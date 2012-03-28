@@ -1,5 +1,6 @@
 #include "bocl_kernel.h"
 #include "bocl_device_info.h"
+#include "bocl_mem.h"
 //:
 // \file
 #include <vcl_iostream.h>
@@ -60,6 +61,61 @@ bool bocl_kernel::create_kernel(cl_context* context,
   return true;
 }
 
+bool bocl_kernel::create_kernel(const cl_context& context,
+                                cl_device_id* device,
+                                vcl_string const& src,
+                                vcl_string const& kernel_name,
+                                vcl_string options,
+                                vcl_string id )
+{
+  id_ = id;
+  device_ = device;
+
+  //dev info
+  bocl_device_info info(device);
+  if (info.is_nvidia_device_) {
+    vcl_cout<<"Compiling kernel ["<<id_<<"] on an NVIDIA device"<<vcl_endl;
+    options += " -cl-nv-verbose";
+  }
+
+  //build program from string source
+  int status;
+  if (program_) {
+    status = clReleaseProgram(program_);
+    program_ = 0;
+    if (!check_val(status, CL_SUCCESS, "clReleaseProgram failed."))
+      return false;
+  }
+
+  //build program with source
+  const char* source = src.c_str();
+  vcl_size_t size = src.size();
+  program_ = clCreateProgramWithSource(context, 1, &source, &size, &status);
+  if (!check_val(status,CL_SUCCESS,"clCreateProgramWithSource failed.")) {
+    vcl_cout<<"clCreate Program With Source Failed..."<<id<<vcl_endl;
+    return SDK_FAILURE;
+  }
+
+  // create a cl program executable for all the devices specified
+  status = clBuildProgram(program_, 1, device, options.c_str(), NULL, NULL);
+  if (!check_val(status, CL_SUCCESS, error_to_string(status))){
+    vcl_cout<<"BUILD ERROR: "<<this->build_log()<<vcl_endl;
+    return false;
+  }
+
+  //create cl_kernel object
+  kernel_ = clCreateKernel(program_, kernel_name.c_str(), &status);
+  if ( !check_val(status,CL_SUCCESS,error_to_string(status)) ) {
+    vcl_cerr<<"bocl_kernel:: couldn't build program "<<id_<<'\n';
+    return false;
+  }
+  //else
+  vcl_cout<<this->build_log()<<vcl_endl;  
+  return true;
+}
+
+
+
 bocl_kernel::~bocl_kernel()
 {
   cl_int status = SDK_SUCCESS;
@@ -78,7 +134,7 @@ bocl_kernel::~bocl_kernel()
     vcl_cout<<" release failed in bocl_kernel destructor"<<vcl_endl;
 }
 
-bool bocl_kernel::execute(cl_command_queue& cmd_queue, cl_uint dim, vcl_size_t* local_threads, vcl_size_t* global_threads)
+bool bocl_kernel::execute(const cl_command_queue& cmd_queue, cl_uint dim, vcl_size_t* local_threads, vcl_size_t* global_threads)
 {
   //set kernel args
   cl_int status = CL_SUCCESS;

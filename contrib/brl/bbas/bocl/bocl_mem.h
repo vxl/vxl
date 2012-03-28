@@ -13,6 +13,7 @@
 
 #include "bocl_cl.h"
 #include "bocl_utils.h"
+#include "bocl_kernel.h"
 #include <vcl_string.h>
 #include <vcl_cstddef.h>
 #include <vcl_iosfwd.h>
@@ -24,7 +25,6 @@
 
 #define MEM_SUCCESS 1
 #define MEM_FAILURE 0
-
 
 //: High level wrapper of a cl_mem object (which always corresponds to some void* cpp buffer).
 //  a bocl_mem object is responsible for freeing the cl_mem buffer but NOT THE CPU buffer.
@@ -62,9 +62,15 @@ class bocl_mem : public vbl_ref_count
   //: map/unmap
   void* enqueue_map(const cl_command_queue& cmd_queue);
   bool enqueue_unmap(const cl_command_queue& cmd_queue, void* mapped_ptr);
+  
+  //: fill gpu buffer with value (shouldn't use any CPU mem
+  template<class T>
+  bool fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string);
 
   //: zeros out GPU buffer
-  bool zero_gpu_buffer(const cl_command_queue& cmd_queue);
+  bool zero_gpu_buffer(const cl_command_queue& cmd_queue) {
+    return this->fill(cmd_queue, (cl_uint) 0, "uint");
+  }
 
   //: intitializes GPU buffer with a constant value
   bool init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_command_queue& cmd_queue);
@@ -115,7 +121,51 @@ class bocl_mem : public vbl_ref_count
 
   //: signifies if this object wraps a GL object
   bool is_gl_;
+
+  //compile kernels and cache
+  bocl_kernel* get_set_kernel(cl_device_id dev_id, cl_context context, vcl_string type="float");
+
+  //map keeps track of all kernels compiled and cached
+  static vcl_map<vcl_string, bocl_kernel*> set_kernels_;
 };
+
+
+//Templated fill method
+template<class T>
+bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string)
+{
+  //buffer length
+  cl_uint len = this->num_bytes_ / sizeof(val);
+  vcl_size_t lThreads[2] = {64,1};
+  vcl_size_t gThreads[2] = {RoundUp(len,lThreads[0]), 1};
+
+  //get command queue info
+  cl_device_id dev_id;
+  cl_context context;
+  cl_int status; 
+  status = clGetCommandQueueInfo(cmd_queue, CL_QUEUE_DEVICE, 
+                                  sizeof(dev_id), &dev_id, NULL);
+  status = clGetCommandQueueInfo(cmd_queue, CL_QUEUE_CONTEXT, 
+                                  sizeof(context), &context, NULL);
+
+  //grab kernel
+  bocl_kernel* fillKernel = this->get_set_kernel(dev_id, context, type_string);
+  bocl_mem* valMem = new bocl_mem(this->context_, &val, sizeof(val), "fill value");
+  valMem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);  
+  bocl_mem lenMem(this->context_, &len, sizeof(len), "buffer length");
+  lenMem.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+  //set args, execute
+  fillKernel->set_arg(this);
+  fillKernel->set_arg(valMem);
+  fillKernel->set_arg(&lenMem);
+  bool good = fillKernel->execute(cmd_queue, 2, lThreads, gThreads);
+  clFinish(cmd_queue);
+  fillKernel->clear_args();  
+  delete valMem;
+  return good;
+}
+
 
 //: Smart_Pointer typedef for boxm2_block
 typedef vbl_smart_ptr<bocl_mem> bocl_mem_sptr;

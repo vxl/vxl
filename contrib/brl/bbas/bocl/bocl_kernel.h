@@ -14,9 +14,9 @@
 #include <vcl_vector.h>
 #include <vcl_cstddef.h> // for std::size_t
 #include "bocl_cl.h"
-#include "bocl_mem.h"
 #include "bocl_utils.h"
 
+class bocl_mem;
 //:  High level wrapper for an Opencl cl_kernel object.
 //  - keeps ref to the context and device_id for which this kernel is created
 //  - can create a kernel from source and device like the following:
@@ -45,8 +45,16 @@ class bocl_kernel
                       vcl_string options,
                       vcl_string id);
 
+  //: create kernel from string source
+  bool create_kernel( const cl_context& context,
+                      cl_device_id* device,
+                      vcl_string const& src,
+                      vcl_string const& kernel_name,
+                      vcl_string options,
+                      vcl_string id );
+
   //: execute this kernel on given command queue with given workspace size
-  bool execute(cl_command_queue& cmd_queue, cl_uint dim,
+  bool execute(const cl_command_queue& cmd_queue, cl_uint dim,
                vcl_size_t* local_threads, vcl_size_t* global_threads);
 
   //: set a bocl_mem buffer arg (pushes it on the back)

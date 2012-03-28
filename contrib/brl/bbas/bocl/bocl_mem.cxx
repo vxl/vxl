@@ -6,6 +6,8 @@
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
+#include <vcl_sstream.h>
+#include <bocl/bocl_kernel.h>
 
 bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id)
 : cpu_buf_(buffer),
@@ -93,15 +95,7 @@ bool bocl_mem::release_memory()
   return MEM_SUCCESS;
 }
 
-//: helper method to zero out gpu buffer
-bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmd_queue)
-{
-  unsigned char* zeros = new unsigned char[this->num_bytes_]; // All values initialized to zero.
-  vcl_memset(zeros, 0, this->num_bytes_);
-  bool good = this->write_to_gpu_mem(cmd_queue, zeros, this->num_bytes_);
-  delete[] zeros;
-  return good;
-}
+
 
 //: helper method to initialize gpu buffer with a constant value
 bool bocl_mem::init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_command_queue& cmd_queue)
@@ -257,6 +251,42 @@ float bocl_mem::exec_time()
 
   //store execution time
   return 1e-6f*float(tend - tstart);
+}
+
+//: declare static var (for linking)
+vcl_map<vcl_string, bocl_kernel*> bocl_mem::set_kernels_;
+
+//: Get set kernel
+bocl_kernel* bocl_mem::get_set_kernel(cl_device_id dev_id, cl_context context, vcl_string type)
+{
+  vcl_string opts = " -D TYPE=" + type;
+
+  // check to see if this device has compiled kernels already
+  vcl_stringstream ss; ss<<opts<<"_"<<dev_id<<"_"<<context;
+  vcl_string identifier = ss.str();
+  if(set_kernels_.find(identifier) != set_kernels_.end())
+    return set_kernels_[identifier];
+
+  //if not, compile and cache them
+  vcl_cout<<"compiling set kernel for device_id: "<<dev_id<<vcl_endl;
+  
+  // OpenCL source code
+  vcl_string oclSrc = 
+       "__kernel void set(__global TYPE* buffer," 
+       "                  __global TYPE* var,"
+       "                  __global uint* len){"
+       "      uint n = get_global_id(0);"
+       "      if(n < *len)"
+       "        buffer[n] = *var;"
+       "}";
+ 
+  //compilation options - default opts should be " -D TYPE float "
+  bocl_kernel* setKernel = new bocl_kernel();
+  setKernel->create_kernel(context, &dev_id, oclSrc, "set", opts, "set "+type+" kernel");
+
+  //cache in map
+  set_kernels_[identifier] = setKernel;
+  return set_kernels_[identifier];
 }
 
 //---I/O------------------------------------------------------------------------
