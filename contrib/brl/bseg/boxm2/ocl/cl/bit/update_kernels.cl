@@ -426,7 +426,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
 
     //minimum alpha value, don't let blocks get below this
-    float  alphamin = -log(1.0-0.0001)/cell_min;
+    float  alphamin = -log(1.0f-0.0001f)/cell_min;
 
     //update cell if alpha and cum_len are greater than 0
     if (alpha > 0.0f && cum_len > 1e-10f)
@@ -566,7 +566,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
 
     //minimum alpha value, don't let blocks get below this
-    float  alphamin = -log(1.0-0.0001)/cell_min;
+    float  alphamin = -log(1.0f-0.0001f)/cell_min;
 
     //update cell if alpha and cum_len are greater than 0
     if (alpha > 0.0f && cum_len > 1e-10f)
@@ -615,7 +615,7 @@ update_bit_scene_main_alpha_only(__global RenderSceneInfo  * info,
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
 
     //minimum alpha value, don't let blocks get below this
-    float  alphamin = -log(1.0-0.0001)/cell_min;
+    float  alphamin = -log(1.0f-0.0001f)/cell_min;
 
     //update cell if alpha and cum_len are greater than 0
     if (alpha > 0.0f && cum_len > 1e-10f)
