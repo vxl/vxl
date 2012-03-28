@@ -20,7 +20,7 @@ void step_cell_render(__global MOG_TYPE   * cell_data,
   if (diff_omega<0.995f)
   {
       CONVERT_FUNC(udata,cell_data[data_ptr]);
-      float8  data=convert_float8(udata)/NORM;
+      float8  data=convert_float8(udata)/(float)NORM;
       EXPECTED_INT(expected_int_cell,data);
   }
   float omega=(*vis) * (1.0f - diff_omega);
