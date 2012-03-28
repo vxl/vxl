@@ -86,8 +86,8 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
     persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // create buffer with nothing to read from host memory
-    ray_origins->create_buffer(CL_MEM_READ_WRITE);
-    ray_directions->create_buffer(CL_MEM_READ_WRITE);
+    ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     //create dims buffer
     cl_uint dims[] = {(cl_uint) i_min, (cl_uint) j_min, cl_ni, cl_nj};
