@@ -20,5 +20,6 @@ void bocl_register::register_process()
 {
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bocl_init_manager_process,"boclInitManagerProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bocl_get_device_process,"boclGetDeviceProcess");
+    REG_PROCESS_FUNC_CONS2(bocl_info_process);
 
 }
