@@ -369,9 +369,12 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
 }
 
 
+#ifndef UINT_MAX
+#define UINT_MAX 0xffffffffU
+#endif
 namespace
 {
-  static const unsigned calc_edge_index_lookup[8] = {0xffffffff, 0, 2, 0, 0xffffffff, 1, 2, 1};
+  static const unsigned calc_edge_index_lookup[8] = {UINT_MAX, 0, 2, 0, UINT_MAX, 1, 2, 1};
   //: Given the [0,2] index of two vertices, in either order, return the edge index [0,2]
   // E.g. between vertices 2 and 0 is edge 2.
   // Use precalculated list lookup, probably fastest.
