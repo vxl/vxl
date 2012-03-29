@@ -271,14 +271,12 @@ vpgl_bundle_adjust::write_vrml(const vcl_string& filename,
   os << "#VRML V2.0 utf8\n\n";
 
   // vrml views are rotated 180 degrees around the X axis
-  vgl_rotation_3d<double> rot180(vnl_math::pi, 0.0, 0.0);
+  vgl_rotation_3d<double> rot180x(vnl_math::pi, 0.0, 0.0);
 
   for (unsigned int i=0; i<cameras.size(); ++i){
     vnl_double_3x3 K = cameras[i].get_calibration().get_matrix();
 
-    vgl_rotation_3d<double> R = rot180*cameras[i].get_rotation();
-    //R.set_row(1,-1.0*R.get_row(1));
-    //R.set_row(2,-1.0*R.get_row(2));
+    vgl_rotation_3d<double> R = (rot180x*cameras[i].get_rotation()).inverse();
     vgl_point_3d<double> ctr = cameras[i].get_camera_center();
     double fov = 2.0*vcl_max(vcl_atan(K[1][2]/K[1][1]), vcl_atan(K[0][2]/K[0][0]));
     os  << "Viewpoint {\n"
