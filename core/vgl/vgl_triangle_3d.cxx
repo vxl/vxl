@@ -24,9 +24,9 @@ namespace
 {
   //: Create plane through three points. Ignore degeneracy.
   vgl_plane_3d<double> create_plane_and_ignore_degenerate(const vgl_point_3d<double>& p1,
-    const vgl_point_3d<double>& p2, const vgl_point_3d<double>& p3)
+                                                          const vgl_point_3d<double>& p2,
+                                                          const vgl_point_3d<double>& p3)
   {
-
     vgl_plane_3d<double> plane;
     double *a = reinterpret_cast<double *>(&plane);
 
@@ -47,7 +47,6 @@ namespace
          + p3.x()*(p1.z()*p2.y() - p1.y()*p2.z());
     return plane;
   }
-
 }
 
 //=======================================================================
@@ -116,7 +115,6 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
                                  const vgl_point_3d<double>& p3,
                                  double coplanar_tolerance)
 {
-  
   // firstly perform some degeneracy checks
   if (collinear(p1,p2,p3))
   { //the triangle is degenerate - its vertices are collinear
@@ -133,13 +131,11 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
 
   // Project to 2d plane, to avoid a degenerate result get
   // the plane normal and identify the largest (abs) x,y or z component
-  vgl_plane_3d<double> plane = 
+  vgl_plane_3d<double> plane =
     create_plane_and_ignore_degenerate(p1, p2, p3);
 
-
-  // use badouel's algorithm ( a barycentric method)
+  // use Badouel's algorithm (a barycentric method)
   // based on the code & paper found at http://jgt.akpeters.com/papers/MollerTrumbore97/
-
 
   //the point needs to be in the triangles plane
   if (vgl_distance(plane,i_pnt) > coplanar_tolerance)
@@ -375,7 +371,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
 
 namespace
 {
-  static const unsigned calc_edge_index_lookup[8] = {-1, 0, 2, 0, -1, 1, 2, 1};
+  static const unsigned calc_edge_index_lookup[8] = {0xffffffff, 0, 2, 0, 0xffffffff, 1, 2, 1};
   //: Given the [0,2] index of two vertices, in either order, return the edge index [0,2]
   // E.g. between vertices 2 and 0 is edge 2.
   // Use precalculated list lookup, probably fastest.
@@ -428,7 +424,6 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
       return None;
     }
 
-
     vgl_triangle_3d_intersection_t ret = None;
     vgl_point_3d<double> i_pnt;
     unsigned tmp_iline_edges[2];
@@ -480,7 +475,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     // Found two edges intersecting with triangle
     i_line_point1_edge = tmp_iline_edges[0];
     i_line_point2_edge = tmp_iline_edges[1];
-    return Skew;    
+    return Skew;
   }
   if (collinear(b_p1,b_p2,b_p3))
   {
@@ -546,9 +541,8 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     // Found two edges intersecting with triangle
     i_line_point1_edge = tmp_iline_edges[0];
     i_line_point2_edge = tmp_iline_edges[1];
-    return Skew;    
+    return Skew;
   }
-
 
   //computing intersection of triangles a and b
 
@@ -816,7 +810,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
       i_line.set(a_p1, a_p3);
       return Coplanar;
     }
-      
+
     if (vgl_triangle_3d_test_inside(b_p1, a_p1, a_p2, a_p3))
     {
       i_line_point1_edge = i_line_point2_edge = 3;
