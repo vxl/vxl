@@ -80,6 +80,9 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
     norm_mems.push_back(norm_mem);
   }
 
+  vul_timer t; t.mark();
+  float gpu_time = 0.0f;
+
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
@@ -114,12 +117,14 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
       clFinish(queues[i]);
     }
   }
+  gpu_time += t.all(); t.mark();
 
   //-------------------------------------------------------------------
   // Reduce images into pre/vis image and make sure the interim
   // pre/vis images are correct
   //-------------------------------------------------------------------
   calc_beta_reduce(cache, cam, helper);
+  gpu_time += t.all();
 
   //--------------------------------------
   //Clean up vis, pre, norm images buffers
@@ -132,7 +137,7 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
     ocl_cache->unref_mem(norm_mems[i].ptr());
   }
 
-  return 0.0f;
+  return gpu_time;
 }
 
 
@@ -220,8 +225,8 @@ void boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
   kern->clear_args();
 
   //call async read for aux2 and aux3
-  aux2->read_to_buffer(queue, false); //read async
-  aux3->read_to_buffer(queue, false);
+  aux2->read_to_buffer(queue); //read async
+  aux3->read_to_buffer(queue);
 }
 
 
@@ -325,9 +330,9 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       kern->clear_args();
 
       //write info to disk
-      alpha->read_to_buffer(queues[i], false);
-      mog->read_to_buffer(queues[i], false);
-      num_obs->read_to_buffer(queues[i], false);
+      alpha->read_to_buffer(queues[i]);
+      mog->read_to_buffer(queues[i]);
+      num_obs->read_to_buffer(queues[i]);
     }
 
     //-------------------------------------------------

@@ -20,6 +20,7 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vul/vul_timer.h>
 
 vcl_map<vcl_string, bocl_kernel*> boxm2_multi_store_aux::kernels_;
 
@@ -89,7 +90,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   //visibility order
   vcl_vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
   vcl_cout<<"Group list size; "<<grp.size()<<vcl_endl;
-
+  vul_timer t; t.mark();
   for(int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
@@ -120,6 +121,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
       read_aux(id, ocl_cache, queues[i]);
     }
   }
+  float gpu_time = t.all();
 
   //read aux data into cpu cache
   for (int i=0; i<queues.size(); ++i) {
@@ -151,6 +153,8 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   //cleanup input image buffer
   if(inImg != img.top_left_ptr())
     delete[] inImg;
+
+  return gpu_time;
 }
 
 //: Reads aux memory from GPU to CPU ram
@@ -183,7 +187,8 @@ void boxm2_multi_store_aux::store_aux_per_block(const boxm2_block_id&     id,
                                                       bocl_mem_sptr&      cl_output,
                                                       bocl_mem_sptr&      lookup,
                                                       vcl_size_t*         lthreads,
-                                                      vcl_size_t*         gThreads)
+                                                      vcl_size_t*         gThreads, 
+                                                      bool                store_rgb)
 {
   //vcl_cout<<(*id);
   //choose correct render kernel
@@ -217,12 +222,19 @@ void boxm2_multi_store_aux::store_aux_per_block(const boxm2_block_id&     id,
   kern->set_arg( alpha );
   kern->set_arg( aux0 );
   kern->set_arg( aux1 );
+  if(store_rgb) {
+    bocl_mem *aux2  = opencl_cache->get_data<BOXM2_AUX2>(id, dataLen*boxm2_data_traits<BOXM2_AUX2>::datasize());
+    bocl_mem *aux3  = opencl_cache->get_data<BOXM2_AUX3>(id, dataLen*boxm2_data_traits<BOXM2_AUX3>::datasize());
+    aux2->zero_gpu_buffer(queue);
+    aux3->zero_gpu_buffer(queue);
+    kern->set_arg( aux2 ); 
+    kern->set_arg( aux3 );
+  }
   kern->set_arg( lookup.ptr() );
 
   // kern->set_arg( persp_cam.ptr() );
   kern->set_arg( ray_o_buff.ptr() );
   kern->set_arg( ray_d_buff.ptr() );
-
   kern->set_arg( img_dim.ptr() );
   kern->set_arg( in_image.ptr() );
   kern->set_arg( cl_output.ptr() );
@@ -280,3 +292,47 @@ bocl_kernel* boxm2_multi_store_aux::get_kernels(bocl_device_sptr device, vcl_str
   return kernels_[identifier];
 }
 
+
+bocl_kernel* boxm2_multi_store_aux::get_kernels_color(bocl_device_sptr device, vcl_string opts)
+{
+  // compile kernels if not already compiled
+  vcl_string identifier = device->device_identifier() + opts + "_color";
+  if (kernels_.find(identifier) != kernels_.end())
+    return kernels_[identifier];
+
+  //otherwise compile the kernels
+  vcl_cout<<"=== boxm2_multi_store_aux::compiling kernels===\n"
+          <<"    for device "<<identifier<<vcl_endl;
+
+  vcl_vector<vcl_string> src_paths;
+  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  src_paths.push_back(source_dir + "scene_info.cl");
+  src_paths.push_back(source_dir + "pixel_conversion.cl");
+  src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+  src_paths.push_back(source_dir + "backproject.cl");
+  src_paths.push_back(source_dir + "statistics_library_functions.cl");
+  src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+  src_paths.push_back(source_dir + "bit/update_rgb_kernels.cl");
+  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+  src_paths.push_back(source_dir + "update_rgb_functors.cl");
+  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+
+  //compilation options
+  vcl_string options = " -D INTENSITY ";
+  options += " -D YUV -D DETERMINISTIC -D MOG_TYPE_8 ";
+  options += opts;
+
+  //seg len pass
+  bocl_kernel* seg_len = new bocl_kernel();
+  vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+  seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_main", seg_opts, "update_color::seg_len");
+
+  //create  compress rgb pass
+  bocl_kernel* comp = new bocl_kernel();
+  vcl_string comp_opts = options + " -D COMPRESS_RGB ";
+  comp->create_kernel(&device->context(), device->device_id(), non_ray_src, "compress_rgb", comp_opts, "update_color::compress_rgb");
+
+  //store and return
+  kernels_[identifier] = seg_len;
+  return kernels_[identifier];
+}

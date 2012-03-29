@@ -23,6 +23,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
+#include <vul/vul_timer.h>
 
 vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_multi_pre_vis_inf::kernels_;
 
@@ -89,6 +90,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
   //initialize per group images (vis/pre)
   vcl_vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
+  vul_timer t; t.mark();
+  float gpu_time = 0.0f, cpu_time = 0.0f;
 
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
@@ -109,12 +112,10 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
       //Run block store aux
       boxm2_block_id id = ids[i]; //vis_order[blk];
+      
       //set visibility to one, set pre to zero
-      float* ones = new float[ni*nj];
-      vcl_fill(ones, ones+ni*nj, 1.0f);
-      vis_mems[i]->write_to_gpu_mem(queues[i], ones, ni*nj*sizeof(float));
+      vis_mems[i]->fill(queues[i], 1.0f, "float");
       pre_mems[i]->zero_gpu_buffer(queues[i]);
-      delete[] ones;
       pre_vis_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0],
                         vis_mems[i], pre_mems[i], img_dims[i],
                         ray_os[i], ray_ds[i],
@@ -127,6 +128,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
 #if 1
       //find the minU,minV, maxU,maxV points
+      vul_timer cpuTimer; cpuTimer.mark();
       double minU=ni, minV=nj,
              maxU=0, maxV=0;
       vgl_box_3d<double>& blkBox = group.bbox(i);
@@ -151,21 +153,19 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
       //next update the vis and pre images
       clFinish(queues[i]);
+      if(idx == indices.size()-1)
+        gpu_time += t.all();
       vis_mems[i]->read_to_buffer(queues[i]);
       pre_mems[i]->read_to_buffer(queues[i]);
       float* v = (float*) vis_mems[i]->cpu_buffer();
       float* p = (float*) pre_mems[i]->cpu_buffer();
-      //for (int c=0; c<ni*nj; ++c) {
-      //    preImg[c]  = preImg[c] + p[c]*visImg[c];
-      //    visImg[c] *= v[c];
-      //    c++;
-      //}
       for (int jj=(int)minV; jj<(int)maxV; ++jj)
         for (int ii=(int)minU; ii<(int)maxU; ++ii) {
           int idx = jj*ni + ii;
           preImg[idx]  = preImg[idx] + p[idx]*visImg[idx];
           visImg[idx] *= v[idx];
         }
+      cpu_time += cpuTimer.all();
 #else
       //first store vis/pre images for first member of group
       float* p = (float*) preInfMems[i]->enqueue_map(queues[i]);
@@ -174,6 +174,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       vcl_memcpy(group.get_vis(i), v/*visImg*/, ni*nj*sizeof(float));
       vcl_memcpy(group.get_pre(i), p/*preImg*/, ni*nj*sizeof(float));
 
+      t.mark();
       bocl_device_sptr device = ocl_caches[i]->get_device();
       bocl_kernel*     kern   = get_kernels(device, options)[2];
       preInfMems[i]->enqueue_unmap(queues[i], p);
@@ -188,21 +189,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       kern->clear_args();
 #endif
     }
-
-#if 0
-    vil_image_view<float> vimg(ni,nj), pimg(ni,nj);
-    int c=0;
-    for (int j=0; j<nj; ++j)
-      for (int i=0; i<ni; ++i) {
-        vimg(i,j) = visImg[c];
-        pimg(i,j) = preImg[c];
-        c++;
-      }
-    vcl_stringstream vf;
-    vf<<"./vis_img_grp_"<<vcl_setfill('0')<<vcl_setw(3)<<grpId<<".tiff";
-    vil_save(pimg, vf.str().c_str());
-#endif
   }
+  gpu_time = t.all() - cpu_time; 
 
   //---- This instead of the reduce step ----
   //Norm image create on CPU
@@ -262,6 +250,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
     ocl_cache->unref_mem(vis_mems[i].ptr());
     ocl_cache->unref_mem(pre_mems[i].ptr());
   }
+  return 0.0f;// gpu_time;
 }
 
 
@@ -428,7 +417,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,
   //set args and execute
   proc_kern->set_arg( norm_mem.ptr() );
   proc_kern->set_arg( vis_mem.ptr() );
-  proc_kern->set_arg( pre_mem.ptr());
+  proc_kern->set_arg( pre_mem.ptr() );
   proc_kern->set_arg( img_dim.ptr() );
 
   //execute kernel

@@ -25,13 +25,12 @@ class boxm2_multi_store_aux
                             vpgl_camera_double_sptr cam,
                             boxm2_multi_update_helper& helper);
 
+    //static float store_aux_color( boxm2_multi_cache& cache,
+    //                              vil_image_view<vil_rgba<float> >& img, 
+    //                              vgpl_camera_double_sptr cam,
+    //                              boxm2_multi_update_helper& helper);
+
   private:
-
-    // Reads aux memory from GPU to CPU ram
-    static void read_aux(const boxm2_block_id& id,
-                         boxm2_opencl_cache* opencl_cache,
-                         cl_command_queue&   queue);
-
 
     static void store_aux_per_block(const boxm2_block_id& id,
                                           boxm2_scene_sptr    scene,
@@ -45,13 +44,22 @@ class boxm2_multi_store_aux
                                           bocl_mem_sptr&      cl_output,
                                           bocl_mem_sptr&      lookup,
                                           vcl_size_t*         lthreads,
-                                          vcl_size_t*         gthreads);
+                                          vcl_size_t*         gthreads,
+                                          bool                store_rgb=false);
+
+    // Reads aux memory from GPU to CPU ram
+    static void read_aux(const boxm2_block_id& id,
+                         boxm2_opencl_cache* opencl_cache,
+                         cl_command_queue&   queue);
 
     //map keeps track of all kernels compiled and cached
     static vcl_map<vcl_string, bocl_kernel*> kernels_;
 
     //compile kernels and cache
     static bocl_kernel* get_kernels(bocl_device_sptr device, vcl_string opts);
+
+    //compile rgb kernels and store
+    static bocl_kernel* get_kernels_color(bocl_device_sptr device, vcl_string opts);
 };
 
 #endif

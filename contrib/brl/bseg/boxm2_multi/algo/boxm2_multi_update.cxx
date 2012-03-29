@@ -27,6 +27,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   vcl_size_t lthreads[2] = {8,8};
   unsigned cl_ni = RoundUp(ni,lthreads[0]);
   unsigned cl_nj = RoundUp(nj,lthreads[1]);
+  float gpu_time = 0.0f;  //time spent on the GPU in milliseconds
 
   //---------------------------------
   //store vars for each ocl_cache
@@ -107,17 +108,17 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
 
 
   //store aux data (cell vis, cell length)
-  boxm2_multi_store_aux::store_aux(cache, img, cam, helper);
+  gpu_time += boxm2_multi_store_aux::store_aux(cache, img, cam, helper);
 
   //calcl pre/vis inf, and store pre/vis images along the way
   float* norm_img = new float[img.ni() * img.nj()];
   vcl_map<bocl_device*, float*> pre_map, vis_map;
   //boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, vis_map, pre_map, norm_img, helper);
-  boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, norm_img, helper);
+  gpu_time += boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, norm_img, helper);
 
   //calculate cell beta, cell vis, and finally reduce each cell to new alphas
   //boxm2_multi_update_cell::update_cells(cache, img, cam, vis_map, pre_map, norm_img, helper);
-  boxm2_multi_update_cell::update_cells(cache, img, cam, norm_img, helper);
+  gpu_time += boxm2_multi_update_cell::update_cells(cache, img, cam, norm_img, helper);
 
   //-------------------------------------
   //clean up
@@ -159,6 +160,9 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
     delete[] iter->second;
   for(iter = vis_map.begin(); iter != vis_map.end(); ++iter)
     delete[] iter->second;
+
+  //report gpu time
+  return gpu_time;
 }
 
 
