@@ -12,6 +12,9 @@
 #include <boxm2/ocl/algo/boxm2_ocl_update_color.h>
 #include <bocl/bocl_device.h>
 #include <brdb/brdb_value.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_new.h>
+#include <vcl_algorithm.h>
 
 namespace boxm2_ocl_update_color_process_globals
 {
@@ -67,8 +70,50 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
   vcl_string mask_filename = pro.get_input<vcl_string>(argIdx++);
   bool       updateAlpha   = pro.get_input<bool>(argIdx++);
 
+  //make sure this image small enough (or else carve it into image pieces)
+  const vcl_size_t MAX_PIXELS = 16777216;
+  if(img->ni()*img->nj() > MAX_PIXELS) {
+    int sni = RoundUp(img->ni(), 16);  
+    int snj = RoundUp(img->nj(), 16);
+    int numSegI = 1;
+    int numSegJ = 1;
+    while( sni*snj > MAX_PIXELS/4 ) {
+      sni /= 2; 
+      snj /= 2;
+      numSegI++;
+      numSegJ++;
+    }
+    sni = RoundUp(sni, 16);
+    snj = RoundUp(snj, 16);
+    vil_image_resource_sptr ir = vil_new_image_resource_of_view(*img); 
+
+    //run update for each image make sure to input i/j
+    for(int i=0; i<numSegI+1; ++i) {
+      for(int j=0; j<numSegJ+1; ++j) {
+        //make sure the view doesn't extend past the original image
+        vcl_size_t startI = (vcl_size_t) i * (vcl_size_t) sni; 
+        vcl_size_t startJ = (vcl_size_t) j * (vcl_size_t) snj;
+        vcl_size_t endI = vcl_min(startI + sni, (vcl_size_t) img->ni());
+        vcl_size_t endJ = vcl_min(startJ + snj, (vcl_size_t) img->nj());
+        if(endI <= startI || endJ <= startJ)
+          break;
+        vcl_cout<<"Gettin patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<")"<<vcl_endl;
+        vil_image_view_base_sptr view = ir->get_copy_view(startI, endI-startI, startJ, endJ-startJ);
+        
+        //run update
+        boxm2_ocl_update_color::update_color(scene, device, opencl_cache, 
+                                             cam, view, in_identifier, 
+                                             mask_filename, updateAlpha,
+                                             startI, startJ);
+      }
+    }
+    return true;
+  }
+
   //call ocl update
-  boxm2_ocl_update_color::update_color(scene,device,opencl_cache,cam,img,in_identifier,mask_filename,updateAlpha);
+  boxm2_ocl_update_color::update_color(scene,device,opencl_cache,
+                                       cam,img,in_identifier,
+                                       mask_filename,updateAlpha);
 
   //no outputs
   return true;

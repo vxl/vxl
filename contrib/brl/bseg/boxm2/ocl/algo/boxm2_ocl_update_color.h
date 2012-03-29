@@ -24,7 +24,9 @@ class boxm2_ocl_update_color
                               vil_image_view_base_sptr img,
                               vcl_string               in_identifier="",
                               vcl_string               mask_filename="", 
-                              bool                     update_alpha=true); 
+                              bool                     update_alpha=true,
+                              vcl_size_t               startI = 0,
+                              vcl_size_t               startJ = 0); 
     
   private:
     //compile kernels and place in static map

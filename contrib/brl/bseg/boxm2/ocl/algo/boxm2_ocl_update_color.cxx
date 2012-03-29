@@ -36,7 +36,9 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
                                           vil_image_view_base_sptr img,
                                           vcl_string               in_identifier,
                                           vcl_string               mask_filename,
-                                          bool                     update_alpha)
+                                          bool                     update_alpha,
+                                          vcl_size_t               startI,
+                                          vcl_size_t               startJ)
 {
   float transfer_time=0.0f;
   float gpu_time=0.0f;
@@ -103,7 +105,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
-  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff, startI, startJ);
 
   //create vis, pre, norm and input image buffers
   float* vis_buff = new float[cl_ni*cl_nj];
