@@ -88,8 +88,8 @@ class vpgl_bundle_adjust
 
   //: Write cameras and points to a file in VRML 2.0 for debugging
   static void write_vrml(const vcl_string& filename,
-                         vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                         vcl_vector<vgl_point_3d<double> >& world_points);
+                         const vcl_vector<vpgl_perspective_camera<double> >& cameras,
+                         const vcl_vector<vgl_point_3d<double> >& world_points);
 
  private:
   //: normalize image points to be mean centered with scale sqrt(2)

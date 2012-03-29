@@ -264,8 +264,8 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
 //: Write cameras and points to a file in VRML 2.0 for debugging
 void
 vpgl_bundle_adjust::write_vrml(const vcl_string& filename,
-                               vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                               vcl_vector<vgl_point_3d<double> >& world_points)
+                               const vcl_vector<vpgl_perspective_camera<double> >& cameras,
+                               const vcl_vector<vgl_point_3d<double> >& world_points)
 {
   vcl_ofstream os(filename.c_str());
   os << "#VRML V2.0 utf8\n\n";
