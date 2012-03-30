@@ -41,9 +41,9 @@
 #include <vil3d/algo/vil3d_structuring_element.h>
 #include <vil3d/algo/vil3d_abs_shuffle_distance.h>
 #include <vil3d/algo/vil3d_locally_z_normalise.h>
+#include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_save.h>
-#include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>
 #include <vimt3d/vimt3d_resample_trilinear.h>
 #include <vgl/vgl_intersection.h>
@@ -2017,6 +2017,86 @@ void box__image_3d_of_int__double__double__double__double__double__double(opstac
 }
 
 
+void checkerboard__image_3d_of_float__double__double__double(opstack_t& s)
+{
+  assert(s.size() >= 4);
+  vimt3d_image_3d_of<float> o1(s[3].as_image_3d_of_float());
+  double xsize(s[2].as_double());
+  double ysize(s[1].as_double());
+  double zsize(s[0].as_double());
+
+  const vil3d_image_view<float>& o1_image = o1.image();
+
+  vimt3d_image_3d_of<float> out(o1_image.ni(), o1_image.nj(), o1_image.nk(), 1,
+    o1.world2im());
+  vil3d_image_view<float>& out_image = out.image();
+
+  vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
+    vgl_point_3d<double>(0, 0, 0), vgl_vector_3d<double>(1.0, 1.0, 1.0) );
+
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+
+
+  vimt3d_transform_3d scale;
+  scale.set_zoom_only(1.0/xsize, 1.0/ysize, 1.0/zsize, 0, 0, 0);
+  vimt3d_transform_3d trans = scale * o1.world2im().inverse();
+
+  for (unsigned k=0; k<nk; ++k)
+    for (unsigned j=0; j<nj; ++j)
+      for (unsigned i=0; i<ni; ++i)
+      {
+         vgl_point_3d<double> p = trans(i,j,k);
+         out_image(i,j,k) =
+           (vnl_math_floor(p.x()) + vnl_math_floor(p.y()) + vnl_math_floor(p.z()))%2 ? 1.0f : 0.0f;
+      }
+
+  s.pop(4);
+  s.push_front(operand(out));
+}
+
+void checkerboard__image_3d_of_int__double__double__double(opstack_t& s)
+{
+  assert(s.size() >= 4);
+  vimt3d_image_3d_of<int> o1(s[3].as_image_3d_of_int());
+  double xsize(s[2].as_double());
+  double ysize(s[1].as_double());
+  double zsize(s[0].as_double());
+
+  const vil3d_image_view<int>& o1_image = o1.image();
+
+  vimt3d_image_3d_of<int> out(o1_image.ni(), o1_image.nj(), o1_image.nk(), 1,
+    o1.world2im());
+  vil3d_image_view<int>& out_image = out.image();
+
+  vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
+    vgl_point_3d<double>(0, 0, 0), vgl_vector_3d<double>(1.0, 1.0, 1.0) );
+
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+
+
+  vimt3d_transform_3d scale;
+  scale.set_zoom_only(1.0/xsize, 1.0/ysize, 1.0/zsize, 0, 0, 0);
+  vimt3d_transform_3d trans = scale * o1.world2im().inverse();
+
+  for (unsigned k=0; k<nk; ++k)
+    for (unsigned j=0; j<nj; ++j)
+      for (unsigned i=0; i<ni; ++i)
+      {
+         vgl_point_3d<double> p = trans(i,j,k);
+         out_image(i,j,k) =
+           (vnl_math_floor(p.x()) + vnl_math_floor(p.y()) + vnl_math_floor(p.z()))%2 ? 1 : 0;
+      }
+
+  s.pop(4);
+  s.push_front(operand(out));
+}
+
 void local_z_normalise__image_3d_of_float__double(opstack_t& s)
 {
   assert(s.size() >= 2);
@@ -2175,6 +2255,12 @@ class operations
                   function_type_t() << operand::e_image_3d_of_int << operand::e_double << operand::e_double
                    << operand::e_double << operand::e_double << operand::e_double << operand::e_double,
                   "image x_min y_min z_min x_max y_max z_max", "image", "Fill image with a binary image of a box (in mm)");
+    add_operation("--checkerboard", &checkerboard__image_3d_of_float__double__double__double,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double << operand::e_double,
+                  "image xsize ysize zsize", "image", "Set all the pixels in an image to B&W pattern of given spacing (in mm)");
+    add_operation("--checkerboard", &checkerboard__image_3d_of_int__double__double__double,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_double << operand::e_double << operand::e_double,
+                  "image xsize ysize zsize", "image", "Set all the pixels in an image to B&W pattern of given spacing (in mm)");
     add_operation("--clamp-above", &clamp_above__image_3d_of_float__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double,
                   "image threshold value", "image", "Set all voxels in image at or above threshold to value");
