@@ -90,6 +90,8 @@ unsigned boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       float alphasize=(float)alpha->num_bytes()/1024/1024;
       if (alphasize >= (float)blk_iter->second.max_mb_/10.0) {
           vcl_cout<<"  Refine STOP !!!"<<vcl_endl;
+          opencl_cache->unref_mem(blk_copy.ptr());
+          opencl_cache->unref_mem(tree_sizes.ptr());
           continue;
       }
       //set first kernel args
@@ -130,7 +132,7 @@ unsigned boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       
       int dataLen = alpha->num_bytes()/sizeof(float); 
       //vcl_cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
-      //        <<"  Num Refined: "<<(newDataSize-dataLen)/8<<'\n'
+      //        <<"  Num Refined: "<<(newDataSize-dataLen)/8<<'\n';
       //        <<"  Scan data sizes time: "<<scan_time.all()<<vcl_endl;
       transfer_time += scan_time.all();
       num_cells   += (unsigned) newDataSize; 
@@ -225,6 +227,7 @@ unsigned boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       opencl_cache->unref_mem(tree_sizes.ptr());
   }
   vcl_cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
+  vcl_cout<<" Number of cells in scene (after refine): "<<num_cells<<vcl_endl;
   clReleaseCommandQueue(queue);
   
   //set output
