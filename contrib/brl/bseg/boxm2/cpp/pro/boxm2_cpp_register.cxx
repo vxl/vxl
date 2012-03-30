@@ -64,4 +64,6 @@ void boxm2_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_image_density_masked_process, "boxm2CppImageDensityMaskedProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_update_using_quality_process, "boxm2CppUpdateUsingQualityProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_points_to_volume_process, "boxm2CppPointsToVolumeProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_export_stack_images_process, "boxm2ExportStackImagesProcess");
+  
 }

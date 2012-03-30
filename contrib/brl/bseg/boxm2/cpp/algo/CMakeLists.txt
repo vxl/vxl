@@ -1,4 +1,5 @@
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply)
 
 SET(boxm2_cpp_algo_sources
@@ -41,6 +42,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_compute_normal_albedo_functor.h  boxm2_compute_normal_albedo_functor.cxx
     boxm2_compute_normal_albedo_functor_opt.h  boxm2_compute_normal_albedo_functor_opt.cxx
     boxm2_points_to_volume_function.h  boxm2_points_to_volume_function.cxx
+	boxm2_export_stack_images_function.h boxm2_export_stack_images_function.cxx
   )
 AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 
