@@ -315,7 +315,7 @@ compute_training_data(vcl_string const& category,
   }
   vcl_vector<vgl_polygon<double> >::const_iterator pit = texture_regions.begin();
   for (; pit != texture_regions.end(); ++pit) {
-    vgl_polygon_scan_iterator<double> psi(*pit);
+    vgl_polygon_scan_iterator<double> psi(*pit, false);
     for (psi.reset(); psi.next(); ) {
       int j = psi.scany();
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
@@ -502,7 +502,7 @@ bool sdet_texture_classifier::load_dictionary(vcl_string const& path)
 {
   vsl_b_ifstream is(path.c_str());
   if (!is) {
-    vcl_cout << "Can't open binary stream in load_dictionary\n";
+    vcl_cout << "Can't open binary stream in load_dictionary in " << path << "\n";
     return false;
   }
   vcl_cout << "Loading texton dictionary: " << path << '\n' << vcl_flush;
