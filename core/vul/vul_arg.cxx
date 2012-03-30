@@ -810,6 +810,9 @@ VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv)
     return -1;
   }
 
+  // if true don't treat space separator as leading to another double.
+  bool found_at_least_one_comma = false;
+
   int sucked = 0;
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
@@ -822,10 +825,12 @@ VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv)
       argmt->value_.push_back(tmp);
       ++ sucked;
       ++ argv;
+      if (found_at_least_one_comma) return sucked;
       current = argv[0];
     }
     else if (*endptr == ',')
     {
+      found_at_least_one_comma = true;
       argmt->value_.push_back(tmp);
       current = endptr+1;
     }
