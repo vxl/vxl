@@ -320,7 +320,7 @@ void boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id&     id,
   //clear render kernel args so it can reset em on next execution
   kern->clear_args();
 }
-
+#if 0
 float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,
                                               vcl_vector<float*>& pre_imgs,
                                               vcl_vector<float*>& vis_imgs,
@@ -437,6 +437,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,
   ocl_cache->unref_mem(pre_mem.ptr());
   ocl_cache->unref_mem(vis_mem.ptr());
 }
+#endif
 
 
 //-----------------------------------------------------------------

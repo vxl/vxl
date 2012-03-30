@@ -51,6 +51,7 @@ class boxm2_multi_pre_vis_inf
                                         vcl_size_t*         lthreads,
                                         vcl_size_t*         gThreads);
 
+#if 0
     //reduction step (proc norm image)
     static float pre_vis_reduce( boxm2_multi_cache&    cache,
                                  vcl_vector<float*>&   pre_imgs,
@@ -61,7 +62,7 @@ class boxm2_multi_pre_vis_inf
                                  int ni,
                                  int nj,
                                  float* norm_img   );
-
+#endif
 
     //map keeps track of all kernels compiled and cached
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
