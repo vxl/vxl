@@ -71,10 +71,26 @@ brdb_value_t<T>::b_write_value(vsl_b_ostream& os) const
 
 
 //: Use this macro to instantiate brdb_value_t for each storage type
+//If a template, a member template or the member of a class template is
+//explicitly specialized then that specialization shall be declared before the
+//first use of that specialization that would cause an implicit instantiation to
+//take place, in every translation unit in which such a use occurs; no diagnostic
+//is required.
+//However MSVC rejects the declaration [temp.expl.spec]p6, [temp.expl.spec]p13
+
+#ifdef WIN32
+
+#define BRDB_VALUE_INSTANTIATE(T,NAME) \
+template class brdb_value_t<T >; \
+VCL_DEFINE_SPECIALIZATION const vcl_string brdb_value_t<T >::type_string_(NAME); \
+const brdb_value::registrar reg_inst_##T(new brdb_value_t<T >)
+#else
+
 #define BRDB_VALUE_INSTANTIATE(T,NAME) \
 VCL_DEFINE_SPECIALIZATION const vcl_string brdb_value_t<T >::type_string_; \
 template class brdb_value_t<T >; \
 VCL_DEFINE_SPECIALIZATION const vcl_string brdb_value_t<T >::type_string_(NAME); \
 const brdb_value::registrar reg_inst_##T(new brdb_value_t<T >)
+#endif
 
 #endif // brdb_value_txx_
