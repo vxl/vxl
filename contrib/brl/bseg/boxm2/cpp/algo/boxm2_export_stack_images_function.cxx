@@ -36,10 +36,9 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
   int img_z = (max_index.z()-min_index.z()+1)*ntrees_z*maxcells;
 
   img3d.set_size(img_x,img_y,img_z,4);
-
-
+#if 0
   double side_len = blk_mdata.sub_block_dim_.x() / ((int)vcl_pow((float)2,(float)blk_mdata.max_level_));
-
+#endif
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
 
@@ -58,7 +57,6 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
-    boxm2_array_3d<uchar16>::iterator tree_iter;
     unsigned ni = trees.get_row1_count();
     unsigned nj = trees.get_row2_count();
     unsigned nk = trees.get_row3_count();
@@ -92,9 +90,9 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
               int factor = vcl_pow((float)2,(float)blk_iter->second.max_level_-depth-1);
               unsigned char intensity  = (unsigned char) vcl_floor( boxm2_mog3_grey_processor::expected_color(int_data->data()[index]) *255.0f);
 
-              for (unsigned subi = 0 ; subi < factor; subi++)
-                for (unsigned subj = 0 ; subj < factor; subj++)
-                  for (unsigned subk = 0 ; subk < factor; subk++)
+              for (int subi = 0; subi < factor; ++subi)
+                for (int subj = 0; subj < factor; ++subj)
+                  for (int subk = 0; subk < factor; ++subk)
                   {
                     img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
                           index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
@@ -145,8 +143,9 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
   int img_z = (max_index.z()-min_index.z()+1)*ntrees_z*maxcells;
 
   img3d.set_size(img_x,img_y,img_z,4);
+#if 0
   double side_len = blk_mdata.sub_block_dim_.x() / ((int)vcl_pow((float)2,(float)blk_mdata.max_level_));
-
+#endif
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
 
@@ -164,7 +163,6 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
-    boxm2_array_3d<uchar16>::iterator tree_iter;
     unsigned ni = trees.get_row1_count();
     unsigned nj = trees.get_row2_count();
     unsigned nk = trees.get_row3_count();
@@ -198,17 +196,14 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
               prob =  1- vcl_exp (-prob* side_len *sub_blk_dims.x());
               int factor = vcl_pow((float)2,(float)blk_iter->second.max_level_-depth-1);
 
-              unsigned char r,g,b ;
               vnl_vector_fixed<float,3> color = boxm2_gauss_rgb_processor::expected_color(int_data->data()[index]);
-              r = (unsigned char) vcl_floor(color[0]*255.0f) ;
-              g = (unsigned char) vcl_floor(color[1]*255.0f) ;
-              b = (unsigned char) vcl_floor(color[2]*255.0f) ;
+              unsigned char r = (unsigned char) vcl_floor(color[0]*255.0f) ;
+              unsigned char g = (unsigned char) vcl_floor(color[1]*255.0f) ;
+              unsigned char b = (unsigned char) vcl_floor(color[2]*255.0f) ;
 
-              for (unsigned subi = 0 ; subi < factor; subi++)
-              {
-                for (unsigned subj = 0 ; subj < factor; subj++)
-                {
-                  for (unsigned subk = 0 ; subk < factor; subk++)
+              for (int subi = 0; subi < factor; ++subi)
+                for (int subj = 0; subj < factor; ++subj)
+                  for (int subk = 0; subk < factor; ++subk)
                   {
                     img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
                           index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
@@ -223,8 +218,6 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
                           index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
                           index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,2) =b;
                   }
-                }
-              }
             }
           }
         }
