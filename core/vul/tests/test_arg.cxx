@@ -29,6 +29,7 @@ char const * my_argv_1[] =
   "h",
   "i",
   "j",
+  "-req", "100",
   0
 };
 
@@ -56,6 +57,7 @@ void test_arg()
   vul_arg<vcl_list<int> > list1(arglist, "-list1", "List...");
   vul_arg<char*> filename1(arglist);
   vul_arg<vcl_vector<double> > list2(arglist, "-list2", "double List...");
+  vul_arg<int> required (arglist, "-req", "Another one to declare a required flag", vul_arg<int>::is_required);
 
   int my_argc = count_my_args(my_argv_1);
   vcl_cout << "vul_argc = " << my_argc
@@ -66,6 +68,7 @@ void test_arg()
            << ", bool3 = " << bool3()
            << ", list1 size = " << list1().size()
            << ", list2 size = " << list2().size()
+           << ", req = " << required()
            << vcl_endl;
   char **my_argv = (char**) my_argv_1; // casting away const !!!
 
@@ -73,6 +76,7 @@ void test_arg()
 
   TEST("int1", int1(), 3);
   TEST("int2", int2(), 2);
+  TEST("req", required(), 100);
   TEST("filename == f", vcl_strcmp(filename1(), "f"), 0);
 
   {
