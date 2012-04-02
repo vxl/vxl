@@ -1,4 +1,6 @@
 # contrib/brl/bseg/boxm2_batch/CMakeLists.txt
+PROJECT( boxm2_batch )
+
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
