@@ -291,7 +291,11 @@ void bprb_batch_process_manager::set_stdout(vcl_string file)
 void bprb_batch_process_manager::reset_stdout()
 {
    vcl_fclose (stdout);
-   vcl_freopen ("CON","w",stdout);
+#ifdef WIN32
+  vcl_freopen ("CON","w",stdout);
+#else
+  vcl_freopen ("/dev/tty","w",stdout);
+#endif
 }
 
 
