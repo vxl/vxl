@@ -124,16 +124,18 @@ void vul_arg_base::display_usage_and_exit(char const* msg)
 
 // vul_arg_base constructors
 
-vul_arg_base::vul_arg_base(vul_arg_info_list& l, char const* option_string, char const* helpstring)
+vul_arg_base::vul_arg_base(vul_arg_info_list& l, char const* option_string, char const* helpstring,  bool required)
 : set_(false),
+  required_(required),
   option_(option_string?option_string:"\0"),
   help_(helpstring?helpstring:"\0")
 {
   l.add(this);
 }
 
-vul_arg_base::vul_arg_base(char const* option_string, char const* helpstring)
-: set_(false),
+vul_arg_base::vul_arg_base(char const* option_string, char const* helpstring, bool required )
+    : set_(false),
+      required_(required),
   option_(option_string?option_string:"\0"),
   help_(helpstring?helpstring:"\0")
 {
@@ -186,12 +188,14 @@ void vul_arg_info_list::display_help( char const*progname)
     vcl_cerr << "Usage: <prog_name> ";
 
   // Print "prog [-a int] string string"
+
   for (unsigned int i=0; i< args_.size(); i++) {
     if (! args_[i]->option_.empty()) {
-      vcl_cerr << '[' << args_[i]->option();
+      if (!args_[i]->required_) vcl_cerr << '[';
+      vcl_cerr << args_[i]->option();
       if (vcl_strlen(args_[i]->type_)> 0)
         vcl_cerr << ' ' << args_[i]->type_;
-      vcl_cerr << "] ";
+      if (!args_[i]->required_) vcl_cerr << "] ";
     }
     else {
       // options without switches are required.
@@ -220,12 +224,19 @@ void vul_arg_info_list::display_help( char const*progname)
 
   // Do required args first
   vul_printf(vcl_cerr, "REQUIRED:\n");
-  for (unsigned int i=0; i< args_.size(); i++)
+  for (unsigned int i=0; i< args_.size(); i++)  // First required without option string
     if (!args_[i]->help_.empty())
-      if (args_[i]->option_.empty()) {
-        vul_printf(vcl_cerr, fmtbuf.c_str(), "", args_[i]->type_, args_[i]->help_.c_str());
-        vcl_cerr << " ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
-      }
+        if (args_[i]->option_.empty()&& !(args_[i]->required_)) {
+          vul_printf(vcl_cerr, fmtbuf.c_str(), "", args_[i]->type_, args_[i]->help_.c_str());
+          vcl_cerr << " ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
+        }
+  for (unsigned int i=0; i< args_.size(); i++) // Then required with option string
+    if (!args_[i]->help_.empty())
+        if (args_[i]->required_  && !args_[i]->option_.empty()) {
+          vul_printf(vcl_cerr, fmtbuf.c_str(), args_[i]->option(), args_[i]->type_, args_[i]->help_.c_str());
+          vcl_cerr << "\n"; // ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
+        }
+
   vcl_cerr << vcl_endl;
 
   // Then others
@@ -233,7 +244,7 @@ void vul_arg_info_list::display_help( char const*progname)
   vul_printf(vcl_cerr, fmtbuf.c_str(), "Switch", "Type", "Help [default value]") << vcl_endl << vcl_endl;
   for (unsigned int i=0; i< args_.size(); i++)
     if (!args_[i]->help_.empty())
-      if (!args_[i]->option_.empty()) {
+      if (!args_[i]->option_.empty() && !(args_[i]->required_) ) {
         vul_printf(vcl_cerr, fmtbuf.c_str(), args_[i]->option(), args_[i]->type_, args_[i]->help_.c_str());
         vcl_cerr << " ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
       }
@@ -356,6 +367,17 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
         display_help(cmdname);
         vcl_cerr << "vul_arg_info_list: WARNING: Unparsed switch [" << *av << "]\n";
       }
+
+  // 4.3 This is required arguments (including option) have been set
+  for (unsigned int i = 0; i < args_.size(); ++i)
+      if (args_[i]->required_ && ! (args_[i]->set_) ) {
+         display_help(cmdname);
+
+         vcl_cerr << "\nargParse::ERROR: Required arg " << args_[i]->option_
+                  << " not supplied\n\n";
+         vcl_exit(1);
+      }
+
 
   // 5. Some people like a chatty program.
 #ifdef DEBUG //fsm: do not print outcome - it looks like an error message.
