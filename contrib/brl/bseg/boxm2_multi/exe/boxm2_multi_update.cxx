@@ -42,6 +42,7 @@ int main(int argc,  char** argv)
   vul_arg<unsigned>   num_updates("-num", "Number of updates", 10);
   vul_arg<int>        inFrame("-frame", "Single frame to use", -1);
   vul_arg<int>        renderInt("-renderInt", "Interval to render progress", -1);
+  vul_arg<int>        numGPU("-numGPU", "Number of GPUs to use", 2);
   vul_arg_parse(argc, argv);
 
   //create scene
@@ -53,13 +54,17 @@ int main(int argc,  char** argv)
   //create cpu cache (lru), and create opencl_cache on the device
   boxm2_lru_cache::create(scene);
 
-  //DEBUG - using just one gpu at first
   //make a multicache
-  for (int i=0; i<mgr->gpus_.size(); ++i)
-    vcl_cout<<" GPU "<<i<<": "<<mgr->gpus_[i]<<vcl_endl;
-  //vcl_vector<bocl_device*> gpus;
-  //gpus.push_back(mgr->gpus_[1]);
-  boxm2_multi_cache mcache(scene, mgr->gpus_);
+  if( numGPU() > mgr->gpus_.size() ) {
+    vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr->gpus_.size()<<" available"<<vcl_endl; 
+    return -1;
+  }
+  
+  //grab the number of devices specified
+  vcl_vector<bocl_device*> gpus;
+  for(int i=0; i<numGPU(); ++i)
+    gpus.push_back(mgr->gpus_[i]);
+  boxm2_multi_cache mcache(scene, gpus);
   vcl_cout<<"Multi Cache:\n"<<mcache.to_string()<<vcl_endl;
 
   //-- GET UPDATE IMG/CAMS ---
