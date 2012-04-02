@@ -17,20 +17,20 @@
 class boxm2_ocl_render_scene_uncertainty_map
 {
   public:
-    static bool render_scene_uncertainty_map(   boxm2_scene_sptr & scene,
-												bocl_device_sptr & device,
-												boxm2_opencl_cache_sptr & opencl_cache,
-												unsigned ni,
-												unsigned nj,
-												vcl_string ident,
-												vil_image_view<float> * exp_image,
-												vil_image_view<float> * vis_image,
-												bool visualization=false);
-    
+    static bool render_scene_uncertainty_map( boxm2_scene_sptr & scene,
+                                              bocl_device_sptr & device,
+                                              boxm2_opencl_cache_sptr & opencl_cache,
+                                              unsigned ni,
+                                              unsigned nj,
+                                              vcl_string ident,
+                                              vil_image_view<float> * exp_image,
+                                              vil_image_view<float> * vis_image,
+                                              bool visualization=false);
+
   private:
-	static   vnl_float_4 compute_cubic_trajectory(float phi_min,float phi_max, 
-																 float theta_min, float theta_max,
-																 vil_image_view<float> * uimg);
+    static   vnl_float_4 compute_cubic_trajectory(float phi_min,float phi_max,
+                                                  float theta_min, float theta_max,
+                                                  vil_image_view<float> * uimg);
     //compile kernels and place in static map
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="" );
 

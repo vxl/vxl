@@ -19,17 +19,17 @@ void cast_ray(int,int,float,float,float,float,float,float,
 __kernel
 void
 render_alpha_integral( __constant  RenderSceneInfo * linfo,
-                  __global    int4               * tree_array,
-                  __global    float              * alpha_array,
-                  __global    float4             * ray_origins,
-                  __global    float4             * ray_directions,
-                  __global    float              * alpha_int_image,      // input image and store vis_inf and pre_inf
-                  __global    uint4              * exp_image_dims,
-                  __global    float              * output,
-                  __constant  uchar              * bit_lookup,
-                  __local     uchar16            * local_tree,
-                  __local     uchar              * cumsum,        //cumulative sum helper for data pointer
-                  __local     int                * imIndex)
+                       __global    int4            * tree_array,
+                       __global    float           * alpha_array,
+                       __global    float4          * ray_origins,
+                       __global    float4          * ray_directions,
+                       __global    float           * alpha_int_image, // input image and store vis_inf and pre_inf
+                       __global    uint4           * exp_image_dims,
+                       __global    float           * output,
+                       __constant  uchar           * bit_lookup,
+                       __local     uchar16         * local_tree,
+                       __local     uchar           * cumsum,          // cumulative sum helper for data pointer
+                       __local     int             * imIndex)
 {
   //----------------------------------------------------------------------------
   //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
@@ -55,16 +55,20 @@ render_alpha_integral( __constant  RenderSceneInfo * linfo,
   float4 ray_o = ray_origins[ imIndex[llid] ];
   float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+#if 0
+  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+#endif
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  //uint  eint    = as_uint(exp_image[imIndex[llid]]);
-  //uchar echar   = convert_uchar(eint);
-  //float expint  = convert_float(echar)/255.0f;
+#if 0
+  uint  eint    = as_uint(exp_image[imIndex[llid]]);
+  uchar echar   = convert_uchar(eint);
+  float expint  = convert_float(echar)/255.0f;
+#endif
   float alpha_int  = alpha_int_image[imIndex[llid]];
   float vis     = 1.0;
   AuxArgs aux_args;
@@ -79,6 +83,7 @@ render_alpha_integral( __constant  RenderSceneInfo * linfo,
   alpha_int_image[imIndex[llid]] =  alpha_int;
 }
 #endif
+
 #ifdef RENDER_USING_ALPHA_INTEGRAL
 //need to define a struct of type AuxArgs with auxiliary arguments
 // to supplement cast ray args
@@ -99,20 +104,20 @@ void cast_ray(int,int,float,float,float,float,float,float,
 __kernel
 void
 render_using_alpha_integral( __constant  RenderSceneInfo    * linfo,
-							 __global    int4               * tree_array,
-							 __global    float              * alpha_array,
-							 __global    MOG_TYPE           * mixture_array,
-							 __global    float4             * ray_origins,
-							 __global    float4             * ray_directions,
-							 __global    float              * exp_image,      // input image and store vis_inf and pre_inf
-							 __global    float              * alpha_integral_image,
-							 __global    float              * alpha_integral_cum_image,
-							 __global    uint4              * exp_image_dims,
-							 __global    float              * output,
-							 __constant  uchar              * bit_lookup,
-							 __local     uchar16            * local_tree,
-							 __local     uchar              * cumsum,        //cumulative sum helper for data pointer
-							 __local     int                * imIndex)
+                             __global    int4               * tree_array,
+                             __global    float              * alpha_array,
+                             __global    MOG_TYPE           * mixture_array,
+                             __global    float4             * ray_origins,
+                             __global    float4             * ray_directions,
+                             __global    float              * exp_image,     // input image and store vis_inf and pre_inf
+                             __global    float              * alpha_integral_image,
+                             __global    float              * alpha_integral_cum_image,
+                             __global    uint4              * exp_image_dims,
+                             __global    float              * output,
+                             __constant  uchar              * bit_lookup,
+                             __local     uchar16            * local_tree,
+                             __local     uchar              * cumsum,        // cumulative sum helper for data pointer
+                             __local     int                * imIndex)
 {
   //----------------------------------------------------------------------------
   //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
@@ -138,24 +143,28 @@ render_using_alpha_integral( __constant  RenderSceneInfo    * linfo,
   float4 ray_o = ray_origins[ imIndex[llid] ];
   float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+#if 0
+  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+#endif
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  //uint  eint    = as_uint(exp_image[imIndex[llid]]);
-  //uchar echar   = convert_uchar(eint);
-  //float expint  = convert_float(echar)/255.0f;
-  float expint			  = exp_image[imIndex[llid]];
-  float alpha_int		  = alpha_integral_image[imIndex[llid]];
-  float alpha_int_cum     = alpha_integral_cum_image[imIndex[llid]];
+#if 0
+  uint  eint          = as_uint(exp_image[imIndex[llid]]);
+  uchar echar         = convert_uchar(eint);
+  float expint        = convert_float(echar)/255.0f;
+#endif
+  float expint        = exp_image[imIndex[llid]];
+  float alpha_int     = alpha_integral_image[imIndex[llid]];
+  float alpha_int_cum = alpha_integral_cum_image[imIndex[llid]];
   AuxArgs aux_args;
-  aux_args.alpha  = alpha_array;
-  aux_args.mog    = mixture_array;
-  aux_args.expint = &expint;
-  aux_args.alpha_int = &alpha_int;
+  aux_args.alpha      = alpha_array;
+  aux_args.mog        = mixture_array;
+  aux_args.expint     = &expint;
+  aux_args.alpha_int  = &alpha_int;
   aux_args.alpha_int_cum = &alpha_int_cum;
 
   float vis  = 1.0f;
@@ -170,4 +179,5 @@ render_using_alpha_integral( __constant  RenderSceneInfo    * linfo,
   //store visibility at the end of this block
   alpha_integral_image[imIndex[llid]] = alpha_int;
 }
+
 #endif
