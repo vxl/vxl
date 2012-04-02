@@ -54,7 +54,7 @@ template<class T>
 inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* data,
                                        unsigned nx, unsigned ny, unsigned nz,
                                        vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep,
-                                       T outval=0)
+                                       double outval=0)
 {
   if (x<0) return static_cast<double>(outval);
   if (y<0) return static_cast<double>(outval);
