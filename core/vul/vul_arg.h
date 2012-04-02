@@ -123,7 +123,6 @@ void vul_arg_display_usage_and_exit(char const* msg = 0);
 template <class T>
 class vul_arg : public vul_arg_base
 {
-
  private:
   void settype() { ::settype(*this); }
   struct required_option_type {}; // see constructors
@@ -143,7 +142,7 @@ class vul_arg : public vul_arg_base
   vul_arg(char const* option_string = 0,
           char const* helpstring = 0,
           T default_value = T()
- 	)
+         )
     : vul_arg_base(option_string,helpstring, false),
       value_(default_value) { settype(); }
 
@@ -157,10 +156,10 @@ class vul_arg : public vul_arg_base
 
   //: Dummy parameter to be passed during construction. It sets a flag as required.
   static required_option_type is_required;
-  
-   //: Construct a vul_arg<T> that user must set in command line.
+
+  //: Construct a vul_arg<T> that user must set in command line.
   // Note that a default value does not make sense.
-  // Add this argument to the global list of arguments that 
+  // Add this argument to the global list of arguments that
   // vul_arg_base::parse() uses when it eventually gets the command line.
   //
   // As in the previous constructors, if \a option_string is null, then the argument is assigned to the
@@ -182,9 +181,7 @@ class vul_arg : public vul_arg_base
           required_option_type dummy )
     : vul_arg_base(l, option_string, helpstring, true),
       value_(T()) { settype(); }
-      
-      
-  
+
   //: return the arg's current value, whether the default or the one from the command line.
   T      & operator () () { return value_; }
   T const& operator () () const { return value_; }
@@ -198,7 +195,6 @@ class vul_arg : public vul_arg_base
     ::print_value(s, *this);
     return s; // << flush
   }
-
 };
 
 //: a helper for vul_arg::parse.
