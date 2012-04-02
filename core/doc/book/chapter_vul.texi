@@ -161,6 +161,29 @@ Passing a @code{0} as the flag string means that the argument is
 obligatory, and will be taken as the first unparsed word on the command
 line.
 
+@subsection Required arguments
+
+As shown in the example above, a very simple method to set an argument as 
+obligatory is passing a @code{0} (or an empty string) as the flag string.
+If there are two or more arguments, the parser extracts these arguments
+using the order they appear on the command line.
+
+In that case, there is not a flag string. This method to provide obligatory 
+arguments is very common (i.e. when you use operating system shells). However,
+if you have many arguments or want a more readable interface, you could prefer
+a required argument which includes a flag string.
+
+To add this functionality, vul includes a special constructor to indicate that
+the argument is required. If you want the paremeter to be obligatory, add the
+special value @code{is_required} as the third parameter. For example:
+
+@smallexample
+  vul_arg<int>    key      ("-key", "Required int", vul_arg<int>::is_required);
+  //     Type     Variable   Flag      Help text      dummy parameter
+@end smallexample
+
+Note that there is not a default value, because it does not make sense.
+
 @subsection Help text
 
 The help text supplied with each argument is used to provide a summary of
