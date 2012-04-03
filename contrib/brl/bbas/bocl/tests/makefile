@@ -10,6 +10,7 @@ TESTS += test_global_io_bandwidth.cxx
 TESTS += test_command_queue.cxx
 TESTS += test_kernel.cxx
 TESTS += test_local_mem_access.cxx
+TESTS += test_mem.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

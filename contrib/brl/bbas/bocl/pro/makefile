@@ -7,6 +7,7 @@ MANPAGE_SOURCES += bocl_processes.h
 
 SOURCES += processes/bocl_get_device_process.cxx
 SOURCES += processes/bocl_init_manager_process.cxx
+SOURCES += processes/bocl_info_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

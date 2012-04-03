@@ -11,6 +11,7 @@ SOURCES += boxm2_ocl_paint_online.cxx
 SOURCES += boxm2_ocl_update_color.cxx
 SOURCES += boxm2_ocl_refine.cxx
 SOURCES += boxm2_ocl_update.cxx
+SOURCES += boxm2_ocl_render_scene_uncertainty_map.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

@@ -41,6 +41,7 @@ SOURCES += boxm2_points_to_volume_function.cxx
 SOURCES += boxm2_compute_normal_albedo_functor.cxx
 SOURCES += boxm2_compute_normal_albedo_functor_opt.cxx
 SOURCES += boxm2_gauss_rgb_processor.cxx
+SOURCES += boxm2_export_stack_images_function.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
