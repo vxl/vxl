@@ -91,6 +91,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   vcl_vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
   vcl_cout<<"Group list size; "<<grp.size()<<vcl_endl;
   vul_timer t; t.mark();
+  float transfer_time = 0.0f;
   for(int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
@@ -118,17 +119,19 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
       clFinish(queues[i]);
       boxm2_block_id id = ids[i];
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      
+      //read aux data back into CPU
+      vul_timer ttime; ttime.mark();
       read_aux(id, ocl_cache, queues[i]);
+      transfer_time += ttime.all();
     }
   }
-  float gpu_time = t.all();
+  float gpu_time = t.all() - transfer_time;
 
-  //read aux data into cpu cache
+  //unref mems
   for (int i=0; i<queues.size(); ++i) {
-    clFinish(queues[i]);
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
-    //free input image
-    ocl_cache->unref_mem(in_imgs[i].ptr());
+    //clFinish(queues[i]);
+    ocl_caches[i]->unref_mem(in_imgs[i].ptr());
   }
 
 //==== DEBUG ====
@@ -231,8 +234,6 @@ void boxm2_multi_store_aux::store_aux_per_block(const boxm2_block_id&     id,
     kern->set_arg( aux3 );
   }
   kern->set_arg( lookup.ptr() );
-
-  // kern->set_arg( persp_cam.ptr() );
   kern->set_arg( ray_o_buff.ptr() );
   kern->set_arg( ray_d_buff.ptr() );
   kern->set_arg( img_dim.ptr() );

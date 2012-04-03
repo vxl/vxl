@@ -250,7 +250,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
     ocl_cache->unref_mem(vis_mems[i].ptr());
     ocl_cache->unref_mem(pre_mems[i].ptr());
   }
-  return 0.0f;// gpu_time;
+  return gpu_time;
 }
 
 
