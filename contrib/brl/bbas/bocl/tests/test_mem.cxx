@@ -2,11 +2,12 @@
 #include <testlib/testlib_root_dir.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_manager.h>
+#include <vul/vul_timer.h>
 
 bool test_fill_kernel()
 {
   //initialize a buffer
-  int length = 128*128; 
+  int length = 1280*720; 
   int* a = new int[length]; 
   int* b = new int[length];
   for(int i=0; i<length; ++i) {
@@ -65,6 +66,31 @@ bool test_fill_kernel()
     }
   }
   TEST("bocl_mem fill gpu buffer returned all correct values", true, true);
+
+  //-------------------------------------------------
+  // TIMING tests
+  //-------------------------------------------------
+  //Do timing tests on uints
+  vul_timer t; t.mark();
+  for(int i=0; i<1000; ++i)
+    b_mem.fill(queue, (uint) 1, "uint");
+  float fill_time = t.all() / 1000.0f;
+
+  //time instantiation 
+  t.mark();
+  for(int i=0; i<1000; ++i) {
+    int* ones = new int[length]; 
+    for(int ii=0; ii<length; ++ii) ones[ii] = 1; 
+    b_mem.write_to_gpu_mem(queue, ones, sizeof(int)*length);
+    delete[] ones;
+  }
+  float trans_time = t.all() / 1000.0f;
+  
+  if( fill_time < trans_time ) 
+    vcl_cout<<"Kernel fill time faster on average!: ";
+  else
+    vcl_cout<<"Buffer transfer fill time faster on average: ";
+  vcl_cout<<fill_time<<" ms vs. "<<trans_time<<" ms"<<vcl_endl;
 
   //clean up buffer
   delete[] a; 
