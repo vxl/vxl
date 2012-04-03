@@ -65,11 +65,11 @@ class bocl_mem : public vbl_ref_count
   
   //: fill gpu buffer with value (shouldn't use any CPU mem
   template<class T>
-  bool fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string);
+  bool fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string, bool blocking=false);
 
   //: zeros out GPU buffer
-  bool zero_gpu_buffer(const cl_command_queue& cmd_queue) {
-    return this->fill(cmd_queue, (cl_uint) 0, "uint");
+  bool zero_gpu_buffer(const cl_command_queue& cmd_queue, bool blocking=false) {
+    return this->fill(cmd_queue, (cl_uint) 0, "uint", blocking);
   }
 
   //: intitializes GPU buffer with a constant value
@@ -132,7 +132,7 @@ class bocl_mem : public vbl_ref_count
 
 //Templated fill method
 template<class T>
-bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string)
+bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string, bool blocking)
 {
   //buffer length
   cl_uint len = this->num_bytes_ / sizeof(val);
@@ -150,19 +150,19 @@ bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_st
 
   //grab kernel
   bocl_kernel* fillKernel = this->get_set_kernel(dev_id, context, type_string);
-  bocl_mem* valMem = new bocl_mem(this->context_, &val, sizeof(val), "fill value");
-  valMem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);  
+  bocl_mem valMem(this->context_, &val, sizeof(val), "fill value");
+  valMem.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);  
   bocl_mem lenMem(this->context_, &len, sizeof(len), "buffer length");
   lenMem.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //set args, execute
   fillKernel->set_arg(this);
-  fillKernel->set_arg(valMem);
+  fillKernel->set_arg(&valMem);
   fillKernel->set_arg(&lenMem);
   bool good = fillKernel->execute(cmd_queue, 2, lThreads, gThreads);
-  clFinish(cmd_queue);
+  if(blocking)
+    clFinish(cmd_queue);
   fillKernel->clear_args();  
-  delete valMem;
   return good;
 }
 
