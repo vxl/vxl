@@ -6,8 +6,6 @@
 #error "This header cannot be included directly, only through vil_math.h"
 #endif
 
-#include "vil_math_sse.txx"
-
 //:
 // \file
 // \brief Various mathematical manipulations of 2D images implemented with SSE
@@ -16,9 +14,14 @@
 
 // To add a new optimized implementation for a different set of types:
 //
-//  1.  Add a call to VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE for the new
-//      combination of types the implementation is defined for
-//  2.  Add the implementation for vil_math_image_abs_difference_1d_sse
+//  1.  Add a call to VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_DECL for the
+//      new combination of types the implementation is defined for.  This will
+//      declare the prototype for the specialization.
+//  2.  Add a call to VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_IMPL for the
+//      new combination of types the implementation is defined for.  This will
+//      implement the outer function which calls the SSE optimized function for
+//      the right set of types.
+//  3.  Add the implementation for vil_math_image_abs_difference_1d_sse
 //      specialized for the new type combination in vil_math_sse.txx
 //
 // Note:
@@ -28,7 +31,43 @@
 
 
 //: Compute absolute difference of two 1D images (imD = |imA-imB|)
-#define VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE(aT,bT,dT)  \
+template<class aT, class bT, class dT>
+void vil_math_image_abs_difference_1d_generic(
+  const aT* pxA, vcl_ptrdiff_t isA,
+  const bT* pxB, vcl_ptrdiff_t isB,
+        dT* pxD, vcl_ptrdiff_t isD,
+  unsigned len);
+
+template<class aT, class bT, class dT>
+void vil_math_image_abs_difference_1d_sse(
+  const aT* pxA, const bT* pxB, dT* pxD,
+  unsigned len);
+
+template<class aT, class bT, class dT>
+void vil_math_image_abs_difference_1d(
+  const aT* pxA, vcl_ptrdiff_t isA,
+  const bT* pxB, vcl_ptrdiff_t isB,
+        dT* pxD, vcl_ptrdiff_t isD,
+  unsigned len);
+
+#define VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_DECL(aT,bT,dT)  \
+template<>                                                        \
+void vil_math_image_abs_difference_1d_sse<aT,bT,dT>(              \
+  const aT* pxA, const bT* pxB, dT* pxD,                          \
+  unsigned len);                                                  \
+template<>                                                        \
+void vil_math_image_abs_difference_1d<aT,bT,dT>(                  \
+  const aT* pxA, vcl_ptrdiff_t isA,                               \
+  const bT* pxB, vcl_ptrdiff_t isB,                               \
+        dT* pxD, vcl_ptrdiff_t isD,                               \
+  unsigned len);
+
+VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_DECL(vxl_byte,vxl_byte,vxl_byte)
+VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_DECL(float,float,float)
+
+#undef VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_DECL
+
+#define VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_IMPL(aT,bT,dT)        \
 template<>                                                              \
 inline void vil_math_image_abs_difference_1d<aT,bT,dT>(                 \
   const aT* pxA, vcl_ptrdiff_t isA,                                     \
@@ -47,9 +86,9 @@ inline void vil_math_image_abs_difference_1d<aT,bT,dT>(                 \
   }                                                                     \
 }
 
-VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE(vxl_byte,vxl_byte,vxl_byte)
-VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE(float,float,float)
+VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_IMPL(vxl_byte,vxl_byte,vxl_byte)
+VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_IMPL(float,float,float)
 
-#undef VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE
+#undef VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_IMPL
 
 #endif

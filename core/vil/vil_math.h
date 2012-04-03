@@ -16,6 +16,10 @@
 #include <vil/vil_transform.h>
 #include <vil/vil_config.h>
 
+#ifdef VXL_HAS_SSE2_HARDWARE_SUPPORT
+#include "vil_math_sse.h"
+#endif
+
 //: Compute minimum and maximum values over view
 template<class T>
 inline void vil_math_value_range(const vil_image_view<T>& view, T& min_value, T& max_value)
@@ -820,7 +824,7 @@ inline void vil_math_image_difference(const vil_image_view<aT>& imA,
 }
 
 
-//: Compute absolute difference of two i1D images (im_sum = |imA-imB|)
+//: Compute absolute difference of two 1D images (im_sum = |imA-imB|)
 // \relatesalso vil_image_view
 template<class aT, class bT, class dT>
 inline void vil_math_image_abs_difference_1d_generic(
@@ -1098,7 +1102,7 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
 
 
 #ifdef VXL_HAS_SSE2_HARDWARE_SUPPORT
-#include "vil_math_sse.h"
+#include "vil_math_sse.txx"
 #endif
 
 #endif // vil_math_h_

@@ -1,25 +1,24 @@
 // This is core/vil/vil_math_sse.txx
+#ifndef vil_math_sse_txx_
+#define vil_math_sse_txx_
 
-#ifndef vil_math_sse_h_
-#error "This header cannot be included directly, only through vil_math_sse.h"
+#ifndef vil_math_h_
+#error "This header cannot be included directly, only through vil_math_.h"
 #endif
 
 #include <vcl_cstring.h>
 #include <vxl_config.h>
-#include <x86intrin.h>
+
+#include <emmintrin.h>
+#ifdef __SSE3__
+#include <pmmintrin.h>
+#endif
 
 //:
 // \file
 // \brief Various mathematical manipulations of 2D images implemented with SSE
 // intrinsic functions
 // \author Chuck Atkins
-
-//: Compute absolute difference of two 1D images (im_sum = |imA-imB|)
-template<class aT, class bT, class dT>
-void vil_math_image_abs_difference_1d_sse(
-  const aT* pxA, const bT* pxB, dT* pxD,
-  unsigned len);
-
 
 //: Compute absolute difference of two 1D images (im_sum = |imA-imB|)
 template<>
@@ -130,3 +129,5 @@ inline void vil_math_image_abs_difference_1d_sse<float,float,float>(
     vcl_memcpy(pxD, pxLastD, ni_m_4_bytes);
   }
 }
+
+#endif // vil_math_sse_txx_
