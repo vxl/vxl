@@ -121,6 +121,9 @@ SOURCE=.\boxm2_ocl_refine.cxx
 # Begin Source File
 SOURCE=.\boxm2_ocl_update.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_render_scene_uncertainty_map.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -150,6 +153,9 @@ SOURCE=.\boxm2_ocl_refine.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_update.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_render_scene_uncertainty_map.h
 # End Source File
 # End Group
 # End Target

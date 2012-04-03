@@ -164,6 +164,9 @@ SOURCE=.\bocl_command_queue_mgr.cxx
 SOURCE=.\test_local_mem_access.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_mem.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

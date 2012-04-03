@@ -101,6 +101,9 @@ SOURCE=.\processes/bocl_get_device_process.cxx
 # Begin Source File
 SOURCE=.\processes/bocl_init_manager_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/bocl_info_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

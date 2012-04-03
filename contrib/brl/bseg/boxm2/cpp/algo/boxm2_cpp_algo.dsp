@@ -135,6 +135,9 @@ SOURCE=.\boxm2_compute_normal_albedo_functor_opt.cxx
 SOURCE=.\boxm2_gauss_rgb_processor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_export_stack_images_function.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm2_batch_functors+BOXM2_APMs-.cxx
 # End Source File
 # Begin Source File
@@ -256,6 +259,9 @@ SOURCE=.\boxm2_gauss_rgb_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_compute_normal_albedo_functor_opt.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_export_stack_images_function.h
 # End Source File
 # End Group
 # End Target
