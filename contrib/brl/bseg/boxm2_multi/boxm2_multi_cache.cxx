@@ -51,7 +51,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
     groupSizeX = 1;
   }
   else if(sub_scenes_.size() == 4) {
-    if(scene_dim.y() % 2 != 0 || scene_dim.z() % 2 != 0) {
+    if(scene_dim.y() % 2 != 0 || scene_dim.x() % 2 != 0) {
       vcl_cerr<<"  Boxm2_multi_cache::scene x/y dimension not divisible by 2\n"
               <<"  "<<scene_dim.y()<<" blocks by "<<scene_dim.x()<<vcl_endl;
       throw -1;
