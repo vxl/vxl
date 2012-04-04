@@ -33,7 +33,7 @@ bool boxm2_ocl_refine_process_cons(bprb_func_process& pro)
 
     // process has 1 output:
     vcl_vector<vcl_string>  output_types_(n_outputs_);
-    output_types_[0] = "unsigned";  //numcells
+    output_types_[0] = "int";  //numcells
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -56,7 +56,8 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
     vcl_cout<<"boxm2_ocl_refine_process num split: "<<num_cells<<vcl_endl;
     
     //set output
-    pro.set_output_val<unsigned>(0, num_cells);
+    pro.set_output_val<int>(0, num_cells);
+    
     return true;
 }
 
