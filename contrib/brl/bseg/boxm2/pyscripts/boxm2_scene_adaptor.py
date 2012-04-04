@@ -80,9 +80,9 @@ class boxm2_scene_adaptor(object):
 
     #run update grey or RGB
     if self.rgb :
-      update_rgb(self.scene, cache, cam, img, dev);
+      return update_rgb(self.scene, cache, cam, img, dev);
     else :
-      update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var);
+      return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var);
       
   #update wrapper, can pass in a Null device to use
   def update_app(self, cam, img, device_string="") :
