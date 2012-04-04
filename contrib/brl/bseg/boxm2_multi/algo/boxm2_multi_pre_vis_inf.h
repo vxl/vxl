@@ -35,7 +35,7 @@ class boxm2_multi_pre_vis_inf
   private:
 
     //runs pre/vis on single block
-    static void pre_vis_per_block(const boxm2_block_id&     id,
+    static float pre_vis_per_block(const boxm2_block_id&     id,
                                         boxm2_scene_sptr    scene,
                                         boxm2_opencl_cache* opencl_cache,
                                         cl_command_queue&   queue,

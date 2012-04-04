@@ -91,7 +91,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   //initialize per group images (vis/pre)
   vcl_vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
   vul_timer t; t.mark();
-  float gpu_time = 0.0f, cpu_time = 0.0f;
+  float gpu_time = 0.0f, cpu_time = 0.0f, transfer_time = 0.0f; 
 
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
@@ -116,7 +116,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       //set visibility to one, set pre to zero
       vis_mems[i]->fill(queues[i], 1.0f, "float");
       pre_mems[i]->zero_gpu_buffer(queues[i]);
-      pre_vis_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0],
+      cpu_time += pre_vis_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0],
                         vis_mems[i], pre_mems[i], img_dims[i],
                         ray_os[i], ray_ds[i],
                         out_imgs[i], lookups[i], lthreads, gThreads);
@@ -174,7 +174,6 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       vcl_memcpy(group.get_vis(i), v/*visImg*/, ni*nj*sizeof(float));
       vcl_memcpy(group.get_pre(i), p/*preImg*/, ni*nj*sizeof(float));
 
-      t.mark();
       bocl_device_sptr device = ocl_caches[i]->get_device();
       bocl_kernel*     kern   = get_kernels(device, options)[2];
       preInfMems[i]->enqueue_unmap(queues[i], p);
@@ -190,12 +189,17 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 #endif
     }
   }
-  gpu_time = t.all() - cpu_time; 
+  gpu_time = t.all();  
 
+  t.mark(); 
   //---- This instead of the reduce step ----
   //Norm image create on CPU
   for (int c=0; c<ni*nj; ++c)
     norm_img[c] = visImg[c] + preImg[c];
+  
+  //grab accurate GPU time (includes transfers)
+  cpu_time += t.all();
+  gpu_time -= cpu_time;
 
 #if 0
   vil_image_view<float> nimg(ni,nj), vimg(ni,nj), pimg(ni,nj);
@@ -254,7 +258,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 }
 
 
-void boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id&     id,
+float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id&     id,
                                                 boxm2_scene_sptr    scene,
                                                 boxm2_opencl_cache* opencl_cache,
                                                 cl_command_queue&   queue,
@@ -270,6 +274,9 @@ void boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id&     id,
                                                 vcl_size_t*         lthreads,
                                                 vcl_size_t*         gThreads)
 {
+  vul_timer ttime; ttime.mark();
+  float transfer_time;
+  
   //choose correct render kernel
   boxm2_block_metadata mdata = scene->get_block_metadata(id);
 
@@ -314,11 +321,14 @@ void boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id&     id,
   kern->set_arg( cl_output.ptr() );
   kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar16) );//local tree,
   kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
+  transfer_time += ttime.all();
+  
   //execute kernel
   kern->execute(queue, 2, lthreads, gThreads);
 
   //clear render kernel args so it can reset em on next execution
   kern->clear_args();
+  return transfer_time;
 }
 #if 0
 float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,

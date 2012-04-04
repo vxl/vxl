@@ -33,7 +33,7 @@ class boxm2_multi_update_cell
 
   private:
     //runs pre/vis on single block
-    static void calc_beta_per_block(const boxm2_block_id&     id,
+    static float calc_beta_per_block(const boxm2_block_id&     id,
                                     boxm2_scene_sptr    scene,
                                     boxm2_opencl_cache* opencl_cache,
                                     cl_command_queue&   queue,

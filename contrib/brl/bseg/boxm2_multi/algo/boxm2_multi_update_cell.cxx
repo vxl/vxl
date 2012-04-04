@@ -31,6 +31,8 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
                                                  boxm2_multi_update_helper& helper)
 {
   vcl_cout<<"  -- boxm2_multi_update_cell update cells --"<<vcl_endl;
+  float transfer_time = 0.0f;
+  
   //verify appearance model
   vcl_size_t lthreads[2] = {8,8};
   vcl_string data_type, options;
@@ -105,7 +107,7 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
       //make sure vis/pre are correct
       vis_mems[i]->write_to_gpu_mem(queues[i], group.get_vis(i), ni*nj*sizeof(float));
       pre_mems[i]->write_to_gpu_mem(queues[i], group.get_pre(i), ni*nj*sizeof(float));
-      calc_beta_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0],
+      transfer_time += calc_beta_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0],
                           vis_mems[i], pre_mems[i], norm_mems[i], img_dims[i],
                           ray_os[i], ray_ds[i], out_imgs[i], lookups[i],
                           lthreads, gThreads);
@@ -115,6 +117,8 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
     for (int idx=0; idx<indices.size(); ++idx){
       int i = indices[idx];
       clFinish(queues[i]);
+      
+      vul_timer ttime; ttime.mark();
       boxm2_opencl_cache* opencl_cache = ocl_caches[i];
       boxm2_block_id id = ids[i];
 
@@ -127,8 +131,9 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
       bocl_mem *aux2 = opencl_cache->get_data<BOXM2_AUX2>(id, dataLen*boxm2_data_traits<BOXM2_AUX2>::datasize());
       bocl_mem *aux3 = opencl_cache->get_data<BOXM2_AUX3>(id, dataLen*boxm2_data_traits<BOXM2_AUX3>::datasize());
       aux2->read_to_buffer(queues[i]);
-      aux3->read_to_buffer(queues[i]); 
-     }
+      aux3->read_to_buffer(queues[i]);
+      transfer_time += ttime.all();
+    }
   }
   gpu_time += t.all(); t.mark();
 
@@ -136,7 +141,7 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
   // Reduce images into pre/vis image and make sure the interim
   // pre/vis images are correct
   //-------------------------------------------------------------------
-  calc_beta_reduce(cache, cam, helper);
+  transfer_time += calc_beta_reduce(cache, cam, helper);
   gpu_time += t.all();
 
   //--------------------------------------
@@ -149,13 +154,13 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
     ocl_cache->unref_mem(pre_mems[i].ptr());
     ocl_cache->unref_mem(norm_mems[i].ptr());
   }
-  return gpu_time;
+  return gpu_time-transfer_time;
 }
 
 
 
 //runs pre/vis on single block
-void boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
+float boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
                                                   boxm2_scene_sptr    scene,
                                                   boxm2_opencl_cache* opencl_cache,
                                                   cl_command_queue&   queue,
@@ -172,6 +177,9 @@ void boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
                                                   vcl_size_t*         lThreads,
                                                   vcl_size_t*         gThreads)
 {
+  float transfer_time = 0.0f;
+  vul_timer ttime; ttime.mark();
+
   //write the image values to the buffer
   bocl_mem* blk       = opencl_cache->get_block(id);
   bocl_mem* blk_info  = opencl_cache->loaded_block_info();
@@ -205,6 +213,7 @@ void boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
   //prep aux2 and 3
   aux2->zero_gpu_buffer(queue);
   aux3->zero_gpu_buffer(queue);
+  transfer_time += ttime.all();
 
   kern->set_arg( blk_info );
   kern->set_arg( blk );
@@ -233,6 +242,7 @@ void boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
   //execute kernel
   kern->execute(queue, 2, lThreads, gThreads);
   kern->clear_args();
+  return transfer_time;
 }
 
 
@@ -242,6 +252,9 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
                                                  vpgl_camera_double_sptr cam,
                                                  boxm2_multi_update_helper& helper )
 {
+  vul_timer ttime; ttime.mark();
+  float transfer_time = 0.0f; 
+
   //get total scene info first
   vcl_string data_type, options;
   int apptypesize;
@@ -261,6 +274,8 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
     for (int i=0; i<ids.size(); ++i){
+      
+      ttime.mark();
       //grab sub scene and it's cache
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
@@ -327,6 +342,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       kern->set_arg( up_alpha_mem.ptr() );
       kern->set_arg( mog_var_mem.ptr() );
       kern->set_arg( out_imgs[i].ptr() );
+      transfer_time += ttime.all();
 
       //execute kernel
       kern->execute(queues[i], 2, local_threads, global_threads);
@@ -338,6 +354,8 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
     //-------------------------------------------------
     for (int i=0; i<ids.size(); ++i) {
       clFinish(queues[i]);
+      
+      ttime.mark();
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       boxm2_block_id id = ids[i];
       
@@ -355,11 +373,12 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       alpha->read_to_buffer(queues[i]);
       mog->read_to_buffer(queues[i]);
       num_obs->read_to_buffer(queues[i]);
+      transfer_time += ttime.all();
     }
   }
 
   //TODO keep track of execution time
-  return 0.0f;
+  return transfer_time;
 }
 
 
