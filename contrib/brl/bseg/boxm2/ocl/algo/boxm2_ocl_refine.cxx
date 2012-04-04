@@ -8,7 +8,7 @@
 vcl_map<vcl_string, bocl_kernel*> boxm2_ocl_refine::tree_kernels_;
 vcl_map<vcl_string, bocl_kernel*> boxm2_ocl_refine::data_kernels_;
 
-unsigned boxm2_ocl_refine::refine_scene(bocl_device_sptr device, 
+int boxm2_ocl_refine::refine_scene(bocl_device_sptr device, 
                                         boxm2_scene_sptr scene, 
                                         boxm2_opencl_cache_sptr opencl_cache,
                                         float thresh)
@@ -23,8 +23,8 @@ unsigned boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
-  if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)) )
-    return 0;
+  if (!check_val(status, CL_SUCCESS, "UPDATE EXECUTE FAILED: " + error_to_string(status)) )
+    return -1;
     
   float prob_buff[1];
   prob_buff[0]=thresh;
@@ -109,7 +109,9 @@ unsigned boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
 
       //execute kernel
       kern->execute( queue, 2, lThreads, gThreads);
-      clFinish(queue);
+      status = clFinish(queue);
+      if (!check_val(status, CL_SUCCESS, "REFINE EXECUTE FAILED: " + error_to_string(status)) )
+        return -1;
       gpu_time += kern->exec_time();
 
       //clear render kernel args so it can reset em on next execution
@@ -207,7 +209,11 @@ unsigned boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
 
           //execute kernel
           kern->execute( queue, 2, lThreads, gThreads);
-          clFinish( queue);
+          status = clFinish(queue);
+          if (!check_val(status, CL_SUCCESS, "REFINE EXECUTE FAILED: " + error_to_string(status)) )
+            return -1;
+
+        
           kern->clear_args();
           gpu_time += kern->exec_time();
 
