@@ -40,35 +40,51 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
   vcl_cout<<"Min ids, max ids: "<<min_ids<<","<<max_ids<<vcl_endl;
 
   //check if scene dimensions will work
-  if(scene_dim.y() % sub_scenes_.size() != 0) {
-    vcl_cerr<<"  Boxm2_multi_cache::scene y dimension is not divisible by num devices\n"
-            <<"  "<<scene_dim.y()<<" blocks by "<<sub_scenes_.size()<<" devices"<<vcl_endl;
-    throw -1;
+  int groupSizeX = 1, groupSizeY = 1;
+  if(sub_scenes_.size() == 2) {
+    if(scene_dim.y() % sub_scenes_.size() != 0) {
+      vcl_cerr<<"  Boxm2_multi_cache::scene y dimension is not divisible by num devices\n"
+              <<"  "<<scene_dim.y()<<" blocks by "<<sub_scenes_.size()<<" devices"<<vcl_endl;
+      throw -1;
+    }
+    groupSizeY = 2;
+    groupSizeX = 1;
+  }
+  else if(sub_scenes_.size() == 4) {
+    if(scene_dim.y() % 2 != 0 || scene_dim.z() % 2 != 0) {
+      vcl_cerr<<"  Boxm2_multi_cache::scene x/y dimension not divisible by 2\n"
+              <<"  "<<scene_dim.y()<<" blocks by "<<scene_dim.x()<<vcl_endl;
+      throw -1;
+    }
+    groupSizeY = 2;
+    groupSizeX = 2;
   }
 
   //divy up the blocks
   const int nDev = sub_scenes_.size(); 
   int dev_id=0; 
-  for(int i=min_ids.x(); i<max_ids.x()+1; ++i) {
-    //iterate over groups in Y
-    for(int group=min_ids.y(); group<max_ids.y()+1; group+=nDev) {
-
+  
+  //iterate over groups in x/y
+  for(int startX=min_ids.x(); startX<max_ids.x()+1; startX+=groupSizeX) {
+    for(int startY=min_ids.y(); startY<max_ids.y()+1; startY+=groupSizeY) {
       //create a block group
       boxm2_multi_cache_group* grp = new boxm2_multi_cache_group;
       //add the vertical row of blocks to scene with dev_id
       dev_id = 0;
-      for(int j=group; j<group+nDev; ++j){
-        for(int k=min_ids.z(); k<max_ids.z()+1; ++k) {
-          boxm2_block_id id(i,j,k);
-          vcl_cout<<"Attempting to add block id: "<<id<<vcl_endl;
-          if(scene->block_exists(id)) {
-            boxm2_block_metadata md = scene->get_block_metadata(id);
-            grp->add_block(md, ocl_caches_[dev_id]); 
-            sub_scenes_[dev_id]->add_block_metadata(md); 
-            blocksAdded++;
+      for(int i=0; i<groupSizeX; ++i) {
+        for(int j=0; j<groupSizeY; ++j) {
+          for(int k=min_ids.z(); k<max_ids.z()+1; ++k) {
+            boxm2_block_id id(i+startX, j+startY, k);
+            vcl_cout<<"Attempting to add block id: "<<id<<vcl_endl;
+            if(scene->block_exists(id)) {
+              boxm2_block_metadata md = scene->get_block_metadata(id);
+              grp->add_block(md, ocl_caches_[dev_id]); 
+              sub_scenes_[dev_id]->add_block_metadata(md); 
+              blocksAdded++;
+            }
           }
+          dev_id = (dev_id+1) % ocl_caches_.size();
         }
-        dev_id = (dev_id+1) % ocl_caches_.size();
       }
       groups_.push_back(grp);
     }
