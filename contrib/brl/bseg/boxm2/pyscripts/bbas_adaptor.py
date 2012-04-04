@@ -151,6 +151,14 @@ def remove_from_db(dbvals) :
     boxm2_batch.set_input_unsigned(0, dbval.id);
     boxm2_batch.run_process();
 
+#redirects std out to a file
+def set_stdout(file) :
+  boxm2_batch.set_stdout(file);
+
+#resets std out to terminal
+def reset_stdout() :
+  boxm2_batch.reset_stdout();
+
 def vrml_initialize(vrml_filename):
   boxm2_batch.init_process("bvrmlInitializeProcess");
   boxm2_batch.set_input_string(0,vrml_filename);
