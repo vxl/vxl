@@ -5,6 +5,23 @@ import os
 # PROVIDES higher level python functions to make boxm2_batch 
 # code more readable/refactored
 #############################################################################
+
+# Print ocl info for all devices
+def ocl_info():
+  print("Init Manager");
+  boxm2_batch.init_process("boclInitManagerProcess");
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  mgr = dbvalue(id, type);
+
+  print("Get OCL info");
+  boxm2_batch.init_process("bocl_info_process");
+  boxm2_batch.set_input_from_db(0,mgr)
+  boxm2_batch.run_process();
+
+
+
+
 def load_scene(scene_str): 
   print("Loading a Scene from file: ", scene_str);
   boxm2_batch.init_process("boxm2LoadSceneProcess");
@@ -112,7 +129,7 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
     boxm2_batch.set_input_from_db(1,cache);
     boxm2_batch.set_input_from_db(2,cam);
     boxm2_batch.set_input_from_db(3,img);
-    boxm2_batch.run_process();
+    return boxm2_batch.run_process();
   elif cache.type == "boxm2_opencl_cache_sptr" and device : 
     print("boxm2_batch GPU update");
     boxm2_batch.init_process("boxm2OclUpdateProcess");
@@ -126,9 +143,10 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
       boxm2_batch.set_input_from_db(6,mask);
     boxm2_batch.set_input_bool(7, update_alpha); 
     boxm2_batch.set_input_float(8, var);
-    boxm2_batch.run_process();
+    return boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
+    return False;
 
 # Update with alternate possible pixel explaination - uses GPU
 def update_grey_with_alt(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0, alt_prior=None, alt_density=None) :
@@ -494,7 +512,7 @@ def refine(scene, cache, thresh=0.3, device=None) :
     
     #get and report cells output
     (id, type) = boxm2_batch.commit_output(0); 
-    nCells = boxm2_batch.get_output_unsigned(id); 
+    nCells = boxm2_batch.get_output_int(id); 
     return nCells;
   else : 
     print "ERROR: Cache type unrecognized: ", cache.type; 
