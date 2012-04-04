@@ -297,7 +297,8 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
         //execute kernel
         kern->execute(queue, 2, local_threads, global_threads);
         int status = clFinish(queue);
-        check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+        if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)))
+          return false;
         gpu_time += kern->exec_time();
 
         //clear render kernel args so it can reset em on next execution
@@ -328,7 +329,8 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
         //execute kernel
         kern->execute(queue, 2, local_threads, global_threads);
         int status = clFinish(queue);
-        check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+        if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)))
+          return false;
         gpu_time += kern->exec_time();
 
         //clear render kernel args so it can reset em on next execution
@@ -371,7 +373,8 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
                 //execute kernel
         kern->execute(queue, 2, local_threads, global_threads);
         int status = clFinish(queue);
-        check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+        if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)))
+          return false;
         gpu_time += kern->exec_time();
 
         //clear render kernel args so it can reset em on next execution
@@ -417,7 +420,8 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
         //execute kernel
         kern->execute(queue, 2, local_threads, global_threads);
         int status = clFinish(queue);
-        check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+        if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)))
+          return false;
         gpu_time += kern->exec_time();
 
         //clear render kernel args so it can reset em on next execution

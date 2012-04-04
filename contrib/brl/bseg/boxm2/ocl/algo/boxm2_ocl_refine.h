@@ -15,7 +15,7 @@ class boxm2_ocl_refine
 {
   public:
 
-    static unsigned refine_scene( bocl_device_sptr device,
+    static int refine_scene( bocl_device_sptr device,
                                   boxm2_scene_sptr scene,
                                   boxm2_opencl_cache_sptr cache,
                                   float thresh);
