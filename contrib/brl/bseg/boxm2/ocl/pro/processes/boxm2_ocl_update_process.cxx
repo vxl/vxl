@@ -148,7 +148,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   }
 
   //otherwise just run a normal update with one image
-  boxm2_ocl_update::update(scene, device, opencl_cache, cam, img, 
-                           ident, mask_sptr, update_alpha, mog_var);
-  return true;
+  return boxm2_ocl_update::update(scene, device, opencl_cache, cam, img, ident, mask_sptr, update_alpha, mog_var);
+
 }
