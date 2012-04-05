@@ -15,10 +15,10 @@ persp_to_generic( __global    float16            * persp_camera,         // came
   
   //make sure the index exists in the image, although this can be thrown away if 
   //it is guaranteed that the global_size is equal to the image size in each dim
-  uint i_min = cam_dims->x;
-  uint j_min = cam_dims->y;
-  uint i_size = cam_dims->z;
-  uint j_size = cam_dims->w;
+  uint i_min = (*cam_dims).x;
+  uint j_min = (*cam_dims).y;
+  uint i_size = (*cam_dims).z;
+  uint j_size = (*cam_dims).w;
   
   if( i < i_size && j < j_size )
   {
