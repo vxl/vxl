@@ -99,12 +99,18 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   boxm2_scene_sptr uscene = new boxm2_scene(scene_dir, bbox.min_point());
   uscene->set_appearances(appearance);
 
+
   //create render scene
   boxm2_scene_sptr rscene = new boxm2_scene(scene_dir, bbox.min_point());
   rscene->set_appearances(appearance);
 
   //build the two scenes
   boxm2_util_cams_and_box_to_scene(cs, bbox, *uscene, *rscene);
+  uscene->set_xml_path(scene_dir+"/uscene.xml");
+  uscene->save_scene();
+  rscene->set_xml_path(scene_dir+"/rscene.xml");
+
+  rscene->save_scene();
   //----------------------------------------------------------------------------
   //if output directory is non empty, create directory and save imgs, cams dirs
   //----------------------------------------------------------------------------
@@ -149,6 +155,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
         ofile.close();
 
         //save image
+
         vcl_string outImgName;
         vcl_string inImgGlob = in_img_dir + "/" + stripped_name + ".*";
         vul_file_iterator moveImage(inImgGlob.c_str()); 
@@ -162,13 +169,6 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
         else {
           vcl_cout<<"Cannot move image "<<full_img_name<<" ! breaking !"<<vcl_endl;
         }
-       
-        //imgstream.seek_frame(i);
-        //vidl_convert_to_view(*imgstream.current_frame(),curr_img);
-        //char imgfname[1024];
-        //vcl_sprintf(imgfname,"%s/frame%05d.png",frm_dir.c_str(),cnt2);
-        //vil_save(curr_img,imgfname);
-        //++cnt2;
       }
     }
   }
