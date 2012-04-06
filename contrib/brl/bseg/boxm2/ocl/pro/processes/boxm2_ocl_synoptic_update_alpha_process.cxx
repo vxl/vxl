@@ -100,7 +100,7 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
     vcl_string img_id;
     ifs >> img_id;
     image_ids.push_back(img_id);
-	vcl_cout<<img_id<<vcl_endl;
+    vcl_cout<<img_id<<vcl_endl;
   }
   ifs.close();
 
@@ -139,9 +139,9 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
   for (id = block_ids.begin(); id != block_ids.end(); ++id)
   {
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-	vcl_size_t lThreads[] = {1};
-	vcl_size_t gThreads[1];
-	gThreads[0] = (unsigned)(mdata.sub_block_num_.x()*mdata.sub_block_num_.y()*mdata.sub_block_num_.z());
+    vcl_size_t lThreads[] = {1};
+    vcl_size_t gThreads[1];
+    gThreads[0] = (unsigned)(mdata.sub_block_num_.x()*mdata.sub_block_num_.y()*mdata.sub_block_num_.z());
 
     //choose correct render kernel
     bocl_mem* blk       = opencl_cache->get_block(*id);
@@ -174,17 +174,17 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
     datasize_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     kern->set_arg(blk_info);
-	kern->set_arg(blk);
-	kern->set_arg(alpha);
+    kern->set_arg(blk);
+    kern->set_arg(alpha);
     kern->set_arg(bocl_data_type0.ptr());
     kern->set_arg(bocl_data_type3.ptr());
     kern->set_arg(nobs_mem.ptr());
     kern->set_arg(datasize_mem.ptr());
-	kern->set_arg(lookup.ptr());
-	kern->set_local_arg(16*lThreads[0]*sizeof(unsigned char));				// local trees
-	kern->set_local_arg( lThreads[0]*10*sizeof(cl_uchar) ); //cumsum buffer,
+    kern->set_arg(lookup.ptr());
+    kern->set_local_arg(16*lThreads[0]*sizeof(unsigned char)); // local trees
+    kern->set_local_arg( lThreads[0]*10*sizeof(cl_uchar) );    // cumsum buffer
 
-	kern->execute(queue, 1, lThreads, gThreads);
+    kern->execute(queue, 1, lThreads, gThreads);
     clFinish(queue);
     vcl_cout<<"Time taken "<< kern->exec_time()<<vcl_endl;
 
@@ -192,7 +192,6 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
     kern->clear_args();
     alpha->read_to_buffer(queue);
     clFinish(queue);
-
   }
   clReleaseCommandQueue(queue);
 

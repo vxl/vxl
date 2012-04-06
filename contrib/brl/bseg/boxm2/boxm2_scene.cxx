@@ -121,11 +121,11 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
   //find intersection box
   //---------------------------------------
   vgl_box_3d<double> sceneBB = this->bounding_box();
-  vgl_box_2d<double> lowBox, highBox; 
-  vsph_camera_bounds::planar_bounding_box(*cam, lowBox, sceneBB.min_z()); 
+  vgl_box_2d<double> lowBox, highBox;
+  vsph_camera_bounds::planar_bounding_box(*cam, lowBox, sceneBB.min_z());
   vsph_camera_bounds::planar_bounding_box(*cam, highBox, sceneBB.max_z());
   vgl_box_2d<double> camBox;
-  camBox.add(lowBox); 
+  camBox.add(lowBox);
   camBox.add(highBox);
 
   //grab visibility order from camera center
@@ -133,8 +133,8 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
   return get_vis_order_from_pt(cam_center, camBox);
 }
 
-vcl_vector<boxm2_block_id> 
-boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt, 
+vcl_vector<boxm2_block_id>
+boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
                                    vgl_box_2d<double> camBox)
 {
   //Map of distance, id
@@ -143,7 +143,7 @@ boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
 
   //get camera center and order blocks distance from the cam center
   //for non-projective cameras there may not be a single center of projection
-  //so instead get the ray origin farthest from the scene origin. 
+  //so instead get the ray origin farthest from the scene origin.
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
     vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
@@ -154,10 +154,10 @@ boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
                                     blk_dim.z()*blk_num.z());
 
     //make sure there is a non empty intersection here
-    vgl_box_2d<double> blkBox(blk_o.x(), blk_o.x()+length.x(), 
+    vgl_box_2d<double> blkBox(blk_o.x(), blk_o.x()+length.x(),
                               blk_o.y(), blk_o.y()+length.y());
-    vgl_box_2d<double> intersect = vgl_intersection(camBox, blkBox); 
-    if(!intersect.is_empty() || camBox.is_empty()) {
+    vgl_box_2d<double> intersect = vgl_intersection(camBox, blkBox);
+    if (!intersect.is_empty() || camBox.is_empty()) {
       vgl_point_3d<double> blk_center = blk_o + length/2.0;
       double dist = vgl_distance( blk_center, pt);
       distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
@@ -169,7 +169,7 @@ boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
 
   //put blocks in "vis_order"
   vcl_vector<boxm2_dist_id_pair>::iterator di;
-  for (di = distances.begin(); di != distances.end(); ++di) 
+  for (di = distances.begin(); di != distances.end(); ++di)
     vis_order.push_back(di->id_);
   return vis_order;
 }
@@ -271,7 +271,7 @@ vgl_box_3d<double> boxm2_scene::bounding_box() const
     if (blk_max.y() > ymax) ymax = blk_max.y();
     if (blk_max.z() > zmax) zmax = blk_max.z();
   }
-  
+
   //: Construct from ranges in \a x,y,z (take care with order of inputs).
   //  The \a x range is given by the 1st and 4th coordinates,
   //  the \a y range is given by the 2nd and 5th coordinates,
@@ -279,17 +279,14 @@ vgl_box_3d<double> boxm2_scene::bounding_box() const
   return vgl_box_3d<double>(xmin, ymin, zmin,
                             xmax, ymax, zmax);
 }
+
 vgl_box_3d<int> boxm2_scene::bounding_box_blk_ids() const
 {
-  double xmin=10e10, xmax=-10e10;
-  double ymin=10e10, ymax=-10e10;
-  double zmin=10e10, zmax=-10e10;
-
-  vgl_box_3d<int> bbox ;
+  vgl_box_3d<int> bbox;
   //iterate through each block
   vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
-	bbox.add(vgl_point_3d<int> ( iter->first.i(),iter->first.j(), iter->first.k()) ) ;
+    bbox.add(vgl_point_3d<int> ( iter->first.i(),iter->first.j(), iter->first.k()) ) ;
 
   return bbox;
 }

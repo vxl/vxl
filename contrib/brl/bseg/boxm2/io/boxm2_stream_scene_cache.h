@@ -40,7 +40,7 @@ class boxm2_stream_scene_cache: public vbl_ref_count
     unsigned long total_bytes_per_block_;
     vcl_map<data_type,unsigned long> total_bytes_per_data_;
 
-	boxm2_scene_sptr scene(){return scene_ ;}
+    boxm2_scene_sptr scene(){return scene_ ;}
 
   protected:
     boxm2_scene_sptr scene_;

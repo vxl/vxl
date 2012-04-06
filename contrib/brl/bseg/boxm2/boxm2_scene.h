@@ -84,10 +84,10 @@ class boxm2_scene : public vbl_ref_count
       return empty;
     }
     //: visibility order from point, blocks must intersect with cam box
-    vcl_vector<boxm2_block_id> 
-    get_vis_order_from_pt(vgl_point_3d<double> const& pt, 
+    vcl_vector<boxm2_block_id>
+    get_vis_order_from_pt(vgl_point_3d<double> const& pt,
                           vgl_box_2d<double> camBox = vgl_box_2d<double>());
- 
+
     //: return a heap pointer to a scene info
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id);
     bool block_exists(boxm2_block_id id) const { return blocks_.find(id) != blocks_.end(); }
@@ -107,7 +107,7 @@ class boxm2_scene : public vbl_ref_count
     boxm2_block_metadata get_block_metadata_const(boxm2_block_id id) const;
 
     //: return number of trees in block
-    int num_trees_in_block(boxm2_block_id id) { 
+    int num_trees_in_block(boxm2_block_id id) {
       boxm2_block_metadata& d = blocks_[id];
       return d.sub_block_num_.x() * d.sub_block_num_.y() * d.sub_block_num_.z();
     }
@@ -116,8 +116,8 @@ class boxm2_scene : public vbl_ref_count
 
     //: gets a tight bounding box for the scene
     vgl_box_3d<double>      bounding_box() const;
-	//: gets a tight bounding box for the scene
-	vgl_box_3d<int>         bounding_box_blk_ids() const;
+    //: gets a tight bounding box for the scene
+    vgl_box_3d<int>         bounding_box_blk_ids() const;
 
     //: gets the smallest block index in all dimensions
     void min_block_index(vgl_point_3d<int> &idx,

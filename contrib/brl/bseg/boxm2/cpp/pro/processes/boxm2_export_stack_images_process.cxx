@@ -15,8 +15,6 @@
 
 //vil includes
 #include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
-#include <vil/vil_math.h>
 #include <vil/vil_save.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_slice.h>
@@ -27,8 +25,8 @@
 
 namespace boxm2_export_stack_images_process_globals
 {
-	const unsigned n_inputs_ = 4;
-	const unsigned n_outputs_ = 0;
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 0;
 }
 
 bool boxm2_export_stack_images_process_cons(bprb_func_process& pro)
@@ -41,13 +39,13 @@ bool boxm2_export_stack_images_process_cons(bprb_func_process& pro)
   input_types_[i++] = "boxm2_scene_sptr";
   input_types_[i++] = "boxm2_cache_sptr";
   input_types_[i++] = "vcl_string";                //output dir of saved DICOM images
-	input_types_[i++] = "bool";   
+  input_types_[i++] = "bool";
 
-	brdb_value_sptr out_app = new brdb_value_t<bool>(false);
-	pro.set_input(3, out_app);
+  brdb_value_sptr out_app = new brdb_value_t<bool>(false);
+  pro.set_input(3, out_app);
 
-	vcl_vector<vcl_string> output_types_(n_outputs_);
-	return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm2_export_stack_images_process(bprb_func_process& pro)
@@ -63,7 +61,7 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(argIdx++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(argIdx++);
   vcl_string outdir = pro.get_input<vcl_string>(argIdx++);
-	bool opacity_only = pro.get_input<bool>(argIdx++);
+  bool opacity_only = pro.get_input<bool>(argIdx++);
   //create the mesh directory
   if (outdir != "") {
     if (!vul_file::make_directory_path(outdir.c_str())) {
@@ -79,15 +77,15 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
 
   vil3d_image_view<unsigned char> img3d;
 
-	if(opacity_only)
-		boxm2_export_stack_images_function::export_opacity_stack_images(scene,cache,img3d);
-	else
-	{
-		if(!iscolor)
-			boxm2_export_stack_images_function::export_greyscale_stack_images(scene,cache,img3d);
-		else
-			boxm2_export_stack_images_function::export_color_stack_images(scene,cache,img3d);
-	}
+  if (opacity_only)
+    boxm2_export_stack_images_function::export_opacity_stack_images(scene,cache,img3d);
+  else
+  {
+    if (!iscolor)
+      boxm2_export_stack_images_function::export_greyscale_stack_images(scene,cache,img3d);
+    else
+      boxm2_export_stack_images_function::export_color_stack_images(scene,cache,img3d);
+  }
   for (unsigned k = 0 ;  k < img3d.nk() ;  k ++)
   {
     vil_image_view<unsigned char> img = vil3d_slice_ji(img3d,k);
