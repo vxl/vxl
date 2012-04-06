@@ -560,8 +560,7 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
   boxm2_data_base *  alpha_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
   boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
-  boxm2_array_1d<float> alpha_data_array=alpha_data->data();
-  float alpha=alpha_data_array[data_offset];
+  float alpha=alpha_data->data()[data_offset];
 
   float side_len=static_cast<float>(mdata.sub_block_dim_.x()/((float)(1<<depth)));
 #ifdef DEBUG
@@ -572,9 +571,8 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
   prob=1.0f-vcl_exp(-alpha*side_len);
   boxm2_data_base *  int_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   boxm2_data<BOXM2_MOG3_GREY> *int_data=new boxm2_data<BOXM2_MOG3_GREY>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
-
-  boxm2_array_1d<vnl_vector_fixed<unsigned char,8> > int_data_array=int_data->data();
-  intensity=(float)int_data_array[data_offset][0]/255.0f;
+  // intensity
+  intensity=(float)int_data->data()[data_offset][0]/255.0f;
 
   return true;
 }

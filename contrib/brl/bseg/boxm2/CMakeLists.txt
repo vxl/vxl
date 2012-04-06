@@ -50,6 +50,8 @@ subdirs(cpp)
 subdirs(ocl)
 
 
+#registration Library
+subdirs(reg)
 
 #pro
 subdirs(pro)
