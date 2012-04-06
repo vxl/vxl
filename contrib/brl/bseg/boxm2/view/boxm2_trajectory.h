@@ -15,7 +15,7 @@
 //
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
-
+#include <vpgl/vpgl_camera.h>
 //smart ptr includes
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
