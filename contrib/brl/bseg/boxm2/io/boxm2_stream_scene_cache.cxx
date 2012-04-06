@@ -35,7 +35,7 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
   }
   total_bytes_per_block_*=16;
   unsigned long global_index = 0;
-  vgl_box_3d<double> bounding_blk_ids = scene_->bounding_box();
+  vgl_box_3d<int> bounding_blk_ids = scene_->bounding_box_blk_ids();
   for (int i = bounding_blk_ids.min_x(); i <= bounding_blk_ids.max_x(); ++i) {
     for (int j = bounding_blk_ids.min_y(); j <= bounding_blk_ids.max_y(); ++j) {
       for (int k = bounding_blk_ids.min_z(); k <= bounding_blk_ids.max_z(); ++k)
@@ -49,7 +49,7 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
         if (!ifs) continue;
         ifs.read(temp_buff, filesize);
         ifs.close();
-        boxm2_block blk(blk_iter->first, temp_buff);
+        boxm2_block blk(id, temp_buff);
         int cnt = (int)blk.tree_buff_length();
         vcl_memcpy(&blk_buffer_[global_index],blk.trees().data_block(),cnt*16);
         blk_offsets_.push_back(global_index);
