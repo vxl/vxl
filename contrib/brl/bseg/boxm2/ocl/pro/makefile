@@ -54,6 +54,8 @@ SOURCES += processes/boxm2_ocl_update_aux_per_view_naa_process.cxx
 SOURCES += processes/boxm2_ocl_update_with_alt_process.cxx
 SOURCES += processes/boxm2_ocl_uncertainty_per_image_process.cxx
 SOURCES += processes/boxm2_ocl_aggregate_normal_from_filter_response_process.cxx
+SOURCES += processes/boxm2_ocl_synoptic_update_alpha_process.cxx
+SOURCES += processes/boxm2_ocl_render_scene_uncertainty_map_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
