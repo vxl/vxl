@@ -22,14 +22,13 @@ namespace boxm2_export_oriented_point_cloud_process_globals
 {
   const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 0;
-
 }
 
 bool boxm2_export_oriented_point_cloud_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_export_oriented_point_cloud_process_globals;
 
-  //process takes 6 inputs, no outputs
+  //process takes 8 inputs (3 required ones), no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
@@ -65,7 +64,7 @@ bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
   using namespace boxm2_export_oriented_point_cloud_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
 
@@ -87,14 +86,13 @@ bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
 
   //read bb from ply, if any
   vgl_box_3d<double> bb;
-  if(!bb_filename.empty()) {
+  if (!bb_filename.empty()) {
     boxm2_export_oriented_point_cloud_function::readBBFromPLY(bb_filename, bb);
   }
 
   //zip through each block
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
-  int dataSize = 0;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
