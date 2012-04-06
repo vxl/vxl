@@ -117,20 +117,19 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
     for (int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       clFinish(queues[i]);
-      boxm2_block_id id = ids[i];
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      //boxm2_block_id id = ids[i];
+      //boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       
       //read aux data back into CPU
-      vul_timer ttime; ttime.mark();
-      read_aux(id, ocl_cache, queues[i]);
-      transfer_time += ttime.all();
+      //vul_timer ttime; ttime.mark();
+      //read_aux(id, ocl_cache, queues[i]);
+      //transfer_time += ttime.all();
     }
   }
   float gpu_time = t.all() - transfer_time;
 
   //unref mems
   for (int i=0; i<queues.size(); ++i) {
-    //clFinish(queues[i]);
     ocl_caches[i]->unref_mem(in_imgs[i].ptr());
   }
 
@@ -250,6 +249,10 @@ void boxm2_multi_store_aux::store_aux_per_block(const boxm2_block_id&     id,
 
   //clear render kernel args so it can reset em on next execution
   kern->clear_args();
+
+  //enqueue two nonblocking reads
+  //aux0->read_to_buffer(queue, false);
+  //aux1->read_to_buffer(queue, false);
 }
 
 //-----------------------------------------------------------------

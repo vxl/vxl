@@ -144,7 +144,11 @@ int main(int argc,  char** argv)
           <<" ave   update time: "<<total_update_time/numUpdates/1000.0f<<" seconds\n"
           <<" ave gpu update time:"<<total_gpu_time/numUpdates/1000.0f<<" seconds \n"
           <<"------------------------------------------"<<vcl_endl;
-  //write cache
+  
+  //clear ocl caches (writes to CPU cache)
+  mcache.clear();
+
+  //write cache  
   boxm2_lru_cache::instance()->write_to_disk();
 
   return 0;

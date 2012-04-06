@@ -118,21 +118,21 @@ float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cach
       int i = indices[idx];
       clFinish(queues[i]);
       
-      vul_timer ttime; ttime.mark();
-      boxm2_opencl_cache* opencl_cache = ocl_caches[i];
-      boxm2_block_id id = ids[i];
+     // vul_timer ttime; ttime.mark();
+     // boxm2_opencl_cache* opencl_cache = ocl_caches[i];
+     // boxm2_block_id id = ids[i];
 
-      //calc data buffer length
-      bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(id,0,false);
-      vcl_size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
-      vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes() / alphaTypeSize);
+     // //calc data buffer length
+     // bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(id,0,false);
+     // vcl_size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
+     // vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes() / alphaTypeSize);
 
-      //grab an appropriately sized AUX data buffer
-      bocl_mem *aux2 = opencl_cache->get_data<BOXM2_AUX2>(id, dataLen*boxm2_data_traits<BOXM2_AUX2>::datasize());
-      bocl_mem *aux3 = opencl_cache->get_data<BOXM2_AUX3>(id, dataLen*boxm2_data_traits<BOXM2_AUX3>::datasize());
-      aux2->read_to_buffer(queues[i]);
-      aux3->read_to_buffer(queues[i]);
-      transfer_time += ttime.all();
+     // //grab an appropriately sized AUX data buffer
+     // bocl_mem *aux2 = opencl_cache->get_data<BOXM2_AUX2>(id, dataLen*boxm2_data_traits<BOXM2_AUX2>::datasize());
+     // bocl_mem *aux3 = opencl_cache->get_data<BOXM2_AUX3>(id, dataLen*boxm2_data_traits<BOXM2_AUX3>::datasize());
+     // aux2->read_to_buffer(queues[i]);
+     // aux3->read_to_buffer(queues[i]);
+     // transfer_time += ttime.all();
     }
   }
   gpu_time += t.all(); t.mark();
@@ -242,6 +242,10 @@ float boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
   //execute kernel
   kern->execute(queue, 2, lThreads, gThreads);
   kern->clear_args();
+  
+  //async reads for aux2 and aux3
+  //aux2->read_to_buffer(queue, false);
+  //aux3->read_to_buffer(queue, false);
   return transfer_time;
 }
 
@@ -347,6 +351,11 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       //execute kernel
       kern->execute(queues[i], 2, local_threads, global_threads);
       kern->clear_args();
+    
+      //async reads
+      //alpha->read_to_buffer(queues[i], false);
+      //mog->read_to_buffer(queues[i], false);
+      //num_obs->read_to_buffer(queues[i], false);
     }
 
     //-------------------------------------------------
@@ -355,25 +364,25 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
     for (int i=0; i<ids.size(); ++i) {
       clFinish(queues[i]);
       
-      ttime.mark();
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
-      boxm2_block_id id = ids[i];
-      
-      //write alpha, mog and num obs to disk
-      bocl_mem* alpha     = ocl_cache->get_data<BOXM2_ALPHA>(id,0,false);
-      int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes()/alphaTypeSize);
-      bocl_mem* mog       = ocl_cache->get_data(id,data_type,dataLen*apptypesize,false);
-      //numobs
-      vcl_string num_obs_type = boxm2_data_traits<BOXM2_NUM_OBS>::prefix();
-      int nobsTypeSize        = (int)boxm2_data_info::datasize(num_obs_type);
-      bocl_mem* num_obs       = ocl_cache->get_data(id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);
+      //ttime.mark();
+      //boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      //boxm2_block_id id = ids[i];
+      //
+      ////write alpha, mog and num obs to disk
+      //bocl_mem* alpha     = ocl_cache->get_data<BOXM2_ALPHA>(id,0,false);
+      //int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      //vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes()/alphaTypeSize);
+      //bocl_mem* mog       = ocl_cache->get_data(id,data_type,dataLen*apptypesize,false);
+      ////numobs
+      //vcl_string num_obs_type = boxm2_data_traits<BOXM2_NUM_OBS>::prefix();
+      //int nobsTypeSize        = (int)boxm2_data_info::datasize(num_obs_type);
+      //bocl_mem* num_obs       = ocl_cache->get_data(id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);
 
-      //write info to disk
-      alpha->read_to_buffer(queues[i]);
-      mog->read_to_buffer(queues[i]);
-      num_obs->read_to_buffer(queues[i]);
-      transfer_time += ttime.all();
+      ////write info to disk
+      //alpha->read_to_buffer(queues[i]);
+      //mog->read_to_buffer(queues[i]);
+      //num_obs->read_to_buffer(queues[i]);
+      //transfer_time += ttime.all();
     }
   }
 
