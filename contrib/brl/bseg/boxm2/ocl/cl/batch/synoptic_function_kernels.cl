@@ -459,3 +459,67 @@ void compute_uncertainty(__global float * aux0,
 }
 
 #endif // COMPUTE_UNCERTAINTY
+
+#ifdef COMPUTE_SYNOPTIC_ALPHA
+__kernel
+void compute_synoptic_alpha(__constant RenderSceneInfo * info,
+						 __global int4 * tree_array,
+						 __global float * alpha_array,
+						 __global float * aux0,
+						 __global float * aux3,
+                         __constant int * nobs,
+                         __global int *datasize,
+						 __constant uchar *bit_lookup,
+						 __local uchar16  * local_trees,
+						 __local uchar    * cumsum_wkgp
+						 )
+{
+	int gid = get_global_id(0);
+	int lid = get_local_id(0);
+
+	int numTrees = info->dims.x * info->dims.y * info->dims.z; 
+    if(gid < numTrees) {
+	
+		local_trees[lid] = as_uchar16(tree_array[gid]);
+		__local uchar16* local_tree = &local_trees[lid];
+		__local uchar * cumsum = &cumsum_wkgp[lid*10];
+		//: iterate through leaves
+		cumsum[0] = (*local_tree).s0;
+		int cumIndex = 1;
+		for(int i=0; i<585; i++) {
+			//if current bit is 0 and parent bit is 1, you're at a leaf
+			int pi = (i-1)>>3;           //Bit_index of parent bit    
+			bool validParent = tree_bit_at(local_tree, pi) || (i==0); // special case for root
+			if(validParent && tree_bit_at(local_tree, i)==0) {
+				//////////////////////////////////////////////////
+				//LEAF CODE HERE
+				//////////////////////////////////////////////////
+				//find side length for cell of this level = block_len/2^currDepth
+				int currDepth = get_depth(i);
+				float side_len = info->block_len/(float) (1<<currDepth);
+
+				//get alpha value for this cell;
+				int dataIndex = data_index_cached(local_tree, i, bit_lookup, cumsum, &cumIndex) + data_index_root(local_tree); //gets absolute position
+				float alpha   = alpha_array[dataIndex];
+
+				//integrate alpha value
+				float prob = 1 - exp(-alpha * side_len);
+				// compute the product of the ratios.
+				float ratio  = 1.0f;
+				for(unsigned int k = 0 ; k < (*nobs) ; k++)
+				{
+					float seg_len = aux0[(*datasize)*k+dataIndex];
+					float r		  = aux3[(*datasize)*k+dataIndex];
+					if (seg_len > 1e-10f *  SEGLEN_FACTOR )
+						ratio *= (r/seg_len);
+				}
+
+				float bayes_ratio =  1/(prob + (1-prob)/ratio);
+				alpha = alpha *clamp(bayes_ratio,0.5f,2.0) ;
+				alpha_array[dataIndex] = alpha ;
+			}
+		}
+	}
+					
+}
+#endif
