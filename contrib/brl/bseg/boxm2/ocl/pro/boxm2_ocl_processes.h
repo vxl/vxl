@@ -42,7 +42,9 @@ DECLARE_FUNC_CONS(boxm2_ocl_batch_synoptic_function_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_alpha_wcubic_process);
 DECLARE_FUNC_CONS(boxm2_ocl_uncertainty_per_image_process);
 DECLARE_FUNC_CONS(boxm2_ocl_batch_uncertainty_process);
+DECLARE_FUNC_CONS(boxm2_ocl_synoptic_update_alpha_process);
 
+DECLARE_FUNC_CONS(boxm2_ocl_render_scene_uncertainty_map_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_sun_visibilities_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_shadow_map_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_create_norm_intensities_process); 
