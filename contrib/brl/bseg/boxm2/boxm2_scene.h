@@ -116,6 +116,8 @@ class boxm2_scene : public vbl_ref_count
 
     //: gets a tight bounding box for the scene
     vgl_box_3d<double>      bounding_box() const;
+	//: gets a tight bounding box for the scene
+	vgl_box_3d<int>         bounding_box_blk_ids() const;
 
     //: gets the smallest block index in all dimensions
     void min_block_index(vgl_point_3d<int> &idx,

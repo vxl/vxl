@@ -271,13 +271,27 @@ vgl_box_3d<double> boxm2_scene::bounding_box() const
     if (blk_max.y() > ymax) ymax = blk_max.y();
     if (blk_max.z() > zmax) zmax = blk_max.z();
   }
-
+  
   //: Construct from ranges in \a x,y,z (take care with order of inputs).
   //  The \a x range is given by the 1st and 4th coordinates,
   //  the \a y range is given by the 2nd and 5th coordinates,
   //  the \a z range is given by the 3rd and 6th coordinates.
   return vgl_box_3d<double>(xmin, ymin, zmin,
                             xmax, ymax, zmax);
+}
+vgl_box_3d<int> boxm2_scene::bounding_box_blk_ids() const
+{
+  double xmin=10e10, xmax=-10e10;
+  double ymin=10e10, ymax=-10e10;
+  double zmin=10e10, zmax=-10e10;
+
+  vgl_box_3d<int> bbox ;
+  //iterate through each block
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
+	bbox.add(vgl_point_3d<int> ( iter->first.i(),iter->first.j(), iter->first.k()) ) ;
+
+  return bbox;
 }
 
 vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
