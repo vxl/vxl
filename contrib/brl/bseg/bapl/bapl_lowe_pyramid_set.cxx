@@ -148,7 +148,7 @@ bapl_lowe_pyramid_set::pyramid_at( const bapl_lowe_pyramid<float> & pyramid,
     sub_index = octave_size_-1;
   }
 
-  if ( actual_scale ) *actual_scale = 1 << (octave-1);
+  if ( actual_scale ) *actual_scale = vcl_pow(2.0f, octave-1);
   if ( rel_scale ) *rel_scale = vcl_pow(2.0f, float(sub_index)/octave_size_);
 
   return pyramid(octave, sub_index);
