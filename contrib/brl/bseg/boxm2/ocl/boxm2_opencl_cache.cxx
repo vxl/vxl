@@ -9,7 +9,7 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
 : scene_(scene), maxBlocksInCache(maxBlocks), bytesInCache_(0), block_info_(0), device_(device)
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
-  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * .75);
+  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * .7);
 
   // by default try to create an LRU cache
   boxm2_lru_cache::create(scene);
@@ -62,6 +62,7 @@ bool boxm2_opencl_cache::clear_cache()
   for (blks=cached_blocks_.begin(); blks!=cached_blocks_.end(); ++blks)
   {
     bocl_mem* toDelete = blks->second;
+    toDelete->read_to_buffer( *queue_ );
     bytesInCache_ -= toDelete->num_bytes();
 #ifdef DEBUG
     vcl_cout<<"Deleting block: "<<toDelete->id()<<"...size: "<<toDelete->num_bytes()<<vcl_endl;
@@ -79,6 +80,7 @@ bool boxm2_opencl_cache::clear_cache()
     for (data_blks=data_map.begin(); data_blks!=data_map.end(); ++data_blks)
     {
       bocl_mem* toDelete = data_blks->second;
+      toDelete->read_to_buffer( *queue_ );
       bytesInCache_ -= toDelete->num_bytes();
       boxm2_block_id bid = data_blks->first;
 #ifdef DEBUG
