@@ -76,7 +76,9 @@ void boxm2_lru_cache::clear_cache()
 //: realization of abstract "get_block(block_id)"
 boxm2_block* boxm2_lru_cache::get_block(boxm2_block_id id)
 {
-  // then look for the block you're requesting
+  boxm2_block_metadata data = scene_->get_block_metadata(id);
+	
+	// then look for the block you're requesting
   if ( cached_blocks_.find(id) != cached_blocks_.end() )
   {
 #ifdef DEBUG
@@ -89,12 +91,12 @@ boxm2_block* boxm2_lru_cache::get_block(boxm2_block_id id)
   vcl_cout<<"Cache miss :("<<vcl_endl;
 #endif
   // otherwise load it from disk with blocking and update cache
-  boxm2_block* loaded = boxm2_sio_mgr::load_block(scene_dir_, id);
+  boxm2_block* loaded = boxm2_sio_mgr::load_block(scene_dir_, id, data);
 
   // if the block is null then initialize an empty one
   if (!loaded && scene_->block_exists(id)) {
     vcl_cout<<"boxm2_lru_cache::initializing empty block "<<id<<vcl_endl;
-    boxm2_block_metadata data = scene_->get_block_metadata(id);
+    
     loaded = new boxm2_block(data);
   }
 
@@ -202,13 +204,15 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
   // grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
     this->cached_data_map(type);
-
   // then look for the block you're requesting
   vcl_map<boxm2_block_id, boxm2_data_base*>::iterator rem = data_map.find(id);
   if ( rem != data_map.end() )
   {
     // found the block,
     boxm2_data_base* litter = data_map[id];
+  
+  
+	 boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
     if (!litter->read_only_) {
       // save it
       vcl_cout<<"boxm2_lru_cache::remove_data_base "<<type<<":"<<id<<"; saving to disk"<<vcl_endl;
