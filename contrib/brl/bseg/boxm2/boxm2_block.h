@@ -39,6 +39,8 @@ class boxm2_block : public vbl_ref_count
   //: only available constructor - from directory and block_id
   boxm2_block(boxm2_block_id id, char* buffer);
 
+  boxm2_block(boxm2_block_id id, boxm2_block_metadata data, char* buffer);
+
   //: creates empty block from metadata
   boxm2_block(boxm2_block_metadata data);
 
@@ -106,6 +108,8 @@ class boxm2_block : public vbl_ref_count
   int max_mb_;       //each total block mb
 
   bool read_only_;   // if the block existed already on the disc, do not write it back
+
+  short version_;
 };
 
 

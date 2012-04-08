@@ -36,14 +36,15 @@ class boxm2_block_metadata: public vbl_ref_count
                           int init_level,
                           int max_level,
                           double max_mb,
-                          double p_init ) : id_(id),
+                          double p_init,
+						  int version = 1) : id_(id),
                                             local_origin_(local_origin),
                                             sub_block_dim_(sub_block_dim),
                                             sub_block_num_(sub_block_num),
                                             init_level_(init_level),
                                             max_level_(max_level),
                                             max_mb_(max_mb),
-                                            p_init_(p_init) {}
+                                            p_init_(p_init),version_(version) {}
 
     boxm2_block_metadata( const boxm2_block_metadata& that)
     : vbl_ref_count ()
@@ -55,6 +56,7 @@ class boxm2_block_metadata: public vbl_ref_count
     , max_level_    (that.max_level_)
     , max_mb_       (that.max_mb_)
     , p_init_       (that.p_init_)
+	, version_		(that.version_)
     {}
 
     //: id and local origin of the block
@@ -72,7 +74,7 @@ class boxm2_block_metadata: public vbl_ref_count
     int                     max_level_;    //each sub_blocks's max_level (default 4)
     double                  max_mb_;       //each total block mb
     double                  p_init_;       //initialize occupancy probs with this
-
+	int						version_;
     //: bounding box for this block
     vgl_box_3d<double>      bbox(); 
     vgl_box_3d<double>      bbox(int x, int y, int z) {

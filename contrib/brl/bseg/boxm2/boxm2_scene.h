@@ -58,7 +58,7 @@ class boxm2_scene : public vbl_ref_count
     //: empty scene, needs to be initialized manually
     boxm2_scene() {}
 
-    boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin);
+    boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version = 2);
 
     //: initializes scene from xmlFile
     boxm2_scene(vcl_string filename);
@@ -148,7 +148,7 @@ class boxm2_scene : public vbl_ref_count
     int num_illumination_bins() const {return num_illumination_bins_;}
 
     //: scene version number
-    static short version_no() { return 1; }
+    int version() { return version_; }
 
     //: scene mutators
     void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
@@ -179,6 +179,7 @@ class boxm2_scene : public vbl_ref_count
     //: list of appearance models/observation models used by this scene
     vcl_vector<vcl_string> appearances_;
     int num_illumination_bins_;
+	int version_;
 };
 
 

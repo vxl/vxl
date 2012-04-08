@@ -21,12 +21,13 @@
 #include <vsph/vsph_camera_bounds.h>
 
 
-boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin)
+boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version)
 {
     local_origin_=origin;
     data_path_   = data_path;
     xml_path_  = data_path_ + "/scene.xml";
     num_illumination_bins_ = -1;
+	version_ = version;
 }
 
 //: initializes Scene from XML file
@@ -63,6 +64,7 @@ boxm2_scene::boxm2_scene(vcl_string filename)
     //store list of appearances
     appearances_ = parser.appearances();
     num_illumination_bins_ = parser.num_illumination_bins();
+	version_ = parser.version();
 }
 
 

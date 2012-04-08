@@ -11,6 +11,7 @@
 #include <vcl_map.h>
 
 //scene level metadata
+#define VERSION_TAG "version"
 #define LVCS_TAG "lvcs"
 #define LOCAL_ORIGIN_TAG "local_origin"
 #define SCENE_PATHS_TAG "scene_paths"
@@ -42,6 +43,7 @@ class boxm2_scene_parser : public expatpp
    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
    vcl_vector<vcl_string> appearances() const { return appearances_; }
    int num_illumination_bins() const { return num_illum_bins_; }
+   int version() const { return version_; }
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* /*name*/) {}
@@ -76,6 +78,8 @@ class boxm2_scene_parser : public expatpp
 
   // list of appearances
   vcl_vector<vcl_string> appearances_;
+
+  int version_;
 };
 
 #endif
