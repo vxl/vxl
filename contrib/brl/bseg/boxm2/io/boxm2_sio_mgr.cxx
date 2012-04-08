@@ -21,7 +21,25 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
   //instantiate new block
   return new boxm2_block(block_id, bytes);
 }
+boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id,boxm2_block_metadata data )
+{
+  vcl_string filepath = dir + block_id.to_string() + ".bin";
 
+  //get file size
+  unsigned long numBytes = vul_file::size(filepath);
+
+  //Read bytes into stream
+  char * bytes = new char[numBytes];
+  vcl_ifstream myFile (filepath.c_str(), vcl_ios::in | vcl_ios::binary);
+  myFile.read(bytes, numBytes);
+  if (!myFile) {
+    //vcl_cerr<<"boxm2_sio_mgr::load_block cannot read file "<<filepath<<vcl_endl;
+    return NULL;
+  }
+
+  //instantiate new block
+  return new boxm2_block(block_id,data, bytes);
+}
 
 void boxm2_sio_mgr::save_block(vcl_string dir, boxm2_block* block)
 {
