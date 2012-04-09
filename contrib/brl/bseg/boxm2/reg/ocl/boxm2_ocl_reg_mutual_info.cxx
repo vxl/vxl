@@ -3,7 +3,7 @@
 // \file
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_rotation_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>

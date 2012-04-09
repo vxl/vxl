@@ -14,7 +14,7 @@
 
 #include <vul/vul_arg.h>
 #include <vcl_algorithm.h>
-
+#include <vcl_fstream.h>
 
 int main(int argc,  char** argv)
 {

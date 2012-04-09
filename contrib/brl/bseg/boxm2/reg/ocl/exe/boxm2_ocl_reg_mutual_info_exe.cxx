@@ -27,7 +27,7 @@ struct ltstr
   bool operator()(const vcl_pair<int,int> & s1, const vcl_pair<int,int> & s2) const
   {
     return  s1.first < s2.first
-        || (s1.first == s2.first && s1.second < s2.second)
+        || (s1.first == s2.first && s1.second < s2.second);
   }
 };
 
