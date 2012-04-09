@@ -54,7 +54,6 @@ class boxm2_scene_info_wrapper : public vbl_ref_count
 class boxm2_scene : public vbl_ref_count
 {
   public:
-
     //: empty scene, needs to be initialized manually
     boxm2_scene() {}
 
@@ -179,7 +178,7 @@ class boxm2_scene : public vbl_ref_count
     //: list of appearance models/observation models used by this scene
     vcl_vector<vcl_string> appearances_;
     int num_illumination_bins_;
-	int version_;
+    int version_;
 };
 
 

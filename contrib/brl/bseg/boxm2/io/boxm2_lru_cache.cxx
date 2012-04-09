@@ -77,8 +77,8 @@ void boxm2_lru_cache::clear_cache()
 boxm2_block* boxm2_lru_cache::get_block(boxm2_block_id id)
 {
   boxm2_block_metadata data = scene_->get_block_metadata(id);
-	
-	// then look for the block you're requesting
+
+  // then look for the block you're requesting
   if ( cached_blocks_.find(id) != cached_blocks_.end() )
   {
 #ifdef DEBUG
@@ -96,7 +96,7 @@ boxm2_block* boxm2_lru_cache::get_block(boxm2_block_id id)
   // if the block is null then initialize an empty one
   if (!loaded && scene_->block_exists(id)) {
     vcl_cout<<"boxm2_lru_cache::initializing empty block "<<id<<vcl_endl;
-    
+
     loaded = new boxm2_block(data);
   }
 
@@ -161,9 +161,8 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
 //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
 boxm2_data_base* boxm2_lru_cache::get_data_base_new(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
-
   boxm2_data_base* block_data;
-  if(num_bytes > 0)   {
+  if (num_bytes > 0)   {
     boxm2_block_metadata data = scene_->get_block_metadata(id);
     // requesting a specific number of bytes,
     vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id
@@ -172,14 +171,13 @@ boxm2_data_base* boxm2_lru_cache::get_data_base_new(boxm2_block_id id, vcl_strin
     block_data = new boxm2_data_base(new char[num_bytes], num_bytes, id, read_only);
     block_data->set_default_value(type, data);
   }
-  else   {
+  else {
     // initialize an empty block
     vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
     boxm2_block_metadata data = scene_->get_block_metadata(id);
     // the following constructor also sets the default values
     block_data = new boxm2_data_base(data, type, read_only);
   }
-
 
   // grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = this->cached_data_map(type);
@@ -210,16 +208,15 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
   {
     // found the block,
     boxm2_data_base* litter = data_map[id];
-  
-  
-	 boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
+
+    boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
     if (!litter->read_only_) {
       // save it
-      vcl_cout<<"boxm2_lru_cache::remove_data_base "<<type<<":"<<id<<"; saving to disk"<<vcl_endl;
+      vcl_cout<<"boxm2_lru_cache::remove_data_base "<<type<<':'<<id<<"; saving to disk"<<vcl_endl;
       boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
     }
     else
-      vcl_cout<<"boxm2_lru_cache::remove_data_base "<<type<<":"<<id<<"; not saving to disk"<<vcl_endl;
+      vcl_cout<<"boxm2_lru_cache::remove_data_base "<<type<<':'<<id<<"; not saving to disk"<<vcl_endl;
     // now throw it away
     delete litter;
     data_map.erase(rem);

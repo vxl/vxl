@@ -10,6 +10,7 @@ boxm2_block::boxm2_block(boxm2_block_id id, char* buff): version_(1)
   this->b_read(buff);
   read_only_ = true;
 }
+
 boxm2_block::boxm2_block(boxm2_block_id id, boxm2_block_metadata data, char* buffer)
 {
   version_ = data.version_;
@@ -23,8 +24,8 @@ boxm2_block::boxm2_block(boxm2_block_id id, boxm2_block_metadata data, char* buf
   buffer_ = buffer;
   this->b_read(buffer_);
   read_only_ = true;
-
 }
+
 boxm2_block::boxm2_block(boxm2_block_metadata data)
 {
   version_ = data.version_;
@@ -35,8 +36,8 @@ boxm2_block::boxm2_block(boxm2_block_metadata data)
 
 bool boxm2_block::b_read(char* buff)
 {
-	if(version_ == 1)
-	{
+  if (version_ == 1)
+  {
     long bytes_read = 0;
 
     //0. first 8 bytes denote size
@@ -69,20 +70,19 @@ bool boxm2_block::b_read(char* buff)
                                           treesBuff);
     bytes_read += sizeof(uchar16)*sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
     return true;
-	}
-
-	else if (version_ == 2)
-	{
-		uchar16* treesBuff = (uchar16*) (buff);
-		byte_count_ = sizeof(uchar16)* sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
-		trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
-											  sub_block_num_.y(),
-											  sub_block_num_.z(),
-											  treesBuff);
-
-		return true;
-	}
-	return false;
+  }
+  else if (version_ == 2)
+  {
+    uchar16* treesBuff = (uchar16*) (buff);
+    byte_count_ = sizeof(uchar16)* sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
+    trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
+                                          sub_block_num_.y(),
+                                          sub_block_num_.z(),
+                                          treesBuff);
+    return true;
+  }
+  else
+    return false;
 }
 
 //:
@@ -92,10 +92,10 @@ bool boxm2_block::b_read(char* buff)
 //  the boxm2_block buffer.
 bool boxm2_block::b_write(char* buff)
 {
-    long bytes_written = 0;
+  long bytes_written = 0;
 
-	if(version_ == 1)
-	{
+  if (version_ == 1)
+  {
     //0. writing total size
     vcl_memcpy(buff, &byte_count_, sizeof(byte_count_));
     bytes_written += sizeof(byte_count_);
@@ -116,9 +116,9 @@ bool boxm2_block::b_write(char* buff)
     int nums[4] = {sub_block_num_.x(), sub_block_num_.y(), sub_block_num_.z(), 0 };
     vcl_memcpy(buff+bytes_written, nums, 4 * sizeof(int));
     bytes_written += 4 * sizeof(int);
-	}
-    //the arrays themselves should be already in the char buffer, so no need to copy
-    return true;
+  }
+  //the arrays themselves should be already in the char buffer, so no need to copy
+  return true;
 }
 
 
@@ -157,14 +157,16 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   //get member variable metadata straight, then write to the buffer
   long bytes_read = 0;
 
-  double dims[4]; int nums[4];
+//double dims[4];
+  int nums[4];
 
-  if(version_==1)
+  if (version_==1)
   {
   bytes_read += sizeof(byte_count_);   //0. first 8 bytes denote size
   bytes_read += sizeof(init_level_);   //1. read init level, max level, max mb
   bytes_read += sizeof(max_level_);
-  bytes_read += sizeof(max_mb_);  //bytes_read += sizeof(dims);          //2. read in sub block dimension, sub block num
+  bytes_read += sizeof(max_mb_);
+//bytes_read += sizeof(dims);          //2. read in sub block dimension, sub block num
   bytes_read += sizeof(nums);
   }
   sub_block_dim_ = data.sub_block_dim_;
@@ -186,31 +188,31 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   {
     //initialize empty tree
     uchar16 treeBlk( (unsigned char) 0 );
-    
+
     //store root data index in bits [10, 11, 12, 13] ;
     treeBlk[10] = (tree_index) & 0xff;
     treeBlk[11] = (tree_index>>8)  & 0xff;
     treeBlk[12] = (tree_index>>16) & 0xff;
     treeBlk[13] = (tree_index>>24) & 0xff;
-    
+
     //Set Init_Level, 1=just root, 2=2 generations, 3=3 generations, 4=all four
-    if(init_level_== 1) {
-      treeBlk[0] = 0; 
+    if (init_level_== 1) {
+      treeBlk[0] = 0;
       ++tree_index;
     }
-    else if(init_level_ == 2){
-      treeBlk[0] = 1; 
+    else if (init_level_ == 2){
+      treeBlk[0] = 1;
       tree_index += 9;                //root + 1st
     }
-    else if(init_level_ == 3) {
+    else if (init_level_ == 3) {
       treeBlk[0] = 1;
-      treeBlk[1] = 0xff;  
+      treeBlk[1] = 0xff;
       tree_index += 1 + 8 + 64;       //root + 1st + 2nd
     }
-    else if(init_level_ == 4) {
-      treeBlk[0] = 1; 
-      for(int i=1; i<1+8; ++i)
-        treeBlk[i] = 0xff; 
+    else if (init_level_ == 4) {
+      treeBlk[0] = 1;
+      for (int i=1; i<1+8; ++i)
+        treeBlk[i] = 0xff;
       tree_index += 1 + 8 + 64 + 512; // root + 1st + 2nd + 3rd...
     }
 
@@ -227,20 +229,20 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
 long boxm2_block::calc_byte_count(int num_buffers, int trees_per_buffer, int num_trees)
 {
   long toReturn = 0;
-  if(version_ ==2)
+  if (version_ ==2)
   {
-	  toReturn += num_trees * sizeof(uchar16) ;                   //3d block pointers
-
+    toReturn += num_trees * sizeof(uchar16) ;                   //3d block pointers
   }
-  else if(version_ == 1)
+  else if (version_ == 1)
   {
-			toReturn = toReturn + num_buffers*trees_per_buffer * sizeof(int)     //tree pointers
-								+ num_buffers*(sizeof(ushort) + sizeof(ushort2)) //blocks in buffers and mem ptrs
-								+ sizeof(long)                        // this number
-								+ 3*sizeof(int)                       // init level, max level, max_mb
-								+ 4*sizeof(double)                    // dims
-								+ 4*sizeof(int);                      // nums
-								+ sizeof(int) + sizeof(int);          // numBuffers, treeLen
+    toReturn = toReturn + num_buffers*trees_per_buffer * sizeof(int)     //tree pointers
+                        + num_buffers*(sizeof(ushort) + sizeof(ushort2)) //blocks in buffers and mem ptrs
+                        + sizeof(long)                        // this number
+                        + 3*sizeof(int)                       // init level, max level, max_mb
+                        + 4*sizeof(double)                    // dims
+                        + 4*sizeof(int)                       // nums
+                        + sizeof(int) + sizeof(int)           // numBuffers, treeLen
+    ;
   }
   return toReturn;
 }

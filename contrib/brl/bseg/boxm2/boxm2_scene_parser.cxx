@@ -147,26 +147,25 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
         convert(atts[i+1], path_);
     }
   }
-  
+
   //----------- APPEARANCE TAG -------------------------------------------------
   else if (vcl_strcmp(name, APM_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
-      vcl_string buff; 
+      vcl_string buff;
       if (vcl_strcmp(atts[i], "apm") == 0) {
         convert(atts[i+1], buff);
-        appearances_.push_back(buff); 
+        appearances_.push_back(buff);
       }
       if (vcl_strcmp(atts[i], "num_illumination_bins") == 0) {
         convert(atts[i+1], num_illum_bins_);
       }
     }
   }
-  else if(vcl_strcmp(name,VERSION_TAG) == 0){
-	  for (int i=0; atts[i]; i+=2) {
-		  if (vcl_strcmp(atts[i], "number") == 0)
-			  convert(atts[i+1], version_);
-
-	  }
+  else if (vcl_strcmp(name,VERSION_TAG) == 0){
+    for (int i=0; atts[i]; i+=2) {
+      if (vcl_strcmp(atts[i], "number") == 0)
+        convert(atts[i+1], version_);
+    }
   }
   //---------- BLOCK TAG -------------------------------------------------------
   else if (vcl_strcmp(name, BLOCK_TAG) == 0) {
@@ -216,7 +215,7 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
     metadata.local_origin_ = vgl_point_3d<double>(ox, oy, oz);
     metadata.sub_block_dim_ = vgl_vector_3d<double>(dim_x, dim_y, dim_z);
     metadata.sub_block_num_ = vgl_vector_3d<unsigned>(num_x, num_y, num_z);
-	metadata.version_ = version_;
+    metadata.version_ = version_;
     blocks_[metadata.id_] = metadata;
   }
 }

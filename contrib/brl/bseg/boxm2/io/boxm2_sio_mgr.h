@@ -19,7 +19,7 @@ class boxm2_sio_mgr
     //: loads block from disk
     static boxm2_block*   load_block(vcl_string dir, boxm2_block_id block_id);
 
-	static boxm2_block* load_block(vcl_string dir, boxm2_block_id block_id,boxm2_block_metadata data );
+    static boxm2_block* load_block(vcl_string dir, boxm2_block_id block_id,boxm2_block_metadata data );
     //: saves block to disk
     static void           save_block(vcl_string dir, boxm2_block* block);
 
