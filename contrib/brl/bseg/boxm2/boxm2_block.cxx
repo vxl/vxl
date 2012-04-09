@@ -228,12 +228,8 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
 // \return size of byte stream
 long boxm2_block::calc_byte_count(int num_buffers, int trees_per_buffer, int num_trees)
 {
-  long toReturn = 0;
-  if (version_ ==2)
-  {
-    toReturn += num_trees * sizeof(uchar16) ;                   //3d block pointers
-  }
-  else if (version_ == 1)
+  long toReturn = num_trees * sizeof(uchar16) ;
+  if(version_ == 1)
   {
     toReturn = toReturn + num_buffers*trees_per_buffer * sizeof(int)     //tree pointers
                         + num_buffers*(sizeof(ushort) + sizeof(ushort2)) //blocks in buffers and mem ptrs
