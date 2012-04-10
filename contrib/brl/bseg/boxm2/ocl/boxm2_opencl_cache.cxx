@@ -513,6 +513,7 @@ bool boxm2_opencl_cache::lru_remove_last(boxm2_block_id &lru_id)
   vcl_map<boxm2_block_id, bocl_mem*>::iterator blk = cached_blocks_.find(lru_id);
   if ( blk != cached_blocks_.end() ) {
     bocl_mem* toDelete = blk->second;
+    toDelete->read_to_buffer( *queue_ );
     bytesInCache_ -= toDelete->num_bytes();
     cached_blocks_.erase(blk);
     delete toDelete;
@@ -530,6 +531,7 @@ bool boxm2_opencl_cache::lru_remove_last(boxm2_block_id &lru_id)
     vcl_map<boxm2_block_id, bocl_mem*>::iterator dat = data_map.find(lru_id);
     if ( dat != data_map.end() ) {
       bocl_mem* toDelete = dat->second;
+      toDelete->read_to_buffer( *queue_ );
       bytesInCache_ -= toDelete->num_bytes();
       data_map.erase(dat);
       delete toDelete;
