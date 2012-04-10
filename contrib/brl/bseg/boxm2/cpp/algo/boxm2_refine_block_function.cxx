@@ -2,7 +2,7 @@
 //:
 // \file
 
-#define copy_parent_data_ 0
+#define copy_parent_data_ 1
 
 
 //: initialize generic data base pointers as their data type
@@ -253,8 +253,8 @@ int boxm2_refine_block_function::move_data(boct_bit_tree& unrefined_tree,
     //case where it's a new leaf...
     else if (validCellNew) {
       //move root data to new location
-      int currLevel = unrefined_tree.depth_at(j);
-      float side_len = block_len_ / (float) (1<<currLevel);
+      int parentLevel = unrefined_tree.depth_at(pj);
+      float side_len = block_len_ / (float) (1<<parentLevel);
       
       alpha_cpy[newDataPtr]  = (max_alpha_int_ / side_len);
       //alpha_cpy[newDataPtr]  = (float(-vcl_log(1.0f - p_init_)) / side_len);
