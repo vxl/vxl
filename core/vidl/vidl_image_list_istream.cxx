@@ -46,6 +46,16 @@ vidl_image_list_istream(const vcl_string& glob)
   open(glob);
 }
 
+//: Constructor
+vidl_image_list_istream::
+vidl_image_list_istream(const vcl_vector<vcl_string>& paths)
+  : index_(INIT_INDEX),
+    ni_(0), nj_(0),
+    format_(VIDL_PIXEL_FORMAT_UNKNOWN),
+    current_frame_(NULL)
+{
+  open(paths);
+}
 
 //: Open a new stream using a file glob (see vul_file_iterator)
 // \note files are loaded in alphanumeric order by path name
