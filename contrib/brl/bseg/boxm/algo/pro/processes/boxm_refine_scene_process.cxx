@@ -41,7 +41,7 @@ bool boxm_refine_scene_process_cons(bprb_func_process& pro)
   //process has 1 output
   //output[0]: The number of leaf cells in the refined scene
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  output_types_[0] = "unsigned";
+  output_types_[0] = "int";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -109,7 +109,7 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
   }
 
   // set output
-  pro.set_output_val<unsigned int>(0,ncells);
+  pro.set_output_val<int>(0,ncells);
 
   return true;
 }
