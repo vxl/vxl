@@ -225,6 +225,11 @@ void vnl_vector_test_float()
   v[3] = 0;
   v0 = v; v1 = v; v2 = v;
   TEST("v(i)", (v(0)==0 && v(1)==-2 && v(2)==2 && v(3)==0), true);
+
+  TEST("v.max_value()", v.max_value(),  2);
+  TEST("v.min_value()", v.min_value(), -2);
+  TEST("v.arg_max()",   v.arg_max(),   2);
+  TEST("v.arg_min()",   v.arg_min(),   1);
 #if 0
   TEST("v.abs()",
        ((v1 = v.abs()),
@@ -327,15 +332,100 @@ void vnl_vector_test_float()
   }
 
   {
-    float vvalues [] = {1,0,0,0};
-    vnl_vector<float> v (4,4,vvalues);
+    double vvalues [] = {1,0,0,0};
+    vnl_vector<double> vd (4);
+    vnl_vector<double> v (4,4,vvalues);
     v[0] = 1;
     v[1] = 0;
     v[2] = 0;
     v[3] = 0;
     TEST("v.squared_magnitude", v.squared_magnitude(), 1);
     TEST("v.magnitude", v.magnitude(), 1);
-    TEST("v.normalize", (v1 = 3.0f * v, v1.normalize(), v1), v);
+// Trying to track down test failure in Intel 10.0 compiler
+    vd = 4.0 * v;
+    vcl_cout << "vd.normalize() is " << vd.normalize() << " and v is " << v << "\n" << vcl_flush;
+    vcl_cout << "vd.normalize() - v is " << vd.normalize() - v << "\n" << vcl_flush;
+    TEST("v.normalize", (vd = 4.0 * v, vd.normalize(), vd), v);
+  }
+
+  {
+    float vvalues [] = {-7,-2,-3,-4};
+    vnl_vector<float> v(4,4,vvalues);
+    v[0] = -7;
+    v[1] = -2;
+    v[2] = -3;
+    v[3] = -4;
+    TEST("v(i)", (v(0)==-7 && v(1)==-2 && v(2)==-3 && v(3)==-4), true);
+
+    TEST("v.max_value()", v.max_value(),  -2);
+    TEST("v.min_value()", v.min_value(), -7);
+    TEST("v.arg_max()",   v.arg_max(),   1);
+    TEST("v.arg_min()",   v.arg_min(),   0);
+  }
+
+  {
+    double vvalues [] = {-7,-2,-3,-4};
+    vnl_vector<double> v(4,4,vvalues);
+    v[0] = -7;
+    v[1] = -2;
+    v[2] = -3;
+    v[3] = -4;
+    TEST("v(i)", (v(0)==-7 && v(1)==-2 && v(2)==-3 && v(3)==-4), true);
+
+    TEST("v.max_value()", v.max_value(),  -2);
+    TEST("v.min_value()", v.min_value(), -7);
+    TEST("v.arg_max()",   v.arg_max(),   1);
+    TEST("v.arg_min()",   v.arg_min(),   0);
+  }
+
+  // We should test odd sized vector's for the special SSE2 handling of
+  // different sizes.
+  {
+    float vvalues [] = {-7,-2,-3,-4, 5};
+    vnl_vector<float> v(5,5,vvalues);
+    v[0] = -7;
+    v[1] = -2;
+    v[2] = -3;
+    v[3] = -4;
+    v[4] = 5;
+    TEST("v(i)", (v(0)==-7 && v(1)==-2 && v(2)==-3 && v(3)==-4 && v(4)==5), true);
+
+    TEST("v.max_value()", v.max_value(),  5);
+    TEST("v.min_value()", v.min_value(), -7);
+    TEST("v.arg_max()",   v.arg_max(),   4);
+    TEST("v.arg_min()",   v.arg_min(),   0);
+  }
+
+  {
+    float vvalues [] = {-7,-2,-3,-4, 5, 2};
+    vnl_vector<float> v(6,6,vvalues);
+    v[0] = -7;
+    v[1] = -2;
+    v[2] = -3;
+    v[3] = -4;
+    v[4] = 5;
+    v[5] = 2;
+    TEST("v(i)", (v(0)==-7 && v(1)==-2 && v(2)==-3 && v(3)==-4 && v(4)==5 && v(5)==2), true);
+
+    TEST("v.max_value()", v.max_value(),  5);
+    TEST("v.min_value()", v.min_value(), -7);
+    TEST("v.arg_max()",   v.arg_max(),   4);
+    TEST("v.arg_min()",   v.arg_min(),   0);
+  }
+  {
+    double vvalues [] = {-7,-2,-3,-4, 5};
+    vnl_vector<double> v(5,5,vvalues);
+    v[0] = -7;
+    v[1] = -2;
+    v[2] = -3;
+    v[3] = -4;
+    v[4] = 5;
+    TEST("v(i)", (v(0)==-7 && v(1)==-2 && v(2)==-3 && v(3)==-4 && v(4)==5), true);
+
+    TEST("v.max_value()", v.max_value(),  5);
+    TEST("v.min_value()", v.min_value(), -7);
+    TEST("v.arg_max()",   v.arg_max(),   4);
+    TEST("v.arg_min()",   v.arg_min(),   0);
   }
 
   TEST("vnl_vector_ssd",
