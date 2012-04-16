@@ -133,8 +133,10 @@ bool vil_tiff_header::read_header()
   // EXTRASAMPLES tag requires two input arguments, which is different
   // from other 16bit values.
   vxl_uint_16* sample_info=0;
-  TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
-  if (extra_samples.val > 0)
+  extra_samples.val=0;
+  extra_samples.valid = false;
+  int const ret_extrasamples = TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
+  if(ret_extrasamples && extra_samples.val > 0)
     extra_samples.valid = true;
 
   read_short_tag(tif_,TIFFTAG_FILLORDER, fill_order);
