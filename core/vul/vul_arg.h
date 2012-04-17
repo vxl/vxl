@@ -168,7 +168,7 @@ class vul_arg : public vul_arg_base
   // first plain word in the command line. However, this constructor adds a new option, allowing us to declare
   // a non-null flag, which can appears anywhere, and that is REQUIRED.
   //
-  // Note that the parameters are not optional. This interface has been was chosen to ensure backward compatibility.
+  // Note that the parameters are not optional. This interface has been chosen to ensure backward compatibility.
   // \seealso is_required
   vul_arg(char const* option_string,
           char const* helpstring,
