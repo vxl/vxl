@@ -37,8 +37,9 @@ int main(int argc,  char** argv)
   //create scene
   boxm2_scene_sptr sceneA = new boxm2_scene(sceneA_file());
   boxm2_scene_sptr sceneB = new boxm2_scene(sceneB_file());
-  boxm2_cache_sptr cacheA = new boxm2_lru_cache(sceneA);
-  boxm2_cache_sptr cacheB = new boxm2_lru_cache(sceneB);
+  boxm2_lru_cache::create(sceneA);
+  boxm2_cache_sptr cacheA = boxm2_cache::instance();
+ // boxm2_cache_sptr cacheB = new boxm2_lru_cache(sceneB);
 
   vcl_vector<float> MIs;
   vcl_map<vcl_pair<int,int>, float,ltstr > Ts;
@@ -47,7 +48,7 @@ int main(int argc,  char** argv)
     for (int j=0; j<1; ) {
       vgl_vector_3d<double> trans(i,j,0);
       t.mark();
-      float MI = register_world(cacheA, cacheB, trans);
+      float MI = register_world(cacheA, sceneB, trans);
       vcl_cout<<"Time Taken is "<<t.all()<<vcl_endl;
       Ts[vcl_pair<int,int>(i,j)] = MI;
       vcl_cout<<"Trans: "<<trans<<' '<<MI<<' '<<vcl_endl;
