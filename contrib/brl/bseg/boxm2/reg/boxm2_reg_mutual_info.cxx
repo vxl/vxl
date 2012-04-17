@@ -77,10 +77,11 @@ void align_samples(boxm2_cache_sptr& cacheA,
 
   //total points
   vgl_vector_3d<double> n = (maxPoint - minPoint);
+#if 0 // Warning: unused!
   unsigned totalPoints = (int) ( n.x()/sbDim.x() + .5) *
                          (int) ( n.y()/sbDim.y() + .5) *
                          (int) ( n.z()/sbDim.z() + .5);
-
+#endif
   vcl_vector<float> probsA, probsB;
   for (double x = minPoint.x(); x<maxPoint.x(); x+=sbDim.x()) {
     for (double y = minPoint.y(); y<maxPoint.y(); y+=sbDim.y()) {
@@ -101,9 +102,9 @@ void align_samples(boxm2_cache_sptr& cacheA,
 
   A.set_size(1, probsA.size(), 1);
   B.set_size(1, probsB.size(), 1);
-  for (int i=0; i<probsA.size(); ++i)
+  for (unsigned int i=0; i<probsA.size(); ++i)
     A(0,i) = probsA[i];
-  for (int i=0; i<probsB.size(); ++i)
+  for (unsigned int i=0; i<probsB.size(); ++i)
     B(0,i) = probsB[i];
 }
 
@@ -133,7 +134,6 @@ float register_world(boxm2_cache_sptr& cacheA,
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
-    boxm2_array_3d<uchar16>::iterator tree_iter;
     unsigned ni = trees.get_row1_count();
     unsigned nj = trees.get_row2_count();
     unsigned nk = trees.get_row3_count();
@@ -171,7 +171,7 @@ float register_world(boxm2_cache_sptr& cacheA,
               float probA=alpha_data->data()[index];
               probA = 1  - vcl_exp (-probA* side_len *sub_blk_dims.x());
               float probB=0.0f;
-              float iA=(float)int_data->data()[index][0]/255.0f;
+              float iA=(float)int_data->data()[index][0]/255.0f; // WARNING: unused!
               float iB=0.0f;
               bool good = boxm2_util::query_point(sceneB, cacheB, ptxformed, probB, iB);
               if (good)
@@ -201,7 +201,7 @@ float register_world(boxm2_cache_sptr& cacheA,
                      vgl_vector_3d<double> tx)
 {
   boxm2_scene_sptr sceneA = cacheA->get_scene();
-  
+
   vcl_vector<vcl_string> data_types,identifiers;
   data_types.push_back("alpha");
   identifiers.push_back("");
@@ -222,12 +222,9 @@ float register_world(boxm2_cache_sptr& cacheA,
     boxm2_block  * blk = cacheA->get_block(blk_iter->first);
     boxm2_data_base *  alpha_base  = cacheA->get_data_base(blk_iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
-    boxm2_data_base *  int_base  = cacheA->get_data_base(blk_iter->first,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-    boxm2_data<BOXM2_MOG3_GREY> *int_data=new boxm2_data<BOXM2_MOG3_GREY>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
-    boxm2_array_3d<uchar16>::iterator tree_iter;
     unsigned ni = trees.get_row1_count();
     unsigned nj = trees.get_row2_count();
     unsigned nk = trees.get_row3_count();
@@ -264,10 +261,8 @@ float register_world(boxm2_cache_sptr& cacheA,
                                                                         tx.z()*sub_blk_dims.z());
               float probA=alpha_data->data()[index];
               probA = 1  - vcl_exp (-probA* side_len *sub_blk_dims.x());
-              float iA=(float)int_data->data()[index][0]/255.0f;
 
               float probB=0.0f;
-              float iB=0.0f;
               bool good = true;
               vgl_point_3d<double> local;
               boxm2_block_id id;
@@ -313,9 +308,9 @@ float register_world(boxm2_cache_sptr& cacheA,
   }
   A.set_size(1, probsA.size(), 1);
   B.set_size(1, probsB.size(), 1);
-  for (int i=0; i<probsA.size(); ++i)
+  for (unsigned int i=0; i<probsA.size(); ++i)
     A(0,i) = probsA[i];
-  for (int i=0; i<probsB.size(); ++i)
+  for (unsigned int i=0; i<probsB.size(); ++i)
     B(0,i) = probsB[i];
   double MI = brip_mutual_info(A,B, 0.0, 1.0, 20);
   return MI;
