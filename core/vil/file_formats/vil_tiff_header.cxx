@@ -45,6 +45,13 @@ static void read_long_tag(TIFF* tif, ttag_t tag, ulong_tag& utag, vxl_uint_32 de
     utag.val = deflt;
 }
 
+static void read_float_tag(TIFF* tif, ttag_t tag, float& val, bool& valid, float deflt = 0)
+{
+  valid = TIFFGetField(tif, tag, &(val))>0;
+  if (!valid)
+    val = deflt;
+}
+
 #if 0 // unused static function
 //assumes array is resized properly
 static bool read_long_array(TIFF* tif, ttag_t tag,
@@ -70,6 +77,12 @@ static void write_long_tag(TIFF* tif, ttag_t tag, ulong_tag const& ultag)
 {
   if (ultag.valid)
     TIFFSetField(tif, tag, ultag.val);
+}
+
+static void write_float_tag(TIFF* tif, ttag_t tag, float const val, bool const valid)
+{
+  if (valid)
+    TIFFSetField(tif, tag, val);
 }
 
 static void write_string(TIFF* tif, ttag_t tag, vcl_string const& stag)
@@ -183,21 +196,10 @@ bool vil_tiff_header::read_header()
   }
 #endif
   read_short_tag(tif_,TIFFTAG_THRESHHOLDING, thresholding);
-  vxl_uint_32 xneu, xden, yneu, yden;
-  x_resolution_valid = false;
-  x_resolution = 0;
-  if (TIFFGetField(tif_,TIFFTAG_XRESOLUTION, &xneu, &xden))
-  {
-    x_resolution = static_cast<double>(xneu)/static_cast<double>(xden);
-    x_resolution_valid = true;
-  }
-  y_resolution_valid = false;
-  y_resolution = 0;
-  if (TIFFGetField(tif_,TIFFTAG_XRESOLUTION, &yneu, &yden))
-  {
-    y_resolution = static_cast<double>(yneu)/static_cast<double>(yden);
-    y_resolution_valid = true;
-  }
+
+  read_float_tag(tif_, TIFFTAG_XRESOLUTION, x_resolution, x_resolution_valid);
+  read_float_tag(tif_, TIFFTAG_YRESOLUTION, y_resolution, y_resolution_valid);
+
   read_long_tag(tif_, TIFFTAG_TILEWIDTH, tile_width, 0);
   read_long_tag(tif_, TIFFTAG_TILELENGTH, tile_length, 0);
 

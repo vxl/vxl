@@ -175,10 +175,10 @@ class vil_tiff_header
 
   ushort_tag thresholding;
 
-  double x_resolution;
+  float x_resolution;
   bool x_resolution_valid;
 
-  double y_resolution;
+  float y_resolution;
   bool y_resolution_valid;
 
   //tiff extension for blocking
