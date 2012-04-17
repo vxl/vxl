@@ -32,7 +32,11 @@ template <class T> int  parse       (vul_arg<T>*, char**);
 //: This is the base class for the templated vul_arg<T>s
 class vul_arg_base
 {
+   struct required_option_type {}; // see constructors of vul_arg
+
  public:
+  static required_option_type is_required;
+
   static void parse_deprecated(int& argc, char **& argv,
                                bool warn_about_unrecognized_arguments = true);
   static void include_deprecated(vul_arg_info_list& l);
@@ -125,7 +129,6 @@ class vul_arg : public vul_arg_base
 {
  private:
   void settype() { ::settype(*this); }
-  struct required_option_type {}; // see constructors
  public:
   T value_;// public so we don't have to worry about templated friends.
 
@@ -155,7 +158,6 @@ class vul_arg : public vul_arg_base
       value_(default_value) { settype(); }
 
   //: Dummy parameter to be passed during construction. It sets a flag as required.
-  static required_option_type is_required;
 
   //: Construct a vul_arg<T> that user must set in command line.
   // Note that a default value does not make sense.

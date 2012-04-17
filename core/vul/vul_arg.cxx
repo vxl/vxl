@@ -37,6 +37,10 @@
 
 //------------------------------------------------------------------------------
 
+// definition: used in constructor of vul_arg for required flags
+vul_arg_base::required_option_type vul_arg_base::is_required;
+
+
 char const* vul_arg_base::option()
 { return option_.c_str(); }
 
