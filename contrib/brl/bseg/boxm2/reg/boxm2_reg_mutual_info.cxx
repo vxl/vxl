@@ -197,12 +197,11 @@ float register_world(boxm2_cache_sptr& cacheA,
 #endif // 0
 
 float register_world(boxm2_cache_sptr& cacheA,
-                     boxm2_cache_sptr& cacheB,
+                     boxm2_scene_sptr& sceneB,
                      vgl_vector_3d<double> tx)
 {
   boxm2_scene_sptr sceneA = cacheA->get_scene();
-  boxm2_scene_sptr sceneB = cacheB->get_scene();
-
+  
   vcl_vector<vcl_string> data_types,identifiers;
   data_types.push_back("alpha");
   identifiers.push_back("");

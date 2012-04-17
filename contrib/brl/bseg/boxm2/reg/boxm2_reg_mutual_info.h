@@ -19,7 +19,7 @@ void align_samples(boxm2_cache_sptr& cacheA,
                    vil_image_view<double>& B);
 
 float register_world(boxm2_cache_sptr& cacheA,
-                     boxm2_cache_sptr& cacheB,
+                     boxm2_scene_sptr& sceneB,
                      vgl_vector_3d<double> tx);
 
 #endif // boxm2_reg_mutual_info_h
