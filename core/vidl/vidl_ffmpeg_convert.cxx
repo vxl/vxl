@@ -109,6 +109,7 @@ vidl_pixel_format_from_ffmpeg(PixelFormat ffmpeg_pix_fmt)
     case PIX_FMT_RGB565:    return VIDL_PIXEL_FORMAT_RGB_565;
     case PIX_FMT_RGB555:    return VIDL_PIXEL_FORMAT_RGB_555;
     case PIX_FMT_GRAY8:     return VIDL_PIXEL_FORMAT_MONO_8;
+    case PIX_FMT_PAL8:      return VIDL_PIXEL_FORMAT_MONO_8;   //HACK: Treating 8-bit palette as greyscale image
     case PIX_FMT_MONOWHITE: return VIDL_PIXEL_FORMAT_MONO_1;
     case PIX_FMT_MONOBLACK: return VIDL_PIXEL_FORMAT_MONO_1;
     case PIX_FMT_UYVY422:   return VIDL_PIXEL_FORMAT_UYVY_422;
