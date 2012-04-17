@@ -48,6 +48,7 @@ struct vidl_ffmpeg_istream::pimpl
     deinterlace_( false ),
     frame_number_offset_( 0 )
   {
+    packet_.data = NULL;
   }
 
   AVFormatContext* fmt_cxt_;
@@ -66,6 +67,12 @@ struct vidl_ffmpeg_istream::pimpl
   // the codec state, so that codec.width and so on apply to the
   // frame data.
   AVFrame* frame_;
+
+
+  //: The last successfully read packet (before decoding).
+  //  This must not be freed if the packet contains the raw image,
+  //  in which case the frame_ will have only a shallow copy
+  AVPacket packet_;
 
   //: number of counted frames
   int num_frames_;
@@ -191,6 +198,9 @@ void
 vidl_ffmpeg_istream::
 close()
 {
+  if( is_->packet_.data )
+    av_free_packet( &is_->packet_ );  // free last packet
+
   if ( is_->frame_ ) {
     av_freep( &is_->frame_ );
   }
@@ -373,26 +383,30 @@ advance()
 
   AVCodecContext* codec = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
 
-  AVPacket pkt;
+  if( is_->packet_.data )
+    av_free_packet( &is_->packet_ );  // free previous packet
+
   int got_picture = 0;
 
   while ( got_picture == 0 ) {
-    if ( av_read_frame( is_->fmt_cxt_, &pkt ) < 0 ) {
+    if ( av_read_frame( is_->fmt_cxt_, &is_->packet_ ) < 0 ) {
       break;
     }
-    is_->last_dts = pkt.dts;
+    is_->last_dts = is_->packet_.dts;
 
     // Make sure that the packet is from the actual video stream.
-    if (pkt.stream_index==is_->vid_index_)
+    if (is_->packet_.stream_index==is_->vid_index_)
     {
       if ( avcodec_decode_video( codec,
                                  is_->frame_, &got_picture,
-                                 pkt.data, pkt.size ) < 0 ) {
+                                 is_->packet_.data, is_->packet_.size ) < 0 ) {
         vcl_cerr << "vidl_ffmpeg_istream: Error decoding packet!\n";
         return false;
       }
+      else
+        break; // without freeing the packet
     }
-    av_free_packet( &pkt );
+    av_free_packet( &is_->packet_ );
   }
 
   // From ffmpeg apiexample.c: some codecs, such as MPEG, transmit the
