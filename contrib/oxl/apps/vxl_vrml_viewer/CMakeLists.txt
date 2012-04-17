@@ -13,7 +13,7 @@ IF(HAS_VGUI)
 
     ADD_EXECUTABLE( vxl_vrml_viewer ${vxl_vrml_viewer_sources} )
     INSTALL_TARGETS( /bin vxl_vrml_viewer)
-    TARGET_LINK_LIBRARIES( vxl_vrml_viewer vgui vrml ${QV_LIBRARIES} vcl )
+    TARGET_LINK_LIBRARIES( vxl_vrml_viewer vgui oxl_vrml ${QV_LIBRARIES} vcl )
 
   ENDIF(QV_FOUND)
 ENDIF(HAS_VGUI)
