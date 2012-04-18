@@ -32,7 +32,7 @@ template <class T> int  parse       (vul_arg<T>*, char**);
 //: This is the base class for the templated vul_arg<T>s
 class vul_arg_base
 {
-public:
+protected:
    struct required_option_type {}; // see constructors of vul_arg
 
 public:
