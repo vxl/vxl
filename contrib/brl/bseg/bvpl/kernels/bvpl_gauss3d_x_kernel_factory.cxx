@@ -77,6 +77,7 @@ void bvpl_gauss3d_x_kernel_factory::create_canonical()
   float max_y =  vcl_floor(2.0f*sigma2_+0.01f);
   float min_z = -vcl_floor(2.0f*sigma3_+0.01f);
   float max_z =  vcl_floor(2.0f*sigma3_+0.01f);
+  float l1_norm = 0.0f;
 
   for (float x=min_x; x<= max_x; x+=1.f)
   {
@@ -85,10 +86,23 @@ void bvpl_gauss3d_x_kernel_factory::create_canonical()
       for (float z= min_z; z<= max_z; z+=1.f)
       {
         vnl_float_3 pt(x,y,z);
-        canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(x,y,z), dispatch(gauss_kernel.gradient(pt)[0])));
+        float val = gauss_kernel.gradient(pt)[0];
+        canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(x,y,z), dispatch(val)));
+        l1_norm += vcl_abs(val);
       }
     }
   }
+  
+  //normalize to L1 norm
+  vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator k_it = canonical_kernel_.begin();
+  float norm = 0.0;
+  for(; k_it != canonical_kernel_.end(); k_it++)
+  {
+    k_it->second.c_ = k_it->second.c_ / l1_norm;
+    norm+=vcl_abs(k_it->second.c_);
+  }
+  vcl_cout << "Canonical kernel has been normalized to have l1_norm, norm= " << norm <<vcl_endl;
+
 
   //set the dimension of the 3-d grid
   max_point_.set(int(max_x),int(max_y),int(max_z));
