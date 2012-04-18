@@ -13,8 +13,9 @@
 bvpl_kernel
 bvpl_kernel_factory::create()
 {
-  bvpl_kernel_iterator iter = interpolate(rotate(angle_));
-  bvpl_kernel kernel(iter, rotation_axis_, parallel_axis_, angle_,dim(), min_point_, max_point_,factory_name_,voxel_length_);
+  kernel_type final_float_kernel = rotate(angle_);
+  bvpl_kernel kernel(interpolate(final_float_kernel), rotation_axis_, parallel_axis_, angle_,dim(), min_point_, max_point_,factory_name_,voxel_length_);
+  kernel.float_kernel_ = final_float_kernel;
   kernel.set_xml_element(xml_element());
 
   return kernel;
@@ -25,7 +26,9 @@ bvpl_kernel
 bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float angle)
 {
   this->set_rotation_axis(rotation_axis);
-  bvpl_kernel kernel(interpolate(rotate(angle)), rotation_axis_, parallel_axis_, angle_, dim(), min_point_, max_point_,factory_name_,voxel_length_);
+  kernel_type final_float_kernel = rotate(angle_);
+  bvpl_kernel kernel(interpolate(final_float_kernel), rotation_axis_, parallel_axis_, angle_, dim(), min_point_, max_point_,factory_name_,voxel_length_);
+  kernel.float_kernel_ = final_float_kernel;
   kernel.set_xml_element(xml_element());
 
   return kernel;

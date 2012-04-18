@@ -52,6 +52,7 @@ class bvpl_kernel: public vbl_ref_count
   double voxel_length() const {return voxel_length_;}
   void set_voxel_length(double length) {voxel_length_=length;}
   void set_xml_element(bxml_data_sptr x_data) {factory_data_ = x_data; }
+  vcl_string name() { return name_; }
   vgl_vector_3d<int> offset()
   {
     int x=0;
@@ -112,8 +113,12 @@ class bvpl_kernel: public vbl_ref_count
   }
 
   unsigned id() const {return id_;}
-  static unsigned id_cnt;
 
+  static unsigned id_cnt;
+  
+  //: Set up access to the floating point kernel -- this should be made more elegantly
+  vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > float_kernel_;
+  
  private:
   bvpl_kernel_iterator kernel_;
   //: Orientation axis
