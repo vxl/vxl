@@ -21,7 +21,7 @@
 #include <bbas_pro/bbas_register.h>
 #include <brad_pro/brad_register.h>
 #include <bsta/pro/bsta_register.h>
-
+#include <bvpl/kernels/pro/bvpl_kernels_register.h>
 #include <ihog_pro/ihog_register.h>
 #if defined(HAS_HDFS) && HAS_HDFS
 #include <bhdfs/pro/bhdfs_register.h>
@@ -34,7 +34,8 @@ register_processes(PyObject *self, PyObject *args)
   boxm2_cpp_register::register_process();
   vpgl_register::register_process();
   vil_register::register_process();
-  brip_register::register_process(); 
+  brip_register::register_process();
+  bvpl_kernels_register::register_process();
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_process();
   boxm2_ocl_register::register_process();
@@ -65,6 +66,7 @@ register_datatypes(PyObject *self, PyObject *args)
   vpgl_register::register_datatype();
   vil_register::register_datatype();
   brip_register::register_datatype(); 
+  bvpl_kernels_register::register_datatype();
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_datatype();
   boxm2_ocl_register::register_datatype();
