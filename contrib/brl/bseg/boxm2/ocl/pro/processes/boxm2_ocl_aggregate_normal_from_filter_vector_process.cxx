@@ -1,11 +1,13 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_aggregate_normal_from_filter_response_process.cxx
+// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_aggregate_normal_from_filter_vector_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process to interpolate the responses of first order derivatives filters into a normal
 // \author Ali Osman Ulusoy
-// \Modifications : 
-//  April 17, 2012  Isabel Restrepo: Take the vector of filters an input. This provides filter names, number and orientation
+// \verbatim
+//  Modifications :
+//   April 17, 2012  Isabel Restrepo: Take the vector of filters an input. This provides filter names, number and orientation
+// \endverbatim
 // \date Feb 13, 2011
 
 //process utilities
@@ -59,7 +61,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process_cons(bprb_func_proces
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
-  input_types_[3] = "bvpl_kernel_vector_sptr";   
+  input_types_[3] = "bvpl_kernel_vector_sptr";
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_)
@@ -102,23 +104,22 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
 
   // compile the kernel if not already compiled
   vcl_string identifier=device->device_identifier();
-  
+
   if (kernels.find(identifier)==kernels.end()) {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     bocl_kernel* aggregate_kernel = new bocl_kernel();
-    if(num_filters == 3 ){
+    if (num_filters == 3 ) {
       compile_kernel(device,aggregate_kernel,"-D XYZ");
       kernels[identifier]=aggregate_kernel;
     }
-    else if(num_filters == 6 ){
+    else if (num_filters == 6 ) {
       compile_kernel(device,aggregate_kernel,"-D DODECAHEDRON");
       kernels[identifier]=aggregate_kernel;
     }
-    else{
-      vcl_cerr << "Aggregate kernel is not available for teh requested number of responses" << vcl_endl;
+    else {
+      vcl_cerr << "Aggregate kernel is not available for the requested number of responses\n";
       return false;
     }
-    
   }
 
   // bit lookup buffer
@@ -129,7 +130,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
 
   // set up directions buffer
   cl_float4* directions = new cl_float4[num_filters];
-  
+
   for (unsigned k = 0; k < num_filters; k++) {
     bvpl_kernel_sptr filter = filter_vector->kernels_[k];
     vnl_float_3 dir = filter->axis();
@@ -157,7 +158,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
 
     //grab appropriate kernel
     bocl_kernel* kern = kernels[identifier];
-    
+
 
     //load tree and alpha
     boxm2_block_metadata data = blk_iter->second;
@@ -172,7 +173,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
 
     //store normals locations
     vcl_size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
-    bocl_mem * normals    = opencl_cache->get_data(id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), info_buffer->data_buffer_length*normalsTypeSize,false);  
+    bocl_mem * normals    = opencl_cache->get_data(id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), info_buffer->data_buffer_length*normalsTypeSize,false);
 
     //set global and local threads
     local_threads[0] = 128;
@@ -185,11 +186,11 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
     kern->set_arg( normals );
     for (unsigned i = 0; i < num_filters; i++) {
       bvpl_kernel_sptr filter = filter_vector->kernels_[i];
-      vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();   
+      vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
       bocl_mem * response = opencl_cache->get_data(id,RESPONSE_DATATYPE::prefix(filter_ident.str()), 0, true);
       kern->set_arg( response );
     }
-    
+
     transfer_time += (float) transfer.all();
 
     //execute kernel
@@ -206,7 +207,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
     status = clFinish(queue);
     check_val(status, MEM_FAILURE, "READ NORMALS FAILED: " + error_to_string(status));
   }
-  
+
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
 
   return true;
