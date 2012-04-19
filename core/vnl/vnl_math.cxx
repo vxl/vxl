@@ -61,18 +61,21 @@ extern "C" int finite(double);
 # include <math.h> // dont_vxl_filter: no HUGE_VAL or isnan() in <cmath>
 #endif
 
-// On OSX Tiger in C++ the math.h header defines an inline __isnan
+// On Mac OS X Tiger in C++ the math.h header defines an inline __isnan
 // that gets compiled here into an internal-linkage symbol.  Then at
 // link time the relocation entry from libm.dylib confuses the linker
 // because it thinks the entry applies to the static version of the
 // symbol.  We need to avoid use of the inline version by never
 // calling __isnan in C++ code.
 #if defined(__APPLE__)
-# include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
-# if VXL_APPLE_HAS_ISNAND
-#  define isnan(x) __isnand((double)x)
-# else
-#  define isnan(x) __inline_isnand((double)x)
+# include <Availability.h>
+# if MAC_OS_X_VERSION_MAX_ALLOWED == 1040
+#  include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
+#  if VXL_APPLE_HAS_ISNAND
+#   define isnan(x) __isnand((double)x)
+#  else
+#   define isnan(x) __inline_isnand((double)x)
+#  endif
 # endif
 #endif
 
@@ -111,7 +114,15 @@ const float vnl_math::float_sqrteps     VCL_STATIC_CONST_INIT_FLOAT_DEFN( 3.4526
 #endif
 
 //--------------------------------------------------------------------------------
-#if defined(VCL_ICC)
+//: Return true iff x is "Not a Number"
+#if __cplusplus > 199711L
+//: Return true iff x is "Not a Number"
+bool vnl_math_isnan(float x) { return std::isnan(x); }
+//: Return true iff x is "Not a Number"
+bool vnl_math_isnan(double x) { return std::isnan(x); }
+//: Return true iff x is "Not a Number"
+bool vnl_math_isnan(long double x) { return std::isnan(x); }
+#elif defined(VCL_ICC)
 #include <mathimf.h> // defines isnanf, isnan, and isnanl
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(float x) { return isnanf(x); }
@@ -200,7 +211,14 @@ bool vnl_math_isnan(long double x)
 # endif
 #endif
 
-#if defined(VCL_BORLAND)
+#if __cplusplus > 199711L
+//: Return true if x is neither NaN nor Inf.
+bool vnl_math_isfinite(float x) { return std::isfinite(x) != 0; }
+//: Return true if x is neither NaN nor Inf.
+bool vnl_math_isfinite(double x) { return std::isfinite(x) != 0; }
+//: Return true if x is neither NaN nor Inf.
+bool vnl_math_isfinite(long double x) { return std::isfinite(x) != 0; }
+#elif defined(VCL_BORLAND)
 //: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(float x) { return _finite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
@@ -227,7 +245,14 @@ bool vnl_math_isfinite(long double x)
 #endif
 
 
-#if defined(VCL_BORLAND)
+#if __cplusplus > 199711L
+//: Return true if x is inf
+bool vnl_math_isinf(float x) { return std::isinf(x) != 0; }
+//: Return true if x is inf
+bool vnl_math_isinf(double x) { return std::isinf(x) != 0; }
+//: Return true if x is inf
+bool vnl_math_isinf(long double x) { return std::isinf(x) != 0; }
+#elif defined(VCL_BORLAND)
 //: Return true if x is inf
 bool vnl_math_isinf(float x) { return !_finite(x) && !vnl_math_isnan(x); }
 //: Return true if x is inf
