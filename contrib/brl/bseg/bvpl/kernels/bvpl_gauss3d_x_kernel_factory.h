@@ -28,27 +28,20 @@ class bvpl_gauss3d_x_kernel_factory : public bvpl_kernel_factory
   //:Default Constructor
   bvpl_gauss3d_x_kernel_factory();
 
+#if 0
   //: Constructs a kernel form gaussian spheroid with sigma parameters s1 and s2. i.e. Cov is diagonal with entries s1, s2, s2
-  bvpl_gauss3d_x_kernel_factory(float s1, float s2);
+  //  Can also specify the support of the kernel
+  bvpl_gauss3d_x_kernel_factory(float s1, float s2, float supp_1 = 2.0, float supp2 = 1.0);
+#endif
 
   //: Constructs a kernel form gaussian ellipsoid with sigma parameters s1, s2 and s3. i.e. Cov is diagonal with entries s1, s2,s3
-  bvpl_gauss3d_x_kernel_factory(float s1, float s2, float s3);
+  //  Can also specify the support of the kernel
+  bvpl_gauss3d_x_kernel_factory(float s1, float s2, float s3, float supp_1 = 2.0, float supp2 = 1.0, float supp3 = 1.0);
 
   virtual ~bvpl_gauss3d_x_kernel_factory() {}
 
   static vcl_string name() {return "gauss_x"; }
 
-#if 0
-  /******************Batch Methods ***********************/
-  //: Creates a vector of kernels with azimuthal and elevation resolution equal to pi/4, and with angle of rotation = angular_resolution_
-  virtual bvpl_kernel_vector_sptr create_kernel_vector();
-
-  //: Creates a vector of kernels according to given  azimuthal and elevation resolution, and with angle of rotation = angular_resolution_
-  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi);
-
-  //: Creates a vector of kernels  according to given azimuthal, levation, and angular resolution
-  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi, float angular_res);
-#endif
  private:
 
   //:Creates a 2d edge kernel
@@ -57,6 +50,9 @@ class bvpl_gauss3d_x_kernel_factory : public bvpl_kernel_factory
   float sigma1_;
   float sigma2_;
   float sigma3_;
+  float supp1_;
+  float supp2_;
+  float supp3_;
 
   static const unsigned max_size_ = 71;
 };
