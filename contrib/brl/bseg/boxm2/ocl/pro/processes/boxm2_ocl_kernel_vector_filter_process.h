@@ -1,8 +1,8 @@
 #ifndef boxm2_ocl_kernel_vector_filter_process_h_
 #define boxm2_ocl_kernel_vector_filter_process_h_
 //:
-// \brief A process to filter a boxm2 scene with a bvpl_kernel. this header is used in boxm_ocl_tests
 // \file
+// \brief A process to filter a boxm2 scene with a bvpl_kernel. this header is used in boxm_ocl_tests
 // \author Isabel Restrepo
 // \date April 12, 2012
 
@@ -23,17 +23,16 @@
 
 
 //:global variables
-namespace boxm2_ocl_kernel_vector_filter_process_globals 
+namespace boxm2_ocl_kernel_vector_filter_process_globals
 {
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 0;
-  
+
   bool compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, vcl_string opts);
-  
+
   bool process(bocl_device_sptr device, boxm2_scene_sptr scene, boxm2_opencl_cache_sptr opencl_cache, bvpl_kernel_vector_sptr filter);
-  
+
   static vcl_map<vcl_string,bocl_kernel* > kernels;
-  
 }
 
 
@@ -42,4 +41,4 @@ bool boxm2_ocl_kernel_vector_filter_process_cons(bprb_func_process& pro);
 bool boxm2_ocl_kernel_vector_filter_process(bprb_func_process& pro);
 
 
-#endif // boxm2_ocl_filter_process_h_
+#endif // boxm2_ocl_kernel_vector_filter_process_h_
