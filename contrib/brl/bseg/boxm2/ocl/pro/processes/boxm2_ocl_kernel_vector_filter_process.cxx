@@ -1,5 +1,5 @@
 //:
-// \brief A process to filter a boxm2 scene with a bvpl_kernel
+// \brief A process to filter a boxm2 scene with a vectors of bvpl_kernels
 // \file
 // \author Isabel Restrepo
 // \date April 12, 2012
@@ -62,6 +62,9 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
       kernels[identifier]=filter_kernel;
     }
     
+    //cache size sanity check
+    long binCache = opencl_cache.ptr()->bytes_in_cache();
+    vcl_cout<<"Filtering: Start MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
     
     // bit lookup buffer
     cl_uchar lookup_arr[256];
@@ -77,13 +80,19 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
     centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     
-  
+    //cache size sanity check
+    binCache = opencl_cache.ptr()->bytes_in_cache();
+    vcl_cout<<"Filtering: Bits and centers MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
   
     //iterate though the filters in the vector
   
     for (unsigned k= 0; k< filter_vector->kernels_.size(); k++)
     {
       bvpl_kernel_sptr filter = filter_vector->kernels_[k];
+      
+      vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();   
+      vcl_cout<<"Computing Filter: " << filter_ident.str() << " of size: " << filter->float_kernel_.size() <<vcl_endl;
+      filter->print();
       
       //set up the filter, filter buffer and other related filter variables
       vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
@@ -95,17 +104,13 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
         float w = kit->second.c_;
         filter_coeff[ci] = (cl_float4){loc.x(), loc.y(), loc.z(), w};
       }
-      bocl_mem_sptr filter_buffer=new bocl_mem(device->context(), filter_coeff, sizeof(cl_float4)*filter->float_kernel_.size(), "filter coefficient buffer");
-      filter_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+      bocl_mem * filter_buffer=new bocl_mem(device->context(), filter_coeff, sizeof(cl_float4)*filter->float_kernel_.size(), "filter coefficient buffer");
+      filter_buffer->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     
       unsigned int filter_size[1];
       filter_size[0]=filter->float_kernel_.size();
       bocl_mem_sptr filter_size_buffer = new bocl_mem(device->context(), filter_size, sizeof(unsigned int), "filter_size buffer");
-      filter_size_buffer->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-      
-      vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();   
-      vcl_cout<<"Computing Filter: " << filter_ident.str() <<vcl_endl;
-
+      filter_size_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
       
       //iterate through all blcoks
       vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
@@ -129,7 +134,7 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
         
         //set up output_data
         bocl_mem* filter_response = opencl_cache->get_data_new(id, boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()), dataSize, false); 
-        
+
         //grab the block out of the cache as well
         bocl_mem* blk = opencl_cache->get_block(id);
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
@@ -141,13 +146,16 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
           RoundUp(data.sub_block_num_.y(), lThreads[1]),
           RoundUp(data.sub_block_num_.z(), lThreads[2]) };
         
+        binCache = opencl_cache.ptr()->bytes_in_cache();
+        vcl_cout<<"Filtering: Ready to execute MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+
         
         //make it a reference so the destructor isn't called at the end...
         kern->set_arg( blk_info );
         kern->set_arg( blk );
         kern->set_arg( data_in );
         kern->set_arg( filter_response );
-        kern->set_arg( filter_buffer.ptr() );
+        kern->set_arg( filter_buffer );
         kern->set_arg( filter_size_buffer.ptr() );
         kern->set_arg( lookup.ptr() );
         kern->set_arg( centerX.ptr() );
@@ -158,7 +166,7 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
         
         //execute kernel
         kern->execute( queue, 3, lThreads, gThreads);
-        int status = clFinish( queue);
+        int status = clFinish(queue);
         if(!check_val(status, CL_SUCCESS, "KERNEL FILTER EXECUTE FAILED: " + error_to_string(status)))
           return false;
         
@@ -168,15 +176,21 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
         
-        //read filter response from gpu
+        //read filter response from gpu to cpu
         filter_response->read_to_buffer(queue);
         status = clFinish(queue);
-        if (!check_val(status, MEM_FAILURE, "READ FILTER RESPONSE FAILED: " + error_to_string(status)))
+        if (!check_val(status, CL_SUCCESS, "READ FILTER RESPONSE FAILED: " + error_to_string(status)))
           return false;
+        
+        //shallow remove from ocl cache unnecessary items from ocl cache.
+        vcl_cout<<"Filtering: After execute MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+        opencl_cache->shallow_remove_data(id,boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
         
         
       }  //end block iter for
+      
       delete [] filter_coeff;
+      delete filter_buffer;
       vcl_cout<<"For filter: " << filter_ident.str() << "gpu_time:  " << gpu_time << " ms" <<vcl_endl;
     }   
     return true;
@@ -219,6 +233,8 @@ bool boxm2_ocl_kernel_vector_filter_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   bvpl_kernel_vector_sptr filter_vector = pro.get_input<bvpl_kernel_vector_sptr>(i++);
   
+  vcl_cout<<"Using the following gpu device: \n" << *(device.ptr());
+
   bool status = process(device, scene, opencl_cache, filter_vector);
   
   return status;

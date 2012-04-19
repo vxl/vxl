@@ -163,7 +163,9 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
       if (!check_val(status, MEM_FAILURE, "READ FILTER RESPONSE FAILED: " + error_to_string(status)))
         return false;
       
-      
+      //shallow remove from ocl cache unnecessary items from ocl cache.
+      opencl_cache->shallow_remove_data(id,boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
+           
     }  //end block iter for
     delete [] filter_coeff;
   

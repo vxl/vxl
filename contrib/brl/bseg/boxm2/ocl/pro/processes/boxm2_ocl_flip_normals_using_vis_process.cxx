@@ -33,7 +33,7 @@
 
 namespace boxm2_ocl_flip_normals_using_vis_process_globals
 {
-  const unsigned n_inputs_  = 3;
+  const unsigned n_inputs_  = 4;
   const unsigned n_outputs_ = 0;
   enum {
       COMPUTE_VIS = 0,
@@ -56,10 +56,10 @@ namespace boxm2_ocl_flip_normals_using_vis_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    vcl_string options = opts+" -D INTENSITY ";
+    vcl_string options = opts+ "-D INTENSITY ";
 
     bocl_kernel* compute_vis = new bocl_kernel();
-    vcl_string seg_opts = options + " -D COMPVIS -D STEP_CELL=step_cell_computevis(aux_args,data_ptr,llid,d) ";
+    vcl_string seg_opts = options + "-D COMPVIS -D STEP_CELL=step_cell_computevis(aux_args,data_ptr,llid,d)";
     compute_vis->create_kernel(&device->context(),device->device_id(), src_paths, "compute_vis", seg_opts, "compute_vis");
     vec_kernels.push_back(compute_vis);
 
@@ -81,6 +81,7 @@ bool boxm2_ocl_flip_normals_using_vis_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
+  input_types_[3] = "bool"; 
 
   // process has 0 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -109,6 +110,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
   bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr         scene        = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  bool use_sum = false;    use_sum      = pro.get_input<bool>(i++);
 
   //cache size sanity check
   long binCache = opencl_cache.ptr()->bytes_in_cache();
@@ -117,6 +119,11 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
   //make correct data types are here
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type,num_obs_type,options;
+  
+  if (use_sum) {
+    options="-D USESUM ";
+    vcl_cout << "Using sum to compute visibility" << vcl_endl;
+  }
 
 
   // create a command queue.
@@ -227,7 +234,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
 
               transfer_time += (float) transfer.all();
 
-              local_threads[0] = 128;
+              local_threads[0] = 64;
               local_threads[1] = 1;
               global_threads[0] = RoundUp((normals->num_bytes()/normalsTypeSize), local_threads[0]);
               global_threads[1]=1;
