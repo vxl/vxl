@@ -6,7 +6,7 @@ __kernel void convert_float4_to_rgba( __global float4* exp_img,
                                               __global uint4* imgdims,
                                               __global uint*  gl_im)
 {
-    int i=0,j=0;
+    uint i=0,j=0;
     i=get_global_id(0);
     j=get_global_id(1);
     int imindex=j*get_global_size(0)+i;
@@ -22,7 +22,7 @@ __kernel void convert_float_to_rgba( __global float* exp_img,
                                               __global uint4* imgdims,
                                               __global uint*  gl_im)
 {
-    int i=0,j=0;
+    uint i=0,j=0;
     i=get_global_id(0);
     j=get_global_id(1);
     int imindex=j*get_global_size(0)+i;
