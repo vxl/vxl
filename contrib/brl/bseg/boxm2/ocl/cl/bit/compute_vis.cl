@@ -193,51 +193,70 @@ decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
     if (gid<datasize) {
         vis[gid] = -1.0f;
 
-        //check if there is meaningful data here
-        if (vis_sphere[gid].sf != -1.0f) {
-            //declare ray
-            float4 dummy = (float4) (1.0,1.0,1.0,1.0);
-            float4 ray_d = normals[ gid ];
+      //check if there is meaningful data here
+      if (vis_sphere[gid].sf != -1.0f) {
+          //declare ray
+          float4 dummy = (float4) (1.0,1.0,1.0,1.0);
+          float4 ray_d = normals[ gid ];
 
-            float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, normal_x,normal_y,normal_z;
-            calc_scene_ray_generic_cam(linfo, dummy, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-            normal_x = ray_dx; normal_y = ray_dy; normal_z = ray_dz;
+          float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, normal_x,normal_y,normal_z;
+          calc_scene_ray_generic_cam(linfo, dummy, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+          normal_x = ray_dx; normal_y = ray_dy; normal_z = ray_dz;
 
-            float max_vis = 0.0f;
-            float max_vis_flipped = 0.0f;
-            float private_vis[12];
-            private_vis[0] = vis_sphere[gid].s0;
-            private_vis[1] = vis_sphere[gid].s1;
-            private_vis[2] = vis_sphere[gid].s2;
-            private_vis[3] = vis_sphere[gid].s3;
-            private_vis[4] = vis_sphere[gid].s4;
-            private_vis[5] = vis_sphere[gid].s5;
-            private_vis[6] = vis_sphere[gid].s6;
-            private_vis[7] = vis_sphere[gid].s7;
-            private_vis[8] = vis_sphere[gid].s8;
-            private_vis[9] = vis_sphere[gid].s9;
-            private_vis[10] = vis_sphere[gid].sa;
-            private_vis[11] = vis_sphere[gid].sb;
+          float max_vis = 0.0f;
+          float max_vis_flipped = 0.0f;
+          float sum_vis = 0.0f;
+          float sum_vis_flipped = 0.0f;
+          float private_vis[12];
+          private_vis[0] = vis_sphere[gid].s0;
+          private_vis[1] = vis_sphere[gid].s1;
+          private_vis[2] = vis_sphere[gid].s2;
+          private_vis[3] = vis_sphere[gid].s3;
+          private_vis[4] = vis_sphere[gid].s4;
+          private_vis[5] = vis_sphere[gid].s5;
+          private_vis[6] = vis_sphere[gid].s6;
+          private_vis[7] = vis_sphere[gid].s7;
+          private_vis[8] = vis_sphere[gid].s8;
+          private_vis[9] = vis_sphere[gid].s9;
+          private_vis[10] = vis_sphere[gid].sa;
+          private_vis[11] = vis_sphere[gid].sb;
 
-            //compute max visibility in normal and opposite hemisphere
-            for (unsigned int i = 0; i < 12; i++) {
-                calc_scene_ray_generic_cam(linfo, dummy, directions[i], &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-                if (dot((float4)(ray_dx,ray_dy,ray_dz,0), (float4)(normal_x,normal_y,normal_z,0)) > 0.0)
-                    max_vis = (max_vis < private_vis[i]) ? private_vis[i] : max_vis;
-                else
-                    max_vis_flipped = (max_vis_flipped < private_vis[i]) ? private_vis[i] : max_vis_flipped;
-            }
+          //compute max visibility in normal and opposite hemisphere
+          for (unsigned int i = 0; i < 12; i++) 
+          {
+              calc_scene_ray_generic_cam(linfo, dummy, directions[i], &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+              if (dot((float4)(ray_dx,ray_dy,ray_dz,0), (float4)(normal_x,normal_y,normal_z,0)) > 0.0){
+                  max_vis = (max_vis < private_vis[i]) ? private_vis[i] : max_vis;
+                  sum_vis+=private_vis[i]; 
+              }
+              else {
+                  max_vis_flipped = (max_vis_flipped < private_vis[i]) ? private_vis[i] : max_vis_flipped;
+                  sum_vis_flipped+=private_vis[i]; 
+              }
 
+          }
+  #ifdef USESUM //use the sum of visibilities for the given hemisphere
             //flip if necessary
-            if(max_vis_flipped > max_vis)
-                normals[ gid ] = (float4)(-normal_x,-normal_y,-normal_z,normals[gid].w);
-            else
-                normals[ gid ] = (float4)(normal_x,normal_y,normal_z,normals[gid].w);
-            
-            //store max visibility
-            vis[gid] = (max_vis_flipped > max_vis) ? max_vis_flipped : max_vis;
+          if(sum_vis_flipped > sum_vis){
+            normals[ gid ] = (float4)(-normal_x,-normal_y,-normal_z,normals[gid].w);
+            vis[gid] = sum_vis_flipped;
+          }
+          else {
+            normals[ gid ] = (float4)(normal_x,normal_y,normal_z,normals[gid].w);  
+            vis[gid] = sum_vis;
+          }
+           
+  #else //use the max  visibility for the given hemisphere
+          //flip if necessary
+          if(max_vis_flipped > max_vis)
+              normals[ gid ] = (float4)(-normal_x,-normal_y,-normal_z,normals[gid].w);
+          else
+              normals[ gid ] = (float4)(normal_x,normal_y,normal_z,normals[gid].w);           
+          //store max visibility
+          vis[gid] = (max_vis_flipped > max_vis) ? max_vis_flipped : max_vis;
+  #endif //USESUM
 
-        }
+      }
     }
 }
 
