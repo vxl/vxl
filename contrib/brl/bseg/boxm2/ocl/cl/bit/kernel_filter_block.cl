@@ -22,12 +22,15 @@ inline void get_max_inner_outer(int* MAX_INNER_CELLS, int* MAX_CELLS, int root_l
 }
 
 
-//: Median filter for a block
+//:Apply a filter, passed as coefficients, for a block
+// Notes: 
+// 1.Keep the size of the kernel manageble, as you could run into resources issues
+// 2.As of now this runs at the lowest level of the octrees 
 __kernel void kernel_filter_block(  __constant RenderSceneInfo * linfo,
                                     __global   uchar16         * trees,
                                     __global   float           * data_in,                //could be alpha or any other float quantity
                                     __global   float           * filter_response,        //holds the response to kernel
-                                    __constant float4          * filter,                 //holds position and coefficient
+                                    __global   float4          * filter,                 //holds position and coefficient
                                     __constant unsigned        * filter_size,              //number of coefficients                                  
                                     __constant uchar           * lookup,
                                     __constant float           * centerX,                //center of current cell
@@ -104,25 +107,26 @@ __kernel void kernel_filter_block(  __constant RenderSceneInfo * linfo,
           //get neighbor local center, traverse to it
           float4 locCenter = nbCenter - floor(nbCenter); 
           int neighborBitIndex = (int) traverse_to(neighbor_tree, locCenter, currDepth);
+          
+          if( is_leaf(neighbor_tree, neighborBitIndex) )
+          {
    
-          //get data index
-          int idx = data_index_relative( neighbor_tree, neighborBitIndex, lookup) + data_index_root(neighbor_tree); 
-          int deltaDepth = abs( currDepth-get_depth(neighborBitIndex) ); 
-          
-          //grab alpha, calculate probability
-          float alpha = data_in[idx];
-          float prob = 1.0f - exp(-alpha * side_len * linfo->block_len); 
-          
-          response += prob * filter[ci].w;
+            //get data index
+            int idx = data_index_relative( neighbor_tree, neighborBitIndex, lookup) + data_index_root(neighbor_tree); 
+           
+            //grab alpha, calculate probability
+            float alpha = data_in[idx];
+            float prob = 1.0f - exp(-alpha * side_len * linfo->block_len); 
+            
+            response += prob * filter[ci].w;
+          }
 
         } 
         
         //store response
         int currIdx = data_index_relative(local_tree, i, lookup) + data_index_root(local_tree); 
         filter_response[currIdx] = response; 
-       
-        barrier(CLK_LOCAL_MEM_FENCE);
-                
+                      
       }
     }
   }

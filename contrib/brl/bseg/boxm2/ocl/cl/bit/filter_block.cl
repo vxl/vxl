@@ -56,12 +56,8 @@ inline void sum_alpha(          float* totalAlphaL,
   (*totalAlphaL) += alphas[dataIndex] * nlen * block_len; 
 }
 
-////////////////////////////////////////////
-// New Refine, pass one, refines trees to copy
-// SPECIAL CASE: if the argument "prob_thresh_t" is less than 0, then 
-// this kernel is refining an appearance data, not alpha
-// if it is refining alpha, ste the init_cell to the correct alpha each time
-/////////////////////////////////////////// 
+
+//: Median filter for a block
 __kernel void filter_block( __constant RenderSceneInfo * linfo,
                            __global   uchar16         * trees,
                            __global   float           * alphas,
