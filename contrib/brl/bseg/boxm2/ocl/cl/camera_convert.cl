@@ -9,8 +9,8 @@ persp_to_generic( __global    float16            * persp_camera,         // came
                   __global    uint4              * cam_dims)
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  int i=get_global_id(0); 
-  int j=get_global_id(1);
+  uint i=get_global_id(0); 
+  uint j=get_global_id(1);
   uint imIndex = j*get_global_size(0)+i;
   
   //make sure the index exists in the image, although this can be thrown away if 
