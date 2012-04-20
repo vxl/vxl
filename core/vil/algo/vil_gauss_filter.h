@@ -157,4 +157,41 @@ inline void vil_gauss_filter_2d(const vil_image_view<srcT>& src_im,
                   float(), boundary, boundary);
 }
 
+
+//: Smooth a src_im to produce dest_im with gaussian of width sd
+//  Generates two gaussian filters of width sd_i,sd_j, using (2*half_width_i+1)
+//  values in the filter.  Typically half_width>3sd.
+//  Convolves this with src_im to generate work_im, then applies filter
+//  vertically to generate dest_im.
+template <class srcT, class destT>
+inline void vil_gauss_filter_2d(const vil_image_view<srcT>& src_im,
+                                vil_image_view<destT>& dest_im,
+                                double sd_i, unsigned half_width_i,
+                                double sd_j, unsigned half_width_j,
+                                vil_convolve_boundary_option boundary = vil_convolve_zero_extend)
+{
+  // Generate filter for i
+  vcl_vector<double> filter_i(2*half_width_i+1);
+  vil_gauss_filter_gen_ntap(sd_i,0,filter_i);
+
+  // Apply 1D convolution along i direction
+  vil_image_view<destT> work_im;
+  vil_convolve_1d(src_im,work_im,&filter_i[half_width_i],-int(half_width_i),half_width_i,
+                  float(), boundary, boundary);
+
+  // Apply 1D convolution along j direction by applying filter to transpose
+  dest_im.set_size(src_im.ni(),src_im.nj(),src_im.nplanes());
+  vil_image_view<destT> work_im_t = vil_transpose(work_im);
+  vil_image_view<destT> dest_im_t = vil_transpose(dest_im);
+
+  // Generate filter for j
+  vcl_vector<double> filter_j(2*half_width_j+1);
+  vil_gauss_filter_gen_ntap(sd_j,0,filter_j);
+
+  vil_convolve_1d(work_im_t,dest_im_t,
+                  &filter_j[half_width_j],-int(half_width_j),half_width_j,
+                  float(), boundary, boundary);
+}
+
+
 #endif // vil_gauss_filter_h_
