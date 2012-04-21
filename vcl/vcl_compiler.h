@@ -340,4 +340,12 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
    typedef void (safe_bool_dummy::* safe_bool)()
 #endif
 
+//----------------------------------------------------------------------------
+// Check if the compiler (claims to) support C++11.
+#if __cplusplus > 199711L
+# define VXL_CXX11 1
+#else
+# define VXL_CXX11 0
+#endif
+
 #endif // vcl_compiler_h_
