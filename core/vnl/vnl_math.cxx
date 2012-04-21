@@ -36,7 +36,7 @@
 #  define finitel finite
 # endif
 
-#elif defined(__hpux) 
+#elif defined(__hpux)
 # include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # define finite _Isfinite
 # define finitef _Isfinitef
@@ -48,7 +48,7 @@ extern "C" int finite(double);
 # define finitef finite
 # define finitel finite
 
-#elif defined(VCL_BORLAND) 
+#elif defined(VCL_BORLAND)
 # include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # include <float.h>
 
@@ -115,7 +115,7 @@ const float vnl_math::float_sqrteps     VCL_STATIC_CONST_INIT_FLOAT_DEFN( 3.4526
 
 //--------------------------------------------------------------------------------
 //: Return true iff x is "Not a Number"
-#if __cplusplus > 199711L
+#if VXL_CXX11
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(float x) { return std::isnan(x); }
 //: Return true iff x is "Not a Number"
@@ -183,14 +183,15 @@ bool vnl_math_isnan(long double x)
 {
   if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && (bMp(&x,0x000fffffL,sz_l)||bMp(&x,0xffffffffL,1-sz_d));
   else if (sizeof(long double) <= 12) // This code doesn't properly check the less significant
-                                      // bytes for non-zero ness to distinguish inf from nan
+                                      // bytes for non-zero-ness to distinguish inf from nan
                                       // see http://babbage.cs.qc.cuny.edu/IEEE-754/References.xhtml#tables
 # if defined LDBL_MANT_DIG && LDBL_MANT_DIG<=53
     return bMe(&x,0x4001ffffL,sz_l) && bMp(&x,0x40000000,sz_l-4);
 # else
     return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x000fffffL,sz_l-4);
 # endif
-  else return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x0000ffffL,sz_l);
+  else
+    return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x0000ffffL,sz_l);
 }
 #endif
 
@@ -211,7 +212,7 @@ bool vnl_math_isnan(long double x)
 # endif
 #endif
 
-#if __cplusplus > 199711L
+#if VXL_CXX11
 //: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(float x) { return std::isfinite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
@@ -245,7 +246,7 @@ bool vnl_math_isfinite(long double x)
 #endif
 
 
-#if __cplusplus > 199711L
+#if VXL_CXX11
 //: Return true if x is inf
 bool vnl_math_isinf(float x) { return std::isinf(x) != 0; }
 //: Return true if x is inf
@@ -315,12 +316,12 @@ char   vnl_huge_val(char)   { return 0x7f; }
 //----------------------------------------------------------------------
 double vnl_math::angle_0_to_2pi(double angle)
 {
-    double a;
+  double a;
   if (angle>=2*vnl_math::pi)
     a = vcl_fmod (angle,vnl_math::pi*2);
   else if (angle < 0)
     a = (2*vnl_math::pi+ vcl_fmod (angle,2*vnl_math::pi));
-  else 
+  else
     a= angle;
 
   // added by Nhon: these two lines of code is to fix the bug when
