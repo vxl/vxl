@@ -18,6 +18,7 @@ extern "C" {
 #include <sys/ioctl.h>
 #include <vcl_cerrno.h>
 #include <fcntl.h>
+#include <unistd.h>
 };
 
 #include <vcl_cstring.h>
