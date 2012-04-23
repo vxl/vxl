@@ -56,6 +56,9 @@ SOURCES += processes/boxm2_ocl_uncertainty_per_image_process.cxx
 SOURCES += processes/boxm2_ocl_aggregate_normal_from_filter_response_process.cxx
 SOURCES += processes/boxm2_ocl_synoptic_update_alpha_process.cxx
 SOURCES += processes/boxm2_ocl_render_scene_uncertainty_map_process.cxx
+SOURCES += processes/boxm2_ocl_kernel_filter_process.cxx
+SOURCES += processes/boxm2_ocl_aggregate_normal_from_filter_vector_process.cxx
+SOURCES += processes/boxm2_ocl_kernel_vector_filter_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

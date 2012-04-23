@@ -17,6 +17,7 @@ SOURCES += processes/bvpl_create_wc_kernel_vector_process.cxx
 SOURCES += processes/bvpl_load_taylor_kernel_process.cxx
 SOURCES += processes/bvpl_load_taylor_responses_process.cxx
 SOURCES += processes/bvpl_create_gauss3d_kernel_process.cxx
+SOURCES += processes/bvpl_create_generic_kernel_vector_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
