@@ -187,7 +187,22 @@ SOURCE=.\test_process_mains.cxx
 SOURCE=.\test_weighted_em.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_kernel_vector_filter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_kernel_filter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_test_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
+# End Source File
+# End Group
+# Begin Group "Header Files"
+# PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\boxm2_ocl_test_utils.h
 # End Source File
 # End Group
 # End Target

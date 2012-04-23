@@ -135,6 +135,9 @@ SOURCE=.\processes/bvpl_load_taylor_responses_process.cxx
 SOURCE=.\processes/bvpl_create_gauss3d_kernel_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_create_generic_kernel_vector_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
 # Begin Source File

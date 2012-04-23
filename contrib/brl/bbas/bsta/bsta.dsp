@@ -248,6 +248,9 @@ SOURCE=.\Templates/bsta_gaussian_full+double.4-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bsta_random_wrapper-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_full+float.4-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
