@@ -85,7 +85,6 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
   bvpl_kernel_vector_sptr filter_vector = pro.get_input<bvpl_kernel_vector_sptr>(i++);
   unsigned num_filters = filter_vector->kernels_.size();
 
-
   //cache size sanity check
   long binCache = opencl_cache.ptr()->bytes_in_cache();
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
@@ -137,7 +136,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
     dir.normalize();
     if ( vcl_abs(dir.magnitude() - 1.0f) > 1e-7 )
       vcl_cout << "Warning: In aggregate, direction doesn't have unit magnitude" << vcl_endl;
-    directions[k] = (cl_float4){dir[0], dir[1], dir[2], 0.0f};
+    directions[k].s0 = dir[0];
+    directions[k].s1 = dir[1];
+    directions[k].s2 = dir[2];
+    directions[k].s3 = 0.0f;
   }
   bocl_mem_sptr directions_buffer=new bocl_mem(device->context(), directions, sizeof(cl_float4)*num_filters, "directions buffer");
   directions_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -158,7 +160,6 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
 
     //grab appropriate kernel
     bocl_kernel* kern = kernels[identifier];
-
 
     //load tree and alpha
     boxm2_block_metadata data = blk_iter->second;
