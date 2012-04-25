@@ -22,7 +22,7 @@ int main2(int argc, char*argv[])
 
   // Parse the program arguments
   vul_arg<vcl_string> in_fname(0, "input filename (or \"-\" for stdin)");
-  vul_arg<vcl_string> out_fname(0, "output filename (or \"-\" for stdout)");
+  vul_arg<vcl_string> out_fname("-o", "output filename (defaults to stdout)", "-");
   vul_arg<vcl_vector<unsigned> > lines_arg("-l", "List of line ");
   vul_arg<vcl_string > lines_fname("-f", "Filename containing list of lines ");
   vul_arg<bool > zero_index("-zero", "Index from zero (defaults to 1-indexed) ");
