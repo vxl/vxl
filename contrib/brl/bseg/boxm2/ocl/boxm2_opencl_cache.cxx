@@ -165,8 +165,11 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   vcl_size_t toLoadSize = trees.size()*sizeof(uchar16);
   unsigned long totalBytes = this->bytes_in_cache() + toLoadSize;
   if (totalBytes > maxBytesInCache_) {
+    
+#ifdef DEBUG
     vcl_cout<<"Loading Block "<<id<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
             <<"    removing... ";
+#endif
     while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !cached_blocks_.empty() )
     {
       boxm2_block_id lru_id;
@@ -174,11 +177,15 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
          vcl_cerr << "ERROR: boxm2_opencl_cache::get_block(): lru is empty" << vcl_endl;
          return (bocl_mem*)0;
       }
+#ifdef DEBUG
       vcl_cout<<lru_id<<" ... ";
+#endif
       if (lru_id == id)
         vcl_cout<<"boxm2_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
     }
+#ifdef DEBUG
     vcl_cout<<vcl_endl;
+#endif
   }
 
   // otherwise load it from disk with blocking
@@ -255,8 +262,10 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   // make enough space by kicking out blocks
   vcl_size_t totalBytes = this->bytes_in_cache() + toLoadSize;
   if (totalBytes > maxBytesInCache_) {
+#ifdef DEBUG
     vcl_cout<<"Loading data "<<id<<" type "<<type<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
             <<"    removing... ";
+#endif
     while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() )
     {
       boxm2_block_id lru_id;
@@ -264,11 +273,15 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
          vcl_cerr << "ERROR: boxm2_opencl_cache::get_data() : lru is empty" << vcl_endl;
          return (bocl_mem*)0;
       }
+#ifdef DEBUG
       vcl_cout<<lru_id<<" ... ";
+#endif
       if (lru_id == id)
         vcl_cout<<"boxm2_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
     }
+#ifdef DEBUG
     vcl_cout<<vcl_endl;
+#endif
   }
 
   // data block isn't found...
@@ -317,8 +330,10 @@ bocl_mem* boxm2_opencl_cache::get_data_new(boxm2_block_id id, vcl_string type, v
   // make enough space by kicking out blocks
   vcl_size_t totalBytes = this->bytes_in_cache() + toLoadSize;
   if (totalBytes > maxBytesInCache_) {
+#ifdef DEBUG
     vcl_cout<<"Loading data "<<id<<" type "<<type<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
             <<"    removing... ";
+#endif
     while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() )
     {
       boxm2_block_id lru_id;
@@ -326,11 +341,15 @@ bocl_mem* boxm2_opencl_cache::get_data_new(boxm2_block_id id, vcl_string type, v
          vcl_cerr << "ERROR: boxm2_opencl_cache::get_data_new() : lru is empty " << vcl_endl;
          return (bocl_mem*)0;
       }
+#ifdef DEBUG
       vcl_cout<<lru_id<<" ... ";
+#endif
       if (lru_id == id)
         vcl_cout<<"boxm2_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
     }
+#ifdef DEBUG
     vcl_cout<<vcl_endl;
+#endif
   }
 
   // initialize buffer from CPU cache and return
@@ -350,8 +369,10 @@ bocl_mem* boxm2_opencl_cache::alloc_mem(vcl_size_t num_bytes, void* cpu_buff, vc
 {
   vcl_size_t totalBytes = this->bytes_in_cache()+num_bytes;
   if (totalBytes > maxBytesInCache_) {
+#ifdef DEBUG
     vcl_cout<<"OCL cache alloc mem "<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
             <<"    removing... ";
+#endif
     while ( this->bytes_in_cache()+num_bytes > maxBytesInCache_ )
     {
       boxm2_block_id lru_id;
@@ -359,10 +380,15 @@ bocl_mem* boxm2_opencl_cache::alloc_mem(vcl_size_t num_bytes, void* cpu_buff, vc
          vcl_cerr << "ERROR: lru empty. unable to alloc buffer of requested size. " << vcl_endl;
          return (bocl_mem*)0;
       }
+#ifdef DEBUG
       vcl_cout<<lru_id<<" ... ";
+#endif
     }
+#ifdef DEBUG
     vcl_cout<<vcl_endl;
+#endif
   }
+
 
   //allocate mem
   bocl_mem* data = new bocl_mem(*context_, cpu_buff, num_bytes, id);
