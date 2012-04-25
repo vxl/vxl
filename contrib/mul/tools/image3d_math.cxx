@@ -1410,7 +1410,34 @@ void na_to_mask__image_3d_of_float(opstack_t& s)
           result_image(i,j,k,p) = vnl_math_isnan(o1_image(i,j,k,p)) ? 1 : 0;
 
   s.pop(1);
-  s.push_front(operand(result));}
+  s.push_front(operand(result));
+}
+
+
+void na_to_value__image_3d_of_float__double(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1=s[0].as_image_3d_of_float();
+  vimt3d_image_3d_of<int> result(o1.image().ni(), o1.image().nj(),
+    o1.image().nk(), o1.image().nplanes(), o1.world2im() );
+  const vil3d_image_view<float>& o1_image = o1.image();
+  vil3d_image_view<int>& result_image = result.image();
+
+
+  unsigned np=o1.image().nplanes();
+  unsigned nk=o1.image().nk();
+  unsigned nj=o1.image().nj();
+  unsigned ni=o1.image().ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k,p) = vnl_math_isnan(o1_image(i,j,k,p)) ? 1 : 0;
+
+  s.pop(1);
+  s.push_front(operand(result));
+}
 
 
 void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
@@ -2372,6 +2399,9 @@ class operations
     add_operation("--na-to-mask",  &na_to_mask__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "mask_image", "Convert NA/NaN values to 1, all others to 0");
+    add_operation("--na-to-value",  &na_to_value__image_3d_of_float__double,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_double,
+                  "image v", "image", "Convert NA/NaN values to v. Leave others unmodified.");
     add_operation("--not", &not__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image", "Apply logical NOT to voxels");
