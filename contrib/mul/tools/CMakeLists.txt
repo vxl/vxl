@@ -41,3 +41,6 @@ TARGET_LINK_LIBRARIES(select_lines mbl)
 
 ADD_EXECUTABLE( convert_rotation_3d convert_rotation_3d.cxx )
 TARGET_LINK_LIBRARIES(convert_rotation_3d mbl vgl_algo)
+
+ADD_EXECUTABLE( rewrite_vsl_strings rewrite_vsl_strings.cxx )
+TARGET_LINK_LIBRARIES(rewrite_vsl_strings mbl)
