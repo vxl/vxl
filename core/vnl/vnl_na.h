@@ -33,8 +33,8 @@
 // by using a conversion manipulator.
 // \verbatim
 // double x, y;
-// is >> x >> y;
-// os << x << ' ' << y;
+// is >> vnl_na_stream(x) >> vnl_na_stream(x);
+// os << vnl_na_stream(x) << ' ' << vnl_na_stream(x);
 // \endverbatim
 
 
