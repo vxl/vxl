@@ -59,7 +59,15 @@ void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
      vil_image_view<bool> v(view_base);
      vsl_b_write(os, v);
      break; }
-   // No version 1 complex images were ever written.
+   // No version 1 complex images were ever written. Now added. It should work. Fix if necessary
+   case VIL_PIXEL_FORMAT_COMPLEX_FLOAT: {
+    vil_image_view<vcl_complex<float> > v(view_base);
+    vsl_b_write(os, v);
+    break; }
+   case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE: {
+    vil_image_view<vcl_complex<double> > v(view_base);
+    vsl_b_write(os, v);
+    break; }
    default: {
       vcl_cerr << "I/O ERROR: vsl_b_write(vsl_b_ostream &, vil_image_view_base_sptr const&)\n"
                << "           Unknown pixel format "<< view_base->pixel_format() << '\n';
@@ -147,6 +155,15 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
    case VIL_PIXEL_FORMAT_BOOL: {
        const bool* data = reinterpret_cast<const bool*>(chunk->data());
        view_base = new vil_image_view<bool>(chunk,data+offset,ni,nj,np,istep,jstep,pstep);
+       break; }
+    // No version 1 complex images were ever written. Now added. It should work. Fix if necessary
+   case VIL_PIXEL_FORMAT_COMPLEX_FLOAT: {
+       const vcl_complex<float>* data = reinterpret_cast<const vcl_complex<float>*>(chunk->data());
+       view_base = new vil_image_view<vcl_complex<float> >(chunk,data+offset,ni,nj,np,istep,jstep,pstep);
+       break; }
+   case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE: {
+       const vcl_complex<double>* data = reinterpret_cast<const vcl_complex<double>*>(chunk->data());
+       view_base = new vil_image_view<vcl_complex<double> >(chunk,data+offset,ni,nj,np,istep,jstep,pstep);
        break; }
    default: {
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
