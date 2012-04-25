@@ -284,8 +284,12 @@ inline void vsl_print_summary(vcl_ostream& os, const vcl_string& n )
 {  os << n; }
 
 //: Write  to vsl_b_ostream
+// \deprecated in favour of vcl_string version.
 void vsl_b_write(vsl_b_ostream& os,const char* s );
 //: Read  from vsl_b_istream
+// \deprecated in favour of vcl_string version.
+// \note You must preallocate enough space at \p s for expected length of string.
+// This function is easy to crash mith a malformed data file.
 void vsl_b_read(vsl_b_istream& is,char* s );
 //: Print to a stream
 inline void vsl_print_summary(vcl_ostream& os, const char* s )

@@ -63,7 +63,7 @@ void vsl_b_read(vsl_b_istream &is, vcl_string& str )
         vsl_b_read(is,*it);
 }
 
-
+// deprecated in favour of vcl_string version.
 void vsl_b_write(vsl_b_ostream& os,const char *s )
 {
   int i = -1;
@@ -73,6 +73,9 @@ void vsl_b_write(vsl_b_ostream& os,const char *s )
   } while ( s[i] != 0 );
 }
 
+// deprecated in favour of vcl_string version.
+// note You must preallocate enough space at \p s for expected length of string.
+// This function is easy to crash mith a malformed data file.
 void vsl_b_read(vsl_b_istream &is,char *s )
 {
   int i = -1;
