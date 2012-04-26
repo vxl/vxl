@@ -10,14 +10,15 @@
 static void test_gauss_reduce_float(vil3d_image_view<float>& image,
                                     vil3d_image_view<float>& dest)
 {
-  unsigned ni = image.ni(), nj = image.nj(), nk = image.nk();
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
+  unsigned ni = image.ni(), nj = image.nj(), nk = image.nk(), np=image.nplanes();
+  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << vcl_endl;
 
 
-  for (unsigned k=0;k<nk;++k)
-    for (unsigned j=0;j<nj;++j)
-      for (unsigned i=0;i<ni;++i)
-        image(i,j,k) = i*0.1f-j+k*10;
+  for (unsigned p=0;p<image.nplanes();++p)
+    for (unsigned k=0;k<nk;++k)
+      for (unsigned j=0;j<nj;++j)
+        for (unsigned i=0;i<ni;++i)
+          image(i,j,k,p) = i*0.1f-j+k*10 + p*100;
 
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
@@ -26,32 +27,38 @@ static void test_gauss_reduce_float(vil3d_image_view<float>& image,
   float old_image222 = image(2,2,2);
   vil3d_gauss_reduce(image,dest,work_im1,work_im2);
 
-  TEST("size i",dest.ni(),(ni+1)/2);
-  TEST("size j",dest.nj(),(nj+1)/2);
-  TEST("size k",dest.nk(),(nk+1)/2);
-  TEST_NEAR("Pixel (0,0,0)", dest(0,0,0), 4.5409f, 1e-4f);
-  TEST_NEAR("Pixel (1,1,1)", dest(1,1,1), old_image222, 1e-5f);
-  TEST_NEAR("Pixel (2,3,3)", dest(2,3,3), 54.4f, 1e-4f);
-  TEST_NEAR("Corner pixel", dest(ni2-1,nj2-1,nk2-1),  258.2591f, 1e-4f);
+  TEST("size i", dest.ni(),(ni+1)/2);
+  TEST("size j", dest.nj(),(nj+1)/2);
+  TEST("size k", dest.nk(),(nk+1)/2);
+  TEST("nplanes", dest.nplanes(), np);
+  for (unsigned p=0; p<np; ++p)
+  {
+    vcl_cout << "\n plane " << p << vcl_endl;
+    TEST_NEAR("Pixel (0,0,0)", dest(0,0,0,p), 4.5409f + p*100.0f, 1e-4f);
+    TEST_NEAR("Pixel (1,1,1)", dest(1,1,1,p), old_image222 + p*100.0f, 1e-4f);
+    TEST_NEAR("Pixel (2,3,3)", dest(2,3,3,p), 54.4f + p*100.0f, 1e-4f);
+    TEST_NEAR("Corner pixel", dest(ni2-1,nj2-1,nk2-1,p),  258.2591f + p*100.0f, 1e-4f);
+  }
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,j but not k on some levels)
-static void test_gauss_reduce_ij()
+static void test_gauss_reduce_ij(unsigned np)
 {
   vcl_cout << "**************************************\n"
            << " Testing vil3d_gauss_reduce_ij<float>\n"
            << "**************************************\n";
 
   unsigned ni = 10, nj = 20, nk = 30;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
+  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << vcl_endl;
 
   vil3d_image_view<float> image0;
-  image0.set_size(ni,nj,nk);
+  image0.set_size(ni, nj, nk, np);
 
-  for (unsigned k=0;k<image0.nk();++k)
-    for (unsigned j=0;j<image0.nj();++j)
-      for (unsigned i=0;i<image0.ni();++i)
-        image0(i,j,k) = i*0.1f-j+k*10;
+  for (unsigned p=0;p<image0.nplanes();++p)
+    for (unsigned k=0;k<image0.nk();++k)
+      for (unsigned j=0;j<image0.nj();++j)
+        for (unsigned i=0;i<image0.ni();++i)
+          image0(i,j,k,p) = i*0.1f-j+k*10 + p*100;
 
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
@@ -63,29 +70,38 @@ static void test_gauss_reduce_ij()
   TEST("Level 1 size i", image1.ni(), ni2);
   TEST("Level 1 size j", image1.nj(), nj2);
   TEST("Level 1 size k", image1.nk(), nk2);
-  TEST_NEAR("Pixel (0,0,0)", image1(0,0,0), -0.4491f, 1e-4f);
-  TEST_NEAR("Pixel (1,1,1)", image1(1,1,2), image0(2,2,2), 1e-5f);
-  TEST_NEAR("Pixel (2,3,3)", image1(2,3,3), 24.4f, 1e-4f);
-  TEST_NEAR("Corner pixel", image1(ni2-1, nj2-1, nk2-1), 273.2491f, 1e-4f);
+  TEST("Level 1 size p", image1.nplanes(), np);
+
+  for (unsigned p=0; p<np; ++p)
+  {
+    vcl_cout << "\n plane " << p << vcl_endl;
+    TEST_NEAR("Pixel (0,0,0)", image1(0,0,0,p), -0.4491f + p*100.0, 1e-4f);
+    TEST_NEAR("Pixel (1,1,1)", image1(1,1,2,p), image0(2,2,2) + p*100.0, 1e-4f);
+    TEST_NEAR("Pixel (2,3,3)", image1(2,3,3,p), 24.4f + p*100.0, 1e-4f);
+    TEST_NEAR("Corner pixel", image1(ni2-1, nj2-1, nk2-1,p), 273.2491f + p*100.0, 1e-4f);
+  }
+
+
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,k but not j on some levels)
-static void test_gauss_reduce_ik()
+static void test_gauss_reduce_ik(unsigned np)
 {
   vcl_cout << "**************************************\n"
            << " Testing vil3d_gauss_reduce_ik<float>\n"
            << "**************************************\n";
 
   unsigned ni = 10, nj = 20, nk = 30;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
+  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << vcl_endl;
 
   vil3d_image_view<float> image0;
-  image0.set_size(ni,nj,nk);
+  image0.set_size(ni,nj,nk, np);
 
-  for (unsigned k=0;k<image0.nk();++k)
-    for (unsigned j=0;j<image0.nj();++j)
-      for (unsigned i=0;i<image0.ni();++i)
-        image0(i,j,k) = i*0.1f-j+k*10;
+  for (unsigned p=0;p<image0.nplanes();++p)
+    for (unsigned k=0;k<image0.nk();++k)
+      for (unsigned j=0;j<image0.nj();++j)
+        for (unsigned i=0;i<image0.ni();++i)
+          image0(i,j,k,p) = i*0.1f-j+k*10 + p*100;
 
   vil3d_image_view<float> image1, work_im;
   vil3d_gauss_reduce_ik(image0,image1,work_im);
@@ -93,32 +109,39 @@ static void test_gauss_reduce_ik()
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = nj;   // Shouldn't change first level
   unsigned nk2 = (nk+1)/2;
-  TEST("Level 1 size i",image1.ni(),ni2);
-  TEST("Level 1 size j",image1.nj(),nj2);
-  TEST("Level 1 size k",image1.nk(),nk2);
-  TEST_NEAR("Pixel (0,0,0)", image1(0,0,0), 5.039900f, 1e-4f);
-  TEST_NEAR("Pixel (1,1,1)", image1(1,2,1), image0(2,2,2), 1e-5f);
-  TEST_NEAR("Pixel (2,3,3)", image1(2,3,3), 57.4f, 1e-4f);
-  TEST_NEAR("Corner pixel", image1(ni2-1,nj2-1,nk2-1), 256.7601f, 1e-4f);
+  TEST("Level 1 size i", image1.ni(),ni2);
+  TEST("Level 1 size j", image1.nj(),nj2);
+  TEST("Level 1 size k", image1.nk(),nk2);
+  TEST("Level 1 size p", image1.nplanes(), np);
+
+  for (unsigned p=0; p<np; ++p)
+  {
+    vcl_cout << "\n plane " << p << vcl_endl;
+    TEST_NEAR("Pixel (0,0,0)", image1(0,0,0,p), 5.039900f + p*100.0, 1e-4f);
+    TEST_NEAR("Pixel (1,1,1)", image1(1,2,1,p), image0(2,2,2) + p*100.0, 1e-4f);
+    TEST_NEAR("Pixel (2,3,3)", image1(2,3,3,p), 57.4f + p*100.0, 1e-4f);
+    TEST_NEAR("Corner pixel", image1(ni2-1,nj2-1,nk2-1,p), 256.7601f + p*100.0, 1e-4f);
+  }
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in j,k but not i on some levels)
-static void test_gauss_reduce_jk()
+static void test_gauss_reduce_jk(unsigned np)
 {
   vcl_cout << "**************************************\n"
            << " Testing vil3d_gauss_reduce_jk<float>\n"
            << "**************************************\n";
 
   unsigned ni = 10, nj = 20, nk = 30;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
+  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << vcl_endl;
 
   vil3d_image_view<float> image0;
-  image0.set_size(ni,nj,nk);
+  image0.set_size(ni,nj,nk, np);
 
-  for (unsigned k=0;k<image0.nk();++k)
-    for (unsigned j=0;j<image0.nj();++j)
-      for (unsigned i=0;i<image0.ni();++i)
-        image0(i,j,k) = i*0.1f-j+k*10;
+  for (unsigned p=0;p<image0.nplanes();++p)
+    for (unsigned k=0;k<image0.nk();++k)
+      for (unsigned j=0;j<image0.nj();++j)
+        for (unsigned i=0;i<image0.ni();++i)
+          image0(i,j,k,p) = i*0.1f-j+k*10 + p*100;
 
   vil3d_image_view<float> image1, work_im;
   vil3d_gauss_reduce_jk(image0,image1,work_im);
@@ -126,13 +149,19 @@ static void test_gauss_reduce_jk()
   unsigned ni2 = ni;    // Shouldn't change first level
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = (nk+1)/2;
-  TEST("Level 1 size i",image1.ni(),ni2);
-  TEST("Level 1 size j",image1.nj(),nj2);
-  TEST("Level 1 size k",image1.nk(),nk2);
-  TEST_NEAR("Pixel (0,0,0)", image1(0,0,0), 4.491f, 1e-4f);
-  TEST_NEAR("Pixel (1,1,1)", image1(2,1,1), image0(2,2,2), 1e-5f);
-  TEST_NEAR("Pixel (2,3,3)", image1(2,3,3), 54.2f, 1e-4f);
-  TEST_NEAR("Corner pixel", image1(ni2-1,nj2-1,nk2-1), 258.409f , 1e-4f);
+  TEST("Level 1 size i", image1.ni(),ni2);
+  TEST("Level 1 size j", image1.nj(),nj2);
+  TEST("Level 1 size k", image1.nk(),nk2);
+  TEST("Level 1 size p", image1.nplanes(), np);
+
+  for (unsigned p=0; p<np; ++p)
+  {
+    vcl_cout << "\n plane " << p << vcl_endl;
+    TEST_NEAR("Pixel (0,0,0)", image1(0,0,0,p), 4.491f + p*100.0, 1e-4f);
+    TEST_NEAR("Pixel (1,1,1)", image1(2,1,1,p), image0(2,2,2) + p*100.0, 1e-4f);
+    TEST_NEAR("Pixel (2,3,3)", image1(2,3,3,p), 54.2f + p*100.0, 1e-4f);
+    TEST_NEAR("Corner pixel", image1(ni2-1,nj2-1,nk2-1,p), 258.409f + p*100.0, 1e-4f);
+  }
 }
 
 static void test_gauss_reduce_int()
@@ -187,6 +216,7 @@ static void test_gauss_reduce()
            << "***********************************\n";
   vil3d_image_view<float> image(10, 20, 30);
   vil3d_image_view<float> dest;
+#if 0
   test_gauss_reduce_float(image, dest);
   vcl_cout<<"Test non-contiguous image\n";
   vil3d_image_view<float> image2(20, 30, 41);
@@ -194,10 +224,19 @@ static void test_gauss_reduce()
   test_gauss_reduce_float(crop_image, dest);
   vcl_cout<<"Test input image = output_image\n";
   test_gauss_reduce_float(image, image);
+#endif
+  vil3d_image_view<float> image3(10, 20, 30,3);
+  vcl_cout<<"Test multiplane image\n";
+  test_gauss_reduce_float(image3, dest);
 
-  test_gauss_reduce_ij();
-  test_gauss_reduce_ik();
-  test_gauss_reduce_jk();
+  test_gauss_reduce_ij(1);
+  test_gauss_reduce_ik(1);
+  test_gauss_reduce_jk(1);
+
+  test_gauss_reduce_ij(2);
+  test_gauss_reduce_ik(2);
+  test_gauss_reduce_jk(2);
+
   test_gauss_reduce_int();
 }
 
