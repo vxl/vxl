@@ -38,6 +38,8 @@
 #include <vil3d/vil3d_clamp.h>
 #include <vil3d/vil3d_math.h>
 #include <vil3d/vil3d_decimate.h>
+#include <vil3d/vil3d_plane.h>
+#include <vil3d/vil3d_copy.h>
 #include <vil3d/algo/vil3d_structuring_element.h>
 #include <vil3d/algo/vil3d_abs_shuffle_distance.h>
 #include <vil3d/algo/vil3d_locally_z_normalise.h>
@@ -444,6 +446,23 @@ static named_store_t named_store;
 
 void print_operations(vcl_ostream&);
 
+template <class T>
+void check_size_and_plane_consistency(const vimt3d_image_3d_of<T>& im1,
+  const vimt3d_image_3d_of<T>& im2, const opstack_t& s, const vcl_string & op_name)
+{
+  const vil3d_image_view<T>& im1im = im1.image();
+  const vil3d_image_view<T>& im2im = im2.image();
+
+  if (im1im.ni() == im2im.ni() && im1im.nj() == im2im.nj() &&
+    im1im.nk() == im2im.nk() && im1im.nplanes() == im2im.nplanes() )
+    return;
+
+  vcl_cerr << "\nERROR: --" <<op_name<<" command. Two operand images are different size.\n"
+            << "At \"" << args_so_far << "\"<-- HERE\n"
+            << "Stack is :\n" << vsl_stream_summary(s);
+  vcl_exit(1);
+}
+
 //-------------------------------------------------------------------------------------
 // Operation implementation
 
@@ -645,6 +664,9 @@ void sum__image_3d_of_int__image_3d_of_int(opstack_t& s)
   vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
   vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
 
+  check_size_and_plane_consistency(o1, o2, s, "sum");
+
+
   vimt3d_image_3d_of<int> result;
   vil3d_math_image_sum(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
@@ -659,6 +681,9 @@ void and__image_3d_of_int__image_3d_of_int(opstack_t& s)
   assert(s.size() >= 2);
   vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
   vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+
+  check_size_and_plane_consistency(o1, o2, s, "and");
+
   const vil3d_image_view<int>& o1_image = o1.image();
   const vil3d_image_view<int>& o2_image = o2.image();
 
@@ -690,6 +715,9 @@ void or__image_3d_of_int__image_3d_of_int(opstack_t& s)
   assert(s.size() >= 2);
   vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
   vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+
+  check_size_and_plane_consistency(o1, o2, s, "or");
+
   const vil3d_image_view<int>& o1_image = o1.image();
   const vil3d_image_view<int>& o2_image = o2.image();
 
@@ -721,6 +749,8 @@ void min__image_3d_of_int__image_3d_of_int(opstack_t& s)
   assert(s.size() >= 2);
   vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
   vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  check_size_and_plane_consistency(o1, o2, s, "min");
+
   const vil3d_image_view<int>& o1_image = o1.image();
   const vil3d_image_view<int>& o2_image = o2.image();
 
@@ -751,6 +781,8 @@ void min__image_3d_of_float__image_3d_of_float(opstack_t& s)
   assert(s.size() >= 2);
   vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
   vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  check_size_and_plane_consistency(o1, o2, s, "min");
+
   const vil3d_image_view<float>& o1_image = o1.image();
   const vil3d_image_view<float>& o2_image = o2.image();
 
@@ -780,6 +812,8 @@ void max__image_3d_of_int__image_3d_of_int(opstack_t& s)
   assert(s.size() >= 2);
   vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
   vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  check_size_and_plane_consistency(o1, o2, s, "max");
+
   const vil3d_image_view<int>& o1_image = o1.image();
   const vil3d_image_view<int>& o2_image = o2.image();
 
@@ -810,6 +844,8 @@ void max__image_3d_of_float__image_3d_of_float(opstack_t& s)
   assert(s.size() >= 2);
   vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
   vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  check_size_and_plane_consistency(o1, o2, s, "max");
+
   const vil3d_image_view<float>& o1_image = o1.image();
   const vil3d_image_view<float>& o2_image = o2.image();
 
@@ -839,6 +875,7 @@ void diff__image_3d_of_float__image_3d_of_float(opstack_t& s)
   assert(s.size() >= 2);
   vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
   vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  check_size_and_plane_consistency(o1, o2, s, "diff");
 
   vimt3d_image_3d_of<float> result;
   vil3d_math_image_difference(o1.image(), o2.image(), result.image());
@@ -854,9 +891,25 @@ void diff__image_3d_of_int__image_3d_of_int(opstack_t& s)
   assert(s.size() >= 2);
   vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
   vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  check_size_and_plane_consistency(o1, o2, s, "diff");
 
   vimt3d_image_3d_of<int> result;
   vil3d_math_image_difference(o1.image(), o2.image(), result.image());
+  result.world2im() = o1.world2im();
+
+  s.pop(2);
+  s.push_front(operand(result));
+}
+
+//: Find the product of voxel pairs of two images
+void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  check_size_and_plane_consistency(o1, o2, s, "product");
+  vimt3d_image_3d_of<float> result;
+  vil3d_math_image_product(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
 
   s.pop(2);
@@ -1416,40 +1469,100 @@ void na_to_mask__image_3d_of_float(opstack_t& s)
 
 void na_to_value__image_3d_of_float__double(opstack_t& s)
 {
-  assert(s.size() >= 1);
-  vimt3d_image_3d_of<float> o1=s[0].as_image_3d_of_float();
-  vimt3d_image_3d_of<int> result(o1.image().ni(), o1.image().nj(),
-    o1.image().nk(), o1.image().nplanes(), o1.world2im() );
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  float o2 = (float) s[0].as_double();
   const vil3d_image_view<float>& o1_image = o1.image();
-  vil3d_image_view<int>& result_image = result.image();
-
 
   unsigned np=o1.image().nplanes();
   unsigned nk=o1.image().nk();
   unsigned nj=o1.image().nj();
   unsigned ni=o1.image().ni();
 
+  vimt3d_image_3d_of<float> result(ni, nj, nk, np, o1.world2im() );
+  vil3d_image_view<float>& result_image = result.image();
+
   for (unsigned p=0; p<np; ++p)
     for (unsigned k=0; k<nk; ++k)
       for (unsigned j=0; j<nj; ++j)
         for (unsigned i=0; i<ni; ++i)
-          result_image(i,j,k,p) = vnl_math_isnan(o1_image(i,j,k,p)) ? 1 : 0;
+          result_image(i,j,k,p) = vnl_math_isnan(o1_image(i,j,k,p)) ? o2 : o1_image(i,j,k,p);
 
-  s.pop(1);
+  s.pop(2);
   s.push_front(operand(result));
 }
 
 
-void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
+void plane_split__image_3d_of_float(opstack_t& s)
 {
-  assert(s.size() >= 2);
-  vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
-  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
-  vimt3d_image_3d_of<float> result;
-  vil3d_math_image_product(o1.image(), o2.image(), result.image());
-  result.world2im() = o1.world2im();
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1=s[0].as_image_3d_of_float();
 
-  s.pop(2);
+  s.pop(1);
+  for (unsigned p=0, np=o1.image().nplanes(); p!=np; p++)
+    s.push_front(operand(vimt3d_image_3d_of<float>(vil3d_plane(o1.image(), p), o1.world2im())));
+}
+  
+void plane_merge__image_3d_of_float__image_3d_of_float__double(opstack_t& s)
+{
+  assert(s.size() >= 3);
+  unsigned n = static_cast<unsigned>(s[0].as_double());
+  // variable number of parameters, so check types now
+
+  if (s.size() < n+1)
+  {
+    vcl_cerr << "\nERROR: --plane_merge command could not find " << n << " images to merge.\n"
+             << "At \"" << args_so_far << "\"<-- HERE\n"
+             << "Stack is :\n" << vsl_stream_summary(s);
+    vcl_exit(1);
+  }
+  if (n < 2)
+  {
+    vcl_cerr << "\nERROR: --plane_merge command must merge at least two images.\n"
+             << "At \"" << args_so_far << "\"<-- HERE\n"
+             << "Stack is :\n" << vsl_stream_summary(s);
+    vcl_exit(1);
+  }
+   
+  for (unsigned i=1;i<=n; ++i)
+  {
+    if (!s[i].is_image_3d_of_float())
+    {
+      vcl_cerr << "\nERROR: --plane_merge command could not find " << n << " float image to merge.\n"
+                << "At \"" << args_so_far << "\"<-- HERE\n"
+                << "Stack is :\n" << vsl_stream_summary(s);
+      vcl_exit(1);
+    }
+  }
+
+  vimt3d_image_3d_of<float> image0 = s[n].as_image_3d_of_float();
+  const vil3d_image_view<float> &image0_im = image0.image();
+  unsigned nplanes=0; // count total number of planes
+  for (unsigned i=n; i>=1; --i)
+  {
+    vil3d_image_view<float> im = s[i].as_image_3d_of_float().image();
+    nplanes += im.nplanes();
+    if (im.ni() != image0_im.ni() ||
+      im.nj() != image0_im.nj() ||
+      im.nk() != image0_im.nk() )
+    {
+      vcl_cerr << "\nERROR: --plane_merge command. Not all " << n << " images of are same size.\n"
+                << "At \"" << args_so_far << "\"<-- HERE\n"
+                << "Stack is :\n" << vsl_stream_summary(s);
+      vcl_exit(1);
+    }
+  }
+
+  vimt3d_image_3d_of<float> result(image0_im.ni(), image0_im.nj(), image0_im.nk(), nplanes, image0.world2im());
+  for (unsigned i=n, p=0; i>=1; --i)
+  {
+    vil3d_image_view<float> im = s[i].as_image_3d_of_float().image();
+    vil3d_copy_deep(im, vil3d_planes(result.image(), p, 1, im.nplanes()));
+    p += im.nplanes();
+  }
+
+
+  s.pop(n+1);
   s.push_front(operand(result));
 }
 
@@ -2423,6 +2536,12 @@ class operations
     add_operation("--or",  &or__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "im_A im_B", "image", "Logical OR over corresponding voxels in im_B and im_B");
+    add_operation("--plane-merge", &plane_merge__image_3d_of_float__image_3d_of_float__double,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float << operand::e_double,
+                  "plane0 plane1 ...", "image", "Merge multiple planes into single multiplane image.");
+    add_operation("--plane-split", &plane_split__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float,
+                  "image", "plane0 plane1 ...", "Split image into individual planes.");
     add_operation("--print", &print__double,
                   function_type_t() <<operand::e_double,
                   "[value value ...] n", "", "Print the previous n values");
