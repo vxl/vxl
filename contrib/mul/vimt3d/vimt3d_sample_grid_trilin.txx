@@ -84,7 +84,7 @@ void vimt3d_sample_grid_trilin(vnl_vector<vecType>& vec,
 //  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
 //  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
-//  Samples are taken along direction w first
+//  Samples are taken along each image plane first, then direction w, then v, and u.
 //  Points outside image return zero.
 template <class imType, class vecType>
 inline void vimt3d_sample_grid_trilin_ic_no_checks(

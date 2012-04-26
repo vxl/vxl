@@ -155,7 +155,7 @@ void vimt_sample_profile_bilin_edgena(vnl_vector<vecType>& vec,
       }
     }
   }
-  else // Use safe interpolation, setting v to zero if outside the image:
+  else // Use safe interpolation, setting v to NA if outside the image:
   {
     if (np==1)
     {

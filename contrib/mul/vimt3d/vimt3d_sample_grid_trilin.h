@@ -14,7 +14,7 @@
 //  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
 //  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
-//  Samples are taken along direction w first
+//  Samples are taken along each image plane first, then direction w, then v, and u.
 template <class imType, class vecType>
 void vimt3d_sample_grid_trilin(vnl_vector<vecType>& vec,
                                const vimt3d_image_3d_of<imType>& image,
@@ -29,8 +29,8 @@ void vimt3d_sample_grid_trilin(vnl_vector<vecType>& vec,
 //  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
 //  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p.
-//  Samples are taken along direction w first. Samples
-//  outside the image are set to the value of the nearest voxel's value.
+//  Samples are taken along each image plane first, then direction w, then v, and u.
+//  Samples outside the image are set to the value of the nearest voxel's value.
 template <class imType, class vecType>
 void vimt3d_sample_grid_trilin_extend(
   vnl_vector<vecType>& vec,
@@ -46,8 +46,8 @@ void vimt3d_sample_grid_trilin_extend(
 //  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
 //  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p.
-//  Samples are taken along direction w first. Samples
-//  outside the image are set to NA.
+//  Samples are taken along each image plane first, then direction w, then v, and u.
+//  Samples outside the image are set to NA.
 template <class imType, class vecType>
 void vimt3d_sample_grid_trilin_edgena(
   vnl_vector<vecType>& vec,
@@ -63,7 +63,7 @@ void vimt3d_sample_grid_trilin_edgena(
 //  Profile points are im_p+i.im_u+j.im_v+k.im_w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
 //  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
-//  Samples are taken along direction w first
+//  Samples are taken along each image plane first, then direction w, then v, and u.
 template <class imType, class vecType>
 void vimt3d_sample_grid_trilin_ic(vnl_vector<vecType>& vec,
                                   const vil3d_image_view<imType>& image,
