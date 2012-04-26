@@ -42,7 +42,7 @@ void mbl_mask_merge_values(const mbl_mask & mask,
                            ForwardIterator result)
 {
   if (vcl_distance(first1, last1) != (int)mask.size() || vcl_distance(first2, last2) != (int)mask.size())
-    throw vcl_runtime_error("Values and mask lengths differ");
+    throw vcl_out_of_range("Values and mask lengths differ");
 
   for (unsigned n = 0 ; first1 != last1 ; ++first1, ++first2, ++n)
     *result++ = mask[n] ? *first2 : *first1;
@@ -74,7 +74,7 @@ template <typename ForwardIterator, typename OutputIterator>
 void mbl_apply_mask(const mbl_mask & mask, ForwardIterator first, ForwardIterator last, OutputIterator target)
 {
   if (vcl_distance(first, last) != (int)mask.size())
-    throw vcl_runtime_error("Values and mask lengths differ");
+    throw vcl_out_of_range("Values and mask lengths differ");
 
   for (unsigned n = 0; first != last ; ++first, ++n)
     if (mask[n]) *target++ = *first;
@@ -99,7 +99,7 @@ void mbl_apply_mask(const mbl_mask & mask, const vcl_vector<T> & src, vcl_vector
 {
   const unsigned n_in = src.size();
   if (mask.size() != n_in)
-    throw vcl_runtime_error("src and mask lengths differ");
+    throw vcl_out_of_range("src and mask lengths differ");
 
   dst.clear();
   dst.reserve(n_in); // this is the maximum size we might need
@@ -122,11 +122,11 @@ void mbl_replace_using_mask(const mbl_mask & mask, const vcl_vector<T> & src1, c
 {
   const unsigned n_in = src1.size();
   if (mask.size() != n_in)
-    throw vcl_runtime_error("src1 and mask lengths differ");
+    throw vcl_out_of_range("src1 and mask lengths differ");
 
   unsigned n_true = vcl_count( mask.begin(), mask.end(), true );
   if ( n_true != src2.size() )
-    throw vcl_runtime_error("src2 and mask are not compatible");
+    throw vcl_out_of_range("src2 and mask are not compatible");
 
   vcl_vector<T> dst_tmp;
   dst_tmp.clear();
@@ -151,7 +151,7 @@ void mbl_apply_mask(const mbl_mask & mask, vcl_vector<T> & values)
 {
   const unsigned n_in = values.size();
   if (mask.size() != n_in)
-    throw vcl_runtime_error("Values and mask lengths differ");
+    throw vcl_out_of_range("Values and mask lengths differ");
 
   unsigned n_out = 0;
   for (unsigned i = 0 ; i < n_in ; ++i)
