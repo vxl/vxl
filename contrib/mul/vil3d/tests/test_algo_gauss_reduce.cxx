@@ -7,8 +7,8 @@
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_crop.h>
 
-static void test_gauss_reduce_float(vil3d_image_view<float>& image,
-                                    vil3d_image_view<float>& dest)
+static void test_algo_gauss_reduce_float(vil3d_image_view<float>& image,
+                                         vil3d_image_view<float>& dest)
 {
   unsigned ni = image.ni(), nj = image.nj(), nk = image.nk(), np=image.nplanes();
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << vcl_endl;
@@ -42,7 +42,7 @@ static void test_gauss_reduce_float(vil3d_image_view<float>& image,
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,j but not k on some levels)
-static void test_gauss_reduce_ij(unsigned np)
+static void test_algo_gauss_reduce_ij(unsigned np)
 {
   vcl_cout << "**************************************\n"
            << " Testing vil3d_gauss_reduce_ij<float>\n"
@@ -85,7 +85,7 @@ static void test_gauss_reduce_ij(unsigned np)
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,k but not j on some levels)
-static void test_gauss_reduce_ik(unsigned np)
+static void test_algo_gauss_reduce_ik(unsigned np)
 {
   vcl_cout << "**************************************\n"
            << " Testing vil3d_gauss_reduce_ik<float>\n"
@@ -125,7 +125,7 @@ static void test_gauss_reduce_ik(unsigned np)
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in j,k but not i on some levels)
-static void test_gauss_reduce_jk(unsigned np)
+static void test_algo_gauss_reduce_jk(unsigned np)
 {
   vcl_cout << "**************************************\n"
            << " Testing vil3d_gauss_reduce_jk<float>\n"
@@ -164,7 +164,7 @@ static void test_gauss_reduce_jk(unsigned np)
   }
 }
 
-static void test_gauss_reduce_int()
+static void test_algo_gauss_reduce_int()
 {
   vcl_cout << "*********************************\n"
            << " Testing vil3d_gauss_reduce<int>\n"
@@ -207,7 +207,7 @@ static void test_gauss_reduce_int()
   TEST_NEAR("LNT corner pixel", image1(0,0,nk2-1),         225, 0);
 }
 
-static void test_gauss_reduce()
+static void test_algo_gauss_reduce()
 {
   vcl_cout << vcl_setprecision(10);
 
@@ -216,28 +216,28 @@ static void test_gauss_reduce()
            << "***********************************\n";
   vil3d_image_view<float> image(10, 20, 30);
   vil3d_image_view<float> dest;
-#if 0
-  test_gauss_reduce_float(image, dest);
+
+  test_algo_gauss_reduce_float(image, dest);
   vcl_cout<<"Test non-contiguous image\n";
   vil3d_image_view<float> image2(20, 30, 41);
   vil3d_image_view<float> crop_image = vil3d_crop(image2,2,10,3,20,4,30);
-  test_gauss_reduce_float(crop_image, dest);
+  test_algo_gauss_reduce_float(crop_image, dest);
   vcl_cout<<"Test input image = output_image\n";
-  test_gauss_reduce_float(image, image);
-#endif
+  test_algo_gauss_reduce_float(image, image);
+
   vil3d_image_view<float> image3(10, 20, 30,3);
   vcl_cout<<"Test multiplane image\n";
-  test_gauss_reduce_float(image3, dest);
+  test_algo_gauss_reduce_float(image3, dest);
 
-  test_gauss_reduce_ij(1);
-  test_gauss_reduce_ik(1);
-  test_gauss_reduce_jk(1);
+  test_algo_gauss_reduce_ij(1);
+  test_algo_gauss_reduce_ik(1);
+  test_algo_gauss_reduce_jk(1);
 
-  test_gauss_reduce_ij(2);
-  test_gauss_reduce_ik(2);
-  test_gauss_reduce_jk(2);
+  test_algo_gauss_reduce_ij(2);
+  test_algo_gauss_reduce_ik(2);
+  test_algo_gauss_reduce_jk(2);
 
-  test_gauss_reduce_int();
+  test_algo_gauss_reduce_int();
 }
 
-TESTMAIN(test_gauss_reduce);
+TESTMAIN(test_algo_gauss_reduce);

@@ -11,7 +11,6 @@ ADD_EXECUTABLE( vil3d_test_all
   test_math.cxx
   test_trilin_interp.cxx
   test_sample_profile_trilin.cxx
-  test_gauss_reduce.cxx
   test_switch_axes.cxx
   test_convert.cxx
   test_from_image_2d.cxx
@@ -20,6 +19,7 @@ ADD_EXECUTABLE( vil3d_test_all
   test_reflect.cxx
   test_tricub_interp.cxx
 
+  test_algo_gauss_reduce.cxx
   test_algo_threshold.cxx
   test_algo_structuring_element.cxx
   test_algo_binary_dilate.cxx
@@ -51,7 +51,6 @@ ADD_TEST( vil3d_test_image_view               ${EXECUTABLE_OUTPUT_PATH}/vil3d_te
 ADD_TEST( vil3d_test_math                     ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_math )
 ADD_TEST( vil3d_test_trilin_interp            ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_trilin_interp )
 ADD_TEST( vil3d_test_sample_profile_trilin    ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_sample_profile_trilin )
-ADD_TEST( vil3d_test_gauss_reduce             ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_gauss_reduce )
 ADD_TEST( vil3d_test_switch_axes              ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_switch_axes )
 ADD_TEST( vil3d_test_image_resource           ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_image_resource )
 ADD_TEST( vil3d_test_convert                  ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_convert ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
@@ -61,6 +60,7 @@ ADD_TEST( vil3d_test_analyze_format           ${EXECUTABLE_OUTPUT_PATH}/vil3d_te
 ADD_TEST( vil3d_test_reflect                  ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_reflect )
 ADD_TEST( vil3d_test_tricub_interp            ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_tricub_interp )
 
+ADD_TEST( vil3d_test_algo_gauss_reduce                ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_gauss_reduce )
 ADD_TEST( vil3d_test_algo_threshold                   ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_threshold )
 ADD_TEST( vil3d_test_algo_structuring_element         ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_structuring_element )
 ADD_TEST( vil3d_test_algo_binary_dilate               ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_binary_dilate )
