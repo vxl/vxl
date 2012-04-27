@@ -1215,7 +1215,7 @@ png_handle_sRGB(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
           */
          png_ptr->rgb_to_gray_red_coeff   =  6968; /* 0.212639005871510 */
          png_ptr->rgb_to_gray_green_coeff = 23434; /* 0.715168678767756 */
-         /* png_ptr->rgb_to_gray_blue_coeff  =  2366; 0.072192315360734	*/
+         /* png_ptr->rgb_to_gray_blue_coeff  =  2366; 0.072192315360734 */
 
          /* The following keeps the cHRM chunk from destroying the
           * coefficients again in the event that it follows the sRGB chunk.
@@ -3706,16 +3706,14 @@ png_init_filter_functions_neon(png_structp pp, unsigned int bpp)
    {
       pp->read_filter[PNG_FILTER_VALUE_SUB-1] = png_read_filter_row_sub3_neon;
       pp->read_filter[PNG_FILTER_VALUE_AVG-1] = png_read_filter_row_avg3_neon;
-      pp->read_filter[PNG_FILTER_VALUE_PAETH-1] = 
-         png_read_filter_row_paeth3_neon;
+      pp->read_filter[PNG_FILTER_VALUE_PAETH-1]=png_read_filter_row_paeth3_neon;
    }
 
    else if (bpp == 4)
    {
       pp->read_filter[PNG_FILTER_VALUE_SUB-1] = png_read_filter_row_sub4_neon;
       pp->read_filter[PNG_FILTER_VALUE_AVG-1] = png_read_filter_row_avg4_neon;
-      pp->read_filter[PNG_FILTER_VALUE_PAETH-1] =
-          png_read_filter_row_paeth4_neon;
+      pp->read_filter[PNG_FILTER_VALUE_PAETH-1]=png_read_filter_row_paeth4_neon;
    }
 }
 #endif /* PNG_ARM_NEON */
