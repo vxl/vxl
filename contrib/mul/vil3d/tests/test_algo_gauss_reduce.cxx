@@ -1,4 +1,4 @@
-// This is mul/vil3d/tests/test_gauss_reduce.cxx
+// This is mul/vil3d/tests/test_algo_gauss_reduce.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
@@ -80,8 +80,6 @@ static void test_algo_gauss_reduce_ij(unsigned np)
     TEST_NEAR("Pixel (2,3,3)", image1(2,3,3,p), 24.4f + p*100.0, 1e-4f);
     TEST_NEAR("Corner pixel", image1(ni2-1, nj2-1, nk2-1,p), 273.2491f + p*100.0, 1e-4f);
   }
-
-
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,k but not j on some levels)
@@ -209,11 +207,11 @@ static void test_algo_gauss_reduce_int()
 
 static void test_algo_gauss_reduce()
 {
-  vcl_cout << vcl_setprecision(10);
-
   vcl_cout << "***********************************\n"
            << " Testing vil3d_gauss_reduce<float>\n"
-           << "***********************************\n";
+           << "***********************************\n"
+           << vcl_setprecision(10);
+
   vil3d_image_view<float> image(10, 20, 30);
   vil3d_image_view<float> dest;
 
