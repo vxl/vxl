@@ -35,7 +35,7 @@
 #ifdef PNG_FREESTANDING_TESTS
 #  include <png.h>
 #else
-#  include "../../png.h"
+#  include "../png.h"
 #endif
 
 #if PNG_LIBPNG_VER < 10500
@@ -95,9 +95,9 @@ typedef png_byte *png_const_bytep;
 /***************************** EXCEPTION HANDLING *****************************/
 #include "../visupng/cexcept.h"
 
+#define this not_the_cpp_this
+#define new not_the_cpp_new
 #ifdef __cplusplus
-#  define this not_the_cpp_this
-#  define new not_the_cpp_new
 #  define voidcast(type, value) static_cast<type>(value)
 #else
 #  define voidcast(type, value) (value)
