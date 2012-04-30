@@ -25,10 +25,7 @@ bool vil_set_float_image_pixel_process_cons( bprb_func_process& pro )
     input_types_[i++] = "unsigned";//j
     input_types_[i++] = "bbas_1d_array_float_sptr";//pixel array (or scalar)
 
-    if( !pro.set_input_types(input_types_) )
-		return false;
-
-    return true;
+    return pro.set_input_types(input_types_);
 }
 
 bool vil_set_float_image_pixel_process( bprb_func_process& pro )
@@ -41,41 +38,41 @@ bool vil_set_float_image_pixel_process( bprb_func_process& pro )
     }
 
     unsigned i = 0;
-    vil_image_view_base_sptr 
+    vil_image_view_base_sptr
         base_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
     unsigned x    = pro.get_input<unsigned>(i++);
     unsigned y    = pro.get_input<unsigned>(i++);
-    bbas_1d_array_float_sptr 
+    bbas_1d_array_float_sptr
         pixel_array_sptr = pro.get_input<bbas_1d_array_float_sptr>(i++);
 
-    if( x > base_sptr->ni() || y > base_sptr->nj() )
+    if ( x > base_sptr->ni() || y > base_sptr->nj() )
     {
-        vcl_cerr << "-----ERROR-----" << vcl_endl
-                 << "In vil_set_float_image_pixel_process" << vcl_endl
-                 << "Target (" << x << ", "<< y << ") out of bounds." << vcl_endl;
+        vcl_cerr << "-----ERROR-----\n"
+                 << "In vil_set_float_image_pixel_process\n"
+                 << "Target (" << x << ", "<< y << ") out of bounds.\n";
         return false;
     }
 
-    if( pixel_array_sptr->data_array.size() != base_sptr->nplanes() )
+    if ( pixel_array_sptr->data_array.size() != base_sptr->nplanes() )
     {
-        vcl_cerr << "-----ERROR-----" << vcl_endl
-                 << "In vil_set_float_image_pixel_process" << vcl_endl
-                 << "Pixel array and Image dimensions don't match." << vcl_endl;
+        vcl_cerr << "-----ERROR-----\n"
+                 << "In vil_set_float_image_pixel_process\n"
+                 << "Pixel array and Image dimensions don't match.\n";
         return false;
     }
 
-    vil_image_view<float>* img_ptr = 
+    vil_image_view<float>* img_ptr =
         dynamic_cast<vil_image_view<float>*>(base_sptr.as_pointer());
 
-    if( !img_ptr )
+    if ( !img_ptr )
     {
-        vcl_cerr << "-----ERROR-----" << vcl_endl
-                 << "In vil_set_float_image_pixel_process" << vcl_endl
-                 << "Couldn't cast to vil_image_view<float>*" << vcl_endl;
+        vcl_cerr << "-----ERROR-----\n"
+                 << "In vil_set_float_image_pixel_process\n"
+                 << "Couldn't cast to vil_image_view<float>*\n";
         return false;
     }
 
-    for( unsigned k = 0; k < pixel_array_sptr->data_array.size(); ++k )
+    for ( unsigned k = 0; k < pixel_array_sptr->data_array.size(); ++k )
         (*img_ptr)(x,y,k) = pixel_array_sptr->data_array[k];
 
     return true;
