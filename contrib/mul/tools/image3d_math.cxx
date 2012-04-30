@@ -1557,7 +1557,8 @@ void plane_merge__image_3d_of_float__image_3d_of_float__double(opstack_t& s)
   for (unsigned i=n, p=0; i>=1; --i)
   {
     vil3d_image_view<float> im = s[i].as_image_3d_of_float().image();
-    vil3d_copy_deep(im, vil3d_planes(result.image(), p, 1, im.nplanes()));
+    vil3d_image_view<float> im_selected = vil3d_planes(result.image(), p, 1, im.nplanes());
+    vil3d_copy_deep(im, im_selected);
     p += im.nplanes();
   }
 
