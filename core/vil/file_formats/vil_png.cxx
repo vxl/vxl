@@ -366,7 +366,7 @@ bool vil_png_image::read_header()
   this->bits_per_component_ = png_get_bit_depth(p_->png_ptr, p_->info_ptr);
 
   png_color_8p sig_bit;
-  if (png_get_sBIT(p_->png_ptr, p_->info_ptr, &sig_bit)) {
+  if (png_get_valid(p_->png_ptr, p_->info_ptr, PNG_INFO_sBIT) && png_get_sBIT(p_->png_ptr, p_->info_ptr, &sig_bit)) {
     png_byte max_bits = sig_bit->red;
     max_bits = vcl_max( max_bits, sig_bit->green );
     max_bits = vcl_max( max_bits, sig_bit->blue );
