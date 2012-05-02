@@ -148,6 +148,7 @@ class boxm2_scene : public vbl_ref_count
 
     //: scene version number
     int version() { return version_; }
+    void set_version(int v) { version_ = v; }
 
     //: scene mutators
     void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
