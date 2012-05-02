@@ -64,7 +64,7 @@
 #include <vil3d/vil3d_copy.h>
 
 
-//: Cast one pixel type to another (with rounding).
+//: Cast one pixel type to another.
 // There must be a cast operator from inP to outP
 //
 // If the two pixel types are the same, the destination may only be a shallow

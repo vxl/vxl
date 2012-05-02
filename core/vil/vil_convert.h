@@ -232,7 +232,7 @@ inline void vil_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const
 #endif
 
 
-//: Cast one pixel type to another (with rounding).
+//: Cast one pixel type to another.
 // There must be a cast operator from inP to outP
 //
 // If the two pixel types are the same, the destination may only be a shallow
