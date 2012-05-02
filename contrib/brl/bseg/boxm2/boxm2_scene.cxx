@@ -422,6 +422,10 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
   paths.add_attribute("path", path + '/');
   paths.x_write(os);
 
+  vsl_basic_xml_element ver(VERSION_TAG);
+  ver.add_attribute("number", scene.version());
+  ver.x_write(os);
+
   //write list of appearance models
 
   vcl_vector<vcl_string> apps = scene.appearances();
