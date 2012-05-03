@@ -339,31 +339,48 @@ bool vil_png_image::read_header()
     return problem("png_sig_cmp");
   }
 
+  //
+  // First read info
   png_set_read_fn(p_->png_ptr, vs_, user_read_data);
   png_set_sig_bytes (p_->png_ptr, SIG_CHECK_SIZE);
   png_read_info (p_->png_ptr, p_->info_ptr);
 
+
+  png_byte const color_type = png_get_color_type(p_->png_ptr, p_->info_ptr);
+  png_byte const bit_depth = png_get_bit_depth(p_->png_ptr, p_->info_ptr);   // valid values are 1, 2, 4, 8, or 16
+  int channels = png_get_channels(p_->png_ptr, p_->info_ptr);
+  bool is_bool_image = false;  
+
+#if 1
+  if (color_type == PNG_COLOR_TYPE_PALETTE) {
+    assert( bit_depth <= 8 );    // valid bit depth 1, 2, 4, 8
+    png_set_palette_to_rgb(p_->png_ptr);
+  }
+  if (color_type == PNG_COLOR_TYPE_GRAY) {
+    if(bit_depth==1) { //treat 1-bit image as bool image 
+      is_bool_image = true;
+      png_set_packing(p_->png_ptr);  // This code expands pixels per byte without changing the values of the pixels"
+    }
+    else if(bit_depth < 8)  // treat these images as 8-bit greyscale image
+      png_set_expand_gray_1_2_4_to_8(p_->png_ptr);
+  }
+  if (png_get_valid(p_->png_ptr, p_->info_ptr, PNG_INFO_tRNS)) {
+    assert( channels == 1 || channels == 3 );
+    png_set_tRNS_to_alpha(p_->png_ptr);
+  }
+#else
+  // According to manual:
+  // "This code expands ... per byte without changing the values of the pixels"
+  // But this is not desired if it has pallete
   if (png_get_bit_depth(p_->png_ptr, p_->info_ptr) < 8)
     png_set_packing (p_->png_ptr);
-
-#if 0
- int maxval;
- if (p->info_ptr->color_type == PNG_COLOR_TYPE_PALETTE) { maxval = 255; }
- else { maxval = (1l << p->info_ptr->bit_depth) - 1; }
 #endif
-
-  p_->channels = png_get_channels(p_->png_ptr, p_->info_ptr);
 
 #if VXL_LITTLE_ENDIAN
   // PNG stores data MSB
   if ( png_get_bit_depth(p_->png_ptr, p_->info_ptr) > 8 )
     png_set_swap(p_->png_ptr);
 #endif
-
-  this->width_ = png_get_image_width(p_->png_ptr, p_->info_ptr);
-  this->height_ = png_get_image_height(p_->png_ptr, p_->info_ptr);
-  this->components_ = png_get_channels(p_->png_ptr, p_->info_ptr);
-  this->bits_per_component_ = png_get_bit_depth(p_->png_ptr, p_->info_ptr);
 
   png_color_8p sig_bit;
   if (png_get_valid(p_->png_ptr, p_->info_ptr, PNG_INFO_sBIT) && png_get_sBIT(p_->png_ptr, p_->info_ptr, &sig_bit)) {
@@ -372,15 +389,28 @@ bool vil_png_image::read_header()
     max_bits = vcl_max( max_bits, sig_bit->blue );
     max_bits = vcl_max( max_bits, sig_bit->gray );
     max_bits = vcl_max( max_bits, sig_bit->alpha );
-    this->bits_per_component_ = max_bits;
-
     png_set_shift(p_->png_ptr, sig_bit);
   }
 
-  if (this->bits_per_component_ == 1) format_ = VIL_PIXEL_FORMAT_BOOL;
-  else if (this->bits_per_component_ <=8) format_=VIL_PIXEL_FORMAT_BYTE;
-  else format_ = VIL_PIXEL_FORMAT_UINT_16;
+  //
+  //  Update the info after putting in all these transforms
+  //  From this point on, the info reflects not the raw image, 
+  //  but the image after transform and to be read.
+  png_read_update_info(p_->png_ptr, p_->info_ptr);
 
+  this->width_ = png_get_image_width(p_->png_ptr, p_->info_ptr);
+  this->height_ = png_get_image_height(p_->png_ptr, p_->info_ptr);
+  this->components_ = p_->channels = png_get_channels(p_->png_ptr, p_->info_ptr);
+  this->bits_per_component_ = png_get_bit_depth(p_->png_ptr, p_->info_ptr);
+
+  // Set bits_per_component_ back to 1 for bool image
+  if(is_bool_image)
+    this->bits_per_component_ = 1;
+
+  if (this->bits_per_component_ == 1)     format_ = VIL_PIXEL_FORMAT_BOOL;
+  else if (this->bits_per_component_==8)  format_ = VIL_PIXEL_FORMAT_BYTE;
+  else if (this->bits_per_component_==16) format_ = VIL_PIXEL_FORMAT_UINT_16;
+  else return problem("Bad bit depth");
 
   // if (p->info_ptr->valid & PNG_INFO_bKGD) problem("LAZY AWF! PNG_INFO_bKGD");
   png_setjmp_off();
@@ -440,48 +470,72 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
   png_byte** rows = p_->get_rows();
   if (!rows) return 0;
 
-  int bit_depth = ((bits_per_component_ + 7)/8)*8;
+  int bit_depth = bits_per_component_;  // value can be 1, 8, or 16
   int bytes_per_pixel = (bit_depth * p_->channels + 7) / 8;
   int bytes_per_row_dst = nx*nplanes() * vil_pixel_format_sizeof_components(format_);
 
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ny*bytes_per_row_dst, format_);
 
-  if ((bit_depth==16) &&
-      (nx == png_get_image_width(p_->png_ptr, p_->info_ptr)))
+  if(nx == png_get_image_width(p_->png_ptr, p_->info_ptr))
   {
     assert(x0 == 0);
 
-    vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
-    return new vil_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
-      nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
-  }
-  if ((bit_depth ==8) &&
-      (nx == png_get_image_width(p_->png_ptr, p_->info_ptr)))
-  {
-    assert(x0 == 0);
+    if(bit_depth==1)
+    {
+      assert(format_==VIL_PIXEL_FORMAT_BOOL); 
 
-    vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
-    return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
-      nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
+      vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
+      return new vil_image_view<bool>(chunk, reinterpret_cast<bool*>(chunk->data()),
+        nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
+    }
+    else if(bit_depth==16) 
+    {
+      assert(format_==VIL_PIXEL_FORMAT_UINT_16); 
+
+      vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
+      return new vil_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
+        nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
+    }
+    else if(bit_depth ==8)
+    {
+      vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
+      return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
+        nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
+    }
+    else return 0;
   }
-  else if (bit_depth==16)
+  else   // not whole row
   {
-    png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
-    for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
-      vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
-    return new vil_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
-      nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
+    if(bit_depth==1)
+    {
+      assert(format_==VIL_PIXEL_FORMAT_BOOL); 
+
+      png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
+      for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
+        vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
+      return new vil_image_view<bool>(chunk, reinterpret_cast<bool*>(chunk->data()),
+        nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
+    }
+    else if (bit_depth==16)
+    {
+      assert(format_==VIL_PIXEL_FORMAT_UINT_16); 
+
+      png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
+      for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
+        vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
+      return new vil_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
+        nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
+    }
+    else if (bit_depth==8)
+    {
+      png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
+      for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
+        vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
+      return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
+        nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
+    }
+    else return 0;
   }
-  else if (bit_depth==8)
-  {
-    png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
-    for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
-      vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
-    return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
-      nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
-  }
-  // FIXME Can't handle pixel depths of 1 2 or 4 pixels yet
-  else return 0;
 }
 
 bool vil_png_image::put_view(const vil_image_view_base &view,

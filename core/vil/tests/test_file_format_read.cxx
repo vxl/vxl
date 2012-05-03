@@ -507,14 +507,17 @@ test_file_format_read( int argc, char* argv[] )
   TEST("8-bit RGBA uncompressed (Photoshop created)", CheckFile(CompareRGBA<vxl_byte>(), "ff_rgba8bit_true.txt", "ff_rgba8bit_uncompressed_ps.bmp" ), true);
 
   vcl_cout << "Portable Network Graphics [png]\n";
+  TEST("1-bit grey compressed", CheckFile(CompareGrey<bool>(), "ff_grey1bit_true.txt", "ff_grey1bit.png" ), true);
   TEST("8-bit RGB uncompressed", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.png" ), true);
   TEST("8-bit RGB compressed", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_compressed.png" ), true);
+  TEST("8-bit RGB Indexed",    CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_indexed_4bpp.png" ), true);
   TEST("10-bit grey with bitdepth=true (from labview)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey10bit_true.txt", "ff_grey10bit_labview_bitdepth_true.png" ), true);
   TEST("10-bit grey with bitdepth=false (from labview)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey10bit_true.txt", "ff_grey10bit_labview_bitdepth_false.png" ), true);
   TEST("16-bit grey with bitdepth=true (from labview)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_labview_bitdepth_true.png" ), true);
   TEST("16-bit grey with bitdepth=false (from labview)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_labview_bitdepth_false.png" ), true);
 
   vcl_cout << "TIFF [tiff]\n";
+  //TEST("1-bit grey uncompressed", CheckFile(CompareGrey<bool>(), "ff_grey1bit_true.txt", "ff_grey1bit_uncompressed.tif" ), true);
   TEST("8-bit RGB uncompressed", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.tif" ), true);
 
   TEST("8-bit RGB packbits", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_packbits.tif" ), true);
