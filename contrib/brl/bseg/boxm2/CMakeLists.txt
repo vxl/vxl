@@ -49,6 +49,8 @@ subdirs(cpp)
 #opencl accelerated library
 subdirs(ocl)
 
+#reg lib
+subdirs(class)
 
 #registration Library
 subdirs(reg)
