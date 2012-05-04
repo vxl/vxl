@@ -9,11 +9,14 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 
+#include <vcl_cstdlib.h> // for std::exit()
+
 //check dirs, exit if not exist
-void check_dir(vcl_string& dir){
-  if(!vul_file::exists(dir)) {
+void check_dir(vcl_string& dir)
+{
+  if (!vul_file::exists(dir)) {
     vcl_cout<<"Directory of file does not exist: "<<dir<<vcl_endl;
-    exit(-1);
+    vcl_exit(-1);
   }
 }
 
@@ -21,10 +24,9 @@ void check_dir(vcl_string& dir){
 template <class T>
 void push_back(vcl_vector<T>& dest, vcl_vector<T>& src)
 {
-  for(int i=0; i<src.size(); ++i)
+  for (int i=0; i<src.size(); ++i)
     dest.push_back(src[i]);
 }
-
 
 
 int main(int argc, char ** argv)
@@ -41,10 +43,10 @@ int main(int argc, char ** argv)
   check_dir(xmlDir());
 
   //grab images and xml files from directory
-  vcl_vector<vcl_string> eoImgs; 
-  vcl_vector<vcl_string> irImgs; 
-  vcl_vector<vcl_string> xmlFiles; 
-  if(vul_file::is_directory(eoDir())) {
+  vcl_vector<vcl_string> eoImgs;
+  vcl_vector<vcl_string> irImgs;
+  vcl_vector<vcl_string> xmlFiles;
+  if (vul_file::is_directory(eoDir())) {
     eoImgs = boxm2_util::images_from_directory(eoDir());
     irImgs = boxm2_util::images_from_directory(irDir());
     xmlFiles = boxm2_util::files_from_dir(xmlDir(), "xml");
@@ -54,29 +56,28 @@ int main(int argc, char ** argv)
     irImgs.push_back(irDir());
     xmlFiles.push_back(xmlDir());
   }
-  vcl_cout<<"Generating samples for "<<eoDir()<<","<<irDir()<<","<<" using "<<xmlDir()<<vcl_endl;
-  vcl_cout<<"  num images: "<<xmlFiles.size()<<vcl_endl;
-  vcl_cout<<"  num eo: "<<eoImgs.size()<<vcl_endl;
-  vcl_cout<<"  num ir: "<<irImgs.size()<<vcl_endl;
+  vcl_cout<<"Generating samples for "<<eoDir()<<','<<irDir()<<','<<" using "<<xmlDir()<<'\n'
+          <<"  num images: "<<xmlFiles.size()<<'\n'
+          <<"  num eo: "<<eoImgs.size()<<'\n'
+          <<"  num ir: "<<irImgs.size()<<vcl_endl;
 
   //set the number of samples K to take from each image
-  vcl_size_t K = sparse() ? 10000 : 999999999999; 
+  vcl_size_t K = sparse() ? 10000 : 999999999999;
 
   //boxm2_class_generate_samples sampler(;a
   vcl_vector<vnl_vector_fixed<float,4> > allInts;
-  vcl_vector<vcl_string> allClasses; 
-  for(int i=0; i<xmlFiles.size(); ++i) {
-    
+  vcl_vector<vcl_string> allClasses;
+  for (unsigned int i=0; i<xmlFiles.size(); ++i) {
     //generate IR samples
     boxm2_class_generate_samples sampler(xmlFiles[i], eoImgs[i], irImgs[i], K);
     vcl_vector<vcl_string> classes = sampler.classes();
-    vcl_vector<float> ints = sampler.intensities(); 
+    vcl_vector<float> ints = sampler.intensities();
     vcl_vector<float> r = sampler.r();
     vcl_vector<float> g = sampler.g();
     vcl_vector<float> b = sampler.b();
 
-    vcl_vector<vnl_vector_fixed<float,4> > feats; 
-    for(int i=0; i<r.size(); ++i)
+    vcl_vector<vnl_vector_fixed<float,4> > feats;
+    for (unsigned int i=0; i<r.size(); ++i)
       feats.push_back( vnl_vector_fixed<float,4>(ints[i],r[i],g[i],b[i]) );
 
     //stack
@@ -85,7 +86,7 @@ int main(int argc, char ** argv)
   }
 
   //print samples/write to file
-  for(int i=0; i<allInts.size(); ++i) {
+  for (unsigned int i=0; i<allInts.size(); ++i) {
     vcl_cout<<allClasses[i]<<"  "<<allInts[i]<<vcl_endl;
   }
 }
