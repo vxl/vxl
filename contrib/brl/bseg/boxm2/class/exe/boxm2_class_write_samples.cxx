@@ -24,7 +24,7 @@ void check_dir(vcl_string& dir)
 template <class T>
 void push_back(vcl_vector<T>& dest, vcl_vector<T>& src)
 {
-  for (int i=0; i<src.size(); ++i)
+  for (unsigned int i=0; i<src.size(); ++i)
     dest.push_back(src[i]);
 }
 
