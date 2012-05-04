@@ -29,7 +29,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-
+#include <vul/vul_timer.h>
 
 void test_render_expected_images(boxm2_scene_sptr scene, 
                                  bocl_device_sptr device, 
@@ -106,6 +106,8 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
   vul_arg<unsigned>   ni("-ni", "Width of output image", 1280);
   vul_arg<unsigned>   nj("-nj", "Height of output image", 720);
+  vul_arg<unsigned>   numFrames("-num", "Maximum number of frames to render", 10);
+  vul_arg<int>        numGPU("-numGPU", "Number of GPUs to use", 2);
   vul_arg_parse(argc, argv);
   
   //create scene
@@ -117,18 +119,23 @@ int main(int argc,  char** argv)
   //create cpu cache (lru), and create opencl_cache on the device
   boxm2_lru_cache::create(scene);
 
+  if(numGPU() > mgr->gpus_.size()) {
+    vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr->gpus_.size()<<" available"<<vcl_endl;
+    return -1;
+  }
   //make a multicache
-  for(int i=0; i<mgr->gpus_.size(); ++i)
-    vcl_cout<<" GPU "<<i<<": "<<mgr->gpus_[i]<<vcl_endl;
-  boxm2_multi_cache mcache(scene, mgr->gpus_); 
+  vcl_vector<bocl_device*> gpus;
+  for(int i=0; i<numGPU(); ++i)
+    gpus.push_back(mgr->gpus_[i]);
+  boxm2_multi_cache mcache(scene, gpus); 
   vcl_cout<<"Multi Cache: \n"<<mcache.to_string()<<vcl_endl;
 
   //generate cameras
-  int num_renders = 10;  
+  int num_renders = (int) numFrames();  
   vcl_vector<vpgl_camera_double_sptr> cams; 
   for(int i=0; i<num_renders; ++i) {
     double currInc    = 45.0;
-    double currRadius = 2*scene->bounding_box().height(); 
+    double currRadius = scene->bounding_box().height(); 
     double currAz     = i*30.0f; 
     vpgl_perspective_camera<double>* pcam;
     pcam = boxm2_util::construct_camera(currInc, currAz, currRadius, ni(), nj(), scene->bounding_box(), false);
@@ -137,21 +144,29 @@ int main(int argc,  char** argv)
   }
 
   //render each cam
-  float mean_time=0.0f; 
+  float mean_time=0.0f, gpu_total=0.0f;
   boxm2_multi_render renderer; 
   for(int i=0; i<cams.size(); ++i) {
     vil_image_view<float> out(ni(),nj()); 
-    float rtime = renderer.render(mcache, out, cams[i]); 
+    vul_timer rtimer; rtimer.mark();
+    float gpu_time = renderer.render(mcache, out, cams[i]); 
+    float rtime = (float) rtimer.all(); 
     vcl_cout<<"Render "<<i<<" time: "<<rtime<<vcl_endl;
     vcl_stringstream s; s<<"out_"<<i<<".tiff"; 
     vil_save(out, s.str().c_str()); 
     mean_time += rtime; 
+    gpu_total += gpu_time;
   }
-  vcl_cout<<"Mean render time: "<<mean_time/num_renders<<vcl_endl;
+  
+  vcl_cout<<"-----------------------------------------\n"
+          <<" RENDERING STATS: \n"
+          <<"   Mean render time: "<<mean_time/cams.size()<<'\n'
+          <<"   Mean GPU time: "<<gpu_total/cams.size()<<'\n'
+          <<"-----------------------------------------"<<vcl_endl;
 
   //test scene render on one gpu
-  boxm2_opencl_cache* opencl_cache = new boxm2_opencl_cache(scene, mgr->gpus_[0]);
-  test_render_expected_images(scene, mgr->gpus_[0], opencl_cache, cams, ni(), nj());
+  //boxm2_opencl_cache* opencl_cache = new boxm2_opencl_cache(scene, mgr->gpus_[0]);
+  //test_render_expected_images(scene, mgr->gpus_[0], opencl_cache, cams, ni(), nj());
 
   return 0;
 }

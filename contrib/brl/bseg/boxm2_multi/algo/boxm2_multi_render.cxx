@@ -124,6 +124,8 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
 
   //visibility order
   vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
+  float cpu_time = 0.0f, gpu_time = 0.0f;
+  vul_timer gpu_timer; gpu_timer.mark();
 
   //--------------------------------------------------
   //run block-wise ray trace for each block/device
@@ -133,33 +135,54 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
     vcl_vector<int> indices = group.order_from_cam(cam);
-    //vcl_cout<<" blk order: ";
     for (int idx=0; idx<indices.size(); ++idx){
       int i = indices[idx];
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
       boxm2_block_id id = ids[i];
-      //vcl_cout<<i<<" : "<<id<<" ";
 
       //keep track of mems allocated, so you can unref them later
-      float* ones = new float[ni*nj];
-      vcl_fill(ones, ones+ni*nj, 1.0f);
-      vis_mems[i]->write_to_gpu_mem(queues[i], ones, ni*nj*sizeof(float));
+      vis_mems[i]->fill(queues[i], 1.0f, "float");
       exp_mems[i]->zero_gpu_buffer(queues[i]);
-      delete[] ones;
       vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
       this->render_block(sub_scene, id, ocl_cache, queues[i],
                          ray_os[i], ray_ds[i], exp_mems[i], vis_mems[i], img_dims[i],
                          outputs[i], lookups[i], data_type, kerns[0],
                          lthreads, cl_ni, cl_nj, apptypesize);
     }
-    //vcl_cout<<vcl_endl;
 
     //finish queues before moving on
     for (int idx=0; idx<indices.size(); ++idx){
-      int i = indices[idx];
+      int i = indices[idx];  
+
+    //Figure out image location
+#if 1 
+      vul_timer cpu_timer; cpu_timer.mark();
+      double minU=ni, minV=nj,
+             maxU=0, maxV=0;
+      vgl_box_3d<double>& blkBox = group.bbox(i);
+      vcl_vector<vgl_point_3d<double> > verts = blkBox.vertices();
+      for (int vi=0; vi<verts.size(); ++vi){
+        double u, v;
+        cam->project(verts[vi].x(), verts[vi].y(), verts[vi].z(), u, v);
+        if (u < minU) minU = u;
+        if (u > maxU) maxU = u;
+        if (v < minV) minV = v;
+        if (v > maxV) maxV = v;
+      }
+      //make sure you clamp the value between
+      minU = clamp(minU, 0.0, (double) ni);
+      maxU = clamp(maxU, 0.0, (double) ni);
+      maxV = clamp(maxV, 0.0, (double) nj);
+      minV = clamp(minV, 0.0, (double) nj);
+      cpu_time += (float) cpu_timer.all();
+#else
+      double minU = 0, minV = 0, 
+             maxU = ni, maxV = nj;
+#endif
       clFinish(queues[i]);
+      cpu_timer.mark();
       exp_mems[i]->read_to_buffer(queues[i]);
       vis_mems[i]->read_to_buffer(queues[i]);
 
@@ -168,18 +191,26 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
       float* e = (float*) exp_mems[i]->cpu_buffer();
       float* imgbuff = img.top_left_ptr();
       float* visbuff = vis_out.top_left_ptr();
-      for (int c=0; c<ni*nj; ++c, ++imgbuff, visbuff++) {
-        (*imgbuff) += e[c] * (*visbuff);
-        (*visbuff) *= v[c];
-      }
+      for(int jj=minV; jj<maxV; ++jj)
+        for(int ii=minU; ii<maxU; ++ii) {
+          int imIdx = jj*ni + ii;
+          imgbuff[imIdx] += e[imIdx] * visbuff[imIdx];
+          visbuff[imIdx] *= v[imIdx];
+        }
+      
+      //record cpu time and finally GPU time
+      cpu_time += (float)cpu_timer.all();
     }
   }
-
+  //actual GPU time
+  gpu_time = (float) gpu_timer.all(); 
+  gpu_time -= cpu_time;
+  
   //normalize
-  float* imgbuff = img.top_left_ptr();
-  float* visbuff = vis_out.top_left_ptr();
-  for(int i=0; i<vis_out.size(); ++i)
-    imgbuff[i] += visbuff[i]*.5f;
+  //float* imgbuff = img.top_left_ptr();
+  //float* visbuff = vis_out.top_left_ptr();
+  //for(int i=0; i<vis_out.size(); ++i)
+  //  imgbuff[i] += visbuff[i]*.5f;
 
   //clean up all ocl buffers
   for (int i=0; i<ocl_caches.size(); ++i)
@@ -215,14 +246,13 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   }
 
   //--------------------------------
-  //combine images
+  //report times
   //--------------------------------
-  float pre_time = (float) rtime.all(); rtime.mark();
-  float combine_time = (float) rtime.all();
-  vcl_cout<<"\nMulti Render Time: "<<combine_time + pre_time<<" ms"<<vcl_endl
-          <<"  pre_time (gpu+overhead): "<<pre_time<<" ms"<<vcl_endl
-          <<"  combine time (end):      "<<combine_time<<" ms"<<vcl_endl;
-  return (float) combine_time+pre_time;
+  float wall_time = (float) rtime.all();
+  vcl_cout<<"\nMulti Render Time: "<< wall_time <<" ms\n"
+          <<"  cpu_time: "<<wall_time-gpu_time<<" ms\n"
+          <<"  gpu_time: "<<gpu_time<<" ms"<<vcl_endl;
+  return (float) gpu_time;
 
 #endif //Using first block method
 #if 0 //Using second block method

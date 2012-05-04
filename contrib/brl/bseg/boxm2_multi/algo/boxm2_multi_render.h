@@ -72,6 +72,9 @@ class boxm2_multi_render
                         unsigned cl_ni,
                         unsigned cl_nj,
                         int apptypesize);
+
+    template <class T>
+    static inline T clamp(T x, T a, T b) { return x < a ? a : (x > b ? b : x); }
 };
 
 #endif
