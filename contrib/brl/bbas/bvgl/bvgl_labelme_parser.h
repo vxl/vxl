@@ -53,10 +53,12 @@ class bvgl_labelme_parser : public expatpp
   vcl_string image_name() { return image_name_; }
 
   //object names (in the same order as polygons)
-  vcl_vector<vcl_string> obj_names() { return obj_names_; }
+  //vcl_vector<vcl_string> obj_names() { return obj_names_; }
+  vcl_vector<vcl_string>& obj_names() { return obj_names_; }
 
   // ACCESSORS for parser info
-  vcl_vector<vgl_polygon<double> > polygons() { return polygons_; }
+  //vcl_vector<vgl_polygon<double> > polygons() { return polygons_; }
+  vcl_vector<vgl_polygon<double> >& polygons() { return polygons_; }
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
