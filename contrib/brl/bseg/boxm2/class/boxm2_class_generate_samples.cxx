@@ -32,12 +32,12 @@ boxm2_class_generate_samples::boxm2_class_generate_samples(vcl_string xml_label,
 
   //randomly choose K pixels and class
   int* buffer = new int[ni*nj];
-  for (int i=0; i<ni*nj; ++i) buffer[i] = i;
+  for (unsigned int i=0; i<ni*nj; ++i) buffer[i] = i;
   boxm2_util::random_permutation(buffer, ni*nj);
 
   //limit K to make sense
   K = vcl_min(K, ni*nj);
-  for (int k=0; k<K; ++k) {
+  for (unsigned int k=0; k<K; ++k) {
     //get image coordinates
     int i = buffer[k] % ni;
     int j = (buffer[k] - i)/ni;
@@ -73,7 +73,7 @@ boxm2_class_generate_samples::boxm2_class_generate_samples(vcl_string xml_label,
 vcl_string
 pixel_class(int i, int j, vcl_vector<vgl_polygon<double> >& polygons, vcl_vector<vcl_string>& classes)
 {
-  for (int c=0; c<polygons.size(); ++c)
+  for (unsigned int c=0; c<polygons.size(); ++c)
     if (polygons[c].contains((double) i, (double)j))
       return classes[c];
   return "noclass";
