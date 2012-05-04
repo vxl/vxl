@@ -1,19 +1,21 @@
 //this is boxm2_class_generate_samples.h
 #ifndef boxm2_class_generate_samples_h_
 #define boxm2_class_generate_samples_h_
-
+//:
+// \file
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vcl_string.h>
+#include <vcl_cstddef.h> // for std::size_t
 
 //: Randomly samples the pixels of an image for training a model
-class boxm2_class_generate_samples {
-
+class boxm2_class_generate_samples
+{
   public:
-    boxm2_class_generate_samples(vcl_string xml_label, 
-                                 vcl_string eoPath, 
+    boxm2_class_generate_samples(vcl_string xml_label,
+                                 vcl_string eoPath,
                                  vcl_string irPath,
-                                 size_t K=1000); 
+                                 vcl_size_t K=1000);
 
     //return ground truth samples
     vcl_vector<float> intensities() { return intensities_; }
@@ -34,9 +36,9 @@ class boxm2_class_generate_samples {
 
     //class for each pixel
     vcl_vector<vcl_string> classes_;
-    
+
     //intensities for rgbs
-    vcl_vector<float> r_, g_, b_; 
+    vcl_vector<float> r_, g_, b_;
 
     //intensities for grey scale images
     vcl_vector<float> intensities_;
@@ -45,7 +47,7 @@ class boxm2_class_generate_samples {
     bool is_rgb_;
 };
 
-vcl_string 
+vcl_string
 pixel_class(int i, int j, vcl_vector<vgl_polygon<double> >& polygons, vcl_vector<vcl_string>& classes);
 
-#endif //boxm_class_generate_samples_h_
+#endif // boxm2_class_generate_samples_h_
