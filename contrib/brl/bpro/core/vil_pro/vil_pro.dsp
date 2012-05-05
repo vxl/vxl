@@ -207,6 +207,9 @@ SOURCE=.\processes/vil_nitf_bits_per_pixel_process.cxx
 SOURCE=.\processes/vil_scale_and_offset_values_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vil_set_float_image_pixel_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group

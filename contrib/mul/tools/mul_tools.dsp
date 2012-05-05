@@ -282,6 +282,9 @@ SOURCE=.\select_lines.cxx
 # Begin Source File
 SOURCE=.\convert_rotation_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rewrite_vsl_strings.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

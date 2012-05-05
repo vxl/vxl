@@ -253,7 +253,7 @@ SOURCE=.\test_algo_structuring_element.cxx
 SOURCE=.\test_algo_threshold.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_gauss_reduce.cxx
+SOURCE=.\test_algo_gauss_reduce.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_image_view.cxx

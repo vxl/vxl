@@ -146,6 +146,21 @@ SOURCE=.\png.h
 # Begin Source File
 SOURCE=.\pngconf.h
 # End Source File
+# Begin Source File
+SOURCE=.\pngpriv.h
+# End Source File
+# Begin Source File
+SOURCE=.\pnginfo.h
+# End Source File
+# Begin Source File
+SOURCE=.\pngdebug.h
+# End Source File
+# Begin Source File
+SOURCE=.\pngstruct.h
+# End Source File
+# Begin Source File
+SOURCE=.\pnglibconf.h
+# End Source File
 # End Group
 # End Target
 # End Project

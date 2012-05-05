@@ -108,6 +108,9 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\pngtest.c
 # End Source File
+# Begin Source File
+SOURCE=.\pngvalid.c
+# End Source File
 # End Group
 # End Target
 # End Project
