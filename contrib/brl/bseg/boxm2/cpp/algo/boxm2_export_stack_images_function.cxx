@@ -49,9 +49,6 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
     boxm2_data_base *  alpha_base  = cache->get_data_base(blk_iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
-    boxm2_data_base *  int_base  = cache->get_data_base(blk_iter->first,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-    boxm2_data<BOXM2_MOG3_GREY> *int_data=new boxm2_data<BOXM2_MOG3_GREY>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
-
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
     unsigned ni = trees.get_row1_count();
