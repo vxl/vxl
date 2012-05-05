@@ -16,8 +16,8 @@ TARGET_LINK_LIBRARIES(boxm2_class boxm2 bvgl vpgl vnl vidl vil_algo vil vgl_algo
 INSTALL_TARGETS(/lib boxm2_class)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_class/ ${boxm2_class_sources})
 
-#IF( BUILD_TESTING )
-#  SUBDIRS(tests)
-#ENDIF( BUILD_TESTING )
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 SUBDIRS(exe)
