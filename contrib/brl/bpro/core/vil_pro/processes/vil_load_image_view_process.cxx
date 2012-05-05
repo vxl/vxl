@@ -24,6 +24,7 @@ bool vil_load_image_view_process_cons(bprb_func_process& pro)
   output_types.push_back("vil_image_view_base_sptr");
   output_types.push_back("unsigned");  // ni of the image
   output_types.push_back("unsigned");  // nj of the image
+  output_types.push_back("unsigned"); //nplanes of the images
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -52,6 +53,7 @@ bool vil_load_image_view_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(i++, loaded_image);
   pro.set_output_val<unsigned>(i++, loaded_image->ni());
   pro.set_output_val<unsigned>(i++, loaded_image->nj());
+  pro.set_output_val<unsigned>(i++, loaded_image->nplanes());
   return true;
 }
 
