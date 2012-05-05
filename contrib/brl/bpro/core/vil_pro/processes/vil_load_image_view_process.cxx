@@ -24,7 +24,7 @@ bool vil_load_image_view_process_cons(bprb_func_process& pro)
   output_types.push_back("vil_image_view_base_sptr");
   output_types.push_back("unsigned");  // ni of the image
   output_types.push_back("unsigned");  // nj of the image
-  output_types.push_back("unsigned"); //nplanes of the images
+  output_types.push_back("unsigned"); //nplanes of the image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
