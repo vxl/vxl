@@ -13,9 +13,9 @@ IF(NOT VXL_USING_NATIVE_PNG)
   IF(ZLIB_FOUND)
     INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
 
-    set(PNGLIB_MAJOR 1)
-    set(PNGLIB_MINOR 5)
-    set(PNGLIB_RELEASE 10)
+    SET(PNGLIB_MAJOR 1)
+    SET(PNGLIB_MINOR 5)
+    SET(PNGLIB_RELEASE 10)
 
     # Use the prebuilt pnglibconf.h file from the scripts folder
     # TODO: fix this by building with awk; without this no cmake build can be
@@ -25,7 +25,7 @@ IF(NOT VXL_USING_NATIVE_PNG)
     #               ${CMAKE_CURRENT_BINARY_DIR}/pnglibconf.h)
     #include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-    set(libpng_public_hdrs
+    SET(libpng_public_hdrs
       png.h
       pngconf.h
       #${CMAKE_CURRENT_BINARY_DIR}/pnglibconf.h 
@@ -38,7 +38,7 @@ IF(NOT VXL_USING_NATIVE_PNG)
                                       pnginfo.h
                                       pngpriv.h
                                       pngstruct.h
-      png.c                           png.h
+      png.c
       pngerror.c
       pngget.c
       pngmem.c
