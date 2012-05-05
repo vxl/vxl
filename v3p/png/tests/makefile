@@ -3,6 +3,7 @@ NO_STDLIBS := 1
 USE_TESTLIB := 0
 
 TESTS += pngtest.c
+TESTS += pngvalid.c
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

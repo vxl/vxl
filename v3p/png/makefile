@@ -24,6 +24,11 @@ SOURCES += pngwtran.c
 SOURCES += pngmem.c
 SOURCES += pngerror.c
 SOURCES += pngpread.c
+MANPAGE_SOURCES += pngpriv.h
+MANPAGE_SOURCES += pnginfo.h
+MANPAGE_SOURCES += pngdebug.h
+MANPAGE_SOURCES += pngstruct.h
+MANPAGE_SOURCES += pnglibconf.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

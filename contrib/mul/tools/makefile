@@ -18,6 +18,7 @@ MINI_PROG_SOURCES += reflect_image_2d.cxx
 MINI_PROG_SOURCES += reflect_image_3d.cxx
 MINI_PROG_SOURCES += select_lines.cxx
 MINI_PROG_SOURCES += convert_rotation_3d.cxx
+MINI_PROG_SOURCES += rewrite_vsl_strings.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
