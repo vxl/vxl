@@ -213,7 +213,7 @@ vcl_string boxm2_test_utils::save_test_empty_scene()
             data.max_level_ = 4;
             data.max_mb_ = 400;
             data.p_init_ = .001;
-            //            data.random_ = true;//jlm
+            data.version_ = 1;
             //push it into the map
             blocks[id] = data;
         }
@@ -229,7 +229,6 @@ vcl_string boxm2_test_utils::save_test_empty_scene()
   scene.set_data_path(test_dir);
   scene.set_blocks(blocks);
   scene.save_scene();
-
 
   return test_file;
 }
@@ -254,6 +253,7 @@ vcl_string boxm2_test_utils::save_test_simple_scene()
             data.max_level_ = 4;
             data.max_mb_ = 400;
             data.p_init_ = .001;
+            data.version_ = 1;
 
             //push it into the map
             blocks[id] = data;
