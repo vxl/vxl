@@ -79,11 +79,13 @@ static void write_long_tag(TIFF* tif, ttag_t tag, ulong_tag const& ultag)
     TIFFSetField(tif, tag, ultag.val);
 }
 
+#if 0 // not currently used...
 static void write_float_tag(TIFF* tif, ttag_t tag, float const val, bool const valid)
 {
   if (valid)
     TIFFSetField(tif, tag, val);
 }
+#endif
 
 static void write_string(TIFF* tif, ttag_t tag, vcl_string const& stag)
 {
@@ -149,7 +151,7 @@ bool vil_tiff_header::read_header()
   extra_samples.val=0;
   extra_samples.valid = false;
   int const ret_extrasamples = TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
-  if(ret_extrasamples && extra_samples.val > 0)
+  if (ret_extrasamples && extra_samples.val > 0)
     extra_samples.valid = true;
 
   read_short_tag(tif_,TIFFTAG_FILLORDER, fill_order);
@@ -699,7 +701,7 @@ vil_tiff_header(TIFF* tif, const unsigned ni, const unsigned nj,
 #if 1  // Handle Alpha channel, assuming it is the last channel
   if (nplanes == 2 || nplanes == 4)
   {
-    //extra_samples.val = 1; 
+    //extra_samples.val = 1;
     //extra_samples.valid = true;
     vxl_uint_32 num_extra_samples = 1;
     vxl_uint_16 extra_sample_values[] = { EXTRASAMPLE_ASSOCALPHA/*1*/ };  // Indicate Associated Alpha Data
