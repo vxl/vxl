@@ -101,6 +101,7 @@ struct vil_jmpbuf_wrapper
 {
   jmp_buf jmpbuf;
 };
+
 static vil_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
@@ -232,7 +233,8 @@ struct vil_png_structures
           png_setjmp_off();
         }
       }
-    } else {
+    }
+    else {
       assert(rows != 0);
     }
 
@@ -245,8 +247,8 @@ struct vil_png_structures
     if (reading_) {
       // Reading - just delete
       png_destroy_read_struct (&png_ptr, &info_ptr, (png_infopp)NULL);
-
-    } else {
+    }
+    else {
       // Writing - save the rows
       png_write_image(png_ptr, rows);
       png_write_end(png_ptr, info_ptr);
@@ -348,8 +350,7 @@ bool vil_png_image::read_header()
 
   png_byte const color_type = png_get_color_type(p_->png_ptr, p_->info_ptr);
   png_byte const bit_depth = png_get_bit_depth(p_->png_ptr, p_->info_ptr);   // valid values are 1, 2, 4, 8, or 16
-  int channels = png_get_channels(p_->png_ptr, p_->info_ptr);
-  bool is_bool_image = false;  
+  bool is_bool_image = false;
 
 #if 1
   if (color_type == PNG_COLOR_TYPE_PALETTE) {
@@ -357,21 +358,22 @@ bool vil_png_image::read_header()
     png_set_palette_to_rgb(p_->png_ptr);
   }
   if (color_type == PNG_COLOR_TYPE_GRAY) {
-    if(bit_depth==1) { //treat 1-bit image as bool image 
+    if (bit_depth==1) { //treat 1-bit image as bool image
       is_bool_image = true;
       png_set_packing(p_->png_ptr);  // This code expands pixels per byte without changing the values of the pixels"
     }
-    else if(bit_depth < 8)  // treat these images as 8-bit greyscale image
+    else if (bit_depth < 8)  // treat these images as 8-bit greyscale image
       png_set_expand_gray_1_2_4_to_8(p_->png_ptr);
   }
   if (png_get_valid(p_->png_ptr, p_->info_ptr, PNG_INFO_tRNS)) {
+    int channels = png_get_channels(p_->png_ptr, p_->info_ptr);
     assert( channels == 1 || channels == 3 );
     png_set_tRNS_to_alpha(p_->png_ptr);
   }
 #else
   // According to manual:
   // "This code expands ... per byte without changing the values of the pixels"
-  // But this is not desired if it has pallete
+  // But this is not desired if it has palette
   if (png_get_bit_depth(p_->png_ptr, p_->info_ptr) < 8)
     png_set_packing (p_->png_ptr);
 #endif
@@ -394,7 +396,7 @@ bool vil_png_image::read_header()
 
   //
   //  Update the info after putting in all these transforms
-  //  From this point on, the info reflects not the raw image, 
+  //  From this point on, the info reflects not the raw image,
   //  but the image after transform and to be read.
   png_read_update_info(p_->png_ptr, p_->info_ptr);
 
@@ -404,7 +406,7 @@ bool vil_png_image::read_header()
   this->bits_per_component_ = png_get_bit_depth(p_->png_ptr, p_->info_ptr);
 
   // Set bits_per_component_ back to 1 for bool image
-  if(is_bool_image)
+  if (is_bool_image)
     this->bits_per_component_ = 1;
 
   if (this->bits_per_component_ == 1)     format_ = VIL_PIXEL_FORMAT_BOOL;
@@ -476,27 +478,27 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
 
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ny*bytes_per_row_dst, format_);
 
-  if(nx == png_get_image_width(p_->png_ptr, p_->info_ptr))
+  if (nx == png_get_image_width(p_->png_ptr, p_->info_ptr))
   {
     assert(x0 == 0);
 
-    if(bit_depth==1)
+    if (bit_depth==1)
     {
-      assert(format_==VIL_PIXEL_FORMAT_BOOL); 
+      assert(format_==VIL_PIXEL_FORMAT_BOOL);
 
       vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
       return new vil_image_view<bool>(chunk, reinterpret_cast<bool*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }
-    else if(bit_depth==16) 
+    else if (bit_depth==16)
     {
-      assert(format_==VIL_PIXEL_FORMAT_UINT_16); 
+      assert(format_==VIL_PIXEL_FORMAT_UINT_16);
 
       vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
       return new vil_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }
-    else if(bit_depth ==8)
+    else if (bit_depth ==8)
     {
       vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
       return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
@@ -506,9 +508,9 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
   }
   else   // not whole row
   {
-    if(bit_depth==1)
+    if (bit_depth==1)
     {
-      assert(format_==VIL_PIXEL_FORMAT_BOOL); 
+      assert(format_==VIL_PIXEL_FORMAT_BOOL);
 
       png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
       for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
@@ -518,7 +520,7 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
     }
     else if (bit_depth==16)
     {
-      assert(format_==VIL_PIXEL_FORMAT_UINT_16); 
+      assert(format_==VIL_PIXEL_FORMAT_UINT_16);
 
       png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
       for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
