@@ -11,6 +11,7 @@
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vsl/vsl_quick_file.h>
+#include <vul/vul_file.h>
 #include <msm/msm_shape_model.h>
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>
@@ -22,6 +23,10 @@ Parameter file format:
 shape_model_path: shape_model.bfs
 
 output_path: shape_params.txt
+
+//: Directory to save best fit points
+//  If parameter is not set then do not write best fit points.
+out_points_dir: /home/bestfit_points/
 
 image_dir: /home/images/
 points_dir: /home/points/
@@ -41,8 +46,9 @@ void print_usage()
            << "Compute shape parameters for each set of points.\n"
            << "Loads in named model and each set of points\n"
            << "Fits model to each set of points and saves\n"
-           << "pose and shape parameters to a text file\n"
+           << "pose and shape parameters to a text file.\n"
            << "One row per shape.\n"
+	   << "Also save best fit points for every image.\n"
            << vcl_endl;
 
   vul_arg_display_usage_and_exit();
@@ -62,6 +68,9 @@ struct tool_params
 
   //: Directory containing points
   vcl_string points_dir;
+
+  //: Directory to save best fit points
+  vcl_string out_points_dir;
 
   //: List of image names
   vcl_vector<vcl_string> image_names;
@@ -93,6 +102,7 @@ void tool_params::read_from_file(const vcl_string& path)
   points_dir=props.get_optional_property("points_dir","./");
   output_path=props.get_optional_property("output_path",
                                           "shape_params.txt");
+  out_points_dir=props.get_optional_property("out_points_dir","");
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_names,image_names);
@@ -171,6 +181,11 @@ int main(int argc, char** argv)
     return 1;
   }
 
+  bool write_bestfitpts = true;
+  if (params.out_points_dir == "")
+  	write_bestfitpts = false;
+  else vcl_cout << "Write best fit points to " << params.out_points_dir << vcl_endl;
+
   for (unsigned i=0;i<shapes.size();++i)
   {
     sm_instance.fit_to_points(shapes[i]);
@@ -189,6 +204,25 @@ int main(int argc, char** argv)
       ofs<<sm_instance.params()[j]<<' ';
 
     ofs<<vcl_endl;
+
+    // Write best fit points
+    if (write_bestfitpts)
+    {
+      // Check that the directory exists (points_name may include a dir)
+      vcl_string out_pts_dir = vul_file::dirname(params.out_points_dir+"/"+params.points_names[i]);
+      if (!vul_file::is_directory(out_pts_dir))
+      {
+        vcl_cout<<"Directory "<<out_pts_dir
+                <<" does not exist. Creating it."<<vcl_endl;
+        if (!vul_file::make_directory_path(out_pts_dir))
+        {
+          vcl_cerr<<"Unable to create it."<<vcl_endl;
+          return 12;
+        }
+      }
+
+      sm_instance.points().write_text_file(params.out_points_dir+"/"+params.points_names[i]);
+    }
   }
   ofs.close();
 
