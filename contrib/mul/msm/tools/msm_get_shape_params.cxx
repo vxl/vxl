@@ -48,7 +48,7 @@ void print_usage()
            << "Fits model to each set of points and saves\n"
            << "pose and shape parameters to a text file.\n"
            << "One row per shape.\n"
-	   << "Also save best fit points for every image.\n"
+           << "Also save best fit points for every image.\n"
            << vcl_endl;
 
   vul_arg_display_usage_and_exit();
@@ -183,8 +183,9 @@ int main(int argc, char** argv)
 
   bool write_bestfitpts = true;
   if (params.out_points_dir == "")
-  	write_bestfitpts = false;
-  else vcl_cout << "Write best fit points to " << params.out_points_dir << vcl_endl;
+    write_bestfitpts = false;
+  else
+    vcl_cout << "Write best fit points to " << params.out_points_dir << vcl_endl;
 
   for (unsigned i=0;i<shapes.size();++i)
   {
@@ -216,11 +217,10 @@ int main(int argc, char** argv)
                 <<" does not exist. Creating it."<<vcl_endl;
         if (!vul_file::make_directory_path(out_pts_dir))
         {
-          vcl_cerr<<"Unable to create it."<<vcl_endl;
+          vcl_cerr<<"Unable to create it.\n";
           return 12;
         }
       }
-
       sm_instance.points().write_text_file(params.out_points_dir+"/"+params.points_names[i]);
     }
   }
