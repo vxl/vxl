@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 
 SET(bsl_sources
   bsl_opinion.h 
+  dummy.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates bsl_sources)
 
