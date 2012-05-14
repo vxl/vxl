@@ -98,3 +98,6 @@ SOURCE=.\bsl_opinion.h
 # End Group
 # End Target
 # End Project
+# Begin Source File
+SOURCE=.\dummy.cxx
+# End Source File
