@@ -16,3 +16,4 @@ endif
 ######################################
 include ${VXLROOT}/config/top-rules.mk
 ######################################
+SOURCES += dummy.cxx
