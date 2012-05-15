@@ -89,9 +89,9 @@ IF(NOT MINGW)
   # This should be fixed in FindMFC.cmake and then this IF can be removed
   INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
 ENDIF(NOT MINGW)
-IF(MFC_FOUND)
+IF(VGUI_USE_MFC)
    SUBDIRS( mfc_example )
-ENDIF(MFC_FOUND)
+ENDIF(VGUI_USE_MFC)
 
 # wxWidgets example
 #------------------
