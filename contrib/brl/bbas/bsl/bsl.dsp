@@ -90,6 +90,12 @@ LIB32=link.exe -lib
 # Name "bsl - Win32 Release"
 # Name "bsl - Win32 Debug"
 
+# Begin Group "Source Files"
+# PROP Default_Filter "cxx"
+# Begin Source File
+SOURCE=.\dummy.cxx
+# End Source File
+# End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
 # Begin Source File
@@ -98,6 +104,3 @@ SOURCE=.\bsl_opinion.h
 # End Group
 # End Target
 # End Project
-# Begin Source File
-SOURCE=.\dummy.cxx
-# End Source File
