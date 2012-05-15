@@ -32,3 +32,6 @@ SUBDIRS(ihog)
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
+
+INSTALL_TARGETS(/lib bpgl)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bpgl ${bpgl_sources})
