@@ -15,9 +15,9 @@
 #include <vsol/vsol_box_2d.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vcl_cmath.h>
-#include <bwm/video/bwm_video_site_io.h>
-#include <bwm/video/bwm_video_corr.h>
-#include <bwm/bwm_observer_cam.h>
+#ifdef BWM_HAS_PROJECT_MESHES
+	#include <bwm/bwm_observer_cam.h>
+#endif
 #include <vpgl/vpgl_perspective_camera.h>
 
 float avg_intensity(vil_image_view<float> & img, int rx, int ry, int u, int v)

@@ -4,12 +4,8 @@
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
 
-#include <bwm/bwm_observer_cam.h>
-#include <bwm/video/bwm_video_cam_ostream.h>
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <bwm/video/bwm_video_corr.h>
-#include <bwm/video/bwm_video_site_io.h>
-#include <bwm/bwm_site_mgr.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vcl_vector.h>

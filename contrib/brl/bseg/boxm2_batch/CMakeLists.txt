@@ -5,6 +5,8 @@ INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 INCLUDE( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+
 
 IF( PYTHON_FOUND )
   INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
@@ -37,10 +39,10 @@ IF( PYTHON_FOUND )
 
     TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro sdet_pro brad_pro brad_io brdb bvpl_kernels_pro)
 
-    IF(GLEW_FOUND)
+    IF(GLEW_FOUND AND HAS_VGUI)
       ADD_DEFINITIONS(-DHAS_GLEW=1)
       TARGET_LINK_LIBRARIES(boxm2_batch boxm2_view_pro )
-    ENDIF(GLEW_FOUND)
+    ENDIF(GLEW_FOUND AND HAS_VGUI)
 
     IF(OPENCL_FOUND)
       ADD_DEFINITIONS(-DHAS_OPENCL=1)

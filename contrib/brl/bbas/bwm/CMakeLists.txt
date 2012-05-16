@@ -1,9 +1,8 @@
 # world modeling application
 # brl/bbas/bwm/CMakeLists.txt
 
-# Set CMake options for using vgui
-INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
-IF(HAS_VGUI)
+
+
 
 PROJECT(bwm)
 
@@ -29,6 +28,10 @@ ENDIF(GEOTIFF_FOUND)
 INCLUDE( ${BRL_MODULE_PATH}/FindSHAPELIB.cmake )
 
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+
+# Set CMake options for using vgui
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+IF(HAS_VGUI)
 
 SET(bwm_sources
    bwm_macros.h
@@ -113,7 +116,7 @@ SUBDIRS(algo)
 SUBDIRS(pro)
 SUBDIRS(io)
 SUBDIRS(reg)
-SUBDIRS(video)
+
 
 #install the .h .txx and libs
 INSTALL_TARGETS(/lib bwm)
@@ -134,3 +137,6 @@ IF(EXPAT_FOUND)
 ENDIF(EXPAT_FOUND)
 
 ENDIF(HAS_VGUI)
+
+
+SUBDIRS(video)

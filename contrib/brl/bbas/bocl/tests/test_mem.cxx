@@ -57,7 +57,7 @@ bool test_fill_kernel()
   //make sure b is set 
   bocl_mem b_mem(mgr->context(), b, length * sizeof(int), "test int buffer");
   b_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  b_mem.fill(queue, (uint) 1337, "uint");
+  b_mem.fill(queue, (unsigned int) 1337, "uint");
   b_mem.read_to_buffer(queue);
   for(int i=0; i<length; ++i) {
     if(b[i] != 1337) {
@@ -73,7 +73,7 @@ bool test_fill_kernel()
   //Do timing tests on uints
   vul_timer t; t.mark();
   for(int i=0; i<1000; ++i)
-    b_mem.fill(queue, (uint) 1, "uint");
+    b_mem.fill(queue, (unsigned int) 1, "uint");
   float fill_time = t.all() / 1000.0f;
 
   //time instantiation 

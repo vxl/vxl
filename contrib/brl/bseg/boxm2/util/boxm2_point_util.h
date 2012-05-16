@@ -3,11 +3,8 @@
 //:
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
-#include <bwm/video/bwm_video_cam_ostream.h>
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <bwm/video/bwm_video_corr.h>
-#include <bwm/video/bwm_video_site_io.h>
-#include <bwm/bwm_site_mgr.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
