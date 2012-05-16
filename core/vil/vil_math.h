@@ -881,7 +881,7 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
     for (unsigned j = 0; j < nj; ++j, rowA += jsA, rowB += jsB, rowD += jsD)
     {
       vil_math_image_abs_difference_1d<aT,bT,dT>(
-        rowA, isA, rowB, isB, rowD, isB, ni);
+        rowA, isA, rowB, isB, rowD, isD, ni);
     }
   }
 }
