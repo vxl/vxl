@@ -20,3 +20,7 @@ IF( BUILD_TESTING )
 ENDIF( BUILD_TESTING )
 
 SUBDIRS( pro )
+
+
+INSTALL_TARGETS(/lib bsvg)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bxml/bsvg ${bsvg_sources})
