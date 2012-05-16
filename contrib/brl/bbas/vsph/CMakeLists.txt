@@ -18,3 +18,8 @@ TARGET_LINK_LIBRARIES(vsph vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vc
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
+
+
+
+INSTALL_TARGETS(/lib vsph)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/vsph ${vsph_sources})
