@@ -39,3 +39,7 @@ IF( BUILD_TESTING )
 ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)
+
+
+INSTALL_TARGETS(/lib bvpl_kernels)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bvpl/kernels/ ${bvpl_kernels_sources})
