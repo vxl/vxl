@@ -199,7 +199,8 @@ void vul_arg_info_list::display_help( char const*progname)
       vcl_cerr << args_[i]->option();
       if (vcl_strlen(args_[i]->type_)> 0)
         vcl_cerr << ' ' << args_[i]->type_;
-      if (!args_[i]->required_) vcl_cerr << "] ";
+      if (!args_[i]->required_) vcl_cerr << ']';
+      vcl_cerr << ' ';
     }
     else {
       // options without switches are required.
