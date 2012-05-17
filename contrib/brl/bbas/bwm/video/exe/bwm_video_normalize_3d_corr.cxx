@@ -16,7 +16,7 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vcl_cmath.h>
 #ifdef BWM_HAS_PROJECT_MESHES
-	#include <bwm/bwm_observer_cam.h>
+  #include <bwm/bwm_observer_cam.h>
 #endif
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -36,7 +36,7 @@ bool compute_correspondences(vcl_vector<vcl_string> img_files,
                              vcl_vector<vcl_vector<bool> > & mask,
                              vcl_vector<float> & corr_int)
 {
-    for (unsigned i=0;i<img_files.size();++i)
+    for (unsigned i=0; i<img_files.size(); ++i)
     {
         vil_image_view_base_sptr img_ptr=vil_load(img_files[i].c_str());
         vcl_vector<bool>  mask_j(obj_files.size(),false);
@@ -59,7 +59,7 @@ bool compute_correspondences(vcl_vector<vcl_string> img_files,
             bwm_project_meshes(obj_files, cam, poly_2d_list);
 #endif
             //scan through polygons, retrieve contained pixels
-            for (unsigned j = 0; j < poly_2d_list.size(); ++j)
+            for (unsigned j=0; j < poly_2d_list.size(); ++j)
             {
                 vgl_polygon<double> this_poly = poly_2d_list[j];
                 vgl_polygon_scan_iterator<double> psi(this_poly);
@@ -71,7 +71,7 @@ bool compute_correspondences(vcl_vector<vcl_string> img_files,
                 {
                     unsigned int y = psi.scany();
                     if (y<floatimg->nj())
-                        for (unsigned int x = psi.startx(); (int)x<= psi.endx() && x<floatimg->ni(); ++x)
+                        for (unsigned int x = psi.startx(); (int) x<= psi.endx() && x<floatimg->ni(); ++x)
                         {
                             meanintensity+=(*floatimg)(x,y);
                             ++countintensity;
@@ -94,7 +94,7 @@ int main(int argc, char** argv)
     vul_arg<vcl_string> camdir   ("-camdir", "Camera Directory", "");
     vul_arg<vcl_string> imgdir   ("-imgdir", "Image Directory", "");
     vul_arg<vcl_string> objdir   ("-objdir", "Mesh Directory", "");
-    vul_arg<vcl_string>        outdir("-outdir", "Output Directory", "");
+    vul_arg<vcl_string> outdir   ("-outdir", "Output Directory", "");
     vul_arg_parse(argc, argv);
 
     vcl_string frame_glob=vul_file::dirname(imgdir())+"/*.???";
@@ -192,7 +192,7 @@ int main(int argc, char** argv)
                 vcl_cout<<" ======="<<vcl_endl;
             }
             else
-                vcl_cout<<" Only  "<<count << " correspondences"<<vcl_endl;
+                vcl_cout<<" Only "<<count << " correspondences"<<vcl_endl;
         }
     }
 
