@@ -2,8 +2,7 @@
 
 # bprb depends on expat and this process library depends on bprb
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-INCLUDE_DIRECTORIES(${expat_BINARY_DIR})
-IF(EXPAT_FOUND)
+ IF(EXPAT_FOUND)
  IF(EXPATPP_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
