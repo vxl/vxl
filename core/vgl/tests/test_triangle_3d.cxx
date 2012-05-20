@@ -690,11 +690,14 @@ inline void test_closest_point()
       TEST_NEAR("Point outside and different plane", (c-p1).length(), 0.0, 1e-6);
     }
   }
+  TEST("To be sure that we get here (Mac)", 1, 1);
+
   // Nearly degenerate triangle
   {
     vgl_point_3d<double> p1(-250.00000027628425, 307.98258024874724, 359.57738152050911);
     vgl_point_3d<double> p2(-239.99999999497970, 314.64924710295026, 359.57738152050911);
     vgl_point_3d<double> p3(-240.00000000000000, 314.64924709960337, 359.57738152050911);
+    vcl_cout << "Nearly degenerate triangle " << p1 << p2 << p3 << vcl_endl;
 
     vgl_point_3d<double> in1(-245.00000013828425, 311.31591367584872, 359.57738152050911);
     vgl_point_3d<double> out1(-245.00000013828425, 311.31591367584872, 380);
@@ -814,7 +817,6 @@ inline void test_aspect_ratio()
 //==============================================================================
 static void test_triangle_3d()
 {
-
   test_closest_point();
 
   test_non_intersecting();
