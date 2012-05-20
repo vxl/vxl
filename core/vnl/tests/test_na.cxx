@@ -22,8 +22,10 @@ template <class T> void test_na_type(T na_v, T qnan_v)
   TEST("isnan(1/NA2)", vnl_math_isnan(1.0f/na_v), true);
   TEST("isna(NA)", vnl_na_isna(vnl_na(T())), true);
   TEST("isna(NA2)", vnl_na_isna(na_v), true);
-  TEST("!isna(-NA2)", vnl_na_isna(-na_v), false);    // Can rely on all compilers getting the same wrong answer for this
-//  TEST("isna(-1.0 * NA2)", vnl_na_isna(-1.0f * na_v), true);   // Can't rely on all compilers getting the same answer for this
+#if 0
+  TEST("!isna(-NA2)", vnl_na_isna(-na_v), false);    // Can't rely on all compilers getting the same wrong answer for this: vs9 being the exception
+  TEST("isna(-1.0 * NA2)", vnl_na_isna(-1.0f * na_v), true);   // Can't rely on all compilers getting the same answer for this
+#endif
   TEST("isna(1/NA2)", vnl_na_isna(1.0f/na_v), true);
   TEST("!isfinite(NA)", !vnl_math_isfinite(na_v), true);
   TEST("!isinf(NA)", !vnl_math_isinf(na_v), true);
@@ -176,8 +178,8 @@ void test_na()
 
 #undef print_hex
 
-//  It would be great if this test passed - but it never will.
-//  Just be explicit about 
+  //  It would be great if this test passed - but it never will.
+  //  Just be explicit about it:
   TEST("static_cast<NA float> is not NA double", vnl_na_isna(static_cast<double>(na_f)), false);
 }
 
