@@ -71,7 +71,7 @@ class vul_sequence_filename_map
   //: returns the frame number corresp. to on-disk index N, or -1 if out-of-range
   int get_mapped_index(int real) const;
 
-  int get_nviews() const { return indices_.size(); }
+  int get_nviews() const { return int(indices_.size()); }
 
 
   //: pretty print

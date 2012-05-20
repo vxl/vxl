@@ -74,7 +74,8 @@ vcl_istream * vul_http_open(char const *url)
     }
 
   // port?
-  for (unsigned int i=host.size()-1; i>0; --i)
+  if (host.size() > 0L)
+  for (unsigned int i=(unsigned int)(host.size()-1); i>0; --i)
     if (host[i] == ':') {
       port = vcl_atoi(host.c_str() + i + 1);
       host = vcl_string(host.c_str(), host.c_str() + i);
@@ -89,7 +90,7 @@ vcl_istream * vul_http_open(char const *url)
       path.replace(k, 1, "%20");
     else if (path[k] == '%')
       path.replace(k, 1, "%25");
-    k++;
+    ++k;
   }
 
   // so far so good.

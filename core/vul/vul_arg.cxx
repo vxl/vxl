@@ -239,7 +239,7 @@ void vul_arg_info_list::display_help( char const*progname)
     if (!args_[i]->help_.empty())
         if (args_[i]->required_  && !args_[i]->option_.empty()) {
           vul_printf(vcl_cerr, fmtbuf.c_str(), args_[i]->option(), args_[i]->type_, args_[i]->help_.c_str());
-          vcl_cerr << "\n"; // ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
+          vcl_cerr << '\n'; // ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
         }
 
   vcl_cerr << vcl_endl;
@@ -596,13 +596,13 @@ VDS int parse(vul_arg<vxl_int_64>* argmt, char ** argv)
   }
 
   // Ensure only digits are present allowing for the special case of an l or L suffix
-  int len = vcl_strlen(argv[0]);
-  for (int i=0; i<len; ++i)
+  unsigned long len = (unsigned long)vcl_strlen(argv[0]);
+  for (unsigned long i=0; i<len; ++i)
   {
     char tmp = argv[0][i];
     if (tmp < '0' || tmp > '9' || // Make sure the number only contains valid digits
-        ((tmp == 'l' || tmp == 'L') && i != len-1) || // Or the trailing l or L suffix
-        (tmp=='-' && i != 0 && len <= 2)) // Or a leading minus sign
+        ((tmp == 'l' || tmp == 'L') && i+1 != len) || // Or the trailing l or L suffix
+        (tmp=='-' && i != 0L && len <= 2L)) // Or a leading minus sign
     {
       vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse \"" << *argv << "\" as int64\n";
       return -1;

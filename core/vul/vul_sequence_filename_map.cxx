@@ -136,7 +136,8 @@ void vul_sequence_filename_map::parse()
       vcl_size_t last_pos = bt.rfind('#');
       index_format_ = vul_sprintf("0%id",last_pos - pos + 1);
       index_format_ = "%" + index_format_;
-    } else
+    }
+    else
       index_format_ = "%03d";
     basename_ = bt.substr(0,pos);
   }
@@ -329,8 +330,8 @@ vcl_ostream& vul_sequence_filename_map::print (vcl_ostream& s) const
 
 bool vul_sequence_filename_map::filter_dirent(char const* name_string, vcl_string const& extension)
 {
-  static unsigned int expected_length = 0;
-  if (expected_length == 0)
+  static vcl_size_t expected_length = 0L;
+  if (expected_length == 0L)
     expected_length = basename_.size() +
                       (vcl_string(vul_sprintf(index_format_.c_str(),0)) + extension).size();
 

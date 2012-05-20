@@ -474,7 +474,7 @@ void vul_reg_exp::compile (char const* exp)
       for (; scan != NULL; scan = regnext(scan))
         if (OP(scan) == EXACTLY && vcl_strlen(OPERAND(scan)) >= len) {
           longest = OPERAND(scan);
-          len = vcl_strlen(OPERAND(scan));
+          len = (unsigned long)vcl_strlen(OPERAND(scan));
         }
       this->regmust = longest;
       this->regmlen = (int)len;
@@ -781,7 +781,7 @@ static char* regatom (int *flagp)
     register char   ender;
 
     regparse--;
-    len = vcl_strcspn(regparse, META);
+    len = (int)vcl_strcspn(regparse, META);
     if (len <= 0) {
       //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
       vcl_cout << "vul_reg_exp::compile(): Internal error.\n";
@@ -1075,7 +1075,7 @@ static int regmatch(const char* prog)
       // Inline the first character, for speed.
       if (*opnd != *reginput)
         return 0;
-      len = vcl_strlen(opnd);
+      len = (int)vcl_strlen(opnd);
       if (len > 1 && vcl_strncmp(opnd, reginput, len) != 0)
         return 0;
       reginput += len;
@@ -1219,7 +1219,7 @@ static int regrepeat(const char* p)
   switch (OP(p))
   {
    case ANY:
-    count = vcl_strlen(scan);
+    count = (int)vcl_strlen(scan);
     scan += count;
     break;
    case EXACTLY:

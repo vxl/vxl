@@ -112,7 +112,7 @@ char* vul_string_c_right_trim(char* str, const char* rem) // Trim suffix from st
 // Reverses the order of the characters in char*.
 char* vul_string_c_reverse(char* c)     // Reverse the order of characters
 {
-  int length = vcl_strlen(c);           // Number of characters in string
+  int length = (int)vcl_strlen(c);      // Number of characters in string
   char temp;
 
   for (int i = 0, j = length-1;         // Counting from front and rear
@@ -128,7 +128,7 @@ char* vul_string_c_reverse(char* c)     // Reverse the order of characters
 // Reverses the order of the characters in string
 vcl_string& vul_string_reverse(vcl_string& s)
 {
-  for (int i=0, j=vcl_strlen(s.c_str())-1; i<j; ++i,--j)
+  for (int i=0, j=(int)vcl_strlen(s.c_str())-1; i<j; ++i,--j)
   {
     char c = s[i]; s[i] = s[j]; s[j] = c;
   }
@@ -180,7 +180,7 @@ vcl_string& vul_string_capitalize(vcl_string& s)
 // from the string sr, and returns the modified string sr.
 vcl_string& vul_string_trim(vcl_string& sr, const char* rem)
 {
-  int l = vcl_strlen(rem);
+  int l = (int)vcl_strlen(rem);
   for (;;) {
     vcl_string::size_type loc = sr.find(rem);
     if (loc == vcl_string::npos)
@@ -194,7 +194,7 @@ vcl_string& vul_string_trim(vcl_string& sr, const char* rem)
 // from the string sr, and returns the modified string sr.
 vcl_string& vul_string_left_trim(vcl_string& sr, const char* rem)
 {
-  int l = vcl_strlen(rem);
+  int l = (int)vcl_strlen(rem);
   if (vcl_strncmp(sr.c_str(), rem, l) == 0)
     sr.erase(0, l);
   return sr;
@@ -204,8 +204,8 @@ vcl_string& vul_string_left_trim(vcl_string& sr, const char* rem)
 // from the string sr, and returns the modified string sr.
 vcl_string& vul_string_right_trim(vcl_string& sr, const char* rem)
 {
-  int l = vcl_strlen(rem);
-  int lsr = sr.length();
+  int l = (int)vcl_strlen(rem);
+  int lsr = int(sr.length());
   if (vcl_strncmp(sr.c_str() + lsr - l, rem, l) == 0)
     sr.erase(lsr - l, l);
   return sr;
@@ -306,7 +306,7 @@ vcl_vector<int> vul_string_to_int_list(vcl_string str)
                            "([:-]" REGEXP_INTEGER ")?" // :int [optional]
                            "([:-]" REGEXP_INTEGER ")?" // :int [optional]
                           );
-  
+
 
   while (str.length() > 0 && range_regexp.find(str)) {
     // the start/end positions (ref from 0) of the
@@ -486,7 +486,7 @@ bool vul_string_replace(vcl_string& full_str,
   bool rep=false;
   for (int i = 0; i<num_times; i++)
   {
-    int loc = full_str.find( find_str,0);
+    int loc = int(full_str.find( find_str,0));
     if (loc >= 0)
     {
       full_str.replace( loc, find_str.length(), replace_str );
@@ -502,7 +502,7 @@ bool vul_string_replace(vcl_string& full_str,
 
 
 //: Replace control chars with escaped representations.
-// Space and \n are preserved, but tabs, CR, etc are escaped.
+// Space and "\n" are preserved, but tabs, CR, etc are escaped.
 // This is not aimed and is not suitable for any particular input-validation
 // security problem, such as sql-injection.
 vcl_string vul_string_escape_ctrl_chars(const vcl_string &in)
@@ -522,7 +522,7 @@ vcl_string vul_string_escape_ctrl_chars(const vcl_string &in)
       if (i==vcl_string::npos)
         out+=vul_sprintf("\\x%02x",static_cast<int>(*it));
       else
-      {      
+      {
         out+='\\';
         out+=special_tr[i];
       }
