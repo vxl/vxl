@@ -213,7 +213,7 @@ void test_polynomial_long()
   f3 = f1*f2;
   vcl_cout << "f1*f2 =" << f3 << vcl_endl;
   TEST("f1*f2 has correct degree", f3.degree(), f1.degree()+f2.degree());
-  TEST("f1(x)*f2(x)",f1.evaluate(302L)*f2.evaluate(302L), f3.evaluate(302L));
+  TEST("f1(x)*f2(x)",f1.evaluate(29L)*f2.evaluate(29L), f3.evaluate(29L));
 
   vcl_cout << "f3d =" << f3.derivative() << vcl_endl;
   TEST("Derivative", f3.derivative(), f1d*f2+f2d*f1);
