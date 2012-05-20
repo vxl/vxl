@@ -145,7 +145,7 @@ void test_generic_camera_convert()
   vul_timer t;
   vpgl_generic_camera<double> gcam;
   bool success = vpgl_generic_camera_convert::convert(lcam, ni, nj, gcam);
-  vcl_cout << " convertd generic cam in " << t.real()/1000.0 << " secs.\n";
+  vcl_cout << " converted generic cam in " << t.real()/1000.0 << " secs.\n";
   TEST("convert generic cam", success, true);
   if (success) {
     double tu = 433, tv = 325;
@@ -243,6 +243,7 @@ void test_generic_camera_convert()
 static void test_camera_convert(int argc, char* argv[])
 {
   test_rational_camera_approx();
+  vcl_cout << "=== End test_rational_camera_approx" << vcl_endl;
   test_generic_camera_convert();
 }
 
