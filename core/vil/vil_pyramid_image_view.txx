@@ -57,7 +57,7 @@ template <class T>
 vil_pyramid_image_view<T>::vil_pyramid_image_view(vcl_vector<vil_image_view_base_sptr> const& images,
                                                   vcl_vector<double> const& scales)
 {
-  nlevels_=images.size();
+  nlevels_=(unsigned int)(images.size());
   images_.resize(nlevels_);
   scales_.resize(nlevels_);
   for (unsigned l=0; l<nlevels_; l++) {

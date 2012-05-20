@@ -104,7 +104,8 @@ vil1_pnm_generic_image::vil1_pnm_generic_image(vil1_stream* vs, int planes,
 
   if (components_ == 3) {
     magic_ = 6;
-  } else if (components_ == 1) {
+  }
+  else if (components_ == 1) {
     if (bits_per_component_ == 1)
       magic_ = 4;
     else
@@ -253,11 +254,11 @@ bool vil1_pnm_generic_image::write_header()
   char buf[1024];
   vcl_sprintf(buf, "P%d\n#vil1 pnm image, #c=%u, bpc=%u\n%u %u\n",
               magic_, components_, bits_per_component_, width_, height_);
-  vs_->write(buf, vcl_strlen(buf));
+  vs_->write(buf, (vil1_streampos)vcl_strlen(buf));
   if (magic_ != 1 && magic_ != 4)
   {
     vcl_sprintf(buf, "%lu\n", maxval_);
-    vs_->write(buf, vcl_strlen(buf));
+    vs_->write(buf, (vil1_streampos)vcl_strlen(buf));
   }
   start_of_data_ = vs_->tell();
   return true;
@@ -313,7 +314,8 @@ bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
     }
     if ( bytes_per_sample==2 && VXL_LITTLE_ENDIAN ) {
       ConvertMSBToHost( buf, xs*ys*components_ );
-    } else if ( bytes_per_sample > 2 ) {
+    }
+    else if ( bytes_per_sample > 2 ) {
       vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
       return false;
     }
@@ -375,7 +377,7 @@ bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
 
 void operator<<(vil1_stream& vs, int a)
 {
-  char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,vcl_strlen(buf));
+  char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,(vil1_streampos)vcl_strlen(buf));
 }
 
 bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)

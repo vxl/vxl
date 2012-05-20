@@ -88,7 +88,7 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
   // that lie on box faces. Find the pair that are farthest apart.
   // There could be multiple intersections if the line passes through the
   // corners of the box.
-  unsigned npts = 0;
+  unsigned int npts = 0;
   vgl_point_3d<double> dp0=pt_xmin, dp1=pt_xmax; // keep this initialisation!
 
   // y-z face at xmin
@@ -210,7 +210,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane)
 
   // find the signed distance from the box corners to the plane
   int pos=0, neg=0;
-  for (unsigned c=0; c<corners.size(); c++) {
+  for (unsigned int c=0; c<corners.size(); c++) {
     vgl_point_3d<T> corner=corners[c];
     double d=(plane.a()*corner.x());
     d+=(plane.b()*corner.y());
@@ -423,17 +423,17 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
 
 //: Returns the number of intersections of a line segment with a box, up to two are returned in p0 and p1.
 template <class Type>
-unsigned vgl_intersection(const vgl_box_2d<Type>& box,
-                          const vgl_line_segment_2d<Type>& line_seg,
-                          vgl_point_2d<Type>& p0,
-                          vgl_point_2d<Type>& p1)
+unsigned int vgl_intersection(const vgl_box_2d<Type>& box,
+                              const vgl_line_segment_2d<Type>& line_seg,
+                              vgl_point_2d<Type>& p0,
+                              vgl_point_2d<Type>& p1)
 {
   vgl_line_2d<Type> line(line_seg.a(), line_seg.b(), line_seg.c());
   vgl_point_2d<Type> pi0, pi1;
   // if no intersection just return
   if (!vgl_intersection<Type>(box, line, pi0, pi1))
     return 0;
-  unsigned nint = 0;
+  unsigned int nint = 0;
   // check if intersection points are interior to the line segment
   if (vgl_lineseg_test_point<Type>(pi0, line_seg)) {
     p0 = pi0;
@@ -912,11 +912,11 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
 {
   // easy checks first
   // check if any poly vertices are inside the box
-  unsigned ns = poly.num_sheets();
+  unsigned int ns = poly.num_sheets();
   bool hit = false;
-  for ( unsigned s = 0; s<ns&&!hit; ++s) {
-    unsigned n = poly[s].size();
-    for (unsigned i = 0; i<n&&!hit; ++i) {
+  for (unsigned int s = 0; s<ns&&!hit; ++s) {
+    unsigned int n = (unsigned int)(poly[s].size());
+    for (unsigned int i = 0; i<n&&!hit; ++i) {
       vgl_point_2d<T> p = poly[s][i];
       hit = b.contains(p.x(), p.y());
     }
@@ -929,12 +929,12 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
     poly.contains(minx, maxy) || poly.contains(maxx, miny);
   if (hit) return true;
   // check if any polygon edges intersect the box
-  for (unsigned s = 0; s<ns&&!hit; ++s)
+  for (unsigned int s = 0; s<ns&&!hit; ++s)
   {
-    unsigned n = poly[s].size();
+    unsigned int n = (unsigned int)(poly[s].size());
     vgl_point_2d<T> ia, ib;
     vgl_point_2d<T> last = poly[s][0];
-    for (unsigned i = 1; i<n&&!hit; ++i)
+    for (unsigned int i = 1; i<n&&!hit; ++i)
     {
       vgl_point_2d<T> p = poly[s][i];
       vgl_line_segment_2d<T> l(last, p);

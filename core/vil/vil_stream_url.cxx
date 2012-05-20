@@ -75,11 +75,11 @@ static const char * encode_triplet(char data[3], unsigned n)
 static vcl_string encode_base64(const vcl_string& in)
 {
   vcl_string out;
-    unsigned i = 0, line_octets = 0;
-  const unsigned l = in.size();
+  unsigned int i = 0, line_octets = 0;
+  const unsigned int l = (unsigned int)(in.size());
   char data[3];
-    while (i < l)
-    {
+  while (i < l)
+  {
     data[0] = in[i++];
     data[1] = data[2] = 0;
 
@@ -108,9 +108,9 @@ static vcl_string encode_base64(const vcl_string& in)
     }
     else
       ++line_octets;
-    }
+  }
 
-    return out;
+  return out;
 }
 
 
@@ -139,7 +139,8 @@ vil_stream_url::vil_stream_url(char const *url)
     }
 
   // port?
-  for (unsigned int i=host.size()-1; i>0; --i)
+  if (host.size() > 0)
+  for (unsigned int i=(unsigned int)(host.size()-1); i>0; --i)
     if (host[i] == ':') {
       port = vcl_atoi(host.c_str() + i + 1);
       host = vcl_string(host.c_str(), host.c_str() + i);
@@ -243,7 +244,7 @@ vil_stream_url::vil_stream_url(char const *url)
   }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0)
+  if (send(tcp_socket, buffer, (int)vcl_strlen(buffer), 0) < 0)
   {
     vcl_cerr << __FILE__ ": error sending HTTP request\n";
     closesocket(tcp_socket);

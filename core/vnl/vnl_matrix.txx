@@ -1410,7 +1410,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   if (debug)
     vcl_cerr << rowz << " rows.\n";
 
-  set_size(rowz, colz);
+  set_size((unsigned int)rowz, (unsigned int)colz);
 
   T* p = this->data[0];
   for (unsigned int i = 0; i < rowz; ++i) {

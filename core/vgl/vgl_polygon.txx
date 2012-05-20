@@ -90,7 +90,7 @@ bool vgl_polygon<T>::contains(T x, T y) const
   for (unsigned int s=0; s < sheets_.size(); ++s)
   {
     sheet_t const& pgon = sheets_[s];
-    int n = pgon.size();
+    int n = int(pgon.size());
     for (int i = 0, j = n-1; i < n; j = i++)
     {
       const vgl_point_2d<T> &p_i = pgon[i];
@@ -135,7 +135,7 @@ template <class T>
 vgl_polygon_sheet_as_array<T>::vgl_polygon_sheet_as_array(vgl_polygon<T> const& p)
 {
   assert(p.num_sheets()==1);
-  n = p[0].size();
+  n = int(p[0].size());
   x = new T[n*2];
   y = x + n;
   for (int v = 0; v < n; ++v)
@@ -148,7 +148,7 @@ vgl_polygon_sheet_as_array<T>::vgl_polygon_sheet_as_array(vgl_polygon<T> const& 
 template <class T>
 vgl_polygon_sheet_as_array<T>::vgl_polygon_sheet_as_array(typename vgl_polygon<T>::sheet_t const& p)
 {
-  n = p.size();
+  n = int(p.size());
   x = new T[n*2];
   y = x + n;
   for (int v = 0; v < n; ++v)
@@ -174,27 +174,27 @@ vgl_polygon_sheet_as_array<T>::~vgl_polygon_sheet_as_array()
 // point is returned in ip[k].
 template <class T>
 void vgl_selfintersections(vgl_polygon<T> const& p,
-                           vcl_vector<vcl_pair<unsigned,unsigned> >& e1,
-                           vcl_vector<vcl_pair<unsigned,unsigned> >& e2,
+                           vcl_vector<vcl_pair<unsigned int,unsigned int> >& e1,
+                           vcl_vector<vcl_pair<unsigned int,unsigned int> >& e2,
                            vcl_vector<vgl_point_2d<T> >& ip)
 {
   const T tol = vcl_sqrt(vgl_tolerance<T>::position);
-  vcl_vector<unsigned> offsets(p.num_sheets()+1,0);
-  for (unsigned s = 0; s < p.num_sheets(); ++s) {
-    offsets[s+1] = offsets[s]+p[s].size();
+  vcl_vector<unsigned int> offsets(p.num_sheets()+1,0);
+  for (unsigned int s = 0; s < p.num_sheets(); ++s) {
+    offsets[s+1] = offsets[s]+(unsigned int)(p[s].size());
   }
   e1.clear();
   e2.clear();
   ip.clear();
 
-  typedef vcl_pair<unsigned, unsigned> upair;
+  typedef vcl_pair<unsigned int, unsigned int> upair;
   vcl_set<upair> isect_set;
-  for (unsigned s1 = 0; s1 < p.num_sheets(); ++s1)
+  for (unsigned int s1 = 0; s1 < p.num_sheets(); ++s1)
   {
     const typename vgl_polygon<T>::sheet_t& sheet1 = p[s1];
     if (sheet1.size() < 2)
       continue;
-    for (unsigned i1=sheet1.size()-1, i1n=0; i1n < sheet1.size(); i1=i1n, ++i1n)
+    for (unsigned int i1=(unsigned int)(sheet1.size()-1), i1n=0; i1n < sheet1.size(); i1=i1n, ++i1n)
     {
       const vgl_point_2d<T>& v1 = sheet1[i1];
       const vgl_point_2d<T>& v2 = sheet1[i1n];
@@ -208,17 +208,16 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
       cy *= norm;
       c *= norm;
 
-      unsigned idx1 = offsets[s1]+i1;
+      unsigned int idx1 = offsets[s1]+i1;
 
       // inner loop - compare against self
-      for (unsigned s2 = 0; s2 < p.num_sheets(); ++s2)
+      for (unsigned int s2 = 0; s2 < p.num_sheets(); ++s2)
       {
         const typename vgl_polygon<T>::sheet_t& sheet2 = p[s2];
-        const unsigned size2 = sheet2.size();
+        const unsigned int size2 = (unsigned int)(sheet2.size());
         if (size2 < 2)
           continue;
-        unsigned start = 0;
-        unsigned end = 0;
+        unsigned int start = 0, end = 0;
         if (s1 == s2) {
           start = (i1n+1)%size2;
           end = (i1+size2-1)%size2;
@@ -228,7 +227,7 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
         bool last_sign = dist > 0;
         bool last_zero = vcl_abs(dist) <= tol;
         bool first = true;
-        for (unsigned i2=start, i2n=(start+1)%size2; i2!=end || first; i2=i2n, i2n=(i2n+1)%size2)
+        for (unsigned int i2=start, i2n=(start+1)%size2; i2!=end || first; i2=i2n, i2n=(i2n+1)%size2)
         {
           const vgl_point_2d<T>& v3 = sheet2[i2];
           const vgl_point_2d<T>& v4 = sheet2[i2n];
@@ -237,7 +236,7 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
           bool zero = vcl_abs(dist) <= tol;
           if (sign != last_sign || zero || last_zero)
           {
-            unsigned idx2 = offsets[s2]+i2;
+            unsigned int idx2 = offsets[s2]+i2;
             upair pair_idx(idx1,idx2);
             if (pair_idx.first > pair_idx.second) {
               pair_idx = upair(idx2,idx1);
@@ -249,7 +248,7 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
             else if (vgl_intersection(v1,v2,v3,v4,tol)) {
               // make intersection point
               vgl_point_2d<T> ipt;
-              if (!vgl_intersection(vgl_line_2d<T>(v1,v2),vgl_line_2d<T>(v3,v4),ipt) 
+              if (!vgl_intersection(vgl_line_2d<T>(v1,v2),vgl_line_2d<T>(v3,v4),ipt)
                   || parallel(v2-v1,v4-v3,tol)) // vgl_intersection test is not accurate enough
               {
                 // use the median point when lines are parallel
@@ -268,7 +267,6 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
               e1.push_back(upair(s2,i2));
               e2.push_back(upair(s1,i1));
               ip.push_back(ipt);
-              
             }
           }
           last_sign = sign;
@@ -287,8 +285,8 @@ template class vgl_polygon<T >; \
 template struct vgl_polygon_sheet_as_array<T >; \
 template vcl_ostream& operator<<(vcl_ostream&,vgl_polygon<T > const&); \
 template void vgl_selfintersections(vgl_polygon<T > const& p, \
-                                    vcl_vector<vcl_pair<unsigned,unsigned> >& e1, \
-                                    vcl_vector<vcl_pair<unsigned,unsigned> >& e2, \
+                                    vcl_vector<vcl_pair<unsigned int,unsigned int> >& e1, \
+                                    vcl_vector<vcl_pair<unsigned int,unsigned int> >& e2, \
                                     vcl_vector<vgl_point_2d<T > >& ip)
 
 #endif // vgl_polygon_txx_

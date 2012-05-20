@@ -19,8 +19,9 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
     result = start_free;
     start_free += total_bytes;
     return result;
-  } else if (bytes_left >= size) {
-    nobjs = bytes_left/size;
+  }
+  else if (bytes_left >= size) {
+    nobjs = int(bytes_left/size);
     total_bytes = size * nobjs;
     result = start_free;
     start_free += total_bytes;
@@ -92,7 +93,8 @@ void* vnl_alloc::refill(vcl_size_t n)
     if (nobjs - 1 == i) {
       current_obj -> free_list_link = 0;
       break;
-    } else {
+    }
+    else {
       current_obj -> free_list_link = next_obj;
     }
   }

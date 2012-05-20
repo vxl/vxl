@@ -85,7 +85,7 @@ class vbl_big_sparse_array_3d
   bool put(unsigned, unsigned, unsigned, T const&);
 
   // Computations--------------------------------------------------------------
-  unsigned count_nonempty() const { return storage_.size(); }
+  unsigned int count_nonempty() const { return (unsigned int)(storage_.size()); }
 
   // Data Control--------------------------------------------------------------
   vcl_ostream& print(vcl_ostream&) const;

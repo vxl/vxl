@@ -260,7 +260,7 @@ vgl_point_3d<Type> centre(vgl_point_3d<Type> const& p1,
 template <class Type> inline
 vgl_point_3d<Type> centre(vcl_vector<vgl_point_3d<Type> > const& v)
 {
-  int n=v.size();
+  int n = (int)(v.size());
   assert(n>0); // it is *not* correct to return the point (0,0) when n==0.
   Type x = 0, y = 0, z = 0;
   for (int i=0; i<n; ++i) x+=v[i].x(), y+=v[i].y(), z+=v[i].z();

@@ -21,9 +21,9 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_stack<T>& v)
   // the values out:
   vcl_stack<T> tmp_stack = v;
 
-  unsigned stack_size = v.size();
+  unsigned int stack_size = (unsigned int)(v.size());
   vsl_b_write(s, stack_size);
-  for (unsigned i=0; i<stack_size; i++)
+  for (unsigned int i=0; i<stack_size; i++)
   {
     vsl_b_write(s,tmp_stack.top());
     tmp_stack.pop();
@@ -39,7 +39,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_stack<T>& v)
 
   while (!v.empty()) v.pop(); // clear stack, which has no clear() member
 
-  unsigned stack_size;
+  unsigned int stack_size;
   vcl_stack<T> tmp_stack;
   short ver;
   vsl_b_read(is, ver);
@@ -50,13 +50,13 @@ void vsl_b_read(vsl_b_istream& is, vcl_stack<T>& v)
 
     // We need to reverse the order of the values before we load them
     // back into the stack, so use another temporary stack for this:
-    for (unsigned i=0; i<stack_size; i++)
+    for (unsigned int i=0; i<stack_size; i++)
     {
       T tmp;
       vsl_b_read(is,tmp);
       tmp_stack.push(tmp);
     }
-    for (unsigned i=0; i<stack_size; i++)
+    for (unsigned int i=0; i<stack_size; i++)
     {
       v.push(tmp_stack.top());
       tmp_stack.pop();
@@ -78,8 +78,8 @@ void vsl_print_summary(vcl_ostream& os, const vcl_stack<T> &v)
   vcl_stack<T> tmp_stack = v;
   os << "Stack length: " << v.size() << '\n';
 
-  unsigned stack_size = v.size();
-  for (unsigned i=0; i<stack_size && i<5; i++)
+  unsigned int stack_size = (unsigned int)(v.size());
+  for (unsigned int i=0; i<stack_size && i<5; i++)
   {
     os << vsl_indent() << ' ' << i << ": ";
     vsl_indent_inc(os);

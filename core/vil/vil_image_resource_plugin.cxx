@@ -66,7 +66,7 @@ void vil_image_resource_plugin::register_plugin(
 void vil_image_resource_plugin::delete_all_plugins()
 {
   if (vil_image_resource_plugins_list_==0) return;
-  unsigned int n = vil_image_resource_plugins_list_->size();
+  unsigned int n = (unsigned int)(vil_image_resource_plugins_list_->size());
   for (unsigned int i=0;i<n;++i)
     delete vil_image_resource_plugins_list_->operator[](i);
   vil_image_resource_plugins_list_->resize(0);

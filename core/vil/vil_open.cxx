@@ -54,7 +54,7 @@ vil_stream *vil_open(char const* what, char const* how)
 
   if (!is) {
     // hacked check for filenames beginning "gen:".
-    int l = vcl_strlen(what);
+    int l = (int)vcl_strlen(what);
     if (l > 4 && vcl_strncmp(what, "gen:", 4) == 0) {
       if (vcl_strcmp(how, "r") == 0) {
         // Make an in-core stream...
@@ -76,7 +76,7 @@ vil_stream *vil_open(char const* what, char const* how)
 
   if (!is) {
     // maybe it's a URL?
-    int l = vcl_strlen(what);
+    int l = (int)vcl_strlen(what);
     if (l > 4 && vcl_strncmp(what, "http://", 7) == 0) {
       if (vcl_strcmp(how, "r") == 0) {
         is = new vil_stream_url(what);

@@ -27,7 +27,7 @@ struct vil1_pyramid
   vil1_pyramid(vil1_image const &, cache_strategy = memory);
   ~vil1_pyramid();
 
-  unsigned size() const { return levels.size(); }
+  unsigned int size() const { return (unsigned int)(levels.size()); }
   vil1_image operator[](unsigned i);
 
  private:

@@ -18,9 +18,9 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_array_1d<T> & p)
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
 
-  int array_size = p.size();
+  int array_size = (int)(p.size());
   vsl_b_write(os, array_size);
-  int array_capacity = p.capacity();
+  int array_capacity = (int)(p.capacity());
   vsl_b_write(os, array_capacity);
   for (int i=0; i < array_size; ++i)
     vsl_b_write(os, p[i]);

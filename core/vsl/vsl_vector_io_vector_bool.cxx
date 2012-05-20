@@ -15,13 +15,13 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_vector<vcl_vector<bool> >& v)
 {
   const short version_no = 1;
   vsl_b_write(s, version_no);
-  unsigned n = v.size();
+  unsigned int n = (unsigned int)(v.size());
   vsl_b_write(s, n);
-  for (unsigned i=0; i<n; ++i)
+  for (unsigned int i=0; i<n; ++i)
   {
-    unsigned m = v[i].size();
+    unsigned int m = (unsigned int)(v[i].size());
     vsl_b_write(s, m);
-    for (unsigned j=0; j<m; ++j)
+    for (unsigned int j=0; j<m; ++j)
     {
       vsl_b_write(s, v[i][j]);
     }
@@ -35,7 +35,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<vcl_vector<bool> >& v)
 {
   if (!is) return;
 
-  unsigned n, m;
+  unsigned int n, m;
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
@@ -43,11 +43,11 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<vcl_vector<bool> >& v)
   case 1:
     vsl_b_read(is, n);
     v.resize(n);
-    for (unsigned i=0; i<n; ++i)
+    for (unsigned int i=0; i<n; ++i)
     {
       vsl_b_read(is, m);
       v[i].resize(m);
-      for (unsigned j=0; j<m; ++j)
+      for (unsigned int j=0; j<m; ++j)
       {
         bool b;
         vsl_b_read(is, b);
@@ -69,12 +69,12 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<vcl_vector<bool> >& v)
 VCL_DEFINE_SPECIALIZATION
 void vsl_print_summary(vcl_ostream& os, const vcl_vector<vcl_vector<bool> >& v)
 {
-  unsigned n = v.size();
+  unsigned int n = (unsigned int)(v.size());
   os << "Vector length: " << n << '\n';
   for (unsigned int i=0; i<n && i<5; i++)
   {
     os << ' ' << i << ": ";
-    unsigned m = v[i].size();
+    unsigned int m = (unsigned int)(v[i].size());
     os << "\tVector length: " << m << '\n';
     for (unsigned int j=0; j<m && j<5; j++)
     {

@@ -198,7 +198,7 @@ vcl_string vul_file::basename(char const* fn, char const * suffix)
 
   // Now strip suffix if any
   if (suffix) {
-    int start = self.size() - vcl_strlen(suffix);
+    int start = (int)(self.size() - vcl_strlen(suffix));
     if (start >= 0)
       // egcs, 2.95, 2.96 have no method which can do
       //   self.compare(start, vcl_string::npos, suffix) == 0

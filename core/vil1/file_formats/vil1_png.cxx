@@ -72,13 +72,13 @@ char const* vil1_png_file_format::tag() const
 static void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
   vil1_stream* f = (vil1_stream*)png_get_io_ptr(png_ptr);
-  f->read(data, length);
+  f->read(data, (vil1_streampos)length);
 }
 
 static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
   vil1_stream* f = (vil1_stream*)png_get_io_ptr(png_ptr);
-  f->write(data, length);
+  f->write(data, (vil1_streampos)length);
 }
 
 static void user_flush_data(png_structp /*png_ptr*/)
@@ -94,6 +94,7 @@ struct vil1_jmpbuf_wrapper
 {
   jmp_buf jmpbuf;
 };
+
 static vil1_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
@@ -224,7 +225,8 @@ struct vil1_png_structures
           png_setjmp_off();
         }
       }
-    } else {
+    }
+    else {
       assert(rows != 0);
     }
 
@@ -237,8 +239,8 @@ struct vil1_png_structures
     if (reading_) {
       // Reading - just delete
       png_destroy_read_struct (&png_ptr, &info_ptr, (png_infopp)NULL);
-
-    } else {
+    }
+    else {
       // Writing - save the rows
       png_write_image(png_ptr, rows);
       png_write_end(png_ptr, info_ptr);

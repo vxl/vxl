@@ -48,12 +48,12 @@ vil1_jpeg_init_destination (j_compress_ptr cinfo)
 
 
 //: Empty the output buffer --- called whenever buffer fills up.
-// 
+//
 //  In typical applications, this should write the entire output buffer
 //  (ignoring the current state of next_output_byte & free_in_buffer),
 //  reset the pointer & count to the start of the buffer, and return TRUE
 //  indicating that the buffer has been dumped.
-// 
+//
 //  In applications that need to be able to suspend compression due to output
 //  overrun, a FALSE return indicates that the buffer cannot be emptied now.
 //  In this situation, the compressor will return to its caller (possibly with
@@ -61,7 +61,7 @@ vil1_jpeg_init_destination (j_compress_ptr cinfo)
 //  application should resume compression after it has made more room in the
 //  output buffer.  Note that there are substantial restrictions on the use of
 //  suspension --- see the documentation.
-// 
+//
 //  When suspending, the compressor will back up to a convenient restart point
 //  (typically the start of the current MCU). next_output_byte & free_in_buffer
 //  indicate where the restart point will be if the current call returns FALSE.
@@ -83,7 +83,7 @@ vil1_jpeg_empty_output_buffer (j_compress_ptr cinfo)
 
 
 //: Terminate destination --- called by jpeg_finish_compress after all data has been written.  Usually needs to flush buffer.
-// 
+//
 //  \note \e not called by jpeg_abort or jpeg_destroy; surrounding
 //  application must deal with any cleanup that should happen even
 //  for error exit.
@@ -95,7 +95,7 @@ vil1_jpeg_term_destination (j_compress_ptr cinfo)
 
   // Write any data remaining in the buffer
   if (datacount > 0) {
-    if (dest->stream->write(dest->buffer, datacount) != (vil1_streampos)datacount)
+    if (dest->stream->write(dest->buffer, (vil1_streampos)datacount) != (vil1_streampos)datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
   }
 }

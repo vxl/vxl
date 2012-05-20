@@ -9,17 +9,17 @@
 template <class T>
 bool local_minima(vbl_array_1d<T> const& in, vbl_array_1d<T>& minima, T thresh)
 {
-  const unsigned n = in.size();
+  const unsigned int n = (unsigned int)(in.size());
   assert(minima.size()==n);
   //special cases
   // minimum is not defined for n<3
   if (n<3)
     return false;
   bool minima_found = false;
-  for (unsigned i = 0; i<n; ++i)
+  for (unsigned int i=0; i<n; ++i)
     minima[i] = T(0);
   //the general case
-  for (unsigned c = 1; c<n-1; ++c) {
+  for (unsigned int c=1; c<n-1; ++c) {
     T dm = in[c-1]-in[c], dp = in[c+1]-in[c];
     if (dm>thresh && dp > thresh) {
       T dmin = dm;
@@ -47,7 +47,7 @@ bool local_minima(vbl_array_1d<T> const& in, vbl_array_1d<T>& minima, T thresh)
 template <class T>
 bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
 {
-  const unsigned nr = in.rows(), nc = in.cols();
+  const unsigned int nr = (unsigned int)(in.rows()), nc = (unsigned int)(in.cols());
   assert(nr==minima.rows() && nc==minima.cols());
   //special case
   // actually a 1-d array or null
@@ -250,9 +250,9 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
 template <class T>
 bool local_minima(vbl_array_3d<T> const& in, vbl_array_3d<T>& minima, T thresh)
 {
-  const unsigned int n1=in.get_row1_count(),
-                     n2=in.get_row2_count(),
-                     n3=in.get_row3_count();
+  const unsigned int n1=(unsigned int)(in.get_row1_count()),
+                     n2=(unsigned int)(in.get_row2_count()),
+                     n3=(unsigned int)(in.get_row3_count());
   assert(n3==minima.get_row3_count() &&
          n2==minima.get_row2_count() &&
          n1==minima.get_row1_count() );

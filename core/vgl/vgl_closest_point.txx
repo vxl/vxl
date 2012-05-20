@@ -294,7 +294,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
   int si = 0, di = 0;
   for ( unsigned int s=0; s < poly.num_sheets(); ++s )
   {
-    unsigned int n = poly[s].size();
+    unsigned int n = (unsigned int)(poly[s].size());
     assert( n > 1 );
     for (unsigned i=0; i+1<n; ++i)
     {
@@ -308,7 +308,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
     }
   }
   T ret_x, ret_y;
-  unsigned int n = poly[si].size();
+  unsigned int n = (unsigned int)(poly[si].size());
   if (di == -1)
     vgl_closest_point_to_linesegment(ret_x,ret_y, poly[si][0].x(),poly[si][0].y(), poly[si][n-1].x(),poly[si][n-1].y(), x,y);
   else
@@ -603,7 +603,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_line_segment_2d<T> const& l,
                                   vgl_point_2d<T> const& p)
 {
   vgl_point_2d<T> q;
-  vgl_closest_point_to_linesegment(q.x(), q.y(), 
+  vgl_closest_point_to_linesegment(q.x(), q.y(),
                                    l.point1().x(), l.point1().y(),
                                    l.point2().x(), l.point2().y(),
                                    p.x(), p.y());

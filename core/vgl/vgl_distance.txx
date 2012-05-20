@@ -255,7 +255,7 @@ double vgl_distance(vgl_polygon<T> const& poly, vgl_point_2d<T> const& point, bo
   for ( unsigned int s=0; s < poly.num_sheets(); ++s )
   {
     const vcl_vector<vgl_point_2d<T> > &sheet = poly[s];
-    unsigned int n = sheet.size();
+    unsigned int n = (unsigned int)(sheet.size());
     assert( n > 1 );
     double dd = closed ?
                 vgl_distance_to_linesegment(sheet[n-1].x(), sheet[n-1].y(),

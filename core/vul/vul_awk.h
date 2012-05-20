@@ -82,7 +82,7 @@ class vul_awk
   int NR() const { return line_number_; }
 
 //: Return the number of fields on this line.
-  int NF() const { return fields_.size(); }
+  int NF() const { return int(fields_.size()); }
 
 //: Return the entire line
   char const* line() const { return (char const*)line_.c_str(); }

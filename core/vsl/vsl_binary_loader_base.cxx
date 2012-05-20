@@ -61,7 +61,7 @@ void vsl_delete_all_loaders()
 //  Deletes every vsl loader for which register_this() has been called
   if (loader_list_!=0)
   {
-    const unsigned n = loader_list_->size();
+    const unsigned int n = (unsigned int)(loader_list_->size());
     for (unsigned i=0;i<n;++i)
       delete loader_list_->operator[](i);
     loader_list_->clear();

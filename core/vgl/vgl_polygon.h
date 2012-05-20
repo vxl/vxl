@@ -108,10 +108,12 @@ class vgl_polygon
   //: Add a pre-existing sheet to the polygon
   void push_back(sheet_t const& s) { sheets_.push_back(s); }
 
-  inline unsigned int num_sheets() const { return sheets_.size(); }
+  inline unsigned int num_sheets() const { return (unsigned int)(sheets_.size()); }
 
   inline unsigned int num_vertices() const {
-    unsigned int c=0; for (unsigned int i=0;i<num_sheets();++i) c += sheets_[i].size(); return c;
+    unsigned int c=0;
+    for (unsigned int i=0;i<num_sheets();++i) c += (unsigned int)(sheets_[i].size());
+    return c;
   }
 
   //: Get the ith sheet

@@ -105,7 +105,7 @@ void vsl_b_read(vsl_b_istream &is,bool& b)
 void vsl_b_write(vsl_b_ostream& os,int n )
 {
   unsigned char buf[ VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) ];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char*)buf, nbytes );
 }
 
@@ -134,7 +134,7 @@ void vsl_b_write(vsl_b_ostream& os,unsigned int n )
 {
   unsigned char
     buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char*)buf, nbytes );
 }
 
@@ -163,7 +163,7 @@ void vsl_b_read(vsl_b_istream &is,unsigned int& n )
 void vsl_b_write(vsl_b_ostream& os,short n )
 {
   unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char*)buf, nbytes );
 }
 
@@ -192,7 +192,7 @@ void vsl_b_write(vsl_b_ostream& os, unsigned short n )
 {
   unsigned char buf[
     VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char*)buf, nbytes );
 }
 
@@ -221,7 +221,7 @@ void vsl_b_read(vsl_b_istream &is, unsigned short& n )
 void vsl_b_write(vsl_b_ostream& os,long n )
 {
   unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char*)buf, nbytes );
 }
 
@@ -249,7 +249,7 @@ void vsl_b_write(vsl_b_ostream& os,unsigned long n )
 {
   unsigned char buf[
     VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char*)buf, nbytes );
 }
 
@@ -279,7 +279,7 @@ void vsl_b_read(vsl_b_istream &is,unsigned long& n )
 void vsl_b_write(vsl_b_ostream& os, vxl_int_64 n )
 {
   unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char*)buf, nbytes );
 }
 
@@ -307,7 +307,7 @@ void vsl_b_write(vsl_b_ostream& os, vxl_uint_64 n )
 {
   unsigned char buf[
     VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char*)buf, nbytes );
 }
 
@@ -484,7 +484,7 @@ unsigned long vsl_b_ostream::add_serialisation_record
 {
   assert(pointer != 0);
   assert(serialisation_records_.find(pointer) == serialisation_records_.end());
-  unsigned long id = serialisation_records_.size() + 1;
+  unsigned long id = (unsigned long)serialisation_records_.size() + 1;
   serialisation_records_[pointer] = vcl_make_pair(id, other_data);
   return id;
 }

@@ -123,7 +123,7 @@ void vgl_polygon_scan_iterator<T>::init()
   // count total numverts
   numverts = 0;
   for (unsigned int s = 0; s < poly_.num_sheets(); ++s)
-    numverts += poly_[s].size();
+    numverts += int(poly_[s].size());
 
   unsigned int numchains = poly_.num_sheets();
   // return if no vertices in face
@@ -410,7 +410,7 @@ void vgl_polygon_scan_iterator<T>::get_prev_vert( vertind v, vertind & prevvert 
         prevvert = v;
         prevvert.vertnum = prevvert.vertnum - 1;
         if ( prevvert.vertnum == -1 )  // wrap around to last vertex
-            prevvert.vertnum = poly_[prevvert.chainnum].size() - 1;
+            prevvert.vertnum = int(poly_[prevvert.chainnum].size() - 1);
 }
 
 //===============================================================

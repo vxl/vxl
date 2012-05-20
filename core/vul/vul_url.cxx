@@ -189,7 +189,7 @@ vcl_istream * vul_http_open(char const *url)
   }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
+  if (send(tcp_socket, buffer, (int)vcl_strlen(buffer), 0) < 0) {
 #else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
 #endif
@@ -386,7 +386,7 @@ bool vul_http_exists(char const *url)
   }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
+  if (send(tcp_socket, buffer, (int)vcl_strlen(buffer), 0) < 0) {
 #else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
 #endif
@@ -444,7 +444,7 @@ vcl_istream * vul_url::open(const char * url, vcl_ios_openmode mode)
   // check for null pointer or empty strings.
   if (!url || !*url)
     return 0;
-  unsigned l = vcl_strlen(url);
+  unsigned int l = (unsigned int)vcl_strlen(url);
 
   // check for filenames beginning "file:".
   if (l > 7 && vcl_strncmp(url, "file://", 7) == 0)
@@ -473,7 +473,7 @@ bool vul_url::exists(const char * url)
   // check for null pointer or empty strings.
   if (!url || !*url)
     return false;
-  unsigned l = vcl_strlen(url);
+  unsigned int l = (unsigned int)vcl_strlen(url);
 
   // check for filenames beginning "file:".
   if (l > 7 && vcl_strncmp(url, "file://", 7) == 0)
@@ -501,7 +501,7 @@ bool vul_url::is_url(const char * url)
   // check for null pointer or empty strings.
   if (!url || !*url)
     return false;
-  unsigned l = vcl_strlen(url);
+  unsigned int l = (unsigned int)vcl_strlen(url);
 
   // check for filenames beginning "file:".
   if (l > 7 && vcl_strncmp(url, "file://", 7) == 0)
@@ -541,7 +541,7 @@ char base64_encoding[]=
 
 static char out_buf[4];
 
-static const char * encode_triplet(char data[3], unsigned n)
+static const char * encode_triplet(char data[3], unsigned int n)
 {
   assert (n>0 && n <4);
   out_buf[0] = base64_encoding[(data[0] & 0xFC) >> 2];
@@ -572,8 +572,8 @@ static const char * encode_triplet(char data[3], unsigned n)
 vcl_string vul_url::encode_base64(const vcl_string& in)
 {
   vcl_string out;
-  unsigned i = 0, line_octets = 0;
-  const unsigned l = in.size();
+  unsigned int i = 0, line_octets = 0;
+  const unsigned int l = (unsigned int)(in.size());
   char data[3];
   while (i <= l)
   {
@@ -653,8 +653,8 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
   int c;
   char data[3];
 
-  unsigned i=0;
-  const unsigned l = in.size();
+  unsigned int i=0;
+  const unsigned int l = (unsigned int)(in.size());
   vcl_string out;
   while (i < l)
   {

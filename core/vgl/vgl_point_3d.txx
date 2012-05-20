@@ -133,7 +133,7 @@ vcl_istream&  operator>>(vcl_istream& is, vgl_point_3d<Type>& p)
 template <class Type>
 double stddev(vcl_vector<vgl_point_3d<Type> > const& v)
 {
-  int n=v.size();
+  int n = (int)(v.size());
   double d = 0.0;
   if (n<=1) return d;
   vgl_point_3d<Type> c = centre(v);
