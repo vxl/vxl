@@ -151,16 +151,19 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
                                                     info_buffer->data_buffer_length*auxTypeSize,false);
     coeffs_buff->zero_gpu_buffer(queue);
 
+
     bocl_kernel * kern = kernels[(device->device_id())][0];
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     str_blk_cache.init(*id);
 
-    int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
 
+    int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
+	vcl_cout<<"ZEROED COEFSS"<<datasize<<" "<<vcl_endl;
     boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
     bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
     if (!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue))
       vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
+
     boxm2_data_base * data_type1 = str_blk_cache.data_types_["aux1"];
     bocl_mem_sptr bocl_data_type1 = new bocl_mem(device->context(),data_type1->data_buffer(),data_type1->buffer_length(),"");
     if (!bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR,queue))
@@ -210,7 +213,6 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
 
     vcl_size_t lThreads[] = {8, 8};
     vcl_size_t gThreads[] = {datasize*8,8};
-
     kern->execute(queue, 2, lThreads, gThreads);
 
     clFinish(queue);

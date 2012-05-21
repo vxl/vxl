@@ -185,7 +185,7 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
     kern->execute(queue, 2, lThreads, gThreads);
 
     clFinish(queue);
-    vcl_cout<<"Time taken "<< kern->exec_time()<<vcl_endl;
+    vcl_cout<<"Time taken "<< kern->exec_time()<<" for "<<*id<<vcl_endl;
 
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
@@ -204,7 +204,7 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
     boxm2_data_leaves_serial_iterator<boxm2_update_synoptic_probability>(cpu_blk,data_buff_length,data_functor);
     opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), true );
 #endif // 0
-  // opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"), true );
+   opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"), true );
   }
   clReleaseCommandQueue(queue);
 
