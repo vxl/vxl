@@ -275,21 +275,32 @@ void step_cell_avg_ratio_cubic(AuxArgs aux_args, int data_ptr, uchar llid, float
     if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
         PI = cubic_prob_density( mean_obs,aux_args.phi,mixture);
     }
-
     //calculate this ray's contribution to beta
+#ifdef INDEPENDENT
+    float temp  = exp(-alpha * seg_len);
+	float numer = *(aux_args.ray_pre) +  (* aux_args.ray_vis) * PI;
+	cell_post = (numer/(aux_args.pre_inf +aux_args.vis_inf)) *d;
+
+	(* aux_args.ray_pre) += (* aux_args.ray_vis)*(1-temp)*PI ;
+	(* aux_args.ray_vis) *= temp;
+#endif
+
+#ifdef JOINT
+	    //calculate this ray's contribution to beta
     float temp  = exp(-alpha * seg_len);
     float numer = *(aux_args.ray_pre) +  (* aux_args.ray_vis) * PI;
-    float denom = *(aux_args.ray_pre) +  (aux_args.pre_inf - *(aux_args.ray_pre) - (* aux_args.ray_vis)*(1-temp)*PI) / temp;
+    float denom = *(aux_args.ray_pre)*temp +  (aux_args.pre_inf - *(aux_args.ray_pre) - (* aux_args.ray_vis)*(1-temp)*PI );// + aux_args.vis_inf*1.0 ;
 
-    (* aux_args.ray_pre) += (* aux_args.ray_vis)*(1-temp)*PI ;
     cell_post = (numer/denom) *d;
-    vis_cont  = (* aux_args.ray_vis) * d;
-    (* aux_args.ray_vis) *= temp;
+    vis_cont  = (aux_args.vis_inf/numer) * d;
+    (* aux_args.ray_pre) += (* aux_args.ray_vis)*(1-temp)*PI ;
+	(* aux_args.ray_vis) *= temp;
+#endif
 
     //discretize and store beta and vis contribution
     int post_int = convert_int_rte(cell_post * SEGLEN_FACTOR);
     atom_add(&aux_args.beta_array[data_ptr], post_int);
     int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
-    atom_add(&aux_args.vis_array[data_ptr], vis_int);
+    atom_add(&aux_args.vis_array[data_ptr], vis_int);	
 }
 #endif // UPDATE_AVG_RATIO_EMPTY_SURFACE
