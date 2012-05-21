@@ -26,7 +26,7 @@ class boxm2_export_oriented_point_cloud_function
                                   boxm2_data_base* points, boxm2_data_base* normals, vcl_ofstream& file,
                                   bool output_aux, float vis_t, float nmag_t, float prob_t, vgl_box_3d<double> bb);
   static void exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
-                                  boxm2_data_base* alpha, boxm2_data_base* vis,
+                                  boxm2_data_base* alpha, boxm2_data_base* mog, boxm2_data_base* vis,
                                   boxm2_data_base* points, boxm2_data_base* normals, vcl_ofstream& file,
                                   bool output_aux, float vis_t, float nmag_t, float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices);
 
@@ -34,6 +34,7 @@ class boxm2_export_oriented_point_cloud_function
 
   static void writePLYHeader(vcl_ofstream& file, unsigned num_vertices, vcl_stringstream& ss, bool output_aux);
 
+  //:Reads a bounding box from a .PLY. the box is created such that all points in the .PLY file are contained in the box
   static void readBBFromPLY(const vcl_string& filename, vgl_box_3d<double>& box);
 };
 
