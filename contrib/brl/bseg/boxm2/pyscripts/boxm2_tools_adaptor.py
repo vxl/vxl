@@ -85,3 +85,17 @@ def export_points_and_normals(scene, cache, file_out, save_aux=True, prob_thresh
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
     return False;
+
+def add_aux_info_to_ply(scene, cache, file_in, file_out):
+  if cache.type == "boxm2_cache_sptr" :
+    print("Adding aux info to ply points");
+    boxm2_batch.init_process("boxm2_add_aux_info_to_ply_process");
+    boxm2_batch.set_input_from_db(0,scene);
+    boxm2_batch.set_input_from_db(1,cache);
+    boxm2_batch.set_input_string(2,file_in);
+    boxm2_batch.set_input_string(3,file_out);  #output aux (prob, vis, normal magnitdue)
+    return boxm2_batch.run_process();
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
+    return False;
+

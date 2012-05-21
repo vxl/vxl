@@ -252,7 +252,11 @@ class boxm2_scene_adaptor(object):
     
   # Export points and normals to a .PLY file or XYZ. Points and normals need to be extracted first  
   def export_points_and_normals(self, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, bbox_file=""):
-     return export_points_and_normals(self.scene, self.cpu_cache, file_out, save_aux, prob_thresh, vis_thresh, nmag_thresh, bbox_file="")
+    return export_points_and_normals(self.scene, self.cpu_cache, file_out, save_aux, prob_thresh, vis_thresh, nmag_thresh, bbox_file)
+  
+  # Adds auxiliary data to vertices in a .PLY
+  def add_aux_info_to_ply(self, file_in, file_out):
+    add_aux_info_to_ply(self.scene, self.cpu_cache, file_in, file_out);
 
   #only write the cpu_cache to disk
   def write_cache(self, do_clear = 0) :
