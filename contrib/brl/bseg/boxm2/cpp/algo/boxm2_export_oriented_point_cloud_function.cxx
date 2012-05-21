@@ -4,6 +4,9 @@
 
 #include <vcl_cassert.h>
 
+#include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
+
+
 void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                                                      boxm2_data_base* alpha, boxm2_data_base* vis,
                                                                      boxm2_data_base* points, boxm2_data_base* normals,
@@ -44,7 +47,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2
 }
 
 void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
-                                                                     boxm2_data_base* alpha, boxm2_data_base* vis,
+                                                                     boxm2_data_base* alpha, boxm2_data_base* mog, boxm2_data_base* vis,
                                                                      boxm2_data_base* points, boxm2_data_base* normals,
                                                                      vcl_ofstream& file, bool output_aux, float vis_t, float nmag_t, float prob_t,
                                                                      vgl_box_3d<double> bb, unsigned& num_vertices)
@@ -53,7 +56,8 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
   boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
   boxm2_data_traits<BOXM2_NORMAL>::datatype *  normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
   boxm2_data_traits<BOXM2_VIS_SCORE>::datatype *    vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
-
+  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *    mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
+  
   file << vcl_fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
   for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
@@ -74,8 +78,10 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
                <<  normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ';
           num_vertices++;
 
-          if (output_aux)
-            file  <<  prob << ' ' <<  vis_data[currIdx] << ' ' <<  normals_data[currIdx][3];
+          if (output_aux){
+            unsigned int intensity = (unsigned int)(boxm2_mog3_grey_processor::expected_color(mog_data[currIdx])*255.0f);
+            file  <<  prob << ' ' <<  vis_data[currIdx] << ' ' <<  normals_data[currIdx][3] << ' ' << intensity << ' ' << intensity << ' ' << intensity;
+          }
           file << vcl_endl;
         }
       }
@@ -122,7 +128,7 @@ void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& fi
    file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
         << "\nproperty float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\n";
    if (output_aux) {
-     file << "property float prob\nproperty float vis_score\nproperty float nmag\n";
+     file << "property float prob\nproperty float vis_score\nproperty float nmag\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n";
    }
 
    file << "end_header\n"
@@ -141,7 +147,7 @@ class ply_bb_reader
 
 
 //: Call-back function for a "vertex" element
-int bof_plyio_vertex_cb_(p_ply_argument argument)
+int boxm2_plyio_vertex_cb(p_ply_argument argument)
 {
   long index;
   void* temp;
@@ -182,9 +188,9 @@ void boxm2_export_oriented_point_cloud_function::readBBFromPLY(const vcl_string&
     vcl_cout << "File " << filename << " doesn't have header.";
 
   // vertex
-  ply_set_read_cb(ply, "vertex", "x", bof_plyio_vertex_cb_, (void*) (&parsed_ply), 0);
-  ply_set_read_cb(ply, "vertex", "y", bof_plyio_vertex_cb_, (void*) (&parsed_ply), 1);
-  ply_set_read_cb(ply, "vertex", "z", bof_plyio_vertex_cb_, (void*) (&parsed_ply), 2);
+  ply_set_read_cb(ply, "vertex", "x", boxm2_plyio_vertex_cb, (void*) (&parsed_ply), 0);
+  ply_set_read_cb(ply, "vertex", "y", boxm2_plyio_vertex_cb, (void*) (&parsed_ply), 1);
+  ply_set_read_cb(ply, "vertex", "z", boxm2_plyio_vertex_cb, (void*) (&parsed_ply), 2);
 
   // Read DATA
   ply_read(ply);
