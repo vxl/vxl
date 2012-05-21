@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
           <<"  num ir: "<<irImgs.size()<<vcl_endl;
 
   //set the number of samples K to take from each image
-  vcl_size_t K = sparse() ? 10000 : 999999999999;
+  vcl_size_t K = vcl_size_t(sparse() ? 10000 : 999999999999);
 
   //boxm2_class_generate_samples sampler(;a
   vcl_vector<vnl_vector_fixed<float,4> > allInts;
