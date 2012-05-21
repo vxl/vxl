@@ -50,6 +50,9 @@ __kernel void kernel_filter_block(  __constant RenderSceneInfo * linfo,
   unsigned gidX = get_global_id(0);
   unsigned gidY = get_global_id(1); 
   unsigned gidZ = get_global_id(2); 
+
+  //The resolution of the kernels is fixed at the highest res cell
+  float side_len = 1.0f/(float) (1<<3); 
   
   //tree Index is global id 
   unsigned treeIndex = calc_blkI(gidX, gidY, gidZ, linfo->dims); 
@@ -69,11 +72,12 @@ __kernel void kernel_filter_block(  __constant RenderSceneInfo * linfo,
          
         //get properties of current leaf cell
         int currDepth = get_depth(i);
+        float response = 0.0; 
         
-        if(currDepth != linfo->root_level)
-          continue;
+//        if(currDepth != linfo->root_level)
+//          continue;
         
-        float side_len = 1.0f/(float) (1<<currDepth);
+        //float side_len = 1.0f/(float) (1<<currDepth);
         float4 localCenter = (float4) (centerX[i], centerY[i], centerZ[i], 0.0f);  //local center within block
         float4 cellCenter = (float4) ( (float) gidX + centerX[i],                  //abs center within block
                                       (float) gidY + centerY[i], 
@@ -81,7 +85,6 @@ __kernel void kernel_filter_block(  __constant RenderSceneInfo * linfo,
                                       0.0f );  
         
         //iterate through the filter coefficients and positions     
-        float response = 0.0; 
         for( uint ci = 0; ci < filter_size[0]; ci++ )
         {
             
