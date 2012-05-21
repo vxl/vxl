@@ -68,10 +68,11 @@ TLevel * vpyr_2_pyramid<TLevel>::level_below(vmap_level_type type, const level_t
   }
   while (vmap_get_level_type(level)!=type)
   {
-    ++level ;
+    ++level;
   }
-  if (level>=above.index()) return NULL ;
-  if (level!=(*it).index())
+  if (level>=(vmap_level_index)(above.index()))
+    return NULL ;
+  else if (level!=(vmap_level_index)((*it).index()))
   {
     level_type tmp(above) ;
     tmp.set_level_index(level) ;
