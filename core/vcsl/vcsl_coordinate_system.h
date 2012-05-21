@@ -46,7 +46,7 @@ class vcsl_coordinate_system
   //***************************************************************************
 
   //: Number of axes
-  int dimensionality() const { return axes_.size(); }
+  int dimensionality() const { return int(axes_.size()); }
 
   //: Is `i' an index on an axis ?
   bool valid_axis(unsigned int i) const { return i < axes_.size(); }

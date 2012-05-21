@@ -46,7 +46,7 @@ class vidl_image_list_istream
   virtual bool open(const vcl_string& glob);
 
   //: Open a new stream using a vector of file paths
-  // \note all files are tested and only valid image files are retained 
+  // \note all files are tested and only valid image files are retained
   virtual bool open(const vcl_vector<vcl_string>& paths);
 
   //: Close the stream
@@ -65,7 +65,7 @@ class vidl_image_list_istream
 
   //: Return the number of frames if known
   //  returns -1 for non-seekable streams
-  virtual int num_frames() const { return image_paths_.size(); }
+  virtual int num_frames() const { return int(image_paths_.size()); }
 
   //: Return the current frame number
   virtual unsigned int frame_number() const { return index_; }
@@ -81,7 +81,7 @@ class vidl_image_list_istream
 
   //: Return the frame rate (0.0 if unspecified)
   virtual double frame_rate() const { return 0.0; }
-  
+
   //: Return the duration in seconds (0.0 if unknown)
   virtual double duration() const { return 0.0; }
 

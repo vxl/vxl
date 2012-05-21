@@ -62,7 +62,7 @@ class vcsl_spatial_transformation : public vbl_ref_count
   vcl_vector<double> beat() const { return beat_; }
 
   //: Return the time duration
-  unsigned int duration() const { return beat_.size(); }
+  unsigned int duration() const { return (unsigned int)(beat_.size()); }
 
   //: Return the list of interpolators
   vcl_vector<vcsl_interpolator> interpolators() const { return interpolator_; }

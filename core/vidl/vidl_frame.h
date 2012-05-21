@@ -146,7 +146,7 @@ class vidl_memory_chunk_frame : public vidl_frame
     virtual const void * data () const { return memory_?memory_->data():NULL; }
 
     //: The size of the buffer in bytes
-    virtual unsigned long size() const { return memory_?memory_->size():0; }
+    virtual unsigned long size() const { return (unsigned long)(memory_?memory_->size():0L); }
 
   private:
     vil_memory_chunk_sptr memory_;

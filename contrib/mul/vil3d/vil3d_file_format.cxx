@@ -79,7 +79,7 @@ void vil3d_file_format::add_format(vil3d_file_format* new_format)
 //: Number of formats available (number added by add_format()
 unsigned vil3d_file_format::n_formats()
 {
-  return formats_available.v.size();
+  return (unsigned)(formats_available.v.size());
 }
 
 //: Access to available format readers supplied by add_format

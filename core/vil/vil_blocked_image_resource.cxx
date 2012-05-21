@@ -17,32 +17,32 @@ vil_blocked_image_resource::vil_blocked_image_resource()
 vil_blocked_image_resource::~vil_blocked_image_resource()
 {}
 
-unsigned vil_blocked_image_resource::n_block_i() const
+unsigned int vil_blocked_image_resource::n_block_i() const
 {
-  unsigned sbi = size_block_i();
+  unsigned int sbi = size_block_i();
   if (sbi==0)
     return 0;
   return (ni()+sbi -1)/sbi;
 }
 
-unsigned vil_blocked_image_resource::n_block_j() const
+unsigned int vil_blocked_image_resource::n_block_j() const
 {
-  unsigned sbj = size_block_j();
+  unsigned int sbj = size_block_j();
   if (sbj==0)
     return 0;
   return (nj()+sbj -1)/sbj;
 }
 
 bool vil_blocked_image_resource::
-get_blocks(unsigned start_block_i, unsigned end_block_i,
-           unsigned  start_block_j, unsigned end_block_j,
+get_blocks(unsigned int start_block_i, unsigned int end_block_i,
+           unsigned int start_block_j, unsigned int end_block_j,
            vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const
 {
-  for (unsigned bi = start_block_i; bi<=end_block_i; ++bi)
+  for (unsigned int bi = start_block_i; bi<=end_block_i; ++bi)
   {
     vcl_vector< vil_image_view_base_sptr > jblocks;
 
-    for (unsigned bj = start_block_j; bj<=end_block_j; ++bj)
+    for (unsigned int bj = start_block_j; bj<=end_block_j; ++bj)
     {
       vil_image_view_base_sptr view =
         this->get_block(bi, bj);
@@ -55,14 +55,14 @@ get_blocks(unsigned start_block_i, unsigned end_block_i,
   return true;
 }
 
-bool vil_blocked_image_resource::put_blocks( unsigned start_block_i,
-                                             unsigned end_block_i,
-                                             unsigned  start_block_j,
-                                             unsigned end_block_j,
+bool vil_blocked_image_resource::put_blocks( unsigned int start_block_i,
+                                             unsigned int end_block_i,
+                                             unsigned int start_block_j,
+                                             unsigned int end_block_j,
                                              vcl_vector< vcl_vector< vil_image_view_base_sptr > > const& blocks )
 {
-  for (unsigned bi = start_block_i; bi<=end_block_i; ++bi)
-    for (unsigned bj = start_block_j; bj<=end_block_j; ++bj)
+  for (unsigned int bi = start_block_i; bi<=end_block_i; ++bi)
+    for (unsigned int bj = start_block_j; bj<=end_block_j; ++bj)
       if (!this->put_block(bi, bj, *blocks[bi][bj]))
         return false;
   return true;
@@ -77,9 +77,9 @@ glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >&
 
   //first calculate the overall size of the output image (all blocks glued together)
 
-  unsigned output_width  = 0;
-  unsigned output_height = 0;
-  unsigned i;
+  unsigned int output_width  = 0;
+  unsigned int output_height = 0;
+  unsigned int i;
   for (i = 0 ; i < blocks.size() ; i++) {
     output_width += blocks[i][0]->ni();
   }
@@ -88,8 +88,8 @@ glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >&
   }
 
   //now paste all the image blocks into their proper location in outImage
-  unsigned curr_i = 0;
-  unsigned curr_j = 0;
+  unsigned int curr_i = 0;
+  unsigned int curr_j = 0;
   vil_pixel_format fmt = vil_pixel_format_component_format(this->pixel_format());
   switch (fmt)
   {
@@ -97,9 +97,9 @@ glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >&
    case FORMAT: { \
     vil_image_view<T>* output_image = \
       new vil_image_view<T>(output_width, output_height, 1, nplanes()); \
-    for (unsigned bi = 0 ; bi < blocks.size() ; bi++) \
+    for (unsigned int bi = 0 ; bi < blocks.size() ; bi++) \
     { \
-      for (unsigned bj = 0 ; bj < blocks[bi].size() ; bj++)\
+      for (unsigned int bj = 0 ; bj < blocks[bi].size() ; bj++)\
       { \
         vil_copy_to_window(static_cast<vil_image_view<T>&>(*blocks[bi][bj]), *output_image, curr_i, curr_j); \
         curr_j += blocks[bi][bj]->nj(); \
@@ -133,14 +133,14 @@ glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >&
 }
 
 // Get the offset from the start of the block row for pixel position i
-bool vil_blocked_image_resource::block_i_offset(unsigned block_i, unsigned i,
-                                                unsigned& i_offset) const
+bool vil_blocked_image_resource::block_i_offset(unsigned int block_i, unsigned int i,
+                                                unsigned int& i_offset) const
 {
   i_offset = 0;
-  unsigned tw = size_block_i();
+  unsigned int tw = size_block_i();
   if (tw==0)
     return false;
-  unsigned bstrt = tw*block_i;
+  unsigned int bstrt = tw*block_i;
   if (i<bstrt)
     return false;
   i_offset = i-bstrt;
@@ -148,14 +148,14 @@ bool vil_blocked_image_resource::block_i_offset(unsigned block_i, unsigned i,
 }
 
 // Get the offset from the start of the block column for pixel position j
-bool vil_blocked_image_resource::block_j_offset(unsigned block_j, unsigned j,
-                                                unsigned& j_offset) const
+bool vil_blocked_image_resource::block_j_offset(unsigned int block_j, unsigned int j,
+                                                unsigned int& j_offset) const
 {
   j_offset = 0;
-  unsigned tl = size_block_j();
+  unsigned int tl = size_block_j();
   if (tl==0)
     return false;
-  unsigned bstrt = tl*block_j;
+  unsigned int bstrt = tl*block_j;
   if (j<bstrt)
     return false;
   j_offset = j-bstrt;
@@ -165,18 +165,18 @@ bool vil_blocked_image_resource::block_j_offset(unsigned block_j, unsigned j,
 //The blocks may overlap the edges of the requested view
 //Therefore we need to trim them in order to have the
 //correct pieces to glue together to form the view.
-bool vil_blocked_image_resource::trim_border_blocks(unsigned i0, unsigned ni,
-                                                    unsigned j0, unsigned nj,
-                                                    unsigned start_block_i,
-                                                    unsigned start_block_j,
+bool vil_blocked_image_resource::trim_border_blocks(unsigned int i0, unsigned int ni,
+                                                    unsigned int j0, unsigned int nj,
+                                                    unsigned int start_block_i,
+                                                    unsigned int start_block_j,
                                                     vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const
 {
   // loop through all the boxes and trim the boxes around the border if necessary.
-  for (unsigned bi = 0 ; bi < blocks.size() ; bi++) {
-    for (unsigned bj = 0 ; bj < blocks[bi].size() ; bj++) {
+  for (unsigned int bi = 0 ; bi < blocks.size() ; bi++) {
+    for (unsigned int bj = 0 ; bj < blocks[bi].size() ; bj++) {
       if (!blocks[bi][bj]) continue;
-      unsigned last_col_index = blocks.size()-1;
-      unsigned last_row_index = blocks[bi].size()-1;
+      unsigned int last_col_index = (unsigned int)(blocks.size()-1);
+      unsigned int last_row_index = (unsigned int)(blocks[bi].size()-1);
       //booleans that tell me whether this box is some sort of border box
       bool first_block_in_row = bi == 0;
       bool first_block_in_col = bj == 0;
@@ -187,8 +187,8 @@ bool vil_blocked_image_resource::trim_border_blocks(unsigned i0, unsigned ni,
       if (!first_block_in_row && !first_block_in_col &&
           !last_block_in_row && !last_block_in_col) continue;
 
-      unsigned bi0=0, bin=size_block_i()-1;
-      unsigned bj0=0, bjn=size_block_j()-1;
+      unsigned int bi0=0, bin=size_block_i()-1;
+      unsigned int bj0=0, bjn=size_block_j()-1;
       if (first_block_in_row)
         if (!block_i_offset(start_block_i+bi, i0, bi0))
           return false;
@@ -237,19 +237,19 @@ bool vil_blocked_image_resource::trim_border_blocks(unsigned i0, unsigned ni,
 
 //Get blocks including those that might be in the cache
 vil_image_view_base_sptr vil_blocked_image_resource::
-get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const
+get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n_j) const
 {
   vil_image_view_base_sptr view = 0;
 
-  unsigned tw = size_block_i(), tl = size_block_j();
+  unsigned int tw = size_block_i(), tl = size_block_j();
   if (tw==0||tl==0)
     return view;
 
   //block index ranges
-  unsigned  bi_start = i0/tw, bi_end = (i0+n_i-1)/tw;
-  unsigned  bj_start = j0/tl, bj_end = (j0+n_j-1)/tl;
+  unsigned int bi_start = i0/tw, bi_end = (i0+n_i-1)/tw;
+  unsigned int bj_start = j0/tl, bj_end = (j0+n_j-1)/tl;
   //last block index
-  unsigned lbi = n_block_i()-1, lbj = n_block_j()-1;
+  unsigned int lbi = n_block_i()-1, lbj = n_block_j()-1;
 
   if (bi_start>lbi||bi_end>lbi||bj_start>lbj||bj_end>lbj)
     return view;
@@ -266,7 +266,7 @@ get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const
   //Assemble them to fill the requested view
   view = this->glue_blocks_together(blocks);
 #ifdef DEBUG
-  unsigned nblocks = (bi_end-bi_start+1)*(bj_end-bj_start+1);
+  unsigned int nblocks = (bi_end-bi_start+1)*(bj_end-bj_start+1);
   if (nblocks>1)
     vcl_cout << "Get copy view of " << nblocks << " blocks in "
              << t.real() << "msecs\n";
@@ -278,7 +278,7 @@ vil_blocked_image_resource_sptr blocked_image_resource(const vil_image_resource_
 {
   if (!ir)
     return 0;
-  unsigned sbi=0, sbj=0;
+  unsigned int sbi=0, sbj=0;
   if (ir->get_property(vil_property_size_block_i, &sbi)&&
       ir->get_property(vil_property_size_block_j, &sbj))
     return (vil_blocked_image_resource*)ir.ptr();

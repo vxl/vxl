@@ -35,20 +35,20 @@ static vil_image_view<float>
 decimate_block(vcl_vector<vcl_vector<vil_image_view<float> > > const& blocks)
 {
   vil_image_view<float> blk = blocks[0][0];
-  unsigned sbi = blk.ni(), sbj = blk.nj();
+  unsigned int sbi = blk.ni(), sbj = blk.nj();
   vil_image_view<float> dec_block;
   dec_block.set_size(sbi, sbj);
-  for (unsigned dj = 0; dj<sbj; ++dj)
+  for (unsigned int dj = 0; dj<sbj; ++dj)
   {
-    unsigned r = 0, j0 = 2*dj;
+    unsigned int r = 0, j0 = 2*dj;
     if (2*dj>=sbj)
     {
       r = 1;
       j0 = 2*dj-sbj;
     }
-    for (unsigned di = 0; di<sbi; ++di)
+    for (unsigned int di = 0; di<sbi; ++di)
     {
-      unsigned c = 0, i0 = 2*di;
+      unsigned int c = 0, i0 = 2*di;
       if (2*di>=sbi)
       {
         c = 1;
@@ -70,15 +70,15 @@ bool convert_multi_plane_to_float(vil_image_view_base_sptr& blk,
   if (!blk) return false;
   fblk.clear();
   vil_pixel_format fmt = blk->pixel_format();
-  unsigned ni = blk->ni(), nj = blk->nj();
-  unsigned np = blk->nplanes();
+  unsigned int ni = blk->ni(), nj = blk->nj();
+  unsigned int np = blk->nplanes();
   if (fmt == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<unsigned char> bv = blk;
-    for (unsigned p = 0; p<np; ++p){
+    for (unsigned int p = 0; p<np; ++p){
       vil_image_view<float> bvf(ni, nj);
-      for (unsigned j = 0; j<nj; ++j)
-        for (unsigned i= 0; i<ni; ++i)
+      for (unsigned int j = 0; j<nj; ++j)
+        for (unsigned int i= 0; i<ni; ++i)
           bvf(i,j) = bv(i,j,p);
       fblk.push_back(bvf);
     }
@@ -87,10 +87,10 @@ bool convert_multi_plane_to_float(vil_image_view_base_sptr& blk,
   else if (fmt == VIL_PIXEL_FORMAT_UINT_16)
   {
     vil_image_view<unsigned short> bv = blk;
-    for (unsigned p = 0; p<np; ++p){
+    for (unsigned int p = 0; p<np; ++p){
       vil_image_view<float> bvf(ni, nj);
-      for (unsigned j = 0; j<nj; ++j)
-        for (unsigned i= 0; i<ni; ++i)
+      for (unsigned int j = 0; j<nj; ++j)
+        for (unsigned int i= 0; i<ni; ++i)
           bvf(i,j) = bv(i,j,p);
       fblk.push_back(bvf);
     }
@@ -103,11 +103,11 @@ static
 void convert_multi_plane_from_float(vcl_vector<vil_image_view<float> >& fblk,
                                     vil_image_view<unsigned char>& blk)
 {
-  unsigned ni = fblk[0].ni(), nj = fblk[0].nj();
-  unsigned np = fblk.size();
-  for (unsigned p = 0; p<np; ++p)
-    for (unsigned j = 0; j<nj; ++j)
-      for (unsigned i= 0; i<ni; ++i)
+  unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
+  unsigned int np = (unsigned int)(fblk.size());
+  for (unsigned int p = 0; p<np; ++p)
+    for (unsigned int j = 0; j<nj; ++j)
+      for (unsigned int i= 0; i<ni; ++i)
         blk(i,j,p) = static_cast<unsigned char>(fblk[p](i,j));
 }
 
@@ -115,11 +115,11 @@ static
 void convert_multi_plane_from_float(vcl_vector<vil_image_view<float> >& fblk,
                                     vil_image_view<unsigned short>& blk)
 {
-  unsigned ni = fblk[0].ni(), nj = fblk[0].nj();
-  unsigned np = fblk.size();
-  for (unsigned p = 0; p<np; ++p)
-    for (unsigned j = 0; j<nj; ++j)
-      for (unsigned i= 0; i<ni; ++i)
+  unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
+  unsigned int np = (unsigned int)(fblk.size());
+  for (unsigned int p = 0; p<np; ++p)
+    for (unsigned int j = 0; j<nj; ++j)
+      for (unsigned int i= 0; i<ni; ++i)
         blk(i,j,p) = static_cast<unsigned short>(fblk[p](i,j));
 }
 
@@ -129,14 +129,14 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
 {
   if (!brsc)
     return false;
-  unsigned nbi = brsc->n_block_i(), nbj = brsc->n_block_j();
+  unsigned int nbi = brsc->n_block_i(), nbj = brsc->n_block_j();
   if (nbi==0||nbj==0)
     return false;
-  unsigned np = brsc->nplanes();
+  unsigned int np = brsc->nplanes();
 
   //check for consistent block structure
-  unsigned sbi_src = brsc->size_block_i(), sbj_src = brsc->size_block_j();
-  unsigned sbi_dec = dec_resc->size_block_i(),
+  unsigned int sbi_src = brsc->size_block_i(), sbj_src = brsc->size_block_j();
+  unsigned int sbi_dec = dec_resc->size_block_i(),
     sbj_dec = dec_resc->size_block_j();
   if (sbi_src!=sbi_dec||sbj_src!=sbj_dec)
     return false;
@@ -164,16 +164,16 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
     case 1: //grey scale images
     {
       vcl_vector<vcl_vector<vil_image_view<float> > > buf(2), nbrhd(2);
-      for (unsigned k =0; k<2; ++k)
+      for (unsigned int k =0; k<2; ++k)
       {
         buf[k] = vcl_vector<vil_image_view<float> >(nbi);
         nbrhd[k] = vcl_vector<vil_image_view<float> >(2);
       }
       vil_image_view<float> dec_blk;
-      for (unsigned bj=0; bj<nbj; bj+=2)
+      for (unsigned int bj=0; bj<nbj; bj+=2)
       {
         //update the block buffer by stepping down two block rows
-        for (unsigned bi = 0; bi<nbi; ++bi)
+        for (unsigned int bi = 0; bi<nbi; ++bi)
         {
           buf[0][bi] = vil_convert_cast(float(),brsc->get_block(bi,bj));
           //if (bj+2<=nbj)//make sure there are enough block rows
@@ -182,13 +182,13 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
           else
             buf[1][bi]=buf[0][bi];//otherwise just copy the upper block
         }
-        for (unsigned bi=0; bi<nbi; bi+=2)
+        for (unsigned int bi=0; bi<nbi; bi+=2)
         {
           //construct the 2x2 block neighborhood
-          for (unsigned r = 0; r<2; ++r)
-            for (unsigned c = 0; c<2; ++c)
+          for (unsigned int r = 0; r<2; ++r)
+            for (unsigned int c = 0; c<2; ++c)
             {
-              unsigned ki = bi+c;
+              unsigned int ki = bi+c;
               if (ki>=nbi)//make sure there are enough blocks in the row
                 ki = nbi-1;
               nbrhd[r][c] = buf[r][ki];//otherwise just copy
@@ -229,7 +229,7 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
     {
       vcl_vector<vcl_vector<vcl_vector<vil_image_view<float> > > > buf(2);
       vcl_vector<vcl_vector<vil_image_view<float> > > nbrhd(2);
-      for (unsigned k =0; k<2; ++k)
+      for (unsigned int k =0; k<2; ++k)
       {
         buf[k] = vcl_vector<vcl_vector<vil_image_view<float> > >(nbi);
         nbrhd[k] = vcl_vector<vil_image_view<float> >(2);
@@ -237,10 +237,10 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
 
       // The color planes of a block are separated into
       // individual float views
-      for (unsigned bj=0; bj<nbj; bj+=2)
+      for (unsigned int bj=0; bj<nbj; bj+=2)
       {
         //update the block buffer by stepping down two block rows
-        for (unsigned bi = 0; bi<nbi; ++bi)
+        for (unsigned int bi = 0; bi<nbi; ++bi)
         {
           vil_image_view_base_sptr bij = brsc->get_block(bi,bj);
           vcl_vector<vil_image_view<float> > fbij;
@@ -257,15 +257,15 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
           else
             buf[1][bi]=buf[0][bi];//otherwise just copy the upper block
         }
-        for (unsigned bi=0; bi<nbi; bi+=2)
+        for (unsigned int bi=0; bi<nbi; bi+=2)
         {
           vcl_vector<vil_image_view<float> >dec_fblk(np);
           //create decimated blocks for each plane
-          for (unsigned p = 0; p<np; ++p){
-            for (unsigned r = 0; r<2; ++r)
-              for (unsigned c = 0; c<2; ++c)
+          for (unsigned int p = 0; p<np; ++p){
+            for (unsigned int r = 0; r<2; ++r)
+              for (unsigned int c = 0; c<2; ++c)
               {
-                unsigned ki = bi+c;
+                unsigned int ki = bi+c;
                 if (ki>=nbi)
                   ki = nbi-1;
                 nbrhd[r][c] = buf[r][ki][p];
@@ -320,8 +320,7 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
     case VIL_PIXEL_FORMAT_DOUBLE:
       break;
     default:
-      vcl_cout << "unrecognized pixel format in"
-               << " vil_pyramid_image_resource::decimate()\n";
+      vcl_cout << "unrecognized pixel format in vil_pyramid_image_resource::decimate()\n";
       return 0;
   }
   //first determine if the resource is blocked, if not create a facade
@@ -336,10 +335,10 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
 
   // create the output decimated resource
   { //file scope to close resource
-    unsigned rni = resc->ni(), rnj = resc->nj();
-    unsigned np = resc->nplanes();
+    unsigned int rni = resc->ni(), rnj = resc->nj();
+    unsigned int np = resc->nplanes();
     //if source image has even dimensions then just divide by 2
-    unsigned dni = rni/2, dnj = rnj/2;
+    unsigned int dni = rni/2, dnj = rnj/2;
     //else if the dimension is odd, increase the output size by 1.
     dni += rni%2; dnj += rnj%2;
     vil_blocked_image_resource_sptr dec_resc =

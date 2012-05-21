@@ -26,8 +26,7 @@ void test_at_file_size(const vcl_size_t n)
 
   fs_core_p->m_transfer((char *)data,0, n, false);
 
-
-  vil_stream_sptr fs_section = new vil_stream_section(fs_core.ptr(), 0, n);
+  vil_stream_sptr fs_section = new vil_stream_section(fs_core.ptr(), 0, int(n));
   vil_image_resource_sptr ir = vil_load_image_resource_raw(fs_section.ptr());
   vcl_cout << "Trying file of size " << n << vcl_endl;
   TEST("Should fail to load", static_cast<bool>(ir), false);

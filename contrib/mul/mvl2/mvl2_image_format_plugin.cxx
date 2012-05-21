@@ -69,8 +69,7 @@ bool mvl2_image_format_plugin::get_frame_number_and_filename(
 
   // find the frame number and file name
 
-  int frame_sep_pos;
-  frame_sep_pos=path.rfind('_');
+  vcl_size_t frame_sep_pos=path.rfind('_');
   if (frame_sep_pos<1)
   {
     return false;
@@ -156,7 +155,7 @@ bool mvl2_image_format_plugin::load_the_image (
 
   image->set_size((*mvl2_list_iterator).second->get_width(),
                   (*mvl2_list_iterator).second->get_height(),
-  the_image.nplanes());
+                  the_image.nplanes());
   vil_copy_deep(the_image,(vil_image_view<vxl_byte>&)*image);
 
   return ok;

@@ -323,7 +323,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
   char fmt_buffer[size];  // should be enough
   BOOL useless;
   // ret indicates the number of characters successfully converted
-  const int ret = WideCharToMultiByte(CP_ACP, 0, file_format, wcslen(file_format), fmt_buffer, size, 0, &useless );
+  const int ret = WideCharToMultiByte(CP_ACP, 0, file_format, int(wcslen(file_format)), fmt_buffer, size, 0, &useless );
   fmt_buffer[ret] = '\0';
   if (!ret)   return 0;
 

@@ -10,6 +10,7 @@
 #include <vul/vul_sprintf.h>
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h> // for std::size_t
 
 mvl2_video_from_sequence::mvl2_video_from_sequence()
 {
@@ -65,8 +66,8 @@ bool mvl2_video_from_sequence::initialize( int /* width */, int /* height */,
   }
 
   //knock off the extension
-  int name_length=file_name.length();
-  int dot_pos = file_name.find_last_of(".");
+  vcl_size_t name_length=file_name.length();
+  vcl_size_t dot_pos = file_name.find_last_of(".");
   file_name.erase(dot_pos, name_length);
 
   //Extract the largest possible number off the end
@@ -181,7 +182,7 @@ void mvl2_video_from_sequence::set_capture_size(int /*width*/,int /*height*/)
 int mvl2_video_from_sequence::length()
 {
   if (!is_initialized_) return -1;
-  return list_files_.size();
+  return int(list_files_.size());
 }
 
 int mvl2_video_from_sequence::seek(int frame_number)

@@ -208,7 +208,7 @@ unsigned vil3d_slice_list_image::nj() const
 // The number of slices per image.
 unsigned vil3d_slice_list_image::nk() const
 {
-  return slices_.size();
+  return (unsigned)(slices_.size());
 }
 
 //: Pixel Format.

@@ -1293,7 +1293,7 @@ bool vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const& ir)
 #if 0 //DON'T NEED CLEAR?
   ti->clear_TIFF();
 #endif
-  tiff_pyramid_level* pl = new tiff_pyramid_level(levels_.size(), ni, nj, nplanes, fmt);
+  tiff_pyramid_level* pl = new tiff_pyramid_level((unsigned int)(levels_.size()), ni, nj, nplanes, fmt);
   levels_.push_back(pl);
   int status = TIFFWriteDirectory(t_.tif());
   return status == 1 ;

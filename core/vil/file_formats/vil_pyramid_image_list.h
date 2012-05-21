@@ -47,16 +47,16 @@ class vil_pyramid_image_list_format : public vil_file_format
   virtual vil_pyramid_image_resource_sptr
   make_pyramid_image_from_base(char const* directory,
                                vil_image_resource_sptr const& base_image,
-                               unsigned nlevels,
+                               unsigned int nlevels,
                                bool copy_base,
                                char const* level_file_format,
                                char const* filename);
 
   //: A non-pyramid output image doesn't make sense here
   virtual vil_image_resource_sptr make_output_image(vil_stream* /*vs*/,
-                                                    unsigned /*ni*/,
-                                                    unsigned /*nj*/,
-                                                    unsigned /*nplanes*/,
+                                                    unsigned int /*ni*/,
+                                                    unsigned int /*nj*/,
+                                                    unsigned int /*nplanes*/,
                                                     enum vil_pixel_format)
   { return 0; }
 
@@ -75,10 +75,10 @@ struct pyramid_level
   vil_image_resource_sptr image_;
 
   //:the current pyramid level for this resource
-  unsigned cur_level_;
+  unsigned int cur_level_;
 
   //:print ni and scale and values
-  void print(const unsigned l)
+  void print(const unsigned int l)
   {
     vcl_cout << "level[" << l <<  "]  scale: " << scale_
              << "  ni: " << image_->ni() << '\n';
@@ -96,7 +96,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   // This method refers to the base (max resolution) image
   // Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.
-  inline virtual unsigned nplanes() const
+  inline virtual unsigned int nplanes() const
   {
     if (levels_.size()>0)
       return levels_[0]->image_->nplanes();
@@ -106,7 +106,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   //: The number of pixels in each row.
   // This method refers to the base (max resolution) image
   // Dimensions:  Planes x ni x nj.
-  inline virtual unsigned ni() const
+  inline virtual unsigned int ni() const
   {
     if (levels_.size()>0)
       return levels_[0]->image_->ni();
@@ -116,7 +116,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   //: The number of pixels in each column.
   // This method refers to the base (max resolution) image
   // Dimensions:  Planes x ni x nj.
-  inline virtual unsigned nj() const
+  inline virtual unsigned int nj() const
   {
     if (levels_.size()>0)
       return levels_[0]->image_->nj();
@@ -136,10 +136,10 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 
   //: Create a read/write view of a copy of this data.
   // Applies only to the base image
-  inline virtual vil_image_view_base_sptr get_copy_view(unsigned i0,
-                                                        unsigned n_i,
-                                                        unsigned j0,
-                                                        unsigned n_j) const
+  inline virtual vil_image_view_base_sptr get_copy_view(unsigned int i0,
+                                                        unsigned int n_i,
+                                                        unsigned int j0,
+                                                        unsigned int n_j) const
   {
     if (levels_.size()>0)
       return levels_[0]->image_->get_copy_view(i0, n_i, j0, n_j);
@@ -154,7 +154,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
         // --- Methods particular to pyramid resource ---
 
   //: number of levels in the pyramid
-  virtual unsigned nlevels() const {return levels_.size();}
+  virtual unsigned int nlevels() const {return (unsigned int)(levels_.size());}
 
   //:Copy an image resource to the pyramid.
   // If an image of the same scale already exists, then method returns false.
@@ -165,17 +165,17 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   bool add_resource(vil_image_resource_sptr const& image);
 
   //: virtual method for getting a level of the pyramid
-  vil_image_resource_sptr get_resource(const unsigned level) const
+  vil_image_resource_sptr get_resource(const unsigned int level) const
     {return get_level(level);}
 
   //: Get a level image resource of the pyramid
-  inline vil_image_resource_sptr get_level(const unsigned level) const
+  inline vil_image_resource_sptr get_level(const unsigned int level) const
   { if (level<levels_.size()) return levels_[level]->image_; else return 0; }
 
   //:Get a partial view from the image from a specified pyramid level
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
-                                                 unsigned j0, unsigned n_j,
-                                                 unsigned level) const;
+  virtual vil_image_view_base_sptr get_copy_view(unsigned int i0, unsigned int n_i,
+                                                 unsigned int j0, unsigned int n_j,
+                                                 unsigned int level) const;
 
   //:Get a view from the image in the pyramid closest to scale
   vil_image_view_base_sptr get_copy_view(const float scale, float& actual_scale) const
@@ -183,15 +183,15 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 
   //:Get a partial view from the image in the pyramid closest to scale.
   // The origin and size parameters are in the coordinate system of the base image.
-  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
-                                         unsigned j0, unsigned n_j,
+  vil_image_view_base_sptr get_copy_view(unsigned int i0, unsigned int n_i,
+                                         unsigned int j0, unsigned int n_j,
                                          const float scale,
                                          float& actual_scale) const;
 
   void set_directory(char const* directory) { directory_ = directory; }
 
   //for debugging purposes
-  void print(const unsigned level)
+  void print(const unsigned int level)
   { if (level<levels_.size()) levels_[level]->print(level); }
 
  protected:

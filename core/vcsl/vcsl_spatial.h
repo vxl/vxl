@@ -75,7 +75,7 @@ class vcsl_spatial
   vcl_vector<double> beat() const { return beat_; }
 
   //: Return the time duration
-  unsigned int duration() const { return beat_.size(); }
+  unsigned int duration() const { return (unsigned int)(beat_.size()); }
 
   //: Return the list of parent coordinate system along the time
   vcl_vector<vcsl_spatial_sptr> parent() const { return parent_; }

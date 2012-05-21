@@ -617,9 +617,9 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
     //in the rare case where the actual number of bits per pixel value (ABPP) is less than the number of bits
     //used in the data (NBPP) AND the data is vcl_left justified... then we correct that here
     if (need_to_right_justify)
-      right_justify<T>(static_cast<T*>(image_memory->data()), image_memory->size()/sizeof(T), extra_bits);
+      right_justify<T>(static_cast<T*>(image_memory->data()), (unsigned int)(image_memory->size()/sizeof(T)), extra_bits);
     //Nitf files store data in big endian... little endian machines need to convert
-    vil_nitf2_data_mask_table::maybe_endian_swap(static_cast< char* >(image_memory->data()), image_memory->size(), pix_format);
+    vil_nitf2_data_mask_table::maybe_endian_swap(static_cast< char* >(image_memory->data()), (unsigned int)(image_memory->size()), pix_format);
     //if the data is not byte aligned (ie. the actual bits per pixel per band is not divisible
     //by 8),then we need to correct that
     image_memory = maybe_byte_align_data(image_memory, num_samples, bits_per_pixel_per_band, dummy);

@@ -17,15 +17,15 @@
 //   The main work of loading and saving happens in vil3d_analyze_image
 
 #include "vil3d_analyze_format.h"
-#include <vcl_cstring.h> // for vcl_strcmp() and vcl_memset()
-#include <vcl_cstdio.h>  // for vcl_sprintf
+#include <vcl_cstring.h> // for std::strcmp() and std::memset()
+#include <vcl_cstdio.h>  // for std::sprintf
+#include <vcl_cstddef.h>  // for std::size_t
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_image_resource.h>
-// not used? #include <vcl_vector.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <vsl/vsl_indent.h>
 
@@ -458,7 +458,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_input_image(const char *fil
   vil3d_analyze_header header;
   vcl_string filename(filename1);
   vcl_string base_filename;
-  int n=filename.size();
+  vcl_size_t n=filename.size();
   if (n>=4 && (filename.substr(n-4,4)==".hdr" || filename.substr(n-4,4)==".img"))
     base_filename = filename.substr(0,n-4);
   else
@@ -498,7 +498,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* fi
 
   vcl_string filename(filename1);
   vcl_string base_filename;
-  int n=filename.size();
+  vcl_size_t n=filename.size();
   if (n>=4 && (filename.substr(n-4,4)==".hdr" || filename.substr(n-4,4)==".img"))
     base_filename = filename.substr(0,n-4);
   else

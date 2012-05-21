@@ -79,14 +79,14 @@ static void golden_test_vbl_io(bool save_file)
 
   // Sparse Array
   vbl_sparse_array_1d<double> sa_out, sa_in;
-  unsigned key1=3,key2=4,key3=5;
+  unsigned int key1=3,key2=4,key3=5;
   double data1=1.2, data2=3.4, data3=5.6;
 
   //create a sparse array - more than 5 elements so only first 5 are written out
   sa_out(key1)=data1;
   sa_out(key2)=data2;
   sa_out(key3)=data3;
-  for (unsigned k=60; k<70; k++)
+  for (unsigned int k=60; k<70; k++)
     sa_out(k)=data1;
 
 
@@ -154,8 +154,8 @@ static void golden_test_vbl_io(bool save_file)
     test_result1 = false;
   else
   {
-    unsigned array_size = a1_out.size();
-    for (unsigned i=0; i<array_size; i++)
+    unsigned int array_size = (unsigned int)(a1_out.size());
+    for (unsigned int i=0; i<array_size; i++)
     {
       if (a1_out[i] != a1_in[i])
         test_result1 = false;
@@ -172,11 +172,11 @@ static void golden_test_vbl_io(bool save_file)
     test_result2 = false;
   else
   {
-    unsigned array_rows = a2_out.rows();
-    unsigned array_cols = a2_out.cols();
-    for (unsigned i=0; i<array_rows; i++)
+    unsigned int array_rows = (unsigned int)(a2_out.rows());
+    unsigned int array_cols = (unsigned int)(a2_out.cols());
+    for (unsigned int i=0; i<array_rows; ++i)
     {
-      for (unsigned j=0; j<array_cols; j++)
+      for (unsigned int j=0; j<array_cols; ++j)
         if (a2_out(i,j) != a2_in(i,j))
           test_result2 = false;
     }
@@ -194,12 +194,12 @@ static void golden_test_vbl_io(bool save_file)
     test_result3 = false;
   else
   {
-    unsigned array_row1 = a3_out.get_row1_count();
-    unsigned array_row2 = a3_out.get_row2_count();
-    unsigned array_row3 = a3_out.get_row3_count();
-    for (unsigned i=0; i<array_row1; i++)
-      for (unsigned j=0; j<array_row2; j++)
-        for (unsigned k=0; k<array_row3; k++)
+    unsigned int array_row1 = (unsigned int)(a3_out.get_row1_count());
+    unsigned int array_row2 = (unsigned int)(a3_out.get_row2_count());
+    unsigned int array_row3 = (unsigned int)(a3_out.get_row3_count());
+    for (unsigned int i=0; i<array_row1; ++i)
+      for (unsigned int j=0; j<array_row2; ++j)
+        for (unsigned int k=0; k<array_row3; ++k)
           if (a3_out(i,j,k) != a3_in(i,j,k))
             test_result3 = false;
   }

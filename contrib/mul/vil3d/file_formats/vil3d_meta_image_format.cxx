@@ -17,9 +17,6 @@
 // The main work of loading and saving happens in vil3d_meta_image
 
 #include "vil3d_meta_image_format.h"
-#include <vcl_cstring.h>
-#include <vcl_cstdlib.h> // for std::atoi() and atof()
-#include <vcl_iostream.h>
 #include <vul/vul_file.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
@@ -28,10 +25,14 @@
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_copy.h>
 #include <vcl_algorithm.h>
+#include <vcl_cstring.h>
+#include <vcl_cstdlib.h> // for std::atoi() and atof()
+#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_iostream.h>
 
-/*
- * Helper functions
- */
+//
+// Helper functions
+//
 inline void vil3d_meta_image_swap16(char *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 2; i += 2)
@@ -60,9 +61,9 @@ inline void vil3d_meta_image_swap64(char *a, unsigned n)
   }
 }
 
-/*
- * Header stuff
- */
+//
+// Header stuff
+//
 
 //===================================================================
 // Header constructor
@@ -665,7 +666,7 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
 
   vcl_string str_fname(filename);
   vcl_string base_filename;
-  int n=str_fname.size();
+  vcl_size_t n=str_fname.size();
   if (n>=4 && (str_fname.substr(n-4,4)==".mhd" || str_fname.substr(n-4,4)==".raw"))
     base_filename = str_fname.substr(0,n-4);
   else

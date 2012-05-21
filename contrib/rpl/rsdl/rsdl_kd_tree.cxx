@@ -140,7 +140,7 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
 #endif
   // 5. Partition the vector and the bounding box along the dimension.
 
-  unsigned int med_loc = (indices.size()-1) / 2;
+  unsigned int med_loc = (unsigned int)(indices.size()-1) / 2;
   double median_value = (values[med_loc].first + values[med_loc+1].first) / 2;
 #ifdef DEBUG
   vcl_cout << "med_loc = " << med_loc << ", median_value = " << median_value << vcl_endl;

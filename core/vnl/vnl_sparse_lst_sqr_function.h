@@ -302,13 +302,13 @@ class vnl_sparse_lst_sqr_function
   unsigned int index_e(int k) const { return indices_e_[k]; }
 
   //: Return the number of subsets in \p a
-  unsigned int number_of_a() const { return indices_a_.size()-1; }
+  unsigned int number_of_a() const { return (unsigned int)(indices_a_.size()-1); }
 
   //: Return the number of subsets in \p b
-  unsigned int number_of_b() const { return indices_b_.size()-1; }
+  unsigned int number_of_b() const { return (unsigned int)(indices_b_.size()-1); }
 
   //: Return the number of residual vectors
-  unsigned int number_of_e() const { return indices_e_.size()-1; }
+  unsigned int number_of_e() const { return (unsigned int)(indices_e_.size()-1); }
 
   //: Return true if the derived class has indicated that gradf has been implemented
   bool has_gradient() const { return use_gradient_; }

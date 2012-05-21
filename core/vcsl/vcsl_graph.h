@@ -46,7 +46,7 @@ class vcsl_graph
   //***************************************************************************
 
   //: Number of coordinate systems
-  unsigned int count() const { return vertices_.size(); }
+  unsigned int count() const { return (unsigned int)(vertices_.size()); }
 
   //***************************************************************************
   // Status report

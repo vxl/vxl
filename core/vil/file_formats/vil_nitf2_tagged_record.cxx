@@ -63,7 +63,8 @@ vil_nitf2_tagged_record* vil_nitf2_tagged_record::create(vil_nitf2_istream& inpu
   vil_nitf2_tagged_record* record = new vil_nitf2_tagged_record();
   if (record->read(input)) {
     return record;
-  } else {
+  }
+  else {
     delete record;
     return 0;
   }
@@ -336,12 +337,12 @@ bool vil_nitf2_tagged_record::test()
   vil_stream_core* vs = new vil_stream_core();
   vs->write(read_string.c_str(), read_string.length());
   vs->seek(0);
-  vil_stream_section* vss = new vil_stream_section(vs, 0, read_string.length());
+  vil_stream_section* vss = new vil_stream_section(vs, 0, int(read_string.length()));
   // Record from the vil_stream
   vil_nitf2_tagged_record* record = vil_nitf2_tagged_record::create(*vss);
   if (record)
   {
-    vcl_cerr << *record << vcl_endl;
+    vcl_cerr << *record << '\n';
     // Now write the record, and compare the output to the test input
     vcl_cerr << "\nOriginal string:\n" << read_string
              << "\nWrite() output:\n";
@@ -353,7 +354,7 @@ bool vil_nitf2_tagged_record::test()
     vs2->read(buf, bufsize);
     buf[bufsize]='\0';
     vcl_string write_string = vcl_string(buf);
-    vcl_cerr << write_string << vcl_endl;
+    vcl_cerr << write_string << '\n';
     if (read_string != write_string) {
       vcl_cerr << "\nWrite failed!\n";
       error = true;
@@ -364,8 +365,9 @@ bool vil_nitf2_tagged_record::test()
     if (!record->get_value("MTI_DP", mti_dp) || mti_dp!=2) {
       vcl_cerr << "Get value failed!\n";
       error = true;
-    } else {
-      vcl_cerr << "MTI_DP = " << mti_dp << vcl_endl;
+    }
+    else {
+      vcl_cerr << "MTI_DP = " << mti_dp << '\n';
     }
     int tgt_speed[4];
     if (!record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(0), tgt_speed[0])  ||
@@ -375,8 +377,9 @@ bool vil_nitf2_tagged_record::test()
         tgt_speed[2] != 4444) {
       vcl_cerr << "Get vector value test failed!\n";
       error = true;
-    } else {
-      vcl_cerr << "TGT_2_SPEED = " << tgt_speed[2] << vcl_endl;
+    }
+    else {
+      vcl_cerr << "TGT_2_SPEED = " << tgt_speed[2] << '\n';
     }
     int d2;
     if (!record->get_value("D", vil_nitf2_index_vector(2), d2) || d2 != 9) {
@@ -417,7 +420,8 @@ bool vil_nitf2_tagged_record::test()
     {
       vcl_cerr << "failed!\n\n";
     }
-  } else {
+  }
+  else {
     vcl_cerr << "Didn't create record!\n";
     error = true;
   }
@@ -434,7 +438,7 @@ bool vil_nitf2_tagged_record::test()
 
 vcl_ostream& vil_nitf2_tagged_record::output(vcl_ostream& os) const
 {
-  os << "CETAG: " << name() << vcl_endl
+  os << "CETAG: " << name() << '\n'
      << "CELEN: " << length() << vcl_endl;
   for (vil_nitf2_field_definitions::iterator fieldNode = m_definition->m_field_definitions->begin();
        fieldNode != m_definition->m_field_definitions->end(); ++fieldNode)
@@ -446,7 +450,8 @@ vcl_ostream& vil_nitf2_tagged_record::output(vcl_ostream& os) const
     os << field_def->tag << ": ";
     if (field) {
       os << *field << vcl_endl;
-    } else {
+    }
+    else {
       os << "(undefined)" << vcl_endl;
     }
   }
@@ -461,7 +466,8 @@ bool vil_nitf2_tagged_record::write(vil_nitf2_ostream& output)
   if (m_tag_field && m_length_field) {
     m_tag_field->write(output);
     m_length_field->write(output);
-  } else return false;
+  }
+  else return false;
   // Write data fields
   m_field_sequence->write(output);
   // Check whether the vcl_right amount was written
@@ -502,7 +508,8 @@ vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
   vil_nitf2_field::field_tree* tr;
   if ( m_field_sequence ) {
     tr = m_field_sequence->get_tree();
-  } else {
+  }
+  else {
     tr = new vil_nitf2_field::field_tree;
     vil_nitf2_field::field_tree* skipped_node = new vil_nitf2_field::field_tree;
     skipped_node->columns.push_back( "CEDATA" );

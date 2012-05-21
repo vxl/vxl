@@ -69,7 +69,8 @@ vnl_decnum::vnl_decnum(double r)
 
 // Implicit type conversion to a decimal string
 // Also used for ostream output
-vnl_decnum::operator vcl_string() const {
+vnl_decnum::operator vcl_string() const
+{
   if (data_=="NaN") return "NaN";
   if (sign_==' ') return "0"; // even if the exponent would be nonzero
   vcl_string r=data_; if (sign_=='-') r.insert(r.begin(), sign_);
@@ -147,7 +148,7 @@ bool vnl_decnum::comp(vcl_string const& a, vcl_string const& b)
 #ifdef DEBUG
   vcl_cerr << "Entering vnl_decnum::comp with " << a << " and " << b << '\n';
 #endif
-  int i, na = a.length(), nb = b.length(), nc = na < nb ? na : nb;
+  int i, na = int(a.length()), nb = int(b.length()), nc = na < nb ? na : nb;
   for (i = 0; i < nc; ++i) {
     if (a.c_str()[i] < b.c_str()[i]) return true;
     else if (a.c_str()[i] > b.c_str()[i]) return false;
@@ -189,7 +190,7 @@ vnl_decnum vnl_decnum::plus(vcl_string const& a, vcl_string const& b, long exp)
   vcl_cerr << "Entering vnl_decnum::plus with " << a << " and " << b << '\n';
 #endif
   vcl_string result = "";
-  int na=a.length(), nb=b.length(), carry=0;
+  int na=int(a.length()), nb=int(b.length()), carry=0;
   for (--na,--nb; na>=0&&nb>=0; --na,--nb) {
     char c = a.c_str()[na] + (b.c_str()[nb] - '0') + carry;
     if (c > '9') c-=10, carry=1; else carry=0;
@@ -219,7 +220,7 @@ vnl_decnum vnl_decnum::minus(vcl_string const& a, vcl_string const& b, long exp)
   vcl_cerr << "Entering vnl_decnum::minus with " << a << " and " << b << '\n';
 #endif
   vcl_string result = "";
-  int na=a.length(), nb=b.length(), carry=0;
+  int na=int(a.length()), nb=int(b.length()), carry=0;
   assert(na>=nb);
   for (--na,--nb; na>=0&&nb>=0; --na,--nb) {
     char c = a.c_str()[na] - (b.c_str()[nb] - '0') - carry;
@@ -249,7 +250,7 @@ vnl_decnum vnl_decnum::operator+(vnl_decnum const& r) const
   else if (data_ == "Inf" && r.data() == "Inf") return sign_ == r.sign() ? *this : vnl_decnum("NaN");
   else if (data_ == "Inf") return *this;
   else if (r.data() == "Inf") return r;
-  
+
   if (sign_ == ' ') return r;
   else if (r.sign() == ' ') return *this;
   else if (operator==(-r)) return vnl_decnum(0L);
@@ -273,7 +274,7 @@ vcl_string vnl_decnum::mult(vcl_string const& a, char b)
   vcl_cerr << "Entering vnl_decnum::mult with " << a << " and " << b << '\n';
 #endif
   vcl_string result = "";
-  int na=a.length(), carry=0, bb = b-'0';
+  int na=int(a.length()), carry=0, bb = b-'0';
   assert(bb >= 0 && bb <= 9);
   for (--na; na>=0; --na) {
     int c = (a.c_str()[na]-'0') * bb + carry;
@@ -298,12 +299,12 @@ vnl_decnum vnl_decnum::operator*(vnl_decnum const& r) const
     return sign_ == r.sign()             ? vnl_decnum("+Inf")
          : (sign_==' ' || r.sign()==' ') ? vnl_decnum("NaN")
          :                                 vnl_decnum("-Inf");
-  
+
   int sign = (sign_==' '?0:sign_=='-'?-1:1) * (r.sign()==' '?0:r.sign()=='-'?-1:1);
   vnl_decnum result(0L);
   if (sign == 0) return result;
   vcl_string zeros = "";
-  int na=data_.length();
+  int na=int(data_.length());
   for (--na; na>=0; --na) {
     result += vnl_decnum(mult(r.data(), data_.c_str()[na]) + zeros);
     zeros.push_back('0');
@@ -322,7 +323,7 @@ vcl_string vnl_decnum::div(vcl_string const& a, vcl_string& b)
 #ifdef DEBUG
   vcl_cerr << "Entering vnl_decnum::div with " << a << " and " << b << '\n';
 #endif
-  int na=a.length(), nb=b.length();
+  int na=int(a.length()), nb=int(b.length());
   assert(na >= nb);
   if (comp(a,b)) ++nb;
   vcl_string u = "1";
@@ -359,7 +360,7 @@ vnl_decnum vnl_decnum::operator/(vnl_decnum const& r) const
   if (r == 1L) return *this;
   if (operator==(r)) return vnl_decnum('+',"1",0L);
   vcl_string a = data_, b = r.data();
-  int na=a.length(), nb=b.length();
+  int na=int(a.length()), nb=int(b.length());
   vnl_decnum result(0L);
   while (na > nb || (na == nb && !comp(a,b))) {
     vcl_string c = b;
@@ -392,7 +393,7 @@ vnl_decnum vnl_decnum::operator%(vnl_decnum const& r) const
   if (r == vnl_decnum("1")) return vnl_decnum("0");
   if (operator==(r)) return vnl_decnum("0");
   vcl_string a = data_, b = r.data();
-  int na=a.length(), nb=b.length();
+  int na=int(a.length()), nb=int(b.length());
   while (na > nb || (na == nb && !comp(a,b))) {
     vcl_string c = b;
     vcl_string d = div(a, c);

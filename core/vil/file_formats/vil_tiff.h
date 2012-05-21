@@ -365,7 +365,7 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
          // --- Methods particular to pyramid resource ---
 
   //: number of pyramid levels
-  virtual unsigned nlevels() const { return levels_.size(); }
+  virtual unsigned nlevels() const { return (unsigned)(levels_.size()); }
 
   //:Get a partial view from the image from a specified pyramid level
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
