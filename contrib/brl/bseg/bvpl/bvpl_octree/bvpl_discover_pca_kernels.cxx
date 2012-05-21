@@ -169,7 +169,7 @@ void bvpl_discover_pca_kernels::set_up_pca_svd(boxm_scene<boct_tree<short,float>
 #ifdef DEBUG
   vcl_cerr << "Scatter Matix svd" << M*M.transpose() << '\n'
            << "PC Matix SVD:\n Size: " << pc_.size() << '\n' <<pc_ << '\n'
-           << "Evals SVD:\nSize: " << weights_.size() << '\n' << weights_ << vcl_endl;
+           << "Evals SVD:\nSize: " << weights_.size() << '\n' << weights_ << '\n';
   bvpl_write_pca(path_out_ + "/pca_matrices", M, weights_, pc_);
 #endif
 }
@@ -195,7 +195,7 @@ void bvpl_discover_pca_kernels::set_up_pca_evd(boxm_scene<boct_tree<short,float>
 #ifdef DEBUG
   vcl_cerr << "Scatter Matix" << S << '\n'
            << "PC Matix EVD:\n Size: " << pc_.size() << '\n' <<pc_ << '\n'
-           << "EVals EVD:\n Size: " << weights_.size() << '\n' <<weights_ << vcl_endl;
+           << "EVals EVD:\n Size: " << weights_.size() << '\n' <<weights_ << '\n';
   bvpl_write_pca(path_out_ + "/pca_evd", S, weights_, pc_);
 #endif
 }
@@ -227,8 +227,8 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
 
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
     vcl_vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
-    float tree_ncells = leaf_cells.size();
-    unsigned long tree_nsamples = (tree_ncells/scene_ncells)*(float)nsamples_;
+    int tree_ncells = leaf_cells.size();
+    unsigned long tree_nsamples = (unsigned long)((float)tree_ncells/scene_ncells*nsamples_);
 #ifdef DEBUG
     vcl_cout <<"Tree nsamples is: " << tree_nsamples << '\n'
              <<" nsamples is: " << nsamples_ <<vcl_endl;
@@ -295,7 +295,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
       ++nfeature;
 #ifdef DEBUG
       vcl_cerr << "Feature EVD: " <<this_feature << '\n'
-               << "Mean Feature EVD: " <<mean_feature << vcl_endl;
+               << "Mean Feature EVD: " <<mean_feature << '\n';
 #endif
     }
   } //end of block-loop
@@ -336,8 +336,8 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
 
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
     vcl_vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
-    float tree_ncells = leaf_cells.size();
-    unsigned long tree_nsamples = (tree_ncells/scene_ncells)*(float)nsamples_;
+    int tree_ncells = leaf_cells.size();
+    unsigned long tree_nsamples = (unsigned long)((float)tree_ncells/scene_ncells*nsamples_);
 
     for (unsigned i=0; i<tree_nsamples; ++i)
     {
@@ -389,7 +389,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
       ++feature_col;
 #ifdef DEBUG
       vcl_cerr << "Feature SVD: " <<this_feature << '\n'
-               << "Mean Feature SVD: " <<mean_feature/(double)feature_col << vcl_endl;
+               << "Mean Feature SVD: " <<mean_feature/(double)feature_col << '\n';
 #endif
     }
   } //end of block-loop
@@ -420,7 +420,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
 void bvpl_discover_pca_kernels::compute_training_error(vnl_vector<double> &proj_error)
 {
   vcl_ifstream data_ifs(data_path().c_str());
-  vcl_cerr << data_path() << vcl_endl;
+  vcl_cerr << data_path() << '\n';
   //a vector to keep projection error - first element refers to error when using only first pc,
   //the sencond elemend, to error when projecting on frist 2 components and so on
   proj_error.set_size(feature_dim_);
@@ -436,7 +436,7 @@ void bvpl_discover_pca_kernels::compute_training_error(vnl_vector<double> &proj_
     vnl_vector<double> norm_feature(feature_dim_, 0.0);
     data_ifs >> norm_feature;
 #ifdef DEBUG
-    vcl_cerr << "Feature: " <<norm_feature << vcl_endl;
+    vcl_cerr << "Feature: " <<norm_feature << '\n';
 #endif
     norm_feature-=sample_mean_feature_;
 

@@ -225,7 +225,7 @@ int boxm_plyio_vertex_cb_(p_ply_argument argument)
       break;
     case 3:
     {
-      parsed_ply->color = ply_get_argument_value(argument);
+      parsed_ply->color = (unsigned char)ply_get_argument_value(argument);
       //insert data
       vgl_point_3d<int> block_index(-1,-1,-1);
       if (parsed_ply->scene->get_block_index(vgl_point_3d<double>(parsed_ply->p), block_index))

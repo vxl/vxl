@@ -56,11 +56,11 @@ class boxm2_compute_nonsurface_histogram_functor
         unsigned nobs = (unsigned)out0.size();
 
         vcl_vector<float> temp_histogram(8,0.125f);
-        for (unsigned i =0;i<histo.size();i++) histo[i] = 1.0f;
+        for (unsigned i =0; i<histo.size(); ++i) histo[i] = 1;
 
         vcl_vector<float> Iobs;
         vcl_vector<float> vis;
-        for (unsigned i = 0; i < nobs; i++)
+        for (unsigned i=0; i<nobs; ++i)
         {
             if (out0[i]>1e-10f)
             {
@@ -102,7 +102,6 @@ class boxm2_compute_nonsurface_histogram_functor
                 entropy_histo -= pi*vcl_log(static_cast<double>(pi));
         }
         entropy_histo *= vnl_math::log2e;
-
 
         return true;
     }

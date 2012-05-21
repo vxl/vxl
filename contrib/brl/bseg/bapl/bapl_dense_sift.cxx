@@ -34,13 +34,13 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint, double co
       //this value is used in the orientation and grad_mag images in the pyramid to recover the scale_index value which is a linear index
       //into a 2d coordinate system, a (scale,octave). We maximize over the linear scale_index then use this value to retrieve the appropriate
       //ancillary images.
-      float current_scale = (float)vcl_pow(2.0f,(float(scale_index)/this->octave_size_)-1);
+      float current_scale = (float)vcl_pow(2.0f,float(scale_index)/this->octave_size_-1);
 
       //the first level in the pyramid is an 2x upsampled version of the original image with each resulting octave, the image resolution
       //is reduced by half. Therefore we need to divide the image coordinates by the correct power of two of the resolution.
-      double resolution = (double)vcl_pow(2.0,double(scale_index/this->octave_size_)-1);
-      double ri = i/resolution;
-      double rj = j/resolution;
+      double resolution = (double)vcl_pow(0.5,double(scale_index/this->octave_size_-1));
+      unsigned int ri = (unsigned int)(i*resolution);
+      unsigned int rj = (unsigned int)(j*resolution);
 
       scale_index_map[vcl_fabs(current_dog(ri,rj))] = current_scale;
     }//end scale iteration

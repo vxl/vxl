@@ -10,8 +10,8 @@
 template <class T_loc, class T_data>
 bool boxm_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bsta_histogram<float>& response_hist )//, bsta_histogram<float>& level_hist, unsigned& n_leaves)
 {
-  vcl_cout << " Using compute_scene_statistics \n";
-  
+  vcl_cout << " Using compute_scene_statistics\n";
+
   typedef boct_tree<T_loc, T_data> tree_type;
   typedef boct_tree_cell<T_loc,T_data> cell_type;
 
@@ -31,7 +31,7 @@ bool boxm_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene
     ++iterator;
   }
 
-  unsigned nbins = vcl_abs(max-min);// vcl_floor(vcl_sqrt(cell_count));
+  unsigned int nbins = (unsigned int)vcl_abs(max-min);// vcl_floor(vcl_sqrt(cell_count));
   response_hist = bsta_histogram<float>(min, max, nbins);
   scene->unload_active_blocks();
   iterator.begin();
@@ -93,8 +93,6 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bst
   }
   return true;
 }
-
-
 
 
 #endif

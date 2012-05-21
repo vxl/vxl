@@ -336,7 +336,7 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
     ++corners_it;
   }
 
-  unsigned nbins =  vcl_floor(vcl_sqrt(cell_count));
+  unsigned int nbins = (unsigned int)vcl_floor(vcl_sqrt(cell_count));
   bsta_histogram<float>  corner_hist(min, max, nbins);
   valid_it.begin();
   corners_it.begin();

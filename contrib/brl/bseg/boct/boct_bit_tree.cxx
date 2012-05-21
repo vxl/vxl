@@ -11,13 +11,13 @@
 boct_bit_tree::boct_bit_tree()
 {
   bits_ = new unsigned char[16];
-  vcl_memset(bits_, 0, 16); 
+  vcl_memset(bits_, 0, 16);
 }
 
 //: copy constructor
 boct_bit_tree::boct_bit_tree(const boct_bit_tree& other)
 {
-  bits_ = new unsigned char[16]; 
+  bits_ = new unsigned char[16];
   num_levels_ = other.number_levels();
   vcl_memcpy(bits_, other.get_bits(), 16);
 }
@@ -86,27 +86,28 @@ vgl_point_3d<double> boct_bit_tree::cell_center(int bit_index)
 }
 
 //: Cell bounding box given bit_index, tree origin and tree len
-vgl_box_3d<double> 
+vgl_box_3d<double>
 boct_bit_tree::cell_box(int bit_index, vgl_point_3d<double> orig, double len)
 {
   double half_len = cell_len(bit_index) / 2.0;
-  return vgl_box_3d<double>( orig.x() + len*(centerX[bit_index] - half_len), 
+  return vgl_box_3d<double>( orig.x() + len*(centerX[bit_index] - half_len),
                              orig.y() + len*(centerY[bit_index] - half_len),
-                             orig.z() + len*(centerZ[bit_index] - half_len), 
-                             orig.x() + len*(centerX[bit_index] + half_len), 
+                             orig.z() + len*(centerZ[bit_index] - half_len),
+                             orig.x() + len*(centerX[bit_index] + half_len),
                              orig.y() + len*(centerY[bit_index] + half_len),
                              orig.z() + len*(centerZ[bit_index] + half_len) );
 }
 
 double boct_bit_tree::cell_len(int bit_index)
 {
-  if(bit_index==0)
+  if (bit_index==0)
     return 1.0;
-  if(bit_index<9)
-    return .5; 
-  if(bit_index<73)
+  else if (bit_index<9)
+    return .5;
+  else if (bit_index<73)
     return .25;
-  return .125;
+  else
+    return .125;
 }
 
 bool boct_bit_tree::valid_cell(int bit_index)
@@ -265,22 +266,21 @@ inline static int int_log8(unsigned int a)
 // A local (and recursive) implementation for a^b with a and b both integer;
 // this is a more accurate alternative for std::pow(double a,double b),
 // certainly in those cases where b is relatively small.
-inline static int int_pow(int a, unsigned int b)
+inline static long int_pow8(unsigned int b)
 {
   if (b==0) return 1;
-  else if (b==1) return a;
-  else return int_pow(a*a,b/2) * int_pow(a, b%2);
+  return 1L<<(3*b);
 }
 
 
 int boct_bit_tree::max_num_cells()
 {
-  return int((int_pow(8.0, num_levels_+1) - 1.0) / 7.0);
+  return int((int_pow8(num_levels_+1) - 1.0) / 7.0);
 }
 
 int boct_bit_tree::max_num_inner_cells()
 {
-  return int((int_pow(8.0, num_levels_) - 1.0) / 7.0);
+  return int((int_pow8(num_levels_) - 1.0) / 7.0);
 }
 
 int boct_bit_tree::depth_at(int index) const
@@ -558,19 +558,19 @@ vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree &t)
   s << "boct_bit_tree:\n"
     << "Tree bits:\n"
     << "depth 0: "<< (int) (t.bit_at(0))
-    << '\n'; 
+    << '\n';
 
   //one
   s << "depth 1:";
   for (int i=1; i<9; i++)
     s << "  " << (int) t.bit_at(i);
-  s << '\n'; 
-  
-  //two 
+  s << '\n';
+
+  //two
   s << "depth 2:";
   for (int i=9; i<73; i++)
     s << "  " << (int) t.bit_at(i);
-  s << '\n'; 
+  s << '\n';
 
   return s;
 }

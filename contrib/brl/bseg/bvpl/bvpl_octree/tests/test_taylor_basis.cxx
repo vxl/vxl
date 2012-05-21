@@ -127,14 +127,13 @@ void test_taylor_basis()
 
   unsigned long tree_ncells = error_scene->get_block(0,0,0)->get_tree()->size();
   unsigned long scene_ncells = error_scene->size();
-  unsigned long nsamples = (unsigned long)((double)scene_ncells* 100);
+  unsigned long nsamples = scene_ncells*100L;
 
-  //number of samples - 10% of total number of leaf-cells
-  unsigned long tree_nsamples = (tree_ncells/scene_ncells)*(float)nsamples;
+  //number of samples - 10% of total number of leaf cells
+  unsigned long tree_nsamples = (unsigned long)(float(tree_ncells)/scene_ncells*nsamples);
   double error = bvpl_taylor_basis::sum_errors(error_scene,0,0,0, tree_nsamples);
-  vcl_cout << "Average Error: " << error <<vcl_endl;
 
-  TEST_NEAR("Test error", error, (double)131737.5, 1.0e-7);
+  TEST_NEAR("Test average error", error, 131737.5, 1e-7);
 }
 
 

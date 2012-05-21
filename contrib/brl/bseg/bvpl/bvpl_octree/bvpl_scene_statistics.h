@@ -20,11 +20,10 @@ bool bvpl_compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed
 {
   typedef boct_tree<short, vnl_vector_fixed<float,DIM> > tree_type;
   typedef boct_tree_cell<short,vnl_vector_fixed<float,DIM> > cell_type;
-  
-  
+
   //(1) Traverse the leaves of the scene
   boxm_cell_iterator<tree_type > iterator = scene->cell_iterator(&boxm_scene<tree_type>::load_block, true);
-  
+
   iterator.begin();
   float cell_count = 0;
   float max = (*iterator)->data().magnitude();
@@ -37,33 +36,33 @@ bool bvpl_compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed
     if ( mag < min)  min = mag;
     ++iterator;
   }
-  
-  unsigned nbins = vcl_floor(vcl_sqrt(cell_count));
+
+  unsigned int nbins = (unsigned int)vcl_floor(vcl_sqrt(cell_count));
   response_hist = bsta_histogram<float>(min, max, nbins);
-  
+
   iterator.begin();
-  
+
   while (!iterator.end()) {
     response_hist.upcount(static_cast<float>((*iterator)->data().magnitude()), 1.0f);
     ++iterator;
   }
-  
+
   scene->unload_active_blocks();
-  
+
   return true;
 }
 
 
-
 template <class T_loc, class T_data>
-bool bvpl_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bsta_histogram<float>& response_hist, unsigned nbins = 0 )//, bsta_histogram<float>& level_hist, unsigned& n_leaves)
+bool bvpl_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bsta_histogram<float>& response_hist, unsigned int nbins = 0 )
+                                   //, bsta_histogram<float>& level_hist, unsigned& n_leaves)
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   typedef boct_tree_cell<T_loc,T_data> cell_type;
-  
+
   //(1) Traverse the leaves of the scene
   boxm_cell_iterator<tree_type > iterator = scene->cell_iterator(&boxm_scene<tree_type>::load_block, true);
-  
+
   iterator.begin();
   float cell_count = 0;
   T_data max = (*iterator)->data();
@@ -76,9 +75,9 @@ bool bvpl_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene
     if ( this_val < min)  min = this_val;
     ++iterator;
   }
-  
-  if(nbins == 0)
-    nbins = vcl_floor(vcl_sqrt(cell_count));
+
+  if (nbins == 0)
+    nbins = (unsigned int)vcl_floor(vcl_sqrt(cell_count));
   response_hist = bsta_histogram<float>(min, max, nbins);
   scene->unload_active_blocks();
   iterator.begin();
@@ -86,24 +85,19 @@ bool bvpl_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene
     response_hist.upcount(static_cast<T_data>((*iterator)->data()), 1.0f);
     ++iterator;
   }
-  
+
   scene->unload_active_blocks();
-  
+
   return true;
-  
 }
 
-//: Function that compute average value of a fraction of samples in the specified block. 
+//: Function that compute average value of a fraction of samples in the specified block.
 //  Datatype is assumed to be float, but if could be templated to expand to other types
 double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int block_j, int block_k, unsigned long tree_nsamples);
 
-//: Function that compute average value of all positive samples in the specified block. 
+//: Function that compute average value of all positive samples in the specified block.
 //  Datatype is assumed to be float, but if could be templated to expand to other types
 double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int block_j, int block_k);
-
-
-
-
 
 
 #endif // bvpl_scene_statistics_h

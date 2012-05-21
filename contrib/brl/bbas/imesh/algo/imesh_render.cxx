@@ -62,7 +62,7 @@ void imesh_render_triangle_texture(const vgl_point_3d<double>& v1,
         double tx = texmap[0][0]*x + texmap[0][1]*y + texmap[0][2];
         double ty = texmap[1][0]*x + texmap[1][1]*y + texmap[1][2];
         for (unsigned p=0; p<texture.nplanes(); ++p) {
-          image(x,y,p) = vil_bilin_interp_safe(texture,tx,ty,p);
+          image(x,y,p) = (vxl_byte)vil_bilin_interp_safe(texture,tx,ty,p);
         }
       }
     }

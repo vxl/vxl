@@ -92,7 +92,7 @@ bool bvpl_bundler_features_2d_compute_process_cons( bprb_func_process& pro )
     vcl_cerr << "----ERROR---- bvpl_bundler_features_2d_compute_process_cons\n"
              << "\tCOULD NOT SET INPUT TYPES.\n"
              << __FILE__ << '\n'
-             << __LINE__ << '\n' << vcl_flush;
+             << __LINE__ << '\n';
     return false;
   }
 
@@ -101,7 +101,7 @@ bool bvpl_bundler_features_2d_compute_process_cons( bprb_func_process& pro )
     vcl_cerr << "----ERROR---- bvpl_bundler_features_2d_compute_process_cons\n"
              << "\tCOULD NOT SET OUTPUT TYPES.\n"
              << __FILE__ << '\n'
-             << __LINE__ << '\n' << vcl_flush;
+             << __LINE__ << '\n';
     return false;
   }
 
@@ -134,8 +134,8 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   {
     vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
              << "\tERROR OPENING BAD CAMERA FILE.\n"
-             << __FILE__ <<'\n'
-             << __LINE__ << '\n' << vcl_flush;
+             << __FILE__ << '\n'
+             << __LINE__ << '\n';
     return false;
   }
 
@@ -153,9 +153,9 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   if ( !vul_file::is_directory(kernel_dir) )
   {
     vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
-             << "\t KERNEL DIRECTORY NOT VALID.\n"
+             << "\tKERNEL DIRECTORY NOT VALID.\n"
              << __FILE__ << '\n'
-             << __LINE__ << '\n' << vcl_flush;
+             << __LINE__ << '\n';
     return false;
   }
 
@@ -173,7 +173,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     k_itr, k_end = filenames.end();
 
   for ( k_itr = filenames.begin();
-    k_itr != k_end; ++k_itr )
+        k_itr != k_end; ++k_itr )
   {
     vcl_string fname = kernel_dir + "//" + *k_itr + ".txt";
     vcl_ifstream kernel_file(fname.c_str());
@@ -181,9 +181,9 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     if ( !kernel_file.good() )
     {
       vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
-               << "\t COULD NOT OPEN KERNEL: " << *k_itr << '\n'
+               << "\tCOULD NOT OPEN KERNEL: " << *k_itr << '\n'
                << __FILE__ << '\n'
-               << __LINE__ << '\n' << vcl_flush;
+               << __LINE__ << '\n';
       return false;
     }
 
@@ -192,8 +192,8 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     kernel_file >> min_pt;
     kernel_file >> max_pt;
 
-    unsigned nx = max_pt.x() - min_pt.y() + 1;
-    unsigned ny = max_pt.y() - min_pt.y() + 1;
+    unsigned int nx = (unsigned int)(max_pt.x() - min_pt.y() + 1);
+    unsigned int ny = (unsigned int)(max_pt.y() - min_pt.y() + 1);
 
     vnl_vector<double> w(nx*ny);
 
@@ -227,8 +227,8 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   {
     vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
              << "\tERROR OPENING BUNDLER OUTPUT FILE.\n"
-             << __FILE__ <<'\n'
-             << __LINE__ << vcl_flush;
+             << __FILE__ << '\n'
+             << __LINE__ << '\n';
     return false;
   }
 
@@ -239,7 +239,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
              << "\tINVALID VIDEO STREAM.\n"
              << __FILE__ << '\n'
-             << __LINE__ << vcl_flush;
+             << __LINE__ << '\n';
     return false;
   }
 
@@ -258,7 +258,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
              << "\tMISSING BUNDLER FILE DATA.\n"
              << __FILE__ << '\n'
-             << __LINE__ << '\n' << vcl_flush;
+             << __LINE__ << '\n';
     return false;
   }
 
@@ -363,16 +363,15 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
       vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
                << "\tCOULD NOT FIND FRAME: " <<v_itr->first << '\n'
                << __FILE__ << '\n'
-               << __LINE__ << '\n' << vcl_flush;
+               << __LINE__ << '\n';
       return false;
     }
 
     vil_image_view<vxl_byte> curr_img;
-    vidl_convert_to_view(*video_stream.current_frame(),
-      curr_img);
+    vidl_convert_to_view(*video_stream.current_frame(), curr_img);
 
     if ( curr_img.nplanes() != 1 ||
-      curr_img.pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE )
+         curr_img.pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE )
     {
       vil_image_view<vxl_byte> grey_img;
       vil_convert_planes_to_grey(curr_img, grey_img);
@@ -396,16 +395,15 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
         vnl_vector<double> neighborhood(k.w.size());
 
         //build this neighborhood for this kernel
-        for ( unsigned i = 0;
-          i < k.locs.size(); ++i )
+        for ( unsigned i = 0; i < k.locs.size(); ++i )
         {
-          int x = p_itr->x() + k.locs[i].x();
-          int y = p_itr->y() + k.locs[i].y();
+          int x = int(p_itr->x() + k.locs[i].x());
+          int y = int(p_itr->y() + k.locs[i].y());
 
           //check if pixel index is within bounds
           //else pad with zeros
-          if ( x > int(0) && y > int(0) &&
-            unsigned(x) < ni && unsigned(y) < nj )
+          if ( x >= 0 && y >= 0 &&
+               unsigned(x) < ni && unsigned(y) < nj )
             neighborhood[i] = curr_img(x,y);
           else
             neighborhood[i] = double(0.0);

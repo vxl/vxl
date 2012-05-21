@@ -81,7 +81,7 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
               vgl_point_3d<double> cc = curr_tree.cell_box(ti).min_point();
               float prob =alpha_data->data()[index];
               prob =  1- vcl_exp (-prob* side_len *sub_blk_dims.x());
-              int factor = vcl_pow((float)2,(float)blk_iter->second.max_level_-depth-1);
+              int factor = 1<<(blk_iter->second.max_level_-depth-1);
 
               for (int subi = 0; subi < factor; ++subi)
                 for (int subj = 0; subj < factor; ++subj)
@@ -89,7 +89,8 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
                   {
                     img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
                           index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk) = (unsigned char) vcl_floor(prob * 255.0f);
+                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk)
+                      = (unsigned char)(prob * 255);
                   }
             }
           }
@@ -177,8 +178,8 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
               vgl_point_3d<double> cc = curr_tree.cell_box(ti).min_point();
               float prob =alpha_data->data()[index];
               prob =  1- vcl_exp (-prob* side_len *sub_blk_dims.x());
-              int factor = vcl_pow((float)2,(float)blk_iter->second.max_level_-depth-1);
-              unsigned char intensity  = (unsigned char) vcl_floor( boxm2_mog3_grey_processor::expected_color(int_data->data()[index]) *255.0f);
+              int factor = 1<<(blk_iter->second.max_level_-depth-1);
+              unsigned char intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(int_data->data()[index]) * 255);
 
               for (int subi = 0; subi < factor; ++subi)
                 for (int subj = 0; subj < factor; ++subj)
@@ -186,7 +187,7 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
                   {
                     img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
                           index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,3) = (unsigned char) vcl_floor(prob * 255.0f);
+                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,3) = (unsigned char)(prob * 255);
                     img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
                           index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
                           index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,0) =intensity;
@@ -284,12 +285,12 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
               vgl_point_3d<double> cc = curr_tree.cell_box(ti).min_point();
               float prob =alpha_data->data()[index];
               prob =  1- vcl_exp (-prob* side_len *sub_blk_dims.x());
-              int factor = vcl_pow((float)2,(float)blk_iter->second.max_level_-depth-1);
+              int factor = 1<<(blk_iter->second.max_level_-depth-1);
 
               vnl_vector_fixed<float,3> color = boxm2_gauss_rgb_processor::expected_color(int_data->data()[index]);
-              unsigned char r = (unsigned char) vcl_floor(color[0]*255.0f) ;
-              unsigned char g = (unsigned char) vcl_floor(color[1]*255.0f) ;
-              unsigned char b = (unsigned char) vcl_floor(color[2]*255.0f) ;
+              unsigned char r = (unsigned char)(color[0]*255);
+              unsigned char g = (unsigned char)(color[1]*255);
+              unsigned char b = (unsigned char)(color[2]*255);
 
               for (int subi = 0; subi < factor; ++subi)
                 for (int subj = 0; subj < factor; ++subj)
@@ -297,7 +298,7 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
                   {
                     img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
                           index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,3) = (unsigned char) vcl_floor(prob * 255.0f);
+                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,3) = (unsigned char)(prob * 255);
                     img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
                           index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
                           index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,0) =r;

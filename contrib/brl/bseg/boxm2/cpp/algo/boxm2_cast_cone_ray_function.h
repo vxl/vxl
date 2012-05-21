@@ -224,7 +224,7 @@ bool cast_cone_ray_per_block( functor_type functor,
         vgl_ray_3d<double> ray_ij; //= cam->ray(i,j);
         double cone_half_angle, solid_angle;
         vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
-        vsph_camera_bounds::pixel_solid_angle(*pcam, ((float)i)+0.5f, ((float)j)+0.5f, ray_ij, cone_half_angle, solid_angle);
+        vsph_camera_bounds::pixel_solid_angle(*pcam, i, j, ray_ij, cone_half_angle, solid_angle);
 
         // normalize ray such that each block is of unit length
         vgl_point_3d<double> block_origin( (ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,

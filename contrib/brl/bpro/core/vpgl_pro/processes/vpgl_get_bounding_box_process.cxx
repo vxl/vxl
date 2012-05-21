@@ -65,7 +65,7 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
   vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
-  vsph_camera_bounds::pixel_solid_angle(cam, pp.x()/4, pp.y()/4, cone_axis, cone_half_angle, solid_angle);
+  vsph_camera_bounds::pixel_solid_angle(cam, int(pp.x()/4), int(pp.y()/4), cone_axis, cone_half_angle, solid_angle);
   vgl_point_3d<double> cc = cam.camera_center();
   vgl_point_3d<double> zc( bbox.centroid().x(), bbox.centroid().y(), zplane);
   double res = 2*(cc-zc).length()*cone_half_angle;

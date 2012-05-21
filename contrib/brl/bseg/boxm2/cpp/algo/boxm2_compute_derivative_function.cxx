@@ -248,7 +248,7 @@ vcl_vector<vcl_pair<vgl_point_3d<int>, float> > boxm2_compute_derivative_functio
         ifs >> weight;
         if (ifs.eof())
             break;
-        filter.push_back(vcl_pair<vgl_point_3d<int>, float>( vgl_point_3d<int>(this_loc.x(),this_loc.y(),this_loc.z()) , weight));
+        filter.push_back(vcl_pair<vgl_point_3d<int>, float>( vgl_point_3d<int>(int(this_loc.x()),int(this_loc.y()),int(this_loc.z())), weight));
 #ifdef DEBUG
         vcl_cout << this_loc << "  weight: " << weight << vcl_endl;
 #endif

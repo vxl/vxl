@@ -153,7 +153,7 @@ void test_global()
       for (unsigned k = 0; k < 3; k++) {
         vnl_matrix_fixed<double, 125, 125> S;
         vnl_vector_fixed<double, 125> mean;
-        unsigned long nfeature =0.0;
+        unsigned long nfeature =0L;
         pca_global_info.sample_statistics(0, i, j, k, S, mean, nfeature);
 
         vcl_stringstream scatter_ss;
