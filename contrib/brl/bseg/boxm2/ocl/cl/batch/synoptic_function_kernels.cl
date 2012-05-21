@@ -303,6 +303,7 @@ typedef struct
            float*  ray_vis;
            float*  ray_pre;
            float   pre_inf;
+		   float   vis_inf;
 
            float phi;
 
@@ -328,6 +329,7 @@ avg_surface_empty_ratio_main(__constant  RenderSceneInfo    * linfo,
                              __global    float4             * ray_directions,
                              __global    uint4              * imgdims,           // dimensions of the input image
                              __global    float              * vis_image,         // visibility image (for keeping vis across blocks)
+                             __global    float              * vis_inf_image,         // visibility image (for keeping vis across blocks)
                              __global    float              * pre_image,         // preinf image (for keeping pre across blocks)
                              __global    float              * pre_inf_image,        // norm image (for bayes update normalization factor)
                              __global    float              * norm_image,        // norm image (for bayes update normalization factor)
@@ -355,6 +357,7 @@ avg_surface_empty_ratio_main(__constant  RenderSceneInfo    * linfo,
   float vis = vis_image[j*get_global_size(0) + i];
   float pre = pre_image[j*get_global_size(0) + i];
   float pre_inf = pre_inf_image[j*get_global_size(0) + i];
+  float vis_inf = vis_inf_image[j*get_global_size(0) + i];
   if (vis <0.0)
     return;
 
@@ -384,6 +387,7 @@ avg_surface_empty_ratio_main(__constant  RenderSceneInfo    * linfo,
   aux_args.phi          = atan2(ray_d.y,ray_d.x);
   aux_args.norm = norm;
   aux_args.pre_inf = pre_inf;
+  aux_args.vis_inf = vis_inf;
   aux_args.ray_vis = &vis;
   aux_args.ray_pre = &pre;
 
@@ -466,7 +470,8 @@ void compute_synoptic_alpha(__constant RenderSceneInfo * info,
                             __global int4 * tree_array,
                             __global float * alpha_array,
                             __global float * aux0,
-                            __global float * aux3,
+                            __global float * aux2,
+							__global float * aux3,
                             __constant int * nobs,
                             __global int *datasize,
                             __constant uchar *bit_lookup,
@@ -479,7 +484,7 @@ void compute_synoptic_alpha(__constant RenderSceneInfo * info,
     int numTrees = info->dims.x * info->dims.y * info->dims.z;
     if (gid < numTrees) {
         local_trees[lid] = as_uchar16(tree_array[gid]);
-        __local uchar16* local_tree = &local_trees[lid];
+        __local uchar16* local_tree = &(local_trees[lid]);
         __local uchar * cumsum = &cumsum_wkgp[lid*10];
         // iterate through leaves
         cumsum[0] = (*local_tree).s0;
@@ -495,26 +500,69 @@ void compute_synoptic_alpha(__constant RenderSceneInfo * info,
                 //find side length for cell of this level = block_len/2^currDepth
                 int currDepth = get_depth(i);
                 float side_len = info->block_len/(float) (1<<currDepth);
-
+				float  alphamin = -log(1.0f-0.0001f)/side_len;
                 //get alpha value for this cell;
                 int dataIndex = data_index_cached(local_tree, i, bit_lookup, cumsum, &cumIndex) + data_index_root(local_tree); //gets absolute position
                 float alpha   = alpha_array[dataIndex];
 
                 //integrate alpha value
                 float prob = 1 - exp(-alpha * side_len);
+				//prob = 0.5f;
                 // compute the product of the ratios.
-                float ratio  = 1.0f;
-                for (unsigned int k = 0 ; k < (*nobs) ; k++)
-                {
-                    float seg_len = aux0[(*datasize)*k+dataIndex];
-                    float r          = aux3[(*datasize)*k+dataIndex];
-                    if (seg_len > 1e-10f *  SEGLEN_FACTOR )
-                        ratio *= (r/seg_len);
-                }
+#ifdef INDEPENDENT
+				float ratio  = 0.0f;
+				int cnt = 0;
+				float vis_inf_cont = 0.0f;
+				for (unsigned int k = 0 ; k <(*nobs) ; k++)
+				{
+					float seg_len = aux0[(*datasize)*k+dataIndex];
+					float r       = aux3[(*datasize)*k+dataIndex];
+					if (seg_len > 1 )
+					{
+						float temp_ratio = (r/seg_len);
+						if(temp_ratio > 0.0 )
+						{
+							ratio = ratio+ log(temp_ratio);
+							cnt ++;
+						}
+					}	
+				}
+				if(cnt > 0 )
+				{
+					alpha = alpha * exp(ratio/(float)cnt);
+					alpha_array[dataIndex] = alpha;//max(alphamin,alpha) ;
+				}
+#endif
+#ifdef JOINT
+				float ratio  = 0.0f;
+				int cnt = 0;
+				float vis_inf_cont = 0.0f;
+				for (unsigned int k = 0 ; k <(*nobs) ; k++)
+				{
+					float seg_len = aux0[(*datasize)*k+dataIndex];
+					float r       = aux3[(*datasize)*k+dataIndex];
 
-                float bayes_ratio =  1/(prob + (1-prob)/ratio);
-                alpha = alpha *clamp(bayes_ratio,0.5f,2.0) ;
-                alpha_array[dataIndex] = alpha ;
+					if (seg_len > 1 )
+					{
+
+						float temp_ratio = (r/seg_len);
+						vis_inf_cont  = aux2[(*datasize)*k+dataIndex];
+						vis_inf_cont = vis_inf_cont/seg_len;
+
+						ratio = ratio + log(1/temp_ratio + vis_inf_cont);
+						cnt++;
+					}	
+				}
+				if(cnt > 0 )
+				{
+					float bayes_ratio =  prob/(prob + (1-prob)*exp(ratio/(float)cnt));
+					if( bayes_ratio >= 0.0 && bayes_ratio <= 1.0)
+					{
+						alpha = (-log(1-bayes_ratio))/side_len;
+						alpha_array[dataIndex] = alpha;
+					}
+				}
+#endif
             }
         }
     }
