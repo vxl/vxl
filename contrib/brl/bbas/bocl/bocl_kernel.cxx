@@ -40,7 +40,7 @@ bool bocl_kernel::create_kernel(cl_context* context,
   bocl_device_info info(device);
   if (info.is_nvidia_device_) {
     vcl_cout<<"Compiling kernel ["<<id_<<"] on an NVIDIA device"<<vcl_endl;
-    options += " -cl-nv-verbose ";
+    options += " -cl-nv-verbose";
   }
 
   //build cl_program object
