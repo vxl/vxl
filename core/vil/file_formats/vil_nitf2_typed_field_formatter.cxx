@@ -292,7 +292,7 @@ bool vil_nitf2_exponential_formatter::write_vcl_stream(vcl_ostream& output,
          << vcl_internal << vcl_setfill('0') << vcl_setprecision(mantissa_width)
          << value;
   vcl_string buffer_string = buffer.str();
-  unsigned int length = buffer_string.length();
+  unsigned int length = (unsigned int)(buffer_string.length());
   // Write everything up to the exponent sign
   output << buffer_string.substr(0,length-3);
   // Write exponent digits, padding or unpadding them to desired width

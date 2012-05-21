@@ -20,8 +20,7 @@ vil_pyramid_image_list_format::make_input_pyramid_image(char const* directory)
 {
   vil_image_list il(directory);
   vcl_vector<vil_image_resource_sptr> rescs = il.resources();
-  unsigned nr = rescs.size();
-  if (nr < 2)
+  if (rescs.size() < 2L)
     return 0;
   vil_pyramid_image_list* pil = new vil_pyramid_image_list(rescs);
   pil->set_directory(directory);
@@ -57,8 +56,8 @@ static bool copy_base_resc(vil_image_resource_sptr const& base_image,
                                    file_format);
   if (!out_resc)
     return false;
-  for (unsigned j = 0; j<brsc->n_block_j(); ++j)
-    for (unsigned i = 0; i<brsc->n_block_i(); ++i)
+  for (unsigned int j = 0; j<brsc->n_block_j(); ++j)
+    for (unsigned int i = 0; i<brsc->n_block_i(); ++i)
     {
       vil_image_view_base_sptr blk = brsc->get_block(i,j);
       if (!blk)
@@ -95,7 +94,7 @@ static vcl_string level_filename(vcl_string& directory, vcl_string& filename,
 vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
     make_pyramid_image_from_base(char const* directory,
                                  vil_image_resource_sptr const& base_image,
-                                 unsigned nlevels,
+                                 unsigned int nlevels,
                                  bool copy_base,
                                  char const* level_file_format,
                                  char const* filename
@@ -123,7 +122,7 @@ vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
   //Create the other pyramid levels
   { //program scope to close resource files
     vil_image_resource_sptr image = blk_base.ptr();
-    for (unsigned L = 1; L<nlevels; ++L)
+    for (unsigned int L = 1; L<nlevels; ++L)
     {
       vcl_cout << "Decimating Level " << L << vcl_endl;
       full_filename = level_filename(d, fn, float(L)) + '.'+ level_file_format;
@@ -171,29 +170,29 @@ vil_pyramid_image_list::vil_pyramid_image_list(vcl_vector<vil_image_resource_spt
 
 vil_pyramid_image_list::~vil_pyramid_image_list()
 {
-  unsigned nlevels = levels_.size();
-  for (unsigned i = 0; i<nlevels; ++i)
+  unsigned int nlevels = (unsigned int)(levels_.size());
+  for (unsigned int i = 0; i<nlevels; ++i)
     delete levels_[i];
 }
 
 //: Assumes that the image in level 0 is the largest
 void vil_pyramid_image_list::normalize_scales()
 {
-  unsigned nlevels = levels_.size();
+  unsigned int nlevels = (unsigned int)(levels_.size());
   if (nlevels==0)
     return;
   levels_[0]->scale_ = 1.0f;
   if (nlevels==1)
     return;
   float ni0 = static_cast<float>(levels_[0]->image_->ni());
-  for (unsigned i = 1; i<nlevels; ++i)
+  for (unsigned int i = 1; i<nlevels; ++i)
     levels_[i]->scale_ = static_cast<float>(levels_[i]->image_->ni())/ni0;
 }
 
 bool vil_pyramid_image_list::is_same_size(vil_image_resource_sptr const& image)
 {
-  unsigned ni = image->ni(), nj = image->nj();
-  for (unsigned L = 0; L<this->nlevels(); ++L)
+  unsigned int ni = image->ni(), nj = image->nj();
+  for (unsigned int L = 0; L<this->nlevels(); ++L)
     if (levels_[L]->image_->ni()==ni&&levels_[L]->image_->nj()==nj)
       return true;
   return false;
@@ -224,7 +223,7 @@ vil_pyramid_image_list::add_resource(vil_image_resource_sptr const& image)
 float
 vil_pyramid_image_list::find_next_level(vil_image_resource_sptr const& image)
 {
-  unsigned nlevels = this->nlevels();
+  unsigned int nlevels = this->nlevels();
   if (nlevels==0)
     return 0.0f;
   float base_ni = static_cast<float>(levels_[0]->image_->ni());
@@ -244,7 +243,7 @@ bool vil_pyramid_image_list::put_resource(vil_image_resource_sptr const& image)
   if (image->file_format())
     ffmt = image->file_format();
   file = file +'.'+ ffmt;
-  unsigned sbi = 0, sbj = 0;
+  unsigned int sbi = 0, sbj = 0;
   vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
   if (bir)
   { sbi = bir->size_block_i(); sbj = bir->size_block_j(); }
@@ -275,15 +274,15 @@ bool vil_pyramid_image_list::put_resource(vil_image_resource_sptr const& image)
 //:find the level closest to the specified scale
 pyramid_level* vil_pyramid_image_list::closest(const float scale) const
 {
-  unsigned nlevels = levels_.size();
+  unsigned int nlevels = (unsigned int)(levels_.size());
   if (nlevels == 0)
     return 0;
 
   if (nlevels == 1)
     return levels_[0];
   float mind = 1.0e08f;//huge scale;
-  unsigned lmin = 0;
-  for (unsigned i = 0; i<nlevels; ++i)
+  unsigned int lmin = 0;
+  for (unsigned int i = 0; i<nlevels; ++i)
   {
     float ds = vcl_fabs(vcl_log(levels_[i]->scale_ / scale));
     if (ds<mind)
@@ -299,9 +298,9 @@ pyramid_level* vil_pyramid_image_list::closest(const float scale) const
 }
 
 vil_image_view_base_sptr
-vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
-                                      unsigned j0, unsigned n_j,
-                                      unsigned level) const
+vil_pyramid_image_list::get_copy_view(unsigned int i0, unsigned int n_i,
+                                      unsigned int j0, unsigned int n_j,
+                                      unsigned int level) const
 {
   if (level>=this->nlevels())
   {
@@ -315,11 +314,11 @@ vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
 
   float fi0 = actual_scale*i0, fni = actual_scale*n_i, fj0 = actual_scale*j0, fnj = actual_scale*n_j;
   //transform image coordinates by actual scale
-  unsigned si0 = static_cast<unsigned>(fi0);
-  unsigned sni = static_cast<unsigned>(fni);
+  unsigned int si0 = static_cast<unsigned int>(fi0);
+  unsigned int sni = static_cast<unsigned int>(fni);
   if (sni == 0) sni = 1;//can't have less than one pixel
-  unsigned sj0 = static_cast<unsigned>(fj0);
-  unsigned snj = static_cast<unsigned>(fnj);
+  unsigned int sj0 = static_cast<unsigned int>(fj0);
+  unsigned int snj = static_cast<unsigned int>(fnj);
   if (snj == 0) snj = 1;//can't have less than one pixel
   vil_image_view_base_sptr v = pl->image_->get_copy_view(si0, sni, sj0, snj);
   if (!v)
@@ -336,8 +335,8 @@ vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
 
 //:return a view with image scale that is closest to scale.
 vil_image_view_base_sptr
-vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
-                                      unsigned j0, unsigned n_j,
+vil_pyramid_image_list::get_copy_view(unsigned int i0, unsigned int n_i,
+                                      unsigned int j0, unsigned int n_j,
                                       const float scale,
                                       float& actual_scale) const
 {
@@ -349,7 +348,7 @@ vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
     return 0;
   }
   actual_scale = pl->scale_;
-  unsigned level = pl->cur_level_;
+  unsigned int level = pl->cur_level_;
   return this->get_copy_view(i0, n_i, j0, n_j, level);
 }
 
