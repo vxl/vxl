@@ -25,15 +25,22 @@
 // storage and whose iterator types are raw pointers. There is
 // no requirement that the element type have a default constructor.
 template <class T>
-struct vbl_array_1d
+class vbl_array_1d
 {
+ public:
+  typedef vcl_size_t size_type;
   typedef T element_type;
 
+ private:
+  element_type *begin_, *end_, *alloc_; // begin_ <= end_ <= alloc_
+
+ public:
   typedef T       *iterator;
   typedef T const *const_iterator;
 
   typedef T       &reference;
   typedef T const &const_reference;
+ public:
 
   vbl_array_1d() : begin_(0), end_(0), alloc_(0) { }
 
@@ -53,12 +60,12 @@ struct vbl_array_1d
   }
 
 //: Construct an array with n elements, all equal to v
-  vbl_array_1d(unsigned long n, const T &v) {
+  vbl_array_1d(size_type n, const T &v) {
     // alignment guaranteed by 18.4.1.1
     begin_ = (T*) operator new( n * sizeof(T) );
     end_   = begin_ + n;
     alloc_ = begin_ + n;
-    for (unsigned long i=0; i<n; ++i)
+    for (size_type i=0; i<n; ++i)
       new (begin_ + i) T(v);
   }
 
@@ -138,8 +145,8 @@ struct vbl_array_1d
   const_iterator end() const { return end_; }
 
   bool empty() const { return begin_ == end_; }
-  vcl_size_t size() const { return end_ - begin_; }
-  vcl_size_t capacity() const { return alloc_ - begin_; }
+  size_type size() const { return end_ - begin_; }
+  size_type capacity() const { return alloc_ - begin_; }
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
@@ -156,10 +163,6 @@ struct vbl_array_1d
     assert (i >= 0 && i < end_ - begin_);
     return begin_[i];
   }
-
- private:
-  // begin_ <= end_ <= alloc_
-  T *begin_, *end_, *alloc_;
 };
 
 export template <class T>

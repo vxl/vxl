@@ -26,6 +26,19 @@ class vbl_array_2d
 {
  public:
   typedef vcl_size_t size_type;
+  typedef T element_type;
+
+ private:
+  element_type** rows_;
+  size_type num_rows_;
+  size_type num_cols_;
+
+ public:
+  typedef T       *iterator;
+  typedef T const *const_iterator;
+
+  typedef T       &reference;
+  typedef T const &const_reference;
  public:
 
   //: Default constructor
@@ -95,8 +108,8 @@ class vbl_array_2d
   }
 
   // Data Access---------------------------------------------------------------
-  T const& operator() (size_type i, size_type j) const { return rows_[i][j]; }
-  T      & operator() (size_type i, size_type j) { return rows_[i][j]; }
+  const_reference operator() (size_type i, size_type j) const { return rows_[i][j]; }
+  reference       operator() (size_type i, size_type j) { return rows_[i][j]; }
 
   void put(size_type i, size_type j, T const &x) { rows_[i][j] = x; }
   T    get(size_type i, size_type j) const { return rows_[i][j]; }
@@ -116,23 +129,19 @@ class vbl_array_2d
 
   //: Return size = (number of rows) * (number of columns)
   size_type size() const { return num_rows_ * num_cols_; }
+  size_type capacity() const { return size(); }
 
   T      *      * get_rows() { return rows_; }
   T const* const* get_rows() const { return rows_; }
 
-  typedef T       *iterator;
+  // iterators
   iterator begin() { return rows_[0]; }
   iterator end  () { return rows_[0] + num_cols_ * num_rows_; }
 
-  typedef T const *const_iterator;
   const_iterator begin() const { return rows_[0]; }
   const_iterator end  () const { return rows_[0] + num_cols_ * num_rows_; }
 
  private:
-  T** rows_;
-  size_type num_rows_;
-  size_type num_cols_;
-
   void construct() {
     rows_ = 0;
     num_rows_ = 0;

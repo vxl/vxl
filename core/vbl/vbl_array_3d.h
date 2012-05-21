@@ -39,15 +39,27 @@ class vbl_array_3d
 {
  public:
   typedef vcl_size_t size_type;
- public:
   typedef T element_type;
-  typedef T* iterator;
+
+ private:
+  element_type ***element_;
+  size_type row1_count_;
+  size_type row2_count_;
+  size_type row3_count_;
+
+ public:
+  typedef T*       iterator;
   typedef T const* const_iterator;
+
+  typedef T       &reference;
+  typedef T const &const_reference;
+ public:
 
   vbl_array_3d(): element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
   {}
 
-  vbl_array_3d(size_type n1, size_type n2, size_type n3) { construct(n1, n2, n3); }
+  vbl_array_3d(size_type n1, size_type n2, size_type n3)
+  { construct(n1, n2, n3); }
 
   vbl_array_3d(size_type n1, size_type n2, size_type n3, T const* init_values)
   {
@@ -94,13 +106,13 @@ class vbl_array_3d
 
   // Data Access---------------------------------------------------------------
 
-  T      & operator() (size_type i1, size_type i2, size_type i3)
+  reference       operator() (size_type i1, size_type i2, size_type i3)
   {
     RANGECHECK(i1,i2,i3);
     return element_ [i1][i2][i3];
   }
 
-  T const& operator() (size_type i1, size_type i2, size_type i3) const
+  const_reference operator() (size_type i1, size_type i2, size_type i3) const
   {
     RANGECHECK(i1,i2,i3);
     return element_ [i1][i2][i3];
@@ -114,12 +126,10 @@ class vbl_array_3d
   size_type get_row2_count () const { return row2_count_; }
   size_type get_row3_count () const { return row3_count_; }
 
-  // iterators
-  size_type size() const
-  {
-    return row1_count_ * row2_count_ * row3_count_;
-  }
+  size_type size() const { return row1_count_ * row2_count_ * row3_count_; }
+  size_type capacity() const { return size(); }
 
+  // iterators
   iterator begin() { return element_[0][0]; }
   iterator end  () { return begin() + size(); }
   const_iterator begin() const { return element_[0][0]; }
@@ -136,13 +146,7 @@ class vbl_array_3d
 
  protected:
   void construct(size_type, size_type, size_type);
-  void destruct ();
-
- private:
-  T ***element_;
-  size_type row1_count_;
-  size_type row2_count_;
-  size_type row3_count_;
+  void destruct();
 };
 
 #undef RANGECHECK
