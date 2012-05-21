@@ -134,7 +134,9 @@ bool bocl_manager<T>::initialize_cl()
   else
     return false;
   context_ = curr_device_->context();
+#ifdef VERBOSE
   vcl_cout<<"Default device: "<<*curr_device_<<vcl_endl;
+#endif
   //////////////////////////////////////////////////////////////////////////////
 
   return true;
