@@ -44,7 +44,7 @@ void step_cell_preinf_cubic(AuxArgs aux_args, int data_ptr, uchar llid, float d)
         *(aux_args.vis_inf) = vis_prob_end;
     }
 }
-#endif // PREINF
+#endif // PREINF_CUBIC
 
 #ifdef PREINF_DEPTH_CUBIC
 //preinf step cell functor
@@ -78,7 +78,7 @@ void step_cell_preinf_depth_cubic(AuxArgs aux_args, int data_ptr, uchar llid, fl
     /* updated visibility probability */
     *(aux_args.vis_inf) = vis_prob_end;
 }
-#endif // PREINF
+#endif // PREINF_DEPTH_CUBIC
 
 #ifdef UPDATE_DEPTH_DENSITY
 //preinf step cell functor
@@ -122,7 +122,7 @@ void step_cell_post_depth_density_cubic(AuxArgs aux_args, int data_ptr, uchar ll
     /* updated visibility probability */
     *(aux_args.vis) = vis_prob_end;
 }
-#endif // PREINF
+#endif // UPDATE_DEPTH_DENSITY
 
 #ifdef BAYES_CUBIC
 //bayes step cell functor
@@ -165,7 +165,7 @@ void step_cell_bayes_cubic(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     }
     //-------------------------------------------------------------------------- */
 }
-#endif
+#endif // BAYES_CUBIC
 
 #ifdef POST_CUBIC
 //bayes step cell functor
@@ -278,15 +278,15 @@ void step_cell_avg_ratio_cubic(AuxArgs aux_args, int data_ptr, uchar llid, float
     //calculate this ray's contribution to beta
 #ifdef INDEPENDENT
     float temp  = exp(-alpha * seg_len);
-	float numer = *(aux_args.ray_pre) +  (* aux_args.ray_vis) * PI;
-	cell_post = (numer/(aux_args.pre_inf +aux_args.vis_inf)) *d;
+    float numer = *(aux_args.ray_pre) +  (* aux_args.ray_vis) * PI;
+    cell_post = (numer/(aux_args.pre_inf +aux_args.vis_inf)) *d;
 
-	(* aux_args.ray_pre) += (* aux_args.ray_vis)*(1-temp)*PI ;
-	(* aux_args.ray_vis) *= temp;
+    (* aux_args.ray_pre) += (* aux_args.ray_vis)*(1-temp)*PI ;
+    (* aux_args.ray_vis) *= temp;
 #endif
 
 #ifdef JOINT
-	    //calculate this ray's contribution to beta
+    //calculate this ray's contribution to beta
     float temp  = exp(-alpha * seg_len);
     float numer = *(aux_args.ray_pre) +  (* aux_args.ray_vis) * PI;
     float denom = *(aux_args.ray_pre)*temp +  (aux_args.pre_inf - *(aux_args.ray_pre) - (* aux_args.ray_vis)*(1-temp)*PI );// + aux_args.vis_inf*1.0 ;
@@ -294,13 +294,13 @@ void step_cell_avg_ratio_cubic(AuxArgs aux_args, int data_ptr, uchar llid, float
     cell_post = (numer/denom) *d;
     vis_cont  = (aux_args.vis_inf/numer) * d;
     (* aux_args.ray_pre) += (* aux_args.ray_vis)*(1-temp)*PI ;
-	(* aux_args.ray_vis) *= temp;
+    (* aux_args.ray_vis) *= temp;
 #endif
 
     //discretize and store beta and vis contribution
     int post_int = convert_int_rte(cell_post * SEGLEN_FACTOR);
     atom_add(&aux_args.beta_array[data_ptr], post_int);
     int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
-    atom_add(&aux_args.vis_array[data_ptr], vis_int);	
+    atom_add(&aux_args.vis_array[data_ptr], vis_int);
 }
-#endif // UPDATE_AVG_RATIO_EMPTY_SURFACE
+#endif // AVG_SURFACE_EMPTY_RATIO

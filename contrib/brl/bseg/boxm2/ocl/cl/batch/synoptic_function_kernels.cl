@@ -303,7 +303,7 @@ typedef struct
            float*  ray_vis;
            float*  ray_pre;
            float   pre_inf;
-		   float   vis_inf;
+           float   vis_inf;
 
            float phi;
 
@@ -461,7 +461,6 @@ void compute_uncertainty(__global float * aux0,
         barrier(CLK_LOCAL_MEM_FENCE);
     }
 }
-
 #endif // COMPUTE_UNCERTAINTY
 
 #ifdef COMPUTE_SYNOPTIC_ALPHA
@@ -471,7 +470,7 @@ void compute_synoptic_alpha(__constant RenderSceneInfo * info,
                             __global float * alpha_array,
                             __global float * aux0,
                             __global float * aux2,
-							__global float * aux3,
+                            __global float * aux3,
                             __constant int * nobs,
                             __global int *datasize,
                             __constant uchar *bit_lookup,
@@ -500,71 +499,70 @@ void compute_synoptic_alpha(__constant RenderSceneInfo * info,
                 //find side length for cell of this level = block_len/2^currDepth
                 int currDepth = get_depth(i);
                 float side_len = info->block_len/(float) (1<<currDepth);
-				float  alphamin = -log(1.0f-0.0001f)/side_len;
+                float  alphamin = -log(1.0f-0.0001f)/side_len;
                 //get alpha value for this cell;
                 int dataIndex = data_index_cached(local_tree, i, bit_lookup, cumsum, &cumIndex) + data_index_root(local_tree); //gets absolute position
                 float alpha   = alpha_array[dataIndex];
 
                 //integrate alpha value
                 float prob = 1 - exp(-alpha * side_len);
-				//prob = 0.5f;
+                //prob = 0.5f;
                 // compute the product of the ratios.
 #ifdef INDEPENDENT
-				float ratio  = 0.0f;
-				int cnt = 0;
-				float vis_inf_cont = 0.0f;
-				for (unsigned int k = 0 ; k <(*nobs) ; k++)
-				{
-					float seg_len = aux0[(*datasize)*k+dataIndex];
-					float r       = aux3[(*datasize)*k+dataIndex];
-					if (seg_len > 1 )
-					{
-						float temp_ratio = (r/seg_len);
-						if(temp_ratio > 0.0 )
-						{
-							ratio = ratio+ log(temp_ratio);
-							cnt ++;
-						}
-					}	
-				}
-				if(cnt > 0 )
-				{
-					alpha = alpha * exp(ratio/(float)cnt);
-					alpha_array[dataIndex] = alpha;//max(alphamin,alpha) ;
-				}
+                float ratio  = 0.0f;
+                int cnt = 0;
+                float vis_inf_cont = 0.0f;
+                for (unsigned int k = 0 ; k <(*nobs) ; k++)
+                {
+                    float seg_len = aux0[(*datasize)*k+dataIndex];
+                    float r       = aux3[(*datasize)*k+dataIndex];
+                    if (seg_len > 1 )
+                    {
+                        float temp_ratio = (r/seg_len);
+                        if (temp_ratio > 0.0 )
+                        {
+                            ratio = ratio+ log(temp_ratio);
+                            cnt ++;
+                        }
+                    }
+                }
+                if (cnt > 0 )
+                {
+                    alpha = alpha * exp(ratio/(float)cnt);
+                    alpha_array[dataIndex] = alpha;//max(alphamin,alpha) ;
+                }
 #endif
 #ifdef JOINT
-				float ratio  = 0.0f;
-				int cnt = 0;
-				float vis_inf_cont = 0.0f;
-				for (unsigned int k = 0 ; k <(*nobs) ; k++)
-				{
-					float seg_len = aux0[(*datasize)*k+dataIndex];
-					float r       = aux3[(*datasize)*k+dataIndex];
+                float ratio  = 0.0f;
+                int cnt = 0;
+                float vis_inf_cont = 0.0f;
+                for (unsigned int k = 0 ; k <(*nobs) ; k++)
+                {
+                    float seg_len = aux0[(*datasize)*k+dataIndex];
+                    float r       = aux3[(*datasize)*k+dataIndex];
 
-					if (seg_len > 1 )
-					{
+                    if (seg_len > 1 )
+                    {
+                        float temp_ratio = (r/seg_len);
+                        vis_inf_cont  = aux2[(*datasize)*k+dataIndex];
+                        vis_inf_cont = vis_inf_cont/seg_len;
 
-						float temp_ratio = (r/seg_len);
-						vis_inf_cont  = aux2[(*datasize)*k+dataIndex];
-						vis_inf_cont = vis_inf_cont/seg_len;
-
-						ratio = ratio + log(1/temp_ratio + vis_inf_cont);
-						cnt++;
-					}	
-				}
-				if(cnt > 0 )
-				{
-					float bayes_ratio =  prob/(prob + (1-prob)*exp(ratio/(float)cnt));
-					if( bayes_ratio >= 0.0 && bayes_ratio <= 1.0)
-					{
-						alpha = (-log(1-bayes_ratio))/side_len;
-						alpha_array[dataIndex] = alpha;
-					}
-				}
+                        ratio = ratio + log(1/temp_ratio + vis_inf_cont);
+                        cnt++;
+                    }
+                }
+                if (cnt > 0 )
+                {
+                    float bayes_ratio =  prob/(prob + (1-prob)*exp(ratio/(float)cnt));
+                    if ( bayes_ratio >= 0.0 && bayes_ratio <= 1.0)
+                    {
+                        alpha = (-log(1-bayes_ratio))/side_len;
+                        alpha_array[dataIndex] = alpha;
+                    }
+                }
 #endif
             }
         }
     }
 }
-#endif
+#endif // COMPUTE_SYNOPTIC_ALPHA
