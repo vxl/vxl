@@ -115,17 +115,17 @@ template <class T>
 vcl_ostream & operator<<(vcl_ostream& os, vbl_array_3d<T> const& A)
 {
   typedef typename vbl_array_3d<T>::size_type size_type;
+  os << "vbl_array_3d [";
   for (size_type i=0; i<A.get_row1_count(); ++i) {
+    os << vcl_endl << "  <" << i << '>';
     for (size_type j=0; j<A.get_row2_count(); ++j) {
+      os << vcl_endl << "   ";
       for (size_type k=0; k<A.get_row3_count(); ++k) {
-        if (k)
-          os << ' ';
-        os << A(i,j,k);
+        os << ' ' << A(i,j,k);
       }
-      os << vcl_endl;
     }
-    os << vcl_endl;
   }
+  os << "\n             ]" << vcl_endl;
   return os;
 }
 

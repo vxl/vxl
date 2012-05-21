@@ -9,17 +9,18 @@
 template<class T>
 vcl_ostream& operator<< (vcl_ostream &os, vbl_array_1d<T> const& array)
 {
+  os << "vbl_array_1d [";
   for (typename vbl_array_1d<T>::const_iterator i=array.begin();
        i < array.end(); ++i)
-    os << (*i) << " ";
-  os << vcl_endl;
+    os << ' ' << (*i);
+  os << " ]" << vcl_endl;
 
   return os;
 }
 
 #undef VBL_ARRAY_1D_INSTANTIATE
 #define VBL_ARRAY_1D_INSTANTIATE(T) \
-template struct vbl_array_1d<T >; \
+template class vbl_array_1d<T >; \
 template vcl_ostream& operator<< (vcl_ostream& , vbl_array_1d<T > const& )
 
 #endif
