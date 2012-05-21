@@ -18,7 +18,7 @@ void bwm_tableau_text::set_text(vcl_string filename)
 
   vcl_string str;
   unsigned length = ydim_ - yinc_;
-  float ypos = ymarg_;
+  int ypos = ymarg_;
   char* s = new char(length);
   this->clear();
   this->set_size(1);
@@ -29,7 +29,7 @@ void bwm_tableau_text::set_text(vcl_string filename)
       this->set_colour(1, 0, 0);
     else
       this->set_colour(1, 1, 1);
-    add(xmarg_, ypos, s);
+    add(xmarg_, (float)ypos, s);
     ypos += 15;
   }
 }
@@ -37,15 +37,15 @@ void bwm_tableau_text::set_text(vcl_string filename)
 void bwm_tableau_text::set_string(vcl_string & str)
 {
   this->set_colour(1, 1, 1);
-  float ypos = ymarg_;
+  int ypos = ymarg_;
   unsigned int s_pos=0, f_pos;
-  while (ypos<(ydim_-ymarg_)) {
+  while (ypos+ymarg_<ydim_) {
     f_pos= str.find('\n',s_pos);
     if (f_pos >= str.size())
       break;
     unsigned nc = f_pos-s_pos;
     vcl_string s = str.substr(s_pos, nc);
-    add(xmarg_, ypos, s.c_str());
+    add(xmarg_, (float)ypos, s.c_str());
     ypos += 15;
     s_pos = f_pos+1;
     if (s_pos >= str.size())

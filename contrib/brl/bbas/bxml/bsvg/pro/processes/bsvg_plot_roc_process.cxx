@@ -91,7 +91,8 @@ bool bsvg_plot_roc_process(bprb_func_process& pro)
         float fpr = (float)vul_string_atof(awk[j]);
         xs.push_back(fpr);
       }
-    } else if (line_cnt == 3) {
+    }
+    else if (line_cnt == 3) {
       for (int j = 0; j < awk.NF(); j++) {
         float tpr = (float)vul_string_atof(awk[j]);
         ys.push_back(tpr);
@@ -107,7 +108,6 @@ bool bsvg_plot_roc_process(bprb_func_process& pro)
 
   return true;
 }
-
 
 
 //: Constructor
@@ -158,7 +158,7 @@ bool bsvg_plot_roc_process2(bprb_func_process& pro)
 
   vcl_vector<float> xs, ys;
   for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin(); 
-    iter != tpr_vals->data_array.end(); iter++, iter2++) {
+       iter != tpr_vals->data_array.end(); iter++, iter2++) {
     ys.push_back(*iter);
     xs.push_back(*iter2);
     vcl_cout << "tp: " << *iter << " fp: " << *iter2 << vcl_endl;
@@ -221,8 +221,8 @@ bool bsvg_plot_initialize_process(bprb_func_process& pro)
   int m = pro.get_input<int>(i++);
   int fs = pro.get_input<int>(i++);
 
-  bsvg_plot* p = new bsvg_plot(w, h);
-  p->set_margin(m);
+  bsvg_plot* p = new bsvg_plot((float)w, (float)h);
+  p->set_margin((float)m);
   p->set_font_size(fs);
   p->add_axes(0, 1, 0, 1);
   p->add_y_increments(0.1f);
@@ -272,7 +272,7 @@ bool bsvg_roc_plot_add_process(bprb_func_process& pro)
   }
   vcl_vector<float> xs, ys;
   for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin(); 
-    iter != tpr_vals->data_array.end(); iter++, iter2++) {
+       iter != tpr_vals->data_array.end(); iter++, iter2++) {
     xs.push_back(*iter2);
     ys.push_back(*iter);
   }
@@ -280,8 +280,4 @@ bool bsvg_roc_plot_add_process(bprb_func_process& pro)
   p->add_line(xs, ys, color);
   return true;
 }
-
-
-
-
 
