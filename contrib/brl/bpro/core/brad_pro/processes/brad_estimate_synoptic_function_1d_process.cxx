@@ -62,8 +62,8 @@ bool brad_estimate_synoptic_function_1d_process(bprb_func_process& pro)
     vis[i]            =visibilities->data_array[i];
     if (samples[i] <0.0 || samples[i] > 1.0 ) vis[i] = 0.0;
 
-    mean_intensities += (vis[i]* samples[i]);
-    sum_weights      +=  vis[i];
+    mean_intensities += float(vis[i]* samples[i]);
+    sum_weights      += float(vis[i]);
   }
   brad_synoptic_function_1d f(camera_elev,camera_azim,vis,samples);
 
@@ -73,10 +73,10 @@ bool brad_estimate_synoptic_function_1d_process(bprb_func_process& pro)
     vcl_cout<<"Cubic Interpolation Model: "<<f.cubic_coef_int()<<" prob density "<<f.cubic_fit_prob_density()<<vcl_endl;
     bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
     for (unsigned i=0;i<num_samples;++i)
-      new_obs->data_array[i]=f.cubic_interp_inten(f.arc_length(i));
+      new_obs->data_array[i]=float(f.cubic_interp_inten(f.arc_length(i)));
     int i=0;
     pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
-    pro.set_output_val<float>(i++, f.cubic_fit_prob_density());
+    pro.set_output_val<float>(i++, float(f.cubic_fit_prob_density()));
   }
   else
   {
@@ -85,10 +85,10 @@ bool brad_estimate_synoptic_function_1d_process(bprb_func_process& pro)
     f.auto_corr_freq_amplitudes(amps);
     bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(amps.size());
     for (unsigned i=0;i<amps.size();++i)
-      new_obs->data_array[i]=amps[i];
+      new_obs->data_array[i]=float(amps[i]);
     int i=0;
     pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
-    pro.set_output_val<float>(i++, f.max_frequency_prob_density());
+    pro.set_output_val<float>(i++, float(f.max_frequency_prob_density()));
   }
   return true;
 }

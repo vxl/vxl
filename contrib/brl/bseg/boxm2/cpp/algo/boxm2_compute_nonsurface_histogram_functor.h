@@ -97,11 +97,11 @@ class boxm2_compute_nonsurface_histogram_functor
         entropy_histo  =0.0;
         for (unsigned int i = 0; i<8; ++i)
         {
-            double pi = (double)(histo[i])/255.0;
+            double pi = double(histo[i])/255.0;
             if (pi>0)
-                entropy_histo -= pi*vcl_log(static_cast<double>(pi));
+                entropy_histo -= float(pi*vcl_log(pi));
         }
-        entropy_histo *= vnl_math::log2e;
+        entropy_histo *= float(vnl_math::log2e);
 
         return true;
     }

@@ -13,19 +13,19 @@
 bool brad_get_sun_angles_date_time_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("float"); // lattitude
+  input_types.push_back("float"); // latitude
   input_types.push_back("float"); // longitude
   input_types.push_back("int"); // year
   input_types.push_back("int"); // month
   input_types.push_back("int"); // day
   input_types.push_back("int"); // hour
   input_types.push_back("int"); // minute
-  
+
   if (!pro.set_input_types(input_types))
     return false;
 
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("float"); 
+  output_types.push_back("float");
   output_types.push_back("float");
   return pro.set_output_types(output_types);
 }
@@ -51,8 +51,8 @@ bool brad_get_sun_angles_date_time_process(bprb_func_process& pro)
   double sun_az, sun_el;
   brad_sun_pos(year, month,  day, hour, minute, 0, lon, lat, sun_az, sun_el);
 
-  pro.set_output_val<float>(0, sun_az);
-  pro.set_output_val<float>(1, sun_el);
+  pro.set_output_val<float>(0, float(sun_az));
+  pro.set_output_val<float>(1, float(sun_el));
   return true;
 }
 

@@ -67,8 +67,8 @@ bool brad_estimate_empty_process(bprb_func_process& pro)
         vis[i]=visibilities->data_array[i];
         if (Iobs[i] <0.0 || Iobs[i] > 1.0 )
             vis[i] = 0.0;
-        mean_intensities += (vis[i]* Iobs[i]);
-        sum_weights      +=  vis[i];
+        mean_intensities += float(vis[i]* Iobs[i]);
+        sum_weights      += float(vis[i]);
     }
     vcl_vector<float> temp_histogram(8,0.125f);
 
@@ -80,19 +80,19 @@ bool brad_estimate_empty_process(bprb_func_process& pro)
             index =0;
         else
             index = i+1;
-        float gradI=vcl_fabs(Iobs[i]-Iobs[index]);
+        float gradI = (float)vcl_fabs(Iobs[i]-Iobs[index]);
 
         int bin_index  = (int) vcl_floor(gradI*8);
         bin_index = bin_index>7 ? 7:bin_index;
-        temp_histogram[bin_index] +=vcl_min(vis[i],vis[index]);
-        sum += vcl_min(vis[i],vis[index]);
+        temp_histogram[bin_index] += (float)vcl_min(vis[i],vis[index]);
+        sum += (float)vcl_min(vis[i],vis[index]);
     }
     for (unsigned i =0; i < 8;i++) temp_histogram[i] /= sum;
     float entropy_histo  =0.0;
     for (unsigned int i = 0; i<8; ++i)
-        entropy_histo += temp_histogram[i]*vcl_log(static_cast<double>(temp_histogram[i]));
+        entropy_histo += temp_histogram[i]*vcl_log(temp_histogram[i]);
 
-    entropy_histo /= vnl_math::log2e;
+    entropy_histo /= float(vnl_math::log2e);
     entropy_histo = vcl_exp(-entropy_histo);
 
     i = 0;

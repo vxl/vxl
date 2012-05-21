@@ -69,11 +69,11 @@ static void test_phongs_model_est()
     lm.set_verbose(true);
     double min_error=1e5;
     vnl_vector<double> argminx;
-    for (float theta=0;theta<vnl_math::pi/2;theta+=0.1)
+    for (float theta=0;theta<vnl_math::pi/2;theta+=0.1f)
     {
-        for (float k1=0.0;k1<1;k1+=0.1)
+        for (float k1=0.0;k1<1;k1+=0.1f)
         {
-            for (float k2=0.0;k2<1;k2+=0.1)
+            for (float k2=0.0;k2<1;k2+=0.1f)
             {
                 x[2]=6.0;
                 x[4]=0.5;

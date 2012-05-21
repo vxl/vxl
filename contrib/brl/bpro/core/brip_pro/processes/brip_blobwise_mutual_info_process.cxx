@@ -8,7 +8,6 @@
 #include <brip/brip_blobwise_mutual_info.h>
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_new.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_save.h>
@@ -71,7 +70,6 @@ namespace brip_blobwise_mutual_info_process_globals
     vcl_cerr<<"Failed to recognize input image type\n";
     return 0;
   }
-
 };
 
 //: Constructor
@@ -85,7 +83,7 @@ bool brip_blobwise_mutual_info_process_cons(bprb_func_process& pro)
   input_types.push_back("vil_image_view_base_sptr"); // blob/mask image
   //output
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // visualize image (mutual informaiton differs by color
+  output_types.push_back("vil_image_view_base_sptr");  // visualize image (mutual information differs by color
 
   return pro.set_input_types(input_types)
      &&  pro.set_output_types(output_types);
@@ -145,7 +143,7 @@ bool brip_blobwise_mutual_info_process(bprb_func_process& pro)
   vil_save(*mi_image, "kl_div.tiff");
 
   //create new blob info (threshold the mi image by some value)
-  float thresh = .1 * max_value;
+  float thresh = .1f * max_value;
   vil_image_view<vxl_byte>* new_blobs = new vil_image_view<vxl_byte>(ni,nj);
   for (unsigned int i=0; i<ni; ++i)
     for (unsigned int j=0; j<nj; ++j) {

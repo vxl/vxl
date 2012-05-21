@@ -20,8 +20,8 @@ class boxm2_merge_block_function
 
   //: "default" constructor
   boxm2_merge_block_function() : merge_count_(0),
-                                 prob_thresh_(.05),
-                                 init_prob_(.001),
+                                 prob_thresh_(.05f),
+                                 init_prob_(.001f),
                                  block_len_(1.0) {}
 
   //: initialize generic data base pointers as their data type

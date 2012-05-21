@@ -44,9 +44,9 @@ class boxm2_entropy_air
         {
             double pi = temp_histogram[i];
             if (pi>0)
-                entropy_histo += pi*vcl_log(static_cast<double>(pi));
+                entropy_histo += float(pi*vcl_log(pi));
         }
-        entropy_histo = vcl_exp(-entropy_histo/vnl_math::log2e);
+        entropy_histo = vcl_exp(-entropy_histo/float(vnl_math::log2e));
 
         return entropy_histo;
     }
@@ -120,9 +120,9 @@ class boxm2_compute_empty_model_gradient_functor
         {
             double pi = temp_histogram[i];
             if (pi>0)
-                entropy_histo += pi*vcl_log(static_cast<double>(pi));
+                entropy_histo += float(pi*vcl_log(pi));
         }
-        entropy_histo /= vnl_math::log2e;
+        entropy_histo /= float(vnl_math::log2e);
         entropy_histo = vcl_exp(-entropy_histo);
 
         return true;
@@ -383,9 +383,10 @@ class boxm2_compute_phongs_and_empty_update_functor
     float sun_azim_;
     bsta_sigma_normalizer_sptr n_table_;
 };
+
 class boxm2_update_synoptic_probability
 {
-public:
+  public:
     boxm2_update_synoptic_probability() {}
 
     bool init_data(boxm2_data_base * alpha_model,
@@ -408,11 +409,9 @@ public:
         if (!isleaf)
             return true;
 
-        float ps = 1 - vcl_exp(-alpha*side_len);    
+        float ps = 1 - vcl_exp(-alpha*side_len);
         float p = cubic_model[5] * ps /(cubic_model[5] * ps +cubic_model[6] * (1-ps) ) ;
 
-
-       
         if (p<1)
             alpha = -(vcl_log(1-p)) / side_len;
         else

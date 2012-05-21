@@ -5,17 +5,17 @@
 
 void test_print_centers()
 {
-  //store cetner x, y z
+  //store center x, y z
   float centerX[585], centerY[585], centerZ[585];
-  centerX[0] = .5;
-  centerY[0] = .5;
-  centerZ[0] = .5;
+  centerX[0] = .5f;
+  centerY[0] = .5f;
+  centerZ[0] = .5f;
 
   //bottom left origins for calculating centers
   float ox[585], oy[585], oz[585];
-  ox[0] = 0.0;
-  oy[0] = 0.0;
-  oz[0] = 0.0;
+  ox[0] = 0.0f;
+  oy[0] = 0.0f;
+  oz[0] = 0.0f;
 
   boct_bit_tree tree;
   for (int i=1; i<585; ++i) {
@@ -34,7 +34,7 @@ void test_print_centers()
       //record the origin of this cell (based on paretns origin and current octant)
       //calculate the side length of this cell
       int curr_depth = tree.depth_at(i);
-      double side_len = 1.0 / (double) (1<<curr_depth);
+      float side_len = 1.0f / (float) (1<<curr_depth);
 
       //bit index of parent
       unsigned char pi = (i-1)>>3;
@@ -43,15 +43,15 @@ void test_print_centers()
       oz[i] = oz[pi] + side_len * dz;
 
       //intersect the cell, grab the intersection volume
-      //vgl_point_3d<double> localCenter = tree.cell_center(bitI)
+      //vgl_point_3d<float> localCenter = tree.cell_center(bitI)
 
-      centerX[i] = ox[i] + .5 * side_len;
-      centerY[i] = oy[i] + .5 * side_len;
-      centerZ[i] = oz[i] + .5 * side_len;
+      centerX[i] = ox[i] + .5f * side_len;
+      centerY[i] = oy[i] + .5f * side_len;
+      centerZ[i] = oz[i] + .5f * side_len;
   }
 
   for (int i=0; i<25; ++i) {
-    vcl_cout<<" bi : "<<i<<" center: "<<vgl_point_3d<double>(centerX[i], centerY[i], centerZ[i])<<vcl_endl;
+    vcl_cout<<" bi : "<<i<<" center: "<<vgl_point_3d<float>(centerX[i], centerY[i], centerZ[i])<<vcl_endl;
   }
 
   //print out in an easily copied format.....
@@ -98,9 +98,9 @@ static void test_bit_tree()
     //---------------------------------------------------------------------------
     bool good = true;
     for (int i=0; i<73; i++) {
-        good = good && (tree.bit_at(i) == bits[i]);
-        if (!good)
-            vcl_cout<<"i";
+      good = good && (tree.bit_at(i) == bits[i]);
+      if (!good)
+        vcl_cout<<"i";
     }
     TEST("Set bits and get bits works ", true, good);
 

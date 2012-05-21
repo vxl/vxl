@@ -1,12 +1,13 @@
 // This is brl/bpro/core/brad_pro/processes/brad_estimate_phongs_model_process.cxx
 #include <bprb/bprb_func_process.h>
-#include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_phongs_model_est.h>
-#include <vcl_algorithm.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_math.h>
 //:
 // \file
+#include <bpro/core/bbas_pro/bbas_1d_array_float.h>
+#include <vcl_algorithm.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/algo/vnl_levenberg_marquardt.h>
+
 namespace brad_estimate_phongs_model_process_globals
 {
   const unsigned n_inputs_  = 6;
@@ -76,8 +77,8 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
     samples_weights[i]=visibilities->data_array[i];
     if (samples[i] <0.0 || samples[i] > 1.0 )
       samples_weights[i] = 0.0;
-    mean_intensities += (samples_weights[i]* samples[i]);
-    sum_weights      +=  samples_weights[i];
+    mean_intensities += float(samples_weights[i]* samples[i]);
+    sum_weights      += float(samples_weights[i]);
   }
   brad_phongs_model_est f(sun_elev,sun_azim,
                           camera_elev,camera_azim,
@@ -92,26 +93,27 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
   x[3] = 0.0;
   x[4] = 0.0;
   lm.minimize(x);
+  vnl_vector<float> xf(5); for (int i=0; i<5; ++i) xf[i]=float(x[i]);
 
   vcl_cout<<"\n Phong's Model : "
-          <<vcl_fabs(x[0])<<','
-          <<vcl_fabs(x[1])<<','
-          <<x[2]<<','<<x[3]<<','<<x[4]<<'\n'
+          <<vcl_fabs(xf[0])<<','
+          <<vcl_fabs(xf[1])<<','
+          <<xf[2]<<','<<xf[3]<<','<<xf[4]<<'\n'
           <<"St Error "<<f.error_var(x)<<'\n';
 
-  brad_phongs_model pm(vcl_fabs(x[0]),vcl_fabs(x[1]),x[2],x[3],x[4]);
+  brad_phongs_model pm(vcl_fabs(xf[0]),vcl_fabs(xf[1]),xf[2],xf[3],xf[4]);
   bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
 
   for (unsigned i=0;i<num_samples;++i)
-      new_obs->data_array[i]=pm.val(camera_elev[i],camera_azim[i],sun_elev,sun_azim);
-  i=0;
+    new_obs->data_array[i]=pm.val(float(camera_elev[i]),float(camera_azim[i]),sun_elev,sun_azim);
 
+  i=0;
   pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
-  pro.set_output_val<float>(i++, x[0]);
-  pro.set_output_val<float>(i++, x[1]);
-  pro.set_output_val<float>(i++, x[2]);
-  pro.set_output_val<float>(i++, x[3]);
-  pro.set_output_val<float>(i++, x[4]);
+  pro.set_output_val<float>(i++, xf[0]);
+  pro.set_output_val<float>(i++, xf[1]);
+  pro.set_output_val<float>(i++, xf[2]);
+  pro.set_output_val<float>(i++, xf[3]);
+  pro.set_output_val<float>(i++, xf[4]);
   pro.set_output_val<float>(i++, f.error_var(x));
   return true;
 }

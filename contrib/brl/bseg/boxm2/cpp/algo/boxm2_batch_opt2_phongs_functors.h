@@ -369,18 +369,17 @@ class boxm2_batch_update_nonray_phongs_functor
 
     inline bool process_cell(int index)
     {
-        boxm2_data<BOXM2_ALPHA>::datatype  & alpha              =alpha_data_->data()[index];
-        boxm2_data<BOXM2_FLOAT8>::datatype & phongs_model       =phongs_data_->data()[index];
-        boxm2_data<BOXM2_AUX0>::datatype   & entropy_air          =air_data_->data()[index];
-        boxm2_data<BOXM2_AUX1>::datatype   & uncertain_model    =uncertain_data_->data()[index];
+        boxm2_data<BOXM2_ALPHA>::datatype  & alpha           = alpha_data_    ->data()[index];
+        boxm2_data<BOXM2_FLOAT8>::datatype & phongs_model    = phongs_data_   ->data()[index];
+        boxm2_data<BOXM2_AUX0>::datatype   & entropy_air     = air_data_      ->data()[index];
+        boxm2_data<BOXM2_AUX1>::datatype   & uncertain_model = uncertain_data_->data()[index];
 
         float ratio = 0.0f;
-        if (entropy_air> 0.0)
-           ratio = phongs_model[6]/entropy_air;
+        if (entropy_air> 0.0f)
+          ratio = phongs_model[6]/entropy_air;
         else
-           ratio = phongs_model[6]/1.0;
+          ratio = phongs_model[6]/1.0f;
 
-       
         alpha *= ratio;
         uncertain_model = 1/vcl_max(ratio,1/ratio);
 

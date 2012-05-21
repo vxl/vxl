@@ -90,7 +90,7 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
       vnl_vector<double> x;
       xform.params(x);
       //vcl_cout << "x = " << x << vcl_endl;
-      double minfo = cost_fun.f(x);
+      float minfo = float(cost_fun.f(x));
       (*cost_map)(i,j) = minfo;
       vcl_cout << "minfo(" << offset_x << ", " << offset_y << ") = " << minfo << vcl_endl;
     }

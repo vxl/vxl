@@ -25,11 +25,11 @@ int main(int argc,  char** argv)
   //create scene
   vil_image_view_base_sptr img = vil_load(img_file().c_str());
 
-  float phi_min = -vnl_math::pi;
-  float phi_max =  vnl_math::pi;
+  float phi_min = -float(vnl_math::pi);
+  float phi_max =  float(vnl_math::pi);
 
-  float theta_min = 0.0;
-  float theta_max = vnl_math::pi/4;
+  float theta_min = 0.0f;
+  float theta_max = float(vnl_math::pi/4);
   vil_image_view<float> * uimg  = dynamic_cast<vil_image_view<float> * > (img.ptr());
 
   float theta_inc = (theta_max- theta_min)/((float)uimg->nj());

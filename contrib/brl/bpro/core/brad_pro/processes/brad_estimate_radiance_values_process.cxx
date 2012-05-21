@@ -7,8 +7,7 @@
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_save.h>
+#include <vil/vil_math.h>
 #include <vcl_string.h>
 #ifdef DEBUG
 #include <vcl_iostream.h>
@@ -54,11 +53,11 @@ bool brad_estimate_radiance_values_process_cons(bprb_func_process& pro)
     return false;
 
   // set default parameter values
-  float Esun = 1381.79;
+  float Esun = 1381.79f;
   pro.set_input(4, new brdb_value_t<float>(Esun));
-  float Edown = 0.0;
+  float Edown = 0.0f;
   pro.set_input(5, new brdb_value_t<float>(Edown));
-  float optical_depth = 0.10;
+  float optical_depth = 0.10f;
   pro.set_input(6, new brdb_value_t<float>(optical_depth));
 
   return true;
@@ -136,9 +135,9 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
 
   vcl_cout << "max = " << maxval << " Lhoriz = " << Lsat_horizontal << " Lsun = " << Lsat_sun_facing << vcl_endl;
 
-  pro.set_output_val<float>(0, airlight);
-  pro.set_output_val<float>(1, Lsat_horizontal);
-  pro.set_output_val<float>(2, Lsat_sun_facing);
+  pro.set_output_val<float>(0, (float)airlight);
+  pro.set_output_val<float>(1, (float)Lsat_horizontal);
+  pro.set_output_val<float>(2, (float)Lsat_sun_facing);
 
   return true;
 }
