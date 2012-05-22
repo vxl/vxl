@@ -31,6 +31,7 @@ SOURCES += processes/boxm2_scene_bbox_process.cxx
 SOURCES += processes/boxm2_transform_model_process.cxx
 SOURCES += processes/boxm2_paint_mesh_process.cxx
 SOURCES += processes/boxm2_create_scene_mask_process.cxx
+SOURCES += processes/boxm2_add_aux_info_to_ply_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
