@@ -99,11 +99,12 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
     return false;
   boxm2_scene_sptr uscene = new boxm2_scene(scene_dir, bbox.min_point());
   uscene->set_appearances(appearance);
-
+  uscene->save_scene();
 
   //create render scene
   boxm2_scene_sptr rscene = new boxm2_scene(scene_dir, bbox.min_point());
   rscene->set_appearances(appearance);
+  rscene->save_scene();
 
   //build the two scenes
   boxm2_util_cams_and_box_to_scene(cs, bbox, *uscene, *rscene);
