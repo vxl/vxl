@@ -273,10 +273,10 @@ T bsta_histogram<T>::entropy() const
   {
     double pi = this->p(i);
     if (pi>min_prob_)
-      ent -= pi*T(vcl_log(static_cast<double>(pi)));
+      ent -= pi*vcl_log(pi);
   }
   ent *= vnl_math::log2e;
-  return (T)ent;
+  return T(ent);
 }
 
 template <class T>
@@ -289,8 +289,8 @@ T bsta_histogram<T>::renyi_entropy() const
     sum += pi*pi;
   }
   if (sum>min_prob_)
-    ent = - T(vcl_log(static_cast<double>(sum)))*(T)vnl_math::log2e;
-  return ent;
+    ent = - vcl_log(sum)*vnl_math::log2e;
+  return T(ent);
 }
 
 template <class T>
