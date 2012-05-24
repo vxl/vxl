@@ -31,5 +31,6 @@
 //#include <bpgl/algo/bpgl_triangulate_points.h>
 #include <bpgl/algo/bpgl_vsol_lens_warp.h>
 #include <bpgl/algo/bpgl_project.h>
+#include <bpgl/algo/bpgl_transform_camera.h>
 
 int main() { return 0; }
