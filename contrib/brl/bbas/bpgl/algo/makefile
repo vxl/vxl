@@ -16,6 +16,7 @@ SOURCES += bpgl_vsol_lens_warp.cxx
 SOURCES += bpgl_bundle_rolling_shutter_adjust.cxx
 MANPAGE_SOURCES += bpgl_lens_warp_mapper.h
 MANPAGE_SOURCES += bpgl_list.txx
+SOURCES += bpgl_transform_camera.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
