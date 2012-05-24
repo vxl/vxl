@@ -180,6 +180,9 @@ SOURCE=.\processes/vpgl_generate_3d_point_from_cams_process.cxx
 SOURCE=.\processes/vpgl_convert_to_local_coordinates_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bpgl_transform_perspective_cameras_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vpgl_camera_double_sptr-.cxx
 # End Source File
 # End Group
