@@ -14,7 +14,8 @@ SET( bpgl_algo_sources
   bpgl_nitf_camera_coverage.h      bpgl_nitf_camera_coverage.cxx
   bpgl_camera_from_box.h           bpgl_camera_from_box.cxx
   bpgl_bundle_rolling_shutter_adjust.h  bpgl_bundle_rolling_shutter_adjust.cxx
-  bpgl_project.h                      bpgl_project.cxx
+  bpgl_project.h                   bpgl_project.cxx
+  bpgl_transform_camera.h		   bpgl_transform_camera.cxx
 )
 
 # the ransac implementations use rpl/rrel
