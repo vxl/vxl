@@ -418,13 +418,15 @@ bool vil3d_meta_image_header::check_next_header_line(const vcl_string &nxt_line)
       pformat_ = VIL_PIXEL_FORMAT_INT_16;
     else if (elem_type_ == "MET_UCHAR")
       pformat_ = VIL_PIXEL_FORMAT_BYTE;
+    else if (elem_type_ == "MET_CHAR")
+      pformat_ = VIL_PIXEL_FORMAT_SBYTE;
     else if (elem_type_ == "MET_DOUBLE")
       pformat_ = VIL_PIXEL_FORMAT_DOUBLE;
     else if (elem_type_ == "MET_FLOAT")
       pformat_ = VIL_PIXEL_FORMAT_FLOAT;
     else
     {
-      vcl_cerr << "Unsupported element type specified\n";
+      vcl_cerr << "Unsupported element type specified: " << val << "\n";
       return false;
     }
     header_valid_ = true;
@@ -634,6 +636,7 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
                                                                      vil_pixel_format format) const
 {
   if (format != VIL_PIXEL_FORMAT_BYTE   &&
+      format != VIL_PIXEL_FORMAT_SBYTE &&
       format != VIL_PIXEL_FORMAT_INT_16 &&
       format != VIL_PIXEL_FORMAT_DOUBLE &&
       format != VIL_PIXEL_FORMAT_FLOAT)
@@ -651,6 +654,8 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
   switch (format)
   {
   case VIL_PIXEL_FORMAT_BYTE: header.set_element_type("MET_UCHAR");
+                              break;
+  case VIL_PIXEL_FORMAT_SBYTE: header.set_element_type("MET_CHAR");
                               break;
   case VIL_PIXEL_FORMAT_INT_16: header.set_element_type("MET_SHORT");
                               break;
@@ -794,6 +799,11 @@ vil3d_image_view_base_sptr vil3d_meta_image::get_copy_view(unsigned int i0, unsi
     read_data_of_type(vxl_byte);
     return new vil3d_image_view<vxl_byte>(im);
    }
+   case VIL_PIXEL_FORMAT_SBYTE:
+   {
+     read_data_of_type(vxl_sbyte);
+     return new vil3d_image_view<vxl_sbyte>(im);
+   }
    case VIL_PIXEL_FORMAT_INT_16:
    {
     read_data_of_type(vxl_int_16);
@@ -851,6 +861,14 @@ bool vil3d_meta_image::put_view(const vil3d_image_view_base &im,
    {
     vil3d_image_view<vxl_byte> view_copy(ni(),nj(),nk(),nplanes());
     vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_byte>&>(im),view_copy);
+    os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes());
+    // Should check that write was successful
+    return true;
+   }
+   case VIL_PIXEL_FORMAT_SBYTE:
+   {
+    vil3d_image_view<vxl_sbyte> view_copy(ni(),nj(),nk(),nplanes());
+    vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_sbyte>&>(im),view_copy);
     os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes());
     // Should check that write was successful
     return true;
