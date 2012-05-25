@@ -21,13 +21,13 @@ bool boxm2_mask_sift_features_process_cons(bprb_func_process& pro)
 {
     using namespace boxm2_mask_sift_features_process_globals;
 
-    //process takes 2 inputs
+    //process takes 3 inputs
     vcl_vector<vcl_string> input_types_(n_inputs_);
     input_types_[0]  = "vcl_string";
     input_types_[1]  = "vil_image_view_base_sptr";
     input_types_[2]  = "vcl_string";
 
-    // process has 1 output
+    // process has no output
     vcl_vector<vcl_string> output_types_(n_outputs_);
 
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -38,7 +38,7 @@ bool boxm2_mask_sift_features_process(bprb_func_process& pro)
     using namespace boxm2_mask_sift_features_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
         return false;
     }
     //get the inputs
@@ -52,7 +52,7 @@ bool boxm2_mask_sift_features_process(bprb_func_process& pro)
     {
         if (!ifile)
         {
-            vcl_cout<<"Unable to open the input file"<<vcl_endl;
+            vcl_cerr<<"Unable to open the input file\n";
             return false;
         }
 
@@ -73,8 +73,8 @@ bool boxm2_mask_sift_features_process(bprb_func_process& pro)
         for (unsigned k=0;k<num_features;++k)
         {
             ifile>>v>>u>>s>>o;
-            unsigned int pi=vcl_floor(u);
-            unsigned int pj=vcl_floor(v);
+            unsigned int pi=(unsigned int)vcl_floor(u);
+            unsigned int pj=(unsigned int)vcl_floor(v);
             if ((*mask_image)(pi,pj)>0)
             {
                 for (unsigned j=0;j<length_features;++j)
@@ -100,7 +100,7 @@ bool boxm2_mask_sift_features_process(bprb_func_process& pro)
 
         if (!ofile)
         {
-            vcl_cout<<"Unable to open the output file"<<vcl_endl;
+            vcl_cerr<<"Unable to open the output file\n";
             return false;
         }
         ofile<<cnt<<' '<<128<<'\n'
