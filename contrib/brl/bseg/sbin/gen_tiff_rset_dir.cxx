@@ -1,7 +1,7 @@
 // This is brl/bseg/sbin/gen_tiff_rset_dir.cxx
 
 #include <vcl_string.h>
-#include <vcl_cstdlib.h>
+#include <vcl_cstdlib.h> // for std::system()
 #include <vul/vul_file.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
@@ -95,19 +95,20 @@ int main(int argc,char * argv[])
 
       vcl_string command = "move " + dir_plus_filename + " " + new_filename;
 
-      system(command.c_str());    // execute file move & rename
-
-      success = vul_file::change_directory(pyramid_dir); // change to pyramid dir
-
-      vcl_cout << "Creating pyramid for: " << new_filename << vcl_endl;
-
-      if (!generate_rset(pyramid_dir, base_image_extension, nlevels))
-      {
-        vcl_cout << "Generate R Set failed for file" << pyramid_dir << vcl_endl;
-        return -1;
+      if (vcl_system(command.c_str()) >= 0) {    // execute file move & rename
+        success = vul_file::change_directory(pyramid_dir); // change to pyramid dir
+        vcl_cout << "Creating pyramid for: " << new_filename << vcl_endl;
+        if (!generate_rset(pyramid_dir, base_image_extension, nlevels))
+        {
+          vcl_cout << "Generate R Set failed for file" << pyramid_dir << vcl_endl;
+          return -1;
+        }
+        success = vul_file::change_directory(base_dir);  // back to base dir
       }
-
-      success = vul_file::change_directory(base_dir);  // back to base dir
+      else
+      {
+        vcl_cout << "Command execution failed for\n  " << command << vcl_endl;
+      }
     }
   }
   return 0;
