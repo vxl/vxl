@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//   <none yet>
+//   22 May 2012 - Peter Vanroose - catching failing redirect of stdout
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -70,19 +70,21 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   bool finish_process();
 
   //: set verbose on
-  bool verbose(){verbose_ = true; return verbose_;}
+  bool verbose() {verbose_ = true; return verbose_;}
 
   //: set verbose off
-  bool not_verbose(){verbose_ = false; return verbose_;}
+  bool not_verbose() {verbose_ = false; return verbose_;}
 
   //: Debug purposes
   void print_db();
 
   //: Set stdout
-  void set_stdout(vcl_string file);
+  // \return false on failure
+  bool set_stdout(vcl_string file);
 
-    //: Reset stdout back to the console
-  void reset_stdout();
+  //: Reset stdout back to the console
+  // \return false on failure
+  bool reset_stdout();
 
   //: Interface to database binary read/write
   void b_write_db(vcl_string const& path);

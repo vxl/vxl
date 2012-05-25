@@ -34,7 +34,7 @@ bool bprb_batch_process_manager::init_process(vcl_string const& process_name)
 {
   bprb_process_sptr p = get_process_by_name(process_name);
   if (p) {
-    if(verbose_)
+    if (verbose_)
       vcl_cout << "Process: " << p->name() << vcl_endl;
     current_process_ = p;
     return true;
@@ -234,8 +234,8 @@ bool bprb_batch_process_manager::process_init()
   bool to_return = false;
   if (!current_process_)
     return to_return;
-  if(verbose_)
-    vcl_cout << "Initializing process: " << current_process_->name() 
+  if (verbose_)
+    vcl_cout << "Initializing process: " << current_process_->name()
              << vcl_endl;
 
   to_return = current_process_->init();
@@ -249,7 +249,7 @@ bool bprb_batch_process_manager::run_process()
   bool to_return = false;
   if (!current_process_)
     return to_return;
-  if(verbose_)
+  if (verbose_)
     vcl_cout << "Running process: " << current_process_->name() << vcl_endl;
   // EXECUTE ///////////////////////////////////////////////
   to_return = current_process_->execute();
@@ -259,12 +259,13 @@ bool bprb_batch_process_manager::run_process()
   return to_return;
   //////////////////////////////////////////////////////////
 }
+
 bool bprb_batch_process_manager::finish_process()
 {
   bool to_return = false;
   if (!current_process_)
     return to_return;
-  if(verbose_)
+  if (verbose_)
     vcl_cout << "Finish process: " << current_process_->name() << vcl_endl;
   // EXECUTE ///////////////////////////////////////////////
   to_return = current_process_->finish();
@@ -274,27 +275,25 @@ bool bprb_batch_process_manager::finish_process()
   return to_return;
   //////////////////////////////////////////////////////////
 }
+
 void bprb_batch_process_manager::print_db()
 {
   DATABASE->print();
 }
 
 
-
-void bprb_batch_process_manager::set_stdout(vcl_string file)
+bool bprb_batch_process_manager::set_stdout(vcl_string file)
 {
-   vcl_freopen (file.c_str(),"a",stdout);
-   
+   return vcl_freopen (file.c_str(),"a",stdout) != NULL;
 }
 
 
-void bprb_batch_process_manager::reset_stdout()
+bool bprb_batch_process_manager::reset_stdout()
 {
-   vcl_fclose (stdout);
 #ifdef WIN32
-  vcl_freopen ("CON","w",stdout);
+  return vcl_fclose(stdout) == 0 && vcl_freopen("CON","w",stdout) != NULL;
 #else
-  vcl_freopen ("/dev/tty","w",stdout);
+  return vcl_fclose(stdout) == 0 && vcl_freopen("/dev/tty","w",stdout) != NULL;
 #endif
 }
 
