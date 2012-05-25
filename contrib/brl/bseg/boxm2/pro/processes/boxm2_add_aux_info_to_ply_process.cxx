@@ -12,7 +12,6 @@
 #include <boxm2/io/boxm2_cache.h>
 
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
-
 #include <boct/boct_bit_tree.h>
 
 #include <vcl_fstream.h>
@@ -24,24 +23,24 @@ namespace boxm2_add_aux_info_to_ply_process_globals
 {
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 0;
-  
+
   //helper class to read in bb from file
   class ply_points_reader
   {
-  public:
+   public:
     vcl_vector<vgl_point_3d<double> > points;
     double p[3];
   };
-  
+
   //: Call-back function for a "vertex" element
   int plyio_vertex_cb(p_ply_argument argument)
   {
     long index;
     void* temp;
     ply_get_argument_user_data(argument, &temp, &index);
-    
+
     ply_points_reader* parsed_ply =  (ply_points_reader*) temp;
-    
+
     switch (index)
     {
       case 0: // "x" coordinate
@@ -60,13 +59,13 @@ namespace boxm2_add_aux_info_to_ply_process_globals
     }
     return 1;
   }
-  
+
   //: The PLY reader of PCL is rather strict, so lets load the cloud on our own
   bool read_points_from_ply(const vcl_string &filename, vcl_vector<vgl_point_3d<double> > &points)
   {
     ply_points_reader parsed_ply;
     parsed_ply.points = points;
-    
+
     p_ply ply = ply_open(filename.c_str(), NULL, 0, NULL);
     if (!ply) {
       vcl_cout << "File " << filename << " doesn't exist.";
@@ -76,25 +75,24 @@ namespace boxm2_add_aux_info_to_ply_process_globals
       vcl_cout << "File " << filename << " doesn't have header.";
       return false;
     }
-    
+
     // vertex
     int nvertices = ply_set_read_cb(ply, "vertex", "x", plyio_vertex_cb, (void*) (&parsed_ply), 0);
     ply_set_read_cb(ply, "vertex", "y", plyio_vertex_cb, (void*) (&parsed_ply), 1);
     ply_set_read_cb(ply, "vertex", "z", plyio_vertex_cb, (void*) (&parsed_ply), 2);
-  
-    vcl_cout << "Parsed: " << nvertices << "points \n";
-    
+
+    vcl_cout << "Parsed: " << nvertices << "points\n";
+
     // Read DATA
     ply_read(ply);
-        
+
     // CLOSE file
     ply_close(ply);
-    
+
     points=parsed_ply.points;
-    
+
     return true;
   }
-  
 }
 
 bool boxm2_add_aux_info_to_ply_process_cons(bprb_func_process& pro)
@@ -156,28 +154,25 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
   ply_add_scalar_property(oply, "diffuse_blue", PLY_UCHAR); //PLY_UCHAR
   ply_add_scalar_property(oply, "tree_depth", PLY_UCHAR); //PLY_UCHAR
 
-
   // end header
   ply_write_header(oply);
 
   vcl_cout << "Start iterating over pts..." << vcl_endl;
-  
-  
+
   //get data sizes
   vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-  vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+//vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix()); // UNUSED!! -- fixme
   vcl_size_t normalTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
   vcl_size_t visTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix());
   int mogSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
 
-  
   //iterate through the points
   float prob;
   vnl_vector_fixed<float,3> intensity;
   vgl_point_3d<double> local;
   boxm2_block_id id;
   for (unsigned  i = 0; i < points.size(); i++) {
-   
+
     const vgl_point_3d<double> pt = points[i];
 
     if (!scene->contains(pt, id, local)) {
@@ -188,7 +183,7 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
     int index_x=(int)vcl_floor(local.x());
     int index_y=(int)vcl_floor(local.y());
     int index_z=(int)vcl_floor(local.z());
-    
+
     boxm2_block * blk=cache->get_block(id);
     boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
     vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
@@ -206,25 +201,23 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
     boxm2_data_base * alpha_base = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     int data_buff_length = (int) (alpha_base->buffer_length()/alphaTypeSize);
 
-    boxm2_data_base * points = cache->get_data_base(id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
+//  boxm2_data_base * points = cache->get_data_base(id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize); // UNUSED!! -- fixme
     boxm2_data_base * normals = cache->get_data_base(id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
     boxm2_data_base * vis = cache->get_data_base(id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
     boxm2_data_base * mog = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), data_buff_length * mogSize);
-    
-    //get the actual data       
+
+    //get the actual data
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha_base->data_buffer();
-    boxm2_data_traits<BOXM2_POINT>::datatype * points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
+//  boxm2_data_traits<BOXM2_POINT>::datatype * points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer(); // UNUSED!! -- fixme
     boxm2_data_traits<BOXM2_NORMAL>::datatype * normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
     boxm2_data_traits<BOXM2_VIS_SCORE>::datatype * vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
     boxm2_data_traits<BOXM2_MOG3_GREY>::datatype * mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
-    
-    
+
     float alpha=alpha_data[data_offset];
     double side_len = 1.0 / (double) (1 << depth);
     //store cell probability
     prob = 1.0f - vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
     unsigned char intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(mog_data[data_offset])*255.0f);
-
 
     ply_write(oply, pt.x());
     ply_write(oply, pt.y());
@@ -239,7 +232,6 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
     ply_write(oply, (unsigned char)(intensity) );
     ply_write(oply, (unsigned char)(intensity));
     ply_write(oply, (unsigned char) depth);
-
   }
   vcl_cout << "Done iterating over pts..." << vcl_endl;
 
