@@ -5,6 +5,12 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - Moved the vxl photogrammetry library, vpgl, to core. vpgl supports a
+        hierarchy of camera types including: projective, perspective and affine
+	projections from 3-d to 2-d. Also included is a class for the 
+	epipolar relationship between cameras, vpgl_fundamental_matrix. An
+	algorithm library is also provided, which implements standard 
+	operations such as bundle adjustment and backprojection.
 
       - Added transpose and conjugate_transpose methods to vnl_sparse_matrix
 
