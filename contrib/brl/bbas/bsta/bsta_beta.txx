@@ -156,36 +156,30 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
   return true;
 }
 
-//: pre: x should be in [0,1]
+//:
+// pre: x should be in [0,1]
+// Otherwise, zero is returned.
 template <class T>
 T bsta_beta<T>::prob_density(T x) const
 {
-  if(x==0.0)
-      x+=1e-10;
-  if(x==1.0)
-      x-=1e-10;
+  if (x==0.0)
+    x+=T(1e-10);
+  else if (x==1.0)
+    x-=T(1e-10);
   if (x<T(0)||x>T(1))
-      return 0;
+    return 0;
   else
   {
-    T a = (T)vnl_log_beta(alpha_,beta_);
-    T b=0;
-    if (x==0 )//&& alpha_==T(1))
-      b=0;
-    else
-      b = (alpha_-1)*vcl_log(x) ;
-    T c=0;
-    if (x==1 )//&& beta_==T(1))
-      c=0;
-    else
-      c = (beta_-1)*vcl_log(1-x) ;
+    double a = vnl_log_beta(alpha_,beta_);
+    double b = (alpha_-1)*vcl_log(x);
+    double c = (beta_-1)*vcl_log(1-x);
 
     if (b+c-a<-60)
-      return 0;
+      return T(0);
     else if (b+c-a>60)
-      return 100;
+      return T(100);
     else
-      return vcl_exp(b+c-a);
+      return (T)vcl_exp(b+c-a);
   }
 }
 
