@@ -381,7 +381,7 @@ void bsta_joint_histogram_3d<T>::print_to_vrml(vcl_ostream& os,
     min_delta = delta_b_;
   if (delta_c_<min_delta)
     min_delta = delta_c_;
-  float rad_scale = 0.5*min_delta;
+  T rad_scale = min_delta/2;
   if (relative_prob_scale){
   for (unsigned a = 0; a<nbins_a_; a++)
     for (unsigned b = 0; b<nbins_b_; b++)
@@ -391,7 +391,7 @@ void bsta_joint_histogram_3d<T>::print_to_vrml(vcl_ostream& os,
           max = v;
       }
   if (max <= T(0)) return;
-  rad_scale = 0.5*min_delta/max;
+  rad_scale = min_delta/max/2;
   }
   os << "#VRML V2.0 utf8\n"
      << "Group { children [\n";
