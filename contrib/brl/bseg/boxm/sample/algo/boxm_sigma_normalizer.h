@@ -1,4 +1,4 @@
-// this is brl/bseg/boxm/util/boxm_sigma_normalizer.h
+// this is brl/bseg/boxm/sample/algo/boxm_sigma_normalizer.h
 #ifndef boxm_sigma_normalizer_h_
 #define boxm_sigma_normalizer_h_
 //:

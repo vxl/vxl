@@ -4,6 +4,7 @@ SET(boxm_sample_algo_sources
     boxm_mob_grey_processor.h        boxm_mob_grey_processor.cxx
     boxm_mog_grey_processor.h        boxm_mog_grey_processor.cxx
     boxm_simple_grey_processor.h     boxm_simple_grey_processor.cxx
+    boxm_sigma_normalizer.h          boxm_sigma_normalizer.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sample_algo_sources)

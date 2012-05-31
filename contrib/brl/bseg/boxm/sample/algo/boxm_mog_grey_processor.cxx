@@ -11,7 +11,7 @@
 
 #include <vnl/vnl_random.h>
 
-#include <boxm/util/boxm_sigma_normalizer.h>
+#include "boxm_sigma_normalizer.h"
 
 #include <vcl_cassert.h>
 

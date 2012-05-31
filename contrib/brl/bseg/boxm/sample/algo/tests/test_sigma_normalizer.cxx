@@ -1,7 +1,7 @@
 
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_random.h>
-#include <boxm/util/boxm_sigma_normalizer.h>
+#include <boxm/sample/algo/boxm_sigma_normalizer.h>
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/algo/bsta_fit_gaussian.h>
 

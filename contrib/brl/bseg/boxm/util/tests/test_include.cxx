@@ -3,7 +3,6 @@
 #include <boxm/util/boxm_quad_scan_iterator.h>
 #include <boxm/util/boxm_rational_camera_utils.h>
 #include <boxm/util/boxm_raytrace_operations.h>
-#include <boxm/util/boxm_sigma_normalizer.h>
 #include <boxm/util/boxm_triangle_interpolation_iterator.h>
 #include <boxm/util/boxm_triangle_scan_iterator.h>
 #include <boxm/util/boxm_utils.h>

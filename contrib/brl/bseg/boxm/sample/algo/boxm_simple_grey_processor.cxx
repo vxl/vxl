@@ -6,7 +6,7 @@
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/algo/bsta_fit_gaussian.h>
 
-#include <boxm/util/boxm_sigma_normalizer.h>
+#include "boxm_sigma_normalizer.h"
 
 //const float boxm_simple_grey_processor::one_over_sigma_ = 25.0f;
 const static bool USE_UNIFORM_COMPONENT = false;
