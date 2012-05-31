@@ -48,7 +48,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 
 ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
 TARGET_LINK_LIBRARIES(boxm2_cpp_algo
-                      boxm2_cpp brad boct brdb expatpp vpgl bvgl imesh imesh_algo bsta_algo bsta vil_algo vil vgl_xio vgl vnl_algo vnl vul vbl_io vbl vsl vcl bvpl)
+                      boxm2_cpp brad boct brdb expatpp vpgl bvgl imesh imesh_algo bsta_algo bsta vil_algo vil vgl_xio vgl vnl_algo vnl vul vbl_io vbl vsl vcl bvpl rply)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

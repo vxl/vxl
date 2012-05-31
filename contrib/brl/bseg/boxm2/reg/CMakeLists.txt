@@ -10,7 +10,7 @@ SET(boxm2_reg_sources
    )
 
 ADD_LIBRARY(boxm2_reg  ${boxm2_reg_sources})
-TARGET_LINK_LIBRARIES(boxm2_reg boxm2 brip baio vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_reg boxm2 boxm2_io brip baio vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
 
 #install the .h .txx and libs
 INSTALL_TARGETS(/lib boxm2_reg)
