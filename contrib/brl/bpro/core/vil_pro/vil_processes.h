@@ -44,5 +44,6 @@ DECLARE_FUNC_CONS(bil_seek_frame_process);
 DECLARE_FUNC_CONS(vil_pixel_value_process);
 DECLARE_FUNC_CONS(vil_scale_and_offset_values_process);
 DECLARE_FUNC_CONS(vil_set_float_image_pixel_process);
+DECLARE_FUNC_CONS(vil_image_sum_process);
 
 #endif

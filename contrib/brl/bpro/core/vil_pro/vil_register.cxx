@@ -55,5 +55,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_pixel_value_process, "vilPixelValueProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_scale_and_offset_values_process, "vilScaleAndOffsetValuesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_set_float_image_pixel_process, "vilSetFloatImagePixelProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_sum_process, "vilImageSumProcess");
+
 }
 
