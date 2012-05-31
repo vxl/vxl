@@ -4,7 +4,9 @@ changes that have an effect on users.  Bug fixes and minor changes
 aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
----------------------------------------------------------------------------
+******************************
+VXL 1.17.0    - June 2012
+******************************
       - Moved the vxl photogrammetry library, vpgl, to core. vpgl supports a
         hierarchy of camera types including: projective, perspective and affine
 	projections from 3-d to 2-d. Also included is a class for the 
