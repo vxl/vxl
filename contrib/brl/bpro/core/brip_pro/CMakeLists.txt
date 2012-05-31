@@ -14,7 +14,7 @@ AUX_SOURCE_DIRECTORY(Templates brip_pro_sources)
 AUX_SOURCE_DIRECTORY(processes brip_pro_sources)
 
 ADD_LIBRARY(brip_pro ${brip_pro_sources})
-TARGET_LINK_LIBRARIES(brip_pro bprb brdb brip vil_pro vil vsl)
+TARGET_LINK_LIBRARIES(brip_pro bprb brdb brip vil_pro vil vsl bil_algo)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

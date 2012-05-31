@@ -13,7 +13,7 @@ AUX_SOURCE_DIRECTORY(Templates vpgl_pro_sources)
 AUX_SOURCE_DIRECTORY(processes vpgl_pro_sources)
 
 ADD_LIBRARY(vpgl_pro ${vpgl_pro_sources})
-TARGET_LINK_LIBRARIES(vpgl_pro bprb vsph bpgl bpgl_algo vpgl_io vpgl vpgl_algo vnl vil vgl vbl_io vul)
+TARGET_LINK_LIBRARIES(vpgl_pro bprb vsph bpgl bpgl_algo vpgl_io vpgl vpgl_algo vnl vil vgl vbl_io vul bbas_pro)
 
 INSTALL_TARGETS(/lib vpgl_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/vpgl_pro ${vpgl_pro_sources})
