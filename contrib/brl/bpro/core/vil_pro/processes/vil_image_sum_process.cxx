@@ -1,7 +1,7 @@
 //this is /brl/bpro/core/vil_pro/processes/vil_image_sum_process.cxx
+#include<bprb/bprb_func_process.h>
 //:
 // \file
-#include<bprb/bprb_func_process.h>
 
 #include<vil/vil_convert.h>
 #include<vil/vil_image_resource.h>
@@ -21,20 +21,15 @@ bool vil_image_sum_process_cons( bprb_func_process& pro )
     vcl_vector<vcl_string> output_types_(n_outputs_);
 
     unsigned i = 0;
-    input_types_[i++] = "vil_image_view_base_sptr";//img
-    input_types_[i++] = "unsigned";//plane index
+    input_types_[i++] = "vil_image_view_base_sptr"; // img
+    input_types_[i++] = "unsigned"; // plane index
 
     output_types_[0] = "double";
 
-    if(!pro.set_input_types(input_types_))
-        return false;
-
-    if(!pro.set_output_types(output_types_))
-        return false;
-
-    //default value
-    pro.set_input(1, brdb_value_sptr(new brdb_value_t<unsigned>(0)));
-    return true;
+    return pro.set_input_types(input_types_)
+       &&  pro.set_output_types(output_types_)
+       &&  pro.set_input(1, brdb_value_sptr(new brdb_value_t<unsigned>(0)));
+           //default value
 }
 
 bool vil_image_sum_process( bprb_func_process& pro )
@@ -43,8 +38,7 @@ bool vil_image_sum_process( bprb_func_process& pro )
 
     if (pro.n_inputs() != n_inputs_) {
         vcl_cout << "vil_set_float_image_pixel_process: "
-                  <<"The number of inputs should be " 
-                  << n_inputs_ << vcl_endl;
+                 << "The number of inputs should be " << n_inputs_ << vcl_endl;
         return false;
     }
 
@@ -53,9 +47,7 @@ bool vil_image_sum_process( bprb_func_process& pro )
         pro.get_input<vil_image_view_base_sptr>(i++);
     unsigned p = pro.get_input<unsigned>(i++);
 
-
-
-    //convert to float image
+    // convert to float image
     vil_image_view<float> fimage;
     if (imgBaseSptr->pixel_format() == VIL_PIXEL_FORMAT_RGBA_BYTE ) {
         vil_image_view_base_sptr plane_image = vil_convert_to_n_planes(4, imgBaseSptr);
@@ -71,6 +63,6 @@ bool vil_image_sum_process( bprb_func_process& pro )
     vil_math_sum(sum, fimage, p);
 
     pro.set_output_val(0,sum);
-    
+
     return true;
 }
