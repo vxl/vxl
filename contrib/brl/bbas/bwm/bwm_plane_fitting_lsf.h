@@ -13,7 +13,7 @@
 //   <none yet>
 // \endverbatim
 
-#include "../bwm_observer_cam.h"
+#include "bwm_observer_cam.h"
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vgl/vgl_homg_plane_3d.h>

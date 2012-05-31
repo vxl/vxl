@@ -47,5 +47,6 @@
 #include <bwm/bwm_tableau_video.h>
 #include <bwm/bwm_texture_map_generator.h>
 #include <bwm/bwm_world.h>
+#include <bwm/bwm_plane_fitting_lsf.h>
 
 int main() { return 0; }

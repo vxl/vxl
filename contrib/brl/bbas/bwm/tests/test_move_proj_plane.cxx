@@ -7,7 +7,7 @@
 #include <vcl_fstream.h>
 #include <testlib/testlib_test.h>
 
-#include <bwm/algo/bwm_plane_fitting_lsf.h>
+#include <bwm/bwm_plane_fitting_lsf.h>
 #include <bwm/bwm_observer_proj_cam.h>
 
 #include <vgl/vgl_homg_plane_3d.h>

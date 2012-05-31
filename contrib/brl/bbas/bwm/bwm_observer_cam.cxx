@@ -7,7 +7,7 @@
 #include <bwm/bwm_observable_point_sptr.h>
 #include <bwm/bwm_observable_mesh_circular.h>
 #include <bwm/algo/bwm_algo.h>
-#include <bwm/algo/bwm_plane_fitting_lsf.h>
+#include <bwm/bwm_plane_fitting_lsf.h>
 #include <bwm/algo/bwm_image_processor.h>
 #include <bwm/algo/bwm_delaunay_tri.h>
 #include <bwm/bwm_tableau_mgr.h>
