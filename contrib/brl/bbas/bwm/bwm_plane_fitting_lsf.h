@@ -1,4 +1,4 @@
-// This is brl/bbas/bwm/algo/bwm_plane_fitting_lsf.h
+// This is brl/bbas/bwm/bwm_plane_fitting_lsf.h
 #ifndef bwm_plane_fitting_lsf_h_
 #define bwm_plane_fitting_lsf_h_
 //:
