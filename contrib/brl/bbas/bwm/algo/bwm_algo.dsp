@@ -12,9 +12,6 @@ SOURCE=.\bwm_image_processor.cxx
 SOURCE=.\bwm_lidar_algo.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bwm_plane_fitting_lsf.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bwm_rat_proj_camera.cxx
 # End Source File
 # Begin Source File
@@ -43,9 +40,6 @@ SOURCE=.\bwm_image_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_lidar_algo.h
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_plane_fitting_lsf.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_rat_proj_camera.h

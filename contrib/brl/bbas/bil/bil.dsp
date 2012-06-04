@@ -107,9 +107,6 @@ SOURCE=.\Templates/bil_bounded_image_view+ushort-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bil_raw_image_istream-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+bil_raw_image_istream_sptr-.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

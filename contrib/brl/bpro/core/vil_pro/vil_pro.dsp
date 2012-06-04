@@ -210,6 +210,15 @@ SOURCE=.\processes/vil_scale_and_offset_values_process.cxx
 SOURCE=.\processes/vil_set_float_image_pixel_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vil_image_dilate_disk_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vil_image_sum_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bil_raw_image_istream_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group

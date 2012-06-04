@@ -134,9 +134,6 @@ SOURCE=.\Templates/boct_tree+short.boxm_opt2_sample+float--.cxx
 SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.boxm_rt_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.boxm_edge_tangent_sample+float---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.boxm_edge_tangent_sample+float---.cxx
 # End Source File
 # Begin Source File
@@ -150,9 +147,6 @@ SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOG_GREY-.boxm_rt_s
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_scalar_sample+float---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_edge_tangent_sample+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_sample+BOXM_APM_MOG_GREY-.cxx
@@ -198,9 +192,6 @@ SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---.c
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_inf_line_sample+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_inf_line_sample+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_opt2_sample+float--.cxx
@@ -302,13 +293,7 @@ SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOG_GREY-.float-.cx
 SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_edge_tangent_sample+float---~-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_edge_sample+float--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/boxm_scalar_sample+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.boxm_edge_sample+float---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.boxm_sample_multi_bin+BOXM_APM_MOG_GREY--.cxx

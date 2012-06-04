@@ -160,6 +160,12 @@ SOURCE=.\Templates/brdb_value_t+boxm_array_1d_float_sptr-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm_array_1d_float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.boxm_edge_tangent_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.boxm_edge_sample+float---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

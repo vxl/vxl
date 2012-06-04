@@ -104,6 +104,9 @@ SOURCE=.\boxm_mob_grey_processor.cxx
 SOURCE=.\boxm_mog_grey_processor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_sigma_normalizer.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boct_tree_cell+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
@@ -141,6 +144,9 @@ SOURCE=.\boxm_simple_grey_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_mog_grey_processor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_sigma_normalizer.h
 # End Source File
 # End Group
 # End Target

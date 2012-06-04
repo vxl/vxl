@@ -107,9 +107,6 @@ SOURCE=.\test_boxm_plane_ransac.cxx
 SOURCE=.\test_boxm_rational_camera_utils.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_sigma_normalizer.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

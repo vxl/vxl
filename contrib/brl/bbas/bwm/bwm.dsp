@@ -102,6 +102,9 @@ SOURCE=.\bwm_tableau_generic_cam.cxx
 SOURCE=.\bwm_3d_corr.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bwm_plane_fitting_lsf.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bwm_command-.cxx
 # End Source File
 # Begin Source File
@@ -274,6 +277,9 @@ SOURCE=.\bwm_3d_corr_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_3d_corr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_plane_fitting_lsf.h
 # End Source File
 # End Group
 # End Target

@@ -93,7 +93,7 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\dummy.cxx
+SOURCE=.\bsl_opinion.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -104,3 +104,5 @@ SOURCE=.\bsl_opinion.h
 # End Group
 # End Target
 # End Project
+# Begin Source File
+# End Source File

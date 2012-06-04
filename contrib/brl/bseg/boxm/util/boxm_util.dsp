@@ -110,9 +110,6 @@ SOURCE=.\boxm_quad_scan_iterator.cxx
 SOURCE=.\boxm_utils.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_sigma_normalizer.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_test_util.cxx
 # End Source File
 # Begin Source File
@@ -147,9 +144,6 @@ SOURCE=.\boxm_triangle_scan_iterator.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_rational_camera_utils.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_sigma_normalizer.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_raytrace_operations.h
