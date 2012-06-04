@@ -63,7 +63,6 @@ class bsl_opinion
   float a_;  // atomicity, default is .5f;
 };
 
-
 inline bsl_opinion fuse(bsl_opinion const& lhs, bsl_opinion const& rhs)
 {
   float bA = lhs.b();
@@ -99,4 +98,6 @@ inline bsl_opinion operator/(bsl_opinion const& o1, bsl_opinion const& o2) { ret
 
 inline vcl_ostream& operator<< (vcl_ostream& s, bsl_opinion const& o) { s << "bsl_opinion [b=" << o.b() << " u=" << o.u() << ']' << vcl_endl; return s; }
 
+
 #endif
+
