@@ -5,6 +5,7 @@ LIBRARY := boxm
 SOURCES += boxm_simple_grey_processor.cxx
 SOURCES += boxm_mob_grey_processor.cxx
 SOURCES += boxm_mog_grey_processor.cxx
+SOURCES += boxm_sigma_normalizer.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

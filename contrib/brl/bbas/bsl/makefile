@@ -3,7 +3,7 @@ USES += contrib/brl contrib/brl/bbas core
 LIBRARY := bsl
 VERSION := 1.0
 
-MANPAGE_SOURCES += bsl_opinion.h
+SOURCES += bsl_opinion.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
@@ -16,4 +16,3 @@ endif
 ######################################
 include ${VXLROOT}/config/top-rules.mk
 ######################################
-SOURCES += dummy.cxx

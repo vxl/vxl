@@ -8,7 +8,6 @@ ifeq ($(HAS_BGUI3D),1)
 SOURCES += bwm_algo.cxx
 SOURCES += bwm_image_processor.cxx
 SOURCES += bwm_lidar_algo.cxx
-SOURCES += bwm_plane_fitting_lsf.cxx
 SOURCES += bwm_rat_proj_camera.cxx
 SOURCES += bwm_soview2D_cross.cxx
 MANPAGE_SOURCES += bwm_soview2D_vertex.h

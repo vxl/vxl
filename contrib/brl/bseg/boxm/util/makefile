@@ -7,7 +7,6 @@ SOURCES += boxm_triangle_scan_iterator.cxx
 SOURCES += boxm_rational_camera_utils.cxx
 SOURCES += boxm_quad_scan_iterator.cxx
 SOURCES += boxm_utils.cxx
-SOURCES += boxm_sigma_normalizer.cxx
 SOURCES += boxm_test_util.cxx
 SOURCES += boxm_cell_data_traits.cxx
 

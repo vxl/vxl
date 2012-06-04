@@ -52,6 +52,7 @@ SOURCES += bwm_observer_generic_cam.cxx
 SOURCES += bwm_tableau_generic_cam.cxx
 SOURCES += bwm_3d_corr.cxx
 MANPAGE_SOURCES += bwm_3d_corr_sptr.h
+SOURCES += bwm_plane_fitting_lsf.cxx
 
 SOURCES += process/bwm_process.cxx
 SOURCES += process/bwm_site_process.cxx
