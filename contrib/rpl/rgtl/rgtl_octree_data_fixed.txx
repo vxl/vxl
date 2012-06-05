@@ -69,7 +69,7 @@ rgtl_octree_data_fixed<D, LeafDataType, NodeDataType>
 {
   if (cell_index_type c = this->location_to_index(cell))
   {
-    if (!has_children(c))
+    if (!this->has_children(c))
     {
       return this->get_leaf_data(c);
     }
@@ -94,7 +94,7 @@ rgtl_octree_data_fixed<D, LeafDataType, NodeDataType>
 {
   if (cell_index_type c = this->location_to_index(cell))
   {
-    if (has_children(c))
+    if (this->has_children(c))
     {
       return this->get_node_data(c);
     }
