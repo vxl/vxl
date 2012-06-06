@@ -6,6 +6,7 @@
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
 #include <vnl/vnl_inverse.h>
+#include <vnl/vnl_numeric_traits.h>
 #include <vbl/vbl_local_minima.h>
 #include <vbl/vbl_array_3d.h>
 #include <vil/algo/vil_gauss_filter.h>
@@ -18,7 +19,7 @@
 #include <icam/icam_sample.h>
 #include <vpgl/algo/vpgl_ray.h>
 
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
 
 static bool smallest_local_minima(vbl_array_3d<double> const& in,
                                   double min_thresh,
