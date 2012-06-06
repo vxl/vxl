@@ -21,7 +21,7 @@ SET(m23d_sources
 AUX_SOURCE_DIRECTORY(Templates m23d_sources)
 
 ADD_LIBRARY(m23d ${m23d_sources})
-TARGET_LINK_LIBRARIES(m23d mbl vnl vnl_algo vgl)
+TARGET_LINK_LIBRARIES(m23d mbl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

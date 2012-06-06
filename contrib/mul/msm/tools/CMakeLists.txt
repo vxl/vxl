@@ -3,7 +3,7 @@
 #  Tim Cootes
 #
 
-LINK_LIBRARIES(msm msm_utils vil vgl vul)
+LINK_LIBRARIES(msm msm_utils )
 
 ADD_EXECUTABLE(msm_build_shape_model msm_build_shape_model.cxx)
 ADD_EXECUTABLE(msm_draw_shape_modes  msm_draw_shape_modes.cxx)

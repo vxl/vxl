@@ -70,7 +70,7 @@ SET(mfpf_sources
 
 AUX_SOURCE_DIRECTORY(Templates mfpf_sources)
 ADD_LIBRARY(mfpf ${mfpf_sources} )
-TARGET_LINK_LIBRARIES(mfpf clsfy mipa vimt vpdfl mbl vnl_algo vgl vnl_io vnl vul vil_io vil)
+TARGET_LINK_LIBRARIES(mfpf clsfy mipa)
 
 SUBDIRS(tools)
 
