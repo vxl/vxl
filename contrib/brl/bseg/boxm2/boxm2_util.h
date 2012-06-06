@@ -6,6 +6,7 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vbl/vbl_array_2d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <bsta/bsta_histogram.h>

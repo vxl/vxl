@@ -1,8 +1,9 @@
 #include "boxm2_stream_scene_cache.h"
-#include <vcl_new.h>
-#include <vcl_iostream.h>
 //:
 // \file
+#include <vgl/vgl_box_3d.h>
+#include <vcl_new.h>
+#include <vcl_iostream.h>
 
 boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
                                                    vcl_vector<vcl_string> data_types,
