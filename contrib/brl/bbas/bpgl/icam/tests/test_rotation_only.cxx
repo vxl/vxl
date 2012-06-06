@@ -18,8 +18,6 @@
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsph/vsph_camera_bounds.h>
 #include <icam/icam_minimizer.h>
