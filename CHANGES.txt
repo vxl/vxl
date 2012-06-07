@@ -29,13 +29,20 @@ VXL 1.17.0    - June 2012
         this in vpgl_bundle_adjust to allow for shared intrinsic
         camera parameters in bundle adjustment.
 
+      - Added a vbl_batch_multimap and vbl_compact_batch_multimap. These have
+        vcl_multimap style interfaces, but with much lower memory allocation
+        overheads when individual inserts and erases are not required.
+
+      - Missing data support in vil. In particular image sampling can now return
+        return NA when off edge of image. Compatible with vnl_na.
+        
 ******************************
 VXL 1.16.0    - December 2010
 ******************************
 
       - generalized sparse symmetric eigensystem solver (A*x = lambda*B*x)
         added to vnl/algo/vnl_sparse_symmetric_eigensystem
-
+        
 ******************************
 VXL 1.15.0    - September 2010
 ******************************
