@@ -57,8 +57,8 @@
 //  public:
 //   void print(vcl_ostream& os) const
 //   {
-//     os<<vsl_indent(os)<<fred_<<'\n'
-//       <<vsl_indent(os)<<"Jim's other data\n";
+//     os<<vsl_indent()<<fred_<<'\n'
+//       <<vsl_indent()<<"Jim's other data\n";
 //   }
 // };
 //
