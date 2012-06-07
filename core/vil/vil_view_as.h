@@ -75,6 +75,10 @@ inline vil_image_view<vil_rgba<T> > vil_view_as_rgba(const vil_image_view<T>& v)
 // \return an empty view if it can't do the conversion (e.g. planestep != 1)
 // O(1).
 // \relatesalso vil_image_view
+// \warning This view translation is a slight bodge. The underlying data is a still a component T.
+// This means that consistency check between the view and the underlying data will fail.
+// For example vsl_b_write(os, vil_view_as_complex(img); and vsl_b_read(...) will fail. Simply deep copy the
+// view before checking (or saving) the image to avoid problems.
 template<class T>
 inline vil_image_view<vcl_complex<T> >
 vil_view_as_complex (const vil_image_view<T> & v)
@@ -92,6 +96,10 @@ vil_view_as_complex (const vil_image_view<T> & v)
 //: Base function to do the work for both vil_view_real/imag_part
 // O(1).
 // \relatesalso vil_image_view
+// \warning This view translation is a slight bodge. The underlying data is a still a scalar complex<T>.
+// This means that consistency check between the view and the underlying data will fail.
+// For example vsl_b_write(os, vil_view_part(img, i); and vsl_b_read(...) will fail. Simply deep copy the
+// view before checking (or saving) the image to avoid problems.
 template <class T>
 inline vil_image_view<T>
 vil_view_part (vil_image_view<vcl_complex<T> > img, int pt)
@@ -106,6 +114,10 @@ vil_view_part (vil_image_view<vcl_complex<T> > img, int pt)
 //: Return a view of the real part of a complex image.
 // O(1).
 // \relatesalso vil_image_view
+// \warning This view translation is a slight bodge. The underlying data is a still a scalar complex<T>.
+// This means that consistency check between the view and the underlying data will fail.
+// For example vsl_b_write(os, vil_view_real_part(img, i); and vsl_b_read(...) will fail. Simply deep copy the
+// view before checking (or saving) the image to avoid problems.
 template <class T>
 inline vil_image_view<T>
 vil_view_real_part (vil_image_view<vcl_complex<T> > img)
@@ -116,6 +128,10 @@ vil_view_real_part (vil_image_view<vcl_complex<T> > img)
 //: Return a view of the imaginary part of a complex image.
 // O(1).
 // \relatesalso vil_image_view
+// \warning This view translation is a slight bodge. The underlying data is a still a scalar complex<T>.
+// This means that consistency check between the view and the underlying data will fail.
+// For example vsl_b_write(os, vil_view_imag_part(img, i); and vsl_b_read(...) will fail. Simply deep copy the
+// view before checking (or saving) the image to avoid problems.
 template <class T>
 inline vil_image_view<T>
 vil_view_imag_part (vil_image_view<vcl_complex<T> > img)

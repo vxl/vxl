@@ -2,15 +2,80 @@
 #include <testlib/testlib_test.h>
 
 #include <vcl_iostream.h>
+#include <vcl_complex.h>
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil/vil_image_view.h>
 #include <vil/io/vil_io_image_view.h>
 #include <vil/vil_plane.h>
+#include <vil/vil_view_as.h>
+#include <vsl/vsl_stream.h>
+
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0
 #endif
+
+
+
+
+
+void test_image_view_io_with_view_transform()
+{
+  {
+    vil_image_view<vil_rgb<vxl_byte> > img(10, 10);
+    vil_image_view<vxl_byte > img2(img);
+
+    vil_image_view<vxl_byte> img3(vil_plane(img, 0));
+
+    vcl_cout << "img: " << vsl_stream_summary(img) << vcl_endl;
+    vcl_cout << "vil_plane(img): " << vsl_stream_summary(img3) << vcl_endl;
+
+    {
+      vsl_b_ofstream f("vil_image_view_test_io_vt2.bvl.tmp");
+      vsl_b_write(f, img3);
+    }
+
+    vil_image_view<vxl_byte> img4;
+    vsl_b_ifstream f2("vil_image_view_test_io_vt2.bvl.tmp");
+    vsl_b_read(f2, img4);
+    TEST("Finished reading file successfully", (!f2), false);
+
+
+    vcl_cout << "loaded vil_plane(img): " << vsl_stream_summary(img4) << vcl_endl;
+
+    TEST("image as expected", vil_image_view_deep_equality(img3, img4), true);
+  }
+#if 0
+  // this test fails because vil_view_real_part assumes that complex is a proper composite type.
+  // It isn't, and the consistency checks during IO pick up on that.
+
+  {
+    vil_image_view<vcl_complex<double> > img(10, 10);
+
+    vil_image_view<double> img2(vil_view_real_part(img));
+
+    vcl_cout << "img: " << vsl_stream_summary(img) << vcl_endl;
+    vcl_cout << "vil_view_real_part(img): " << vsl_stream_summary(img2) << vcl_endl;
+
+    {
+      vsl_b_ofstream f("vil_image_view_test_io_vt1.bvl.tmp");
+      vsl_b_write(f, img2);
+    }
+    vil_image_view<double> img3;
+    vsl_b_ifstream f2("vil_image_view_test_io_vt1.bvl.tmp");
+    vsl_b_read(f2, img3);
+    TEST("Finished reading file successfully", (!f2), false);
+
+
+    vcl_cout << "vil_view_real_part(img): " << vsl_stream_summary(img3) << vcl_endl;
+
+    TEST("read image as expected", vil_image_view_deep_equality(img2, img3), true);
+  }
+#endif
+}
+
+
 
 // Check for multiple null pointer loading bug
 void test_image_view_io_as_null()
@@ -83,6 +148,8 @@ static void test_image_view_io()
            << " Testing IO for vil_image_view\n"
            << "*******************************\n";
 
+  test_image_view_io_with_view_transform();
+
 #if VXL_HAS_INT_64
   test_image_view_io_as(vxl_uint_64(3),vxl_uint_64(17));
   test_image_view_io_as(vxl_int_64(5),vxl_int_64(-17));
@@ -97,6 +164,7 @@ static void test_image_view_io()
   test_image_view_io_as(double(12.1),double(123.456));
   test_image_view_io_as(bool(false),bool(true));
   test_image_view_io_as_null();
+
 }
 
 TESTMAIN(test_image_view_io);
