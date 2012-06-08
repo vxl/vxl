@@ -982,14 +982,15 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
 
 bool vpgl_generic_camera_convert::
 convert( vpgl_proj_camera<double> const& prj_cam, int ni, int nj,
-         vpgl_generic_camera<double> & gen_cam)
+         vpgl_generic_camera<double> & gen_cam, unsigned level)
 {
   vbl_array_2d<vgl_ray_3d<double> > rays(nj, ni);
   vgl_ray_3d<double> ray;
   vgl_homg_point_2d<double> ipt;
+  double scale = vcl_pow(2.0,level);
   for (int j = 0; j<nj; ++j)
     for (int i = 0; i<ni; ++i) {
-      ipt.set(i, j, 1.0);
+      ipt.set(i*scale, j*scale, 1.0);
       ray = prj_cam.backproject_ray(ipt);
       rays[j][i]=ray;
     }
@@ -997,14 +998,34 @@ convert( vpgl_proj_camera<double> const& prj_cam, int ni, int nj,
   return true;
 }
 
+bool vpgl_generic_camera_convert::
+convert_with_margin( vpgl_perspective_camera<double> const& per_cam, int ni, int nj,
+                     vpgl_generic_camera<double> & gen_cam, int margin, unsigned level)
+{
+  vbl_array_2d<vgl_ray_3d<double> > rays(nj+2*margin, ni+2*margin);
+  vgl_ray_3d<double> ray;
+  vgl_homg_point_2d<double> ipt;
+  double scale = vcl_pow(2.0,level);
+  for (int j = -margin; j<nj+margin; ++j)
+    for (int i = -margin; i<ni+margin; ++i) {
+      ipt.set(i*scale, j*scale, 1.0);
+      ray = per_cam.backproject_ray(ipt);
+      rays[j+margin][i+margin]=ray;
+    }
+  gen_cam = vpgl_generic_camera<double>(rays);
+  return true;
+}
+
+
 // the affine camera defines a principal plane which is
 // far enough from the scene origin so that all the scene
 // geometry is in front of the plane. The backproject function
 // finds constructs finite ray origins on the principal plane.
 bool vpgl_generic_camera_convert::
 convert( vpgl_affine_camera<double> const& aff_cam, int ni, int nj,
-         vpgl_generic_camera<double> & gen_cam)
+         vpgl_generic_camera<double> & gen_cam, unsigned level)
 {
+  double scale = vcl_pow(2.0,level);
   // is an ideal point defining the ray direction
   vgl_homg_point_3d<double> cent = aff_cam.camera_center();
   vgl_vector_3d<double> dir(cent.x(), cent.y(), cent.z());
@@ -1015,7 +1036,7 @@ convert( vpgl_affine_camera<double> const& aff_cam, int ni, int nj,
   vgl_homg_line_3d_2_points<double> hline;
   for (int j = 0; j<nj; ++j)
     for (int i = 0; i<ni; ++i) {
-      ipt.set(i, j, 1.0);
+      ipt.set(i*scale, j*scale, 1.0);
       hline = aff_cam.backproject(ipt);
       horg = hline.point_finite();
       org.set(horg.x()/horg.w(), horg.y()/horg.w(), horg.z()/horg.w());
@@ -1035,13 +1056,37 @@ convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
 
   if (vpgl_proj_camera<double>* cam =
       dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr()))
-    return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam);
+    return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
 
   if (vpgl_affine_camera<double>* cam =
       dynamic_cast<vpgl_affine_camera<double>*>(camera.ptr()))
-    return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam);
+    return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
 
   return false;
 }
+
+//: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera
+bool vpgl_generic_camera_convert::convert( vpgl_geo_camera& geocam, int ni, int nj, double height,
+                                           vpgl_generic_camera<double> & gen_cam, unsigned level)
+{
+  double scale = vcl_pow(2.0,level);
+ 
+  //: all rays have the same direction
+  vgl_vector_3d<double> dir(0.0, 0.0, -1.0);
+
+  vbl_array_2d<vgl_ray_3d<double> > rays(nj, ni);
+  vgl_point_3d<double> org;
+  
+  for (int j = 0; j<nj; ++j)
+    for (int i = 0; i<ni; ++i) {
+      double x,y,z;
+      geocam.backproject(i*scale, j*scale,x,y,z);
+      org.set(x, y, height);
+      rays[j][i].set(org, dir);
+    }
+  gen_cam = vpgl_generic_camera<double>(rays);
+  return true;
+}
+
 
 #endif // vpgl_camera_convert_cxx_
