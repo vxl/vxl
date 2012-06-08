@@ -34,6 +34,7 @@ SOURCES += processes/vpgl_convert_local_rational_to_generic_process.cxx
 SOURCES += processes/vpgl_generate_3d_point_from_cams_process.cxx
 SOURCES += processes/vpgl_convert_to_local_coordinates_process.cxx
 SOURCES += processes/bpgl_transform_perspective_cameras_process.cxx
+SOURCES += processes/vpgl_load_geo_camera_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
