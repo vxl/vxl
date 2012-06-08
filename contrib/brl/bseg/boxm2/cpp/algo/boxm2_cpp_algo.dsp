@@ -263,6 +263,9 @@ SOURCE=.\boxm2_compute_normal_albedo_functor_opt.h
 # Begin Source File
 SOURCE=.\boxm2_export_stack_images_function.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_create_mog_image_functor.h
+# End Source File
 # End Group
 # End Target
 # End Project
