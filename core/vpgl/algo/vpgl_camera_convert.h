@@ -19,6 +19,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
 //: Basic least squares solution for a general projective camera given corresponding world and image points.
@@ -86,26 +87,34 @@ class vpgl_generic_camera_convert
   //: Convert a proj_camera to a generic camera
   static bool convert( vpgl_proj_camera<double> const& prj_cam,
                        int ni, int nj,
-                       vpgl_generic_camera<double> & gen_cam);
+                       vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
 
   //: Convert a perspective_camera to a generic camera
   static bool convert( vpgl_perspective_camera<double> const& per_cam,
                        int ni, int nj,
-                       vpgl_generic_camera<double> & gen_cam)
+                       vpgl_generic_camera<double> & gen_cam, unsigned level = 0)
   {
     vpgl_perspective_camera<double> nc_cam(per_cam);
     vpgl_proj_camera<double>* prj_cam_ptr =
       dynamic_cast<vpgl_proj_camera<double>*>(&nc_cam);
     if (!prj_cam_ptr) return false;
-    return convert(*prj_cam_ptr, ni, nj, gen_cam);
+    return convert(*prj_cam_ptr, ni, nj, gen_cam,level);
   }
+
+  static bool convert_with_margin( vpgl_perspective_camera<double> const& per_cam,
+                       int ni, int nj,
+                       vpgl_generic_camera<double> & gen_cam, int margin, unsigned level = 0);
 
   //: Convert an affine_camera to a generic camera
   static bool convert( vpgl_affine_camera<double> const& aff_cam,
-                       int ni, int nj, vpgl_generic_camera<double> & gen_cam);
+                       int ni, int nj, vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
 
   //::convert an abstract camera to generic camera
   static bool convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
+                       vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
+
+  //: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera
+  static bool convert( vpgl_geo_camera& geocam, int ni, int nj, double height,
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
 
   // === utility methods ===
