@@ -15,7 +15,7 @@ IF(TIFF_FOUND)
     INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 
     SET( vpgl_file_formats_sources ${vpgl_file_formats_sources}
-         vpgl_geo_camera.h         vpgl_geo_camera.cxx )
+         vpgl_geo_camera.h         vpgl_geo_camera.cxx)
 
   ENDIF(GEOTIFF_FOUND)
 ENDIF(TIFF_FOUND)
