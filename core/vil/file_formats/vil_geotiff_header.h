@@ -46,6 +46,9 @@ class vil_geotiff_header
   //: returns the Zone and the Hemisphere (0 for N, 1 for S);
   bool PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph);
 
+  //: returns the Zone and the Hemisphere (0 for N, 1 for S);
+  bool PCS_NAD83_UTM_zone(int &zone, GTIF_HEMISPH &hemisph);
+
   //: <key> : key id
   // <value>: a single value or an array of values
   // <size>:  the size of individual key values
