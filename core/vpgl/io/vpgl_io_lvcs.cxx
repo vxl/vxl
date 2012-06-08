@@ -79,3 +79,18 @@ void vsl_print_summary(vcl_ostream& os,const vpgl_lvcs & c)
   os << c << '\n';
 }
 
+//: Binary save lvcs sptr to stream
+void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs_sptr const& lvcs_sptr)
+{
+  if (!lvcs_sptr) return;
+  vpgl_lvcs* lvcs = lvcs_sptr.ptr();
+  vsl_b_write(os, *lvcs);
+}
+
+//: Binary load lvcs sptr from stream.
+void vsl_b_read(vsl_b_istream & is, vpgl_lvcs_sptr &lvcs_sptr)
+{
+  vpgl_lvcs* lvcs = 0;
+  vsl_b_read(is, *lvcs);
+  lvcs_sptr = lvcs;
+}
