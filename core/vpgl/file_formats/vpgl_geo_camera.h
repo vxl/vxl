@@ -29,9 +29,9 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: creates identity matrix and all zero tiepoints
   vpgl_geo_camera();
 
+  //: if scale tag is false be sure that trans_matrix[0][0] and trans_matrix[1][1] is 1.0 otherwise set it to true
   vpgl_geo_camera(vnl_matrix<double> trans_matrix,
-                  vpgl_lvcs_sptr lvcs,
-                  vcl_vector<vcl_vector<double> > /*tiepoints*/) // FIXME - unused parameter
+                  vpgl_lvcs_sptr lvcs)
     : trans_matrix_(trans_matrix), is_utm(false), scale_tag_(false) { this->set_lvcs(lvcs); }
 
   // copy constructor
@@ -93,6 +93,17 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: returns the corresponding geographical coordinates for a given pixel position (i,j)
   void img_to_wgs(const double i, const double j, const double z,
                   double& lon, double& lat, double& elev);
+
+  //: returns the corresponding pixel position for given geographical coordinates
+  void wgs_to_img(const double lon, const double lat, const double gz,
+                  double& u, double& v);
+
+  //: returns the corresponding utm location for the given local position
+  void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone); 
+
+  int utm_zone() { return utm_zone_; }
+
+  bool img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2);
 
 #if 0
   //: returns the corresponding pixel position (i,j) for a given geographical coordinates (lon, lat)
