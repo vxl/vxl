@@ -228,6 +228,7 @@ bool vpgl_ray::principal_ray(vpgl_proj_camera<double> const& cam,
     return false;
   dir = normalize(dir);
   vgl_point_3d<double> cent = cam.camera_center();
+  pray = vgl_ray_3d<double>(cent, cent + dir); 
   return true;
 }
 
