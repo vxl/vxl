@@ -223,6 +223,7 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
   }
+#if DEBUG
   vil_image_view<float> test(ni,nj);
   count = 0;
   for (unsigned int j=0;j<cl_nj;++j) {
@@ -235,6 +236,7 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
     }
   }
   vil_save(test,"f:/test.tiff");
+#endif
   clReleaseCommandQueue(queue);
   return true;
 }
