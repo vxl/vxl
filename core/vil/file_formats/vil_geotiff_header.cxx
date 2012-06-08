@@ -158,6 +158,37 @@ bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) //
   }
 }
 
+//: returns the Zone and the Hemisphere (0 for N, 1 for S);
+bool vil_geotiff_header::PCS_NAD83_UTM_zone(int &zone, GTIF_HEMISPH &hemisph)
+{
+  modeltype_t type;
+  if (gtif_modeltype(type) && type == ModelTypeProjected)
+  {
+    void *value;
+    int size;
+    int length;
+    tagtype_t ttype;
+    get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
+
+    assert ((length == 1) && (ttype == TYPE_SHORT));
+
+    short *val = static_cast<short*> (value);
+    if ((*val < PCS_NAD83_UTM_zone_3N ) || ((*val > PCS_NAD83_Missouri_West ))) {
+      vcl_cerr << "NOT in RANGE PCS_NAD83_UTM_zone_3N and PCS_NAD83_Missouri_West!\n";
+      return false;
+    }
+    zone = *val - 26900;
+    hemisph = NORTH;
+    
+    return true;
+  }
+  else {
+    hemisph = UNDEF;
+    return false;
+  }
+}
+
+
 bool vil_geotiff_header::get_key_value(geokey_t key, void** value,
                                        int& size, int& length, tagtype_t& type)
 {
