@@ -875,9 +875,6 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
         vgl_point_3d<double> prev_org(0.0,0.0,local_z_max);
         vgl_point_3d<double> prev_endpt(0.0, 0.0, local_z_min);
         // initialize guess with
-#ifdef DEBUG
-        vcl_cout << "level: i,j = " << lev << ":   " << i << ", " << j << vcl_endl;
-#endif
         if (lev < n_levels-1) {
           double rel_scale = scl[lev]/scl[lev+1];
           int i_above = static_cast<int>(rel_scale * i);
@@ -888,18 +885,12 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
           // find endpoint
           double ray_len = (local_z_min - prev_org.z()) / prev_dir.z();
           prev_endpt = prev_org + (prev_dir * ray_len);
-#ifdef DEBUG
-          vcl_cout << "prev_org = " << prev_org << "  prev_endpt = " << prev_endpt << vcl_endl;
-#endif
         }
         const double error_tol = 0.25; // allow projection error of 0.25 pixel
         if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org, error_tol))
           return false;
         if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt, error_tol))
           return false;
-#ifdef DEBUG
-        vcl_cout << "     org = " << org << "       endpt = " << endpt << vcl_endl;
-#endif
 #else // 0
         if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, vgl_point_3d<double>(0.0,0.0,0.0), org))
           return false;
