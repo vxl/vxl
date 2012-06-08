@@ -123,10 +123,6 @@ class vil_nitf2_image_subheader
 
   bool get_correction_offset(double & u_off, double & v_off);
 
-  unsigned int get_number_of_bits_per_pixel(){return 0;} // Temporary stub -DEC
-  vcl_string get_image_source(){return "";} // Temporary stub -DEC
-  vcl_string get_image_type(){return "";} // Temporary stub -DEC
-
  protected:
   vil_nitf2_field_sequence m_field_sequence;
   vil_nitf2_data_mask_table* m_data_mask_table;
