@@ -4,6 +4,7 @@
 
 #include <expatpplib.h>
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -81,7 +82,8 @@ class bvgl_labelme_parser : public expatpp
 template <typename T>
 void convert(const char* t, T& d)
 {
-  vcl_stringstream strm(t);
+  vcl_string s = t;
+  vcl_stringstream strm(s);
   strm >> d;
 }
 
