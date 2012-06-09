@@ -8,7 +8,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for rand()
-#include <vcl_cmath.h>
+#include <vcl_cmath.h> // for std::pow()
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -828,7 +828,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
     dim = nj;
   double lv = vcl_log(dim)/vcl_log(2.0);
   int n_levels = static_cast<int>(lv+1.0);// round up
-  if (dim/vcl_pow(2.0, static_cast<double>(n_levels-1)) < 3.0) n_levels--;
+  if (dim*vcl_pow(0.5, static_cast<double>(n_levels-1)) < 3.0) n_levels--;
   // construct pyramid of ray indices
   // the row and column dimensions at each level
   vcl_vector<int> nr(n_levels,0), nc(n_levels,0);
@@ -978,7 +978,7 @@ convert( vpgl_proj_camera<double> const& prj_cam, int ni, int nj,
   vbl_array_2d<vgl_ray_3d<double> > rays(nj, ni);
   vgl_ray_3d<double> ray;
   vgl_homg_point_2d<double> ipt;
-  double scale = vcl_pow(2.0,level);
+  double scale = (level < 32) ? double(1L<<level) : vcl_pow(2.0,static_cast<double>(level));
   for (int j = 0; j<nj; ++j)
     for (int i = 0; i<ni; ++i) {
       ipt.set(i*scale, j*scale, 1.0);
@@ -996,7 +996,7 @@ convert_with_margin( vpgl_perspective_camera<double> const& per_cam, int ni, int
   vbl_array_2d<vgl_ray_3d<double> > rays(nj+2*margin, ni+2*margin);
   vgl_ray_3d<double> ray;
   vgl_homg_point_2d<double> ipt;
-  double scale = vcl_pow(2.0,level);
+  double scale = (level < 32) ? double(1L<<level) : vcl_pow(2.0,static_cast<double>(level));
   for (int j = -margin; j<nj+margin; ++j)
     for (int i = -margin; i<ni+margin; ++i) {
       ipt.set(i*scale, j*scale, 1.0);
@@ -1016,7 +1016,7 @@ bool vpgl_generic_camera_convert::
 convert( vpgl_affine_camera<double> const& aff_cam, int ni, int nj,
          vpgl_generic_camera<double> & gen_cam, unsigned level)
 {
-  double scale = vcl_pow(2.0,level);
+  double scale = (level < 32) ? double(1L<<level) : vcl_pow(2.0,static_cast<double>(level));
   // is an ideal point defining the ray direction
   vgl_homg_point_3d<double> cent = aff_cam.camera_center();
   vgl_vector_3d<double> dir(cent.x(), cent.y(), cent.z());
@@ -1060,14 +1060,14 @@ convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
 bool vpgl_generic_camera_convert::convert( vpgl_geo_camera& geocam, int ni, int nj, double height,
                                            vpgl_generic_camera<double> & gen_cam, unsigned level)
 {
-  double scale = vcl_pow(2.0,level);
- 
+  double scale = (level < 32) ? double(1L<<level) : vcl_pow(2.0,static_cast<double>(level));
+
   //: all rays have the same direction
   vgl_vector_3d<double> dir(0.0, 0.0, -1.0);
 
   vbl_array_2d<vgl_ray_3d<double> > rays(nj, ni);
   vgl_point_3d<double> org;
-  
+
   for (int j = 0; j<nj; ++j)
     for (int i = 0; i<ni; ++i) {
       double x,y,z;
