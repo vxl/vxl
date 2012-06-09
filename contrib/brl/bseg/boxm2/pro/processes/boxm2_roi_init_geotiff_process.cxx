@@ -9,19 +9,20 @@
 // \author Ozge C. Ozcanli
 // \date May 07, 2012
 
-#include <vcl_fstream.h>
-#include <vcl_ios.h> // for std::ios::fixed
 #include <boxm2/boxm2_scene.h>
 
 #include <vpgl/file_formats/vpgl_geo_camera.h>
+#include <vpgl/algo/vpgl_camera_convert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
-#include <vpgl/algo/vpgl_camera_convert.h>
-#include <vcl_algorithm.h>
 #include <vil/file_formats/vil_geotiff_header.h>
 #include <vil/file_formats/vil_tiff.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_load.h>
+#include <vcl_cmath.h> // for std::pow()
+#include <vcl_fstream.h>
+#include <vcl_ios.h> // for std::ios::fixed
+#include <vcl_algorithm.h>
 
 namespace boxm2_roi_init_geotiff_process_globals
 {
@@ -115,8 +116,14 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
   }
 
   // downsample the image based on the level
-  crop_ni = (unsigned int) (crop_ni/vcl_pow(2.0,level));
-  crop_nj = (unsigned int) (crop_nj/vcl_pow(2.0,level));
+  if (level < 32) {
+    crop_ni /= (1L<<level);
+    crop_nj /= (1L<<level);
+  }
+  else {
+    crop_ni = (unsigned int) (crop_ni*vcl_pow(0.5,static_cast<double>(level)));
+    crop_nj = (unsigned int) (crop_nj*vcl_pow(0.5,static_cast<double>(level)));
+  }
   vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(crop_ni, crop_nj, crop_view->nplanes());
   vil_resample_bilin(*crop_view, *out_img, crop_ni, crop_nj);
   // now use this camera to generate generic cam
