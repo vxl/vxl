@@ -57,6 +57,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_set_float_image_pixel_process, "vilSetFloatImagePixelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_sum_process, "vilImageSumProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_dilate_disk_process, "vilImageDilateDiskProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_mean_and_variance_process, "vilImageMeanAndVarianceProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_normalise_process, "vilImageNormaliseProcess");
 }
 
