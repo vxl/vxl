@@ -614,20 +614,20 @@ void vpgl_lvcs::read(vcl_istream& strm)
   else
     vcl_cerr << "undefined local_cs_name\n";
 
-  strm >> ang_u >> len_u;
-  if (ang_u.compare("feet") == 0)
+  strm >> len_u >> ang_u;
+  if (len_u.compare("feet") == 0)
     localXYZUnit_ = FEET;
-  else if (ang_u.compare("meters") == 0)
+  else if (len_u.compare("meters") == 0)
     localXYZUnit_ = METERS;
   else
-    vcl_cerr << "undefined localXYZUnit_\n";
+    vcl_cerr << "undefined localXYZUnit_ " << len_u << "\n";
 
-  if (len_u.compare("degrees") == 0)
+  if (ang_u.compare("degrees") == 0)
     geo_angle_unit_ = DEG;
-  else if (len_u.compare("radians") == 0)
+  else if (ang_u.compare("radians") == 0)
     geo_angle_unit_ = RADIANS;
   else
-    vcl_cerr << "undefined geo_angle_unit_\n";
+    vcl_cerr << "undefined geo_angle_unit_ " << ang_u << "\n";
 
   strm >> localCSOriginLat_ >> localCSOriginLon_ >> localCSOriginElev_;
   strm >> lat_scale_ >> lon_scale_;
