@@ -23,7 +23,6 @@
 #include <mbl/mbl_log.h>
 
 
-
 //=======================================================================
 
 
@@ -114,7 +113,7 @@ int vimt3d_gaussian_pyramid_builder_3d<T>::n_levels(const vimt3d_image_3d_of<T>&
       nj = (nj+1)/2; dy*=2;
       nk = (nk+1)/2; dz*=2;
     }
-    max_levels++;
+    ++max_levels;
   }
   if (max_levels<1) max_levels = 1;
   if (max_levels>max_levels_)
@@ -273,8 +272,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
   // Shallow copy of part of base_image
   im0=base_image;
 
-  int i;
-  for (i=1;i<max_levels;i++)
+  for (int i=1;i<max_levels;++i)
   {
     vimt3d_image_3d_of<T>& im_i0 = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(i));
     vimt3d_image_3d_of<T>& im_i1 = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(i-1));
@@ -299,7 +297,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
     vul_file::make_directory_path(vul_file::dirname(images_logger().dump_prefix()));
 
     static unsigned count=0;
-    for (unsigned i=0;i<max_levels;i++)
+    for (int i=0;i<max_levels;++i)
     {
       const vimt3d_image_3d_of<T>& level_im = static_cast<const vimt3d_image_3d_of<T>&>(image_pyr(i));
       vcl_string filename = vul_sprintf("%s_count%d_level%d.v3i",images_logger().dump_prefix().c_str(),count,i);
@@ -310,9 +308,8 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
     const vimt3d_image_3d_of<T>& orig_im = static_cast<const vimt3d_image_3d_of<T>&>(im);
     vimt3d_save(filename.c_str(),orig_im);
 
-    count++;
+    ++count;
   }
-
 }
 
 //: Compute real world size of pixel
@@ -357,11 +354,10 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::extend(vimt_image_pyramid& image_pyr
   {
     image_pyr.data().resize(max_levels);
 
-    int i;
-    for (i=oldsize;i<max_levels;++i)
+    for (int i=oldsize;i<max_levels;++i)
       image_pyr.data()[i] = new vimt3d_image_3d_of<T>;
 
-    for (i=oldsize;i<max_levels;i++)
+    for (int i=oldsize;i<max_levels;++i)
     {
       vimt3d_image_3d_of<T>& im_i0 = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(i));
       vimt3d_image_3d_of<T>& im_i1 = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(i-1));
