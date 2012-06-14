@@ -11,14 +11,28 @@
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 
+#include <vul/vul_sprintf.h>
+#include <vul/vul_file.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vimt/vimt_image_pyramid.h>
+#include <vimt3d/vimt3d_save.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <mbl/mbl_log.h>
+
+
 
 //=======================================================================
+
+
+static mbl_logger& images_logger()
+{
+    static mbl_logger l("mul.vimt3d.gaussian_pyramid_builder_3d");
+    return l;
+}
+
 
 template<class T>
 vimt3d_gaussian_pyramid_builder_3d<T>::vimt3d_gaussian_pyramid_builder_3d()
@@ -278,6 +292,27 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
   double scale_step = 2.0;
 
   image_pyr.set_widths(base_pixel_width,scale_step);
+
+  // save out the original image and each level of the pyramid
+  if (images_logger().level() >= mbl_logger::INFO && images_logger().dump())
+  {
+    vul_file::make_directory_path(vul_file::dirname(images_logger().dump_prefix()));
+
+    static unsigned count=0;
+    for (unsigned i=0;i<max_levels;i++)
+    {
+      const vimt3d_image_3d_of<T>& level_im = static_cast<const vimt3d_image_3d_of<T>&>(image_pyr(i));
+      vcl_string filename = vul_sprintf("%s_count%d_level%d.v3i",images_logger().dump_prefix().c_str(),count,i);
+      vimt3d_save(filename.c_str(),level_im);
+    }
+
+    vcl_string filename = vul_sprintf("%s_count%d.v3i",images_logger().dump_prefix().c_str(),count);
+    const vimt3d_image_3d_of<T>& orig_im = static_cast<const vimt3d_image_3d_of<T>&>(im);
+    vimt3d_save(filename.c_str(),orig_im);
+
+    count++;
+  }
+
 }
 
 //: Compute real world size of pixel
