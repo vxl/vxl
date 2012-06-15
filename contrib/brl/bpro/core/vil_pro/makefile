@@ -47,6 +47,11 @@ SOURCES += processes/vil_scale_and_offset_values_process.cxx
 SOURCES += processes/vil_set_float_image_pixel_process.cxx
 SOURCES += processes/vil_image_dilate_disk_process.cxx
 SOURCES += processes/vil_image_sum_process.cxx
+SOURCES += processes/vil_shadow_detection_process.cxx
+SOURCES += processes/vil_shadow_ridge_detection_process.cxx
+SOURCES += processes/vil_image_normalise_process.cxx
+SOURCES += processes/vil_image_mean_and_variance_process.cxx
+SOURCES += processes/vil_EO_IR_combine_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
