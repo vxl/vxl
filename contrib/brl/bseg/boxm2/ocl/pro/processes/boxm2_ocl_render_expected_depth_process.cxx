@@ -228,7 +228,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
     bocl_mem * blk_info     = opencl_cache->loaded_block_info();
     transfer_time          += (float) transfer.all();
-	subblk_dim				= mdata.sub_block_dim_.x();
+    subblk_dim              = mdata.sub_block_dim_.x();
     ////3. SET args
     kern->set_arg( blk_info );
     kern->set_arg( blk );
@@ -243,7 +243,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     kern->set_arg( lookup.ptr() );
     kern->set_arg( vis_image.ptr() );
     kern->set_arg( prob_image.ptr() );
-	kern->set_arg( t_infinity.ptr() );
+    kern->set_arg( t_infinity.ptr() );
 
     //local tree , cumsum buffer, imindex buffer
     kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
@@ -270,8 +270,8 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     normalize_kern->set_arg( var_image.ptr() );
     normalize_kern->set_arg( vis_image.ptr() );
     normalize_kern->set_arg( exp_img_dim.ptr());
-	normalize_kern->set_arg( t_infinity.ptr());
-	normalize_kern->set_arg( subblk_dim_mem.ptr());
+    normalize_kern->set_arg( t_infinity.ptr());
+    normalize_kern->set_arg( subblk_dim_mem.ptr());
     normalize_kern->execute( queue, 2, local_threads, gThreads);
     clFinish(queue);
     gpu_time += normalize_kern->exec_time();

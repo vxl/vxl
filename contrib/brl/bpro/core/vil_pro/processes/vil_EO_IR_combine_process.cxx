@@ -39,13 +39,13 @@ bool vil_EO_IR_combine_process(bprb_func_process& pro)
   vil_image_view_base_sptr img_eo = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr img_ir = pro.get_input<vil_image_view_base_sptr>(i++);
 
-  if(img_eo->nplanes() != 3 || img_ir->nplanes() !=1 || 
-	 img_eo->ni() != img_ir->ni() || img_eo->nj() !=img_ir->nj())
+  if (img_eo->nplanes() != 3 || img_ir->nplanes() !=1 ||
+      img_eo->ni() != img_ir->ni() || img_eo->nj() !=img_ir->nj())
   {
-	  vcl_cout<<"# of planes  "<<img_eo->nplanes()<<" "<<img_ir->nplanes()<<vcl_endl;
-	  vcl_cout<<"Error in the input image "<<vcl_endl;
-	  return false;
-  }  
+    vcl_cout<<"# of planes  "<<img_eo->nplanes()<<' '<<img_ir->nplanes()<<'\n'
+            <<"Error in the input image"<<vcl_endl;
+    return false;
+  }
   vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, img_eo);
   vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
   vil_image_view<vil_rgba<vxl_byte> >* eo_rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
@@ -59,12 +59,8 @@ bool vil_EO_IR_combine_process(bprb_func_process& pro)
   vil_image_view<vxl_byte >::iterator ir_iter=ir_view->begin();
   vil_image_view<vil_rgb<vxl_byte> >::iterator out_iter= out_img->begin();
   for (; eo_iter != eo_rgba_view->end(); ++eo_iter,++ir_iter,++out_iter) {
-	  (*out_iter) = vil_rgb<vxl_byte>(eo_iter->R(), eo_iter->R(),eo_iter->R()); //(unsigned char)(0.75*(float)eo_iter->G()+0.25*(float)(*ir_iter)), (unsigned char)vcl_fabs(0.75*(float)eo_iter->G()-0.25*(float)(*ir_iter)));
+    (*out_iter) = vil_rgb<vxl_byte>(eo_iter->R(), eo_iter->R(),eo_iter->R()); //(unsigned char)(0.75*(float)eo_iter->G()+0.25*(float)(*ir_iter)), (unsigned char)vcl_fabs(0.75*(float)eo_iter->G()-0.25*(float)(*ir_iter)));
   }
-
-
- 
-
 
   vil_image_view_base_sptr out_img_ptr=out_img;
 
