@@ -48,7 +48,7 @@ namespace boxm2_ocl_render_expected_depth_process_globals
     //set kernel options
     vcl_string options = " -D RENDER_DEPTH ";
     options +=  "-D DETERMINISTIC";
-    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum)";
+    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -63,6 +63,8 @@ namespace boxm2_ocl_render_expected_depth_process_globals
 
     //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
+    norm_src_paths.push_back(source_dir + "scene_info.cl");
+
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -161,6 +163,8 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   for (unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
   float* prob_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) prob_buff[i]=0.0f;
+  float* t_infinity_buff = new float[cl_ni*cl_nj];
+  for (unsigned i=0;i<cl_ni*cl_nj;i++) t_infinity_buff[i]=0.0f;
 
   bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -173,6 +177,9 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
 
   bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  bocl_mem_sptr t_infinity=new bocl_mem(device->context(),t_infinity_buff,cl_ni*cl_nj*sizeof(float),"t infinity buffer");
+  t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set generic cam
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
@@ -205,7 +212,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   //2. set workgroup size
   vcl_size_t lThreads[] = {8, 8};
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
-
+  float subblk_dim = 0.0;
   // set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
@@ -221,7 +228,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
     bocl_mem * blk_info     = opencl_cache->loaded_block_info();
     transfer_time          += (float) transfer.all();
-
+	subblk_dim				= mdata.sub_block_dim_.x();
     ////3. SET args
     kern->set_arg( blk_info );
     kern->set_arg( blk );
@@ -236,6 +243,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     kern->set_arg( lookup.ptr() );
     kern->set_arg( vis_image.ptr() );
     kern->set_arg( prob_image.ptr() );
+	kern->set_arg( t_infinity.ptr() );
 
     //local tree , cumsum buffer, imindex buffer
     kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
@@ -252,13 +260,18 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     // clear render kernel args so it can reset em on next execution
     kern->clear_args();
   }
+
+  bocl_mem_sptr  subblk_dim_mem=new bocl_mem(device->context(), &(subblk_dim), sizeof(float), "sub block dim buffer");
+  subblk_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   // normalize
   {
     bocl_kernel* normalize_kern= kernels[identifier][1];
     normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->set_arg( var_image.ptr() );
-    normalize_kern->set_arg( prob_image.ptr() );
+    normalize_kern->set_arg( vis_image.ptr() );
     normalize_kern->set_arg( exp_img_dim.ptr());
+	normalize_kern->set_arg( t_infinity.ptr());
+	normalize_kern->set_arg( subblk_dim_mem.ptr());
     normalize_kern->execute( queue, 2, local_threads, gThreads);
     clFinish(queue);
     gpu_time += normalize_kern->exec_time();
