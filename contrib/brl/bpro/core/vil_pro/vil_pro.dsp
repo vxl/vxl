@@ -216,6 +216,21 @@ SOURCE=.\processes/vil_image_dilate_disk_process.cxx
 SOURCE=.\processes/vil_image_sum_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vil_shadow_detection_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vil_shadow_ridge_detection_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vil_image_normalise_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vil_image_mean_and_variance_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vil_EO_IR_combine_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bil_raw_image_istream_sptr-.cxx
 # End Source File
 # Begin Source File
