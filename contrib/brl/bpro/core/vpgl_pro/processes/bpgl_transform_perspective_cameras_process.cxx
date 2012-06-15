@@ -85,10 +85,10 @@ bool bpgl_transform_perspective_cameras_process(bprb_func_process& pro)
   double xr,yr,zr,r;
   double tx,ty,tz,scale;
 
-  ifile>>xr>>yr>>zr>>r;
+  ifile>>xr>>yr>>zr;
   ifile>>tx>>ty>>tz;
   ifile>>scale;
-  vnl_quaternion<double> q(xr,yr,zr,r);
+  vnl_quaternion<double> q(xr,yr,zr);
   vgl_rotation_3d<double> R(q);
   vnl_vector_fixed<double, 3> t;
   t[0] = tx; t[1] = ty; t[2] = tz;
