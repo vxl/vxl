@@ -29,7 +29,7 @@
 namespace boxm2_ocl_render_expected_color_process_globals
 {
   const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_outputs_ = 2;
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -97,6 +97,7 @@ bool boxm2_ocl_render_expected_color_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
+  output_types_[1] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -195,6 +196,7 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
 
   // read out expected image
   exp_image->read_to_buffer(queue);
+  vis_image->read_to_buffer(queue);
   vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(ni,nj);
   int numFloats = 4;
   int count = 0;
@@ -207,12 +209,16 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
                            (vxl_byte) 255 );
     }
   }
-
+  vil_image_view<float>* vis_img_out=new vil_image_view<float>(ni,nj);
+  for (unsigned c=0;c<nj;c++)
+    for (unsigned r=0;r<ni;r++)
+      (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];
   delete [] buff;
   delete [] vis_buff;
   clReleaseCommandQueue(queue);
   argIdx=0;
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(argIdx++, exp_img_out);
+  pro.set_output_val<vil_image_view_base_sptr>(argIdx++, vis_img_out);
   return true;
 }
