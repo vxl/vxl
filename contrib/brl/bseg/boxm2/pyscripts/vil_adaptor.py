@@ -243,4 +243,34 @@ def nitf_date_time(image_filename):
   minute = boxm2_batch.get_output_int(id);
   return year, month, day, hour, minute
 
+def combine_eo_ir(eo_img,ir_img):
+  boxm2_batch.init_process("vilEOIRCombineProcess")
+  boxm2_batch.set_input_from_db(0,eo_img)
+  boxm2_batch.set_input_from_db(1,ir_img)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  img_out = dbvalue(id,type)
+  return img_out
 
+def detect_shadow_rgb(img,threshold) :
+  boxm2_batch.init_process("vilShadowDetectionProcess");
+  boxm2_batch.set_input_from_db(0,img)
+  boxm2_batch.set_input_float(1, threshold);
+  boxm2_batch.run_process();
+  (o_id,o_type) = boxm2_batch.commit_output(0);
+  region_img = dbvalue(o_id,o_type);
+  return region_img;	
+  
+def detect_shadow_ridge(region_img,blob_size_t, sun_angle) :
+  boxm2_batch.init_process("vilShadowRidgeDetectionProcess");
+  boxm2_batch.set_input_from_db(0,region_img)
+  boxm2_batch.set_input_int(1, blob_size_t);
+  boxm2_batch.set_input_float(2, sun_angle);
+  boxm2_batch.run_process();
+  (o_id,o_type) = boxm2_batch.commit_output(0);
+  region_img = dbvalue(o_id,o_type);
+  (o_id,o_type) = boxm2_batch.commit_output(1);
+  out_img = dbvalue(o_id,o_type);
+  (o_id,o_type) = boxm2_batch.commit_output(2);
+  dist_img = dbvalue(o_id,o_type);
+  return region_img, out_img, dist_img;	
