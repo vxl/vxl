@@ -82,7 +82,7 @@ bool bpgl_transform_perspective_cameras_process(bprb_func_process& pro)
     return -1;
   }
 
-  double xr,yr,zr,r;
+  double xr,yr,zr;
   double tx,ty,tz,scale;
 
   ifile>>xr>>yr>>zr;
