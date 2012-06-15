@@ -46,7 +46,8 @@ DECLARE_FUNC_CONS(vil_scale_and_offset_values_process);
 DECLARE_FUNC_CONS(vil_set_float_image_pixel_process);
 DECLARE_FUNC_CONS(vil_image_sum_process);
 DECLARE_FUNC_CONS(vil_image_dilate_disk_process);
+DECLARE_FUNC_CONS(vil_shadow_detection_process);
+DECLARE_FUNC_CONS(vil_shadow_ridge_detection_process);
 DECLARE_FUNC_CONS(vil_image_mean_and_variance_process);
 DECLARE_FUNC_CONS(vil_image_normalise_process);
-
 #endif
