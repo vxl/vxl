@@ -6,12 +6,12 @@
     #define NORM 255;
 #endif
 #ifdef RENDER
-void step_cell_render(__global MOG_TYPE   * cell_data,
-                      __global float  * alpha_data,
-                               int      data_ptr,
-                               float    d,
-                               float  * vis,
-                               float  * expected_i)
+void step_cell_render(__global MOG_TYPE * cell_data,
+                      __global float    * alpha_data,
+                               int        data_ptr,
+                               float      d,
+                               float    * vis,
+                               float    * expected_i)
 {
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
@@ -19,9 +19,9 @@ void step_cell_render(__global MOG_TYPE   * cell_data,
   // for rendering only
   if (diff_omega<0.995f)
   {
-      CONVERT_FUNC(udata,cell_data[data_ptr]);
-      float8  data=convert_float8(udata)/(float)NORM;
-      EXPECTED_INT(expected_int_cell,data);
+    CONVERT_FUNC(udata,cell_data[data_ptr]);
+    float8  data=convert_float8(udata)/(float)NORM;
+    EXPECTED_INT(expected_int_cell,data);
   }
   float omega=(*vis) * (1.0f - diff_omega);
   (*vis) *= diff_omega;
@@ -30,32 +30,32 @@ void step_cell_render(__global MOG_TYPE   * cell_data,
 #endif
 #ifdef RENDER_ALPHA_INTEGRAL
 void step_cell_alpha_integral(__global float  * alpha_data,
-                               int      data_ptr,
-                               float    d,
-                               float  * alpha_integral)
+                                       int      data_ptr,
+                                       float    d,
+                                       float  * alpha_integral)
 {
   float alpha = alpha_data[data_ptr];
   (*alpha_integral) += alpha*d;
 }
 #endif
 #ifdef RENDER_USING_ALPHA_INTEGRAL
-void step_cell_render_using_alpha_intergal( __global MOG_TYPE   * cell_data,
-											 __global float  * alpha_data,
-													   int      data_ptr,
-													   float    d,
-													   float  * alpha_int,
-													   float  * alpha_int_cum,
-													   float  * expected_i)
+void step_cell_render_using_alpha_intergal( __global MOG_TYPE * cell_data,
+                                            __global float    * alpha_data,
+                                                     int        data_ptr,
+                                                     float      d,
+                                                     float    * alpha_int,
+                                                     float    * alpha_int_cum,
+                                                     float    * expected_i)
 {
-	float alpha = alpha_data[data_ptr];
+  float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
   float expected_int_cell=0.0f;
   // for rendering only
   if (diff_omega<0.995f)
   {
-      CONVERT_FUNC(udata,cell_data[data_ptr]);
-      float8  data=convert_float8(udata)/NORM;
-      EXPECTED_INT(expected_int_cell,data);
+    CONVERT_FUNC(udata,cell_data[data_ptr]);
+    float8  data=convert_float8(udata)/NORM;
+    EXPECTED_INT(expected_int_cell,data);
   }
   (*alpha_int) +=  alpha*d ;
   float vis = exp(-((*alpha_int_cum)-(*alpha_int)));
@@ -253,7 +253,7 @@ void step_cell_render_depth2(float depth,
                              float  * expected_depth,
                              float  * expected_depth_square,
                              float  * probsum,
-							 float * t)
+                             float * t)
 {
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
@@ -288,9 +288,9 @@ void step_cell_render_depth2(float depth,
   {
     CONVERT_FUNC(udata,cell_data[data_ptr]);
     float8  data=convert_float8(udata)/NORM;
-    expected_int_cell = ((data.s0) * (data.s2)
-                        +(data.s3) * (data.s5)
-                        +(data.s6) * (1 - data.s2 - data.s5));
+    expected_int_cell = ( data.s0  *  data.s2
+                        + data.s3  *  data.s5
+                        + data.s6  * (1 - data.s2 - data.s5));
   }
   float omega=(*vis) * (1.0f - diff_omega);
   (*expected_i)+=expected_int_cell*omega;
