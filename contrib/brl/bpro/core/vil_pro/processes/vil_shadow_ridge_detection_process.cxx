@@ -81,7 +81,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   vil_image_view<unsigned> * conn_thresh_region= new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
   conn_thresh_region->fill(0);
   vil_image_view<unsigned> * conn_edge = new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
-  vil_blob_labels(close_img,vil_blob_connectivity::vil_blob_8_conn,*conn_region);
+  vil_blob_labels(close_img,vil_blob_8_conn,*conn_region);
 
   vcl_vector<vil_blob_pixel_list> dest_pixel_lists;
   vil_blob_labels_to_pixel_lists(*conn_region,dest_pixel_lists);
@@ -99,7 +99,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   }
 
   vcl_cout<<"Selected "<<count <<" out of "<<dest_pixel_lists.size()<<vcl_endl;
-  vil_blob_labels_to_edge_labels(*conn_thresh_region,vil_blob_connectivity::vil_blob_8_conn,*conn_edge);
+  vil_blob_labels_to_edge_labels(*conn_thresh_region,vil_blob_8_conn,*conn_edge);
 
   vcl_vector<vil_blob_pixel_list> blob_edge_pixel_lists;
   vil_blob_labels_to_pixel_lists(*conn_edge,blob_edge_pixel_lists);
@@ -151,7 +151,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   shadow_border_dist_thresholded->fill(-1.0f);
   shadow_border_conn_thresh_region->fill(0);
 
-  vil_blob_labels(*shadow_border_edge_thresholded,vil_blob_connectivity::vil_blob_8_conn,*shadow_border_conn_region);
+  vil_blob_labels(*shadow_border_edge_thresholded,vil_blob_8_conn,*shadow_border_conn_region);
   vcl_vector<vil_blob_pixel_list> shadow_edge_dest_pixel_lists;
   vil_blob_labels_to_pixel_lists(*shadow_border_conn_region,shadow_edge_dest_pixel_lists);
   count = 1;
