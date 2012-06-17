@@ -22,7 +22,6 @@ DECLARE_FUNC_CONS(boxm2_cpp_filter_process);
 DECLARE_FUNC_CONS(boxm2_cpp_compute_derivative_process);
 DECLARE_FUNC_CONS(boxm2_cpp_filter_response_process);
 
-
 DECLARE_FUNC_CONS(boxm2_cpp_vis_of_point_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_probe_intensities_process);
 DECLARE_FUNC_CONS(boxm2_cpp_ray_probe_process);
@@ -56,7 +55,5 @@ DECLARE_FUNC_CONS(boxm2_cpp_points_to_volume_process);
 
 DECLARE_FUNC_CONS(boxm2_export_stack_images_process);
 DECLARE_FUNC_CONS(boxm2_cpp_create_mog_image_process);
-DECLARE_FUNC_CONS(boxm2_cpp_adjust_gain_offset_process);
-
 
 #endif
