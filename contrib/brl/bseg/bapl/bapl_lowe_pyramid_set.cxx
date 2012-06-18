@@ -148,8 +148,8 @@ bapl_lowe_pyramid_set::pyramid_at( const bapl_lowe_pyramid<float> & pyramid,
     sub_index = octave_size_-1;
   }
 
-  if ( actual_scale ) *actual_scale = vcl_pow(2.0f, octave-1);
-  if ( rel_scale ) *rel_scale = vcl_pow(2.0f, float(sub_index)/octave_size_);
+  if ( actual_scale ) *actual_scale = vcl_pow(2.0f, float(octave-1));
+  if ( rel_scale )    *rel_scale    = vcl_pow(2.0f, float(sub_index)/octave_size_);
 
   return pyramid(octave, sub_index);
 }
@@ -167,12 +167,12 @@ bapl_lowe_pyramid_set::make_descriptor(bapl_lowe_keypoint* keypoint)
   vnl_vector_fixed<double,128> histograms(0.0);
 
   float actual_scale, ref_scale;
-  float key_scale = keypoint->scale();
+  float key_scale = float(keypoint->scale());
   const vil_image_view<float> & grad_orient = grad_orient_at(key_scale, &actual_scale, &ref_scale);
   const vil_image_view<float> & grad_mag =  grad_mag_at(key_scale);
 
-  float key_x = keypoint->location_i() / actual_scale;
-  float key_y = keypoint->location_j() / actual_scale;
+  float key_x = float(keypoint->location_i()) / actual_scale;
+  float key_y = float(keypoint->location_j()) / actual_scale;
   double key_orient = keypoint->orientation();
 
   for (int hi=0; hi<4; ++hi) {
