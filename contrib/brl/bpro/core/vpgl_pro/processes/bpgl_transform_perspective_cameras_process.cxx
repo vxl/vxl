@@ -37,9 +37,8 @@ bool bpgl_transform_perspective_cameras_process_cons(bprb_func_process& pro)
   // process has 0 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
-  bool good = pro.set_input_types(input_types_) &&
-              pro.set_output_types(output_types_);
-  return good;
+  return pro.set_input_types(input_types_) &&
+         pro.set_output_types(output_types_);
 }
 
 //: Execute the process
@@ -61,14 +60,14 @@ bool bpgl_transform_perspective_cameras_process(bprb_func_process& pro)
   if (!vul_file::is_directory(in_dir.c_str()))
   {
     vcl_cout<<"Input Camera directory does not exist"<<vcl_endl;
-    return -1;
+    return false;
   }
 
   // check if output directory exists
   if (!vul_file::is_directory(out_dir.c_str()))
   {
     vcl_cout<<"Output Camera directory does not exist"<<vcl_endl;
-    return -1;
+    return false;
   }
 
   // read the xform file
@@ -79,7 +78,7 @@ bool bpgl_transform_perspective_cameras_process(bprb_func_process& pro)
   if (!ifile)
   {
     vcl_cout<<"Cannot open Xform file"<<vcl_endl;
-    return -1;
+    return false;
   }
 
   double xr,yr,zr;
