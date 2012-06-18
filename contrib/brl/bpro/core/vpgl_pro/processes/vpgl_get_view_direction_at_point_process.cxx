@@ -7,8 +7,8 @@
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
+
 namespace vpgl_get_view_direction_at_point_process_globals
 {
     const unsigned n_inputs_ = 4;
@@ -58,12 +58,12 @@ bool vpgl_get_view_direction_at_point_process(bprb_func_process& pro)
     return false;
   }
 
-  vgl_point_3d<double> camcenter=cam->camera_center();
-  vgl_vector_3d<double> view_direction=vgl_point_3d<double>(x,y,z)-camcenter;
+  vgl_point_3d<double> camcenter = cam->camera_center();
+  vgl_vector_3d<double> view_direction = vgl_point_3d<double>(x,y,z)-camcenter;
   normalize(view_direction);
 
-  float theta =vcl_acos(view_direction.z());
-  float phi =vcl_atan2(view_direction.y(),view_direction.x());
+  float theta = (float)vcl_acos(view_direction.z());
+  float phi   = (float)vcl_atan2(view_direction.y(),view_direction.x());
   pro.set_output_val<float>(0, theta);
   pro.set_output_val<float>(1, phi);
   return true;
