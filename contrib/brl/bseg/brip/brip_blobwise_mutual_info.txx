@@ -91,7 +91,7 @@ void brip_blobwise_mutual_info (const vil_image_view<T>& img1,
     }
 #endif // 0
 
-    T H1, H2, H3, MI;
+    double H1, H2, H3, MI;
     H1 = brip_hist_entropy(x_hist, mag1);
     H2 = brip_hist_entropy(y_hist, mag2);
     H3 = brip_hist_entropy(joint_hist, mag3);
