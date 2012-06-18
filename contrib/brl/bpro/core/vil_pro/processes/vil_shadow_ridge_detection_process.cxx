@@ -20,7 +20,7 @@ namespace vil_shadow_ridge_detection_process_globals
   float dist_angles(float a,float b)
   {
     float dist = vcl_fabs((b-a));
-    return dist < 2*vnl_math::pi - dist ? dist: 2*vnl_math::pi - dist;
+    return dist < float(vnl_math::pi) ? dist : float(2*vnl_math::pi) - dist;
   }
 }
 //: Init function
