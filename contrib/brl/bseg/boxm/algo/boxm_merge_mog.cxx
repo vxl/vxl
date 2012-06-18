@@ -126,8 +126,8 @@ bool compute_differential_entropy(boxm_scene<boct_tree<short, bsta_num_obs<bsta_
       continue;
     }
 
-    float h = 0.5f*vcl_log(vnl_math::pi*vnl_math::e*2.0f*cell_in->data().var());
-    cell_out->set_data(h);
+    double h = 0.5*vcl_log(vnl_math::pi*vnl_math::e*2*cell_in->data().var());
+    cell_out->set_data(float(h));
     ++it_in;
     ++it_out;
   }
@@ -182,40 +182,40 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
 }
 
 
-#if 0 
+#if 0
 //: Compute total expectation E(I) = E(I| X \in S) P(X \in S) + E(I| X !\in S) P(X !\in S)
-//  Expected apperance of a non surface voxel is not defined. Every intensity is equally likely therefore E(I| X !\in S) = 127.5 for I in [0,255]
+//  Expected appearance of a non surface voxel is not defined. Every intensity is equally likely therefore E(I| X !\in S) = 127.5 for I in [0,255]
 bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >& scene_in, boxm_scene<boct_tree<short, float > >& scene_out)
 {
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > scene_tree_type;
   scene_in.clone_blocks_to_type<boct_tree<short, float > >(scene_out, vcl_numeric_limits<float>::min());
-  
-  //iterate thorugh the leaf cells computing mean appearance
+
+  //iterate through the leaf cells computing mean appearance
   boxm_cell_iterator<scene_tree_type > it_in =
   scene_in.cell_iterator(&boxm_scene<scene_tree_type >::load_block, true);
-  
+
   boxm_cell_iterator<boct_tree<short, float > > it_out =
   scene_out.cell_iterator(&boxm_scene<boct_tree<short, float> >::load_block);
-  
+
   it_in.begin();
   it_out.begin();
-  
-  while ( !(it_in.end() || it_out.end()) ) {
-    
-    boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > *cell_in = *it_in; 
-    boct_tree_cell<short,float> *cell_out = *it_out; 
-    
+
+  while ( !(it_in.end() || it_out.end()) )
+  {
+    boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > *cell_in = *it_in;
+    boct_tree_cell<short,float> *cell_out = *it_out;
+
     boct_loc_code<short> out_code = cell_in->get_code();
     boct_loc_code<short> in_code = cell_out->get_code();
-    
+
     //if level and location code of cells isn't the same then continue
-    if((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))){
-      vcl_cerr << " Input and output cells don't have the same structure " << vcl_endl;
+    if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))){
+      vcl_cerr << " Input and output cells don't have the same structure\n";
       ++it_in;
       ++it_out;
       continue;
     }
-    
+
     float mean_color = boxm_mog_grey_processor::expected_color(cell_in->data().appearance());
     //alpha integral
     float vis = vcl_exp(- cell_in->data().alpha * it_in.length());
@@ -225,12 +225,11 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
     ++it_in;
     ++it_out;
   }
-  
+
   scene_in.unload_active_blocks();
   scene_out.unload_active_blocks();
-  
+
   return true;
-  
 }
 
 #endif
