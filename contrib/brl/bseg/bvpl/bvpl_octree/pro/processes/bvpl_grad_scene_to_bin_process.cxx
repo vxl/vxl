@@ -98,7 +98,7 @@ bool bvpl_grad_scene_to_bin_process(bprb_func_process& pro)
 
         vgl_point_3d<double> centroid = alpha_iter.global_centroid();
         vnl_vector_fixed< float,3 > grad = grad_cell->data();
-        float p_x = (1.0 - vcl_exp(- (alpha_cell->data() * cell_length )));
+        float p_x = 1.0f - (float)vcl_exp(- (alpha_cell->data() * cell_length ));
 #if 0
         vsl_b_write(os, (float)centroid.x());
         vsl_b_write(os, (float)centroid.y());

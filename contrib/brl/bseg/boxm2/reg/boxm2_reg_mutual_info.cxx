@@ -260,7 +260,7 @@ float register_world(boxm2_cache_sptr& cacheA,
                                                                         tx.y()*sub_blk_dims.y(),
                                                                         tx.z()*sub_blk_dims.z());
               float probA=alpha_data->data()[index];
-              probA = 1  - vcl_exp (-probA* side_len *sub_blk_dims.x());
+              probA = 1.0f  - (float)vcl_exp(-probA* side_len *sub_blk_dims.x());
 
               float probB=0.0f;
               bool good = true;
@@ -312,7 +312,6 @@ float register_world(boxm2_cache_sptr& cacheA,
     A(0,i) = probsA[i];
   for (unsigned int i=0; i<probsB.size(); ++i)
     B(0,i) = probsB[i];
-  double MI = brip_mutual_info(A,B, 0.0, 1.0, 20);
-  return MI;
+  return (float)brip_mutual_info(A,B, 0.0, 1.0, 20);
 }
 

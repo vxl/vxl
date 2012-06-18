@@ -147,9 +147,9 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
 
   //grab thresholds by evenly dispersing them through examples
   float* thresholds = new float[numPoints];
-  float  incr       = 1.0/(float)numPoints; // = totPix / numPoints;
+  float  incr       = 1.0f/(float)numPoints; // = totPix / numPoints;
   for (unsigned int i=0; i<numPoints; ++i) {
-    thresholds[i] = i*incr + .01; //pairs[i*incr].change;
+    thresholds[i] = i*incr + .01f; //pairs[i*incr].change;
 #ifdef DEBUG
     vcl_cout<<" thresh "<<i<<": "<<thresholds[i]<<',';
 #endif
@@ -172,25 +172,22 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
     boxm2_util_detect_change_blobs( *detection_map, thresholds[pnt], blobs );
     vcl_cout<<"  thresh "<<thresholds[pnt]<<" detected "<<blobs.size()<<" blobs"<<vcl_endl;
 
-    vil_image_view<vxl_byte> blbImage(gt_map.ni(), gt_map.nj()); 
-    boxm2_util_blob_to_image(blobs, blbImage); 
-    vcl_stringstream fname; 
+    vil_image_view<vxl_byte> blbImage(gt_map.ni(), gt_map.nj());
+    boxm2_util_blob_to_image(blobs, blbImage);
+    vcl_stringstream fname;
     fname<<"blobImage_"<<thresholds[pnt]<<".png";
-    vil_save(blbImage, fname.str().c_str()); 
+    vil_save(blbImage, fname.str().c_str());
 
-    
     //cross check each ground truth blob against change blobs for coverage
-    for(unsigned g=0; g<gt_blobs.size(); ++g) {
-      boxm2_change_blob& gt_blob = gt_blobs[g]; 
-      for(unsigned c=0; c<blobs.size(); ++c) {
-        if( gt_blob.percent_overlap( blobs[c] ) > .25f )
-          true_positives++; 
+    for (unsigned g=0; g<gt_blobs.size(); ++g) {
+      boxm2_change_blob& gt_blob = gt_blobs[g];
+      for (unsigned c=0; c<blobs.size(); ++c) {
+        if ( gt_blob.percent_overlap( blobs[c] ) > .25f )
+          true_positives++;
       }
     }
     vcl_cout<<" num true positives: "<<true_positives<<vcl_endl;
-    
-    
-  
+
     //set precision and recall
     precision->data_array[pnt] = blobs.size()==0 ? 0 : true_positives / blobs.size();
     recall->data_array[pnt]    = true_positives / gt_blobs.size();

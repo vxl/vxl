@@ -29,7 +29,7 @@ void bwm_tableau_text::set_text(vcl_string filename)
       this->set_colour(1, 0, 0);
     else
       this->set_colour(1, 1, 1);
-    add(xmarg_, (float)ypos, s);
+    add((float)xmarg_, (float)ypos, s);
     ypos += 15;
   }
 }
@@ -45,7 +45,7 @@ void bwm_tableau_text::set_string(vcl_string & str)
       break;
     unsigned nc = f_pos-s_pos;
     vcl_string s = str.substr(s_pos, nc);
-    add(xmarg_, (float)ypos, s.c_str());
+    add((float)xmarg_, (float)ypos, s.c_str());
     ypos += 15;
     s_pos = f_pos+1;
     if (s_pos >= str.size())

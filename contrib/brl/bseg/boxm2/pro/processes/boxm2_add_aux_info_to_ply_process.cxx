@@ -216,7 +216,7 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
     float alpha=alpha_data[data_offset];
     double side_len = 1.0 / (double) (1 << depth);
     //store cell probability
-    prob = 1.0f - vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
+    prob = 1.0f - (float)vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
     unsigned char intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(mog_data[data_offset])*255.0f);
 
     ply_write(oply, pt.x());
