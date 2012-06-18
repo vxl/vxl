@@ -53,8 +53,8 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint, double co
     float actual_scale;
     const vil_image_view<float>& orient_img = this->pyramid_sptr_->grad_orient_at(maximal_scale_map_itr->second, &actual_scale);
     const vil_image_view<float>& mag_img = this->pyramid_sptr_->grad_mag_at(maximal_scale_map_itr->second);
-    double key_x = i/actual_scale;
-    double key_y = j/actual_scale;
+    float key_x = i/actual_scale;
+    float key_y = j/actual_scale;
 
     bapl_lowe_orientation orientor(3.0,36);//same parameters matt used.
     vcl_vector<float> orientations;
