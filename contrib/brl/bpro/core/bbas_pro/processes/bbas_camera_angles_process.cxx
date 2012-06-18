@@ -31,19 +31,19 @@ bool bbas_camera_angles_process_cons(bprb_func_process& pro)
     return false;
 
   //output
-   // 0: camera elevation
-   // 1: camera azimuth
+  // 0: camera elevation
+  // 1: camera azimuth
   vcl_vector<vcl_string> output_types_(2);
-  output_types_[0] = "float";  
+  output_types_[0] = "float";
   output_types_[1] = "float";
   return pro.set_output_types(output_types_);
 }
 
 bool bbas_camera_angles_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs()<1)
+  if (pro.n_inputs()<4)
   {
-    vcl_cout << pro.name() << " The input number should be 1 " << vcl_endl;
+    vcl_cout << pro.name() << " The number of inputs should be 4" << vcl_endl;
     return false;
   }
 
@@ -57,17 +57,17 @@ bool bbas_camera_angles_process(bprb_func_process& pro)
   // make sure camera is using a local coordinate frame
   vpgl_local_rational_camera<double> *local_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
   if (!local_cam) {
-      vpgl_rational_camera<double> *rcam = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
-      if (rcam) {
-          // rational camera operates on geodetic coordinates, but we need a Euclidean space.
-          double lat = pt_y;
-          double lon = pt_x;
-          double el = pt_z;
-          vpgl_lvcs lvcs(lat, lon, el, vpgl_lvcs::wgs84, 0.0, 0.0, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-          camera = new vpgl_local_rational_camera<double>(lvcs,*rcam);
-          // should return 0,0,0 since point was used as origin
-          lvcs.global_to_local(lon, lat, el, vpgl_lvcs::wgs84, pt_x, pt_y, pt_z);
-      }
+    vpgl_rational_camera<double> *rcam = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
+    if (rcam) {
+      // rational camera operates on geodetic coordinates, but we need a Euclidean space.
+      double lat = pt_y;
+      double lon = pt_x;
+      double el = pt_z;
+      vpgl_lvcs lvcs(lat, lon, el, vpgl_lvcs::wgs84, 0.0, 0.0, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+      camera = new vpgl_local_rational_camera<double>(lvcs,*rcam);
+      // should return 0,0,0 since point was used as origin
+      lvcs.global_to_local(lon, lat, el, vpgl_lvcs::wgs84, pt_x, pt_y, pt_z);
+    }
   }
 
   vgl_point_3d<double> focus_pt(pt_x, pt_y, pt_z);
@@ -75,7 +75,7 @@ bool bbas_camera_angles_process(bprb_func_process& pro)
   // project point into image
   double pt_u, pt_v;
   camera->project(pt_x,pt_y,pt_z, pt_u,pt_v);
-  
+
   // backproject to plane above and below point
   const double plane_dist = 10.0; // arbitrary distance above and below focus point to backproject to.
   const double z_low = pt_z - plane_dist;
@@ -91,14 +91,14 @@ bool bbas_camera_angles_process(bprb_func_process& pro)
   // camera direction is vector from point_low to point_high (assuming camera is far above focus_pt with up ==  +z)
   vgl_vector_3d<double> cam_direction = focus_pt_high - focus_pt_low;
   normalize(cam_direction);
-  
+
   // NOTE: assumes that local coordinate system has x = east and y = north
   double cam_az = vcl_atan2(cam_direction.x(), cam_direction.y());
   double cam_el = vcl_asin(cam_direction.z());
 
   //store azimuth and elevation in range 0,360
-  pro.set_output_val<float>(0, (float)vnl_math::angle_0_to_2pi(cam_az)*vnl_math::deg_per_rad);
-  pro.set_output_val<float>(1, (float)vnl_math::angle_0_to_2pi(cam_el)*vnl_math::deg_per_rad);
+  pro.set_output_val<float>(0, float(vnl_math::angle_0_to_2pi(cam_az)*vnl_math::deg_per_rad));
+  pro.set_output_val<float>(1, float(vnl_math::angle_0_to_2pi(cam_el)*vnl_math::deg_per_rad));
 
   return true;
 }
