@@ -30,6 +30,7 @@
 #include <vnl/vnl_na.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_log.h>
+#include <mbl/mbl_sample_stats_1d.h>
 #include <mbl/mbl_exception.h>
 #include <vil3d/file_formats/vil3d_gen_synthetic.h>
 #include <vil3d/algo/vil3d_distance_transform.h>
@@ -1788,8 +1789,8 @@ void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
         sum2 += p2;
       }
 
-  vcl_cout << "Tanamoto: " << gTanamoto_num/gTanamoto_den <<
-    " Volume Change: " << (sum2-sum1)/sum1 << vcl_endl;
+  vcl_cout << "Tanimoto: " << gTanamoto_num/gTanamoto_den <<
+    " Volume Change: " << (sum2-sum1)/sum1 << " DSC: " << 2.0*gTanamoto_num/(sum1+sum2) << vcl_endl;
 
   if (dodgy)
     vcl_cerr << "WARNING: PRINT_OVERLAP: At least some voxels were outside the range [0,1].\n";
@@ -1824,8 +1825,9 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
         sum2 += p2;
       }
 
-  vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den
-           << " Volume Change: " << (static_cast<double>(sum2)-sum1)/sum1 << vcl_endl;
+  vcl_cout << "Tanimoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den
+           << " Volume Change: " << (static_cast<double>(sum2)-sum1)/sum1
+           << " DSC: " << 2.0*static_cast<double>(Tanamoto_num)/static_cast<double>(sum1+sum2) << vcl_endl;
 
   s.pop(2);
 }
