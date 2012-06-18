@@ -238,7 +238,7 @@ int boxm_plyio_vertex_cb_(p_ply_argument argument)
         // convert point to location code.
         boct_loc_code<short> loc_code(norm_p, parsed_ply->scene->max_level()-1);
         boct_tree_cell<short, float> leaf_cell(loc_code);
-        float expected_color = (float)parsed_ply->color/255.0f + parsed_ply->grey_offset;
+        float expected_color = float(parsed_ply->color)/255.0f + float(parsed_ply->grey_offset);
         if (expected_color > 2.0f || expected_color < 0.0f)
           vcl_cout << "color: " <<  parsed_ply->grey_offset << vcl_endl;
         leaf_cell.set_data(expected_color);
