@@ -136,7 +136,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
           }
         }
       }
-      (*shadow_border_edge)(blob_edge_pixel_lists[k][l].first,blob_edge_pixel_lists[k][l].second) = min;
+      (*shadow_border_edge)(blob_edge_pixel_lists[k][l].first,blob_edge_pixel_lists[k][l].second) = (float)min;
       if (min < 0.04)
       {
         (*shadow_border_edge_thresholded)(blob_edge_pixel_lists[k][l].first,blob_edge_pixel_lists[k][l].second) = 1;
