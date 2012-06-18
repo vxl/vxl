@@ -319,7 +319,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
 vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_scene<boct_tree<short, float> > *scene)
 {
   //init variables
-  float scene_ncells = scene->size();
+  unsigned long scene_ncells = scene->size();
   sample_mean_feature_.fill(0.0f);
   vnl_matrix<double> M(feature_dim_, nsamples_);
   vnl_random rng(9667566ul);
@@ -337,7 +337,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
     vcl_vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
     int tree_ncells = leaf_cells.size();
-    unsigned long tree_nsamples = (unsigned long)((float)tree_ncells/scene_ncells*nsamples_);
+    unsigned long tree_nsamples = tree_ncells*nsamples_/scene_ncells;
 
     for (unsigned i=0; i<tree_nsamples; ++i)
     {
@@ -461,7 +461,7 @@ void bvpl_discover_pca_kernels::compute_training_error(vnl_vector<double> &proj_
 void bvpl_discover_pca_kernels::compute_normalized_training_error(vnl_vector<double> &proj_error)
 {
   theoretical_training_error(proj_error);
-  proj_error = proj_error/nsamples_;
+  proj_error /= (double)nsamples_;
 }
 
 //: Project training samples onto pca space and return error as a function of number of components used
