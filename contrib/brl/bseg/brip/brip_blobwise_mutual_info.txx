@@ -121,7 +121,7 @@ void brip_blobwise_mutual_info (const vil_image_view<T>& img1,
     //store mutual information value back in MI img
     for (iter=region.begin(); iter!=region.end(); ++iter)
       for (unsigned i=iter->ilo; i<iter->ihi+1; ++i)
-        mi_img(i, iter->j) =  MI;
+        mi_img(i, iter->j) = (T)MI;
   } //end blob while
 }
 
@@ -183,7 +183,7 @@ void brip_blobwise_kl_div( const vil_image_view<T>& img1,
       y_hist[i] += .01/n_bins;
       magY      += .01/n_bins;
     }
-    T KL = brip_hist_kl_div(x_hist, magX, y_hist, magY);
+    T KL = (T)brip_hist_kl_div(x_hist, magX, y_hist, magY);
 
     //store mutual information value back in MI img
     for (iter=region.begin(); iter!=region.end(); ++iter)
