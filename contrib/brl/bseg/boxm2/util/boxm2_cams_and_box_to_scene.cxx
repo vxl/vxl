@@ -22,7 +22,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     //Build the scenes,
     //----------------------------------------------------------------------------
     // get the inputs
-    float  zplane  = (bbox.max_z()-bbox.min_z()) / 2.0;
+    double zplane  = (bbox.max_z()-bbox.min_z()) / 2.0;
 
     //run planar bounding box
     vgl_box_2d<double> b2box;
