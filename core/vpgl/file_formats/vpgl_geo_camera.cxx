@@ -138,8 +138,9 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
   else {
     lat = y;
     lon = x;
+    gz = 0.0;
   }
-  
+
   double x1=lon, y1=lat, z1=gz;
   if (is_utm) {
     vpgl_utm utm;
@@ -157,13 +158,13 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
     u /= trans_matrix_[0][0];
     v = (y1 - trans_matrix_[1][3]);
     v /= trans_matrix_[1][1];
-  } else {
+  }
+  else {
     // do we really need this, const does not allow this
     vnl_matrix<double> tm(trans_matrix_);
     tm[2][2] = 1;
 
-    //vcl_cout << trans_matrix_ << vcl_endl;
-    //vcl_cout << tm << vcl_endl;
+    //vcl_cout << trans_matrix_ << '\n' << tm << vcl_endl;
     vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
     //vcl_cout << trans_matrix_inv << vcl_endl;
     res = trans_matrix_inv*vec;
@@ -181,13 +182,14 @@ void vpgl_geo_camera::backproject(const double u, const double v,
   if (scale_tag_) {
     vec[0] = trans_matrix_[0][3] + trans_matrix_[0][0]*u;
     vec[1] = trans_matrix_[1][3] + trans_matrix_[1][1]*v;
-  } else { // assumes scale is 1
+  }
+  else { // assumes scale is 1
     vec[0] = trans_matrix_[0][3] + u;
     vec[1] = trans_matrix_[1][3] - v;
   }
   vec[2] = 0;
   vec[3] = 1;
-  //vcl_cout << "\n" << vec << vcl_endl;
+  //vcl_cout << '\n' << vec << vcl_endl;
 
   double lat, lon, elev;
   if (is_utm) {
@@ -203,7 +205,6 @@ void vpgl_geo_camera::backproject(const double u, const double v,
 
   if (lvcs_)
     lvcs_->global_to_local(lon, lat, elev, vpgl_lvcs::wgs84, x, y, z);
-    
 }
 
 void vpgl_geo_camera::translate(double tx, double ty, double z)
@@ -227,7 +228,8 @@ void vpgl_geo_camera::img_to_wgs(const double i, const double j, const double z,
   if (scale_tag_) {
     v[0] = trans_matrix_[0][3] + i*trans_matrix_[0][0];
     v[1] = trans_matrix_[1][3] + j*trans_matrix_[1][1];
-  } else {
+  }
+  else {
     v[0] = trans_matrix_[0][3] + i;
     v[1] = trans_matrix_[1][3] - j;
   }
@@ -237,9 +239,10 @@ void vpgl_geo_camera::img_to_wgs(const double i, const double j, const double z,
   vpgl_utm utm;
   utm.transform(utm_zone_, v[0], v[1], v[2], lat, lon, elev);
 }
+
 //: transforms a given local 3d world point to image plane
 void vpgl_geo_camera::wgs_to_img(const double lon, const double lat, const double gz,
-                              double& u, double& v)
+                                 double& u, double& v)
 {
   vnl_vector<double> vec(4), res(4);
   double x1=lon, y1=lat, z1=gz;
@@ -262,7 +265,8 @@ void vpgl_geo_camera::wgs_to_img(const double lon, const double lat, const doubl
   if (scale_tag_) {
     u = (vec[0] - trans_matrix_[0][3])/trans_matrix_[0][0];
     v = (vec[1] - trans_matrix_[1][3])/trans_matrix_[1][1];
-  } else {
+  }
+  else {
     vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
     res = trans_matrix_inv*vec;
     u = res[0];
@@ -279,6 +283,7 @@ void vpgl_geo_camera::local_to_utm(const double x, const double y, const double 
   vpgl_utm utm;
   utm.transform(lat, lon, e, n, utm_zone);
 }
+
 bool vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2)
 {
   if (!is_utm) {
@@ -307,7 +312,7 @@ vcl_ostream&  operator<<(vcl_ostream& s,
 {
   s << p.trans_matrix_ << '\n'<< *(p.lvcs_) << '\n';
   if (p.is_utm) {
-    s << "geocam is using UTM with zone: " << p.utm_zone_ << "\n";
+    s << "geocam is using UTM with zone: " << p.utm_zone_ << '\n';
   }
 
   return s ;
