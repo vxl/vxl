@@ -155,8 +155,8 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
 // on the global level, so buffers, offsets are used
 /////////////////////////////////////////////////////////////////
 boct_bit_tree boxm2_refine_block_function::refine_bit_tree(boct_bit_tree& unrefined_tree,
-                                                            int buff_offset,
-                                                            bool is_random)
+                                                           int buff_offset,
+                                                           bool is_random)
 {
   //initialize tree to return
   boct_bit_tree refined_tree(unrefined_tree.get_bits(), max_level_);
@@ -255,12 +255,11 @@ int boxm2_refine_block_function::move_data(boct_bit_tree& unrefined_tree,
       //move root data to new location
       int parentLevel = unrefined_tree.depth_at(pj);
       float side_len = block_len_ / (float) (1<<parentLevel);
-      
-      alpha_cpy[newDataPtr]  = (max_alpha_int_ / side_len);
-      //alpha_cpy[newDataPtr]  = (float(-vcl_log(1.0f - p_init_)) / side_len);
+
+      alpha_cpy[newDataPtr]  = float(max_alpha_int_) / side_len; // (float(-vcl_log(1.0f - p_init_)) / side_len);
 #if copy_parent_data_
-      mog_cpy[newDataPtr] = mog_[oldDataPtr]; 
-#else      
+      mog_cpy[newDataPtr]    = mog_[oldDataPtr];
+#else
       mog_cpy[newDataPtr]    = uchar8((uchar) 0);
 #endif
       num_obs_cpy[newDataPtr]= ushort4((ushort) 0);

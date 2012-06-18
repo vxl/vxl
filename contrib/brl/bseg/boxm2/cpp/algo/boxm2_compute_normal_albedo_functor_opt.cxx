@@ -7,8 +7,6 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_erf.h>
-#include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_brent_minimizer.h>
 
 #include <brad/brad_image_metadata.h>
@@ -28,7 +26,7 @@ double boxm2_compute_normal_albedo_cost_function::f(vnl_vector<double> const& x)
       double weight = visibilities_[m];
       if (rad_var <= 0.0) {
          // indicates that surface with given normal is not visible from this view
-         double background_density = 0.01; // TODO: compute actual uniform density value 
+         double background_density = 0.01; // TODO: compute actual uniform density value
          log_prob += vcl_log((1.0 - weight)*background_density);
       }
       else {
@@ -42,7 +40,7 @@ double boxm2_compute_normal_albedo_cost_function::f(vnl_vector<double> const& x)
          double diff = (radiance_scales_[m]*rho + radiance_offsets_[m] - radiances_[m]);
          prob = visibilities_[m] * vcl_exp(-diff*diff/(2.0*rad_var)) / vcl_sqrt(2.0*vnl_math::pi*rad_var);
       }
-      const double background_density = 0.01; // TODO: compute actual uniform density value 
+      const double background_density = 0.01; // TODO: compute actual uniform density value
       prob += (1.0 - visibilities_[m])*background_density;
       if (!(prob >= 1e-6)) {
          prob = 1e-6;
@@ -159,7 +157,7 @@ bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, b
    for (unsigned int n=0; n<num_normals_; ++n) {
       boxm2_compute_normal_albedo_cost_function cost_fun(radiances, vis_vals, radiance_scales_[n], radiance_offsets_[n], radiance_var_scales_[n], radiance_var_offsets_[n]);
       vnl_brent_minimizer bmin(cost_fun);
-      double albedo = bmin.minimize_given_bounds(0.0, 0.2, 1.0);
+      float albedo = bmin.minimize_given_bounds(0.0, 0.2, 1.0);
       naa_model.set_albedo(n,albedo);
       double opt_prob = vcl_exp(-1.0 * bmin.f_at_last_minimum());
       normal_probs[n] = opt_prob;
@@ -167,15 +165,14 @@ bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, b
    }
    if (prob_sum > 1e-100) {
       for (unsigned int n=0; n<num_normals_; ++n) {
-         naa_model.set_probability(n,normal_probs[n]/prob_sum);
+         naa_model.set_probability(n,float(normal_probs[n]/prob_sum));
       }
    }
    else {
       for (unsigned int n=0; n<num_normals_; ++n) {
-         naa_model.set_probability(n,1.0/num_normals_);
+         naa_model.set_probability(n,1.0f/num_normals_);
       }
    }
    return true;
 }
-
 

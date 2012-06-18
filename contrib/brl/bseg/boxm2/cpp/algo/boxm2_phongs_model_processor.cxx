@@ -15,7 +15,7 @@ float boxm2_phongs_model_processor::expected_color(brad_phongs_model & pmodel,
 float boxm2_phongs_model_processor::prob_density(float obs, float expected_obs, float var)
 {
     if (var>0.0f)
-        return 1/vcl_sqrt(2*vnl_math::pi*var)*vcl_exp(-(obs-expected_obs)*(obs-expected_obs)/(2*var));
+        return (float)vcl_exp(-(obs-expected_obs)*(obs-expected_obs)/(2*var))/(float)vcl_sqrt(2*vnl_math::pi*var);
     else
         return 1.0f;
 }
@@ -65,8 +65,8 @@ brad_phongs_model boxm2_phongs_model_processor::compute_phongs_model(float & var
         vnl_levenberg_marquardt lm(f);
         lm.set_max_function_evals(100);
         lm.minimize(x);
-        var=  f.error_var(x);
+        var = f.error_var(x);
     }
-    return brad_phongs_model(x[0],x[1],x[2],x[3],x[4]);
+    return brad_phongs_model(float(x[0]),float(x[1]),float(x[2]),float(x[3]),float(x[4]));
 }
 

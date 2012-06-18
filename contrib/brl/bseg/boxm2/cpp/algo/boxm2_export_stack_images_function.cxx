@@ -28,7 +28,7 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
   int ntrees_y = blk_mdata.sub_block_num_.y() ;
   int ntrees_z = blk_mdata.sub_block_num_.z() ;
 
-  int maxcells = (int)vcl_pow((float)2,(float)blk_mdata.max_level_-1) ;
+  int maxcells = 1 << (blk_mdata.max_level_-1) ;
 
   int img_x = (max_index.x()-min_index.x()+1)*ntrees_x*maxcells;
   int img_y = (max_index.y()-min_index.y()+1)*ntrees_y*maxcells;
@@ -80,17 +80,17 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
               int index = curr_tree.get_data_index(ti);
               vgl_point_3d<double> cc = curr_tree.cell_box(ti).min_point();
               float prob =alpha_data->data()[index];
-              prob =  1- vcl_exp (-prob* side_len *sub_blk_dims.x());
+              prob =  1.0f - (float)vcl_exp(-prob* side_len *sub_blk_dims.x());
               int factor = 1<<(blk_iter->second.max_level_-depth-1);
 
               for (int subi = 0; subi < factor; ++subi)
                 for (int subj = 0; subj < factor; ++subj)
                   for (int subk = 0; subk < factor; ++subk)
                   {
-                    img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
-                          index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk)
-                      = (unsigned char)(prob * 255);
+                    img3d(index_x*maxcells+int(cc.x()*maxcells)+subi,
+                          index_y*maxcells+int(cc.y()*maxcells)+subj,
+                          index_z*maxcells+int(cc.z()*maxcells)+subk)
+                      = (unsigned char)(prob * 255.99f);
                   }
             }
           }
@@ -120,7 +120,7 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
   int ntrees_y = blk_mdata.sub_block_num_.y() ;
   int ntrees_z = blk_mdata.sub_block_num_.z() ;
 
-  int maxcells = (int)vcl_pow((float)2,(float)blk_mdata.max_level_-1) ;
+  int maxcells = 1 << (blk_mdata.max_level_-1) ;
 
   int img_x = (max_index.x()-min_index.x()+1)*ntrees_x*maxcells;
   int img_y = (max_index.y()-min_index.y()+1)*ntrees_y*maxcells;
@@ -128,7 +128,7 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
 
   img3d.set_size(img_x,img_y,img_z,4);
 #if 0
-  double side_len = blk_mdata.sub_block_dim_.x() / ((int)vcl_pow((float)2,(float)blk_mdata.max_level_));
+  double side_len = blk_mdata.sub_block_dim_.x() / (1 << blk_mdata.max_level_);
 #endif
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
@@ -177,7 +177,7 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
               int index = curr_tree.get_data_index(ti);
               vgl_point_3d<double> cc = curr_tree.cell_box(ti).min_point();
               float prob =alpha_data->data()[index];
-              prob =  1- vcl_exp (-prob* side_len *sub_blk_dims.x());
+              prob =  1.0f - (float)vcl_exp(-prob* side_len *sub_blk_dims.x());
               int factor = 1<<(blk_iter->second.max_level_-depth-1);
               unsigned char intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(int_data->data()[index]) * 255);
 
@@ -185,18 +185,18 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
                 for (int subj = 0; subj < factor; ++subj)
                   for (int subk = 0; subk < factor; ++subk)
                   {
-                    img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
-                          index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,3) = (unsigned char)(prob * 255);
-                    img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
-                          index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,0) =intensity;
-                    img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
-                          index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,1) =intensity;
-                    img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
-                          index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,2) =intensity;
+                    img3d(index_x*maxcells+int(cc.x()*maxcells)+subi,
+                          index_y*maxcells+int(cc.y()*maxcells)+subj,
+                          index_z*maxcells+int(cc.z()*maxcells)+subk,3) = (unsigned char)(prob * 255.99f);
+                    img3d(index_x*maxcells+int(cc.x()*maxcells)+subi,
+                          index_y*maxcells+int(cc.y()*maxcells)+subj,
+                          index_z*maxcells+int(cc.z()*maxcells)+subk,0) =intensity;
+                    img3d(index_x*maxcells+int(cc.x()*maxcells)+subi,
+                          index_y*maxcells+int(cc.y()*maxcells)+subj,
+                          index_z*maxcells+int(cc.z()*maxcells)+subk,1) =intensity;
+                    img3d(index_x*maxcells+int(cc.x()*maxcells)+subi,
+                          index_y*maxcells+int(cc.y()*maxcells)+subj,
+                          index_z*maxcells+int(cc.z()*maxcells)+subk,2) =intensity;
                   }
             }
           }
@@ -227,7 +227,7 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
   int ntrees_y = blk_mdata.sub_block_num_.y() ;
   int ntrees_z = blk_mdata.sub_block_num_.z() ;
 
-  int maxcells = (int)vcl_pow((float)2,(float)blk_mdata.max_level_-1) ;
+  int maxcells = 1 << (blk_mdata.max_level_-1) ;
 
   int img_x = (max_index.x()-min_index.x()+1)*ntrees_x*maxcells;
   int img_y = (max_index.y()-min_index.y()+1)*ntrees_y*maxcells;
@@ -235,7 +235,7 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
 
   img3d.set_size(img_x,img_y,img_z,4);
 #if 0
-  double side_len = blk_mdata.sub_block_dim_.x() / ((int)vcl_pow((float)2,(float)blk_mdata.max_level_));
+  double side_len = blk_mdata.sub_block_dim_.x() / (1 << blk_mdata.max_level_);
 #endif
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
@@ -284,7 +284,7 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
               int index = curr_tree.get_data_index(ti);
               vgl_point_3d<double> cc = curr_tree.cell_box(ti).min_point();
               float prob =alpha_data->data()[index];
-              prob =  1- vcl_exp (-prob* side_len *sub_blk_dims.x());
+              prob =  1.0f - (float)vcl_exp(-prob* side_len *sub_blk_dims.x());
               int factor = 1<<(blk_iter->second.max_level_-depth-1);
 
               vnl_vector_fixed<float,3> color = boxm2_gauss_rgb_processor::expected_color(int_data->data()[index]);
@@ -296,18 +296,18 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
                 for (int subj = 0; subj < factor; ++subj)
                   for (int subk = 0; subk < factor; ++subk)
                   {
-                    img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
-                          index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,3) = (unsigned char)(prob * 255);
-                    img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
-                          index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,0) =r;
-                    img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
-                          index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,1) =g;
-                    img3d(index_x*maxcells+(int)vcl_floor(cc.x()*maxcells)+subi,
-                          index_y*maxcells+(int)vcl_floor(cc.y()*maxcells)+subj,
-                          index_z*maxcells+(int)vcl_floor(cc.z()*maxcells)+subk,2) =b;
+                    img3d(index_x*maxcells+int(cc.x()*maxcells)+subi,
+                          index_y*maxcells+int(cc.y()*maxcells)+subj,
+                          index_z*maxcells+int(cc.z()*maxcells)+subk,3) = (unsigned char)(prob * 255.99f);
+                    img3d(index_x*maxcells+int(cc.x()*maxcells)+subi,
+                          index_y*maxcells+int(cc.y()*maxcells)+subj,
+                          index_z*maxcells+int(cc.z()*maxcells)+subk,0) =r;
+                    img3d(index_x*maxcells+int(cc.x()*maxcells)+subi,
+                          index_y*maxcells+int(cc.y()*maxcells)+subj,
+                          index_z*maxcells+int(cc.z()*maxcells)+subk,1) =g;
+                    img3d(index_x*maxcells+int(cc.x()*maxcells)+subi,
+                          index_y*maxcells+int(cc.y()*maxcells)+subj,
+                          index_z*maxcells+int(cc.z()*maxcells)+subk,2) =b;
                   }
             }
           }

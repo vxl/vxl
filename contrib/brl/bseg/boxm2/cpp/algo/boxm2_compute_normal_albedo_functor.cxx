@@ -182,7 +182,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
       if (denominator > 0.0) {
          albedo = numerator / denominator;
       }
-      naa_model.set_albedo(n,albedo);
+      naa_model.set_albedo(n,(float)albedo);
 
       // compute "score" based on agreement between predicted and actual intensities
       double log_pred_prob = 0.0;
@@ -229,7 +229,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
    }
    if (prob_sum <= 1e-40) {
       for (unsigned int n=0; n<num_normals_; ++n) {
-         naa_model.set_probability(n,1.0/num_normals_);
+         naa_model.set_probability(n,1.0f/num_normals_);
       }
    }
    else {
@@ -239,7 +239,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
             vcl_cerr << "ERROR: normal_prob[" << n << "] = " << normal_prob << '\n';
             normal_prob = 0.0;
          }
-         naa_model.set_probability(n,normal_prob);
+         naa_model.set_probability(n,(float)normal_prob);
       }
    }
 #if 0

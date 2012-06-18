@@ -58,8 +58,8 @@ boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::boxm2_apply_filter_function(
     //insert to kernel
     kernel_[loc_interp] = weight;
   }
-  vcl_cout << "Loaded kernel " << id_kernel << " successfully..." << vcl_endl;
-  vcl_cout << "Kernel extent is from " << min << " to " << max << vcl_endl;
+  vcl_cout << "Loaded kernel " << id_kernel << " successfully...\n"
+           << "Kernel extent is from " << min << " to " << max << vcl_endl;
 }
 
 
@@ -68,7 +68,6 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
     boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas,
     boxm2_data_base* response, float prob_threshold, unsigned octree_lvl)
 {
-
   boxm2_block_id id = blk->block_id();
 
   //3d array of trees
@@ -95,8 +94,7 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
           int currIdx = bit_tree.get_data_index(currBitIndex);
 
           double side_len = 1.0 / (double) (1 << octree_lvl);
-          float prob = 1.0f - vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
-
+          float prob = 1.0f - (float)vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
 
           response_data[currIdx] = 0.0f;
 
@@ -126,7 +124,6 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
 
           //apply filter
           response_data[currIdx] = eval_filter(neighborhood, data, bit_tree, trees, alpha_data, octree_lvl);
-
         } //end leaf for
       } //end z for
     } //end y for
@@ -151,8 +148,9 @@ bool boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::neighbor_points(
          cellCenter.x() + i*side_len >= 0 &&
          cellCenter.y() + j*side_len >= 0 &&
          cellCenter.z() + k*side_len >= 0) {
-        vcl_pair< vnl_vector_fixed<int,3> , vgl_point_3d<double> > mypair(v,
-            vgl_point_3d<double>(cellCenter.x() + i*side_len, cellCenter.y() + j*side_len,  cellCenter.z() + k*side_len));
+        vcl_pair< vnl_vector_fixed<int,3> , vgl_point_3d<double> >
+          mypair(v,
+                 vgl_point_3d<double>(cellCenter.x() + i*side_len, cellCenter.y() + j*side_len,  cellCenter.z() + k*side_len));
         neighborhood.insert(mypair);
     }
     else
@@ -166,7 +164,6 @@ float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_alpha(
     boxm2_block_metadata data, const boct_bit_tree& bit_tree, const vgl_point_3d<double> & point,
     const boxm2_array_3d<uchar16>& trees, const boxm2_data_traits<BOXM2_ALPHA>::datatype* alpha_data, int curr_depth)
 {
-
     double side_len = 1.0 / (double) (1 << curr_depth);
 
 
@@ -209,7 +206,7 @@ float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_alpha(
       }
 
 #ifdef PROB
-      return 1.0f - vcl_exp( -totalAlphaL * side_len);
+      return 1.0f - (float)vcl_exp( -totalAlphaL * side_len);
 #else
       return totalAlphaL;
 #endif
@@ -219,8 +216,8 @@ float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_alpha(
 
 template<boxm2_data_type RESPONSE_DATA_TYPE>
 float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_filter(vcl_map<vnl_vector_fixed<int,3> , vgl_point_3d<double> > neighbors,
-    boxm2_block_metadata data, const boct_bit_tree& bit_tree,  const boxm2_array_3d<uchar16>& trees,
-    const boxm2_data_traits<BOXM2_ALPHA>::datatype* alpha_data, int curr_depth)
+                                                                   boxm2_block_metadata data, const boct_bit_tree& bit_tree,  const boxm2_array_3d<uchar16>& trees,
+                                                                   const boxm2_data_traits<BOXM2_ALPHA>::datatype* alpha_data, int curr_depth)
 {
 
   float sum = 0;
@@ -228,7 +225,6 @@ float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_filter(vcl_map<vnl_v
     sum += (*iter).second * eval_alpha(data, bit_tree, neighbors[(*iter).first], trees, alpha_data, curr_depth);     //add data*filter to sum
 
   return sum;
-
 }
 
 

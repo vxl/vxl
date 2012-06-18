@@ -99,7 +99,7 @@ void boxm2_points_to_volume::fillBlockByTri(boxm2_block_metadata& data, boxm2_bl
   int Nz = trees.get_row3_count();
 
   //create a vector for each tree in the block (of size one)
-  float emptyRoot = alphaProb(.001f, data.sub_block_dim_.x());
+  float emptyRoot = alphaProb(.001f, float(data.sub_block_dim_.x()));
   alphas.resize(trees.size());
   for (unsigned int i=0; i<trees.size(); ++i)
     alphas[i].push_back(emptyRoot);
@@ -230,15 +230,15 @@ void boxm2_points_to_volume::refine_tree(boct_bit_tree& tree,
     //if currBit is a valid cell in the old tree, move it's data into place
     if (newSurface.find(currBit)!=newSurface.end()) {
       //vcl_cout<<"  Inserting new surface! for "<<currBit<<vcl_endl;
-      float cellLen = blockLen*tree.cell_len(currBit);
-      alpha[alphIdx] = fullRoot/cellLen;
+      double cellLen = blockLen*tree.cell_len(currBit);
+      alpha[alphIdx] = fullRoot/(float)cellLen;
     }
     else if ( orig.valid_cell(currBit) ) {
       alpha[alphIdx] = origAlphas[orig.get_relative_index(currBit)];
     }
     else {
-      float cellLen = blockLen*tree.cell_len(currBit);
-      alpha[alphIdx] = emptyRoot/cellLen;
+      double cellLen = blockLen*tree.cell_len(currBit);
+      alpha[alphIdx] = emptyRoot/(float)cellLen;
     }
 
     //tack children onto queue

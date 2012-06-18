@@ -204,9 +204,8 @@ boct_bit_tree boxm2_merge_block_function::merge_bit_tree(boct_bit_tree& unrefine
 
     //calculate the theoretical radius of this cell
     int curr_depth = unrefined_tree.depth_at(currBit);
-    float side_len = block_len_ / (float) (1<<curr_depth);
-    float prob = 1.0 - vcl_exp(-alpha * side_len);
-    probs[genCounter++] = prob;
+    float side_len = (float)block_len_ / float(1<<curr_depth);
+    probs[genCounter++] = 1.0f - (float)vcl_exp(-alpha * side_len);
 
     //track current generation's leaf status, and push back children if not
     if (! unrefined_tree.is_leaf(currBit)) {
@@ -291,8 +290,8 @@ int boxm2_merge_block_function::move_data( boct_bit_tree& old_tree,
     else if (merged_tree.is_leaf(currBit) && !old_tree.is_leaf(currBit))
     {
       int currLevel = merged_tree.depth_at(currBit);
-      float side_len = block_len_ / (float) (1<<currLevel);
-      float newAlpha = (max_alpha / side_len);
+      float side_len = (float)block_len_ / float(1<<currLevel);
+      float newAlpha = max_alpha / side_len;
       alpha_cpy[newDataIndex]  = newAlpha;
       mog_cpy[newDataIndex]    = uchar8((uchar) 0);
       num_obs_cpy[newDataIndex]= ushort4((ushort) 0);

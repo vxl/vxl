@@ -52,7 +52,7 @@ boxm2_compute_derivative_function::boxm2_compute_derivative_function(
           int curr_depth = bit_tree.depth_at(currBitIndex);
           double side_len = 1.0 / (double) (1<<curr_depth);
 
-          float prob = 1.0f - vcl_exp( -alpha_data[currIdx] * side_len * data.sub_block_dim_.x() );
+          float prob = 1.0f - (float)vcl_exp( -alpha_data[currIdx] * side_len * data.sub_block_dim_.x() );
 
           //put dummy 0s in both normals and points
           normals_data[currIdx][0] = 0;
@@ -105,9 +105,9 @@ boxm2_compute_derivative_function::boxm2_compute_derivative_function(
                    << "the sub dim are "    << data.sub_block_dim_.x()<< ' ' << data.sub_block_dim_.y() << ' ' << data.sub_block_dim_.z() << ' ' << vcl_endl
                    << "cell center is " << cellCenter.x() << ' ' << cellCenter.y() << ' ' << cellCenter.z() << ' ' << vcl_endl;
 #endif
-          points_data[currIdx][0] = (cellCenter.x() )*data.sub_block_dim_.x() + data.local_origin_.x();
-          points_data[currIdx][1] = (cellCenter.y() )*data.sub_block_dim_.y() + data.local_origin_.y();
-          points_data[currIdx][2] = (cellCenter.z() )*data.sub_block_dim_.z() + data.local_origin_.z();
+          points_data[currIdx][0] = float(cellCenter.x() )*data.sub_block_dim_.x() + data.local_origin_.x();
+          points_data[currIdx][1] = float(cellCenter.y() )*data.sub_block_dim_.y() + data.local_origin_.y();
+          points_data[currIdx][2] = float(cellCenter.z() )*data.sub_block_dim_.z() + data.local_origin_.z();
 #ifdef PROB
           points_data[currIdx][3] = prob; //use the unused field in points to store prob
 #else
