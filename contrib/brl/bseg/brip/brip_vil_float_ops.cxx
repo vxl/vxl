@@ -323,7 +323,7 @@ brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma,
   unsigned r;
   double* ker;
   brip_1d_gaussian_kernel(sigma, 0.02, r, ker);
-  for (unsigned p = 0; p<np; ++p){
+  for (unsigned p = 0; p<np; ++p) {
     vil_image_view<float> input_temp(ni, nj);
     vil_image_view<float> out_temp(ni, nj);
     vil_image_view<float> work(ni, nj);
@@ -3922,8 +3922,8 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
           if (mask[jj+rj][ii+ri])
             sum += coef[jj+rj][ii+ri]*input(i+ii, j+jj);
       temp2(i,j) = static_cast<float>(sum);
-      if (mag_only){
-        temp(i,j) = vcl_fabs(sum);
+      if (mag_only) {
+        temp(i,j) = static_cast<float>(vcl_fabs(sum));
       }
       else if (bright) { // coefficients are negative at center
         if (sum<0) temp(i,j) = static_cast<float>(-sum);
@@ -4055,20 +4055,20 @@ extrema_rotational(vil_image_view<float> const& input, float lambda0,
     int rj = (nrows-1)/2, ri = (ncols-1)/2;
     if (rj > max_rji) max_rji = rj;
     if (ri > max_rji) max_rji = ri;
-    for (unsigned j = rj; j<(nj-rj); j++){
+    for (unsigned j = rj; j<(nj-rj); j++) {
       for (unsigned i = ri; i<(ni-ri); i++) {
         float res = 0.0f;
         double sum = 0;
         for (int jj=-rj; jj<=rj; ++jj)
           for (int ii=-ri; ii<=ri; ++ii)
-            if (mask[jj+rj][ii+ri]){
+            if (mask[jj+rj][ii+ri]) {
               sum += double(fa[jj+rj][ii+ri])*input(i+ii, j+jj);
             }
-        if (mag_only){
-          res = vcl_fabs(sum);
+        if (mag_only) {
+          res = static_cast<float>(vcl_fabs(sum));
         }
-        else if (signed_response){
-          res = sum;
+        else if (signed_response) {
+          res = static_cast<float>(sum);
         }
         else if (bright) { // coefficients are negative at center
           if (sum<0) res = static_cast<float>(-sum);
@@ -4353,7 +4353,7 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
     for (int i = 0; i<ni; ++i)
     {
       float v = pre_res(i + tui, j+ tvi);
-      if (mag_only){
+      if (mag_only) {
         res(i,j) = vcl_fabs(v);
       }
       else if (bright) { // coefficients are negative at center
@@ -4468,7 +4468,7 @@ fast_extrema_rotational(vil_image_view<float> const& input,
                         bool bright, bool mag_only,
                         bool signed_response, bool scale_invariant,
                         bool non_max_suppress,
-                        float cutoff){
+                        float cutoff) {
   unsigned ni = input.ni(), nj = input.nj();
   vil_image_view<float> resp(ni, nj);
   resp.fill(0.0f);
@@ -4482,7 +4482,7 @@ fast_extrema_rotational(vil_image_view<float> const& input,
                   mag_only, false, signed_response,
                   scale_invariant, false, cutoff);
     for (unsigned j = 0; j<nj; ++j)
-      for (unsigned i = 0; i<ni; ++i){
+      for (unsigned i = 0; i<ni; ++i) {
         float v = temp(i,j);
         if (vcl_fabs(v)>vcl_fabs(resp(i,j)))
           resp(i,j) = v;
