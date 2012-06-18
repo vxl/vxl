@@ -25,25 +25,25 @@ class bvpl_corner_detector
   //  The type of measure used, depends on the functor.
   template<class T_data, class F>
   void detect_and_threshold( boxm_scene<boct_tree<short, T_data > > *scene_in,
-                            F harris_functor,
-                            vgl_point_3d<int> min_neigborhood_idx,
-                            vgl_point_3d<int> max_neigborhood_idx,
-                            unsigned block_i, unsigned block_j, unsigned block_k,
-                            boxm_scene<boct_tree<short, bool> > *valid_scene,
-                            boxm_scene<boct_tree<short, float> > *corner_scene,
-                            double cell_length);
+                             F harris_functor,
+                             vgl_point_3d<int> min_neigborhood_idx,
+                             vgl_point_3d<int> max_neigborhood_idx,
+                             unsigned block_i, unsigned block_j, unsigned block_k,
+                             boxm_scene<boct_tree<short, bool> > *valid_scene,
+                             boxm_scene<boct_tree<short, float> > *corner_scene,
+                             double cell_length);
 
   //: Computes the corner measure and stores it in "corner_scene"
   //  Input scene and auxiliary valid scene are not modified
   template<class T_data, class F>
   void compute_C( boxm_scene<boct_tree<short, T_data > > *scene_in,
-                            F harris_functor,
-                            vgl_point_3d<int> min_neigborhood_idx,
-                            vgl_point_3d<int> max_neigborhood_idx,
-                            unsigned block_i, unsigned block_j, unsigned block_k,
-                            boxm_scene<boct_tree<short, bool> > *valid_scene,
-                            boxm_scene<boct_tree<short, float> > *corner_scene,
-                            double cell_length);
+                  F harris_functor,
+                  vgl_point_3d<int> min_neigborhood_idx,
+                  vgl_point_3d<int> max_neigborhood_idx,
+                  unsigned block_i, unsigned block_j, unsigned block_k,
+                  boxm_scene<boct_tree<short, bool> > *valid_scene,
+                  boxm_scene<boct_tree<short, float> > *corner_scene,
+                  double cell_length);
 
   //: Compute the determinant of the hessian
   template<class T_data>
@@ -56,13 +56,13 @@ class bvpl_corner_detector
 
 template<class T_data, class F>
 void bvpl_corner_detector::detect_and_threshold( boxm_scene<boct_tree<short, T_data > > *scene_in,
-                                                F harris_functor,
-                                                vgl_point_3d<int> min_neigborhood_idx,
-                                                vgl_point_3d<int> max_neigborhood_idx,
-                                                unsigned block_i, unsigned block_j, unsigned block_k,
-                                                boxm_scene<boct_tree<short, bool> > *valid_scene,
-                                                boxm_scene<boct_tree<short, float> > *corner_scene,
-                                                double cell_length)
+                                                 F harris_functor,
+                                                 vgl_point_3d<int> min_neigborhood_idx,
+                                                 vgl_point_3d<int> max_neigborhood_idx,
+                                                 unsigned block_i, unsigned block_j, unsigned block_k,
+                                                 boxm_scene<boct_tree<short, bool> > *valid_scene,
+                                                 boxm_scene<boct_tree<short, float> > *corner_scene,
+                                                 double cell_length)
 {
   typedef boct_tree<short, T_data> tree_type;
   typedef boct_tree_cell<short,T_data> cell_type;
@@ -103,7 +103,7 @@ void bvpl_corner_detector::detect_and_threshold( boxm_scene<boct_tree<short, T_d
     boct_loc_code<short> in_code = center_cell->get_code();
 
     //if level and location code of cells isn't the same then continue
-    if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))){
+    if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))) {
       vcl_cerr << " Input and output cells don't have the same structure\n";
       continue;
     }
@@ -123,7 +123,7 @@ void bvpl_corner_detector::detect_and_threshold( boxm_scene<boct_tree<short, T_d
 
           boct_tree_cell<short,T_data> *this_cell = scene_in->locate_point_in_memory(neighbor_cell_centroid);
 
-          if (this_cell){
+          if (this_cell) {
             harris_functor.apply(this_cell->data());
           }
           else
@@ -133,9 +133,9 @@ void bvpl_corner_detector::detect_and_threshold( boxm_scene<boct_tree<short, T_d
     double C = 0;
     if (!harris_functor.result(C)) {
       valid_center_cell->set_data(false);
-      n_fail++;
+      ++n_fail;
     }
-    corner_center_cell->set_data(C);
+    corner_center_cell->set_data(float(C));
   }
 
   vcl_cout << "Number of Harris fails: " << n_fail << vcl_endl;
@@ -195,7 +195,7 @@ void bvpl_corner_detector::compute_C( boxm_scene<boct_tree<short, T_data > > *sc
     boct_loc_code<short> in_code = center_cell->get_code();
 
     //if level and location code of cells isn't the same then continue
-    if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))){
+    if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))) {
       vcl_cerr << " Input and output cells don't have the same structure\n";
       continue;
     }
@@ -215,7 +215,7 @@ void bvpl_corner_detector::compute_C( boxm_scene<boct_tree<short, T_data > > *sc
 
           boct_tree_cell<short,T_data> *this_cell = scene_in->locate_point_in_memory(neighbor_cell_centroid);
 
-          if (this_cell){
+          if (this_cell) {
             harris_functor.apply(this_cell->data());
           }
           else
@@ -236,9 +236,9 @@ void bvpl_corner_detector::compute_C( boxm_scene<boct_tree<short, T_data > > *sc
 
 template<class T_data>
 void bvpl_corner_detector::compute_det_H( boxm_scene<boct_tree<short, T_data > > *scene_in,
-                                           unsigned block_i, unsigned block_j, unsigned block_k,
-                                           boxm_scene<boct_tree<short, bool> > *valid_scene,
-                                           boxm_scene<boct_tree<short, float> > *corner_scene)
+                                          unsigned block_i, unsigned block_j, unsigned block_k,
+                                          boxm_scene<boct_tree<short, bool> > *valid_scene,
+                                          boxm_scene<boct_tree<short, float> > *corner_scene)
 {
   typedef boct_tree<short, T_data> tree_type;
   typedef boct_tree_cell<short,T_data> cell_type;
