@@ -169,7 +169,7 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
 
     float mean_color = boxm_mog_grey_processor::expected_color(cell_in->data().appearance());
     // update alpha integral
-    float vis_color = (1.0 - vcl_exp(- cell_in->data().alpha * it_in.length()))*(mean_color+grey_offset);
+    float vis_color = float(1.0 - vcl_exp(- cell_in->data().alpha * it_in.length()))*(mean_color+grey_offset);
     cell_out->set_data(vis_color);
     ++it_in;
     ++it_out;
