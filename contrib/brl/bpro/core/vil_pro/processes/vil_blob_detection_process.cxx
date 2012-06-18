@@ -43,8 +43,8 @@ bool vil_blob_detection_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vil_image_view_base_sptr img_ptr_a = pro.get_input<vil_image_view_base_sptr>(i++);
-  float min_size  = pro.get_input<unsigned>(i++);
-  float max_size  = pro.get_input<unsigned>(i++);
+  unsigned int min_size  = pro.get_input<unsigned>(i++);
+  unsigned int max_size  = pro.get_input<unsigned>(i++);
 
   if (vil_image_view<bool> *view=dynamic_cast<vil_image_view<bool>* > (img_ptr_a.ptr()))
   {
@@ -86,6 +86,6 @@ bool vil_blob_detection_process(bprb_func_process& pro)
     return true;
   }
 
-  vcl_cout<<"Error! Require a boolean image"<<vcl_endl;
+  vcl_cerr<<"Error! Require a boolean image\n";
   return false;
 }
