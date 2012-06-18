@@ -224,7 +224,7 @@ void bvpl_corner_detector::compute_C( boxm_scene<boct_tree<short, T_data > > *sc
 
     double C = 0;
     harris_functor.result(C);
-    corner_center_cell->set_data(C);
+    corner_center_cell->set_data(float(C));
   }
 
   vcl_cout << "Number of Harris fails: " << n_fail << vcl_endl;
@@ -285,7 +285,7 @@ void bvpl_corner_detector::compute_det_H( boxm_scene<boct_tree<short, T_data > >
     H.put(2,1,mean_coeff[9]);
     H.put(2,2,mean_coeff[6]);
 
-    corner_center_cell->set_data(vnl_determinant(H));
+    corner_center_cell->set_data(float(vnl_determinant(H)));
   }
 
   //write the output block
