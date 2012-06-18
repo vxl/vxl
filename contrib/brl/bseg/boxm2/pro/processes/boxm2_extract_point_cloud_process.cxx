@@ -100,19 +100,18 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
            //compute probability
            int curr_depth = bit_tree.depth_at(currBitIndex);
            double side_len = 1.0 / (double) (1<<curr_depth);
-           float prob = 1.0f - vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
+           float prob = 1.0f - (float)vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
 
-           if(prob < prob_t)
+           if (prob < prob_t)
              continue;
 
            vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
            vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y()+ y, localCenter.z() + z);
 
-           points_data[currIdx][0] = (cellCenter.x() )*data.sub_block_dim_.x() + data.local_origin_.x();
-           points_data[currIdx][1] = (cellCenter.y() )*data.sub_block_dim_.y() + data.local_origin_.y();
-           points_data[currIdx][2] = (cellCenter.z() )*data.sub_block_dim_.z() + data.local_origin_.z();
-           points_data[currIdx][3] = 0;
-
+           points_data[currIdx][0] = float(cellCenter.x())*data.sub_block_dim_.x() + data.local_origin_.x();
+           points_data[currIdx][1] = float(cellCenter.y())*data.sub_block_dim_.y() + data.local_origin_.y();
+           points_data[currIdx][2] = float(cellCenter.z())*data.sub_block_dim_.z() + data.local_origin_.z();
+           points_data[currIdx][3] = 0.0f;
          }
        }
       }

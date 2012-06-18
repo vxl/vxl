@@ -72,26 +72,25 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     boxm2_block_metadata mdata=scene->get_block_metadata(*id);
-    float num_octree_cells=vcl_pow(2.0f,(float)mdata.max_level_-1);
-    xint=mdata.sub_block_dim_.x()/num_octree_cells;
-    yint=mdata.sub_block_dim_.y()/num_octree_cells;
-    zint=mdata.sub_block_dim_.z()/num_octree_cells;
+    unsigned long num_octree_cells = 1L << (mdata.max_level_-1);
+    xint += float(mdata.sub_block_dim_.x())/num_octree_cells;
+    yint += float(mdata.sub_block_dim_.y())/num_octree_cells;
+    zint += float(mdata.sub_block_dim_.z())/num_octree_cells;
   }
-  unsigned int ni=(unsigned int)vcl_ceil(bbox.width()/xint) -1;
-  unsigned int nj=(unsigned int)vcl_ceil(bbox.height()/yint) -1;
-  unsigned int nz=(unsigned int)vcl_ceil(bbox.depth()/zint) -1;
+  unsigned int ni = (unsigned int)(bbox.width()/xint) -1;
+  unsigned int nj = (unsigned int)(bbox.height()/yint) -1;
+  unsigned int nz = (unsigned int)(bbox.depth()/zint) -1;
 
-  for (unsigned k = 0;k<nz;k++)
+  for (unsigned k = 0;k<nz;++k)
   {
     vil_image_view<float> img(ni,nj);
-    float z = bbox.min_z()+zint*k+zint*0.5;
-
-    for (unsigned i = 0; i<ni; i++)
+    float z = bbox.min_z()+zint*(k+0.5f);
+    for (unsigned i = 0; i<ni; ++i)
     {
-      float x = bbox.min_x()+xint*i+xint*0.5;
-      for (unsigned j = 0; j<nj; j++)
+      float x = bbox.min_x()+xint*(i+0.5f);
+      for (unsigned j = 0; j<nj; ++j)
       {
-        float y = bbox.min_y()+yint*j +yint*0.5;
+        float y = bbox.min_y()+yint*(j+0.5f);
         vgl_point_3d<double> local;
         boxm2_block_id id;
         if (!scene->contains(vgl_point_3d<double>(x, y, z), id, local))

@@ -146,7 +146,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     float alpha=(alpha_data->data())[data_offset];
     double side_len = 1.0 / (double) (1 << depth);
     //store cell probability
-    prob = 1.0f - vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
+    prob = 1.0f - (float)vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
 
     boxm2_data_base *  int_base  = cache->get_data_base(id, data_type);
     if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos) {

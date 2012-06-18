@@ -129,9 +129,9 @@ bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
       vgl_ray_3d<double> ray = pcam->backproject_ray( (double) i+.5, (double) j+.5);
 
       //ray o
-      float ray_ox = ray.origin().x();
-      float ray_oy = ray.origin().y();
-      float ray_oz = ray.origin().z();
+      float ray_ox = float(ray.origin().x()),
+            ray_oy = float(ray.origin().y()),
+            ray_oz = float(ray.origin().z());
 
       //ray dir
       float dray_x = float(ray.direction().x()),
