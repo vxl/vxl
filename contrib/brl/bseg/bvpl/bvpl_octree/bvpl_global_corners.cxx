@@ -44,7 +44,7 @@ bvpl_global_corners::bvpl_global_corners(const vcl_string &path)
   vcl_vector<bxml_data_sptr> scenes_data = bxml_find_all_with_name(root, scenes_query);
 
   unsigned nscenes=scenes_data.size();
-  vcl_cout << "Number of scenes: " << nscenes <<vcl_endl;
+  vcl_cout << "Number of scenes: " << nscenes << vcl_endl;
 
   aux_dirs_.clear();
   aux_dirs_.resize(nscenes);
@@ -368,7 +368,7 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
   }
 
   vcl_string file = aux_dirs_[scene_id] + "/corner_threshold_values.txt";
-  float threshold[] = {0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 0.8};
+  float threshold[] = {0.01f, 0.02f, 0.05f, 0.1f, 0.2f, 0.5f, 0.8f};
   vcl_ofstream ofs(file.c_str());
   ofs.precision(7);
   for (unsigned i = 0; i < 7; i++) {
