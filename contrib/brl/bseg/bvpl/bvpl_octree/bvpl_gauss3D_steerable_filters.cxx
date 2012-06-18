@@ -477,38 +477,38 @@ void bvpl_gauss3D_steerable_filters::assemble_basis_size_5()
 
   //Zeroth Derivative G0
   //Separable basis taps: f01, f02
-  float f01_data[5] = {0.000402093, 0.162216, 1.19862, 0.162216, 0.000402093};
+  float f01_data[5] = {0.000402093f, 0.162216f, 1.19862f, 0.162216f, 0.000402093f};
   vnl_vector_fixed<float, 5> f01(f01_data);
   separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f01", f01));
 
-  float f02_data[5] = {0.000335463, 0.135335, 1.0, 0.135335, 0.000335463};
+  float f02_data[5] = {0.000335463f, 0.135335f, 1.0f, 0.135335f, 0.000335463f};
   vnl_vector_fixed<float,5> f02(f02_data);
   separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f02", f02));
 
   //First Derivative Basis: G1 = alpha*G1a + beta*G1b
   //Separable basis functions: f11, f12
-  float f11_data[5] = {0.00227458, 0.458816, 0.0, -0.458816, -0.00227458};
+  float f11_data[5] = {0.00227458f, 0.458816f, 0.0f, -0.458816f, -0.00227458f};
   vnl_vector_fixed<float,5> f11(f11_data);
   separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f11", f11));
-  float f12_data[5] = {0.000335463, 0.135335, 1.0, 0.135335, 0.000335463};
+  float f12_data[5] = {0.000335463f, 0.135335f, 1.0f, 0.135335f, 0.000335463f};
   vnl_vector_fixed<float,5> f12(f12_data);
   separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f12", f12));
 
   //Second derivative basis G2 = alpha^2*G2a + 2*alpha*beta*G2b + beta^2*G2c + 2*alpha*gamma*G2d + 2*beta*gamma*G2e + gamma^2*G2f
   //Separable basis taps = f21, f22, f23, f24
-  float f21_data[5] = {0.00696448, 0.561934, -1.38405, 0.561934, 0.00696448};
+  float f21_data[5] = {0.00696448f, 0.561934f, -1.38405f, 0.561934f, 0.00696448f};
   vnl_vector_fixed<float,5> f21(f21_data);
   separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f21", f21));
 
-  float f22_data[5] = {0.000335463, 0.135335, 1.0, 0.135335, 0.000335463};
+  float f22_data[5] = {0.000335463f, 0.135335f, 1.0f, 0.135335f, 0.000335463f};
   vnl_vector_fixed<float,5> f22(f22_data);
   separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f22", f22));
 
-  float f23_data[5] = {-0.00643349, -1.29773, 0.0, 1.29773, 0.00643349};
+  float f23_data[5] = {-0.00643349f, -1.29773f, 0.0f, 1.29773f, 0.00643349f};
   vnl_vector_fixed<float,5> f23(f23_data);
   separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f23", f23));
 
-  float f24_data[5] = {-0.000670925, -0.135335, 0.0, 0.135335, 0.000670925};
+  float f24_data[5] = {-0.000670925f, -0.135335f, 0.0f, 0.135335f, 0.000670925f};
   vnl_vector_fixed<float,5> f24(f24_data);
   separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f24", f24));
 }
