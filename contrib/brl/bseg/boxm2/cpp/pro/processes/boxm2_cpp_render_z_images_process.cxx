@@ -66,31 +66,31 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
   vgl_box_3d<double> bbox=scene->bounding_box();
   vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();// (vpgl_perspective_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
-  float xint=0.0f;
-  float yint=0.0f;
-  float zint=0.0f;
+  double xint=0.0;
+  double yint=0.0;
+  double zint=0.0;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     boxm2_block_metadata mdata=scene->get_block_metadata(*id);
     unsigned long num_octree_cells = 1L << (mdata.max_level_-1);
-    xint += float(mdata.sub_block_dim_.x())/num_octree_cells;
-    yint += float(mdata.sub_block_dim_.y())/num_octree_cells;
-    zint += float(mdata.sub_block_dim_.z())/num_octree_cells;
+    xint += mdata.sub_block_dim_.x()/num_octree_cells;
+    yint += mdata.sub_block_dim_.y()/num_octree_cells;
+    zint += mdata.sub_block_dim_.z()/num_octree_cells;
   }
-  unsigned int ni = (unsigned int)(bbox.width()/xint) -1;
-  unsigned int nj = (unsigned int)(bbox.height()/yint) -1;
-  unsigned int nz = (unsigned int)(bbox.depth()/zint) -1;
+  unsigned int ni = (unsigned int)(bbox.width() /xint -1);
+  unsigned int nj = (unsigned int)(bbox.height()/yint -1);
+  unsigned int nz = (unsigned int)(bbox.depth() /zint -1);
 
   for (unsigned k = 0;k<nz;++k)
   {
     vil_image_view<float> img(ni,nj);
-    float z = bbox.min_z()+zint*(k+0.5f);
+    double z = bbox.min_z()+zint*(k+0.5);
     for (unsigned i = 0; i<ni; ++i)
     {
-      float x = bbox.min_x()+xint*(i+0.5f);
+      double x = bbox.min_x()+xint*(i+0.5);
       for (unsigned j = 0; j<nj; ++j)
       {
-        float y = bbox.min_y()+yint*(j+0.5f);
+        double y = bbox.min_y()+yint*(j+0.5);
         vgl_point_3d<double> local;
         boxm2_block_id id;
         if (!scene->contains(vgl_point_3d<double>(x, y, z), id, local))
