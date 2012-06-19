@@ -40,12 +40,12 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata da
 
           //side length of the cell
           int curr_depth = bit_tree.depth_at(currBitIndex);
-          float side_len = 1.0f / float(1<<curr_depth);
+          double side_len = 1.0 / double(1<<curr_depth);
 
           //get cell center, and get six neighbor points
           vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
           vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y() + y, localCenter.z() + z);
-          vcl_vector<vgl_point_3d<double> > neighborPoints = this->neighbor_points(cellCenter, (double)side_len, trees);
+          vcl_vector<vgl_point_3d<double> > neighborPoints = this->neighbor_points(cellCenter, side_len, trees);
 
           //get each prob and sort it
           vcl_vector<float> probs;
@@ -115,11 +115,11 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata da
           probs.push_back(prob);
           if (probs.size() > 0) {
             vcl_sort( probs.begin(), probs.end() );
-            float median = probs[ (int) (probs.size()/2) ];
-            float medAlpha = - (float)vcl_log(1.0f-median) / ( side_len * data.sub_block_dim_.x() );
+            double median = probs[ (int) (probs.size()/2) ];
+            double medAlpha = - vcl_log(1.0-median) / ( side_len * data.sub_block_dim_.x() );
 
             //store the median value in the new alpha (copy)
-            alpha_cpy[currIdx] = medAlpha;
+            alpha_cpy[currIdx] = float(medAlpha);
           }
         } //end leaf for
       } //end z for

@@ -157,8 +157,8 @@ bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, b
    for (unsigned int n=0; n<num_normals_; ++n) {
       boxm2_compute_normal_albedo_cost_function cost_fun(radiances, vis_vals, radiance_scales_[n], radiance_offsets_[n], radiance_var_scales_[n], radiance_var_offsets_[n]);
       vnl_brent_minimizer bmin(cost_fun);
-      float albedo = bmin.minimize_given_bounds(0.0, 0.2, 1.0);
-      naa_model.set_albedo(n,albedo);
+      double albedo = bmin.minimize_given_bounds(0.0, 0.2, 1.0);
+      naa_model.set_albedo(n,float(albedo));
       double opt_prob = vcl_exp(-1.0 * bmin.f_at_last_minimum());
       normal_probs[n] = opt_prob;
       prob_sum += opt_prob;
