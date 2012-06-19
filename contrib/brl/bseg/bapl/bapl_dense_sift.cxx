@@ -38,7 +38,7 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint, double co
 
       //the first level in the pyramid is an 2x upsampled version of the original image with each resulting octave, the image resolution
       //is reduced by half. Therefore we need to divide the image coordinates by the correct power of two of the resolution.
-      double resolution = (double)vcl_pow(0.5,double(scale_index/this->octave_size_-1));
+      float resolution = 1.0f / current_scale;
       unsigned int ri = (unsigned int)(i*resolution);
       unsigned int rj = (unsigned int)(j*resolution);
 
@@ -52,9 +52,9 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint, double co
     //actual scale is the closest image to the maximal scale available in the pyramid. Describes the resolution of the image at a given scale.
     float actual_scale;
     const vil_image_view<float>& orient_img = this->pyramid_sptr_->grad_orient_at(maximal_scale_map_itr->second, &actual_scale);
-    const vil_image_view<float>& mag_img = this->pyramid_sptr_->grad_mag_at(maximal_scale_map_itr->second);
-    float key_x = i/actual_scale;
-    float key_y = j/actual_scale;
+    const vil_image_view<float>& mag_img    = this->pyramid_sptr_->grad_mag_at(maximal_scale_map_itr->second);
+    float key_x = float(i)/actual_scale;
+    float key_y = float(j)/actual_scale;
 
     bapl_lowe_orientation orientor(3.0,36);//same parameters matt used.
     vcl_vector<float> orientations;
