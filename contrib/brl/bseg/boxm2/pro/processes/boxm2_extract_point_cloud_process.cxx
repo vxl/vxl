@@ -108,9 +108,9 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
            vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
            vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y()+ y, localCenter.z() + z);
 
-           points_data[currIdx][0] = float(cellCenter.x())*data.sub_block_dim_.x() + data.local_origin_.x();
-           points_data[currIdx][1] = float(cellCenter.y())*data.sub_block_dim_.y() + data.local_origin_.y();
-           points_data[currIdx][2] = float(cellCenter.z())*data.sub_block_dim_.z() + data.local_origin_.z();
+           points_data[currIdx][0] = float(cellCenter.x()*data.sub_block_dim_.x() + data.local_origin_.x());
+           points_data[currIdx][1] = float(cellCenter.y()*data.sub_block_dim_.y() + data.local_origin_.y());
+           points_data[currIdx][2] = float(cellCenter.z()*data.sub_block_dim_.z() + data.local_origin_.z());
            points_data[currIdx][3] = 0.0f;
          }
        }
