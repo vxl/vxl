@@ -163,7 +163,7 @@ boct_bit_tree boxm2_refine_block_function::refine_bit_tree(boct_bit_tree& unrefi
 
   //no need to do depth first search, just iterate and check each node along the way
   //(iterate through the max number of inner cells)
-  for (int i=0; i<MAX_INNER_CELLS_; i++)
+  for (int i=0; i<MAX_INNER_CELLS_; ++i)
   {
     //if current bit is 0 and parent bit is 1, you're at a leaf
     int pi = (i-1)>>3;           //Bit_index of parent bit
@@ -175,22 +175,18 @@ boct_bit_tree boxm2_refine_block_function::refine_bit_tree(boct_bit_tree& unrefi
       //////////////////////////////////////////////////
       //find side length for cell of this level = block_len/2^currDepth
       int currDepth = unrefined_tree.depth_at(i);
-      float side_len = (float)block_len_/(float)(1<<currDepth);
+      double side_len = block_len_/ double(1<<currDepth);
 
       //get alpha value for this cell;
-      int dataIndex;
-      float alpha;
+      int dataIndex = unrefined_tree.get_data_index(i, is_random);
       if (is_random) {
-        dataIndex = unrefined_tree.get_data_index(i, is_random) % data_len_;             //gets offset within buffer
-        alpha   = alpha_[buff_offset + dataIndex];
+        dataIndex %= data_len_;             //gets offset within buffer
+        dataIndex += buff_offset;
       }
-      else {
-        dataIndex = unrefined_tree.get_data_index(i, is_random);
-        alpha   = alpha_[dataIndex];
-      }
+      float alpha = alpha_[dataIndex];
 
       //integrate alpha value
-      float alpha_int = alpha * side_len;
+      float alpha_int = alpha * float(side_len);
 
       //IF alpha value triggers split, tack on 8 children to end of tree array
       if (alpha_int > max_alpha_int_ && currDepth < max_level_-1)
@@ -199,7 +195,7 @@ boct_bit_tree boxm2_refine_block_function::refine_bit_tree(boct_bit_tree& unrefi
         refined_tree.set_bit_at(i, true);
 
         //keep track of number of nodes that split
-        num_split_++;
+        ++num_split_;
       }
       ////////////////////////////////////////////
       //END LEAF SPECIFIC CODE
@@ -246,17 +242,17 @@ int boxm2_refine_block_function::move_data(boct_bit_tree& unrefined_tree,
       num_obs_cpy[newDataPtr]= num_obs_[oldDataPtr];
 
       //increment
-      oldDataPtr++;
-      newDataPtr++;
-      cellsMoved++;
+      ++oldDataPtr;
+      ++newDataPtr;
+      ++cellsMoved;
     }
     //case where it's a new leaf...
     else if (validCellNew) {
       //move root data to new location
       int parentLevel = unrefined_tree.depth_at(pj);
-      float side_len = block_len_ / (float) (1<<parentLevel);
+      double side_len = block_len_ / double(1<<parentLevel);
 
-      alpha_cpy[newDataPtr]  = float(max_alpha_int_) / side_len; // (float(-vcl_log(1.0f - p_init_)) / side_len);
+      alpha_cpy[newDataPtr]  = float(max_alpha_int_ / side_len); // (float(-vcl_log(1.0f - p_init_) / side_len));
 #if copy_parent_data_
       mog_cpy[newDataPtr]    = mog_[oldDataPtr];
 #else
@@ -265,9 +261,9 @@ int boxm2_refine_block_function::move_data(boct_bit_tree& unrefined_tree,
       num_obs_cpy[newDataPtr]= ushort4((ushort) 0);
 
       //update new data pointer
-      newDataPtr++;
-      newInitCount++;
-      cellsMoved++;
+      ++newDataPtr;
+      ++newInitCount;
+      ++cellsMoved;
     }
   }
   return newInitCount;
