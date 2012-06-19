@@ -29,7 +29,7 @@ bool brad_estimate_shadow_prob_density(vil_image_view<float> const& radiance_ima
    for (unsigned int j=0; j<radiance_image.nj(); ++j) {
       for (unsigned int i=0; i<radiance_image.ni(); ++i) {
          double diff = radiance_image(i,j) - shadow_rad;
-         shadow_prob_density(i,j) = shadow_pdf_norm * vcl_exp(-diff*diff/(2*radiance_var));
+         shadow_prob_density(i,j) = shadow_pdf_norm * (float)vcl_exp(-diff*diff/(2*radiance_var));
       }
    }
    return true;
@@ -46,7 +46,7 @@ bool brad_estimate_shadow_prob(vil_image_view<float> const& radiance_image, brad
   double uniform_min = brad_expected_radiance_chavez(0.0, vgl_vector_3d<double>(0,0,1), mdata, atm_params);
   double uniform_max = brad_expected_radiance_chavez(1.0, vgl_vector_3d<double>(0,0,1), mdata, atm_params);
 
-  double uniform_pd = 1.0 / (uniform_max - uniform_min);
+  float uniform_pd = 1.0f / float(uniform_max - uniform_min);
   if (!(uniform_max > uniform_min)) {
     vcl_cerr << "ERROR: brad_estimate_shadows: max radiance less than min radiance\n";
     return false;
@@ -56,7 +56,7 @@ bool brad_estimate_shadow_prob(vil_image_view<float> const& radiance_image, brad
 
   for (unsigned int j=0; j<radiance_image.nj(); ++j) {
     for (unsigned int i=0; i<radiance_image.ni(); ++i) {
-       double shadow_pd = shadow_density(i,j);
+       float shadow_pd = shadow_density(i,j);
        shadow_prob(i,j) = shadow_pd / (shadow_pd + uniform_pd);
     }
   }

@@ -91,10 +91,9 @@ bool brad_undo_reflectance_estimate(vil_image_view<float> const& reflectance, br
   radiance.set_size(ni,nj);
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
-      radiance(i,j) = reflectance(i,j) * Lsat_horizontal + atm_params.airlight_;
+      radiance(i,j) = reflectance(i,j) * float(Lsat_horizontal) + atm_params.airlight_;
     }
   }
-
   return true;
 }
 
@@ -118,13 +117,12 @@ bool brad_estimate_reflectance_image(vil_image_view<float> const& radiance, brad
   reflectance.set_size(ni,nj);
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
-      float normalized = (radiance(i,j) - atm_params.airlight_) / Lsat_horizontal;
+      double normalized = (radiance(i,j) - atm_params.airlight_) / Lsat_horizontal;
       // don't let reflectance value fall below 0
       // value above 1 is unlikely but possible (e.g. specular reflection)
-      reflectance(i,j) = vcl_max(0.0f, normalized);
+      reflectance(i,j) = vcl_max(0.0f, float(normalized));
     }
   }
-
   return true;
 }
 

@@ -43,7 +43,7 @@ float brad_phongs_model::val(float view_elev, float view_azim, float sun_elev, f
     double diffuse_term  = kd_* vcl_fabs(dot_product<double>(normal_,sun_dir));
     double specular_term = ks_* vcl_pow(vcl_fabs(dot_product<double>(reflected_light_vector,view_dir)),(double)gamma_);
 
-    return diffuse_term + specular_term;
+    return float(diffuse_term + specular_term);
 }
 
 float brad_phongs_model::val(vnl_double_3 view_dir, float sun_elev, float sun_azim)
@@ -65,7 +65,7 @@ float brad_phongs_model::val(vnl_double_3 view_dir, float sun_elev, float sun_az
 
     double diffuse_term  = kd_* vcl_fabs(dot_product<double>(normal_,sun_dir));
     double specular_term = ks_* vcl_pow(vcl_fabs(dot_product<double>(reflected_light_vector,view_dir)),(double)gamma_);
-    return diffuse_term + specular_term;
+    return float(diffuse_term + specular_term);
 }
 
 brad_phongs_model_approx::brad_phongs_model_approx(float kd, float ks, float gamma, float normal_elev, float normal_azim)
@@ -104,7 +104,7 @@ float brad_phongs_model_approx::val(float view_elev, float view_azim, float sun_
     //double specular_term = ks_* vcl_pow(vcl_fabs(dot_product<double>(reflected_light_vector,view_dir)),(double)gamma_);
     //double specular_term = ks_* vcl_pow(vcl_fabs(dot_product<double>(normal_,half_vector)),(double)gamma_);
 
-    return diffuse_term ;//+ specular_term;
+    return float(diffuse_term); // + specular_term;
 }
 
 float brad_phongs_model_approx::val(vnl_double_3 view_dir, float sun_elev, float sun_azim)
@@ -129,7 +129,7 @@ float brad_phongs_model_approx::val(vnl_double_3 view_dir, float sun_elev, float
     double diffuse_term  = kd_* vcl_fabs(dot_product<double>(normal_,sun_dir));
     double specular_term = ks_* vcl_pow(vcl_fabs(dp),(double)gamma_);
 
-    return diffuse_term + specular_term;
+    return float(diffuse_term + specular_term);
 }
 
 
@@ -147,9 +147,9 @@ brad_phongs_model_est::brad_phongs_model_est(double sun_elev,
     obs_weights_ = obs_weights;
     double total_weight=0.0;
 
-    for (unsigned i=0;i<obs_weights_.size();i++)
+    for (unsigned i=0;i<obs_weights_.size();++i)
         total_weight += obs_weights_[i];
-    for (unsigned i=0;i<obs_weights_.size();i++)
+    for (unsigned i=0;i<obs_weights_.size();++i)
     {
         obs_weights_[i]/=total_weight;
         obs_weights_[i]*=obs_weights_.size();
@@ -173,10 +173,10 @@ brad_phongs_model_est::brad_phongs_model_est(double sun_elev,
     obs_weights_ = obs_weights;
     double total_weight=0.0;
 
-    for (unsigned i=0;i<obs_weights_.size();i++)
+    for (unsigned i=0;i<obs_weights_.size();++i)
         total_weight += obs_weights_[i];
 
-    for (unsigned i=0;i<obs_weights_.size();i++)
+    for (unsigned i=0;i<obs_weights_.size();++i)
     {
         obs_weights_[i]/=total_weight;
         obs_weights_[i]*=obs_weights_.size();
@@ -198,7 +198,7 @@ void brad_phongs_model_est::f(vnl_vector<double> const& x, vnl_vector<double>& y
 
     vnl_double_3 reflected_light_vector =householder_xform * light_vector;
     double diffuse_term  = vcl_fabs(x[0])* vcl_fabs(dot_product<double>(normal_vector,light_vector));
-    for (unsigned i=0;i<viewing_dirs_.size();i++)
+    for (unsigned i=0;i<viewing_dirs_.size();++i)
     {
         vnl_double_3 view_vector= viewing_dirs_[i];
         double dp=vcl_fabs(dot_product<double>(reflected_light_vector,view_vector));
@@ -208,8 +208,8 @@ void brad_phongs_model_est::f(vnl_vector<double> const& x, vnl_vector<double>& y
 
 float brad_phongs_model_est::error_var(vnl_vector<double> const& x)
 {
-    float var =0.0;
-    float sum_weights = 0.0;
+    double var =0.0;
+    double sum_weights = 0.0;
     vnl_double_3 normal_vector(vcl_sin(x[3])*vcl_cos(x[4]),vcl_sin(x[3])*vcl_sin(x[4]), vcl_cos(x[3]));
     vnl_double_3 light_vector(vcl_sin(sun_elev_)*vcl_cos(sun_azim_),vcl_sin(sun_elev_)*vcl_sin(sun_azim_), vcl_cos(sun_elev_));
     vnl_identity_3x3 I;
@@ -220,7 +220,7 @@ float brad_phongs_model_est::error_var(vnl_vector<double> const& x)
     vnl_double_3 reflected_light_vector =householder_xform * light_vector;
     double diffuse_term  = vcl_fabs(x[0])* vcl_fabs(dot_product<double>(normal_vector,light_vector));
     vnl_vector<double> y(viewing_dirs_.size());
-    for (unsigned i=0;i<viewing_dirs_.size();i++)
+    for (unsigned i=0;i<viewing_dirs_.size();++i)
     {
         vnl_double_3 view_vector= viewing_dirs_[i];
         double dp=vcl_fabs(dot_product<double>(reflected_light_vector,view_vector));
@@ -229,10 +229,7 @@ float brad_phongs_model_est::error_var(vnl_vector<double> const& x)
         sum_weights += obs_weights_[i];
     }
 
-    if (sum_weights > 0.0)
-        return var/sum_weights;
-    else
-        return 0.0;
+    return (sum_weights > 0.0) ? float(var/sum_weights) : 0.0f;
 }
 
 void brad_phongs_model_est::gradf(vnl_vector<double> const& x, vnl_matrix<double> &J)
@@ -259,12 +256,12 @@ void brad_phongs_model_est::gradf(vnl_vector<double> const& x, vnl_matrix<double
     vnl_double_3 householder_xform_dp_lv= (I-nvdp_nv_op-nv_nvdp_op)*lv;
 
     vnl_double_3 rlv =householder_xform * lv;
-    for (unsigned i=0;i<viewing_dirs_.size();i++)
+    for (unsigned i=0;i<viewing_dirs_.size();++i)
     {
         vnl_double_3 view_vector=viewing_dirs_[i];
         double dp_rlv_vv=vcl_fabs(dot_product<double>(rlv,view_vector));
-        float sign_of_x0 = x[0];
-        float sign_of_x1 = x[0];
+        double sign_of_x0 = x[0];
+        double sign_of_x1 = x[0];
         if ( x[0] == 0.0)
             sign_of_x0 =1;
         else
@@ -302,9 +299,9 @@ brad_phongs_model_approx_est::brad_phongs_model_approx_est(double sun_elev,
     obs_weights_ = obs_weights;
     double total_weight=0.0;
 
-    for (unsigned i=0;i<obs_weights_.size();i++)
+    for (unsigned i=0;i<obs_weights_.size();++i)
         total_weight += obs_weights_[i];
-    for (unsigned i=0;i<obs_weights_.size();i++)
+    for (unsigned i=0;i<obs_weights_.size();++i)
     {
         obs_weights_[i]/=total_weight;
         obs_weights_[i]*=obs_weights_.size();
@@ -328,10 +325,10 @@ brad_phongs_model_approx_est::brad_phongs_model_approx_est(double sun_elev,
     obs_weights_ = obs_weights;
     double total_weight=0.0;
 
-    for (unsigned i=0;i<obs_weights_.size();i++)
+    for (unsigned i=0;i<obs_weights_.size();++i)
         total_weight += obs_weights_[i];
 
-    for (unsigned i=0;i<obs_weights_.size();i++)
+    for (unsigned i=0;i<obs_weights_.size();++i)
     {
         obs_weights_[i]/=total_weight;
         obs_weights_[i]*=obs_weights_.size();
@@ -347,7 +344,7 @@ void brad_phongs_model_approx_est::f(vnl_vector<double> const& x, vnl_vector<dou
     vnl_double_3 normal_vector(vcl_sin(x[3])*vcl_cos(x[4]),vcl_sin(x[3])*vcl_sin(x[4]), vcl_cos(x[3]));
     vnl_double_3 light_vector(vcl_sin(sun_elev_)*vcl_cos(sun_azim_),vcl_sin(sun_elev_)*vcl_sin(sun_azim_), vcl_cos(sun_elev_));
     double diffuse_term  = vcl_fabs(x[0])* vcl_fabs(dot_product<double>(normal_vector,light_vector));
-    for (unsigned i=0;i<viewing_dirs_.size();i++)
+    for (unsigned i=0;i<viewing_dirs_.size();++i)
     {
         vnl_double_3 view_vector= viewing_dirs_[i];
         vnl_double_3 half_vector = light_vector + view_vector;
@@ -359,14 +356,14 @@ void brad_phongs_model_approx_est::f(vnl_vector<double> const& x, vnl_vector<dou
 
 float  brad_phongs_model_approx_est::error_var(vnl_vector<double> const& x)
 {
-    float var =0.0;
-    float sum_weights = 0.0;
+    double var =0.0;
+    double sum_weights = 0.0;
     vnl_double_3 normal_vector(vcl_sin(x[3])*vcl_cos(x[4]),vcl_sin(x[3])*vcl_sin(x[4]), vcl_cos(x[3]));
     vnl_double_3 light_vector(vcl_sin(sun_elev_)*vcl_cos(sun_azim_),vcl_sin(sun_elev_)*vcl_sin(sun_azim_), vcl_cos(sun_elev_));
 
     double diffuse_term  = vcl_fabs(x[0])* vcl_fabs(dot_product<double>(normal_vector,light_vector));
     vnl_vector<double> y(viewing_dirs_.size());
-    for (unsigned i=0;i<viewing_dirs_.size();i++)
+    for (unsigned i=0;i<viewing_dirs_.size();++i)
     {
         vnl_double_3 view_vector = viewing_dirs_[i];
         vnl_double_3 half_vector = light_vector + view_vector;
@@ -379,7 +376,7 @@ float  brad_phongs_model_approx_est::error_var(vnl_vector<double> const& x)
         sum_weights += obs_weights_[i];
     }
 
-    return (sum_weights > 0.0) ? var/sum_weights : 0.0;
+    return (sum_weights > 0.0) ? float(var/sum_weights) : 0.0f;
 }
 
 void brad_phongs_model_approx_est::gradf(vnl_vector<double> const& x, vnl_matrix<double> &J)
@@ -390,7 +387,7 @@ void brad_phongs_model_approx_est::gradf(vnl_vector<double> const& x, vnl_matrix
     vnl_double_3 lv(vcl_sin(sun_elev_)*vcl_cos(sun_azim_),
                     vcl_sin(sun_elev_)*vcl_sin(sun_azim_),
                     vcl_cos(sun_elev_));
-    for (unsigned i=0;i<viewing_dirs_.size();i++)
+    for (unsigned i=0;i<viewing_dirs_.size();++i)
     {
         vnl_double_3 view_vector=viewing_dirs_[i];
         vnl_double_3 half_vector = lv + view_vector;
