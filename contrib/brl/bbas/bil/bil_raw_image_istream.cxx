@@ -10,16 +10,11 @@
 //-----------------------------------------------------------------------------
 
 #include "bil_raw_image_istream.h"
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_convert.h>
 #include <vcl_algorithm.h>
 #include <vcl_sstream.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
-#include <vil/vil_image_resource_sptr.h>
-#include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
 #include <vil/vil_memory_chunk.h>
 
 //--------------------------------------------------------------------------------
@@ -61,9 +56,9 @@ open(const vcl_string& rawFile)
   //open up raw file, and read 20 byte header
   this->raw_file_ = rawFile;
   raw_.open(raw_file_.c_str(), vcl_ios::in | vcl_ios::binary);
-  
-  int ni, nj, pixelSize; 
-  vxl_int_64 numFrames; 
+
+  int ni, nj, pixelSize;
+  vxl_int_64 numFrames;
   raw_.read( (char*) &ni, sizeof(ni) );
   raw_.read( (char*) &nj, sizeof(nj) );
   raw_.read( (char*) &pixelSize, sizeof(pixelSize) );
@@ -76,7 +71,7 @@ open(const vcl_string& rawFile)
   //store in member vars
   ni_ = ni;
   nj_ = nj;
-  num_frames_ = numFrames;
+  num_frames_ = (unsigned int)numFrames; // possible overflow...
   pixel_size_ = pixelSize;
   if (pixelSize==24)
     format_ = VIDL_PIXEL_FORMAT_RGB_24;
@@ -135,8 +130,8 @@ bil_raw_image_istream::current_frame()
 {
   //hack way to clean up current memory
   if (is_valid()) {
-    if (!current_frame_) {
-
+    if (!current_frame_)
+    {
       //calc image size, seek to offset
       unsigned int imgSize = ni_*nj_*pixel_size_/8;
       long long loc = 20 + (long long) index_* ( (long long)imgSize + 8);
@@ -160,9 +155,9 @@ bil_raw_image_istream::current_frame()
       }
 
       //read timestamp
-      vxl_int_64 timeStamp; 
-      raw_.read( (char*) &timeStamp, sizeof(timeStamp) ); 
-      time_stamp_ = timeStamp; 
+      vxl_int_64 timeStamp;
+      raw_.read( (char*) &timeStamp, sizeof(timeStamp) );
+      time_stamp_ = timeStamp;
     }
     return current_frame_;
   }
