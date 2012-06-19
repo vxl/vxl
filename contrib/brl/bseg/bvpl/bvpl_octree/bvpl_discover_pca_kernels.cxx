@@ -321,7 +321,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
   //init variables
   unsigned long scene_ncells = scene->size();
   sample_mean_feature_.fill(0.0f);
-  vnl_matrix<double> M(feature_dim_, nsamples_);
+  vnl_matrix<double> M(feature_dim_, (unsigned int)nsamples_);
   vnl_random rng(9667566ul);
   vcl_ofstream pos_ofs(pos_path().c_str());
 
@@ -337,9 +337,9 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
     vcl_vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
     int tree_ncells = leaf_cells.size();
-    unsigned long tree_nsamples = tree_ncells*nsamples_/scene_ncells;
+    unsigned long tree_nsamples = (unsigned long)(tree_ncells*nsamples_/scene_ncells); // possible overflow ...
 
-    for (unsigned i=0; i<tree_nsamples; ++i)
+    for (unsigned int i=0; i<tree_nsamples; ++i)
     {
       unsigned long sample = rng.lrand32(tree_ncells-1);
 
