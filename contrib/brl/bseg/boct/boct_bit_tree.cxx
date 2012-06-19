@@ -257,7 +257,7 @@ boct_bit_tree::set_bit_at(int index, bool val)
 // makes no sense, but in that case a "very negative" value is returned.
 inline static int int_log8(unsigned int a)
 {
-  if (a==0) return -0x80000000L; // stands for minus infinity
+  if (a==0) return -0x7FFFFFFFL-1L; // stands for minus infinity
   int r = 0;
   while (a >= 8) ++r, a>>=3; // divide by 8
   return r;
