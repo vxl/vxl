@@ -60,7 +60,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vil_image_view_base_sptr out_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  int blob_size = pro.get_input<int>(i++);
+  unsigned int blob_size = pro.get_input<unsigned int>(i++);
   float sun_angle = pro.get_input<float>(i++);
 
   if (out_img->nplanes() != 1)
