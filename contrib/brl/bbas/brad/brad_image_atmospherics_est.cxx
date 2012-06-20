@@ -91,7 +91,7 @@ bool brad_undo_reflectance_estimate(vil_image_view<float> const& reflectance, br
   radiance.set_size(ni,nj);
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
-      radiance(i,j) = reflectance(i,j) * float(Lsat_horizontal) + atm_params.airlight_;
+      radiance(i,j) = float(reflectance(i,j) * Lsat_horizontal + atm_params.airlight_);
     }
   }
   return true;
