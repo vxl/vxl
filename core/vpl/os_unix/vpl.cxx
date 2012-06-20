@@ -65,9 +65,7 @@ vpl_usleep( unsigned int t )
 #endif
 }
 
-
-
-unsigned 
+unsigned
 vpl_getpid( )
 {
 #if VXL_UNISTD_HAS_GETPID
@@ -77,8 +75,8 @@ vpl_getpid( )
 #endif
 }
 
-
-int vpl_putenv ( const char * envvar )
+int
+vpl_putenv ( const char * envvar )
 {
   char * storage_space = strdup(envvar); // This causes a memory leak
                                          // but this can't be helped
@@ -90,8 +88,8 @@ int vpl_putenv ( const char * envvar )
   return putenv(storage_space);
 }
 
-
-int vpl_gethostname(char *name, size_t len)
+int
+vpl_gethostname(char *name, size_t len)
 {
 #if VXL_UNISTD_HAS_GETHOSTNAME
   return gethostname(name, len);
