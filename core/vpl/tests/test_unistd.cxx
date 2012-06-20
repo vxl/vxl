@@ -4,6 +4,7 @@
 #include <vcl_cstring.h>
 #include <vcl_string.h>
 #include <vcl_cctype.h>
+#include <vcl_cerrno.h>
 #include <vcl_algorithm.h>
 
 #include <testlib/testlib_test.h>
@@ -15,7 +16,6 @@
 #if defined(VCL_VC)
   #include <winsock2.h>
 #endif
-
 
 
 #ifdef VCL_WIN32
@@ -36,11 +36,11 @@ static void test_unistd(int argc, char *argv[])
     int retval = vpl_gethostname(hostname, 255);
     if (retval != 0)
     {
-      vcl_cerr << "errno: " << errno << 
+      vcl_cerr << "errno: " << errno
 #if defined(VCL_VC)
-        "WSAErr: " << WSAGetLastError() << 
+               << "WSAErr: " << WSAGetLastError()
 #endif
-        vcl_endl;
+               << vcl_endl;
       perror("Failed to run gethostname(): ");
     }
     TEST_NEAR("vpl_gethostname reports no success", retval, 0, 0);
@@ -52,7 +52,6 @@ static void test_unistd(int argc, char *argv[])
 
     TEST("vpl_gethostname() agrees with CMake", hostname_cmake, hostname_vpl);
   }
-
 
 
   vpl_mkdir(ROOT_PATH "/vpltest", 0777);
@@ -120,10 +119,6 @@ static void test_unistd(int argc, char *argv[])
   vcl_cout << "\b\b\b, done\n";
 
   vcl_cout << "\n\nCurrent PID: " << vpl_getpid() << vcl_endl;
-
-
-  
-
 }
 
 TESTMAIN_ARGS(test_unistd);
