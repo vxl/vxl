@@ -2,6 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cstring.h>
+#include <vcl_cstdio.h>
 #include <vcl_string.h>
 #include <vcl_cctype.h>
 #include <vcl_cerrno.h>
@@ -24,6 +25,14 @@
 #define ROOT_PATH "/tmp"
 #endif
 
+namespace
+{
+  char my_tolower(char c)
+  {
+    return vcl_tolower(c);
+  }
+}
+
 static void test_unistd(int argc, char *argv[])
 {
 
@@ -41,14 +50,14 @@ static void test_unistd(int argc, char *argv[])
                << "WSAErr: " << WSAGetLastError()
 #endif
                << vcl_endl;
-      perror("Failed to run gethostname(): ");
+      vcl_perror("Failed to run gethostname(): ");
     }
     TEST_NEAR("vpl_gethostname reports no success", retval, 0, 0);
     vcl_string hostname_cmake = vcl_string(argv[1]);
     vcl_string hostname_vpl = vcl_string(hostname);
     //can't use vul_string_downcase because vul not built yet
-    vcl_transform(hostname_cmake.begin(), hostname_cmake.end(), hostname_cmake.begin(), vcl_tolower);
-    vcl_transform(hostname_vpl.begin(), hostname_vpl.end(), hostname_vpl.begin(), vcl_tolower);
+    vcl_transform(hostname_cmake.begin(), hostname_cmake.end(), hostname_cmake.begin(), my_tolower);
+    vcl_transform(hostname_vpl.begin(), hostname_vpl.end(), hostname_vpl.begin(), my_tolower);
 
     TEST("vpl_gethostname() agrees with CMake", hostname_cmake, hostname_vpl);
   }
