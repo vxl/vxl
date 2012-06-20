@@ -127,6 +127,7 @@
 #define VXL_UNISTD_HAS_PREAD      1
 #define VXL_UNISTD_HAS_PWRITE     1
 #define VXL_UNISTD_HAS_TELL       1
+#define VXL_UNISTD_HAS_GETHOSTNAME      1
 
 /* true if <stdlib.h> declares qsort() */
 #define VXL_STDLIB_HAS_QSORT      1

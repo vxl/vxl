@@ -45,4 +45,8 @@ int             vpl_putenv ( const char * envvar );
 //: Get the process identifier.
 unsigned        vpl_getpid( ); 
 
+//: Get the current machine's hostname.
+int             vpl_gethostname(char *name, vcl_size_t len ); 
+
+
 #endif // vpl_h_

@@ -1,15 +1,22 @@
 // This is core/vpl/tests/test_unistd.cxx
 #include <vcl_fstream.h>
-
-#include <testlib/testlib_test.h>
-
-#include <vpl/vpl.h>
-#include <vpl/vpl_fileno.h>
-#include <vpl/vpl_fdopen.h>
-
 #include <vcl_cstdlib.h>
 #include <vcl_cstring.h>
 #include <vcl_string.h>
+#include <vcl_cctype.h>
+#include <vcl_algorithm.h>
+
+#include <testlib/testlib_test.h>
+
+#include <vul/vul_string.h>
+#include <vpl/vpl.h>
+#include <vpl/vpl_fileno.h>
+#include <vpl/vpl_fdopen.h>
+#if defined(VCL_VC)
+  #include <winsock2.h>
+#endif
+
+
 
 #ifdef VCL_WIN32
 #define ROOT_PATH "C:/"
@@ -17,8 +24,37 @@
 #define ROOT_PATH "/tmp"
 #endif
 
-static void test_unistd()
+static void test_unistd(int argc, char *argv[])
 {
+
+  // Test vpl_gethostname
+  TEST("Expecting one cmdline argument", argc, 2);
+
+  if (argc>=2)
+  {
+    char hostname[256];
+    int retval = vpl_gethostname(hostname, 255);
+    if (retval != 0)
+    {
+      vcl_cerr << "errno: " << errno << 
+#if defined(VCL_VC)
+        "WSAErr: " << WSAGetLastError() << 
+#endif
+        vcl_endl;
+      perror("Failed to run gethostname(): ");
+    }
+    TEST_NEAR("vpl_gethostname reports no success", retval, 0, 0);
+    vcl_string hostname_cmake = vcl_string(argv[1]);
+    vcl_string hostname_vpl = vcl_string(hostname);
+    //can't use vul_string_downcase because vul not built yet
+    vcl_transform(hostname_cmake.begin(), hostname_cmake.end(), hostname_cmake.begin(), vcl_tolower);
+    vcl_transform(hostname_vpl.begin(), hostname_vpl.end(), hostname_vpl.begin(), vcl_tolower);
+
+    TEST("vpl_gethostname() agrees with CMake", hostname_cmake, hostname_vpl);
+  }
+
+
+
   vpl_mkdir(ROOT_PATH "/vpltest", 0777);
   vpl_chdir(ROOT_PATH "/vpltest");
 
@@ -84,6 +120,10 @@ static void test_unistd()
   vcl_cout << "\b\b\b, done\n";
 
   vcl_cout << "\n\nCurrent PID: " << vpl_getpid() << vcl_endl;
+
+
+  
+
 }
 
-TESTMAIN(test_unistd);
+TESTMAIN_ARGS(test_unistd);

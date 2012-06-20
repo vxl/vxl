@@ -1062,6 +1062,22 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VXL_UNISTD_HAS_GETPID ";
+#ifdef VXL_UNISTD_HAS_GETPID
+  vcl_cout << "is set to " << quote(VXL_UNISTD_HAS_GETPID);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VXL_UNISTD_HAS_GETHOSTNAME ";
+#ifdef VXL_UNISTD_HAS_GETHOSTNAME
+  vcl_cout << "is set to " << quote(VXL_UNISTD_HAS_GETHOSTNAME);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VXL_STDLIB_HAS_QSORT ";
 #ifdef VXL_STDLIB_HAS_QSORT
   vcl_cout << "is set to " << quote(VXL_STDLIB_HAS_QSORT);

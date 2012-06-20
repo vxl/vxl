@@ -89,3 +89,14 @@ int vpl_putenv ( const char * envvar )
 
   return putenv(storage_space);
 }
+
+
+int vpl_gethostname(char *name, size_t len)
+{
+#if VXL_UNISTD_HAS_GETHOSTNAME
+  return gethostname(name, len);
+#else
+  if (len) *name=0;
+  return -1;
+#endif
+}
