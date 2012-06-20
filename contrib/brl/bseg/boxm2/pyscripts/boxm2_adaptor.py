@@ -101,7 +101,7 @@ def describe_scene(scene):
                   'appType': appType, 
                 }
   return description; 
-  
+
 # returns bounding box as two tuple points (minpt, maxpt)
 def scene_bbox(scene):
   boxm2_batch.init_process("boxm2SceneBboxProcess");
@@ -343,7 +343,21 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string=""
     return exp_image; 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
-    
+def render_scene_uncertainty(scene, cache,  ni=1280, nj=720, device=None, ident_string="") :
+  if cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclRenderSceneUncertaintyMapProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_unsigned(3,ni);
+    boxm2_batch.set_input_unsigned(4,nj);
+    boxm2_batch.set_input_string(5,ident_string);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    exp_image = dbvalue(id,type);
+    return exp_image; 
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type;     
 #####################################################################
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
@@ -386,7 +400,10 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
-    return exp_image; 
+    (id,type) = boxm2_batch.commit_output(1);
+    vis_image = dbvalue(id,type);
+
+    return exp_image,vis_image; 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
  
