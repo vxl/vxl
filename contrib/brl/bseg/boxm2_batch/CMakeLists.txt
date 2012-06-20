@@ -37,7 +37,7 @@ IF( PYTHON_FOUND )
     ENDIF(APPLE)
     SET_TARGET_PROPERTIES(boxm2_batch PROPERTIES PREFIX "")
 
-    TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro sdet_pro brad_pro brad_io brdb bvpl_kernels_pro)
+    TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
 
     IF(GLEW_FOUND AND HAS_VGUI)
       ADD_DEFINITIONS(-DHAS_GLEW=1)
@@ -67,6 +67,10 @@ IF( PYTHON_FOUND )
     IF( BUILD_TESTING )
       SUBDIRS(tests)
     ENDIF( BUILD_TESTING )
+    
+    #install the .h .txx and libs
+    INSTALL_TARGETS(/lib boxm2_batch)
+    INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_batch/ ${boxm2_batch_sources})
 
   ENDIF( EXPAT_FOUND )
 ENDIF( PYTHON_FOUND )
