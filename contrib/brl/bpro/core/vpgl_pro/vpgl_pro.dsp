@@ -188,6 +188,9 @@ SOURCE=.\processes/vpgl_load_geo_camera_process.cxx
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+vpgl_camera_double_sptr-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+vpgl_lvcs_sptr-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
