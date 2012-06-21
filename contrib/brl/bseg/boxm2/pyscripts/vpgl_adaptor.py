@@ -1,5 +1,6 @@
 from boxm2_register import boxm2_batch, dbvalue;
-import math, numpy
+#import math, numpy
+import math
 
 ###################
 #camera loading
@@ -113,15 +114,34 @@ def save_perspective_camera(camera,path) :
 #################################################
 # perspective go generic conversion
 #################################################
-def persp2gen(pcam, ni, nj) :
+def persp2gen(pcam, ni, nj, level=0) :
   boxm2_batch.init_process("vpglConvertToGenericCameraProcess");
   boxm2_batch.set_input_from_db(0, pcam);
   boxm2_batch.set_input_unsigned(1, ni);
   boxm2_batch.set_input_unsigned(2, nj);
+  boxm2_batch.set_input_unsigned(3, level);
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   gcam = dbvalue(id,type);
   return gcam;
+  
+def persp2genWmargin(pcam, ni, nj, margin, level=0) :
+  boxm2_batch.init_process("vpglConvertToGenericCameraWithMarginProcess");
+  boxm2_batch.set_input_from_db(0, pcam);
+  boxm2_batch.set_input_unsigned(1, ni);
+  boxm2_batch.set_input_unsigned(2, nj);
+  boxm2_batch.set_input_unsigned(3, level);
+  boxm2_batch.set_input_int(4, margin);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  gcam = dbvalue(id,type);
+  (id,type) = boxm2_batch.commit_output(1);
+  ni = boxm2_batch.get_output_unsigned(id);
+  (id,type) = boxm2_batch.commit_output(2);
+  nj = boxm2_batch.get_output_unsigned(id);
+  (id,type) = boxm2_batch.commit_output(3);
+  new_pers_cam = dbvalue(id,type);
+  return (gcam, ni, nj, new_pers_cam);
 
 #gets bounding box from a directory of cameras... (incomplete)_
 def camera_dir_planar_bbox(dir_name) :
@@ -251,4 +271,97 @@ def convert_to_local_coordinates(lvcs_filename,lat,lon,el):
     z = boxm2_batch.get_output_float(id)
     boxm2_batch.remove_data(id)
     return (x,y,z)
+
+# randomly sample a camera rotated around principle axis
+def perturb_camera(cam_in, angle, rng):
+    boxm2_batch.init_process('vpglPerturbPerspCamOrientProcess')
+    boxm2_batch.set_input_from_db(0,cam_in)
+    boxm2_batch.set_input_float(1,angle)
+    boxm2_batch.set_input_from_db(2,rng)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    pert_cam = dbvalue(id,type)
+    (theta_id,type) = boxm2_batch.commit_output(1)
+    (phi_id,type) = boxm2_batch.commit_output(2)
+    theta = boxm2_batch.get_output_float(theta_id);
+    phi = boxm2_batch.get_output_float(phi_id);
+    return pert_cam, theta, phi
+    
+def write_perspective_cam_vrml(vrml_filename, pcam, camera_rad, axis_length, r, g, b):
+    boxm2_batch.init_process("bvrmlWritePerspectiveCamProcess");
+    boxm2_batch.set_input_string(0,vrml_filename);
+    boxm2_batch.set_input_from_db(1,pcam);
+    boxm2_batch.set_input_float(2,camera_rad);
+    boxm2_batch.set_input_float(3,axis_length);
+    boxm2_batch.set_input_float(4,r);
+    boxm2_batch.set_input_float(5,g);
+    boxm2_batch.set_input_float(6,b);
+    boxm2_batch.run_process();
+    
+# rotate a camera around principle axis
+def rotate_perspective_camera(cam_in, theta, phi):
+    boxm2_batch.init_process('vpglRotatePerspCamProcess')
+    boxm2_batch.set_input_from_db(0,cam_in)
+    boxm2_batch.set_input_float(1,theta)
+    boxm2_batch.set_input_float(2,phi)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    rot_cam = dbvalue(id,type)
+    return rot_cam
+
+def get_perspective_cam_center(pcam):
+    boxm2_batch.init_process("vpglGetPerspectiveCamCenterProcess");
+    boxm2_batch.set_input_from_db(0, pcam);
+    boxm2_batch.run_process()
+    (x_id,x_type) = boxm2_batch.commit_output(0)
+    x = boxm2_batch.get_output_float(x_id);
+    (y_id,type) = boxm2_batch.commit_output(1)
+    y = boxm2_batch.get_output_float(y_id);
+    (z_id,type) = boxm2_batch.commit_output(2)
+    z = boxm2_batch.get_output_float(z_id);
+    return x, y, z
+    
+def create_perspective_camera(pcam, cent_x, cent_y, cent_z):
+    boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess2");
+    boxm2_batch.set_input_from_db(0, pcam);
+    boxm2_batch.set_input_float(1, cent_x);
+    boxm2_batch.set_input_float(2, cent_y);
+    boxm2_batch.set_input_float(3, cent_z);
+    boxm2_batch.run_process()
+    (c_id,c_type) = boxm2_batch.commit_output(0)
+    cam = dbvalue(c_id,c_type);
+    return cam
+    
+def create_perspective_camera_with_rot(pcam, phi, theta, cent_x, cent_y, cent_z):
+    boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess3");
+    boxm2_batch.set_input_from_db(0, pcam);
+    boxm2_batch.set_input_float(1, phi);
+    boxm2_batch.set_input_float(2, theta);
+    boxm2_batch.set_input_float(3, cent_x);
+    boxm2_batch.set_input_float(4, cent_y);
+    boxm2_batch.set_input_float(5, cent_z);
+    boxm2_batch.run_process()
+    (c_id,c_type) = boxm2_batch.commit_output(0)
+    cam = dbvalue(c_id,c_type);
+    return cam
+    
+def get_nitf_footprint(nitf_list_filename, out_kml_filename):
+    boxm2_batch.init_process('vpglNITFFootprintProcess')
+    boxm2_batch.set_input_string(0,nitf_list_filename);
+    boxm2_batch.set_input_string(1,out_kml_filename);
+    boxm2_batch.run_process()
+
+def load_geotiff_cam(tfw_filename, lvcs, utm_zone, utm_hemisphere):
+    boxm2_batch.init_process("vpglLoadGeoCameraProcess");
+    boxm2_batch.set_input_string(0, tfw_filename);
+    boxm2_batch.set_input_from_db(1, lvcs);
+    boxm2_batch.set_input_int(2, utm_zone);
+    boxm2_batch.set_input_unsigned(3, utm_hemisphere);
+    boxm2_batch.run_process()
+    (c_id,c_type) = boxm2_batch.commit_output(0)
+    cam = dbvalue(c_id,c_type);
+    return cam
+    
+
+
 
