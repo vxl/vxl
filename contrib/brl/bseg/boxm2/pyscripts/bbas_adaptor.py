@@ -197,6 +197,29 @@ def vrml_write_point(vrml_filename, coords, radius, r, g, b ):
   boxm2_batch.set_input_float(7, b); # blue
   boxm2_batch.run_process();
   
+def vrml_write_line(vrml_filename, pt1_coords, pt2_coords, r, g, b ):
+  boxm2_batch.init_process("bvrmlWriteLineProcess");
+  boxm2_batch.set_input_string(0,vrml_filename);
+  boxm2_batch.set_input_float(1,pt1_coords[0]); # x
+  boxm2_batch.set_input_float(2,pt1_coords[1]); # y
+  boxm2_batch.set_input_float(3,pt1_coords[2]); # z
+  boxm2_batch.set_input_float(4,pt2_coords[0]); # x
+  boxm2_batch.set_input_float(5,pt2_coords[1]); # y
+  boxm2_batch.set_input_float(6,pt2_coords[2]); # z
+  boxm2_batch.set_input_float(7, r); # red
+  boxm2_batch.set_input_float(8, g); # green
+  boxm2_batch.set_input_float(9, b); # blue
+  boxm2_batch.run_process();
+  
+def vrml_filter_ply(vrml_filename, ply_file, points_file, dist_threshold,nearest=False):
+  boxm2_batch.init_process("bvrmlFilteredPlyProcess");
+  boxm2_batch.set_input_string(0,vrml_filename);
+  boxm2_batch.set_input_string(1,ply_file);
+  boxm2_batch.set_input_string(2,points_file);
+  boxm2_batch.set_input_float(3,dist_threshold);
+  boxm2_batch.set_input_bool(4,nearest);
+  boxm2_batch.run_process();
+  
 def initialize_rng(seed=0):
   boxm2_batch.init_process("bstaInitializeRandomSeedProcess");
   boxm2_batch.set_input_unsigned(0,seed);
@@ -247,6 +270,55 @@ def create_texture_classifier(lambda0, lambda1,n_scales,scale_interval,angle_int
   (tclsf_id, tclsf_type)=boxm2_batch.commit_output(0);
   tclsf = dbvalue(tclsf_id, tclsf_type);
   return tclsf;
+  
+def texture_training(tclsf, image, exp_poly_path,texton_dict_path, name_of_category="mod", compute_textons=True):
+  boxm2_batch.init_process("sdetTextureTrainingProcess");
+  boxm2_batch.set_input_from_db(0,tclsf);
+  boxm2_batch.set_input_bool(1,compute_textons);# compute textons
+  boxm2_batch.set_input_from_db(2,image);
+  boxm2_batch.set_input_string(3,exp_poly_path);
+  boxm2_batch.set_input_string(4,name_of_category);
+  boxm2_batch.set_input_string(5,texton_dict_path);
+  boxm2_batch.run_process();
+  # write out the texton dictionary on finish
+  boxm2_batch.finish_process();
+
+def print_texton_dictionary(tclsf, texton_dict_path, print_mode="inter_dist"):
+  boxm2_batch.init_process("sdetPrintTextonDictProcess");
+  boxm2_batch.set_input_from_db(0,tclsf);
+  boxm2_batch.set_input_string(1,texton_dict_path);
+  boxm2_batch.set_input_string(2,print_mode);
+  boxm2_batch.run_process();
+  
+def texture_classifier_exp_img(tclsf, dict_expected, fimage, fexp, block_size=64):
+  boxm2_batch.init_process("sdetExpImgClassifierProcess");
+  boxm2_batch.set_input_from_db(0, tclsf);
+  boxm2_batch.set_input_string(1,dict_expected);
+  boxm2_batch.set_input_from_db(2, fimage);
+  boxm2_batch.set_input_from_db(3, fexp);
+  boxm2_batch.set_input_unsigned(4,64);
+  boxm2_batch.run_process();
+  (text_class_id, text_class_type) = boxm2_batch.commit_output(0);
+  text_class = dbvalue(text_class_id, text_class_type);
+  return text_class;
+
+def solve_gain_offset(model_image, test_image, test_mask):
+  boxm2_batch.init_process("bripSolveGainOffsetProcess");
+  boxm2_batch.set_input_from_db(0, model_image);
+  boxm2_batch.set_input_from_db(1, test_image);
+  boxm2_batch.set_input_from_db(3, test_mask);
+  boxm2_batch.run_process();
+  (map_image_id, map_image_type) = boxm2_batch.commit_output(0);
+  map_image = dbvalue(map_image_id, map_image_type);
+  return map_image
+  
+def triangulate_site_corrs(site_file, out_file):
+  boxm2_batch.init_process("bwmTriangulateCorrProcess");
+  boxm2_batch.set_input_string(0,site_file);
+  boxm2_batch.set_input_string(1,out_file);
+  boxm2_batch.run_process();
+  
+
   
   
 
