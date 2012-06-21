@@ -27,6 +27,7 @@ class boxm2_scene_adaptor(object):
     self.str_cache = None;
     self.model_dir = None;
     self.bbox = None;
+    self.lvcs = None;
 
     #if device_string is gpu, load up opencl
     if device_string[0:3]=="gpu" :
@@ -45,6 +46,7 @@ class boxm2_scene_adaptor(object):
     self.description = describe_scene(self.scene);
     self.model_dir = self.description['dataPath'];
     self.rgb = self.description['appType'] == "boxm2_gauss_rgb";
+    self.lvcs = scene_lvcs(self.scene);
 
   def __del__(self):
     boxm2_batch.remove_data(self.scene.id)
@@ -52,6 +54,7 @@ class boxm2_scene_adaptor(object):
     boxm2_batch.remove_data(self.ocl_mgr.id)
     boxm2_batch.remove_data(self.device.id)
     boxm2_batch.remove_data(self.opencl_cache.id)
+    boxm2_batch.remove_data(self.lvcs.id)
 
   #describe scene (returns data path)
   def describe(self) :
@@ -60,6 +63,9 @@ class boxm2_scene_adaptor(object):
   #returns scene bounding box
   def bounding_box(self) :
     return self.bbox
+    
+  def lvcs(self) :
+    return self.lvcs
 
   #update with alternate explaination prior and appearance density
   def update_with_alt(self, cam, img, update_alpha=True, mask=None, var=-1.0, alt_prior=None, alt_density=None):
