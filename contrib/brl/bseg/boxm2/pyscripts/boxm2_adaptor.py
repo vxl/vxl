@@ -19,9 +19,6 @@ def ocl_info():
   boxm2_batch.set_input_from_db(0,mgr)
   boxm2_batch.run_process();
 
-
-
-
 def load_scene(scene_str): 
   print("Loading a Scene from file: ", scene_str);
   boxm2_batch.init_process("boxm2LoadSceneProcess");
@@ -29,11 +26,12 @@ def load_scene(scene_str):
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   scene = dbvalue(scene_id, scene_type);
-  return scene; 
+  return scene;
+
 
 #does the opencl prep work on an input scene
 def load_opencl(scene_str, device_string="gpu"):
-  scene = load_scene(scene_str); 
+  scene = load_scene(scene_str);
 
   ###############################################################
   # Create cache, opencl manager, device, and gpu cache
@@ -68,12 +66,12 @@ def load_opencl(scene_str, device_string="gpu"):
   (id, type) = boxm2_batch.commit_output(0);
   openclcache = dbvalue(id, type);
 
-  return scene, cache, mgr, device, openclcache; 
+  return scene, cache, mgr, device, openclcache;
   
   
 #Just loads up CPP cache 
 def load_cpp(scene_str) :
-  scene = load_scene(scene_str); 
+  scene = load_scene(scene_str);
 
   ###############################################################
   # Create cache, opencl manager, device, and gpu cache
@@ -85,7 +83,7 @@ def load_cpp(scene_str) :
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   cache = dbvalue(id, type);
-  return scene, cache; 
+  return scene, cache;
 
 # describe scene process, returns the path containing scene data
 def describe_scene(scene):
@@ -115,6 +113,15 @@ def scene_bbox(scene):
   minPt = (out[0], out[1], out[2]);
   maxPt = (out[3], out[4], out[5]);
   return (minPt, maxPt); 
+
+def scene_lvcs(scene):
+  boxm2_batch.init_process("boxm2SceneLVCSProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.run_process();
+  (lvcs_id, lvcs_type) = boxm2_batch.commit_output(0);
+  lvcs = dbvalue(lvcs_id, lvcs_type);
+  return lvcs;
+  
   
 ###############################################
 # Model building stuff
@@ -148,7 +155,7 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
     print "ERROR: Cache type not recognized: ", cache.type; 
     return False;
 
-# Update with alternate possible pixel explaination - uses GPU
+# Update with alternate possible pixel explanation - uses GPU
 def update_grey_with_alt(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0, alt_prior=None, alt_density=None) :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
@@ -687,6 +694,32 @@ def scale_scene(scene, scale) :
   scene = dbvalue(scene_id, scene_type);
   return scene; 
 
+# Create a scene from specified (lat,lon) corners and size of each voxel (in meters) at the finest scale, elev values are also in meters
+def create_scene_and_blocks(scene_dir, app_model, obs_model, lon1, lat1, elev1, lon2, lat2, elev2, vox_size, block_len_xy, block_len_z, num_bins=0, xml_name="scene"):
+  boxm2_batch.init_process("boxm2CreateSceneAndBlocksProcess");
+  boxm2_batch.set_input_string(0,scene_dir);
+  boxm2_batch.set_input_string(1,app_model);
+  boxm2_batch.set_input_string(2,obs_model);
+  boxm2_batch.set_input_float(3,lon1);
+  boxm2_batch.set_input_float(4,lat1);
+  boxm2_batch.set_input_float(5,elev1);
+  boxm2_batch.set_input_float(6,lon2);
+  boxm2_batch.set_input_float(7,lat2);
+  boxm2_batch.set_input_float(8,elev2);
+  boxm2_batch.set_input_float(9,vox_size);
+  boxm2_batch.set_input_float(10,block_len_xy);
+  boxm2_batch.set_input_float(11,block_len_z);
+  boxm2_batch.set_input_int(12,num_bins);
+  boxm2_batch.run_process();
+  (scene_id, scene_type) = boxm2_batch.commit_output(0);
+  scene = dbvalue(scene_id, scene_type);
+  
+  print("Write Scene");
+  boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1, xml_name);
+  boxm2_batch.run_process();
+  
 # Create multi block scene - params is a hash of scene parameters
 def save_multi_block_scene(params) : 
 
@@ -779,7 +812,7 @@ def save_multi_block_scene(params) :
   boxm2_batch.set_input_string(1, fname); 
   boxm2_batch.run_process();
 
-def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0) : 
+def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0) :
   boxm2_batch.init_process("boxm2RoiInitProcess")
   boxm2_batch.set_params_process(params_fname)
   boxm2_batch.set_input_string(0, NITF_path)
@@ -949,4 +982,126 @@ def scene_illumination_info(scene):
     (nb_id,nb_type)=boxm2_batch.commit_output(2);
     nbins = boxm2_batch.get_output_int(nb_id);
     return longitude, latitude, nbins
+    
+# create stream cache
+def create_stream_cache(scene, type_id_fname, image_id_fname,mem=2.0):
+    boxm2_batch.init_process("boxm2CreateStreamCacheProcess");
+    boxm2_batch.set_input_from_db(0,scene);
+    boxm2_batch.set_input_string(1,type_id_fname);
+    boxm2_batch.set_input_string(2,image_id_fname);
+    boxm2_batch.set_input_float(3,mem); #number of gigabytes available for stream cache
+    boxm2_batch.run_process();
+    (cache_id, cache_type) = boxm2_batch.commit_output(0);
+    strcache = dbvalue(cache_id, cache_type);
+    return strcache
+    
+def perspective_camera_from_scene(scene, cent_x, cent_y, cent_z, ni, nj):
+    boxm2_batch.init_process("vpglPerspCameraFromSceneProcess");
+    boxm2_batch.set_input_from_db(0,scene)
+    boxm2_batch.set_input_float(1,cent_x)
+    boxm2_batch.set_input_float(2,cent_y)
+    boxm2_batch.set_input_float(3,cent_z)
+    boxm2_batch.set_input_unsigned(4,ni)
+    boxm2_batch.set_input_unsigned(5,nj)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    cam = dbvalue(id,type)
+    return cam
+
+# Create x y z images from a DEM at the resolution of the scene
+def generate_xyz_from_dem(scene, refine_level, geotiff_dem, geoid_height,bilin=False):
+  boxm2_batch.init_process("boxm2DemToXYZProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_unsigned(1,refine_level);
+  boxm2_batch.set_input_string(2,geotiff_dem);
+  boxm2_batch.set_input_double(3,geoid_height);
+  boxm2_batch.set_input_bool(4,bilin);
+  boxm2_batch.run_process();
+  (xi_id, xi_type) = boxm2_batch.commit_output(0);
+  x_img = dbvalue(xi_id, xi_type);
+  (yi_id, yi_type) = boxm2_batch.commit_output(1);
+  y_img = dbvalue(yi_id, yi_type);
+  (zi_id, zi_type) = boxm2_batch.commit_output(2);
+  z_img = dbvalue(zi_id, zi_type);
+  (dem_id, dem_type) = boxm2_batch.commit_output(3);
+  dem_img = dbvalue(dem_id, dem_type);
+  (demr_id, demr_type) = boxm2_batch.commit_output(4);
+  dem_res_img = dbvalue(demr_id, demr_type);
+  return x_img, y_img, z_img, dem_img, dem_res_img
+  
+def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
+  boxm2_batch.init_process("boxm2ShadowHeightsToXYZProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,height_img);
+  boxm2_batch.set_input_from_db(2,generic_cam);
+  boxm2_batch.set_input_string(3,dem_fname);
+  boxm2_batch.set_input_double(4,scale);
+  boxm2_batch.run_process();
+  (xi_id, xi_type) = boxm2_batch.commit_output(0);
+  x_img = dbvalue(xi_id, xi_type);
+  (yi_id, yi_type) = boxm2_batch.commit_output(1);
+  y_img = dbvalue(yi_id, yi_type);
+  (zi_id, zi_type) = boxm2_batch.commit_output(2);
+  z_img = dbvalue(zi_id, zi_type);
+  return x_img, y_img, z_img
+
+def roi_init_geotiff(scene, geocam, geotiff_img_name, level=0):
+  boxm2_batch.init_process("boxm2RoiInitGeotiffProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,geocam);
+  boxm2_batch.set_input_string(2,geotiff_img_name);
+  boxm2_batch.set_input_unsigned(3,level);
+  result = boxm2_batch.run_process()
+  if result:
+    (id,type) = boxm2_batch.commit_output(0)
+    gcam = dbvalue(id,type)
+    (id,type) = boxm2_batch.commit_output(1)
+    cropped_image = dbvalue(id,type)
+  else:
+    gcam = 0
+    cropped_image = 0
+  return result, gcam, cropped_image
+  
+def extract_color_features(scene, cache, data_type, index):
+  boxm2_batch.init_process("boxm2ExtractColorFeaturesProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cache);
+  boxm2_batch.set_input_string(2,data_type);
+  boxm2_batch.set_input_unsigned(3,index);
+  boxm2_batch.run_process()
+  
+def extract_surface_features(scene, cache, type, index):
+  boxm2_batch.init_process("boxm2ExtractSurfaceFeaturesProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cache);
+  boxm2_batch.set_input_string(2,type);
+  boxm2_batch.set_input_unsigned(3,index);
+  boxm2_batch.run_process()
+  
+def block_similarity(scene, cache, i, j, k, vrml_filename,feature_sim_variance,entropy_range_min,entropy_range_max):
+  boxm2_batch.init_process("boxm2BlockSimilarityProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cache);
+  boxm2_batch.set_input_int(2,i);
+  boxm2_batch.set_input_int(3,j);
+  boxm2_batch.set_input_int(4,k);
+  boxm2_batch.set_input_string(5,vrml_filename);
+  boxm2_batch.set_input_float(6,feature_sim_variance);
+  boxm2_batch.set_input_float(7,entropy_range_min); # for visualization
+  boxm2_batch.set_input_float(8,entropy_range_max);
+  boxm2_batch.run_process()
+  
+def compute_derivatives_process(scene, cache, prob_threshold, normal_threshold, kernel_x_file_name, kernel_y_file_name, kernel_z_file_name, i=-1, j=-1, k=-1):
+  boxm2_batch.init_process("boxm2CppComputeDerivativeProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cache);
+  boxm2_batch.set_input_float(2,prob_threshold); #prob threshold
+  boxm2_batch.set_input_float(3,normal_threshold); #normal t
+  boxm2_batch.set_input_string(4, "C:/projects/vxl/vxl/contrib/brl/bseg/bvpl/doc/taylor2_5_5_5/Ix.txt");
+  boxm2_batch.set_input_string(5, "C:/projects/vxl/vxl/contrib/brl/bseg/bvpl/doc/taylor2_5_5_5/Iy.txt");
+  boxm2_batch.set_input_string(6, "C:/projects/vxl/vxl/contrib/brl/bseg/bvpl/doc/taylor2_5_5_5/Iz.txt");
+  boxm2_batch.set_input_int(7, i)
+  boxm2_batch.set_input_int(8, j)
+  boxm2_batch.set_input_int(9, k)
+  boxm2_batch.run_process();
 
