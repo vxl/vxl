@@ -602,6 +602,7 @@ def clear_cache(cache) :
   if cache.type == "boxm2_cache_sptr" : 
     boxm2_batch.init_process("boxm2ClearCacheProcess");
     boxm2_batch.set_input_from_db(0,cache);
+    boxm2_batch.run_process();
   elif cache.type == "boxm2_opencl_cache_sptr" :
     boxm2_batch.init_process("boxm2ClearOpenclCacheProcess"); 
     boxm2_batch.set_input_from_db(0,cache);
