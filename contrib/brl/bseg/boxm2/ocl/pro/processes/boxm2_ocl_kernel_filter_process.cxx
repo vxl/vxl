@@ -79,10 +79,12 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
   {
     vgl_point_3d<float> loc = kit->first;
     float w = kit->second.c_;
+#if 0
     filter_coeff[ci].s0 = loc.x();
     filter_coeff[ci].s1 = loc.y();
     filter_coeff[ci].s2 = loc.z();
     filter_coeff[ci].s3 = w;
+#endif
   }
   bocl_mem_sptr filter_buffer=new bocl_mem(device->context(), filter_coeff, sizeof(cl_float4)*filter->float_kernel_.size(), "filter coefficient buffer");
   filter_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);

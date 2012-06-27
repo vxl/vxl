@@ -136,10 +136,12 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
     dir.normalize();
     if ( vcl_abs(dir.magnitude() - 1.0f) > 1e-7 )
       vcl_cout << "Warning: In aggregate, direction doesn't have unit magnitude" << vcl_endl;
-    directions[k].s0 = dir[0];
+#if 0
+	directions[k].s0 = dir[0];
     directions[k].s1 = dir[1];
     directions[k].s2 = dir[2];
-    directions[k].s3 = 0.0f;
+	directions[k].s3 = 0.0f;
+#endif
   }
   bocl_mem_sptr directions_buffer=new bocl_mem(device->context(), directions, sizeof(cl_float4)*num_filters, "directions buffer");
   directions_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);

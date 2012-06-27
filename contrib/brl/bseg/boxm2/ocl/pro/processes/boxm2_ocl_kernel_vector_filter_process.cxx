@@ -97,10 +97,10 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
     {
       vgl_point_3d<float> loc = kit->first;
       float w = kit->second.c_;
-      filter_coeff[ci].s0 = loc.x();
-      filter_coeff[ci].s1 = loc.y();
-      filter_coeff[ci].s2 = loc.z();
-      filter_coeff[ci].s3 = w;
+      filter_coeff[ci].s[0] = loc.x();
+      filter_coeff[ci].s[1] = loc.y();
+      filter_coeff[ci].s[2] = loc.z();
+      filter_coeff[ci].s[3] = w;
     }
     bocl_mem * filter_buffer=new bocl_mem(device->context(), filter_coeff, sizeof(cl_float4)*filter->float_kernel_.size(), "filter coefficient buffer");
     filter_buffer->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
