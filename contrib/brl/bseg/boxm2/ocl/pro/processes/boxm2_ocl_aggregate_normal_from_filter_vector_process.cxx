@@ -73,7 +73,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
   using namespace boxm2_ocl_aggregate_normal_from_filter_vector_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   //get the inputs
@@ -137,10 +137,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
     if ( vcl_abs(dir.magnitude() - 1.0f) > 1e-7 )
       vcl_cout << "Warning: In aggregate, direction doesn't have unit magnitude" << vcl_endl;
 #if 0
-	directions[k].s0 = dir[0];
+    directions[k].s0 = dir[0];
     directions[k].s1 = dir[1];
     directions[k].s2 = dir[2];
-	directions[k].s3 = 0.0f;
+    directions[k].s3 = 0.0f;
 #endif
   }
   bocl_mem_sptr directions_buffer=new bocl_mem(device->context(), directions, sizeof(cl_float4)*num_filters, "directions buffer");
