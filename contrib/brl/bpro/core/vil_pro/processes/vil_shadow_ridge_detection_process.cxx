@@ -9,7 +9,6 @@
 #include <vil/algo/vil_binary_closing.h>
 #include <vil/algo/vil_binary_opening.h>
 #include <vil/algo/vil_blob.h>
-#include <brip/brip_vil_float_ops.h>
 #include <vnl/vnl_math.h>
 
 namespace vil_shadow_ridge_detection_process_globals
