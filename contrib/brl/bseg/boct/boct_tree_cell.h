@@ -110,7 +110,7 @@ class boct_tree_cell
     if (!this->is_leaf()) {
       cell->split();
       for (unsigned i=0; i<8; i++) {
-        boct_tree_cell<T_loc,T_data_to>* c=this->children_[i].clone_to_type<T_data_to>(cell);
+        boct_tree_cell<T_loc,T_data_to>* c=this->children_[i].template clone_to_type<T_data_to>(cell);
         cell->set_children(i,c);
         c->set_children_null();
         delete c;
