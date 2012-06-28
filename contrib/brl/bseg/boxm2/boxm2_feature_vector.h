@@ -1,8 +1,6 @@
 #ifndef boxm2_feature_vector_h_
 #define boxm2_feature_vector_h_
 
-#include <mcal/mcal_pca.h>
-
 class boxm2_feature_vector
 {
  public:
