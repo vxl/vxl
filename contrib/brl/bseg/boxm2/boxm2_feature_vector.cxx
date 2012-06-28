@@ -2,6 +2,7 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_vector_3d.h>
 #include "boxm2_feature_vector.h"
+#include <vcl_iostream.h>
 
 vcl_ostream& operator<<(vcl_ostream &s, boxm2_feature_vector& f) {
   for (unsigned i = 0; i < boxm2_feature_vector::SIZE; i++) {
