@@ -3,6 +3,8 @@
 // \file
 
 #include <vcl_cassert.h>
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <vcl_limits.h>
 
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 
@@ -89,6 +91,120 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
   }
 }
 
+void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
+                                                                     boxm2_data_base* mog, boxm2_data_base* alpha,
+                                                                     boxm2_data_base* points, boxm2_data_base* covariances, vcl_ofstream& file,
+                                                                     float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices, bool color_using_model)
+{
+  boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
+  boxm2_data_traits<BOXM2_COVARIANCE>::datatype *  covs_data = (boxm2_data_traits<BOXM2_COVARIANCE>::datatype*) covariances->data_buffer();
+  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype * mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
+  boxm2_data_traits<BOXM2_ALPHA>::datatype *   alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
+
+  file << vcl_fixed;
+  int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+  for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
+    //check if the point data is valid
+    //if (covs_data[currIdx][0] >= 0.0)
+    //{
+      float prob = 0.0f;
+      vnl_vector_fixed<double, 3> axes;
+      //vnl_vector_fixed<double, 3> eval;
+      double LE, CE, exp_color;
+      if (!calculateProbOfPoint(scene, blk, points_data[currIdx], covs_data[currIdx], mog, alpha, prob, exp_color, axes, LE, CE))
+        continue;
+
+      if (prob >= prob_t)
+      {
+        //check bounding box
+        if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
+        {
+          exp_color = boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog_data[currIdx]);
+          file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
+          int col = (int)(exp_color*255);
+          col = col > 255 ? 255 : col;
+          file << col << ' ' << col << ' ' << col << ' ';
+          file << axes[0] << ' ' << axes[1] << ' ' << axes[2] << ' ';
+          //file << eval[0] << ' ' << eval[1] << ' ' << eval[2] << ' ';
+          file << LE << ' ' << CE << ' ';
+          num_vertices++;
+          file  <<  prob << vcl_endl;
+        }
+      }
+    //}
+  }
+}
+bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
+                                                                      const vnl_vector_fixed<float, 4>& point, 
+                                                                      const vnl_vector_fixed<float, 9>& cov,
+                                                                      boxm2_data_base* mog,
+                                                                      boxm2_data_base* alpha,
+                                                                      float& prob, double& color, vnl_vector_fixed<double, 3>& axes, double& LE, double& CE)
+{
+  vgl_point_3d<double> local;
+  boxm2_block_id id;
+  vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
+  //if the scene doesn't contain point,
+  if (!scene->contains(vgl_point, id, local)) {
+    //vcl_cout << "Point " << vgl_point << " not present in scene! Skipping..." << vcl_endl;
+    return false;
+  }
+  //if the block passed isn't the block that contains the point, there is something wrong...
+  //this happens when the point data is empty (0,0,0,0) for instance, or simply wrong.
+  //if (blk->block_id() != id)
+  //  return false;
+
+  prob = 1.0;
+  // compute the eigenvalues
+  vnl_matrix<double> pt_cov(3,3,0.0);
+  pt_cov[0][0] = cov[0];
+  pt_cov[0][1] = cov[1];
+  pt_cov[0][2] = cov[2];
+
+  pt_cov[1][0] = cov[3];
+  pt_cov[1][1] = cov[4];
+  pt_cov[1][2] = cov[5];
+
+  pt_cov[2][0] = cov[6];
+  pt_cov[2][1] = cov[7];
+  pt_cov[2][2] = cov[8];
+  
+  vnl_matrix<double> V(3,3,0.0); vnl_vector<double> eigs(3);
+  if (!vnl_symmetric_eigensystem_compute(pt_cov, V, eigs))
+    return false;
+  
+  //: place from the longest axis to the shortest, largest eigen value is in eigs[2]
+  axes[0] =2*vcl_sqrt(eigs[2])*2.5;  // to find 90% confidence ellipsoid, scale the eigenvalues, see pg. 416 on Intro To Modern Photogrammetry, Mikhail, et. al.
+  axes[1] =2*vcl_sqrt(eigs[1])*2.5;
+  axes[2] =2*vcl_sqrt(eigs[0])*2.5;
+  //: check if values are valid (AND is the only way to detect invalid value, do not change into ORs
+  if (!(axes[0] < vcl_numeric_limits<double>::max() && axes[0] > vcl_numeric_limits<double>::min() &&
+        axes[1] < vcl_numeric_limits<double>::max() && axes[1] > vcl_numeric_limits<double>::min() && 
+        axes[2] < vcl_numeric_limits<double>::max() && axes[2] > vcl_numeric_limits<double>::min()))
+    return false;
+
+  //: now find LE (vertical error) using the eigenvector that corresponds to major axis
+  vnl_vector<double> major = V.get_column(2);
+  
+  //: create the vector that corresponds to error ellipsoid
+  vnl_vector<double> major_ellipsoid = axes[0]*major;
+
+
+  LE = vcl_abs(major_ellipsoid.get(2)); 
+  double CEx = vcl_abs(major_ellipsoid.get(0));
+  double CEy = vcl_abs(major_ellipsoid.get(1));
+  
+  CE = CEx > CEy ? CEx : CEy;
+
+  if (LE > 2.5)
+    return false;
+  if (CE > 2.5)
+    return false;
+
+  return true;
+}
+
+
 
 bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
                                                                       const vnl_vector_fixed<float, 4>& point,
@@ -134,7 +250,18 @@ void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& fi
    file << "end_header\n"
         << ss.str();
 }
+void boxm2_export_oriented_point_cloud_function::writePLYHeaderOnlyPoints(vcl_ofstream& file, unsigned num_vertices, vcl_stringstream& ss)
+{
+  file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
+        << "\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n"
+        << "property float axes_a\nproperty float axes_b\nproperty float axes_c\n"
+        //<< "property float eval_x\nproperty float eval_y\nproperty eval_z\n";
+        << "property float LE\nproperty float CE\n";
+   file << "property float prob\n";
 
+   file << "end_header\n"
+        << ss.str();
+}
 
 //helper class to read in bb from file
 class ply_bb_reader
