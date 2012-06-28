@@ -13,6 +13,7 @@
 #include <vcl_iostream.h>
 
 #include "boxm2_normal_albedo_array.h"
+#include "boxm2_feature_vector.h"
 
 class boxm2_mog3_grey_processor;
 class boxm2_gauss_grey_processor;
@@ -46,6 +47,8 @@ enum boxm2_data_type
   BOXM2_VIS_SCORE,
   BOXM2_GAUSS_GREY,
   BOXM2_NORMAL_ALBEDO_ARRAY,
+  BOXM2_COVARIANCE,
+  BOXM2_FEATURE_VECTOR,
   BOXM2_UNKNOWN
 };
 
@@ -149,6 +152,17 @@ class boxm2_data_traits<BOXM2_POINT>
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "boxm2_point"; else return "boxm2_point_"+identifier; }
+};
+
+// 3x3 covariance matrix for a 3d point
+template<>
+class boxm2_data_traits<BOXM2_COVARIANCE>
+{
+ public:
+  typedef vnl_vector_fixed<float, 9> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_covariance"; else return "boxm2_covariance_"+identifier; }
 };
 
 
@@ -330,10 +344,20 @@ class boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>
   static vcl_string prefix() { return "boxm2_normal_albedo_array"; }
 };
 
+template<>
+class boxm2_data_traits<BOXM2_FEATURE_VECTOR>
+{
+ public:
+  typedef boxm2_feature_vector datatype;
+  static vcl_size_t datasize() { return sizeof(boxm2_feature_vector); }
+  static vcl_string prefix() { return "boxm2_feature_vector"; }
+};
+
 //: HACKY WAY TO GENERICALLY GET DATASIZES -
 class boxm2_data_info
 {
  public:
+   
   static vcl_size_t datasize(vcl_string prefix)
   {
     // some of them changed to using find method to account for identifiers
@@ -376,12 +400,13 @@ class boxm2_data_info
       return boxm2_data_traits<BOXM2_AUX4>::datasize();
     if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_AUX>::datasize();
+    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT16>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_FLOAT16>::datasize();
     if (prefix.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_FLOAT8>::datasize();
     if (prefix.find(boxm2_data_traits<BOXM2_FLOAT>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_FLOAT>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT16>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_FLOAT16>::datasize();
+
     if (prefix == boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix())
       return boxm2_data_traits<BOXM2_VIS_SPHERE>::datasize();
     if (prefix == boxm2_data_traits<BOXM2_VIS_SCORE>::prefix())
@@ -399,20 +424,28 @@ class boxm2_data_info
     if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos) 
       return boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::datasize();
 
-    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL>::prefix()) != vcl_string::npos)
+    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL>::prefix()) != vcl_string::npos) 
       return boxm2_data_traits<BOXM2_NORMAL>::datasize();
     
-    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_POINT>::datasize();
+    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos) 
+      return boxm2_data_traits<BOXM2_POINT>::datasize(); 
+
+    if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos) 
+      return boxm2_data_traits<BOXM2_COVARIANCE>::datasize(); 
+
+    if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos) 
+      return boxm2_data_traits<BOXM2_FEATURE_VECTOR>::datasize();
 
     return 0;
   }
+  
 
   static boxm2_data_type data_type(vcl_string prefix)
   {
     // some of them changed to using find method to account for identifiers
     if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos)
       return BOXM2_ALPHA;
+    
     if (prefix.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != vcl_string::npos)
       return BOXM2_GAMMA;
      if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != vcl_string::npos)
@@ -448,12 +481,11 @@ class boxm2_data_info
       return  BOXM2_AUX4 ;
     if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos)
       return  BOXM2_AUX ;
-    if (prefix == boxm2_data_traits<BOXM2_FLOAT8>::prefix())
-      return  BOXM2_FLOAT8 ;
-
-    if (prefix == boxm2_data_traits<BOXM2_FLOAT16>::prefix())
+    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT16>::prefix()) != vcl_string::npos)
       return  BOXM2_FLOAT16 ;
-    if (prefix == boxm2_data_traits<BOXM2_FLOAT>::prefix())
+    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != vcl_string::npos)
+      return  BOXM2_FLOAT8 ;
+    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT>::prefix()) != vcl_string::npos)
       return  BOXM2_FLOAT;
     if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
       return  BOXM2_INTENSITY ;
@@ -463,9 +495,10 @@ class boxm2_data_info
       return  BOXM2_GAUSS_GREY ;
     if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos) 
       return  BOXM2_NORMAL_ALBEDO_ARRAY ;
+    if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos) 
+      return  BOXM2_FEATURE_VECTOR ;
     return BOXM2_UNKNOWN;
   }
-
 
   static void print_data(vcl_string prefix, char *cell)
   {
@@ -531,6 +564,17 @@ class boxm2_data_info
       vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_INTENSITY>::datatype*>(cell)[0];
       return;
     }
+
+    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos) {
+      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_POINT>::datatype*>(cell)[0];
+      return;
+    }
+
+    if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos) {
+      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_COVARIANCE>::datatype*>(cell)[0];
+      return;
+    }
+
 #if 0
     if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos) {
       vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(cell)[0];
