@@ -132,6 +132,8 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
     if (loaded && loaded->buffer_length()==num_bytes) {
       // update data map
       data_map[id] = loaded;
+      if (!read_only)  // write-enable is enforced
+        loaded->enable_write();
       return loaded;
     }
 
@@ -165,15 +167,17 @@ boxm2_data_base* boxm2_lru_cache::get_data_base_new(boxm2_block_id id, vcl_strin
   if (num_bytes > 0)   {
     boxm2_block_metadata data = scene_->get_block_metadata(id);
     // requesting a specific number of bytes,
-    vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id
-            <<" type: "<<type
-            <<" to size: "<<num_bytes<<" bytes"<<vcl_endl;
+    //vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id
+    //        <<" type: "<<type
+    //        <<" to size: "<<num_bytes<<" bytes"<<vcl_endl;
+    vcl_cout<<id<<" init empty "<<type<<vcl_endl;
     block_data = new boxm2_data_base(new char[num_bytes], num_bytes, id, read_only);
     block_data->set_default_value(type, data);
   }
   else {
     // initialize an empty block
-    vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+    //vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+    vcl_cout<<id<<" init empty "<<type<<vcl_endl;
     boxm2_block_metadata data = scene_->get_block_metadata(id);
     // the following constructor also sets the default values
     block_data = new boxm2_data_base(data, type, read_only);
@@ -209,7 +213,6 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
     // found the block,
     boxm2_data_base* litter = data_map[id];
 
-    boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
     if (!litter->read_only_) {
       // save it
       vcl_cout<<"boxm2_lru_cache::remove_data_base "<<type<<':'<<id<<"; saving to disk"<<vcl_endl;
