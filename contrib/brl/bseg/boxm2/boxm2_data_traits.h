@@ -357,7 +357,7 @@ class boxm2_data_traits<BOXM2_FEATURE_VECTOR>
 class boxm2_data_info
 {
  public:
-   
+
   static vcl_size_t datasize(vcl_string prefix)
   {
     // some of them changed to using find method to account for identifiers
@@ -421,87 +421,80 @@ class boxm2_data_info
     if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_GAUSS_GREY>::datasize();
 
-    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos) 
+    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::datasize();
 
-    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL>::prefix()) != vcl_string::npos) 
+    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_NORMAL>::datasize();
-    
-    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos) 
-      return boxm2_data_traits<BOXM2_POINT>::datasize(); 
 
-    if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos) 
-      return boxm2_data_traits<BOXM2_COVARIANCE>::datasize(); 
+    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_POINT>::datasize();
 
-    if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos) 
+    if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_COVARIANCE>::datasize();
+
+    if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_FEATURE_VECTOR>::datasize();
 
     return 0;
   }
-  
+
 
   static boxm2_data_type data_type(vcl_string prefix)
   {
     // some of them changed to using find method to account for identifiers
     if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos)
-      return BOXM2_ALPHA;
-    
-    if (prefix.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != vcl_string::npos)
-      return BOXM2_GAMMA;
-     if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != vcl_string::npos)
+      return BOXM2_ALPHA ;
+    else if (prefix.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != vcl_string::npos)
+      return BOXM2_GAMMA ;
+    else if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != vcl_string::npos)
       return  BOXM2_MOG3_GREY_16 ;
-
-    if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
       return  BOXM2_MOG3_GREY ;
-
-    if (prefix == boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix())
+    else if (prefix == boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix())
       return  BOXM2_BATCH_HISTOGRAM ;
-
-    if (prefix.find(boxm2_data_traits<BOXM2_MOG2_RGB>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_MOG2_RGB>::prefix()) != vcl_string::npos)
       return  BOXM2_MOG2_RGB ;
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix()) != vcl_string::npos)
       return  BOXM2_NUM_OBS_SINGLE_INT ;
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) != vcl_string::npos)
       return  BOXM2_NUM_OBS_SINGLE ;
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) != vcl_string::npos)
       return  BOXM2_NUM_OBS ;
-
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos)
       return  BOXM2_AUX0 ;
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX1>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_AUX1>::prefix()) != vcl_string::npos)
       return  BOXM2_AUX1 ;
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX2>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_AUX2>::prefix()) != vcl_string::npos)
       return  BOXM2_AUX2 ;
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX3>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_AUX3>::prefix()) != vcl_string::npos)
       return  BOXM2_AUX3 ;
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX4>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_AUX4>::prefix()) != vcl_string::npos)
       return  BOXM2_AUX4 ;
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos)
       return  BOXM2_AUX ;
-    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT16>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_FLOAT16>::prefix()) != vcl_string::npos)
       return  BOXM2_FLOAT16 ;
-    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != vcl_string::npos)
       return  BOXM2_FLOAT8 ;
-    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_FLOAT>::prefix()) != vcl_string::npos)
       return  BOXM2_FLOAT;
-    if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
       return  BOXM2_INTENSITY ;
-    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos)
       return  BOXM2_GAUSS_RGB ;
-    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
+    else if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
       return  BOXM2_GAUSS_GREY ;
-    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos) 
+    else if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos)
       return  BOXM2_NORMAL_ALBEDO_ARRAY ;
-    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos) 
+    else if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos)
       return  BOXM2_POINT ;
-    if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos) 
+    else if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos)
       return  BOXM2_COVARIANCE ;
-	if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos) 
+    else if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos)
       return  BOXM2_FEATURE_VECTOR ;
-    return BOXM2_UNKNOWN;
+    else
+      return BOXM2_UNKNOWN;
   }
 
   static void print_data(vcl_string prefix, char *cell)
@@ -584,8 +577,6 @@ class boxm2_data_info
       vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(cell)[0];
       return;
     }
-
-
 #endif // 0
 
     vcl_cerr << "In boxm2_data_info::print_data() -- type: " << prefix << " could not be identified!\n";
