@@ -25,7 +25,7 @@
 
 namespace boxm2_cpp_points_to_volume_process_globals
 {
-  const unsigned n_inputs_ =33;
+  const unsigned n_inputs_ =3;
   const unsigned n_outputs_ = 0;
 }
 
