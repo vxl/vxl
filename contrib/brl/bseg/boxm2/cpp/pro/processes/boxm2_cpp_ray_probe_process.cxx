@@ -68,14 +68,14 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         return false;
     }
     //get the inputs
-    unsigned i = 0;
-    boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
-    boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-    vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-    unsigned pi=pro.get_input<unsigned>(i++);
-    unsigned pj=pro.get_input<unsigned>(i++);
-    vcl_string prefix = pro.get_input<vcl_string>(i++);
-    vcl_string identifier = pro.get_input<vcl_string>(i);
+    unsigned k = 0;
+    boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(k++);
+    boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(k++);
+    vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(k++);
+    unsigned pi=pro.get_input<unsigned>(k++);
+    unsigned pj=pro.get_input<unsigned>(k++);
+    vcl_string prefix = pro.get_input<vcl_string>(k++);
+    vcl_string identifier = pro.get_input<vcl_string>(k++);
 
     bool foundDataType = false;
     vcl_string data_type;
@@ -92,16 +92,13 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
             foundDataType = true;
         }
     }
-    if (!foundDataType) {
-        vcl_cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
-        return false;
-    }
+
 
     if (identifier.size() > 0) {
         data_type += "_" + identifier;
     }
 
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_generic_camera<double>*)(cam.ptr()));
+    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_perspective_camera<double>*)(cam.ptr()));
     vcl_vector<boxm2_block_id>::iterator id;
 
     vcl_vector<float> seg_lengths;
@@ -113,14 +110,16 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     {
         boxm2_block *     blk  =  cache->get_block(*id);
         boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        vcl_string name = prefix;
-        if (identifier!="") name+= ("_"+identifier);
-        boxm2_data_base *  data_of_interest  = cache->get_data_base(*id,name);
-
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(alph);
-        datas.push_back(data_of_interest);
-
+		if(prefix!="")
+		{
+			vcl_string name = prefix;
+			if (identifier!="") 
+				name+= ("_"+identifier);
+			boxm2_data_base *  data_of_interest  = cache->get_data_base(*id,name);
+			datas.push_back(data_of_interest);
+		}
         boxm2_ray_probe_functor ray_probe_functor;
         ray_probe_functor.init_data(datas,seg_lengths,abs_depth,alphas,data_to_return, prefix, nelems);
 
@@ -128,6 +127,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
         cast_ray_per_block<boxm2_ray_probe_functor>(ray_probe_functor,scene_info_wrapper->info,blk,cam,pi+1,pj+1,pi,pj);
+
     }
 
     bbas_1d_array_float_sptr seg_array  =new bbas_1d_array_float(seg_lengths.size());
@@ -140,10 +140,12 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     {
         seg_array->data_array[i]=seg_lengths[i];
         abs_depth_array->data_array[i]=abs_depth[i];
+
         alpha_array->data_array[i]=alphas[i];
-        vis*=vcl_exp(-seg_lengths[i]*alphas[i]);
+        
         vis_array->data_array[i]=vis;
-        for (int j=0 ; j<nelems; ++j)
+        vis*=vcl_exp(-seg_lengths[i]*alphas[i]);
+		for (int j=0 ; j<nelems; ++j)
             data_to_return_array->data_array[i*nelems+j] = data_to_return[i*nelems+j];
     }
 
