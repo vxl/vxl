@@ -51,7 +51,13 @@ class boxm2_ray_probe_functor
       case BOXM2_NUM_OBS:
         nelems = 4;
         break;
-      default:
+      case BOXM2_POINT:
+        nelems = 4;
+        break;
+      case BOXM2_COVARIANCE:
+        nelems = 9;
+        break;
+	  default:
         nelems = 0;
     }
     return true;
@@ -129,6 +135,24 @@ class boxm2_ray_probe_functor
         data_to_return_->push_back(app[3]);
         break;
       }
+	  case BOXM2_POINT:
+		  {
+			  boxm2_data<BOXM2_POINT>* point_data  = new boxm2_data<BOXM2_POINT>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+			  boxm2_data<BOXM2_POINT>::datatype app=point_data->data()[index];
+			  data_to_return_->push_back(app[0]);
+			  data_to_return_->push_back(app[1]);
+			  data_to_return_->push_back(app[2]);
+			  data_to_return_->push_back(app[3]);
+			  break;
+		  }
+		  	  case BOXM2_COVARIANCE:
+		  {
+			  boxm2_data<BOXM2_COVARIANCE>* point_data  = new boxm2_data<BOXM2_COVARIANCE>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+			  boxm2_data<BOXM2_COVARIANCE>::datatype app=point_data->data()[index];
+			  for(unsigned k = 0 ; k < 9; k++)
+			  data_to_return_->push_back(app[k]);
+			  break;
+		  }
       default: // do nothing
         break;
     }
