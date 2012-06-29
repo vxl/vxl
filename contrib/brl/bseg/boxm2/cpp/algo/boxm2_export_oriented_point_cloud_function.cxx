@@ -59,7 +59,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
   boxm2_data_traits<BOXM2_NORMAL>::datatype *  normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
   boxm2_data_traits<BOXM2_VIS_SCORE>::datatype *    vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *    mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
-  
+
   file << vcl_fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
   for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
@@ -99,7 +99,6 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
   boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
   boxm2_data_traits<BOXM2_COVARIANCE>::datatype *  covs_data = (boxm2_data_traits<BOXM2_COVARIANCE>::datatype*) covariances->data_buffer();
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype * mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
-  boxm2_data_traits<BOXM2_ALPHA>::datatype *   alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
 
   file << vcl_fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
@@ -123,10 +122,10 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
           file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
           int col = (int)(exp_color*255);
           col = col > 255 ? 255 : col;
-          file << col << ' ' << col << ' ' << col << ' ';
-          file << axes[0] << ' ' << axes[1] << ' ' << axes[2] << ' ';
-          //file << eval[0] << ' ' << eval[1] << ' ' << eval[2] << ' ';
-          file << LE << ' ' << CE << ' ';
+          file << col << ' ' << col << ' ' << col << ' '
+               << axes[0] << ' ' << axes[1] << ' ' << axes[2] << ' '
+        //     << eval[0] << ' ' << eval[1] << ' ' << eval[2] << ' '
+               << LE << ' ' << CE << ' ';
           num_vertices++;
           file  <<  prob << vcl_endl;
         }
@@ -134,8 +133,9 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
     //}
   }
 }
+
 bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
-                                                                      const vnl_vector_fixed<float, 4>& point, 
+                                                                      const vnl_vector_fixed<float, 4>& point,
                                                                       const vnl_vector_fixed<float, 9>& cov,
                                                                       boxm2_data_base* mog,
                                                                       boxm2_data_base* alpha,
@@ -168,32 +168,32 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   pt_cov[2][0] = cov[6];
   pt_cov[2][1] = cov[7];
   pt_cov[2][2] = cov[8];
-  
+
   vnl_matrix<double> V(3,3,0.0); vnl_vector<double> eigs(3);
   if (!vnl_symmetric_eigensystem_compute(pt_cov, V, eigs))
     return false;
-  
-  //: place from the longest axis to the shortest, largest eigen value is in eigs[2]
+
+  // place from the longest axis to the shortest, largest eigen value is in eigs[2]
   axes[0] =2*vcl_sqrt(eigs[2])*2.5;  // to find 90% confidence ellipsoid, scale the eigenvalues, see pg. 416 on Intro To Modern Photogrammetry, Mikhail, et. al.
   axes[1] =2*vcl_sqrt(eigs[1])*2.5;
   axes[2] =2*vcl_sqrt(eigs[0])*2.5;
-  //: check if values are valid (AND is the only way to detect invalid value, do not change into ORs
+  // check if values are valid (AND is the only way to detect invalid value, do not change into ORs
   if (!(axes[0] < vcl_numeric_limits<double>::max() && axes[0] > vcl_numeric_limits<double>::min() &&
-        axes[1] < vcl_numeric_limits<double>::max() && axes[1] > vcl_numeric_limits<double>::min() && 
+        axes[1] < vcl_numeric_limits<double>::max() && axes[1] > vcl_numeric_limits<double>::min() &&
         axes[2] < vcl_numeric_limits<double>::max() && axes[2] > vcl_numeric_limits<double>::min()))
     return false;
 
-  //: now find LE (vertical error) using the eigenvector that corresponds to major axis
+  // now find LE (vertical error) using the eigenvector that corresponds to major axis
   vnl_vector<double> major = V.get_column(2);
-  
-  //: create the vector that corresponds to error ellipsoid
+
+  // create the vector that corresponds to error ellipsoid
   vnl_vector<double> major_ellipsoid = axes[0]*major;
 
 
-  LE = vcl_abs(major_ellipsoid.get(2)); 
+  LE = vcl_abs(major_ellipsoid.get(2));
   double CEx = vcl_abs(major_ellipsoid.get(0));
   double CEy = vcl_abs(major_ellipsoid.get(1));
-  
+
   CE = CEx > CEy ? CEx : CEy;
 
   if (LE > 2.5)
@@ -203,7 +203,6 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
 
   return true;
 }
-
 
 
 bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
@@ -238,7 +237,6 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   return true;
 }
 
-
 void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& file, unsigned num_vertices,vcl_stringstream& ss, bool output_aux)
 {
    file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
@@ -250,17 +248,17 @@ void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& fi
    file << "end_header\n"
         << ss.str();
 }
+
 void boxm2_export_oriented_point_cloud_function::writePLYHeaderOnlyPoints(vcl_ofstream& file, unsigned num_vertices, vcl_stringstream& ss)
 {
   file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
-        << "\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n"
-        << "property float axes_a\nproperty float axes_b\nproperty float axes_c\n"
-        //<< "property float eval_x\nproperty float eval_y\nproperty eval_z\n";
-        << "property float LE\nproperty float CE\n";
-   file << "property float prob\n";
-
-   file << "end_header\n"
-        << ss.str();
+       << "\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n"
+       << "property float axes_a\nproperty float axes_b\nproperty float axes_c\n"
+    // << "property float eval_x\nproperty float eval_y\nproperty eval_z\n"
+       << "property float LE\nproperty float CE\n"
+       << "property float prob\n"
+       << "end_header\n"
+       << ss.str();
 }
 
 //helper class to read in bb from file
