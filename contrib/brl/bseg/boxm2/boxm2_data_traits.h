@@ -495,7 +495,11 @@ class boxm2_data_info
       return  BOXM2_GAUSS_GREY ;
     if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos) 
       return  BOXM2_NORMAL_ALBEDO_ARRAY ;
-    if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos) 
+    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos) 
+      return  BOXM2_POINT ;
+    if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos) 
+      return  BOXM2_COVARIANCE ;
+	if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos) 
       return  BOXM2_FEATURE_VECTOR ;
     return BOXM2_UNKNOWN;
   }
