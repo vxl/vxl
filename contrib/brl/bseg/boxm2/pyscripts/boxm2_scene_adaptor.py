@@ -134,8 +134,9 @@ class boxm2_scene_adaptor(object):
       cache = self.cpu_cache;
       dev = None;
     if self.rgb :
-      print "Render visibility map not implemented for color scenes";
-      return;
+	  expimg, vis_image = render_rgb(self.scene, cache, cam, ni, nj, dev);
+      #print "Render visibility map not implemented for color scenes";
+      #return;
     else :
       expimg, vis_image = render_grey_and_vis(self.scene, cache, cam, ni, nj, dev);
     return expimg, vis_image;
