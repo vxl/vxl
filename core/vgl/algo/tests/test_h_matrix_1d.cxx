@@ -56,6 +56,26 @@ static void test_projective_basis()
   TEST_NEAR("transformed 3rd point", Basis(p2) - vgl_homg_point_1d<double>(1,1), 0.0, 1e-6);
 }
 
+static void test_compute_svd()
+{
+  vcl_cout << "\n=== Test the recovery of a 2x scale transform using the SVD ===\n";
+  vcl_vector<vgl_homg_point_1d<double> > points1, points2;
+  //setup points in frame 1
+  vgl_homg_point_1d<double> p10(0,1), p11(1,1), p12(3,2), p13(2,1);
+  points1.push_back(p10); points1.push_back(p11); points1.push_back(p12); points1.push_back(p13);
+
+  //setup points in frame 2
+  vgl_homg_point_1d<double> p20(0,1), p21(2,1), p22(1,1), p23(3,2);
+  points2.push_back(p20); points2.push_back(p21); points2.push_back(p22); points2.push_back(p23);
+
+  vgl_h_matrix_1d<double> H(points1, points2);
+  vcl_cout << "The resulting transform\n" << H << vcl_endl;
+  vnl_matrix_fixed<double,2,2> M=H.get_matrix();
+  vgl_homg_point_1d<double> hdiag(M[0][0], M[1][1]);
+  vcl_cout << "The normalized upper diagonal "<< hdiag << vcl_endl;
+  TEST_NEAR("recover 2x scale matrix", hdiag-vgl_homg_point_1d<double>(5,-4), 0.0, 1e-06);
+}
+
 static void test_compute_linear()
 {
   vcl_cout << "\n=== Test the recovery of a 2x scale transform using the linear algorithm ===\n";
@@ -121,14 +141,31 @@ static void test_compute_optimize()
   TEST_NEAR("recover 2x scale matrix", hdiag-vgl_homg_point_1d<double>(5,-4), 0.0, 1e-06);
 }
 
+static void test_inverse()
+{
+  vnl_matrix_fixed<float,2,2> M;
+  M.put(0,0, -2.0f); M.put(0,1, 1.5f);
+  M.put(1,0,  3.0f); M.put(1,1, 1.75f);
+  vgl_h_matrix_1d<float> T(M);
+  TEST("not Euclidean", T.is_euclidean(), false);
+  TEST("not a rotation", T.is_rotation(), false);
+  vgl_h_matrix_1d<float> Tinv = T.get_inverse();
+  vcl_cout << "The inverse is\n" << Tinv;
+  TEST_NEAR("Lower right value", Tinv.get(1,1), 0.25f, 1e-06);
+  vgl_h_matrix_1d<float> P = T * Tinv;
+  TEST("product is identity", P.is_identity(), true);
+}
+
 static void test_h_matrix_1d()
 {
   test_identity_transform();
   test_perspective_transform();
   test_projective_basis();
+  test_compute_svd();
   test_compute_linear();
   test_compute_3point();
   test_compute_optimize();
+  test_inverse();
 }
 
 TESTMAIN(test_h_matrix_1d);
