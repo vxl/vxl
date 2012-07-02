@@ -76,10 +76,147 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =new boxm2_scene(datapath,vgl_point_3d<double>(origin_x,origin_y,origin_z));
   scene->set_local_origin(vgl_point_3d<double>(origin_x,origin_y,origin_z));
   scene->set_appearances(appearance);
-  vpgl_lvcs lv = scene->lvcs();
-  lv.set_origin((double)lon, (double)lat, (double)elev);
+  //vpgl_lvcs lv = scene->lvcs();
+  //lv.set_origin((double)lon, (double)lat, (double)elev);
+  vpgl_lvcs lv(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   scene->set_lvcs(lv);
   scene->set_num_illumination_bins(num_bins);
+  i=0;  // store scene smart pointer
+  pro.set_output_val<boxm2_scene_sptr>(i++, scene);
+  return true;
+}
+
+
+//: A process that takes two (lat,lon,elev) positions and creates a scene with a given voxel size and corresponding block structure
+//  lvcs is used to figure out the local origins of the blocks
+namespace boxm2_create_scene_and_blocks_process_globals
+{
+  const unsigned n_inputs_ = 13;
+  const unsigned n_outputs_ = 1;
+}
+
+bool boxm2_create_scene_and_blocks_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_create_scene_and_blocks_process_globals;
+
+  //process takes 11 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vcl_string"; // scene dir (with no slash at the end)
+  input_types_[1] = "vcl_string"; //Appearance Model String
+  input_types_[2] = "vcl_string"; //Occupancy Model String
+  input_types_[3] = "float"; // lon1  // coords of lower left corner of the scene bounding box
+  input_types_[4] = "float"; // lat1
+  input_types_[5] = "float"; // elev1
+  input_types_[6] = "float"; // lon2  // coords of upper right corner of the scene bounding box
+  input_types_[7] = "float"; // lat2
+  input_types_[8] = "float"; // elev2
+  input_types_[9] = "float"; // voxel size in meters
+  input_types_[10] = "float"; // block length in meters, set according to memory requirement of GPU
+  input_types_[11] = "float"; // block length in z in meters, set according to memory requirement of GPU
+  input_types_[12] = "int";   // number of illumination bins in the scene
+
+  // process has 1 output
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  output_types_[0] = "boxm2_scene_sptr";
+
+  // ill bins might not be set
+  brdb_value_sptr idx = new brdb_value_t<int>(0);
+  pro.set_input(10, idx);
+  
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
+{
+  using namespace boxm2_create_scene_and_blocks_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  //get the inputs
+  vcl_vector<vcl_string> appearance(2,"");
+  unsigned i = 0;
+  vcl_string datapath = pro.get_input<vcl_string>(i++);
+  appearance[0]       = pro.get_input<vcl_string>(i++); //Appearance Model String
+  appearance[1]       = pro.get_input<vcl_string>(i++); //Occupancy Model String
+  float lon1          = pro.get_input<float>(i++);
+  float lat1          = pro.get_input<float>(i++);
+  float elev1         = pro.get_input<float>(i++);
+  float lon2          = pro.get_input<float>(i++);
+  float lat2          = pro.get_input<float>(i++);
+  float elev2         = pro.get_input<float>(i++);
+  float voxel_size    = pro.get_input<float>(i++);
+  float block_len     = pro.get_input<float>(i++);  // blocks have equal length on x and y direction
+  float block_lenz     = pro.get_input<float>(i++);
+  int num_bins        = pro.get_input<int>(i++);
+
+  unsigned init_level = 1;
+  unsigned max_level = 4;
+  float max_data_mb = 1000.0;
+  float p_init = 0.001;
+
+  if (!vul_file::make_directory_path(datapath.c_str()))
+    return false;
+
+  vpgl_lvcs lv(lat1, lon1, elev1, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  double origin_x = 0.0, origin_y = 0.0, origin_z = 0.0;
+  double lx, ly, lz;
+  lv.global_to_local(lon1, lat1, elev1, vpgl_lvcs::wgs84, lx, ly, lz);
+  vcl_cout << "local coords:\nlat1,lon1,elev1: " << lx << " " << ly << " " << lz << vcl_endl;
+  lv.global_to_local(lon2, lat2, elev2, vpgl_lvcs::wgs84, lx, ly, lz);
+  vcl_cout << "lat2,lon2,elev2: " << lx << " " << ly << " " << lz << vcl_endl;
+  
+  
+
+  boxm2_scene_sptr scene =new boxm2_scene(datapath,vgl_point_3d<double>(origin_x,origin_y,origin_z));
+  scene->set_local_origin(vgl_point_3d<double>(origin_x,origin_y,origin_z));
+  scene->set_appearances(appearance);
+  
+  scene->set_lvcs(lv);
+  scene->set_num_illumination_bins(num_bins);
+  
+  //: calculate number of voxels and block and subblock sizes
+  float sb_length = 8*voxel_size;
+  
+  int num_xy = (int)vcl_ceil(block_len/sb_length);
+  int num_z = (int)vcl_ceil(block_lenz/sb_length);
+  int n_x = (int)vcl_ceil(lx / (num_xy*sb_length));
+  int n_y = (int)vcl_ceil(ly / (num_xy*sb_length));
+  int n_z = (int)vcl_ceil(lz / (num_z*sb_length));
+  
+  vcl_cout << "sb_length: " << sb_length << " block_len_xy: " << block_len << " num_xy: " << num_xy << vcl_endl;
+  vcl_cout << "block_len z: " << block_lenz << " num_z: " << num_z << vcl_endl;
+  vcl_cout << "num of blocks in x: " << n_x << " y: " << n_y << " n_z: " << n_z << vcl_endl;
+  vcl_cout << "input scene length x: " << lx << " blocked x: " << n_x*num_xy*sb_length << vcl_endl;
+  vcl_cout << "input scene length y: " << ly << " blocked y: " << n_y*num_xy*sb_length << vcl_endl;
+  vcl_cout << "input scene length z: " << lz << " blocked z: " << n_z*num_z*sb_length << vcl_endl;
+
+  for (unsigned i=0; i < n_x; i++) 
+    for (unsigned j = 0; j < n_y; j++)
+      for (unsigned k = 0; k < n_z; k++) {
+        boxm2_block_id id(i,j,k);
+        vcl_map<boxm2_block_id, boxm2_block_metadata> blks=scene->blocks();
+
+        if (blks.find(id)!=blks.end())
+        {
+          vcl_cout<<"Problems in adding block: " << i << " " << j << " " << k << " block already exists"<<vcl_endl;
+          return false;
+        }
+        double local_z = k*num_z*sb_length + origin_z;
+        double local_y = j*num_xy*sb_length + origin_y;
+        double local_x = i*num_xy*sb_length + origin_x;
+
+        boxm2_block_metadata mdata(id,vgl_point_3d<double>(local_x,local_y,local_z),
+                                   vgl_vector_3d<double>(sb_length,sb_length,sb_length),
+                                   vgl_vector_3d<unsigned>(num_xy,num_xy,num_z),
+                                   init_level,max_level,max_data_mb,p_init);
+
+        blks[id]=mdata;
+        scene->set_blocks(blks);
+      }
+      
+
   i=0;  // store scene smart pointer
   pro.set_output_val<boxm2_scene_sptr>(i++, scene);
   return true;
