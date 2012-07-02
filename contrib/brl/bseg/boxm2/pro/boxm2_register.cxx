@@ -49,6 +49,13 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_transform_model_process, "boxm2TransformModelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_scene_mask_process, "boxm2CreateSceneMaskProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_paint_mesh_process, "boxm2PaintMeshProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_dem_to_xyz_process, "boxm2DemToXYZProcess");
+#if HAS_GEOTIFF
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_roi_init_geotiff_process, "boxm2RoiInitGeotiffProcess");
+#endif
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_lvcs_process, "boxm2SceneLVCSProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_scene_and_blocks_process, "boxm2CreateSceneAndBlocksProcess");
+  
   REG_PROCESS_FUNC_CONS2(boxm2_add_aux_info_to_ply_process);
 
 }
