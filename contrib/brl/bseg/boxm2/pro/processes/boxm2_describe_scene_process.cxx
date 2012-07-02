@@ -47,7 +47,7 @@ bool boxm2_describe_scene_process(bprb_func_process& pro)
     vcl_cout << " null scene in boxm2_describe_scene_process\n";
     return false;
   }
-  vcl_cout << *scene;
+  //vcl_cout << *scene;
   
   //verifies that a scene has a valid appearance, spits out data type and apperance type size
   vcl_vector<vcl_string> valid_types; 
