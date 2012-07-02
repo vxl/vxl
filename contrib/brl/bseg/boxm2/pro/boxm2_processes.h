@@ -32,7 +32,12 @@ DECLARE_FUNC_CONS(boxm2_transform_model_process);
 DECLARE_FUNC_CONS(boxm2_create_scene_mask_process);
 DECLARE_FUNC_CONS(boxm2_paint_mesh_process);
 DECLARE_FUNC_CONS(boxm2_extract_point_cloud_process);
+DECLARE_FUNC_CONS(boxm2_dem_to_xyz_process);
+#if HAS_GEOTIFF
+DECLARE_FUNC_CONS(boxm2_roi_init_geotiff_process);
+#endif
+DECLARE_FUNC_CONS(boxm2_scene_lvcs_process);
+DECLARE_FUNC_CONS(boxm2_create_scene_and_blocks_process);
 DECLARE_FUNC_CONS(boxm2_add_aux_info_to_ply_process);
-
 
 #endif
