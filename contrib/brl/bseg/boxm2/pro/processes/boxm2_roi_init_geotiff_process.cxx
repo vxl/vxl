@@ -68,6 +68,7 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
   double e1,n1,e2,n2,elev,lat,lon;
   scene->lvcs().get_origin(lat, lon, elev);
   geocam->img_four_corners_in_utm(img_res->ni(), img_res->nj(), elev, e1, n1, e2, n2);
+  vcl_cout << "img res ni: " << img_res->ni() << " nj: " << img_res->nj() << vcl_endl;
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   vcl_cout.setf(vcl_ios_fixed);
@@ -109,11 +110,6 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
     vcl_cerr << "Error: boxm2_roi_init_geotiff_process: could not crop the scene in this image!\n";
     return false;
   }
-  vil_image_view<vxl_byte>* crop_view = dynamic_cast<vil_image_view<vxl_byte>*>(crop_base.ptr());
-  if (!crop_view) {
-    vcl_cerr << "Error: boxm2_roi_init_geotiff_process: could not cast first return image to a vil_image_view<float>\n";
-    return false;
-  }
 
   // downsample the image based on the level
   if (level < 32) {
@@ -124,8 +120,7 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
     crop_ni = (unsigned int) (crop_ni*vcl_pow(0.5,static_cast<double>(level)));
     crop_nj = (unsigned int) (crop_nj*vcl_pow(0.5,static_cast<double>(level)));
   }
-  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(crop_ni, crop_nj, crop_view->nplanes());
-  vil_resample_bilin(*crop_view, *out_img, crop_ni, crop_nj);
+
   // now use this camera to generate generic cam
   vpgl_generic_camera<double> gcam;
   // make the geocam local
@@ -135,6 +130,23 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
 
   vpgl_camera_double_sptr out = new vpgl_generic_camera<double>(gcam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, out);
+
+  vil_image_view<vxl_byte>* crop_view = dynamic_cast<vil_image_view<vxl_byte>*>(crop_base.ptr());
+  if (!crop_view) {
+    vil_image_view<float>* crop_view_f = dynamic_cast<vil_image_view<float>*>(crop_base.ptr());
+    if (!crop_view_f) {
+      vcl_cerr << "Error: boxm2_roi_init_geotiff_process: could not cast first return image to a vil_image_view<float>\n";
+      return false;
+    }
+    vil_image_view<float>* out_img = new vil_image_view<float>(crop_ni, crop_nj, crop_view_f->nplanes());
+    vil_resample_bilin(*crop_view_f, *out_img, crop_ni, crop_nj);
+    pro.set_output_val<vil_image_view_base_sptr>(1,new vil_image_view<float>(*out_img));
+    return true;
+  }
+
+  //: downsample the image based on the level
+  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(crop_ni, crop_nj, crop_view->nplanes());
+  vil_resample_bilin(*crop_view, *out_img, crop_ni, crop_nj);
   pro.set_output_val<vil_image_view_base_sptr>(1,new vil_image_view<vxl_byte>(*out_img));
 
   return true;
