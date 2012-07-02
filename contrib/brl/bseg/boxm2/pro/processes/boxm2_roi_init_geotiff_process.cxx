@@ -71,7 +71,7 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
   vcl_cout << "img res ni: " << img_res->ni() << " nj: " << img_res->nj() << vcl_endl;
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
-  vcl_cout.setf(vcl_ios_fixed);
+  vcl_cout.setf(vcl_ios_fixed, vcl_ios_floatfield);
 
   // crop the image
   vgl_box_2d<double> proj_bbox;
@@ -90,7 +90,7 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
     vcl_cerr << "Error: boxm2_roi_init_geotiff_process: the image does not contain scene!\n"
              << "scene bbox:\n " << scene_bbox << '\n';
     double n,e; int utm_zone;
-    vcl_cerr.setf(vcl_ios_fixed); vcl_cerr.precision(2);
+    vcl_cerr.setf(vcl_ios_fixed, vcl_ios_floatfield); vcl_cerr.precision(2);
     geocam->local_to_utm(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), e, n, utm_zone);
     vcl_cerr << "in UTM bbox transforms to " << n << " N " << e << " E and ";
     geocam->local_to_utm(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), e, n, utm_zone);
