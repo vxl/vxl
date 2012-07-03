@@ -1,6 +1,7 @@
 #include "vpgl_register.h"
 #include "vpgl_processes.h"
 #include <vpgl/vpgl_camera_double_sptr.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
@@ -9,6 +10,7 @@
 void vpgl_register::register_datatype()
 {
   REGISTER_DATATYPE( vpgl_camera_double_sptr );
+  REGISTER_DATATYPE( vpgl_lvcs_sptr );
 }
 
 void vpgl_register::register_process()
@@ -44,10 +46,18 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_nitf_footprint_process, "vpglNITFFootprintProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_generate_3d_point_from_cams_process, "vpglGenerate3dPointFromCamsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_to_local_coordinates_process, "vpglConvertToLocalCoordinatesProcess");
- 
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_perturb_persp_cam_orient_process, "vpglPerturbPerspCamOrientProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_rotate_persp_cam_process, "vpglRotatePerspCamProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_persp_cam_distance_process, "vpglPerspCamDistancaProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_to_generic_camera_w_margin_process, "vpglConvertToGenericCameraWithMarginProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_persp_cam_pa_covariance_process, "vpglComputePerspCamPACovariancePRocess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_process2, "vpglCreatePerspectiveCameraProcess2");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_perspective_cam_center_process, "vpglGetPerspectiveCamCenterProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_geo_camera_process, "vpglLoadGeoCameraProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_process3, "vpglCreatePerspectiveCameraProcess3");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_process4, "vpglCreatePerspectiveCameraProcess4");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_perturb_uniform_persp_cam_orient_process, "vpglPerturbUniformPerspCamOrientProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bpgl_transform_perspective_cameras_process, "bpglTransformPerspectiveCamerasProcess");
-
-  
 }
 
 

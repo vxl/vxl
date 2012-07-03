@@ -58,7 +58,6 @@ bool vpgl_load_perspective_camera_process(bprb_func_process& pro)
   else {
    ifs >> *pcam;
   }
-  vcl_cout << " cent: " << pcam->camera_center() << vcl_endl;
   pro.set_output_val<vpgl_camera_double_sptr>(0, pcam);
 
   return true;

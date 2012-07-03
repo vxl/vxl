@@ -77,13 +77,14 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
     if (cam_path.size() < 2) continue;
     double i, j;
     line >> i; line >> j;
-    ifs >> orig_cam_path;
-    vcl_cout << "reading cam: " << cam_path << " corr i: " << i << ' ' << j << vcl_endl;
+    //ifs >> orig_cam_path;
+    vcl_cout << "reading cam: " << cam_path <<vcl_endl;
+    vcl_cout << "\t corr i: " << i << " j: " << j << vcl_endl;
     vcl_string img_name = vul_file::strip_directory(cam_path);
     img_name = vul_file::strip_extension(img_name);
-    vcl_string out_cam_name = output_path + img_name + ".rpb";
-    vcl_string out_cam_orig_name = output_path + img_name + "_orig.rpb";
-    vcl_cout << "img name: " << out_cam_name << vcl_endl;
+    vcl_string out_cam_name = output_path + img_name + "_corrected.rpb";
+    //vcl_string out_cam_orig_name = output_path + img_name + "_orig.rpb";
+    vcl_cout << "out cam name: " << out_cam_name << vcl_endl;
 
     vpgl_local_rational_camera<double> *ratcam = read_local_rational_camera<double>(cam_path);
     if ( !ratcam ) {
@@ -100,11 +101,11 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
       vpgl_rational_camera<double> *ratcam2 = read_rational_camera<double>(cam_path);
       cams.push_back(*ratcam2);
     }
-    vpgl_rational_camera<double> *ratcam3 = read_rational_camera<double>(orig_cam_path);
-    cams_origs.push_back(*ratcam3);
+    //vpgl_rational_camera<double> *ratcam3 = read_rational_camera<double>(orig_cam_path);
+    //cams_origs.push_back(*ratcam3);
 
     out_cam_names.push_back(out_cam_name);
-    out_cam_orig_names.push_back(out_cam_orig_name);
+    //out_cam_orig_names.push_back(out_cam_orig_name);
 
     vgl_point_2d<double> cor(i,j);
     corrs.push_back(cor);
@@ -139,10 +140,10 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
       cams[i].set_image_offset(u_off + cam_trans[i].x(), v_off + cam_trans[i].y());
       cams[i].save(out_cam_names[i]);
     }
-    double u_off,v_off;
-    cams_origs[i].image_offset(u_off,v_off);
-    cams_origs[i].set_image_offset(u_off + cam_trans[i].x(), v_off + cam_trans[i].y());
-    cams_origs[i].save(out_cam_orig_names[i]);
+    //double u_off,v_off;
+    //cams_origs[i].image_offset(u_off,v_off);
+    //cams_origs[i].set_image_offset(u_off + cam_trans[i].x(), v_off + cam_trans[i].y());
+    //cams_origs[i].save(out_cam_orig_names[i]);
   }
   return true;
 }

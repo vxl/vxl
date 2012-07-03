@@ -64,4 +64,3 @@ bool vpgl_nitf_camera_coverage_process(bprb_func_process& pro)
 
   return true;
 }
-

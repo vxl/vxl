@@ -34,7 +34,17 @@ DECLARE_FUNC_CONS(vpgl_nitf_footprint_process);
 DECLARE_FUNC_CONS(vpgl_generate_3d_point_from_cams_process);
 DECLARE_FUNC_CONS(vpgl_convert_to_local_coordinates_process);
 
+DECLARE_FUNC_CONS(vpgl_perturb_persp_cam_orient_process);
+DECLARE_FUNC_CONS(vpgl_rotate_persp_cam_process);
+DECLARE_FUNC_CONS(vpgl_persp_cam_distance_process);
+DECLARE_FUNC_CONS(vpgl_convert_to_generic_camera_w_margin_process);
+DECLARE_FUNC_CONS(vpgl_compute_persp_cam_pa_covariance_process);
+DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process2);
+DECLARE_FUNC_CONS(vpgl_get_perspective_cam_center_process);
+DECLARE_FUNC_CONS(vpgl_load_geo_camera_process);
+DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process3);
+DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process4);
+DECLARE_FUNC_CONS(vpgl_perturb_uniform_persp_cam_orient_process);
 DECLARE_FUNC_CONS(bpgl_transform_perspective_cameras_process);
-
 
 #endif
