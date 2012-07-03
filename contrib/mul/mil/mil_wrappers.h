@@ -8,6 +8,7 @@
 #include <mil/mil_image_2d_of.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector.h> // for M.get_row()
 
 //: Create a vimt image that wraps a mil image - should only be used read only.
 //  Sorry about breaking the naming conventions, but I don't want this in vimt
@@ -28,7 +29,7 @@ inline vimt_image_2d_of<T> vimt_wrap_mil_image(const mil_image_2d_of<T>& im)
   int planestep=0;
   if (im.n_planes()>1) planestep=im.plane(1)-im.plane(0);
   vim.image().set_to_memory(im.plane(0),im.nx(),im.ny(),im.n_planes(),
-                                  im.xstep(),im.ystep(),planestep);
+                            im.xstep(),im.ystep(),planestep);
   return vim;
 }
 
