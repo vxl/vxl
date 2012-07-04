@@ -36,7 +36,7 @@ template <class D>
 void vmap_2_map<D>::initialise_darts(int arg)
 {
 #if 0
-  get_dart_pointer.resize(arg) ;
+  dart_sequence::resize(arg) ;
 #endif // 0
   dart_sequence::resize(arg) ;
   for (int i=1; i<arg; i+=2)
@@ -203,10 +203,10 @@ void vmap_2_map<D>::suppress_from_sequence(dart_type * d)
   int i=sequence_index(*d) ;
   dart_sequence::swap(i,nb_darts()-1) ;
 #if 0
-  vcl_swap(get_dart_pointer(i),get_dart_pointer.last()) ;
+  vcl_swap(get_dart_pointer(i),dart_sequence::last()) ;
   get_dart_pointer(i)->set_sequence_index(i) ;
   delete_dart(d);
-  get_dart_pointer.pop_back();
+  dart_sequence::pop_back();
 #endif // 0
   this->destroyLastDart() ;
 }
@@ -214,7 +214,7 @@ void vmap_2_map<D>::suppress_from_sequence(dart_type * d)
 template <class D>
 void vmap_2_map<D>::contraction(contraction_kernel const& arg_kernel)
 {
-  int ld=get_dart_pointer.size(), id ;
+  int ld=dart_sequence::size(), id ;
 
   typename contraction_kernel::const_iterator itk ;
   for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
@@ -247,12 +247,12 @@ void vmap_2_map<D>::contraction(contraction_kernel const& arg_kernel)
     }
   }
 
-  ld=get_dart_pointer.size()-ld ;
+  ld=dart_sequence::size()-ld ;
   for (id=0; id<ld ; ++id )
   {
 #if 0
-    delete_dart(get_dart_pointer.last()) ;
-    get_dart_pointer.pop_back() ;
+    delete_dart(dart_sequence::last()) ;
+    dart_sequence::pop_back() ;
 #endif // 0
     this->destroyLastDart() ;
   }
@@ -261,7 +261,7 @@ void vmap_2_map<D>::contraction(contraction_kernel const& arg_kernel)
 template <class D>
 void vmap_2_map<D>::removal(removal_kernel const& arg_kernel)
 {
-  int ld=get_dart_pointer.size(), id ;
+  int ld=dart_sequence::size(), id ;
 
   typename contraction_kernel::const_iterator itk ;
   for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
@@ -294,12 +294,12 @@ void vmap_2_map<D>::removal(removal_kernel const& arg_kernel)
     }
   }
 
-  ld=get_dart_pointer.size()-ld ;
+  ld=dart_sequence::size()-ld ;
   for (id=0; id<ld ; ++id )
   {
 #if 0
-    delete_dart(get_dart_pointer.last()) ;
-    get_dart_pointer.pop_back() ;
+    delete_dart(dart_sequence::last()) ;
+    dart_sequence::pop_back() ;
 #endif // 0
     this->destroyLastDart() ;
   }
