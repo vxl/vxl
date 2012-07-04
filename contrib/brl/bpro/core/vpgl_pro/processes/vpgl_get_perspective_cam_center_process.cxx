@@ -8,9 +8,7 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vul/vul_file.h>
 
 //: Init function
 bool vpgl_get_perspective_cam_center_process_cons(bprb_func_process& pro)
@@ -36,7 +34,7 @@ bool vpgl_get_perspective_cam_center_process_cons(bprb_func_process& pro)
 bool vpgl_get_perspective_cam_center_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vpgl_get_perspective_cam_center_process: The input number should be 1" << vcl_endl;
+    vcl_cout << "vpgl_get_perspective_cam_center_process: The number of inputs should be 1" << vcl_endl;
     return false;
   }
 
