@@ -113,8 +113,8 @@ bool boxm2_block::b_write(char* buff)
     vcl_memcpy(buff+bytes_written, dims, 4 * sizeof(double));
     bytes_written += 4 * sizeof(double);
 
-    int nums[4] = {sub_block_num_.x(), sub_block_num_.y(), sub_block_num_.z(), 0 };
-    vcl_memcpy(buff+bytes_written, nums, 4 * sizeof(int));
+    unsigned int nums[4] = {sub_block_num_.x(), sub_block_num_.y(), sub_block_num_.z(), 0 };
+    vcl_memcpy(buff+bytes_written, nums, 4 * sizeof(unsigned int));
     bytes_written += 4 * sizeof(int);
   }
   //the arrays themselves should be already in the char buffer, so no need to copy
@@ -229,15 +229,15 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
 long boxm2_block::calc_byte_count(int num_buffers, int trees_per_buffer, int num_trees)
 {
   long toReturn = num_trees * sizeof(uchar16) ;
-  if(version_ == 1)
+  if (version_ == 1)
   {
-    toReturn = toReturn + num_buffers*trees_per_buffer * sizeof(int)     //tree pointers
-                        + num_buffers*(sizeof(ushort) + sizeof(ushort2)) //blocks in buffers and mem ptrs
-                        + sizeof(long)                        // this number
-                        + 3*sizeof(int)                       // init level, max level, max_mb
-                        + 4*sizeof(double)                    // dims
-                        + 4*sizeof(int)                       // nums
-                        + sizeof(int) + sizeof(int)           // numBuffers, treeLen
+    toReturn += num_buffers*trees_per_buffer * sizeof(int)     //tree pointers
+              + num_buffers*(sizeof(ushort) + sizeof(ushort2)) //blocks in buffers and mem ptrs
+              + sizeof(long)                                   // this number
+              + 3*sizeof(int)                                  // init level, max level, max_mb
+              + 4*sizeof(double)                               // dims
+              + 4*sizeof(int)                                  // nums
+              + sizeof(int) + sizeof(int)                      // numBuffers, treeLen
     ;
   }
   return toReturn;
