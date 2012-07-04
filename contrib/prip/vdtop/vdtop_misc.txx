@@ -540,10 +540,11 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
   nb_darts=nb_vertices=0 ;
 
   // Sets the links
-  vdtop_8_neighborhood_mask* planeM=mask.top_left_ptr() ;
+  const vdtop_8_neighborhood_mask* planeM=mask.top_left_ptr() ;
   planeM += plane*pstepM ;
   {
-    vdtop_8_neighborhood_mask* rowM   = planeM, *current_mask;
+    const vdtop_8_neighborhood_mask* rowM   = planeM;
+    vdtop_8_neighborhood_mask* current_mask;
 
     for (unsigned j=0;j<nj;j++,rowM+=jstepM)
     {
