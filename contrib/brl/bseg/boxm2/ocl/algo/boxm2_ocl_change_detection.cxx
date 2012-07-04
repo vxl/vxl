@@ -183,16 +183,16 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   change_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //bocl_mem_sptr change_exp_image=new bocl_mem(device->context(),change_exp_image_buff,cl_ni*cl_nj*sizeof(float),"change exp image buffer");
-  bocl_mem_sptr change_exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), change_exp_image_buff, "change exp image buffer"); 
+  bocl_mem_sptr change_exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), change_exp_image_buff, "change exp image buffer");
   change_exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
-  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer"); 
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
-  int img_dim_buff[] = { 0, 0, img_view->ni(), img_view->nj() };
-  bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
+  unsigned int img_dim_buff[] = { 0, 0, img_view->ni(), img_view->nj() };
+  bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(unsigned int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Output Array
@@ -349,7 +349,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
           kern->set_arg( oj_mem.ptr() );    //offset j
           //kern->set_arg( persp_cam.ptr() );
           kern->set_arg( ray_o_buff.ptr() );
-          kern->set_arg( ray_d_buff.ptr() );  
+          kern->set_arg( ray_d_buff.ptr() );
           kern->set_arg( in_image.ptr() );
           kern->set_arg( exp_image.ptr() );
           kern->set_arg( nxn_change.ptr() );        //pass two change image
@@ -460,7 +460,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   delete [] vis_buff;
   delete [] exp_image_buff;
   delete [] input_buff;
-  opencl_cache->unref_mem(in_image.ptr()); 
+  opencl_cache->unref_mem(in_image.ptr());
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(exp_image.ptr());
   opencl_cache->unref_mem(change_image.ptr());
@@ -710,7 +710,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
   unsigned cl_nj    = RoundUp(img_view->nj(),local_threads[1]);
   global_threads[0] = cl_ni;
   global_threads[1] = cl_nj;
-  
+
   //set generic cam
   cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
@@ -720,21 +720,21 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
 
   //prepare image buffers (cpu)
   float* vis_buff               = new float[cl_ni*cl_nj];
-  float* true_vis               = new float[cl_ni*cl_nj]; 
+  float* true_vis               = new float[cl_ni*cl_nj];
   float* exp_image_buff         = new float[cl_ni*cl_nj];
   float* change_image_buff      = new float[cl_ni*cl_nj];
   float* change_exp_image_buff  = new float[cl_ni*cl_nj];
   float* input_buff             = new float[cl_ni*cl_nj];
-  float* max_background_buff    = new float[cl_ni*cl_nj]; 
+  float* max_background_buff    = new float[cl_ni*cl_nj];
   float* min_prob_exp_buff      = new float[cl_ni*cl_nj];
-  vxl_byte* mask_buff           = new vxl_byte[cl_ni*cl_nj];  
+  vxl_byte* mask_buff           = new vxl_byte[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) {
     vis_buff[i]              = 1.0f;
     change_image_buff[i]     = 0.0f;
     change_exp_image_buff[i] = 0.0f;
-    max_background_buff[i]   = 0.0f; 
-    min_prob_exp_buff[i]     = 1.0f; 
-    mask_buff[i]             = (vxl_byte) 1; 
+    max_background_buff[i]   = 0.0f;
+    min_prob_exp_buff[i]     = 1.0f;
+    mask_buff[i]             = (vxl_byte) 1;
   }
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
@@ -748,7 +748,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
       ++count;
     }
   }
-  
+
   //prepare image buffers (GPU)
   bocl_mem_sptr in_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), input_buff, "input image buffer");
   in_image->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -762,11 +762,11 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
   change_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //bocl_mem_sptr change_exp_image=new bocl_mem(device->context(),change_exp_image_buff,cl_ni*cl_nj*sizeof(float),"change exp image buffer");
-  bocl_mem_sptr change_exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), change_exp_image_buff, "change exp image buffer"); 
+  bocl_mem_sptr change_exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), change_exp_image_buff, "change exp image buffer");
   change_exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
-  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer"); 
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //bocl_mem_sptr mask_image = new bocl_mem(device->context(),mask_buff,cl_ni*cl_nj*sizeof(vxl_byte),"change mask image buffer");
@@ -774,12 +774,12 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
   mask_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
-  int img_dim_buff[] = { 0, 0, img_view->ni(), img_view->nj() };
-  bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
+  unsigned int img_dim_buff[] = { 0, 0, img_view->ni(), img_view->nj() };
+  bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(unsigned int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Output Array
-  float* output_arr = new float[cl_ni*cl_nj]; 
+  float* output_arr = new float[cl_ni*cl_nj];
   bocl_mem_sptr cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*cl_ni*cl_nj, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -794,22 +794,22 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
   //----------------------------------------------------------------------------
   //--- order offsets so you do 0,0 first -----
   int half = n/2;
-  vcl_vector<int> ois; ois.push_back(0); 
-  vcl_vector<int> ojs; ojs.push_back(0); 
+  vcl_vector<int> ois; ois.push_back(0);
+  vcl_vector<int> ojs; ojs.push_back(0);
   for (int o=-half; o<=half; ++o) {
-    if(o==0) continue;
-    ois.push_back(o); 
-    ojs.push_back(o); 
+    if (o==0) continue;
+    ois.push_back(o);
+    ojs.push_back(o);
   }
-  
+
   //iterate over offsets i, offsets j
   for (int offi=0; offi<ois.size(); ++offi)
   {
     for (int offj=0; offj<ojs.size(); ++offj)
     {
-      int oi = ois[offi]; 
-      int oj = ojs[offj]; 
-      vcl_cout<<"CHANGE OFFSET ("<<oi<<","<<oj<<")"<<vcl_endl;
+      int oi = ois[offi];
+      int oj = ojs[offj];
+      vcl_cout<<"CHANGE OFFSET ("<<oi<<','<<oj<<')'<<vcl_endl;
       bocl_mem_sptr oi_mem = new bocl_mem(device->context(), &oi, sizeof(int),"offset i buffer");
       bocl_mem_sptr oj_mem = new bocl_mem(device->context(), &oj, sizeof(int),"offset j buffer");
       oi_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -819,7 +819,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
       //For each ID in the visibility order, grab that block
       vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( cam );
       vcl_vector<boxm2_block_id>::iterator id;
-      vcl_cout<<"  STEP ONE "<<vcl_endl;
+      vcl_cout<<"  STEP ONE"<<vcl_endl;
       for (id = vis_order.begin(); id != vis_order.end(); ++id)
       {
         //choose correct render kernel
@@ -831,12 +831,12 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
         bocl_mem* blk       = opencl_cache->get_block(*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-        
+
         // aux buffers (determine length first)
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
-        blk_info->write_to_buffer(queue);    
+        blk_info->write_to_buffer(queue);
         int auxTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
         bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
         auxTypeSize     = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
@@ -845,15 +845,15 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
 
         //3. SET args
         kern->set_arg( blk_info );
-        kern->set_arg( oi_mem.ptr() ); 
-        kern->set_arg( oj_mem.ptr() ); 
+        kern->set_arg( oi_mem.ptr() );
+        kern->set_arg( oj_mem.ptr() );
         kern->set_arg( blk );
         kern->set_arg( alpha );
-        kern->set_arg( aux0 ); 
-        kern->set_arg( aux1 ); 
-        kern->set_arg( lookup.ptr() ); 
-        kern->set_arg( ray_o_buff.ptr() ); 
-        kern->set_arg( ray_d_buff.ptr() ); 
+        kern->set_arg( aux0 );
+        kern->set_arg( aux1 );
+        kern->set_arg( lookup.ptr() );
+        kern->set_arg( ray_o_buff.ptr() );
+        kern->set_arg( ray_d_buff.ptr() );
         kern->set_arg( img_dim.ptr());
         kern->set_arg( in_image.ptr() );
         kern->set_arg( cl_output.ptr() );
@@ -870,7 +870,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
       }
-      
+
       //----- STEP TWO: prob background pas --------
       vcl_cout<<"  STEP TWO CHANGE PASS"<<vcl_endl;
       for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -885,12 +885,12 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
         bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
-        
+
         // aux buffers (determine length first)
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
-        blk_info->write_to_buffer((queue));    
+        blk_info->write_to_buffer((queue));
         int auxTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
         bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
         auxTypeSize     = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
@@ -898,16 +898,16 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
         transfer_time += (float) transfer.all();
 
         //3. SET args
-        kern->set_arg( blk_info ); 
-        kern->set_arg( oi_mem.ptr() ); 
-        kern->set_arg( oj_mem.ptr() ); 
+        kern->set_arg( blk_info );
+        kern->set_arg( oi_mem.ptr() );
+        kern->set_arg( oj_mem.ptr() );
         kern->set_arg( blk );
         kern->set_arg( alpha );
         kern->set_arg( mog );
-        kern->set_arg( aux0 ); 
-        kern->set_arg( aux1 ); 
-        kern->set_arg( ray_o_buff.ptr() ); 
-        kern->set_arg( ray_d_buff.ptr() );     
+        kern->set_arg( aux0 );
+        kern->set_arg( aux1 );
+        kern->set_arg( ray_o_buff.ptr() );
+        kern->set_arg( ray_d_buff.ptr() );
         kern->set_arg( in_image.ptr() );
         kern->set_arg( exp_image.ptr() );
         kern->set_arg( change_image.ptr() );
@@ -916,7 +916,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
         kern->set_arg( cl_output.ptr() );
         kern->set_arg( lookup.ptr() );
         kern->set_arg( vis_image.ptr() );
-        
+
         //local tree , cumsum buffer, imindex buffer
         kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
         kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
@@ -933,33 +933,33 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
       change_image->read_to_buffer(queue);
       change_exp_image->read_to_buffer(queue);
       vis_image->read_to_buffer(queue);
-     
+
       //----- STEP THREE: choose pixel-wise max background----
       // choose max change, min ray prob pixels
       for (unsigned int i=0; i<cl_ni*cl_nj; ++i) {
-        if(change_image_buff[i] > max_background_buff[i])
-          max_background_buff[i] = change_image_buff[i]; 
-        if(change_exp_image_buff[i] < min_prob_exp_buff[i])
-          min_prob_exp_buff[i] = change_exp_image_buff[i]; 
+        if (change_image_buff[i] > max_background_buff[i])
+          max_background_buff[i] = change_image_buff[i];
+        if (change_exp_image_buff[i] < min_prob_exp_buff[i])
+          min_prob_exp_buff[i] = change_exp_image_buff[i];
       }
-      
+
       //----- store true vis -----
-      if(oi==0 && oj==0)
-        for(unsigned i=0; i<cl_ni*cl_nj; ++i) 
-          true_vis[i] = vis_buff[i]; 
-          
+      if (oi==0 && oj==0)
+        for (unsigned i=0; i<cl_ni*cl_nj; ++i)
+          true_vis[i] = vis_buff[i];
+
       //----- update mask image ------
-      for(int i=0; i<cl_ni*cl_nj; ++i) {
-        if(mask_buff[i]) {
+      for (int i=0; i<cl_ni*cl_nj; ++i) {
+        if (mask_buff[i]) {
           float change      = max_background_buff[count];
           float vis         = true_vis[count];
           float prob_change = 1.0f / (1.0f + change+vis);
-          if(prob_change < PROB_THRESH)
-            mask_buff[i] = (vxl_byte) 0; 
+          if (prob_change < PROB_THRESH)
+            mask_buff[i] = (vxl_byte) 0;
         }
       }
-      mask_image->write_to_buffer(queue); 
-    
+      mask_image->write_to_buffer(queue);
+
       //----------------------------------------------------------------------------
       // ZERO OUT auxiliary data, reset vis and change buffers
       //----------------------------------------------------------------------------
@@ -967,33 +967,33 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
         //choose correct render kernel
         bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(*id);
         bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(*id);
-        aux0->zero_gpu_buffer(queue); 
-        aux1->zero_gpu_buffer(queue); 
+        aux0->zero_gpu_buffer(queue);
+        aux1->zero_gpu_buffer(queue);
       }
       for (unsigned i=0;i<cl_ni*cl_nj; ++i) {
         vis_buff[i]              = 1.0f;
         change_image_buff[i]     = 0.0f;
         change_exp_image_buff[i] = 0.0f;
       }
-      vis_image->write_to_buffer(queue); 
-      change_image->write_to_buffer(queue); 
-      change_exp_image->write_to_buffer(queue); 
+      vis_image->write_to_buffer(queue);
+      change_image->write_to_buffer(queue);
+      change_exp_image->write_to_buffer(queue);
     }
   }
-  
+
   //set change and change exp to max/min buffs
-  for(unsigned i=0; i<cl_ni*cl_nj; ++i) {
-    change_image_buff[i] = max_background_buff[i]; 
-    change_exp_image_buff[i] = min_prob_exp_buff[i]; 
+  for (unsigned i=0; i<cl_ni*cl_nj; ++i) {
+    change_image_buff[i] = max_background_buff[i];
+    change_exp_image_buff[i] = min_prob_exp_buff[i];
   }
-  change_image->write_to_buffer(queue); 
-  change_exp_image->write_to_buffer(queue); 
-  
+  change_image->write_to_buffer(queue);
+  change_exp_image->write_to_buffer(queue);
+
 #if 1
-  vil_image_view<float> pre_norm(cl_ni,cl_nj); 
-  int c=0; 
-  for(int j=0; j<cl_nj; ++j)
-    for(int i=0; i<cl_ni; ++i)
+  vil_image_view<float> pre_norm(cl_ni,cl_nj);
+  int c=0;
+  for (int j=0; j<cl_nj; ++j)
+    for (int i=0; i<cl_ni; ++i)
       pre_norm(i,j) = change_exp_image_buff[c++];
   vil_save(pre_norm, "change_exp_image.tiff");
 #endif
@@ -1007,10 +1007,10 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
     int rbelief_buff[1] = {1};
     bocl_mem_sptr rbelief = new bocl_mem(device->context(), rbelief_buff, sizeof(int), "rbelief buffer");
     rbelief->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    
+
     //true vis buff
-    bocl_mem_sptr vis_two = new bocl_mem(device->context(), true_vis, sizeof(float)*cl_ni*cl_nj, "oi=0,oj=0 visibility"); 
-    vis_two->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+    bocl_mem_sptr vis_two = new bocl_mem(device->context(), true_vis, sizeof(float)*cl_ni*cl_nj, "oi=0,oj=0 visibility");
+    vis_two->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     normalize_change_kernel->set_arg( change_image.ptr() );
     normalize_change_kernel->set_arg( change_exp_image.ptr() );
@@ -1038,16 +1038,16 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
 
   //cleanup the image buffers
   delete [] vis_buff;
-  delete [] true_vis; 
+  delete [] true_vis;
   delete [] exp_image_buff;
   delete [] input_buff;
   delete [] output_arr;
   delete [] change_image_buff;
-  delete [] change_exp_image_buff; 
-  delete [] max_background_buff; 
-  delete [] min_prob_exp_buff; 
-  delete [] mask_buff; 
-  opencl_cache->unref_mem(in_image.ptr()); 
+  delete [] change_exp_image_buff;
+  delete [] max_background_buff;
+  delete [] min_prob_exp_buff;
+  delete [] mask_buff;
+  opencl_cache->unref_mem(in_image.ptr());
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(exp_image.ptr());
   opencl_cache->unref_mem(change_image.ptr());
@@ -1082,24 +1082,24 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //pass one, seglen
-  vcl_string seg_options = opts + " -D CHANGE_SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) "; 
+  vcl_string seg_options = opts + " -D CHANGE_SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
   bocl_kernel* seg_len = new bocl_kernel();
   seg_len->create_kernel( &device->context(),
-                           device->device_id(),
-                           src_paths,
-                           "change_seg_len",   //kernel name
-                           seg_options,              //options
-                           "boxm2 change seg len (pass 1)"); //kernel identifier (for error checking)
+                          device->device_id(),
+                          src_paths,
+                          "change_seg_len",   //kernel name
+                          seg_options,              //options
+                          "boxm2 change seg len (pass 1)"); //kernel identifier (for error checking)
 
   //pass two, change detection
-  vcl_string change_options = opts + " -D CHANGE -D STEP_CELL=step_cell_change(aux_args,data_ptr,llid,d) "; 
+  vcl_string change_options = opts + " -D CHANGE -D STEP_CELL=step_cell_change(aux_args,data_ptr,llid,d) ";
   bocl_kernel* change_kernel = new bocl_kernel();
   change_kernel->create_kernel( &device->context(),
-                                 device->device_id(),
-                                 src_paths,
-                                 "two_pass_change_kernel",   //kernel name
-                                 change_options,              //options
-                                 "boxm2 two pass change kernel (pass 2)"); //kernel identifier (for error checking)
+                                device->device_id(),
+                                src_paths,
+                                "two_pass_change_kernel",   //kernel name
+                                change_options,              //options
+                                "boxm2 two pass change kernel (pass 2)"); //kernel identifier (for error checking)
 
   //create nxn kernel
   //vcl_stringstream pthresh;
@@ -1123,7 +1123,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
                                           device->device_id(),
                                           norm_src_paths,
                                           "normalize_change_kernel",   //kernel name
-                                           norm_opts,              //options
+                                          norm_opts,                   //options
                                           "normalize change detection kernel"); //kernel identifier (for error checking)
 
   //store in a vector in the map and return

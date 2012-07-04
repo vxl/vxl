@@ -146,9 +146,9 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
     // TOFIX:::note that this for fixed grid.
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
 
-    int numtrees = info_buffer->scene_dims[0]*
-                   info_buffer->scene_dims[1]*
-                   info_buffer->scene_dims[2];
+    vcl_size_t numtrees = info_buffer->scene_dims[0]*
+                          info_buffer->scene_dims[1]*
+                          info_buffer->scene_dims[2];
     vcl_size_t gThreads[] = {numtrees,1};
     //execute kernel
     kern->execute(queue, 2, lThreads, gThreads);

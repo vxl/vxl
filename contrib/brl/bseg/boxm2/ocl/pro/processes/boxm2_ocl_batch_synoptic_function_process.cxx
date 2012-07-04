@@ -212,7 +212,7 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
     kern->set_local_arg(1*sizeof(int));
 
     vcl_size_t lThreads[] = {8, 8};
-    vcl_size_t gThreads[] = {datasize*8,8};
+    vcl_size_t gThreads[] = {static_cast<vcl_size_t>(datasize*8),8};
     kern->execute(queue, 2, lThreads, gThreads);
 
     clFinish(queue);

@@ -94,7 +94,7 @@ bool boxm2_ocl_render_expected_height_map_process_cons(bprb_func_process& pro)
   output_types_[2] = "vil_image_view_base_sptr";
   output_types_[3] = "vil_image_view_base_sptr";
   output_types_[4] = "vil_image_view_base_sptr";
-  output_types_[5] = "vil_image_view_base_sptr"; 
+  output_types_[5] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -141,7 +141,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
-  
+
   //get x and y size from scene
   vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();// (vpgl_perspective_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
@@ -200,13 +200,13 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   for (unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
   float* prob_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) prob_buff[i]=0.0f;
-  float* app_buff = new float[cl_ni*cl_nj]; 
+  float* app_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) app_buff[i]=0.0f;
 
   //new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"height (z) buffer ");
-  bocl_mem_sptr exp_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),buff,"height (z) buffer "); 
+  bocl_mem_sptr exp_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),buff,"height (z) buffer ");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
+
   //new bocl_mem(device->context(),var_buff,cl_ni*cl_nj*sizeof(float),"var image buffer");
   bocl_mem_sptr var_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),var_buff, "var image buffer");
   var_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -215,7 +215,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff, "vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");   
+  //new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
   bocl_mem_sptr prob_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),prob_buff, "vis x omega image buffer");
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -224,8 +224,8 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   app_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
-  int img_dim_buff[4] = {0,0,ni,nj};
-  bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
+  unsigned int img_dim_buff[4] = {0,0,ni,nj};
+  bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(unsigned int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Output Array
@@ -255,7 +255,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     vul_timer transfer;
     bocl_mem* blk           = opencl_cache->get_block(*id);
     bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-    bocl_mem* mog           = opencl_cache->get_data(*id, mog_type); 
+    bocl_mem* mog           = opencl_cache->get_data(*id, mog_type);
     bocl_mem * blk_info     = opencl_cache->loaded_block_info();
     transfer_time          += (float) transfer.all();
 
@@ -267,8 +267,8 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     kern->set_arg( scene_origin_mem.ptr());
     kern->set_arg( blk );
     kern->set_arg( alpha );
-    kern->set_arg( mog ); 
-    kern->set_arg( app_image.ptr() ); 
+    kern->set_arg( mog );
+    kern->set_arg( app_image.ptr() );
     kern->set_arg( exp_image.ptr() );
     kern->set_arg( var_image.ptr() );
     kern->set_arg( exp_img_dim.ptr());
@@ -309,7 +309,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     var_image->read_to_buffer(queue);
     vis_image->read_to_buffer(queue);
     prob_image->read_to_buffer(queue);
-    app_image->read_to_buffer(queue); 
+    app_image->read_to_buffer(queue);
   }
 
   clReleaseCommandQueue(queue);
@@ -329,7 +329,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
         (*xcoord_img)(r,c)  = r*xint+scene_origin[0];
         (*ycoord_img)(r,c)  = c*yint+scene_origin[1];
         (*prob_img)(r,c)    = prob_buff[c*cl_ni+r];
-        (*app_img)(r,c)     = app_buff[c*cl_ni+r]; 
+        (*app_img)(r,c)     = app_buff[c*cl_ni+r];
     }
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
@@ -338,15 +338,15 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(i++, ycoord_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, prob_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, app_img);
-  delete[] buff; 
-  delete[] var_buff; 
-  delete[] vis_buff; 
-  delete[] prob_buff; 
-  delete[] app_buff; 
-  opencl_cache->unref_mem(exp_image.ptr()); 
-  opencl_cache->unref_mem(var_image.ptr()); 
-  opencl_cache->unref_mem(vis_image.ptr()); 
-  opencl_cache->unref_mem(prob_image.ptr()); 
-  opencl_cache->unref_mem(app_image.ptr()); 
+  delete[] buff;
+  delete[] var_buff;
+  delete[] vis_buff;
+  delete[] prob_buff;
+  delete[] app_buff;
+  opencl_cache->unref_mem(exp_image.ptr());
+  opencl_cache->unref_mem(var_image.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(prob_image.ptr());
+  opencl_cache->unref_mem(app_image.ptr());
   return true;
 }

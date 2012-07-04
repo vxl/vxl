@@ -51,11 +51,11 @@ namespace boxm2_ocl_adaptive_cone_render_expected_process_globals
     src_paths.push_back(source_dir + "cone/render_adaptive_cone_kernels.cl");
     src_paths.push_back(source_dir + "cone/cone_util.cl");
     src_paths.push_back(source_dir + "cone/cast_adaptive_cone_ray.cl");
-    
+
     //set kernel options
     opts += " -D STEP_CELL=step_cell_cone(aux_args,data_ptr,intersect_volume) ";
     opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args) ";
-    opts += " -D RENDER "; 
+    opts += " -D RENDER ";
     opts += " -D IMG_TYPE=float ";
 
     //have kernel construct itself using the context and device
@@ -176,8 +176,8 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
   ray_level_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //write image dims (real img dims, not ni, nj)
-  int img_dim_buff[] = {0, 0, ni, nj};
-  bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
+  unsigned int img_dim_buff[] = {0, 0, ni, nj};
+  bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(unsigned int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
@@ -202,22 +202,22 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
   vis_image->read_to_buffer(queue);
   ray_level_image->read_to_buffer(queue);
   clFinish(queue);
-  int idx = 0; 
+  int idx = 0;
   vil_image_view<float> * vis_view=new vil_image_view<float>(cl_ni,cl_nj);
 
   for (unsigned c=0;c<cl_nj;++c) {
-      for (unsigned r=0;r<cl_ni;++r) {
-          float vis = vis_buff[idx];
-          if(ray_level_buff[idx] < 4) 
-          {
-              float pow_factor =vcl_pow(0.25f,(float) (4-ray_level_buff[idx]));
-              vis =vcl_pow(vis,pow_factor);
-          }
-          (*vis_view)(r,c) = vis;
-          idx++; 
+    for (unsigned r=0;r<cl_ni;++r) {
+      float vis = vis_buff[idx];
+      if (ray_level_buff[idx] < 4)
+      {
+        float pow_factor =vcl_pow(0.25f,(float) (4-ray_level_buff[idx]));
+        vis =vcl_pow(vis,pow_factor);
       }
+      (*vis_view)(r,c) = vis;
+      idx++;
+    }
   }
-  //vil_save( vis_view, "vis_render_debug.tiff"); 
+  //vil_save( vis_view, "vis_render_debug.tiff");
   //vil_save( *exp_img_out, "exp_render_debug.tiff");
 #endif
 

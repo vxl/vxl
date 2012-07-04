@@ -21,7 +21,7 @@
 #include <bocl/bocl_kernel.h>
 #include <vul/vul_timer.h>
 #include <vcl_algorithm.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
 
 //: Declare kernels
 vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_paint_online::kernels_;
@@ -128,9 +128,9 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
-  int img_dim_buff[4]={0,0,img_view->ni(),img_view->nj()};
+  unsigned int img_dim_buff[4]={0,0,img_view->ni(),img_view->nj()};
 
-  bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
+  bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(unsigned int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Output Array

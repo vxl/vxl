@@ -48,7 +48,7 @@ namespace boxm2_ocl_render_cone_expected_image_process_globals
     src_paths.push_back(source_dir + "cone/render_expected_cone.cl");
     src_paths.push_back(source_dir + "cone/cone_util.cl");
     src_paths.push_back(source_dir + "cone/cast_cone_ray.cl");
-    
+
 
     //set kernel options
     vcl_string options = " -D STEP_CELL=step_cell_cone(aux_args,data_ptr,intersect_volume) ";
@@ -171,8 +171,8 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
   ray_level_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //write image dims (real img dims, not ni, nj)
-  int img_dim_buff[] = {0, 0, ni, nj};
-  bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
+  unsigned int img_dim_buff[] = {0, 0, ni, nj};
+  bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(unsigned int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image

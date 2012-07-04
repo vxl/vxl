@@ -58,7 +58,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process_cons(bprb_func_process&
    //process takes 5 inputs, no output
    // 0) opencl device
    // 1) boxm2 scene
-   // 2) opencl cache 
+   // 2) opencl cache
    // 3) name of text file containing list of image ids
    // 4) name of text file containing list of image_metadata files
    // 5) name of text file containing list of atmospheric_parameters files
@@ -100,7 +100,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
 
    vcl_ifstream id_list_ifs(id_list_fname.c_str());
    if (!id_list_ifs.good()) {
-      vcl_cerr << "ERROR reading: " << id_list_fname << vcl_endl;
+      vcl_cerr << "ERROR reading: " << id_list_fname << '\n';
       return false;
    }
    while (!id_list_ifs.eof()) {
@@ -114,7 +114,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
 
    vcl_ifstream md_list_ifs(md_list_fname.c_str());
    if (!md_list_ifs.good()) {
-      vcl_cerr << "ERROR reading: " << md_list_fname << vcl_endl;
+      vcl_cerr << "ERROR reading: " << md_list_fname << '\n';
       return false;
    }
    while (!md_list_ifs.eof()) {
@@ -122,11 +122,11 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
       md_list_ifs >> filename;
       if (filename.length() == 0)
          continue;
-      vcl_cout << "metadata filename = <" << filename << ">" <<  vcl_endl;
+      vcl_cout << "metadata filename = <" << filename << '>' <<  vcl_endl;
       brad_image_metadata md;
       vcl_ifstream md_ifs(filename.c_str());
       if (!md_ifs.good()) {
-         vcl_cerr << "ERROR reading image_metadata file: " << filename << vcl_endl;
+         vcl_cerr << "ERROR reading image_metadata file: " << filename << '\n';
          return false;
       }
       md_ifs >> md;
@@ -136,7 +136,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
 
    vcl_ifstream atm_list_ifs(atm_list_fname.c_str());
    if (!atm_list_ifs.good()) {
-      vcl_cerr << "ERROR reading: " << atm_list_fname << vcl_endl;
+      vcl_cerr << "ERROR reading: " << atm_list_fname << '\n';
       return false;
    }
    while (!atm_list_ifs.eof()) {
@@ -144,11 +144,11 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
       atm_list_ifs >> filename;
       if (filename.length() == 0)
          continue;
-      vcl_cout << "atmospheric_params filename = <" << filename << ">" <<  vcl_endl;
+      vcl_cout << "atmospheric_params filename = <" << filename << '>' <<  vcl_endl;
       brad_atmospheric_parameters atm;
       vcl_ifstream atm_ifs(filename.c_str());
       if (!atm_ifs.good()) {
-         vcl_cerr << "ERROR reading atmospheric_parameters file: " << filename << vcl_endl;
+         vcl_cerr << "ERROR reading atmospheric_parameters file: " << filename << '\n';
          return false;
       }
       atm_ifs >> atm;
@@ -159,11 +159,11 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    // sanity check
    unsigned int num_images = image_ids.size();
    if (atm_params.size() != num_images) {
-      vcl_cerr << "ERROR: atmospheric params and image id list are different length" << vcl_endl;
+      vcl_cerr << "ERROR: atmospheric params and image id list are different length" << '\n';
       return false;
    }
    if (metadata.size() != num_images) {
-      vcl_cerr << "ERROR: metadata and image id list are different length" << vcl_endl;
+      vcl_cerr << "ERROR: metadata and image id list are different length" << '\n';
       return false;
    }
 
@@ -179,7 +179,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    unsigned int num_normals = normals.size();
    // opencl code depends on 16 normal directions
    if (num_normals != 16) {
-      vcl_cerr << "ERROR: boxm2_ocl_batch_compute_normal_albedo_array_process: expecting 16 normals, got " << num_normals << vcl_endl;
+      vcl_cerr << "ERROR: boxm2_ocl_batch_compute_normal_albedo_array_process: expecting 16 normals, got " << num_normals << '\n';
       return false;
    }
    // compute offsets and scales for linear radiance model
@@ -233,8 +233,8 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    // create a command queue.
    int status=0;
    cl_command_queue queue = clCreateCommandQueue(device->context(),
-                                                *(device->device_id()),
-                                                CL_QUEUE_PROFILING_ENABLE,&status);
+                                                 *(device->device_id()),
+                                                 CL_QUEUE_PROFILING_ENABLE,&status);
    if (status!=0) return false;
    // compile the kernel
    if (kernels.find((device->device_id()))==kernels.end())
@@ -266,13 +266,13 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
       //boxm2_block_metadata block_mdata = scene->get_block_metadata(*id);
       str_blk_cache.init(*id);
 
-      int num_cells = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
+      vcl_size_t num_cells = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
 
-      cl_int num_cells_buff = num_cells;
+      cl_int num_cells_buff = (cl_int)num_cells;
       bocl_mem_sptr num_cells_ocl = new bocl_mem(device->context(), &num_cells_buff, sizeof(cl_int), "num cells buffer");
       num_cells_ocl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-      vcl_string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix(); 
+      vcl_string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
       int appTypeSize = (int)boxm2_data_info::datasize(data_type);
       bocl_mem* naa_apm   = opencl_cache->get_data(*id,data_type,num_cells*appTypeSize, true);
 
