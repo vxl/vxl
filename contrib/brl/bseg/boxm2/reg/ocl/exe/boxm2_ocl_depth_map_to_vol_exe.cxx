@@ -120,9 +120,16 @@ int main(int argc,  char** argv)
 			{	
 					x[0]=  cam_center.x() + xinc;
 					x[1]=  cam_center.y() + yinc;
-					double mi = -func.f(x);
-				
-					output((xinc+1200)/50,(yinc+200)/50) = mi;
+					double maxmi = 0.0;
+					// angles 
+					for (unsigned int k = 0; k < 1; k++)
+					{
+						x[5] = vnl_math::pi/2 * ( double ) k ;					
+						double mi = -func.f(x);
+						if ( maxmi < mi ) 
+							maxmi = mi;
+					}
+					output((xinc+1200)/50,(yinc+200)/50) = maxmi;
 		
 			}
 			vcl_cout<<".";
