@@ -16,6 +16,7 @@ bool boxm2_ocl_register_world(boxm2_opencl_cache_sptr& cacheA,
                               vgl_vector_3d<double> tx,
                               int nbins,
                               bocl_device_sptr device,
+							  bocl_kernel * kern,
                               float & mi);
 
 #endif // boxm2_ocl_reg_mutual_info_h

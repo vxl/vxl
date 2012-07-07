@@ -19,8 +19,12 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_powell.h>
+#include <vnl/algo/vnl_levenberg_marquardt.h>
+#include <vnl/vnl_matrix_fixed.h>
 
 #include <vcl_iostream.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
 
 struct ltstr
 {
@@ -61,18 +65,48 @@ int main(int argc,  char** argv)
 
   boxm2_ocl_reg_minfo_func func(opencl_cacheA,cacheB,device,20);
 
+#if 1
   vnl_powell powell(&func);
   vnl_vector<double> x(6,0.0);
+  powell.set_x_tolerance(1e-1);	
+  powell.set_max_function_evals(10);
   vul_timer t ;
   t.mark();
   powell.minimize(x);
-  vcl_cout<<"Solution is "<< x<<'\n'
-          <<"Time Taken is "<<t.all()<<vcl_endl;
-  vgl_rotation_3d<double> r(x[3],x[4],x[5]);
-  vcl_cout<<"Translation is ("<<x[0]<<','<<x[1]<<','<<x[2]<<')'<<'\n'
-          <<"Rotation is "<<r.angle()<<" angles about "<<r.axis()<<'\n'
-          <<"Initial Mutual Info "<<func.mutual_info(vgl_rotation_3d<double>(),vgl_vector_3d<double>())<<'\n'
-          <<"Final Mutual Info "<<func.mutual_info(r,vgl_vector_3d<double>(x[0],x[1],x[2]))<<vcl_endl;
 
+  vcl_cout<<"Time Taken is "<<t.all()<<vcl_endl;
+  vgl_rotation_3d<double> r(x[3],x[4],x[5]);
+  vcl_cout<<" B to A "<<vcl_endl;
+  vcl_cout<<"Translation is ("<<x[0]<<","<<x[1]<<","<<x[2]<<")"<<vcl_endl;
+  vcl_cout<<"Rotation is "<<r.as_matrix()<<vcl_endl;
+
+  vcl_cout<<"Initial Mutual Info "<<func.mutual_info(vgl_rotation_3d<double>(),vgl_vector_3d<double>())<<vcl_endl;
+  vcl_cout<<"Final Mutual Info "<<func.mutual_info(r,vgl_vector_3d<double>(x[0],x[1],x[2]))<<vcl_endl;
+#endif 
+
+#if 0 
+  int numsamples  = 20; 
+  float var1_range  = 0.5;
+  float var2_range  = 0.5;
+  
+  vil_image_view<float> mi(numsamples,numsamples);
+  mi.fill(0.0);
+  vnl_vector<double> x(6,0.0);
+ 
+  float var1_inc = 2* var1_range / ( (float) numsamples );
+  float var2_inc = 2* var2_range / ( (float) numsamples );
+  for(unsigned i = 0 ; i <numsamples; i++)
+  {
+	  vcl_cout<<".";
+	  for(unsigned j = 0 ; j <numsamples; j++)
+	  {
+		  x[3] = -var1_range + (float)i * var1_inc;
+		  x[4] = -var2_range + (float)j * var2_inc;
+		   vgl_rotation_3d<double> r(x[3],x[4],x[5]);
+		  mi(i,j) = func.mutual_info(r,vgl_vector_3d<double>(x[0],x[1],x[2]));
+	  }
+  }
+  vil_save(mi,"e:/data/LIDAR/theta1theta2.tiff");
+  #endif
   return 0;
 }
