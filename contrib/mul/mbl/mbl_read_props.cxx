@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cctype.h>
+#include <vcl_utility.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
@@ -148,7 +149,20 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
         }
 
         strip_trailing_ws(str1);
-        props[label] = str1;
+
+        mbl_read_props_type::iterator it = props.lower_bound(label);
+
+        if (it != props.end() && it->first == label)
+        {
+          mbl_exception_warning(
+            mbl_exception_read_props_parse_error( vcl_string(
+              "Found second entry with label \"") + label + '"' ) );
+          afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+          return props;
+        }
+
+
+        props.insert(it, vcl_make_pair(label, str1));
         last_label = label;
       }
       else if ( label.substr(0,1) == "{" )
@@ -194,6 +208,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
             mbl_exception_read_props_parse_error( vcl_string(
               "Could not find colon ':' separator while reading line ")
               + label + " " + str1) );
+          afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
           return props;
         }
       }
@@ -205,11 +220,14 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
   while ( !afs.eof() );
 
   if ( need_closing_brace && label != "}" )
+  {
     mbl_exception_warning(
       mbl_exception_read_props_parse_error( vcl_string(
         "Unexpected end of file while "
         "looking for '}'. Last read string = \"")
         + label +'"') );
+    afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+  }
 
   return props;
 }

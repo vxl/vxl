@@ -74,9 +74,17 @@ void test_read_props1()
   {
     vcl_cout << "\nCase 6\n";
     vcl_istringstream ss("{\n  // comment\n a: a\n a: b\n }");
-    mbl_read_props_type props = mbl_read_props( ss );
-    mbl_read_props_print(vcl_cout, props);
-    TEST("Case 6: props[ \"a\" ] == \"b\"", props["a"]=="b" && !ss.fail(), true);
+    bool caught_exception = false;
+    try
+    {
+      mbl_read_props_type props = mbl_read_props( ss );
+      mbl_read_props_print(vcl_cout, props);
+    }
+    catch (...)
+    {
+      caught_exception = true;
+    }
+    TEST("Case 6: Caught double props exception", caught_exception, true);
   }
 
   {
