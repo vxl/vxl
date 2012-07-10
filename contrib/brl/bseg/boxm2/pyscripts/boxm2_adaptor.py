@@ -407,10 +407,8 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
-    (id,type) = boxm2_batch.commit_output(1);
-    vis_image = dbvalue(id,type);
 
-    return exp_image,vis_image; 
+    return exp_image;
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
  
