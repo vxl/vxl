@@ -158,6 +158,36 @@ bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) //
   }
 }
 
+//: returns true if in geographic coords, linear units are in meters and angular units are in degrees
+bool vil_geotiff_header::GCS_WGS84_MET_DEG()
+{
+  modeltype_t type;
+  if (gtif_modeltype(type) && type == ModelTypeGeographic) {
+    void *value; int size; int length; tagtype_t ttype;
+    
+    get_key_value(GeogLinearUnitsGeoKey, &value, size, length, ttype);
+    assert ((length == 1) && (ttype == TYPE_SHORT));
+    short *val = static_cast<short*> (value);
+
+    if (*val != Linear_Meter) {
+      vcl_cerr << "Linear units are not in Meters!\n";
+      return false;
+    }
+
+    get_key_value(GeogAngularUnitsGeoKey, &value, size, length, ttype);
+    assert ((length == 1) && (ttype == TYPE_SHORT));
+    val = static_cast<short*> (value);
+
+    if (*val != Angular_Degree) {
+      vcl_cerr << "Angular units are not in Degrees!\n";
+      return false;
+    }
+
+    return true;
+  }
+  return false;
+}
+
 //: returns the Zone and the Hemisphere (0 for N, 1 for S);
 bool vil_geotiff_header::PCS_NAD83_UTM_zone(int &zone, GTIF_HEMISPH &hemisph)
 {
