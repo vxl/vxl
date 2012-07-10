@@ -134,7 +134,6 @@ bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) //
 
     short *val = static_cast<short*> (value);
     if ((*val < PCS_WGS84_UTM_zone_1N ) || ((*val > PCS_WGS84_UTM_zone_60S ))) {
-      vcl_cerr << "NOT A WGS84_UTM!!!!\n";
       return false;
     }
 
