@@ -77,7 +77,7 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
       return 0.0f;
     }
 
-    vcl_cout<<"Converting perspective gamera"<<vcl_endl;
+    vcl_cout<<"Converting perspective camera"<<vcl_endl;
 
     // set persp cam buffer
     cl_float cam_buffer[48];
