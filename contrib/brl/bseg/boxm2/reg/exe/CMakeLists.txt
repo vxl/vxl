@@ -16,7 +16,3 @@ ADD_EXECUTABLE( boxm2_compute_path_uncertainty_exe
 
 TARGET_LINK_LIBRARIES( boxm2_compute_path_uncertainty_exe vil vul vnl vbl vgl) 
 
-ADD_EXECUTABLE( boxm2_register_dems
-                boxm2_register_dems.cxx
-              )
-TARGET_LINK_LIBRARIES( boxm2_register_dems vil ihog vul vnl vbl vpgl_algo vgl)
