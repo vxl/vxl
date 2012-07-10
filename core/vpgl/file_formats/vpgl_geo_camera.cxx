@@ -59,70 +59,47 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
   int utm_zone;
   vil_geotiff_header::GTIF_HEMISPH h;
 
-  // convert given tiepoint to world coordinates (lat, long)
-  // based on the model defined in GEOTIFF
+  vcl_vector<vcl_vector<double> > tiepoints;
+  gtif->gtif_tiepoints(tiepoints);
 
-  // is this a PCS_WGS84_UTM?
-  bool is_utm = false;
+  // create a transformation matrix
+  // if there is a transformation matrix in GEOTIFF, use that
+  vnl_matrix<double> trans_matrix;
+  double* trans_matrix_values;
+  double sx1, sy1, sz1;
+  bool scale_tag=false;
+  if (gtif->gtif_trans_matrix(trans_matrix_values)) {
+    vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
+    trans_matrix.copy_in(trans_matrix_values);
+    vcl_cout << "Warning LIDAR sample spacing different than 1 meter will not be handled correctly!\n";
+  }
+  else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
+    scale_tag = true;
+    vpgl_geo_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints,
+                                       trans_matrix, scale_tag);
+  }
+  else {
+    vcl_cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
+    return false;
+  }
+
+  // create the camera
+  camera = new vpgl_geo_camera(trans_matrix, lvcs);
+  camera->set_scale_format(scale_tag);
+
+  //: check if the model type is geographic and also the units
+  if (gtif->GCS_WGS84_MET_DEG())
+    return true;
+
+  //: otherwise check if it is projected to UTM and figure out the zone
   if (gtif->PCS_WGS84_UTM_zone(utm_zone, h) || gtif->PCS_NAD83_UTM_zone(utm_zone, h))
   {
-    vcl_vector<vcl_vector<double> > tiepoints;
-    gtif->gtif_tiepoints(tiepoints);
-    is_utm = true;
-#if 0  // I, J, K should not be transformed
-    // transform each tiepoint
-    vpgl_utm utm;
-
-    bool south_flag = (h == 1);
-    for (unsigned i=0; i< tiepoints.size(); i++) {
-      assert (tiepoints[i].size() == 6);
-      double I = tiepoints[i][0]; // lat
-      double J = tiepoints[i][1]; // lon
-      double K = tiepoints[i][2]; // elev
-      double X = tiepoints[i][3];
-      double Y = tiepoints[i][4];
-      double Z = tiepoints[i][5];
-
-      utm.transform(utm_zone, X, Y, Z, I, J, K, south_flag );
-      if (!lvcs) {
-        lvcs = new vpgl_lvcs(I,J,K);
-        tiepoints[i][0] = I; // lat
-        tiepoints[i][1] = J; // lon
-        tiepoints[i][2] = K; // elev
-      }
-    }
-#endif
-    // create a transformation matrix
-    // if there is a transformation matrix in GEOTIFF, use that
-    vnl_matrix<double> trans_matrix;
-    double* trans_matrix_values;
-    double sx1, sy1, sz1;
-    bool scale_tag=false;
-    if (gtif->gtif_trans_matrix(trans_matrix_values)) {
-      vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
-      trans_matrix.copy_in(trans_matrix_values);
-      vcl_cout << "Warning LIDAR sample spacing different than 1 meter will not be handled correctly!\n";
-    }
-    else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
-      scale_tag = true;
-      vpgl_geo_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints,
-                                         trans_matrix, scale_tag);
-    }
-    else {
-      vcl_cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
-      return false;
-    }
-
-    // create the camera
-    camera = new vpgl_geo_camera(trans_matrix, lvcs);
-    if (is_utm)
-      camera->set_utm(utm_zone, h);
-    camera->set_scale_format(scale_tag);
+    camera->set_utm(utm_zone, h);
     return true;
   }
   else {
-      vcl_cout << "bmdl_lidar_roi_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << vcl_endl;
-      return false;
+    vcl_cout << "vpgl_geo_camera::init_geo_camera()-- if UTM only PCS_WGS84_UTM and PCS_NAD83_UTM, if geographic (GCS_WGS_84) only linear units in meters, angular units in degrees are supported, please define otherwise!" << vcl_endl;
+    return false;
   }
 }
 
@@ -138,7 +115,7 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
   else {
     lat = y;
     lon = x;
-    gz = 0.0;
+    gz = z;
   }
 
   double x1=lon, y1=lat, z1=gz;
@@ -164,9 +141,7 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
     vnl_matrix<double> tm(trans_matrix_);
     tm[2][2] = 1;
 
-    //vcl_cout << trans_matrix_ << '\n' << tm << vcl_endl;
     vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
-    //vcl_cout << trans_matrix_inv << vcl_endl;
     res = trans_matrix_inv*vec;
     u = res[0];
     v = res[1];
@@ -324,19 +299,6 @@ vcl_istream&  operator>>(vcl_istream& s,
 {
   vnl_matrix_fixed<double,4,4> tr_matrix;
   s >> tr_matrix;
-#if 0  // tiepoints are not saved in the current implementation of vpgl_geo_camera anyways
-  // read a set of tiepoints
-  vcl_vector<vcl_vector<double> > tiepoints(1);
-  double t0, t1, t2, t3, t4, t5;
-  s >> t0 >> t1 >> t2 >> t3 >> t4 >> t5;
-  tiepoints[0].resize(6);
-  tiepoints[0][0] = t0;
-  tiepoints[0][1] = t1;
-  tiepoints[0][2] = t2;
-  tiepoints[0][3] = t3;
-  tiepoints[0][4] = t4;
-  tiepoints[0][5] = t5;
-#endif
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs();
   s >> (*lvcs);
   p = vpgl_geo_camera(tr_matrix.as_ref(), lvcs);
