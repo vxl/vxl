@@ -706,7 +706,9 @@ void vsl_b_ifstream::close()
 
 
 //: Test to see if a stream really is a binary vsl file.
-bool vsl_b_stream_test(vcl_istream &is)
+// \return false if we can't find magic numbers and correct version number.
+// The file pointer is reset to the beginning on leaving this function.
+bool vsl_b_istream_test(vcl_istream &is)
 {
   if (!is) return false;
   is.seekg(0);
@@ -723,11 +725,11 @@ bool vsl_b_stream_test(vcl_istream &is)
   is.read( ( char* )&m2, 2 );
   vsl_swap_bytes(( char* )&m2, sizeof(long) ); 
   
+  is.seekg(0);
+
   if (!is || m2 != vsl_magic_number_part_2 || m1 != vsl_magic_number_part_1 || v>1)
-  {
-    is.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return false;
-  }
+
 
   return true;
 }

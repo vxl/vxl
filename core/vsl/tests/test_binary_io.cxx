@@ -240,19 +240,19 @@ void test_binary_io()
            << "****************************\n";
 
   vcl_ifstream gold_if(gold_path.c_str());
-  TEST("vsl_b_stream_test on golden data", vsl_b_stream_test(gold_if), true);
+  TEST("vsl_b_stream_test on golden data", vsl_b_istream_test(gold_if), true);
   {
     vcl_ofstream f("vsl_binary_io_test.txt");
     f << "Some random text.\n";
   }
   vcl_ifstream none_if("Some_non_existant_file");
-  TEST("vsl_b_stream_test on missing file fails", vsl_b_stream_test(none_if), false);
+  TEST("vsl_b_stream_test on missing file fails", vsl_b_istream_test(none_if), false);
   {
     vcl_ofstream f("Some_empty_file");
   }
-  TEST("vsl_b_stream_test on empty file fails", vsl_b_stream_test(none_if), false);
+  TEST("vsl_b_stream_test on empty file fails", vsl_b_istream_test(none_if), false);
   vcl_ifstream text_if("vsl_binary_io_test.txt");
-  TEST("vsl_b_stream_test on text file fails", vsl_b_stream_test(text_if), false);
+  TEST("vsl_b_stream_test on text file fails", vsl_b_istream_test(text_if), false);
 
 }
 

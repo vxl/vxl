@@ -143,8 +143,9 @@ class vsl_b_ofstream: public vsl_b_ostream
 
 
 //: Test to see if a stream really is a binary vsl file.
-// \return false if we can;t find magic numbers and correct version number.
-bool vsl_b_stream_test(vcl_istream &is);
+// \return false if we can't find magic numbers and correct version number.
+// The file pointer is reset to the beginning on leaving this function.
+bool vsl_b_istream_test(vcl_istream &is);
 
 //: An adaptor for any vcl_istream to make it suitable for binary input
 // Currently the main use of this is to encourage file streams to be opened
