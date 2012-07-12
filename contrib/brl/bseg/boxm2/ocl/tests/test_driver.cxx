@@ -5,6 +5,7 @@ DECLARE( test_process_mains );
 DECLARE( test_weighted_em   ); 
 DECLARE( test_kernel_filter );
 DECLARE( test_kernel_vector_filter );
+DECLARE( test_ocl_cholesky );
 
 void register_tests()
 {
@@ -13,6 +14,7 @@ void register_tests()
   REGISTER( test_weighted_em   );
   REGISTER( test_kernel_filter );
   REGISTER( test_kernel_vector_filter );
+  REGISTER( test_ocl_cholesky );
 
 }
 
