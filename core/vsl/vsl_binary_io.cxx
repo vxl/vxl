@@ -11,6 +11,11 @@
 #include <vcl_cstdlib.h> // abort()
 #include <vsl/vsl_binary_explicit_io.h>
 
+
+
+
+
+
 void vsl_b_write(vsl_b_ostream& os, char n )
 {
   os.os().write( ( char* )&n, sizeof( n ) );
@@ -564,7 +569,7 @@ vsl_b_istream::vsl_b_istream(vcl_istream *i_s): is_(i_s)
 {
   assert(is_ != 0);
   if (!(*is_)) return;
-  unsigned long v, m1, m2;
+  unsigned long v=0, m1=0, m2=0;
   vsl_b_read_uint_16(*this, v);
   vsl_b_read_uint_16(*this, m1);
   vsl_b_read_uint_16(*this, m2);
@@ -696,4 +701,33 @@ void vsl_b_ifstream::close()
   assert(is_ != 0);
   ((vcl_ifstream *)is_)->close();
   clear_serialisation_records();
+}
+
+
+
+//: Test to see if a stream really is a binary vsl file.
+bool vsl_b_stream_test(vcl_istream &is)
+{
+  if (!is) return false;
+  is.seekg(0);
+  unsigned long v=0, m1=0, m2=0;
+
+//  vsl_b_read_uint_16(is, v);
+//  vsl_b_read_uint_16(is, m1);
+//  vsl_b_read_uint_16(is, m2);
+
+  is.read( ( char* )&v, 2 );
+  vsl_swap_bytes(( char* )&v, sizeof(long) );
+  is.read( ( char* )&m1, 2 );
+  vsl_swap_bytes(( char* )&m1, sizeof(long) );
+  is.read( ( char* )&m2, 2 );
+  vsl_swap_bytes(( char* )&m2, sizeof(long) ); 
+  
+  if (!is || m2 != vsl_magic_number_part_2 || m1 != vsl_magic_number_part_1 || v>1)
+  {
+    is.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return false;
+  }
+
+  return true;
 }

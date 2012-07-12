@@ -3,6 +3,7 @@
 #include <vcl_cstring.h>
 #include <vcl_cstddef.h>
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_quick_file.h>
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
@@ -232,6 +233,27 @@ void test_binary_io()
   TEST("Golden C string out == C string in", vcl_string(c_string_out), vcl_string(c_string_in2));
   TEST("Golden vcl_size_t out == vcl_size_t in", size_t_out, size_t_in2);
   TEST("Golden vcl_ptrdiff_t out == vcl_ptrdiff_t in", ptrdiff_t_out, ptrdiff_t_in2);
+
+
+  vcl_cout << "****************************\n"
+           << " Testing magic number check\n"
+           << "****************************\n";
+
+  vcl_ifstream gold_if(gold_path.c_str());
+  TEST("vsl_b_stream_test on golden data", vsl_b_stream_test(gold_if), true);
+  {
+    vcl_ofstream f("vsl_binary_io_test.txt");
+    f << "Some random text.\n";
+  }
+  vcl_ifstream none_if("Some_non_existant_file");
+  TEST("vsl_b_stream_test on missing file fails", vsl_b_stream_test(none_if), false);
+  {
+    vcl_ofstream f("Some_empty_file");
+  }
+  TEST("vsl_b_stream_test on empty file fails", vsl_b_stream_test(none_if), false);
+  vcl_ifstream text_if("vsl_binary_io_test.txt");
+  TEST("vsl_b_stream_test on text file fails", vsl_b_stream_test(text_if), false);
+
 }
 
 TESTMAIN(test_binary_io);
