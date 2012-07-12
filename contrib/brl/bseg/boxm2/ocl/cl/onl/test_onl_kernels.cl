@@ -38,3 +38,4 @@ void test_cubic_fit(__global float * gobs,       // dim n
     fit_intensity_cubic(obs,vis,s,temp,XtWX,cofactor,invXtWX,XtY,coeffs,nobs);
     cubic_fit_error(obs, vis,s, temp,coeffs,vars,nobs);
 }
+
