@@ -12,6 +12,10 @@
 #include <vcl_iterator.h>
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
+#include <vul/vul_sprintf.h>
+
+#include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
 
 //: Defines a binary mask
 class mbl_mask : public vcl_vector<bool>
@@ -99,7 +103,9 @@ void mbl_apply_mask(const mbl_mask & mask, const vcl_vector<T> & src, vcl_vector
 {
   const unsigned n_in = src.size();
   if (mask.size() != n_in)
-    throw vcl_out_of_range("src and mask lengths differ");
+  {
+    throw vcl_out_of_range(vul_sprintf("src and mask lengths differ: src %d mask %d",n_in,mask.size()));
+  }
 
   dst.clear();
   dst.reserve(n_in); // this is the maximum size we might need
@@ -195,6 +201,16 @@ void mbl_mask_to_indices(const mbl_mask& mask, vcl_vector<unsigned>& inds);
 void mbl_indices_to_mask(const vcl_vector<unsigned>& inds,
                          const unsigned n,
                          mbl_mask& mask);
+
+//: Save
+void vsl_b_write(vsl_b_ostream& bfs, const mbl_mask& t);
+
+//: Load
+void vsl_b_read(vsl_b_istream& bfs, mbl_mask& t);
+
+//: print summary
+void vsl_print_summary(vcl_ostream& os, const mbl_mask& m);
+
 
 
 #endif // mbl_mask_h_

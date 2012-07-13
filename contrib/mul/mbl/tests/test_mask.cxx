@@ -282,6 +282,45 @@ void test_mask()
 
     TEST("mbl_replace_using_mask", replace_ok, true);
   }
+
+  // test vsl read write
+  {
+	  mbl_mask mask1(5);
+	  mask1[0] = false;
+	  mask1[1] = true;
+	  mask1[2] = true;
+	  mask1[3] = false;
+	  mask1[4] = true;
+
+	  vsl_b_ofstream bout("./mbl_masl_test_vsl.bvl");
+	  vsl_b_write(bout,mask1);
+	  bout.close();
+
+	  mbl_mask mask2;
+	  vsl_b_ifstream bin("./mbl_masl_test_vsl.bvl");
+	  vsl_b_read(bin,mask2);
+	  bout.close();
+	  TEST("mbl_mask vsl binary IO write/read  consistent ", mask1==mask2 , true);
+  }
+
+  // test vsl read write of mask for empty mask
+  {
+	  mbl_mask mask1;
+
+	  vsl_b_ofstream bout("./mbl_masl_test_vsl.bvl");
+	  vsl_b_write(bout,mask1);
+	  bout.close();
+
+	  mbl_mask mask2;
+	  vsl_b_ifstream bin("./mbl_masl_test_vsl.bvl");
+	  vsl_b_read(bin,mask2);
+	  bout.close();
+	  TEST("mbl_mask vsl binary IO write/read consistent for empty mask ", mask1==mask2 , true);
+  }
+ 
+  
+
+
 }
 
 TESTMAIN(test_mask);
