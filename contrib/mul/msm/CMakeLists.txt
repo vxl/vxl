@@ -41,7 +41,10 @@ ADD_LIBRARY(msm ${msm_sources} )
 TARGET_LINK_LIBRARIES(msm mcal vimt)
 
 SUBDIRS(utils)
-SUBDIRS(tools)
+
+IF (BUILD_MUL_TOOLS)
+  SUBDIRS(tools)
+ENDIF (BUILD_MUL_TOOLS)
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

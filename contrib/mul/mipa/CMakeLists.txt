@@ -25,7 +25,9 @@ AUX_SOURCE_DIRECTORY(Templates mipa_sources)
 ADD_LIBRARY(mipa ${mipa_sources} )
 TARGET_LINK_LIBRARIES(mipa vimt vpdfl)
 
-SUBDIRS(tools)
+IF (BUILD_MUL_TOOLS)
+  SUBDIRS(tools)
+ENDIF (BUILD_MUL_TOOLS)
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

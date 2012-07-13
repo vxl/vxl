@@ -72,7 +72,9 @@ AUX_SOURCE_DIRECTORY(Templates mfpf_sources)
 ADD_LIBRARY(mfpf ${mfpf_sources} )
 TARGET_LINK_LIBRARIES(mfpf clsfy mipa)
 
-SUBDIRS(tools)
+IF (BUILD_MUL_TOOLS)
+  SUBDIRS(tools)
+ENDIF (BUILD_MUL_TOOLS)
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)
