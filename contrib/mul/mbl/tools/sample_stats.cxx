@@ -45,7 +45,7 @@ int main2(int argc, char *argv[])
 {
   // Parse the program arguments
   vul_arg<vcl_string> in_file("-i", "input file containing scalar values (whitespace-separated); otherwise uses stdin", "");
-  vul_arg<vcl_string> out_file("-o", "output file to append statistics; logger will be used otherwise", "");
+  vul_arg<vcl_string> out_file("-o", "output file to append statistics; otherwise write to stdout", "");
   vul_arg<vcl_string> sep("-sep", "String to use as a separator between output values, e.g. \", \" or \"  \" (default=TAB)", "\t");
   vul_arg<bool> nohead("-h","Specify this to SUPPRESS column headers", false);
   vul_arg<bool> n("-n", "Specify this to record the number of samples", false);
@@ -94,9 +94,16 @@ int main2(int argc, char *argv[])
     for (unsigned i=0;i<data_vec.size();++i) data_vec[i]=vcl_abs(data_vec[i]);
   }
 
-
-  // Close the input filestream
-  if (!in_file().empty()) (dynamic_cast<vcl_ifstream*>(is))->close();
+  // Clean up if input was from a file
+  {
+    vcl_ifstream* ifs = dynamic_cast<vcl_ifstream*>(is);
+    if (ifs)
+    {
+      ifs->close();
+      delete ifs;
+    }
+    is = 0;
+  }
 
   // Calculate the requested statistics
   mbl_sample_stats_1d data(data_vec);
@@ -132,14 +139,18 @@ int main2(int argc, char *argv[])
     }
   }
 
-  // Open output file if requested
-  vcl_ofstream* ofs=0;
+  // Open output file if requested, otherwise use stdout
+  vcl_ostream* os=0;
   if (!out_file().empty())
   {
-    ofs = new vcl_ofstream(out_file().c_str(), vcl_ios::app);
-    if (!ofs || !ofs->good())
+    os = new vcl_ofstream(out_file().c_str(), vcl_ios::app);
+    if (!os || !os->good())
       do_error(vcl_string("Failed to open outout file ") + out_file().c_str());
     MBL_LOG(DEBUG, logger(), "Opened output file: " << out_file().c_str());
+  }
+  else
+  {
+    os = &vcl_cout;
   }
 
   // Output requested statistics
@@ -148,26 +159,34 @@ int main2(int argc, char *argv[])
   // Write a line of column headers unless suppressed
   if (!nohead())
   {
-    if (ofs && ofs->good()) *ofs << '#' << sep();
+    if (os && os->good()) *os << '#' << sep();
     for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
     {
-      if (ofs && ofs->good()) *ofs << it->first << sep();
+      if (os && os->good()) *os << it->first << sep();
     }
-    if (ofs && ofs->good()) *ofs << '\n';
+    if (os && os->good()) *os << '\n';
   }
   vcl_string my_label = in_file();
   if (label.set()) my_label = label();
   // Write statistics in a single line
-  if (ofs && ofs->good()) *ofs << my_label << sep();
+  if (os && os->good()) *os << my_label << sep();
   for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
   {
-    vcl_cout <<  my_label << " " << it->first << ": " << it->second << vcl_endl;
-    if (ofs && ofs->good()) *ofs << it->second << sep();
+    //vcl_cout <<  my_label << " " << it->first << ": " << it->second << vcl_endl;
+    if (os && os->good()) *os << it->second << sep();
   }
-  if (ofs && ofs->good()) *ofs << vcl_endl;
+  if (os && os->good()) *os << vcl_endl;
 
-  // Close file
-  if (ofs) ofs->close();
+  // Clean up if output was to a file
+  {
+    vcl_ofstream* ofs = dynamic_cast<vcl_ofstream*>(os);
+    if (ofs)
+    {
+      ofs->close();
+      delete ofs;
+    }
+    os = 0;
+  }
 
   return 0;
 }
