@@ -118,35 +118,7 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
     gz = z;
   }
 
-  double x1=lon, y1=lat, z1=gz;
-  if (is_utm) {
-    vpgl_utm utm;
-    int utm_zone;
-    utm.transform(lat, lon, x1, y1, utm_zone);
-  }
-  vec[0] = x1;
-  vec[1] = y1;
-  vec[2] = z1;
-  vec[3] = 1;
-  if (scale_tag_) { // the inverse operation doesn't really work when the scale factor is different than 1
-    if (trans_matrix_[0][1] != 0 || trans_matrix_[1][0] != 0)
-      vcl_cerr << "In vpgl_geo_camera::project() - WARNING: the inverse operation assumes non-diagonal elements of transformation matrix to be zero!\n";
-    u = (x1 - trans_matrix_[0][3]);
-    u /= trans_matrix_[0][0];
-    v = (y1 - trans_matrix_[1][3]);
-    v /= trans_matrix_[1][1];
-  }
-  else {
-    // do we really need this, const does not allow this
-    vnl_matrix<double> tm(trans_matrix_);
-    tm[2][2] = 1;
-
-    vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
-    res = trans_matrix_inv*vec;
-    u = res[0];
-    v = res[1];
-    vcl_cout << "geocam trans matrix gave image loc u: " << u << " v: " << v << vcl_endl;
-  }
+  this->wgs_to_img(lon, lat, gz, u, v);
 }
 
 //: backprojects an image point into local coordinates (based on lvcs_)
@@ -197,7 +169,7 @@ void vpgl_geo_camera::translate(double tx, double ty, double z)
 }
 
 void vpgl_geo_camera::img_to_wgs(const double i, const double j, const double z,
-                                 double& lon, double& lat, double& elev)
+                                 double& lon, double& lat, double& elev) const
 {
   vnl_vector<double> v(4), res(4);
   if (scale_tag_) {
@@ -210,14 +182,17 @@ void vpgl_geo_camera::img_to_wgs(const double i, const double j, const double z,
   }
   v[2] = z;
   v[3] = 1;
-  //find the UTM values
-  vpgl_utm utm;
-  utm.transform(utm_zone_, v[0], v[1], v[2], lat, lon, elev);
+  if (is_utm) {
+    vpgl_utm utm;
+    utm.transform(utm_zone_, v[0], v[1], v[2], lat, lon, elev);
+  } else {
+    lon = v[0]; lat = v[1]; elev = v[2];
+  }
 }
 
 //: transforms a given local 3d world point to image plane
 void vpgl_geo_camera::wgs_to_img(const double lon, const double lat, const double gz,
-                                 double& u, double& v)
+                                 double& u, double& v) const
 {
   vnl_vector<double> vec(4), res(4);
   double x1=lon, y1=lat, z1=gz;
