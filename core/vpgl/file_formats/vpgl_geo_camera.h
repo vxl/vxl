@@ -92,11 +92,11 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   //: returns the corresponding geographical coordinates for a given pixel position (i,j)
   void img_to_wgs(const double i, const double j, const double z,
-                  double& lon, double& lat, double& elev);
+                  double& lon, double& lat, double& elev) const;
 
   //: returns the corresponding pixel position for given geographical coordinates
   void wgs_to_img(const double lon, const double lat, const double gz,
-                  double& u, double& v);
+                  double& u, double& v) const;
 
   //: returns the corresponding utm location for the given local position
   void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone); 
