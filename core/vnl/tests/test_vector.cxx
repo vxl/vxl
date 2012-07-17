@@ -560,6 +560,8 @@ void vnl_vector_test_conversion()
 
 static void vnl_vector_test_io()
 {
+  double expected_data[] = {1.0, 2.0, 3.0};
+  vnl_vector<double> expected(expected_data, 3);
   {
     vcl_stringstream ss;
     ss << "";
@@ -579,21 +581,28 @@ static void vnl_vector_test_io()
     ss << "1 2 3.0";
     vnl_vector<double> p;
     ss >> p;
-    TEST("number of values read from stream, no newline", p.size(), 3);
+    TEST("number of values read from stream, no newline", p, expected);
   }
   {
     vcl_stringstream ss;
     ss << "1 2 3.0\n";
     vnl_vector<double> p;
     ss >> p;
-    TEST("number of values read from stream, newline", p.size(), 3);
+    TEST("number of values read from stream, newline", p, expected);
   }
   {
     vcl_stringstream ss;
     ss << "1 2 3.0\n ";
     vnl_vector<double> p;
     ss >> p;
-    TEST("number of values read from stream, newline + WS", p.size(), 3);
+    TEST("number of values read from stream, newline + WS", p, expected);
+  }
+  {
+    vcl_stringstream ss;
+    ss << "5";
+    vnl_vector<double> p;
+    ss >> p;
+    TEST("single value read from stream, no newline or ws", p.size() == 1 && p(0)==5, true);
   }
 }
 
