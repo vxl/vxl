@@ -11,8 +11,6 @@
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vul/vul_string.h>
-#include <vsl/vsl_vector_io.txx>
-#include <vsl/vsl_block_binary_rle.h>
 #include <mbl/mbl_exception.h>
 
 
@@ -215,66 +213,6 @@ void mbl_indices_to_mask(const vcl_vector<unsigned>& inds,
   }
 }
 
-// =====================================================
-void vsl_b_write(vsl_b_ostream& bfs, const mbl_mask& m)
-{
-	 const short version_no = 1;
-     vsl_b_write(bfs, version_no);
-     vsl_b_write(bfs, m.size());
-	 if (!m.empty())
-	 {
-		vcl_vector<char> tmp_mask(m.size());
-		vcl_copy(m.begin(),m.end(),reinterpret_cast<char*>(&tmp_mask.front()));
-		vsl_block_binary_rle_write(bfs,reinterpret_cast<bool*>(&tmp_mask.front()),m.size());
-	 }
-}
-
-
-//: Load
-void vsl_b_read(vsl_b_istream& bfs, mbl_mask& m)
-{
- 	if (!bfs) return;
-
-	short version;
-	vsl_b_read(bfs,version);
-	switch (version)
-	{
-	case 1:
-		unsigned mask_size;
-		vsl_b_read(bfs, mask_size);
-		if (mask_size)
-		{
-			vcl_vector<char> tmp_mask(mask_size); // can't use vector<bool> because of it's bit-compression.
-			vsl_block_binary_rle_read(bfs,
-				reinterpret_cast<bool*>(&tmp_mask.front()), mask_size);
-			m.assign(reinterpret_cast<bool *>(&tmp_mask.front()), reinterpret_cast<bool *>(&tmp_mask.back()+1) );
-		}
-		break;
-	default:
-		vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_mask&) \n";
-		vcl_cerr << "           Unknown version number "<< version << "\n";
-		bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-		return;
-	}
-}
-
-//: print summary
-void vsl_print_summary(vcl_ostream &os, const mbl_mask &m)
-{
-
-  os << vsl_indent() << "Mask length: " << m.size() << '\n';
-  for (unsigned int i=0; i<m.size() && i<5; i++)
-  {
-    os << vsl_indent() << ' ' << i << ": ";
-    vsl_indent_inc(os);
-    vsl_print_summary(os, m[i]);
-    os << ' ';
-    vsl_indent_dec(os);
-  }
-  if (m.size() > 5)
-    os << vsl_indent() << " ...\n";
-
-}
 
 
 

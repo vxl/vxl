@@ -22,4 +22,17 @@ void vsl_b_read(vsl_b_istream& s, vcl_vector<T>& v);
 template <class T>
 void vsl_print_summary(vcl_ostream & os,const vcl_vector<T> &v);
 
+
+//: Write vector<bool> to binary stream
+template <>
+void vsl_b_write(vsl_b_ostream& s, const vcl_vector<bool>& v);
+
+//: Read vector<bool> from binary stream
+template <>
+void vsl_b_read(vsl_b_istream& s, vcl_vector<bool>& v);
+
+//: Print human readable summary of object to a stream
+template <>
+void vsl_print_summary(vcl_ostream & os,const vcl_vector<bool> &v);
+
 #endif // vsl_vector_io_h_

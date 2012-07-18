@@ -1,9 +1,12 @@
 // This is mul/mbl/tests/test_mask.cxx
-#include <testlib/testlib_test.h>
-#include <mbl/mbl_mask.h>
+
 #include <vcl_vector.h>
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
+#include <vsl/vsl_vector_io.h>
+#include <vsl/vsl_binary_io.h>
+#include <testlib/testlib_test.h>
+#include <mbl/mbl_mask.h>
 
 unsigned mask4_to_number(const mbl_mask & r)
 {

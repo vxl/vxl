@@ -12,12 +12,13 @@
 #include <vcl_iterator.h>
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
+#include <vcl_cstddef.h>
+#include <vcl_iostream.h>
 #include <vul/vul_sprintf.h>
 
-#include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
 
 //: Defines a binary mask
+// \note include vsl/vsl_vector_io.h in your client code, if your want binary io of mbl_mask
 class mbl_mask : public vcl_vector<bool>
 {
  public:
@@ -130,7 +131,7 @@ void mbl_replace_using_mask(const mbl_mask & mask, const vcl_vector<T> & src1, c
   if (mask.size() != n_in)
     throw vcl_out_of_range("src1 and mask lengths differ");
 
-  unsigned n_true = vcl_count( mask.begin(), mask.end(), true );
+  vcl_size_t n_true = vcl_count( mask.begin(), mask.end(), true );
   if ( n_true != src2.size() )
     throw vcl_out_of_range("src2 and mask are not compatible");
 
@@ -202,14 +203,6 @@ void mbl_indices_to_mask(const vcl_vector<unsigned>& inds,
                          const unsigned n,
                          mbl_mask& mask);
 
-//: Save
-void vsl_b_write(vsl_b_ostream& bfs, const mbl_mask& t);
-
-//: Load
-void vsl_b_read(vsl_b_istream& bfs, mbl_mask& t);
-
-//: print summary
-void vsl_print_summary(vcl_ostream& os, const mbl_mask& m);
 
 
 
