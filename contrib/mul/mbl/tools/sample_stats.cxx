@@ -18,6 +18,14 @@
 #include <mbl/mbl_sample_stats_1d.h>
 
 
+//! Identify which format to use for output.
+enum OutputFormat
+{
+  LIST,   //!< Write each statistic on a separate line, including its title
+  TABLE   //!< Write all statistics on one line, arranged in columns
+};
+
+
 //=========================================================================
 // Static function to create a static logger when first required
 //=========================================================================
@@ -49,7 +57,7 @@ int main2(int argc, char *argv[])
   vul_arg<vcl_string> in_file("-i", "input file containing scalar values (whitespace-separated); otherwise uses stdin", "");
   vul_arg<vcl_string> out_file("-o", "output file to append statistics; otherwise write to stdout", "");
   vul_arg<vcl_string> label("-label","Adds this label to each line outputting a statistic - useful for later grep");
-  vul_arg<bool> tabular("-tab","Specify this to use tabular format (default is list format)", false);
+  vul_arg<vcl_string> format("-fmt","Specify the output format, e.g. \"table\", \"list\" (default is list)", "list");
   vul_arg<bool> nohead("-h","Specify this to SUPPRESS column headers in tabular format", false);
   vul_arg<vcl_string> sep("-sep", "String to use as a separator between columns in tabular format, e.g. \", \" or \"  \" (default=TAB)", "\t");
   // These options are statistical measures:
@@ -162,43 +170,48 @@ int main2(int argc, char *argv[])
   // Use provided label if specified, otherwise use input filename (or empty string).
   vcl_string my_label = label.set() ? label() : in_file();
   
-  // Write statistics in 1 of 2 formats
-  if (tabular())
+  // Write statistics in 1 of multiple formats
+  enum OutputFormat output_format = format()=="table" ? TABLE : LIST;
+  switch (output_format)
   {
-    // Tabular format
-      
-    // Write a line of column headers unless suppressed
-    if (!nohead())
+  case TABLE: // Tabular format
     {
-      if (os && os->good()) *os << '#' << sep();
+      // Write a line of column headers unless suppressed
+      if (!nohead())
+      {
+        if (os && os->good()) *os << '#' << sep();
+        for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
+        {
+          if (os && os->good()) *os << it->first << sep();
+        }
+        if (os && os->good()) *os << '\n';
+      }
+
+      // Write all statistics on one line arranged in columns
+      if (os && os->good()) *os << my_label << sep();
       for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
       {
-        if (os && os->good()) *os << it->first << sep();
+        if (os && os->good()) 
+          *os << it->second << sep();
       }
-      if (os && os->good()) *os << '\n';
+      if (os && os->good()) *os << vcl_endl;
     }
-
-    // Write all statistics on one line arranged in columns
-    if (os && os->good()) *os << my_label << sep();
-    for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
-    {
-      if (os && os->good()) 
-        *os << it->second << sep();
-    }
-    if (os && os->good()) *os << vcl_endl;
-  }
-  else
-  {
-    // List format - write each statistic on a new line including its title, e.g. "mean: 0.512"
-    for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
-    {
-      if (os && os->good()) 
-      {
-        *os <<  my_label << " " << it->first << ": " << it->second << "\n";
-      }
-    }
-  }
+    break;
   
+  default:
+    {
+      // List format
+      for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
+      {
+        if (os && os->good()) 
+        {
+          *os <<  my_label << " " << it->first << ": " << it->second << "\n";
+        }
+      }
+    }
+    break;
+  }
+
   // Clean up if output was to a file
   {
     vcl_ofstream* ofs = dynamic_cast<vcl_ofstream*>(os);
