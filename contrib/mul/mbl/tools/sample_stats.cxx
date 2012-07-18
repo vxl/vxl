@@ -44,10 +44,15 @@ static void do_error(const vcl_string& msg)
 int main2(int argc, char *argv[])
 {
   // Parse the program arguments
+  
+  // These options are I/O and format-related
   vul_arg<vcl_string> in_file("-i", "input file containing scalar values (whitespace-separated); otherwise uses stdin", "");
   vul_arg<vcl_string> out_file("-o", "output file to append statistics; otherwise write to stdout", "");
-  vul_arg<vcl_string> sep("-sep", "String to use as a separator between output values, e.g. \", \" or \"  \" (default=TAB)", "\t");
-  vul_arg<bool> nohead("-h","Specify this to SUPPRESS column headers", false);
+  vul_arg<vcl_string> label("-label","Adds this label to each line outputting a statistic - useful for later grep");
+  vul_arg<bool> tabular("-tab","Specify this to use tabular format (default is list format)", false);
+  vul_arg<bool> nohead("-h","Specify this to SUPPRESS column headers in tabular format", false);
+  vul_arg<vcl_string> sep("-sep", "String to use as a separator between columns in tabular format, e.g. \", \" or \"  \" (default=TAB)", "\t");
+  // These options are statistical measures:
   vul_arg<bool> n("-n", "Specify this to record the number of samples", false);
   vul_arg<bool> mean("-mean", "Specify this to record the mean", false);
   vul_arg<bool> variance("-var", "Specify this to record the variance", false);
@@ -65,7 +70,6 @@ int main2(int argc, char *argv[])
   vul_arg<bool> skewness("-skew", "Specify this to record the skewness", false);
   vul_arg<bool> kurtosis("-kurt", "Specify this to record the kurtosis", false);
   vul_arg<bool> absolute("-absolute", "Calculate statistics of absolute sample values", false);
-  vul_arg<vcl_string> label("-label","Adds this label to each line outputting a statistic - useful for later grep");
   vul_arg_parse(argc, argv);
 
   // Try to open the input file if specified or use stdin
@@ -81,6 +85,7 @@ int main2(int argc, char *argv[])
   {
     is = &vcl_cin;
   }
+  MBL_LOG(INFO, logger(), "in_file: " << (in_file.set() ? in_file() : vcl_string("stdin")));
 
   // Load the data from stream until end
   vcl_vector<double> data_vec;
@@ -153,30 +158,47 @@ int main2(int argc, char *argv[])
     os = &vcl_cout;
   }
 
-  // Output requested statistics
-  MBL_LOG(INFO, logger(), "in_file: " << in_file());
 
-  // Write a line of column headers unless suppressed
-  if (!nohead())
+  // Use provided label if specified, otherwise use input filename (or empty string).
+  vcl_string my_label = label.set() ? label() : in_file();
+  
+  // Write statistics in 1 of 2 formats
+  if (tabular())
   {
-    if (os && os->good()) *os << '#' << sep();
+    // Tabular format
+      
+    // Write a line of column headers unless suppressed
+    if (!nohead())
+    {
+      if (os && os->good()) *os << '#' << sep();
+      for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
+      {
+        if (os && os->good()) *os << it->first << sep();
+      }
+      if (os && os->good()) *os << '\n';
+    }
+
+    // Write all statistics on one line arranged in columns
+    if (os && os->good()) *os << my_label << sep();
     for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
     {
-      if (os && os->good()) *os << it->first << sep();
+      if (os && os->good()) 
+        *os << it->second << sep();
     }
-    if (os && os->good()) *os << '\n';
+    if (os && os->good()) *os << vcl_endl;
   }
-  vcl_string my_label = in_file();
-  if (label.set()) my_label = label();
-  // Write statistics in a single line
-  if (os && os->good()) *os << my_label << sep();
-  for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
+  else
   {
-    //vcl_cout <<  my_label << " " << it->first << ": " << it->second << vcl_endl;
-    if (os && os->good()) *os << it->second << sep();
+    // List format - write each statistic on a new line including its title, e.g. "mean: 0.512"
+    for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
+    {
+      if (os && os->good()) 
+      {
+        *os <<  my_label << " " << it->first << ": " << it->second << "\n";
+      }
+    }
   }
-  if (os && os->good()) *os << vcl_endl;
-
+  
   // Clean up if output was to a file
   {
     vcl_ofstream* ofs = dynamic_cast<vcl_ofstream*>(os);
