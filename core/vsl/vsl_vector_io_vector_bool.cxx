@@ -7,11 +7,14 @@
 #include "vsl_vector_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
-
+#include <vcl_deprecated.h>
 
 //====================================================================================
-//: Read vector from binary stream
-// \deprecated. Only kept for backwards compatibility.
+//: Read vector from binary stream in an old deprecated format.
+// \deprecated in favour of correctly work normal vsl behaviour. Only kept for backwards compatibility.
+// If no-one complains about the name change to this code, or otherwise asks for it
+// to be kept, then it should be removed after the release of VXL 1.18. The name change will
+// however remain, to avoid overriding normal performance of vsl(vec<vec<bool>>) IMS July 2012.
 void vsl_b_read_vec_vec_bool_old(vsl_b_istream& is, vcl_vector<vcl_vector<bool> >& v)
 {
   if (!is) return;
