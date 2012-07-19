@@ -1008,7 +1008,7 @@ def perspective_camera_from_scene(scene, cent_x, cent_y, cent_z, ni, nj):
     return cam
 
 # Create x y z images from a DEM at the resolution of the scene
-def generate_xyz_from_dem(scene, refine_level, geotiff_dem, geoid_height, bilin=False, geocam=0,fill_in_value=32.0):
+def generate_xyz_from_dem(scene, refine_level, geotiff_dem, geoid_height, bilin=False, geocam=0,fill_in_value=-1.0):
   boxm2_batch.init_process("boxm2DemToXYZProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_unsigned(1,refine_level);
