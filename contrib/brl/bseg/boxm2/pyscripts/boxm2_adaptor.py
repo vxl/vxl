@@ -1008,24 +1008,33 @@ def perspective_camera_from_scene(scene, cent_x, cent_y, cent_z, ni, nj):
     return cam
 
 # Create x y z images from a DEM at the resolution of the scene
-def generate_xyz_from_dem(scene, refine_level, geotiff_dem, geoid_height,bilin=False):
+def generate_xyz_from_dem(scene, refine_level, geotiff_dem, geoid_height, bilin=False, geocam=0,fill_in_value=32.0):
   boxm2_batch.init_process("boxm2DemToXYZProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_unsigned(1,refine_level);
   boxm2_batch.set_input_string(2,geotiff_dem);
   boxm2_batch.set_input_double(3,geoid_height);
   boxm2_batch.set_input_bool(4,bilin);
-  boxm2_batch.run_process();
-  (xi_id, xi_type) = boxm2_batch.commit_output(0);
-  x_img = dbvalue(xi_id, xi_type);
-  (yi_id, yi_type) = boxm2_batch.commit_output(1);
-  y_img = dbvalue(yi_id, yi_type);
-  (zi_id, zi_type) = boxm2_batch.commit_output(2);
-  z_img = dbvalue(zi_id, zi_type);
-  (dem_id, dem_type) = boxm2_batch.commit_output(3);
-  dem_img = dbvalue(dem_id, dem_type);
-  (demr_id, demr_type) = boxm2_batch.commit_output(4);
-  dem_res_img = dbvalue(demr_id, demr_type);
+  boxm2_batch.set_input_from_db(5,geocam);
+  boxm2_batch.set_input_float(6,fill_in_value);
+  result = boxm2_batch.run_process();
+  if result:
+    (xi_id, xi_type) = boxm2_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = boxm2_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = boxm2_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+    (dem_id, dem_type) = boxm2_batch.commit_output(3);
+    dem_img = dbvalue(dem_id, dem_type);
+    (demr_id, demr_type) = boxm2_batch.commit_output(4);
+    dem_res_img = dbvalue(demr_id, demr_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
+    dem_img = 0;
+    dem_res_img = 0;
   return x_img, y_img, z_img, dem_img, dem_res_img
   
 def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
@@ -1035,13 +1044,18 @@ def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
   boxm2_batch.set_input_from_db(2,generic_cam);
   boxm2_batch.set_input_string(3,dem_fname);
   boxm2_batch.set_input_double(4,scale);
-  boxm2_batch.run_process();
-  (xi_id, xi_type) = boxm2_batch.commit_output(0);
-  x_img = dbvalue(xi_id, xi_type);
-  (yi_id, yi_type) = boxm2_batch.commit_output(1);
-  y_img = dbvalue(yi_id, yi_type);
-  (zi_id, zi_type) = boxm2_batch.commit_output(2);
-  z_img = dbvalue(zi_id, zi_type);
+  result = boxm2_batch.run_process();
+  if result:
+    (xi_id, xi_type) = boxm2_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = boxm2_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = boxm2_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
   return x_img, y_img, z_img
 
 def roi_init_geotiff(scene, geocam, geotiff_img_name, level=0):
