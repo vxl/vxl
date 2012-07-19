@@ -6,6 +6,10 @@
 // E.g. if DEM is a 10 m resolution and scene is of 1m resolution, then the output images are resampled versions of DEM
 // given x,y,z images use ingest_dem process to initialize model
 //
+//  If a camera is passed as input (e.g. given by a previous process that reads it from tfw file then use it, 
+//  otherwise try reading it from geotiff header
+//
+//
 // \author Ozge C. Ozcanli
 // \date May 02, 2012
 
@@ -19,12 +23,18 @@
 #include <vil/vil_load.h>
 #include <vcl_algorithm.h>
 #include <vil/vil_resample_bilin.h>
+#include <vil/vil_convert.h>
 #include <vil/vil_new.h>
+
+#include <vsol/vsol_box_2d_sptr.h>
+#include <vsol/vsol_box_2d.h>
+
+#include <brip/brip_roi.h>
 
 
 namespace boxm2_dem_to_xyz_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 5;
 }
 
@@ -41,6 +51,8 @@ bool boxm2_dem_to_xyz_process_cons(bprb_func_process& pro)
                               // in that case pass the distance between ellipsoid and geiod in the region
                               // to convert DEM heights to heights wrt to ellipsoid
   input_types_[4] = "bool";   // resample bilinearly
+  input_types_[5] = "vpgl_camera_double_sptr";  // geocam if available, otherwise pass 0, camera will be constructed using info in geotiff header
+  input_types_[6] = "float";  // some DEMs have gaps or invalid regions, pass the value in the DEM imagery that is used to fill those areas.
 
   // process has 1 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -89,14 +101,25 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   unsigned refine_cnt = pro.get_input<unsigned>(1);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-  vcl_cout << "scene lvcs:\n" << *lvcs << vcl_endl;
-
   vcl_string geotiff_fname = pro.get_input<vcl_string>(2);
   double geoid_height = pro.get_input<double>(3);
   bool bilinear = pro.get_input<double>(4);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(5);
+  float fill_in_value = pro.get_input<float>(6);
+
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
+  
   vpgl_geo_camera* geocam = 0;
-  vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
+  if (cam) {
+    vcl_cout << "Using the loaded camera!\n";
+    geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  } else
+    vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
+
+  if (!geocam) {
+    vcl_cerr << "In boxm2_dem_to_xyz_process() - the geocam could not be initialized!\n";
+    return false;
+  }
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   vcl_cout << "scene bbox: " << scene_bbox << vcl_endl;
@@ -105,27 +128,42 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   if (blks.size() < 1)
     return false;
 
-  // crop the image from the DEM
-  vgl_box_2d<double> proj_bbox;
+   //: crop the image from the DEM
+  brip_roi broi(dem_res->ni(), dem_res->nj());
+  vsol_box_2d_sptr bb = new vsol_box_2d();
+  
   double u,v;
-  geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z() + geoid_height, u, v);
-  proj_bbox.add(vgl_point_2d<double>(u,v));
-  geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z() + geoid_height, u, v);
-  proj_bbox.add(vgl_point_2d<double>(u,v));
-  int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
-  int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
-  int max_i = int(vcl_min(dem_res->ni()-1.0, vcl_ceil(proj_bbox.max_x())));
-  int max_j = int(vcl_min(dem_res->nj()-1.0, vcl_ceil(proj_bbox.max_y())));
-  vcl_cout << "scene projected in the image mini: " << min_i << " minj: " << min_j << " maxi: " << max_i << " maxj: " << max_j << vcl_endl;
-  unsigned int dem_ni = max_i - min_i + 1;
-  unsigned int dem_nj = max_j - min_j + 1;
-  vil_image_view_base_sptr dem_view_base = dem_res->get_view((unsigned int)min_i, dem_ni, (unsigned int)min_j, dem_nj);
+  geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
+  bb->add_point(u,v);
+  geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
+  bb->add_point(u,v);
+  
+  bb = broi.clip_to_image_bounds(bb);
+  if (bb->width() <= 0 || bb->height() <= 0) {
+    vcl_cout << "In boxm2_dem_to_xyz_process() -- " << geotiff_fname << " does not overlap the scene!\n";
+    return false;
+  }
+  
+  unsigned dem_ni = bb->width(); unsigned dem_nj = bb->height();
+  vcl_cout << "dem resolution is: " << dem_ni << " by " << dem_nj << vcl_endl;
+
+  vil_image_view_base_sptr dem_view_base = dem_res->get_view(bb->get_min_x(), bb->width(), bb->get_min_y(), bb->height());
   vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
   if (!dem_view) {
-      vcl_cerr << "Error: boxm2_dem_to_xyz_process: could not cast first return image to a vil_image_view<float>\n";
-      return false;
+    vil_image_view<float> temp(dem_view_base->ni(), dem_view_base->nj(), 1);
+
+    vil_image_view<vxl_int_16>* dem_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(dem_view_base.ptr());
+    if (!dem_view_int) {
+      vil_image_view<vxl_byte>* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_view_base.ptr());
+      if (!dem_view_byte) {
+        vcl_cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
+        return false;
+      } else
+        vil_convert_cast(*dem_view_byte, temp);
+    } else
+      vil_convert_cast(*dem_view_int, temp);
+    dem_view = new vil_image_view<float>(temp);
   }
-  vcl_cout << "dem resolution is: " << dem_ni << " by " << dem_nj << vcl_endl;
 
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
   boxm2_block_metadata meta = scene->get_block_metadata(blks[0]);
@@ -178,7 +216,8 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
     for (int j = 0; j < nj; ++j) {
       (*out_img_x)(i,j) = i*vox_length+scene_bbox.min_x()+vox_length/2.0f;
       (*out_img_y)(i,j) = scene_bbox.max_y()-j*vox_length+vox_length/2.0f;
-      (*out_img_z)(i,j) = (*out_img)(i,j)-gz;  // we need local height
+      if ((*out_img)(i,j) < fill_in_value)  // otherwise it remains at local height = 0
+        (*out_img_z)(i,j) = (*out_img)(i,j)-gz;  // we need local height
     }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
@@ -310,3 +349,4 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
   return true;
 }
+
