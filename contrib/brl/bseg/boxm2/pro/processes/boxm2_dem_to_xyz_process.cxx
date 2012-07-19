@@ -103,7 +103,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vcl_string geotiff_fname = pro.get_input<vcl_string>(2);
   double geoid_height = pro.get_input<double>(3);
-  bool bilinear = pro.get_input<double>(4);
+  bool bilinear = pro.get_input<bool>(4);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(5);
   float fill_in_value = pro.get_input<float>(6);
 
@@ -144,10 +144,10 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
     return false;
   }
   
-  unsigned dem_ni = bb->width(); unsigned dem_nj = bb->height();
+  unsigned dem_ni = (unsigned)bb->width(); unsigned dem_nj = (unsigned)bb->height();
   vcl_cout << "dem resolution is: " << dem_ni << " by " << dem_nj << vcl_endl;
 
-  vil_image_view_base_sptr dem_view_base = dem_res->get_view(bb->get_min_x(), bb->width(), bb->get_min_y(), bb->height());
+  vil_image_view_base_sptr dem_view_base = dem_res->get_view((unsigned)bb->get_min_x(), dem_ni, (unsigned)bb->get_min_y(), dem_nj);
   vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
   if (!dem_view) {
     vil_image_view<float> temp(dem_view_base->ni(), dem_view_base->nj(), 1);
@@ -179,7 +179,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   ni = int(vcl_ceil((float)ni/dem_ni)*dem_ni);
   nj = int(vcl_ceil((float)nj/dem_nj)*dem_nj);
   vcl_cout << "made res multiple of dem_res: " << ni << " by " << nj << vcl_endl;
-  vox_length = (scene_bbox.max_x()-scene_bbox.min_x())/ni;
+  vox_length = (float)((scene_bbox.max_x()-scene_bbox.min_x())/ni);
 
   vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj, 1);
   vil_image_resource_sptr out_img_res = vil_new_image_resource_of_view(*out_img);
@@ -212,12 +212,15 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   vcl_cout << "lvcs origin height: " << gz << " dem height at that point: " << (*out_img)(0,0) << " adding local height of scene: " << scene_bbox.min_z() << vcl_endl;
   gz += scene_bbox.min_z();
 
+  if (fill_in_value <= 0) 
+    fill_in_value = vcl_numeric_limits<float>::max();
+  
   for (int i = 0; i < ni; ++i)
     for (int j = 0; j < nj; ++j) {
-      (*out_img_x)(i,j) = i*vox_length+scene_bbox.min_x()+vox_length/2.0f;
-      (*out_img_y)(i,j) = scene_bbox.max_y()-j*vox_length+vox_length/2.0f;
+      (*out_img_x)(i,j) = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      (*out_img_y)(i,j) = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
       if ((*out_img)(i,j) < fill_in_value)  // otherwise it remains at local height = 0
-        (*out_img_z)(i,j) = (*out_img)(i,j)-gz;  // we need local height
+        (*out_img_z)(i,j) = (*out_img)(i,j)-(float)gz;  // we need local height
     }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
@@ -335,13 +338,13 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
     for (unsigned j = 0; j < nj; j++) {
       vgl_ray_3d<double> ray = gcam->ray(i,j);
       vgl_point_3d<double> o = ray.origin();
-      (*out_img_x)(i,j) = o.x();
-      (*out_img_y)(i,j) = o.y();
+      (*out_img_x)(i,j) = (float)o.x();
+      (*out_img_y)(i,j) = (float)o.y();
       if (height_img(i,j) >= 0) {
-        (*out_img_z)(i,j) = height_img(i,j)*scale+(*out_img)(i,j)-gz;  // we need local height
+        (*out_img_z)(i,j) = (float)(height_img(i,j)*scale+(*out_img)(i,j)-gz);  // we need local height
       }
       else
-        (*out_img_z)(i,j) = (*out_img)(i,j)-gz;  // we need local height
+        (*out_img_z)(i,j) = (*out_img)(i,j)-(float)gz;  // we need local height
     }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
