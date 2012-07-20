@@ -544,12 +544,11 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
   planeM += plane*pstepM ;
   {
     const vdtop_8_neighborhood_mask* rowM   = planeM;
-    vdtop_8_neighborhood_mask* current_mask;
 
     for (unsigned j=0;j<nj;j++,rowM+=jstepM)
     {
       // starts from the end
-      current_mask=rowM+(ni-1)*istepM;
+      const vdtop_8_neighborhood_mask* current_mask = rowM+(ni-1)*istepM;
       for (int i=ni-1; i>=0; --i, current_mask-=istepM)
       {
         int k=0 ;
@@ -573,8 +572,7 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
 
         // darts between 5-7 have to be instantiated
         const vdtop_8_neighborhood_mask down_left_neighbors(0xF0) ;
-        vdtop_8_neighborhood_mask tmp_mask=*current_mask ;
-        tmp_mask&=down_left_neighbors ;
+        const vdtop_8_neighborhood_mask tmp_mask = *current_mask & down_left_neighbors ;
         int n = tmp_mask.nb_8_neighbors() ;
         if (n!=0)
         {
