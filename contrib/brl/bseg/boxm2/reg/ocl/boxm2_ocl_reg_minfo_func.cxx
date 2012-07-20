@@ -2,11 +2,12 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boct/boct_bit_tree.h>
 #include <vcl_where_root_dir.h>
+
 boxm2_ocl_reg_minfo_func::boxm2_ocl_reg_minfo_func( boxm2_opencl_cache_sptr& cacheA,
                                                     boxm2_stream_scene_cache& cacheB,
                                                     bocl_device_sptr device,
                                                     int nbins)
-: vnl_cost_function(6),cacheB_(cacheB)
+: vnl_cost_function(6), cacheB_(cacheB)
 {
   cacheA_ = cacheA;
 
@@ -15,7 +16,6 @@ boxm2_ocl_reg_minfo_func::boxm2_ocl_reg_minfo_func( boxm2_opencl_cache_sptr& cac
 
   this->compile_kernel();
   this->init_ocl_minfo();
-
 }
 
 double boxm2_ocl_reg_minfo_func::f(vnl_vector<double> const& x)
@@ -24,7 +24,7 @@ double boxm2_ocl_reg_minfo_func::f(vnl_vector<double> const& x)
   vgl_rotation_3d<double> r(x[3],x[4],x[5]);
   float val = 0.0f;
   this->boxm2_ocl_register_world(r,tx,nbins_,val);
-  vcl_cout<<val<<" ";
+  vcl_cout<<val<<' ';
   return -val;
 }
 
@@ -42,7 +42,6 @@ double boxm2_ocl_reg_minfo_func:: error(vgl_rotation_3d<double> rot,vgl_vector_3
   return -val;
 }
 
-
 bool boxm2_ocl_reg_minfo_func::compile_kernel()
 {
   vcl_vector<vcl_string> src_paths;
@@ -55,9 +54,9 @@ bool boxm2_ocl_reg_minfo_func::compile_kernel()
   this->kern = new bocl_kernel();
   return kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "estimate_mi_vol", "", "MI");
 }
+
 bool boxm2_ocl_reg_minfo_func::init_ocl_minfo()
 {
-
   boxm2_scene_sptr sceneB = cacheB_.scene();
   // Instantiate OPENCL
   // get scene B on the GPU's host memory
@@ -72,12 +71,11 @@ bool boxm2_ocl_reg_minfo_func::init_ocl_minfo()
   vcl_vector<boxm2_block_id> sceneB_ids = sceneB->get_block_ids();
   boxm2_scene_info * sceneB_info = sceneB->get_blk_metadata( sceneB_ids[0] );
 
-
   vgl_box_3d<int> bbox = sceneB->bounding_box_blk_ids();
 
-  bbox_buff[0] = 0; bbox_buff[3] = bbox.max_x()-bbox.min_x();  
-  bbox_buff[1] = 0; bbox_buff[4] = bbox.max_y()-bbox.min_y();  
-  bbox_buff[2] = 0; bbox_buff[5] = bbox.max_z()-bbox.min_z();  
+  bbox_buff[0] = 0; bbox_buff[3] = bbox.max_x()-bbox.min_x();
+  bbox_buff[1] = 0; bbox_buff[4] = bbox.max_y()-bbox.min_y();
+  bbox_buff[2] = 0; bbox_buff[5] = bbox.max_z()-bbox.min_z();
 
   bbox_buff[6] = sceneB_info->scene_dims[0];
   bbox_buff[7] = sceneB_info->scene_dims[1];
@@ -86,7 +84,6 @@ bool boxm2_ocl_reg_minfo_func::init_ocl_minfo()
   sceneB_bbox_ids = new bocl_mem(device_->context(), bbox_buff, 9*sizeof(int), " scene B bbox" );
   sceneB_bbox_ids->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
- 
   vgl_box_3d<double> scene_bbox = sceneB->bounding_box();
   sceneB_origin_buff[0] = scene_bbox.min_x();
   sceneB_origin_buff[1] = scene_bbox.min_y();
@@ -95,14 +92,12 @@ bool boxm2_ocl_reg_minfo_func::init_ocl_minfo()
   sceneB_origin = new bocl_mem(device_->context(), sceneB_origin_buff, 4*sizeof(float), " scene B origin" );
   sceneB_origin->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-  
   block_dims[0] = sceneB_info->scene_dims[0]*sceneB_info->block_len;
   block_dims[1] = sceneB_info->scene_dims[1]*sceneB_info->block_len;
   block_dims[2] = sceneB_info->scene_dims[2]*sceneB_info->block_len;
   sceneB_block_dims = new bocl_mem(device_->context(), block_dims, 4*sizeof(float), " scene B block dims" );
   sceneB_block_dims->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-  
   subblk_num_buff[0] = sceneB_info->scene_dims[0];
   subblk_num_buff[1] = sceneB_info->scene_dims[1];
   subblk_num_buff[2] = sceneB_info->scene_dims[2];
@@ -113,8 +108,6 @@ bool boxm2_ocl_reg_minfo_func::init_ocl_minfo()
 
   sceneB_sub_block_len = new bocl_mem(device_->context(), &(sceneB_info->block_len), sizeof(float), " scene B sub block len" );
   sceneB_sub_block_len->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-
-
 
   blks_ocl_B = new bocl_mem(device_->context(), cacheB_.blk_buffer_, cacheB_.total_bytes_per_block_, " block buffer B" );
   blks_ocl_B->create_buffer(CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR );
@@ -145,14 +138,13 @@ bool boxm2_ocl_reg_minfo_func::init_ocl_minfo()
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   return true;
-
 }
-bool boxm2_ocl_reg_minfo_func::boxm2_ocl_register_world(vgl_rotation_3d<double> rot,
-														vgl_vector_3d<double> tx,
-														int nbins,
-														float & mi)
-{
 
+bool boxm2_ocl_reg_minfo_func::boxm2_ocl_register_world(vgl_rotation_3d<double> rot,
+                                                        vgl_vector_3d<double> tx,
+                                                        int nbins,
+                                                        float & mi)
+{
   int * joint_histogram_buff= new int[nbins*nbins];
   for (unsigned k = 0 ; k<nbins*nbins; k++)
       joint_histogram_buff[k] = 0;
@@ -202,11 +194,10 @@ bool boxm2_ocl_reg_minfo_func::boxm2_ocl_register_world(vgl_rotation_3d<double> 
     blk_info->write_to_buffer((queue));
     global_threads[0] = (unsigned) RoundUp(mdata.sub_block_num_.x()*mdata.sub_block_num_.y()*mdata.sub_block_num_.z(),(int)local_threads[0]);
 
-
     // Kernel ( blk_info , trees, alpha,  transformation, sceneB_bbox,sceneB_bbox_id, blkoffsets, alphaoffsets )
     kern->set_arg(blk_info);
     kern->set_arg(centerX.ptr());
-	kern->set_arg(centerY.ptr());
+    kern->set_arg(centerY.ptr());
 
     kern->set_arg(centerZ.ptr());
     kern->set_arg(lookup.ptr());
@@ -247,7 +238,6 @@ bool boxm2_ocl_reg_minfo_func::boxm2_ocl_register_world(vgl_rotation_3d<double> 
   float * histA = new float[nbins];
   float * histB = new float[nbins];
 
-  
   for (unsigned k = 0 ;k<nbins; k++)
   {
     histA[k] = 0.0;
@@ -298,8 +288,5 @@ bool boxm2_ocl_reg_minfo_func::boxm2_ocl_register_world(vgl_rotation_3d<double> 
   delete [] histA;
   delete [] histB;
   return true;
-
-
 }
-
 

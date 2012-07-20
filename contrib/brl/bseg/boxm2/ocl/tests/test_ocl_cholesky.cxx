@@ -10,6 +10,7 @@
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
 #include <boxm2/ocl/tests/boxm2_ocl_test_utils.h>
+
 void compute_ocl_cholesky(vnl_matrix<float>  A, vnl_vector<float>  b, vnl_vector<float>  x0, vnl_vector<float>  & x)
 {
   //load BOCL stuff
@@ -59,17 +60,17 @@ void compute_ocl_cholesky(vnl_matrix<float>  A, vnl_vector<float>  b, vnl_vector
   cholesky_test.execute( queue, 1, lThreads, gThreads);
   clFinish( queue );
   invmatbuff->read_to_buffer(queue);
-  
+
   vnl_matrix<float> AL( A.rows(), A.cols());
   AL.fill(0.0);
   vcl_cout<<"====== L Matrix  ======"<<vcl_endl;
-  for(unsigned i = 0 ; i < Acopy.rows(); i ++)
-	  for(unsigned j = 0 ; j <= i ; j ++)
-		  AL(i,j) = odata[i*Acopy.cols() + j];
+  for (unsigned i = 0 ; i < Acopy.rows(); i ++)
+    for (unsigned j = 0 ; j <= i ; j ++)
+      AL(i,j) = odata[i*Acopy.cols() + j];
   AL = AL * AL. transpose();
   testlib_test_assert_near("ONL CHOLESKY L*L'-A", (AL - A).fro_norm(),0,1e-5);
 
-  //: testing solver part
+  // testing solver part
   Acopy = A;
   bocl_mem_sptr Abuff = new bocl_mem( device->context(), Acopy.data_block(), 16*sizeof(float), "input matrix");
   Abuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -116,6 +117,7 @@ void compute_vnl_cholesky(vnl_matrix<double> & A, vnl_vector<double>  b, vnl_vec
     testlib_test_assert_near("Solve Ax=b",(x-x0).one_norm(),0,1e-4);
   }
 }
+
 void test_ocl_cholesky()
 {
   vnl_random rng(1000);
@@ -124,23 +126,24 @@ void test_ocl_cholesky()
   A = A * A.transpose();
 
   vnl_matrix<float> Af(4,4);
-  for(unsigned i = 0 ; i < A.rows(); i ++)
-	  for(unsigned j = 0 ; j < A.cols(); j++)
-		  Af(i,j) = (float)A(i,j);
-  
+  for (unsigned i = 0 ; i < A.rows(); i ++)
+    for (unsigned j = 0 ; j < A.cols(); j++)
+      Af(i,j) = (float)A(i,j);
+
   vnl_vector<float> bf(4),x0f(4),xf(4);
   boxm2_ocl_test_utils::fill_random(x0f.begin(), x0f.end(), rng);
   bf=Af*x0f;
 
   vnl_vector<double> b(4),x0(4),x(4);
 
-  for(unsigned i = 0 ; i < b.size(); i++)
+  for (unsigned i = 0 ; i < b.size(); i++)
   {
-	  b[i] = bf[i] ;
-	  x0[i] = x0f[i] ;
-	  x[i] = xf[i] ;
+    b[i] = bf[i] ;
+    x0[i] = x0f[i] ;
+    x[i] = xf[i] ;
   }
   compute_ocl_cholesky(Af,bf,x0f,xf);
   compute_vnl_cholesky(A,b,x0,x);
- }
+}
+
 TESTMAIN(test_ocl_cholesky);

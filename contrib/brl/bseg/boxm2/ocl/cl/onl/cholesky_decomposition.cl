@@ -18,30 +18,28 @@ void cholesky_decomposition(__local float* A, int n)
    }
 }
 
-//: L is a lower trianguler matrix 
+// \p L is a lower triangular matrix
 void cholesky_solve( __local float* L, int n, __local float * b , __local float * x )
 {
   if ( get_local_id(0) == 0)
   {
-
-	  //: forward substitution
-	  for(unsigned i = 0; i < n; i++)
-	  {
-		  float sum  = 0.0f;
-		  for(unsigned j = 0; j < i; j++)
-			   sum += L[i*n+j]*x[j] ; 
-		  x[i] = (b[i]-sum)/L[i*n+i];
-	  }
-	  for(unsigned i = 0; i < n; i++)
-			b[i] = x[i];
-	  //: backward substitution
-	  for(int i = n-1; i >=0 ; i--)
-	  {
-		  float sum  = 0.0f;
-		  for(unsigned j = n-1; j > i; j--)
-			   sum += L[j*n+i]*x[j] ;  // L[j*n+i] is the transpose of L[i*n+j]
-		  x[i] = (b[i]-sum)/L[i*n+i];
-	  }
-
+     // forward substitution
+     for (unsigned i = 0; i < n; i++)
+     {
+        float sum  = 0.0f;
+        for (unsigned j = 0; j < i; j++)
+           sum += L[i*n+j]*x[j] ;
+        x[i] = (b[i]-sum)/L[i*n+i];
+     }
+     for (unsigned i = 0; i < n; i++)
+        b[i] = x[i];
+     // backward substitution
+     for (int i = n-1; i >=0 ; i--)
+     {
+        float sum  = 0.0f;
+        for (unsigned j = n-1; j > i; j--)
+           sum += L[j*n+i]*x[j] ;  // L[j*n+i] is the transpose of L[i*n+j]
+        x[i] = (b[i]-sum)/L[i*n+i];
+     }
   }
 }

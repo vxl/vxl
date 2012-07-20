@@ -38,11 +38,11 @@ class boxm2_ocl_reg_minfo_func : public vnl_cost_function
   //: Mutual information between the destination and mapped source image
   double mutual_info(vgl_rotation_3d<double> rot,vgl_vector_3d<double> trans);
  protected:
- bool compile_kernel();
- bool boxm2_ocl_register_world(vgl_rotation_3d<double>  rot,
-                              vgl_vector_3d<double> tx,
-                              int nbins,
-                              float & mi);
+  bool compile_kernel();
+  bool boxm2_ocl_register_world(vgl_rotation_3d<double>  rot,
+                                vgl_vector_3d<double> tx,
+                                int nbins,
+                                float & mi);
 
   bool init_ocl_minfo();
   unsigned nbins_;
@@ -65,15 +65,13 @@ class boxm2_ocl_reg_minfo_func : public vnl_cost_function
   bocl_mem_sptr alpha_ocl_B_offsets;
   bocl_mem_sptr output;
 
-
   unsigned int * blk_offsets_array ;
   unsigned int * alpha_offsets_array;
-    int bbox_buff[9];
-	 float sceneB_origin_buff[4];
-	 float block_dims[4];
-	 int subblk_num_buff[4];
-	   float output_buff[1000];
-
+  int bbox_buff[9];
+  float sceneB_origin_buff[4];
+  float block_dims[4];
+  int subblk_num_buff[4];
+  float output_buff[1000];
 };
 
 

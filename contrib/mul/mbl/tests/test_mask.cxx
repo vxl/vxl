@@ -123,7 +123,6 @@ void test_mask()
   TEST("Expected fail of apply mask where lengths differ", failed_application, true);
   TEST("Values invariant on failure of mask application", (v1 == v_tgt), true);
 
-
   // Test iterator version
   vcl_cout << "\nTesting mbl_apply_mask iterator version" << vcl_endl;
   setup_default_masks(m1, m2);
@@ -181,7 +180,6 @@ void test_mask()
   TEST("Expected fails for invalid logic ops", (failed_logic == 3), true);
   TEST("Result invariant on failure of mask logic", (m2 == m_op), true);
 
-
   // Test merging of value vectors
   vcl_cout << "\nTesting mbl_mask_merge_values" << vcl_endl;
   setup_default_masks(m1, m2);
@@ -204,7 +202,6 @@ void test_mask()
   catch (...) { merge_failed = true; }
   TEST("Expected fail of merge values where lengths differ", merge_failed, true);
   TEST("Values invariant on failure of merge operation", v2 == v_tgt, true);
-
 
   // Test mbl_mask_on_mask
   vcl_cout << "\nTesting mbl_mask_on_mask" << vcl_endl;
@@ -232,7 +229,6 @@ void test_mask()
   catch (...) { mask_mask_failure = true; }
   TEST("Expected fail of mask-on-mask due to count mismatch", mask_mask_failure, true);
   TEST("Result invariant on failure of mask-on-mask operation", (m2 == m_op), true);
-
 
   // Test mbl_masks_from_index_set
   vcl_cout << "\nTesting mbl_masks_from_index_set" << vcl_endl;
@@ -288,42 +284,38 @@ void test_mask()
 
   // test vsl read write
   {
-	  mbl_mask mask1(5);
-	  mask1[0] = false;
-	  mask1[1] = true;
-	  mask1[2] = true;
-	  mask1[3] = false;
-	  mask1[4] = true;
+    mbl_mask mask1(5);
+    mask1[0] = false;
+    mask1[1] = true;
+    mask1[2] = true;
+    mask1[3] = false;
+    mask1[4] = true;
 
-	  vsl_b_ofstream bout("./mbl_masl_test_vsl.bvl");
-	  vsl_b_write(bout,mask1);
-	  bout.close();
+    vsl_b_ofstream bout("./mbl_masl_test_vsl.bvl");
+    vsl_b_write(bout,mask1);
+    bout.close();
 
-	  mbl_mask mask2;
-	  vsl_b_ifstream bin("./mbl_masl_test_vsl.bvl");
-	  vsl_b_read(bin,mask2);
-	  bout.close();
-	  TEST("mbl_mask vsl binary IO write/read  consistent ", mask1==mask2 , true);
+    mbl_mask mask2;
+    vsl_b_ifstream bin("./mbl_masl_test_vsl.bvl");
+    vsl_b_read(bin,mask2);
+    bout.close();
+    TEST("mbl_mask vsl binary IO write/read  consistent ", mask1==mask2 , true);
   }
 
   // test vsl read write of mask for empty mask
   {
-	  mbl_mask mask1;
+    mbl_mask mask1;
 
-	  vsl_b_ofstream bout("./mbl_masl_test_vsl.bvl");
-	  vsl_b_write(bout,mask1);
-	  bout.close();
+    vsl_b_ofstream bout("./mbl_masl_test_vsl.bvl");
+    vsl_b_write(bout,mask1);
+    bout.close();
 
-	  mbl_mask mask2;
-	  vsl_b_ifstream bin("./mbl_masl_test_vsl.bvl");
-	  vsl_b_read(bin,mask2);
-	  bout.close();
-	  TEST("mbl_mask vsl binary IO write/read consistent for empty mask ", mask1==mask2 , true);
+    mbl_mask mask2;
+    vsl_b_ifstream bin("./mbl_masl_test_vsl.bvl");
+    vsl_b_read(bin,mask2);
+    bout.close();
+    TEST("mbl_mask vsl binary IO write/read consistent for empty mask ", mask1==mask2 , true);
   }
- 
-  
-
-
 }
 
 TESTMAIN(test_mask);
