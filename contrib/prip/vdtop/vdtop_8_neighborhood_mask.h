@@ -172,6 +172,12 @@ class vdtop_8_neighborhood_mask
     return *this ;
   }
 
+  //: performs the intersection of this and arg.
+  vdtop_8_neighborhood_mask operator&(const vdtop_8_neighborhood_mask arg) const
+  {
+    return vdtop_8_neighborhood_mask(mask_&arg.mask_);
+  }
+
   //: returns a binary mask.
   vxl_byte mask() const
   {
