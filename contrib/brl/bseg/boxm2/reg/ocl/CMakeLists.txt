@@ -7,11 +7,10 @@ ADD_DEFINITIONS(-DHAS_OPENCL=1)
 INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
-
 SET(boxm2_ocl_reg_sources
-    #boxm2_ocl_reg_mutual_info.h   boxm2_ocl_reg_mutual_info.cxx
-	boxm2_ocl_reg_minfo_func.h	  boxm2_ocl_reg_minfo_func.cxx
-	boxm2_ocl_reg_depth_map_to_vol.h boxm2_ocl_reg_depth_map_to_vol.cxx
+    boxm2_ocl_reg_mutual_info.h      boxm2_ocl_reg_mutual_info.cxx
+    boxm2_ocl_reg_minfo_func.h	     boxm2_ocl_reg_minfo_func.cxx
+    boxm2_ocl_reg_depth_map_to_vol.h boxm2_ocl_reg_depth_map_to_vol.cxx
    )
 
 ADD_LIBRARY(boxm2_ocl_reg  ${boxm2_ocl_reg_sources})
