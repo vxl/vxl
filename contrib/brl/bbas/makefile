@@ -61,19 +61,29 @@ SUBDIRS += imesh
 # vrml utilities library
 SUBDIRS += bvrml
 
+# Brown opencl library
 SUBDIRS += bocl
 
+# Brown asychronous IO library
 SUBDIRS += baio
 
+# Brown radiometry library
 SUBDIRS += brad
 
+# viewsphere Library
 SUBDIRS += vsph
 
+# camera library
 SUBDIRS += bpgl
 
+# Brown hadoop library
 SUBDIRS += bhdfs
 
+# Brown subjective logic library
 SUBDIRS += bsl
+
+# Brown elastic curve matching library
+SUBDIRS += bcvr
 
 ################################
 include ${VXLROOT}/config/top.mk
