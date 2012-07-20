@@ -1,5 +1,7 @@
+#ifndef bcvr_cv_cor_h_
+#define bcvr_cv_cor_h_
 //---------------------------------------------------------------------
-// This is brcv/rec/dbcvr/bcvr_cv_cor.h
+// This is brl/bbas/bcvr/bcvr_cv_cor.h
 //:
 // \file
 // \brief a class to hold the curve correspondence as vectors of points
@@ -16,9 +18,6 @@
 //
 //-------------------------------------------------------------------------
 
-#ifndef _bcvr_cv_cor_h
-#define _bcvr_cv_cor_h
-
 #include <vbl/vbl_ref_count.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
@@ -32,13 +31,13 @@
 // either use the constructor or set the point vectors directly
 class bcvr_cv_cor : public vbl_ref_count
 {
-public:
+ public:
   //: constructors
   bcvr_cv_cor();
-  bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1, 
-               const bsol_intrinsic_curve_2d_sptr c2, 
-               vcl_vector<vcl_pair<int,int> >& map,
-               int n1);
+  bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1,
+              const bsol_intrinsic_curve_2d_sptr c2,
+              vcl_vector<vcl_pair<int,int> >& map,
+              int n1);
 
   virtual ~bcvr_cv_cor()  { poly1_ = 0; poly2_ = 0; };
 
@@ -49,18 +48,20 @@ public:
   void set_contour_pts1(const vcl_vector<vgl_point_2d<double> >& pts1) { pts1_ = pts1; }
   void set_contour_pts2(const vcl_vector<vgl_point_2d<double> >& pts2) { pts2_ = pts2; }
 
+  //: given s1 on curve1 return alpha(s1) on curve2.
   // interpolate alpha (correspondence function) piecewise linearly using the final map
   // alpha has vertical jumps, in those cases assign the jumped value to the point of jump on curve1
   // i.e. in the figure below, return s2 as alpha(s1) (not s)
+  // \verbatim
   //   s2|  ----
   //     |  |
   //   s | -
   //     |/
   //     --------
   //        s1
+  // \endverbatim
   //
   // do the same thing for reverse operation
-  //: given s1 on curve1 return alpha(s1) on curve2
   double get_arclength_on_curve2(double s1);
   //: given s2 on curve2 return alpha_inverse(s2) on curve1
   double get_arclength_on_curve1(double s2);
@@ -84,24 +85,23 @@ public:
   //-----------------------
 
   //: Serial I/O format version
-  virtual unsigned version() const {return 1;} 
-  
+  virtual unsigned version() const {return 1;}
+
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const {return "bcvr_cv_cor";}
 
   //: determine if this is the given class
   virtual bool is_class(vcl_string const& cls) const
    { return cls==is_a();}
-  
+
   //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const ;
 
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
 
-
   //: data
-  //  polygons used to get sillhuoette correspondence 
+  //  polygons used to get sillhuoette correspondence
   //  (might be line fitted versions of input polygons
   //  which are inputted to dbcvr_clsd_cvmatch)
   vsol_polygon_2d_sptr poly1_;
@@ -120,4 +120,4 @@ public:
   bool open_curve_matching_;
 };
 
-#endif
+#endif // bcvr_cv_cor_h_
