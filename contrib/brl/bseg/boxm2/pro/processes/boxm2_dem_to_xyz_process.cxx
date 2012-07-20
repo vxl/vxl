@@ -6,7 +6,7 @@
 // E.g. if DEM is a 10 m resolution and scene is of 1m resolution, then the output images are resampled versions of DEM
 // given x,y,z images use ingest_dem process to initialize model
 //
-//  If a camera is passed as input (e.g. given by a previous process that reads it from tfw file then use it, 
+//  If a camera is passed as input (e.g. given by a previous process that reads it from tfw file then use it,
 //  otherwise try reading it from geotiff header
 //
 //
@@ -102,18 +102,19 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   unsigned refine_cnt = pro.get_input<unsigned>(1);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vcl_string geotiff_fname = pro.get_input<vcl_string>(2);
-  double geoid_height = pro.get_input<double>(3);
+  double geoid_height = pro.get_input<double>(3); // TODO - unused!
   bool bilinear = pro.get_input<bool>(4);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(5);
   float fill_in_value = pro.get_input<float>(6);
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
-  
+
   vpgl_geo_camera* geocam = 0;
   if (cam) {
     vcl_cout << "Using the loaded camera!\n";
     geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
-  } else
+  }
+  else
     vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
 
   if (!geocam) {
@@ -131,19 +132,19 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
    //: crop the image from the DEM
   brip_roi broi(dem_res->ni(), dem_res->nj());
   vsol_box_2d_sptr bb = new vsol_box_2d();
-  
+
   double u,v;
   geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
   bb->add_point(u,v);
   geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
   bb->add_point(u,v);
-  
+
   bb = broi.clip_to_image_bounds(bb);
   if (bb->width() <= 0 || bb->height() <= 0) {
     vcl_cout << "In boxm2_dem_to_xyz_process() -- " << geotiff_fname << " does not overlap the scene!\n";
     return false;
   }
-  
+
   unsigned dem_ni = (unsigned)bb->width(); unsigned dem_nj = (unsigned)bb->height();
   vcl_cout << "dem resolution is: " << dem_ni << " by " << dem_nj << vcl_endl;
 
@@ -158,9 +159,11 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
       if (!dem_view_byte) {
         vcl_cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
         return false;
-      } else
+      }
+      else
         vil_convert_cast(*dem_view_byte, temp);
-    } else
+    }
+    else
       vil_convert_cast(*dem_view_int, temp);
     dem_view = new vil_image_view<float>(temp);
   }
@@ -209,12 +212,14 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
   double lon,lat,gz;
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84,lon, lat, gz);
-  vcl_cout << "lvcs origin height: " << gz << " dem height at that point: " << (*out_img)(0,0) << " adding local height of scene: " << scene_bbox.min_z() << vcl_endl;
+  vcl_cout << "lvcs origin height: " << gz
+           << " dem height at that point: " << (*out_img)(0,0)
+           << " adding local height of scene: " << scene_bbox.min_z() << vcl_endl;
   gz += scene_bbox.min_z();
 
-  if (fill_in_value <= 0) 
+  if (fill_in_value <= 0)
     fill_in_value = vcl_numeric_limits<float>::max();
-  
+
   for (int i = 0; i < ni; ++i)
     for (int j = 0; j < nj; ++j) {
       (*out_img_x)(i,j) = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
