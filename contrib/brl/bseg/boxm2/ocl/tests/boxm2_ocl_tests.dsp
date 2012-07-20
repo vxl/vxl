@@ -196,6 +196,9 @@ SOURCE=.\test_kernel_filter.cxx
 SOURCE=.\boxm2_ocl_test_utils.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_ocl_cholesky.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

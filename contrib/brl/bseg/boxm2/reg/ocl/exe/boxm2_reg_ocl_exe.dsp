@@ -97,6 +97,9 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\boxm2_ocl_reg_mutual_info_exe.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_depth_map_to_vol_exe.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

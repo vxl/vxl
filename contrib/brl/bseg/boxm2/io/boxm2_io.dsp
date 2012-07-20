@@ -178,6 +178,12 @@ SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX4-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_block_cache-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_FLOAT16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_POINT-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

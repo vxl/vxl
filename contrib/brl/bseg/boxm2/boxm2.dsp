@@ -169,6 +169,15 @@ SOURCE=.\Templates/boxm2_data+BOXM2_NORMAL_ALBEDO_ARRAY-.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm2_data+BOXM2_GAUSS_RGB-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_POINT.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_NORMAL.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_FEATURE_VECTOR-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -201,6 +210,9 @@ SOURCE=.\boxm2_scene_parser.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_normal_albedo_array.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_feature_vector.h
 # End Source File
 # End Group
 # End Target
