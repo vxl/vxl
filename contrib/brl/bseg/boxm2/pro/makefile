@@ -34,6 +34,7 @@ SOURCES += processes/boxm2_create_scene_mask_process.cxx
 SOURCES += processes/boxm2_add_aux_info_to_ply_process.cxx
 SOURCES += processes/boxm2_roi_init_geotiff_process.cxx
 SOURCES += processes/boxm2_scene_lvcs_process.cxx
+SOURCES += processes/boxm2_dem_to_xyz_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

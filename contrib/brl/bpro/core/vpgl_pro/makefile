@@ -35,6 +35,10 @@ SOURCES += processes/vpgl_generate_3d_point_from_cams_process.cxx
 SOURCES += processes/vpgl_convert_to_local_coordinates_process.cxx
 SOURCES += processes/bpgl_transform_perspective_cameras_process.cxx
 SOURCES += processes/vpgl_load_geo_camera_process.cxx
+SOURCES += processes/vpgl_compute_persp_cam_pa_covariance_process.cxx
+SOURCES += processes/vpgl_get_perspective_cam_center_process.cxx
+SOURCES += processes/vpgl_perspective_cam_distance_processes.cxx
+SOURCES += processes/vpgl_perturb_perspective_camera_processes.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

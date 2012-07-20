@@ -11,6 +11,7 @@ TESTS += test_process_mains.cxx
 TESTS += test_weighted_em.cxx
 TESTS += test_kernel_vector_filter.cxx
 TESTS += test_kernel_filter.cxx
+TESTS += test_ocl_cholesky.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
