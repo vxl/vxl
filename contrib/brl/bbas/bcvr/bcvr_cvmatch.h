@@ -1,16 +1,16 @@
-#ifndef _bcvr_cvmatch_h
-#define _bcvr_cvmatch_h
 //---------------------------------------------------------------------
-// This is brcv/rec/dbcvr/bcvr_cvmatch.h
+// This is brl/bbas/bcvr/bcvr_cvmatch.h
+#ifndef bcvr_cvmatch_h_
+#define bcvr_cvmatch_h_
 //:
 // \file
 // \brief open curve matching adapted from original source code of Thomas Sebastian
-//        On Aligning Curves. 
+//        On Aligning Curves.
 //        T. B. Sebastian, P. N. Klein, B. B. Kimia
 //        IEEE Trans. Pattern Anal. Mach. Intell. 25(1): 116-125 (2003)
 //
 // \author
-//  MingChing Chang 
+//  MingChing Chang
 //
 // \verbatim
 //  Modifications
@@ -21,6 +21,7 @@
 
 #include <bsol/bsol_intrinsic_curve_2d.h>
 #include <bsol/bsol_intrinsic_curve_2d_sptr.h>
+#include <vcl_cassert.h>
 
 #include "bcvr_cv_cor_sptr.h"
 
@@ -41,7 +42,7 @@ typedef vcl_vector< vcl_pair<int,int> >            FinalMapType;
 
 class bcvr_cvmatch : public vbl_ref_count
 {
-protected:
+ protected:
 
   bsol_intrinsic_curve_2d_sptr    _curve1;
   bsol_intrinsic_curve_2d_sptr    _curve2;
@@ -58,7 +59,7 @@ protected:
   vcl_vector<int> XOFFSET;
   vcl_vector<int> YOFFSET;
 
-public:
+ public:
 
   //Result of matching:
   DPCostType*        DPCost()      { return &_DPCost; }
@@ -68,11 +69,11 @@ public:
   double          finalCost()    { return _finalCost; }
 
   int getFMapFirst (int i) {
-    assert (i>-1);
+    assert (i>=0);
     return (*finalMap())[i].first;
   }
   int getFMapSecond (int i) {
-    assert (i>-1);
+    assert (i>=0);
     return (*finalMap())[i].second;
   }
 
@@ -81,12 +82,12 @@ public:
   bsol_intrinsic_curve_2d_sptr curve2() { return _curve2; }
   void setCurve1 (const bsol_intrinsic_curve_2d_sptr& c1) {
     _curve1 = c1;
-    //: just in case
+    // just in case
     _curve1->computeProperties();
   }
   void setCurve2 (const bsol_intrinsic_curve_2d_sptr& c2) {
     _curve2 = c2;
-    //: just in case
+    // just in case
     _curve2->computeProperties();
   }
   void setFinalMap (FinalMapType map) {
@@ -123,7 +124,7 @@ public:
 
   void Match ();
 
-   //: prepare and return the instance of container class that saves curve correspondence
+  //: prepare and return the instance of container class that saves curve correspondence
   bcvr_cv_cor_sptr get_cv_cor();
 
   void GetAverageCurveFromAMatch (bsol_intrinsic_curve_2d_sptr AverageCurve);
@@ -137,5 +138,4 @@ public:
   void SaveAlignCurve (void);
 };
 
-#endif
-
+#endif // bcvr_cvmatch_h_
