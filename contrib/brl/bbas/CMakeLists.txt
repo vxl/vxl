@@ -83,3 +83,5 @@ SUBDIRS(bhdfs)
 # Brown subjective logic library
 SUBDIRS(bsl)
 
+# Brown elastic curve matching library
+SUBDIRS(bcvr)
