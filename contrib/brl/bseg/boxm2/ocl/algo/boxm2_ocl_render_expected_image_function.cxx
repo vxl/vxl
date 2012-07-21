@@ -316,9 +316,9 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
         bocl_mem *aux_sun   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(data_type));
         //vcl_cout << "id = " << id << vcl_endl;
-        vcl_cout << "blk = " << blk->cpu_buffer() << vcl_endl;
-        vcl_cout << "alpha = " << alpha->cpu_buffer() << vcl_endl;
-        vcl_cout << "aux_sun = " << aux_sun->cpu_buffer() << vcl_endl;
+        vcl_cout << "blk = " << blk->cpu_buffer() << '\n'
+                 << "alpha = " << alpha->cpu_buffer() << '\n'
+                 << "aux_sun = " << aux_sun->cpu_buffer() << vcl_endl;
 
         transfer_time += (float) transfer.all();
         ////3. SET args
@@ -498,7 +498,7 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
     unsigned int num_normals = normals.size();
     // opencl code depends on there being exactly 16 normal directions - do sanity check here
     if (num_normals != 16) {
-      vcl_cerr << "ERROR: boxm2_ocl_update_alpha_naa_process: num_normals = " << num_normals << ".  Expected 16" << vcl_endl;
+      vcl_cerr << "ERROR: boxm2_ocl_update_alpha_naa_process: num_normals = " << num_normals << ".  Expected 16\n";
       return false;
     }
 
@@ -512,7 +512,7 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
    // buffers for holding radiance scales and offsets per normal
    float* radiance_scales_buff = new float[num_normals];
    float* radiance_offsets_buff = new float[num_normals];
-  
+
    // compute offsets and scale for linear radiance model
    for (unsigned n=0; n < num_normals; ++n) {
       // compute offset as radiance of surface with 0 reflectance
@@ -617,8 +617,8 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
     //delete[] radiance_scales_shadow_buff;
     delete[] radiance_offsets_buff;
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
-    vcl_cout << "Returning " << vcl_endl;
+    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<'\n'
+            << "Returning" << vcl_endl;
     return gpu_time + transfer_time;
 }
 
@@ -655,11 +655,22 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
     // get normals
     vcl_vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
     cl_float16 normals_x, normals_y, normals_z;
+#ifdef CL_ALIGNED
     for (unsigned int i=0; i<16; ++i) {
        normals_x.s[i] = normals[i].x();
        normals_y.s[i] = normals[i].y();
        normals_z.s[i] = normals[i].z();
     }
+#else // assuming cl_float16 is a typedef for float[16]
+    float* n_x = static_cast<float*>(normals_x);
+    float* n_y = static_cast<float*>(normals_y);
+    float* n_z = static_cast<float*>(normals_z);
+    for (unsigned int i=0; i<16; ++i) {
+       n_x[i] = normals[i].x();
+       n_y[i] = normals[i].y();
+       n_z[i] = normals[i].z();
+    }
+#endif // CL_ALIGNED
     bocl_mem_sptr normals_x_buff = new bocl_mem(device->context(), &normals_x, sizeof(cl_float16), "normals_x buffer");
     normals_x_buff->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
