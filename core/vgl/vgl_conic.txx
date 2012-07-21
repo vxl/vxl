@@ -117,10 +117,10 @@ vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& co, T rx, T ry, T theta)
     f_ = -a_*rx*rx-b_*rx*ry-c_*ry*ry-d_*rx-e_*ry;
   }
   else { // hyperbola or ellipse
-    rx = (rx < 0) ? (-rx*rx) : (rx > 0) ? (rx*rx) : 0;
-    ry = (ry < 0) ? (-ry*ry) : (ry > 0) ? (ry*ry) : 0;
+    rx = (rx < 0) ? (-rx*rx) : rx*rx; // abs of square
+    ry = (ry < 0) ? (-ry*ry) : ry*ry; // idem
 
-    double ct = vcl_cos(-theta);
+    double ct = vcl_cos(-theta); // rotate counterclockwise over theta
     double st = vcl_sin(-theta);
     T u = co.x();
     T v = co.y();

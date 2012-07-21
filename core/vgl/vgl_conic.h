@@ -168,8 +168,9 @@ class vgl_conic
   //  ry have opposite sign; the positive one determines the distance
   //  from bots tops to the centre, and the other one specified the
   //  'minor' axis length. The rotation is about the centre of the
-  //  ellipse or hyperbola. A parabola is obtained when the centre has
-  //  w()=0, i.e., is a point at infinity. In that case (rx,ry) is the
+  //  ellipse or hyperbola, measured counterclockwise from the X axis.
+  //  A parabola is obtained when the centre has w()=0,
+  //  i.e., is a point at infinity. In that case (rx,ry) is the
   //  top, and theta is an eccentricity parameter (since the centre
   //  already specifies the direction of the symmetry axis).
   vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta);
@@ -197,6 +198,7 @@ class vgl_conic
 
   //: Returns true if the point pt belongs to the conic.
   //  I.e., if it \e exactly satisfies the conic equation.
+  //  Beware of rounding for floating point type T! An "almost" returns false!
   bool contains(vgl_homg_point_2d<T> const& pt) const;
 
   //: Returns the list of component lines, when degenerate and real components.
