@@ -231,12 +231,19 @@ static void test_conic()
   TEST("conic is ellipse", c.real_type(), "real ellipse");
   TEST("centre", c.centre(), centre);
   TEST_NEAR("ellipse equality", cc,c, 1e-6);
+  // since the orientation is given counterclockwise,
+  // one of the tops should be the point (1,2)+(6,8) (and not (1,2)+(6,-8)):
+  TEST("top (6,8)", c.contains(vgl_homg_point_2d<double>(7.0,10.0,1.0)), true);
+  TEST("top not (6,-8)", c.contains(vgl_homg_point_2d<double>(7.0,-6.0,1.0)), false);
+  TEST("top not (8,6)", c.contains(vgl_homg_point_2d<double>(9.0,8.0,1.0)), false);
+  TEST("top not (8,-6)", c.contains(vgl_homg_point_2d<double>(9.0,-4.0,1.0)), false);
 
   // Test ellipse geometry for an ellipse with a = 2, b = 1 slanted 45 degrees
   // and centered at (1, 2)
 
   vcl_cout << "Test ellipse geometry\n";
-  cc = vgl_conic<double>(0.492577, -0.591093, 0.492577, 0.197032, -1.37921, 0.492813);
+  cc = vgl_conic<double>(0.492576994, -0.591092393, 0.492576994, 0.197030798, -1.379215583, 0.492576994);
+  // identical to cc = vgl_conic<double>(centre, 2,1, vnl_math::pi_over_4);
   good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
   vcl_cout << "ellipse(" << xc << ' ' << yc << ' ' << major_axis
            << ' ' << minor_axis << ' ' << angle*vnl_math::deg_per_rad << ")\n";
@@ -253,7 +260,7 @@ static void test_conic()
   // and centered at (-1, 2)
 
   vcl_cout << "Test ellipse geometry\n";
-  cc = vgl_conic<double>(-0.492577, -0.591093, -0.492577, 0.197032, 1.37921, -0.492813);
+  cc = vgl_conic<double>(-0.492576994, -0.591092393, -0.492576994, 0.197030798, 1.379215583, -0.492576994);
   good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
   vcl_cout << "ellipse(" << xc << ' ' << yc << ' ' << major_axis
            << ' ' << minor_axis << ' ' << angle*vnl_math::deg_per_rad << ")\n";
