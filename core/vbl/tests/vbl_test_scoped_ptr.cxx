@@ -1,8 +1,5 @@
-/*
-  fsm
-*/
+// fsm
 #include <testlib/testlib_test.h>
-// not used? #include <vcl_iostream.h>
 #include <vbl/vbl_scoped_ptr.h>
 
 struct some_class
@@ -14,7 +11,7 @@ struct some_class
 
 int some_class::count = 0;
 
-// This should fail to compile.
+// This should fail to compile:
 // struct incomplete;
 // vbl_scoped_ptr<incomplete> y;
 
