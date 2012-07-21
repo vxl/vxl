@@ -22,65 +22,30 @@ void boxm2_ocl_util::set_dodecahedron_dir_lookup(cl_float4* dodecahedron_dir)
   float golden = 0.8507f; //the golden ratio
   float other = 0.5257f;
 
-  dodecahedron_dir[0].s[0] = 0;
-  dodecahedron_dir[0].s[1] = -golden;
-  dodecahedron_dir[0].s[2] = -other;
-  dodecahedron_dir[0].s[3] = 0;
+  float data[] = {  0,     -golden, -other,  0,
+                    0,     -golden,  other,  0,
+                    0,      golden, -other,  0,
+                    0,      golden,  other,  0,
+                   -other,  0,      -golden, 0,
+                   -other,  0,       golden, 0,
+                    other,  0,      -golden, 0,
+                    other,  0,       golden, 0,
+                   -golden, -other,  0,      0,
+                   -golden,  other,  0,      0,
+                    golden, -other,  0,      0,
+                    golden,  other,  0,      0 };
 
-  dodecahedron_dir[1].s[0] = 0;
-  dodecahedron_dir[1].s[1] = -golden;
-  dodecahedron_dir[1].s[2] = other;
-  dodecahedron_dir[1].s[3] = 0;
-
-  dodecahedron_dir[2].s[0] = 0;
-  dodecahedron_dir[2].s[1] = golden;
-  dodecahedron_dir[2].s[2] = -other;
-  dodecahedron_dir[2].s[3] = 0;
-
-  dodecahedron_dir[3].s[0] = 0;
-  dodecahedron_dir[3].s[1] = golden;
-  dodecahedron_dir[3].s[2] = other;
-  dodecahedron_dir[3].s[3] = 0;
-
-  dodecahedron_dir[4].s[0] = -other;
-  dodecahedron_dir[4].s[1] = 0;
-  dodecahedron_dir[4].s[2] = -golden;
-  dodecahedron_dir[4].s[3] = 0;
-
-  dodecahedron_dir[5].s[0] = -other;
-  dodecahedron_dir[5].s[1] = 0;
-  dodecahedron_dir[5].s[2] = golden;
-  dodecahedron_dir[5].s[3] = 0;
-
-  dodecahedron_dir[6].s[0] = other;
-  dodecahedron_dir[6].s[1] = 0;
-  dodecahedron_dir[6].s[2] = -golden;
-  dodecahedron_dir[6].s[3] = 0;
-
-  dodecahedron_dir[7].s[0] = other;
-  dodecahedron_dir[7].s[1] = 0;
-  dodecahedron_dir[7].s[2] = golden;
-  dodecahedron_dir[7].s[3] = 0;
-
-  dodecahedron_dir[8].s[0] = -golden;
-  dodecahedron_dir[8].s[1] = -other;
-  dodecahedron_dir[8].s[2] = 0;
-  dodecahedron_dir[8].s[3] = 0;
-
-  dodecahedron_dir[9].s[0] = -golden;
-  dodecahedron_dir[9].s[1] = other;
-  dodecahedron_dir[9].s[2] = 0;
-  dodecahedron_dir[9].s[3] = 0;
-
-  dodecahedron_dir[10].s[0] = golden;
-  dodecahedron_dir[10].s[1] = -other;
-  dodecahedron_dir[10].s[2] = 0;
-  dodecahedron_dir[10].s[3] = 0;
-
-  dodecahedron_dir[11].s[0] = golden;
-  dodecahedron_dir[11].s[1] = other;
-  dodecahedron_dir[11].s[2] = 0;
-  dodecahedron_dir[11].s[3] = 0;
+#ifdef CL_ALIGNED
+  for (int i=0; i<12; ++i)
+    for (int j=0; j<4; ++j)
+      dodecahedron_dir[i].s[j] = data[4*i+j];
+#else // assuming cl_float4 is a typedef for float[4]
+  for (int i=0; i<12; ++i) {
+    float* d = static_cast<float*>(dodecahedron_dir[i]);
+    for (int j=0; j<4; ++j)
+      d[j] = data[4*i+j];
+  }
+#endif // CL_ALIGNED
 }
 
 void boxm2_ocl_util::set_dodecahedron_orientations_lookup(cl_float4* dodecahedron_dir)
@@ -88,35 +53,24 @@ void boxm2_ocl_util::set_dodecahedron_orientations_lookup(cl_float4* dodecahedro
   float golden = 0.8507f; //the golden ratio
   float other = 0.5257f;
 
-  dodecahedron_dir[0].s[0] = 0;
-  dodecahedron_dir[0].s[1] = golden;
-  dodecahedron_dir[0].s[2] = -other;
-  dodecahedron_dir[0].s[3] = 0;
+  float data[] = { 0,      golden, -other,  0,
+                   0,      golden,  other,  0,
+                   other,  0,      -golden, 0,
+                   other,  0,       golden, 0,
+                   golden, -other, 0,       0,
+                   golden,  other, 0,       0 };
 
-  dodecahedron_dir[1].s[0] = 0;
-  dodecahedron_dir[1].s[1] = golden;
-  dodecahedron_dir[1].s[2] = other;
-  dodecahedron_dir[1].s[3] = 0;
-
-  dodecahedron_dir[2].s[0] = other;
-  dodecahedron_dir[2].s[1] = 0;
-  dodecahedron_dir[2].s[2] = -golden;
-  dodecahedron_dir[2].s[3] = 0;
-
-  dodecahedron_dir[3].s[0] = other;
-  dodecahedron_dir[3].s[1] = 0;
-  dodecahedron_dir[3].s[2] = golden;
-  dodecahedron_dir[3].s[3] = 0;
-
-  dodecahedron_dir[4].s[0] = golden;
-  dodecahedron_dir[4].s[1] = -other;
-  dodecahedron_dir[4].s[2] = 0;
-  dodecahedron_dir[4].s[3] = 0;
-
-  dodecahedron_dir[5].s[0] = golden;
-  dodecahedron_dir[5].s[1] = other;
-  dodecahedron_dir[5].s[2] = 0;
-  dodecahedron_dir[5].s[3] = 0;
+#ifdef CL_ALIGNED
+  for (int i=0; i<6; ++i)
+    for (int j=0; j<4; ++j)
+      dodecahedron_dir[i].s[j] = data[4*i+j];
+#else // assuming cl_float4 is a typedef for float[4]
+  for (int i=0; i<6; ++i) {
+    float* d = static_cast<float*>(dodecahedron_dir[i]);
+    for (int j=0; j<4; ++j)
+      d[j] = data[4*i+j];
+  }
+#endif // CL_ALIGNED
 }
 
 //returns path to opencl src (cl files)
