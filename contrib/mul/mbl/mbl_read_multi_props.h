@@ -73,6 +73,9 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs);
 //: Print a list of properties for debugging purposes.
 void mbl_read_multi_props_print(vcl_ostream &afs, mbl_read_multi_props_type props);
 
+//: Print a list of properties for debugging purposes. Limit each property value length to \p max_chars
+// Useful for preventing diagnostic ouput from being flooded by large properties.
+void mbl_read_multi_props_print(vcl_ostream &afs, mbl_read_multi_props_type props, unsigned max_chars);
 
 //: Throw error if there are any keys in props that aren't in ignore.
 // \throw mbl_exception_unused_props

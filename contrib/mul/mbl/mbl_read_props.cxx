@@ -57,6 +57,21 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
 }
 
 
+void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props, unsigned max_chars)
+{
+  typedef vcl_map<vcl_string, vcl_string>::iterator ITER;
+  afs << vsl_indent() << "{\n";
+  vsl_indent_inc(afs);
+  for (ITER i = props.begin(); i != props.end(); ++i)
+  {
+    afs << vsl_indent() << (*i).first << ": " << (*i).second.substr(0, max_chars) << '\n';
+    if (max_chars < (*i).second.size()) afs << vsl_indent() << "...\n";
+  }
+  vsl_indent_dec(afs);
+  afs << vsl_indent() << "}\n";
+}
+
+
 static void strip_trailing_ws(vcl_string &s)
 {
   int p=s.length()-1;
@@ -467,7 +482,7 @@ void mbl_read_props_look_for_unused_props(
   {
 
     vcl_ostringstream ss;
-    mbl_read_props_print(ss, p2);
+    mbl_read_props_print(ss, p2, 1000);
     mbl_exception_error(mbl_exception_unused_props(function_name, ss.str()));
   }
 }
