@@ -169,7 +169,7 @@ void test_log()
       "AA.11.aa: { level: ALERT }\n"
       "AA: { level: DEBUG }\n"
       "BB: { level: INFO }\n"
-      "AA.11: { level: ERR dump_prefix: ./logdump2_ }\n"
+      "AA.11: { level: ERR dump_prefix: ./logdump2_ timestamp: %c }\n"
       "root: { level: EMERG }\n";
   }
 

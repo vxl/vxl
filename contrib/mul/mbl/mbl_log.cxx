@@ -544,6 +544,7 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str,
   }
 
   spec.dump_prefix = props.get_optional_property("dump_prefix");
+  spec.timestamp = props.get_optional_property("timestamp");
 
   if (props.find("file_output") != props.end())
   {

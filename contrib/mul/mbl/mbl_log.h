@@ -200,6 +200,7 @@ class mbl_logger
   vcl_ostream &mtlog() {return nullstream_;}
   bool dump() const { return false; }
   const vcl_string& dump_prefix() const { return ""; }
+  const vcl_string& timestamp() const { return ""; }
 #else
   int level_;
   mbl_log_output_base *output_;
@@ -209,6 +210,9 @@ class mbl_logger
   //: File location to dump files.
   // If empty - don't dump files.
   vcl_string dump_prefix_;
+  //: Time stamp format.
+  // If empty - don't print time stamp.
+  vcl_string timestamp_;
   //: Default constructor only available to root's default logger.
   mbl_logger();
 
@@ -241,6 +245,9 @@ class mbl_logger
   // that begin with "foo_" in sub-directory my_dump_area of the cwd.
   const vcl_string& dump_prefix() const {return dump_prefix_;}
 
+  //: Time stamp format. Don't save timestamp if empty. Not Yet Implemented
+  const vcl_string& timestamp() const { return timestamp_; }
+
 #endif // MBL_LOG_DISABLE_ALL_LOGGING
 
   static mbl_logger_root &root();
@@ -268,6 +275,7 @@ class mbl_log_categories
     enum output_type {FILE_OUT, NAMED_STREAM} output;
     vcl_string name;
     vcl_string dump_prefix;
+    vcl_string timestamp;
     vcl_ostream *stream;
   };
 
@@ -333,6 +341,7 @@ class mbl_logger_root
   // "file_output" and the filename or "stream_output" and the stream name.
   // The known stream names are "vcl_cout" and "vcl_cerr", and additional
   // names can be provided through \p stream_names.
+  // The 
   //\verbatim
   // root: { level: INFO stream_output: test }
   // obj3: { level: INFO stream_output: vcl_cout }\n
