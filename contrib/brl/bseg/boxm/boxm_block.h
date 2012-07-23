@@ -46,7 +46,7 @@ class boxm_block
   static short version_no() { return 1; }
 
 #ifndef VCL_GCC
-  bool operator==(boxm_block<T> const& other) {
+  bool operator==(boxm_block<T> const& other) const {
     return bbox_ == other.bounding_box()
         && octree_ == other.octree_;
   }
