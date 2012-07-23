@@ -10,6 +10,7 @@
 #include <vcl_fstream.h>
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h>
+#include <vcl_iomanip.h>
 #include <vul/vul_file.h>
 #include <vul/vul_expand_path.h>
 #include <mbl/mbl_config.h>
@@ -77,5 +78,5 @@ void mbl_test_save_measurement( const vcl_string &measurement_path, double value
     vcl_cerr << "ERROR: mbl_test_save_measurement: Unable to open file " << path.c_str()
              << "ERRNO: " << errno << '\n';
   else
-    file << timestamp() << ' ' << MBL_CONFIG_BUILD_NAME << ' ' << value << vcl_endl;
+    file << timestamp() << ' ' << MBL_CONFIG_BUILD_NAME << ' ' << vcl_setprecision(15) << value << vcl_endl;
 }
