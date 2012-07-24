@@ -65,7 +65,7 @@ bool test_gauss_filter()
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    vcl_cout << "Printing results for block: " << id << vcl_endl;
+    vcl_cout << "Printing results for block " << id << ':' << vcl_endl;
 
     boxm2_block *     blk     = boxm2_cache::instance()->get_block(id);
     vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
@@ -79,7 +79,7 @@ bool test_gauss_filter()
     //iterate through each block, filtering the root level first
 
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-      vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_flush;
+      vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_endl;
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
         for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
           //load current block/tree
@@ -96,7 +96,7 @@ bool test_gauss_filter()
 
             result = result && ( (vcl_abs(response_data[currIdx]-val1) < 1e-5) ||(vcl_abs(response_data[currIdx]-val2) < 1e-5) || (vcl_abs(response_data[currIdx]-0.0f) < 1e-5));
 
-            vcl_cout << "Leaf with index: " << currIdx << " has prob: " << response_data[currIdx] << vcl_endl;
+            vcl_cout << " P(leaf[" << currIdx << "])=" << response_data[currIdx] << vcl_endl;
           }
         }
       }
@@ -158,7 +158,7 @@ bool test_gauss_x_filter()
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    vcl_cout << "Printing results for block: " << id << vcl_endl;
+    vcl_cout << "Printing results for block " << id << ':' << vcl_endl;
 
     boxm2_block *     blk     = boxm2_cache::instance()->get_block(id);
     vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
@@ -172,7 +172,7 @@ bool test_gauss_x_filter()
     //iterate through each block, filtering the root level first
 
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-      vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_flush;
+      vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_endl;
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
         for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
           //load current block/tree
@@ -189,7 +189,7 @@ bool test_gauss_x_filter()
 
             result = result && ((vcl_abs(response_data[currIdx]-0.0f) < 1e-5));
 
-            vcl_cout << "Leaf with index: " << currIdx << " has prob: " << response_data[currIdx] << vcl_endl;
+            vcl_cout << "P(leaf[" << currIdx << "])=" << response_data[currIdx] << vcl_endl;
           }
         }
       }
