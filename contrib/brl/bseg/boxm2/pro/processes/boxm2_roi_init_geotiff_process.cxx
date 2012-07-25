@@ -98,14 +98,7 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
     return false;
   }
 
-  // check if the image is tiff
-  vil_tiff_image* geotiff_tiff = dynamic_cast<vil_tiff_image*> (img_res.ptr());
-  if (!geotiff_tiff) {
-      vcl_cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image.\n";
-      return false;
-  }
-
-  vil_image_view_base_sptr crop_base = geotiff_tiff->get_view((unsigned int)min_i, crop_ni, (unsigned int)min_j, crop_nj);
+  vil_image_view_base_sptr crop_base = img_res->get_view((unsigned int)min_i, crop_ni, (unsigned int)min_j, crop_nj);
   if (!crop_base) {
     vcl_cerr << "Error: boxm2_roi_init_geotiff_process: could not crop the scene in this image!\n";
     return false;
