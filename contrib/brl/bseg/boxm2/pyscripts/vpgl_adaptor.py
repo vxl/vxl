@@ -13,8 +13,8 @@ def load_perspective_camera(file_path) :
   cam = dbvalue(id,type);
   return cam;
 
-#Scale = (scale_u, scale_v), ppoint = (u,v), center = (x,y,z), look_pt = (x,y,z)
-def create_perspective_camera( scale, ppoint, center, look_pt ) :
+#Scale = (scale_u, scale_v), ppoint = (u,v), center = (x,y,z), look_pt = (x,y,z), up = (x,y,z)
+def create_perspective_camera( scale, ppoint, center, look_pt, up ) :
   boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess");
   boxm2_batch.set_input_double(0, scale[0]);
   boxm2_batch.set_input_double(1, ppoint[0]);
@@ -26,6 +26,9 @@ def create_perspective_camera( scale, ppoint, center, look_pt ) :
   boxm2_batch.set_input_double(7, look_pt[0]);
   boxm2_batch.set_input_double(8, look_pt[1]);
   boxm2_batch.set_input_double(9, look_pt[2]);
+  boxm2_batch.set_input_double(10, up[0]);
+  boxm2_batch.set_input_double(11, up[1]);
+  boxm2_batch.set_input_double(12, up[2]);
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
@@ -321,7 +324,7 @@ def get_perspective_cam_center(pcam):
     z = boxm2_batch.get_output_float(z_id);
     return x, y, z
     
-def create_perspective_camera(pcam, cent_x, cent_y, cent_z):
+def create_perspective_camera2(pcam, cent_x, cent_y, cent_z):
     boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess2");
     boxm2_batch.set_input_from_db(0, pcam);
     boxm2_batch.set_input_float(1, cent_x);
@@ -350,6 +353,14 @@ def get_nitf_footprint(nitf_list_filename, out_kml_filename):
     boxm2_batch.set_input_string(0,nitf_list_filename);
     boxm2_batch.set_input_string(1,out_kml_filename);
     boxm2_batch.run_process()
+    
+def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename,init_finish=True):
+    boxm2_batch.init_process('vpglGeoFootprintProcess')
+    boxm2_batch.set_input_from_db(0,geocam);
+    boxm2_batch.set_input_string(1,geotiff_filename);
+    boxm2_batch.set_input_string(2,out_kml_filename);
+    boxm2_batch.set_input_bool(3,init_finish);
+    boxm2_batch.run_process()
 
 def load_geotiff_cam(tfw_filename, lvcs, utm_zone, utm_hemisphere):
     boxm2_batch.init_process("vpglLoadGeoCameraProcess");
@@ -360,6 +371,28 @@ def load_geotiff_cam(tfw_filename, lvcs, utm_zone, utm_hemisphere):
     boxm2_batch.run_process()
     (c_id,c_type) = boxm2_batch.commit_output(0)
     cam = dbvalue(c_id,c_type);
+    return cam
+
+def translate_geo_camera(geocam, x, y):
+    boxm2_batch.init_process("vpglTranslateGeoCameraProcess");
+    boxm2_batch.set_input_from_db(0, geocam);
+    boxm2_batch.set_input_double(1, x);
+    boxm2_batch.set_input_double(2, y);
+    boxm2_batch.run_process();
+    (c_id, c_type) = boxm2_batch.commit_output(0);
+    cam = dbvalue(c_id, c_type);
+    return cam
+
+def geo2generic(geocam, ni, nj, scene_height, level):
+    boxm2_batch.init_process("vpglConvertGeoCameraToGenericProcess");
+    boxm2_batch.set_input_from_db(0, geocam);
+    boxm2_batch.set_input_int(1, ni);
+    boxm2_batch.set_input_int(2, nj);
+    boxm2_batch.set_input_double(3, scene_height);
+    boxm2_batch.set_input_int(4, level);
+    boxm2_batch.run_process();
+    (c_id, c_type) = boxm2_batch.commit_output(0);
+    cam = dbvalue(c_id, c_type);
     return cam
     
 
