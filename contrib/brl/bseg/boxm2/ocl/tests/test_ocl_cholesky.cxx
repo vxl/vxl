@@ -110,7 +110,6 @@ void compute_vnl_cholesky(vnl_matrix<double> & A, vnl_vector<double>  b, vnl_vec
     testlib_test_assert_near("(VNL) Ai * A - I", (chol.inverse() * A - I).fro_norm());
     testlib_test_assert_near("(VNL) Ai * A - I", (A * chol.inverse() - I).fro_norm());
   }
-
   {
     vnl_cholesky chol(A);
     x=chol.solve(b);

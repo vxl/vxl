@@ -8,6 +8,8 @@ ADD_EXECUTABLE( boxm2_ocl_test_all
   test_kernel_vector_filter.cxx
 #  test_cubic_estimation.cxx
   test_ocl_cholesky.cxx
+  test_ocl_levenberg_marquardt.cxx
+  test_ocl_lm_phongs_model.cxx
  )
 
 
@@ -25,8 +27,10 @@ ADD_TEST( boxm2_ocl_test_process_mains               ${EXECUTABLE_OUTPUT_PATH}/b
 ADD_TEST( boxm2_ocl_test_weighted_em                 ${EXECUTABLE_OUTPUT_PATH}/boxm2_ocl_test_all       test_weighted_em  )
 ADD_TEST( boxm2_ocl_test_kernel_filter               ${EXECUTABLE_OUTPUT_PATH}/boxm2_ocl_test_all       test_kernel_filter )
 ADD_TEST( boxm2_ocl_test_kernel_vector_filter        ${EXECUTABLE_OUTPUT_PATH}/boxm2_ocl_test_all       test_kernel_vector_filter )
-#ADD_TEST( boxm2_ocl_test_cubic_estimation            ${EXECUTABLE_OUTPUT_PATH}/boxm2_ocl_test_all       test_cubic_estimation  )
+#ADD_TEST( boxm2_ocl_test_cubic_estimation           ${EXECUTABLE_OUTPUT_PATH}/boxm2_ocl_test_all       test_cubic_estimation  )
 ADD_TEST( boxm2_ocl_test_ocl_cholesky                ${EXECUTABLE_OUTPUT_PATH}/boxm2_ocl_test_all       test_ocl_cholesky  )
+ADD_TEST( boxm2_ocl_test_ocl_levenberg_marquardt     ${EXECUTABLE_OUTPUT_PATH}/boxm2_ocl_test_all       test_ocl_levenberg_marquardt  )
+ADD_TEST( boxm2_ocl_test_ocl_lm_phongs_model     ${EXECUTABLE_OUTPUT_PATH}/boxm2_ocl_test_all       test_ocl_lm_phongs_model  )
 
 
 ADD_EXECUTABLE( boxm2_ocl_test_include test_include.cxx )
