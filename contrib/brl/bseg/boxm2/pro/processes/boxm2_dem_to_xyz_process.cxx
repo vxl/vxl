@@ -6,7 +6,7 @@
 // E.g. if DEM is a 10 m resolution and scene is of 1m resolution, then the output images are resampled versions of DEM
 // given x,y,z images use ingest_dem process to initialize model
 //
-//  If a camera is passed as input (e.g. given by a previous process that reads it from tfw file then use it,
+//  If a camera is passed as input (e.g. given by a previous process that reads it from tfw file then use it, 
 //  otherwise try reading it from geotiff header
 //
 //
@@ -34,8 +34,8 @@
 
 namespace boxm2_dem_to_xyz_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 5;
+  const unsigned n_inputs_ = 5;
+  const unsigned n_outputs_ = 3;
 }
 
 bool boxm2_dem_to_xyz_process_cons(bprb_func_process& pro)
@@ -45,23 +45,19 @@ bool boxm2_dem_to_xyz_process_cons(bprb_func_process& pro)
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
-  input_types_[1] = "unsigned"; // scene refine level, 0-> original, 1->refined once, ..,3-> refined 3 times, at max resolution so dem must be re-sampled accordingly
-  input_types_[2] = "vcl_string";  // geotiff image of DEM
-  input_types_[3] = "double"; // lvcs is using wgs84 so wrt ellipsoid, however some DEMs are using geoid,
-                              // in that case pass the distance between ellipsoid and geiod in the region
+  input_types_[1] = "vcl_string";  // geotiff image of DEM
+  input_types_[2] = "double"; // lvcs is using wgs84 so wrt ellipsoid, however some DEMs are using geoid,
+                              // in that case pass the distance between ellipsoid and geoid in the region
                               // to convert DEM heights to heights wrt to ellipsoid
-  input_types_[4] = "bool";   // resample bilinearly
-  input_types_[5] = "vpgl_camera_double_sptr";  // geocam if available, otherwise pass 0, camera will be constructed using info in geotiff header
-  input_types_[6] = "float";  // some DEMs have gaps or invalid regions, pass the value in the DEM imagery that is used to fill those areas.
+  input_types_[3] = "vpgl_camera_double_sptr";  // geocam if available, otherwise pass 0, camera will be constructed using info in geotiff header
+  input_types_[4] = "float";  // some DEMs have gaps or invalid regions, pass the value in the DEM imagery that is used to fill those areas.
 
   // process has 1 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
   output_types_[2] = "vil_image_view_base_sptr";  // z image
-  output_types_[3] = "vil_image_view_base_sptr";  // cropped dem view
-  output_types_[4] = "vil_image_view_base_sptr";  // cropped and resampled dem view
-
+  
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -99,22 +95,19 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
-  unsigned refine_cnt = pro.get_input<unsigned>(1);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-  vcl_string geotiff_fname = pro.get_input<vcl_string>(2);
-  double geoid_height = pro.get_input<double>(3); // TODO - unused!
-  bool bilinear = pro.get_input<bool>(4);
-  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(5);
-  float fill_in_value = pro.get_input<float>(6);
+  vcl_string geotiff_fname = pro.get_input<vcl_string>(1);
+  double geoid_height = pro.get_input<double>(2);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(3);
+  float fill_in_value = pro.get_input<float>(4);
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
-
+  
   vpgl_geo_camera* geocam = 0;
   if (cam) {
     vcl_cout << "Using the loaded camera!\n";
     geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
-  }
-  else
+  } else
     vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
 
   if (!geocam) {
@@ -123,32 +116,28 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   }
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
-  vcl_cout << "scene bbox: " << scene_bbox << vcl_endl;
   vgl_vector_3d<unsigned> dims = scene->scene_dimensions();
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
   if (blks.size() < 1)
     return false;
 
-   //: crop the image from the DEM
-  brip_roi broi(dem_res->ni(), dem_res->nj());
+  unsigned orig_dem_ni = dem_res->ni(); unsigned orig_dem_nj = dem_res->nj();
+  vcl_cout << "original dem resolution: " << orig_dem_ni << " " << orig_dem_nj << vcl_endl;
+  brip_roi broi(orig_dem_ni, orig_dem_nj);
   vsol_box_2d_sptr bb = new vsol_box_2d();
-
+  
   double u,v;
   geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
   bb->add_point(u,v);
   geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
   bb->add_point(u,v);
-
   bb = broi.clip_to_image_bounds(bb);
   if (bb->width() <= 0 || bb->height() <= 0) {
     vcl_cout << "In boxm2_dem_to_xyz_process() -- " << geotiff_fname << " does not overlap the scene!\n";
     return false;
   }
 
-  unsigned dem_ni = (unsigned)bb->width(); unsigned dem_nj = (unsigned)bb->height();
-  vcl_cout << "dem resolution is: " << dem_ni << " by " << dem_nj << vcl_endl;
-
-  vil_image_view_base_sptr dem_view_base = dem_res->get_view((unsigned)bb->get_min_x(), dem_ni, (unsigned)bb->get_min_y(), dem_nj);
+  vil_image_view_base_sptr dem_view_base = dem_res->get_view(0, orig_dem_ni, 0, orig_dem_nj);
   vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
   if (!dem_view) {
     vil_image_view<float> temp(dem_view_base->ni(), dem_view_base->nj(), 1);
@@ -159,80 +148,58 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
       if (!dem_view_byte) {
         vcl_cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
         return false;
-      }
-      else
+      } else
         vil_convert_cast(*dem_view_byte, temp);
-    }
-    else
+    } else
       vil_convert_cast(*dem_view_int, temp);
     dem_view = new vil_image_view<float>(temp);
   }
 
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
-  boxm2_block_metadata meta = scene->get_block_metadata(blks[0]);
-  // each sub block is an octree, there are 8 voxels along one dimension of each sub block at the finest scale
   float sb_length = info->block_len;
   float vox_length = sb_length/8.0f;
 
   // prepare an image for the finest resolution
   int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x())/vox_length);
   int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y())/vox_length);
-  vcl_cout << "scene image resolution needs to be at least: " << ni << " by " << nj << vcl_endl;
-  // make the resolution a multiple of dem resolution
-  ni = int(vcl_ceil((float)ni/dem_ni)*dem_ni);
-  nj = int(vcl_ceil((float)nj/dem_nj)*dem_nj);
-  vcl_cout << "made res multiple of dem_res: " << ni << " by " << nj << vcl_endl;
-  vox_length = (float)((scene_bbox.max_x()-scene_bbox.min_x())/ni);
-
-  vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj, 1);
-  vil_image_resource_sptr out_img_res = vil_new_image_resource_of_view(*out_img);
-
-  // but fill it up according to the number of refinement if upsampling bilinearly
-  if (bilinear) {
-    // determine the level of bilinear interpolation
-    int level = meta.max_level_-1;
-    if (level >= int(refine_cnt))
-      level -= refine_cnt;
-    double scale = vcl_pow(2.0, level);
-    int nib = int(ni/scale);
-    int njb = int(nj/scale);
-    vil_image_view<float>* out_img_temp = new vil_image_view<float>(nib, njb, 1);
-    vil_resample_bilin(*dem_view, *out_img_temp, nib, njb);
-    if (!upsample_dem(out_img_res, ni, nj, out_img_temp, nib, njb))
-      return false;
-  }
-  else { // just upsample the dem
-    if (!upsample_dem(out_img_res, ni, nj, dem_view, dem_ni, dem_nj))
-      return false;
-  }
 
   // create x y z images
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  out_img_z->fill(scene_bbox.min_z());
+  
   double lon,lat,gz;
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84,lon, lat, gz);
-  vcl_cout << "lvcs origin height: " << gz
-           << " dem height at that point: " << (*out_img)(0,0)
-           << " adding local height of scene: " << scene_bbox.min_z() << vcl_endl;
+  vcl_cout << "lvcs origin height: " << gz << vcl_endl; 
+  gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
   gz += scene_bbox.min_z();
-
-  if (fill_in_value <= 0)
+  
+  if (fill_in_value <= 0) 
     fill_in_value = vcl_numeric_limits<float>::max();
-
+  
   for (int i = 0; i < ni; ++i)
     for (int j = 0; j < nj; ++j) {
-      (*out_img_x)(i,j) = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
-      (*out_img_y)(i,j) = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
-      if ((*out_img)(i,j) < fill_in_value)  // otherwise it remains at local height = 0
-        (*out_img_z)(i,j) = (*out_img)(i,j)-(float)gz;  // we need local height
+      float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
+      (*out_img_x)(i,j) = local_x;
+      (*out_img_y)(i,j) = local_y;
+      
+      double u,v;
+      geocam->project(local_x, local_y, scene_bbox.min_z(), u, v);
+      //: for now just cast to the nearest pixel in DEM, might want to sample bilinearly
+      int uu = (int)vcl_floor(u+0.5);
+      int vv = (int)vcl_floor(v+0.5);
+      if (u >= 0 && v >= 0 && u < (int)orig_dem_ni && v < (int)orig_dem_ni) { 
+        if ((*dem_view)(u,v) < fill_in_value)  // otherwise it remains at local height = 0
+          (*out_img_z)(i,j) = (*dem_view)(u,v)-(float)gz;  // we need local height
+      }
     }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
   pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
-  pro.set_output_val<vil_image_view_base_sptr>(3, dem_view);
-  pro.set_output_val<vil_image_view_base_sptr>(4, out_img);
+  
   return true;
 }
 
