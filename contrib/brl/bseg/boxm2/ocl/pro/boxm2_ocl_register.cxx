@@ -41,7 +41,8 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_batch_uncertainty_process, "boxm2OclBatchUncertaintyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_scene_uncertainty_map_process, "boxm2OclRenderSceneUncertaintyMapProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_synoptic_update_alpha_process, "boxm2OclSynopticUpdateAlphaProcess");
-  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_batch_synoptic_phongs_process, "boxm2OclBatchSynopticPhongsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_alpha_wphongs_process, "boxm2OclUpdateAlphaWphongsProcess");
   
   //batch paint
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_paint_batch_process, "boxm2OclPaintBatchProcess");
