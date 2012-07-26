@@ -41,15 +41,16 @@ void test_onl_cholesky_solve(__global float *mat4x4,
         localLmat4x4[lid ] = mat4x4[grpid*nsqr + lid];
     barrier(CLK_LOCAL_MEM_FENCE);
 
-    if ( lid < (*n) )
-    {
-        localb4x1[lid] = b4x1[grpid*(*n) + lid];
-        localx4x1[lid] =0.0;
-    }
-    barrier(CLK_LOCAL_MEM_FENCE);
-    cholesky_decomposition(localLmat4x4,*n);
-    cholesky_solve(localLmat4x4,*n,localb4x1,localx4x1);
-    if ( lid < (*n) )
-        x4x1[grpid*(*n) + lid] = localx4x1[lid];
-    barrier(CLK_LOCAL_MEM_FENCE);
+
+	if( lid < (*n) )
+	{
+		localb4x1[lid] = b4x1[grpid*(*n) + lid];
+		localx4x1[lid] =0.0;
+	}
+	barrier(CLK_LOCAL_MEM_FENCE);
+	cholesky_solve(localLmat4x4,*n,localb4x1,localx4x1);
+	if( lid < (*n) )
+		x4x1[grpid*(*n) + lid] = localx4x1[lid];
+	barrier(CLK_LOCAL_MEM_FENCE);
+	
 }
