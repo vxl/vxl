@@ -70,7 +70,87 @@ void batch_fit_cubic_polynomial(__global float * aux0,
     }
 }
 #endif // COMPUTE_CUBIC
+#ifdef PHONGS
 
+__kernel
+void batch_fit_phongs_model(__constant int * max_iter,
+							__constant int * nobs,
+                            __constant float * interim_sigma,
+							__global float * aux0,
+                            __global float * aux1,
+                            __global float * aux2,
+                            __global float * aux3,
+							__global int *datasize,
+                            __global float * phongs_coeffs,
+							__global float * sunangles,
+							__global float * output, // for debugging
+							__local float * ly,
+							__local float * lJ,
+							__local float * lA,
+							__local float * tempm,
+							__local float * lIobs,
+							__local float * lweights,
+							__local float * lxview,
+							__local float * lyview,
+							__local float * lzview
+                           )
+{
+    unsigned gid = get_group_id(0)+get_global_offset(0)/get_local_size(0);
+    int lid = get_local_id(0);
+	int lsize = get_local_size(0);
+
+	__local float result[5];
+	result[0] = 1.0;
+	result[1] = 1.0;
+	result[2] = 5.0;
+	result[3] = 0.5;
+	result[4] = 0.0;
+    if (gid<(*datasize))
+    {
+        for( int i = lid ; i < (*nobs) ; i+=lsize)
+        {
+            
+			// Obtain obs, vis
+            float seg_len = aux0[(*datasize)*i+gid];
+            lIobs[i] = 0.0;
+            lweights[i] = 0.0;
+            if (seg_len > 1e-10f)
+            {
+                lIobs[i]   = aux1[(*datasize)*i+gid]/seg_len;
+                lweights[i]   = aux2[(*datasize)*i+gid]/seg_len;
+            }
+            // Obtain  view direction
+            seg_len = aux0[(*datasize)*(i + *nobs)+gid];
+            if (seg_len > 1e-10f)
+            {
+                lxview[i] = aux1[(*datasize)*(i + *nobs)+gid]/seg_len;
+                lyview[i] = aux2[(*datasize)*(i + *nobs)+gid]/seg_len;
+				lzview[i] = aux3[(*datasize)*(i + *nobs)+gid]/seg_len;
+
+            }
+ 			
+       }
+
+
+		barrier(CLK_LOCAL_MEM_FENCE);
+		brad_ocl_phongs_model_est(max_iter,*nobs,result,	   //
+								  output,sunangles,ly,lJ,lA,tempm,
+								  lIobs,lweights,lxview,lyview,lzview);
+
+		float var = brad_ocl_phongs_model_est_var(*nobs,result,sunangles,ly,lIobs,lweights,lxview,lyview,lzview);
+		if(lid == 0)
+			phongs_coeffs[gid*8+5] = var;
+		barrier(CLK_GLOBAL_MEM_FENCE);	
+
+		for(unsigned i = lid ; i < 5; i+=lsize)
+		{
+			phongs_coeffs[gid*8+i] = result[i]; 
+		}
+		barrier(CLK_GLOBAL_MEM_FENCE);
+
+    }
+}
+#endif // COMPUTE_CUBIC
 #ifdef PREINF_DEPTH_CUBIC
 typedef struct
 {
