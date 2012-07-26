@@ -701,8 +701,10 @@ PyObject *get_bbas_1d_array_float(PyObject * /*self*/, PyObject *args)
   PyObject *x;
   for (unsigned i=0;i<value->data_array.size();i++)
   {
-    x=PyFloat_FromDouble((double)value->data_array[i]);
-    PyList_SetItem(array_1d, i,x);//Py_DECREF(x);
+    
+	x=PyFloat_FromDouble((double)value->data_array[i]);
+    PyList_SetItem(array_1d, i,x);
+	//Py_DECREF(x);
   }
   Py_INCREF(array_1d);
   return array_1d;
