@@ -69,7 +69,9 @@ __kernel void normalize_render_kernel(__global float * exp_img,
 __kernel void normalize_render_depth_kernel(__global float * exp_img,
                                             __global float * var_img,
                                             __global float* prob_img, 
-                                            __global uint4* imgdims)
+                                            __global uint4* imgdims,
+											__global float * t_infinity,
+											__global float * sub_block_dim)
 {
     int i=0,j=0;
     i=get_global_id(0);
@@ -80,13 +82,10 @@ __kernel void normalize_render_depth_kernel(__global float * exp_img,
     // cases #of threads will be more than the pixels.
     if (i>=(*imgdims).z || j>=(*imgdims).w) 
         return;
-
     //normalize image with respect to visibility
     float prob   = prob_img[imindex];
-
-    float mean   = exp_img[imindex]/prob;
-
-    float var    = var_img[imindex]/prob -mean*mean;
+    float mean   =  exp_img[imindex] + t_infinity[imindex]*prob * (*sub_block_dim);
+    float var    = var_img[imindex]+t_infinity[imindex]*prob*t_infinity[imindex]*prob -mean*mean;
     exp_img[imindex]=mean;
     var_img[imindex]=var;
 }
