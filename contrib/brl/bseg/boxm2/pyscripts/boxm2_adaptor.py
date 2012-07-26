@@ -284,7 +284,7 @@ def render_height_map(scene, cache, device=None) :
     print "ERROR: Cache type not recognized: ", cache.type; 
   # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
-def ingest_height_map(scene, cache,x_img,y_img,z_img, device=None) :
+def ingest_height_map(scene, cache,x_img,y_img,z_img, zero_out_alpha=True,device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_adaptor, render height map cpp process not implemented"; 
 
@@ -296,6 +296,7 @@ def ingest_height_map(scene, cache,x_img,y_img,z_img, device=None) :
     boxm2_batch.set_input_from_db(3,z_img);
     boxm2_batch.set_input_from_db(4,x_img);
     boxm2_batch.set_input_from_db(5,y_img);
+    boxm2_batch.set_input_bool(6,zero_out_alpha);
     boxm2_batch.run_process();
     return ; 
   else : 
@@ -1008,15 +1009,13 @@ def perspective_camera_from_scene(scene, cent_x, cent_y, cent_z, ni, nj):
     return cam
 
 # Create x y z images from a DEM at the resolution of the scene
-def generate_xyz_from_dem(scene, refine_level, geotiff_dem, geoid_height, bilin=False, geocam=0,fill_in_value=-1.0):
+def generate_xyz_from_dem(scene, geotiff_dem, geoid_height, geocam=0,fill_in_value=-1.0):
   boxm2_batch.init_process("boxm2DemToXYZProcess");
   boxm2_batch.set_input_from_db(0,scene);
-  boxm2_batch.set_input_unsigned(1,refine_level);
-  boxm2_batch.set_input_string(2,geotiff_dem);
-  boxm2_batch.set_input_double(3,geoid_height);
-  boxm2_batch.set_input_bool(4,bilin);
-  boxm2_batch.set_input_from_db(5,geocam);
-  boxm2_batch.set_input_float(6,fill_in_value);
+  boxm2_batch.set_input_string(1,geotiff_dem);
+  boxm2_batch.set_input_double(2,geoid_height);
+  boxm2_batch.set_input_from_db(3,geocam);
+  boxm2_batch.set_input_float(4,fill_in_value);
   result = boxm2_batch.run_process();
   if result:
     (xi_id, xi_type) = boxm2_batch.commit_output(0);
@@ -1025,17 +1024,11 @@ def generate_xyz_from_dem(scene, refine_level, geotiff_dem, geoid_height, bilin=
     y_img = dbvalue(yi_id, yi_type);
     (zi_id, zi_type) = boxm2_batch.commit_output(2);
     z_img = dbvalue(zi_id, zi_type);
-    (dem_id, dem_type) = boxm2_batch.commit_output(3);
-    dem_img = dbvalue(dem_id, dem_type);
-    (demr_id, demr_type) = boxm2_batch.commit_output(4);
-    dem_res_img = dbvalue(demr_id, demr_type);
   else:
     x_img = 0;
     y_img = 0;
     z_img = 0;
-    dem_img = 0;
-    dem_res_img = 0;
-  return x_img, y_img, z_img, dem_img, dem_res_img
+  return x_img, y_img, z_img
   
 def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
   boxm2_batch.init_process("boxm2ShadowHeightsToXYZProcess");
