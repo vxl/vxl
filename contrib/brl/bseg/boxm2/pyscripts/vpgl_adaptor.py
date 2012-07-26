@@ -12,7 +12,20 @@ def load_perspective_camera(file_path) :
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam;
-
+def load_affine_camera(file_path) :
+  boxm2_batch.init_process("vpglLoadAffineCameraProcess");
+  boxm2_batch.set_input_string(0, file_path);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cam = dbvalue(id,type);
+  return cam;
+def load_projective_camera(file_path) :
+  boxm2_batch.init_process("vpglLoadProjCameraProcess");
+  boxm2_batch.set_input_string(0, file_path);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cam = dbvalue(id,type);
+  return cam;  
 #Scale = (scale_u, scale_v), ppoint = (u,v), center = (x,y,z), look_pt = (x,y,z), up = (x,y,z)
 def create_perspective_camera( scale, ppoint, center, look_pt, up ) :
   boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess");
