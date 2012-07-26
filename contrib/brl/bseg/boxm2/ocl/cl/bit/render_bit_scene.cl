@@ -97,6 +97,8 @@ typedef struct
   float* expdepth;
   float* expdepthsqr;
   float* probsum;
+  float* t;
+  float* vis;
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
@@ -119,6 +121,7 @@ render_depth( __constant  RenderSceneInfo    * linfo,
               __constant  uchar              * bit_lookup,
               __global    float              * vis_image,
               __global    float              * prob_image,
+			  __global    float              * t_image,
               __local     uchar16            * local_tree,
               __local     uchar              * cumsum,        // cumulative sum helper for data pointer
               __local     int                * imIndex)
@@ -155,15 +158,20 @@ render_depth( __constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
 
-  float expdepth   = 0.0f;
-  float expdepthsqr= 0.0f;
-  float probsum =prob_image[imIndex[llid]];
-  float vis     = vis_image[imIndex[llid]];
+  float expdepth    = 0.0f;
+  float expdepthsqr = 0.0f;
+  float probsum		= prob_image[imIndex[llid]];
+  float vis_rec     = vis_image[imIndex[llid]];
+  float t			= t_image[imIndex[llid]];
   AuxArgs aux_args;
   aux_args.alpha  = alpha_array;
   aux_args.expdepth = &expdepth;
   aux_args.expdepthsqr = &expdepthsqr;
   aux_args.probsum = &probsum;
+  aux_args.t = &t;
+  aux_args.vis = &vis_rec;
+
+  float vis = 1.0;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -175,7 +183,8 @@ render_depth( __constant  RenderSceneInfo    * linfo,
   exp_sqr_image[imIndex[llid]] += (* aux_args.expdepthsqr)*linfo->block_len*linfo->block_len;
   prob_image[imIndex[llid]] = (* aux_args.probsum);
   //store visibility at the end of this block
-  vis_image[imIndex[llid]]  = vis;
+  vis_image[imIndex[llid]]  = vis_rec;
+  t_image[imIndex[llid]]  = (* aux_args.t) ;
 }
 #endif
 
