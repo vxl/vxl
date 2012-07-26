@@ -110,19 +110,20 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       //execute kernel
       kern->execute( queue, 2, lThreads, gThreads);
       status = clFinish(queue);
-      if (!check_val(status, CL_SUCCESS, "REFINE EXECUTE FAILED: " + error_to_string(status)) )
+      if (!check_val(status, CL_SUCCESS, "REFINE EXECUTE FAILED 1: " + error_to_string(status)) )
         return -1;
       gpu_time += kern->exec_time();
 
       //clear render kernel args so it can reset em on next execution
       kern->clear_args();
       blk_copy->read_to_buffer(queue);
-
+	  status = clFinish(queue);
       /////////////////////////////////////////////////////////////////////////
       //STEP TWO
       //read out tree_sizes and do cumulative sum on it
       vul_timer scan_time;
       tree_sizes->read_to_buffer(queue);
+	  status = clFinish(queue);
       int* sizebuff = (int*) tree_sizes->cpu_buffer();
       for (int i=1; i<numTrees; ++i)
           sizebuff[i] += sizebuff[i-1];
@@ -131,11 +132,11 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
           sizebuff[i] = sizebuff[i-1];
       sizebuff[0] = 0;
       tree_sizes->write_to_buffer((queue));
-      
+      status = clFinish(queue);
       int dataLen = alpha->num_bytes()/sizeof(float); 
-      //vcl_cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
-      //        <<"  Num Refined: "<<(newDataSize-dataLen)/8<<'\n';
-      //        <<"  Scan data sizes time: "<<scan_time.all()<<vcl_endl;
+      vcl_cout<<"  new data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
+              <<"  num refined: "<<(newDataSize-dataLen)/8<<'\n'
+              <<"  scan data sizes time: "<<scan_time.all()<<vcl_endl;
       transfer_time += scan_time.all();
       num_cells   += (unsigned) newDataSize; 
       num_refined += (unsigned) ( (newDataSize-dataLen)/8 ); 
@@ -164,6 +165,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
 
           //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
           int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
+		  vcl_cout<<"# of bytes "<<data_types[i]<<" "<<dataBytes<<vcl_endl;
           bocl_mem* new_dat = opencl_cache->alloc_mem(dataBytes, NULL, "new data buffer " + data_types[i]);
           new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
@@ -210,7 +212,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
           //execute kernel
           kern->execute( queue, 2, lThreads, gThreads);
           status = clFinish(queue);
-          if (!check_val(status, CL_SUCCESS, "REFINE EXECUTE FAILED: " + error_to_string(status)) )
+          if (!check_val(status, CL_SUCCESS, "REFINE EXECUTE FAILED 2: " + error_to_string(status)) )
             return -1;
 
         
@@ -295,6 +297,7 @@ bocl_kernel* boxm2_ocl_refine::get_refine_data_kernel(bocl_device_sptr device, v
 
 vcl_string boxm2_ocl_refine::get_option_string(int datasize) 
 {
+	vcl_cout<<"DATA SIZE "<<datasize <<vcl_endl;
     vcl_string options="";
     switch (datasize)
     {
@@ -308,6 +311,8 @@ vcl_string boxm2_ocl_refine::get_option_string(int datasize)
         options= "-D MOG_TYPE_8 ";break;
       case 16:
         options= "-D MOG_TYPE_16 ";break;
+	  case 32:
+		  options = "-D FLOAT8"; break;
       default:
         break;
     }
