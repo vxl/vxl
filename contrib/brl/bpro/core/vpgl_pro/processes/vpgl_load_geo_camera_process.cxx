@@ -6,6 +6,7 @@
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
+#include <vpgl/algo/vpgl_camera_convert.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 
 //: initialization
@@ -62,5 +63,90 @@ bool vpgl_load_geo_camera_process(bprb_func_process& pro)
   cam->set_scale_format(true);
 
   pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
+  return true;
+}
+
+
+//: initialization
+bool vpgl_translate_geo_camera_process_cons(bprb_func_process& pro)
+{
+  //this process takes one input: local rational camera filename
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");  // input geo camera
+  input_types.push_back("double");
+  input_types.push_back("double");
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vpgl_camera_double_sptr");  //camera output
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
+
+  return true;
+}
+
+//: Execute the process
+bool vpgl_translate_geo_camera_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs()!= 3) {
+    vcl_cout << "vpgl_translate_geo_camera_process: The input number should be 3" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
+  double tx = pro.get_input<double>(1);
+  double ty = pro.get_input<double>(2);
+  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  vpgl_geo_camera* outcam = new vpgl_geo_camera(*geocam);
+  outcam->translate(tx, ty, 0.0);
+  pro.set_output_val<vpgl_camera_double_sptr>(0, outcam);
+  return true;
+}
+
+//: initialization
+bool vpgl_convert_geo_camera_to_generic_process_cons(bprb_func_process& pro)
+{
+  //this process takes one input: local rational camera filename
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");  // input geo camera
+  input_types.push_back("int");
+  input_types.push_back("int");
+  input_types.push_back("double");
+  input_types.push_back("int");
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vpgl_camera_double_sptr");  // generic camera output
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
+
+  return true;
+}
+
+//: Execute the process
+bool vpgl_convert_geo_camera_to_generic_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs()!= 5) {
+    vcl_cout << "vpgl_convert_geo_camera_to_generic_process: The input number should be 3" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
+  int ni = pro.get_input<int>(1);
+  int nj = pro.get_input<int>(2);
+  double scene_height = pro.get_input<double>(3);
+  int level = pro.get_input<int>(4);
+  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  vpgl_generic_camera<double> gcam;
+  vpgl_generic_camera_convert::convert(*geocam, ni, nj, scene_height, gcam, level);
+
+  vpgl_camera_double_sptr out = new vpgl_generic_camera<double>(gcam);
+  pro.set_output_val<vpgl_camera_double_sptr>(0, out);
   return true;
 }
