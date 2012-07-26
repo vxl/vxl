@@ -17,7 +17,7 @@ typedef struct
   __local  float4* cached_aux;
            float   obs;
   __global float * output;
-          float * ray_len;
+           float * ray_len;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -119,7 +119,8 @@ typedef struct
            float* vis_inf;
            float* pre_inf;
            float phi;
-  __constant RenderSceneInfo * linfo;
+		   float4 viewdir;
+   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
@@ -179,6 +180,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
+  float4 viewdir = {ray_dx,ray_dy,ray_dz,0};
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
@@ -192,6 +194,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   aux_args.vis_inf = &vis_inf;
   aux_args.pre_inf = &pre_inf;
   aux_args.phi     = atan2(ray_d.y,ray_d.x);
+  aux_args.viewdir = viewdir; 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -252,7 +255,7 @@ typedef struct
   __local  int*    cell_ptrs;
   __local  float*  cached_vis;
            float phi;
-
+		   float4 viewdir;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -310,9 +313,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   float pre = pre_image[j*get_global_size(0) + i];
   if (vis <0.0)
     return;
-
   barrier(CLK_LOCAL_MEM_FENCE);
-
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image,
   // BEGIN RAY TRACE
@@ -322,6 +323,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+  float4 viewdir = {ray_dx,ray_dy,ray_dz,0};
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -336,7 +338,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.vis_array  = aux_array2;
   aux_args.beta_array = aux_array3;
   aux_args.phi          = atan2(ray_d.y,ray_d.x);
-
+  aux_args.viewdir = viewdir; 
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs = cell_ptrs;
   aux_args.cached_vis = cached_vis;
