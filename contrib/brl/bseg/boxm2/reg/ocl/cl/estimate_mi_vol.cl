@@ -1,3 +1,6 @@
+#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics: enable
+#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable
+
 __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
                               __constant  float           * centerX,
                               __constant  float           * centerY,
@@ -124,7 +127,7 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
 
           int hist_index_B =(int)(0.5+((*nbins)-1)*probB) ;// (int)clamp((int)floor(probB*(*nbins)),0,(*nbins)-1);
           int hist_index_A =(int)(0.5+((*nbins)-1)*prob) ;// (int)clamp((int)floor(prob*(*nbins)),0,(*nbins)-1);
-          atomic_inc(&joint_histogram[hist_index_A*(*nbins)+hist_index_B]);
+          atom_inc(&joint_histogram[hist_index_A*(*nbins)+hist_index_B]);
         }
         ////////////////////////////////////////////
         //END LEAF SPECIFIC CODE
@@ -137,7 +140,7 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
   if (lid == 0)
   {
     for (unsigned int i = 0; i < (*nbins)*(*nbins); i++)
-      atomic_add(&global_joint_histogram[i],joint_histogram[i]) ;
+      atom_add(&global_joint_histogram[i],joint_histogram[i]) ;
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 }
