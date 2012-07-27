@@ -105,7 +105,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 #ifdef DEBUG
   output[imIndex] = rlen;
 #endif
-
 }
 #endif // SEGLEN
 
@@ -119,7 +118,7 @@ typedef struct
            float* vis_inf;
            float* pre_inf;
            float phi;
-		   float4 viewdir;
+           float4 viewdir;
    __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -194,7 +193,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   aux_args.vis_inf = &vis_inf;
   aux_args.pre_inf = &pre_inf;
   aux_args.phi     = atan2(ray_d.y,ray_d.x);
-  aux_args.viewdir = viewdir; 
+  aux_args.viewdir = viewdir;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -211,7 +210,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 __kernel
 void
 combine_pre_vis(__global float* preInf, __global float* visInf,
-                __global float* blkPre, __global float* blkVis, 
+                __global float* blkPre, __global float* blkVis,
                 __global uint4* imgdims)
 {
   //----------------------------------------------------------------------------
@@ -225,12 +224,12 @@ combine_pre_vis(__global float* preInf, __global float* visInf,
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
   int index = j*get_global_size(0) + i;
-  
+
   //update pre before vis
   preInf[index] += blkPre[index]*visInf[index];
 
   //update vis
-  visInf[index] *= blkVis[index]; 
+  visInf[index] *= blkVis[index];
 }
 #endif //COMBINE_PRE_VIS
 
@@ -255,7 +254,7 @@ typedef struct
   __local  int*    cell_ptrs;
   __local  float*  cached_vis;
            float phi;
-		   float4 viewdir;
+           float4 viewdir;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -338,7 +337,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.vis_array  = aux_array2;
   aux_args.beta_array = aux_array3;
   aux_args.phi          = atan2(ray_d.y,ray_d.x);
-  aux_args.viewdir = viewdir; 
+  aux_args.viewdir = viewdir;
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs = cell_ptrs;
   aux_args.cached_vis = cached_vis;

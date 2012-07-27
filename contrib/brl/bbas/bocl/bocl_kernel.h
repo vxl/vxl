@@ -17,6 +17,7 @@
 #include "bocl_utils.h"
 
 class bocl_mem;
+
 //:  High level wrapper for an Opencl cl_kernel object.
 //  - keeps ref to the context and device_id for which this kernel is created
 //  - can create a kernel from source and device like the following:
@@ -55,9 +56,9 @@ class bocl_kernel
 
   //: execute this kernel on given command queue with given workspace size
   bool execute(const cl_command_queue& cmd_queue, cl_uint dim,
-               vcl_size_t* local_threads, 
-			   vcl_size_t* global_threads,
-			   vcl_size_t* global_offsets=NULL);
+               vcl_size_t* local_threads,
+               vcl_size_t* global_threads,
+               vcl_size_t* global_offsets=NULL);
 
   //: set a bocl_mem buffer arg (pushes it on the back)
   bool set_arg(bocl_mem* buffer);

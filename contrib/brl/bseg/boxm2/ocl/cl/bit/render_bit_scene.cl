@@ -121,7 +121,7 @@ render_depth( __constant  RenderSceneInfo    * linfo,
               __constant  uchar              * bit_lookup,
               __global    float              * vis_image,
               __global    float              * prob_image,
-			  __global    float              * t_image,
+              __global    float              * t_image,
               __local     uchar16            * local_tree,
               __local     uchar              * cumsum,        // cumulative sum helper for data pointer
               __local     int                * imIndex)
@@ -160,9 +160,9 @@ render_depth( __constant  RenderSceneInfo    * linfo,
 
   float expdepth    = 0.0f;
   float expdepthsqr = 0.0f;
-  float probsum		= prob_image[imIndex[llid]];
+  float probsum     = prob_image[imIndex[llid]];
   float vis_rec     = vis_image[imIndex[llid]];
-  float t			= t_image[imIndex[llid]];
+  float t           = t_image[imIndex[llid]];
   AuxArgs aux_args;
   aux_args.alpha  = alpha_array;
   aux_args.expdepth = &expdepth;

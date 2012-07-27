@@ -11,9 +11,9 @@
 #include <bocl/bocl_device.h>
 #include <boxm2/ocl/tests/boxm2_ocl_test_utils.h>
 
-void ocl_levenberg_marquardt(vnl_vector<float> x, 
-						     vnl_vector<float> y, 
-							 int m, int n, int max_iter)
+void ocl_levenberg_marquardt(vnl_vector<float> x,
+                             vnl_vector<float> y,
+                             int m, int n, int max_iter)
 {
   //load BOCL stuff
   bocl_manager_child* mgr = bocl_manager_child::instance();
@@ -44,7 +44,7 @@ void ocl_levenberg_marquardt(vnl_vector<float> x,
 
   bocl_mem_sptr ybuff = new bocl_mem( device->context(), y.data_block(), y.size()*sizeof(float), "y vector");
   ybuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
+
   bocl_mem_sptr mbuff = new bocl_mem( device->context(), &m, sizeof(int), "dimension of x");
   mbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -69,40 +69,39 @@ void ocl_levenberg_marquardt(vnl_vector<float> x,
   lm_test.set_arg( xbuff.ptr() );
   lm_test.set_arg( ybuff.ptr() );
   lm_test.set_arg( outputbuff.ptr() );
-  lm_test.set_local_arg( x.size()*sizeof(float) );			//local tree,
-  lm_test.set_local_arg( x.size()*sizeof(float) );			//local tree,
-  lm_test.set_local_arg( y.size()*sizeof(float) );			//local tree,
-  lm_test.set_local_arg( x.size()*sizeof(float) );			//local tree,
+  lm_test.set_local_arg( x.size()*sizeof(float) );          //local tree,
+  lm_test.set_local_arg( x.size()*sizeof(float) );          //local tree,
+  lm_test.set_local_arg( y.size()*sizeof(float) );          //local tree,
+  lm_test.set_local_arg( x.size()*sizeof(float) );          //local tree,
   lm_test.set_local_arg( x.size()*y.size()*sizeof(float) ); //local tree,
   lm_test.set_local_arg( x.size()*x.size()*sizeof(float) ); //local tree,
-  lm_test.set_local_arg( y.size()*sizeof(float) );			//local tree,
-  lm_test.set_local_arg( x.size()*sizeof(float) );			//local tree,
+  lm_test.set_local_arg( y.size()*sizeof(float) );          //local tree,
+  lm_test.set_local_arg( x.size()*sizeof(float) );          //local tree,
   //execute kernel
   lm_test.execute( queue, 1, lThreads, gThreads);
   clFinish( queue );
   outputbuff->read_to_buffer(queue);
 
-  for( unsigned i = 0 ; i < 10; i++)
-	  vcl_cout<<output[i]<<" ";
+  for ( unsigned i = 0 ; i < 10; i++)
+    vcl_cout<<output[i]<<' ';
 }
 
 void test_ocl_levenberg_marquardt()
 {
-	vnl_vector<float>  x(3) ;
-	x[0] = 1.0;
-	x[1] = 2.0;
-	x[2] = 7.0;
-	int n = x.size();
+  vnl_vector<float>  x(3) ;
+  x[0] = 1.0;
+  x[1] = 2.0;
+  x[2] = 7.0;
+  int n = x.size();
 
-	vnl_vector<float>  y(2) ;
+  vnl_vector<float>  y(2) ;
 
-	y[0] = 2.0; 
-	y[1] = 2.0; 
-	int m = y.size();
+  y[0] = 2.0;
+  y[1] = 2.0;
+  int m = y.size();
 
-	int max_iter = 100;
-	ocl_levenberg_marquardt(x,y,m,n,max_iter);
-
+  int max_iter = 100;
+  ocl_levenberg_marquardt(x,y,m,n,max_iter);
 }
 
 

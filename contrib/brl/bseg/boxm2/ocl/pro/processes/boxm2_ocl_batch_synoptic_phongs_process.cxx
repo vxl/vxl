@@ -35,10 +35,10 @@ namespace boxm2_ocl_batch_synoptic_phongs_process_globals
   {
     vcl_vector<vcl_string> src_paths;
     vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
-	src_paths.push_back(source_dir + "onl/cholesky_decomposition.cl");
-	src_paths.push_back(source_dir + "onl/phongs_model.cl");
-	src_paths.push_back(source_dir + "onl/levenberg_marquardt.cl");
-	src_paths.push_back(source_dir + "batch/synoptic_function_kernels.cl");
+    src_paths.push_back(source_dir + "onl/cholesky_decomposition.cl");
+    src_paths.push_back(source_dir + "onl/phongs_model.cl");
+    src_paths.push_back(source_dir + "onl/levenberg_marquardt.cl");
+    src_paths.push_back(source_dir + "batch/synoptic_function_kernels.cl");
 
     //compilation options
 
@@ -60,9 +60,9 @@ bool boxm2_ocl_batch_synoptic_phongs_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
-  input_types_[3] = "unsigned";         //: number of obs
-  input_types_[4] = "vcl_string";       //: identifiers name file
-  input_types_[5] = "float";            //: interim sigma
+  input_types_[3] = "unsigned";         // number of obs
+  input_types_[4] = "vcl_string";       // identifiers name file
+  input_types_[5] = "float";            // interim sigma
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
@@ -89,11 +89,11 @@ bool boxm2_ocl_batch_synoptic_phongs_process(bprb_func_process& pro)
   float interim_sigma                 = pro.get_input<float>(i++);
 
   boxm2_cache_sptr cache = opencl_cache->get_cpu_cache();
-  //: Read data types and identifier file names.
+  // Read data types and identifier file names.
   vcl_ifstream ifs(identifier_filename.c_str());
   if (!ifs.good()) {
-      vcl_cerr << "error opening file " <<identifier_filename << '\n';
-      return false;
+    vcl_cerr << "error opening file " <<identifier_filename << '\n';
+    return false;
   }
   vcl_vector<vcl_string> image_ids;
   unsigned int n_images = 0;
@@ -134,24 +134,23 @@ bool boxm2_ocl_batch_synoptic_phongs_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id> block_ids = scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator id;
   bocl_kernel * kern = kernels[(device->device_id())][0];
-      bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
-    nobs_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
+  nobs_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-    bocl_mem_sptr interim_sigma_mem=new bocl_mem(device->context(), &interim_sigma, sizeof(int), "Interim Sigma");
-    interim_sigma_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr interim_sigma_mem=new bocl_mem(device->context(), &interim_sigma, sizeof(int), "Interim Sigma");
+  interim_sigma_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
+  float sunangles[2] ={0.325398, -3.69 };
+  bocl_mem_sptr  sunanglesbuff=new bocl_mem(device->context(),sunangles, 2*sizeof(float), "Sun angles");
+  sunanglesbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-	float sunangles[2] ={0.325398, -3.69 };
-    bocl_mem_sptr  sunanglesbuff=new bocl_mem(device->context(),sunangles, 2*sizeof(float), "Sun angles");
-    sunanglesbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  float output[1000];
+  bocl_mem_sptr  outputbuff=new bocl_mem(device->context(),output, 1000*sizeof(float), "Output for debugging");
+  outputbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-    float output[1000];
-    bocl_mem_sptr  outputbuff=new bocl_mem(device->context(),output, 1000*sizeof(float), "Output for debugging");
-    outputbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-	int max_iter = 100;
-	bocl_mem_sptr  max_iter_mem=new bocl_mem(device->context(), &max_iter, sizeof(int), "Number of Max Iterations for LM");
-    max_iter_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  int max_iter = 100;
+  bocl_mem_sptr  max_iter_mem=new bocl_mem(device->context(), &max_iter, sizeof(int), "Number of Max Iterations for LM");
+  max_iter_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   for (id = block_ids.begin(); id != block_ids.end(); ++id)
   {
@@ -171,10 +170,8 @@ bool boxm2_ocl_batch_synoptic_phongs_process(bprb_func_process& pro)
                                                     info_buffer->data_buffer_length*auxTypeSize,false);
     coeffs_buff->zero_gpu_buffer(queue);
 
-
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     str_blk_cache.init(*id);
-
 
     int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
     boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
@@ -196,21 +193,21 @@ bool boxm2_ocl_batch_synoptic_phongs_process(bprb_func_process& pro)
     bocl_mem_sptr bocl_data_type3 = new bocl_mem(device->context(),data_type3->data_buffer(),data_type3->buffer_length(),"");
     if (!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR,queue))
       vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
-		bocl_mem_sptr  datasize_mem=new bocl_mem(device->context(), &datasize, sizeof(int), "Data Size");
+
+    bocl_mem_sptr  datasize_mem=new bocl_mem(device->context(), &datasize, sizeof(int), "Data Size");
     datasize_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-	
-	kern->set_arg(max_iter_mem.ptr());
-	kern->set_arg(nobs_mem.ptr());
+    kern->set_arg(max_iter_mem.ptr());
+    kern->set_arg(nobs_mem.ptr());
     kern->set_arg(interim_sigma_mem.ptr());
-	kern->set_arg(bocl_data_type0.ptr());
+    kern->set_arg(bocl_data_type0.ptr());
     kern->set_arg(bocl_data_type1.ptr());
     kern->set_arg(bocl_data_type2.ptr());
     kern->set_arg(bocl_data_type3.ptr());
     kern->set_arg(datasize_mem.ptr());
     kern->set_arg(coeffs_buff);
-	kern->set_arg(sunanglesbuff.ptr());
-	kern->set_arg(outputbuff.ptr());
+    kern->set_arg(sunanglesbuff.ptr());
+    kern->set_arg(outputbuff.ptr());
     kern->set_local_arg(nobs*sizeof(float));
     kern->set_local_arg(nobs*5*sizeof(float));
     kern->set_local_arg(5*5*sizeof(float));
@@ -224,29 +221,28 @@ bool boxm2_ocl_batch_synoptic_phongs_process(bprb_func_process& pro)
     vcl_size_t lThreads[] = {32};
     vcl_size_t gThreads[] = {static_cast<vcl_size_t>(50000*32)};
     vcl_size_t goffsets[1];
-	for(unsigned k = 0; k < datasize; k+=50000)
-	{
-		vcl_cout<<k<<" ";
-		goffsets[0]=static_cast<vcl_size_t>(k*32);
-		vcl_cout<<"here "<<(int)goffsets[0]<<vcl_endl;
-		vcl_cout.flush();
-		kern->execute(queue, 1, lThreads, gThreads,goffsets);
-		clFinish(queue);
-	}
-
+    for (unsigned k = 0; k < datasize; k+=50000)
+    {
+      vcl_cout<<k<<' ';
+      goffsets[0]=static_cast<vcl_size_t>(k*32);
+      vcl_cout<<"here "<<(int)goffsets[0]<<vcl_endl;
+      vcl_cout.flush();
+      kern->execute(queue, 1, lThreads, gThreads,goffsets);
+      clFinish(queue);
+    }
 
     vcl_cout<<"Time taken "<< kern->exec_time()<<vcl_endl;
 
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
-	outputbuff->read_to_buffer(queue);
+    outputbuff->read_to_buffer(queue);
     coeffs_buff->read_to_buffer(queue);
     clFinish(queue);
     cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model") );
   }
   clReleaseCommandQueue(queue);
-  for(unsigned k = 0 ; k < 32; k++)
-	  vcl_cout<<output[k]<<" ";
+  for (unsigned k = 0 ; k < 32; k++)
+    vcl_cout<<output[k]<<' ';
   vcl_cout<<"Finished Ocl Phongs in "<<t.all()<<" ms"<<vcl_endl;
   return true;
 }

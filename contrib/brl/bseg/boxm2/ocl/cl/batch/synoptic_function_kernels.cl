@@ -74,43 +74,42 @@ void batch_fit_cubic_polynomial(__global float * aux0,
 
 __kernel
 void batch_fit_phongs_model(__constant int * max_iter,
-							__constant int * nobs,
+                            __constant int * nobs,
                             __constant float * interim_sigma,
-							__global float * aux0,
+                            __global float * aux0,
                             __global float * aux1,
                             __global float * aux2,
                             __global float * aux3,
-							__global int *datasize,
+                            __global int *datasize,
                             __global float * phongs_coeffs,
-							__global float * sunangles,
-							__global float * output, // for debugging
-							__local float * ly,
-							__local float * lJ,
-							__local float * lA,
-							__local float * tempm,
-							__local float * lIobs,
-							__local float * lweights,
-							__local float * lxview,
-							__local float * lyview,
-							__local float * lzview
+                            __global float * sunangles,
+                            __global float * output, // for debugging
+                            __local float * ly,
+                            __local float * lJ,
+                            __local float * lA,
+                            __local float * tempm,
+                            __local float * lIobs,
+                            __local float * lweights,
+                            __local float * lxview,
+                            __local float * lyview,
+                            __local float * lzview
                            )
 {
     unsigned gid = get_group_id(0)+get_global_offset(0)/get_local_size(0);
     int lid = get_local_id(0);
-	int lsize = get_local_size(0);
+    int lsize = get_local_size(0);
 
-	__local float result[5];
-	result[0] = 1.0;
-	result[1] = 1.0;
-	result[2] = 5.0;
-	result[3] = 0.5;
-	result[4] = 0.0;
+    __local float result[5];
+    result[0] = 1.0;
+    result[1] = 1.0;
+    result[2] = 5.0;
+    result[3] = 0.5;
+    result[4] = 0.0;
     if (gid<(*datasize))
     {
-        for( int i = lid ; i < (*nobs) ; i+=lsize)
+        for ( int i = lid ; i < (*nobs) ; i+=lsize)
         {
-            
-			// Obtain obs, vis
+            // Obtain obs, vis
             float seg_len = aux0[(*datasize)*i+gid];
             lIobs[i] = 0.0;
             lweights[i] = 0.0;
@@ -125,32 +124,29 @@ void batch_fit_phongs_model(__constant int * max_iter,
             {
                 lxview[i] = aux1[(*datasize)*(i + *nobs)+gid]/seg_len;
                 lyview[i] = aux2[(*datasize)*(i + *nobs)+gid]/seg_len;
-				lzview[i] = aux3[(*datasize)*(i + *nobs)+gid]/seg_len;
-
+                lzview[i] = aux3[(*datasize)*(i + *nobs)+gid]/seg_len;
             }
- 			
-       }
+        }
 
+        barrier(CLK_LOCAL_MEM_FENCE);
+        brad_ocl_phongs_model_est(max_iter,*nobs,result,       //
+                                  output,sunangles,ly,lJ,lA,tempm,
+                                  lIobs,lweights,lxview,lyview,lzview);
 
-		barrier(CLK_LOCAL_MEM_FENCE);
-		brad_ocl_phongs_model_est(max_iter,*nobs,result,	   //
-								  output,sunangles,ly,lJ,lA,tempm,
-								  lIobs,lweights,lxview,lyview,lzview);
+        float var = brad_ocl_phongs_model_est_var(*nobs,result,sunangles,ly,lIobs,lweights,lxview,lyview,lzview);
+        if (lid == 0)
+            phongs_coeffs[gid*8+5] = var;
+        barrier(CLK_GLOBAL_MEM_FENCE);
 
-		float var = brad_ocl_phongs_model_est_var(*nobs,result,sunangles,ly,lIobs,lweights,lxview,lyview,lzview);
-		if(lid == 0)
-			phongs_coeffs[gid*8+5] = var;
-		barrier(CLK_GLOBAL_MEM_FENCE);	
-
-		for(unsigned i = lid ; i < 5; i+=lsize)
-		{
-			phongs_coeffs[gid*8+i] = result[i]; 
-		}
-		barrier(CLK_GLOBAL_MEM_FENCE);
-
+        for (unsigned i = lid ; i < 5; i+=lsize)
+        {
+            phongs_coeffs[gid*8+i] = result[i];
+        }
+        barrier(CLK_GLOBAL_MEM_FENCE);
     }
 }
 #endif // COMPUTE_CUBIC
+
 #ifdef PREINF_DEPTH_CUBIC
 typedef struct
 {
@@ -171,23 +167,23 @@ void cast_ray(int,int,float,float,float,float,float,float,__constant RenderScene
 
 __kernel
 void
-pre_depth_inf_main(__constant  RenderSceneInfo    * linfo,
-                   __global    int4               * tree_array,       // tree structure for each block
-                   __global    float              * alpha_array,      // alpha for each block
-                   __global    MOG_TYPE           * mixture_array,    // mixture for each block
-                   __global    ushort4            * num_obs_array,    // num obs for each block
-                   __global    int                * aux_array0,        // four aux arrays strung together
-                   __global    int                * aux_array1,        // four aux arrays strung together
-                   __constant  uchar              * bit_lookup,       // used to get data_index
-                   __global    float4             * ray_origins,
-                   __global    float4             * ray_directions,
-                   __global    uint4              * imgdims,          // dimensions of the input image
-                   __global    float              * vis_image,        // visibility image
-                   __global    float              * pre_inf_image,        // preinf image
-                   __global    float              * pre_depth_inf_image,        // preinf image
-                   __global    float              * output,
-                   __local     uchar16            * local_tree,       // cache current tree into local memory
-                   __local     uchar              * cumsum )           // cumulative sum for calculating data pointer
+pre_depth_inf_main(__constant  RenderSceneInfo * linfo,
+                   __global    int4            * tree_array,       // tree structure for each block
+                   __global    float           * alpha_array,      // alpha for each block
+                   __global    MOG_TYPE        * mixture_array,    // mixture for each block
+                   __global    ushort4         * num_obs_array,    // num obs for each block
+                   __global    int             * aux_array0,       // four aux arrays strung together
+                   __global    int             * aux_array1,       // four aux arrays strung together
+                   __constant  uchar           * bit_lookup,       // used to get data_index
+                   __global    float4          * ray_origins,
+                   __global    float4          * ray_directions,
+                   __global    uint4           * imgdims,          // dimensions of the input image
+                   __global    float           * vis_image,        // visibility image
+                   __global    float           * pre_inf_image,    // preinf image
+                   __global    float           * pre_depth_inf_image, // preinf image
+                   __global    float           * output,
+                   __local     uchar16         * local_tree,       // cache current tree into local memory
+                   __local     uchar           * cumsum )          // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -276,28 +272,28 @@ void cast_ray(int,int,float,float,float,float,float,float,__constant RenderScene
 
 __kernel
 void
-update_post_depth_density(__constant  RenderSceneInfo    * linfo,
-                          __global    int4               * tree_array,       // tree structure for each block
-                          __global    float              * alpha_array,      // alpha for each block
-                          __global    MOG_TYPE           * mixture_array,    // mixture for each block
-                          __global    ushort4            * num_obs_array,    // num obs for each block
-                          __global    int                * aux_array0,        // cum_len
-                          __global    int                * aux_array1,        // mean_obs
-                          __global    int                * aux_array2,        // mean vis
-                          __global    int                * aux_array3,        // mean_density
-                          __constant  uchar              * bit_lookup,       // used to get data_index
-                          __global    float4             * ray_origins,
-                          __global    float4             * ray_directions,
-                          __global    uint4              * imgdims,          // dimensions of the input image
-                          __global    float              * vis_image,        // visibility image
-                          __global    float              * vis_inf_image,        // visibility image
-                          __global    float              * pre_inf_image,        // preinf image
-                          __global    float              * pre_depth_inf_image,        // preinf image
-                          __global    float              * pre_image,        // preinf image
-                          __global    float              * pre_depth_image,        // preinf image
-                          __global    float              * output,
-                          __local     uchar16            * local_tree,       // cache current tree into local memory
-                          __local     uchar              * cumsum )           // cumulative sum for calculating data pointer
+update_post_depth_density(__constant  RenderSceneInfo * linfo,
+                          __global    int4            * tree_array,       // tree structure for each block
+                          __global    float           * alpha_array,      // alpha for each block
+                          __global    MOG_TYPE        * mixture_array,    // mixture for each block
+                          __global    ushort4         * num_obs_array,    // num obs for each block
+                          __global    int             * aux_array0,       // cum_len
+                          __global    int             * aux_array1,       // mean_obs
+                          __global    int             * aux_array2,       // mean vis
+                          __global    int             * aux_array3,       // mean_density
+                          __constant  uchar           * bit_lookup,       // used to get data_index
+                          __global    float4          * ray_origins,
+                          __global    float4          * ray_directions,
+                          __global    uint4           * imgdims,          // dimensions of the input image
+                          __global    float           * vis_image,        // visibility image
+                          __global    float           * vis_inf_image,    // visibility image
+                          __global    float           * pre_inf_image,    // preinf image
+                          __global    float           * pre_depth_inf_image, // preinf image
+                          __global    float           * pre_image,        // preinf image
+                          __global    float           * pre_depth_image,  // preinf image
+                          __global    float           * output,
+                          __local     uchar16         * local_tree,       // cache current tree into local memory
+                          __local     uchar           * cumsum )          // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -396,26 +392,26 @@ void cast_ray(int,int,float,float,float,float,float,float,__constant RenderScene
 
 __kernel
 void
-avg_surface_empty_ratio_main(__constant  RenderSceneInfo    * linfo,
-                             __global    int4               * tree_array,        // tree structure for each block
-                             __global    float              * alpha_array,       // alpha for each block
-                             __global    MOG_TYPE           * mixture_array,     // mixture for each block
-                             __global    int                * aux_array0,        // four aux arrays strung together
-                             __global    int                * aux_array1,        // four aux arrays strung together
-                             __global    int                * aux_array2,        // four aux arrays strung together
-                             __global    int                * aux_array3,        // four aux arrays strung together
-                             __constant  uchar              * bit_lookup,        // used to get data_index
-                             __global    float4             * ray_origins,
-                             __global    float4             * ray_directions,
-                             __global    uint4              * imgdims,           // dimensions of the input image
-                             __global    float              * vis_image,         // visibility image (for keeping vis across blocks)
-                             __global    float              * vis_inf_image,         // visibility image (for keeping vis across blocks)
-                             __global    float              * pre_image,         // preinf image (for keeping pre across blocks)
-                             __global    float              * pre_inf_image,        // norm image (for bayes update normalization factor)
-                             __global    float              * norm_image,        // norm image (for bayes update normalization factor)
-                             __global    float              * output,
-                             __local     uchar16            * local_tree,        // cache current tree into local memory
-                             __local     uchar              * cumsum)            // cumulative sum for calculating data pointer
+avg_surface_empty_ratio_main(__constant  RenderSceneInfo * linfo,
+                             __global    int4            * tree_array,        // tree structure for each block
+                             __global    float           * alpha_array,       // alpha for each block
+                             __global    MOG_TYPE        * mixture_array,     // mixture for each block
+                             __global    int             * aux_array0,        // four aux arrays strung together
+                             __global    int             * aux_array1,        // four aux arrays strung together
+                             __global    int             * aux_array2,        // four aux arrays strung together
+                             __global    int             * aux_array3,        // four aux arrays strung together
+                             __constant  uchar           * bit_lookup,        // used to get data_index
+                             __global    float4          * ray_origins,
+                             __global    float4          * ray_directions,
+                             __global    uint4           * imgdims,           // dimensions of the input image
+                             __global    float           * vis_image,         // visibility image (for keeping vis across blocks)
+                             __global    float           * vis_inf_image,     // visibility image (for keeping vis across blocks)
+                             __global    float           * pre_image,         // preinf image (for keeping pre across blocks)
+                             __global    float           * pre_inf_image,     // norm image (for bayes update normalization factor)
+                             __global    float           * norm_image,        // norm image (for bayes update normalization factor)
+                             __global    float           * output,
+                             __local     uchar16         * local_tree,        // cache current tree into local memory
+                             __local     uchar           * cumsum)            // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));

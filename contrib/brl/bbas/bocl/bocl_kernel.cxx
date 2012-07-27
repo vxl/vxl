@@ -1,8 +1,8 @@
 #include "bocl_kernel.h"
-#include "bocl_device_info.h"
-#include "bocl_mem.h"
 //:
 // \file
+#include "bocl_device_info.h"
+#include "bocl_mem.h"
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
@@ -57,7 +57,7 @@ bool bocl_kernel::create_kernel(cl_context* context,
     return false;
   }
   //else
-  vcl_cout<<this->build_log()<<vcl_endl;  
+  vcl_cout<<this->build_log()<<vcl_endl;
   return true;
 }
 
@@ -110,10 +110,9 @@ bool bocl_kernel::create_kernel(const cl_context& context,
     return false;
   }
   //else
-  vcl_cout<<this->build_log()<<vcl_endl;  
+  vcl_cout<<this->build_log()<<vcl_endl;
   return true;
 }
-
 
 
 bocl_kernel::~bocl_kernel()
@@ -134,11 +133,11 @@ bocl_kernel::~bocl_kernel()
     vcl_cout<<" release failed in bocl_kernel destructor"<<vcl_endl;
 }
 
-bool bocl_kernel::execute(const cl_command_queue& cmd_queue, 
-								cl_uint dim, 
-								vcl_size_t* local_threads, 
-								vcl_size_t* global_threads,
-								vcl_size_t* global_offsets)
+bool bocl_kernel::execute(const cl_command_queue& cmd_queue,
+                          cl_uint dim,
+                          vcl_size_t* local_threads,
+                          vcl_size_t* global_threads,
+                          vcl_size_t* global_offsets)
 {
   //set kernel args
   cl_int status = CL_SUCCESS;
@@ -270,6 +269,7 @@ vcl_string bocl_kernel::program_binaries()
 //------------------------------------------------------------------------------
 // Private helper functions
 //------------------------------------------------------------------------------
+
 //: load kernel into string
 bool bocl_kernel::load_kernel_source(vcl_string const& path)
 {
