@@ -302,6 +302,24 @@ def ingest_height_map(scene, cache,x_img,y_img,z_img, zero_out_alpha=True,device
   else : 
     print "ERROR: Cache type not recognized: ", cache.type;
     
+def ingest_height_map_space(scene, cache,x_img,y_img,z_img, crust_thickness,device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_adaptor, render height map cpp process not implemented";
+
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    boxm2_batch.init_process("boxm2OclIngestDemSpaceProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,z_img);
+    boxm2_batch.set_input_from_db(4,x_img);
+    boxm2_batch.set_input_from_db(5,y_img);
+    boxm2_batch.set_input_double(6,crust_thickness);
+    boxm2_batch.run_process();
+    return ;
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+    
 # Ingest a Buckeye-Style DEM, i.e. first return and last return image pair
 def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoid_height, device=None) :
   if cache.type == "boxm2_cache_sptr" :
