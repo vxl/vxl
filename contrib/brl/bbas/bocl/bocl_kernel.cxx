@@ -134,7 +134,11 @@ bocl_kernel::~bocl_kernel()
     vcl_cout<<" release failed in bocl_kernel destructor"<<vcl_endl;
 }
 
-bool bocl_kernel::execute(const cl_command_queue& cmd_queue, cl_uint dim, vcl_size_t* local_threads, vcl_size_t* global_threads)
+bool bocl_kernel::execute(const cl_command_queue& cmd_queue, 
+								cl_uint dim, 
+								vcl_size_t* local_threads, 
+								vcl_size_t* global_threads,
+								vcl_size_t* global_offsets)
 {
   //set kernel args
   cl_int status = CL_SUCCESS;
@@ -158,7 +162,8 @@ bool bocl_kernel::execute(const cl_command_queue& cmd_queue, cl_uint dim, vcl_si
 
   //enqueue the kernel on the command queue
   ceEvent_ = 0;
-  status = clEnqueueNDRangeKernel(cmd_queue, kernel_, dim, NULL, global_threads, local_threads, 0, NULL, &ceEvent_);
+
+  status = clEnqueueNDRangeKernel(cmd_queue, kernel_, dim, global_offsets, global_threads, local_threads, 0, NULL, &ceEvent_);
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed (" + id_ + ") " +error_to_string(status)) )
     return false;
   else
