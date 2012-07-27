@@ -6,9 +6,8 @@
 // E.g. if DEM is a 10 m resolution and scene is of 1m resolution, then the output images are resampled versions of DEM
 // given x,y,z images use ingest_dem process to initialize model
 //
-//  If a camera is passed as input (e.g. given by a previous process that reads it from tfw file then use it, 
+//  If a camera is passed as input (e.g. given by a previous process that reads it from tfw file then use it,
 //  otherwise try reading it from geotiff header
-//
 //
 // \author Ozge C. Ozcanli
 // \date May 02, 2012
@@ -22,7 +21,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vcl_algorithm.h>
-#include <vil/vil_resample_bilin.h>
+//#include <vil/vil_resample_bilin.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>
 
@@ -57,7 +56,7 @@ bool boxm2_dem_to_xyz_process_cons(bprb_func_process& pro)
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
   output_types_[2] = "vil_image_view_base_sptr";  // z image
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -102,12 +101,13 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   float fill_in_value = pro.get_input<float>(4);
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
-  
+
   vpgl_geo_camera* geocam = 0;
   if (cam) {
     vcl_cout << "Using the loaded camera!\n";
     geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
-  } else
+  }
+  else
     vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
 
   if (!geocam) {
@@ -122,10 +122,10 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
     return false;
 
   unsigned orig_dem_ni = dem_res->ni(); unsigned orig_dem_nj = dem_res->nj();
-  vcl_cout << "original dem resolution: " << orig_dem_ni << " " << orig_dem_nj << vcl_endl;
+  vcl_cout << "original dem resolution: " << orig_dem_ni << ' ' << orig_dem_nj << vcl_endl;
   brip_roi broi(orig_dem_ni, orig_dem_nj);
   vsol_box_2d_sptr bb = new vsol_box_2d();
-  
+
   double u,v;
   geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
   bb->add_point(u,v);
@@ -148,9 +148,11 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
       if (!dem_view_byte) {
         vcl_cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
         return false;
-      } else
+      }
+      else
         vil_convert_cast(*dem_view_byte, temp);
-    } else
+    }
+    else
       vil_convert_cast(*dem_view_int, temp);
     dem_view = new vil_image_view<float>(temp);
   }
@@ -168,38 +170,38 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
   out_img_z->fill(scene_bbox.min_z());
-  
+
   double lon,lat,gz;
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84,lon, lat, gz);
-  vcl_cout << "lvcs origin height: " << gz << vcl_endl; 
+  vcl_cout << "lvcs origin height: " << gz << vcl_endl;
   gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
   gz += scene_bbox.min_z();
-  
-  if (fill_in_value <= 0) 
+
+  if (fill_in_value <= 0)
     fill_in_value = vcl_numeric_limits<float>::max();
-  
+
   for (int i = 0; i < ni; ++i)
     for (int j = 0; j < nj; ++j) {
       float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
       float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
       (*out_img_x)(i,j) = local_x;
       (*out_img_y)(i,j) = local_y;
-      
+
       double u,v;
       geocam->project(local_x, local_y, scene_bbox.min_z(), u, v);
-      //: for now just cast to the nearest pixel in DEM, might want to sample bilinearly
+      // for now just cast to the nearest pixel in DEM, might want to sample bilinearly
       int uu = (int)vcl_floor(u+0.5);
       int vv = (int)vcl_floor(v+0.5);
-      if (u >= 0 && v >= 0 && u < (int)orig_dem_ni && v < (int)orig_dem_ni) { 
-        if ((*dem_view)(u,v) < fill_in_value)  // otherwise it remains at local height = 0
-          (*out_img_z)(i,j) = (*dem_view)(u,v)-(float)gz;  // we need local height
+      if (uu >= 0 && vv >= 0 && uu < (int)orig_dem_ni && vv < (int)orig_dem_ni) {
+        if ((*dem_view)(uu,vv) < fill_in_value)  // otherwise it remains at local height = 0
+          (*out_img_z)(i,j) = (*dem_view)(uu,vv)-(float)gz;  // we need local height
       }
     }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
   pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
-  
+
   return true;
 }
 
@@ -215,7 +217,7 @@ bool boxm2_shadow_heights_to_xyz_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_shadow_heights_to_xyz_process_globals;
 
-  //process takes 1 input
+  //process takes 5 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vil_image_view_base_sptr";  // shadow height map image of the cropped ortho aerial image, height values are in pixels with respect to a horizontal surface at the base of the object
@@ -223,7 +225,7 @@ bool boxm2_shadow_heights_to_xyz_process_cons(bprb_func_process& pro)
   input_types_[3] = "vcl_string"; // dem_fname, height image values will be added to these values
   input_types_[4] = "double"; // pixel scaling
 
-  // process has 1 outputs:
+  // process has 3 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
