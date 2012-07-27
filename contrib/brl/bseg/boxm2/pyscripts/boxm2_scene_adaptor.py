@@ -181,7 +181,7 @@ class boxm2_scene_adaptor(object):
     return z_image, var_image, x_image, y_image, prob_image, app_image;
     
   #ingest heigh map
-  def ingest_height_map(self,x_img,y_img,z_img, device_string="") :
+  def ingest_height_map(self,x_img,y_img,z_img, zero_out_alpha=True,device_string="") :
     cache = self.active_cache;
     dev = self.device;
     if device_string=="gpu" :
@@ -189,7 +189,19 @@ class boxm2_scene_adaptor(object):
     elif device_string=="cpp" :
       cache = self.cpu_cache;
       dev = None;
-    ingest_height_map(self.scene, cache,x_img,y_img,z_img, dev);
+    ingest_height_map(self.scene, cache,x_img,y_img,z_img, zero_out_alpha, dev);
+    return ;
+    
+  #ingest heigh map
+  def ingest_height_map_space(self,x_img,y_img,z_img, crust_thickness,device_string="") :
+    cache = self.active_cache;
+    dev = self.device;
+    if device_string=="gpu" :
+      cache = self.opencl_cache;
+    elif device_string=="cpp" :
+      cache = self.cpu_cache;
+      dev = None;
+    ingest_height_map_space(self.scene, cache,x_img,y_img,z_img, crust_thickness, dev);
     return ;
     
   #ingest buckeye-style dem
