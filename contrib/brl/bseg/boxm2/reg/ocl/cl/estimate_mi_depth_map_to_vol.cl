@@ -12,7 +12,7 @@ void estimate_mi_depth_map_to_vol(__constant  uchar        * bit_lookup,       /
                                   __global    float        * sub_block_len,    // [ width, depth, height ]
                                   __global    int4         * sceneB_trees,
                                   __global    float        * sceneB_alphas,
-                                  __global    float        * sceneB_aux2s,
+                                  //__global    float        * sceneB_aux2s,
                                   __global    unsigned int * sceneB_tree_offsets,
                                   __global    unsigned int * sceneB_alpha_offsets,
                                   __global    float        * translation,
@@ -91,7 +91,7 @@ void estimate_mi_depth_map_to_vol(__constant  uchar        * bit_lookup,       /
     unsigned int alpha_offset = sceneB_alpha_offsets[blk_offset_index]+ alpha_blk_offset;
 
     float alphaB = sceneB_alphas[alpha_offset];
-    float aux2 = sceneB_aux2s[alpha_offset];
+    //float aux2 = sceneB_aux2s[alpha_offset];
     float probB  = 0.0;
     //if (aux2 > 0.7)
     {
