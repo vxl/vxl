@@ -84,4 +84,6 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_albedo_normal_process, "boxm2OclRenderExpectedAlbedoNormalProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_batch_compute_normal_albedo_array_process, "boxm2OclBatchComputeNormalAlbedoArrayProcess");
 
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_ingest_dem_space_process, "boxm2OclIngestDemSpaceProcess");
+
 }
