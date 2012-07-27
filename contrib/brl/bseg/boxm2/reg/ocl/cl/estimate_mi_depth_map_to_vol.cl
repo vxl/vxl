@@ -1,3 +1,6 @@
+#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics: enable
+#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable
+
 __kernel
 void estimate_mi_depth_map_to_vol(__constant  uchar        * bit_lookup,       //0-255 num bits lookup table
                                   __global    float        * xdepth,
@@ -96,20 +99,20 @@ void estimate_mi_depth_map_to_vol(__constant  uchar        * bit_lookup,       /
     }
     int hist_index_B =(int)(((*nbins)-1)*probB) ;// (int)clamp((int)floor(probB*(*nbins)),0,(*nbins)-1);
     int hist_index_A =(int)(((*nbins)-1)*1.0f) ;// (int)clamp((int)floor(prob*(*nbins)),0,(*nbins)-1);
-    atomic_inc(&joint_histogram[2+hist_index_B]);
+    atom_inc(&joint_histogram[2+hist_index_B]);
   }
   else
   {
-    atomic_inc(&joint_histogram[0]);
+    atom_inc(&joint_histogram[0]);
   }
   //barrier(CLK_LOCAL_MEM_FENCE);
-  //atomic_add(&global_joint_histogram[llid],joint_histogram[llid]) ;
+  //atom_add(&global_joint_histogram[llid],joint_histogram[llid]) ;
   //barrier(CLK_LOCAL_MEM_FENCE);
 
   if (llid == 0)
   {
     for (unsigned int k = 0; k < (*nbins)*(*nbins); k++)
-      atomic_add(&global_joint_histogram[k],joint_histogram[k]) ;
+      atom_add(&global_joint_histogram[k],joint_histogram[k]) ;
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 }
