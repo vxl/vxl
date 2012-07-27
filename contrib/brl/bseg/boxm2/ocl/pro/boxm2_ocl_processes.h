@@ -66,4 +66,6 @@ DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_naa_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_albedo_normal_process);
 DECLARE_FUNC_CONS(boxm2_ocl_batch_compute_normal_albedo_array_process);
 
+DECLARE_FUNC_CONS(boxm2_ocl_ingest_dem_space_process);
+
 #endif
