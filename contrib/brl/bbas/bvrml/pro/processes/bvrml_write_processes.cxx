@@ -249,3 +249,59 @@ bool bvrml_write_point_process(bprb_func_process& pro)
   return true;
 }
 
+//: sets input and output types
+bool bvrml_write_line_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  vcl_vector<vcl_string> input_types_(10);
+  input_types_[0] = "vcl_string";
+  input_types_[1] = "float";  // x1
+  input_types_[2] = "float";  // y1
+  input_types_[3] = "float";  // z1
+  input_types_[4] = "float";  // x2
+  input_types_[5] = "float";  // y2
+  input_types_[6] = "float";  // z2
+  input_types_[7] = "float";  // red in [0,1]
+  input_types_[8] = "float";  // green
+  input_types_[9] = "float";  // blue
+
+  //output
+  vcl_vector<vcl_string> output_types_(0);
+
+  bool good = pro.set_input_types(input_types_) &&
+              pro.set_output_types(output_types_);
+  return good;
+}
+
+bool bvrml_write_line_process(bprb_func_process& pro)
+{
+  // check number of inputs
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << ": Invalid inputs" << vcl_endl;
+    return false;
+  }
+
+  //get the inputs
+  vcl_string fname = pro.get_input<vcl_string>(0);
+  float x1 = pro.get_input<float>(1);
+  float y1 = pro.get_input<float>(2);
+  float z1 = pro.get_input<float>(3);
+  float x2 = pro.get_input<float>(4);
+  float y2 = pro.get_input<float>(5);
+  float z2 = pro.get_input<float>(6);
+  float red = pro.get_input<float>(7);
+  float green = pro.get_input<float>(8);
+  float blue = pro.get_input<float>(9);
+
+  vcl_ofstream ofs(fname.c_str(), vcl_ios::app);
+
+  vgl_point_3d<double> p1(x1, y1, z1);
+  vgl_point_3d<double> p2(x2, y2, z2);
+  vgl_line_segment_3d<double> line(p1, p2);
+  bvrml_write::write_vrml_line_segment(ofs, line, red, green, blue, 0.0f);
+  ofs.close();
+
+  return true;
+}
+

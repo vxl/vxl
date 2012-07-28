@@ -18,6 +18,13 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_line_segment_3d.h>
 
+class bvrml_color
+{
+public:
+  //: store the color scheme 'classic' to generate a heatmap
+  static unsigned heatmap_classic_size;
+  static unsigned char heatmap_classic[256][3]; 
+};
 
 class bvrml_write
 {
@@ -63,6 +70,12 @@ class bvrml_write
                               vgl_vector_3d<double> const &dir,
                               float radius,
                               const float r, const float g, const float b);
+
+  static void write_vrml_cylinder(vcl_ofstream& str,
+                                  vgl_point_3d<double> const& pt,
+                                  vgl_vector_3d<double> const &dir,
+                                  float radius, float height,
+                                  const float r, const float g, const float b);
 };
 
 #endif
@@ -135,6 +148,7 @@ void bvrml_write::write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segm
   << " appearance Appearance{\n"
   << "   material Material\n"
   << "    {\n"
+  << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
   << "      emissiveColor " << r << ' ' << g << ' ' << b << '\n'
   << "      transparency " << transparency << '\n'
   << "    }\n"

@@ -18,4 +18,6 @@ void bvrml_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvrml_write_perspective_cam_process, "bvrmlWritePerspectiveCamProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvrml_write_origin_and_axes_process, "bvrmlWriteOriginAndAxesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvrml_write_point_process, "bvrmlWritePointProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvrml_write_line_process, "bvrmlWriteLineProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvrml_filtered_ply_process, "bvrmlFilteredPlyProcess");
 }

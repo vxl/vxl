@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
+INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
 
 SET(bvrml_pro_sources
     bvrml_processes.h
@@ -15,7 +16,7 @@ AUX_SOURCE_DIRECTORY(Templates bvrml_pro_sources)
 
 ADD_LIBRARY(bvrml_pro ${bvrml_pro_sources} )
 
-TARGET_LINK_LIBRARIES(bvrml_pro bvrml vpgl_algo vpgl_io bprb )
+TARGET_LINK_LIBRARIES(bvrml_pro bvrml vpgl_algo vpgl_io bprb rply )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
