@@ -8,6 +8,10 @@
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
+#include <bkml/bkml_write.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_load.h>
+#include <vul/vul_file.h>
 
 //: initialization
 bool vpgl_load_geo_camera_process_cons(bprb_func_process& pro)
@@ -150,3 +154,72 @@ bool vpgl_convert_geo_camera_to_generic_process(bprb_func_process& pro)
   pro.set_output_val<vpgl_camera_double_sptr>(0, out);
   return true;
 }
+
+//: initialization
+bool vpgl_geo_footprint_process_cons(bprb_func_process& pro)
+{
+  //this process takes 4 inputs:
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");  // as read from a geotiff image header or from a tfw file
+  input_types.push_back("vcl_string");               // geotiff file, to determine image size
+  input_types.push_back("vcl_string");               // the filename of the kml file to write footprints to
+  input_types.push_back("bool");                     // put the tags do initialize and end the document, if writing only one file these are needed, otherwise add manually to the file
+  return pro.set_input_types(input_types);
+}
+
+//: Execute the process
+bool vpgl_geo_footprint_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() != 4) {
+    vcl_cout << "vpgl_geo_footprint_process: Number of inputs is " << pro.n_inputs() << ", should be 2" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
+  vcl_string geotiff_filename = pro.get_input<vcl_string>(1);
+  vil_image_resource_sptr img_res = vil_load_image_resource(geotiff_filename.c_str());
+  vcl_string footprint_filename = pro.get_input<vcl_string>(2);
+  bool init_finish = pro.get_input<bool>(3);
+  unsigned ni = img_res->ni(); unsigned nj = img_res->nj();
+
+  vcl_ofstream ofs(footprint_filename.c_str(), vcl_ios::app);
+  if (!ofs.good()) {
+    vcl_cerr << "ERROR: vpgl_geo_footprint_process : Error opening " << footprint_filename << " for write.\n";
+    return false;
+  }
+
+  if (init_finish)
+    bkml_write::open_document(ofs);
+
+  vpgl_geo_camera* geocam=dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  if (!geocam) {
+    vcl_cerr << "In vpgl_geo_footprint_process() - input camera is not valid!\n";
+    return false;
+  }
+  
+  double lon, lat, elev;
+  geocam->img_to_wgs(0,0,0,lon,lat,elev);
+  vnl_double_2 ul; ul[0] = lat; ul[1] = lon;
+
+  geocam->img_to_wgs(0,nj,0,lon,lat,elev);
+  vnl_double_2 ur; ur[0] = lat; ur[1] = lon;
+  
+  geocam->img_to_wgs(ni,0,0,lon,lat,elev);
+  vnl_double_2 ll; ll[0] = lat; ll[1] = lon; 
+  
+  geocam->img_to_wgs(ni,nj,0,lon,lat,elev);
+  vnl_double_2 lr; lr[0] = lat; lr[1] = lon;
+
+  vcl_string g_id = vul_file::strip_directory(geotiff_filename);
+  vcl_string desc = geotiff_filename + " footprint";
+
+  bkml_write::write_box(ofs, g_id, desc, ul, ur, ll, lr);
+  
+  if (init_finish)
+    bkml_write::close_document(ofs);
+
+  return true;
+}
+
+
