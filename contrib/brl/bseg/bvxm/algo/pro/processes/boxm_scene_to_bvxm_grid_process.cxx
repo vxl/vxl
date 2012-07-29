@@ -92,8 +92,8 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-  else if ( boxm_scene< boct_tree<short, mix_gauss_sf1_type > > *scene=
-          dynamic_cast<boxm_scene< boct_tree<short, mix_gauss_sf1_type > > * >(scene_base.as_pointer()))
+  else if ( boxm_scene< boct_tree<short, mix_gauss_sf1_type > > *scene =
+            dynamic_cast<boxm_scene< boct_tree<short, mix_gauss_sf1_type > > * >(scene_base.as_pointer()))
   {
     bvxm_voxel_grid<mix_gauss_sf1_type > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
@@ -104,8 +104,6 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
     vcl_cerr << "It's not possible to convert input scene to a bvxm grid\n";
     return false;
   }
-
-  return false;
 }
 
 #include <boxm/boxm_scene.txx>
@@ -128,4 +126,4 @@ VBL_ARRAY_3D_INSTANTIATE(block_type);
 void vsl_b_write(vsl_b_ostream&, bsta_mixture_fixed<bsta_num_obs<bsta_gaussian_sphere<float,1> >,3>&) {}
 void vsl_b_read(vsl_b_istream&, bsta_mixture_fixed<bsta_num_obs<bsta_gaussian_sphere<float,1> >,3>&) {}
 void vsl_b_read(vsl_b_istream&, bsta_gaussian_sphere<float,1>&) {}
-bool operator==(block_type const&, block_type const&) { return false; }
+//bool operator==(block_type const&, block_type const&) { return false; }

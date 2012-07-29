@@ -45,12 +45,10 @@ class boxm_block
   void b_write(vsl_b_ostream &s, const bool save_internal_nodes_, const bool platform_independent = true);
   static short version_no() { return 1; }
 
-#ifndef VCL_GCC
   bool operator==(boxm_block<T> const& other) const {
     return bbox_ == other.bounding_box()
         && octree_ == other.octree_;
   }
-#endif
 
  private:
   vgl_box_3d<double> bbox_;
