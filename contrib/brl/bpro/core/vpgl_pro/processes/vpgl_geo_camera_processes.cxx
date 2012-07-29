@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vpgl_pro/processes/vpgl_load_geo_camera_process.cxx
+// This is brl/bpro/core/vpgl_pro/processes/vpgl_geo_camera_processes.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -16,29 +16,23 @@
 //: initialization
 bool vpgl_load_geo_camera_process_cons(bprb_func_process& pro)
 {
-  //this process takes one input: local rational camera filename
-  bool ok=false;
+  //this process takes 4 inputs and one output
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");
   input_types.push_back("vpgl_lvcs_sptr");
   input_types.push_back("int");  // UTM zone, pass 0 if not UTM
   input_types.push_back("unsigned");  // UTM hemisphere, pass 0 for north, 1 for south
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  //camera output
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
-
-  return true;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 //: Execute the process
 bool vpgl_load_geo_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= 4) {
-    vcl_cout << "vpgl_load_geo_camera_process: The input number should be 1" << vcl_endl;
+    vcl_cout << "vpgl_load_geo_camera_process: The number of inputs should be 4" << vcl_endl;
     return false;
   }
 
@@ -74,28 +68,22 @@ bool vpgl_load_geo_camera_process(bprb_func_process& pro)
 //: initialization
 bool vpgl_translate_geo_camera_process_cons(bprb_func_process& pro)
 {
-  //this process takes one input: local rational camera filename
-  bool ok=false;
+  //this process takes 3 inputs and one output
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");  // input geo camera
   input_types.push_back("double");
   input_types.push_back("double");
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  //camera output
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
-
-  return true;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 //: Execute the process
 bool vpgl_translate_geo_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= 3) {
-    vcl_cout << "vpgl_translate_geo_camera_process: The input number should be 3" << vcl_endl;
+    vcl_cout << "vpgl_translate_geo_camera_process: The number of inputs should be 3" << vcl_endl;
     return false;
   }
 
@@ -113,30 +101,24 @@ bool vpgl_translate_geo_camera_process(bprb_func_process& pro)
 //: initialization
 bool vpgl_convert_geo_camera_to_generic_process_cons(bprb_func_process& pro)
 {
-  //this process takes one input: local rational camera filename
-  bool ok=false;
+  //this process takes 5 inputs and one output
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");  // input geo camera
   input_types.push_back("int");
   input_types.push_back("int");
   input_types.push_back("double");
   input_types.push_back("int");
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  // generic camera output
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
-
-  return true;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 //: Execute the process
 bool vpgl_convert_geo_camera_to_generic_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= 5) {
-    vcl_cout << "vpgl_convert_geo_camera_to_generic_process: The input number should be 3" << vcl_endl;
+    vcl_cout << "vpgl_convert_geo_camera_to_generic_process: The number of inputs should be 5" << vcl_endl;
     return false;
   }
 
@@ -197,17 +179,17 @@ bool vpgl_geo_footprint_process(bprb_func_process& pro)
     vcl_cerr << "In vpgl_geo_footprint_process() - input camera is not valid!\n";
     return false;
   }
-  
+
   double lon, lat, elev;
   geocam->img_to_wgs(0,0,0,lon,lat,elev);
   vnl_double_2 ul; ul[0] = lat; ul[1] = lon;
 
   geocam->img_to_wgs(0,nj,0,lon,lat,elev);
   vnl_double_2 ur; ur[0] = lat; ur[1] = lon;
-  
+
   geocam->img_to_wgs(ni,0,0,lon,lat,elev);
-  vnl_double_2 ll; ll[0] = lat; ll[1] = lon; 
-  
+  vnl_double_2 ll; ll[0] = lat; ll[1] = lon;
+
   geocam->img_to_wgs(ni,nj,0,lon,lat,elev);
   vnl_double_2 lr; lr[0] = lat; lr[1] = lon;
 
@@ -215,7 +197,7 @@ bool vpgl_geo_footprint_process(bprb_func_process& pro)
   vcl_string desc = geotiff_filename + " footprint";
 
   bkml_write::write_box(ofs, g_id, desc, ul, ur, ll, lr);
-  
+
   if (init_finish)
     bkml_write::close_document(ofs);
 
