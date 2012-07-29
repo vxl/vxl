@@ -12,6 +12,8 @@ TESTS += test_weighted_em.cxx
 TESTS += test_kernel_vector_filter.cxx
 TESTS += test_kernel_filter.cxx
 TESTS += test_ocl_cholesky.cxx
+TESTS += test_ocl_levenberg_marquardt.cxx
+TESTS += test_ocl_lm_phongs_model.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

@@ -1,14 +1,9 @@
 USES += contrib/brl contrib/brl/bbas core
 
-LIBRARY := bvrml_pro
+LIBRARY := bkml
 VERSION := 1.0
 
-SOURCES += bvrml_register.cxx
-MANPAGE_SOURCES += bvrml_processes.h
-
-SOURCES += processes/bvrml_initialize_process.cxx
-SOURCES += processes/bvrml_write_processes.cxx
-SOURCES += processes/bvrml_ply_processes.cxx
+SOURCES += bkml_write.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

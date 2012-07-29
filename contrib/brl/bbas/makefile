@@ -85,6 +85,9 @@ SUBDIRS += bsl
 # Brown elastic curve matching library
 SUBDIRS += bcvr
 
+# Brown KML utilities library
+SUBDIRS += bkml
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
