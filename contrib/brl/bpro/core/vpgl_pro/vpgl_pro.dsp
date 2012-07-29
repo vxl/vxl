@@ -183,7 +183,7 @@ SOURCE=.\processes/vpgl_convert_to_local_coordinates_process.cxx
 SOURCE=.\processes/bpgl_transform_perspective_cameras_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/vpgl_load_geo_camera_process.cxx
+SOURCE=.\processes/vpgl_geo_camera_processes.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/vpgl_compute_persp_cam_pa_covariance_process.cxx
@@ -215,3 +215,5 @@ SOURCE=.\vpgl_processes.h
 # End Group
 # End Target
 # End Project
+# Begin Source File
+# End Source File

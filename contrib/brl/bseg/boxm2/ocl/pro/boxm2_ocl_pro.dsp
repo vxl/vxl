@@ -257,6 +257,12 @@ SOURCE=.\processes/boxm2_ocl_aggregate_normal_from_filter_vector_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_kernel_vector_filter_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_batch_synoptic_phongs_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_update_alpha_wphongs_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
