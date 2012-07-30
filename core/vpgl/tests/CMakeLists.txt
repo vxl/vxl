@@ -10,6 +10,7 @@ ADD_EXECUTABLE( vpgl_test_all
   test_rational_camera.cxx
   test_local_rational_camera.cxx
   test_generic_camera.cxx
+  test_lvcs.cxx
 )
 
 TARGET_LINK_LIBRARIES( vpgl_test_all vpgl vpgl_io vgl_algo vgl vnl vbl vpl testlib )
@@ -23,6 +24,7 @@ ADD_TEST(vpgl_test_essential_matrix                 ${EXECUTABLE_OUTPUT_PATH}/vp
 ADD_TEST(vpgl_test_rational_camera                  ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_rational_camera)
 ADD_TEST(vpgl_test_local_rational_camera            ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_local_rational_camera)
 ADD_TEST(vpgl_test_generic_camera                   ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_generic_camera)
+ADD_TEST(vpgl_test_lvcs                             ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_lvcs)
 SET( HAS_GEOTIFF 0 )
 INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
 IF(GEOTIFF_FOUND)
