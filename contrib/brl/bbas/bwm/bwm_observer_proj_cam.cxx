@@ -95,8 +95,8 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
     return;
   }
   this->set_camera_path(cam_path);
-  if(subtype=="identity")
-	  camera_ = new vpgl_perspective_camera<double>();
+  if (subtype=="identity")
+    camera_ = new vpgl_perspective_camera<double>();
   else
   camera_ = bwm_observer_proj_cam::read_camera(cam_path,subtype);
   //generate a unique tab name if null
