@@ -314,7 +314,17 @@ submenu.add( "Load 2D Spatial Objects (binary)",
     mesh_submenu.add("Delete", del_menu);
     menu.separator();
     menu.add("3D Objects", mesh_submenu);
+    menu.separator();
+    // camera calibration submenu
 
+    vgui_menu cal_submenu;
+    cal_submenu.add("Set Focal Length(pix)", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::set_focal_length));
+    cal_submenu.add("Set Camera Height (m)", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::set_cam_height));
+    cal_submenu.add("Define Horizon(selected line)", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::set_horizon));
+    cal_submenu.add("Calibrate From Horizon", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::calibrate_cam_from_horizon));
+    cal_submenu.add("Camera from KML", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::camera_from_kml));
+    cal_submenu.add("Toggle Horizon", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::toggle_cam_horizon));
+    menu.add("Camera Calibration", cal_submenu);
   // Registration menu
     vgui_menu reg_submenu, threed_menu;
     menu.separator();

@@ -135,7 +135,14 @@ class bwm_tableau_cam : public bwm_tableau_img
   void load_boxm_scene() { my_observer_->load_boxm_scene(); }
 #endif
   bool show_vertices_;
-
+  //==================  camera calibration methods ===============
+  void set_horizon() {my_observer_->set_horizon();}
+  void set_focal_length();
+  void set_cam_height();
+  void calibrate_cam_from_horizon()
+    {my_observer_->calibrate_cam_from_horizon();}
+  void camera_from_kml();
+  void toggle_cam_horizon(){my_observer_->toggle_cam_horizon();}
  protected:
   bwm_observer_cam* my_observer_;
   bwm_tableau_cam(bwm_observer_cam* obs)

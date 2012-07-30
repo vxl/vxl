@@ -419,6 +419,42 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
   }
  return bwm_tableau_img::handle(e);
 }
+// ======================   camera calibration methods =============
+void bwm_tableau_cam::set_focal_length(){
+  static double focal_length = 3000.0;
+  vgui_dialog fval("Set Focal Length");
+  fval.field("Focal Length (pixel units)", focal_length);
+  if (!fval.ask())
+    return;
+  my_observer_->set_focal_length(focal_length);
+}
+void bwm_tableau_cam::set_cam_height(){
+  static double cam_height = 1.6;
+  vgui_dialog hval("Set Camera Center Height");
+  hval.field("Height (m)", cam_height);
+  if (!hval.ask())
+    return;
+  my_observer_->set_cam_height(cam_height);
+}
+void bwm_tableau_cam::camera_from_kml(){
+  static double right_fov = 29.605;//degrees
+  static double top_fov = 17.725;//degrees
+  static double altitude = 1.6;//meters
+  static double heading = 0.0;//degrees
+  static double tilt = 78.62;//degrees
+  static double roll = -2.76;//degrees
+  vgui_dialog fval("KML Camera");
+  fval.field("RightFOV(deg)", right_fov);
+  fval.field("TopFOV(deg)", top_fov);
+  fval.field("Altitude(m)", altitude);
+  fval.field("Heading(deg)", heading);
+  fval.field("Tilt(deg)",tilt);
+  fval.field("Roll(deg)",roll);
+  if (!fval.ask())
+    return;
+  my_observer_->camera_from_kml(right_fov, top_fov, altitude,
+                                heading, tilt, roll);
+}
 
 // Private Methods
 

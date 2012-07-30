@@ -89,12 +89,15 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
 
   // check if the camera path is not empty, if it is NITF, the camera
   // info is in the image, not a separate file
-  if (cam_path.size() == 0)
+  if (subtype!="identity"&&cam_path.size() == 0)
   {
     bwm_utils::show_error("Camera tableaus need a valid camera path!");
     return;
   }
   this->set_camera_path(cam_path);
+  if(subtype=="identity")
+	  camera_ = new vpgl_perspective_camera<double>();
+  else
   camera_ = bwm_observer_proj_cam::read_camera(cam_path,subtype);
   //generate a unique tab name if null
   if (name=="")

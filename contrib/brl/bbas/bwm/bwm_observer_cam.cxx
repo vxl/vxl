@@ -36,6 +36,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_line_3d_sptr.h>
 #include <vsol/vsol_line_3d.h>
@@ -45,13 +46,14 @@
 #include <vgui/vgui_dialog_extensions.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <bgui/bgui_vsol_soview2D.h>
+
 #if 0
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene_parser.h>
 #endif
 #include <vsl/vsl_basic_xml_element.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
-
+#include <bpgl/bpgl_camera_utils.h>
 bool bwm_observer_cam::geo_position(double u, double v,
                                     double& x, double& y, double& z)
 {
@@ -81,209 +83,209 @@ bool bwm_observer_cam::handle(const vgui_event &e)
 
   if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE &&
       e.modifier == vgui_SHIFT)
-  {
-    if (in_jog_mode_)
     {
-      in_jog_mode_ = false;
-      return true;
-    }
+      if (in_jog_mode_)
+        {
+          in_jog_mode_ = false;
+          return true;
+        }
 
-    vgui_text_tableau_sptr tt = img_tab_->text_tab();
-    if (tt)
-      tt->clear();
+      vgui_text_tableau_sptr tt = img_tab_->text_tab();
+      if (tt)
+        tt->clear();
 
-    // first get the selected polygon
-    vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
-    if (select_list.size() == 1)
-    {
-      if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
-        unsigned face_id;
-        bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
-        if (obj) {
-          if (obj->num_faces() == 1) {
-            // it is OK to move faces but not meshes with more than one face
-            moving_p_ = (bgui_vsol_soview2D*) select_list[0];
-            moving_face_ = obj;
-            vsol_polygon_3d_sptr poly3d = obj->extract_face(face_id);
-            if (poly3d) {
-            vgl_homg_plane_3d<double> plane = poly3d->plane();
-            moving_face_plane_ = plane;
+      // first get the selected polygon
+      vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+      if (select_list.size() == 1)
+        {
+          if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+            unsigned face_id;
+            bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
+            if (obj) {
+              if (obj->num_faces() == 1) {
+                // it is OK to move faces but not meshes with more than one face
+                moving_p_ = (bgui_vsol_soview2D*) select_list[0];
+                moving_face_ = obj;
+                vsol_polygon_3d_sptr poly3d = obj->extract_face(face_id);
+                if (poly3d) {
+                  vgl_homg_plane_3d<double> plane = poly3d->plane();
+                  moving_face_plane_ = plane;
+                }
+                start_x_ = x;
+                start_y_ = y;
+                moving_polygon_ = true;
+                moving_vertex_ = false;
+              }
+              this->deselect();
+              return true;
             }
+          }
+          else if (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0) {
             start_x_ = x;
             start_y_ = y;
-            moving_polygon_ = true;
-            moving_vertex_ = false;
-          }
-          this->deselect();
-          return true;
-        }
-      }
-      else if (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0) {
-        start_x_ = x;
-        start_y_ = y;
-        bwm_soview2D_vertex* v = (bwm_soview2D_vertex*) select_list[0];
-        bgui_vsol_soview2D* poly = v->obj();
-        unsigned face_id;
-        bwm_observable_sptr obj = find_object(poly->get_id(), face_id);
-        if (obj) {
-          if (obj->num_faces() == 1) {
-            moving_v_ = v;
-            // since there is only one face we can choose the only one
-            moving_p_ = poly;
-            moving_face_ = obj;
-            vsol_polygon_3d_sptr poly3d = obj->extract_face(face_id);
-            if (poly3d) {
-            vgl_homg_plane_3d<double> plane = poly3d->plane();
-            moving_face_plane_ = plane;
+            bwm_soview2D_vertex* v = (bwm_soview2D_vertex*) select_list[0];
+            bgui_vsol_soview2D* poly = v->obj();
+            unsigned face_id;
+            bwm_observable_sptr obj = find_object(poly->get_id(), face_id);
+            if (obj) {
+              if (obj->num_faces() == 1) {
+                moving_v_ = v;
+                // since there is only one face we can choose the only one
+                moving_p_ = poly;
+                moving_face_ = obj;
+                vsol_polygon_3d_sptr poly3d = obj->extract_face(face_id);
+                if (poly3d) {
+                  vgl_homg_plane_3d<double> plane = poly3d->plane();
+                  moving_face_plane_ = plane;
+                }
+                moving_vertex_ = true;
+                moving_polygon_ = false;
+              }
+              this->deselect();
+              return true;
             }
-            moving_vertex_ = true;
-            moving_polygon_ = false;
           }
-          this->deselect();
-          return true;
         }
-      }
     }
-  }
   else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE &&
            e.modifier == vgui_SHIFT && !moving_vertex_ && moving_face_)
-  {
-    float x_diff = x-start_x_;
-    float y_diff = y-start_y_;
-    moving_p_->translate(x_diff, y_diff);
+    {
+      float x_diff = x-start_x_;
+      float y_diff = y-start_y_;
+      moving_p_->translate(x_diff, y_diff);
 
-    // move all the vertices of the face
-    vcl_vector<bwm_soview2D_vertex* > vertices = object_verts_[moving_face_];
-    for (unsigned i=0; i<vertices.size(); i++) {
-      bwm_soview2D_vertex* v = vertices[i];
-      v->translate(x_diff, y_diff);
+      // move all the vertices of the face
+      vcl_vector<bwm_soview2D_vertex* > vertices = object_verts_[moving_face_];
+      for (unsigned i=0; i<vertices.size(); i++) {
+        bwm_soview2D_vertex* v = vertices[i];
+        v->translate(x_diff, y_diff);
+      }
+
+      start_x_ = x;
+      start_y_ = y;
+      post_redraw();
+      return true;
     }
-
-    start_x_ = x;
-    start_y_ = y;
-    post_redraw();
-    return true;
-  }
   else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE &&
            e.modifier == vgui_SHIFT && moving_vertex_ && moving_face_)
-  {
-    float x_diff = x-start_x_;
-    float y_diff = y-start_y_;
-    // find the polygon including this vertex
-    if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
-      bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+    {
+      float x_diff = x-start_x_;
+      float y_diff = y-start_y_;
+      // find the polygon including this vertex
+      if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
+        bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+        unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
+        if (i == (unsigned int)(-1))
+          return true;
+        moving_v_->translate(x_diff, y_diff);
+        polygon->sptr()->vertex(i)->set_x(polygon->sptr()->vertex(i)->x() + x_diff );
+        polygon->sptr()->vertex(i)->set_y(polygon->sptr()->vertex(i)->y() + y_diff );
+      }
+      else {
+        vcl_cerr << moving_p_->type_name() << " is NOT movable!!!!\n";
+      }
+
+      start_x_ = x;
+      start_y_ = y;
+      post_redraw();
+      return true;
+    }
+  else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && !moving_vertex_ && moving_face_)
+    {
+      if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+        bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+        vsol_polygon_2d_sptr poly2d = polygon->sptr();
+        vsol_polygon_3d_sptr poly3d;
+        this->backproj_poly(poly2d, poly3d, moving_face_plane_);
+        moving_face_->set_object(poly3d);
+      }
+      this->deselect();
+      moving_face_ = 0;
+      moving_vertex_ = false;
+      moving_polygon_ = false;
+      return true;
+    }
+  else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE &&
+           moving_vertex_ && moving_face_)
+    {
       unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
       if (i == (unsigned int)(-1))
         return true;
-      moving_v_->translate(x_diff, y_diff);
-      polygon->sptr()->vertex(i)->set_x(polygon->sptr()->vertex(i)->x() + x_diff );
-      polygon->sptr()->vertex(i)->set_y(polygon->sptr()->vertex(i)->y() + y_diff );
-    }
-    else {
-      vcl_cerr << moving_p_->type_name() << " is NOT movable!!!!\n";
-    }
-
-    start_x_ = x;
-    start_y_ = y;
-    post_redraw();
-    return true;
-  }
-  else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && !moving_vertex_ && moving_face_)
-  {
-    if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
-      bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
-      vsol_polygon_2d_sptr poly2d = polygon->sptr();
-      vsol_polygon_3d_sptr poly3d;
-      this->backproj_poly(poly2d, poly3d, moving_face_plane_);
-      moving_face_->set_object(poly3d);
-    }
-    this->deselect();
-    moving_face_ = 0;
-    moving_vertex_ = false;
-    moving_polygon_ = false;
-    return true;
-  }
-  else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE &&
-           moving_vertex_ && moving_face_)
-  {
-    unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
-    if (i == (unsigned int)(-1))
+      if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
+        bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+        bwm_soview2D_vertex* vertex = moving_v_;
+        float x, y;
+        vertex->get_centroid(&x,&y);
+        polygon->sptr()->vertex(i)->set_x(x);
+        polygon->sptr()->vertex(i)->set_y(y);
+        vsol_polygon_2d_sptr poly2d = polygon->sptr();
+        vsol_polygon_3d_sptr poly3d;
+        this->backproj_poly(poly2d, poly3d, moving_face_plane_);
+        moving_face_->set_object(poly3d);
+      }
+      this->deselect();
+      moving_face_ = 0;
+      moving_vertex_ = false;
+      moving_polygon_ = false;
       return true;
-    if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
-      bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
-      bwm_soview2D_vertex* vertex = moving_v_;
-      float x, y;
-      vertex->get_centroid(&x,&y);
-      polygon->sptr()->vertex(i)->set_x(x);
-      polygon->sptr()->vertex(i)->set_y(y);
-      vsol_polygon_2d_sptr poly2d = polygon->sptr();
-      vsol_polygon_3d_sptr poly3d;
-      this->backproj_poly(poly2d, poly3d, moving_face_plane_);
-      moving_face_->set_object(poly3d);
     }
-    this->deselect();
-    moving_face_ = 0;
-    moving_vertex_ = false;
-    moving_polygon_ = false;
-    return true;
-  }
   // extrude mode, goes only in z direction (up and down)
   if (extrude_mode_ && e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_UP)
-  {
+    {
       if (e.modifier == vgui_SHIFT)
         extrude_obj_->move_extr_face(1.0);
       else if (e.modifier == vgui_CTRL)
         extrude_obj_->move_extr_face(0.1);
       else
         extrude_obj_->move_extr_face(0.01);
-    in_jog_mode_ = true;
-    return true;
-  }
+      in_jog_mode_ = true;
+      return true;
+    }
   if (extrude_mode_ && e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_DOWN)
-  {
+    {
       if (e.modifier == vgui_SHIFT)
         extrude_obj_->move_extr_face(-1.0);
       else if (e.modifier == vgui_CTRL)
         extrude_obj_->move_extr_face(-0.1);
       else
         extrude_obj_->move_extr_face(-0.01);
-    in_jog_mode_ = true;
-    return true;
-  }
+      in_jog_mode_ = true;
+      return true;
+    }
 
   // stops the extrude mode
   if (extrude_mode_ && e.type==vgui_KEY_PRESS && e.key == vgui_END)
     extrude_mode_ = false;
   // moving along the optical axis
   if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_UP)
-  {
-    if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
-      if (e.modifier == vgui_SHIFT)
-        this->translate_along_optical_cone(1.0);
-      else if (e.modifier == vgui_CTRL)
-        this->translate_along_optical_cone(0.1);
-      else
-        this->translate_along_optical_cone(0.01);
+    {
+      if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
+        if (e.modifier == vgui_SHIFT)
+          this->translate_along_optical_cone(1.0);
+        else if (e.modifier == vgui_CTRL)
+          this->translate_along_optical_cone(0.1);
+        else
+          this->translate_along_optical_cone(0.01);
+      }
+      in_jog_mode_ = true;
+      return true;
     }
-    in_jog_mode_ = true;
-    return true;
-  }
   if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_DOWN)
-  {
-    if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
-      if (e.modifier == vgui_SHIFT)
-        this->translate_along_optical_cone(-1.0);
-      else if (e.modifier == vgui_CTRL)
-        this->translate_along_optical_cone(-0.1);
-      else
-        this->translate_along_optical_cone(-0.01);
+    {
+      if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
+        if (e.modifier == vgui_SHIFT)
+          this->translate_along_optical_cone(-1.0);
+        else if (e.modifier == vgui_CTRL)
+          this->translate_along_optical_cone(-0.1);
+        else
+          this->translate_along_optical_cone(-0.01);
+      }
+      in_jog_mode_ = true;
+      return true;
     }
-    in_jog_mode_ = true;
-    return true;
-  }
-    // extrude mode, goes only in z direction (up and down)
+  // extrude mode, goes only in z direction (up and down)
   if (shadow_mode_ && e.type==vgui_KEY_PRESS && e.modifier == vgui_CTRL)
-  {
+    {
       if (e.key == 'w' )
         sun_elev_angle_+=0.01;
       else if (e.key == 's')
@@ -297,8 +299,8 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       //sun_elev_angle_=sun_elev_angle_<vnl_math::pi_over_2 ? vnl_math::pi_over_2 : sun_elev_angle_;
       //sun_elev_angle_=sun_elev_angle_>vnl_math::pi        ? vnl_math::pi : sun_elev_angle_;
       this->project_shadow();
-    return true;
-  }
+      return true;
+    }
   // stops the extrude mode
   if (shadow_mode_ && e.type==vgui_KEY_PRESS && e.key == vgui_END)
     shadow_mode_ = false;
@@ -307,18 +309,18 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_LEFT && e.modifier == vgui_SHIFT) {
     vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
     if (select_list.size() == 1)
-    {
-      if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
-        unsigned face_id;
-        bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
-        if (obj) {
-          if (obj->type_name().compare("bwm_observable_mesh_circular") == 0) {
-            bwm_observable_mesh_circular* circle = static_cast<bwm_observable_mesh_circular*> (obj.as_pointer());
-            circle->decrease_radius(0.1);
+      {
+        if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+          unsigned face_id;
+          bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
+          if (obj) {
+            if (obj->type_name().compare("bwm_observable_mesh_circular") == 0) {
+              bwm_observable_mesh_circular* circle = static_cast<bwm_observable_mesh_circular*> (obj.as_pointer());
+              circle->decrease_radius(0.1);
+            }
           }
         }
       }
-    }
     in_jog_mode_ = true;
     return true;
   }
@@ -327,18 +329,18 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_RIGHT && e.modifier == vgui_SHIFT) {
     vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
     if (select_list.size() == 1)
-    {
-      if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
-        unsigned face_id;
-        bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
-        if (obj) {
-          if (obj->type_name().compare("bwm_observable_mesh_circular") == 0) {
-            bwm_observable_mesh_circular* circle = static_cast<bwm_observable_mesh_circular*> (obj.as_pointer());
-            circle->increase_radius(0.1);
+      {
+        if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+          unsigned face_id;
+          bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
+          if (obj) {
+            if (obj->type_name().compare("bwm_observable_mesh_circular") == 0) {
+              bwm_observable_mesh_circular* circle = static_cast<bwm_observable_mesh_circular*> (obj.as_pointer());
+              circle->increase_radius(0.1);
+            }
           }
         }
       }
-    }
     in_jog_mode_ = true;
     return true;
   }
@@ -346,14 +348,14 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       e.button != vgui_MIDDLE &&
       show_geo_position_&&
       !bwm_observer_img::vgui_status_locked())
-  {
-    double X, Y, Z;
-    if (this->geo_position(x, y, X, Y, Z))
-      vgui::out << vcl_fixed << vcl_setprecision(6)<< "Lat(deg): "
-                << Y << " Lon(deg): "
-                << X << vcl_setprecision(2) << " Ele(m): "
-                << Z << " (WGS84)" << vcl_endl;
-  }
+    {
+      double X, Y, Z;
+      if (this->geo_position(x, y, X, Y, Z))
+        vgui::out << vcl_fixed << vcl_setprecision(6)<< "Lat(deg): "
+                  << Y << " Lon(deg): "
+                  << X << vcl_setprecision(2) << " Ele(m): "
+                  << Z << " (WGS84)" << vcl_endl;
+    }
   return base::handle(e);
 }
 
@@ -382,7 +384,7 @@ void bwm_observer_cam::select_proj_plane()
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   if ((select_list.size() == 1) &&
-    (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
+      (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
     bgui_vsol_soview2D_polygon* polygon = static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
     unsigned face_id;
     bwm_observable_sptr obs = find_object(polygon->get_id(), face_id);
@@ -400,7 +402,7 @@ void bwm_observer_cam::move_ground_plane( vgl_plane_3d<double> master_plane,
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   if ((select_list.size() == 1) &&
-    (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0)) {
+      (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0)) {
     bwm_soview2D_vertex* circle = static_cast<bwm_soview2D_vertex*> (select_list[0]);
 
     //find the mesh this vertex belongs to
@@ -475,41 +477,41 @@ void bwm_observer_cam::translate_along_optical_axis(double da)
 
   if (select_list.size() == 1 &&
       select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)
-  {
-    bgui_vsol_soview2D_polygon* poly =
-      static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
+    {
+      bgui_vsol_soview2D_polygon* poly =
+        static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
 
-    //find the mesh this polygon belongs to
-    unsigned int face_id;
-    bwm_observable_sptr obs = find_object(poly->get_id(), face_id);
-    if (!obs)
-    {
-      vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
-               << "nothing selected to move\n";
+      //find the mesh this polygon belongs to
+      unsigned int face_id;
+      bwm_observable_sptr obs = find_object(poly->get_id(), face_id);
+      if (!obs)
+        {
+          vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
+                   << "nothing selected to move\n";
+          return;
+        }
+      vcl_vector<vsol_point_3d_sptr> verts = obs->extract_vertices();
+      if (!verts.size())
+        {
+          vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
+                   << "object has no vertices\n";
+          return;
+        }
+      vsol_point_3d_sptr p3d = verts[0];
+      vgl_point_3d<double> pg3d= p3d->get_p();
+      //get the direction of a ray
+      vgl_vector_3d<double> ray_dir;
+      if (!vpgl_ray::ray(camera_, pg3d, ray_dir))
+        {
+          vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
+                   << "ray direction computation failed\n";
+          return;
+        }
+      ray_dir *= da;
+      this->translate(ray_dir, obs);
+      this->select_object(obs);
       return;
     }
-    vcl_vector<vsol_point_3d_sptr> verts = obs->extract_vertices();
-    if (!verts.size())
-    {
-      vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
-               << "object has no vertices\n";
-      return;
-    }
-    vsol_point_3d_sptr p3d = verts[0];
-    vgl_point_3d<double> pg3d= p3d->get_p();
-    //get the direction of a ray
-    vgl_vector_3d<double> ray_dir;
-    if (!vpgl_ray::ray(camera_, pg3d, ray_dir))
-    {
-      vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
-               << "ray direction computation failed\n";
-      return;
-    }
-    ray_dir *= da;
-    this->translate(ray_dir, obs);
-    this->select_object(obs);
-    return;
-  }
   vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
            << "not exactly one selected vertex\n";
 }
@@ -525,39 +527,39 @@ void bwm_observer_cam::translate_along_optical_cone(double da)
 #endif
   if (select_list.size() == 1 &&
       select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)
-  {
-    bgui_vsol_soview2D_polygon* poly =
-      static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
-
-    //find the mesh this polygon belongs to
-    unsigned int face_id;
-    bwm_observable_sptr obs = find_object(poly->get_id(), face_id);
-    if (!obs)
     {
-      vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
-               << "nothing selected to move\n";
+      bgui_vsol_soview2D_polygon* poly =
+        static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
+
+      //find the mesh this polygon belongs to
+      unsigned int face_id;
+      bwm_observable_sptr obs = find_object(poly->get_id(), face_id);
+      if (!obs)
+        {
+          vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
+                   << "nothing selected to move\n";
+          return;
+        }
+      // cone method only available on observable_mesh, not in general
+      bwm_observable_mesh* omsh = 0;
+      if (obs->type_name()=="bwm_observable_mesh")
+        omsh = static_cast<bwm_observable_mesh*>(obs.ptr());
+      else return;
+
+      if (!omsh->move_poly_in_optical_cone(camera_,face_id,da))
+        return;
+#if 0
+      select_list = this->get_selected_soviews();
+      vcl_cout << "#selected after move = " << select_list.size() << '\n';
+#endif
+      //keep the object selected
+      this->select_object(obs);
+#if 0
+      select_list = this->get_selected_soviews();
+      vcl_cout << "#selected after select = " << select_list.size() << '\n';
+#endif
       return;
     }
-    // cone method only available on observable_mesh, not in general
-    bwm_observable_mesh* omsh = 0;
-    if (obs->type_name()=="bwm_observable_mesh")
-      omsh = static_cast<bwm_observable_mesh*>(obs.ptr());
-    else return;
-
-    if (!omsh->move_poly_in_optical_cone(camera_,face_id,da))
-       return;
-#if 0
-     select_list = this->get_selected_soviews();
-    vcl_cout << "#selected after move = " << select_list.size() << '\n';
-#endif
-    //keep the object selected
-    this->select_object(obs);
-#if 0
-     select_list = this->get_selected_soviews();
-    vcl_cout << "#selected after select = " << select_list.size() << '\n';
-#endif
-    return;
-  }
 }
 
 void bwm_observer_cam::proj_point(vgl_point_3d<double> world_pt,
@@ -664,14 +666,14 @@ void bwm_observer_cam::move_corr_point(vsol_point_2d_sptr new_pt)
 
   if (select_list.size() == 1) {
     if (select_list[0]->type_name().compare("bwm_soview2D_cross") == 0) {
-    bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*> (select_list[0]);
-    vgl_point_2d<double> old_pt(cross->x, cross->y);
-    //Change both the corr position and cross display
-    bwm_observer_vgui::set_corr(new_pt->x(), new_pt->y());
-    // remove the old one
-    this->remove(cross);
-    // notify the observer mgr about the change
-    bwm_observer_mgr::instance()->update_corr(this, old_pt, new_pt->get_p());
+      bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*> (select_list[0]);
+      vgl_point_2d<double> old_pt(cross->x, cross->y);
+      //Change both the corr position and cross display
+      bwm_observer_vgui::set_corr(new_pt->x(), new_pt->y());
+      // remove the old one
+      this->remove(cross);
+      // notify the observer mgr about the change
+      bwm_observer_mgr::instance()->update_corr(this, old_pt, new_pt->get_p());
     }
   }
 }
@@ -683,11 +685,11 @@ void bwm_observer_cam::set_corr_to_vertex()
     (bwm_soview2D_vertex*)bwm_observer_img::get_selected_object("bwm_soview2D_vertex");
   // extract the location
   if (!sov)
-  {
-    vcl_cerr << "In bwm_observer_cam::set_corr_to_vertex() -"
-             << " no vertex selected\n";
-    return;
-  }
+    {
+      vcl_cerr << "In bwm_observer_cam::set_corr_to_vertex() -"
+               << " no vertex selected\n";
+      return;
+    }
   bwm_observer_vgui::set_corr(sov->x, sov->y);
   bwm_observer_img::post_redraw();
 }
@@ -726,9 +728,9 @@ bool bwm_observer_cam::find_intersection_points(vgl_point_2d<double> const img_p
                                                 vgl_point_2d<double> const img_point2,
                                                 vsol_polygon_3d_sptr poly3d,
                                                 vgl_point_3d<double>& point1,
-   /* end points of the first polygon segment*/ vgl_point_3d<double>& l1, vgl_point_3d<double>& l2,
+                                                /* end points of the first polygon segment*/ vgl_point_3d<double>& l1, vgl_point_3d<double>& l2,
                                                 vgl_point_3d<double>& point2,
-  /* end points of the second polygon segment*/ vgl_point_3d<double>& l3, vgl_point_3d<double>& l4)
+                                                /* end points of the second polygon segment*/ vgl_point_3d<double>& l3, vgl_point_3d<double>& l4)
 {
   vgl_plane_3d<double> poly_plane = poly3d->plane();
 
@@ -757,37 +759,37 @@ bool bwm_observer_cam::find_intersection_points(vgl_point_2d<double> const img_p
 
   // if it is close enough, find the intersection
   if ((dist1 < 2.0) && (dist2 < 2.0))
-  {
-    double point1_x, point1_y, point1_z,
-      point2_x, point2_y, point2_z;
-    unsigned
-    int edge_index1 = vgl_closest_point_to_closed_polygon(point1_x, point1_y, point1_z,
-                                                          x_list, y_list, z_list, poly3d->size(),
-                                                          non_homg_p1.x(), non_homg_p1.y(), non_homg_p1.z());
-    unsigned
-    int edge_index2 = vgl_closest_point_to_closed_polygon(point2_x, point2_y, point2_z,
-                                                          x_list, y_list, z_list, poly3d->size(),
-                                                          non_homg_p2.x(), non_homg_p2.y(), non_homg_p2.z());
+    {
+      double point1_x, point1_y, point1_z,
+        point2_x, point2_y, point2_z;
+      unsigned
+        int edge_index1 = vgl_closest_point_to_closed_polygon(point1_x, point1_y, point1_z,
+                                                              x_list, y_list, z_list, poly3d->size(),
+                                                              non_homg_p1.x(), non_homg_p1.y(), non_homg_p1.z());
+      unsigned
+        int edge_index2 = vgl_closest_point_to_closed_polygon(point2_x, point2_y, point2_z,
+                                                              x_list, y_list, z_list, poly3d->size(),
+                                                              non_homg_p2.x(), non_homg_p2.y(), non_homg_p2.z());
 
-    if (edge_index1 == edge_index2) {
-      vcl_cerr << "bwm_observer_cam::find_intersection_points() -- Both points are on the same edge!!!\n";
-      return false;
+      if (edge_index1 == edge_index2) {
+        vcl_cerr << "bwm_observer_cam::find_intersection_points() -- Both points are on the same edge!!!\n";
+        return false;
+      }
+
+      l1 = vgl_point_3d<double> (x_list[edge_index1], y_list[edge_index1], z_list[edge_index1]);
+      unsigned int next_index = edge_index1+1;
+      if (next_index == poly3d->size())
+        next_index = 0;
+      l2 = vgl_point_3d<double> (x_list[next_index], y_list[next_index], z_list[next_index]);
+      l3 = vgl_point_3d<double> (x_list[edge_index2], y_list[edge_index2], z_list[edge_index2]);
+      next_index = edge_index2+1;
+      if (edge_index2+1 == poly3d->size())
+        next_index = 0;
+      l4 = vgl_point_3d<double> (x_list[next_index], y_list[next_index], z_list[next_index]);
+      point1 = vgl_point_3d<double>(point1_x, point1_y, point1_z);
+      point2 = vgl_point_3d<double>(point2_x, point2_y, point2_z);
+      return true;
     }
-
-    l1 = vgl_point_3d<double> (x_list[edge_index1], y_list[edge_index1], z_list[edge_index1]);
-    unsigned int next_index = edge_index1+1;
-    if (next_index == poly3d->size())
-      next_index = 0;
-    l2 = vgl_point_3d<double> (x_list[next_index], y_list[next_index], z_list[next_index]);
-    l3 = vgl_point_3d<double> (x_list[edge_index2], y_list[edge_index2], z_list[edge_index2]);
-    next_index = edge_index2+1;
-    if (edge_index2+1 == poly3d->size())
-      next_index = 0;
-    l4 = vgl_point_3d<double> (x_list[next_index], y_list[next_index], z_list[next_index]);
-    point1 = vgl_point_3d<double>(point1_x, point1_y, point1_z);
-    point2 = vgl_point_3d<double>(point2_x, point2_y, point2_z);
-    return true;
-  }
   return false;
 }
 
@@ -826,7 +828,7 @@ bool bwm_observer_cam::intersect(float x1, float y1, float x2, float y2)
   // TEST THIS!!!!!!!!!!!!!!
   //if (vpgl_proj_camera<double> *pro_cam = dynamic_cast<vpgl_proj_camera<double>*>(camera_))
   //{
-    // first, check the intersection with the bounding box
+  // first, check the intersection with the bounding box
   for (; itr != objects_.end(); itr++) {
     vgl_box_3d<double> bb;
     bwm_observable_sptr obs =(*itr).first;
@@ -848,32 +850,32 @@ bool bwm_observer_cam::intersect(float x1, float y1, float x2, float y2)
 #if 0 // commented out
   if (vpgl_proj_camera<double> *pro_cam = dynamic_cast<vpgl_proj_camera<double>*>(camera_)) {
     cam_center = pro_cam->camera_center();
-   }
-   else if (vpgl_rational_camera<double> *rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(camera_)) {
-     // THIS IS JUST A PLACE HOLDER TILL WE FIGURE OUT SOMETHING BETTER...
+  }
+  else if (vpgl_rational_camera<double> *rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(camera_)) {
+    // THIS IS JUST A PLACE HOLDER TILL WE FIGURE OUT SOMETHING BETTER...
 
-     cam_center.set(rat_cam->offset(rat_cam->X_INDX),
-                    rat_cam->offset(rat_cam->Y_INDX),
-                    rat_cam->offset(rat_cam->Z_INDX));
-   }
-   else {
-     //unsupported camera type
-     vcl_cerr << "poly_cam_observer::intersect(): unsupported camera type!\n";
-     return false;
-   }
+    cam_center.set(rat_cam->offset(rat_cam->X_INDX),
+                   rat_cam->offset(rat_cam->Y_INDX),
+                   rat_cam->offset(rat_cam->Z_INDX));
+  }
+  else {
+    //unsupported camera type
+    vcl_cerr << "poly_cam_observer::intersect(): unsupported camera type!\n";
+    return false;
+  }
 #endif // 0
-    // choose the polygon amongst the selected objects
-    // select the one closest to the camera
-    int closest_face_id = 0;
-    vgl_point_3d<double> seg_l1, seg_l2, seg_l3, seg_l4, inters_point1, inters_point2;
-    double dist = 1e06;
-    bool found=false;
-    for (unsigned i=0; i<intersecting_obs.size(); i++) {
-      bwm_observable_sptr obs = intersecting_obs[i];
-      vcl_map<int, vsol_polygon_3d_sptr> faces = obs->extract_faces();
-      vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
+  // choose the polygon amongst the selected objects
+  // select the one closest to the camera
+  int closest_face_id = 0;
+  vgl_point_3d<double> seg_l1, seg_l2, seg_l3, seg_l4, inters_point1, inters_point2;
+  double dist = 1e06;
+  bool found=false;
+  for (unsigned i=0; i<intersecting_obs.size(); i++) {
+    bwm_observable_sptr obs = intersecting_obs[i];
+    vcl_map<int, vsol_polygon_3d_sptr> faces = obs->extract_faces();
+    vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
 
-      while (iter != faces.end())
+    while (iter != faces.end())
       {
         vgl_point_3d<double> l1, l2, l3, l4;
         vgl_point_3d<double> point1, point2;
@@ -897,11 +899,11 @@ bool bwm_observer_cam::intersect(float x1, float y1, float x2, float y2)
         }
         iter++;
       }
-      if (found) {
-        obs->divide_face(closest_face_id, seg_l1, seg_l2, inters_point1,
-                         seg_l3, seg_l4, inters_point2);
-        return true;
-      }
+    if (found) {
+      obs->divide_face(closest_face_id, seg_l1, seg_l2, inters_point1,
+                       seg_l3, seg_l4, inters_point2);
+      return true;
+    }
   }
   return false;
 }
@@ -1002,27 +1004,27 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
 
   // make sure that these vertices belong to the face
   //if ((v1->obj() == poly) && (v2->obj() == poly))
-    unsigned face_id;
-    bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
+  unsigned face_id;
+  bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
 
-    float x1, y1, x2, y2;
-    v1->get_centroid(&x1, &y1);
-    v2->get_centroid(&x2, &y2);
-    vsol_point_2d_sptr picked_v1 = new vsol_point_2d(x1,y1);
-    vsol_point_2d_sptr picked_v2 = new vsol_point_2d(x2,y2);
-    vsol_polygon_3d_sptr face = obs->extract_face(face_id);
-    vsol_polygon_2d_sptr face2d;
+  float x1, y1, x2, y2;
+  v1->get_centroid(&x1, &y1);
+  v2->get_centroid(&x2, &y2);
+  vsol_point_2d_sptr picked_v1 = new vsol_point_2d(x1,y1);
+  vsol_point_2d_sptr picked_v2 = new vsol_point_2d(x2,y2);
+  vsol_polygon_3d_sptr face = obs->extract_face(face_id);
+  vsol_polygon_2d_sptr face2d;
 
-    // find the backprojection of the selected vertex
-    proj_poly(face, face2d);
+  // find the backprojection of the selected vertex
+  proj_poly(face, face2d);
 
-    // find the index of the selected vertices, by searching for the
-    // closest 3-d vertex to the backprojected 2-d vertex
-    double min_dist1 = 1e23, min_dist2 = 1e23;
-    unsigned index1 = (unsigned int)(-1), index2 = (unsigned int)(-1);
-    vcl_cout << "\n-- Selected v1=" << picked_v1->get_p()
-             << "\n-- Selected v2=" << picked_v2->get_p() << vcl_endl;
-    for (unsigned i=0; i<face2d->size(); i++)
+  // find the index of the selected vertices, by searching for the
+  // closest 3-d vertex to the backprojected 2-d vertex
+  double min_dist1 = 1e23, min_dist2 = 1e23;
+  unsigned index1 = (unsigned int)(-1), index2 = (unsigned int)(-1);
+  vcl_cout << "\n-- Selected v1=" << picked_v1->get_p()
+           << "\n-- Selected v2=" << picked_v2->get_p() << vcl_endl;
+  for (unsigned i=0; i<face2d->size(); i++)
     {
       vgl_point_2d<double> pt = face2d->vertex(i)->get_p();
 
@@ -1039,88 +1041,88 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
         index2 = i;
       }
     }
-    if ((index1 == (unsigned int)(-1)) || (index2 == (unsigned int)(-1))) {
-      vcl_cerr << "The vertices (one or both) cannot be found on the face\n";
+  if ((index1 == (unsigned int)(-1)) || (index2 == (unsigned int)(-1))) {
+    vcl_cerr << "The vertices (one or both) cannot be found on the face\n";
+    return;
+  }
+#if 0
+  // see if the vertices are adjacent
+  unsigned index = (index1 < index2) ? index1 : index2;
+  unsigned next_index = (index == face->size()-1) ? 0 : index+1;
+#endif
+  if (index1 == index2) {
+    vcl_cerr << "the edge vertices are the same vertex, something terribly wrong!\n";
+    return;
+  }
+  else if (index1 < index2) {
+    unsigned next_index = (index1 == 0) ? face->size()-1 : index1+1;
+    if (next_index != index2) {
+      vcl_cerr << "backprojected vertices are not adjacent\n";
       return;
     }
-#if 0
-    // see if the vertices are adjacent
-    unsigned index = (index1 < index2) ? index1 : index2;
-    unsigned next_index = (index == face->size()-1) ? 0 : index+1;
-#endif
-    if (index1 == index2) {
-      vcl_cerr << "the edge vertices are the same vertex, something terribly wrong!\n";
+  }
+  else {
+    unsigned next_index = (index2 == 0) ? face->size()-1 : index2+1;
+    if (next_index != index1) {
+      vcl_cerr << "backprojected vertices are not adjacent\n";
       return;
     }
-    else if (index1 < index2) {
-      unsigned next_index = (index1 == 0) ? face->size()-1 : index1+1;
-      if (next_index != index2) {
-        vcl_cerr << "backprojected vertices are not adjacent\n";
-        return;
-      }
-    }
-    else {
-      unsigned next_index = (index2 == 0) ? face->size()-1 : index2+1;
-      if (next_index != index1) {
-        vcl_cerr << "backprojected vertices are not adjacent\n";
-        return;
-      }
-    }
+  }
 
-    // selected vertices
-    vgl_point_3d<double> p0(face->vertex(index1)->get_p());
-    vgl_point_3d<double> p1(face->vertex(index2)->get_p());
+  // selected vertices
+  vgl_point_3d<double> p0(face->vertex(index1)->get_p());
+  vgl_point_3d<double> p1(face->vertex(index2)->get_p());
 
-    // a point above p0 along normal
-    vcl_cout << "Face Normal-->" << face->normal() << vcl_endl;
+  // a point above p0 along normal
+  vcl_cout << "Face Normal-->" << face->normal() << vcl_endl;
 #if 0
-    vgl_point_3d<double> p2(face->vertex(index1)->get_p().x() +
-                            face->normal().x(),
-                            face->vertex(index1)->get_p().y() +
-                            face->normal().y(),
-                            face->vertex(index1)->get_p().z() +
-                            face->normal().z());
+  vgl_point_3d<double> p2(face->vertex(index1)->get_p().x() +
+                          face->normal().x(),
+                          face->vertex(index1)->get_p().y() +
+                          face->normal().y(),
+                          face->vertex(index1)->get_p().z() +
+                          face->normal().z());
 #endif
-    vgl_point_3d<double> p2(face->vertex(index1)->get_p().x(),
-                            face->vertex(index1)->get_p().y(),
-                            face->vertex(index1)->get_p().z()+1);
+  vgl_point_3d<double> p2(face->vertex(index1)->get_p().x(),
+                          face->vertex(index1)->get_p().y(),
+                          face->vertex(index1)->get_p().z()+1);
 
-    vcl_cout << "p0-->" << p0 << '\n'
-             << "p1-->" << p1 << '\n'
-             << "p2-->" << p2 << vcl_endl;
-    vgl_plane_3d<double> plane(p0, p2, p1);
-  #ifdef CAM_DEBUG
-    vcl_cout << "projection plane normal " << plane.normal() << '\n';
-  #endif
-    vsol_point_3d_sptr pt3d;
-    backproj_point(pt, pt3d, plane);
-    if (!pt3d)
+  vcl_cout << "p0-->" << p0 << '\n'
+           << "p1-->" << p1 << '\n'
+           << "p2-->" << p2 << vcl_endl;
+  vgl_plane_3d<double> plane(p0, p2, p1);
+#ifdef CAM_DEBUG
+  vcl_cout << "projection plane normal " << plane.normal() << '\n';
+#endif
+  vsol_point_3d_sptr pt3d;
+  backproj_point(pt, pt3d, plane);
+  if (!pt3d)
     {
       vcl_cout << "Target point did not project successfully "
                <<"to building surface. Try again.\n";
       return;
     }
 
-  #ifdef CAM_DEBUG
-    vcl_cout << "The back-projected point ("
-             << pt3d->x() << ' ' << pt3d->y() << ' ' << pt3d->z() << ")\n";
-  #endif
+#ifdef CAM_DEBUG
+  vcl_cout << "The back-projected point ("
+           << pt3d->x() << ' ' << pt3d->y() << ' ' << pt3d->z() << ")\n";
+#endif
 
-    // use the z value of the backprojected point
+  // use the z value of the backprojected point
 
 #if 0
-    // the face normal vector
-    vgl_vector_3d<double> n1 = face->normal();
+  // the face normal vector
+  vgl_vector_3d<double> n1 = face->normal();
 #ifdef CAM_DEBUG
-    vcl_cout << "extrusion face normal " << n1 << '\n';
+  vcl_cout << "extrusion face normal " << n1 << '\n';
 #endif
-    // the vector pointing from the selected vertex to the 3-d target point
-    vgl_vector_3d<double> n2 = pt3d->get_p() - v3d->get_p();
-    double a = angle(n1, n2);
-    double ninety_deg = vnl_math::pi/2.0;
+  // the vector pointing from the selected vertex to the 3-d target point
+  vgl_vector_3d<double> n2 = pt3d->get_p() - v3d->get_p();
+  double a = angle(n1, n2);
+  double ninety_deg = vnl_math::pi/2.0;
 
 #ifdef CAM_DEBUG
-    vcl_cout << "angle " << a*vnl_math::deg_per_rad << '\n';
+  vcl_cout << "angle " << a*vnl_math::deg_per_rad << '\n';
 #endif
 
   //magnitude of the distance from the selected vertex to the target point
@@ -1129,13 +1131,13 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
     dist *= -1;
 #endif // 0
 
-    //OK but what if the target point does not lie exactly on the
-    //vector from the selected vertex to the ground. We should only
-    //consider that the z coordinate of the selected point is important.
-    //This method should be modified, perhaps define a "visible side"
-    //construction plane.
+  //OK but what if the target point does not lie exactly on the
+  //vector from the selected vertex to the ground. We should only
+  //consider that the z coordinate of the selected point is important.
+  //This method should be modified, perhaps define a "visible side"
+  //construction plane.
 
-    obs->extrude(face_id, pt3d->z());
+  obs->extrude(face_id, pt3d->z());
 }
 
 // The input point, pt, is supplied by the caller. The routine
@@ -1203,12 +1205,12 @@ void bwm_observer_cam::backproj_point(vsol_point_2d_sptr p2d,
 #endif
 
   if (intersect_ray_and_plane(image_point,proj_plane,world_point))
-  {
-    double x = world_point.x();
-    double y = world_point.y();
-    double z = world_point.z();
-    p3d = new vsol_point_3d (x, y, z);
-  }
+    {
+      double x = world_point.x();
+      double y = world_point.y();
+      double z = world_point.z();
+      p3d = new vsol_point_3d (x, y, z);
+    }
   else
     p3d = 0;
 }
@@ -1290,7 +1292,7 @@ bool bwm_observer_cam::intersect_ray_and_box(vgl_box_3d<double> box,
   for (unsigned i=0; i<planes.size(); i++) {
     vgl_point_3d<double> p;
     if (intersect_ray_and_plane(img_point,planes[i],p)) {
-    vcl_cout << "ray-plane intersection failed\n" << vcl_endl;
+      vcl_cout << "ray-plane intersection failed\n" << vcl_endl;
       return false;
     }
     vgl_point_3d<double> ip(p);
@@ -1410,38 +1412,38 @@ void bwm_observer_cam::scan_regions()
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
   vcl_vector<vgl_polygon<double> > polygons;
   for (unsigned s=0; s<select_list.size();s++)
-  {
-    if (select_list[s]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)
     {
-      bgui_vsol_soview2D_polygon* poly;
-      poly = static_cast<bgui_vsol_soview2D_polygon*> (select_list[s]);
-      unsigned face_id;
-      vgl_polygon<double> polygon(1);
-      bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
-      if (obs) {
-        vcl_vector<bwm_soview2D_vertex*> vertices = object_verts_[obs];
-        if (obs->num_faces() == 1) {
-           for (unsigned i=0; i<vertices.size(); i++) {
-             float x, y;
-             vertices[i]->get_centroid(&x, &y);
-             polygon.push_back(x,y);
-           }
-        }
-        else {
-          vcl_vector<vgl_point_2d<double> > points;
-          for (unsigned i=0; i<vertices.size(); i++) {
-             float x, y;
-             vertices[i]->get_centroid(&x, &y);
-             vgl_point_2d<double> p(x,y);
-             points.push_back(p);
+      if (select_list[s]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)
+        {
+          bgui_vsol_soview2D_polygon* poly;
+          poly = static_cast<bgui_vsol_soview2D_polygon*> (select_list[s]);
+          unsigned face_id;
+          vgl_polygon<double> polygon(1);
+          bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
+          if (obs) {
+            vcl_vector<bwm_soview2D_vertex*> vertices = object_verts_[obs];
+            if (obs->num_faces() == 1) {
+              for (unsigned i=0; i<vertices.size(); i++) {
+                float x, y;
+                vertices[i]->get_centroid(&x, &y);
+                polygon.push_back(x,y);
+              }
+            }
+            else {
+              vcl_vector<vgl_point_2d<double> > points;
+              for (unsigned i=0; i<vertices.size(); i++) {
+                float x, y;
+                vertices[i]->get_centroid(&x, &y);
+                vgl_point_2d<double> p(x,y);
+                points.push_back(p);
+              }
+              vgl_convex_hull_2d<double> convex_hull(points);
+              polygon = convex_hull.hull();
+            }
+            polygons.push_back(polygon);
           }
-          vgl_convex_hull_2d<double> convex_hull(points);
-          polygon = convex_hull.hull();
         }
-        polygons.push_back(polygon);
-      }
     }
-  }
   bwm_image_processor::scan_regions(img_tab_, polygons);
 }
 
@@ -1449,70 +1451,70 @@ void bwm_observer_cam::project_shadow()
 {
   // get the selected objects
   shadow_mode_=true;
-    vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
   vcl_vector<vgl_polygon<double> > polygons;
   for (unsigned i=0;i<shadow_line_segs_.size();i++)
-      this->remove(shadow_line_segs_[i]);
+    this->remove(shadow_line_segs_[i]);
   shadow_line_segs_.clear();
   for (unsigned s=0; s<select_list.size();s++)
-  {
-    if (select_list[s]->type_name().compare("bgui_vsol_soview2D_line_seg") == 0)
     {
-      bgui_vsol_soview2D_line_seg* lineseg;
-      lineseg = static_cast<bgui_vsol_soview2D_line_seg*> (select_list[s]);
-      vsol_line_2d_sptr line_sptr=lineseg->sptr();
-
-      double x0=line_sptr->p0()->x();
-      double y0=line_sptr->p0()->y();
-
-      double x1=line_sptr->p1()->x();
-      double y1=line_sptr->p1()->y();
-
-      double dist_min1=1e10; int index_min1=-1;
-      double dist_min2=1e10; int index_min2=-1;
-      unsigned edge_id;
-      bwm_observable_sptr obs = this->find_object(lineseg->get_id(), edge_id);
-
-      vcl_vector<vsol_point_3d_sptr> mesh_pts=obs->extract_vertices();
-      for (unsigned i=0;i<mesh_pts.size();i++)
-      {
-        double u,v;
-        camera_->project(mesh_pts[i]->x(),
-                         mesh_pts[i]->y(),
-                         mesh_pts[i]->z(),u,v);
-        double dist1=(x0-u)*(x0-u)+(y0-v)*(y0-v);
-        double dist2=(x1-u)*(x1-u)+(y1-v)*(y1-v);
-        if (dist_min1>dist1)
+      if (select_list[s]->type_name().compare("bgui_vsol_soview2D_line_seg") == 0)
         {
-          dist_min1=dist1;
-          index_min1=i;
+          bgui_vsol_soview2D_line_seg* lineseg;
+          lineseg = static_cast<bgui_vsol_soview2D_line_seg*> (select_list[s]);
+          vsol_line_2d_sptr line_sptr=lineseg->sptr();
+
+          double x0=line_sptr->p0()->x();
+          double y0=line_sptr->p0()->y();
+
+          double x1=line_sptr->p1()->x();
+          double y1=line_sptr->p1()->y();
+
+          double dist_min1=1e10; int index_min1=-1;
+          double dist_min2=1e10; int index_min2=-1;
+          unsigned edge_id;
+          bwm_observable_sptr obs = this->find_object(lineseg->get_id(), edge_id);
+
+          vcl_vector<vsol_point_3d_sptr> mesh_pts=obs->extract_vertices();
+          for (unsigned i=0;i<mesh_pts.size();i++)
+            {
+              double u,v;
+              camera_->project(mesh_pts[i]->x(),
+                               mesh_pts[i]->y(),
+                               mesh_pts[i]->z(),u,v);
+              double dist1=(x0-u)*(x0-u)+(y0-v)*(y0-v);
+              double dist2=(x1-u)*(x1-u)+(y1-v)*(y1-v);
+              if (dist_min1>dist1)
+                {
+                  dist_min1=dist1;
+                  index_min1=i;
+                }
+              if (dist_min2>dist2)
+                {
+                  dist_min2=dist2;
+                  index_min2=i;
+                }
+            }
+          int min_z_index=mesh_pts[index_min1]->z()<mesh_pts[index_min2]->z()?index_min1:index_min2;
+          double len=mesh_pts[index_min1]->distance(mesh_pts[index_min2]);
+          vsol_point_3d_sptr base_point= mesh_pts[min_z_index];
+          vsol_point_3d_sptr pnew=new vsol_point_3d(base_point->x()-len*vcl_tan(sun_elev_angle_)*vcl_cos(sun_azim_angle_),
+                                                    base_point->y()-len*vcl_tan(sun_elev_angle_)*vcl_sin(sun_azim_angle_),
+                                                    base_point->z());
+
+          double u0,v0,u1,v1;
+          camera_->project(base_point->x(),
+                           base_point->y(),
+                           base_point->z(),u0,v0);
+          camera_->project(pnew->x(),pnew->y(),pnew->z(),u1,v1);
+
+
+          vsol_line_2d_sptr shadow_line= new vsol_line_2d(new vsol_point_2d(u0,v0),
+                                                          new vsol_point_2d(u1,v1));
+
+          shadow_line_segs_.push_back(this->add_vsol_line_2d(shadow_line));
         }
-        if (dist_min2>dist2)
-        {
-          dist_min2=dist2;
-          index_min2=i;
-        }
-      }
-      int min_z_index=mesh_pts[index_min1]->z()<mesh_pts[index_min2]->z()?index_min1:index_min2;
-      double len=mesh_pts[index_min1]->distance(mesh_pts[index_min2]);
-      vsol_point_3d_sptr base_point= mesh_pts[min_z_index];
-      vsol_point_3d_sptr pnew=new vsol_point_3d(base_point->x()-len*vcl_tan(sun_elev_angle_)*vcl_cos(sun_azim_angle_),
-                                                base_point->y()-len*vcl_tan(sun_elev_angle_)*vcl_sin(sun_azim_angle_),
-                                                base_point->z());
-
-      double u0,v0,u1,v1;
-      camera_->project(base_point->x(),
-                       base_point->y(),
-                       base_point->z(),u0,v0);
-      camera_->project(pnew->x(),pnew->y(),pnew->z(),u1,v1);
-
-
-      vsol_line_2d_sptr shadow_line= new vsol_line_2d(new vsol_point_2d(u0,v0),
-                                                      new vsol_point_2d(u1,v1));
-
-      shadow_line_segs_.push_back(this->add_vsol_line_2d(shadow_line));
     }
-  }
   vcl_cout<<"(theta,phi) = ("<<sun_elev_angle_<<','<<sun_azim_angle_<<')'<<vcl_endl;
   this->post_redraw();
 }
@@ -1572,18 +1574,18 @@ void  bwm_observer_cam::position_vertex(bool show_as_geo)
   vcl_map<unsigned, vsol_point_3d_sptr>::iterator vit;
   vit = vertex_3d_map_.find(vert->get_id());
   if (vit==vertex_3d_map_.end())
-  {
-    vcl_cerr << "Can't find selected vertex for geo_position!\n";
-    return;
-  }
+    {
+      vcl_cerr << "Can't find selected vertex for geo_position!\n";
+      return;
+    }
   vsol_point_3d_sptr p3d = (*vit).second;
   double lx,ly,lz;
   bool lvcs_valid = bwm_world::instance()->lvcs_valid();
   if (lvcs_valid) {
     vpgl_lvcs lvcs;
     bwm_world::instance()->get_lvcs(lvcs);
-  // convert point to local
-  lvcs.global_to_local(p3d->x(), p3d->y(), p3d->z(), vpgl_lvcs::wgs84,lx, ly, lz);
+    // convert point to local
+    lvcs.global_to_local(p3d->x(), p3d->y(), p3d->z(), vpgl_lvcs::wgs84,lx, ly, lz);
   }
   else {
     lx = p3d->x(); ly = p3d->y(); lz = p3d->z();
@@ -1664,10 +1666,10 @@ void bwm_observer_cam::create_terrain()
 
 void bwm_observer_cam::deselect()
 {
- this->deselect_all();
- for (unsigned i=0; i<selected_soviews_.size(); i++) {
-  selected_soviews_[i]->set_style(mesh_style_);
- }
+  this->deselect_all();
+  for (unsigned i=0; i<selected_soviews_.size(); i++) {
+    selected_soviews_[i]->set_style(mesh_style_);
+  }
   selected_soviews_.clear();
 }
 
@@ -1928,3 +1930,70 @@ void bwm_observer_cam::load_boxm_scene()
   bwm_observer_mgr::instance()->attach(mesh);
 }
 #endif
+// ==================   camera calibration methods ===============
+void bwm_observer_cam::set_horizon(){
+  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  if (select_list.size() == 1)
+    {
+      if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polyline") == 0) {
+	    bgui_vsol_soview2D_polyline* pline_ptr = static_cast<bgui_vsol_soview2D_polyline*>(select_list[0]);
+        vsol_polyline_2d_sptr pline = pline_ptr->sptr();
+		if(pline->size()!=2){
+		 vcl_cout << "polyline must have exactly 2 vertices to be a horizon line\n";
+		 return;
+		}
+        vsol_point_2d_sptr p0 = pline->p0(), p1 = pline->p1();
+        horizon_ = new vsol_line_2d(p0, p1);
+        vcl_cout << "got the horizon\n";
+      }
+    }
+}
+void bwm_observer_cam::calibrate_cam_from_horizon(){
+  if (!horizon_){
+    vcl_cout << "Null horizon - can't calibrate the camera\n";
+    return;
+  }
+  // get a, b, c of horizon
+  vgl_line_segment_2d<double> vgl_line = horizon_->vgl_seg_2d();
+  double a = vgl_line.a(), b = vgl_line.b(), c = vgl_line.c();
+  // get the principal point
+  double ppu = static_cast<double>(img_tab_->width())/2.0;
+  double ppv = static_cast<double>(img_tab_->height())/2.0;
+  vpgl_perspective_camera<double> cam = 
+    bpgl_camera_utils::camera_from_horizon(focal_length_,ppu, ppv,  
+                                           cam_height_, a, b, c);
+  vcl_cout << "camera from horizon \n" << cam << '\n';
+  if(camera_)
+    delete camera_;
+  camera_ = new vpgl_perspective_camera<double>(cam);
+}
+void bwm_observer_cam::camera_from_kml(double right_fov, double top_fov,
+                                       double altitude, double heading,
+                                       double tilt, double roll){
+  double ni = img_tab_->width(), nj = img_tab_->height();
+  vpgl_perspective_camera<double> cam  = 
+    bpgl_camera_utils::camera_from_kml(ni, nj, right_fov, top_fov,
+                                       altitude, heading, tilt, roll);
+  vcl_cout << "kml camera \n" << cam << '\n';
+  if(camera_)
+    delete camera_;
+  camera_ = new vpgl_perspective_camera<double>(cam);
+}
+void bwm_observer_cam::toggle_cam_horizon(){
+  if(!camera_||(camera_->type_name() != "vpgl_perspective_camera"))
+    return;
+  if(horizon_soview_){
+    // in vgui_easy2D
+    remove(horizon_soview_);
+    horizon_soview_ = 0;
+    post_redraw();
+    return;
+  }
+  vpgl_perspective_camera<double>* cam = 
+    static_cast<vpgl_perspective_camera<double>*>(camera_);
+  vgl_line_2d<double> horizon = bpgl_camera_utils::horizon(*cam);
+  horizon_soview_=//in vgui_easy2D
+    this->add_infinite_line(horizon.a(), horizon.b(), horizon.c());
+  post_redraw();
+}
+

@@ -59,6 +59,15 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
       if (t->name == "") t->name = cam_tab->cam_path;
       return tab;
     }
+	else if (cam_tab->cam_type.compare("identity") == 0)
+    {
+      bgui_image_tableau_sptr img = bgui_image_tableau_new();
+      bwm_observer_proj_cam* o = new bwm_observer_proj_cam(img, cam_tab->name,
+        cam_tab->img_path, cam_tab->cam_path, cam_tab->cam_type, false);
+      bwm_tableau_proj_cam* tab = new bwm_tableau_proj_cam(o);
+      if (t->name == "") t->name = cam_tab->cam_path;
+      return tab;
+    }
     else {
       vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!\n";
       return 0;

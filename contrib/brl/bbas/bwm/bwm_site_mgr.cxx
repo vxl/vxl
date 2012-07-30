@@ -921,6 +921,7 @@ void bwm_site_mgr::load_cam_tableau()
   types.push_back("rational");
   types.push_back("projective");
   types.push_back("perspective");
+  types.push_back("identity");
   params.field("Tableau Name", name);
   params.line_break();
   params.dir("Image...", ext, img_file);
@@ -932,7 +933,7 @@ void bwm_site_mgr::load_cam_tableau()
   if (!params.ask())
     return;
 
-  if ((img_file == "") || (cam_file == "")) {
+  if ((img_file == "") || camera_type !=4 && (cam_file == "")) {
     vgui_dialog error ("Error");
     error.message ("Please specify an input file (prefix)." );
     error.ask();
@@ -953,6 +954,9 @@ void bwm_site_mgr::load_cam_tableau()
     break;
    case 3:
     cam_str = "perspective";
+    break;
+   case 4:
+    cam_str = "identity";
     break;
    default:
     cam_str = "unknown";

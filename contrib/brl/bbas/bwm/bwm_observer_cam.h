@@ -23,7 +23,7 @@
 #include <vnl/vnl_math.h>
 
 #include <vpgl/vpgl_camera.h>
-
+#include <vpgl/vpgl_perspective_camera.h>
 void bwm_project_meshes(vcl_vector<vcl_string> paths,
                         vpgl_camera<double>* cam,
                         vcl_vector<vgl_polygon<double> > &poly_2d_list);
@@ -37,14 +37,16 @@ class bwm_observer_cam : public bwm_observer_vgui
   bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, vcl_string cam_path)
     : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
       camera_(camera), cam_path_(cam_path), cam_adjusted_(false),
-      proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false)
+    proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false), focal_length_(3000.0), cam_height_(1.6),horizon_(0),
+    horizon_soview_(0)
     {}
 
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* /*n*/="unnamed")
     : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
       cam_adjusted_(false),
-      proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false)
+    proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false), focal_length_(3000.0), cam_height_(1.6),horizon_(0),
+    horizon_soview_(0)
     {}
 
   virtual ~bwm_observer_cam() { delete camera_; }
@@ -201,6 +203,15 @@ class bwm_observer_cam : public bwm_observer_vgui
   void create_boxm_scene();
   void load_boxm_scene();
 #endif
+  // ==================  camera calibration methods ================
+  void set_horizon();
+  void set_focal_length(double focal_length){focal_length_ = focal_length;}
+  void set_cam_height(double cam_height){cam_height_ = cam_height;}
+  void calibrate_cam_from_horizon();
+  void camera_from_kml(double right_fov, double top_fov,
+                       double altitude, double heading,
+                       double tilt, double roll);
+  void toggle_cam_horizon();
  protected:
 
   //: to compute direciton of sun.
@@ -263,6 +274,11 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   //: deselects all the selected objects and sets their styles back to mesh
   void deselect();
+  //: objects for camera calibration
+  double focal_length_;
+  double cam_height_;
+  vsol_line_2d_sptr horizon_;//set manually
+  vgui_soview* horizon_soview_;//computed from camera
 };
 
 #endif
