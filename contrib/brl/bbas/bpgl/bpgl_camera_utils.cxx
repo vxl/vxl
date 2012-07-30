@@ -4,6 +4,7 @@
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_intersection.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
@@ -13,12 +14,12 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 
 vpgl_perspective_camera<double> bpgl_camera_utils::
-camera_from_horizon(double focal_length, double principal_pt_u, 
+camera_from_horizon(double focal_length, double principal_pt_u,
                     double principal_pt_v, double cam_height,
-                    double a, double b, double c){
-  
+                    double a, double b, double c)
+{
   // assume the x vanishing point is at infinity
-  // assume that the y vanishing point is the intersection 
+  // assume that the y vanishing point is the intersection
   // of a vertical line from the principal point and the
   // horizon line. The distance from the principal point to the
   // vanishing point defines the rotation about the x axis of the camera
@@ -27,7 +28,7 @@ camera_from_horizon(double focal_length, double principal_pt_u,
   vgl_vector_2d<double> line_dir = line.direction();
   line_dir = normalize(line_dir);
   vgl_vector_2d<double> pp(principal_pt_u, principal_pt_v);
-  vpgl_calibration_matrix<double> K(focal_length, 
+  vpgl_calibration_matrix<double> K(focal_length,
                                     vgl_point_2d<double>(pp.x(), pp.y()));
   // vanishing point 2
   vnl_matrix<double> m(2,2);
@@ -52,10 +53,10 @@ camera_from_horizon(double focal_length, double principal_pt_u,
   double tempv3 =(vp3[1]-pp.y())/focal_length;
   double lambda_3 = 1.0 + tempu3*tempu3 + tempv3*tempv3;
   lambda_3 = vcl_sqrt(1.0/lambda_3);
-  // lambda_3 is negative if the horizon is above the 
+  // lambda_3 is negative if the horizon is above the
   // principal point and positive if below
   double sign = (pp.x()*line.a()) + (pp.y()*line.b()) + line.c();
-  if(sign>0.0) lambda_3*=-1.0;
+  if (sign>0.0) lambda_3*=-1.0;
   vnl_matrix_fixed<double, 3, 3> R;
   R[0][0]=line_dir.x(); R[0][1]=lambda_2*tempu2; R[0][2]=lambda_3*tempu3;
   R[1][0]=line_dir.y(); R[1][1]=lambda_2*tempv2; R[1][2]=lambda_3*tempv3;
@@ -72,13 +73,13 @@ camera_from_horizon(double focal_length, double principal_pt_u,
 vpgl_perspective_camera<double> bpgl_camera_utils::
     camera_from_kml(double ni, double nj, double right_fov, double top_fov,
                     double altitude, double heading,
-                    double tilt, double roll){
-                    
+                    double tilt, double roll)
+{
   double ppu = ni/2, ppv = nj/2;
   //get focal length
   // right_fov = atan(ppu/f), top_fov = atan(ppv/f)
 
-  double dtor = 3.14159/180.0;
+  double dtor = vnl_math::pi_over_180;
   double tr = vcl_tan(right_fov*dtor), tt = vcl_tan(top_fov*dtor);
   double fr = ppu/tr, ft=ppv/tt;
   double f = 0.5*(fr+ft);
@@ -106,22 +107,24 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
 
   vgl_point_3d<double> c(0.0,0.0,altitude);
   cam.set_camera_center(c);
-#if 0 //debug
-  vcl_cout <<  "axis Rotation \n " << R_axis.as_matrix() << '\n';
-  vcl_cout <<  "roll Rotation \n " << Rr.as_matrix() << '\n';
-  vcl_cout <<  "R_cam \n " << R_cam.as_matrix() << '\n';
-  vcl_cout << "cam center " << cam.get_camera_center()<< '\n';
+#ifdef DEBUG
+  vcl_cout << "axis Rotation\n " << R_axis.as_matrix() << '\n'
+           << "roll Rotation\n " << Rr.as_matrix() << '\n'
+           << "R_cam\n " << R_cam.as_matrix() << '\n'
+           << "cam center " << cam.get_camera_center()<< '\n';
 #endif
   return cam;
 }
+
 // the horizon line is the cross product of the X and Y axis vanishing points
 vgl_line_2d<double> bpgl_camera_utils::
-horizon(vpgl_perspective_camera<double> const& cam){
+horizon(vpgl_perspective_camera<double> const& cam)
+{
   vgl_rotation_3d<double> R = cam.get_rotation();
   vnl_matrix_fixed<double,3,3> Rm =  R.as_matrix();
-  // vanishing point for x axis  
+  // vanishing point for x axis
   vnl_vector_fixed<double,3> vpx(Rm[0][0], Rm[1][0], Rm[2][0]);
-  // vanishing point for y axis  
+  // vanishing point for y axis
   vnl_vector_fixed<double,3> vpy(Rm[0][1], Rm[1][1], Rm[2][1]);
   vnl_matrix_fixed<double,3,3> K = cam.get_calibration().get_matrix();
   vpx = K*vpx; vpy = K*vpy;
