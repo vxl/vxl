@@ -13,6 +13,7 @@ bpgl_reg_fundamental_matrix.h       bpgl_reg_fundamental_matrix.txx
 bpgl_rolling_shutter_camera.h
 bpgl_segmented_rolling_shutter_camera.h bpgl_segmented_rolling_shutter_camera.txx
 bpgl_camera_estimator.h bpgl_camera_estimator.txx bpgl_camera_estimator_amoeba.h
+bpgl_camera_utils.h bpgl_camera_utils.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates bpgl_sources)
