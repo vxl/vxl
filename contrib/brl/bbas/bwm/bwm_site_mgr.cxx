@@ -933,7 +933,7 @@ void bwm_site_mgr::load_cam_tableau()
   if (!params.ask())
     return;
 
-  if ((img_file == "") || camera_type !=4 && (cam_file == "")) {
+  if ((img_file == "") || (camera_type !=4 && (cam_file == ""))) {
     vgui_dialog error ("Error");
     error.message ("Please specify an input file (prefix)." );
     error.ask();
