@@ -51,13 +51,27 @@ static void do_error(const vcl_string& msg)
 //=========================================================================
 int main2(int argc, char *argv[])
 {
+  vul_arg_base::set_help_precis("Compute various statistics of 1D data");
+  vul_arg_base::set_help_description("DETAILED INFORMATION\n"
+    "1. By default, data is read from stdin, unless the -i option is used to specify an input filename.\n\n"
+    "2. By default, output is written to stdout, unless the -o option is used to specify an output filename.\n"
+    "   When writing to an output file, results are *appended* to the specified file.\n"
+    "   This permits the program to be run multiple times *sequentially* on different data, building up a list of comparable statistics.\n"
+    "   Results are undefined if this program is run multiple times *simultaneously* with the -o option specifying the same file.\n\n"
+    "3. A choice of 2 output formats is provided with the -fmt option: \"table\" and \"list\". The default is \"list\".\n"
+    "   list: write each statistic on a separate line, including its title.\n"
+    "   table: write all statistics on one line, arranged in columns, with optional column headers.\n"
+    "     In \"table\" format, column headers are printed by default, unless the -h option is specified.\n"
+    "4. The desired statistics may be specified in any order, but the output is printed in alphabetical order.\n"
+  );
+
   // Parse the program arguments
   
   // These options are I/O and format-related
   vul_arg<vcl_string> in_file("-i", "input file containing scalar values (whitespace-separated); otherwise uses stdin", "");
   vul_arg<vcl_string> out_file("-o", "output file to append statistics; otherwise write to stdout", "");
   vul_arg<vcl_string> label("-label","Adds this label to each line outputting a statistic - useful for later grep");
-  vul_arg<vcl_string> format("-fmt","Specify the output format, e.g. \"table\", \"list\" (default is list)", "list");
+  vul_arg<vcl_string> format("-fmt","Specify the output format, e.g. \"table\", \"list\" (default is list). See help for more details.");
   vul_arg<bool> nohead("-h","Specify this to SUPPRESS column headers in tabular format", false);
   vul_arg<vcl_string> sep("-sep", "String to use as a separator between columns in tabular format, e.g. \", \" or \"  \" (default=TAB)", "\t");
   // These options are statistical measures:
