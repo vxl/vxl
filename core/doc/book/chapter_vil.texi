@@ -703,7 +703,7 @@ void vil_image_view<T>::fill(T value)
       for (unsigned j=0;j<nj_;++j,row += jstep_)
       @{
         int i = ni_;
-        while (i>=0) @{ row[i--]=value; @}
+        while (i>=0) @{ row[--i]=value; @}
       @}
     @}
     return;
