@@ -1,3 +1,5 @@
+//:
+// \file
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/bwm_observer_mgr.h>
 #include <bwm/bwm_3d_corr.h>
@@ -20,7 +22,6 @@
 #include <rply.h>   //.ply parser
 
 
-
 //helper class to read in bb from file
 class ply_points_reader
 {
@@ -29,7 +30,6 @@ class ply_points_reader
   vnl_vector_fixed<double,3> p;
   vcl_vector<int > vertex_indices;
 };
-
 
 //: Call-back function for a "vertex" element
 int plyio_vertex_cb(p_ply_argument argument)
@@ -49,12 +49,10 @@ int plyio_vertex_cb(p_ply_argument argument)
       parsed_ply->p[1] = ply_get_argument_value(argument);
       break;
     case 2: // "z" coordinate
-		{
-		 parsed_ply->p[2] = ply_get_argument_value(argument);
-		 // Instert into vector
-		 parsed_ply->all_points.push_back(parsed_ply->p);
-		 break;
-		}
+     parsed_ply->p[2] = ply_get_argument_value(argument);
+     // Instert into vector
+     parsed_ply->all_points.push_back(parsed_ply->p);
+     break;
     default:
       assert(!"This should not happen: index out of range");
   }
@@ -80,7 +78,7 @@ void readPointsFromPLY(const vcl_string& filename, vcl_vector<vnl_vector_fixed<d
   ply_set_read_cb(ply, "vertex", "y", plyio_vertex_cb, (void*) (&parsed_ply), 1);
   ply_set_read_cb(ply, "vertex", "z", plyio_vertex_cb, (void*) (&parsed_ply), 2);
 
-  vcl_cerr << nvertices << " points \n";
+  vcl_cerr << nvertices << " points\n";
 
   // Read DATA
   ply_read(ply);
@@ -95,11 +93,11 @@ void readPointsFromPLY(const vcl_string& filename, vcl_vector<vnl_vector_fixed<d
 //: Write points to a PLY file
 void writePointsToPLY(const vcl_string& ply_file_out, vcl_vector<vnl_vector_fixed<double,3> > &all_points)
 {
-	  // OPEN output file
+    // OPEN output file
   p_ply oply = ply_create(ply_file_out.c_str(), PLY_ASCII, NULL, 0, NULL);
-  
+
   vcl_cerr << "  saving " << ply_file_out << " :\n";
-  
+
   // HEADER SECTION
   // vertex
   ply_add_element(oply, "vertex", all_points.size());
@@ -112,15 +110,15 @@ void writePointsToPLY(const vcl_string& ply_file_out, vcl_vector<vnl_vector_fixe
   ply_add_obj_info(oply, "a vector of vnl_vector_fixed<double,3> object");
   // end header
   ply_write_header(oply);
-  
+
   // DATA SECTION
   // save min and max boint of the box to ply file
-  for(unsigned pi=0; pi<all_points.size(); ++pi){
-	  vnl_vector_fixed<double,3> p = all_points[pi];
-	  ply_write(oply, p[0]);
-	  ply_write(oply, p[1]);
-	  ply_write(oply, p[2]);
- }
+  for (unsigned pi=0; pi<all_points.size(); ++pi){
+    vnl_vector_fixed<double,3> p = all_points[pi];
+    ply_write(oply, p[0]);
+    ply_write(oply, p[1]);
+    ply_write(oply, p[2]);
+  }
  // CLOSE PLY FILE
   ply_close(oply);
 }
@@ -201,13 +199,13 @@ int main(int argc, char** argv)
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string f = fn();
     vcl_vector<vnl_vector_fixed<double,3> > points2transform;
-	vcl_vector<vnl_vector_fixed<double,3> > transformed_points;
-	readPointsFromPLY(f, points2transform);
-	for(unsigned pi = 0; pi < points2transform.size(); ++pi){
+    vcl_vector<vnl_vector_fixed<double,3> > transformed_points;
+    readPointsFromPLY(f, points2transform);
+    for (unsigned pi = 0; pi < points2transform.size(); ++pi){
       vnl_vector_fixed<double, 3> new_p = scale*(R * (points2transform[pi])+ t);
-	  transformed_points.push_back(new_p);
-	}
-	vcl_cout << "Transformed Poins: " << points2transform.size() << "\n";
+      transformed_points.push_back(new_p);
+    }
+    vcl_cout << "Transformed Poins: " << points2transform.size() << '\n';
     vcl_string fname = vul_file::strip_directory(f.c_str());
     vcl_cout << fname << '\n';
     vcl_string out_dir = output_point_dir() + "/";
