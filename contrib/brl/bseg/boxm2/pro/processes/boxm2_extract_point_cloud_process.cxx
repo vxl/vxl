@@ -81,9 +81,14 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
     boxm2_data_traits<BOXM2_POINT>::datatype * points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
 
+	for( unsigned i = 0 ; i < (alpha->buffer_length() /alphaTypeSize) ; i++)
+
+	{
+		points_data[i].fill(-1.0);
+	}
     //iterate through each tree
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-      vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_flush;
+      //vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_flush;
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
        for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
          //load current block/tree
@@ -103,8 +108,10 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
            float prob = 1.0f - (float)vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
 
            if (prob < prob_t)
+		   {
+			 points_data[currIdx][3] = -1.0f;
              continue;
-
+		   }
            vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
            vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y()+ y, localCenter.z() + z);
 
@@ -112,6 +119,8 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
            points_data[currIdx][1] = float(cellCenter.y()*data.sub_block_dim_.y() + data.local_origin_.y());
            points_data[currIdx][2] = float(cellCenter.z()*data.sub_block_dim_.z() + data.local_origin_.z());
            points_data[currIdx][3] = 0.0f;
+
+		   
          }
        }
       }
