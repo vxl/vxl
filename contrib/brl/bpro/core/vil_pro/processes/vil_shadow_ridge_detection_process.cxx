@@ -1,7 +1,8 @@
 // This is brl/bpro/core/vil_pro/processes/vil_shadow_ridge_detection_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
-// \file
+// \file This process detects shadow ridges from a detected shadow image.
+// Shadow ridges are occluding contours from sun's viewpoint. 
 
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
