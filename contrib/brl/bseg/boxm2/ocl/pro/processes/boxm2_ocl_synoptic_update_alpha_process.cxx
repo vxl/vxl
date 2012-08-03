@@ -43,7 +43,7 @@ namespace boxm2_ocl_synoptic_update_alpha_process_globals
     //compilation options
 
     bocl_kernel* compute_cubic = new bocl_kernel();
-    vcl_string opts = " -D COMPUTE_SYNOPTIC_ALPHA ";
+    vcl_string opts = " -D COMPUTE_SYNOPTIC_ALPHA -D JOINT";
 
     compute_cubic->create_kernel(&device->context(), device->device_id(), src_paths, "compute_synoptic_alpha", opts, "kernel: compute_synoptic_alpha");
     vec_kernels.push_back(compute_cubic);
@@ -108,7 +108,6 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
   type_names.push_back("aux0");
   type_names.push_back("aux2");
   type_names.push_back("aux3");
-
   // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),
@@ -124,7 +123,7 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
     kernels[(device->device_id())]=ks;
   }
   // create all buffers
-    // bit lookup buffer
+  // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
@@ -141,8 +140,9 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     vcl_size_t lThreads[] = {1};
     vcl_size_t gThreads[1];
-    gThreads[0] = (unsigned)(mdata.sub_block_num_.x()*mdata.sub_block_num_.y()*mdata.sub_block_num_.z());
-
+    gThreads[0] = (unsigned)(mdata.sub_block_num_.x()
+							*mdata.sub_block_num_.y()
+							*mdata.sub_block_num_.z());
     //choose correct render kernel
     bocl_mem* blk       = opencl_cache->get_block(*id);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
@@ -153,21 +153,29 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
 
     //grab an appropriately sized AUX data buffer
     int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
-
     bocl_kernel * kern = kernels[(device->device_id())][0];
     str_blk_cache.init(*id);
 
+	vcl_cout<<"Block Id: "<<(*id)<<vcl_endl;
     int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
-    boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
+
+	boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
     bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
     if (!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue))
       vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
-
-    boxm2_data_base * data_type3 = str_blk_cache.data_types_["aux3"];
+	
+	boxm2_data_base * data_type2 = str_blk_cache.data_types_["aux2"];
+    bocl_mem_sptr bocl_data_type2 = new bocl_mem(device->context(),data_type2->data_buffer(),data_type2->buffer_length(),"");
+    if (!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+      vcl_cout<<"Aux2 buffer was not created"<<vcl_endl;
+    
+	boxm2_data_base * data_type3 = str_blk_cache.data_types_["aux3"];
     bocl_mem_sptr bocl_data_type3 = new bocl_mem(device->context(),data_type3->data_buffer(),data_type3->buffer_length(),"");
     if (!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR,queue))
       vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
-    bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
+    
+	vcl_cout<<"Block Id: "<<(*id)<<vcl_endl;
+	bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
     nobs_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     bocl_mem_sptr  datasize_mem=new bocl_mem(device->context(), &datasize, sizeof(int), "Data Size");
@@ -177,13 +185,13 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
     kern->set_arg(blk);
     kern->set_arg(alpha);
     kern->set_arg(bocl_data_type0.ptr());
-    kern->set_arg(bocl_data_type3.ptr());
+    kern->set_arg(bocl_data_type2.ptr());
+	kern->set_arg(bocl_data_type3.ptr());
     kern->set_arg(nobs_mem.ptr());
     kern->set_arg(datasize_mem.ptr());
     kern->set_arg(lookup.ptr());
     kern->set_local_arg(16*lThreads[0]*sizeof(unsigned char)); // local trees
     kern->set_local_arg( lThreads[0]*10*sizeof(cl_uchar) );    // cumsum buffer
-
     kern->execute(queue, 1, lThreads, gThreads);
     clFinish(queue);
     vcl_cout<<"Time taken "<< kern->exec_time()<<vcl_endl;

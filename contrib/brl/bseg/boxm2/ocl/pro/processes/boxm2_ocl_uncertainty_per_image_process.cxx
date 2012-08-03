@@ -79,7 +79,7 @@ namespace boxm2_ocl_uncertainty_per_image_process_globals
 
         //push back cast_ray_bit
         bocl_kernel* avg_surface_empty_ratio_main = new bocl_kernel();
-        vcl_string avg_surface_empty_ratio_opt = options + "-D AVG_SURFACE_EMPTY_RATIO -D STEP_CELL=step_cell_avg_ratio_cubic(aux_args,data_ptr,llid,d) ";
+        vcl_string avg_surface_empty_ratio_opt = options + "-D AVG_SURFACE_EMPTY_RATIO -D JOINT -D STEP_CELL=step_cell_avg_ratio_cubic(aux_args,data_ptr,llid,d) ";
         avg_surface_empty_ratio_main->create_kernel(&device->context(),device->device_id(), src_paths, "avg_surface_empty_ratio_main", avg_surface_empty_ratio_opt, "update::avg_surface_empty_ratio_main");
         vec_kernels.push_back(avg_surface_empty_ratio_main);
 
@@ -194,6 +194,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
 
     //Visibility, Preinf, Norm, and input image buffers
     float* vis_buff = new float[cl_ni*cl_nj];
+    float* vis_inf_buff = new float[cl_ni*cl_nj];
     float* pre_buff  = new float[cl_ni*cl_nj];
     float* pre_inf_buff  = new float[cl_ni*cl_nj];
     float* norm_buff  = new float[cl_ni*cl_nj];
@@ -202,6 +203,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     {
         vis_buff[i]=1.0f;
         pre_buff[i]=0.0f;
+		vis_inf_buff[i]=1.0f;
         pre_inf_buff[i]=0.0f;
         norm_buff[i]=0.0f;
     }
@@ -222,7 +224,10 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-    bocl_mem_sptr pre_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),pre_buff,"pre image buffer");
+    bocl_mem_sptr vis_inf_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_inf_buff, "vis inf image buffer");
+    vis_inf_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+	bocl_mem_sptr pre_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),pre_buff,"pre image buffer");
     pre_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     bocl_mem_sptr pre_inf_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), pre_inf_buff, "pre inf image buffer");
@@ -348,7 +353,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 kern->set_arg(ray_o_buff.ptr() );
                 kern->set_arg(ray_d_buff.ptr() );
                 kern->set_arg(img_dim.ptr() );
-                kern->set_arg(vis_image.ptr() );
+                kern->set_arg(vis_inf_image.ptr() );
                 kern->set_arg(pre_inf_image.ptr() );
                 kern->set_arg(cl_output.ptr() );
                 kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );//local tree,
@@ -367,26 +372,10 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
             //pre_image->write_to_buffer(queue);
         }
         else if ( i == UPDATE_PROC ) {
-#if 0
-            bocl_kernel * proc_kern=kernels[identifier][i];
 
-            proc_kern->set_arg( norm_image.ptr() );
-            proc_kern->set_arg( vis_image.ptr() );
-            proc_kern->set_arg( pre_image.ptr());
-            proc_kern->set_arg( img_dim.ptr() );
-
-            //execute kernel
-            proc_kern->execute( queue, 2, local_threads, global_threads);
-            int status = clFinish(queue);
-            check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
-            proc_kern->clear_args();
-#endif // 0
         }
         else if (i==UPDATE_AVG_RATIO_EMPTY_SURFACE) // kernel to compute avg ratio of empty and surface
         {
-            for (unsigned k=0;k<cl_ni*cl_nj;k++)
-                vis_buff[k]=1.0f;
-            vis_image->write_to_buffer(queue);
             for (id = vis_order.begin(); id != vis_order.end(); ++id)
             {
                 //choose correct render kernel
@@ -430,6 +419,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 kern->set_arg( ray_d_buff.ptr() );
                 kern->set_arg( img_dim.ptr() );
                 kern->set_arg( vis_image.ptr() );
+                kern->set_arg( vis_inf_image.ptr() );
                 kern->set_arg( pre_image.ptr() );
                 kern->set_arg( pre_inf_image.ptr() );
                 kern->set_arg( norm_image.ptr() );

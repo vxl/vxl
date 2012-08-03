@@ -224,7 +224,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   exp_image->read_to_buffer(queue);
   vis_image->read_to_buffer(queue);
 
-#if 0 //output a float image by default
+#if 1 //output a float image by default
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
