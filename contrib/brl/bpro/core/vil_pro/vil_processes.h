@@ -50,4 +50,5 @@ DECLARE_FUNC_CONS(vil_shadow_detection_process);
 DECLARE_FUNC_CONS(vil_shadow_ridge_detection_process);
 DECLARE_FUNC_CONS(vil_image_mean_and_variance_process);
 DECLARE_FUNC_CONS(vil_image_normalise_process);
+DECLARE_FUNC_CONS(vil_debayer_BGGR_to_RGB_process);
 #endif
