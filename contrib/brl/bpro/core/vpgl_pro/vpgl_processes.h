@@ -45,6 +45,7 @@ DECLARE_FUNC_CONS(vpgl_load_geo_camera_process);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process3);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process4);
 DECLARE_FUNC_CONS(vpgl_perturb_uniform_persp_cam_orient_process);
+DECLARE_FUNC_CONS(vpgl_load_affine_camera_process);
 DECLARE_FUNC_CONS(bpgl_transform_perspective_cameras_process);
 DECLARE_FUNC_CONS(vpgl_geo_footprint_process);
 DECLARE_FUNC_CONS(vpgl_translate_geo_camera_process);
