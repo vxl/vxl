@@ -24,9 +24,9 @@ class boxm2_ocl_render_scene_uncertainty_map
                                               unsigned nj,
                                               vcl_string ident,
                                               vil_image_view<float> * exp_image,
-                                              vil_image_view<float> * vis_image,
-                                              bool visualization=false);
-
+                                              vil_image_view<unsigned char> * vis_image,
+											  vcl_string cam_dir_1,
+											  vcl_string cam_dir_2);
   private:
     static   vnl_float_4 compute_cubic_trajectory(float phi_min,float phi_max,
                                                   float theta_min, float theta_max,
