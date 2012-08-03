@@ -1,6 +1,7 @@
 #include "boxm2_stream_block_cache.h"
 #include <vcl_new.h>
 #include <vcl_iostream.h>
+#include <vcl_algorithm.h>
 //:
 // \file
 
@@ -18,11 +19,17 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
     // First go through each data-type and allocate a big buffer;
     for (unsigned i = 0; i < data_types_list_.size(); i++) {
         unsigned long total_bytes_per_data_type = 0 ;
+		unsigned long bytes_per_data_type = 0 ;
         for (unsigned j = 0; j < identifier_list_.size(); j++) {
+			
             vcl_string filename = scene_->data_path() + data_types_list_[i] + "_"+ identifier_list_[j] +"_"+ current_block_id_.to_string() + ".bin";
-            total_bytes_per_data_type += vul_file::size(filename);
+			if(vul_file::exists(filename))
+				bytes_per_data_type= vul_file::size(filename);
+
         }
+		total_bytes_per_data_type= bytes_per_data_type* identifier_list_.size();
         char * buffer = new(std::nothrow) char[total_bytes_per_data_type];
+		
         if (buffer == 0)
            vcl_cout<<"Failed to Allocate Memory"<<vcl_endl;
 
@@ -31,14 +38,21 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
         unsigned long num_bytes = 0;
         for (unsigned j = 0; j < identifier_list_.size(); j++) {
             vcl_string filename = scene_->data_path() + data_types_list_[i] + "_" + identifier_list_[j]+"_"+current_block_id_.to_string() + ".bin";
-            unsigned long filesize= vul_file::size(filename);
-            num_bytes   =   filesize;
-            vcl_ifstream ifs;
-            ifs.open(filename.c_str(), vcl_ios::in | vcl_ios::binary);
-            if (!ifs) return false;
-            ifs.read(&(buffer[global_index]), num_bytes);
-            int cnt = (int)ifs.gcount();
-            global_index+=cnt;
+			if(vul_file::exists(filename))
+			{
+				unsigned long filesize= vul_file::size(filename);
+				num_bytes   =   filesize;
+				vcl_ifstream ifs;
+				ifs.open(filename.c_str(), vcl_ios::in | vcl_ios::binary);
+				if (!ifs) return false;
+				ifs.read(&(buffer[global_index]), num_bytes);
+				int cnt = (int)ifs.gcount();
+				global_index+=cnt;
+			}
+			else
+			{
+				global_index+=bytes_per_data_type;
+			}
         }
 
         boxm2_data_base * data_buffer             = new boxm2_data_base(buffer,total_bytes_per_data_type,current_block_id_, true);
