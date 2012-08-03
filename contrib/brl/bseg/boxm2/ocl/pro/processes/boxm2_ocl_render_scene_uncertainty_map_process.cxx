@@ -28,7 +28,7 @@
 
 namespace boxm2_ocl_render_scene_uncertainty_map_process_globals
 {
-  const unsigned n_inputs_ = 6;
+  const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 2;
 
 }
@@ -45,6 +45,8 @@ bool boxm2_ocl_render_scene_uncertainty_map_process_cons(bprb_func_process& pro)
   input_types_[3] = "unsigned";
   input_types_[4] = "unsigned";
   input_types_[5] = "vcl_string";
+  input_types_[6] = "vcl_string"; // directory of the cameras used
+  input_types_[7] = "vcl_string"; // directory of the cameras unused
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -75,14 +77,15 @@ bool boxm2_ocl_render_scene_uncertainty_map_process(bprb_func_process& pro)
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
   vcl_string ident = pro.get_input<vcl_string>(i++);
-
+  vcl_string cam_dir_1 = pro.get_input<vcl_string>(i++);
+  vcl_string cam_dir_2 = pro.get_input<vcl_string>(i++);
   vil_image_view<float> * exp_img_out = new vil_image_view<float>(ni,nj);
-  vil_image_view<float> * vis_img_out = new vil_image_view<float>(ni,nj);
+  vil_image_view<unsigned char> * radial_img_out = new vil_image_view<unsigned char>(ni,ni,3);
   //: render scene uncertainty
-  boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map(scene,device,opencl_cache,ni,nj,ident,exp_img_out,vis_img_out);
+  boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map(scene,device,opencl_cache,ni,nj,ident,exp_img_out,radial_img_out,cam_dir_1,cam_dir_2);
   i=0;
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
-  pro.set_output_val<vil_image_view_base_sptr>(i++, vis_img_out);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, radial_img_out);
   return true;
 }
