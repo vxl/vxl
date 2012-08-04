@@ -1005,6 +1005,51 @@ vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const
       r.push_back(*i);
   return r;
 }
+template <class T>
+vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
+                                              vgl_line_2d<T> const& line){
+  vcl_vector<vgl_point_2d<T> > ret;
+  T tol = vcl_sqrt(vgl_tolerance<T>::position);
+  T a = line.a(), b = line.b(), c = line.c();
+  T norm = vcl_sqrt(a*a + b*b);
+  a/=norm; b/=norm; c/=norm;
+  unsigned ns = poly.num_sheets();
+  for(unsigned s = 0; s<ns; ++s){
+    vcl_vector<vgl_point_2d<T> > sh = poly[s];
+    unsigned nv = sh.size();
+    for(unsigned i = 0; i<nv; ++i){
+      unsigned next = (i+1)%nv;
+      vgl_point_2d<T> pa = sh[i];
+      vgl_point_2d<T> pb = sh[next];
+      //algebraic distances
+      T ad_a = a*pa.x() +b*pa.y() +c;
+      T ad_b = a*pb.x() +b*pb.y() +c;
+      bool sign_a = ad_a>T(0);
+      bool sign_b = ad_b>T(0);
+      bool zero = vcl_abs(ad_a)<tol;
+      //cases
+      // 1) no intersections
+      // 2) current vertex intersects
+      // 3) intersection interior to poly edge
+      // case 1
+      if(!zero&&(sign_a == sign_b))
+        continue;
+      // case 2
+      if(zero){
+        ret.push_back(pa);
+        continue;
+      }
+      //case 3
+      // find the intersection
+      vgl_line_2d<T> edge(pa, pb);
+      vgl_point_2d<T> p_int;
+      if(!vgl_intersection(line, edge, p_int))
+        continue;
+      ret.push_back(p_int);
+    }
+  }
+  return ret;
+}
 
 //: Instantiate those functions which are suitable for integer instantiation.
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
@@ -1037,6 +1082,7 @@ template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,v
 template bool vgl_intersection(vgl_box_2d<T > const&,vgl_polygon<T > const&); \
 template bool vgl_intersection(vgl_plane_3d<T > const&,vgl_plane_3d<T > const&,vgl_line_segment_3d<T > &); \
 template bool vgl_intersection(vgl_plane_3d<T > const&,vgl_plane_3d<T > const&,vgl_infinite_line_3d<T >&); \
+template vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const&, vgl_line_2d<T> const&); \
 VGL_INTERSECTION_BOX_INSTANTIATE(T)
 
 #endif // vgl_intersection_txx_

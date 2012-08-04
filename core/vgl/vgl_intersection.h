@@ -282,7 +282,17 @@ vcl_vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, vcl_vector
 template <class T>
 vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const& p, vgl_box_3d<T> const& b);
 
-
+//: Find the intersections of a line with a polygon( can have multiple sheets)
+// \relatesalso vgl_line_2d
+// \relatesalso vgl_point_2d
+template <class T>
+vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
+                                              vgl_line_2d<T> const& line);
+template <class T>
+vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_line_2d<T> const& line,
+                                              vgl_polygon<T> const& poly){
+  return vgl_intersection(poly, line);
+}
 #define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
 

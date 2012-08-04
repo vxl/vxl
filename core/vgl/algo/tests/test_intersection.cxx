@@ -383,6 +383,41 @@ static void test_box_poly_intersection()
   b7.add(ps);
   TEST("box with a single point", vgl_intersection(b7, poly), false);
 }
+static void test_poly_line_intersection()
+{
+  vcl_cout << "Testing polygon - line intersection\n";
+  vcl_vector<vgl_point_2d<double> > sh0, sh1;
+  vgl_point_2d<double> p00(-10.0, -10.0), p01(10.0,-10.0);
+  vgl_point_2d<double> p02(10.0, 10.0), p03(-10.0, 10.0);
+  sh0.push_back(p00);   sh0.push_back(p01);
+  sh0.push_back(p02);   sh0.push_back(p03);
+  vgl_point_2d<double> p10(-1.0, -1.0), p11(-1.0,1.0);
+  vgl_point_2d<double> p12(1.0, 1.0), p13(1.0, -1.0);
+  sh1.push_back(p10);   sh1.push_back(p11);
+  sh1.push_back(p12);   sh1.push_back(p13);
+  vgl_polygon<double> poly;
+  poly.push_back(sh0);   poly.push_back(sh1); 
+  // test line with all line-edge intersections
+  vgl_point_2d<double> p0(-20.0, 0.0), p1(20.0, 0.0);
+  vgl_line_2d<double> line_a(p0, p1);
+  vcl_vector<vgl_point_2d<double> > inters = 
+    vgl_intersection<double>(poly, line_a);
+  TEST("number of intersections, interior case", inters.size(), 4);
+  double corrs=0.0;
+  for(unsigned i = 0; i<inters.size(); ++i){
+    corrs+= inters[i].x();
+    corrs+= inters[i].y();
+  }
+  TEST_NEAR("intersection locations", corrs, 0.0, 0.001);
+  //check grazing intersection
+  vgl_point_2d<double> pg0(-20.0, 1.0), pg1(20.0, 1.0);
+  vgl_line_2d<double> line_g(pg0, pg1);
+  vcl_vector<vgl_point_2d<double> > ginter = 
+    vgl_intersection<double>(line_g, poly);
+  TEST("number of intersections, vertex case", ginter.size(), 4);
+  double t = -ginter[2].x() + ginter[3].x()+ginter[2].y()+ginter[3].y();
+  TEST_NEAR("vertex intersection", t, 4.0, 0.001);
+}
 
 void test_intersection()
 {
@@ -398,6 +433,7 @@ void test_intersection()
   test_box_2d_intersection();
   test_box_3d_intersection();
   test_box_poly_intersection();
+  test_poly_line_intersection();
 }
 
 TESTMAIN(test_intersection);
