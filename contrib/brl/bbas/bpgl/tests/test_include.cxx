@@ -1,5 +1,6 @@
 #include <bpgl/bpgl_camera_estimator.h>
 #include <bpgl/bpgl_camera_estimator_amoeba.h>
+#include <bpgl/bpgl_camera_utils.h>
 #include <bpgl/bpgl_comp_rational_camera.h>
 #include <bpgl/bpgl_lens_distortion.h>
 #include <bpgl/bpgl_poly_radial_distortion.h>
