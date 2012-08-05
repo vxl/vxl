@@ -13,6 +13,7 @@ TESTS += test_proj_camera.cxx
 TESTS += test_perspective_camera.cxx
 TESTS += test_calibration_matrix.cxx
 TESTS += test_affine_camera.cxx
+TESTS += test_lvcs.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

@@ -14,6 +14,8 @@ MANPAGE_SOURCES += bpgl_camera_estimator.txx
 MANPAGE_SOURCES += bpgl_camera_estimator_amoeba.h
 MANPAGE_SOURCES += bpgl_rolling_shutter_camera.h
 
+SOURCES += bpgl_camera_utils.cxx
+
 SUBDIRS += algo ihog icam
 
 #######################################

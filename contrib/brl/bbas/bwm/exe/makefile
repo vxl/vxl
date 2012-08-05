@@ -15,6 +15,7 @@ MINI_PROG_SOURCES += bwm_bundler4_to_video_site.cxx
 MINI_PROG_SOURCES += bwm_visualsfm_to_vpgl_cams.cxx
 MINI_PROG_SOURCES += bwm_nvm_avg_focal_length.cxx
 MINI_PROG_SOURCES += bwm_3d_site_transform.cxx
+MINI_PROG_SOURCES += bwm_3d_site_transform_points.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

@@ -39,6 +39,7 @@ SOURCES += processes/vpgl_compute_persp_cam_pa_covariance_process.cxx
 SOURCES += processes/vpgl_get_perspective_cam_center_process.cxx
 SOURCES += processes/vpgl_perspective_cam_distance_processes.cxx
 SOURCES += processes/vpgl_perturb_perspective_camera_processes.cxx
+SOURCES += processes/vpgl_load_affine_camera_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

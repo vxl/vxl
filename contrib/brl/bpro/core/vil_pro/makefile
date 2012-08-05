@@ -52,6 +52,7 @@ SOURCES += processes/vil_shadow_ridge_detection_process.cxx
 SOURCES += processes/vil_image_normalise_process.cxx
 SOURCES += processes/vil_image_mean_and_variance_process.cxx
 SOURCES += processes/vil_EO_IR_combine_process.cxx
+SOURCES += processes/vil_debayer_BGGR_to_RGB_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
