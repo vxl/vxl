@@ -198,6 +198,9 @@ SOURCE=.\processes/vpgl_perspective_cam_distance_processes.cxx
 SOURCE=.\processes/vpgl_perturb_perspective_camera_processes.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vpgl_load_affine_camera_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vpgl_camera_double_sptr-.cxx
 # End Source File
 # Begin Source File
