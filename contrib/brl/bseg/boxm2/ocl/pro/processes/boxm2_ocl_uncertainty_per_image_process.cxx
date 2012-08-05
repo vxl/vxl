@@ -203,7 +203,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     {
         vis_buff[i]=1.0f;
         pre_buff[i]=0.0f;
-		vis_inf_buff[i]=1.0f;
+        vis_inf_buff[i]=1.0f;
         pre_inf_buff[i]=0.0f;
         norm_buff[i]=0.0f;
     }
@@ -227,7 +227,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     bocl_mem_sptr vis_inf_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_inf_buff, "vis inf image buffer");
     vis_inf_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-	bocl_mem_sptr pre_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),pre_buff,"pre image buffer");
+    bocl_mem_sptr pre_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),pre_buff,"pre image buffer");
     pre_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     bocl_mem_sptr pre_inf_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), pre_inf_buff, "pre inf image buffer");
@@ -366,13 +366,15 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 //clear render kernel args so it can reset em on next execution
                 kern->clear_args();
             }
-            //pre_inf_image->read_to_buffer(queue);
-            //for (unsigned k=0;k<cl_ni*cl_nj;k++)
-            //    pre_buff[k]=pre_inf_buff[k];
-            //pre_image->write_to_buffer(queue);
+#if 0
+            pre_inf_image->read_to_buffer(queue);
+            for (unsigned k=0;k<cl_ni*cl_nj;k++)
+                pre_buff[k]=pre_inf_buff[k];
+            pre_image->write_to_buffer(queue);
+#endif // 0
         }
         else if ( i == UPDATE_PROC ) {
-
+            // do nothing
         }
         else if (i==UPDATE_AVG_RATIO_EMPTY_SURFACE) // kernel to compute avg ratio of empty and surface
         {
