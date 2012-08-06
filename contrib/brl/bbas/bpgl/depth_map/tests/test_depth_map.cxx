@@ -23,7 +23,7 @@ static void test_depth_map()
   double heading = 0.0;
   double tilt = 90.0;
   double roll = 0.0;
-  vpgl_perspective_camera<double> cam = 
+  vpgl_perspective_camera<double> cam =
     bpgl_camera_utils::camera_from_kml(nid, njd, right_fov, top_fov,
                                        altitude, heading, tilt, roll);
   //construct a ground plane region
@@ -37,7 +37,7 @@ static void test_depth_map()
 
   vsol_polygon_2d_sptr gp = new vsol_polygon_2d(verts);
   vgl_plane_3d<double> plane(0.0, 0.0, 1.0, 0.0);
-  depth_map_region_sptr gpr = 
+  depth_map_region_sptr gpr =
     new depth_map_region(gp, plane, "test_region",
                          depth_map_region::GROUND_PLANE);
   gpr->set_ground_plane_max_depth(10000.0, cam, 3.0);
@@ -53,9 +53,9 @@ static void test_depth_map()
   vsol_polygon_2d_sptr vp = new vsol_polygon_2d(vertsv);
   vgl_plane_3d<double> vplane(0.0, 1.0, 0.0, 0.0);
   double min_depth = 10000, max_depth = 30000;
-  depth_map_region_sptr vr = 
+  depth_map_region_sptr vr =
     new depth_map_region(vp, vplane, min_depth, max_depth,
-						 "vertical_region",
+                         "vertical_region",
                          depth_map_region::VERTICAL);
   double depth = 10000;
   vr->set_region_3d(depth,cam);
@@ -67,9 +67,7 @@ static void test_depth_map()
   // create depth map image
   vil_image_view<double> depth_view = dms.depth_map();
   vil_save(depth_view, "e:/mundy/VisionSystems/Finder/VolumetricQuery/test_depth_map.tiff");
-
-#endif
-
+#endif // 1
 }
 
 

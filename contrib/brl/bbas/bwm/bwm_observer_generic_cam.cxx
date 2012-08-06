@@ -49,22 +49,22 @@ bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
   this->set_camera_path(cam_path);
   bool local = false;
   vpgl_camera<double>* cam =
-	  bwm_observer_proj_cam::read_camera(cam_path, "perspective", ni, nj);
+    bwm_observer_proj_cam::read_camera(cam_path, "perspective", ni, nj);
   if (!cam)
-	  cam = bwm_observer_proj_cam::read_camera(cam_path, "projective", ni, nj);
+    cam = bwm_observer_proj_cam::read_camera(cam_path, "projective", ni, nj);
   if (!cam)
     cam = bwm_observer_rat_cam::read_camera(cam_path, local);
   if (!cam||!local)
     camera_ = 0;
-  else{
-      vpgl_generic_camera<double> gcam;
-      vpgl_generic_camera_convert::convert(cam, ni, nj, gcam);
-      camera_ = new vpgl_generic_camera<double>(gcam);
+  else {
+    vpgl_generic_camera<double> gcam;
+    vpgl_generic_camera_convert::convert(cam, ni, nj, gcam);
+    camera_ = new vpgl_generic_camera<double>(gcam);
   }
 
   //generate a unique tab name if null
   if (name=="")
-    {name = cam_path;}
+    name = cam_path;
   set_tab_name(name);
   // add the observer to the observer pool
   bwm_observer_mgr::instance()->add(this);
