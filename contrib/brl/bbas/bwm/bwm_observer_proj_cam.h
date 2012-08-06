@@ -2,13 +2,11 @@
 #define bwm_observer_proj_cam_h_
 
 #include "bwm_observer_cam.h"
-
+//:
+// \file
 #include <vcl_iosfwd.h>
-
 #include <vgl/vgl_fwd.h>
-
 #include <vpgl/vpgl_proj_camera.h>
-
 #include <bmsh3d/bmsh3d_vertex.h>
 
 class bwm_observer_proj_cam : public bwm_observer_cam
@@ -43,7 +41,7 @@ class bwm_observer_proj_cam : public bwm_observer_cam
                                        vgl_point_3d<double> &world_point);
 
   vcl_ostream& print_camera(vcl_ostream& s);
-  //: read various file formats for projective/perspective cameras
+  //: read various file formats for projective/perspective cameras.
   // include ni and nj to form default principal point.
   static vpgl_camera<double>* 
     read_camera(vcl_string cam_path, vcl_string subtype, unsigned ni = 0,
