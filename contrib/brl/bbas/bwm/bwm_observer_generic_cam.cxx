@@ -38,7 +38,7 @@ bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
 
   img->set_image_resource(img_res, params);
   img->set_file_name(image_path);
-
+  int ni = img_res->ni(), nj = img_res->nj();
   // check if the camera path is not empty, if it is NITF, the camera
   // info is in the image, not a separate file
   if (cam_path.size() == 0)
@@ -49,16 +49,15 @@ bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
   this->set_camera_path(cam_path);
   bool local = false;
   vpgl_camera<double>* cam =
-    bwm_observer_proj_cam::read_camera(cam_path, "perspective");
+	  bwm_observer_proj_cam::read_camera(cam_path, "perspective", ni, nj);
   if (!cam)
-    cam = bwm_observer_proj_cam::read_camera(cam_path, "projective");
+	  cam = bwm_observer_proj_cam::read_camera(cam_path, "projective", ni, nj);
   if (!cam)
     cam = bwm_observer_rat_cam::read_camera(cam_path, local);
   if (!cam||!local)
     camera_ = 0;
   else{
       vpgl_generic_camera<double> gcam;
-      int ni = img_res->ni(), nj = img_res->nj();
       vpgl_generic_camera_convert::convert(cam, ni, nj, gcam);
       camera_ = new vpgl_generic_camera<double>(gcam);
   }

@@ -51,6 +51,9 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   bgui_image_tableau_sptr image_tableau() { return img_tab_; }
 
+  unsigned ni(){if(img_tab_)return img_tab_->width(); return 0;}
+  unsigned nj(){if(img_tab_)return img_tab_->height(); return 0;}
+
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { viewer_ = viewer; }
 
   virtual void set_tab_name(vcl_string name) { tab_name_.assign(name); }

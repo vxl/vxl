@@ -14,10 +14,13 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/io/vpgl_io_proj_camera.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
+#include <bwm/io/bwm_io_kml_camera.h>
+#include <bpgl/bpgl_camera_utils.h>
 #define DEBUG
 
 vpgl_camera<double>* bwm_observer_proj_cam::
-read_camera(vcl_string cam_path, vcl_string subtype)
+read_camera(vcl_string cam_path, vcl_string subtype,
+            unsigned ni, unsigned nj)
 {
   vcl_string ext = vul_file_extension(cam_path);
   if (ext == ".rpc")
@@ -36,10 +39,30 @@ read_camera(vcl_string cam_path, vcl_string subtype)
       bp_in.close();
       vpgl_proj_camera<double> cam(pcam.get_matrix());
       return cam.clone();
+    }else if(ext == ".kml"){
+      double right_fov, top_fov;
+      double altitude, heading;
+      double tilt, roll;
+      bool success = 
+        bwm_io_kml_camera::read_camera(cam_path, right_fov, top_fov,
+                                       altitude, heading, tilt, roll);
+      if(!success){
+        vcl_cerr << "In bwm_observer_proj_cam::read_kml_camera(.) -\n"
+                 << " invalid binary camera file " << cam_path.data() << '\n';
+        return 0;
+      } 
+      vpgl_perspective_camera<double> cam =
+        bpgl_camera_utils::camera_from_kml(ni, nj, right_fov, top_fov,
+                                           altitude, heading, tilt, roll);
+      return new vpgl_perspective_camera<double>(cam);
     }
     //An ASCII stream for perspective camera
     vpgl_perspective_camera<double> pcam;
     vcl_ifstream cam_stream(cam_path.data());
+
+
+
+
     if (!cam_stream.is_open())
     {
       vcl_cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
@@ -98,7 +121,9 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
   if (subtype=="identity")
     camera_ = new vpgl_perspective_camera<double>();
   else
-  camera_ = bwm_observer_proj_cam::read_camera(cam_path,subtype);
+  camera_ = bwm_observer_proj_cam::read_camera(cam_path,subtype,
+                                               img_res->ni(),
+                                               img_res->nj());
   //generate a unique tab name if null
   if (name=="")
     name = cam_path;
