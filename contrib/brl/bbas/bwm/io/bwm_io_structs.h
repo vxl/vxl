@@ -18,7 +18,18 @@
 #define OBJECTS_TAG "Objects"
 #define OBJECT_TAG "Object"
 #define LVCS_TAG "lvcs"
-
+// Tags for KML
+#define PHOTO_OVL_TAG "PhotoOverlay"
+#define KML_CAMERA_TAG "Camera"
+#define KML_LON_TAG "longitude"
+#define KML_LAT_TAG "latitude"
+#define KML_ALT_TAG "altitude"
+#define KML_HEAD_TAG "heading"
+#define KML_TILT_TAG "tilt"
+#define KML_ROLL_TAG "roll"
+#define KML_RFOV_TAG "rightFov"
+#define KML_TFOV_TAG "topFov"
+#define KML_NEAR_TAG "near"
 // Correspondence Tags
 #define CORRESPONDENCES_TAG "Correspondences"
 #define CORRESP_TAG "Correspondence"

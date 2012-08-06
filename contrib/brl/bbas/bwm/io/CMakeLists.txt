@@ -15,6 +15,8 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
   SET(bwm_io_sources ${bwm_io_sources}
      bwm_io_config_parser.cxx    bwm_io_config_parser.h
+     bwm_io_kml_parser.cxx    bwm_io_kml_parser.h
+     bwm_io_kml_camera.cxx     bwm_io_kml_camera.h
   )
  ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)
