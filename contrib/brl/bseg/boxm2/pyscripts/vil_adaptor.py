@@ -66,7 +66,13 @@ def seek_frame(rawStream, frame) :
   (id, type) = boxm2_batch.commit_output(1);
   time = boxm2_batch.get_output_unsigned(id);
   return img, time
-  
+def debayer(img):
+  boxm2_batch.init_process("vilDebayerBGGRToRGBProcess")
+  boxm2_batch.set_input_from_db(0,img);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  outimg = dbvalue(id,type);
+  return outimg;
 #pixel wise roc process for change detection images
 def pixel_wise_roc(cd_img, gt_img, mask_img=None) :
   boxm2_batch.init_process("vilPixelwiseRocProcess");
