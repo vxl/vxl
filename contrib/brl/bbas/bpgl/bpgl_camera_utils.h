@@ -47,5 +47,6 @@ class bpgl_camera_utils
   // the horizon line for a given camera
   static vgl_line_2d<double> 
     horizon(vpgl_perspective_camera<double> const& cam);
+  
 };
 #endif //bpgl_camera_utils_h_

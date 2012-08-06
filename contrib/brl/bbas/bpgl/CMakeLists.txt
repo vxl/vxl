@@ -30,6 +30,9 @@ SUBDIRS(icam)
 # image homography registration
 SUBDIRS(ihog)
 
+# reasoning about scenes from a single image
+SUBDIRS(depth_map)
+
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)

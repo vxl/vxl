@@ -89,19 +89,22 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
   cam.set_calibration(K);
   vnl_vector_fixed<double,3> z_axis(0.0, 0.0, 1.0);//z axis
 
-  // camera principal ray direction considering heading and tilt
+  // camera principal ray direction considering tilt
   double c_tilt = vcl_cos(tilt*dtor), s_tilt = vcl_sin(tilt*dtor);
-  double c_head = vcl_cos(heading*dtor), s_head = vcl_sin(heading*dtor);
-  vnl_vector_fixed<double,3> principal_ray(s_head*s_tilt, c_head*s_tilt,
-                                           -c_tilt);
+  vnl_vector_fixed<double,3> principal_ray(0.0, s_tilt, -c_tilt);
 
   //the rotation that moves z to the principal ray direction
   vgl_rotation_3d<double> R_axis(z_axis, principal_ray);
-
+  // rotation for heading
+  vgl_rotation_3d<double> R_head(0.0, 0.0, heading*dtor);
+  // composition of tilt and heading
+  vgl_rotation_3d<double> R_tot = R_head*R_axis;
+  // rotation for roll
   vgl_rotation_3d<double> Rr(0.0, 0.0, roll*dtor);
 
   // note that the inverse axis rotation is applied to the camera
-  vgl_rotation_3d<double> R_cam =Rr*(R_axis.inverse());
+  //  vgl_rotation_3d<double> R_cam =Rr*(R_axis.inverse());
+  vgl_rotation_3d<double> R_cam =Rr*(R_tot.inverse());
 
   cam.set_rotation(R_cam);
 
@@ -120,14 +123,10 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
 vgl_line_2d<double> bpgl_camera_utils::
 horizon(vpgl_perspective_camera<double> const& cam)
 {
-  vgl_rotation_3d<double> R = cam.get_rotation();
-  vnl_matrix_fixed<double,3,3> Rm =  R.as_matrix();
-  // vanishing point for x axis
-  vnl_vector_fixed<double,3> vpx(Rm[0][0], Rm[1][0], Rm[2][0]);
-  // vanishing point for y axis
-  vnl_vector_fixed<double,3> vpy(Rm[0][1], Rm[1][1], Rm[2][1]);
-  vnl_matrix_fixed<double,3,3> K = cam.get_calibration().get_matrix();
-  vpx = K*vpx; vpy = K*vpy;
+  vgl_homg_point_3d<double> px(1.0, 0.0, 0.0, 0.0), py(0.0, 1.0, 0.0, 0.0);
+  vgl_homg_point_2d<double> ppx = cam.project(px), ppy = cam.project(py);
+  vnl_vector_fixed<double, 3> vpx(ppx.x(),ppx.y(), ppx.w());
+  vnl_vector_fixed<double, 3> vpy(ppy.x(),ppy.y(), ppy.w());
   vnl_vector_fixed<double,3> hor = vnl_cross_3d(vpx, vpy);
   vgl_line_2d<double> hor_line(hor[0],hor[1],hor[2]);
   return hor_line;
