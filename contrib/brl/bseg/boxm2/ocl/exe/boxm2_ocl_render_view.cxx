@@ -60,14 +60,20 @@ int main(int argc, char ** argv)
     vul_arg<vcl_string> imgdir("-imgdir", "image directory", "");
     vul_arg<vcl_string> camdir("-camdir", "camera directory", "");
     vul_arg<vcl_string> identifier("-ident", "identifier of the appearance data to be displayed, e.g. illum_bin_0", "");
-    vul_arg<bool>       change("-change", "makes gui go into change detection mode - press n for next and p for previous", false); 
+    vul_arg<bool>       change("-change", "makes gui go into change detection mode - press n for next and p for previous", false);
+    vul_arg<unsigned>   gpu_idx("-gpu_idx", "GPU index for multi GPU set up", 0);
 
     // need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
 
     //make bocl manager
     bocl_manager_child_sptr mgr =bocl_manager_child::instance();
-    bocl_device_sptr device = mgr->gpus_[0];
+    if (gpu_idx() >= mgr->gpus_.size()){
+      vcl_cout << "GPU index out of bounds" << vcl_endl;
+      return -1;
+    }
+    bocl_device_sptr device = mgr->gpus_[gpu_idx()];
+    vcl_cout << "Using: " << *device;
     boxm2_scene_sptr scene = new boxm2_scene(scene_file());
 
     //create initial cam
