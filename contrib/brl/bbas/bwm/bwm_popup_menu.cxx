@@ -72,7 +72,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
 
   submenu.add( "Save 2D Spatial Objects (binary)",
                new vgui_command_simple<bwm_tableau_img>(img_tab, &bwm_tableau_img::save_spatial_objects_2d));
-submenu.add( "Load 2D Spatial Objects (binary)",
+  submenu.add( "Load 2D Spatial Objects (binary)",
                new vgui_command_simple<bwm_tableau_img>(img_tab, &bwm_tableau_img::load_spatial_objects_2d));
   submenu.add( "Save Pointset 2D (ascii)",
                new vgui_command_simple<bwm_tableau_img>(img_tab,
@@ -186,11 +186,11 @@ submenu.add( "Load 2D Spatial Objects (binary)",
 
   // add more based on the tableau type
   // all camera tableau children will do the following menu items
-  if ((tab_->type_name().compare("bwm_tableau_proj_cam") == 0) ||
-      (tab_->type_name().compare("bwm_tableau_geo_cam") == 0) ||
-	  (tab_->type_name().compare("bwm_tableau_rat_cam") == 0)  ||
-      (tab_->type_name().compare("bwm_tableau_video") == 0)||
-       tab_->type_name().compare("bwm_tableau_generic_cam") == 0)
+  if (tab_->type_name().compare("bwm_tableau_proj_cam")    == 0 ||
+      tab_->type_name().compare("bwm_tableau_geo_cam")     == 0 ||
+      tab_->type_name().compare("bwm_tableau_rat_cam")     == 0 ||
+      tab_->type_name().compare("bwm_tableau_video")       == 0 ||
+      tab_->type_name().compare("bwm_tableau_generic_cam") == 0)
   {
     // 3D Objects menu
     bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
