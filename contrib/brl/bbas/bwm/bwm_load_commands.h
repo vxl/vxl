@@ -31,7 +31,14 @@ class bwm_load_proj_cam_command: public bwm_command
   virtual vcl_string name() const {return "bwm_tableau_proj_cam"; }
   virtual void execute() { bwm_site_mgr::instance()->load_cam_tableau(); }
 };
-
+class bwm_load_geo_cam_command: public bwm_command
+{
+ public:
+  bwm_load_geo_cam_command() {}
+  ~bwm_load_geo_cam_command() {}
+  virtual vcl_string name() const {return "bwm_tableau_geo_cam"; }
+  virtual void execute() { bwm_site_mgr::instance()->load_cam_tableau(); }
+};
 class bwm_load_generic_cam_command: public bwm_command
 {
  public:
