@@ -43,6 +43,7 @@ vsl_add_to_binary_loader(vsol_polygon_2d());
   REG_TABLEAU(bwm_load_img_command);
   REG_TABLEAU(bwm_load_rat_cam_command);
   REG_TABLEAU(bwm_load_proj_cam_command);
+  REG_TABLEAU(bwm_load_geo_cam_command);
   REG_TABLEAU(bwm_load_generic_cam_command);
 #if 1 //enable only if video processing is desired
   REG_TABLEAU(bwm_load_video_command);
