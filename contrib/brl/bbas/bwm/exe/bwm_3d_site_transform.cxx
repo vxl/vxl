@@ -50,7 +50,7 @@ static bool compute_similarity(vnl_matrix<double> const& pts0,
 //                       |0 0 s 0||        |
 //                       |0 0 0 1|| 0 0 0 1|
 //                        -      - -      -
-// It follows that R' = R0*Rs and t' = t0/s + R*ts
+// It follows that R' = R0*Rs and t' = t0/s + R0*ts
 //
 static vpgl_perspective_camera<double>
 transform_camera(vpgl_perspective_camera<double> const& cam,
@@ -83,7 +83,6 @@ transform_camera(vpgl_perspective_camera<double> const& cam,
 int main(int argc, char** argv)
 {
   //Get Inputs
-
   vul_arg<vcl_string> corrs_path   ("-corrs", "corr input file",  "");
   vul_arg<vcl_string> gps_file ("-gps", "gps text file (x y z in local coords per line)", "");
 
