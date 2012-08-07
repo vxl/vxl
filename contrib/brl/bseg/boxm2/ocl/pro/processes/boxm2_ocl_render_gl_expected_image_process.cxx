@@ -50,9 +50,9 @@ namespace boxm2_ocl_render_gl_expected_image_process_globals
 
     //set kernel options
     //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-    vcl_string options = opts + " -D RENDER ";
-    options += " -D DETERMINISTIC ";
-    options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint) ";
+    vcl_string options = opts + " -D RENDER";
+    options += " -D DETERMINISTIC";
+    options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -74,7 +74,7 @@ namespace boxm2_ocl_render_gl_expected_image_process_globals
                                             device->device_id(),
                                             norm_src_paths,
                                             "normalize_render_kernel_gl",   //kernel name
-                                            " -D NORMALIZE_RENDER_GL ",              //options
+                                            " -D NORMALIZE_RENDER_GL",              //options
                                             "normalize render kernel gl"); //kernel identifier (for error checking)
 
     vec_kernels.push_back(normalize_render_kernel);
