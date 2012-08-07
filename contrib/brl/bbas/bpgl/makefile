@@ -16,7 +16,7 @@ MANPAGE_SOURCES += bpgl_rolling_shutter_camera.h
 
 SOURCES += bpgl_camera_utils.cxx
 
-SUBDIRS += algo ihog icam
+SUBDIRS += algo ihog icam depth_map
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
