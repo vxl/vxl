@@ -69,7 +69,8 @@ IF(EXPAT_FOUND)
        bwm_tableau_img.cxx              bwm_tableau_img.h
        bwm_tableau_factory.cxx          bwm_tableau_factory.h
        bwm_tableau_proj_cam.cxx         bwm_tableau_proj_cam.h
-       bwm_tableau_rat_cam.cxx          bwm_tableau_rat_cam.h
+       bwm_tableau_geo_cam.cxx			bwm_tableau_geo_cam.h
+	   bwm_tableau_rat_cam.cxx          bwm_tableau_rat_cam.h
        bwm_tableau_generic_cam.cxx      bwm_tableau_generic_cam.h
        bwm_tableau_video.cxx            bwm_tableau_video.h
        bwm_observable_mesh.cxx          bwm_observable_mesh.h             bwm_observable_mesh_sptr.h
@@ -77,6 +78,8 @@ IF(EXPAT_FOUND)
        bwm_observer_vgui.cxx            bwm_observer_vgui.h
        bwm_observer_video.cxx           bwm_observer_video.h
        bwm_observer_mgr.cxx             bwm_observer_mgr.h
+       bwm_observer_geo_cam.cxx        bwm_observer_geo_cam.h
+
        bwm_observer_proj_cam.cxx        bwm_observer_proj_cam.h
        bwm_observer_rat_cam.cxx         bwm_observer_rat_cam.h
        bwm_observer_generic_cam.cxx     bwm_observer_generic_cam.h
