@@ -105,6 +105,12 @@ SOURCE=.\bwm_3d_corr.cxx
 SOURCE=.\bwm_plane_fitting_lsf.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bwm_observer_geo_cam.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_tableau_geo_cam.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bwm_command-.cxx
 # End Source File
 # Begin Source File
@@ -280,6 +286,12 @@ SOURCE=.\bwm_3d_corr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_plane_fitting_lsf.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_tableau_geo_cam.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_observer_geo_cam.h
 # End Source File
 # End Group
 # End Target

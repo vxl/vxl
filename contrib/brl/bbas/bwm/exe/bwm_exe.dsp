@@ -121,6 +121,9 @@ SOURCE=.\bwm_3d_site_transform.cxx
 # Begin Source File
 SOURCE=.\bwm_3d_site_transform_points.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bwm_triangulate_2d_corrs.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
