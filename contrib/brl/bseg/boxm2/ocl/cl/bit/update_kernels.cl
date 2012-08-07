@@ -179,7 +179,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
-  float4 viewdir = {ray_dx,ray_dy,ray_dz,0};
+  float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
@@ -322,7 +322,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-  float4 viewdir = {ray_dx,ray_dy,ray_dz,0};
+  float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
