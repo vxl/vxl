@@ -921,6 +921,7 @@ void bwm_site_mgr::load_cam_tableau()
   types.push_back("rational");
   types.push_back("projective");
   types.push_back("perspective");
+  types.push_back("identity");
   types.push_back("geo");
   params.field("Tableau Name", name);
   params.line_break();
