@@ -185,6 +185,8 @@ class bwm_load_3d_site_corr_command: public vgui_command
   virtual vcl_string name() const {return "load_site_to_site_corrs"; }
   virtual void execute() { bwm_observer_mgr::instance()->load_3d_corrs(); }
 };
+
+
 class bwm_corresp_process_command: public bwm_menu_process_command
 {
  public:

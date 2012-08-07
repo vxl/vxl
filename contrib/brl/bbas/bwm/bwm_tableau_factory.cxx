@@ -8,6 +8,7 @@
 #include "bwm_observer_generic_cam.h"
 #include "bwm_tableau_generic_cam.h"
 #include "bwm_tableau_rat_cam.h"
+#include  "bwm_tableau_geo_cam.h"
 #include "bwm_tableau_video.h"
 
 #include "bwm_observer_mgr.h"
@@ -37,10 +38,7 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
     {
       bgui_image_tableau_sptr img = bgui_image_tableau_new();
       bwm_observer_proj_cam* o = new bwm_observer_proj_cam(img, cam_tab->name,
-                                                           cam_tab->img_path,
-                                                           cam_tab->cam_path,
-                                                           cam_tab->cam_type,
-                                                           false);
+        cam_tab->img_path, cam_tab->cam_path, cam_tab->cam_type, false);
       bwm_tableau_proj_cam* tab = new bwm_tableau_proj_cam(o);
       if (t->name == "") t->name = cam_tab->cam_path;
       return tab;
@@ -48,10 +46,16 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
     else if (cam_tab->cam_type.compare("rational") == 0) {
       bgui_image_tableau_sptr img = bgui_image_tableau_new();
       bwm_observer_rat_cam* o = new bwm_observer_rat_cam(img, cam_tab->name,
-                                                         cam_tab->img_path,
-                                                         cam_tab->cam_path,
-                                                         false);
+        cam_tab->img_path, cam_tab->cam_path, false);
       bwm_tableau_rat_cam* tab = new bwm_tableau_rat_cam(o);
+      if (t->name == "") t->name = cam_tab->cam_path;
+      return tab;
+    }
+	else if (cam_tab->cam_type.compare("geo") == 0) {
+      bgui_image_tableau_sptr img = bgui_image_tableau_new();
+      bwm_observer_geo_cam* o = new bwm_observer_geo_cam(img, cam_tab->name,
+        cam_tab->img_path, cam_tab->cam_path, false);
+      bwm_tableau_geo_cam* tab = new bwm_tableau_geo_cam(o);
       if (t->name == "") t->name = cam_tab->cam_path;
       return tab;
     }
@@ -59,23 +63,8 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
       bgui_image_tableau_sptr img = bgui_image_tableau_new();
       bwm_observer_generic_cam* o =
         new bwm_observer_generic_cam(img, cam_tab->name,
-                                     cam_tab->img_path,
-                                     cam_tab->cam_path,
-                                     cam_tab->cam_type,
-                                     false);
+        cam_tab->img_path, cam_tab->cam_path, cam_tab->cam_type, false);
       bwm_tableau_generic_cam* tab = new bwm_tableau_generic_cam(o);
-      if (t->name == "") t->name = cam_tab->cam_path;
-      return tab;
-    }
-    else if (cam_tab->cam_type.compare("identity") == 0)
-    {
-      bgui_image_tableau_sptr img = bgui_image_tableau_new();
-      bwm_observer_proj_cam* o = new bwm_observer_proj_cam(img, cam_tab->name,
-                                                           cam_tab->img_path,
-                                                           cam_tab->cam_path,
-                                                           cam_tab->cam_type,
-                                                           false);
-      bwm_tableau_proj_cam* tab = new bwm_tableau_proj_cam(o);
       if (t->name == "") t->name = cam_tab->cam_path;
       return tab;
     }

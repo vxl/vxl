@@ -49,6 +49,8 @@ vcl_vector<bwm_observer_cam*> bwm_observer_mgr::observers_cam() const
       v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
     if (observers_[i]->type_name().compare("bwm_observer_proj_cam") == 0)
       v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
+    if (observers_[i]->type_name().compare("bwm_observer_geo_cam") == 0)
+      v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
     if (observers_[i]->type_name().compare("bwm_observer_video") == 0)
       v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
   }
@@ -654,6 +656,8 @@ all_selected_observables(vcl_string const& soview_type) const
       }
     }
   }
+
+ 
   return sel_obsbls;
 }
 
@@ -699,7 +703,7 @@ bool bwm_observer_mgr::add_3d_corr_centroid()
     vsol_point_3d_sptr vi = poly0->vertex(i);
     xc0 += (*vi).x(); yc0 += (*vi).y(); zc0 += (*vi).z();
   }
-  for (unsigned i = 0; i<n0; ++i) {
+  for (unsigned i = 0; i<n1; ++i) {
     vsol_point_3d_sptr vi = poly1->vertex(i);
     xc1 += (*vi).x(); yc1 += (*vi).y(); zc1 += (*vi).z();
   }
@@ -767,7 +771,7 @@ void bwm_observer_mgr::load_3d_corrs(vcl_string const& path,
   vcl_string temp, temp1, temp2;
   is >> temp;
   if (temp!="Ncorrs:") {
-    vcl_cout << "error in 3d_corr file\n";
+    vcl_cout << "error in 3d_corr file 1\n";
     return;
   }
   unsigned n_corrs = 0;
@@ -775,7 +779,7 @@ void bwm_observer_mgr::load_3d_corrs(vcl_string const& path,
   for (unsigned i = 0; i<n_corrs; ++i) {
     is >> temp >> temp1 >> temp2;
     if (temp2!="Sites:") {
-      vcl_cout << "error in 3d_corr file\n";
+      vcl_cout << "error in 3d_corr file 2\n";
       return;
     }
     unsigned n_sites = 0;
@@ -786,25 +790,25 @@ void bwm_observer_mgr::load_3d_corrs(vcl_string const& path,
     for (unsigned s = 0; s<n_sites; ++s) {
       is >> temp >> temp1;
       if (temp != "Site[") {
-        vcl_cout << "error in 3d_corr file\n";
+        vcl_cout << "error in 3d_corr file 3\n";
         return;
       }
       site = temp1;
       is >> temp >> temp1;
       if (temp1 != "X:") {
-        vcl_cout << "error in 3d_corr file\n";
+        vcl_cout << "error in 3d_corr file 4\n";
         return;
       }
       is >> x;
       is >> temp;
       if (temp != "Y:") {
-        vcl_cout << "error in 3d_corr file\n";
+        vcl_cout << "error in 3d_corr file 5\n";
         return;
       }
       is >> y;
       is >> temp;
       if (temp != "Z:") {
-        vcl_cout << "error in 3d_corr file\n";
+        vcl_cout << "error in 3d_corr file 6\n";
         return;
       }
       is >> z;

@@ -40,7 +40,6 @@ class bwm_observer_mgr
   vcl_vector<bwm_observer_cam*> observers_cam() const;
   vcl_vector<bwm_observer_rat_cam*> observers_rat_cam() const;
 
-
   void add(bwm_observer* o);
 
   void remove(bwm_observer* observer);
@@ -108,6 +107,7 @@ class bwm_observer_mgr
   //: requires exactly two selected polygons each in a unique site. 
   //  Corresponds centroids of the polygons
   bool add_3d_corr_centroid();
+
 
   //: save 3d_corrs as an ascii file
   void save_3d_corrs() const;
