@@ -78,9 +78,9 @@ region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
 }
 
 depth_map_region::depth_map_region() :
-  orient_type_(NOT_DEF), depth_(-1.0), min_depth_(0.0),
-  max_depth_(vcl_numeric_limits<double>::max()),
-  region_2d_(0), region_3d_(0), name_("")
+  orient_type_(NOT_DEF), name_(""), depth_(-1.0),
+  min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
+  region_2d_(0), region_3d_(0)
 {}
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -88,9 +88,9 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    double min_depth, double max_depth,
                                    vcl_string name,
                                    depth_map_region::orientation orient)
-: orient_type_(orient), region_2d_(region),region_3d_(0),
-  region_plane_(region_plane), depth_(-1.0),
-  min_depth_(min_depth), max_depth_(max_depth), name_(name)
+: orient_type_(orient), name_(name), depth_(-1.0),
+  min_depth_(min_depth), max_depth_(max_depth),
+ region_plane_(region_plane), region_2d_(region), region_3d_(0)
 {
 }
 
@@ -98,18 +98,18 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vgl_plane_3d<double> const& region_plane,
                                    vcl_string name,
                                    depth_map_region::orientation orient)
-: orient_type_(orient), region_2d_(region),region_3d_(0),
-  region_plane_(region_plane), depth_(-1.0),
-  min_depth_(-1.0), max_depth_(-1.0), name_(name)
+: orient_type_(orient), name_(name), depth_(-1.0),
+  min_depth_(-1.0), max_depth_(-1.0),
+ region_plane_(region_plane), region_2d_(region), region_3d_(0)
 {
 }
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name)
-: orient_type_(INFINITE),region_2d_(region), depth_(vcl_numeric_limits<double>::max()),
+: orient_type_(INFINITE), name_(name), depth_(vcl_numeric_limits<double>::max()),
   min_depth_(vcl_numeric_limits<double>::max()),
   max_depth_(vcl_numeric_limits<double>::max()),
-  name_(name), region_3d_(0)
+  region_2d_(region), region_3d_(0)
 {
 }
 
