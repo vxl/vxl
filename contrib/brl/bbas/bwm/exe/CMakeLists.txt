@@ -1,6 +1,8 @@
 # This is brl/bbas/bwm/exe/CMakeLists.txt
 # World Modeling GUI executables
 
+INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
+
 IF(EXPAT_FOUND)
  IF(EXPATPP_FOUND)
   IF(SHAPELIB_FOUND)
@@ -31,6 +33,9 @@ IF(EXPAT_FOUND)
    
    ADD_EXECUTABLE( bwm_3d_site_transform_points  bwm_3d_site_transform_points.cxx)
    TARGET_LINK_LIBRARIES( bwm_3d_site_transform_points bwm bwm_algo vpgl vgl_algo vnl_algo vgl vnl vul vidl vcl bxml)
+
+   ADD_EXECUTABLE( bwm_triangulate_2d_corrs  bwm_triangulate_2d_corrs.cxx)
+   TARGET_LINK_LIBRARIES( bwm_triangulate_2d_corrs bwm bwm_algo vpgl vgl_algo vnl_algo vgl vnl vul vidl vcl bxml)
 
   ENDIF(SHAPELIB_FOUND)
  ENDIF(EXPATPP_FOUND)
