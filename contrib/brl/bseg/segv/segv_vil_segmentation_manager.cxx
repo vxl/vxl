@@ -8,7 +8,6 @@
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 #endif
 // include for project points menu option
-#include <vpgl/vpgl_rational_camera.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // sprintf
 #include <vcl_fstream.h>
@@ -546,7 +545,7 @@ void segv_vil_segmentation_manager::load_image()
   if (!image)
     image = vil_load_image_resource(image_filename.c_str(), false);
 
-  if (!image){
+  if (!image) {
     vcl_cout << "Failed to load image path " << image_filename << '\n';
     return;
   }
@@ -612,7 +611,7 @@ void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
   if (!image)
     image = vil_load_image_resource(path.c_str(), false);
 
-  if (!image){
+  if (!image) {
     vcl_cout << "Failed to load image path " << path << '\n';
     return;
   }
@@ -988,6 +987,7 @@ void segv_vil_segmentation_manager::third_order_edges()
   if (lines.size())
     this->draw_lines(lines);
 }
+
 void segv_vil_segmentation_manager::fit_lines()
 {
   this->clear_display();
@@ -1092,7 +1092,7 @@ void segv_vil_segmentation_manager::fit_conics()
   vcl_vector<vsol_point_2d_sptr> center_points;
   double cx,cy,phi,width,height;
   // draw the center points of the conics
-  for (unsigned int i=0; i<conics.size(); i++){
+  for (unsigned int i=0; i<conics.size(); i++) {
     if (conics[i]->is_real_ellipse()) {
       conics[i]->ellipse_parameters(cx,cy,phi,width,height);
       vsol_point_2d_sptr p = new vsol_point_2d(cx, cy);
@@ -1162,7 +1162,7 @@ void segv_vil_segmentation_manager::fit_overlay_conics()
   vcl_vector<vsol_point_2d_sptr> center_points;
   double cx,cy,phi,width,height;
   // draw the center points of the conics
-  for (unsigned int i=0; i<conics.size(); i++){
+  for (unsigned int i=0; i<conics.size(); i++) {
     if (conics[i]->is_real_ellipse()) {
       conics[i]->ellipse_parameters(cx,cy,phi,width,height);
       vsol_point_2d_sptr p = new vsol_point_2d(cx, cy);
@@ -1374,19 +1374,19 @@ delete ip_dialog;
 
 void segv_vil_segmentation_manager::display_roi()
 {
-  if(!roi_){
-    vcl_cout << " Null ROI \n";
+  if (!roi_) {
+    vcl_cout << " Null ROI\n";
     return;
   }
   //assume only one region
-  if(roi_->n_regions() != 1)
-    {
-      vcl_cout << " Can't handle a roi with more than one region \n";
-      return;
-    }
-  int cmin=roi_->cmin(0), cmax=roi_->cmax(0), 
+  if (roi_->n_regions() != 1)
+  {
+    vcl_cout << " Can't handle a roi with more than one region\n";
+    return;
+  }
+  int cmin=roi_->cmin(0), cmax=roi_->cmax(0),
     rmin=roi_->rmin(0), rmax = roi_->rmax(0);
-  
+
   // display the roi as a vsol polygon
   vsol_point_2d_sptr p0 = new vsol_point_2d(cmin, rmin);
   vsol_point_2d_sptr p1 = new vsol_point_2d(cmax, rmin);
@@ -1401,39 +1401,42 @@ void segv_vil_segmentation_manager::display_roi()
   t2D->clear_all();
   t2D->add_vsol_polygon_2d(poly);
 }
+
 void segv_vil_segmentation_manager::create_roi()
 {
   bgui_picker_tableau_sptr ptab = selected_picker_tab();
   float start_col=0, end_col=0, start_row=0, end_row=0;
   ptab->pick_box(&start_col, &start_row, &end_col, &end_row);
   roi_ = new brip_roi();
-  roi_->add_region(start_col, start_row, 
-                   (end_col-start_col), (end_row-start_row));
+  roi_->add_region(int(start_col+0.5f), int(start_row+0.5f),
+                   int(end_col-start_col+0.5f), int(end_row-start_row+0.5f));
   this->display_roi();
 }
+
 void segv_vil_segmentation_manager::crop_image()
 {
   vil_image_resource_sptr img = this->selected_image();
-  if(!img){
+  if (!img) {
     vcl_cout << "No image to crop\n";
     return;
   }
-  if(!roi_){
+  if (!roi_) {
     vcl_cout << "No crop roi specified\n";
     return;
   }
   vil_image_resource_sptr chip;
-  if(!brip_vil_float_ops::chip(img, roi_, chip))
-    {
-      vcl_cout << "Crop operation failed\n";
-      return;
-    }
+  if (!brip_vil_float_ops::chip(img, roi_, chip))
+  {
+    vcl_cout << "Crop operation failed\n";
+    return;
+  }
   this->add_image(chip);
 }
+
 void segv_vil_segmentation_manager::gaussian()
 {
   vil_image_resource_sptr img = this->selected_image();
-  if(!img){
+  if (!img) {
     vcl_cout << "No image to smooth\n";
     return;
   }
@@ -1447,9 +1450,11 @@ void segv_vil_segmentation_manager::gaussian()
   vil_image_resource_sptr gaussr = vil_new_image_resource_of_view(gauss);
   this->add_image(gaussr);
 }
-void segv_vil_segmentation_manager::abs_value(){
+
+void segv_vil_segmentation_manager::abs_value()
+{
   vil_image_resource_sptr img = this->selected_image();
-  if(!img){
+  if (!img) {
     vcl_cout << "No image to for absolute value\n";
     return;
   }
@@ -1458,6 +1463,7 @@ void segv_vil_segmentation_manager::abs_value(){
   vil_image_resource_sptr absr = vil_new_image_resource_of_view(abs);
   this->add_image(absr);
 }
+
 void segv_vil_segmentation_manager::inline_viewer()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
@@ -1814,7 +1820,7 @@ void segv_vil_segmentation_manager::color_order()
 void segv_vil_segmentation_manager::create_polygon()
 {
   bgui_picker_tableau_sptr ptab = selected_picker_tab();
-  if (!ptab){
+  if (!ptab) {
     vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - "
              << "no picker tableau\n";
     return;
@@ -1828,7 +1834,7 @@ void segv_vil_segmentation_manager::create_polygon()
     return;
   }
   bgui_vtol2D_tableau_sptr btab = selected_vtol2D_tab();
-  if (!btab){
+  if (!btab) {
     vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - "
              << "no vtol2D tableau\n";
     return;
@@ -1929,7 +1935,7 @@ void segv_vil_segmentation_manager::extrema()
     brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> extr;
   bool output_mask = false, output_unclipped = false, mag_only = false;
-  bool scale_invariant = false, non_max_suppress = true; 
+  bool scale_invariant = false, non_max_suppress = true;
   if (choice == 1) output_mask = true;
   if (choice == 2) output_unclipped = true;
   if (choice == 3) {
@@ -1949,20 +1955,20 @@ void segv_vil_segmentation_manager::extrema()
     extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, mag_only, output_mask, output_unclipped, scale_invariant, non_max_suppress);
 
   vcl_cout << "Extrema computation time " << t.real() << " msec\n";
-  if(choice ==3 || choice == 4){
+  if (choice ==3 || choice == 4) {
     vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
     this->add_image(resc);
     return;
   }
   unsigned ni = extr.ni(), nj = extr.nj(), np = extr.nplanes();
-  if (choice==0&&!color_overlay){
+  if (choice==0&&!color_overlay) {
     if (np!=1)
       return;
     vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
     this->add_image(resc);
     return;
   }
-  if (choice==0&&color_overlay){
+  if (choice==0&&color_overlay) {
     if (np!=1)
       return;
     vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
@@ -1981,7 +1987,7 @@ void segv_vil_segmentation_manager::extrema()
         res(i,j) = extr(i,j,0);
         mask(i,j) = extr(i,j,1);
       }
-    if (color_overlay){
+    if (color_overlay) {
       vil_image_resource_sptr res_resc = vil_new_image_resource_of_view(res);
       vil_image_resource_sptr msk_resc = vil_new_image_resource_of_view(mask);
       vil_image_view<vil_rgb<vxl_byte> > rgb =
@@ -2161,15 +2167,15 @@ void segv_vil_segmentation_manager::gradient_mag_angle()
   vil_image_view<float> mag(ni, nj), gx(ni, nj), gy(ni, nj);
   brip_vil_float_ops::gradient_mag_comp_3x3(smooth, mag, gx, gy);
   vcl_vector<vsol_line_2d_sptr > lines;
-  if (sep_mag_displ){
+  if (sep_mag_displ) {
     for (unsigned j = 2; j<nj-2; j+=display_interval)
-      for (unsigned i = 2; i<ni-2; i+=display_interval){
+      for (unsigned i = 2; i<ni-2; i+=display_interval) {
         double cx =  i, cy = j;
         vsol_point_2d_sptr c = new vsol_point_2d(cx, cy);
         double dx = 0, dy = 0;
         float m = mag(i,j);
         float ggx = gx(i,j), ggy = gy(i,j);
-        if (m>0.1){
+        if (m>0.1) {
           dx = ggx/m; dy = ggy/m;
         }
         vsol_point_2d_sptr e = new vsol_point_2d(cx+vector_scale*dx,
@@ -2177,7 +2183,7 @@ void segv_vil_segmentation_manager::gradient_mag_angle()
         vsol_line_2d_sptr l = new vsol_line_2d(c, e);
         lines.push_back(l);
       }
-    if (!display_on_image){
+    if (!display_on_image) {
       vil_image_view<float> blank(ni, nj);
       blank.fill(0.0f);
       this->add_image(vil_new_image_resource_of_view(blank));
@@ -2202,13 +2208,14 @@ void segv_vil_segmentation_manager::gradient_mag_angle()
       vsol_line_2d_sptr l = new vsol_line_2d(c, e);
       lines.push_back(l);
     }
-  if (!display_on_image){
+  if (!display_on_image) {
     vil_image_view<float> blank(ni, nj);
     blank.fill(0.0f);
     this->add_image(vil_new_image_resource_of_view(blank));
   }
   this->draw_lines(lines, style);
 }
+
 void segv_vil_segmentation_manager::fft()
 {
   vil_image_resource_sptr img = selected_image();
@@ -2222,13 +2229,13 @@ void segv_vil_segmentation_manager::fft()
   dlg.checkbox("Display FFT Mag?", use_mag);
   if (!dlg.ask())
     return;
-  vil_image_view<float> fview = brip_vil_float_ops::convert_to_float(img);  
+  vil_image_view<float> fview = brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> fview_p2;
-  if(!brip_vil_float_ops::resize_to_power_of_two(fview, fview_p2))
+  if (!brip_vil_float_ops::resize_to_power_of_two(fview, fview_p2))
     return;
   vil_image_view<float> magr, phase;
   brip_vil_float_ops::fourier_transform(fview_p2, magr, phase);
-  if(use_mag)
+  if (use_mag)
     this->add_image(vil_new_image_resource_of_view(magr));
   else
     this->add_image(vil_new_image_resource_of_view(phase));
