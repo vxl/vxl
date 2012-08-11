@@ -50,6 +50,11 @@ class vsol_polygon_3d : public vsol_region_3d
 
  public:
   //---------------------------------------------------------------------------
+  //: Default constructor. Do nothing. 
+  //---------------------------------------------------------------------------
+  vsol_polygon_3d(void);
+
+  //---------------------------------------------------------------------------
   //: Constructor from a vcl_vector (not a geometric vector but a list of points)
   //  REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
   //---------------------------------------------------------------------------
@@ -200,10 +205,7 @@ class vsol_polygon_3d : public vsol_region_3d
   void describe(vcl_ostream &strm, int blanking=0) const;
 
  protected:
-  //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing. Just to enable inheritance.  Protected.
-  //---------------------------------------------------------------------------
-  vsol_polygon_3d();
+  void compute_plane();
   vgl_homg_plane_3d<double> plane_;
 };
 
