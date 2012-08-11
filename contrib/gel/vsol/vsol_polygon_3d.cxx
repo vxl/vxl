@@ -14,8 +14,9 @@
 //***************************************************************************
 // Initialization
 //***************************************************************************
-void vsol_polygon_3d::compute_plane(){
-vcl_vector<vgl_homg_point_3d<double> > pts;
+void vsol_polygon_3d::compute_plane()
+{
+  vcl_vector<vgl_homg_point_3d<double> > pts;
   for (vcl_vector<vsol_point_3d_sptr>::iterator pit = storage_->begin();
        pit != storage_->end(); ++pit)
     pts.push_back(vgl_homg_point_3d<double>((*pit)->x(),(*pit)->y(),(*pit)->z(),1.0));
@@ -24,13 +25,15 @@ vcl_vector<vgl_homg_point_3d<double> > pts;
   plane_ = fp.get_plane();
   plane_.normalize();
 }
+
 //----------------------------------------------------------------
 // Default constructor
 //----------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d()
+: storage_(0)
 {
-  storage_= 0;
 }
+
 //---------------------------------------------------------------------------
 //: Constructor from a vcl_vector (not a geometric vector but a list of points).
 // Require: new_vertices.size()>=3 and valid_vertices(new_vertices)
@@ -43,7 +46,6 @@ vsol_polygon_3d::vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr> const& new_verti
 
   storage_=new vcl_vector<vsol_point_3d_sptr>(new_vertices);
   this->compute_plane();
-  
 }
 
 //---------------------------------------------------------------------------
@@ -341,7 +343,7 @@ void vsol_polygon_3d::b_read(vsl_b_istream &is)
     if (!valid_ptr)
       return;
     vsl_b_read(is, *storage_);
-	this->compute_plane();
+    this->compute_plane();
     break;
    default:
     vcl_cerr << "vsol_polygon_3d: unknown I/O version " << ver << '\n';
