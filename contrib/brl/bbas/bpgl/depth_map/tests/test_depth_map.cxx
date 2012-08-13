@@ -13,6 +13,7 @@
 #include <vil/vil_save.h>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
+
 static void test_depth_map()
 {
   // construct the camera looking along Y with 1.6m height off the ground
@@ -67,29 +68,33 @@ static void test_depth_map()
   vsl_b_ifstream is("./temp.bin");
   depth_map_region_sptr r_in;
   vsl_b_read(is, r_in);
-  if(r_in){
-      bool good = r_in->name() == gpr->name();
-      good = good && r_in->min_depth() == gpr->min_depth();
-	  good = good && r_in->region_2d()->size() == gpr->region_2d()->size();
-	  TEST("binary read write - depth_map_region", good, true);
-  }else
-	  TEST("binary_read_write - depth_map_region", true, false);
+  if (r_in) {
+    bool good = r_in->name() == gpr->name();
+    good = good && r_in->min_depth() == gpr->min_depth();
+    good = good && r_in->region_2d()->size() == gpr->region_2d()->size();
+    TEST("binary read write - depth_map_region", good, true);
+  }
+  else {
+    TEST("binary_read_write - depth_map_region", true, false);
+  }
   vpl_unlink("./temp.bin");
   depth_map_scene_sptr ssptr = new depth_map_scene(dms);
-   vsl_b_ofstream sos("./temps.bin");
+  vsl_b_ofstream sos("./temps.bin");
   vsl_b_write(sos, ssptr);
   sos.close();
   vsl_b_ifstream sis("./temps.bin");
   depth_map_scene_sptr s_in;
   vsl_b_read(sis, s_in);
   vpl_unlink("./temps.bin");
-  if(s_in){
-      bool good = s_in->ni() == ssptr->ni();
-      good = good && s_in->nj() == ssptr->nj();
-	  good = good && s_in->ground_plane()->region_2d()->size() == gpr->region_2d()->size();
-	  TEST("binary read write - depth_map_scene", good, true);
-  }else
-	  TEST("binary_read_write - depth_map_scene", true, false);
+  if (s_in) {
+    bool good = s_in->ni() == ssptr->ni();
+    good = good && s_in->nj() == ssptr->nj();
+    good = good && s_in->ground_plane()->region_2d()->size() == gpr->region_2d()->size();
+    TEST("binary read write - depth_map_scene", good, true);
+  }
+  else {
+    TEST("binary_read_write - depth_map_scene", true, false);
+  }
   // test ortho perp scene planes, sky region
   vsol_point_2d_sptr p0s= new vsol_point_2d(640.0, 360.0);
   vsol_point_2d_sptr p1s= new vsol_point_2d(1280.0, 360.0);
