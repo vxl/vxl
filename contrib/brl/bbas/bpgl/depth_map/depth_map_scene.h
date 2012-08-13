@@ -10,20 +10,20 @@
 // \verbatim
 //  Modifications
 // \endverbatim
-// The idea is that the absolute depth map for a scene cannot often 
+// The idea is that the absolute depth map for a scene cannot often
 // be extracted from a single image since there can be unknown parameters.
 // For example, an object depth in the image cannot be known unless the
 // camera is known as well as the 3-d dimensions of the object. Moreover,
 // the object can have surface depth variations that may not be able to
 // be recovered, e.g. shape from shading is fragile.
 //
-// Instead it is necessary to express the depth map analytically in terms 
+// Instead it is necessary to express the depth map analytically in terms
 // of regions whose depth is a parameter. For a given specification of depth,
-// the lateral extent of the region in 3-d is determined. In this 
+// the lateral extent of the region in 3-d is determined. In this
 // initial version, the scene is represented by a ground plane and
 // regions perpendicular to the ground plane and the viewing direction,
 //
-// A camera is required to specify the depth map, which is rendered 
+// A camera is required to specify the depth map, which is rendered
 // for that camera view.
 //
 #include <vcl_vector.h>
@@ -47,7 +47,7 @@ class depth_map_scene : public vbl_ref_count
   depth_map_scene(unsigned ni, unsigned nj) :
     ni_(ni), nj_(nj), ground_plane_(0) {}
 
-  depth_map_scene(unsigned ni, unsigned nj, 
+  depth_map_scene(unsigned ni, unsigned nj,
                   vpgl_perspective_camera<double> const& cam,
                   depth_map_region_sptr const& ground_plane,
                   depth_map_region_sptr const& sky,
@@ -67,19 +67,18 @@ class depth_map_scene : public vbl_ref_count
   bool set_depth(double depth, vcl_string const& name);
 
   //: set the maximum depth of the ground plane
-  // for example the depth can be limited by the curvature of the Earth
-  // proximity scale factor is with respect to the closest ground plane 
-  // point to the horizon. That is, points less than scale * distance to 
+  // For example the depth can be limited by the curvature of the Earth
+  // proximity scale factor is with respect to the closest ground plane
+  // point to the horizon. That is, points less than scale * distance to
   // closest point are moved to max_depth
-  void set_ground_plane_max_depth(double max_depth, 
+  void set_ground_plane_max_depth(double max_depth,
                                   double proximity_scale_factor = 3.0);
 
-  //:add a region orthogonal to the ground plane and perpendicular to 
-  // the plane containing the principal ray and the z axis
+  //:add a region orthogonal to the ground plane and perpendicular to the plane containing the principal ray and the z axis
   void add_ortho_perp_region(vsol_polygon_2d_sptr const& region,
                              double min_distance, double max_distance,
                              vcl_string name);
-                             
+
   //: add a region with an arbitrary orientation (not currently used)
   void add_region(vsol_polygon_2d_sptr const& region,
                   vgl_vector_3d<double> plane_normal,
@@ -97,20 +96,19 @@ class depth_map_scene : public vbl_ref_count
   //: binary IO read
   void b_read(vsl_b_istream& is);
 
-  
  protected:
-  unsigned ni_, nj_;//: depth map dimensions
+  unsigned ni_, nj_; //: depth map dimensions
   vcl_map<vcl_string, depth_map_region_sptr> scene_regions_;
   depth_map_region_sptr ground_plane_;
   depth_map_region_sptr sky_;
   vpgl_perspective_camera<double> cam_;
 };
+
 #include <depth_map/depth_map_scene_sptr.h>
+
 void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* sptr);
-
 void vsl_b_read(vsl_b_istream &is, depth_map_scene*& sptr);
-
 void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& sptr);
-
 void vsl_b_read(vsl_b_istream &is, depth_map_scene_sptr& sptr);
+
 #endif //depth_map_scene_h_
