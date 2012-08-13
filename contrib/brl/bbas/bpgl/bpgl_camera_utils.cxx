@@ -95,8 +95,8 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
 
   //the rotation that moves z to the principal ray direction
   vgl_rotation_3d<double> R_axis(z_axis, principal_ray);
-  // rotation for heading
-  vgl_rotation_3d<double> R_head(0.0, 0.0, heading*dtor);
+  // rotation for heading (note minus sign is needed, check definition JLM)
+  vgl_rotation_3d<double> R_head(0.0, 0.0, -heading*dtor);
   // composition of tilt and heading
   vgl_rotation_3d<double> R_tot = R_head*R_axis;
   // rotation for roll
