@@ -1971,18 +1971,7 @@ void bwm_observer_cam::calibrate_cam_from_horizon()
   camera_ = new vpgl_perspective_camera<double>(cam);
 }
 
-void bwm_observer_cam::camera_from_kml(double right_fov, double top_fov,
-                                       double altitude, double heading,
-                                       double tilt, double roll){
-  double ni = img_tab_->width(), nj = img_tab_->height();
-  vpgl_perspective_camera<double> cam  =
-    bpgl_camera_utils::camera_from_kml(ni, nj, right_fov, top_fov,
-                                       altitude, heading, tilt, roll);
-  vcl_cout << "kml camera\n" << cam << '\n';
-  if (camera_)
-    delete camera_;
-  camera_ = new vpgl_perspective_camera<double>(cam);
-}
+
 
 void bwm_observer_cam::toggle_cam_horizon()
 {
@@ -2002,4 +1991,62 @@ void bwm_observer_cam::toggle_cam_horizon()
     this->add_infinite_line(horizon.a(), horizon.b(), horizon.c());
   post_redraw();
 }
+//==========================  depth map methods =================
+void bwm_observer_cam::set_ground_plane(){
+	 // get the selected polygon
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+  if(polys.size()!=1){
+   vcl_cout << "Not a single polygon selected - select a single polygon\n";
+   return;
+  }
+  bgui_vsol_soview2D_polygon* p = reinterpret_cast<bgui_vsol_soview2D_polygon*>(polys[0]);
+  scene_.set_ground_plane( p->sptr() );
+}
+void bwm_observer_cam::set_sky(){
 
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+  if(polys.size()!=1){
+   vcl_cout << "Not a single polygon selected - select a single polygon\n";
+   return;
+  }
+  bgui_vsol_soview2D_polygon* p = reinterpret_cast<bgui_vsol_soview2D_polygon*>(polys[0]);
+  
+  scene_.set_sky( p->sptr());	
+}
+void bwm_observer_cam::add_vertical_depth_region(double min_depth,
+                                                 double max_depth,
+                                                 vcl_string name){
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+  if(polys.size()!=1){
+   vcl_cout << "Not a single polygon selected - select a single polygon\n";
+   return;
+  }
+  bgui_vsol_soview2D_polygon* p = reinterpret_cast<bgui_vsol_soview2D_polygon*>(polys[0]);
+	scene_.add_ortho_perp_region(p->sptr(), min_depth, max_depth, name);
+}
+void bwm_observer_cam::save_depth_map_scene(vcl_string const& path){
+  vsl_b_ofstream os(path.c_str());
+  if(!os){
+    vcl_cout << "invalid binary stream for path " << path << "\n";
+    return;
+  }
+  scene_.b_write(os);
+}
+
+void bwm_observer_cam::load_depth_map_scene(vcl_string const& path){
+  vsl_b_ifstream is(path.c_str());
+  if(!is){
+    vcl_cout << "invalid binary stream for path " << path << "\n";
+    return;
+  }
+  scene_.b_read(is);
+  depth_map_region_sptr gp = scene_.ground_plane();
+  if(gp) bwm_observer_img::create_polygon(gp->region_2d());
+  depth_map_region_sptr sky = scene_.sky();
+  if(sky) bwm_observer_img::create_polygon(sky->region_2d());
+  vcl_vector<depth_map_region_sptr> regions = scene_.scene_regions();
+  for(vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+      rit != regions.end(); ++rit)
+    bwm_observer_img::create_polygon((*rit)->region_2d());
+  post_redraw();
+}

@@ -109,7 +109,7 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
 
   img->set_image_resource(img_res, params);
   img->set_file_name(image_path);
-
+  scene_ = depth_map_scene(img_res->ni(), img_res->nj());
   // check if the camera path is not empty, if it is NITF, the camera
   // info is in the image, not a separate file
   if (subtype!="identity"&&cam_path.size() == 0)
@@ -124,6 +124,12 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
   camera_ = bwm_observer_proj_cam::read_camera(cam_path,subtype,
                                                img_res->ni(),
                                                img_res->nj());
+  if (camera_&& subtype == "perspective"){
+    vpgl_perspective_camera<double>* cam =
+      static_cast<vpgl_perspective_camera<double>*>(camera_);
+    scene_.set_camera(*cam);
+  }
+
   //generate a unique tab name if null
   if (name=="")
     name = cam_path;

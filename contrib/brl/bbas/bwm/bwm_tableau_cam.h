@@ -141,8 +141,12 @@ class bwm_tableau_cam : public bwm_tableau_img
   void set_cam_height();
   void calibrate_cam_from_horizon()
     {my_observer_->calibrate_cam_from_horizon();}
-  void camera_from_kml();
   void toggle_cam_horizon(){my_observer_->toggle_cam_horizon();}
+  void set_ground_plane(){ my_observer_->set_ground_plane();}
+  void set_sky(){ my_observer_->set_sky();}
+  void add_vertical_depth_region();
+  void save_depth_map_scene();
+  void load_depth_map_scene();
  protected:
   bwm_observer_cam* my_observer_;
   bwm_tableau_cam(bwm_observer_cam* obs)

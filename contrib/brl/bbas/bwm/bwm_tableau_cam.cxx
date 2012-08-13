@@ -436,25 +436,27 @@ void bwm_tableau_cam::set_cam_height(){
     return;
   my_observer_->set_cam_height(cam_height);
 }
-void bwm_tableau_cam::camera_from_kml(){
-  static double right_fov = 29.605;//degrees
-  static double top_fov = 17.725;//degrees
-  static double altitude = 1.6;//meters
-  static double heading = 0.0;//degrees
-  static double tilt = 78.62;//degrees
-  static double roll = -2.76;//degrees
-  vgui_dialog fval("KML Camera");
-  fval.field("RightFOV(deg)", right_fov);
-  fval.field("TopFOV(deg)", top_fov);
-  fval.field("Altitude(m)", altitude);
-  fval.field("Heading(deg)", heading);
-  fval.field("Tilt(deg)",tilt);
-  fval.field("Roll(deg)",roll);
-  if (!fval.ask())
+
+void bwm_tableau_cam::add_vertical_depth_region(){
+  static double min_depth = 0.0;
+  static double max_depth = 100.0;
+  static vcl_string name = "";
+  vgui_dialog vdval("Vertical Region");
+  vdval.field("Min Depth (m)", min_depth);
+  vdval.field("Max Depth (m)", max_depth);
+  vdval.field("Name ", name);
+  if (!vdval.ask())
     return;
-  my_observer_->camera_from_kml(right_fov, top_fov, altitude,
-                                heading, tilt, roll);
+  my_observer_->add_vertical_depth_region(min_depth, max_depth, name);
+}
+void bwm_tableau_cam::save_depth_map_scene(){
+  vcl_string path = bwm_utils::select_file();
+  my_observer_->save_depth_map_scene(path);
 }
 
+void bwm_tableau_cam::load_depth_map_scene(){
+  vcl_string path = bwm_utils::select_file();
+  my_observer_->load_depth_map_scene(path);
+}
 // Private Methods
 

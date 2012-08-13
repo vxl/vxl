@@ -316,7 +316,20 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     mesh_submenu.add("Delete", del_menu);
     menu.separator();
     menu.add("3D Objects", mesh_submenu);
-
+    menu.separator();
+    vgui_menu cal_submenu;
+    cal_submenu.add("Set Focal Length(pix)", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::set_focal_length));
+    cal_submenu.add("Set Camera Height (m)", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::set_cam_height));
+    cal_submenu.add("Define Horizon(selected line)", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::set_horizon));
+    cal_submenu.add("Calibrate From Horizon", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::calibrate_cam_from_horizon));
+    cal_submenu.add("Toggle Horizon", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::toggle_cam_horizon));
+    cal_submenu.separator();
+    cal_submenu.add("Set Ground Plane", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::set_ground_plane));
+    cal_submenu.add("Set Sky", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::set_sky));
+    cal_submenu.add("Add Vertical Region", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::add_vertical_depth_region));
+    cal_submenu.add("Save Depth Map Scene", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::save_depth_map_scene));
+    cal_submenu.add("Load Depth Map Scene", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::load_depth_map_scene));
+    menu.add("Camera Calibration", cal_submenu);
   // Registration menu
     vgui_menu reg_submenu, threed_menu;
     menu.separator();
