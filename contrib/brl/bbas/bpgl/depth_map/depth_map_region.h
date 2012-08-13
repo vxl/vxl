@@ -20,10 +20,14 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vcl_string.h>
+#include <vsl/vsl_binary_io.h>
+
+
 class depth_map_region : public vbl_ref_count
 {
- public:
-  enum orientation { GROUND_PLANE, VERTICAL, INFINITE, NOT_DEF };
+
+public:
+  enum orientation{GROUND_PLANE, VERTICAL, INFINT, NOT_DEF};
   //: default constructor
   depth_map_region();
   //: standard constructor for a plane that can be moved along the camera ray
@@ -41,7 +45,7 @@ class depth_map_region : public vbl_ref_count
 
   //: constructor for a region of infinite distance
   depth_map_region(vsol_polygon_2d_sptr const& region,
-                   vcl_string name = "sky");
+                   vcl_string name);
 
   //: unique name
   vcl_string name() const {return name_;}
@@ -55,41 +59,56 @@ class depth_map_region : public vbl_ref_count
   void set_min_depth(double min_depth){min_depth_ = min_depth;}
   void set_max_depth(double max_depth){max_depth_ = max_depth;}
 
-  //accessors
+  //:accessors
   double min_depth() const {return min_depth_;}
   double max_depth() const {return max_depth_;}
   vsol_polygon_3d_sptr region_3d() const {return region_3d_;}
   vsol_polygon_2d_sptr region_2d() const {return region_2d_;}
   double depth() const {return depth_;}
-  //utility function for case where region plane is fixed
-  static vsol_polygon_3d_sptr 
-    region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d, 
-                    vgl_plane_3d<double> const& region_plane,
-                    double d,// as in a, b, c, d
-                    vpgl_perspective_camera<double> const& cam);
 
+  //:  depth is defined as distance on  the x-y plane in the direction
+  //  of the camera ray through the region centroid. An assertion is
+  //  thrown if the camera ray is perpendicular to the 3-d region normal
   static vsol_polygon_3d_sptr 
     region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d, 
                     vgl_vector_3d<double> const& region_normal,
                     double depth, // plane is moved along ray to depth
                     vpgl_perspective_camera<double> const& cam);
 
+  //: The 3-d region is fixed as in the case of the ground plane. The
+  // 3-d vertices are the intersection of the camera rays with the plane.
   static vsol_polygon_3d_sptr 
     region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d, 
-                    vgl_plane_3d<double> const& region_plane, //fixed plane
+                    vgl_plane_3d<double> const& region_plane,
                     vpgl_perspective_camera<double> const& cam);
 
-  //: clip ground plane region by horizon line. tolerance is 
-  // Returns false if:
-  // 1) region is not a ground plane
-  // 2) region needs splittng, since part lies above or on the horizon
-  // 3) throws an assertion if the region is entirely above the horizon
+  //: The direction vector that is parallel to the ground plane and
+  //  lies in the plane of the camera principal ray and the z axis. 
+  //  Provides the normal to the plane perpendicular to the gound plane
+  //  and orthogonal to the camera principal ray.
+  static vgl_vector_3d<double> 
+    perp_ortho_dir(vpgl_perspective_camera<double> const& cam);
+
+  //: changes the 2-d region so that points near the  horizon move 
+  //  to the specified max depth. The proximity scale factor defines
+  //  a threshold on "near" as a factor times the distance to the 
+  //  point closest to the horizon. This approach is likely to be 
+  //  fragile if the ground plane region has a convex shape.
   bool set_ground_plane_max_depth(double max_depth, 
                                   vpgl_perspective_camera<double> const& cam,
-                                  double tolerance);
+                                  double proximity_scale_factor);
 
-  bool update_depth_image(vil_image_view<double>& depth_image,
+  //: update the input depth image with *this* region
+  // currently assumes disjoint regions so that sorting on depth
+  // is not required.
+  bool update_depth_image(vil_image_view<float>& depth_image,
                           vpgl_perspective_camera<double> const& cam) const;
+
+  //: binary IO write
+  void b_write(vsl_b_ostream& os);
+
+  //: binary IO read
+  void b_read(vsl_b_istream& is);
 
  protected:
   orientation orient_type_;
@@ -102,4 +121,13 @@ class depth_map_region : public vbl_ref_count
   vsol_polygon_2d_sptr region_2d_;
   vsol_polygon_3d_sptr region_3d_;//:cached
 };
+
+#include <depth_map/depth_map_region_sptr.h>
+void vsl_b_write(vsl_b_ostream& os, const depth_map_region* rptr);
+
+void vsl_b_read(vsl_b_istream &is, depth_map_region*& rptr);
+
+void vsl_b_write(vsl_b_ostream& os, const depth_map_region_sptr& rptr);
+
+void vsl_b_read(vsl_b_istream &is, depth_map_region_sptr& rptr);
 #endif //depth_map_region_h_

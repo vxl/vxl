@@ -20,12 +20,12 @@
 // Instead it is necessary to express the depth map analytically in terms 
 // of regions whose depth is a parameter. For a given specification of depth,
 // the lateral extent of the region in 3-d is determined. In this 
-// initial version the scene will be represented by a ground plane and
+// initial version, the scene is represented by a ground plane and
 // regions perpendicular to the ground plane and the viewing direction,
-// bounded by occluding contours. By convention, the camera principal
-// ray is along the world Y axis but can be inclined with respect to the
-// ground plane. The image can be rotated about the principal ray as well.
-// These orientations are defined by the camera model for the image.
+//
+// A camera is required to specify the depth map, which is rendered 
+// for that camera view.
+//
 #include <vcl_vector.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
@@ -35,23 +35,52 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_limits.h>
 #include <vcl_map.h>
-class depth_map_scene
+#include <vbl/vbl_ref_count.h>
+#include <vsl/vsl_binary_io.h>
+class depth_map_scene : public vbl_ref_count
 {
  public:
   depth_map_scene() : ni_(0), nj_(0), ground_plane_(0)
   {}
 
+  //: ni and nj are the required image dimensions
   depth_map_scene(unsigned ni, unsigned nj) :
     ni_(ni), nj_(nj), ground_plane_(0) {}
 
   depth_map_scene(unsigned ni, unsigned nj, 
                   vpgl_perspective_camera<double> const& cam,
                   depth_map_region_sptr const& ground_plane,
+                  depth_map_region_sptr const& sky,
                   vcl_vector<depth_map_region_sptr> const& scene_regions);
+  //: accessors
+  unsigned ni() const {return ni_;}
+  unsigned nj() const {return nj_;}
+  depth_map_region_sptr ground_plane() const {return ground_plane_;}
+  depth_map_region_sptr sky() const {return sky_;}
+  vcl_vector<depth_map_region_sptr> scene_regions() const;
+  //: set members
+  void set_camera(vpgl_perspective_camera<double> const& cam){cam_ = cam;}
+  void set_ground_plane(vsol_polygon_2d_sptr ground_plane);
+  void set_sky(vsol_polygon_2d_sptr ground_plane);
 
-  void set_ground_plane(vsol_polygon_2d_sptr ground_plane,
-                        double min_distance, double max_distance);
+  //: set the scene depth of a movable plane. returns false if plane is fixed
+  bool set_depth(double depth, vcl_string const& name);
 
+  //: set the maximum depth of the ground plane
+  // for example the depth can be limited by the curvature of the Earth
+  // proximity scale factor is with respect to the closest ground plane 
+  // point to the horizon. That is, points less than scale * distance to 
+  // closest point are moved to max_depth
+  void set_ground_plane_max_depth(double max_depth, 
+                                  double proximity_scale_factor = 3.0);
+
+  //:add a region orthogonal to the ground plane and perpendicular to 
+  // the plane containing the principal ray and the z axis
+  void add_ortho_perp_region(vsol_polygon_2d_sptr const& region,
+                             double min_distance, double max_distance,
+                             vcl_string name);
+                             
+  //: add a region with an arbitrary orientation (not currently used)
   void add_region(vsol_polygon_2d_sptr const& region,
                   vgl_vector_3d<double> plane_normal,
                   double min_distance,
@@ -59,12 +88,29 @@ class depth_map_scene
                   vcl_string name,
                   depth_map_region::orientation orient);
 
-  vil_image_view<double> depth_map();
+  //: return a depth map of distance from the camera
+  vil_image_view<float> depth_map();
+
+  //: binary IO write
+  void b_write(vsl_b_ostream& os);
+
+  //: binary IO read
+  void b_read(vsl_b_istream& is);
+
   
  protected:
   unsigned ni_, nj_;//: depth map dimensions
   vcl_map<vcl_string, depth_map_region_sptr> scene_regions_;
   depth_map_region_sptr ground_plane_;
+  depth_map_region_sptr sky_;
   vpgl_perspective_camera<double> cam_;
 };
+#include <depth_map/depth_map_scene_sptr.h>
+void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* sptr);
+
+void vsl_b_read(vsl_b_istream &is, depth_map_scene*& sptr);
+
+void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& sptr);
+
+void vsl_b_read(vsl_b_istream &is, depth_map_scene_sptr& sptr);
 #endif //depth_map_scene_h_
