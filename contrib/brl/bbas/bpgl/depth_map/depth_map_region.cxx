@@ -180,7 +180,7 @@ move_to_depth(vgl_point_2d<double> const& img_pt, double max_depth,
               vgl_plane_3d<double> const& region_plane)
 {
   vgl_ray_3d<double> ray = cam.backproject_ray(img_pt);
-  vgl_vector_3d<double> pray = normalize(cam.principal_axis());
+  vgl_vector_3d<double> pray = normalized(cam.principal_axis());
   vgl_vector_3d<double> prxy(pray.x(), pray.y(), 0.0);
   double prxy_mag = prxy.length();
   vgl_point_3d<double> p3d, org = ray.origin();
@@ -197,7 +197,7 @@ move_to_depth(vgl_point_2d<double> const& img_pt, double max_depth,
 #endif
   double k = (max_depth - depth)/prxy_mag;
   // project into image
-  vgl_vector_3d<double> v3dn = normalize(v3d);
+  vgl_vector_3d<double> v3dn = normalized(v3d);
   vgl_vector_3d<double> vmove =
     k*vgl_vector_3d<double>(v3dn.x(), v3dn.y(), 0.0);
   vgl_point_3d<double> pmoved_3d = p3d+vmove;
@@ -222,7 +222,7 @@ set_ground_plane_max_depth(double max_depth,
 
   // first check if the polygon is entirely above the horizion
   // shouldn't happen
-  vgl_vector_3d<double> pray = 100.0*normalize(cam.principal_axis());
+  vgl_vector_3d<double> pray = 100.0*normalized(cam.principal_axis());
   vgl_point_3d<double> on_gp(pray.x(), pray.y(), 0.0);
   vgl_point_3d<double> above_gp(pray.x(), pray.y(), 1.0);
   vgl_point_2d<double> p0(cam.project(on_gp));
@@ -276,7 +276,7 @@ bool depth_map_region::
 update_depth_image(vil_image_view<float>& depth_image,
                    vpgl_perspective_camera<double> const& cam) const
 {
-  vgl_vector_3d<double> pray = normalize(cam.principal_axis());
+  vgl_vector_3d<double> pray = normalized(cam.principal_axis());
   vgl_vector_3d<double> prxy(pray.x(), pray.y(), 0.0);
   vcl_vector<vgl_point_2d<double> > verts_2d;
   unsigned nverts = region_2d_->size();
