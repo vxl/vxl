@@ -80,6 +80,8 @@ bool depth_map_scene::set_depth(double depth, vcl_string const& name)
 {
   if (name == "sky" || name == "ground_plane")
     return false;
+  if(scene_regions_.find(name) == scene_regions_.end())
+    return false;
   depth_map_region_sptr r = scene_regions_[name];
   if (!r) return false;
   if (r->orient_type() != depth_map_region::VERTICAL)
