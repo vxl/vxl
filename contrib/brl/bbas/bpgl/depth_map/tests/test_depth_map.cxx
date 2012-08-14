@@ -60,7 +60,7 @@ static void test_depth_map()
   vcl_string name =  "vert_perp";
   depth_map_scene dms(ni, nj, cam, gpr, 0, vcl_vector<depth_map_region_sptr>());
   dms.add_ortho_perp_region(vp, min_depth, max_depth, name);
-  bool success = dms.set_depth(depth, name);
+  /* bool success = */ dms.set_depth(depth, name);
 
   vsl_b_ofstream os("./temp.bin");
   vsl_b_write(os, gpr);
