@@ -74,8 +74,12 @@ read_camera(vcl_string cam_path, vcl_string subtype,
 #ifdef DEBUG
     vcl_cout << pcam << vcl_endl;
 #endif
+#if 0 // was returning a projective cam
     vpgl_proj_camera<double> cam(pcam.get_matrix());
     return cam.clone();
+#endif
+	// now returns a perspective cam
+    return new vpgl_perspective_camera<double>(pcam);
   }
   //must be an ASCII stream for projective camera
   vcl_ifstream cam_stream(cam_path.data());
