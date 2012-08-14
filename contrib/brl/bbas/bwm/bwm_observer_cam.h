@@ -23,7 +23,6 @@
 #include <vnl/vnl_math.h>
 
 #include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <depth_map/depth_map_scene.h>
 
 void bwm_project_meshes(vcl_vector<vcl_string> paths,
@@ -37,18 +36,18 @@ class bwm_observer_cam : public bwm_observer_vgui
   typedef bwm_observer_vgui base;
 
   bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, vcl_string cam_path)
-    : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
-      camera_(camera), cam_path_(cam_path), cam_adjusted_(false),
+  : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
+    camera_(camera), cam_path_(cam_path), cam_adjusted_(false),
     proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false), focal_length_(3000.0), cam_height_(1.6),horizon_(0),
     horizon_soview_(0)
-    { }
+  {}
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* /*n*/="unnamed")
-    : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
-      cam_adjusted_(false), camera_(0),
+  : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
+    camera_(0), cam_adjusted_(false),
     proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false), focal_length_(3000.0), cam_height_(1.6),horizon_(0),
     horizon_soview_(0)
-    {}
+  {}
 
   virtual ~bwm_observer_cam() { delete camera_; }
 
@@ -220,7 +219,7 @@ class bwm_observer_cam : public bwm_observer_vgui
 
  protected:
 
-  //: to compute direciton of sun.
+  //: to compute direction of sun.
   double sun_elev_angle_;
   double sun_azim_angle_;
   bool shadow_mode_;
