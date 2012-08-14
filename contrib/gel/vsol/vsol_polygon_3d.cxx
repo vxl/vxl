@@ -239,7 +239,7 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
   vgl_vector_3d<double> v2 (p2->x()-p0->x(),
                             p2->y()-p0->y(),
                             p2->z()-p0->z());
-  vgl_vector_3d<double> n = cross_product(v1,v2);// normal to the plane made by the vertices
+  vgl_vector_3d<double> n = normalize(cross_product(v1,v2));// normal to the plane made by the vertices
 
   for (unsigned int i=3;i<new_vertices.size();++i)
   {
@@ -251,7 +251,8 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
     if (dot_product(n,v2)!=0)
       return false;
 #endif
-    if (vcl_fabs(dot_product(n,v2))>tol)
+	double dp = vcl_fabs(dot_product(n,v2));
+    if (dp>tol)
       return false;
   }
 
