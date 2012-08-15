@@ -9,6 +9,8 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
+#include <bpgl/bpgl_camera_utils.h>
+#include <bpgl/algo/bpgl_transform_camera.h>
 
 //: Init function
 bool vpgl_create_perspective_camera_process_cons(bprb_func_process& pro)
@@ -267,3 +269,55 @@ bool vpgl_create_perspective_camera_process4(bprb_func_process& pro)
   return true;
 }
 
+// create camera from kml parameters
+bool vpgl_create_perspective_camera_from_kml_process_cons(bprb_func_process& pro)
+{
+  bool ok=false;
+  vcl_vector<vcl_string> input_types(10);
+  input_types[0] = "unsigned";// ni
+  input_types[1] = "unsigned";// nj
+  input_types[2] = "double";  // right field of view 
+  input_types[3] = "double";  // top field of view
+  input_types[4] = "double";  // altitude
+  input_types[5] = "double";  // heading
+  input_types[6] = "double";  // tilt
+  input_types[7] = "double";  // roll
+  input_types[8] = "double";  // x
+  input_types[9] = "double";  // y
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types(1);
+  output_types[0] = "vpgl_camera_double_sptr";  // output camera
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
+
+  return true;
+}
+
+//: Execute the process
+bool vpgl_create_perspective_camera_from_kml_process(bprb_func_process& pro)
+{
+   // Sanity check
+  if (!pro.verify_inputs()) {
+    vcl_cerr << "vpgl_create_perspective_camera_process4: Invalid inputs\n";
+    return false;
+  }
+  // get the inputs
+  unsigned ni = pro.get_input<unsigned>(0);
+  unsigned nj = pro.get_input<unsigned>(1);
+  double right_fov = pro.get_input<double>(2);
+  double top_fov = pro.get_input<double>(3);
+  double alt = pro.get_input<double>(4);
+  double heading = pro.get_input<double>(5);
+  double tilt = pro.get_input<double>(6);
+  double roll = pro.get_input<double>(7);
+  double cent_x = pro.get_input<double>(8);
+  double cent_y = pro.get_input<double>(9);
+
+  vpgl_perspective_camera<double> out_cam = bpgl_camera_utils::camera_from_kml((double)ni, (double)nj, right_fov, top_fov, 1.6, heading, tilt, roll);  
+  out_cam.set_camera_center(vgl_point_3d<double>(cent_x, cent_y, alt));
+  vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(out_cam);
+  pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
+  return true;
+}
