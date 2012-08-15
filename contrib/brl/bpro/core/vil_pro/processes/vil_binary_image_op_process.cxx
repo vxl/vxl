@@ -49,11 +49,11 @@ bool vil_binary_image_op_process(bprb_func_process& pro)
   vil_image_view<float> result;
 
   //test for operation
-  if(operation=="product")
+  if (operation=="product")
     vil_math_image_product(view_a, view_b, result);
-  else  if(operation=="max")
+  else if(operation=="max")
     vil_math_image_max(view_a, view_b, result);
-  else  if(operation=="sum")
+  else if(operation=="sum")
     vil_math_image_sum(view_a, view_b, result);
   else
     {
