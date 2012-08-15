@@ -91,12 +91,25 @@ class vpgl_geo_camera : public vpgl_camera<double>
   friend vcl_istream&  operator>>(vcl_istream& s, vpgl_geo_camera& p);
 
   //: returns the corresponding geographical coordinates for a given pixel position (i,j)
-  void img_to_wgs(const double i, const double j, const double z,
-                  double& lon, double& lat, double& elev) const;
+  //  the output global coord is wgs84
+  void img_to_global(const double i, const double j,
+                     double& lon, double& lat) const;
 
   //: returns the corresponding pixel position for given geographical coordinates
-  void wgs_to_img(const double lon, const double lat, const double gz,
-                  double& u, double& v) const;
+  //  the input global coord is wgs84
+  void global_to_img(const double lon, const double lat, const double elev,
+                     double& u, double& v) const;
+
+  //: returns the corresponding geographical coordinates for a given pixel position (i,j)
+  //  the output global coord is UTM: x east, y north 
+  void img_to_global_utm(const double i, const double j,
+                         double& x, double& y) const;
+
+  //: returns the corresponding pixel position for given geographical coordinates
+  //  the input global coord is UTM: x east, for y north
+  void global_utm_to_img(const double x, const double y, int zone, double elev, 
+                     double& u, double& v) const;
+
 
   //: returns the corresponding utm location for the given local position
   void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone); 
