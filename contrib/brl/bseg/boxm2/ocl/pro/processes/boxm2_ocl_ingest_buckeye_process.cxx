@@ -83,7 +83,7 @@ class alpha_update_from_opinion_functor
 
 namespace boxm2_ocl_ingest_buckeye_dem_process_globals
 {
-  const unsigned n_inputs_  = 6;
+  const unsigned n_inputs_  = 7;
   const unsigned n_outputs_ = 0;
   vcl_size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string options)
@@ -128,11 +128,19 @@ bool boxm2_ocl_ingest_buckeye_dem_process_cons(bprb_func_process& pro)
   input_types_[3] = "vcl_string"; // first return geotiff filename
   input_types_[4] = "vcl_string"; // last return geotiff filename
   input_types_[5] = "float"; // geoid height
+  input_types_[6] = "vpgl_camera_double_sptr"; // external geo cam
 
   // process has no outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  bool good =  pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
+ //set defaults inputs
+ brdb_value_sptr cam    = new brdb_value_t<vpgl_camera_double_sptr>(0);
+
+  pro.set_input(6, cam);
+
+  return good;
 }
 
 bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
@@ -155,7 +163,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   vcl_string a2_fname = pro.get_input<vcl_string>(4);
 
   double geoid_height = pro.get_input<float>(5);
-
+  vpgl_camera_double_sptr geocam_in = pro.get_input<vpgl_camera_double_sptr>(6);
   // load the images as resources
   vil_image_resource_sptr a1_res = vil_load_image_resource(a1_fname.c_str());
   vil_image_resource_sptr a2_res = vil_load_image_resource(a2_fname.c_str());
@@ -163,8 +171,15 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
 
   vpgl_geo_camera* geocam = 0;
-  vpgl_geo_camera::init_geo_camera(a1_res, lvcs, geocam);
-
+  if(geocam_in->is_a()=="vpgl_geo_camera")
+  {
+	  vcl_cout<<"LOADING EXTERNAL CAMERA "<<vcl_endl;
+	  geocam = static_cast<vpgl_geo_camera*>(geocam_in.ptr());
+  }
+  else
+  {
+	vpgl_geo_camera::init_geo_camera(a1_res, lvcs, geocam);
+  }
   // crop relevant image data into a view
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   vgl_box_2d<double> proj_bbox;
@@ -221,7 +236,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
         double lat,lon,el, x, y, z_first, z_last;
         double el_first = (*a1_view)(i,j) + geoid_height;
         double el_last = (*a2_view)(i,j) + geoid_height;
-        geocam->img_to_wgs(full_i, full_j, 0.0, lon, lat, el);
+        geocam->img_to_global(full_i, full_j,  lon, lat);
         lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);
         lvcs->global_to_local(lon,lat,el_last, vpgl_lvcs::wgs84, x, y, z_last);
 
@@ -311,9 +326,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     //write the image values to the buffer
     vul_timer transfer;
     bocl_mem * blk           = opencl_cache->get_block(*id);
-    //bocl_mem * alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
     bocl_mem * blk_info      = opencl_cache->loaded_block_info();
-
     bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
