@@ -7,6 +7,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_limits.h>
+#include <vcl_algorithm.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vsol/vsol_polygon_3d.h>
@@ -58,9 +59,9 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
 
 
 void depth_map_scene::
-  add_ortho_perp_region(vsol_polygon_2d_sptr const& region,
-                        double min_depth, double max_depth,
-                        vcl_string name)
+add_ortho_perp_region(vsol_polygon_2d_sptr const& region,
+                      double min_depth, double max_depth,
+                      vcl_string name)
 {
   vgl_vector_3d<double> normal_dir = depth_map_region::perp_ortho_dir(cam_);
   this->add_region(region, normal_dir, min_depth, max_depth, name,
@@ -101,76 +102,151 @@ set_ground_plane_max_depth(double max_depth,
 
 vil_image_view<float> depth_map_scene::depth_map()
 {
-  assert(ground_plane_);
   vil_image_view<float> depth(ni_, nj_);
   depth.fill(-1.0f); // depth is undefined
-  // add the ground plane to the depth image
 
-  bool good = ground_plane_->update_depth_image(depth, cam_);
-  good = good && sky_->update_depth_image(depth, cam_);
-
+  // do the sky first so other regions can paint over it if 
+  // necessary
+  bool good = true;
+  if(sky_)
+   good = sky_->update_depth_image(depth, cam_);
+  // then do the ground plane
+  if(ground_plane_)
+    good = good && ground_plane_->update_depth_image(depth, cam_);
   assert(good);
-  vcl_map<vcl_string, depth_map_region_sptr>::iterator rit = scene_regions_.begin();
-  for (; rit!= scene_regions_.end(); ++rit) {
-    good = (*rit).second->update_depth_image(depth, cam_);
-    assert(good);
-  }
+  vcl_vector<depth_map_region_sptr> regions;
+  vcl_map<vcl_string, depth_map_region_sptr>::iterator rit = 
+    scene_regions_.begin();
+  for(; rit != scene_regions_.end(); ++rit)
+    regions.push_back(rit->second);
+  //sort on depth order
+  vcl_sort(regions.begin(), regions.end(), compare_order());
+  // paint in reverse depth order so closer regions paint over more
+  // distant regions
+  int nr = regions.size();
+  for(int i = (nr-1); i>=0; --i)
+    good = good && (regions[i]->update_depth_image(depth, cam_));
+  assert(good);
   return depth;
 }
+//: the iterator at the start of depth search
+scene_depth_iterator depth_map_scene::begin(){
+  this->init_depths();
+  return scene_depth_iterator(this);
+}  
 
-//: binary IO write
-void depth_map_scene::b_write(vsl_b_ostream& os)
-{
-  vsl_b_write(os, ni_);
-  vsl_b_write(os, nj_);
-  vsl_b_write(os, scene_regions_);
-  vsl_b_write(os, ground_plane_);
-  vsl_b_write(os, sky_);
-  vsl_b_write(os, cam_);
-}
+//: the iterator at the end of depth search
+scene_depth_iterator depth_map_scene::end(){
+  scene_depth_iterator temp;
+  temp.set_end();
+  return temp;
+}  
 
-//: binary IO read
-void depth_map_scene::b_read(vsl_b_istream& is)
-{
-  vsl_b_read(is, ni_);
-  vsl_b_read(is, nj_);
-  vsl_b_read(is, scene_regions_);
-  vsl_b_read(is, ground_plane_);
-  vsl_b_read(is, sky_);
-  vsl_b_read(is, cam_);
-}
-
-void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* ds_ptr)
-{
-  if (ds_ptr ==0)
-    vsl_b_write(os, false);
-  else
-    vsl_b_write(os, true);
-  depth_map_scene* ds_non_const = const_cast<depth_map_scene*>(ds_ptr);
-  ds_non_const->b_write(os);
-}
-
-void vsl_b_read(vsl_b_istream &is, depth_map_scene*& ds_ptr)
-{
-  bool valid_ptr = false;
-  vsl_b_read(is, valid_ptr);
-  if (valid_ptr) {
-    ds_ptr = new depth_map_scene();
-    ds_ptr->b_read(is);
-    return;
+//: move vert regions to next depth configuration. returns false if done
+bool depth_map_scene::next_depth(){
+  bool increment_done = false;
+  unsigned nst = depth_states_.size();
+  for(unsigned i = 0; (i<nst)&&!increment_done; ++i){
+    if(!increment_done){
+      double depth = depth_states_[i]->depth();
+      depth_map_region_sptr& dmr = depth_states_[i];
+      double min_depth = dmr->min_depth();
+      double max_depth = dmr->max_depth();
+      double depth_inc = dmr->depth_inc();
+      depth += depth_inc;
+      bool depth_order = true;
+      if(i<(nst-1))
+        depth_order = depth <= depth_states_[i+1]->depth();
+      if(depth_order&& depth <= max_depth){
+        this->set_depth(depth, dmr->name());
+        increment_done = true;
+      }else
+        this->set_depth(min_depth, dmr->name());
+    }
   }
-  ds_ptr = 0;
+  return increment_done;
 }
+      
 
-void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& ds_ptr)
-{
-  depth_map_scene* ds=ds_ptr.ptr();
-  vsl_b_write(os, ds);
-}
 
-void vsl_b_read(vsl_b_istream &is, depth_map_scene_sptr& ds_ptr)
-{
-  depth_map_scene* ds=0;
-  vsl_b_read(is, ds);
-  ds_ptr = ds;
-}
+  //: initialize the movable depth configuration
+  void depth_map_scene::init_depths(){
+    depth_states_.clear();
+    vcl_map<vcl_string, depth_map_region_sptr>::iterator rit = 
+      scene_regions_.begin();
+    for(; rit !=     scene_regions_.end(); ++rit)
+      depth_states_.push_back(rit->second);
+    //sort on depth order
+    vcl_sort(depth_states_.begin(), depth_states_.end(), compare_order());
+    //set depths to min depth. May need to check if min depths are consistent
+    unsigned ns = depth_states_.size();
+    for(unsigned i = 0; i<ns; ++i)
+      this->set_depth(depth_states_[i]->min_depth(), depth_states_[i]->name());
+    //for now put in an assert on inconsistent depths
+    for(unsigned i = 1; i<ns; ++i)
+      assert(depth_states_[i]->depth()>=depth_states_[i-1]->depth());
+  }
+  void depth_map_scene::print_depth_states(){
+    unsigned ns = depth_states_.size();
+    for(unsigned i = 0; i<ns; ++i){
+      depth_map_region_sptr dmr = depth_states_[i];
+      vcl_cout << dmr->name() << ' ' << dmr->depth() << ' ';
+    }
+    vcl_cout << '\n';
+  }
+  //: binary IO write
+  void depth_map_scene::b_write(vsl_b_ostream& os)
+    {
+      vsl_b_write(os, ni_);
+      vsl_b_write(os, nj_);
+      vsl_b_write(os, scene_regions_);
+      vsl_b_write(os, ground_plane_);
+      vsl_b_write(os, sky_);
+      vsl_b_write(os, cam_);
+    }
+
+  //: binary IO read
+  void depth_map_scene::b_read(vsl_b_istream& is)
+    {
+      vsl_b_read(is, ni_);
+      vsl_b_read(is, nj_);
+      vsl_b_read(is, scene_regions_);
+      vsl_b_read(is, ground_plane_);
+      vsl_b_read(is, sky_);
+      vsl_b_read(is, cam_);
+    }
+
+  void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* ds_ptr)
+    {
+      if (ds_ptr ==0)
+        vsl_b_write(os, false);
+      else
+        vsl_b_write(os, true);
+      depth_map_scene* ds_non_const = const_cast<depth_map_scene*>(ds_ptr);
+      ds_non_const->b_write(os);
+    }
+
+  void vsl_b_read(vsl_b_istream &is, depth_map_scene*& ds_ptr)
+    {
+      bool valid_ptr = false;
+      vsl_b_read(is, valid_ptr);
+      if (valid_ptr) {
+        ds_ptr = new depth_map_scene();
+        ds_ptr->b_read(is);
+        return;
+      }
+      ds_ptr = 0;
+    }
+
+  void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& ds_ptr)
+    {
+      depth_map_scene* ds=ds_ptr.ptr();
+      vsl_b_write(os, ds);
+    }
+
+  void vsl_b_read(vsl_b_istream &is, depth_map_scene_sptr& ds_ptr)
+    {
+      depth_map_scene* ds=0;
+      vsl_b_read(is, ds);
+      ds_ptr = ds;
+    }

@@ -37,6 +37,8 @@
 #include <vcl_map.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
+
+class scene_depth_iterator;
 class depth_map_scene : public vbl_ref_count
 {
  public:
@@ -90,18 +92,84 @@ class depth_map_scene : public vbl_ref_count
   //: return a depth map of distance from the camera
   vil_image_view<float> depth_map();
 
+  //: the iterator at the start of depth search
+  scene_depth_iterator begin();  
+
+  //: the iterator at the end of depth search
+  scene_depth_iterator end();  
+
+  //: move vert regions to next depth configuration. returns false if done
+  bool next_depth();
+  //: initialize the movable depth configuration
+  void init_depths();
   //: binary IO write
   void b_write(vsl_b_ostream& os);
 
   //: binary IO read
   void b_read(vsl_b_istream& is);
-
+  //: debug utilities
+  void print_depth_states();
  protected:
   unsigned ni_, nj_; //: depth map dimensions
   vcl_map<vcl_string, depth_map_region_sptr> scene_regions_;
   depth_map_region_sptr ground_plane_;
   depth_map_region_sptr sky_;
   vpgl_perspective_camera<double> cam_;
+  vcl_vector<depth_map_region_sptr> depth_states_;
+};
+
+class scene_depth_iterator
+{
+ public:
+  scene_depth_iterator(depth_map_scene* scene = 0): scene_(scene),
+    end_(false){}
+
+  ~scene_depth_iterator(){}
+
+  depth_map_scene& operator*(){
+    return *scene_;
+  }
+
+  depth_map_scene* operator->(){
+    return scene_;
+  }
+  scene_depth_iterator& operator++(){
+    if(!scene_)
+      return *this;
+    if(!scene_->next_depth()){
+      end_ = true;
+      return *this;
+    }
+  }
+  scene_depth_iterator& operator+=(unsigned inc){
+    if(!scene_)
+      return *this;
+    for(unsigned k =0; k<inc; ++k){
+      if(!scene_->next_depth()){
+        end_ = true;
+      return *this;
+      }
+    }
+    return *this;
+  }
+      
+
+  bool operator==(const scene_depth_iterator& it){
+    return end_ == it.end();
+  }
+  bool operator!=(const scene_depth_iterator& it){
+    return !(end_ == it.end());
+  }
+  void set_end(){end_ = true;}
+  bool end() const{return end_;}
+ private:
+  bool end_;
+  depth_map_scene* scene_;
+};
+
+struct compare_order {
+  bool operator ()(depth_map_region_sptr ra, depth_map_region_sptr rb)
+  { return ra->order() < rb->order(); }
 };
 
 #include <depth_map/depth_map_scene_sptr.h>

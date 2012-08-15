@@ -108,17 +108,17 @@ static void test_depth_map()
   dms.set_sky(sky);
 
 #if 0
-  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/p1a_res06_dirtroad_031_scene_dummy.vsl";
+  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/colored_mounds_v1.vsl";
   vsl_b_ifstream tis(spath.c_str());
   depth_map_scene scin;
   scin.b_read(tis);
-  scin.set_depth(22000.0, "left_mount");
-  scin.set_depth(22000.0, "m1");
-  scin.set_depth(22000.0, "m2");
-  depth_map_region_sptr test_gp = scin.ground_plane();
-  scin.set_ground_plane_max_depth(10000.0);
-  vil_image_view<float> depth_view = scin.depth_map();
-  vil_save(depth_view, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_dummy.tiff");
+  scene_depth_iterator sit = scin.begin();
+  scene_depth_iterator dend = scin.end();
+  sit+=5;
+  if(sit != dend)
+    scin.print_depth_states();
+  vil_image_view<float> dv = sit->depth_map();
+  vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator.tiff");
 #endif
 }
 

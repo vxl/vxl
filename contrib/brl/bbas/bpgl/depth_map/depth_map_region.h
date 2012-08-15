@@ -13,6 +13,7 @@
 // units are in meters
 #include <vbl/vbl_ref_count.h>
 #include <vcl_limits.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -57,14 +58,17 @@ class depth_map_region : public vbl_ref_count
 
   void set_min_depth(double min_depth){min_depth_ = min_depth;}
   void set_max_depth(double max_depth){max_depth_ = max_depth;}
-
+  void set_depth_inc(double depth_inc){depth_inc_ = depth_inc;}
+  void set_order(unsigned order){order_ = order;}
   //:accessors
   double min_depth() const {return min_depth_;}
   double max_depth() const {return max_depth_;}
   vsol_polygon_3d_sptr region_3d() const {return region_3d_;}
   vsol_polygon_2d_sptr region_2d() const {return region_2d_;}
   double depth() const {return depth_;}
-
+  double depth_inc() const {return  depth_inc_;}
+  unsigned order() const {return order_;}
+  vsol_point_2d_sptr centroid_2d() const;
   //:
   //  depth is defined as distance on  the x-y plane in the direction
   //  of the camera ray through the region centroid. An assertion is
@@ -110,12 +114,14 @@ class depth_map_region : public vbl_ref_count
   void b_read(vsl_b_istream& is);
 
  protected:
+  unsigned order_;//depth order
   orientation orient_type_;
   vcl_string name_;
   // depth value for region centroid
   double depth_; //current depth estimate
   double min_depth_; // closest possible centroid depth
   double max_depth_; // furthest possible centroid depth
+  double depth_inc_; // step size from min to max depth
   vgl_plane_3d<double> region_plane_;
   vsol_polygon_2d_sptr region_2d_;
   vsol_polygon_3d_sptr region_3d_;//:cached

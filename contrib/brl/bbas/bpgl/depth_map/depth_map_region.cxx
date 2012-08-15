@@ -89,7 +89,7 @@ region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
 depth_map_region::depth_map_region() :
   orient_type_(NOT_DEF), name_(""), depth_(-1.0),
   min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
-  region_2d_(0), region_3d_(0)
+  depth_inc_(1.0), region_2d_(0), region_3d_(0), order_(0)
 {}
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -98,8 +98,8 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name,
                                    depth_map_region::orientation orient)
   : orient_type_(orient), name_(name), depth_(-1.0),
-    min_depth_(min_depth), max_depth_(max_depth),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0)
+    min_depth_(min_depth), max_depth_(max_depth), depth_inc_(1.0),
+    region_plane_(region_plane), region_2d_(region), region_3d_(0), order_(0)
 {
 }
 
@@ -108,8 +108,8 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name,
                                    depth_map_region::orientation orient)
   : orient_type_(orient), name_(name), depth_(-1.0),
-    min_depth_(-1.0), max_depth_(-1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0)
+    min_depth_(-1.0), max_depth_(-1.0),depth_inc_(1.0),
+    region_plane_(region_plane), region_2d_(region), region_3d_(0), order_(0)
 {
 }
 
@@ -118,10 +118,14 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
   : orient_type_(INFINT), name_(name), depth_(vcl_numeric_limits<double>::max()),
     min_depth_(vcl_numeric_limits<double>::max()),
     max_depth_(vcl_numeric_limits<double>::max()),
-    region_2d_(region), region_3d_(0)
+    depth_inc_(1.0),
+    region_2d_(region), region_3d_(0), order_(0)
 {
 }
-
+vsol_point_2d_sptr depth_map_region::centroid_2d() const{
+  if(region_2d_) return region_2d_->centroid();
+  return 0;
+}
 vgl_vector_3d<double> depth_map_region::
 perp_ortho_dir(vpgl_perspective_camera<double> const& cam)
 {
@@ -370,12 +374,14 @@ void vsl_b_read(vsl_b_istream &is, depth_map_region_sptr& dm_ptr)
 //: binary IO write
 void depth_map_region::b_write(vsl_b_ostream& os)
 {
+  vsl_b_write(os, order_);
   unsigned temp = static_cast<unsigned>(orient_type_);
   vsl_b_write(os, temp);
   vsl_b_write(os, name_);
   vsl_b_write(os, depth_);
   vsl_b_write(os, min_depth_);
   vsl_b_write(os, max_depth_);
+  vsl_b_write(os, depth_inc_);
   vsl_b_write(os, region_plane_);
   vsl_b_write(os, region_2d_.ptr());
   vsl_b_write(os, region_3d_.ptr());
@@ -384,6 +390,7 @@ void depth_map_region::b_write(vsl_b_ostream& os)
 //: binary IO read
 void depth_map_region::b_read(vsl_b_istream& is)
 {
+  vsl_b_read(is, order_);
   unsigned temp;
   vsl_b_read(is, temp);
   orient_type_ = static_cast<orientation>(temp);
@@ -391,6 +398,7 @@ void depth_map_region::b_read(vsl_b_istream& is)
   vsl_b_read(is, depth_);
   vsl_b_read(is, min_depth_);
   vsl_b_read(is, max_depth_);
+  vsl_b_read(is, depth_inc_);
   vsl_b_read(is, region_plane_);
   vsol_polygon_2d* r2d=0;
   vsl_b_read(is, r2d);
