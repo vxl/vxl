@@ -4,9 +4,69 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_algorithm.h>
 #include <boxm2/boxm2_util.h>
+#include <bpgl/bpgl_camera_utils.h>
+#include <vcl_cassert.h>
 
 #define RAD_FACTOR (vnl_math::pi_over_180) //radians per one degree
 #define AZ_STEP (vnl_math::pi_over_180) //step around the volume is 1 degree
+
+//: initialize cameras using parametrization in a photo overlay given by a kml file
+boxm2_trajectory::boxm2_trajectory(unsigned ni, unsigned nj, double right_fov, double top_fov, 
+                                    double alt, double heading, double tilt, double roll, 
+                                    double x_start, double y_start, double x_end, double y_end, 
+                                    double x_increment, double y_increment, double heading_increment)
+{
+  // Generate a regular sampling of viewpoints starting from (x_start, y_start)
+  for (double x = x_start; x < x_end; x += x_increment) {
+    for (double y = y_start; y < y_end; y += y_increment) {
+      for (double head = heading; head < heading + 360; head += heading_increment) {
+        vpgl_perspective_camera<double>* cam = 
+          new vpgl_perspective_camera<double>(bpgl_camera_utils::camera_from_kml((double)ni, (double)nj, right_fov, top_fov, alt, head, tilt, roll));          
+        cam->set_camera_center(vgl_point_3d<double>(x,y,alt));  
+        cams_.push_back(cam);
+      }
+    }
+  }
+  //initialize iterator for list
+  iter_ = cams_.begin();
+}
+
+//: initialize cameras using parametrization in a photo overlay given by a kml file
+//  use the x,y,z images to set camera centers, height of camera will be z value + alt
+boxm2_trajectory::boxm2_trajectory(vgl_box_3d<double> bb, vil_image_view<float>& x_img, vil_image_view<float>& y_img, vil_image_view<float>& z_img, 
+                                   unsigned ni, unsigned nj, double right_fov, double top_fov, double alt, double tilt, double roll, 
+                                   unsigned margin, unsigned i_start, unsigned j_start, unsigned i_inc, unsigned j_inc, double heading_start, double heading_increment)
+{
+  unsigned img_ni = x_img.ni();
+  unsigned img_nj = x_img.nj();
+  assert(img_ni == y_img.ni() && img_ni == z_img.ni() && img_nj == y_img.nj() && img_nj == z_img.nj());
+
+  assert(img_ni > margin && img_nj > margin);
+  img_ni -= margin;
+  img_nj -= margin;
+  if (i_start < margin) i_start = margin;
+  if (j_start < margin) j_start = margin;
+  for (double head = heading_start; head < 360; head += heading_increment) {
+    for (unsigned i = i_start; i < img_ni; i += i_inc) {
+      for (unsigned j = j_start; j < img_nj; j += j_inc) {
+        double x = x_img(i,j);
+        double y = y_img(i,j);
+        double z = z_img(i,j);
+        vcl_cout << "i: " << i << " j: " << j << " x: " << x << " y: " << y << " z: " << z << vcl_endl;
+        if (bb.contains(vgl_point_3d<double>(x,y,z))) {      
+            vpgl_perspective_camera<double>* cam = 
+            new vpgl_perspective_camera<double>(
+            bpgl_camera_utils::camera_from_kml((double)ni, (double)nj, right_fov, top_fov, alt, head, tilt, roll));          
+            cam->set_camera_center(vgl_point_3d<double>(x,y,z+alt));
+            cams_.push_back(cam);
+        }
+      }
+    }
+  }
+  
+  //initialize iterator for list
+  iter_ = cams_.begin();
+}
 
 
 //: Initializes cameras given an incline0, incline1, radius and bounding box/volume
