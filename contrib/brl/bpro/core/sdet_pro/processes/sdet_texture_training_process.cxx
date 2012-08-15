@@ -84,7 +84,7 @@ bool sdet_texture_training_process(bprb_func_process& pro)
       return false;
     }
   // if the last training image for the category then complete the 
-  // texton dictionary entry
+  // texton dictionary entry 
   if(compute_textons)
     if(!tc_ptr->compute_textons(category))
        return false;
