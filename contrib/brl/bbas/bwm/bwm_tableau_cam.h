@@ -145,6 +145,7 @@ class bwm_tableau_cam : public bwm_tableau_img
   void set_ground_plane(){ my_observer_->set_ground_plane();}
   void set_sky(){ my_observer_->set_sky();}
   void add_vertical_depth_region();
+  void edit_region_props();
   void save_depth_map_scene();
   void load_depth_map_scene();
  protected:

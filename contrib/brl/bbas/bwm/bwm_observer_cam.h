@@ -216,7 +216,8 @@ class bwm_observer_cam : public bwm_observer_vgui
                                  vcl_string name);
   void save_depth_map_scene(vcl_string const& path);
   void load_depth_map_scene(vcl_string const& path);
-
+  vcl_vector<depth_map_region_sptr> scene_regions();
+  void set_ground_plane_max_depth();
  protected:
 
   //: to compute direction of sun.

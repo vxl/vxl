@@ -19,6 +19,7 @@
 #include <vsol/vsol_polygon_3d_sptr.h>
 
 #include <vgui/vgui_dialog.h>
+#include <vgui/vgui_dialog_extensions.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
@@ -448,6 +449,55 @@ void bwm_tableau_cam::add_vertical_depth_region(){
   if (!vdval.ask())
     return;
   my_observer_->add_vertical_depth_region(min_depth, max_depth, name);
+}
+void bwm_tableau_cam::edit_region_props(){
+  vcl_vector<depth_map_region_sptr> regions = my_observer_->scene_regions();
+  // initialize region properties
+  static vcl_map<vcl_string, unsigned> depth_order;
+  static vcl_map<vcl_string, double> min_depth;
+  static vcl_map<vcl_string, double> max_depth;
+  static vcl_map<vcl_string, double> depth_inc;
+  for(vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+      rit != regions.end(); ++rit){
+    depth_order[(*rit)->name()] = (*rit)->order();
+    min_depth[(*rit)->name()] = (*rit)->min_depth();
+    max_depth[(*rit)->name()] = (*rit)->max_depth();
+    depth_inc[(*rit)->name()] = (*rit)->depth_inc();
+  }
+  vgui_dialog_extensions reg_dialog("Scene Region Editor");
+  vcl_vector<depth_map_region_sptr>::iterator gpit;
+  for(vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+    rit != regions.end(); ++rit){
+    vcl_string temp = (*rit)->name() + "  ";
+    reg_dialog.message(temp.c_str());
+    if((*rit)->name() == "sky" ){
+      reg_dialog.line_break();
+      continue;
+    }
+    if((*rit)->name() == "ground_plane" ){
+      reg_dialog.field("MaxDepth", max_depth[(*rit)->name()]);
+	  gpit = rit;
+      reg_dialog.line_break();
+      continue;
+    }
+    reg_dialog.field("Order", depth_order[(*rit)->name()]);
+    reg_dialog.field("MinDepth", min_depth[(*rit)->name()]);
+    reg_dialog.field("MaxDepth", max_depth[(*rit)->name()]);
+    reg_dialog.field("Depth Increment", depth_inc[(*rit)->name()]);
+    reg_dialog.line_break();
+  }
+  
+  if (!reg_dialog.ask())
+    return;
+  // update region properties
+  for(vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+      rit != regions.end(); ++rit){
+    (*rit)->set_order(depth_order[(*rit)->name()]);
+    (*rit)->set_min_depth(min_depth[(*rit)->name()]);
+    (*rit)->set_max_depth(max_depth[(*rit)->name()]);
+    (*rit)->set_depth_inc(depth_inc[(*rit)->name()]);
+  }
+  my_observer_->set_ground_plane_max_depth();
 }
 void bwm_tableau_cam::save_depth_map_scene(){
   vcl_string path = bwm_utils::select_file();
