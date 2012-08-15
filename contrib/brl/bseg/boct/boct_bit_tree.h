@@ -37,10 +37,10 @@ class boct_bit_tree
   }
 
   //: Returns index of data for given bit
-  int  get_data_index(int bit_index, bool is_random=false) const;
+  int get_data_index(int bit_index, bool is_random=false) const;
 
   //: returns bit index assuming root data is located at 0
-  int  get_relative_index(int bit_index) const;
+  int get_relative_index(int bit_index) const;
 
   //: traverse tree to get leaf index that contains point
   int traverse(const vgl_point_3d<double> p, int deepest=4);
