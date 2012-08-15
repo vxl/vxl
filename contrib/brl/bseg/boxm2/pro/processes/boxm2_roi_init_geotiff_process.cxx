@@ -64,7 +64,21 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
   unsigned int level = pro.get_input<unsigned>(3);
 
   vil_image_resource_sptr img_res = vil_load_image_resource(geotiff_fname.c_str());
-  vpgl_geo_camera* geocam=dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  vpgl_geo_camera* geocam = 0;
+  if (cam) {
+    vcl_cout << "Using the provided loaded camera.\n";
+    geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  } else {
+    vcl_cout << "Using the camera initialized from the image.\n";
+    vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
+    vpgl_geo_camera::init_geo_camera(img_res, lvcs, geocam);
+  }
+
+  if (!geocam) {
+    vcl_cerr << "In boxm2_roi_init_geotiff_process() - the geocam could not be initialized!\n";
+    return false;
+  }
+
   double e1,n1,e2,n2,elev,lat,lon;
   scene->lvcs().get_origin(lat, lon, elev);
   geocam->img_four_corners_in_utm(img_res->ni(), img_res->nj(), elev, e1, n1, e2, n2);
