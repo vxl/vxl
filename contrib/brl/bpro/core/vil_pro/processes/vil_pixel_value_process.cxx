@@ -76,6 +76,13 @@ bool vil_pixel_value_process(bprb_func_process& pro)
     vil_image_view<float>& inimg = *dynamic_cast<vil_image_view<float>* >(img.ptr());
     pro.set_output_val<float>(0, inimg(i,j));
     return true;
+  } 
+  else if (img->pixel_format() == VIL_PIXEL_FORMAT_BOOL)
+  {
+    vil_image_view<bool>& inimg = *dynamic_cast<vil_image_view<bool>* >(img.ptr());
+    float pixVal = inimg(i,j);
+    pro.set_output_val<float>(0, pixVal);
+    return true;
   }
 
   //otherwise it's messed up, return a null pointer
