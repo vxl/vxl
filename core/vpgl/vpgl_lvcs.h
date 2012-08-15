@@ -21,6 +21,17 @@
 //             Rajiv Gupta and Bill Hoffman
 //      with modifications by Rupert Curwen (1996)
 //             GE Corporate Research and Development
+//
+//
+// \verbatim
+//  Modifications
+//   Ozge C. Ozcanli  July 28 2012: added option to use UTM projection planes as local coordinate system
+//                                  origin point is still given in wgs84, 
+//                                  but it is converted to utm origin during local to global transformations and vice versa
+//                                  all the global coords are still either in wgs84, nad27n or wgs72
+//                                  if a utm zone is crossed 
+//
+// \endverbatim
 /////////////////////////////////////////////////////////////////////////////
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
@@ -33,14 +44,14 @@ class vpgl_lvcs : public vbl_ref_count
  public:
   enum LenUnits {FEET, METERS};
   enum AngUnits {RADIANS, DEG};
-  enum cs_names { wgs84 =0, nad27n, wgs72, NumNames};
+  enum cs_names { wgs84 =0, nad27n, wgs72, utm, NumNames};
   VPGL_DLL_DATA static const char* cs_name_strings[];
   static vpgl_lvcs::cs_names str_to_enum(const char*);
   // Constructors/Initializers/Destructors-------------------------------------
   vpgl_lvcs(double orig_lat=0,         //!< latitude of LVCS orig in radians.
             double orig_lon=0,         //!< longitude of LVCS  orig in radians.
             double orig_elev=0,        //!< elev of orig LVCS  in radians.
-            cs_names cs_name=wgs84,    //!< nad27n, wgs84, wgs72
+            cs_names cs_name=wgs84,    //!< nad27n, wgs84, wgs72 or utm
             double lat_scale=0,        //!< radians/meter along lat (custom geoid)
             double lon_scale=0,        //!< radians/meter along lon (custom geoid)
             AngUnits  ang_unit = DEG,  //!< angle units
@@ -68,13 +79,13 @@ class vpgl_lvcs : public vbl_ref_count
 
   // Utility Methods-----------------------------------------------------------
   void local_to_global(const double lx, const double ly, const double lz,
-                       cs_names cs_name,
+                       cs_names cs_name,        // this is output global cs
                        double& lon, double& lat, double& gz,
                        AngUnits output_ang_unit=DEG,
                        LenUnits output_len_unit=METERS);
 
   void global_to_local(const double lon, const double lat, const double gz,
-                       cs_names cs_name,
+                       cs_names cs_name,        // this is input global cs
                        double& lx, double& ly, double& lz,
                        AngUnits output_ang_unit=DEG,
                        LenUnits output_len_unit=METERS);
@@ -99,6 +110,8 @@ class vpgl_lvcs : public vbl_ref_count
   friend vcl_ostream& operator << (vcl_ostream& os, const vpgl_lvcs& local_coord_sys);
   friend vcl_istream& operator >> (vcl_istream& os, vpgl_lvcs& local_coord_sys);
   bool operator==(vpgl_lvcs const& r) const;
+
+  void get_utm_origin(double& x, double& y, double& elev, int& zone) const;
 
   // INTERNALS-----------------------------------------------------------------
 
@@ -126,6 +139,10 @@ class vpgl_lvcs : public vbl_ref_count
   double lox_;                //!< Origin in local co-ordinates.
   double loy_;                //!< Origin in local co-ordinates.
   double theta_;              //!< Direction of north in radians.
+  
+  double localUTMOrigin_X_East_;  // in meters 
+  double localUTMOrigin_Y_North_; // in meters 
+  int localUTMOrigin_Zone_;      
 };
 
 //: return the scale for lat lon and elevation
@@ -145,6 +162,14 @@ inline void vpgl_lvcs::get_origin(double& lat, double& lon, double& elev) const
 {
   lat = localCSOriginLat_;
   lon = localCSOriginLon_;
+  elev = localCSOriginElev_;
+}
+
+inline void vpgl_lvcs::get_utm_origin(double& x, double& y, double& elev, int& zone) const
+{
+  x = localUTMOrigin_X_East_;
+  y = localUTMOrigin_Y_North_;
+  zone = localUTMOrigin_Zone_;
   elev = localCSOriginElev_;
 }
 
