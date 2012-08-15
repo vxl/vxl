@@ -122,6 +122,12 @@ def scene_lvcs(scene):
   lvcs = dbvalue(lvcs_id, lvcs_type);
   return lvcs;
   
+def write_scene_to_kml(scene, kml_filename):
+  boxm2_batch.init_process("boxm2SceneKmlProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1,kml_filename);
+  boxm2_batch.run_process();
+  
   
 ###############################################
 # Model building stuff
@@ -319,6 +325,25 @@ def ingest_height_map_space(scene, cache,x_img,y_img,z_img, crust_thickness,devi
     return ;
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
+
+# refine count should not exceed 3 for scenes with max_octree_level=4
+def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=2):
+  scene.ingest_height_map(x_img, y_img, z_img);
+  # to save space by not refining empty voxels below surface voxels
+  scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
+  #scene.write_cache()
+
+  for i in range(0,refine_cnt,1):
+    scene.refine();
+    #scene.write_cache();
+    
+    scene.ingest_height_map(x_img,y_img,z_img);
+    scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
+    #scene.write_cache();
+
+  # ingest one more time to fill up the empty voxels below the surface (They are not refined but they still need to be occupied)
+  scene.ingest_height_map(x_img,y_img,z_img);
+  scene.write_cache();
     
 # Ingest a Buckeye-Style DEM, i.e. first return and last return image pair
 def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoid_height, device=None) :
@@ -426,8 +451,9 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
-
-    return exp_image;
+    (id,type) = boxm2_batch.commit_output(1);
+    vis_image = dbvalue(id,type);
+    return exp_image,vis_image;
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
  
@@ -670,6 +696,54 @@ def trajectory_direct(trajectory, index):
   cam = dbvalue(id,type)
   return cam
 
+def init_trajectory_regular(ni, nj, right_fov, top_fov, altitude, heading, tilt, roll, x_start, y_start, x_end, y_end, x_inc, y_inc, heading_inc) :
+  boxm2_batch.init_process("boxm2ViewInitRegularTrajectoryProcess");
+  boxm2_batch.set_input_unsigned(0, ni);
+  boxm2_batch.set_input_unsigned(1, nj);
+  boxm2_batch.set_input_double(2, right_fov);
+  boxm2_batch.set_input_double(3, top_fov);
+  boxm2_batch.set_input_double(4, altitude);
+  boxm2_batch.set_input_double(5, heading);
+  boxm2_batch.set_input_double(6, tilt);
+  boxm2_batch.set_input_double(7, roll);
+  boxm2_batch.set_input_double(8, x_start);
+  boxm2_batch.set_input_double(9, y_start);
+  boxm2_batch.set_input_double(10, x_end);
+  boxm2_batch.set_input_double(11, y_end);
+  boxm2_batch.set_input_double(12, x_inc);
+  boxm2_batch.set_input_double(13, y_inc);
+  boxm2_batch.set_input_double(14, heading_inc);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  trajectory = dbvalue(id,type);
+  return trajectory;
+
+# heading is incremented from 0 to 360 with heading_increment
+def init_trajectory_height_map(scene, x_img, y_img, z_img, ni, nj, right_fov, top_fov, altitude, tilt, roll, margin, i_start, j_start, i_inc, j_inc, heading_start, heading_inc) :
+  boxm2_batch.init_process("boxm2ViewInitHeightMapTrajectoryProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_from_db(1, x_img);
+  boxm2_batch.set_input_from_db(2, y_img);
+  boxm2_batch.set_input_from_db(3, z_img);
+  boxm2_batch.set_input_unsigned(4, ni);
+  boxm2_batch.set_input_unsigned(5, nj);
+  boxm2_batch.set_input_double(6, right_fov);
+  boxm2_batch.set_input_double(7, top_fov);
+  boxm2_batch.set_input_double(8, altitude);
+  boxm2_batch.set_input_double(9, tilt);
+  boxm2_batch.set_input_double(10, roll);
+  boxm2_batch.set_input_unsigned(11, margin);
+  boxm2_batch.set_input_unsigned(12, i_start);
+  boxm2_batch.set_input_unsigned(13, j_start);
+  boxm2_batch.set_input_unsigned(14, i_inc);
+  boxm2_batch.set_input_unsigned(15, j_inc);
+  boxm2_batch.set_input_double(16, heading_start);
+  boxm2_batch.set_input_double(17, heading_inc);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  trajectory = dbvalue(id,type);
+  return trajectory;
+
 ######################################################################
 # camera/scene methods
 #####################################################################
@@ -713,7 +787,7 @@ def scale_scene(scene, scale) :
   return scene; 
 
 # Create a scene from specified (lat,lon) corners and size of each voxel (in meters) at the finest scale, elev values are also in meters
-def create_scene_and_blocks(scene_dir, app_model, obs_model, lon1, lat1, elev1, lon2, lat2, elev2, vox_size, block_len_xy, block_len_z, num_bins=0, xml_name="scene"):
+def create_scene_and_blocks(scene_dir, app_model, obs_model, origin_lon, origin_lat, origin_elev, lon1, lat1, elev1, lon2, lat2, elev2, vox_size, block_len_xy, block_len_z, local_cs_name, num_bins=0, xml_name="scene"):
   boxm2_batch.init_process("boxm2CreateSceneAndBlocksProcess");
   boxm2_batch.set_input_string(0,scene_dir);
   boxm2_batch.set_input_string(1,app_model);
@@ -724,10 +798,14 @@ def create_scene_and_blocks(scene_dir, app_model, obs_model, lon1, lat1, elev1, 
   boxm2_batch.set_input_float(6,lon2);
   boxm2_batch.set_input_float(7,lat2);
   boxm2_batch.set_input_float(8,elev2);
-  boxm2_batch.set_input_float(9,vox_size);
-  boxm2_batch.set_input_float(10,block_len_xy);
-  boxm2_batch.set_input_float(11,block_len_z);
-  boxm2_batch.set_input_int(12,num_bins);
+  boxm2_batch.set_input_float(9,origin_lon);
+  boxm2_batch.set_input_float(10,origin_lat);
+  boxm2_batch.set_input_float(11,origin_elev);
+  boxm2_batch.set_input_float(12,vox_size);
+  boxm2_batch.set_input_float(13,block_len_xy);
+  boxm2_batch.set_input_float(14,block_len_z);
+  boxm2_batch.set_input_int(15,num_bins);
+  boxm2_batch.set_input_string(16,local_cs_name);
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   scene = dbvalue(scene_id, scene_type);
@@ -736,6 +814,15 @@ def create_scene_and_blocks(scene_dir, app_model, obs_model, lon1, lat1, elev1, 
   boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1, xml_name);
+  boxm2_batch.run_process();
+  
+# Distribute a larger scene region and its blocks to smaller square scenes with a given dimension
+def distribute_scene_blocks(scene, small_scene_dim, xml_output_path, xml_name_prefix):
+  boxm2_batch.init_process("boxm2DistributeSceneBlocksProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_double(1,small_scene_dim);
+  boxm2_batch.set_input_string(2,xml_output_path);
+  boxm2_batch.set_input_string(3,xml_name_prefix);
   boxm2_batch.run_process();
   
 # Create multi block scene - params is a hash of scene parameters
