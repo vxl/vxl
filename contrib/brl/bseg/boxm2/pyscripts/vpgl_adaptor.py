@@ -46,6 +46,23 @@ def create_perspective_camera( scale, ppoint, center, look_pt, up ) :
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam;
+  
+def create_perspective_camera_from_kml( ni, nj, right_fov, top_fov, altitude, heading, tilt, roll, cent_x, cent_y) :
+  boxm2_batch.init_process("vpglCreatePerspCameraFromKMLProcess");
+  boxm2_batch.set_input_unsigned(0, ni);
+  boxm2_batch.set_input_unsigned(1, nj);
+  boxm2_batch.set_input_double(2, right_fov);
+  boxm2_batch.set_input_double(3, top_fov);
+  boxm2_batch.set_input_double(4, altitude);
+  boxm2_batch.set_input_double(5, heading);
+  boxm2_batch.set_input_double(6, tilt);
+  boxm2_batch.set_input_double(7, roll);
+  boxm2_batch.set_input_double(8, cent_x);
+  boxm2_batch.set_input_double(9, cent_y);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cam = dbvalue(id,type);
+  return cam;
 
 #resize a camera from size0 =(ni,nj) to size1 (ni_1, nj_1)
 def resample_perspective_camera( cam, size0, size1 ):
@@ -287,6 +304,26 @@ def convert_to_local_coordinates(lvcs_filename,lat,lon,el):
     z = boxm2_batch.get_output_float(id)
     boxm2_batch.remove_data(id)
     return (x,y,z)
+
+# convert lat,lon,el to local coordinates
+def convert_to_local_coordinates2(lvcs,lat,lon,el):
+    boxm2_batch.init_process('vpglConvertToLocalCoordinatesProcess2')
+    boxm2_batch.set_input_from_db(0,lvcs)
+    boxm2_batch.set_input_float(1,lat)
+    boxm2_batch.set_input_float(2,lon)
+    boxm2_batch.set_input_float(3,el)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    x = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
+    (id,type) = boxm2_batch.commit_output(1)
+    y = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
+    (id,type) = boxm2_batch.commit_output(2)
+    z = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
+    return (x,y,z)
+
 
 # randomly sample a camera rotated around principle axis
 def perturb_camera(cam_in, angle, rng):
