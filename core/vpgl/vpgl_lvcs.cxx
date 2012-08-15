@@ -744,7 +744,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
              << " unrecognized." << '\n';
     local_lat = local_lon = local_elev = 0.0; // dummy initialisation
   }
-  vcl_cout << "local_lat: " << local_lat << " local_lon: " << local_lon << vcl_endl;
+  
   // Now compute the x, y, z of the point in local vetical CS
   //first convert the local_lat to radians and local cs origin to meters
   pointout_y =
