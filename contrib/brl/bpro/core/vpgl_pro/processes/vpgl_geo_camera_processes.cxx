@@ -181,16 +181,16 @@ bool vpgl_geo_footprint_process(bprb_func_process& pro)
   }
 
   double lon, lat, elev;
-  geocam->img_to_wgs(0,0,0,lon,lat,elev);
+  geocam->img_to_global(0,0,lon,lat);
   vnl_double_2 ul; ul[0] = lat; ul[1] = lon;
 
-  geocam->img_to_wgs(0,nj,0,lon,lat,elev);
+  geocam->img_to_global(0,nj,lon,lat);
   vnl_double_2 ur; ur[0] = lat; ur[1] = lon;
 
-  geocam->img_to_wgs(ni,0,0,lon,lat,elev);
+  geocam->img_to_global(ni,0,lon,lat);
   vnl_double_2 ll; ll[0] = lat; ll[1] = lon;
 
-  geocam->img_to_wgs(ni,nj,0,lon,lat,elev);
+  geocam->img_to_global(ni,nj,lon,lat);
   vnl_double_2 lr; lr[0] = lat; lr[1] = lon;
 
   vcl_string g_id = vul_file::strip_directory(geotiff_filename);
