@@ -106,7 +106,7 @@ bool vil_resample_process(bprb_func_process& pro)
       delete out_img; 
       return true; 
   }
-  else if(out_type=="rgba")    {
+  else if(out_type=="rgba") {
       vil_math_scale_values(*out_img, 255.0); 
       vil_image_view<vxl_byte>* bimage = new vil_image_view<vxl_byte>(tni, tnj, nplanes); 
       vil_convert_cast(*out_img, *bimage); 
