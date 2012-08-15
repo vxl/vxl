@@ -58,7 +58,8 @@ void boxm2_register::register_process()
 #endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_lvcs_process, "boxm2SceneLVCSProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_scene_and_blocks_process, "boxm2CreateSceneAndBlocksProcess");
-  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_distribute_scene_blocks_process, "boxm2DistributeSceneBlocksProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_kml_process, "boxm2SceneKmlProcess");
   REG_PROCESS_FUNC_CONS2(boxm2_add_aux_info_to_ply_process);
 
 }
