@@ -40,5 +40,7 @@ DECLARE_FUNC_CONS(boxm2_roi_init_geotiff_process);
 DECLARE_FUNC_CONS(boxm2_scene_lvcs_process);
 DECLARE_FUNC_CONS(boxm2_create_scene_and_blocks_process);
 DECLARE_FUNC_CONS(boxm2_add_aux_info_to_ply_process);
+DECLARE_FUNC_CONS(boxm2_scene_kml_process);
+DECLARE_FUNC_CONS(boxm2_distribute_scene_blocks_process);
 
 #endif
