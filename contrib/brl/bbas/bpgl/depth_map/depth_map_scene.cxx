@@ -100,19 +100,26 @@ set_ground_plane_max_depth(double max_depth,
                                               proximity_scale_factor);
 }
 
-vil_image_view<float> depth_map_scene::depth_map()
+vil_image_view<float> depth_map_scene::
+depth_map(unsigned log2_downsample_ratio)
 {
-  vil_image_view<float> depth(ni_, nj_);
+  double ratio = vcl_pow(2.0, static_cast<double>(log2_downsample_ratio));
+  double dni = static_cast<double>(ni_)/ratio, 
+    dnj = static_cast<double>(nj_)/ratio;
+  if(dni<2.0) dni = 2.0;
+  if(dnj<2.0) dnj = 2.0;
+  unsigned sni = static_cast<unsigned>(dni), snj = static_cast<unsigned>(dnj);
+  vil_image_view<float> depth(sni, snj);
   depth.fill(-1.0f); // depth is undefined
 
   // do the sky first so other regions can paint over it if 
   // necessary
   bool good = true;
   if(sky_)
-   good = sky_->update_depth_image(depth, cam_);
+   good = sky_->update_depth_image(depth, cam_, ratio);
   // then do the ground plane
   if(ground_plane_)
-    good = good && ground_plane_->update_depth_image(depth, cam_);
+    good = good && ground_plane_->update_depth_image(depth, cam_, ratio);
   assert(good);
   vcl_vector<depth_map_region_sptr> regions;
   vcl_map<vcl_string, depth_map_region_sptr>::iterator rit = 
@@ -125,7 +132,7 @@ vil_image_view<float> depth_map_scene::depth_map()
   // distant regions
   int nr = regions.size();
   for(int i = (nr-1); i>=0; --i)
-    good = good && (regions[i]->update_depth_image(depth, cam_));
+    good = good && (regions[i]->update_depth_image(depth, cam_, ratio));
   assert(good);
   return depth;
 }

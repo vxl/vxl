@@ -89,8 +89,8 @@ class depth_map_scene : public vbl_ref_count
                   vcl_string name,
                   depth_map_region::orientation orient);
 
-  //: return a depth map of distance from the camera
-  vil_image_view<float> depth_map();
+  //: return a depth map of distance from the camera. Downsample accordingly
+  vil_image_view<float> depth_map(unsigned log2_downsample_ratio);
 
   //: the iterator at the start of depth search. resets the depth_states_.
   scene_depth_iterator begin();

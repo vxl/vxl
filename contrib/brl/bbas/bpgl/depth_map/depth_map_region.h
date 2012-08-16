@@ -105,7 +105,8 @@ class depth_map_region : public vbl_ref_count
   // Currently assumes disjoint regions so that sorting on depth
   // is not required.
   bool update_depth_image(vil_image_view<float>& depth_image,
-                          vpgl_perspective_camera<double> const& cam) const;
+                          vpgl_perspective_camera<double> const& cam,
+                          double downsample_ratio = 1.0) const;
 
   //: binary IO write
   void b_write(vsl_b_ostream& os);

@@ -108,7 +108,7 @@ static void test_depth_map()
   vsol_polygon_2d_sptr sky = new vsol_polygon_2d(vertss);
   dms.set_sky(sky);
 
-#if 0
+#if 1
   vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/colored_mounds_v1.vsl";
   vsl_b_ifstream tis(spath.c_str());
   depth_map_scene scin;
@@ -118,7 +118,7 @@ static void test_depth_map()
   for(; sit != dend; ++sit)
     scin.print_depth_states();
 
-  vil_image_view<float> dv = sit->depth_map();
+  vil_image_view<float> dv = sit->depth_map(0);
   vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator.tiff");
 #endif
 }
