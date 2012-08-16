@@ -32,20 +32,20 @@ class boxm2_multi_refine
                                         bocl_mem_sptr& cl_output );
 
     //: refines trees in block
-    static float swap_data_per_block(boxm2_scene_sptr scene,
-                                     const boxm2_block_id& id,
-                                     int numTrees,
-                                     boxm2_opencl_cache* ocl_cache,
-                                     cl_command_queue& queue,
-                                     BlockMemMap& sizebuffs,
-                                     BlockMemMap& blockCopies,
-                                     BlockMemMap& newDatas,
-                                     BlockIntMap& newDataSizes,
-                                     bocl_mem_sptr cl_output,
-                                     bocl_mem_sptr lookup,
-                                     vcl_string data_type,
-                                     int  apptypesize,
-                                     bocl_mem_sptr prob_thresh );
+    static void swap_data_per_block(boxm2_scene_sptr scene,
+                                    const boxm2_block_id& id,
+                                    int numTrees,
+                                    boxm2_opencl_cache* ocl_cache,
+                                    cl_command_queue& queue,
+                                    BlockMemMap& sizebuffs,
+                                    BlockMemMap& blockCopies,
+                                    BlockMemMap& newDatas,
+                                    BlockIntMap& newDataSizes,
+                                    bocl_mem_sptr cl_output,
+                                    bocl_mem_sptr lookup,
+                                    vcl_string data_type,
+                                    int  apptypesize,
+                                    bocl_mem_sptr prob_thresh );
 
 
     //does in place, zero based cumulative sum on cpu, returns total size
