@@ -464,18 +464,27 @@ void bwm_tableau_cam::edit_region_props()
   static vcl_map<vcl_string, double> min_depth;
   static vcl_map<vcl_string, double> max_depth;
   static vcl_map<vcl_string, double> depth_inc;
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
-       rit != regions.end(); ++rit) {
-    depth_order[(*rit)->name()] = (*rit)->order();
-    min_depth[(*rit)->name()] = (*rit)->min_depth();
-    max_depth[(*rit)->name()] = (*rit)->max_depth();
-    depth_inc[(*rit)->name()] = (*rit)->depth_inc();
+  // for padding to align fields
+  unsigned max_string_size = 0;
+  for(vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+      rit != regions.end(); ++rit){
+    vcl_string& name  = (*rit)->name();
+    if(name.size()>max_string_size)
+      max_string_size = name.size();
+    depth_order[name] = (*rit)->order();
+    min_depth[name]   = (*rit)->min_depth();
+    max_depth[name]   = (*rit)->max_depth();
+    depth_inc[name]   = (*rit)->depth_inc();
   }
   vgui_dialog_extensions reg_dialog("Scene Region Editor");
   vcl_vector<depth_map_region_sptr>::iterator gpit;
   for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
        rit != regions.end(); ++rit) {
-    vcl_string temp = (*rit)->name() + "  ";
+    vcl_string temp = (*rit)->name();
+    // compute padding
+    int pad_cnt = max_string_size-temp.size();
+    for(int k = 0; k<pad_cnt; ++k)
+      temp += ' ';
     reg_dialog.message(temp.c_str()) ;
     if ((*rit)->name() == "sky" ) {
       reg_dialog.line_break();
@@ -490,7 +499,7 @@ void bwm_tableau_cam::edit_region_props()
     reg_dialog.field("Order", depth_order[(*rit)->name()]);
     reg_dialog.field("MinDepth", min_depth[(*rit)->name()]);
     reg_dialog.field("MaxDepth", max_depth[(*rit)->name()]);
-    reg_dialog.field("Depth Increment", depth_inc[(*rit)->name()]);
+    reg_dialog.field("Depth Inc.", depth_inc[(*rit)->name()]);
     reg_dialog.line_break();
   }
 
@@ -499,10 +508,11 @@ void bwm_tableau_cam::edit_region_props()
   // update region properties
   for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
        rit != regions.end(); ++rit) {
-    (*rit)->set_order(depth_order[(*rit)->name()]);
-    (*rit)->set_min_depth(min_depth[(*rit)->name()]);
-    (*rit)->set_max_depth(max_depth[(*rit)->name()]);
-    (*rit)->set_depth_inc(depth_inc[(*rit)->name()]);
+    vcl_string& name = (*rit)->name();
+    (*rit)->set_order(depth_order[name]);
+    (*rit)->set_min_depth(min_depth[name]);
+    (*rit)->set_max_depth(max_depth[name]);
+    (*rit)->set_depth_inc(depth_inc[name]);
   }
   my_observer_->set_ground_plane_max_depth();
 }
