@@ -180,7 +180,7 @@ bool vpgl_geo_footprint_process(bprb_func_process& pro)
     return false;
   }
 
-  double lon, lat, elev;
+  double lon, lat;
   geocam->img_to_global(0,0,lon,lat);
   vnl_double_2 ul; ul[0] = lat; ul[1] = lon;
 
