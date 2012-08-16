@@ -6,6 +6,7 @@ TESTMAIN := test_driver.cxx
 
 TESTS += test_poly_radial_distortion.cxx
 TESTS += test_segmented_rolling_shutter_camera.cxx
+TESTS += test_kml_camera.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx
