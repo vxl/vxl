@@ -171,14 +171,14 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
 
   vpgl_geo_camera* geocam = 0;
-  if(geocam_in->is_a()=="vpgl_geo_camera")
+  if (geocam_in->is_a()=="vpgl_geo_camera")
   {
-	  vcl_cout<<"LOADING EXTERNAL CAMERA "<<vcl_endl;
-	  geocam = static_cast<vpgl_geo_camera*>(geocam_in.ptr());
+    vcl_cout<<"LOADING EXTERNAL CAMERA"<<vcl_endl;
+    geocam = static_cast<vpgl_geo_camera*>(geocam_in.ptr());
   }
   else
   {
-	vpgl_geo_camera::init_geo_camera(a1_res, lvcs, geocam);
+    vpgl_geo_camera::init_geo_camera(a1_res, lvcs, geocam);
   }
   // crop relevant image data into a view
   vgl_box_3d<double> scene_bbox = scene->bounding_box();

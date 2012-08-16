@@ -420,8 +420,10 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
   }
  return bwm_tableau_img::handle(e);
 }
+
 // ======================   camera calibration methods =============
-void bwm_tableau_cam::set_focal_length(){
+void bwm_tableau_cam::set_focal_length()
+{
   static double focal_length = 3000.0;
   vgui_dialog fval("Set Focal Length");
   fval.field("Focal Length (pixel units)", focal_length);
@@ -429,7 +431,9 @@ void bwm_tableau_cam::set_focal_length(){
     return;
   my_observer_->set_focal_length(focal_length);
 }
-void bwm_tableau_cam::set_cam_height(){
+
+void bwm_tableau_cam::set_cam_height()
+{
   static double cam_height = 1.6;
   vgui_dialog hval("Set Camera Center Height");
   hval.field("Height (m)", cam_height);
@@ -438,7 +442,8 @@ void bwm_tableau_cam::set_cam_height(){
   my_observer_->set_cam_height(cam_height);
 }
 
-void bwm_tableau_cam::add_vertical_depth_region(){
+void bwm_tableau_cam::add_vertical_depth_region()
+{
   static double min_depth = 0.0;
   static double max_depth = 100.0;
   static vcl_string name = "";
@@ -450,15 +455,17 @@ void bwm_tableau_cam::add_vertical_depth_region(){
     return;
   my_observer_->add_vertical_depth_region(min_depth, max_depth, name);
 }
-void bwm_tableau_cam::edit_region_props(){
+
+void bwm_tableau_cam::edit_region_props()
+{
   vcl_vector<depth_map_region_sptr> regions = my_observer_->scene_regions();
   // initialize region properties
   static vcl_map<vcl_string, unsigned> depth_order;
   static vcl_map<vcl_string, double> min_depth;
   static vcl_map<vcl_string, double> max_depth;
   static vcl_map<vcl_string, double> depth_inc;
-  for(vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
-      rit != regions.end(); ++rit){
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+       rit != regions.end(); ++rit) {
     depth_order[(*rit)->name()] = (*rit)->order();
     min_depth[(*rit)->name()] = (*rit)->min_depth();
     max_depth[(*rit)->name()] = (*rit)->max_depth();
@@ -466,17 +473,17 @@ void bwm_tableau_cam::edit_region_props(){
   }
   vgui_dialog_extensions reg_dialog("Scene Region Editor");
   vcl_vector<depth_map_region_sptr>::iterator gpit;
-  for(vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
-    rit != regions.end(); ++rit){
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+       rit != regions.end(); ++rit) {
     vcl_string temp = (*rit)->name() + "  ";
-    reg_dialog.message(temp.c_str());
-    if((*rit)->name() == "sky" ){
+    reg_dialog.message(temp.c_str()) ;
+    if ((*rit)->name() == "sky" ) {
       reg_dialog.line_break();
       continue;
     }
-    if((*rit)->name() == "ground_plane" ){
+    if ((*rit)->name() == "ground_plane" ) {
       reg_dialog.field("MaxDepth", max_depth[(*rit)->name()]);
-	  gpit = rit;
+      gpit = rit;
       reg_dialog.line_break();
       continue;
     }
@@ -486,12 +493,12 @@ void bwm_tableau_cam::edit_region_props(){
     reg_dialog.field("Depth Increment", depth_inc[(*rit)->name()]);
     reg_dialog.line_break();
   }
-  
+
   if (!reg_dialog.ask())
     return;
   // update region properties
-  for(vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
-      rit != regions.end(); ++rit){
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+       rit != regions.end(); ++rit) {
     (*rit)->set_order(depth_order[(*rit)->name()]);
     (*rit)->set_min_depth(min_depth[(*rit)->name()]);
     (*rit)->set_max_depth(max_depth[(*rit)->name()]);
@@ -499,14 +506,16 @@ void bwm_tableau_cam::edit_region_props(){
   }
   my_observer_->set_ground_plane_max_depth();
 }
-void bwm_tableau_cam::save_depth_map_scene(){
+
+void bwm_tableau_cam::save_depth_map_scene()
+{
   vcl_string path = bwm_utils::select_file();
   my_observer_->save_depth_map_scene(path);
 }
 
-void bwm_tableau_cam::load_depth_map_scene(){
+void bwm_tableau_cam::load_depth_map_scene()
+{
   vcl_string path = bwm_utils::select_file();
   my_observer_->load_depth_map_scene(path);
 }
-// Private Methods
 
