@@ -1,13 +1,13 @@
-// This is brl/bpro/core/vpgl_pro/processes/vpgl_persp_cam_from_scene_process.cxx
+// This is brl/bpro/core/vpgl_pro/processes/vpgl_persp_cam_from_photo_overlay_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for computing a perspective camera using Google Earth photo overlay parameters:
-//            Heading, Tilt, Roll, Lat, Lon, altitude, Horizontal and Vertical Field of View 
+// \brief  A process for computing a perspective camera using Google Earth photo overlay parameters
+// Viz. Tilt, Roll, Lat, Lon, altitude, Horizontal and Vertical Field of View
 //
 // \author Ozge C. Ozcanli
 // \date June 06, 2012
 
-#include <bprb/bprb_func_process.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vcl_cmath.h>
@@ -20,11 +20,12 @@ namespace vpgl_persp_cam_from_photo_overlay_process_globals
   const unsigned n_inputs_ = 11;
   const unsigned n_outputs_ = 1;
 }
+
 bool vpgl_persp_cam_from_photo_overlay_process_cons(bprb_func_process& pro)
 {
   using namespace vpgl_persp_cam_from_photo_overlay_process_globals;
 
-  //process takes 1 input, the scene
+  //process takes 11 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vpgl_lvcs_sptr";
   input_types_[1] = "float"; // heading
@@ -33,11 +34,11 @@ bool vpgl_persp_cam_from_photo_overlay_process_cons(bprb_func_process& pro)
   input_types_[4] = "float"; // cam center latitude
   input_types_[5] = "float"; // cam center longitude
   input_types_[6] = "float"; // cam center altitude (above sea level)
-  input_types_[7] = "float"; // horizontal field of view 
-  input_types_[8] = "float"; // vertical field of view 
+  input_types_[7] = "float"; // horizontal field of view
+  input_types_[8] = "float"; // vertical field of view
   input_types_[9] = "unsigned"; // ni
   input_types_[10] = "unsigned"; // nj
-  
+
   // process has 1 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";// longitude
@@ -66,12 +67,12 @@ bool vpgl_persp_cam_from_photo_overlay_process(bprb_func_process& pro)
   double fov_ver = pro.get_input<float>(8)*deg_to_rad;
   unsigned ni = pro.get_input<unsigned>(9);
   unsigned nj = pro.get_input<unsigned>(10);
-  
+
   double x,y,z;
   lvcs->global_to_local(lon, lat, alt, lvcs->get_cs_name(), x,y,z);
   vgl_homg_point_3d<double> camera_center(x,y,z);
   vcl_cout << "camera center in local coords: " << camera_center << vcl_endl;
-/*
+#if 0
   vgl_point_3d<double> cam_cent(x,y,z);
   //vgl_point_3d<double> look_at(x,y,0);
   lvcs->global_to_local(lon, lat+1, alt, lvcs->get_cs_name(), x,y,z);
@@ -102,7 +103,7 @@ bool vpgl_persp_cam_from_photo_overlay_process(bprb_func_process& pro)
   double focal_length = ni/(2.0 * vcl_tan(fov_hor/2.0f));
   double focal_length2 = nj/(2.0 * vcl_tan(fov_ver/2.0f));
   vcl_cout << "focal length: " << focal_length << " focal_length 2: " << focal_length2 << vcl_endl;
-*/
+#endif
   double focal_length = 1500;
   vnl_double_3x3 M;
   M[0][0] = focal_length; M[0][1] = 0; M[0][2] = ni/2;
@@ -110,14 +111,14 @@ bool vpgl_persp_cam_from_photo_overlay_process(bprb_func_process& pro)
   M[2][0] = 0; M[2][1] = 0; M[2][2] = 1;
   vpgl_calibration_matrix<double> K(M);
   vcl_cout << "initial K:\n" << M << vcl_endl;
-
-  //vgl_rotation_3d<double> I; // no rotation initially
-  //vpgl_perspective_camera<double> camera(K, camera_center,I);
-  //camera.look_at(vgl_homg_point_3d<double>(look_at), up_vector);
-
+#if 0
+  vgl_rotation_3d<double> I; // no rotation initially
+  vpgl_perspective_camera<double> camera(K, camera_center,I);
+  camera.look_at(vgl_homg_point_3d<double>(look_at), up_vector);
+#endif
   vgl_point_3d<double> scene_min(0,0,0);vgl_point_3d<double> scene_max(2400,1400,200);
   vgl_box_3d<double> box(scene_min, scene_max);
-  vpgl_perspective_camera<double> camera = 
+  vpgl_perspective_camera<double> camera =
     bpgl_camera_from_box::persp_camera_from_box(box, camera_center, ni, nj);
 
   vcl_cout << "final cam:\n" << camera << vcl_endl;
