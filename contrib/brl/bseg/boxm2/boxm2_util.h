@@ -67,6 +67,11 @@ class boxm2_util
     //verifies that a scene has a valid appearance, spits out data type and appearance type size
     static bool verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_string>&valid_types, vcl_string& data_type, int& appTypeSize );
 
+    static bool get_point_index(boxm2_scene_sptr& scene,
+                                boxm2_cache_sptr& cache,
+                                const vgl_point_3d<double>& point,
+                                boxm2_block_id& bid, int& data_index, float& side_len);
+
     static bool query_point(boxm2_scene_sptr& scene,
                             boxm2_cache_sptr& cache,
                             const vgl_point_3d<double>& point,

@@ -19,12 +19,14 @@
 
 //vil includes
 #include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
 
 //vcl io stuff
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_algorithm.h>
+#include <vcl_limits.h>
 
 //vul file includes
 #include <vul/vul_file.h>
@@ -460,10 +462,14 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
       floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
       vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
     }
+    //: try unsigned short which is vxl_uint_16
     else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
     {
       floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-      vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)0,(unsigned short)65535,  0.0f, 1.0f); // hardcoded to be fixed.
+      unsigned short max = vcl_numeric_limits<unsigned short>::max();
+      vcl_cout << "casting vxl_uint_16 image, max is " << max << vcl_endl;
+      vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)0,max, 0.0f, 1.0f); 
+      vil_save(*floatimg, "floatimg.tiff");
     }
     else if (vil_image_view<float> *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
     {
@@ -533,27 +539,40 @@ bool boxm2_util::verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_stri
   return foundDataType;
 }
 
-
-bool boxm2_util::query_point(boxm2_scene_sptr& scene,
-                             boxm2_cache_sptr& cache,
-                             const vgl_point_3d<double>& point,
-                             float& prob, float& intensity)
+bool boxm2_util::get_point_index(boxm2_scene_sptr& scene,
+                                 boxm2_cache_sptr& cache,
+                                 const vgl_point_3d<double>& point,
+                                 boxm2_block_id& bid, int& data_index, float& side_len)
 {
   vgl_point_3d<double> local;
-  boxm2_block_id id;
-  if (!scene->contains(point, id, local))
+  if (!scene->contains(point, bid, local))
     return false;
 
   int index_x=(int)vcl_floor(local.x());
   int index_y=(int)vcl_floor(local.y());
   int index_z=(int)vcl_floor(local.z());
-  boxm2_block * blk=cache->get_block(id);
-  boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
+  boxm2_block * blk=cache->get_block(bid);
+  boxm2_block_metadata mdata = scene->get_block_metadata_const(bid);
   vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
   boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
   int bit_index=tree.traverse(local);
   int depth=tree.depth_at(bit_index);
-  int data_offset=tree.get_data_index(bit_index,false);
+  data_index=tree.get_data_index(bit_index,false);
+  side_len=static_cast<float>(mdata.sub_block_dim_.x()/((float)(1<<depth)));
+  return true;
+}
+
+
+bool boxm2_util::query_point(boxm2_scene_sptr& scene,
+                             boxm2_cache_sptr& cache,
+                             const vgl_point_3d<double>& point,
+                             float& prob, float& intensity)
+{ 
+  boxm2_block_id id;
+  int data_offset; float side_len;
+  if (!boxm2_util::get_point_index(scene,cache,point,id,data_offset,side_len))
+    return false;
+
 #if 0
   data_offset += 0x10000*((int)treebits[12]*0x100+(int)treebits[13]);
 #endif
@@ -562,7 +581,6 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
 
   float alpha=alpha_data->data()[data_offset];
 
-  float side_len=static_cast<float>(mdata.sub_block_dim_.x()/((float)(1<<depth)));
 #ifdef DEBUG
   vcl_cout<<" DATA OFFSET "<<side_len<<vcl_endl;
 #endif
