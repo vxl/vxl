@@ -40,10 +40,12 @@ vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays)
       if (d>max_dist) {
         max_dist = d;
         max_ray_origin_ = org;
+        max_ray_direction_ = rays[v][u].direction();
       }
       if (d<min_dist) {
         min_dist = d;
         min_ray_origin_ = org;
+        min_ray_direction_ = rays[v][u].direction();
       }
     }
   // form the pyramid for efficient projection

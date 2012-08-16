@@ -66,9 +66,11 @@ class vpgl_generic_camera : public vpgl_camera<T>
 
   //: the nearest ray origin to the coordinate origin
   vgl_point_3d<T> min_ray_origin() {return min_ray_origin_;}
+  vgl_vector_3d<T> min_ray_direction() {return min_ray_direction_;}
 
   //: the furthest ray origin from the coordinate origin
   vgl_point_3d<T> max_ray_origin() {return max_ray_origin_;}
+  vgl_vector_3d<T> max_ray_direction() {return max_ray_direction_;}
 
   //: debug function
   void print_orig(int level);
@@ -97,8 +99,10 @@ class vpgl_generic_camera : public vpgl_camera<T>
 
   //: ray origin bound to support occlusion reasoning
   vgl_point_3d<T> min_ray_origin_;
+  vgl_vector_3d<T> min_ray_direction_;
   //: ray origin bound to support occlusion reasoning
   vgl_point_3d<T> max_ray_origin_;
+  vgl_vector_3d<T> max_ray_direction_;
 
   //: a pyramid data structure for the rays to support efficient projection
   // (level == 0 is the highest resolution)
