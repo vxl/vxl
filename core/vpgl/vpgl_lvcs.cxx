@@ -113,10 +113,10 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat, double orig_lon, double orig_elev,
   vcl_cout << "Here!!! lat_scale_: " << lat_scale_ << " lon_scale: " << lon_scale_ << vcl_endl;
   if (cs_name == vpgl_lvcs::utm) {
     //: the origin is still given in wgs84
-    vpgl_utm u; 
+    vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << " " << localUTMOrigin_X_East_ << " East " << " " << localUTMOrigin_Y_North_ << " North " << vcl_endl;
-    lat_scale_ == 0.0; lon_scale_ == 0.0;
+    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
+    lat_scale_ = lon_scale_ = 0.0;
   }
   if (lat_scale_ == 0.0 || lon_scale_ == 0.0)
     this->compute_scale();
@@ -145,9 +145,9 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat, double orig_lon, double orig_elev,
 
   if (cs_name == vpgl_lvcs::utm) {
     //: the origin is still given in wgs84
-    vpgl_utm u; 
+    vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << " " << localUTMOrigin_X_East_ << " East " << " " << localUTMOrigin_Y_North_ << " North " << " elev: " << localCSOriginElev_ << vcl_endl;
+    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North  elev: " << localCSOriginElev_ << vcl_endl;
   }
   lat_scale_ = 0;
   lon_scale_ = 0;
@@ -180,9 +180,9 @@ vpgl_lvcs::vpgl_lvcs(double lat_low, double lon_low,
 
   if (cs_name == vpgl_lvcs::utm) {
     //: the origin is still given in wgs84
-    vpgl_utm u; 
+    vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << " " << localUTMOrigin_X_East_ << " East " << " " << localUTMOrigin_Y_North_ << " North " << vcl_endl;
+    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
   }
 
 
@@ -371,15 +371,16 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
   local_transform(aligned_x, aligned_y);
 
   if (local_cs_name_ == vpgl_lvcs::utm) {
-    
+
 
     if (global_cs_name == vpgl_lvcs::utm) {
       if (output_len_unit == METERS) {
-        pointout_lon = aligned_x*local_to_meters + localUTMOrigin_X_East_; 
+        pointout_lon = aligned_x*local_to_meters + localUTMOrigin_X_East_;
         pointout_lat = aligned_y*local_to_meters + localUTMOrigin_Y_North_;
         pointout_z = pointin_z*local_to_meters + localCSOriginElev_*local_to_meters;
-      } else {
-        pointout_lon = aligned_x*local_to_feet + localUTMOrigin_X_East_*local_to_feet; 
+      }
+      else {
+        pointout_lon = aligned_x*local_to_feet + localUTMOrigin_X_East_*local_to_feet;
         pointout_lat = aligned_y*local_to_feet + localUTMOrigin_Y_North_*local_to_feet;
         pointout_z = pointin_z*local_to_feet + localCSOriginElev_*local_to_feet;
       }
@@ -387,8 +388,8 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
     }
 
     vpgl_utm u;
-    u.transform(localUTMOrigin_Zone_, pointin_x*local_to_meters + localUTMOrigin_X_East_, 
-                                      pointin_y*local_to_meters + localUTMOrigin_Y_North_, 
+    u.transform(localUTMOrigin_Zone_, pointin_x*local_to_meters + localUTMOrigin_X_East_,
+                                      pointin_y*local_to_meters + localUTMOrigin_Y_North_,
                                       pointin_z*local_to_meters + localCSOriginElev_*local_to_meters, local_lat, local_lon, local_elev);
 
     if (global_cs_name == vpgl_lvcs::wgs84) {  // global values will be in degrees and in meters
@@ -415,10 +416,8 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
                << " unrecognized." << '\n';
       global_lat = global_lon = global_elev = 0.0; // dummy initialisation
     }
-
-
-  } else {
-
+  }
+  else {
     // Now compute the lat, lon, elev of the output point in Local CS
     local_lat = aligned_y*local_to_meters*lat_scale_ + localCSOriginLat_*local_to_radians;
     local_lon = aligned_x*local_to_meters*lon_scale_ + localCSOriginLon_*local_to_radians;
@@ -427,89 +426,88 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
     local_lat *= RADIANS_TO_DEGREES;
     local_lon *= RADIANS_TO_DEGREES;
 
-  //at this point local_lat, local_lon are in degrees
-  //local_elev is in meters
-  if (local_cs_name_ == global_cs_name)
-  {
-    // Local and global coord systems are the same
-    global_lat = local_lat;
-    global_lon = local_lon;
-    global_elev = local_elev;
-  }
-  else if (local_cs_name_ ==  vpgl_lvcs::nad27n)
-  {
-    // Convert from "nad27n" to whatever
-    if (global_cs_name == vpgl_lvcs::wgs84)
+    //at this point local_lat, local_lon are in degrees
+    //local_elev is in meters
+    if (local_cs_name_ == global_cs_name)
     {
-      nad27n_to_wgs84(local_lat,
-                      local_lon,
-                      local_elev,
-                      &global_lat, &global_lon, &global_elev);
+      // Local and global coord systems are the same
+      global_lat = local_lat;
+      global_lon = local_lon;
+      global_elev = local_elev;
     }
-    else if (global_cs_name ==  vpgl_lvcs::wgs72)
+    else if (local_cs_name_ ==  vpgl_lvcs::nad27n)
     {
-      nad27n_to_wgs72(local_lat, local_lon,
-                      local_elev,
-                      &global_lat, &global_lon, &global_elev);
+      // Convert from "nad27n" to whatever
+      if (global_cs_name == vpgl_lvcs::wgs84)
+      {
+        nad27n_to_wgs84(local_lat,
+                        local_lon,
+                        local_elev,
+                        &global_lat, &global_lon, &global_elev);
+      }
+      else if (global_cs_name ==  vpgl_lvcs::wgs72)
+      {
+        nad27n_to_wgs72(local_lat, local_lon,
+                        local_elev,
+                        &global_lat, &global_lon, &global_elev);
+      }
+      else {
+        vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
+                 << " unrecognized." << '\n';
+        global_lat = global_lon = global_elev = 0.0; // dummy initialisation
+      }
+    }
+    else if (local_cs_name_ == vpgl_lvcs::wgs72)
+    {
+      // Convert from "wgs72" to whatever
+      if (global_cs_name == vpgl_lvcs::nad27n)
+      {
+        wgs72_to_nad27n(local_lat,
+                        local_lon,
+                        local_elev,
+                        &global_lat, &global_lon, &global_elev);
+      }
+      else if (global_cs_name == vpgl_lvcs::wgs84)
+      {
+        wgs72_to_wgs84(local_lat,
+                       local_lon,
+                       local_elev,
+                       &global_lat, &global_lon, &global_elev);
+      }
+      else {
+        vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
+                 << " unrecognized." << '\n';
+        global_lat = global_lon = global_elev = 0.0; // dummy initialisation
+      }
+    }
+    else if (local_cs_name_ == vpgl_lvcs::wgs84)
+    {
+      // Convert from "wgs84" to whatever
+      if (global_cs_name == vpgl_lvcs::nad27n)
+      {
+        wgs84_to_nad27n(local_lat,
+                        local_lon,
+                        local_elev,
+                        &global_lat, &global_lon, &global_elev);
+      }
+      else if (global_cs_name == vpgl_lvcs::wgs72)
+      {
+        wgs84_to_wgs72(local_lat,
+                       local_lon,
+                       local_elev,
+                       &global_lat, &global_lon, &global_elev);
+      }
+      else {
+        vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
+                 << " unrecognized." << '\n';
+        global_lat = global_lon = global_elev = 0.0; // dummy initialisation
+      }
     }
     else {
-      vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
+      vcl_cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
                << " unrecognized." << '\n';
       global_lat = global_lon = global_elev = 0.0; // dummy initialisation
     }
-  }
-  else if (local_cs_name_ == vpgl_lvcs::wgs72)
-  {
-    // Convert from "wgs72" to whatever
-    if (global_cs_name == vpgl_lvcs::nad27n)
-    {
-      wgs72_to_nad27n(local_lat,
-                      local_lon,
-                      local_elev,
-                      &global_lat, &global_lon, &global_elev);
-    }
-    else if (global_cs_name == vpgl_lvcs::wgs84)
-    {
-      wgs72_to_wgs84(local_lat,
-                     local_lon,
-                     local_elev,
-                     &global_lat, &global_lon, &global_elev);
-    }
-    else {
-      vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
-               << " unrecognized." << '\n';
-      global_lat = global_lon = global_elev = 0.0; // dummy initialisation
-    }
-  }
-  else if (local_cs_name_ == vpgl_lvcs::wgs84)
-  {
-    // Convert from "wgs84" to whatever
-    if (global_cs_name == vpgl_lvcs::nad27n)
-    {
-      wgs84_to_nad27n(local_lat,
-                      local_lon,
-                      local_elev,
-                      &global_lat, &global_lon, &global_elev);
-    }
-    else if (global_cs_name == vpgl_lvcs::wgs72)
-    {
-      wgs84_to_wgs72(local_lat,
-                     local_lon,
-                     local_elev,
-                     &global_lat, &global_lon, &global_elev);
-    }
-    else {
-      vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
-               << " unrecognized." << '\n';
-      global_lat = global_lon = global_elev = 0.0; // dummy initialisation
-    }
-  }
-  else {
-    vcl_cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
-             << " unrecognized." << '\n';
-    global_lat = global_lon = global_elev = 0.0; // dummy initialisation
-  }
-
   }
 
   //at this point, global_lat and global_lon are in degrees.
@@ -574,8 +572,9 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
           pointout_x = pointin_lon - localUTMOrigin_X_East_;  // these are always in meters
           pointout_y = pointin_lat - localUTMOrigin_Y_North_;
           pointout_z = pointin_z - localCSOriginElev_*local_to_meters;
-        } else {
-          pointout_x = pointin_lon*FEET_TO_METERS + localUTMOrigin_X_East_; 
+        }
+        else {
+          pointout_x = pointin_lon*FEET_TO_METERS + localUTMOrigin_X_East_;
           pointout_y = pointin_lat*FEET_TO_METERS + localUTMOrigin_Y_North_;
           pointout_z = pointin_z*FEET_TO_METERS + localCSOriginElev_*local_to_meters;
         }
@@ -588,7 +587,8 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
         // Transform from compass aligned into local co-ordinates.
         inverse_local_transform(pointout_x,pointout_y);
         return;
-      } else { 
+      }
+      else {
         vcl_cerr << "global cs UTM is not supported with other local cs like wgs84, etc.!\n";
         return;
       }
@@ -626,11 +626,11 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
       nad27n_to_wgs72(global_lat, global_lon, global_elev,
                       &local_lat, &local_lon, &local_elev);
     }
-    else if (local_cs_name_ == vpgl_lvcs::utm) 
+    else if (local_cs_name_ == vpgl_lvcs::utm)
     {
       nad27n_to_wgs84(global_lat, global_lon, global_elev,
                       &local_lat, &local_lon, &local_elev);
-      
+
       vpgl_utm u; int zone;
       u.transform(local_lat, local_lon, pointout_x, pointout_y, zone);
       if (zone != localUTMOrigin_Zone_) {
@@ -669,7 +669,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
       wgs72_to_wgs84(global_lat, global_lon, global_elev,
                      &local_lat, &local_lon, &local_elev);
     }
-    else if (local_cs_name_ == vpgl_lvcs::utm) 
+    else if (local_cs_name_ == vpgl_lvcs::utm)
     {
       wgs72_to_wgs84(global_lat, global_lon, global_elev,
                      &local_lat, &local_lon, &local_elev);
@@ -712,7 +712,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
       wgs84_to_wgs72(global_lat, global_lon, global_elev,
                      &local_lat, &local_lon, &local_elev);
     }
-    else if (local_cs_name_ == vpgl_lvcs::utm) 
+    else if (local_cs_name_ == vpgl_lvcs::utm)
     {
       vpgl_utm u; int zone;
       u.transform(global_lat, global_lon, pointout_x, pointout_y, zone);
@@ -744,7 +744,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
              << " unrecognized." << '\n';
     local_lat = local_lon = local_elev = 0.0; // dummy initialisation
   }
-  
+
   // Now compute the x, y, z of the point in local vetical CS
   //first convert the local_lat to radians and local cs origin to meters
   pointout_y =
@@ -818,14 +818,14 @@ void vpgl_lvcs::read(vcl_istream& strm)
   else if (len_u.compare("meters") == 0)
     localXYZUnit_ = METERS;
   else
-    vcl_cerr << "undefined localXYZUnit_ " << len_u << "\n";
+    vcl_cerr << "undefined localXYZUnit_ " << len_u << '\n';
 
   if (ang_u.compare("degrees") == 0)
     geo_angle_unit_ = DEG;
   else if (ang_u.compare("radians") == 0)
     geo_angle_unit_ = RADIANS;
   else
-    vcl_cerr << "undefined geo_angle_unit_ " << ang_u << "\n";
+    vcl_cerr << "undefined geo_angle_unit_ " << ang_u << '\n';
 
   strm >> localCSOriginLat_ >> localCSOriginLon_ >> localCSOriginElev_;
   strm >> lat_scale_ >> lon_scale_;
@@ -834,13 +834,13 @@ void vpgl_lvcs::read(vcl_istream& strm)
   if (local_cs_name_ == vpgl_lvcs::utm) {
     double local_to_meters, local_to_feet, local_to_radians, local_to_degrees;
     this->set_angle_conversions(geo_angle_unit_, local_to_radians,
-                              local_to_degrees);
+                                local_to_degrees);
     this->set_length_conversions(localXYZUnit_, local_to_meters, local_to_feet);
 
     //: the origin is still given in wgs84
-    vpgl_utm u; 
+    vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << " " << localUTMOrigin_X_East_ << " East " << " " << localUTMOrigin_Y_North_ << " North " << vcl_endl;
+    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
   }
 
   if (lat_scale_==0.0 && lon_scale_==0.0) {
