@@ -87,9 +87,9 @@ region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
 }
 
 depth_map_region::depth_map_region() :
-  orient_type_(NOT_DEF), name_(""), depth_(-1.0),
+  order_(0), orient_type_(NOT_DEF), name_(""), depth_(-1.0),
   min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
-  depth_inc_(1.0), region_2d_(0), region_3d_(0), order_(0)
+  depth_inc_(1.0), region_2d_(0), region_3d_(0)
 {}
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -97,9 +97,9 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    double min_depth, double max_depth,
                                    vcl_string name,
                                    depth_map_region::orientation orient)
-  : orient_type_(orient), name_(name), depth_(-1.0),
+  : order_(0), orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(min_depth), max_depth_(max_depth), depth_inc_(1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0), order_(0)
+    region_plane_(region_plane), region_2d_(region), region_3d_(0)
 {
 }
 
@@ -107,25 +107,28 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vgl_plane_3d<double> const& region_plane,
                                    vcl_string name,
                                    depth_map_region::orientation orient)
-  : orient_type_(orient), name_(name), depth_(-1.0),
+  : order_(0), orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(-1.0), max_depth_(-1.0),depth_inc_(1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0), order_(0)
+    region_plane_(region_plane), region_2d_(region), region_3d_(0)
 {
 }
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name)
-  : orient_type_(INFINT), name_(name), depth_(vcl_numeric_limits<double>::max()),
+  : order_(0), orient_type_(INFINT), name_(name), depth_(vcl_numeric_limits<double>::max()),
     min_depth_(vcl_numeric_limits<double>::max()),
     max_depth_(vcl_numeric_limits<double>::max()),
     depth_inc_(1.0),
-    region_2d_(region), region_3d_(0), order_(0)
+    region_2d_(region), region_3d_(0)
 {
 }
-vsol_point_2d_sptr depth_map_region::centroid_2d() const{
-  if(region_2d_) return region_2d_->centroid();
+
+vsol_point_2d_sptr depth_map_region::centroid_2d() const
+{
+  if (region_2d_) return region_2d_->centroid();
   return 0;
 }
+
 vgl_vector_3d<double> depth_map_region::
 perp_ortho_dir(vpgl_perspective_camera<double> const& cam)
 {
