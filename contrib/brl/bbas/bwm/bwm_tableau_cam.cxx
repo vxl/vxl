@@ -466,10 +466,10 @@ void bwm_tableau_cam::edit_region_props()
   static vcl_map<vcl_string, double> depth_inc;
   // for padding to align fields
   unsigned max_string_size = 0;
-  for(vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
-      rit != regions.end(); ++rit){
-    vcl_string& name  = (*rit)->name();
-    if(name.size()>max_string_size)
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+       rit != regions.end(); ++rit) {
+    vcl_string name  = (*rit)->name();
+    if (name.size()>max_string_size)
       max_string_size = name.size();
     depth_order[name] = (*rit)->order();
     min_depth[name]   = (*rit)->min_depth();
@@ -483,7 +483,7 @@ void bwm_tableau_cam::edit_region_props()
     vcl_string temp = (*rit)->name();
     // compute padding
     int pad_cnt = max_string_size-temp.size();
-    for(int k = 0; k<pad_cnt; ++k)
+    for (int k = 0; k<pad_cnt; ++k)
       temp += ' ';
     reg_dialog.message(temp.c_str()) ;
     if ((*rit)->name() == "sky" ) {
@@ -508,7 +508,7 @@ void bwm_tableau_cam::edit_region_props()
   // update region properties
   for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
        rit != regions.end(); ++rit) {
-    vcl_string& name = (*rit)->name();
+    vcl_string name = (*rit)->name();
     (*rit)->set_order(depth_order[name]);
     (*rit)->set_min_depth(min_depth[name]);
     (*rit)->set_max_depth(max_depth[name]);
