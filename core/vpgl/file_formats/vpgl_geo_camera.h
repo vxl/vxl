@@ -108,8 +108,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: returns the corresponding pixel position for given geographical coordinates
   //  the input global coord is UTM: x east, for y north
   void global_utm_to_img(const double x, const double y, int zone, double elev, 
-                     double& u, double& v) const;
-
+                         double& u, double& v) const;
 
   //: returns the corresponding utm location for the given local position
   void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone); 
@@ -118,8 +117,12 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   bool img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2);
 
+  //: returns the corresponding geographical coordinate (lon, lat, elev) for a given pixel position (i,j,k)
+  //  Note: not yet implemented -- PVr, 16 aug 2012
+  void img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev);
+
 #if 0
-  //: returns the corresponding pixel position (i,j) for a given geographical coordinates (lon, lat)
+  //: returns the corresponding pixel position (i,j) for a given geographical coordinate (lon, lat)
   void wgs_to_img(double lon, double lat,
                   unsigned& i, unsigned& j);
 #endif // 0

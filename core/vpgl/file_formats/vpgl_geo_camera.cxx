@@ -411,4 +411,7 @@ bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,
   return true;
 }
 
-
+void vpgl_geo_camera::img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev)
+{
+  assert(!"Not yet implemented");
+}
