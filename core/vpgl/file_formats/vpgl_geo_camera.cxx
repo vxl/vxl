@@ -41,7 +41,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
   // check if the image is tiff
   vil_tiff_image* geotiff_tiff = dynamic_cast<vil_tiff_image*> (geotiff_img.ptr());
   if (!geotiff_tiff) {
-      vcl_cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image." << vcl_endl;
+      vcl_cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image.\n";
       return false;
   }
   if (!geotiff_tiff->get_geotiff_header()) {
@@ -87,11 +87,11 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(scale_tag);
 
-  //: check if the model type is geographic and also the units
+  // check if the model type is geographic and also the units
   if (gtif->GCS_WGS84_MET_DEG())
     return true;
 
-  //: otherwise check if it is projected to UTM and figure out the zone
+  // otherwise check if it is projected to UTM and figure out the zone
   if (gtif->PCS_WGS84_UTM_zone(utm_zone, h) || gtif->PCS_NAD83_UTM_zone(utm_zone, h))
   {
     camera->set_utm(utm_zone, h);
@@ -116,16 +116,19 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
         double gx, gy;
         lvcs_->local_to_global(x, y, z, vpgl_lvcs::utm, gx, gy, gz);
         this->global_utm_to_img(gx, gy, utm_zone_, gz, u, v);
-      } else {  // geo cam is not utm, convert to wgs84 as global
+      }
+      else {  // geo cam is not utm, convert to wgs84 as global
         lvcs_->local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
         this->global_to_img(lon, lat, gz, u, v);
       }
-    } else {
+    }
+    else {
       lvcs_->local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
-      this->global_to_img(lon, lat, gz, u, v); 
-    } 
-  } else // if there is no lvcs, then we assume global coords are given in wgs84, i.e. x is lon and y is lat
-    this->global_to_img(x, y, z, u, v);  
+      this->global_to_img(lon, lat, gz, u, v);
+    }
+  }
+  else // if there is no lvcs, then we assume global coords are given in wgs84, i.e. x is lon and y is lat
+    this->global_to_img(x, y, z, u, v);
 }
 
 //: backprojects an image point into local coordinates (based on lvcs_)
@@ -182,9 +185,9 @@ void vpgl_geo_camera::translate(double tx, double ty, double z)
 }
 
 //: returns the corresponding geographical coordinates for a given pixel position (i,j)
-//  the output global coord is wgs84
+//  The output global coord is wgs84
 void vpgl_geo_camera::img_to_global(const double i, const double j,
-                                 double& lon, double& lat) const
+                                    double& lon, double& lat) const
 {
   vnl_vector<double> v(4), res(4);
   if (scale_tag_) {
@@ -200,16 +203,17 @@ void vpgl_geo_camera::img_to_global(const double i, const double j,
   if (is_utm) {
     vpgl_utm utm; double dummy;
     utm.transform(utm_zone_, v[0], v[1], v[2], lat, lon, dummy);
-  } else {
+  }
+  else {
     //lon = v[0]; lat = v[1]; elev = v[2];
     lon = v[0]; lat = v[1];
   }
 }
 
 //: returns the corresponding pixel position for given geographical coordinates
-//  the input global coord is wgs84
+//  The input global coord is wgs84
 void vpgl_geo_camera::global_to_img(const double lon, const double lat, const double gz,
-                                 double& u, double& v) const
+                                    double& u, double& v) const
 {
   vnl_vector<double> vec(4), res(4);
   double x1=lon, y1=lat, z1=gz;
@@ -242,7 +246,7 @@ void vpgl_geo_camera::global_to_img(const double lon, const double lat, const do
 }
 
 //: returns the corresponding geographical coordinates for a given pixel position (i,j)
-//  the output global coord is UTM: x east, y north 
+//  The output global coord is UTM: x east, y north
 void vpgl_geo_camera::img_to_global_utm(const double i, const double j, double& x, double& y) const
 {
   vnl_vector<double> v(4), res(4);
@@ -257,16 +261,17 @@ void vpgl_geo_camera::img_to_global_utm(const double i, const double j, double& 
   v[2] = 0;
   v[3] = 1;
   if (is_utm) {
-    x = v[0];  
+    x = v[0];
     y = v[1];
-  } else {  // the trans matrix was using lat,lon coord, transform output to utm
+  }
+  else {  // the trans matrix was using lat,lon coord, transform output to utm
     vpgl_utm utm; int dummy_zone;
     utm.transform(v[0], v[1], x, y, dummy_zone);
   }
 }
 
 //: returns the corresponding pixel position for given geographical coordinates
-//  the input global coord is UTM: x east, for y north
+//  The input global coord is UTM: x east, for y north
 void vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone, double elev, double& u, double& v) const
 {
   vnl_vector<double> vec(4), res(4);
@@ -274,7 +279,8 @@ void vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone
     vec[0] = x;
     vec[1] = y;
     vec[2] = elev;
-  } else {
+  }
+  else {
     vpgl_utm utm;
     double lat, lon, z;
     utm.transform(zone, x, y, elev, lat, lon, z);
@@ -283,7 +289,7 @@ void vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone
     vec[2] = z;
   }
   vec[3] = 1;
-  
+
   // do we really need this, const does not allow this
   vnl_matrix<double> tm(trans_matrix_);
   tm[2][2] = 1;
@@ -316,7 +322,7 @@ bool vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni, const unsigned 
     vcl_cerr << "In vpgl_geo_camera::img_four_corners_in_utm() -- UTM hasn't been set!\n";
     return false;
   }
-  double lon,lat,elev2;
+  double lon,lat;
   this->img_to_global(0, 0, lon, lat);
   vpgl_utm utm;int utm_zone;
   utm.transform(lat, lon, e1, n1, utm_zone);
