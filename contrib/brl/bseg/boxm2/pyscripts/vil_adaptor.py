@@ -163,16 +163,6 @@ def gradient_angle(Ix, Iy) :
     angleImg = dbvalue(id,type)
     return angleImg
 
-def init_float_image(ni,nj,init_val):
-    boxm2_batch.init_process("vilInitFloatImageProcess")
-    boxm2_batch.set_input_unsigned(0,ni)
-    boxm2_batch.set_input_unsigned(1,nj)
-    boxm2_batch.set_input_float(2, init_val)
-    boxm2_batch.run_process()
-    (id,type) = boxm2_batch.commit_output(0)
-    img = dbvalue(id,type)
-    return img
-
 def threshold_image(img, value, threshold_above=True):
     boxm2_batch.init_process("vilThresholdImageProcess")
     boxm2_batch.set_input_from_db(0,img)
@@ -223,11 +213,12 @@ def scale_and_offset_values(img,scale,offset):
   boxm2_batch.run_process()
   return
   
-def init_float_img(ni,nj,val):
+def init_float_img(ni,nj,np,val):
   boxm2_batch.init_process("vilInitFloatImageProcess")
   boxm2_batch.set_input_unsigned(0,ni)
   boxm2_batch.set_input_unsigned(1,nj)
-  boxm2_batch.set_input_float(2,val)
+  boxm2_batch.set_input_unsigned(2,np)
+  boxm2_batch.set_input_float(3,val)
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   img_out = dbvalue(id,type)
@@ -248,6 +239,16 @@ def nitf_date_time(image_filename):
   (id,type)=boxm2_batch.commit_output(4);
   minute = boxm2_batch.get_output_int(id);
   return year, month, day, hour, minute
+
+def undistort_image(img, param_file, iters) :
+  boxm2_batch.init_process("vilUndistortImageProcess");
+  boxm2_batch.set_input_from_db(0,img)
+  boxm2_batch.set_input_string(1, param_file);
+  boxm2_batch.set_input_int(2, iters);
+  boxm2_batch.run_process();
+  (o_id,o_type) = boxm2_batch.commit_output(0);
+  out_img = dbvalue(o_id,o_type);
+  return out_img;
 
 def combine_eo_ir(eo_img,ir_img):
   boxm2_batch.init_process("vilEOIRCombineProcess")
@@ -280,3 +281,35 @@ def detect_shadow_ridge(region_img,blob_size_t, sun_angle) :
   (o_id,o_type) = boxm2_batch.commit_output(2);
   dist_img = dbvalue(o_id,o_type);
   return region_img, out_img, dist_img;	
+  
+def binary_img_op(img1, img2, operation="sum"):
+  boxm2_batch.init_process("vilBinaryImageOpProcess")
+  boxm2_batch.set_input_from_db(0,img1)
+  boxm2_batch.set_input_from_db(1,img2)
+  boxm2_batch.set_input_string(2,operation)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  out = dbvalue(id, type);
+  return out
+  
+def img_sum(img, plane_index=0):
+  boxm2_batch.init_process("vilImageSumProcess")
+  boxm2_batch.set_input_from_db(0,img)
+  boxm2_batch.set_input_unsigned(1,plane_index)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  value = boxm2_batch.get_output_double(id)
+  return value
+
+## input a visibility image with float values in 0,1 range, negate this image and threshold to generate a byte image as a mask
+def prepare_mask_image_from_vis_image(vis_image, ni2, nj2, threshold):
+  img_1 = init_float_img(ni2,nj2,1,-1.0);
+  vis_image_neg = binary_img_op(img_1, vis_image, "sum");
+  scale_and_offset_values(vis_image_neg,-1.0,0.0);
+  exp_img_mask_f = threshold_image(vis_image_neg, threshold);
+  sum = img_sum(exp_img_mask_f);
+  #print "mask sum: " + str(sum) + " ratio of true: " + str(sum/(ni2*nj2));
+  ratio = sum/(ni2*nj2)*100;
+  exp_img_mask = stretch_image(exp_img_mask_f, 0, 1, 'byte');
+  return exp_img_mask, img_1, vis_image_neg, ratio
+  
