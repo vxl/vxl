@@ -13,6 +13,7 @@
 #include <vil/vil_save.h>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
+#include <vul/vul_timer.h>
 
 static void test_depth_map()
 {
@@ -112,11 +113,11 @@ static void test_depth_map()
   vsl_b_ifstream tis(spath.c_str());
   depth_map_scene scin;
   scin.b_read(tis);
-  scene_depth_iterator sit = scin.begin();
   scene_depth_iterator dend = scin.end();
-  sit+=5;
-  if(sit != dend)
+  scene_depth_iterator sit = scin.begin();
+  for(; sit != dend; ++sit)
     scin.print_depth_states();
+
   vil_image_view<float> dv = sit->depth_map();
   vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator.tiff");
 #endif

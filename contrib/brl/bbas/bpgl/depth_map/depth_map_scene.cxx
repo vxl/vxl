@@ -178,11 +178,11 @@ bool depth_map_scene::next_depth(){
       depth_states_.push_back(rit->second);
     //sort on depth order
     vcl_sort(depth_states_.begin(), depth_states_.end(), compare_order());
-    //set depths to min depth. May need to check if min depths are consistent
+    //set depths to min depth.
     unsigned ns = depth_states_.size();
     for(unsigned i = 0; i<ns; ++i)
       this->set_depth(depth_states_[i]->min_depth(), depth_states_[i]->name());
-    //for now put in an assert on inconsistent depths
+    //assert on inconsistent depths, i.e. min_depths must respect depth order
     for(unsigned i = 1; i<ns; ++i)
       assert(depth_states_[i]->depth()>=depth_states_[i-1]->depth());
   }

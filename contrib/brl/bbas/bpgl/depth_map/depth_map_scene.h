@@ -92,10 +92,10 @@ class depth_map_scene : public vbl_ref_count
   //: return a depth map of distance from the camera
   vil_image_view<float> depth_map();
 
-  //: the iterator at the start of depth search
+  //: the iterator at the start of depth search. resets the depth_states_.
   scene_depth_iterator begin();
 
-  //: the iterator at the end of depth search
+  //: the iterator at the end of depth search. 
   scene_depth_iterator end();
 
   //: move vert regions to next depth configuration. returns false if done
@@ -115,9 +115,12 @@ class depth_map_scene : public vbl_ref_count
   depth_map_region_sptr ground_plane_;
   depth_map_region_sptr sky_;
   vpgl_perspective_camera<double> cam_;
+  //: a vector of regions with assigned depths
   vcl_vector<depth_map_region_sptr> depth_states_;
 };
-
+//: An iterator for parameterized depth maps
+//  Scans the vertical movable regions in depth, while respecting
+//  depth ordering constraints, e.g. region A is closer than region B.
 class scene_depth_iterator
 {
  public:
@@ -126,24 +129,34 @@ class scene_depth_iterator
 
   ~scene_depth_iterator() {}
 
-  depth_map_scene& operator*() { return *scene_; }
+  //: returns a reference to the scene to enable access to scene methods
+  depth_map_scene& operator*(){
+    return *scene_;
+  }
 
-  depth_map_scene* operator->() { return scene_; }
+  //: returns a pointer to the scene to enable access to scene methods
+  depth_map_scene* operator->(){
+    return scene_;
+  }
 
-  scene_depth_iterator& operator++() {
-    if (!scene_)
+  //: increments the depth arrangement of vertical regions
+  scene_depth_iterator& operator++(){
+    if(!scene_)// if scene_ is null, there is no effect
       return *this;
     if (!scene_->next_depth()) {
       end_ = true;
       return *this;
     }
+	return *this;
   }
 
-  scene_depth_iterator& operator+=(unsigned inc) {
-    if (!scene_)
+  //: increments the depth arrangement of vertical regions n_inc times
+  scene_depth_iterator& operator+=(unsigned n_inc){
+    if(!scene_)
       return *this;
-    for (unsigned k =0; k<inc; ++k) {
-      if (!scene_->next_depth()) {
+
+    for(unsigned k =0; k<n_inc; ++k){
+      if(!scene_->next_depth()){
         end_ = true;
       return *this;
       }
@@ -151,15 +164,23 @@ class scene_depth_iterator
     return *this;
   }
 
-  bool operator==(const scene_depth_iterator& it) const { return end_ == it.end(); }
-  bool operator!=(const scene_depth_iterator& it) const { return !(end_ == it.end()); }
-  void set_end() {end_ = true;}
-  bool end() const {return end_;}
+  //: Only considers the state of end_ in determining equality.
+  //  enables the test for the end of depth region arrangements
+  bool operator==(const scene_depth_iterator& it){
+    return end_ == it.end();
+  }
+  bool operator!=(const scene_depth_iterator& it){
+    return !(end_ == it.end());
+  }
+
+  //: defines the state of completing all the depth arrangements
+  void set_end(){end_ = true;}
+  bool end() const{return end_;}
  private:
   bool end_;
   depth_map_scene* scene_;
 };
-
+//: a functor to compare region depth order
 struct compare_order {
   bool operator ()(depth_map_region_sptr ra, depth_map_region_sptr rb)
   { return ra->order() < rb->order(); }
