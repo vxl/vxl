@@ -101,6 +101,15 @@ SOURCE=.\depth_map_region.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+depth_map_region-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+depth_map_region-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+depth_map_scene-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_io_map+vcl_string.vbl_smart_ptr+depth_map_region--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -112,6 +121,9 @@ SOURCE=.\depth_map_region.h
 # End Source File
 # Begin Source File
 SOURCE=.\depth_map_region_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\depth_map_scene_sptr.h
 # End Source File
 # End Group
 # End Target
