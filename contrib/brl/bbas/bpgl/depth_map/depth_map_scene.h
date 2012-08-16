@@ -61,7 +61,7 @@ class depth_map_scene : public vbl_ref_count
   depth_map_region_sptr sky() const {return sky_;}
   vcl_vector<depth_map_region_sptr> scene_regions() const;
   //: set members
-  void set_camera(vpgl_perspective_camera<double> const& cam){cam_ = cam;}
+  void set_camera(vpgl_perspective_camera<double> const& cam) {cam_ = cam;}
   void set_ground_plane(vsol_polygon_2d_sptr ground_plane);
   void set_sky(vsol_polygon_2d_sptr ground_plane);
 
@@ -93,10 +93,10 @@ class depth_map_scene : public vbl_ref_count
   vil_image_view<float> depth_map();
 
   //: the iterator at the start of depth search
-  scene_depth_iterator begin();  
+  scene_depth_iterator begin();
 
   //: the iterator at the end of depth search
-  scene_depth_iterator end();  
+  scene_depth_iterator end();
 
   //: move vert regions to next depth configuration. returns false if done
   bool next_depth();
@@ -121,47 +121,40 @@ class depth_map_scene : public vbl_ref_count
 class scene_depth_iterator
 {
  public:
-  scene_depth_iterator(depth_map_scene* scene = 0): scene_(scene),
-    end_(false){}
+  scene_depth_iterator(depth_map_scene* scene = 0)
+  : end_(false), scene_(scene) {}
 
-  ~scene_depth_iterator(){}
+  ~scene_depth_iterator() {}
 
-  depth_map_scene& operator*(){
-    return *scene_;
-  }
+  depth_map_scene& operator*() { return *scene_; }
 
-  depth_map_scene* operator->(){
-    return scene_;
-  }
-  scene_depth_iterator& operator++(){
-    if(!scene_)
+  depth_map_scene* operator->() { return scene_; }
+
+  scene_depth_iterator& operator++() {
+    if (!scene_)
       return *this;
-    if(!scene_->next_depth()){
+    if (!scene_->next_depth()) {
       end_ = true;
       return *this;
     }
   }
-  scene_depth_iterator& operator+=(unsigned inc){
-    if(!scene_)
+
+  scene_depth_iterator& operator+=(unsigned inc) {
+    if (!scene_)
       return *this;
-    for(unsigned k =0; k<inc; ++k){
-      if(!scene_->next_depth()){
+    for (unsigned k =0; k<inc; ++k) {
+      if (!scene_->next_depth()) {
         end_ = true;
       return *this;
       }
     }
     return *this;
   }
-      
 
-  bool operator==(const scene_depth_iterator& it){
-    return end_ == it.end();
-  }
-  bool operator!=(const scene_depth_iterator& it){
-    return !(end_ == it.end());
-  }
-  void set_end(){end_ = true;}
-  bool end() const{return end_;}
+  bool operator==(const scene_depth_iterator& it) const { return end_ == it.end(); }
+  bool operator!=(const scene_depth_iterator& it) const { return !(end_ == it.end()); }
+  void set_end() {end_ = true;}
+  bool end() const {return end_;}
  private:
   bool end_;
   depth_map_scene* scene_;
