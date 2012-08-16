@@ -215,6 +215,11 @@ void step_cell_ingest_height_map(AuxArgs aux_args, int data_ptr, float d)
     float alpha = - (log(1-0.999))/d;
     aux_args.alpha[data_ptr] = alpha;
 }
+void step_cell_ingest_height_space_map(AuxArgs aux_args, int data_ptr, float d)
+{
+    float alpha = - (log(1-0.001))/d;
+    aux_args.alpha[data_ptr] = alpha;
+}
 #endif // INGEST_HEIGHT_MAP
 
 #ifdef POST
