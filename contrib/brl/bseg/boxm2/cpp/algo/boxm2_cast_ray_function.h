@@ -186,7 +186,7 @@ bool cast_ray_per_block(functor_type functor,
     }
     return true;
   }
-  else if(cam->type_name()== "vpgl_perspective_camera") {
+  else if (cam->type_name()== "vpgl_perspective_camera") {
     for (unsigned i=roi_ni0;i<roi_ni;++i) {
       if (i%10==0) vcl_cout<<'.'<<vcl_flush;
       for (unsigned j=roi_nj0;j<roi_nj;++j) {
@@ -194,9 +194,8 @@ bool cast_ray_per_block(functor_type functor,
         boxm2_cast_ray_function<functor_type>(ray_ij,linfo,blk_sptr,i,j,functor);
       }
     }
-    return true;	
+    return true;
   }
-  
 
   vcl_cout<<"boxm2_cast_ray_function cannot dynamic cast camera"<<vcl_endl;
   return false;
