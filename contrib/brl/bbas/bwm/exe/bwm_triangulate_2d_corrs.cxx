@@ -9,10 +9,7 @@
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 
 #include <bwm/video/bwm_video_corr_processor.h>
 #include <bwm/video/bwm_video_site_io.h>
@@ -51,16 +48,17 @@ int main(int argc, char** argv)
     vpgl_perspective_camera<double>* cam = cstr->read_camera();
     if (cam) {
       cams.push_back(*cam);
-    } else 
+    }
+    else
       break;
-  } while (1);
-  
+  } while (true);
+
   vcl_cout << "found: " << cams.size() << vcl_endl;
   vcl_vector<bwm_video_corr_sptr> corrs = cp.correspondences();
   vcl_cout << "there are: " << corrs.size() << " corrs in the file\n";
-  
-  for (unsigned i = 0; i < corrs.size(); i++) {
-    
+
+  for (unsigned i = 0; i < corrs.size(); i++)
+  {
     vcl_vector<vgl_point_2d<double> > points;
     vcl_vector<vpgl_perspective_camera<double> > cameras;
 
@@ -70,14 +68,14 @@ int main(int argc, char** argv)
       points.push_back(iter->second);
       cameras.push_back(cams[iter->first]);
     }
-    
+
     vgl_point_3d<double> point_3d;
     vpgl_triangulate_points::triangulate(points,cameras,point_3d);
-    vcl_cout << "output 3d point: " << vcl_endl;
-    vcl_cout << point_3d.x() << "\t" << point_3d.y() << "\t" << point_3d.z() << vcl_endl;
+    vcl_cout << "output 3d point:\n"
+             << point_3d.x() << '\t' << point_3d.y() << '\t' << point_3d.z() << vcl_endl;
     corr->set_world_pt(point_3d);
   }
   cp.write_video_site(out_site_file().c_str());
-  
+
   return 0;
 }
