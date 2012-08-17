@@ -20,8 +20,8 @@
 
 template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector( const vcl_string & path )
-//: bfs_( path ), 
-: bfs_( 0 ), 
+//: bfs_( path ),
+: bfs_( 0 ),
   wrapper_( 0 )
 {
   path_ = path;
@@ -31,7 +31,7 @@ mbl_file_data_collector<T>::mbl_file_data_collector( const vcl_string & path )
   }
 
   short vn= 1;
-  
+
   bfs_ = new vsl_b_ofstream( path_ );
   if ( !( *bfs_ ) )
   {
@@ -43,15 +43,10 @@ mbl_file_data_collector<T>::mbl_file_data_collector( const vcl_string & path )
   vsl_b_write( *bfs_, vn );
 }
 
-//#if 0 // commented out
-
-//Can't make copy constructor because have to initialize binary file stream
-//some how. DON'T know how to do that!
-
-//: Copy constructor
+//: Constructor from mbl_data_collector_base
 template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector(const mbl_data_collector_base& c)
-: bfs_( 0 ), 
+: bfs_( 0 ),
   wrapper_( 0 )
 {
   assert( c.is_class("mbl_file_data_collector<T>") );
@@ -61,74 +56,73 @@ mbl_file_data_collector<T>::mbl_file_data_collector(const mbl_data_collector_bas
 //: Copy constructor
 template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector(const mbl_file_data_collector & c)
-: bfs_( 0 ), 
+: bfs_( 0 ),
   wrapper_( 0 )
 {
-//  assert( c.is_class("mbl_file_data_collector<T>") );
   assert( c.is_class( is_a() ) );
   *this = dynamic_cast< const mbl_file_data_collector<T>& > ( c );
 }
 
-//: Copy operator
-//template<class T>
-//mbl_file_data_collector<T>& mbl_file_data_collector<T>::operator=( const mbl_data_collector_base& c)
+#if 0 // not yet fully tested
+//: Assignment operator from mbl_data_collector_base
+template<class T>
+mbl_file_data_collector<T>& mbl_file_data_collector<T>::operator=( const mbl_data_collector_base& c) {...}
+  assert( c.is_class( is_a() ) );
+  const mbl_file_data_collector<T> & cref = dynamic_cast< const mbl_file_data_collector<T>& > ( c );
+  return operator=(cref);
+#endif
 
-//: Copy operator
+//: Assignment operator
 template<class T>
 mbl_file_data_collector<T>& mbl_file_data_collector<T>::operator=( const mbl_file_data_collector & c)
 {
-//  assert( c.is_a() == "mbl_file_data_collector<T>" );
-//  const mbl_file_data_collector<T> & cref = dynamic_cast< const mbl_file_data_collector<T>& > ( c );
-  const mbl_file_data_collector<T> & cref =  ( c );
-
   // I think I just need to clone the wrapper
   delete_stuff();
-  
+
   // set up a new filename for each new set
-  path_ = cref.path_;
+  path_ = c.path_;
   while ( vul_file::exists( path_ ) )
   {
     path_ = vul_file::strip_extension( path_ ) + vcl_string( "a" ) + vul_file::extension( path_ );
   }
-  
-  delete( bfs_ );
+
+  delete bfs_;
   bfs_ = new vsl_b_ofstream( path_ );
 
   // need to file the new file with the version number...
   short vn= 1;
   vsl_b_write( *bfs_, vn );
-  
+
+#if 0
   // ...and then the data
-//  const mbl_file_data_wrapper & test_copy_wrapper = cref.data_wrapper();
+  const mbl_file_data_wrapper & test_copy_wrapper = c.data_wrapper();
+#endif
 
   // have to say (like Jim Morrison) "this is the end" - you can tell Dave wrote this!
-  vsl_b_write( *( cref.bfs_ ), true);
+  vsl_b_write( *( c.bfs_ ), true);
 
   // flush the file (to make sure it exists on disk - i.e. override buffering)
-  ( *(cref.bfs_) ).os().flush();
+  ( *(c.bfs_) ).os().flush();
 
-  mbl_file_data_wrapper<T> copy_wrapper( cref.path_ );
-  
+  mbl_file_data_wrapper<T> copy_wrapper( c.path_ );
+
   if ( copy_wrapper.size() > 0 )
   {
     copy_wrapper.reset();
     vsl_b_write( *bfs_, copy_wrapper.current() );
-    
-    while( copy_wrapper.next() )
+
+    while ( copy_wrapper.next() )
     {
       vsl_b_write( *bfs_, copy_wrapper.current() );
     }
   }
-  
-  
-//  bfs_= cref.bfs_;
-//  path_ = cref.path_;
-//  wrapper_ = cref.wrapper_->clone();
-
+#if 0
+  bfs_= c.bfs_;
+  path_ = c.path_;
+  wrapper_ = c.wrapper_->clone();
+#endif
   return *this;
 }
-
-//#endif // 0
 
 //=======================================================================
 // Destructor
@@ -138,11 +132,11 @@ template<class T>
 mbl_file_data_collector<T>::~mbl_file_data_collector()
 {
   delete_stuff();
-
   vul_file::delete_file_glob( path_.c_str() );
-  
-  //bfs_.close();
-  //delete wrapper_;
+#if 0
+  bfs_.close();
+  delete wrapper_;
+#endif
 }
 
 //: Delete stuff
@@ -155,7 +149,7 @@ void mbl_file_data_collector<T>::delete_stuff()
     delete bfs_;
     bfs_ = 0;
   }
-   
+
   if ( wrapper_ )
   {
     delete wrapper_;
@@ -233,13 +227,7 @@ short mbl_file_data_collector<T>::version_no() const
 template <class T>
 mbl_data_collector_base* mbl_file_data_collector<T>::clone() const
 {
-//  vcl_cout<<"ERROR: mbl_file_data_collector<T>::clone()\n"
-//          <<"Can't clone this class\n";
-//  vcl_abort();
-
-  // can't find a way of writing copy constructor! so don't allow clone
   return new mbl_file_data_collector<T>(*this);
-//  return 0;
 }
 
 template <class T>
