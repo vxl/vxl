@@ -27,7 +27,7 @@ inline int calc_blkI(float cell_minx, float cell_miny, float cell_minz, int4 dim
 //requires cell_minx
 inline int calc_blkInt(int cell_minx, int cell_miny, int cell_minz, int4 dims)
 {
-  return (cell_minz + (cell_miny + cell_minx*dims.y)*dims.z);
+  return cell_minz + (cell_miny + cell_minx*dims.y)*dims.z;
 }
 
 //requires float position
@@ -54,8 +54,6 @@ inline void intersect_block(float4 ray_o, float4 ray_d,
   float min_facez = (ray_d.z < 0.0f) ? (linfo->dims.z) : 0.0f;
   (*tblock) = calc_tnear(ray_o.x, ray_o.y, ray_o.z, ray_d.x, ray_d.y, ray_d.z, min_facex, min_facey, min_facez);
 }
-
-
 
 
 ////////////////////////////////////////////////////////////
@@ -93,5 +91,4 @@ void next_sphere(float currT, float currR, float* nextT, float* nextR)
   (*nextR) = currR * (currR + currT) / (currT - currR); 
   (*nextT) = currT + currR + (*nextR); 
 }
-
 

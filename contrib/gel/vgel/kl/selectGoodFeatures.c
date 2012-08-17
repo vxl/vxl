@@ -244,9 +244,9 @@ static int _comparePoints(const void *a, const void *b)
   int v1 = *(((int *) a) + 2);
   int v2 = *(((int *) b) + 2);
 
-  if (v1 > v2)  return(-1);
-  else if (v1 < v2)  return(1);
-  else return(0);
+  if (v1 > v2)  return -1;
+  else if (v1 < v2)  return 1;
+  else return 0;
 }
 #endif
 

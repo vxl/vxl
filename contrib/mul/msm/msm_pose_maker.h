@@ -35,7 +35,7 @@ class msm_pose_maker
   void set_from_curves(unsigned n_points, const msm_curves& curves);
 
   //: Returns true if direction defined at point i
-  bool defined(unsigned i) { return (end0_[i]!=0 || end1_[i]!=0); }
+  bool defined(unsigned i) { return end0_[i]!=0 || end1_[i]!=0; }
 
   //: Compute a direction at each point, usually normal to curve.
   void create_vectors(const msm_points& points,
