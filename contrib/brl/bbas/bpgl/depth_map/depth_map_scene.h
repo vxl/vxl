@@ -186,7 +186,7 @@ struct compare_order {
   { return ra->order() < rb->order(); }
 };
 
-#include <depth_map/depth_map_scene_sptr.h>
+#include "depth_map_scene_sptr.h"
 
 void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* sptr);
 void vsl_b_read(vsl_b_istream &is, depth_map_scene*& sptr);
