@@ -128,7 +128,7 @@ class depth_map_region : public vbl_ref_count
   vsol_polygon_3d_sptr region_3d_;//:cached
 };
 
-#include <depth_map/depth_map_region_sptr.h>
+#include "depth_map_region_sptr.h"
 void vsl_b_write(vsl_b_ostream& os, const depth_map_region* rptr);
 
 void vsl_b_read(vsl_b_istream &is, depth_map_region*& rptr);
