@@ -347,7 +347,8 @@ void vil_nitf2_image_subheader::add_shared_field_defs_1(vil_nitf2_field_definiti
     .field("TGTID",  "Target Identifier",   NITF_STR_BCSA(17), true)
     .field("IID2",   "Image Identifier 2",  NITF_STR_ECSA(80), true);
 }
-/*
+
+#if 0 // get_date_time() commented out
 bool vil_nitf2_image_subheader::
 get_date_time(int& year, int& month, int& day, int& hour, int& min)
 {
@@ -370,14 +371,15 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
   vcl_string months[]={"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG",
                         "SEP", "OCT", "NOV", "DEC"};
   bool found = false;
-  vcl_cout << date_time << "\n";
-  vcl_cout << s_day << " " << s_hour << " " << s_min << " " << s_month << " " << s_year_suff << vcl_endl;
-  for(int i = 0; (i<12)&&(!found); ++i)
-    if(s_month==months[i]){
+  vcl_cout << date_time << '\n'
+           << s_day << ' ' << s_hour << ' ' << s_min
+           << ' ' << s_month << ' ' << s_year_suff << vcl_endl;
+  for (int i = 0; (i<12)&&(!found); ++i)
+    if (s_month==months[i]){
       found = true;
       month = i+1;
     }
-  if(!found)
+  if (!found)
     return false;
   day  = vcl_atoi(s_day.c_str());
   hour = vcl_atoi(s_hour.c_str());
@@ -386,7 +388,8 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
   year += 2000;//good until the next millenium
   return true;
 }
-*/
+#endif // 0
+
 bool vil_nitf2_image_subheader::
 get_date_time(int& year, int& month, int& day, int& hour, int& min)
 {
@@ -411,16 +414,17 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
                          "MAY", "JUN", "JUL", "AUG",
                          "SEP", "OCT", "NOV", "DEC"};
     bool found = false;
-    for(int i = 0; (i<12)&&(!found); ++i) {
-      if(s_month==months[i]){
+    for (int i = 0; (i<12)&&(!found); ++i) {
+      if (s_month==months[i]){
         found = true;
         month = i+1;
       }
     }
-    if(!found) {
+    if (!found) {
       return false;
     }
-  } else {  // try yyyymmddhhnnss
+  }
+  else {  // try yyyymmddhhnnss
     s_year  = date_time.substr(0,4);
     s_month = date_time.substr(4,2);
     s_day   = date_time.substr(6,2);
@@ -436,6 +440,7 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
     year += 2000;//good until the next millenium
   return true;
 }
+
 unsigned vil_nitf2_image_subheader::nplanes() const
 {
   //the number of image bands is stored in NBANDS unless NBANDS=0.
@@ -488,6 +493,7 @@ unsigned int vil_nitf2_image_subheader::get_num_blocks_y() const
   }
   return 0;
 }
+
 unsigned int vil_nitf2_image_subheader::get_number_of_bits_per_pixel() const
 {
   int bits_per_pixel;
@@ -496,6 +502,7 @@ unsigned int vil_nitf2_image_subheader::get_number_of_bits_per_pixel() const
   }
   return 0;
 }
+
 vcl_string vil_nitf2_image_subheader::get_image_source() const
 {
   vcl_string source;
@@ -504,6 +511,7 @@ vcl_string vil_nitf2_image_subheader::get_image_source() const
   }
   return "";
 }
+
 vcl_string vil_nitf2_image_subheader::get_image_type() const
 {
   vcl_string id;
