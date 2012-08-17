@@ -50,9 +50,9 @@ class bocl_mem : public vbl_ref_count
   //: read/write to buffer (copies memory from cpu_buf to gpu buf)
   bool write_to_buffer(const cl_command_queue& cmd_queue, bool blocking=true);
   bool read_to_buffer(const cl_command_queue& cmd_queue, bool blocking=true);
-  
+
   //: read/write buffers of arbitrary size (smaller than existing gpu mem)
-  bool write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking=true); 
+  bool write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking=true);
   bool read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking=true);
 
   //: write to buffer asynchronously
@@ -62,7 +62,7 @@ class bocl_mem : public vbl_ref_count
   //: map/unmap
   void* enqueue_map(const cl_command_queue& cmd_queue);
   bool enqueue_unmap(const cl_command_queue& cmd_queue, void* mapped_ptr);
-  
+
   //: fill gpu buffer with value (shouldn't use any CPU mem
   template<class T>
   bool fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string, bool blocking=false);
@@ -72,7 +72,7 @@ class bocl_mem : public vbl_ref_count
     return this->fill(cmd_queue, (cl_uint) 0, "uint", blocking);
   }
 
-  //: intitializes GPU buffer with a constant value
+  //: initializes GPU buffer with a constant value
   bool init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_command_queue& cmd_queue);
 
   //: returns a reference to the buffer
@@ -102,7 +102,7 @@ class bocl_mem : public vbl_ref_count
   //: pointer to the corresponding CPU buffer
   void* cpu_buf_;
   bool  delete_cpu_;
-  cl_command_queue* queue_; 
+  cl_command_queue* queue_;
 
   //: number of bytes this buffer points to
   vcl_size_t num_bytes_;
@@ -142,16 +142,16 @@ bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_st
   //get command queue info
   cl_device_id dev_id;
   cl_context context;
-  cl_int status; 
-  status = clGetCommandQueueInfo(cmd_queue, CL_QUEUE_DEVICE, 
-                                  sizeof(dev_id), &dev_id, NULL);
-  status = clGetCommandQueueInfo(cmd_queue, CL_QUEUE_CONTEXT, 
-                                  sizeof(context), &context, NULL);
+  cl_int status;
+  status = clGetCommandQueueInfo(cmd_queue, CL_QUEUE_DEVICE,
+                                 sizeof(dev_id), &dev_id, NULL);
+  status = clGetCommandQueueInfo(cmd_queue, CL_QUEUE_CONTEXT,
+                                 sizeof(context), &context, NULL);
 
   //grab kernel
   bocl_kernel* fillKernel = this->get_set_kernel(dev_id, context, type_string);
   bocl_mem valMem(this->context_, &val, sizeof(val), "fill value");
-  valMem.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);  
+  valMem.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   bocl_mem lenMem(this->context_, &len, sizeof(len), "buffer length");
   lenMem.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
@@ -160,9 +160,9 @@ bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_st
   fillKernel->set_arg(&valMem);
   fillKernel->set_arg(&lenMem);
   bool good = fillKernel->execute(cmd_queue, 2, lThreads, gThreads);
-  if(blocking)
+  if (blocking)
     clFinish(cmd_queue);
-  fillKernel->clear_args();  
+  fillKernel->clear_args();
   return good;
 }
 

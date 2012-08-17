@@ -24,7 +24,7 @@
 // - FMatrixCompute8Point    - linear least squares on 8 point matches
 // - FMatrixComputeLMedSq    - Zhengyou Zhang's Least Medium of Squares estimation
 // - FMatrixComputeMLESAC    - Phil Torr's Maximum Likelihood estimation
-// - FMatrixComputeRANSAC    - Phil Torr's Robust Sampling Concensus
+// - FMatrixComputeRANSAC    - Phil Torr's Robust Sampling Consensus
 //
 // \verbatim
 // Modifications

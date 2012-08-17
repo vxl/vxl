@@ -69,7 +69,7 @@ static void test_camera_io()
     }
   }
   //delete cam; cam = 0;
-  //===========   perpsective_camera ==================
+  //===========   perspective_camera ==================
   double data[] = { 2000,    0, 512,
                     0, 2000, 384,
                     0,    0,   1 };

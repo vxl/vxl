@@ -28,7 +28,7 @@ class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string>
   // returns empty string or \a default_prop if \a label doesn't exist.
   // \throws mbl_exception_read_props_parse_error if there are two or more values of \a label.
   vcl_string get_optional_property(const vcl_string& label,
-    const vcl_string& default_prop="");
+                                   const vcl_string& default_prop="");
 
   //: Return a vector of all values for a given property label \a label.
   // All entries of \a label are removed from the property list.
@@ -36,11 +36,10 @@ class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string>
   // \param nmax The maximum number of permitted occurrences of this label (default=max<unsigned>).
   // \param nmin The minimum number of permitted occurrences of this label (default=1).
   // \throws mbl_exception_read_props_parse_error if \a label occurs an invalid number of times.
-  void get_required_properties(
-    const vcl_string& label,
-    vcl_vector<vcl_string>& values,
-    const unsigned nmax= (unsigned)(-1), //=max<unsigned>
-    const unsigned nmin=1);
+  void get_required_properties(const vcl_string& label,
+                               vcl_vector<vcl_string>& values,
+                               const unsigned nmax= (unsigned)(-1), //=max<unsigned>
+                               const unsigned nmin=1);
 
   //: Return a vector of all values for a given property label \a label.
   // All entries of \a label are removed from the property list.
@@ -48,8 +47,8 @@ class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string>
   // \param nmax The maximum number of permitted occurrences of this label (default=max<unsigned>).
   // \throws mbl_exception_read_props_parse_error if \a label occurs too many times.
   void get_optional_properties(const vcl_string& label,
-                             vcl_vector<vcl_string>& values,
-                             const unsigned nmax= (unsigned)(-1)); //=max<unsigned>
+                               vcl_vector<vcl_string>& values,
+                               const unsigned nmax= (unsigned)(-1)); //=max<unsigned>
 };
 
 
@@ -74,7 +73,7 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs);
 void mbl_read_multi_props_print(vcl_ostream &afs, mbl_read_multi_props_type props);
 
 //: Print a list of properties for debugging purposes. Limit each property value length to \p max_chars
-// Useful for preventing diagnostic ouput from being flooded by large properties.
+// Useful for preventing diagnostic output from being flooded by large properties.
 void mbl_read_multi_props_print(vcl_ostream &afs, mbl_read_multi_props_type props, unsigned max_chars);
 
 //: Throw error if there are any keys in props that aren't in ignore.
@@ -91,7 +90,7 @@ inline void mbl_read_multi_props_look_for_unused_props(
   const mbl_read_multi_props_type &props)
 {
   mbl_read_multi_props_look_for_unused_props(function_name, props,
-    mbl_read_multi_props_type());
+                                             mbl_read_multi_props_type());
 }
 
 

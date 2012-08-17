@@ -5,7 +5,7 @@
 // \brief Robust FMatrix computation
 //
 //    FMatrixComputeRANSAC implements
-//    Phil Torr's RANSAC (Robust Sampling Concensus) of the fundamental matrix.
+//    Phil Torr's RANSAC (Robust Sampling Consensus) of the fundamental matrix.
 //
 //    The resulting F matrix is rank-2 truncated.  The
 //     conditioning and truncation are optional and may be

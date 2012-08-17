@@ -13,7 +13,7 @@ typedef struct
            float        intensity_exp;
            float*       change;
            float*       change_exp;
-           float*       vis; 
+           float*       vis;
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
@@ -21,7 +21,7 @@ void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneIn
               global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
 
 //------------------------------------------------------------------------------
-// 1x1 change detection (simple, single ray independent CD). 
+// 1x1 change detection (simple, single ray independent CD).
 //------------------------------------------------------------------------------
 __kernel
 void
@@ -65,9 +65,9 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   float vis             = vis_image[imIndex[llid]];
 
   //find neighbor pixel
-  int currI = i; 
-  int currJ = j; 
-    
+  int currI = i;
+  int currJ = j;
+
   //calc scene ray
   //float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   //calc_scene_ray(linfo, camera, currI, currJ, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
@@ -87,7 +87,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   aux_args.intensity_exp= intensity_exp;
   aux_args.change       = &change;
   aux_args.change_exp   = &change_exp;
-  aux_args.vis          = &vis; 
+  aux_args.vis          = &vis;
 
   cast_ray( currI, currJ,
             ray_ox, ray_oy, ray_oz,
@@ -101,7 +101,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
 
             //RENDER SPECIFIC ARGS
             aux_args);
-            
+
   //expected image gets rendered
   change_image[imIndex[llid]]     = change;  //expected_int;
   change_exp_image[imIndex[llid]] = change_exp; //expected_int;
@@ -113,28 +113,28 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
 void step_cell_change(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
   //grab float8 version mog data
-  CONVERT_FUNC_FLOAT8(data, aux_args.mog[data_ptr])/NORM; 
+  CONVERT_FUNC_FLOAT8(data, aux_args.mog[data_ptr])/NORM;
 
 #if 0
   //calc using max only if 1) Weight is non-zero and 2) variance is above some thresh
-  float prob_den = 0.0f; 
-  float w2 = 1.0f - data.s2 - data.s5; 
-  float mode1_prob = (data.s2 > 10e-6f && data.s1 > .01f) ? gauss_prob_density(img_intensity, data.s0, data.s1) : 0.0f; 
-  float mode2_prob = (data.s5 > 10e-6f && data.s4 > .01f) ? gauss_prob_density(img_intensity, data.s3, data.s4) : 0.0f; 
-  float mode3_prob = (w2      > 10e-6f && data.s7 > .01f) ? gauss_prob_density(img_intensity, data.s6, data.s7) : 0.0f; 
-  prob_den = fmax(mode1_prob, fmax(mode2_prob, mode3_prob)); 
+  float prob_den = 0.0f;
+  float w2 = 1.0f - data.s2 - data.s5;
+  float mode1_prob = (data.s2 > 10e-6f && data.s1 > .01f) ? gauss_prob_density(img_intensity, data.s0, data.s1) : 0.0f;
+  float mode2_prob = (data.s5 > 10e-6f && data.s4 > .01f) ? gauss_prob_density(img_intensity, data.s3, data.s4) : 0.0f;
+  float mode3_prob = (w2      > 10e-6f && data.s7 > .01f) ? gauss_prob_density(img_intensity, data.s6, data.s7) : 0.0f;
+  prob_den = fmax(mode1_prob, fmax(mode2_prob, mode3_prob));
 #endif
-  
+
   //choose value based on cell depth
-  //int cell_depth = get_depth(bit_index); 
-  float img_in = aux_args.intensity.x;  
+  //int cell_depth = get_depth(bit_index);
+  float img_in = aux_args.intensity.x;
 /*
-  if(cell_depth==0) 
-    img_in = img_intensity.w; 
-  else if(cell_depth==1)
-    img_in = img_intensity.z; 
-  else if(cell_depth==2)
-    img_in = img_intensity.y; 
+  if (cell_depth==0)
+    img_in = img_intensity.w;
+  else if (cell_depth==1)
+    img_in = img_intensity.z;
+  else if (cell_depth==2)
+    img_in = img_intensity.y;
 */
   float prob_den=gauss_3_mixture_prob_density(img_in,
                                               data.s0,data.s1,data.s2,
@@ -145,10 +145,10 @@ void step_cell_change(AuxArgs aux_args, int data_ptr, uchar llid, float d)
   float prob  = 1.0f - exp(-alpha*d);
   float omega = (*aux_args.vis)*prob;
   (*aux_args.vis) = (*aux_args.vis)*(1.0f-prob);
-  
-  //set change 
+
+  //set change
   (*aux_args.change) += prob_den*omega;
-  
+
   //track ray belief
   float e_prob_den = gauss_3_mixture_prob_density(aux_args.intensity_exp,
                                                   data.s0,data.s1,data.s2,
@@ -159,7 +159,7 @@ void step_cell_change(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
 
 //------------------------------------------------------------------------------
-// NxN change detection (simple, single ray independent CD). 
+// NxN change detection (simple, single ray independent CD).
 //------------------------------------------------------------------------------
 __kernel
 void
@@ -169,10 +169,10 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
                       __global    MOG_TYPE           * mixture_array,
                       __global    int                * offset_i,            //nxn offset (can be negative
                       __global    int                * offset_j,            //nxn offset (can be negative
-                      //__global    float16            * camera,              
+                      //__global    float16            * camera,
                       __global    float4             * ray_origins,
                       __global    float4             * ray_directions,
-                      __global    float4              * in_image,            // input image 
+                      __global    float4              * in_image,            // input image
                       __global    float              * exp_image,           // expected image
                       __global    float              * change_image,        // change image
                       __global    float              * change_exp_image,    // change exp image
@@ -182,7 +182,7 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
                       __constant  uchar              * bit_lookup,
                       __global    float              * vis_image,
                       __local     uchar16            * local_tree,
-                      __local     uchar              * cumsum,        
+                      __local     uchar              * cumsum,
                       __local     int                * imIndex)
 {
   //----------------------------------------------------------------------------
@@ -201,17 +201,17 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
     return;
   }
 
-  //Second pass, do 3 loops on those who's change thresholds are hight enough
-  float prob_change = p1_prob_change_image[imIndex[llid]]; 
-  if( prob_change > 0.1f ) 
+  //Second pass, do 3 loops on those whose change thresholds are high enough
+  float prob_change = p1_prob_change_image[imIndex[llid]];
+  if ( prob_change > 0.1f )
   {
     //calc neighbor pixel (grab intensity/vis from here)
-    int currI = i + *offset_i; 
-    int currJ = j + *offset_j; 
-    if (currI>=(*exp_image_dims).z || currJ>=(*exp_image_dims).w) 
+    int currI = i + *offset_i;
+    int currJ = j + *offset_j;
+    if (currI>=(*exp_image_dims).z || currJ>=(*exp_image_dims).w)
       return;
     int nIdx = currJ*get_global_size(0)+currI;
-    
+
     //calc scene ray
     //float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
     //calc_scene_ray(linfo, camera, currI, currJ, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
@@ -223,16 +223,16 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
     float4 ray_d = ray_directions[ imIndex[llid] ];
     float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
     calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-  
+
     //set p change, change_exp, intensity and vis for this neighbor pixel
     float change          = change_image    [imIndex[llid]];
     float change_exp      = change_exp_image[imIndex[llid]];
     float vis             = vis_image       [imIndex[llid]];
-   
+
     //intensity's belong to neighbor
     float intensity_exp   = exp_image[imIndex[llid]];
     float4 intensity       = in_image [imIndex[llid]];
-    
+
     //setup aux args for step cell function
     AuxArgs aux_args;
     aux_args.alpha        = alpha_array;
@@ -241,7 +241,7 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
     aux_args.intensity_exp= intensity_exp;
     aux_args.change       = &change;
     aux_args.change_exp   = &change_exp;
-    aux_args.vis          = &vis; 
+    aux_args.vis          = &vis;
 
     //cast neighbor ray
     cast_ray( i, j,
@@ -256,7 +256,7 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
 
               //RENDER SPECIFIC ARGS
               aux_args);
-    
+
     //expected image gets rendered
     change_image    [imIndex[llid]] = change;  //expected_int;
     change_exp_image[imIndex[llid]] = change_exp; //expected_int;

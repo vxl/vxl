@@ -7,7 +7,7 @@
 //    FMatrixCompute7Point implements the `7-point' estimation
 //    of the fundamental matrix.
 //
-//    Points are preconditioned as described in [Hartley, ``In defence of
+//    Points are preconditioned as described in [Hartley, ``In defense of
 //    the 8-point algorithm'', ICCV95], and the resulting F matrix is rank-2
 //    truncated.  The conditioning and truncation are optional and may be
 //    omitted.
@@ -32,8 +32,9 @@
 #include <mvl/PairMatchSetCorner.h>
 #include <vgl/vgl_homg_point_2d.h>
 
-class FMatrixCompute7Point {
-public:
+class FMatrixCompute7Point
+{
+ public:
   //: Initialize FMatrixCompute7Point object.
   //  If precondition = false, points are not conditioned prior to computation.
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
@@ -65,8 +66,7 @@ public:
   bool compute_preconditioned(vcl_vector<vgl_homg_point_2d<double> >& points1,
                               vcl_vector<vgl_homg_point_2d<double> >& points2,
                               vcl_vector<FMatrix*>&);
-
-protected:
+ protected:
   static vcl_vector<double> GetCoef(FMatrix const& F1, FMatrix const& F2);
   static vcl_vector<double> solve_quadratic(vcl_vector<double> v);
   static vcl_vector<double> solve_cubic(vcl_vector<double> v);

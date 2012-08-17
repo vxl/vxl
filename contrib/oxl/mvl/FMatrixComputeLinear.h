@@ -12,7 +12,7 @@
 //    the ``8-point'' or linear least squares algorithm for estimation of
 //    the fundamental matrix.
 //
-//    Points are preconditioned as described in [Hartley, ``In defence of
+//    Points are preconditioned as described in [Hartley, ``In defense of
 //    the 8-point algorithm'', ICCV95], and the resulting F matrix is rank-2
 //    truncated.  The conditioning and truncation are optional and may be
 //    omitted.
@@ -76,10 +76,10 @@ class FMatrixComputeLinear : public FMatrixCompute
 
   inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }
   inline FMatrix compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2)
-    { return FMatrixCompute::compute(p1,p2); }
+  { return FMatrixCompute::compute(p1,p2); }
   inline FMatrix compute(vcl_vector<vgl_homg_point_2d<double> >& p1,
                          vcl_vector<vgl_homg_point_2d<double> >& p2)
-    { return FMatrixCompute::compute(p1,p2); }
+  { return FMatrixCompute::compute(p1,p2); }
 };
 
 #endif // FMatrixComputeLinear_h_

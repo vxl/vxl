@@ -1,6 +1,6 @@
 //:
 // \file
-// \brief  Test for getting a bin numbel from an illumination direction
+// \brief  Test for getting a bin number from an illumination direction
 // \author Isabel Restrepo
 // \date   February 29, 2008
 

@@ -97,7 +97,8 @@ bool vil_nitf2_typed_array_field<T>::value(
   if (element != m_value_map.end()) {
     out_value = element->second;
     return true;
-  } else return false;
+  }
+  else return false;
 }
 
 template<class T>
@@ -125,11 +126,14 @@ read_vector_element(vil_nitf2_istream& input, const vil_nitf2_index_vector& inde
   if (value_read) {
     VIL_NITF2_LOG(log_debug) << val << vcl_endl;
     m_value_map[indexes] = val;
-  } else if (is_blank && !m_definition->blanks_ok) {
+  }
+  else if (is_blank && !m_definition->blanks_ok) {
     VIL_NITF2_LOG(log_debug) << "not specified, but required!" << vcl_endl;
-  } else if (is_blank) {
+  }
+  else if (is_blank) {
     VIL_NITF2_LOG(log_debug) << "(unspecified)" << vcl_endl;
-  } else {
+  }
+  else {
     VIL_NITF2_LOG(log_debug) << "failed!" << vcl_endl;
     return false;
   }
@@ -155,7 +159,8 @@ write_vector_element(vil_nitf2_ostream& output, const vil_nitf2_index_vector& in
   if (value_defined) {
     VIL_NITF2_LOG(log_debug) << vcl_endl;
     return typed_formatter->write(output, val);
-  } else {
+  }
+  else {
     if (!m_definition->blanks_ok) {
       VIL_NITF2_LOG(log_debug) << ": required value undefined at this index; writing blanks." << vcl_endl;
     }
@@ -182,12 +187,14 @@ void vil_nitf2_typed_array_field<T>::output_dimension_iterate(
       // elements within a line.
       if (output_yet) {
         os << ", ";
-      } else {
+      }
+      else {
         output_yet = true;
       }
       os << indexes << ' ' << val;
     }
-  } else {
+  }
+  else {
     int dim = next_dimension(indexes);
     for (int i=0; i < dim; ++i) {
       vil_nitf2_index_vector next_indexes(indexes);
@@ -212,7 +219,7 @@ inline vil_nitf2_typed_array_field<void*>::~vil_nitf2_typed_array_field()
   for (vcl_map<vil_nitf2_index_vector, void*>::iterator it = m_value_map.begin();
        it != m_value_map.end(); ++it)
   {
-    // vector delete correponds to new char[] for binary data
+    // vector delete corresponds to new char[] for binary data
     delete[] (char*) it->second;
   }
   m_value_map.clear();

@@ -19,7 +19,7 @@ bool sdet_texture_training_process_cons(bprb_func_process& pro)
   vsl_add_to_binary_loader(vsol_polygon_2d());
   // process takes 6 inputs:
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //texture classifer
+  input_types.push_back("sdet_texture_classifier_sptr"); //texture classifier
   input_types.push_back("bool"); //if true, compute textons for category,
   //otherwise append filter responses from the image to the training data
   input_types.push_back("vil_image_view_base_sptr"); //input image
@@ -41,7 +41,7 @@ bool sdet_texture_training_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process inputs are not valid "<< vcl_endl;
+    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
     return false;
   }
 
@@ -54,18 +54,18 @@ bool sdet_texture_training_process(bprb_func_process& pro)
   bool compute_textons = pro.get_input<bool>(1);
 
   //== the input image
-  vil_image_view_base_sptr view_ptr = 
+  vil_image_view_base_sptr view_ptr =
     pro.get_input<vil_image_view_base_sptr>(2);
-  if(!view_ptr)
-    {
-      vcl_cout << "null image in sdet_texture_classifier_process\n";
-      return false;
-    }
+  if (!view_ptr)
+  {
+    vcl_cout << "null image in sdet_texture_classifier_process\n";
+    return false;
+  }
   //assumes a float image on the range [0, 1] so cast without checking
   vil_image_view<float> fview(view_ptr);
 
   //go ahead and compute the filter bank as well as laplace and Gauss filters
-  if(!tc_ptr->compute_filter_bank(fview)){
+  if (!tc_ptr->compute_filter_bank(fview)){
     vcl_cout << "failed to compute filter bank\n";
     return false;
   }
@@ -78,16 +78,16 @@ bool sdet_texture_training_process(bprb_func_process& pro)
   vcl_string category = pro.get_input<vcl_string>(4);
 
   // extract the training data from the current image filter responses
-  if(!tc_ptr->compute_training_data(category, poly_path))
-    {
-      vcl_cout << "failed to compute training data\n";
+  if (!tc_ptr->compute_training_data(category, poly_path))
+  {
+    vcl_cout << "failed to compute training data\n";
+    return false;
+  }
+  // if the last training image for the category then complete the
+  // texton dictionary entry
+  if (compute_textons)
+    if (!tc_ptr->compute_textons(category))
       return false;
-    }
-  // if the last training image for the category then complete the 
-  // texton dictionary entry 
-  if(compute_textons)
-    if(!tc_ptr->compute_textons(category))
-       return false;
 
   // pass the texture classifier into the database for additional training
   // data or additional categories
@@ -95,6 +95,7 @@ bool sdet_texture_training_process(bprb_func_process& pro)
 
   return true;
 }
+
 // this method is called if all training is complete
 // the texton dictionary is finalized and written out to the specified
 // file
@@ -102,21 +103,21 @@ bool sdet_texture_training_process_finish(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process inputs are not valid "<< vcl_endl;
+    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
     return false;
   }
   // get inputs
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  if(!tc_ptr){
+  if (!tc_ptr){
     vcl_cout << "In finishing texture training - null texture_classifier\n";
     return false;
   }
   vcl_string dict_path = pro.get_input<vcl_string>(5);
-  if(dict_path == "")
+  if (dict_path == "")
     return false;
   tc_ptr->compute_category_histograms();
   vcl_cout << "Saving dictionary\n";
-  if(!tc_ptr->save_dictionary(dict_path))
+  if (!tc_ptr->save_dictionary(dict_path))
     return false;
   return true;
 }

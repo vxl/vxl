@@ -2,8 +2,8 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// this process is the companion to vil_resample_image_process and 
-// adjusts the calibration matrix to corespond to the resampled image
+// this process is the companion to vil_resample_image_process and
+// adjusts the calibration matrix to correspond to the resampled image
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
@@ -53,9 +53,9 @@ bool vpgl_resample_perspective_camera_process(bprb_func_process& pro)
   //cast image sizes to double for scale computation
   double ni_orig = pro.get_input<int>(1), nj_orig = pro.get_input<int>(2);
   double ni_new = pro.get_input<int>(3), nj_new = pro.get_input<int>(4);
-  if(ni_orig == 0.0||nj_orig == 0.0||ni_new == 0.0||nj_new == 0.0){
-    vcl_cout << "In vpgl_resample_perspective_camera_process - "
-             << " zero image dimension(s) \n";
+  if (ni_orig == 0.0||nj_orig == 0.0||ni_new == 0.0||nj_new == 0.0){
+    vcl_cout << "In vpgl_resample_perspective_camera_process -"
+             << " zero image dimension(s)\n";
     return false;
   }
   //the origin of the two images is the same, so the transformation from

@@ -49,7 +49,7 @@ struct bundler_inters_feature : public vbl_ref_count
     bundler_inters_image_sptr image; // Others features from same image
     int index_in_image;
 
-    // General purpose boolean marking this feature as seen. 
+    // General purpose boolean marking this feature as seen.
     // Useful in a variety of situations, such as depth-first search.
     bool visited;
 
@@ -57,8 +57,8 @@ struct bundler_inters_feature : public vbl_ref_count
     // Constructors
     bundler_inters_feature();
     bundler_inters_feature(
-        double row, 
-        double col, 
+        double row,
+        double col,
         const vnl_vector<double> &d,
         const bundler_inters_image_sptr &img,
         int index_in_image);
@@ -91,7 +91,7 @@ struct bundler_inters_image : public vbl_ref_count
     // The camera that was used to take this image.
     vpgl_perspective_camera<double> camera;
 
-    bundler_inters_image() : 
+    bundler_inters_image() :
         in_recon(false) { }
 
     void remove_if_present(bundler_inters_feature_sptr const& f);
@@ -111,7 +111,7 @@ struct bundler_inters_image_pair
 
 /*-----------------------------------------------------------------------*/
 typedef
-    vcl_pair<bundler_inters_feature_sptr, bundler_inters_feature_sptr> 
+    vcl_pair<bundler_inters_feature_sptr, bundler_inters_feature_sptr>
     bundler_inters_feature_pair;
 
 // A set of matched features between two images.
@@ -143,20 +143,20 @@ struct bundler_inters_match_set
 
 
     // Estimates a homography, and returns the percentage of inliers
-    // for the estimated homograpy. This is cached until the match set
+    // for the estimated homography. This is cached until the match set
     // is changed by adding or removing a match.
     double get_homography_inlier_percentage(
         int num_ransac_rounds, double thresh_sq) const;
 
 
-private:
+  private:
     void reset_inlier_percentage();
     mutable double inlier_percentage;
 };
 
 
 /*-----------------------------------------------------------------------*/
-// This represents a 3-d point. It holds the features that view it, 
+// This represents a 3-d point. It holds the features that view it,
 // the location of the 3-d point, and which features have been incorporated
 // into the location.
 struct bundler_inters_track : public vbl_ref_count
@@ -169,7 +169,7 @@ struct bundler_inters_track : public vbl_ref_count
 
     bool observed;
 
-    bundler_inters_track() : 
+    bundler_inters_track() :
         observed(false) { }
 
     // Returns the place the feature was added.

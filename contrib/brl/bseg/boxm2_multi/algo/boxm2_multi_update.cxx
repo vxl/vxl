@@ -38,7 +38,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders; //visibility order for each dev
   vcl_size_t maxBlocks = 0;
   vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.ocl_caches();
-  for(int i=0; i<ocl_caches.size(); ++i) {
+  for (int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
@@ -91,11 +91,11 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
     maxBlocks = vcl_max(vis_order.size(), maxBlocks);
   }
 
-  //initalize per group images (vis/pre
+  //initialize per group images (vis/pre
   vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
-  for(int grpId=0; grpId<grp.size(); ++grpId) {
+  for (int grpId=0; grpId<grp.size(); ++grpId) {
     vcl_vector<boxm2_block_id> ids = grp[grpId]->ids();
-    for(int i=0; i<ids.size(); ++i) {
+    for (int i=0; i<ids.size(); ++i) {
       float* visImg = new float[ni*nj]; vcl_fill(visImg, visImg+ni*nj, 1.0f);
       float* preImg = new float[ni*nj]; vcl_fill(preImg, preImg+ni*nj, 0.0f);
       grp[grpId]->set_vis(i, visImg);
@@ -107,12 +107,11 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   boxm2_multi_update_helper helper(queues, ray_os, ray_ds, img_dims, lookups,
                                    outputs, grp, vis_orders, ocl_caches, maxBlocks);
 
-  
   //store aux data (cell vis, cell length)
   vul_timer stepTimer; stepTimer.mark();
   float aux_time = boxm2_multi_store_aux::store_aux(cache, img, cam, helper);
   vcl_cout<<"  store_aux time: "<<aux_time<<"  "<<stepTimer.all()<<vcl_endl;
-  gpu_time += aux_time; 
+  gpu_time += aux_time;
 
   //calcl pre/vis inf, and store pre/vis images along the way
   float* norm_img = new float[img.ni() * img.nj()];
@@ -131,15 +130,15 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   //-------------------------------------
   //clean up
   //-------------------------------------
-  for(int grpId=0; grpId<grp.size(); ++grpId) {
+  for (int grpId=0; grpId<grp.size(); ++grpId) {
     vcl_vector<boxm2_block_id> ids = grp[grpId]->ids();
-    for(int i=0; i<ids.size(); ++i) {
+    for (int i=0; i<ids.size(); ++i) {
       delete[] grp[grpId]->get_vis(i);
       delete[] grp[grpId]->get_pre(i);
     }
   }
 
-  for(int i=0; i<queues.size(); ++i) {
+  for (int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
 
     //release generic cam
@@ -164,14 +163,12 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
 
   //clean up pre/vis maps per device
   vcl_map<bocl_device*, float*>::iterator iter;
-  for(iter = pre_map.begin(); iter != pre_map.end(); ++iter)
+  for (iter = pre_map.begin(); iter != pre_map.end(); ++iter)
     delete[] iter->second;
-  for(iter = vis_map.begin(); iter != vis_map.end(); ++iter)
+  for (iter = vis_map.begin(); iter != vis_map.end(); ++iter)
     delete[] iter->second;
 
   //report gpu time
   return gpu_time;
 }
-
-
 

@@ -7,7 +7,7 @@
 //    FMatrixComputeLMedSq implements
 //    Zhengyou Zhang's LMedSq (Least Medium of Squares Estimation) of the fundamental matrix.
 //
-//    Points are preconditioned as described in [Hartley, ``In defence of
+//    Points are preconditioned as described in [Hartley, ``In defense of
 //    the 8-point algorithm'', ICCV95], and the resulting F matrix is rank-2
 //    truncated.  The conditioning and truncation are optional and may be
 //    omitted.

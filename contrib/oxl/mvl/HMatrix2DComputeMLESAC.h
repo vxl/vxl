@@ -8,7 +8,7 @@
 //  Phil Torr's MLESAC (Maximum Likelihood Estimation) of the projective matrix.
 //  (or homography)
 //
-//  Points are preconditioned as described in [Hartley, ``In defence of
+//  Points are preconditioned as described in [Hartley, ``In defense of
 //  the 8-point algorithm'', ICCV95].
 //    The conditioning and truncation are optional and may be
 //  omitted. The MLESAC class is also responsible for maintaining the inliers

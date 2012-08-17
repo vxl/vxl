@@ -72,7 +72,7 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
     bocl_kernel* seg_len = new bocl_kernel();
     vcl_string seg_opts = options + "-D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
     if (!seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len")) {
-      vcl_cerr << "ERROR compiling kernel " << vcl_endl;
+      vcl_cerr << "ERROR compiling kernel\n";
       return false;
     }
     vec_kernels.push_back(seg_len);
@@ -80,7 +80,7 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
     bocl_kernel* pre_inf = new bocl_kernel();
     vcl_string pre_opts = options + " -D PREINF_NAA -D STEP_CELL=step_cell_preinf_naa(aux_args,data_ptr,llid,d) ";
     if (!pre_inf->create_kernel(&device->context(),device->device_id(), src_paths, "pre_inf_naa_main", pre_opts, "update::pre_inf_naa")) {
-      vcl_cerr << "ERROR compiling kernel " << vcl_endl;
+      vcl_cerr << "ERROR compiling kernel\n";
       return false;
     }
     vec_kernels.push_back(pre_inf);
@@ -88,8 +88,8 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
 
     bocl_kernel* proc_img = new bocl_kernel();
     vcl_string proc_opt = options + " -D PROC_NORM_NAA ";
-    if(!proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_opt, "update::proc_norm_image")){
-      vcl_cerr << "ERROR compling kernel " << vcl_endl;
+    if (!proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_opt, "update::proc_norm_image")){
+      vcl_cerr << "ERROR compling kernel\n";
       return false;
     }
     vec_kernels.push_back(proc_img);
@@ -97,16 +97,16 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
 
     bocl_kernel* bayes_main = new bocl_kernel();
     vcl_string bayes_opt = options + " -D BAYES_NAA -D STEP_CELL=step_cell_bayes_naa(aux_args,data_ptr,llid,d) ";
-    if(!bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main_naa", bayes_opt, "update::bayes_naa_main")){
-      vcl_cerr << "ERROR compiling kernel " << vcl_endl;
+    if (!bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main_naa", bayes_opt, "update::bayes_naa_main")){
+      vcl_cerr << "ERROR compiling kernel\n";
       return false;
     }
     vec_kernels.push_back(bayes_main);
 
     bocl_kernel* update = new bocl_kernel();
     vcl_string update_opt = options + " -D UPDATE_ALPHA_ONLY ";
-    if(!update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_bit_scene_main_alpha_only", update_opt, "update::update_main_alpha_only")) {
-      vcl_cerr << "ERROR compiling kernel " << vcl_endl;
+    if (!update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_bit_scene_main_alpha_only", update_opt, "update::update_main_alpha_only")) {
+      vcl_cerr << "ERROR compiling kernel\n";
       return false;
     }
     vec_kernels.push_back(update);
@@ -132,12 +132,12 @@ bool boxm2_ocl_update_alpha_naa_process_cons(bprb_func_process& pro)
   input_types_[6] = "brad_atmospheric_parameters_sptr";  // atmospheric parameters
   input_types_[7] = "vil_image_view_base_sptr";     // alternate explaination prior
   input_types_[8] = "vil_image_view_base_sptr";     // alternate explaination density
-                                                    
+
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  
+
   return good;
 }
 
@@ -160,7 +160,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   }
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  
+
   //get the inputs
   bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(0);
   boxm2_scene_sptr         scene        = pro.get_input<boxm2_scene_sptr>(1);
@@ -173,32 +173,32 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   vil_image_view_base_sptr alt_density_base   = pro.get_input<vil_image_view_base_sptr>(8);
 
 
-  if( alt_prior_base->ni() != img->ni() || alt_prior_base->nj() != img->nj() ) {
-    vcl_cerr << "ERROR: alt_prior and image sizes do not match! exiting without update."<< vcl_endl;
+  if ( alt_prior_base->ni() != img->ni() || alt_prior_base->nj() != img->nj() ) {
+    vcl_cerr << "ERROR: alt_prior and image sizes do not match! exiting without update.\n";
     return false;
   }
-  if( alt_density_base->ni() != img->ni() || alt_density_base->nj() != img->nj() ) {
-    vcl_cerr << "ERROR: alt_density and image sizes do not match! exiting without update."<< vcl_endl;
+  if ( alt_density_base->ni() != img->ni() || alt_density_base->nj() != img->nj() ) {
+    vcl_cerr << "ERROR: alt_density and image sizes do not match! exiting without update.\n";
     return false;
   }
- 
+
   vil_image_view<float> *alt_prior = dynamic_cast<vil_image_view<float>*>(alt_prior_base.ptr());
   if (!alt_prior) {
-    vcl_cerr << "ERROR casting alt_prior to vil_image_view<float>" << vcl_endl;
+    vcl_cerr << "ERROR casting alt_prior to vil_image_view<float>\n";
     return false;
   }
   vil_image_view<float> *alt_density = dynamic_cast<vil_image_view<float>*>(alt_density_base.ptr());
   if (!alt_density) {
-    vcl_cerr << "ERROR casting alt_density to vil_image_view<float>" << vcl_endl;
+    vcl_cerr << "ERROR casting alt_density to vil_image_view<float>\n";
     return false;
   }
-  
+
   // get normal directions
   vcl_vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
   unsigned int num_normals = normals.size();
   // opencl code depends on there being exactly 16 normal directions - do sanity check here
   if (num_normals != 16) {
-    vcl_cerr << "ERROR: boxm2_ocl_update_alpha_naa_process: num_normals = " << num_normals << ".  Expected 16" << vcl_endl;
+    vcl_cerr << "ERROR: boxm2_ocl_update_alpha_naa_process: num_normals = " << num_normals << ".  Expected 16\n";
     return false;
   }
 
@@ -214,7 +214,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   float* radiance_offsets_buff = new float[num_normals];
   float* radiance_var_scales_buff = new float[num_normals];
   float* radiance_var_offsets_buff = new float[num_normals];
-  
+
   // compute offsets and scales for linear radiance model
   for (unsigned n=0; n < num_normals; ++n) {
      // compute offsets as radiance of surface with 0 reflectance
@@ -229,9 +229,9 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
      // compute scale
      double var = brad_radiance_variance_chavez(1.0, normals[n], *metadata, *atm_params, reflectance_var, optical_depth_var, skylight_var, airlight_var);
      radiance_var_scales_buff[n] = var - var_offset;
-     vcl_cout << "---- normal = " << normals[n] << vcl_endl;
-     vcl_cout << "radiance scale = " << radiance << " offset = " << offset << vcl_endl;
-     vcl_cout << "radiance var scale = " << var << " variance offset = " << var_offset << vcl_endl;
+     vcl_cout << "---- normal = " << normals[n] << '\n'
+              << "radiance scale = " << radiance << " offset = " << offset << '\n'
+              << "radiance var scale = " << var << " variance offset = " << var_offset << vcl_endl;
   }
 
   //cache size sanity check
@@ -239,7 +239,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
 
   //make sure correct data types are here
-  bool found_appearance = false, found_num_obs = false; 
+  bool found_appearance = false, found_num_obs = false;
   vcl_string data_type, num_obs_type, options;
   vcl_vector<vcl_string> apps = scene->appearances();
   int appTypeSize;
@@ -272,7 +272,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
                                                  *(device->device_id()),
                                                  CL_QUEUE_PROFILING_ENABLE,
                                                  &status);
-  if (status!=0) 
+  if (status!=0)
     return false;
 
   // compile the kernel if not already compiled
@@ -281,7 +281,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
     vcl_cout << "===========Compiling kernels===========" << vcl_endl;
     vcl_vector<bocl_kernel*> ks;
     if (!compile_kernel(device,ks,options)) {
-      vcl_cerr << "ERROR compiling kernels " << vcl_endl;
+      vcl_cerr << "ERROR compiling kernels\n";
       return false;
     }
     kernels[identifier]=ks;
@@ -307,7 +307,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   float* pre_buff = new float[cl_ni*cl_nj];
   float* norm_buff = new float[cl_ni*cl_nj];
   float* input_buff=new float[cl_ni*cl_nj];
-  { 
+  {
     int count = 0;
     for (unsigned int j=0; j<cl_nj; ++j) {
       for (unsigned int i=0; i<cl_ni; ++i) {
@@ -315,7 +315,8 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
           vis_buff[count] = 1.0f - (*alt_prior)(i,j);
           pre_buff[count] = (*alt_prior)(i,j) * (*alt_density)(i,j);
           norm_buff[count] = 0.0f;
-        } else {
+        }
+        else {
           vis_buff[count] = 1.0f;
           pre_buff[count] = 0.0f;
           norm_buff[count] = 0.0f;
@@ -324,13 +325,13 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       }
     }
   }
-  
+
   // copy input vals into image
   int count = 0;
   for (unsigned int j=0; j<cl_nj; ++j) {
     for (unsigned int i=0; i<cl_ni; ++i) {
       input_buff[count] = 0.0f;
-      if ( i<img_view->ni() && j< img_view->nj() ) 
+      if ( i<img_view->ni() && j< img_view->nj() )
         input_buff[count] = (*img_view)(i,j);
       ++count;
     }
@@ -406,7 +407,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   background_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //vcl_cout << "######  Entering stage loop: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
-  
+
   // set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
@@ -434,14 +435,15 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       //set masked values
       vis_image->read_to_buffer(queue);
       pre_image->read_to_buffer(queue);
-      { 
+      {
           int count = 0;
           for (unsigned int j=0; j<cl_nj; ++j) {
             for (unsigned int i=0; i<cl_ni; ++i) {
               if ((i < img->ni()) && (j < img->nj())){
                 vis_buff[count] = 1.0f - (*alt_prior)(i,j);
                 pre_buff[count] = (*alt_prior)(i,j) * (*alt_density)(i,j);
-              } else {
+              }
+              else {
                 vis_buff[count] = 1.0f;
                 pre_buff[count] = 0.0f;
               }
@@ -455,10 +457,9 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
 
       continue;
     }
-    
+
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-
       //vcl_cout << "### vis loop begin: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
       //choose correct render kernel
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
@@ -469,7 +470,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       bocl_mem* blk       = opencl_cache->get_block(*id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
       bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
-      
+
       //vcl_cout << "  loaded block and alpha: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -479,7 +480,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       //int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
       // data type string may contain an identifier so determine the buffer size
       unsigned int num_cells = alpha->num_bytes()/alphaTypeSize;
-      
+
       //bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type,num_cells*nobsTypeSize, true);
 
       //grab an appropriately sized AUX data buffer
@@ -609,8 +610,8 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
         gpu_time += kern->exec_time();
 
-        //clear render kernel args so it can reset em on next execution
-        //vcl_cout << "exectued bayes update: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
+        //clear render kernel args so it can reset 'm on next execution
+        //vcl_cout << "executed bayes update: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
         kern->clear_args();
         aux2->read_to_buffer(queue);
         aux3->read_to_buffer(queue);
@@ -637,7 +638,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         //kern->set_arg( cl_output.ptr() );
         //execute kernel
         kern->execute(queue, 2, local_threads, global_threads);
-        //vcl_cout << "execute returned " << vcl_endl;
+        //vcl_cout << "execute returned" << vcl_endl;
         int status = clFinish(queue);
         //vcl_cout << "clFinish returned" << vcl_endl;
         check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
@@ -652,7 +653,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       }
       //vcl_cout << "bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
       //read image out to buffer (from gpu)
- 
+
       in_image->read_to_buffer(queue);
       vis_image->read_to_buffer(queue);
       pre_image->read_to_buffer(queue);
@@ -694,7 +695,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   delete [] input_buff;
   delete [] ray_origins;
   delete [] ray_directions;
- 
+
   delete [] radiance_scales_buff;
   delete [] radiance_offsets_buff;
   delete [] radiance_var_scales_buff;

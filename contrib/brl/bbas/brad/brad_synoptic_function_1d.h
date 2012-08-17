@@ -23,7 +23,7 @@ class brad_synoptic_function_1d
     max_freq_mean_(0.487648), max_freq_sigma_(0.2) {}
   //:constructor from batch orbit data
   brad_synoptic_function_1d(vcl_vector<double> const& elevation,
-                            vcl_vector<double> const& azimuth,                 
+                            vcl_vector<double> const& azimuth,
                             vcl_vector<double> const& vis,
                             vcl_vector<double> const& intensity):
     elev_(elevation),azimuth_(azimuth),vis_(vis),intensity_(intensity),
@@ -85,7 +85,7 @@ class brad_synoptic_function_1d
   //: compute the autocorrelation function with intensity weighted by vis.
   void compute_auto_correlation();
 
-  //: autocorrelation function 
+  //: autocorrelation function
   vcl_vector<double> auto_correlation(){return auto_corr_;}
 
   //: fit a linear/constant model to the autocorrelation function
@@ -97,7 +97,7 @@ class brad_synoptic_function_1d
   //: linear coefficient
   double alpha(){return alpha_;}
 
-  //: const coefficent
+  //: const coefficient
   double mu(){return mu_;}
 
   //: sigma of linear const fit to the autocorrelation function

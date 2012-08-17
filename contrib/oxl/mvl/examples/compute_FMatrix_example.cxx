@@ -72,7 +72,7 @@ int main(int argc, char**argv)
   }
 
   {
-    // Perform the fit using Phil Torr's Robust Sampling Concensus
+    // Perform the fit using Phil Torr's Robust Sampling Consensus
     FMatrixComputeRANSAC computor(true,2);
     FMatrix f = computor.compute(points1, points2);
     f.set_rank2_using_svd();

@@ -40,8 +40,8 @@ class boxm_edge_tangent_updater
 
   float ransac_ortho_thres_;
   float ransac_volume_ratio_;
-  int ransac_concensus_cnt_;  // number of images that need to contribute planes to a hypothesis for a cell to be assigned a 3D edge
-                              // there should be at least ransac_concensus_cnt_+1 training images for some consensus to be met at any voxel, otherwise edge world will be empty
+  int ransac_consensus_cnt_;  // number of images that need to contribute planes to a hypothesis for a cell to be assigned a 3D edge
+                              // there should be at least ransac_consensus_cnt_+1 training images for some consensus to be met at any voxel, otherwise edge world will be empty
 
   boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene_;
 };
@@ -65,7 +65,7 @@ class boxm_edge_tangent_refine_updates
                                                    // edge_img(ix, iy, 2) = static_cast<float>(dir); tangent direction of the edgel
   vcl_vector<vpgl_camera_double_sptr> cameras_;
 
-  int concensus_cnt_;  // how many images need to be in agreement for an edgel to survive
+  int consensus_cnt_;  // how many images need to be in agreement for an edgel to survive
   boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene_;
 };
 

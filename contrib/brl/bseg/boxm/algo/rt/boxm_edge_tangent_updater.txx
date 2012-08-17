@@ -31,7 +31,7 @@ boxm_edge_tangent_updater<T_loc,APM,AUX>::boxm_edge_tangent_updater(boxm_scene<b
                                                                     float ransac_ortho_thres,
                                                                     float ransac_volume_ratio,
                                                                     int ransac_concensus_cnt)
-: image_ids_(image_ids), use_ransac_(use_ransac), ransac_ortho_thres_(ransac_ortho_thres), ransac_volume_ratio_(ransac_volume_ratio), ransac_concensus_cnt_(ransac_concensus_cnt), scene_(scene)
+: image_ids_(image_ids), use_ransac_(use_ransac), ransac_ortho_thres_(ransac_ortho_thres), ransac_volume_ratio_(ransac_volume_ratio), ransac_consensus_cnt_(ransac_concensus_cnt), scene_(scene)
 {}
 
 
@@ -116,14 +116,13 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         }
         nums+=planes.size();
         if (planes.size() > 1) {
-
           if (use_ransac_) {
             vgl_infinite_line_3d<AUX> line;
             float residual=1e5;
             vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
 
-            // ransac_concensus_cnt_ used to be hard-coded here to 5; made it into a parameter with a default value of 3
-            if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, ransac_concensus_cnt_, ransac_ortho_thres_, ransac_volume_ratio_)) {
+            // ransac_consensus_cnt_ used to be hard-coded here to 5; made it into a parameter with a default value of 3
+            if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, ransac_consensus_cnt_, ransac_ortho_thres_, ransac_volume_ratio_)) {
               boxm_inf_line_sample<AUX> data(line,aux_samples.size());
               data.residual_=residual;
 
@@ -194,7 +193,7 @@ boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::boxm_edge_tangent_refine_update
                                                                                   int consensus_cnt,
                                                                                   vcl_vector<vil_image_view<float> > const& edge_images,
                                                                                   vcl_vector<vpgl_camera_double_sptr> const& cameras)
-: edge_images_(edge_images), cameras_(cameras), concensus_cnt_(consensus_cnt), scene_(scene)
+: edge_images_(edge_images), cameras_(cameras), consensus_cnt_(consensus_cnt), scene_(scene)
 {}
 
 template <class T_loc, class APM, class AUX>
@@ -264,7 +263,7 @@ bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
               cnt++;
         }
 
-        if (cnt >= concensus_cnt_)
+        if (cnt >= consensus_cnt_)
           cell_value.residual_ = AUX(1.0)-AUX(cnt)/AUX(edge_images_.size());
         else
           cell_value.residual_ = AUX(1.0);

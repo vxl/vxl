@@ -100,6 +100,7 @@ void vpgl_generic_camera<T>::nearest_ray(int level,
       }
     }
 }
+
 template <class T>
 void vpgl_generic_camera<T>::
 nearest_ray_to_point(vgl_point_3d<T> const& p,
@@ -123,6 +124,7 @@ nearest_ray_to_point(vgl_point_3d<T> const& p,
     if (lev ==1&&nc_[0]%2!=0) end_c++;
   }
 }
+
 template <class T>
 void vpgl_generic_camera<T>::
 refine_ray_at_point(int nearest_c, int nearest_r,
@@ -137,6 +139,7 @@ refine_ray_at_point(int nearest_c, int nearest_r,
   org += t; //shift origin by vector from closest point, cp to p
   ray.set(org, ray.direction());
 }
+
 //: a ray passing through a given 3-d point
 template <class T>
 vgl_ray_3d<T> vpgl_generic_camera<T>::
@@ -170,8 +173,8 @@ refine_projection(int nearest_c, int nearest_r, vgl_point_3d<T> const& p,
   vgl_point_3d<T> ipt;
   valid_inter = vgl_intersection(nr, pl, ipt);
   inter_pts.push_back(ipt);
-  //find intersections of neigboring rays with the plane
-  //need at least two neigbors
+  //find intersections of neighboring rays with the plane
+  //need at least two neighbors
   img_pts.push_back(vgl_point_2d<T>(0.0, 0.0));
   if (nearest_r>0) {
     vgl_ray_3d<T> r = rays_[0][nearest_r-1][nearest_c];
@@ -222,6 +225,7 @@ refine_projection(int nearest_c, int nearest_r, vgl_point_3d<T> const& p,
   u = nearest_c + del.x();
   v = nearest_r + del.y();
 }
+
 // projects by exhaustive search in a pyramid.
 template <class T>
 void vpgl_generic_camera<T>::project(const T x, const T y, const T z,
@@ -233,6 +237,7 @@ void vpgl_generic_camera<T>::project(const T x, const T y, const T z,
   // refine to sub-pixel accuracy using a Taylor series approximation
   this->refine_projection(nearest_c, nearest_r, p, u, v);
 }
+
 // a ray specified by an image location (can be sub-pixel)
 template <class T>
 vgl_ray_3d<T> vpgl_generic_camera<T>::ray(const T u, const T v) const
@@ -318,7 +323,7 @@ void vpgl_generic_camera<T>::print_orig(int level)
   for (int r = 0; r<nr_[level]; ++r) {
     for (int c = 0; c<nc_[level]; ++c) {
       vgl_point_3d<T> o = rays_[level][r][c].origin();
-      vcl_cout << "(" << o.x() << ' ' << o.y() << ") ";
+      vcl_cout << '(' << o.x() << ' ' << o.y() << ") ";
     }
     vcl_cout << '\n';
   }
@@ -327,29 +332,28 @@ void vpgl_generic_camera<T>::print_orig(int level)
 template <class T>
 void vpgl_generic_camera<T>::print_to_vrml(int level, vcl_ostream& os)
 {
-  
-   for(int r = 0; r<nr_[level]; ++r) {
-    for(int c = 0; c<nc_[level]; ++c) {
-      vgl_point_3d<T> o = rays_[level][r][c].origin(); 
-    os<< "Transform {\n"
-      << "translation " << o.x() << ' ' << o.y() << ' '
-      << ' ' << o.z() << '\n'
-      << "children [\n"
-      << "Shape {\n"
-      << " appearance DEF A1 Appearance {\n"
-      << "   material Material\n"
-      << "    {\n"
-      << "      diffuseColor " << 1 << ' ' << 0 << ' ' << 0 << '\n'
-      << "      emissiveColor " << .3 << ' ' << 0 << ' ' << 0 << '\n'
-      << "    }\n"
-      << "  }\n"
-      << " geometry Sphere\n"
-      <<   "{\n"
-      << "  radius " << 20 << '\n'
-      <<  "   }\n"
-      <<  "  }\n"
-      <<  " ]\n"
-      << "}\n";  
+  for (int r = 0; r<nr_[level]; ++r) {
+    for (int c = 0; c<nc_[level]; ++c) {
+      vgl_point_3d<T> o = rays_[level][r][c].origin();
+      os<< "Transform {\n"
+        << "translation " << o.x() << ' ' << o.y() << ' '
+        << ' ' << o.z() << '\n'
+        << "children [\n"
+        << "Shape {\n"
+        << " appearance DEF A1 Appearance {\n"
+        << "   material Material\n"
+        << "    {\n"
+        << "      diffuseColor " << 1 << ' ' << 0 << ' ' << 0 << '\n'
+        << "      emissiveColor " << .3 << ' ' << 0 << ' ' << 0 << '\n'
+        << "    }\n"
+        << "  }\n"
+        << " geometry Sphere\n"
+        << "{\n"
+        << "  radius " << 20 << '\n'
+        << "   }\n"
+        << "  }\n"
+        << " ]\n"
+        << "}\n";
     }
   }
 }

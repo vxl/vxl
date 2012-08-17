@@ -110,7 +110,7 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs);
 void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props);
 
 //: Print a list of properties for debugging purposes. Limit each property value length to \p max_chars
-// Useful for preventing diagnostic ouput from being flooded by large properties.
+// Useful for preventing diagnostic output from being flooded by large properties.
 void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props, unsigned max_chars);
 
 //: merge two property sets.

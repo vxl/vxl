@@ -131,22 +131,22 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
 
   //get scene data type and appTypeSize
   vcl_string data_type;
-  int apptypesize; 
-  vcl_vector<vcl_string> valid_types; 
-  valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()); 
-  valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()); 
-  valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()); 
-  if( !boxm2_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
+  int apptypesize;
+  vcl_vector<vcl_string> valid_types;
+  valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
+  valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+  if ( !boxm2_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
     vcl_cout<<"boxm2_ocl_paint_batch ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
 
-  //make sure apperance identifier is correct
-  if (app_identifier.size() > 0) 
+  //make sure appearance identifier is correct
+  if (app_identifier.size() > 0)
    data_type += "_" + app_identifier;
-   
+
   //get initial options (MOG TYPE)
-  vcl_string options = boxm2_ocl_util::mog_options(data_type);  
+  vcl_string options = boxm2_ocl_util::mog_options(data_type);
 
   //: create a command queue.
   int status=0;
@@ -195,9 +195,9 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
 
   // read out expected image
   clReleaseCommandQueue(queue);
-  
-  delete[] vis_buff; 
-  
+
+  delete[] vis_buff;
+
   //store render time
   int argIdx = 0;
   pro.set_output_val<float>(argIdx, time);

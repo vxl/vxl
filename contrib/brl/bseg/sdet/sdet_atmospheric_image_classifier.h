@@ -34,7 +34,7 @@ class sdet_atmospheric_image_classifier : public sdet_texture_classifier
 
   //: classify image quality based on expected model image and incoming image
   // Assumes that textons have been computed for the model generating the 
-  // expected image of a scene. The image is then classifed according to
+  // expected image of a scene. The image is then classified according to
   // its similarity to the expected image, via the texton histogram for the 
   // model. 
   vil_image_view<float> 

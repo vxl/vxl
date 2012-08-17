@@ -78,9 +78,9 @@ class vidl_v4l2_device
   vcl_vector<vidl_v4l2_input> inputs_;
   vcl_vector<vidl_v4l2_control *> controls_;
   void update_controls(); // must be called after input change
-  
-  // Reset the device to an initial state 
-  // It was public, but it is not usefull for users of device, so it is moved to private
+
+  // Reset the device to an initial state
+  // It was public, but it is not useful for users of device, so it is moved to private
   void reset();
 
   bool open(); // return true if successful
@@ -101,14 +101,12 @@ class vidl_v4l2_device
  public:
 
   //: Constructor
-  // After construction, device is closed (device is not busy). 
+  // After construction, device is closed (device is not busy).
   // You can use device as a boolean expression to test if device is ok.
   // \param file device name (for example, "/dev/video")
   // \param file device name (for example, "/dev/video")
   vidl_v4l2_device(const char *file);
   ~vidl_v4l2_device();
-
-
 
   //: Name of the associated file device (same as constructor)
   vcl_string device_file() const { return dev_name_; }
@@ -145,7 +143,6 @@ class vidl_v4l2_device
 
   bool try_formats(int width= 640, int height= 480);
 
-  
   //: Return if the format is set.
   // Normally, a format is automatically selected or user call set_v4l2_format. User can use this function to know if a format is selected before calling start_capturing.
   // \see set_v4l2_format
@@ -233,7 +230,6 @@ class vidl_v4l2_device
                  dynamic_cast<vidl_v4l2_control_button *>(pc) : 0 ) : 0;
   }
 
-
   // ----------------- End methods associated to controls -------------------
 
   //: Start capturing
@@ -247,7 +243,6 @@ class vidl_v4l2_device
   //: Read next frame
   // \return if successful
   bool read_frame();
-
 
   // ----------------- Methods associated to buffers -------------------
 
@@ -284,7 +279,6 @@ class vidl_v4l2_device
 
   // ----------------- End methods associated to buffers -------------------
 
-
   //: Return if driver has time associated to the captured frame
   // \pre device is capturing
   bool time_available() const {
@@ -309,7 +303,6 @@ class vidl_v4l2_device
 
   //: Return last error if device is in a bad state. Empty if ok
   vcl_string get_error() const { return last_error; }
-
 
   //-------------------------------------------------------
   // reference counting if used through sptr

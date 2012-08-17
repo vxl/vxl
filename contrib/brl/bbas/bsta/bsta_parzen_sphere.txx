@@ -195,7 +195,7 @@ probability(typename bsta_distribution<T,1>::vector_type const& min_pt,
                                   bandwidth_*bandwidth_);
 }
 
-//: general case for distance and idex of nearest sample
+//: general case for distance and index of nearest sample
 template <class T, unsigned int n>
 T bsta_parzen_sphere<T,n>::nearest_sample(const typename bsta_distribution<T,n>::vector_type& pt, unsigned & index) const
 {
