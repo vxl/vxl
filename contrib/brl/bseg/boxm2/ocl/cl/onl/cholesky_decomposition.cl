@@ -1,5 +1,8 @@
+//:
+// \file
+
 //: Cholesky decomposition
-// The LL^\top = A and the L matrix is overwritten on A as lower triangular matrix.
+// The $LL^\top = A$ and the L matrix is overwritten on A as lower triangular matrix.
 
 void cholesky_decomposition(__local float* A, int n)
 {
