@@ -1,30 +1,30 @@
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
-#include <vgl/vgl_vector_3d.h>
 #include "boxm2_feature_vector.h"
 #include <vcl_iostream.h>
 
-vcl_ostream& operator<<(vcl_ostream &s, boxm2_feature_vector& f) {
+vcl_ostream& operator<<(vcl_ostream &s, boxm2_feature_vector& f)
+{
   for (unsigned i = 0; i < boxm2_feature_vector::SIZE; i++) {
-    s << f.get_feature(i) << " ";
+    s << f.get_feature(i) << ' ';
   }
   return s;
 }
 
-float prob_correspondence(boxm2_feature_vector& f1, float surface_prob1, boxm2_feature_vector& f2, float surface_prob2, double feature_sim_variance) {
+float prob_correspondence(boxm2_feature_vector& f1, float surface_prob1, boxm2_feature_vector& f2, float surface_prob2, double feature_sim_variance)
+{
   float d_square = 0.0;
   for (unsigned i = 0; i < boxm2_feature_vector::SIZE; i++) {
     float dif = f1.get_feature(i)-f2.get_feature(i);
     d_square += dif*dif;
   }
   d_square *= surface_prob1*surface_prob2;
-  //: assuming prob distribution on distance (between feature vectors) is a normal distribution
+  // assuming prob distribution on distance (between feature vectors) is a normal distribution
   float dif_prob = (float)(1.0/vcl_sqrt(2*vnl_math::pi*feature_sim_variance)*vcl_exp(-0.5*d_square/feature_sim_variance));
-    
-  //: compute the probability of correspondence of these two samples: 
-  //  possibilities for correspondence are: both surface and both non-surface (a prob space with 4 events)
+
+  // compute the probability of correspondence of these two samples:
+  // possibilities for correspondence are: both surface and both non-surface (a prob space with 4 events)
   float prob_cor = surface_prob1*surface_prob2 + (1.0f-surface_prob1)*(1.0f-surface_prob2);
   return prob_cor*dif_prob;
 }
-
 
