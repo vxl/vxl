@@ -57,14 +57,14 @@ bool vpgl_persp_cam_from_photo_overlay_process(bprb_func_process& pro)
   double deg_to_rad = vnl_math::pi/180.0;
   //get the inputs
   vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(0);
-  float heading = pro.get_input<float>(1);
-  float tilt = pro.get_input<float>(2);
-  float roll = pro.get_input<float>(3);
+  float heading = pro.get_input<float>(1); // TODO - unused!
+  float tilt = pro.get_input<float>(2); // TODO - unused!
+  float roll = pro.get_input<float>(3); // TODO - unused!
   float lat = pro.get_input<float>(4);
   float lon = pro.get_input<float>(5);
   float alt = pro.get_input<float>(6);
-  double fov_hor = pro.get_input<float>(7)*deg_to_rad;
-  double fov_ver = pro.get_input<float>(8)*deg_to_rad;
+  double fov_hor = pro.get_input<float>(7)*deg_to_rad; // TODO - unused!
+  double fov_ver = pro.get_input<float>(8)*deg_to_rad; // TODO - unused!
   unsigned ni = pro.get_input<unsigned>(9);
   unsigned nj = pro.get_input<unsigned>(10);
 
