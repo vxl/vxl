@@ -170,10 +170,13 @@ SOURCE=.\Templates/boxm2_data+BOXM2_NORMAL_ALBEDO_ARRAY-.cxx
 SOURCE=.\Templates/boxm2_data+BOXM2_GAUSS_RGB-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm2_data+BOXM2_POINT.cxx
+SOURCE=.\Templates/boxm2_data+BOXM2_NORMAL-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm2_data+BOXM2_NORMAL.cxx
+SOURCE=.\Templates/boxm2_data+BOXM2_COVARIANCE-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_POINT-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm2_data+BOXM2_FEATURE_VECTOR-.cxx
