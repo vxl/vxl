@@ -52,5 +52,6 @@ DECLARE_FUNC_CONS(vpgl_translate_geo_camera_process);
 DECLARE_FUNC_CONS(vpgl_convert_geo_camera_to_generic_process);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_from_kml_process);
 DECLARE_FUNC_CONS(vpgl_convert_to_local_coordinates_process2);
+DECLARE_FUNC_CONS(vpgl_load_perspective_camera_from_kml_file_process);
 
 #endif
