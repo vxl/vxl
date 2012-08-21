@@ -35,9 +35,9 @@ bool boxm2_ocl_reg_depth_map_to_vol::estimate_xyz()
         vgl_point_3d<double> temp(0,0,0);
         vgl_point_3d<double> pt = temp +(*depth_img_)(i,j)*r.direction();
 
-        (*Xdepth)(i,j) = pt.x();
-        (*Ydepth)(i,j) = pt.y();
-        (*Zdepth)(i,j) = pt.z();
+        (*Xdepth)(i,j) = (float)pt.x();
+        (*Ydepth)(i,j) = (float)pt.y();
+        (*Zdepth)(i,j) = (float)pt.z();
       }
 #if 0
     vil_save(*Zdepth,"z.tiff");
@@ -114,9 +114,9 @@ bool boxm2_ocl_reg_depth_map_to_vol::init_ocl_minfo()
   sceneB_bbox_ids->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
   vgl_box_3d<double> scene_bbox = sceneB->bounding_box();
-  sceneB_origin_buff[0] = scene_bbox.min_x();
-  sceneB_origin_buff[1] = scene_bbox.min_y();
-  sceneB_origin_buff[2] = scene_bbox.min_z();
+  sceneB_origin_buff[0] = (float)scene_bbox.min_x();
+  sceneB_origin_buff[1] = (float)scene_bbox.min_y();
+  sceneB_origin_buff[2] = (float)scene_bbox.min_z();
 
   sceneB_origin = new bocl_mem(device_->context(), sceneB_origin_buff, 4*sizeof(float), " scene B origin" );
   sceneB_origin->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
