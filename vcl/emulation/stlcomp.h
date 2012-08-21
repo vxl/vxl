@@ -53,7 +53,7 @@
 // default values of autoconf  flags
 //==========================================================
 
-// the values choosen here as defaults try to give
+// the values chosen here as defaults try to give
 // maximum functionality on the most conservative settings
 
 // Uncomment this if your compiler supports "bool"
