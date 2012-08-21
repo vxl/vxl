@@ -990,6 +990,24 @@ convert( vpgl_proj_camera<double> const& prj_cam, int ni, int nj,
 }
 
 bool vpgl_generic_camera_convert::
+convert( vpgl_perspective_camera<double> const& per_cam, int ni, int nj,
+         vpgl_generic_camera<double> & gen_cam, unsigned level)
+{
+  vbl_array_2d<vgl_ray_3d<double> > rays(nj, ni);
+  vgl_ray_3d<double> ray;
+  vgl_homg_point_2d<double> ipt;
+  double scale = (level < 32) ? double(1L<<level) : vcl_pow(2.0,static_cast<double>(level));
+  for (int j = 0; j<nj; ++j)
+    for (int i = 0; i<ni; ++i) {
+      ipt.set(i*scale, j*scale, 1.0);
+      ray = per_cam.backproject_ray(ipt);
+      rays[j][i]=ray;
+    }
+  gen_cam = vpgl_generic_camera<double>(rays);
+  return true;
+}
+
+bool vpgl_generic_camera_convert::
 convert_with_margin( vpgl_perspective_camera<double> const& per_cam, int ni, int nj,
                      vpgl_generic_camera<double> & gen_cam, int margin, unsigned level)
 {
@@ -1045,9 +1063,15 @@ convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
       dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr()))
     return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
 
+  if (vpgl_perspective_camera<double>* cam =
+    dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr())) {
+      return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
+  }
+
   if (vpgl_proj_camera<double>* cam =
-      dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr()))
-    return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
+    dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr())) {
+      return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
+  }
 
   if (vpgl_affine_camera<double>* cam =
       dynamic_cast<vpgl_affine_camera<double>*>(camera.ptr()))

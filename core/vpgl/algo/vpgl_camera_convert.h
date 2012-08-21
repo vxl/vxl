@@ -92,7 +92,8 @@ class vpgl_generic_camera_convert
   //: Convert a perspective_camera to a generic camera
   static bool convert( vpgl_perspective_camera<double> const& per_cam,
                        int ni, int nj,
-                       vpgl_generic_camera<double> & gen_cam, unsigned level = 0)
+                       vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
+#if 0
   {
     vpgl_perspective_camera<double> nc_cam(per_cam);
     vpgl_proj_camera<double>* prj_cam_ptr =
@@ -100,6 +101,7 @@ class vpgl_generic_camera_convert
     if (!prj_cam_ptr) return false;
     return convert(*prj_cam_ptr, ni, nj, gen_cam,level);
   }
+#endif
 
   static bool convert_with_margin( vpgl_perspective_camera<double> const& per_cam,
                        int ni, int nj,
