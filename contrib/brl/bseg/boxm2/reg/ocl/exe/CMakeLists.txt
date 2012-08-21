@@ -12,3 +12,8 @@ ADD_EXECUTABLE( boxm2_ocl_depth_map_to_vol_exe
                 boxm2_ocl_depth_map_to_vol_exe.cxx
               )
 TARGET_LINK_LIBRARIES( boxm2_ocl_depth_map_to_vol_exe boxm2_ocl_reg  vbl vgl)
+
+ADD_EXECUTABLE( boxm2_ocl_depth_map_to_vol_xyz_image
+                boxm2_ocl_depth_map_to_vol_xyz_image.cxx
+              )
+TARGET_LINK_LIBRARIES( boxm2_ocl_depth_map_to_vol_xyz_image boxm2_ocl_reg  vbl vgl)

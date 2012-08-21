@@ -99,8 +99,8 @@ int main(int argc,  char** argv)
       }
       vcl_cout<<".";
     }
-
-    vcl_cout<<"Time "<<t.all();
+    double secs = t.all()/1000.0;
+    vcl_cout<<"Time "<< secs << " secs " << secs/60.0 << " mins."<<vcl_endl;
     float min, max;
     vil_math_value_range(output, min, max);
     vcl_cout << " min mutual info in the output: " << min << " max mi: " << max << vcl_endl;
