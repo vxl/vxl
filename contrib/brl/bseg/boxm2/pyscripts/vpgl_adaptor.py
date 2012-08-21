@@ -47,7 +47,7 @@ def create_perspective_camera( scale, ppoint, center, look_pt, up ) :
   cam = dbvalue(id,type);
   return cam;
   
-def create_perspective_camera_from_kml( ni, nj, right_fov, top_fov, altitude, heading, tilt, roll, cent_x, cent_y) :
+def create_perspective_camera_from_kml(ni, nj, right_fov, top_fov, altitude, heading, tilt, roll, cent_x, cent_y) :
   boxm2_batch.init_process("vpglCreatePerspCameraFromKMLProcess");
   boxm2_batch.set_input_unsigned(0, ni);
   boxm2_batch.set_input_unsigned(1, nj);
@@ -63,6 +63,22 @@ def create_perspective_camera_from_kml( ni, nj, right_fov, top_fov, altitude, he
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam;
+
+def load_perspective_camera_from_kml_file(NI, NJ, kml_file) :
+  boxm2_batch.init_process("vpglLoadPerspCameraFromKMLFileProcess");
+  boxm2_batch.set_input_unsigned(0, NI);
+  boxm2_batch.set_input_unsigned(1, NJ);
+  boxm2_batch.set_input_string(2, kml_file);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cam = dbvalue(id,type);
+  (id,type) = boxm2_batch.commit_output(1);
+  longitude = boxm2_batch.get_output_double(id);
+  (id,type) = boxm2_batch.commit_output(2);
+  latitude = boxm2_batch.get_output_double(id);
+  (id,type) = boxm2_batch.commit_output(3);
+  altitude = boxm2_batch.get_output_double(id);
+  return cam, longitude, latitude, altitude;
 
 #resize a camera from size0 =(ni,nj) to size1 (ni_1, nj_1)
 def resample_perspective_camera( cam, size0, size1 ):
