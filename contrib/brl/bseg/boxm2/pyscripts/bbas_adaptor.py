@@ -318,6 +318,14 @@ def triangulate_site_corrs(site_file, out_file):
   boxm2_batch.set_input_string(1,out_file);
   boxm2_batch.run_process();
   
+def generate_depth_maps(depth_scene_file, output_folder, output_name_prefix, downsampling_level=0):
+  boxm2_batch.init_process("bpglGenerateDepthMapsProcess");
+  boxm2_batch.set_input_string(0,depth_scene_file);
+  boxm2_batch.set_input_unsigned(1,downsampling_level);
+  boxm2_batch.set_input_string(2,output_folder);
+  boxm2_batch.set_input_string(3,output_name_prefix);
+  boxm2_batch.run_process();
+  
 
   
   
