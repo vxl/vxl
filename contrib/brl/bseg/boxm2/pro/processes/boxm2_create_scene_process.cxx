@@ -296,8 +296,8 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
   vcl_cout << "number of blocks in the scene: " << blks.size() << vcl_endl;
   vgl_box_3d<double> bb = scene->bounding_box();
   double w = bb.width(); double h = bb.height();
-  for (double orig_x = 0.0; orig_x <= w; orig_x += scene_dim)
-    for (double orig_y = 0.0; orig_y <= h; orig_y += scene_dim) {
+  for (double orig_x = bb.min_point().x(); orig_x <= bb.max_point().x(); orig_x += scene_dim)
+    for (double orig_y = bb.min_point().y(); orig_y <= bb.max_point().y(); orig_y += scene_dim) {
       boxm2_scene_sptr small_scene = new boxm2_scene(scene->data_path(), scene->local_origin());
       small_scene->set_appearances(scene->appearances());
       small_scene->set_lvcs(lv);
