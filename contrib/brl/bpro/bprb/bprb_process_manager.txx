@@ -100,7 +100,7 @@ bprb_process_manager<T>::register_process( const bprb_process_sptr& sptr )
   pit = process_map.find(nm);
   if(pit == process_map.end()){
   process_map.insert( vcl_pair< vcl_string , bprb_process_sptr >( nm , sptr ) );
-  vcl_cout << "Registered " << nm << '\n';
+  //vcl_cout << "Registered " << nm << '\n';
   }
 }
 #undef BPRB_PROCESS_MANAGER_INSTANTIATE
