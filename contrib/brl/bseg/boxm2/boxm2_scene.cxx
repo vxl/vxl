@@ -98,7 +98,7 @@ get_block_metadata_const(boxm2_block_id id) const
   return boxm2_block_metadata();
 }
 
-vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<double>* cam)
+vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<double>* cam, double dist)
 {
   vcl_vector<boxm2_block_id> vis_order;
   if (!cam) {
@@ -108,10 +108,12 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
 
   //cam center, and getblock vis order from point
   vgl_point_3d<double> cam_center = cam->max_ray_origin();
-  return get_vis_order_from_pt(cam_center);
+  vgl_vector_3d<double> cam_dir = cam->max_ray_direction();
+  //return get_vis_order_from_pt(cam_center, vgl_box_2d<double>(), dist);
+  return get_vis_order_from_ray(cam_center, cam_dir, dist);
 }
 
-vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
+vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam, double dist)
 {
   vcl_vector<boxm2_block_id> vis_order;
   if (!cam) {
@@ -132,12 +134,12 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
 
   //grab visibility order from camera center
   vgl_point_3d<double> cam_center = cam->camera_center();
-  return get_vis_order_from_pt(cam_center, camBox);
+  return get_vis_order_from_pt(cam_center, camBox, dist);
 }
 
 vcl_vector<boxm2_block_id>
 boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
-                                   vgl_box_2d<double> camBox)
+                                   vgl_box_2d<double> camBox, double distance)
 {
   //Map of distance, id
   vcl_vector<boxm2_block_id> vis_order;
@@ -161,8 +163,60 @@ boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
     vgl_box_2d<double> intersect = vgl_intersection(camBox, blkBox);
     if (!intersect.is_empty() || camBox.is_empty()) {
       vgl_point_3d<double> blk_center = blk_o + length/2.0;
+      
       double dist = vgl_distance( blk_center, pt);
-      distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+
+      if (distance > 0 && dist < distance)
+        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+      else 
+        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+    }
+  }
+
+  //sort distances
+  vcl_sort(distances.begin(), distances.end());
+
+  //put blocks in "vis_order"
+  vcl_vector<boxm2_dist_id_pair>::iterator di;
+  for (di = distances.begin(); di != distances.end(); ++di)
+    vis_order.push_back(di->id_);
+  return vis_order;
+}
+
+vcl_vector<boxm2_block_id>
+boxm2_scene::get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vector_3d<double> const& dir, double distance)
+{
+  // Map of distance, id
+  vcl_vector<boxm2_block_id> vis_order;
+  vcl_vector<boxm2_dist_id_pair> distances;
+
+  // get camera center and order blocks distance from the cam center
+  // do not insert blocks if they are in front of the camera! 
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
+    vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
+    vgl_vector_3d<double>&   blk_dim = (iter->second).sub_block_dim_;
+    vgl_vector_3d<unsigned>& blk_num = (iter->second).sub_block_num_;
+    vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x(),
+                                    blk_dim.y()*blk_num.y(),
+                                    blk_dim.z()*blk_num.z());
+
+    vgl_point_3d<double> blk_center = blk_o + length/2.0;
+    
+    // ray from origin to blk center
+    vgl_vector_3d<double> blk_ray = blk_center - origin; 
+    vgl_vector_3d<double> blk_ray_n = normalized(blk_ray);
+
+    // check if the blk ray and camera ray are pointing to the same direction
+    double cos = dot_product(dir, blk_ray_n);
+    if (cos > 0) { // an angle in (-pi/2,pi/2)
+      
+      double dist = vgl_distance( blk_center, origin);
+      
+      if (distance > 0 && dist < distance)
+        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+      else 
+        distances.push_back( boxm2_dist_id_pair(dist, iter->first) ); 
     }
   }
 
@@ -395,7 +449,7 @@ void boxm2_scene::max_block_index (vgl_point_3d<int> &idx,
 //: returns true if the scene has specified data type (simple linear search)
 bool boxm2_scene::has_data_type(vcl_string data_type)
 {
-  for (unsigned int i=0; i<appearances_.size(); ++i)
+  for (unsigned int i=0; i<appearances_.size(); ++i) 
     if ( appearances_[i] == data_type )
       return true;
   return false;
