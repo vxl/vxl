@@ -27,4 +27,5 @@ void bbas_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsl_expected_image_process, "bslExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsl_fusion_process, "bslFusionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, imesh_ply_bbox_process, "imeshPlyBboxProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bpgl_generate_depth_maps_process, "bpglGenerateDepthMapsProcess");
 }

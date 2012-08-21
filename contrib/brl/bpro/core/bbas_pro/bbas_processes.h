@@ -20,5 +20,6 @@ DECLARE_FUNC_CONS(bsl_expected_image_process);
 DECLARE_FUNC_CONS(bsl_fusion_process);
 
 DECLARE_FUNC_CONS(imesh_ply_bbox_process);
+DECLARE_FUNC_CONS(bpgl_generate_depth_maps_process);
 
 #endif // bbas_processes_h_
