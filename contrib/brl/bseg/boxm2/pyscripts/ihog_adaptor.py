@@ -26,7 +26,7 @@ def compute_mi_cost_surface(img0, img0_mask, img1, search_radius):
     cost_image = dbvalue(id,type)
     return cost_image
 
-# compute mutual information 
+# compute mutual information, this is actually entropy diff so the lower the better
 def mutual_information(img0, img1, mask):
     boxm2_batch.init_process('ihogMutualInformationProcess')
     boxm2_batch.set_input_from_db(0,img0)
