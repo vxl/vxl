@@ -110,13 +110,12 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat, double orig_lon, double orig_elev,
                               local_to_degrees);
   this->set_length_conversions(localXYZUnit_, local_to_meters, local_to_feet);
 
-  vcl_cout << "Here!!! lat_scale_: " << lat_scale_ << " lon_scale: " << lon_scale_ << vcl_endl;
   if (cs_name == vpgl_lvcs::utm) {
     //: the origin is still given in wgs84
     vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
-    lat_scale_ = lon_scale_ = 0.0;
+    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
+    lat_scale_ = 0.0; lon_scale_ = 0.0;
   }
   if (lat_scale_ == 0.0 || lon_scale_ == 0.0)
     this->compute_scale();
@@ -335,8 +334,6 @@ void vpgl_lvcs::compute_scale()
                                      (grs80_z - grs80_z1)*(grs80_z - grs80_z1));
     //lon_scale_ is in radians/meter
   }
-  vcl_cout << "lat_scale: " << lat_scale_ << " lon_scale: " << lon_scale_ << vcl_endl;
-  vcl_cout.flush();
 }
 
 //------------------------------------------------------------------------------
