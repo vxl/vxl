@@ -140,7 +140,7 @@ brdb_database::clear_relation(const vcl_string& name)
 bool
 brdb_database::add_relation(const vcl_string& name, const brdb_relation_sptr& new_relation)
 {
-  vcl_cout << "Adding relation " << name << '\n';
+  //vcl_cout << "Adding relation " << name << '\n';
 
   vcl_map<vcl_string, brdb_relation_sptr>::iterator itr = relations_.find(name);
   if (itr != relations_.end())
