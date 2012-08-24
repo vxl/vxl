@@ -84,7 +84,7 @@ bool vil_debayer_BGGR_to_RGB_process(bprb_func_process& pro)
         unsigned char g = (*out_img)(k,l).G();
         unsigned char b = (*out_img)(k,l).B();
         //(0,0)
-        if (!isodd(k) && !isodd(l))
+		if (!isodd(k) && !isodd(l))
         {
           g =((int)(*out_img)(k-1,l).G() +(int)(*out_img)(k,l-1).G()+(int)(*out_img)(k,l+1).G()+(int)(*out_img)(k+1,l).G())/4;
           r =((int)(*out_img)(k-1,l-1).R() + (int) (*out_img)(k+1,l-1).R()+(int) (*out_img)(k+1,l+1).R()+ (int) (*out_img)(k-1,l+1).R())/4;
@@ -107,9 +107,134 @@ bool vil_debayer_BGGR_to_RGB_process(bprb_func_process& pro)
           b =((int)(*out_img)(k-1,l-1).B() + (int) (*out_img)(k+1,l-1).B()+(int) (*out_img)(k+1,l+1).B()+ (int) (*out_img)(k-1,l+1).B())/4;
           g =((int)(*out_img)(k-1,l).G() +(int)(*out_img)(k,l-1).G()+(int)(*out_img)(k,l+1).G()+(int)(*out_img)(k+1,l).G())/4;
         }
+
        (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
       }
     }
+	unsigned k = 0;
+	for (unsigned l = 1 ; l < in_img_byte->nj()-1; l++)
+	{
+		unsigned char r = (*out_img)(k,l).R();
+		unsigned char g = (*out_img)(k,l).G();
+		unsigned char b = (*out_img)(k,l).B();
+		if(!isodd(l))
+		{
+			g =((int)(*out_img)(k,l-1).G()+(int)(*out_img)(k+1,l).G())/2;
+			r =((int)(*out_img)(k+1,l-1).R()+(int)(*out_img)(k+1,l+1).R())/2;
+		}
+		else
+		{
+			b =((int)(*out_img)(k,l-1).B() +(int)(*out_img)(k,l+1).B())/2;
+			r =(int)(*out_img)(k+1,l).R();
+		}
+		      (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
+
+	}
+
+	k = in_img_byte->ni()-1; // assumed to be even
+	for (unsigned l = 1 ; l < in_img_byte->nj()-1; l++)
+	{
+		unsigned char r = (*out_img)(k,l).R();
+		unsigned char g = (*out_img)(k,l).G();
+		unsigned char b = (*out_img)(k,l).B();
+		if(!isodd(l))
+		{
+			b =(int)(*out_img)(k-1,l).B();
+			r =((int)(*out_img)(k,l-1).R()+(int)(*out_img)(k,l+1).R())/2;
+		}
+		else
+		{
+			g =((int)(*out_img)(k,l-1).G()+(int)(*out_img)(k-1,l).G())/2;
+			b =((int)(*out_img)(k-1,l-1).B()+(int)(*out_img)(k-1,l+1).B())/2;
+		}
+      (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
+
+	}
+
+	unsigned l = 0;
+	for (unsigned k = 1 ; k < in_img_byte->ni()-1; k++)
+	{
+		unsigned char r = (*out_img)(k,l).R();
+		unsigned char g = (*out_img)(k,l).G();
+		unsigned char b = (*out_img)(k,l).B();
+		if(!isodd(k))
+		{
+			g =((int)(*out_img)(k+1,l).G()+(int)(*out_img)(k,l+1).G())/2;
+			r =((int)(*out_img)(k+1,l+1).R()+(int)(*out_img)(k-1,l+1).R())/2;
+		}
+		else
+		{
+			b =((int)(*out_img)(k-1,l).B() +(int)(*out_img)(k+1,l).B())/2;
+			r =(int)(*out_img)(k,l+1).R();
+		}
+      (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
+
+	}
+	l = in_img_byte->nj()-1;
+	for (unsigned k = 1 ; k < in_img_byte->ni()-1; k++)
+	{
+		unsigned char r = (*out_img)(k,l).R();
+		unsigned char g = (*out_img)(k,l).G();
+		unsigned char b = (*out_img)(k,l).B();
+	
+		if(!isodd(k))
+		{
+			b =(int)(*out_img)(k,l-1).B(); 
+			r =((int)(*out_img)(k-1,l).R() +(int)(*out_img)(k+1,l).R())/2;
+		}
+		else
+		{
+
+			g =((int)(*out_img)(k-1,l).G()+(int)(*out_img)(k,l-1).G())/2;
+			b =((int)(*out_img)(k+1,l-1).B()+(int)(*out_img)(k-1,l-1).B())/2;
+		}
+      (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
+	}
+
+
+	// four corners
+
+	k = 0; l = 0;
+	unsigned char r = (*out_img)(k,l).R();
+	unsigned char g = (*out_img)(k,l).G();
+	unsigned char b = (*out_img)(k,l).B();
+	g =((int)(*out_img)(k+1,l).G()+(int)(*out_img)(k,l+1).G())/2;
+	r =(int)(*out_img)(k+1,l+1).R(); 
+	(*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
+
+	k = 0; l = in_img_byte->nj()-1;
+	r = (*out_img)(k,l).R();
+	g = (*out_img)(k,l).G();
+	b = (*out_img)(k,l).B();
+	
+	b =(int)(*out_img)(k,l-1).B();
+	r =(int)(*out_img)(k+1,l).R(); 
+	(*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
+
+	//(1,1)
+	k = in_img_byte->ni()-1; 
+	l = in_img_byte->nj()-1;
+	
+	r = (*out_img)(k,l).R();
+	g = (*out_img)(k,l).G();
+	b = (*out_img)(k,l).B();
+
+	b =(int)(*out_img)(k-1,l-1).B();
+	g =((int)(*out_img)(k-1,l).G()+(int)(*out_img)(k,l-1).G())/2;
+	(*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
+
+	//(0,1)
+	k = in_img_byte->ni()-1; 
+	l = 0;
+	
+	r = (*out_img)(k,l).R();
+	g = (*out_img)(k,l).G();
+	b = (*out_img)(k,l).B();
+
+	b =(int)(*out_img)(k-1,l).B();
+	r =(int)(*out_img)(k,l+1).R(); 
+	(*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
+
   }
   pro.set_output_val<vil_image_view_base_sptr>(0, debayer_img);
   return true;
