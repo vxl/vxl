@@ -52,7 +52,7 @@ namespace boxm2_ocl_render_expected_image_process_globals
     //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
     vcl_string options = opts;
     options += "-D RENDER ";
-    options += "-D DETERMINISTIC ";
+
     options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
     //have kernel construct itself using the context and device
@@ -155,6 +155,13 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
       foundDataType = true;
       options="-D FLOAT8 ";
       apptypesize = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
+    }
+	else if ( apps[i] == boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      options="-D SHORT ";
+      apptypesize = boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
     }
   }
   if (!foundDataType) {
