@@ -31,6 +31,7 @@ enum boxm2_data_type
   BOXM2_NUM_OBS,
   BOXM2_NUM_OBS_SINGLE,
   BOXM2_NUM_OBS_SINGLE_INT,
+  BOXM2_LABEL_SHORT,
   BOXM2_AUX,
   BOXM2_INTENSITY,
   BOXM2_AUX0,
@@ -352,6 +353,15 @@ class boxm2_data_traits<BOXM2_FEATURE_VECTOR>
   static vcl_size_t datasize() { return sizeof(boxm2_feature_vector); }
   static vcl_string prefix() { return "boxm2_feature_vector"; }
 };
+template<>
+class boxm2_data_traits<BOXM2_LABEL_SHORT>
+{
+ public:
+  typedef short datatype;
+  static vcl_size_t datasize() { return sizeof(short); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_label_short"; else return "boxm2_label_short_"+identifier; }
+};
 
 //: HACKY WAY TO GENERICALLY GET DATASIZES -
 class boxm2_data_info
@@ -436,6 +446,9 @@ class boxm2_data_info
     if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_FEATURE_VECTOR>::datasize();
 
+    if (prefix.find(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
+
     return 0;
   }
 
@@ -493,6 +506,8 @@ class boxm2_data_info
       return  BOXM2_COVARIANCE ;
     else if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos)
       return  BOXM2_FEATURE_VECTOR ;
+    else if (prefix.find(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()) != vcl_string::npos)
+      return  BOXM2_LABEL_SHORT ;
     else
       return BOXM2_UNKNOWN;
   }
