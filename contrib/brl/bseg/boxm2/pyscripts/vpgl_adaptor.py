@@ -461,6 +461,18 @@ def geo2generic(geocam, ni, nj, scene_height, level):
     cam = dbvalue(c_id, c_type);
     return cam
     
+def geo_cam_global_to_img(geocam, lon, lat):
+    boxm2_batch.init_process("vpglGeoGlobalToImgProcess");
+    boxm2_batch.set_input_from_db(0, geocam);
+    boxm2_batch.set_input_double(1, lon);
+    boxm2_batch.set_input_double(2, lat);
+    boxm2_batch.run_process();
+    (id, type) = boxm2_batch.commit_output(0);
+    u = boxm2_batch.get_output_int(id);
+    (id, type) = boxm2_batch.commit_output(1);
+    v = boxm2_batch.get_output_int(id);
+    return u, v
+    
 
 
 
