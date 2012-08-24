@@ -67,6 +67,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_from_kml_process, "vpglCreatePerspCameraFromKMLProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_to_local_coordinates_process2, "vpglConvertToLocalCoordinatesProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_perspective_camera_from_kml_file_process, "vpglLoadPerspCameraFromKMLFileProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_geo_cam_global_to_img_process, "vpglGeoGlobalToImgProcess");
 }
 
 
