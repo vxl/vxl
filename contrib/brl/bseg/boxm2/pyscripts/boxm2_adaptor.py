@@ -344,6 +344,16 @@ def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickne
   # ingest one more time to fill up the empty voxels below the surface (They are not refined but they still need to be occupied)
   scene.ingest_height_map(x_img,y_img,z_img);
   scene.write_cache();
+  
+def refine_and_ingest_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=1):
+  for i in range(0,refine_cnt,1):
+    scene.refine();
+    scene.ingest_height_map(x_img,y_img,z_img);
+    scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
+
+  # ingest one more time to fill up the empty voxels below the surface (They are not refined but they still need to be occupied)
+  scene.ingest_height_map(x_img,y_img,z_img);
+  scene.write_cache();
     
 # Ingest a Buckeye-Style DEM, i.e. first return and last return image pair
 def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoid_height, device=None) :
