@@ -35,12 +35,7 @@
     #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data)
     #define NORM 65535
 #endif
-#ifndef MOG_TYPE
-    #define MOG_TYPE int2
-    #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data)
-    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int2(convert_uchar8_sat_rte(data));
-    #define NORM 255
-#endif
+
 
 
 #ifdef FLOAT8
@@ -51,7 +46,20 @@
     #define EXPECTED_INT(lhs, data) lhs = min(data.s7*data.s7,1/(data.s7*data.s7))
     #define NORM 1.0
 #endif
+#ifdef SHORT
+    #define MOG_TYPE unsigned short
+    #define CONVERT_FUNC(lhs,data) short lhs = convert_float8(data);
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = data;
+    #define EXPECTED_INT(lhs, data) lhs = data.s0;
+    #define NORM 65535
+#endif
 
+#ifndef MOG_TYPE
+    #define MOG_TYPE int2
+    #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data)
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int2(convert_uchar8_sat_rte(data));
+    #define NORM 255
+#endif
 //pixel type (RGB or GREY)
 #ifdef PIXEL_GREY
     #define PIXEL_TYPE float
