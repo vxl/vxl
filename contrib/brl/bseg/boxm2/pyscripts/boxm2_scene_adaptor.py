@@ -67,6 +67,8 @@ class boxm2_scene_adaptor(object):
   def lvcs(self) :
     return self.lvcs
 
+  def cache() :
+	return self.cache;
   #update with alternate explaination prior and appearance density
   def update_with_alt(self, cam, img, update_alpha=True, mask=None, var=-1.0, alt_prior=None, alt_density=None):
     cache = self.opencl_cache
@@ -189,7 +191,7 @@ class boxm2_scene_adaptor(object):
       dev = None;
     ingest_height_map(self.scene, cache,x_img,y_img,z_img, zero_out_alpha, dev);
     return ;
-    
+
   #ingest heigh map
   def ingest_height_map_space(self,x_img,y_img,z_img, crust_thickness,device_string="") :
     cache = self.active_cache;
@@ -203,7 +205,7 @@ class boxm2_scene_adaptor(object):
     return ;
     
   #ingest buckeye-style dem
-  def ingest_buckeye_dem(self, first_ret_fname, last_ret_fname, geoid_height, device_string="") :
+  def ingest_buckeye_dem(self, first_ret_fname, last_ret_fname, geoid_height,geocam, device_string="") :
     cache = self.active_cache;
     dev = self.device;
     if device_string=="gpu" :
@@ -211,9 +213,14 @@ class boxm2_scene_adaptor(object):
     elif device_string=="cpp" :
       cache = self.cpu_cache;
       dev = None;
-    ingest_buckeye_dem(self.scene, cache, first_ret_fname, last_ret_fname, geoid_height, dev);
+    ingest_buckeye_dem(self.scene, cache, first_ret_fname, last_ret_fname, geoid_height,geocam, dev);
     return ;
 
+  def probabiltiy_of(self, cam, image):
+	cache = self.active_cache;
+	dev = self.device;
+	outimg = compute_probabiltiy_of_image(self.device,self.scene, self.opencl_cache, cam, image);
+	return outimg;
   # detect change wrapper,
   def change_detect(self, cam, img, exp_img, n=1, raybelief="", max_mode=False, rgb=False, device_string="") :
     cache = self.active_cache;
