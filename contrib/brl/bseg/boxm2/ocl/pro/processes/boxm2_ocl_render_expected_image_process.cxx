@@ -156,7 +156,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
       options="-D FLOAT8 ";
       apptypesize = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
     }
-	else if ( apps[i] == boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix() )
+    else if ( apps[i] == boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;

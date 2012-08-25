@@ -241,62 +241,62 @@ bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-      //choose correct render kernel
-      boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-      bocl_kernel* kern =  kernels[identifier][0];
+    //choose correct render kernel
+    boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+    bocl_kernel* kern =  kernels[identifier][0];
 
-      //write the image values to the buffer
-      vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(*id);
-      bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-	  int mogTypeSize    = (int) boxm2_data_info::datasize(data_type);
-	        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-      int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
-      blk_info->write_to_buffer((queue));
+    //write the image values to the buffer
+    vul_timer transfer;
+    bocl_mem* blk       = opencl_cache->get_block(*id);
+    bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+    int mogTypeSize    = (int) boxm2_data_info::datasize(data_type);
+    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
+    blk_info->write_to_buffer((queue));
 
-     bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*mogTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
-       transfer_time += (float) transfer.all();
+    bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*mogTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
+    transfer_time += (float) transfer.all();
 
-      ////3. SET args
-      kern->set_arg( blk_info );
-      kern->set_arg( blk );
-      kern->set_arg( alpha );
-      kern->set_arg( mog );
-      kern->set_arg( persp_cam.ptr() );
-      kern->set_arg( in_image.ptr() );
-      kern->set_arg( prob_image.ptr() );
-      kern->set_arg( img_dim.ptr());
-      kern->set_arg( cl_output.ptr() );
-      kern->set_arg( lookup.ptr() );
-      kern->set_arg( vis_image.ptr() );
+    ////3. SET args
+    kern->set_arg( blk_info );
+    kern->set_arg( blk );
+    kern->set_arg( alpha );
+    kern->set_arg( mog );
+    kern->set_arg( persp_cam.ptr() );
+    kern->set_arg( in_image.ptr() );
+    kern->set_arg( prob_image.ptr() );
+    kern->set_arg( img_dim.ptr());
+    kern->set_arg( cl_output.ptr() );
+    kern->set_arg( lookup.ptr() );
+    kern->set_arg( vis_image.ptr() );
 
-      //local tree , cumsum buffer, imindex buffer
-      kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
-      kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
-      kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );
+    //local tree , cumsum buffer, imindex buffer
+    kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
+    kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
+    kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );
 
-      //execute kernel
-      kern->execute(queue, 2, local_threads, global_threads);
-      clFinish(queue);
-      gpu_time += kern->exec_time();
+    //execute kernel
+    kern->execute(queue, 2, local_threads, global_threads);
+    clFinish(queue);
+    gpu_time += kern->exec_time();
 
-      //clear render kernel args so it can reset em on next execution
-      kern->clear_args();
+    //clear render kernel args so it can reset em on next execution
+    kern->clear_args();
   }
   // normalize
   bocl_kernel* normalize_prob_image_kernel =  kernels[identifier][1];
   {
-      normalize_prob_image_kernel->set_arg( prob_image.ptr() );
-      normalize_prob_image_kernel->set_arg( vis_image.ptr() );
-      normalize_prob_image_kernel->set_arg( img_dim.ptr());
-      normalize_prob_image_kernel->execute( queue, 2, local_threads, global_threads);
-      clFinish(queue);
-      gpu_time += normalize_prob_image_kernel->exec_time();
+    normalize_prob_image_kernel->set_arg( prob_image.ptr() );
+    normalize_prob_image_kernel->set_arg( vis_image.ptr() );
+    normalize_prob_image_kernel->set_arg( img_dim.ptr());
+    normalize_prob_image_kernel->execute( queue, 2, local_threads, global_threads);
+    clFinish(queue);
+    gpu_time += normalize_prob_image_kernel->exec_time();
 
-      //clear render kernel args so it can reset em on next execution
-      normalize_prob_image_kernel->clear_args();
+    //clear render kernel args so it can reset em on next execution
+    normalize_prob_image_kernel->clear_args();
   }
 
   // read out expected image
