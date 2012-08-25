@@ -10,6 +10,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_distance.h>
+#include <vgl/vgl_tolerance.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -162,7 +163,30 @@ bool vgl_plane_3d<T>::planar_coords(vgl_point_3d<T> const& p3d,
     }
   return true;
 }
-
+template <class T>
+vgl_point_3d<T> 
+vgl_plane_3d<T>::world_coords(vgl_point_2d<T> const& p2d) const{
+  // construct the axis vectors
+  vgl_vector_3d<T> Y((T)0, (T)1, (T)0);
+  vgl_vector_3d<T> n = this->normal();
+  vgl_point_3d<T> origin_pt = vgl_closest_point_origin(*this);
+  T dp = (T)1 - vcl_fabs(dot_product(n, Y));
+  T tol = vgl_tolerance<T>::position;
+  if(dp>tol)//ok to use the Y axis to form the coordinate system
+    {
+      vgl_vector_3d<T> uvec = cross_product(Y, n);
+      vgl_vector_3d<T> vvec = cross_product(n, uvec);
+      uvec *= p2d.x(); vvec *= p2d.y();
+      vgl_point_3d<T> p3d = origin_pt + (uvec + vvec);
+      return p3d;
+    } // the normal is parallel to the Y axis
+      vgl_vector_3d<T> Z((T)0, (T)0, (T)1);
+      vgl_vector_3d<T> uvec = cross_product(n, Z);
+      vgl_vector_3d<T> vvec = cross_product(uvec, n);
+      uvec *= p2d.x(); vvec *= p2d.y();
+      vgl_point_3d<T> p3d = origin_pt + (uvec + vvec);
+      return p3d;
+}
 
 #undef VGL_PLANE_3D_INSTANTIATE
 #define VGL_PLANE_3D_INSTANTIATE(T) \

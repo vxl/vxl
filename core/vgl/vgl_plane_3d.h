@@ -125,6 +125,8 @@ class vgl_plane_3d
   // the plane origin is the point in the plane closest to the world origin
   bool planar_coords(vgl_point_3d<T> const& p3d,
                      vgl_point_2d<T>& p2d, T tol=(T)0 ) const;
+  // inverse map from plane coordinates to world coordinates
+  vgl_point_3d<T> world_coords(vgl_point_2d<T> const& p2d) const;
 };
 
 //: Return true iff p is the plane at infinity
