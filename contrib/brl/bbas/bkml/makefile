@@ -4,6 +4,7 @@ LIBRARY := bkml
 VERSION := 1.0
 
 SOURCES += bkml_write.cxx
+SOURCES += bkml_parser.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

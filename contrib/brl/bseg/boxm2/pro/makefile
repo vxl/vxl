@@ -37,6 +37,7 @@ SOURCES += processes/boxm2_scene_lvcs_process.cxx
 SOURCES += processes/boxm2_dem_to_xyz_process.cxx
 SOURCES += processes/boxm2_combine_expected_images_process.cxx
 SOURCES += processes/boxm2_scene_kml_process.cxx
+SOURCES += processes/boxm2_ingest_convex_mesh_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

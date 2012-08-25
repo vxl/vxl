@@ -26,6 +26,7 @@ SOURCES += processes/bbas_estimate_irradiance_process.cxx
 SOURCES += processes/imesh_ply_bbox_process.cxx
 SOURCES += processes/bsl_expected_image_process.cxx
 SOURCES += processes/bsl_fusion_process.cxx
+SOURCES += processes/bpgl_depth_map_processes.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
