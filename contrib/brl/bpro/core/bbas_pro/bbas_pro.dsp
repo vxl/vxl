@@ -147,6 +147,9 @@ SOURCE=.\processes/bsl_expected_image_process.cxx
 SOURCE=.\processes/bsl_fusion_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bpgl_depth_map_processes.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bbas_1d_array_uint_sptr-.cxx
 # End Source File
 # Begin Source File

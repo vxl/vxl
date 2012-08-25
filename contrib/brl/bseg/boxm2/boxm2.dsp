@@ -181,6 +181,24 @@ SOURCE=.\Templates/boxm2_data+BOXM2_POINT-.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm2_data+BOXM2_FEATURE_VECTOR-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_FLOAT8-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_LABEL_SHORT-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_GAUSS_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_INTENSITY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_GAMMA-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_FLOAT16-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

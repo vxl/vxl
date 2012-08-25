@@ -192,6 +192,9 @@ SOURCE=.\processes/boxm2_combine_expected_images_process.cxx
 SOURCE=.\processes/boxm2_scene_kml_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm2_ingest_convex_mesh_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group
