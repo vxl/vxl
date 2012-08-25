@@ -111,6 +111,20 @@ class vgl_plane_3d
 
   //: Return true if p is on the plane
   bool contains(vgl_point_3d<T> const& p, T tol = (T)0) const;
+
+  //: Given a 3-d point, return a 2-d point in the coord. system of the plane
+  // if the point is not on the plane then false is returned
+  // the coordinate system on the plane, (u, v), is defined as,
+  // cases:
+  // 1) n not parallel to Y
+  //   u = Y x n and v = n x u
+  //
+  // 2) n parallel to Y
+  //   u = n x Z and v = u x n
+  //
+  // the plane origin is the point in the plane closest to the world origin
+  bool planar_coords(vgl_point_3d<T> const& p3d,
+                     vgl_point_2d<T>& p2d, T tol=(T)0 ) const;
 };
 
 //: Return true iff p is the plane at infinity

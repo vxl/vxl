@@ -7,6 +7,10 @@
 #include "vgl_plane_3d.h"
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_closest_point.h>
+#include <vgl/vgl_distance.h>
+#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
@@ -128,6 +132,37 @@ vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p)
   p.set(a,b,c,d);
   return is;
 }
+
+template <class T>
+bool vgl_plane_3d<T>::planar_coords(vgl_point_3d<T> const& p3d,
+                                    vgl_point_2d<T>& p2d, T tol) const{
+  // check if point is on the plane
+  vgl_point_3d<T> planar_pt = vgl_closest_point(p3d, *this);
+  double dist = vgl_distance(p3d, planar_pt), dtol = static_cast<double>(tol);
+  if(dist>dtol) return false;
+  // use the planar point to compute coordinates
+  // construct the axis vectors
+  vgl_vector_3d<T> Y((T)0, (T)1, (T)0);
+  vgl_vector_3d<T> n = this->normal();
+  vgl_point_3d<T> origin_pt = vgl_closest_point_origin(*this);
+  vgl_vector_3d<T> p = planar_pt - origin_pt;
+  T dp = (T)1 - vcl_fabs(dot_product(n, Y));
+  if(dp>tol)//ok to use the Y axis to form the coordinate system
+    {
+      vgl_vector_3d<T> uvec = cross_product(Y, n);
+      vgl_vector_3d<T> vvec = cross_product(n, uvec);
+      T u = dot_product(uvec, p), v = dot_product(vvec, p);
+      p2d.set(u, v);
+    }else{ // the normal is parallel to the Y axis
+      vgl_vector_3d<T> Z((T)0, (T)0, (T)1);
+      vgl_vector_3d<T> uvec = cross_product(n, Z);
+      vgl_vector_3d<T> vvec = cross_product(uvec, n);
+      T u = dot_product(uvec, p), v = dot_product(vvec, p);
+      p2d.set(u, v);
+    }
+  return true;
+}
+
 
 #undef VGL_PLANE_3D_INSTANTIATE
 #define VGL_PLANE_3D_INSTANTIATE(T) \
