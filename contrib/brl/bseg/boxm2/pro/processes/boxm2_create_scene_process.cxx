@@ -169,7 +169,7 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
     return false;
 
   vpgl_lvcs::cs_names cs_id;
-  if (cs_name == "wgs84") 
+  if (cs_name == "wgs84")
     cs_id = vpgl_lvcs::wgs84;
   else if (cs_name == "utm")
     cs_id = vpgl_lvcs::utm;
@@ -260,11 +260,11 @@ bool boxm2_distribute_scene_blocks_process_cons(bprb_func_process& pro)
 
   //process takes 13 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "boxm2_scene_sptr"; // big scene 
+  input_types_[0] = "boxm2_scene_sptr"; // big scene
   input_types_[1] = "double"; // dimension of the smaller scenes (in units of the local coordinate system, e.g. if UTM in meters)
   input_types_[2] = "vcl_string"; // output folder to write the smaller scene xml files
   input_types_[3] = "vcl_string"; // xml name prefix
-  
+
   // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
@@ -282,7 +282,7 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
   //get the inputs
   vcl_vector<vcl_string> appearance(2,"");
   unsigned i = 0;
-  
+
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   double scene_dim = pro.get_input<double>(i++);
   vcl_string output_path = pro.get_input<vcl_string>(i++);
@@ -295,7 +295,6 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blks=scene->blocks();
   vcl_cout << "number of blocks in the scene: " << blks.size() << vcl_endl;
   vgl_box_3d<double> bb = scene->bounding_box();
-  double w = bb.width(); double h = bb.height();
   for (double orig_x = bb.min_point().x(); orig_x <= bb.max_point().x(); orig_x += scene_dim)
     for (double orig_y = bb.min_point().y(); orig_y <= bb.max_point().y(); orig_y += scene_dim) {
       boxm2_scene_sptr small_scene = new boxm2_scene(scene->data_path(), scene->local_origin());
@@ -303,36 +302,35 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
       small_scene->set_lvcs(lv);
       small_scene->set_num_illumination_bins(scene->num_illumination_bins());
       vcl_map<boxm2_block_id, boxm2_block_metadata>& small_scene_blks=small_scene->blocks();
-      
+
       vgl_box_2d<double> small_scene_box;
       small_scene_box.add(vgl_point_2d<double>(orig_x, orig_y));
       small_scene_box.add(vgl_point_2d<double>(orig_x + scene_dim - scene_dim/1000, orig_y + scene_dim - scene_dim/1000));
-      //: find all the blocks in the scene with (orig_x, orig_y) <-> (orig_x + scene_dim, orig_y + scene_dim)
+      // find all the blocks in the scene with (orig_x, orig_y) <-> (orig_x + scene_dim, orig_y + scene_dim)
       for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) {
         boxm2_block_metadata md = iter->second;
         vgl_point_2d<double> lo(iter->second.local_origin_.x(), iter->second.local_origin_.y());
-        if (small_scene_box.contains(lo)) 
-          small_scene_blks[iter->first] = iter->second;    
+        if (small_scene_box.contains(lo))
+          small_scene_blks[iter->first] = iter->second;
       }
 
       small_scenes.push_back(small_scene);
     }
-  
+
   vcl_cout << output_path + name_prefix + ".xml" << " number of small scenes: " << small_scenes.size() << vcl_endl;
-  
-  //: write each scene
+
+  // write each scene
   for (unsigned i = 0; i < small_scenes.size(); i++) {
-    vcl_stringstream ss; ss << i; 
-    vcl_string filename = name_prefix + ss.str(); 
-    vcl_string filename_full = output_path + name_prefix + ss.str() + ".xml"; 
-    
-    small_scenes[i]->set_xml_path(filename_full); 
-    
+    vcl_stringstream ss; ss << i;
+    vcl_string filename = name_prefix + ss.str();
+    vcl_string filename_full = output_path + name_prefix + ss.str() + ".xml";
+
+    small_scenes[i]->set_xml_path(filename_full);
+
     //make file and x_write to file
     vcl_ofstream ofile(filename_full.c_str());
-    x_write(ofile,(*small_scenes[i].ptr()), "scene");  
+    x_write(ofile,(*small_scenes[i].ptr()), "scene");
   }
-  
 
   return true;
 }
