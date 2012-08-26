@@ -115,17 +115,18 @@ depth_map(unsigned log2_downsample_ratio)
   // do the sky first so other regions can paint over it if 
   // necessary
   bool good = true;
-  if(sky_)
+  if(sky_&&sky_->active())
    good = sky_->update_depth_image(depth, cam_, ratio);
   // then do the ground plane
-  if(ground_plane_)
+  if(ground_plane_&&ground_plane_->active())
     good = good && ground_plane_->update_depth_image(depth, cam_, ratio);
   assert(good);
   vcl_vector<depth_map_region_sptr> regions;
   vcl_map<vcl_string, depth_map_region_sptr>::iterator rit = 
     scene_regions_.begin();
   for(; rit != scene_regions_.end(); ++rit)
-    regions.push_back(rit->second);
+    if(rit->second->active())
+      regions.push_back(rit->second);
   //sort on depth order
   vcl_sort(regions.begin(), regions.end(), compare_order());
   // paint in reverse depth order so closer regions paint over more
@@ -182,7 +183,8 @@ bool depth_map_scene::next_depth(){
     vcl_map<vcl_string, depth_map_region_sptr>::iterator rit = 
       scene_regions_.begin();
     for(; rit !=     scene_regions_.end(); ++rit)
-      depth_states_.push_back(rit->second);
+      if(rit->second->active())
+        depth_states_.push_back(rit->second);
     //sort on depth order
     vcl_sort(depth_states_.begin(), depth_states_.end(), compare_order());
     //set depths to min depth.

@@ -19,6 +19,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vcl_string.h>
 #include <vsl/vsl_binary_io.h>
@@ -60,6 +61,7 @@ class depth_map_region : public vbl_ref_count
   void set_max_depth(double max_depth){max_depth_ = max_depth;}
   void set_depth_inc(double depth_inc){depth_inc_ = depth_inc;}
   void set_order(unsigned order){order_ = order;}
+  void set_active(bool active){active_ = active;}
   //:accessors
   double min_depth() const {return min_depth_;}
   double max_depth() const {return max_depth_;}
@@ -67,6 +69,7 @@ class depth_map_region : public vbl_ref_count
   vsol_polygon_2d_sptr region_2d() const {return region_2d_;}
   double depth() const {return depth_;}
   double depth_inc() const {return  depth_inc_;}
+  bool active() const { return active_;}
   unsigned order() const {return order_;}
   vsol_point_2d_sptr centroid_2d() const;
   //:
@@ -101,12 +104,18 @@ class depth_map_region : public vbl_ref_count
                                   vpgl_perspective_camera<double> const& cam,
                                   double proximity_scale_factor);
 
+  //: compute the homography between the image and 3d region plane coords
+  bool img_to_region_plane(vpgl_perspective_camera<double> const& cam,
+                           vgl_h_matrix_2d<double>& H) const;
+
   //: update the input depth image with *this* region
   // Currently assumes disjoint regions so that sorting on depth
   // is not required.
   bool update_depth_image(vil_image_view<float>& depth_image,
                           vpgl_perspective_camera<double> const& cam,
                           double downsample_ratio = 1.0) const;
+  //: version
+  unsigned version() const {return 1;}
 
   //: binary IO write
   void b_write(vsl_b_ostream& os);
@@ -115,6 +124,7 @@ class depth_map_region : public vbl_ref_count
   void b_read(vsl_b_istream& is);
 
  protected:
+  bool active_; // if active is true then inserted into the depth map
   unsigned order_;//depth order
   orientation orient_type_;
   vcl_string name_;

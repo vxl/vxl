@@ -3,6 +3,7 @@
 // \file
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
+#include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_polygon.h>
@@ -16,6 +17,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vcl_cassert.h>
+#include <vsl/vsl_basic_xml_element.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
@@ -86,10 +88,10 @@ region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
   return poly_3d;
 }
 
-depth_map_region::depth_map_region() :
-  order_(0), orient_type_(NOT_DEF), name_(""), depth_(-1.0),
-  min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
-  depth_inc_(1.0), region_2d_(0), region_3d_(0)
+depth_map_region::depth_map_region() : active_(true),
+                                       order_(0), orient_type_(NOT_DEF), name_(""), depth_(-1.0),
+                                       min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
+                                       depth_inc_(1.0), region_2d_(0), region_3d_(0)
 {}
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -97,7 +99,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    double min_depth, double max_depth,
                                    vcl_string name,
                                    depth_map_region::orientation orient)
-  : order_(0), orient_type_(orient), name_(name), depth_(-1.0),
+  : active_(true), order_(0), orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(min_depth), max_depth_(max_depth), depth_inc_(1.0),
     region_plane_(region_plane), region_2d_(region), region_3d_(0)
 {
@@ -107,7 +109,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vgl_plane_3d<double> const& region_plane,
                                    vcl_string name,
                                    depth_map_region::orientation orient)
-  : order_(0), orient_type_(orient), name_(name), depth_(-1.0),
+  : active_(true), order_(0), orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(-1.0), max_depth_(-1.0),depth_inc_(1.0),
     region_plane_(region_plane), region_2d_(region), region_3d_(0)
 {
@@ -115,7 +117,8 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name)
-  : order_(0), orient_type_(INFINT), name_(name), depth_(vcl_numeric_limits<double>::max()),
+  : active_(true), order_(0), orient_type_(INFINT), name_(name), 
+    depth_(vcl_numeric_limits<double>::max()),
     min_depth_(vcl_numeric_limits<double>::max()),
     max_depth_(vcl_numeric_limits<double>::max()),
     depth_inc_(1.0),
@@ -278,6 +281,36 @@ set_ground_plane_max_depth(double max_depth,
   this->set_region_3d(cam);
   return true;
 }
+bool depth_map_region::
+img_to_region_plane(vpgl_perspective_camera<double> const& cam,
+                    vgl_h_matrix_2d<double>& H) const{
+  if(this->orient_type() == INFINT)
+    return false;
+  vcl_vector<vgl_point_2d<double> > verts_2d, reg_pts_2d;
+  unsigned nverts = region_2d_->size();
+  for (unsigned i = 0; i<nverts; ++i){
+    vgl_point_2d<double> pimg = region_2d_->vertex(i)->get_p();
+    verts_2d.push_back(pimg);
+    vgl_ray_3d<double> ray = cam.backproject_ray(pimg);
+      vgl_point_3d<double> p3d;
+      vgl_point_2d<double> p2d;
+      bool success =  vgl_intersection(ray, region_plane_, p3d);
+      double tol = vcl_sqrt(vgl_tolerance<double>::position);
+      success = region_plane_.planar_coords(p3d, p2d, tol);
+      assert(success);
+	  vgl_point_3d<double> test = region_plane_.world_coords(p2d);
+      if(!success) return false;
+      reg_pts_2d.push_back(p2d);
+  }
+  vcl_vector<vgl_homg_point_2d<double> > hpts_2d, hpts_reg_2d;
+  for (unsigned i = 0; i<nverts; ++i){
+    hpts_2d.push_back(vgl_homg_point_2d<double>(verts_2d[i].x(),verts_2d[i].y()) );
+    hpts_reg_2d.push_back(vgl_homg_point_2d<double>(reg_pts_2d[i].x(),reg_pts_2d[i].y()));
+  }
+  vgl_h_matrix_2d_compute_linear hc;
+  bool success = hc.compute(hpts_2d, hpts_reg_2d, H);
+  return success;
+}
 
 bool depth_map_region::
 update_depth_image(vil_image_view<float>& depth_image,
@@ -285,42 +318,18 @@ update_depth_image(vil_image_view<float>& depth_image,
                    double downsample_ratio) const
 {
   vgl_vector_3d<double> pray = normalized(cam.principal_axis());
+  vgl_point_3d<double> cen = cam.get_camera_center();
   vgl_vector_3d<double> prxy(pray.x(), pray.y(), 0.0);
-  vcl_vector<vgl_point_2d<double> > verts_2d;
+  vcl_vector<vgl_point_2d<double> > verts_2d, reg_pts_2d;
   unsigned nverts = region_2d_->size();
-  for (unsigned i = 0; i<nverts; ++i)
-    verts_2d.push_back(region_2d_->vertex(i)->get_p() );
-
-  // since the regions are planar it follows that
-  // depth = alpha u + beta v + gamma for image locations within the 2-d region
-  // note this computation could be put into set_depth to be more efficient
-  double alpha=0.0, beta=0.0, gamma = vcl_numeric_limits<double>::max();
-  if (this->orient_type() != INFINT)
-    {
-      if (region_3d_) {
-        vnl_matrix<double> A(nverts, 3, 1.0);
-        vnl_vector<double> b(nverts);
-        for (unsigned r = 0; r<nverts; ++r) {
-          A[r][0]=verts_2d[r].x(); A[r][1]=verts_2d[r].y();
-          vgl_point_2d<double> pimg = verts_2d[r];
-          vgl_ray_3d<double> ray = cam.backproject_ray(pimg);
-          vgl_point_3d<double> p3d, org = ray.origin();
-          bool success =  vgl_intersection(ray, region_plane_, p3d);
-          assert(success);
-          vgl_vector_3d<double> vpt = p3d - org;
-          b[r] = vcl_fabs(dot_product(vpt, prxy));
-        }
-        vnl_svd<double> svd(A);
-        vnl_vector<double> result = svd.solve(b);
-        alpha = result[0]; beta = result[1]; gamma = result[2];
-      }
-      else {
-        alpha = 0.0; beta=0.0; gamma = -1.0;
-      }
-    }
-  // compute downsampled alpha, beta
-  alpha *= downsample_ratio; beta *= downsample_ratio;
-  // downsample the 2-d region vertices
+  for (unsigned i = 0; i<nverts; ++i){
+    vgl_point_2d<double> pimg = region_2d_->vertex(i)->get_p();
+    verts_2d.push_back(pimg);
+  }
+  vgl_h_matrix_2d<double> H;
+  if(this->orient_type() != INFINT)
+    if(!this->img_to_region_plane(cam, H))
+      return false;
   vcl_vector<vgl_point_2d<double> > downsmp_verts_2d;  
   for(unsigned i = 0; i<nverts; ++i){
     vgl_point_2d<double>& vert = verts_2d[i];
@@ -328,96 +337,115 @@ update_depth_image(vil_image_view<float>& depth_image,
                                vert.y()/downsample_ratio);
     downsmp_verts_2d.push_back(dvert);
   }
-    // now scan the region into the image
-    vgl_polygon<double> vpoly(downsmp_verts_2d);
-    //scan convert depths
-    int ni = depth_image.ni(), nj = depth_image.nj();
-    vgl_polygon_scan_iterator<double> scan(vpoly);
-    float inf = vcl_numeric_limits<float>::max();
-    for (scan.reset(); scan.next(); ) {
-      int v = scan.scany();
-      for (int u = scan.startx(); u <= scan.endx(); ++u) {
-        if (u<0||u>=ni||v<0||v>=nj)
-          continue;
-        if (this->orient_type() != INFINT)
-          depth_image(u, v) = static_cast<float>(alpha*u + beta*v + gamma);
-        else
-          depth_image(u, v) = inf;
-      }
+  // now scan the region into the image
+  vgl_polygon<double> vpoly(downsmp_verts_2d);
+  //scan convert depths
+  int ni = depth_image.ni(), nj = depth_image.nj();
+  vgl_polygon_scan_iterator<double> scan(vpoly);
+  float inf = vcl_numeric_limits<float>::max();
+  for (scan.reset(); scan.next(); ) {
+    int v = scan.scany();
+    for (int u = scan.startx(); u <= scan.endx(); ++u) {
+      if (u<0||u>=ni||v<0||v>=nj)
+        continue;
+      if (this->orient_type() != INFINT){
+        double su = u*downsample_ratio, sv = v*downsample_ratio;
+        vgl_homg_point_2d<double> hp(su, sv);
+        vgl_point_2d<double> hpr;
+        hpr = H(hp);
+        vgl_point_3d<double> p3d = region_plane_.world_coords(hpr);
+        vgl_vector_3d<double> rayv = p3d-cen;
+        //double depth = dot_product(rayv, pray);
+        double depth = rayv.length();
+        depth_image(u, v) = static_cast<float>(depth);
+      }else
+        depth_image(u, v) = inf;
     }
-    return true;
   }
+  return true;
+}
 
-  void vsl_b_write(vsl_b_ostream& os, const depth_map_region* dm_ptr)
-    {
-      if (dm_ptr ==0) {
-        vsl_b_write(os, false);
-        return;
-      }
-      else
-        vsl_b_write(os, true);
-      depth_map_region* dm_non_const = const_cast<depth_map_region*>(dm_ptr);
-      dm_non_const->b_write(os);
-    }
+void vsl_b_write(vsl_b_ostream& os, const depth_map_region* dm_ptr)
+{
+  if (dm_ptr ==0) {
+    vsl_b_write(os, false);
+    return;
+  }
+  else
+    vsl_b_write(os, true);
+  depth_map_region* dm_non_const = const_cast<depth_map_region*>(dm_ptr);
+  dm_non_const->b_write(os);
+}
 
-  void vsl_b_read(vsl_b_istream &is, depth_map_region*& dm_ptr)
-    {
-      bool valid_ptr = false;
-      vsl_b_read(is, valid_ptr);
-      if (valid_ptr) {
-        dm_ptr = new depth_map_region();
-        dm_ptr->b_read(is);
-        return;
-      }
-      dm_ptr = 0;
-    }
+void vsl_b_read(vsl_b_istream &is, depth_map_region*& dm_ptr)
+{
+  bool valid_ptr = false;
+  vsl_b_read(is, valid_ptr);
+  if (valid_ptr) {
+    dm_ptr = new depth_map_region();
+    dm_ptr->b_read(is);
+    return;
+  }
+  dm_ptr = 0;
+}
 
-  void vsl_b_write(vsl_b_ostream& os, const depth_map_region_sptr& dm_ptr)
-    {
-      depth_map_region* dm=dm_ptr.ptr();
-      vsl_b_write(os, dm);
-    }
+void vsl_b_write(vsl_b_ostream& os, const depth_map_region_sptr& dm_ptr)
+{
+  depth_map_region* dm=dm_ptr.ptr();
+  vsl_b_write(os, dm);
+}
 
-  void vsl_b_read(vsl_b_istream &is, depth_map_region_sptr& dm_ptr)
-    {
-      depth_map_region* dm=0;
-      vsl_b_read(is, dm);
-      dm_ptr = dm;
-    }
+void vsl_b_read(vsl_b_istream &is, depth_map_region_sptr& dm_ptr)
+{
+  depth_map_region* dm=0;
+  vsl_b_read(is, dm);
+  dm_ptr = dm;
+}
 
-  //: binary IO write
-  void depth_map_region::b_write(vsl_b_ostream& os)
-    {
-      vsl_b_write(os, order_);
-      unsigned temp = static_cast<unsigned>(orient_type_);
-      vsl_b_write(os, temp);
-      vsl_b_write(os, name_);
-      vsl_b_write(os, depth_);
-      vsl_b_write(os, min_depth_);
-      vsl_b_write(os, max_depth_);
-      vsl_b_write(os, depth_inc_);
-      vsl_b_write(os, region_plane_);
-      vsl_b_write(os, region_2d_.ptr());
-      vsl_b_write(os, region_3d_.ptr());
-    }
+//: binary IO write
+void depth_map_region::b_write(vsl_b_ostream& os)
+{
+  unsigned ver = this->version();
+  vsl_b_write(os, ver);
+  vsl_b_write(os, active_);
+  vsl_b_write(os, order_);
+  unsigned temp = static_cast<unsigned>(orient_type_);
+  vsl_b_write(os, temp);
+  vsl_b_write(os, name_);
+  vsl_b_write(os, depth_);
+  vsl_b_write(os, min_depth_);
+  vsl_b_write(os, max_depth_);
+  vsl_b_write(os, depth_inc_);
+  vsl_b_write(os, region_plane_);
+  vsl_b_write(os, region_2d_.ptr());
+  vsl_b_write(os, region_3d_.ptr());
+}
 
-  //: binary IO read
-  void depth_map_region::b_read(vsl_b_istream& is)
-    {
-      vsl_b_read(is, order_);
-      unsigned temp;
-      vsl_b_read(is, temp);
-      orient_type_ = static_cast<orientation>(temp);
-      vsl_b_read(is, name_);
-      vsl_b_read(is, depth_);
-      vsl_b_read(is, min_depth_);
-      vsl_b_read(is, max_depth_);
-      vsl_b_read(is, depth_inc_);
-      vsl_b_read(is, region_plane_);
-      vsol_polygon_2d* r2d=0;
-      vsl_b_read(is, r2d);
-      region_2d_ = r2d;
-      vsol_polygon_3d* r3d=0;
-      vsl_b_read(is, r3d);
-      region_3d_ = r3d;
-    }
+//: binary IO read
+void depth_map_region::b_read(vsl_b_istream& is)
+{
+  unsigned ver;
+  vsl_b_read(is, ver);
+  if(ver ==1){
+    vsl_b_read(is, active_);
+    vsl_b_read(is, order_);
+    unsigned temp;
+    vsl_b_read(is, temp);
+    orient_type_ = static_cast<orientation>(temp);
+    vsl_b_read(is, name_);
+    vsl_b_read(is, depth_);
+    vsl_b_read(is, min_depth_);
+    vsl_b_read(is, max_depth_);
+    vsl_b_read(is, depth_inc_);
+    vsl_b_read(is, region_plane_);
+    vsol_polygon_2d* r2d=0;
+    vsl_b_read(is, r2d);
+    region_2d_ = r2d;
+    vsol_polygon_3d* r3d=0;
+    vsl_b_read(is, r3d);
+    region_3d_ = r3d;
+  }else{
+    vcl_cout << "depth_map_region - unknown binary io version " << ver <<'\n';
+    return;
+  }
+}

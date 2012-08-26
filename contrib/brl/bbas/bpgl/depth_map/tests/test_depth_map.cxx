@@ -6,7 +6,9 @@
 #include <depth_map/depth_map_region_sptr.h>
 #include <vil/vil_image_view.h>
 #include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vcl_limits.h>
@@ -26,6 +28,7 @@ static void test_depth_map()
   double altitude = 1.6;
   double heading = 0.0;
   double tilt = 90.0;
+ // double tilt = 78.62;
   double roll = 0.0;
   vpgl_perspective_camera<double> cam =
     bpgl_camera_utils::camera_from_kml(nid, njd, right_fov, top_fov,
@@ -35,6 +38,8 @@ static void test_depth_map()
   vsol_point_2d_sptr p1= new vsol_point_2d(1280.0, 720.0);
   vsol_point_2d_sptr p2= new vsol_point_2d(1280.0, 361.0);
   vsol_point_2d_sptr p3= new vsol_point_2d(0.0, 361.0);
+  
+
   vcl_vector<vsol_point_2d_sptr> verts;
   verts.push_back(p0);   verts.push_back(p1);
   verts.push_back(p2);   verts.push_back(p3);
@@ -45,7 +50,26 @@ static void test_depth_map()
     new depth_map_region(gp, plane, "test_region",
                          depth_map_region::GROUND_PLANE);
   gpr->set_ground_plane_max_depth(10000.0, cam, 3.0);
-
+  // test ground plane homography
+  vgl_h_matrix_2d<double> H;
+  bool good_H = gpr->img_to_region_plane(cam, H);
+  vsol_polygon_2d_sptr r2d = gpr->region_2d();
+  vsol_polygon_3d_sptr r3d = gpr->region_3d();
+  vgl_plane_3d<double> pl3d = r3d->plane();
+  unsigned nv = r2d->size();
+  double erh = 0.0;
+  for(unsigned i = 0; i<nv; ++i){
+    vsol_point_3d_sptr p3d = r3d->vertex(i);
+    vgl_point_2d<double> pimg = r2d->vertex(i)->get_p();
+    vgl_point_2d<double> pmp_2d = H(vgl_homg_point_2d<double>(pimg.x(), pimg.y()));
+    vgl_point_3d<double> rmap_3d = plane.world_coords(pmp_2d);
+    vcl_cout << pimg << ' ' << *p3d << ' ' << pmp_2d << ' ' << rmap_3d << '\n';
+    erh += vcl_fabs(p3d->x()-rmap_3d.x()) + 
+      vcl_fabs(p3d->y()-rmap_3d.y()) +
+      vcl_fabs(p3d->z()-rmap_3d.z());
+  }
+  
+  TEST_NEAR("planar homography", erh, 0.0, 1e-4);
   vsol_point_2d_sptr p0v= new vsol_point_2d(0.0, 360.0);
   vsol_point_2d_sptr p1v= new vsol_point_2d(640.0, 360.0);
   vsol_point_2d_sptr p2v= new vsol_point_2d(640.0, 0.0);
@@ -108,8 +132,8 @@ static void test_depth_map()
   vsol_polygon_2d_sptr sky = new vsol_polygon_2d(vertss);
   dms.set_sky(sky);
 
-#if 1
-  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/colored_mounds_v1.vsl";
+
+  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene.vsl";
   vsl_b_ifstream tis(spath.c_str());
   depth_map_scene scin;
   scin.b_read(tis);
@@ -119,8 +143,7 @@ static void test_depth_map()
     scin.print_depth_states();
 
   vil_image_view<float> dv = sit->depth_map(0);
-  vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator.tiff");
-#endif
+  vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator_v2.tiff");
 }
 
 
