@@ -62,9 +62,8 @@ class vil_nitf2_data_mask_table
   vxl_uint_16 TMRLNTH;
   //Pad Output Pixel Code Length (in bits)
   vxl_uint_16 TPXCDLNTH;
-  //Pad Output Pixel Code (it's an integer,
-  //but it's length is TPXCDLNTH rounded up
-  //to the nearest byte)
+  //Pad Output Pixel Code
+  // (it's an integer, but its length is TPXCDLNTH rounded up to the nearest byte)
 #if VXL_HAS_INT_64
   vxl_uint_64 TPXCD;
 #else
