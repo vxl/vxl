@@ -117,7 +117,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name)
-  : active_(true), order_(0), orient_type_(INFINT), name_(name), 
+  : active_(true), order_(0), orient_type_(INFINT), name_(name),
     depth_(vcl_numeric_limits<double>::max()),
     min_depth_(vcl_numeric_limits<double>::max()),
     max_depth_(vcl_numeric_limits<double>::max()),
@@ -284,7 +284,7 @@ set_ground_plane_max_depth(double max_depth,
 bool depth_map_region::
 img_to_region_plane(vpgl_perspective_camera<double> const& cam,
                     vgl_h_matrix_2d<double>& H) const{
-  if(this->orient_type() == INFINT)
+  if (this->orient_type() == INFINT)
     return false;
   vcl_vector<vgl_point_2d<double> > verts_2d, reg_pts_2d;
   unsigned nverts = region_2d_->size();
@@ -298,8 +298,8 @@ img_to_region_plane(vpgl_perspective_camera<double> const& cam,
       double tol = vcl_sqrt(vgl_tolerance<double>::position);
       success = region_plane_.planar_coords(p3d, p2d, tol);
       assert(success);
-	  vgl_point_3d<double> test = region_plane_.world_coords(p2d);
-      if(!success) return false;
+      vgl_point_3d<double> test = region_plane_.world_coords(p2d);
+      if (!success) return false;
       reg_pts_2d.push_back(p2d);
   }
   vcl_vector<vgl_homg_point_2d<double> > hpts_2d, hpts_reg_2d;
@@ -327,11 +327,11 @@ update_depth_image(vil_image_view<float>& depth_image,
     verts_2d.push_back(pimg);
   }
   vgl_h_matrix_2d<double> H;
-  if(this->orient_type() != INFINT)
-    if(!this->img_to_region_plane(cam, H))
+  if (this->orient_type() != INFINT)
+    if (!this->img_to_region_plane(cam, H))
       return false;
-  vcl_vector<vgl_point_2d<double> > downsmp_verts_2d;  
-  for(unsigned i = 0; i<nverts; ++i){
+  vcl_vector<vgl_point_2d<double> > downsmp_verts_2d;
+  for (unsigned i = 0; i<nverts; ++i){
     vgl_point_2d<double>& vert = verts_2d[i];
     vgl_point_2d<double> dvert(vert.x()/downsample_ratio,
                                vert.y()/downsample_ratio);
@@ -426,7 +426,7 @@ void depth_map_region::b_read(vsl_b_istream& is)
 {
   unsigned ver;
   vsl_b_read(is, ver);
-  if(ver ==1){
+  if (ver ==1) {
     vsl_b_read(is, active_);
     vsl_b_read(is, order_);
     unsigned temp;
