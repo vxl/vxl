@@ -2055,13 +2055,15 @@ void bwm_observer_cam::save_depth_map_scene(vcl_string const& path){
   scene_.b_write(os);
 }
 
-void bwm_observer_cam::load_depth_map_scene(vcl_string const& path)
+void bwm_observer_cam::load_depth_map_scene(vcl_string const& path,
+                                            bool clear_2d)
 {
   vsl_b_ifstream is(path.c_str());
   if (!is) {
     vcl_cout << "invalid binary stream for path " << path << vcl_endl;
     return;
   }
+  if(clear_2d) clear_objects();
   scene_.b_read(is);
   depth_map_region_sptr gp = scene_.ground_plane();
   if(gp){

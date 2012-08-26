@@ -464,6 +464,7 @@ void bwm_tableau_cam::edit_region_props()
   static vcl_map<vcl_string, double> min_depth;
   static vcl_map<vcl_string, double> max_depth;
   static vcl_map<vcl_string, double> depth_inc;
+  static vcl_map<vcl_string, bool> active;;
   // for padding to align fields
   unsigned max_string_size = 0;
   for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
@@ -475,6 +476,7 @@ void bwm_tableau_cam::edit_region_props()
     min_depth[name]   = (*rit)->min_depth();
     max_depth[name]   = (*rit)->max_depth();
     depth_inc[name]   = (*rit)->depth_inc();
+    active[name]      = (*rit)->active();
   }
   vgui_dialog_extensions reg_dialog("Scene Region Editor");
   vcl_vector<depth_map_region_sptr>::iterator gpit;
@@ -500,6 +502,7 @@ void bwm_tableau_cam::edit_region_props()
     reg_dialog.field("MinDepth", min_depth[(*rit)->name()]);
     reg_dialog.field("MaxDepth", max_depth[(*rit)->name()]);
     reg_dialog.field("Depth Inc.", depth_inc[(*rit)->name()]);
+    reg_dialog.checkbox("Active", active[(*rit)->name()]);
     reg_dialog.line_break();
   }
 
@@ -513,6 +516,7 @@ void bwm_tableau_cam::edit_region_props()
     (*rit)->set_min_depth(min_depth[name]);
     (*rit)->set_max_depth(max_depth[name]);
     (*rit)->set_depth_inc(depth_inc[name]);
+    (*rit)->set_active(active[name]);
   }
   my_observer_->set_ground_plane_max_depth();
 }
@@ -525,7 +529,14 @@ void bwm_tableau_cam::save_depth_map_scene()
 
 void bwm_tableau_cam::load_depth_map_scene()
 {
-  vcl_string path = bwm_utils::select_file();
-  my_observer_->load_depth_map_scene(path);
+  static vcl_string path;
+  bool clear_2d = true;
+  vcl_string ext = ".*";
+  vgui_dialog ld_dialog("Load Depth Map Scene");
+  ld_dialog.file("Scene File", ext, path);
+  ld_dialog.checkbox("Clear Polys Before Load",clear_2d);
+  if(!ld_dialog.ask())
+    return;
+  my_observer_->load_depth_map_scene(path, clear_2d);
 }
 
