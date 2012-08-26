@@ -7,6 +7,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_closest_point.h>
 #include <vcl_cmath.h>
 static void test_constructor()
 {
@@ -54,6 +55,16 @@ static void test_operations()
   er += (p3d2-p3dy).length();
   er += (p3d3-p3dys).length();
   TEST_NEAR("Planar Coordinate System: plane -> world",er,0.0,1e-5);
+
+  // test with a realistic plane
+  vgl_point_3d<double> pt3d(-51.26, -7045.5, -50.0);
+  vgl_plane_3d<double> plane_real(-.162, 0.987, 0.0, 6943.55);
+  vgl_point_3d<double> pt3d_on = vgl_closest_point(pt3d, plane_real);
+  vgl_point_2d<double> pt2d;
+  good = plane_real.planar_coords(pt3d_on, pt2d, 1e-5);
+  vgl_point_3d<double> prec_3d = plane_real.world_coords(pt2d);
+  er = (prec_3d-pt3d_on).length();
+  TEST_NEAR("Realistic plane test", er, 0.0, 1e-5);
 }
 
 void test_plane_3d()

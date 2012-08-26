@@ -140,7 +140,8 @@ bool vgl_plane_3d<T>::planar_coords(vgl_point_3d<T> const& p3d,
   // check if point is on the plane
   vgl_point_3d<T> planar_pt = vgl_closest_point(p3d, *this);
   double dist = vgl_distance(p3d, planar_pt), dtol = static_cast<double>(tol);
-  if(dist>dtol) return false;
+  if(dist>dtol)
+   return false;
   // use the planar point to compute coordinates
   // construct the axis vectors
   vgl_vector_3d<T> Y((T)0, (T)1, (T)0);
@@ -150,14 +151,14 @@ bool vgl_plane_3d<T>::planar_coords(vgl_point_3d<T> const& p3d,
   T dp = (T)1 - vcl_fabs(dot_product(n, Y));
   if(dp>tol)//ok to use the Y axis to form the coordinate system
     {
-      vgl_vector_3d<T> uvec = cross_product(Y, n);
-      vgl_vector_3d<T> vvec = cross_product(n, uvec);
+      vgl_vector_3d<T> uvec = normalize(cross_product(Y, n));
+      vgl_vector_3d<T> vvec = normalize(cross_product(n, uvec));
       T u = dot_product(uvec, p), v = dot_product(vvec, p);
       p2d.set(u, v);
     }else{ // the normal is parallel to the Y axis
       vgl_vector_3d<T> Z((T)0, (T)0, (T)1);
-      vgl_vector_3d<T> uvec = cross_product(n, Z);
-      vgl_vector_3d<T> vvec = cross_product(uvec, n);
+      vgl_vector_3d<T> uvec = normalize(cross_product(n, Z));
+      vgl_vector_3d<T> vvec = normalize(cross_product(uvec, n));
       T u = dot_product(uvec, p), v = dot_product(vvec, p);
       p2d.set(u, v);
     }
@@ -174,15 +175,15 @@ vgl_plane_3d<T>::world_coords(vgl_point_2d<T> const& p2d) const{
   T tol = vgl_tolerance<T>::position;
   if(dp>tol)//ok to use the Y axis to form the coordinate system
     {
-      vgl_vector_3d<T> uvec = cross_product(Y, n);
-      vgl_vector_3d<T> vvec = cross_product(n, uvec);
+      vgl_vector_3d<T> uvec = normalize(cross_product(Y, n));
+      vgl_vector_3d<T> vvec = normalize(cross_product(n, uvec));
       uvec *= p2d.x(); vvec *= p2d.y();
       vgl_point_3d<T> p3d = origin_pt + (uvec + vvec);
       return p3d;
     } // the normal is parallel to the Y axis
       vgl_vector_3d<T> Z((T)0, (T)0, (T)1);
-      vgl_vector_3d<T> uvec = cross_product(n, Z);
-      vgl_vector_3d<T> vvec = cross_product(uvec, n);
+      vgl_vector_3d<T> uvec = normalize(cross_product(n, Z));
+      vgl_vector_3d<T> vvec = normalize(cross_product(uvec, n));
       uvec *= p2d.x(); vvec *= p2d.y();
       vgl_point_3d<T> p3d = origin_pt + (uvec + vvec);
       return p3d;
