@@ -284,24 +284,31 @@ set_ground_plane_max_depth(double max_depth,
 bool depth_map_region::
 img_to_region_plane(vpgl_perspective_camera<double> const& cam,
                     vgl_h_matrix_2d<double>& H) const{
-  if (this->orient_type() == INFINT)
+  if(this->orient_type() == INFINT){
+    vcl_cout << "homography not defined for regions at infinity\n";
     return false;
+  }
+  if(!region_3d_){
+    vcl_cout << "region 3-d is null - depth not set\n";
+    return false;
+  }
   vcl_vector<vgl_point_2d<double> > verts_2d, reg_pts_2d;
   unsigned nverts = region_2d_->size();
   for (unsigned i = 0; i<nverts; ++i){
     vgl_point_2d<double> pimg = region_2d_->vertex(i)->get_p();
     verts_2d.push_back(pimg);
     vgl_ray_3d<double> ray = cam.backproject_ray(pimg);
-      vgl_point_3d<double> p3d;
+      vgl_point_3d<double> p3d = region_3d_->vertex(i)->get_p();
       vgl_point_2d<double> p2d;
-      bool success =  vgl_intersection(ray, region_plane_, p3d);
       double tol = vcl_sqrt(vgl_tolerance<double>::position);
-      success = region_plane_.planar_coords(p3d, p2d, tol);
-      assert(success);
-      vgl_point_3d<double> test = region_plane_.world_coords(p2d);
-      if (!success) return false;
+      bool on_plane = region_plane_.plane_coords(p3d, p2d, tol);
+      if(!on_plane){
+        vcl_cout << "vertex " << p3d << " not on region plane\n";
+        return false;
+      }
       reg_pts_2d.push_back(p2d);
   }
+  // cast to homogenous points
   vcl_vector<vgl_homg_point_2d<double> > hpts_2d, hpts_reg_2d;
   for (unsigned i = 0; i<nverts; ++i){
     hpts_2d.push_back(vgl_homg_point_2d<double>(verts_2d[i].x(),verts_2d[i].y()) );
@@ -355,7 +362,6 @@ update_depth_image(vil_image_view<float>& depth_image,
         hpr = H(hp);
         vgl_point_3d<double> p3d = region_plane_.world_coords(hpr);
         vgl_vector_3d<double> rayv = p3d-cen;
-        //double depth = dot_product(rayv, pray);
         double depth = rayv.length();
         depth_image(u, v) = static_cast<float>(depth);
       }else
