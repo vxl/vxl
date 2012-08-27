@@ -29,23 +29,23 @@ static void test_operations()
   vgl_plane_3d<double> plane(a, b, c, d);
   vgl_point_3d<double> p3d(1.0, 1.0, -1.0);
   vgl_point_2d<double> p2d, p2dy, p2dys;
-  bool good = plane.planar_coords(p3d, p2d, 1e-5);
+  bool good = plane.plane_coords(p3d, p2d, 1e-5);
   double er = vcl_fabs(p2d.x()-vcl_sqrt(2.0));
 
   // a plane with the Y axis as its normal
   a = 0.0, b = 1.0, c = 0.0;
   vgl_plane_3d<double> plane1(a, b, c, d);
   vgl_point_3d<double> p3dy(1.0, 0.0, 1.0);
-  good = good && plane1.planar_coords(p3dy, p2dy, 1e-5);
+  good = good && plane1.plane_coords(p3dy, p2dy, 1e-5);
   er +=  vcl_fabs(p2dy.x()-1.0)+vcl_fabs(p2dy.y()-1.0);
   // shift the plane along the y axis
   d = -10.0;
   vgl_plane_3d<double> plane1s(a, b, c, d);
   vgl_point_3d<double> p3dys(1.0, 10.0, 1.0);
-  good = good && plane1s.planar_coords(p3dys, p2dys, 1e-5);
+  good = good && plane1s.plane_coords(p3dys, p2dys, 1e-5);
   er +=  vcl_fabs(p2dys.x()-1.0)+vcl_fabs(p2dys.y()-1.0);
   good = good && (er < 1e-5);
-  TEST("Planar Coordinate System: world -> plane", good, true);
+  TEST("Plane Coordinate System: world -> plane", good, true);
 
   vgl_point_3d<double> p3d1, p3d2, p3d3;
   p3d1 = plane.world_coords(p2d);
@@ -54,14 +54,14 @@ static void test_operations()
   er = (p3d1-p3d).length();
   er += (p3d2-p3dy).length();
   er += (p3d3-p3dys).length();
-  TEST_NEAR("Planar Coordinate System: plane -> world",er,0.0,1e-5);
+  TEST_NEAR("Plane Coordinate System: plane -> world",er,0.0,1e-5);
 
   // test with a realistic plane
   vgl_point_3d<double> pt3d(-51.26, -7045.5, -50.0);
   vgl_plane_3d<double> plane_real(-.162, 0.987, 0.0, 6943.55);
   vgl_point_3d<double> pt3d_on = vgl_closest_point(pt3d, plane_real);
   vgl_point_2d<double> pt2d;
-  good = plane_real.planar_coords(pt3d_on, pt2d, 1e-5);
+  good = plane_real.plane_coords(pt3d_on, pt2d, 1e-5);
   vgl_point_3d<double> prec_3d = plane_real.world_coords(pt2d);
   er = (prec_3d-pt3d_on).length();
   TEST_NEAR("Realistic plane test", er, 0.0, 1e-5);
