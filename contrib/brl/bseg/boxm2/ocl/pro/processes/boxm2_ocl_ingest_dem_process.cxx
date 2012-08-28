@@ -225,6 +225,8 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
     out_buff->read_to_buffer(queue);
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
+
+    opencl_cache->clear_cache();
   }
 #ifdef DEBUG
   vil_image_view<float> test(ni,nj);
@@ -443,6 +445,8 @@ bool boxm2_ocl_ingest_dem_space_process(bprb_func_process& pro)
     out_buff->read_to_buffer(queue);
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
+
+    opencl_cache->clear_cache();
   }
 #ifdef DEBUG
   vil_image_view<float> test(ni,nj);
