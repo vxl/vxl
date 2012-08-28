@@ -123,16 +123,16 @@ class vgl_plane_3d
   // the plane origin is the point in the plane closest to the world origin
 
   //: Given a 3-d point, return a 2-d point in the coord. system of the plane
-  // if the point is not on the plane then false is returned
+  // If the point is not on the plane then false is returned
   bool plane_coords(vgl_point_3d<T> const& p3d,
-                     vgl_point_2d<T>& p2d, T tol=(T)0 ) const;
+                    vgl_point_2d<T>& p2d, T tol=(T)0 ) const;
 
   //: inverse map from plane coordinates to world coordinates
   vgl_point_3d<T> world_coords(vgl_point_2d<T> const& p2d) const;
 
   //: plane coordinate unit vectors
   void plane_coord_vectors(vgl_vector_3d<T>& uvec,
-                            vgl_vector_3d<T>& vvec) const; 
+                           vgl_vector_3d<T>& vvec) const;
 };
 
 //: Return true iff p is the plane at infinity
