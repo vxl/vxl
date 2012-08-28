@@ -11,11 +11,10 @@
 #include <vsol/vsol_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/bpgl_camera_utils.h>
-#include <vcl_limits.h>
 #include <vil/vil_save.h>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
-#include <vul/vul_timer.h>
+#include <vcl_limits.h>
 
 static void test_depth_map()
 {
@@ -38,7 +37,7 @@ static void test_depth_map()
   vsol_point_2d_sptr p1= new vsol_point_2d(1280.0, 720.0);
   vsol_point_2d_sptr p2= new vsol_point_2d(1280.0, 361.0);
   vsol_point_2d_sptr p3= new vsol_point_2d(0.0, 361.0);
-  
+
 
   vcl_vector<vsol_point_2d_sptr> verts;
   verts.push_back(p0);   verts.push_back(p1);
@@ -53,22 +52,23 @@ static void test_depth_map()
   // test ground plane homography
   vgl_h_matrix_2d<double> H;
   bool good_H = gpr->img_to_region_plane(cam, H);
+  TEST("ground plane homography", good_H, true);
   vsol_polygon_2d_sptr r2d = gpr->region_2d();
   vsol_polygon_3d_sptr r3d = gpr->region_3d();
   vgl_plane_3d<double> pl3d = r3d->plane();
   unsigned nv = r2d->size();
   double erh = 0.0;
-  for(unsigned i = 0; i<nv; ++i){
+  for (unsigned i = 0; i<nv; ++i) {
     vsol_point_3d_sptr p3d = r3d->vertex(i);
     vgl_point_2d<double> pimg = r2d->vertex(i)->get_p();
     vgl_point_2d<double> pmp_2d = H(vgl_homg_point_2d<double>(pimg.x(), pimg.y()));
     vgl_point_3d<double> rmap_3d = plane.world_coords(pmp_2d);
     vcl_cout << pimg << ' ' << *p3d << ' ' << pmp_2d << ' ' << rmap_3d << '\n';
-    erh += vcl_fabs(p3d->x()-rmap_3d.x()) + 
+    erh += vcl_fabs(p3d->x()-rmap_3d.x()) +
       vcl_fabs(p3d->y()-rmap_3d.y()) +
       vcl_fabs(p3d->z()-rmap_3d.z());
   }
-  
+
   TEST_NEAR("planar homography", erh, 0.0, 1e-4);
   vsol_point_2d_sptr p0v= new vsol_point_2d(0.0, 360.0);
   vsol_point_2d_sptr p1v= new vsol_point_2d(640.0, 360.0);
@@ -139,7 +139,7 @@ static void test_depth_map()
   scin.b_read(tis);
   scene_depth_iterator dend = scin.end();
   scene_depth_iterator sit = scin.begin();
-  for(; sit != dend; ++sit)
+  for (; sit != dend; ++sit)
     scin.print_depth_states();
 
   vil_image_view<float> dv = sit->depth_map(0);
