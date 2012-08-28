@@ -10,7 +10,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_distance.h>
-#include <vgl/vgl_tolerance.h>
+//#include <vgl/vgl_tolerance.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -133,31 +133,35 @@ vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p)
   p.set(a,b,c,d);
   return is;
 }
+
 template <class T>
 void vgl_plane_3d<T>::
-plane_coord_vectors(vgl_vector_3d<T>& uvec, vgl_vector_3d<T>& vvec) const{
+plane_coord_vectors(vgl_vector_3d<T>& uvec, vgl_vector_3d<T>& vvec) const
+{
   vgl_vector_3d<T> Y((T)0, (T)1, (T)0);
   vgl_vector_3d<T> n = this->normal();
   T dp = (T)1 - vcl_fabs(dot_product(n, Y));
   T tol = ((T)1)/((T)10);
-  if(dp>tol)//ok to use the Y axis to form the coordinate system
-    {
-      uvec = normalize(cross_product(Y, n));
-      vvec = normalize(cross_product(n, uvec));
-    }else{ // the normal is parallel to the Y axis
-      vgl_vector_3d<T> Z((T)0, (T)0, (T)1);
-      uvec = normalize(cross_product(n, Z));
-      vvec = normalize(cross_product(uvec, n));
-    }
+  if (dp>tol)//ok to use the Y axis to form the coordinate system
+  {
+    uvec = normalized(cross_product(Y, n));
+    vvec = normalized(cross_product(n, uvec));
+  }
+  else { // the normal is parallel to the Y axis
+    vgl_vector_3d<T> Z((T)0, (T)0, (T)1);
+    uvec = normalized(cross_product(n, Z));
+    vvec = normalized(cross_product(uvec, n));
+  }
 }
-  
+
 template <class T>
 bool vgl_plane_3d<T>::plane_coords(vgl_point_3d<T> const& p3d,
-                                    vgl_point_2d<T>& p2d, T tol) const{
+                                   vgl_point_2d<T>& p2d, T tol) const
+{
   // check if point is on the plane
   vgl_point_3d<T> pt_on_plane = vgl_closest_point(p3d, *this);
   double dist = vgl_distance(p3d, pt_on_plane), dtol = static_cast<double>(tol);
-  if(dist>dtol)
+  if (dist>dtol)
    return false;
   // use the plane point to compute coordinates
   // construct the axis vectors
@@ -172,8 +176,9 @@ bool vgl_plane_3d<T>::plane_coords(vgl_point_3d<T> const& p3d,
 }
 
 template <class T>
-vgl_point_3d<T> 
-vgl_plane_3d<T>::world_coords(vgl_point_2d<T> const& p2d) const{
+vgl_point_3d<T>
+vgl_plane_3d<T>::world_coords(vgl_point_2d<T> const& p2d) const
+{
   vgl_point_3d<T> origin_pt = vgl_closest_point_origin(*this);
   vgl_vector_3d<T> uvec, vvec;
   this->plane_coord_vectors(uvec, vvec);
