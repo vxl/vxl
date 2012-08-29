@@ -25,12 +25,12 @@ void test_probability_functor()
   bsta_gauss_t gauss0(vector_t(0.0f), covar_t(covar) );
   bsta_gauss_t gauss1(vector_t(0.5f), covar_t(covar) );
   mix_gauss_type mix;
-  bool good = mix.insert(gauss0, 0.8f);
-  good = good && mix.insert(gauss1, 0.2f);
+  bool good1 = mix.insert(gauss0, 0.8f);
+  bool good2 = mix.insert(gauss1, 0.2f);
   bsta_prob_density_addcovar_functor<mix_gauss_type> pd;
   float probd;
-  good = good && pd(mix, sample, mod_covar, probd);
-  TEST("test mixture", good, true);
+  bool good3 = pd(mix, sample, mod_covar, probd); // returns probd
+  TEST("test mixture", good1 && good2 && good3, true);
   TEST_NEAR("probability density", probd, 0.81275439, 1e-6);
   // test the probability functor
   bsta_probability_addcovar_functor<mix_gauss_type> prb;
