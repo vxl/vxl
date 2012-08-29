@@ -38,15 +38,15 @@ class boxm2_multi_update_helper
                               vcl_vector<boxm2_opencl_cache*>& vis_caches,
                               vcl_size_t maxBlocks) :
         queues_(queues),
-        ray_os_(ray_os),
-        ray_ds_(ray_ds),
         img_dims_(img_dims),
-        lookups_(lookups),
         outputs_(outputs),
-        group_orders_(group_orders),
+        ray_ds_(ray_ds),
+        ray_os_(ray_os),
+        lookups_(lookups),
         vis_orders_(vis_orders),
         vis_caches_(vis_caches),
-        maxBlocks_(maxBlocks)
+        maxBlocks_(maxBlocks),
+        group_orders_(group_orders)
     {}
 
     //update command queues
