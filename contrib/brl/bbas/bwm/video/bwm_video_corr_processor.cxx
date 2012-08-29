@@ -925,7 +925,7 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
     if (!unknown_frames[f])
     {
       for (unsigned w = 0; w<npoints; ++w)
-        if (cmask[ff][w] = mask[f][w])
+        if ((cmask[ff][w] = mask[f][w])) // assignment, not a comparison!
           cimage_points.push_back(image_points[f*npoints + w]);
 
       if (!cam_istr_->seek_camera(f)){
