@@ -49,6 +49,7 @@ class bwm_io_tab_config
     : name(t.name), type_name(t.type_name), status(t.status) {}
 
   virtual bwm_io_tab_config* clone()=0; // {return new bwm_io_tab_config(type_name, name, status); }
+  virtual ~bwm_io_tab_config() {}
   vcl_string name;
   vcl_string type_name;
   bool status;
