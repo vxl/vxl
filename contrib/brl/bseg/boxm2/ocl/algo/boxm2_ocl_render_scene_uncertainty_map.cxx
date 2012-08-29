@@ -359,18 +359,22 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         float phi = vcl_atan2(ray.y(),ray.x());
 
         float r = vcl_floor((theta_max-theta_min)/radial_theta_inc/2);
-        int k = vcl_floor(r*vcl_cos(phi) +img_center_x );
-        int j = vcl_floor(r*vcl_sin(phi) +img_center_y );
+        int k = (int)vcl_floor(r*vcl_cos(phi) +img_center_x );
+        int j = (int)vcl_floor(r*vcl_sin(phi) +img_center_y );
 
-        for (unsigned ki = k-7;ki<=k+7;ki++)
-            for (unsigned ji = j-7;ji<=j+7;ji++)
+        for (int ki = k-7;ki<=k+7;++ki)
+        {
+            if (ki<0 || ki>=cl_ni)
+                continue;
+            for (int ji = j-7;ji<=j+7;++ji)
             {
-                if (ki<0 || ki>=cl_ni || ji <0 || ji >=cl_ni)
+                if (ji<0 || ji>=cl_ni)
                     continue;
                 (* radial_image)(ki,ji,0) = 0;
                 (* radial_image)(ki,ji,1) = 255;
                 (* radial_image)(ki,ji,2) = 0;
             }
+        }
     }
 #if 0
     vcl_cout<<" DRAW TRAJECTORY"<<vcl_endl;
