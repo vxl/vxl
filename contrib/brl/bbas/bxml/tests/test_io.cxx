@@ -93,7 +93,7 @@ static void test_io(int argc, char* argv[])
     bxml_data_sptr data = NULL;
     bool fail = false;
     int count = 0;
-    while (data = str_reader.next_element(s, depth)) {
+    while ((data = str_reader.next_element(s, depth))) { // assignment, no comparison
       if (depth == 1) {
         if (data->type() != bxml_data::ELEMENT) {
           fail = true;
