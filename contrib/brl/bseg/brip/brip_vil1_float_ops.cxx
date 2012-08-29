@@ -2092,7 +2092,7 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
   for (; r0+radius+1<h; r0++)
   {
     if (r0==5)
-      r0=r0;
+      r0=5;
 #ifdef DEBUG
     vcl_cout << "r0 " << r0 << '\n';
 #endif
