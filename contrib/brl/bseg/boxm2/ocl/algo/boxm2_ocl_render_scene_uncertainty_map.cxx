@@ -17,7 +17,6 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
 
 #include <vnl/vnl_float_4x4.h>
 #include <vnl/vnl_inverse.h>
@@ -295,13 +294,11 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
             float theta = theta_min + radial_theta_inc * r ;
             float phi   = vcl_atan2((j-img_center_y),(i-img_center_x)) ;
 
-            unsigned prev_i = vcl_floor((phi-phi_min)/phi_inc );
-            unsigned prev_j = vcl_floor((theta-theta_min)/theta_inc);
+            int prev_i = (int)vcl_floor((phi-phi_min)/phi_inc );
+            int prev_j = (int)vcl_floor((theta-theta_min)/theta_inc);
 
-            prev_i = prev_i < 0 ? 0:prev_i;
-            prev_i = prev_i > cl_ni ? cl_ni:prev_i;
-            prev_j = prev_j < 0 ? 0:prev_j;
-            prev_j = prev_j > cl_ni ? cl_ni:prev_j;
+            prev_i = prev_i < 0 ? 0 : prev_i > cl_ni ? cl_ni : prev_i;
+            prev_j = prev_j < 0 ? 0 : prev_j > cl_ni ? cl_ni : prev_j;
             (*radial_image)(i,j,0) = (unsigned char) vcl_floor(255.0f*buff[prev_j*cl_ni+prev_i]);
             (*radial_image)(i,j,1) = (unsigned char) vcl_floor(255.0f*buff[prev_j*cl_ni+prev_i]);
             (*radial_image)(i,j,2) = (unsigned char) vcl_floor(255.0f*buff[prev_j*cl_ni+prev_i]);
