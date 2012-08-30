@@ -119,10 +119,8 @@ void bgui_graph_tableau::update(vcl_vector<double> const& pos,
   n_ = pos.size();
   pos_ = new float[n_];
   vals_ = new float[n_];
-  xmin_ = vnl_numeric_traits<float>::maxval;
-  xmax_ = -xmin_;
-  ymin_ = xmin_;
-  ymax_ = ymax_;
+  ymin_ = xmin_ = vnl_numeric_traits<float>::maxval;
+  ymax_ = xmax_ = -xmin_;
   for (unsigned i = 0; i<n_; ++i)
   {
     pos_[i]=static_cast<float>(pos[i]);
