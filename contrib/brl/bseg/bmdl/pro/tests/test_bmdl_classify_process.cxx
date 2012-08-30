@@ -58,25 +58,25 @@ static void test_bmdl_classify_process()
   brdb_value_sptr v1 = new brdb_value_t<vil_image_view_base_sptr>(last_return);
   brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(ground);
 
-  bool good = bprb_batch_process_manager::instance()->init_process("bmdlClassifyProcess");
-  good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
-  good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
-  good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
-  good = good && bprb_batch_process_manager::instance()->set_params("classify_params.xml");
-  good = good && bprb_batch_process_manager::instance()->run_process();
+  bool good1 = bprb_batch_process_manager::instance()->init_process("bmdlClassifyProcess")
+            && bprb_batch_process_manager::instance()->set_input(0, v0)
+            && bprb_batch_process_manager::instance()->set_input(1, v1)
+            && bprb_batch_process_manager::instance()->set_input(2, v2)
+            && bprb_batch_process_manager::instance()->set_params("classify_params.xml")
+            && bprb_batch_process_manager::instance()->run_process();
 
   unsigned int label_img_id, height_img_id;
   vcl_string type;
-  good = good && bprb_batch_process_manager::instance()->commit_output(0, label_img_id, type);
-  good = good && bprb_batch_process_manager::instance()->commit_output(1, height_img_id, type);
-  TEST("run classify process", good ,true);
+  bool good2 = bprb_batch_process_manager::instance()->commit_output(0, label_img_id, type);
+  bool good3 = bprb_batch_process_manager::instance()->commit_output(1, height_img_id, type);
+  TEST("run classify process", good1 && good2 && good3, true);
 
   vil_image_view_base_sptr label_img, height_img;
-  good = get_image(label_img_id, label_img);
-  TEST("get label image", good ,true);
+  bool good4 = get_image(label_img_id, label_img);
+  TEST("get label image", good4 ,true);
 
-  good = get_image(height_img_id, height_img);
-  TEST("get height image", good ,true);
+  bool good5 = get_image(height_img_id, height_img);
+  TEST("get height image", good5 ,true);
 
   bool saved = vil_save(*label_img, "label.tif");
   TEST("LABELS saved", saved, true);
