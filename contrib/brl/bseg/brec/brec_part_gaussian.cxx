@@ -299,11 +299,11 @@ bool brec_part_gaussian::xml_parse_element(bxml_data_sptr data)
     if (!found)
       return false;
 
-    bright_ = bright_int == 0 ? false : true;
+    bright_ = bright_int != 0;
 
     int fitted_w_int;
-    found = found && ((bxml_element*)g_root.ptr())->get_attribute("fitted_weibull", fitted_w_int);
-    fitted_weibull_ = fitted_w_int == 0 ? false : true;
+    ((bxml_element*)g_root.ptr())->get_attribute("fitted_weibull", fitted_w_int);
+    fitted_weibull_ = fitted_w_int != 0;
 
     initialize_mask();
 
