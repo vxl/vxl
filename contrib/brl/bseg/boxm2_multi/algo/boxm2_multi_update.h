@@ -70,9 +70,7 @@ class boxm2_multi_image_patch
                             float* img,
                             vcl_size_t ni, vcl_size_t nj,
                             vcl_size_t oi, vcl_size_t oj)
-      : id_(id), img_(img),
-        ni_(ni), nj_(nj),
-        oi_(oi), oj_(oj) {}
+      : ni_(ni), nj_(nj), oi_(oi), oj_(oj), img_(img), id_(id) {}
 
   private:
     vcl_size_t ni_, nj_, oi_, oj_;
