@@ -51,7 +51,7 @@ class boxm2_multi_refine
     //does in place, zero based cumulative sum on cpu, returns total size
     static int cumsum(int* buff, vcl_size_t len) {
       //non zero based cumsum
-      for (int i=1; i<len; ++i)
+      for (unsigned int i=1; i<len; ++i)
         buff[i] += buff[i-1];
       int newSize = buff[len-1];
       //zero based
@@ -60,7 +60,6 @@ class boxm2_multi_refine
       buff[0] = 0;
       return newSize;
     }
-
 
     //compile kernels and cache
     static bocl_kernel* get_refine_tree_kernel(bocl_device_sptr device, vcl_string opts);

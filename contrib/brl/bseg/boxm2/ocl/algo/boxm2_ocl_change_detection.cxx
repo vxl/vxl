@@ -803,9 +803,9 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
   }
 
   //iterate over offsets i, offsets j
-  for (int offi=0; offi<ois.size(); ++offi)
+  for (unsigned int offi=0; offi<ois.size(); ++offi)
   {
-    for (int offj=0; offj<ojs.size(); ++offj)
+    for (unsigned int offj=0; offj<ojs.size(); ++offj)
     {
       int oi = ois[offi];
       int oj = ojs[offj];
@@ -945,11 +945,11 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
 
       //----- store true vis -----
       if (oi==0 && oj==0)
-        for (unsigned i=0; i<cl_ni*cl_nj; ++i)
+        for (unsigned int i=0; i<cl_ni*cl_nj; ++i)
           true_vis[i] = vis_buff[i];
 
       //----- update mask image ------
-      for (int i=0; i<cl_ni*cl_nj; ++i) {
+      for (unsigned int i=0; i<cl_ni*cl_nj; ++i) {
         if (mask_buff[i]) {
           float change      = max_background_buff[count];
           float vis         = true_vis[count];
@@ -992,8 +992,8 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
 #if 1
   vil_image_view<float> pre_norm(cl_ni,cl_nj);
   int c=0;
-  for (int j=0; j<cl_nj; ++j)
-    for (int i=0; i<cl_ni; ++i)
+  for (unsigned int j=0; j<cl_nj; ++j)
+    for (unsigned int i=0; i<cl_ni; ++i)
       pre_norm(i,j) = change_exp_image_buff[c++];
   vil_save(pre_norm, "change_exp_image.tiff");
 #endif

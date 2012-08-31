@@ -49,7 +49,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
 
   //input image buffer
   float* inImg;
-  if(img.size() == cl_ni*cl_nj){
+  if (img.size() == cl_ni*cl_nj){
     inImg = img.top_left_ptr();
   }
   else {
@@ -71,8 +71,8 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
                              lookups = helper.lookups_;
   vcl_size_t maxBlocks = helper.maxBlocks_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
-  for (int i=0; i<ocl_caches.size(); ++i) {
-    //grab sub scene and it's cache
+  for (unsigned int i=0; i<ocl_caches.size(); ++i) {
+    //grab sub scene and its cache
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
     bocl_device_sptr    device    = ocl_cache->get_device();
@@ -83,7 +83,6 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
     in_imgs.push_back(in_mem);
   }
 
-
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
@@ -92,13 +91,13 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   vcl_cout<<"Group list size; "<<grp.size()<<vcl_endl;
   vul_timer t; t.mark();
   float transfer_time = 0.0f;
-  for(int grpId=0; grpId<grp.size(); ++grpId) {
+  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
     vcl_vector<int> indices = group.order_from_cam(cam);
-    for(int idx=0; idx<indices.size(); ++idx) {
+    for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
-      //grab sub scene and it's cache
+      //grab sub scene and its cache
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
@@ -114,12 +113,12 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
     }
 
     //finish
-    for (int idx=0; idx<indices.size(); ++idx) {
+    for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       clFinish(queues[i]);
       //boxm2_block_id id = ids[i];
       //boxm2_opencl_cache* ocl_cache = ocl_caches[i];
-      
+
       //read aux data back into CPU
       //vul_timer ttime; ttime.mark();
       //read_aux(id, ocl_cache, queues[i]);
@@ -129,7 +128,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   float gpu_time = t.all() - transfer_time;
 
   //unref mems
-  for (int i=0; i<queues.size(); ++i) {
+  for (unsigned int i=0; i<queues.size(); ++i) {
     ocl_caches[i]->unref_mem(in_imgs[i].ptr());
   }
 
@@ -139,7 +138,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   //unsigned cl_nj=RoundUp(nj,lthreads[1]);
   vil_image_view<float> segLens(cl_ni,cl_nj);
   segLens.fill(0.0f);
-  for (int i=0; i<queues.size(); ++i) {
+  for (unsigned int i=0; i<queues.size(); ++i) {
     //clFinish(queues[i]);
     out_imgs[i]->read_to_buffer(queues[i]);
     float* output_arr = (float*) out_imgs[i]->cpu_buffer();
@@ -153,7 +152,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
 //==============
 
   //cleanup input image buffer
-  if(inImg != img.top_left_ptr())
+  if (inImg != img.top_left_ptr())
     delete[] inImg;
 
   return gpu_time;
@@ -189,7 +188,7 @@ void boxm2_multi_store_aux::store_aux_per_block(const boxm2_block_id&     id,
                                                       bocl_mem_sptr&      cl_output,
                                                       bocl_mem_sptr&      lookup,
                                                       vcl_size_t*         lthreads,
-                                                      vcl_size_t*         gThreads, 
+                                                      vcl_size_t*         gThreads,
                                                       bool                store_rgb)
 {
   //vcl_cout<<(*id);
@@ -224,12 +223,12 @@ void boxm2_multi_store_aux::store_aux_per_block(const boxm2_block_id&     id,
   kern->set_arg( alpha );
   kern->set_arg( aux0 );
   kern->set_arg( aux1 );
-  if(store_rgb) {
+  if (store_rgb) {
     bocl_mem *aux2  = opencl_cache->get_data<BOXM2_AUX2>(id, dataLen*boxm2_data_traits<BOXM2_AUX2>::datasize());
     bocl_mem *aux3  = opencl_cache->get_data<BOXM2_AUX3>(id, dataLen*boxm2_data_traits<BOXM2_AUX3>::datasize());
     aux2->zero_gpu_buffer(queue);
     aux3->zero_gpu_buffer(queue);
-    kern->set_arg( aux2 ); 
+    kern->set_arg( aux2 );
     kern->set_arg( aux3 );
   }
   kern->set_arg( lookup.ptr() );
@@ -249,10 +248,11 @@ void boxm2_multi_store_aux::store_aux_per_block(const boxm2_block_id&     id,
 
   //clear render kernel args so it can reset em on next execution
   kern->clear_args();
-
+#if 0
   //enqueue two nonblocking reads
-  //aux0->read_to_buffer(queue, false);
-  //aux1->read_to_buffer(queue, false);
+  aux0->read_to_buffer(queue, false);
+  aux1->read_to_buffer(queue, false);
+#endif
 }
 
 //-----------------------------------------------------------------

@@ -113,7 +113,7 @@ static void ocl_phongs_model(vnl_vector<float> & x,
   vnl_vector<float> sun_angles(2);
   sun_angles[0] = sun_elev;
   sun_angles[1] = sun_phi;
-  for (unsigned i=0; i<m; ++i)
+  for (int i=0; i<m; ++i)
   {
     obs[i] = samples[i];
     weights[i] = samples_weights[i];
@@ -205,7 +205,7 @@ static void ocl_phongs_model(vnl_vector<float> & x,
   clFinish( queue );
   //xbuff->read_to_buffer(queue);
   vcl_cout<<"Solution (OCL): "<<time <<' ';
-  for (unsigned i=0; i<n; ++i)
+  for (int i=0; i<n; ++i)
     vcl_cout<<x[i]<<' ';
   vcl_cout<<vcl_endl;
 }

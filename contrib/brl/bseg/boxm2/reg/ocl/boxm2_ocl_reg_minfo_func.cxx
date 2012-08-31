@@ -146,8 +146,8 @@ bool boxm2_ocl_reg_minfo_func::boxm2_ocl_register_world(vgl_rotation_3d<double> 
                                                         float & mi)
 {
   int * joint_histogram_buff= new int[nbins*nbins];
-  for (unsigned k = 0 ; k<nbins*nbins; k++)
-      joint_histogram_buff[k] = 0;
+  for (int k = 0; k<nbins*nbins; k++)
+    joint_histogram_buff[k] = 0;
   bocl_mem_sptr joint_histogram = new bocl_mem(device_->context(), joint_histogram_buff, sizeof(int)*nbins*nbins, " joint histogram" );
   joint_histogram->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
@@ -238,45 +238,45 @@ bool boxm2_ocl_reg_minfo_func::boxm2_ocl_register_world(vgl_rotation_3d<double> 
   float * histA = new float[nbins];
   float * histB = new float[nbins];
 
-  for (unsigned k = 0 ;k<nbins; k++)
+  for (int k = 0; k<nbins; k++)
   {
     histA[k] = 0.0;
     histB[k] = 0.0;
   }
   float sum  = 0.0;
   // normalize joint histogram
-  for (unsigned k = 0; k < nbins; k++) {
-    for (unsigned l = 0; l < nbins; l++) {
+  for (int k = 0; k < nbins; k++) {
+    for (int l = 0; l < nbins; l++) {
       sum+=joint_histogram_float[k*nbins+l];
     }
   }
-  for (unsigned k = 0; k < nbins; k++) {
-    for (unsigned l = 0; l < nbins; l++) {
+  for (int k = 0; k < nbins; k++) {
+    for (int l = 0; l < nbins; l++) {
       joint_histogram_float[k*nbins+l] = joint_histogram_float[k*nbins+l] / sum;
     }
   }
-  for (unsigned k = 0; k < nbins; k++) {
-    for (unsigned l = 0; l < nbins; l++) {
+  for (int k = 0; k < nbins; k++) {
+    for (int l = 0; l < nbins; l++) {
        histA[k]+=joint_histogram_float[k*nbins+l];
     }
   }
-  for (unsigned k = 0; k < nbins; k++) {
-    for (unsigned l = 0; l < nbins; l++) {
+  for (int k = 0; k < nbins; k++) {
+    for (int l = 0; l < nbins; l++) {
       histB[k]+=joint_histogram_float[l*nbins+k];
     }
   }
 
   float entropyA = 0;
-  for (unsigned k = 0; k < nbins; k++) {
+  for (int k = 0; k < nbins; k++) {
     entropyA += -(histA[k]?histA[k]*vcl_log(histA[k]):0); // if prob=0 this value is defined as 0
   }
   float entropyB = 0;
-  for (unsigned l = 0; l < nbins; l++) {
+  for (int l = 0; l < nbins; l++) {
     entropyB += -(histB[l]?histB[l]*vcl_log(histB[l]):0); // if prob=0 this value is defined as 0
   }
   float entropyAB =  0.0; ;
-  for (unsigned k = 0; k < nbins; k++) {
-    for (unsigned l = 0; l < nbins; l++) {
+  for (int k = 0; k < nbins; k++) {
+    for (int l = 0; l < nbins; l++) {
       entropyAB += -(joint_histogram_float[k*nbins+l]?joint_histogram_float[k*nbins+l]*vcl_log(joint_histogram_float[k*nbins+l]):0);
     }
   }

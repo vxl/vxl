@@ -70,7 +70,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   vcl_size_t maxBlocks = helper.maxBlocks_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   vcl_vector<bocl_mem_sptr> vis_mems, pre_mems, visInfMems, preInfMems;
-  for (int i=0; i<ocl_caches.size(); ++i) {
+  for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
 
@@ -96,11 +96,11 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
-  for (int grpId=0; grpId<grp.size(); ++grpId) {
+  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
     vcl_vector<int> indices = group.order_from_cam(cam);
-    for (int idx=0; idx<indices.size(); ++idx) {
+    for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       //grab sub scene and it's cache
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
@@ -123,7 +123,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
     }
 
     //finish queues before moving on
-    for (int idx=0; idx<indices.size(); ++idx) {
+    for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
 
 #if 1
@@ -133,7 +133,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
              maxU=0, maxV=0;
       vgl_box_3d<double>& blkBox = group.bbox(i);
       vcl_vector<vgl_point_3d<double> > verts = blkBox.vertices();
-      for (int vi=0; vi<verts.size(); ++vi) {
+      for (unsigned int vi=0; vi<verts.size(); ++vi) {
         double u, v;
         cam->project(verts[vi].x(), verts[vi].y(), verts[vi].z(), u, v);
         if (u < minU) minU = u;
@@ -153,7 +153,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
       //next update the vis and pre images
       clFinish(queues[i]);
-      if (idx == indices.size()-1)
+      if (idx+1 == indices.size())
         gpu_time += t.all();
       vis_mems[i]->read_to_buffer(queues[i]);
       pre_mems[i]->read_to_buffer(queues[i]);
@@ -220,7 +220,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   //------------------
   //read all images in
   //vcl_vector<float*> pre_imgs, vis_imgs;
-  //for (int i=0; i<vis_mems.size(); ++i) {
+  //for (unsigned int i=0; i<vis_mems.size(); ++i) {
   //  // read out expected image
   //  pre_mems[i]->read_to_buffer(queues[i]);
   //  vis_mems[i]->read_to_buffer(queues[i]);
@@ -243,7 +243,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   //-------------------------------------
   delete[] visImg;
   delete[] preImg;
-  for (int i=0; i<queues.size(); ++i) {
+  for (unsigned int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
     float* v = (float*) vis_mems[i]->cpu_buffer();
     float* p = (float*) pre_mems[i]->cpu_buffer();
@@ -344,7 +344,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,
   //------------------------------------------------------------------------
   // combine images - need to ensure that images along the way are correct
   //------------------------------------------------------------------------
-  for (int idx=0; idx<pre_imgs.size(); ++idx) {
+  for (unsigned int idx=0; idx<pre_imgs.size(); ++idx) {
     if (idx > 0) {
       float* prev_vis = vis_imgs[idx-1];
       float* prev_pre = pre_imgs[idx-1];
@@ -368,7 +368,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,
   bocl_device_sptr dev0 = ocl_caches[0]->get_device();
   vis_map[dev0.ptr()] = vis0;
   pre_map[dev0.ptr()] = pre0;
-  for (int idx=1; idx<ocl_caches.size(); ++idx) {
+  for (unsigned int idx=1; idx<ocl_caches.size(); ++idx) {
     boxm2_opencl_cache*     ocl_cache = ocl_caches[idx];
     boxm2_scene_sptr        sub_scene = ocl_cache->get_scene();
     bocl_device_sptr        device    = ocl_cache->get_device();

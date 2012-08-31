@@ -62,7 +62,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
   vcl_size_t maxBlocks = helper.maxBlocks_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   vcl_vector<bocl_mem_sptr> vis_mems, pre_mems, norm_mems;
-  for (int i=0; i<ocl_caches.size(); ++i) {
+  for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
@@ -89,11 +89,11 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
   vcl_vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
-  for (int grpId=0; grpId<grp.size(); ++grpId) {
+  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
     vcl_vector<int> indices = group.order_from_cam(cam);
-    for (int idx=0; idx<indices.size(); ++idx){
+    for (unsigned int idx=0; idx<indices.size(); ++idx){
       int i = indices[idx];
       //grab sub scene and it's cache
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
@@ -114,7 +114,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
     }
 
     //finish queues before moving on (Maybe read in AUX 2 and 3 here)
-    for (int idx=0; idx<indices.size(); ++idx){
+    for (unsigned int idx=0; idx<indices.size(); ++idx){
       int i = indices[idx];
       clFinish(queues[i]);
 
@@ -147,7 +147,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
   //--------------------------------------
   //Clean up vis, pre, norm images buffers
   //--------------------------------------
-  for (int i=0; i<ocl_caches.size(); ++i) {
+  for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
     ocl_cache->unref_mem(vis_mems[i].ptr());
@@ -271,10 +271,10 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
 
   //Only bother updating the visible groups
   vcl_vector<boxm2_multi_cache_group*> grp = mcache.get_vis_groups(cam);
-  for (int grpId=0; grpId<grp.size(); ++grpId) {
+  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
-    for (int i=0; i<ids.size(); ++i){
+    for (unsigned int i=0; i<ids.size(); ++i){
 
       ttime.mark();
       //grab sub scene and it's cache
@@ -358,7 +358,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
     //-------------------------------------------------
     //Finish this group before moving onto the next one
     //-------------------------------------------------
-    for (int i=0; i<ids.size(); ++i) {
+    for (unsigned int i=0; i<ids.size(); ++i) {
       clFinish(queues[i]);
 
       //ttime.mark();

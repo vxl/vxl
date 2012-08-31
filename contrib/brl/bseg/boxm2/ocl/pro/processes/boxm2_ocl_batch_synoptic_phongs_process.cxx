@@ -221,7 +221,7 @@ bool boxm2_ocl_batch_synoptic_phongs_process(bprb_func_process& pro)
     vcl_size_t lThreads[] = {32};
     vcl_size_t gThreads[] = {static_cast<vcl_size_t>(50000*32)};
     vcl_size_t goffsets[1];
-    for (unsigned k = 0; k < datasize; k+=50000)
+    for (int k = 0; k < datasize; k+=50000)
     {
       vcl_cout<<k<<' ';
       goffsets[0]=static_cast<vcl_size_t>(k*32);
@@ -241,7 +241,7 @@ bool boxm2_ocl_batch_synoptic_phongs_process(bprb_func_process& pro)
     cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model") );
   }
   clReleaseCommandQueue(queue);
-  for (unsigned k = 0 ; k < 32; k++)
+  for (unsigned k = 0 ; k < 32; ++k)
     vcl_cout<<output[k]<<' ';
   vcl_cout<<"Finished Ocl Phongs in "<<t.all()<<" ms"<<vcl_endl;
   return true;

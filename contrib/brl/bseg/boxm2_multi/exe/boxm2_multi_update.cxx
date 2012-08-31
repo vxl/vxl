@@ -42,7 +42,7 @@ int main(int argc,  char** argv)
   vul_arg<unsigned>   num_updates("-num", "Number of updates", 10);
   vul_arg<int>        inFrame("-frame", "Single frame to use", -1);
   vul_arg<int>        renderInt("-renderInt", "Interval to render progress", -1);
-  vul_arg<int>        numGPU("-numGPU", "Number of GPUs to use", 2);
+  vul_arg<unsigned>   numGPU("-numGPU", "Number of GPUs to use", 2);
   vul_arg_parse(argc, argv);
 
   //create scene
@@ -55,14 +55,14 @@ int main(int argc,  char** argv)
   boxm2_lru_cache::create(scene);
 
   //make a multicache
-  if( numGPU() > mgr->gpus_.size() ) {
-    vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr->gpus_.size()<<" available"<<vcl_endl; 
+  if ( numGPU() > mgr->gpus_.size() ) {
+    vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr->gpus_.size()<<" available"<<vcl_endl;
     return -1;
   }
-  
+
   //grab the number of devices specified
   vcl_vector<bocl_device*> gpus;
-  for(int i=0; i<numGPU(); ++i)
+  for (unsigned int i=0; i<numGPU(); ++i)
     gpus.push_back(mgr->gpus_[i]);
   boxm2_multi_cache mcache(scene, gpus);
   vcl_cout<<"Multi Cache:\n"<<mcache.to_string()<<vcl_endl;
@@ -88,7 +88,7 @@ int main(int argc,  char** argv)
   int* frames = new int[cams.size()];
   for (int i=0; i<cams.size(); ++i) frames[i] = i;
   boxm2_util::random_permutation(frames, cams.size());
-  
+
   //timing vars
   vul_timer t;
   float total_gpu_time = 0.0f;
@@ -99,8 +99,8 @@ int main(int argc,  char** argv)
   {
     //update with random frame (or user chosen frame)
     int frame = (inFrame() >= 0) ? inFrame() : frames[i];
-    
-    
+
+
     vcl_cout<<"===========================================\n"
             <<"Update with frame: "<<frame<<", num "<<i<<" of "<<numUpdates<<vcl_endl;
     vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(imgs[frame], true);
@@ -142,13 +142,13 @@ int main(int argc,  char** argv)
           <<" total GPU time:    "<<total_gpu_time / 1000.0f<<" seconds\n"
           <<" GPU Time/Total Time:"<< total_gpu_time / total_update_time << '\n'
           <<" ave   update time: "<<total_update_time/numUpdates/1000.0f<<" seconds\n"
-          <<" ave gpu update time:"<<total_gpu_time/numUpdates/1000.0f<<" seconds \n"
+          <<" ave gpu update time:"<<total_gpu_time/numUpdates/1000.0f<<" seconds\n"
           <<"------------------------------------------"<<vcl_endl;
-  
+
   //clear ocl caches (writes to CPU cache)
   mcache.clear();
 
-  //write cache  
+  //write cache
   boxm2_lru_cache::instance()->write_to_disk();
 
   return 0;

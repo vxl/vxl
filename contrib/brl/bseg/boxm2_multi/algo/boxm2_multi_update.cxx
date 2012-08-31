@@ -38,7 +38,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders; //visibility order for each dev
   vcl_size_t maxBlocks = 0;
   vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.ocl_caches();
-  for (int i=0; i<ocl_caches.size(); ++i) {
+  for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
@@ -93,9 +93,9 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
 
   //initialize per group images (vis/pre
   vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
-  for (int grpId=0; grpId<grp.size(); ++grpId) {
+  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
     vcl_vector<boxm2_block_id> ids = grp[grpId]->ids();
-    for (int i=0; i<ids.size(); ++i) {
+    for (unsigned int i=0; i<ids.size(); ++i) {
       float* visImg = new float[ni*nj]; vcl_fill(visImg, visImg+ni*nj, 1.0f);
       float* preImg = new float[ni*nj]; vcl_fill(preImg, preImg+ni*nj, 0.0f);
       grp[grpId]->set_vis(i, visImg);
@@ -130,15 +130,15 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   //-------------------------------------
   //clean up
   //-------------------------------------
-  for (int grpId=0; grpId<grp.size(); ++grpId) {
+  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
     vcl_vector<boxm2_block_id> ids = grp[grpId]->ids();
-    for (int i=0; i<ids.size(); ++i) {
+    for (unsigned int i=0; i<ids.size(); ++i) {
       delete[] grp[grpId]->get_vis(i);
       delete[] grp[grpId]->get_pre(i);
     }
   }
 
-  for (int i=0; i<queues.size(); ++i) {
+  for (unsigned int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
 
     //release generic cam
