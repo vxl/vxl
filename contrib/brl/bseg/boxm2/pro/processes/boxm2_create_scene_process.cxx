@@ -177,6 +177,8 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
     cs_id = vpgl_lvcs::nad27n;
   else if (cs_name == "wgs72")
     cs_id = vpgl_lvcs::wgs72;
+  else
+    cs_id = vpgl_lvcs::NumNames; // this should never happen ... (avoids compiler warning)
 
   vpgl_lvcs lv(origin_lat, origin_lon, origin_elev, cs_id, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
@@ -225,7 +227,7 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
 
         if (blks.find(id)!=blks.end())
         {
-          vcl_cout<<"Problems in adding block: " << i << ' ' << j << ' ' << k << " block already exists"<<vcl_endl;
+          vcl_cout<<"Problems in adding block: (" << i << ',' << j << ',' << k << ") block already exists"<<vcl_endl;
           return false;
         }
         double local_z = k*num_z*sb_length + local_origin_z;
@@ -317,7 +319,8 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
       small_scenes.push_back(small_scene);
     }
 
-  vcl_cout << output_path + name_prefix + ".xml" << " number of small scenes: " << small_scenes.size() << vcl_endl;
+  vcl_cout << output_path + name_prefix + ".xml\n"
+           << " number of small scenes: " << small_scenes.size() << vcl_endl;
 
   // write each scene
   for (unsigned i = 0; i < small_scenes.size(); i++) {
