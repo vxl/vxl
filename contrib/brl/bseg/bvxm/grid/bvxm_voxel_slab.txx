@@ -59,7 +59,7 @@ void bvxm_voxel_slab<T>::deep_copy(bvxm_voxel_slab<T> const& src)
 {
   set_size(src.nx(),src.ny(),src.nz());
 
-  vcl_memcpy(this->first_voxel_,src.first_voxel(),src.size()*sizeof(T));
+  vcl_memcpy((void*)(this->first_voxel_),src.first_voxel(),src.size()*sizeof(T));
   return;
 }
 
