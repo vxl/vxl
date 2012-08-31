@@ -21,6 +21,7 @@ class breg3d_homography_generator
  public:
 
   breg3d_homography_generator() : use_mask0_(false), use_mask1_(false), compute_projective_(false) {}
+  virtual ~breg3d_homography_generator() {}
 
   void set_image0(vil_image_view<float> *img0) { img0_ = img0; }
   void set_image1(vil_image_view<float> *img1) { img1_ = img1; }
