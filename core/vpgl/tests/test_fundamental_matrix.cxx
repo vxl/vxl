@@ -11,6 +11,29 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_distance.h>
+#include <vpgl/vpgl_calibration_matrix.h>
+#include <vpgl/vpgl_essential_matrix.h>
+
+static vnl_double_3x3
+skew_symmetric(const double tx, const double ty, const double tz)
+{
+  vnl_double_3x3 m;
+  m[0][0] =  0;   m[0][1] = -tz;  m[0][2] =  ty;
+  m[1][0] =  tz;  m[1][1] =  0;   m[1][2] = -tx;
+  m[2][0] = -ty;  m[2][1] =  tx;  m[2][2] =  0;
+  return m;
+}
+
+static vpgl_fundamental_matrix<double> actual_f_matrix()
+{
+  vnl_double_3x3 m;
+
+  m[0][0] = 0;  m[0][1] = -9.46971705e-006; m[0][2] = 2.31061096e-003;
+  m[1][0] = 0;  m[1][1] = 0;                m[1][2] = 1.66666667e-002;
+  m[2][0] = 0;  m[2][1] = -6.81088136e-003; m[2][2] = -2.33814495e+000;
+
+  return vpgl_fundamental_matrix<double>(m);
+}
 
 static void test_fundamental_matrix()
 {
@@ -91,6 +114,36 @@ static void test_fundamental_matrix()
              vgl_distance( p3i[0], vgl_point_2d<double>(
                 C2l_est2.project( vgl_homg_point_3d<double>(p3w[0]) ) ) ), 0, 5.0 );
 
+  // Test computation of a Fundamental matrix from an Essential matrix:
+  vnl_double_3x3 K1_;
+  K1_[0][0] = 880;   K1_[0][1] = 0;    K1_[0][2] = 330;
+  K1_[1][0] = 0;     K1_[1][1] = 880;  K1_[1][2] = 244;
+  K1_[2][0] = 0;     K1_[2][1] = 0;    K1_[2][2] = 1;
+  vpgl_calibration_matrix<double> K1(K1_);
+
+  vnl_double_3x3 K2_;
+  K2_[0][0] = 600;   K2_[0][1] = 0;    K2_[0][2] = 320;
+  K2_[1][0] = 0;     K2_[1][1] = 600;  K2_[1][2] = 240;
+  K2_[2][0] = 0;     K2_[2][1] = 0;    K2_[2][2] = 1;
+  vpgl_calibration_matrix<double> K2(K2_);
+
+  //Test with a rotation of 30 degrees around the y axis
+  vgl_h_matrix_3d<double> Rh;
+  Rh.set_identity();
+  vnl_vector_fixed<double,3> ax(0,1,0), cv(10, 0, 0), t;
+  // vgl_point_3d<double> c(10,0,0);  //Camera center
+  Rh.set_rotation_about_axis(ax, 0.5236); //Rotation matrix
+  vnl_double_3x3 R = Rh.get_upper_3x3_matrix();
+  t = -R*cv;
+
+  vpgl_essential_matrix<double> E(skew_symmetric(t[0],t[1],t[2])*R);
+
+  vpgl_fundamental_matrix<double> F4(K1, K2, E);
+  vpgl_fundamental_matrix<double> Fi = actual_f_matrix();
+
+  vnl_double_3x3 error = Fi.get_matrix()-F4.get_matrix();
+  TEST_NEAR("Construct fundamental matrix from essential matrix", 
+            error.frobenius_norm(), 0, 1);
 }
 
 TESTMAIN(test_fundamental_matrix);
