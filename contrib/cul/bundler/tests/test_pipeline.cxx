@@ -12,6 +12,7 @@
 static const char* IMG_PATH = "contrib/cul/bundler/test/test_data";
 
 static const int NUM_IMGS = 11;
+// static const int NUM_IMGS = 4;
 static const double FOCAL_LENGTH_MM = 5.4;
 static const double SENSOR_WIDTH_MM = 5.312;
 
@@ -53,6 +54,8 @@ static void test_pipeline(int argc, char** argv)
     bundler_driver(
         routines, imgs, exif_tags,
         cameras, points, visibility_graph);
+
+    bundler_write_bundle_file("bundle.out", cameras, points);
 
     bundler_write_ply_file(
         "points.ply",

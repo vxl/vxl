@@ -16,6 +16,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
+
 //------------------------------------------------------------------------
 // Generic helper function to create a calibration matrix.
 // Assumes the camera center is the center of the image.
@@ -137,13 +138,13 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
     vgl_point_2d<double> pt_right =
         k1.map_to_focal_plane(best_match->matches[0].first->point);
 
-
     // Extract the left camera from the essential matrix
     best_match->image2->camera.set_calibration(k2);
+
     extract_left_camera(
         best_em,
-        vgl_point_2d<double>(-pt_left.x(), -pt_left.y()),
-        vgl_point_2d<double>(-pt_right.x(), -pt_right.y()),
+        vgl_point_2d<double>(pt_left.x(), pt_left.y()),
+        vgl_point_2d<double>(pt_right.x(), pt_right.y()),
         best_match->image2->camera);
 
 
@@ -262,12 +263,9 @@ class image_adder
         thresh(t) { }
 
     void operator()(const bundler_inters_image_sptr &img) {
-        const double threshold = thresh *
-            vcl_max(img->source->ni(), img->source->nj());
-
         // Get the associated vpgl camera using RANSAC
         bundler_utils_fill_persp_camera_ransac(
-            img, rounds, threshold);
+            img, rounds, thresh);
 
         img->in_recon = true;
 
@@ -367,6 +365,8 @@ void bundler_sfm_impl_add_new_points::operator()(
     bundler_inters_reconstruction &recon,
     const vcl_vector<bundler_inters_image_sptr> &added)
 {
+    int num_points_added = 0;
+
     //Look at every image that was added in the last round.
     vcl_vector<bundler_inters_image_sptr>::const_iterator i;
     for (i = added.begin(); i != added.end(); ++i)
@@ -395,6 +395,7 @@ void bundler_sfm_impl_add_new_points::operator()(
                         settings.min_observing_images,
                         settings.min_ray_angle)) {
                 add_new_track(recon, (*f)->track);
+                num_points_added++;
             }
         }
     }
@@ -405,6 +406,8 @@ void bundler_sfm_impl_add_new_points::operator()(
             bundler_utils_triangulate_points(*t);
         }
     }
+
+    vcl_cout << "Added " << num_points_added << " points\n";
 }
 
 
@@ -531,6 +534,9 @@ void bundler_sfm_impl_bundle_adjust::operator()(
     //------------------------------------------------------------------
     // Perform the bundle adjustment
     vpgl_bundle_adjust bundle_adjust;
+    bundle_adjust.set_verbose(true);
+    bundle_adjust.set_normalize_data(false);
+    bundle_adjust.write_vrml("bundle.vrml", cameras, world_points);
 
     assert(bundle_adjust.optimize(cameras, world_points, image_points, mask));
 

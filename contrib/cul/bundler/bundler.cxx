@@ -60,6 +60,49 @@ bool bundler_write_ply_file(
 }
 
 
+bool bundler_write_bundle_file(
+    const char* filename,
+    const vcl_vector<vpgl_perspective_camera<double> > &cameras,
+    const vcl_vector<vgl_point_3d<double> > &points)
+{
+    vcl_ofstream bundle_file;
+    bundle_file.open(filename);
+
+    if ( !bundle_file.is_open() ) {
+        return false;
+    }
+
+    // Write the header
+    int num_cameras = cameras.size();
+    int num_points = points.size();
+    
+    bundle_file << "# Bundle file v0.3\n"
+                << num_cameras << " " << num_points << "\n";
+
+    vcl_vector<vpgl_perspective_camera<double> >::const_iterator c;
+    for (c = cameras.begin(); c != cameras.end(); c++) {
+        /* Intrinsics */
+        const vpgl_calibration_matrix<double> &K = c->get_calibration();
+        const vnl_matrix_fixed<double,3,3> &R = c->get_rotation().as_matrix();
+        const vgl_vector_3d<double> &t = c->get_translation();
+
+        bundle_file << K.focal_length() << " " << 0 << " " << 0 << "\n";
+        bundle_file << R;
+        bundle_file << t.x() << " " << t.y() << " " << t.z() << "\n";
+    }
+
+    vcl_vector<vgl_point_3d<double> >::const_iterator p;
+    for (p = points.begin(); p != points.end(); p++) {
+        bundle_file << p->x() << ' ' << p->y() << ' ' << p->z() << '\n';
+        bundle_file << 0 << ' ' << 0 << ' ' << 255 << '\n';
+        bundle_file << 0 << '\n';
+    }
+
+    bundle_file.close();
+    return true;
+}
+
+
 //----------------------------------------------------------------------
 bundler_tracks::bundler_tracks():manage_pointers(true)
 {
@@ -227,6 +270,33 @@ bool bundler_sfm::run_sfm_stage(
         return false;
     }
 
+    vcl_cout << "Bundle adjusting initial reconstruction..." << vcl_endl;
+    (*bundle_adjust)(recon);
+
+    {
+        /* Write initial reconstruction to a file */
+        vcl_vector<vpgl_perspective_camera<double> > cameras_init;
+
+        vcl_vector<bundler_inters_image_sptr>::const_iterator cam;
+        for (cam = recon.feature_sets.begin(); cam != recon.feature_sets.end(); ++cam) {
+            if ( (*cam)->in_recon ){
+                cameras_init.push_back((*cam)->camera);
+            }
+        }
+        
+        vcl_vector<vgl_point_3d<double> > points_init;
+
+        vcl_vector<bundler_inters_track_sptr>::const_iterator pt;
+        for (pt = recon.tracks.begin(); pt != recon.tracks.end(); pt++) {
+            if ( (*pt)->observed ) {
+                points_init.push_back((*pt)->world_point);
+            }
+        }
+
+        bundler_write_ply_file("points_init.ply", points_init);
+        bundler_write_bundle_file("bundle_init.out", cameras_init, points_init);
+    }
+
     //Now do the add images, add points, bundle adjust loop
     vcl_vector<bundler_inters_image_sptr> to_add;
     while ( (*select_next_images)(recon, to_add) ) {
@@ -234,15 +304,18 @@ bool bundler_sfm::run_sfm_stage(
 
         vcl_vector<bundler_inters_image_sptr> added;
 
-        vcl_cout << "Adding the next images..." << vcl_endl;
+        vcl_cout << "Adding next set of images..." << vcl_endl;
         (*add_next_images)(to_add, recon, added);
 
         assert(to_add.size() > 0);
 
-        vcl_cout << "Adding the new points..." << vcl_endl;
+        vcl_cout << "Bundle adjusting [after adding images]..." << vcl_endl;
+        (*bundle_adjust)(recon);
+
+        vcl_cout << "Adding new points..." << vcl_endl;
         (*add_new_points)(recon, added);
 
-        vcl_cout << "Bundle adjusting..." << vcl_endl;
+        vcl_cout << "Bundle adjusting [after adding points]..." << vcl_endl;
         (*bundle_adjust)(recon);
 
         to_add.clear();

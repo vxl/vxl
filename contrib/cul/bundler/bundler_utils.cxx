@@ -163,8 +163,8 @@ void bundler_utils_fill_persp_camera_ransac(
             6, match_idxs, image_pts.size());
 
         for (int idx = 0; idx < 6; idx++) {
-            curr_image_pts[idx] = image_pts[idx];
-            curr_world_pts[idx] = world_pts[idx];
+            curr_image_pts[idx] = image_pts[match_idxs[idx]];
+            curr_world_pts[idx] = world_pts[match_idxs[idx]];
         }
 
 
@@ -180,6 +180,10 @@ void bundler_utils_fill_persp_camera_ransac(
         // is.
         int inlier_count = 0;
         for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind) {
+
+            if (camera.is_behind_camera(vgl_homg_point_3d<double>(world_pts[pt_ind])))
+                continue; // cheirality violation
+
             double u, v;
             camera.project(
                 world_pts[pt_ind].x(),
@@ -202,6 +206,7 @@ void bundler_utils_fill_persp_camera_ransac(
         }
     }
 
+    std::cout << "add_image: best_inliers: " << best_inliers << " / " << image_pts.size() << "\n";
 
     //------------------------------------------------------------------
     // Now that we have an estimate for the camera, re-do it into a more

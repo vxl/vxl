@@ -4,7 +4,6 @@ PROJECT( cul )
 
 doxygen_add_package(contrib/gel "Cornell University Libraries")
 
-
 SET( VXL_CUL_INCLUDE_DIR ${cul_SOURCE_DIR} CACHE STATIC "Cornell University package include files" )
 SET( 
   CUL_INSTALL_INCLUDE_DIR 

@@ -82,8 +82,8 @@ struct bundler_settings_create_initial_recon
         min_number_of_matches_homography(50),
         number_ransac_rounds_homography(128),
         inlier_threshold_homography(6.0),
-        number_ransac_rounds_e_matrix(512),
-        inlier_threshold_e_matrix(2.25){ }
+        number_ransac_rounds_e_matrix(2048),
+        inlier_threshold_e_matrix(4.0){ }
 };
 
 struct bundler_settings_select_next_images
@@ -109,7 +109,7 @@ struct bundler_settings_add_next_images
 
     bundler_settings_add_next_images() :
         number_ransac_rounds(40960),
-        inlier_size_multiplier(.4){ }
+        inlier_size_multiplier(6.0){ }
 };
 
 struct bundler_settings_add_new_points

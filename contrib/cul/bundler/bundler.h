@@ -65,7 +65,10 @@ bool bundler_write_ply_file(
     const char *filename,
     const vcl_vector<vgl_point_3d<double> > &points);
     
-
+bool bundler_write_bundle_file(
+    const char* filename,
+    const vcl_vector<vpgl_perspective_camera<double> > &cameras,
+    const vcl_vector<vgl_point_3d<double> > &points);
 
 // A collection of routines that provide the feature phase of
 // the bundler pipeline. There are three constructors, one for the default,
