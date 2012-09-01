@@ -47,7 +47,7 @@ vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix(
 
 //---------------------------------
 //: From Essential Matrix.
-//  Since $E = Kl^T \times F \times Kr$, $F = Kl^{-T} \times F \times Kr^{-1}$
+//  Since $E = Kl^T \times F \times Kr$, $F = Kl^{-T} \times E \times Kr^{-1}$
 template <class T>
 vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix(
     const vpgl_calibration_matrix<T> &kr,
@@ -56,9 +56,8 @@ vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix(
   : cached_svd_(NULL)
 {
   vnl_matrix_fixed<T, 3, 3> kl_tinv = vnl_inverse(kl.get_matrix().transpose());
-  vnl_matrix_fixed<T, 3, 3> em_inv = em.cached_svd_->inverse();
-  vnl_matrix_fixed<T, 3, 3> kr_inv = vnl_inverse(kl.get_matrix());
-  this->set_matrix(kl_tinv * em_inv * kr_inv);
+  vnl_matrix_fixed<T, 3, 3> kr_inv = vnl_inverse(kr.get_matrix());
+  this->set_matrix(kl_tinv * em.get_matrix() * kr_inv);
 }
 
 

@@ -58,7 +58,7 @@ class vpgl_fundamental_matrix
   vpgl_fundamental_matrix(const vpgl_fundamental_matrix<T>& other);
 
   //: Construct from an essential matrix and two calibration matrices.
-  // Since E = Kl^T * F * Kr, then F = Kl^-T * F * Kr^-1.
+  // Since E = Kl^T * F * Kr, then F = Kl^-T * E * Kr^-1.
   // WARNING! This constructor uses two 3x3 inverse calculations, so it is expensive.
   vpgl_fundamental_matrix(const vpgl_calibration_matrix<T> &kr,
                           const vpgl_calibration_matrix<T> &kl,
