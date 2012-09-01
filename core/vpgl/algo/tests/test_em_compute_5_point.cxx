@@ -31,7 +31,7 @@ static void normalize(
         vnl_matrix_fixed<double,3,1> normed = k_inv*vec;
 
         normed_points.push_back(
-            vgl_point_2d<double>(-normed.get(0,0), -normed.get(1,0)));
+            vgl_point_2d<double>(normed.get(0,0), normed.get(1,0)));
     }
 }
 
@@ -112,7 +112,6 @@ static void test_unnormed()
 
     vpgl_calibration_matrix<double> k2
         (focal_length2, vgl_point_2d<double>(width2/2, height2/2));
-
 
     //Finally, the point correspondences
     vgl_point_2d<double> corres1_arr[] =
