@@ -35,7 +35,7 @@ class PairMatchSet2D3D : public PairMatchSet
   // Data Access---------------------------------------------------------------
 
   // Data Control--------------------------------------------------------------
-  bool is_set() const { return (_corners != 0) && (_structure != 0); }
+  bool is_set() const { return (corners_ != 0) && (structure_ != 0); }
   void set(const HomgInterestPointSet* corners, vcl_vector<HomgPoint3D>* structure);
   void set(int corners_size, vcl_vector<HomgPoint3D>* structure);
 
@@ -51,11 +51,11 @@ class PairMatchSet2D3D : public PairMatchSet
   HomgMetric get_conditioner() const;
 
 //: Return the projective structure within which the i2 indices point
-  vcl_vector<HomgPoint3D>* get_structure() const { return _structure; }
+  vcl_vector<HomgPoint3D>* get_structure() const { return structure_; }
 
  private:
-  const HomgInterestPointSet* _corners;
-  vcl_vector<HomgPoint3D>* _structure;
+  const HomgInterestPointSet* corners_;
+  vcl_vector<HomgPoint3D>* structure_;
 };
 
 #endif // PairMatchSet2D3D_h_

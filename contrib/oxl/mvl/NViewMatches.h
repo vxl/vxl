@@ -57,8 +57,8 @@ vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c);
 class NViewMatches : public vcl_vector<NViewMatch>
 {
   // Data Members--------------------------------------------------------------
-  int _nviews;
-  int _min_overlap;
+  int nviews_;
+  int min_overlap_;
 
  public:
   // Constructors/Destructors--------------------------------------------------
@@ -72,7 +72,7 @@ class NViewMatches : public vcl_vector<NViewMatch>
   // NViewMatches& operator=(const NViewMatches& that); - use default
 
   // Operations----------------------------------------------------------------
-  int nviews() const { return _nviews; }
+  int nviews() const { return nviews_; }
 
   bool load(vcl_istream&);
   bool load(const char* filename);

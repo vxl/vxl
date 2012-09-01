@@ -19,13 +19,13 @@
 template <class T>
 class mvl_modify_handle
 {
-  T  _oldvalue;
-  T* _place;
+  T  oldvalue_;
+  T* place_;
  public:
-  mvl_modify_handle(T* place) { _place = place; _oldvalue = *place; }
-  ~mvl_modify_handle() { *_place = _oldvalue; }
-  operator T* () { return _place; }
-  T& operator*() { return *_place; }
+  mvl_modify_handle(T* place) { place_ = place; oldvalue_ = *place; }
+  ~mvl_modify_handle() { *place_ = oldvalue_; }
+  operator T* () { return place_; }
+  T& operator*() { return *place_; }
 };
 
 #endif // mvl_modify_handle_h_

@@ -9,8 +9,8 @@
 
 bcvr_clsd_cvmatch::bcvr_clsd_cvmatch()
 {
-  _n1 = 0;
-  _n2 = 0;
+  n1_ = 0;
+  n2_ = 0;
   setTemplateSize(3);
 }
 
@@ -25,36 +25,36 @@ bcvr_clsd_cvmatch::bcvr_clsd_cvmatch(const bsol_intrinsic_curve_2d_sptr c1,
   _curve2 = new bsol_intrinsic_curve_2d(*c2);
   _curve1->setOpen(c1->isOpen());
   _curve2->setOpen(c2->isOpen());
-  _n1=c1->size();     //No. of points in original curve
-  _n2=c2->size();
+  n1_=c1->size();     //No. of points in original curve
+  n2_=c2->size();
 
   // duplicate curve 1 to capture cyclic nature of closed curves
-  for (n=0;n<_n1;n++)
+  for (n=0;n<n1_;n++)
     _curve1->add_vertex(c1->x(n), c1->y(n));
 
   // caller function should not compute properties of curve 1 to avoid duplicate computation
   _curve2->computeProperties();
   _curve1->computeProperties();
 
-  for (n=0;n<2*_n1;n++) {
-    vcl_vector<double> tmp1(_n2,DP_VERY_LARGE_COST);
+  for (n=0;n<2*n1_;n++) {
+    vcl_vector<double> tmp1(n2_,DP_VERY_LARGE_COST);
     _cost.push_back(tmp1);
 
     vcl_pair <int,int> tmp3(0,0);
-    vcl_vector< vcl_pair <int,int> > tmp2(_n2,tmp3);
+    vcl_vector< vcl_pair <int,int> > tmp2(n2_,tmp3);
     _map.push_back(tmp2);
 
     vcl_pair <int,int> tmp4(0,0);
-    vcl_vector< vcl_pair <int,int> > tmp5(_n1+_n2,tmp4);
+    vcl_vector< vcl_pair <int,int> > tmp5(n1_+n2_,tmp4);
     _finalMap.push_back(tmp5);
   }
 
-  _leftMask.insert(_leftMask.begin(),_n2,0);
-  //_rightMask.insert(_rightMask.begin(),_n2,2*_n1-1);
-  _rightMask.insert(_rightMask.begin(),_n2,2*_n2-1);
-  _finalCost.insert(_finalCost.begin(),2*_n1,0);
+  _leftMask.insert(_leftMask.begin(),n2_,0);
+  //_rightMask.insert(_rightMask.begin(),n2_,2*n1_-1);
+  _rightMask.insert(_rightMask.begin(),n2_,2*n2_-1);
+  _finalCost.insert(_finalCost.begin(),2*n1_,0);
 
-  _R = R;
+  R_ = R;
   setTemplateSize(template_size);
 }
 
@@ -114,39 +114,39 @@ bcvr_clsd_cvmatch::bcvr_clsd_cvmatch(const vsol_polygon_2d_sptr p1,
   }
 
    int n;
-  _n1=c1->size();     //No. of points in original curve
-  _n2=_curve2->size();
+  n1_=c1->size();     //No. of points in original curve
+  n2_=_curve2->size();
 
   // duplicate curve 1 to capture cyclic nature of closed curves
   _curve1 = new bsol_intrinsic_curve_2d(*c1);
   _curve1->setOpen(false);
   _curve2->setOpen(false);
-  for (n=0;n<_n1;n++)
+  for (n=0;n<n1_;n++)
     _curve1->add_vertex(c1->x(n), c1->y(n));
 
   // caller function should not compute properties of curve 1 to avoid duplicate computation
   _curve2->computeProperties();
   _curve1->computeProperties();
 
-  for (n=0;n<2*_n1;n++) {
-    vcl_vector<double> tmp1(_n2,DP_VERY_LARGE_COST);
+  for (n=0;n<2*n1_;n++) {
+    vcl_vector<double> tmp1(n2_,DP_VERY_LARGE_COST);
     _cost.push_back(tmp1);
 
     vcl_pair <int,int> tmp3(0,0);
-    vcl_vector< vcl_pair <int,int> > tmp2(_n2,tmp3);
+    vcl_vector< vcl_pair <int,int> > tmp2(n2_,tmp3);
     _map.push_back(tmp2);
 
     vcl_pair <int,int> tmp4(0,0);
-    vcl_vector< vcl_pair <int,int> > tmp5(_n1+_n2,tmp4);
+    vcl_vector< vcl_pair <int,int> > tmp5(n1_+n2_,tmp4);
     _finalMap.push_back(tmp5);
   }
 
-  _leftMask.insert(_leftMask.begin(),_n2,0);
-  //_rightMask.insert(_rightMask.begin(),_n2,2*_n1-1);
-  _rightMask.insert(_rightMask.begin(),_n2,2*_n2-1);
-  _finalCost.insert(_finalCost.begin(),2*_n1,0);
+  _leftMask.insert(_leftMask.begin(),n2_,0);
+  //_rightMask.insert(_rightMask.begin(),n2_,2*n1_-1);
+  _rightMask.insert(_rightMask.begin(),n2_,2*n2_-1);
+  _finalCost.insert(_finalCost.begin(),2*n1_,0);
 
-  _R = R;
+  R_ = R;
   setTemplateSize(template_size);
 }
 
@@ -211,8 +211,8 @@ void bcvr_clsd_cvmatch::printCost()
 {
   int i,j;
   vcl_cout << "Cost Matrix" << vcl_endl;
-  for (i = 0; i<_n1; i++) {
-    for (j = 0; j<_n2; j++) {
+  for (i = 0; i<n1_; i++) {
+    for (j = 0; j<n2_; j++) {
       vcl_printf("%6.3f ",_cost[i][j]);
     }
     vcl_printf("\n");
@@ -224,8 +224,8 @@ void bcvr_clsd_cvmatch::writeCost(vcl_string fname)
   vcl_FILE *fp=vcl_fopen(fname.c_str(),"w");
   int i,j;
   double c;
-  for (i = 0; i<_n1; i++) {
-    for (j = 0; j<_n2; j++) {
+  for (i = 0; i<n1_; i++) {
+    for (j = 0; j<n2_; j++) {
       c=_cost[i][j];
       vcl_fwrite(&c,sizeof(double),1,fp);
     }
@@ -237,8 +237,8 @@ void bcvr_clsd_cvmatch::printMap()
 {
   int i,j;
   vcl_printf("Map Matrix\n");
-  for (i = 0; i<_n1; i++) {
-    for (j = 0; j<_n2; j++) {
+  for (i = 0; i<n1_; i++) {
+    for (j = 0; j<n2_; j++) {
       vcl_printf("(%2d,%2d) ", _map[i][j].first, _map[i][j].second);
     }
     vcl_printf("\n");
@@ -249,14 +249,14 @@ void bcvr_clsd_cvmatch::initializeDPMask1()
 {
   int ii,jj;
 
-  for (ii=0;ii<2*_n1;ii++) {
-    for (jj=0;jj<_n2;jj++) {
+  for (ii=0;ii<2*n1_;ii++) {
+    for (jj=0;jj<n2_;jj++) {
       _cost[ii][jj]=DP_VERY_LARGE_COST;
     }
   }
-  for (jj=0;jj<_n2;jj++) {
+  for (jj=0;jj<n2_;jj++) {
     _leftMask[jj]=0;
-    _rightMask[jj]=2*_n2-1;
+    _rightMask[jj]=2*n2_-1;
   }
 }
 
@@ -278,8 +278,8 @@ void bcvr_clsd_cvmatch::initializeDPMask2(int s1, int s2)
   int start,end;
   int n1,n2;
 
-  n1=_n1;
-  n2=_n2;
+  n1=n1_;
+  n2=n2_;
 
   vcl_pair <int,int> tmp3(0,0);
   vcl_vector< vcl_pair <int,int> > Pi(n1+n2,tmp3);
@@ -348,7 +348,7 @@ void bcvr_clsd_cvmatch::initializeDPMask2(int s1, int s2)
   }
 #endif
 
-  for (jj=0;jj<_n2;jj++) {
+  for (jj=0;jj<n2_;jj++) {
     while (ci <NDi && PiR[ci].second<jj) {
       ci++;
     }
@@ -360,7 +360,7 @@ void bcvr_clsd_cvmatch::initializeDPMask2(int s1, int s2)
     _leftMask[jj]=start;
     _rightMask[jj]=end;
     //vcl_cout << jj <<" Start= " << start << " End= " << end << ' ' << cj-1 << vcl_endl;
-    for (ii=0;ii<=2*_n1-1;ii++)
+    for (ii=0;ii<=2*n1_-1;ii++)
       _cost[ii][jj]=DP_VERY_LARGE_COST;
   }
 
@@ -377,9 +377,9 @@ void bcvr_clsd_cvmatch::computeDPCosts(int startPoint)
 
   _cost[startPoint][0]=0;
   //for (sum = 1; sum<_n+_m-1; sum++) {
-  for (j=0;j<_n2;j++) {
+  for (j=0;j<n2_;j++) {
     start=(startPoint>_leftMask[j] ? startPoint : _leftMask[j]);
-    end=(_rightMask[j]<startPoint+_n1-1 ? _rightMask[j] : startPoint+_n1-1);
+    end=(_rightMask[j]<startPoint+n1_-1 ? _rightMask[j] : startPoint+n1_-1);
     for (i=start;i<=end;i++) {
       for (k=0;k<_template_size;k++) {
               ip=i+XOFFSET[k];
@@ -403,15 +403,15 @@ void bcvr_clsd_cvmatch::findDPCorrespondence(int startPoint)
   int count;
 
   vcl_pair <int,int> tmp3(0,0);
-  vcl_vector< vcl_pair <int,int> > tmpMap(_n1+_n2+1,tmp3);
+  vcl_vector< vcl_pair <int,int> > tmpMap(n1_+n2_+1,tmp3);
   //tmpMap=(intPair*)calloc(d->n1+d->n2+1,sizeof(intPair));
 
-  _finalCost[startPoint]=_cost[_n1+startPoint-1][_n2-1];
+  _finalCost[startPoint]=_cost[n1_+startPoint-1][n2_-1];
 
-  ip=_n1+startPoint-1;
-  jp=_n2-1;
-  i=_n1+startPoint-1;
-  j=_n2-1;
+  ip=n1_+startPoint-1;
+  jp=n2_-1;
+  i=n1_+startPoint-1;
+  j=n2_-1;
 
   count=0;
   tmpMap[count].first=ip;
@@ -471,23 +471,23 @@ void bcvr_clsd_cvmatch::Match()
   //Copy the starting point match (0) to the match from _n
   int N0=_finalMap[0].size();
   vcl_pair <int,int> p;
-  _finalMap[_n1].clear();
-  _finalCost[_n1]=_finalCost[0];
+  _finalMap[n1_].clear();
+  _finalCost[n1_]=_finalCost[0];
   for (int i=0;i<N0;i++) {
-    p.first=_finalMap[0][i].first+_n1;
+    p.first=_finalMap[0][i].first+n1_;
     p.second=_finalMap[0][i].second;
-    _finalMap[_n1].push_back(p);
+    _finalMap[n1_].push_back(p);
   }
   vcl_cout <<  "In Match: Done copying  start point"<< vcl_endl;
-  computeMiddlePaths(0,_n1);
+  computeMiddlePaths(0,n1_);
 
 #if 0
   vcl_ofstream fpoo;
   fpoo.open("D:\\contours\\Mpeg-7\\temp_original.out", vcl_ios::app);
 
-  fpoo << 2*_n1 << ' ' << _n2 << '\n';
-  for (int i = 0; i<2*_n1; i++) {
-    for (int j = 0; j<_n2; j++) {   // -1 since (0,0) will go to CD
+  fpoo << 2*n1_ << ' ' << n2_ << '\n';
+  for (int i = 0; i<2*n1_; i++) {
+    for (int j = 0; j<n2_; j++) {   // -1 since (0,0) will go to CD
       fpoo << _curve1->arcLength(i) << ' '
            << _curve2->arcLength(j) << vcl_endl;
     }
@@ -495,7 +495,7 @@ void bcvr_clsd_cvmatch::Match()
 
   double minCost = _finalCost[0];
   int i_min = 0;
-  for (int i=1; i<_n1 ; i++) {
+  for (int i=1; i<n1_ ; i++) {
     if (minCost > _finalCost[i]) {
       minCost = _finalCost[i];
       i_min = i;
@@ -545,7 +545,7 @@ double bcvr_clsd_cvmatch::computeIntervalCost(int i, int ip, int j, int jp)
   double dt2 = bendCost(_curve2, j,jp);
   double dK = vcl_fabs(dt1-dt2);
 
-  return dF + _R*dK;
+  return dF + R_*dK;
 #if 0
   s11=d->curve1->arcLength[ip];
   s12=d->curve1->arcLength[i];
@@ -590,7 +590,7 @@ double bcvr_clsd_cvmatch::finalBestCostRestrictedStartingPoint(int &index, doubl
   double minCost = _finalCost[0];
   index = 0;
 
-  for (int count=1;count<_n1;count++) {
+  for (int count=1;count<n1_;count++) {
     double al = _curve1->arcLength(count);
     if (al < allowedLmin || al > allowedLmax)
       if (minCost>_finalCost[count]) {
@@ -611,7 +611,7 @@ double bcvr_clsd_cvmatch::finalBestCost(int &index, bool get_normalized_cost)
   double minCost = _finalCost[0];
   index = 0;
 
-  for (int count=1;count<_n1;count++) {
+  for (int count=1;count<n1_;count++) {
     if (minCost>_finalCost[count]) {
       minCost=_finalCost[count];
       index=count;
@@ -627,6 +627,6 @@ double bcvr_clsd_cvmatch::finalBestCost(int &index, bool get_normalized_cost)
 //: prepare and return the instance of container class that saves curve correspondence
 bcvr_cv_cor_sptr bcvr_clsd_cvmatch::get_cv_cor(int minIndex)
 {
-  return new bcvr_cv_cor(_curve1, _curve2, _finalMap[minIndex], _n1);
+  return new bcvr_cv_cor(_curve1, _curve2, _finalMap[minIndex], n1_);
 }
 

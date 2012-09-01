@@ -44,29 +44,29 @@ class bcvr_cvmatch : public vbl_ref_count
 {
  protected:
 
-  bsol_intrinsic_curve_2d_sptr    _curve1;
-  bsol_intrinsic_curve_2d_sptr    _curve2;
+  bsol_intrinsic_curve_2d_sptr    curve1_;
+  bsol_intrinsic_curve_2d_sptr    curve2_;
 
-  DPCostType        _DPCost;          //DPMap of cost: n*m array of double
-  DPMapType        _DPMap;          //DPMap of prev point vcl_map: n*m array of vcl_pair of index
-  FinalMapType      _finalMap;        //alignment curve
-  vcl_vector<double>  _finalMapCost;      //cost on alignment curve
-  double          _finalCost;        //final cost
+  DPCostType        DPCost_;          //DPMap of cost: n*m array of double
+  DPMapType        DPMap_;          //DPMap of prev point vcl_map: n*m array of vcl_pair of index
+  FinalMapType      finalMap_;        //alignment curve
+  vcl_vector<double>  finalMapCost_;      //cost on alignment curve
+  double          finalCost_;        //final cost
 
-  double  _R;
-  bool _normalized_stretch_cost;
-  int _template_size;
+  double  R_;
+  bool normalized_stretch_cost_;
+  int template_size_;
   vcl_vector<int> XOFFSET;
   vcl_vector<int> YOFFSET;
 
  public:
 
   //Result of matching:
-  DPCostType*        DPCost()      { return &_DPCost; }
-  DPMapType*        DPMap()      { return &_DPMap; }
-  FinalMapType*      finalMap()    { return &_finalMap; }
-  vcl_vector<double>*  finalMapCost() { return &_finalMapCost; }
-  double          finalCost()    { return _finalCost; }
+  DPCostType*        DPCost()      { return &DPCost_; }
+  DPMapType*        DPMap()      { return &DPMap_; }
+  FinalMapType*      finalMap()    { return &finalMap_; }
+  vcl_vector<double>*  finalMapCost() { return &finalMapCost_; }
+  double          finalCost()    { return finalCost_; }
 
   int getFMapFirst (int i) {
     assert (i>=0);
@@ -77,33 +77,33 @@ class bcvr_cvmatch : public vbl_ref_count
     return (*finalMap())[i].second;
   }
 
-  vcl_string    _fileName1, _fileName2;
-  bsol_intrinsic_curve_2d_sptr curve1() { return _curve1; }
-  bsol_intrinsic_curve_2d_sptr curve2() { return _curve2; }
+  vcl_string    fileName1_, fileName2_;
+  bsol_intrinsic_curve_2d_sptr curve1() { return curve1_; }
+  bsol_intrinsic_curve_2d_sptr curve2() { return curve2_; }
   void setCurve1 (const bsol_intrinsic_curve_2d_sptr& c1) {
-    _curve1 = c1;
+    curve1_ = c1;
     // just in case
-    _curve1->computeProperties();
+    curve1_->computeProperties();
   }
   void setCurve2 (const bsol_intrinsic_curve_2d_sptr& c2) {
-    _curve2 = c2;
+    curve2_ = c2;
     // just in case
-    _curve2->computeProperties();
+    curve2_->computeProperties();
   }
   void setFinalMap (FinalMapType map) {
-    _finalMap = map;
+    finalMap_ = map;
   }
 
   void setFinalMapCost (vcl_vector<double>* map) {
-    _finalMapCost = *map;
+    finalMapCost_ = *map;
   }
 
   void setFinalMap (int i, int first, int second) {
-    _finalMap[i].first = first;
-        _finalMap[i].second = second;
+    finalMap_[i].first = first;
+        finalMap_[i].second = second;
   }
   void setStretchCostFlag (bool flag) {
-        _normalized_stretch_cost = flag;
+        normalized_stretch_cost_ = flag;
   }
   void setTemplateSize (int size);
 

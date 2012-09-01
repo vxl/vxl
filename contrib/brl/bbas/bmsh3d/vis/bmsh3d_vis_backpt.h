@@ -3,8 +3,8 @@
 // \author 040309 Ming: bmsh3d_vis_backpt.h
 // \brief  Derived class of standard OpenInventor object to put backward pointer to our datastructure.
 
-#ifndef _bmsh3d_vis_backpt_h_
-#define _bmsh3d_vis_backpt_h_
+#ifndef bmsh3d_vis_backpt_h_
+#define bmsh3d_vis_backpt_h_
 
 #include <bmsh3d/bmsh3d_utils.h>
 
@@ -115,4 +115,4 @@ class bmsh3dvis_face_SoFaceSet : public SoFaceSet, public bmsh3dvis_gui_elm
   }
 };
 
-#endif
+#endif // bmsh3d_vis_backpt_h_

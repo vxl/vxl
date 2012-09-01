@@ -1,5 +1,7 @@
 //---------------------------------------------------------------------
 // This is bbas/bcvr/bcvr_clsd_cvmatch.h
+#ifndef bcvr_clsd_cvmatch_h_
+#define bcvr_clsd_cvmatch_h_
 //:
 // \file
 // \brief closed elastic curve matching algorithm:
@@ -18,9 +20,6 @@
 //
 //-------------------------------------------------------------------------
 
-#ifndef _bcvr_clsd_cvmatch_h
-#define _bcvr_clsd_cvmatch_h
-
 #include <vcl_ctime.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include "bcvr_cv_cor_sptr.h"
@@ -28,8 +27,7 @@
 
 class bcvr_clsd_cvmatch : public vbl_ref_count
 {
-
-protected:
+ protected:
   //Data
   bsol_intrinsic_curve_2d_sptr _curve1;
   bsol_intrinsic_curve_2d_sptr _curve2;
@@ -42,9 +40,9 @@ protected:
   DPMapType _finalMap; //Shortest Path for each start point (_n+1 x 1)
   vcl_vector<double> _finalCost; //Final cost for each start point (_n+1 x 1)
 
-  int _n1;
-  int _n2;
-  double _R;
+  int n1_;
+  int n2_;
+  double R_;
   bool _normalized_stretch_cost;
   int _template_size;
   vcl_vector<int> XOFFSET;
@@ -62,31 +60,31 @@ protected:
   double stretchCost (bsol_intrinsic_curve_2d_sptr curve, int i, int ip);
   double bendCost (bsol_intrinsic_curve_2d_sptr curve, int i, int ip);
 
-public:
+ public:
   bcvr_clsd_cvmatch();
-  bcvr_clsd_cvmatch(const bsol_intrinsic_curve_2d_sptr c1, 
-                     const bsol_intrinsic_curve_2d_sptr c2, 
-                     double R, 
-                     int template_size=3);
+  bcvr_clsd_cvmatch(const bsol_intrinsic_curve_2d_sptr c1,
+                    const bsol_intrinsic_curve_2d_sptr c2,
+                    double R,
+                    int template_size=3);
 
-  bcvr_clsd_cvmatch(const vsol_polygon_2d_sptr p1, 
-                     const vsol_polygon_2d_sptr p2, 
-                     double R, 
-                     double rms = 0.0f,  // fit lines to the input polygon before using
-                     int template_size = 3);
+  bcvr_clsd_cvmatch(const vsol_polygon_2d_sptr p1,
+                    const vsol_polygon_2d_sptr p2,
+                    double R,
+                    double rms = 0.0f,  // fit lines to the input polygon before using
+                    int template_size = 3);
 
-  virtual ~bcvr_clsd_cvmatch(){};
-  
+  virtual ~bcvr_clsd_cvmatch() {};
+
   //access functions
-  double finalCost(int index){return _finalCost[index];};
-  vcl_vector<double> finalCost(){return _finalCost;};
-  FinalMapType finalMap(int index){return _finalMap[index];};
-  int n1(){return _n1;};
-  int n2(){return _n2;};
+  double finalCost(int index) {return _finalCost[index];};
+  vcl_vector<double> finalCost() {return _finalCost;};
+  FinalMapType finalMap(int index) {return _finalMap[index];};
+  int n1() {return n1_;};
+  int n2() {return n2_;};
 
   //: return the best cost around the starting point, but within a restricted arclength range
-  //  e.g. if ratio is 1/4 then go L/4 to the right and -L/4 to the left 
-  //  of the starting point and return the best cost in that range
+  //  E.g. if ratio is 1/4 then go L/4 to the right and -L/4 to the left
+  //       of the starting point and return the best cost in that range
   double finalBestCostRestrictedStartingPoint(int &index, double ratio, bool get_normalized_cost=true);
 
   //: return the best cost around the starting point
@@ -104,7 +102,7 @@ public:
   void printCost();
   void writeCost(vcl_string f);
   void printMap();
-  
+
   //: Match() corresponds to closedCurveDPMatch(ClosedDPMatch *d) in original source code
   void Match();
   //void Match(int startPoint);
@@ -113,4 +111,4 @@ public:
   bsol_intrinsic_curve_2d_sptr curve2() { return _curve2; }
 };
 
-#endif
+#endif // bcvr_clsd_cvmatch_h_

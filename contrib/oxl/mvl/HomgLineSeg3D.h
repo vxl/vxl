@@ -23,8 +23,8 @@
 class HomgLineSeg3D : public HomgLine3D
 {
   // Data Members--------------------------------------------------------------
-  HomgPoint3D _point1;
-  HomgPoint3D _point2;
+  HomgPoint3D point1_;
+  HomgPoint3D point2_;
 
  public:
   // Constructors/Initializers/Destructors-------------------------------------

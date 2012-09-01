@@ -14,8 +14,8 @@
 vmal_dense_matching::vmal_dense_matching(const vnl_double_3x3 & H0,
                                          const vnl_double_3x3 & H1)
 {
-  _H0=H0;
-  _H1=H1;
+  H0_=H0;
+  H1_=H1;
 }
 
 vmal_dense_matching::~vmal_dense_matching()
@@ -24,14 +24,14 @@ vmal_dense_matching::~vmal_dense_matching()
 
 void vmal_dense_matching::set_fmatrix(const vnl_double_3x3 & F)
 {
-  _F=F;
-  _type=1; //1 for fundamental matrix
+  F_=F;
+  type_=1; //1 for fundamental matrix
 }
 
 void vmal_dense_matching::set_hmatrix(const vnl_double_3x3 & H)
 {
-  _H=H;
-  _type=2; // 2 for homography
+  H_=H;
+  type_=2; // 2 for homography
 }
 
 // Between two set of lines in 2 images that are matched, it compute the best lines
@@ -42,7 +42,7 @@ void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mv
   // We assume that the lines have been sorted. It means that, for example, the
   // first end-point of the first segment correspond to the first end-point of
   // the second segment.
-  if (_type==1)
+  if (type_==1)
   {
     if (mvd_edge->get_nb_views()>1)
     {
@@ -65,10 +65,10 @@ void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mv
       {
         //compute the 4 epipolars lines, each linked to an end-point of
         //the 2 segments
-        vnl_double_3 epi_line1p=_F*lines0_p[i];
-        vnl_double_3 epi_line1q=_F*lines0_q[i];
-        vnl_double_3 epi_line0p=(_F.transpose()*lines1_p[i]);
-        vnl_double_3 epi_line0q=(_F.transpose()*lines1_q[i]);
+        vnl_double_3 epi_line1p=F_*lines0_p[i];
+        vnl_double_3 epi_line1q=F_*lines0_q[i];
+        vnl_double_3 epi_line0p=(F_.transpose()*lines1_p[i]);
+        vnl_double_3 epi_line0q=(F_.transpose()*lines1_q[i]);
 
         //variables to represent the end-points
         vnl_double_3 pt0p=lines0_p[i];
@@ -130,7 +130,7 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
                                                vmal_multi_view_data_edge_sptr res)
 {
   //the second segment.
-  if (_type==2)
+  if (type_==2)
   {
     if (mvd_edge->get_nb_views()>1)
     {
@@ -148,7 +148,7 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
       convert_lines_double_3(tmp_lines0, lines0_p, lines0_q);
       convert_lines_double_3(tmp_lines1, lines1_p, lines1_q);
 
-      vnl_double_3x3 HI=vnl_inverse(_H);
+      vnl_double_3x3 HI=vnl_inverse(H_);
       for (int i=0;i<numlines;i++)
       {
         vnl_double_3 pt0p=lines0_p[i];
@@ -156,8 +156,8 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
         vnl_double_3 pt1p=lines1_p[i];
         vnl_double_3 pt1q=lines1_q[i];
 
-        vnl_double_3 h_lines1_p=_H*lines0_p[i];
-        vnl_double_3 h_lines1_q=_H*lines0_q[i];
+        vnl_double_3 h_lines1_p=H_*lines0_p[i];
+        vnl_double_3 h_lines1_q=H_*lines0_q[i];
         vnl_double_3 h_lines0_p=HI*lines1_p[i];
         vnl_double_3 h_lines0_q=HI*lines1_q[i];
 
@@ -228,7 +228,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
   convert_lines_double_3(tmp_lines0, lines0_p, lines0_q);
   convert_lines_double_3(tmp_lines1, lines1_p, lines1_q);
 
-  vnl_double_3x3 IH0=vnl_inverse(_H0);
+  vnl_double_3x3 IH0=vnl_inverse(H0_);
 
   vnl_double_3 int_line0p;
   vnl_double_3 int_line0q;
@@ -310,8 +310,8 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
       else
         point1[1]+=delta1y*2;
 
-      t_point0=_H0*point0;
-      t_point1=_H1*point1;
+      t_point0=H0_*point0;
+      t_point1=H1_*point1;
       int_t_point0[0]=(int)vmal_round(t_point0[0]/t_point0[2]);
       int_t_point0[1]=(int)vmal_round(t_point0[1]/t_point0[2]);
       int_t_point1[0]=(int)vmal_round(t_point1[0]/t_point1[2]);
@@ -326,8 +326,8 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
         max_disparity=disparity;
     }
   }
-  vcl_cerr<<"Disparity min: "<<min_disparity<<vcl_endl;
-  vcl_cerr<<"Disparity max: "<<max_disparity<<vcl_endl;
+  vcl_cerr<<"Disparity min: "<<min_disparity<<'\n'
+          <<"Disparity max: "<<max_disparity<<'\n';
 
   //Save the matrix in a pgn image
   max_disparity-=min_disparity;

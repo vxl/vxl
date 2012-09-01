@@ -1,6 +1,6 @@
 // This is brl/bbas/bmsh3d/bmsh3d_fuzzy_boolean.h
-#ifndef _bmsh3d_fuzzy_boolean_h_
-#define _bmsh3d_fuzzy_boolean_h_
+#ifndef bmsh3d_fuzzy_boolean_h__
+#define bmsh3d_fuzzy_boolean_h__
 //:
 // \file
 // \brief  bmsh3d fuzzy boolean functions.
@@ -41,4 +41,4 @@ inline bool bmsh3d_eq_c (const double& a, const double& b)
   return vcl_fabs(a-b) < BMSH3D_COARSE_EPSILON;
 }
 
-#endif
+#endif // bmsh3d_fuzzy_boolean_h__

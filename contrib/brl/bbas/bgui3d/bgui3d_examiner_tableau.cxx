@@ -44,7 +44,7 @@ bgui3d_examiner_tableau::bgui3d_examiner_tableau(SoNode * scene_root)
   SbViewVolume volume;
   volume.ortho(-1, 1, -1, 1, -1, 1);
   spin_projector_->setViewVolume( volume );
-  _seekSensor = new SoTimerSensor( seeksensorCB, this );
+  seekSensor_ = new SoTimerSensor( seeksensorCB, this );
   find_scale();
 }
 
@@ -493,8 +493,8 @@ seeksensorCB(void * data, SoSensor * s)
 
   t = float(1 - vcl_cos(M_PI*t)) * 0.5f;
 
-  thisp->camera_node()->position = thisp->_fromPos + (thisp->_toPos - thisp->_fromPos) * t;
-  thisp->camera_node()->orientation = SbRotation::slerp( thisp->_fromRot, thisp->_toRot, t);
+  thisp->camera_node()->position = thisp->fromPos_ + (thisp->toPos_ - thisp->fromPos_) * t;
+  thisp->camera_node()->orientation = SbRotation::slerp( thisp->fromRot_, thisp->toRot_, t);
   if ( end )
     s->unschedule();
 }
@@ -538,20 +538,20 @@ void bgui3d_examiner_tableau::seek_to_point( SbVec2s pos )
   SbVec3f hitpoint = picked->getPoint();
   SbVec3f cameraposition = scene_camera_->position.getValue();
   SbVec3f diff = hitpoint - cameraposition;
-  _fromPos = cameraposition;
-  _toPos = cameraposition += factor*diff;
+  fromPos_ = cameraposition;
+  toPos_ = cameraposition += factor*diff;
 
   SbRotation camrot = scene_camera_->orientation.getValue();
   SbVec3f lookat(0, 0, -1); // init to default view direction vector
   camrot.multVec(lookat, lookat);
   SbRotation rot(lookat, diff);
 
-  _fromRot = camrot;
-  _toRot = camrot*rot;
+  fromRot_ = camrot;
+  toRot_ = camrot*rot;
 
   scene_camera_->focalDistance = diff.length()*(1.0f-factor);
-  _seekSensor->setBaseTime( SbTime::getTimeOfDay() );
-  _seekSensor->schedule();
+  seekSensor_->setBaseTime( SbTime::getTimeOfDay() );
+  seekSensor_->schedule();
 }
 
 

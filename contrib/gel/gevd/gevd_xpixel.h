@@ -30,8 +30,8 @@
 //
 // ---------------------------------------------------------------------------
 // <end copyright notice>
-#ifndef _xpixel_h_
-#define _xpixel_h_
+#ifndef xpixel_h_
+#define xpixel_h_
 
 //:
 // \file
@@ -60,4 +60,4 @@ inline void freeFVectors(gevd_bufferxy& buf)
       delete fvectorPixel(buf, x, y);
 }
 
-#endif
+#endif // xpixel_h_

@@ -21,10 +21,10 @@ int vmal_round_int(double a);
 
 class vmal_dense_matching
 {
-public:
+ public:
 
   vmal_dense_matching(const vnl_double_3x3 & H0,
-            const vnl_double_3x3 & H1);
+                      const vnl_double_3x3 & H1);
 
   ~vmal_dense_matching();
 
@@ -36,19 +36,19 @@ public:
   // Between two set of lines in 2 images that are matched, it compute
   //the best lines using the fundamental constraint.
   void refine_lines_using_F(vmal_multi_view_data_edge_sptr mvd_edge,
-                vmal_multi_view_data_edge_sptr res);
+                            vmal_multi_view_data_edge_sptr res);
   // Between two set of lines in 2 images that are matched, it compute
   //the best lines using the homography.
   void refine_lines_using_H(vmal_multi_view_data_edge_sptr mvd_edge,
-                  vmal_multi_view_data_edge_sptr res);
+                            vmal_multi_view_data_edge_sptr res);
 
   void disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
-    int h, int w);
+                     int h, int w);
 
-private:
-  vnl_double_3x3 _H0,_H1,_F;
-  vnl_double_3x3 _H;
-  int _type; //1 for Fundamental matrix, 2 for Homography matrix
+ private:
+  vnl_double_3x3 H0_,H1_,F_;
+  vnl_double_3x3 H_;
+  int type_; //1 for Fundamental matrix, 2 for Homography matrix
 };
 
 #endif

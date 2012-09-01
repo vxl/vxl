@@ -128,7 +128,7 @@ class bgui3d_examiner_tableau : public bgui3d_fullviewer_tableau
   SbRotation spin_increment_;
   Log log_;
   SeekDistance seek_distance_;
-  SoTimerSensor* _seekSensor;
+  SoTimerSensor* seekSensor_;
 
   // The scale of the scene
   float scale_;
@@ -136,10 +136,10 @@ class bgui3d_examiner_tableau : public bgui3d_fullviewer_tableau
   bool axis_visible_;
 
  public:
-  SbRotation _fromRot;
-  SbRotation _toRot;
-  SbVec3f _fromPos;
-  SbVec3f _toPos;
+  SbRotation fromRot_;
+  SbRotation toRot_;
+  SbVec3f fromPos_;
+  SbVec3f toPos_;
 };
 
 

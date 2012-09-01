@@ -17,8 +17,8 @@
 class HomgMatchPoint3D2D
 {
   // Data Members------------------------------------------------------------
-    HomgPoint2D _point2D;
-    HomgPoint3D _point3D;
+    HomgPoint2D point2D_;
+    HomgPoint3D point3D_;
 
  public:
   // Constructors/Initializers/Destructors-----------------------------------

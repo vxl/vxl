@@ -23,8 +23,8 @@ HomgLineSeg3D::HomgLineSeg3D ()
 HomgLineSeg3D::HomgLineSeg3D (const HomgPoint3D& point1, const HomgPoint3D& point2):
   HomgLine3D(point1, point2)
 {
-  _point1 = point1;
-  _point2 = point2;
+  point1_ = point1;
+  point2_ = point2;
 }
 
 
@@ -49,7 +49,7 @@ const HomgLine3D& HomgLineSeg3D::get_line () const
 //: Return the first point of the line segment
 const HomgPoint3D& HomgLineSeg3D::get_point1 () const
 {
-  return _point1;
+  return point1_;
 }
 
 //--------------------------------------------------------------
@@ -57,7 +57,7 @@ const HomgPoint3D& HomgLineSeg3D::get_point1 () const
 //: Return the second point of the line segment
 const HomgPoint3D& HomgLineSeg3D::get_point2 () const
 {
-  return _point2;
+  return point2_;
 }
 
 
@@ -66,8 +66,8 @@ const HomgPoint3D& HomgLineSeg3D::get_point2 () const
 // Set the line segment given two points
 void HomgLineSeg3D::set (const HomgPoint3D& point1, const HomgPoint3D& point2)
 {
-  _point1 = point1;
-  _point2 = point2;
+  point1_ = point1;
+  point2_ = point2;
 }
 
 vcl_ostream& operator << (vcl_ostream& s, const HomgLineSeg3D& l)

@@ -12,15 +12,15 @@
 // Default ctor
 PairMatchSet2D3D::PairMatchSet2D3D()
 {
-  _corners = 0;
-  _structure = 0;
+  corners_ = 0;
+  structure_ = 0;
 }
 
 // Copy ctor
 PairMatchSet2D3D::PairMatchSet2D3D(const PairMatchSet2D3D& that)
   : PairMatchSet(that),
-    _corners(new HomgInterestPointSet(*that._corners)),
-    _structure(new vcl_vector<HomgPoint3D>(*that._structure))
+    corners_(new HomgInterestPointSet(*that.corners_)),
+    structure_(new vcl_vector<HomgPoint3D>(*that.structure_))
 {
 }
 
@@ -43,22 +43,22 @@ PairMatchSet2D3D::~PairMatchSet2D3D()
 
 void PairMatchSet2D3D::set(const HomgInterestPointSet* corners, vcl_vector<HomgPoint3D>* structure)
 {
-  _corners = corners;
-  _structure = structure;
-  set_size(_corners->size());
+  corners_ = corners;
+  structure_ = structure;
+  set_size(corners_->size());
 }
 
 void PairMatchSet2D3D::set(int num_corners, vcl_vector<HomgPoint3D>* structure)
 {
-  _corners = 0;
-  _structure = structure;
+  corners_ = 0;
+  structure_ = structure;
   set_size(num_corners);
 }
 
 void PairMatchSet2D3D::set_from(const PairMatchSet2D3D& otherframe_to_3d, const PairMatchSetCorner& otherframe_to_this)
 {
-  _corners = otherframe_to_this.get_corners2();
-  _structure = otherframe_to_3d.get_structure();
+  corners_ = otherframe_to_this.get_corners2();
+  structure_ = otherframe_to_3d.get_structure();
   set_size(otherframe_to_this.size());
 
   clear();
@@ -72,33 +72,33 @@ void PairMatchSet2D3D::set_from(const PairMatchSet2D3D& otherframe_to_3d, const 
 
 HomgMetric PairMatchSet2D3D::get_conditioner() const
 {
-  if (!_corners) {
-    vcl_cerr << "PairMatchSet2D3D::get_conditioner() WARNING _corners not set!\n";
+  if (!corners_) {
+    vcl_cerr << "PairMatchSet2D3D::get_conditioner() WARNING corners_ not set!\n";
     return 0;
   }
-  return _corners->get_conditioner();
+  return corners_->get_conditioner();
 }
 
 const HomgPoint2D& PairMatchSet2D3D::get_point_2d(int i1) const
 {
-  if (!_corners) {
+  if (!corners_) {
     static HomgPoint2D dummy;
-    vcl_cerr << "PairMatchSet2D3D::get_point_2d() WARNING _corners not set!\n";
+    vcl_cerr << "PairMatchSet2D3D::get_point_2d() WARNING corners_ not set!\n";
     return dummy;
   }
-  return _corners->get_homg(i1);
+  return corners_->get_homg(i1);
 }
 
 const HomgPoint3D& PairMatchSet2D3D::get_point_3d(int i2) const
 {
-  return _structure->operator[](i2);
+  return structure_->operator[](i2);
 }
 
 const HomgInterestPointSet* PairMatchSet2D3D::get_corners() const
 {
-  if (!_corners) {
-    vcl_cerr << "PairMatchSet2D3D::get_point_2d() WARNING _corners not set!\n";
+  if (!corners_) {
+    vcl_cerr << "PairMatchSet2D3D::get_point_2d() WARNING corners_ not set!\n";
     return 0;
   }
-  return _corners;
+  return corners_;
 }
