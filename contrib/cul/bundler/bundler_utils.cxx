@@ -206,7 +206,7 @@ void bundler_utils_fill_persp_camera_ransac(
         }
     }
 
-    std::cout << "add_image: best_inliers: " << best_inliers << " / " << image_pts.size() << "\n";
+    vcl_cout << "add_image: best_inliers: " << best_inliers << " / " << image_pts.size() << '\n';
 
     //------------------------------------------------------------------
     // Now that we have an estimate for the camera, re-do it into a more
