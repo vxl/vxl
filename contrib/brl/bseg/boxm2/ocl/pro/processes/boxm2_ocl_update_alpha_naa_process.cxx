@@ -17,8 +17,6 @@
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 #include <brad/brad_illum_util.h>
@@ -88,7 +86,7 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
 
     bocl_kernel* proc_img = new bocl_kernel();
     vcl_string proc_opt = options + " -D PROC_NORM_NAA ";
-    if (!proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_opt, "update::proc_norm_image")){
+    if (!proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_opt, "update::proc_norm_image")) {
       vcl_cerr << "ERROR compling kernel\n";
       return false;
     }
@@ -97,7 +95,7 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
 
     bocl_kernel* bayes_main = new bocl_kernel();
     vcl_string bayes_opt = options + " -D BAYES_NAA -D STEP_CELL=step_cell_bayes_naa(aux_args,data_ptr,llid,d) ";
-    if (!bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main_naa", bayes_opt, "update::bayes_naa_main")){
+    if (!bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main_naa", bayes_opt, "update::bayes_naa_main")) {
       vcl_cerr << "ERROR compiling kernel\n";
       return false;
     }
@@ -311,7 +309,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
     int count = 0;
     for (unsigned int j=0; j<cl_nj; ++j) {
       for (unsigned int i=0; i<cl_ni; ++i) {
-        if ((i < img->ni()) && (j < img->nj())){
+        if ((i < img->ni()) && (j < img->nj())) {
           vis_buff[count] = 1.0f - (*alt_prior)(i,j);
           pre_buff[count] = (*alt_prior)(i,j) * (*alt_density)(i,j);
           norm_buff[count] = 0.0f;
@@ -439,7 +437,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
           int count = 0;
           for (unsigned int j=0; j<cl_nj; ++j) {
             for (unsigned int i=0; i<cl_ni; ++i) {
-              if ((i < img->ni()) && (j < img->nj())){
+              if ((i < img->ni()) && (j < img->nj())) {
                 vis_buff[count] = 1.0f - (*alt_prior)(i,j);
                 pre_buff[count] = (*alt_prior)(i,j) * (*alt_density)(i,j);
               }

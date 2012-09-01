@@ -9,7 +9,6 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
@@ -18,7 +17,7 @@
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
-#include <vul/vul_timer.h>
+
 static void test_camera_compute_setup()
 {
   // PART 1: Test the affine camera computation

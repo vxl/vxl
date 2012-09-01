@@ -1,10 +1,8 @@
 #include <vcl_where_root_dir.h>
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_cholesky.h>
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_random.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>

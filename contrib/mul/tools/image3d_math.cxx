@@ -30,7 +30,6 @@
 #include <vnl/vnl_na.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_log.h>
-#include <mbl/mbl_sample_stats_1d.h>
 #include <mbl/mbl_exception.h>
 #include <vil3d/file_formats/vil3d_gen_synthetic.h>
 #include <vil3d/algo/vil3d_distance_transform.h>
@@ -449,18 +448,19 @@ void print_operations(vcl_ostream&);
 
 template <class T>
 void check_size_and_plane_consistency(const vimt3d_image_3d_of<T>& im1,
-  const vimt3d_image_3d_of<T>& im2, const opstack_t& s, const vcl_string & op_name)
+                                      const vimt3d_image_3d_of<T>& im2,
+                                      const opstack_t& s, const vcl_string & op_name)
 {
   const vil3d_image_view<T>& im1im = im1.image();
   const vil3d_image_view<T>& im2im = im2.image();
 
   if (im1im.ni() == im2im.ni() && im1im.nj() == im2im.nj() &&
-    im1im.nk() == im2im.nk() && im1im.nplanes() == im2im.nplanes() )
+     im1im.nk() == im2im.nk() && im1im.nplanes() == im2im.nplanes() )
     return;
 
   vcl_cerr << "\nERROR: --" <<op_name<<" command. Two operand images are different size.\n"
-            << "At \"" << args_so_far << "\"<-- HERE\n"
-            << "Stack is :\n" << vsl_stream_summary(s);
+           << "At \"" << args_so_far << "\"<-- HERE\n"
+           << "Stack is :\n" << vsl_stream_summary(s);
   vcl_exit(1);
 }
 
@@ -546,7 +546,7 @@ void voxel_product__image_3d_of_float(opstack_t& s)
   const vil3d_image_view<int>& o1_image = o1.image();
 
   double result = 0.0;
-  
+
   unsigned np=o1_image.nplanes();
   unsigned nk=o1_image.nk();
   unsigned nj=o1_image.nj();
@@ -667,7 +667,6 @@ void sum__image_3d_of_int__image_3d_of_int(opstack_t& s)
 
   check_size_and_plane_consistency(o1, o2, s, "sum");
 
-
   vimt3d_image_3d_of<int> result;
   vil3d_math_image_sum(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
@@ -692,7 +691,6 @@ void and__image_3d_of_int__image_3d_of_int(opstack_t& s)
                                  o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
-  
   unsigned np=o1_image.nplanes();
   unsigned nk=o1_image.nk();
   unsigned nj=o1_image.nj();
@@ -725,7 +723,6 @@ void or__image_3d_of_int__image_3d_of_int(opstack_t& s)
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
                                  o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
-
 
   unsigned np=o1_image.nplanes();
   unsigned nk=o1_image.nk();
@@ -791,7 +788,6 @@ void min__image_3d_of_float__image_3d_of_float(opstack_t& s)
                                    o1_image.nplanes(), o1.world2im());
   vil3d_image_view<float> &result_image = result.image();
 
-
   unsigned np=o1_image.nplanes();
   unsigned nk=o1_image.nk();
   unsigned nj=o1_image.nj();
@@ -821,7 +817,6 @@ void max__image_3d_of_int__image_3d_of_int(opstack_t& s)
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
                                  o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
-
 
   unsigned np=o1_image.nplanes();
   unsigned nk=o1_image.nk();
@@ -853,7 +848,6 @@ void max__image_3d_of_float__image_3d_of_float(opstack_t& s)
   vimt3d_image_3d_of<float> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
                                    o1_image.nplanes(), o1.world2im());
   vil3d_image_view<float> &result_image = result.image();
-
 
   unsigned np=o1_image.nplanes();
   unsigned nk=o1_image.nk();
@@ -1147,7 +1141,6 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
   vimt3d_image_3d_of<float> o2(s[1].as_image_3d_of_float());
   const vil3d_image_view<float>& o2_image = o2.image();;
 
-
   vcl_ofstream output_file;
   vcl_ostream *output;
 
@@ -1194,7 +1187,6 @@ void save_to_mat__image_3d_of_double__string(opstack_t& s)
   vcl_string o1(s[0].as_string());
   vimt3d_image_3d_of<double> o2(s[1].as_image_3d_of_double());
   const vil3d_image_view<double>& o2_image = o2.image();;
-
 
   vcl_ofstream output_file;
   vcl_ostream *output;
@@ -1287,7 +1279,6 @@ void not__image_3d_of_int(opstack_t& s)
                                  o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
-
   unsigned np=o1_image.nplanes();
   unsigned nk=o1_image.nk();
   unsigned nj=o1_image.nj();
@@ -1313,7 +1304,6 @@ void not__image_3d_of_float(opstack_t& s)
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
                                  o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
-
 
   unsigned np=o1_image.nplanes();
   unsigned nk=o1_image.nk();
@@ -1422,10 +1412,9 @@ void na_from_mask__image_3d_of_int(opstack_t& s)
   assert(s.size() >= 1);
   vimt3d_image_3d_of<int> o1=s[0].as_image_3d_of_int();
   vimt3d_image_3d_of<float> result(o1.image().ni(), o1.image().nj(),
-    o1.image().nk(), o1.image().nplanes(), o1.world2im() );
+                                   o1.image().nk(), o1.image().nplanes(), o1.world2im() );
   const vil3d_image_view<int>& o1_image = o1.image();
   vil3d_image_view<float>& result_image = result.image();
-
 
   unsigned np=o1.image().nplanes();
   unsigned nk=o1.image().nk();
@@ -1447,10 +1436,9 @@ void na_to_mask__image_3d_of_float(opstack_t& s)
   assert(s.size() >= 1);
   vimt3d_image_3d_of<float> o1=s[0].as_image_3d_of_float();
   vimt3d_image_3d_of<int> result(o1.image().ni(), o1.image().nj(),
-    o1.image().nk(), o1.image().nplanes(), o1.world2im() );
+                                 o1.image().nk(), o1.image().nplanes(), o1.world2im() );
   const vil3d_image_view<float>& o1_image = o1.image();
   vil3d_image_view<int>& result_image = result.image();
-
 
   unsigned np=o1.image().nplanes();
   unsigned nk=o1.image().nk();
@@ -1503,7 +1491,7 @@ void plane_split__image_3d_of_float(opstack_t& s)
   for (unsigned p=0, np=o1.image().nplanes(); p!=np; p++)
     s.push_front(operand(vimt3d_image_3d_of<float>(vil3d_plane(o1.image(), p), o1.world2im())));
 }
-  
+
 void plane_merge__image_3d_of_float__image_3d_of_float__double(opstack_t& s)
 {
   assert(s.size() >= 3);
@@ -1524,14 +1512,14 @@ void plane_merge__image_3d_of_float__image_3d_of_float__double(opstack_t& s)
              << "Stack is :\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
-   
+
   for (unsigned i=1;i<=n; ++i)
   {
     if (!s[i].is_image_3d_of_float())
     {
       vcl_cerr << "\nERROR: --plane_merge command could not find " << n << " float image to merge.\n"
-                << "At \"" << args_so_far << "\"<-- HERE\n"
-                << "Stack is :\n" << vsl_stream_summary(s);
+               << "At \"" << args_so_far << "\"<-- HERE\n"
+               << "Stack is :\n" << vsl_stream_summary(s);
       vcl_exit(1);
     }
   }
@@ -1544,12 +1532,12 @@ void plane_merge__image_3d_of_float__image_3d_of_float__double(opstack_t& s)
     vil3d_image_view<float> im = s[i].as_image_3d_of_float().image();
     nplanes += im.nplanes();
     if (im.ni() != image0_im.ni() ||
-      im.nj() != image0_im.nj() ||
-      im.nk() != image0_im.nk() )
+        im.nj() != image0_im.nj() ||
+        im.nk() != image0_im.nk() )
     {
       vcl_cerr << "\nERROR: --plane_merge command. Not all " << n << " images of are same size.\n"
-                << "At \"" << args_so_far << "\"<-- HERE\n"
-                << "Stack is :\n" << vsl_stream_summary(s);
+               << "At \"" << args_so_far << "\"<-- HERE\n"
+               << "Stack is :\n" << vsl_stream_summary(s);
       vcl_exit(1);
     }
   }
@@ -1562,7 +1550,6 @@ void plane_merge__image_3d_of_float__image_3d_of_float__double(opstack_t& s)
     vil3d_copy_deep(im, im_selected);
     p += im.nplanes();
   }
-
 
   s.pop(n+1);
   s.push_front(operand(result));
@@ -1679,7 +1666,7 @@ void gaussian_noise_image__image_3d_of_float(opstack_t& s)
   const vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
 
   vimt3d_image_3d_of<float> result(o1.image().ni(), o1.image().nj(), o1.image().nk(),
-    o1.image().nplanes(), o1.world2im() );
+                                   o1.image().nplanes(), o1.world2im() );
 
   for (float* p=result.image().begin(), *end=result.image().end(); p!=end; ++p)
     *p=static_cast<float>(rng.normal());
@@ -1695,7 +1682,7 @@ void gaussian_noise_image__image_3d_of_double(opstack_t& s)
   const vimt3d_image_3d_of<double> o1(s[0].as_image_3d_of_double());
 
   vimt3d_image_3d_of<double> result(o1.image().ni(), o1.image().nj(), o1.image().nk(),
-    o1.image().nplanes(), o1.world2im() );
+                                    o1.image().nplanes(), o1.world2im() );
 
   for (double* p=result.image().begin(), *end=result.image().end(); p!=end; ++p)
     *p=rng.normal64();
@@ -1912,14 +1899,13 @@ void print_stats__image_3d_of_int(opstack_t& s)
 }
 
 
-
 void print_unique__image_3d_of_int(opstack_t& s)
 {
   vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
   const vil3d_image_view<int>& image = o1.image();
-  
+
   vcl_set<int> set;
-    
+
   if (o1.image().is_contiguous())
     set.insert(image.begin(), image.end()); // faster version
   else
@@ -1939,13 +1925,12 @@ void print_unique__image_3d_of_int(opstack_t& s)
         }
   }
 
-
-  
   vcl_ostream_iterator<int> output(vcl_cout, " ");
   vcl_copy(set.begin(), set.end(), output);
 
   s.pop(1);
 }
+
 void print__double(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -2094,7 +2079,7 @@ void box__image_3d_of_float__double__double__double__double__double__double(opst
   const vil3d_image_view<float>& o1_image = o1.image();
 
   vimt3d_image_3d_of<float> image_out(o1_image.ni(), o1_image.nj(), o1_image.nk(), 1,
-    o1.world2im());
+                                      o1.world2im());
 
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
     vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
@@ -2134,15 +2119,12 @@ void box__image_3d_of_int__double__double__double__double__double__double(opstac
 
   const vil3d_image_view<int>& o1_image = o1.image();
 
-
   vimt3d_image_3d_of<int> image_out(o1_image.ni(), o1_image.nj(), o1_image.nk(), 1,
-    o1.world2im());
+                                    o1.world2im());
 
   vgl_box_3d<double> box;
   box.add(o1.world2im()(min_x, min_y, min_z));
   box.add(o1.world2im()(max_x, max_y, max_z));
-
-
 
   unsigned nk=o1_image.nk();
   unsigned nj=o1_image.nj();
@@ -2171,7 +2153,7 @@ void checkerboard__image_3d_of_float__double__double__double(opstack_t& s)
   const vil3d_image_view<float>& o1_image = o1.image();
 
   vimt3d_image_3d_of<float> out(o1_image.ni(), o1_image.nj(), o1_image.nk(), 1,
-    o1.world2im());
+                                o1.world2im());
   vil3d_image_view<float>& out_image = out.image();
 
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
@@ -2180,8 +2162,6 @@ void checkerboard__image_3d_of_float__double__double__double(opstack_t& s)
   unsigned nk=o1_image.nk();
   unsigned nj=o1_image.nj();
   unsigned ni=o1_image.ni();
-
-
 
   vimt3d_transform_3d scale;
   scale.set_zoom_only(1.0/xsize, 1.0/ysize, 1.0/zsize, 0, 0, 0);
@@ -2211,7 +2191,7 @@ void checkerboard__image_3d_of_int__double__double__double(opstack_t& s)
   const vil3d_image_view<int>& o1_image = o1.image();
 
   vimt3d_image_3d_of<int> out(o1_image.ni(), o1_image.nj(), o1_image.nk(), 1,
-    o1.world2im());
+                              o1.world2im());
   vil3d_image_view<int>& out_image = out.image();
 
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
@@ -2220,8 +2200,6 @@ void checkerboard__image_3d_of_int__double__double__double(opstack_t& s)
   unsigned nk=o1_image.nk();
   unsigned nj=o1_image.nj();
   unsigned ni=o1_image.ni();
-
-
 
   vimt3d_transform_3d scale;
   scale.set_zoom_only(1.0/xsize, 1.0/ysize, 1.0/zsize, 0, 0, 0);
@@ -2332,7 +2310,7 @@ void shuffle__image_3d_of_float__double__double(opstack_t& s)
   se.set_to_circle_k( radius );
 
   vimt3d_image_3d_of<float> result;
-  if( radius < 0.000001 )
+  if ( radius < 0.000001 )
     vil3d_math_image_difference( o1.image(), o2.image(), result.image() );
   else
     vil3d_abs_shuffle_distance(  o1.image(), o2.image(), se, result.image() );
@@ -2707,7 +2685,7 @@ class operations
              << "\nStack is :\n" << vsl_stream_summary(stack)
              << "\nPossible \"" << name << "\" operations are:\n";
     print(vcl_cerr, distance(singleton_.names_.begin(), range.first),
-      distance(range.first, range.second) );
+          distance(range.first, range.second) );
     vcl_exit(1);
   }
   static void print(vcl_ostream& os, vcl_size_t j, vcl_size_t n)

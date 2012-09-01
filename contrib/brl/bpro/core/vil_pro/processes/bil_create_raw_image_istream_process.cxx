@@ -6,7 +6,6 @@
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view_base.h>
 #include <bil/bil_raw_image_istream.h>
 #include <vcl_sstream.h>
@@ -16,12 +15,12 @@ bool bil_create_raw_image_istream_process_cons(bprb_func_process& pro)
 {
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(1);
-  input_types_[0] = "vcl_string"; //raw file 
+  input_types_[0] = "vcl_string"; //raw file
 
   // process has 1 output:
   vcl_vector<vcl_string>  output_types_(2);
   output_types_[0] = "bil_raw_image_istream_sptr";     //an initialized istream_sptr
-  output_types_[1] = "int"; 
+  output_types_[1] = "int";
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -40,7 +39,7 @@ bool bil_create_raw_image_istream_process(bprb_func_process& pro)
   //: Constructor - from a file glob string
   bil_raw_image_istream_sptr stream = new bil_raw_image_istream(raw_file);
   pro.set_output_val<bil_raw_image_istream_sptr>(0, stream);
-  pro.set_output_val<int> (1, stream->num_frames()); 
+  pro.set_output_val<int> (1, stream->num_frames());
   return true;
 }
 
@@ -53,7 +52,7 @@ bool bil_read_frame_process_cons(bprb_func_process& pro)
 {
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(1);
-  input_types_[0] = "bil_raw_image_istream_sptr"; //raw file 
+  input_types_[0] = "bil_raw_image_istream_sptr"; //raw file
 
   // process has 1 output:
   vcl_vector<vcl_string>  output_types_(2);
@@ -73,11 +72,11 @@ bool bil_read_frame_process(bprb_func_process& pro)
   //Retrieve filename from input
   bil_raw_image_istream_sptr stream = pro.get_input<bil_raw_image_istream_sptr>(0);
   vil_image_view_base_sptr   img    = stream->read_frame();
-  unsigned                   time   = stream->time_stamp(); 
+  unsigned                   time   = stream->time_stamp();
 
   //out
   pro.set_output_val<vil_image_view_base_sptr>(0, img);
-  pro.set_output_val<unsigned>(1, time); 
+  pro.set_output_val<unsigned>(1, time);
   return true;
 }
 
@@ -88,12 +87,12 @@ bool bil_read_frame_process(bprb_func_process& pro)
 //: Constructor
 bool bil_seek_frame_process_cons(bprb_func_process& pro)
 {
-  //process takes 1 input
+  //process takes 2 inputs
   vcl_vector<vcl_string> input_types_(2);
-  input_types_[0] = "bil_raw_image_istream_sptr"; //raw file 
-  input_types_[1] = "unsigned"; //frame to seek to 
+  input_types_[0] = "bil_raw_image_istream_sptr"; //raw file
+  input_types_[1] = "unsigned"; //frame to seek to
 
-  // process has 1 output:
+  // process has 2 outputs
   vcl_vector<vcl_string>  output_types_(2);
   output_types_[0] = "vil_image_view_base_sptr";     //an initialized istream_sptr
   output_types_[1] = "unsigned";                     //time stamp
@@ -111,15 +110,15 @@ bool bil_seek_frame_process(bprb_func_process& pro)
   //Retrieve filename from input
   bil_raw_image_istream_sptr stream = pro.get_input<bil_raw_image_istream_sptr>(0);
   unsigned                   frame  = pro.get_input<unsigned>(1);
-  
+
   //seek, retrieve image, and output
   stream->seek_frame(frame);
   vil_image_view_base_sptr   img    = stream->read_frame();
-  unsigned                   time   = stream->time_stamp(); 
+  unsigned                   time   = stream->time_stamp();
 
   //out
   pro.set_output_val<vil_image_view_base_sptr>(0, img);
-  pro.set_output_val<unsigned>(1, time); 
+  pro.set_output_val<unsigned>(1, time);
   return true;
 }
 

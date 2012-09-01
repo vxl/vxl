@@ -7,7 +7,6 @@
 
 #include <sdet/sdet_texture_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
-#include <vil/vil_image_view.h>
 
 //: initialize input and output types
 bool sdet_texture_classifier_kernel_margin_process_cons(bprb_func_process& pro)

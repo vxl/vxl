@@ -17,7 +17,6 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
 
 //directory utility
 #include <vul/vul_timer.h>
@@ -31,12 +30,12 @@ vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update::kernels_;
 //Main public method, updates color model
 bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
                               bocl_device_sptr         device,
-                              boxm2_opencl_cache_sptr  opencl_cache, 
+                              boxm2_opencl_cache_sptr  opencl_cache,
                               vpgl_camera_double_sptr  cam,
                               vil_image_view_base_sptr img,
                               vcl_string               ident,
-                              vil_image_view_base_sptr mask_sptr,  
-                              bool                     update_alpha, 
+                              vil_image_view_base_sptr mask_sptr,
+                              bool                     update_alpha,
                               float                    mog_var,
                               vcl_size_t               startI,
                               vcl_size_t               startJ)
@@ -75,9 +74,9 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   //make correct data types are here
   vcl_string data_type, num_obs_type,options;
   int appTypeSize;
-  bool isRGB = false; 
-  if(!validate_appearances(scene, data_type, appTypeSize, num_obs_type, options, isRGB))
-    return false; 
+  bool isRGB = false;
+  if (!validate_appearances(scene, data_type, appTypeSize, num_obs_type, options, isRGB))
+    return false;
   if (ident.size() > 0) {
     data_type += "_" + ident;
     num_obs_type += "_" + ident;
@@ -94,7 +93,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
 
   // compile the kernel if not already compiled
   vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
-  
+
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, true);
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
@@ -128,7 +127,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   unsigned int min_i=1000000000, max_i=0;
   unsigned int min_j=1000000000, max_j=0;
   if (use_mask)
-  {  
+  {
     for (unsigned int j=0;j<mask_map->nj();++j) {
       for (unsigned int i=0;i<mask_map->ni();++i)
       {
@@ -458,7 +457,6 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
   return true;
-
 }
 
 
@@ -481,14 +479,14 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device,
   src_paths.push_back(source_dir + "backproject.cl");
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-  if(isRGB) 
+  if (isRGB)
     src_paths.push_back(source_dir + "bit/update_rgb_kernels.cl");
   else
     src_paths.push_back(source_dir + "bit/update_kernels.cl");
   vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
-  
+
   //push ray trace files
-  if(isRGB)
+  if (isRGB)
     src_paths.push_back(source_dir + "update_rgb_functors.cl");
   else
     src_paths.push_back(source_dir + "update_functors.cl");
@@ -507,7 +505,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device,
   vec_kernels.push_back(seg_len);
 
   //create  compress rgb pass
-  if(isRGB) {
+  if (isRGB) {
     bocl_kernel* comp = new bocl_kernel();
     vcl_string comp_opts = options + " -D COMPRESS_RGB";
     comp->create_kernel(&device->context(), device->device_id(), non_ray_src, "compress_rgb", comp_opts, "update::compress_rgb");
@@ -547,11 +545,11 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device,
 
 
 //makes sure appearance types correspond correctly
-bool boxm2_ocl_update::validate_appearances(boxm2_scene_sptr scene, 
-                                            vcl_string& data_type, 
+bool boxm2_ocl_update::validate_appearances(boxm2_scene_sptr scene,
+                                            vcl_string& data_type,
                                             int& appTypeSize,
-                                            vcl_string& num_obs_type, 
-                                            vcl_string& options, 
+                                            vcl_string& num_obs_type,
+                                            vcl_string& options,
                                             bool& isRGB)
 {
   vcl_vector<vcl_string> apps = scene->appearances();

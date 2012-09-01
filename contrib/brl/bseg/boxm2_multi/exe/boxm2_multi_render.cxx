@@ -11,7 +11,7 @@
 
 //executable args
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
+#include <vul/vul_timer.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_save.h>
 
@@ -29,7 +29,6 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-#include <vul/vul_timer.h>
 
 void test_render_expected_images(boxm2_scene_sptr scene,
                                  bocl_device_sptr device,

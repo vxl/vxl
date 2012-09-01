@@ -4,9 +4,8 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_4x4.h>
-#include <vnl/vnl_double_2x2.h>
-#include <vnl/vnl_double_2.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd.h>

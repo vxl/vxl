@@ -25,11 +25,7 @@
 #include <vpgl/algo/vpgl_optimize_camera.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vbl/vbl_array_2d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/algo/vpgl_backproject.h>
 

@@ -22,10 +22,7 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
-#if 0
-#include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_vector_fixed.h>
-#endif
+
 #include <vcl_iostream.h>
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>

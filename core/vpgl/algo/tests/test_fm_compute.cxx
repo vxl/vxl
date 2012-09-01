@@ -5,9 +5,7 @@
 #include <vpgl/algo/vpgl_fm_compute_2_point.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
 #include <vnl/vnl_fwd.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 
@@ -32,7 +30,7 @@ static void test_fm_compute()
   p1w.push_back( vgl_homg_point_3d<double>( -2, 0, -1 ) );
 
   vcl_vector< vgl_homg_point_2d<double> > p1r, p1l;
-  for ( unsigned i = 0; i < p1w.size(); i++ ){
+  for ( unsigned i = 0; i < p1w.size(); i++ ) {
     p1r.push_back( C1r.project( p1w[i] ) );
     p1l.push_back( C1l.project( p1w[i] ) );
   }
@@ -60,15 +58,15 @@ static void test_fm_compute()
   double crm[] = { 1.0, 0.0, 0.0, 2,
                    0.0, 1.0, 0.0, 4,
                    0.0, 1.0, 1.0, 6 };
-  
+
   vpgl_proj_camera<double> Ctl = vnl_matrix_fixed<double,3,4>(clm),
                            Ctr = vnl_matrix_fixed<double,3,4>(crm);
   vpgl_fundamental_matrix<double> fm3p( Ctr, Ctl );
   vnl_double_3x3 mideal = fm3p.get_matrix();
   vcl_cerr << "Two Point F Matrix Ideal:\n" << mideal; //DEBUG
   p1r.clear(); p1l.clear();
-  //for ( unsigned i = 0; i < p1w.size(); i++ ){
-  for ( unsigned i = 0; i < 2; i++ ){
+  //for ( unsigned i = 0; i < p1w.size(); i++ ) {
+  for ( unsigned i = 0; i < 2; i++ ) {
     p1r.push_back( Ctl.project( p1w[i] ) );
     p1l.push_back( Ctr.project( p1w[i] ) );
   }

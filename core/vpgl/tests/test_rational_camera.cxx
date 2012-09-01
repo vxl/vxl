@@ -5,7 +5,6 @@
 #include <vcl_cmath.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_double_3.h>
 
 static void test_rational_camera()
 {
@@ -155,7 +154,6 @@ static void test_rational_camera()
   good = good && sv == rcam.scale(vpgl_rational_camera<double>::V_INDX);
   good = good && ov == rcam.offset(vpgl_rational_camera<double>::V_INDX);
   TEST("test getting scale and offset values", good, true);
-  
 }
 
 TESTMAIN(test_rational_camera);

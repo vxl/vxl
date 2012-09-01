@@ -12,10 +12,7 @@
 #include <boxm2/util/boxm2_convert_bundle.h>
 #include <boxm2/util/boxm2_convert_nvm.h>
 #include <boxm2/util/boxm2_cams_and_box_to_scene.h>
-#include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vul/vul_file.h>
@@ -160,8 +157,8 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
 
         vcl_string outImgName;
         vcl_string inImgGlob = in_img_dir + "/" + stripped_name + ".*";
-        vul_file_iterator moveImage(inImgGlob.c_str()); 
-        if (moveImage) { 
+        vul_file_iterator moveImage(inImgGlob.c_str());
+        if (moveImage) {
           outImgName = vcl_string(moveImage());
           vcl_cout<<"    Writing camera and image for image "<<outImgName<<vcl_endl;
           vil_image_view_base_sptr img = vil_load(outImgName.c_str());

@@ -4,12 +4,8 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_rgb.h>
-
-#include <vnl/vnl_matrix.h>
-#include <vul/vul_file.h>
 
 //: Constructor
 // this process takes 1 input:

@@ -17,7 +17,7 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_timer.h>
@@ -49,7 +49,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
 
   //input image buffer
   float* inImg;
-  if (img.size() == cl_ni*cl_nj){
+  if (img.size() == cl_ni*cl_nj) {
     inImg = img.top_left_ptr();
   }
   else {

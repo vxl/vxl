@@ -11,7 +11,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 
 static void test_fm_compute()
@@ -79,7 +78,7 @@ static void test_fm_compute()
   p2w.push_back( vgl_homg_point_3d<double>( 6, 8, -5 ) );
 
   vcl_vector< vgl_point_2d<double> > p2r, p2l;
-  for ( unsigned i = 0; i < p2w.size(); i++ ){
+  for ( unsigned i = 0; i < p2w.size(); i++ ) {
     p2r.push_back( vgl_point_2d<double>( C2r.project( p2w[i] ) ) );
     p2l.push_back( vgl_point_2d<double>( C2l.project( p2w[i] ) ) );
   }

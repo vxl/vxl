@@ -4,9 +4,7 @@
 // \file
 // \brief Compute mean value in an image
 
-#include <vil/vil_math.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
 #include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
 
@@ -14,7 +12,7 @@
 //: Constructor
 bool vil_pixel_value_process_cons(bprb_func_process& pro)
 {
-  //this process takes one input: the image
+  //this process takes 3 inputs and returns 1 output
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("int");
@@ -76,7 +74,7 @@ bool vil_pixel_value_process(bprb_func_process& pro)
     vil_image_view<float>& inimg = *dynamic_cast<vil_image_view<float>* >(img.ptr());
     pro.set_output_val<float>(0, inimg(i,j));
     return true;
-  } 
+  }
   else if (img->pixel_format() == VIL_PIXEL_FORMAT_BOOL)
   {
     vil_image_view<bool>& inimg = *dynamic_cast<vil_image_view<bool>* >(img.ptr());

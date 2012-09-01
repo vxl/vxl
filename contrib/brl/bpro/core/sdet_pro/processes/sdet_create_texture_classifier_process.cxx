@@ -7,11 +7,11 @@
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_texture_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
-#include <vil/vil_image_view.h>
 #include <bbas_pro/bbas_1d_array_string.h>
 #include <bbas_pro/bbas_1d_array_string_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsl/vsl_binary_io.h>
+
 //: initialize input and output types
 bool sdet_create_texture_classifier_process_cons(bprb_func_process& pro)
 {
@@ -41,7 +41,7 @@ bool sdet_create_texture_classifier_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process inputs are not valid "<< vcl_endl;
+    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
     return false;
   }
 
@@ -71,7 +71,7 @@ bool sdet_create_texture_classifier_process(bprb_func_process& pro)
   tcp.mag_ = false;
   sdet_texture_classifier_sptr tc_ptr = new sdet_texture_classifier(tcp);
 
-  // pass the texture classifier into the database 
+  // pass the texture classifier into the database
   // to enable subsequent processing
   pro.set_output_val<sdet_texture_classifier_sptr>(0, tc_ptr);
 

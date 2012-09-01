@@ -17,7 +17,6 @@
 #include <vcl_map.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
-#include <vgl/vgl_vector_3d.h>
 
 void test_cubic_estimation()
 {
@@ -60,19 +59,14 @@ void test_cubic_estimation()
   inverse_test.set_local_arg( lThreads[0]*lThreads[1]*sizeof(float) ); //ray bundle,
   inverse_test.set_local_arg( lThreads[0]*lThreads[1]*sizeof(float) );    //cell pointers,
 
-
-
-
   //execute kernel
   inverse_test.execute( queue, 2, lThreads, gThreads);
   clFinish( queue );
   matbuff->read_to_buffer(queue);
   invmatbuff->read_to_buffer(queue);
 
-  for(unsigned i = 0 ; i < 16; i ++)
-      vcl_cout<<odata[i]<<" ";
-
-
+  for (unsigned i = 0 ; i < 16; i ++)
+    vcl_cout<<odata[i]<<' ';
 
   int nobs = 16;
 
@@ -82,7 +76,7 @@ void test_cubic_estimation()
   float coeffs[5]={1.2,0.4,0.5,0.6,0.0};
 
   float var;
-  for(unsigned i =0; i<16; i++)
+  for (unsigned i =0; i<16; i++)
   {
     Iobs[i] = 0.5;
     vis[i] = 0.1;
@@ -92,7 +86,6 @@ void test_cubic_estimation()
   }
   bocl_kernel cubic_fit_test;
   cubic_fit_test.create_kernel(&device->context(),device->device_id(), src_paths, "test_cubic_fit", "", "test cubic fitting kernel");
-
 
   bocl_mem_sptr Ibuff = new bocl_mem( device->context(), Iobs, 16*sizeof(float), "Intensities");
   Ibuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -128,13 +121,11 @@ void test_cubic_estimation()
   clFinish( queue );
   coeffsbuff->read_to_buffer(queue);
   varbuff->read_to_buffer(queue);
-  for(unsigned i = 0 ; i < 4; i ++)
-      vcl_cout<<coeffs[i]<<" ";
+  for (unsigned i = 0 ; i < 4; i ++)
+    vcl_cout<<coeffs[i]<<' ';
 
   vcl_cout<<var<<vcl_endl;
 }
-
-
 
 
 TESTMAIN( test_cubic_estimation );

@@ -14,7 +14,6 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
@@ -113,7 +112,7 @@ void writePointsToPLY(const vcl_string& ply_file_out, vcl_vector<vnl_vector_fixe
 
   // DATA SECTION
   // save min and max boint of the box to ply file
-  for (unsigned pi=0; pi<all_points.size(); ++pi){
+  for (unsigned pi=0; pi<all_points.size(); ++pi) {
     vnl_vector_fixed<double,3> p = all_points[pi];
     ply_write(oply, p[0]);
     ply_write(oply, p[1]);
@@ -201,7 +200,7 @@ int main(int argc, char** argv)
     vcl_vector<vnl_vector_fixed<double,3> > points2transform;
     vcl_vector<vnl_vector_fixed<double,3> > transformed_points;
     readPointsFromPLY(f, points2transform);
-    for (unsigned pi = 0; pi < points2transform.size(); ++pi){
+    for (unsigned pi = 0; pi < points2transform.size(); ++pi) {
       vnl_vector_fixed<double, 3> new_p = scale*(R * (points2transform[pi])+ t);
       transformed_points.push_back(new_p);
     }

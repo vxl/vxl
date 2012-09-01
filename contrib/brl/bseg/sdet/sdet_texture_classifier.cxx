@@ -8,7 +8,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
 #include <vul/vul_timer.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vil/vil_math.h>
@@ -502,7 +501,7 @@ bool sdet_texture_classifier::load_dictionary(vcl_string const& path)
 {
   vsl_b_ifstream is(path.c_str());
   if (!is) {
-    vcl_cout << "Can't open binary stream in load_dictionary in " << path << "\n";
+    vcl_cout << "Can't open binary stream in load_dictionary in " << path << vcl_endl;
     return false;
   }
   vcl_cout << "Loading texton dictionary: " << path << '\n' << vcl_flush;

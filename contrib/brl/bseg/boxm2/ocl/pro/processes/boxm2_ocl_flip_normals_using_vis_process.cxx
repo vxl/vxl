@@ -18,9 +18,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 //brdb stuff
@@ -76,14 +73,14 @@ bool boxm2_ocl_flip_normals_using_vis_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_flip_normals_using_vis_process_globals;
 
-  //process takes 3 inputs
+  //process takes 4 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
-  input_types_[3] = "bool"; 
+  input_types_[3] = "bool";
 
-  // process has 0 output:
+  // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
@@ -119,7 +116,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
   //make correct data types are here
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type,num_obs_type,options;
-  
+
   if (use_sum) {
     options="-D USESUM ";
     vcl_cout << "Using sum to compute visibility" << vcl_endl;

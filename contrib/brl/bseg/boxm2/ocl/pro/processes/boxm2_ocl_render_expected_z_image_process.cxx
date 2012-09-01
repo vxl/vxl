@@ -16,8 +16,6 @@
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h> // for debug images
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -67,7 +65,6 @@ namespace boxm2_ocl_render_expected_z_image_process_globals
                                      options,              //options
                                      "boxm2 opencl render z image"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
-
   }
 }
 
@@ -324,7 +321,8 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
           float zval = (*z_image)(r,c);
           float zval_byte = vcl_max(0.0f,vcl_min(255.0f,float(zval*scale + offset)));
           (*z_image_byte)(r,c) = vxl_byte(zval_byte);
-        } else {
+        }
+        else {
           (*z_image_byte)(r,c) = vxl_byte(0);
         }
       }

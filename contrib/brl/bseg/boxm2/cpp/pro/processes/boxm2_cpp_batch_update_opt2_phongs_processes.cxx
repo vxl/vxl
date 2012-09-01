@@ -24,8 +24,6 @@
 #include <vil/vil_math.h>
 #include <bsta/bsta_gauss_sf1.h>
 
-#include <vil/vil_save.h>
-
 //: create a norm img = pre_inf+vis_inf;
 namespace boxm2_cpp_pre_infinity_opt2_phongs_process_globals
 {
@@ -52,12 +50,12 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process_cons(bprb_func_process& pro)
     input_types_[5] = "vcl_string";   //viewing direection image identifier
     input_types_[6] = "vcl_string";  //seg_len and image intensity aux  identifier
     input_types_[7] = "float"; // Sun Elevation
-    input_types_[8] = "float"; // Sun Azimuthal 
+    input_types_[8] = "float"; // Sun Azimuthal
     // process has 0 output:
     vcl_vector<vcl_string>  output_types_(n_outputs_);
     output_types_[0] = "vil_image_view_base_sptr";
 
-    bool good = pro.set_input_types(input_types_) && 
+    bool good = pro.set_input_types(input_types_) &&
         pro.set_output_types(output_types_);
     return good;
 }
@@ -66,7 +64,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
 {
     using namespace boxm2_cpp_pre_infinity_opt2_phongs_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ){
+    if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
         return false;
     }
@@ -128,8 +126,8 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
         boxm2_batch_update_phongs_pass1_functor pass1;
         pass1.init_data(datas,&pre_inf_img,&vis_inf_img,sun_elev,sun_azim);
         cast_ray_per_block<boxm2_batch_update_phongs_pass1_functor>(pass1,
-            scene_info_wrapper->info,
-            blk,cam,ni,nj);
+                                                                    scene_info_wrapper->info,
+                                                                    blk,cam,ni,nj);
 
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix());
@@ -140,7 +138,6 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(dir_identifier));
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
-
     }
     // compute beta denominator
     vil_image_view<float> *  norm_img= new vil_image_view<float>(ni,nj);
@@ -187,10 +184,10 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
         boxm2_batch_update_opt2_phongs_pass2_functor pass2;
         pass2.init_data(datas,&pre_inf_img,&vis_inf_img,sun_elev,sun_azim, norm_img);
         cast_ray_per_block<boxm2_batch_update_opt2_phongs_pass2_functor>(pass2,
-            scene_info_wrapper->info,
-            blk,
-            cam,
-            ni,nj);
+                                                                         scene_info_wrapper->info,
+                                                                         blk,
+                                                                         cam,
+                                                                         ni,nj);
 
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix());
@@ -202,7 +199,6 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
         cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(img_identifier));
-
     }
 
     return true;
@@ -219,7 +215,7 @@ bool boxm2_cpp_batch_update_opt2_phongs_process_cons(bprb_func_process& pro)
 {
     using namespace boxm2_cpp_batch_update_opt2_phongs_process_globals;
 
-    //process takes 4 inputs
+    //process takes 6 inputs
     // 0) scene
     // 1) cache
     // 2) stream cache 1
@@ -233,7 +229,7 @@ bool boxm2_cpp_batch_update_opt2_phongs_process_cons(bprb_func_process& pro)
     input_types_[3] = "boxm2_stream_cache_sptr";
     input_types_[4] = "float";
     input_types_[5] = "float";
-    // process has no output:
+    // process has no outputs
     vcl_vector<vcl_string>  output_types_(n_outputs_);
 
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -244,7 +240,7 @@ bool boxm2_cpp_batch_update_opt2_phongs_process(bprb_func_process& pro)
 {
     using namespace boxm2_cpp_batch_update_opt2_phongs_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ){
+    if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
         return false;
     }
@@ -313,7 +309,7 @@ bool boxm2_cpp_batch_update_nonray_process(bprb_func_process& pro)
 {
     using namespace boxm2_cpp_batch_update_nonray_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ){
+    if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
         return false;
     }

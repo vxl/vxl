@@ -16,10 +16,8 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 
 float boxm2_multi_render::render(boxm2_multi_cache&      cache,
@@ -135,7 +133,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
     vcl_vector<int> indices = group.order_from_cam(cam);
-    for (unsigned int idx=0; idx<indices.size(); ++idx){
+    for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
@@ -153,7 +151,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     }
 
     //finish queues before moving on
-    for (unsigned int idx=0; idx<indices.size(); ++idx){
+    for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
 
     //Figure out image location
@@ -163,7 +161,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
              maxU=0, maxV=0;
       vgl_box_3d<double>& blkBox = group.bbox(i);
       vcl_vector<vgl_point_3d<double> > verts = blkBox.vertices();
-      for (unsigned int vi=0; vi<verts.size(); ++vi){
+      for (unsigned int vi=0; vi<verts.size(); ++vi) {
         double u, v;
         cam->project(verts[vi].x(), verts[vi].y(), verts[vi].z(), u, v);
         if (u < minU) minU = u;

@@ -12,8 +12,7 @@
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_timer.h>
 
@@ -93,7 +92,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
     vcl_vector<int> indices = group.order_from_cam(cam);
-    for (unsigned int idx=0; idx<indices.size(); ++idx){
+    for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       //grab sub scene and it's cache
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
@@ -114,7 +113,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
     }
 
     //finish queues before moving on (Maybe read in AUX 2 and 3 here)
-    for (unsigned int idx=0; idx<indices.size(); ++idx){
+    for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       clFinish(queues[i]);
 
@@ -274,7 +273,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
   for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
-    for (unsigned int i=0; i<ids.size(); ++i){
+    for (unsigned int i=0; i<ids.size(); ++i) {
 
       ttime.mark();
       //grab sub scene and it's cache

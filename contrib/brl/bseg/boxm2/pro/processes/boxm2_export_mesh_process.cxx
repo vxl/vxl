@@ -19,7 +19,6 @@
 
 //vgl
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
 //vpgl camera stuff

@@ -15,8 +15,6 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 //brdb stuff

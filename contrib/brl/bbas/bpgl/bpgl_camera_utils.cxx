@@ -3,7 +3,6 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_intersection.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_matrix.h>

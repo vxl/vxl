@@ -23,21 +23,19 @@
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/ocl/algo/boxm2_ocl_render_scene_uncertainty_map.h>
-#include <vul/vul_timer.h>
 
 
 namespace boxm2_ocl_render_scene_uncertainty_map_process_globals
 {
   const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 2;
-
 }
 
 bool boxm2_ocl_render_scene_uncertainty_map_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_scene_uncertainty_map_process_globals;
 
-  //process takes 1 input
+  //process takes 8 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
@@ -48,10 +46,9 @@ bool boxm2_ocl_render_scene_uncertainty_map_process_cons(bprb_func_process& pro)
   input_types_[6] = "vcl_string"; // directory of the cameras used
   input_types_[7] = "vcl_string"; // directory of the cameras unused
 
-  // process has 1 output:
-  // output[0]: scene sptr
+  // process has 2 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  output_types_[0] = "vil_image_view_base_sptr";
+  output_types_[0] = "vil_image_view_base_sptr"; // scene sptr
   output_types_[1] = "vil_image_view_base_sptr";
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);

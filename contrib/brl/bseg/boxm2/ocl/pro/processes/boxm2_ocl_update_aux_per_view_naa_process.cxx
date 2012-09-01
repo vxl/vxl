@@ -18,7 +18,6 @@
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <vil/vil_convert.h>
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
 #include <brad/brad_illum_util.h>
@@ -60,7 +59,7 @@ namespace boxm2_ocl_update_aux_per_view_naa_process_globals
     //convert aux buffer int values to float (just divide by SEGLENFACTOR
     bocl_kernel* convert_aux_int_float = new bocl_kernel();
     if (!convert_aux_int_float->create_kernel(&device->context(),device->device_id(), src_paths, "convert_aux_int_to_float", opts+" -D CONVERT_AUX ", "batch_update::convert_aux_int_to_float")) {
-      vcl_cerr << "ERROR compiling kernel convert_aux_int_float" << vcl_endl;
+      vcl_cerr << "ERROR compiling kernel convert_aux_int_float\n";
       return false;
     }
 
@@ -72,7 +71,7 @@ namespace boxm2_ocl_update_aux_per_view_naa_process_globals
     bocl_kernel* seg_len = new bocl_kernel();
     vcl_string seg_opts = "-D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
     if (!seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len")) {
-      vcl_cerr << "ERROR compiling kernel seg_len" << vcl_endl;
+      vcl_cerr << "ERROR compiling kernel seg_len\n";
       return false;
     }
     vec_kernels.push_back(seg_len);
@@ -81,7 +80,7 @@ namespace boxm2_ocl_update_aux_per_view_naa_process_globals
     bocl_kernel* aux_previs_naa_kernel = new bocl_kernel();
     vcl_string aux_opt = opts + " -D AUX_PREVIS_NAA -D STEP_CELL=step_cell_aux_previs_naa(aux_args,data_ptr,llid,d) ";
     if (!aux_previs_naa_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "aux_previs_main_naa", aux_opt, "batch_update::aux_previs_main_naa")) {
-      vcl_cerr << "ERROR compiling kernel aux_previs_naa_kernel" << vcl_endl;
+      vcl_cerr << "ERROR compiling kernel aux_previs_naa_kernel\n";
       return false;
     }
     vec_kernels.push_back(aux_previs_naa_kernel);
@@ -99,7 +98,7 @@ bool boxm2_ocl_update_aux_per_view_naa_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_aux_per_view_naa_process_globals;
 
-  //process takes 1 input
+  //process takes 10 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
@@ -112,15 +111,14 @@ bool boxm2_ocl_update_aux_per_view_naa_process_cons(bprb_func_process& pro)
   input_types_[8] = "vil_image_view_base_sptr";
   input_types_[9] = "vil_image_view_base_sptr";
 
-  // process has 1 output:
-  // output[0]: scene sptr
+  // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the input 5 is not set
   brdb_value_sptr idx5 = new brdb_value_t<vcl_string>("");
   pro.set_input(5, idx5);
-  
+
   return good;
 }
 
@@ -151,12 +149,12 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
 
   vil_image_view<float> *alt_prior = dynamic_cast<vil_image_view<float>*>(alt_prior_base.ptr());
   if (!alt_prior) {
-    vcl_cerr << "ERROR casting alt_prior to vil_image_view<float> " << vcl_endl;
+    vcl_cerr << "ERROR casting alt_prior to vil_image_view<float>\n";
     return false;
   }
   vil_image_view<float> *alt_density = dynamic_cast<vil_image_view<float>*>(alt_density_base.ptr());
   if (!alt_density) {
-    vcl_cerr << "ERROR casting alt_density to vil_image_view<float> " << vcl_endl;
+    vcl_cerr << "ERROR casting alt_density to vil_image_view<float>\n";
     return false;
   }
   // variances
@@ -170,7 +168,7 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
   unsigned int num_normals = normals.size();
   // opencl code depends on there being exactly 16 normal directions - do sanity check here
   if (num_normals != 16) {
-    vcl_cerr << "ERROR: boxm2_ocl_update_aux_per_view_naa_process: num_normals = " << num_normals << ".  Expected 16" << vcl_endl;
+    vcl_cerr << "ERROR: boxm2_ocl_update_aux_per_view_naa_process: num_normals = " << num_normals << ".  Expected 16\n";
     return false;
   }
 
@@ -207,7 +205,7 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
     if (!compile_kernel(device,ks,"")) {
-      vcl_cerr << "ERROR: compile kernel returned false" << vcl_endl;
+      vcl_cerr << "ERROR: compile kernel returned false\n";
       return false;
     }
     kernels[identifier]=ks;
@@ -226,7 +224,7 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
   float* radiance_offsets_buff = new float[num_normals];
   float* radiance_var_scales_buff = new float[num_normals];
   float* radiance_var_offsets_buff = new float[num_normals];
-  
+
   // compute offsets and scales for linear radiance model
   for (unsigned n=0; n < num_normals; ++n) {
      // compute offsets as radiance of surface with 0 reflectance
@@ -241,9 +239,9 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
      // compute scale
      double var = brad_radiance_variance_chavez(1.0, normals[n], *metadata, *atm_params, reflectance_var, optical_depth_var, skylight_var, airlight_var);
      radiance_var_scales_buff[n] = var - var_offset;
-     vcl_cout << "---- normal = " << normals[n] << vcl_endl;
-     vcl_cout << "radiance scale = " << radiance << " offset = " << offset << vcl_endl;
-     vcl_cout << "radiance var scale = " << var << " variance offset = " << var_offset << vcl_endl;
+     vcl_cout << "---- normal = " << normals[n] << vcl_endl
+              << "radiance scale = " << radiance << " offset = " << offset << vcl_endl
+              << "radiance var scale = " << var << " variance offset = " << var_offset << vcl_endl;
   }
 
   //set generic cam

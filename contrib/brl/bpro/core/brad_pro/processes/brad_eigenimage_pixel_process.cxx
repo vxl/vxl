@@ -1,7 +1,6 @@
 // This is brl/bpro/core/brad_pro/processes/brad_eigenimage_pixel_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
-#include <vil/vil_new.h>
 #include <vil/vil_convert.h>
 //:
 // \file
@@ -40,13 +39,13 @@ bool brad_eigenimage_pixel_process(bprb_func_process& pro)
     return false;
   }
   brad_eigenspace_sptr es_ptr = pro.get_input<brad_eigenspace_sptr>(0);
-  if (!es_ptr){
+  if (!es_ptr) {
     vcl_cout << "in eigenimage_pixel_process, null eigenspace pointer\n";
     return false;
   }
 
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(1);
-  if (!image){
+  if (!image) {
     vcl_cout << "in eigenimage_pixel_process, input image view is null\n";
     return false;
   }

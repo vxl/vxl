@@ -13,12 +13,10 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_transform.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/cpp/algo/boxm2_image_density_functor.h>
 
-#include <vil/vil_math.h>
 #include <vil/vil_save.h>
 #include <bsta/bsta_gauss_sf1.h>
 

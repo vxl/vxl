@@ -1,6 +1,5 @@
-// This is vpgl_triangulate_points.cxx
+// This is core/vpgl/algo/vpgl_triangulate_points.cxx
 #include "vpgl_triangulate_points.h"
-
 //:
 // \file
 
@@ -11,7 +10,6 @@
 #include <vgl/vgl_vector_3d.h>
 
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3.h>
@@ -38,7 +36,7 @@ double vpgl_triangulate_points::triangulate(
         const vnl_double_3x3 &rot =
             cameras[i].get_rotation().as_matrix();
 
-        const vgl_point_2d<double> pt = 
+        const vgl_point_2d<double> pt =
             cameras[i].get_calibration().map_to_focal_plane(points[i]);
 
         // Set the row for x for this point

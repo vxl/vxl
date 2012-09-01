@@ -5,15 +5,13 @@
 
 #include "msm_pose_maker.h"
 #include <vsl/vsl_binary_loader.h>
-#include <mbl/mbl_read_props.h>
-#include <mbl/mbl_exception.h>
 #include <vsl/vsl_vector_io.h>
 
 //=======================================================================
 
 //: Set up definitions of directions from the curves.
-void msm_pose_maker::set_from_curves(unsigned n_points, 
-                                           const msm_curves& curves)
+void msm_pose_maker::set_from_curves(unsigned n_points,
+                                     const msm_curves& curves)
 {
   end0_.resize(n_points,0);
   end1_.resize(n_points,0);
@@ -43,7 +41,7 @@ void msm_pose_maker::set_from_curves(unsigned n_points,
 
 //: Compute a direction at each point, usually normal to curve.
 void msm_pose_maker::create_vectors(const msm_points& points,
-                      vcl_vector<vgl_vector_2d<double> >& dir) const
+                                    vcl_vector<vgl_vector_2d<double> >& dir) const
 {
   if (end0_.size()==0)
   {

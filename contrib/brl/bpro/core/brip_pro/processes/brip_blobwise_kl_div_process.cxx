@@ -8,10 +8,8 @@
 #include <brip/brip_blobwise_mutual_info.h>
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_new.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
-#include <vil/vil_save.h>
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 
@@ -160,12 +158,12 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
       else
         (*new_blobs)(i,j) = (vxl_byte) 0;
     }
-    
+
   //make sure KL div image isn't overstepping old blobs
   for (unsigned i=0; i<ni; ++i)
     for (unsigned int j=0; j<nj; ++j)
       if ( !mask_img(i,j) )
-        (*kl_img)(i,j) = 0.0f;  
+        (*kl_img)(i,j) = 0.0f;
 
   //------------------------------------------------
   // set outputs

@@ -3,7 +3,6 @@
 // \file
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
-#include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -206,7 +205,7 @@ adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
     vcl_cout << " done! found global min! min error: " << min_error << '\n';
     vcl_vector<vpgl_rational_camera<double> > current_cams(cams);
     // return translations
-    vcl_cout << "translations for each camera: " << vcl_endl;
+    vcl_cout << "translations for each camera:" << vcl_endl;
     for (unsigned int i = 0; i < current_cams.size(); ++i) {
       vgl_vector_2d<double> tr(param_values[params_indices_best[i*2]], param_values[params_indices_best[i*2+1]]);
       vcl_cout << tr << vcl_endl;
