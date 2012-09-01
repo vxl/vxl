@@ -86,7 +86,7 @@ int main(int argc,  char** argv)
 
   //shuffle frames
   int* frames = new int[cams.size()];
-  for (int i=0; i<cams.size(); ++i) frames[i] = i;
+  for (unsigned int i=0; i<cams.size(); ++i) frames[i] = (int)i;
   boxm2_util::random_permutation(frames, cams.size());
 
   //timing vars
