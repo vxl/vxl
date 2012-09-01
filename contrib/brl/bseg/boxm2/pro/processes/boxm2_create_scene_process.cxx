@@ -185,7 +185,7 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
   double local_origin_x = 0.0, local_origin_y = 0.0, local_origin_z = 0.0; // this is local origin
   double lx, ly, lz;
   lv.global_to_local(lon1, lat1, elev1, vpgl_lvcs::wgs84, local_origin_x, local_origin_y, local_origin_z);
-  vcl_cout << "local coords:\nlat1,lon1,elev1: " << lx << ' ' << ly << ' ' << lz << vcl_endl;
+  vcl_cout << "local coords:\nlat1,lon1,elev1: " << local_origin_x << ' ' << local_origin_y << ' ' << local_origin_z << vcl_endl;
   lv.global_to_local(lon2, lat2, elev2, vpgl_lvcs::wgs84, lx, ly, lz);
   vcl_cout << "lat2,lon2,elev2: " << lx << ' ' << ly << ' ' << lz << vcl_endl;
   lx -= local_origin_x;  // width
