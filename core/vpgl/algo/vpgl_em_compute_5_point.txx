@@ -85,9 +85,8 @@ void vpgl_em_compute_5_point<T>::normalize(
 {
     for (unsigned int i = 0; i < points.size(); ++i)
     {
-        vnl_matrix_fixed<T, 3, 3> k_inv = vnl_inverse(k.get_matrix());
         vgl_point_2d<T> p = k.map_to_focal_plane(points[i]);
-        normed_points.push_back(vgl_point_2d<T>(-p.x(), -p.y()));
+        normed_points.push_back(vgl_point_2d<T>(p.x(), p.y()));
     }
 }
 
@@ -480,8 +479,8 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
         get_distinct_indices(5, match_idxs, num_points);
 
         for (int idx = 0; idx < 5; ++idx) {
-            right_points_to_use.push_back(right_points[idx]);
-            left_points_to_use.push_back(left_points[idx]);
+            right_points_to_use.push_back(right_points[match_idxs[idx]]);
+            left_points_to_use.push_back(left_points[match_idxs[idx]]);
         }
         vcl_vector<vpgl_essential_matrix<T> > ems;
         five_point.compute(
@@ -508,17 +507,26 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
                 point_l.put(1, 0, left_points[j].y());
                 point_l.put(2, 0, 1.0);
 
-                if ( (point_l.transpose()*f.get_matrix()*point_r).get(0,0)
-                    <= inlier_threshold) {
+                vnl_double_3x1 f_r = f.get_matrix() * point_r;
+                vnl_double_3x1 f_l = f.get_matrix().transpose() * point_l;
+
+                // compute normalized distance to line
+                double p = (point_r.transpose() * f_l).get(0,0);
+                double error = (1.0 / (f_l.get(0,0) * f_l.get(0,0) + f_l.get(1,0) * f_l.get(1,0)) + 
+                                1.0 / (f_r.get(0,0) * f_r.get(0,0) + f_r.get(1,0) * f_r.get(1,0))) * (p * p);
+
+                if ( error <= inlier_threshold) {
                     ++inlier_count;
                 }
             }
+
             if (best_inlier_count < inlier_count) {
                 best_em = *i;
                 best_inlier_count = inlier_count;
             }
         }
     }
+
     return true;
 }
 
