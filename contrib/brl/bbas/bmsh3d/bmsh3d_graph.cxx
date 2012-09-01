@@ -38,9 +38,9 @@ bool bmsh3d_graph::brute_force_validation ()
     if (SCurve->type() == bmsh3d_edge::SC_TYPE_A13_AXIAL &&
         SCurve->is_self_loop()) {
       vul_printf (vcl_cerr, "\tA13 scaffold curve (%d: %d-%d) has self-loop\n",
-                   SCurve->id(),
-                   SCurve->S_Vertex()->id(),
-                   SCurve->E_Vertex()->id());
+                  SCurve->id(),
+                  SCurve->S_Vertex()->id(),
+                  SCurve->E_Vertex()->id());
       result = false;
     }
   }

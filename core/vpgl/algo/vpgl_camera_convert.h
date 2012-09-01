@@ -104,8 +104,8 @@ class vpgl_generic_camera_convert
 #endif
 
   static bool convert_with_margin( vpgl_perspective_camera<double> const& per_cam,
-                       int ni, int nj,
-                       vpgl_generic_camera<double> & gen_cam, int margin, unsigned level = 0);
+                                   int ni, int nj,
+                                   vpgl_generic_camera<double> & gen_cam, int margin, unsigned level = 0);
 
   //: Convert an affine_camera to a generic camera
   static bool convert( vpgl_affine_camera<double> const& aff_cam,

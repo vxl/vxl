@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 {
   vul_arg_info_list arglist;
   vul_arg<vcl_string> site_path(arglist, "-site_path",
-                                 "video site path", "");
+                                "video site path", "");
   vul_arg<vcl_string> cal_matrix_path(arglist, "-cal_path",
                                       "calibration matrix(mat)", "");
   vul_arg<double> initial_depth(arglist, "-depth", "initial camera depth",

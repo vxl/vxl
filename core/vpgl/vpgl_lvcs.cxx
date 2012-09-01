@@ -387,7 +387,8 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
     vpgl_utm u;
     u.transform(localUTMOrigin_Zone_, pointin_x*local_to_meters + localUTMOrigin_X_East_,
                                       pointin_y*local_to_meters + localUTMOrigin_Y_North_,
-                                      pointin_z*local_to_meters + localCSOriginElev_*local_to_meters, local_lat, local_lon, local_elev);
+                                      pointin_z*local_to_meters + localCSOriginElev_*local_to_meters,
+                local_lat, local_lon, local_elev);
 
     if (global_cs_name == vpgl_lvcs::wgs84) {  // global values will be in degrees and in meters
       global_lat = local_lat;

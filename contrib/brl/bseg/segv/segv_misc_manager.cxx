@@ -719,9 +719,9 @@ void segv_misc_manager::project_on_subm()
 {
   this->clear_display();
   vgui_style_sptr mstyle = vgui_style::new_style(0.5f, 1.0f, 0.25f,
-                                               1.0f, 5.0f);
+                                                 1.0f, 5.0f);
   vgui_style_sptr pstyle = vgui_style::new_style(1.0f, 0.5f, 0.1f,
-                                               1.0f, 5.0f);
+                                                 1.0f, 5.0f);
     static double theta_hat = 0.25*vnl_math::pi;
   static double alpha_hat = 1.0;
   static double theta = 0.3*vnl_math::pi;
@@ -764,9 +764,9 @@ void segv_misc_manager::project_on_articulation()
 {
   this->clear_display();
   vgui_style_sptr mstyle = vgui_style::new_style(0.5f, 1.0f, 0.25f,
-                                               1.0f, 5.0f);
+                                                 1.0f, 5.0f);
   vgui_style_sptr pstyle = vgui_style::new_style(1.0f, 0.5f, 0.1f,
-                                               1.0f, 5.0f);
+                                                 1.0f, 5.0f);
   unsigned njoints = 4;
   static vcl_vector<double> joint_trans(njoints, 0);
   static double basis_angle = 0.25*vnl_math::pi;
