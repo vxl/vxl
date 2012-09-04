@@ -90,7 +90,7 @@ bool breg3d_init_ekf_camera_optimizer_planar_process::execute()
   bvxm_voxel_world_sptr vox_world = input3->value();
 
   // get parameters
-  double rot_var, pos_var, t_scale;
+  double rot_var=0.0, pos_var=0.0, t_scale=0.0; // dummy initialisations to avoid compiler warnings
   if (!parameters()->get_value(vcl_string("position_measurement_variance"), rot_var)) {
     vcl_cout << "breg3d_init_ekf_camera_optimizer_planar_process::execute() -- problem in retrieving parameter rotation_variance\n";
     return false;

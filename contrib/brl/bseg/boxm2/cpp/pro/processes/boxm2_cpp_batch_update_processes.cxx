@@ -13,7 +13,6 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-#
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/boxm2_util.h>
@@ -56,7 +55,7 @@ bool boxm2_cpp_create_norm_intensities_process(bprb_func_process& pro)
   using namespace boxm2_cpp_create_norm_intensities_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
       return false;
   }
   //get the inputs
@@ -147,7 +146,7 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
   using namespace boxm2_cpp_create_aux_data_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   //get the inputs
@@ -342,7 +341,7 @@ bool boxm2_cpp_batch_update_process(bprb_func_process& pro)
   using namespace boxm2_cpp_batch_update_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
       return false;
   }
   //get the inputs
@@ -442,7 +441,7 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
   using namespace boxm2_cpp_batch_update_app_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
       return false;
   }
   //get the inputs
@@ -455,7 +454,7 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
   vcl_string data_type;
   bool foundDataType = false;
   vcl_vector<vcl_string> apps = scene->appearances();
-  int appTypeSize;
+  int appTypeSize = 0; // dummy initialization, to avoid compiler warning
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -486,14 +485,14 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
-  for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
-    
-    boxm2_block_id bid = *id; 
+  for (id = blk_ids.begin(); id != blk_ids.end(); ++id)
+  {
+    boxm2_block_id bid = *id;
     vcl_cout<<" block "<<bid<<vcl_endl;
-    
+
     // reads from disc if not already in memory
     boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    int numData = alph->buffer_length() / alphaTypeSize; 
+    int numData = alph->buffer_length() / alphaTypeSize;
     boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,numData*appTypeSize,false);
 
     if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
@@ -548,7 +547,7 @@ bool boxm2_cpp_batch_update_alpha_process(bprb_func_process& pro)
   using namespace boxm2_cpp_batch_update_alpha_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
       return false;
   }
   //get the inputs

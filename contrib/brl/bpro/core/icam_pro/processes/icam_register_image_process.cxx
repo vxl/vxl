@@ -80,18 +80,18 @@ bool icam_register_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr dest_image = pro.get_input<vil_image_view_base_sptr>(i++);
 
   // get the parameters
-  double local_min_thresh,smooth_sigma,
-    axis_search_cone_multiplier, polar_range_multiplier;
-  unsigned nbins, min_pyramid_image_size, box_reduction_k;
+  unsigned nbins=0, min_pyramid_image_size=0, box_reduction_k=0;
+  double local_min_thresh=0.0, smooth_sigma=0.0, axis_search_cone_multiplier=0.0, polar_range_multiplier=0.0;
   vcl_string base_path="";
-  pro.parameters()->get_value("nbins", nbins);
-  pro.parameters()->get_value("min_pyramid_image_size", min_pyramid_image_size);
-  pro.parameters()->get_value("box_reduction_k", box_reduction_k);
-  pro.parameters()->get_value("local_min_thresh", local_min_thresh);
-  pro.parameters()->get_value("smooth_sigma", smooth_sigma);
-  pro.parameters()->get_value("axis_search_cone_multiplier", axis_search_cone_multiplier);
-  pro.parameters()->get_value("polar_range_multiplier", polar_range_multiplier);
-  pro.parameters()->get_value("base_path", base_path);
+  // with dummy initialisations to avoid compiler warnings
+  if (!pro.parameters()->get_value("nbins", nbins)) return false;
+  if (!pro.parameters()->get_value("min_pyramid_image_size", min_pyramid_image_size)) return false;
+  if (!pro.parameters()->get_value("box_reduction_k", box_reduction_k)) return false;
+  if (!pro.parameters()->get_value("local_min_thresh", local_min_thresh)) return false;
+  if (!pro.parameters()->get_value("smooth_sigma", smooth_sigma)) return false;
+  if (!pro.parameters()->get_value("axis_search_cone_multiplier", axis_search_cone_multiplier)) return false;
+  if (!pro.parameters()->get_value("polar_range_multiplier", polar_range_multiplier)) return false;
+  if (!pro.parameters()->get_value("base_path", base_path)) return false;
 
   // create the parameters object
   icam_minimizer_params params(nbins,min_pyramid_image_size,box_reduction_k,axis_search_cone_multiplier,

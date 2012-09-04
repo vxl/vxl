@@ -1,5 +1,5 @@
 // This is brl/bpro/core/icam_pro/processes/icam_create_view_sphere_process.cxx
-
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process for generating cameras that view a scene
@@ -12,7 +12,6 @@
 //   <none yet>
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
@@ -55,22 +54,23 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
   }
   using namespace icam_create_view_sphere_process_globals;
 
-  double elevation,view_angle,orig_x, orig_y, orig_z, radius;
-  double dim_x, dim_y, dim_z;
-  unsigned ni,nj;
+  double elevation=0.0, view_angle=0.0, radius=0.0;
+  double dim_x=0.0, dim_y=0.0, dim_z=0.0,orig_x=0.0, orig_y=0.0, orig_z=0.0;
+  unsigned ni=0, nj=0;
   vcl_string path="";
-  pro.parameters()->get_value("elevation", elevation);
-  pro.parameters()->get_value("view_angle", view_angle);
-  pro.parameters()->get_value("dim_x", dim_x);
-  pro.parameters()->get_value("dim_y", dim_y);
-  pro.parameters()->get_value("dim_z", dim_z);
-  pro.parameters()->get_value("orig_x", orig_x);
-  pro.parameters()->get_value("orig_y", orig_y);
-  pro.parameters()->get_value("orig_z", orig_z);
-  pro.parameters()->get_value("radius", radius);
-  pro.parameters()->get_value("image_ni", ni);
-  pro.parameters()->get_value("image_nj", nj);
-  pro.parameters()->get_value("camera_path", path);
+  // with dummy initialisations to avoid compiler warnings
+  if (!pro.parameters()->get_value("elevation", elevation)) return false;
+  if (!pro.parameters()->get_value("view_angle", view_angle)) return false;
+  if (!pro.parameters()->get_value("dim_x", dim_x)) return false;
+  if (!pro.parameters()->get_value("dim_y", dim_y)) return false;
+  if (!pro.parameters()->get_value("dim_z", dim_z)) return false;
+  if (!pro.parameters()->get_value("orig_x", orig_x)) return false;
+  if (!pro.parameters()->get_value("orig_y", orig_y)) return false;
+  if (!pro.parameters()->get_value("orig_z", orig_z)) return false;
+  if (!pro.parameters()->get_value("radius", radius)) return false;
+  if (!pro.parameters()->get_value("image_ni", ni)) return false;
+  if (!pro.parameters()->get_value("image_nj", nj)) return false;
+  if (!pro.parameters()->get_value("camera_path", path)) return false;
 
   vgl_box_3d<double> world_bb(orig_x, orig_y, orig_z, orig_x+dim_x, orig_y+dim_y, orig_z+dim_z);
   icam_view_sphere_sptr view_sphere =new icam_view_sphere(world_bb, radius);

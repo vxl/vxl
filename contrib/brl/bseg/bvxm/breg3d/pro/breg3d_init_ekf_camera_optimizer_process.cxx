@@ -10,7 +10,7 @@
 
 breg3d_init_ekf_camera_optimizer_process::breg3d_init_ekf_camera_optimizer_process()
 {
-  // process takes 1 inputs:
+  // process takes 1 input:
   //input[0]: The first estimated camera (eg GPS/INS reading)
   // camera should be of type vgpl_perspective_camera
   input_data_.resize(1,brdb_value_sptr(0));
@@ -54,7 +54,7 @@ bool breg3d_init_ekf_camera_optimizer_process::execute()
   }
 
   // get parameters
-  double rot_var, pos_var, t_scale;
+  double rot_var=0.0, pos_var=0.0, t_scale=0.0; // dummy initialisations to avoid compiler warnings
   if (!parameters()->get_value(vcl_string("position_measurement_variance"), rot_var)) {
     vcl_cout << "breg3d_init_ekf_camera_optimizer_process::execute() -- problem in retrieving parameter rotation_variance\n";
     return false;
