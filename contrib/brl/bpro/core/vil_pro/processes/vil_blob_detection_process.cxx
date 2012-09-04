@@ -13,22 +13,17 @@
 //: Constructor
 bool vil_blob_detection_process_cons(bprb_func_process& pro)
 {
-  //this process takes one input: the filename
-  bool ok=false;
+  //this process takes 3 inputs
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("unsigned"); // max size of the blob in pixels
   input_types.push_back("unsigned"); // min size of the blob in pixels
 
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // label image
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
 
-  return true;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 //: Execute the process

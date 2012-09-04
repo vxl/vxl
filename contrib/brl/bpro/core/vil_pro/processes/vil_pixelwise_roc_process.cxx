@@ -32,7 +32,7 @@ bool pair_sorter2(Pair const& lhs, Pair const& rhs)
 //: Constructor
 bool vil_pixelwise_roc_process_cons(bprb_func_process& pro)
 {
-  // this process takes 3 inputs:
+  // this process takes 4 inputs, 2 of which are optional:
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  // change image
   input_types.push_back("vil_image_view_base_sptr");  // ground truth map
@@ -48,7 +48,7 @@ bool vil_pixelwise_roc_process_cons(bprb_func_process& pro)
   brdb_value_sptr idx = new brdb_value_t<bool>(true);
   pro.set_input(3, idx);
 
-  // this process takes 4 outputs:
+  // this process takes 7 outputs:
   vcl_vector<vcl_string> output_types;
   output_types.push_back("bbas_1d_array_float_sptr");  // tp
   output_types.push_back("bbas_1d_array_float_sptr");  // tn
@@ -65,7 +65,7 @@ bool vil_pixelwise_roc_process_cons(bprb_func_process& pro)
 bool vil_pixelwise_roc_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 3) {
+  if (pro.n_inputs() < 2) {
     vcl_cerr << "vil_pixelwise_roc_process: The number of inputs should be 2 (with optional 3rd (num thresh) and 4th (mask image))\n";
     return false;
   }

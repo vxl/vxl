@@ -19,23 +19,21 @@ bool vpgl_generate_3d_point_from_depth_process_cons(bprb_func_process& pro)
 {
     using namespace vpgl_generate_3d_point_from_depth_process_globals;
 
-    //process takes 1 input
+    //process takes 4 input
     vcl_vector<vcl_string> input_types_(n_inputs_);
     input_types_[0] = "vpgl_camera_double_sptr";
     input_types_[1] = "float";
     input_types_[2] = "float";
     input_types_[3] = "float";
 
-    // process has 1 output:
-    // output[0]: scene sptr
+    // process has 3 outputs
     vcl_vector<vcl_string>  output_types_(n_outputs_);
     output_types_[0] = "float"; //X
     output_types_[1] = "float"; //Y
     output_types_[2] = "float"; //Z
 
-    bool good = pro.set_input_types(input_types_) &&
-                pro.set_output_types(output_types_);
-    return good;
+    return pro.set_input_types(input_types_) &&
+           pro.set_output_types(output_types_);
 }
 
 //: Execute the process

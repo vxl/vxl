@@ -1,8 +1,8 @@
 // This is brl/bpro/core/sdet_pro/processes/sdet_texture_classifier_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_atmospheric_image_classifier.h>
@@ -12,7 +12,7 @@
 //: initialize input and output types
 bool sdet_texture_classifier_process_cons(bprb_func_process& pro)
 {
-  // process takes 3 inputs:
+  // process takes 4 inputs:
   vcl_vector<vcl_string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); //classifier
   input_types.push_back("vcl_string"); //texton dictionary

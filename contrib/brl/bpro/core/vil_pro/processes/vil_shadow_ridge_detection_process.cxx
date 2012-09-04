@@ -30,22 +30,20 @@ bool vil_shadow_ridge_detection_process_cons(bprb_func_process& pro)
 {
   using namespace vil_shadow_ridge_detection_process_globals;
 
-  //process takes 1 input
+  //process takes 3 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "int"; // blob size ( 100 pixels or so)
   input_types_[2] = "float"; // -0.75*vnl_math::pi
 
-  // process has 1 output:
-  // output[0]: scene sptr
+  // process has 3 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr"; // Shadow  Regions
   output_types_[1] = "vil_image_view_base_sptr"; // Shadow Ridges
   output_types_[2] = "vil_image_view_base_sptr"; // Length of Shadows
 
-  bool good = pro.set_input_types(input_types_) &&
-    pro.set_output_types(output_types_);
-  return good;
+  return pro.set_input_types(input_types_) &&
+         pro.set_output_types(output_types_);
 }
 
 //: Execute the process
@@ -54,8 +52,8 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   using namespace vil_shadow_ridge_detection_process_globals;
 
   // Sanity check
-  if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_shadow_ridge_detection_process: The input number should be 1" << vcl_endl;
+  if (pro.n_inputs()< 3) {
+    vcl_cout << "vil_shadow_ridge_detection_process: The number of inputs should be 3" << vcl_endl;
     return false;
   }
 

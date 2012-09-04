@@ -25,7 +25,7 @@ bool bhdfs_create_fs_manager_process_cons(bprb_func_process& pro)
   input_types_[0] = "vcl_string";  // host_name
   input_types_[1] = "int";         // port
 
-  // process has 1 output:
+  // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "bhdfs_manager_sptr";
 
@@ -37,7 +37,7 @@ bool bhdfs_create_fs_manager_process(bprb_func_process& pro)
   using namespace bhdfs_create_fs_manager_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   //get the inputs
@@ -67,11 +67,11 @@ bool bhdfs_fs_create_dir_process_cons(bprb_func_process& pro)
 {
   using namespace bhdfs_fs_create_dir_process_globals;
 
-  //process takes 1 inputs
+  //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";  // path on current dir
 
-  // process has 0 output:
+  // process has no output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -82,7 +82,7 @@ bool bhdfs_fs_create_dir_process(bprb_func_process& pro)
   using namespace bhdfs_fs_create_dir_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   //get the inputs
@@ -110,12 +110,12 @@ bool bhdfs_fs_copy_file_process_cons(bprb_func_process& pro)
 {
   using namespace bhdfs_fs_copy_file_process_globals;
 
-  //process takes 1 inputs
+  //process takes 2 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";  // full path of file on local dir
   input_types_[1] = "vcl_string";  // path on hdfs
 
-  // process has 0 output:
+  // process has no output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -126,7 +126,7 @@ bool bhdfs_fs_copy_file_process(bprb_func_process& pro)
   using namespace bhdfs_fs_copy_file_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   if (!bhdfs_manager::exists())
@@ -151,13 +151,13 @@ bool bhdfs_fs_copy_files_to_local_process_cons(bprb_func_process& pro)
 {
   using namespace bhdfs_fs_copy_files_to_local_process_globals;
 
-  //process takes 1 inputs
+  //process takes 3 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";  // path on hdfs
   input_types_[1] = "vcl_string";  // name ending
   input_types_[2] = "vcl_string";  // local path
 
-  // process has 0 output:
+  // process has no output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -168,7 +168,7 @@ bool bhdfs_fs_copy_files_to_local_process(bprb_func_process& pro)
   using namespace bhdfs_fs_copy_files_to_local_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   if (!bhdfs_manager::exists())
@@ -209,10 +209,10 @@ bool bhdfs_fs_get_working_dir_process_cons(bprb_func_process& pro)
 {
   using namespace bhdfs_fs_get_working_dir_process_globals;
 
-  //process takes 1 inputs
+  //process takes no input
   vcl_vector<vcl_string> input_types_(n_inputs_);
 
-  // process has 0 output:
+  // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vcl_string";
 
@@ -224,7 +224,7 @@ bool bhdfs_fs_get_working_dir_process(bprb_func_process& pro)
   using namespace bhdfs_fs_get_working_dir_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   if (!bhdfs_manager::exists())

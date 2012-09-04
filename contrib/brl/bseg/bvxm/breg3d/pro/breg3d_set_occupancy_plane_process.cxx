@@ -11,7 +11,7 @@
 
 breg3d_set_occupancy_plane_process::breg3d_set_occupancy_plane_process()
 {
-  // process takes 3 inputs: 
+  // process takes 6 inputs: 
   //inputs[0-3]: The plane parameters (a,b,c,d) such that ax + by + cz + d = 0
   //input[4]: The standard deviation of the plane estimate
   //input[5]: The voxel world
@@ -27,15 +27,13 @@ breg3d_set_occupancy_plane_process::breg3d_set_occupancy_plane_process()
   // process has 0 outputs.
   output_data_.resize(0,brdb_value_sptr(0));
   output_types_.resize(0);
-
 }
 
 
 bool breg3d_set_occupancy_plane_process::execute()
 {
-
   // Sanity check
-  if(!this->verify_inputs())
+  if (!this->verify_inputs())
     return false;
 
   brdb_value_t<double>* input0 = 
@@ -87,12 +85,12 @@ bool breg3d_set_occupancy_plane_process::execute()
   ocp_datatype max_prob = vox_world->get_params()->max_occupancy_prob();
 
   bvxm_voxel_grid<ocp_datatype>::iterator ocp_it = grid->begin();
-  for (unsigned k=0; k < nz; ++k, ++ocp_it) {
-
+  for (unsigned k=0; k < nz; ++k, ++ocp_it)
+  {
     bvxm_voxel_slab<ocp_datatype> slab = *(ocp_it);
     for (unsigned i=0; i < nx; ++i) {
-      for (unsigned j=0; j< ny; ++j) {
-
+      for (unsigned j=0; j< ny; ++j)
+      {
         vgl_point_3d<float> world_pt = vox_world->voxel_index_to_xyz(i,j,k);
 
         double dist = world_pt.x() * plane_a + world_pt.y() * plane_b + world_pt.z() * plane_c + plane_d;
@@ -104,7 +102,6 @@ bool breg3d_set_occupancy_plane_process::execute()
         if (vox_prob > max_prob)
           vox_prob = max_prob;
         slab(i,j) = vox_prob;
-
       }
     }
   }

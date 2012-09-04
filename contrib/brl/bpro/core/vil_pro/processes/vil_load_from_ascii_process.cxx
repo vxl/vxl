@@ -10,7 +10,7 @@
 #include <vnl/vnl_matrix.h>
 
 //: Constructor
-// this process takes 1 input:
+// this process takes 2 inputs:
 // * input(0): ascii filename
 // * input(1): image output filename
 //
@@ -31,7 +31,7 @@ bool vil_load_from_ascii_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_load_from_ascii_process: The input number should be 2" << vcl_endl;
+    vcl_cout << "vil_load_from_ascii_process: The number of inputs should be 2" << vcl_endl;
     return false;
   }
 
@@ -51,7 +51,7 @@ bool vil_load_from_ascii_process(bprb_func_process& pro)
   vil_image_view<float> img(M.cols(),M.rows());
 
   img.set_to_memory(M.data_block(),M.cols(),M.rows(),
-    1,1,M.cols(),M.rows()*M.cols());
+                    1,1,M.cols(),M.rows()*M.cols());
 
   vil_save(img, img_file.c_str());
 

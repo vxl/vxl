@@ -10,7 +10,7 @@
 //: initialization
 bool vpgl_nitf_camera_coverage_process_cons(bprb_func_process& pro)
 {
-  //this process takes 2 inputs:
+  //this process takes 3 inputs:
   // 1: the filename containing a list of images to evaluate
   // 2: Filename for region-points input file
   //    This file must contain the points in the following format
@@ -32,9 +32,9 @@ void  get_regions(vcl_string file, vcl_vector< vgl_point_2d<double> > &region)
   vcl_ifstream ifs( file.c_str() );
   while (!ifs.eof())
   {
-      double x, y;
-      ifs >> x; ifs >> y;
-      region.push_back( vgl_point_2d<double>( x, y ) );
+    double x, y;
+    ifs >> x; ifs >> y;
+    region.push_back( vgl_point_2d<double>( x, y ) );
   }
 }
 
@@ -42,7 +42,7 @@ void  get_regions(vcl_string file, vcl_vector< vgl_point_2d<double> > &region)
 bool vpgl_nitf_camera_coverage_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 3) {
-    vcl_cout << "vpgl_nitf_camera_coverage_process: The input number should be 3" << vcl_endl;
+    vcl_cout << "vpgl_nitf_camera_coverage_process: The number of inputs should be 3" << vcl_endl;
     return false;
   }
 
@@ -58,7 +58,7 @@ bool vpgl_nitf_camera_coverage_process(bprb_func_process& pro)
 
   if (!bpgl_nitf_camera_coverage::coverage_list(regions,in_img_list, out_img_list))
   {
-    vcl_cerr << "Error vpgl_nitf_camera_coverage_process: Failed to get coverage list" << vcl_endl;
+    vcl_cerr << "Error vpgl_nitf_camera_coverage_process: Failed to get coverage list\n";
     return false;
   };
 

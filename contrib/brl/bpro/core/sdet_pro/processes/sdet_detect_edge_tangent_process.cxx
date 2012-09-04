@@ -26,14 +26,12 @@
 bool sdet_detect_edge_tangent_process_cons(bprb_func_process& pro)
 {
   using namespace sdet_detect_edge_tangent_process_globals;
-  // process takes 1 input:
+  // process takes 2 inputs
   //input[0]: input grayscale image
   //input[1]: string indicating the output format
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   // process has 1 output image with 3 bands:
   // output[0]: output edge image with 3 planes
@@ -53,7 +51,8 @@ bool sdet_detect_edge_tangent_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
-  return pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_)
+      && pro.set_output_types(output_types_);
 }
 
 //: generates the edge map

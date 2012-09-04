@@ -44,7 +44,7 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
 
   // Sanity check
   if (pro.n_inputs() < n_inputs_) {
-    vcl_cerr << "brip_blob_intersection_process: The number of inputs should be 2 (with optional 3rd (num thresh) and 4th (mask image))\n";
+    vcl_cerr << "brip_blob_intersection_process: The number of inputs should be 2\n";
     return false;
   }
 

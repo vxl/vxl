@@ -17,14 +17,12 @@
 bool sdet_detect_edge_tangent_interp_process_cons(bprb_func_process& pro)
 {
   using namespace sdet_detect_edge_tangent_interp_process_globals;
-  // process takes 1 input:
+  // process takes 2 inputs
   //input[0]: input grayscale image
   //input[1]: string indicating the output format
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   // process has 1 output image with 3 bands:
   // output[0]: output edge image with 3 planes
@@ -44,7 +42,8 @@ bool sdet_detect_edge_tangent_interp_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
-  return pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_)
+      && pro.set_output_types(output_types_);
 }
 
 //: generates the edge map
@@ -54,7 +53,7 @@ bool sdet_detect_edge_tangent_interp_process(bprb_func_process& pro)
 
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
     return false;
   }
 
@@ -87,11 +86,11 @@ bool sdet_detect_edge_tangent_interp_process(bprb_func_process& pro)
 #endif
   vil_image_view<float> edge_image =
     sdet_img_edge::detect_edge_tangent_interpolated(input_image,
-                                        noise_multiplier,
-                                        smooth,
-                                        automatic_threshold,
-                                        junctionp,
-                                        aggressive_junction_closure);
+                                                    noise_multiplier,
+                                                    smooth,
+                                                    automatic_threshold,
+                                                    junctionp,
+                                                    aggressive_junction_closure);
 
   // return the output edge image in pos_dir format
   if (out_type=="pos_dir") {
@@ -116,7 +115,7 @@ bool sdet_detect_edge_line_fitted_process_cons(bprb_func_process& pro)
   //input[1]: string indicating the output format
   vcl_vector<vcl_string> input_types_(2);
   input_types_[0] = "vil_image_view_base_sptr";
-  input_types_[1] = "vcl_string";  
+  input_types_[1] = "vcl_string";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -124,12 +123,13 @@ bool sdet_detect_edge_line_fitted_process_cons(bprb_func_process& pro)
   output_types_[0] = "vil_image_view_base_sptr";
   return pro.set_output_types(output_types_);
 }
+
 bool sdet_detect_edge_line_fitted_process(bprb_func_process& pro)
 {
   using namespace sdet_detect_edge_line_fitted_process_globals;
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
     return false;
   }
 
@@ -162,11 +162,11 @@ bool sdet_detect_edge_line_fitted_process(bprb_func_process& pro)
 
   vil_image_view<float> edge_image =
     sdet_img_edge::detect_edge_line_fitted(input_image,
-                                        noise_multiplier,
-                                        smooth,
-                                        automatic_threshold,
-                                        junctionp,
-                                        aggressive_junction_closure, min_fit_length, rms_distance);
+                                           noise_multiplier,
+                                           smooth,
+                                           automatic_threshold,
+                                           junctionp,
+                                           aggressive_junction_closure, min_fit_length, rms_distance);
 
   // return the output edge image in pos_dir format
   if (out_type=="pos_dir") {
@@ -196,7 +196,7 @@ bool sdet_write_edge_file_process_cons(bprb_func_process& pro)
   //           Negative value indicates no edge is present
   // plane 2 - Orientation of local edge tangent direction in radians
   // range is [0, 2pi).
- 
+
   vcl_vector<vcl_string> input_types_(2);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";  // name of output file, extention should be .edg
@@ -206,11 +206,12 @@ bool sdet_write_edge_file_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(0);
   return pro.set_output_types(output_types_);
 }
+
 bool sdet_write_edge_file_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
     return false;
   }
 
@@ -224,7 +225,7 @@ bool sdet_write_edge_file_process(bprb_func_process& pro)
     vcl_cout << pro.name() <<" :-- null input image or wrong image type\n";
     return false;
   }
-  
+
   vil_image_view<float> edge_image(input_image_sptr);
   unsigned ni = edge_image.ni();
   unsigned nj = edge_image.nj();
@@ -248,25 +249,23 @@ bool sdet_write_edge_file_process(bprb_func_process& pro)
   }
 
   //2) write out the header block
-  outfp << "# EDGE_MAP v3.0" << vcl_endl << vcl_endl;
-  outfp << "# Format :  [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Strength Uncer" << vcl_endl;
-  outfp << vcl_endl;
-  outfp << "WIDTH=" << ni << vcl_endl;
-  outfp << "HEIGHT=" << nj << vcl_endl;
-  outfp << "EDGE_COUNT=" << cnt  << vcl_endl;
-  outfp << vcl_endl << vcl_endl;
+  outfp << "# EDGE_MAP v3.0\n\n"
+        << "# Format :  [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Strength Uncer\n\n"
+        << "WIDTH=" << ni << '\n'
+        << "HEIGHT=" << nj << '\n'
+        << "EDGE_COUNT=" << cnt  << '\n' << vcl_endl;
 
   for (unsigned i = 0; i < ni; i++) {
     for (unsigned j = 0; j < nj; j++) {
       if (edge_image(i,j) < 0)
         continue;
-        
+
         double x = edge_image(i,j,0);
         double y = edge_image(i,j,1);
 
         unsigned ix = i;//col; //preserve the original pixel assignment
         unsigned iy = j;//row;
-        
+
         double idir = edge_image(i,j,2), iconf = 0.0;
         double dir= edge_image(i,j,2), conf= 0.0, uncer=0.0;
 

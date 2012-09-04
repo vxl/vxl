@@ -14,7 +14,7 @@
 //: initialization
 bool vpgl_save_perspective_camera_vrml_process_cons(bprb_func_process& pro)
 {
-  //this process takes two inputs:
+  //this process takes 3 inputs:
   //input[0]: the camera
   //input[1]: the filename
   //input[2]: radius of the sphere that will represent camera center in the output file
@@ -29,7 +29,7 @@ bool vpgl_save_perspective_camera_vrml_process_cons(bprb_func_process& pro)
 bool vpgl_save_perspective_camera_vrml_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 3) {
-    vcl_cout << "vpgl_save_perspective_camera_process: The input number should be 1" << vcl_endl;
+    vcl_cout << "vpgl_save_perspective_camera_process: The number of inputs should be 3" << vcl_endl;
     return false;
   }
 

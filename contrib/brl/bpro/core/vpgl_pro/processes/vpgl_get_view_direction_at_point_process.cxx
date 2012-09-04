@@ -12,22 +12,21 @@
 namespace vpgl_get_view_direction_at_point_process_globals
 {
     const unsigned n_inputs_ = 4;
-    const unsigned n_outputs_ = 3;
+    const unsigned n_outputs_ = 2;
 }
 //: Init function
 bool vpgl_get_view_direction_at_point_process_cons(bprb_func_process& pro)
 {
     using namespace vpgl_get_view_direction_at_point_process_globals;
 
-    //process takes 1 input
+    //process takes 4 inputs
     vcl_vector<vcl_string> input_types_(n_inputs_);
     input_types_[0] = "vpgl_camera_double_sptr";
     input_types_[1] = "float";
     input_types_[2] = "float";
     input_types_[3] = "float";
 
-    // process has 1 output:
-    // output[0]: scene sptr
+    // process has 2 outputs
     vcl_vector<vcl_string>  output_types_(n_outputs_);
     output_types_[0] = "float"; // theta
     output_types_[1] = "float"; // phi

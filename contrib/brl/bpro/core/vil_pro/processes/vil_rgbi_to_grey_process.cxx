@@ -10,21 +10,17 @@
 //: Constructor
 bool vil_rgbi_to_grey_process_cons(bprb_func_process& pro)
 {
-  //this process takes two inputs:
+  //this process takes one input:
   // input(0): the vil_image_view_base_sptr
-  // input(1): the filename to save to
-  bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  input_types.push_back("vil_image_view_base_sptr");
 
-  //this process has no outputs
+  //this process has one output
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
-  return true;
+
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 //: Execute the process
@@ -32,7 +28,7 @@ bool vil_rgbi_to_grey_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vil_rgbi_to_grey_process: The input number should be 1" << vcl_endl;
+    vcl_cout << "vil_rgbi_to_grey_process: The number of inputs should be 1" << vcl_endl;
     return false;
   }
 

@@ -21,8 +21,7 @@
 //  project that point back to images and correct each camera by adjusting its 2D image offset so that they all project the 3D location to the same 2D location
 bool vpgl_correct_rational_cameras_process_cons(bprb_func_process& pro)
 {
-  //this process takes one input: the filename
-  bool ok=false;
+  //this process takes 2 inputs: the filename, and the path for the output
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");  // a file that lists the path to a camera on each line and i and j coordinate of the 3D world point
                                     // format of the file:
@@ -32,21 +31,16 @@ bool vpgl_correct_rational_cameras_process_cons(bprb_func_process& pro)
                                     // .
                                     // .
   input_types.push_back("vcl_string"); // output path to save the corrected cams, names will be input_cam_name_corrected.rpb
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
   vcl_vector<vcl_string> output_types;
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
-
-  return true;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 //: Execute the process
 bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 2) {
-    vcl_cout << "lvpgl_correct_rational_cameras_process: The input number should be 2" << vcl_endl;
+    vcl_cout << "lvpgl_correct_rational_cameras_process: The number of inputs should be 2" << vcl_endl;
     return false;
   }
 
@@ -78,8 +72,8 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
     double i, j;
     line >> i; line >> j;
     //ifs >> orig_cam_path;
-    vcl_cout << "reading cam: " << cam_path <<vcl_endl;
-    vcl_cout << "\t corr i: " << i << " j: " << j << vcl_endl;
+    vcl_cout << "reading cam: " << cam_path <<vcl_endl
+             << "\t corr i: " << i << " j: " << j << vcl_endl;
     vcl_string img_name = vul_file::strip_directory(cam_path);
     img_name = vul_file::strip_extension(img_name);
     vcl_string out_cam_name = output_path + img_name + "_corrected.rpb";

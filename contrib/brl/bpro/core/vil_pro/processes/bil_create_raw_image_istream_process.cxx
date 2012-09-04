@@ -17,11 +17,13 @@ bool bil_create_raw_image_istream_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(1);
   input_types_[0] = "vcl_string"; //raw file
 
-  // process has 1 output:
+  // process has 2 outputs
   vcl_vector<vcl_string>  output_types_(2);
   output_types_[0] = "bil_raw_image_istream_sptr";     //an initialized istream_sptr
   output_types_[1] = "int";
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
+  return pro.set_input_types(input_types_)
+      && pro.set_output_types(output_types_);
 }
 
 
@@ -30,7 +32,7 @@ bool bil_create_raw_image_istream_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()<1) {
-    vcl_cout << "bil_create_raw_image_istream_process: The input number should be 1" << vcl_endl;
+    vcl_cout << "bil_create_raw_image_istream_process: The number of inputs should be 1" << vcl_endl;
     return false;
   }
   //Retrieve filename from input
@@ -66,7 +68,7 @@ bool bil_read_frame_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()<1) {
-    vcl_cout << "bil_create_raw_image_istream_process: The input number should be 1" << vcl_endl;
+    vcl_cout << "bil_create_raw_image_istream_process: The number of inputs should be 1" << vcl_endl;
     return false;
   }
   //Retrieve filename from input
@@ -103,8 +105,8 @@ bool bil_seek_frame_process_cons(bprb_func_process& pro)
 bool bil_seek_frame_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs()<1) {
-    vcl_cout << "bil_create_raw_image_istream_process: The input number should be 1" << vcl_endl;
+  if (pro.n_inputs()<2) {
+    vcl_cout << "bil_create_raw_image_istream_process: The number of inputs should be 2" << vcl_endl;
     return false;
   }
   //Retrieve filename from input

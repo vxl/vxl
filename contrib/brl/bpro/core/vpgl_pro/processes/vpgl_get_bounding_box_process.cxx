@@ -19,23 +19,19 @@
 //: initialization
 bool vpgl_get_bounding_box_process_cons(bprb_func_process& pro)
 {
-  //this process takes two inputs:
-  //input[0]: the camera
+  //this process takes one input and has no output:
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");    //directory of perspective cameras
-  pro.set_input_types(input_types);
-
   vcl_vector<vcl_string> output_types;
-  //output_types.push_back("float");
-  pro.set_output_types(output_types);
-  return true;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 //: Execute the process
 bool vpgl_get_bounding_box_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()<1) {
-    vcl_cout << "vpgl_get_bounding_box_process: The input number should be 1 string" << vcl_endl;
+    vcl_cout << "vpgl_get_bounding_box_process: The number of inputs should be 1 (a string)" << vcl_endl;
     return false;
   }
 

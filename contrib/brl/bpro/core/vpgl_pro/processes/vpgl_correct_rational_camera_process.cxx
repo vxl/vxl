@@ -12,28 +12,22 @@
 //: initialization
 bool vpgl_correct_rational_camera_process_cons(bprb_func_process& pro)
 {
-  //this process takes one input: the filename
-  bool ok=false;
+  //this process takes 3 inputs and has 1 output
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("double");  // ofset x
   input_types.push_back("double");  // ofset y
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
-
-  return true;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 //: Execute the process
 bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() != 3) {
-    vcl_cout << "vpgl_correct_rational_camera_process: The input number should be 3, not " << pro.n_inputs() << vcl_endl;
+    vcl_cout << "vpgl_correct_rational_camera_process: The number of inputs should be 3, not " << pro.n_inputs() << vcl_endl;
     return false;
   }
 

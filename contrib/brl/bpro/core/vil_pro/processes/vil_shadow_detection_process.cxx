@@ -21,19 +21,17 @@ bool vil_shadow_detection_process_cons(bprb_func_process& pro)
 {
   using namespace vil_shadow_detection_process_globals;
 
-  //process takes 1 input
+  //process takes 2 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "float"; // threshold
 
   // process has 1 output:
-  // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr"; //X
 
-  bool good = pro.set_input_types(input_types_) &&
-    pro.set_output_types(output_types_);
-  return good;
+  return pro.set_input_types(input_types_) &&
+         pro.set_output_types(output_types_);
 }
 
 //: Execute the process
@@ -42,7 +40,7 @@ bool vil_shadow_detection_process(bprb_func_process& pro)
   using namespace vil_shadow_detection_process_globals;
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_shadow_detection_process: The input number should be 1" << vcl_endl;
+    vcl_cout << "vil_shadow_detection_process: The number of inputs should be 2" << vcl_endl;
     return false;
   }
   // get the inputs

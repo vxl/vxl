@@ -14,10 +14,8 @@
 //: initialization
 bool vpgl_project_process_cons(bprb_func_process& pro)
 {
-  //this process takes two inputs:
+  //this process takes 4 inputs:
   //input[0]: the camera
-  //input[1]: the filename
-  //input[2]: radius of the sphere that will represent camera center in the output file
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("float");
@@ -25,6 +23,7 @@ bool vpgl_project_process_cons(bprb_func_process& pro)
   input_types.push_back("float");
   pro.set_input_types(input_types);
 
+  // this process has two outputs:
   vcl_vector<vcl_string> output_types;
   output_types.push_back("float");
   output_types.push_back("float");
@@ -37,7 +36,7 @@ bool vpgl_project_process_cons(bprb_func_process& pro)
 bool vpgl_project_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 4) {
-    vcl_cout << "vpgl_save_perspective_camera_process: The input number should be 1" << vcl_endl;
+    vcl_cout << "vpgl_save_perspective_camera_process: The number of inputs should be 4" << vcl_endl;
     return false;
   }
 

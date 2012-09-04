@@ -24,19 +24,17 @@ bool vil_debayer_BGGR_to_RGB_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";   //scene to operate on
 
-  // process has 0 output:
+  // process has 1 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";   //scene to operate on
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_)
+      && pro.set_output_types(output_types_);
 }
 
 static bool isodd(unsigned int x)
 {
-  if (x % 2==0)
-    return false;
-  else
-    return true;
+  return x % 2 != 0;
 }
 
 
@@ -45,7 +43,7 @@ bool vil_debayer_BGGR_to_RGB_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vil_debayer_BGGR_to_RGB_process: The input number should be 1" << vcl_endl;
+    vcl_cout << "vil_debayer_BGGR_to_RGB_process: The number of inputs should be 1" << vcl_endl;
     return false;
   }
 
