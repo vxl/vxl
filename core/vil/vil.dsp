@@ -192,6 +192,9 @@ SOURCE=.\vil_math.cxx
 SOURCE=.\vil_file_format.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil_color_table.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\file_formats/vil_ras.cxx
 # End Source File
 # Begin Source File
