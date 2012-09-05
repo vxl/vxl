@@ -253,7 +253,7 @@ SET( vil_sources ${vil_sources}
   vil_exception.h
   vil_rgb.txx                           vil_rgb.h
   vil_rgba.txx                          vil_rgba.h
-  vil_color_table.h
+  vil_color_table.h			vil_color_table.cxx
   vil_fwd.h
   vil_round.h
   vil_na.cxx                            vil_na.h
