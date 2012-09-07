@@ -130,7 +130,9 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
     vpgl_perspective_camera<double>* cam =
       static_cast<vpgl_perspective_camera<double>*>(camera_);
     scene_.set_camera(*cam);
-    scene_.set_image_path(img_tab_->file_name());
+    vcl_string ipath = img_tab_->file_name();
+    vcl_string img_file = vul_file::strip_directory(ipath);
+    scene_.set_image_path(img_file);
   }
 
   //generate a unique tab name if null

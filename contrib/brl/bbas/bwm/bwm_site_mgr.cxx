@@ -25,6 +25,7 @@
 #include <vnl/vnl_quaternion.h>
 #include <vcl_cstdio.h>
 #include <vcl_sstream.h>
+#include <vul/vul_file.h>
 #ifdef WIN32
  #define _LIB
 #endif
@@ -1431,7 +1432,7 @@ void bwm_site_mgr::compute_3d_world_params()
 }
 void bwm_site_mgr::load_depth_map_scene(){
   vcl_string path = bwm_utils::select_file();
-  
+  vcl_string dir = vul_file::dirname(path);
   depth_map_scene scene;
   vsl_b_ifstream is(path.c_str());
   if (!is) {
@@ -1440,7 +1441,12 @@ void bwm_site_mgr::load_depth_map_scene(){
   }
   scene.b_read(is);
   vcl_string name = "depth_map";
-  bwm_io_tab_config* tab = new bwm_io_tab_config_cam(name, true, scene.image_path(), "not_needed" , "perspective");
+  vcl_string ifile = scene.image_path();
+  //just in case the user has an obsolete directory path
+  vcl_string temp = vul_file::strip_directory(ifile);
+  scene.set_image_path(temp);
+  vcl_string ipath = dir + '/' + temp;
+  bwm_io_tab_config* tab = new bwm_io_tab_config_cam(name, true, ipath , "not_needed" , "perspective");
   active_tableaus_.push_back(tab);
   bwm_tableau_img*  t = tableau_factory_.create_tableau(tab);
   bwm_tableau_mgr::instance()->add_tableau(t, name);
