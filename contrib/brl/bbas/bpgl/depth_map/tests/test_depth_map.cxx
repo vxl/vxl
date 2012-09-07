@@ -83,7 +83,8 @@ static void test_depth_map()
   double min_depth = 10000, max_depth = 30000;
   double depth = 10000;
   vcl_string name =  "vert_perp";
-  depth_map_scene dms(ni, nj, cam, gpr, 0, vcl_vector<depth_map_region_sptr>());
+  vcl_string image_path = "dummy_path";
+  depth_map_scene dms(ni, nj, image_path, cam, gpr, 0, vcl_vector<depth_map_region_sptr>());
   dms.add_ortho_perp_region(vp, min_depth, max_depth, name);
   /* bool success = */ dms.set_depth(depth, name);
 
@@ -115,6 +116,7 @@ static void test_depth_map()
     bool good = s_in->ni() == ssptr->ni();
     good = good && s_in->nj() == ssptr->nj();
     good = good && s_in->ground_plane()->region_2d()->size() == gpr->region_2d()->size();
+	good = good && s_in->image_path() == image_path;
     TEST("binary read write - depth_map_scene", good, true);
   }
   else {
@@ -133,7 +135,9 @@ static void test_depth_map()
   dms.set_sky(sky);
 
 #if 0
-  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res03_coloredmounds_depthscene_v2.vsl";
+  //  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res03_coloredmounds_depthscene_v2.vsl";
+  //  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene.vsl";
+  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res17_beachgrass_depthmap_scene.vsl";
   vsl_b_ifstream tis(spath.c_str());
   depth_map_scene scin;
   scin.b_read(tis);
@@ -144,7 +148,11 @@ static void test_depth_map()
 
   vil_image_view<float> dv = sit->depth_map(0);
   vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator_v2.tiff");
+  for(unsigned v = 2999; v>=1500; v-=50)
+    vcl_cout << v << ' ' << dv(2000, v) << '\n';
+
 #endif
+
 }
 
 

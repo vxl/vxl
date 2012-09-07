@@ -16,11 +16,12 @@
 
 depth_map_scene::
 depth_map_scene(unsigned ni, unsigned nj,
+                vcl_string const& image_path, 
                 vpgl_perspective_camera<double> const& cam,
                 depth_map_region_sptr const& ground_plane,
                 depth_map_region_sptr const& sky,
                 vcl_vector<depth_map_region_sptr> const& scene_regions)
-  : ni_(ni), nj_(nj), ground_plane_(ground_plane), sky_(sky), cam_(cam)
+  : ni_(ni), nj_(nj), image_path_(image_path),ground_plane_(ground_plane), sky_(sky), cam_(cam)
 {
   for (vcl_vector<depth_map_region_sptr>::const_iterator rit = scene_regions.begin();
        rit != scene_regions.end(); ++rit)
@@ -116,7 +117,7 @@ depth_map(unsigned log2_downsample_ratio)
   // necessary
   bool good = true;
   if(sky_&&sky_->active())
-   good = sky_->update_depth_image(depth, cam_, ratio);
+    good = sky_->update_depth_image(depth, cam_, ratio);
   // then do the ground plane
   if(ground_plane_&&ground_plane_->active())
     good = good && ground_plane_->update_depth_image(depth, cam_, ratio);
@@ -177,85 +178,95 @@ bool depth_map_scene::next_depth(){
       
 
 
-  //: initialize the movable depth configuration
-  void depth_map_scene::init_depths(){
-    depth_states_.clear();
-    vcl_map<vcl_string, depth_map_region_sptr>::iterator rit = 
-      scene_regions_.begin();
-    for(; rit !=     scene_regions_.end(); ++rit)
-      if(rit->second->active())
-        depth_states_.push_back(rit->second);
-    //sort on depth order
-    vcl_sort(depth_states_.begin(), depth_states_.end(), compare_order());
-    //set depths to min depth.
-    unsigned ns = depth_states_.size();
-    for(unsigned i = 0; i<ns; ++i)
-      this->set_depth(depth_states_[i]->min_depth(), depth_states_[i]->name());
-    //assert on inconsistent depths, i.e. min_depths must respect depth order
-    for(unsigned i = 1; i<ns; ++i)
-      assert(depth_states_[i]->depth()>=depth_states_[i-1]->depth());
+//: initialize the movable depth configuration
+void depth_map_scene::init_depths(){
+  depth_states_.clear();
+  vcl_map<vcl_string, depth_map_region_sptr>::iterator rit = 
+    scene_regions_.begin();
+  for(; rit !=     scene_regions_.end(); ++rit)
+    if(rit->second->active())
+      depth_states_.push_back(rit->second);
+  //sort on depth order
+  vcl_sort(depth_states_.begin(), depth_states_.end(), compare_order());
+  //set depths to min depth.
+  unsigned ns = depth_states_.size();
+  for(unsigned i = 0; i<ns; ++i)
+    this->set_depth(depth_states_[i]->min_depth(), depth_states_[i]->name());
+  //assert on inconsistent depths, i.e. min_depths must respect depth order
+  for(unsigned i = 1; i<ns; ++i)
+    assert(depth_states_[i]->depth()>=depth_states_[i-1]->depth());
+}
+void depth_map_scene::print_depth_states(){
+  unsigned ns = depth_states_.size();
+  for(unsigned i = 0; i<ns; ++i){
+    depth_map_region_sptr dmr = depth_states_[i];
+    vcl_cout << dmr->name() << ' ' << dmr->depth() << ' ';
   }
-  void depth_map_scene::print_depth_states(){
-    unsigned ns = depth_states_.size();
-    for(unsigned i = 0; i<ns; ++i){
-      depth_map_region_sptr dmr = depth_states_[i];
-      vcl_cout << dmr->name() << ' ' << dmr->depth() << ' ';
-    }
-    vcl_cout << '\n';
+  vcl_cout << '\n';
+}
+//: binary IO write
+void depth_map_scene::b_write(vsl_b_ostream& os)
+{
+  unsigned ver = this->version();
+  vsl_b_write(os, ver);
+  vsl_b_write(os, ni_);
+  vsl_b_write(os, nj_);
+  vsl_b_write(os, image_path_);
+  vsl_b_write(os, scene_regions_);
+  vsl_b_write(os, ground_plane_);
+  vsl_b_write(os, sky_);
+  vsl_b_write(os, cam_);
+}
+
+//: binary IO read
+void depth_map_scene::b_read(vsl_b_istream& is)
+{
+  unsigned ver;
+  vsl_b_read(is, ver);
+  if(ver == 1){
+    vsl_b_read(is, ni_);
+    vsl_b_read(is, nj_);
+    vsl_b_read(is, image_path_);
+    vsl_b_read(is, scene_regions_);
+    vsl_b_read(is, ground_plane_);
+    vsl_b_read(is, sky_);
+    vsl_b_read(is, cam_);
+  }else{
+    vcl_cout << " in depth_map_scene::b_read - unknown version\n";
+    return;
   }
-  //: binary IO write
-  void depth_map_scene::b_write(vsl_b_ostream& os)
-    {
-      vsl_b_write(os, ni_);
-      vsl_b_write(os, nj_);
-      vsl_b_write(os, scene_regions_);
-      vsl_b_write(os, ground_plane_);
-      vsl_b_write(os, sky_);
-      vsl_b_write(os, cam_);
-    }
+}
+void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* ds_ptr)
+{
+  if (ds_ptr ==0)
+    vsl_b_write(os, false);
+  else
+    vsl_b_write(os, true);
+  depth_map_scene* ds_non_const = const_cast<depth_map_scene*>(ds_ptr);
+  ds_non_const->b_write(os);
+}
 
-  //: binary IO read
-  void depth_map_scene::b_read(vsl_b_istream& is)
-    {
-      vsl_b_read(is, ni_);
-      vsl_b_read(is, nj_);
-      vsl_b_read(is, scene_regions_);
-      vsl_b_read(is, ground_plane_);
-      vsl_b_read(is, sky_);
-      vsl_b_read(is, cam_);
-    }
+void vsl_b_read(vsl_b_istream &is, depth_map_scene*& ds_ptr)
+{
+  bool valid_ptr = false;
+  vsl_b_read(is, valid_ptr);
+  if (valid_ptr) {
+    ds_ptr = new depth_map_scene();
+    ds_ptr->b_read(is);
+    return;
+  }
+  ds_ptr = 0;
+}
 
-  void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* ds_ptr)
-    {
-      if (ds_ptr ==0)
-        vsl_b_write(os, false);
-      else
-        vsl_b_write(os, true);
-      depth_map_scene* ds_non_const = const_cast<depth_map_scene*>(ds_ptr);
-      ds_non_const->b_write(os);
-    }
+void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& ds_ptr)
+{
+  depth_map_scene* ds=ds_ptr.ptr();
+  vsl_b_write(os, ds);
+}
 
-  void vsl_b_read(vsl_b_istream &is, depth_map_scene*& ds_ptr)
-    {
-      bool valid_ptr = false;
-      vsl_b_read(is, valid_ptr);
-      if (valid_ptr) {
-        ds_ptr = new depth_map_scene();
-        ds_ptr->b_read(is);
-        return;
-      }
-      ds_ptr = 0;
-    }
-
-  void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& ds_ptr)
-    {
-      depth_map_scene* ds=ds_ptr.ptr();
-      vsl_b_write(os, ds);
-    }
-
-  void vsl_b_read(vsl_b_istream &is, depth_map_scene_sptr& ds_ptr)
-    {
-      depth_map_scene* ds=0;
-      vsl_b_read(is, ds);
-      ds_ptr = ds;
-    }
+void vsl_b_read(vsl_b_istream &is, depth_map_scene_sptr& ds_ptr)
+{
+  depth_map_scene* ds=0;
+  vsl_b_read(is, ds);
+  ds_ptr = ds;
+}

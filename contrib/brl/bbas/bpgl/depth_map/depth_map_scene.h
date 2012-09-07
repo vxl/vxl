@@ -43,13 +43,14 @@ class depth_map_scene : public vbl_ref_count
 {
  public:
   depth_map_scene()
-  : ni_(0), nj_(0), ground_plane_(0) {}
+  : ni_(0), nj_(0), image_path_(""), ground_plane_(0) {}
 
   //: ni and nj are the required image dimensions
   depth_map_scene(unsigned ni, unsigned nj)
-  : ni_(ni), nj_(nj), ground_plane_(0) {}
+  : ni_(ni), nj_(nj),image_path_(""), ground_plane_(0) {}
 
   depth_map_scene(unsigned ni, unsigned nj,
+                  vcl_string const& image_path,
                   vpgl_perspective_camera<double> const& cam,
                   depth_map_region_sptr const& ground_plane,
                   depth_map_region_sptr const& sky,
@@ -57,10 +58,13 @@ class depth_map_scene : public vbl_ref_count
   //: accessors
   unsigned ni() const {return ni_;}
   unsigned nj() const {return nj_;}
+  vcl_string image_path() const {return image_path_;}
   depth_map_region_sptr ground_plane() const {return ground_plane_;}
   depth_map_region_sptr sky() const {return sky_;}
   vcl_vector<depth_map_region_sptr> scene_regions() const;
+  vpgl_perspective_camera<double> cam() const{return cam_;}
   //: set members
+  void set_image_path(vcl_string const& path){image_path_ = path;}
   void set_camera(vpgl_perspective_camera<double> const& cam) {cam_ = cam;}
   void set_ground_plane(vsol_polygon_2d_sptr ground_plane);
   void set_sky(vsol_polygon_2d_sptr ground_plane);
@@ -110,11 +114,16 @@ class depth_map_scene : public vbl_ref_count
   //: binary IO read
   void b_read(vsl_b_istream& is);
 
+  //: binary io version no
+  unsigned version(){return 1;}
+
   //: debug utilities
   void print_depth_states();
 
+
  protected:
   unsigned ni_, nj_; //: depth map dimensions
+  vcl_string image_path_;
   vcl_map<vcl_string, depth_map_region_sptr> scene_regions_;
   depth_map_region_sptr ground_plane_;
   depth_map_region_sptr sky_;
