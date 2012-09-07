@@ -527,16 +527,5 @@ void bwm_tableau_cam::save_depth_map_scene()
   my_observer_->save_depth_map_scene(path);
 }
 
-void bwm_tableau_cam::load_depth_map_scene()
-{
-  static vcl_string path;
-  bool clear_2d = true;
-  vcl_string ext = ".*";
-  vgui_dialog ld_dialog("Load Depth Map Scene");
-  ld_dialog.file("Scene File", ext, path);
-  ld_dialog.checkbox("Clear Polys Before Load",clear_2d);
-  if(!ld_dialog.ask())
-    return;
-  my_observer_->load_depth_map_scene(path, clear_2d);
-}
+
 

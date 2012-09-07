@@ -147,7 +147,6 @@ class bwm_tableau_cam : public bwm_tableau_img
   void add_vertical_depth_region();
   void edit_region_props();
   void save_depth_map_scene();
-  void load_depth_map_scene();
  protected:
   bwm_observer_cam* my_observer_;
   bwm_tableau_cam(bwm_observer_cam* obs)

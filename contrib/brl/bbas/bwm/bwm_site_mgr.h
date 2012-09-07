@@ -42,6 +42,9 @@ class bwm_site_mgr
   //:site info
   vcl_string site_name() { return site_name_;}
   vcl_string site_dir() { return site_dir_;}
+  //: depth map scene io
+  void load_depth_map_scene();
+  void save_depth_map_scene();
  private:
   bwm_site_mgr();
   static bwm_site_mgr* instance_;

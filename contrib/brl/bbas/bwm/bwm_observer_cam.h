@@ -210,13 +210,13 @@ class bwm_observer_cam : public bwm_observer_vgui
   void calibrate_cam_from_horizon();
   void toggle_cam_horizon();
   //=====================  depth map methods ========================
+  void set_depth_map_scene(depth_map_scene const& scene){scene_ = scene;}
   void set_ground_plane();
   void set_sky();
   void add_vertical_depth_region(double min_depth, double max_depth,
                                  vcl_string name);
   void save_depth_map_scene(vcl_string const& path);
-  void load_depth_map_scene(vcl_string const& path,
-                            bool clear_2d);
+  void display_depth_map_scene();
   vcl_vector<depth_map_region_sptr> scene_regions();
   void set_ground_plane_max_depth();
  protected:

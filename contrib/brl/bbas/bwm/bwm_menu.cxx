@@ -10,6 +10,7 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
   load_menu.add("Save Site..." , save_site);
   load_menu.add("Load VideoSite..." , load_video_site);
   load_menu.add("Save VideoSite..." , save_video_site);
+  load_menu.add("Load Depth Scene..." , load_depth_map_scene);
   MENU_LOAD_TABLEAU("Load Image Tableau...", "bwm_tableau_img", load_menu);
   load_menu.add("Load Video Tableau...", load_video_tableau);
   MENU_LOAD_TABLEAU("Load Camera Tableau...", "bwm_tableau_rat_cam", load_menu);

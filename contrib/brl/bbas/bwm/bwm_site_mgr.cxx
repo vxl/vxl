@@ -16,6 +16,7 @@
 #include "video/bwm_video_cam_istream.h"
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/algo/bpgl_project.h>
+#include <depth_map/depth_map_scene.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
@@ -1427,4 +1428,29 @@ void bwm_site_mgr::compute_3d_world_params()
   os.close();
   //restore camera stream state
   cam_istr->seek_camera(cam_number);
+}
+void bwm_site_mgr::load_depth_map_scene(){
+  vcl_string path = bwm_utils::select_file();
+  
+  depth_map_scene scene;
+  vsl_b_ifstream is(path.c_str());
+  if (!is) {
+    vcl_cout << "invalid binary stream for path " << path << vcl_endl;
+    return;
+  }
+  scene.b_read(is);
+  vcl_string name = "depth_map";
+  bwm_io_tab_config* tab = new bwm_io_tab_config_cam(name, true, scene.image_path(), "not_needed" , "perspective");
+  active_tableaus_.push_back(tab);
+  bwm_tableau_img*  t = tableau_factory_.create_tableau(tab);
+  bwm_tableau_mgr::instance()->add_tableau(t, name);
+  bwm_tableau_cam* tc = reinterpret_cast<bwm_tableau_cam*>(t);
+  vpgl_camera<double>* cam = new vpgl_perspective_camera<double>(scene.cam());
+  tc->observer()->set_camera(cam, "");
+  tc->observer()->set_depth_map_scene(scene);
+  tc->observer()->display_depth_map_scene();
+}
+
+void bwm_site_mgr::save_depth_map_scene(){
+
 }
