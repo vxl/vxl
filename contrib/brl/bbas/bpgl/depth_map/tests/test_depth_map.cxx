@@ -94,15 +94,12 @@ static void test_depth_map()
   vsl_b_ifstream is("./temp.bin");
   depth_map_region_sptr r_in;
   vsl_b_read(is, r_in);
-  if (r_in) {
-    bool good = r_in->name() == gpr->name();
-    good = good && r_in->min_depth() == gpr->min_depth();
-    good = good && r_in->region_2d()->size() == gpr->region_2d()->size();
-    TEST("binary read write - depth_map_region", good, true);
-  }
-  else {
-    TEST("binary_read_write - depth_map_region", true, false);
-  }
+  bool good = r_in
+           && r_in->name() == gpr->name()
+           && r_in->min_depth() == gpr->min_depth()
+           && r_in->region_2d()->size() == gpr->region_2d()->size();
+  TEST("binary read write - depth_map_region", good, true);
+
   vpl_unlink("./temp.bin");
   depth_map_scene_sptr ssptr = new depth_map_scene(dms);
   vsl_b_ofstream sos("./temps.bin");
@@ -112,16 +109,13 @@ static void test_depth_map()
   depth_map_scene_sptr s_in;
   vsl_b_read(sis, s_in);
   vpl_unlink("./temps.bin");
-  if (s_in) {
-    bool good = s_in->ni() == ssptr->ni();
-    good = good && s_in->nj() == ssptr->nj();
-    good = good && s_in->ground_plane()->region_2d()->size() == gpr->region_2d()->size();
-	good = good && s_in->image_path() == image_path;
-    TEST("binary read write - depth_map_scene", good, true);
-  }
-  else {
-    TEST("binary_read_write - depth_map_scene", true, false);
-  }
+  good = s_in
+      && s_in->ni() == ssptr->ni()
+      && s_in->nj() == ssptr->nj()
+      && s_in->ground_plane()->region_2d()->size() == gpr->region_2d()->size()
+      && s_in->image_path() == image_path;
+  TEST("binary read write - depth_map_scene", good, true);
+
   // test ortho perp scene planes, sky region
   vsol_point_2d_sptr p0s= new vsol_point_2d(640.0, 360.0);
   vsol_point_2d_sptr p1s= new vsol_point_2d(1280.0, 360.0);
@@ -148,11 +142,9 @@ static void test_depth_map()
 
   vil_image_view<float> dv = sit->depth_map(0);
   vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator_v2.tiff");
-  for(unsigned v = 2999; v>=1500; v-=50)
+  for (unsigned v = 2999; v>=1500; v-=50)
     vcl_cout << v << ' ' << dv(2000, v) << '\n';
-
 #endif
-
 }
 
 
