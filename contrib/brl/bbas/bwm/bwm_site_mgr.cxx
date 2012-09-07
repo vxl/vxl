@@ -25,16 +25,15 @@
 #include <vnl/vnl_quaternion.h>
 #include <vcl_cstdio.h>
 #include <vcl_sstream.h>
+
 #include <vul/vul_file.h>
+#include <vul/vul_string.h>
+#include <vgui/vgui_tableau_sptr.h>
+
 #ifdef WIN32
  #define _LIB
 #endif
 #include <expatpp.h> // for accessing methods in parent class of bwm_io_config_parser
-
-#include <vul/vul_file.h>
-#include <vul/vul_string.h>
-
-#include <vgui/vgui_tableau_sptr.h>
 
 bwm_site_mgr* bwm_site_mgr::instance_ = 0;
 
@@ -1430,7 +1429,9 @@ void bwm_site_mgr::compute_3d_world_params()
   //restore camera stream state
   cam_istr->seek_camera(cam_number);
 }
-void bwm_site_mgr::load_depth_map_scene(){
+
+void bwm_site_mgr::load_depth_map_scene()
+{
   vcl_string path = bwm_utils::select_file();
   vcl_string dir = vul_file::dirname(path);
   depth_map_scene scene;
@@ -1457,6 +1458,7 @@ void bwm_site_mgr::load_depth_map_scene(){
   tc->observer()->display_depth_map_scene();
 }
 
-void bwm_site_mgr::save_depth_map_scene(){
-
+void bwm_site_mgr::save_depth_map_scene()
+{
+  vcl_cerr << "bwm_site_mgr::save_depth_map_scene() not yet implemented!!!\n";
 }
