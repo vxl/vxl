@@ -297,16 +297,15 @@ img_to_region_plane(vpgl_perspective_camera<double> const& cam,
   for (unsigned i = 0; i<nverts; ++i){
     vgl_point_2d<double> pimg = region_2d_->vertex(i)->get_p();
     verts_2d.push_back(pimg);
-    vgl_ray_3d<double> ray = cam.backproject_ray(pimg);
-      vgl_point_3d<double> p3d = region_3d_->vertex(i)->get_p();
-      vgl_point_2d<double> p2d;
-      double tol = vcl_sqrt(vgl_tolerance<double>::position);
-      bool on_plane = region_plane_.plane_coords(p3d, p2d, tol);
-      if(!on_plane){
-        vcl_cout << "vertex " << p3d << " not on region plane\n";
-        return false;
-      }
-      reg_pts_2d.push_back(p2d);
+    vgl_point_3d<double> p3d = region_3d_->vertex(i)->get_p();
+    vgl_point_2d<double> p2d;
+    double tol = vcl_sqrt(vgl_tolerance<double>::position);
+    bool on_plane = region_plane_.plane_coords(p3d, p2d, tol);
+    if(!on_plane){
+      vcl_cout << "vertex " << p3d << " not on region plane\n";
+      return false;
+    }
+    reg_pts_2d.push_back(p2d);
   }
   // cast to homogenous points
   vcl_vector<vgl_homg_point_2d<double> > hpts_2d, hpts_reg_2d;

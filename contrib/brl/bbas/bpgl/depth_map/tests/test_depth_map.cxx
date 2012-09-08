@@ -130,8 +130,8 @@ static void test_depth_map()
 
 #if 0
   //  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res03_coloredmounds_depthscene_v2.vsl";
-  //  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene.vsl";
-  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res17_beachgrass_depthmap_scene.vsl";
+    vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
+  // vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res17_beachgrass_depthmap_scene.vsl";
   vsl_b_ifstream tis(spath.c_str());
   depth_map_scene scin;
   scin.b_read(tis);
@@ -142,8 +142,7 @@ static void test_depth_map()
 
   vil_image_view<float> dv = sit->depth_map(0);
   vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator_v2.tiff");
-  for (unsigned v = 2999; v>=1500; v-=50)
-    vcl_cout << v << ' ' << dv(2000, v) << '\n';
+
 #endif
 }
 
