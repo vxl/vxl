@@ -1,12 +1,11 @@
+// This is brl/bbas/bcvr/bcvr_cv_cor.h
+//---------------------------------------------------------------------
 #ifndef bcvr_cv_cor_h_
 #define bcvr_cv_cor_h_
-//---------------------------------------------------------------------
-// This is brl/bbas/bcvr/bcvr_cv_cor.h
 //:
 // \file
 // \brief a class to hold the curve correspondence as vectors of points
 //        WARNING: This class has to be revised to work with the correspondence of "open curves"
-//
 //
 // \author
 //  O.C. Ozcanli - Nov 23, 2005
@@ -81,7 +80,7 @@ class bcvr_cv_cor : public vbl_ref_count
   void set_open_curve_matching(bool val) { open_curve_matching_ = val; }  // needs to true explicitly for open curve matching
 
   //-----------------------
-  //:  BINARY I/O METHODS |
+  //  BINARY I/O METHODS  |
   //-----------------------
 
   //: Serial I/O format version
@@ -91,11 +90,10 @@ class bcvr_cv_cor : public vbl_ref_count
   virtual vcl_string is_a() const {return "bcvr_cv_cor";}
 
   //: determine if this is the given class
-  virtual bool is_class(vcl_string const& cls) const
-   { return cls==is_a();}
+  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 
   //: Binary save self to stream.
-  virtual void b_write(vsl_b_ostream &os) const ;
+  virtual void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
