@@ -56,8 +56,21 @@ bool vil_threshold_image_process(bprb_func_process& pro)
     //: Apply threshold such that dest(i,j,p)=true if src(i,j,p)<=t
     vil_threshold_below(fimg, *temp, thres);
   }
+   vil_image_view<unsigned char>* out = new vil_image_view<unsigned char>(temp->ni(),temp->nj());
+   for(unsigned k = 0 ; k < out->ni(); k++)
+   {
+		   for(unsigned l = 0 ; l < out->nj(); l++)
+   {
+	
+	   if((*temp)(k,l) )
+		   (*out)(k,l) =255;
+	   else
+		   (*out)(k,l) =0;
+   }
+	
+   }
 
-  pro.set_output_val<vil_image_view_base_sptr>(0, temp);
+  pro.set_output_val<vil_image_view_base_sptr>(0, out);
   return true;
 }
 

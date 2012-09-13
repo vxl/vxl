@@ -7,11 +7,12 @@
 
 #include <vil/vil_image_view_base.h>
 #include <bil/bil_raw_image_istream.h>
-
+#include <bil/bil_arf_image_istream.h>
 void vil_register::register_datatype()
 {
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(bil_raw_image_istream_sptr); 
+  REGISTER_DATATYPE(bil_arf_image_istream_sptr); 
 }
 
 void vil_register::register_process()
@@ -62,6 +63,11 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_mean_and_variance_process, "vilImageMeanAndVarianceProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_normalise_process, "vilImageNormaliseProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_debayer_BGGR_to_RGB_process, "vilDebayerBGGRToRGBProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_create_arf_image_istream_process, "bilCreateArfImageIstreamProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_arf_read_frame_process, "bilArfReadFrameProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_arf_seek_frame_process, "bilArfSeekFrameProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_read_CLIF07_data_process, "bilReadCLIF07DataProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_fill_holes_in_regions_process, "vilFillHolesInRegionsProcess");
 
   
 }

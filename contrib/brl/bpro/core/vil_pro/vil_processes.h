@@ -51,4 +51,11 @@ DECLARE_FUNC_CONS(vil_shadow_ridge_detection_process);
 DECLARE_FUNC_CONS(vil_image_mean_and_variance_process);
 DECLARE_FUNC_CONS(vil_image_normalise_process);
 DECLARE_FUNC_CONS(vil_debayer_BGGR_to_RGB_process);
+DECLARE_FUNC_CONS(bil_create_arf_image_istream_process);
+DECLARE_FUNC_CONS(bil_arf_read_frame_process);
+DECLARE_FUNC_CONS(bil_arf_seek_frame_process);
+DECLARE_FUNC_CONS(bil_read_CLIF07_data_process);
+DECLARE_FUNC_CONS(vil_fill_holes_in_regions_process);
+
+
 #endif
