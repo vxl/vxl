@@ -434,7 +434,6 @@ void test_clsfy_geman_mcclure_build()
 
     double test_error2 = clsfy_test_error(*pClassifier, test_set_inputs, testLabels);
     vcl_cout << "Error on Testing set " << test_error2 << vcl_endl;
-    dtest=test_error-test_error;
     TEST("Test error on classifier has improved", test_error2<test_error, true);
     TEST_NEAR("Test error on classifier is good enough", test_error2, 0.0, 0.10);
 
