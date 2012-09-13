@@ -159,11 +159,10 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
            << "HMatrix2D : " << Hs << vcl_endl;
   H->set(Hs.get_matrix());
 
-  int inlier_count = count;
   double std_in = stdev(residualsH);
 
   matches.set(inlier_list, point1_int, point2_int);
-  inlier_count = matches.compute_match_count();
+  int inlier_count = matches.compute_match_count();
   inliers_ = inlier_list;
   residuals_ = residualsH;
   vcl_cerr << "Residuals Variance : " << std_in << vcl_endl
