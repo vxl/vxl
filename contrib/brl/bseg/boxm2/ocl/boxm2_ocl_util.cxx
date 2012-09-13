@@ -308,6 +308,8 @@ vcl_string boxm2_ocl_util::mog_options(vcl_string data_type)
     return "-D MOG_TYPE_16 ";
   else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
     return "-D GAUSS_TYPE_2 ";
+  else if ( data_type == boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix() )
+    return "-D SHORT ";
   else
     return "";
 }
