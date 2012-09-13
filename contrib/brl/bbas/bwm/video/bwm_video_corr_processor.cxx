@@ -294,12 +294,10 @@ interpolate_cameras(vcl_vector<vpgl_perspective_camera<double> > known_cams,
 
   //fill in the known cameras
   unsigned ne = unknown.size();
-  unsigned count = 0;
-  for (unsigned fi = 0; fi<ne; ++fi)
+  for (unsigned fi=0, count=0; fi<ne; ++fi)
     if (!unknown[fi])
       interp_cams[fi]=known_cams[count++];
   //then interpolate the missing cameras
-  count = 0;
   for (unsigned fi = 0; fi<ne; ++fi)
   {
     if (unknown[fi])//row is empty
