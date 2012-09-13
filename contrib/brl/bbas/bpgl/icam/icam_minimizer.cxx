@@ -539,7 +539,6 @@ exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
   vnl_vector_fixed<double, 3> min_trans_rod;
   vgl_vector_3d<double> t, min_trans_trans;
   unsigned ix = 0, iy = 0, iz = 0;
-  int mx = 0, my = 0, mz = 0;
   double x , y, z;
   for (x=box_origin_.x(), ix = 0; ix<nx; x+=step_delta_.x(), ++ix)
     for (y=box_origin_.y(), iy = 0; iy<ny; y+=step_delta_.y(), ++iy)
@@ -556,7 +555,6 @@ exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
           min_trans_cost = cost;
           min_trans_rod = rotr;
           min_trans_overlap = overlap;
-          mx = ix; my = iy; mz = iz;
         }
         if (verbose_) {
         double t_dist = (t-actual_trans_).length();
