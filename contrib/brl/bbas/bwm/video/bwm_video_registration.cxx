@@ -264,7 +264,7 @@ register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
   // the size of the output image is defined by the bounds and the
   // ground sample distance
   double w = bounds->width(), h = bounds->height();
-  w/=world_sample_distance;    h/=world_sample_distance;
+  w/=world_sample_distance;    h/=world_sample_distance; // w&h are never used!  Is this leftover crud or unfinished work?
 
   vnl_matrix_fixed<double,3, 3> t;
   t[0][0]=1;  t[0][1]=0; t[0][2]=-bounds->get_min_x();
