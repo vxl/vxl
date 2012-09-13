@@ -144,13 +144,13 @@ bool mmn_csp_solver::check_for_node_deletions()
                     }
                 }
                 found = found && foundThisNeighbour;
-                if (!found)
+                if (!foundThisNeighbour)
                 {
                     if (verbose_)
                     {
-//                        vcl_cout<<"Found no arc linking labels for node "<<inode<<" label "<<label<<" to node "<<neighIter->first<<"along arc ID "<<arcId<<vcl_endl;
-                        break;
+                        vcl_cout<<"Found no arc linking labels for node "<<inode<<" label "<<label<<" to node "<<neighIter->first<<"along arc ID "<<arcId<<vcl_endl;
                     }
+                    break;
                 }
                 ++neighIter;
             } //loop over all neighbours (pencils)
@@ -199,16 +199,8 @@ bool mmn_csp_solver::check_for_arc_deletions()
             bool found=false;
             if (labelSet1.find(label1)!=labelSet1.end())
             {
-                found=true;
                 vcl_set<unsigned>& labelSet2=node_labels_present_[node2];
-                if (labelSet2.find(label2)!=labelSet2.end())
-                {
-                    found=true;
-                }
-                else
-                {
-                    found=false;
-                }
+                found = labelSet2.find(label2)!=labelSet2.end();
             }
             if (!found) //failed to find at least one of target labels
             {
