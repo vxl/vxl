@@ -107,7 +107,7 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
   }
 
   //cam center, and getblock vis order from point
-  vgl_point_3d<double> cam_center = cam->max_ray_origin();
+  vgl_point_3d<double> cam_center = (cam->ray(cam->cols()/2,cam->rows()/2)).origin();
   vgl_vector_3d<double> cam_dir = cam->max_ray_direction();
   //return get_vis_order_from_pt(cam_center, vgl_box_2d<double>(), dist);
   return get_vis_order_from_ray(cam_center, cam_dir, dist);
