@@ -6,6 +6,7 @@ SET(bil_sources
     bil_math.h
     bil_bounded_image_view.h    bil_bounded_image_view.txx
     bil_raw_image_istream.h     bil_raw_image_istream.cxx
+	bil_arf_image_istream.h     bil_arf_image_istream.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates bil_sources)
