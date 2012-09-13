@@ -114,8 +114,7 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
   vcl_cout << *cam;
   local_min.push_back(*vp);
 #endif
-  double cam_cost=1e10;
-  unsigned idx=-1;
+  double cam_cost=1e99; // will become min cost, so initialise with high value
   for (unsigned i=0; i<local_min.size(); i++) {
     vcl_cout << "Local MINIMA " << i << "--" << local_min[i].view_point() << vcl_endl;
     vpgl_perspective_camera<double>* gt_cam =
@@ -134,7 +133,6 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
     md->refine_camera(dest_img, local_min[i].camera(),params);
     if (md->cost() < cam_cost) {
       cam_cost = md->cost();
-      idx = i;
     }
   }
 }
