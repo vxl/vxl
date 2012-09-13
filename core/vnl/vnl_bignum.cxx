@@ -205,8 +205,8 @@ vnl_bignum::vnl_bignum(long double d)
   }
 }
 
-
-#if 0 // old, original Texas Instruments implementation - PVr
+#if 0 // Old, original Texas Instruments implementation - PVr
+      // Left here for ducumentation purposes only!
 
 static bool is_decimal(const char *s)
 {
@@ -434,11 +434,15 @@ vcl_istream& operator>>(vcl_istream& is, vnl_bignum& x)
 vnl_bignum::vnl_bignum(const vnl_bignum& b)
 : count(b.count), sign(b.sign)
 {
-  this->data = b.data ? new Data[b.count] : 0;  // Allocate data if necessary
-  for (Counter i = 0; i < this->count; ++i)     // Copy b data
-    this->data[i] = b.data[i];
+  if (b.data) {
+    this->data = new Data[b.count];            // Allocate data
+    for (Counter i = 0; i < this->count; ++i)  // Copy b data
+      this->data[i] = b.data[i];
+  }
+  else {
+    this->data = 0;
+  }
 }
-
 
 //: Frees space for vnl_bignum.
 
@@ -472,7 +476,6 @@ vnl_bignum vnl_bignum::operator-() const
   return neg;
 }
 
-
 //: Prefix increment. Increments a vnl_bignum by 1, and returns it.
 
 vnl_bignum& vnl_bignum::operator++()
@@ -491,7 +494,6 @@ vnl_bignum& vnl_bignum::operator++()
 
   return *this;
 }
-
 
 //: Prefix decrement. Decrements a vnl_bignum by 1, and returns it.
 
@@ -541,7 +543,6 @@ vnl_bignum vnl_bignum::operator+(const vnl_bignum& b) const
   return sum;                           // shallow swap on return
 }
 
-
 //: Multiplies this with a vnl_bignum
 
 vnl_bignum& vnl_bignum::operator*=(const vnl_bignum& b)
@@ -562,7 +563,6 @@ vnl_bignum& vnl_bignum::operator*=(const vnl_bignum& b)
   prod.trim();                                  //   trim excess data and ret.
   return (*this)=prod;
 }
-
 
 //: Divides this by a vnl_bignum
 
@@ -597,7 +597,6 @@ vnl_bignum& vnl_bignum::operator%=(const vnl_bignum& b)
   return (*this) = remain;     // shallow swap on return
 }
 
-
 //: Shifts bignum to the left l digits.
 
 vnl_bignum vnl_bignum::operator<<(int l) const
@@ -612,7 +611,6 @@ vnl_bignum vnl_bignum::operator<<(int l) const
   else                                  // otherwise
     return left_shift(*this,l);         //   do a left shift
 }
-
 
 //: Shifts bignum to the right l digits.
 
@@ -629,7 +627,6 @@ vnl_bignum vnl_bignum::operator>>(int l) const
     return right_shift(*this,l);        //   do a right shift
 }
 
-
 //: Two vnl_bignums are equal if and only if they have the same integer representation.
 
 bool vnl_bignum::operator==(const vnl_bignum& rhs) const
@@ -643,7 +640,6 @@ bool vnl_bignum::operator==(const vnl_bignum& rhs) const
   return true;                                    // Yes. Return ==
 }
 
-
 //: Compares two vnl_bignums.
 
 bool vnl_bignum::operator<(const vnl_bignum& rhs) const
@@ -655,7 +651,6 @@ bool vnl_bignum::operator<(const vnl_bignum& rhs) const
   else                                          // Both signs == -1
     return magnitude_cmp(*this,rhs) > 0;        // this must be larger
 }
-
 
 //: Formatted output for bignum.
 
@@ -684,6 +679,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const vnl_bignum& b)
 }
 
 //: Convert the number to a decimal representation in a string.
+
 vcl_string& vnl_bignum_to_string(vcl_string& s, const vnl_bignum& b)
 {
   s.erase();
@@ -707,6 +703,7 @@ vcl_string& vnl_bignum_to_string(vcl_string& s, const vnl_bignum& b)
 }
 
 //: Convert the number from a decimal representation in a string.
+
 vnl_bignum& vnl_bignum_from_string(vnl_bignum& b, const vcl_string& s)
 {
   // decimal:     "^ *[-+]?[1-9][0-9]*$"
@@ -721,16 +718,16 @@ vnl_bignum& vnl_bignum_from_string(vnl_bignum& b, const vcl_string& s)
   return b;
 }
 
-
 //: Implicit conversion from a vnl_bignum to a short.
+
 vnl_bignum::operator short() const
 {
   int j = this->operator int();
   return (short)j;
 }
 
-
 //: Implicit conversion from a vnl_bignum to an int.
+
 vnl_bignum::operator int() const
 {
   int j = 0;
@@ -739,8 +736,8 @@ vnl_bignum::operator int() const
   return (this->sign < 0) ? -j : j;
 }
 
-
 //: Implicit conversion from a vnl_bignum to a long.
+
 vnl_bignum::operator long() const
 {
   long l = 0;
@@ -749,8 +746,8 @@ vnl_bignum::operator long() const
   return (this->sign < 0) ? -l : l;
 }
 
-
 //: Implicit conversion from a vnl_bignum to a float.
+
 vnl_bignum::operator float() const
 {
   float f = 0.0f;
@@ -759,7 +756,6 @@ vnl_bignum::operator float() const
   if (this->is_infinity()) f = vcl_numeric_limits<float>::infinity();
   return (this->sign < 0) ? -f : f;
 }
-
 
 //: Implicit conversion from a vnl_bignum to a double.
 
@@ -810,7 +806,6 @@ void vnl_bignum::dump(vcl_ostream& os) const
   os << "}}\n";                         // close brackets
 }
 
-
 //: Converts decimal string to a vnl_bignum.
 
 int vnl_bignum::dtoBigNum(const char *s)
@@ -840,7 +835,6 @@ void vnl_bignum::exptoBigNum(const char *s)
     *this = (*this) * 10L;              // power
 }
 
-
 //: convert hex character to integer hex value (ASCII or EBCDIC)
 // - Inputs:  character representation of a hex number
 // - Outputs: integer value of the hex number
@@ -867,7 +861,6 @@ void vnl_bignum::xtoBigNum(const char *s)
       vnl_bignum(long(ctox(s[len++]))); //   digit and add next digit
   }
 }
-
 
 //: convert octal string to vnl_bignum
 
@@ -908,7 +901,6 @@ void vnl_bignum::resize(short new_count)
   this->count = new_count;              // Save new count
 }
 
-
 //: trim non-infinite vnl_bignum of excess data allotment
 
 vnl_bignum& vnl_bignum::trim()
@@ -926,7 +918,6 @@ vnl_bignum& vnl_bignum::trim()
   }
   return *this;                         // return reference to vnl_bignum
 }
-
 
 //: add two non-infinite vnl_bignum values and save their sum
 
@@ -964,6 +955,7 @@ void add(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum)
 }
 
 //: Add 1 to bnum (unsigned, non-infinite)
+
 void increment(vnl_bignum& bnum)
 {
   Counter i = 0;
@@ -980,7 +972,6 @@ void increment(vnl_bignum& bnum)
     bnum.data[bnum.count-1] = 1;
   }
 }
-
 
 //: subtract bmin from bmax (unsigned, non-infinite), result in diff
 
@@ -1004,8 +995,8 @@ void subtract(const vnl_bignum& bmax, const vnl_bignum& bmin, vnl_bignum& diff)
   diff.trim();                                  // Done. Now trim excess data
 }
 
-
 //: Subtract 1 from bnum (unsigned, non-infinite, non-zero)
+
 void decrement(vnl_bignum& bnum)
 {
   Counter i = 0;
@@ -1019,7 +1010,6 @@ void decrement(vnl_bignum& bnum)
   bnum.trim();                                  // Done. Now trim excess data
   if (bnum.count==0) bnum.sign=+1;              // Re-establish sign invariant
 }
-
 
 //: compare absolute values of two vnl_bignums
 // Outputs:  result of comparison:  -1 if abs(b1) < abs(b2)
@@ -1042,7 +1032,6 @@ int magnitude_cmp(const vnl_bignum& b1, const vnl_bignum& b2)
   }                                     // No data, or all elements same
   return 0;                             //  so must be equal
 }
-
 
 //: multiply a non-infinite vnl_bignum by a "single digit"
 // - Inputs:  vnl_bignum reference, single word multiplier, reference to the product,
@@ -1095,7 +1084,6 @@ Data normalize(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& u, vnl_bi
   return d;                                     // return normalization factor
 }
 
-
 //: divide a vnl_bignum by a "single digit"
 // (Refer to Knuth, V.2, Section 4.3.2, exercise 16 for details.
 //  A digit here is one data element in the radix 2**2.)
@@ -1113,7 +1101,6 @@ void divide_aux(const vnl_bignum& b1, Data d, vnl_bignum& q, Data& r)
     r = Data(temp % d);                         // calculate new remainder
   }
 }
-
 
 //: estimate next dividend
 // (Refer to Knuth, V.2, Section 4.3.1, Algorithm D for details.
@@ -1162,7 +1149,6 @@ Data estimate_q_hat(const vnl_bignum& u, const vnl_bignum& v, Counter j)
   }                                     // Loop again
   return q_hat;                         // Return estimate
 }
-
 
 //: calculate u - v*q_hat
 // (Refer to Knuth, V. 2, Section 4.3.1, Algorithm D for details.
@@ -1222,7 +1208,6 @@ Data multiply_subtract(vnl_bignum& u, const vnl_bignum& v, Data q_hat, Counter j
   }
   return q_hat;                         // return corrected q_hat
 }
-
 
 //: divide b2 into b1, getting quotient q and remainder r.
 // (Refer to Knuth, V.2, Section 4.3.1, Algorithm D for details.
@@ -1285,7 +1270,6 @@ void divide(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignu
   q.sign = r.sign = b1.sign * b2.sign;  // Calculate signs
 }
 
-
 //: left shift (arithmetic) non-infinite vnl_bignum by positive number.
 // - Inputs:  reference to vnl_bignum, positive shift value
 // - Outputs: vnl_bignum, multiplied by the corresponding power of two
@@ -1323,7 +1307,6 @@ vnl_bignum left_shift(const vnl_bignum& b1, int l)
   vnl_bignum& result = *((vnl_bignum*) &rslt);// same physical object
   return result;                              // shallow swap on return
 }
-
 
 //: right shift (arithmetic) non-infinite vnl_bignum by positive number.
 // - Inputs:  reference to vnl_bignum, positive shift value
