@@ -74,7 +74,7 @@ static void vbl_test_local_minima_2d()
   // lower middle
   v2r[nr-1][nc/2] = 0.05;
   vbl_array_2d<double> minima2r = vbl_local_minima(v2r);
-  success = minima2r.rows() > 0;
+  TEST("vbl_local_minima rows", minima2r.rows() > 0, true);
   for (unsigned r = 0; r<minima2r.rows(); ++r) {
     for (unsigned c = 0; c<minima2r.cols(); ++c)
       vcl_cout << minima2r[r][c] << ' ';
