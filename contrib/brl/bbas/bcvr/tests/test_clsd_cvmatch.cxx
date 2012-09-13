@@ -33,12 +33,10 @@ MAIN_ARGS(test_clsd_cvmatch)
   clsd_cvmatch->setStretchCostFlag(false);
   clsd_cvmatch->Match();
 
-  double minCost=1E10;
-  int minIndex;
-  for (int count=0;count<curve_2d1->size();count++){
-    if (minCost>clsd_cvmatch->finalCost(count)){
+  double minCost=1e99; // initialise with high value
+  for (int count=0;count<curve_2d1->size();count++) {
+    if (minCost>clsd_cvmatch->finalCost(count)) {
       minCost=clsd_cvmatch->finalCost(count);
-      minIndex=count;
     }
   }
 
