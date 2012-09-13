@@ -158,8 +158,6 @@ inline void vil3d_convert_stretch_range_limited(const vil3d_image_view<inP>& src
                                                 const double dest_lo,
                                                 const double dest_hi)
 {
-  double b = 0.0;
-
   double ddest = dest_hi - dest_lo;
   double dsrc = static_cast<double>(src_hi - src_lo);
   double dds = ddest / dsrc;
@@ -340,7 +338,7 @@ inline vil3d_image_view_base_sptr vil3d_convert_to_n_planes(
     /* try to do it quickly 1 */ \
     if (src_ref.nplanes() >= n_planes)  /* reduce number of planes */ \
       return vil3d_image_view_base_sptr( new vil3d_image_view<T >( \
-          vil3d_planes(vil3d_image_view<T > (src),0,1,n_planes) )); \
+        vil3d_planes(vil3d_image_view<T > (src),0,1,n_planes) )); \
     else { /* expand number of planes with copying */ \
       vil3d_image_view_base_sptr dest = new vil3d_image_view<T >( \
         src_ref.ni(), src_ref.nj(), src_ref.nk(), n_planes); \
