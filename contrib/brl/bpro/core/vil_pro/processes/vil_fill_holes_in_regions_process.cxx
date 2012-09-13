@@ -44,64 +44,59 @@ bool vil_fill_holes_in_regions_process(bprb_func_process& pro)
 
   if (vil_image_view<unsigned char> *view=dynamic_cast<vil_image_view<unsigned char>* > (in_img_ptr.ptr()))
   {
-	  unsigned int ni = view->ni();
-	  unsigned int nj = view->nj();
+    unsigned int ni = view->ni();
+    unsigned int nj = view->nj();
 
 
-	  for(unsigned k = 0; k< ni; k++)
-	  {
-		  if (k % 10 == 0)
-			  vcl_cout<<k<<vcl_endl;
-		  for(unsigned l = 0; l< nj; l++)
-		  {
-			  if((*view)(k,l) == 0)
-			  {
-				  unsigned char labels[256]={0};
+    for (unsigned k = 0; k< ni; k++)
+    {
+      if (k % 10 == 0)
+        vcl_cout<<k<<vcl_endl;
+      for (unsigned l = 0; l< nj; l++)
+      {
+        if ((*view)(k,l) == 0)
+        {
+          unsigned char labels[256]={0};
 
-				  for(unsigned int s = k; s >= vcl_max((int)k-10,0) ; s-- )
-					  if( (*view)(s,l) > 0 )
-					  {
-						  if((*view)(s,l)  < 256)
-						  labels[(int ) ( (*view)(s,l) ) ]++;
-						  break;
-					  }
-				  for(unsigned int s = k; s < vcl_min((int)k+10,(int)ni) ; s++ )
-					if( (*view)(s,l) > 0 )
-					{
-						if((*view)(s,l)  < 256)
-							labels[(int ) ( (*view)(s,l) ) ]++;
-						break;
-					}
-					int lmax = vcl_max((int)l-10,(int)0);
-					for(unsigned int s = l; s > lmax  ; s-- )
-					if( (*view)(k,s) > 0 )
-					{
-						if((*view)(k,s)  < 256)
-							labels[(int ) ( (*view)(k,s) ) ]++; 
-						break;
-					}
-					for(unsigned int s = l; s < vcl_min((int)l+10,(int)nj) ; s++ )
-					if( (*view)(k,s) > 0 )
-					{
-						if((*view)(k,s)  < 256)
-						labels[(int)  (*view)(k,s) ]++; 
-						break;
-					}				
+          for (unsigned int s = k; (int)s >= vcl_max((int)k-10,0) ; s-- )
+            if ( (*view)(s,l) > 0 )
+            {
+              labels[(int)((*view)(s,l))]++;
+              break;
+            }
+          for (unsigned int s = k; (int)s < vcl_min((int)k+10,(int)ni) ; s++ )
+          if ( (*view)(s,l) > 0 )
+          {
+            labels[(int)((*view)(s,l))]++;
+            break;
+          }
+          unsigned int lmax = (unsigned int)vcl_max((int)l-10,(int)0);
+          for (unsigned int s = l; s > lmax  ; s-- )
+          if ( (*view)(k,s) > 0 )
+          {
+            labels[(int)((*view)(k,s))]++;
+            break;
+          }
+          for (unsigned int s = l; (int)s < vcl_min((int)l+10,(int)nj) ; s++ )
+          if ( (*view)(k,s) > 0 )
+          {
+            labels[(int)((*view)(k,s))]++;
+            break;
+          }
 
-					for(unsigned int s = 0; s <256; s++)
-					{
-						if(labels[s] >= 3)
-						{
-							(*view)(k,l) = s;
-							break;
-						}
-					}
-				  
-			  }
-		  }
-	  }
-	  pro.set_output_val<vil_image_view_base_sptr>(0, view);
-	  return true;
+          for (unsigned int s = 0; s <256; s++)
+          {
+            if (labels[s] >= 3)
+            {
+              (*view)(k,l) = s;
+              break;
+            }
+          }
+        }
+      }
+    }
+    pro.set_output_val<vil_image_view_base_sptr>(0, view);
+    return true;
   }
 
   vcl_cerr<<"Error! Require a Byte image\n";

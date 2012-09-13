@@ -39,13 +39,10 @@ class boxm2_bounding_box_parser : public expatpp
 
   void init_params();
 
-	
   vcl_string dataset_;
   int entity_id_;
   int volume_id_;
   double height_;
-
-
 
   int version_;
 };

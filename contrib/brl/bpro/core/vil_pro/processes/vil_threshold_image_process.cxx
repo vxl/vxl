@@ -14,7 +14,7 @@ bool vil_threshold_image_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  
+  input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("float");   // threshold
   input_types.push_back("bool");   // whether to threshold above or below, if true thresholds above, i.e. dest(i,j) = true if src(i,j) >= threshold
   ok = pro.set_input_types(input_types);
@@ -52,23 +52,22 @@ bool vil_threshold_image_process(bprb_func_process& pro)
   if (thres_above) {
     //: Apply threshold such that dest(i,j,p)=true if src(i,j,p)>=t
     vil_threshold_above(fimg, *temp, thres);
-  } else {
+  }
+  else {
     //: Apply threshold such that dest(i,j,p)=true if src(i,j,p)<=t
     vil_threshold_below(fimg, *temp, thres);
   }
-   vil_image_view<unsigned char>* out = new vil_image_view<unsigned char>(temp->ni(),temp->nj());
-   for(unsigned k = 0 ; k < out->ni(); k++)
-   {
-		   for(unsigned l = 0 ; l < out->nj(); l++)
-   {
-	
-	   if((*temp)(k,l) )
-		   (*out)(k,l) =255;
-	   else
-		   (*out)(k,l) =0;
-   }
-	
-   }
+  vil_image_view<unsigned char>* out = new vil_image_view<unsigned char>(temp->ni(),temp->nj());
+  for (unsigned k = 0 ; k < out->ni(); k++)
+  {
+    for (unsigned l = 0 ; l < out->nj(); l++)
+    {
+      if ((*temp)(k,l) )
+        (*out)(k,l) =255;
+      else
+        (*out)(k,l) =0;
+    }
+  }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out);
   return true;

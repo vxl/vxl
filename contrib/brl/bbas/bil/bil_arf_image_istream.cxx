@@ -18,21 +18,22 @@
 #include <vil/vil_memory_chunk.h>
 
 //--------------------------------------------------------------------------------
-void endian_swap(unsigned int& x) {
- 
-        // Int is 4 bytes on this machine
- 
-        x = (x >> 24) |
-        ((x<<8) & 0x00FF0000) |
-        ((x>>8) & 0x0000FF00) |
-        (x<<24);
+void endian_swap(unsigned int& x)
+{
+  // Int is 4 bytes on this machine
+
+  x = (x >> 24) |
+  ((x<<8) & 0x00FF0000) |
+  ((x>>8) & 0x0000FF00) |
+  (x<<24);
 }
-void endian_swap_short(unsigned short& x) {
- 
-        // Int is 4 bytes on this machine
-        x = (x >> 8) |((x<<8) & 0x0000FF00) ;
-        
+
+void endian_swap_short(unsigned short& x)
+{
+  // Int is 4 bytes on this machine
+  x = (x >> 8) |((x<<8) & 0x0000FF00) ;
 }
+
 //: The initial frame index
 // \note the initial frame index is invalid until advance() is called
 static const unsigned int INIT_INDEX = unsigned(-1);
@@ -75,7 +76,7 @@ open(const vcl_string& rawFile)
 
   raw_.read( (char*) &magic_num, sizeof(magic_num) );
   raw_.read( (char*) &version, sizeof(version) );
-  raw_.read( (char*) &nj, sizeof(nj) ); 
+  raw_.read( (char*) &nj, sizeof(nj) );
   raw_.read( (char*) &ni, sizeof(ni) );
   raw_.read( (char*) &arf_image_type, sizeof(arf_image_type) );
   raw_.read( (char*) &num_images, sizeof(num_images) );
@@ -91,25 +92,25 @@ open(const vcl_string& rawFile)
   endian_swap(image_offset);
   endian_swap(subheader_flags);
 
-  //vj: modification 
+  //vj: modification
   vcl_cout<<"Raw file header:\n"
-		  <<"Magic Num "<<magic_num<<"\n"
-		  <<"version "<<version<<"\n"
+          <<"Magic Num "<<magic_num<<'\n'
+          <<"version "<<version<<'\n'
           <<"size: "<<ni<<','<<nj<<'\n'
           <<"pixel:"<<arf_image_type<<'\n'
           <<"#fram:"<<num_images<<'\n'
-		  <<"Image Offset "<<image_offset<<'\n'
-		  <<"Subheader "<<subheader_flags<<vcl_endl;
+          <<"Image Offset "<<image_offset<<'\n'
+          <<"Subheader "<<subheader_flags<<vcl_endl;
 
   //store in member vars
   ni_ = ni;
   nj_ = nj;
   num_frames_ = (unsigned int)num_images; // possible overflow...
-  
+
   if (arf_image_type==5)
   {
     format_ = VIDL_PIXEL_FORMAT_MONO_16;
-	pixel_size_ = 16;
+    pixel_size_ = 16;
   }
   image_offset_ = image_offset;
 
@@ -143,8 +144,8 @@ advance()
   current_frame_ = NULL;
   if (index_ < num_frames_ || index_ == INIT_INDEX )
     return ++index_ < num_frames_;
-
-  return false;
+  else
+    return false;
 }
 
 
@@ -167,10 +168,10 @@ bil_arf_image_istream::current_frame()
     {
       //calc image size, seek to offset
       unsigned int imgSize = ni_*nj_*pixel_size_/8;
-	  	  //:  vj Modification
+      //  vj Modification
       long long loc = image_offset_+((long long) index_ -1)* ( (long long)imgSize +40 );
 
-	  vcl_cout<<"location "<<loc <<" "<<index_<<vcl_endl;
+      vcl_cout<<"location "<<loc <<' '<<index_<<vcl_endl;
       raw_.seekg(loc, vcl_ios::beg);
 
       //allocate vil memory chunk
@@ -181,7 +182,7 @@ bil_arf_image_istream::current_frame()
         raw_.read( (char*) mem_chunk->data(), imgSize );
         current_frame_ = new vil_image_view<vxl_byte>(mem_chunk, (vxl_byte*) mem_chunk->data(), ni_, nj_, 3, 3, 3*ni_, 1);
       }
-      else if (pixel_size_==8){
+      else if (pixel_size_==8) {
         raw_.read( (char*) mem_chunk->data(), imgSize );
         current_frame_ = new vil_image_view<vxl_byte>(mem_chunk, (vxl_byte*) mem_chunk->data(), ni_, nj_, 1, 1, ni_, ni_*nj_);
       }
@@ -189,18 +190,17 @@ bil_arf_image_istream::current_frame()
         raw_.read( (char*) mem_chunk->data(), imgSize );
         vil_image_view<unsigned short> * current_frame = new vil_image_view<unsigned short>(mem_chunk, (unsigned short*) mem_chunk->data(), ni_, nj_, 1, 1, ni_, ni_*nj_);
 
-		for(unsigned i = 0 ; i < current_frame->ni(); i++)
-		{
-			for(unsigned j = 0 ; j < current_frame->nj(); j++)
-			{
-				unsigned short x = (*current_frame)(i,j) ;
-				endian_swap_short(x);
-				(*current_frame)(i,j) = x;
-			}
-		}
-		current_frame_ = current_frame ; 
-	  }
-
+        for (unsigned i = 0 ; i < current_frame->ni(); i++)
+        {
+          for (unsigned j = 0 ; j < current_frame->nj(); j++)
+          {
+            unsigned short x = (*current_frame)(i,j) ;
+            endian_swap_short(x);
+            (*current_frame)(i,j) = x;
+          }
+        }
+        current_frame_ = current_frame ;
+      }
     }
 
     return current_frame_;
