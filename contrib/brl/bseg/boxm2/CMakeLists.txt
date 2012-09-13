@@ -25,6 +25,7 @@ IF(EXPAT_FOUND)
     SET(boxm2_sources ${boxm2_sources}
         boxm2_scene.h                 boxm2_scene.cxx
         boxm2_scene_parser.h          boxm2_scene_parser.cxx
+		boxm2_bounding_box_parser.h   boxm2_bounding_box_parser.cxx
        )
 
 ENDIF(EXPAT_FOUND)
