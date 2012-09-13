@@ -28,7 +28,7 @@ inline double parabolic_min(double fa, double fb, double fc)
   double df2=fc-fb;
   double d=df1+df2;
   if (vcl_fabs(d)<1e-6) return 0.0;
-  return 0.5*(df1-df2)/d;
+  else                  return 0.5*(df1-df2)/d;
 }
 
 class mfpf_pf_cost : public vnl_cost_function
@@ -252,7 +252,6 @@ double mfpf_point_finder::search(const vimt_image_2d_of<float>& image,
   }
 
   double best_fit=9e99;
-  int best_iA,best_is;
   vgl_point_2d<double> p1;
 
   vgl_vector_2d<double> v(-u.y(),u.x());
@@ -268,8 +267,6 @@ double mfpf_point_finder::search(const vimt_image_2d_of<float>& image,
       double f = search_one_pose(image,p,uA,p1);
       if (f<best_fit)
       {
-        best_iA=iA;
-        best_is=is;
         best_fit = f;
         new_u = uA;
         new_p = p1;
@@ -297,8 +294,7 @@ double mfpf_point_finder::search_with_opt(
     return search_one_pose_with_opt(image,p,u,new_p);
   }
 
-  double best_fit=9e99;
-  int best_iA,best_is;
+  double best_fit=1e99; // initialise to high value; will become min(f)
   vgl_point_2d<double> p1;
 
   vgl_vector_2d<double> v(-u.y(),u.x());
@@ -314,8 +310,6 @@ double mfpf_point_finder::search_with_opt(
       double f = search_one_pose_with_opt(image,p,uA,p1);
       if (f<best_fit)
       {
-        best_iA=iA;
-        best_is=is;
         best_fit = f;
         new_u = uA;
         new_p = p1;
@@ -455,12 +449,11 @@ void mfpf_point_finder::multi_search_one_pose(
 //  one at each scale and angle near to the optima.  Thus the
 //  poses defined in pts should be further refined to eliminate
 //  such multiple responses.
-void mfpf_point_finder::grid_search(
-                          const vimt_image_2d_of<float>& image,
-                          const vgl_point_2d<double>& p,
-                          const vgl_vector_2d<double>& u,
-                          vcl_vector<mfpf_pose>& pts,
-                          vcl_vector<double>& fit)
+void mfpf_point_finder::grid_search(const vimt_image_2d_of<float>& image,
+                                    const vgl_point_2d<double>& p,
+                                    const vgl_vector_2d<double>& u,
+                                    vcl_vector<mfpf_pose>& pts,
+                                    vcl_vector<double>& fit)
 {
   pts.resize(0);
   fit.resize(0);
@@ -497,12 +490,11 @@ void mfpf_point_finder::grid_search(
 //  one at each scale and angle near to the optima.  Thus the
 //  poses defined in pts should be further refined to eliminate
 //  such multiple responses.
-void mfpf_point_finder::multi_search(
-                          const vimt_image_2d_of<float>& image,
-                          const vgl_point_2d<double>& p,
-                          const vgl_vector_2d<double>& u,
-                          vcl_vector<mfpf_pose>& poses,
-                          vcl_vector<double>& fits)
+void mfpf_point_finder::multi_search(const vimt_image_2d_of<float>& image,
+                                     const vgl_point_2d<double>& p,
+                                     const vgl_vector_2d<double>& u,
+                                     vcl_vector<mfpf_pose>& poses,
+                                     vcl_vector<double>& fits)
 {
   poses.resize(0);
   fits.resize(0);
@@ -590,9 +582,9 @@ unsigned mfpf_point_finder::image_level(const mfpf_pose& pose,
 
   // Round level down, to work with slightly higher res. image.
   int level = int(vcl_log(rel_size0)/log_step);
-  if (level<im_pyr.lo()) return im_pyr.lo();
-  if (level>im_pyr.hi()) return im_pyr.hi();
-  return level;
+  if      (level<im_pyr.lo()) return im_pyr.lo();
+  else if (level>im_pyr.hi()) return im_pyr.hi();
+  else                        return level;
 }
 
 //: Return true if modelled regions at pose1 and pose2 overlap
@@ -634,14 +626,14 @@ void mfpf_point_finder::aligned_bounding_box(const mfpf_pose& pose,
 //: Return true if base class parameters are the same in pf
 bool mfpf_point_finder::base_equality(const mfpf_point_finder& pf) const
 {
-  if (search_ni_!=pf.search_ni_) return false;
-  if (search_nj_!=pf.search_nj_) return false;
-  if (nA_!=pf.nA_) return false;
-  if (ns_!=pf.ns_) return false;
-  if (vcl_fabs(dA_-pf.dA_)>1e-6) return false;
-  if (vcl_fabs(ds_-pf.ds_)>1e-6) return false;
-  if (vcl_fabs(step_size_-pf.step_size_)>1e-6) return false;
-  return true;
+  return
+    search_ni_==pf.search_ni_ &&
+    search_nj_==pf.search_nj_ &&
+    nA_==pf.nA_ &&
+    ns_==pf.ns_ &&
+    vcl_fabs(dA_-pf.dA_)<=1e-6 &&
+    vcl_fabs(ds_-pf.ds_)<=1e-6 &&
+    vcl_fabs(step_size_-pf.step_size_)<=1e-6;
 }
 
 
@@ -695,7 +687,7 @@ void mfpf_point_finder::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,version);
   switch (version)
   {
-    case (1):
+    case 1:
       vsl_b_read(bfs,step_size_);
       vsl_b_read(bfs,search_ni_);
       vsl_b_read(bfs,search_nj_);
@@ -708,7 +700,7 @@ void mfpf_point_finder::b_read(vsl_b_istream& bfs)
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
+      break;
   }
 }
 
@@ -733,7 +725,7 @@ void vsl_add_to_binary_loader(const mfpf_point_finder& b)
 
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_point_finder& b)
 {
-    b.b_write(bfs);
+  b.b_write(bfs);
 }
 
 //=======================================================================
@@ -742,7 +734,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mfpf_point_finder& b)
 
 void vsl_b_read(vsl_b_istream& bfs, mfpf_point_finder& b)
 {
-    b.b_read(bfs);
+  b.b_read(bfs);
 }
 
 //=======================================================================
