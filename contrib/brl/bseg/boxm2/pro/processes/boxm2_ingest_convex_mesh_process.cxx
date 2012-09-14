@@ -55,7 +55,7 @@ bool boxm2_ingest_convex_mesh_process_cons(bprb_func_process& pro)
   input_types_[i++] = "boxm2_scene_sptr";  // scene
   input_types_[i++] = "boxm2_cache_sptr";  // scene
   input_types_[i++] = "vcl_string";        // input ply file
-  input_types_[i++] = "int";         // label id
+  input_types_[i++] = "int";               // label id
   input_types_[i++] = "vcl_string";        // Name of the category
 
   // process has no outputs
@@ -68,7 +68,7 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_ingest_convex_mesh_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
 
@@ -98,85 +98,85 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
         {
           bmsh3d_vertex* v = bmesh->_new_vertex();
 
-          v->set_pt (vgl_point_3d<double>(volume_iter->second[j].x(),
-                            volume_iter->second[j].y(),
-                          -100.0));
-          bmesh->_add_vertex (v);
+          v->set_pt(vgl_point_3d<double>(volume_iter->second[j].x(),
+                                         volume_iter->second[j].y(),
+                                         -100.0));
+          bmesh->_add_vertex(v);
         }
-        for ( unsigned j = 0 ; j <volume_iter->second.size(); j++)
+        for (unsigned j = 0 ; j <volume_iter->second.size(); ++j)
         {
-          bmsh3d_vertex* v = bmesh->_new_vertex ();
+          bmsh3d_vertex* v = bmesh->_new_vertex();
           //vgl_point_3d<double> newpt(volume_iter->second[j].x(),
           //              volume_iter->second[j].y(),
           //              volume_iter->second[j].z()+parser.heights_[entity_iter->first][volume_iter->first]);
-          //v->set_pt (newpt);
-          v->set_pt (vgl_point_3d<double>(volume_iter->second[j].x(),
-                          volume_iter->second[j].y(),
-                          600.0));
-          bmesh->_add_vertex (v);
+          //v->set_pt(newpt);
+          v->set_pt(vgl_point_3d<double>(volume_iter->second[j].x(),
+                                         volume_iter->second[j].y(),
+                                         600.0));
+          bmesh->_add_vertex(v);
         }
         // 01,2,3
-        bmsh3d_face* F0 = bmesh->_new_face ();
-        bmsh3d_edge* e01 = bmesh->add_new_edge (bmesh->vertexmap(0), bmesh->vertexmap(1));
-        bmsh3d_edge* e12 = bmesh->add_new_edge (bmesh->vertexmap(1), bmesh->vertexmap(2));
-        bmsh3d_edge* e23 = bmesh->add_new_edge (bmesh->vertexmap(2), bmesh->vertexmap(3));
-        bmsh3d_edge* e30 = bmesh->add_new_edge (bmesh->vertexmap(3), bmesh->vertexmap(0));
+        bmsh3d_face* F0 = bmesh->_new_face();
+        bmsh3d_edge* e01 = bmesh->add_new_edge(bmesh->vertexmap(0), bmesh->vertexmap(1));
+        bmsh3d_edge* e12 = bmesh->add_new_edge(bmesh->vertexmap(1), bmesh->vertexmap(2));
+        bmsh3d_edge* e23 = bmesh->add_new_edge(bmesh->vertexmap(2), bmesh->vertexmap(3));
+        bmsh3d_edge* e30 = bmesh->add_new_edge(bmesh->vertexmap(3), bmesh->vertexmap(0));
 
         _connect_F_E_end(F0,e01);
         _connect_F_E_end(F0,e12);
         _connect_F_E_end(F0,e23);
         _connect_F_E_end(F0,e30);
 
-        bmesh->_add_face (F0);
+        bmesh->_add_face(F0);
         // 4,5,6,7
-        bmsh3d_face* F1 = bmesh->_new_face ();
-        bmsh3d_edge* e45 = bmesh->add_new_edge (bmesh->vertexmap(4), bmesh->vertexmap(5));
-        bmsh3d_edge* e56 = bmesh->add_new_edge (bmesh->vertexmap(5), bmesh->vertexmap(6));
-        bmsh3d_edge* e67 = bmesh->add_new_edge (bmesh->vertexmap(6), bmesh->vertexmap(7));
-        bmsh3d_edge* e74 = bmesh->add_new_edge (bmesh->vertexmap(7), bmesh->vertexmap(4));
+        bmsh3d_face* F1 = bmesh->_new_face();
+        bmsh3d_edge* e45 = bmesh->add_new_edge(bmesh->vertexmap(4), bmesh->vertexmap(5));
+        bmsh3d_edge* e56 = bmesh->add_new_edge(bmesh->vertexmap(5), bmesh->vertexmap(6));
+        bmsh3d_edge* e67 = bmesh->add_new_edge(bmesh->vertexmap(6), bmesh->vertexmap(7));
+        bmsh3d_edge* e74 = bmesh->add_new_edge(bmesh->vertexmap(7), bmesh->vertexmap(4));
 
         _connect_F_E_end(F1,e45);
         _connect_F_E_end(F1,e56);
         _connect_F_E_end(F1,e67);
         _connect_F_E_end(F1,e74);
-        bmesh->_add_face (F1);
+        bmesh->_add_face(F1);
         // 0,4,7,3
-        bmsh3d_face* F2 = bmesh->_new_face ();
-        bmsh3d_edge *e04 = bmesh->add_new_edge (bmesh->vertexmap(0), bmesh->vertexmap(4));
-        bmsh3d_edge *e73 = bmesh->add_new_edge (bmesh->vertexmap(7), bmesh->vertexmap(3));
+        bmsh3d_face* F2 = bmesh->_new_face();
+        bmsh3d_edge *e04 = bmesh->add_new_edge(bmesh->vertexmap(0), bmesh->vertexmap(4));
+        bmsh3d_edge *e73 = bmesh->add_new_edge(bmesh->vertexmap(7), bmesh->vertexmap(3));
         _connect_F_E_end(F2,e04);
         _connect_F_E_end(F2,e74);
         _connect_F_E_end(F2,e73);
         _connect_F_E_end(F2,e30);
-        bmesh->_add_face (F2);
+        bmesh->_add_face(F2);
 
         // 2,6,7,3
-        bmsh3d_face* F3 = bmesh->_new_face ();
-        bmsh3d_edge *e26 = bmesh->add_new_edge (bmesh->vertexmap(2), bmesh->vertexmap(6));
+        bmsh3d_face* F3 = bmesh->_new_face();
+        bmsh3d_edge *e26 = bmesh->add_new_edge(bmesh->vertexmap(2), bmesh->vertexmap(6));
         _connect_F_E_end(F3,e26);
         _connect_F_E_end(F3,e67);
         _connect_F_E_end(F3,e73);
         _connect_F_E_end(F3,e23);
-        bmesh->_add_face (F3);
+        bmesh->_add_face(F3);
 
         // 1,5,6,2
-        bmsh3d_face* F4 = bmesh->_new_face ();
-        bmsh3d_edge *e15 = bmesh->add_new_edge (bmesh->vertexmap(1), bmesh->vertexmap(5));
+        bmsh3d_face* F4 = bmesh->_new_face();
+        bmsh3d_edge *e15 = bmesh->add_new_edge(bmesh->vertexmap(1), bmesh->vertexmap(5));
         _connect_F_E_end(F4,e15);
         _connect_F_E_end(F4,e56);
         _connect_F_E_end(F4,e26);
         _connect_F_E_end(F4,e12);
-        bmesh->_add_face (F4);
+        bmesh->_add_face(F4);
 
         //0,1,5,4
-        bmsh3d_face* F5 = bmesh->_new_face ();
+        bmsh3d_face* F5 = bmesh->_new_face();
         _connect_F_E_end(F5,e01);
         _connect_F_E_end(F5,e15);
         _connect_F_E_end(F5,e45);
         _connect_F_E_end(F5,e04);
-        bmesh->_add_face (F5);
+        bmesh->_add_face(F5);
 
-        bmesh->build_IFS_mesh ();
+        bmesh->build_IFS_mesh();
         meshes.push_back(bmesh);
         label_ids.push_back(entity_iter->first);
         // add vertices
@@ -191,11 +191,10 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
   }
   else
   {
-    vcl_cout<<"Other extensions not supoort yet";
+    vcl_cout<<"Other extensions not supported yet";
     return false;
   }
   vcl_cout<<"Orienting face normals"<<vcl_endl;
-  vcl_cout.flush();
 
   for (unsigned nm = 0 ; nm < meshes.size() ; nm++)
   {
@@ -211,8 +210,8 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
     int len_buffer  = alpha->buffer_length()/4*boxm2_data_info::datasize("boxm2_label_short") ;
     boxm2_data<BOXM2_ALPHA> alpha_data(alpha->data_buffer(),alpha->buffer_length(),iter->first);
     boxm2_data_base *  label_data_base;
-    boxm2_data<BOXM2_LABEL_SHORT> * label_data;
-            boxm2_array_3d<uchar16>  trees = blk->trees()   ;
+    boxm2_data<BOXM2_LABEL_SHORT> * label_data = 0; // dummy initialisation (see "flag" variable for guarantees on correct initialisation)
+    boxm2_array_3d<uchar16>  trees = blk->trees();
     bool flag = false;
     for (unsigned nm = 0 ; nm < meshes.size() ; nm++)
     {
@@ -238,14 +237,14 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
         }
         vgl_vector_3d<double> min_dir = rbox.min_point()-mdata.bbox().min_point();
         vgl_vector_3d<double> max_dir = rbox.max_point()-mdata.bbox().min_point();
-        unsigned int min_i = (unsigned int ) vcl_floor(min_dir.x()/mdata.sub_block_dim_.x());
-        unsigned int min_j = (unsigned int ) vcl_floor(min_dir.y()/mdata.sub_block_dim_.y());
-        unsigned int min_k = (unsigned int ) vcl_floor(min_dir.z()/mdata.sub_block_dim_.z());
-        unsigned int max_i = (unsigned int ) vcl_floor(max_dir.x()/mdata.sub_block_dim_.x());
+        unsigned int min_i = (unsigned int) vcl_floor(min_dir.x()/mdata.sub_block_dim_.x());
+        unsigned int min_j = (unsigned int) vcl_floor(min_dir.y()/mdata.sub_block_dim_.y());
+        unsigned int min_k = (unsigned int) vcl_floor(min_dir.z()/mdata.sub_block_dim_.z());
+        unsigned int max_i = (unsigned int) vcl_floor(max_dir.x()/mdata.sub_block_dim_.x());
         unsigned int max_j = (unsigned int ) vcl_floor(max_dir.y()/mdata.sub_block_dim_.y());
         unsigned int max_k = (unsigned int ) vcl_floor(max_dir.z()/mdata.sub_block_dim_.z());
         vcl_cout<<"Paint Cells in block "<<iter->first<<vcl_endl
-                <<"mesh # "<<nm <<" Min : ("<<min_i<<','<<min_j<<','<<min_k<<") "<<" Max: ("<<max_i<<','<<max_j<<','<<max_k<<')'<<vcl_endl;
+                <<"mesh # "<<nm <<" Min : ("<<min_i<<','<<min_j<<','<<min_k<<")  Max: ("<<max_i<<','<<max_j<<','<<max_k<<')'<<vcl_endl;
         // read the trees info
 
         for (unsigned int i = min_i ; i < max_i; i++)
