@@ -261,10 +261,6 @@ register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
   vpgl_perspective_camera<double>* cam0 = cam_istream->current_camera();
   vgl_h_matrix_2d<double> H0 =
     vpgl_camera_homographies::homography_to_camera(*cam0, world_plane);
-  // the size of the output image is defined by the bounds and the
-  // ground sample distance
-  double w = bounds->width(), h = bounds->height();
-  w/=world_sample_distance;    h/=world_sample_distance; // w&h are never used!  Is this leftover crud or unfinished work?
 
   vnl_matrix_fixed<double,3, 3> t;
   t[0][0]=1;  t[0][1]=0; t[0][2]=-bounds->get_min_x();
