@@ -50,8 +50,6 @@ double ipow(double x, int i)
 
 void wgs72_to_wgs84_deltas
   (double phi,                 //!< input lat (degrees)
-   double lamda,               //!< input lon (degrees)
-   double height,              //!< input elv (meters)
    double *delta_phi,          //!< lat shift (degrees)
    double *delta_lamda,        //!< lon shift (degrees)
    double *delta_hgt)          //!< elev shift (meters)
@@ -77,19 +75,15 @@ void wgs72_to_wgs84_deltas
   delta_a = 2.000;            // meters
   delta_r = 1.400;            // meters
 
-  // Convert the longitude from -180 -> +180  to 0 -> 360
-  if (lamda < 0)
-    lamda += 360.0;
-
   // First compute delta_phi and delta_lamda in arc seconds
 
   *delta_phi = (4.5 * dcos(phi))/(a * dsin(1/3600.0)) +
                (delta_f * dsin(2.0 * phi)) / (dsin(1/3600.0));
 
-  *delta_lamda = .554; // TODO -- why not use parameter "lamda" here?
+  *delta_lamda = .554;
 
-  *delta_hgt = 4.5 * dsin(phi) + // TODO -- why not use parameter "height" here?
-               a * delta_f * (dsin(phi) * dsin(phi)) - delta_a + delta_r;
+  *delta_hgt = 4.5 * dsin(phi) + a * delta_f * (dsin(phi) * dsin(phi))
+    - delta_a + delta_r;
 
   // Convert to decimal degrees
   *delta_phi   /= 3600.0;
@@ -111,8 +105,7 @@ void wgs72_to_wgs84
 {
   double delta_phi, delta_lamda, delta_hgt;
 
-  wgs72_to_wgs84_deltas(phi, lamda, height,
-                        &delta_phi, &delta_lamda, &delta_hgt);
+  wgs72_to_wgs84_deltas(phi, &delta_phi, &delta_lamda, &delta_hgt);
 
   *wgs84_phi   = phi + delta_phi;
   *wgs84_lamda = lamda + delta_lamda;
@@ -134,8 +127,7 @@ void wgs84_to_wgs72
 {
   double delta_phi, delta_lamda, delta_hgt;
 
-  wgs72_to_wgs84_deltas(phi, lamda, height,
-                        &delta_phi, &delta_lamda, &delta_hgt);
+  wgs72_to_wgs84_deltas(phi, &delta_phi, &delta_lamda, &delta_hgt);
 
   *wgs72_phi   = phi - delta_phi;
   *wgs72_lamda = lamda - delta_lamda;
