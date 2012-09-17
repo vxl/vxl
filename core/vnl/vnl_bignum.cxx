@@ -199,9 +199,14 @@ vnl_bignum::vnl_bignum(long double d)
       d /= 0x10000L;                                // Shift d right 1 data "digit"
     }
     // Allocate and copy into permanent buffer
-    this->data = (buf.size()>0 ? new Data[buf.size()] : 0);
     this->count = (unsigned short)(buf.size());
-    vcl_copy( buf.begin(), buf.end(), data );
+    if (this->count > 0) {
+      this->data = new Data[this->count];
+      vcl_copy( buf.begin(), buf.end(), data );
+    }
+    else {
+      this->data = 0;
+    }
   }
 }
 
@@ -458,9 +463,14 @@ vnl_bignum& vnl_bignum::operator=(const vnl_bignum& rhs)
   if (this != &rhs) {                           // Avoid self-assignment
     delete[] this->data;                        // Delete existing data
     this->count = rhs.count;                    // Copy rhs's count
-    this->data = rhs.data ? new Data[rhs.count] : 0; // Allocate data if necessary
-    for (Counter i = 0; i < rhs.count; ++i)     // Copy rhs's data
-      this->data[i] = rhs.data[i];
+    if (rhs.data) {
+      this->data = new Data[rhs.count];         // Allocate data if necessary
+      for (Counter i = 0; i < rhs.count; ++i)   // Copy rhs's data
+        this->data[i] = rhs.data[i];
+    }
+    else {
+      this->data = 0;
+    }
     this->sign = rhs.sign;                      // Copy rhs's sign
   }
   return *this;                                 // Return reference
