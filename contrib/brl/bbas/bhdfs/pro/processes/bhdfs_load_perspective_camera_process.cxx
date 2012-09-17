@@ -51,6 +51,7 @@ bool bhdfs_load_perspective_camera_process(bprb_func_process& pro)
 
   // get the inputs
   vcl_string camera_filename = pro.get_input<vcl_string>(0);
+  vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
 
   // read projection matrix from the file.
   if (!bhdfs_manager::exists())
