@@ -17,7 +17,7 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bhdfs_pro ${bhdfs_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bhdfs_pro bhdfs bprb vil_algo vil_io vil)
+  TARGET_LINK_LIBRARIES(bhdfs_pro bhdfs bprb vil_algo vil_io vil vpgl boxm2)
 
   IF(BUILD_TESTING)
     SUBDIRS(tests)
