@@ -292,12 +292,7 @@ void msm_similarity_aligner::calc_transform_wt_mat(
   vgl_point_2d<double> cog1 = pts1.cog();
   vgl_point_2d<double> cog2 = pts2.cog();
 
-
   // Compute weighted CoGs
-  const double* p1 = pts1.vector().begin();
-  const double* p2 = pts2.vector().begin();
-  const double* p1_end = pts1.vector().end();
-  vcl_vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
 
   msm_wt_mat_2d w_sum(0,0,0);
   msm_wt_mat_2d S(0,0,0); // Sum
@@ -305,9 +300,11 @@ void msm_similarity_aligner::calc_transform_wt_mat(
   double txx_sum = 0, txy_sum = 0;
   double s31=0,s32=0,s41=0,s42=0;
 
-  p1 = pts1.vector().begin();
-  p2 = pts2.vector().begin();
-  w=wt_mat.begin();
+  const double* p1 = pts1.vector().begin();
+  const double* p2 = pts2.vector().begin();
+  const double* p1_end = pts1.vector().end();
+  vcl_vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
+
   for (;p1!=p1_end;p1+=2,p2+=2,++w)
   {
     double dpx = p1[0]-cog1.x();
