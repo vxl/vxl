@@ -10,6 +10,7 @@
 
 #include <vcl_fstream.h>
 #include <boxm2/boxm2_scene.h>
+#include <boxm2/boxm2_scene_parser.h>
 
 #include <bhdfs/bhdfs_manager.h>
 #include <bhdfs/bhdfs_fstream.h>
@@ -46,6 +47,9 @@ bool bhdfs_boxm2_load_scene_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   vcl_string filename = pro.get_input<vcl_string>(i++);
+
+  
+  boxm2_scene_parser parser;
 
   // load the XML from HDFS
   if (!bhdfs_manager::exists())
