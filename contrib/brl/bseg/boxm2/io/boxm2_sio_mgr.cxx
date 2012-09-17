@@ -27,7 +27,7 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id, 
 	  }
   } else if (fs_type == HDFS) {
 	  // lib bhdfs is needed for this case
-#if defined(HAS_HDFS) && HAS_HDFS
+#if HAS_HDFS
 	  bytes = load_from_hdfs(filename, numBytes);
 	  if (bytes == 0) {
 	    vcl_cerr << "boxm2_sio_mgr:: There is an error reading from HDFS!"  << vcl_endl;
