@@ -5,6 +5,11 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 
+IF(HDFS_FOUND)
+  ADD_DEFINITIONS(-DHAS_HDFS=1)
+  INCLUDE_DIRECTORIES( ${HDFS_INCLUDE_DIRS} )
+ENDIF(HDFS_FOUND)
+
 SET(boxm2_io_sources
     boxm2_asio_mgr.h       boxm2_asio_mgr.cxx
     boxm2_sio_mgr.h        boxm2_sio_mgr.cxx
@@ -20,6 +25,10 @@ AUX_SOURCE_DIRECTORY(Templates boxm2_io_sources)
 
 ADD_LIBRARY(boxm2_io  ${boxm2_io_sources})
 TARGET_LINK_LIBRARIES(boxm2_io boxm2 expatpp vpgl baio vpgl vgl_xio vgl vbl vul vsl vcl)
+
+IF(HDFS_FOUND)
+ TARGET_LINK_LIBRARIES(boxm2_io bhdfs)
+ENDIF(HDFS_FOUND)
 
 #install the .h .txx and libs
 INSTALL_TARGETS(/lib boxm2_io)
