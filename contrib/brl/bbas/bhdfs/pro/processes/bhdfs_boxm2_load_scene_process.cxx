@@ -11,6 +11,9 @@
 #include <vcl_fstream.h>
 #include <boxm2/boxm2_scene.h>
 
+#include <bhdfs/bhdfs_manager.h>
+#include <bhdfs/bhdfs_fstream.h>
+
 namespace bhdfs_boxm2_load_scene_process_globals
 {
   const unsigned n_inputs_ = 1;
