@@ -5,12 +5,12 @@
 #include <vcl_sstream.h>
 
 //: PUBLIC create method, for creating singleton instance of boxm2_cache
-void boxm2_lru_cache::create(boxm2_scene_sptr scene)
+void boxm2_lru_cache::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)
 {
   if (boxm2_cache::exists())
     vcl_cout << "boxm2_lru_cache:: boxm2_cache singleton already created" << vcl_endl;
   else {
-    instance_ = new boxm2_lru_cache(scene);
+    instance_ = new boxm2_lru_cache(scene, fs_type);
     destroyer_.set_singleton(instance_);
   }
 }

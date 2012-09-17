@@ -17,7 +17,7 @@ class boxm2_lru_cache : public boxm2_cache
   public:
 
     //: create function used instead of constructor
-    static void create(boxm2_scene_sptr scene);
+    static void create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type=LOCAL);
 
     //: returns block pointer to block specified by ID
     virtual boxm2_block* get_block(boxm2_block_id id);
