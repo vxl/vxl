@@ -11,10 +11,11 @@ SET(boxm2_ocl_reg_sources
     boxm2_ocl_reg_mutual_info.h      boxm2_ocl_reg_mutual_info.cxx
     boxm2_ocl_reg_minfo_func.h	     boxm2_ocl_reg_minfo_func.cxx
     boxm2_ocl_reg_depth_map_to_vol.h boxm2_ocl_reg_depth_map_to_vol.cxx
+    boxm2_ocl_reg_depth_map_to_vol2.h boxm2_ocl_reg_depth_map_to_vol2.cxx
    )
 
 ADD_LIBRARY(boxm2_ocl_reg  ${boxm2_ocl_reg_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_reg boxm2_io boxm2_reg boxm2_ocl bocl brip baio vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_ocl_reg boxm2_io boxm2_reg boxm2_ocl bocl brip baio vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
 
 #install the .h .txx and libs
 INSTALL_TARGETS(/lib boxm2_ocl_reg)
