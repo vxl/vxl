@@ -19,8 +19,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
-#include <vsl/vsl_binary_io.h>
-#include <vul/vul_file.h>
 
 #include <bhdfs/bhdfs_manager.h>
 #include <bhdfs/bhdfs_fstream.h>
@@ -55,39 +53,21 @@ bool bhdfs_load_perspective_camera_process(bprb_func_process& pro)
   vcl_string camera_filename = pro.get_input<vcl_string>(0);
 
   // read projection matrix from the file.
-  vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
-  vcl_string ext = vul_file_extension(camera_filename);
-  if (ext == ".vsl") // binary form
-  {
-    vsl_b_ifstream bp_in(camera_filename.c_str());
-    vsl_b_read(bp_in, *pcam);
-    bp_in.close();
-  }
-
-  vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
-  vcl_string ext = vul_file_extension(camera_filename);
-  if (ext == ".vsl") // binary form
-  {
-    vsl_b_ifstream bp_in(camera_filename.c_str());
-    vsl_b_read(bp_in, *pcam);
-    bp_in.close();
-  }
-  else {
-   if (!bhdfs_manager::exists())
-     bhdfs_manager::create(vcl_string("default"),0);
-   bhdfs_manager_sptr mgr = bhdfs_manager::instance();
-   vcl_cerr << "The working directory is: [" << mgr->get_working_dir() << "]" vcl_endl;
-   bhdfs_fstream_sptr fs = new bhdfs_fstream(camera_filename, "r");
-   unsigned long fsize =  fs->file_size()-1;
-   char* buf = new char[fsize];
-   fs->read(buf, fsize);
-   fs->close();
-   vcl_cerr << "[" << buf << "]" << vcl_endl;
-   vcl_string str(buf);
-   vcl_stringstream iss(str);
-   iss >> *pcam;
-   vcl_cerr << "CAMERA=" << *pcam;
-  }
+  if (!bhdfs_manager::exists())
+    bhdfs_manager::create(vcl_string("default"),0);
+  bhdfs_manager_sptr mgr = bhdfs_manager::instance();
+  vcl_cerr << "The working directory is: [" << mgr->get_working_dir() << "]" << vcl_endl;
+  bhdfs_fstream_sptr fs = new bhdfs_fstream(camera_filename, "r");
+  unsigned long fsize =  fs->file_size()-1;
+  char* buf = new char[fsize];
+  fs->read(buf, fsize);
+  fs->close();
+  vcl_cerr << "[" << buf << "]" << vcl_endl;
+  vcl_string str(buf);
+  vcl_stringstream iss(str);
+  iss >> *pcam;
+  vcl_cerr << "CAMERA=" << *pcam;
+  
   pro.set_output_val<vpgl_camera_double_sptr>(0, pcam);
 
   return true;

@@ -72,13 +72,13 @@ bool bhdfs_boxm2_load_scene_process(bprb_func_process& pro)
   if (!parser.parseString(newbuf)) {
     vcl_cerr << "HDFS--" << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
              << parser.XML_GetCurrentLineNumber() << '\n';
-     return;
+     return false;
   }
 
   boxm2_scene_sptr scene= new boxm2_scene(newbuf);
    
   i=0;
-  // store scene smaprt pointer
+  // store scene smart pointer
   pro.set_output_val<boxm2_scene_sptr>(i++, scene);
   return true;
 }
