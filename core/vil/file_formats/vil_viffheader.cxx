@@ -53,7 +53,7 @@ vil_viff_xvimage::vil_viff_xvimage(
   fspare1 = 0;
   fspare2 = 0;
 
-  unsigned long image_data_n_bytes;
+  unsigned long image_data_n_bytes=0L; // dummy initialisation to avoid compiler warning
   switch (storage_type)
   {
     case VFF_TYP_BIT:       image_data_n_bytes = (ncols+7)/8; break;
