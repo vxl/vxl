@@ -30,6 +30,34 @@ boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origi
     version_ = version;
 }
 
+boxm2_scene::boxm2_scene(const char* buffer) 
+{
+	boxm2_scene_parser parser;
+
+	if (!parser.parseString(buffer)) {
+    vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
+             << parser.XML_GetCurrentLineNumber() << '\n';
+     return;
+	}
+
+	//store data path
+    data_path_ = parser.path();
+    xml_path_  = data_path_ + "scene.xml";
+
+    //lvcs, origin, block dimension
+    parser.lvcs(lvcs_);
+    local_origin_ = parser.origin();
+    rpc_origin_   = parser.origin();
+
+    //store BLOCKS
+    blocks_ = parser.blocks();
+
+    //store list of appearances
+    appearances_ = parser.appearances();
+    num_illumination_bins_ = parser.num_illumination_bins();
+    version_ = parser.version();
+}
+
 //: initializes Scene from XML file
 boxm2_scene::boxm2_scene(vcl_string filename)
 {
