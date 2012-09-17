@@ -25,4 +25,6 @@ void bhdfs_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bhdfs_generate_stdin_file_process, "bhdfsGenerateStdInFileProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bhdfs_generate_file_process, "bhdfsGenerateFileProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bhdfs_fs_copy_files_to_local_process, "bhdfsCopyFilesToLocalProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bhdfs_boxm2_load_scene_process, "bhdfsBOXM2LoadSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bhdfs_load_perspective_camera_process, "bhdfsLoadPerspectiveCameraProcess");
 }

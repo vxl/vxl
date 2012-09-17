@@ -14,5 +14,7 @@ DECLARE_FUNC_CONS(bhdfs_fs_get_working_dir_process);
 DECLARE_FUNC_CONS(bhdfs_generate_stdin_file_process);
 DECLARE_FUNC_CONS(bhdfs_generate_file_process);
 DECLARE_FUNC_CONS(bhdfs_fs_copy_files_to_local_process);
+DECLARE_FUNC_CONS(bhdfs_boxm2_load_scene_process);
+DECLARE_FUNC_CONS(bhdfs_load_perspective_camera_process);
 
 #endif
