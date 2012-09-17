@@ -12,7 +12,6 @@ void estimate_mi_depth_map_to_vol(__constant  uchar        * bit_lookup,       /
                                   __global    float        * sub_block_len,    // [ width, depth, height ]
                                   __global    int4         * sceneB_trees,
                                   __global    float        * sceneB_alphas,
-                                  //__global    float        * sceneB_aux2s,
                                   __global    unsigned int * sceneB_tree_offsets,
                                   __global    unsigned int * sceneB_alpha_offsets,
                                   __global    float        * translation,
@@ -49,9 +48,6 @@ void estimate_mi_depth_map_to_vol(__constant  uchar        * bit_lookup,       /
   float xformed_x = rotation[0]*x +rotation[1]*y + rotation[2]*z + translation[0];
   float xformed_y = rotation[3]*x +rotation[4]*y + rotation[5]*z + translation[1];
   float xformed_z = rotation[6]*x +rotation[7]*y + rotation[8]*z + translation[2];
-  //float xformed_x = x  + translation[0];
-  //float xformed_y = y  + translation[1];
-  //float xformed_z = z  + translation[2];
 
   int blk_index_x = (int) floor((xformed_x - sceneB_origin[0])/sceneB_blk_dims[0] );
   int blk_index_y = (int) floor((xformed_y - sceneB_origin[1])/sceneB_blk_dims[1] );
@@ -91,20 +87,16 @@ void estimate_mi_depth_map_to_vol(__constant  uchar        * bit_lookup,       /
     unsigned int alpha_offset = sceneB_alpha_offsets[blk_offset_index]+ alpha_blk_offset;
 
     float alphaB = sceneB_alphas[alpha_offset];
-    //float aux2 = sceneB_aux2s[alpha_offset];
-    float probB  = 0.0;
-    //if (aux2 > 0.7)
-    {
-      probB = (1 - exp(-alphaB*cell_len*(*sub_block_len)));
+    
+    float probB  = (1 - exp(-alphaB*cell_len*(*sub_block_len)));
+    
+    if (probB >= 0.0f && probB <= 1.0f) {
+      int hist_index_B =(int)(((*nbins)-1)*probB) ;// (int)clamp((int)floor(probB*(*nbins)),0,(*nbins)-1);
+      //int hist_index_A =(int)(((*nbins)-1)*1.0f) ;// (int)clamp((int)floor(prob*(*nbins)),0,(*nbins)-1);
+      atom_inc(&joint_histogram[2+hist_index_B]);
     }
-    int hist_index_B =(int)(((*nbins)-1)*probB) ;// (int)clamp((int)floor(probB*(*nbins)),0,(*nbins)-1);
-    int hist_index_A =(int)(((*nbins)-1)*1.0f) ;// (int)clamp((int)floor(prob*(*nbins)),0,(*nbins)-1);
-    atom_inc(&joint_histogram[2+hist_index_B]);
   }
-  else
-  {
-    atom_inc(&joint_histogram[0]);
-  }
+
   //barrier(CLK_LOCAL_MEM_FENCE);
   //atom_add(&global_joint_histogram[llid],joint_histogram[llid]) ;
   //barrier(CLK_LOCAL_MEM_FENCE);
@@ -114,5 +106,6 @@ void estimate_mi_depth_map_to_vol(__constant  uchar        * bit_lookup,       /
     for (unsigned int k = 0; k < (*nbins)*(*nbins); k++)
       atom_add(&global_joint_histogram[k],joint_histogram[k]) ;
   }
-  barrier(CLK_LOCAL_MEM_FENCE);
+  //barrier(CLK_LOCAL_MEM_FENCE);
+  barrier(CLK_GLOBAL_MEM_FENCE);
 }
