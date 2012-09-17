@@ -47,7 +47,7 @@ class boxm2_sio_mgr
     static void save_block_data_base(vcl_string dir, boxm2_block_id block_id, boxm2_data_base* data, vcl_string prefix);
 
 private:
-	char* load_from_hdfs(vcl_string filepath, unsigned long &numBytes);
+	static char* load_from_hdfs(vcl_string filepath, unsigned long &numBytes);
 
 };
 
