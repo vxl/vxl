@@ -48,7 +48,7 @@ class boxm2_lru_cache : public boxm2_cache
   private:
 
     //: hidden constructor (private so it cannot be called -- forces the class to be singleton)
-    boxm2_lru_cache(boxm2_scene_sptr scene);
+    boxm2_lru_cache(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE=LOCAL);
 
     //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
     ~boxm2_lru_cache();

@@ -5,7 +5,8 @@
 // \file
 
 //: constructor, set the directory path
-boxm2_nn_cache::boxm2_nn_cache(boxm2_scene* scene) : boxm2_cache(scene)
+boxm2_nn_cache::boxm2_nn_cache(boxm2_scene* scene, BOXM2_IO_FS_TYPE fs) 
+	: boxm2_cache(scene, fs)
 {
   scene_dir_ = scene->data_path();
 }

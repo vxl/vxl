@@ -11,17 +11,23 @@
 #include <vul/vul_file.h>
 #include <vcl_iostream.h>
 
+//: enabling to allow different filesystems to load blocks
+typedef enum {LOCAL=0, HDFS} BOXM2_IO_FS_TYPE;
+
 //: disk level storage class.
 //  handles all of the synchronous IO read and write requests
 class boxm2_sio_mgr
 {
   public:
     //: loads block from disk
-    static boxm2_block*   load_block(vcl_string dir, boxm2_block_id block_id);
+    static boxm2_block*   load_block(vcl_string dir, boxm2_block_id block_id, 
+		BOXM2_IO_FS_TYPE fs_type=LOCAL);
 
-    static boxm2_block* load_block(vcl_string dir, boxm2_block_id block_id,boxm2_block_metadata data );
+    static boxm2_block* load_block(vcl_string dir, boxm2_block_id block_id,
+		boxm2_block_metadata data, BOXM2_IO_FS_TYPE fs_type=LOCAL);
+
     //: saves block to disk
-    static void           save_block(vcl_string dir, boxm2_block* block);
+    static void save_block(vcl_string dir, boxm2_block* block);
 
     //: load data from disk
     template <boxm2_data_type data_type>
@@ -29,7 +35,8 @@ class boxm2_sio_mgr
 
     //: load data generically
     // loads a generic boxm2_data_base* from disk (given data_type string prefix)
-    static boxm2_data_base*  load_block_data_generic(vcl_string dir, boxm2_block_id id, vcl_string data_type);
+    static boxm2_data_base*  load_block_data_generic(vcl_string dir, boxm2_block_id id, 
+		vcl_string data_type, BOXM2_IO_FS_TYPE fs_type=LOCAL);
 
     //: saves data to disk
     template <boxm2_data_type data_type>
@@ -38,6 +45,10 @@ class boxm2_sio_mgr
     //: saves data generically
     // generically saves data_base * to disk (given prefix)
     static void save_block_data_base(vcl_string dir, boxm2_block_id block_id, boxm2_data_base* data, vcl_string prefix);
+
+private:
+	char* load_from_hdfs(vcl_string filepath, unsigned long &numBytes);
+
 };
 
 template <boxm2_data_type data_type>

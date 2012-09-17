@@ -16,7 +16,7 @@ void boxm2_lru_cache::create(boxm2_scene_sptr scene)
 }
 
 //: constructor, set the directory path
-boxm2_lru_cache::boxm2_lru_cache(boxm2_scene_sptr scene) : boxm2_cache(scene)
+boxm2_lru_cache::boxm2_lru_cache(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type) : boxm2_cache(scene,fs_type)
 {
   scene_dir_ = scene->data_path();
 }

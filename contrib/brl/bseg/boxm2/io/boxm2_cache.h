@@ -28,6 +28,7 @@ class boxm2_cache_destroyer;
 class boxm2_cache: public vbl_ref_count
 {
  public:
+  void set_filesystem(BOXM2_IO_FS_TYPE fs_type) { filesystem_ = fs_type; }
 
   //: Use this instead of constructor
   static boxm2_cache_sptr instance();
@@ -77,7 +78,7 @@ class boxm2_cache: public vbl_ref_count
  protected:
 
   //: hidden constructor
-  boxm2_cache(boxm2_scene_sptr scene) : scene_(scene) {}
+  boxm2_cache(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs=LOCAL) : scene_(scene), filesystem_(fs) {}
 
   //: hidden destructor (protected so it cannot be called -- forces the class to be singleton)
   virtual ~boxm2_cache() {}
@@ -90,6 +91,8 @@ class boxm2_cache: public vbl_ref_count
 
   //: boxm2_asio_manager handles asio requests
   boxm2_asio_mgr io_mgr_;
+
+  BOXM2_IO_FS_TYPE filesystem_;
 };
 
 //: returns a boxm2_data<T>* from the cache

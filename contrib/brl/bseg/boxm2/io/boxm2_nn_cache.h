@@ -3,14 +3,17 @@
 //:
 // \file
 #include <boxm2/io/boxm2_cache.h>
+#include <boxm2/io/boxm2_sio_mgr.h>
 #include <vcl_iostream.h>
 
 //: an example cache that loads in the nearest neighbors of the requested block (asynchronously)
 class boxm2_nn_cache : public boxm2_cache
 {
   public:
-    //: construct with directory and scene dimensions (blocknum)
-    boxm2_nn_cache(boxm2_scene* scene);
+
+    //: construct with directory and scene dimensions (blocknum), by default use
+	// the local filesystem
+    boxm2_nn_cache(boxm2_scene* scene, BOXM2_IO_FS_TYPE fs=LOCAL);
     ~boxm2_nn_cache();
 
     //: returns block pointer to block specified by ID
