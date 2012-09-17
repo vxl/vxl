@@ -200,6 +200,8 @@ vil1_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
     {
        if ((location=(float*)malloc((size_t)location_size_bytes)) == NULL)
        {
+         free(imagedata);
+         free(maps);
          fprintf(stderr,"vil1_viff_createimage: Not enough memory for location data!\n");
          return 0;
        }
