@@ -203,9 +203,7 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
   vl.clean_directory();
 
   ///Test the tiff pyramid resource with multiple levels in a single file
-  vcl_string file = "tiff_pyramid.tif";
-  //  create_multi_file_resource(file);
-  good = true;
+  vcl_string file = "tiff_pyramid.tif"; //  create_multi_file_resource(file);
   {//scope for pi
     vil_pyramid_image_resource_sptr pi =
       vil_new_pyramid_image_resource(file.c_str(), "tiff");
