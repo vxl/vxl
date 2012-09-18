@@ -23,76 +23,76 @@
 
 boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version)
 {
-    local_origin_=origin;
-    data_path_   = data_path;
-    xml_path_  = data_path_ + "/scene.xml";
-    num_illumination_bins_ = -1;
-    version_ = version;
+  local_origin_=origin;
+  data_path_   = data_path;
+  xml_path_  = data_path_ + "/scene.xml";
+  num_illumination_bins_ = -1;
+  version_ = version;
 }
 
-boxm2_scene::boxm2_scene(const char* buffer) 
+boxm2_scene::boxm2_scene(const char* buffer)
 {
-	boxm2_scene_parser parser;
+  boxm2_scene_parser parser;
 
-	if (!parser.parseString(buffer)) {
+  if (!parser.parseString(buffer)) {
     vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
              << parser.XML_GetCurrentLineNumber() << '\n';
-     return;
-	}
+    return;
+  }
 
-	//store data path
-    data_path_ = parser.path();
-    xml_path_  = data_path_ + "scene.xml";
+  //store data path
+  data_path_ = parser.path();
+  xml_path_  = data_path_ + "scene.xml";
 
-    //lvcs, origin, block dimension
-    parser.lvcs(lvcs_);
-    local_origin_ = parser.origin();
-    rpc_origin_   = parser.origin();
+  //lvcs, origin, block dimension
+  parser.lvcs(lvcs_);
+  local_origin_ = parser.origin();
+  rpc_origin_   = parser.origin();
 
-    //store BLOCKS
-    blocks_ = parser.blocks();
+  //store BLOCKS
+  blocks_ = parser.blocks();
 
-    //store list of appearances
-    appearances_ = parser.appearances();
-    num_illumination_bins_ = parser.num_illumination_bins();
-    version_ = parser.version();
+  //store list of appearances
+  appearances_ = parser.appearances();
+  num_illumination_bins_ = parser.num_illumination_bins();
+  version_ = parser.version();
 }
 
 //: initializes Scene from XML file
 boxm2_scene::boxm2_scene(vcl_string filename)
 {
-    //xml parser
-    xml_path_ = filename;
-    boxm2_scene_parser parser;
-    if (filename.size() > 0) {
-      vcl_FILE* xmlFile = vcl_fopen(filename.c_str(), "r");
-      if (!xmlFile) {
-        vcl_cerr << filename.c_str() << " error on opening\n";
-        return;
-      }
-      if (!parser.parseFile(xmlFile)) {
-        vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
-                 << parser.XML_GetCurrentLineNumber() << '\n';
-        return;
-      }
+  //xml parser
+  xml_path_ = filename;
+  boxm2_scene_parser parser;
+  if (filename.size() > 0) {
+    vcl_FILE* xmlFile = vcl_fopen(filename.c_str(), "r");
+    if (!xmlFile) {
+      vcl_cerr << filename.c_str() << " error on opening\n";
+      return;
     }
+    if (!parser.parseFile(xmlFile)) {
+      vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
+               << parser.XML_GetCurrentLineNumber() << '\n';
+      return;
+    }
+  }
 
-    //store data path
-    data_path_ = parser.path();
-    xml_path_  = data_path_ + "scene.xml";
+  //store data path
+  data_path_ = parser.path();
+  xml_path_  = data_path_ + "scene.xml";
 
-    //lvcs, origin, block dimension
-    parser.lvcs(lvcs_);
-    local_origin_ = parser.origin();
-    rpc_origin_   = parser.origin();
+  //lvcs, origin, block dimension
+  parser.lvcs(lvcs_);
+  local_origin_ = parser.origin();
+  rpc_origin_   = parser.origin();
 
-    //store BLOCKS
-    blocks_ = parser.blocks();
+  //store BLOCKS
+  blocks_ = parser.blocks();
 
-    //store list of appearances
-    appearances_ = parser.appearances();
-    num_illumination_bins_ = parser.num_illumination_bins();
-    version_ = parser.version();
+  //store list of appearances
+  appearances_ = parser.appearances();
+  num_illumination_bins_ = parser.num_illumination_bins();
+  version_ = parser.version();
 }
 
 
@@ -191,12 +191,12 @@ boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
     vgl_box_2d<double> intersect = vgl_intersection(camBox, blkBox);
     if (!intersect.is_empty() || camBox.is_empty()) {
       vgl_point_3d<double> blk_center = blk_o + length/2.0;
-      
+
       double dist = vgl_distance( blk_center, pt);
 
       if (distance > 0 && dist < distance)
         distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
-      else 
+      else
         distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
     }
   }
@@ -219,7 +219,7 @@ boxm2_scene::get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vect
   vcl_vector<boxm2_dist_id_pair> distances;
 
   // get camera center and order blocks distance from the cam center
-  // do not insert blocks if they are in front of the camera! 
+  // do not insert blocks if they are in front of the camera!
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
     vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
@@ -230,21 +230,19 @@ boxm2_scene::get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vect
                                     blk_dim.z()*blk_num.z());
 
     vgl_point_3d<double> blk_center = blk_o + length/2.0;
-    
+
     // ray from origin to blk center
-    vgl_vector_3d<double> blk_ray = blk_center - origin; 
+    vgl_vector_3d<double> blk_ray = blk_center - origin;
     vgl_vector_3d<double> blk_ray_n = normalized(blk_ray);
 
     // check if the blk ray and camera ray are pointing to the same direction
     double cos = dot_product(dir, blk_ray_n);
     if (cos > 0) { // an angle in (-pi/2,pi/2)
-      
       double dist = vgl_distance( blk_center, origin);
-      
       if (distance > 0 && dist < distance)
         distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
-      else 
-        distances.push_back( boxm2_dist_id_pair(dist, iter->first) ); 
+      else
+        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
     }
   }
 
@@ -263,27 +261,27 @@ boxm2_scene::get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vect
 bool boxm2_scene::contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
                            vgl_point_3d<double>& local_coords) const
 {
-    vcl_vector<boxm2_block_id> block_ids = this->get_block_ids();
-    for (vcl_vector<boxm2_block_id>::iterator id = block_ids.begin();
-         id != block_ids.end(); ++id)
-    {
-      boxm2_block_metadata md = this->get_block_metadata_const(*id);
-      vgl_vector_3d<double> dims(md.sub_block_dim_.x()*md.sub_block_num_.x(),
-                                 md.sub_block_dim_.y()*md.sub_block_num_.y(),
-                                 md.sub_block_dim_.z()*md.sub_block_num_.z());
+  vcl_vector<boxm2_block_id> block_ids = this->get_block_ids();
+  for (vcl_vector<boxm2_block_id>::iterator id = block_ids.begin();
+       id != block_ids.end(); ++id)
+  {
+    boxm2_block_metadata md = this->get_block_metadata_const(*id);
+    vgl_vector_3d<double> dims(md.sub_block_dim_.x()*md.sub_block_num_.x(),
+                               md.sub_block_dim_.y()*md.sub_block_num_.y(),
+                               md.sub_block_dim_.z()*md.sub_block_num_.z());
 
-      vgl_point_3d<double> lorigin = md.local_origin_;
-      vgl_box_3d<double> bbox(lorigin,lorigin+dims);
-      if (bbox.contains(p.x(), p.y(), p.z())) {
-        bid = (*id);
-        double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
-        double local_y=(p.y()-md.local_origin_.y())/md.sub_block_dim_.y();
-        double local_z=(p.z()-md.local_origin_.z())/md.sub_block_dim_.z();
-        local_coords.set(local_x, local_y, local_z);
-        return true;
-      }
+    vgl_point_3d<double> lorigin = md.local_origin_;
+    vgl_box_3d<double> bbox(lorigin,lorigin+dims);
+    if (bbox.contains(p.x(), p.y(), p.z())) {
+      bid = (*id);
+      double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
+      double local_y=(p.y()-md.local_origin_.y())/md.sub_block_dim_.y();
+      double local_z=(p.z()-md.local_origin_.z())/md.sub_block_dim_.z();
+      local_coords.set(local_x, local_y, local_z);
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
 //: save scene (xml file)
@@ -477,7 +475,7 @@ void boxm2_scene::max_block_index (vgl_point_3d<int> &idx,
 //: returns true if the scene has specified data type (simple linear search)
 bool boxm2_scene::has_data_type(vcl_string data_type)
 {
-  for (unsigned int i=0; i<appearances_.size(); ++i) 
+  for (unsigned int i=0; i<appearances_.size(); ++i)
     if ( appearances_[i] == data_type )
       return true;
   return false;

@@ -1,10 +1,11 @@
 #include "boxm2_ocl_reg_depth_map_to_vol2.h"
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boct/boct_bit_tree.h>
-#include <vcl_where_root_dir.h>
 #include <vil/vil_save.h>
+#include <vcl_where_root_dir.h>
+#include <vcl_cassert.h>
 
-boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_reg_depth_map_to_vol2(  vpgl_camera_double_sptr & cam,
+boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_reg_depth_map_to_vol2(vpgl_camera_double_sptr & cam,
                                                                  vil_image_view<float> * img,
                                                                  //vil_image_view<float> * skyimg,
                                                                  vcl_vector<boxm2_stream_scene_cache_sptr>& caches,
@@ -41,15 +42,16 @@ bool boxm2_ocl_reg_depth_map_to_vol2::estimate_xyz()
           (*Xdepth)(i,j) = global_bbox_.min_x()-10000;
           (*Ydepth)(i,j) = global_bbox_.min_y()-10000;
           (*Zdepth)(i,j) = global_bbox_.min_z()-10000;
-        } else {
-        vgl_point_3d<double> pt = temp + d*r.direction();
+        }
+        else {
+          vgl_point_3d<double> pt = temp + d*r.direction();
 
-        (*Xdepth)(i,j) = (float)pt.x();
-        (*Ydepth)(i,j) = (float)pt.y();
-        (*Zdepth)(i,j) = (float)pt.z();
+          (*Xdepth)(i,j) = (float)pt.x();
+          (*Ydepth)(i,j) = (float)pt.y();
+          (*Zdepth)(i,j) = (float)pt.z();
         }
         // OZGE HACK TO SEE IF MAKING SKY AT INFINITY MAKES A DIFFERENCE
-        //if ((*sky_img_)(i,j) >= 0.9) 
+        //if ((*sky_img_)(i,j) >= 0.9)
         //  (*Zdepth)(i,j) = global_bbox_.max_z()+10000;
       }
     //vil_save(*Zdepth, "C:\\projects\\FINDER\\query_matching\\depth_maps\\z_depth.tif");
@@ -99,27 +101,27 @@ bool boxm2_ocl_reg_depth_map_to_vol2::init_ocl_minfo()
 {
   // Instantiate OPENCL
   // get scene B on the GPU's host memory
-  
+
   unsigned cnt = (unsigned)caches_.size();
 
   blk_offsets_array.resize(cnt);
   alpha_offsets_array.resize(cnt);
 #if 0
   sceneB_origin.resize(cnt);
-	sceneB_bbox_ids.resize(cnt);
-	sceneB_block_dims.resize(cnt);
-	sceneB_sub_block_len.resize(cnt);
-	sceneB_sub_block_num.resize(cnt);
-	blks_ocl_B.resize(cnt);
-	alpha_ocl_B.resize(cnt);
-	blks_ocl_B_offsets.resize(cnt);
-	alpha_ocl_B_offsets.resize(cnt);
+  sceneB_bbox_ids.resize(cnt);
+  sceneB_block_dims.resize(cnt);
+  sceneB_sub_block_len.resize(cnt);
+  sceneB_sub_block_num.resize(cnt);
+  blks_ocl_B.resize(cnt);
+  alpha_ocl_B.resize(cnt);
+  blks_ocl_B_offsets.resize(cnt);
+  alpha_ocl_B_offsets.resize(cnt);
 #endif
-	assert(caches_.size()!=0);
+  assert(caches_.size()!=0);
 
   for (unsigned i = 0; i < caches_.size(); i++) {
     boxm2_scene_sptr sceneB = caches_[i]->scene();
-    
+
     blk_offsets_array[i] = new unsigned int[caches_[i]->blk_offsets_.size()];
     for (unsigned k = 0; k< caches_[i]->blk_offsets_.size(); k++)
       blk_offsets_array[i][k] = caches_[i]->blk_offsets_[k];
@@ -132,7 +134,7 @@ bool boxm2_ocl_reg_depth_map_to_vol2::init_ocl_minfo()
     boxm2_scene_info * sceneB_info = sceneB->get_blk_metadata( sceneB_ids[0] );
 
     vgl_box_3d<int> bbox = sceneB->bounding_box_blk_ids();
-    
+
     bbox_buff[0] = 0; bbox_buff[3] = bbox.max_x()-bbox.min_x();
     bbox_buff[1] = 0; bbox_buff[4] = bbox.max_y()-bbox.min_y();
     bbox_buff[2] = 0; bbox_buff[5] = bbox.max_z()-bbox.min_z();
@@ -146,7 +148,7 @@ bool boxm2_ocl_reg_depth_map_to_vol2::init_ocl_minfo()
     sceneB_bbox_ids[i]->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
     vgl_box_3d<double> scene_bbox = sceneB->bounding_box();
-    
+
     sceneB_origin_buff[0] = (float)scene_bbox.min_x();
     sceneB_origin_buff[1] = (float)scene_bbox.min_y();
     sceneB_origin_buff[2] = (float)scene_bbox.min_z();
@@ -158,9 +160,11 @@ bool boxm2_ocl_reg_depth_map_to_vol2::init_ocl_minfo()
     block_dims[0] = sceneB_info->scene_dims[0]*sceneB_info->block_len;
     block_dims[1] = sceneB_info->scene_dims[1]*sceneB_info->block_len;
     block_dims[2] = sceneB_info->scene_dims[2]*sceneB_info->block_len;
-    //vcl_cout << "sub-block cnt/block " << sceneB_info->scene_dims[0] << " " << sceneB_info->scene_dims[1] << " " << sceneB_info->scene_dims[2] << vcl_endl;
-    //vcl_cout << "sub-block len " << sceneB_info->block_len << vcl_endl;
-    //vcl_cout << "scene block dims " << block_dims[0] << " " << block_dims[1] << " " << block_dims[2] << vcl_endl;
+#if 0
+    vcl_cout << "sub-block cnt/block " << sceneB_info->scene_dims[0] << ' ' << sceneB_info->scene_dims[1] << ' ' << sceneB_info->scene_dims[2] << '\n'
+             << "sub-block len " << sceneB_info->block_len << '\n'
+             << "scene block dims " << block_dims[0] << ' ' << block_dims[1] << ' ' << block_dims[2] << vcl_endl;
+#endif
     sceneB_block_dims[i] = new bocl_mem(device_->context(), block_dims, 4*sizeof(float), " scene B block dims" );
     //sceneB_block_dims[i]->create_buffer(CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR );
     sceneB_block_dims[i]->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
@@ -199,14 +203,14 @@ bool boxm2_ocl_reg_depth_map_to_vol2::init_ocl_minfo()
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
   lookup=new bocl_mem(device_->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-  
+
   local_threads[0] = 8;
   local_threads[1] = 8;
   unsigned cl_ni=(unsigned)RoundUp(depth_img_->ni(),(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(depth_img_->nj(),(int)local_threads[1]);
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
-  
+
   xdepth_buff = new float[cl_ni*cl_nj];
   ydepth_buff = new float[cl_ni*cl_nj];
   zdepth_buff = new float[cl_ni*cl_nj];
@@ -220,7 +224,8 @@ bool boxm2_ocl_reg_depth_map_to_vol2::init_ocl_minfo()
         ydepth_buff[count] = (*Ydepth)(i,j);
         zdepth_buff[count] = (*Zdepth)(i,j);
         //skyimg_buff[count] = (*sky_img_)(i,j);
-      } else
+      }
+      else
         zdepth_buff[count] = -1.0;
       ++count;
     }
@@ -244,6 +249,7 @@ bool boxm2_ocl_reg_depth_map_to_vol2::init_ocl_minfo()
 
   return true;
 }
+
 boxm2_ocl_reg_depth_map_to_vol2::~boxm2_ocl_reg_depth_map_to_vol2()
 {
   delete [] xdepth_buff;
@@ -259,9 +265,9 @@ boxm2_ocl_reg_depth_map_to_vol2::~boxm2_ocl_reg_depth_map_to_vol2()
 }
 
 bool boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_register_world(vgl_rotation_3d<double> rot,
-                                                              vgl_vector_3d<double> tx,
-                                                              int nbins,
-                                                              float & mi)
+                                                               vgl_vector_3d<double> tx,
+                                                               int nbins,
+                                                               float & mi)
 {
   int * joint_histogram_buff= new int[nbins*nbins];
   int * global_joint_histogram = new int[nbins*nbins];
@@ -269,7 +275,7 @@ bool boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_register_world(vgl_rotation_3d<d
     joint_histogram_buff[k] = 0;
     global_joint_histogram[k] = 0;
   }
-  
+
   float translation_buff[4];
   translation_buff[0] = (float)tx.x();        translation_buff[2] = (float)tx.z();
   translation_buff[1] = (float)tx.y();        translation_buff[3] = 0.0f;
@@ -306,17 +312,17 @@ bool boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_register_world(vgl_rotation_3d<d
 
     // output buffer for debugging
     bocl_mem_sptr output = new bocl_mem(device_->context(), output_buff, sizeof(float)*1000, "output" );
-    //output->create_buffer(CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR );    
+    //output->create_buffer(CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR );
     output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 
     ////////////////////////////////////////////
     boxm2_scene_sptr sceneB = caches_[i]->scene();
-    
+
     vcl_vector<boxm2_block_id> sceneB_ids = sceneB->get_block_ids();
     boxm2_scene_info * sceneB_info = sceneB->get_blk_metadata( sceneB_ids[0] );
 
     vgl_box_3d<int> bbox = sceneB->bounding_box_blk_ids();
-    
+
     bbox_buff[0] = 0; bbox_buff[3] = bbox.max_x()-bbox.min_x();
     bbox_buff[1] = 0; bbox_buff[4] = bbox.max_y()-bbox.min_y();
     bbox_buff[2] = 0; bbox_buff[5] = bbox.max_z()-bbox.min_z();
@@ -330,7 +336,7 @@ bool boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_register_world(vgl_rotation_3d<d
     sceneB_bbox_ids->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
     vgl_box_3d<double> scene_bbox = sceneB->bounding_box();
-    
+
     sceneB_origin_buff[0] = (float)scene_bbox.min_x();
     sceneB_origin_buff[1] = (float)scene_bbox.min_y();
     sceneB_origin_buff[2] = (float)scene_bbox.min_z();
@@ -342,9 +348,11 @@ bool boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_register_world(vgl_rotation_3d<d
     block_dims[0] = sceneB_info->scene_dims[0]*sceneB_info->block_len;
     block_dims[1] = sceneB_info->scene_dims[1]*sceneB_info->block_len;
     block_dims[2] = sceneB_info->scene_dims[2]*sceneB_info->block_len;
-    //vcl_cout << "sub-block cnt/block " << sceneB_info->scene_dims[0] << " " << sceneB_info->scene_dims[1] << " " << sceneB_info->scene_dims[2] << vcl_endl;
-    //vcl_cout << "sub-block len " << sceneB_info->block_len << vcl_endl;
-    //vcl_cout << "scene block dims " << block_dims[0] << " " << block_dims[1] << " " << block_dims[2] << vcl_endl;
+#if 0
+    vcl_cout << "sub-block cnt/block " << sceneB_info->scene_dims[0] << ' ' << sceneB_info->scene_dims[1] << ' ' << sceneB_info->scene_dims[2] << '\n'
+             << "sub-block len " << sceneB_info->block_len << '\n'
+             << "scene block dims " << block_dims[0] << ' ' << block_dims[1] << ' ' << block_dims[2] << vcl_endl;
+#endif
     bocl_mem_sptr sceneB_block_dims = new bocl_mem(device_->context(), block_dims, 4*sizeof(float), " scene B block dims" );
     //sceneB_block_dims->create_buffer(CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR );
     sceneB_block_dims->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
@@ -406,7 +414,7 @@ bool boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_register_world(vgl_rotation_3d<d
     kern->set_arg(alpha_ocl_B.ptr());
     kern->set_arg(blks_ocl_B_offsets.ptr());
     kern->set_arg(alpha_ocl_B_offsets.ptr());
-    
+
     kern->set_arg(translation.ptr());
     kern->set_arg(rotation.ptr());
     kern->set_arg(ocl_nbins.ptr());
@@ -414,7 +422,7 @@ bool boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_register_world(vgl_rotation_3d<d
     kern->set_arg(output.ptr());
     kern->set_local_arg(nbins*nbins*sizeof(float));
     kern->set_local_arg(16*local_threads[0]*local_threads[1]*sizeof(unsigned char)); // local trees
-  
+
     kern->execute(queue, 2, local_threads, global_threads);
 
     status = clFinish(queue);
@@ -431,36 +439,34 @@ bool boxm2_ocl_reg_depth_map_to_vol2::boxm2_ocl_register_world(vgl_rotation_3d<d
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
 #if 0
-    vcl_cout << "joint: \n";
+    vcl_cout << "joint:\n";
     for (int k = 0; k < nbins*nbins; k++)
-      vcl_cout << joint_histogram_buff[k] << "\t";
+      vcl_cout << joint_histogram_buff[k] << '\t';
 #endif
-    for (int k = 0; k < nbins*nbins; k++) 
+    for (int k = 0; k < nbins*nbins; k++)
       global_joint_histogram[k] += joint_histogram_buff[k];
-      
-    for ( int k = 0 ; k <nbins*nbins; k++) 
+
+    for ( int k = 0 ; k <nbins*nbins; k++)
       joint_histogram_buff[k] = 0;
 #if 0
-    vcl_cout << "\nglobal: \n";
+    vcl_cout << "\nglobal:\n";
     for (int k = 0; k < nbins*nbins; k++)
-      vcl_cout << global_joint_histogram[k] << "\t";
-    vcl_cout << "\n";  
+      vcl_cout << global_joint_histogram[k] << '\t';
+    vcl_cout << '\n';
 #endif
-   
-
   }
 
   clReleaseCommandQueue(queue);
-  
+
   float sum = 0.0;
   for ( int k = 0 ; k <nbins*nbins; k++)
     sum+=global_joint_histogram[k];
   if (sum == 0)
    mi = 0.0;
-  else 
+  else
    mi = global_joint_histogram[nbins*nbins-1]/sum;
    //mi = (global_joint_histogram[0]+global_joint_histogram[nbins*nbins-1])/sum;
-  
+
   delete [] global_joint_histogram;
   delete [] joint_histogram_buff;
 
