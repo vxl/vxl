@@ -36,6 +36,7 @@ SET(brip_sources
    brip_blobwise_mutual_info.h brip_blobwise_mutual_info.txx
    brip_filter_bank.h        brip_filter_bank.cxx
    brip_gain_offset_solver.h    brip_gain_offset_solver.cxx
+   brip_classifier.h         brip_classifier.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 

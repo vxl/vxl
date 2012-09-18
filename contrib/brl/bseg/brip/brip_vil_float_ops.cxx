@@ -774,12 +774,6 @@ brip_vil_float_ops::beaudet(vil_image_view<float> const& Ixx,
       //compute eigenvalues for experimentation
       float det = xx*yy-xy*xy;
       float tr = xx+yy;
-      float arg = tr*tr-4.f*det, lambda0 = 0, lambda1=0;
-      if (arg>0)
-      {
-        lambda0 = tr+vcl_sqrt(arg);
-        lambda1 = tr-vcl_sqrt(arg);
-      }
       if (determinant)
         output(x,y) = det;
       else
@@ -1750,7 +1744,23 @@ void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
   h = (vxl_byte)(h * (255.0 / 360.0));
   s = (vxl_byte)(s * 255.0);
 }
-
+void   brip_vil_float_ops::rgb_to_ihs_tsai(vil_rgb<vxl_byte> const& rgb,
+                     float& i, float& h, float& s){
+  float r,g,b;
+  r=rgb.R();
+  g=rgb.G();
+  b=rgb.B();
+  float sq6 = vcl_sqrt(6.0f);
+  float V1, V2;
+  i = (r+g+b)/3.0f;
+  V1 = (sq6*b)/3.0f -(r/sq6) -(g/sq6);
+  V2 = (r/sq6)-(2.0f*g/sq6);
+  s = vcl_sqrt(V1*V1 + V2*V2);
+  float a = vcl_atan2(V2, V1);
+  float two_pi = static_cast<float>(2.0*vnl_math::pi);
+  if(a<0.0f) a += two_pi;
+  h = (a*255.0f)/two_pi;
+}
 void brip_vil_float_ops::ihs_to_rgb(vil_rgb<vxl_byte> & rgb,
                                     const float i, const float h, const float s)
 {
@@ -1830,7 +1840,30 @@ convert_to_IHS(vil_image_view<vxl_byte> const& image,
       S(c,r) = sat;
     }
 }
-
+void brip_vil_float_ops::
+convert_to_IHS_tsai(vil_image_view<vxl_byte> const& image,
+                    vil_image_view<float>& I,
+                    vil_image_view<float>& H,
+                    vil_image_view<float>& S,
+                    vil_image_view<float>& ratio)
+{
+  unsigned w = image.ni(), h = image.nj();
+  I.set_size(w,h);
+  H.set_size(w,h);
+  S.set_size(w,h);
+  ratio.set_size(w,h);
+  for (unsigned r = 0; r < h; r++)
+    for (unsigned c = 0; c < w; c++)
+    {
+      float in, hue, sat, rat;
+      vil_rgb<vxl_byte> imint(image(c,r,0),image(c,r,1),image(c,r,2));
+      rgb_to_ihs_tsai(imint, in, hue, sat);
+      I(c,r) = in;
+      H(c,r) = hue;
+      S(c,r) = sat;
+      ratio(c,r) = (H(c,r)+1.0f)/(I(c,r) + 1.0f);
+    }
+}
 #if 0 // commented out
 void brip_vil_float_ops::
 display_IHS_as_RGB(vil_image_view<float> const& I,

@@ -388,8 +388,24 @@ class brip_vil_float_ops
     convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& image);
 
   //: convert a single RGB pixel to (I,H,S)
+  //  Foley and Van Damm
   static void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
                          float& i, float& h, float& s);
+
+  //: convert a single RGB pixel to (I,H,S) with the following map
+  // V. Tsai
+  // IEEE Transactions on Geoscience and Remote Sensing,
+  // VOL. 44, NO. 6, JUNE 2006
+  //
+  //  I = (R+G+B)/3
+  //  V1 = -R/sqrt(6) - G/sqrt(6) + B*sqrt(2/3)
+  //  V2 = R/sqrt(6) - 2*G/sqrt(6)
+  //  S = sqrt(V1^2 + V2^2)
+  //  H = atan2(V2/V1)
+  //
+  static void rgb_to_ihs_tsai(vil_rgb<vxl_byte> const& rgb,
+                              float& i, float& h, float& s);
+
 
   //: convert a single (I,H,S) pixel to RGB
   static void ihs_to_rgb(vil_rgb<vxl_byte>& rgb,
@@ -402,6 +418,8 @@ class brip_vil_float_ops
                    vil_image_view<float>& H,
                    vil_image_view<float>& S);
 
+  
+
   //: converts a byte-pixel image to float (I,H,S) image triple
   static void
     convert_to_IHS(vil_image_view<vxl_byte> const& image,
@@ -409,7 +427,15 @@ class brip_vil_float_ops
                    vil_image_view<float>& H,
                    vil_image_view<float>& S);
 
-  //: display (I,H,S) image triple as RGB (no conversion from IHS to RGB!)
+  //: somewhat different map to IHS, ratio = (H+1)/(I+1) indicating shadows
+  static void
+    convert_to_IHS_tsai(vil_image_view<vxl_byte > const& image,
+                        vil_image_view<float>& I,
+                        vil_image_view<float>& H,
+                        vil_image_view<float>& S,
+                        vil_image_view<float>& ratio);
+
+//: display (I,H,S) image triple as RGB (no conversion from IHS to RGB!)
   static void
     display_IHS_as_RGB(vil_image_view<float> const& I,
                        vil_image_view<float> const& H,
