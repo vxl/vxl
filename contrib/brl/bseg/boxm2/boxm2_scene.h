@@ -59,9 +59,9 @@ class boxm2_scene : public vbl_ref_count
 
     boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version = 2);
 
-	//: initializes the scene from the buffer that loaded an XML file in, 
-	// this is added for decoupling from the local filesystem to load the scene
-	boxm2_scene(const char* buffer);
+    //: initializes the scene from the buffer that loaded an XML file in.
+    // this is added for decoupling from the local filesystem to load the scene
+    boxm2_scene(const char* buffer);
 
     //: initializes scene from xmlFile
     boxm2_scene(vcl_string filename);

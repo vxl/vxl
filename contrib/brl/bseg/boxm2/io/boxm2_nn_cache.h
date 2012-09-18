@@ -11,8 +11,7 @@ class boxm2_nn_cache : public boxm2_cache
 {
   public:
 
-    //: construct with directory and scene dimensions (blocknum), by default use
-	// the local filesystem
+    //: construct with directory and scene dimensions (blocknum), by default use the local filesystem
     boxm2_nn_cache(boxm2_scene* scene, BOXM2_IO_FS_TYPE fs=LOCAL);
     ~boxm2_nn_cache();
 
