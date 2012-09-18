@@ -243,7 +243,6 @@ set_ground_plane_max_depth(double max_depth,
   vcl_vector<vsol_point_2d_sptr> pts_above_on;
   vcl_vector<unsigned> pts_closer_than_centroid;
   double min_d = vcl_numeric_limits<double>::max();
-  unsigned i_min = 0;
   for (unsigned i = 0; i<nverts; ++i) {
     vgl_point_2d<double> p = region_2d_->vertex(i)->get_p();
     vgl_vector_2d<double> vp = vector_to_closest_horizon_pt(p, horizon);
@@ -252,7 +251,6 @@ set_ground_plane_max_depth(double max_depth,
       pts_closer_than_centroid.push_back(i);
     if (d <min_d) {
       min_d = d;
-      i_min = i;
     }
     double dp = dot_product(vp, v01);
     bool above = dp>0.0;
