@@ -26,12 +26,12 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int2               * mixture_array,
                   __global    float4             * ray_origins,
                   __global    float4             * ray_directions,
-                  //__global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
                   __global    float4             * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,
                   __global    float              * output,
                   __constant  uchar              * bit_lookup,
                   __global    float              * vis_image,
+				  __global    float              * max_omega_image,
                   __local     uchar16            * local_tree,
                   __local     uchar              * cumsum,        //cumulative sum helper for data pointer
                   __local     int                * imIndex)
