@@ -76,6 +76,12 @@ class boxm2_util
                             boxm2_cache_sptr& cache,
                             const vgl_point_3d<double>& point,
                             float& prob, float& intensity);
+    // Computes the order of the blocks spiraling from the curr_block.
+    static vcl_vector<boxm2_block_id> order_about_a_block(boxm2_scene_sptr scene, boxm2_block_id curr_block);
+
+    static bool get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile, vgl_point_3d<double> origin, 
+                                   vcl_vector<vil_image_view<float>*> & raydirs,
+                                   vcl_vector<vil_image_view<float>*> & tfinal);
 };
 
-#endif // boxm2_util_h
+#endif // boxm2_util_h;

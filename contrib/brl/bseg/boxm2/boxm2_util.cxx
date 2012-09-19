@@ -595,3 +595,120 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
   return true;
 }
 
+vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scene, boxm2_block_id curr_block)
+{
+    vcl_vector<boxm2_block_id> allblocks = scene->get_block_ids();
+    vcl_vector<boxm2_block_id> orderdblocks;
+    vcl_vector<boxm2_block_id>::iterator iter;
+    int curr_i = curr_block.i();
+    int curr_j = curr_block.j();
+    int curr_k = curr_block.k();
+    
+    iter = vcl_find(allblocks.begin(), allblocks.end(), curr_block); 
+    if(iter!= allblocks.end() )
+    {
+        orderdblocks.push_back(*iter);
+    }
+    else
+    {
+        vcl_cout<<"The current block id is not in this scene"<<vcl_endl;
+        return orderdblocks;
+    }
+    int radius = 1;
+    while(allblocks.size() > orderdblocks.size())
+    {
+        
+        int k =0;
+
+        for(int i =-radius+curr_i; i<=radius+curr_i; i+=2*radius)
+            for(int j =-radius+curr_j; j<=radius+curr_j; j++)              
+                {
+                    iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k)); 
+                    if(iter!= allblocks.end() )
+                    {
+                        orderdblocks.push_back(*iter);
+                    }
+                }
+            for(int j =-radius+curr_j; j<=radius+curr_j; j+=2*radius)              
+                for(int i =-radius+curr_i+1; i<radius+curr_i; i++)
+                {
+                    iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k)); 
+                    if(iter!= allblocks.end() )
+                    {
+                        orderdblocks.push_back(*iter);
+                    }
+                }
+
+        radius++;
+    }
+    return orderdblocks;
+}
+
+bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile, 
+                                    vgl_point_3d<double> origin, 
+                                    vcl_vector<vil_image_view<float>*> & raydirs,
+                                    vcl_vector<vil_image_view<float>*> & tfinals)
+{
+    if(!vul_file::is_directory(depthdir))
+    {
+        vcl_cout<<"Directory is not valid "<<vcl_endl;
+        return false;
+    }
+    vcl_ifstream ifile(camsfile.c_str());
+    if(!ifile)
+    {
+        vcl_cout<<"Could not open the cams file "<<camsfile<<vcl_endl;
+        return false;
+    }
+  
+    vcl_cout<<"Processing the file"<<vcl_endl;
+    int counter = 0;
+    while(!ifile.eof() )
+    {
+        int uid;
+        double f; 
+        double tempx,tempy,tempz;
+        double mind,maxd;
+        ifile >> uid >> f ;
+        ifile >> tempx >> tempy >> tempz;
+        vgl_point_3d<double> cc(tempx,tempy,tempz);
+        ifile >> tempx >> tempy >> tempz;
+        vgl_vector_3d<double> zdir(tempx,tempy,tempz);
+        ifile >> tempx >> tempy >> tempz;
+        vgl_vector_3d<double> udir(tempx,tempy,tempz);
+        ifile >> tempx >> tempy >> tempz;
+        vgl_vector_3d<double> vdir(tempx,tempy,tempz);
+        ifile >> mind >> maxd; 
+        char filename[1000];
+        vcl_sprintf(filename,"%s//depth_%d.png",depthdir,uid);
+        vil_image_view_base_sptr im = vil_load(filename);
+        if(vil_image_view<unsigned char> * depthimg = dynamic_cast<vil_image_view<unsigned char> *> (im.ptr()))
+        {
+            vil_image_view<float> * tdirimg= new vil_image_view<float>(depthimg->ni(),depthimg->nj(), 3);
+            vil_image_view<float> * tfinalimg= new vil_image_view<float>(depthimg->ni(),depthimg->nj(), 1);
+            for(unsigned int i = 0 ; i < depthimg->ni(); i++)
+            {
+                for(unsigned int j = 0 ; j < depthimg->nj(); j++)
+                {
+                    double zr = (double)(*depthimg)(i,j) /255.0* ( maxd-mind) + mind;
+                    double xr = ((double)i-(double)depthimg->ni()/2) / f;
+                    double yr = ((double)j-(double)depthimg->nj()/2) / f;
+
+                    vgl_point_3d<double> wr(xr,yr,zr);
+                    vgl_point_3d<double> wp = cc + xr*udir+ yr*vdir+zr*zdir;                  
+                    vgl_ray_3d<double> ray(origin, wp);
+                        
+                    double length =  (origin-wp).length();
+                    vgl_vector_3d<double> raydir = ray.direction();
+                    (*tdirimg)(i,j,0) = raydir.x();
+                    (*tdirimg)(i,j,1) = raydir.y();
+                    (*tdirimg)(i,j,2) = raydir.z();
+
+                    (*tfinalimg)(i,j) = length;
+                }
+            }
+            raydirs.push_back(tdirimg);
+            tfinals.push_back(tfinalimg);
+        }
+    }
+}
