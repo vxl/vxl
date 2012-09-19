@@ -136,6 +136,7 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+  valid_types.push_back(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix());
   if ( !boxm2_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
     vcl_cout<<"boxm2_ocl_paint_batch ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
@@ -172,10 +173,16 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  
+  
+  float* max_omega_buff = new float[cl_ni*cl_nj];
+  vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
+  bocl_mem_sptr max_omega_image = new bocl_mem(device->context(), max_omega_buff, cl_ni*cl_nj*sizeof(float), "vis image (single float) buffer");
+  max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // run expected image function
   float time = render_expected_image( scene, device, opencl_cache, queue,
-                                      cam, exp_image, vis_image, exp_img_dim,
+                                      cam, exp_image, vis_image,max_omega_image, exp_img_dim,
                                       data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj, apptypesize);
 
   // normalize

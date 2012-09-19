@@ -167,6 +167,10 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(cl_float), "vis image (single float) buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+      float* max_omega_buff = new float[cl_ni*cl_nj];
+  vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
+  bocl_mem_sptr max_omega_image = new bocl_mem(device->context(), max_omega_buff, cl_ni*cl_nj*sizeof(float), "vis image (single float) buffer");
+  max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //image dimensions
   int img_dim_buff[4];
@@ -177,7 +181,7 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
 
   // run expected image function
   render_expected_image(scene, device, opencl_cache, queue,
-                        cam, exp_image, vis_image, exp_img_dim,
+                        cam, exp_image, vis_image, max_omega_image, exp_img_dim,
                         data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
 
   // normalize

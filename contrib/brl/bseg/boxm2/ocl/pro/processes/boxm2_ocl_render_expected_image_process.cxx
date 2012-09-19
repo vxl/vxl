@@ -48,12 +48,15 @@ namespace boxm2_ocl_render_expected_image_process_globals
     src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    //set kernel options
-    //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-    vcl_string options = opts;
+	vcl_size_t found = opts.find("SHORT");
+	if (found!=vcl_string::npos)
+	{
+		vcl_cout<<"COMPILING SHORT "<<vcl_endl;
+		vcl_cout.flush();
+	vcl_string options = opts;
     options += "-D RENDER ";
 
-    options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
+    options += "-D RENDER_MAX -D STEP_CELL=step_cell_render_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -65,7 +68,25 @@ namespace boxm2_ocl_render_expected_image_process_globals
                                      options,              //options
                                      "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
-    //create normalize image kernel
+	}
+	else
+	{
+			vcl_string options = opts;
+    options += "-D RENDER ";
+
+    options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
+
+    //have kernel construct itself using the context and device
+    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    ray_trace_kernel->create_kernel( &device->context(),
+                                     device->device_id(),
+                                     src_paths,
+                                     "render_bit_scene",   //kernel name
+                                     options,              //options
+                                     "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
+    vec_kernels.push_back(ray_trace_kernel);
+
+	    //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
@@ -79,6 +100,9 @@ namespace boxm2_ocl_render_expected_image_process_globals
                                             "normalize render kernel"); //kernel identifier (for error checking)
 
     vec_kernels.push_back(normalize_render_kernel);
+	}
+
+
   }
 }
 
@@ -207,13 +231,17 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+   float* max_omega_buff = new float[cl_ni*cl_nj];
+  vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
+  bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"vis image buffer");
+  max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // run expected image function
   render_expected_image(scene, device, opencl_cache, queue,
-                        cam, exp_image, vis_image, exp_img_dim,
+                        cam, exp_image, vis_image, max_omega_image, exp_img_dim,
                         data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
-
   // normalize
+  if(kernels[identifier].size()>1)
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern = kernels[identifier][1];
@@ -250,9 +278,10 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
   delete [] vis_buff;
   delete [] buff;
+  delete [] max_omega_buff;
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(exp_image.ptr());
-
+  opencl_cache->unref_mem(max_omega_image.ptr());
   clReleaseCommandQueue(queue);
   i=0;
   // store scene smaprt pointer
