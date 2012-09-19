@@ -43,6 +43,8 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_synoptic_update_alpha_process, "boxm2OclSynopticUpdateAlphaProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_batch_synoptic_phongs_process, "boxm2OclBatchSynopticPhongsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_alpha_wphongs_process, "boxm2OclUpdateAlphaWphongsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_probability_of_image_wcubic_process, "boxm2OclProbabilityOfImageWcubicProcess");
+  
   
   //batch paint
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_paint_batch_process, "boxm2OclPaintBatchProcess");
@@ -83,6 +85,7 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_image_naa_process, "boxm2OclRenderExpectedImageNAAProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_albedo_normal_process, "boxm2OclRenderExpectedAlbedoNormalProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_batch_compute_normal_albedo_array_process, "boxm2OclBatchComputeNormalAlbedoArrayProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_compute_visibility_process, "boxm2OclComputeVisibilityProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_ingest_dem_space_process, "boxm2OclIngestDemSpaceProcess");
 

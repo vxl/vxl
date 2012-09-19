@@ -45,6 +45,9 @@ DECLARE_FUNC_CONS(boxm2_ocl_batch_uncertainty_process);
 DECLARE_FUNC_CONS(boxm2_ocl_synoptic_update_alpha_process);
 DECLARE_FUNC_CONS(boxm2_ocl_batch_synoptic_phongs_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_alpha_wphongs_process);
+DECLARE_FUNC_CONS(boxm2_ocl_probability_of_image_wcubic_process);
+DECLARE_FUNC_CONS(boxm2_ocl_compute_visibility_process);
+
 
 DECLARE_FUNC_CONS(boxm2_ocl_render_scene_uncertainty_map_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_sun_visibilities_process); 
