@@ -19,15 +19,15 @@
 #include <vnl/vnl_double_2x3.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>
 #include <vnl/algo/vnl_svd.h>
+
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_transpose.h>
-
 #include <vil/vil_convert.h>
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
-
 #include <vil/vil_math.h>
 #include <vil/algo/vil_convolve_1d.h>
+
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
@@ -998,7 +998,7 @@ max_scale_trace_value(vil_image_view<float> input,
 
   vil_image_view<double> tr_normalized, tr_stretched;
   vil_convert_stretch_range(tr_max, tr_normalized, 0.0f, 1.0f);
-  vil_convert_stretch_range(tr_max, tr_stretched, 0.0f, 255.0f);
+  vil_convert_stretch_range(tr_max, tr_stretched, 0.0f, 256.0f);
   vil_image_view<float> tr_cast;
   vil_convert_cast(tr_stretched, tr_cast);
   vil_image_view<vxl_byte> tr_cast_byte;
@@ -1071,7 +1071,7 @@ max_scale_trace_value(vil_image_view<float> input,
   vil_save_image_resource(vil_new_image_resource_of_view(dif_cast), "D:\\projects\\vehicle_rec_on_models\\difference_image.png");
 
   vil_image_view<double> tr_stretched2;
-  vil_convert_stretch_range(tr_max2, tr_stretched2, 0.0f, 255.0f);
+  vil_convert_stretch_range(tr_max2, tr_stretched2, 0.0f, 256.0f);
   vil_image_view<float> tr_cast2;
   vil_convert_cast(tr_stretched2, tr_cast2);
   vil_image_view<vxl_byte> tr_cast2_byte;
@@ -1461,7 +1461,7 @@ brip_vil_float_ops::convert_to_byte(vil_image_view<float> const& image)
   if (range == 0.f)
     range = 1.f;
   else
-    range = 255.f/range;
+    range = 256.f/range;
   for (unsigned y = 0; y<h; y++)
     for (unsigned x = 0; x<w; x++)
     {
@@ -1484,14 +1484,14 @@ brip_vil_float_ops::convert_to_byte(vil_image_view<float> const& image,
   if (range == 0.f)
     range = 1.f;
   else
-    range = 255.f/range;
+    range = 256.f/range;
   for (unsigned y = 0; y<h; y++)
     for (unsigned x = 0; x<w; x++)
     {
       float v = (image(x,y)-min_val)*range;
-      if (v>255)
+      if (v>=256)
         v=255;
-      if (v<0)
+      else if (v<0)
         v=0;
       output(x,y) = (unsigned char)v;
     }
@@ -1508,16 +1508,16 @@ convert_to_byte(vil_image_view<vxl_uint_16> const& image,
   output.set_size(ni, nj);
   float range = static_cast<float>(max_val-min_val);
   if (!range)
-    range = 1;
+    range = 1.f;
   else
-    range = 255/range;
+    range = 256.f/range;
   for (unsigned r = 0; r<nj; r++)
     for (unsigned c = 0; c<ni; c++)
     {
       float v = float(image(c, r)-min_val)*range;
-      if (v>255)
+      if (v>=256)
         v=255;
-      if (v<0)
+      else if (v<0)
         v=0;
       output(c, r) = static_cast<unsigned char>(v);
     }
@@ -1711,10 +1711,9 @@ brip_vil_float_ops::convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& i
 void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
                                     float& i, float& h, float& s)
 {
-  float r,g,b;
-  r=rgb.R();
-  g=rgb.G();
-  b=rgb.B();
+  float r=rgb.R();
+  float g=rgb.G();
+  float b=rgb.B();
 
   float maxval = vnl_math_max(r,vnl_math_max(g,b));
   float minval = vnl_math_min(r,vnl_math_min(g,b));
@@ -1726,7 +1725,7 @@ void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
   else
     s = delta / maxval;
 
-  if (s== 0)
+  if (s==0)
     h = 0;                   //!< (Hue is undefined)
 
   if (r== maxval)
@@ -1735,32 +1734,34 @@ void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
     h = 2 + (b - r)/delta ;  //!< (between cyan and yellow)
   if (b == maxval)
     h = 4 + (r - g) / delta; //!< (between magenta and cyan)
-  h = h * 60;                //!< (convert Hue to degrees)
-  if (h < 0)
-    h = h + 360 ;            //!< (Hue must be positive)
-  if (h >= 360)
-    h = h - 360;             //!< (Hue must be less than 360)
+  h *= 60.f;                 //!< (convert Hue to degrees)
+  if (h < 0.f)
+    h += 360.f;              //!< (Hue must be positive)
+  else if (h >= 360.f)
+    h -= 360.f;              //!< (Hue must be less than 360)
 
-  h = (vxl_byte)(h * (255.0 / 360.0));
-  s = (vxl_byte)(s * 255.0);
+  h *= 256.0f / 360.0f; // range 0 .. 255
+  s *= 256.0f;          // range 0 .. 255
 }
+
 void   brip_vil_float_ops::rgb_to_ihs_tsai(vil_rgb<vxl_byte> const& rgb,
-                     float& i, float& h, float& s){
-  float r,g,b;
-  r=rgb.R();
-  g=rgb.G();
-  b=rgb.B();
+                                           float& i, float& h, float& s)
+{
+  float r=rgb.R();
+  float g=rgb.G();
+  float b=rgb.B();
   float sq6 = vcl_sqrt(6.0f);
   float V1, V2;
   i = (r+g+b)/3.0f;
-  V1 = (sq6*b)/3.0f -(r/sq6) -(g/sq6);
-  V2 = (r/sq6)-(2.0f*g/sq6);
+  V1 = (2.0f*b-r-g)/sq6;
+  V2 = (r-2.0f*g)/sq6;
   s = vcl_sqrt(V1*V1 + V2*V2);
-  float a = vcl_atan2(V2, V1);
   float two_pi = static_cast<float>(2.0*vnl_math::pi);
-  if(a<0.0f) a += two_pi;
-  h = (a*255.0f)/two_pi;
+  float a = vcl_atan2(V2, V1)/two_pi;
+  if (a<0.0f) a += 1.0f; // range [0..1)
+  h = a*256.0f; // range [0..256)
 }
+
 void brip_vil_float_ops::ihs_to_rgb(vil_rgb<vxl_byte> & rgb,
                                     const float i, const float h, const float s)
 {
@@ -1777,8 +1778,8 @@ void brip_vil_float_ops::ihs_to_rgb(vil_rgb<vxl_byte> & rgb,
   else if (s > 0.0)
   {
     float ss = s, hh = h;
-    ss *= 1.f / 255.f;
-    hh *= 6.f / 255.f;
+    ss *= 1.f / 256.f;
+    hh *= 6.f / 256.f;
 
     float J = vcl_floor(hh);
     float F = hh - J;
@@ -1840,6 +1841,7 @@ convert_to_IHS(vil_image_view<vxl_byte> const& image,
       S(c,r) = sat;
     }
 }
+
 void brip_vil_float_ops::
 convert_to_IHS_tsai(vil_image_view<vxl_byte> const& image,
                     vil_image_view<float>& I,
@@ -1855,15 +1857,16 @@ convert_to_IHS_tsai(vil_image_view<vxl_byte> const& image,
   for (unsigned r = 0; r < h; r++)
     for (unsigned c = 0; c < w; c++)
     {
-      float in, hue, sat, rat;
+      float in, hue, sat;
       vil_rgb<vxl_byte> imint(image(c,r,0),image(c,r,1),image(c,r,2));
       rgb_to_ihs_tsai(imint, in, hue, sat);
       I(c,r) = in;
       H(c,r) = hue;
       S(c,r) = sat;
-      ratio(c,r) = (H(c,r)+1.0f)/(I(c,r) + 1.0f);
+      ratio(c,r) = (hue+1.0f)/(in+1.0f);
     }
 }
+
 #if 0 // commented out
 void brip_vil_float_ops::
 display_IHS_as_RGB(vil_image_view<float> const& I,
@@ -1873,7 +1876,7 @@ display_IHS_as_RGB(vil_image_view<float> const& I,
 {
   unsigned w = I.ni(), h = I.nj();
   image.set_size(w,h);
-  float s = 255.0f/360.0f;
+  float s = 256.0f/360.0f;
   for (unsigned r = 0; r < h; r++)
     for (unsigned c = 0; c < w; c++)
     {
@@ -1883,9 +1886,9 @@ display_IHS_as_RGB(vil_image_view<float> const& I,
       if (in<0) in = 0;
       if (sat<0) sat = 0;
       if (hue<0) hue = 0;
-      if (in>255) in = 255;
-      if (hue>255) hue = 255;
-      if (sat>255) sat = 255;
+      if (in>=256) in = 255;
+      if (hue>=256) hue = 255;
+      if (sat>=256) sat = 255;
       image(c,r).r = (vxl_byte)in;
       image(c,r).g = (vxl_byte)hue;
       image(c,r).b = (vxl_byte)sat;
@@ -1911,8 +1914,8 @@ display_IHS_as_RGB(vil_image_view<float> const& I,
       float sat = 2.f*S(c,r);
       if (sat<0)
         sat = 0.f;
-      if (sat>255)
-        sat = 255.f;
+      else if (sat>=256)
+        sat = 255.999f;
       float ang = deg_to_rad*hue;
       float cs = vcl_cos(ang), si = vcl_fabs(vcl_sin(ang));
       float red=0.0f, blue=0.0f;
@@ -2026,7 +2029,7 @@ brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
   if (image.nplanes()==1 &&image.pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
   {
     vil_image_view<float> temp = image.get_view();
-    float vmin=0, vmax=255;
+    float vmin=0.f, vmax=256.f;
     vil_math_value_range<float>(temp, vmin, vmax);
     return brip_vil_float_ops::convert_to_byte(temp, vmin, vmax);
   }
@@ -2085,7 +2088,7 @@ brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
           v += color_image(x,y,p);
         grey_image_f(x,y) = v/3.0f;
       }
-    float vmin=0, vmax=255;
+    float vmin=0.f, vmax=256.f;
     vil_math_value_range<float>(grey_image_f, vmin, vmax);
     return brip_vil_float_ops::convert_to_byte(grey_image_f, vmin, vmax);
   }
