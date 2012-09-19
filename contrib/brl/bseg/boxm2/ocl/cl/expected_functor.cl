@@ -5,6 +5,7 @@
     #define CONVERT_FUNC(lhs,data) uchar2 lhs1 = as_uchar2(data); uchar8 lhs = as_uchar8(0.0); lhs.s0 = lhs1.s0; lhs.s1 = lhs1.s1; lhs.s2 = 255;
     #define NORM 255;
 #endif
+
 #ifdef RENDER
 void step_cell_render(__global MOG_TYPE * cell_data,
                       __global float    * alpha_data,
@@ -28,32 +29,34 @@ void step_cell_render(__global MOG_TYPE * cell_data,
   (*expected_i)+=expected_int_cell*omega;
 }
 #endif
+
 #ifdef RENDER_MAX
 void step_cell_render_max(__global MOG_TYPE * cell_data,
-						  __global float    * alpha_data,
-						       int        data_ptr,
-                               float      d,
-                               float    * vis,
-                               float    * expected_i,
-							   float    * max_omega)
+                          __global float    * alpha_data,
+                                   int        data_ptr,
+                                   float      d,
+                                   float    * vis,
+                                   float    * expected_i,
+                                   float    * max_omega)
 {
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
   float expected_int_cell=0.0f;
   // for rendering only
-  
+
   float omega=(*vis) * (1.0f - diff_omega);
-  (*vis) *= diff_omega; 
-  if(omega > (*max_omega) )
+  (*vis) *= diff_omega;
+  if (omega > (*max_omega) )
   {
-	(*expected_i)=cell_data[data_ptr];
-	(*max_omega) = omega ;
+    (*expected_i)=cell_data[data_ptr];
+    (*max_omega) = omega ;
   }
 }
 #endif
+
 #ifdef RENDER_ALPHA_INTEGRAL
 void step_cell_alpha_integral(__global float  * alpha_data,
-                                      int      data_ptr,
+                                       int      data_ptr,
                                        float    d,
                                        float  * alpha_integral)
 {
@@ -61,6 +64,7 @@ void step_cell_alpha_integral(__global float  * alpha_data,
   (*alpha_integral) += alpha*d;
 }
 #endif
+
 #ifdef RENDER_USING_ALPHA_INTEGRAL
 void step_cell_render_using_alpha_intergal( __global MOG_TYPE * cell_data,
                                             __global float    * alpha_data,
@@ -87,6 +91,7 @@ void step_cell_render_using_alpha_intergal( __global MOG_TYPE * cell_data,
   (*expected_i)+=expected_int_cell*omega;
 }
 #endif
+
 #ifdef RENDER_SUN_VIS
 void step_cell_render_sun_vis(__global float   * auxsun,
                               __global float  * alpha_data,
@@ -251,7 +256,7 @@ void step_cell_render_depth(__global float* alpha_data,int data_ptr,
   float omega = vis - vis_prob_end;
   if (omega> 0.01)
   {
-	expected_depth += depth*omega;
+    expected_depth += depth*omega;
   }
   (*data_return).x = alpha_integral;
   (*data_return).y = vis_prob_end;
@@ -275,8 +280,9 @@ void step_cell_vis(__global float* cell_data, int data_ptr,
   float alpha = cell_data[data_ptr];
 
   (*vis) = (*vis) * exp(-alpha* d);
-  }
+}
 #endif
+
 #ifdef RENDER_DEPTH
 void step_cell_render_depth2(float depth,
                              __global float  * alpha_data,
@@ -293,12 +299,12 @@ void step_cell_render_depth2(float depth,
   float omega=(*vis) * (1.0f - diff_omega);
   if (omega> 0.005)
   {
-	  (*probsum)+=omega;
-	  (*vis)    *= diff_omega;
-	  (*expected_depth)+=depth*omega;
-	  (*expected_depth_square)+=depth*depth*omega;
-   }
-   (*t)=depth;
+    (*probsum)+=omega;
+    (*vis)    *= diff_omega;
+    (*expected_depth)+=depth*omega;
+    (*expected_depth_square)+=depth*depth*omega;
+  }
+  (*t)=depth;
 }
 
 #endif
@@ -412,4 +418,3 @@ void step_cell_render_albedo_normal(AuxArgs aux_args,
   *(aux_args.expected_albedo_normal) += expected_albedo_normal_cell*omega;
 }
 #endif
-

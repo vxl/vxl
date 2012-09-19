@@ -12,29 +12,27 @@ float cubic_prob_density(float  mean_obs,float phi,float8 mixture)
     }
     return prob_density;
 }
+
 #ifdef PROB_CUBIC_IMAGE
-
-
 void step_cell_cubic_compute_probability_of_intensity(AuxArgs aux_args,
-													  int data_ptr,
-														float d,
-														float * vis,
-														float * prob_image)
+                                                      int data_ptr,
+                                                      float d,
+                                                      float * vis,
+                                                      float * prob_image)
 {
-  
-  CONVERT_FUNC(uchar_data,aux_args.mog[data_ptr]);
-  float8 data= convert_float8(uchar_data)/NORM;
+    CONVERT_FUNC(uchar_data,aux_args.mog[data_ptr]);
+    float8 data= convert_float8(uchar_data)/NORM;
 
-  float meanobs  = aux_args.aux1[data_ptr]/aux_args.aux0[data_ptr];
-  float prob_den = cubic_prob_density(meanobs,aux_args.phi,data);
-  float alpha    = aux_args.alpha[data_ptr];
-  float prob     = 1-exp(-alpha*d);
-  float omega    = (*vis)*prob;
-  (*vis)         = (*vis)*(1-prob);
-  (*prob_image) += prob_den*omega;
+    float meanobs  = aux_args.aux1[data_ptr]/aux_args.aux0[data_ptr];
+    float prob_den = cubic_prob_density(meanobs,aux_args.phi,data);
+    float alpha    = aux_args.alpha[data_ptr];
+    float prob     = 1-exp(-alpha*d);
+    float omega    = (*vis)*prob;
+    (*vis)         = (*vis)*(1-prob);
+    (*prob_image) += prob_den*omega;
 }
+#endif
 
-#endif 
 #ifdef PREINF_CUBIC
 //preinf step cell functor
 void step_cell_preinf_cubic(AuxArgs aux_args, int data_ptr, uchar llid, float d)

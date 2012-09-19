@@ -31,7 +31,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    float              * output,
                   __constant  uchar              * bit_lookup,
                   __global    float              * vis_image,
-				  __global    float              * max_omega_image,
+                  __global    float              * max_omega_image,
                   __local     uchar16            * local_tree,
                   __local     uchar              * cumsum,        //cumulative sum helper for data pointer
                   __local     int                * imIndex)

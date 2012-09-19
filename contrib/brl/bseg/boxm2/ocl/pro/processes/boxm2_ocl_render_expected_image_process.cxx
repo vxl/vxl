@@ -48,61 +48,57 @@ namespace boxm2_ocl_render_expected_image_process_globals
     src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-	vcl_size_t found = opts.find("SHORT");
-	if (found!=vcl_string::npos)
-	{
-		vcl_cout<<"COMPILING SHORT "<<vcl_endl;
-		vcl_cout.flush();
-	vcl_string options = opts;
-    options += "-D RENDER ";
+    vcl_size_t found = opts.find("SHORT");
+    if (found!=vcl_string::npos)
+    {
+      vcl_cout<<"COMPILING SHORT"<<vcl_endl;
+      vcl_string options = opts;
+      options += "-D RENDER ";
+      options += "-D RENDER_MAX -D STEP_CELL=step_cell_render_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
 
-    options += "-D RENDER_MAX -D STEP_CELL=step_cell_render_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
+      //have kernel construct itself using the context and device
+      bocl_kernel * ray_trace_kernel=new bocl_kernel();
 
-    //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+      ray_trace_kernel->create_kernel( &device->context(),
+                                       device->device_id(),
+                                       src_paths,
+                                       "render_bit_scene",   //kernel name
+                                       options,              //options
+                                       "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
+      vec_kernels.push_back(ray_trace_kernel);
+    }
+    else
+    {
+      vcl_string options = opts;
+      options += "-D RENDER ";
 
-    ray_trace_kernel->create_kernel( &device->context(),
-                                     device->device_id(),
-                                     src_paths,
-                                     "render_bit_scene",   //kernel name
-                                     options,              //options
-                                     "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
-    vec_kernels.push_back(ray_trace_kernel);
-	}
-	else
-	{
-			vcl_string options = opts;
-    options += "-D RENDER ";
+      options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
-    options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
+      //have kernel construct itself using the context and device
+      bocl_kernel * ray_trace_kernel=new bocl_kernel();
+      ray_trace_kernel->create_kernel( &device->context(),
+                                       device->device_id(),
+                                       src_paths,
+                                       "render_bit_scene",   //kernel name
+                                       options,              //options
+                                       "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
+      vec_kernels.push_back(ray_trace_kernel);
 
-    //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
-    ray_trace_kernel->create_kernel( &device->context(),
-                                     device->device_id(),
-                                     src_paths,
-                                     "render_bit_scene",   //kernel name
-                                     options,              //options
-                                     "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
-    vec_kernels.push_back(ray_trace_kernel);
+      //create normalize image kernel
+      vcl_vector<vcl_string> norm_src_paths;
+      norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
+      norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
+      bocl_kernel * normalize_render_kernel=new bocl_kernel();
 
-	    //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
-    norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
-    norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    bocl_kernel * normalize_render_kernel=new bocl_kernel();
+      normalize_render_kernel->create_kernel( &device->context(),
+                                              device->device_id(),
+                                              norm_src_paths,
+                                              "normalize_render_kernel",   //kernel name
+                                              options,              //options
+                                              "normalize render kernel"); //kernel identifier (for error checking)
 
-    normalize_render_kernel->create_kernel( &device->context(),
-                                            device->device_id(),
-                                            norm_src_paths,
-                                            "normalize_render_kernel",   //kernel name
-                                            options,              //options
-                                            "normalize render kernel"); //kernel identifier (for error checking)
-
-    vec_kernels.push_back(normalize_render_kernel);
-	}
-
-
+      vec_kernels.push_back(normalize_render_kernel);
+    }
   }
 }
 
@@ -241,7 +237,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
                         cam, exp_image, vis_image, max_omega_image, exp_img_dim,
                         data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
   // normalize
-  if(kernels[identifier].size()>1)
+  if (kernels[identifier].size()>1)
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern = kernels[identifier][1];
