@@ -126,7 +126,8 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     vcl_string coordinate_type            = pro.get_input<vcl_string>(i++);
 
 
-    opencl_cache->clear_cache();
+    //  opencl_cache->get_cpu_cache()->clear_cache();
+
     long binCache = opencl_cache.ptr()->bytes_in_cache();
     vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
 
