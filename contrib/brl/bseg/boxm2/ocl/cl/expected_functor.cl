@@ -28,9 +28,32 @@ void step_cell_render(__global MOG_TYPE * cell_data,
   (*expected_i)+=expected_int_cell*omega;
 }
 #endif
+#ifdef RENDER_MAX
+void step_cell_render_max(__global MOG_TYPE * cell_data,
+						  __global float    * alpha_data,
+						       int        data_ptr,
+                               float      d,
+                               float    * vis,
+                               float    * expected_i,
+							   float    * max_omega)
+{
+  float alpha = alpha_data[data_ptr];
+  float diff_omega=exp(-alpha*d);
+  float expected_int_cell=0.0f;
+  // for rendering only
+  
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*vis) *= diff_omega; 
+  if(omega > (*max_omega) )
+  {
+	(*expected_i)=cell_data[data_ptr];
+	(*max_omega) = omega ;
+  }
+}
+#endif
 #ifdef RENDER_ALPHA_INTEGRAL
 void step_cell_alpha_integral(__global float  * alpha_data,
-                                       int      data_ptr,
+                                      int      data_ptr,
                                        float    d,
                                        float  * alpha_integral)
 {
@@ -167,7 +190,6 @@ void step_cell_compute_probability_of_intensity(__global MOG_TYPE * cell_data,
 {
   CONVERT_FUNC(uchar_data,cell_data[data_ptr]);
   float8 data= convert_float8(uchar_data)/NORM;
-
   float prob_den=gauss_3_mixture_prob_density(img_intensity,
                                               data.s0,data.s1,data.s2,
                                               data.s3,data.s4,data.s5,
@@ -227,8 +249,10 @@ void step_cell_render_depth(__global float* alpha_data,int data_ptr,
 
   float vis_prob_end = exp(-alpha_integral);
   float omega = vis - vis_prob_end;
-
-  expected_depth += depth*omega;
+  if (omega> 0.01)
+  {
+	expected_depth += depth*omega;
+  }
   (*data_return).x = alpha_integral;
   (*data_return).y = vis_prob_end;
   (*data_return).z = expected_depth;
@@ -244,6 +268,15 @@ void step_cell_visibility(__global float* cell_data, int data_ptr,
   (*data_return) = alpha_integral;
 }
 
+#ifdef RENDER_VISIBILITY
+void step_cell_vis(__global float* cell_data, int data_ptr,
+                   float d, float * vis)
+{
+  float alpha = cell_data[data_ptr];
+
+  (*vis) = (*vis) * exp(-alpha* d);
+  }
+#endif
 #ifdef RENDER_DEPTH
 void step_cell_render_depth2(float depth,
                              __global float  * alpha_data,
@@ -258,11 +291,14 @@ void step_cell_render_depth2(float depth,
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
   float omega=(*vis) * (1.0f - diff_omega);
-  (*probsum)+=omega;
-  (*vis)    *= diff_omega;
-  (*expected_depth)+=depth*omega;
-  (*expected_depth_square)+=depth*depth*omega;
-  (*t)=depth;
+  if (omega> 0.005)
+  {
+	  (*probsum)+=omega;
+	  (*vis)    *= diff_omega;
+	  (*expected_depth)+=depth*omega;
+	  (*expected_depth_square)+=depth*depth*omega;
+   }
+   (*t)=depth;
 }
 
 #endif
