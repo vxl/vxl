@@ -84,8 +84,6 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id,b
     return NULL;
   }
   //instantiate new block
-  return new boxm2_block(block_id, bytes);
-  //instantiate new block
   return new boxm2_block(block_id,data, bytes);
 }
 
@@ -114,7 +112,7 @@ boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(vcl_string dir, boxm2_bl
     numBytes=vul_file::size(filename);
 
     //Read bytes into stream
-    char * bytes = new char[numBytes];
+    bytes = new char[numBytes];
     vcl_ifstream myFile (filename.c_str(), vcl_ios::in | vcl_ios::binary);
     myFile.read(bytes, numBytes);
     if (!myFile) {
