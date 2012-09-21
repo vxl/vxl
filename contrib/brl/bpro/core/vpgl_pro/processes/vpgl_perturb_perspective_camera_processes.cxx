@@ -138,8 +138,8 @@ bool vpgl_perturb_persp_cam_orient_process(bprb_func_process& pro)
   vcl_cout << "delta_x with sampled theta: " << ap.theta << " at height: " << h << " is: " << delta_x << " cm." << vcl_endl;
 #endif
   pro.set_output_val<vpgl_camera_double_sptr>(0, new vpgl_perspective_camera<double>(out_cam));
-  pro.set_output_val<float>(1,ap.theta);
-  pro.set_output_val<float>(2,ap.phi);
+  pro.set_output_val<float>(1,float(ap.theta));
+  pro.set_output_val<float>(2,float(ap.phi));
   return true;
 }
 
@@ -341,8 +341,8 @@ bool vpgl_perturb_uniform_persp_cam_orient_process(bprb_func_process& pro)
   out_cam.set_camera_center(cam->get_camera_center());
 
   pro.set_output_val<vpgl_camera_double_sptr>(0, new vpgl_perspective_camera<double>(out_cam));
-  pro.set_output_val<float>(1,ap.theta);
-  pro.set_output_val<float>(2,ap.phi);
+  pro.set_output_val<float>(1,float(ap.theta));
+  pro.set_output_val<float>(2,float(ap.phi));
   return true;
 }
 
