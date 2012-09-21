@@ -24,7 +24,7 @@ vil_viff_xvimage::vil_viff_xvimage(
   memset(  reserve, 0, VIFF_HEADERSIZE-21*sizeof(vxl_sint_32)-520*sizeof(char)-4*sizeof(float));
   memset(  trash, 0, 3L);
   memset(  comment, 0, VIL_VIFF_COMMENT_LENGTH);
-  strcpy(  comment, "vil_viff image writer output"); // This string needs to be shorter than 511 chars.
+  strncpy( comment, "vil_viff image writer output", 28); // must be <= 511 chars
   row_size = ncols;
   col_size = nrows;
   subrow_size = 0; /* Don't care, just avoid uninitialised memory. */
