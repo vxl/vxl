@@ -100,7 +100,7 @@ namespace boxm2_create_scene_and_blocks_process_globals
 bool boxm2_create_scene_and_blocks_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_scene_and_blocks_process_globals;
-  //process takes 13 inputs
+  //process takes 17 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // scene dir (with no slash at the end)
   input_types_[1] = "vcl_string"; //Appearance Model String
@@ -162,8 +162,8 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
 
   unsigned init_level = 1;
   unsigned max_level = 4;
-  float max_data_mb = 1000.0;
-  float p_init = 0.001;
+  float max_data_mb = 1000.0f;
+  float p_init = 0.001f;
 
   if (!vul_file::make_directory_path(datapath.c_str()))
     return false;

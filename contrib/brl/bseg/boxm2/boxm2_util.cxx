@@ -174,12 +174,12 @@ vcl_vector<vcl_string> boxm2_util::files_from_dir(vcl_string dir, vcl_string ext
 //Constructs a camera given elevation, azimuth (degrees), radius, and bounding box.
 vpgl_perspective_camera<double>*
     boxm2_util::construct_camera( double elevation,
-    double azimuth,
-    double radius,
-    unsigned ni,
-    unsigned nj,
-    vgl_box_3d<double> bb,
-    bool fit_bb)
+                                  double azimuth,
+                                  double radius,
+                                  unsigned ni,
+                                  unsigned nj,
+                                  vgl_box_3d<double> bb,
+                                  bool fit_bb)
 {
     double dni = static_cast<double>(ni);
     double dnj = static_cast<double>(nj);
@@ -244,7 +244,7 @@ vpgl_perspective_camera<double>*
 //: searches through the list of perspective cameras and returns a pointer to the one that most closely aligns with the normal
 //  \returns negative one if the list is empty
 int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
-    vcl_vector<vpgl_perspective_camera<double>* >& cams)
+                                 vcl_vector<vpgl_perspective_camera<double>* >& cams)
 {
     if (cams.empty()) {
         return -1;
@@ -259,7 +259,7 @@ int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
 #ifdef DEBUG
         if ( vcl_fabs(normal.z()) > .8 ) {
             vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<'\n'
-                <<" and angle: " <<ang * vnl_math::deg_per_rad<<vcl_endl;
+                    <<" and angle: " <<ang * vnl_math::deg_per_rad<<vcl_endl;
         }
 #endif // DEBUG
         if (ang < minAngle && ang < vnl_math::pi/3.0) {
@@ -502,9 +502,9 @@ vil_rgba<vxl_byte> boxm2_util::mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& i
         }
     }
     return vil_rgba<vxl_byte>( (vxl_byte) (mean[0]/count),
-        (vxl_byte) (mean[1]/count),
-        (vxl_byte) (mean[2]/count),
-        255 );
+                               (vxl_byte) (mean[1]/count),
+                               (vxl_byte) (mean[2]/count),
+                               255 );
 }
 
 bsta_histogram_sptr
@@ -540,9 +540,9 @@ bool boxm2_util::verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_stri
 }
 
 bool boxm2_util::get_point_index(boxm2_scene_sptr& scene,
-    boxm2_cache_sptr& cache,
-    const vgl_point_3d<double>& point,
-    boxm2_block_id& bid, int& data_index, float& side_len)
+                                 boxm2_cache_sptr& cache,
+                                 const vgl_point_3d<double>& point,
+                                 boxm2_block_id& bid, int& data_index, float& side_len)
 {
     vgl_point_3d<double> local;
     if (!scene->contains(point, bid, local))
@@ -564,9 +564,9 @@ bool boxm2_util::get_point_index(boxm2_scene_sptr& scene,
 
 
 bool boxm2_util::query_point(boxm2_scene_sptr& scene,
-    boxm2_cache_sptr& cache,
-    const vgl_point_3d<double>& point,
-    float& prob, float& intensity)
+                             boxm2_cache_sptr& cache,
+                             const vgl_point_3d<double>& point,
+                             float& prob, float& intensity)
 {
     boxm2_block_id id;
     int data_offset; float side_len;
@@ -644,29 +644,28 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
 }
 
 bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
-    vgl_point_3d<double> origin,
-    vcl_vector<vil_image_view<float>*> & raydirs,
-    vcl_vector<vil_image_view<float>*> & tfinals)
-{  
+                                    vgl_point_3d<double> origin,
+                                    vcl_vector<vil_image_view<float>*> & raydirs,
+                                    vcl_vector<vil_image_view<float>*> & tfinals)
+{
     if (!vul_file::is_directory(depthdir))
     {
-
-        vcl_cout<<"Directory is not valid "<<vcl_endl;
+        vcl_cout<<"Directory is not valid"<<vcl_endl;
         return false;
     }
     vcl_ifstream ifile(camsfile.c_str());
-    if(!ifile)
+    if (!ifile)
     {
         vcl_cout<<"Could not open the cams file "<<camsfile<<vcl_endl;
         return false;
     }
 
     int counter = 0;
-    while(!ifile.eof() )
+    while (!ifile.eof() )
     {
         ++counter;
         int uid;
-        double f; 
+        double f;
         double tempx,tempy,tempz;
         double mind,maxd;
         ifile >> uid >> f ;
@@ -678,14 +677,13 @@ bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
         vgl_vector_3d<double> udir(tempx,tempy,tempz);
         ifile >> tempx >> tempy >> tempz;
         vgl_vector_3d<double> vdir(tempx,tempy,tempz);
-        ifile >> mind >> maxd; 
+        ifile >> mind >> maxd;
         char filename[1000];
         vcl_sprintf(filename,"depth_%d.png",uid);
         vcl_string depthfilename = depthdir +"/" +filename ;
         vil_image_view_base_sptr im = vil_load(depthfilename.c_str());
-        if(vil_image_view<unsigned char> * depthimg = dynamic_cast<vil_image_view<unsigned char> *> (im.ptr()))
+        if (vil_image_view<unsigned char> * depthimg = dynamic_cast<vil_image_view<unsigned char> *> (im.ptr()))
         {
-
             vil_image_view<float> * tdirimg= new vil_image_view<float>(depthimg->ni(),depthimg->nj(), 3);
             vil_image_view<float> * tfinalimg= new vil_image_view<float>(depthimg->ni(),depthimg->nj(), 1);
             for (unsigned int i = 0 ; i < depthimg->ni(); i++)
@@ -702,11 +700,11 @@ bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
 
                     double length =  (origin-wp).length();
                     vgl_vector_3d<double> raydir = ray.direction();
-                    (*tdirimg)(i,j,0) = raydir.x();
-                    (*tdirimg)(i,j,1) = raydir.y();
-                    (*tdirimg)(i,j,2) = raydir.z();
+                    (*tdirimg)(i,j,0) = float(raydir.x());
+                    (*tdirimg)(i,j,1) = float(raydir.y());
+                    (*tdirimg)(i,j,2) = float(raydir.z());
 
-                    (*tfinalimg)(i,j) = length;
+                    (*tfinalimg)(i,j) = float(length);
                 }
             }
             raydirs.push_back(tdirimg);
@@ -717,7 +715,7 @@ bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
     return true;
 }
 
-vcl_vector<boxm2_block_id> 
+vcl_vector<boxm2_block_id>
 boxm2_util::blocks_along_a_ray(boxm2_scene_sptr scene, vgl_point_3d<double> p0, vgl_point_3d<double> p1)
 {
     boxm2_block_id id0,id1;
@@ -733,7 +731,7 @@ boxm2_util::blocks_along_a_ray(boxm2_scene_sptr scene, vgl_point_3d<double> p0, 
     double ray_dz = vec.z();
     vcl_vector<boxm2_block_id> ids;
     boxm2_block_id curr_id = id0;
-    while(t < length)
+    while (t < length)
     {
         ids.push_back(curr_id);
         boxm2_block_metadata mdata = scene->get_block_metadata(curr_id);
