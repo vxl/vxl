@@ -79,7 +79,10 @@ class boxm2_util
     // Computes the order of the blocks spiraling from the curr_block.
     static vcl_vector<boxm2_block_id> order_about_a_block(boxm2_scene_sptr scene, boxm2_block_id curr_block);
 
-    static bool get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile, vgl_point_3d<double> origin,
+    //: get blocks along a ray
+    static vcl_vector<boxm2_block_id> blocks_along_a_ray(boxm2_scene_sptr scene, vgl_point_3d<double> p0, vgl_point_3d<double> p1);
+
+    static bool get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile, vgl_point_3d<double> origin, 
                                    vcl_vector<vil_image_view<float>*> & raydirs,
                                    vcl_vector<vil_image_view<float>*> & tfinal);
 };
