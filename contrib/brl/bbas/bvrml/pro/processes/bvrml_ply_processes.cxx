@@ -267,7 +267,7 @@ int bvrml_plyio_vertex_cb_(p_ply_argument argument)
       break;
     case 8:
     {
-      parsed_ply->prob = ply_get_argument_value(argument);
+      parsed_ply->prob = (float)ply_get_argument_value(argument);
       // now check if this point needs to be collected
       vgl_point_3d<float> read_pt(parsed_ply->p[0], parsed_ply->p[1], parsed_ply->p[2]);
       vcl_vector<point_pair>& pp = parsed_ply->data;
