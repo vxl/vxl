@@ -29,7 +29,7 @@ bool brad_estimate_shadow_prob_density(vil_image_view<float> const& radiance_ima
    for (unsigned int j=0; j<radiance_image.nj(); ++j) {
       for (unsigned int i=0; i<radiance_image.ni(); ++i) {
          double diff = radiance_image(i,j) - shadow_rad;
-         shadow_prob_density(i,j) = shadow_pdf_norm * (float)vcl_exp(-diff*diff/(2*radiance_var));
+         shadow_prob_density(i,j) = float(shadow_pdf_norm * vcl_exp(-diff*diff/(2*radiance_var)));
       }
    }
    return true;
