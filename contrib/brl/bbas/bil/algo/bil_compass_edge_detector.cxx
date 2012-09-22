@@ -373,7 +373,7 @@ void compute_strength_and_orient(double* dist, int n_orient, float& strength, do
 
   // Compute Minimum and Maximum EMD values
   double maxEMD = 0.0, minEMD = 1.0;
-  int strindex = 0, abindex = 0;
+  int strindex = 0;
   for (int i = 0; i < n_orient; ++i) {
     if (dist[i] > maxEMD) {
       maxEMD = dist[i];
@@ -381,7 +381,6 @@ void compute_strength_and_orient(double* dist, int n_orient, float& strength, do
     }
     if (dist[i] < minEMD) {
       minEMD = dist[i];
-      abindex = i;
     }
   }
 
