@@ -77,9 +77,9 @@ vnl_vector<double> camera_diff(const vnl_vector<double>& a1,
   for (unsigned int i=0; i<da.size(); i+=3)
   {
     if ( da[i] > vnl_math::pi )
-      da[i] -= vnl_math::pi*2;
+      da[i] -= vnl_math::twopi;
     if ( da[i] < -vnl_math::pi )
-      da[i] += vnl_math::pi*2;
+      da[i] += vnl_math::twopi;
   }
   return da;
 }
