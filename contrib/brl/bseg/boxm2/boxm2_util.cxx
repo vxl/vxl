@@ -297,7 +297,7 @@ bool boxm2_util::copy_file(vcl_string file, vcl_string dest)
 
 bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, vcl_string dest)
 {
-    char html[4*1024];
+    char html[4096];
     vcl_sprintf(html,
         "<!DOCTYPE html>\n\
         <html lang='en'>\n\
@@ -602,7 +602,7 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
     vcl_vector<boxm2_block_id>::iterator iter;
     int curr_i = curr_block.i();
     int curr_j = curr_block.j();
-    int curr_k = curr_block.k(); // TODO -- unused!!
+    int curr_k = curr_block.k();
 
     iter = vcl_find(allblocks.begin(), allblocks.end(), curr_block);
     if (iter!= allblocks.end() )
@@ -617,10 +617,10 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
     int radius = 1;
     while (allblocks.size() > orderdblocks.size())
     {
-        int k =0;
+        int k =curr_k;
 
         for (int i =-radius+curr_i; i<=radius+curr_i; i+=2*radius)
-            for (int j =-radius+curr_j; j<=radius+curr_j; j++)
+            for (int j =-radius+curr_j; j<=radius+curr_j; ++j)
             {
                 iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
                 if (iter!= allblocks.end() )
@@ -628,17 +628,17 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
                     orderdblocks.push_back(*iter);
                 }
             }
-            for (int j =-radius+curr_j; j<=radius+curr_j; j+=2*radius)
-                for (int i =-radius+curr_i+1; i<radius+curr_i; i++)
+        for (int j =-radius+curr_j; j<=radius+curr_j; j+=2*radius)
+            for (int i =-radius+curr_i+1; i<radius+curr_i; ++i)
+            {
+                iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
+                if (iter!= allblocks.end() )
                 {
-                    iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
-                    if (iter!= allblocks.end() )
-                    {
-                        orderdblocks.push_back(*iter);
-                    }
+                    orderdblocks.push_back(*iter);
                 }
+            }
 
-                radius++;
+        ++radius;
     }
     return orderdblocks;
 }
@@ -735,10 +735,10 @@ boxm2_util::blocks_along_a_ray(boxm2_scene_sptr scene, vgl_point_3d<double> p0, 
     {
         ids.push_back(curr_id);
         boxm2_block_metadata mdata = scene->get_block_metadata(curr_id);
-        float max_facex = (ray_dx > 0.0f) ? mdata.bbox().max_x() : mdata.bbox().min_x();
-        float max_facey = (ray_dy > 0.0f) ? mdata.bbox().max_y() : mdata.bbox().min_y();
-        float max_facez = (ray_dz > 0.0f) ? mdata.bbox().max_z() : mdata.bbox().min_z();
-        t = vcl_min(vcl_min( (max_facex-p0.x())*(1.0f/ray_dx), (max_facey-p0.y())*(1.0f/ray_dy)), (max_facez-p0.z())*(1.0f/ray_dz))+1.0;
+        double max_facex = (ray_dx > 0) ? mdata.bbox().max_x() : mdata.bbox().min_x();
+        double max_facey = (ray_dy > 0) ? mdata.bbox().max_y() : mdata.bbox().min_y();
+        double max_facez = (ray_dz > 0) ? mdata.bbox().max_z() : mdata.bbox().min_z();
+        t = vcl_min(vcl_min( (max_facex-p0.x())*(1.0/ray_dx), (max_facey-p0.y())*(1.0/ray_dy)), (max_facez-p0.z())*(1.0/ray_dz))+1.0;
         scene->contains(p0+t*vec,curr_id,local_coords);
     }
     return ids;
