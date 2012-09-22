@@ -294,18 +294,23 @@ static void test_bvxm_normalize_image_process()
   brdb_value_sptr v6 = new brdb_value_t<unsigned>(ni);
   brdb_value_sptr v7 = new brdb_value_t<unsigned>(nj);
 
-  bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateMOGImageProcess");
-  good = good && bprb_batch_process_manager::instance()->set_input(0, v2); // voxel world
-  good = good && bprb_batch_process_manager::instance()->set_input(1, v3); // apm type
-  good = good && bprb_batch_process_manager::instance()->set_input(2, v4); // scale and bin ids
-  good = good && bprb_batch_process_manager::instance()->set_input(3, v5);
-  good = good && bprb_batch_process_manager::instance()->set_input(4, v1);  // camera
-  good = good && bprb_batch_process_manager::instance()->set_input(5, v6);   // ni of MOG image
-  good = good && bprb_batch_process_manager::instance()->set_input(6, v7);   // n7 of MOG image
+  bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateMOGImageProcess")
+           && bprb_batch_process_manager::instance()->set_input(0, v2) // voxel world
+           && bprb_batch_process_manager::instance()->set_input(1, v3) // apm type
+           && bprb_batch_process_manager::instance()->set_input(2, v4) // scale and bin ids
+           && bprb_batch_process_manager::instance()->set_input(3, v5)
+           && bprb_batch_process_manager::instance()->set_input(4, v1)  // camera
+           && bprb_batch_process_manager::instance()->set_input(5, v6)  // ni of MOG image
+           && bprb_batch_process_manager::instance()->set_input(6, v7); // n7 of MOG image
+  TEST("bprb_batch_process_manager init_process", good, true);
 
-  good = good && bprb_batch_process_manager::instance()->run_process();
+  good = bprb_batch_process_manager::instance()->run_process();
+  TEST("bprb_batch_process_manager run_process", good, true);
+
   unsigned id_slab;
-  good = good && bprb_batch_process_manager::instance()->commit_output(0, id_slab);
+  good = bprb_batch_process_manager::instance()->commit_output(0, id_slab);
+  TEST("bprb_batch_process_manager commit_output", good, true);
+
   brdb_query_aptr Q_slab = brdb_query_comp_new("id", brdb_query::EQ, id_slab);
   brdb_selection_sptr S_slab = DATABASE->select("bvxm_voxel_slab_base_sptr_data", Q_slab);
   TEST("output slab is in db", S_slab->size(), 1);
@@ -314,18 +319,20 @@ static void test_bvxm_normalize_image_process()
   TEST("output slab is in db", S_slab->get_value(vcl_string("value"), value_slab), true);
   TEST("output slab is non-null", (value_slab != 0) ,true);
 
-  good = bprb_batch_process_manager::instance()->init_process("bvxmNormalizeImageProcess");
-  good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
-  good = good && bprb_batch_process_manager::instance()->set_input(1, value_slab);
-  good = good && bprb_batch_process_manager::instance()->set_input(2, v3);
+  good = bprb_batch_process_manager::instance()->init_process("bvxmNormalizeImageProcess")
+      && bprb_batch_process_manager::instance()->set_input(0, v0)
+      && bprb_batch_process_manager::instance()->set_input(1, value_slab)
+      && bprb_batch_process_manager::instance()->set_input(2, v3);
+  TEST("bprb_batch_process_manager init_process", good, true);
 
-  good = good && bprb_batch_process_manager::instance()->run_process();
+  good = bprb_batch_process_manager::instance()->run_process();
+  TEST("run bvxm normalize image process", good ,true);
 
   unsigned id_img, id_a, id_b;
-  good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img);
-  good = good && bprb_batch_process_manager::instance()->commit_output(1, id_a);
-  good = good && bprb_batch_process_manager::instance()->commit_output(2, id_b);
-  TEST("run bvxm normalize image process", good ,true);
+  good = bprb_batch_process_manager::instance()->commit_output(0, id_img)
+      && bprb_batch_process_manager::instance()->commit_output(1, id_a)
+      && bprb_batch_process_manager::instance()->commit_output(2, id_b);
+  TEST("bprb_batch_process_manager commit_output", good, true);
 
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
   brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);

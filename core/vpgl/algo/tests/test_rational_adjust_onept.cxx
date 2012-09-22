@@ -9,7 +9,6 @@
 
 static void test_rational_adjust_onept()
 {
-
   double neu_u1[20] =
     { 8.96224e-005,  5.01302e-005,  -7.67889e-006,  -0.010342,
       -6.89891e-005,  7.97337e-006,  0.00149824,  -1.38598e-005,
@@ -95,7 +94,8 @@ static void test_rational_adjust_onept()
 
   vgl_point_3d<double> intersection;
   bool good  = vpgl_rational_adjust_onept::adjust(cams, corrs, cam_trans,
-                                                        intersection);
+                                                  intersection);
+  TEST("vpgl_rational_adjust_onept::adjust", good, true);
   vcl_cout << "3-d intersection point " << intersection <<'\n';
   for (unsigned i = 0; i<2; ++i)
     vcl_cout << "T[" << i << "] " << cam_trans[i] << '\n';
@@ -124,7 +124,8 @@ static void test_rational_adjust_onept()
   cams[1].set_image_offset(u02-10, v02-15);
 
   good  = vpgl_rational_adjust_onept::adjust(cams, corrs, cam_trans,
-                                                        intersection);
+                                             intersection);
+  TEST("vpgl_rational_adjust_onept::adjust", good, true);
   vcl_cout << "3-d intersection point " << intersection <<'\n';
   for (unsigned i = 0; i<2; ++i)
     vcl_cout << "T[" << i << "] " << cam_trans[i] << '\n';

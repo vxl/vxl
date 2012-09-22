@@ -23,7 +23,7 @@ static void test_constructor()
 
 static void test_operations()
 {
-  // a plane rotated 45 degrees around the Y axis, i.e. normal is 
+  // a plane rotated 45 degrees around the Y axis, i.e. normal is
   // perpendicular to Y
   double a = 1.0, b = 0.0, c = 1.0, d = 0.0;
   vgl_plane_3d<double> plane(a, b, c, d);
@@ -62,6 +62,7 @@ static void test_operations()
   vgl_point_3d<double> pt3d_on = vgl_closest_point(pt3d, plane_real);
   vgl_point_2d<double> pt2d;
   good = plane_real.plane_coords(pt3d_on, pt2d, 1e-5);
+  TEST("Realistic plane test: world -> plane", good, true);
   vgl_point_3d<double> prec_3d = plane_real.world_coords(pt2d);
   er = (prec_3d-pt3d_on).length();
   TEST_NEAR("Realistic plane test", er, 0.0, 1e-5);
@@ -69,9 +70,9 @@ static void test_operations()
 
 void test_plane_3d()
 {
-  vcl_cout << "*****************************\n"
+  vcl_cout << "**********************\n"
            << " Testing vgl_plane_3d\n"
-           << "*****************************\n\n";
+           << "**********************\n\n";
 
   test_constructor();
   test_operations();
