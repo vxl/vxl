@@ -28,8 +28,8 @@ bool bil_cedt::compute_cedt()
 {
     vbl_array_2d<double>  level(nj_,ni_);
 
-    for (int j=0; j<nj_; j++) {
-        for (int i=0; i<ni_; i++) {
+    for (int j=0; j<nj_; ++j) {
+        for (int i=0; i<ni_; ++i) {
             if (img_(i,j)==0)
                 level(j,i)=0;
             else
@@ -38,11 +38,11 @@ bool bil_cedt::compute_cedt()
     }
     bil_cedt_heap * heap=new bil_cedt_heap(nj_,ni_);
 
-    /* initialize the heap for positive values */
+    // initialize the heap for positive values
     find_dist_trans(level, heap);
 
-    for (unsigned j=0;j<dist_.nj();j++)
-      for (unsigned i=0;i<dist_.ni();i++)
+    for (unsigned j=0;j<dist_.nj();++j)
+      for (unsigned i=0;i<dist_.ni();++i)
          dist_(i,j)=vcl_sqrt((float)(dx_(j,i)*dx_(j,i)+dy_(j,i)*dy_(j,i)));
 
     delete heap;
@@ -53,7 +53,7 @@ bool bil_cedt::compute_cedt()
 bool bil_cedt::find_dist_trans(vbl_array_2d<double> &level,
                                bil_cedt_heap *heap)
 {
-  int yy,xx,i,ii,j,dir;
+  int yy,xx,i,j,dir;
   double dist,dist_x,dist_y;
 
   bil_cedt_contour pc(nj_,ni_);
@@ -66,9 +66,9 @@ bool bil_cedt::find_dist_trans(vbl_array_2d<double> &level,
 
   pc.ptr=0;
 
-  for (int y=0; y<nj_; y++)
+  for (int y=0; y<nj_; ++y)
   {
-    for (int x=0; x<ni_; x++)
+    for (int x=0; x<ni_; ++x)
     {
       tag_array(y,x) = 2;
 
@@ -93,53 +93,53 @@ bool bil_cedt::find_dist_trans(vbl_array_2d<double> &level,
     }
   }
 
-  ii = 0; pf.ptr =0;
-  for (ii=0; ii<pc.ptr; ii++)
+  pf.ptr = 0;
+  for (int ii=0; ii<pc.ptr; ++ii)
   {
-      int y = pc.y[ii];
-      int x = pc.x[ii];
-      tag_array(y,x) = 0;
-      for (i=-1; i<2; i++)
+    int y = pc.y[ii];
+    int x = pc.x[ii];
+    tag_array(y,x) = 0;
+    for (i=-1; i<2; ++i)
+    {
+      for (j=-1; j<2; ++j)
       {
-          for (j=-1; j<2; j++)
-          {
-              yy = y+i; xx = x+j;
-              if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_) {
-                  if (tag_array(yy,xx) != 0.0) {
-                      dist_x = dx_(y,x) + (double) j;
-                      dist_y = dy_(y,x) + (double) i;
-                      dist = dist_x*dist_x+dist_y*dist_y;
-                      if (surface(yy,xx) > dist)  {
-                          surface(yy,xx) = dist;
-                          dx_(yy,xx) = dist_x;
-                          dy_(yy,xx) = dist_y;
-                          tag_array(yy,xx) = 1;
-                          dir =  initial_direction(j, i);
-                          if (dir_array(yy,xx) == 17) {
-                              pf.x[pf.ptr] = xx;
-                              pf.y[pf.ptr] = yy;
-                              pf.dir[pf.ptr] = dir;
-                              pf.ptr++;
-                          }
-                          dir_array(yy,xx) = (unsigned char)dir;
-                      }
-                  }
+        yy = y+i; xx = x+j;
+        if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_) {
+          if (tag_array(yy,xx) != 0.0) {
+            dist_x = dx_(y,x) + (double) j;
+            dist_y = dy_(y,x) + (double) i;
+            dist = dist_x*dist_x+dist_y*dist_y;
+            if (surface(yy,xx) > dist)  {
+              surface(yy,xx) = dist;
+              dx_(yy,xx) = dist_x;
+              dy_(yy,xx) = dist_y;
+              tag_array(yy,xx) = 1;
+              dir =  initial_direction(j, i);
+              if (dir_array(yy,xx) == 17) {
+                pf.x[pf.ptr] = xx;
+                pf.y[pf.ptr] = yy;
+                pf.dir[pf.ptr] = dir;
+                pf.ptr++;
               }
+              dir_array(yy,xx) = (unsigned char)dir;
+            }
           }
+        }
       }
+    }
   }
 
-  /* correct the directions since dir_array contains right directions */
-  for (int ii=0; ii<pf.ptr; ii++) {
+  // correct the directions since dir_array contains right directions
+  for (int ii=0; ii<pf.ptr; ++ii) {
     int y = pf.y[ii];
     int x = pf.x[ii];
     int dir = dir_array(y,x);
     pf.dir[ii] =dir;
   }
 
-  /* horizontal and vertical directions */
+  // horizontal and vertical directions
   pc.ptr =0; heap->N=0; heap->end =1;
-  for (int ii=0; ii<pf.ptr; ii++) {
+  for (int ii=0; ii<pf.ptr; ++ii) {
     int y = pf.y[ii];
     int x = pf.x[ii];
     int dir = pf.dir[ii];
@@ -150,8 +150,8 @@ bool bil_cedt::find_dist_trans(vbl_array_2d<double> &level,
     }
   }
 
-  /* diagonal directions */
-  for (int ii=0; ii<pf.ptr; ii++) {
+  // diagonal directions
+  for (int ii=0; ii<pf.ptr; ++ii) {
     int y = pf.y[ii];
     int x = pf.x[ii];
     dir = pf.dir[ii];
@@ -162,7 +162,7 @@ bool bil_cedt::find_dist_trans(vbl_array_2d<double> &level,
     }
   }
 
-  /* start the growing from the contour */
+  // start the growing from the contour
   while (heap->N > 0) {
     int x = heap->locx[heap->index[1]];
     int y = heap->locy[heap->index[1]];
@@ -199,7 +199,8 @@ int bil_cedt:: initial_direction(int x, int y)
     return 6;
   else if (x == 1 &&  y == 1)
     return 7;
-  return -1;
+  else
+    return -1;
 }
 
 
@@ -693,26 +694,26 @@ void bil_cedt::add_to_contour(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
 //: heap to keep track of updated contour
 bil_cedt_heap::bil_cedt_heap(int nj,int ni)
 {
-    nj_=nj;
-    ni_=ni;
+  nj_=nj;
+  ni_=ni;
 
-    data = new double[2*nj*ni];
-    index = new int[2*nj*ni];
-    rank = new int[2*nj*ni];
-    loc = new int[2*nj*ni];
-    locx= new int[2*nj*ni];
-    locy= new int[2*nj*ni];
+  data = new double[2*nj*ni];
+  index = new int[2*nj*ni];
+  rank = new int[2*nj*ni];
+  loc = new int[2*nj*ni];
+  locx= new int[2*nj*ni];
+  locy= new int[2*nj*ni];
 
-    for (int i=0;i<2*nj*ni;i++)
-    {
-        data[i]=0;
-        index[i]=0;
-        rank[i]=0;
-        loc[i]=0;
-        locx[i]=0;
-        locy[i]=0;
-    }
-    N=0;
+  for (int i=0;i<2*nj*ni;++i)
+  {
+    data[i]=0;
+    index[i]=0;
+    rank[i]=0;
+    loc[i]=0;
+    locx[i]=0;
+    locy[i]=0;
+  }
+  N=0;
 }
 
 bil_cedt_heap::~bil_cedt_heap()
@@ -727,14 +728,14 @@ bil_cedt_heap::~bil_cedt_heap()
 
 void bil_cedt_heap::print_heap()
 {
-    for (int i=1; i<=N; i++) {
-        int x = locx[index[i]];
-        int y = locy[index[i]];
+  for (int i=1; i<=N; ++i) {
+    int x = locx[index[i]];
+    int y = locy[index[i]];
 #if 0 // this variable is not used in the code.  FIXME !  -MM
-        int pos = y*ni_+x;
+    int pos = y*ni_+x;
 #endif
-        vcl_cout<<"i ="<<i<<" index[i]= "<<index[i]<< " x= "<<x<<" y= "<<y<<'\n';
-    }
+    vcl_cout<<"i ="<<i<<" index[i]= "<<index[i]<< " x= "<<x<<" y= "<<y<<'\n';
+  }
 }
 
 void bil_cedt_heap::upheap( int k)
@@ -750,7 +751,7 @@ void bil_cedt_heap::upheap( int k)
 
 void bil_cedt_heap::insert( int pos, int location, double item)
 {
-  N++;
+  ++N;
   data[pos] = item;
   index[N] = pos;
   loc[location] = pos;
@@ -765,7 +766,7 @@ void bil_cedt_heap::downheap(int k)
   while (k <= (int) N/2.0) {
     int j = k+k;
     if (j < N && data[index[j]] > data[index[j+1]])
-      j++;
+      ++j;
     if (data[v] <= data[index[j]])
       break;
     index[k] = index[j];
@@ -799,8 +800,8 @@ bil_cedt_contour::bil_cedt_contour(int nj,int ni)
 
 bil_cedt_contour::~bil_cedt_contour()
 {
-    delete[] x;
-    delete[] y;
-    delete[] dir;
+  delete[] x;
+  delete[] y;
+  delete[] dir;
 }
 
