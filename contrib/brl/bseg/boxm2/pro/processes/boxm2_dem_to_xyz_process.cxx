@@ -169,7 +169,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
-  out_img_z->fill(scene_bbox.min_z());
+  out_img_z->fill((float)scene_bbox.min_z());
 
   double lon,lat,gz;
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84,lon, lat, gz);
