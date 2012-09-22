@@ -90,6 +90,7 @@ const double vnl_math::log10e           VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.4342
 const double vnl_math::ln2              VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.69314718055994530942 );
 const double vnl_math::ln10             VCL_STATIC_CONST_INIT_FLOAT_DEFN( 2.30258509299404568402 );
 const double vnl_math::pi               VCL_STATIC_CONST_INIT_FLOAT_DEFN( 3.14159265358979323846 );
+const double vnl_math::twopi            VCL_STATIC_CONST_INIT_FLOAT_DEFN( 6.28318530717958647692 );
 const double vnl_math::pi_over_2        VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.57079632679489661923 );
 const double vnl_math::pi_over_4        VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.78539816339744830962 );
 const double vnl_math::pi_over_180      VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.01745329251994329577 );
@@ -316,22 +317,10 @@ char   vnl_huge_val(char)   { return 0x7f; }
 //----------------------------------------------------------------------
 double vnl_math::angle_0_to_2pi(double angle)
 {
-  double a;
-  if (angle>=2*vnl_math::pi)
-    a = vcl_fmod (angle,vnl_math::pi*2);
-  else if (angle < 0)
-    a = (2*vnl_math::pi+ vcl_fmod (angle,2*vnl_math::pi));
-  else
-    a= angle;
-
-  // added by Nhon: these two lines of code is to fix the bug when
-  // angle = -1.1721201390607859e-016
-  // then after all the computation, we get
-  // a = 6.2831853071795862 == 2*vnl_math::pi !!!!!!!
-  // this situation can happen is when a is very close to zero.
-
-  if (!(a>=0 && a<2*vnl_math::pi)) {
-    a = 0;
-  }
-  return a;
+  angle = vcl_fmod(angle, vnl_math::twopi);
+  if (angle<0) angle += vnl_math::twopi;
+  // added by Nhon: this fixes a bug when angle == -1.1721201390607859e-016 :
+  // then after the above computation we get 6.2831853071795864769 == twopi !!!
+  if (angle<0 || angle>=vnl_math::twopi) { angle = 0; }
+  return angle;
 }

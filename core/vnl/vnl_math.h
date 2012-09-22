@@ -86,6 +86,7 @@ class vnl_math
   static VNL_DLL_DATA const double ln2              VCL_STATIC_CONST_INIT_FLOAT_DECL(0.69314718055994530942);
   static VNL_DLL_DATA const double ln10             VCL_STATIC_CONST_INIT_FLOAT_DECL(2.30258509299404568402);
   static VNL_DLL_DATA const double pi               VCL_STATIC_CONST_INIT_FLOAT_DECL(3.14159265358979323846);
+  static VNL_DLL_DATA const double twopi            VCL_STATIC_CONST_INIT_FLOAT_DECL(6.28318530717958647692);
   static VNL_DLL_DATA const double pi_over_2        VCL_STATIC_CONST_INIT_FLOAT_DECL(1.57079632679489661923);
   static VNL_DLL_DATA const double pi_over_4        VCL_STATIC_CONST_INIT_FLOAT_DECL(0.78539816339744830962);
   static VNL_DLL_DATA const double pi_over_180      VCL_STATIC_CONST_INIT_FLOAT_DECL(0.01745329251994329577);
@@ -145,8 +146,6 @@ template <class T> bool vnl_math_isnan(T);
 #endif
 
 
-
-
 // isinf
 inline bool vnl_math_isinf(char)               { return false; }
 inline bool vnl_math_isinf(short)              { return false; }
@@ -189,8 +188,6 @@ bool vnl_math_isfinite(long double);
 template <class T> bool vnl_math_isfinite(T);
 #endif
 
-
-
 // vnl_math_rnd_halfinttoeven  -- round towards nearest integer
 //         halfway cases are rounded towards the nearest even integer, e.g.
 //         vnl_math_rnd_halfinttoeven( 1.5) ==  2
@@ -210,6 +207,7 @@ inline int vnl_math_rnd_halfinttoeven(float  x)
 # endif
   return _mm_cvtss_si32(_mm_set_ss(x));
 }
+
 inline int vnl_math_rnd_halfinttoeven(double  x)
 {
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
@@ -229,6 +227,7 @@ inline int vnl_math_rnd_halfinttoeven(float  x)
   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
   return r;
 }
+
 inline int vnl_math_rnd_halfinttoeven(double  x)
 {
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
@@ -250,6 +249,7 @@ inline int vnl_math_rnd_halfinttoeven(float  x)
   }
   return r;
 }
+
 inline int vnl_math_rnd_halfinttoeven(double  x)
 {
   int r;
@@ -279,6 +279,7 @@ inline int vnl_math_rnd_halfinttoeven(float  x)
      return 2*(r/2);
   }
 }
+
 inline int vnl_math_rnd_halfinttoeven(double x)
 {
   if (x>=0.)
@@ -298,7 +299,6 @@ inline int vnl_math_rnd_halfinttoeven(double x)
 }
 
 #endif
-
 
 
 // vnl_math_rnd_halfintup  -- round towards nearest integer
@@ -324,6 +324,7 @@ inline int vnl_math_rnd_halfintup(float  x)
   x+=0.5f;
   return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
 }
+
 inline int vnl_math_rnd_halfintup(double x)
 {
   x+=0.5;
@@ -331,7 +332,6 @@ inline int vnl_math_rnd_halfintup(double x)
 }
 
 #endif
-
 
 
 // vnl_math_rnd  -- round towards nearest integer
@@ -359,7 +359,6 @@ inline int vnl_math_rnd(double x) { return x>=0.0?static_cast<int>(x+0.5):static
 #endif
 
 
-
 // vnl_math_floor -- round towards minus infinity
 //
 // Be careful: argument absolute value must be less than INT_MAX/2
@@ -376,6 +375,7 @@ inline int vnl_math_floor(float  x)
 # endif
    return _mm_cvtss_si32(_mm_set_ss(2*x-.5f))>>1;
 }
+
 inline int vnl_math_floor(double  x)
 {
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
@@ -396,6 +396,7 @@ inline int vnl_math_floor(float  x)
   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
   return r>>1;
 }
+
 inline int vnl_math_floor(double  x)
 {
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
@@ -419,6 +420,7 @@ inline int vnl_math_floor(float  x)
   }
   return r>>1;
 }
+
 inline int vnl_math_floor(double  x)
 {
   int r;
@@ -436,13 +438,13 @@ inline int vnl_math_floor(float  x)
 {
   return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
 }
+
 inline int vnl_math_floor(double x)
 {
   return static_cast<int>(x>=0.0?x:(x==static_cast<int>(x)?x:x-1.0));
 }
 
 #endif
-
 
 
 // vnl_math_ceil -- round towards plus infinity
@@ -461,6 +463,7 @@ inline int vnl_math_ceil(float  x)
 # endif
    return -(_mm_cvtss_si32(_mm_set_ss(-.5f-2*x))>>1);
 }
+
 inline int vnl_math_ceil(double  x)
 {
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
@@ -481,6 +484,7 @@ inline int vnl_math_ceil(float  x)
   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
   return -(r>>1);
 }
+
 inline int vnl_math_ceil(double  x)
 {
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
@@ -504,6 +508,7 @@ inline int vnl_math_ceil(float  x)
   }
   return -(r>>1);
 }
+
 inline int vnl_math_ceil(double  x)
 {
   int r;
@@ -521,13 +526,13 @@ inline int vnl_math_ceil(float  x)
 {
   return static_cast<int>(x<0.f?x:(x==static_cast<int>(x)?x:x+1.f));
 }
+
 inline int vnl_math_ceil(double x)
 {
   return static_cast<int>(x<0.0?x:(x==static_cast<int>(x)?x:x+1.0));
 }
 
 #endif
-
 
 
 // abs

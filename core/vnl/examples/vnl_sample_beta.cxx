@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
   int n = vcl_atoi(argv[2]);
   while (n--) {
     double u = vnl_sample_uniform(0,1);
-    double v = vnl_sample_uniform(0,2*vnl_math::pi);
+    double v = vnl_sample_uniform(0,vnl_math::twopi);
     vcl_cout << 0.5+0.5*vcl_sin(v)*vcl_sqrt(1.0-vcl_pow(u,1.0/(a-0.5))) << '\n';
   }
   return 0;

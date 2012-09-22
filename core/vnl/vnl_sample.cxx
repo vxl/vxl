@@ -53,7 +53,7 @@ double vnl_sample_uniform(double a, double b)
 void vnl_sample_normal_2(double *x, double *y)
 {
   double u     = vnl_sample_uniform(1, 0); // not (0,1): should not return 0
-  double theta = vnl_sample_uniform(0, 2 * vnl_math::pi);
+  double theta = vnl_sample_uniform(0, vnl_math::twopi);
 
   double r = vcl_sqrt(-2*vcl_log(u));
 

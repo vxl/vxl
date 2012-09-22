@@ -20,7 +20,7 @@ class gaussian_integrant : public vnl_analytic_integrant
   {
     oneoversr2_ = 1 / vcl_pow(sr_, 2);
     oneoversz2_ = 1 / vcl_pow(sz_, 2);
-    normalizer_ = -vcl_pow(sr_,2) / (sz_ * 2 * vcl_sqrt(2*vnl_math::pi));
+    normalizer_ = -vcl_pow(sr_,2) / (sz_ * 2 * vcl_sqrt(vnl_math::twopi));
   }
 
   void set_varying_params(double theta, double phi)
