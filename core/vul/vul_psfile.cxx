@@ -239,6 +239,10 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
   set_parameters(sizex,sizey);
   compute_bounding_box();
 
+  // reduction factor should not be an expansion factor ...
+  if (reduction_factor < 1)
+    reduction_factor = 1;
+
   int new_width = (int)vcl_ceil(sizex/(double)reduction_factor); // round up
   int new_height= (int)vcl_ceil(sizey/(double)reduction_factor);
 
@@ -329,6 +333,10 @@ void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
   height = sizey;
   set_parameters(sizex,sizey);
   compute_bounding_box();
+
+  // reduction factor should not be an expansion factor ...
+  if (reduction_factor < 1)
+    reduction_factor = 1;
 
   int new_width = (int)vcl_ceil(sizex/(double)reduction_factor); // round up
   int new_height= (int)vcl_ceil(sizey/(double)reduction_factor);
