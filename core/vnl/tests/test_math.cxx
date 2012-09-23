@@ -16,6 +16,7 @@ static
 void test_static_const_definition()
 {
   check_pointer( &vnl_math::e );
+  check_pointer( &vnl_math::euler );
   check_pointer( &vnl_math::log2e );
   check_pointer( &vnl_math::log10e );
   check_pointer( &vnl_math::ln2 );
@@ -24,11 +25,15 @@ void test_static_const_definition()
   check_pointer( &vnl_math::twopi );
   check_pointer( &vnl_math::pi_over_2 );
   check_pointer( &vnl_math::pi_over_4 );
+  check_pointer( &vnl_math::pi_over_180 );
   check_pointer( &vnl_math::one_over_pi );
   check_pointer( &vnl_math::two_over_pi );
+  check_pointer( &vnl_math::one_over_sqrt2pi );
   check_pointer( &vnl_math::two_over_sqrtpi );
+  check_pointer( &vnl_math::deg_per_rad );
   check_pointer( &vnl_math::sqrt2 );
   check_pointer( &vnl_math::sqrt1_2 );
+  check_pointer( &vnl_math::sqrt1_3 );
   check_pointer( &vnl_math::eps );
   check_pointer( &vnl_math::sqrteps );
 }
@@ -349,6 +354,35 @@ static void test_math()
 
   TEST("!isfinite(huge_val(double))", vnl_math_isfinite(vnl_huge_val(double())), false);
   TEST("!isfinite(huge_val(float))",  vnl_math_isfinite(vnl_huge_val(float())),  false);
+
+  vcl_cout << vcl_endl;
+
+  // test vnl_math::angle_0_to_2pi() for "extreme values":
+  TEST("vnl_math::angle_0_to_2pi(2pi)", vnl_math::angle_0_to_2pi(vnl_math::twopi), 0.0);
+  double eps = 2e-16; // which is smaller than the precision of vnl_math::pi
+  double conv_eps = vnl_math::angle_0_to_2pi(-eps);
+  vcl_cout << "conv_eps = " << conv_eps << " = 2pi - " << vnl_math::twopi-conv_eps << vcl_endl;
+  TEST("vnl_math::angle_0_to_2pi(-eps)", conv_eps < vnl_math::twopi && conv_eps > 6.283, true);
+  eps = 2e-15; // which is larger than the precision of vnl_math::pi
+  conv_eps = vnl_math::angle_0_to_2pi(-eps);
+  vcl_cout << "conv_eps = " << conv_eps << " = 2pi - " << vnl_math::twopi-conv_eps << vcl_endl;
+  TEST("vnl_math::angle_0_to_2pi(-10eps)", conv_eps < vnl_math::twopi - 1e-15 && conv_eps > 6.283, true);
+  double ang = vnl_math::twopi - eps;
+  double conv_ang = vnl_math::angle_0_to_2pi(ang);
+  vcl_cout << "conv_ang = " << conv_ang << " = 2pi - " << vnl_math::twopi-conv_ang << vcl_endl;
+  TEST("vnl_math::angle_0_to_2pi(2pi-10eps)", conv_ang, ang);
+  // test vnl_math::angle_minuspi_to_pi() for "extreme values":
+  TEST("vnl_math::angle_minuspi_to_pi(2pi)", vnl_math::angle_minuspi_to_pi(vnl_math::twopi), 0.0);
+  TEST("vnl_math::angle_minuspi_to_pi(pi)", vnl_math::angle_minuspi_to_pi(vnl_math::pi), vnl_math::pi);
+  TEST("vnl_math::angle_minuspi_to_pi(-pi)", vnl_math::angle_minuspi_to_pi(-vnl_math::pi), -vnl_math::pi);
+  eps = 2e-16; // which is smaller than the precision of vnl_math::pi
+  conv_eps = vnl_math::angle_minuspi_to_pi(-eps);
+  vcl_cout << "conv_eps = " << conv_eps << vcl_endl;
+  TEST("vnl_math::angle_minuspi_to_pi(-eps)", conv_eps, -eps);
+  eps = 2e-15; // which is larger than the precision of vnl_math::pi
+  conv_eps = vnl_math::angle_minuspi_to_pi(-eps);
+  vcl_cout << "conv_eps = " << conv_eps << vcl_endl;
+  TEST("vnl_math::angle_minuspi_to_pi(-10eps)", conv_eps, -eps);
 }
 
 TESTMAIN(test_math);
