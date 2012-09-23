@@ -21,6 +21,7 @@ void test_static_const_definition()
   check_pointer( &vnl_math::ln2 );
   check_pointer( &vnl_math::ln10 );
   check_pointer( &vnl_math::pi );
+  check_pointer( &vnl_math::twopi );
   check_pointer( &vnl_math::pi_over_2 );
   check_pointer( &vnl_math::pi_over_4 );
   check_pointer( &vnl_math::one_over_pi );
@@ -33,12 +34,55 @@ void test_static_const_definition()
 }
 #endif
 
-void test_math()
+// Test that the vnl_math constants don't have weird values
+static void test_math_constants()
+{
+#define TEST_CONSTANT(a,v) TEST_NEAR("value: ", vnl_math::a, v, 1e-9);
+  TEST_NEAR("log of e is 1"     , log(vnl_math::e), 1.0, 1e-9);
+  TEST_CONSTANT(e               , 2.7182818285);
+  TEST_NEAR("log2e * ln2 = 1"   , vnl_math::log2e * vnl_math::ln2, 1.0, 1e-9);
+  TEST_CONSTANT(log2e           , 1.4426950409);
+  TEST_CONSTANT(ln2             , 0.6931471806);
+  TEST_NEAR("log10e * ln10 = 1" , vnl_math::log10e * vnl_math::ln10, 1.0, 1e-9);
+  TEST_CONSTANT(log10e          , 0.4342944819);
+  TEST_CONSTANT(ln10            , 2.3025850930);
+  TEST_NEAR("cos(pi) = -1"      , cos(vnl_math::pi), -1.0, 1e-9);
+  TEST_CONSTANT(pi              , 3.1415926536);
+  TEST_NEAR("twopi = 2*pi"      , vnl_math::twopi, 2.0*vnl_math::pi, 1e-9);
+  TEST_CONSTANT(twopi           , 6.2831853072);
+  TEST_NEAR("pi_over_2 = pi/2"  , vnl_math::pi_over_2, 0.5*vnl_math::pi, 1e-9);
+  TEST_CONSTANT(pi_over_2       , 1.5707963268);
+  TEST_NEAR("pi_over_4 = pi/4"  , vnl_math::pi_over_4, 0.25*vnl_math::pi, 1e-9);
+  TEST_CONSTANT(pi_over_4       , 0.7853981634);
+  TEST_NEAR("pi_over_180=pi/180", vnl_math::pi_over_180, vnl_math::pi/180.0, 1e-9);
+  TEST_CONSTANT(pi_over_180     , 0.0174532925);
+  TEST_NEAR("pi*one_over_pi=1"  , vnl_math::pi*vnl_math::one_over_pi, 1.0, 1e-9);
+  TEST_CONSTANT(one_over_pi     , 0.3183098862);
+  TEST_NEAR("pi*two_over_pi=2"  , vnl_math::pi*vnl_math::two_over_pi, 2.0, 1e-9);
+  TEST_CONSTANT(two_over_pi     , 0.6366197724);
+  TEST_NEAR("deg_per_rad=180/pi", vnl_math::deg_per_rad, 180.0/vnl_math::pi, 1e-9);
+  TEST_CONSTANT(deg_per_rad     , 57.295779513);
+  TEST_NEAR("two_over_sqrtpi"   , vnl_math::two_over_sqrtpi, 2.0/sqrt(vnl_math::pi), 1e-9);
+  TEST_CONSTANT(two_over_sqrtpi , 1.1283791671);
+  TEST_NEAR("one_over_sqrt2pi"  , vnl_math::one_over_sqrt2pi, 1.0/sqrt(vnl_math::twopi), 1e-9);
+  TEST_CONSTANT(one_over_sqrt2pi, 0.3989422804);
+  TEST_NEAR("sqrt2*sqrt2=2"     , vnl_math::sqrt2*vnl_math::sqrt2, 2.0, 1e-9);
+  TEST_CONSTANT(sqrt2           , 1.4142135624);
+  TEST_NEAR("sqrt1_2*sqrt2=1"   , vnl_math::sqrt1_2*vnl_math::sqrt2, 1.0, 1e-9);
+  TEST_CONSTANT(sqrt1_2         , 0.7071067812);
+  TEST_NEAR("sqrt1_3^2=1/3"     , vnl_math::sqrt1_3*vnl_math::sqrt1_3, 1.0/3.0, 1e-9);
+  TEST_CONSTANT(sqrt1_3         , 0.5773502692);
+  TEST_NEAR("euler"             , vnl_math::euler, 0.5772156649, 1e-9);
+#undef TEST_CONSTANT
+}
+
+static void test_math()
 {
 #if !VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
   // Call it to avoid compiler warnings
   test_static_const_definition();
 #endif
+  test_math_constants();
 
   int n = -11;
   float f = -7.5f;
