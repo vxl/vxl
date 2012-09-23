@@ -35,7 +35,7 @@ struct example_polygon_tableau : public vgui_tableau
   {
     for (unsigned i=0; i<n; ++i)
     {
-      double t = 2*vnl_math::pi*i/n;
+      double t = vnl_math::twopi*i/n;
       x.push_back(float(vcl_cos(t)));
       y.push_back(float(vcl_sin(t)));
     }

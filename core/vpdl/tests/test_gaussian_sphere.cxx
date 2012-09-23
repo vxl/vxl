@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdl_gaussian_sphere.h>
+#include <vnl/vnl_math.h> // for twopi
 #include <vcl_string.h>
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
@@ -145,7 +146,7 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
     TEST(("mahalanobis dist <"+type_name+"> variable").c_str(),
          gauss.sqr_mahal_dist(test_pt.as_ref()), sqr_mahal_dist);
 
-    T two_pi_var = static_cast<T>(2.0*vnl_math::pi*var);
+    T two_pi_var = static_cast<T>(vnl_math::twopi*var);
     T prob3 = static_cast<T>(1.0/vcl_sqrt(two_pi_var*two_pi_var*two_pi_var)
                              * vcl_exp(-sqr_mahal_dist/2) );
     T prob1 = static_cast<T>(1.0/vcl_sqrt(two_pi_var)

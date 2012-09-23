@@ -1,6 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdl_gaussian_indep.h>
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_math.h> // for twopi
 #include <vcl_string.h>
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
@@ -155,7 +155,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
     TEST(("mahalanobis dist <"+type_name+"> variable").c_str(),
          gauss.sqr_mahal_dist(test_pt.as_ref()), sqr_mahal_dist);
 
-    T two_pi = static_cast<T>(2.0*vnl_math::pi);
+    T two_pi = static_cast<T>(vnl_math::twopi);
     T prob3 = static_cast<T>(1.0/vcl_sqrt(two_pi*two_pi*two_pi
                                           *var[0]*var[1]*var[2])
                              * vcl_exp(-sqr_mahal_dist/2) );

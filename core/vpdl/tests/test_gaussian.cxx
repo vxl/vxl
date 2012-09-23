@@ -2,7 +2,7 @@
 #include <vpdl/vpdl_gaussian.h>
 #include <vcl_string.h>
 #include <vcl_limits.h>
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_math.h> // for twopi
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vcl_iostream.h>
@@ -166,7 +166,7 @@ void test_gaussian_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("mahalanobis dist <"+type_name+"> variable").c_str(),
               gauss.sqr_mahal_dist(test_pt.as_ref()), sqr_mahal_dist, epsilon);
 
-    T two_pi = static_cast<T>(2.0*vnl_math::pi);
+    T two_pi = static_cast<T>(vnl_math::twopi);
     T prob3 = static_cast<T>(1.0/vcl_sqrt(two_pi*two_pi*two_pi
                                           *vnl_determinant(covar))
                              * vcl_exp(-sqr_mahal_dist/2) );

@@ -185,7 +185,7 @@ double
 vgl_homg_operators_2d<T>::angle_between_oriented_lines(const vgl_homg_line_2d<T>& line1,
                                                        const vgl_homg_line_2d<T>& line2)
 {
-  return vcl_fmod(line_angle(line2)-line_angle(line1), 2*vnl_math::pi);
+  return vcl_fmod(line_angle(line2)-line_angle(line1), vnl_math::twopi);
 }
 
 //  JOINS/INTERSECTIONS

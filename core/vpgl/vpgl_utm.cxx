@@ -67,16 +67,16 @@ static double adjust_lon2(double x) // Angle in radians
   {
     if (vnl_math_abs(x)<=vnl_math::pi)
       break;
-    else if (long(vnl_math_abs(x / (vnl_math::pi))) < 2)
-      x -= (sign(x) * 2*vnl_math::pi);
-    else if (long(vnl_math_abs(x / (2*vnl_math::pi))) < vcl_numeric_limits<long>::max())
-      x -= long((x /(2*vnl_math::pi))*2*vnl_math::pi);
-    else if (((long) vnl_math_abs(x / (vcl_numeric_limits<long>::max() * 2*vnl_math::pi))) < vcl_numeric_limits<long>::max())
-      x -= (((long)(x / (vcl_numeric_limits<long>::max() * 2*vnl_math::pi))) * (2*vnl_math::pi * vcl_numeric_limits<long>::max()));
-    else if (((long) vnl_math_abs(x / (DBLLONG * 2*vnl_math::pi))) < vcl_numeric_limits<long>::max())
-      x -= (((long)(x / (DBLLONG * 2*vnl_math::pi))) * (2*vnl_math::pi * DBLLONG));
+    else if (long(vnl_math_abs(x / vnl_math::pi)) < 2)
+      x -= (sign(x) * vnl_math::twopi);
+    else if (long(vnl_math_abs(x / (vnl_math::twopi))) < vcl_numeric_limits<long>::max())
+      x -= long((x/vnl_math::twopi)*vnl_math::twopi);
+    else if (((long) vnl_math_abs(x / (vcl_numeric_limits<long>::max() * vnl_math::twopi))) < vcl_numeric_limits<long>::max())
+      x -= (((long)(x / (vcl_numeric_limits<long>::max() * vnl_math::twopi))) * (vnl_math::twopi * vcl_numeric_limits<long>::max()));
+    else if (((long) vnl_math_abs(x / (DBLLONG * vnl_math::twopi))) < vcl_numeric_limits<long>::max())
+      x -= (((long)(x / (DBLLONG * vnl_math::twopi))) * (vnl_math::twopi * DBLLONG));
     else
-      x -= (sign(x) *2*vnl_math::pi);
+      x -= (sign(x) * vnl_math::twopi);
   }
 
   return x;
@@ -91,7 +91,7 @@ static double adjust_lat2(double x) // Angle in radians
     else if (((long) vnl_math_abs(x / vnl_math::pi_over_2)) < 2)
       x -= (sign(x) * vnl_math::pi);
     else if (((long) vnl_math_abs(x / vnl_math::pi)) < vcl_numeric_limits<long>::max())
-      x -= (((long)(x / vnl_math::pi))*vnl_math::pi);
+      x -= ((long)(x / vnl_math::pi))*vnl_math::pi;
     else if (((long) vnl_math_abs(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) < vcl_numeric_limits<long>::max())
       x -= (((long)(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) * (vnl_math::pi * vcl_numeric_limits<long>::max()));
     else if (((long) vnl_math_abs(x / (DBLLONG * vnl_math::pi))) < vcl_numeric_limits<long>::max())

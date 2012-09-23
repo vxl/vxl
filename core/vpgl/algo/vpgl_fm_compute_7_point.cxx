@@ -7,7 +7,7 @@
 #include "vpgl_fm_compute_7_point.h"
 //
 #include <vnl/vnl_fwd.h>
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_math.h> // for twopi
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vcl_iostream.h>
 
@@ -181,9 +181,9 @@ vpgl_fm_compute_7_point::solve_cubic( vcl_vector<double> v )
   c = vcl_sqrt(q);
   double theta = vcl_acos( r/q/c ) / 3;
   vcl_vector<double> l;
-  l.push_back(-2.0*c*vcl_cos(theta)                    - b);
-  l.push_back(-2.0*c*vcl_cos(theta + 2*vnl_math::pi/3) - b);
-  l.push_back(-2.0*c*vcl_cos(theta - 2*vnl_math::pi/3) - b);
+  l.push_back(-2.0*c*vcl_cos(theta)                     - b);
+  l.push_back(-2.0*c*vcl_cos(theta + vnl_math::twopi/3) - b);
+  l.push_back(-2.0*c*vcl_cos(theta - vnl_math::twopi/3) - b);
   return l;
 };
 

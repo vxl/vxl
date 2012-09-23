@@ -13,7 +13,7 @@
 #include <vcl_iostream.h>
 
 #include <vgl/vgl_distance.h>
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_math.h> // for twopi
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_new.h>
 #include <vil1/vil1_image.h>
@@ -254,7 +254,7 @@ void vgui_soview2D_circle::compile()
   glBegin(GL_LINE_LOOP);
   for (unsigned int i=0;i<100;i++)
   {
-    double angle = i*(2*vnl_math::pi/100);
+    double angle = vnl_math::twopi*0.01*i;
     glVertex2d(vcl_cos(angle), vcl_sin(angle));
   }
   glEnd();
@@ -273,7 +273,7 @@ void vgui_soview2D_circle::draw() const
   glBegin(GL_LINE_LOOP);
   for (unsigned int i=0;i<100;i++)
   {
-    double angle = i*(2*vnl_math::pi/100);
+    double angle = vnl_math::twopi*0.01*i;
     glVertex2d(x+r*vcl_cos(angle), y+r*vcl_sin(angle));
   }
   glEnd();
@@ -321,7 +321,7 @@ void vgui_soview2D_ellipse::draw() const
   glBegin(GL_LINE_LOOP);
   for (unsigned int i=0;i<100;i++)
   {
-    double angle = i*(2*vnl_math::pi/100);
+    double angle = vnl_math::twopi*0.01*i;
     px = w*vcl_cos(this->phi)*vcl_cos(angle) + h*vcl_sin(this->phi)*vcl_sin(angle);
     py = h*vcl_cos(this->phi)*vcl_sin(angle) - w*vcl_sin(this->phi)*vcl_cos(angle);
     glVertex2d(x+px, y+py);

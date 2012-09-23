@@ -19,6 +19,7 @@
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
 #include <vpdl/vpdt/vpdt_norm_metric.h>
+#include <vnl/vnl_math.h> // for twopi
 #include <vcl_limits.h>
 #include <vnl/vnl_erf.h>
 
@@ -170,7 +171,7 @@ struct vpdt_gaussian_integrator<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
   static inline T domain_integral(const vpdt_gaussian<F,Covar>& g)
   {
     const unsigned int d = g.dimension();
-    const double two_pi = 2.0*vnl_math::pi;
+    const double two_pi = vnl_math::twopi;
     double two_pi_n = two_pi;
     for (unsigned int i=1; i<d; ++i)
       two_pi_n *= two_pi;
@@ -200,7 +201,7 @@ struct vpdt_gaussian_integrator<F,F,vpdt_norm_metric<F,F>,
   static inline T domain_integral(const vpdt_gaussian<F,F>& g)
   {
     const unsigned int d = g.dimension();
-    const double two_pi = 2.0*vnl_math::pi;
+    const double two_pi = vnl_math::twopi;
     double val = 1.0;
     for (unsigned int i=0; i<d; ++i)
       val *= two_pi*g.covar[i];
@@ -244,7 +245,7 @@ struct vpdt_gaussian_integrator<F,typename vpdt_field_traits<F>::scalar_type,
   static inline T domain_integral(const vpdt_gaussian<F,T>& g)
   {
     const unsigned int d = g.dimension();
-    const double two_pi = 2.0*vnl_math::pi;
+    const double two_pi = vnl_math::twopi;
     double val = 1.0;
     for (unsigned int i=0; i<d; ++i)
       val *= two_pi*g.covar;
@@ -285,7 +286,7 @@ typename vpdt_field_traits<F>::type_is_scalar>
   //: integrate over the entire domain
   static inline T domain_integral(const vpdt_gaussian<F,F>& g)
   {
-    return static_cast<T>(vcl_sqrt(2.0*vnl_math::pi*g.covar));
+    return static_cast<T>(vcl_sqrt(vnl_math::twopi*g.covar));
   }
 
   //: integrate from -infinity to \c pt

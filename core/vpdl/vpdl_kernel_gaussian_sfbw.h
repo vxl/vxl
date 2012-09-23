@@ -15,6 +15,7 @@
 #include <vpdl/vpdl_kernel_base.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vnl/vnl_erf.h>
+#include <vnl/vnl_math.h> // for twopi
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
 
@@ -186,7 +187,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   virtual T kernel_norm_const() const
   {
     const unsigned int dim = this->dimension();
-    double v2pi = this->bandwidth()*this->bandwidth()*2.0*vnl_math::pi;
+    double v2pi = this->bandwidth()*this->bandwidth()*vnl_math::twopi;
     double denom = v2pi;
     for (unsigned int i=1; i<dim; ++i)
       denom *= v2pi;

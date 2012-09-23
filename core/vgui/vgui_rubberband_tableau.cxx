@@ -14,7 +14,7 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_clip.h>
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_math.h> // for twopi
 
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_projection_inspector.h>
@@ -235,8 +235,8 @@ void vgui_rubberband_tableau::draw_circle(float x, float y, float r)
   glBegin(GL_LINE_LOOP);
 
 
-  for (int i=0;i<100;i++) {
-    double angle = (2*vnl_math::pi/100.0)*i;
+  for (int i=0;i<100;++i) {
+    double angle = vnl_math::twopi*0.01*i;
     glVertex2d(vcl_cos(angle)*r + x, vcl_sin(angle)*r + y);
   }
   glEnd();
@@ -480,7 +480,7 @@ bool vgui_rubberband_tableau::handle_linestrip(vgui_event const &e, float ix, fl
 
 bool vgui_rubberband_tableau::handle(vgui_event const &e)
 {
-  if(e.origin)
+  if (e.origin)
     e.origin->make_current();
   else
     return false;
