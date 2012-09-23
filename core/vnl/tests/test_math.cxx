@@ -28,6 +28,7 @@ void test_static_const_definition()
   check_pointer( &vnl_math::pi_over_180 );
   check_pointer( &vnl_math::one_over_pi );
   check_pointer( &vnl_math::two_over_pi );
+  check_pointer( &vnl_math::sqrt2pi );
   check_pointer( &vnl_math::one_over_sqrt2pi );
   check_pointer( &vnl_math::two_over_sqrtpi );
   check_pointer( &vnl_math::deg_per_rad );
@@ -67,6 +68,8 @@ static void test_math_constants()
   TEST_CONSTANT(two_over_pi     , 0.6366197724);
   TEST_NEAR("deg_per_rad=180/pi", vnl_math::deg_per_rad, 180.0/vnl_math::pi, 1e-9);
   TEST_CONSTANT(deg_per_rad     , 57.295779513);
+  TEST_NEAR("sqrt2pi^2"         , vnl_math::sqrt2pi*vnl_math::sqrt2pi, vnl_math::twopi, 1e-9);
+  TEST_CONSTANT(sqrt2pi         , 2.5066282746);
   TEST_NEAR("two_over_sqrtpi"   , vnl_math::two_over_sqrtpi, 2.0/sqrt(vnl_math::pi), 1e-9);
   TEST_CONSTANT(two_over_sqrtpi , 1.1283791671);
   TEST_NEAR("one_over_sqrt2pi"  , vnl_math::one_over_sqrt2pi, 1.0/sqrt(vnl_math::twopi), 1e-9);

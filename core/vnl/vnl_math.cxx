@@ -84,8 +84,8 @@ extern "C" int finite(double);
 #if !VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
 
 //: constants
-const double vnl_math::e                VCL_STATIC_CONST_INIT_FLOAT_DEFN( 2.71828182845904523540 );
-const double vnl_math::log2e            VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.44269504088896340740 );
+const double vnl_math::e                VCL_STATIC_CONST_INIT_FLOAT_DEFN( 2.71828182845904523536 );
+const double vnl_math::log2e            VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.44269504088896340736 );
 const double vnl_math::log10e           VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.43429448190325182765 );
 const double vnl_math::ln2              VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.69314718055994530942 );
 const double vnl_math::ln10             VCL_STATIC_CONST_INIT_FLOAT_DEFN( 2.30258509299404568402 );
@@ -97,6 +97,7 @@ const double vnl_math::pi_over_180      VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.0174
 const double vnl_math::one_over_pi      VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.31830988618379067154 );
 const double vnl_math::two_over_pi      VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.63661977236758134308 );
 const double vnl_math::deg_per_rad      VCL_STATIC_CONST_INIT_FLOAT_DEFN( 57.2957795130823208772 );
+const double vnl_math::sqrt2pi          VCL_STATIC_CONST_INIT_FLOAT_DEFN( 2.50662827463100024161 );
 const double vnl_math::two_over_sqrtpi  VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.12837916709551257390 );
 const double vnl_math::one_over_sqrt2pi VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.39894228040143267794 );
 const double vnl_math::sqrt2            VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.41421356237309504880 );
