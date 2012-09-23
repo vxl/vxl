@@ -45,7 +45,7 @@ static void create_test_data(vnl_vector<double> & samples,
   for (unsigned i=0; i < num_samples; ++i)
   {
     double elev = rand.drand32(vnl_math::pi/6,vnl_math::pi/3);
-    double azim = rand.drand32(2*vnl_math::pi);
+    double azim = rand.drand32(vnl_math::twopi);
     vnl_double_3 vv(vcl_sin(elev)*vcl_cos(azim),
                     vcl_sin(elev)*vcl_sin(azim),
                     vcl_cos(elev));

@@ -38,7 +38,7 @@ void test_gaussian_full_type(T epsilon, const vcl_string& type_name)
   TEST_NEAR(("Mahalanobis dist <"+type_name+">").c_str(),
             gauss.sqr_mahalanobis_dist(test_pt), sqr_mah_dist, epsilon);
 
-  T two_pi = T(2*vnl_math::pi);
+  T two_pi = T(vnl_math::twopi);
   T prob = T(1.0/vcl_sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * vcl_exp(-sqr_mah_dist/2));
   TEST_NEAR(("probability density <"+type_name+">").c_str(),
             gauss.prob_density(test_pt), prob, epsilon);

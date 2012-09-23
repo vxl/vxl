@@ -15,7 +15,7 @@ vcl_vector<vgl_vector_3d<double> > boxm2_normal_albedo_array::get_normals()
   unsigned int num_az[] = {8,7};
   for (unsigned int e=0; e<2; ++e) {
     for (unsigned int a=0; a<num_az[e]; ++a) {
-      double azimuth = a*vnl_math::pi*2.0/num_az[e];
+      double azimuth = a*vnl_math::twopi/num_az[e];
       double elevation = e*vnl_math::pi_over_2/2;
       double x = vcl_sin(azimuth)*vcl_cos(elevation);
       double y = vcl_cos(azimuth)*vcl_cos(elevation);

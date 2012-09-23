@@ -41,7 +41,7 @@ double vpdfl_gaussian_kernel_pdf::operator()(const vnl_vector<double>& x0) const
   double p;
   const vnl_vector<double>* x = &x_[0];
   const double* w = width_.data_block();
-  double k = 1.0/(n*vcl_pow(2*vnl_math::pi,0.5*dim));
+  double k = 1.0/(n*vcl_pow(vnl_math::sqrt2pi,double(dim)));
   double sum = 0;
 
   for (int i=0;i<n;++i)

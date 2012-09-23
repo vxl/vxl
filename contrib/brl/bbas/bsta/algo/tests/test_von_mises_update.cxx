@@ -28,7 +28,7 @@ T sample_2d()
 template <class T>
 vgl_point_2d<T> sample_3d(T kappa)
 {
-  double phi = 2.0*vnl_math::pi*(vcl_rand()/(1.0+RAND_MAX));
+  double phi = vnl_math::twopi*(vcl_rand()/(1.0+RAND_MAX));
   T phi_T = static_cast<T>(phi);
   double p = vcl_rand()/(1.0+RAND_MAX);
   double exk = vcl_exp(2.0*kappa);

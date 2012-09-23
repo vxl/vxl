@@ -31,7 +31,7 @@ ang_pair sample_3d(double kappa)
 {
   vnl_random rng(vcl_clock());
   ang_pair ap;
-  ap.phi = 2.0*vnl_math::pi*rng.drand32();
+  ap.phi = vnl_math::twopi*rng.drand32();
   double p = rng.drand32();
   double exk = vcl_exp(2.0*kappa);
   //double exk = vcl_exp(2.0*kappa);

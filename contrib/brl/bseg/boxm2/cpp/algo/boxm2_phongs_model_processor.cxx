@@ -9,13 +9,13 @@ float boxm2_phongs_model_processor::expected_color(brad_phongs_model & pmodel,
                                                    float sun_elev,
                                                    float sun_azim)
 {
-    return pmodel.val(view_dir,sun_elev,sun_azim);
+        return pmodel.val(view_dir,sun_elev,sun_azim);
 }
 
 float boxm2_phongs_model_processor::prob_density(float obs, float expected_obs, float var)
 {
     if (var>0.0f)
-        return (float)vcl_exp(-(obs-expected_obs)*(obs-expected_obs)/(2*var))/(float)vcl_sqrt(2*vnl_math::pi*var);
+        return (float)vcl_exp(-(obs-expected_obs)*(obs-expected_obs)/(2*var))/(float)vcl_sqrt(vnl_math::twopi*var);
     else
         return 1.0f;
 }

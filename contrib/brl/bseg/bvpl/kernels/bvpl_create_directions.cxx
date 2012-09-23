@@ -10,7 +10,7 @@ bvpl_create_directions_xyz::bvpl_create_directions_xyz()
 {
   axes_.clear();
   angles_.clear();
-  
+
   vnl_float_3 axis_x (1.0f, 0.0f, 0.0f);
   axes_.push_back(axis_x);
   angles_.push_back(0.0f);
@@ -20,7 +20,6 @@ bvpl_create_directions_xyz::bvpl_create_directions_xyz()
   vnl_float_3 axis_z (0.0f, 0.0f, 1.0f);
   axes_.push_back(axis_z);
   angles_.push_back(0.0f);
-
 }
 
 bvpl_create_directions_a::bvpl_create_directions_a()
@@ -35,7 +34,7 @@ bvpl_create_directions_a::bvpl_create_directions_a()
   for (double phi=vnl_math::pi_over_4; phi<3*vnl_math::pi/4-1e-5; phi+=phi_res)
   {
     // theta=0,pi/4,pi/2,3pi/4,pi,5pi/4,3pi/2,7pi/4
-    for (double theta=0.0; theta<2.0*vnl_math::pi-1e-5; theta+=theta_res)
+    for (double theta=0.0; theta<vnl_math::twopi-1e-5; theta+=theta_res)
     {
       axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
       axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
@@ -192,7 +191,7 @@ bvpl_main_plane_corner_dirs::bvpl_main_plane_corner_dirs()
 {
   vnl_float_3 axis(0.0f, 1.0f, 0.0f);
   double angle_res = vnl_math::pi_over_4;
-  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+  for (double angle =0.0; angle<vnl_math::twopi-1e-5; angle+=angle_res)
   {
     axes_.push_back(axis);
     angles_.push_back(float(angle));
@@ -207,7 +206,7 @@ bvpl_all_corner_dirs::bvpl_all_corner_dirs()
   //polar phi=0
   vnl_float_3 axis(0.0f, 0.0f, 1.0f);
   double angle_res = vnl_math::pi_over_4;
-  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+  for (double angle =0.0; angle<vnl_math::twopi-1e-5; angle+=angle_res)
   {
     axes_.push_back(axis);
     angles_.push_back(float(angle));
@@ -217,7 +216,7 @@ bvpl_all_corner_dirs::bvpl_all_corner_dirs()
 
   //when phi is pi/4 traverse all hemisphere
   phi = (vnl_math::pi_over_4);
-  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+  for (double angle =0.0; angle<vnl_math::twopi-1e-5; angle+=angle_res)
   {
     for (theta =0.0;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
     {
@@ -234,7 +233,7 @@ bvpl_all_corner_dirs::bvpl_all_corner_dirs()
   phi = double(vnl_math::pi_over_2);
   for (theta =0.0;theta < (vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+    for (double angle =0.0; angle<vnl_math::twopi-1e-5; angle+=angle_res)
     {
       axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
       axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
@@ -256,7 +255,7 @@ bvpl_pi_over_2_corner_dirs::bvpl_pi_over_2_corner_dirs()
   //polar phi=0
   vnl_float_3 axis(0.0f, 0.0f, 1.0f);
   double angle_res = vnl_math::pi_over_2;
-  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+  for (double angle =0.0; angle<vnl_math::twopi-1e-5; angle+=angle_res)
   {
     axes_.push_back(axis);
     angles_.push_back(float(angle));
@@ -269,7 +268,7 @@ bvpl_pi_over_2_corner_dirs::bvpl_pi_over_2_corner_dirs()
   phi = double(vnl_math::pi_over_2);
   for (theta =0.0;theta < (vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+    for (double angle =0.0; angle<vnl_math::twopi-1e-5; angle+=angle_res)
     {
       axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
       axis[1] = float(vcl_sin(theta) * vcl_sin(phi));

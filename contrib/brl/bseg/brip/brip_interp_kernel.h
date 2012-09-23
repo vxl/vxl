@@ -71,7 +71,7 @@ class brip_h0_Gx_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     for (int x = -khs; x <= khs; x++)
       dG_x[x+khs] = (vcl_exp(-(x+0.5-dx)*(x+0.5-dx)/(2*ssq)) - vcl_exp(-(x-0.5-dx)*(x-0.5-dx)/(2*ssq)))/sq2pisig;
@@ -105,7 +105,7 @@ class brip_h0_Gy_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     for (int x = -khs; x <= khs; x++)
       G_x[x+khs] = (vnl_erf((x+0.5-dx)/c) - vnl_erf((x-0.5-dx)/c))/2.0;
@@ -139,7 +139,7 @@ class brip_h0_Gxx_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     for (int x = -khs; x <= khs; x++)
       d2G_x[x+khs] = (-(x+0.5-dx)*vcl_exp(-(x+0.5-dx)*(x+0.5-dx)/(2*ssq)) + (x-0.5-dx)*vcl_exp(-(x-0.5-dx)*(x-0.5-dx)/(2*ssq)))/(sq2pisig*ssq);
@@ -172,7 +172,7 @@ class brip_h0_Gxy_kernel : public brip_gaussian_kernel
     dG_y.resize(2*khs+1);
 
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     for (int x = -khs; x <= khs; x++)
       dG_x[x+khs] = (vcl_exp(-(x+0.5-dx)*(x+0.5-dx)/(2*ssq)) - vcl_exp(-(x-0.5-dx)*(x-0.5-dx)/(2*ssq)))/sq2pisig;
@@ -206,7 +206,7 @@ class brip_h0_Gyy_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     for (int x = -khs; x <= khs; x++)
       G_x[x+khs] = (vnl_erf((x+0.5-dx)/c) - vnl_erf((x-0.5-dx)/c))/2.0;
@@ -240,7 +240,7 @@ class brip_h0_Gxxx_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     for (int x = -khs; x <= khs; x++)
       d3G_x[x+khs] = (((x+0.5-dx)*(x+0.5-dx)-ssq)*vcl_exp(-(x+0.5-dx)*(x+0.5-dx)/(2*ssq)) - ((x-0.5-dx)*(x-0.5-dx)-ssq)*vcl_exp(-(x-0.5-dx)*(x-0.5-dx)/(2*ssq)))/(sq2pisig*ssq*ssq);
@@ -273,7 +273,7 @@ class brip_h0_Gxxy_kernel : public brip_gaussian_kernel
     dG_y.resize(2*khs+1);
 
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     for (int x = -khs; x <= khs; x++)
       d2G_x[x+khs] = (-(x+0.5-dx)*vcl_exp(-(x+0.5-dx)*(x+0.5-dx)/(2*ssq)) + (x-0.5-dx)*vcl_exp(-(x-0.5-dx)*(x-0.5-dx)/(2*ssq)))/(sq2pisig*ssq);
@@ -306,7 +306,7 @@ class brip_h0_Gxyy_kernel : public brip_gaussian_kernel
     d2G_y.resize(2*khs+1);
 
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     for (int x = -khs; x <= khs; x++)
       dG_x[x+khs] = (vcl_exp(-(x+0.5-dx)*(x+0.5-dx)/(2*ssq)) - vcl_exp(-(x-0.5-dx)*(x-0.5-dx)/(2*ssq)))/sq2pisig;
@@ -340,7 +340,7 @@ class brip_h0_Gyyy_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     for (int x = -khs; x <= khs; x++)
       G_x[x+khs] = (vnl_erf((x+0.5-dx)/c) - vnl_erf((x-0.5-dx)/c))/2.0;
@@ -378,7 +378,7 @@ class brip_h1_G_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pi = vcl_sqrt(2*vnl_math::pi);
+    double sq2pi = vnl_math::sqrt2pi;
 
     for (int x = -khs; x <= khs; x++)
       G_x[x+khs] = ((x-1-dx)*vnl_erf((x-1-dx)/c) - 2*(x-dx)*vnl_erf((x-dx)/c) +(x+1-dx)*vnl_erf((x+1-dx)/c))/2.0 +
@@ -414,7 +414,7 @@ class brip_h1_Gx_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pi = vcl_sqrt(2*vnl_math::pi);
+    double sq2pi = vnl_math::sqrt2pi;
 
     for (int x = -khs; x <= khs; x++)
       dG_x[x+khs] = (vnl_erf((x-1-dx)/c) - 2*vnl_erf((x-dx)/c) + vnl_erf((x+1-dx)/c))/2.0;
@@ -449,7 +449,7 @@ class brip_h1_Gy_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pi = vcl_sqrt(2*vnl_math::pi);
+    double sq2pi = vnl_math::sqrt2pi;
 
     for (int x = -khs; x <= khs; x++)
       G_x[x+khs] = ((x-1-dx)*vnl_erf((x-1-dx)/c) - 2*(x-dx)*vnl_erf((x-dx)/c) +(x+1-dx)*vnl_erf((x+1-dx)/c))/2.0 +
@@ -484,7 +484,7 @@ class brip_h1_Gxx_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pi = vcl_sqrt(2*vnl_math::pi);
+    double sq2pi = vnl_math::sqrt2pi;
 
     for (int x = -khs; x <= khs; x++)
       d2G_x[x+khs] = (vcl_exp(-(x-1-dx)*(x-1-dx)/(2*ssq)) - 2*vcl_exp(-(x-dx)*(x-dx)/(2*ssq)) + vcl_exp(-(x+1-dx)*(x+1-dx)/(2*ssq)))/(sq2pi*sigma);
@@ -551,7 +551,7 @@ class brip_h1_Gyy_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pi = vcl_sqrt(2*vnl_math::pi);
+    double sq2pi = vnl_math::sqrt2pi;
 
     for (int x = -khs; x <= khs; x++)
       G_x[x+khs] = ((x-1-dx)*vnl_erf((x-1-dx)/c) - 2*(x-dx)*vnl_erf((x-dx)/c) +(x+1-dx)*vnl_erf((x+1-dx)/c))/2.0 +
@@ -586,7 +586,7 @@ class brip_h1_Gxxx_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pi = vcl_sqrt(2*vnl_math::pi);
+    double sq2pi = vnl_math::sqrt2pi;
 
     for (int x = -khs; x <= khs; x++)
       d3G_x[x+khs] = (-(x-1-dx)*vcl_exp(-(x-1-dx)*(x-1-dx)/(2*ssq)) + 2*(x-dx)*vcl_exp(-(x-dx)*(x-dx)/(2*ssq)) - (x+1-dx)*vcl_exp(-(x+1-dx)*(x+1-dx)/(2*ssq)))/(sq2pi*sigma*ssq);
@@ -621,7 +621,7 @@ class brip_h1_Gxxy_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pi = vcl_sqrt(2*vnl_math::pi);
+    double sq2pi = vnl_math::sqrt2pi;
 
     for (int x = -khs; x <= khs; x++)
       d2G_x[x+khs] = (vcl_exp(-(x-1-dx)*(x-1-dx)/(2*ssq)) - 2*vcl_exp(-(x-dx)*(x-dx)/(2*ssq)) + vcl_exp(-(x+1-dx)*(x+1-dx)/(2*ssq)))/(sq2pi*sigma);
@@ -655,7 +655,7 @@ class brip_h1_Gxyy_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pi = vcl_sqrt(2*vnl_math::pi);
+    double sq2pi = vnl_math::sqrt2pi;
 
     for (int x = -khs; x <= khs; x++)
       dG_x[x+khs] = (vnl_erf((x-1-dx)/c) - 2*vnl_erf((x-dx)/c) + vnl_erf((x+1-dx)/c))/2.0;
@@ -689,7 +689,7 @@ class brip_h1_Gyyy_kernel : public brip_gaussian_kernel
 
     double ssq = sigma*sigma;
     double c = vcl_sqrt(2.0)*sigma;
-    double sq2pi = vcl_sqrt(2*vnl_math::pi);
+    double sq2pi = vnl_math::sqrt2pi;
 
     for (int x = -khs; x <= khs; x++)
       G_x[x+khs] = ((x-1-dx)*vnl_erf((x-1-dx)/c) - 2*(x-dx)*vnl_erf((x-dx)/c) +(x+1-dx)*vnl_erf((x+1-dx)/c))/2.0 +

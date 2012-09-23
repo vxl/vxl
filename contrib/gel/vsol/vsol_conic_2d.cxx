@@ -308,7 +308,7 @@ double vsol_conic_2d::ellipse_angular_position(vsol_point_2d_sptr const& pt) con
     vcl_atan2(major_axis*(vcl_cos(angle)*y-vcl_sin(angle)*x),
               minor_axis*(vcl_cos(angle)*x + vcl_sin(angle)*y));
   if (phi<0.0)
-    phi += 2.0*vnl_math::pi;
+    phi += vnl_math::twopi;
   return phi;
 }
 
@@ -399,7 +399,7 @@ double vsol_conic_2d::length() const
   vsol_point_2d_sptr p1 = this->p1();
   double end_angle = this->ellipse_angular_position(p1);
   if (end_angle<=start_angle)
-    end_angle += 2.0*vnl_math::pi;
+    end_angle += vnl_math::twopi;
 
   double xc, yc, angle, major_axis, minor_axis;
   this->ellipse_parameters(xc, yc, angle, major_axis, minor_axis);

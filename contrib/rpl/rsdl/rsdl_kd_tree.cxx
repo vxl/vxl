@@ -46,7 +46,7 @@ rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
   if ( Na_ > 0 ) {
     for ( unsigned int i=0; i<Na_; ++i ) {
       low.angular(i) = min_angle;
-      high.angular(i) = min_angle + 2*vnl_math::pi;
+      high.angular(i) = min_angle + vnl_math::twopi;
     }
   }
 
@@ -674,7 +674,7 @@ rsdl_kd_tree :: points_in_radius( const rsdl_point& query_point,
   if ( radius >= vnl_math::pi ) {
     for ( unsigned int j=0; j < query_point.num_angular(); ++j ) {
       min_point.angular( j ) = this -> min_angle_;
-      max_point.angular( j ) = this -> min_angle_ + 2 * vnl_math::pi;
+      max_point.angular( j ) = this -> min_angle_ + vnl_math::twopi;
     }
   }
   //  The radius is less than pi.  For each angular value, generate
@@ -683,10 +683,10 @@ rsdl_kd_tree :: points_in_radius( const rsdl_point& query_point,
     for ( unsigned int j=0; j < query_point.num_angular(); ++j ) {
       double min_angle = query_point.angular(j) - radius;
       if ( min_angle < this -> min_angle_ )
-        min_angle += 2 * vnl_math::pi;
+        min_angle += vnl_math::twopi;
       double max_angle = query_point.angular(j) + radius;
-      if ( max_angle > this -> min_angle_ + 2 * vnl_math::pi )
-        max_angle -= 2 * vnl_math::pi;
+      if ( max_angle > this -> min_angle_ + vnl_math::twopi )
+        max_angle -= vnl_math::twopi;
       min_point.angular( j ) = min_angle;
       max_point.angular( j ) = max_angle;
     }

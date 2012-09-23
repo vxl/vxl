@@ -21,7 +21,7 @@ double brec_fg_pair_density::operator()(const double y0, const double y1)
   double B = vcl_exp(-vcl_pow(y0-y1, 2.0)/(2*ss));
   double ootss = 1.0/(2*ss);
   double oosts = 1.0/(vcl_sqrt(2.0)*sigma_);
-  double A = sigma_*(2*sigma_*(vcl_exp(-ootss)-1) + vcl_sqrt(2*vnl_math::pi)*vnl_erf(oosts));
+  double A = sigma_*(2*sigma_*(vcl_exp(-ootss)-1) + vnl_math::sqrt2pi*vnl_erf(oosts));
   return (1.0/A)*B;
 }
 
@@ -37,7 +37,7 @@ double brec_fg_pair_density::gradient_of_log(const double y0, const double y1)
   double B1 = vcl_exp(vcl_pow(y0-y1, 2.0)/(2*ss));
   double A2 = -1+vcl_exp(-1.0/(2*ss));
   double A3 = 1.0/(vcl_sqrt(2.0)*sigma_);
-  double A1 = 2*sigma_*A2 + vcl_sqrt(2*vnl_math::pi)*vnl_erf(A3);
+  double A1 = 2*sigma_*A2 + vnl_math::sqrt2pi*vnl_erf(A3);
 
   double ssss = vcl_pow(sigma_, 4.0);
   return sigma_*B1*A1*( -(2*B*A2)/(sigma_*A1*A1) - B/(ss*A1) + (B*vcl_pow(y0-y1, 2.0))/(ssss*A1) );
@@ -50,11 +50,9 @@ double brec_fg_pair_density::gradient_of_negative_log(const double y0, const dou
   double B1 = vcl_exp(vcl_pow(y0-y1, 2.0)/(2*ss));
   double A2 = -1+vcl_exp(-1.0/(2*ss));
   double A3 = 1.0/(vcl_sqrt(2.0)*sigma_);
-  double A1 = 2*sigma_*A2 + vcl_sqrt(2*vnl_math::pi)*vnl_erf(A3);
+  double A1 = 2*sigma_*A2 + vnl_math::sqrt2pi*vnl_erf(A3);
 
   double ssss = vcl_pow(sigma_, 4.0);
   return -sigma_*B1*A1*( -(2*B*A2)/(sigma_*A1*A1) - B/(ss*A1) + (B*vcl_pow(y0-y1, 2.0))/(ssss*A1) );
 }
-
-
 

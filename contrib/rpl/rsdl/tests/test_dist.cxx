@@ -70,7 +70,7 @@ static void test_dist()
   ang0[2] = vnl_math::pi/5;     // non-wrap, below, but closer to above value
   test_p.set_angular( ang0.begin() );
   sq_dist = vnl_math_sqr( vnl_math::pi/16 ) + vnl_math_sqr( vnl_math::pi/8 ) +
-    vnl_math_sqr( 2*vnl_math::pi/5 );
+            vnl_math_sqr( vnl_math::twopi/5 );
   TEST_NEAR("point-to-box dist sq - angle outside (a)", rsdl_dist_sq( test_p, box), sq_dist , 1e-6);
   TEST_NEAR("point-to-box dist - angle outside (a) ", rsdl_dist( test_p, box), vcl_sqrt(sq_dist), 1e-6);
 

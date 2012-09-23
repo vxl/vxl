@@ -62,12 +62,9 @@ vcl_vector<float> bapl_dsift::dsift( unsigned const& key_x, unsigned const& key_
 
               float weight = this->grad_mag_(xc,yc) * interp_x * interp_y * bapl_dsift::gaussian(float(xc-key_x), float(yc-key_y));
 
-              float orient = this->grad_orient_(xc,yc)-key_orient+float(vnl_math::pi);
+              float orient = float(vnl_math::angle_0_to_2pi(this->grad_orient_(xc,yc)-key_orient+vnl_math::pi));
 
-              while (orient > float(2*vnl_math::pi)) orient -= float(2*vnl_math::pi);
-              while (orient < 0.0f)                  orient += float(2*vnl_math::pi);
-
-              int bin = ((int(orient*15/float(2*vnl_math::pi))+1)/2)%8;
+              int bin = ((int(orient*15/float(vnl_math::twopi))+1)/2)%8;
               histogram[hi*32+hj*8+bin] += weight;
             }//end boundary check
           }//end c
@@ -117,13 +114,9 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
               float gw = bapl_dsift::gaussian((xc-float(key_x)), (yc-float(key_y)));
 
               float weight = this->grad_mag_(xc,yc) * interp_x * interp_y * gw;
+              float orient = float(vnl_math::angle_0_to_2pi(this->grad_orient_(xc,yc)-key_orient+vnl_math::pi));
 
-              float orient = this->grad_orient_(xc,yc)-key_orient+float(vnl_math::pi);
-
-              while (orient > float(2*vnl_math::pi)) orient -= float(2*vnl_math::pi);
-              while (orient < 0.0f)                  orient += float(2*vnl_math::pi);
-
-              int bin = ((int(orient*15/float(2*vnl_math::pi))+1)/2)%8;
+              int bin = ((int(orient*15/float(vnl_math::twopi))+1)/2)%8;
               histogram[hi*32+hj*8+bin] += weight;
             }//end boundary check
           }//end c

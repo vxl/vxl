@@ -192,10 +192,8 @@ bapl_lowe_pyramid_set::make_descriptor(bapl_lowe_keypoint* keypoint)
               float interp_y = 1.0f - vcl_fabs( key_y + float(y-yc) );
               float weight = grad_mag(xc,yc) * interp_x * interp_y
                            * gaussian((xc-key_x)/ref_scale, (yc-key_y)/ref_scale);
-              float orient = float(grad_orient(xc,yc)-key_orient+vnl_math::pi);
-              while (orient > float(2*vnl_math::pi)) orient -= float(2*vnl_math::pi);
-              while (orient < 0.0f)                  orient += float(2*vnl_math::pi);
-              int bin = ((int(orient*15/float(2*vnl_math::pi))+1)/2)%8;
+              float orient = float(vnl_math::angle_0_to_2pi(grad_orient(xc,yc)-key_orient+vnl_math::pi));
+              int bin = ((int(orient*15/float(vnl_math::twopi))+1)/2)%8;
               histograms[hi*32+hj*8+bin] += weight;
             }
           }

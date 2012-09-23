@@ -201,14 +201,12 @@ bapl_lowe_clusterer::is_inlier( const bapl_affine_transform& A,
 
   double err_x = x_tgt - x_map;
   double err_y = y_tgt - y_map;
-  double err_s = vcl_log(s_tgt/s_map)/vcl_log(2.0);
-  double err_o = o_tgt - o_map;
-  while (err_o >  vnl_math::pi) err_o -= 2*vnl_math::pi;
-  while (err_o < -vnl_math::pi) err_o += 2*vnl_math::pi;
+  double err_s = vcl_log(s_tgt/s_map)*vnl_math::log2e; // i.e., the base-2 log of s_tgt/s_map
+  double err_o = vnl_math::angle_minuspi_to_pi(o_tgt-o_map);
 
   return vcl_fabs(err_o) < 0.25 &&
          vcl_fabs(err_s) < 0.5 &&
-         vcl_fabs(err_x) < trans_step_/4.0 &&
-         vcl_fabs(err_y) < trans_step_/4.0;
+         vcl_fabs(err_x) < trans_step_*0.25 &&
+         vcl_fabs(err_y) < trans_step_*0.25;
 }
 

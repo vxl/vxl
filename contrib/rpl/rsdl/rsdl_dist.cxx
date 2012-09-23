@@ -20,7 +20,7 @@ rsdl_dist_sq( const rsdl_point& p, const rsdl_point& q )
   for ( unsigned int j=0; j<Na; ++j ) {
     double diff = vnl_math_abs( p.angular(j) - q.angular(j) );
     if ( diff > vnl_math::pi ) {
-      diff = 2*vnl_math::pi - diff;
+      diff = vnl_math::twopi - diff;
     }
     sum_sq += vnl_math_sqr( diff );
   }
@@ -65,10 +65,10 @@ rsdl_dist_sq( const rsdl_point & p, const rsdl_bounding_box &  b )
     }
     else {                       // interval does not wrap around
       if ( a > a1 ) {            // a is above a1
-        sum_sq += vnl_math_sqr( vnl_math_min( a - a1, 2 * vnl_math::pi + a0 - a ) );
+        sum_sq += vnl_math_sqr( vnl_math_min( a - a1, vnl_math::twopi + a0 - a ) );
       }
       else if ( a0 > a ) {       // a is below a0
-        sum_sq += vnl_math_sqr( vnl_math_min( a0 - a, 2 * vnl_math::pi + a - a1 ) );
+        sum_sq += vnl_math_sqr( vnl_math_min( a0 - a, vnl_math::twopi + a - a1 ) );
       }
     }
   }

@@ -1756,7 +1756,7 @@ void   brip_vil_float_ops::rgb_to_ihs_tsai(vil_rgb<vxl_byte> const& rgb,
   V1 = (2.0f*b-r-g)/sq6;
   V2 = (r-2.0f*g)/sq6;
   s = vcl_sqrt(V1*V1 + V2*V2);
-  float two_pi = static_cast<float>(2.0*vnl_math::pi);
+  float two_pi = static_cast<float>(vnl_math::twopi);
   float a = vcl_atan2(V2, V1)/two_pi;
   if (a<0.0f) a += 1.0f; // range [0..1)
   h = a*256.0f; // range [0..256)
@@ -3750,7 +3750,7 @@ static double brip_vil_rot_gauss(double x, double y,
   double sxr = 1.0/sigma_x, syr = 1.0/sigma_y;
   double ax = (c*x + s*y)*sxr, ay = (-s*x + c*y)*syr;
   double ret = vcl_exp(-0.5*(ax*ax + ay*ay));
-  return ret*sxr*syr/(2.0*vnl_math::pi);
+  return ret*sxr*syr/vnl_math::twopi;
 }
 
 // revert angle to the range [-90, 90]
@@ -4235,8 +4235,8 @@ max_inscribed_rect(float lambda0, float lambda1, float theta,
 static void eu(float lambda0, float cutoff_per, vcl_vector<float>& kernel)
 {
   kernel.clear();
-  double l_sqi = 1/(lambda0*lambda0);
-  double norm = 1/vcl_sqrt(2.0*vnl_math::pi);
+  double l_sqi = 1.0/(lambda0*lambda0);
+  double norm = vnl_math::one_over_sqrt2pi;
   norm /= lambda0;
   int r = static_cast<int>(vcl_sqrt((-2.0*vcl_log(cutoff_per))/l_sqi)+0.5);
   for (int i = -r; i<=r; ++i)
@@ -4254,7 +4254,7 @@ static void ev(float lambda1, float cutoff_per, bool scale_invariant,
   double l1_sqi = 1/(lambda1*lambda1);
   int r = static_cast<int>(vcl_sqrt((-2.0*vcl_log(cutoff_per))/l1_sqi)+0.5);
   double norm = scale_invariant ? 1/lambda1 : l1_sqi/lambda1;
-  norm /= vcl_sqrt(2.0*vnl_math::pi);
+  norm *= vnl_math::one_over_sqrt2pi;
   for (int i = -r; i<=r; ++i)
   {
     double s = i*i*l1_sqi;

@@ -189,7 +189,7 @@ convert_to_cartesian(T azimuth, T elevation, T& x, T& y, T& z) const
   //convert to standard spherical coordinates if necessary
   if (az_branch_cut_ == B_0_360)
     if (az>static_cast<T>(vnl_math::pi))
-      az -= static_cast<T>(2.0*vnl_math::pi);
+      az -= static_cast<T>(vnl_math::twopi);
   if (el_poles_ == B_90_90)
     el = -el + static_cast<T>(vnl_math::pi/2.0);
   //convert to cartesian
@@ -232,7 +232,7 @@ convert_to_spherical(T x, T y, T z, T& azimuth, T& elevation) const
   T ya = y/s;
   azimuth = vcl_atan2(ya, xa);//returns angles with +-180 branch cut
   if (az_branch_cut_ == B_0_360)
-    if (azimuth<0) azimuth += static_cast<T>(2.0*vnl_math::pi);
+    if (azimuth<0) azimuth += static_cast<T>(vnl_math::twopi);
   if (el_poles_ == B_90_90)
     elevation = -elevation + static_cast<T>(0.5*vnl_math::pi);
   if (units_ == DEG) {
@@ -421,7 +421,7 @@ vnl_matrix_fixed<T, 2, 2> bsta_spherical_histogram<T>::covariance_matrix()
   double mean_x = T(0), mean_y = T(0) , mean_z = T(0);
   T two_pi = T(360);
   if (units_ == RADIANS)
-    two_pi = static_cast<T>(2.0*vnl_math::pi);
+    two_pi = static_cast<T>(vnl_math::twopi);
   for (int el = 0; el<static_cast<int>(n_elevation_); ++el) {
     T ec = elevation_center(el);
     for (int az = 0; az<static_cast<int>(n_azimuth_); ++az) {

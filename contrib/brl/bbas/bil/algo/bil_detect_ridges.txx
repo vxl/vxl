@@ -26,8 +26,8 @@ void bil_detect_ridges( const vil_image_view<T>& Im,
   // define gaussian derivative operators
   int width = vnl_math_rnd(3*sigma);
   double ssq = sigma*sigma;
-  double d1_denominator = (2*vnl_math::pi*ssq*ssq);
-  double d2_denominator = (2*vnl_math::pi*ssq*ssq*ssq);
+  double d1_denominator = vnl_math::twopi*ssq*ssq;
+  double d2_denominator = vnl_math::twopi*ssq*ssq*ssq;
 
   vil_image_view<float> dgau2D(2*width+1,2*width+1);
   vil_image_view<float> d2gau2D(2*width+1,2*width+1);

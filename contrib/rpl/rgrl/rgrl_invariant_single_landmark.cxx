@@ -369,5 +369,5 @@ ccw_angle_between(vnl_double_2 from, vnl_double_2 to)
   if (z >= 0)
     return angle;
   else
-    return vnl_math::pi*2 - angle;
+    return vnl_math::twopi - angle;
 }

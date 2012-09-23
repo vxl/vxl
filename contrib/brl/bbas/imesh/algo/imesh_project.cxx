@@ -705,7 +705,7 @@ bool trace_texture(const imesh_mesh& mesh,
       imesh_half_edge_set::v_const_iterator vi(fi);
       imesh_half_edge_set::v_const_iterator vend(vi);
       ++vi;
-      double max_ang = -2*vnl_math::pi;
+      double max_ang = -vnl_math::twopi;
       unsigned long max_heidx = 0;
       for (; vi!=vend; ++vi) {
         vgl_vector_2d<double> d(tc[he[vi->pair_index()].vert_index()]
@@ -713,7 +713,7 @@ bool trace_texture(const imesh_mesh& mesh,
         // rotate to compute angle relative to dir
         double ang = vcl_atan2(d.y()*dir.x()-d.x()*dir.y(),
                                d.x()*dir.x()+d.y()*dir.y());
-        if (ang > 0) ang -= 2*vnl_math::pi;
+        if (ang > 0) ang -= vnl_math::twopi;
         if (ang > max_ang) {
           max_ang = ang;
           max_heidx = vi->half_edge_index();

@@ -17,15 +17,13 @@
 //: return value in (-Pi,Pi]
 double curve_fixAngleMPiPi (double a)
 {
-  while (a <= -vnl_math::pi) a += 2*vnl_math::pi;
-  while (a >   vnl_math::pi) a -= 2*vnl_math::pi;
-  return a;
+  return vnl_math::angle_minuspi_to_pi(a);
 }
 
 //Does a1-a2, value in (-Pi,Pi]
 double curve_angleDiff (double a1, double a2)
 {
-  return curve_fixAngleMPiPi(a1-a2);
+  return vnl_math::angle_minuspi_to_pi(a1-a2);
 }
 
 double  curve_maxof (double a, double b, double c)

@@ -165,8 +165,6 @@ void cvg_hemisphere_tableau::set_expected_image()
 
 double cvg_hemisphere_tableau::compress_range(double rad)
 {
-  while (rad >  vnl_math::pi) rad -= 2*vnl_math::pi;
-  while (rad < -vnl_math::pi) rad += 2*vnl_math::pi;
-  return rad;
+  return vnl_math::angle_minuspi_to_pi(rad);
 }
 

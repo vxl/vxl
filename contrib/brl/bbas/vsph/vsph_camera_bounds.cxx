@@ -8,14 +8,6 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 
-static double mod_two_pi(double angle)
-{
-  double two_pi = 2.0*vnl_math::pi;
-  unsigned nmod = static_cast<unsigned>(angle/two_pi);
-  double mod_ang = nmod*two_pi;
-  return angle - mod_ang;
-}
-
 principal_ray_scan::principal_ray_scan(double cone_half_angle,
                                        unsigned& n_samples)
 {
@@ -23,7 +15,7 @@ principal_ray_scan::principal_ray_scan(double cone_half_angle,
   vcl_vector<double> theta(n_samples+1);
   vcl_vector<double> phi(n_samples+1);
   //find the fraction of the sphere defined by the cone half angle
-  double cone_solid_angle = 2.0*vnl_math::pi*(1.0-vcl_cos(cone_half_angle));
+  double cone_solid_angle = vnl_math::twopi*(1.0-vcl_cos(cone_half_angle));
   double fraction_of_sphere = cone_solid_angle/(4.0*vnl_math::pi);
   //number of points that would cover the entire sphere
   unsigned limit = static_cast<unsigned>(n_samples/fraction_of_sphere);
@@ -48,7 +40,7 @@ principal_ray_scan::principal_ray_scan(double cone_half_angle,
     // cut off the scan when the elevation reaches the cone half angle
     elv = vnl_math::pi-theta[k-1];
     double temp  = phi[k-2] + 3.6/vcl_sqrt(ns)*2/(rkm1+rk);
-    phi[k-1] = mod_two_pi(temp);
+    phi[k-1] = vnl_math::angle_0_to_2pi(temp);
     rkm1 = rk;
   }
   //if the entire sphere is covered then add the North pole
@@ -100,12 +92,12 @@ vgl_rotation_3d<double> principal_ray_scan::rot(unsigned i, double alpha) const
 
 double vsph_camera_bounds::solid_angle(double cone_half_angle)
 {
-  return 2.0*vnl_math::pi*(1.0-vcl_cos(cone_half_angle));
+  return vnl_math::twopi*(1.0-vcl_cos(cone_half_angle));
 }
 
 double vsph_camera_bounds::cone_half_angle(double solid_angle)
 {
-  double temp = solid_angle/(2.0*vnl_math::pi);
+  double temp = solid_angle/vnl_math::twopi;
   temp = vcl_acos(1.0-temp);
   return temp;
 }

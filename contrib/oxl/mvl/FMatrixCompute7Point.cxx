@@ -48,7 +48,7 @@ bool FMatrixCompute7Point::compute (vcl_vector<vgl_homg_point_2d<double> >& poin
 {
   if (points1.size() < 7 || points2.size() < 7) {
     vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
-             << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
+             << "Number in each set: " << points1.size() << ", " << points2.size() << '\n';
     return false;
   }
 
@@ -84,7 +84,7 @@ bool FMatrixCompute7Point::compute(vcl_vector<HomgPoint2D>& points1,
 {
   if (points1.size() < 7 || points2.size() < 7) {
     vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
-             << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
+             << "Number in each set: " << points1.size() << ", " << points2.size() << '\n';
     return false;
   }
 
@@ -300,8 +300,8 @@ vcl_vector<double> FMatrixCompute7Point::solve_cubic(vcl_vector<double> v)
    c = vcl_sqrt(q);
    double theta = vcl_acos( r/q/c ) / 3;
    vcl_vector<double> l;
-   l.push_back(-2.0*c*vcl_cos(theta)                    - b);
-   l.push_back(-2.0*c*vcl_cos(theta + 2*vnl_math::pi/3) - b);
-   l.push_back(-2.0*c*vcl_cos(theta - 2*vnl_math::pi/3) - b);
+   l.push_back(-2.0*c*vcl_cos(theta)                     - b);
+   l.push_back(-2.0*c*vcl_cos(theta + vnl_math::twopi/3) - b);
+   l.push_back(-2.0*c*vcl_cos(theta - vnl_math::twopi/3) - b);
    return l;
 }

@@ -1810,7 +1810,7 @@ static  vnl_random random;
       q.clear();
       // create points on a circle
       for ( unsigned int i=0; i<num; ++i ) {
-        const double angle = double(i)/double(num)*2*vnl_math::pi;
+        const double angle = vnl_math::twopi*double(i)/double(num);
         pt[0] = c*vcl_cos(angle);
         pt[1] = c*vcl_sin(angle);
         p.push_back(pt);
@@ -1891,7 +1891,7 @@ static  vnl_random random;
       q.clear();
       // create points on a circle
       for ( unsigned int i=0; i<num; ++i ) {
-        const double angle = double(i)/double(num)*2*vnl_math::pi;
+        const double angle = vnl_math::twopi*double(i)/double(num);
         pt[0] = c*vcl_cos(angle);
         pt[1] = c*vcl_sin(angle);
         p.push_back(pt);
@@ -1975,7 +1975,7 @@ static  vnl_random random;
       // create points on a circle
       for ( unsigned int i=0; i<num; ++i )
       {
-        const double angle = double(i)/double(num)*2*vnl_math::pi;
+        const double angle = vnl_math::twopi*double(i)/double(num);
         pt[0] = c*vcl_cos(angle);
         pt[1] = c*vcl_sin(angle);
         p.push_back(pt);

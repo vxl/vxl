@@ -46,7 +46,7 @@ void vpdfl_axis_gaussian::calcLogK()
   for (int i=0;i<n;i++)
     log_v_sum+=vcl_log(v_data[i]);
 
-  log_k_ = -0.5 * (n*vcl_log(2 * vnl_math::pi) + log_v_sum);
+  log_k_ = -0.5 * (n*vcl_log(vnl_math::twopi) + log_v_sum);
 }
 
 void vpdfl_axis_gaussian::calcSD()
@@ -77,7 +77,7 @@ double vpdfl_axis_gaussian::dx_sigma_dx(const vnl_vector<double> &x) const
   if (n!=n_dims())
   {
     vcl_cerr<<"ERROR: vpdfl_axis_gaussian::log_p: Target vector has "
-            <<n<<" dimensions, not the required "<<n_dims()<<vcl_endl;
+            <<n<<" dimensions, not the required "<<n_dims()<<'\n';
     vcl_abort();
   }
 #endif
@@ -132,7 +132,7 @@ void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
 //: Gradient and value of log(p(x)) at x
 //  Computes gradient df/dx of f(x)=log(p(x)) at x.
 void vpdfl_axis_gaussian::gradient_logp(vnl_vector<double>& g,
-                                   const vnl_vector<double>& x) const
+                                        const vnl_vector<double>& x) const
 {
   unsigned int n = n_dims();
   assert(x.size() == n);
@@ -169,7 +169,7 @@ double vpdfl_axis_gaussian::log_prob_thresh(double pass_proportion) const
 
 
 void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x,
-  double log_p_min) const
+                                            double log_p_min) const
 {
   unsigned n = x.size();
 
@@ -248,7 +248,7 @@ void vpdfl_axis_gaussian::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

@@ -136,7 +136,7 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
   double dist2 = ls.get_point2().x()/ls.get_point2().w() * lll.x() +
                  ls.get_point2().y()/ls.get_point2().w() * lll.y() + lll.w();
 #ifdef DEBUG
-  vcl_cerr << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << vcl_endl;
+  vcl_cerr << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << '\n';
 #endif
   double dist = (vcl_fabs(dist1) + vcl_fabs(dist2))/2;
 
@@ -244,10 +244,10 @@ double HomgOperator2D::angle_between_oriented_lines (const HomgLine2D& line1,
   double diff = angle2 - angle1;
 
   if (diff > vnl_math::pi)
-    return diff - 2.0 * vnl_math::pi;
+    return diff - vnl_math::twopi;
 
   if (diff < -vnl_math::pi)
-    return diff + 2.0 * vnl_math::pi;
+    return diff + vnl_math::twopi;
 
   return diff;
 }

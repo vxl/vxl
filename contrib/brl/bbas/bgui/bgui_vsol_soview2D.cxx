@@ -147,7 +147,7 @@ bgui_vsol_soview2D_conic_seg::bgui_vsol_soview2D_conic_seg( vsol_conic_2d_sptr c
   vsol_point_2d_sptr p1 = conic->p1();
   end_angle_ = conic->ellipse_angular_position(p1);
   if (end_angle_<=start_angle_)
-    end_angle_ = 2.0*vnl_math::pi + end_angle_;
+    end_angle_ = vnl_math::twopi + end_angle_;
 }
 
 vsol_conic_2d_sptr bgui_vsol_soview2D_conic_seg::sptr() const

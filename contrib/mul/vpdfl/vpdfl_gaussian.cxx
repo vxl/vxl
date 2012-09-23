@@ -86,7 +86,7 @@ void vpdfl_gaussian::calcLogK()
   double log_v_sum = 0.0;
   for (int i=0;i<n;i++) log_v_sum+=vcl_log(v_data[i]);
 
-  log_k_ = -0.5 * (n*vcl_log(2 * vnl_math::pi) + log_v_sum);
+  log_k_ = -0.5 * (n*vcl_log(vnl_math::twopi) + log_v_sum);
 }
 
 //: Initialise safely
@@ -204,7 +204,7 @@ double vpdfl_gaussian::dx_sigma_dx(const vnl_vector<double>& x) const
   if (n!=x.size())
   {
     vcl_cerr<<"ERROR: vpdfl_gaussian::dx_sigma_dx: Target vector has "
-            <<n<<" dimensions, not the required "<<n_dims()<<vcl_endl;
+            <<n<<" dimensions, not the required "<<n_dims()<<'\n';
     vcl_abort();
   }
 #endif
@@ -421,7 +421,7 @@ void vpdfl_gaussian::b_read(vsl_b_istream& bfs)
   {
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &)\n"
              << "           Attempted to load object of type "
-             << name <<" into object of type " << is_a() << vcl_endl;
+             << name <<" into object of type " << is_a() << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -438,7 +438,7 @@ void vpdfl_gaussian::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

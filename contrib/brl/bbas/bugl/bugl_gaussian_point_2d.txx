@@ -21,7 +21,7 @@ T bugl_gaussian_point_2d<T>::prob_at(vgl_point_2d<T> const& p) const
   if (!this->exists_)
    return 0;
   vnl_vector_fixed<T, 2> v(p.x() - this->x(), p.y() - this->y());
-  return vcl_exp(-0.5*(dot_product(v, sigma_inv_*v)))/(2*vnl_math::pi*det_);
+  return vcl_exp(-0.5*(dot_product(v, sigma_inv_*v)))/(vnl_math::twopi*det_);
 }
 
 //----------------------------------------------------------------------------

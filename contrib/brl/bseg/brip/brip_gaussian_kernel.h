@@ -62,8 +62,8 @@ class brip_G_Lhalf_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool /*separated_kernels_only*/=false)
   {
     double ssq = sigma*sigma;
-    //double pisig2 = 2*vnl_math::pi*ssq;
-    double cc = vcl_sqrt(2*vnl_math::pi)*ssq*sigma;
+    //double pisig2 = vnl_math::twopi*ssq;
+    double cc = vnl_math::sqrt2pi*ssq*sigma;
 
     //not separable
     for (int x = -khs; x <= khs; x++){
@@ -95,8 +95,8 @@ class brip_G_Rhalf_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool /*separated_kernels_only*/=false)
   {
     double ssq = sigma*sigma;
-    //double pisig2 = 2*vnl_math::pi*ssq;
-    double cc = vcl_sqrt(2*vnl_math::pi)*ssq*sigma;
+    //double pisig2 = vnl_math::twopi*ssq;
+    double cc = vnl_math::sqrt2pi*ssq*sigma;
 
     //not separable
     for (int x = -khs; x <= khs; x++){
@@ -128,7 +128,7 @@ class brip_G_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
@@ -158,7 +158,7 @@ class brip_Gx_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
@@ -188,7 +188,7 @@ class brip_Gy_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
@@ -218,7 +218,7 @@ class brip_Gxx_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
@@ -248,7 +248,7 @@ class brip_Gxy_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
@@ -278,7 +278,7 @@ class brip_Gyy_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
@@ -308,7 +308,7 @@ class brip_Gxxx_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
@@ -338,7 +338,7 @@ class brip_Gxxy_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
@@ -368,7 +368,7 @@ class brip_Gxyy_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
@@ -398,7 +398,7 @@ class brip_Gyyy_kernel : public brip_gaussian_kernel
   virtual void compute_kernel(bool separated_kernels_only=false)
   {
     double ssq = sigma*sigma;
-    double sq2pisig = vcl_sqrt(2*vnl_math::pi)*sigma;
+    double sq2pisig = vnl_math::sqrt2pi*sigma;
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)

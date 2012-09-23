@@ -46,7 +46,7 @@ void test_trivial_ca1(unsigned nd, unsigned ns)
   vcl_vector<vnl_vector<double> > data(ns);
   for (unsigned i=0;i<ns;++i)
   {
-    double A = i*(2.0*vnl_math::pi/ns);
+    double A = vnl_math::twopi/ns*i;
     // Third term introduces small "noise"
     data[i] = mean + v1*(30*vcl_cos(A)) + v2*(10*vcl_sin(A)) + v3*(0.01*vcl_sin(3*A+0.1));
   }

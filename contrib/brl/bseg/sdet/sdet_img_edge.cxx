@@ -100,16 +100,6 @@ vil_image_view<vxl_byte> sdet_img_edge::detect_edges(vil_image_view<vxl_byte> im
   return img_edge;
 }
 
-static double angle_0_360(double angle)
-{
-  double ang = angle;
-  while (ang<0)
-    ang += (2.0*vnl_math::pi);
-  while (ang > 2.0*vnl_math::pi)
-    ang -= (2.0*vnl_math::pi);
-  return ang;
-}
-
 vil_image_view<float>
 sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
                                    double noise_multiplier,
@@ -154,7 +144,7 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
     double e0x  = e0.x(), e0y = e0.y();
     double e1x  = e1.x(), e1y = e0.y();
     if (e0x<0||e0y<0) continue;
-    double ang = angle_0_360(vcl_atan2(e1y-e0y, e1x-e0x));
+    double ang = vnl_math::angle_0_to_2pi(vcl_atan2(e1y-e0y, e1x-e0x));
     unsigned x0 = static_cast<unsigned>(e0x);
     unsigned y0 = static_cast<unsigned>(e0y);
     edge_img(x0, y0, 0) = static_cast<float>(e0x);
@@ -166,7 +156,7 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
     double enm2x  = enm2.x(), enm2y = enm2.y();
     double enm1x  = enm1.x(), enm1y = enm1.y();
     if (enm1x<0||enm1y<0) continue;
-    double angnm1 = angle_0_360(vcl_atan2(enm1y-enm2y, enm1x-enm2x));
+    double angnm1 = vnl_math::angle_0_to_2pi(vcl_atan2(enm1y-enm2y, enm1x-enm2x));
     unsigned xnm1 = static_cast<unsigned>(enm1x);
     unsigned ynm1 = static_cast<unsigned>(enm1y);
     edge_img(xnm1, ynm1, 0) = static_cast<float>(enm1x);
@@ -181,7 +171,7 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
       double cex  = ce.x(), cey = ce.y();
       double nex  = ne.x(), ney = ne.y();
       if (cex<0||cey<0) continue;
-      double angle = angle_0_360(vcl_atan2(ney-pey, nex-pex));
+      double angle = vnl_math::angle_0_to_2pi(vcl_atan2(ney-pey, nex-pex));
       unsigned xc = static_cast<unsigned>(cex);
       unsigned yc = static_cast<unsigned>(cey);
       // set the current edge pixel in the edge image
@@ -258,8 +248,8 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
 
       unsigned xc = static_cast<unsigned>(cex);
       unsigned yc = static_cast<unsigned>(cey);
-      double angle = angle_0_360((vnl_math::pi_over_180)*cubic_intp->get_theta(j)+vnl_math::pi_over_2);
-      //double angle = angle_0_360((vnl_math::pi_over_180)*cubic_intp->get_tangent_angle(j));
+      double angle = vnl_math::angle_0_to_2pi((vnl_math::pi_over_180)*cubic_intp->get_theta(j)+vnl_math::pi_over_2);
+      //double angle = vnl_math::angle_0_to_2pi((vnl_math::pi_over_180)*cubic_intp->get_tangent_angle(j));
 
       edge_img(xc, yc, 0) = static_cast<float>(cex);
       edge_img(xc, yc, 1) = static_cast<float>(cey);
@@ -331,7 +321,7 @@ sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
   for (unsigned i = 0; i < lines.size(); i++) {
     vsol_line_2d_sptr l = lines[i];
     int length = (int)vcl_ceil(l->length());
-    double angle = angle_0_360(vnl_math::pi_over_180*l->tangent_angle());
+    double angle = vnl_math::angle_0_to_2pi(vnl_math::pi_over_180*l->tangent_angle());
 #if 0
     vcl_cout << " line: " << i << " length: " << l->length()
              << " p0: (" << l->p0()->x() << ", " << l->p0()->y() << ')'

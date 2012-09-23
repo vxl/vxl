@@ -43,13 +43,13 @@ sample_sphere_directions(unsigned int num_dir_samples)
   vcl_vector<vgl_vector_3d<double> > dirs;
   const unsigned int half_samples = num_dir_samples/2;
   for (unsigned int i=0; i<=half_samples; ++i) {
-    double theta = i*2.0*vnl_math::pi/num_dir_samples;
+    double theta = i*vnl_math::twopi/num_dir_samples;
     double st = vcl_sin(theta);
     double ct = vcl_cos(theta);
     unsigned int num_j_samples = static_cast<unsigned int>(st*num_dir_samples+0.5);
     if (num_j_samples == 0) num_j_samples = 1;
     for (unsigned j=0; j<num_j_samples; ++j) {
-      double phi = j*2.0*vnl_math::pi/num_j_samples;
+      double phi = j*vnl_math::twopi/num_j_samples;
       double sp = vcl_sin(phi);
       double cp = vcl_cos(phi);
       dirs.push_back(vgl_vector_3d<double>(st*cp,st*sp,ct));

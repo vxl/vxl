@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 
 // Declaration of some constants
-static double twopi  = 2.0*vnl_math::pi;
+static double twopi  = vnl_math::twopi;
 static double rad    = vnl_math::pi_over_180;
 static double invrad = vnl_math::deg_per_rad;
 static double dEarthMeanRadius  =  6371.01;   // In km
@@ -32,42 +32,40 @@ double julian_day(int year, int month, int day, int hour=0, int minute=0, int se
 
 double solve_eccentric_anomaly(double mean_anomaly, double eccentricity)
 {
-
    // this approximation of the eccentric anomaly is probably good enough..
    double approx_E = mean_anomaly + eccentricity * vcl_sin(mean_anomaly);
 
    // .. but solve using minimizer just to be sure.
    // Create 1D cost function
-   class kepler_cost_fn : public vnl_cost_function 
+   class kepler_cost_fn : public vnl_cost_function
    {
-   public:
-      kepler_cost_fn(double mean_anomaly, double eccentricity) 
+    public:
+      kepler_cost_fn(double mean_anomaly, double eccentricity)
          : vnl_cost_function(1), M_(mean_anomaly), e_(eccentricity) {}
 
       double f(const vnl_vector<double>& x)
       {
-         double residual = M_ - (x[0] - e_*vcl_sin(x[0])); 
+         double residual = M_ - (x[0] - e_*vcl_sin(x[0]));
          return residual*residual;
       }
-   protected:
+    protected:
       double M_; // mean anomaly
       double e_; // eccentricity
    };
- 
+
    kepler_cost_fn cost_fun(mean_anomaly, eccentricity);
    // solve for eccentric anomaly using brent minimizer
    vnl_brent_minimizer brent(cost_fun);
    brent.set_f_tolerance(1e-6);
    brent.set_verbose(true);
-   double E = brent.minimize(approx_E);
 
-   return E;
+   return brent.minimize(approx_E);
 }
 
 
 double brad_sun_distance(int year, int month, int day, int hours, int minutes, int seconds)
 {
-   const double J2000 = 2451545.0; // Jan 1, 2000 
+   const double J2000 = 2451545.0; // Jan 1, 2000
    double jday = julian_day(year, month, day, hours, minutes, seconds);
 
 #define BRAD_USE_EARTH_SUN_DIST_APPROX
@@ -93,7 +91,7 @@ double brad_sun_distance(int year, int month, int day, int hours, int minutes, i
 
    const double days_per_century = 36525.6363;
    double T = (jday - J2000)/days_per_century;
-   // compute orbit parameters 
+   // compute orbit parameters
    double mean_dist = mean_dist0 + T*d_mean_dist;
    double eccentricity = eccentricity0 + T*d_eccentricity;
    double mean_long = mean_long0 + T*d_mean_long;

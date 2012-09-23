@@ -23,7 +23,7 @@ template<unsigned n>
 struct two_pi_power
 {
   static inline double value()
-  { return 2.0*vnl_math::pi*two_pi_power<n-1>::value(); }
+  { return vnl_math::twopi*two_pi_power<n-1>::value(); }
 };
 
 VCL_DEFINE_SPECIALIZATION

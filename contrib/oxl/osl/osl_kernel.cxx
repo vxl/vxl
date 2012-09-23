@@ -13,9 +13,10 @@
 // Construct one half of a Gaussian convolution kernel.
 //
 //   kernel_[i] = exp( (i-width_)^2/sigma^2 )/det
-void osl_kernel_DOG(float sigma_, float *kernel_, int k_size_, int width_) {
+void osl_kernel_DOG(float sigma_, float *kernel_, int k_size_, int width_)
+{
   float s2 = 2.0f*sigma_*sigma_;
-  float det = sigma_*(float)vcl_sqrt(2.0 * vnl_math::pi);
+  float det = sigma_*(float)vnl_math::sqrt2pi;
 
   for (int i=0,x=-width_; i<k_size_; ++i,++x)
     kernel_[i] = (float)vcl_exp(-x*x/s2)/det;

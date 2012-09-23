@@ -105,9 +105,9 @@ static void test_kd_tree()
     points[i].resize( Nc, Na );
     points[i].cartesian(0) = 6.5 * mz_rand.drand32() + 50;
     points[i].cartesian(1) = 6.5 * mz_rand.drand32() + 100;
-    points[i].angular(0) = 2*vnl_math::pi * mz_rand.drand32();
-    points[i].angular(1) = 2*vnl_math::pi * mz_rand.drand32();
-    points[i].angular(2) = 2*vnl_math::pi * mz_rand.drand32();
+    points[i].angular(0) = vnl_math::twopi * mz_rand.drand32();
+    points[i].angular(1) = vnl_math::twopi * mz_rand.drand32();
+    points[i].angular(2) = vnl_math::twopi * mz_rand.drand32();
   }
 
   rsdl_kd_tree tree2( points, 0, 4 );
@@ -120,9 +120,9 @@ static void test_kd_tree()
     rsdl_point query(2,3);
     query.cartesian(0) = 6.5 * mz_rand.drand32() + 50;
     query.cartesian(1) = 6.5 * mz_rand.drand32() + 100;
-    query.angular(0) = 2*vnl_math::pi * mz_rand.drand32();
-    query.angular(1) = 2*vnl_math::pi * mz_rand.drand32();
-    query.angular(2) = 2*vnl_math::pi * mz_rand.drand32();
+    query.angular(0) = vnl_math::twopi * mz_rand.drand32();
+    query.angular(1) = vnl_math::twopi * mz_rand.drand32();
+    query.angular(2) = vnl_math::twopi * mz_rand.drand32();
 
     // generate by exhaustive search
     for ( int i=0; i<M; ++i ) {
@@ -162,12 +162,12 @@ static void test_kd_tree()
     y = 6.5 * mz_rand.drand32() + 100;
     min_point.cartesian(1) = (x<y) ? x : y;
     max_point.cartesian(1) = (x<y) ? y : x;
-    min_point.angular(0) = 2*vnl_math::pi * mz_rand.drand32();
-    max_point.angular(0) = 2*vnl_math::pi * mz_rand.drand32();
-    min_point.angular(1) = 2*vnl_math::pi * mz_rand.drand32();
-    max_point.angular(1) = 2*vnl_math::pi * mz_rand.drand32();
-    min_point.angular(2) = 2*vnl_math::pi * mz_rand.drand32();
-    max_point.angular(2) = 2*vnl_math::pi * mz_rand.drand32();
+    min_point.angular(0) = vnl_math::twopi * mz_rand.drand32();
+    max_point.angular(0) = vnl_math::twopi * mz_rand.drand32();
+    min_point.angular(1) = vnl_math::twopi * mz_rand.drand32();
+    max_point.angular(1) = vnl_math::twopi * mz_rand.drand32();
+    min_point.angular(2) = vnl_math::twopi * mz_rand.drand32();
+    max_point.angular(2) = vnl_math::twopi * mz_rand.drand32();
 
     //  Now do "points_in_bounding_box" query.
     rsdl_bounding_box box( min_point, max_point );
@@ -235,9 +235,9 @@ static void test_kd_tree()
     //  Output to check everything:
     vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
              << " inside_count from exhaustive test: " << inside_count << '\n'
-             << " number in vector: " << radius_indices.size() << vcl_endl;
-
-    vcl_cout << "\nNow checking each:\n";
+             << " number in vector: " << radius_indices.size() << '\n'
+             << '\n'
+             << "Now checking each:\n";
 #endif
     disagree_index = 0; disagree_pt = 0;
     for ( unsigned int i=0; i<radius_points.size(); ++i ) {
@@ -282,9 +282,9 @@ static void test_kd_tree()
     //  Output to check everything:
     vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
              << " inside_count from exhaustive test: " << inside_count << '\n'
-             << " number in vector: " << radius_indices.size() << vcl_endl;
-
-    vcl_cout << "\nNow checking each:\n";
+             << " number in vector: " << radius_indices.size() << '\n'
+             << '\n'
+             << "Now checking each:\n";
 #endif
     disagree_index = 0; disagree_pt = 0;
     for ( unsigned int i=0; i<radius_points.size(); ++i ) {

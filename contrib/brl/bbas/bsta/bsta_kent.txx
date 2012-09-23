@@ -116,7 +116,7 @@ T bsta_kent<T>::normalizing_const(T kappa, T beta)
 {
   if (kappa<=0) kappa=kappa_; // the default
   if (beta <=0) beta= beta_;  // the default
-  T denom = vcl_pow(2*vnl_math::pi, 1.5);
+  T denom = vnl_math::twopi * vnl_math::sqrt2pi;
   denom*=vcl_pow(kappa, T(-0.5)); // so kappa should not be zero!
   T sum=0;
   for (int r=0; r<20; r++) {

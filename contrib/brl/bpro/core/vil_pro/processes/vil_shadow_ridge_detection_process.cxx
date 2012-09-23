@@ -21,7 +21,7 @@ namespace vil_shadow_ridge_detection_process_globals
   float dist_angles(float a,float b)
   {
     float dist = vcl_fabs((b-a));
-    return dist < float(vnl_math::pi) ? dist : float(2*vnl_math::pi) - dist;
+    return dist < float(vnl_math::pi) ? dist : float(vnl_math::twopi) - dist;
   }
 }
 
@@ -115,8 +115,8 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
     vil_blob_pixel_list::iterator iter;
     for (unsigned l = 0 ; l < blob_edge_pixel_lists[k].size(); l++)
     {
-      double min = 2 * vnl_math::pi;
-      float min_r = 0.0;
+      double min = vnl_math::twopi;
+      float min_r = 0.0f;
       for (unsigned m = 0 ; m < blob_edge_pixel_lists[k].size(); m++)
       {
         if (l!=m)

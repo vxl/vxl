@@ -133,7 +133,7 @@ void vpdfl_pc_gaussian::calcPartLogK()
 
   for (unsigned int i=0;i<n;i++) log_v_sum+=vcl_log(v_data[i]);
 
-  log_k_principal_ = -0.5 * (n*vcl_log(2 * vnl_math::pi) + log_v_sum);
+  log_k_principal_ = -0.5 * (n*vcl_log(vnl_math::twopi) + log_v_sum);
 }
 
 
@@ -282,7 +282,7 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
   {
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian &)\n"
              << "           Attempted to load object of type "
-             << name <<" into object of type " << is_a() << vcl_endl;
+             << name <<" into object of type " << is_a() << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -310,7 +310,7 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

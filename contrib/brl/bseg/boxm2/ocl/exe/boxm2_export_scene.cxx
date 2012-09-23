@@ -195,12 +195,12 @@ int main(int argc,  char** argv)
 
     vcl_ofstream cam_file_stream(camstream.str().c_str());
     // determine increment along azimuth and elevation (incline)
-    double az_incr = 2.0*vnl_math::pi/num_az();
+    double az_incr = vnl_math::twopi/num_az();
     double el_incr = (incline_0() - incline_1()) / (num_in()-1); //degrees (to include both start and end)
     el_incr = el_incr * vnl_math::pi_over_180;  // radians
     for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
     {
-        double az = 2.0*vnl_math::pi - az_i * az_incr;
+        double az = vnl_math::twopi - az_i * az_incr;
         for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
         {
             double el = vnl_math::pi_over_180 * incline_0() - el_i * el_incr;

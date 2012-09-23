@@ -19,7 +19,7 @@ double
 brec_hierarchy_edge::prob_density(const float dist, const float angle)
 {
   //: return non-normalized value
-  //return float(loc_model_.var()*2*vnl_math::pi*loc_model_.prob_density(pt));
+  //return float(loc_model_.var()*vnl_math::twopi*loc_model_.prob_density(pt));
   double d_dens = dist_model_.prob_density(dist);
   double d_var = dist_model_.var();
   d_dens = d_var*2.0f*vnl_math::pi*d_dens;
@@ -36,14 +36,14 @@ double
 brec_hierarchy_edge::prob_density_dist(const float dist)
 {
   //: return non-normalized value
-  return dist_model_.var()*2*vnl_math::pi*dist_model_.prob_density(dist);
+  return dist_model_.var()*vnl_math::twopi*dist_model_.prob_density(dist);
 }
 
 double
 brec_hierarchy_edge::prob_density_angle(const float angle)
 {
   //: return non-normalized value
-  return angle_model_.var()*2*vnl_math::pi*angle_model_.prob_density(angle);
+  return angle_model_.var()*vnl_math::twopi*angle_model_.prob_density(angle);
 }
 
 #if 0

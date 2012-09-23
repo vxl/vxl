@@ -31,14 +31,14 @@ double boxm2_compute_normal_albedo_cost_function::f(vnl_vector<double> const& x)
       }
       else {
          double diff = (radiance_scales_[m]*rho + radiance_offsets_[m] - radiances_[m]);
-         double log_norm = -0.5 * vcl_log(2.0 * vnl_math::pi * rad_var);
+         double log_norm = -0.5 * vcl_log(vnl_math::twopi * rad_var);
          log_prob += weight * (log_norm - (diff*diff / (2.0*rad_var)));
       }
 #endif
       double prob = 0.0;
       if (rad_var > 0.0) {
          double diff = (radiance_scales_[m]*rho + radiance_offsets_[m] - radiances_[m]);
-         prob = visibilities_[m] * vcl_exp(-diff*diff/(2.0*rad_var)) / vcl_sqrt(2.0*vnl_math::pi*rad_var);
+         prob = visibilities_[m] * vcl_exp(-diff*diff/(2.0*rad_var)) / vcl_sqrt(vnl_math::twopi*rad_var);
       }
       const double background_density = 0.01; // TODO: compute actual uniform density value
       prob += (1.0 - visibilities_[m])*background_density;
@@ -136,7 +136,7 @@ bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, b
    vcl_vector<aux3_datatype> aux3_raw = str_cache_->get_next<BOXM2_AUX3>(id_, index); // pre
 
    if (aux0_raw.size() != num_images_) {
-      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor_opt : aux0_raw.size() " << aux0_raw.size() << " != num_images_ " << num_images_ << vcl_endl;
+      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor_opt : aux0_raw.size() " << aux0_raw.size() << " != num_images_ " << num_images_ << '\n';
       return false;
    }
 

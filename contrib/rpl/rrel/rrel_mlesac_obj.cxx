@@ -28,7 +28,7 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   double pi,p0,zi;
   vect_const_iter begin0 = begin;
   unsigned long num_residual = end - begin;
-  double mult1 = 1.0 / (vcl_sqrt( 2 * vnl_math::pi ));
+  double mult1 = vnl_math::one_over_sqrt2pi;
 
   double inlier_frac = 1.0;
   double new_inlier_frac = 1 - outlier_frac_;
@@ -74,7 +74,7 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
 
   double inlier_frac = 1.0;
   double new_inlier_frac = 1 - outlier_frac_;
-  double mult1 = 1.0 / (vcl_sqrt( 2 * vnl_math::pi ) * scale);
+  double mult1 = vnl_math::one_over_sqrt2pi / scale;
   double const1 = vcl_pow(mult1, (int)residual_dof_) ;
   double exp_mult2 = -1.0 / (2.0 * sqr(scale));
 

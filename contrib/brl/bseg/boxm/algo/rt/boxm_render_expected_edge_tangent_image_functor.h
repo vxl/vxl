@@ -17,13 +17,6 @@
 #include <vcl_iostream.h>
 #endif
 
-inline static double angle_0_360(double ang)
-{
-  while (ang<0) ang += 2*vnl_math::pi;
-  while (ang > 2.0*vnl_math::pi) ang -= 2*vnl_math::pi;
-  return ang;
-}
-
 template <boxm_apm_type APM, class T_aux>
 class boxm_render_expected_edge_tangent_image_functor
 {
@@ -94,7 +87,7 @@ class boxm_render_expected_edge_tangent_image_functor
       {
         expected_(i,j,0)=float(u1+u2)/2;
         expected_(i,j,1)=float(v1+v2)/2;
-        expected_(i,j,2)=float(angle_0_360(vcl_atan2(v2-v1,u2-u1)));
+        expected_(i,j,2)=float(vnl_math::angle_0_to_2pi(vcl_atan2(v2-v1,u2-u1)));
       }
     }
 #endif // 0

@@ -128,7 +128,7 @@ static double angle_from_rotation_matrix(vgl_h_matrix_2d<double> const& r)
   double s = r.get(1,0);
   double ang = vcl_atan2(s,c);
   if (ang>vnl_math::pi)
-    ang = 2*vnl_math::pi - ang;
+    ang = vnl_math::twopi - ang;
   return ang;
 }
 

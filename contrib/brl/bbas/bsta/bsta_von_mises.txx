@@ -76,7 +76,7 @@ T bsta_von_mises<T,3>::prob_density( typename bsta_von_mises<T,3>::vector_type c
   double k = static_cast<double>(kappa_);
   double ex = vcl_exp(k*dp);
   double norm = k/(vcl_exp(k)-vcl_exp(-k));
-  norm /= 2.0*vnl_math::pi;
+  norm /= vnl_math::twopi;
   return static_cast<T>(norm*ex);
 }
 
@@ -143,7 +143,7 @@ T bsta_von_mises<T,2>::prob_density(typename bsta_von_mises<T,2>::vector_type co
   double ex = vcl_exp(k*dp);
   double i0 = I0(k);
   double norm = 1.0/i0;
-  norm /= 2.0*vnl_math::pi;
+  norm /= vnl_math::twopi;
   return static_cast<T>(norm*ex);
 }
 #endif //VCL_CAN_DO_PARTIAL_SPECIALIZATION

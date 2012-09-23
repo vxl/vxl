@@ -534,7 +534,7 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
 
     // run mean_shift on angle sample set
     unsigned a_nbins = a_hist->nbins();
-    float a_delta = float(2*vnl_math::pi/a_nbins);
+    float a_delta = float(vnl_math::twopi/a_nbins);
 
     bsta_mean_shift<double,1> a_ms;
     a_ms.find_modes(a_set, 0.01f);
