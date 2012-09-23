@@ -318,9 +318,20 @@ char   vnl_huge_val(char)   { return 0x7f; }
 double vnl_math::angle_0_to_2pi(double angle)
 {
   angle = vcl_fmod(angle, vnl_math::twopi);
-  if (angle<0) angle += vnl_math::twopi;
-  // added by Nhon: this fixes a bug when angle == -1.1721201390607859e-016 :
-  // then after the above computation we get 6.2831853071795864769 == twopi !!!
-  if (angle<0 || angle>=vnl_math::twopi) { angle = 0; }
+  if (angle >= 0) return angle;
+  double a = angle + vnl_math::twopi;
+  if (a > 0 && a < vnl_math::twopi) return a;
+  // added by Nhon: this fixes a bug when angle >= -1.1721201390607859e-016 :
+  // then after the above computation we get 6.2831853071795864769 == twopi
+  // while this function guarantees that it returns values < twopi !!!
+  if (angle < 0) return 6.28318530717958575;
+  else return angle;
+}
+
+double vnl_math::angle_minuspi_to_pi(double angle)
+{
+  angle = vcl_fmod(angle, vnl_math::twopi);
+  if (angle> vnl_math::pi) angle -= vnl_math::twopi;
+  if (angle<-vnl_math::pi) angle += vnl_math::twopi;
   return angle;
 }

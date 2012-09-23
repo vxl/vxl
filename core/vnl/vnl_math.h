@@ -106,8 +106,10 @@ class vnl_math
   //: IEEE single machine precision
   static VNL_DLL_DATA const float float_eps        VCL_STATIC_CONST_INIT_FLOAT_DECL(1.192092896e-07f);
   static VNL_DLL_DATA const float float_sqrteps    VCL_STATIC_CONST_INIT_FLOAT_DECL(3.4526698307e-4f);
-//: Convert an angle to [0, 2Pi) range
+  //: Convert an angle to [0, 2Pi) range
   static double angle_0_to_2pi(double angle);
+  //: Convert an angle to [-Pi, Pi) range
+  static double angle_minuspi_to_pi(double angle);
 };
 
 // We do not want to make assumptions about unknown types that happen
