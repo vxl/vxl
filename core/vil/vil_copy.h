@@ -50,4 +50,10 @@ vil_image_view<T> vil_copy_deep(const vil_image_view<T> &src);
 // \relatesalso vil_image_resource
 bool vil_copy_deep(const vil_image_resource_sptr &src, vil_image_resource_sptr &dest);
 
+//: Creates an in memory vil_image_resource and copies the src to it.
+// The size and pixel type of the return vil_image_resource is determined by src
+// O(size)
+// \relatesalso vil_image_resource
+vil_image_resource_sptr vil_copy_deep( const vil_image_resource_sptr &src );
+
 #endif // vil_copy_h_

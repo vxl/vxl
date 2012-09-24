@@ -9,6 +9,7 @@
 #include <vil/vil_property.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource.h>
+#include <vil/vil_new.h>
 
 //: Copy images in blocks of roughly this size
 static const unsigned long large_image_limit_ = 1024ul * 1024ul * 8ul; //8M Pixels
@@ -80,5 +81,17 @@ bool vil_copy_deep(const vil_image_resource_sptr &src, vil_image_resource_sptr &
     }
     return true;
   }
+}
+
+vil_image_resource_sptr vil_copy_deep( const vil_image_resource_sptr &src )
+{
+  if(src == NULL) return NULL;
+  vil_image_resource_sptr result = vil_new_image_resource(src->ni(), src->nj(), src);
+  bool copy_r = vil_copy_deep(src, result);
+  if(!copy_r)
+  {
+    return NULL;
+  }
+  return result;
 }
 
