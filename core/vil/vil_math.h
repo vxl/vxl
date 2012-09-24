@@ -11,6 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_image_resource.h>
 #include <vil/vil_view_as.h>
 #include <vil/vil_plane.h>
 #include <vil/vil_transform.h>
@@ -305,6 +306,42 @@ inline void vil_math_sum_squares(sumT& sum, sumT& sum_sq, const vil_image_view<i
   }
 }
 
+//: Sum of squares of masked elements in plane p of image
+// \relatesalso vil_image_view
+template<class imT, class sumT>
+inline bool vil_math_sum_squares(sumT& sum, sumT& sum_sq, unsigned int & count,
+                                 const vil_image_view<imT>& im, const vil_image_view<bool> & mask, unsigned p)
+{
+  count = 0;
+  if ( im.ni() != mask.ni() || im.nj() != mask.nj() || mask.nplanes() != 1)
+  {
+    return false;
+  }
+  const imT* row = im.top_left_ptr()+p*im.planestep();
+  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
+  const imT* row_end = row + im.nj()*jstep;
+  vcl_ptrdiff_t row_len = im.ni()*im.istep();
+  const bool* m_row = mask.top_left_ptr()+mask.planestep();
+  vcl_ptrdiff_t m_istep = mask.istep(), m_jstep=mask.jstep();
+  sum = 0; sum_sq = 0;
+  for (;row!=row_end;row+=jstep, m_row+=m_jstep)
+  {
+    const imT* v_end = row + row_len;
+    const bool* b = m_row;
+    for (const imT* v = row; v!=v_end;v+=istep, b+=m_istep )
+    {
+      if(*b)
+      {
+        ++count;
+        sum+=*v;
+        sum_sq+=sumT(*v)*sumT(*v);
+      }
+    }
+  }
+  return true;
+}
+
+
 //: Mean and variance of elements in plane p of image
 // \relatesalso vil_image_view
 template<class imT, class sumT>
@@ -316,6 +353,59 @@ inline void vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_vi
   mean = sum/float(im.ni()*im.nj());
   var = sum_sq/float(im.ni()*im.nj()) - mean*mean;
 }
+
+//: Mean and variance of masked elements in plane p of image
+// \relatesalso vil_image_view
+template<class imT, class sumT>
+inline bool vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_view<imT>& im,
+                                       const vil_image_view<bool> & mask, unsigned p)
+{
+  if (im.size()==0) { mean=0; var=0; return true; }
+  sumT sum,sum_sq;
+  unsigned int count = 0;
+  if(!vil_math_sum_squares(sum,sum_sq, count, im,mask,p))
+  {
+    return false;
+  }
+  mean = sum/float(count);
+  var = sum_sq/float(count) - mean*mean;
+  return true;
+}
+
+//: Mean and variance of masked elements in plane p for vil_image_resource
+// \relatedalso vil_image_resource
+template< class sumT >
+inline bool vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_resource_sptr im,
+                                       const vil_image_view<bool> & mask, unsigned p)
+{
+  if(im == NULL || im->get_view() == NULL)
+  {
+    return false;
+  }
+  switch (im->pixel_format())
+  {
+#define macro( F , T )                                                  \
+    case F :                                                            \
+      return vil_math_mean_and_variance(mean, var,                      \
+                                        static_cast<vil_image_view<T >&>(*(im->get_view())), \
+                                        mask, p);                       \
+
+    macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+      macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+      macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+      macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+      macro(VIL_PIXEL_FORMAT_BOOL , bool )
+      macro(VIL_PIXEL_FORMAT_FLOAT , float )
+      macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
+  default:
+      return false;
+  }
+  return true;
+}
+
 
 //: Functor class to compute square roots (returns zero if x<0)
 class vil_math_sqrt_functor
@@ -367,7 +457,7 @@ inline void vil_math_truncate_range(vil_image_view<T>& image, T min_v, T max_v)
 class vil_math_scale_functor
 {
   double s_;
- public:
+public:
   vil_math_scale_functor(double s) : s_(s) {}
   vxl_byte operator()(vxl_byte x) const { return vxl_byte(0.5+s_*x); }
   unsigned operator()(unsigned x) const { return unsigned(0.5+s_*x); }
@@ -384,7 +474,7 @@ class vil_math_scale_functor
 // \sa vil_math_scale_and_offset_values()
 class vil_math_scale_and_translate_functor
 {
- public:
+public:
   //: Constructor
   // \param s Scaling.
   // \param t Translation (offset).
@@ -399,7 +489,7 @@ class vil_math_scale_and_translate_functor
   double operator()(double x)     const { return s_*x+t_; }
   std::complex<double> operator()(std::complex<double> x) const { return s_*x+t_; } // Not sure if this one makes sense
 
- private:
+private:
   double s_;
   double t_;
 };
@@ -489,8 +579,8 @@ void vil_math_rms(const vil_image_view<srcT>& src,
       for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
       {
         destT sum2 = destT(*pixelA)*(*pixelA)
-                     + destT(pixelA[pstepA])*(pixelA[pstepA]);
-        *pixelB = destT(std::sqrt(sum2/2));
+          + destT(pixelA[pstepA])*(pixelA[pstepA]);
+        *pixelB = destT(vcl_sqrt(sum2/2));
       }
     }
     else
@@ -539,8 +629,8 @@ void vil_math_rss(const vil_image_view<srcT>& src,
       for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
       {
         destT sum2 = destT(*pixelA)*(*pixelA)
-                     + destT(pixelA[pstepA])*(pixelA[pstepA]);
-        *pixelB = destT(std::sqrt(sum2));
+          + destT(pixelA[pstepA])*(pixelA[pstepA]);
+        *pixelB = destT(vcl_sqrt(sum2));
       }
     }
     else
@@ -587,7 +677,7 @@ void vil_math_sum_sqr(const vil_image_view<srcT>& src,
     {
       for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
         *pixelB =   destT(*pixelA)*(*pixelA)
-                  + destT(pixelA[pstepA])*(pixelA[pstepA]);
+          + destT(pixelA[pstepA])*(pixelA[pstepA]);
     }
     else
     {
@@ -653,7 +743,7 @@ inline void vil_math_image_product(const vil_image_view<aT>& imA,
   std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
   std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
   std::ptrdiff_t istepP=im_product.istep(),jstepP=im_product.jstep(),
-                pstepP = im_product.planestep();
+    pstepP = im_product.planestep();
 
   // For one plane case, arrange that im_prod(i,j,p) = imA(i,j,p)*imB(i,j,0)
   if (imB.nplanes()==1) pstepB=0;
@@ -765,7 +855,7 @@ inline void vil_math_image_ratio(const vil_image_view<aT>& imA,
   std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
   std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
   std::ptrdiff_t istepR=im_ratio.istep(),jstepR=im_ratio.jstep(),
-                pstepR = im_ratio.planestep();
+    pstepR = im_ratio.planestep();
 
   // For one plane case, arrange that im_ratio(i,j,p) = imA(i,j,p)/imB(i,j,0)
   if (imB.nplanes()==1) pstepB=0;
@@ -784,8 +874,10 @@ inline void vil_math_image_ratio(const vil_image_view<aT>& imA,
       const bT* pixelB = rowB;
       sumT* pixelR = rowR;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelR+=istepR)
-      if (*pixelB==0) *pixelR=0;
-      else *pixelR = sumT(*pixelA)/sumT(*pixelB);
+      {
+        if (*pixelB==0) *pixelR=0;
+        else *pixelR = sumT(*pixelA)/sumT(*pixelB);
+      }
     }
   }
 }
@@ -830,7 +922,7 @@ template<class aT, class bT, class dT>
 inline void vil_math_image_abs_difference_1d_generic(
   const aT* pxA, vcl_ptrdiff_t isA,
   const bT* pxB, vcl_ptrdiff_t isB,
-        dT* pxD, vcl_ptrdiff_t isD,
+  dT* pxD, vcl_ptrdiff_t isD,
   unsigned len)
 {
   for (unsigned i =0; i < len; ++i, pxA += isA, pxB += isB, pxD += isD)
@@ -847,7 +939,7 @@ template<class aT, class bT, class dT>
 inline void vil_math_image_abs_difference_1d(
   const aT* pxA, vcl_ptrdiff_t isA,
   const bT* pxB, vcl_ptrdiff_t isB,
-        dT* pxD, vcl_ptrdiff_t isD,
+  dT* pxD, vcl_ptrdiff_t isD,
   unsigned len)
 {
   vil_math_image_abs_difference_1d_generic<aT, bT, dT>(
@@ -860,7 +952,7 @@ inline void vil_math_image_abs_difference_1d(
 template<class aT, class bT, class dT>
 inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
                                           const vil_image_view<bT>& imB,
-                                                vil_image_view<dT>& imD)
+                                          vil_image_view<dT>& imD)
 {
   unsigned ni = imA.ni(), nj = imA.nj(), np = imA.nplanes();
   assert(imB.ni() == ni && imB.nj() == nj && imB.nplanes() == np);
@@ -871,13 +963,14 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
   vcl_ptrdiff_t isD=imD.istep(), jsD=imD.jstep(), psD = imD.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
-        dT* planeD = imD.top_left_ptr();
+  dT* planeD = imD.top_left_ptr();
 
   for (unsigned p = 0; p < np ;++p, planeA += psA, planeB += psB, planeD += psD)
   {
     const aT* rowA = planeA;
     const bT* rowB = planeB;
-          dT* rowD = planeD;
+
+    dT* rowD = planeD;
     for (unsigned j = 0; j < nj; ++j, rowA += jsA, rowB += jsB, rowD += jsD)
     {
       vil_math_image_abs_difference_1d<aT,bT,dT>(
