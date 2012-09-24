@@ -353,9 +353,7 @@ void bcvr_cvmatch::GetAverageCurveFromAMatch (bsol_intrinsic_curve_2d_sptr Avera
     previ2 = i2;
   }
 
-  int na = AverageCurve->size();
-  int no = curve1_->size();
-  assert (na==no);
+  assert (AverageCurve->size() == curve1_->size());
 }
 
 //The number of sample points of AverageCurve is the same as the one in the reference curve.
@@ -392,9 +390,7 @@ void bcvr_cvmatch::GetSumCurveFromAMatch (bsol_intrinsic_curve_2d_sptr SumCurve)
     previ2 = i2;
   }
 
-  int ns = SumCurve->size();
-  int no = curve1_->size();
-  assert (ns==no);
+  assert(SumCurve->size() == curve1_->size());
 }
 
 void bcvr_cvmatch::GetMorphingCurvesFromAMatch (bsol_intrinsic_curve_2d_sptr MorphingCurves, int NumMorphs)
@@ -435,9 +431,7 @@ void bcvr_cvmatch::GetMorphingCurvesFromAMatch (bsol_intrinsic_curve_2d_sptr Mor
       previ2 = i2;
     }
 
-    int na = MorphingCurves.ptr()[iMorph].size();
-    int no = curve1_->size();
-    assert (na==no);
+    assert(MorphingCurves.ptr()[iMorph].size() == curve1_->size());
   }//end for iMorph
 }
 
