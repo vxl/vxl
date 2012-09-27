@@ -181,7 +181,7 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
 
   // run expected image function
   float time = render_expected_image( scene, device, opencl_cache, queue,
-                                      cam, exp_image, vis_image, /*max_omega_image,*/ exp_img_dim,
+                                      cam, exp_image, vis_image, max_omega_image, exp_img_dim,
                                       data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj, apptypesize);
 
   // normalize

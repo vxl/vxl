@@ -48,6 +48,7 @@ namespace boxm2_ocl_render_expected_image_process_globals
     src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
+
     vcl_size_t found = opts.find("SHORT");
     if (found!=vcl_string::npos)
     {
@@ -56,9 +57,9 @@ namespace boxm2_ocl_render_expected_image_process_globals
       options += "-D RENDER ";
       options += "-D RENDER_MAX -D STEP_CELL=step_cell_render_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
 
+
       //have kernel construct itself using the context and device
       bocl_kernel * ray_trace_kernel=new bocl_kernel();
-
       ray_trace_kernel->create_kernel( &device->context(),
                                        device->device_id(),
                                        src_paths,
@@ -234,7 +235,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 
   // run expected image function
   render_expected_image(scene, device, opencl_cache, queue,
-                        cam, exp_image, vis_image, /*max_omega_image,*/ exp_img_dim,
+                        cam, exp_image, vis_image, max_omega_image,exp_img_dim,
                         data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
   // normalize
   if (kernels[identifier].size()>1)
