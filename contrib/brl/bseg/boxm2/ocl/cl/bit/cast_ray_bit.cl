@@ -186,7 +186,7 @@ void cast_ray(
     ////////////////////////////////////////////////////////////////////////////////
   }
 }
-
+#ifdef RENDER_VISIBILITY
 void cast_ray_render_vis(
           //---- RAY ARGUMENTS -------------------------------------------------
           int i, int j,                                     //pixel information
@@ -219,7 +219,7 @@ void cast_ray_render_vis(
   float min_facez = (ray_dz < 0.0f) ? (linfo->dims.z) : 0.0f;
   float tblock = calc_tnear(ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, min_facex, min_facey, min_facez);
   tblock = (tblock > 2.0f) ? tblock : 2.0f;    //make sure tnear is at least 0...
-  tfar = tfar > (*tfar_max) ? (*tfar_max): tfar;
+  tfar = tfar > (*tfar_max) ? (*tfar_max)-2.0: tfar;
   tfar -= BLOCK_EPSILON;   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
   
   if (tfar <= tblock)
@@ -250,7 +250,7 @@ void cast_ray_render_vis(
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  while (tblock < tfar )
+  while (tblock < tfar  )
   {
     //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
@@ -306,3 +306,5 @@ void cast_ray_render_vis(
     ////////////////////////////////////////////////////////////////////////////////
   }
 }
+
+#endif
