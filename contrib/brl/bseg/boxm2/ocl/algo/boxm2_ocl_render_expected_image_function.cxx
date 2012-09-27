@@ -18,6 +18,7 @@ float render_expected_image(  boxm2_scene_sptr & scene,
                               vpgl_camera_double_sptr & cam,
                               bocl_mem_sptr & exp_image,
                               bocl_mem_sptr & vis_image,
+							  bocl_mem_sptr & max_omega_image,
                               bocl_mem_sptr & exp_img_dim,
                               vcl_string data_type,
                               bocl_kernel* kernel,
@@ -90,6 +91,7 @@ float render_expected_image(  boxm2_scene_sptr & scene,
         kern->set_arg( cl_output.ptr() );
         kern->set_arg( lookup.ptr() );
         kern->set_arg( vis_image.ptr() );
+		kern->set_arg( max_omega_image.ptr() );
 
         //local tree , cumsum buffer, imindex buffer
         kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar16) );
