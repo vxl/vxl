@@ -101,7 +101,7 @@ void cast_ray(
   float tblock = calc_tnear(ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, min_facex, min_facey, min_facez);
   tblock = (tblock > 2.0f) ? tblock : 2.0f;    //make sure tnear is at least 0...
   tfar -= BLOCK_EPSILON;   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
-  
+
   if (tfar <= tblock)
     return;
 
@@ -134,9 +134,9 @@ void cast_ray(
   {
     //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
-    float posx = calc_pos(tblock, ray_ox, ray_dx); 
-    float posy = calc_pos(tblock, ray_oy, ray_dy); 
-    float posz = calc_pos(tblock, ray_oz, ray_dz); 
+    float posx = calc_pos(tblock, ray_ox, ray_dx);
+    float posy = calc_pos(tblock, ray_oy, ray_dy);
+    float posz = calc_pos(tblock, ray_oz, ray_dz);
     if (tblock >= texit)
     {
       //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
@@ -163,7 +163,7 @@ void cast_ray(
                                   posx-cell_minx, posy-cell_miny, posz-cell_minz,
                                   &vox_minx, &vox_miny, &vox_minz, &vox_len);
     //data index is relative data (data_index_cached) plus data_index_root
-    int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex) 
+    int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex)
                     + data_index_root(&local_tree[llid]);
 
     // get texit along the voxel
@@ -221,7 +221,7 @@ void cast_ray_render_vis(
   tblock = (tblock > 2.0f) ? tblock : 2.0f;    //make sure tnear is at least 0...
   tfar = tfar > (*tfar_max) ? (*tfar_max)-2.0: tfar;
   tfar -= BLOCK_EPSILON;   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
-  
+
   if (tfar <= tblock)
     return;
 
@@ -254,9 +254,9 @@ void cast_ray_render_vis(
   {
     //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
-    float posx = calc_pos(tblock, ray_ox, ray_dx); 
-    float posy = calc_pos(tblock, ray_oy, ray_dy); 
-    float posz = calc_pos(tblock, ray_oz, ray_dz); 
+    float posx = calc_pos(tblock, ray_ox, ray_dx);
+    float posy = calc_pos(tblock, ray_oy, ray_dy);
+    float posz = calc_pos(tblock, ray_oz, ray_dz);
     if (tblock >= texit)
     {
       //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
@@ -283,7 +283,7 @@ void cast_ray_render_vis(
                                   posx-cell_minx, posy-cell_miny, posz-cell_minz,
                                   &vox_minx, &vox_miny, &vox_minz, &vox_len);
     //data index is relative data (data_index_cached) plus data_index_root
-    int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex) 
+    int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex)
                     + data_index_root(&local_tree[llid]);
 
     // get texit along the voxel
