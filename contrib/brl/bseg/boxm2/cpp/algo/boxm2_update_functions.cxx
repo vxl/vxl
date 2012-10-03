@@ -20,7 +20,16 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
                              unsigned int roi_nj0)
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
+	vcl_vector<boxm2_block_id> vis_order;
+	if (vpgl_perspective_camera<double>* pcam =
+      dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
+	{
+		vis_order=scene->get_vis_blocks(pcam);
+	}
+	else
+	{
+		vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+	}
     if (vis_order.empty())
     {
         vcl_cout<<"None of the blocks are visible from this viewpoint"<<vcl_endl;
@@ -141,7 +150,16 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
                         unsigned int roi_nj0)
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+	vcl_vector<boxm2_block_id> vis_order;
+	if (vpgl_perspective_camera<double>* pcam =
+      dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
+	{
+		vis_order=scene->get_vis_blocks(pcam);
+	}
+	else
+	{
+		vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+	}
     if (vis_order.empty())
     {
         vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
