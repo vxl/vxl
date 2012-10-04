@@ -32,7 +32,7 @@ bool boxm2_cpp_render_expected_image_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_render_expected_image_process_globals;
 
-  //process takes 1 input
+  //process takes 6 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
@@ -40,7 +40,6 @@ bool boxm2_cpp_render_expected_image_process_cons(bprb_func_process& pro)
   input_types_[3] = "unsigned";
   input_types_[4] = "unsigned";
   input_types_[5] = "vcl_string";// if identifier string is empty, then only one appearance model
-
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -60,7 +59,7 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
   using namespace boxm2_cpp_render_expected_image_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   //get the inputs
@@ -93,7 +92,7 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    vcl_cerr<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type\n";
     return false;
   }
 
@@ -107,15 +106,15 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
   exp_img->fill(0.0f);
   vis_img->fill(1.0f);
   vcl_vector<boxm2_block_id> vis_order;
-  if (vpgl_perspective_camera<double>* pcam =
-      dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
+  if ((vpgl_perspective_camera<double>* pcam = // assignment, not comparison
+       dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr())))
   {
-	vis_order=scene->get_vis_blocks(pcam);
+    vis_order=scene->get_vis_blocks(pcam);
   }
   else
   {
-	vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
-  }  
+    vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+  }
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
