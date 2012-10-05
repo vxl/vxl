@@ -7,6 +7,7 @@
 #include <boxm2/cpp/algo/boxm2_update_using_quality_functor.h>
 #include <vil/vil_math.h>
 #include <vil/vil_save.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <bsta/bsta_gauss_sf1.h>
 
 bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
@@ -21,8 +22,8 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     vcl_vector<boxm2_block_id> vis_order;
-    if ((vpgl_perspective_camera<double>* pcam = // assignment, not comparison
-         dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr())))
+    if (vpgl_perspective_camera<double>* pcam = // assignment, not comparison
+        dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
     {
         vis_order=scene->get_vis_blocks(pcam);
     }
@@ -151,8 +152,8 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     vcl_vector<boxm2_block_id> vis_order;
-    if ((vpgl_perspective_camera<double>* pcam = // assignment, not comparison
-         dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr())))
+    if (vpgl_perspective_camera<double>* pcam = // assignment, not comparison
+        dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
     {
         vis_order=scene->get_vis_blocks(pcam);
     }
