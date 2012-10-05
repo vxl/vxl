@@ -106,8 +106,8 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
   exp_img->fill(0.0f);
   vis_img->fill(1.0f);
   vcl_vector<boxm2_block_id> vis_order;
-  if ((vpgl_perspective_camera<double>* pcam = // assignment, not comparison
-       dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr())))
+  if (vpgl_perspective_camera<double>* pcam = // assignment, not comparison
+      dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
   {
     vis_order=scene->get_vis_blocks(pcam);
   }
