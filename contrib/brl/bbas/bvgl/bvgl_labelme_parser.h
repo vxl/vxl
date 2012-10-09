@@ -18,6 +18,8 @@
 #define POINT_TAG "pt"
 #define X_TAG "x"
 #define Y_TAG "y"
+#define OBJECT_MINDIST_TAG "mindist"
+#define OBJECT_ORDER_TAG "order"
 
 #if 0
 <annotation>
@@ -54,12 +56,14 @@ class bvgl_labelme_parser : public expatpp
   vcl_string image_name() { return image_name_; }
 
   //object names (in the same order as polygons)
-  //vcl_vector<vcl_string> obj_names() { return obj_names_; }
   vcl_vector<vcl_string>& obj_names() { return obj_names_; }
+  vcl_vector<int>& obj_mindists() { return obj_dists_; }
+  vcl_vector<int>& obj_depth_orders() { return obj_depth_orders_; }
 
   // ACCESSORS for parser info
-  //vcl_vector<vgl_polygon<double> > polygons() { return polygons_; }
   vcl_vector<vgl_polygon<double> >& polygons() { return polygons_; }
+  
+  void trim_string(vcl_string& s);
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
@@ -72,6 +76,10 @@ class bvgl_labelme_parser : public expatpp
   double x_, y_;
 
   vcl_vector<vcl_string> obj_names_;
+  vcl_vector<int> obj_dists_;
+  vcl_vector<int> obj_depth_orders_; 
+  int dist_;
+  int order_;
   vcl_string image_name_;
 
   //set active tag for parsing char data from different tags
