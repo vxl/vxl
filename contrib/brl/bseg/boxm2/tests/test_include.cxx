@@ -1,5 +1,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_block_metadata.h>
+#include <boxm2/boxm2_bounding_box_parser.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/boxm2_data_traits.h>
