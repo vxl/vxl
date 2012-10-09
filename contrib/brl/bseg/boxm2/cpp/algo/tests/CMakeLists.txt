@@ -14,3 +14,6 @@ ADD_TEST( boxm2_test_merge_function      ${EXECUTABLE_OUTPUT_PATH}/boxm2_cpp_alg
 
 ADD_EXECUTABLE( boxm2_cpp_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm2_cpp_algo_test_include boxm2_cpp_algo )
+
+ADD_EXECUTABLE( boxm2_cpp_algo_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( boxm2_cpp_algo_test_template_include boxm2_cpp_algo )
