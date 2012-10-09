@@ -116,6 +116,9 @@ SOURCE=.\boxm2_scene_parser.cxx
 SOURCE=.\boxm2_normal_albedo_array.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_bounding_box_parser.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
 # Begin Source File
@@ -234,6 +237,9 @@ SOURCE=.\boxm2_normal_albedo_array.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_feature_vector.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_bounding_box_parser.h
 # End Source File
 # End Group
 # End Target

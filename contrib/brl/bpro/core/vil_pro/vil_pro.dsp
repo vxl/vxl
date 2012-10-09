@@ -234,6 +234,15 @@ SOURCE=.\processes/vil_EO_IR_combine_process.cxx
 SOURCE=.\processes/vil_debayer_BGGR_to_RGB_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vil_fill_holes_in_regions_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bil_create_arf_image_istream_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bil_read_CLIF07_data_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bil_raw_image_istream_sptr-.cxx
 # End Source File
 # Begin Source File

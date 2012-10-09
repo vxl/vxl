@@ -103,6 +103,9 @@ SOURCE=.\boxm2_ocl_depth_map_to_vol_exe.cxx
 # Begin Source File
 SOURCE=.\boxm2_ocl_depth_map_to_vol_xyz_image.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_depth_map_to_vol_xyz_image2.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

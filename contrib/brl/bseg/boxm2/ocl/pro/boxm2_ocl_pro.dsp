@@ -263,6 +263,12 @@ SOURCE=.\processes/boxm2_ocl_batch_synoptic_phongs_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_update_alpha_wphongs_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_compute_visibility_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_probability_of_image_wcubic_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

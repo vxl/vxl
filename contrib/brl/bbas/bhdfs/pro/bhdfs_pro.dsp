@@ -108,6 +108,12 @@ SOURCE=.\processes/bhdfs_save_image_view_process.cxx
 SOURCE=.\processes/bhdfs_mapper_scripting_processes.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bhdfs_boxm2_load_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bhdfs_load_perspective_camera_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bhdfs_manager_sptr-.cxx
 # End Source File
 # End Group
