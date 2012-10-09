@@ -8,7 +8,7 @@ import os
 
 # Print ocl info for all devices
 def ocl_info():
-  print("Init Manager");
+  #print("Init Manager");
   boxm2_batch.init_process("boclInitManagerProcess");
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
@@ -20,7 +20,7 @@ def ocl_info():
   boxm2_batch.run_process();
 
 def load_scene(scene_str): 
-  print("Loading a Scene from file: ", scene_str);
+  #print("Loading a Scene from file: ", scene_str);
   boxm2_batch.init_process("boxm2LoadSceneProcess");
   boxm2_batch.set_input_string(0, scene_str);
   boxm2_batch.run_process();
@@ -36,7 +36,7 @@ def load_opencl(scene_str, device_string="gpu"):
   ###############################################################
   # Create cache, opencl manager, device, and gpu cache
   ###############################################################
-  print("Create Main Cache");
+  #print("Create Main Cache");
   boxm2_batch.init_process("boxm2CreateCacheProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1,"lru");
@@ -44,13 +44,13 @@ def load_opencl(scene_str, device_string="gpu"):
   (id,type) = boxm2_batch.commit_output(0);
   cache = dbvalue(id, type);
 
-  print("Init Manager");
+  #print("Init Manager");
   boxm2_batch.init_process("boclInitManagerProcess");
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   mgr = dbvalue(id, type);
 
-  print("Get Gpu Device");
+  #print("Get Gpu Device");
   boxm2_batch.init_process("boclGetDeviceProcess");
   boxm2_batch.set_input_string(0,device_string)
   boxm2_batch.set_input_from_db(1,mgr)
@@ -58,7 +58,7 @@ def load_opencl(scene_str, device_string="gpu"):
   (id, type) = boxm2_batch.commit_output(0);
   device = dbvalue(id, type);
 
-  print("Create Gpu Cache");
+  #print("Create Gpu Cache");
   boxm2_batch.init_process("boxm2CreateOpenclCacheProcess");
   boxm2_batch.set_input_from_db(0,device)
   boxm2_batch.set_input_from_db(1,scene)
@@ -76,7 +76,7 @@ def load_cpp(scene_str) :
   ###############################################################
   # Create cache, opencl manager, device, and gpu cache
   ###############################################################
-  print("Create Main Cache");
+  #print("Create Main Cache");
   boxm2_batch.init_process("boxm2CreateCacheProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1,"lru");
@@ -344,6 +344,7 @@ def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickne
   # ingest one more time to fill up the empty voxels below the surface (They are not refined but they still need to be occupied)
   scene.ingest_height_map(x_img,y_img,z_img);
   scene.write_cache();
+
   
 def refine_and_ingest_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=1):
   for i in range(0,refine_cnt,1):
@@ -486,7 +487,9 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
     exp_image = dbvalue(id,type);
     (id,type) = boxm2_batch.commit_output(1); 
     var_image = dbvalue(id,type); 
-    return exp_image, var_image 
+    (id,type) = boxm2_batch.commit_output(2);
+    vis_image = dbvalue(id,type);
+    return exp_image, var_image, vis_image
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
     
