@@ -12,6 +12,7 @@ SOURCES += boxm2_block_metadata.cxx
 SOURCES += boxm2_scene_parser.cxx
 SOURCES += boxm2_normal_albedo_array.cxx
 MANPAGE_SOURCES += boxm2_feature_vector.h
+SOURCES += boxm2_bounding_box_parser.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

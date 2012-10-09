@@ -53,6 +53,9 @@ SOURCES += processes/vil_image_normalise_process.cxx
 SOURCES += processes/vil_image_mean_and_variance_process.cxx
 SOURCES += processes/vil_EO_IR_combine_process.cxx
 SOURCES += processes/vil_debayer_BGGR_to_RGB_process.cxx
+SOURCES += processes/vil_fill_holes_in_regions_process.cxx
+SOURCES += processes/bil_create_arf_image_istream_process.cxx
+SOURCES += processes/bil_read_CLIF07_data_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

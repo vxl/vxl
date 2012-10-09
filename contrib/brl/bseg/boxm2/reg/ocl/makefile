@@ -5,6 +5,7 @@ LIBRARY := boxm2_reg_ocl
 SOURCES += boxm2_ocl_reg_mutual_info.cxx
 SOURCES += boxm2_ocl_reg_minfo_func.cxx
 SOURCES += boxm2_ocl_reg_depth_map_to_vol.cxx
+SOURCES += boxm2_ocl_reg_depth_map_to_vol2.cxx
 
 SUBDIRS += exe
 

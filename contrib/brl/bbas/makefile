@@ -88,6 +88,9 @@ SUBDIRS += bcvr
 # Brown KML utilities library
 SUBDIRS += bkml
 
+# volumetric matching tools
+SUBDIRS += volm
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

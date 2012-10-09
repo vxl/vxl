@@ -1,21 +1,19 @@
 USES += contrib/brl contrib/brl/bbas core
 
-LIBRARY := bil
+LIBRARY := volm
 VERSION := 1.0
 
-MANPAGE_SOURCES += bil_bounded_image_view.txx
-MANPAGE_SOURCES += bil_math.h
-SOURCES += bil_raw_image_istream.cxx
-SOURCES += bil_arf_image_istream.cxx
-
-SUBDIRS += algo
+SOURCES += volm_spherical_container.cxx
+SOURCES += volm_query.cxx
+SOURCES += volm_io.cxx
+MANPAGE_SOURCES += volm_query_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
- SUBDIRS += tests
+SUBDIRS += tests exe
 endif
 
 ######################################
