@@ -48,7 +48,7 @@ filename>andy_eze.jpg</filename>
 class bvgl_labelme_parser : public expatpp
 {
  public:
-  bvgl_labelme_parser() {};
+  bvgl_labelme_parser() {}
   bvgl_labelme_parser(vcl_string& filename);
   ~bvgl_labelme_parser(void) {}
 
@@ -62,7 +62,7 @@ class bvgl_labelme_parser : public expatpp
 
   // ACCESSORS for parser info
   vcl_vector<vgl_polygon<double> >& polygons() { return polygons_; }
-  
+
   void trim_string(vcl_string& s);
 
  private:
@@ -77,7 +77,7 @@ class bvgl_labelme_parser : public expatpp
 
   vcl_vector<vcl_string> obj_names_;
   vcl_vector<int> obj_dists_;
-  vcl_vector<int> obj_depth_orders_; 
+  vcl_vector<int> obj_depth_orders_;
   int dist_;
   int order_;
   vcl_string image_name_;
