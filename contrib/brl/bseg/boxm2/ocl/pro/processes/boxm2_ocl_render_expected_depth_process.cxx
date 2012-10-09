@@ -28,7 +28,7 @@
 namespace boxm2_ocl_render_expected_depth_process_globals
 {
   const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 2;
+  const unsigned n_outputs_ = 3;
   vcl_size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
   {
@@ -101,6 +101,7 @@ bool boxm2_ocl_render_expected_depth_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
+  output_types_[2] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -139,7 +140,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+    //vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
     compile_kernel(device,ks);
     kernels[identifier]=ks;
@@ -214,6 +215,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
   float subblk_dim = 0.0;
   // set arguments
+  //vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam,25000);
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -289,15 +291,18 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
 
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
+  vil_image_view<float>* vis_out=new vil_image_view<float>(ni,nj);
 
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
     {
       (*exp_img_out)(r,c)=buff[c*cl_ni+r];
       (*exp_var_out)(r,c)=var_buff[c*cl_ni+r];
+      (*vis_out)(r,c)=vis_buff[c*cl_ni+r];
     }
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_var_out);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, vis_out);
   return true;
 }
