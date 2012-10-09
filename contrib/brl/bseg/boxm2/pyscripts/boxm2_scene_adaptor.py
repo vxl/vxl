@@ -120,7 +120,8 @@ class boxm2_scene_adaptor(object):
       cache = self.cpu_cache;
       dev = None;
     if self.rgb :
-      expimg = render_rgb(self.scene, cache, cam, ni, nj, dev);
+      expimg, vis_image = render_rgb(self.scene, cache, cam, ni, nj, dev);
+      boxm2_batch.remove_data(vis_image.id)
     else :
       expimg = render_grey(self.scene, cache, cam, ni, nj, dev, ident_string);
     return expimg;
@@ -147,13 +148,13 @@ class boxm2_scene_adaptor(object):
     dev = self.device;
     #check if force gpu or cpu
     if device_string=="gpu" : 
-      cache = self.opencl_cache; 
+      cache = self.opencl_cache;
     elif device_string=="cpp" : 
       cache = self.cpu_cache; 
-      dev = None; 
-    expimg,varimg = render_depth(self.scene, cache, cam, ni, nj, dev); 
-    return expimg,varimg; 
-    
+      dev = None;
+    expimg,varimg,visimg = render_depth(self.scene, cache, cam, ni, nj, dev);
+    return expimg,varimg,visimg;
+
   #render z image wrapper
   def render_z_image(self, cam, ni=1280, nj=720, normalize = False, device_string="") :
     cache = self.active_cache;
