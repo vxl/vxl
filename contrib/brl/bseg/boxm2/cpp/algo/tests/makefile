@@ -10,6 +10,7 @@ TESTS += test_cone_update.cxx
 TESTS += test_merge_function.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk
