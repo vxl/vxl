@@ -37,5 +37,6 @@
 #include <boxm2/cpp/algo/boxm2_update_image_functor.h>
 #include <boxm2/cpp/algo/boxm2_update_using_quality_functor.h>
 #include <boxm2/cpp/algo/boxm2_update_with_shadow_functor.h>
+#include <boxm2/cpp/algo/boxm2_vis_probe_functor.h>
 
 int main() { return 0; }
