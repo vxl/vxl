@@ -84,7 +84,7 @@ class boxm2_util
 
     static bool get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile, vgl_point_3d<double> origin, 
                                    vcl_vector<vil_image_view<float>*> & raydirs,
-                                   vcl_vector<vil_image_view<float>*> & tfinal);
+                                   vcl_vector<vil_image_view<float>*> & tfinal,int scale);
 };
 
 #endif // boxm2_util_h

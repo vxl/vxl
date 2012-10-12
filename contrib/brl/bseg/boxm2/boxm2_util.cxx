@@ -20,6 +20,7 @@
 //vil includes
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
+#include <vil/vil_resample_nearest.h>
 
 //vcl io stuff
 #include <vcl_iostream.h>
@@ -644,10 +645,11 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
 }
 
 bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
-                                    vgl_point_3d<double> origin,
-                                    vcl_vector<vil_image_view<float>*> & raydirs,
-                                    vcl_vector<vil_image_view<float>*> & tfinals)
-{
+    vgl_point_3d<double> origin,
+    vcl_vector<vil_image_view<float>*> & raydirs,
+    vcl_vector<vil_image_view<float>*> & tfinals,
+    int scale)
+{  
     if (!vul_file::is_directory(depthdir))
     {
         vcl_cout<<"Directory is not valid"<<vcl_endl;
@@ -684,21 +686,26 @@ bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
         vil_image_view_base_sptr im = vil_load(depthfilename.c_str());
         if (vil_image_view<unsigned char> * depthimg = dynamic_cast<vil_image_view<unsigned char> *> (im.ptr()))
         {
-            vil_image_view<float> * tdirimg= new vil_image_view<float>(depthimg->ni(),depthimg->nj(), 3);
-            vil_image_view<float> * tfinalimg= new vil_image_view<float>(depthimg->ni(),depthimg->nj(), 1);
-            for (unsigned int i = 0 ; i < depthimg->ni(); i++)
+            int scaled_ni = depthimg->ni() /scale; 
+            int scaled_nj = depthimg->nj() / scale;
+            vil_image_view<unsigned char> * scaled_depthimg = new  vil_image_view<unsigned char>(scaled_ni,scaled_nj);
+            vil_resample_nearest<unsigned char,unsigned char>(*depthimg, *scaled_depthimg, scaled_ni, scaled_nj);
+
+            vil_image_view<float> * tdirimg= new vil_image_view<float>(scaled_depthimg->ni(),scaled_depthimg->nj(), 3);
+            vil_image_view<float> * tfinalimg= new vil_image_view<float>(scaled_depthimg->ni(),scaled_depthimg->nj(), 1);
+            for (unsigned int i = 0 ; i < scaled_depthimg->ni(); i++)
             {
-                for (unsigned int j = 0 ; j < depthimg->nj(); j++)
+                for (unsigned int j = 0 ; j < scaled_depthimg->nj(); j++)
                 {
-                    double zr = (double)(*depthimg)(i,j) /255.0* ( maxd-mind) + mind;
-                    double xr = ((double)i-(double)depthimg->ni()/2) / f;
-                    double yr = ((double)j-(double)depthimg->nj()/2) / f;
+                    double zr = (double)(*scaled_depthimg)(i,j) /255.0* ( maxd-mind) + mind;
+                    double xr = ((double)scale*i-(double)scale*scaled_depthimg->ni()/2) / f;
+                    double yr = ((double)scale*j-(double)scale*scaled_depthimg->nj()/2) / f;
 
                     vgl_point_3d<double> wr(xr,yr,zr);
                     vgl_point_3d<double> wp = cc + xr*udir+ yr*vdir+zr*zdir;
                     vgl_ray_3d<double> ray(origin, wp);
 
-                    double length =  (origin-wp).length();
+                    double length =  (origin-wp).length() -2.0f;
                     vgl_vector_3d<double> raydir = ray.direction();
                     (*tdirimg)(i,j,0) = float(raydir.x());
                     (*tdirimg)(i,j,1) = float(raydir.y());
@@ -707,6 +714,8 @@ bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
                     (*tfinalimg)(i,j) = float(length);
                 }
             }
+            
+            delete scaled_depthimg;
             raydirs.push_back(tdirimg);
             tfinals.push_back(tfinalimg);
         }
