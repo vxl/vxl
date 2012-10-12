@@ -266,6 +266,9 @@ SOURCE=.\boxm2_export_stack_images_function.h
 # Begin Source File
 SOURCE=.\boxm2_create_mog_image_functor.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_vis_probe_functor.h
+# End Source File
 # End Group
 # End Target
 # End Project
