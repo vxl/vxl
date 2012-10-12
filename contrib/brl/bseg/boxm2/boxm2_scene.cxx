@@ -129,16 +129,59 @@ get_block_metadata_const(boxm2_block_id id) const
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<double>* cam, double dist)
 {
   vcl_vector<boxm2_block_id> vis_order;
+  vcl_vector<boxm2_dist_id_pair> distances;
   if (!cam) {
     vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
     return vis_order;
   }
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
+    vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
+    vgl_vector_3d<double>&   blk_dim = (iter->second).sub_block_dim_;
+    vgl_vector_3d<unsigned>& blk_num = (iter->second).sub_block_num_;
+    vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x(),
+                                    blk_dim.y()*blk_num.y(),
+                                    blk_dim.z()*blk_num.z());
+    
+    double min_depth = 1e10;
+    for(unsigned i = 0;  i<=1 ; i++)
+        for(unsigned j = 0;  j<=1 ; j++)
+            for(unsigned k = 0;  k<=1 ; k++)
+            {
+            vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x() * (double)i,
+                                    blk_dim.y()*blk_num.y()* (double)j,
+                                    blk_dim.z()*blk_num.z()* (double)k);
+                vgl_point_3d<double> pt = blk_o + length;
 
-  //cam center, and getblock vis order from point
-  vgl_point_3d<double> cam_center = (cam->ray(cam->cols()/2,cam->rows()/2)).origin();
-  vgl_vector_3d<double> cam_dir = cam->max_ray_direction();
-  //return get_vis_order_from_pt(cam_center, vgl_box_2d<double>(), dist);
-  return get_vis_order_from_ray(cam_center, cam_dir, dist);
+                double u,v;
+                cam->project(pt.x(),pt.y(),pt.z(),u,v);
+
+                if ( u >= 0 && v >=0 && u < cam->cols() && v <cam->rows() )
+                {
+                    vgl_point_3d<double> ro =  cam->ray(u,v).origin();
+
+                    double depth = (ro-pt).length();
+
+                    if(depth <  min_depth)
+                        min_depth = depth ;
+                }
+            }
+
+
+
+      if (min_depth <1e10)
+        distances.push_back( boxm2_dist_id_pair(min_depth, iter->first) );
+
+  }
+
+  //sort distances
+  vcl_sort(distances.begin(), distances.end());
+
+  //put blocks in "vis_order"
+  vcl_vector<boxm2_dist_id_pair>::iterator di;
+  for (di = distances.begin(); di != distances.end(); ++di)
+    vis_order.push_back(di->id_);
+  return vis_order;
 }
 
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam, double dist)
