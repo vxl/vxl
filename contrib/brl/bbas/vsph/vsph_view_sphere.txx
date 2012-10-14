@@ -12,6 +12,10 @@
 #include <vnl/vnl_math.h>
 
 template <class T>
+vsph_view_sphere<T>::vsph_view_sphere(vgl_point_3d<double> const& center, double radius)
+  : coord_sys_(new vsph_spherical_coord(center ,radius)),uid_(0) { }
+
+template <class T>
 vsph_view_sphere<T>::vsph_view_sphere(vgl_box_3d<double> bb, double radius)
   : coord_sys_(new vsph_spherical_coord(bb.centroid(),radius)),uid_(0) { }
 

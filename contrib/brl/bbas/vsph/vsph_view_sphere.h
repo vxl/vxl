@@ -33,6 +33,9 @@ class vsph_view_sphere
   vsph_view_sphere(vsph_spherical_coord_sptr cs)
     : coord_sys_(cs),uid_(0) { }
 
+  //: constructor, creates a sphere from the center point and radius
+  vsph_view_sphere(vgl_point_3d<double> const& center, double radius);
+
   //: constructor, creates a sphere from a bounding box, centered at the box center
   vsph_view_sphere(vgl_box_3d<double> bb, double radius);
 
