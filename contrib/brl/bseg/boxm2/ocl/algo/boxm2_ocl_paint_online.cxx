@@ -100,8 +100,8 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
   //set generic cam
   cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins,   cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
-  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_origins,    "ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //Visibility, Preinf, Norm, and input image buffers
@@ -121,10 +121,10 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
     }
   }
 
-  bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff,cl_ni*cl_nj*sizeof(float),"input image buffer");
+  bocl_mem_sptr in_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),input_buff,"input image buffer");
   in_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
@@ -258,7 +258,10 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
     clFinish(queue);
   }
   ///debugging save vis, pre, norm images
-
+  opencl_cache->unref_mem(ray_d_buff.ptr());
+  opencl_cache->unref_mem(ray_o_buff.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(in_image.ptr());
   delete [] vis_buff;
   delete [] input_buff;
   delete [] ray_origins;
