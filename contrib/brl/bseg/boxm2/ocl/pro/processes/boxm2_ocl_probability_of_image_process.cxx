@@ -29,7 +29,7 @@
 
 namespace boxm2_ocl_probability_of_image_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 
@@ -95,12 +95,15 @@ bool boxm2_ocl_probability_of_image_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
+  input_types_[5] = "vcl_string";  //identifier
 
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
-
+  
+  brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
+  pro.set_input(5, idx);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -123,11 +126,11 @@ bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
-
+  vcl_string data_identifier =pro.get_input<vcl_string>(i++);
   unsigned ni=img->ni();
   unsigned nj=img->nj();
   bool foundDataType = false, foundNumObsType = false;
-  vcl_string data_type,num_obs_type,options;
+  vcl_string data_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -142,20 +145,21 @@ bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
+    else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
     {
-      num_obs_type = apps[i];
-      foundNumObsType = true;
+      data_type = apps[i];
+      foundDataType = true;
+      options=" -D FLOAT8 ";
     }
+
   }
   if (!foundDataType) {
     vcl_cout<<"boxm2_ocl_probability_of_image_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
-  if (!foundNumObsType) {
-    vcl_cout<<"boxm2_ocl_probability_of_image_process ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
-    return false;
-  }
+
+  if(data_identifier!="")
+      data_type += data_identifier;
 
 //: create a command queue.
   int status=0;
