@@ -40,6 +40,7 @@
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <brip/brip_vil_float_ops.h>
+#include <vcl_algorithm.h>
 
 // Boxm2_Export_Scene executable will create a small, portable, pre rendered
 // scene that can be viewed on many devices.  Currently the output is a folder
@@ -56,7 +57,8 @@ int main(int argc,  char** argv)
     vcl_cout<<"Boxm2 Hemisphere"<<vcl_endl;
     vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
     vul_arg<vcl_string> dir("-dir", "output image directory", "");
-    vul_arg<bool> depth("-depth", "output depth maps", "");
+    vul_arg<bool> depth("-depth", "output depth maps", 0);
+	vul_arg<vcl_string> imgname("-imgname", "name of the image", "scene");
     vul_arg<unsigned> ni("-ni", "Width of image", 640);
     vul_arg<unsigned> nj("-nj", "Height of image", 480);
     vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
@@ -65,6 +67,7 @@ int main(int argc,  char** argv)
     vul_arg<double> incline_1("-end_incline", "Angle of incline nearest zenith (degrees)", 15.0);
     vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0);
     vul_arg<bool> stitch("-stitch", "also save a large, stitched image", false);
+    vul_arg<double> gsd("-gsd", "GSD of the central pixel", 0.3);
     vul_arg_parse(argc, argv);
 
     //////////////////////////////////////////////////////////////////////////////
@@ -160,7 +163,7 @@ int main(int argc,  char** argv)
     bocl_manager_child_sptr mgr =bocl_manager_child::instance();
     bocl_device_sptr device = mgr->gpus_[0];
 
-
+    double gsdofcentralpixel = gsd();
     //create cache, grab singleton instance
     boxm2_lru_cache::create(scene);
     boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene, device, 1); //allow 4 blocks inthe cache
@@ -173,8 +176,8 @@ int main(int argc,  char** argv)
     // FOR  GRID
     //////////////////////////////////////////////////////////////////////////////
     //set up a view sphere, use find closest for closest neighbors
-    vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), radius());
-
+	vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), scene->bounding_box().depth()*2.0);
+	//vcl_cout<<"Radius "<< scene->bounding_box().depth()*1.5<<vcl_endl;
 
     // Uncomment the below for non-grid representation
 #if 0
@@ -198,13 +201,13 @@ int main(int argc,  char** argv)
     double az_incr = vnl_math::twopi/num_az();
     double el_incr = (incline_0() - incline_1()) / (num_in()-1); //degrees (to include both start and end)
     el_incr = el_incr * vnl_math::pi_over_180;  // radians
-    for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
-    {
-        double az = vnl_math::twopi - az_i * az_incr;
-        for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
-        {
-            double el = vnl_math::pi_over_180 * incline_0() - el_i * el_incr;
-
+	for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
+	{
+		double el = vnl_math::pi_over_180 * incline_0() - el_i * el_incr;
+		for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
+		{
+			double az = 2.0*vnl_math::pi - az_i * az_incr;
+ 
             //convert to cartesian (as method is only in cartesian for some reason)
             vsph_sph_point_3d curr_point(radius(), el, az);
             sphere.add_view(curr_point,ni(), nj());
@@ -214,9 +217,9 @@ int main(int argc,  char** argv)
 
             //if the viewpoint has already been rendered, skip it
             vcl_stringstream fstr, idstream;
-            fstr<<"scene_"<<uid<<".jpg";
+            fstr<<imgname()<<"_"<<uid<<".jpg";
             img_grid(el_i, az_i) = fstr.str();
-            idstream<<imgdir<<"scene_"<<uid<<".jpg";
+            idstream<<imgdir<<imgname()<<"_"<<uid<<".jpg";
             if ( saved_imgs.find(uid) == saved_imgs.end() )
             {
                 vpgl_camera_double_sptr cam_sptr = view.camera();
@@ -225,13 +228,17 @@ int main(int argc,  char** argv)
                 vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
                 vpgl_calibration_matrix<double> mat = cam->get_calibration();
                 vgl_vector_3d<double> pp = normalized(cam->principal_axis());
-                vgl_vector_3d<double> vdir(cam->get_rotation().as_matrix()(1,0),
+     			vgl_vector_3d<double> vdir(cam->get_rotation().as_matrix()(1,0),
                                            cam->get_rotation().as_matrix()(1,1),
                                            cam->get_rotation().as_matrix()(1,2));
                 vgl_vector_3d<double> udir = normalized(cross_product(vdir,pp));
                 //vgl_vector_3d<double> vdir = cross_product(pp,udir);
                 vgl_point_3d<double> cc = cam->camera_center();
-                double f= mat.focal_length()/10;
+
+                double f = 1.0 / gsdofcentralpixel;
+                //double f= mat.focal_length()/750;
+                //vcl_cout<<"Estimated F "<<fest<<" f now "<<f<<vcl_endl;
+                
                 vbl_array_2d<vgl_ray_3d<double> > rays(nj(),ni());
                 cam_file_stream<<uid<<' '<<f<<' '<<cc.x()<<' '<<cc.y()<<' '<<cc.z()<<' '
                                <<pp.x()<<' '<<pp.y()<<' '<<pp.z()<<' '
@@ -242,12 +249,11 @@ int main(int argc,  char** argv)
                 for (double k = 0 ; k < ni(); ++k)
                     for (double l = 0 ; l < nj(); ++l)
                     {
-                        vgl_point_3d<double> p = cc + udir*(k - ni()/2)/200 - vdir*(l - nj()/2)/200;
+                        vgl_point_3d<double> p = cc + udir*(k - ni()/2)/f + vdir*(l - nj()/2)/f;
                         rays((int)l,(int)k)=vgl_ray_3d<double>(p,pp);
                     }
 
                 vpgl_generic_camera<double> * gcam = new vpgl_generic_camera<double>(rays);
-                //gcam->print_orig(0);
                 brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(gcam);
 
                 mat.set_focal_length(mat.focal_length());
@@ -301,12 +307,20 @@ int main(int argc,  char** argv)
                     }
                   }
                   vil_save( jpg_out, idstream.str().c_str() );
-
-                  //and store for whatever reason
-                  //imgs(el_i, az_i) = exp_img_out;
                 }
-                else
+                else if(scene->has_data_type(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()))
                 {
+                    vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
+                    vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
+                    for (unsigned int i=0; i<ni(); ++i)
+                        for (unsigned int j=0; j<nj(); ++j)
+                            (*byte_img)(i,j) =  (unsigned char)(vcl_min((*expimg_view)(i,j),255.0f) );   //just grab the first byte (all foura r the same)
+
+                    saved_imgs[uid] = idstream.str();
+                    vil_save(*byte_img, idstream.str().c_str() );
+                }
+				else
+				{
                     vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
                     vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
                     for (unsigned int i=0; i<ni(); ++i)
@@ -315,10 +329,7 @@ int main(int argc,  char** argv)
 
                     saved_imgs[uid] = idstream.str();
                     vil_save(*byte_img, idstream.str().c_str() );
-
-                  //and store for whatever reason
-                  //imgs(el_i, az_i) = expimg_view;
-                }
+				}
 
                 if (depth())
                 {
@@ -350,13 +361,14 @@ int main(int argc,  char** argv)
 
                     vil_image_view<float>* depthimg_view = static_cast<vil_image_view<float>* >(depthimg.ptr());
                     float vmin=0, vmax = 0;
-                    vil_math_value_range<float>(*depthimg_view, vmin, vmax);
-                    vil_image_view<vxl_byte> byte_img = brip_vil_float_ops::convert_to_byte(*depthimg_view);
+                    vil_math_value_range<  float>(*depthimg_view, vmin, vmax);
+					vil_image_view<vxl_byte> byte_img = brip_vil_float_ops::convert_to_byte(*depthimg_view);
                     cam_file_stream<<vmin<<' '<<vmax<<'\n';
                     vcl_stringstream depthstream;
                     depthstream<<imgdir<<"depth_"<<uid<<".jpg";
                     vil_save( byte_img, depthstream.str().c_str() );
                 }
+
             }
         }
     }
