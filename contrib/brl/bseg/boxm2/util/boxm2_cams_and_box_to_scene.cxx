@@ -23,7 +23,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     //----------------------------------------------------------------------------
     // get the inputs
     double zplane  = (bbox.max_z()-bbox.min_z()) / 2.0;
-
+	int nblks = 12;
     //run planar bounding box
     vgl_box_2d<double> b2box;
     if (vsph_camera_bounds::planar_bounding_box(cams,b2box,zplane))
@@ -56,13 +56,13 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
         (unsigned) ((bbox.max_z()-bbox.min_z())/res) );
 
     //number of octrees in this scene (x,y,z)
-    vgl_vector_3d<unsigned> totSubBlocks ( (unsigned) (numVoxels.x() / 8),
-        (unsigned) (numVoxels.y() / 8),
-        (unsigned) (numVoxels.z() / 8) );
-    vgl_vector_3d<double> subBlockDim ( 8.0*res, 8.0*res, 8.0*res );
+    vgl_vector_3d<unsigned> totSubBlocks ( (unsigned) (numVoxels.x() / nblks),
+        (unsigned) (numVoxels.y() / nblks),
+        (unsigned) (numVoxels.z() / nblks) );
+    vgl_vector_3d<double> subBlockDim ( nblks*res, nblks*res, nblks*res );
 
-    //number of blocks in scene (8,8,1)
-    vgl_vector_3d<unsigned> numBlocks(8, 8, 1);
+    //number of blocks in scene (nblks,nblks,1)
+    vgl_vector_3d<unsigned> numBlocks(nblks, nblks, 1);
 
     vcl_cout<<"totSubBlocks "<<totSubBlocks<<vcl_endl;
     //number of subblocks per block
@@ -75,8 +75,8 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
                                       subBlockDim.z() * numSubBlocks.z() );
 
     //create an image with this res, and count each pixel
-    unsigned ni = numSubBlocks.x()*numBlocks.x()*8;//(unsigned) (b2box.width()/res);
-    unsigned nj = numSubBlocks.y()*numBlocks.y()*8;;
+    unsigned ni = numSubBlocks.x()*numBlocks.x()*nblks;//(unsigned) (b2box.width()/res);
+    unsigned nj = numSubBlocks.y()*numBlocks.y()*nblks;;
     vcl_cout<<"Created Box size: "<<ni<<','<<nj<<vcl_endl;
     vil_image_view<vxl_byte> cntimg(ni, nj); cntimg.fill(0);
     for (unsigned int i=0; i<cams.size(); ++i)
@@ -144,7 +144,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
         for (unsigned int j=0; j<numBlocks.y(); ++j) {
             for (unsigned int k=0; k<numBlocks.z(); ++k){
                 //setup update scene with loose criteria
-                //if ( boxm2_util_has_observation(i,j,numSubBlocks*8, cntimg) )
+                //if ( boxm2_util_has_observation(i,j,numSubBlocks*nblks, cntimg) )
                 {
                     //get block map
                     boxm2_block_id id(i,j,k);
@@ -173,7 +173,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
                 }
 
                 //setup render scene with strict criteria
-                if ( boxm2_util_has_percent_views(i,j,thresh,numSubBlocks*8,cntimg,cams.size()))
+                if ( boxm2_util_has_percent_views(i,j,thresh,numSubBlocks*nblks,cntimg,cams.size()))
                 {
                     vcl_cout.flush();
                     boxm2_block_id id(i,j,k);
