@@ -55,5 +55,6 @@ DECLARE_FUNC_CONS(boxm2_cpp_points_to_volume_process);
 
 DECLARE_FUNC_CONS(boxm2_export_stack_images_process);
 DECLARE_FUNC_CONS(boxm2_cpp_create_mog_image_process);
+DECLARE_FUNC_CONS(boxm2_cpp_los_visibility_process);
 
 #endif
