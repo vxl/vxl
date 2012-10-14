@@ -27,10 +27,10 @@
 #include <boxm2/boxm2_util.h>
 #include <vcl_cstdio.h>
 #include <vil/vil_save.h>
-
+#include <vil/vil_resample_nearest.h>
 namespace boxm2_ocl_compute_visibility_process_globals
 {
-    const unsigned n_inputs_ = 9;
+    const unsigned n_inputs_ = 10;
     const unsigned n_outputs_ = 0;
     vcl_size_t lthreads[2]={8,8};
     void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
@@ -56,11 +56,11 @@ namespace boxm2_ocl_compute_visibility_process_globals
         bocl_kernel * ray_trace_kernel=new bocl_kernel();
 
         ray_trace_kernel->create_kernel( &device->context(),
-                                         device->device_id(),
-                                         src_paths,
-                                         "render_visibiltiy",   //kernel name
-                                         options,              //options
-                                         "boxm2 opencl render visibility"); //kernel identifier (for error checking)
+            device->device_id(),
+            src_paths,
+            "render_visibiltiy",   //kernel name
+            options,              //options
+            "boxm2 opencl render visibility"); //kernel identifier (for error checking)
         vec_kernels.push_back(ray_trace_kernel);
     }
     static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -77,10 +77,11 @@ bool boxm2_ocl_compute_visibility_process_cons(bprb_func_process& pro)
     input_types_[2] = "boxm2_opencl_cache_sptr";
     input_types_[3] = "vcl_string"; // cams file
     input_types_[4] = "vcl_string"; // directory for depth images
-    input_types_[5] = "float";
-    input_types_[6] = "float";
-    input_types_[7] = "float";
+    input_types_[5] = "float";  
+    input_types_[6] = "float";  
+    input_types_[7] = "float";  
     input_types_[8] = "vcl_string"; // output directory for visibility images
+    input_types_[9] = "int"; // scale parameter for increasing speed, should be a power of 2.
     // process has 1 output:
     // output[0]: scene sptr
     vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -109,14 +110,16 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     float y = pro.get_input<float>(i++);
     float z = pro.get_input<float>(i++);
     vcl_string outdir= pro.get_input<vcl_string>(i++);
+    int scale = pro.get_input<int>(i++);
+
     vcl_string identifier=device->device_identifier();
 
     // create a command queue.
     int status=0;
     cl_command_queue queue = clCreateCommandQueue(device->context(),
-                                                  *(device->device_id()),
-                                                  CL_QUEUE_PROFILING_ENABLE,
-                                                  &status);
+        *(device->device_id()),
+        CL_QUEUE_PROFILING_ENABLE,
+        &status);
     if (status!=0)
         return false;
     // compile the kernel
@@ -132,12 +135,12 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     float rayo_buff[4];
     rayo_buff[0] = x;
     rayo_buff[1] = y;
-    rayo_buff[2] = z;
+    rayo_buff[2] = z+2;
     rayo_buff[3] = 0;
     bocl_mem_sptr ray_o_buff=opencl_cache->alloc_mem(sizeof(float)*4, rayo_buff,  "image dims");
     ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-    boxm2_util::get_raydirs_tfinal(indir,camsfile,vgl_point_3d<double>(x,y,z),raydirs,tfinals,1);
+    vcl_cout<<"Reading Depth Images "<<vcl_endl;
+    boxm2_util::get_raydirs_tfinal(indir,camsfile,vgl_point_3d<double>(x,y,z),raydirs,tfinals,scale );
     unsigned cl_ni =0;
     unsigned cl_nj =0;
     vcl_vector<bocl_mem_sptr> bocl_raydirs;
@@ -149,11 +152,6 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     vcl_size_t gThreads[]={8,8};
     for (unsigned int count = 0 ; count < tfinals.size(); count ++)
     {
-        char filename[1000];
-        vcl_sprintf(filename,"tfinal_%d.tiff",count);
-        vcl_string outfile = outdir +"/" + filename;
-        vil_save(*(tfinals[count]),outfile.c_str());
-
         cl_ni=RoundUp(tfinals[count]->ni(),lthreads[0]);
         cl_nj=RoundUp(tfinals[count]->nj(),lthreads[1]);
 
@@ -163,8 +161,8 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
         for (unsigned int j=0;j<cl_nj;++j)
             for (unsigned int i=0;i<cl_ni;++i)
             {
-                if (i<tfinals[count]->ni() && j< tfinals[count]->nj())
-                {
+                if (i<tfinals[count]->ni() && j< tfinals[count]->nj()) 
+                { 
                     rayd_buff[num*4+0]=(* raydirs[count])(i,j,0);
                     rayd_buff[num*4+1]=(* raydirs[count])(i,j,1);
                     rayd_buff[num*4+2]=(* raydirs[count])(i,j,2);
@@ -173,18 +171,18 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
                 vis_buff[num] = 1.0f;
                 ++num;
             }
-        rayd_buffs.push_back(rayd_buff);
-        vis_buffs.push_back(vis_buff);
-        if (count ==0)
-        {
-            img_dim_buff[0] = 0;
-            img_dim_buff[1] = 0;
-            img_dim_buff[2] = tfinals[count]->ni();
-            img_dim_buff[3] = tfinals[count]->nj();
+            rayd_buffs.push_back(rayd_buff);
+            vis_buffs.push_back(vis_buff);
+            if(count ==0)
+            {
+                img_dim_buff[0] = 0;
+                img_dim_buff[1] = 0;
+                img_dim_buff[2] = tfinals[count]->ni();
+                img_dim_buff[3] = tfinals[count]->nj();
 
-            gThreads[0] = cl_ni;
-            gThreads[1] = cl_nj;
-        }
+                gThreads[0] = cl_ni;
+                gThreads[1] = cl_nj;
+            }
     }
 
     // Image Dimensions
@@ -211,8 +209,12 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     scene->contains(vgl_point_3d<double>(x,y,z),pt_id,local_coords);
 
     vcl_vector<boxm2_block_id> vis_order = boxm2_util::order_about_a_block(scene,pt_id);
-    vcl_cout<<"GOT TH BLOCKS ORDERED"<<vcl_endl;
     vcl_vector<boxm2_block_id>::iterator id;
+    bocl_mem * ray_image = opencl_cache->alloc_mem(4*cl_ni*cl_nj*sizeof(float),NULL,"ray direction buffer");
+    ray_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR);
+
+    bocl_mem * vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), NULL,"ray direction buffer");
+    vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR);
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
@@ -221,16 +223,17 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
         bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
         bocl_mem * blk_info     = opencl_cache->loaded_block_info();
         transfer_time          += (float) transfer.all();
-        vcl_cout<<(*id)<<vcl_endl;
-        for (unsigned int frame = 0 ; frame < rayd_buffs.size(); frame ++)
+        
+        //vcl_cout<<"bytes in cache "<<opencl_cache->bytes_in_cache()<<vcl_endl;
+        for(unsigned int frame = 0 ; frame < rayd_buffs.size(); frame ++)
         {
+            
             //choose correct render kernel
-            bocl_mem * ray_image = opencl_cache->alloc_mem(4*cl_ni*cl_nj*sizeof(float), rayd_buffs[frame],"ray direction buffer");
-            ray_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
 
-            bocl_mem * vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buffs[frame],"ray direction buffer");
-            vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
 
+            ray_image->write_to_gpu_mem(queue,rayd_buffs[frame],4*cl_ni*cl_nj*sizeof(float));
+            vis_image->write_to_gpu_mem(queue,vis_buffs[frame],cl_ni*cl_nj*sizeof(float));
+            
             ////3. SET args
             kern->set_arg( blk_info );
             kern->set_arg( blk );
@@ -248,36 +251,56 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
             //execute kernel
             kern->execute(queue, 2, lthreads, gThreads);
             clFinish(queue);
-            gpu_time += kern->exec_time();
 
-            cl_output->read_to_buffer(queue);
-            vis_image->read_to_buffer(queue);
-            opencl_cache->free_mem(ray_image);
-            opencl_cache->free_mem(vis_image);
+            gpu_time += kern->exec_time();
+            vcl_cout.flush();
+            vis_image->read_from_gpu_mem(queue,vis_buffs[frame],cl_ni*cl_nj*sizeof(float));
+             clFinish(queue);
             // clear render kernel args so it can reset em on next execution
             kern->clear_args();
         }
-    }
 
+        opencl_cache->shallow_remove_data(*id,"alpha");
+
+    }
+    opencl_cache->free_mem(ray_image);
+    opencl_cache->free_mem(vis_image);
+    opencl_cache->unref_mem(exp_img_dim.ptr());
+    opencl_cache->unref_mem(cl_output.ptr());
+    opencl_cache->unref_mem(lookup.ptr());
+    opencl_cache->unref_mem(ray_o_buff.ptr());
+    //opencl_cache->free_mem_pool();
     clReleaseCommandQueue(queue);
+    vcl_cout<<"Writing Vis Images "<<vcl_endl;
     for (unsigned int count = 0 ; count < tfinals.size(); count ++)
     {
         float * vis_buf = (float*)vis_buffs[count];
-        vil_image_view<unsigned char> visout(tfinals[count]->ni(),tfinals[count]->nj());
+        vil_image_view<unsigned char> visout(tfinals[count]->ni(),tfinals[count]->nj(),3);
+        visout.fill(0);
 
         for (unsigned c=0;c<tfinals[count]->nj();c++)
             for (unsigned r=0;r<tfinals[count]->ni();r++)
             {
-                if (vis_buf[c*cl_ni+r] > 0.5)
-                visout(r,c)=255;
+                if(vis_buf[c*cl_ni+r] > 0.5)
+                    visout(r,c,1)=255;
+
             }
 
-            char filename[1000];
-            vcl_sprintf(filename,"vis_%d.png",count);
-            vcl_string outfile = outdir +"/" + filename;
-            vil_save(visout,outfile.c_str());
-    }
+       int rescaled_ni = tfinals[count]->ni() * scale;
+       int rescaled_nj = tfinals[count]->nj() * scale;
+       vil_image_view<unsigned char> visout_rescaled(rescaled_ni,rescaled_nj,3);
+       vil_resample_nearest<unsigned char,unsigned char>(visout, visout_rescaled, rescaled_ni, rescaled_nj);
 
+       char filename[1000];
+       vcl_sprintf(filename,"vis_%d.png",count);
+       vcl_string outfile = outdir +"/" + filename;
+       vil_save(visout_rescaled,outfile.c_str());
+    }
+    for(unsigned int count = 0 ; count < tfinals.size(); count ++)
+    {
+       delete [] rayd_buffs[count];
+       delete [] vis_buffs[count];
+    }
     vcl_cout<<"Time taken is "<<t.all()<<vcl_endl;
     return true;
 }
