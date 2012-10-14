@@ -33,6 +33,7 @@ DECLARE_FUNC_CONS(vpgl_get_bounding_box_process);
 DECLARE_FUNC_CONS(vpgl_nitf_footprint_process);
 DECLARE_FUNC_CONS(vpgl_generate_3d_point_from_cams_process);
 DECLARE_FUNC_CONS(vpgl_convert_to_local_coordinates_process);
+DECLARE_FUNC_CONS(vpgl_save_lvcs_process);
 
 DECLARE_FUNC_CONS(vpgl_perturb_persp_cam_orient_process);
 DECLARE_FUNC_CONS(vpgl_rotate_persp_cam_process);
