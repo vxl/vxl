@@ -30,6 +30,7 @@ void batch_fit_cubic_polynomial(__global float * aux0,
         {
             // OBTAIN obs, vis
             float seg_len = aux0[(*datasize)*llid+gid];
+
             obs[llid] = 0.0;
             vis[llid] = 0.0;
             posts[llid] = 0.0;
@@ -37,8 +38,8 @@ void batch_fit_cubic_polynomial(__global float * aux0,
             {
                 obs[llid]   = aux1[(*datasize)*llid+gid]/seg_len;
                 vis[llid]   = aux2[(*datasize)*llid+gid]/seg_len;
-                posts[llid] = aux3[(*datasize)*llid+gid]/seg_len;
-            }
+                posts[llid] = aux3[(*datasize)*llid+gid]/seg_len; 
+            }	
             // OBTAIN  phi
             seg_len = aux0[(*datasize)*(llid + *nobs)+gid];
             s[llid] = seg_len;//0.0;
@@ -47,6 +48,7 @@ void batch_fit_cubic_polynomial(__global float * aux0,
                 float x = aux1[(*datasize)*(llid + *nobs)+gid];
                 float y = aux2[(*datasize)*(llid + *nobs)+gid];
                 s[llid]  = atan2(y,x);
+
             }
         }
         barrier(CLK_LOCAL_MEM_FENCE);
@@ -60,13 +62,16 @@ void batch_fit_cubic_polynomial(__global float * aux0,
             }
             cubic_coeffs[gid*8+7] =(float) (*num_visible_views);
         }
-        barrier(CLK_LOCAL_MEM_FENCE);
-        fit_intensity_cubic(obs,vis,s,temp, XtWX, cofactor, invXtWX,  XtY,outerprodl,l, cubic_coeffs, nobs);
-        cubic_fit_error(obs, vis,s, temp, cubic_coeffs, interim_sigma, nobs);
-        //compute_empty(obs,vis,XtWX,cubic_coeffs,nobs);
-        compute_empty(posts,vis,cubic_coeffs,nobs);
-        float p1= cubic_coeffs[gid*8+6]/cubic_coeffs[gid*8+5];
-        cubic_coeffs[gid*8+7]= min(p1,1/p1);
+
+        barrier(CLK_GLOBAL_MEM_FENCE);
+        if( cubic_coeffs[gid*8+7] > 3)
+		{
+
+		fit_intensity_cubic(obs,vis,s,temp, XtWX, cofactor, invXtWX,  XtY,outerprodl,l, cubic_coeffs, nobs);
+		cubic_fit_error(obs, vis,s, temp, cubic_coeffs, interim_sigma, nobs);
+
+		}
+		 barrier(CLK_GLOBAL_MEM_FENCE);
     }
 }
 #endif // COMPUTE_CUBIC
