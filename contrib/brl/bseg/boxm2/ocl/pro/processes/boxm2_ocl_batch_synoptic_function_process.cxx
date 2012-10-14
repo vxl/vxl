@@ -158,25 +158,27 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
 
 
     int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
-    vcl_cout<<"ZEROED COEFSS"<<datasize<<vcl_endl;
-    boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
-    bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
-    if (!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-      vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
 
+	boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
+
+
+    bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
+    if (!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR|CL_MEM_READ_ONLY,queue))
+      vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
+	clFinish(queue);
     boxm2_data_base * data_type1 = str_blk_cache.data_types_["aux1"];
     bocl_mem_sptr bocl_data_type1 = new bocl_mem(device->context(),data_type1->data_buffer(),data_type1->buffer_length(),"");
-    if (!bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+    if (!bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR|CL_MEM_READ_ONLY,queue))
       vcl_cout<<"Aux1 buffer was not created"<<vcl_endl;
 
     boxm2_data_base * data_type2 = str_blk_cache.data_types_["aux2"];
     bocl_mem_sptr bocl_data_type2 = new bocl_mem(device->context(),data_type2->data_buffer(),data_type2->buffer_length(),"");
-    if (!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+    if (!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR|CL_MEM_READ_ONLY,queue))
       vcl_cout<<"Aux2 buffer was not created"<<vcl_endl;
 
     boxm2_data_base * data_type3 = str_blk_cache.data_types_["aux3"];
     bocl_mem_sptr bocl_data_type3 = new bocl_mem(device->context(),data_type3->data_buffer(),data_type3->buffer_length(),"");
-    if (!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+    if (!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR|CL_MEM_READ_ONLY,queue))
       vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
 
     bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
@@ -222,7 +224,9 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
     kern->clear_args();
     coeffs_buff->read_to_buffer(queue);
     clFinish(queue);
-    cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
+
+	float * ccoeffs = reinterpret_cast<float*> (coeffs_buff->cpu_buffer());
+	cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
   }
   clReleaseCommandQueue(queue);
 
