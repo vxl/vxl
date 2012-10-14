@@ -23,9 +23,9 @@ bool boxm2_add_block_process_cons(bprb_func_process& pro)
   //process takes 2 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0]  = "boxm2_scene_sptr";
-  input_types_[1]  = "unsigned";
-  input_types_[2]  = "unsigned";
-  input_types_[3]  = "unsigned";
+  input_types_[1]  = "int";
+  input_types_[2]  = "int";
+  input_types_[3]  = "int";
   input_types_[4]  = "unsigned";
   input_types_[5]  = "unsigned";
   input_types_[6]  = "unsigned";
@@ -55,9 +55,9 @@ bool boxm2_add_block_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   boxm2_scene_sptr scene    =pro.get_input<boxm2_scene_sptr>(i++);
-  unsigned index_i          =pro.get_input<unsigned>        (i++);
-  unsigned index_j          =pro.get_input<unsigned>        (i++);
-  unsigned index_k          =pro.get_input<unsigned>        (i++);
+  int index_i          =pro.get_input<int>        (i++);
+  int index_j          =pro.get_input<int>        (i++);
+  int index_k          =pro.get_input<int>        (i++);
   unsigned num_x            =pro.get_input<unsigned>        (i++);
   unsigned num_y            =pro.get_input<unsigned>        (i++);
   unsigned num_z            =pro.get_input<unsigned>        (i++);
