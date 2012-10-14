@@ -27,7 +27,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
                              boxm2_scene_info * linfo,
                              boxm2_block * blk_sptr,
                              unsigned i, unsigned j,
-                             F functor)
+                             F functor, float tfar_max= -1.0f)
 {
     vgl_point_3d<float> block_origin(float(ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,
                                             float(ray_ij.origin().y()-linfo->scene_origin[1])/linfo->block_len,
@@ -68,12 +68,15 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
   float min_facez = (ray_dz < 0.0f) ? (linfo->scene_dims[2]) : 0.0f;
   float tblock = vcl_max(vcl_max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
 
+
   if (tfar <= tblock || tfar < 0) {
     return;
   }
 
   //make sure tnear is at least 0...
   tblock = (tblock > 0.0f) ? tblock : 0.0f;
+  if(tfar_max >0.0)
+    tfar = tfar > tfar_max ? tfar_max: tfar;
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
   tfar -= BLOCK_EPSILON;
 
