@@ -252,3 +252,156 @@ void step_cell_change(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 }
 
 #endif
+#ifdef AUX_CHANGE
+//need to define a struct of type AuxArgs with auxiliary arguments
+// to supplement cast ray args
+typedef struct
+{
+  __constant  RenderSceneInfo* linfo;
+  
+  //cell data
+  __global float*       alpha;
+  __global MOG_TYPE *   mog;
+  __global int*         seg_len;
+  __global int*         mean_obs;
+  
+  //ray data
+float*       change;
+float*       ray_vis;
+} AuxArgs;
+
+//forward declare cast ray (so you can use it)
+void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneInfo*,
+              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
+
+//------------------------------------------------------------------------------
+// 1x1 change detection (simple, single ray independent CD). 
+//------------------------------------------------------------------------------
+__kernel
+void
+aux_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
+                            __global    int4               * tree_array,
+                            __global    float              * alpha_array,
+                            __global    MOG_TYPE           * mixture_array,
+                            __global    int                * aux_seg_len,
+                            __global    int                * aux_mean_obs,
+                            __global    float4             * ray_origins,
+                            __global    float4             * ray_directions,
+                            __global    float              * change_image,      // input image and store vis_inf and pre_inf
+                            __global    uint4              * exp_image_dims,
+                            __global    float              * output,
+                            __constant  uchar              * bit_lookup,
+                            __global    float              * vis_image,
+                            __local     uchar16            * local_tree,
+                            __local     uchar              * cumsum,        //cumulative sum helper for data pointer
+                            __local     int                * imIndex)
+{
+  //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  int i=get_global_id(0);
+  int j=get_global_id(1);
+  imIndex[llid] = j*get_global_size(0)+i;
+
+  // check to see if the thread corresponds to an actual pixel as in some
+  // cases #of threads will be more than the pixels.
+  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) {
+    return;
+  }
+
+  //-------- grab center pixels - change, change_exp
+  float change          = change_image[imIndex[llid]];
+  float vis             = vis_image[imIndex[llid]];
+
+  //------- calc offset ray (potentially neighboring ray)-----------
+  float4 ray_o = ray_origins[ imIndex[llid] ];
+  float4 ray_d = ray_directions[ imIndex[llid] ];
+  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+
+  //------- Set Aux Args -------------
+  AuxArgs aux_args;
+  aux_args.linfo        = linfo;
+  aux_args.alpha        = alpha_array;
+  aux_args.mog          = mixture_array;
+  aux_args.seg_len      = aux_seg_len; 
+  aux_args.mean_obs     = aux_mean_obs; 
+  
+  aux_args.ray_vis      = &vis; 
+  aux_args.change       = &change;
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
+
+            //scene info
+            linfo, tree_array,
+
+            //utility info
+            local_tree, bit_lookup, cumsum, &vis,
+
+            //RENDER SPECIFIC ARGS
+            aux_args);
+            
+  //expected image gets rendered
+  change_image[imIndex[llid]]     = change;  //expected_int;
+  vis_image[imIndex[llid]]        = vis;
+}
+
+
+// Change detection step cell functor
+void step_cell_change2(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+  //d-normalize the ray seg len
+  d *= aux_args.linfo->block_len;
+  
+  //get cell cumulative length and make sure it isn't 0
+  int len_int = aux_args.seg_len[data_ptr];
+  float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
+        
+  int obs_int = aux_args.mean_obs[data_ptr];
+  float mean_obs = convert_float(obs_int) / convert_float(len_int);
+
+  //uchar8 uchar_data = cell_data[data_ptr];
+  CONVERT_FUNC(uchar_data, aux_args.mog[data_ptr]);
+  float8 data = convert_float8(uchar_data)/NORM;
+
+  //choose value based on cell depth
+  float prob_den=gauss_3_mixture_prob_density(mean_obs,
+                                              data.s0,data.s1,data.s2,
+                                              data.s3,data.s4,data.s5,
+                                              data.s6,data.s7,1-data.s2-data.s5);
+
+  //calculate prob density of expected image
+  float alpha = aux_args.alpha[data_ptr];
+  float prob  = 1.0f-exp(-alpha*d);
+  float omega = (*aux_args.ray_vis)*prob;
+  (*aux_args.ray_vis) *= (1.0f-prob);
+  (*aux_args.change) += prob_den*omega;
+}
+// Change detection step cell functor
+void step_cell_change2_maxdensity(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+  //d-normalize the ray seg len
+  d *= aux_args.linfo->block_len;
+  
+  //get cell cumulative length and make sure it isn't 0
+  int len_int = aux_args.seg_len[data_ptr];
+  float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
+        
+  int obs_int = aux_args.mean_obs[data_ptr];
+  float mean_obs = convert_float(obs_int) / convert_float(len_int);
+
+  //uchar8 uchar_data = cell_data[data_ptr];
+  CONVERT_FUNC(uchar_data, aux_args.mog[data_ptr]);
+  float8 data = convert_float8(uchar_data)/NORM;
+
+  //choose value based on cell depth
+  float prob_den=gauss_3_mixture_prob_density(mean_obs,
+                                              data.s0,data.s1,data.s2,
+                                              data.s3,data.s4,data.s5,
+                                              data.s6,data.s7,1-data.s2-data.s5);
+
+  
+  if ( (*aux_args.change)  < prob_den )
+		 (*aux_args.change)  = prob_den;
+}
+#endif
