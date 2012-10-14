@@ -99,7 +99,39 @@ void test_render_height_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, 
     bprb_batch_process_manager::instance()->remove_data(out_ids[i]);
   }
 }
+//: Example c++ calls
+void test_refine_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_opencl_cache_sptr& opencl_cache)
+{
+  //////////////////////////////////////////////////////////////////////////////
+  //Only has to be done once
+  //
+  //register data types and process functions
+  DECLARE_FUNC_CONS(boxm2_ocl_refine_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_refine_process, "boxm2OclRefineProcess");
+  REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
+  REGISTER_DATATYPE(boxm2_scene_sptr);
+  REGISTER_DATATYPE(float);
+  //
 
+
+  //set up brdb_value_sptr arguments... (for generic passing)
+  brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device);
+  brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
+  brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache);
+  brdb_value_sptr brdb_thresh = new brdb_value_t<float>(0.3f);
+
+  //if scene has RGB data type, use color render process
+  bool good = true;
+  good = bprb_batch_process_manager::instance()->init_process("boxm2OclRefineProcess");
+  //set process args
+  good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+              && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
+              && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
+              && bprb_batch_process_manager::instance()->set_input(3, brdb_thresh)    // camera
+               && bprb_batch_process_manager::instance()->run_process();
+
+
+}
 //: Example c++ calls
 void test_render_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_opencl_cache_sptr& opencl_cache)
 {
@@ -172,7 +204,7 @@ void test_render_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_o
              << " didn't get value\n";
   }
   vil_image_view_base_sptr out_img_sptr =value->val<vil_image_view_base_sptr>();
-  vil_save(*out_img_sptr.ptr(), "test_output.png");
+  vil_save(*out_img_sptr.ptr(), "test_output.tiff");
 }
 
 //: Example c++ calls
@@ -257,7 +289,7 @@ void test_update_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_o
 void test_process_mains()
 {
   // Create scene from file
-  vcl_string scene_file = "/home/acm/data/downtown/model_grey/scene.xml";
+  vcl_string scene_file = "e:/data/Tailwind1.5/Richmond1/geomodel/scene.xml";
   boxm2_scene_sptr scene = new boxm2_scene(scene_file);
 
   //make bocl manager (handles a lot of OpenCL stuff)
@@ -269,9 +301,10 @@ void test_process_mains()
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(scene, device, 4);
 
   //run render and update mains
-  //test_render_main(scene, device, opencl_cache);
+  test_render_main(scene, device, opencl_cache);
+  test_refine_main(scene,device, opencl_cache);
   //test_update_main(scene, device, opencl_cache);
-  test_render_height_main(scene, device, opencl_cache);
+  //test_render_height_main(scene, device, opencl_cache);
 
   //print database
   bprb_batch_process_manager::instance()->print_db();
