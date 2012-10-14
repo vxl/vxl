@@ -10,6 +10,7 @@
 //UNIX specific includes
 #include <aio.h>     //for aio_read
 //#include <fcntl.h>   // for open (not really necessary
+#include <unistd.h> // for close
 #include <strings.h> //includes bzero
 
 
