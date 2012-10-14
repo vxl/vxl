@@ -16,9 +16,7 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
-#if 0
-#include <vil/vil_save.h>
-#endif
+
 #include <vil/vil_new.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
@@ -125,12 +123,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
           break;
         vcl_cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<vcl_endl;
         vil_image_view_base_sptr view = ir->get_copy_view(startI, endI-startI, startJ, endJ-startJ);
-#if 0
-        //test saving
-        vcl_stringstream s;
-        s<<"block_"<<startI<<'_'<<startJ<<".png";
-        vil_save(*view, s.str().c_str());
-#endif
         //run update
         boxm2_ocl_update::update(scene, device, opencl_cache, cam, view,
                                  ident, mask_sptr, update_alpha, mog_var,
