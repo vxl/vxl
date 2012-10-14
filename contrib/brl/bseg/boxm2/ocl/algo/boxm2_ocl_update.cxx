@@ -58,7 +58,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
     vcl_cout<<"Update using mask."<<vcl_endl;
     use_mask = true;
   }
-  vil_image_view<unsigned char>* mask_map = 0;
+  vil_image_view<unsigned char >* mask_map = 0;
   if (use_mask) {
     mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
     if (!mask_map) {
@@ -81,6 +81,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
     data_type += "_" + ident;
     num_obs_type += "_" + ident;
   }
+
 
   // create a command queue.
   int status=0;
@@ -105,8 +106,6 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   //set generic cam
   cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  //bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins,   cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
-  //bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff, startI, startJ);
@@ -126,21 +125,6 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   //determine min/max i and j
   unsigned int min_i=1000000000, max_i=0;
   unsigned int min_j=1000000000, max_j=0;
-  if (use_mask)
-  {
-    for (unsigned int j=0;j<mask_map->nj();++j) {
-      for (unsigned int i=0;i<mask_map->ni();++i)
-      {
-        if ( (*mask_map)(i,j)==0 )
-        {
-          if (min_i > i) min_i = i;
-          if (min_j > j) min_j = j;
-          if (max_i < i) max_i = i;
-          if (max_j < j) max_j = j;
-        }
-      }
-    }
-  }
 
   //copy input vals into image
   int count=0;
@@ -228,9 +212,9 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
       for (unsigned int j=0;j<cl_nj;++j) {
         for (unsigned int i=0;i<cl_ni;++i) {
           if ( i<mask_map->ni() && j<mask_map->nj() ) {
-            if ( (*mask_map)(i,j)>0 ) {
+            if ( (*mask_map)(i,j)==0 ) {
               input_buff[count] = -1.0f;
-              vis_buff  [count] = -1.0f;
+              vis_buff  [count] = 0.0f;
             }
           }
           ++count;
