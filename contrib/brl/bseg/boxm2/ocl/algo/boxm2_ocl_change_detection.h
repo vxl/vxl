@@ -82,4 +82,19 @@ class boxm2_ocl_two_pass_change
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
 };
 
+class boxm2_ocl_aux_pass_change
+{
+  public:
+    static bool change_detect(  vil_image_view<float>&    change_img,
+                                bocl_device_sptr          device,
+                                boxm2_scene_sptr          scene,
+                                boxm2_opencl_cache_sptr   opencl_cache,
+                                vpgl_camera_double_sptr   cam,
+                                vil_image_view_base_sptr  img,
+                                bool max_density=false);
+
+  private:
+    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts, bool maxdensity =false);
+    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+};
 #endif // boxm2_ocl_change_detection_h_
