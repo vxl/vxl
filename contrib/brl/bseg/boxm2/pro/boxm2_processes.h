@@ -34,6 +34,9 @@ DECLARE_FUNC_CONS(boxm2_paint_mesh_process);
 DECLARE_FUNC_CONS(boxm2_extract_point_cloud_process);
 DECLARE_FUNC_CONS(boxm2_dem_to_xyz_process);
 DECLARE_FUNC_CONS(boxm2_combine_expected_images_process);
+DECLARE_FUNC_CONS(boxm2_scene_from_box_cams_process);
+
+
 #if HAS_GEOTIFF
 DECLARE_FUNC_CONS(boxm2_roi_init_geotiff_process);
 #endif
