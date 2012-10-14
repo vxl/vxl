@@ -290,17 +290,18 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
                 }
             }
         }
-        boxm2_data_base * aux0_cpu = cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix));
-        boxm2_sio_mgr::save_block_data_base(scene->data_path(), *id, aux0_cpu, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix));
-        boxm2_data_base * aux1_cpu = cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(suffix));
-        boxm2_sio_mgr::save_block_data_base(scene->data_path(), *id, aux1_cpu, boxm2_data_traits<BOXM2_AUX1>::prefix(suffix));
+
+        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(suffix),true);
+        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(suffix),true);
         if(coordinate_type != "spherical")
         {
-            boxm2_data_base * aux2_cpu = cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX2>::prefix(suffix));
-            boxm2_sio_mgr::save_block_data_base(scene->data_path(), *id, aux2_cpu, boxm2_data_traits<BOXM2_AUX2>::prefix(suffix));
-
-            boxm2_data_base * aux3_cpu = cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix));
-            boxm2_sio_mgr::save_block_data_base(scene->data_path(), *id, aux3_cpu, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix));
+            opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix),true);
+            opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix),true);
+        }
+        else
+        {
+            opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix),false);
+            opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix),false);
         }
     }
     delete [] ray_origins;
