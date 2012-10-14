@@ -71,9 +71,25 @@ bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_for
                                    vcl_size_t width, vcl_size_t height)
 {
   cl_int status = MEM_FAILURE;
+/* NOTE: clCreateImage2D has been replaced with clCreateImage as of v1.2
+ * Should probably have a switch here based on OpenCL version present on system
+ * - D. Crispell 10/2012
+ */
+#if 1 // use this call for versions prior to v1.2 
   buffer_ = clCreateImage2D(this->context_, flags, format, width, height,
                             this->num_bytes_, this->cpu_buf_, &status);
-  if (!check_val(status, MEM_FAILURE, "clCreateBuffer failed: " + this->id_))
+#else // use this call for version v1.2 and later
+  // create image description structure
+  cl_image_desc image_desc;
+  image_desc.image_type = CL_MEM_OBJECT_IMAGE2D;
+  image_desc.image_width = width;
+  image_desc.image_height = height;
+  image_desc.image_row_pitch = 0; // force calculation of row pitch
+
+  buffer_ = clCreateImage(this->context_, flags, format, &image_desc,
+                          this->cpu_buf_, &status);
+#endif
+  if (!check_val(status, MEM_FAILURE, "clCreateImage failed: " + this->id_))
     return MEM_FAILURE;
   return MEM_SUCCESS;
 }
