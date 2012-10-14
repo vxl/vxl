@@ -80,26 +80,24 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
     vcl_cout<<"Converting perspective camera"<<vcl_endl;
 
     // set persp cam buffer
-    cl_float cam_buffer[48];
+    cl_float *cam_buffer= new cl_float[48];
     boxm2_ocl_util::set_persp_camera(pcam, cam_buffer);
-    bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
+	bocl_mem *  persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
     persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-    // create buffer with nothing to read from host memory
-    ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-    //create dims buffer
+    ////create dims buffer
     cl_uint dims[] = {(cl_uint) i_min, (cl_uint) j_min, cl_ni, cl_nj};
     bocl_mem_sptr dims_buff = new bocl_mem(device->context(), dims, sizeof(cl_uint4), "camera dimensions buffer");
     dims_buff->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
+	ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+	ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     //2. set global/local thread size
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
     vcl_size_t lThreads[] = {8, 8};
 
+
     // set arguments
-    persp_to_generic_kernel->set_arg( persp_cam.ptr() );
+    persp_to_generic_kernel->set_arg( persp_cam );
     persp_to_generic_kernel->set_arg( ray_origins.ptr() );
     persp_to_generic_kernel->set_arg( ray_directions.ptr() );
     persp_to_generic_kernel->set_arg( dims_buff.ptr());
@@ -107,11 +105,18 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
     //execute kernel
     persp_to_generic_kernel->execute(queue, 2, lThreads, gThreads);
     clFinish(queue);
+	ray_origins->read_to_buffer(queue);
+	ray_directions->read_to_buffer(queue);
+	clFinish(queue);
     gpu_time += persp_to_generic_kernel->exec_time();
-
+	
     //clear render kernel args so it can reset em on next execution
     persp_to_generic_kernel->clear_args();
 
+
+	delete persp_cam;
+
+	//delete persp_cam;
     vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
     return gpu_time + transfer_time;
 }
