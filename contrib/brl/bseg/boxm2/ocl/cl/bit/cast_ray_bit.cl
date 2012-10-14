@@ -28,6 +28,7 @@ inline float calc_tfar( float ray_ox, float ray_oy, float ray_oz,
                         float max_facex, float max_facey, float max_facez)
 {
   return min(min( (max_facex-ray_ox)*(1.0f/ray_dx), (max_facey-ray_oy)*(1.0f/ray_dy)), (max_facez-ray_oz)*(1.0f/ray_dz));
+ 
 }
 
 inline float calc_tnear(float ray_ox, float ray_oy, float ray_oz,
@@ -99,7 +100,7 @@ void cast_ray(
   float min_facey = (ray_dy < 0.0f) ? (linfo->dims.y) : 0.0f;
   float min_facez = (ray_dz < 0.0f) ? (linfo->dims.z) : 0.0f;
   float tblock = calc_tnear(ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, min_facex, min_facey, min_facez);
-  tblock = (tblock > 2.0f) ? tblock : 2.0f;    //make sure tnear is at least 0...
+  tblock = (tblock > 0.0f) ? tblock : 0.0f;    //make sure tnear is at least 0...
   tfar -= BLOCK_EPSILON;   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
 
   if (tfar <= tblock)
