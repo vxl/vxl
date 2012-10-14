@@ -135,7 +135,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     vcl_size_t global_threads[] = {cl_ni,cl_nj};
 
     float theta_min = 0.0 ;
-    float theta_max = vnl_math::pi/4;
+    float theta_max = 3*vnl_math::pi/4;
 
     float phi_min = -vnl_math::pi ;
     float phi_max =  vnl_math::pi ;
@@ -146,13 +146,13 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
     cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
     vgl_box_3d<double> scene_bbox = scene->bounding_box();
-    vgl_point_3d<double> center(scene_bbox.centroid_x(),scene_bbox.centroid_y(),scene_bbox.min_z()+(scene_bbox.depth()/100.0));
+    vgl_point_3d<double> center(scene_bbox.centroid_x(),scene_bbox.centroid_y(),-0.5);
 
 
     phi_inc =  (phi_max-phi_min)/(float)(cl_ni)  ;
     theta_inc = (theta_max-theta_min)/ (float) (cl_nj) ;
 
-    double radius = vcl_sqrt(scene_bbox.width()*scene_bbox.width()+
+    double radius = 10*vcl_sqrt(scene_bbox.width()*scene_bbox.width()+
                              scene_bbox.depth()*scene_bbox.depth()+
                              scene_bbox.height()*scene_bbox.height());
     for (unsigned j = 0 ; j < cl_nj; j++)
