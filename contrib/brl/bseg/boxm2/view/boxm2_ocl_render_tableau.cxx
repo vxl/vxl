@@ -94,8 +94,9 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
     //calculate and write fps to status
     vcl_stringstream str;
     str<<".  rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
-    status_->write(str.str().c_str());
-
+    if (status_) {
+      status_->write(str.str().c_str());
+    }
     return true;
   }
   
