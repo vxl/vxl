@@ -53,27 +53,27 @@
 //   * Pre Rendered Stills
 int closest_camera(vgl_point_3d<double> p, vcl_vector<vpgl_perspective_camera<double> *> cams)
 {
-	double min_distance = 1e20;
-	int min_cam_index = -1;
-	for(unsigned i = 0 ; i < cams.size(); i++)
-	{
-		vgl_vector_3d<double> diff =( cams[i]->get_camera_center() - p ); 
-		double d = diff.length();
-		if(d < min_distance)
-		{
-			min_distance = d; 
-			min_cam_index = i ;
-		}
-
-	}
-	return min_cam_index;
+    double min_distance = 1e20;
+    int min_cam_index = -1;
+    for (unsigned i = 0 ; i < cams.size(); ++i)
+    {
+        vgl_vector_3d<double> diff =( cams[i]->get_camera_center() - p );
+        double d = diff.length();
+        if (d < min_distance)
+        {
+            min_distance = d;
+            min_cam_index = i;
+        }
+    }
+    return min_cam_index;
 }
 
-bool compare_second_element(const vcl_pair<vgl_point_3d<double>, double> &a, 
-							const vcl_pair<vgl_point_3d<double>, double> &b)
+bool compare_second_element(const vcl_pair<vgl_point_3d<double>, double> &a,
+                            const vcl_pair<vgl_point_3d<double>, double> &b)
 {
     return a.second > b.second;
 }
+
 int main(int argc,  char** argv)
 {
     vcl_cout<<"Boxm2 Uncertain Viewponts"<<vcl_endl;
@@ -146,52 +146,52 @@ int main(int argc,  char** argv)
     brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj());
     brdb_value_sptr brdb_ident = new brdb_value_t<vcl_string>("cubic_model");
 
-	// FOR  GRID
+    // FOR  GRID
     //////////////////////////////////////////////////////////////////////////////
     //set up a view sphere, use find closest for closest neighbors
-	vsph_view_sphere<vsph_view_point<vcl_string> > sphere(vgl_point_3d<double>(0,0,-0.28), radius());
+    vsph_view_sphere<vsph_view_point<vcl_string> > sphere(vgl_point_3d<double>(0,0,-0.28), radius());
 
-	//map of ID's that have been rendered
+    //map of ID's that have been rendered
     vcl_map<int, vcl_string> saved_imgs;
 
     /////////////////////////////////////////////////////////////////////////////
     //rendered array of views
     vcl_map<int, vil_image_view<vxl_byte>* > img_map;
     vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
-	
-	typedef vcl_pair<vgl_point_3d<double>,double> ptdistpair;
-	vcl_vector<ptdistpair > distances ;
+
+    typedef vcl_pair<vgl_point_3d<double>,double> ptdistpair;
+    vcl_vector<ptdistpair > distances ;
     // determine increment along azimuth and elevation (incline)
     double az_incr = 2.0*vnl_math::pi/num_az();
     double el_incr = (incline_0() - incline_1()) / (num_in()-1); //degrees (to include both start and end)
     el_incr = el_incr * vnl_math::pi_over_180;  // radians
-	for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
-	{
-		double el = vnl_math::pi_over_180 * incline_0() - el_i * el_incr;
-		for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
-		{
-			double az = 2.0*vnl_math::pi - az_i * az_incr;
- 
-			float mean = 0.0;
+    for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
+    {
+        double el = vnl_math::pi_over_180 * incline_0() - el_i * el_incr;
+        for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
+        {
+            double az = 2.0*vnl_math::pi - az_i * az_incr;
+
+            float mean = 0.0;
             //convert to cartesian (as method is only in cartesian for some reason)
             vsph_sph_point_3d curr_point(radius(), el, az);
             sphere.add_view(curr_point,ni(), nj());
             vgl_point_3d<double> cart_point = sphere.cart_coord(curr_point);
             int uid; double dist;
             vsph_view_point<vcl_string> view = sphere.find_closest(cart_point, uid, dist);
-			vcl_stringstream 	idstream;
-			idstream<<imgdir<<"uncertainty_"<<el_i<<"_"<<az_i<<".tiff";
+            vcl_stringstream     idstream;
+            idstream<<imgdir<<"uncertainty_"<<el_i<<'_'<<az_i<<".tiff";
 
             if ( saved_imgs.find(uid) == saved_imgs.end() )
             {
-				vpgl_camera_double_sptr cam_sptr = view.camera();
-				//set focal length and image size for camera
-				vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
-				vpgl_calibration_matrix<double> mat = cam->get_calibration();
-				brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
-				mat.set_focal_length(5270.5f);
-				cam->set_calibration(mat);
-				vcl_cout<<"Focal Length "<<mat.focal_length()<<vcl_endl;
+                vpgl_camera_double_sptr cam_sptr = view.camera();
+                //set focal length and image size for camera
+                vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
+                vpgl_calibration_matrix<double> mat = cam->get_calibration();
+                brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
+                mat.set_focal_length(5270.5f);
+                cam->set_calibration(mat);
+                vcl_cout<<"Focal Length "<<mat.focal_length()<<vcl_endl;
                 //if scene has RGB data type, use color render process
                 bool good;
                 if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
@@ -200,13 +200,13 @@ int main(int argc,  char** argv)
                   good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
                 //set process args
                 good = good
-                    && bprb_batch_process_manager::instance()->set_input(0, brdb_device)		// device
-                    && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)			// scene
-                    && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)	// opencl cache
-                    && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)			// camera
-                    && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)			// ni for rendered image
-                    && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)			// nj for rendered image
-                    && bprb_batch_process_manager::instance()->set_input(6, brdb_ident)			// identifier for rendered image
+                    && bprb_batch_process_manager::instance()->set_input(0, brdb_device)        // device
+                    && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)            // scene
+                    && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)    // opencl cache
+                    && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)            // camera
+                    && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)            // ni for rendered image
+                    && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)            // nj for rendered image
+                    && bprb_batch_process_manager::instance()->set_input(6, brdb_ident)            // identifier for rendered image
                     && bprb_batch_process_manager::instance()->run_process();
                 unsigned int img_id=0;
                 good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
@@ -222,20 +222,20 @@ int main(int argc,  char** argv)
                            << " didn't get value\n";
                 }
                 vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
-				vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
-				vil_math_mean<float,float>(mean, *expimg_view,0);
-				vcl_cout<<el<<" "<<az<<" "<<mean<<vcl_endl;
-				distances.push_back(ptdistpair(cart_point,mean));
-				saved_imgs[uid] = idstream.str();
-				vil_save(*expimg_view, idstream.str().c_str() );
+                vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
+                vil_math_mean<float,float>(mean, *expimg_view,0);
+                vcl_cout<<el<<' '<<az<<' '<<mean<<vcl_endl;
+                distances.push_back(ptdistpair(cart_point,mean));
+                saved_imgs[uid] = idstream.str();
+                vil_save(*expimg_view, idstream.str().c_str() );
             }
         }
     }
-	vcl_ofstream ofile(outfile().c_str());
-	vcl_sort(distances.begin(), distances.end(), compare_second_element);
+    vcl_ofstream ofile(outfile().c_str());
+    vcl_sort(distances.begin(), distances.end(), compare_second_element);
 
-	for(unsigned int k = 0 ; k < distances.size(); k ++)
-		ofile<<distances[k].first.x()<<" "<<distances[k].first.y()<<" "<<distances[k].first.z()<<" "<<distances[k].second<<vcl_endl;
+    for (unsigned int k = 0 ; k < distances.size(); ++k)
+        ofile<<distances[k].first.x()<<' '<<distances[k].first.y()<<' '<<distances[k].first.z()<<' '<<distances[k].second<<vcl_endl;
     return 0;
 }
 

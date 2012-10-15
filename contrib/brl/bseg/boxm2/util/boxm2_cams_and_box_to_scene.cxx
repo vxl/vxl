@@ -23,7 +23,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     //----------------------------------------------------------------------------
     // get the inputs
     double zplane  = (bbox.max_z()-bbox.min_z()) / 2.0;
-	int nblks = 12;
+    int nblks = 12;
     //run planar bounding box
     vgl_box_2d<double> b2box;
     if (vsph_camera_bounds::planar_bounding_box(cams,b2box,zplane))

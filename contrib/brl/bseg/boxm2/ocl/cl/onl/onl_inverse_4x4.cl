@@ -31,12 +31,8 @@ float cofactor_ij_v1(__local float * mat4x4, unsigned int row, unsigned int col)
 
     if ( (col + row) & 1 )
         return -det3x3;
-    else 
+    else
         return det3x3;
-
-		
-
-		
 }
 
 float determinant(__local float * mat4x4, __local float * cofactor4x4)
@@ -66,7 +62,6 @@ bool onl_inverse_4x4(__local float * mat4x4,__local float * cofactor4x4, __local
         invmat4x4[llid_transpose] = cofactor4x4[llid] / det ;
     }
     barrier(CLK_LOCAL_MEM_FENCE);
-
 }
 
 // Assuming 4x4 workgroup

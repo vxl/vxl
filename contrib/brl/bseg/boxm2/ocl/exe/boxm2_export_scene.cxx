@@ -58,7 +58,7 @@ int main(int argc,  char** argv)
     vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
     vul_arg<vcl_string> dir("-dir", "output image directory", "");
     vul_arg<bool> depth("-depth", "output depth maps", 0);
-	vul_arg<vcl_string> imgname("-imgname", "name of the image", "scene");
+    vul_arg<vcl_string> imgname("-imgname", "name of the image", "scene");
     vul_arg<unsigned> ni("-ni", "Width of image", 640);
     vul_arg<unsigned> nj("-nj", "Height of image", 480);
     vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
@@ -154,7 +154,7 @@ int main(int argc,  char** argv)
     REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
     REGISTER_DATATYPE(boxm2_scene_sptr);
     REGISTER_DATATYPE(bocl_mem_sptr);
-   // vil_register::register_datatype();
+    // vil_register::register_datatype();
     REGISTER_DATATYPE(vil_image_view_base_sptr);
 
     //create scene
@@ -176,8 +176,8 @@ int main(int argc,  char** argv)
     // FOR  GRID
     //////////////////////////////////////////////////////////////////////////////
     //set up a view sphere, use find closest for closest neighbors
-	vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), scene->bounding_box().depth()*2.0);
-	//vcl_cout<<"Radius "<< scene->bounding_box().depth()*1.5<<vcl_endl;
+    vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), scene->bounding_box().depth()*2.0);
+    //vcl_cout<<"Radius "<< scene->bounding_box().depth()*1.5<<vcl_endl;
 
     // Uncomment the below for non-grid representation
 #if 0
@@ -201,13 +201,13 @@ int main(int argc,  char** argv)
     double az_incr = vnl_math::twopi/num_az();
     double el_incr = (incline_0() - incline_1()) / (num_in()-1); //degrees (to include both start and end)
     el_incr = el_incr * vnl_math::pi_over_180;  // radians
-	for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
-	{
-		double el = vnl_math::pi_over_180 * incline_0() - el_i * el_incr;
-		for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
-		{
-			double az = 2.0*vnl_math::pi - az_i * az_incr;
- 
+    for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
+    {
+        double el = vnl_math::pi_over_180 * incline_0() - el_i * el_incr;
+        for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
+        {
+            double az = 2.0*vnl_math::pi - az_i * az_incr;
+
             //convert to cartesian (as method is only in cartesian for some reason)
             vsph_sph_point_3d curr_point(radius(), el, az);
             sphere.add_view(curr_point,ni(), nj());
@@ -217,9 +217,9 @@ int main(int argc,  char** argv)
 
             //if the viewpoint has already been rendered, skip it
             vcl_stringstream fstr, idstream;
-            fstr<<imgname()<<"_"<<uid<<".jpg";
+            fstr<<imgname()<<'_'<<uid<<".jpg";
             img_grid(el_i, az_i) = fstr.str();
-            idstream<<imgdir<<imgname()<<"_"<<uid<<".jpg";
+            idstream<<imgdir<<imgname()<<'_'<<uid<<".jpg";
             if ( saved_imgs.find(uid) == saved_imgs.end() )
             {
                 vpgl_camera_double_sptr cam_sptr = view.camera();
@@ -228,7 +228,7 @@ int main(int argc,  char** argv)
                 vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
                 vpgl_calibration_matrix<double> mat = cam->get_calibration();
                 vgl_vector_3d<double> pp = normalized(cam->principal_axis());
-     			vgl_vector_3d<double> vdir(cam->get_rotation().as_matrix()(1,0),
+                vgl_vector_3d<double> vdir(cam->get_rotation().as_matrix()(1,0),
                                            cam->get_rotation().as_matrix()(1,1),
                                            cam->get_rotation().as_matrix()(1,2));
                 vgl_vector_3d<double> udir = normalized(cross_product(vdir,pp));
@@ -238,7 +238,7 @@ int main(int argc,  char** argv)
                 double f = 1.0 / gsdofcentralpixel;
                 //double f= mat.focal_length()/750;
                 //vcl_cout<<"Estimated F "<<fest<<" f now "<<f<<vcl_endl;
-                
+
                 vbl_array_2d<vgl_ray_3d<double> > rays(nj(),ni());
                 cam_file_stream<<uid<<' '<<f<<' '<<cc.x()<<' '<<cc.y()<<' '<<cc.z()<<' '
                                <<pp.x()<<' '<<pp.y()<<' '<<pp.z()<<' '
@@ -262,9 +262,9 @@ int main(int argc,  char** argv)
                 //if scene has RGB data type, use color render process
                 bool good;
                 if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
-                  good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
+                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
                 else
-                  good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
 
                 //set process args
                 good = good
@@ -281,34 +281,34 @@ int main(int argc,  char** argv)
                 brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                 brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                 if (S->size()!=1) {
-                  vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                           << " no selections\n";
+                    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                             << " no selections\n";
                 }
 
                 brdb_value_sptr value;
                 if (!S->get_value(vcl_string("value"), value)) {
-                  vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                           << " didn't get value\n";
+                    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                             << " didn't get value\n";
                 }
                 vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
 
 
                 if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
                 {
-                  vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = static_cast<vil_image_view<vil_rgba<vxl_byte> > *>(outimg.ptr());
-                  saved_imgs[uid] = idstream.str();
+                    vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = static_cast<vil_image_view<vil_rgba<vxl_byte> > *>(outimg.ptr());
+                    saved_imgs[uid] = idstream.str();
 
-                  vil_image_view<vxl_byte> jpg_out(ni(), nj(),3);
-                  for (unsigned int i=0; i<ni(); ++i) {
-                    for (unsigned int j=0; j<nj(); ++j) {
-                      jpg_out(i,j,0) = (*exp_img_out)(i,j).R();
-                      jpg_out(i,j,1) = (*exp_img_out)(i,j).G();
-                      jpg_out(i,j,2) = (*exp_img_out)(i,j).B();
+                    vil_image_view<vxl_byte> jpg_out(ni(), nj(),3);
+                    for (unsigned int i=0; i<ni(); ++i) {
+                        for (unsigned int j=0; j<nj(); ++j) {
+                            jpg_out(i,j,0) = (*exp_img_out)(i,j).R();
+                            jpg_out(i,j,1) = (*exp_img_out)(i,j).G();
+                            jpg_out(i,j,2) = (*exp_img_out)(i,j).B();
+                        }
                     }
-                  }
-                  vil_save( jpg_out, idstream.str().c_str() );
+                    vil_save( jpg_out, idstream.str().c_str() );
                 }
-                else if(scene->has_data_type(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()))
+                else if (scene->has_data_type(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()))
                 {
                     vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
                     vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
@@ -319,8 +319,8 @@ int main(int argc,  char** argv)
                     saved_imgs[uid] = idstream.str();
                     vil_save(*byte_img, idstream.str().c_str() );
                 }
-				else
-				{
+                else
+                {
                     vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
                     vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
                     for (unsigned int i=0; i<ni(); ++i)
@@ -329,7 +329,7 @@ int main(int argc,  char** argv)
 
                     saved_imgs[uid] = idstream.str();
                     vil_save(*byte_img, idstream.str().c_str() );
-				}
+                }
 
                 if (depth())
                 {
@@ -362,13 +362,12 @@ int main(int argc,  char** argv)
                     vil_image_view<float>* depthimg_view = static_cast<vil_image_view<float>* >(depthimg.ptr());
                     float vmin=0, vmax = 0;
                     vil_math_value_range<  float>(*depthimg_view, vmin, vmax);
-					vil_image_view<vxl_byte> byte_img = brip_vil_float_ops::convert_to_byte(*depthimg_view);
+                    vil_image_view<vxl_byte> byte_img = brip_vil_float_ops::convert_to_byte(*depthimg_view);
                     cam_file_stream<<vmin<<' '<<vmax<<'\n';
                     vcl_stringstream depthstream;
                     depthstream<<imgdir<<"depth_"<<uid<<".jpg";
                     vil_save( byte_img, depthstream.str().c_str() );
                 }
-
             }
         }
     }

@@ -44,9 +44,9 @@ bool fit_intensity_cubic(__local float * obs,       // dim n
     }
     barrier(CLK_LOCAL_MEM_FENCE);
     if (llid < (*nobs) )
-	{
+    {
         temp[llid] = vis[llid];
-	}
+    }
     barrier(CLK_LOCAL_MEM_FENCE);
     for (unsigned int k = 0 ; k< 7; k++)
     {
@@ -56,15 +56,13 @@ bool fit_intensity_cubic(__local float * obs,       // dim n
         // writing at appropriate places in the matrix.
         if (get_local_id(0) + get_local_id(1) == k && get_local_id(0) < 4 && get_local_id(1) < 4)
             XtWX[get_local_id(0) + 4*get_local_id(1)] = sum;
-		barrier(CLK_LOCAL_MEM_FENCE);
+        barrier(CLK_LOCAL_MEM_FENCE);
 
         if (llid < (*nobs) )
             temp[llid] = temp[llid] * s[llid];
         barrier(CLK_LOCAL_MEM_FENCE);
     }
     barrier(CLK_LOCAL_MEM_FENCE);
-
-
 
     onl_outerproduct_4x4(l,l,outerprodl);
     if (llid < 16)
@@ -74,28 +72,25 @@ bool fit_intensity_cubic(__local float * obs,       // dim n
     if (llid < (*nobs) )
         temp[llid] = obs[llid]*vis[llid];
 
-
     barrier(CLK_LOCAL_MEM_FENCE);
 
-
-   if (llid== 0)
+    if (llid== 0)
     {
         for (unsigned int k = 0 ; k< 4; k++)
         {
-
             float sum = 0;
             for (unsigned int i = 0 ; i< *nobs; i++)
             {
-				sum+= temp[i];
-				temp[i] = temp[i] * s[i];
-			}
+                sum+= temp[i];
+                temp[i] = temp[i] * s[i];
+            }
             XtY[k] = sum;
         }
     }
     barrier(CLK_LOCAL_MEM_FENCE);
     //// Inverse of XtWX
     onl_inverse_4x4(XtWX,cofactor, invXtWX);
-	barrier(CLK_LOCAL_MEM_FENCE);
+    barrier(CLK_LOCAL_MEM_FENCE);
     // inv(XtWX) * XtY
     for ( unsigned int k = 0 ; k < 4; k++)
     {
@@ -106,11 +101,10 @@ bool fit_intensity_cubic(__local float * obs,       // dim n
                 sum+= invXtWX[k*4+i] * XtY[i];
             coeffs[gid*8+k] = sum;
         }
-		 barrier(CLK_LOCAL_MEM_FENCE);
+        barrier(CLK_LOCAL_MEM_FENCE);
     }
     barrier(CLK_LOCAL_MEM_FENCE);
 }
-
 
 
 float variance_multiplier(float n_obs)
@@ -141,7 +135,7 @@ void cubic_fit_error(__local float  * obs,       // dim n
     float c = coeffs[gid*8+2];
     float d = coeffs[gid*8+3];
 
-	if (llid < *nobs)
+    if (llid < *nobs)
     {
         temp[llid] = vis[llid]*(a+b*s[llid]+c*s[llid]*s[llid]+d*s[llid]*s[llid]*s[llid] - obs[llid]);
         temp[llid] = temp[llid]*temp[llid];
@@ -172,12 +166,8 @@ void cubic_fit_error(__local float  * obs,       // dim n
         float numer = exp(-var/(2*(*internal_sigma)*(*internal_sigma)));
         coeffs[gid*8+5] = numer/denom;
 
-		if (var < 0 )
+        if (var < 0 )
             coeffs[gid*8+5] = 1.0;
-
-
-
-
     }
     barrier(CLK_LOCAL_MEM_FENCE);
 }

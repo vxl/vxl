@@ -38,8 +38,8 @@ void batch_fit_cubic_polynomial(__global float * aux0,
             {
                 obs[llid]   = aux1[(*datasize)*llid+gid]/seg_len;
                 vis[llid]   = aux2[(*datasize)*llid+gid]/seg_len;
-                posts[llid] = aux3[(*datasize)*llid+gid]/seg_len; 
-            }	
+                posts[llid] = aux3[(*datasize)*llid+gid]/seg_len;
+            }
             // OBTAIN  phi
             seg_len = aux0[(*datasize)*(llid + *nobs)+gid];
             s[llid] = seg_len;//0.0;
@@ -48,7 +48,6 @@ void batch_fit_cubic_polynomial(__global float * aux0,
                 float x = aux1[(*datasize)*(llid + *nobs)+gid];
                 float y = aux2[(*datasize)*(llid + *nobs)+gid];
                 s[llid]  = atan2(y,x);
-
             }
         }
         barrier(CLK_LOCAL_MEM_FENCE);
@@ -64,14 +63,12 @@ void batch_fit_cubic_polynomial(__global float * aux0,
         }
 
         barrier(CLK_GLOBAL_MEM_FENCE);
-        if( cubic_coeffs[gid*8+7] > 3)
-		{
-
-		fit_intensity_cubic(obs,vis,s,temp, XtWX, cofactor, invXtWX,  XtY,outerprodl,l, cubic_coeffs, nobs);
-		cubic_fit_error(obs, vis,s, temp, cubic_coeffs, interim_sigma, nobs);
-
-		}
-		 barrier(CLK_GLOBAL_MEM_FENCE);
+        if ( cubic_coeffs[gid*8+7] > 3)
+        {
+            fit_intensity_cubic(obs,vis,s,temp, XtWX, cofactor, invXtWX,  XtY,outerprodl,l, cubic_coeffs, nobs);
+            cubic_fit_error(obs, vis,s, temp, cubic_coeffs, interim_sigma, nobs);
+        }
+        barrier(CLK_GLOBAL_MEM_FENCE);
     }
 }
 #endif // COMPUTE_CUBIC

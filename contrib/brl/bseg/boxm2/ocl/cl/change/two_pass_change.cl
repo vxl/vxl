@@ -12,7 +12,7 @@ typedef struct
   __global    int*        seg_len;    //seglen aux buffer
   __global    int*        mean_obs;   //mean obs aux buffer
               float       obs;        //input image obs
-              
+
               float*      ray_len;     //output debugger
 } AuxArgs;
 
@@ -50,7 +50,7 @@ change_seg_len(__constant  RenderSceneInfo    * linfo,
   int imIndex = j*get_global_size(0) + i;
 
   //grab input image value (also holds vis)
-  float ray_len = output[imIndex]; 
+  float ray_len = output[imIndex];
   float obs = in_image[imIndex];
   float vis = 1.0f;  //no visibility in this pass
   barrier(CLK_LOCAL_MEM_FENCE);
@@ -62,9 +62,9 @@ change_seg_len(__constant  RenderSceneInfo    * linfo,
   //----------------------------------------------------------------------------
   // choose offset ray (shoot middle pixel through neighboring rays)
   //----------------------------------------------------------------------------
-  int offI = (i + *offset_i); 
-  int offJ = (j + *offset_j); 
-  if (offI < imgdims->x || offI >= imgdims->z || offJ < imgdims->y || offJ >= imgdims->w) 
+  int offI = (i + *offset_i);
+  int offJ = (j + *offset_j);
+  if (offI < imgdims->x || offI >= imgdims->z || offJ < imgdims->y || offJ >= imgdims->w)
     return;
   int nIdx = offJ*get_global_size(0)+offI;
   float4 ray_o = ray_origins[ nIdx ];
@@ -82,7 +82,7 @@ change_seg_len(__constant  RenderSceneInfo    * linfo,
   aux_args.obs      = obs;
   aux_args.seg_len  = aux_seg_len;
   aux_args.mean_obs = aux_mean_obs;
-  aux_args.ray_len  = &ray_len; 
+  aux_args.ray_len  = &ray_len;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -106,13 +106,13 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 typedef struct
 {
   __constant  RenderSceneInfo* linfo;
-  
+
   //cell data
   __global float*       alpha;
   __global MOG_TYPE *   mog;
   __global int*         seg_len;
   __global int*         mean_obs;
-  
+
   //ray data
            float        intensity;
            float        intensity_exp;
@@ -126,7 +126,7 @@ void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneIn
               global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
 
 //------------------------------------------------------------------------------
-// 1x1 change detection (simple, single ray independent CD). 
+// 1x1 change detection (simple, single ray independent CD).
 //------------------------------------------------------------------------------
 __kernel
 void
@@ -172,9 +172,9 @@ two_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
   float vis             = vis_image[imIndex[llid]];
 
   //------- calc offset ray (potentially neighboring ray)-----------
-  int offI = (i + *offset_i); 
-  int offJ = (j + *offset_j); 
-  if (offI < exp_image_dims->x || offI >= exp_image_dims->z || offJ < exp_image_dims->y || offJ >= exp_image_dims->w) 
+  int offI = (i + *offset_i);
+  int offJ = (j + *offset_j);
+  if (offI < exp_image_dims->x || offI >= exp_image_dims->z || offJ < exp_image_dims->y || offJ >= exp_image_dims->w)
     return;
   int nIdx = offJ*get_global_size(0)+offI;
   float4 ray_o = ray_origins[ nIdx ];
@@ -187,10 +187,10 @@ two_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
   aux_args.linfo        = linfo;
   aux_args.alpha        = alpha_array;
   aux_args.mog          = mixture_array;
-  aux_args.seg_len      = aux_seg_len; 
-  aux_args.mean_obs     = aux_mean_obs; 
-  
-  aux_args.ray_vis      = &vis; 
+  aux_args.seg_len      = aux_seg_len;
+  aux_args.mean_obs     = aux_mean_obs;
+
+  aux_args.ray_vis      = &vis;
   aux_args.intensity    = intensity;
   aux_args.intensity_exp= intensity_exp;
   aux_args.change       = &change;
@@ -207,7 +207,7 @@ two_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
 
             //RENDER SPECIFIC ARGS
             aux_args);
-            
+
   //expected image gets rendered
   change_image[imIndex[llid]]     = change;  //expected_int;
   change_exp_image[imIndex[llid]] = change_exp; //expected_int;
@@ -220,11 +220,11 @@ void step_cell_change(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
   //d-normalize the ray seg len
   d *= aux_args.linfo->block_len;
-  
+
   //get cell cumulative length and make sure it isn't 0
   int len_int = aux_args.seg_len[data_ptr];
   float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
-        
+
   int obs_int = aux_args.mean_obs[data_ptr];
   float mean_obs = convert_float(obs_int) / convert_float(len_int);
 
@@ -258,13 +258,13 @@ void step_cell_change(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 typedef struct
 {
   __constant  RenderSceneInfo* linfo;
-  
+
   //cell data
   __global float*       alpha;
   __global MOG_TYPE *   mog;
   __global int*         seg_len;
   __global int*         mean_obs;
-  
+
   //ray data
 float*       change;
 float*       ray_vis;
@@ -275,7 +275,7 @@ void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneIn
               global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
 
 //------------------------------------------------------------------------------
-// 1x1 change detection (simple, single ray independent CD). 
+// 1x1 change detection (simple, single ray independent CD).
 //------------------------------------------------------------------------------
 __kernel
 void
@@ -323,10 +323,10 @@ aux_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
   aux_args.linfo        = linfo;
   aux_args.alpha        = alpha_array;
   aux_args.mog          = mixture_array;
-  aux_args.seg_len      = aux_seg_len; 
-  aux_args.mean_obs     = aux_mean_obs; 
-  
-  aux_args.ray_vis      = &vis; 
+  aux_args.seg_len      = aux_seg_len;
+  aux_args.mean_obs     = aux_mean_obs;
+
+  aux_args.ray_vis      = &vis;
   aux_args.change       = &change;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
@@ -340,7 +340,7 @@ aux_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
 
             //RENDER SPECIFIC ARGS
             aux_args);
-            
+
   //expected image gets rendered
   change_image[imIndex[llid]]     = change;  //expected_int;
   vis_image[imIndex[llid]]        = vis;
@@ -352,11 +352,11 @@ void step_cell_change2(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
   //d-normalize the ray seg len
   d *= aux_args.linfo->block_len;
-  
+
   //get cell cumulative length and make sure it isn't 0
   int len_int = aux_args.seg_len[data_ptr];
   float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
-        
+
   int obs_int = aux_args.mean_obs[data_ptr];
   float mean_obs = convert_float(obs_int) / convert_float(len_int);
 
@@ -377,16 +377,17 @@ void step_cell_change2(AuxArgs aux_args, int data_ptr, uchar llid, float d)
   (*aux_args.ray_vis) *= (1.0f-prob);
   (*aux_args.change) += prob_den*omega;
 }
+
 // Change detection step cell functor
 void step_cell_change2_maxdensity(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
   //d-normalize the ray seg len
   d *= aux_args.linfo->block_len;
-  
+
   //get cell cumulative length and make sure it isn't 0
   int len_int = aux_args.seg_len[data_ptr];
   float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
-        
+
   int obs_int = aux_args.mean_obs[data_ptr];
   float mean_obs = convert_float(obs_int) / convert_float(len_int);
 
@@ -400,8 +401,8 @@ void step_cell_change2_maxdensity(AuxArgs aux_args, int data_ptr, uchar llid, fl
                                               data.s3,data.s4,data.s5,
                                               data.s6,data.s7,1-data.s2-data.s5);
 
-  
+
   if ( (*aux_args.change)  < prob_den )
-		 (*aux_args.change)  = prob_den;
+    (*aux_args.change)  = prob_den;
 }
 #endif
