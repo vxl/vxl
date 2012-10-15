@@ -1,12 +1,11 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_height_map_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for rendering height map of a scene.
 //
 // \author Vishal Jain
 // \date Mar 30, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -43,9 +42,10 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    options += " -D RENDER_HEIGHT_MAP ";
-    options +=  "-D DETERMINISTIC ";
-    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,aux_args.mog,data_ptr,d*linfo->block_len,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.expint)";//step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d,aux_args.vis,aux_args.expint)";
+    options += " -D RENDER_HEIGHT_MAP";
+    options += " -D DETERMINISTIC";
+    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,aux_args.mog,data_ptr,d*linfo->block_len,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.expint)";
+    //step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d,aux_args.vis,aux_args.expint)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -124,22 +124,22 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) {
       mog_type = apps[i];
       foundDataType = true;
-      options=" -D MOG_TYPE_8 ";
+      options=" -D MOG_TYPE_8";
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ) {
       mog_type = apps[i];
       foundDataType = true;
-      options=" -D MOG_TYPE_16 ";
+      options=" -D MOG_TYPE_16";
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )  {
       mog_type = apps[i];
       foundDataType = true;
-      options=" -D MOG_TYPE_8 ";
+      options=" -D MOG_TYPE_8";
     }
-	else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )  {
+    else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )  {
       mog_type = apps[i]+"_cubic_model";
       foundDataType = true;
-      options=" -D FLOAT8 ";
+      options=" -D FLOAT8";
     }
   }
   if (!foundDataType) {
@@ -260,8 +260,8 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     vul_timer transfer;
     bocl_mem* blk           = opencl_cache->get_block(*id);
     bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-   // bocl_mem* mog           = opencl_cache->get_data(*id, mog_type);
-	bocl_mem* mog       = opencl_cache->get_data(*id,mog_type,alpha->num_bytes()*8,true);
+    // bocl_mem* mog        = opencl_cache->get_data(*id, mog_type);
+    bocl_mem* mog           = opencl_cache->get_data(*id,mog_type,alpha->num_bytes()*8,true);
     bocl_mem * blk_info     = opencl_cache->loaded_block_info();
     transfer_time          += (float) transfer.all();
 
@@ -300,17 +300,19 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   }
   // normalize
   {
-    //bocl_kernel* normalize_kern= kernels[identifier][1];
-    //normalize_kern->set_arg( exp_image.ptr() );
-    //normalize_kern->set_arg( var_image.ptr() );
-    //normalize_kern->set_arg( prob_image.ptr() );
-    //normalize_kern->set_arg( exp_img_dim.ptr());
-    //normalize_kern->execute( queue, 2, local_threads, gThreads);
-    //clFinish(queue);
-    //gpu_time += normalize_kern->exec_time();
+#if 0
+    bocl_kernel* normalize_kern= kernels[identifier][1];
+    normalize_kern->set_arg( exp_image.ptr() );
+    normalize_kern->set_arg( var_image.ptr() );
+    normalize_kern->set_arg( prob_image.ptr() );
+    normalize_kern->set_arg( exp_img_dim.ptr());
+    normalize_kern->execute( queue, 2, local_threads, gThreads);
+    clFinish(queue);
+    gpu_time += normalize_kern->exec_time();
 
-    ////clear render kernel args so it can reset em on next execution
-    //normalize_kern->clear_args();
+    //clear render kernel args so it can reset em on next execution
+    normalize_kern->clear_args();
+#endif
     exp_image->read_to_buffer(queue);
     var_image->read_to_buffer(queue);
     vis_image->read_to_buffer(queue);
@@ -330,12 +332,12 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   for (unsigned c=0;c<nj;++c)
     for (unsigned r=0;r<ni;++r)
     {
-        (*exp_img_out)(r,c) = z-buff[c*cl_ni+r];
-        (*exp_var_out)(r,c) = var_buff[c*cl_ni+r];
-        (*xcoord_img)(r,c)  = r*xint+scene_origin[0];
-        (*ycoord_img)(r,c)  = c*yint+scene_origin[1];
-        (*prob_img)(r,c)    = prob_buff[c*cl_ni+r];
-        (*app_img)(r,c)     = app_buff[c*cl_ni+r];
+      (*exp_img_out)(r,c) = z-buff[c*cl_ni+r];
+      (*exp_var_out)(r,c) = var_buff[c*cl_ni+r];
+      (*xcoord_img)(r,c)  = r*xint+scene_origin[0];
+      (*ycoord_img)(r,c)  = c*yint+scene_origin[1];
+      (*prob_img)(r,c)    = prob_buff[c*cl_ni+r];
+      (*app_img)(r,c)     = app_buff[c*cl_ni+r];
     }
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);

@@ -182,14 +182,14 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
     global_threads[0]=cl_ni;
     global_threads[1]=cl_nj;
-	
-	//set generic cam
-	cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-	cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-	bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_origins,   "ray_origins buffer");
-	bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
 
-	boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+    //set generic cam
+    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_origins,   "ray_origins buffer");
+    bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
+
+    boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
     //Visibility, Preinf, Norm, and input image buffers
     float* vis_buff = new float[cl_ni*cl_nj];
@@ -263,9 +263,8 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     vcl_vector<boxm2_block_id>::iterator id;
     for (unsigned int i=0; i<kernels[identifier].size(); ++i)
     {
-       
-		vcl_cout<<"Pass : "<<i<<vcl_endl;
-		if (i==UPDATE_SEGLEN)
+        vcl_cout<<"Pass : "<<i<<vcl_endl;
+        if (i==UPDATE_SEGLEN)
         {
             for (id = vis_order.begin(); id != vis_order.end(); ++id)
             {
@@ -368,7 +367,6 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 //clear render kernel args so it can reset em on next execution
                 kern->clear_args();
             }
-
         }
         else if ( i == UPDATE_PROC ) {
             // do nothing
@@ -504,7 +502,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     delete [] norm_buff;
     delete [] input_buff;
     delete [] ray_origins;
-    delete [] ray_directions;	
+    delete [] ray_directions;
     opencl_cache->unref_mem(in_image.ptr());
     opencl_cache->unref_mem(vis_image.ptr());
     opencl_cache->unref_mem(norm_image.ptr());
