@@ -159,24 +159,24 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   //create color buffer
   float* buff = new float[4*cl_ni*cl_nj];
   vcl_fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
-  bocl_mem_sptr exp_image = new bocl_mem(device->context(), buff, cl_ni*cl_nj*sizeof(cl_float4), "exp color image (float4) buffer");
+  bocl_mem_sptr exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4),buff,  "exp color image (float4) buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-  bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(cl_float), "vis image (single float) buffer");
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem( cl_ni*cl_nj*sizeof(cl_float), vis_buff, "vis image (single float) buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
       float* max_omega_buff = new float[cl_ni*cl_nj];
   vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
-  bocl_mem_sptr max_omega_image = new bocl_mem(device->context(), max_omega_buff, cl_ni*cl_nj*sizeof(float), "vis image (single float) buffer");
+  bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),  max_omega_buff, "vis image (single float) buffer");
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //image dimensions
   int img_dim_buff[4];
   img_dim_buff[0] = 0;   img_dim_buff[2] = ni;
   img_dim_buff[1] = 0;   img_dim_buff[3] = nj;
-  bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
+  bocl_mem_sptr exp_img_dim=opencl_cache->alloc_mem(sizeof(int)*4,img_dim_buff,  "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // run expected image function
@@ -201,6 +201,7 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   // read out expected image
   exp_image->read_to_buffer(queue);
   vis_image->read_to_buffer(queue);
+  clFinish(queue);
   vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(ni,nj);
   int numFloats = 4;
   int count = 0;
@@ -217,9 +218,18 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
       (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];
+
+  opencl_cache->unref_mem(exp_image.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(exp_img_dim.ptr());
+  opencl_cache->unref_mem(max_omega_image.ptr());
+
   delete [] buff;
   delete [] vis_buff;
+  delete [] max_omega_buff;
   clReleaseCommandQueue(queue);
+
+
   argIdx=0;
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(argIdx++, exp_img_out);

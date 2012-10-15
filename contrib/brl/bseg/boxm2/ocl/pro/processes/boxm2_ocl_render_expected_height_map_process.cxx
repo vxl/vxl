@@ -136,6 +136,11 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
     }
+	else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )  {
+      mog_type = apps[i]+"_cubic_model";
+      foundDataType = true;
+      options=" -D FLOAT8 ";
+    }
   }
   if (!foundDataType) {
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
@@ -255,7 +260,8 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     vul_timer transfer;
     bocl_mem* blk           = opencl_cache->get_block(*id);
     bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-    bocl_mem* mog           = opencl_cache->get_data(*id, mog_type);
+   // bocl_mem* mog           = opencl_cache->get_data(*id, mog_type);
+	bocl_mem* mog       = opencl_cache->get_data(*id,mog_type,alpha->num_bytes()*8,true);
     bocl_mem * blk_info     = opencl_cache->loaded_block_info();
     transfer_time          += (float) transfer.all();
 
@@ -294,17 +300,17 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   }
   // normalize
   {
-    bocl_kernel* normalize_kern= kernels[identifier][1];
-    normalize_kern->set_arg( exp_image.ptr() );
-    normalize_kern->set_arg( var_image.ptr() );
-    normalize_kern->set_arg( prob_image.ptr() );
-    normalize_kern->set_arg( exp_img_dim.ptr());
-    normalize_kern->execute( queue, 2, local_threads, gThreads);
-    clFinish(queue);
-    gpu_time += normalize_kern->exec_time();
+    //bocl_kernel* normalize_kern= kernels[identifier][1];
+    //normalize_kern->set_arg( exp_image.ptr() );
+    //normalize_kern->set_arg( var_image.ptr() );
+    //normalize_kern->set_arg( prob_image.ptr() );
+    //normalize_kern->set_arg( exp_img_dim.ptr());
+    //normalize_kern->execute( queue, 2, local_threads, gThreads);
+    //clFinish(queue);
+    //gpu_time += normalize_kern->exec_time();
 
-    //clear render kernel args so it can reset em on next execution
-    normalize_kern->clear_args();
+    ////clear render kernel args so it can reset em on next execution
+    //normalize_kern->clear_args();
     exp_image->read_to_buffer(queue);
     var_image->read_to_buffer(queue);
     vis_image->read_to_buffer(queue);
