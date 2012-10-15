@@ -307,7 +307,15 @@ def ingest_height_map(scene, cache,x_img,y_img,z_img, zero_out_alpha=True,device
     return ; 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type;
-    
+
+def ingest_mesh(scene,cache,plyfile,label_id,category):
+	boxm2_batch.init_process("boxm2IngestConvexMeshProcess");
+	boxm2_batch.set_input_from_db(0,scene);
+	boxm2_batch.set_input_from_db(1,cache);
+	boxm2_batch.set_input_string(2,plyfile);
+	boxm2_batch.set_input_int(3,label_id);
+	boxm2_batch.set_input_string(4,category);
+	boxm2_batch.run_process();      
 def ingest_height_map_space(scene, cache,x_img,y_img,z_img, crust_thickness,device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_adaptor, render height map cpp process not implemented";
@@ -357,7 +365,7 @@ def refine_and_ingest_with_height_img(scene, x_img, y_img, z_img, crust_thicknes
   scene.write_cache();
     
 # Ingest a Buckeye-Style DEM, i.e. first return and last return image pair
-def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoid_height, device=None) :
+def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoid_height,geocam, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_adaptor, ingest_buckeye cpp process not implemented"; 
 
@@ -369,6 +377,7 @@ def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoi
     boxm2_batch.set_input_string(3,first_return_fname);
     boxm2_batch.set_input_string(4,last_return_fname);
     boxm2_batch.set_input_float(5,geoid_height);
+    boxm2_batch.set_input_from_db(6,geocam);
     boxm2_batch.run_process();
     return ; 
   else : 
@@ -459,12 +468,12 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.set_input_from_db(3,cam);
     boxm2_batch.set_input_unsigned(4,ni);
     boxm2_batch.set_input_unsigned(5,nj);
-    boxm2_batch.run_process();
+    status = boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
     (id,type) = boxm2_batch.commit_output(1);
     vis_image = dbvalue(id,type);
-    return exp_image,vis_image;
+    return exp_image,vis_image,status;
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
  
@@ -554,8 +563,21 @@ def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, 
     return cd_img; 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type;
-    
 
+def change_detect2(scene, cache, cam, img, maxmode = False,  device=None) : 
+    print "boxm2_batch GPU change detection"; 
+    boxm2_batch.init_process("boxm2OclChangeDetectionProcess2"); 
+    boxm2_batch.set_input_from_db(0,device); 
+    boxm2_batch.set_input_from_db(1,scene); 
+    boxm2_batch.set_input_from_db(2,cache); 
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_from_db(4,img); 
+    boxm2_batch.set_input_bool(5,maxmode); 
+    boxm2_batch.run_process(); 
+    (id,type) = boxm2_batch.commit_output(0);
+    cd_img = dbvalue(id,type);
+    return cd_img; 
+ 
 ####################################################################
 # Visualize Change Wrapper
 ####################################################################
@@ -1228,4 +1250,80 @@ def compute_derivatives_process(scene, cache, prob_threshold, normal_threshold, 
   boxm2_batch.set_input_int(8, j)
   boxm2_batch.set_input_int(9, k)
   boxm2_batch.run_process();
+def compute_probabiltiy_of_image(device,scene,cache,cam,img):
+  boxm2_batch.init_process("boxm2OclProbabilityOfImageProcess");
+  boxm2_batch.set_input_from_db(0,device);
+  boxm2_batch.set_input_from_db(1,scene);
+  boxm2_batch.set_input_from_db(2,cache);
+  boxm2_batch.set_input_from_db(3,cam);
+  boxm2_batch.set_input_from_db(4,img);
+  result = boxm2_batch.run_process()
+  outimg = -1;
+  if result:
+    (id,type) = boxm2_batch.commit_output(0)
+    outimg = dbvalue(id,type)
+  return outimg;
+def cubic_compute_probabiltiy_of_image(device,scene,cache,cam,img,model_ident,img_ident):
+  boxm2_batch.init_process("boxm2OclProbabilityOfImageWcubicProcess");
+  boxm2_batch.set_input_from_db(0,device);
+  boxm2_batch.set_input_from_db(1,scene);
+  boxm2_batch.set_input_from_db(2,cache);
+  boxm2_batch.set_input_from_db(3,cam);
+  boxm2_batch.set_input_from_db(4,img);
+  boxm2_batch.set_input_string(5,model_ident);
+  boxm2_batch.set_input_string(6,img_ident);
+  result = boxm2_batch.run_process()
+  outimg = -1;
+  if result:
+    (id,type) = boxm2_batch.commit_output(0)
+    outimg = dbvalue(id,type)
+  return outimg;
+
+def compute_visibility(device,scene,cache,camsfile,depthdir,x,y,z,outputdir,scale):
+  
+  boxm2_batch.init_process("boxm2OclComputeVisibilityProcess");
+  boxm2_batch.set_input_from_db(0,device);
+  boxm2_batch.set_input_from_db(1,scene);
+  boxm2_batch.set_input_from_db(2,cache);
+  boxm2_batch.set_input_string(3,camsfile);
+  boxm2_batch.set_input_string(4,depthdir);
+  boxm2_batch.set_input_float(5,x);
+  boxm2_batch.set_input_float(6,y);
+  boxm2_batch.set_input_float(7,z);
+  boxm2_batch.set_input_string(8,outputdir);
+  boxm2_batch.set_input_int(9,scale);
+  result = boxm2_batch.run_process()
+  return result;
+  
+def compute_los_visibility(scene,cache,x0,y0,z0,x1,y1,z1):
+  
+  boxm2_batch.init_process("boxm2CppLosVisibilityProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cache);
+  boxm2_batch.set_input_float(2,x0);
+  boxm2_batch.set_input_float(3,y0);
+  boxm2_batch.set_input_float(4,z0);
+  boxm2_batch.set_input_float(5,x1);
+  boxm2_batch.set_input_float(6,y1);
+  boxm2_batch.set_input_float(7,z1);
+  result = boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0)
+  vis = boxm2_batch.get_output_float(id)
+  return vis;
+  
+def get_scene_from_box_cams(camsdir,x0,y0,z0,x1,y1,z1,modeldir):
+  
+  boxm2_batch.init_process("boxm2SceneFromBoxCamsProcess");
+  boxm2_batch.set_input_string(0,camsdir);
+  boxm2_batch.set_input_float(1,x0);
+  boxm2_batch.set_input_float(2,y0);
+  boxm2_batch.set_input_float(3,z0);
+  boxm2_batch.set_input_float(4,x1);
+  boxm2_batch.set_input_float(5,y1);
+  boxm2_batch.set_input_float(6,z1);
+  boxm2_batch.set_input_string(7,modeldir);
+
+  result = boxm2_batch.run_process();
+
+  return result;
 
