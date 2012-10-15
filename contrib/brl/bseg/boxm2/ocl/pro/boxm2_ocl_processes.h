@@ -25,6 +25,7 @@ DECLARE_FUNC_CONS(boxm2_ocl_render_expected_color_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_color_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_color_process);
 DECLARE_FUNC_CONS(boxm2_ocl_change_detection_process);
+DECLARE_FUNC_CONS(boxm2_ocl_change_detection_process2);
 DECLARE_FUNC_CONS(boxm2_ocl_visualize_change_process);
 DECLARE_FUNC_CONS(boxm2_ocl_probability_of_image_process);
 DECLARE_FUNC_CONS(boxm2_ocl_probability_of_image_gl_process);
