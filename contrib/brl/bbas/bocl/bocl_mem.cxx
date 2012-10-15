@@ -71,11 +71,13 @@ bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_for
                                    vcl_size_t width, vcl_size_t height)
 {
   cl_int status = MEM_FAILURE;
-/* NOTE: clCreateImage2D has been replaced with clCreateImage as of v1.2
- * Should probably have a switch here based on OpenCL version present on system
- * - D. Crispell 10/2012
- */
-#if 1 // use this call for versions prior to v1.2 
+  //
+  // NOTE: clCreateImage2D has been replaced with clCreateImage as of v1.2
+  // Should probably have a switch here based on OpenCL version present on system
+  // - D. Crispell 10/2012
+  //
+#define OPENCL_IS_PRE_V12 1
+#if OPENCL_IS_PRE_V12 // use this call for versions prior to v1.2
   buffer_ = clCreateImage2D(this->context_, flags, format, width, height,
                             this->num_bytes_, this->cpu_buf_, &status);
 #else // use this call for version v1.2 and later
@@ -112,13 +114,12 @@ bool bocl_mem::release_memory()
 }
 
 
-
 //: helper method to initialize gpu buffer with a constant value
 bool bocl_mem::init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_command_queue& cmd_queue)
 {
   // sanity check on sizes
   if (this->num_bytes_ % value_size != 0) {
-    vcl_cerr << "ERROR: bocl_mem::init_gpu_buffer(): value_size does not divide evenly into buffer size." <<vcl_endl;
+    vcl_cerr << "ERROR: bocl_mem::init_gpu_buffer(): value_size does not divide evenly into buffer size.\n";
     return MEM_FAILURE;
   }
   unsigned char* init_buff = new unsigned char[this->num_bytes_];
@@ -153,7 +154,7 @@ bool bocl_mem::init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_c
 //: write to command queue
 bool bocl_mem::write_to_buffer(const cl_command_queue& cmd_queue, bool blocking)
 {
-  if (!is_gl_) 
+  if (!is_gl_)
     return this->write_to_gpu_mem(cmd_queue, this->cpu_buf_, this->num_bytes_, blocking);
   return true;
 }
@@ -241,11 +242,12 @@ void* bocl_mem::enqueue_map(const cl_command_queue& cmd_queue)
 {
   int status = MEM_FAILURE;
   void* ptr = clEnqueueMapBuffer(cmd_queue,this->buffer_,CL_TRUE,CL_MAP_READ,
-                            0,this->num_bytes_,0,NULL,&ceEvent_,&status); 
+                                 0,this->num_bytes_,0,NULL,&ceEvent_,&status);
   if (!check_val(status,MEM_FAILURE,"clEnqueueMapBuffer failed: " + this->id_ + error_to_string(status)))
     return 0;
   return ptr;
 }
+
 bool bocl_mem::enqueue_unmap(const cl_command_queue& cmd_queue, void* mapped_ptr)
 {
   int status = MEM_FAILURE;
@@ -278,24 +280,24 @@ bocl_kernel* bocl_mem::get_set_kernel(cl_device_id dev_id, cl_context context, v
   vcl_string opts = " -D TYPE=" + type;
 
   // check to see if this device has compiled kernels already
-  vcl_stringstream ss; ss<<opts<<"_"<<dev_id<<"_"<<context;
+  vcl_stringstream ss; ss<<opts<<'_'<<dev_id<<'_'<<context;
   vcl_string identifier = ss.str();
-  if(set_kernels_.find(identifier) != set_kernels_.end())
+  if (set_kernels_.find(identifier) != set_kernels_.end())
     return set_kernels_[identifier];
 
   //if not, compile and cache them
   vcl_cout<<"compiling set kernel for device_id: "<<dev_id<<vcl_endl;
-  
+
   // OpenCL source code
-  vcl_string oclSrc = 
-       "__kernel void set(__global TYPE* buffer," 
+  vcl_string oclSrc =
+       "__kernel void set(__global TYPE* buffer,"
        "                  __global TYPE* var,"
        "                  __global uint* len){"
        "      uint n = get_global_id(0);"
-       "      if(n < *len)"
+       "      if (n < *len)"
        "        buffer[n] = *var;"
        "}";
- 
+
   //compilation options - default opts should be " -D TYPE float "
   bocl_kernel* setKernel = new bocl_kernel();
   setKernel->create_kernel(context, &dev_id, oclSrc, "set", opts, "set "+type+" kernel");
