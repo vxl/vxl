@@ -5,6 +5,7 @@ doxygen_add_package(contrib/brl/bseg/boxm2 "BOXM2 Library")
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 
 SET(boxm2_sources
     boxm2_block.h                 boxm2_block.cxx
@@ -13,7 +14,8 @@ SET(boxm2_sources
     boxm2_data.h                  boxm2_data.txx
     boxm2_data_traits.h
     boxm2_util.h                  boxm2_util.cxx
-	 boxm2_normal_albedo_array.h   boxm2_normal_albedo_array.cxx
+    boxm2_normal_albedo_array.h   boxm2_normal_albedo_array.cxx
+    boxm2_feature_vector.h        boxm2_feature_vector.cxx
    )
 
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
@@ -33,7 +35,7 @@ ENDIF(EXPAT_FOUND)
 AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
 ADD_LIBRARY(boxm2  ${boxm2_sources})
-TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boct brdb bsta vsph vbl_io vpgl vpgl_pro vpgl_io vpgl_xio vpgl_algo vgl_xio vgl vnl_algo vnl vbl vil vul vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boct brdb bsta vsph vbl_io vpgl vpgl_pro vpgl_io vpgl_xio vpgl_algo vgl_xio vgl vnl_algo vnl vbl vil vul vsl vcl mcal)
 IF(EXPAT_FOUND)
 TARGET_LINK_LIBRARIES(boxm2 expatpp)
 ENDIF(EXPAT_FOUND)
@@ -64,6 +66,9 @@ subdirs(view)
 
 #util
 subdirs(util)
+
+# volumetric matching Library
+subdirs(volm)
 
 #tests
 IF( BUILD_TESTING )
