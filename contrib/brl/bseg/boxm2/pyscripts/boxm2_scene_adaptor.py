@@ -33,6 +33,9 @@ class boxm2_scene_adaptor(object):
     if device_string[0:3]=="gpu" :
       self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
       self.active_cache = self.opencl_cache;
+    elif device_string[0:3]=="cpu" :
+      self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
+      self.active_cache = self.opencl_cache;
     elif device_string[0:3]=="cpp" :
       self.scene, self.cpu_cache = load_cpp(scene_str);
       self.active_cache = self.cpu_cache;
@@ -222,7 +225,12 @@ class boxm2_scene_adaptor(object):
 	dev = self.device;
 	outimg = compute_probabiltiy_of_image(self.device,self.scene, self.opencl_cache, cam, image);
 	return outimg;
-  # detect change wrapper,
+  def cubic_probabiltiy_of(self, cam, image,model_ident,img_ident):
+	cache = self.active_cache;
+	dev = self.device;
+	outimg = cubic_compute_probabiltiy_of_image(self.device,self.scene, self.opencl_cache, cam, image, model_ident,img_ident);
+	return outimg;
+	# detect change wrapper,
   def change_detect(self, cam, img, exp_img, n=1, raybelief="", max_mode=False, rgb=False, device_string="") :
     cache = self.active_cache;
     dev = self.device;
