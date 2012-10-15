@@ -66,6 +66,44 @@ def seek_frame(rawStream, frame) :
   (id, type) = boxm2_batch.commit_output(1);
   time = boxm2_batch.get_output_unsigned(id);
   return img, time
+def arf_stream(file_path) : 
+  boxm2_batch.init_process("bilCreateArfImageIstreamProcess")
+  boxm2_batch.set_input_string(0,file_path);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  stream = dbvalue(id, type);
+  (id, type) = boxm2_batch.commit_output(1); 
+  numImgs = boxm2_batch.get_output_int(id);
+  return stream, numImgs 
+def arf_next_frame(rawStream) :
+  boxm2_batch.init_process("bilArfReadFrameProcess")
+  boxm2_batch.set_input_from_db(0,rawStream);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  img = dbvalue(id,type);
+  (id, type) = boxm2_batch.commit_output(1);
+  time = boxm2_batch.get_output_unsigned(id);
+  return img, time
+  
+def arf_seek_frame(rawStream, frame) :
+  boxm2_batch.init_process("bilArfSeekFrameProcess")
+  boxm2_batch.set_input_from_db(0,rawStream);
+  boxm2_batch.set_input_unsigned(1,frame);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  img = dbvalue(id,type);
+  (id, type) = boxm2_batch.commit_output(1);
+  time = boxm2_batch.get_output_unsigned(id);
+  return img, time  
+  
+def read_CLIF07(indir,outdir,camnum,datatype="CLIF06") :
+  boxm2_batch.init_process("bilReadCLIF07DataProcess")
+  boxm2_batch.set_input_string(0,indir);
+  boxm2_batch.set_input_string(1,outdir);
+  boxm2_batch.set_input_int(2,camnum);
+  boxm2_batch.set_input_string(3,datatype);
+  boxm2_batch.run_process();
+
 def debayer(img):
   boxm2_batch.init_process("vilDebayerBGGRToRGBProcess")
   boxm2_batch.set_input_from_db(0,img);
@@ -313,3 +351,12 @@ def prepare_mask_image_from_vis_image(vis_image, ni2, nj2, threshold):
   exp_img_mask = stretch_image(exp_img_mask_f, 0, 1, 'byte');
   return exp_img_mask, img_1, vis_image_neg, ratio
   
+
+  
+def fill_holes(img):
+	boxm2_batch.init_process("vilFillHolesInRegionsProcess")
+	boxm2_batch.set_input_from_db(0,img)
+	boxm2_batch.run_process()
+	(id,type) = boxm2_batch.commit_output(0)
+	outimg = dbvalue(id, type);
+	return outimg
