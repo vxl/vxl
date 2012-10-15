@@ -46,11 +46,7 @@ def export_stack(scene,cache,outdir):
 	boxm2_batch.set_input_string(2,outdir);
 	boxm2_batch.run_process();
 
-	boxm2_batch.init_process("boxm2ExportStackImagesProcess");
-	boxm2_batch.set_input_from_db(0,scene);
-	boxm2_batch.set_input_from_db(1,cache);
-	boxm2_batch.set_input_string(2,outdir);
-	boxm2_batch.run_process();
+
 def paint_mesh(scene,cache,in_file,out_file):
 	boxm2_batch.init_process("boxm2PaintMeshProcess");
 	boxm2_batch.set_input_from_db(0,scene);
