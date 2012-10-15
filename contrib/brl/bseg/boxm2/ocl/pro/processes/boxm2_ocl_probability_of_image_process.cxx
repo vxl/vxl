@@ -101,7 +101,7 @@ bool boxm2_ocl_probability_of_image_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
-  
+
   brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
   pro.set_input(5, idx);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -129,7 +129,7 @@ bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
   vcl_string data_identifier =pro.get_input<vcl_string>(i++);
   unsigned ni=img->ni();
   unsigned nj=img->nj();
-  bool foundDataType = false, foundNumObsType = false;
+  bool foundDataType = false;
   vcl_string data_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
@@ -151,15 +151,14 @@ bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
       foundDataType = true;
       options=" -D FLOAT8 ";
     }
-
   }
   if (!foundDataType) {
     vcl_cout<<"boxm2_ocl_probability_of_image_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
 
-  if(data_identifier!="")
-      data_type += data_identifier;
+  if (data_identifier!="")
+    data_type += data_identifier;
 
 //: create a command queue.
   int status=0;
