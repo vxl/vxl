@@ -13,8 +13,17 @@
 // \endverbatim
 // 
 
+#include <vbl/vbl_array_1d.h>
+
+struct index_value {
+  char vis_;   // the highest bit is the visibility, visible or not, other bits will be used to code orientation if needed
+  char prob_;
+};
+
 class boxm2_volm_wr3db_index
 {
+  public:
+   vbl_array_1d<index_value> values_;
 };
 
 #endif  // boxm2_volm_wr3db_index_h_
