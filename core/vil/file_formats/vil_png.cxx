@@ -610,6 +610,15 @@ bool vil_png_image::put_view(const vil_image_view_base &view,
         for (unsigned x=0; x < view.ni(); ++x)
           *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*2]) = view2(x,y);
     }
+    else if (nplanes() == 2)
+    {
+      for (unsigned y = 0; y < view.nj(); ++y)
+        for (unsigned x=0; x < view.ni(); ++x)
+        {
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*4]) = view2(x,y,0);
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*4+2]) = view2(x,y,1);
+        }
+    }
     else if (nplanes() == 3)
     {
       for (unsigned y = 0; y < view.nj(); ++y)
