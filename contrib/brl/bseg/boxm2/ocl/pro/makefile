@@ -63,6 +63,7 @@ SOURCES += processes/boxm2_ocl_batch_synoptic_phongs_process.cxx
 SOURCES += processes/boxm2_ocl_update_alpha_wphongs_process.cxx
 SOURCES += processes/boxm2_ocl_compute_visibility_process.cxx
 SOURCES += processes/boxm2_ocl_probability_of_image_wcubic_process.cxx
+SOURCES += processes/boxm2_ocl_change_detection_process2.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

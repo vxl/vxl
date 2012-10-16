@@ -39,6 +39,7 @@ SOURCES += processes/boxm2_cpp_batch_compute_normal_albedo_process.cxx
 SOURCES += processes/boxm2_cpp_points_to_volume_process.cxx
 SOURCES += processes/boxm2_export_stack_images_process.cxx
 SOURCES += processes/boxm2_cpp_create_mog_image_process.cxx
+SOURCES += processes/boxm2_cpp_los_visibility_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

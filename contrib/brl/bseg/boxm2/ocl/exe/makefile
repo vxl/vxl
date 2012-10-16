@@ -4,6 +4,7 @@ MINI_PROG_SOURCES += boxm2_render_hemisphere.cxx
 MINI_PROG_SOURCES += boxm2_export_scene.cxx
 MINI_PROG_SOURCES += boxm2_ocl_render_view.cxx
 MINI_PROG_SOURCES += boxm2_ocl_refine_scene.cxx
+MINI_PROG_SOURCES += boxm2_estimate_uncertain_viewpoints.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
