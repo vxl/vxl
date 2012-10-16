@@ -287,6 +287,9 @@ SOURCE=.\processes/boxm2_ocl_kernel_vector_filter_process.h
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_kernel_filter_process.h
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_change_detection_process2.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -197,6 +197,9 @@ SOURCE=.\processes/boxm2_export_stack_images_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_cpp_create_mog_image_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_los_visibility_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

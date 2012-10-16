@@ -119,6 +119,9 @@ SOURCE=.\boxm2_normal_albedo_array.cxx
 SOURCE=.\boxm2_bounding_box_parser.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_feature_vector.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
 # Begin Source File
