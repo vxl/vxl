@@ -44,7 +44,9 @@ int main(int argc,  char** argv)
 	vcl_vector<volm_tile> tiles = volm_tile::generate_p1_tiles();
 	for (unsigned i = 0; i < tiles.size(); i++) {
 	  vil_image_view<unsigned int> out(3601, 3601);
-	  out.fill(volm_io::UNEVALUATED);
+	  
+	  /// RUN THE MATCHING for each location here
+	  //out.fill(volm_io::UNEVALUATED);
 
 	  vcl_string out_name = out_folder() + "/VolM_" + tiles[i].get_string() + "_S1x1.tif";
 	  if (save_images()) {

@@ -13,17 +13,25 @@
 // \endverbatim
 // 
 
-#include <vbl/vbl_array_1d.h>
+#include <vbl/vbl_ref_count.h>
+#include <bbas/volm/volm_spherical_container.h>
+#include <bbas/volm/volm_spherical_container_sptr.h>
 
-struct index_value {
-  char vis_;   // the highest bit is the visibility, visible or not, other bits will be used to code orientation if needed
-  char prob_;
-};
-
-class boxm2_volm_wr3db_index
+class boxm2_volm_wr3db_index : public vbl_ref_count
 {
   public:
-   vbl_array_1d<index_value> values_;
+    boxm2_volm_wr3db_index(volm_spherical_container_sptr cont, bool only_vis) : 
+      cont_(cont), size_((unsigned int)cont->get_voxels().size()), only_vis_(only_vis), vis_values_(0), prob_values_(0) {}
+    ~boxm2_volm_wr3db_index();
+    
+    void allocate_mem();
+   
+  protected:
+    volm_spherical_container_sptr cont_;
+    unsigned int size_;
+    bool only_vis_;
+    char* vis_values_;
+    char* prob_values_;
 };
 
 #endif  // boxm2_volm_wr3db_index_h_
