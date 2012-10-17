@@ -15,6 +15,7 @@ ENDIF(EXPAT_FOUND)
 
 SET(volm_sources
  volm_io.h  volm_io.cxx
+ volm_tile.h  volm_tile.cxx
  volm_spherical_container.h volm_spherical_container.cxx
  volm_query.h volm_query.cxx
  volm_query_sptr.h

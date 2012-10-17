@@ -14,9 +14,10 @@
 //
 
 #include <vbl/vbl_ref_count.h>
+#include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <volm/volm_io.h>
+#include <volm/volm_tile.h>
 #include <vil/vil_image_view.h>
 
 //: a set of 3d points in local coordinates of a scene, corresponds to an output tile.
