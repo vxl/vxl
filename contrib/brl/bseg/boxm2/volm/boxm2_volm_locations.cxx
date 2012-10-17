@@ -14,15 +14,16 @@ boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses(vpgl_lvcs_sptr lvcs,
                                                      vcl_vector<vil_image_view<float> >& dems,
                                                      vcl_vector<vpgl_geo_camera*>& cams) : tile_(tile)
 {
-  vcl_cout << "tile ni: " << tile.ni_ << " nj: " << tile.nj_ << vcl_endl;
-  vcl_cout << "dem ni: " << dems[0].ni() << " nj: " << dems[0].nj() << vcl_endl;
+  vcl_cout << "tile lat: " << tile.lat_ << " lon: " << tile.lon_ << vcl_endl
+           << "dem ni: " << dems[0].ni() << " nj: " << dems[0].nj() << vcl_endl;
+#if 0 // unused:
   double arcsecond_i = (interval_i/2.0) * (1.0/3600.0);
   double arcsecond_j = (interval_j/2.0) * (1.0/3600.0);
-  for (unsigned i = 0; i < tile_.ni_; i += interval_i)
-    for (unsigned j = 0; j < tile_.nj_; j += interval_j) {
+#endif
+  for (int i = 0; i < tile_.lon_; i += interval_i)
+    for (int j = 0; j < tile_.lat_; j += interval_j) {
       // fetch the global location from the tile
-      double lon, lat;
-      tile_.img_to_global(i,j,lon,lat);
+      double lon=i, lat=j; // instead of: tile_.img_to_global(i,j,lon,lat);
 
       float elev = 0;
       // find the dem that includes this location to fetch elev
@@ -50,12 +51,14 @@ boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses(vpgl_lvcs_sptr lvcs,
 //: construct the output tile image using the score, score vector's size need to be same as locs_ size
 void boxm2_volm_loc_hypotheses::generate_output_tile(vcl_vector<float>& scores, int uncertainty_size_i, int uncertainty_size_j, float cut_off, vil_image_view<unsigned int>& out)
 {
+  assert(!"boxm2_volm_loc_hypotheses::generate_output_tile() not yet implemented...");
+#if 0
   assert(scores.size() == locs_.size());
   vbl_array_2d<bool> mask;
   vbl_array_2d<float> kernel;
+
   volm_tile::get_uncertainty_region((float)uncertainty_size_i, (float)uncertainty_size_j, cut_off, mask, kernel);
 
-#if 0
   vcl_cout << "kernel_max: " << kernel[kernel.rows()/2][kernel.cols()/2]
            << "uncertainty mask:\n";
   for (unsigned i = 0; i < mask.cols(); i++) {
@@ -68,9 +71,9 @@ void boxm2_volm_loc_hypotheses::generate_output_tile(vcl_vector<float>& scores, 
       vcl_cout << kernel[i][j] << ' ';
     vcl_cout << '\n';
   }
-#endif
 
   for (unsigned i = 0; i < scores.size(); i++)
     volm_tile::mark_uncertainty_region(pixels_[i].first,  pixels_[i].second, scores[i], mask, kernel, out);
+#endif
 }
 
