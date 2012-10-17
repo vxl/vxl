@@ -1744,8 +1744,7 @@ void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
   s *= 256.0f;          // range 0 .. 255
 }
 
-void   brip_vil_float_ops::rgb_to_ihs_tsai(vil_rgb<vxl_byte> const& rgb,
-                                           float& i, float& h, float& s)
+void brip_vil_float_ops::rgb_to_ihs_tsai(vil_rgb<vxl_byte> const& rgb, float& i, float& h, float& s)
 {
   float r=rgb.R();
   float g=rgb.G();
@@ -3832,6 +3831,70 @@ void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
       kernel[j][i]=static_cast<float>(coef[j][i]);
     }
 }
+
+//:
+//  \p theta must be given in degrees.
+//  Scale invariant means that the response is independent of the
+//  \a sigma_y of the unrotated operator, i.e. the direction of the derivative
+void brip_vil_float_ops::gaussian_kernel_mask(float lambda, vbl_array_2d<float>& kernel, vbl_array_2d<bool>& mask, float cutoff_percentage)
+{
+  double s1 = lambda;
+  double s1sq = 1.0/(s1*s1);
+  // determine the size of the array
+  double max_v = brip_vil_rot_gauss(0, 0, s1, s1, 0);
+  double cutoff = max_v*cutoff_percentage; // if 0.01 then 1% tails removed
+  unsigned r = 0;
+  while (brip_vil_rot_gauss(r, 0, s1, s1, 0) >= cutoff)
+    ++r;
+  
+  int ri = static_cast<int>(vcl_fabs((float)r) +0.5);
+  
+  unsigned n = 2*ri +1;
+  mask.resize(n,n);
+  kernel.resize(n, n);
+  double total  = 0.0;
+  for (int ry = -ri; ry<=ri; ++ry)
+    for (int rx = -ri; rx<=ri; ++rx)
+    {
+      double g = brip_vil_rot_gauss(rx, ry, s1, s1, 0);
+      mask[ry+ri][rx+ri] = g>=cutoff;
+      double temp = ry*s1sq;
+      double v = (temp -1)*g;
+      if (g<cutoff) v = 0.0;
+      kernel[ry+ri][rx+ri] = static_cast<float>(vcl_fabs(v));
+    }
+}
+
+//: return a square mask and the coefficient matrix [kernel] for a symmetric gaussian distribution
+void brip_vil_float_ops::gaussian_kernel_square_mask(float lambda, vbl_array_2d<float>& kernel, vbl_array_2d<bool>& mask, float cutoff_percentage)
+{
+  double s1 = lambda;
+  double s1sq = 1.0/(s1*s1);
+  // determine the size of the array
+  double max_v = brip_vil_rot_gauss(0, 0, s1, s1, 0);
+  double cutoff = max_v*cutoff_percentage; // if 0.01 then 1% tails removed
+  unsigned r = 0;
+  while (brip_vil_rot_gauss(r, 0, s1, s1, 0) >= cutoff)
+    ++r;
+  
+  int ri = static_cast<int>(vcl_fabs((float)r) +0.5);
+  
+  unsigned n = 2*ri +1;
+  vbl_array_2d<double> coef(n, n);
+  mask.resize(n,n);
+  kernel.resize(n, n);
+  double total  = 0.0;
+  for (int ry = -ri; ry<=ri; ++ry)
+    for (int rx = -ri; rx<=ri; ++rx)
+    {
+      double g = brip_vil_rot_gauss(rx, ry, s1, s1, 0);
+      mask[ry+ri][rx+ri] = true;
+      double temp = ry*s1sq;
+      kernel[ry+ri][rx+ri] = static_cast<float>(vcl_fabs((temp -1)*g));
+    }  
+}
+
+
 
 // Compute the standard deviation of an operator response
 // given the image intensity standard deviation at each pixel

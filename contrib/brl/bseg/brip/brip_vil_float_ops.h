@@ -148,6 +148,12 @@ class brip_vil_float_ops
                                   vbl_array_2d<bool>& mask,
                                   float cutoff_percentage = 0.01f,
                                   bool scale_invariant = false);
+                                  
+  //: return a spherical mask and the coefficient matrix [kernel] for a symmetric gaussian distribution
+  static void gaussian_kernel_mask(float lambda, vbl_array_2d<float>& kernel, vbl_array_2d<bool>& mask, float cutoff_percentage = 0.01f);
+
+  //: return a square mask and the coefficient matrix [kernel] for a symmetric gaussian distribution
+  static void gaussian_kernel_square_mask(float lambda, vbl_array_2d<float>& kernel, vbl_array_2d<bool>& mask, float cutoff_percentage = 0.01f);
 
   //: Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel
   static  vil_image_view<float>
