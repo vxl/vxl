@@ -6,6 +6,7 @@ VERSION := 1.0
 SOURCES += volm_spherical_container.cxx
 SOURCES += volm_query.cxx
 SOURCES += volm_io.cxx
+SOURCES += volm_tile.cxx
 MANPAGE_SOURCES += volm_query_sptr.h
 
 #######################################

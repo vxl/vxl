@@ -9,6 +9,7 @@ SOURCES += msm_draw_shape_modes.cxx
 SOURCES += msm_build_shape_model.cxx
 SOURCES += msm_plot_aligned_shapes.cxx
 SOURCES += msm_get_shape_params.cxx
+SOURCES += msm_add_dir_to_names.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
