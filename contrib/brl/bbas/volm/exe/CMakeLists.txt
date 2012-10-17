@@ -8,5 +8,3 @@ ADD_EXECUTABLE( volm_dummy_matcher
 
 TARGET_LINK_LIBRARIES( volm_dummy_matcher volm depth_map )
 
-
-

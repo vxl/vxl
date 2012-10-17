@@ -9,6 +9,10 @@
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <bsol/bsol_algs.h>
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
+
+//:
+// \file
 #include <vcl_cassert.h>
 
 bool volm_io::read_camera(vcl_string kml_file, vpgl_perspective_camera<double>& cam, unsigned ni, unsigned nj)
@@ -104,6 +108,6 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent)
   file << "</status>\n";
   file.close();
   return true;
-}
+}   
 
 

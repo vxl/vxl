@@ -17,6 +17,7 @@ SET(volm_sources
  volm_io.h  volm_io.cxx
  volm_tile.h  volm_tile.cxx
  volm_spherical_container.h volm_spherical_container.cxx
+ volm_spherical_container_sptr.h
  volm_query.h volm_query.cxx
  volm_query_sptr.h
 )
@@ -25,7 +26,7 @@ AUX_SOURCE_DIRECTORY(Templates volm_sources)
 
 ADD_LIBRARY(volm  ${volm_sources})
 
-TARGET_LINK_LIBRARIES(volm bpgl vgl_algo vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul)
+TARGET_LINK_LIBRARIES(volm bpgl vgl_algo vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul bvrml depth_map)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

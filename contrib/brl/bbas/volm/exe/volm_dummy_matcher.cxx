@@ -5,6 +5,7 @@
 // \date Sept 20, 2012
 
 #include <volm/volm_io.h>
+#include <volm/volm_tile.h>
 #include <vul/vul_arg.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
@@ -55,8 +56,8 @@ int main(int argc,  char** argv)
       vcl_cout << "would write image to: " << out_name << vcl_endl;
     }
   }
-
-  volm_io::write_status(out_folder(), volm_io::SUCCESS);
-  vcl_cout << "returning SUCCESS!\n";
-  return volm_io::SUCCESS;
+	
+	volm_io::write_status(out_folder(), volm_io::SUCCESS);
+	vcl_cout << "returning SUCCESS!\n";
+	return volm_io::SUCCESS;
 }
