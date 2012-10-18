@@ -56,8 +56,8 @@ int main(int argc,  char** argv)
       vcl_cout << "would write image to: " << out_name << vcl_endl;
     }
   }
-	
-	volm_io::write_status(out_folder(), volm_io::SUCCESS);
-	vcl_cout << "returning SUCCESS!\n";
-	return volm_io::SUCCESS;
+
+  volm_io::write_status(out_folder(), volm_io::SUCCESS);
+  vcl_cout << "returning SUCCESS!\n";
+  return volm_io::SUCCESS;
 }

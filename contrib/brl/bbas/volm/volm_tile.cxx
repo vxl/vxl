@@ -8,8 +8,8 @@
 #include <brip/brip_vil_float_ops.h>
 #include <bkml/bkml_write.h>
 
-volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, float scale_i, float scale_j, unsigned ni, unsigned nj) : 
-        lat_(lat), lon_(lon), hemisphere_(hemisphere), direction_(direction), scale_i_(scale_i), scale_j_(scale_j), ni_(ni), nj_(nj)         
+volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, float scale_i, float scale_j, unsigned ni, unsigned nj) :
+        lat_(lat), lon_(lon), hemisphere_(hemisphere), direction_(direction), scale_i_(scale_i), scale_j_(scale_j), ni_(ni), nj_(nj)
 {
   vnl_matrix<double> trans_matrix(4,4,0.0);
   trans_matrix[0][0] = -scale_i_/ni; trans_matrix[1][1] = -scale_j_/nj;
@@ -61,13 +61,13 @@ vcl_vector<volm_tile> volm_tile::generate_p1_wr1_tiles()
   p1_tiles.push_back(volm_tile(38, 119, 'N', 'W', scale_i, scale_j, ni, nj));
   return p1_tiles;
 }
- 
+
 vcl_string volm_tile::get_string()
 {
   vcl_stringstream str;
-  str << hemisphere_ << lat_ << direction_ << vcl_setfill('0') << vcl_setw(3) << lon_;
-  str << "_S" << scale_i_ << "x" << scale_j_;
-  return str.str(); 
+  str << hemisphere_ << lat_ << direction_ << vcl_setfill('0') << vcl_setw(3) << lon_
+      << "_S" << scale_i_ << 'x' << scale_j_;
+  return str.str();
 }
 
 void volm_tile::img_to_global(unsigned i, unsigned j, double& lon, double& lat)
@@ -91,8 +91,8 @@ void volm_tile::get_uncertainty_region(float lambda_i, float lambda_j, float cut
   for (unsigned i = 0; i < ncols; i++)
     for (unsigned j = 0; j < nrows; j++)
       kernel[j][i] /= kernel_max;
-      
 }
+
 //: mark the uncertainty region around a given location using a gaussian mask, the center has the designated score, the rest diminishes with respect to a cutoff degree
 void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<unsigned int>& img)
 {
@@ -103,7 +103,7 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
   int is = (int)vcl_floor(i - (float)ncols/2.0f + 0.5f);
   int je = (int)vcl_floor(j + (float)nrows/2.0f + 0.5f);
   int ie = (int)vcl_floor(i + (float)ncols/2.0f + 0.5f);
-  
+
   int ni = (int)img.ni();
   int nj = (int)img.nj();
   if (score > 0.0f) {
@@ -113,10 +113,10 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
         int mask_j = jj - js;
         if (mask[mask_j][mask_i] && ii >= 0 && jj >= 0 && ii < ni && jj < nj) {
           float val = score*kernel[mask_j][mask_i];
-          unsigned int pix_val = (unsigned int)(val*volm_io::SCALE_VALUE) + 1;  // scale it 
+          unsigned int pix_val = (unsigned int)(val*volm_io::SCALE_VALUE) + 1;  // scale it
           if (img(ii,jj) > 0)
             img(ii,jj) = (img(ii,jj)+pix_val)/2;  // overwrites whatever values was in the image
-          else 
+          else
             img(ii,jj) = pix_val;
         }
       }
@@ -128,20 +128,20 @@ void volm_tile::write_kml(vcl_string name, int n)
 {
   vcl_ofstream ofs(name.c_str());
   bkml_write::open_document(ofs);
-  
+
   double lon, lat;
   this->img_to_global(0,0,lon,lat);
   vnl_double_2 ul; ul[0] = lat; ul[1] = lon;
-  this->img_to_global(0, this->nj_, lon, lat); 
+  this->img_to_global(0, this->nj_, lon, lat);
   vnl_double_2 ll; ll[0] = lat; ll[1] = lon;
-  this->img_to_global(this->ni_, this->nj_, lon, lat); 
+  this->img_to_global(this->ni_, this->nj_, lon, lat);
   vnl_double_2 lr; lr[0] = lat; lr[1] = lon;
-  this->img_to_global(this->ni_, 0, lon, lat); 
+  this->img_to_global(this->ni_, 0, lon, lat);
   vnl_double_2 ur; ur[0] = lat; ur[1] = lon;
   bkml_write::write_box(ofs, this->get_string(), this->get_string(), ul, ur, ll, lr);
-  
+
   double arcsecond = (n/2.0) * (1.0/3600.0);
-  for (unsigned i = 0; i < this->ni_; i+=n) 
+  for (unsigned i = 0; i < this->ni_; i+=n)
     for (unsigned j = 0; j < this->nj_; j+=n) {
       this->img_to_global(i,j,lon,lat);
       ul[0] = lat; ul[1] = lon;
@@ -150,7 +150,7 @@ void volm_tile::write_kml(vcl_string name, int n)
       ur[0] = lat; ur[1] = lon+arcsecond;
       bkml_write::write_box(ofs, this->get_string(), this->get_string(), ul, ur, ll, lr);
     }
-  
+
   bkml_write::close_document(ofs);
   ofs.close();
 }
@@ -163,11 +163,11 @@ volm_tile volm_tile::parse_string(vcl_string& filename)
   if (name.find_first_of('N') != name.end())
   vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
   float lon, lat, scale;
-  vcl_stringstream str(n); str >> lat; 
+  vcl_stringstream str(n); str >> lat;
   n = name.substr(name.find_first_of('W')+1, name.find_first_of('_'));
-  vcl_stringstream str2(n); str2 >> lon; 
+  vcl_stringstream str2(n); str2 >> lon;
   n = name.substr(name.find_first_of('x')+1, name.find_last_of('.'));
   vcl_stringstream str3(n); str3 >> scale;
-  vcl_cout << " lat: " << lat << " lon: " << lon << " scale:" << scale << vcl_endl; 
+  vcl_cout << " lat: " << lat << " lon: " << lon << " scale:" << scale << vcl_endl;
 }
 #endif
