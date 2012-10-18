@@ -17,8 +17,8 @@ boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses(vpgl_lvcs_sptr lvcs,
   vcl_cout << "tile lat: " << tile.lat_ << " lon: " << tile.lon_ << vcl_endl
            << "dem ni: " << dems[0].ni() << " nj: " << dems[0].nj() << vcl_endl;
 
-  for (int i = 0; i < tile_.ni_; i += interval_i)
-    for (int j = 0; j < tile_.nj_; j += interval_j) {
+  for (unsigned int i = 0; i < tile_.ni_; i += interval_i)
+    for (unsigned int j = 0; j < tile_.nj_; j += interval_j) {
       // fetch the global location from the tile using its transformation matrix saved in vpgl_geo_camera member
       double lon, lat;
       tile_.img_to_global(i,j,lon,lat); // instead of: double lon=i, lat=j; // instead of: tile_.img_to_global(i,j,lon,lat);
