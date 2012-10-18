@@ -265,20 +265,17 @@ void volm_spherical_container::first_res(double res, unsigned int& offset, unsig
   // number of depth layers in the container:
   offset = 0;
   depth = 0.0;
-  bool first = true;
   for (vcl_map<double, unsigned int>::iterator iter = depth_offset_map_.begin(); iter != depth_offset_map_.end(); iter++) {
-    double current_res = voxels_[iter->second].resolution_;
-    if (voxels_[iter->second].resolution_ < res) 
+    if (voxels_[iter->second].resolution_ < res)
       continue;
     offset = iter->second;
     depth = iter->first;
     iter++;
     if (iter != depth_offset_map_.end())
       end_offset = iter->second;
-    else 
+    else
       end_offset = (unsigned int)voxels_.size();
     break;
-  } 
+  }
 }
-
 
