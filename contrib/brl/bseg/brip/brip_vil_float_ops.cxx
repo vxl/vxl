@@ -3818,7 +3818,7 @@ void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
       total += vcl_fabs(v);
     }
   double cor = 0.0;
-  if (total)
+  if (total != 0)
     cor = -residual/total;
   kernel.resize(nrows, ncols);
   // correct any residual offset in coefficients
@@ -3846,13 +3846,12 @@ void brip_vil_float_ops::gaussian_kernel_mask(float lambda, vbl_array_2d<float>&
   unsigned r = 0;
   while (brip_vil_rot_gauss(r, 0, s1, s1, 0) >= cutoff)
     ++r;
-  
+
   int ri = static_cast<int>(vcl_fabs((float)r) +0.5);
-  
+
   unsigned n = 2*ri +1;
   mask.resize(n,n);
   kernel.resize(n, n);
-  double total  = 0.0;
   for (int ry = -ri; ry<=ri; ++ry)
     for (int rx = -ri; rx<=ri; ++rx)
     {
@@ -3876,14 +3875,13 @@ void brip_vil_float_ops::gaussian_kernel_square_mask(float lambda, vbl_array_2d<
   unsigned r = 0;
   while (brip_vil_rot_gauss(r, 0, s1, s1, 0) >= cutoff)
     ++r;
-  
+
   int ri = static_cast<int>(vcl_fabs((float)r) +0.5);
-  
+
   unsigned n = 2*ri +1;
   vbl_array_2d<double> coef(n, n);
   mask.resize(n,n);
   kernel.resize(n, n);
-  double total  = 0.0;
   for (int ry = -ri; ry<=ri; ++ry)
     for (int rx = -ri; rx<=ri; ++rx)
     {
@@ -3891,9 +3889,8 @@ void brip_vil_float_ops::gaussian_kernel_square_mask(float lambda, vbl_array_2d<
       mask[ry+ri][rx+ri] = true;
       double temp = ry*s1sq;
       kernel[ry+ri][rx+ri] = static_cast<float>(vcl_fabs((temp -1)*g));
-    }  
+    }
 }
-
 
 
 // Compute the standard deviation of an operator response
