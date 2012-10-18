@@ -28,10 +28,10 @@ double RoundUp2Vmin(double x, double vmin)
   }
 }
 
-volm_spherical_container::volm_spherical_container(double d_solid_ang, double voxel_min, double max_dist)
+volm_spherical_container::volm_spherical_container(float d_solid_ang, float voxel_min, float max_dist)
   : depth_offset_(0), ds_(d_solid_ang), vmin_(voxel_min)
  {
-  dmax_ = RoundUp(max_dist,vmin_);
+  dmax_ = (float)RoundUp(max_dist,vmin_);
   double vmin = vmin_;
   double d = 0;
   double dtor = vnl_math::pi_over_180;
@@ -239,17 +239,16 @@ void volm_spherical_container::draw_template(vcl_string vrml_file_name, double d
   ofs.close();
 }
 
-//: return the offset and depth of the last layer with vmin resolution
-void volm_spherical_container::last_vmin(unsigned int& offset, double& depth)
+
+//: return the offset and depth of the last layer with given resolution
+void volm_spherical_container::last_res(double res, unsigned int& offset, unsigned int& end_offset, double& depth)
 {
-#if 0
-  // find the number of voxels at depth where the first vmin*2 voxel resolution starts
-  vcl_map<double, unsigned int>& offset_map = this->get_depth_offset_map();
-#endif
+  // number of depth layers in the container:
   offset = 0;
   depth = 0.0;
   for (vcl_map<double, unsigned int>::iterator iter = depth_offset_map_.begin(); iter != depth_offset_map_.end(); iter++) {
-    if (voxels_[iter->second].resolution_ > vmin_) {
+    if (voxels_[iter->second].resolution_ > res) {
+      end_offset = iter->second;
       break;
     }
 #ifdef DEBUG
@@ -259,4 +258,27 @@ void volm_spherical_container::last_vmin(unsigned int& offset, double& depth)
     depth = iter->first;
   }
 }
+
+//: return the offset and depth of the first layer with the given resolution
+void volm_spherical_container::first_res(double res, unsigned int& offset, unsigned int& end_offset, double& depth)
+{
+  // number of depth layers in the container:
+  offset = 0;
+  depth = 0.0;
+  bool first = true;
+  for (vcl_map<double, unsigned int>::iterator iter = depth_offset_map_.begin(); iter != depth_offset_map_.end(); iter++) {
+    double current_res = voxels_[iter->second].resolution_;
+    if (voxels_[iter->second].resolution_ < res) 
+      continue;
+    offset = iter->second;
+    depth = iter->first;
+    iter++;
+    if (iter != depth_offset_map_.end())
+      end_offset = iter->second;
+    else 
+      end_offset = (unsigned int)voxels_.size();
+    break;
+  } 
+}
+
 

@@ -42,7 +42,7 @@ class volm_spherical_container : public vbl_ref_count
  public:
   // constructor
   volm_spherical_container() {}
-  volm_spherical_container(double d_solid_ang, double voxel_min, double max_dist);
+  volm_spherical_container(float d_solid_ang, float voxel_min, float max_dist);
 
   // accessor
   vcl_vector<volm_voxel>& get_voxels() { return voxels_; }
@@ -52,18 +52,21 @@ class volm_spherical_container : public vbl_ref_count
 
   double min_voxel_res() { return vmin_; }
 
-  //: return the offset and depth of the last layer with vmin resolution
-  void last_vmin(unsigned int& offset, double& depth);
-
- protected:
+  //: return the offset and depth of the last layer with given resolution
+  void last_res(double res, unsigned int& offset, unsigned int& end_offset, double& depth);
+  
+  //: return the offset and depth of the first layer with the given resolution
+  void first_res(double res, unsigned int& offset, unsigned int& end_offset, double& depth);
+  
+protected:
   bool meshcurrentlayer(double d, double vc);
   vcl_vector<volm_voxel> voxels_;
   vcl_map<double, unsigned int> depth_offset_map_;                        // stores offset for each layer at depth d along east direction
   vcl_map<double, vnl_vector_fixed<unsigned int,5> > depth_blk_num_map_;  // stores offset of each facet voxels of the cube at depth d along east direction
   unsigned int depth_offset_;
-  double ds_;
-  double vmin_;
-  double dmax_;
+  float ds_;
+  float vmin_;
+  float dmax_;
 };
 
 #endif  // volm_spherical_container_h_
