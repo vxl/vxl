@@ -6,6 +6,7 @@ SOURCES += boxm2_volm_matcher.cxx
 SOURCES += boxm2_volm_wr3db_index.cxx
 SOURCES += boxm2_volm_locations.cxx
 MANPAGE_SOURCES += boxm2_volm_locations_sptr.h
+MANPAGE_SOURCES += boxm2_volm_wr3db_index_sptr.h
 
 SUBDIRS += exe
 

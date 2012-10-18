@@ -8,6 +8,7 @@ SOURCES += volm_query.cxx
 SOURCES += volm_io.cxx
 SOURCES += volm_tile.cxx
 MANPAGE_SOURCES += volm_query_sptr.h
+MANPAGE_SOURCES += volm_spherical_container_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
