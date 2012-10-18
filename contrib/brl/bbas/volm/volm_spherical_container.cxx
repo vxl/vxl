@@ -1,21 +1,25 @@
 #include "volm_spherical_container.h"
+//:
+// \file
+#include <vcl_cmath.h> // for std::floor() and std::fabs()
 
 double RoundUp(double x, double unit)
 {
   return vcl_ceil(x/unit)*unit;
 }
 
-double RoundUp2Vmin(double x, double vmin){
-  if(x < 0 || vmin < 0) {
-    vcl_cout << "ERROR: the voxel size has to be positive " << vcl_endl;
+double RoundUp2Vmin(double x, double vmin)
+{
+  if (x < 0 || vmin < 0) {
+    vcl_cout << "ERROR: the voxel size has to be positive" << vcl_endl;
     return vmin;
   }
-  if(x < 2*vmin)
+  if (x < 2*vmin)
     return vmin;
-  else{
-    unsigned int k = (unsigned int)floor(x/vmin);
+  else {
+    unsigned int k = (unsigned int)vcl_floor(x/vmin);
     unsigned int count = 0;
-    while(k != 1) {
+    while (k != 1) {
       k /= 2;
       count++;
     }
@@ -25,8 +29,8 @@ double RoundUp2Vmin(double x, double vmin){
 }
 
 volm_spherical_container::volm_spherical_container(double d_solid_ang, double voxel_min, double max_dist)
-  : ds_(d_solid_ang), vmin_(voxel_min), depth_offset_(0)
-{
+  : depth_offset_(0), ds_(d_solid_ang), vmin_(voxel_min)
+ {
   dmax_ = RoundUp(max_dist,vmin_);
   double vmin = vmin_;
   double d = 0;
@@ -35,18 +39,19 @@ volm_spherical_container::volm_spherical_container(double d_solid_ang, double vo
   //tan_ds = 1; // for debug purpose
   double vc;
   bool is_even = false; // the first layer has 4 voxels and hence half of it is an odd
-  while(d <= dmax_) {
+  while (d <= dmax_) {
   depth_offset_map_[d] = depth_offset_;
     vc = d * tan_ds;
-  if(vc >= 2*vmin && is_even){
+  if (vc >= 2*vmin && is_even) {
     vc = 2*vmin;
     vmin = vc;
-  }else{
+  }
+  else {
     vc = vmin;
   }
   // use current voxel size to mesh the space
   this->meshcurrentlayer(d, vc);
-  // update and check current layer has even number of voxel along half 
+  // update and check current layer has even number of voxel along half
   d = d + vc;
   unsigned int N = (unsigned int)(d/vc);
   is_even = !(N%2);
@@ -54,8 +59,8 @@ volm_spherical_container::volm_spherical_container(double d_solid_ang, double vo
 }
 
 bool volm_spherical_container::meshcurrentlayer(double d, double v)
-{
-// construct voxel sturcture at current depth d with current resolution v
+ {
+// construct voxel structure at current depth d with current resolution v
   double hv = 0.5*v;
   unsigned int blk_num = 0;
   unsigned int upper_num = 0;
@@ -75,9 +80,9 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
   double ycl = -hv;
   double hw = d + v;
   double bdry = d + hv;
-  while(xleft < hw){
+  while (xleft < hw) {
     double yleft = 0.0;
-    while(yleft < hw) {
+    while (yleft < hw) {
       voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(xcr,ycr,z)));
       voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(xcl,ycr,z)));
       voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(xcl,ycl,z)));
@@ -88,13 +93,13 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
       uppers.push_back(vgl_point_3d<double>(xcl,ycr,z));
       uppers.push_back(vgl_point_3d<double>(xcl,ycl,z));
       uppers.push_back(vgl_point_3d<double>(xcr,ycl,z));
-      if(xcr < bdry) {
+      if (xcr < bdry) {
         inners_left.push_back(vgl_point_3d<double>(xcr,ycr,z));
         inners_left.push_back(vgl_point_3d<double>(xcl,ycr,z));
         inners_left.push_back(vgl_point_3d<double>(xcl,ycl,z));
         inners_left.push_back(vgl_point_3d<double>(xcr,ycl,z));
       }
-      if(ycr < bdry && xcr < bdry) {
+      if (ycr < bdry && xcr < bdry) {
         inners_back.push_back(vgl_point_3d<double>(xcr,ycr,z));
         inners_back.push_back(vgl_point_3d<double>(xcl,ycr,z));
         inners_back.push_back(vgl_point_3d<double>(xcl,ycl,z));
@@ -106,7 +111,7 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
   xcr += v; xcl -= v;  xleft += v;
   }
   // construct lower layer
-  for(vcl_vector<vgl_point_3d<double> >::iterator upit = uppers.begin(); upit != uppers.end(); ++upit) {
+  for (vcl_vector<vgl_point_3d<double> >::iterator upit = uppers.begin(); upit != uppers.end(); ++upit) {
     voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(upit->x(),upit->y(),-1*upit->z())));
   lower_num++;
   blk_num++;
@@ -123,7 +128,7 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
   vnl_vector_fixed<double,3> xp;
   vnl_vector_fixed<double,3> Xp;
   vcl_vector<vgl_point_3d<double> > left;
-  for(vcl_vector<vgl_point_3d<double> >::iterator it = inners_left.begin(); it != inners_left.end(); ++it) {
+  for (vcl_vector<vgl_point_3d<double> >::iterator it = inners_left.begin(); it != inners_left.end(); ++it) {
     X[0] = it->x();  X[1] = it->y();  X[2] = it->z();
   x = Q*(X-O);
   xp[0] = x[2];  xp[1] = x[1];  xp[2] = x[0];
@@ -134,7 +139,7 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
   left.push_back(vgl_point_3d<double>(Xp[0],Xp[1],Xp[2]));
   }
   // construct right layer
-  for(vcl_vector<vgl_point_3d<double> >::iterator it = left.begin(); it != left.end(); ++it) {
+  for (vcl_vector<vgl_point_3d<double> >::iterator it = left.begin(); it != left.end(); ++it) {
     voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(-1*it->x(),it->y(),it->z())));
     right_num++;
     blk_num++;
@@ -145,7 +150,7 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
   Q[2][0] = 0.0;  Q[2][1] = 1.0;  Q[2][2] =  0.0;
   O[0] = 0.0;  O[1] = -d-hv;  O[2] = d+hv;
   vcl_vector<vgl_point_3d<double> > back;
-  for(vcl_vector<vgl_point_3d<double> >::iterator it = inners_back.begin(); it != inners_back.end(); ++it) {
+  for (vcl_vector<vgl_point_3d<double> >::iterator it = inners_back.begin(); it != inners_back.end(); ++it) {
     X[0] = it->x();  X[1] = it->y();  X[2] = it->z();
     x = Q*(X-O);
     xp[0] = x[0];  xp[1] = x[2];  xp[2] = x[1];
@@ -156,7 +161,7 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
     back.push_back(vgl_point_3d<double>(Xp[0],Xp[1],Xp[2]));
   }
   // use back layer to mirror front layer
-  for(vcl_vector<vgl_point_3d<double> >::iterator it = back.begin(); it != back.end(); ++it) {
+  for (vcl_vector<vgl_point_3d<double> >::iterator it = back.begin(); it != back.end(); ++it) {
     voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(it->x(),-1*it->y(),it->z())));
     blk_num++;
   }
@@ -180,13 +185,14 @@ double volm_spherical_container::center_depth(volm_voxel voxel)
   double fab_y = vcl_fabs(voxel.center_.y());
   double fab_z = vcl_fabs(voxel.center_.z());
   double depth = fab_x;
-  if(depth < fab_y)
+  if (depth < fab_y)
     depth = fab_y;
-  if(depth < fab_z)
+  if (depth < fab_z)
     depth = fab_z;
   depth -= 0.5*voxel.resolution_;
   return depth;
 }
+
 unsigned volm_spherical_container::fetch_voxel(double dist, double theta, double phi)
 {
   return 0;
@@ -215,12 +221,14 @@ void volm_spherical_container::draw_template(vcl_string vrml_file_name, double d
   bvrml_write::write_vrml_line(ofs, cent_ray, axis_y, (float)axis_len, 0.0f, 1.0f, 0.0f);
   bvrml_write::write_vrml_line(ofs, cent_ray, axis_z, (float)axis_len, 1.0f, 1.0f, 1.0f);
   // write the voxel structure
-  for(vcl_vector<volm_voxel>::iterator it = voxels_.begin(); it != voxels_.end(); ++it) {
-    double x = fabs(it->center_.x());  double y = fabs(it->center_.y());  double z = fabs(it->center_.z());
+  for (vcl_vector<volm_voxel>::iterator it = voxels_.begin(); it != voxels_.end(); ++it) {
+    double x = vcl_fabs(it->center_.x());
+    double y = vcl_fabs(it->center_.y());
+    double z = vcl_fabs(it->center_.z());
     double d = x;
-    if(d < y) d = y;
-    if(d < z) d = z;
-    if(d > dmin) {
+    if (d < y) d = y;
+    if (d < z) d = z;
+    if (d > dmin) {
       double v_len = it->resolution_;
       vgl_point_3d<double> vc(it->center_.x(), it->center_.y(), it->center_.z());
       vgl_box_3d<double> box(vc, v_len, v_len, v_len, vgl_box_3d<double>::centre);
@@ -234,21 +242,21 @@ void volm_spherical_container::draw_template(vcl_string vrml_file_name, double d
 //: return the offset and depth of the last layer with vmin resolution
 void volm_spherical_container::last_vmin(unsigned int& offset, double& depth)
 {
-  //: find the number of voxels at depth where the first vmin*2 voxel resolution starts
-  //vcl_map<double, unsigned int>& offset_map = this->get_depth_offset_map();
+#if 0
+  // find the number of voxels at depth where the first vmin*2 voxel resolution starts
+  vcl_map<double, unsigned int>& offset_map = this->get_depth_offset_map();
+#endif
   offset = 0;
   depth = 0.0;
   for (vcl_map<double, unsigned int>::iterator iter = depth_offset_map_.begin(); iter != depth_offset_map_.end(); iter++) {
     if (voxels_[iter->second].resolution_ > vmin_) {
       break;
     }
-    //vcl_cout << iter->first << " " << iter->second << vcl_endl;  
+#ifdef DEBUG
+    vcl_cout << iter->first << ' ' << iter->second << vcl_endl;
+#endif
     offset = iter->second;
     depth = iter->first;
-  }  
+  }
 }
-  
-
-  
-
 
