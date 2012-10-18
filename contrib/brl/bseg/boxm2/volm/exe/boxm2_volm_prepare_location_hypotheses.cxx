@@ -7,6 +7,8 @@
 #include <vul/vul_arg.h>
 
 #include <boxm2/volm/boxm2_volm_locations.h>
+#include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
+#include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <volm/volm_io.h>
 #include <boxm2/boxm2_scene.h>
 #include <vil/vil_image_view.h>
@@ -22,6 +24,9 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> int_i("-int_i", "interval in +x direction (East) in pixels in the output tiles", (unsigned)10);
   vul_arg<unsigned> int_j("-int_j", "interval in +y direction (North) in pixels in the output tiles", (unsigned)10);
   vul_arg<float> alt("-altitude", "altitude (in meters) from above ground to generate the elevation of each hyptohesis, default is 1.6", 1.6f);
+  vul_arg<float> vmin("-min_res", "minimum resolution of voxels to construct spherical container", 10.0);  // for WR1
+  vul_arg<float> dmax("-max_d", "diameter of the spherical container", 60000.0); // for WR1
+  vul_arg<float> solid_angle("-angle", "solid angle to construct spherical container", 4.0); // for WR1
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
@@ -44,9 +49,12 @@ int main(int argc,  char** argv)
   cams.push_back(geocam);
 
   vcl_cout << "generating hypotheses for scene: " << scene_file() << " using " << dem_file() << vcl_endl;
+  
+  volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle(),vmin(),dmax());
 
   //: just generate dummy output
-  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_tiles();
+  //vcl_vector<volm_tile> tiles = volm_tile::generate_p1_tiles();
+  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles();
 
   for (unsigned i = 0; i < tiles.size(); i++) {
     vcl_string out_name = out_file() + "_volm_" + tiles[i].get_string() + ".kml";
@@ -54,18 +62,28 @@ int main(int argc,  char** argv)
   }
 
   for (unsigned i = 0; i < tiles.size(); i++) {
-    boxm2_volm_loc_hypotheses h(lvcs, tiles[i], int_i(), int_j(), alt(), dems, cams);
-    vcl_cout << "constructed: " << h.locs_.size() << " hypotheses for tile: " << tiles[i].get_string() << vcl_endl;
-    //vcl_cout <<
+    boxm2_volm_loc_hypotheses_sptr h = new boxm2_volm_loc_hypotheses(lvcs, tiles[i], int_i(), int_j(), alt(), dems, cams);
+    vcl_cout << "constructed: " << h->locs_.size() << " hypotheses for tile: " << tiles[i].get_string() << " indexing..." << vcl_endl;
+    
+    boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(sph);
+    ind->index_locations(scene, h);
+    vcl_string out_name = out_file() + "_volm_index_" + tiles[i].get_string() + ".bin";
+    if (!ind->write_index(out_name))
+      vcl_cerr << "Problems writing index: " << out_name << vcl_endl;
 
+#if 0
     vil_image_view<unsigned int> out(3601, 3601);
-
     out.fill(volm_io::UNEVALUATED);
     vcl_vector<float> dummy_scores(h.locs_.size(), 1.0f);
     h.generate_output_tile(dummy_scores, 5*int_i()/12, 5*int_j()/12, 0.5f, out);
-
     vcl_string out_name = out_file() + "_volm_" + tiles[i].get_string() + ".tif";
     vil_save(out, out_name.c_str());
+#endif
+  }
+  for (unsigned i = 0; i < tiles.size(); i++) {
+    vcl_string name = out_file() + "_volm_index_" + tiles[i].get_string() + ".bin";
+    boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(sph);
+    ind->read_index(name);
   }
 
   vcl_cout << "returning SUCCESS!\n";
