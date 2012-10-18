@@ -107,6 +107,9 @@ SOURCE=.\volm_tile.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+volm_query-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+volm_spherical_container-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -124,6 +127,9 @@ SOURCE=.\volm_tile.h
 # End Source File
 # Begin Source File
 SOURCE=.\volm_query_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_container_sptr.h
 # End Source File
 # End Group
 # End Target

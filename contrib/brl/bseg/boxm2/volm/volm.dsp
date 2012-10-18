@@ -106,6 +106,9 @@ SOURCE=.\boxm2_volm_locations.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_volm_locations-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_volm_wr3db_index-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -120,6 +123,9 @@ SOURCE=.\boxm2_volm_wr3db_index.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volm_locations_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_volm_wr3db_index_sptr.h
 # End Source File
 # End Group
 # End Target

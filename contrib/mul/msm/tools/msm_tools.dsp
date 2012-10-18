@@ -111,6 +111,9 @@ SOURCE=.\msm_get_shape_params.cxx
 # Begin Source File
 SOURCE=.\msm_add_dir_to_names.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\msm_estimate_residuals.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
