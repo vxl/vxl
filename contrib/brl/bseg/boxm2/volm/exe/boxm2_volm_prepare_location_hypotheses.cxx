@@ -7,6 +7,7 @@
 #include <vul/vul_arg.h>
 
 #include <boxm2/volm/boxm2_volm_locations.h>
+#include <volm/volm_io.h>
 #include <boxm2/boxm2_scene.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
