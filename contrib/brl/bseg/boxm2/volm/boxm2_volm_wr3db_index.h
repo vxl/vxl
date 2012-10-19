@@ -33,19 +33,22 @@
 class boxm2_volm_wr3db_index : public vbl_ref_count
 {
   public:
+    enum combinations { VIS_OCC = 0, VIS_UNOCC = 1, NONVIS_UNKNOWN = 2 };
     boxm2_volm_wr3db_index(volm_spherical_container_sptr cont);
     ~boxm2_volm_wr3db_index();
     
     //: create the index for a given location in the scene
-    bool index_location(boxm2_scene_sptr scene, vgl_point_3d<float>& loc, vcl_vector<char>& values);
+    bool index_location(boxm2_scene_sptr scene, vgl_point_3d<float>& loc, vcl_vector<unsigned char>& values);
+    //: just appends to the end of the index_ array, nothing about which location hypothesis these values correspond is known, this method should be used mostly for debuggin purposes
+    void add_to_index(vcl_vector<unsigned char>& values) { index_.push_back(values); }
     
     //: create a condensed index for given locations of a scene and write as binary, use the vmin layer of spherical container
     bool index_locations(boxm2_scene_sptr scene, boxm2_volm_loc_hypotheses_sptr h);
     bool write_index(vcl_string out_file);
     bool read_index(vcl_string in_file);
     
-    //: inflate the index for ith location and return a vector of char values where last bit is visiblity and second to last is prob (occupied or not)
-    bool inflate_index_vis_and_prob(unsigned i, vcl_vector<char>& vis_prob);
+    //: inflate the index for ith location and return a vector of chars whose values are one of the combinations VIS_OCC, VIS_UNOCC, NONVIS_UNKNOWN
+    bool inflate_index_vis_and_prob(unsigned i, vcl_vector<unsigned char>& vis_prob);
    
   protected:
     volm_spherical_container_sptr cont_;
@@ -53,8 +56,8 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     unsigned int offset_;     // offset of first layer with min_res*2 resolution
     unsigned int end_offset_; 
      
-    //: keep a value in [0-255] to code the index of the distance layer in the container
-    vcl_vector< vcl_vector<char> > index_;  
+    //: for each hypothesis location, keep a value in [0-255] to code the index of the distance layer in the container
+    vcl_vector< vcl_vector<unsigned char> > index_;  
 };
 
 #endif  // boxm2_volm_wr3db_index_h_
