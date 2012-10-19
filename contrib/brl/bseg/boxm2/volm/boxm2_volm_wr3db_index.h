@@ -8,12 +8,15 @@
 //         this is a "condensed" index for the container
 //         the indexed values are the depth along the ray traced towards that voxel in the world, 
 //         however the depth itself is not saved, the interval corresponding to that depth in the container is saved
-//         the number of intervals is assumed to less than 255 so a vector of char values is stored for each location hypothesis
-//         the full container is filled using this "condensed" index during matching
-//         this class also has a method to "inflate" the index computing vis and prob values to full size container given its condensed form
+//         the number of intervals is assumed to be less than 255 so a vector of char values is stored for each location hypothesis
+//         
+//         the full container is filled using this "condensed" index during matching for each location
+//         this class has a method to "inflate" the index to the full size of the container, by computing vis and prob values 
 //           when inflated, a vector of char values is returned for each voxel in the container
-//                          the last bit of char is visibility, 0 or 1
-//                          second to last bit is probability, 0 for unoccupied, 1 for occupied
+//                          the values are one of the combinations: 
+//                                     VIS_OCC = 0 visible and occluded, 
+//                                     VIS_UNOCC = 1 visible and unoccluded
+//                                     NONVIS_UNKNOWN = 2 not visible and occlusion is unknown
 //
 // \author Ozge C. Ozcanli 
 // \date October 07, 2012
