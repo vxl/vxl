@@ -8,17 +8,17 @@
 // \author Yi Dong
 // \date October 07, 2012
 // \verbatim
-//   Modifications
-//       created by Ozge C. Ozcanli - Oct 07, 2012
+//  Modifications
+//   created by Ozge C. Ozcanli - Oct 07, 2012
 // \endverbatim
-// 
+//
 
 #include <volm/volm_query_sptr.h>
 #include "boxm2_volm_wr3db_index.h"
 
 class boxm2_volm_matcher
 {
-public:
+ public:
   double matching_cost(volm_query_sptr q, boxm2_volm_wr3db_index ind);
 };
 
