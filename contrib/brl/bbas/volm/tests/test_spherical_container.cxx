@@ -22,6 +22,12 @@ static void test_spherical_container()
   TEST("# voxels of last layer with res min_res.. ", end_offset-offset, 20888); 
   sph.first_res(vmin*2, offset, end_offset, depth);
   TEST("# voxels of first layer with res min_res*2.. ", end_offset-offset, 5768); 
+  
+  vcl_map<double, unsigned char>& depth_interval_map = sph.get_depth_interval_map();
+  TEST("number of depth intervals.. ", depth_interval_map.size(), 144);
+  vcl_map<double, unsigned char>::iterator iter = depth_interval_map.end();
+  iter--;
+  TEST("last interval.. ", iter->second, (unsigned char)143);
 }
 
 

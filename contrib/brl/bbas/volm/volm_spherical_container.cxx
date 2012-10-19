@@ -56,6 +56,17 @@ volm_spherical_container::volm_spherical_container(float d_solid_ang, float voxe
   unsigned int N = (unsigned int)(d/vc);
   is_even = !(N%2);
   } // end of while
+  
+  //: create the depth_interval_map_
+  unsigned int i = 0;
+  for (vcl_map<double, unsigned int>::iterator iter = depth_offset_map_.begin(); iter != depth_offset_map_.end(); iter++) {
+    depth_interval_map_[iter->first] = (unsigned char)i;
+    i++;
+    if (i > 255) {
+      vcl_cerr << "In volm_spherical_container::volm_spherical_container() -- number of depth intervals is larger than 255! Current indexing scheme does not support this container extent of " << dmax_ << "!\n";
+      break;
+    }
+  }
 }
 
 bool volm_spherical_container::meshcurrentlayer(double d, double v)
@@ -199,12 +210,8 @@ unsigned volm_spherical_container::fetch_voxel(double dist, double theta, double
 }
 #endif
 
-
-void volm_spherical_container::draw_template(vcl_string vrml_file_name, double dmin)
+void volm_spherical_container::draw_helper(vcl_ofstream& ofs, double dmin)
 {
-  vcl_ofstream ofs(vrml_file_name.c_str());
-  // write the header
-  bvrml_write::write_vrml_header(ofs);
   // write a world center and world axis
   double rad = 0.5*vmin_;
   vcl_vector<volm_voxel>::iterator it = voxels_.end();
@@ -236,8 +243,87 @@ void volm_spherical_container::draw_template(vcl_string vrml_file_name, double d
       bvrml_write::write_vrml_wireframe_box(ofs, box, 0.0f, 0.0f, 1.0f, 1);
     }
   }
+}
+
+void volm_spherical_container::draw_template(vcl_string vrml_file_name, double dmin)
+{
+  vcl_ofstream ofs(vrml_file_name.c_str());
+  // write the header
+  bvrml_write::write_vrml_header(ofs);
+  draw_helper(ofs, dmin);
   ofs.close();
 }
+
+//: paint the wireframe of the voxels with the given ids with the given color
+void volm_spherical_container::draw_template_painted(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned int>& ids, float r, float g, float b)
+{
+  vcl_ofstream ofs(vrml_file_name.c_str());
+  // write the header
+  bvrml_write::write_vrml_header(ofs);
+  draw_helper(ofs, dmin);
+  // draw the extras
+  
+  for (unsigned i = 0; i < ids.size(); i++) {
+    
+    double x = vcl_fabs(voxels_[ids[i]].center_.x());
+    double y = vcl_fabs(voxels_[ids[i]].center_.y());
+    double z = vcl_fabs(voxels_[ids[i]].center_.z());
+    double d = x;
+    if (d < y) d = y;
+    if (d < z) d = z;
+    if (d > dmin) {
+      double v_len = voxels_[ids[i]].resolution_;
+      vgl_point_3d<double> vc(voxels_[ids[i]].center_.x(), voxels_[ids[i]].center_.y(), voxels_[ids[i]].center_.z());
+      vgl_box_3d<double> box(vc, v_len, v_len, v_len, vgl_box_3d<double>::centre);
+      bvrml_write::write_vrml_box(ofs, box, r, g, b, (float)(d/dmax_+0.2));
+      bvrml_write::write_vrml_wireframe_box(ofs, box, r, g, b, 1);
+    }
+  }
+  
+  ofs.close();
+}
+
+//: paint the wireframe of the voxels with the given ids with the given color
+void volm_spherical_container::draw_template_vis_prob(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned char>& ids)
+{
+  vcl_ofstream ofs(vrml_file_name.c_str());
+  // write the header
+  bvrml_write::write_vrml_header(ofs);
+  //draw_helper(ofs, dmin);
+  // draw the extras
+  if (voxels_.size() != ids.size()) {
+    vcl_cerr << "In volm_spherical_container::draw_template_vis_prob() -- passed vector is not of the same size with voxels vector!\n";
+    return;
+  }
+  for (unsigned i = 0; i < voxels_.size(); i++) {
+    
+    double x = vcl_fabs(voxels_[i].center_.x());
+    double y = vcl_fabs(voxels_[i].center_.y());
+    double z = vcl_fabs(voxels_[i].center_.z());
+    double d = x;
+    if (d < y) d = y;
+    if (d < z) d = z;
+    if (d > dmin) {
+      double v_len = voxels_[i].resolution_;
+      vgl_point_3d<double> vc(voxels_[i].center_.x(), voxels_[i].center_.y(), voxels_[i].center_.z());
+      vgl_box_3d<double> box(vc, v_len, v_len, v_len, vgl_box_3d<double>::centre);
+      // VIS_OCC = 0, VIS_UNOCC = 1, NONVIS_UNKNOWN = 2 
+      if (ids[i] == 0) {
+        bvrml_write::write_vrml_box(ofs, box, 0.0f, 0.0f, 0.0f, 0.8f);  // 1 is completely transparent, 0 is completely opaque
+        //bvrml_write::write_vrml_wireframe_box(ofs, box, 0.0f, 0.0f, 0.0f, 1.0f); // blacks will be visible and occupied
+      } else if (ids[i] == 1) {
+        //bvrml_write::write_vrml_box(ofs, box, 0.0f, 0.0f, 1.0f, 0.9f);  
+        //bvrml_write::write_vrml_wireframe_box(ofs, box, 0.0f, 0.0f, 1.0f, 1.0f); // blues will be visible and unoccupied
+      } else if (ids[i] == 2) {
+        //bvrml_write::write_vrml_box(ofs, box, 0.0f, 0.0f, 0.0f, 1.0f);
+        //bvrml_write::write_vrml_wireframe_box(ofs, box, 0.0f, 1.0f, 0.0f, 0.2f); // greens will be non visible
+      }
+    }
+  }
+  
+  ofs.close();
+}
+
 
 
 //: return the offset and depth of the last layer with given resolution

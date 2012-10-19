@@ -47,8 +47,13 @@ class volm_spherical_container : public vbl_ref_count
   // accessor
   vcl_vector<volm_voxel>& get_voxels() { return voxels_; }
   vcl_map<double, unsigned int>& get_depth_offset_map() { return depth_offset_map_;}
+  vcl_map<double, unsigned char>& get_depth_interval_map() { return depth_interval_map_; }
 
   void draw_template(vcl_string vrml_file_name, double dmin);
+  void draw_helper(vcl_ofstream& ofs, double dmin);
+  //: paint the wireframe of the voxels with the given ids with the given color
+  void draw_template_painted(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned int>& ids, float r, float g, float b);
+  void draw_template_vis_prob(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned char>& ids);
 
   double min_voxel_res() { return vmin_; }
 
@@ -62,6 +67,7 @@ protected:
   bool meshcurrentlayer(double d, double vc);
   vcl_vector<volm_voxel> voxels_;
   vcl_map<double, unsigned int> depth_offset_map_;                        // stores offset for each layer at depth d along east direction
+  vcl_map<double, unsigned char> depth_interval_map_;                     // stores a char to designate depth intervals in depth_offset_map_
   vcl_map<double, vnl_vector_fixed<unsigned int,5> > depth_blk_num_map_;  // stores offset of each facet voxels of the cube at depth d along east direction
   unsigned int depth_offset_;
   float ds_;
