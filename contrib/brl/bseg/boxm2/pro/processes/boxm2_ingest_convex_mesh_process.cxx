@@ -202,8 +202,8 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
     int len_buffer  = alpha->buffer_length()/4*boxm2_data_info::datasize("boxm2_label_short") ;
     boxm2_data<BOXM2_ALPHA> alpha_data(alpha->data_buffer(),alpha->buffer_length(),iter->first);
     boxm2_data_base *  label_data_base;
-    boxm2_data<BOXM2_LABEL_SHORT> * label_data;
-            boxm2_array_3d<uchar16>  trees = blk->trees()   ;
+    boxm2_data<BOXM2_LABEL_SHORT> * label_data = 0; // avoid compiler warning on uninitialised use
+    boxm2_array_3d<uchar16>  trees = blk->trees();
     bool flag = false;
     for (unsigned nm = 0 ; nm < meshes.size() ; nm++)
     {
