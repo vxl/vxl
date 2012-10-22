@@ -121,6 +121,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //  Note: not yet implemented -- PVr, 16 aug 2012
   void img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev);
 
+  vnl_matrix<double>  trans_matrix(){return trans_matrix_; }
 #if 0
   //: returns the corresponding pixel position (i,j) for a given geographical coordinate (lon, lat)
   void wgs_to_img(double lon, double lat,
