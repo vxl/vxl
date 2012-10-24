@@ -34,7 +34,8 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   input_types_[1] = "vcl_string"; // image dir path (all images)
   input_types_[2] = "vcl_string"; // appearnce model
   input_types_[3] = "vcl_string"; // num_obs model
-  input_types_[4] = "vcl_string"; // optional arg - output dir to save cams/imgs
+  input_types_[4] = "int";
+  input_types_[5] = "vcl_string"; // optional arg - output dir to save cams/imgs
 
   // process has 2 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -68,6 +69,8 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   vcl_vector<vcl_string> appearance(2,"");
   appearance[0]          = pro.get_input<vcl_string>(i++); //Appearance Model String
   appearance[1]          = pro.get_input<vcl_string>(i++); //Occupancy Model String
+  int nblks          = pro.get_input<int>(i++); //nblks
+
   vcl_string out_dir     = pro.get_input<vcl_string>(i++); //output dir for imgs/files
 
   //----------------------------------------------------------------------------
