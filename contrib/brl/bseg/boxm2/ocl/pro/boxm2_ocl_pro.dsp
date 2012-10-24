@@ -269,6 +269,9 @@ SOURCE=.\processes/boxm2_ocl_compute_visibility_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_probability_of_image_wcubic_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_change_detection_process2.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -286,9 +289,6 @@ SOURCE=.\processes/boxm2_ocl_kernel_vector_filter_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_kernel_filter_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_change_detection_process2.cxx
 # End Source File
 # End Group
 # End Target
