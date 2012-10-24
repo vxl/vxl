@@ -62,10 +62,10 @@ float render_expected_image(  boxm2_scene_sptr & scene,
 
     // set arguments
     vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    vcl_cout<<"Scene : "<<scene->data_path()<<" "<<scene->num_blocks()<<vcl_endl;
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-                vcl_cout<<"bytes in cache "<<opencl_cache->bytes_in_cache()<<vcl_endl;
         //choose correct render kernel
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         bocl_kernel* kern =  kernel;
@@ -112,8 +112,8 @@ float render_expected_image(  boxm2_scene_sptr & scene,
     delete[] ray_directions;
     opencl_cache->unref_mem(ray_o_buff.ptr());
     opencl_cache->unref_mem(ray_d_buff.ptr());
-      opencl_cache->unref_mem(cl_output.ptr());
-  opencl_cache->unref_mem(lookup.ptr());
+    opencl_cache->unref_mem(cl_output.ptr());
+    opencl_cache->unref_mem(lookup.ptr());
     vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
     return gpu_time + transfer_time;
 }
