@@ -109,7 +109,7 @@ boxm2_convert_bundle::boxm2_convert_bundle(vcl_string bundle_file, vcl_string im
   // the z-dimension however suffers because most points tend to be on the ground and the average miss represents points off the gound
   //--------------------------------------------------------------------------
   double minx=-3.0f*sigma[0], miny=-3.0f*sigma[1], minz=-1.0f*sigma[2];
-  double maxx=3.0f*sigma[0], maxy=3.0f*sigma[1], maxz=4.0f*sigma[2];
+  double maxx=3.0f*sigma[0], maxy=3.0f*sigma[1], maxz=6.0f*sigma[2];
   bbox_ = vgl_box_3d<double>(minx, miny, minz, maxx, maxy,maxz);
 
   //--------------------------------------------------------------------------
