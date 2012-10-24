@@ -19,7 +19,9 @@ vnl_vector<double> msm_similarity_aligner::inverse(const vnl_vector<double>& t) 
   vnl_vector<double> q(4);
   double a=t[0]+1.0, b=t[1];
   double s2 = a*a + b*b;
-  double a1=a/s2, b1=-b/s2;
+  double a1,b1;
+  if (s2<1e-8) { a1=0; b1=0; }  // Deal with zero scale case.
+  else { a1=a/s2; b1=-b/s2; }
   q[0] = a1-1.0;
   q[1] = b1;
   q[2] = -a1 * t[2] + b1 * t[3];
@@ -124,10 +126,14 @@ void msm_similarity_aligner::calc_transform(const msm_points& pts1,
     dot_sum += dpx*dtx + dpy*dty;
     xy_sum += dpx*dty - dpy*dtx;
   }
-
+  
   trans.set_size(4);
-  double a = dot_sum/x2_sum;
-  double b = xy_sum/x2_sum;
+  double a=0,b=0;
+  if (x2_sum>1e-8)
+  {
+    a = dot_sum/x2_sum;
+    b = xy_sum/x2_sum;
+  }
   trans[0] = a - 1.0;
   trans[1] = b;
   trans[2] = cog2.x() - (a*cog1.x() - b*cog1.y());
@@ -183,8 +189,12 @@ void msm_similarity_aligner::calc_transform_wt(const msm_points& pts1,
   }
 
   trans.set_size(4);
-  double a = dot_sum/x2_sum;
-  double b = xy_sum/x2_sum;
+  double a=0,b=0;
+  if (x2_sum>1e-8)
+  {
+    a = dot_sum/x2_sum;
+    b = xy_sum/x2_sum;
+  }
   trans[0] = a - 1.0;
   trans[1] = b;
   trans[2] = cog2.x() - (a*cog1.x() - b*cog1.y());
