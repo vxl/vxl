@@ -20,7 +20,7 @@
 
 namespace boxm2_bundle_to_scene_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 2;
 }
 
