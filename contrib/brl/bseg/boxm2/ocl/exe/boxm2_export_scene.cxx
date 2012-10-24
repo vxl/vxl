@@ -79,12 +79,8 @@ int main(int argc,  char** argv)
     }
     else {
         vul_file::make_directory_path(dir());
-#ifdef DEBUG
-        vcl_cout<<"Couldn't make directory at "<<dir()<<vcl_endl;
-        return -1;
-#endif
-    }
 
+    }
     //see if img folder exists
     vcl_string imgdir = dir() + "/img/";
     if ( vul_file::exists(imgdir) && vul_file::is_directory(imgdir) ) {
@@ -92,54 +88,8 @@ int main(int argc,  char** argv)
     }
     else {
         vul_file::make_directory_path(imgdir);
-#ifdef DEBUG
-        vcl_cout<<"Couldn't make img directory at "<<dir()<<vcl_endl;
-        return -1;
-#endif
-    }
 
-    //see if JS folder exists
-    vcl_string jsdir = dir() + "/js/";
-    if ( vul_file::exists(jsdir) && vul_file::is_directory(jsdir) ) {
-        vul_file::delete_file_glob(jsdir+"*");
     }
-    else {
-        vul_file::make_directory_path(jsdir);
-#ifdef DEBUG
-        vcl_cout<<"Couldn't make js directory at "<<dir()<<vcl_endl;
-        return -1;
-#endif
-    }
-
-    //see if CSS folder exists
-    vcl_string cssdir = dir() + "/css/";
-    if ( vul_file::exists(cssdir) && vul_file::is_directory(cssdir) ) {
-        vul_file::delete_file_glob(cssdir+"*");
-    }
-    else {
-        vul_file::make_directory_path(cssdir);
-#ifdef DEBUG
-        vcl_cout<<"Couldn't make css directory at "<<dir()<<vcl_endl;
-        return -1;
-#endif
-    }
-
-    //copy JS files into JS folder
-    vcl_string aux_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/exe/auxiliary/";
-    vcl_vector<vcl_string> js_files;
-    js_files.push_back("/js/jquery.min.js");
-    js_files.push_back("/js/jquery.cookie-min.js");
-    js_files.push_back("/js/jquery.disabletextselect-min.js");
-    js_files.push_back("/js/jquery.mousewheel-min.js");
-    js_files.push_back("/js/jquery.reel-min.js");
-    js_files.push_back("/js/miniZoomPan.js");
-    //copy files to dir() + js
-    for (unsigned int i=0; i<js_files.size(); ++i)
-        boxm2_util::copy_file(aux_dir + js_files[i], dir() + js_files[i]);
-
-    //copy CSS file to css folder
-    boxm2_util::copy_file(aux_dir + "/css/miniZoomPan.css", dir() + "/css/miniZoomPan.css");
-
     //////////////////////////////////////////////////////////////////////////////
     // Now Render Scene Images
     //////////////////////////////////////////////////////////////////////////////
@@ -150,13 +100,10 @@ int main(int argc,  char** argv)
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_image_process, "boxm2OclRenderExpectedImageProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_depth_process, "boxm2OclRenderExpectedDepthProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_color_process, "boxm2OclRenderExpectedColorProcess");
-
     REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
     REGISTER_DATATYPE(boxm2_scene_sptr);
     REGISTER_DATATYPE(bocl_mem_sptr);
-    // vil_register::register_datatype();
     REGISTER_DATATYPE(vil_image_view_base_sptr);
-
     //create scene
     boxm2_scene_sptr scene = new boxm2_scene(scene_file());
 
@@ -167,7 +114,6 @@ int main(int argc,  char** argv)
     //create cache, grab singleton instance
     boxm2_lru_cache::create(scene);
     boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene, device, 1); //allow 4 blocks inthe cache
-
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device);
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
     brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache);
@@ -176,14 +122,9 @@ int main(int argc,  char** argv)
     // FOR  GRID
     //////////////////////////////////////////////////////////////////////////////
     //set up a view sphere, use find closest for closest neighbors
-    vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), scene->bounding_box().depth()*2.0);
-    //vcl_cout<<"Radius "<< scene->bounding_box().depth()*1.5<<vcl_endl;
+    vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), scene->bounding_box().depth()*radius());
+  
 
-    // Uncomment the below for non-grid representation
-#if 0
-    sphere.add_uniform_views(vnl_math::pi_over_2, vnl_math::pi/18.0, ni(), nj());
-    vcl_cout<<"Number of views on sphere: "<<sphere.size()<<vcl_endl;
-#endif
     //map of ID's that have been rendered
     vcl_map<int, vcl_string> saved_imgs;
     vbl_array_2d<vcl_string> img_grid(num_in(), num_az());
@@ -192,7 +133,6 @@ int main(int argc,  char** argv)
     //rendered array of views
     vcl_map<int, vil_image_view<vxl_byte>* > img_map;
     vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
-
     vcl_stringstream camstream;
     camstream<<dir()<<"/cams.txt";
 
@@ -220,7 +160,7 @@ int main(int argc,  char** argv)
             fstr<<imgname()<<'_'<<uid<<".jpg";
             img_grid(el_i, az_i) = fstr.str();
             idstream<<imgdir<<imgname()<<'_'<<uid<<".jpg";
-            if ( saved_imgs.find(uid) == saved_imgs.end() )
+            //if ( saved_imgs.find(uid) == saved_imgs.end() )
             {
                 vpgl_camera_double_sptr cam_sptr = view.camera();
 
@@ -228,114 +168,36 @@ int main(int argc,  char** argv)
                 vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
                 vpgl_calibration_matrix<double> mat = cam->get_calibration();
                 vgl_vector_3d<double> pp = normalized(cam->principal_axis());
+                vgl_vector_3d<double> ppnew = normalized(scene->bounding_box().centroid() - cart_point);
+
                 vgl_vector_3d<double> vdir(cam->get_rotation().as_matrix()(1,0),
                                            cam->get_rotation().as_matrix()(1,1),
                                            cam->get_rotation().as_matrix()(1,2));
+
                 vgl_vector_3d<double> udir = normalized(cross_product(vdir,pp));
-                //vgl_vector_3d<double> vdir = cross_product(pp,udir);
                 vgl_point_3d<double> cc = cam->camera_center();
-
                 double f = 1.0 / gsdofcentralpixel;
-                //double f= mat.focal_length()/750;
-                //vcl_cout<<"Estimated F "<<fest<<" f now "<<f<<vcl_endl;
-
                 vbl_array_2d<vgl_ray_3d<double> > rays(nj(),ni());
                 cam_file_stream<<uid<<' '<<f<<' '<<cc.x()<<' '<<cc.y()<<' '<<cc.z()<<' '
-                               <<pp.x()<<' '<<pp.y()<<' '<<pp.z()<<' '
-                               <<udir.x()<<' '<<udir.y()<<' '<<udir.z()<<' '
-                               <<vdir.x()<<' '<<vdir.y()<<' '<<vdir.z()<<' ';
-
-
-                for (double k = 0 ; k < ni(); ++k)
+                                    <<pp.x()<<' '<<pp.y()<<' '<<pp.z()<<' '
+                                    <<udir.x()<<' '<<udir.y()<<' '<<udir.z()<<' '
+                                    <<vdir.x()<<' '<<vdir.y()<<' '<<vdir.z()<<' ';
+                for (double k = 0 ; k < ni(); ++k){
                     for (double l = 0 ; l < nj(); ++l)
                     {
                         vgl_point_3d<double> p = cc + udir*(k - ni()/2)/f + vdir*(l - nj()/2)/f;
                         rays((int)l,(int)k)=vgl_ray_3d<double>(p,pp);
                     }
-
+                }
                 vpgl_generic_camera<double> * gcam = new vpgl_generic_camera<double>(rays);
                 brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(gcam);
-
-                mat.set_focal_length(mat.focal_length());
-                cam->set_calibration(mat);
-                vcl_cout<<"Focal Length "<<mat.focal_length()<<vcl_endl;
                 //if scene has RGB data type, use color render process
                 bool good;
                 if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+                {
                     good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
-                else
-                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
-
-                //set process args
-                good = good
-                    && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
-                    && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
-                    && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
-                    && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
-                    && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
-                    && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
-                    && bprb_batch_process_manager::instance()->run_process();
-
-                unsigned int img_id=0;
-                good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
-                brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
-                brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
-                if (S->size()!=1) {
-                    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                             << " no selections\n";
-                }
-
-                brdb_value_sptr value;
-                if (!S->get_value(vcl_string("value"), value)) {
-                    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                             << " didn't get value\n";
-                }
-                vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
-
-
-                if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
-                {
-                    vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = static_cast<vil_image_view<vil_rgba<vxl_byte> > *>(outimg.ptr());
-                    saved_imgs[uid] = idstream.str();
-
-                    vil_image_view<vxl_byte> jpg_out(ni(), nj(),3);
-                    for (unsigned int i=0; i<ni(); ++i) {
-                        for (unsigned int j=0; j<nj(); ++j) {
-                            jpg_out(i,j,0) = (*exp_img_out)(i,j).R();
-                            jpg_out(i,j,1) = (*exp_img_out)(i,j).G();
-                            jpg_out(i,j,2) = (*exp_img_out)(i,j).B();
-                        }
-                    }
-                    vil_save( jpg_out, idstream.str().c_str() );
-                }
-                else if (scene->has_data_type(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()))
-                {
-                    vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
-                    vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
-                    for (unsigned int i=0; i<ni(); ++i)
-                        for (unsigned int j=0; j<nj(); ++j)
-                            (*byte_img)(i,j) =  (unsigned char)(vcl_min((*expimg_view)(i,j),255.0f) );   //just grab the first byte (all foura r the same)
-
-                    saved_imgs[uid] = idstream.str();
-                    vil_save(*byte_img, idstream.str().c_str() );
-                }
-                else
-                {
-                    vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
-                    vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
-                    for (unsigned int i=0; i<ni(); ++i)
-                        for (unsigned int j=0; j<nj(); ++j)
-                            (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
-
-                    saved_imgs[uid] = idstream.str();
-                    vil_save(*byte_img, idstream.str().c_str() );
-                }
-
-                if (depth())
-                {
-                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedDepthProcess");
-                    good = good
-                        && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+                    //set process args
+                    good = good  && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
                         && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
                         && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
                         && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
@@ -349,16 +211,128 @@ int main(int argc,  char** argv)
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
                         vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                                 << " no selections\n";
+                            << " no selections\n";
                     }
 
                     brdb_value_sptr value;
                     if (!S->get_value(vcl_string("value"), value)) {
                         vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                                 << " didn't get value\n";
+                            << " didn't get value\n";
+                    }
+                    vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
+                    vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = static_cast<vil_image_view<vil_rgba<vxl_byte> > *>(outimg.ptr());
+                    saved_imgs[uid] = idstream.str();
+
+                    vil_image_view<vxl_byte> jpg_out(ni(), nj(),3);
+                    for (unsigned int i=0; i<ni(); ++i) {
+                        for (unsigned int j=0; j<nj(); ++j) {
+                            jpg_out(i,j,0) = (*exp_img_out)(i,j).R();
+                            jpg_out(i,j,1) = (*exp_img_out)(i,j).G();
+                            jpg_out(i,j,2) = (*exp_img_out)(i,j).B();
+                        }
+                    }
+                    vcl_stringstream colorstream;
+                    colorstream<<imgdir<<"scene_"<<uid<<".jpg";
+                    vil_save( jpg_out, colorstream.str().c_str() );
+
+                }
+                if (scene->has_data_type(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) )
+                {
+                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+                    //set process args
+                    good = good  && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+                        && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
+                        && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
+                        && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
+                        && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
+                        && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
+                        && bprb_batch_process_manager::instance()->run_process();
+                    unsigned int img_id=0;
+                    good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+                    brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
+                    brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+                    if (S->size()!=1) {
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                            << " no selections\n";
+                    }
+
+                    brdb_value_sptr value;
+                    if (!S->get_value(vcl_string("value"), value)) {
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                            << " didn't get value\n";
+                    }
+                    vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
+                    vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
+                    vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
+                    for (unsigned int i=0; i<ni(); ++i)
+                        for (unsigned int j=0; j<nj(); ++j)
+                            (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
+                    vcl_stringstream graystream;
+                    graystream<<imgdir<<"ir_"<<uid<<".jpg";
+                    saved_imgs[uid] = idstream.str();
+                    vil_save(*byte_img, graystream.str().c_str() );
+                }
+                if (scene->has_data_type(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()))
+                {
+                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+                    //set process args
+                    good = good  && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+                        && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
+                        && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
+                        && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
+                        && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
+                        && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
+                        && bprb_batch_process_manager::instance()->run_process();
+
+                    unsigned int img_id=0;
+                    good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+                    brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
+                    brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+                    if (S->size()!=1) {
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                            << " no selections\n";
+                    }
+                    brdb_value_sptr value;
+                    if (!S->get_value(vcl_string("value"), value)) {
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                            << " didn't get value\n";
+                    }
+                    vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
+                    vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
+                    vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
+                    for (unsigned int i=0; i<ni(); ++i)
+                        for (unsigned int j=0; j<nj(); ++j)
+                            (*byte_img)(i,j) =  (unsigned char)(vcl_min((*expimg_view)(i,j),255.0f) );   //just grab the first byte (all foura r the same)
+                    vcl_stringstream depthstream;
+                    depthstream<<imgdir<<"label_"<<uid<<".jpg";
+                    vil_save(*byte_img, depthstream.str().c_str() );
+                }
+                if (depth())
+                {
+                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedDepthProcess");
+                    good = good
+                        && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+                        && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
+                        && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
+                        && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
+                        && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
+                        && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
+                        && bprb_batch_process_manager::instance()->run_process();
+                    unsigned int img_id=0;
+                    good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+                    brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
+                    brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+                    if (S->size()!=1) {
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                            << " no selections\n";
+                    }
+
+                    brdb_value_sptr value;
+                    if (!S->get_value(vcl_string("value"), value)) {
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                            << " didn't get value\n";
                     }
                     vil_image_view_base_sptr depthimg=value->val<vil_image_view_base_sptr>();
-
                     vil_image_view<float>* depthimg_view = static_cast<vil_image_view<float>* >(depthimg.ptr());
                     float vmin=0, vmax = 0;
                     vil_math_value_range<  float>(*depthimg_view, vmin, vmax);
@@ -372,11 +346,6 @@ int main(int argc,  char** argv)
         }
     }
     cam_file_stream.close();
-    //need to generate a JS.JS file that lists an array of these images
-    vcl_cout<<"Rows: "<<num_in()<<" cols: "<<num_az()<<vcl_endl;
-    boxm2_util::generate_jsfunc(img_grid, dir() + "/js/js.js");
-    boxm2_util::generate_html(nj(),ni(), num_in(), num_az(),  dir() + "/index.html");
-
     // if stitch is specified, also save a big image
     if (stitch())
     {
@@ -391,12 +360,10 @@ int main(int argc,  char** argv)
                         (*stitched)(ni()*col + i, nj()*row + j) = (*lil_img)(i,j);
             }
         }
-
         //save as pngv
         vcl_string big = dir() + "/scene-reel.jpg";
         vil_save( *stitched, big.c_str() );
     }
-
     return 0;
 }
 
