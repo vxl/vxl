@@ -9,8 +9,6 @@
 #include <vgl/vgl_box_2d.h>
 #include <msm/msm_ref_shape_instance.h>
 
-class vsml_smv_graphics;
-
 //: Generates shapes displaying modes of a shape model.
 //  Generates a set of shapes by varying one model parameter,
 //  placing shapes in a row.  This is useful for display programs.
