@@ -59,7 +59,7 @@ void vnl_symmetric_eigensystem_compute_eigenvals(
   // complex conjugate roots as numerically inaccurate repeated roots.
 
   // first check we are not too numerically inaccurate
-  assert((g2 - f3) / vnl_math_sqr(vnl_math_cube(b)) < 1e-8);
+  assert((g2 - f3) / vnl_math::sqr(vnl_math::cube(b)) < 1e-8);
 
   if (g2 >= f3)
   {
@@ -119,7 +119,7 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<T> const & A,
   vnl_copy(Dd, D);
 
   if (ierr) {
-    vcl_cerr << "vnl_symmetric_eigensystem: ierr = " << ierr << vcl_endl;
+    vcl_cerr << "vnl_symmetric_eigensystem: ierr = " << ierr << '\n';
     return false;
   }
 

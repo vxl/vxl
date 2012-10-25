@@ -92,8 +92,8 @@ bool line_chamfer_1d::insert_lines(vcl_vector<vsol_line_2d_sptr> const& lines,
     l.normalize();
     double d = -l.c(); // perpendicular distance
     distances_.push_back(d);
-    dmin_ = vnl_math_min(d,dmin_);
-    dmax_ = vnl_math_max(d,dmax_);
+    dmin_ = vnl_math::min(d,dmin_);
+    dmax_ = vnl_math::max(d,dmax_);
   }
   if (!(dmax_>=dmin_))
     return false;
@@ -209,8 +209,8 @@ bool grid_profile_matcher::insert_lines(vcl_vector<vsol_line_2d_sptr> const& lin
       d = mid->x();
 #endif
     distances_.push_back(d);
-    dmin_ = vnl_math_min(d,dmin_);
-    dmax_ = vnl_math_max(d,dmax_);
+    dmin_ = vnl_math::min(d,dmin_);
+    dmax_ = vnl_math::max(d,dmax_);
   }
   if (!(dmax_>=dmin_))
     return false;
@@ -1167,9 +1167,9 @@ bool sdet_grid_finder::compute_manual_homography(vsol_point_2d_sptr ul,
       // find closest grid line
       double length = (*lit)->length();
 #ifdef USE_HTLINE // currently not active
-      int closest_line = vnl_math_rnd(-htline.c() / spacing_);
+      int closest_line = vnl_math::rnd(-htline.c() / spacing_);
 #else
-      int closest_line = vnl_math_rnd(tline->middle()->y() / spacing_);
+      int closest_line = vnl_math::rnd(tline->middle()->y() / spacing_);
 #endif
       // TODO: weed out lines not close enough to closest grid line
       vgl_homg_line_2d<double> gl(0.0, 1.0, -spacing_*closest_line);
@@ -1190,9 +1190,9 @@ bool sdet_grid_finder::compute_manual_homography(vsol_point_2d_sptr ul,
       vgl_homg_line_2d<double> homgl = (*lit)->vgl_hline_2d();
       homgl.normalize();
 #ifdef USE_HTLINE // currently not active
-      int closest_line = vnl_math_rnd(-htline.c() / spacing_);
+      int closest_line = vnl_math::rnd(-htline.c() / spacing_);
 #else
-      int closest_line = vnl_math_rnd(tline->middle()->x() / spacing_);
+      int closest_line = vnl_math::rnd(tline->middle()->x() / spacing_);
 #endif
       // TODO: weed out lines not close enough to closest grid line
       vgl_homg_line_2d<double> gl(1.0, 0.0, -spacing_*closest_line);
@@ -1587,9 +1587,9 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
 #endif
   // add/subtract 1 from min_y and max_y to account for possible rounding error
   int min_y =
-    vnl_math_rnd(vnl_math_min(vnl_math_min(vnl_math_min(ul.y(),ur.y()),ll.y()),lr.y())) -1;
+    vnl_math::rnd(vnl_math::min(vnl_math::min(vnl_math::min(ul.y(),ur.y()),ll.y()),lr.y())) -1;
   int max_y =
-    vnl_math_rnd(vnl_math_max(vnl_math_max(vnl_math_max(ul.y(),ur.y()),ll.y()),lr.y())) +1;
+    vnl_math::rnd(vnl_math::max(vnl_math::max(vnl_math::max(ul.y(),ur.y()),ll.y()),lr.y())) +1;
 
   int n_scan_rows = max_y - min_y + 1;
 
@@ -1611,8 +1611,8 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   // avoiding the boundary pixels
 
   // upper line
-  int start_t = vnl_math_rnd(ul.x()+0.5);
-  int end_t = vnl_math_rnd(ur.x()-0.5);
+  int start_t = vnl_math::rnd(ul.x()+0.5);
+  int end_t = vnl_math::rnd(ur.x()-0.5);
   double slope = (ur.y() - ul.y())/(ur.x() - ul.x());
   double real_pix = ul.y();
   int rounded_pix;
@@ -1622,16 +1622,16 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
 #endif
   for (int t = start_t; t <= end_t; t++)
   {
-    rounded_pix = vnl_math_rnd(real_pix);
+    rounded_pix = vnl_math::rnd(real_pix);
     row_idx = rounded_pix - min_y;
-    scan_rows[row_idx][0] = vnl_math_min(scan_rows[row_idx][0],t);
-    scan_rows[row_idx][1] = vnl_math_max(scan_rows[row_idx][1],t);
+    scan_rows[row_idx][0] = vnl_math::min(scan_rows[row_idx][0],t);
+    scan_rows[row_idx][1] = vnl_math::max(scan_rows[row_idx][1],t);
     real_pix += slope;
   }
 
   // lower line
-  start_t = vnl_math_rnd(ll.x()+0.5);
-  end_t = vnl_math_rnd(lr.x()-0.5);
+  start_t = vnl_math::rnd(ll.x()+0.5);
+  end_t = vnl_math::rnd(lr.x()-0.5);
   slope = (lr.y() - ll.y())/(lr.x() - ll.x());
   real_pix = ll.y();
 #ifdef DEBUG
@@ -1639,16 +1639,16 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
 #endif
   for (int t = start_t; t <= end_t; t++)
   {
-    rounded_pix = vnl_math_rnd(real_pix);
+    rounded_pix = vnl_math::rnd(real_pix);
     row_idx = rounded_pix - min_y;
-    scan_rows[row_idx][0] = vnl_math_min(scan_rows[row_idx][0],t);
-    scan_rows[row_idx][1] = vnl_math_max(scan_rows[row_idx][1],t);
+    scan_rows[row_idx][0] = vnl_math::min(scan_rows[row_idx][0],t);
+    scan_rows[row_idx][1] = vnl_math::max(scan_rows[row_idx][1],t);
     real_pix += slope;
   }
 
   // left line
-  start_t = vnl_math_rnd(ul.y()+0.5);
-  end_t = vnl_math_rnd(ll.y()-0.5);
+  start_t = vnl_math::rnd(ul.y()+0.5);
+  end_t = vnl_math::rnd(ll.y()-0.5);
   slope = (ll.x() - ul.x())/(ll.y() - ul.y());
   real_pix = ul.x();
 #ifdef DEBUG
@@ -1656,16 +1656,16 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
 #endif
   for (int t = start_t; t <= end_t; t++)
   {
-    rounded_pix = vnl_math_rnd(real_pix);
+    rounded_pix = vnl_math::rnd(real_pix);
     row_idx = t - min_y;
-    scan_rows[row_idx][0] = vnl_math_min(scan_rows[row_idx][0],rounded_pix);
-    scan_rows[row_idx][1] = vnl_math_max(scan_rows[row_idx][1],rounded_pix);
+    scan_rows[row_idx][0] = vnl_math::min(scan_rows[row_idx][0],rounded_pix);
+    scan_rows[row_idx][1] = vnl_math::max(scan_rows[row_idx][1],rounded_pix);
     real_pix += slope;
   }
 
   // right line
-  start_t = vnl_math_rnd(ur.y()+0.5);
-  end_t = vnl_math_rnd(lr.y()-0.5);
+  start_t = vnl_math::rnd(ur.y()+0.5);
+  end_t = vnl_math::rnd(lr.y()-0.5);
   slope = (lr.x() - ur.x())/(lr.y() - ur.y());
   real_pix = ur.x();
 #ifdef DEBUG
@@ -1673,10 +1673,10 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
 #endif
   for (int t = start_t; t <= end_t; t++)
   {
-    rounded_pix = vnl_math_rnd(real_pix);
+    rounded_pix = vnl_math::rnd(real_pix);
     row_idx = t - min_y;
-    scan_rows[row_idx][0] = vnl_math_min(scan_rows[row_idx][0],rounded_pix);
-    scan_rows[row_idx][1] = vnl_math_max(scan_rows[row_idx][1],rounded_pix);
+    scan_rows[row_idx][0] = vnl_math::min(scan_rows[row_idx][0],rounded_pix);
+    scan_rows[row_idx][1] = vnl_math::max(scan_rows[row_idx][1],rounded_pix);
     real_pix += slope;
   }
   // now we can scan the pixels and grab their intensities

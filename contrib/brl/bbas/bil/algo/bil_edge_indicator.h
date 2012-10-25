@@ -52,7 +52,7 @@ class bil_power_functor
 {
   int p_;
  public:
-  bil_power_functor(int p):p_(p){}
+  bil_power_functor(int p):p_(p) {}
   float operator()(float x) const {return vcl_pow(x, (float)p_); }
   double operator()(double x) const {return vcl_pow(x, p_); }
 };
@@ -64,7 +64,7 @@ class bil_gaussian_functor
   double mu_;
   double sigma_;
  public:
-  bil_gaussian_functor(double mu, double sigma): mu_(mu), sigma_(sigma){}
+  bil_gaussian_functor(double mu, double sigma): mu_(mu), sigma_(sigma) {}
   double operator()(double x) const
   {
     return vcl_exp(-(x-mu_)*(x-mu_)/(2*sigma_*sigma_) ) /
@@ -279,7 +279,7 @@ inline void bil_normalized_inverse_gradient(
       for (unsigned int j=0; j<grad_mag_cost.nj(); ++j)
       {
         grad_mag_cost(i,j) =
-          1 + a*vnl_math_sqr(grad_mag_cost(i, j)-b);
+          1 + a*vnl_math::sqr(grad_mag_cost(i, j)-b);
       }
     }
 

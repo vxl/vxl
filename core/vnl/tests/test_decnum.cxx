@@ -15,13 +15,13 @@ static vnl_decnum factorial(unsigned long n)
 
 // Combinations (n choose k)
 static vnl_decnum binom(unsigned long n, unsigned long k)
-{ 
+{
   vnl_decnum r(1L);
   if (k >= n || k == 0) return r;
-  else 
+  else
   {
     for (unsigned long i=n; i>n-k; --i)
-      r *= i; 
+      r *= i;
     r /= factorial(k);
     return r;
   }
@@ -72,16 +72,16 @@ static void run_constructor_tests()
   {vnl_decnum b(" 9"); TEST("vnl_decnum b(\" 9\");", b, 9L);}
 
   // infinity and NaN:
-  {vnl_decnum b("-123"); TEST("isfinite(-123)", vnl_math_isfinite(b), true);}
-  {vnl_decnum b("0"); TEST("isfinite(0)", vnl_math_isfinite(b), true);}
-  {vnl_decnum b("1e999"); TEST("isfinite(1e999)", vnl_math_isfinite(b), true);}
-  {vnl_decnum b("NaN"); TEST("isfinite(NaN)", vnl_math_isfinite(b), false);}
-  {vnl_decnum b("NaN"); TEST("isnan(NaN)", vnl_math_isnan(b), true);}
-  {vnl_decnum b("1e999"); TEST("isnan(1e999)", vnl_math_isnan(b), false);}
-  {vnl_decnum b("+Inf"); TEST("vnl_decnum(\"+Inf\")", vnl_math_isfinite(b), false);}
-  {vnl_decnum b("Infinity"); TEST("vnl_decnum(\"Infinity\")", vnl_math_isfinite(b), false);}
-  {vnl_decnum b("-Infin"); TEST("vnl_decnum(\"-Infin\")", vnl_math_isfinite(b), false);}
-  {vnl_decnum b("Inf"); TEST("isnan(Inf)", vnl_math_isnan(b), false);}
+  {vnl_decnum b("-123"); TEST("isfinite(-123)", vnl_math::isfinite(b), true);}
+  {vnl_decnum b("0"); TEST("isfinite(0)", vnl_math::isfinite(b), true);}
+  {vnl_decnum b("1e999"); TEST("isfinite(1e999)", vnl_math::isfinite(b), true);}
+  {vnl_decnum b("NaN"); TEST("isfinite(NaN)", vnl_math::isfinite(b), false);}
+  {vnl_decnum b("NaN"); TEST("isnan(NaN)", vnl_math::isnan(b), true);}
+  {vnl_decnum b("1e999"); TEST("isnan(1e999)", vnl_math::isnan(b), false);}
+  {vnl_decnum b("+Inf"); TEST("vnl_decnum(\"+Inf\")", vnl_math::isfinite(b), false);}
+  {vnl_decnum b("Infinity"); TEST("vnl_decnum(\"Infinity\")", vnl_math::isfinite(b), false);}
+  {vnl_decnum b("-Infin"); TEST("vnl_decnum(\"-Infin\")", vnl_math::isfinite(b), false);}
+  {vnl_decnum b("Inf"); TEST("isnan(Inf)", vnl_math::isnan(b), false);}
 
   vcl_cout << "reading from istream:\n";
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_decnum b;
@@ -119,7 +119,6 @@ static void run_conversion_operator_tests()
   TEST("vnl_decnum b(0x7fffffffL); ++b; (unsigned long)b == 0x80000000UL", (unsigned long)b, 0x80000000UL);
   --b;
   TEST("vnl_decnum b(0x80000000UL); --b; long(b) == 0x7fffffffL", long(b), 0x7fffffffL);
-
 }
 
 static void run_assignment_tests()
@@ -251,7 +250,7 @@ static void run_division_tests()
   TEST("long(vnl_decnum(-1L)/vnl_decnum(\"+Inf\"))", long(vnl_decnum(-1L)/vnl_decnum("+Inf")), 0L);
   TEST("vnl_decnum(\"+Inf\")/(-1L)", vnl_decnum("+Inf")/(-1L), vnl_decnum("-Inf"));
   TEST("vnl_decnum(-1L)/0L", vnl_decnum(-1L)/0L, vnl_decnum("-Inf"));
-  TEST("vnl_decnum(-0L)/0L", vnl_math_isnan(vnl_decnum(-0L)/0L), true);
+  TEST("vnl_decnum(-0L)/0L", vnl_math::isnan(vnl_decnum(-0L)/0L), true);
 
   for (long i = 0xffff; i!=0; i /= -16) {
    for (long k = -6; k < 9; k+=3) {
@@ -329,7 +328,7 @@ static void run_multiplication_division_tests()
   vnl_decnum b2 = "4294967295"; // == 0xffffffff         // Create vnl_decnum object
   vnl_decnum b3 = "12345e30";   // Create vnl_decnum object
 
-  vcl_cout << "b2 = " << b2 << vcl_endl
+  vcl_cout << "b2 = " << b2 << '\n'
            << "b3 = " << b3 << vcl_endl;
 
   TEST("(b2*b3) / b3 = b2", (b2*b3) / b3, b2);

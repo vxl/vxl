@@ -41,8 +41,8 @@ vil_image_view<float> bvxm_camera_estimator::convert_to_spherical_coordinates(co
                                                                               const vpgl_perspective_camera<double> &cam,
                                                                               const double rotate)
 {
-  int theta_size = 2*vnl_math_ceil(theta_range_/theta_step_);
-  int phi_size = 2*vnl_math_ceil(phi_range_/phi_step_);
+  int theta_size = 2*vnl_math::ceil(theta_range_/theta_step_);
+  int phi_size = 2*vnl_math::ceil(phi_range_/phi_step_);
 
   vil_image_view<float> imgs(theta_size,phi_size,1);
   imgs.fill(0.0f);
@@ -78,8 +78,8 @@ vil_image_view<float> bvxm_camera_estimator::convert_to_spherical_coordinates(co
       curr_vector[2] = x;
       vnl_double_3 curr_pixel = K*curr_vector;
 
-      int u = vnl_math_rnd(curr_pixel[0]/curr_pixel[2]);
-      int v = vnl_math_rnd(curr_pixel[1]/curr_pixel[2]);
+      int u = vnl_math::rnd(curr_pixel[0]/curr_pixel[2]);
+      int v = vnl_math::rnd(curr_pixel[1]/curr_pixel[2]);
 
       if (img.in_range(u,v)) {
         imgs(i,j) = img(u,v);
@@ -207,7 +207,7 @@ void bvxm_camera_estimator::get_expected_edge_image(const bvxm_voxel_slab<float>
 
           // this line takes 2200 milliseconds
           // with float ***data it takes 1100 ms
-          (*img_eei)(i,j) = vnl_math_max((*img_eei)(i,j),data(vx,vy,vz));
+          (*img_eei)(i,j) = vnl_math::max((*img_eei)(i,j),data(vx,vy,vz));
         }
       }
     }
@@ -228,7 +228,7 @@ double bvxm_camera_estimator::estimate_rotation_angle(const vil_image_view<float
   vil_image_view<float> img2;
   normalize_to_interval(img2c,img2,0.0f,1.0f);
 
-  int rot_size = vnl_math_ceil(rot_range_/rot_step_);
+  int rot_size = vnl_math::ceil(rot_range_/rot_step_);
 
   double best_score = 0.0;
   double best_rot = 0.0;

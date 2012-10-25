@@ -120,9 +120,9 @@ transfer_error_covar( vnl_vector<double> const& from_loc ) const
 
   // derivatives w.r.t division
   jg(0,0) = 1.0/mapped_homo[2];
-  jg(0,2) = -mapped_homo[0]/vnl_math_sqr(mapped_homo[2]);
+  jg(0,2) = -mapped_homo[0]/vnl_math::sqr(mapped_homo[2]);
   jg(1,1) = 1.0/mapped_homo[2];
-  jg(1,2) = -mapped_homo[1]/vnl_math_sqr(mapped_homo[2]);
+  jg(1,2) = -mapped_homo[1]/vnl_math::sqr(mapped_homo[2]);
 
   // since Jab_g(f(p)) = Jac_g * Jac_f
   jac = jg * jf;
@@ -257,7 +257,7 @@ write(vcl_ostream& os ) const
   // tag
   os << "HOMOGRAPHY2D\n"
   // parameters
-     << 2 << vcl_endl
+     << 2 << '\n'
      << H_ << from_centre_ << "  " << to_centre_ << vcl_endl;
 
   // parent

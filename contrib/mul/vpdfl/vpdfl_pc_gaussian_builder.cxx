@@ -284,9 +284,9 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   // eigenvalues are highest first now
 
 #if 0
-  vcl_cerr << 'S' << S <<vcl_endl
-           << "evals" << evals <<vcl_endl
-           << "evecs" << evecs <<vcl_endl;
+  vcl_cerr << 'S' << S <<'\n'
+           << "evals " << evals <<'\n'
+           << "evecs " << evecs <<vcl_endl;
 #endif
 
   eValsFloorZero(evals);
@@ -332,7 +332,7 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   assert (eVals.size() > 0);
   if (partitionMethod_ == vpdfl_pc_gaussian_builder::fixed)
   {
-    return vnl_math_min(eVals.size(), (unsigned)fixed_partition()+1);;
+    return vnl_math::min(eVals.size(), (unsigned)fixed_partition()+1);;
   }
   else if (partitionMethod_ == proportionate)
   {

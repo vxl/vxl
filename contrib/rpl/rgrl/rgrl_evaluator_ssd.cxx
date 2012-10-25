@@ -23,8 +23,8 @@ evaluate( vcl_vector< double > const& a,
   double sigma_a = 0, sigma_b = 0;
 
   for ( unsigned i = 0; i < a.size(); ++i ) {
-    sigma_a += vnl_math_sqr( a[ i ] - mean_a );
-    sigma_b += vnl_math_sqr( b[ i ] - mean_b );
+    sigma_a += vnl_math::sqr( a[ i ] - mean_a );
+    sigma_b += vnl_math::sqr( b[ i ] - mean_b );
   }
 
   sigma_a = vcl_sqrt( sigma_a / (a.size()-1) );
@@ -45,7 +45,7 @@ evaluate( vcl_vector< double > const& a,
     else
       bb = ( b[ i ] - mean_b ) / sigma_b;
 
-    double ff = (double) vnl_math_sqr ( aa - bb ) / a.size();
+    double ff = (double) vnl_math::sqr ( aa - bb ) / a.size();
     f += weight[i] * vcl_sqrt ( ff );
   }
 

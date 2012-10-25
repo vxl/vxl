@@ -59,10 +59,10 @@ bapl_bbf_dist_sq( const bapl_keypoint_sptr p, const bapl_bbf_box& b )
     double x0 = b.min_point_[i], x1 = b.max_point_[i];
     double x = p->descriptor()[i];
     if ( x < x0 ) {
-      sum_sq += vnl_math_sqr( x0 - x );
+      sum_sq += vnl_math::sqr( x0 - x );
     }
     else if ( x > x1 ) {
-      sum_sq += vnl_math_sqr( x1 - x );
+      sum_sq += vnl_math::sqr( x1 - x );
     }
   }
 
@@ -100,7 +100,7 @@ bapl_bbf_tree::bapl_bbf_tree(const vcl_vector< bapl_keypoint_sptr >& points, int
   // 3. call recursive function to do the real work
   root_ = build_tree( points_per_leaf, box, 0, indices );
 
-  vcl_cout << "total leaves = " << leaf_count_ << vcl_endl
+  vcl_cout << "total leaves = " << leaf_count_ << '\n'
            << "total internal = " << internal_count_ << vcl_endl;
 }
 
@@ -130,7 +130,7 @@ bapl_bbf_tree::build_tree( int points_per_leaf,
   bapl_bbf_box inner_box = this->build_inner_box( indices );
 
   // 2. If only one point is left, create and return a leaf node.
-  if ( indices.size() <= (unsigned int)points_per_leaf){
+  if ( indices.size() <= (unsigned int)points_per_leaf) {
     leaf_count_++;
     return new bapl_bbf_node ( outer_box, inner_box, depth, indices );
   }
@@ -350,9 +350,9 @@ bapl_bbf_tree::update_closest( const bapl_keypoint_sptr query_point,
 {
   assert(n>0);
 #ifdef DEBUG
-  vcl_cout << "Update_closest for leaf " << vcl_endl
-           << " query_point = " << query_point << vcl_endl
-           << " inner bounding box =\n" << p->inner_box_ << vcl_endl
+  vcl_cout << "Update_closest for leaf" << '\n'
+           << " query_point = " << query_point << '\n'
+           << " inner bounding box =\n" << p->inner_box_ << '\n'
            << " sq_dist = " << rsdl_dist_sq( query_point, p->inner_box_ ) << vcl_endl;
 #endif
 
@@ -387,7 +387,7 @@ bapl_bbf_tree::update_closest( const bapl_keypoint_sptr query_point,
     sq_distances[ j+1 ] = sq_dist;
   }
   // vcl_cout << "  End of leaf computation, num_found =  " << num_found
-  //          << ", and they are: " << vcl_endl;
+  //          << ", and they are:" << vcl_endl;
   // for ( int k=0; k<num_found; ++k )
   //   vcl_cout << "     " << k << ":  indices: " << closest_indices[ k ]
   //            << ", sq_dist " << sq_distances[ k ] << vcl_endl;

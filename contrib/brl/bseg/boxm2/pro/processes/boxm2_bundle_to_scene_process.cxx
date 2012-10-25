@@ -69,7 +69,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   vcl_vector<vcl_string> appearance(2,"");
   appearance[0]          = pro.get_input<vcl_string>(i++); //Appearance Model String
   appearance[1]          = pro.get_input<vcl_string>(i++); //Occupancy Model String
-  int nblks          = pro.get_input<int>(i++); //nblks
+  int nblks              = pro.get_input<int>(i++);        // TODO: unused!!!
 
   vcl_string out_dir     = pro.get_input<vcl_string>(i++); //output dir for imgs/files
 

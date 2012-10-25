@@ -301,7 +301,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
 
     // guess initial step size assuming a rectangular distribution.
     // slope = 1 / sqrt(12 * variance)
-    double step = 2.0 * vnl_math_abs(f_init - P)*vcl_sqrt(12 * variance());
+    double step = 2.0 * vnl_math::abs(f_init - P)*vcl_sqrt(12 * variance());
 
     double x_above, x_below;
     if (f_init > P)
@@ -341,21 +341,22 @@ double pdf1d_pdf::inverse_cdf(double P) const
     // bracketed Newton-Raphson.
 
 
-    double x_middle=0.5*(x_above+x_below); 
-    double dxold= x_above-x_below; 
+    double x_middle=0.5*(x_above+x_below);
+    double dxold= x_above-x_below;
     double dx=dxold;
     double f_middle = cdf(x_middle)-P;
     double df_middle = operator() (x_middle);
-    for (unsigned j=100;j>0;j--) 
+    for (unsigned j=100;j>0;j--)
     {
       if ( !((x_above - x_middle)*df_middle + f_middle > 0.0 &&
-             (x_below - x_middle)*df_middle + f_middle < 0.0   ) || 
-        (vnl_math_abs((2.0*f_middle)) > vnl_math_abs(dxold*df_middle)))
+             (x_below - x_middle)*df_middle + f_middle < 0.0   ) ||
+        (vnl_math::abs((2.0*f_middle)) > vnl_math::abs(dxold*df_middle)))
       { // Bisect if Newton-Raphson isn't working
         x_middle=0.5*(x_above+x_below);
         dxold=dx;
         dx=x_above-x_middle;
-      } else // Newton-Raphson step
+      }
+      else // Newton-Raphson step
       {
         dxold=dx;
         dx=f_middle/df_middle;
@@ -363,7 +364,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
         assert (x_below <= x_middle && x_middle <= x_above);
       }
 
-      if (vnl_math_abs(dx) < vnl_math_abs(x_middle * vnl_math::sqrteps))
+      if (vnl_math::abs(dx) < vnl_math::abs(x_middle * vnl_math::sqrteps))
       {
         return x_middle; // Converged .
       }
@@ -389,7 +390,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
     if (P < 0.5)
     {
       // we want n_stat samples below P
-      n = vnl_math_rnd(vcl_ceil(n_stat / P));
+      n = vnl_math::rnd(vcl_ceil(n_stat / P));
 
       // find lowest values
       mbl_priority_bounded_queue<double> lowest(n_stat+1);
@@ -405,7 +406,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
     {
       // we want n_stat samples above P
       P = 1.0 - P;
-      n = vnl_math_rnd(vcl_ceil(n_stat / P));
+      n = vnl_math::rnd(vcl_ceil(n_stat / P));
 
       // find highest values
       mbl_priority_bounded_queue<double, vcl_vector<double>, vcl_greater<double> >

@@ -306,24 +306,24 @@ void test_trans_rigid()
       statusdet = false;
     }
 
-    if (!( vnl_math_abs(phi-dphi)< tol     &&
-           vnl_math_abs(theta-dtheta)< tol &&
-           vnl_math_abs(alpha-dalpha)< tol ))
+    if (!( vnl_math::abs(phi-dphi)< tol     &&
+           vnl_math::abs(theta-dtheta)< tol &&
+           vnl_math::abs(alpha-dalpha)< tol ))
     {
       testlib_test_perform(false);
       vcl_cout<<"Failing for this case:\n"
-              <<"initial   phi,alpha,theta = "<<phi<<' '<<alpha<<' '<<theta<<vcl_endl
+              <<"initial   phi,alpha,theta = "<<phi<<' '<<alpha<<' '<<theta<<'\n'
               <<"extracted phi,alpha,theta = "<<dphi<<' '<<dalpha<<' '<<dtheta<<vcl_endl;
       status3 = false;
     }
 
     rigid2.set_rotation(theta);
     rigid2.determine_angles(dtheta);
-    if (! (vnl_math_abs(theta-dtheta)< tol ) )
+    if (! (vnl_math::abs(theta-dtheta)< tol ) )
     {
       testlib_test_perform(false);
       vcl_cout<<"Failing for this case:\n"
-              <<"initial   theta = "<<theta<<vcl_endl
+              <<"initial   theta = "<<theta<<'\n'
               <<"extracted theta = "<<dtheta<<vcl_endl;
       status2 = false;
     }
@@ -366,7 +366,7 @@ void test_trans_rigid()
   rigid->determine_angles(dphi,dalpha,dtheta);
 
   testlib_test_begin(" Extracted angles are close to real angles ");
-  testlib_test_perform( vnl_math_abs(phi-dphi)< tol && vnl_math_abs(theta-dtheta)< tol && vnl_math_abs(alpha-dalpha)< tol );
+  testlib_test_perform( vnl_math::abs(phi-dphi)< tol && vnl_math::abs(theta-dtheta)< tol && vnl_math::abs(alpha-dalpha)< tol );
 
   testlib_test_begin( "Transform 3D location" );
 

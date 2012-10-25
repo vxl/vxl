@@ -89,7 +89,7 @@ void clsfy_random_classifier::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_classifier&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
@@ -192,7 +192,7 @@ void clsfy_random_classifier::class_probabilities(vcl_vector<double> &outputs, c
     assert(i<n);
 
     last_outputs_ = probs_;
-    last_outputs_[i] += min_to_win_[i] + vnl_math_abs(rng_.normal()) * confidence_;
+    last_outputs_[i] += min_to_win_[i] + vnl_math::abs(rng_.normal()) * confidence_;
 
     double * const p = &last_outputs_[0];
     cvd::scale(p, p, n, 1.0/cvd::sum(p, n));

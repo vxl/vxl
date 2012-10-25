@@ -37,7 +37,7 @@ static void test_robust_util()
   double sum_wr = 0;
   double sum_w = 0;
   for ( int i=0; i<10; ++i ) {
-    sum_wr += wgt_arr[i] * vnl_math_sqr(rs_arr[i]);
+    sum_wr += wgt_arr[i] * vnl_math::sqr(rs_arr[i]);
     sum_w += wgt_arr[i];
   }
   int num = 10;

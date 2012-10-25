@@ -29,8 +29,8 @@ void save_slice(const vil_image_view<float>& image,
 {
   // Resize so that image has square pixels
   float w=vcl_min(wi,wj);
-  unsigned ni=vnl_math_rnd(image.ni()*wi/w);
-  unsigned nj=vnl_math_rnd(image.nj()*wj/w);
+  unsigned ni=vnl_math::rnd(image.ni()*wi/w);
+  unsigned nj=vnl_math::rnd(image.nj()*wj/w);
 
   vil_image_view<float> image2;
   if (ni==nj)
@@ -38,9 +38,9 @@ void save_slice(const vil_image_view<float>& image,
   else
     vil_resample_bilin(image,image2,ni,nj);
 
-  unsigned ilo=vnl_math_rnd(ni*border);
+  unsigned ilo=vnl_math::rnd(ni*border);
   unsigned ihi=ni-1-ilo;
-  unsigned jlo=vnl_math_rnd(nj*border);
+  unsigned jlo=vnl_math::rnd(nj*border);
   unsigned jhi=nj-1-jlo;
 
   vil_image_view<float> cropped_image
@@ -101,11 +101,11 @@ int main(int argc, char** argv)
   }
 
   // Select i,j,k values
-  unsigned i=vnl_math_rnd(0.01*pi()*(image3d.ni()-1));
+  unsigned i=vnl_math::rnd(0.01*pi()*(image3d.ni()-1));
   i=vcl_min(i,image3d.ni()-1);
-  unsigned j=vnl_math_rnd(0.01*pj()*(image3d.nj()-1));
+  unsigned j=vnl_math::rnd(0.01*pj()*(image3d.nj()-1));
   j=vcl_min(j,image3d.nj()-1);
-  unsigned k=vnl_math_rnd(0.01*pk()*(image3d.nk()-1));
+  unsigned k=vnl_math::rnd(0.01*pk()*(image3d.nk()-1));
   k=vcl_min(k,image3d.nk()-1);
 
   vil_image_view<float> slice_jk = vil3d_slice_jk(image3d,i);

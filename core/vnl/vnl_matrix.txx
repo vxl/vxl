@@ -847,7 +847,7 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b)
   typedef typename vnl_numeric_traits<Abs_t>::real_t abs_r;
 
   T ab = inner_product(a,b);
-  Abs_t a_b = (Abs_t)vcl_sqrt( (abs_r)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+  Abs_t a_b = (Abs_t)vcl_sqrt( (abs_r)vnl_math::abs(inner_product(a,a) * inner_product(b,b)) );
 
   return T( ab / a_b);
 }
@@ -934,7 +934,7 @@ vnl_matrix<T>& vnl_matrix<T>::normalize_rows()
   for (unsigned int i = 0; i < this->num_rows; ++i) {  // For each row in the Matrix
     Abs_t norm(0); // double will not do for all types.
     for (unsigned int j = 0; j < this->num_cols; ++j)  // For each element in row
-      norm += vnl_math_squared_magnitude(this->data[i][j]);
+      norm += vnl_math::squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
       abs_real_t scale = abs_real_t(1)/(vcl_sqrt((abs_real_t)norm));
@@ -956,7 +956,7 @@ vnl_matrix<T>& vnl_matrix<T>::normalize_columns()
   for (unsigned int j = 0; j < this->num_cols; j++) {  // For each column in the Matrix
     Abs_t norm(0); // double will not do for all types.
     for (unsigned int i = 0; i < this->num_rows; i++)
-      norm += vnl_math_squared_magnitude(this->data[i][j]);
+      norm += vnl_math::squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
       abs_real_t scale = abs_real_t(1)/(vcl_sqrt((abs_real_t)norm));
@@ -1181,7 +1181,7 @@ bool vnl_matrix<T>::is_equal(vnl_matrix<T> const& rhs, double tol) const
 
   for (unsigned int i = 0; i < this->rows(); ++i)
     for (unsigned int j = 0; j < this->columns(); ++j)
-      if (vnl_math_abs(this->data[i][j] - rhs.data[i][j]) > tol)
+      if (vnl_math::abs(this->data[i][j] - rhs.data[i][j]) > tol)
         return false;                                    // difference greater than tol
 
   return true;
@@ -1210,7 +1210,7 @@ bool vnl_matrix<T>::is_identity(double tol) const
   for (unsigned int i = 0; i < this->rows(); ++i)
     for (unsigned int j = 0; j < this->columns(); ++j) {
       T xm = (*this)(i,j);
-      abs_t absdev = (i == j) ? vnl_math_abs(xm - one) : vnl_math_abs(xm);
+      abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
       if (absdev > tol)
         return false;
     }
@@ -1235,7 +1235,7 @@ bool vnl_matrix<T>::is_zero(double tol) const
 {
   for (unsigned int i = 0; i < this->rows(); ++i)
     for (unsigned int j = 0; j < this->columns(); ++j)
-      if (vnl_math_abs((*this)(i,j)) > tol)
+      if (vnl_math::abs((*this)(i,j)) > tol)
         return false;
 
   return true;
@@ -1247,7 +1247,7 @@ bool vnl_matrix<T>::has_nans() const
 {
   for (unsigned int i = 0; i < this->rows(); ++i)
     for (unsigned int j = 0; j < this->columns(); ++j)
-      if (vnl_math_isnan((*this)(i,j)))
+      if (vnl_math::isnan((*this)(i,j)))
         return true;
 
   return false;
@@ -1259,7 +1259,7 @@ bool vnl_matrix<T>::is_finite() const
 {
   for (unsigned int i = 0; i < this->rows(); ++i)
     for (unsigned int j = 0; j < this->columns(); ++j)
-      if (!vnl_math_isfinite((*this)(i,j)))
+      if (!vnl_math::isfinite((*this)(i,j)))
         return false;
 
   return true;
@@ -1283,7 +1283,7 @@ void vnl_matrix<T>::assert_finite_internal() const
 
     for (unsigned int i=0; i<rows(); ++i) {
       for (unsigned int j=0; j<cols(); ++j)
-        vcl_cerr << char(vnl_math_isfinite((*this)(i, j)) ? '-' : '*');
+        vcl_cerr << char(vnl_math::isfinite((*this)(i, j)) ? '-' : '*');
       vcl_cerr << '\n';
     }
   }
@@ -1494,7 +1494,7 @@ typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_one_norm() const
   for (unsigned int j=0; j<this->num_cols; ++j) {
     abs_t tmp = 0;
     for (unsigned int i=0; i<this->num_rows; ++i)
-      tmp += vnl_math_abs(this->data[i][j]);
+      tmp += vnl_math::abs(this->data[i][j]);
     if (tmp > max)
       max = tmp;
   }
@@ -1510,7 +1510,7 @@ typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_inf_norm() const
   for (unsigned int i=0; i<this->num_rows; ++i) {
     abs_t tmp = 0;
     for (unsigned int j=0; j<this->num_cols; ++j)
-      tmp += vnl_math_abs(this->data[i][j]);
+      tmp += vnl_math::abs(this->data[i][j]);
     if (tmp > max)
       max = tmp;
   }
@@ -1646,7 +1646,7 @@ vnl_matrix<T>& vnl_matrix<T>::inplace_transpose()
 
   int iok = ::vnl_inplace_transpose(data_block(), n, m, &move[0], iwrk);
   if (iok != 0)
-    vcl_cerr << __FILE__ " : inplace_transpose() -- iok = " << iok << vcl_endl;
+    vcl_cerr << __FILE__ " : inplace_transpose() -- iok = " << iok << '\n';
 
   this->num_rows = n;
   this->num_cols = m;

@@ -101,7 +101,7 @@ rrel_tukey_obj::rho_fast( double u ) const
   if ( u < -B_ || u > B_ )
     return 1.0;
   else
-    return 1.0 - vnl_math_cube(1.0 - vnl_math_sqr(u/B_));
+    return 1.0 - vnl_math::cube(1.0 - vnl_math::sqr(u/B_));
 }
 
 inline double
@@ -110,7 +110,7 @@ rrel_tukey_obj::wgt_fast( double u ) const
   if ( u < -B_ || u > B_ )
     return 0.0;
   else
-    return vnl_math_sqr(1.0 - vnl_math_sqr(u/B_));
+    return vnl_math::sqr(1.0 - vnl_math::sqr(u/B_));
 }
 
 #endif // rrel_tukey_obj_h_

@@ -51,8 +51,8 @@ bsol_distance_histogram(const int nbins,
     hlines.push_back(lines[i]->vgl_hline_2d());
     hlines[i].normalize();
     double d = hlines[i].c();
-    dmin = vnl_math_min(dmin, d);
-    dmax = vnl_math_max(dmax, d);
+    dmin = vnl_math::min(dmin, d);
+    dmax = vnl_math::max(dmax, d);
   }
   delta_ = (dmax-dmin)/nbins;
 

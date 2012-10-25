@@ -166,7 +166,7 @@ rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
   //    initialize the maps
   distance_map_.resize(size_y_ , size_x_ );
   index_map_.resize(size_y_ , size_x_ );
-  int max_range = vnl_math_max( size_x_, size_y_) * 3;
+  int max_range = vnl_math::max( size_x_, size_y_) * 3;
   for (int i = 0; i < size_y_; i++)
     for (int j = 0; j < size_x_; j++) {
       distance_map_[i][j] = max_range ;
@@ -176,8 +176,8 @@ rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
   // 2. Mark the data on the maps
   //
   for (unsigned int i = 0; i < data_.size(); ++i) {
-    int x = vnl_math_rnd((*data_[i])[0] - org_x_);
-    int y = vnl_math_rnd((*data_[i])[1] - org_y_);
+    int x = vnl_math::rnd((*data_[i])[0] - org_x_);
+    int y = vnl_math::rnd((*data_[i])[1] - org_y_);
     if ( x>= 0 && x < size_x_ && y>=0 && y < size_y_ )
     {
       distance_map_[y][x] = 0;

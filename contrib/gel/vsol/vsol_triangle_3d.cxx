@@ -118,9 +118,9 @@ double vsol_triangle_3d::area(void) const
   double dx12=(*storage_)[1]->x()-(*storage_)[2]->x();
   double dy12=(*storage_)[1]->y()-(*storage_)[2]->y();
   double dz12=(*storage_)[1]->z()-(*storage_)[2]->z();
-  return vcl_sqrt( vnl_math_sqr(dy02*dz12-dy12*dz02)
-                 + vnl_math_sqr(dz02*dx12-dz12*dx02)
-                 + vnl_math_sqr(dx02*dy12-dx12*dy02))/2;
+  return vcl_sqrt( vnl_math::sqr(dy02*dz12-dy12*dz02)
+                 + vnl_math::sqr(dz02*dx12-dz12*dx02)
+                 + vnl_math::sqr(dx02*dy12-dx12*dy02))/2;
 }
 //***************************************************************************
 // Element change
@@ -251,7 +251,7 @@ void vsol_triangle_3d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, vsol_triangle_3d const* t)
 {
-  if (!t){
+  if (!t) {
     vsl_b_write(os, false); // Indicate null triangle stored
   }
   else{

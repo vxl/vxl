@@ -117,7 +117,7 @@ double
 rrel_muse_table::calculate_divisor( unsigned int /* k */, unsigned int n,
                                     double expected_kth ) const
 {
-  return (n+1)*vcl_sqrt(2/vnl_math::pi)*(1.0-vcl_exp(-vnl_math_sqr(expected_kth)/2.0));
+  return (n+1)*vcl_sqrt(2/vnl_math::pi)*(1.0-vcl_exp(-vnl_math::sqr(expected_kth)/2.0));
 }
 
 double
@@ -125,6 +125,6 @@ rrel_muse_table::calculate_sq_divisor( unsigned int k, unsigned int n,
                                        double expected_kth ) const
 {
   return k - (n+1) * expected_kth * vcl_sqrt(2/vnl_math::pi)
-    * vcl_exp(-vnl_math_sqr(expected_kth)/2.0);
+    * vcl_exp(-vnl_math::sqr(expected_kth)/2.0);
 }
 

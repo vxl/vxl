@@ -163,7 +163,7 @@ similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
 
   cofact = vnl_inverse(wXtX).as_ref(); // size 4x4
   params = cofact * wXtu;
-  if ( vnl_math_abs(params[0]) < 1.0e-6 && vnl_math_abs(params[1]) < 1.0e-6 )
+  if ( vnl_math::abs(params[0]) < 1.0e-6 && vnl_math::abs(params[1]) < 1.0e-6 )
   {
     vcl_cout << "Transformation is degenerate\n";
     return false;

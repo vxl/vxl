@@ -86,7 +86,7 @@ compute_weights( rgrl_scale const&  scales,
       }
       else if ( use_signature_error_ ) {
         vnl_vector<double> error_vector = to_feature->signature_error_vector( *mapped_from );
-        assert ( error_vector.size() > 0 && 
+        assert ( error_vector.size() > 0 &&
                  error_vector.size() == signature_inv_covar.rows() &&
                  error_vector.size() == signature_inv_covar.cols());
         double signature_err = vcl_sqrt( dot_product( error_vector * signature_inv_covar, error_vector ) );
@@ -114,7 +114,7 @@ compute_weights( rgrl_scale const&  scales,
     // affected at all.
 
     if ( sum_weights > 1e-16 ) { //sum_weights not approaching 0
-      if( weight_more_on_distinct_match_ )
+      if ( weight_more_on_distinct_match_ )
         for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
           double wgt = titr.cumulative_weight();
             titr.set_cumulative_weight( wgt*wgt / sum_weights );
@@ -128,7 +128,7 @@ compute_weights( rgrl_scale const&  scales,
   }
 }
 
-double 
+double
 rgrl_weighter_m_est::
 aux_sum_weighted_residuals( rgrl_scale const&  scale,
                             rgrl_match_set&    match_set,
@@ -141,31 +141,31 @@ aux_sum_weighted_residuals( rgrl_scale const&  scale,
     match_set.remap_from_features( xform );
     compute_weights( scale, match_set );
   }
-  
+
   double weighted_sum = 0;
-  
+
   // As the objective function is formulated as weighted Least-Square problem,
   // the obj function value is indeed weighted sum of SQUARED residuals
   //
-  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
+  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ) {
       if ( fitr.size() == 0 )  continue;
-      
+
       rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
       for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
         //  for each match with a "to" image feature
         rgrl_feature_sptr to_feature = titr.to_feature();
         double geometric_err = to_feature->geometric_error( *mapped_from );
-        
-        weighted_sum += vnl_math_sqr(geometric_err) * titr.geometric_weight();
+
+        weighted_sum += vnl_math::sqr(geometric_err) * titr.geometric_weight();
       }
   }
-  
+
   return weighted_sum;
 }
 
-// It is unclear how to handle multiple matches. 
+// It is unclear how to handle multiple matches.
 // The current method is to pick the one with minimum distance
-// and evaluate the likelihood based on that. 
+// and evaluate the likelihood based on that.
 //
 double
 rgrl_weighter_m_est::
@@ -180,13 +180,13 @@ aux_sum_rho_values( rgrl_scale const&  scale,
 
   double sum_rho = 0;
 
-  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
+  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ) {
       if ( fitr.size() == 0 )  continue;
-      
+
       rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
       to_iter titr = fitr.begin();
       double min_val = titr.to_feature()->geometric_error( *mapped_from );
-      
+
       for ( ++titr; titr != fitr.end(); ++titr ) {
         //  for each match with a "to" image feature
         rgrl_feature_sptr to_feature = titr.to_feature();
@@ -199,18 +199,18 @@ aux_sum_rho_values( rgrl_scale const&  scale,
         //if ( signature_precomputed_ ) {
         //  signature_wgt = titr . signature_weight( );
         //}
-        
-        if( min_val > geometric_err )
+
+        if ( min_val > geometric_err )
           min_val = geometric_err;
       }
       // sum of rho is weighted by signature??
       sum_rho += m_est_->rho(min_val, scale.geometric_scale());
   }
-  
+
   return sum_rho;
 }
 
-double 
+double
 rgrl_weighter_m_est::
 aux_neg_log_likelihood( rgrl_scale const&  scale,
                         rgrl_match_set&    match_set,
@@ -222,7 +222,7 @@ aux_neg_log_likelihood( rgrl_scale const&  scale,
   int n = 0;
 
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr )
-    if( fitr.size() > 0 ) {
+    if ( fitr.size() > 0 ) {
       // multi-match counts as one constraint
       n ++;
     }
@@ -233,7 +233,7 @@ aux_neg_log_likelihood( rgrl_scale const&  scale,
   return n*vcl_log(geometric_scale) + sum_rho_values;
 }
 
-double 
+double
 rgrl_weighter_m_est::
 aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
                             rgrl_match_set&    match_set,
@@ -245,14 +245,14 @@ aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
   int n = 0;
 
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr )
-    if( fitr.size() > 0 ) {
+    if ( fitr.size() > 0 ) {
       // multi-match counts as one constraint
       n ++;
     }
 
-  if( !n ) 
+  if ( !n )
     return 0;
-    
+
   double sum_rho_values = aux_sum_rho_values(scale, match_set, xform);
   const double geometric_scale = scale.geometric_scale();
   //vcl_cout << "    rho_value: " << sum_rho_values << vcl_endl;

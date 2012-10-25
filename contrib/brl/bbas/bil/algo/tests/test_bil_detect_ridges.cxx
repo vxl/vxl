@@ -95,7 +95,7 @@ static void test_bil_detect_ridges(int argc, char* argv[])
     vil_image_view<float> iyy;
     vil_image_view<float> ixy;
 
-    vil_gauss_filter_2d(view_float, view_float, 1.5,vnl_math_rnd(3*1.5/2.));
+    vil_gauss_filter_2d(view_float, view_float, 1.5,vnl_math::rnd(3*1.5/2.));
 
     vil_sobel_3x3(view_float,ix,iy);
     vil_sobel_3x3(ix,ixx,ixy);

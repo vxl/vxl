@@ -27,8 +27,8 @@ HomgInterestPoint::HomgInterestPoint(const vgl_homg_point_2d<double>& h, const H
   metric.homg_to_image(homg_, &x, &y);
   double2_[0] = x;
   double2_[1] = y;
-  int2_[0]= vnl_math_rnd(x);
-  int2_[1]= vnl_math_rnd(y);
+  int2_[0]= vnl_math::rnd(x);
+  int2_[1]= vnl_math::rnd(y);
 }
 
 //: Create from HomgPoint2D in conditioned coordinates.
@@ -43,14 +43,14 @@ HomgInterestPoint::HomgInterestPoint(const HomgPoint2D& h, const HomgMetric& met
   metric.homg_to_image(h, &x, &y);
   double2_[0] = x;
   double2_[1] = y;
-  int2_[0]= vnl_math_rnd(x);
-  int2_[1]= vnl_math_rnd(y);
+  int2_[0]= vnl_math::rnd(x);
+  int2_[1]= vnl_math::rnd(y);
 }
 
 HomgInterestPoint::HomgInterestPoint(double x, double y, float mean_intensity):
   homg_(x, y, 1.0),
   double2_(x, y),
-  int2_(vnl_math_rnd(x), vnl_math_rnd(y)),
+  int2_(vnl_math::rnd(x), vnl_math::rnd(y)),
   mean_intensity_(mean_intensity)
 {
 }
@@ -58,7 +58,7 @@ HomgInterestPoint::HomgInterestPoint(double x, double y, float mean_intensity):
 HomgInterestPoint::HomgInterestPoint(double x, double y, const HomgMetric& c, float mean_intensity):
   homg_(c.image_to_homg(x, y)),
   double2_(x, y),
-  int2_(vnl_math_rnd(x), vnl_math_rnd(y)),
+  int2_(vnl_math::rnd(x), vnl_math::rnd(y)),
   mean_intensity_(mean_intensity)
 {
 }

@@ -323,7 +323,7 @@ double imesh_imls_surface::operator() (const vgl_point_3d<double>& p) const
                                                          p,verts_[i1],verts_[i2],verts_[i3],
                                                          normals_[i]*2.0,
                                                          phi_[i1],phi_[i2],phi_[i3],eps2_);
-      assert(!vnl_math_isnan(I.x()) && !vnl_math_isnan(I.y()));
+      assert(!vnl_math::isnan(I.x()) && !vnl_math::isnan(I.y()));
 
       sum_phi += I.x();
       if (normal_len_[i]>0.0)
@@ -404,8 +404,8 @@ double imesh_imls_surface::deriv(const vgl_point_3d<double>& p,
                                                   p,verts_[i1],verts_[i2],verts_[i3],
                                                   normals_[i]*2.0,
                                                   phi_[i1],phi_[i2],phi_[i3],eps2_);
-      assert(!vnl_math_isnan(Id.I) && !vnl_math_isnan(Id.I_phi));
-      //assert(!vnl_math_isnan(Id.dI) && !vnl_math_isnan(Id.dI_phi));
+      assert(!vnl_math::isnan(Id.I) && !vnl_math::isnan(Id.I_phi));
+      //assert(!vnl_math::isnan(Id.dI) && !vnl_math::isnan(Id.dI_phi));
 
       sums.I += Id.I;
       sums.I_phi += Id.I_phi;

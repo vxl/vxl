@@ -147,7 +147,7 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
 
   vnl_matrix<double> temp( 2, 6, 0.0 );
   vnl_vector<double> p_centered = p - from_centre_;
-  temp(0,0) = temp(1,1) = vnl_math_sqr(p_centered[0]) + vnl_math_sqr(p_centered[1]);
+  temp(0,0) = temp(1,1) = vnl_math::sqr(p_centered[0]) + vnl_math::sqr(p_centered[1]);
   temp(0,2) = temp(1,3) = p_centered[0];
   temp(0,3) = -p_centered[1];
   temp(1,2) =  p_centered[1];
@@ -281,16 +281,16 @@ higher_order_terms(vnl_vector<double> p) const
   vnl_vector<double> higher_terms( m + int(m*(m-1)/2));
 
   if (m == 3) {
-    higher_terms[0] = vnl_math_sqr(p[0]);   //x^2
-    higher_terms[1] = vnl_math_sqr(p[1]);   //y^2
-    higher_terms[2] = vnl_math_sqr(p[2]);   //z^2
+    higher_terms[0] = vnl_math::sqr(p[0]);   //x^2
+    higher_terms[1] = vnl_math::sqr(p[1]);   //y^2
+    higher_terms[2] = vnl_math::sqr(p[2]);   //z^2
     higher_terms[3] = p[0]*p[1];            //xy
     higher_terms[4] = p[1]*p[2];            //yz
     higher_terms[5] = p[0]*p[2];            //xz
   }
   else { //m ==2
-    higher_terms[0] = vnl_math_sqr(p[0]);         //x^2
-    higher_terms[1] = vnl_math_sqr(p[1]);         //y^2
+    higher_terms[0] = vnl_math::sqr(p[0]);         //x^2
+    higher_terms[1] = vnl_math::sqr(p[1]);         //y^2
     higher_terms[2] = p[0]*p[1];                  //xy
   }
 
@@ -305,7 +305,7 @@ write( vcl_ostream& os ) const
   // tag
   os << "REDUCED_QUADRATIC\n"
   // parameters
-     << t().size() << vcl_endl
+     << t().size() << '\n'
      << Q_<< A_ << trans_ << ' ' << origin << vcl_endl;
 
   // parent
@@ -362,7 +362,7 @@ inverse_transform( ) const
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_reduced_quad::
 clone() const
 {

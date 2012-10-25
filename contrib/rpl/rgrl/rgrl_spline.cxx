@@ -251,7 +251,7 @@ element_1d_thin_plate(unsigned i, unsigned j) const
   int a1 = i - 1;
   int b1 = j - 1;
 
-  if ( vnl_math_abs( a1 - b1 ) > 3 )
+  if ( vnl_math::abs( a1 - b1 ) > 3 )
     return 0;
 #if 0
   return g( delta_[0], a1, b1, m_[0] ) * delta_[0];
@@ -273,9 +273,9 @@ element_2d_thin_plate(unsigned i, unsigned j) const
   int b1 = j % ( m_[0] + 3 ) - 1;
   int b2 = ( j / ( m_[0] + 3 ) ) - 1;
 
-  if ( vnl_math_abs( a1 - b1 ) > 3 )
+  if ( vnl_math::abs( a1 - b1 ) > 3 )
     return 0;
-  if ( vnl_math_abs( a2 - b2 ) > 3 )
+  if ( vnl_math::abs( a2 - b2 ) > 3 )
     return 0;
 
 #if 0
@@ -316,11 +316,11 @@ element_3d_thin_plate(unsigned i, unsigned j) const
   int b2 = ( j / ( m_[0] + 3 ) ) % ( m_[1] + 3 ) - 1;
   int b3 = ( j / ( m_[0] + 3 ) ) / ( m_[1] + 3 ) - 1;
 
-  if ( vnl_math_abs( a1 - b1 ) > 3 )
+  if ( vnl_math::abs( a1 - b1 ) > 3 )
     return 0;
-  if ( vnl_math_abs( a2 - b2 ) > 3 )
+  if ( vnl_math::abs( a2 - b2 ) > 3 )
     return 0;
-  if ( vnl_math_abs( a3 - b3 ) > 3 )
+  if ( vnl_math::abs( a3 - b3 ) > 3 )
     return 0;
 
 #if 0
@@ -457,7 +457,7 @@ g( int a1, int a2, int m ) // was: g( double u, int a1, int a2, int m )
 
   assert ( min_a >= -1 );
   assert ( max_a <= m+1 );
-  int diff_a = vnl_math_abs( a1 - a2 );
+  int diff_a = vnl_math::abs( a1 - a2 );
 
   double ans = 0;
   if ( diff_a == 0 ) {
@@ -526,7 +526,7 @@ g_prime( int a1, int a2, int m ) // was: g_prime(double u, int a1, int a2, int m
   int max_a = (a1 < a2) ? a2 : a1;
   assert ( min_a >= -1 );
   assert ( max_a <= m+1 );
-  int diff_a = vnl_math_abs( a1 - a2 );
+  int diff_a = vnl_math::abs( a1 - a2 );
 
   double ans = 0;
   if ( diff_a == 0 ) {
@@ -594,7 +594,7 @@ g_double_prime( int a1, int a2, int m ) // was: g_double_prime( double u, int a1
   int max_a = (a1 < a2) ? a2 : a1;
   assert ( min_a >= -1 );
   assert ( max_a <= m+1 );
-  int diff_a = vnl_math_abs( a1 - a2 );
+  int diff_a = vnl_math::abs( a1 - a2 );
 
   double ans = 0;
   if ( diff_a == 0 ) {
@@ -846,7 +846,7 @@ operator<< (vcl_ostream& os, rgrl_spline const& spline )
      << spline.m_ << vcl_endl;
 
   // control points
-  os << spline.c_.size() << vcl_endl
+  os << spline.c_.size() << '\n'
      << spline.c_;
 
   //

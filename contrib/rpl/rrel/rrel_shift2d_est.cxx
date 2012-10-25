@@ -77,7 +77,7 @@ rrel_shift2d_est::compute_residuals(
   for (unsigned i=0; i<from_pts_.size(); i++) {
       double del_x = del_pts_[i][0] - params[0];
       double del_y = del_pts_[i][1] - params[1];
-      residuals[i] = vcl_sqrt( vnl_math_sqr(del_x) + vnl_math_sqr(del_y) );
+      residuals[i] = vcl_sqrt( vnl_math::sqr(del_x) + vnl_math::sqr(del_y) );
   }
 }
 

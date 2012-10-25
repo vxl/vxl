@@ -45,7 +45,7 @@ rgrl_matcher_pseudo_int_3d_physical_to_pixel( vnl_double_3 const& point,
                                               vnl_double_3 const& spacing_ratio )
 {
   for ( unsigned i = 0; i < 3; ++i )
-    pixel_loc[ i ] = (int) vnl_math_rnd( point[ i ] / spacing_ratio[ i ] );
+    pixel_loc[ i ] = (int) vnl_math::rnd( point[ i ] / spacing_ratio[ i ] );
 }
 
 // convert physical points to pixel points
@@ -716,11 +716,11 @@ slide_window(rgrl_feature_sptr         mapped_feature,
       if ( sub_offset1 < -max_offset ) sub_offset1 = -max_offset;
       if ( sub_offset1 > max_offset ) sub_offset1 = max_offset;
       DBGi( vcl_cout << " sub_offset1 = " << sub_offset1 << " in [ "
-                     << -max_offset << " , " << max_offset << " ] " << vcl_endl );
+                     << -max_offset << " , " << max_offset << " ]" << vcl_endl );
     }
 
-    double second_d1 = vnl_math_abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
-                                     - 2 * responses[ idx1 ][ idx2 ] );
+    double second_d1 = vnl_math::abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
+                                      - 2 * responses[ idx1 ][ idx2 ] );
 
     int deriv_loc2 = best_off2;
     if ( deriv_loc2 == -max_offset ) ++deriv_loc2;
@@ -745,13 +745,13 @@ slide_window(rgrl_feature_sptr         mapped_feature,
       if ( sub_offset2 < -max_offset ) sub_offset2 = -max_offset;
       if ( sub_offset2 > max_offset ) sub_offset2 = max_offset;
       DBGi( vcl_cout << " sub_offset2 = " << sub_offset2 << " in [ "
-                     << -max_offset << " , " << max_offset << " ] " << vcl_endl; );
+                     << -max_offset << " , " << max_offset << " ]" << vcl_endl; );
     }
 
-    double second_d2 = vnl_math_abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
-                                     - 2 * responses[ idx1 ][ idx2 ] );
+    double second_d2 = vnl_math::abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
+                                      - 2 * responses[ idx1 ][ idx2 ] );
 
-    second_derivative = vnl_math_min( second_d1, second_d2 );
+    second_derivative = vnl_math::min( second_d1, second_d2 );
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
     DBGi( vcl_cout << "best match :\n" << match_location << vcl_endl );
 #endif // 0

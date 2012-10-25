@@ -9,7 +9,7 @@
 #include <vcl_algorithm.h> // for vcl_swap
 #include <vcl_iostream.h>  // for vcl_cerr
 #include <vcl_cstdlib.h>   // for vcl_abort
-#include <vnl/vnl_math.h>  // for vnl_math_isfinite
+#include <vnl/vnl_math.h>  // for vnl_math::isfinite
 
 
 //------------------------------------------------------------
@@ -68,7 +68,7 @@ bool
 vnl_vector_fixed_ref_const<T,n>::is_finite() const
 {
   for ( size_type i = 0; i < this->size(); ++i )
-    if ( !vnl_math_isfinite( (*this)[i] ) )
+    if ( !vnl_math::isfinite( (*this)[i] ) )
       return false;
 
   return true;

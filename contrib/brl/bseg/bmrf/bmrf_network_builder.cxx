@@ -154,7 +154,7 @@ static void alpha_segment(vcl_vector<bmrf_epi_point_sptr> const& samples,
   last_alpha = samples[i]->alpha();
   seg->add_point(samples[i-1]);
   seg->add_point(samples[i]);
-  for (i += 1; i<n; ++i){
+  for (i += 1; i<n; ++i) {
     double alpha = samples[i]->alpha();
     if ( alpha == last_alpha ) {
       segs.push_back(seg);
@@ -195,7 +195,7 @@ extract_alpha_segments(vdgl_digital_curve_sptr const & dc,
   vcl_vector<bmrf_epi_point_sptr> samples;
 
   vdgl_edgel_chain_sptr ec = dc->get_interpolator()->get_edgel_chain();
-  for ( unsigned int i=0; i<ec->size(); ++i ){
+  for ( unsigned int i=0; i<ec->size(); ++i ) {
     const vdgl_edgel & edgel = ec->edgel(i);
     double u = edgel.get_x(), v = edgel.get_y(), alpha=0.0, s=0.0;
     this->epi_coords(u, v, alpha, s);
@@ -402,7 +402,7 @@ find_left_s(const double a, const double s,
     if (xs<s)
     {
       double ds = s-xs;
-      ds_min = vnl_math_min(ds_min, ds);
+      ds_min = vnl_math::min(ds_min, ds);
     }
   }
   if (ds_min<r)
@@ -431,7 +431,7 @@ find_right_s(const double a, const double s,
     if (xs>s)
     {
       double ds = xs-s;
-      ds_min = vnl_math_min(ds_min, ds);
+      ds_min = vnl_math::min(ds_min, ds);
     }
   }
   if (ds_min<r)
@@ -639,7 +639,7 @@ bool bmrf_network_builder::assign_neighbors()
       bmrf_arc_sptr temp_arc = new bmrf_arc(nit->second, *nnit);
       double total_error = temp_arc->induced_match_error()/2.0
                           +temp_arc->avg_intensity_error()/(2.0*int_var);
-      if (total_error < 100.0){
+      if (total_error < 100.0) {
         network_->add_arc(temp_arc,            bmrf_node::TIME);
         network_->add_arc(temp_arc->reverse(), bmrf_node::TIME);
       }

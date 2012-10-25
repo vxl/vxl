@@ -30,7 +30,7 @@ bool bvxm_util::read_cameras(const vcl_string filename, vcl_vector<vnl_double_3x
 {
   vcl_ifstream file_inp(filename.c_str());
   if (!file_inp.good()) {
-    vcl_cerr << "error opening file "<< filename <<vcl_endl;
+    vcl_cerr << "error opening file "<< filename <<'\n';
     return false;
   }
   unsigned ncameras;
@@ -56,16 +56,16 @@ bool bvxm_util::write_cameras(const vcl_string filename, vcl_vector<vnl_double_3
 {
   vcl_ofstream file_out(filename.c_str());
   if (!file_out.good()) {
-    vcl_cerr << "error opening file "<< filename <<vcl_endl;
+    vcl_cerr << "error opening file "<< filename <<'\n';
     return false;
   }
   unsigned ncameras = Ks.size();
 
   file_out << ncameras << vcl_endl << vcl_endl;
   for (unsigned i=0; i < ncameras; i++) {
-    file_out << Ks[i] << vcl_endl
-             << Rs[i] << vcl_endl
-             << Ts[i] << vcl_endl
+    file_out << Ks[i] << '\n'
+             << Rs[i] << '\n'
+             << Ts[i] << '\n'
              << vcl_endl;
   }
   file_out.close();
@@ -264,5 +264,5 @@ int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl
     roi_uncertainty->add(p2d_uncertainty);
   }
 
-  return vnl_math_ceil(0.5*vnl_math_max(roi_uncertainty->width(),roi_uncertainty->height()));
+  return vnl_math::ceil(0.5*vnl_math::max(roi_uncertainty->width(),roi_uncertainty->height()));
 }

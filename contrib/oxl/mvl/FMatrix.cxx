@@ -410,9 +410,9 @@ FMatrix::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
     if (roots.imag(root_index) == 0) {
       // equation (4) in the paper.
       double t = roots.real(root_index);
-      double s = t * t / vnl_math_sqr(1.0 + f * f * t * t) +
-        vnl_math_sqr(c * t + d) /
-        (vnl_math_sqr(a * t + b) + g * g * vnl_math_sqr(c * t + d));
+      double s = t * t / vnl_math::sqr(1.0 + f * f * t * t) +
+        vnl_math::sqr(c * t + d) /
+        (vnl_math::sqr(a * t + b) + g * g * vnl_math::sqr(c * t + d));
       if (s < s_min) {
         real_root_flag = true;
         t_min = t;
@@ -528,9 +528,9 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
     if (roots.imag(root_index) == 0) {
       // equation (4) in the paper.
       double t = roots.real(root_index);
-      double s = t * t / vnl_math_sqr(1.0 + f * f * t * t) +
-        vnl_math_sqr(c * t + d) /
-        (vnl_math_sqr(a * t + b) + g * g * vnl_math_sqr(c * t + d));
+      double s = t * t / vnl_math::sqr(1.0 + f * f * t * t) +
+        vnl_math::sqr(c * t + d) /
+        (vnl_math::sqr(a * t + b) + g * g * vnl_math::sqr(c * t + d));
       if (s < s_min) {
         real_root_flag = true;
         t_min = t;

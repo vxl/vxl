@@ -36,7 +36,7 @@ inside( vnl_vector<double> const& pt ) const
   bool in_range = ( x0_[0] <= x ) && ( x <= x1_[0] ) &&
                   ( x0_[1] <= y ) && ( y <= x1_[1] );
 
-  return in_range && mask_image_( vnl_math_rnd(x), vnl_math_rnd(y) )>0;
+  return in_range && mask_image_( vnl_math::rnd(x), vnl_math::rnd(y) )>0;
 }
 
 void
@@ -96,7 +96,7 @@ inside( vnl_vector<double> const& pt ) const
 
   double sqr_sum = 0;
   for (unsigned int i = 0; i<pt.size(); ++i) {
-    sqr_sum +=  vnl_math_sqr( pt[i] - center_[i] );
+    sqr_sum +=  vnl_math::sqr( pt[i] - center_[i] );
   }
   return sqr_sum < radius_sqr_ ;
 }

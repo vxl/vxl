@@ -359,7 +359,7 @@ set_scaling_factors( vnl_vector<double> const& scaling )
   // checking scaling
   // set it to epsilon if scaling is in fact zero
   for ( unsigned int i=0; i<scaling.size(); ++i )
-    assert( vnl_math_isfinite( scaling[i] ) );
+    assert( vnl_math::isfinite( scaling[i] ) );
 
   scaling_factors_ = scaling;
 }
@@ -381,7 +381,7 @@ write( vcl_ostream& os ) const
   {
     // write covariance
     os << "COVARIANCE\n"
-       << covar_.rows() << ' ' << covar_.cols() << vcl_endl
+       << covar_.rows() << ' ' << covar_.cols() << '\n'
        << covar_ << vcl_endl;
   }
 
@@ -389,7 +389,7 @@ write( vcl_ostream& os ) const
   {
     // write scaling factors
     os << "SCALING_FACTORS\n"
-       << scaling_factors_.size() << vcl_endl
+       << scaling_factors_.size() << '\n'
        << scaling_factors_ << vcl_endl;
   }
 }

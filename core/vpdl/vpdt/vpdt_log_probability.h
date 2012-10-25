@@ -43,7 +43,7 @@ vpdt_log_prob_density(const dist& d,
 {
   typedef typename vpdt_dist_traits<dist>::scalar_type T;
   T norm = d.norm_const();
-  if (vnl_math_isinf(norm))
+  if (vnl_math::isinf(norm))
     return -vcl_numeric_limits<T>::infinity();
 
   return static_cast<T>(vcl_log(norm) + vpdt_log_density(d,pt));

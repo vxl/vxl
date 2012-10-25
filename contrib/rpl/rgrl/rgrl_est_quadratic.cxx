@@ -17,21 +17,20 @@ rgrl_est_quadratic()
 {}
 
 rgrl_est_quadratic::
-rgrl_est_quadratic( unsigned int dimension, 
+rgrl_est_quadratic( unsigned int dimension,
                     double condition_num_thrd )
   : condition_num_thrd_( condition_num_thrd )
-
 {
   // Derive the parameter_dof from the dimension
   //
-  unsigned int param_dof = (dimension == 2)? 12 : 30; 
+  unsigned int param_dof = (dimension == 2)? 12 : 30;
 
   // Pass the two variable to the parent class, where they're stored
   //
   rgrl_estimator::set_param_dof( param_dof );
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_est_quadratic::
 estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
           rgrl_transformation const& /*cur_transform*/ ) const
@@ -45,10 +44,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // looking at the dimension of one of the data points.
   //
   unsigned ms = 0;
-  while( ms < matches.size() &&
-         matches[ms]->from_begin() == matches[ms]->from_end() )
+  while ( ms < matches.size() &&
+          matches[ms]->from_begin() == matches[ms]->from_end() )
     ++ms;
-  if( ms == matches.size() ) {
+  if ( ms == matches.size() ) {
     DebugMacro( 0, "No data!\n" );
     return 0; // no data!
   }
@@ -59,11 +58,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // Create the constraint matrix. See "Affine transform with a
   // projector matrix" in notes.tex.
 
-  // Holds \tilde{p} \tilde{p}^t, 
+  // Holds \tilde{p} \tilde{p}^t,
   // where \tilde{p} = [x^2 y^2 z^2 xy yz xz x y z 1]^t
-  // 
+  //
   unsigned p_size =  1+ 2*m + m*(m-1)/2;
-  vnl_matrix<double> ptp( p_size, p_size ); 
+  vnl_matrix<double> ptp( p_size, p_size );
 
   vnl_vector<double> Bq( m );
 
@@ -86,10 +85,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> from_pt( m );
   vnl_vector<double> to_pt( m );
   double sum_wgt = 0.0;
-  for( unsigned ms=0; ms < matches.size(); ++ms ) {
+  for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
-      for( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
         from_pt *= wgt;
@@ -106,10 +105,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // if the weight is too small or zero,
   // that means there is no good match
-  if( sum_wgt < 1e-13 ) {
+  if ( sum_wgt < 1e-13 ) {
     return 0;
   }
-  
+
 
   // Since XtWX is symmetric, we only compute the upper triangle, and
   // copy it later into the lower triangle.
@@ -117,10 +116,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   unsigned count=0; //for debugging
   vnl_vector<double> p (p_size); //the content of p depends on m
-  for( unsigned ms=0; ms < matches.size(); ++ms ) {
+  for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
-      for( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         from_pt = fi.from_feature()->location();
         from_pt -= from_centre;
         to_pt = ti.to_feature()->location();
@@ -136,9 +135,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         // Compute ptp.
         //
         if (m == 3) {
-          p[0] = vnl_math_sqr(from_pt[0]);   //x^2
-          p[1] = vnl_math_sqr(from_pt[1]);   //y^2
-          p[2] = vnl_math_sqr(from_pt[2]);   //z^2
+          p[0] = vnl_math::sqr(from_pt[0]);   //x^2
+          p[1] = vnl_math::sqr(from_pt[1]);   //y^2
+          p[2] = vnl_math::sqr(from_pt[2]);   //z^2
           p[3] = from_pt[0]*from_pt[1];      //xy
           p[4] = from_pt[1]*from_pt[2];      //yz
           p[5] = from_pt[0]*from_pt[2];      //xz
@@ -148,55 +147,55 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
           p[9] = 1;                          //1
         }
         else { //m ==2
-          p[0] = vnl_math_sqr(from_pt[0]);   //x^2
-          p[1] = vnl_math_sqr(from_pt[1]);   //y^2
+          p[0] = vnl_math::sqr(from_pt[0]);   //x^2
+          p[1] = vnl_math::sqr(from_pt[1]);   //y^2
           p[2] = from_pt[0]*from_pt[1];      //xy
           p[3] = from_pt[0];                 //x
           p[4] = from_pt[1];                 //y
           p[5] = 1;                          //1
         }
-        for( unsigned i=0; i < p_size; ++i ) {
-          for( unsigned j=0; j < p_size; ++j ) {
+        for ( unsigned i=0; i < p_size; ++i ) {
+          for ( unsigned j=0; j < p_size; ++j ) {
             ptp(i,j) = p[i] * p[j];
           }
         }
 
         // Construct the upper half of B \kron (p p^t) and add into XtWX
         //
-        for( unsigned i=0; i < m; ++i ) { // index into B
-          for( unsigned j=i; j < m; ++j ) {
-            if( B(i,j) != 0.0 ) {
+        for ( unsigned i=0; i < m; ++i ) { // index into B
+          for ( unsigned j=i; j < m; ++j ) {
+            if ( B(i,j) != 0.0 ) {
               double wBij = wgt * B(i,j);
               unsigned off_r = i*p_size; // offsets in XtWX
               unsigned off_c = j*p_size;
-              for( unsigned r=0; r < p_size; ++r ) {  // index into ptp
-                for( unsigned c=0; c < p_size; ++c ) {
+              for ( unsigned r=0; r < p_size; ++r ) {  // index into ptp
+                for ( unsigned c=0; c < p_size; ++c ) {
                   XtWX(off_r+r,off_c+c) += wBij * ptp(r,c);
                 }
               }
             }
           }
         }
-  
+
         // Construct Bq \kron p and copy into XtWy
         //
         Bq = B * to_pt;
-        for( unsigned i=0; i < m; ++i ) {
+        for ( unsigned i=0; i < m; ++i ) {
           double wBqi = wgt * Bq[i];
           unsigned off = i*p_size; // offset in XtWy
-          for( unsigned j=0; j < p_size; ++j ) {
+          for ( unsigned j=0; j < p_size; ++j ) {
             XtWy[off+j] += wBqi * p[j];
           }
         }
-      }  
+      }
     }
   }
 
   // Complete XtWX by copying the upper triangle into the lower
   // triangle.
   //
-  for( unsigned i=0; i < m*p_size; ++i ) {
-    for( unsigned j=0; j < i; ++j ) {
+  for ( unsigned i=0; i < m*p_size; ++i ) {
+    for ( unsigned j=0; j < i; ++j ) {
       XtWX(i,j) = XtWX(j,i);
     }
   }
@@ -207,11 +206,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   double factor0, factor1, factor2;
   vnl_vector<double> s(p_size*m, 1);
   if (m == 2) {
-    factor0 = vnl_math_max(XtWX(5,5), XtWX(11,11));
-    factor1 = vnl_math_max(vnl_math_max(XtWX(3,3), XtWX(4,4)),
-                           vnl_math_max(XtWX(10,10), XtWX(9,9)));
-    factor2 = vnl_math_max(vnl_math_max(XtWX(0,0), XtWX(1,1)),
-                           vnl_math_max(XtWX(6,6), XtWX(7,7)));
+    factor0 = vnl_math::max(XtWX(5,5), XtWX(11,11));
+    factor1 = vnl_math::max(vnl_math::max(XtWX(3,3), XtWX(4,4)),
+                           vnl_math::max(XtWX(10,10), XtWX(9,9)));
+    factor2 = vnl_math::max(vnl_math::max(XtWX(0,0), XtWX(1,1)),
+                           vnl_math::max(XtWX(6,6), XtWX(7,7)));
 
     double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
     double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
@@ -220,12 +219,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     s(5) = s(11) = scale0;
   }
   else { // m == 3
-    factor0 = vnl_math_max( vnl_math_max(XtWX(9,9), XtWX(19,19)),
+    factor0 = vnl_math::max( vnl_math::max(XtWX(9,9), XtWX(19,19)),
                             XtWX(29,29));
-    factor1 = max_of_9_elements( XtWX(6,6), XtWX(7,7), XtWX(8,8), 
+    factor1 = max_of_9_elements( XtWX(6,6), XtWX(7,7), XtWX(8,8),
                                  XtWX(16,16), XtWX(17,17), XtWX(18,18),
                                  XtWX(26,26), XtWX(27,27), XtWX(28,28) );
-    factor2 = max_of_9_elements( XtWX(0,0), XtWX(1,1), XtWX(2,2), 
+    factor2 = max_of_9_elements( XtWX(0,0), XtWX(1,1), XtWX(2,2),
                                  XtWX(10,10), XtWX(11,11), XtWX(12,12),
                                  XtWX(20,20), XtWX(21,21), XtWX(22,22) );
 
@@ -252,14 +251,14 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // look non-zero, so we correct for that.
   //svd.zero_out_relative();
 
-  if( (unsigned)svd.rank() < p_size*m ) {
+  if ( (unsigned)svd.rank() < p_size*m ) {
     DebugMacro(1, "rank ("<<svd.rank()<<") < "<<p_size*m<<"; no solution." );
     DebugMacro_abv(1,"(used " << count << " correspondences)\n" );
     return 0; // no solution
   }
   double cond_num = svd.well_condition();
   if ( condition_num_thrd_ > cond_num ) {
-    DebugMacro(1, "Unstable xform with condition number = "<<cond_num<<"\n" );
+    DebugMacro(1, "Unstable xform with condition number = "<<cond_num<<'\n' );
     return 0; //no solution
   }
 
@@ -283,27 +282,27 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // Translation component
   vnl_vector<double> trans( m );
-  for( unsigned i=0; i < m; ++i ) {
+  for ( unsigned i=0; i < m; ++i ) {
     trans[i] = XtWy[ i*p_size + (p_size-1) ];
   }
 
   // 2nd-order component, for [x^2 y^2 z^2 xy yz xz]
-  unsigned Q_size = m + m*(m-1)/2; 
+  unsigned Q_size = m + m*(m-1)/2;
   vnl_matrix<double> Q( m, Q_size );
-  for( unsigned i=0; i < m; ++i ) {
-    for( unsigned j=0; j < Q_size; ++j ) {
+  for ( unsigned i=0; i < m; ++i ) {
+    for ( unsigned j=0; j < Q_size; ++j ) {
       Q(i,j) = XtWy[ i*p_size+j ];
     }
   }
-   
-  // first-order component, for [x y z] 
+
+  // first-order component, for [x y z]
   vnl_matrix<double> A( m, m );
-  for( unsigned i=0; i < m; ++i ) {
-    for( unsigned j=0; j < m; ++j ) {
+  for ( unsigned i=0; i < m; ++i ) {
+    for ( unsigned j=0; j < m; ++j ) {
       A(i,j) = XtWy[ i*p_size + (Q_size+j) ];
     }
   }
-  
+
   return new rgrl_trans_quadratic( Q, A, trans, covar, from_centre, to_centre );
 }
 
@@ -326,12 +325,12 @@ transformation_type() const
 
 double
 rgrl_est_quadratic::
-max_of_9_elements(double elt1, double elt2, double elt3, 
-                  double elt4, double elt5, double elt6,  
+max_of_9_elements(double elt1, double elt2, double elt3,
+                  double elt4, double elt5, double elt6,
                   double elt7, double elt8, double elt9 ) const
 {
-  double max = vnl_math_max( elt1, vnl_math_max( elt2, elt3 ) );
-  max  = vnl_math_max ( max, vnl_math_max( elt4, elt5 ) );
-  max  = vnl_math_max ( max, vnl_math_max( elt6, elt7 ) );
-  return vnl_math_max ( max, vnl_math_max( elt8, elt9 ) );
+  double max = vnl_math::max( elt1, vnl_math::max( elt2, elt3 ) );
+  max  = vnl_math::max ( max, vnl_math::max( elt4, elt5 ) );
+  max  = vnl_math::max ( max, vnl_math::max( elt6, elt7 ) );
+  return vnl_math::max ( max, vnl_math::max( elt8, elt9 ) );
 }

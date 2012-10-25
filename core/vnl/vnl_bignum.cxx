@@ -11,7 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
-#include <vnl/vnl_math.h> // for vnl_math_isfinite(double)
+#include <vnl/vnl_math.h> // for vnl_math::isfinite(double)
 
 typedef unsigned short Counter;
 typedef unsigned short Data;
@@ -122,7 +122,7 @@ vnl_bignum::vnl_bignum(float f)
     this->sign = -1;
   }
 
-  if (!vnl_math_isfinite(d)) {
+  if (!vnl_math::isfinite(d)) {
     // Infinity is represented as: count=1, data[0]=0.
     // This is an otherwise unused representation, since 0 is represented as count=0.
     this->count = 1;
@@ -153,7 +153,7 @@ vnl_bignum::vnl_bignum(double d)
     this->sign = -1;
   }
 
-  if (!vnl_math_isfinite(d)) {
+  if (!vnl_math::isfinite(d)) {
     // Infinity is represented as: count=1, data[0]=0.
     // This is an otherwise unused representation, since 0 is represented as count=0.
     this->count = 1;
@@ -184,7 +184,7 @@ vnl_bignum::vnl_bignum(long double d)
     this->sign = -1;
   }
 
-  if (!vnl_math_isfinite(d)) {
+  if (!vnl_math::isfinite(d)) {
     // Infinity is represented as: count=1, data[0]=0.
     // This is an otherwise unused representation, since 0 is represented as count=0.
     this->count = 1;

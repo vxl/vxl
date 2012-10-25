@@ -154,9 +154,9 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         jf(0,2) = jf(1,5) = jf(2,8) = 1.0;
         // make division
         jg(0,0) = 1.0/homo[2];
-        jg(0,2) = -homo[0]/vnl_math_sqr(homo[2]);
+        jg(0,2) = -homo[0]/vnl_math::sqr(homo[2]);
         jg(1,1) = 1.0/homo[2];
-        jg(1,2) = -homo[1]/vnl_math_sqr(homo[2]);
+        jg(1,2) = -homo[1]/vnl_math::sqr(homo[2]);
         // since Jab_g(f(p)) = Jac_g * Jac_f
         base_jac = jg * jf;
 

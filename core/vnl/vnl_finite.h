@@ -153,9 +153,9 @@ class vnl_finite_int
   //: Pre-decrement (--r).
   inline Base& operator--() { mo_=lp1_=0; if (val_==0) val_=N; --val_; return *this; }
   //: Post-increment (r++).
-  inline Base operator++(int){Base b=*this; mo_=lp1_=0; ++val_; if (val_==N) val_=0; return b; }
+  inline Base operator++(int) {Base b=*this; mo_=lp1_=0; ++val_; if (val_==N) val_=0; return b; }
   //: Post-decrement (r--).
-  inline Base operator--(int){Base b=*this; mo_=lp1_=0; if (val_==0) val_=N; --val_; return b;}
+  inline Base operator--(int) {Base b=*this; mo_=lp1_=0; if (val_==0) val_=N; --val_; return b;}
 
   //: Write N as the unique product of prime factors.
   static vcl_vector<unsigned int> decompose() {
@@ -384,25 +384,29 @@ inline bool operator== (int  r1, vnl_finite_int<N> const& r2) { return r2==r1; }
 template <int N>
 inline bool operator!= (int  r1, vnl_finite_int<N> const& r2) { return r2!=r1; }
 
-//:
-// \relatesalso vnl_finite_int
-template <int N>
-inline vnl_finite_int<N> vnl_math_squared_magnitude(vnl_finite_int<N> const& x) { return x*x; }
+namespace vnl_math
+{
+  //:
+  // \relatesalso vnl_finite_int
+  template <int N>
+  inline vnl_finite_int<N> squared_magnitude(vnl_finite_int<N> const& x) { return x*x; }
 
-//:
-// \relatesalso vnl_finite_int
-template <int N>
-inline vnl_finite_int<N> vnl_math_sqr(vnl_finite_int<N> const& x) { return x*x; }
+  //:
+  // \relatesalso vnl_finite_int
+  template <int N>
+  inline vnl_finite_int<N> sqr(vnl_finite_int<N> const& x) { return x*x; }
 
-//:
-// \relatesalso vnl_finite_int
-template <int N>
-inline bool vnl_math_isnan(vnl_finite_int<N> const& ){return false;}
+  //:
+  // \relatesalso vnl_finite_int
+  template <int N>
+  inline bool isnan(vnl_finite_int<N> const& ) {return false;}
 
-//:
-// \relatesalso vnl_finite_int
-template <int N>
-inline bool vnl_math_isfinite(vnl_finite_int<N> const& x){return true;}
+  //:
+  // \relatesalso vnl_finite_int
+  template <int N>
+  inline bool isfinite(vnl_finite_int<N> const& x) {return true;}
+
+ } // end namespace vnl_math
 
 //: finite modulo-N arithmetic with polynomials of degree < M
 //

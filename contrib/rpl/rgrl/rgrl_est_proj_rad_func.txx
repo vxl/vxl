@@ -519,7 +519,7 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   //invert the W matrix and square it
   vnl_diag_matrix<double> invW( param_num-1 );
   for ( unsigned i=0; i+1<param_num; ++i )
-    invW[i] = vnl_math_sqr( 1.0/svd.W(i) );
+    invW[i] = vnl_math::sqr( 1.0/svd.W(i) );
 
   //compute inverse of Jac^\top * Jac
   const vnl_matrix<double>  covar( svd.V() * invW * vnl_transpose( svd.V() ) );

@@ -9,7 +9,7 @@
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_dist.h>
 
-static inline bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static inline bool close( double x, double y ) { return vnl_math::abs(x-y) < 1.0e-6; }
 static inline bool less_first( const vcl_pair<double,int>& left,
                                const vcl_pair<double,int>& right )
 {
@@ -179,7 +179,7 @@ static void test_kd_tree()
     unsigned int inside_count = 0;
     vcl_vector< bool > pt_inside(M,false);
     for ( int i=0; i<M; ++i ) {
-      if ( rsdl_dist_point_in_box( points[i], box ) ){
+      if ( rsdl_dist_point_in_box( points[i], box ) ) {
         pt_inside[ i ] = true;
         inside_count ++ ;
       }
@@ -223,7 +223,7 @@ static void test_kd_tree()
     //  Exhaustively gather info.
     inside_count = 0;
     for ( int i=0; i<M; ++i ) {
-      if ( rsdl_dist_sq( points[i], query ) <= radius*radius ){
+      if ( rsdl_dist_sq( points[i], query ) <= radius*radius ) {
         pt_inside[ i ] = true;
         inside_count ++ ;
       }
@@ -270,7 +270,7 @@ static void test_kd_tree()
     //  Exhaustively gather info.
     inside_count = 0;
     for ( int i=0; i<M; ++i ) {
-      if ( rsdl_dist_sq( points[i], query ) <= radius*radius ){
+      if ( rsdl_dist_sq( points[i], query ) <= radius*radius ) {
         pt_inside[ i ] = true;
         inside_count ++ ;
       }

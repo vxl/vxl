@@ -129,12 +129,13 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
   {
     if ( !((x_above - x_middle)*df_middle + f_middle > 0.0 &&
            (x_below - x_middle)*df_middle + f_middle < 0.0   ) ||
-      (vnl_math_abs((2.0*f_middle)) > vnl_math_abs(dxold*df_middle)))
+      (vnl_math::abs((2.0*f_middle)) > vnl_math::abs(dxold*df_middle)))
     { // Bisect if Newton-Raphson isn't working
       x_middle=0.5*(x_above+x_below);
       dxold=dx;
       dx=x_above-x_middle;
-    } else // Newton-Raphson step
+    }
+    else // Newton-Raphson step
     {
       dxold=dx;
       dx=f_middle/df_middle;
@@ -142,7 +143,7 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
       assert (x_below <= x_middle && x_middle <= x_above);
     }
 
-    if (vnl_math_abs(dx) < vnl_math_abs(x_middle * vnl_math::sqrteps))
+    if (vnl_math::abs(dx) < vnl_math::abs(x_middle * vnl_math::sqrteps))
     {
       return x_middle; // Converged .
     }

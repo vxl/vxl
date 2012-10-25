@@ -117,8 +117,8 @@ vgl_homg_operators_2d<T>::distance_squared(const vgl_homg_point_2d<T>& p1,
     return vcl_numeric_limits<T>::infinity();
   }
 
-  return vnl_math_sqr (p1.x() / p1.w() - p2.x() / p2.w()) +
-         vnl_math_sqr (p1.y() / p1.w() - p2.y() / p2.w());
+  return vnl_math::sqr (p1.x() / p1.w() - p2.x() / p2.w()) +
+         vnl_math::sqr (p1.y() / p1.w() - p2.y() / p2.w());
 }
 
 //: Get the square of the perpendicular distance to a line.
@@ -137,7 +137,7 @@ vgl_homg_operators_2d<T>::perp_dist_squared(const vgl_homg_point_2d<T>& point,
     return vgl_homg<T>::infinity;
   }
 
-  T numerator = vnl_math_sqr (dot(line,point) / point.w());
+  T numerator = vnl_math::sqr (dot(line,point) / point.w());
   if (numerator == 0) return T(0); // efficiency
   T denominator = line.a()*line.a() + line.b()*line.b();
 

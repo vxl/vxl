@@ -133,7 +133,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         //
         // X  = [px^2+py^2 0 px -py 1 0; 0 px^2+py^2 py px 0 1]
         D.fill( 0.0 );
-        D(0,0) = D(1,1) = vnl_math_sqr(from_pt[0]) + vnl_math_sqr(from_pt[1]);
+        D(0,0) = D(1,1) = vnl_math::sqr(from_pt[0]) + vnl_math::sqr(from_pt[1]);
         D(0,2) = D(1,3) = from_pt[0];
         D(0,3) = -from_pt[1];
         D(1,2) = from_pt[1];
@@ -153,9 +153,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // Find the scales and scale the matrices appropriate to normalize
   // them and increase the numerical stability.
-  double factor0 = vnl_math_max(XtWX(4,4), XtWX(5,5));
-  double factor1 = vnl_math_max(XtWX(2,2), XtWX(3,3));
-  double factor2 = vnl_math_max(XtWX(1,1), XtWX(0,0));
+  double factor0 = vnl_math::max(XtWX(4,4), XtWX(5,5));
+  double factor1 = vnl_math::max(XtWX(2,2), XtWX(3,3));
+  double factor2 = vnl_math::max(XtWX(1,1), XtWX(0,0));
   double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1);   // neither should be 0
   double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
 

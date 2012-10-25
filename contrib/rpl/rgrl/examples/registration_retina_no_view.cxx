@@ -182,9 +182,9 @@ read_landmark_file( const char* filename,
       istr >> direction2[0] >> direction2[1]>>width2;
       istr >> direction3[0] >> direction3[1]>>width3;
       // Make sure all widths are at least 1
-      width1 = vnl_math_max( 1.0, width1);
-      width2 = vnl_math_max( 1.0, width2);
-      width3 = vnl_math_max( 1.0, width3);
+      width1 = vnl_math::max( 1.0, width1);
+      width2 = vnl_math::max( 1.0, width2);
+      width3 = vnl_math::max( 1.0, width3);
 
       // BeginCodeSnippet
       rgrl_invariant_single_landmark* single =
@@ -311,7 +311,7 @@ main( int argc, char* argv[] )
     vcl_cout<<"Final xform:"<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t ="<<q_xform->t()<<vcl_endl
+    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t ="<<q_xform->t()<<'\n'
             <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 

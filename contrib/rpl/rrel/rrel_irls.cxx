@@ -141,13 +141,12 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     vcl_cerr << "irls::estimate: Objective function requires a prior scale, and the problem does not provide one.\n"
              << "                Aborting estimation.\n";
     return false;
-  } else {
-    if ( problem->scale_type() == rrel_estimation_problem::NONE && ! scale_initialized_ ) {
-      problem->compute_residuals( params_, residuals );
-      scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end(), num_for_fit );
-      allow_convergence_test = false;
-      scale_initialized_ = true;
-    }
+  }
+  else if ( problem->scale_type() == rrel_estimation_problem::NONE && ! scale_initialized_ ) {
+    problem->compute_residuals( params_, residuals );
+    scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end(), num_for_fit );
+    allow_convergence_test = false;
+    scale_initialized_ = true;
   }
 
   if ( trace_level_ >= 1 )
@@ -291,8 +290,8 @@ rrel_irls::has_converged( const vcl_vector<double>& residuals,
     vcl_cout << "  prev obj fcn = " << prev_obj_fcn_
              << ",  new obj fcn = " << obj_fcn_ << vcl_endl;
 
-  return vnl_math_abs( obj_fcn_ ) < convergence_tol_  ||
-    vnl_math_abs(obj_fcn_ - prev_obj_fcn_) < convergence_tol_ * obj_fcn_;
+  return vnl_math::abs( obj_fcn_ ) < convergence_tol_  ||
+    vnl_math::abs(obj_fcn_ - prev_obj_fcn_) < convergence_tol_ * obj_fcn_;
 }
 
 

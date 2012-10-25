@@ -16,7 +16,7 @@
 //
 //  That's right, M_PI is nonstandard!
 //
-//  Aside from e, pi and their associates the class also defines eps,
+//  Aside from e, pi and their associates the namespace also defines eps,
 //  the IEEE double machine precision.  This is the smallest number
 //  eps such that 1+eps != 1.
 //
@@ -33,6 +33,8 @@
 //   LSB (Modifications) 23 Jan 2001 Documentation tidied
 //   Peter Vanroose - 7 Sep 2002 - maxdouble etc. replaced by vnl_numeric_traits<T>::maxval
 //   Amitha Perera - 13 Sep 2002 - make constant initialization standards compliant.
+//   Peter Vanroose -22 Oct 2012 - was a class, now is a namespace
+//                                 also renamed functions vnl_math_isnan etc. to vnl_math::isnan
 // \endverbatim
 
 #include <vcl_cmath.h>
@@ -76,41 +78,49 @@ short    vnl_huge_val(short);
 char     vnl_huge_val(char);
 
 //: real numerical constants
-class vnl_math
+// Strictly speaking, the static declaration of the constant variables is
+// redundant with the implicit behavior in C++ of objects declared const
+// as defined at:
+//  "C++98 7.1.1/6: ...Objects declared const and not explicitly declared
+//   extern have internal linkage."
+//
+// Explicit use of the static keyword is used to make the code easier to
+// understand.
+namespace vnl_math
 {
- public:
   //: pi, e and all that
-  static VNL_DLL_DATA const double e                VCL_STATIC_CONST_INIT_FLOAT_DECL(2.71828182845904523536);
-  static VNL_DLL_DATA const double log2e            VCL_STATIC_CONST_INIT_FLOAT_DECL(1.44269504088896340736);
-  static VNL_DLL_DATA const double log10e           VCL_STATIC_CONST_INIT_FLOAT_DECL(0.43429448190325182765);
-  static VNL_DLL_DATA const double ln2              VCL_STATIC_CONST_INIT_FLOAT_DECL(0.69314718055994530942);
-  static VNL_DLL_DATA const double ln10             VCL_STATIC_CONST_INIT_FLOAT_DECL(2.30258509299404568402);
-  static VNL_DLL_DATA const double pi               VCL_STATIC_CONST_INIT_FLOAT_DECL(3.14159265358979323846);
-  static VNL_DLL_DATA const double twopi            VCL_STATIC_CONST_INIT_FLOAT_DECL(6.28318530717958647692);
-  static VNL_DLL_DATA const double pi_over_2        VCL_STATIC_CONST_INIT_FLOAT_DECL(1.57079632679489661923);
-  static VNL_DLL_DATA const double pi_over_4        VCL_STATIC_CONST_INIT_FLOAT_DECL(0.78539816339744830962);
-  static VNL_DLL_DATA const double pi_over_180      VCL_STATIC_CONST_INIT_FLOAT_DECL(0.01745329251994329577);
-  static VNL_DLL_DATA const double one_over_pi      VCL_STATIC_CONST_INIT_FLOAT_DECL(0.31830988618379067154);
-  static VNL_DLL_DATA const double two_over_pi      VCL_STATIC_CONST_INIT_FLOAT_DECL(0.63661977236758134308);
-  static VNL_DLL_DATA const double deg_per_rad      VCL_STATIC_CONST_INIT_FLOAT_DECL(57.2957795130823208772);
-  static VNL_DLL_DATA const double sqrt2pi          VCL_STATIC_CONST_INIT_FLOAT_DECL(2.50662827463100024161);
-  static VNL_DLL_DATA const double two_over_sqrtpi  VCL_STATIC_CONST_INIT_FLOAT_DECL(1.12837916709551257390);
-  static VNL_DLL_DATA const double one_over_sqrt2pi VCL_STATIC_CONST_INIT_FLOAT_DECL(0.39894228040143267794);
-  static VNL_DLL_DATA const double sqrt2            VCL_STATIC_CONST_INIT_FLOAT_DECL(1.41421356237309504880);
-  static VNL_DLL_DATA const double sqrt1_2          VCL_STATIC_CONST_INIT_FLOAT_DECL(0.70710678118654752440);
-  static VNL_DLL_DATA const double sqrt1_3          VCL_STATIC_CONST_INIT_FLOAT_DECL(0.57735026918962573106);
-  static VNL_DLL_DATA const double euler            VCL_STATIC_CONST_INIT_FLOAT_DECL(0.57721566490153286061);
+  static const double e                = 2.71828182845904523536;
+  static const double log2e            = 1.44269504088896340736;
+  static const double log10e           = 0.43429448190325182765;
+  static const double ln2              = 0.69314718055994530942;
+  static const double ln10             = 2.30258509299404568402;
+  static const double pi               = 3.14159265358979323846;
+  static const double twopi            = 6.28318530717958647692;
+  static const double pi_over_2        = 1.57079632679489661923;
+  static const double pi_over_4        = 0.78539816339744830962;
+  static const double pi_over_180      = 0.01745329251994329577;
+  static const double one_over_pi      = 0.31830988618379067154;
+  static const double two_over_pi      = 0.63661977236758134308;
+  static const double deg_per_rad      = 57.2957795130823208772;
+  static const double sqrt2pi          = 2.50662827463100024161;
+  static const double two_over_sqrtpi  = 1.12837916709551257390;
+  static const double one_over_sqrt2pi = 0.39894228040143267794;
+  static const double sqrt2            = 1.41421356237309504880;
+  static const double sqrt1_2          = 0.70710678118654752440;
+  static const double sqrt1_3          = 0.57735026918962573106;
+  static const double euler            = 0.57721566490153286061;
 
   //: IEEE double machine precision
-  static VNL_DLL_DATA const double eps             VCL_STATIC_CONST_INIT_FLOAT_DECL(2.2204460492503131e-16);
-  static VNL_DLL_DATA const double sqrteps         VCL_STATIC_CONST_INIT_FLOAT_DECL(1.490116119384766e-08);
+  static const double eps              = 2.2204460492503131e-16;
+  static const double sqrteps          = 1.490116119384766e-08;
   //: IEEE single machine precision
-  static VNL_DLL_DATA const float float_eps        VCL_STATIC_CONST_INIT_FLOAT_DECL(1.192092896e-07f);
-  static VNL_DLL_DATA const float float_sqrteps    VCL_STATIC_CONST_INIT_FLOAT_DECL(3.4526698307e-4f);
+  static const float  float_eps        = 1.192092896e-07f;
+  static const float  float_sqrteps    = 3.4526698307e-4f;
+
   //: Convert an angle to [0, 2Pi) range
-  static double angle_0_to_2pi(double angle);
+  double angle_0_to_2pi(double angle);
   //: Convert an angle to [-Pi, Pi) range
-  static double angle_minuspi_to_pi(double angle);
+  double angle_minuspi_to_pi(double angle);
 };
 
 // We do not want to make assumptions about unknown types that happen
@@ -127,527 +137,526 @@ class vnl_math
 // since that would override the non-inline specialisations. - PVr.
 //
 
-// isnan
-inline bool vnl_math_isnan(char)               { return false; }
-inline bool vnl_math_isnan(short)              { return false; }
-inline bool vnl_math_isnan(int)                { return false; }
-inline bool vnl_math_isnan(long)               { return false; }
-inline bool vnl_math_isnan(signed char)        { return false; }
-inline bool vnl_math_isnan(unsigned char)      { return false; }
-inline bool vnl_math_isnan(unsigned short)     { return false; }
-inline bool vnl_math_isnan(unsigned int)       { return false; }
-inline bool vnl_math_isnan(unsigned long)      { return false; }
+namespace vnl_math
+{
+ // isnan
+ inline bool isnan(char)               { return false; }
+ inline bool isnan(short)              { return false; }
+ inline bool isnan(int)                { return false; }
+ inline bool isnan(long)               { return false; }
+ inline bool isnan(signed char)        { return false; }
+ inline bool isnan(unsigned char)      { return false; }
+ inline bool isnan(unsigned short)     { return false; }
+ inline bool isnan(unsigned int)       { return false; }
+ inline bool isnan(unsigned long)      { return false; }
 #if VCL_HAS_LONG_LONG
-inline bool vnl_math_isnan(long long)          { return false; }
-inline bool vnl_math_isnan(unsigned long long) { return false; }
+ inline bool isnan(long long)          { return false; }
+ inline bool isnan(unsigned long long) { return false; }
 #endif
-bool vnl_math_isnan(float);
-bool vnl_math_isnan(double);
-bool vnl_math_isnan(long double);
+ bool isnan(float);
+ bool isnan(double);
+ bool isnan(long double);
 #if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
-template <class T> bool vnl_math_isnan(T);
+ template <class T> bool isnan(T);
 #endif
 
 
-// isinf
-inline bool vnl_math_isinf(char)               { return false; }
-inline bool vnl_math_isinf(short)              { return false; }
-inline bool vnl_math_isinf(int)                { return false; }
-inline bool vnl_math_isinf(long)               { return false; }
-inline bool vnl_math_isinf(signed char)        { return false; }
-inline bool vnl_math_isinf(unsigned char)      { return false; }
-inline bool vnl_math_isinf(unsigned short)     { return false; }
-inline bool vnl_math_isinf(unsigned int)       { return false; }
-inline bool vnl_math_isinf(unsigned long)      { return false; }
+ // isinf
+ inline bool isinf(char)               { return false; }
+ inline bool isinf(short)              { return false; }
+ inline bool isinf(int)                { return false; }
+ inline bool isinf(long)               { return false; }
+ inline bool isinf(signed char)        { return false; }
+ inline bool isinf(unsigned char)      { return false; }
+ inline bool isinf(unsigned short)     { return false; }
+ inline bool isinf(unsigned int)       { return false; }
+ inline bool isinf(unsigned long)      { return false; }
 #if VCL_HAS_LONG_LONG
-inline bool vnl_math_isinf(long long)          { return false; }
-inline bool vnl_math_isinf(unsigned long long) { return false; }
+ inline bool isinf(long long)          { return false; }
+ inline bool isinf(unsigned long long) { return false; }
 #endif
-bool vnl_math_isinf(float);
-bool vnl_math_isinf(double);
-bool vnl_math_isinf(long double);
+ bool isinf(float);
+ bool isinf(double);
+ bool isinf(long double);
 #if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
-template <class T> bool vnl_math_isinf(T);
+ template <class T> bool isinf(T);
 #endif
 
-// isfinite
-inline bool vnl_math_isfinite(char)               { return true; }
-inline bool vnl_math_isfinite(short)              { return true; }
-inline bool vnl_math_isfinite(int)                { return true; }
-inline bool vnl_math_isfinite(long)               { return true; }
-inline bool vnl_math_isfinite(signed char)        { return true; }
-inline bool vnl_math_isfinite(unsigned char)      { return true; }
-inline bool vnl_math_isfinite(unsigned short)     { return true; }
-inline bool vnl_math_isfinite(unsigned int)       { return true; }
-inline bool vnl_math_isfinite(unsigned long)      { return true; }
+ // isfinite
+ inline bool isfinite(char)               { return true; }
+ inline bool isfinite(short)              { return true; }
+ inline bool isfinite(int)                { return true; }
+ inline bool isfinite(long)               { return true; }
+ inline bool isfinite(signed char)        { return true; }
+ inline bool isfinite(unsigned char)      { return true; }
+ inline bool isfinite(unsigned short)     { return true; }
+ inline bool isfinite(unsigned int)       { return true; }
+ inline bool isfinite(unsigned long)      { return true; }
 #if VCL_HAS_LONG_LONG
-inline bool vnl_math_isfinite(long long)          { return true; }
-inline bool vnl_math_isfinite(unsigned long long) { return true; }
+ inline bool isfinite(long long)          { return true; }
+ inline bool isfinite(unsigned long long) { return true; }
 #endif
-bool vnl_math_isfinite(float);
-bool vnl_math_isfinite(double);
-bool vnl_math_isfinite(long double);
+ bool isfinite(float);
+ bool isfinite(double);
+ bool isfinite(long double);
 #if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
-template <class T> bool vnl_math_isfinite(T);
+ template <class T> bool isfinite(T);
 #endif
 
-// vnl_math_rnd_halfinttoeven  -- round towards nearest integer
-//         halfway cases are rounded towards the nearest even integer, e.g.
-//         vnl_math_rnd_halfinttoeven( 1.5) ==  2
-//         vnl_math_rnd_halfinttoeven(-1.5) == -2
-//         vnl_math_rnd_halfinttoeven( 2.5) ==  2
-//         vnl_math_rnd_halfinttoeven( 3.5) ==  4
-//
-// We assume that the rounding mode is not changed from the default
-// one (or at least that it is always restored to the default one).
+ // rnd_halfinttoeven  -- round towards nearest integer
+ //         halfway cases are rounded towards the nearest even integer, e.g.
+ //         rnd_halfinttoeven( 1.5) ==  2
+ //         rnd_halfinttoeven(-1.5) == -2
+ //         rnd_halfinttoeven( 2.5) ==  2
+ //         rnd_halfinttoeven( 3.5) ==  4
+ //
+ // We assume that the rounding mode is not changed from the default
+ // one (or at least that it is always restored to the default one).
 
 #if VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast sse2 implementation
 
-inline int vnl_math_rnd_halfinttoeven(float  x)
-{
+ inline int rnd_halfinttoeven(float  x)
+ {
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-  return _mm_cvtss_si32(_mm_set_ss(x));
-}
+   return _mm_cvtss_si32(_mm_set_ss(x));
+ }
 
-inline int vnl_math_rnd_halfinttoeven(double  x)
-{
+ inline int rnd_halfinttoeven(double  x)
+ {
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-  return _mm_cvtsd_si32(_mm_set_sd(x));
-}
+   return _mm_cvtsd_si32(_mm_set_sd(x));
+ }
 
 #elif GCC_USE_FAST_IMPL // Fast gcc asm implementation
 
-inline int vnl_math_rnd_halfinttoeven(float  x)
-{
+ inline int rnd_halfinttoeven(float  x)
+ {
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-  int r;
-  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-  return r;
-}
+   int r;
+   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+   return r;
+ }
 
-inline int vnl_math_rnd_halfinttoeven(double  x)
-{
+ inline int rnd_halfinttoeven(double  x)
+ {
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-  int r;
-  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-  return r;
-}
+   int r;
+   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+   return r;
+ }
 
 #elif VC_USE_FAST_IMPL // Fast msvc asm implementation
 
-inline int vnl_math_rnd_halfinttoeven(float  x)
-{
-  int r;
-  __asm {
-    fld x
-    fistp r
-  }
-  return r;
-}
+ inline int rnd_halfinttoeven(float  x)
+ {
+   int r;
+   __asm {
+     fld x
+     fistp r
+   }
+   return r;
+ }
 
-inline int vnl_math_rnd_halfinttoeven(double  x)
-{
-  int r;
-  __asm {
-    fld x
-    fistp r
-  }
-  return r;
-}
+ inline int rnd_halfinttoeven(double  x)
+ {
+   int r;
+   __asm {
+     fld x
+     fistp r
+   }
+   return r;
+ }
 
 #else // Vanilla implementation
 
-inline int vnl_math_rnd_halfinttoeven(float  x)
-{
-  if (x>=0.f)
-  {
-     x+=0.5f;
-     const int r = static_cast<int>(x);
-     if ( x != static_cast<float>(r) ) return r;
-     return 2*(r/2);
-  }
-  else
-  {
-     x-=0.5f;
-     const int r = static_cast<int>(x);
-     if ( x != static_cast<float>(r) ) return r;
-     return 2*(r/2);
-  }
-}
+ inline int rnd_halfinttoeven(float  x)
+ {
+   if (x>=0.f)
+   {
+      x+=0.5f;
+      const int r = static_cast<int>(x);
+      if ( x != static_cast<float>(r) ) return r;
+      return 2*(r/2);
+   }
+   else
+   {
+      x-=0.5f;
+      const int r = static_cast<int>(x);
+      if ( x != static_cast<float>(r) ) return r;
+      return 2*(r/2);
+   }
+ }
 
-inline int vnl_math_rnd_halfinttoeven(double x)
-{
-  if (x>=0.)
-  {
-     x+=0.5;
-     const int r = static_cast<int>(x);
-     if ( x != static_cast<double>(r) ) return r;
-     return 2*(r/2);
-  }
-  else
-  {
-     x-=0.5;
-     const int r = static_cast<int>(x);
-     if ( x != static_cast<double>(r) ) return r;
-     return 2*(r/2);
-  }
-}
+ inline int rnd_halfinttoeven(double x)
+ {
+   if (x>=0.)
+   {
+      x+=0.5;
+      const int r = static_cast<int>(x);
+      if ( x != static_cast<double>(r) ) return r;
+      return 2*(r/2);
+   }
+   else
+   {
+      x-=0.5;
+      const int r = static_cast<int>(x);
+      if ( x != static_cast<double>(r) ) return r;
+      return 2*(r/2);
+   }
+ }
 
 #endif
 
-
-// vnl_math_rnd_halfintup  -- round towards nearest integer
-//         halfway cases are rounded upward, e.g.
-//         vnl_math_rnd_halfintup( 1.5) ==  2
-//         vnl_math_rnd_halfintup(-1.5) == -1
-//         vnl_math_rnd_halfintup( 2.5) ==  3
-//
-// Be careful: argument absolute value must be less than INT_MAX/2
-// for vnl_math_rnd_halfintup to be guaranteed to work.
-// We also assume that the rounding mode is not changed from the default
-// one (or at least that it is always restored to the default one).
+ // rnd_halfintup  -- round towards nearest integer
+ //         halfway cases are rounded upward, e.g.
+ //         rnd_halfintup( 1.5) ==  2
+ //         rnd_halfintup(-1.5) == -1
+ //         rnd_halfintup( 2.5) ==  3
+ //
+ // Be careful: argument absolute value must be less than INT_MAX/2
+ // for rnd_halfintup to be guaranteed to work.
+ // We also assume that the rounding mode is not changed from the default
+ // one (or at least that it is always restored to the default one).
 
 #if VNL_CONFIG_ENABLE_SSE2_ROUNDING || GCC_USE_FAST_IMPL || VC_USE_FAST_IMPL
 
-inline int vnl_math_rnd_halfintup(float  x) { return vnl_math_rnd_halfinttoeven(2*x+0.5f)>>1; }
-inline int vnl_math_rnd_halfintup(double  x) { return vnl_math_rnd_halfinttoeven(2*x+0.5)>>1; }
+ inline int rnd_halfintup(float  x) { return rnd_halfinttoeven(2*x+0.5f)>>1; }
+ inline int rnd_halfintup(double  x) { return rnd_halfinttoeven(2*x+0.5)>>1; }
 
 #else // Vanilla implementation
 
-inline int vnl_math_rnd_halfintup(float  x)
-{
-  x+=0.5f;
-  return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
-}
+ inline int rnd_halfintup(float  x)
+ {
+   x+=0.5f;
+   return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
+ }
 
-inline int vnl_math_rnd_halfintup(double x)
-{
-  x+=0.5;
-  return static_cast<int>(x>=0.?x:(x==static_cast<int>(x)?x:x-1.));
-}
+ inline int rnd_halfintup(double x)
+ {
+   x+=0.5;
+   return static_cast<int>(x>=0.?x:(x==static_cast<int>(x)?x:x-1.));
+ }
 
 #endif
 
-
-// vnl_math_rnd  -- round towards nearest integer
-//         halfway cases such as 0.5 may be rounded either up or down
-//         so as to maximize the efficiency, e.g.
-//         vnl_math_rnd_halfinttoeven( 1.5) ==  1 or  2
-//         vnl_math_rnd_halfinttoeven(-1.5) == -2 or -1
-//         vnl_math_rnd_halfinttoeven( 2.5) ==  2 or  3
-//         vnl_math_rnd_halfinttoeven( 3.5) ==  3 or  4
-//
-// We assume that the rounding mode is not changed from the default
-// one (or at least that it is always restored to the default one).
+ // rnd  -- round towards nearest integer
+ //         halfway cases such as 0.5 may be rounded either up or down
+ //         so as to maximize the efficiency, e.g.
+ //         rnd_halfinttoeven( 1.5) ==  1 or  2
+ //         rnd_halfinttoeven(-1.5) == -2 or -1
+ //         rnd_halfinttoeven( 2.5) ==  2 or  3
+ //         rnd_halfinttoeven( 3.5) ==  3 or  4
+ //
+ // We assume that the rounding mode is not changed from the default
+ // one (or at least that it is always restored to the default one).
 
 #if VNL_CONFIG_ENABLE_SSE2_ROUNDING || GCC_USE_FAST_IMPL || VC_USE_FAST_IMPL
 
-inline int vnl_math_rnd(float  x) { return vnl_math_rnd_halfinttoeven(x); }
-inline int vnl_math_rnd(double  x) { return vnl_math_rnd_halfinttoeven(x); }
+ inline int rnd(float  x) { return rnd_halfinttoeven(x); }
+ inline int rnd(double  x) { return rnd_halfinttoeven(x); }
 
 #else // Vanilla implementation
 
-inline int vnl_math_rnd(float  x) { return x>=0.f?static_cast<int>(x+.5f):static_cast<int>(x-.5f); }
-inline int vnl_math_rnd(double x) { return x>=0.0?static_cast<int>(x+0.5):static_cast<int>(x-0.5); }
-
+ inline int rnd(float  x) { return x>=0.f?static_cast<int>(x+.5f):static_cast<int>(x-.5f); }
+ inline int rnd(double x) { return x>=0.0?static_cast<int>(x+0.5):static_cast<int>(x-0.5); }
 
 #endif
 
-
-// vnl_math_floor -- round towards minus infinity
-//
-// Be careful: argument absolute value must be less than INT_MAX/2
-// for vnl_math_floor to be guaranteed to work.
-// We also assume that the rounding mode is not changed from the default
-// one (or at least that it is always restored to the default one).
+ // floor -- round towards minus infinity
+ //
+ // Be careful: argument absolute value must be less than INT_MAX/2
+ // for floor to be guaranteed to work.
+ // We also assume that the rounding mode is not changed from the default
+ // one (or at least that it is always restored to the default one).
 
 #if VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast sse2 implementation
 
-inline int vnl_math_floor(float  x)
-{
+ inline int floor(float  x)
+ {
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
    return _mm_cvtss_si32(_mm_set_ss(2*x-.5f))>>1;
-}
+ }
 
-inline int vnl_math_floor(double  x)
-{
+ inline int floor(double  x)
+ {
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
    return _mm_cvtsd_si32(_mm_set_sd(2*x-.5))>>1;
-}
+ }
 
 #elif GCC_USE_FAST_IMPL // Fast gcc asm implementation
 
-inline int vnl_math_floor(float  x)
-{
+ inline int floor(float  x)
+ {
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-  int r;
-  x = 2*x-.5f;
-  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-  return r>>1;
-}
+   int r;
+   x = 2*x-.5f;
+   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+   return r>>1;
+ }
 
-inline int vnl_math_floor(double  x)
-{
+ inline int floor(double  x)
+ {
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-  int r;
-  x = 2*x-.5;
-  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-  return r>>1;
-}
+   int r;
+   x = 2*x-.5;
+   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+   return r>>1;
+ }
 
 #elif VC_USE_FAST_IMPL // Fast msvc asm implementation
 
-inline int vnl_math_floor(float  x)
-{
-  int r;
-  x = 2*x-.5f;
-  __asm {
-    fld x
-    fistp r
-  }
-  return r>>1;
-}
+ inline int floor(float  x)
+ {
+   int r;
+   x = 2*x-.5f;
+   __asm {
+     fld x
+     fistp r
+   }
+   return r>>1;
+ }
 
-inline int vnl_math_floor(double  x)
-{
-  int r;
-  x = 2*x-.5;
-  __asm {
-    fld x
-    fistp r
-  }
-  return r>>1;
-}
+ inline int floor(double  x)
+ {
+   int r;
+   x = 2*x-.5;
+   __asm {
+     fld x
+     fistp r
+   }
+   return r>>1;
+ }
 
 #else // Vanilla implementation
 
-inline int vnl_math_floor(float  x)
-{
-  return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
-}
+ inline int floor(float  x)
+ {
+   return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
+ }
 
-inline int vnl_math_floor(double x)
-{
-  return static_cast<int>(x>=0.0?x:(x==static_cast<int>(x)?x:x-1.0));
-}
+ inline int floor(double x)
+ {
+   return static_cast<int>(x>=0.0?x:(x==static_cast<int>(x)?x:x-1.0));
+ }
 
 #endif
 
 
-// vnl_math_ceil -- round towards plus infinity
-//
-// Be careful: argument absolute value must be less than INT_MAX/2
-// for vnl_math_ceil to be guaranteed to work.
-// We also assume that the rounding mode is not changed from the default
-// one (or at least that it is always restored to the default one).
+ // ceil -- round towards plus infinity
+ //
+ // Be careful: argument absolute value must be less than INT_MAX/2
+ // for ceil to be guaranteed to work.
+ // We also assume that the rounding mode is not changed from the default
+ // one (or at least that it is always restored to the default one).
 
 #if VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast sse2 implementation
 
-inline int vnl_math_ceil(float  x)
-{
+ inline int ceil(float  x)
+ {
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-   return -(_mm_cvtss_si32(_mm_set_ss(-.5f-2*x))>>1);
-}
+    return -(_mm_cvtss_si32(_mm_set_ss(-.5f-2*x))>>1);
+ }
 
-inline int vnl_math_ceil(double  x)
-{
+ inline int ceil(double  x)
+ {
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-   return -(_mm_cvtsd_si32(_mm_set_sd(-.5-2*x))>>1);
-}
+    return -(_mm_cvtsd_si32(_mm_set_sd(-.5-2*x))>>1);
+ }
 
 #elif GCC_USE_FAST_IMPL // Fast gcc asm implementation
 
-inline int vnl_math_ceil(float  x)
-{
+ inline int ceil(float  x)
+ {
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-  int r;
-  x = -.5f-2*x;
-  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-  return -(r>>1);
-}
+   int r;
+   x = -.5f-2*x;
+   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+   return -(r>>1);
+ }
 
-inline int vnl_math_ceil(double  x)
-{
+ inline int ceil(double  x)
+ {
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-  assert(fegetround()==FE_TONEAREST);
+   assert(fegetround()==FE_TONEAREST);
 # endif
-  int r;
-  x = -.5-2*x;
-  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-  return -(r>>1);
-}
+   int r;
+   x = -.5-2*x;
+   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+   return -(r>>1);
+ }
 
 #elif VC_USE_FAST_IMPL // Fast msvc asm implementation
 
-inline int vnl_math_ceil(float  x)
-{
-  int r;
-  x = -.5f-2*x;
-  __asm {
-    fld x
-    fistp r
-  }
-  return -(r>>1);
-}
+ inline int ceil(float  x)
+ {
+   int r;
+   x = -.5f-2*x;
+   __asm {
+     fld x
+     fistp r
+   }
+   return -(r>>1);
+ }
 
-inline int vnl_math_ceil(double  x)
-{
-  int r;
-  x = -.5-2*x;
-  __asm {
-    fld x
-    fistp r
-  }
-  return -(r>>1);
-}
+ inline int ceil(double  x)
+ {
+   int r;
+   x = -.5-2*x;
+   __asm {
+     fld x
+     fistp r
+   }
+   return -(r>>1);
+ }
 
 #else // Vanilla implementation
 
-inline int vnl_math_ceil(float  x)
-{
-  return static_cast<int>(x<0.f?x:(x==static_cast<int>(x)?x:x+1.f));
-}
+ inline int ceil(float  x)
+ {
+   return static_cast<int>(x<0.f?x:(x==static_cast<int>(x)?x:x+1.f));
+ }
 
-inline int vnl_math_ceil(double x)
-{
-  return static_cast<int>(x<0.0?x:(x==static_cast<int>(x)?x:x+1.0));
-}
+ inline int ceil(double x)
+ {
+   return static_cast<int>(x<0.0?x:(x==static_cast<int>(x)?x:x+1.0));
+ }
 
 #endif
 
-
-// abs
-inline bool               vnl_math_abs(bool x)               { return x; }
-inline unsigned char      vnl_math_abs(unsigned char x)      { return x; }
-inline unsigned char      vnl_math_abs(signed char x)        { return x < 0 ? static_cast<unsigned char>(-x) : x; }
-inline unsigned char      vnl_math_abs(char x)               { return static_cast<unsigned char>(x); }
-inline unsigned short     vnl_math_abs(short x)              { return x < 0 ? static_cast<unsigned short>(-x) : x; }
-inline unsigned short     vnl_math_abs(unsigned short x)     { return x; }
-inline unsigned int       vnl_math_abs(int x)                { return x < 0 ? -x : x; }
-inline unsigned int       vnl_math_abs(unsigned int x)       { return x; }
-inline unsigned long      vnl_math_abs(long x)               { return x < 0L ? -x : x; }
-inline unsigned long      vnl_math_abs(unsigned long x)      { return x; }
+ // abs
+ inline bool               abs(bool x)               { return x; }
+ inline unsigned char      abs(unsigned char x)      { return x; }
+ inline unsigned char      abs(signed char x)        { return x < 0 ? static_cast<unsigned char>(-x) : x; }
+ inline unsigned char      abs(char x)               { return static_cast<unsigned char>(x); }
+ inline unsigned short     abs(short x)              { return x < 0 ? static_cast<unsigned short>(-x) : x; }
+ inline unsigned short     abs(unsigned short x)     { return x; }
+ inline unsigned int       abs(int x)                { return x < 0 ? -x : x; }
+ inline unsigned int       abs(unsigned int x)       { return x; }
+ inline unsigned long      abs(long x)               { return x < 0L ? -x : x; }
+ inline unsigned long      abs(unsigned long x)      { return x; }
 #if VCL_HAS_LONG_LONG
-inline unsigned long long vnl_math_abs(long long x)          { return x < 0LL ? -x : x; }
-inline unsigned long long vnl_math_abs(unsigned long long x) { return x; }
+ inline unsigned long long abs(long long x)          { return x < 0LL ? -x : x; }
+ inline unsigned long long abs(unsigned long long x) { return x; }
 #endif
-inline float              vnl_math_abs(float x)              { return x < 0.0f ? -x : x; }
-inline double             vnl_math_abs(double x)             { return x < 0.0 ? -x : x; }
-inline long double        vnl_math_abs(long double x)        { return x < 0.0 ? -x : x; }
+ inline float              abs(float x)              { return x < 0.0f ? -x : x; }
+ inline double             abs(double x)             { return x < 0.0 ? -x : x; }
+ inline long double        abs(long double x)        { return x < 0.0 ? -x : x; }
 
-// max
-inline int                vnl_math_max(int x, int y)                               { return (x > y) ? x : y; }
-inline unsigned int       vnl_math_max(unsigned int x, unsigned int y)             { return (x > y) ? x : y; }
-inline long               vnl_math_max(long x, long y)                             { return (x > y) ? x : y; }
-inline unsigned long      vnl_math_max(unsigned long x, unsigned long y)           { return (x > y) ? x : y; }
+ // max
+ inline int                max(int x, int y)                               { return (x > y) ? x : y; }
+ inline unsigned int       max(unsigned int x, unsigned int y)             { return (x > y) ? x : y; }
+ inline long               max(long x, long y)                             { return (x > y) ? x : y; }
+ inline unsigned long      max(unsigned long x, unsigned long y)           { return (x > y) ? x : y; }
 #if VCL_HAS_LONG_LONG
-inline long long          vnl_math_max(long long x, long long y)                   { return (x > y) ? x : y; }
-inline unsigned long long vnl_math_max(unsigned long long x, unsigned long long y) { return (x > y) ? x : y; }
+ inline long long          max(long long x, long long y)                   { return (x > y) ? x : y; }
+ inline unsigned long long max(unsigned long long x, unsigned long long y) { return (x > y) ? x : y; }
 #endif
-inline float              vnl_math_max(float x, float y)                           { return (x < y) ? y : x; }
-inline double             vnl_math_max(double x, double y)                         { return (x < y) ? y : x; }
+ inline float              max(float x, float y)                           { return (x < y) ? y : x; }
+ inline double             max(double x, double y)                         { return (x < y) ? y : x; }
 
-// min
-inline int                vnl_math_min(int x, int y)                               { return (x < y) ? x : y; }
-inline unsigned int       vnl_math_min(unsigned int x, unsigned int y)             { return (x < y) ? x : y; }
-inline long               vnl_math_min(long x, long y)                             { return (x < y) ? x : y; }
-inline unsigned long      vnl_math_min(unsigned long x, unsigned long y)           { return (x < y) ? x : y; }
+ // min
+ inline int                min(int x, int y)                               { return (x < y) ? x : y; }
+ inline unsigned int       min(unsigned int x, unsigned int y)             { return (x < y) ? x : y; }
+ inline long               min(long x, long y)                             { return (x < y) ? x : y; }
+ inline unsigned long      min(unsigned long x, unsigned long y)           { return (x < y) ? x : y; }
 #if VCL_HAS_LONG_LONG
-inline long long          vnl_math_min(long long x, long long y)                   { return (x < y) ? x : y; }
-inline unsigned long long vnl_math_min(unsigned long long x, unsigned long long y) { return (x < y) ? x : y; }
+ inline long long          min(long long x, long long y)                   { return (x < y) ? x : y; }
+ inline unsigned long long min(unsigned long long x, unsigned long long y) { return (x < y) ? x : y; }
 #endif
-inline float              vnl_math_min(float x, float y)                           { return (x > y) ? y : x; }
-inline double             vnl_math_min(double x, double y)                         { return (x > y) ? y : x; }
+ inline float              min(float x, float y)                           { return (x > y) ? y : x; }
+ inline double             min(double x, double y)                         { return (x > y) ? y : x; }
 
-// sqr (square)
-inline bool               vnl_math_sqr(bool x)               { return x; }
-inline int                vnl_math_sqr(int x)                { return x*x; }
-inline unsigned int       vnl_math_sqr(unsigned int x)       { return x*x; }
-inline long               vnl_math_sqr(long x)               { return x*x; }
-inline unsigned long      vnl_math_sqr(unsigned long x)      { return x*x; }
+ // sqr (square)
+ inline bool               sqr(bool x)               { return x; }
+ inline int                sqr(int x)                { return x*x; }
+ inline unsigned int       sqr(unsigned int x)       { return x*x; }
+ inline long               sqr(long x)               { return x*x; }
+ inline unsigned long      sqr(unsigned long x)      { return x*x; }
 #if VCL_HAS_LONG_LONG
-inline long long          vnl_math_sqr(long long x)          { return x*x; }
-inline unsigned long long vnl_math_sqr(unsigned long long x) { return x*x; }
+ inline long long          sqr(long long x)          { return x*x; }
+ inline unsigned long long sqr(unsigned long long x) { return x*x; }
 #endif
-inline float              vnl_math_sqr(float x)              { return x*x; }
-inline double             vnl_math_sqr(double x)             { return x*x; }
+ inline float              sqr(float x)              { return x*x; }
+ inline double             sqr(double x)             { return x*x; }
 
-// cube
-inline bool               vnl_math_cube(bool x)               { return x; }
-inline int                vnl_math_cube(int x)                { return x*x*x; }
-inline unsigned int       vnl_math_cube(unsigned int x)       { return x*x*x; }
-inline long               vnl_math_cube(long x)               { return x*x*x; }
-inline unsigned long      vnl_math_cube(unsigned long x)      { return x*x*x; }
+ // cube
+ inline bool               cube(bool x)               { return x; }
+ inline int                cube(int x)                { return x*x*x; }
+ inline unsigned int       cube(unsigned int x)       { return x*x*x; }
+ inline long               cube(long x)               { return x*x*x; }
+ inline unsigned long      cube(unsigned long x)      { return x*x*x; }
 #if VCL_HAS_LONG_LONG
-inline long long          vnl_math_cube(long long x)          { return x*x*x; }
-inline unsigned long long vnl_math_cube(unsigned long long x) { return x*x*x; }
+ inline long long          cube(long long x)          { return x*x*x; }
+ inline unsigned long long cube(unsigned long long x) { return x*x*x; }
 #endif
-inline float              vnl_math_cube(float x)              { return x*x*x; }
-inline double             vnl_math_cube(double x)             { return x*x*x; }
+ inline float              cube(float x)              { return x*x*x; }
+ inline double             cube(double x)             { return x*x*x; }
 
-// sgn (sign in -1, 0, +1)
-inline int vnl_math_sgn(int x)       { return x?((x>0)?1:-1):0; }
-inline int vnl_math_sgn(long x)      { return x?((x>0)?1:-1):0; }
+ // sgn (sign in -1, 0, +1)
+ inline int sgn(int x)       { return x?((x>0)?1:-1):0; }
+ inline int sgn(long x)      { return x?((x>0)?1:-1):0; }
 #if VCL_HAS_LONG_LONG
-inline int vnl_math_sgn(long long x) { return x?((x>0)?1:-1):0; }
+ inline int sgn(long long x) { return x?((x>0)?1:-1):0; }
 #endif
-inline int vnl_math_sgn(float x)     { return (x != 0)?((x>0)?1:-1):0; }
-inline int vnl_math_sgn(double x)    { return (x != 0)?((x>0)?1:-1):0; }
+ inline int sgn(float x)     { return (x != 0)?((x>0)?1:-1):0; }
+ inline int sgn(double x)    { return (x != 0)?((x>0)?1:-1):0; }
 
-// sgn0 (sign in -1, +1 only, useful for reals)
-inline int vnl_math_sgn0(int x)         { return (x>=0)?1:-1; }
-inline int vnl_math_sgn0(long x)        { return (x>=0)?1:-1; }
+ // sgn0 (sign in -1, +1 only, useful for reals)
+ inline int sgn0(int x)         { return (x>=0)?1:-1; }
+ inline int sgn0(long x)        { return (x>=0)?1:-1; }
 #if VCL_HAS_LONG_LONG
-inline int vnl_math_sgn0(long long x)   { return (x>=0)?1:-1; }
+ inline int sgn0(long long x)   { return (x>=0)?1:-1; }
 #endif
-inline int vnl_math_sgn0(float x)       { return (x>=0)?1:-1; }
-inline int vnl_math_sgn0(double x)      { return (x>=0)?1:-1; }
+ inline int sgn0(float x)       { return (x>=0)?1:-1; }
+ inline int sgn0(double x)      { return (x>=0)?1:-1; }
 
-// squared_magnitude
-inline unsigned int       vnl_math_squared_magnitude(char               x) { return int(x)*int(x); }
-inline unsigned int       vnl_math_squared_magnitude(unsigned char      x) { return int(x)*int(x); }
-inline unsigned int       vnl_math_squared_magnitude(int                x) { return x*x; }
-inline unsigned int       vnl_math_squared_magnitude(unsigned int       x) { return x*x; }
-inline unsigned long      vnl_math_squared_magnitude(long               x) { return x*x; }
-inline unsigned long      vnl_math_squared_magnitude(unsigned long      x) { return x*x; }
+ // squared_magnitude
+ inline unsigned int       squared_magnitude(char               x) { return int(x)*int(x); }
+ inline unsigned int       squared_magnitude(unsigned char      x) { return int(x)*int(x); }
+ inline unsigned int       squared_magnitude(int                x) { return x*x; }
+ inline unsigned int       squared_magnitude(unsigned int       x) { return x*x; }
+ inline unsigned long      squared_magnitude(long               x) { return x*x; }
+ inline unsigned long      squared_magnitude(unsigned long      x) { return x*x; }
 #if VCL_HAS_LONG_LONG
-inline unsigned long long vnl_math_squared_magnitude(long long          x) { return x*x; }
-inline unsigned long long vnl_math_squared_magnitude(unsigned long long x) { return x*x; }
+ inline unsigned long long squared_magnitude(long long          x) { return x*x; }
+ inline unsigned long long squared_magnitude(unsigned long long x) { return x*x; }
 #endif
-inline float              vnl_math_squared_magnitude(float              x) { return x*x; }
-inline double             vnl_math_squared_magnitude(double             x) { return x*x; }
-inline long double        vnl_math_squared_magnitude(long double        x) { return x*x; }
+ inline float              squared_magnitude(float              x) { return x*x; }
+ inline double             squared_magnitude(double             x) { return x*x; }
+ inline long double        squared_magnitude(long double        x) { return x*x; }
 
-// cuberoot
-inline float  vnl_math_cuberoot(float  a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
-inline double vnl_math_cuberoot(double a) { return       (a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3); }
+ // cuberoot
+ inline float  cuberoot(float  a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
+ inline double cuberoot(double a) { return       (a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3); }
 
-// hypotenuse
-inline double      vnl_math_hypot(int         x, int         y) { return vcl_sqrt(double(x*x + y*y)); }
-inline float       vnl_math_hypot(float       x, float       y) { return float( vcl_sqrt(double(x*x + y*y)) ); }
-inline double      vnl_math_hypot(double      x, double      y) { return vcl_sqrt(x*x + y*y); }
-inline long double vnl_math_hypot(long double x, long double y) { return vcl_sqrt(x*x + y*y); }
+ // hypotenuse
+ inline double      hypot(int         x, int         y) { return vcl_sqrt(double(x*x + y*y)); }
+ inline float       hypot(float       x, float       y) { return float( vcl_sqrt(double(x*x + y*y)) ); }
+ inline double      hypot(double      x, double      y) { return vcl_sqrt(x*x + y*y); }
+ inline long double hypot(long double x, long double y) { return vcl_sqrt(x*x + y*y); }
+
+} // end of namespace vnl_math
 
 #endif // vnl_math_h_

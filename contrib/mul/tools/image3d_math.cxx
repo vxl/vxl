@@ -1368,7 +1368,7 @@ void option_precision__double(opstack_t& s)
 {
   assert(s.size() >= 1);
 
-  int prec = vnl_math_rnd(s[0].as_double());
+  int prec = vnl_math::rnd(s[0].as_double());
   if (prec < 0 || prec > 20)
   {
     vcl_cerr << "\nERROR: option_precision takes an integer between 0 and 20.\n"
@@ -1449,7 +1449,7 @@ void na_to_mask__image_3d_of_float(opstack_t& s)
     for (unsigned k=0; k<nk; ++k)
       for (unsigned j=0; j<nj; ++j)
         for (unsigned i=0; i<ni; ++i)
-          result_image(i,j,k,p) = vnl_math_isnan(o1_image(i,j,k,p)) ? 1 : 0;
+          result_image(i,j,k,p) = vnl_math::isnan(o1_image(i,j,k,p)) ? 1 : 0;
 
   s.pop(1);
   s.push_front(operand(result));
@@ -1475,7 +1475,7 @@ void na_to_value__image_3d_of_float__double(opstack_t& s)
     for (unsigned k=0; k<nk; ++k)
       for (unsigned j=0; j<nj; ++j)
         for (unsigned i=0; i<ni; ++i)
-          result_image(i,j,k,p) = vnl_math_isnan(o1_image(i,j,k,p)) ? o2 : o1_image(i,j,k,p);
+          result_image(i,j,k,p) = vnl_math::isnan(o1_image(i,j,k,p)) ? o2 : o1_image(i,j,k,p);
 
   s.pop(2);
   s.push_front(operand(result));
@@ -1561,7 +1561,7 @@ void del_stack__double(opstack_t& s)
 {
   assert (s.size() >= 1);
   double o1 = s[0].as_double();
-  unsigned int index = vnl_math_rnd(o1);
+  unsigned int index = vnl_math::rnd(o1);
 
   if (o1 != index || o1 < 0)
   {
@@ -1695,9 +1695,9 @@ void decimate__image_3d_of_float__double__double__double(opstack_t& s)
 {
   assert(s.size() >= 4);
   vimt3d_image_3d_of<float> im(s[3].as_image_3d_of_float());
-  int si(vnl_math_rnd(s[2].as_double()));
-  int sj(vnl_math_rnd(s[1].as_double()));
-  int sk(vnl_math_rnd(s[0].as_double()));
+  int si(vnl_math::rnd(s[2].as_double()));
+  int sj(vnl_math::rnd(s[1].as_double()));
+  int sk(vnl_math::rnd(s[0].as_double()));
 
   if (si<=0 || sj<=0 || sk<=0)
   {
@@ -1723,9 +1723,9 @@ void decimate__image_3d_of_int__double__double__double(opstack_t& s)
 {
   assert(s.size() >= 4);
   vimt3d_image_3d_of<int> im(s[3].as_image_3d_of_int());
-  int si(vnl_math_rnd(s[2].as_double()));
-  int sj(vnl_math_rnd(s[1].as_double()));
-  int sk(vnl_math_rnd(s[0].as_double()));
+  int si(vnl_math::rnd(s[2].as_double()));
+  int sj(vnl_math::rnd(s[1].as_double()));
+  int sk(vnl_math::rnd(s[0].as_double()));
 
   if (si <0 || sj < 0 || sk < 0)
   {
@@ -1827,23 +1827,23 @@ void print_quantiles__image_3d_of_float__double(opstack_t& s)
                                   o1.image().nk(), o1.image().nplanes());
   vil3d_copy_reformat(o1.image(), storage);
 
-  double nsteps = vnl_math_floor(s[0].as_double());
+  double nsteps = vnl_math::floor(s[0].as_double());
   double step = storage.size() / nsteps;
 
-  vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
+  vcl_nth_element(storage.begin(), storage.begin() + vnl_math::rnd(step), storage.end());
 
-  vcl_cout << "     0%: " << vcl_setw(20) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
+  vcl_cout << "     0%: " << vcl_setw(20) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math::rnd(step))
            << '\n' << vcl_setw(6) << 100.0/nsteps << "%: "
-           << vcl_setw(20) << *(storage.begin() + vnl_math_rnd(step)) << '\n';
+           << vcl_setw(20) << *(storage.begin() + vnl_math::rnd(step)) << '\n';
   for (unsigned i=1; i+1<nsteps; ++i)
   {
-    vcl_nth_element(storage.begin() + vnl_math_rnd(i*step),
-                    storage.begin() + vnl_math_rnd((i+1)*step), storage.end());
+    vcl_nth_element(storage.begin() + vnl_math::rnd(i*step),
+                    storage.begin() + vnl_math::rnd((i+1)*step), storage.end());
     vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(20)
-             << *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
+             << *(storage.begin() + vnl_math::rnd((i+1)*step)) << '\n';
   }
   vcl_cout << "   100%: " << vcl_setw(20)
-           << *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
+           << *vcl_max_element(storage.begin() + vnl_math::rnd((nsteps-1)*step), storage.end()) << vcl_endl;
   s.pop(2);
 }
 
@@ -1855,22 +1855,22 @@ void print_quantiles__image_3d_of_int__double(opstack_t& s)
                                 o1.image().nk(), o1.image().nplanes());
   vil3d_copy_reformat(o1.image(), storage);
 
-  double nsteps = vnl_math_floor(s[0].as_double());
+  double nsteps = vnl_math::floor(s[0].as_double());
   double step = storage.size() / nsteps;
-  vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
+  vcl_nth_element(storage.begin(), storage.begin() + vnl_math::rnd(step), storage.end());
 
-  vcl_cout << "     0%: " << vcl_setw(20) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
-           << '\n' << vcl_setw(6) << 100.0/nsteps << "%: " << vcl_setw(20) << *(storage.begin() + vnl_math_rnd(step))
+  vcl_cout << "     0%: " << vcl_setw(20) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math::rnd(step))
+           << '\n' << vcl_setw(6) << 100.0/nsteps << "%: " << vcl_setw(20) << *(storage.begin() + vnl_math::rnd(step))
            << '\n';
   for (unsigned i=1; i+1<nsteps; ++i)
   {
-    vcl_nth_element(storage.begin() + vnl_math_rnd(i*step),
-                    storage.begin() + vnl_math_rnd((i+1)*step), storage.end());
+    vcl_nth_element(storage.begin() + vnl_math::rnd(i*step),
+                    storage.begin() + vnl_math::rnd((i+1)*step), storage.end());
     vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(20)
-             << *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
+             << *(storage.begin() + vnl_math::rnd((i+1)*step)) << '\n';
   }
   vcl_cout << "   100%: " << vcl_setw(20)
-           << *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
+           << *vcl_max_element(storage.begin() + vnl_math::rnd((nsteps-1)*step), storage.end()) << vcl_endl;
   s.pop(2);
 }
 
@@ -2173,7 +2173,7 @@ void checkerboard__image_3d_of_float__double__double__double(opstack_t& s)
       {
          vgl_point_3d<double> p = trans(i,j,k);
          out_image(i,j,k) =
-           (vnl_math_floor(p.x()) + vnl_math_floor(p.y()) + vnl_math_floor(p.z()))%2 ? 1.0f : 0.0f;
+           (vnl_math::floor(p.x()) + vnl_math::floor(p.y()) + vnl_math::floor(p.z()))%2 ? 1.0f : 0.0f;
       }
 
   s.pop(4);
@@ -2211,7 +2211,7 @@ void checkerboard__image_3d_of_int__double__double__double(opstack_t& s)
       {
          vgl_point_3d<double> p = trans(i,j,k);
          out_image(i,j,k) =
-           (vnl_math_floor(p.x()) + vnl_math_floor(p.y()) + vnl_math_floor(p.z()))%2 ? 1 : 0;
+           (vnl_math::floor(p.x()) + vnl_math::floor(p.y()) + vnl_math::floor(p.z()))%2 ? 1 : 0;
       }
 
   s.pop(4);
@@ -2370,11 +2370,11 @@ class operations
                   "im_A im_B", "image", "Logical AND over corresponding voxels in im_B and im_B");
     add_operation("--box", &box__image_3d_of_float__double__double__double__double__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double
-                   << operand::e_double << operand::e_double << operand::e_double << operand::e_double,
+                                    << operand::e_double << operand::e_double << operand::e_double << operand::e_double,
                   "image x_min y_min z_min x_max y_max z_max", "image", "Fill image with a partial-vol image of a box (in mm)");
     add_operation("--box", &box__image_3d_of_int__double__double__double__double__double__double,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_double << operand::e_double
-                   << operand::e_double << operand::e_double << operand::e_double << operand::e_double,
+                                    << operand::e_double << operand::e_double << operand::e_double << operand::e_double,
                   "image x_min y_min z_min x_max y_max z_max", "image", "Fill image with a binary image of a box (in mm)");
     add_operation("--checkerboard", &checkerboard__image_3d_of_float__double__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double << operand::e_double,

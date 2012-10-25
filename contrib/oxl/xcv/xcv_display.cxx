@@ -249,13 +249,13 @@ void xcv_display::line_profile(const vil1_image& src, float x0, float y0, float 
 
     if (sdepth == 8)
     {
-      float imgval = (float)memimg(vnl_math_rnd(xvals[i]), vnl_math_rnd(yvals[i]));
+      float imgval = (float)memimg(vnl_math::rnd(xvals[i]), vnl_math::rnd(yvals[i]));
       ivals[i] = imgval;
     }
 #if 0
     else if (sdepth == 16)
       ivals[i]
-        = (int)(*(unsigned short*)(memimg(vnl_math_rnd(xvals[i]), vnl_math_rnd(yvals[i]))));
+        = (int)(*(unsigned short*)(memimg(vnl_math::rnd(xvals[i]), vnl_math::rnd(yvals[i]))));
 #endif
   }
 }
@@ -279,7 +279,7 @@ void xcv_display::show_line_slice()
     return;
 
   int num_points
-    = (int)(vnl_math_rnd(vcl_sqrt((double)((fx1-fx0)*(fx1-fx0)
+    = (int)(vnl_math::rnd(vcl_sqrt((double)((fx1-fx0)*(fx1-fx0)
     + (fy1-fy0)*(fy1-fy0)))));
 
   // Avoid divide by zero

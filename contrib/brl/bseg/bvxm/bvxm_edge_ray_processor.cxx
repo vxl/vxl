@@ -239,7 +239,7 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
     bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
 
     for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it, ++edges_image_it) {
-      (*expected_edge_image_it) = vnl_math_max((*expected_edge_image_it),(*edges_image_it));
+      (*expected_edge_image_it) = vnl_math::max((*expected_edge_image_it),(*edges_image_it));
     }
   }
   vcl_cout << vcl_endl;
@@ -250,8 +250,8 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
   float eei_max = vcl_numeric_limits<float>::min();
   for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
     (*expected_edge_image_it) = sdet_img_edge::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
-    eei_min = vnl_math_min(eei_min,*expected_edge_image_it);
-    eei_max = vnl_math_max(eei_max,*expected_edge_image_it);
+    eei_min = vnl_math::min(eei_min,*expected_edge_image_it);
+    eei_max = vnl_math::max(eei_max,*expected_edge_image_it);
   }
 
   if (eei_min<eei_max) {

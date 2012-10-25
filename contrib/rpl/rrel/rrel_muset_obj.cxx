@@ -83,7 +83,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
   vcl_vector<double> abs_residuals;
   abs_residuals.reserve( end - begin );
   for ( ; begin != end; ++begin ) {
-    abs_residuals.push_back( vnl_math_abs( *begin ) );
+    abs_residuals.push_back( vnl_math::abs( *begin ) );
   }
   vcl_sort( abs_residuals.begin(), abs_residuals.end() );
 
@@ -110,7 +110,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     //  Find the best k
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ )
     {
-      unsigned int k = vnl_math_rnd( frac*num_residuals );
+      unsigned int k = vnl_math::rnd( frac*num_residuals );
       if ( k>num_residuals ) k=num_residuals;
       if ( k<=0 ) k=1;
       if ( table_->expected_kth(k, num_residuals) /
@@ -186,7 +186,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
 
     //  Find the best k
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
-      unsigned int k = vnl_math_rnd( frac*num_residuals );
+      unsigned int k = vnl_math::rnd( frac*num_residuals );
       if ( k>num_residuals ) k=num_residuals;
       if ( k<=0 ) k=1;
       if ( table_->expected_kth(k, num_residuals) /
@@ -201,7 +201,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
         }
 
       for ( unsigned int i=prev_k; i<k; ++i ) {
-        sum_sq_residuals += vnl_math_sqr( abs_residuals[i] );
+        sum_sq_residuals += vnl_math::sqr( abs_residuals[i] );
       }
       double sk = vcl_sqrt( sum_sq_residuals
                             / table_->muset_sq_divisor(k, num_residuals) );
@@ -259,7 +259,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     vcl_cout << "\nRREL_MUSE_QUANTILE\n";
 #endif
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
-      int kk = vnl_math_rnd( frac*num_residuals );
+      int kk = vnl_math::rnd( frac*num_residuals );
       unsigned int k = ( kk <= 0 )  ? 1 : kk;
       if ( k>num_residuals ) k=num_residuals;
       if ( table_->expected_kth(k, num_residuals) /

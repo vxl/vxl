@@ -63,7 +63,7 @@ void HomgNorm2D::normalize(vcl_vector<vgl_homg_point_2d<double> > const& points)
     for (unsigned i = 0; i < points.size(); ++i) {
       vnl_double_3 ni = normalized_[i].get_vector();
       vgl_homg_point_2d<double> mi = SimilarityMetric::imagehomg_to_homg(points[i]);
-      ni[0] -= mi.x(); ni[1] -= mi.y(); ni[2] -= mi.w(); 
+      ni[0] -= mi.x(); ni[1] -= mi.y(); ni[2] -= mi.w();
       double l = ni.magnitude();
       if (l > 1e-12) {
         vcl_cerr << "HomgNorm2D: "
@@ -87,10 +87,11 @@ void HomgNorm2D::normalize(vcl_vector<vgl_homg_point_2d<double> > const& points)
       if (w == 0) {
         /* average magnitude of finite points is root(3) after this stage - do the same for pts at infinity. */
 
-        double scaling = vcl_sqrt(3.0) / vnl_math_hypot(x, y);
+        double scaling = vcl_sqrt(3.0) / vnl_math::hypot(x, y);
         x *= scaling;
         y *= scaling;
-      } else {
+      }
+      else {
         x /= w;
         y /= w;
         w = 1.0;
@@ -107,7 +108,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
 
 #if 0
   for (unsigned i = 0; i < points.size(); ++i)
-    vcl_cerr << points[i].get_vector() << vcl_endl;
+    vcl_cerr << points[i].get_vector() << '\n';
 #endif
 
   double cx, cy;
@@ -124,7 +125,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
 
   SimilarityMetric::set_center_and_scale(cx, cy, 1/diameter);
 
-  //vcl_cerr << "NORM = " << norm_matrix_ << vcl_endl;
+  //vcl_cerr << "NORM = " << norm_matrix_ << '\n';
   if (paranoid) {
     SimilarityMetric::scale_matrices(1/diameter);
     for (unsigned i = 0; i < points.size(); ++i) {
@@ -155,10 +156,11 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
       if (w == 0) {
         /* average magnitude of finite points is root(3) after this stage - do the same for pts at infinity. */
 
-        double scaling = vcl_sqrt(3.0) / vnl_math_hypot(x, y);
+        double scaling = vcl_sqrt(3.0) / vnl_math::hypot(x, y);
         x *= scaling;
         y *= scaling;
-      } else {
+      }
+      else {
         x /= w;
         y /= w;
         w = 1.0;
@@ -219,8 +221,8 @@ static void centre(const vcl_vector<HomgPoint2D>& in,
         cog_y += y;
       }
     }
-    if (vnl_math_hypot(cog_x, cog_y) > 1e-10)
-      vcl_cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << "," << cog_y << ")\n";
+    if (vnl_math::hypot(cog_x, cog_y) > 1e-10)
+      vcl_cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << ',' << cog_y << ")\n";
   }
 }
 
@@ -275,8 +277,8 @@ static void centre(vcl_vector<vgl_homg_point_2d<double> > const& in,
         cog_y += y;
       }
     }
-    if (vnl_math_hypot(cog_x, cog_y) > 1e-10)
-      vcl_cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << "," << cog_y << ")\n";
+    if (vnl_math::hypot(cog_x, cog_y) > 1e-10)
+      vcl_cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << ',' << cog_y << ")\n";
   }
 }
 
@@ -292,7 +294,7 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
     const HomgPoint2D& p = in[i];
     double x,y;
     if (p.get_nonhomogeneous(x, y)) {
-      magnitude += vnl_math_hypot(x, y);
+      magnitude += vnl_math::hypot(x, y);
       ++numfinite;
     }
   }
@@ -317,14 +319,14 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
       const HomgPoint2D& p = out[i];
       double x,y;
       if (p.get_nonhomogeneous(x, y)) {
-        magnitude += vnl_math_hypot(x, y);
+        magnitude += vnl_math::hypot(x, y);
         ++numfinite;
       }
     }
     if (numfinite > 0) magnitude /= numfinite;
     const double expected = vcl_sqrt(2.0);
-    if (vnl_math_abs(expected - magnitude) > 1e-13) // 1e-14 gave false alarm -- fsm
-      vcl_cerr << "HomgNorm2D: Expected magnitude " << expected << " computed magnitude " << magnitude << vcl_endl;
+    if (vnl_math::abs(expected - magnitude) > 1e-13) // 1e-14 gave false alarm -- fsm
+      vcl_cerr << "HomgNorm2D: Expected magnitude " << expected << " computed magnitude " << magnitude << '\n';
   }
 
   // Return

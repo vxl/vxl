@@ -236,8 +236,8 @@ void extract_normalised_patches(const vimt_image& image,
   for (unsigned i=0;i<n;++i)
   {
     vgl_point_2d<double> im_p = byte_im.world2im()(pts[i]);
-    int px = vnl_math_rnd(im_p.x()+0.5);
-    int py = vnl_math_rnd(im_p.y()+0.5);
+    int px = vnl_math::rnd(im_p.x()+0.5);
+    int py = vnl_math::rnd(im_p.y()+0.5);
 
     // Select region around point, allowing for image edges.
     int ilo = vcl_max(0,px-half_width);

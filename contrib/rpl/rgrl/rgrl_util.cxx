@@ -23,7 +23,7 @@
 
 static
 rgrl_mask_box
-global_region_from_inv_xformed_points( 
+global_region_from_inv_xformed_points(
           vcl_vector< vnl_vector<double> > const& inv_mapped_pts,
           rgrl_mask_sptr                   const& from_image_roi,
           rgrl_mask_box                    const& current_region,
@@ -37,21 +37,21 @@ global_region_from_inv_xformed_points(
   const vnl_vector<double> from_x1 =  from_image_roi->x1();
   const unsigned m = from_x0.size();
   const int debug_flag = 0;
-  
+
   vnl_vector<double> inv_mapped_x0 = from_image_roi->x1();
   vnl_vector<double> inv_mapped_x1 = from_image_roi->x0();
   for ( pt_iter pitr = inv_mapped_pts.begin();  pitr != inv_mapped_pts.end(); ++pitr ) {
 
       vnl_vector<double> const& inv_mapped_pt = *pitr;
-      
+
       //update the inv_mapped bounding box
       for ( unsigned d=0; d < m; ++d ) {
         if (inv_mapped_pt[d] < inv_mapped_x0[d]) inv_mapped_x0[d] = inv_mapped_pt[d];
         if (inv_mapped_pt[d] > inv_mapped_x1[d]) inv_mapped_x1[d] = inv_mapped_pt[d];
       }
   }
-  
-  DebugFuncMacro( debug_flag, 1, "Global Region after inv-mapping: " 
+
+  DebugFuncMacro( debug_flag, 1, "Global Region after inv-mapping: "
                   << inv_mapped_x0 << " - " << inv_mapped_x1 << vcl_endl );
 
   //3. Take the intersection of the from_image_roi and the inverse_xformed to_image_roi
@@ -68,7 +68,7 @@ global_region_from_inv_xformed_points(
   if (region_x0 == region_x1) //no overlap
     return current_region;
 
-  DebugFuncMacro( debug_flag, 1, "Global Region after intersecting with ROI: " 
+  DebugFuncMacro( debug_flag, 1, "Global Region after intersecting with ROI: "
                   << region_x0 << " - " << region_x1 << vcl_endl );
 
   //4. If union_with_curr set, union region and current_region to prevent oscillation
@@ -79,7 +79,7 @@ global_region_from_inv_xformed_points(
     }
   }
 
-  DebugFuncMacro( debug_flag, 1, "Global Region after union with prev region: " 
+  DebugFuncMacro( debug_flag, 1, "Global Region after union with prev region: "
                   << region_x0 << " - " << region_x1 << vcl_endl );
 
   //5. If the changes from current_region is insignificant, or the change is too
@@ -105,15 +105,14 @@ global_region_from_inv_xformed_points(
     region.set_x1(region_x1);
   }
 
-  DebugFuncMacro( debug_flag, 1, "Global Region finalized: " 
+  DebugFuncMacro( debug_flag, 1, "Global Region finalized: "
                   << region_x0 << " - " << region_x1 << vcl_endl );
 
   return region;
-  
 }
 
 rgrl_mask_box
-rgrl_util_estimate_global_region_with_inverse_xform( 
+rgrl_util_estimate_global_region_with_inverse_xform(
                   rgrl_mask_sptr const&        from_image_roi,
                   rgrl_mask_sptr const&        to_image_roi,
                   rgrl_mask_box const&         current_region,
@@ -121,7 +120,7 @@ rgrl_util_estimate_global_region_with_inverse_xform(
                   bool                         union_with_curr,
                   double                       drastic_change_ratio)
 {
-  // Forward map boundary points every 20 pixels 
+  // Forward map boundary points every 20 pixels
   // of the from_image_roi. For each boundary q of the to_image_roi,
   // find the closest forward_xformed point for initialized inverse_map for q.
   // Take the intersection of the from_image_roi and the inverse_xformed to_image_roi
@@ -136,10 +135,10 @@ rgrl_util_estimate_global_region_with_inverse_xform(
   vnl_vector<double> const& to_x1 =  to_image_roi->x1();
   const unsigned m = to_x0.size();
   assert( 2 <= m && m <= 3 );
-  
+
   // dimension/axis index
   vcl_vector<int> ind( m );
-  for( unsigned i=0; i<m; ++i )
+  for ( unsigned i=0; i<m; ++i )
     ind[i] = i;
 
   //1. Place the boundary points of to_image_roi into a list
@@ -154,12 +153,10 @@ rgrl_util_estimate_global_region_with_inverse_xform(
 
   // apply permutation on ind
   // the position of 1 will change for each iteration
-  do{
-  
+  do {
     const double step = 30;
     for (double i = to_x0[ind[0]]; i<= to_x1[ind[0]]; i+=step) {
       for (double j = to_x0[ind[1]]; j<= to_x1[ind[1]]; j+=step) {
-      
         if (m == 3) {
           for (double k = to_x0[ind[2]]; k<= to_x1[ind[2]]; k+=step) {
             pt[ind[0]] = i;
@@ -167,35 +164,34 @@ rgrl_util_estimate_global_region_with_inverse_xform(
             pt[ind[2]] = k;
             to_boun_pts.push_back(pt);
           }
-        } else {
+        }
+        else {
           pt[ind[0]] = i;
           pt[ind[1]] = j;
           to_boun_pts.push_back(pt);
         }
-
       }
     }
 
     // Only the 1st element keeps the boundary dimension
     // The others can exchange wo/ affecting the boundary
-    while(vcl_next_permutation(ind.begin()+1, ind.end() ) )    ;
-    
-  }while( vcl_next_permutation(ind.begin(), ind.end() ) );
+    while (vcl_next_permutation(ind.begin()+1, ind.end() ) ) /* do nothing */;
+  }
+  while ( vcl_next_permutation(ind.begin(), ind.end() ) );
 
-    
-  //2. For each boundary point q of the to_image_roi, inverse map it to 
+
+  //2. For each boundary point q of the to_image_roi, inverse map it to
   //   From image
   //
   vnl_vector<double> inv_mapped_pt( m );
   for ( pt_iter pitr = to_boun_pts.begin();  pitr != to_boun_pts.end(); ++pitr ) {
-
     inv_xform.map_location( *pitr,  inv_mapped_pt );
-    inv_mapped_pts.push_back( inv_mapped_pt );      
-  }        
+    inv_mapped_pts.push_back( inv_mapped_pt );
+  }
 
   //3. form global region
   //
-  return global_region_from_inv_xformed_points( inv_mapped_pts, 
+  return global_region_from_inv_xformed_points( inv_mapped_pts,
                                                 from_image_roi,
                                                 current_region,
                                                 union_with_curr,
@@ -211,7 +207,7 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
                                   bool                         union_with_curr,
                                   double                       drastic_change_ratio)
 {
-  // Forward map boundary points every 20 pixels 
+  // Forward map boundary points every 20 pixels
   // of the from_image_roi. For each boundary q of the to_image_roi,
   // find the closest forward_xformed point for initialized inverse_map for q.
   // Take the intersection of the from_image_roi and the inverse_xformed to_image_roi
@@ -228,10 +224,10 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
   vnl_vector<double> const& from_x1 =  from_image_roi->x1();
   const unsigned m = from_x0.size();
   assert( 2 <= m && m <= 3 );
-  
+
   // dimension/axis index
   vcl_vector<int> ind( m );
-  for( unsigned i=0; i<m; ++i )
+  for ( unsigned i=0; i<m; ++i )
     ind[i] = i;
 
 
@@ -250,11 +246,10 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
   // apply permutation on ind
   // the position of 1 will change for each iteration
   do{
-  
+
     const double step = 30;
     for (double i = to_x0[ind[0]]; i<= to_x1[ind[0]]; i+=step) {
       for (double j = to_x0[ind[1]]; j<= to_x1[ind[1]]&&j>= to_x0[ind[1]]; j+=(to_x1[ind[1]]-to_x0[ind[1]])) {
-      
         if (m == 3) {
           for (double k = to_x0[ind[2]]; k<= to_x1[ind[2]]&&k>= to_x0[ind[2]]; k+=(to_x1[ind[2]]-to_x0[ind[2]])) {
             pt[ind[0]] = i;
@@ -262,51 +257,49 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
             pt[ind[2]] = k;
             to_boun_pts.push_back(pt);
           }
-        } else {
+        }
+        else {
           pt[ind[0]] = i;
           pt[ind[1]] = j;
           to_boun_pts.push_back(pt);
         }
-
       }
     }
 
     // Only the 1st element keeps the boundary dimension
     // The others can exchange wo/ affecting the boundary
-    while(vcl_next_permutation(ind.begin()+1, ind.end() ) )    ;
-    
-  }while( vcl_next_permutation(ind.begin(), ind.end() ) );
+    while (vcl_next_permutation(ind.begin()+1, ind.end() ) ) /* do nothing */;
+  }
+  while ( vcl_next_permutation(ind.begin(), ind.end() ) );
 
-    
-  //2. For each boundary point q of the to_image_roi, inverse map it to 
+
+  //2. For each boundary point q of the to_image_roi, inverse map it to
   //   From image
   //
-  if( curr_xform.is_invertible() ) {
-    
+  if ( curr_xform.is_invertible() ) {
     rgrl_transformation_sptr inv_xform = curr_xform.inverse_transform();
     vnl_vector<double> inv_mapped_pt( m );
     for ( pt_iter pitr = to_boun_pts.begin();  pitr != to_boun_pts.end(); ++pitr ) {
 
       inv_xform->map_location( *pitr,  inv_mapped_pt );
-      inv_mapped_pts.push_back( inv_mapped_pt );      
-    }        
-
-  } else {
-
+      inv_mapped_pts.push_back( inv_mapped_pt );
+    }
+  }
+  else {
     //(1). compute the set of points from from_image_roi for forward mapping
     //
     pt_vector from_pts;
     const double step_eps = 1e-10;
-    for (double i = from_x0[0]; 
-         i<= from_x1[0]&&i>= from_x0[0]; 
+    for (double i = from_x0[0];
+         i<= from_x1[0]&&i>= from_x0[0];
          i+= (from_x1[0]-from_x0[0])/10-step_eps) {
-      
-      for (double j = from_x0[1]; 
-           j<= from_x1[1]&&j>=from_x0[1]; 
+
+      for (double j = from_x0[1];
+           j<= from_x1[1]&&j>=from_x0[1];
            j+= (from_x1[1]-from_x0[1])/10-step_eps) {
         if (m == 3) {
-          for (double k = from_x0[2]; 
-               k<= from_x1[2]&&k>=from_x0[2]; 
+          for (double k = from_x0[2];
+               k<= from_x1[2]&&k>=from_x0[2];
                k+= (from_x1[2]-from_x0[2])/10-step_eps) {
             vnl_vector<double> pt(3);
             pt[0] = i;
@@ -323,7 +316,7 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
         }
       }
     }
-  
+
     //(2). Forward map all the points in from_pts
     pt_vector to_mapped_pts;
     vnl_vector<double> to_pt;
@@ -331,7 +324,7 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
       curr_xform.map_location(*pitr, to_pt);
       to_mapped_pts.push_back(to_pt);
     }
-    
+
     //(3). For each corner point q of the to_image_roi, find the closest
     //     forward_xformed point for initialized inverse_map for q.
     //
@@ -352,15 +345,14 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
       vnl_vector<double> fwd_mapp_pt = curr_xform.map_location(inv_mapped_pt);
       if (vnl_vector_ssd(fwd_mapp_pt, *pitr) > eps_squared) //didn't converge
         return current_region;
-  
+
       inv_mapped_pts.push_back( inv_mapped_pt );
-  
     }
   }
-  
+
   //3. form global region
   //
-  return global_region_from_inv_xformed_points( inv_mapped_pts, 
+  return global_region_from_inv_xformed_points( inv_mapped_pts,
                                                 from_image_roi,
                                                 current_region,
                                                 union_with_curr,
@@ -377,12 +369,12 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
 
   // Estimate the change in the spread of the feature set
   //
-  double change_in_fst = vnl_math_max( factors[0],
+  double change_in_fst = vnl_math::max( factors[0],
                                        1/factors[0] );
-  double change_in_snd = vnl_math_max( factors[1],
+  double change_in_snd = vnl_math::max( factors[1],
                                        1/factors[1] );
 
-  double scaling = vnl_math_max( change_in_fst, change_in_snd );
+  double scaling = vnl_math::max( change_in_fst, change_in_snd );
   //double scaling = vcl_sqrt(scaling_sqr);
 
   return scaling;
@@ -392,7 +384,7 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
   // moments
   double ratio_from = ev_fst_from/ev_snd_from;
   double ratio_mapped = ev_fst_mapped/ev_snd_mapped;
-  double distortion = vnl_math_max( ratio_from/ratio_mapped,
+  double distortion = vnl_math::max( ratio_from/ratio_mapped,
                                     ratio_mapped/ratio_from );
 
   return distortion;
@@ -409,12 +401,12 @@ rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& curre
 
   // Estimate the change in the spread of the feature set
   //
-  double change_in_fst = vnl_math_max( factors[0],
+  double change_in_fst = vnl_math::max( factors[0],
                                        1/factors[0] );
-  double change_in_snd = vnl_math_max( factors[1],
+  double change_in_snd = vnl_math::max( factors[1],
                                        1/factors[1] );
 
-  double scaling = vnl_math_max( change_in_fst, change_in_snd );
+  double scaling = vnl_math::max( change_in_fst, change_in_snd );
 
   return scaling;
 }
@@ -455,7 +447,7 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
       outer_product(fi.mapped_from_feature()->location() - mapped_centre,
                     fi.mapped_from_feature()->location() - mapped_centre);
   }
-  if( match_set.from_size()<m+1 ) 
+  if ( match_set.from_size()<m+1 )
     return false;
 
   cov_matrix_from /= match_set.from_size();
@@ -469,8 +461,8 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
   double sv_from, sv_mapped;
   factors.set_size( m );
   for ( unsigned i=0; i<m; ++i ) {
-    sv_from = vcl_sqrt( vnl_math_max( svd_from.W(i), 1e-16 ) );
-    sv_mapped = vcl_sqrt( vnl_math_max( svd_mapped.W(i), 1e-16 ) );
+    sv_from = vcl_sqrt( vnl_math::max( svd_from.W(i), 1e-16 ) );
+    sv_mapped = vcl_sqrt( vnl_math::max( svd_mapped.W(i), 1e-16 ) );
     factors[i] = sv_mapped / sv_from;
   }
 
@@ -496,8 +488,8 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
   // get the dimension
   const unsigned int from_dim = current_match_sets[i]->from_begin().from_feature()->location().size();
   const unsigned int mapped_dim = current_match_sets[i]->from_begin().mapped_from_feature()->location().size();
-  
-  if( from_dim != mapped_dim ) {
+
+  if ( from_dim != mapped_dim ) {
 
     // cannot compute scaling factors between two sets of data that have different dimensions
     factors.set_size(0);
@@ -520,9 +512,9 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
       mapped_centre += fi.mapped_from_feature()->location();
     }
   }
-  if( num<m+1 ) 
+  if ( num<m+1 )
     return false;
-  
+
   from_centre /= double(num);
   mapped_centre /=  double(num);
 
@@ -552,10 +544,10 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
   double sv_from, sv_mapped;
   factors.set_size( m );
   for ( unsigned i=0; i<m; ++i ) {
-    sv_from = vnl_math_max( svd_from.W(i), 1e-16 );
-    sv_mapped = vnl_math_max( svd_mapped.W(i), 1e-16 );
-    // As the scatter matrix essentially squared the 
-    // underlying scaling factors, 
+    sv_from = vnl_math::max( svd_from.W(i), 1e-16 );
+    sv_mapped = vnl_math::max( svd_mapped.W(i), 1e-16 );
+    // As the scatter matrix essentially squared the
+    // underlying scaling factors,
     // take square-root to get the real factor
     factors[i] = vcl_sqrt( sv_mapped / sv_from );
   }
@@ -586,7 +578,7 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
   //  2^dimension corners.
 
   vcl_vector< vnl_vector<double> > corner_points;
-  int num_corners = vnl_math_rnd( vcl_exp( dimension * vcl_log(2.0) ));
+  int num_corners = vnl_math::rnd( vcl_exp( dimension * vcl_log(2.0) ));
   corner_points.reserve( num_corners );
 
   //  1b. Since the dimension is computed dynamically, we can't do the
@@ -682,8 +674,8 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
   for ( unsigned int i=0; i < dimension-1; ++i )
   {
     // round or floor/ceil?
-    //       int lower_index = vnl_math_rnd( lower[i] );
-    //       int upper_index = vnl_math_rnd( upper[i] );
+    //       int lower_index = vnl_math::rnd( lower[i] );
+    //       int upper_index = vnl_math::rnd( upper[i] );
     int lower_index = (int)vcl_ceil( lower[i] );
     int upper_index = (int)vcl_floor( upper[i] );
     int prev_size = interval_indices.size();
@@ -738,7 +730,7 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
       //  on the interval.  Ignore it to avoid problems caused by
       //  numerical issues.
 
-      if ( vnl_math_abs( bdir[ dimension-1 ] ) <= 1.0E-6 ) continue;
+      if ( vnl_math::abs( bdir[ dimension-1 ] ) <= 1.0E-6 ) continue;
 
       //  3b(ii).  Project the interval, which has a 0 in the last
       //  dimension, onto the basis vector.
@@ -775,8 +767,8 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
     //  this line segment.
 
     // round or floor/ceil?
-    //       int last_lower_bound = vnl_math_rnd( min_z + center[ dimension-1 ] );
-    //       int last_upper_bound = vnl_math_rnd( max_z + center[ dimension-1 ] );
+    //       int last_lower_bound = vnl_math::rnd( min_z + center[ dimension-1 ] );
+    //       int last_upper_bound = vnl_math::rnd( max_z + center[ dimension-1 ] );
     int last_lower_bound = (int)vcl_ceil( min_z );
     int last_upper_bound = (int)vcl_floor( max_z );
     for ( int last_component = last_lower_bound; last_component <= last_upper_bound;
@@ -832,17 +824,17 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
 
   // for iterative method, set relative thres to be 1/10 of the value
   // for IRLS
-  if( estimator->is_iterative_method() ) {
-    
-    rgrl_nonlinear_estimator* nonlinear_est 
+  if ( estimator->is_iterative_method() ) {
+
+    rgrl_nonlinear_estimator* nonlinear_est
       = dynamic_cast<rgrl_nonlinear_estimator*>( estimator.as_pointer() );
-    if( nonlinear_est ) {
-      
+    if ( nonlinear_est ) {
+
       // set tolerance to be 1/10th of the current value
       nonlinear_est->set_rel_thres( conv_tester.rel_tol() / 10.0 );
-      // also not too use too many iterations, 
+      // also not too use too many iterations,
       // as the geometric weights change accordingly.
-      nonlinear_est->set_max_num_iter( 15 );  
+      nonlinear_est->set_max_num_iter( 15 );
     }
   }
 
@@ -858,9 +850,9 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
   for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
     rgrl_match_set_sptr match_set = match_sets[ms];
     if ( match_set && match_set->from_size() > 0) {
-      
+
       match_set->remap_from_features( *estimate );
-      
+
       weighters[ms]->compute_weights( *scales[ms], *match_set );
     }
   }
@@ -883,7 +875,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
       new_estimate->set_scaling_factors( estimate->scaling_factors() );
       vcl_cout << "WARNING in " << __FILE__ << __LINE__ << "cannot compute scaling factors!!!" << vcl_endl;
     }
-    
+
     //  Step 2.  Map matches and calculate weights
     //
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
@@ -891,12 +883,12 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
       if ( match_set && match_set->from_size() > 0) {
 
         // if fast mapping is on, map only the locations
-        // 
-        if( fast_remapping )
+        //
+        if ( fast_remapping )
           match_set->remap_only_location( *new_estimate );
         else
           match_set->remap_from_features( *new_estimate );
-        
+
         weighters[ms]->compute_weights( *scales[ms], *match_set );
       }
     }
@@ -916,25 +908,24 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
 
     estimate = new_estimate;
     ++ iteration;
-  } while ( !current_status->has_converged() &&
-            !current_status->has_stagnated() &&
-            !current_status->is_failed() &&
-            iteration < max_iterations );
+  }
+  while ( !current_status->has_converged() &&
+          !current_status->has_stagnated() &&
+          !current_status->is_failed() &&
+          iteration < max_iterations );
 
   DebugFuncMacro_abv(debug_flag, 1, "irls status: " <<
                      ( current_status->has_converged() ?
                        "converged\n" : current_status->has_stagnated() ?
                                        "stagnated\n" : current_status->is_failed() ?
                                                        "failed\n" :"reaches max iteration\n" ) );
-  
+
   // re-map the features if fast mapping is on,
   // to ensure expected behavior in other components
-  if( fast_remapping )
+  if ( fast_remapping )
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
-
       rgrl_match_set_sptr match_set = match_sets[ms];
       if ( match_set && match_set->from_size() ) {
-        
         match_set->remap_from_features( *estimate );
       }
     }

@@ -12,6 +12,10 @@
 // the user with dialog boxes to obtain the required parameters to construct
 // a vidl_istream or vidl_ostream.
 //
+// \verbatim
+//  Modifications
+//   24-Oct-2012  Peter Vanroose - was a class with static methods, now a namespace
+// \endverbatim
 //----------------------------------------------------------------------------
 
 
@@ -40,30 +44,28 @@ vidl_istream* vidl_gui_open_istream_dialog();
 vidl_ostream* vidl_gui_open_ostream_dialog();
 
 
-//: struct with static members used as a namespace replacement
-// Change to a namespace when they are allowed in VXL
-struct vidl_gui_param_dialog
+namespace vidl_gui_param_dialog
 {
   //: Use vgui dialogs to open an image list istream
-  static vidl_image_list_istream* image_list_istream();
+  vidl_image_list_istream* image_list_istream();
 
   //: Use vgui dialogs to open an image list ostream
-  static vidl_image_list_ostream* image_list_ostream();
+  vidl_image_list_ostream* image_list_ostream();
 
   //: Use vgui dialogs to open a FFMPEG istream
-  static vidl_ffmpeg_istream* ffmpeg_istream();
+  vidl_ffmpeg_istream* ffmpeg_istream();
 
   //: Use vgui dialogs to open a FFMPEG ostream
-  static vidl_ffmpeg_ostream* ffmpeg_ostream();
+  vidl_ffmpeg_ostream* ffmpeg_ostream();
 
   //: Use vgui dialogs to open a dc1394 istream
-  static vidl_dc1394_istream* dc1394_istream();
+  vidl_dc1394_istream* dc1394_istream();
 
   //: Use vgui dialogs to open a v4l2 istream
-  static vidl_v4l2_istream* v4l2_istream();
+  vidl_v4l2_istream* v4l2_istream();
 
-  static bool update_iidc1394_params(vcl_vector<vidl_iidc1394_params::
-                                     feature_options>& features);
+  bool update_iidc1394_params(vcl_vector<vidl_iidc1394_params::
+                              feature_options>& features);
 };
 
 

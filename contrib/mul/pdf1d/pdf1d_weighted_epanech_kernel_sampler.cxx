@@ -122,7 +122,7 @@ void pdf1d_weighted_epanech_kernel_sampler::regular_samples(vnl_vector<double>& 
       }
     }
   }
-  assert (vnl_math_abs(dist - double(n)) < 1.0e-10 * dist);
+  assert (vnl_math::abs(dist - double(n)) < 1.0e-10 * dist);
   assert (i == n);
 }
 

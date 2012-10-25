@@ -385,11 +385,11 @@ void mfpf_point_finder::multi_search_one_pose(
     unsigned x =t_pts[i].x(), y=t_pts[i].y();
     double f0 = r_im(x,y);  // Value at minima on grid
 
-    if (vnl_math_isnan(f0))
+    if (vnl_math::isnan(f0))
     {
       vcl_cerr<<"mfpf_point_finder::multi_search_one_pose()\n"
-              <<"Response was a NaN at "<<x<<','<<y<<vcl_endl
-              <<"Reponse image: "<<response_im.image()<<vcl_endl;
+              <<"Response was a NaN at "<<x<<','<<y<<'\n'
+              <<"Reponse image: "<<response_im.image()<<'\n';
       vil_print_all(vcl_cout,response_im.image());
       vcl_abort();
     }

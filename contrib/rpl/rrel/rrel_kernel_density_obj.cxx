@@ -85,7 +85,7 @@ rrel_kernel_density_obj::best_x(vect_const_iter res_begin,
   x0 = sort_res[loc-1];
   x3 = sort_res[loc+1];
 
-  if ( vnl_math_abs( x3 - sort_res[loc] ) > vnl_math_abs( sort_res[loc] - x0 ) ) {
+  if ( vnl_math::abs( x3 - sort_res[loc] ) > vnl_math::abs( sort_res[loc] - x0 ) ) {
     x1 = sort_res[loc];
     x2 = sort_res[loc] + C * ( x3 - sort_res[loc] );
   }
@@ -96,8 +96,8 @@ rrel_kernel_density_obj::best_x(vect_const_iter res_begin,
 
   f1 = kernel_density( res_begin, res_end, x1, h );
   f2 = kernel_density( res_begin, res_end, x2, h );
-  while ( vnl_math_abs( x3 - x0 ) >
-          tol * vnl_math_abs( x1 ) + vnl_math_abs( x2 ) ) {
+  while ( vnl_math::abs( x3 - x0 ) >
+          tol * vnl_math::abs( x1 ) + vnl_math::abs( x2 ) ) {
     if ( f2 > f1 ) {
       shft3( x0, x1, x2, R * x2 + C * x3 );
       shft2( f1, f2, kernel_density( res_begin, res_end, x2, h ) );
@@ -136,7 +136,7 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
     vcl_vector<double> abs_res_median;
     abs_res_median.reserve( n );
     for (vcl_vector<double>::difference_type i=0; i<n; ++i ) {
-      abs_res_median.push_back( vnl_math_abs( residuals[i] - res_median ) );
+      abs_res_median.push_back( vnl_math::abs( residuals[i] - res_median ) );
     }
     loc = abs_res_median.begin() + n / 2;
     vcl_nth_element( abs_res_median.begin(), loc, abs_res_median.end() );
@@ -183,7 +183,7 @@ rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin,
 double
 rrel_kernel_density_obj::kernel_function(double u) const
 {
-  if (vnl_math_abs(u) > 1)
+  if (vnl_math::abs(u) > 1)
     return 0;
 
   double t = 1 - u * u;

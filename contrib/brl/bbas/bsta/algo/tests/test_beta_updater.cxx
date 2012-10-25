@@ -107,9 +107,9 @@ static void test_beta_updater()
     mix_updater(model, obs ); // FIXME
   }
 
-  vcl_cout << "W1=" << model.weight(0) << vcl_endl
-           << "W2=" << model.weight(1) << vcl_endl
-           << "W3=" << model.weight(2) << vcl_endl << vcl_endl;
+  vcl_cout << "W1=" << model.weight(0) << '\n'
+           << "W2=" << model.weight(1) << '\n'
+           << "W3=" << model.weight(2) << '\n' << vcl_endl;
 
   beta_type d1 = model.distribution(0);
   float diff1 = compare_betas(d1, beta100_100);
@@ -122,7 +122,7 @@ static void test_beta_updater()
   beta_type d3 = model.distribution(2);
   float diff3 = compare_betas(d3, beta100_10);
   vcl_cout << d3;
-  TEST("diff3", vnl_math_isnan(diff3), true);
+  TEST("diff3", vnl_math::isnan(diff3), true);
 #endif
 }
 

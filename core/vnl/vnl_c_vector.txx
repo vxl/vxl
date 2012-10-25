@@ -30,7 +30,7 @@ void vnl_c_vector<T>::normalize(T* v, unsigned n)
   typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
   abs_t tmp(0);
   for (unsigned i = 0; i < n; ++i)
-    tmp += vnl_math_squared_magnitude(v[i]);
+    tmp += vnl_math::squared_magnitude(v[i]);
   if (tmp!=0)
   {
     tmp = abs_t(real_t(1) / vcl_sqrt(real_t(tmp)));
@@ -302,12 +302,12 @@ void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out)
   S val = S(0);
   T const* end = p+n;
   while (p != end)
-    val += S(vnl_math_squared_magnitude(*p++));
+    val += S(vnl_math::squared_magnitude(*p++));
   *out = val;
 #else
   *out = 0;
   for (unsigned i=0; i<n; ++i)
-    *out += vnl_math_squared_magnitude(p[i]);
+    *out += vnl_math::squared_magnitude(p[i]);
 #endif
 }
 
@@ -326,7 +326,7 @@ void vnl_c_vector_one_norm(T const *p, unsigned n, S *out)
   *out = 0;
   T const* end = p+n;
   while (p != end)
-    *out += vnl_math_abs(*p++);
+    *out += vnl_math::abs(*p++);
 }
 
 template <class T, class S>
@@ -343,7 +343,7 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
   *out = 0;
   T const* end = p+n;
   while (p != end) {
-    S v = vnl_math_abs(*p++);
+    S v = vnl_math::abs(*p++);
     if (v > *out)
       *out = v;
   }

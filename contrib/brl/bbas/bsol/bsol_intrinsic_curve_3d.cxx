@@ -198,7 +198,7 @@ void bsol_intrinsic_curve_3d::computeProperties()
     phis_.push_back(phis);
     double thetas = (theta_[i] - theta_[i-1])/s_[i];
     thetas_.push_back(thetas);
-    double curvature = vnl_math_hypot(phis, vcl_sin(phi_[i])*thetas);
+    double curvature = vnl_math::hypot(phis, vcl_sin(phi_[i])*thetas);
     curvature_.push_back(curvature);
     totalCurvature_ += curvature;
     totalAngleChange_ += vcl_fabs(curvature);
@@ -309,7 +309,7 @@ void bsol_intrinsic_curve_3d::computeProperties_old()
     normalize(*tangent); //normalize the tangent vector.
     Tangent_.push_back(tangent);
 
-    double dL = vnl_math_hypot(cur_dx, cur_dy);
+    double dL = vnl_math::hypot(cur_dx, cur_dy);
     length += dL;
     arcLength_.push_back(length);
     s_.push_back(dL);

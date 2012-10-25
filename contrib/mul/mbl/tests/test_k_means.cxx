@@ -92,17 +92,17 @@ void test_k_means()
   {
     double bestDist = nDims ;
     for (j=0; j<i; ++j)
-      bestDist = vnl_math_min(bestDist,
+      bestDist = vnl_math::min(bestDist,
                               vnl_vector_ssd(centres[i], centres[j]));
     for (j=i+1; j<nCentres; ++j)
-      bestDist = vnl_math_min(bestDist,
+      bestDist = vnl_math::min(bestDist,
                               vnl_vector_ssd(centres[i], centres[j]));
     bestDistSum += vcl_sqrt(bestDist);
     bestDistSumSq += bestDist;
   }
 
   double bestDistMean = bestDistSum/nCentres;
-  double bestDistSD = (bestDistSumSq - vnl_math_sqr(bestDistSum)/nCentres)/(nCentres-1);
+  double bestDistSD = (bestDistSumSq - vnl_math::sqr(bestDistSum)/nCentres)/(nCentres-1);
   vcl_cout << "\nClosest cluster centres are on average " << bestDistMean
            << " apart\n\twith a s.d. of " << bestDistSD << vcl_endl;
 

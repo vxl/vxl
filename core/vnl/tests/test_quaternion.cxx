@@ -90,7 +90,7 @@ static void test_random_quat_near_zero()
   for (unsigned i=0;i<1000;++i)
   {
     vnl_quaternion<double> quat(rng.normal()/1000.0, rng.normal()/1000.0, rng.normal()/1000.0,
-                                vnl_math_sgn0(rng.normal()) * (1.0+rng.normal()/1000.0) );
+                                vnl_math::sgn0(rng.normal()) * (1.0+rng.normal()/1000.0) );
     quat.normalize();
 
     vnl_vector_fixed<double,3> euler = quat.rotation_euler_angles();

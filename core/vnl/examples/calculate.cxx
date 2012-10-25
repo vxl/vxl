@@ -66,7 +66,7 @@ class node
 
 void ErrorExit(vcl_string const& expr, char const* t, unsigned long s)
 {
-  vcl_cerr << "Error parsing expression -- " << t << ":\n" << expr << vcl_endl;
+  vcl_cerr << "Error parsing expression -- " << t << ":\n" << expr << '\n';
   while (s--) vcl_cerr << ' ';
   vcl_cerr << "^\n";
   vcl_exit(1);
@@ -280,7 +280,7 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
   if (j==l && expr[s]>='a' && expr[s]<='z') { // function
     for (j=0; j<l; ++j) if (expr[s+j] == '(') break; ++j;
     if (j >= l) ErrorExit(expr, "missing parameter list for function",s);
-    else if (expr.substr(s,j)=="abs(")  n.func1 = &vnl_math_abs, n.func2=0, n.func3=0;
+    else if (expr.substr(s,j)=="abs(")  n.func1 = &vnl_math::abs, n.func2=0, n.func3=0;
     else if (expr.substr(s,j)=="floor(")  n.func1 = &floor, n.func2=0, n.func3=0;
     else if (expr.substr(s,j)=="ceil(")  n.func1 = &ceil, n.func2=0, n.func3=0;
     else if (expr.substr(s,j)=="round(")  n.func1 = &round, n.func2=0, n.func3=0;

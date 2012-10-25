@@ -55,10 +55,10 @@ rrel_lms_obj::fcn( vect_const_iter begin, vect_const_iter end,
   // 2. Find the index of the "median value" if the residuals are sorted.
 
   unsigned int index;
-  if ( inlier_frac_ == 0.5 ) 
+  if ( inlier_frac_ == 0.5 )
     index = (num_residuals-num_sam_inst_)/2 + num_sam_inst_;
   else
-    index = vnl_math_rnd( (num_residuals-num_sam_inst_)*inlier_frac_ ) + num_sam_inst_;
+    index = vnl_math::rnd( (num_residuals-num_sam_inst_)*inlier_frac_ ) + num_sam_inst_;
   if ( index >= num_residuals ) index = num_residuals-1;
 
   // 3. Sort the squared residuals and extract the "median".

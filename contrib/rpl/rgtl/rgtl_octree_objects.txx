@@ -654,7 +654,7 @@ rgtl_octree_objects_internal<D>
     this->lookup_leaf(cell_location_type(), cell_index_type(), p, leaf, lidx);
     if (leaf_data_type const* leaf_data = this->tree_.get_leaf_data(lidx))
     {
-      if (vnl_math_isfinite(leaf_data->distance))
+      if (vnl_math::isfinite(leaf_data->distance))
       {
         // Compute a bound on the distance by adding the distance from
         // the query point to the cell center and the distance from

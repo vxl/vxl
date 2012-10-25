@@ -43,7 +43,7 @@ rgrl_matcher_pseudo_3d_physical_to_pixel( vnl_double_3 const& point,
                                           vnl_double_3 const& spacing_ratio )
 {
   for ( unsigned i = 0; i < 3; ++i )
-    pixel_loc[ i ] = (int) vnl_math_rnd( point[ i ] / spacing_ratio[ i ] );
+    pixel_loc[ i ] = (int) vnl_math::rnd( point[ i ] / spacing_ratio[ i ] );
 }
 
 // convert physical points to pixel points
@@ -405,7 +405,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
   vnl_vector<double> match_location;
   double min_response = 0.0;
   double second_derivative = 0.0;
-  int max_offset = vnl_math_rnd( scale_multiplier * current_scale.geometric_scale() );
+  int max_offset = vnl_math::rnd( scale_multiplier * current_scale.geometric_scale() );
   if ( max_offset == 0 ) max_offset = 1;
 
   //  DO THE REST DEPENDING ON IF THE NORMAL SUBSPACE IS 1D or 2D.
@@ -436,7 +436,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
         int i = offset + max_offset;
         responses[i] = this -> compute_response( mapped_location, mapped_pixels, basis * offset );
         DBG( vcl_cout << " response at offset " << offset
-                      << " ( i = " << i << " ) : " << responses[ i ] << vcl_endl
+                      << " ( i = " << i << " ) : " << responses[ i ] << '\n'
            );
 
         // We don't want to use the responses of the offsets that shift
@@ -509,8 +509,8 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
          index - 1 >= -2*max_offset &&
          responses[ index + 1 ] != rgrl_matcher_pseudo_3d_max_response_value &&
          responses[ index - 1 ] != rgrl_matcher_pseudo_3d_max_response_value )
-      second_derivative = vnl_math_abs( responses[ index-1 ] + responses[ index+1 ]
-                                        - 2 * responses[ index ] ); // should be positive
+      second_derivative = vnl_math::abs( responses[ index-1 ] + responses[ index+1 ]
+                                         - 2 * responses[ index ] ); // should be positive
     // If one neighbor's response is not valid, calculate the second
     // derivative value of the other neighbor
     else {
@@ -596,8 +596,8 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
                     << -max_offset << " , " << max_offset << " ]\n" );
     }
 
-    double second_d1 = vnl_math_abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
-                                     - 2 * responses[ idx1 ][ idx2 ] );
+    double second_d1 = vnl_math::abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
+                                      - 2 * responses[ idx1 ][ idx2 ] );
 
     int deriv_loc2 = best_off2;
     if ( deriv_loc2 == -max_offset ) ++deriv_loc2;
@@ -625,10 +625,10 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
                     << -max_offset << " , " << max_offset << " ]\n" );
     }
 
-    double second_d2 = vnl_math_abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
-                                     - 2 * responses[ idx1 ][ idx2 ] );
+    double second_d2 = vnl_math::abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
+                                      - 2 * responses[ idx1 ][ idx2 ] );
 
-    second_derivative = vnl_math_min( second_d1, second_d2 );
+    second_derivative = vnl_math::min( second_d1, second_d2 );
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
     DBG( vcl_cout << "best match :\n" << match_location << vcl_endl );
   }

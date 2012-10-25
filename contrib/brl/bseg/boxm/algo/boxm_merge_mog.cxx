@@ -6,7 +6,7 @@
 #include <boxm/boxm_scene.h>
 #include <vcl_cassert.h>
 #include <vcl_limits.h>
-#include <vnl/vnl_math.h> // for vnl_math_sqr()
+#include <vnl/vnl_math.h> // for vnl_math::sqr()
 
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 
@@ -31,11 +31,11 @@ void boxm_merge_mog::kl_merge(mix_gauss_type const& mixture,bsta_gauss_sf1 &gaus
     // only because in this case it is 1
     mean += mixture.weight(i) * mixture.distribution(i).mean();
     var  += mixture.weight(i) *(mixture.distribution(i).var() +
-                                vnl_math_sqr(mixture.distribution(i).mean()));
+                                vnl_math::sqr(mixture.distribution(i).mean()));
   }
-  if (var <  vnl_math_sqr(mean))
+  if (var <  vnl_math::sqr(mean))
     vcl_cout<< "This should not happen: " << mixture << vcl_endl;
-  var -= vnl_math_sqr(mean);
+  var -= vnl_math::sqr(mean);
   assert(var >= 0);
 
   gaussian.set_mean(mean);
@@ -119,7 +119,7 @@ bool compute_differential_entropy(boxm_scene<boct_tree<short, bsta_num_obs<bsta_
     boct_loc_code<short> in_code = cell_out->get_code();
 
     //if level and location code of cells isn't the same then continue
-    if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))){
+    if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))) {
       vcl_cerr << " Input and output cells don't have the same structure\n";
       ++it_in;
       ++it_out;
@@ -160,7 +160,7 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
     boct_loc_code<short> in_code = cell_out->get_code();
 
     //if level and location code of cells isn't the same then continue
-    if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))){
+    if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))) {
       vcl_cerr << " Input and output cells don't have the same structure\n";
       ++it_in;
       ++it_out;
@@ -209,7 +209,7 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
     boct_loc_code<short> in_code = cell_out->get_code();
 
     //if level and location code of cells isn't the same then continue
-    if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))){
+    if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))) {
       vcl_cerr << " Input and output cells don't have the same structure\n";
       ++it_in;
       ++it_out;

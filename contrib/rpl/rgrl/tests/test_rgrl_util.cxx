@@ -35,7 +35,7 @@ get_region( vnl_vector< double > const & center,
 {
   unsigned dimension = basis_radii.size();
   vcl_vector< vnl_vector<double> > corner_points;
-  int num_corners = vnl_math_rnd( vcl_exp( dimension * vcl_log(2.0) ));
+  int num_corners = vnl_math::rnd( vcl_exp( dimension * vcl_log(2.0) ));
   corner_points.reserve( num_corners );
 
   //  1b. Since the dimension is computed dynamically, we can't do the
@@ -142,7 +142,7 @@ test_util_extract_region_locations()
 {
   vcl_cout << " util extract region locations\n";
   {
-    vcl_cout << " 1D case : " << vcl_endl;
+    vcl_cout << " 1D case :" << vcl_endl;
     unsigned dim = 1;
     vnl_vector< double > center;
     vcl_vector< vnl_vector< double > > basis_dirs;
@@ -184,7 +184,7 @@ test_util_extract_region_locations()
     else {
       for ( unsigned i = 0; i < true_locations.size(); ++i ) {
         if ( vcl_find( pixel_locations.begin(), pixel_locations.end(), true_locations[ i ] ) == pixel_locations.end() ) {
-          vcl_cout << " point " << true_locations[ i ] << " is not extracted " << vcl_endl;
+          vcl_cout << " point " << true_locations[ i ] << " is not extracted" << vcl_endl;
           test_pass = false;
           break;
         }
@@ -194,7 +194,7 @@ test_util_extract_region_locations()
     TEST( " extract 1D region result is correct " , test_pass, true );
   }
   {
-    vcl_cout << " 2D case : " << vcl_endl;
+    vcl_cout << " 2D case :" << vcl_endl;
     unsigned dim = 2;
     vnl_vector< double > center;
     vcl_vector< vnl_vector< double > > basis_dirs;
@@ -237,7 +237,7 @@ test_util_extract_region_locations()
     else {
       for ( unsigned i = 0; i < true_locations.size(); ++i ) {
         if ( vcl_find( pixel_locations.begin(), pixel_locations.end(), true_locations[ i ] ) == pixel_locations.end() ) {
-          vcl_cout << " point " << true_locations[ i ] << " is not extracted " << vcl_endl;
+          vcl_cout << " point " << true_locations[ i ] << " is not extracted" << vcl_endl;
           test_pass = false;
           break;
         }
@@ -247,7 +247,7 @@ test_util_extract_region_locations()
     TEST( " extract 2D region result is correct " , test_pass, true );
   }
   {
-    vcl_cout << " 3D case : " << vcl_endl;
+    vcl_cout << " 3D case :" << vcl_endl;
     unsigned dim = 3;
     vnl_vector< double > center;
     vcl_vector< vnl_vector< double > > basis_dirs;
@@ -293,7 +293,7 @@ test_util_extract_region_locations()
     else {
       for ( unsigned i = 0; i < true_locations.size(); ++i ) {
         if ( vcl_find( pixel_locations.begin(), pixel_locations.end(), true_locations[ i ] ) == pixel_locations.end() ) {
-          vcl_cout << " point " << true_locations[ i ] << " is not extracted " << vcl_endl;
+          vcl_cout << " point " << true_locations[ i ] << " is not extracted" << vcl_endl;
           test_pass = false;
           break;
         }

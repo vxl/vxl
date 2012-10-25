@@ -196,11 +196,11 @@ void mcal_pca::build_evecs_ns_smaller(mbl_data_wrapper<vnl_vector<double> >& dat
     // Set up indices for chunks
     vcl_vector<int> start(n_chunks),end(n_chunks);
     start[0] = 0;
-    end[0] = vnl_math_rnd(chunk_size)-1;
+    end[0] = vnl_math::rnd(chunk_size)-1;
     for (unsigned int i=1;i<n_chunks;i++)
     {
       start[i] = end[i-1]+1;
-      end[i] = vnl_math_rnd((i+1)*chunk_size) -1;
+      end[i] = vnl_math::rnd((i+1)*chunk_size) -1;
     }
     end[n_chunks-1] = n_samples-1;
 

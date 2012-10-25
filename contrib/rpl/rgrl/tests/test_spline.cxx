@@ -4,7 +4,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h> // for vnl_math_isnan()
+#include <vnl/vnl_math.h> // for vnl_math::isnan()
 
 static vnl_random random_;
 
@@ -203,7 +203,7 @@ test_3d_spline()
         vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
         double true_spline_value = spline_3d_value( pt, c, m );
         vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
-        if (!vnl_math_isnan(true_spline_value)) {
+        if (!vnl_math::isnan(true_spline_value)) {
           TEST_NEAR_REL("test spline value: ", return_spline_value, true_spline_value, 1e-9);
         }
       }
@@ -243,7 +243,7 @@ test_refine_1d_spline()
   rgrl_spline_sptr refine_spline = spline.refinement( new_m );
   TEST("new number of control points is 12", refine_spline->num_of_control_points(), new_m[0]+3);
 #ifdef DEBUG
-  vcl_cout << "the original control points: " << c << vcl_endl
+  vcl_cout << "the original control points: " << c << '\n'
            << "the refined control points: " << refine_spline->get_control_points() << vcl_endl;
 #endif
   for (unsigned i=0; i < 100; ++i ) {
@@ -274,7 +274,7 @@ test_refine_2d_spline()
   rgrl_spline_sptr refine_spline = spline.refinement( new_m );
   TEST("new number of control points is 64", refine_spline->num_of_control_points(), (new_m[0]+3)*(new_m[1]+3));
 #ifdef DEBUG
-  vcl_cout << "the original control points: " << c << vcl_endl
+  vcl_cout << "the original control points: " << c << '\n'
            << "the refined control points: " << refine_spline->get_control_points() << vcl_endl;
 #endif
   for (unsigned i=0; i < 10; ++i ) {
@@ -308,7 +308,7 @@ test_refine_3d_spline()
   rgrl_spline_sptr refine_spline = spline.refinement( new_m );
   TEST("new number of control points is 512", refine_spline->num_of_control_points(), (new_m[0]+3)*(new_m[1]+3)*(new_m[2]+3));
 #ifdef DEBUG
-  vcl_cout << "the original control points: " << c << vcl_endl
+  vcl_cout << "the original control points: " << c << '\n'
            << "the refined control points: " << refine_spline->get_control_points() << vcl_endl;
 #endif
   for (unsigned i=0; i < 10; ++i ) {

@@ -50,7 +50,7 @@ class rrel_cauchy_obj : public rrel_m_est_obj
   //: Evaluate the objective function on heteroscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
-  //  calls the superclass' version of the same routine. 
+  //  calls the superclass' version of the same routine.
   //  \sa rrel_wls_obj::wgt()
   virtual void wgt( vect_const_iter res_begin, vect_const_iter res_end,
                     vect_const_iter scale_begin,
@@ -90,13 +90,13 @@ class rrel_cauchy_obj : public rrel_m_est_obj
 inline double
 rrel_cauchy_obj::rho_fast( double u ) const
 {
-  return 0.5 * vcl_log( 1 + vnl_math_sqr( u/C_ ) );
+  return 0.5 * vcl_log( 1 + vnl_math::sqr( u/C_ ) );
 }
 
 inline double
 rrel_cauchy_obj::wgt_fast( double u ) const
 {
-  return 1.0 / ( 1 + vnl_math_sqr(u/C_) );
+  return 1.0 / ( 1 + vnl_math::sqr(u/C_) );
 }
 
 #endif // rrel_cauchy_obj_h_

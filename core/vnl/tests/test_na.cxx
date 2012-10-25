@@ -16,10 +16,10 @@
 
 template <class T> void test_na_type(T na_v, T qnan_v)
 {
-  TEST("isnan(NaN)", vnl_math_isnan(qnan_v), true);
-  TEST("isnan(NA)", vnl_math_isnan(vnl_na(T())), true);
-  TEST("isnan(NA2)", vnl_math_isnan(na_v), true);
-  TEST("isnan(1/NA2)", vnl_math_isnan(1.0f/na_v), true);
+  TEST("isnan(NaN)", vnl_math::isnan(qnan_v), true);
+  TEST("isnan(NA)", vnl_math::isnan(vnl_na(T())), true);
+  TEST("isnan(NA2)", vnl_math::isnan(na_v), true);
+  TEST("isnan(1/NA2)", vnl_math::isnan(1.0f/na_v), true);
   TEST("isna(NA)", vnl_na_isna(vnl_na(T())), true);
   TEST("isna(NA2)", vnl_na_isna(na_v), true);
 #if 0
@@ -27,8 +27,8 @@ template <class T> void test_na_type(T na_v, T qnan_v)
   TEST("isna(-1.0 * NA2)", vnl_na_isna(-1.0f * na_v), true);   // Can't rely on all compilers getting the same answer for this
 #endif
   TEST("isna(1/NA2)", vnl_na_isna(1.0f/na_v), true);
-  TEST("!isfinite(NA)", !vnl_math_isfinite(na_v), true);
-  TEST("!isinf(NA)", !vnl_math_isinf(na_v), true);
+  TEST("!isfinite(NA)", !vnl_math::isfinite(na_v), true);
+  TEST("!isinf(NA)", !vnl_math::isinf(na_v), true);
 
   TEST("!isna(0)", !vnl_na_isna(0.0), true);
   TEST("!isna(-0)", !vnl_na_isna(-0.0), true);

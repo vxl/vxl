@@ -14,15 +14,15 @@ rsdl_dist_sq( const rsdl_point& p, const rsdl_point& q )
   double sum_sq = 0;
 
   for ( unsigned int i=0; i<Nc; ++i ) {
-    sum_sq += vnl_math_sqr( p.cartesian(i) - q.cartesian(i) );
+    sum_sq += vnl_math::sqr( p.cartesian(i) - q.cartesian(i) );
   }
 
   for ( unsigned int j=0; j<Na; ++j ) {
-    double diff = vnl_math_abs( p.angular(j) - q.angular(j) );
+    double diff = vnl_math::abs( p.angular(j) - q.angular(j) );
     if ( diff > vnl_math::pi ) {
       diff = vnl_math::twopi - diff;
     }
-    sum_sq += vnl_math_sqr( diff );
+    sum_sq += vnl_math::sqr( diff );
   }
 
   return sum_sq;
@@ -48,10 +48,10 @@ rsdl_dist_sq( const rsdl_point & p, const rsdl_bounding_box &  b )
     double x0 = b.min_cartesian(i), x1 = b.max_cartesian(i);
     double x = p.cartesian(i);
     if ( x < x0 ) {
-      sum_sq += vnl_math_sqr( x0 - x );
+      sum_sq += vnl_math::sqr( x0 - x );
     }
     else if ( x > x1 ) {
-      sum_sq += vnl_math_sqr( x1 - x );
+      sum_sq += vnl_math::sqr( x1 - x );
     }
   }
 
@@ -60,15 +60,15 @@ rsdl_dist_sq( const rsdl_point & p, const rsdl_bounding_box &  b )
     double a = p.angular(j);
     if ( a0 > a1 ) {             // interval wraps around 0
       if ( a < a0 && a > a1 ) {  // outside interval, calculate distance
-        sum_sq += vnl_math_sqr( vnl_math_min( a0-a, a-a1 ) );
+        sum_sq += vnl_math::sqr( vnl_math::min( a0-a, a-a1 ) );
       }
     }
     else {                       // interval does not wrap around
       if ( a > a1 ) {            // a is above a1
-        sum_sq += vnl_math_sqr( vnl_math_min( a - a1, vnl_math::twopi + a0 - a ) );
+        sum_sq += vnl_math::sqr( vnl_math::min( a - a1, vnl_math::twopi + a0 - a ) );
       }
       else if ( a0 > a ) {       // a is below a0
-        sum_sq += vnl_math_sqr( vnl_math_min( a0 - a, vnl_math::twopi + a - a1 ) );
+        sum_sq += vnl_math::sqr( vnl_math::min( a0 - a, vnl_math::twopi + a - a1 ) );
       }
     }
   }

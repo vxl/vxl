@@ -113,12 +113,14 @@ vidl_ostream* vidl_gui_open_ostream_dialog()
   return NULL;
 }
 
-
-//-----------------------------------------------------------------------------
-//: Use vgui dialogs to open an image list istream
-//-----------------------------------------------------------------------------
-vidl_image_list_istream* vidl_gui_param_dialog::image_list_istream()
+// The rest of this file contains namespace vidl_gui_param_dialog functions
+namespace vidl_gui_param_dialog
 {
+ //-----------------------------------------------------------------------------
+ //: Use vgui dialogs to open an image list istream
+ //-----------------------------------------------------------------------------
+ vidl_image_list_istream* image_list_istream()
+ {
   vgui_dialog dlg("Open Image List Input Stream");
   static vcl_string image_filename = "*";
   static vcl_string ext = "*";
@@ -136,14 +138,13 @@ vidl_image_list_istream* vidl_gui_param_dialog::image_list_istream()
   }
 
   return i_stream;
-}
+ }
 
-
-//-----------------------------------------------------------------------------
-//: Use vgui dialogs to open an image list ostream
-//-----------------------------------------------------------------------------
-vidl_image_list_ostream* vidl_gui_param_dialog::image_list_ostream()
-{
+ //-----------------------------------------------------------------------------
+ //: Use vgui dialogs to open an image list ostream
+ //-----------------------------------------------------------------------------
+ vidl_image_list_ostream* image_list_ostream()
+ {
   vgui_dialog dlg("Open Output Image List Stream");
   static vcl_string directory = "";
   static vcl_string name_format = "%05u";
@@ -182,15 +183,14 @@ vidl_image_list_ostream* vidl_gui_param_dialog::image_list_ostream()
   }
 
   return o_stream;
-}
+ }
 
-
-//-----------------------------------------------------------------------------
-//: Use vgui dialogs to open a FFMPEG istream
-//-----------------------------------------------------------------------------
-vidl_ffmpeg_istream* vidl_gui_param_dialog::ffmpeg_istream()
-{
-#if VIDL_HAS_FFMPEG
+ //-----------------------------------------------------------------------------
+ //: Use vgui dialogs to open a FFMPEG istream
+ //-----------------------------------------------------------------------------
+ vidl_ffmpeg_istream* ffmpeg_istream()
+ {
+ #if VIDL_HAS_FFMPEG
   vgui_dialog dlg("Open FFMPEG Input Stream");
   static vcl_string image_filename = "";
   static vcl_string ext = "*";
@@ -207,19 +207,18 @@ vidl_ffmpeg_istream* vidl_gui_param_dialog::ffmpeg_istream()
   }
   return i_stream;
 
-#else // VIDL_HAS_FFMPEG
+ #else // VIDL_HAS_FFMPEG
   vgui_error_dialog("FFMPEG support not compiled in");
   return NULL;
-#endif // VIDL_HAS_FFMPEG
-}
+ #endif // VIDL_HAS_FFMPEG
+ }
 
-
-//-----------------------------------------------------------------------------
-//: Use vgui dialogs to open a FFMPEG ostream
-//-----------------------------------------------------------------------------
-vidl_ffmpeg_ostream* vidl_gui_param_dialog::ffmpeg_ostream()
-{
-#if VIDL_HAS_FFMPEG
+ //-----------------------------------------------------------------------------
+ //: Use vgui dialogs to open a FFMPEG ostream
+ //-----------------------------------------------------------------------------
+ vidl_ffmpeg_ostream* ffmpeg_ostream()
+ {
+ #if VIDL_HAS_FFMPEG
   vgui_dialog dlg("Open FFMPEG Output Stream");
   static vcl_string file = "";
   static vcl_string ext = "avi";
@@ -257,18 +256,18 @@ vidl_ffmpeg_ostream* vidl_gui_param_dialog::ffmpeg_ostream()
   }
   return o_stream;
 
-#else // VIDL_HAS_FFMPEG
+ #else // VIDL_HAS_FFMPEG
   vgui_error_dialog("FFMPEG support not compiled in");
   return NULL;
-#endif // VIDL_HAS_FFMPEG
-}
+ #endif // VIDL_HAS_FFMPEG
+ }
 
-//-----------------------------------------------------------------------------
-//: Use vgui dialogs to open a v4l2 istream
-//-----------------------------------------------------------------------------
-vidl_v4l2_istream* vidl_gui_param_dialog::v4l2_istream()
-{
-#if VIDL_HAS_VIDEODEV2
+ //-----------------------------------------------------------------------------
+ //: Use vgui dialogs to open a v4l2 istream
+ //-----------------------------------------------------------------------------
+ vidl_v4l2_istream* v4l2_istream()
+ {
+ #if VIDL_HAS_VIDEODEV2
   vidl_v4l2_devices& devs= vidl_v4l2_devices::all();  // simpler name
 
   // Select Device
@@ -334,18 +333,18 @@ vidl_v4l2_istream* vidl_gui_param_dialog::v4l2_istream()
     return NULL;
   }
   return i_stream;
-#else // VIDL_HAS_VIDEODEV2
+ #else // VIDL_HAS_VIDEODEV2
   vgui_error_dialog("v4l2 support not compiled in");
   return NULL;
-#endif // VIDL_HAS_VIDEODEV2
-}
+ #endif // VIDL_HAS_VIDEODEV2
+ }
 
-//-----------------------------------------------------------------------------
-//: Use vgui dialogs to open a dc1394 istream
-//-----------------------------------------------------------------------------
-vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
-{
-#if VIDL_HAS_DC1394
+ //-----------------------------------------------------------------------------
+ //: Use vgui dialogs to open a dc1394 istream
+ //-----------------------------------------------------------------------------
+ vidl_dc1394_istream* dc1394_istream()
+ {
+ #if VIDL_HAS_DC1394
   vgui_dialog dlg("Open dc1394 Input Stream");
 
   //: Probe cameras for valid options
@@ -357,7 +356,7 @@ vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
     return NULL;
   }
 
-#ifndef NDEBUG
+ #ifndef NDEBUG
   vcl_cout << "Detected " << options.cameras.size() << " cameras\n";
   for (unsigned int i=0; i<options.cameras.size(); ++i) {
     const vidl_iidc1394_params::valid_options::camera& cam = options.cameras[i];
@@ -374,7 +373,7 @@ vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
     }
   }
   vcl_cout << vcl_endl;
-#endif
+ #endif
 
   vidl_iidc1394_params params;
 
@@ -483,19 +482,18 @@ vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
   return i_stream;
 
 
-#else // VIDL_HAS_DC1394
+ #else // VIDL_HAS_DC1394
   vgui_error_dialog("dc1394 support not compiled in");
   return NULL;
-#endif // VIDL_HAS_DC1394
-}
+ #endif // VIDL_HAS_DC1394
+ }
 
-
-//-----------------------------------------------------------------------------
-//: Use a vgui dialog to update iidc1394 camera parameters
-//-----------------------------------------------------------------------------
-bool vidl_gui_param_dialog::update_iidc1394_params(vcl_vector<vidl_iidc1394_params::
-                                                   feature_options>& features)
-{
+ //-----------------------------------------------------------------------------
+ //: Use a vgui dialog to update iidc1394 camera parameters
+ //-----------------------------------------------------------------------------
+ bool update_iidc1394_params(vcl_vector<vidl_iidc1394_params::
+                            feature_options>& features)
+ {
   vgui_dialog dlg("Set feature values");
   vcl_vector<unsigned> choices(features.size(),0);
   for (unsigned int i=0; i<features.size(); ++i) {
@@ -573,4 +571,5 @@ bool vidl_gui_param_dialog::update_iidc1394_params(vcl_vector<vidl_iidc1394_para
     f.active_mode = modes[choices[i]];
   }
   return true;
-}
+ }
+} // end namespace vidl_gui_param_dialog

@@ -147,7 +147,7 @@ void mfpf_mr_point_finder_builder::set_size_and_levels(
   // Estimate level above which size falls below min_pixel_width pixels
   int max_L = int(vcl_log(max_w/min_n_samples)/log_s);
   // Estimate level below which size is above max_pixel_width pixels
-  int min_L = vnl_math_rnd(0.5+vcl_log(max_w/max_n_samples)/log_s);
+  int min_L = vnl_math::rnd(0.5+vcl_log(max_w/max_n_samples)/log_s);
   if (min_L>max_L) max_L=min_L;
 
   double step0 = base_pixel_width*vcl_pow(scale_step,min_L);
@@ -170,7 +170,7 @@ unsigned mfpf_mr_point_finder_builder::image_level(
   double rel_size0 = model_pixel_size/im_pyr.base_pixel_width();
 
   double log_step = vcl_log(im_pyr.scale_step());
-  int level = vnl_math_rnd(vcl_log(rel_size0)/log_step);
+  int level = vnl_math::rnd(vcl_log(rel_size0)/log_step);
   if (level<im_pyr.lo()) return im_pyr.lo();
   if (level>im_pyr.hi()) return im_pyr.hi();
   return level;

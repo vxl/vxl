@@ -396,15 +396,18 @@ inline vnl_decnum ceil(vnl_decnum const& x) { return x.ceil(); }
 inline vnl_decnum floor(vnl_decnum const& x) { return x.floor(); }
 inline vnl_decnum pow(vnl_decnum const& x, unsigned long p) { return x.pow(p); }
 
-inline vnl_decnum vnl_math_abs(vnl_decnum const& x) { return x.abs(); }
-inline vnl_decnum vnl_math_sqr(vnl_decnum const& x) { return x*x; }
-inline vnl_decnum vnl_math_cube(vnl_decnum const& x) { return x*x*x; }
-inline vnl_decnum vnl_math_squared_magnitude(vnl_decnum const& x) { return x*x; }
-inline bool vnl_math_isnan(vnl_decnum const& x) { return x.data() == "NaN"; }
-inline bool vnl_math_isfinite(vnl_decnum const& x) { return x.data() != "Inf" && x.data() != "NaN"; }
-inline vnl_decnum vnl_math_max(vnl_decnum const& x, vnl_decnum const& y) { return (x < y) ? y : x; }
-inline vnl_decnum vnl_math_min(vnl_decnum const& x, vnl_decnum const& y) { return (x < y) ? x : y; }
-inline int vnl_math_sgn(vnl_decnum x) { return x.sign()==' '?0:x.sign()=='+'?1:-1; }
-inline int vnl_math_sgn0(vnl_decnum x) { return x.sign()=='-'?-1:1; }
+namespace vnl_math
+{
+  inline vnl_decnum abs(vnl_decnum const& x) { return x.abs(); }
+  inline vnl_decnum sqr(vnl_decnum const& x) { return x*x; }
+  inline vnl_decnum cube(vnl_decnum const& x) { return x*x*x; }
+  inline vnl_decnum squared_magnitude(vnl_decnum const& x) { return x*x; }
+  inline bool isnan(vnl_decnum const& x) { return x.data() == "NaN"; }
+  inline bool isfinite(vnl_decnum const& x) { return x.data() != "Inf" && x.data() != "NaN"; }
+  inline vnl_decnum max(vnl_decnum const& x, vnl_decnum const& y) { return (x < y) ? y : x; }
+  inline vnl_decnum min(vnl_decnum const& x, vnl_decnum const& y) { return (x < y) ? x : y; }
+  inline int sgn(vnl_decnum x) { return x.sign()==' '?0:x.sign()=='+'?1:-1; }
+  inline int sgn0(vnl_decnum x) { return x.sign()=='-'?-1:1; }
+}
 
 #endif // vnl_decnum_h_

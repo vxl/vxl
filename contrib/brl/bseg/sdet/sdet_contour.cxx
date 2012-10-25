@@ -1695,12 +1695,12 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
 #undef WARN
 
     if (sdet_contour::debug_)
-      vcl_cout << " intersecting (" << i << ")(" << vnl_math_abs(x-xe)
-               << ' ' << vnl_math_abs(y-ye) << ")\n";
+      vcl_cout << " intersecting (" << i << ")(" << vnl_math::abs(x-xe)
+               << ' ' << vnl_math::abs(y-ye) << ")\n";
 
     self_intersects = self_intersects ||
       ((edgeMap->get(x, y)==new_edge)&&
-       ((vnl_math_abs(x-xe)>1)||(vnl_math_abs(y-ye)>1)));
+       ((vnl_math::abs(x-xe)>1)||(vnl_math::abs(y-ye)>1)));
 
     if (!self_intersects)
       edgeMap->put(x, y,new_edge);
@@ -1923,7 +1923,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
             {
               LookupTableRemove(vertices, removed_vert);
               if (sdet_contour::debug_)
-                vcl_cout << "cycle endpt1=" << *end1 << vcl_endl
+                vcl_cout << "cycle endpt1=" << *end1 << '\n'
                          << "cycle endpt2=" << *end2 << vcl_endl;
               dendpt++;
             }
@@ -1932,7 +1932,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
           {
             //Case a2. The edge on the other endpoint is different from seg
             if (sdet_contour::debug_)
-              vcl_cout << "endpt1=" << *end1 << vcl_endl
+              vcl_cout << "endpt1=" << *end1 << '\n'
                        << "endpt2=" << *end2 << vcl_endl;
 
             vtol_edge_2d_sptr merge=NULL, longer=NULL, shorter=NULL;
@@ -1940,10 +1940,10 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
             MergeEndPtTouchingEndPt(end1, end2,
                                     merge, longer, shorter);
             if (sdet_contour::debug_)
-              vcl_cout << "merge=" << *merge << vcl_endl
-                       << "longer=" << *longer << vcl_endl
-                       << "shorter=" << *shorter << vcl_endl
-                       << "merge.v1=" << *merge->v1() << vcl_endl
+              vcl_cout << "merge=" << *merge << '\n'
+                       << "longer=" << *longer << '\n'
+                       << "shorter=" << *shorter << '\n'
+                       << "merge.v1=" << *merge->v1() << '\n'
                        << "merge.v2=" << *merge->v2() << vcl_endl;
 
             LookupTableReplace(edges, longer, merge);
@@ -1957,7 +1957,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
         {
           //Case b. The other junction has more than 2 edges
           if (sdet_contour::debug_)
-            vcl_cout << "junction endpt1=" << *end1 << vcl_endl
+            vcl_cout << "junction endpt1=" << *end1 << '\n'
                      << "junction endpt2=" << *end2 << vcl_endl;
           vtol_edge_2d_sptr old_edge=NULL, new_edge=NULL;
           if (MergeEndPtTouchingJunction(end1, end2, old_edge, new_edge))

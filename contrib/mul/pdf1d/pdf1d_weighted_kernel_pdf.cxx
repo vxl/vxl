@@ -34,8 +34,8 @@ void pdf1d_weighted_kernel_pdf::pdf1d_weighted_kernel_mean_var(double& mean, dou
   for (unsigned i=0;i<n;++i)
   {
     sum+=weights(i) * centres(i);
-    sum2+=weights(i) * vnl_math_sqr(centres(i));
-    sum3+=weights(i) * vnl_math_sqr(widths(i));
+    sum2+=weights(i) * vnl_math::sqr(centres(i));
+    sum3+=weights(i) * vnl_math::sqr(widths(i));
     sum_weights += weights(i);
   }
 

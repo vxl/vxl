@@ -124,15 +124,15 @@ vimt_transform_2d& vimt_transform_2d::simplify(double tol /*=1e-10*/)
                 return *this;
 
             // mirroring if det is negative;
-            double mirror=vnl_math_sgn(vnl_det(X[0], X[1]));
+            double mirror=vnl_math::sgn(vnl_det(X[0], X[1]));
 
             sx = vcl_sqrt(vcl_abs(S2(0,0))) * mirror;
             sy = vcl_sqrt(vcl_abs(S2(1,1))) * mirror;
-            if (vnl_math_sqr(sx-sy) < tol*tol)
+            if (vnl_math::sqr(sx-sy) < tol*tol)
                 return this->set_similarity(sx, r, xt_, yt_ ).simplify();
             else if (r*r < tol*tol)
                 return this->set_zoom_only(sx, sy, xt_, yt_).simplify();
-            else if (vnl_math_sqr(vcl_abs(r) - vnl_math::pi)< tol)
+            else if (vnl_math::sqr(vcl_abs(r) - vnl_math::pi)< tol)
                 return this->set_zoom_only(-sx, -sy, xt_, yt_).simplify();
             else
                 return *this;
@@ -141,13 +141,13 @@ vimt_transform_2d& vimt_transform_2d::simplify(double tol /*=1e-10*/)
             r = vcl_atan2(-xy_,xx_);
 
             det=+xx_*yy_-yx_*xy_;
-            sx=vcl_sqrt(xx_*xx_ + yx_*yx_)* vnl_math_sgn(det);
+            sx=vcl_sqrt(xx_*xx_ + yx_*yx_)* vnl_math::sgn(det);
 
             if (r*r < tol*tol)
                 return this->set_zoom_only(sx, xt_, yt_).simplify();
-            else if (vnl_math_sqr(vcl_abs(r) - vnl_math::pi)< tol)
+            else if (vnl_math::sqr(vcl_abs(r) - vnl_math::pi)< tol)
                 return this->set_zoom_only(-sx, xt_, yt_).simplify();
-            else if (vnl_math_sqr(sx-1.0) < tol*tol)
+            else if (vnl_math::sqr(sx-1.0) < tol*tol)
                 return this->set_rigid_body(r, xt_, yt_).simplify();
             else
                 return *this;
@@ -160,7 +160,7 @@ vimt_transform_2d& vimt_transform_2d::simplify(double tol /*=1e-10*/)
             else
                 return *this;
         case ZoomOnly:
-            if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) < tol*tol)
+            if (vnl_math::sqr(xx_-1.0) + vnl_math::sqr(yy_-1.0) < tol*tol)
                 return set_translation(xt_, yt_);
             else
                 return *this;

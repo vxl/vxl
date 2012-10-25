@@ -40,8 +40,8 @@ estimate_unweighted( rgrl_match_set const& match_set,
 
   double scale = -1.0;
   vnl_matrix<double> inv_covar;
-  
-  if( compute_geometric_scale( scale, match_set, penalize_scaling ) )
+
+  if ( compute_geometric_scale( scale, match_set, penalize_scaling ) )
     scales->set_geometric_scale( scale );
 
   if ( do_signature_scale_ && compute_signature_inv_covar( inv_covar, match_set ) ) {
@@ -77,7 +77,8 @@ compute_geometric_scale( double& return_scale,
     if ( fitr.empty() ) {
       DebugMacro_abv(1," no matched points for from: "<< fitr.from_feature()->location()<< ", set its error distances = 1.0e30\n");
       error_distances.push_back( 1.0e30 );
-    } else {
+    }
+    else {
       to_iter titr = fitr.begin();
 
       rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
@@ -105,16 +106,16 @@ compute_geometric_scale( double& return_scale,
 #endif // 0
 
   // empty set
-  if( error_distances.empty() )
+  if ( error_distances.empty() )
     return false;
-    
+
   const double epsilon = 1e-16;
-  return_scale = scaling * vnl_math_max( obj_->scale( error_distances.begin(), error_distances.end() ), epsilon );
+  return_scale = scaling * vnl_math::max( obj_->scale( error_distances.begin(), error_distances.end() ), epsilon );
 
   // is finite?
-  if( !vnl_math_isfinite( return_scale ) )
+  if ( !vnl_math::isfinite( return_scale ) )
     return false;
-  
+
   // success
   return true;
 }
@@ -123,8 +124,8 @@ bool
 rgrl_scale_est_closest::
 compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const& match_set ) const
 {
-  if( !match_set.from_size() ) return false;
-    
+  if ( !match_set.from_size() ) return false;
+
   //  Do the same as above, one component at a time, BUT use the
   //  closest geometric feature to determine which signature vector to
   //  use.  (We really need to do better.)  This yields a diagonal
@@ -135,9 +136,9 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
 
   from_iter fitr = match_set.from_begin();
   const unsigned nrows = fitr.from_feature()->signature_error_dimension( match_set.to_feature_type() );
-  
+
   // check on the error vector dimension
-  if( !nrows ) return false;
+  if ( !nrows ) return false;
 
   vcl_vector< vcl_vector<double> > all_errors( nrows );
   bool success = true;
@@ -149,7 +150,8 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
       for ( unsigned r=0; r<nrows; ++r ) {
         all_errors[r].push_back( 1.0e30 );
       }
-    } else {
+    }
+    else {
       to_iter titr = fitr.begin();
       to_iter best_titr = titr;
 
@@ -174,19 +176,19 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
   inv_covar.set_size( nrows, nrows );
   inv_covar.fill( 0.0 );
 
-  for ( unsigned r = 0; r < nrows&&success; ++r ) {
-    
-    if( all_errors[r].empty() ) {
+  for ( unsigned r = 0; r < nrows&&success; ++r )
+  {
+    if ( all_errors[r].empty() ) {
       success = false;
       break;
     }
-    
+
     const double std = obj_->scale( all_errors[r].begin(), all_errors[r].end() );
-    success = success && vnl_math_isfinite( std );
-    if( std < 1e-10 )  // if variance is too small
+    success = success && vnl_math::isfinite( std );
+    if ( std < 1e-10 )  // if variance is too small
       inv_covar(r,r) = 0.0;
     else
-      inv_covar(r,r) = 1 / vnl_math_sqr( std );
+      inv_covar(r,r) = 1 / vnl_math::sqr( std );
   }
 
   return success;

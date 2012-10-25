@@ -109,7 +109,7 @@ static void normalize(vil_image_view<double>& im)
       sum+=im(i,j); ss+=im(i,j)*im(i,j);
     }
 
-  assert(!vnl_math_isnan(sum));
+  assert(!vnl_math::isnan(sum));
 
   if (ss<1e-6)
   {

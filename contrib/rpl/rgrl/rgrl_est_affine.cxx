@@ -100,13 +100,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       }
     }
   }
-  
+
   // if the weight is too small or zero,
   // that means there is no good match
-  if( sum_wgt < 1e-13 ) {
+  if ( sum_wgt < 1e-13 ) {
     return 0;
   }
-  
+
   from_centre /= sum_wgt;
   to_centre /= sum_wgt;
 
@@ -188,19 +188,19 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   double factor0, factor1;
   vnl_vector<double> s(m*(m+1), 1);
   if ( m == 2) {
-    factor0 = vnl_math_max(XtWX(2,2),XtWX(5,5));
-    factor1 = vnl_math_max(vnl_math_max(XtWX(0,0), XtWX(1,1)),
-                           vnl_math_max(XtWX(3,3), XtWX(4,4)));
+    factor0 = vnl_math::max(XtWX(2,2),XtWX(5,5));
+    factor1 = vnl_math::max(vnl_math::max(XtWX(0,0), XtWX(1,1)),
+                           vnl_math::max(XtWX(3,3), XtWX(4,4)));
     double scale = vcl_sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
     s(2) = s(5) = scale;
   }
   else {
-    factor0 = vnl_math_max( vnl_math_max( XtWX(3,3), XtWX(7,7) ),
+    factor0 = vnl_math::max( vnl_math::max( XtWX(3,3), XtWX(7,7) ),
                             XtWX(11, 11) );
-    factor1 = vnl_math_max( vnl_math_max( vnl_math_max( vnl_math_max( XtWX(0,0), XtWX(1,1) ),
-                                                        vnl_math_max( XtWX(2,2), XtWX(4,4) ) ),
-                                          vnl_math_max( vnl_math_max( XtWX(5,5), XtWX(6,6) ),
-                                                        vnl_math_max( XtWX(8,8), XtWX(9,9) ) ) ),
+    factor1 = vnl_math::max( vnl_math::max( vnl_math::max( vnl_math::max( XtWX(0,0), XtWX(1,1) ),
+                                                        vnl_math::max( XtWX(2,2), XtWX(4,4) ) ),
+                                          vnl_math::max( vnl_math::max( XtWX(5,5), XtWX(6,6) ),
+                                                        vnl_math::max( XtWX(8,8), XtWX(9,9) ) ) ),
                             XtWX(10,10) );
     double scale = vcl_sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
     s(3) = s(7) = s(11) = scale;

@@ -31,7 +31,7 @@ test_feature_point()
 {
   vcl_cout << "Test normal point feature\n";
 
-  vnl_double_2 loc2d(5.0, -4.0); 
+  vnl_double_2 loc2d(5.0, -4.0);
   vnl_double_3 loc3d(5.0, -4.0,  2.0);
   vnl_double_4 loc4d(2.0,  7.0, -1.0, 3.0);
 
@@ -164,7 +164,7 @@ test_feature_face()
   vnl_double_2 error_vect2d = test_pt2d - loc2d;
 
   TEST_NEAR( "2d face point error projector",
-             vnl_math_abs( dot_product( pf2d->error_projector() * error_vect2d, error_vect2d ) ),
+             vnl_math::abs( dot_product( pf2d->error_projector() * error_vect2d, error_vect2d ) ),
              dist*dist, 1e-6 );
 
   //  Onto testing the transformation
@@ -206,7 +206,7 @@ test_feature_face()
     double eig_val = x_nor.magnitude();
     x_nor.normalize();
     // vnl_double_2x2 outer = outer_product( x_nor, x_nor );
-    vnl_double_2x2 real_proj = outer_product( x_nor, x_nor ) / vnl_math_sqr(eig_val);
+    vnl_double_2x2 real_proj = outer_product( x_nor, x_nor ) / vnl_math::sqr(eig_val);
 
     //vcl_cout << "error proj: " << result->error_projector() << vcl_endl;
     //vcl_cout << "transformed normal: " << x_nor << vcl_endl;

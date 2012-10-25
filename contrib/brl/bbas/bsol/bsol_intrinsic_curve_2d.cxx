@@ -39,11 +39,11 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vcl_vector<vsol_point_2d_
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr poly)
 {
   storage_ = new vcl_vector<vsol_point_2d_sptr>();
-  for (unsigned i = 0; i < poly->size(); i++) 
+  for (unsigned i = 0; i < poly->size(); i++)
     storage_->push_back(poly->vertex(i));
   isOpen_=true;
 }
-  
+
 
 //---------------------------------------------------------------------------
 // Copy constructor
@@ -259,8 +259,8 @@ void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
   else if (openFlag.find("CLOSE",0) != vcl_string::npos)
     isOpen_ = false;
   else{
-    vcl_cerr << "Invalid File " << fileName.c_str() << vcl_endl
-             << "Should be OPEN/CLOSE " << openFlag << vcl_endl;
+    vcl_cerr << "Invalid File " << fileName.c_str() << '\n'
+             << "Should be OPEN/CLOSE " << openFlag << '\n';
     return;
   }
 
@@ -294,7 +294,7 @@ void bsol_intrinsic_curve_2d::computeArcLength()
   {
     double cx=(*storage_)[i]->x();
     double cy=(*storage_)[i]->y();
-    double dL = vnl_math_hypot(cx-px,cy-py);
+    double dL = vnl_math::hypot(cx-px,cy-py);
     length_ += dL;
     arcLength_.push_back(length_);
     s_.push_back(dL);
@@ -664,8 +664,8 @@ void bsol_intrinsic_curve_2d::readDataFromFile(vcl_string fileName)
   char lineBuffer[2000]; //200
   infp.getline(lineBuffer,2000);
   if (vcl_strncmp(lineBuffer,"CONTOUR",7)) {
-    vcl_cerr << "Invalid File " << fileName.c_str() << vcl_endl
-             << "Should be CONTOUR " << lineBuffer << vcl_endl;
+    vcl_cerr << "Invalid File " << fileName.c_str() << '\n'
+             << "Should be CONTOUR " << lineBuffer << '\n';
     vcl_exit(1);
   }
 
@@ -676,8 +676,8 @@ void bsol_intrinsic_curve_2d::readDataFromFile(vcl_string fileName)
   else if (!vcl_strncmp(openFlag,"CLOSE",5))
     isOpen_ = false;
   else{
-    vcl_cerr << "Invalid File " << fileName.c_str() << vcl_endl
-             << "Should be OPEN/CLOSE " << openFlag << vcl_endl;
+    vcl_cerr << "Invalid File " << fileName.c_str() << '\n'
+             << "Should be OPEN/CLOSE " << openFlag << '\n';
     vcl_exit(1);
   }
 

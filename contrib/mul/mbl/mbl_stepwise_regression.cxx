@@ -58,7 +58,7 @@ mbl_stepwise_regression::mbl_stepwise_regression(const vnl_matrix<double>& x,
             {
                 XtX_(i,j) += px[i] * px[j];
             }
-            XtX_(i,i) += vnl_math_sqr(px[i]);
+            XtX_(i,i) += vnl_math::sqr(px[i]);
             XtX_(i,num_vars_) -= px[i];
             XtY_(i) += yval * px[i];
         }

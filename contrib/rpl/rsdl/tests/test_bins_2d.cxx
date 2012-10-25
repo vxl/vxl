@@ -98,7 +98,7 @@ static void test_bins_2d()
 
     vcl_vector< int > all_close_indices;
     for ( int i=0; i<M; ++i ) {
-      if ( vnl_vector_ssd( points[ i ], q ) < vnl_math_sqr( radius ) )
+      if ( vnl_vector_ssd( points[ i ], q ) < vnl_math::sqr( radius ) )
         all_close_indices.push_back( i );
     }
 

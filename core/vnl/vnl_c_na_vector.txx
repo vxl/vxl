@@ -55,11 +55,11 @@ void vnl_c_na_vector_two_norm_squared(T const *p, unsigned n, S *out)
 {
   S val = 0;
   bool any_valid(false);
-  for(T const * end = p+n; p != end; p++)
+  for (T const * end = p+n; p != end; p++)
   {
     if (!vnl_na_isna(*p))
     {
-      val += S(vnl_math_squared_magnitude(*p));
+      val += S(vnl_math::squared_magnitude(*p));
       any_valid=true;
     }
   }
@@ -75,7 +75,7 @@ void vnl_c_na_vector_rms_norm(T const *p, unsigned n, S *out)
   {
     if (!vnl_na_isna(*p))
     {
-      val += S(vnl_math_squared_magnitude(*p));
+      val += S(vnl_math::squared_magnitude(*p));
       n_finite++;
     }
   }
@@ -92,7 +92,7 @@ void vnl_c_na_vector_one_norm(T const *p, unsigned n, S *out)
   {
     if (!vnl_na_isna(*p))
     {
-      val += vnl_math_abs(*p++);
+      val += vnl_math::abs(*p++);
       any_valid=true;
     }
   }
@@ -115,7 +115,7 @@ void vnl_c_na_vector_inf_norm(T const *p, unsigned n, S *out)
   bool any_valid(false);
   for (T const* end = p+n; p != end; p++)
   {
-    S v = vnl_math_abs(*p);
+    S v = vnl_math::abs(*p);
     if (v > val) // don't need to test for NA, because NA > x is always false.
     {
       v = val;

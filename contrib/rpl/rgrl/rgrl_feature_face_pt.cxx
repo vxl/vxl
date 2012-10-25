@@ -13,8 +13,7 @@
 rgrl_feature_face_pt ::
 rgrl_feature_face_pt( vnl_vector< double > const& location,
                       vnl_vector< double > const& normal )
-  : rgrl_feature( location ), normal_( normal ),
-    subspace_cached_( false )
+  : rgrl_feature( location ), normal_( normal ), subspace_cached_( false )
 {
   normal_.normalize();
 }
@@ -30,14 +29,14 @@ vnl_matrix<double> const&
 rgrl_feature_face_pt ::
 error_projector() const
 {
-  if(scale_ == 0){
+  if (scale_ == 0) {
     WarningMacro( "The scale is zero." );
   }
-  if( !err_proj_.size() ) {
+  if ( !err_proj_.size() ) {
     err_proj_ = outer_product( normal_, normal_ ) ;
-    err_proj_ /= vnl_math_sqr( scale_ );
+    err_proj_ /= vnl_math::sqr( scale_ );
   }
-  
+
   return err_proj_;
 }
 
@@ -45,14 +44,14 @@ vnl_matrix<double> const&
 rgrl_feature_face_pt ::
 error_projector_sqrt() const
 {
-  if(scale_ == 0){
+  if (scale_ == 0) {
     WarningMacro( "The scale is zero." );
   }
-  if( !err_proj_sqrt_.size() ) {
+  if ( !err_proj_sqrt_.size() ) {
     err_proj_sqrt_ = outer_product( normal_, normal_ ) ;
     err_proj_sqrt_ /= scale_;
   }
-  
+
   return err_proj_sqrt_;
 }
 
@@ -98,7 +97,7 @@ transform( rgrl_transformation const& xform ) const
   xform.map_normal( this->location_, this->normal_, face_ptr->normal_ );
 
   // it is not clear what's meaning of the scale of corner and face points
-  // It certainly does not represent the physical scale and is related to 
+  // It certainly does not represent the physical scale and is related to
   // the sharpness of the edge.
 #if 0
   // transform scale
@@ -153,8 +152,8 @@ transform_scale( rgrl_transformation const& xform ) const
     for ( unsigned i=0; i<normal_.size(); ++i )
       scale += vcl_abs(normal_[i]) * scaling[i];
     scale *= this->scale_;
-
-  } else if ( this-> scale_ > 0.0 ) {
+  }
+  else if ( this-> scale_ > 0.0 ) {
     WarningMacro( "This feature has non-zero scale value, but transformation has no scaling factors."
                   << "The scale of transformed features is NOT set." );
   }
@@ -189,36 +188,35 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
 }
 
 //:  Compute the signature error vector between two features.
-vnl_vector<double> 
+vnl_vector<double>
 rgrl_feature_face_pt::
 signature_error_vector( rgrl_feature const& other ) const
 {
-  if( !other.is_type( rgrl_feature_face_pt::type_id() ) ) 
+  if ( !other.is_type( rgrl_feature_face_pt::type_id() ) )
     return vnl_vector<double>();
-  
+
   // cast it to face point type
   rgrl_feature_face_pt const& other_face_pt = static_cast<rgrl_feature_face_pt const&>(other);
-  
-  // compute cos between normals 
+
+  // compute cos between normals
   const double dot = dot_product( this->normal_, other_face_pt.normal_ );
   const double half_pi = vnl_math::pi / 2.0;
   double ang = vcl_acos( dot );
 
   // make it between [-pi/2, pi/2]
-  if( ang > half_pi )  ang -= vnl_math::pi;
-    
+  if ( ang > half_pi )  ang -= vnl_math::pi;
+
   vnl_vector<double> error_vec(1, ang);
   return error_vec;
-  
 }
 
 //:  the dimensions of the signature error vector.
-unsigned 
+unsigned
 rgrl_feature_face_pt::
 signature_error_dimension( const vcl_type_info& other_feature_type ) const
 {
-  if( other_feature_type == rgrl_feature_face_pt::type_id() )
-    return 1; 
+  if ( other_feature_type == rgrl_feature_face_pt::type_id() )
+    return 1;
   else
     return 0;
 }

@@ -422,10 +422,13 @@ inline bool operator> (long r1, vnl_bignum const& r2) { return r2< r1; }
 inline bool operator<=(long r1, vnl_bignum const& r2) { return r2>=r1; }
 inline bool operator>=(long r1, vnl_bignum const& r2) { return r2<=r1; }
 
-inline vnl_bignum vnl_math_abs(vnl_bignum const& x) { return x.abs(); }
-inline vnl_bignum vnl_math_squared_magnitude(vnl_bignum const& x) { return x*x; }
-inline vnl_bignum vnl_math_sqr(vnl_bignum const& x) { return x*x; }
-inline bool vnl_math_isnan(vnl_bignum const& ) { return false; }
-inline bool vnl_math_isfinite(vnl_bignum const& x) { return ! x.is_infinity(); }
+namespace vnl_math
+{
+  inline vnl_bignum abs(vnl_bignum const& x) { return x.abs(); }
+  inline vnl_bignum squared_magnitude(vnl_bignum const& x) { return x*x; }
+  inline vnl_bignum sqr(vnl_bignum const& x) { return x*x; }
+  inline bool isnan(vnl_bignum const& ) { return false; }
+  inline bool isfinite(vnl_bignum const& x) { return ! x.is_infinity(); }
+}
 
 #endif // vnl_bignum_h_

@@ -224,8 +224,8 @@ bool vsol_line_2d::in(vsol_point_2d_sptr const& p) const
     double dot_product=(p->x()-p0_->x())*(p1_->x()-p0_->x())
                       +(p->y()-p0_->y())*(p1_->y()-p0_->y());
     result=(dot_product>=0)&&
-           (dot_product<(vnl_math_sqr(p1_->x()-p0_->x())
-                        +vnl_math_sqr(p1_->y()-p0_->y())));
+           (dot_product<(vnl_math::sqr(p1_->x()-p0_->x())
+                        +vnl_math::sqr(p1_->y()-p0_->y())));
   }
   return result;
 }

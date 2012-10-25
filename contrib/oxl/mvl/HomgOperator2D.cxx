@@ -91,8 +91,8 @@ double HomgOperator2D::distance_squared(const HomgPoint2D& point1,
   double scale1 = 1.0/z1;
   double scale2 = 1.0/z2;
 
-  return vnl_math_sqr (x1 * scale1 - x2 * scale2) +
-         vnl_math_sqr (y1 * scale1 - y2 * scale2);
+  return vnl_math::sqr (x1 * scale1 - x2 * scale2) +
+         vnl_math::sqr (y1 * scale1 - y2 * scale2);
 }
 
 //-----------------------------------------------------------------------------
@@ -110,8 +110,8 @@ double HomgOperator2D::perp_dist_squared (const HomgPoint2D& point, const HomgLi
     return Homg::infinity;
   }
 
-  double numerator = vnl_math_sqr (dot(line, point));
-  double denominator = (vnl_math_sqr(line.x()) + vnl_math_sqr(line.y())) * vnl_math_sqr(point.w());
+  double numerator = vnl_math::sqr (dot(line, point));
+  double denominator = (vnl_math::sqr(line.x()) + vnl_math::sqr(line.y())) * vnl_math::sqr(point.w());
 
   return numerator / denominator;
 }
@@ -120,7 +120,7 @@ double HomgOperator2D::perp_dist_squared (const HomgPoint2D& point, const HomgLi
 //  This is defined as the maximum of the distances of the two endpoints to the line.
 double HomgOperator2D::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line)
 {
-  return vnl_math_max(perp_dist_squared(segment.get_point1(), line),
+  return vnl_math::max(perp_dist_squared(segment.get_point1(), line),
                    perp_dist_squared(segment.get_point2(), line));
 }
 
@@ -216,7 +216,7 @@ double HomgOperator2D::abs_angle(const HomgLine2D& line1, const HomgLine2D& line
   double angle1 = line_angle (line1);
   double angle2 = line_angle (line2);
 
-  double diff = vnl_math_abs(angle2 - angle1);
+  double diff = vnl_math::abs(angle2 - angle1);
 
   if (diff > vnl_math::pi)
     diff -= vnl_math::pi;
@@ -402,7 +402,7 @@ HomgLineSeg2D HomgOperator2D::clip_line_to_lineseg(const HomgLine2D& line,
   double ny = line.y();
   double nz = line.w();
 
-  bool intersect_lr = vnl_math_abs(ny) > vnl_math_abs(nx);
+  bool intersect_lr = vnl_math::abs(ny) > vnl_math::abs(nx);
 
   if (intersect_lr) {
     // Clip against verticals

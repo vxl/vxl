@@ -30,27 +30,27 @@ void vil_gauss_reduce_1plane(const vxl_byte* src_im,
   {
     // Set first element of row
     *d_row = static_cast<vxl_byte>(
-              vnl_math_rnd(0.071f * s_row[sxs2]
-                         + 0.357f * s_row[s_x_step]
-                         + 0.572f * s_row[0]));
+              vnl_math::rnd( 0.071f * s_row[sxs2]
+                           + 0.357f * s_row[s_x_step]
+                           + 0.572f * s_row[0]));
 
     vxl_byte * d = d_row + d_x_step;
     const vxl_byte* s = s_row + sxs2;
     for (unsigned x=0;x<ni2;++x)
     {
       *d = static_cast<vxl_byte>(
-            vnl_math_rnd(0.05*s[-sxs2]    + 0.05*s[sxs2]
-                       + 0.25*s[-s_x_step]+ 0.25*s[s_x_step]
-                       + 0.4*s[0]));
+            vnl_math::rnd( 0.05*s[-sxs2]    + 0.05*s[sxs2]
+                         + 0.25*s[-s_x_step]+ 0.25*s[s_x_step]
+                         + 0.4*s[0]));
 
       d += d_x_step;
       s += sxs2;
     }
     // Set last elements of row
     *d = static_cast<vxl_byte>(
-          vnl_math_rnd(0.071f * s[-sxs2]
-                     + 0.357f * s[-s_x_step]
-                     + 0.572f * s[0]));
+          vnl_math::rnd( 0.071f * s[-sxs2]
+                       + 0.357f * s[-s_x_step]
+                       + 0.572f * s[0]));
 
     d_row += d_y_step;
     s_row += s_y_step;
@@ -155,25 +155,25 @@ void vil_gauss_reduce_1plane(const int* src_im,
   for (unsigned y=0;y<src_nj;++y)
   {
     // Set first element of row
-    *d_row = vnl_math_rnd(0.071f * s_row[sxs2]
-                        + 0.357f * s_row[s_x_step]
-                        + 0.572f * s_row[0]);
+    *d_row = vnl_math::rnd( 0.071f * s_row[sxs2]
+                          + 0.357f * s_row[s_x_step]
+                          + 0.572f * s_row[0]);
 
     int * d = d_row + d_x_step;
     const int* s = s_row + sxs2;
     for (unsigned x=0;x<ni2;++x)
     {
-      *d = vnl_math_rnd(0.05*s[-sxs2] + 0.25*s[-s_x_step] +
-                        0.05*s[ sxs2] + 0.25*s[ s_x_step] +
-                        0.4 *s[0]);
+      *d = vnl_math::rnd( 0.05*s[-sxs2] + 0.25*s[-s_x_step] +
+                          0.05*s[ sxs2] + 0.25*s[ s_x_step] +
+                          0.4 *s[0]);
 
       d += d_x_step;
       s += sxs2;
     }
     // Set last elements of row
-    *d = vnl_math_rnd(0.071f * s[-sxs2]
-                    + 0.357f * s[-s_x_step]
-                    + 0.572f * s[0]);
+    *d = vnl_math::rnd( 0.071f * s[-sxs2]
+                      + 0.357f * s[-s_x_step]
+                      + 0.572f * s[0]);
 
     d_row += d_y_step;
     s_row += s_y_step;
@@ -198,9 +198,9 @@ void vil_gauss_reduce_1plane(const vxl_int_16* src_im,
   {
     // Set first element of row
     *d_row = static_cast<vxl_int_16>(
-              vnl_math_rnd(0.071f * s_row[sxs2]
-                         + 0.357f * s_row[s_x_step]
-                         + 0.572f * s_row[0]));
+              vnl_math::rnd( 0.071f * s_row[sxs2]
+                           + 0.357f * s_row[s_x_step]
+                           + 0.572f * s_row[0]));
 
     vxl_int_16 * d = d_row + d_x_step;
     const vxl_int_16* s = s_row + sxs2;
@@ -216,9 +216,9 @@ void vil_gauss_reduce_1plane(const vxl_int_16* src_im,
     }
     // Set last elements of row
     *d = static_cast<vxl_int_16>(
-          vnl_math_rnd(0.071f * s[-sxs2]
-                     + 0.357f * s[-s_x_step]
-                     + 0.572f * s[0]));
+          vnl_math::rnd( 0.071f * s[-sxs2]
+                       + 0.357f * s[-s_x_step]
+                       + 0.572f * s[0]));
 
     d_row += d_y_step;
     s_row += s_y_step;

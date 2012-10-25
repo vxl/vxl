@@ -37,7 +37,6 @@ double vnl_na(double)
 }
 
 
-
 //: A particular qNaN to indicate not available.
 // This returns the bit pattern 0x7f8007a2
 // Don't assume that any VXL functions will treat the value as NA rather than NaN, unless
@@ -73,17 +72,16 @@ bool vnl_na_isna(float x)
 }
 
 
-
 //: Replace NaNs with NA, leave other values alone.
 double vnl_na_nan_to_na(double v)
 {
-  return vnl_math_isnan(v) ? vnl_na(double()) : v;
+  return vnl_math::isnan(v) ? vnl_na(double()) : v;
 }
 
 //: Replace NaNs with NA, leave other values alone.
 float vnl_na_nan_to_na(float v)
 {
-  return vnl_math_isnan(v) ? vnl_na(float()) : v;
+  return vnl_math::isnan(v) ? vnl_na(float()) : v;
 }
 
 

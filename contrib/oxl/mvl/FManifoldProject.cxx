@@ -64,7 +64,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   affine_F_ = eig.D(3,3) < 1e-6;
   if (affine_F_) {
 #ifdef DEBUG
-    vcl_cerr << "FManifoldProject: Affine F = " << F_ << vcl_endl;
+    vcl_cerr << "FManifoldProject: Affine F = " << F_ << '\n';
 #endif // DEBUG
     double s = 1.0 / b.magnitude();
     t_ = b * s;
@@ -80,12 +80,12 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
     double Cprime = tAt + dot_product(t_, b) + c;
 
     // Now C is zero cos F is rank 2
-    if (vnl_math_abs(Cprime) > 1e-6) {
-      vcl_cerr << "FManifoldProject: ** HartleySturm: F = " << F_ << vcl_endl
-               << "FManifoldProject: ** HartleySturm: B = " << Bprime << vcl_endl
-               << "FManifoldProject: ** HartleySturm: Cerror = " << Cprime << vcl_endl
+    if (vnl_math::abs(Cprime) > 1e-6) {
+      vcl_cerr << "FManifoldProject: ** HartleySturm: F = " << F_ << '\n'
+               << "FManifoldProject: ** HartleySturm: B = " << Bprime << '\n'
+               << "FManifoldProject: ** HartleySturm: Cerror = " << Cprime << '\n'
                << "FManifoldProject: ** HartleySturm: F not rank 2 ?\n"
-               << "FManifoldProject: singular values are "  << vnl_svd<double>(F_.as_ref()).W() << vcl_endl;
+               << "FManifoldProject: singular values are "  << vnl_svd<double>(F_.as_ref()).W() << '\n';
     }
     // **** Now have quadric x'*A*x = 0 ****
 
@@ -176,14 +176,14 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
     vnl_double_3 l = F_ * vnl_double_3(p[2], p[3], 1.0);
     double EPIDIST = (l[0] * p[0] + l[1] * p[1] + l[2])/vcl_sqrt(l[0]*l[0]+l[1]*l[1]);
     if (EPIDIST > 1e-4) {
-      vcl_cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << vcl_endl
-               << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << vcl_endl;
+      vcl_cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << '\n'
+               << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << '\n';
 #if 0
       double EPI1 = dot_product(out2->get_vector(), F_*out1->get_vector());
       double EPI2 = dot_product(p, n) + d;
-      vcl_cerr << "t = " << n << ' ' << d << vcl_endl
-               << "F_ = " << F_ << vcl_endl
-               << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << vcl_endl;
+      vcl_cerr << "t = " << n << ' ' << d << '\n'
+               << "F_ = " << F_ << '\n'
+               << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << '\n';
       vcl_abort();
 #endif // 0
     }
@@ -195,12 +195,12 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
   vnl_double_4 pprime = V_.transpose() * (p - t_);
 
   // Solve p' (I - lambda D)^-1 D (I - lambda D)^-1 p = 0
-  double b1 = 1./d_[0]; double a1 = vnl_math_sqr(pprime[0])*b1;
-  double b2 = 1./d_[1]; double a2 = vnl_math_sqr(pprime[1])*b2;
-  double b3 = 1./d_[2]; double a3 = vnl_math_sqr(pprime[2])*b3;
-  double b4 = 1./d_[3]; double a4 = vnl_math_sqr(pprime[3])*b4;
+  double b1 = 1./d_[0]; double a1 = vnl_math::sqr(pprime[0])*b1;
+  double b2 = 1./d_[1]; double a2 = vnl_math::sqr(pprime[1])*b2;
+  double b3 = 1./d_[2]; double a3 = vnl_math::sqr(pprime[2])*b3;
+  double b4 = 1./d_[3]; double a4 = vnl_math::sqr(pprime[3])*b4;
 
-  if (vnl_math_max(vnl_math_abs(b1 + b2), vnl_math_abs(b3 + b4)) > 1e-7) {
+  if (vnl_math::max(vnl_math::abs(b1 + b2), vnl_math::abs(b3 + b4)) > 1e-7) {
     vcl_cerr << "FManifoldProject: B = [" <<b1<< ' ' <<b2<< ' ' <<b3<< ' ' <<b4<< "];\n"
              << "FManifoldProject: b1 != -b2 or b3 != -b4\n";
   }
@@ -238,10 +238,10 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
     double lambda = realroots[i];
 
     // Some roots to the multiplied out poly are not roots to the rational polynomial.
-    double RATPOLY_RESIDUAL = (a1/vnl_math_sqr(b1 - lambda) +
-                               a2/vnl_math_sqr(b2 - lambda) +
-                               a3/vnl_math_sqr(b3 - lambda) +
-                               a4/vnl_math_sqr(b4 - lambda));
+    double RATPOLY_RESIDUAL = (a1/vnl_math::sqr(b1 - lambda) +
+                               a2/vnl_math::sqr(b2 - lambda) +
+                               a3/vnl_math::sqr(b3 - lambda) +
+                               a4/vnl_math::sqr(b4 - lambda));
 
     if (vcl_fabs(RATPOLY_RESIDUAL) > 1e-8)
       continue;
@@ -259,11 +259,11 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
       if (0 && EPIDIST > 1e-12) {
         // This can happen in reasonable circumstances -- notably when one
         // epipole is at infinity.
-        vcl_cerr << "FManifoldProject: A root has epidist = " << vcl_sqrt(EPIDIST) << vcl_endl
-                 << "  coeffs: " << coeffs_ << vcl_endl
-                 << "  root = " << lambda << vcl_endl
-                 << "  poly residual = " << poly.evaluate(lambda) << vcl_endl
-                 << "  rational poly residual = " << RATPOLY_RESIDUAL << vcl_endl;
+        vcl_cerr << "FManifoldProject: A root has epidist = " << vcl_sqrt(EPIDIST) << '\n'
+                 << "  coeffs: " << coeffs_ << '\n'
+                 << "  root = " << lambda << '\n'
+                 << "  poly residual = " << poly.evaluate(lambda) << '\n'
+                 << "  rational poly residual = " << RATPOLY_RESIDUAL << '\n';
         ++ errs;
         break;
       }
@@ -278,7 +278,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
   }
 
   if (!got_one) {
-    vcl_cerr << "FManifoldProject: AROOGAH. Final epipolar distance =  " << dmin << ", errs = " << errs << vcl_endl;
+    vcl_cerr << "FManifoldProject: AROOGAH. Final epipolar distance =  " << dmin << ", errs = " << errs << '\n';
     *ox1 = x1;
     *oy1 = y1;
     *ox2 = x2;

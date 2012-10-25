@@ -48,7 +48,7 @@ static inline bool columnsAreUnitNorm(const vnl_matrix<double>& vecs)
   {
     double sumsq = 0.0;
     for (int i=0; i<m; i++)
-      sumsq += vnl_math_sqr(vecs(i,j));
+      sumsq += vnl_math::sqr(vecs(i,j));
     if (!almostEqualsOne(sumsq)) return false;
   }
   return true;
@@ -117,7 +117,7 @@ void vpdfl_gaussian::set(const vnl_vector<double>& mean,
     double &vi = v(i);
     vi = 0.0;
     for (unsigned int j=0; j<n; j++)
-      vi += vnl_math_sqr(evecs(i,j)) * evals(i);
+      vi += vnl_math::sqr(evecs(i,j)) * evals(i);
   }
 
   set(mean, v, evecs, evals);

@@ -50,7 +50,7 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
       double x2= corners2_[j].first;
       double y2= corners2_[j].second;
 
-      if (vnl_math_abs(x1-x2) < SEARCH_WINDOW_X && vnl_math_abs(y1-y2) < SEARCH_WINDOW_Y)
+      if (vnl_math::abs(x1-x2) < SEARCH_WINDOW_X && vnl_math::abs(y1-y2) < SEARCH_WINDOW_Y)
       {
         vcl_pair<double,double> scores= best_local_correlation_score( i, j);
 
@@ -131,15 +131,15 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
 
     if ((int)i==b)
     {
-      vcl_cerr << i << ' ' << a << vcl_endl;
+      vcl_cerr << i << ' ' << a << '\n';
       vcl_cout << corners1_[i].first << ' ' << corners1_[i].second << ' '
                << corners2_[a].first << ' ' << corners2_[a].second << vcl_endl;
       l.push_back( vcl_pair<int,int>(i,a) );
     }
   }
 
-  //  vcl_cerr << bestimage1match << vcl_endl;
-  //  vcl_cerr << bestimage2match << vcl_endl;
+  //  vcl_cerr << bestimage1match << '\n'
+  //           << bestimage2match << '\n';
 
   return l;
 }

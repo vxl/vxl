@@ -46,7 +46,7 @@ void vimt3d_transform_3d::matrix(vnl_matrix<double>& M) const
 
 //=======================================================================
 // Define the transform in terms of a 4x4 homogeneous matrix.
-void vimt3d_transform_3d::set_matrix(const vnl_matrix<double>& M) 
+void vimt3d_transform_3d::set_matrix(const vnl_matrix<double>& M)
 {
   if (M.rows()!=4 || M.cols()!=4)
     mbl_exception_error(mbl_exception_abort("vimt3d_transform_3d::set_matrix(matrix): input matrix must be 4x4"));
@@ -66,9 +66,9 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   // also won't work properly in rigid body case either!
   double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
 
-  double xlen = vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
-  double ylen = vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math_sgn(det);
-  double zlen = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math_sgn(det);
+  double xlen = vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math::sgn(det);
+  double ylen = vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math::sgn(det);
+  double zlen = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math::sgn(det);
 
   double xx3 = xx_ / xlen;
   double xy3 = xy_ / ylen;
@@ -198,9 +198,9 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
       angles(v[3],v[4],v[5]);
       // try to compute scaling factors
       double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
-      v[0]=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
-      v[1]=vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math_sgn(det);
-      v[2]=vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math_sgn(det);
+      v[0]=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math::sgn(det);
+      v[1]=vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math::sgn(det);
+      v[2]=vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math::sgn(det);
       v[6]=xt_; v[7]=yt_; v[8]=zt_;
       break;
     }
@@ -227,17 +227,17 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
       vnl_matrix_fixed<double, 3, 3> S2 = X.transpose() * X;
       // if X=R*S (where S is a diagonal matrix) then X'X = S'*R'*R*S
       // if R is a rotation matrix then R'*R=I and so X'X = S'*S = [s_x^2 0 0; 0 s_y^2 0; 0 0 s_z^2]
-      if (S2(0,1)*S2(0,1) + S2(0,2)*S2(0,2) + S2(1,0)*S2(1,0) + 
+      if (S2(0,1)*S2(0,1) + S2(0,2)*S2(0,2) + S2(1,0)*S2(1,0) +
           S2(1,2)*S2(1,2) + S2(2,0)*S2(2,0) + S2(2,1)*S2(2,1) >= tol*tol*6)
         return;
 
       // mirroring if det is negative;
-      double mirror=vnl_math_sgn(vnl_determinant(X[0], X[1], X[2]));
+      double mirror=vnl_math::sgn(vnl_determinant(X[0], X[1], X[2]));
 
       sx = vcl_sqrt(vcl_abs(S2(0,0))) * mirror;
       sy = vcl_sqrt(vcl_abs(S2(1,1))) * mirror;
       sz = vcl_sqrt(vcl_abs(S2(2,2))) * mirror;
-      if (vnl_math_sqr(sx-sy) +  vnl_math_sqr(sx-sz) < tol*tol)
+      if (vnl_math::sqr(sx-sy) +  vnl_math::sqr(sx-sz) < tol*tol)
         this->set_similarity(sx, rx, ry, rz,
                              xt_, yt_, zt_ );
       else if (rx*rx+ry*ry+rz*rz < tol*tol)
@@ -251,10 +251,10 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
    case Similarity:
     angles(rx, ry, rz);
     det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
-    sx=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
+    sx=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math::sgn(det);
     if (rx*rx+ry*ry+rz*rz < tol*tol)
       this->set_zoom_only(sx, xt_, yt_, zt_);
-    else if (vnl_math_sqr(sx-1.0) < tol*tol)
+    else if (vnl_math::sqr(sx-1.0) < tol*tol)
       this->set_rigid_body(rx, ry, rz, xt_, yt_, zt_);
     else
       return;
@@ -269,7 +269,7 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
     simplify(tol);
     return;
    case ZoomOnly:
-    if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) + vnl_math_sqr(zz_-1.0) >= tol*tol)
+    if (vnl_math::sqr(xx_-1.0) + vnl_math::sqr(yy_-1.0) + vnl_math::sqr(zz_-1.0) >= tol*tol)
       return;
     set_translation(xt_, yt_, zt_);
    case Translation:
@@ -485,12 +485,12 @@ void vimt3d_transform_3d::set_rigid_body(const vnl_quaternion<double>& q,
   }
   vnl_matrix_fixed<double,3,3> R = q.rotation_matrix_transpose();
   form_=RigidBody;
-  
+
   // Set rotation terms from R, which is transpose of Rot mat.
   xx_=R[0][0];  xy_= R[1][0]; xz_ = R[2][0];
   yx_=R[0][1];  yy_= R[1][1]; yz_ = R[2][1];
   zx_=R[0][2];  zy_= R[1][2]; zz_ = R[2][2];
-  
+
   // Set translation
   xt_=t_x;
   yt_=t_y;
@@ -512,12 +512,12 @@ void vimt3d_transform_3d::set_similarity(double s, const vnl_quaternion<double>&
   }
   vnl_matrix_fixed<double,3,3> R = q.rotation_matrix_transpose();
   form_=RigidBody;
-  
+
   // Set scale/rotation terms from R, which is transpose of Rot mat.
   xx_=s*R[0][0];  xy_= s*R[1][0]; xz_ = s*R[2][0];
   yx_=s*R[0][1];  yy_= s*R[1][1]; yz_ = s*R[2][1];
   zx_=s*R[0][2];  zy_= s*R[1][2]; zz_ = s*R[2][2];
-  
+
   // Set translation
   xt_=t_x;
   yt_=t_y;
@@ -545,11 +545,11 @@ void vimt3d_transform_3d::set_similarity(double s,
 #ifdef DEBUG // debug test
     double r_x1, r_y1, r_z1;
     angles( r_x1, r_y1, r_z1 );
-    vcl_cout << "r_x = " << r_x  << vcl_endl
-             << "r_x1= " << r_x1 << vcl_endl
-             << "r_y = " << r_y  << vcl_endl
-             << "r_y1= " << r_y1 << vcl_endl
-             << "r_z = " << r_z  << vcl_endl
+    vcl_cout << "r_x = " << r_x  << '\n'
+             << "r_x1= " << r_x1 << '\n'
+             << "r_y = " << r_y  << '\n'
+             << "r_y1= " << r_y1 << '\n'
+             << "r_z = " << r_z  << '\n'
              << "r_z1= " << r_z1 << vcl_endl;
 #endif
 

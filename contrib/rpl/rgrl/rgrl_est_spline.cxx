@@ -105,7 +105,7 @@ namespace{
       double fx = 0;
       spline_->set_control_points( x );
       for ( unsigned i = 0; i < pts_.size(); ++i ) {
-        fx += vnl_math_sqr( displacement_[ i ] - spline_->f_x( pts_[ i ] ) )
+        fx += vnl_math::sqr( displacement_[ i ] - spline_->f_x( pts_[ i ] ) )
           * wgt_[ i ] ;
       }
       return fx;
@@ -169,7 +169,7 @@ rgrl_est_spline( unsigned dof,
   for ( unsigned i=0; i<m.size(); ++i )
     num_control *= m[i] + 3;
 
-  vcl_cerr << "rgrl_est_spline.cxx : number of control points: " << num_control << ", dof=" << dof << vcl_endl;
+  vcl_cerr << "rgrl_est_spline.cxx : number of control points: " << num_control << ", dof=" << dof << '\n';
   assert( num_control == dof );
 }
 
@@ -210,8 +210,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vcl_vector< rgrl_spline_sptr > splines( dim );
   if ( cur_transform.is_type( rgrl_trans_spline::type_id() ) ) {
     rgrl_trans_spline const& cur_trans_spline = dynamic_cast< rgrl_trans_spline const& >(cur_transform);
-    vcl_cerr << "delta_: " << delta_ << vcl_endl
-             << "current transformation's delta_: " << cur_trans_spline.get_delta() << vcl_endl;
+    vcl_cerr << "delta_: " << delta_ << '\n'
+             << "current transformation's delta_: " << cur_trans_spline.get_delta() << '\n';
     if ( ( delta_ - cur_trans_spline.get_delta()/2 ).two_norm() < 1e-5 ) {
       for ( unsigned i=0; i<dim; ++i ) {
         splines[ i ] = cur_trans_spline.get_spline( i )->refinement( m_ );
@@ -224,13 +224,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         splines[ i ] = new rgrl_spline( *(cur_trans_spline.get_spline( i )) );
     }
     else {
-      DebugMacro(1, "create spline with m_=" << m_ << "\n");
+      DebugMacro(1, "create spline with m_=" << m_ << '\n');
       for ( unsigned i=0; i<dim; ++i )
         splines[ i ] = new rgrl_spline( m_ );
     }
   }
   else {
-    DebugMacro(1, "create spline with m_=" << m_ << "\n" );
+    DebugMacro(1, "create spline with m_=" << m_ << '\n' );
     for ( unsigned i=0; i<dim; ++i )
       splines[ i ] = new rgrl_spline( m_ );
   }
@@ -280,13 +280,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
             if ( !global_xform_ ) {
               displacement.set_row( i, ti.to_feature()->location() - from_pt );
 
-              DebugMacro_abv(2, from_pt << " \t " << ti.to_feature()->location() << " \t " << displacement.get_row( i ) << "\n" );
+              DebugMacro_abv(2, from_pt << " \t " << ti.to_feature()->location() << " \t " << displacement.get_row( i ) << '\n' );
             }
             else {
               displacement.set_row( i, ti.to_feature()->location() - global_xform_->map_location( from_pt ) );
 
               DebugMacro_abv(2, global_xform_->map_location( from_pt ) << " \t " << ti.to_feature()->location()
-                                                                       << " \t " << displacement.get_row( i ) << "\n" );
+                                                                       << " \t " << displacement.get_row( i ) << '\n' );
             }
             g.set_row( i, gr );
             wgt[i] = ti.cumulative_weight();
@@ -303,7 +303,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     }
   }
 
-  vcl_cerr << "\nafter reduce dof, dof=" << free_control_pt_index.size() << vcl_endl;
+  vcl_cerr << "\nafter reduce dof, dof=" << free_control_pt_index.size() << '\n';
   DebugMacro( 1,  "\nafter reduce dof, dof=" << free_control_pt_index.size()<< vcl_endl );
 
   vul_timer timer;
@@ -359,7 +359,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DebugMacro( 1, "control points:\n" << c << "\n" );
+      DebugMacro( 1, "control points:\n" << c << '\n' );
       }
     if ( this->debug_flag() > 1) timer.print( vcl_cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
@@ -374,7 +374,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DebugMacro( 1, "control points:\n" << c << "\n" );
+      DebugMacro( 1, "control points:\n" << c << '\n' );
     }
     if (this->debug_flag() > 1) timer.print( vcl_cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
@@ -389,7 +389,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DebugMacro( 1, "control points:\n" << c << "\n" );
+      DebugMacro( 1, "control points:\n" << c << '\n' );
     }
     if (this->debug_flag() > 1) timer.print( vcl_cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
@@ -404,7 +404,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DebugMacro( 1, "control points:\n" << c << "\n" );
+      DebugMacro( 1, "control points:\n" << c << '\n' );
     }
     if (this->debug_flag()> 1) timer.print( vcl_cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );

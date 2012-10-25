@@ -184,6 +184,7 @@ vgl_homg_point_2d<double> SimilarityMetric::imagehomg_to_homg(vgl_homg_point_2d<
   // ho_std2cam_aspect_point
   return inv_cond_matrix * x;
 }
+
 HomgPoint2D SimilarityMetric::imagehomg_to_homg(const HomgPoint2D& x) const
 {
   // ho_std2cam_aspect_point
@@ -200,8 +201,9 @@ double SimilarityMetric::distance_squared(vgl_homg_point_2d<double> const& p1,
   double x2 = p2.x() / p2.w();
   double y2 = p2.y() / p2.w();
 
-  return vnl_math_sqr (inv_scale_) * (vnl_math_sqr (x1 - x2) + vnl_math_sqr (y1 - y2));
+  return vnl_math::sqr (inv_scale_) * (vnl_math::sqr (x1 - x2) + vnl_math::sqr (y1 - y2));
 }
+
 //: Compute distance (in image coordinates) between points supplied in conditioned coordinates.
 double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D const& p2) const
 {
@@ -212,7 +214,7 @@ double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D con
   double x2 = p2.x() / p2.w();
   double y2 = p2.y() / p2.w();
 
-  return vnl_math_sqr (inv_scale_) * (vnl_math_sqr (x1 - x2) + vnl_math_sqr (y1 - y2));
+  return vnl_math::sqr (inv_scale_) * (vnl_math::sqr (x1 - x2) + vnl_math::sqr (y1 - y2));
 }
 
 //: Get distance between a line segment and an infinite line.
@@ -220,14 +222,15 @@ double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D con
 double SimilarityMetric::distance_squared(vgl_line_segment_2d<double> const& segment,
                                           vgl_homg_line_2d<double> const& line) const
 {
-  return vnl_math_max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
+  return vnl_math::max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
                       this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point2()), line));
 }
+
 //: Get distance between a line segment and an infinite line.
 //  The metric used is the maximum of the two endpoint perp distances.
 double SimilarityMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const
 {
-  return vnl_math_max(this->perp_dist_squared(segment.get_point1(), line),
+  return vnl_math::max(this->perp_dist_squared(segment.get_point1(), line),
                       this->perp_dist_squared(segment.get_point2(), line));
 }
 
@@ -245,11 +248,12 @@ double SimilarityMetric::perp_dist_squared(vgl_homg_point_2d<double> const& p,
     return Homg::infinity;
   }
 
-  double numerator = vnl_math_sqr(p.x()*l.a()+p.y()*l.b()+p.w()*l.c());
-  double denominator = (vnl_math_sqr(l.a()) + vnl_math_sqr(l.b())) * vnl_math_sqr(p.w() * scale_);
+  double numerator = vnl_math::sqr(p.x()*l.a()+p.y()*l.b()+p.w()*l.c());
+  double denominator = (vnl_math::sqr(l.a()) + vnl_math::sqr(l.b())) * vnl_math::sqr(p.w() * scale_);
 
   return numerator / denominator;
 }
+
 double SimilarityMetric::perp_dist_squared(HomgPoint2D const & p, HomgLine2D const & l) const
 {
   // ho_triveccam_aspect_perpdistance_squared
@@ -265,9 +269,9 @@ double SimilarityMetric::perp_dist_squared(HomgPoint2D const & p, HomgLine2D con
     return Homg::infinity;
   }
 
-  double numerator = vnl_math_sqr(HomgOperator2D::dot(l, p));
-  double denominator = (vnl_math_sqr(l.x()) + vnl_math_sqr(l.y()))
-    * vnl_math_sqr(p.w() * scale_);
+  double numerator = vnl_math::sqr(HomgOperator2D::dot(l, p));
+  double denominator = (vnl_math::sqr(l.x()) + vnl_math::sqr(l.y()))
+    * vnl_math::sqr(p.w() * scale_);
 
   return numerator / denominator;
 }

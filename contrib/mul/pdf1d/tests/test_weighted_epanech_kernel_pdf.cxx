@@ -48,7 +48,7 @@ void test_weighted_epanech_kernel_pdf()
     }
     vcl_sort(p.begin(), p.end());
     ks1 -= p;
-    ks1.apply(&vnl_math_abs);
+    ks1.apply(&vnl_math::abs);
 
     vcl_cout << "Single kernel KS1 deviation is " << vnl_c_vector<double>::max_value(ks1.data_block(), ns) << vcl_endl;
     TEST("KS1 test < 0.003", vnl_c_vector<double>::max_value(ks1.data_block(), ns) < 0.003, true);
@@ -70,7 +70,7 @@ void test_weighted_epanech_kernel_pdf()
     }
     vcl_sort(p.begin(), p.end());
     ks1 -= p;
-    ks1.apply(&vnl_math_abs);
+    ks1.apply(&vnl_math::abs);
 
     vcl_cout << "4 weighted kernels kernel KS1 deviation is " << vnl_c_vector<double>::max_value(ks1.data_block(), ns) << vcl_endl;
     TEST("KS1 test < 0.01", vnl_c_vector<double>::max_value(ks1.data_block(), ns) < 0.01, true);

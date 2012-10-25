@@ -74,7 +74,7 @@ bool bvxm_pmap_ratio_process_globals::compute(vcl_string pmap1,vcl_string pmap2,
         vil_image_view<float> *img_view2 = dynamic_cast<vil_image_view<float>*>(nonlidar_img.ptr());
         float p=0.0f, p2 = (*img_view2)(ni, nj);
 
-        if ((p1>0) && (p2>0) && vnl_math_isfinite(p1) && vnl_math_isfinite(p2))
+        if ((p1>0) && (p2>0) && vnl_math::isfinite(p1) && vnl_math::isfinite(p2))
           p=vcl_log10(p1/p2);
         if (p>pmax)
           pmax=p;

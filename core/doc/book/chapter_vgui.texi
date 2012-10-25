@@ -360,8 +360,8 @@ int main(int argc, char **argv)
   vgui_shell_tableau_new shell(viewer);
 
   // Create a window, add the tableau and show it on screen.
-  int width = vnl_math_max(image_tab1->width(), image_tab2->width());
-  int height = vnl_math_max(image_tab1->height(), image_tab2->height());
+  int width = vnl_math::max(image_tab1->width(), image_tab2->width());
+  int height = vnl_math::max(image_tab1->height(), image_tab2->height());
 
   //Add 50 to account for window borders
   return vgui::run(shell, width+50, height+50);
@@ -878,17 +878,17 @@ static void test_dialog()
 
   if (mydialog.ask())
   @{
-    vcl_cerr << "int_value : " << int_value << vcl_endl
-             << "long_value : " << long_value << vcl_endl
-             << "float_value : " << float_value << vcl_endl
-             << "double_value : " << double_value << vcl_endl
-             << "string_value : " << string_value << vcl_endl
+    vcl_cerr << "int_value : " << int_value << '\n'
+             << "long_value : " << long_value << '\n'
+             << "float_value : " << float_value << '\n'
+             << "double_value : " << double_value << '\n'
+             << "string_value : " << string_value << '\n'
              << "bool_value : "
-             << vbl_bool_ostream::true_false(bool_value) << vcl_endl
+             << vbl_bool_ostream::true_false(bool_value) << '\n'
              << "choice_value : " << choice_value << ' '
-             << labels[choice_value] << vcl_endl
-             << "file_value: " << file_value << vcl_endl
-             << "color_value: " << color_value << vcl_endl;
+             << labels[choice_value] << '\n'
+             << "file_value: " << file_value << '\n'
+             << "color_value: " << color_value << '\n';
   @}
 @}
 @end cartouche

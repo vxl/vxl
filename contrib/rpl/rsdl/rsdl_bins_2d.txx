@@ -320,8 +320,8 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
       bin_xs.clear(); bin_ys.clear();
 
       // make list of bins to try
-      int lower_x_for_y = vnl_math_max( c_bin_x - infinity_norm_dist, 0 );
-      int upper_x_for_y = vnl_math_min( c_bin_x + infinity_norm_dist, num_bins_x_-1 );
+      int lower_x_for_y = vnl_math::max( c_bin_x - infinity_norm_dist, 0 );
+      int upper_x_for_y = vnl_math::min( c_bin_x + infinity_norm_dist, num_bins_x_-1 );
 
       // across top (when origin is at upper left)
       if ( c_bin_y - infinity_norm_dist >= 0 ) {
@@ -339,8 +339,8 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
         }
       }
 
-      int lower_y_for_x = vnl_math_max( c_bin_y - infinity_norm_dist+1, 0 );
-      int upper_y_for_x = vnl_math_min( c_bin_y + infinity_norm_dist-1, num_bins_y_-1 );
+      int lower_y_for_x = vnl_math::max( c_bin_y - infinity_norm_dist+1, 0 );
+      int upper_y_for_x = vnl_math::min( c_bin_y + infinity_norm_dist-1, num_bins_y_-1 );
 
       // across left
       if ( c_bin_x - infinity_norm_dist >= 0 ) {   // haven't fallen off left edge
@@ -549,17 +549,17 @@ min_sq_distance_to_bin( COORD_T x, COORD_T y, int bin_x, int bin_y ) const
   COORD_T max_x = min_pt_[0] + (bin_x + 1) * bin_sizes_[0];  // not right for COORD_T == int
 
   if ( x < min_x )
-    sq_dist += vnl_math_sqr( min_x - x );
+    sq_dist += vnl_math::sqr( min_x - x );
   else if ( x > max_x )
-    sq_dist += vnl_math_sqr( x - max_x );
+    sq_dist += vnl_math::sqr( x - max_x );
 
   COORD_T min_y = min_pt_[1] + bin_y * bin_sizes_[1];
   COORD_T max_y = min_pt_[1] + (bin_y + 1) * bin_sizes_[1];  // not right for COORD_T == int
 
   if ( y < min_y )
-    sq_dist += vnl_math_sqr( min_y - y );
+    sq_dist += vnl_math::sqr( min_y - y );
   else if ( y > max_y )
-    sq_dist += vnl_math_sqr( y - max_y );
+    sq_dist += vnl_math::sqr( y - max_y );
 
   return sq_dist;
 }

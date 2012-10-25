@@ -62,14 +62,14 @@ bcvr_cv_cor::bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1,
   // find total length of curve 2
   vsol_point_2d_sptr p2_last = c2->vertex(c2->size()-1);
   vsol_point_2d_sptr p2_first = c2->vertex(0);
-  length2_ = c2->arcLength(c2->size()-1) + vnl_math_hypot(p2_last->x()-p2_first->x(),
-                                                          p2_last->y()-p2_first->y());
+  length2_ = c2->arcLength(c2->size()-1) + vnl_math::hypot(p2_last->x()-p2_first->x(),
+                                                           p2_last->y()-p2_first->y());
 
   // add the correspondence of the final interval
   arclengths2_.push_back(length2_);
 
   // find total length of curve 1
- 
+
   length1_ = c1->length(); // changed by ozge on Nov 17, 2006, from: length1_ = c1->arcLength(n1);
   if (arclengths1_[0] != 0)
     arclengths1_.push_back(2*length1_);

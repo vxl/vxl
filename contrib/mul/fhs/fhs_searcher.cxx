@@ -43,7 +43,7 @@ void fhs_searcher::set_geom_wt(double geom_wt)
 {
   geom_wt_=geom_wt;
 }
-  
+
 
 //: Index of root node (set by last call to set_tree()
 unsigned fhs_searcher::root_node() const
@@ -99,8 +99,8 @@ void fhs_searcher::combine_responses(unsigned im_index,
     if (is_int_transform)
     {
       // Use fast pointer based approach to performing the addition
-      int ci0 = vnl_math_rnd(p0.x());
-      int cj  = vnl_math_rnd(p0.y());
+      int ci0 = vnl_math::rnd(p0.x());
+      int cj  = vnl_math::rnd(p0.y());
       const float * c_row = c_data + cj*c_jstep + ci0*c_istep;
       float *s_row = s_data;
       for (unsigned j=0;j<nj;++j,++cj,c_row+=c_jstep,s_row+=s_jstep)

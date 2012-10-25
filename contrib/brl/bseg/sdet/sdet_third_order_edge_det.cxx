@@ -220,8 +220,8 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
     else {
       if (reduce_tokens) {
         //only insert one edgel per grid position
-        int xx = vnl_math_rnd(edge_locations[i].x());
-        int yy = vnl_math_rnd(edge_locations[i].y());
+        int xx = vnl_math::rnd(edge_locations[i].x());
+        int yy = vnl_math::rnd(edge_locations[i].y());
 
         if (edge_map->edge_cells(yy, xx).size()>0)
           continue;
@@ -539,7 +539,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
     /********************************************************************************
     // This computation is noisy
     double n1 = vcl_sqrt((1.0 + (A-C)/d)/2.0);
-    double n2 = vnl_math_sgn(B)*vcl_sqrt((1.0 - (A-C)/d)/2.0);
+    double n2 = vnl_math::sgn(B)*vcl_sqrt((1.0 - (A-C)/d)/2.0);
 
     // when B is zero, these derivatives need to be corrected to the limiting value
     double n1x, n1y, n2x, n2y;

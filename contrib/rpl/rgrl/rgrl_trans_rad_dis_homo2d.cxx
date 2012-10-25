@@ -73,9 +73,9 @@ homo_wrt_h( vnl_matrix_fixed<double, 2, 9>&        jac_h,
 
   // derivatives w.r.t division
   jg(0,0) = 1.0/mapped_homo[2];
-  jg(0,2) = -mapped_homo[0]/vnl_math_sqr(mapped_homo[2]);
+  jg(0,2) = -mapped_homo[0]/vnl_math::sqr(mapped_homo[2]);
   jg(1,1) = 1.0/mapped_homo[2];
-  jg(1,2) = -mapped_homo[1]/vnl_math_sqr(mapped_homo[2]);
+  jg(1,2) = -mapped_homo[1]/vnl_math::sqr(mapped_homo[2]);
 
   // Apply chain rule: Jab_g(f(p)) = Jac_g * Jac_f
   jac_h = jg * jf;
@@ -122,8 +122,8 @@ distort_wrt_loc( vnl_double_2x2& jac_loc, vnl_double_2 const& true_loc, double k
 {
   const double c = 1 + k1 * true_loc.squared_magnitude();
 
-  jac_loc(0,0) = c + 2*k1*vnl_math_sqr(true_loc[0]);
-  jac_loc(1,1) = c + 2*k1*vnl_math_sqr(true_loc[1]);
+  jac_loc(0,0) = c + 2*k1*vnl_math::sqr(true_loc[0]);
+  jac_loc(1,1) = c + 2*k1*vnl_math::sqr(true_loc[1]);
   jac_loc(0,1) = jac_loc(1,0) = 2 * k1 * true_loc[0] * true_loc[1];
 }
 
@@ -394,7 +394,7 @@ write(vcl_ostream& os ) const
   // tag
   os << "HOMOGRAPHY2D_WITH_RADIAL_DISTORTION\n"
   // parameters
-     << 2 << vcl_endl
+     << 2 << '\n'
      << H_
      << from_centre_ << "  " << to_centre_ << '\n'
      << k1_from_ << "  " <<  k1_to_

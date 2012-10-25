@@ -222,7 +222,7 @@ void mfpf_hog_box_finder::evaluate_region(
       //if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
       normaliser_->normalise(v);
       r[i] = cost().evaluate(v);
-      if (vnl_math_isnan(r[i]))
+      if (vnl_math::isnan(r[i]))
       {
         vcl_cerr<<is_a()<<"::evaluate_region: Response is NaN.\n"
                 <<*this<<'\n'

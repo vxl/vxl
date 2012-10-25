@@ -65,7 +65,7 @@ void mfpf_grad_corr2d::set(const vil_image_view<double>& kx,
       sum_x+=kx(i,j); ss_x+=kx(i,j)*kx(i,j);
     }
 
-  assert(!vnl_math_isnan(sum_x));
+  assert(!vnl_math::isnan(sum_x));
 
   // Normalise so that kernel_ has zero mean and unit sum of squares.
   double mean_x=sum_x/(ni*nj);
@@ -86,7 +86,7 @@ void mfpf_grad_corr2d::set(const vil_image_view<double>& kx,
       sum_y+=ky(i,j); ss_y+=ky(i,j)*ky(i,j);
     }
 
-  assert(!vnl_math_isnan(sum_y));
+  assert(!vnl_math::isnan(sum_y));
 
   // Normalise so that kernel_ has zero mean and unit sum of squares.
   double mean_y=sum_y/(ni*nj);
@@ -195,7 +195,7 @@ static void normalize(vil_image_view<double>& im)
       sum+=im(i,j); ss+=im(i,j)*im(i,j);
     }
 
-  assert(!vnl_math_isnan(sum));
+  assert(!vnl_math::isnan(sum));
 
   if (ss<1e-6)
   {

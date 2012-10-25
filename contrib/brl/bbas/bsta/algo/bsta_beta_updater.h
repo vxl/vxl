@@ -77,7 +77,7 @@ void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample , const T 
   T new_var = rho_comp * beta_dist.var();
   new_var += (rho * rho_comp) * diff*diff;
 
-  new_var=vnl_math_max(new_var,min_var);
+  if (min_var > new_var) new_var=min_var;
   T new_mean = (old_mean) +  (rho * diff);
 
   T alpha,beta;

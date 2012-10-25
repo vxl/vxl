@@ -27,7 +27,7 @@ class vcl_multimap_double_int : public vcl_multimap<double, int, vcl_less <doubl
 
 vcl_multimap_double_int::iterator vcl_multimap_double_int::insert(double key, int value)
 {
-  //vcl_cerr << " ins \t" << value << '\t' << key << vcl_endl;
+  //vcl_cerr << " ins \t" << value << '\t' << key << '\n';
   return base::insert(vcl_pair<const double, int>(key, value));
 }
 
@@ -82,7 +82,7 @@ void ClosestImagePointFinder::get_all_within_search_region(vgl_box_2d<double> co
   vcl_cerr << "map:";
   for (vcl_multimap_double_int::iterator p = y2i_->begin(); p != y2i_->end(); ++p)
     vcl_cerr << ' '<< (*p).second << '[' << (*p).first << ']';
-  vcl_cerr << vcl_endl;
+  vcl_cerr << '\n';
 #endif // 0
   out->erase(out->begin(), out->end());
   for (; potential != end; ++potential) {
@@ -132,7 +132,7 @@ int ClosestImagePointFinder::get_closest_within_region(double cx, double cy, dou
 
 int ClosestImagePointFinder::get_closest_within_region(double cx, double cy, double w, double h, int* out)
 {
-  double d = vnl_math_max(w,h);
+  double d = vnl_math::max(w,h);
   return get_closest_within_region(cx, cy, w, h, out, d*d);
 }
 

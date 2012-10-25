@@ -84,15 +84,15 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
 
   if (verbose)
     vcl_cerr << "Doing Canny on image region "
-             << xsize_ << " by " << ysize_ << vcl_endl
-             << "Sigma               = " << sigma_ << vcl_endl
-             << "Gaussian tail       = " << gauss_tail_ << vcl_endl
-             << "Max kernel size     = " << max_width_OX_ << vcl_endl
-             << "Upper threshold     = " << high_ << vcl_endl
-             << "Lower threshold     = " << low_ << vcl_endl
-             << "Min edgel intensity = " << edge_min_OX_ << vcl_endl
-             << "Min edge length     = " << min_length_OX_ << vcl_endl
-             << "Image border size   = " << border_size_OX_ << vcl_endl << vcl_endl;
+             << xsize_ << " by " << ysize_ << '\n'
+             << "Sigma               = " << sigma_ << '\n'
+             << "Gaussian tail       = " << gauss_tail_ << '\n'
+             << "Max kernel size     = " << max_width_OX_ << '\n'
+             << "Upper threshold     = " << high_ << '\n'
+             << "Lower threshold     = " << low_ << '\n'
+             << "Min edgel intensity = " << edge_min_OX_ << '\n'
+             << "Min edge length     = " << min_length_OX_ << '\n'
+             << "Image border size   = " << border_size_OX_ << "\n\n";
 
   // Allocate internal bitmaps ..
   smooth_ = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
@@ -122,7 +122,7 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
   osl_kernel_DOG(kernel_, sub_area_OX_, k_size_,
                  sigma_, gauss_tail_,
                  max_width_OX_, width_);
-  if (verbose) vcl_cerr << "Kernel size     = " << k_size_ << vcl_endl;
+  if (verbose) vcl_cerr << "Kernel size     = " << k_size_ << '\n';
 
 
   if (verbose) vcl_cerr << "smoothing the image\n";
@@ -136,7 +136,7 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
 
   if (verbose) vcl_cerr << "doing non-maximal suppression\n";
   unsigned int n_edgels_NMS = osl_canny_nms(xsize_, ysize_, dx_, dy_, grad_, thick_, theta_);
-  if (verbose) vcl_cerr << "Number of edgels after NMS = " << n_edgels_NMS << vcl_endl;
+  if (verbose) vcl_cerr << "Number of edgels after NMS = " << n_edgels_NMS << '\n';
 
 
   // (x_,y_) holds the pixel location (and not the sub pixel accuracy)
@@ -157,7 +157,7 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
   if (verbose) vcl_cerr << "doing hysteresis\n";
   int *status = new int[n_edgels_NMS];
   int n_edgels_Hysteresis = HysteresisOX(edgels_NMS, status);
-  if (verbose) vcl_cerr << "Number of edgels after Hysteresis = " << n_edgels_Hysteresis << vcl_endl;
+  if (verbose) vcl_cerr << "Number of edgels after Hysteresis = " << n_edgels_Hysteresis << '\n';
 
   osl_edgel_chain *edgels_Hysteresis = new osl_edgel_chain(n_edgels_Hysteresis);
   Get_hysteresis_edgelsOX(edgels_NMS,status,edgels_Hysteresis, x_, y_);
@@ -717,7 +717,7 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
       delete dc;
     }
 #ifdef DEBUG
-  vcl_cerr << "edges->size() : " << edges->size() << vcl_endl;
+  vcl_cerr << "edges->size() : " << edges->size() << '\n';
 #endif
 }
 
@@ -945,7 +945,7 @@ void osl_canny_ox::Scale_imageOX(float **image, float scale)
 {
   for (unsigned int x=0; x<xsize_; ++x)
     for (unsigned int y=0; y<ysize_; ++y)
-      image[x][y] = vnl_math_min( image[x][y]*scale, 255.0f );
+      image[x][y] = vnl_math::min( image[x][y]*scale, 255.0f );
 }
 
 

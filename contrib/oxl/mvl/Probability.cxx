@@ -203,20 +203,20 @@ double Sampsons_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
 {
   double rX, rY, rX_dash, rY_dash, GRADr, r, dist;
   vnl_matrix_fixed<double,3,3> temp = F->get_matrix();
-  vcl_cerr << x2.x() << vcl_endl;
+  vcl_cerr << x2.x() << '\n';
   rX = temp.get(0, 0)*x2.x() + temp.get(1, 0)*x2.y() + temp.get(2, 0);
   rY = F->get(0, 1)*x2.x() + F->get(1, 1)*x2.y() + F->get(2, 1);
   rX_dash = F->get(0, 0)*x1.x() + F->get(0, 1)*x1.y() + F->get(0, 2);
   rY_dash = F->get(1, 0)*x1.x() + F->get(1, 1)*x1.y() + F->get(1, 2);
-  vcl_cerr << "Points : " << rX << ' ' << rY << ' ' << rX_dash << ' ' << rY_dash << vcl_endl;
-  GRADr = vnl_math_sqr(rX*rX + rY*rY + rX_dash*rX_dash + rY_dash*rY_dash);
-  vcl_cerr << "1 :  " << GRADr << vcl_endl;
+  vcl_cerr << "Points : " << rX << ' ' << rY << ' ' << rX_dash << ' ' << rY_dash << '\n';
+  GRADr = vnl_math::sqr(rX*rX + rY*rY + rX_dash*rX_dash + rY_dash*rY_dash);
+  vcl_cerr << "1 :  " << GRADr << '\n';
   // This is an annoying interface
   HomgPoint2D *x1p = new HomgPoint2D(x1.x(), x1.y(), 1.0);
   HomgPoint2D *x2p = new HomgPoint2D(x2.x(), x2.y(), 1.0);
   vcl_cerr << "2\n";
   r = F->image1_epipolar_distance_squared(x1p, x2p);
-  vcl_cerr << "r " << r << vcl_endl;
+  vcl_cerr << "r " << r << '\n';
   dist = r/GRADr;
   return dist;
 }

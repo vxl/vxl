@@ -184,7 +184,7 @@ int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
       a2 = alph2;
   }
 
-  if (vnl_math_abs(a2-alph2) < eps_*(a2+alph2+eps_) )
+  if (vnl_math::abs(a2-alph2) < eps_*(a2+alph2+eps_) )
     return 0;
 
   a1 = alph1 - s * (a2 - alph2);
@@ -226,8 +226,7 @@ int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
 
     for (unsigned int i=0; i<data_->size(); i++)
       if (0 < alph_[i] && alph_[i] < C_)
-        error_cache_[i] +=  t1 * kernel(i1,i) + t2 * kernel(i2,i)
-        - delta_b;
+        error_cache_[i] +=  t1 * kernel(i1,i) + t2 * kernel(i2,i) - delta_b;
     error_cache_[i1] = 0.0;
     error_cache_[i2] = 0.0;
   }
@@ -272,7 +271,7 @@ int clsfy_smo_1_lin::examine_example(int i1)
           double E2, temp;
 
           E2 = error_cache_[k];
-          temp = vnl_math_abs(E1 - E2);
+          temp = vnl_math::abs(E1 - E2);
           if (temp > tmax)
           {
             tmax = temp;
@@ -286,7 +285,6 @@ int clsfy_smo_1_lin::examine_example(int i1)
       }
     }
 
-
     // second choice Heuristic B - Find any unbound example that give positive progress.
     // start from random location
     for (unsigned long k0 = rng_.lrand32(N-1), k = k0; k < N + k0; ++k)
@@ -298,7 +296,6 @@ int clsfy_smo_1_lin::examine_example(int i1)
           return 1;
       }
     }
-
 
     // second choice Heuristic C - Find any example that give positive progress.
     // start from random location
@@ -340,7 +337,6 @@ int clsfy_smo_1_lin::calc()
     alph_.fill(0.0);
   }
 
-
   // E_i = u_i - y_i = 0 - y_i = -y_i
   error_cache_.resize(N);
 
@@ -373,7 +369,7 @@ int clsfy_smo_1_lin::calc()
         {
           for (int j=0; j<N; j++)
             if (alph_[j] != 0.0)
-            t += alph_[i]*alph_[j]*target_[i]*target_[j]*kernel(i,j);
+              t += alph_[i]*alph_[j]*target_[i]*target_[j]*kernel(i,j);
         }
       }
       vcl_cerr << "Objective function=" << (s - t/2.) << '\t';
@@ -400,7 +396,7 @@ int clsfy_smo_1_lin::calc()
             bound_support++;
         }
       vcl_cerr << "non_bound=" << non_bound_support << '\t'
-               << "bound_support=" << bound_support << vcl_endl;
+               << "bound_support=" << bound_support << '\n';
     }
 #endif
   }
@@ -408,7 +404,7 @@ int clsfy_smo_1_lin::calc()
   error_ = error_rate();
 
 #if !defined NDEBUG && CLSFY_SMO_BASE_PRINT_PROGRESS
-  vcl_cerr << "Threshold=" << b_ << vcl_endl;
+  vcl_cerr << "Threshold=" << b_ << '\n';
   vcl_cout << "Error rate=" << error_ << vcl_endl;
 #endif
 

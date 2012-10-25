@@ -81,7 +81,7 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
         {
           data_->IncrByXY(dc->GetX(ii), dc->GetY(ii));
           int orient = int((dc->GetTheta(ii) * using_degrees + angle/2.0)/angle);
-          int diff = vnl_math_abs(orient - orient0);
+          int diff = vnl_math::abs(orient - orient0);
           if (diff > 1 && diff < 7)
             angle_ok = false;
         }

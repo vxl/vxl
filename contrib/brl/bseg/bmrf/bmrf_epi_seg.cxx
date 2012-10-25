@@ -95,12 +95,12 @@ void bmrf_epi_seg::compute_limits()
   for (int i= 0; i<n; i++)
   {
     double s = seg_[i]->s();
-    min_s_ = vnl_math_min(min_s_, s);
-    max_s_ = vnl_math_max(max_s_, s);
+    min_s_ = vnl_math::min(min_s_, s);
+    max_s_ = vnl_math::max(max_s_, s);
     double ang_deg = seg_[i]->tan_ang();
     double ang_rad = deg_to_rad*ang_deg;
-    min_tan_ang_ = vnl_math_min(min_tan_ang_, ang_deg);
-    max_tan_ang_ = vnl_math_max(max_tan_ang_, ang_deg);
+    min_tan_ang_ = vnl_math::min(min_tan_ang_, ang_deg);
+    max_tan_ang_ = vnl_math::max(max_tan_ang_, ang_deg);
     sin_sum += vcl_sin(ang_rad);
     cos_sum += vcl_cos(ang_rad);
   }
@@ -427,10 +427,10 @@ void bmrf_epi_seg::compute_int_values()
   {
     //max, min limits
     double left_int = left_int_[i], right_int = right_int_[i];
-    min_left_int_ = vnl_math_min(min_left_int_, left_int);
-    max_left_int_ = vnl_math_max(max_left_int_, left_int);
-    min_right_int_ = vnl_math_min(min_right_int_, right_int);
-    max_right_int_ = vnl_math_max(max_right_int_, right_int);
+    min_left_int_ = vnl_math::min(min_left_int_, left_int);
+    max_left_int_ = vnl_math::max(max_left_int_, left_int);
+    min_right_int_ = vnl_math::min(min_right_int_, right_int);
+    max_right_int_ = vnl_math::max(max_right_int_, right_int);
     //statistics
     sum_li += left_int; sum_li2 += left_int*left_int;
     sum_ri += right_int; sum_ri2 += right_int*right_int;
@@ -536,7 +536,7 @@ double bmrf_epi_seg::left_int_match(const double a,
   if (lia<0 || lib<0)
     return -1;
   double lia_sd = sa->left_int_sd(), lib_sd = sb->left_int_sd();
-  double sd = vnl_math_min(lia_sd, lib_sd);
+  double sd = vnl_math::min(lia_sd, lib_sd);
 #ifdef DEBUG
   vcl_cout << "left_int:(" << lia << ' ' << lib << " /" << sd << ")\n";
 #endif
@@ -558,7 +558,7 @@ double bmrf_epi_seg::right_int_match(const double a,
   if (ria<0 || rib<0)
     return -1;
   double ria_sd = sa->right_int_sd(), rib_sd = sb->right_int_sd();
-  double sd = vnl_math_min(ria_sd, rib_sd);
+  double sd = vnl_math::min(ria_sd, rib_sd);
 #ifdef DEBUG
   vcl_cout << "right_int:(" << ria << ' ' << rib << " /" << sd << ")\n";
 #endif

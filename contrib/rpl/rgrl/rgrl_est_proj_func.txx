@@ -173,7 +173,7 @@ full_proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)>& complete_
     }
 
   // 2. gradient of making division
-  const double homo_last_neg_sqr = -vnl_math_sqr(homo[Tdim]);
+  const double homo_last_neg_sqr = -vnl_math::sqr(homo[Tdim]);
   const double homo_last_div = 1.0/homo[Tdim];
   for ( unsigned i=0; i<Tdim; ++i )
     jg(i,i) = homo_last_div;
@@ -224,7 +224,7 @@ proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>& jac_loc,
   rgrl_est_proj_map_homo_point<Tdim, Fdim>( homo, proj, from-from_centre_ );
 
   vnl_matrix_fixed<double, Tdim,   Tdim+1>       jg(0.0);    // grad of division, [u/w, v/w]^T
-  const double homo_last_neg_sqr = -vnl_math_sqr(homo[Tdim]);
+  const double homo_last_neg_sqr = -vnl_math::sqr(homo[Tdim]);
   const double homo_last_div = 1.0/homo[Tdim];
   for ( unsigned i=0; i<Tdim; ++i )
     jg(i,i) = homo_last_div;
@@ -412,7 +412,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   //invert the W matrix and square it
   vnl_diag_matrix<double> invW( proj_size_-1 );
   for ( unsigned i=0; i+1 < proj_size_; ++i )
-    invW[i] = vnl_math_sqr( 1.0/svd.W(i) );
+    invW[i] = vnl_math::sqr( 1.0/svd.W(i) );
 
   //compute inverse of Jac^\top * Jac
   const vnl_matrix<double>  covar( svd.V() * invW * vnl_transpose( svd.V() ) );
@@ -527,7 +527,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   //invert the W matrix and square it
   vnl_diag_matrix<double> invW( proj_size_-1 );
   for ( unsigned i=0; i+1<proj_size_; ++i )
-    invW[i] = vnl_math_sqr( 1.0/svd.W(i) );
+    invW[i] = vnl_math::sqr( 1.0/svd.W(i) );
 
   //compute inverse of Jac^\top * Jac
   const vnl_matrix<double>  covar( svd.V() * invW * vnl_transpose( svd.V() ) );

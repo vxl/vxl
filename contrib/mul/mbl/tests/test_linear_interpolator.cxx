@@ -35,7 +35,7 @@ void test_linear_interpolator()
     y.push_back(func(i));
   }
 
-  TEST("No data so return an NaN",vnl_math_isnan(li.y(1.5)),true);
+  TEST("No data so return an NaN",vnl_math::isnan(li.y(1.5)),true);
 
   li.set(x,y);
 
@@ -51,7 +51,7 @@ void test_linear_interpolator()
   TEST("Y value boundary condition correct",li.y(+20)==li.y(v2),true);
 
   li.clear();
-  TEST("No data so return an NaN",vnl_math_isnan(li.y(1.5)),true);
+  TEST("No data so return an NaN",vnl_math::isnan(li.y(1.5)),true);
 }
 
 TESTMAIN(test_linear_interpolator);

@@ -37,7 +37,7 @@ rgrl_invariant_single_landmark(vnl_vector<double> location,
 
   // Compute the radius of the region that the landmark occupies
   //
-  radius_ = vnl_math_max(width1, vnl_math_max(width2, width3));
+  radius_ = vnl_math::max(width1, vnl_math::max(width2, width3));
 
   // reorder the vessels directions, so that they're ordered in
   // increasing counter-clock-wise angles from the x-axis.
@@ -224,8 +224,8 @@ estimate(rgrl_invariant_sptr         from_inv,
 
   // Find the scales and scale the matrices appropriate to normalize
   // them and increase the numerical stability.
-  double factor0 = vnl_math_max(sum_prod(0,0),sum_prod(1,1));
-  double factor1 = vnl_math_max(sum_prod(2,2),sum_prod(3,3));
+  double factor0 = vnl_math::max(sum_prod(0,0),sum_prod(1,1));
+  double factor1 = vnl_math::max(sum_prod(2,2),sum_prod(3,3));
   double norm_scale = vcl_sqrt(factor1 / factor0);   // neither should be 0
 
   vnl_double_4 s;
@@ -276,8 +276,8 @@ estimate(rgrl_invariant_sptr         from_inv,
   vnl_vector<double> mapped;
   for (unsigned int i = 0; i< num_boundary_points; i++) {
     est_xform.map_location(from->boundary_point_location(i).as_ref(), mapped);
-    obj += vnl_math_sqr( dot_product((this->boundary_point_location(i) - mapped),
-                                     this->boundary_point_normal(i)) );
+    obj += vnl_math::sqr( dot_product((this->boundary_point_location(i) - mapped),
+                                       this->boundary_point_normal(i)) );
   }
   est_xform.map_location(from->location().as_ref(), mapped);
   obj += (location_ - mapped).squared_magnitude();
@@ -289,7 +289,7 @@ estimate(rgrl_invariant_sptr         from_inv,
   // Set the return parameters
   //
   xform = new rgrl_trans_similarity( est_xform.A(), est_xform.t(),
-                                     est_xform.covar()*vnl_math_sqr(geometric_scale) );
+                                     est_xform.covar()*vnl_math::sqr(geometric_scale) );
   scale = new rgrl_scale;
   scale->set_geometric_scale( geometric_scale );
 
@@ -347,9 +347,9 @@ reorder_vessel(vcl_vector<vnl_vector<double> >& directions,
   vcl_sort(angles.begin(), angles.end());
 
   // re-assign the directions
-  for (int i=0; i<3; ++i){
-    for (int j=0; j<3; ++j){
-      if (angles[i]==old_angles[j]){
+  for (int i=0; i<3; ++i) {
+    for (int j=0; j<3; ++j) {
+      if (angles[i]==old_angles[j]) {
         directions.push_back(old_dirs[j]);
         local_widths.push_back(old_widths[j]);
         break;

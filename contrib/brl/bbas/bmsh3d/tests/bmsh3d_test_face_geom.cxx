@@ -58,7 +58,7 @@ static void bmsh3d_test_face_geom()
   for (int i=0; i<size; i++) {
     int j = (i+1) % size;
 
-    double d2 = vnl_math_hypot (xs[i]-xs[j], ys[i]-ys[j]);
+    double d2 = vnl_math::hypot (xs[i]-xs[j], ys[i]-ys[j]);
     bmsh3d_vertex* vi = vertices[i];
     bmsh3d_vertex* vj = vertices[j];
     double d3 = vgl_distance (vi->pt(), vj->pt());

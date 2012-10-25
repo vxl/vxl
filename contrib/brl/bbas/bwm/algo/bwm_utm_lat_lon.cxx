@@ -65,15 +65,15 @@ static double adjust_lon2(double x) // Angle in radians
 {
   for (long count = 0; count <= MAX_VAL; ++count)
   {
-    if (vnl_math_abs(x)<=vnl_math::pi)
+    if (vnl_math::abs(x)<=vnl_math::pi)
       break;
-    else if (long(vnl_math_abs(x / (vnl_math::pi))) < 2)
+    else if (long(vnl_math::abs(x / (vnl_math::pi))) < 2)
       x -= sign(x) * vnl_math::twopi;
-    else if (long(vnl_math_abs(x / vnl_math::twopi)) < vcl_numeric_limits<long>::max())
+    else if (long(vnl_math::abs(x / vnl_math::twopi)) < vcl_numeric_limits<long>::max())
       x -= long((x /vnl_math::twopi)*vnl_math::twopi);
-    else if (((long) vnl_math_abs(x / (vcl_numeric_limits<long>::max() * vnl_math::twopi))) < vcl_numeric_limits<long>::max())
+    else if (((long) vnl_math::abs(x / (vcl_numeric_limits<long>::max() * vnl_math::twopi))) < vcl_numeric_limits<long>::max())
       x -= (((long)(x / (vcl_numeric_limits<long>::max() * vnl_math::twopi))) * (vnl_math::twopi * vcl_numeric_limits<long>::max()));
-    else if (((long) vnl_math_abs(x / (DBLLONG * vnl_math::twopi))) < vcl_numeric_limits<long>::max())
+    else if (((long) vnl_math::abs(x / (DBLLONG * vnl_math::twopi))) < vcl_numeric_limits<long>::max())
       x -= (((long)(x / (DBLLONG * vnl_math::twopi))) * (vnl_math::twopi * DBLLONG));
     else
       x -= sign(x) *vnl_math::twopi;
@@ -86,15 +86,15 @@ static double adjust_lat2(double x) // Angle in radians
 {
   for (long count = 0; count <= MAX_VAL; ++count)
   {
-    if (vnl_math_abs(x)<=vnl_math::pi_over_2)
+    if (vnl_math::abs(x)<=vnl_math::pi_over_2)
       break;
-    else if (((long) vnl_math_abs(x / vnl_math::pi_over_2)) < 2)
+    else if (((long) vnl_math::abs(x / vnl_math::pi_over_2)) < 2)
       x -= (sign(x) * vnl_math::pi);
-    else if (((long) vnl_math_abs(x / vnl_math::pi)) < vcl_numeric_limits<long>::max())
+    else if (((long) vnl_math::abs(x / vnl_math::pi)) < vcl_numeric_limits<long>::max())
       x -= (((long)(x / vnl_math::pi))*vnl_math::pi);
-    else if (((long) vnl_math_abs(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) < vcl_numeric_limits<long>::max())
+    else if (((long) vnl_math::abs(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) < vcl_numeric_limits<long>::max())
       x -= (((long)(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) * (vnl_math::pi * vcl_numeric_limits<long>::max()));
-    else if (((long) vnl_math_abs(x / (DBLLONG * vnl_math::pi))) < vcl_numeric_limits<long>::max())
+    else if (((long) vnl_math::abs(x / (DBLLONG * vnl_math::pi))) < vcl_numeric_limits<long>::max())
       x -= (((long)(x / (DBLLONG * vnl_math::pi))) * (vnl_math::pi * DBLLONG));
     else
       x -= (sign(x) *vnl_math::pi);
@@ -185,7 +185,7 @@ void bwm_utm_lat_lon::transform(int utm_zone, double x, double y, double z,
     temp = lat_center2 + y/(a_ * scale_factor2);
     h = vcl_cos(temp);
     con = vcl_sqrt((1.0 - h * h)/(1.0 + g * g));
-    if (vnl_math_abs(con) > 1.0)
+    if (vnl_math::abs(con) > 1.0)
     {
       if (con > 1.0)
         phi = vcl_asin(1.0);
@@ -223,13 +223,13 @@ void bwm_utm_lat_lon::transform(int utm_zone, double x, double y, double z,
 #endif
       temp_phi += delta_phi;
 
-      if (vnl_math_abs(delta_phi)<1E-6) break;
+      if (vnl_math::abs(delta_phi)<1E-6) break;
 
       if (i >= max_iter)
         vcl_cout << "Transform failed to converge" << vcl_endl;
     }
 
-    if (vnl_math_abs(temp_phi) < vnl_math::pi_over_2)
+    if (vnl_math::abs(temp_phi) < vnl_math::pi_over_2)
     {
       sin_phi = vcl_sin(temp_phi);
       cos_phi = vcl_cos(temp_phi);

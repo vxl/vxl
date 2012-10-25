@@ -108,9 +108,9 @@ void vil3d_generate_gaussian_filters(const vgl_vector_3d<double>& sd,
 {
   // Size of filters (number of "taps") - filter should be ~ 7*sd wide
   vgl_vector_3d<unsigned> nt;
-  nt.x_ = vnl_math_rnd(7.0*sd.x());
-  nt.y_ = vnl_math_rnd(7.0*sd.y());
-  nt.z_ = vnl_math_rnd(7.0*sd.z());
+  nt.x_ = vnl_math::rnd(7.0*sd.x());
+  nt.y_ = vnl_math::rnd(7.0*sd.y());
+  nt.z_ = vnl_math::rnd(7.0*sd.z());
 
   // Temporary fix - force filters to have odd number of taps.
   // Not sure why, but even-numbered filters cause strange errors.
@@ -123,7 +123,7 @@ void vil3d_generate_gaussian_filters(const vgl_vector_3d<double>& sd,
   {
     vcl_cout << "------------------------------------------------------\n"
              << "Warning: filter size is even: this may cause problems.\n"
-             << nt.x() << '\t' << nt.y()<< '\t'  << nt.z() << '\n'
+             << nt.x() << '\t' << nt.y()<< '\t' << nt.z() << '\n'
              << "------------------------------------------------------\n"
              << vcl_endl;
   }

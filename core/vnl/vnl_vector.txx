@@ -773,7 +773,7 @@ template <class T>
 bool vnl_vector<T>::is_finite() const
 {
   for (unsigned i = 0; i < this->size();++i)
-    if (!vnl_math_isfinite( (*this)[i] ))
+    if (!vnl_math::isfinite( (*this)[i] ))
       return false;
 
   return true;
@@ -814,15 +814,14 @@ bool vnl_vector<T>::is_equal(vnl_vector<T> const& rhs, double tol) const
 {
   if (this == &rhs)                                         //Same object ? => equal.
     return true;
-  
+
   if (this->size() != rhs.size())                           //Size different ?
-    return false;                                         
-  for (unsigned i = 0; i < size(); i++)                         
-    if (vnl_math_abs(this->data[i] - rhs.data[i]) > tol)    //Element different ?
-      return false;                                
-  
-  return true;                                   
-  
+    return false;
+  for (unsigned i = 0; i < size(); i++)
+    if (vnl_math::abs(this->data[i] - rhs.data[i]) > tol)    //Element different ?
+      return false;
+
+  return true;
 }
 
 template<class T>

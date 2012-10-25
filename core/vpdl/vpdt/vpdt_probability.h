@@ -29,7 +29,7 @@ vpdt_prob_density(const dist& d,
 {
   typedef typename vpdt_dist_traits<dist>::scalar_type T;
   T norm = d.norm_const();
-  if (vnl_math_isinf(norm))
+  if (vnl_math::isinf(norm))
     return T(0);
   return norm * d.density(pt);
 }
@@ -49,7 +49,7 @@ vpdt_box_prob(const dist& d,
   const unsigned int dim = d.dimension();
 
   // return zero for ill-defined box
-  for (unsigned int j=0; j<dim; ++j){
+  for (unsigned int j=0; j<dim; ++j) {
     if (vpdt_index(max_pt,j)<=vpdt_index(min_pt,j))
       return T(0);
   }
@@ -68,7 +68,7 @@ vpdt_box_prob(const dist& d,
     // number of maximal axis are added. The other corners are subtracted.
     bool plus = (dim%2 != 1);
     // create the corner position by selecting elements from max_pt and min_pt
-    for (unsigned int j=0; j<dim; ++j){
+    for (unsigned int j=0; j<dim; ++j) {
       bool is_max = (i>>j) & 1;
       plus ^= is_max; // toggle plus if is_max
       vpdt_index(corner,j) = is_max?vpdt_index(max_pt,j):vpdt_index(min_pt,j);

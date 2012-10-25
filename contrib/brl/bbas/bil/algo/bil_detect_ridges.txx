@@ -24,7 +24,7 @@ void bil_detect_ridges( const vil_image_view<T>& Im,
 
   // Compute the gaussian smoothed derivatives of this image
   // define gaussian derivative operators
-  int width = vnl_math_rnd(3*sigma);
+  int width = vnl_math::rnd(3*sigma);
   double ssq = sigma*sigma;
   double d1_denominator = vnl_math::twopi*ssq*ssq;
   double d2_denominator = vnl_math::twopi*ssq*ssq*ssq;
@@ -33,8 +33,8 @@ void bil_detect_ridges( const vil_image_view<T>& Im,
   vil_image_view<float> d2gau2D(2*width+1,2*width+1);
   vil_image_view<float> d2gauxy2D(2*width+1,2*width+1);
 
-  for (int y = -width; y <= width; y++){
-    for (int x = -width; x <= width; x++){
+  for (int y = -width; y <= width; y++) {
+    for (int x = -width; x <= width; x++) {
       int i = x + width;
       int j = y + width;
       double exponential = vcl_exp(-(x*x + y*y)/(2*ssq));

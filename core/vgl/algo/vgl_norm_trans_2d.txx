@@ -199,7 +199,7 @@ scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
     if (in[i].ideal(tol))
       continue;
     vgl_point_2d<T> p(in[i]);
-    magnitude += vnl_math_hypot(p.x(),p.y());
+    magnitude += vnl_math::hypot(p.x(),p.y());
     ++numfinite;
   }
 

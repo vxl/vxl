@@ -79,7 +79,7 @@ double clsfy_binary_hyperplane_ls_builder::build(
     {
       for (unsigned j=0; j<i; ++j)
         XtX(i,j) += x(i) * x(j);
-      XtX(i,i) += vnl_math_sqr(x(i));
+      XtX(i,i) += vnl_math::sqr(x(i));
       XtX(i,k) -= x(i);
       XtY(i) += y * x(i);
     }
@@ -103,8 +103,8 @@ double clsfy_binary_hyperplane_ls_builder::build(
   vnl_svd<double> svd(XtX, 1.0e-12); // 1e-12 = zero-tolerance for singular values
   vnl_vector<double> w = svd.solve(XtY);
 #if 0
-  vcl_cerr << "XtX: " << XtX << vcl_endl
-           << "XtY: " << XtY << vcl_endl
+  vcl_cerr << "XtX: " << XtX << '\n'
+           << "XtY: " << XtY << '\n'
            << "w: "   << w   << vcl_endl;
 #endif
   vnl_vector<double> weights(&w(0), k);

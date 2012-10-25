@@ -27,11 +27,11 @@ static void test_dist()
   for ( unsigned int i=0; i < Na; ++i )  q_ang.push_back( q_ang_arr[i] );
 
   double sq_dist =
-    vnl_math_sqr( 3.4 + 1.4 )
-    + vnl_math_sqr( 4.5-7.6 )
-    + vnl_math_sqr( vnl_math::pi/8 )
-    + vnl_math_sqr( 7*vnl_math::pi/8 )
-    + vnl_math_sqr( vnl_math::pi/4 );
+    vnl_math::sqr( 3.4 + 1.4 )
+    + vnl_math::sqr( 4.5-7.6 )
+    + vnl_math::sqr( vnl_math::pi/8 )
+    + vnl_math::sqr( 7*vnl_math::pi/8 )
+    + vnl_math::sqr( vnl_math::pi/4 );
   rsdl_point p( p_cart.begin(), p_cart.end(), p_ang.begin(), p_ang.end() );
   rsdl_point q( q_cart.begin(), q_cart.end(), q_ang.begin(), q_ang.end() );
 
@@ -69,8 +69,8 @@ static void test_dist()
   ang0[1] = 5*vnl_math::pi/8;   // wrap, closer to "min" (larger angle value)
   ang0[2] = vnl_math::pi/5;     // non-wrap, below, but closer to above value
   test_p.set_angular( ang0.begin() );
-  sq_dist = vnl_math_sqr( vnl_math::pi/16 ) + vnl_math_sqr( vnl_math::pi/8 ) +
-            vnl_math_sqr( vnl_math::twopi/5 );
+  sq_dist = vnl_math::sqr( vnl_math::pi/16 ) + vnl_math::sqr( vnl_math::pi/8 ) +
+            vnl_math::sqr( vnl_math::twopi/5 );
   TEST_NEAR("point-to-box dist sq - angle outside (a)", rsdl_dist_sq( test_p, box), sq_dist , 1e-6);
   TEST_NEAR("point-to-box dist - angle outside (a) ", rsdl_dist( test_p, box), vcl_sqrt(sq_dist), 1e-6);
 
@@ -78,8 +78,8 @@ static void test_dist()
   ang0[1] = 3*vnl_math::pi/8;    // wrap, closer to "max" (smaller angle value)
   ang0[2] = 19*vnl_math::pi/10;  // non-wrap, above
   test_p.set_angular( ang0.begin() );
-  sq_dist = vnl_math_sqr( vnl_math::pi/4 ) + vnl_math_sqr( vnl_math::pi/8 ) +
-    vnl_math_sqr( vnl_math::pi/10 );
+  sq_dist = vnl_math::sqr( vnl_math::pi/4 ) + vnl_math::sqr( vnl_math::pi/8 ) +
+    vnl_math::sqr( vnl_math::pi/10 );
   TEST_NEAR("point-to-box dist sq - angle outside (b)", rsdl_dist_sq( test_p, box), sq_dist , 1e-6);
   TEST_NEAR("point-to-box dist - angle outside (b) ", rsdl_dist( test_p, box), vcl_sqrt(sq_dist), 1e-6);
 

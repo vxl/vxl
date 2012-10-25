@@ -2,7 +2,7 @@
 #include <rsdl/rsdl_bounding_box.h>
 #include <testlib/testlib_test.h>
 
-static inline bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static inline bool close( double x, double y ) { return vnl_math::abs(x-y) < 1.0e-6; }
 
 static void test_bounding_box()
 {

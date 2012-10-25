@@ -98,7 +98,7 @@ int main2(int argc, char*argv[])
   {
     if (max_voxels < ni*nj)
     {
-      vcl_cerr << "ERROR: More voxels in single plane than " << max_voxels << vcl_endl;
+      vcl_cerr << "ERROR: More voxels in single plane than " << max_voxels << '\n';
       return 3;
     }
 
@@ -112,10 +112,10 @@ int main2(int argc, char*argv[])
   else
   {
     blockwidth_k = vcl_min<unsigned long>(nk,
-                                          vnl_math_rnd(vnl_math_cuberoot(static_cast<double>(max_voxels))) );
+                                          vnl_math::rnd(vnl_math::cuberoot(static_cast<double>(max_voxels))) );
     blockcount_k = (nk+blockwidth_k-1) / blockwidth_k;
     blockwidth_j = vcl_min<unsigned long>(nj,
-                                          vnl_math_rnd(vcl_sqrt(static_cast<double>(max_voxels/blockwidth_k))));
+                                          vnl_math::rnd(vcl_sqrt(static_cast<double>(max_voxels/blockwidth_k))));
     blockcount_j = (nj+blockwidth_j-1) / blockwidth_j;
     blockwidth_i = vcl_min<unsigned long>(ni,  max_voxels / (blockwidth_k*blockwidth_j));
     blockcount_i = (ni+blockwidth_i-1) / blockwidth_i;
@@ -132,13 +132,13 @@ int main2(int argc, char*argv[])
 
   if (label_seq())
     filename_pattern = vul_sprintf("%%0%dd",
-                                   vnl_math_floor( vcl_log10( static_cast<double>(
+                                   vnl_math::floor( vcl_log10( static_cast<double>(
                                      blockcount_i*blockcount_j*blockcount_k )))+1 );
   else
     filename_pattern = vul_sprintf("%%0%dd%%0%dd%%0%dd",
-                                   vnl_math_floor(vcl_log10(static_cast<double>(blockcount_i)))+1,
-                                   vnl_math_floor(vcl_log10(static_cast<double>(blockcount_j)))+1,
-                                   vnl_math_floor(vcl_log10(static_cast<double>(blockcount_k)))+1 );
+                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_i)))+1,
+                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_j)))+1,
+                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_k)))+1 );
 
   if (replace_str.set())
   {
@@ -228,7 +228,7 @@ int main(int argc, char*argv[])
   }
   catch (...)
   {
-    vcl_cout << "caught unknown exception " << vcl_endl;
+    vcl_cout << "caught unknown exception" << vcl_endl;
     return 3;
   }
 

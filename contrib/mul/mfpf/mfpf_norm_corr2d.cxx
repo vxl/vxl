@@ -63,7 +63,7 @@ void mfpf_norm_corr2d::set(const vil_image_view<double>& k,
       sum+=k(i,j); ss+=k(i,j)*k(i,j);
     }
 
-  assert(!vnl_math_isnan(sum));
+  assert(!vnl_math::isnan(sum));
 
   // Normalise so that kernel_ has zero mean and unit sum of squares.
   double mean=sum/(ni*nj);
@@ -170,7 +170,7 @@ static void normalize(vil_image_view<double>& im)
       sum+=im(i,j); ss+=im(i,j)*im(i,j);
     }
 
-  assert(!vnl_math_isnan(sum));
+  assert(!vnl_math::isnan(sum));
 
   if (ss<1e-6)
   {

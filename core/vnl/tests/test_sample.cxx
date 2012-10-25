@@ -28,7 +28,7 @@ static void test_sample_uniform()
   // sample standard deviation
   double sigma_bar = 0;
   for (unsigned i=0; i<N; ++i)
-    sigma_bar += vnl_math_sqr(X[i] - X_bar);
+    sigma_bar += vnl_math::sqr(X[i] - X_bar);
   sigma_bar = vcl_sqrt(sigma_bar / (N-1));
   TEST_NEAR("sample stddev", sigma_bar, (b-a)/vcl_sqrt(12.0), eps*a);
 
@@ -44,7 +44,7 @@ static void test_sample_uniform()
   vnl_sample_uniform(X, X+N, a, b);
   X_bar=0; for (unsigned i=0; i<N; ++i) X_bar += X[i]; X_bar /= N;
   TEST_NEAR("sample mean", X_bar, (a+b)*0.5, eps*a);
-  sigma_bar=0; for (unsigned i=0; i<N; ++i) sigma_bar += vnl_math_sqr(X[i] - X_bar);
+  sigma_bar=0; for (unsigned i=0; i<N; ++i) sigma_bar += vnl_math::sqr(X[i] - X_bar);
   TEST_NEAR("sample stddev", vcl_sqrt(sigma_bar/(N-1)), (b-a)/vcl_sqrt(12.0), eps*a);
 }
 
@@ -70,7 +70,7 @@ static void test_sample_normal()
   // sample standard deviation
   double sigma_bar = 0;
   for (unsigned i=0; i<N; ++i)
-    sigma_bar += vnl_math_sqr(X[i] - X_bar);
+    sigma_bar += vnl_math::sqr(X[i] - X_bar);
   sigma_bar = vcl_sqrt(sigma_bar / (N-1));
   TEST_NEAR("sample stddev", sigma_bar, sigma, eps*sigma);
 
@@ -86,7 +86,7 @@ static void test_sample_normal()
   vnl_sample_normal(X, X+N, mu, sigma);
   X_bar=0; for (unsigned i=0; i<N; ++i) X_bar += X[i]; X_bar /= N;
   TEST_NEAR("sample mean", X_bar, mu, eps*sigma);
-  sigma_bar=0; for (unsigned i=0; i<N; ++i) sigma_bar += vnl_math_sqr(X[i] - X_bar);
+  sigma_bar=0; for (unsigned i=0; i<N; ++i) sigma_bar += vnl_math::sqr(X[i] - X_bar);
   TEST_NEAR("sample stddev", vcl_sqrt(sigma_bar/(N-1)), sigma, eps*sigma);
 }
 
@@ -112,7 +112,7 @@ static void test_sample_binomial()
   // sample standard deviation
   double sigma_bar_sqr = 0;
   for (unsigned i=0; i<N; ++i)
-    sigma_bar_sqr += vnl_math_sqr(X[i] - X_bar);
+    sigma_bar_sqr += vnl_math::sqr(X[i] - X_bar);
   sigma_bar_sqr /= N-1;
   TEST_NEAR("sample stddev squared", sigma_bar_sqr, p*(1-p)*n, eps*n);
 
@@ -120,7 +120,7 @@ static void test_sample_binomial()
   vnl_sample_binomial(X, X+N, n, p);
   X_bar=0; for (unsigned i=0; i<N; ++i) X_bar += X[i]; X_bar /= N;
   TEST_NEAR("sample mean", X_bar, n*(1-p), eps*n);
-  sigma_bar_sqr=0; for (unsigned i=0; i<N; ++i) sigma_bar_sqr += vnl_math_sqr(X[i] - X_bar);
+  sigma_bar_sqr=0; for (unsigned i=0; i<N; ++i) sigma_bar_sqr += vnl_math::sqr(X[i] - X_bar);
   TEST_NEAR("sample stddev squared", sigma_bar_sqr /= N-1, p*(1-p)*n, eps*n);
 }
 
@@ -145,7 +145,7 @@ static void test_sample_bernoulli()
   // sample standard deviation
   double sigma_bar_sqr = 0;
   for (unsigned i=0; i<N; ++i)
-    sigma_bar_sqr += vnl_math_sqr(X[i] - X_bar);
+    sigma_bar_sqr += vnl_math::sqr(X[i] - X_bar);
   sigma_bar_sqr /= N-1;
   TEST_NEAR("sample stddev squared", sigma_bar_sqr, p*(1-p), eps);
 
@@ -153,7 +153,7 @@ static void test_sample_bernoulli()
   vnl_sample_bernoulli(X, X+N, p);
   X_bar=0; for (unsigned i=0; i<N; ++i) X_bar += X[i]; X_bar /= N;
   TEST_NEAR("sample mean", X_bar, 1-p, eps);
-  sigma_bar_sqr=0; for (unsigned i=0; i<N; ++i) sigma_bar_sqr += vnl_math_sqr(X[i] - X_bar);
+  sigma_bar_sqr=0; for (unsigned i=0; i<N; ++i) sigma_bar_sqr += vnl_math::sqr(X[i] - X_bar);
   TEST_NEAR("sample stddev squared", sigma_bar_sqr /= N-1, p*(1-p), eps);
 }
 

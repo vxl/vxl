@@ -23,7 +23,7 @@ rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof, O* /*dum
     return 0;
 
   for ( T i=begin; i!=end; ++i ) {
-    *i = vnl_math_abs( *i );
+    *i = vnl_math::abs( *i );
   }
   T loc = begin + ((count-dof)/2 + dof);
   vcl_nth_element( begin, loc, end );
@@ -43,7 +43,7 @@ rrel_util_weighted_scale( const T& residuals_first, const T& residuals_end,
   T r_itr = residuals_first;
   T w_itr = weights_first;
   for ( ; r_itr != residuals_end; ++ r_itr, ++ w_itr ) {
-    sum += *w_itr * vnl_math_sqr( *r_itr );
+    sum += *w_itr * vnl_math::sqr( *r_itr );
     sum_weights += *w_itr;
     ++num;
   }
@@ -68,7 +68,7 @@ void rrel_util_median_and_scale( Ran first, Ran last,
   vcl_nth_element( first, loc, last );
   median = *loc;
   for ( Ran i=first; i!=last; ++i ) {
-    *i = vnl_math_abs(*i-median);
+    *i = vnl_math::abs(*i-median);
   }
   ++loc;
   vcl_nth_element( first, loc, last );
@@ -152,7 +152,7 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
   T bound = mu * std_dev;
 
   Ran begin_itr;
-  for( begin_itr=first; *begin_itr < center-bound; ++begin_itr ) ;
+  for ( begin_itr=first; *begin_itr < center-bound; ++begin_itr ) ;
   Ran end_itr=begin_itr;
   T sum = *begin_itr;
   while ( ++end_itr != last && *end_itr <= center+bound ) {
@@ -164,7 +164,7 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
 
   T sum_sq=0;
   for ( Ran i=begin_itr; i!=end_itr; ++i ) {
-    sum_sq += vnl_math_sqr( *i - robust_mean );
+    sum_sq += vnl_math::sqr( *i - robust_mean );
   }
   robust_std = T( vcl_sqrt(sum_sq / (inliers-dof)) );
 }

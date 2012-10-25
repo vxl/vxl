@@ -889,7 +889,7 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::normalize_rows()
          ++col_iter)
     {
       vnl_sparse_matrix_pair<T>& entry = *col_iter;
-      norm += vnl_math_squared_magnitude(entry.second);
+      norm += vnl_math::squared_magnitude(entry.second);
     }
     if (norm != 0) {
       abs_real_t scale = abs_real_t(1)/(vcl_sqrt((abs_real_t)norm));

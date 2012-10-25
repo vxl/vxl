@@ -120,7 +120,7 @@ static inline void incXbyYplusXXv(vnl_vector<double> *X, const vnl_vector<double
   double * const pX=X->data_block();
   while (i >= 0)
   {
-    pX[i] += (Y[i] + vnl_math_sqr(Z[i]))* v;
+    pX[i] += (Y[i] + vnl_math::sqr(Z[i]))* v;
     i--;
   }
 }
@@ -153,7 +153,7 @@ void vpdfl_mixture::set(const vcl_vector<vpdfl_pdf_base*> components, const vcl_
   }
 
   for (unsigned i=0; i<m; ++i)
-    var(i) -= vnl_math_sqr(mean(i));
+    var(i) -= vnl_math::sqr(mean(i));
 
   set_mean(mean);
   set_variance(var);

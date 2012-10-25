@@ -89,7 +89,7 @@ static void test_m_est_obj()
   rrel_m_est_obj* m_est3 = new rrel_trunc_quad_obj( trunc_quad_cnst );
   TEST_NEAR("trunc_quad rho 1", m_est3->rho(0), 0.0, 1e-6);
   TEST_NEAR("trunc_quad rho 2", m_est3->rho(0.5), 0.25 , 1e-6);
-  TEST_NEAR("trunc_quad rho 3", m_est3->rho(3.0), vnl_math_sqr( trunc_quad_cnst ) , 1e-6);
+  TEST_NEAR("trunc_quad rho 3", m_est3->rho(3.0), vnl_math::sqr( trunc_quad_cnst ) , 1e-6);
 
   TEST_NEAR("trunc_quad wgt 1", m_est3->wgt(0), 1, 1e-6);
   TEST_NEAR("trunc_quad wgt 2", m_est3->wgt(0.5), 1.0, 1e-6);

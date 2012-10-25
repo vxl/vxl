@@ -65,7 +65,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   using namespace bvxm_rpc_registration_process_globals;
 
   //check number of inputs
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -118,8 +118,8 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   //// setting the output edge image for viewing purposes
   //for (int i=0; i<ni; i++) {
   //  for (int j=0; j<nj; j++) {
-  //    eei_min = vnl_math_min(eei_min,expected_edge_image(i,j));
-  //    eei_max = vnl_math_max(eei_max,expected_edge_image(i,j));
+  //    eei_min = vnl_math::min(eei_min,expected_edge_image(i,j));
+  //    eei_max = vnl_math::max(eei_max,expected_edge_image(i,j));
   //  }
   //}
   for (int i=0; i<ni; i++) {
@@ -157,8 +157,8 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
         }
       }
 
-      if(norm>0.0)
-          prob/=norm;
+      if (norm>0.0)
+        prob/=norm;
 
       // if maximum is found
       if (prob > max_prob) {

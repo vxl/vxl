@@ -58,7 +58,7 @@ vnl_matrix<double> const&
 rgrl_feature_point::
 error_projector() const
 {
-  if(scale_ == 0){
+  if (scale_ == 0) {
     WarningMacro( "The scale is zero." );
   }
   if ( !err_proj_.size() )
@@ -66,7 +66,7 @@ error_projector() const
     const unsigned m = location_.size();
     err_proj_.set_size( m, m );
     err_proj_.set_identity();
-    err_proj_ /= vnl_math_sqr( scale_ );
+    err_proj_ /= vnl_math::sqr( scale_ );
   }
 
   return err_proj_;
@@ -76,7 +76,7 @@ vnl_matrix<double> const&
 rgrl_feature_point::
 error_projector_sqrt() const
 {
-  if(scale_ == 0){
+  if (scale_ == 0) {
     WarningMacro( "The scale is zero." );
   }
   if ( !err_proj_sqrt_.size() )
@@ -130,7 +130,8 @@ transform_scale( rgrl_transformation const& xform ) const
         prod_scale *= scaling[i];
       scale = vcl_exp( vcl_log(prod_scale) / double(dim) ) * this->scale_;
     }
-  } else if ( this-> scale_ != 1.0 ) {
+  }
+  else if ( this-> scale_ != 1.0 ) {
     WarningMacro( "This feature has non-zero scale value, but transformation has no scaling factors."
                   << "The scale of transformed features is NOT set." );
   }
@@ -156,7 +157,7 @@ transform_scale( rgrl_transformation const& xform ) const
 
     double sqr_mag = 0.0;
     for ( unsigned j=0; j<jac.rows(); ++j )
-      sqr_mag += vnl_math_sqr( jac(j,i) );
+      sqr_mag += vnl_math::sqr( jac(j,i) );
 
     cumulative_scale_change += vcl_sqrt( sqr_mag );
   }

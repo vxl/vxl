@@ -133,8 +133,8 @@ rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
       del_y = trans_pt[ 1 ] / trans_pt[ 2 ] - to_pts_[ i ][ 1 ] / to_pts_[ i ][ 2 ];
       inv_del_x = inv_trans_pt[ 0 ] / inv_trans_pt[ 2 ] - from_pts_[ i ][ 0 ] / from_pts_[ i ][ 2 ];
       inv_del_y = inv_trans_pt[ 1 ] / inv_trans_pt[ 2 ] - from_pts_[ i ][ 1 ] / from_pts_[ i ][ 2 ];
-      residuals [ i ] = vcl_sqrt( vnl_math_sqr(del_x)     + vnl_math_sqr(del_y)
-                                + vnl_math_sqr(inv_del_x) + vnl_math_sqr(inv_del_y) );
+      residuals [ i ] = vcl_sqrt( vnl_math::sqr(del_x)     + vnl_math::sqr(del_y)
+                                + vnl_math::sqr(inv_del_x) + vnl_math::sqr(inv_del_y) );
     }
   }
 }
@@ -240,8 +240,8 @@ rrel_homography2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
 
   double avg_distance = 0;
   for ( i=0; i<pts.size(); ++i ) {
-    avg_distance += wgts[i] * vcl_sqrt( vnl_math_sqr( pts[i][0] / pts[i][2] - center[0] ) +
-                                        vnl_math_sqr( pts[i][1] / pts[i][2] - center[1] ) );
+    avg_distance += wgts[i] * vcl_sqrt( vnl_math::sqr( pts[i][0] / pts[i][2] - center[0] ) +
+                                        vnl_math::sqr( pts[i][1] / pts[i][2] - center[1] ) );
   }
   avg_distance /= sum_wgt;
 

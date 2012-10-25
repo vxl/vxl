@@ -129,7 +129,7 @@ normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ){
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
       for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
@@ -155,17 +155,17 @@ normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   double to_avg_distance = 0;
   for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ){
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
       for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
         from_avg_distance +=
-          wgt * vcl_sqrt( vnl_math_sqr( from_pt[0] - from_center[0] ) +
-                          vnl_math_sqr( from_pt[1] - from_center[1] ) );
+          wgt * vcl_sqrt( vnl_math::sqr( from_pt[0] - from_center[0] ) +
+                          vnl_math::sqr( from_pt[1] - from_center[1] ) );
         to_pt = ti.to_feature()->location();
         to_avg_distance +=
-          wgt * vcl_sqrt( vnl_math_sqr( to_pt[0] - to_center[0] ) +
-                          vnl_math_sqr( to_pt[1] - to_center[1] ) );
+          wgt * vcl_sqrt( vnl_math::sqr( to_pt[0] - to_center[0] ) +
+                          vnl_math::sqr( to_pt[1] - to_center[1] ) );
       }
     }
   }
@@ -195,7 +195,7 @@ normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> norm_to_pt(3,1.0);
   for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ){
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
       norm_from_pt[0] = fi.from_feature()->location()[0];
       norm_from_pt[1] = fi.from_feature()->location()[1];
       for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {

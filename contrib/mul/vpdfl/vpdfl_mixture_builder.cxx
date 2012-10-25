@@ -333,7 +333,7 @@ void vpdfl_mixture_builder::initialise_to_regular_samples(vpdfl_mixture& model,
   vcl_vector<vnl_vector<double> > mean(n_comp);
   for (unsigned int i=0;i<n_comp;++i)
   {
-    unsigned int j = vnl_math_rnd((i+0.5)*f); // must not be negative!
+    unsigned int j = vnl_math::rnd((i+0.5)*f); // must not be negative!
     if (j>=n_samples) j=n_samples-1;
       mean[i] = data[j];
   }
@@ -512,7 +512,7 @@ static inline void incXbyYplusXXv(vnl_vector<double> *X, const vnl_vector<double
   double * const pX=X->data_block();
   while (i >= 0)
   {
-    pX[i] += (Y[i] + vnl_math_sqr(Z[i]))* v;
+    pX[i] += (Y[i] + vnl_math::sqr(Z[i]))* v;
     i--;
   }
 }
@@ -533,7 +533,7 @@ void vpdfl_mixture_builder::calc_mean_and_variance(vpdfl_mixture& model)
   }
 
   for (unsigned int i=0; i<n; ++i)
-    var(i) -= vnl_math_sqr(mean(i));
+    var(i) -= vnl_math::sqr(mean(i));
 
   model.set_mean_and_variance(mean, var);
 }

@@ -85,7 +85,7 @@ T bmdl_classify<T>::estimate_bare_earth()
 
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
-      if (vnl_math_isfinite(last_return_(i,j))) {
+      if (vnl_math::isfinite(last_return_(i,j))) {
         data.push_back(last_return_(i,j));
       }
     }
@@ -120,7 +120,7 @@ T bmdl_classify<T>::estimate_height_noise_stdev()
   vcl_vector<T> diff;
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
-      if (!vnl_math_isfinite(last_return_(i,j)) || !vnl_math_isfinite(first_return_(i,j)))
+      if (!vnl_math::isfinite(last_return_(i,j)) || !vnl_math::isfinite(first_return_(i,j)))
         continue;
       diff.push_back(first_return_(i,j) - last_return_(i,j));
     }
@@ -224,7 +224,7 @@ void bmdl_classify<T>::segment()
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       // test for ground
-      if (!vnl_math_isfinite(first_return_(i,j)) ||
+      if (!vnl_math::isfinite(first_return_(i,j)) ||
           first_return_(i,j) - bare_earth_(i,j) < gnd_threshold_)
         labels_(i,j) = 0;
       // test for vegetation
@@ -517,7 +517,7 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
       int idx = labels(i,j)-1;
       while (idx>=0 && merge_map[idx] != (unsigned int)idx )
         idx = merge_map[idx];
-      if (count[idx] <= min_size){
+      if (count[idx] <= min_size) {
         labels_(i,j) = 1;
       }
     }
@@ -535,7 +535,7 @@ void bmdl_classify<T>::threshold_building_area()
   vcl_vector<unsigned int> new_areas;
   vcl_vector<unsigned int> label_map(building_area_.size(),1);
 
-  for (unsigned int i=0; i<building_area_.size(); ++i){
+  for (unsigned int i=0; i<building_area_.size(); ++i) {
     if (building_area_[i] >= area_threshold_)
     {
       label_map[i] = new_areas.size()+2;
@@ -793,7 +793,7 @@ void bmdl_classify<T>::range(const vil_image_view<T>& image,
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       const T& val = image(i,j);
-      if (vnl_math_isfinite(val)) {
+      if (vnl_math::isfinite(val)) {
         if (val > maxv) maxv = val;
         if (val < minv) minv = val;
       }
@@ -829,26 +829,26 @@ bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
       vcl_set<int> n;
       if (i>0 && labels_(i-1,j) > 1) {
         unsigned int idx = merge.translate(labels_(i-1,j)-2);
-        if (vnl_math_sqr(first_return_(i,j) - first_return_(i-1,j)) < zthresh ||
-            vnl_math_sqr(last_return_(i,j) - last_return_(i-1,j)) < zthresh )
+        if (vnl_math::sqr(first_return_(i,j) - first_return_(i-1,j)) < zthresh ||
+            vnl_math::sqr(last_return_(i,j) - last_return_(i-1,j)) < zthresh )
           n.insert(idx);
       }
       if (j>0 && labels_(i,j-1) > 1) {
         unsigned int idx = merge.translate(labels_(i,j-1)-2);
-        if (vnl_math_sqr(first_return_(i,j) - first_return_(i,j-1)) < zthresh ||
-            vnl_math_sqr(last_return_(i,j) - last_return_(i,j-1)) < zthresh )
+        if (vnl_math::sqr(first_return_(i,j) - first_return_(i,j-1)) < zthresh ||
+            vnl_math::sqr(last_return_(i,j) - last_return_(i,j-1)) < zthresh )
           n.insert(idx);
       }
       if (i<ni-1 && labels_(i+1,j) > 1) {
         unsigned int idx = merge.translate(labels_(i+1,j)-2);
-        if (vnl_math_sqr(first_return_(i,j) - first_return_(i+1,j)) < zthresh ||
-            vnl_math_sqr(last_return_(i,j) - last_return_(i+1,j)) < zthresh )
+        if (vnl_math::sqr(first_return_(i,j) - first_return_(i+1,j)) < zthresh ||
+            vnl_math::sqr(last_return_(i,j) - last_return_(i+1,j)) < zthresh )
           n.insert(idx);
       }
       if (j<nj-1 && labels_(i,j+1) > 1) {
         unsigned int idx = merge.translate(labels_(i,j+1)-2);
-        if (vnl_math_sqr(first_return_(i,j) - first_return_(i,j+1)) < zthresh ||
-            vnl_math_sqr(last_return_(i,j) - last_return_(i,j+1)) < zthresh )
+        if (vnl_math::sqr(first_return_(i,j) - first_return_(i,j+1)) < zthresh ||
+            vnl_math::sqr(last_return_(i,j) - last_return_(i,j+1)) < zthresh )
           n.insert(idx);
       }
       if (n.empty())
@@ -1065,7 +1065,7 @@ bmdl_classify<T>::close_buildings(unsigned int num_labels)
     // copy mask back to labels
     for (unsigned int j=0; j<lnj; ++j) {
       for (unsigned int i=0; i<lni; ++i) {
-        if (mask(i,j)){
+        if (mask(i,j)) {
           new_labels(min_x+i,min_y+j) = l+2;
           valid[l] = true;
         }

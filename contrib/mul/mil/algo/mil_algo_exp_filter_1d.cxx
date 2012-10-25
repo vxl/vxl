@@ -92,7 +92,7 @@ void mil_algo_exp_filter_1d(unsigned char* dest, int dstep,
   while (s!=src_end)
   {
     rt += *s;
-    *dest = (unsigned char) vnl_math_rnd(f * rt);
+    *dest = (unsigned char) vnl_math::rnd(f * rt);
     rt *= k;
     s+=sstep; dest+=dstep;
   }
@@ -104,7 +104,7 @@ void mil_algo_exp_filter_1d(unsigned char* dest, int dstep,
   while (s!=src_end)
   {
     // Central value already included once, so only add it after updating dest.
-    *dest += static_cast<unsigned char>(vnl_math_rnd(f * rt));
+    *dest += static_cast<unsigned char>(vnl_math::rnd(f * rt));
     rt += *s;
     rt *= k;
     s-=sstep; dest-=dstep;

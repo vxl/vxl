@@ -35,8 +35,8 @@ vil_image_view<float> bpgl_camera_estimator<exp_edge_func>::convert_to_spherical
                                                                                               const vpgl_perspective_camera<double> &cam,
                                                                                               const double rotate)
 {
-  int theta_size = 2*vnl_math_ceil(theta_range_/theta_step_);
-  int phi_size = 2*vnl_math_ceil(phi_range_/phi_step_);
+  int theta_size = 2*vnl_math::ceil(theta_range_/theta_step_);
+  int phi_size = 2*vnl_math::ceil(phi_range_/phi_step_);
 
   vil_image_view<float> imgs(theta_size,phi_size,1);
   imgs.fill(0.0f);
@@ -70,8 +70,8 @@ vil_image_view<float> bpgl_camera_estimator<exp_edge_func>::convert_to_spherical
       curr_vector[2] = x;
       vnl_double_3 curr_pixel = K*curr_vector;
 
-      int u = vnl_math_rnd(curr_pixel[0]/curr_pixel[2]);
-      int v = vnl_math_rnd(curr_pixel[1]/curr_pixel[2]);
+      int u = vnl_math::rnd(curr_pixel[0]/curr_pixel[2]);
+      int v = vnl_math::rnd(curr_pixel[1]/curr_pixel[2]);
 
       if (img.in_range(u,v)) {
         imgs(i,j) = img(u,v);
@@ -130,7 +130,7 @@ double bpgl_camera_estimator<exp_edge_func>::estimate_rotation_angle(const vil_i
   vil_image_view<float> img2;
   brip_vil_float_ops::normalize_to_interval(img2c,img2,0.0f,1.0f);
 
-  int rot_size = vnl_math_ceil(rot_range_/rot_step_);
+  int rot_size = vnl_math::ceil(rot_range_/rot_step_);
 
   double best_score = vcl_numeric_limits<double>::min();
   double best_rot = 0.0;

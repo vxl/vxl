@@ -122,8 +122,8 @@ decided that zero-based indexing was closer to being ``not weird''.
   vnl_matrix<double> A(3,3); // 3x3 matrix, elements not initialized
   vnl_matrix<double> B(3,3, 1.0); // 3x3 matrix, filled with ones.
   vnl_matrix<double> R(3,4); // Rectangular matrix
-  vcl_cerr << "A is " << A.@ttb{rows}() << 'x' << A.@ttb{columns}() << vcl_endl
-           << "A has a total of " << A.@ttb{size}() << " elements" << vcl_endl;
+  vcl_cerr << "A is " << A.@ttb{rows}() << 'x' << A.@ttb{columns}() << '\n'
+           << "A has a total of " << A.@ttb{size}() << " elements" << '\n';
   A(0,0) = 2.0; // Set top-left component of A.
   A(3,3) = 0.0; // *** Error, (3,3) is outside the range of A.
   A.@ttb{set_size}(3,4); // Change size of A, invalidating elements.
@@ -528,7 +528,7 @@ Now, @code{roots} contains the roots, which can be made use of, or simply
 admired.  To facilitate the latter, we shall print them to the console:
 @example
      for (int k = 0; k < 3; ++k) // Cubic polynomial ==> 3 roots
-       vcl_cerr << roots[k] << vcl_endl;
+       vcl_cerr << roots[k] << '\n';
 @end example
 
 To get just the real or imaginary parts of the (generally complex) roots,
@@ -537,7 +537,7 @@ to print only the real roots, one might use
 @example
      for (int k = 0; k < 3; ++k)
        if (roots.imag(k) < 1e-8)
-         vcl_cerr << roots.real(k) << vcl_endl;
+         vcl_cerr << roots.real(k) << '\n';
 @end example
 
 @subsection Implementation
@@ -649,7 +649,7 @@ the declaration of @code{my_rosenbrock_functor}.
        @{
          double x = params[0];
          double y = params[1];
-         return vnl_math_sqr(10*(y-x*x)) + vnl_math_sqr(1-x);
+         return vnl_math::sqr(10*(y-x*x)) + vnl_math::sqr(1-x);
        @}
 @end example
 Because a @code{vnl_cost_function} can deal with cost functions of any
@@ -686,7 +686,7 @@ And we can now close the declaration of @code{my_rosenbrock_functor}:
 @c @example
 @c   double f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 @c   @{
-@c     fx[0] = 10 * (x[1] - vnl_math_sqr(x[0]));
+@c     fx[0] = 10 * (x[1] - vnl_math::sqr(x[0]));
 @c     fx[1] = 1 - x[0];
 @c   @}
 @c @end example

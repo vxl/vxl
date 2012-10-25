@@ -11,7 +11,7 @@
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_complex.h>  // vnl_math_squared_magnitude()
+#include <vnl/vnl_complex.h>  // vnl_math::squared_magnitude()
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/algo/vnl_netlib.h> // dqrdc_(), dqrsl_()
@@ -74,7 +74,7 @@ vnl_qr<T>::~vnl_qr()
 template <class T>
 T vnl_qr<T>::determinant() const
 {
-  int m = vnl_math_min((int)qrdc_out_.columns(), (int)qrdc_out_.rows());
+  int m = vnl_math::min((int)qrdc_out_.columns(), (int)qrdc_out_.rows());
   T det = qrdc_out_(0,0);
 
   for (int i = 1; i < m; ++i)
@@ -115,10 +115,10 @@ vnl_matrix<T> const& vnl_qr<T>::Q() const
       if (k >= m) continue;
       // Make housevec v, and accumulate norm at the same time.
       v[k] = qraux_[k];
-      abs_t sq = vnl_math_squared_magnitude(v[k]);
+      abs_t sq = vnl_math::squared_magnitude(v[k]);
       for (int j = k+1; j < m; ++j) {
         v[j] = qrdc_out_(k,j);
-        sq += vnl_math_squared_magnitude(v[j]);
+        sq += vnl_math::squared_magnitude(v[j]);
       }
       if (verbose) vnl_matlab_print(vcl_cerr, v, "v");
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

@@ -208,12 +208,12 @@ static void test_ran_sam_search()
   vnl_vector<double> est_params = ransam->params();
 #ifdef DEBUG
   vcl_cout << "estimate = " << est_params
-           << ", true model = " << true_params << vcl_endl
+           << ", true model = " << true_params << '\n'
            << "scale = " << ransam->scale() << vcl_endl;
 #endif // DEBUG
-  ok = vnl_math_abs( est_params[0] - true_params[0] ) < 0.2
-    && vnl_math_abs( est_params[1] - true_params[1] ) < 0.025
-    && vnl_math_abs( est_params[2] - true_params[2] ) < 0.025;
+  ok = vnl_math::abs( est_params[0] - true_params[0] ) < 0.2
+    && vnl_math::abs( est_params[1] - true_params[1] ) < 0.025
+    && vnl_math::abs( est_params[2] - true_params[2] ) < 0.025;
   TEST("accurate estimate", ok, true);
 
   delete lr;
@@ -233,12 +233,12 @@ static void test_ran_sam_search()
   TEST("non-unique estimate succeed", ransam->estimate( match_prob, lms ), true);
   est_params = ransam->params();
   vcl_cout << "similarity estimate = " << est_params
-           << ", true similarity model = " << sim_params << vcl_endl
+           << ", true similarity model = " << sim_params << '\n'
            << "scale = " << ransam->scale() << vcl_endl;
-  ok = vnl_math_abs( est_params[0] - sim_params[0] ) < 0.025
-    && vnl_math_abs( est_params[1] - sim_params[1] ) < 0.025
-    && vnl_math_abs( est_params[2] - sim_params[2] ) < 1.0
-    && vnl_math_abs( est_params[3] - sim_params[3] ) < 1.0;
+  ok = vnl_math::abs( est_params[0] - sim_params[0] ) < 0.025
+    && vnl_math::abs( est_params[1] - sim_params[1] ) < 0.025
+    && vnl_math::abs( est_params[2] - sim_params[2] ) < 1.0
+    && vnl_math::abs( est_params[3] - sim_params[3] ) < 1.0;
   TEST("non-unique estimate accurate", ok, true);
 
   delete ransam;

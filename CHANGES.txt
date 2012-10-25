@@ -5,6 +5,11 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ******************************
+VXL 1.18.0    - ???? 2012
+******************************
+      - Made vnl_math a namespace instead of a class with static data & methods
+
+******************************
 VXL 1.17.0    - June 2012
 ******************************
       - Moved the vxl photogrammetry library, vpgl, to core. vpgl supports a

@@ -295,7 +295,7 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_rows()
   {
     abs_t norm(0); // double will not do for all types.
     for (unsigned int j = 0; j < ncols; ++j)
-      norm += vnl_math_squared_magnitude( this->data_[i][j] );
+      norm += vnl_math::squared_magnitude( this->data_[i][j] );
 
     if (norm != 0)
     {
@@ -319,7 +319,7 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_columns()
   for (unsigned int j = 0; j < ncols; ++j) {  // For each column in the Matrix
     abs_t norm(0); // double will not do for all types.
     for (unsigned int i = 0; i < nrows; ++i)
-      norm += vnl_math_squared_magnitude( this->data_[i][j] );
+      norm += vnl_math::squared_magnitude( this->data_[i][j] );
 
     if (norm != 0)
     {
@@ -550,7 +550,7 @@ vnl_matrix_fixed<T,nrows,ncols>::is_identity(double tol) const
     for (unsigned int j = 0; j < ncols; ++j)
     {
       T xm = this->data_[i][j];
-      abs_t absdev = (i == j) ? vnl_math_abs(xm - one) : vnl_math_abs(xm);
+      abs_t absdev = (i == j) ? vnl_math::abs(xm - one) : vnl_math::abs(xm);
       if (absdev > tol)
         return false;
     }
@@ -576,7 +576,7 @@ vnl_matrix_fixed<T,nrows,ncols>::is_zero(double tol) const
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (vnl_math_abs(this->data_[i][j]) > tol)
+      if (vnl_math::abs(this->data_[i][j]) > tol)
         return false;
 
   return true;
@@ -588,7 +588,7 @@ vnl_matrix_fixed<T,nrows,ncols>::has_nans() const
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (vnl_math_isnan(this->data_[i][j]))
+      if (vnl_math::isnan(this->data_[i][j]))
         return true;
 
   return false;
@@ -600,7 +600,7 @@ vnl_matrix_fixed<T,nrows,ncols>::is_finite() const
 {
   for (unsigned int i = 0; i < nrows; ++i)
     for (unsigned int j = 0; j < ncols; ++j)
-      if (!vnl_math_isfinite(this->data_[i][j]))
+      if (!vnl_math::isfinite(this->data_[i][j]))
         return false;
 
   return true;
@@ -626,7 +626,7 @@ vnl_matrix_fixed<T,nrows,ncols>::assert_finite_internal() const
     for (unsigned int i=0; i<rows(); ++i)
     {
       for (unsigned int j=0; j<cols(); ++j)
-        vcl_cerr << char(vnl_math_isfinite(this->data_[i][ j]) ? '-' : '*');
+        vcl_cerr << char(vnl_math::isfinite(this->data_[i][ j]) ? '-' : '*');
       vcl_cerr << '\n';
     }
   }
@@ -709,7 +709,7 @@ vnl_matrix_fixed<T,nrows,ncols>::operator_one_norm() const
   {
     abs_t t(0);
     for (unsigned int i=0; i<nrows; ++i)
-      t += vnl_math_abs( this->data_[i][j] );
+      t += vnl_math::abs( this->data_[i][j] );
     if (t > m)
       m = t;
   }
@@ -725,7 +725,7 @@ vnl_matrix_fixed<T,nrows,ncols>::operator_inf_norm() const
   {
     abs_t t(0);
     for (unsigned int j=0; j<ncols; ++j)
-      t += vnl_math_abs( this->data_[i][j] );
+      t += vnl_math::abs( this->data_[i][j] );
     if (t > m)
       m = t;
   }
