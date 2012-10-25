@@ -246,6 +246,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_spherical_container.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_spherical_shell_container.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
