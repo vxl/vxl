@@ -11,6 +11,8 @@
 //  Modifications
 //   Ozge C. Ozcanli - Dec 09, 2008 - Added an algorithm to sample from a "set of samples with given probabilities"
 //   Daniel E. Crispell - Feb. 22, 2010 - Added versions of functions that allow user to provide own vnl_random object
+//   Brandon A. Mayer - Oct. 25, 2012 - Added static default random number generator. Consecutive calls to bsta_sampler
+//       produced the same samples if time between calls was less than vcl_time resolution.
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -45,6 +47,8 @@ class bsta_sampler
 
   //: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
   static bool sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<unsigned, unsigned> >& out_indices);
+
+  static vnl_random default_rand;
 };
 
 #endif // bsta_sampler_h_

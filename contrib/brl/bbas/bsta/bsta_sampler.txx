@@ -11,8 +11,10 @@
 #include <vcl_utility.h>
 #include <vcl_algorithm.h>
 
-//: For sorting pairs by their first element
+template<class T>
+vnl_random bsta_sampler<T>::default_rand = vnl_random();
 
+//: For sorting pairs by their first element
 template<class T>
 class first_less
 {
@@ -30,8 +32,8 @@ template <class T>
 bool bsta_sampler<T>::sample(vcl_vector<T>& samples, vcl_vector<float>& p,
                              unsigned cnt, vcl_vector<T>& out)
 {
-  vnl_random rand;
-  return sample(samples,p,cnt,out,rand);
+  //vnl_random rand;
+  return sample(samples,p,cnt,out,default_rand);
 }
 
 
@@ -75,8 +77,9 @@ bool bsta_sampler<T>::sample(vcl_vector<T>& samples, vcl_vector<float>& p,
 template <class T>
 bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out)
 {
-  vnl_random rng;
-  return sample(jh, cnt, out, rng);
+  //vnl_random rng;
+   
+  return sample(jh, cnt, out, default_rand);
 }
 
 //: sample from a joint histogram treating it as a discrete prob distribution
