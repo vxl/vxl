@@ -1,15 +1,13 @@
 #include "volm_spherical_shell_container.h"
+#include <vnl/vnl_math.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_line_segment_3d.h>
-//:
-// \file
-
 
 // constructor
 volm_spherical_shell_container::volm_spherical_shell_container(double radius, double cap_angle, double point_angle)
   : radius_(radius),
-    cap_angle_(cap_angle*vnl_math::pi_over_180), 
-    point_angle_(point_angle*vnl_math::pi_over_180)
+    point_angle_(point_angle*vnl_math::pi_over_180),
+    cap_angle_(cap_angle*vnl_math::pi_over_180)
 {
   coord_sys_ = new vsph_spherical_coord(vgl_point_3d<double>(0.0,0.0,0.0), radius_);
   this->add_uniform_views();
@@ -17,7 +15,7 @@ volm_spherical_shell_container::volm_spherical_shell_container(double radius, do
 
 void volm_spherical_shell_container::add_uniform_views()
 {
-  //: create a octahedron on the sphere, define 6 points for the vertices of the triangles
+  // create a octahedron on the sphere, define 6 points for the vertices of the triangles
   double radius = radius_;
   vgl_point_3d<double> center = coord_sys_->origin();
   vcl_vector<vgl_point_3d<double> > verts;
@@ -28,7 +26,7 @@ void volm_spherical_shell_container::add_uniform_views()
   vgl_point_3d<double> v5(center.x(),center.y()+radius,center.z()); verts.push_back(v5);
   vgl_point_3d<double> v6(center.x(),center.y()-radius,center.z()); verts.push_back(v6);
 
-  //: vector of triangles (vector of 3 points, only indices of the vertices kept)
+  // vector of triangles (vector of 3 points, only indices of the vertices kept)
   vcl_vector<vcl_vector<int> > triangles;
 
   vcl_vector<int> tri1;
@@ -125,33 +123,36 @@ void volm_spherical_shell_container::add_uniform_views()
       triangle.push_back(verts[list[0]]); triangle.push_back(verts[list[1]]); triangle.push_back(verts[list[2]]);
       if (!min_angle(triangle, point_angle_)) done=false;
     }
-    // check the angle again to see if the threashold is met
-    //vgl_vector_3d<double> vector1=verts[new_triangles[0][0]]-center;
-    //vgl_vector_3d<double> vector2=verts[new_triangles[0][1]]-center;
+#if 0
+    // check the angle again to see if the threshold is met
+    vgl_vector_3d<double> vector1=verts[new_triangles[0][0]]-center;
+    vgl_vector_3d<double> vector2=verts[new_triangles[0][1]]-center;
+#endif
     triangles.clear();
     triangles=new_triangles;
   }  // done for the refine process
 
-  //: refine the vertices to points, eliminate duplicate ones and 
-  //  also eliminate the ones below given elevation
+  // refine the vertices to points, eliminate duplicate ones and
+  // also eliminate the ones below given elevation
   int ntri=(int)triangles.size();
-  for(int i=0; i<ntri; i++) {
-    for(int j=0; j<3; j++) {
+  for (int i=0; i<ntri; i++) {
+    for (int j=0; j<3; j++) {
       vsph_sph_point_3d sv;
-	  coord_sys_->spherical_coord(verts[triangles[i][j]], sv);
-	  if(sv.theta_ < cap_angle_) { 
+      coord_sys_->spherical_coord(verts[triangles[i][j]], sv);
+      if (sv.theta_ < cap_angle_) {
         double dist;
-        if( find_closest(verts[triangles[i][j]],dist) ) {
-          if(dist > 0.0001) { // make sure the two points are far enough
+        if ( find_closest(verts[triangles[i][j]],dist) ) {
+          if (dist > 0.0001) { // make sure the two points are far enough
             cart_points_.push_back(verts[triangles[i][j]]);
-			sph_points_.push_back(sv);
-		  }
-		}else{
-            cart_points_.push_back(verts[triangles[i][j]]);
-			sph_points_.push_back(sv);
-		}
-	  }
-	}
+            sph_points_.push_back(sv);
+          }
+        }
+        else {
+          cart_points_.push_back(verts[triangles[i][j]]);
+          sph_points_.push_back(sv);
+        }
+      }
+    }
   }
 }
 
@@ -160,19 +161,19 @@ bool volm_spherical_shell_container::find_closest(vgl_point_3d<double> p, double
 {
   double min_dist = 1E20;
   int uid = -1;
-  for(unsigned i = 1; i < (unsigned)cart_points_.size(); i++){
-	  vgl_point_3d<double> cp = cart_points_[i];
-	  double d = vgl_distance(cp,p);
-	  if(d < min_dist){
-        min_dist = d;
-		uid = i;
-	  }
+  for (unsigned i = 1; i < (unsigned)cart_points_.size(); i++) {
+    vgl_point_3d<double> cp = cart_points_[i];
+    double d = vgl_distance(cp,p);
+    if (d < min_dist) {
+      min_dist = d;
+      uid = i;
+    }
   }
   dist = min_dist;
-  if(uid > -1)
-	  return true;
+  if (uid > -1)
+    return true;
   else
-	  return false;
+    return false;
 }
 
 
