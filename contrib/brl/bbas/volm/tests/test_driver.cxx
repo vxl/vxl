@@ -10,9 +10,7 @@ register_tests()
 {
   REGISTER( test_spherical_container );
   REGISTER( test_spherical_shell_container );
-  REGISTER( test_volm_query );
 }
 
 DEFINE_MAIN;
-
 
