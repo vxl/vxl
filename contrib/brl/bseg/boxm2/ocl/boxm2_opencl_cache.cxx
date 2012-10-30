@@ -98,6 +98,25 @@ bool boxm2_opencl_cache::clear_cache()
   // notify exceptional case
   return true;
 }
+void boxm2_opencl_cache::shallow_remove_block(boxm2_block_id id)
+{
+  // delete blocks in cache
+  vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = cached_blocks_.find(id);
+  if (iter != cached_blocks_.end()) {
+    bocl_mem* toDelete = iter->second;
+    bytesInCache_ -= toDelete->num_bytes();
+    delete toDelete;
+    cached_blocks_.erase(iter);
+  }
+}
+
+//: check if max_bytes_in_cache is hit and call clear_cache() if necessary
+bool boxm2_opencl_cache::clear_cache_if_necessary() 
+{ 
+  if (bytesInCache_ >= maxBytesInCache_) 
+    return clear_cache(); 
+  else return true; 
+}
 
 vcl_size_t boxm2_opencl_cache::bytes_in_cache()
 {
@@ -490,6 +509,7 @@ void boxm2_opencl_cache::shallow_remove_data(boxm2_block_id id, vcl_string type)
   if ( iter != data_map.end() ) {
     // release existing memory
     bocl_mem* toDelete = iter->second;
+    bytesInCache_ -= toDelete->num_bytes();
     delete toDelete;
     data_map.erase(iter);
   }

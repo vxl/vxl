@@ -70,6 +70,9 @@ class boxm2_opencl_cache: public vbl_ref_count
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
 
+    //: check if max_bytes_in_cache is hit and call clear_cache() if necessary
+    bool clear_cache_if_necessary();
+
     //: returns num bytes in cache
     vcl_size_t bytes_in_cache();
 
@@ -81,6 +84,9 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: shallow_remove_data removes data with id and type from ocl cache only
     void shallow_remove_data(boxm2_block_id id, vcl_string type);
+
+    //: removes block data with id from opencl cache only, caution if block data changed: this method does not enqueu a read event before deletion! 
+    void shallow_remove_block(boxm2_block_id id);
 
     //: to string method prints out LRU order
     vcl_string to_string(); 
