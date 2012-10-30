@@ -18,16 +18,8 @@
 class volm_tile
 {
  public:
-   float lat_, lon_;  // lower left corner of the tile
-   char hemisphere_;  // 'N' or 'S'
-   char direction_;   // 'E' or 'W'
-   float scale_i_;      // the total extent of the tile (E W direction)
-   float scale_j_;      // the total extent of the tile (N S direction)
-   unsigned ni_;
-   unsigned nj_;
-   vpgl_geo_camera cam_; // the output of this camera cannot be directly used, if 'W' use -lon
-
    volm_tile(float lat, float lon, char hemisphere, char direction, float scale_i, float scale_j, unsigned ni, unsigned nj);
+   volm_tile() {}
    vcl_string get_string();
 
    void img_to_global(unsigned i, unsigned j, double& lon, double& lat);
@@ -45,6 +37,25 @@ class volm_tile
 #endif
    static vcl_vector<volm_tile> generate_p1_tiles();
    static vcl_vector<volm_tile> generate_p1_wr1_tiles();
+   
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const { return 1; }  
+  
+ public: 
+  float lat_, lon_;  // lower left corner of the tile
+  char hemisphere_;  // 'N' or 'S'
+  char direction_;   // 'E' or 'W'
+  float scale_i_;      // the total extent of the tile (E W direction)
+  float scale_j_;      // the total extent of the tile (N S direction)
+  unsigned ni_;
+  unsigned nj_;
+  vpgl_geo_camera cam_; // the output of this camera cannot be directly used, if 'W' use -lon
 };
 
 

@@ -6,8 +6,10 @@
 
 static void test_spherical_shell_container()
 {
-  double cap_angle = 180;
-  double point_angle = 10;
+  //double cap_angle = 180;
+  double cap_angle = 90;
+  //double point_angle = 10;
+  double point_angle = 30;
   double radius = 1;
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, cap_angle, point_angle);
 
@@ -19,9 +21,10 @@ static void test_spherical_shell_container()
   TEST("# voxels of last layer with res min_res.. ", sph_shell->get_container_size(), 1026);
 
   vcl_vector<vgl_point_3d<double> >& cart_points = sph_shell->cart_points();
-  vcl_cout << "Cart points: ";
+  /*vcl_cout << "Cart points: ";
   for (vcl_vector<vgl_point_3d<double> >::const_iterator p = cart_points.begin(); p != cart_points.end(); ++p)
-    vcl_cout << *p << vcl_endl;
+    vcl_cout << *p << vcl_endl;*/
+    sph_shell->draw_template("./spherical_shell.vrml");
 }
 
 TESTMAIN(test_spherical_shell_container);

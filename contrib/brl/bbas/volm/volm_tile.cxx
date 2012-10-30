@@ -171,3 +171,48 @@ volm_tile volm_tile::parse_string(vcl_string& filename)
   vcl_cout << " lat: " << lat << " lon: " << lon << " scale:" << scale << vcl_endl;
 }
 #endif
+
+
+//: Binary save self to stream.
+void volm_tile::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  vsl_b_write(os, lat_);
+  vsl_b_write(os, lon_);
+  vsl_b_write(os, hemisphere_);
+  vsl_b_write(os, direction_);
+  vsl_b_write(os, scale_i_);
+  vsl_b_write(os, scale_j_);
+  vsl_b_write(os, ni_);
+  vsl_b_write(os, nj_);
+  cam_.b_write(os); 
+}
+
+//: Binary load self from stream.
+void volm_tile::b_read(vsl_b_istream &is)
+{
+  if (!is) return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch (ver)
+  {
+   case 1: {
+     vsl_b_read(is, lat_);
+     vsl_b_read(is, lon_);
+     vsl_b_read(is, hemisphere_);
+     vsl_b_read(is, direction_);
+     vsl_b_read(is, scale_i_);
+     vsl_b_read(is, scale_j_);
+     vsl_b_read(is, ni_);
+     vsl_b_read(is, nj_);
+     cam_.b_read(is); 
+    break; }
+
+   default:
+    vcl_cerr << "I/O ERROR: vpgl_geo_camera::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+}
+

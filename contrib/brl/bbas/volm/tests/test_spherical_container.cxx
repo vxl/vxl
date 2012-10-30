@@ -22,12 +22,40 @@ static void test_spherical_container()
   TEST("# voxels of last layer with res min_res.. ", end_offset-offset, 20888); 
   sph.first_res(vmin*2, offset, end_offset, depth);
   TEST("# voxels of first layer with res min_res*2.. ", end_offset-offset, 5768); 
+  vcl_vector<unsigned int> ids;
+  for (unsigned i = offset; i < end_offset; i++)
+    ids.push_back(i);
+  vcl_cout << " drawing template for vmin*2 layer, there are : " << ids.size() << " ids..\n";
+  //sph.draw_template_painted("./2vmin_layer.vrml", 0, ids, 1.0f, 0.0f, 0.0f, 0.8f);
+  unsigned off = sph.get_depth_offset_map()[depth];
+  TEST("depth of layer with res min_res*2.. ", off, offset); 
   
   vcl_map<double, unsigned char>& depth_interval_map = sph.get_depth_interval_map();
   TEST("number of depth intervals.. ", depth_interval_map.size(), 144);
   vcl_map<double, unsigned char>::iterator iter = depth_interval_map.end();
   iter--;
   TEST("last interval.. ", iter->second, (unsigned char)143);
+  int cnt = 0; 
+  for (vcl_map<double, unsigned char>::iterator iter = depth_interval_map.begin(); iter != depth_interval_map.end(); iter++, cnt++) {
+    vcl_cout << "depth: " << iter->first << " interval: " << (int)iter->second << vcl_endl;
+    if (cnt > 5)
+      break;
+  }
+  cnt=0;
+  for (vcl_map<double, unsigned char>::iterator iter = depth_interval_map.end(); cnt < 5; cnt++) {
+    iter--;
+    vcl_cout << "depth: " << iter->first << " interval: " << (int)iter->second << vcl_endl;
+  }
+  
+  TEST("depth interval for 0..", sph.get_depth_interval(0), 1);
+  TEST("depth interval for 1..", sph.get_depth_interval(1), 1);
+  TEST("depth interval for 9..", sph.get_depth_interval(9), 1);
+  TEST("depth interval for 10..", sph.get_depth_interval(10), 2);
+  TEST("depth interval for 20..", sph.get_depth_interval(20), 3);
+  TEST("depth interval for 51500..", sph.get_depth_interval(51500), 141);
+  TEST("depth interval for 58879..", sph.get_depth_interval(58879), 143);
+  TEST("depth interval for 58880..", sph.get_depth_interval(58880), 144);
+  TEST("depth interval for dmax..", sph.get_depth_interval(dmax), 144);
 }
 
 

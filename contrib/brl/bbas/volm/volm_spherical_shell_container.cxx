@@ -2,6 +2,7 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_line_segment_3d.h>
+#include <bvrml/bvrml_write.h>
 
 // constructor
 volm_spherical_shell_container::volm_spherical_shell_container(double radius, double cap_angle, double point_angle)
@@ -192,4 +193,65 @@ bool volm_spherical_shell_container::min_angle(vcl_vector<vgl_point_3d<double> >
       return false;
   }
   return true;
+}
+
+void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
+{
+  vcl_ofstream ofs(vrml_file_name.c_str());
+  // write the header
+  bvrml_write::write_vrml_header(ofs);
+  // write a world center and world axis
+  double rad = 1.0;
+  vgl_point_3d<float> cent(0.0,0.0,0.0);
+  vgl_point_3d<double> cent_ray(0.0,0.0,0.0);
+  vgl_vector_3d<double> axis_x(1.0, 0.0, 0.0);
+  vgl_vector_3d<double> axis_y(0.0, 1.0, 0.0);
+  vgl_vector_3d<double> axis_z(0.0, 0.0, 1.0);
+  vgl_sphere_3d<float> sp((float)cent.x(), (float)cent.y(), (float)cent.z(), (float)rad);
+  bvrml_write::write_vrml_sphere(ofs, sp, 1.0f, 0.0f, 0.0f, 0.0f);
+  bvrml_write::write_vrml_line(ofs, cent_ray, axis_x, (float)rad*20, 1.0f, 0.0f, 0.0f);
+  bvrml_write::write_vrml_line(ofs, cent_ray, axis_y, (float)rad*20, 0.0f, 1.0f, 0.0f);
+  bvrml_write::write_vrml_line(ofs, cent_ray, axis_z, (float)rad*20, 1.0f, 1.0f, 0.0f);
+  // write the voxel structure
+  
+  vgl_point_3d<double> orig(0.0,0.0,0.0);
+  for (unsigned i = 0; i < cart_points_.size(); i++) {
+    vgl_vector_3d<double> ray = cart_points_[i]-orig;
+    //bvrml_write::write_vrml_line(ofs, orig, ray, 10.0f, 0.0f, 0.0f, 1.0f);
+    bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 1.0f, 0.0f, 0.0f, 1.0f);
+  }
+  ofs.close();
+}
+
+//: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
+void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vcl_vector<char>& values, char special)
+{
+  assert(values.size() == cart_points_.size());
+  
+  vcl_ofstream ofs(vrml_file_name.c_str());
+  // write the header
+  bvrml_write::write_vrml_header(ofs);
+  // write a world center and world axis
+  double rad = 1.0;
+  vgl_point_3d<float> cent(0.0,0.0,0.0);
+  vgl_point_3d<double> cent_ray(0.0,0.0,0.0);
+  vgl_vector_3d<double> axis_x(1.0, 0.0, 0.0);
+  vgl_vector_3d<double> axis_y(0.0, 1.0, 0.0);
+  vgl_vector_3d<double> axis_z(0.0, 0.0, 1.0);
+  vgl_sphere_3d<float> sp((float)cent.x(), (float)cent.y(), (float)cent.z(), (float)rad);
+  bvrml_write::write_vrml_sphere(ofs, sp, 1.0f, 0.0f, 0.0f, 0.0f);
+  bvrml_write::write_vrml_line(ofs, cent_ray, axis_x, (float)rad*20, 1.0f, 0.0f, 0.0f);
+  bvrml_write::write_vrml_line(ofs, cent_ray, axis_y, (float)rad*20, 0.0f, 1.0f, 0.0f);
+  bvrml_write::write_vrml_line(ofs, cent_ray, axis_z, (float)rad*20, 0.0f, 1.0f, 1.0f);
+  // write the voxel structure
+  
+  vgl_point_3d<double> orig(0.0,0.0,0.0);
+  for (unsigned i = 0; i < cart_points_.size(); i++) {
+    vgl_vector_3d<double> ray = cart_points_[i]-orig;
+    if (values[i] == special)
+      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 1.0f, 1.0f, 1.0f, 0.0f);
+    else 
+      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 1.0f, 0.0f, 0.0f, values[i]/255.0f);
+  }
+  ofs.close();
 }

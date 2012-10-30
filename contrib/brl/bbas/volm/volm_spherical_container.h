@@ -48,11 +48,13 @@ class volm_spherical_container : public vbl_ref_count
   vcl_vector<volm_voxel>& get_voxels() { return voxels_; }
   vcl_map<double, unsigned int>& get_depth_offset_map() { return depth_offset_map_;}
   vcl_map<double, unsigned char>& get_depth_interval_map() { return depth_interval_map_; }
+  //: find the interval of the given depth value, i.e. return interval such that d1 <= value < d2 (caution: interval id is 1 + index in depth_interval_map_)
+  unsigned char get_depth_interval(double value);
 
   void draw_template(vcl_string vrml_file_name, double dmin);
   void draw_helper(vcl_ofstream& ofs, double dmin);
   //: paint the wireframe of the voxels with the given ids with the given color
-  void draw_template_painted(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned int>& ids, float r, float g, float b);
+  void draw_template_painted(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned int>& ids, float r, float g, float b, float trans);
   void draw_template_vis_prob(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned char>& ids);
 
   double min_voxel_res() { return vmin_; }

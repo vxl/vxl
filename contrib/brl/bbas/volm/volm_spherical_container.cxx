@@ -57,16 +57,27 @@ volm_spherical_container::volm_spherical_container(float d_solid_ang, float voxe
   is_even = !(N%2);
   } // end of while
   
-  //: create the depth_interval_map_
+  //: create the depth_interval_map_  [0,d1) --> 1, [d1,d2) --> 2, ... [dn,dmax) --> n , n can be 253 max
   unsigned int i = 0;
   for (vcl_map<double, unsigned int>::iterator iter = depth_offset_map_.begin(); iter != depth_offset_map_.end(); iter++) {
     depth_interval_map_[iter->first] = (unsigned char)i;
     i++;
-    if (i > 255) {
-      vcl_cerr << "In volm_spherical_container::volm_spherical_container() -- number of depth intervals is larger than 255! Current indexing scheme does not support this container extent of " << dmax_ << "!\n";
+    if (i > 252) {
+      vcl_cerr << "In volm_spherical_container::volm_spherical_container() -- number of depth intervals is larger than 253! Current indexing scheme does not support this container extent of " << dmax_ << "!\n";
       break;
     }
   }
+}
+
+//: find the interval of the given depth value, i.e. return interval such that d1 <= value < d2, interval ids are 1 greater than index in depth_offset_map_
+unsigned char volm_spherical_container::get_depth_interval(double value)
+{
+  vcl_map<double, unsigned char>::iterator iter = depth_interval_map_.upper_bound(value);
+  if (iter == depth_interval_map_.end()) {
+    iter--;
+    return iter->second + 1;
+  }
+  return iter->second;  
 }
 
 bool volm_spherical_container::meshcurrentlayer(double d, double v)
@@ -255,12 +266,12 @@ void volm_spherical_container::draw_template(vcl_string vrml_file_name, double d
 }
 
 //: paint the wireframe of the voxels with the given ids with the given color
-void volm_spherical_container::draw_template_painted(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned int>& ids, float r, float g, float b)
+void volm_spherical_container::draw_template_painted(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned int>& ids, float r, float g, float b, float trans)
 {
   vcl_ofstream ofs(vrml_file_name.c_str());
   // write the header
   bvrml_write::write_vrml_header(ofs);
-  draw_helper(ofs, dmin);
+  //draw_helper(ofs, dmin);
   // draw the extras
   
   for (unsigned i = 0; i < ids.size(); i++) {
@@ -275,7 +286,7 @@ void volm_spherical_container::draw_template_painted(vcl_string vrml_file_name, 
       double v_len = voxels_[ids[i]].resolution_;
       vgl_point_3d<double> vc(voxels_[ids[i]].center_.x(), voxels_[ids[i]].center_.y(), voxels_[ids[i]].center_.z());
       vgl_box_3d<double> box(vc, v_len, v_len, v_len, vgl_box_3d<double>::centre);
-      bvrml_write::write_vrml_box(ofs, box, r, g, b, (float)(d/dmax_+0.2));
+      bvrml_write::write_vrml_box(ofs, box, r, g, b, trans);
       bvrml_write::write_vrml_wireframe_box(ofs, box, r, g, b, 1);
     }
   }

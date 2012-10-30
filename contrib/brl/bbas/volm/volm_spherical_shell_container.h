@@ -42,6 +42,10 @@ class volm_spherical_shell_container : public vbl_ref_count
   vcl_vector<vsph_sph_point_3d>& sph_points() { return sph_points_;}
 
   vcl_size_t get_container_size() const { return cart_points_.size(); }
+  
+  void draw_template(vcl_string vrml_file_name);
+  //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
+  void draw_template(vcl_string vrml_file_name, vcl_vector<char>& values, char special);
 
  protected:
   double radius_;
