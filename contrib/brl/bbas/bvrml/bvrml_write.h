@@ -75,7 +75,8 @@ class bvrml_write
                                   vgl_point_3d<double> const& pt,
                                   vgl_vector_3d<double> const &dir,
                                   float radius, float height,
-                                  const float r, const float g, const float b);
+                                  const float r, const float g, const float b,
+								  const unsigned side = 0);
 };
 
 #endif

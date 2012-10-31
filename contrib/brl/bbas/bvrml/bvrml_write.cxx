@@ -319,7 +319,8 @@ void bvrml_write::write_vrml_cylinder(vcl_ofstream& str,
                                       vgl_point_3d<double> const& pt,
                                       vgl_vector_3d<double> const &dir,
                                       float radius, float height,
-                                      const float r, const float g, const float b)
+                                      const float r, const float g, const float b,
+									  const unsigned side)
 {
   double denom=vcl_sqrt(dir.x()*dir.x()+dir.y()*dir.y());
   float axis_x;
@@ -357,7 +358,7 @@ void bvrml_write::write_vrml_cylinder(vcl_ofstream& str,
       <<   "{\n"
       << "  radius " << radius << '\n'
       << "  height " << height << '\n'
-      << "  side 0 \n"
+      << "  side " << side << '\n'
       <<  "   }\n"
       <<  "  }\n"
       <<  " ]\n"
