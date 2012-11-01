@@ -120,13 +120,23 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: returns the corresponding geographical coordinate (lon, lat, elev) for a given pixel position (i,j,k)
   //  Note: not yet implemented -- PVr, 16 aug 2012
   void img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev);
-
+  
   vnl_matrix<double>  trans_matrix(){return trans_matrix_; }
+  
 #if 0
   //: returns the corresponding pixel position (i,j) for a given geographical coordinate (lon, lat)
   void wgs_to_img(double lon, double lat,
                   unsigned& i, unsigned& j);
 #endif // 0
+
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const { return 1; }  
 
  private:
 

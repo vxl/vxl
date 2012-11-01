@@ -415,3 +415,55 @@ void vpgl_geo_camera::img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon
 {
   assert(!"Not yet implemented");
 }
+
+//: Binary save self to stream.
+void vpgl_geo_camera::b_write(vsl_b_ostream& os) const
+{
+  vsl_b_write(os, version());
+  vsl_b_write(os, trans_matrix_.rows());
+  vsl_b_write(os, trans_matrix_.cols());
+  for (unsigned i = 0; i < trans_matrix_.rows(); i++)
+    for (unsigned j = 0; j < trans_matrix_.cols(); j++)
+      vsl_b_write(os, trans_matrix_[i][j]);
+  
+  lvcs_->b_write(os);
+  vsl_b_write(os, is_utm);
+  vsl_b_write(os, utm_zone_); 
+  vsl_b_write(os, northing_); 
+  vsl_b_write(os, scale_tag_);      
+}
+
+
+//: Binary load self from stream.
+void vpgl_geo_camera::b_read(vsl_b_istream& is)
+{
+  if (!is) return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch (ver)
+  {
+   case 1: {
+     unsigned nrows, ncols;
+     vsl_b_read(is, nrows);
+     vsl_b_read(is, ncols);
+     trans_matrix_.set_size(nrows, ncols);
+     for (unsigned i = 0; i < nrows; i++)
+      for (unsigned j = 0; j < ncols; j++) 
+        vsl_b_read(is, trans_matrix_[i][j]);
+      
+     vpgl_lvcs_sptr lvcs_ = new vpgl_lvcs(0,0,0);
+     lvcs_->b_read(is);
+     vsl_b_read(is, is_utm);
+     vsl_b_read(is, utm_zone_); 
+     vsl_b_read(is, northing_); 
+     vsl_b_read(is, scale_tag_);      
+    break; }
+
+   default:
+    vcl_cerr << "I/O ERROR: vpgl_geo_camera::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+}
+
