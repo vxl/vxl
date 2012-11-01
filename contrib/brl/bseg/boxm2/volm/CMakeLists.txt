@@ -28,3 +28,6 @@ ENDIF( BUILD_TESTING )
 
 SUBDIRS(exe)
 
+#pro
+subdirs(pro)
+
