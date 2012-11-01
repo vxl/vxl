@@ -123,7 +123,7 @@ class boxm2_scene_adaptor(object):
       cache = self.cpu_cache;
       dev = None;
     if self.rgb :
-      expimg, vis_image = render_rgb(self.scene, cache, cam, ni, nj, dev);
+      expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev);
       boxm2_batch.remove_data(vis_image.id)
     else :
       expimg = render_grey(self.scene, cache, cam, ni, nj, dev, ident_string);
@@ -140,7 +140,7 @@ class boxm2_scene_adaptor(object):
       cache = self.cpu_cache;
       dev = None;
     if self.rgb :
-	  expimg, vis_image = render_rgb(self.scene, cache, cam, ni, nj, dev);
+	  expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev);
     else :
       expimg, vis_image = render_grey_and_vis(self.scene, cache, cam, ni, nj, dev);
     return expimg, vis_image;
