@@ -162,7 +162,7 @@ char* boxm2_sio_mgr::load_from_hdfs(vcl_string filepath, unsigned long &numBytes
   vcl_string cur_dir = mgr->get_working_dir();
   vcl_cout << "Working directory =" << cur_dir << vcl_endl;
   bhdfs_fstream_sptr fs = new bhdfs_fstream(filepath, "r");
-  numBytes = fs->file_size()-1;
+  numBytes = fs->file_size();
   //vcl_cerr << "BInary file size=" << numBytes << vcl_endl;
   //vcl_cout << "number of bytes=" << numBytes;
   char* bytes =  new char[numBytes];
