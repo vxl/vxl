@@ -33,6 +33,10 @@ bvgl_labelme_parser::bvgl_labelme_parser(vcl_string& filename)
 //#define OBJECT_TAG "object"
 //#define NAME_TAG "name"
 //#define POLYTON_TAG "polygon"
+//#define OBJECT_MINDIST_TAG "mindist"
+//#define OBJECT_MAXDIST_TAG "maxdist"
+//#define OBJECT_ORDER_TAG "order"
+//#define TYPE_TAG "type"
 //#define POINT_TAG "pt"
 //#define X_TAG "x"
 //#define Y_TAG "y"
@@ -47,7 +51,8 @@ bvgl_labelme_parser::startElement(const char* name, const char** atts)
     pts_.clear();
 
   if (vcl_strcmp(name, OBJECT_TAG)==0) {
-    dist_ = -1;
+    min_dist_ = -1;
+	max_dist_ = -1;
     order_ = -1;
   }
 }
@@ -69,7 +74,8 @@ void bvgl_labelme_parser::endElement(const XML_Char* name)
 
   //finish up an object
   if (vcl_strcmp(name, OBJECT_TAG)==0) {
-    obj_dists_.push_back(dist_);
+    obj_min_dists_.push_back(min_dist_);
+	obj_max_dists_.push_back(max_dist_);
     obj_depth_orders_.push_back(order_);
   }
 }
@@ -97,8 +103,18 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
       obj_names_.push_back(name);
   }
 
+  if (active_tag_ == TYPE_TAG) {
+    vcl_string type = vcl_string(s,len);
+    this->trim_string(type);
+    if (type.length() != 0)
+      obj_types_.push_back(type);
+  }
+
   if (active_tag_ == OBJECT_MINDIST_TAG)
-    convert(vcl_string(s,len), dist_);
+    convert(vcl_string(s,len), min_dist_);
+
+  if (active_tag_ == OBJECT_MAXDIST_TAG)
+    convert(vcl_string(s,len), max_dist_);
 
   if (active_tag_ == OBJECT_ORDER_TAG)
     convert(vcl_string(s,len), order_);

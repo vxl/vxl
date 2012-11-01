@@ -19,7 +19,9 @@
 #define X_TAG "x"
 #define Y_TAG "y"
 #define OBJECT_MINDIST_TAG "mindist"
+#define OBJECT_MAXDIST_TAG "maxdist"
 #define OBJECT_ORDER_TAG "order"
+#define TYPE_TAG "type"
 
 #if 0
 <annotation>
@@ -57,7 +59,9 @@ class bvgl_labelme_parser : public expatpp
 
   //object names (in the same order as polygons)
   vcl_vector<vcl_string>& obj_names() { return obj_names_; }
-  vcl_vector<int>& obj_mindists() { return obj_dists_; }
+  vcl_vector<vcl_string>& obj_types() { return obj_types_; }
+  vcl_vector<float>& obj_mindists() { return obj_min_dists_; }
+  vcl_vector<float>& obj_maxdists() { return obj_max_dists_; }
   vcl_vector<int>& obj_depth_orders() { return obj_depth_orders_; }
 
   // ACCESSORS for parser info
@@ -76,9 +80,12 @@ class bvgl_labelme_parser : public expatpp
   double x_, y_;
 
   vcl_vector<vcl_string> obj_names_;
-  vcl_vector<int> obj_dists_;
+  vcl_vector<vcl_string> obj_types_;
+  vcl_vector<float> obj_min_dists_;
+  vcl_vector<float> obj_max_dists_;
   vcl_vector<int> obj_depth_orders_;
-  int dist_;
+  float min_dist_;
+  float max_dist_;
   int order_;
   vcl_string image_name_;
 
