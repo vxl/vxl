@@ -28,7 +28,7 @@
 class depth_map_region : public vbl_ref_count
 {
  public:
-  enum orientation{GROUND_PLANE, VERTICAL, INFINT, NOT_DEF};
+  enum orientation{GROUND_PLANE, VERTICAL, INFINT, FLAT, NOT_DEF};
   //: default constructor
   depth_map_region();
   //: standard constructor for a plane that can be moved along the camera ray
