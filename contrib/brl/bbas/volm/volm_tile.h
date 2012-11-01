@@ -18,11 +18,16 @@
 class volm_tile
 {
  public:
+   //: specify lat lon in positive numbers but specify hemisphere ('N' or 'S') and direction ('W' or 'E')
    volm_tile(float lat, float lon, char hemisphere, char direction, float scale_i, float scale_j, unsigned ni, unsigned nj);
+   //: specify lat lon as regular, e.g. negative lon for 'W'
+   volm_tile(float lat, float lon, float scale_i, float scale_j, unsigned ni, unsigned nj);
    volm_tile() {}
    vcl_string get_string();
 
    void img_to_global(unsigned i, unsigned j, double& lon, double& lat);
+   
+   bool global_to_img(double lon, double lat, unsigned& i, unsigned& j);
 
    //: create a kml file of the tile as a box and with circular marks throughout at every n pixels in each direction
    void write_kml(vcl_string name, int n);

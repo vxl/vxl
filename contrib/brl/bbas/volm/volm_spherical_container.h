@@ -55,7 +55,7 @@ class volm_spherical_container : public vbl_ref_count
   void draw_helper(vcl_ofstream& ofs, double dmin);
   //: paint the wireframe of the voxels with the given ids with the given color
   void draw_template_painted(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned int>& ids, float r, float g, float b, float trans);
-  void draw_template_vis_prob(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned char>& ids);
+  void draw_template_vis_prob(vcl_string vrml_file_name, double dmin, vcl_vector<char>& ids);
 
   double min_voxel_res() { return vmin_; }
 

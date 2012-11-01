@@ -20,6 +20,19 @@ static void test_tile()
   tiles[0].img_to_global(0, tiles[0].nj_, lon2, lat2);
   TEST_NEAR("tile 1 img to global", lat2, 37, 0.01);
   
+  unsigned i, j;
+  tiles[0].img_to_global(0, tiles[0].nj_-1, lon2, lat2);
+  TEST("tile1 global to img", tiles[0].global_to_img(lon2, lat2, i, j), true);
+  TEST("tile1 global to img", i == 0, true);
+  TEST("tile1 global to img", j == tiles[0].nj_-1, true);
+  
+  TEST("tile1 global to img", tiles[0].global_to_img(lon2+5, lat2, i, j), false);
+  
+  volm_tile tt(37, -118, tiles[0].scale_i_, tiles[0].scale_j_, tiles[0].ni_, tiles[0].nj_);
+  TEST("tt global to img", tt.global_to_img(lon2, lat2, i, j), true);
+  TEST("tt global to img", i == 0, true);
+  TEST("tt global to img", j == tt.nj_-1, true);
+  
   vsl_b_ofstream ofs("test_tile.bin");
   tiles[0].b_write(ofs);
   ofs.close();

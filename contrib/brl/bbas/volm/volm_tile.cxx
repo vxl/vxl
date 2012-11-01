@@ -8,12 +8,29 @@
 #include <brip/brip_vil_float_ops.h>
 #include <bkml/bkml_write.h>
 
+//: specify lat lon in positive numbers but specify hemisphere ('N' or 'S') and direction ('W' or 'E')
 volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, float scale_i, float scale_j, unsigned ni, unsigned nj) :
         lat_(lat), lon_(lon), hemisphere_(hemisphere), direction_(direction), scale_i_(scale_i), scale_j_(scale_j), ni_(ni), nj_(nj)
 {
   vnl_matrix<double> trans_matrix(4,4,0.0);
   trans_matrix[0][0] = -scale_i_/ni; trans_matrix[1][1] = -scale_j_/nj;
-  trans_matrix[0][3] = lon; trans_matrix[1][3] = lat+scale_j_;
+  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
+  // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
+  vpgl_lvcs_sptr lv = new vpgl_lvcs;
+  vpgl_geo_camera cam(trans_matrix, lv); cam.set_scale_format(true);
+  cam_ = cam;
+}
+
+//: specify lat lon as regular, e.g. negative lon for 'W'
+volm_tile::volm_tile(float lat, float lon, float scale_i, float scale_j, unsigned ni, unsigned nj) :
+        scale_i_(scale_i), scale_j_(scale_j), ni_(ni), nj_(nj)
+{
+  if (lat < 0) { lat_ = -lat; hemisphere_ = 'S'; } else { lat_ = lat; hemisphere_ = 'N'; }
+  if (lon < 0) { lon_ = -lon; direction_ = 'W'; } else { lon_ = lon; direction_ = 'E'; }
+  
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  trans_matrix[0][0] = -scale_i_/ni; trans_matrix[1][1] = -scale_j_/nj;
+  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
   // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
   vpgl_lvcs_sptr lv = new vpgl_lvcs;
   vpgl_geo_camera cam(trans_matrix, lv); cam.set_scale_format(true);
@@ -77,6 +94,22 @@ void volm_tile::img_to_global(unsigned i, unsigned j, double& lon, double& lat)
     lon = -lon;
   if (hemisphere_ == 'S')
     lat = -lat;
+}
+bool volm_tile::global_to_img(double lon, double lat, unsigned& i, unsigned& j)
+{
+  double u,v; double dummy_elev = 0;
+  
+  if (direction_ == 'W')
+    lon = -lon;
+  if (hemisphere_ == 'S')
+    lat = -lat;
+    
+  cam_.global_to_img(lon, lat, dummy_elev, u, v);
+  if (u < 0 || v < 0 || u >= this->ni_ || v >= this->nj_)
+    return false;
+  i = (unsigned)vcl_floor(u+0.5);
+  j = (unsigned)vcl_floor(v+0.5);
+  return true;
 }
 
 void volm_tile::get_uncertainty_region(float lambda_i, float lambda_j, float cutoff, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel)

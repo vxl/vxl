@@ -295,7 +295,7 @@ void volm_spherical_container::draw_template_painted(vcl_string vrml_file_name, 
 }
 
 //: paint the wireframe of the voxels with the given ids with the given color
-void volm_spherical_container::draw_template_vis_prob(vcl_string vrml_file_name, double dmin, vcl_vector<unsigned char>& ids)
+void volm_spherical_container::draw_template_vis_prob(vcl_string vrml_file_name, double dmin, vcl_vector<char>& ids)
 {
   vcl_ofstream ofs(vrml_file_name.c_str());
   // write the header
