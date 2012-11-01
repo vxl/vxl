@@ -114,7 +114,7 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat, double orig_lon, double orig_elev,
     //: the origin is still given in wgs84
     vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
+    //vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
     lat_scale_ = 0.0; lon_scale_ = 0.0;
   }
   if (lat_scale_ == 0.0 || lon_scale_ == 0.0)
@@ -146,7 +146,7 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat, double orig_lon, double orig_elev,
     //: the origin is still given in wgs84
     vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North  elev: " << localCSOriginElev_ << vcl_endl;
+    //vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North  elev: " << localCSOriginElev_ << vcl_endl;
   }
   lat_scale_ = 0;
   lon_scale_ = 0;
@@ -181,7 +181,7 @@ vpgl_lvcs::vpgl_lvcs(double lat_low, double lon_low,
     //: the origin is still given in wgs84
     vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
+    //vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
   }
 
 
@@ -838,7 +838,7 @@ void vpgl_lvcs::read(vcl_istream& strm)
     //: the origin is still given in wgs84
     vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
+    //vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
   }
 
   if (lat_scale_==0.0 && lon_scale_==0.0) {
@@ -929,4 +929,59 @@ bool vpgl_lvcs::operator==(vpgl_lvcs const& r) const
   eq = eq && (this->loy_ == r.loy_);
   eq = eq && (this->theta_ == r.theta_);
   return eq;
+}
+
+//: Binary save self to stream.
+void vpgl_lvcs::b_write( vsl_b_ostream& os ) const
+{
+  vsl_b_write(os, version());
+  vsl_b_write(os, (int)local_cs_name_);
+  vsl_b_write(os, localCSOriginLat_); 
+  vsl_b_write(os, localCSOriginLon_); 
+  vsl_b_write(os, localCSOriginElev_);
+  vsl_b_write(os, lat_scale_);        
+  vsl_b_write(os, lon_scale_);        
+  vsl_b_write(os, (int)geo_angle_unit_);   
+  vsl_b_write(os, (int)localXYZUnit_);     
+  vsl_b_write(os, lox_);                
+  vsl_b_write(os, loy_);                
+  vsl_b_write(os, theta_);              
+  vsl_b_write(os, localUTMOrigin_X_East_);  
+  vsl_b_write(os, localUTMOrigin_Y_North_); 
+  vsl_b_write(os, localUTMOrigin_Zone_);      
+}
+
+
+//: Binary load self from stream.
+void vpgl_lvcs::b_read( vsl_b_istream& is )
+{
+  if (!is) return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch (ver)
+  {
+   case 1:
+     int val;
+     vsl_b_read(is, val); local_cs_name_ = (vpgl_lvcs::cs_names)val;
+     vsl_b_read(is, localCSOriginLat_); 
+     vsl_b_read(is, localCSOriginLon_); 
+     vsl_b_read(is, localCSOriginElev_);
+     vsl_b_read(is, lat_scale_);        
+     vsl_b_read(is, lon_scale_);        
+     vsl_b_read(is, val);   geo_angle_unit_ = (vpgl_lvcs::AngUnits)val;
+     vsl_b_read(is, val);   localXYZUnit_ = (vpgl_lvcs::LenUnits)val;     
+     vsl_b_read(is, lox_);                
+     vsl_b_read(is, loy_);                
+     vsl_b_read(is, theta_);              
+     vsl_b_read(is, localUTMOrigin_X_East_);  
+     vsl_b_read(is, localUTMOrigin_Y_North_); 
+     vsl_b_read(is, localUTMOrigin_Zone_);    
+    break;
+
+   default:
+    vcl_cerr << "I/O ERROR: vpgl_lvcs::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
 }
