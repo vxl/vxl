@@ -9,12 +9,14 @@
 // \date September 18, 2012
 // \verbatim
 //  Modifications
+//   Yi Dong - October 25 2012 - modify the read_labelme to construct depth_map_scene from xml file
 // \endverbatim
 // units are in meters
 
 #include <vcl_string.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
+#include <bpgl/depth_map/depth_map_scene.h>
 
 
 class volm_io 

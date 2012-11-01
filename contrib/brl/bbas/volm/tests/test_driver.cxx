@@ -4,7 +4,6 @@
 DECLARE( test_spherical_container );
 DECLARE( test_tile );
 DECLARE( test_spherical_shell_container );
-DECLARE( test_volm_query );
 
 void
 register_tests()

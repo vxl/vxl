@@ -5,6 +5,7 @@
 #include <bpgl/bpgl_camera_utils.h>
 #include <bvgl/bvgl_labelme_parser.h>
 #include <depth_map/depth_map_region_sptr.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <bsol/bsol_algs.h>
@@ -39,44 +40,50 @@ bool volm_io::read_camera(vcl_string kml_file, vpgl_perspective_camera<double>& 
 
 bool volm_io::read_labelme(vcl_string xml_file, vpgl_perspective_camera<double> const& cam, depth_map_scene_sptr& depth_scene)
 {
-  try {
-    bvgl_labelme_parser parser(xml_file);
-    vcl_vector<vgl_polygon<double> > polys = parser.polygons();
-    vcl_vector<vcl_string> objects = parser.obj_names();
-    vcl_cout << " read " << polys.size() << " polygons for " << objects.size() << " objects from labelme file: " << xml_file << vcl_endl;
-    for (unsigned i = 0; i < objects.size(); ++i) {
-      vcl_cout << "obj name: "<< objects[i] << vcl_endl;
-    }
-    for (unsigned i = 0; i < parser.obj_mindists().size(); ++i) {
-      vcl_cout << "obj dist: "<< parser.obj_mindists()[i] << vcl_endl;
-    }
-    for (unsigned i = 0; i < parser.obj_depth_orders().size(); ++i) {
-      vcl_cout << "obj depth order: "<< parser.obj_depth_orders()[i] << vcl_endl;
-    }
-    if (polys.size() != objects.size())
-      throw -1;
+  bvgl_labelme_parser parser(xml_file);
+  vcl_vector<vgl_polygon<double> > polys = parser.polygons();
+  vcl_vector<vcl_string>& objects = parser.obj_names();
+  vcl_vector<vcl_string>& object_types = parser.obj_types();
 #if 0
-    depth_map_region_sptr sky, ground_plane;
-    vcl_vector<depth_map_region_sptr> regions;
-    for (unsigned i = 0; i < polys.size(); i++) {
-      vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
-      depth_map_region_sptr reg = new depth_map_region(poly, plane,
-                                                       depth_map_region(vsol_polygon_2d_sptr const& region,
-                                                                        vgl_plane_3d<double> const& region_plane,
-                                                                        double min_depth, double max_depth,
-                                                                        vcl_string name,
-                                                                        depth_map_region::orientation orient));
-    }
-    depth_map_scene(unsigned ni, unsigned nj,
-                    vcl_string const& image_path,
-                    vpgl_perspective_camera<double> const& cam,
-                    depth_map_region_sptr const& ground_plane,
-                    depth_map_region_sptr const& sky,
-                    vcl_vector<depth_map_region_sptr> const& scene_regions);
-#endif // 0
-  }
-  catch (int) {
+  vcl_cout << " read " << polys.size() << " polygons for " << objects.size() << " objects from labelme file: " << xml_file << vcl_endl;
+  for (unsigned i = 0; i < objects.size(); ++i)
+    vcl_cout << "obj name: "<< objects[i] << vcl_endl;
+  for (unsigned i = 0; i < object_types.size(); i++)
+    vcl_cout << "obj type: " << object_types[i] << vcl_endl;
+  for (unsigned i = 0; i < parser.obj_mindists().size(); ++i)
+    vcl_cout << "obj min_dist: "<< parser.obj_mindists()[i] << ", \t max_dist = " << parser.obj_maxdists()[i] <<  vcl_endl; 
+  for (unsigned i = 0; i < parser.obj_depth_orders().size(); ++i)
+    vcl_cout << "obj depth order: "<< parser.obj_depth_orders()[i] << vcl_endl;
+#endif
+  if (polys.size() != objects.size()) {
     return false;
+  }
+  //: add differnt depth region into depth_map_scene
+  for (unsigned i = 0; i < polys.size(); i++) {
+    vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
+    if(objects[i] == "sky") {
+      depth_scene->set_sky(poly);
+    } else {
+      //: check object type to define the region_normal
+      if(object_types[i] == "mountain") {
+        double min_depth = parser.obj_mindists()[i];
+        double max_depth = parser.obj_maxdists()[i];
+		vgl_vector_3d<double> np(1.0, 1.0, 1.0); 
+		depth_scene->add_region(poly, np, min_depth, max_depth, objects[i], depth_map_region::NOT_DEF);
+      } else if(object_types[i] == "vertical") {
+        double min_depth = parser.obj_mindists()[i];
+        double max_depth = parser.obj_maxdists()[i];
+		vgl_vector_3d<double> vp(1.0, 0.0, 0.0);
+        depth_scene->add_region(poly, vp, min_depth, max_depth, objects[i], depth_map_region::VERTICAL);
+      } else if(object_types[i] == "flat") {
+       double min_depth = parser.obj_mindists()[i];
+       double max_depth = parser.obj_maxdists()[i];
+       vgl_vector_3d<double> gp(0.0, 0.0, 1.0);//z axis is the plane normal temporary, flat object can have different normal values
+       depth_scene->add_region(poly, gp, min_depth, max_depth, objects[i], depth_map_region::FLAT);
+      } else {
+       return false;
+      }
+    }
   }
   return true;
 }
