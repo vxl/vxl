@@ -1170,6 +1170,28 @@ def generate_xyz_from_dem(scene, geotiff_dem, geoid_height, geocam=0,fill_in_val
     z_img = 0;
   return x_img, y_img, z_img
   
+# Create x y z images from a DEM at the resolution of the scene
+def generate_xyz_from_dem2(scene, geotiff_dem, geoid_height, geocam=0,fill_in_value=-1.0):
+  boxm2_batch.init_process("boxm2DemToXYZProcess2");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1,geotiff_dem);
+  boxm2_batch.set_input_double(2,geoid_height);
+  boxm2_batch.set_input_from_db(3,geocam);
+  boxm2_batch.set_input_float(4,fill_in_value);
+  result = boxm2_batch.run_process();
+  if result:
+    (xi_id, xi_type) = boxm2_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = boxm2_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = boxm2_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
+  return x_img, y_img, z_img
+  
 def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
   boxm2_batch.init_process("boxm2ShadowHeightsToXYZProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1177,6 +1199,25 @@ def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
   boxm2_batch.set_input_from_db(2,generic_cam);
   boxm2_batch.set_input_string(3,dem_fname);
   boxm2_batch.set_input_double(4,scale);
+  result = boxm2_batch.run_process();
+  if result:
+    (xi_id, xi_type) = boxm2_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = boxm2_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = boxm2_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
+  return x_img, y_img, z_img
+  
+# Create x y z images from a DEM at the resolution of the scene
+def generate_xyz_from_lidar(scene, tiff_lidar):
+  boxm2_batch.init_process("boxm2LidarToXYZProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1,tiff_lidar);
   result = boxm2_batch.run_process();
   if result:
     (xi_id, xi_type) = boxm2_batch.commit_output(0);
@@ -1326,4 +1367,75 @@ def get_scene_from_box_cams(camsdir,x0,y0,z0,x1,y1,z1,modeldir):
   result = boxm2_batch.run_process();
 
   return result;
+  
+def load_hypotheses(filename):
+  boxm2_batch.init_process("boxm2LoadHypothesesProcess");
+  boxm2_batch.set_input_string(0, filename);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  hyp = dbvalue(id, type);
+  (id, type) = boxm2_batch.commit_output(1);
+  n = boxm2_batch.get_output_unsigned(id)
+  return hyp, n;
+  
+def save_hypotheses(hyp, filename):
+  boxm2_batch.init_process("boxm2SaveHypothesesProcess");
+  boxm2_batch.set_input_from_db(0, hyp);
+  boxm2_batch.set_input_string(1, filename);
+  boxm2_batch.run_process();
+
+def create_hypotheses(lat, lon, scale_i, scale_j, ni, nj):
+  boxm2_batch.init_process("boxm2CreateHypothesesProcess");
+  boxm2_batch.set_input_float(0, lat);
+  boxm2_batch.set_input_float(1, lon);
+  boxm2_batch.set_input_float(2, scale_i);
+  boxm2_batch.set_input_float(3, scale_j);
+  boxm2_batch.set_input_unsigned(4, ni);
+  boxm2_batch.set_input_unsigned(5, nj);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  hyp = dbvalue(id, type);
+  return hyp;
+  
+def add_hypotheses(hypo, lat, lon, cent_x, cent_y, cent_z):
+  boxm2_batch.init_process("boxm2AddHypothesisProcess");
+  boxm2_batch.set_input_from_db(0,hypo);
+  boxm2_batch.set_input_double(1, lon);
+  boxm2_batch.set_input_double(2, lat);
+  boxm2_batch.set_input_float(3, cent_x);
+  boxm2_batch.set_input_float(4, cent_y);
+  boxm2_batch.set_input_float(5, cent_z);
+  status = boxm2_batch.run_process();
+  return status;
+
+def get_hypothesis(hypo,j):
+  boxm2_batch.init_process("boxm2GetHypothesisProcess");
+  boxm2_batch.set_input_from_db(0,hypo);
+  boxm2_batch.set_input_unsigned(1,j);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  x = boxm2_batch.get_output_float(id)
+  (id, type) = boxm2_batch.commit_output(1);
+  y = boxm2_batch.get_output_float(id)
+  (id, type) = boxm2_batch.commit_output(2);
+  z = boxm2_batch.get_output_float(id)
+  return x,y,z;
+
+  
+def index_hypotheses(device, scene, opencl_cache, hyp, vmin, dmax, solid_angle, cap_angle, point_angle, out_name, visibility_threshold, index_buffer_capacity):
+  boxm2_batch.init_process("boxm2IndexHypothesesProcess");
+  boxm2_batch.set_input_from_db(0, device);
+  boxm2_batch.set_input_from_db(1, scene);
+  boxm2_batch.set_input_from_db(2, opencl_cache);
+  boxm2_batch.set_input_from_db(3, hyp);
+  boxm2_batch.set_input_float(4, vmin);
+  boxm2_batch.set_input_float(5, dmax);
+  boxm2_batch.set_input_float(6, solid_angle);
+  boxm2_batch.set_input_float(7, cap_angle);
+  boxm2_batch.set_input_float(8, point_angle);
+  boxm2_batch.set_input_string(9, out_name);
+  boxm2_batch.set_input_float(10, visibility_threshold);
+  boxm2_batch.set_input_float(11, index_buffer_capacity);
+  boxm2_batch.run_process();
+
 
