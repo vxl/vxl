@@ -177,7 +177,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   // create directions buffer
   cl_float* ray_dirs = new cl_float[4*layer_size];
-  vcl_vector<vgl_point_3d<double>>& cart_points = sph_shell->cart_points();
+  vcl_vector<vgl_point_3d<double> >& cart_points = sph_shell->cart_points();
   int cnt = 0;
   for (int i = 0; i < layer_size; i++) {
     ray_dirs[4*i  ] = (cl_float)cart_points[i].x();
