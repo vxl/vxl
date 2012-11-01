@@ -59,7 +59,7 @@ bool bhdfs_load_perspective_camera_process(bprb_func_process& pro)
   bhdfs_manager_sptr mgr = bhdfs_manager::instance();
   vcl_cerr << "The working directory is: [" << mgr->get_working_dir() << "]" << vcl_endl;
   bhdfs_fstream_sptr fs = new bhdfs_fstream(camera_filename, "r");
-  unsigned long fsize =  fs->file_size()-1;
+  unsigned long fsize =  fs->file_size();
   char* buf = new char[fsize];
   fs->read(buf, fsize);
   fs->close();
