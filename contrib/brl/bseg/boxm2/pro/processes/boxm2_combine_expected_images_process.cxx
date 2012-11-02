@@ -51,30 +51,30 @@ bool boxm2_combine_expected_images_process(bprb_func_process& pro)
   vil_image_view_base_sptr e2_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr v2_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
 
-  vil_image_view<float> e1(e1_sptr);
-  vil_image_view<float> v1(v1_sptr);
-  vil_image_view<float> e2(e2_sptr);
-  vil_image_view<float> v2(v2_sptr);
+  vil_image_view<unsigned char> e1(e1_sptr);
+  vil_image_view<unsigned char> v1(v1_sptr);
+  vil_image_view<unsigned char> e2(e2_sptr);
+  vil_image_view<unsigned char> v2(v2_sptr);
 
   int ni=e1_sptr->ni(), nj=e1_sptr->nj();
 
-  float* e1buff = e1.top_left_ptr();
-  float* v1buff = v1.top_left_ptr();
-  float* e2buff = e2.top_left_ptr();
-  float* v2buff = v2.top_left_ptr();
-
+  unsigned char* e1buff = e1.top_left_ptr();
+  unsigned char* v1buff = v1.top_left_ptr();
+  unsigned char* e2buff = e2.top_left_ptr();
+  unsigned char* v2buff = v2.top_left_ptr();
   int minU = 0, minV = 0, maxU = ni, maxV = nj;
   for (int jj=minV; jj<maxV; ++jj)
     for (int ii=minU; ii<maxU; ++ii) {
       int imIdx = jj*ni + ii;
-      e1buff[imIdx] += e2buff[imIdx] * v1buff[imIdx];
-      v1buff[imIdx] *= v2buff[imIdx];
+      e1buff[imIdx] +=(unsigned char)( (float)e2buff[imIdx] * (float)v1buff[imIdx]/255.0f - 0.5 * (float)v1buff[imIdx]);
+      v1buff[imIdx] = (unsigned char)( (float)v1buff[imIdx] * (float)v2buff[imIdx]/255.0f);
     }
 
   i=0;
 
   // output image smart pointers
-  pro.set_output_val<vil_image_view_base_sptr>(i++, new vil_image_view<float>(e1));
-  pro.set_output_val<vil_image_view_base_sptr>(i++, new vil_image_view<float>(v1));
+  pro.set_output_val<vil_image_view_base_sptr>(i++, new vil_image_view<unsigned char>(e1));
+  pro.set_output_val<vil_image_view_base_sptr>(i++, new vil_image_view<unsigned char>(v1));
+
   return true;
 }
