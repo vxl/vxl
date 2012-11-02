@@ -224,7 +224,7 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
 }
 
 //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
-void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vcl_vector<unsigned char>& values, unsigned char special)
+void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vcl_vector<char>& values, unsigned char special)
 {
   assert(values.size() == cart_points_.size());
   
