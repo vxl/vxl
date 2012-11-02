@@ -146,7 +146,7 @@ unsigned char volm_query::fetch_depth(double const& u, double const& v, depth_ma
   return (unsigned char)255;
 }
 
-void volm_query::draw_template(vcl_string vrml_fname, volm_spherical_shell_container_sptr const& sph_shell, depth_map_scene_sptr const& dm)
+void volm_query::draw_template(vcl_string const& vrml_fname, volm_spherical_shell_container_sptr const& sph_shell, depth_map_scene_sptr const& dm)
 {
   //: write the header and shell container first
   sph_shell->draw_template(vrml_fname);
