@@ -224,7 +224,7 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
 }
 
 //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
-void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vcl_vector<char>& values, char special)
+void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vcl_vector<unsigned char>& values, unsigned char special)
 {
   assert(values.size() == cart_points_.size());
   
@@ -243,8 +243,10 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vc
   bvrml_write::write_vrml_line(ofs, cent_ray, axis_x, (float)rad*20, 1.0f, 0.0f, 0.0f);
   bvrml_write::write_vrml_line(ofs, cent_ray, axis_y, (float)rad*20, 0.0f, 1.0f, 0.0f);
   bvrml_write::write_vrml_line(ofs, cent_ray, axis_z, (float)rad*20, 0.0f, 1.0f, 1.0f);
-  // write the voxel structure
+  vgl_sphere_3d<float> sp2((float)cent.x(), (float)cent.y(), (float)cent.z()+20, (float)rad);
+  bvrml_write::write_vrml_sphere(ofs, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
   
+  // write the voxel structure
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_points_.size(); i++) {
     vgl_vector_3d<double> ray = cart_points_[i]-orig;
