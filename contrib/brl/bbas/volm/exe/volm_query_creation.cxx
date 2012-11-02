@@ -5,7 +5,6 @@
 // \date Novermber 01, 2012
 
 #include <vul/vul_arg.h>
-#include <testlib/testlib_test.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_container_sptr.h>
 #include <volm/volm_spherical_shell_container.h>
