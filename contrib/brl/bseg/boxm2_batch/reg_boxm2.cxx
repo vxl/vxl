@@ -26,6 +26,11 @@
 #if defined(HAS_HDFS) && HAS_HDFS
 #include <bhdfs/pro/bhdfs_register.h>
 #endif
+#include <bxml/bsvg/pro/bsvg_register.h>
+#include <bvrml/pro/bvrml_register.h>
+#include <bbgm/pro/bbgm_register.h>
+#include <icam_pro/icam_register.h>
+#include <boxm2/volm/pro/boxm2_volm_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -51,6 +56,11 @@ register_processes(PyObject *self, PyObject *args)
 #if defined(HAS_HDFS) && HAS_HDFS
   bhdfs_register::register_process();
 #endif
+  bsvg_register::register_process();
+  bvrml_register::register_process();
+  bbgm_register::register_process();
+  icam_register::register_process();
+  boxm2_volm_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -82,6 +92,12 @@ register_datatypes(PyObject *self, PyObject *args)
 #if defined(HAS_HDFS) && HAS_HDFS
   bhdfs_register::register_datatype();
 #endif
+  bsvg_register::register_datatype();
+  bvrml_register::register_datatype();
+  bbgm_register::register_datatype();
+  icam_register::register_datatype();
+  boxm2_register::register_datatype();
+  boxm2_volm_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }
