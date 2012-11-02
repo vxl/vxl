@@ -37,7 +37,7 @@ static void test_spherical_container()
   TEST("last interval.. ", iter->second, (unsigned char)143);
   int cnt = 0; 
   for (vcl_map<double, unsigned char>::iterator iter = depth_interval_map.begin(); iter != depth_interval_map.end(); iter++, cnt++) {
-    vcl_cout << "depth: " << iter->first << " interval: " << (int)iter->second << vcl_endl;
+    vcl_cout << "depth: " << iter->first << " interval: " << iter->second << vcl_endl;  
     if (cnt > 5)
       break;
   }
