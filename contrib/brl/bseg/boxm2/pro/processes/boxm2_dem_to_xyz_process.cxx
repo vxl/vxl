@@ -165,18 +165,28 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x())/vox_length);
   int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y())/vox_length);
 
+  vcl_cout <<"ni: " << ni << " nj: " << nj << vcl_endl;
+  vcl_cout.flush();
+
   // create x y z images
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
-  out_img_z->fill((float)scene_bbox.min_z());
+  out_img_x->fill((float)(scene_bbox.min_x())-10.0f);  // local coord system min z
+  out_img_y->fill((float)(scene_bbox.min_y())-10.0f);  // local coord system min z
+  out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
+  vcl_cout << "out img x(0,0): " << ((*out_img_x)(0,0)) << vcl_endl; vcl_cout.flush();
+  vcl_cout << "out img y(0,0): " << ((*out_img_y)(0,0)) << vcl_endl; vcl_cout.flush();
+  vcl_cout << "out img z(0,0): " << ((*out_img_z)(0,0)) << vcl_endl; vcl_cout.flush();
 
   double lon,lat,gz;
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84,lon, lat, gz);
   vcl_cout << "lvcs origin height: " << gz << vcl_endl;
   gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
   gz += scene_bbox.min_z();
-
+  
+  vcl_cout << " scene min z: " << scene_bbox.min_z() << " gz: " << gz << vcl_endl; 
+  vcl_cout.flush();
   if (fill_in_value <= 0)
     fill_in_value = vcl_numeric_limits<float>::max();
 
@@ -193,7 +203,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
       int uu = (int)vcl_floor(u+0.5);
       int vv = (int)vcl_floor(v+0.5);
       if (uu >= 0 && vv >= 0 && uu < (int)orig_dem_ni && vv < (int)orig_dem_ni) {
-        if ((*dem_view)(uu,vv) < fill_in_value)  // otherwise it remains at local height = 0
+        if ((*dem_view)(uu,vv) < fill_in_value)  // otherwise it remains at local min z
           (*out_img_z)(i,j) = (*dem_view)(uu,vv)-(float)gz;  // we need local height
       }
     }
@@ -324,6 +334,163 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
   pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
+  return true;
+}
+
+namespace boxm2_dem_to_xyz_process2_globals
+{
+  const unsigned n_inputs_ = 5;
+  const unsigned n_outputs_ = 3;
+}
+
+bool boxm2_dem_to_xyz_process2_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_dem_to_xyz_process2_globals;
+
+  //process takes 1 input
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr";
+  input_types_[1] = "vcl_string";  // geotiff image of DEM
+  input_types_[2] = "double"; // lvcs is using wgs84 so wrt ellipsoid, however some DEMs are using geoid,
+                              // in that case pass the distance between ellipsoid and geoid in the region
+                              // to convert DEM heights to heights wrt to ellipsoid
+  input_types_[3] = "vpgl_camera_double_sptr";  // geocam if available, otherwise pass 0, camera will be constructed using info in geotiff header
+  input_types_[4] = "float";  // some DEMs have gaps or invalid regions, pass the value in the DEM imagery that is used to fill those areas.
+
+  // process has 1 outputs:
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  output_types_[0] = "vil_image_view_base_sptr";  // x image
+  output_types_[1] = "vil_image_view_base_sptr";  // y image
+  output_types_[2] = "vil_image_view_base_sptr";  // z image
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
+{
+  using namespace boxm2_dem_to_xyz_process2_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  //get the inputs
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
+  vcl_string geotiff_fname = pro.get_input<vcl_string>(1);
+  double geoid_height = pro.get_input<double>(2);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(3);
+  float fill_in_value = pro.get_input<float>(4);
+
+  vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
+
+  vpgl_geo_camera* geocam = 0;
+  if (cam) {
+    vcl_cout << "Using the loaded camera!\n";
+    geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  }
+  else
+    vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
+
+  if (!geocam) {
+    vcl_cerr << "In boxm2_dem_to_xyz_process() - the geocam could not be initialized!\n";
+    return false;
+  }
+
+  vgl_box_3d<double> scene_bbox = scene->bounding_box();
+  vgl_vector_3d<unsigned> dims = scene->scene_dimensions();
+  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  if (blks.size() < 1)
+    return false;
+
+  unsigned orig_dem_ni = dem_res->ni(); unsigned orig_dem_nj = dem_res->nj();
+  vcl_cout << "original dem resolution: " << orig_dem_ni << ' ' << orig_dem_nj << vcl_endl;
+  brip_roi broi(orig_dem_ni, orig_dem_nj);
+  vsol_box_2d_sptr bb = new vsol_box_2d();
+
+  double min_uu, min_vv, max_uu, max_vv;
+  geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), min_uu, min_vv);
+  bb->add_point(min_uu,min_vv);
+  geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), max_uu, max_vv);
+  bb->add_point(max_uu,max_vv);
+  bb = broi.clip_to_image_bounds(bb);
+  if (bb->width() <= 0 || bb->height() <= 0) {
+    vcl_cout << "In boxm2_dem_to_xyz_process() -- " << geotiff_fname << " does not overlap the scene!\n";
+    return false;
+  }
+  vcl_cout <<"projected scene bbox: " << *bb << vcl_endl;
+
+  unsigned int min_i = min_uu > 0 ? (unsigned int)min_uu : 0;
+  unsigned int min_j = max_vv > 0 ? (unsigned int)max_vv : 0;  // scene box min projects to lower left corner of the scene in the image
+  
+  int ni = max_uu-min_uu+1 < orig_dem_ni ? (int)(max_uu-min_uu+1) : orig_dem_ni;
+  int nj = min_vv-max_vv+1 < orig_dem_nj ? (int)(min_vv-max_vv+1) : orig_dem_nj;
+  
+  vcl_cout <<"min_uu: " << min_uu << " min_vv: " << min_vv << vcl_endl;
+  vcl_cout <<"max_uu: " << max_uu << " max_vv: " << max_vv << vcl_endl;
+  vcl_cout <<"min_i: " << min_i << " min_j: " << min_j << " ni: " << ni << " nj: " << nj << vcl_endl;
+  vcl_cout.flush();
+  
+  vil_image_view_base_sptr dem_view_base = dem_res->get_view(min_i, ni, min_j, nj);
+  vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
+  if (!dem_view) {
+    vil_image_view<float> temp(dem_view_base->ni(), dem_view_base->nj(), 1);
+
+    vil_image_view<vxl_int_16>* dem_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(dem_view_base.ptr());
+    if (!dem_view_int) {
+      vil_image_view<vxl_byte>* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_view_base.ptr());
+      if (!dem_view_byte) {
+        vcl_cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
+        return false;
+      }
+      else
+        vil_convert_cast(*dem_view_byte, temp);
+    }
+    else
+      vil_convert_cast(*dem_view_int, temp);
+    dem_view = new vil_image_view<float>(temp);
+  }
+  vcl_cout <<"got dem image!" << vcl_endl;
+  vcl_cout.flush();
+
+  boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
+  float sb_length = info->block_len;
+  vcl_cout <<"sb_length: " << sb_length << "!\n" << vcl_endl;
+  vcl_cout.flush();
+
+  vcl_cout <<"ni: " << ni << " nj: " << nj << vcl_endl;
+  vcl_cout.flush();
+
+  // create x y z images
+  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  out_img_x->fill((float)(scene_bbox.min_x())-10.0f);  // local coord system min z
+  out_img_y->fill((float)(scene_bbox.min_y())-10.0f);  // local coord system min z
+  out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
+  vcl_cout << "out img x(0,0): " << ((*out_img_x)(0,0)) << vcl_endl; vcl_cout.flush();
+  vcl_cout << "out img y(0,0): " << ((*out_img_y)(0,0)) << vcl_endl; vcl_cout.flush();
+  vcl_cout << "out img z(0,0): " << ((*out_img_z)(0,0)) << vcl_endl; vcl_cout.flush();
+
+  for (int i = 0; i < ni; ++i)
+    for (int j = 0; j < nj; ++j) {
+      // find the global coord of this pixel
+      double lon, lat;
+      geocam->img_to_global(i+min_i, j+min_j, lon, lat);
+      // find the local coord of this global position
+      double lx, ly, lz;
+      lvcs->global_to_local(lon, lat, (*dem_view)(i,j), vpgl_lvcs::wgs84, lx, ly, lz);
+      vgl_point_3d<double> pt(lx, ly, lz);
+      (*out_img_x)(i,j) = (float)lx;
+      (*out_img_y)(i,j) = (float)ly;
+      (*out_img_z)(i,j) = (float)lz;           
+    }
+  
+
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
+  pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
+  pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
+
   return true;
 }
 
