@@ -38,6 +38,8 @@
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
 #include <vcl_fstream.h>
 
+#define uchar unsigned char
+
 class boxm2_volm_wr3db_index : public vbl_ref_count
 {
   public:
@@ -60,24 +62,24 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     
     //: just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known, 
     //  caller is responsible to keep the ordering consistent with the hypotheses ordering
-    bool add_to_index(vcl_vector<char>& values);
+    bool add_to_index(vcl_vector<uchar>& values);
     //: caller is responsible to pass a valid array of size layer_size
-    bool add_to_index(char* values); 
+    bool add_to_index(uchar* values); 
     
     //: retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc
     //  caller is responsible to resize values array to layer_size
-    bool get_next(vcl_vector<char>& values);
+    bool get_next(vcl_vector<uchar>& values);
     //: caller is responsible to pass a valid array of size layer_size
-    bool get_next(char* values);
+    bool get_next(uchar* values);
     
     //: binary io
     bool close_file(vcl_string out_file);
     
     //: inflate an index value array and return a vector of chars whose values are one of the combinations VIS_OCC, VIS_UNOCC, NONVIS_UNKNOWN
-    static bool inflate_index_vis_and_prob(vcl_vector<char>& values, volm_spherical_container_sptr cont, vcl_vector<char>& vis_prob);
+    static bool inflate_index_vis_and_prob(vcl_vector<uchar>& values, volm_spherical_container_sptr cont, vcl_vector<char>& vis_prob);
    
   protected:
-    unsigned int read_to_buffer(char* buf);
+    unsigned int read_to_buffer(uchar* buf);
   
     unsigned int layer_size_;     // number of values in an index, this is given by the spherical shell container
     unsigned int buffer_size_;
@@ -86,7 +88,7 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     mode m_;
     vcl_string file_name_;
     
-    char *active_buffer_;  
+    uchar *active_buffer_;  
     
     unsigned long file_size_;
     unsigned long read_so_far_;

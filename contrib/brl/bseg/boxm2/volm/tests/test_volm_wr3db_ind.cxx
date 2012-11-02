@@ -20,10 +20,10 @@ static void test_volm_wr3db_index()
   // fill the layer after vmin with some depth interval values:
   unsigned int offset, end_offset; double depth;
   sph2->first_res(sph2->min_voxel_res()*2, offset, end_offset, depth);
-  vcl_vector<char> values(end_offset-offset);
+  vcl_vector<unsigned char> values(end_offset-offset);
   vnl_random rng;
   for (unsigned i = 0; i+offset < end_offset; ++i)
-    values[i] = (char)rng.drand32(1.0,(double)(sph2->get_depth_offset_map().size()-1));
+    values[i] = (unsigned char)rng.drand32(1.0,(double)(sph2->get_depth_offset_map().size()-1));
 
   vcl_vector<char> vis_prob;
   vis_prob.resize(sph2->get_voxels().size());
@@ -36,7 +36,7 @@ static void test_volm_wr3db_index()
     int layer_size = (int)sph_shell->get_container_size();
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, 1.0f);
 
-    vcl_vector<char> vals(layer_size, 0);
+    vcl_vector<unsigned char> vals(layer_size, 0);
     vals[0] = 'a'; vals[3] = 'c';
   
     vul_file::delete_file_glob("./test_ind.bin");
@@ -47,7 +47,7 @@ static void test_volm_wr3db_index()
     // the one below should trigger a write to disc
     vals[0] = 'b';  vals[layer_size-1] = 'd';
     TEST("add to index", ind->add_to_index(vals), true);
-    char *vals_buf = new char[layer_size];
+    unsigned char *vals_buf = new unsigned char[layer_size];
     vals_buf[0] = 'e';  vals_buf[layer_size-1] = 'f';
     TEST("add to index", ind->add_to_index(vals_buf), true);
     vcl_cout << "global id: " << ind->current_global_id() << " current active cache id: " << ind->current_id() << vcl_endl;
@@ -60,14 +60,14 @@ static void test_volm_wr3db_index()
     TEST("initialize read", ind2->initialize_read("./test_ind.bin"), true);
     TEST("global id", ind2->current_global_id(), 0);
   
-    vcl_vector<char> vals2(layer_size);
+    vcl_vector<unsigned char> vals2(layer_size);
     TEST("getting the first index", ind2->get_next(vals2), true);
     TEST("test index 0", vals2[0] == 'a', true);
     TEST("test index 0", vals2[3] == 'c', true);
     for (unsigned i = 0; i < ind->buffer_size()-1; i++)
       ind2->get_next(vals2);
     ind2->get_next(vals2);
-    char *vals_buf2 = new char[layer_size];
+    unsigned char *vals_buf2 = new unsigned char[layer_size];
     ind2->get_next(vals_buf2);
     TEST("test index end", vals_buf2[0] == 'e', true);
     TEST("test index end", vals_buf2[layer_size-1] == 'f', true);

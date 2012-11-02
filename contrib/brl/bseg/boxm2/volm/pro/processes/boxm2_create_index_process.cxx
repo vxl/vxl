@@ -323,11 +323,11 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     vcl_cout << vcl_endl;
 #endif
     // find each depth interval using spherical container
-    vcl_vector<char> values;
+    vcl_vector<unsigned char> values;
     for (int i = 0; i < layer_size; i++) {
       // check if sky
       if (vis_buff[i] > vis_thres)
-        values.push_back((char)254);
+        values.push_back((unsigned char)254);
       else
         values.push_back(sph2->get_depth_interval((double)buff[i]));
     }
@@ -423,7 +423,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
   ind->initialize_read(index_file);
   
-  vcl_vector<char> values(layer_size);
+  vcl_vector<unsigned char> values(layer_size);
   for (unsigned j = 0; j < si; j++)
     ind->get_next(values);
   for (unsigned j = si; j < ei; j++) {

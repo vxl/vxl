@@ -12,7 +12,7 @@ layer_size_(layer_size), buffer_size_(0), current_id_(0), current_global_id_(0),
   vcl_cout << "max active cache size on CPU: " << buffer_capacity << " Gb." << vcl_endl;
   buffer_size_ = (unsigned int)vcl_floor((buffer_capacity*1024*1024*1024)/(2.0f*layer_size));
   vcl_cout << layer_size << " elements in each index, at max: " << buffer_size_ << " indices on active cache.." << vcl_endl;
-  active_buffer_ = new char[buffer_size_*layer_size_];
+  active_buffer_ = new uchar[buffer_size_*layer_size_];
 }
 
 boxm2_volm_wr3db_index::~boxm2_volm_wr3db_index()
@@ -56,7 +56,7 @@ bool boxm2_volm_wr3db_index::initialize_read(vcl_string file_name)
 bool boxm2_volm_wr3db_index::finalize() 
 {
   if (m_ == WRITE && current_id_ != 0) { // write whatever is on the cache
-    f_obj_.write(active_buffer_, (long)(current_id_*layer_size_));  
+    f_obj_.write((char*)active_buffer_, (long)(current_id_*layer_size_));  
   }
   f_obj_.close();
   m_ = NOT_INITIALIZED;
@@ -66,7 +66,7 @@ bool boxm2_volm_wr3db_index::finalize()
 
 //: just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known, 
 //  caller is responsible to keep the ordering consistent with the hypotheses ordering
-bool boxm2_volm_wr3db_index::add_to_index(vcl_vector<char>& values)
+bool boxm2_volm_wr3db_index::add_to_index(vcl_vector<uchar>& values)
 {
   if (m_ == READ) {
     vcl_cout << "index object is in READ mode! cannot add to index!\n";
@@ -78,7 +78,7 @@ bool boxm2_volm_wr3db_index::add_to_index(vcl_vector<char>& values)
   }
   if (current_id_ == buffer_size_) {  // write the current cache 
     // initiate a write
-    f_obj_.write(active_buffer_, (long)(buffer_size_*layer_size_));
+    f_obj_.write((char*)active_buffer_, (long)(buffer_size_*layer_size_));
     current_id_ = 0;
   }
   
@@ -91,14 +91,14 @@ bool boxm2_volm_wr3db_index::add_to_index(vcl_vector<char>& values)
 }
 
 //: caller is responsible to pass a valid array of size layer_size
-bool boxm2_volm_wr3db_index::add_to_index(char* values) { 
+bool boxm2_volm_wr3db_index::add_to_index(uchar* values) { 
 if (m_ == READ) {
     vcl_cout << "index object is in READ mode! cannot add to index!\n";
     return false;
   }
   if (current_id_ == buffer_size_) {  // write the current cache 
     // initiate a write
-    f_obj_.write(active_buffer_, (long)(buffer_size_*layer_size_));
+    f_obj_.write((char*)active_buffer_, (long)(buffer_size_*layer_size_));
     current_id_ = 0;
   }
   
@@ -109,15 +109,15 @@ if (m_ == READ) {
   return true;
 }
 
-unsigned int boxm2_volm_wr3db_index::read_to_buffer(char* buf) 
+unsigned int boxm2_volm_wr3db_index::read_to_buffer(uchar* buf) 
 {
   long remaining = file_size_-read_so_far_;
   if ((long)(buffer_size_*layer_size_) <= remaining) {
-    f_obj_.read(buf, (long)(buffer_size_*layer_size_));   
+    f_obj_.read((char*)buf, (long)(buffer_size_*layer_size_));   
     read_so_far_ += (long)(buffer_size_*layer_size_);
     return buffer_size_;
   } else if (remaining > 0) {
-    f_obj_.read(buf, remaining);   
+    f_obj_.read((char*)buf, remaining);   
     read_so_far_ += remaining;
     return remaining/layer_size_;
   } else 
@@ -125,7 +125,7 @@ unsigned int boxm2_volm_wr3db_index::read_to_buffer(char* buf)
 }
 
 //: retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc, values array is resized to layer_size
-bool boxm2_volm_wr3db_index::get_next(vcl_vector<char>& values)
+bool boxm2_volm_wr3db_index::get_next(vcl_vector<uchar>& values)
 {  
   if (m_ == WRITE) {
     vcl_cout << "index object is in WRITE mode! cannot read from index!\n";
@@ -145,7 +145,7 @@ bool boxm2_volm_wr3db_index::get_next(vcl_vector<char>& values)
   return true;
 }
 //: caller is responsible to pass a valid array of size layer_size
-bool boxm2_volm_wr3db_index::get_next(char* values)
+bool boxm2_volm_wr3db_index::get_next(uchar* values)
 {
   if (m_ == WRITE) {
     vcl_cout << "index object is in WRITE mode! cannot read from index!\n";
@@ -168,7 +168,7 @@ bool boxm2_volm_wr3db_index::get_next(char* values)
     
 
 //: inflate the index for ith location and return a vector of char values where last bit is visibility and second to last is prob (occupied or not)
-bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(vcl_vector<char>& values, 
+bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(vcl_vector<uchar>& values, 
                                                         volm_spherical_container_sptr cont, 
                                                         vcl_vector<char>& vis_prob)
 {
@@ -279,7 +279,7 @@ bool boxm2_volm_wr3db_index::read_index(vcl_string in_file)
   for (unsigned i = 0; i < size; i++) {
     index_[i].resize(layer_size);
     for (unsigned k = 0; k < layer_size; k++) {
-      char val;
+      uchar val;
       vsl_b_read(ifs, val);
       index_[i][k] = val;
     }
