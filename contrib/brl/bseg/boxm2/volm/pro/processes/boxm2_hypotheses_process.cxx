@@ -124,13 +124,13 @@ bool boxm2_get_hypothesis_process(bprb_func_process& pro)
   pro.set_output_val<float>(i++, h->locs_[k].z());
   return true;
 }
-
-
 namespace boxm2_create_hypotheses_process_globals
 {
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 2;
 }
+
+
 bool boxm2_create_hypotheses_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_hypotheses_process_globals;
