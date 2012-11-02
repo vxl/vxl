@@ -376,3 +376,61 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   
   return true;
 }
+
+namespace boxm2_visualize_index_process_globals
+{
+  const unsigned n_inputs_ = 7;
+  const unsigned n_outputs_ = 0;
+}
+bool boxm2_visualize_index_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_visualize_index_process_globals;
+
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vcl_string"; // index file
+  input_types_[1] = "float"; // cap angle to construct index
+  input_types_[2] = "float"; // point angle
+  input_types_[3] = "float"; // buffer capacity for the index
+  input_types_[4] = "unsigned";  // start id of the indices to visualize
+  input_types_[5] = "unsigned";  // end id of the indices to visualize
+  input_types_[6] = "vcl_string";  // prefix for the output files
+
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_visualize_index_process(bprb_func_process& pro)
+{
+  using namespace boxm2_visualize_index_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  unsigned i = 0;
+  vcl_string index_file = pro.get_input<vcl_string>(i++);
+  float cap_angle = pro.get_input<float>(i++);
+  float point_angle = pro.get_input<float>(i++);
+  float buffer_capacity = pro.get_input<float>(i++);
+  unsigned si = pro.get_input<unsigned>(i++);
+  unsigned ei = pro.get_input<unsigned>(i++);
+  vcl_string prefix = pro.get_input<vcl_string>(i++);
+  
+  // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
+  double radius = 1;
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, (double)cap_angle, (double)point_angle);
+  int layer_size = (int)(sph_shell->get_container_size());
+  boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
+  ind->initialize_read(index_file);
+  
+  vcl_vector<char> values(layer_size);
+  for (unsigned j = 0; j < si; j++)
+    ind->get_next(values);
+  for (unsigned j = si; j < ei; j++) {
+    vcl_stringstream str; str << prefix << "_" << j << ".vrml";
+    ind->get_next(values);
+    sph_shell->draw_template(str.str(), values, 254);
+  }  
+  return true;
+}
+
