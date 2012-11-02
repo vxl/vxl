@@ -1421,7 +1421,6 @@ def get_hypothesis(hypo,j):
   z = boxm2_batch.get_output_float(id)
   return x,y,z;
 
-  
 def index_hypotheses(device, scene, opencl_cache, hyp, vmin, dmax, solid_angle, cap_angle, point_angle, out_name, visibility_threshold, index_buffer_capacity):
   boxm2_batch.init_process("boxm2IndexHypothesesProcess");
   boxm2_batch.set_input_from_db(0, device);
@@ -1437,5 +1436,17 @@ def index_hypotheses(device, scene, opencl_cache, hyp, vmin, dmax, solid_angle, 
   boxm2_batch.set_input_float(10, visibility_threshold);
   boxm2_batch.set_input_float(11, index_buffer_capacity);
   boxm2_batch.run_process();
+  
+def visualize_indices(index_file, cap_angle, point_angle, buffer_capacity, start_i, end_i, out_prefix):
+  boxm2_batch.init_process("boxm2VisualizeIndicesProcess");
+  boxm2_batch.set_input_string(0, index_file);
+  boxm2_batch.set_input_float(1, cap_angle);
+  boxm2_batch.set_input_float(2, point_angle);
+  boxm2_batch.set_input_float(3, buffer_capacity);
+  boxm2_batch.set_input_unsigned(4, start_i);
+  boxm2_batch.set_input_unsigned(5, end_i);
+  boxm2_batch.set_input_string(6, out_prefix);
+  boxm2_batch.run_process();
+  
 
 
