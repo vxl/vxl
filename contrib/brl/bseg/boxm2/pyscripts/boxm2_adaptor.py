@@ -850,7 +850,36 @@ def create_scene_and_blocks(scene_dir, app_model, obs_model, origin_lon, origin_
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1, xml_name);
   boxm2_batch.run_process();
-  
+
+# Create a scene from a given polygon strucutre in kml file
+def create_scene_poly_and_blocks(scene_dir, app_model, obs_model, poly_kml, origin_lon, origin_lat, origin_elev, scene_height, vox_size, block_len_xy, block_len_z, local_cs_name, num_bins = 0, xml_name = "scene"):
+	# get the inpus
+	boxm2_batch.init_process("boxm2CreatePolySceneAndBlocksProcess");
+	boxm2_batch.set_input_string(0,scene_dir);
+	boxm2_batch.set_input_string(1,app_model);
+	boxm2_batch.set_input_string(2,obs_model);
+	boxm2_batch.set_input_string(3,poly_kml);
+	boxm2_batch.set_input_float(4,origin_lon);
+	boxm2_batch.set_input_float(5,origin_lat);
+	boxm2_batch.set_input_float(6,origin_elev);
+	boxm2_batch.set_input_float(7,scene_height);
+	boxm2_batch.set_input_float(8,vox_size);
+	boxm2_batch.set_input_float(9,block_len_xy);
+	boxm2_batch.set_input_float(10,block_len_z);
+	boxm2_batch.set_input_int(11,num_bins);
+	boxm2_batch.set_input_string(12,local_cs_name);
+	
+	# create scene
+	boxm2_batch.run_process();
+	(scene_id, scene_type) = boxm2_batch.commit_output(0);
+	scene = dbvalue(scene_id, scene_type);
+	
+	# write scene
+	boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
+	boxm2_batch.set_input_from_db(0,scene);
+	boxm2_batch.set_input_string(1, xml_name);
+	boxm2_batch.run_process();  
+ 
 # Distribute a larger scene region and its blocks to smaller square scenes with a given dimension
 def distribute_scene_blocks(scene, small_scene_dim, xml_output_path, xml_name_prefix):
   boxm2_batch.init_process("boxm2DistributeSceneBlocksProcess");
@@ -1447,6 +1476,3 @@ def visualize_indices(index_file, cap_angle, point_angle, buffer_capacity, start
   boxm2_batch.set_input_unsigned(5, end_i);
   boxm2_batch.set_input_string(6, out_prefix);
   boxm2_batch.run_process();
-  
-
-
