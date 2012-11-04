@@ -23,8 +23,10 @@
 
 
 #ifndef BUFSIZ
-  #define BUFSIZ 4096
+  #define BUFSIZ 262144
 #endif
+// Sep, 2012, Yi Dong: hack to increase BUFSIZE
+#define BUFSIZ 262144
 
 expatpp::expatpp(bool createParser) :
   mParser(0),  // in case of exception below
