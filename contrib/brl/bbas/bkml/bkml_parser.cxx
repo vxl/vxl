@@ -185,7 +185,7 @@ void bkml_parser::charData(const XML_Char* s, int len)
       str >> y; 
       str.ignore();
       str >> z; 
-      if(str == "")
+      if(str.str() == " ")
         str.ignore();
       vgl_point_3d<double> vpt(x,y,z);
       if(cord_tag_ == KML_POLYOB_TAG)
