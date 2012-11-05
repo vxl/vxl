@@ -2,6 +2,12 @@
 // \file
 // \brief Parses the kml configuration file for bwm tool.
 // 
+//
+// \verybatim
+//	Modifications
+//   2012-09-10 Yi Dong - Modified to parser the polygon and path(LineString) coordinates stored in kml
+// \endverbatim
+//
 #include "bkml_parser.h"
 
 #include <vcl_sstream.h>
@@ -70,6 +76,18 @@ bkml_parser::startElement(const char* name, const char** atts)
   }
   else if (vcl_strcmp(name, KML_NEAR_TAG) == 0) {
     last_tag = KML_NEAR_TAG;
+  }
+  else if (vcl_strcmp(name, KML_CORD_TAG) == 0 && (cord_tag_ != "") ){
+	last_tag = KML_CORD_TAG;
+  }
+  else if (vcl_strcmp(name, KML_POLYOB_TAG) == 0) {
+	cord_tag_ = KML_POLYOB_TAG;
+  }
+  else if (vcl_strcmp(name, KML_POLYIB_TAG) == 0) {
+	cord_tag_ = KML_POLYIB_TAG;
+  }
+  else if (vcl_strcmp(name, KML_LINE_TAG) == 0) {
+	cord_tag_ = KML_LINE_TAG;
   }
 }
 
@@ -146,6 +164,39 @@ void bkml_parser::charData(const XML_Char* s, int len)
       str << s[i];
     str >> near_;
     last_tag = "";
+  }
+  else if (last_tag == KML_CORD_TAG) {
+	vcl_stringstream str;
+	double x,y,z;
+	vcl_string str_s;
+	str_s = s;
+	size_t cord_end = str_s.find(KML_POLYCORE_END_TAG);
+	while(str_s[cord_end] != '\n')
+		cord_end--;
+	while(str_s[cord_end-1] == ' ')
+		cord_end--;
+	if(cord_end > len)
+		len = (int)cord_end;
+	for(int i=0; i<cord_end; ++i) 
+		str << s[i];
+	while(!str.eof()){
+		str >> x; str.ignore();
+		str >> y; str.ignore();
+		str >> z; 
+		if(str == "")
+			str.ignore();
+		vgl_point_3d<double> vpt(x,y,z);
+		if(cord_tag_ == KML_POLYOB_TAG)
+			polyouter_.push_back(vpt);
+		else if(cord_tag_ == KML_POLYIB_TAG)
+			polyinner_.push_back(vpt);
+		else if(cord_tag_ == KML_LINE_TAG)
+			linecord_.push_back(vpt);
+		else{
+			vcl_cout << "WARNING: shape tag can not be recognized (not LineString or Polygon)" << vcl_endl;
+		}	
+	}
+	last_tag = "";
   }
 }
 

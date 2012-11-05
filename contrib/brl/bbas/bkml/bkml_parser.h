@@ -13,6 +13,12 @@
 #define KML_RFOV_TAG "rightFov"
 #define KML_TFOV_TAG "topFov"
 #define KML_NEAR_TAG "near"
+#define KML_POLY_TAG "Polygon"
+#define KML_POLYOB_TAG "outerBoundaryIs"
+#define KML_POLYIB_TAG "innerBoundaryIs"
+#define KML_CORD_TAG "coordinates"
+#define KML_POLYCORE_END_TAG "/coordinates"
+#define KML_LINE_TAG "LineString"
 
 
 #ifdef WIN32
@@ -22,6 +28,7 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
+#include <vgl/vgl_point_3d.h>
 
 
 class bkml_parser : public expatpp
@@ -41,7 +48,9 @@ class bkml_parser : public expatpp
   double right_fov_;
   double top_fov_;
   double near_;
-
+  vcl_vector<vgl_point_3d<double> > polyouter_;
+  vcl_vector<vgl_point_3d<double> > polyinner_;
+  vcl_vector<vgl_point_3d<double> > linecord_;
  private:
 
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
@@ -53,7 +62,7 @@ class bkml_parser : public expatpp
 
   //element parser
   vcl_string last_tag;
-
+  vcl_string cord_tag_;
   void trim_string(vcl_string& s);
 };
 
