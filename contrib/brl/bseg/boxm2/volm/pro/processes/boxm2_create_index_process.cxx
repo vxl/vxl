@@ -12,10 +12,11 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
-#include <boxm2/volm/boxm2_volm_locations.h>
+//#include <boxm2/volm/boxm2_volm_locations.h>
 //#include <bbas/volm/volm_spherical_container.h>
 #include <bbas/volm/volm_spherical_shell_container.h>
 #include <bbas/volm/volm_spherical_shell_container_sptr.h>
+#include <bbas/volm/volm_loc_hyp.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -29,7 +30,7 @@
 
 namespace boxm2_create_index_process_globals
 {
-  const unsigned n_inputs_ = 12;
+  const unsigned n_inputs_ = 15;
   const unsigned n_outputs_ = 0;
   
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
@@ -81,15 +82,19 @@ bool boxm2_create_index_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
-  input_types_[3] = "boxm2_volm_loc_hypotheses_sptr";
-  input_types_[4] = "float"; // minimum voxel resolution to create spherical container
-  input_types_[5] = "float"; // maximum distance in the world that the spherical container will cover
-  input_types_[6] = "float"; // the solid angle for the spherical container, the resolution of the voxels will get coarser based on this angle
-  input_types_[7] = "float"; // cap angle to create the spherical shell container  -- 180 for full sphere, 90 for half sphere
-  input_types_[8] = "float"; // point angle to create the spherical shell container
-  input_types_[9] = "vcl_string"; // name of output file to save the index
-  input_types_[10] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
-  input_types_[11] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
+  //input_types_[3] = "boxm2_volm_loc_hypotheses_sptr";
+  input_types_[3] = "vcl_string"; // binary hypotheses file with lat, lon, elev positions to generate indices for 
+  input_types_[4] = "float"; // elevation difference to adjust local heights, some scenes need a height adjustment according to their resolution
+  input_types_[5] = "float"; // minimum voxel resolution to create spherical container
+  input_types_[6] = "float"; // maximum distance in the world that the spherical container will cover
+  input_types_[7] = "float"; // the solid angle for the spherical container, the resolution of the voxels will get coarser based on this angle
+  input_types_[8] = "float"; // cap angle to create the spherical shell container  -- 180 for full sphere, 90 for half sphere
+  input_types_[9] = "float"; // point angle to create the spherical shell container
+  input_types_[10] = "float"; // top angle to remove from shp shell
+  input_types_[11] = "float"; // bottom angle to remove from sph sheel
+  input_types_[12] = "vcl_string"; // name of output file to save the index
+  input_types_[13] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
+  input_types_[14] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
@@ -122,13 +127,18 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   vcl_cout << " max allowed work items in a group: " << device->info().max_work_group_size_ << "\n";
   vcl_cout << " max work item sizes in each dimensions: " << device->info().max_work_item_sizes_ << "\n";
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
+  vpgl_lvcs lvcs = scene->lvcs();
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  boxm2_volm_loc_hypotheses_sptr hyp = pro.get_input<boxm2_volm_loc_hypotheses_sptr>(i++);
+  //boxm2_volm_loc_hypotheses_sptr hyp = pro.get_input<boxm2_volm_loc_hypotheses_sptr>(i++);
+  vcl_string hyp_file = pro.get_input<vcl_string>(i++);
+  float elev_dif = pro.get_input<float>(i++);
   float vmin = pro.get_input<float>(i++);
   float dmax = pro.get_input<float>(i++);
   float solid_angle = pro.get_input<float>(i++);
   float cap_angle = pro.get_input<float>(i++);
   float point_angle = pro.get_input<float>(i++); 
+  float top_angle = pro.get_input<float>(i++); 
+  float bottom_angle = pro.get_input<float>(i++); 
   vcl_string index_file = pro.get_input<vcl_string>(i++);
   float vis_thres = pro.get_input<float>(i++);
   float buffer_capacity = pro.get_input<float>(i++);
@@ -136,9 +146,18 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   volm_spherical_container_sptr sph2 = new volm_spherical_container(solid_angle,vmin,dmax);
   vcl_cout << "number of voxels in container: " << sph2->get_voxels().size() << vcl_endl;
   
+  //: read the location hypotheses
+  if (!vul_file::exists(hyp_file)) {
+    vcl_cerr << "Cannot find: " << hyp_file << "!\n";
+    return false;
+  }
+  
+  volm_loc_hyp hyp(hyp_file);
+  vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file << vcl_endl;
+  
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   double radius = 1;
-  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, (double)cap_angle, (double)point_angle);
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, cap_angle, point_angle, top_angle, bottom_angle);
   int layer_size = (int)(sph_shell->get_container_size());
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
   ind->initialize_write(index_file);
@@ -204,14 +223,27 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   subblk_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   
   //zip through each location hypothesis
-  for (unsigned hi = 0; hi < hyp->locs_.size(); hi++)
+  //for (unsigned hi = 0; hi < hyp->locs_.size(); hi++)
+  for (unsigned hi = 0; hi < hyp.size(); hi++)
   {
-    vcl_cout << "Processing hypothesis: " << hi << " x: " << hyp->locs_[hi].x() << " y: " << hyp->locs_[hi].y() << " z: " << hyp->locs_[hi].z() << vcl_endl;
+    vgl_point_3d<float> h_pt;
+    if (!hyp.get_next(h_pt)) {
+      vcl_cerr << "!!Problem retrieving hyp: " << hi << " from file: " << hyp_file << vcl_endl;
+      return false;
+    }
+    //vcl_cout << "Processing hypothesis: " << hi << " x: " << hyp->locs_[hi].x() << " y: " << hyp->locs_[hi].y() << " z: " << hyp->locs_[hi].z() << vcl_endl;
+    vcl_cout << "Processing hypothesis: " << hi << " x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
+    double lx, ly, lz;
+    lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
+    vcl_cout << "   in local coords: " << lx << " " << ly << " " << lz << vcl_endl;
+    lz = lz - elev_dif;
+    vcl_cout << "   after subtracting elev dif (" << elev_dif << "): " << lx << " " << ly << " " << lz << vcl_endl;
     
     cl_float loc_arr[4];
-    loc_arr[0] = hyp->locs_[hi].x(); 
-    loc_arr[1] = hyp->locs_[hi].y();
-    loc_arr[2] = hyp->locs_[hi].z();
+    //loc_arr[0] = hyp->locs_[hi].x(); 
+    //loc_arr[1] = hyp->locs_[hi].y();
+    //loc_arr[2] = hyp->locs_[hi].z();
+    loc_arr[0] = (cl_float)lx; loc_arr[1] = (cl_float)ly; loc_arr[2] = (cl_float)lz; 
     loc_arr[3] = 1.0f;
     bocl_mem* hypo_location = new bocl_mem(device->context(), loc_arr, sizeof(cl_float4), "location buffer");
     hypo_location->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -379,7 +411,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
 namespace boxm2_visualize_index_process_globals
 {
-  const unsigned n_inputs_ = 7;
+  const unsigned n_inputs_ = 9;
   const unsigned n_outputs_ = 0;
 }
 bool boxm2_visualize_index_process_cons(bprb_func_process& pro)
@@ -390,10 +422,12 @@ bool boxm2_visualize_index_process_cons(bprb_func_process& pro)
   input_types_[0] = "vcl_string"; // index file
   input_types_[1] = "float"; // cap angle to construct index
   input_types_[2] = "float"; // point angle
-  input_types_[3] = "float"; // buffer capacity for the index
-  input_types_[4] = "unsigned";  // start id of the indices to visualize
-  input_types_[5] = "unsigned";  // end id of the indices to visualize
-  input_types_[6] = "vcl_string";  // prefix for the output files
+  input_types_[3] = "float"; // top angle
+  input_types_[4] = "float"; // bottom angle
+  input_types_[5] = "float"; // buffer capacity for the index
+  input_types_[6] = "unsigned";  // start id of the indices to visualize
+  input_types_[7] = "unsigned";  // end id of the indices to visualize
+  input_types_[8] = "vcl_string";  // prefix for the output files
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -411,6 +445,8 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   vcl_string index_file = pro.get_input<vcl_string>(i++);
   float cap_angle = pro.get_input<float>(i++);
   float point_angle = pro.get_input<float>(i++);
+  float top_angle = pro.get_input<float>(i++);
+  float bottom_angle = pro.get_input<float>(i++);
   float buffer_capacity = pro.get_input<float>(i++);
   unsigned si = pro.get_input<unsigned>(i++);
   unsigned ei = pro.get_input<unsigned>(i++);
@@ -418,7 +454,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   double radius = 1;
-  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, (double)cap_angle, (double)point_angle);
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, cap_angle, point_angle, top_angle, bottom_angle);
   int layer_size = (int)(sph_shell->get_container_size());
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
   ind->initialize_read(index_file);
