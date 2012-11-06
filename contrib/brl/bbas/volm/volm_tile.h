@@ -42,15 +42,19 @@ class volm_tile
 #endif
    static vcl_vector<volm_tile> generate_p1_tiles();
    static vcl_vector<volm_tile> generate_p1_wr1_tiles();
+
+   //: calculate width of the tile
+   double calculate_width();
+   double calculate_height();
    
-  //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+   //: Binary save self to stream.
+   void b_write(vsl_b_ostream &os) const;
 
-  //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+   //: Binary load self from stream.
+   void b_read(vsl_b_istream &is);
 
-  //: Return IO version number;
-  short version() const { return 1; }  
+   //: Return IO version number;
+   short version() const { return 1; }  
   
  public: 
   float lat_, lon_;  // lower left corner of the tile

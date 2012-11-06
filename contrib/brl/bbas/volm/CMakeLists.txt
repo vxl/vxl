@@ -22,6 +22,8 @@ SET(volm_sources
  volm_spherical_shell_container_sptr.h
  volm_query.h                            volm_query.cxx
  volm_query_sptr.h
+ volm_loc_hyp.h                          volm_loc_hyp.cxx
+ volm_loc_hyp_sptr.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_sources)

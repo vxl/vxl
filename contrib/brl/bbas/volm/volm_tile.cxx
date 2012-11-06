@@ -7,6 +7,7 @@
 
 #include <brip/brip_vil_float_ops.h>
 #include <bkml/bkml_write.h>
+#include <vpgl/vpgl_utm.h>
 
 //: specify lat lon in positive numbers but specify hemisphere ('N' or 'S') and direction ('W' or 'E')
 volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, float scale_i, float scale_j, unsigned ni, unsigned nj) :
@@ -111,6 +112,25 @@ bool volm_tile::global_to_img(double lon, double lat, unsigned& i, unsigned& j)
   j = (unsigned)vcl_floor(v+0.5);
   return true;
 }
+
+//: calculate width of the tile
+double volm_tile::calculate_width()
+{
+  vpgl_utm utm;
+  double x, x2, y, y2; int utm_zone;
+  utm.transform(lat_, lon_, x,  y, utm_zone);
+  utm.transform(lat_, lon_+scale_i_, x2, y2, utm_zone);
+  return vcl_abs(x-x2);
+}
+//: calculate width of the tile
+double volm_tile::calculate_height()
+{
+  vpgl_utm utm;
+  double x, x2, y, y2; int utm_zone;
+  utm.transform(lat_, lon_, x,  y, utm_zone);
+  utm.transform(lat_+scale_j_, lon_, x2, y2, utm_zone);
+  return vcl_abs(y-y2);
+}   
 
 void volm_tile::get_uncertainty_region(float lambda_i, float lambda_j, float cutoff, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel)
 {

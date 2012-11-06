@@ -30,7 +30,7 @@ class volm_spherical_shell_container : public vbl_ref_count
   //: Default constructor
   volm_spherical_shell_container() {}
   //: Constructor
-  volm_spherical_shell_container(double radius, double cap_angle, double point_angle);
+  volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle);
 
   // === accessors ===
 
@@ -48,15 +48,20 @@ class volm_spherical_shell_container : public vbl_ref_count
   void draw_template(vcl_string vrml_file_name, vcl_vector<unsigned char>& values, unsigned char special);
 
  protected:
-  double radius_;
-  double point_angle_;
-  double cap_angle_;
-  vsph_spherical_coord_sptr coord_sys_;
-  vcl_vector<vgl_point_3d<double> > cart_points_;
-  vcl_vector<vsph_sph_point_3d> sph_points_;
   void add_uniform_views();
   bool min_angle(vcl_vector<vgl_point_3d<double> > list, double point_angle);
   bool find_closest(vgl_point_3d<double> p, double& dist);
+  void remove_top_and_bottom();
+  
+  double radius_;
+  double point_angle_;
+  double cap_angle_;
+  double top_angle_;
+  double bottom_angle_;
+  vsph_spherical_coord_sptr coord_sys_;
+  vcl_vector<vgl_point_3d<double> > cart_points_;
+  vcl_vector<vsph_sph_point_3d> sph_points_;
+  
 };
 
 #endif  // volm_spherical_shell_container_h_

@@ -5,13 +5,14 @@
 #include <bvrml/bvrml_write.h>
 
 // constructor
-volm_spherical_shell_container::volm_spherical_shell_container(double radius, double cap_angle, double point_angle)
+volm_spherical_shell_container::volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle)
   : radius_(radius),
     point_angle_(point_angle*vnl_math::pi_over_180),
-    cap_angle_(cap_angle*vnl_math::pi_over_180)
+    cap_angle_(cap_angle*vnl_math::pi_over_180), top_angle_(top_angle*vnl_math::pi_over_180), bottom_angle_(bottom_angle*vnl_math::pi_over_180)
 {
   coord_sys_ = new vsph_spherical_coord(vgl_point_3d<double>(0.0,0.0,0.0), radius_);
   this->add_uniform_views();
+  this->remove_top_and_bottom();
 }
 
 void volm_spherical_shell_container::add_uniform_views()
@@ -157,6 +158,23 @@ void volm_spherical_shell_container::add_uniform_views()
   }
 }
 
+void volm_spherical_shell_container::remove_top_and_bottom()
+{
+  vcl_vector<vgl_point_3d<double> > cart_points_new;
+  vcl_vector<vsph_sph_point_3d> sph_points_new;
+  for (unsigned i = 0; i < sph_points_.size(); i++) {
+    if (sph_points_[i].theta_ > top_angle_ && sph_points_[i].theta_ < vnl_math::pi - bottom_angle_) {
+      sph_points_new.push_back(sph_points_[i]);
+      cart_points_new.push_back(cart_points_[i]);
+    }
+  }
+  
+  sph_points_.clear();
+  sph_points_ = sph_points_new;
+  cart_points_.clear();
+  cart_points_ = cart_points_new;
+}
+
 
 bool volm_spherical_shell_container::find_closest(vgl_point_3d<double> p, double& dist)
 {
@@ -218,7 +236,7 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
   for (unsigned i = 0; i < cart_points_.size(); i++) {
     vgl_vector_3d<double> ray = cart_points_[i]-orig;
     //bvrml_write::write_vrml_line(ofs, orig, ray, 10.0f, 0.0f, 0.0f, 1.0f);
-    bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 1.0f, 0.0f, 0.0f, 1.0f);
+    bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 0.5f, 0.0f, 0.0f, 1.0f);
   }
   ofs.close();
 }
@@ -251,9 +269,9 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vc
   for (unsigned i = 0; i < cart_points_.size(); i++) {
     vgl_vector_3d<double> ray = cart_points_[i]-orig;
     if (values[i] == special)
-      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 1.0f, 1.0f, 1.0f, 0.0f);
+      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 0.6f, 1.0f, 1.0f, 0.0f);
     else 
-      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 1.0f, 0.0f, 0.0f, values[i]/255.0f);
+      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 0.6f, 0.0f, 0.0f, values[i]/255.0f);
   }
   ofs.close();
 }
