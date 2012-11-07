@@ -12,6 +12,7 @@ DECLARE( test_sleep_timer );
 DECLARE( test_vul_file );
 DECLARE( test_expand_path );
 DECLARE( test_get_time_as_string );
+DECLARE( test_checksum );
 
 void
 register_tests()
@@ -28,6 +29,7 @@ register_tests()
   REGISTER( test_vul_file );
   REGISTER( test_expand_path );
   REGISTER( test_get_time_as_string );
+  REGISTER( test_checksum );
 }
 
 DEFINE_MAIN;

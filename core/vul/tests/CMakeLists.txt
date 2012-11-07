@@ -15,6 +15,7 @@ SET(vul_test_sources
   test_awk.cxx
   test_expand_path.cxx
   test_debug.cxx
+  test_checksum.cxx
 )
 
 IF (NOT APPLE)

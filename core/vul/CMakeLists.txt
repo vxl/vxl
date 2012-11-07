@@ -12,6 +12,7 @@ SET(vul_sources
 
   vul_arg.h                   vul_arg.cxx
   vul_awk.h                   vul_awk.cxx
+  vul_checksum.h
   vul_debug.h                 vul_debug.cxx
   vul_expand_path.h           vul_expand_path.cxx
   vul_file.h                  vul_file.cxx
