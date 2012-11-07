@@ -23,8 +23,10 @@ int main(int argc, char** argv)
   vul_arg<float> vmin("-v", "minimum voxel size", 10.0f);
   vul_arg<float> dmax("-d", "maximum depth", 60000.0f);
   vul_arg<float> solid_angle("-sa", "solid angle (deg)", 2.0f);
-  vul_arg<double> cap_angle("-ca", "cap angle(deg)", 360.0);
-  vul_arg<double> point_angle("-pa", "point angle(deg)", 10.0);
+  vul_arg<float> cap_angle("-ca", "cap angle(deg)", 180.0f);
+  vul_arg<float> point_angle("-pa", "point angle(deg)", 10.0f);
+  vul_arg<float> top_angle("-top", "top angle(deg)" , 0.0f);
+  vul_arg<float> bottom_angle("-btm", "bottom angle(deg)", 0.0f);
   vul_arg<double> init_focal("-f", "focal initial", 1000.0);
   vul_arg<double> conf_focal("-cf", "focal confidence", 0.0);
   vul_arg<double> init_heading("-h", "heading initial", 180.0);
@@ -66,7 +68,7 @@ int main(int argc, char** argv)
   //: create containers
   
   volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle(),vmin(),dmax());
-  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, cap_angle(), point_angle());
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, cap_angle(), point_angle(), top_angle(), bottom_angle());
 
   //: create query array
   volm_query_sptr query = new volm_query(dm, sph, sph_shell, img_ni(), img_nj(),
@@ -116,6 +118,8 @@ int main(int argc, char** argv)
     vcl_string vrml_fname = out_folder() + "cam_hypo_schematic.vrml";
     query->draw_template(vrml_fname, sph_shell, dm);
     query->draw_query_images(out_folder(), dm);
+	vcl_string prefix = out_folder();
+	query->visualize_query(prefix, sph_shell);
   }
   
   return volm_io::SUCCESS;

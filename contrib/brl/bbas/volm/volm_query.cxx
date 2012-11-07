@@ -14,6 +14,86 @@
 volm_query::volm_query(depth_map_scene_sptr dm,
                        volm_spherical_container_sptr sph,
 			           volm_spherical_shell_container_sptr container,
+			           unsigned ni,		       unsigned nj,
+			           double init_right_fov,    double conf_right_fov,
+			           double init_top_fov,      double conf_top_fov,
+			           double init_heading, double conf_heading,
+			           double init_tilt,    double conf_tilt,
+			           double init_roll,    double conf_roll,
+			           double altitude)
+{
+  ni_ = ni;  nj_ = nj;
+  // create init_focal and conf_focal by input viewing angle
+  double ppu = 0.5*ni_; double ppv = 0.5*nj_;
+  double dtor = vnl_math::pi_over_180;
+  double init_tr = vcl_tan(init_right_fov*dtor), init_tt = vcl_tan(init_top_fov*dtor);
+  double init_fr = ppu/init_tr, init_ft = ppv/init_tt;
+  init_focal_ = 0.5*(init_fr + init_ft);
+  
+  double conf_tr = vcl_tan((init_right_fov - conf_right_fov)*dtor);
+  double conf_tt = vcl_tan((init_top_fov -conf_top_fov)*dtor);
+  double conf_fr = ppu/conf_tr - init_fr;
+  double conf_ft = ppv/conf_tt - init_ft;
+  conf_focal_ = 0.5*(conf_fr + conf_ft);
+  altitude_ = altitude;
+  // construct camera hypothesis arrays given camera input (better be even number)
+  focals_.push_back(init_focal_);
+  Nf_ = 0;
+  if(conf_focal_){
+	Nf_ = 2;
+    double d_focal = 2.0*conf_focal_/Nf_;
+	for(unsigned i = 1; i < Nf_; i++){
+      focals_.push_back(init_focal_ + i*d_focal);  focals_.push_back(init_focal_ - i*d_focal);
+	}
+  }
+  headings_.push_back(init_heading);
+  Nh_ = 0;
+  if(conf_heading){
+    Nh_ = 2;
+	double d_head = 2.0*conf_heading/Nh_;
+	for(unsigned i = 1; i < Nh_; i++){
+      double fowd = init_heading + i*d_head;
+	  double bkwd = init_heading - i*d_head;
+	  if(fowd > 360.0) fowd -= 360.0;
+	  if(bkwd < 0.0)   bkwd += 360.0;
+      headings_.push_back(fowd);  headings_.push_back(bkwd);
+	}
+  }
+  tilts_.push_back(init_tilt);
+  Nt_ = 0;
+  if(conf_tilt){
+    Nt_ = 2;
+	double d_tilt = 2.0*conf_tilt/Nt_;
+	for(unsigned i = 1; i < Nt_; i++) {
+      double fowd = init_tilt + i*d_tilt;
+	  double bkwd = init_tilt - i*d_tilt;
+	  if(fowd > 360.0) fowd -= 360.0;
+	  if(bkwd < 0.0)   bkwd += 360.0;
+      tilts_.push_back(fowd);  tilts_.push_back(fowd);
+	}
+  }
+  rolls_.push_back(init_roll);
+  Nr_ = 0;
+  if(conf_roll){
+    Nr_ = 2;
+	double d_roll = 2.0*conf_roll/Nr_;
+	for(unsigned i = 1; i < Nr_; i++) {
+      double fowd = init_roll + i*d_roll;
+	  double bkwd = init_roll - i*d_roll;
+	  if(fowd > 360.0) fowd -= 360.0;
+	  if(bkwd < 0.0)   bkwd += 360.0;
+      rolls_.push_back(fowd);  rolls_.push_back(bkwd);
+	}
+  }
+  query_points_ = container->cart_points();
+  query_size_ = (unsigned)query_points_.size();
+
+  this->query_ingest(dm, sph);
+}
+
+volm_query::volm_query(depth_map_scene_sptr dm,
+                       volm_spherical_container_sptr sph,
+			           volm_spherical_shell_container_sptr container,
 			           unsigned ni,         unsigned nj,
 			           double init_focal,   double conf_focal,
 			           double init_heading, double conf_heading,
@@ -21,16 +101,16 @@ volm_query::volm_query(depth_map_scene_sptr dm,
 			           double init_roll,    double conf_roll,
 					   double altitude)
 {
-  init_focal_ = init_focal;
-  conf_focal_ = conf_focal;
   ni_ = ni;
   nj_ = nj;
+  init_focal_ = init_focal;
+  conf_focal_ = conf_focal;
   altitude_ = altitude;
   // construct camera hypothesis arrays given camera input (better be even number)
   focals_.push_back(init_focal);
   Nf_ = 0;
   if(conf_focal){
-	Nf_ = 2;
+	Nf_ = 10;
     double d_focal = 2.0*conf_focal/Nf_;
 	for(unsigned i = 1; i < Nf_; i++){
       focals_.push_back(init_focal + i*d_focal);  focals_.push_back(init_focal - i*d_focal);
@@ -39,7 +119,7 @@ volm_query::volm_query(depth_map_scene_sptr dm,
   headings_.push_back(init_heading);
   Nh_ = 0;
   if(conf_heading){
-    Nh_ = 2;
+    Nh_ = 36;
 	double d_head = 2.0*conf_heading/Nh_;
 	for(unsigned i = 1; i < Nh_; i++){
       double fowd = init_heading + i*d_head;
@@ -172,11 +252,11 @@ void volm_query::draw_template(vcl_string const& vrml_fname, volm_spherical_shel
 void volm_query::draw_rays(vcl_string const& fname)
 {
   vcl_ofstream ofs(fname.c_str(), vcl_ios::app);
-  double len = 200.0;
+  double len = 400.0;
   vgl_point_3d<double> ori(0.0,0.0,0.0);
   for(unsigned i=0; i<query_size_; i++){
     vgl_ray_3d<double> ray(ori, query_points_[i]);
-	bvrml_write::write_vrml_cylinder(ofs, ori, ray.direction(), (float)0.4, (float)len, 0.0f, 0.0f, 0.0f, 1);
+	bvrml_write::write_vrml_cylinder(ofs, ori, ray.direction(), (float)3.0, (float)len, 0.0f, 0.0f, 0.0f, 1);
   }  
 }
 
@@ -195,7 +275,7 @@ void volm_query::draw_viewing_volume(vcl_string const& fname, depth_map_scene_sp
   //: calculate a scaling factor
   double scale;
   if(conf_focal_)  scale = conf_focal_ / init_focal_;
-  else  scale = 0.05;
+  else  scale = 0.5;
 
   double focal = (cam.get_calibration()).focal_length();
   double depth = focal * scale;
@@ -297,7 +377,6 @@ void volm_query::draw_query_images(vcl_string const& out_dir, depth_map_scene_sp
 {
   //: create a png img associated with each camera hypothesis, containing the geometry defined 
   //  in depth_map_scene and the img points corresponding to points inside the container
-  
   //: loop over all camera
   for(unsigned i = 0; i < cameras_.size(); i++) {
     //: create a vil_image_view<vxl_byte> for png query_img geometry
@@ -334,5 +413,17 @@ void volm_query::draw_query_images(vcl_string const& out_dir, depth_map_scene_sp
 	vcl_memcpy(fname, fs.c_str(),fs.size());
 	vil_save(img,fname);
 	delete []fname;
+  }
+}
+
+void volm_query::visualize_query(vcl_string const& prefix, volm_spherical_shell_container_sptr const& sph_shell)
+{
+  //: visualize the spherical shell by the query depth value -- used to compare with the generated index spherical shell
+  //: loop over all camera
+  for(unsigned i = 0; i < cameras_.size(); i++) {
+    vcl_vector<unsigned char> single_layer = query_[i];
+	vcl_stringstream str; 
+	str << prefix << "_query_" << i << ".vrml";
+	sph_shell->draw_template(str.str(), single_layer, 254);
   }
 }

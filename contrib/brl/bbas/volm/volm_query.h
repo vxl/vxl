@@ -27,11 +27,24 @@ public:
   //: default consturctor
   volm_query() {}
   //: constructor
+  //: specify the initial focal value and its confidence
   volm_query(depth_map_scene_sptr dm,
              volm_spherical_container_sptr sph,
 			 volm_spherical_shell_container_sptr container,
 			 unsigned ni,         unsigned nj,
 			 double init_focal,   double conf_focal,
+			 double init_heading, double conf_heading,
+			 double init_tilt,    double conf_tilt,
+			 double init_roll,    double conf_roll,
+			 double altitude);
+
+  //: specify the right fov and top fov and its confidence
+  volm_query(depth_map_scene_sptr dm,
+             volm_spherical_container_sptr sph,
+			 volm_spherical_shell_container_sptr container,
+			 unsigned ni,		       unsigned nj,
+			 double init_right_fov,    double conf_right_fov,
+			 double init_top_fov,      double conf_top_fov,
 			 double init_heading, double conf_heading,
 			 double init_tilt,    double conf_tilt,
 			 double init_roll,    double conf_roll,
@@ -50,6 +63,8 @@ public:
   void draw_template(vcl_string const& vrml_fname, volm_spherical_shell_container_sptr const& sph_shell, depth_map_scene_sptr const& dm);
   //: write query image showing the depth map geometry and the penetrating ray
   void draw_query_images(vcl_string const& out_dir, depth_map_scene_sptr const& dm);
+  //: visualized the query camera using the spherical shell geometry
+  void visualize_query(vcl_string const& prefix, volm_spherical_shell_container_sptr const& sph_shell);
 
 protected:
   // image size
