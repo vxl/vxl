@@ -11,10 +11,11 @@
 static void test_spherical_container()
 {
   float vmin = 10;
-  float dmax = 60000;
-  float angle = 4;
+  float dmax = 30000;
+  float angle = 2;
   volm_spherical_container sph(angle,vmin,dmax);
   vcl_cout << " solid angle = " << angle << "\t, finnest resolution = " << vmin << ", dmax = " << dmax  << ", number of voxel = " << (sph.get_voxels()).size() << vcl_endl;
+  vcl_cout << "number of depth intervals.. " << sph.get_depth_offset_map().size() << vcl_endl;
   TEST("number of depth intervals.. ", sph.get_depth_offset_map().size(), 144); // change if using an angle different than 4
   unsigned int offset, end_offset;
   double depth;
@@ -47,6 +48,7 @@ static void test_spherical_container()
     vcl_cout << "depth: " << iter->first << " interval: " << (int)iter->second << vcl_endl;
   }
   
+  TEST("depth interval for -1..", sph.get_depth_interval(-1), 1);
   TEST("depth interval for 0..", sph.get_depth_interval(0), 1);
   TEST("depth interval for 1..", sph.get_depth_interval(1), 1);
   TEST("depth interval for 9..", sph.get_depth_interval(9), 1);
