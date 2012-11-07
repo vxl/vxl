@@ -1,6 +1,5 @@
 from boxm2_register import boxm2_batch, dbvalue; 
 import os
-
 #############################################################################
 # PROVIDES higher level python functions to make boxm2_batch 
 # code more readable/refactored
@@ -1365,7 +1364,7 @@ def compute_visibility(device,scene,cache,camsfile,depthdir,x,y,z,outputdir,scal
   result = boxm2_batch.run_process()
   return result;
   
-def compute_los_visibility(scene,cache,x0,y0,z0,x1,y1,z1):
+def compute_los_visibility(scene,cache,x0,y0,z0,x1,y1,z1, t = 5):
   
   boxm2_batch.init_process("boxm2CppLosVisibilityProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1376,6 +1375,7 @@ def compute_los_visibility(scene,cache,x0,y0,z0,x1,y1,z1):
   boxm2_batch.set_input_float(5,x1);
   boxm2_batch.set_input_float(6,y1);
   boxm2_batch.set_input_float(7,z1);
+  boxm2_batch.set_input_float(8,t);
   result = boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0)
   vis = boxm2_batch.get_output_float(id)
