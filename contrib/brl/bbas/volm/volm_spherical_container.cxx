@@ -72,6 +72,8 @@ volm_spherical_container::volm_spherical_container(float d_solid_ang, float voxe
 //: find the interval of the given depth value, i.e. return interval such that d1 <= value < d2, interval ids are 1 greater than index in depth_offset_map_
 unsigned char volm_spherical_container::get_depth_interval(double value)
 {
+  if (value < 0)
+    return (unsigned char)1;
   vcl_map<double, unsigned char>::iterator iter = depth_interval_map_.upper_bound(value);
   if (iter == depth_interval_map_.end()) {
     iter--;
