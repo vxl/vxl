@@ -23,10 +23,8 @@
 
 
 #ifndef BUFSIZ
-  #define BUFSIZ 262144
+  #define BUFSIZ 1024
 #endif
-// Sep, 2012, Yi Dong: hack to increase BUFSIZE
-#define BUFSIZ 262144
 
 expatpp::expatpp(bool createParser) :
   mParser(0),  // in case of exception below
@@ -115,7 +113,10 @@ expatpp::parseFile(FILE* inFile)
 {
  // ResetParser();
 
-  char buf[BUFSIZ];
+  // hack here
+  // Sep, 2012, Yi Dong: hack to not use BUFSIZ for large file
+  //char buf[BUFSIZ];
+  char buf[261244];
   int done;
   if (!inFile)
       return XML_STATUS_ERROR;
