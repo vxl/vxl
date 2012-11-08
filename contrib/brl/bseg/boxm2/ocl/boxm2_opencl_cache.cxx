@@ -98,6 +98,14 @@ bool boxm2_opencl_cache::clear_cache()
   // notify exceptional case
   return true;
 }
+
+//: calls clFinish so halts cpp code
+bool boxm2_opencl_cache::finish_queue() {
+  cl_int status = clFinish(*queue_);
+  check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
+  return true;
+}
+
 void boxm2_opencl_cache::shallow_remove_block(boxm2_block_id id)
 {
   // delete blocks in cache

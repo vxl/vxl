@@ -69,6 +69,8 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
+    //: calls clFinish so halts cpp code
+    bool finish_queue(); 
 
     //: check if max_bytes_in_cache is hit and call clear_cache() if necessary
     bool clear_cache_if_necessary();
