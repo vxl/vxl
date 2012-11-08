@@ -275,3 +275,18 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vc
   }
   ofs.close();
 }
+
+//: generate panaroma image
+//  create an image with width 360 and height 180 to pour all the ray values such that left most column is east direction, and the viewsphere is painted clockwise
+void volm_spherical_shell_container::panaroma_img(vil_image_view<vxl_byte>& img, vcl_vector<unsigned char>& values)
+{
+  assert(values.size() == sph_points_.size());
+  img.set_size(360, 180);
+  for (unsigned i = 0; i < sph_points_.size(); i++) {
+    vsph_sph_point_3d pt = sph_points_[i];
+    unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180);
+    unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180);
+    img(ii,jj) = values[i];
+  }
+}
+
