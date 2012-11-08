@@ -18,7 +18,9 @@
 #include <bbas/volm/volm_spherical_shell_container_sptr.h>
 #include <bbas/volm/volm_loc_hyp.h>
 #include <vul/vul_timer.h>
+#include <vul/vul_file.h>
 #include <vil/vil_save.h>
+#include <bkml/bkml_write.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -33,7 +35,7 @@
 
 namespace boxm2_create_index_process_globals
 {
-  const unsigned n_inputs_ = 15;
+  const unsigned n_inputs_ = 17;
   const unsigned n_outputs_ = 0;
   
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
@@ -85,19 +87,20 @@ bool boxm2_create_index_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
-  //input_types_[3] = "boxm2_volm_loc_hypotheses_sptr";
   input_types_[3] = "vcl_string"; // binary hypotheses file with lat, lon, elev positions to generate indices for 
-  input_types_[4] = "float"; // elevation difference to adjust local heights, some scenes need a height adjustment according to their resolution
-  input_types_[5] = "float"; // minimum voxel resolution to create spherical container
-  input_types_[6] = "float"; // maximum distance in the world that the spherical container will cover
-  input_types_[7] = "float"; // the solid angle for the spherical container, the resolution of the voxels will get coarser based on this angle
-  input_types_[8] = "float"; // cap angle to create the spherical shell container  -- 180 for full sphere, 90 for half sphere
-  input_types_[9] = "float"; // point angle to create the spherical shell container
-  input_types_[10] = "float"; // top angle to remove from shp shell
-  input_types_[11] = "float"; // bottom angle to remove from sph sheel
-  input_types_[12] = "vcl_string"; // name of output file to save the index
-  input_types_[13] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
-  input_types_[14] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
+  input_types_[4] = "unsigned"; // start value, which hypo to start indexing from 
+  input_types_[5] = "unsigned"; // skip value, how many hypos will be skipped before being processed
+  input_types_[6] = "float"; // elevation difference to adjust local heights, some scenes need a height adjustment according to their resolution
+  input_types_[7] = "float"; // minimum voxel resolution to create spherical container
+  input_types_[8] = "float"; // maximum distance in the world that the spherical container will cover
+  input_types_[9] = "float"; // the solid angle for the spherical container, the resolution of the voxels will get coarser based on this angle
+  input_types_[10] = "float"; // cap angle to create the spherical shell container  -- 180 for full sphere, 90 for half sphere
+  input_types_[11] = "float"; // point angle to create the spherical shell container
+  input_types_[12] = "float"; // top angle to remove from shp shell
+  input_types_[13] = "float"; // bottom angle to remove from sph sheel
+  input_types_[14] = "vcl_string"; // name of output file to save the index
+  input_types_[15] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
+  input_types_[16] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
@@ -134,6 +137,8 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   //boxm2_volm_loc_hypotheses_sptr hyp = pro.get_input<boxm2_volm_loc_hypotheses_sptr>(i++);
   vcl_string hyp_file = pro.get_input<vcl_string>(i++);
+  unsigned start = pro.get_input<unsigned>(i++);
+  unsigned skip = pro.get_input<unsigned>(i++);
   float elev_dif = pro.get_input<float>(i++);
   float vmin = pro.get_input<float>(i++);
   float dmax = pro.get_input<float>(i++);
@@ -228,17 +233,12 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   boxm2_block_id curr_block;
   
   //zip through each location hypothesis
-  //for (unsigned hi = 0; hi < hyp->locs_.size(); hi++)
-  for (unsigned hi = 0; hi < hyp.size(); hi++)
-  //for (unsigned hi = 0; hi < 1; hi++)
+  vgl_point_3d<float> h_pt; 
+  unsigned indexed_cnt = 0;
+  while (hyp.get_next(start, skip, h_pt))
   {
-    vgl_point_3d<float> h_pt; 
-    if (!hyp.get_next(h_pt)) {
-      vcl_cerr << "!!Problem retrieving hyp: " << hi << " from file: " << hyp_file << vcl_endl;
-      return false;
-    }
     //vcl_cout << "Processing hypothesis: " << hi << " x: " << hyp->locs_[hi].x() << " y: " << hyp->locs_[hi].y() << " z: " << hyp->locs_[hi].z() << vcl_endl;
-    vcl_cout << "Processing hypothesis: " << hi << " x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
+    vcl_cout << "Processing hypothesis: " << hyp.current_-skip << " x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
     double lx, ly, lz;
     lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
     vcl_cout << "   in local coords: " << lx << " " << ly << " " << lz << vcl_endl;
@@ -247,9 +247,6 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
     
     cl_float loc_arr[4];
-    //loc_arr[0] = hyp->locs_[hi].x(); 
-    //loc_arr[1] = hyp->locs_[hi].y();
-    //loc_arr[2] = hyp->locs_[hi].z();
     loc_arr[0] = (cl_float)lx; loc_arr[1] = (cl_float)ly; loc_arr[2] = (cl_float)lz; 
     loc_arr[3] = 1.0f;
     bocl_mem* hypo_location = new bocl_mem(device->context(), loc_arr, sizeof(cl_float4), "location buffer");
@@ -287,26 +284,27 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     if (!scene->block_contains(local_h_pt_d, curr_block, local))
     {
     
-    if (!scene->contains(local_h_pt_d, curr_block, local)) {
-      vcl_cerr << " Scene does not contain hypothesis: " << hi << " " << local_h_pt_d << " writing empty array for it!\n";
-      vcl_vector<unsigned char> values(layer_size, 0);
-      ind->add_to_index(values);
-      // release the device and host memories  
-      delete exp_depth;  // calls release_memory() which enqueues a mem delete event, call clFinish to make sure it is executed
-      delete vis;
-      delete probs;
-      delete t_infinity;
-      delete hypo_location;
-      status = clFinish(queue);
-      check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
-      if (!buff)
-        vcl_cout << "buff is zero after release mem!\n"; vcl_cout.flush();
-      delete [] buff;
-      delete [] vis_buff;
-      delete [] prob_buff;
-      delete [] t_infinity_buff;
-      continue;
-    }
+      if (!scene->contains(local_h_pt_d, curr_block, local)) {
+        vcl_cerr << " Scene does not contain hypothesis: " << hyp.current_-skip << " " << local_h_pt_d << " writing empty array for it!\n";
+        vcl_vector<unsigned char> values(layer_size, 0);
+        ind->add_to_index(values);
+        indexed_cnt++;
+        // release the device and host memories  
+        delete exp_depth;  // calls release_memory() which enqueues a mem delete event, call clFinish to make sure it is executed
+        delete vis;
+        delete probs;
+        delete t_infinity;
+        delete hypo_location;
+        status = clFinish(queue);
+        check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
+        if (!buff)
+          vcl_cout << "buff is zero after release mem!\n"; vcl_cout.flush();
+        delete [] buff;
+        delete [] vis_buff;
+        delete [] prob_buff;
+        delete [] t_infinity_buff;
+        continue;
+      }
     
     }
     vcl_cout << "Total time taken = " << t.user()/1000.0 << " secs.\n";
@@ -424,6 +422,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 #endif
     // add to index 
     ind->add_to_index(values);
+    indexed_cnt++;
   
     // release the device and host memories  
     delete exp_depth;  // calls release_memory() which enqueues a mem delete event, call clFinish to make sure it is executed
@@ -461,6 +460,10 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   vcl_cout<<"At the end of process MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
   
   ind->finalize();
+  vcl_string index_size_file = vul_file::strip_extension(index_file) + ".txt";
+  vcl_ofstream ofs(index_size_file.c_str());
+  ofs << indexed_cnt << "\n";
+  ofs.close();
   
   return true;
 }
@@ -550,6 +553,89 @@ bool boxm2_partition_hypotheses_process(bprb_func_process& pro)
   
   return true;
 }
+
+
+namespace boxm2_hypotheses_kml_process_globals
+{
+  const unsigned n_inputs_ = 5;
+  const unsigned n_outputs_ = 0;
+}
+bool boxm2_hypotheses_kml_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_hypotheses_kml_process_globals;
+
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vcl_string"; // binary hypotheses file with lat, lon, elev positions to generate indices for 
+  input_types_[1] = "unsigned"; // start
+  input_types_[2] = "unsigned"; // skip
+  input_types_[3] = "float"; // size of boxes to draw in arcseconds, e.g. 0.01
+  input_types_[4] = "vcl_string"; // output kml file
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_hypotheses_kml_process(bprb_func_process& pro)
+{
+  using namespace boxm2_hypotheses_kml_process_globals;
+
+  //sanity check inputs
+  if ( pro.n_inputs() < n_inputs_ ) {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  float transfer_time=0.0f;
+  float gpu_time=0.0f;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  vcl_string hyp_file = pro.get_input<vcl_string>(i++);
+  unsigned start = pro.get_input<unsigned>(i++);
+  unsigned skip = pro.get_input<unsigned>(i++);
+  float b_size = pro.get_input<float>(i++);
+  vcl_string out_file = pro.get_input<vcl_string>(i++);
+  
+  //: read the location hypotheses
+  if (!vul_file::exists(hyp_file)) {
+    vcl_cerr << "Cannot find: " << hyp_file << "!\n";
+    return false;
+  }
+  vcl_ofstream ofs(out_file.c_str());
+  bkml_write::open_document(ofs);
+  
+  volm_loc_hyp hyp(hyp_file);
+  vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file << vcl_endl;
+  vcl_cout.flush();
+  
+  vgl_point_3d<float> h_pt; 
+  unsigned cnt = 0;
+  while (hyp.get_next(start, skip, h_pt))
+  {
+    vcl_cout.precision(6);
+    vcl_cout << h_pt.y() << " " << h_pt.x() << vcl_endl;
+    vnl_double_2 ll; ll[0] = h_pt.y(); ll[1] = h_pt.x();  // longitude is x (east) / latitude is y (north) // elev is z
+    vnl_double_2 lr; lr[0] = h_pt.y(); lr[1] = h_pt.x()+b_size;
+    vnl_double_2 ur; ur[0] = h_pt.y()+b_size; ur[1] = h_pt.x()+b_size;
+    vnl_double_2 ul; ul[0] = h_pt.y()+b_size; ul[1] = h_pt.x();
+    
+    vcl_stringstream box_id; box_id << hyp.current_-1;
+    vcl_string desc = "desc";
+    bkml_write::write_box(ofs, box_id.str(), desc, ul, ur, ll, lr);  
+    cnt++;
+    if (cnt > 10)
+      break;
+  }
+  vcl_cout << cnt << " boxes are written to the output " << out_file << vcl_endl;
+  bkml_write::close_document(ofs);
+  ofs.close();
+  
+  return true;
+}
+
 
 
 namespace boxm2_visualize_index_process_globals
