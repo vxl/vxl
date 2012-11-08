@@ -33,6 +33,8 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 
+#include <bkml/bkml_write.h>
+
 
 void boxm2_util::random_permutation(int* buffer, int size)
 {
@@ -618,10 +620,70 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
     int radius = 1;
     while (allblocks.size() > orderdblocks.size())
     {
-        int k =curr_k;
-
+        //int k =curr_k;
         for (int i =-radius+curr_i; i<=radius+curr_i; i+=2*radius)
             for (int j =-radius+curr_j; j<=radius+curr_j; ++j)
+              for (int k = -radius+curr_k; k <=radius+curr_k; ++k)
+            {
+                iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
+                if (iter!= allblocks.end() )
+                {
+                    orderdblocks.push_back(*iter);
+                }
+            }
+        
+        for (int j =-radius+curr_j; j<=radius+curr_j; j+=2*radius)
+            for (int i =-radius+curr_i+1; i<radius+curr_i; ++i)
+              for (int k = -radius+curr_k; k <= radius+curr_k; ++k)
+            {
+                iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
+                if (iter!= allblocks.end() )
+                {
+                    orderdblocks.push_back(*iter);
+                }
+            }
+        for (int k =-radius+curr_k; k<=radius+curr_k; ++k)
+          for (int i =-radius+curr_i+1; i<radius+curr_i; ++i)
+            for (int j = -radius+curr_j+1; j < radius+curr_j; ++j)
+            {
+                iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
+                if (iter!= allblocks.end() )
+                {
+                    orderdblocks.push_back(*iter);
+                }
+            }
+
+        ++radius;
+        //if (orderdblocks.size() > 50)
+        //  break;
+    }
+    return orderdblocks;
+}
+//: same as above but among the passed set of blocks, they might have been computed e.g. using scene->get_vis_blocks
+vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block2(boxm2_scene_sptr scene, boxm2_block_id curr_block, vcl_vector<boxm2_block_id>& allblocks)
+{
+    vcl_vector<boxm2_block_id> orderdblocks;
+    vcl_vector<boxm2_block_id>::iterator iter;
+    int curr_i = curr_block.i();
+    int curr_j = curr_block.j();
+    int curr_k = curr_block.k();
+
+    iter = vcl_find(allblocks.begin(), allblocks.end(), curr_block);
+    if (iter!= allblocks.end() )
+    {
+        orderdblocks.push_back(*iter);
+    }
+    else
+    {
+        vcl_cout<<"The current block id is not in this scene"<<vcl_endl;
+        return orderdblocks;
+    }
+    int radius = 1;
+    while (allblocks.size() > orderdblocks.size())
+    {
+        for (int i =-radius+curr_i; i<=radius+curr_i; i+=2*radius)
+            for (int j =-radius+curr_j; j<=radius+curr_j; ++j)
+              for (int k = -radius+curr_k; k <=radius+curr_k; ++k)
             {
                 iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
                 if (iter!= allblocks.end() )
@@ -631,6 +693,17 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
             }
         for (int j =-radius+curr_j; j<=radius+curr_j; j+=2*radius)
             for (int i =-radius+curr_i+1; i<radius+curr_i; ++i)
+              for (int k = -radius+curr_k; k <= radius+curr_k; ++k)
+            {
+                iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
+                if (iter!= allblocks.end() )
+                {
+                    orderdblocks.push_back(*iter);
+                }
+            }
+        for (int k =-radius+curr_k; k<=radius+curr_k; k+=2*radius)
+          for (int i =-radius+curr_i+1; i<radius+curr_i; ++i)
+            for (int j = -radius+curr_j+1; j < radius+curr_j; ++j)
             {
                 iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
                 if (iter!= allblocks.end() )
@@ -642,6 +715,48 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
         ++radius;
     }
     return orderdblocks;
+}
+bool boxm2_util::write_blocks_to_kml(boxm2_scene_sptr& scene, vcl_string kml_file, vcl_vector<boxm2_block_id> blks)
+{
+  vpgl_lvcs lvcs = scene->lvcs();
+  vcl_ofstream ofs(kml_file.c_str());
+  bkml_write::open_document(ofs);
+  vcl_map<boxm2_block_id, boxm2_block_metadata> all_blks = scene->blocks();
+  
+  //for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) {
+  for (unsigned i = 0; i < blks.size(); i++) {
+    
+    int redness = (int)vcl_floor((((float)i/blks.size())*255.0+0.5));
+    vcl_stringstream color_hex; 
+    color_hex.flags ( vcl_ios::right | vcl_ios::hex );
+    color_hex.width(2); color_hex.fill('0');
+    color_hex << 255 << "0000";
+    color_hex.width(2); color_hex.fill('0');
+    color_hex << redness;
+    vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = all_blks.find(blks[i]);
+    vgl_box_3d<double> box = iter->second.bbox();
+
+    double lon, lat, elev;
+    lvcs.local_to_global(box.min_x(), box.min_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
+    vnl_double_2 ll; ll[0] = lat; ll[1] = lon;
+    
+    lvcs.local_to_global(box.max_x(), box.min_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
+    vnl_double_2 lr; lr[0] = lat; lr[1] = lon;
+    
+    lvcs.local_to_global(box.max_x(), box.max_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
+    vnl_double_2 ur; ur[0] = lat; ur[1] = lon;
+    
+    lvcs.local_to_global(box.min_x(), box.max_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
+    vnl_double_2 ul; ul[0] = lat; ul[1] = lon;
+    
+    vcl_string box_id = iter->first.to_string();
+    vcl_string desc = scene->data_path() + " block footprint";
+    bkml_write::write_box(ofs, box_id, desc, ul, ur, ll, lr, color_hex.str());
+  }
+
+  bkml_write::close_document(ofs);
+  ofs.close();
+  return true;
 }
 
 bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,

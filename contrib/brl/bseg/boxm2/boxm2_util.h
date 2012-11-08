@@ -78,6 +78,9 @@ class boxm2_util
                             float& prob, float& intensity);
     // Computes the order of the blocks spiraling from the curr_block.
     static vcl_vector<boxm2_block_id> order_about_a_block(boxm2_scene_sptr scene, boxm2_block_id curr_block);
+    
+    //: same as above but among the passed set of blocks, they might have been computed e.g. using scene->get_vis_blocks
+    static vcl_vector<boxm2_block_id> order_about_a_block2(boxm2_scene_sptr scene, boxm2_block_id curr_block, vcl_vector<boxm2_block_id>& blk_set);
 
     //: get blocks along a ray
     static vcl_vector<boxm2_block_id> blocks_along_a_ray(boxm2_scene_sptr scene, vgl_point_3d<double> p0, vgl_point_3d<double> p1);
@@ -85,6 +88,8 @@ class boxm2_util
     static bool get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile, vgl_point_3d<double> origin, 
                                    vcl_vector<vil_image_view<float>*> & raydirs,
                                    vcl_vector<vil_image_view<float>*> & tfinal,int scale);
+    
+    static bool write_blocks_to_kml(boxm2_scene_sptr& scene, vcl_string kml_file, vcl_vector<boxm2_block_id> blks);
 };
 
 #endif // boxm2_util_h
