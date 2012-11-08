@@ -22,4 +22,5 @@ void boxm2_volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_save_hypotheses_process, "boxm2SaveHypothesesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_visualize_index_process, "boxm2VisualizeIndicesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_partition_hypotheses_process, "boxm2PartitionHypsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_hypotheses_kml_process, "boxm2HypoKmlProcess");
 }
