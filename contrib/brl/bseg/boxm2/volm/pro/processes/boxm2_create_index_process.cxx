@@ -17,12 +17,15 @@
 #include <bbas/volm/volm_spherical_shell_container.h>
 #include <bbas/volm/volm_spherical_shell_container_sptr.h>
 #include <bbas/volm/volm_loc_hyp.h>
+#include <vul/vul_timer.h>
+#include <vil/vil_save.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
 //directory utility
 #include <vul/vul_timer.h>
 #include <bocl/bocl_device.h>
@@ -203,8 +206,6 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     ray_dirs[4*i+1] = (cl_float)cart_points[i].y();
     ray_dirs[4*i+2] = (cl_float)cart_points[i].z();
     ray_dirs[4*i+3] = 0.0f;
-    if (cnt++ < 5)
-      vcl_cout << "ray dir: " << i << " " << cart_points[i].x() << " " << cart_points[i].y() << " " << cart_points[i].z() << vcl_endl;
   }
   
   bocl_mem* ray_dir_buffer = new bocl_mem(device->context(), ray_dirs, sizeof(cl_float4)*layer_size, "ray directions buffer");
@@ -213,7 +214,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   bocl_mem* ray_dim_mem = new bocl_mem(device->context(), &(layer_size), sizeof(int), "ray directions size");
   ray_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
   vcl_cout << "number of blocks: " << blocks.size() << vcl_endl;
   vcl_cout.flush();
   //: get subblk dimension
@@ -221,12 +222,17 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   float subblk_dim = (float)mdata.sub_block_dim_.x();
   bocl_mem*  subblk_dim_mem=new bocl_mem(device->context(), &(subblk_dim), sizeof(float), "sub block dim buffer");
   subblk_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+
+  vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> > order_cache;
+
+  boxm2_block_id curr_block;
   
   //zip through each location hypothesis
   //for (unsigned hi = 0; hi < hyp->locs_.size(); hi++)
   for (unsigned hi = 0; hi < hyp.size(); hi++)
+  //for (unsigned hi = 0; hi < 1; hi++)
   {
-    vgl_point_3d<float> h_pt;
+    vgl_point_3d<float> h_pt; 
     if (!hyp.get_next(h_pt)) {
       vcl_cerr << "!!Problem retrieving hyp: " << hi << " from file: " << hyp_file << vcl_endl;
       return false;
@@ -238,6 +244,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     vcl_cout << "   in local coords: " << lx << " " << ly << " " << lz << vcl_endl;
     lz = lz - elev_dif;
     vcl_cout << "   after subtracting elev dif (" << elev_dif << "): " << lx << " " << ly << " " << lz << vcl_endl;
+    vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
     
     cl_float loc_arr[4];
     //loc_arr[0] = hyp->locs_[hi].x(); 
@@ -271,17 +278,67 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     
     //zip through each block
-    vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter_inner;
-    for (blk_iter_inner = blocks.begin(); blk_iter_inner != blocks.end(); ++blk_iter_inner) {
-      boxm2_block_id id_inner = blk_iter_inner->first;
+    //vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter_inner;
+    //for (blk_iter_inner = blocks.begin(); blk_iter_inner != blocks.end(); ++blk_iter_inner) {
+    
+    vgl_point_3d<double> local;
+    vul_timer t;
+    t.mark();
+    if (!scene->block_contains(local_h_pt_d, curr_block, local))
+    {
+    
+    if (!scene->contains(local_h_pt_d, curr_block, local)) {
+      vcl_cerr << " Scene does not contain hypothesis: " << hi << " " << local_h_pt_d << " writing empty array for it!\n";
+      vcl_vector<unsigned char> values(layer_size, 0);
+      ind->add_to_index(values);
+      // release the device and host memories  
+      delete exp_depth;  // calls release_memory() which enqueues a mem delete event, call clFinish to make sure it is executed
+      delete vis;
+      delete probs;
+      delete t_infinity;
+      delete hypo_location;
+      status = clFinish(queue);
+      check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
+      if (!buff)
+        vcl_cout << "buff is zero after release mem!\n"; vcl_cout.flush();
+      delete [] buff;
+      delete [] vis_buff;
+      delete [] prob_buff;
+      delete [] t_infinity_buff;
+      continue;
+    }
+    
+    }
+    vcl_cout << "Total time taken = " << t.user()/1000.0 << " secs.\n";
+
+    t.mark();
+    vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
+    if (!(ord_iter != order_cache.end())) {
+      vcl_vector<boxm2_block_id> vis_blocks_pt = scene->get_vis_blocks(local_h_pt_d, dmax);
+      order_cache[curr_block] =  boxm2_util::order_about_a_block2(scene, curr_block, vis_blocks_pt);
+      if (order_cache.size() > 100) {// kick the first one 
+        vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator to_kick = order_cache.begin(); 
+        if (to_kick->first != curr_block)
+          order_cache.erase(to_kick);
+        else { to_kick++; order_cache.erase(to_kick); }
+      }
+    }
+    vcl_vector<boxm2_block_id>& vis_blocks = order_cache[curr_block];
+    
+    vcl_cout << "Total time taken = " << t.user()/1000.0 << " secs.\n";
+    vcl_cout << "number of visible blocks: " << vis_blocks.size() << vcl_endl;
+    vcl_vector<boxm2_block_id>::iterator blk_iter_inner;
+    
+    for (blk_iter_inner = vis_blocks.begin(); blk_iter_inner != vis_blocks.end(); ++blk_iter_inner) {
+      boxm2_block_id id_inner = *blk_iter_inner;
+      //boxm2_block_id id_inner = blk_iter_inner->first;
       
       //load tree and alpha
-      boxm2_block_metadata mdata = blk_iter_inner->second;
       bocl_kernel* kern =  kernels[identifier][0];
       
       vul_timer transfer;
       
-      bocl_mem* blk       = opencl_cache->get_block(blk_iter_inner->first);
+      bocl_mem* blk       = opencl_cache->get_block(id_inner);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
       //bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(blk_iter_inner->first,0,false);
       bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(id_inner);
@@ -325,8 +382,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
       status = clFinish(queue);
       check_val(status, MEM_FAILURE, "opencl clear cache FAILED: " + error_to_string(status)); 
     }
-    
-    // normalize
+    if (vis_blocks.size() != 0)  // normalize
     {
       bocl_kernel* normalize_kern= kernels[identifier][1];
       normalize_kern->set_arg( exp_depth );
@@ -339,7 +395,6 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   
       //clear render kernel args so it can reset em on next execution
       normalize_kern->clear_args();
-    }
 
     //read from gpu
     exp_depth->read_to_buffer(queue);
@@ -347,6 +402,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     
     status = clFinish(queue);
     check_val(status, MEM_FAILURE, "read to output buffers FAILED: " + error_to_string(status));
+    }
 #if 0
     vcl_cout << "exp depths after normalization: \n";
     for (unsigned i = 0; i < layer_size; i++) {
@@ -409,6 +465,93 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   return true;
 }
 
+
+namespace boxm2_partition_hypotheses_process_globals
+{
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 0;
+}
+bool boxm2_partition_hypotheses_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_partition_hypotheses_process_globals;
+
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vcl_string"; // scene xml file
+  input_types_[1] = "vcl_string"; // binary hypotheses file with lat, lon, elev positions to generate indices for 
+  input_types_[2] = "float"; // elevation difference to adjust local heights, some scenes need a height adjustment according to their resolution
+  input_types_[3] = "vcl_string"; // postfix of name of output file to save the hyp file, ".bin" will be added to save hyps and ".txt" will be added to save size
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_partition_hypotheses_process(bprb_func_process& pro)
+{
+  using namespace boxm2_partition_hypotheses_process_globals;
+
+  //sanity check inputs
+  if ( pro.n_inputs() < n_inputs_ ) {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  float transfer_time=0.0f;
+  float gpu_time=0.0f;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  vcl_string scene_file = pro.get_input<vcl_string>(i++);
+  boxm2_scene_sptr scene = new boxm2_scene(scene_file);
+  vpgl_lvcs lvcs = scene->lvcs();
+  vcl_string hyp_file = pro.get_input<vcl_string>(i++);
+  float elev_dif = pro.get_input<float>(i++);
+  vcl_string out_file = pro.get_input<vcl_string>(i++);
+  
+  //: read the location hypotheses
+  if (!vul_file::exists(hyp_file)) {
+    vcl_cerr << "Cannot find: " << hyp_file << "!\n";
+    return false;
+  }
+  
+  volm_loc_hyp hyp(hyp_file);
+  vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file << vcl_endl;
+  vcl_cout.flush();
+  volm_loc_hyp hyp2;  // empty one
+  boxm2_block_id curr_block;
+  
+  for (unsigned hi = 0; hi < hyp.size(); hi++)
+  {
+    vgl_point_3d<float> h_pt; 
+    if (!hyp.get_next(h_pt)) {
+      vcl_cerr << "!!Problem retrieving hyp: " << hi << " from file: " << hyp_file << vcl_endl;
+      return false;
+    }
+    double lx, ly, lz;
+    lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
+    lz = lz - elev_dif;
+    vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
+    
+    vgl_point_3d<double> local;
+    if (!scene->contains(local_h_pt_d, curr_block, local)) 
+      continue;
+          
+    // bool add(float lat, float lon, float elev);  // longitude is x (east) / latitude is y (north) // elev is z
+    hyp2.add(h_pt.y(), h_pt.x(), h_pt.z());
+  }
+  hyp2.write_hypotheses(out_file+".bin");
+  vcl_string out_txt(out_file+".txt");
+  vcl_ofstream ofs(out_txt.c_str());
+  ofs << hyp2.size() << vcl_endl;
+  vcl_cout << hyp2.size() << " hyps written to " << out_file+".bin" << vcl_endl;
+  ofs.close();
+  
+  return true;
+}
+
+
 namespace boxm2_visualize_index_process_globals
 {
   const unsigned n_inputs_ = 9;
@@ -463,9 +606,14 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   for (unsigned j = 0; j < si; j++)
     ind->get_next(values);
   for (unsigned j = si; j < ei; j++) {
-    vcl_stringstream str; str << prefix << "_" << j << ".vrml";
+    vcl_stringstream str; str << prefix << "_" << j;
+    vcl_string temp_name = str.str() + ".vrml";
     ind->get_next(values);
-    sph_shell->draw_template(str.str(), values, 254);
+    sph_shell->draw_template(temp_name, values, 254);
+    vil_image_view<vxl_byte> img;
+    sph_shell->panaroma_img(img, values);
+    vcl_string img_name = str.str() + ".png";
+    vil_save(img, img_name.c_str()); 
   }  
   return true;
 }
