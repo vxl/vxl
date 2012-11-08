@@ -30,8 +30,11 @@ class volm_loc_hyp : public vbl_ref_count
 {
  public:
   
+  //: construct empty
+  volm_loc_hyp() : current_(0), cnt_(0) {}
+  
   //: construct using a single dem file, 
-  volm_loc_hyp(vgl_polygon<float>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int int_i, int int_j);
+  volm_loc_hyp(vgl_polygon<double>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int int_i, int int_j);
   
   //: construct by reading from a binary file
   volm_loc_hyp(vcl_string bin_file);
