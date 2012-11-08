@@ -209,3 +209,44 @@ void bkml_parser::trim_string(vcl_string& s)
   vcl_string t = s.substr(i,j-i+1);
   s = t;
 }
+
+//: the first sheet contains the outer polygon, and the second sheet contains the inner polygon if any, saves 2d points, only lat, lon
+vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
+{
+  bkml_parser* parser = new bkml_parser();
+  vgl_polygon<double> out(2);
+  vcl_FILE* xmlFile = vcl_fopen(poly_kml_file.c_str(), "r");
+  if(!xmlFile) {
+    vcl_cerr << poly_kml_file.c_str() << " error on opening the input kml file\n";
+    delete parser;
+    return out;
+  }
+  if(!parser->parseFile(xmlFile)){
+    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+             << parser->XML_GetCurrentLineNumber() << '\n';
+    delete parser;
+    return out;
+  }
+  if(parser->polyouter_.size()<2){
+    vcl_cerr << "input polygon has no outerboundary" << '\n';
+    delete parser;
+    return out;
+  }
+  unsigned int n_out = (unsigned int)parser->polyouter_.size();
+  n_out--;   // note that the last point in kml is same as the first point
+  for (unsigned i = 0; i < n_out; i++) {
+    vgl_point_2d<double> pt(parser->polyouter_[i].x(), parser->polyouter_[i].y());
+    out[0].push_back(pt);
+  }
+  if(parser->polyinner_.size()<2){
+    vcl_cerr << "input polygon has no innerboundary, skipping" << '\n';
+    return out;
+  }
+  unsigned int n_in = (unsigned int)parser->polyinner_.size();
+  n_in--;   // note that the last point in kml is same as the first point
+  for (unsigned i = 0; i < n_in; i++) {
+    vgl_point_2d<double> pt(parser->polyinner_[i].x(), parser->polyinner_[i].y());
+    out[1].push_back(pt);
+  }
+  return out;
+}

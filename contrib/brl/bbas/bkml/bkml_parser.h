@@ -29,6 +29,7 @@
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_polygon.h>
 
 
 class bkml_parser : public expatpp
@@ -37,6 +38,10 @@ class bkml_parser : public expatpp
   bkml_parser(void);
   // parser should not delete the site, it is used afterwards
   ~bkml_parser(void) {}
+  
+  //: the first sheet contains the outer polygon, and the second sheet contains the inner polygon if any, saves 2d points, only lat, lon
+  // in this poly lon is x, lat is y
+  static vgl_polygon<double> parse_polygon(vcl_string poly_kml_file);
 
   // results of parse
   double longitude_;
