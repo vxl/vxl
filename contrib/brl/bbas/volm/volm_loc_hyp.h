@@ -46,7 +46,11 @@ class volm_loc_hyp : public vbl_ref_count
   
   bool write_hypotheses(vcl_string out_file); 
   
+  //: return false when all hyps are returned
   bool get_next(vgl_point_3d<float>& h);
+  
+  //: return false when all hyps are returned, return in a sequence which started from start and incremented by skip, e.g. i = start; i < cnt_; i+=skip
+  bool get_next(unsigned start, unsigned skip, vgl_point_3d<float>& h);
   
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;

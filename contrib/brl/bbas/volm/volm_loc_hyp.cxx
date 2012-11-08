@@ -60,6 +60,7 @@ volm_loc_hyp::volm_loc_hyp(vcl_string bin_file) : current_(0)
     return;
   }
   this->b_read(is);
+  is.close();
 }
 
 bool volm_loc_hyp::write_hypotheses(vcl_string out_file)
@@ -99,6 +100,27 @@ bool volm_loc_hyp::get_next(vgl_point_3d<float>& h) {
       return false;
   }
 }
+
+//: return false when all hyps are returned, return in a sequence which started from start and incremented by skip, e.g. i+=skip
+bool volm_loc_hyp::get_next(unsigned start, unsigned skip, vgl_point_3d<float>& h)
+{
+  assert(skip > 0);
+  if (current_ >= cnt_)
+    return false;
+  while (current_ < start)
+    if (!get_next(h))
+      return false;
+  if (!get_next(h))  // this one retrieves the current needed
+    return false;
+  // now skip
+  vgl_point_3d<float> dummy;
+  unsigned end = current_+skip-1;  // the previous get_next already incremented by one
+  while (current_ < end)
+    if (!get_next(dummy))
+      break;
+  return true;
+}
+  
 
 //: Binary save self to stream.
 void volm_loc_hyp::b_write(vsl_b_ostream &os) const
