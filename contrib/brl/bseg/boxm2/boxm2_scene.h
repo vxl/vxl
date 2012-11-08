@@ -94,6 +94,9 @@ class boxm2_scene : public vbl_ref_count
     //: visibility order using a ray given by origin and direction vector, the block needs to be in the front direction as given by this ray
     vcl_vector<boxm2_block_id>
     get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vector_3d<double> const& dir, double distance);
+    
+    //: return all blocks with center less than dist from the given point
+    vcl_vector<boxm2_block_id> get_vis_blocks(vgl_point_3d<double> const& pt, double dist);
 
     //: return a heap pointer to a scene info
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id);
@@ -136,7 +139,10 @@ class boxm2_scene : public vbl_ref_count
     // returns the dimesnsion of the scene grid where each grid element is a block
     vgl_vector_3d<unsigned int>   scene_dimensions() const;
 
-    //: If a block contains a 3-d point, set the block id, else return false. The local coordinates of the point are also returned
+    //: If a block contains a 3-d point, set the local coordinates of the point
+    bool block_contains(vgl_point_3d<double> const& p, boxm2_block_id bid,
+                  vgl_point_3d<double>& local_coords) const;
+    //: If a scene contains a 3-d point, set the block id, else return false. The local coordinates of the point are also returned
     bool contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
                   vgl_point_3d<double>& local_coords) const;
 

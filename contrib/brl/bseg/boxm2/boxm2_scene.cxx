@@ -33,7 +33,8 @@ boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origi
 boxm2_scene::boxm2_scene(const char* buffer)
 {
   boxm2_scene_parser parser;
-
+  vcl_string temp(buffer);
+  bool out = parser.parseString(buffer);
   if (!parser.parseString(buffer)) {
     vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
              << parser.XML_GetCurrentLineNumber() << '\n';
@@ -253,6 +254,26 @@ boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
     vis_order.push_back(di->id_);
   return vis_order;
 }
+//: return all blocks with center less than dist from the given point
+vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vgl_point_3d<double> const& pt, double distance)
+{
+  vcl_vector<boxm2_block_id> vis_order;
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
+    vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
+    vgl_vector_3d<double>&   blk_dim = (iter->second).sub_block_dim_;
+    vgl_vector_3d<unsigned>& blk_num = (iter->second).sub_block_num_;
+    vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x(),
+                                    blk_dim.y()*blk_num.y(),
+                                    blk_dim.z()*blk_num.z());
+    vgl_point_3d<double> blk_center = blk_o + length/2.0;
+    double dist = vgl_distance( blk_center, pt);
+    if (dist <= distance)
+      vis_order.push_back(iter->first);
+  }
+  return vis_order;
+}
+
 
 vcl_vector<boxm2_block_id>
 boxm2_scene::get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vector_3d<double> const& dir, double distance)
@@ -299,6 +320,29 @@ boxm2_scene::get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vect
   return vis_order;
 }
 
+//: If a block contains a 3-d point, set the local coordinates of the point
+bool boxm2_scene::block_contains(vgl_point_3d<double> const& p, boxm2_block_id bid,
+                                 vgl_point_3d<double>& local_coords) const
+{
+  boxm2_block_metadata md = this->get_block_metadata_const(bid);
+  if (md.init_level_ == 0) // block does not exist
+    return false;
+  vgl_vector_3d<double> dims(md.sub_block_dim_.x()*md.sub_block_num_.x(),
+                             md.sub_block_dim_.y()*md.sub_block_num_.y(),
+                             md.sub_block_dim_.z()*md.sub_block_num_.z());
+
+  vgl_point_3d<double> lorigin = md.local_origin_;
+  vgl_box_3d<double> bbox(lorigin,lorigin+dims);
+  if (bbox.contains(p.x(), p.y(), p.z())) {
+    double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
+    double local_y=(p.y()-md.local_origin_.y())/md.sub_block_dim_.y();
+    double local_z=(p.z()-md.local_origin_.z())/md.sub_block_dim_.z();
+    local_coords.set(local_x, local_y, local_z);
+    return true;
+  }
+  return false;
+}
+    
 //: find the block containing the specified point, else return false
 //  Local coordinates are also returned
 bool boxm2_scene::contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
@@ -308,19 +352,8 @@ bool boxm2_scene::contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
   for (vcl_vector<boxm2_block_id>::iterator id = block_ids.begin();
        id != block_ids.end(); ++id)
   {
-    boxm2_block_metadata md = this->get_block_metadata_const(*id);
-    vgl_vector_3d<double> dims(md.sub_block_dim_.x()*md.sub_block_num_.x(),
-                               md.sub_block_dim_.y()*md.sub_block_num_.y(),
-                               md.sub_block_dim_.z()*md.sub_block_num_.z());
-
-    vgl_point_3d<double> lorigin = md.local_origin_;
-    vgl_box_3d<double> bbox(lorigin,lorigin+dims);
-    if (bbox.contains(p.x(), p.y(), p.z())) {
+    if (this->block_contains(p, *id, local_coords)) {
       bid = (*id);
-      double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
-      double local_y=(p.y()-md.local_origin_.y())/md.sub_block_dim_.y();
-      double local_z=(p.z()-md.local_origin_.z())/md.sub_block_dim_.z();
-      local_coords.set(local_x, local_y, local_z);
       return true;
     }
   }
