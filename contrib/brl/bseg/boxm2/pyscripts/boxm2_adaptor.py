@@ -1450,29 +1450,42 @@ def get_hypothesis(hypo,j):
   z = boxm2_batch.get_output_float(id)
   return x,y,z;
 
-def index_hypotheses(device, scene, opencl_cache, hyp, vmin, dmax, solid_angle, cap_angle, point_angle, out_name, visibility_threshold, index_buffer_capacity):
+def index_hypotheses(device, scene, opencl_cache, hyp_file, elev_dif, vmin, dmax, solid_angle, cap_angle, point_angle, top_angle, bottom_angle, out_name, visibility_threshold, index_buffer_capacity):
   boxm2_batch.init_process("boxm2IndexHypothesesProcess");
   boxm2_batch.set_input_from_db(0, device);
   boxm2_batch.set_input_from_db(1, scene);
   boxm2_batch.set_input_from_db(2, opencl_cache);
-  boxm2_batch.set_input_from_db(3, hyp);
-  boxm2_batch.set_input_float(4, vmin);
-  boxm2_batch.set_input_float(5, dmax);
-  boxm2_batch.set_input_float(6, solid_angle);
-  boxm2_batch.set_input_float(7, cap_angle);
-  boxm2_batch.set_input_float(8, point_angle);
-  boxm2_batch.set_input_string(9, out_name);
-  boxm2_batch.set_input_float(10, visibility_threshold);
-  boxm2_batch.set_input_float(11, index_buffer_capacity);
+  boxm2_batch.set_input_string(3, hyp_file);
+  boxm2_batch.set_input_float(4, elev_dif);
+  boxm2_batch.set_input_float(5, vmin);
+  boxm2_batch.set_input_float(6, dmax);
+  boxm2_batch.set_input_float(7, solid_angle);
+  boxm2_batch.set_input_float(8, cap_angle);
+  boxm2_batch.set_input_float(9, point_angle);
+  boxm2_batch.set_input_float(10, top_angle);
+  boxm2_batch.set_input_float(11, bottom_angle);
+  boxm2_batch.set_input_string(12, out_name);
+  boxm2_batch.set_input_float(13, visibility_threshold);
+  boxm2_batch.set_input_float(14, index_buffer_capacity);
   boxm2_batch.run_process();
   
-def visualize_indices(index_file, cap_angle, point_angle, buffer_capacity, start_i, end_i, out_prefix):
+def partition_hypotheses(scene_file, hyp_file, elev_dif, out_name):
+  boxm2_batch.init_process("boxm2PartitionHypsProcess");
+  boxm2_batch.set_input_string(0, scene_file);
+  boxm2_batch.set_input_string(1, hyp_file);
+  boxm2_batch.set_input_float(2, elev_dif);
+  boxm2_batch.set_input_string(3, out_name);
+  boxm2_batch.run_process();
+  
+def visualize_indices(index_file, cap_angle, point_angle, top_angle, bottom_angle, buffer_capacity, start_i, end_i, out_prefix):
   boxm2_batch.init_process("boxm2VisualizeIndicesProcess");
   boxm2_batch.set_input_string(0, index_file);
   boxm2_batch.set_input_float(1, cap_angle);
   boxm2_batch.set_input_float(2, point_angle);
-  boxm2_batch.set_input_float(3, buffer_capacity);
-  boxm2_batch.set_input_unsigned(4, start_i);
-  boxm2_batch.set_input_unsigned(5, end_i);
-  boxm2_batch.set_input_string(6, out_prefix);
+  boxm2_batch.set_input_float(3, top_angle);
+  boxm2_batch.set_input_float(4, bottom_angle);
+  boxm2_batch.set_input_float(5, buffer_capacity);
+  boxm2_batch.set_input_unsigned(6, start_i);
+  boxm2_batch.set_input_unsigned(7, end_i);
+  boxm2_batch.set_input_string(8, out_prefix);
   boxm2_batch.run_process();
