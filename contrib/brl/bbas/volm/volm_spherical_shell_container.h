@@ -23,6 +23,7 @@
 #include <vsph/vsph_spherical_coord_sptr.h>
 #include <vsph/vsph_spherical_coord.h>
 #include <vsph/vsph_sph_point_3d.h>
+#include <vil/vil_image_view.h>
 
 class volm_spherical_shell_container : public vbl_ref_count
 {
@@ -46,6 +47,9 @@ class volm_spherical_shell_container : public vbl_ref_count
   void draw_template(vcl_string vrml_file_name);
   //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
   void draw_template(vcl_string vrml_file_name, vcl_vector<unsigned char>& values, unsigned char special);
+  
+  //: generate panaroma image
+  void panaroma_img(vil_image_view<vxl_byte>& img, vcl_vector<unsigned char>& values);
 
  protected:
   void add_uniform_views();
