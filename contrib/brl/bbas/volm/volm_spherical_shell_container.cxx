@@ -282,6 +282,7 @@ void volm_spherical_shell_container::panaroma_img(vil_image_view<vxl_byte>& img,
 {
   assert(values.size() == sph_points_.size());
   img.set_size(360, 180);
+  img.fill(127);
   for (unsigned i = 0; i < sph_points_.size(); i++) {
     vsph_sph_point_3d pt = sph_points_[i];
     unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180);
