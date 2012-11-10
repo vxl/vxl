@@ -312,8 +312,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     t.mark();
     vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
     if (!(ord_iter != order_cache.end())) {
-      vcl_vector<boxm2_block_id> vis_blocks_pt = scene->get_vis_blocks(local_h_pt_d, dmax);
-      order_cache[curr_block] =  boxm2_util::order_about_a_block2(scene, curr_block, vis_blocks_pt);
+      order_cache[curr_block] =  boxm2_util::order_about_a_block(scene, curr_block, dmax);
       if (order_cache.size() > 100) {// kick the first one 
         vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator to_kick = order_cache.begin(); 
         if (to_kick->first != curr_block)
