@@ -1450,23 +1450,25 @@ def get_hypothesis(hypo,j):
   z = boxm2_batch.get_output_float(id)
   return x,y,z;
 
-def index_hypotheses(device, scene, opencl_cache, hyp_file, elev_dif, vmin, dmax, solid_angle, cap_angle, point_angle, top_angle, bottom_angle, out_name, visibility_threshold, index_buffer_capacity):
+def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_hyp_id, elev_dif, vmin, dmax, solid_angle, cap_angle, point_angle, top_angle, bottom_angle, out_name, visibility_threshold, index_buffer_capacity):
   boxm2_batch.init_process("boxm2IndexHypothesesProcess");
   boxm2_batch.set_input_from_db(0, device);
   boxm2_batch.set_input_from_db(1, scene);
   boxm2_batch.set_input_from_db(2, opencl_cache);
   boxm2_batch.set_input_string(3, hyp_file);
-  boxm2_batch.set_input_float(4, elev_dif);
-  boxm2_batch.set_input_float(5, vmin);
-  boxm2_batch.set_input_float(6, dmax);
-  boxm2_batch.set_input_float(7, solid_angle);
-  boxm2_batch.set_input_float(8, cap_angle);
-  boxm2_batch.set_input_float(9, point_angle);
-  boxm2_batch.set_input_float(10, top_angle);
-  boxm2_batch.set_input_float(11, bottom_angle);
-  boxm2_batch.set_input_string(12, out_name);
-  boxm2_batch.set_input_float(13, visibility_threshold);
-  boxm2_batch.set_input_float(14, index_buffer_capacity);
+  boxm2_batch.set_input_unsigned(4, start_hyp_id);
+  boxm2_batch.set_input_unsigned(5, skip_hyp_id);
+  boxm2_batch.set_input_float(6, elev_dif);
+  boxm2_batch.set_input_float(7, vmin);
+  boxm2_batch.set_input_float(8, dmax);
+  boxm2_batch.set_input_float(9, solid_angle);
+  boxm2_batch.set_input_float(10, cap_angle);
+  boxm2_batch.set_input_float(11, point_angle);
+  boxm2_batch.set_input_float(12, top_angle);
+  boxm2_batch.set_input_float(13, bottom_angle);
+  boxm2_batch.set_input_string(14, out_name);
+  boxm2_batch.set_input_float(15, visibility_threshold);
+  boxm2_batch.set_input_float(16, index_buffer_capacity);
   boxm2_batch.run_process();
   
 def partition_hypotheses(scene_file, hyp_file, elev_dif, out_name):
@@ -1475,6 +1477,16 @@ def partition_hypotheses(scene_file, hyp_file, elev_dif, out_name):
   boxm2_batch.set_input_string(1, hyp_file);
   boxm2_batch.set_input_float(2, elev_dif);
   boxm2_batch.set_input_string(3, out_name);
+  boxm2_batch.run_process();
+  
+# size is the size of mini box around the hypo, unit is arcseconds, e.g. 0.01
+def write_hypotheses_kml(hyp_file, start, skip, out_name, size=0.01):
+  boxm2_batch.init_process("boxm2HypoKmlProcess");
+  boxm2_batch.set_input_string(0, hyp_file);
+  boxm2_batch.set_input_unsigned(1, start);
+  boxm2_batch.set_input_unsigned(2, skip);
+  boxm2_batch.set_input_float(3, size);
+  boxm2_batch.set_input_string(4, out_name);
   boxm2_batch.run_process();
   
 def visualize_indices(index_file, cap_angle, point_angle, top_angle, bottom_angle, buffer_capacity, start_i, end_i, out_prefix):
