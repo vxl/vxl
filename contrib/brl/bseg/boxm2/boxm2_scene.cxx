@@ -33,8 +33,6 @@ boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origi
 boxm2_scene::boxm2_scene(const char* buffer)
 {
   boxm2_scene_parser parser;
-  vcl_string temp(buffer);
-  bool out = parser.parseString(buffer);
   if (!parser.parseString(buffer)) {
     vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
              << parser.XML_GetCurrentLineNumber() << '\n';
