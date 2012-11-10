@@ -12,6 +12,7 @@
 #include <bsta/bsta_histogram.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
+#include <vcl_limits.h>
 
 //: Utility class with static methods
 class boxm2_util
@@ -76,12 +77,9 @@ class boxm2_util
                             boxm2_cache_sptr& cache,
                             const vgl_point_3d<double>& point,
                             float& prob, float& intensity);
-    // Computes the order of the blocks spiraling from the curr_block.
-    static vcl_vector<boxm2_block_id> order_about_a_block(boxm2_scene_sptr scene, boxm2_block_id curr_block);
+    // Computes the order of the blocks spiraling from the curr_block, find the depth from curr_block center and order with respect to that
+    static vcl_vector<boxm2_block_id> order_about_a_block(boxm2_scene_sptr scene, boxm2_block_id curr_block, double distance = vcl_numeric_limits<double>::max());
     
-    //: same as above but among the passed set of blocks, they might have been computed e.g. using scene->get_vis_blocks
-    static vcl_vector<boxm2_block_id> order_about_a_block2(boxm2_scene_sptr scene, boxm2_block_id curr_block, vcl_vector<boxm2_block_id>& blk_set);
-
     //: get blocks along a ray
     static vcl_vector<boxm2_block_id> blocks_along_a_ray(boxm2_scene_sptr scene, vgl_point_3d<double> p0, vgl_point_3d<double> p1);
 

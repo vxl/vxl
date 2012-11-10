@@ -598,8 +598,36 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
     return true;
 }
 
-vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scene, boxm2_block_id curr_block)
+vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scene, boxm2_block_id curr_block, double distance)
 {
+  vcl_vector<boxm2_block_id> vis_order;
+  vcl_vector<boxm2_dist_id_pair> distances;
+  
+  vcl_map<boxm2_block_id, boxm2_block_metadata>& blk_map = scene->blocks();
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator it = blk_map.find(curr_block);
+  if (it == blk_map.end()) {
+    vcl_cerr << " Cannot locate " << curr_block << " in the blocks of the scene to compute vis order around it!!\n";
+    return vis_order;
+  }
+  vgl_point_3d<double>& current_o = (it->second).local_origin_;
+  
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  for (iter = blk_map.begin(); iter != blk_map.end(); ++iter) {
+    vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
+    double depth = (current_o-blk_o).length();
+    if(depth <  distance)
+      distances.push_back( boxm2_dist_id_pair(depth, iter->first) );
+  }
+
+  //sort distances
+  vcl_sort(distances.begin(), distances.end());
+
+  //put blocks in "vis_order"
+  vcl_vector<boxm2_dist_id_pair>::iterator di;
+  for (di = distances.begin(); di != distances.end(); ++di)
+    vis_order.push_back(di->id_);
+  return vis_order;
+#if 0
     vcl_vector<boxm2_block_id> allblocks = scene->get_block_ids();
     vcl_vector<boxm2_block_id> orderdblocks;
     vcl_vector<boxm2_block_id>::iterator iter;
@@ -658,64 +686,9 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
         //  break;
     }
     return orderdblocks;
+#endif
 }
-//: same as above but among the passed set of blocks, they might have been computed e.g. using scene->get_vis_blocks
-vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block2(boxm2_scene_sptr scene, boxm2_block_id curr_block, vcl_vector<boxm2_block_id>& allblocks)
-{
-    vcl_vector<boxm2_block_id> orderdblocks;
-    vcl_vector<boxm2_block_id>::iterator iter;
-    int curr_i = curr_block.i();
-    int curr_j = curr_block.j();
-    int curr_k = curr_block.k();
 
-    iter = vcl_find(allblocks.begin(), allblocks.end(), curr_block);
-    if (iter!= allblocks.end() )
-    {
-        orderdblocks.push_back(*iter);
-    }
-    else
-    {
-        vcl_cout<<"The current block id is not in this scene"<<vcl_endl;
-        return orderdblocks;
-    }
-    int radius = 1;
-    while (allblocks.size() > orderdblocks.size())
-    {
-        for (int i =-radius+curr_i; i<=radius+curr_i; i+=2*radius)
-            for (int j =-radius+curr_j; j<=radius+curr_j; ++j)
-              for (int k = -radius+curr_k; k <=radius+curr_k; ++k)
-            {
-                iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
-                if (iter!= allblocks.end() )
-                {
-                    orderdblocks.push_back(*iter);
-                }
-            }
-        for (int j =-radius+curr_j; j<=radius+curr_j; j+=2*radius)
-            for (int i =-radius+curr_i+1; i<radius+curr_i; ++i)
-              for (int k = -radius+curr_k; k <= radius+curr_k; ++k)
-            {
-                iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
-                if (iter!= allblocks.end() )
-                {
-                    orderdblocks.push_back(*iter);
-                }
-            }
-        for (int k =-radius+curr_k; k<=radius+curr_k; k+=2*radius)
-          for (int i =-radius+curr_i+1; i<radius+curr_i; ++i)
-            for (int j = -radius+curr_j+1; j < radius+curr_j; ++j)
-            {
-                iter = vcl_find(allblocks.begin(), allblocks.end(), boxm2_block_id(i,j,k));
-                if (iter!= allblocks.end() )
-                {
-                    orderdblocks.push_back(*iter);
-                }
-            }
-
-        ++radius;
-    }
-    return orderdblocks;
-}
 bool boxm2_util::write_blocks_to_kml(boxm2_scene_sptr& scene, vcl_string kml_file, vcl_vector<boxm2_block_id> blks)
 {
   vpgl_lvcs lvcs = scene->lvcs();
