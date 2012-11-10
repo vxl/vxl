@@ -28,6 +28,10 @@
 #include <vcl_cstdio.h>
 #include <vil/vil_save.h>
 #include <vil/vil_resample_nearest.h>
+
+#include <vil/algo/vil_structuring_element.h>
+#include <vil/algo/vil_binary_closing.h>
+
 namespace boxm2_ocl_compute_visibility_process_globals
 {
     const unsigned n_inputs_ = 10;
@@ -139,8 +143,11 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     rayo_buff[3] = 0;
     bocl_mem_sptr ray_o_buff=opencl_cache->alloc_mem(sizeof(float)*4, rayo_buff,  "image dims");
     ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    vcl_cout<<"Reading Depth Images "<<vcl_endl;
+    
+
     boxm2_util::get_raydirs_tfinal(indir,camsfile,vgl_point_3d<double>(x,y,z),raydirs,tfinals,scale );
+    vcl_cout<<"Read Depth Images in "<<t.all()<<" ms"<<vcl_endl;
+    t.mark();
     unsigned cl_ni =0;
     unsigned cl_nj =0;
     vcl_vector<bocl_mem_sptr> bocl_raydirs;
@@ -229,8 +236,6 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
         {
             
             //choose correct render kernel
-
-
             ray_image->write_to_gpu_mem(queue,rayd_buffs[frame],4*cl_ni*cl_nj*sizeof(float));
             vis_image->write_to_gpu_mem(queue,vis_buffs[frame],cl_ni*cl_nj*sizeof(float));
             
@@ -271,31 +276,44 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     opencl_cache->unref_mem(ray_o_buff.ptr());
     //opencl_cache->free_mem_pool();
     clReleaseCommandQueue(queue);
+    vcl_cout<<"GPU TIME "<<gpu_time<<" and total time "<<t.all()<<vcl_endl;
+    t.mark();
     vcl_cout<<"Writing Vis Images "<<vcl_endl;
     for (unsigned int count = 0 ; count < tfinals.size(); count ++)
     {
         float * vis_buf = (float*)vis_buffs[count];
-        vil_image_view<unsigned char> visout(tfinals[count]->ni(),tfinals[count]->nj(),3);
-        visout.fill(0);
-
+        vil_image_view<bool> visbool(tfinals[count]->ni(),tfinals[count]->nj());
+        visbool.fill(false);
         for (unsigned c=0;c<tfinals[count]->nj();c++)
             for (unsigned r=0;r<tfinals[count]->ni();r++)
             {
                 if(vis_buf[c*cl_ni+r] > 0.5)
+                    visbool(r,c)=true;
+
+            }
+        vil_structuring_element s; 
+        s.set_to_disk(2.0);
+        vil_binary_closing(visbool,visbool,s);
+        vil_image_view<unsigned char> visout(tfinals[count]->ni(),tfinals[count]->nj(),3);       
+        visout.fill(0);
+        for (unsigned c=0;c<visbool.nj();c++)
+            for (unsigned r=0;r<visbool.ni();r++)
+            {
+                if(visbool(r,c))
                     visout(r,c,1)=255;
 
             }
-
        int rescaled_ni = tfinals[count]->ni() * scale;
        int rescaled_nj = tfinals[count]->nj() * scale;
        vil_image_view<unsigned char> visout_rescaled(rescaled_ni,rescaled_nj,3);
        vil_resample_nearest<unsigned char,unsigned char>(visout, visout_rescaled, rescaled_ni, rescaled_nj);
 
        char filename[1000];
-       vcl_sprintf(filename,"vis_%d.png",count);
+       vcl_sprintf(filename,"vis_%d.jpg",count);
        vcl_string outfile = outdir +"/" + filename;
        vil_save(visout_rescaled,outfile.c_str());
     }
+    vcl_cout<<"it took "<<t.all()<<vcl_endl;
     for(unsigned int count = 0 ; count < tfinals.size(); count ++)
     {
        delete [] rayd_buffs[count];
