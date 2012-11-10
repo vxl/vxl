@@ -254,10 +254,7 @@ void step_cell_render_depth(__global float* alpha_data,int data_ptr,
 
   float vis_prob_end = exp(-alpha_integral);
   float omega = vis - vis_prob_end;
-  if (omega> 0.01)
-  {
-    expected_depth += depth*omega;
-  }
+  expected_depth += depth*omega;
   (*data_return).x = alpha_integral;
   (*data_return).y = vis_prob_end;
   (*data_return).z = expected_depth;
@@ -297,13 +294,10 @@ void step_cell_render_depth2(float depth,
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
   float omega=(*vis) * (1.0f - diff_omega);
-  if (omega> 0.005)
-  {
-    (*probsum)+=omega;
-    (*vis)    *= diff_omega;
-    (*expected_depth)+=depth*omega;
-    (*expected_depth_square)+=depth*depth*omega;
-  }
+  (*probsum)+=omega;
+  (*vis)    *= diff_omega;
+  (*expected_depth)+=depth*omega;
+  (*expected_depth_square)+=depth*depth*omega;
   (*t)=depth;
 }
 
