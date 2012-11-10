@@ -411,9 +411,12 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     vcl_vector<unsigned char> values;
     for (int i = 0; i < layer_size; i++) {
       // check if sky
-      if (vis_buff[i] > vis_thres)
-        values.push_back((unsigned char)254);
-      else
+      if (vis_buff[i] > vis_thres) { 
+        if (buff[i] > 0)  //  if the ray goes into the world vis stays 1 but depth stays 0 too, so don't confuse that with sky
+          values.push_back((unsigned char)254);
+        else
+          values.push_back((unsigned char)253); // pass an invalid depth interval, not a valid occupied surface, vis = 1 but depth = 0
+      } else
         values.push_back(sph2->get_depth_interval((double)buff[i]));
     }
 #if 0
@@ -694,7 +697,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
     vcl_stringstream str; str << prefix << "_" << j;
     vcl_string temp_name = str.str() + ".vrml";
     ind->get_next(values);
-    sph_shell->draw_template(temp_name, values, 254);
+    sph_shell->draw_template(temp_name, values, (unsigned char)254);
     vil_image_view<vxl_byte> img;
     sph_shell->panaroma_img(img, values);
     vcl_string img_name = str.str() + ".png";
