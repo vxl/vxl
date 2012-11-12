@@ -14,6 +14,7 @@
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
 #include <boxm2/ocl/pro/boxm2_ocl_register.h>
+#include <boxm2/volm/pro/boxm2_volm_register.h>
 #if defined(HAS_GLEW) && HAS_GLEW
 #include <boxm2/view/pro/boxm2_view_register.h>
 #endif
@@ -30,7 +31,6 @@
 #include <bvrml/pro/bvrml_register.h>
 #include <bbgm/pro/bbgm_register.h>
 #include <icam_pro/icam_register.h>
-#include <boxm2/volm/pro/boxm2_volm_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -44,6 +44,7 @@ register_processes(PyObject *self, PyObject *args)
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_process();
   boxm2_ocl_register::register_process();
+  boxm2_volm_register::register_process();
 #if defined(HAS_GLEW) && HAS_GLEW
   boxm2_view_register::register_process();
 #endif
@@ -60,7 +61,6 @@ register_processes(PyObject *self, PyObject *args)
   bvrml_register::register_process();
   bbgm_register::register_process();
   icam_register::register_process();
-  boxm2_volm_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -80,6 +80,7 @@ register_datatypes(PyObject *self, PyObject *args)
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_datatype();
   boxm2_ocl_register::register_datatype();
+  boxm2_volm_register::register_datatype();
 #if defined(HAS_GLEW) && HAS_GLEW
   boxm2_view_register::register_datatype();
 #endif
@@ -97,7 +98,6 @@ register_datatypes(PyObject *self, PyObject *args)
   bbgm_register::register_datatype();
   icam_register::register_datatype();
   boxm2_register::register_datatype();
-  boxm2_volm_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }
