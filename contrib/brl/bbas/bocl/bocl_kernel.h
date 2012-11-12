@@ -80,7 +80,7 @@ class bocl_kernel
   ////////////////////////////////////////////////////////////////////////////
   // Profiling functions
 
-  //: returns GPU time
+  //: returns GPU time in miliseconds
   float exec_time();
   //: returns local memory used by a single instance of kernel
   unsigned long local_mem_size();
