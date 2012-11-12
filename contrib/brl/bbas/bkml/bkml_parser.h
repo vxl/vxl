@@ -1,6 +1,13 @@
 #ifndef bkml_parser_h_
 #define bkml_parser_h_
 
+
+// \verbatim
+//  Modifications
+//     Yi Dong   SEP-2012   added parser for polygon (inner/outer) defined in kml
+//     Yi Dong   NOV-2012   added parser for deviations of heading, tilt, roll, right_fov, top_fov of camera
+// \endverbatim
+
 // Tags for KML
 #define PHOTO_OVL_TAG "PhotoOverlay"
 #define KML_CAMERA_TAG "Camera"
@@ -21,6 +28,11 @@
 #define KML_LINE_TAG "LineString"
 
 
+#define KML_HEAD_DEV_TAG "heading_deviation"
+#define KML_TILT_DEV_TAG "tilt_deviation"
+#define KML_ROLL_DEV_TAG "roll_deviation"
+#define KML_RFOV_DEV_TAG "rightFov_deviation"
+#define KML_TFOV_DEV_TAG "topFov_deviation"
 #ifdef WIN32
  #define _LIB
 #endif
@@ -53,6 +65,11 @@ class bkml_parser : public expatpp
   double right_fov_;
   double top_fov_;
   double near_;
+  double heading_dev_;
+  double tilt_dev_;
+  double roll_dev_;
+  double right_fov_dev_;
+  double top_fov_dev_;
   vcl_vector<vgl_point_3d<double> > polyouter_;
   vcl_vector<vgl_point_3d<double> > polyinner_;
   vcl_vector<vgl_point_3d<double> > linecord_;

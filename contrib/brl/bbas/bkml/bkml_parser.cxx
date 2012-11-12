@@ -27,13 +27,22 @@ void convert(const char* t, T& d)
 
 bkml_parser::bkml_parser()
 {
-#if 0
   init_params();
-#endif
 }
 
 void bkml_parser::init_params()
 {
+  heading_ = 0.0;
+  tilt_ = 0.0;
+  roll_ = 0.0;
+  right_fov_ = 0.0;
+  top_fov_ = 0.0;
+  near_ = 0.0;
+  heading_dev_ = 0.0;
+  tilt_dev_ = 0.0;
+  roll_dev_ = 0.0;
+  right_fov_dev_ = 0.0;
+  top_fov_dev_ = 0.0;
 }
 
 void
@@ -62,17 +71,32 @@ bkml_parser::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, KML_HEAD_TAG) == 0 ) {
     last_tag = KML_HEAD_TAG;
   }
+  else if (vcl_strcmp(name, KML_HEAD_DEV_TAG) == 0 ) {
+    last_tag = KML_HEAD_DEV_TAG;
+  }
   else if (vcl_strcmp(name, KML_TILT_TAG) == 0 ) {
     last_tag = KML_TILT_TAG;
-      }
+  }
+  else if (vcl_strcmp(name, KML_TILT_DEV_TAG) == 0 ) {
+    last_tag = KML_TILT_DEV_TAG;
+  }
   else if (vcl_strcmp(name, KML_ROLL_TAG) == 0 ) {
     last_tag = KML_ROLL_TAG;
   }
+  else if (vcl_strcmp(name, KML_ROLL_DEV_TAG) == 0 ) {
+    last_tag = KML_ROLL_DEV_TAG;
+  }
   else if (vcl_strcmp(name, KML_RFOV_TAG) == 0) {
     last_tag = KML_RFOV_TAG;
-      }
+  }
+  else if (vcl_strcmp(name, KML_RFOV_DEV_TAG) == 0 ) {
+    last_tag = KML_RFOV_DEV_TAG;
+  }
   else if (vcl_strcmp(name, KML_TFOV_TAG) == 0) {
     last_tag = KML_TFOV_TAG;
+  }
+  else if (vcl_strcmp(name, KML_TFOV_DEV_TAG) == 0) {
+    last_tag = KML_TFOV_DEV_TAG;
   }
   else if (vcl_strcmp(name, KML_NEAR_TAG) == 0) {
     last_tag = KML_NEAR_TAG;
@@ -130,12 +154,26 @@ void bkml_parser::charData(const XML_Char* s, int len)
     str >> heading_;
     last_tag = "";
   }
+  else if (last_tag == KML_HEAD_DEV_TAG) {
+    vcl_stringstream str;
+	for(int i = 0; i < len; i++)
+      str << s[i];
+	str >> heading_dev_;
+	last_tag = "";
+  }
   else if (last_tag == KML_TILT_TAG) {
     vcl_stringstream str;
     for (int i =0; i<len; ++i)
       str << s[i];
     str >> tilt_;
     last_tag = "";
+  }
+  else if (last_tag == KML_TILT_DEV_TAG) {
+    vcl_stringstream str;
+	for(int i = 0; i < len; i++)
+      str << s[i];
+	str >> tilt_dev_;
+	last_tag = "";
   }
   else if (last_tag == KML_ROLL_TAG) {
     vcl_stringstream str;
@@ -144,6 +182,13 @@ void bkml_parser::charData(const XML_Char* s, int len)
     str >> roll_;
     last_tag = "";
   }
+  else if (last_tag == KML_ROLL_DEV_TAG) {
+    vcl_stringstream str;
+	for(int i = 0; i < len; i++)
+      str << s[i];
+	str >> roll_dev_;
+	last_tag = "";
+  }
   else if (last_tag == KML_RFOV_TAG) {
     vcl_stringstream str;
     for (int i =0; i<len; ++i)
@@ -151,12 +196,26 @@ void bkml_parser::charData(const XML_Char* s, int len)
     str >> right_fov_;
     last_tag = "";
   }
+  else if (last_tag == KML_RFOV_DEV_TAG) {
+    vcl_stringstream str;
+	for(int i = 0; i < len; i++)
+      str << s[i];
+	str >> right_fov_dev_;
+	last_tag = "";
+  }
   else if (last_tag == KML_TFOV_TAG) {
     vcl_stringstream str;
     for (int i =0; i<len; ++i)
       str << s[i];
     str >> top_fov_;
     last_tag = "";
+  }
+  else if (last_tag == KML_TFOV_DEV_TAG) {
+    vcl_stringstream str;
+	for(int i = 0; i < len; ++i)
+      str << s[i];
+	str >> top_fov_dev_;
+	last_tag = "";
   }
   else if (last_tag == KML_NEAR_TAG) {
     vcl_stringstream str;
