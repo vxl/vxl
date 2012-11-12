@@ -9,6 +9,8 @@
 // \date July 31, 2012
 // \verbatim
 //  Modifications
+//     Yi Dong     NOV--2012    added an order argument in add_region method, with default 0
+//     Yi Dong     NOV--2012    added an method to set the depth image size
 // \endverbatim
 // The idea is that the absolute depth map for a scene cannot often
 // be extracted from a single image since there can be unknown parameters.
@@ -65,6 +67,7 @@ class depth_map_scene : public vbl_ref_count
   vpgl_perspective_camera<double> cam() const{return cam_;}
   //: set members
   void set_image_path(vcl_string const& path){image_path_ = path;}
+  void set_image_size(unsigned const& ni, unsigned const& nj) { ni_ = ni;  nj_ = nj; }
   void set_camera(vpgl_perspective_camera<double> const& cam) {cam_ = cam;}
   void set_ground_plane(vsol_polygon_2d_sptr ground_plane);
   void set_sky(vsol_polygon_2d_sptr ground_plane);
@@ -91,7 +94,8 @@ class depth_map_scene : public vbl_ref_count
                   double min_distance,
                   double max_distance,
                   vcl_string name,
-                  depth_map_region::orientation orient);
+                  depth_map_region::orientation orient,
+				  unsigned order = 0);
 
   //: return a depth map of distance from the camera. Downsample accordingly
   vil_image_view<float> depth_map(unsigned log2_downsample_ratio);

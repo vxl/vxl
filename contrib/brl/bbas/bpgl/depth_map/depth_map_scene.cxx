@@ -48,13 +48,15 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
                                  double min_depth,
                                  double max_depth,
                                  vcl_string name,
-                                 depth_map_region::orientation orient)
+                                 depth_map_region::orientation orient,
+								 unsigned order)
 {
   vgl_plane_3d<double> plane(region_normal.x(), region_normal.y(), region_normal.z(), 0.0);
   depth_map_region_sptr reg = new depth_map_region(region, plane,
                                                    min_depth, max_depth,
                                                    name,
                                                    orient);
+  reg->set_order(order);
   scene_regions_[name]=reg;
 }
 
