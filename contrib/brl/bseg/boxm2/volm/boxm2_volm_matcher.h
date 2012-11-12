@@ -8,18 +8,70 @@
 // \author Yi Dong
 // \date October 07, 2012
 // \verbatim
-//  Modifications
-//   created by Ozge C. Ozcanli - Oct 07, 2012
+//   Modifications
+//       created by Ozge C. Ozcanli - Oct 07, 2012
 // \endverbatim
-//
+// 
 
 #include <volm/volm_query_sptr.h>
+#include <volm/volm_query.h>
+#include "boxm2_volm_wr3db_index_sptr.h"
 #include "boxm2_volm_wr3db_index.h"
+#include <bocl/bocl_manager.h>
+#include <bocl/bocl_device.h>
+#include <bocl/bocl_kernel.h>
+#include <bocl/bocl_mem.h>
 
 class boxm2_volm_matcher
 {
- public:
-  double matching_cost(volm_query_sptr q, boxm2_volm_wr3db_index ind);
+public:
+  //: default constructor
+  boxm2_volm_matcher(){}
+  //: constructor 
+  boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_index_sptr ind, unsigned long ei, vcl_vector<bocl_device_sptr> device_);
+  //: destructor
+  ~boxm2_volm_matcher();
+
+  //: compile kernel for each device
+  bool compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels);
+  //: create queue, bocl_mem for queries
+  bool setup_queue();
+  //: execute_kernel for given chunk of indices
+  bool execute_kernel(bocl_device_sptr device, cl_command_queue& queue, bocl_mem* query, bocl_mem* score, bocl_mem* index, bocl_kernel* kern);
+  //: main process to streaming indices into kernel
+  bool matching_cost_layer();
+  //: Binary score to stream.
+  bool write_score(vcl_string const& out_file);
+  
+private:
+  //: members
+  volm_query_sptr query_;
+  boxm2_volm_wr3db_index_sptr ind_;
+  unsigned long ei_;
+  vcl_vector<float> score_all_;
+  vcl_vector<unsigned> cam_all_id_;
+  //: ocl instance
+  vcl_vector<bocl_device_sptr> gpus_;
+  vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  //: GPU work item and work group (1D case)
+  unsigned int cl_ni;
+  unsigned int cl_nj;
+  cl_uint work_dim;
+  vcl_size_t local_threads[2];
+  vcl_size_t global_threads[2];
+
+  // buffer defination for cost kernel
+  vcl_vector<cl_command_queue> queues;
+  vcl_vector<bocl_mem* > queries;
+  vcl_vector<unsigned char*> queries_buff;
+
+#if 0
+    unsigned int* query_voxel_buff;
+    unsigned int* query_offset_buff;
+    unsigned int* query_counter_buff;
+	unsigned int* query_prop_buff; // this one is used to define the what kind of properites we are dealing with
+#endif
+
 };
 
 #endif  // boxm2_volm_matcher_h_
