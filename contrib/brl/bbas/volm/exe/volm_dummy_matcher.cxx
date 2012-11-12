@@ -13,32 +13,34 @@
 int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> cam_file("-cam", "cam kml filename", "");
-  vul_arg<unsigned> img_ni("-ni", "query img ni", 0);
-  vul_arg<unsigned> img_nj("-nj", "query img nj", 0);
   vul_arg<vcl_string> label_file("-label", "xml file with labeled polygons", "");
   vul_arg<vcl_string> out_folder("-out", "output folder", "");
   vul_arg<bool> save_images("-save", "save out images or not", false);
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
-  if (img_ni() == 0 || img_nj() == 0 || cam_file().compare("") == 0 || label_file().compare("") == 0 || out_folder().compare("") == 0) {
+  if (cam_file().compare("") == 0 || label_file().compare("") == 0 || out_folder().compare("") == 0) {
     vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-  vpgl_perspective_camera<double> cam;
-  if (!volm_io::read_camera(cam_file(), cam, img_ni(), img_nj())) {
-    volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);
-    return volm_io::CAM_FILE_IO_ERROR;
+  //: check the query input file
+  depth_map_scene_sptr dm = new depth_map_scene;
+  vcl_string img_category;
+  if (!volm_io::read_labelme(label_file(), dm, img_category)) {
+    volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR);
   }
 
-  depth_map_scene_sptr depth_scene;
-  if (!volm_io::read_labelme(label_file(), cam, depth_scene)) {
-    volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR);
-    return volm_io::LABELME_FILE_IO_ERROR;
+  //: check the camera input file
+  double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
+  double top_fov, top_fov_dev;
+  if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev)) {
+    volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);  
   }
+  
+
   volm_io::write_status(out_folder(), volm_io::EXE_RUNNING, 0);
 
   //: just generate dummy output

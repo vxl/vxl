@@ -29,8 +29,14 @@ class volm_io
   enum VOLM_IMAGE_CODES {UNEVALUATED = 0, STRONG_NEGATIVE = 1, UNKNOWN = 127, STRONG_POSITIVE = 255, SCALE_VALUE = 254};
 
   static bool write_status(vcl_string out_folder, int status_code, int percent=0);
-  static bool read_camera(vcl_string kml_file, vpgl_perspective_camera<double>& cam, unsigned ni, unsigned nj);
-  static bool read_labelme(vcl_string xml_file, vpgl_perspective_camera<double> const& cam, depth_map_scene_sptr& depth_scene);
+
+  static bool read_camera(vcl_string kml_file, unsigned const& ni, unsigned const& nj,
+	                                           double& heading,   double& heading_dev,
+	                                           double& tilt,      double& tilt_dev,
+											   double& roll,      double& roll_dev,
+											   double& top_fov,   double& top_fov_dev);
+
+  static bool read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category);
   
 };  
 

@@ -37,6 +37,7 @@ class volm_tile
    //  \p cut_off is the percentage that shows how quickly the kernel dies off, typically 50
    static void get_uncertainty_region(float lambda_i, float lambda_j, float cut_off, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel);
    static void mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<unsigned int>& img);
+   static void mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<vxl_byte>& img);
 #if 0
    static volm_tile parse_string(vcl_string& filename);
 #endif
