@@ -95,6 +95,9 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
 
   if (active_tag_ == FILENAME_TAG)
     image_name_ = vcl_string(s, len);
+  
+  if (active_tag_ == IMG_CAT_TAG)
+    image_category_ = vcl_string(s, len);
 
   if (active_tag_ == NAME_TAG) {
     vcl_string name = vcl_string(s,len);
@@ -118,6 +121,12 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
 
   if (active_tag_ == OBJECT_ORDER_TAG)
     convert(vcl_string(s,len), order_);
+
+  if (active_tag_ == IMG_NI_TAG)
+    convert(vcl_string(s,len), image_ni_);
+
+  if (active_tag_ == IMG_NJ_TAG)
+    convert(vcl_string(s,len), image_nj_);
 }
 
 void bvgl_labelme_parser::trim_string(vcl_string& s)

@@ -2,6 +2,12 @@
 #ifndef bvgl_labelme_parser_h_
 #define bvgl_labelme_parser_h_
 
+// \verbatim
+//  Modifications
+//     Yi Dong   OCT-2012   added parser for mindist, maxdist, name, polygon defined in xml
+//     Yi Dong   NOV-2012   added parser for order, image size, type and ImageCategory(desert or coast, etc) defined in xml
+// \endverbatim
+
 #include <expatpplib.h>
 #include <vcl_string.h>
 #include <vcl_sstream.h>
@@ -22,6 +28,10 @@
 #define OBJECT_MAXDIST_TAG "maxdist"
 #define OBJECT_ORDER_TAG "order"
 #define TYPE_TAG "type"
+#define IMG_CAT_TAG "ImageCategory"
+#define IMG_NI_TAG "nrows"
+#define IMG_NJ_TAG "ncols"
+
 
 #if 0
 <annotation>
@@ -54,9 +64,11 @@ class bvgl_labelme_parser : public expatpp
   bvgl_labelme_parser(vcl_string& filename);
   ~bvgl_labelme_parser(void) {}
 
-  //image filename/path
+  //image filename/path, category, and size
   vcl_string image_name() { return image_name_; }
-
+  vcl_string image_category() { return image_category_; }
+  unsigned image_ni() { return image_ni_; }
+  unsigned image_nj() { return image_nj_; }
   //object names (in the same order as polygons)
   vcl_vector<vcl_string>& obj_names() { return obj_names_; }
   vcl_vector<vcl_string>& obj_types() { return obj_types_; }
@@ -87,7 +99,10 @@ class bvgl_labelme_parser : public expatpp
   float min_dist_;
   float max_dist_;
   int order_;
+  vcl_string image_category_;
   vcl_string image_name_;
+  unsigned image_ni_;
+  unsigned image_nj_;
 
   //set active tag for parsing char data from different tags
   vcl_string active_tag_;
