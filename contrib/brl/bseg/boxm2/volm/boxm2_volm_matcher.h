@@ -28,7 +28,7 @@ public:
   //: default constructor
   boxm2_volm_matcher(){}
   //: constructor 
-  boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_index_sptr ind, unsigned long ei, vcl_vector<bocl_device_sptr> device_);
+  boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_index_sptr ind, unsigned long ei, bocl_device_sptr gpu);
   //: destructor
   ~boxm2_volm_matcher();
 
@@ -51,7 +51,7 @@ private:
   vcl_vector<float> score_all_;
   vcl_vector<unsigned> cam_all_id_;
   //: ocl instance
-  vcl_vector<bocl_device_sptr> gpus_;
+  bocl_device_sptr gpu_;
   vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
   //: GPU work item and work group (1D case)
   unsigned int cl_ni;
@@ -60,18 +60,10 @@ private:
   vcl_size_t local_threads[2];
   vcl_size_t global_threads[2];
 
-  // buffer defination for cost kernel
-  vcl_vector<cl_command_queue> queues;
-  vcl_vector<bocl_mem* > queries;
-  vcl_vector<unsigned char*> queries_buff;
-
-#if 0
-    unsigned int* query_voxel_buff;
-    unsigned int* query_offset_buff;
-    unsigned int* query_counter_buff;
-	unsigned int* query_prop_buff; // this one is used to define the what kind of properites we are dealing with
-#endif
-
+  //: buffer defination for cost kernel
+  cl_command_queue queue;
+         bocl_mem* query_cl;
+    unsigned char* queries_buff;
 };
 
 #endif  // boxm2_volm_matcher_h_
