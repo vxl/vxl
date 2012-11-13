@@ -26,14 +26,14 @@ int main(int argc,  char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-  //: check the query input file
+  // check the query input file
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
   if (!volm_io::read_labelme(label_file(), dm, img_category)) {
     volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR);
   }
 
-  //: check the camera input file
+  // check the camera input file
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
   double top_fov, top_fov_dev;
   if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev)) {
@@ -43,7 +43,7 @@ int main(int argc,  char** argv)
 
   volm_io::write_status(out_folder(), volm_io::EXE_RUNNING, 0);
 
-  //: just generate dummy output
+  // just generate dummy output
   vcl_vector<volm_tile> tiles = volm_tile::generate_p1_tiles();
   for (unsigned i = 0; i < tiles.size(); ++i) {
     vil_image_view<unsigned int> out(3601, 3601);

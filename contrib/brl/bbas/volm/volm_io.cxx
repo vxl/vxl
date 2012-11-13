@@ -17,10 +17,10 @@
 #include <vcl_cassert.h>
 
 bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned const& nj,
-	                                           double& heading,   double& heading_dev,
-	                                           double& tilt,      double& tilt_dev,
-											   double& roll,      double& roll_dev,
-											   double& top_fov,   double& top_fov_dev)
+                                               double& heading,   double& heading_dev,
+                                               double& tilt,      double& tilt_dev,
+                                               double& roll,      double& roll_dev,
+                                               double& top_fov,   double& top_fov_dev)
 {
   bkml_parser* parser = new bkml_parser();
   vcl_FILE* xmlFile = vcl_fopen(kml_file.c_str(), "r");
@@ -46,31 +46,31 @@ bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned cons
   double dtor = vnl_math::pi_over_180;
   double ppu = 0.5*ni;
   double ppv = 0.5*nj;
-  //: check the consitency of input parameters
+  // check the consitency of input parameters
   if( parser->right_fov_dev_ && !parser->right_fov_ ){
     vcl_cerr << " ERROR in camera kml: deviation of right_fov is defined without given inital right_fov.\n";
-	return false;
+    return false;
   }
   if( parser->top_fov_dev_ && !parser->top_fov_) {
     vcl_cerr << " ERROR in camera kml: deviation of top_fov is defined without given inital top_fov.\n";
-	return false;
+    return false;
   }
 
-  //: define the viewing volume
+  // define the viewing volume
   if( parser->right_fov_ && parser->top_fov_ ) {  // use averaged value to define top_fov_
-	double tr = vcl_tan(parser->right_fov_*dtor), tt = vcl_tan(parser->top_fov_*dtor);
+    double tr = vcl_tan(parser->right_fov_*dtor), tt = vcl_tan(parser->top_fov_*dtor);
     double fr = ppu/tr, ft = ppv/tt;
     double f = 0.5*(fr+ft);
-	top_fov = vcl_atan(0.5*nj/f)/dtor;
+    top_fov = vcl_atan(0.5*nj/f)/dtor;
   }else if( parser->right_fov_ ){  // transfer right_fov to top_fov to serve query purpose
-	double tr = vcl_tan(parser->right_fov_*dtor);
-	double fr = ni/tr;
-	top_fov = vcl_atan(nj/fr)/dtor;
+    double tr = vcl_tan(parser->right_fov_*dtor);
+    double fr = ni/tr;
+    top_fov = vcl_atan(nj/fr)/dtor;
   }else if( parser->top_fov_ ) {   // use top_fov directly in query 
     top_fov = parser->top_fov_;
   }
 
-  //: define the deviation of viewing volume
+  // define the deviation of viewing volume
   if( parser->right_fov_dev_ && parser->top_fov_dev_ ){
     // If both given, use the one that gives larger focal range
     double trd = vcl_tan( dtor*(parser->right_fov_ + parser->right_fov_dev_) );
@@ -78,14 +78,14 @@ bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned cons
     double frd = ppu/trd, ftd = ppv/ttd;
     if(frd >= ftd)
       top_fov_dev = parser->top_fov_dev_;
-	else
+    else
       top_fov_dev = parser->right_fov_dev_;
   }else if( parser->right_fov_dev_ ) {
     // transfer right_fov_dev to top_fov_dev
     double trd = vcl_tan( dtor*(parser->right_fov_ + parser->right_fov_dev_) );
-	top_fov_dev = vcl_atan(nj*trd/ni)/dtor - top_fov;
+    top_fov_dev = vcl_atan(nj*trd/ni)/dtor - top_fov;
   }else if( parser->top_fov_dev_ ) {
-	// use top_fov
+    // use top_fov
     top_fov_dev = parser->top_fov_dev_;
   }
   
@@ -103,43 +103,43 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   vcl_vector<float>& object_mindist = parser.obj_mindists();
   vcl_vector<float>& object_maxdist = parser.obj_maxdists();
   if (polys.size() != object_names.size() || !parser.image_ni() || !parser.image_nj() || parser.image_category() == "" ) {
-	vcl_cerr << " ERROR in labelme xml file: defined names and shapes do not match\n";
+    vcl_cerr << " ERROR in labelme xml file: defined names and shapes do not match\n";
     return false;
   }
-  //: load the image category
+  // load the image category
   img_category = parser.image_category();
   if( img_category != "desert" && img_category != "coast" ){
     vcl_cout << " image_category is " << img_category << vcl_endl;
     vcl_cerr << " WARNING in lableme xml file: undefined img_category found\n";
   }
 
-  //: load the image size
+  // load the image size
   unsigned ni = parser.image_ni();
   unsigned nj = parser.image_nj();
   depth_scene->set_image_size(nj, ni);
-  //: push the depth_map_region into depth_scene in the order of defined order in xml
+  // push the depth_map_region into depth_scene in the order of defined order in xml
   for (unsigned i = 0; i < polys.size(); i++) {
     vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
     if(object_types[i] == "sky") {
       depth_scene->set_sky(poly);
     } else {
-      //: check object type to define the region_normal
+      // check object type to define the region_normal
       if(object_types[i] == "hotel" || object_types[i] == "building") {
         double min_depth = parser.obj_mindists()[i];
         double max_depth = parser.obj_maxdists()[i];
-		vgl_vector_3d<double> vp(1.0, 0.0, 0.0);
+        vgl_vector_3d<double> vp(1.0, 0.0, 0.0);
         depth_scene->add_region(poly, vp, min_depth, max_depth, object_names[i], depth_map_region::VERTICAL, object_orders[i]);
-	  }else if(object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "water" || object_types[i] == "desert" || object_types[i] == "flat") {
+      }else if(object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "water" || object_types[i] == "desert" || object_types[i] == "flat") {
         double min_depth = parser.obj_mindists()[i];
         double max_depth = parser.obj_maxdists()[i];
         vgl_vector_3d<double> gp(0.0, 0.0, 1.0);//z axis is the plane normal temporary, flat object can have different normal values
         depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i], depth_map_region::GROUND_PLANE, object_orders[i]);
-	  }else {
+      }else {
         double min_depth = parser.obj_mindists()[i];
         double max_depth = parser.obj_maxdists()[i];
-		vgl_vector_3d<double> np(1.0, 1.0, 1.0); 
-		depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i], depth_map_region::NOT_DEF, object_orders[i]);
-	  }
+        vgl_vector_3d<double> np(1.0, 1.0, 1.0); 
+        depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i], depth_map_region::NOT_DEF, object_orders[i]);
+      }
     }
   }
   return true;

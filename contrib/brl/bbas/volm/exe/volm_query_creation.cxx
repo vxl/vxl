@@ -29,8 +29,6 @@ int main(int argc, char** argv)
   vul_arg<int> save_images("-save", "save out query images or not", 0);
   
   vul_arg_parse(argc, argv);
-
-  //vcl_cout << "argc: " << argc << vcl_endl;
   
   if (cam_file().compare("") == 0 || label_file().compare("") == 0 || out_folder().compare("") == 0) {
     vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
@@ -39,29 +37,31 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   
-  //: check the query input file
+  // check the query input file
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
   if (!volm_io::read_labelme(label_file(), dm, img_category)) {
     volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR);
+    return volm_io::LABELME_FILE_IO_ERROR;
   }
 
-  //: check the camera input file
+  // check the camera input file
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
   double top_fov, top_fov_dev;
   if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev)) {
-    volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);  
+    volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);
+    return volm_io::CAM_FILE_IO_ERROR;
   }
 
-  //: create containers
+  // create containers
   
   volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle(),vmin(),dmax());
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, cap_angle(), point_angle(), top_angle(), bottom_angle());
 
-  //: create query array
+  // create query array
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
 
-  //: screen output
+  // screen output
   // query check
   dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region " << vcl_endl;
@@ -70,17 +70,17 @@ int main(int argc, char** argv)
   }
   if(dm->scene_regions().size()) {
     for(unsigned i = 0; i < dm->scene_regions().size(); i++) {
-	  vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "  
-		       << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth() 
-			   << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth() 
-			   << ",\t order = " << (dm->scene_regions())[i]->order()
-			   << vcl_endl;
-	}
+      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "  
+               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth() 
+               << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth() 
+               << ",\t order = " << (dm->scene_regions())[i]->order()
+               << vcl_endl;
+    }
   }
   vcl_cout << " for spherical surface, point angle = " << point_angle() << " degree, " 
-	       << ", top_angle = " << top_angle()
-		   << ", bottom_angle = " << bottom_angle()
-	       << ", generated query has size " << query->get_query_size() << vcl_endl;
+           << ", top_angle = " << top_angle()
+           << ", bottom_angle = " << bottom_angle()
+           << ", generated query has size " << query->get_query_size() << vcl_endl;
 
   vcl_cout << " The query has " << query->get_cam_num() << " cameras: " << vcl_endl;
   vcl_cout << " \t" << query->headings().size() << " headings = " << query->headings()[0] << " +/- " << (query->headings().size()-1)/2 << vcl_endl;
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
   vcl_cout << " For each camera hypothesis, generated query_size is " << query->get_query_size() << " byte" << vcl_endl;
   
 //#if 0  
-  //: check generated camera parameters
+  // check generated camera parameters
   vcl_vector<double>& headings = query->headings();
   vcl_vector<double>& tilts = query->tilts();
   vcl_vector<double>& rolls = query->rolls();
@@ -102,23 +102,23 @@ int main(int argc, char** argv)
       for(unsigned k = 0; k < tilts.size(); k++)
         for(unsigned l = 0; l < rolls.size(); l++) {
           double top_fov = top_fovs[i]; double heading = headings[j]; double tilt = tilts[k];  double roll = rolls[l];
-		  unsigned idx = l + (unsigned)rolls.size()*(k + (unsigned)tilts.size()*(j + (unsigned)headings.size()*i));
-		  vcl_cout << " camera " << idx << " ---> "
-			       << " valid ray = " << query->get_valid_ray_num(idx) 
+          unsigned idx = l + (unsigned)rolls.size()*(k + (unsigned)tilts.size()*(j + (unsigned)headings.size()*i));
+          vcl_cout << " camera " << idx << " ---> "
+                   << " valid ray = " << query->get_valid_ray_num(idx) 
                    << " f = " << top_fov << ",   " 
-				   << " h = " << heading << ",   "
-				   << " t = " << tilt << ",   "
-				   << " r = " << roll << vcl_endl;
-		}
+                   << " h = " << heading << ",   "
+                   << " t = " << tilt << ",   "
+                   << " r = " << roll << vcl_endl;
+        }
 //#endif
 
-  //: visualize query
+  // visualize query
   if(save_images()){
     vcl_string vrml_fname = out_folder() + "cam_hypo_schematic.vrml";
     query->draw_template(vrml_fname);
-	vcl_string prefix = out_folder();
-	query->visualize_query(prefix);
-	query->draw_query_images(out_folder());
+    vcl_string prefix = out_folder();
+    query->visualize_query(prefix);
+    query->draw_query_images(out_folder());
   }
   
   return volm_io::SUCCESS;

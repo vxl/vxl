@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief  A class to represent a volumetric matching query through an image mark-up and estimated camera parameters
-//				The container is numbers of points distributed on a unit spherecial surface
+//              The container is numbers of points distributed on a unit spherecial surface
 //              The camera parameters, heading, tilt, roll, right_fov, top_fov, have resolution one degree, and their 
 //              default values are chosen based on query image category (desert/coast)
 //              Use top viewing angle to define the viewing volume
@@ -34,9 +34,9 @@ public:
   volm_query() {}
   //: constructor
   volm_query(vcl_string const& cam_kml_file, 
-	         vcl_string const& label_xml_file, 
-			 volm_spherical_container_sptr const& sph,
-			 volm_spherical_shell_container_sptr const& sph_shell);
+             vcl_string const& label_xml_file, 
+             volm_spherical_container_sptr const& sph,
+             volm_spherical_shell_container_sptr const& sph_shell);
 
   // === accessors ===
   vcl_vector<vcl_vector<unsigned char> >& min_dist() {return min_dist_;}
