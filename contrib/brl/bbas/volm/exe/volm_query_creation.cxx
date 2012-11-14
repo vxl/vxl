@@ -19,7 +19,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> cam_file("-cam", "cam kml filename", "");
   vul_arg<vcl_string> label_file("-label", "xml file with labeled polygons", "");
   vul_arg<float> vmin("-v", "minimum voxel size", 10.0f);
-  vul_arg<float> dmax("-d", "maximum depth", 60000.0f);
+  vul_arg<float> dmax("-d", "maximum depth", 30000.0f);
   vul_arg<float> solid_angle("-sa", "solid angle (deg)", 2.0f);
   vul_arg<float> cap_angle("-ca", "cap angle(deg)", 180.0f);
   vul_arg<float> point_angle("-pa", "point angle(deg)", 10.0f);
@@ -83,10 +83,10 @@ int main(int argc, char** argv)
            << ", generated query has size " << query->get_query_size() << vcl_endl;
 
   vcl_cout << " The query has " << query->get_cam_num() << " cameras: " << vcl_endl;
-  vcl_cout << " \t" << query->headings().size() << " headings = " << query->headings()[0] << " +/- " << (query->headings().size()-1)/2 << vcl_endl;
-  vcl_cout << " \t" << query->tilts().size() << " tilts = " << query->tilts()[0] << " +/- " << (query->tilts().size() - 1)/2 << vcl_endl;
-  vcl_cout << " \t" << query->rolls().size() << " rolls = " << query->rolls()[0] << " +/- " << (query->rolls().size() - 1)/2 << vcl_endl;
-  vcl_cout << " \t" << query->top_fovs().size() << " top_fov = " << query->top_fovs()[0] << " +/- " << (query->top_fovs().size() - 1)/2 << vcl_endl;
+  vcl_cout << " \t" << query->headings().size() << " headings = " << query->headings()[0] << " +/- " << query->head_d_ << " increment: " << query->head_inc_ << vcl_endl;
+  vcl_cout << " \t" << query->tilts().size() << " tilts = " << query->tilts()[0] << " +/- " << query->tilt_d_ << " increments: " << query->tilt_inc_ << vcl_endl;
+  vcl_cout << " \t" << query->rolls().size() << " rolls = " << query->rolls()[0] << " +/- " << query->roll_d_ << " increments: " << query->roll_inc_ << vcl_endl;
+  vcl_cout << " \t" << query->top_fovs().size() << " top_fov = " << query->top_fovs()[0] << " +/- " << query->tfov_d << " increment: " << query->tfov_inc_ << vcl_endl;
   vcl_cout << " For each camera hypothesis, generated query_size is " << query->get_query_size() << " byte" << vcl_endl;
   
 //#if 0  
