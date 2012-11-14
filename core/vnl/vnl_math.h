@@ -659,4 +659,24 @@ namespace vnl_math
 
 } // end of namespace vnl_math
 
+// Legacy definitions, for backward compatibility:
+#define vnl_math_isnan vnl_math::isnan
+#define vnl_math_isinf vnl_math::isinf
+#define vnl_math_isfinite vnl_math::isfinite
+#define vnl_math_rnd_halfinttoeven vnl_math::rnd_halfinttoeven
+#define vnl_math_rnd_halfintup vnl_math::rnd_halfintup
+#define vnl_math_rnd vnl_math::rnd
+#define vnl_math_floor vnl_math::floor
+#define vnl_math_ceil vnl_math::ceil
+#define vnl_math_abs vnl_math::abs
+#define vnl_math_max vnl_math::max
+#define vnl_math_min vnl_math::min
+#define vnl_math_sqr vnl_math::sqr
+#define vnl_math_cube vnl_math::cube
+#define vnl_math_sgn vnl_math::sgn
+#define vnl_math_sgn0 vnl_math::sgn0
+#define vnl_math_squared_magnitude vnl_math::squared_magnitude
+#define vnl_math_cuberoot vnl_math::cuberoot
+#define vnl_math_hypot vnl_math::hypot
+
 #endif // vnl_math_h_
