@@ -52,7 +52,7 @@ bvgl_labelme_parser::startElement(const char* name, const char** atts)
 
   if (vcl_strcmp(name, OBJECT_TAG)==0) {
     min_dist_ = -1;
-	max_dist_ = -1;
+    max_dist_ = -1;
     order_ = -1;
   }
 }
@@ -75,7 +75,7 @@ void bvgl_labelme_parser::endElement(const XML_Char* name)
   //finish up an object
   if (vcl_strcmp(name, OBJECT_TAG)==0) {
     obj_min_dists_.push_back(min_dist_);
-	obj_max_dists_.push_back(max_dist_);
+    obj_max_dists_.push_back(max_dist_);
     obj_depth_orders_.push_back(order_);
   }
 }
@@ -95,7 +95,7 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
 
   if (active_tag_ == FILENAME_TAG)
     image_name_ = vcl_string(s, len);
-  
+
   if (active_tag_ == IMG_CAT_TAG)
     image_category_ = vcl_string(s, len);
 

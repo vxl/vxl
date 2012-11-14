@@ -1,6 +1,6 @@
 # Recovering the correct offsets for rpc cameras
 #
-# s3_copy_files_to_local.py <hdfs_folder> <name_ending> <local_folder> 
+# s3_copy_files_to_local.py <hdfs_folder> <name_ending> <local_folder>
 #
 # all the files in <hdfs_folder> as:
 #   <hdfs_working_dir>/<hdfs_folder>/*<name_ending> will be copied over to <local_folder>
@@ -34,7 +34,6 @@ boxm2_batch.set_input_string(1, sys.argv[2]);  # name ending
 boxm2_batch.set_input_string(2, sys.argv[3]);  # local path
 statuscode = boxm2_batch.run_process();
 if statuscode != 1:
-	print "Unable to copy files to local folder: " + sys.argv[3] + "!\n";
-	sys.exit(0);
+  print "Unable to copy files to local folder: " + sys.argv[3] + "!\n";
+  sys.exit(0);
 
-	

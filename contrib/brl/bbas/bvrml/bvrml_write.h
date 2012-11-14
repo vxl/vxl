@@ -20,10 +20,10 @@
 
 class bvrml_color
 {
-public:
+ public:
   //: store the color scheme 'classic' to generate a heatmap
   static unsigned heatmap_classic_size;
-  static unsigned char heatmap_classic[256][3]; 
+  static unsigned char heatmap_classic[256][3];
 };
 
 class bvrml_write
@@ -50,7 +50,7 @@ class bvrml_write
                              const float r = 1.0, const float g = 1.0,
                              const float b = 1.0,
                              const float transparency = 0.0);
-  
+
   //: Write a vgl_box_3d as a  wireframe
   template <class T>
   static void write_vrml_wireframe_box(vcl_ofstream& str, vgl_box_3d<T> const& box,
@@ -76,7 +76,7 @@ class bvrml_write
                                   vgl_vector_3d<double> const &dir,
                                   float radius, float height,
                                   const float r, const float g, const float b,
-								  const unsigned side = 0);
+                                  const unsigned side = 0);
 };
 
 #endif
@@ -90,25 +90,25 @@ void bvrml_write::write_vrml_box(vcl_ofstream& str, vgl_box_3d<T> const& box,
   T w = box.max_point().x() - box.min_point().x();
   T h = box.max_point().y() - box.min_point().y();
   T d = box.max_point().z() - box.min_point().z();
-  
+
   str << "Transform {\n"
-  << "translation " << x0 << ' ' << y0 << ' ' << z0 << '\n'
-  << "children [\n"
-  << "Shape {\n"
-  << " appearance Appearance{\n"
-  << "   material Material\n"
-  << "    {\n"
-  << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
-  << "      transparency " << transparency << '\n'
-  << "    }\n"
-  << "  }\n"
-  << " geometry Box\n"
-  <<   "{\n"
-  << "  size " << w << ' ' << h << ' ' << d << '\n'
-  <<  "   }\n"
-  <<  "  }\n"
-  <<  " ]\n"
-  << "}\n";
+      << "translation " << x0 << ' ' << y0 << ' ' << z0 << '\n'
+      << "children [\n"
+      << "Shape {\n"
+      << " appearance Appearance{\n"
+      << "   material Material\n"
+      << "    {\n"
+      << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
+      << "      transparency " << transparency << '\n'
+      << "    }\n"
+      << "  }\n"
+      << " geometry Box\n"
+      <<   "{\n"
+      << "  size " << w << ' ' << h << ' ' << d << '\n'
+      <<  "   }\n"
+      <<  "  }\n"
+      <<  " ]\n"
+      << "}\n";
 }
 
 template <class T>
@@ -117,50 +117,50 @@ void bvrml_write::write_vrml_wireframe_box(vcl_ofstream& str, vgl_box_3d<T> cons
                                            const float transparency )
 {
   vcl_vector<vgl_point_3d<T> > vertices = box.vertices();
-  
+
   str << "Shape {\n"
-  << " appearance Appearance{\n"
-  << "   material Material\n"
-  << "    {\n"
-  << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
-  << "      emissiveColor " << r << ' ' << g << ' ' << b << '\n'
-  << "    }\n"
-  << "  }\n"
-  << " geometry IndexedLineSet\n"
-  << " {\n"
-  << "      coord Coordinate{\n"
-  << "       point[\n";
-      for(unsigned i = 0; i < vertices.size(); i++)
-      {
-        vgl_point_3d<T> pt = vertices[i];
-        str << pt.x() << ' ' << pt.y() << ' ' << pt.z() << ", ";
-      }
+      << " appearance Appearance{\n"
+      << "   material Material\n"
+      << "    {\n"
+      << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
+      << "      emissiveColor " << r << ' ' << g << ' ' << b << '\n'
+      << "    }\n"
+      << "  }\n"
+      << " geometry IndexedLineSet\n"
+      << " {\n"
+      << "      coord Coordinate{\n"
+      << "       point[\n";
+  for (unsigned i = 0; i < vertices.size(); i++)
+  {
+    vgl_point_3d<T> pt = vertices[i];
+    str << pt.x() << ' ' << pt.y() << ' ' << pt.z() << ", ";
+  }
   str << "   ]\n      }"
-  << "   coordIndex [\n"
-  << "0, 1, 2, 3, 0, -1, 4, 5, 6, 7, 4, -1, 0, 4, -1, 1, 5, -1, 2, 6, -1, 3, 7,   ]\n }\n"
-  << "}\n";
-  
+      << "   coordIndex [\n"
+      << "0, 1, 2, 3, 0, -1, 4, 5, 6, 7, 4, -1, 0, 4, -1, 1, 5, -1, 2, 6, -1, 3, 7,   ]\n }\n"
+      << "}\n";
 }
+
 template <class T>
 void bvrml_write::write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<T> &line, const float r, const float g, const float b,
                                           const float transparency)
 {
   str << "Shape {\n"
-  << " appearance Appearance{\n"
-  << "   material Material\n"
-  << "    {\n"
-  << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
-  << "      emissiveColor " << r << ' ' << g << ' ' << b << '\n'
-  << "      transparency " << transparency << '\n'
-  << "    }\n"
-  << "  }\n"
-  << " geometry IndexedLineSet\n"
-  <<   "{\n"
-  << "      coord Coordinate{\n"
-  << "       point[\n"
-  << line.point1().x() << ' ' << line.point1().y() << ' ' <<line.point1().z() << '\n'
-  << line.point2().x() << ' ' << line.point2().y() << ' ' <<line.point2().z() << '\n'
-  << "   ]\n\n }"
-  << "   coordIndex [\n"
-  << "0,1   ]\n  }\n}";
+      << " appearance Appearance{\n"
+      << "   material Material\n"
+      << "    {\n"
+      << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
+      << "      emissiveColor " << r << ' ' << g << ' ' << b << '\n'
+      << "      transparency " << transparency << '\n'
+      << "    }\n"
+      << "  }\n"
+      << " geometry IndexedLineSet\n"
+      <<   "{\n"
+      << "      coord Coordinate{\n"
+      << "       point[\n"
+      << line.point1().x() << ' ' << line.point1().y() << ' ' <<line.point1().z() << '\n'
+      << line.point2().x() << ' ' << line.point2().y() << ' ' <<line.point2().z() << '\n'
+      << "   ]\n\n }"
+      << "   coordIndex [\n"
+      << "0,1   ]\n  }\n}";
 }

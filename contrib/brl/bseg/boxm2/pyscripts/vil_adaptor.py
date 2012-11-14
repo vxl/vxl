@@ -18,7 +18,7 @@ def load_image(file_path) :
   return img, ni, nj;
 
 def save_image(img, file_path) :
-  assert not isinstance(list, tuple) 
+  assert not isinstance(list, tuple)
   boxm2_batch.init_process("vilSaveImageViewProcess");
   boxm2_batch.set_input_from_db(0,img);
   boxm2_batch.set_input_string(1,file_path);
@@ -32,19 +32,19 @@ def convert_image(img, type="byte") :
   (id,type) = boxm2_batch.commit_output(0);
   cimg = dbvalue(id,type);
   return cimg;
-  
+
 ################################
 # BAE raw file image stream
 ################################
-def bae_raw_stream(file_path) : 
+def bae_raw_stream(file_path) :
   boxm2_batch.init_process("bilCreateRawImageIstreamProcess")
   boxm2_batch.set_input_string(0,file_path);
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   stream = dbvalue(id, type);
-  (id, type) = boxm2_batch.commit_output(1); 
+  (id, type) = boxm2_batch.commit_output(1);
   numImgs = boxm2_batch.get_output_int(id);
-  return stream, numImgs 
+  return stream, numImgs
 
 def next_frame(rawStream) :
   boxm2_batch.init_process("bilReadFrameProcess")
@@ -55,7 +55,7 @@ def next_frame(rawStream) :
   (id, type) = boxm2_batch.commit_output(1);
   time = boxm2_batch.get_output_unsigned(id);
   return img, time
-  
+
 def seek_frame(rawStream, frame) :
   boxm2_batch.init_process("bilSeekFrameProcess")
   boxm2_batch.set_input_from_db(0,rawStream);
@@ -66,15 +66,15 @@ def seek_frame(rawStream, frame) :
   (id, type) = boxm2_batch.commit_output(1);
   time = boxm2_batch.get_output_unsigned(id);
   return img, time
-def arf_stream(file_path) : 
+def arf_stream(file_path) :
   boxm2_batch.init_process("bilCreateArfImageIstreamProcess")
   boxm2_batch.set_input_string(0,file_path);
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   stream = dbvalue(id, type);
-  (id, type) = boxm2_batch.commit_output(1); 
+  (id, type) = boxm2_batch.commit_output(1);
   numImgs = boxm2_batch.get_output_int(id);
-  return stream, numImgs 
+  return stream, numImgs
 def arf_next_frame(rawStream) :
   boxm2_batch.init_process("bilArfReadFrameProcess")
   boxm2_batch.set_input_from_db(0,rawStream);
@@ -84,7 +84,7 @@ def arf_next_frame(rawStream) :
   (id, type) = boxm2_batch.commit_output(1);
   time = boxm2_batch.get_output_unsigned(id);
   return img, time
-  
+
 def arf_seek_frame(rawStream, frame) :
   boxm2_batch.init_process("bilArfSeekFrameProcess")
   boxm2_batch.set_input_from_db(0,rawStream);
@@ -94,8 +94,8 @@ def arf_seek_frame(rawStream, frame) :
   img = dbvalue(id,type);
   (id, type) = boxm2_batch.commit_output(1);
   time = boxm2_batch.get_output_unsigned(id);
-  return img, time  
-  
+  return img, time
+
 def read_CLIF07(indir,outdir,camnum,datatype="CLIF06") :
   boxm2_batch.init_process("bilReadCLIF07DataProcess")
   boxm2_batch.set_input_string(0,indir);
@@ -133,7 +133,7 @@ def pixel_wise_roc(cd_img, gt_img, mask_img=None) :
 
 #get image pixel value (always 0-1 float)
 def pixel(img, point):
-    boxm2_batch.init_process("vilPixelValueProcess") 
+    boxm2_batch.init_process("vilPixelValueProcess")
     boxm2_batch.set_input_from_db(0,img)
     boxm2_batch.set_input_int(1, int(point[0]))
     boxm2_batch.set_input_int(2, int(point[1]))
@@ -141,11 +141,11 @@ def pixel(img, point):
     (id,type) = boxm2_batch.commit_output(0)
     val = boxm2_batch.get_output_float(id)
     return val
-    
+
 
 #resize image (default returns float image
 def resize(img, ni, nj, pixel="float"):
-    boxm2_batch.init_process("vilResampleProcess") 
+    boxm2_batch.init_process("vilResampleProcess")
     boxm2_batch.set_input_from_db(0,img)
     boxm2_batch.set_input_int(1, ni)
     boxm2_batch.set_input_int(2, nj)
@@ -154,7 +154,7 @@ def resize(img, ni, nj, pixel="float"):
     (id,type) = boxm2_batch.commit_output(0)
     img = dbvalue(id,type)
     return img
-    
+
 # get image dimensions
 def image_size(img):
     boxm2_batch.init_process('vilImageSizeProcess')
@@ -175,7 +175,7 @@ def image_range(img):
     (id,type) = boxm2_batch.commit_output(1)
     maxVal = boxm2_batch.get_output_float(id)
     return minVal, maxVal
-    
+
 def gradient(img) :
     boxm2_batch.init_process('vilGradientProcess')
     boxm2_batch.set_input_from_db(0,img)
@@ -190,7 +190,7 @@ def gradient(img) :
     (id,type) = boxm2_batch.commit_output(2)
     magImg = dbvalue(id,type)
     return dIdx, dIdy, magImg
-    
+
 def gradient_angle(Ix, Iy) :
     boxm2_batch.init_process('vilGradientAngleProcess')
     boxm2_batch.set_input_from_db(0,Ix)
@@ -230,7 +230,7 @@ def image_mean(img):
   mean_val = boxm2_batch.get_output_float(id)
   boxm2_batch.remove_data(id)
   return mean_val
-  
+
 def crop_image(img,i0,j0,ni,nj):
   boxm2_batch.init_process("vilCropImageProcess")
   boxm2_batch.set_input_from_db(0,img)
@@ -250,7 +250,7 @@ def scale_and_offset_values(img,scale,offset):
   boxm2_batch.set_input_float(2,offset)
   boxm2_batch.run_process()
   return
-  
+
 def init_float_img(ni,nj,np,val):
   boxm2_batch.init_process("vilInitFloatImageProcess")
   boxm2_batch.set_input_unsigned(0,ni)
@@ -261,7 +261,7 @@ def init_float_img(ni,nj,np,val):
   (id,type) = boxm2_batch.commit_output(0)
   img_out = dbvalue(id,type)
   return img_out
-  
+
 def nitf_date_time(image_filename):
   boxm2_batch.init_process("vilNITFDateTimeProcess");
   boxm2_batch.set_input_string(0,image_filename);
@@ -304,8 +304,8 @@ def detect_shadow_rgb(img,threshold) :
   boxm2_batch.run_process();
   (o_id,o_type) = boxm2_batch.commit_output(0);
   region_img = dbvalue(o_id,o_type);
-  return region_img;	
-  
+  return region_img;
+
 def detect_shadow_ridge(region_img,blob_size_t, sun_angle) :
   boxm2_batch.init_process("vilShadowRidgeDetectionProcess");
   boxm2_batch.set_input_from_db(0,region_img)
@@ -318,8 +318,8 @@ def detect_shadow_ridge(region_img,blob_size_t, sun_angle) :
   out_img = dbvalue(o_id,o_type);
   (o_id,o_type) = boxm2_batch.commit_output(2);
   dist_img = dbvalue(o_id,o_type);
-  return region_img, out_img, dist_img;	
-  
+  return region_img, out_img, dist_img;
+
 def binary_img_op(img1, img2, operation="sum"):
   boxm2_batch.init_process("vilBinaryImageOpProcess")
   boxm2_batch.set_input_from_db(0,img1)
@@ -329,7 +329,7 @@ def binary_img_op(img1, img2, operation="sum"):
   (id,type) = boxm2_batch.commit_output(0)
   out = dbvalue(id, type);
   return out
-  
+
 def img_sum(img, plane_index=0):
   boxm2_batch.init_process("vilImageSumProcess")
   boxm2_batch.set_input_from_db(0,img)
@@ -350,13 +350,12 @@ def prepare_mask_image_from_vis_image(vis_image, ni2, nj2, threshold):
   ratio = sum/(ni2*nj2)*100;
   exp_img_mask = stretch_image(exp_img_mask_f, 0, 1, 'byte');
   return exp_img_mask, img_1, vis_image_neg, ratio
-  
 
-  
+
 def fill_holes(img):
-	boxm2_batch.init_process("vilFillHolesInRegionsProcess")
-	boxm2_batch.set_input_from_db(0,img)
-	boxm2_batch.run_process()
-	(id,type) = boxm2_batch.commit_output(0)
-	outimg = dbvalue(id, type);
-	return outimg
+  boxm2_batch.init_process("vilFillHolesInRegionsProcess")
+  boxm2_batch.set_input_from_db(0,img)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  outimg = dbvalue(id, type);
+  return outimg

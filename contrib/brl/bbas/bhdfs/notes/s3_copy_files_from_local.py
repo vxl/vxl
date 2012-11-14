@@ -1,6 +1,6 @@
 # Recovering the correct offsets for rpc cameras
 #
-# s3_copy_files_from_local.py <local_folder> <name_ending> <hdfs_folder> 
+# s3_copy_files_from_local.py <local_folder> <name_ending> <hdfs_folder>
 #
 # all the files in <local_folder> as:
 #   <local_folder>/*<name_ending> will be copied over to <hdfs_working_dir>/<hdfs_folder> on hdfs
@@ -34,8 +34,8 @@ boxm2_batch.init_process("bhdfsCreateDirProcess");
 boxm2_batch.set_input_string(0, sys.argv[3]);
 statuscode = boxm2_batch.run_process();
 if statuscode != 1:
-	print "Unable to create folder: " + sys.argv[3] + " on HDFS, exiting!\n";
-	sys.exit(0);
+  print "Unable to create folder: " + sys.argv[3] + " on HDFS, exiting!\n";
+  sys.exit(0);
 
 for fname in file_list:
     print fname
@@ -43,6 +43,4 @@ for fname in file_list:
     boxm2_batch.set_input_string(0,fname);
     boxm2_batch.set_input_string(1,sys.argv[3]);
     boxm2_batch.run_process();
-    
 
-	

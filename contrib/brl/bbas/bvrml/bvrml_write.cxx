@@ -2,7 +2,8 @@
 #include <vcl_cmath.h>
 
 unsigned bvrml_color::heatmap_classic_size = 256;
-unsigned char bvrml_color::heatmap_classic[256][3] = { {255, 237, 237},
+unsigned char bvrml_color::heatmap_classic[256][3] = {
+             {255, 237, 237},
              {255, 224, 224},
              {255, 209, 209},
              {255, 193, 193},
@@ -257,7 +258,8 @@ unsigned char bvrml_color::heatmap_classic[256][3] = { {255, 237, 237},
              {48, 48, 63},
              {49, 50, 62},
              {51, 51, 61},
-             {53, 52, 61}};
+             {53, 52, 61}
+};
 
 void bvrml_write::write_vrml_header(vcl_ofstream& str)
 {
@@ -320,7 +322,7 @@ void bvrml_write::write_vrml_cylinder(vcl_ofstream& str,
                                       vgl_vector_3d<double> const &dir,
                                       float radius, float height,
                                       const float r, const float g, const float b,
-									  const unsigned side)
+                                      const unsigned side)
 {
   double denom=vcl_sqrt(dir.x()*dir.x()+dir.y()*dir.y());
   float axis_x;
@@ -329,13 +331,13 @@ void bvrml_write::write_vrml_cylinder(vcl_ofstream& str,
 
   if (denom==0.0)
   {
-        axis_x=1.0f;
-        axis_y=0.0f;
+    axis_x=1.0f;
+    axis_y=0.0f;
   }
   else
   {
-      axis_x=-float(dir.y()/denom);
-      axis_y=float(dir.x()/denom);
+    axis_x=-float(dir.y()/denom);
+    axis_y=float(dir.x()/denom);
   }
   float phi=float(vcl_acos(dir.z()));
 
@@ -399,10 +401,4 @@ void bvrml_write::write_vrml_line(vcl_ofstream& str,vgl_point_3d<double> pt,
       <<  " ]\n"
       << "}\n";
 }
-
-
-
-
-
-
 

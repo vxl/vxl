@@ -66,12 +66,13 @@ class boxm2_scene_adaptor(object):
   #returns scene bounding box
   def bounding_box(self) :
     return self.bbox
-    
+
   def lvcs(self) :
     return self.lvcs
 
   def cache() :
-	return self.cache;
+    return self.cache;
+
   #update with alternate explaination prior and appearance density
   def update_with_alt(self, cam, img, update_alpha=True, mask=None, var=-1.0, alt_prior=None, alt_density=None):
     cache = self.opencl_cache
@@ -95,12 +96,12 @@ class boxm2_scene_adaptor(object):
       return update_rgb(self.scene, cache, cam, img, dev);
     else :
       return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var);
-      
+
   #update wrapper, can pass in a Null device to use
   def update_app(self, cam, img, device_string="") :
     cache = self.active_cache;
     dev = self.device;
-    
+
     #check if force gpu or cpu
     if device_string=="gpu" :
       cache = self.opencl_cache;
@@ -140,7 +141,7 @@ class boxm2_scene_adaptor(object):
       cache = self.cpu_cache;
       dev = None;
     if self.rgb :
-	  expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev);
+      expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev);
     else :
       expimg, vis_image = render_grey_and_vis(self.scene, cache, cam, ni, nj, dev);
     return expimg, vis_image;
@@ -150,10 +151,10 @@ class boxm2_scene_adaptor(object):
     cache = self.active_cache;
     dev = self.device;
     #check if force gpu or cpu
-    if device_string=="gpu" : 
+    if device_string=="gpu" :
       cache = self.opencl_cache;
-    elif device_string=="cpp" : 
-      cache = self.cpu_cache; 
+    elif device_string=="cpp" :
+      cache = self.cpu_cache;
       dev = None;
     expimg,varimg,visimg = render_depth(self.scene, cache, cam, ni, nj, dev);
     return expimg,varimg,visimg;
@@ -163,14 +164,14 @@ class boxm2_scene_adaptor(object):
     cache = self.active_cache;
     dev = self.device;
     #check if force gpu or cpu
-    if device_string=="gpu" : 
-      cache = self.opencl_cache; 
-    elif device_string=="cpp" : 
-      cache = self.cpu_cache; 
-      dev = None; 
-    z_exp_img, z_var_img = render_z_image(self.scene, cache, cam, ni, nj, normalize, dev); 
-    return z_exp_img, z_var_img; 
-  
+    if device_string=="gpu" :
+      cache = self.opencl_cache;
+    elif device_string=="cpp" :
+      cache = self.cpu_cache;
+      dev = None;
+    z_exp_img, z_var_img = render_z_image(self.scene, cache, cam, ni, nj, normalize, dev);
+    return z_exp_img, z_var_img;
+
 
   #render heigh map render
   def render_height_map(self, device_string="") :
@@ -183,7 +184,7 @@ class boxm2_scene_adaptor(object):
       dev = None;
     z_image, var_image, x_image, y_image, prob_image, app_image = render_height_map(self.scene, cache, dev);
     return z_image, var_image, x_image, y_image, prob_image, app_image;
-    
+
   #ingest heigh map
   def ingest_height_map(self,x_img,y_img,z_img, zero_out_alpha=True,device_string="") :
     cache = self.active_cache;
@@ -207,7 +208,7 @@ class boxm2_scene_adaptor(object):
       dev = None;
     ingest_height_map_space(self.scene, cache,x_img,y_img,z_img, crust_thickness, dev);
     return ;
-    
+
   #ingest buckeye-style dem
   def ingest_buckeye_dem(self, first_ret_fname, last_ret_fname, geoid_height,geocam, device_string="") :
     cache = self.active_cache;
@@ -220,17 +221,19 @@ class boxm2_scene_adaptor(object):
     ingest_buckeye_dem(self.scene, cache, first_ret_fname, last_ret_fname, geoid_height,geocam, dev);
     return ;
 
-  def probabiltiy_of(self, cam, image):
-	cache = self.active_cache;
-	dev = self.device;
-	outimg = compute_probabiltiy_of_image(self.device,self.scene, self.opencl_cache, cam, image);
-	return outimg;
-  def cubic_probabiltiy_of(self, cam, image,model_ident,img_ident):
-	cache = self.active_cache;
-	dev = self.device;
-	outimg = cubic_compute_probabiltiy_of_image(self.device,self.scene, self.opencl_cache, cam, image, model_ident,img_ident);
-	return outimg;
-	# detect change wrapper,
+  def probability_of(self, cam, image):
+    cache = self.active_cache;
+    dev = self.device;
+    outimg = compute_probability_of_image(self.device,self.scene, self.opencl_cache, cam, image);
+    return outimg;
+
+  def cubic_probability_of(self, cam, image,model_ident,img_ident):
+    cache = self.active_cache;
+    dev = self.device;
+    outimg = cubic_compute_probability_of_image(self.device,self.scene, self.opencl_cache, cam, image, model_ident,img_ident);
+    return outimg;
+
+  # detect change wrapper,
   def change_detect(self, cam, img, exp_img, n=1, raybelief="", max_mode=False, rgb=False, device_string="") :
     cache = self.active_cache;
     dev = self.device;
@@ -266,27 +269,27 @@ class boxm2_scene_adaptor(object):
       median_filter(self.scene, self.opencl_cache, self.device);
     elif device_string=="cpp" :
       median_filter(self.scene, self.cpu_cache, None);
-  
-  # Apply multiple filters to  scene    
+
+  # Apply multiple filters to  scene
   def kernel_vector_filter(self, filters ) :
     return apply_filters(self.scene, self.opencl_cache, self.device, filters);
-   
-  # Interpolate normal from various responses 
+
+  # Interpolate normal from various responses
   def interpolate_normals(self, filters) :
     return interpolate_normals(self.scene, self.opencl_cache, self.device, filters);
-    
-  # Extract cell centers to XYZ for fast access  
+
+  # Extract cell centers to XYZ for fast access
   def extract_cell_centers(self, prob_thresh=0.0) :
     return extract_cell_centers(self.scene, self.cpu_cache, prob_thresh=0.0)
-    
+
   #  Flip normals towards direction of maximum visibility
-  def flip_normals(self, use_sum=False) :  
+  def flip_normals(self, use_sum=False) :
     return flip_normals(self.scene, self.opencl_cache, self.device, use_sum)
-    
-  # Export points and normals to a .PLY file or XYZ. Points and normals need to be extracted first  
+
+  # Export points and normals to a .PLY file or XYZ. Points and normals need to be extracted first
   def export_points_and_normals(self, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, bbox_file=""):
     return export_points_and_normals(self.scene, self.cpu_cache, file_out, save_aux, prob_thresh, vis_thresh, nmag_thresh, bbox_file)
-  
+
   # Adds auxiliary data to vertices in a .PLY
   def add_aux_info_to_ply(self, file_in, file_out):
     add_aux_info_to_ply(self.scene, self.cpu_cache, file_in, file_out);
@@ -307,8 +310,8 @@ class boxm2_scene_adaptor(object):
     return get_info_along_ray(self.scene,self.cpu_cache,cam,u,v,prefix,identifier)
 
   def query_cell_brdf(self, point, model_type) :
-    return query_cell_brdf(self.scene,self.cpu_cache,point,model_type)  
-  
+    return query_cell_brdf(self.scene,self.cpu_cache,point,model_type)
+
   #####################################################################
   ######### BATCH UPDATE METHODS ######################################
   #####################################################################
@@ -484,7 +487,7 @@ class boxm2_scene_adaptor(object):
     boxm2_batch.set_input_string(3,metadata_filename_list)
     boxm2_batch.set_input_string(4,atmospheric_params_filename_list)
     boxm2_batch.run_process()
-    
+
     # close the files so that they can be reloaded after the next iteration
     boxm2_batch.init_process("boxm2StreamCacheCloseFilesProcess");
     boxm2_batch.set_input_from_db(0,self.str_cache);
@@ -499,7 +502,7 @@ class boxm2_scene_adaptor(object):
     boxm2_batch.set_input_string(4,metadata_filename_list)
     boxm2_batch.set_input_string(5,atmospheric_params_filename_list)
     boxm2_batch.run_process()
-    
+
   def render_expected_image_naa(self, camera, ni,nj, metadata, atmospheric_params):
     boxm2_batch.init_process("boxm2OclRenderExpectedImageNAAProcess");
     boxm2_batch.set_input_from_db(0,self.device)
@@ -551,18 +554,18 @@ class boxm2_scene_adaptor(object):
 
 
   def transform(self, tx,ty,tz,rx,ry,rz,scale):
-      boxm2_batch.init_process("boxm2TransformModelProcess")
-      boxm2_batch.set_input_from_db(0,self.scene)
-      boxm2_batch.set_input_float(1,tx)
-      boxm2_batch.set_input_float(2,ty)
-      boxm2_batch.set_input_float(3,tz)
-      boxm2_batch.set_input_float(4,rx)
-      boxm2_batch.set_input_float(5,ry)
-      boxm2_batch.set_input_float(6,rz)
-      boxm2_batch.set_input_float(7,scale)
-      boxm2_batch.run_process()
-      return
-      
+    boxm2_batch.init_process("boxm2TransformModelProcess")
+    boxm2_batch.set_input_from_db(0,self.scene)
+    boxm2_batch.set_input_float(1,tx)
+    boxm2_batch.set_input_float(2,ty)
+    boxm2_batch.set_input_float(3,tz)
+    boxm2_batch.set_input_float(4,rx)
+    boxm2_batch.set_input_float(5,ry)
+    boxm2_batch.set_input_float(6,rz)
+    boxm2_batch.set_input_float(7,scale)
+    boxm2_batch.run_process()
+    return
+
   def compute_sun_affine_camera(self, sun_az, sun_el, astro_coords = True):
     (camera, ni, nj) = compute_sun_affine_camera(self.scene, sun_az, sun_el, astro_coords)
     return (camera, ni, nj)
@@ -573,9 +576,8 @@ class boxm2_scene_adaptor(object):
   def render_shadow_map(self, camera, ni, nj, prefix_name=''):
     shadow_map = render_shadow_map(self.scene, self.device, self.opencl_cache, camera, ni, nj, prefix_name)
     return shadow_map
-    
+
   def render_scene_mask(self, camera, ni, nj, ground_plane_only=False):
     mask = create_mask_image(self.scene, camera, ni, nj, ground_plane_only);
     return mask;
-
 

@@ -1,7 +1,7 @@
-from boxm2_register import boxm2_batch, dbvalue; 
+from boxm2_register import boxm2_batch, dbvalue;
 import os
 #############################################################################
-# PROVIDES higher level python functions to make boxm2_batch 
+# PROVIDES higher level python functions to make boxm2_batch
 # code more readable/refactored
 #############################################################################
 
@@ -18,7 +18,7 @@ def ocl_info():
   boxm2_batch.set_input_from_db(0,mgr)
   boxm2_batch.run_process();
 
-def load_scene(scene_str): 
+def load_scene(scene_str):
   #print("Loading a Scene from file: ", scene_str);
   boxm2_batch.init_process("boxm2LoadSceneProcess");
   boxm2_batch.set_input_string(0, scene_str);
@@ -66,9 +66,9 @@ def load_opencl(scene_str, device_string="gpu"):
   openclcache = dbvalue(id, type);
 
   return scene, cache, mgr, device, openclcache;
-  
-  
-#Just loads up CPP cache 
+
+
+#Just loads up CPP cache
 def load_cpp(scene_str) :
   scene = load_scene(scene_str);
 
@@ -89,15 +89,15 @@ def describe_scene(scene):
   boxm2_batch.init_process("boxm2DescribeSceneProcess");
   boxm2_batch.set_input_from_db(0, scene);
   boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0); 
-  dataPath = boxm2_batch.get_output_string(id); 
+  (id, type) = boxm2_batch.commit_output(0);
+  dataPath = boxm2_batch.get_output_string(id);
   (id, type) = boxm2_batch.commit_output(1);
   appType = boxm2_batch.get_output_string(id);
-  description = { 
-                  'dataPath': dataPath, 
-                  'appType': appType, 
+  description = {
+                  'dataPath': dataPath,
+                  'appType': appType,
                 }
-  return description; 
+  return description;
 
 # returns bounding box as two tuple points (minpt, maxpt)
 def scene_bbox(scene):
@@ -106,12 +106,12 @@ def scene_bbox(scene):
   boxm2_batch.run_process();
   out = []
   for outIdx in range(6):
-    (id, type) = boxm2_batch.commit_output(outIdx); 
-    pt = boxm2_batch.get_output_double(id); 
+    (id, type) = boxm2_batch.commit_output(outIdx);
+    pt = boxm2_batch.get_output_double(id);
     out.append(pt);
   minPt = (out[0], out[1], out[2]);
   maxPt = (out[3], out[4], out[5]);
-  return (minPt, maxPt); 
+  return (minPt, maxPt);
 
 def scene_lvcs(scene):
   boxm2_batch.init_process("boxm2SceneLVCSProcess");
@@ -120,14 +120,14 @@ def scene_lvcs(scene):
   (lvcs_id, lvcs_type) = boxm2_batch.commit_output(0);
   lvcs = dbvalue(lvcs_id, lvcs_type);
   return lvcs;
-  
+
 def write_scene_to_kml(scene, kml_filename):
   boxm2_batch.init_process("boxm2SceneKmlProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1,kml_filename);
   boxm2_batch.run_process();
-  
-  
+
+
 ###############################################
 # Model building stuff
 ###############################################
@@ -142,7 +142,7 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
     boxm2_batch.set_input_from_db(2,cam);
     boxm2_batch.set_input_from_db(3,img);
     return boxm2_batch.run_process();
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     print("boxm2_batch GPU update");
     boxm2_batch.init_process("boxm2OclUpdateProcess");
     boxm2_batch.set_input_from_db(0,device);
@@ -153,11 +153,11 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
     boxm2_batch.set_input_string(5,ident);
     if mask :
       boxm2_batch.set_input_from_db(6,mask);
-    boxm2_batch.set_input_bool(7, update_alpha); 
+    boxm2_batch.set_input_bool(7, update_alpha);
     boxm2_batch.set_input_float(8, var);
     return boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
     return False;
 
 # Update with alternate possible pixel explanation - uses GPU
@@ -165,7 +165,7 @@ def update_grey_with_alt(scene, cache, cam, img, device=None, ident="", mask=Non
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
     print "ERROR: CPU update not implemented for update_with_alt";
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     print("boxm2_batch GPU update with alt");
     boxm2_batch.init_process("boxm2OclUpdateWithAltProcess");
     boxm2_batch.set_input_from_db(0,device);
@@ -176,13 +176,13 @@ def update_grey_with_alt(scene, cache, cam, img, device=None, ident="", mask=Non
     boxm2_batch.set_input_string(5,ident);
     if mask :
       boxm2_batch.set_input_from_db(6,mask);
-    boxm2_batch.set_input_bool(7, update_alpha); 
+    boxm2_batch.set_input_bool(7, update_alpha);
     boxm2_batch.set_input_float(8, var);
     boxm2_batch.set_input_from_db(9, alt_prior)
     boxm2_batch.set_input_from_db(10, alt_density)
     boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
 
 
 def update_app_grey(scene, cache, cam, img, device=None) :
@@ -204,7 +204,7 @@ def update_hist_app_grey(scene, cache, cam, img, device=None) :
   boxm2_batch.set_input_from_db(2,cache);
   boxm2_batch.set_input_from_db(3,img);
   boxm2_batch.set_input_from_db(4,cam);
-  boxm2_batch.run_process();    
+  boxm2_batch.run_process();
 ####################################################################
 # Generic update - will use GPU if device/openclcache are passed in
 ####################################################################
@@ -212,7 +212,7 @@ def update_rgb(scene, cache, cam, img, device=None, mask="", updateAlpha=True) :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch rgb CPU update not implemented";
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     print("boxm2_batch GPU update");
     boxm2_batch.init_process("boxm2OclUpdateColorProcess");
     boxm2_batch.set_input_from_db(0,device);
@@ -224,8 +224,8 @@ def update_rgb(scene, cache, cam, img, device=None, mask="", updateAlpha=True) :
     boxm2_batch.set_input_string(6, mask) #mask file
     boxm2_batch.set_input_bool(7, updateAlpha);
     boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
 
 def update_with_quality(scene, cache, cam, img, q_img, identifier="") :
   boxm2_batch.init_process("boxm2CppUpdateUsingQualityProcess");
@@ -236,7 +236,7 @@ def update_with_quality(scene, cache, cam, img, q_img, identifier="") :
   boxm2_batch.set_input_from_db(4, q_img);
   boxm2_batch.set_input_string(5, identifier);
   boxm2_batch.run_process();
-  
+
 # Generic update - will use GPU if device/openclcache are passed in
 def update_cpp(scene, cache, cam, img, ident="") :
   boxm2_batch.init_process("boxm2CppUpdateImageProcess");
@@ -251,49 +251,49 @@ def update_cpp(scene, cache, cam, img, ident="") :
 # Cache can be either an OPENCL cache or a CPU cache
 def render_height_map(scene, cache, device=None) :
   if cache.type == "boxm2_cache_sptr" :
-    print "boxm2_adaptor, render height map cpp process not implemented"; 
+    print "boxm2_adaptor, render height map cpp process not implemented";
 
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderExpectedHeightMapProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.run_process();
-    
+
     #z_img
     (id,type) = boxm2_batch.commit_output(0);
     z_image = dbvalue(id,type);
-    
+
     #var image
     (id,type) = boxm2_batch.commit_output(1);
     var_image = dbvalue(id,type);
-    
+
     #x_img
     (id,type) = boxm2_batch.commit_output(2);
     x_image = dbvalue(id,type);
-    
+
     #y_img
     (id,type) = boxm2_batch.commit_output(3);
     y_image = dbvalue(id,type);
-    
+
     #prob_img
     (id,type) = boxm2_batch.commit_output(4);
     prob_image = dbvalue(id,type);
-    
+
     #appearance_img
     (id,type) = boxm2_batch.commit_output(5);
     app_image = dbvalue(id,type);
 
-    return z_image, var_image, x_image, y_image, prob_image, app_image; 
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+    return z_image, var_image, x_image, y_image, prob_image, app_image;
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
   # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 def ingest_height_map(scene, cache,x_img,y_img,z_img, zero_out_alpha=True,device=None) :
   if cache.type == "boxm2_cache_sptr" :
-    print "boxm2_adaptor, render height map cpp process not implemented"; 
+    print "boxm2_adaptor, render height map cpp process not implemented";
 
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclIngestDemProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -303,18 +303,19 @@ def ingest_height_map(scene, cache,x_img,y_img,z_img, zero_out_alpha=True,device
     boxm2_batch.set_input_from_db(5,y_img);
     boxm2_batch.set_input_bool(6,zero_out_alpha);
     boxm2_batch.run_process();
-    return ; 
-  else : 
+    return ;
+  else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
 def ingest_mesh(scene,cache,plyfile,label_id,category):
-	boxm2_batch.init_process("boxm2IngestConvexMeshProcess");
-	boxm2_batch.set_input_from_db(0,scene);
-	boxm2_batch.set_input_from_db(1,cache);
-	boxm2_batch.set_input_string(2,plyfile);
-	boxm2_batch.set_input_int(3,label_id);
-	boxm2_batch.set_input_string(4,category);
-	boxm2_batch.run_process();      
+  boxm2_batch.init_process("boxm2IngestConvexMeshProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cache);
+  boxm2_batch.set_input_string(2,plyfile);
+  boxm2_batch.set_input_int(3,label_id);
+  boxm2_batch.set_input_string(4,category);
+  boxm2_batch.run_process();
+
 def ingest_height_map_space(scene, cache,x_img,y_img,z_img, crust_thickness,device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_adaptor, render height map cpp process not implemented";
@@ -343,7 +344,7 @@ def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickne
   for i in range(0,refine_cnt,1):
     scene.refine();
     #scene.write_cache();
-    
+
     scene.ingest_height_map(x_img,y_img,z_img);
     scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
     #scene.write_cache();
@@ -352,7 +353,7 @@ def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickne
   scene.ingest_height_map(x_img,y_img,z_img);
   scene.write_cache();
 
-  
+
 def refine_and_ingest_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=1):
   for i in range(0,refine_cnt,1):
     scene.refine();
@@ -362,13 +363,13 @@ def refine_and_ingest_with_height_img(scene, x_img, y_img, z_img, crust_thicknes
   # ingest one more time to fill up the empty voxels below the surface (They are not refined but they still need to be occupied)
   scene.ingest_height_map(x_img,y_img,z_img);
   scene.write_cache();
-    
+
 # Ingest a Buckeye-Style DEM, i.e. first return and last return image pair
 def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoid_height,geocam, device=None) :
   if cache.type == "boxm2_cache_sptr" :
-    print "boxm2_adaptor, ingest_buckeye cpp process not implemented"; 
+    print "boxm2_adaptor, ingest_buckeye cpp process not implemented";
 
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclIngestBuckeyeDemProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -378,8 +379,8 @@ def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoi
     boxm2_batch.set_input_float(5,geoid_height);
     boxm2_batch.set_input_from_db(6,geocam);
     boxm2_batch.run_process();
-    return ; 
-  else : 
+    return ;
+  else :
     print "ERROR: Cache type not recognized: ", cache.type;
 #####################################################################
 # Generic render, returns a dbvalue expected image
@@ -397,8 +398,8 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string=""
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
-    return exp_image; 
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    return exp_image;
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderExpectedImageProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -410,11 +411,11 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string=""
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
-    return exp_image; 
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+    return exp_image;
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
 def render_scene_uncertainty(scene, cache,  ni=1280, nj=720, device=None, ident_string="") :
-  if cache.type == "boxm2_opencl_cache_sptr" and device : 
+  if cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderSceneUncertaintyMapProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -425,9 +426,9 @@ def render_scene_uncertainty(scene, cache,  ni=1280, nj=720, device=None, ident_
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
-    return exp_image; 
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type;     
+    return exp_image;
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
 #####################################################################
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
@@ -435,8 +436,8 @@ def render_scene_uncertainty(scene, cache,  ni=1280, nj=720, device=None, ident_
 def render_grey_and_vis(scene, cache, cam, ni=1280, nj=720, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU render grey and vis not yet implemented";
-    return; 
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    return;
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderExpectedImageProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -448,18 +449,18 @@ def render_grey_and_vis(scene, cache, cam, ni=1280, nj=720, device=None) :
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
     (id,type) = boxm2_batch.commit_output(1);
-    vis_image = dbvalue(id,type); 
-    return exp_image,vis_image; 
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
-    
-#####################################################################    
+    vis_image = dbvalue(id,type);
+    return exp_image,vis_image;
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+
+#####################################################################
 # Generic render, returns a dbvalue expected image
 #####################################################################
 def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU render rgb not yet implemented";
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderExpectedColorProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -473,16 +474,16 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
     (id,type) = boxm2_batch.commit_output(1);
     vis_image = dbvalue(id,type);
     return exp_image,vis_image,status;
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
- 
-#####################################################################    
-# render depth map 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+
 #####################################################################
-def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) : 
+# render depth map
+#####################################################################
+def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU render depth not yet implemented";
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderExpectedDepthProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -493,21 +494,21 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
-    (id,type) = boxm2_batch.commit_output(1); 
-    var_image = dbvalue(id,type); 
+    (id,type) = boxm2_batch.commit_output(1);
+    var_image = dbvalue(id,type);
     (id,type) = boxm2_batch.commit_output(2);
     vis_image = dbvalue(id,type);
     return exp_image, var_image, vis_image
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
-    
-#####################################################################    
-# render image of expected z values 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+
 #####################################################################
-def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize = False, device=None) : 
+# render image of expected z values
+#####################################################################
+def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize = False, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU render depth not yet implemented";
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderExpectedZImageProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -519,78 +520,78 @@ def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize = False, device
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     z_exp_image = dbvalue(id,type);
-    (id,type) = boxm2_batch.commit_output(1); 
-    z_var_image = dbvalue(id,type); 
-    return z_exp_image, z_var_image 
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+    (id,type) = boxm2_batch.commit_output(1);
+    z_var_image = dbvalue(id,type);
+    return z_exp_image, z_var_image
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
 #####################################################################
 # change detection wrapper
 #####################################################################
-def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, raybelief="", max_mode=False) : 
-  if cache.type == "boxm2_cache_sptr" : 
-    print "boxm2_batch CPU change detection"; 
-    boxm2_batch.init_process("boxm2CppChangeDetectionProcess"); 
-    boxm2_batch.set_input_from_db(0,scene); 
-    boxm2_batch.set_input_from_db(1,cache); 
+def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, raybelief="", max_mode=False) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU change detection";
+    boxm2_batch.init_process("boxm2CppChangeDetectionProcess");
+    boxm2_batch.set_input_from_db(0,scene);
+    boxm2_batch.set_input_from_db(1,cache);
     boxm2_batch.set_input_from_db(2,cam);
-    boxm2_batch.set_input_from_db(3,img); 
-    boxm2_batch.set_input_from_db(4,exp_img); 
-    boxm2_batch.run_process(); 
-    (id,type) = boxm2_batch.commit_output(0); 
-    cd_img = dbvalue(id,type); 
-    return cd_img; 
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
-    print "boxm2_batch GPU change detection"; 
-    boxm2_batch.init_process("boxm2OclChangeDetectionProcess"); 
-    boxm2_batch.set_input_from_db(0,device); 
-    boxm2_batch.set_input_from_db(1,scene); 
-    boxm2_batch.set_input_from_db(2,cache); 
+    boxm2_batch.set_input_from_db(3,img);
+    boxm2_batch.set_input_from_db(4,exp_img);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    cd_img = dbvalue(id,type);
+    return cd_img;
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    print "boxm2_batch GPU change detection";
+    boxm2_batch.init_process("boxm2OclChangeDetectionProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_from_db(3,cam);
-    boxm2_batch.set_input_from_db(4,img); 
-    boxm2_batch.set_input_from_db(5,exp_img); 
-    boxm2_batch.set_input_int(6, n); 
+    boxm2_batch.set_input_from_db(4,img);
+    boxm2_batch.set_input_from_db(5,exp_img);
+    boxm2_batch.set_input_int(6, n);
     boxm2_batch.set_input_string(7, raybelief);
-    boxm2_batch.set_input_bool(8, max_mode); 
-    boxm2_batch.run_process(); 
+    boxm2_batch.set_input_bool(8, max_mode);
+    boxm2_batch.run_process();
     if not rgb :
-      (id,type) = boxm2_batch.commit_output(0); 
-      cd_img = dbvalue(id,type); 
+      (id,type) = boxm2_batch.commit_output(0);
+      cd_img = dbvalue(id,type);
     else :
       (id,type) = boxm2_batch.commit_output(1);
       cd_img = dbvalue(id,type);
-    return cd_img; 
-  else : 
+    return cd_img;
+  else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
-def change_detect2(scene, cache, cam, img, maxmode = False,  device=None) : 
-    print "boxm2_batch GPU change detection"; 
-    boxm2_batch.init_process("boxm2OclChangeDetectionProcess2"); 
-    boxm2_batch.set_input_from_db(0,device); 
-    boxm2_batch.set_input_from_db(1,scene); 
-    boxm2_batch.set_input_from_db(2,cache); 
+def change_detect2(scene, cache, cam, img, maxmode = False,  device=None) :
+    print "boxm2_batch GPU change detection";
+    boxm2_batch.init_process("boxm2OclChangeDetectionProcess2");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_from_db(3,cam);
-    boxm2_batch.set_input_from_db(4,img); 
-    boxm2_batch.set_input_bool(5,maxmode); 
-    boxm2_batch.run_process(); 
+    boxm2_batch.set_input_from_db(4,img);
+    boxm2_batch.set_input_bool(5,maxmode);
+    boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     cd_img = dbvalue(id,type);
-    return cd_img; 
- 
+    return cd_img;
+
 ####################################################################
 # Visualize Change Wrapper
 ####################################################################
-def visualize_change(change_img, in_img, thresh=.5) : 
-  boxm2_batch.init_process("boxm2OclVisualizeChangeProcess"); 
-  boxm2_batch.set_input_from_db(0,change_img); 
-  boxm2_batch.set_input_from_db(1,in_img); 
+def visualize_change(change_img, in_img, thresh=.5) :
+  boxm2_batch.init_process("boxm2OclVisualizeChangeProcess");
+  boxm2_batch.set_input_from_db(0,change_img);
+  boxm2_batch.set_input_from_db(1,in_img);
   boxm2_batch.set_input_float(2,thresh);
-  boxm2_batch.run_process(); 
-  (id,type) = boxm2_batch.commit_output(0); 
-  vis_img = dbvalue(id,type); 
-  return vis_img; 
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  vis_img = dbvalue(id,type);
+  return vis_img;
 
-#####################################################################    
+#####################################################################
 #generic refine (will work on color and grey scenes)
 #####################################################################
 def refine(scene, cache, thresh=0.3, device=None) :
@@ -602,97 +603,97 @@ def refine(scene, cache, thresh=0.3, device=None) :
     boxm2_batch.set_input_float(2,thresh);
     boxm2_batch.run_process();
     return 0;
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
-    print "boxm2_batch GPU refine"; 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    print "boxm2_batch GPU refine";
     boxm2_batch.init_process("boxm2OclRefineProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
-    boxm2_batch.set_input_from_db(2,cache);    
+    boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_float(3,thresh);
     boxm2_batch.run_process();
-    
+
     #get and report cells output
-    (id, type) = boxm2_batch.commit_output(0); 
-    nCells = boxm2_batch.get_output_int(id); 
+    (id, type) = boxm2_batch.commit_output(0);
+    nCells = boxm2_batch.get_output_int(id);
     return nCells;
-  else : 
-    print "ERROR: Cache type unrecognized: ", cache.type; 
-    
+  else :
+    print "ERROR: Cache type unrecognized: ", cache.type;
+
 #####################################################################
-#generic merge method 
+#generic merge method
 #####################################################################
 def merge(scene, cache, thresh=0.01, device=None) :
   if cache.type == "boxm2_cache_sptr" :
-    print "boxm2_batch CPU merge"; 
+    print "boxm2_batch CPU merge";
     boxm2_batch.init_process("boxm2CppMergeProcess");
     boxm2_batch.set_input_from_db(0,scene);
     boxm2_batch.set_input_from_db(1,cache);
     boxm2_batch.set_input_float(2,thresh);
     boxm2_batch.run_process();
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
-    print "boxm2_batch GPU refine"; 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    print "boxm2_batch GPU refine";
     boxm2_batch.init_process("boxm2OclMergeProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
-    boxm2_batch.set_input_from_db(2,cache);    
+    boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_float(3,thresh);
     boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type unrecognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type unrecognized: ", cache.type;
 
 #####################################################################
 #generic filter scene, should work with color and grey scenes
 #####################################################################
-def median_filter(scene, cache, device=None) : 
-  if cache.type == "boxm2_cache_sptr" : 
-    print "boxm2_batch CPU median filter"; 
-    boxm2_batch.init_process("boxm2CppFilterProcess"); 
-    boxm2_batch.set_input_from_db(1, scene); 
-    boxm2_batch.set_input_from_db(2, cache); 
-    boxm2_batch.run_process(); 
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
-    print "boxm2_batch GPU median filter";  
-    boxm2_batch.init_process("boxm2OclFilterProcess"); 
-    boxm2_batch.set_input_from_db(0, device); 
-    boxm2_batch.set_input_from_db(1, scene); 
-    boxm2_batch.set_input_from_db(2, cache); 
-    boxm2_batch.run_process(); 
-  else : 
-    print "ERROR: Cache type unrecognized: ", cache.type; 
+def median_filter(scene, cache, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU median filter";
+    boxm2_batch.init_process("boxm2CppFilterProcess");
+    boxm2_batch.set_input_from_db(1, scene);
+    boxm2_batch.set_input_from_db(2, cache);
+    boxm2_batch.run_process();
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    print "boxm2_batch GPU median filter";
+    boxm2_batch.init_process("boxm2OclFilterProcess");
+    boxm2_batch.set_input_from_db(0, device);
+    boxm2_batch.set_input_from_db(1, scene);
+    boxm2_batch.set_input_from_db(2, cache);
+    boxm2_batch.run_process();
+  else :
+    print "ERROR: Cache type unrecognized: ", cache.type;
 
 
 ######################################################################
 # cache methods
 #####################################################################
 #generic write cache to disk
-def write_cache(cache, do_clear = 0) : 
-  if cache.type == "boxm2_cache_sptr" : 
+def write_cache(cache, do_clear = 0) :
+  if cache.type == "boxm2_cache_sptr" :
     boxm2_batch.init_process("boxm2WriteCacheProcess");
     boxm2_batch.set_input_from_db(0,cache);
     boxm2_batch.set_input_bool(1,do_clear);
     boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type; 
+  else :
+    print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type;
 
 #generic clear cache
-def clear_cache(cache) : 
-  if cache.type == "boxm2_cache_sptr" : 
+def clear_cache(cache) :
+  if cache.type == "boxm2_cache_sptr" :
     boxm2_batch.init_process("boxm2ClearCacheProcess");
     boxm2_batch.set_input_from_db(0,cache);
     boxm2_batch.run_process();
   elif cache.type == "boxm2_opencl_cache_sptr" :
-    boxm2_batch.init_process("boxm2ClearOpenclCacheProcess"); 
+    boxm2_batch.init_process("boxm2ClearOpenclCacheProcess");
     boxm2_batch.set_input_from_db(0,cache);
     boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type; 
+  else :
+    print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type;
 
 
 ######################################################################
 # trajectory methods
 #####################################################################
-def init_trajectory(scene, startInc, endInc, radius, ni=1280, nj=720) :  
-  boxm2_batch.init_process("boxm2ViewInitTrajectoryProcess"); 
+def init_trajectory(scene, startInc, endInc, radius, ni=1280, nj=720) :
+  boxm2_batch.init_process("boxm2ViewInitTrajectoryProcess");
   boxm2_batch.set_input_from_db(0, scene);
   boxm2_batch.set_input_double(1, float(startInc) );  #incline0
   boxm2_batch.set_input_double(2, float(endInc) ); #incline1
@@ -702,15 +703,15 @@ def init_trajectory(scene, startInc, endInc, radius, ni=1280, nj=720) :
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   trajectory = dbvalue(id,type);
-  return trajectory; 
+  return trajectory;
 
-def trajectory_next(trajectory) : 
-  boxm2_batch.init_process("boxm2ViewTrajectoryNextProcess"); 
-  boxm2_batch.set_input_from_db(0, trajectory); 
+def trajectory_next(trajectory) :
+  boxm2_batch.init_process("boxm2ViewTrajectoryNextProcess");
+  boxm2_batch.set_input_from_db(0, trajectory);
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
-  return cam; 
+  return cam;
 
 def trajectory_size(trajectory):
   boxm2_batch.init_process("boxm2ViewTrajectorySizeProcess")
@@ -781,44 +782,44 @@ def init_trajectory_height_map(scene, x_img, y_img, z_img, ni, nj, right_fov, to
 ######################################################################
 # camera/scene methods
 #####################################################################
-def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="nvm_out") : 
-  if app_model == "boxm2_mog3_grey" or app_model =="boxm2_mog3_grey_16": 
+def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="nvm_out") :
+  if app_model == "boxm2_mog3_grey" or app_model =="boxm2_mog3_grey_16":
     nobs_model = "boxm2_num_obs";
   elif app_model == "boxm2_gauss_rgb" :
     nobs_model = "boxm2_num_obs_single"
-  else: 
-    print "ERROR appearance model not recognized!!!", app_model; 
+  else:
+    print "ERROR appearance model not recognized!!!", app_model;
     return
 
   #run process
   boxm2_batch.init_process("boxm2BundleToSceneProcess");
   boxm2_batch.set_input_string(0, bundle_file);
-  boxm2_batch.set_input_string(1, img_dir); 
-  boxm2_batch.set_input_string(2, app_model); 
-  boxm2_batch.set_input_string(3, nobs_model); 
-  boxm2_batch.set_input_string(4, out_dir); 
+  boxm2_batch.set_input_string(1, img_dir);
+  boxm2_batch.set_input_string(2, app_model);
+  boxm2_batch.set_input_string(3, nobs_model);
+  boxm2_batch.set_input_string(4, out_dir);
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   uscene = dbvalue(scene_id, scene_type);
   (scene_id, scene_type) = boxm2_batch.commit_output(1);
   rscene = dbvalue(scene_id, scene_type);
-  return uscene, rscene; 
+  return uscene, rscene;
 
-  
-def save_scene(scene, fname) : 
+
+def save_scene(scene, fname) :
   boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
   boxm2_batch.set_input_from_db(0,scene);
-  boxm2_batch.set_input_string(1, fname); 
+  boxm2_batch.set_input_string(1, fname);
   boxm2_batch.run_process();
-  
-def scale_scene(scene, scale) : 
+
+def scale_scene(scene, scale) :
   boxm2_batch.init_process("boxm2ScaleSceneProcess");
   boxm2_batch.set_input_from_db(0,scene);
-  boxm2_batch.set_input_float(1, scale); 
+  boxm2_batch.set_input_float(1, scale);
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   scene = dbvalue(scene_id, scene_type);
-  return scene; 
+  return scene;
 
 # Create a scene from specified (lat,lon) corners and size of each voxel (in meters) at the finest scale, elev values are also in meters
 def create_scene_and_blocks(scene_dir, app_model, obs_model, origin_lon, origin_lat, origin_elev, lon1, lat1, elev1, lon2, lat2, elev2, vox_size, block_len_xy, block_len_z, local_cs_name, num_bins=0, xml_name="scene"):
@@ -843,42 +844,42 @@ def create_scene_and_blocks(scene_dir, app_model, obs_model, origin_lon, origin_
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   scene = dbvalue(scene_id, scene_type);
-  
+
   print("Write Scene");
   boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1, xml_name);
   boxm2_batch.run_process();
 
-# Create a scene from a given polygon strucutre in kml file
+# Create a scene from a given polygon structure in kml file
 def create_scene_poly_and_blocks(scene_dir, app_model, obs_model, poly_kml, origin_lon, origin_lat, origin_elev, scene_height, vox_size, block_len_xy, block_len_z, local_cs_name, num_bins = 0, xml_name = "scene"):
-	# get the inpus
-	boxm2_batch.init_process("boxm2CreatePolySceneAndBlocksProcess");
-	boxm2_batch.set_input_string(0,scene_dir);
-	boxm2_batch.set_input_string(1,app_model);
-	boxm2_batch.set_input_string(2,obs_model);
-	boxm2_batch.set_input_string(3,poly_kml);
-	boxm2_batch.set_input_float(4,origin_lon);
-	boxm2_batch.set_input_float(5,origin_lat);
-	boxm2_batch.set_input_float(6,origin_elev);
-	boxm2_batch.set_input_float(7,scene_height);
-	boxm2_batch.set_input_float(8,vox_size);
-	boxm2_batch.set_input_float(9,block_len_xy);
-	boxm2_batch.set_input_float(10,block_len_z);
-	boxm2_batch.set_input_int(11,num_bins);
-	boxm2_batch.set_input_string(12,local_cs_name);
-	
-	# create scene
-	boxm2_batch.run_process();
-	(scene_id, scene_type) = boxm2_batch.commit_output(0);
-	scene = dbvalue(scene_id, scene_type);
-	
-	# write scene
-	boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
-	boxm2_batch.set_input_from_db(0,scene);
-	boxm2_batch.set_input_string(1, xml_name);
-	boxm2_batch.run_process();  
- 
+  # get the inpus
+  boxm2_batch.init_process("boxm2CreatePolySceneAndBlocksProcess");
+  boxm2_batch.set_input_string(0,scene_dir);
+  boxm2_batch.set_input_string(1,app_model);
+  boxm2_batch.set_input_string(2,obs_model);
+  boxm2_batch.set_input_string(3,poly_kml);
+  boxm2_batch.set_input_float(4,origin_lon);
+  boxm2_batch.set_input_float(5,origin_lat);
+  boxm2_batch.set_input_float(6,origin_elev);
+  boxm2_batch.set_input_float(7,scene_height);
+  boxm2_batch.set_input_float(8,vox_size);
+  boxm2_batch.set_input_float(9,block_len_xy);
+  boxm2_batch.set_input_float(10,block_len_z);
+  boxm2_batch.set_input_int(11,num_bins);
+  boxm2_batch.set_input_string(12,local_cs_name);
+
+  # create scene
+  boxm2_batch.run_process();
+  (scene_id, scene_type) = boxm2_batch.commit_output(0);
+  scene = dbvalue(scene_id, scene_type);
+
+  # write scene
+  boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1, xml_name);
+  boxm2_batch.run_process();
+
 # Distribute a larger scene region and its blocks to smaller square scenes with a given dimension
 def distribute_scene_blocks(scene, small_scene_dim, xml_output_path, xml_name_prefix):
   boxm2_batch.init_process("boxm2DistributeSceneBlocksProcess");
@@ -887,41 +888,41 @@ def distribute_scene_blocks(scene, small_scene_dim, xml_output_path, xml_name_pr
   boxm2_batch.set_input_string(2,xml_output_path);
   boxm2_batch.set_input_string(3,xml_name_prefix);
   boxm2_batch.run_process();
-  
+
 # Create multi block scene - params is a hash of scene parameters
-def save_multi_block_scene(params) : 
+def save_multi_block_scene(params) :
 
   #load params
-  scene_dir = params['scene_dir'] if 'scene_dir' in params else os.getcwd(); 
+  scene_dir = params['scene_dir'] if 'scene_dir' in params else os.getcwd();
   app_model = params['app_model'] if 'app_model' in params else "boxm2_mog3_grey";
   obs_model = params['obs_model'] if 'obs_model' in params else "boxm2_num_obs";
-  orig_x = params['orig_x'] if 'orig_x' in params else 0.0; 
-  orig_y = params['orig_y'] if 'orig_y' in params else 0.0; 
-  orig_z = params['orig_z'] if 'orig_z' in params else 0.0; 
-  n_x = params['num_block_x'] if 'num_block_x' in params else 8; 
-  n_y = params['num_block_y'] if 'num_block_y' in params else 8; 
-  n_z = params['num_block_z'] if 'num_block_z' in params else 1; 
+  orig_x = params['orig_x'] if 'orig_x' in params else 0.0;
+  orig_y = params['orig_y'] if 'orig_y' in params else 0.0;
+  orig_z = params['orig_z'] if 'orig_z' in params else 0.0;
+  n_x = params['num_block_x'] if 'num_block_x' in params else 8;
+  n_y = params['num_block_y'] if 'num_block_y' in params else 8;
+  n_z = params['num_block_z'] if 'num_block_z' in params else 1;
   num_vox_x = params['num_vox_x'] if 'num_vox_x' in params else 1536
   num_vox_y = params['num_vox_y'] if 'num_vox_y' in params else 1536
   num_vox_z = params['num_vox_z'] if 'num_vox_z' in params else 512
 
   #max mb per block, init level, and init prob
-  max_data_mb = params['max_block_mb'] if 'max_block_mb' in params else 1000.0; 
-  p_init = params['p_init'] if 'p_init' in params else .01; 
-  max_level = params['max_tree_level'] if 'max_tree_level' in params else 4; 
+  max_data_mb = params['max_block_mb'] if 'max_block_mb' in params else 1000.0;
+  p_init = params['p_init'] if 'p_init' in params else .01;
+  max_level = params['max_tree_level'] if 'max_tree_level' in params else 4;
   init_level = params['init_tree_level'] if 'init_tree_level' in params else 1;
-  vox_length = params['vox_length'] if 'vox_length' in params else 1.0; 
-  sb_length = params['sub_block_length'] if 'sub_block_length' in params else .125; 
-  fname = params['filename'] if 'filename' in params else "scene"; 
+  vox_length = params['vox_length'] if 'vox_length' in params else 1.0;
+  sb_length = params['sub_block_length'] if 'sub_block_length' in params else .125;
+  fname = params['filename'] if 'filename' in params else "scene";
 
   #reconcile sub block length vs voxel length
-  if 'sub_block_length' in params : 
-    vox_length = sb_length / 8.0; 
-  elif 'vox_length' in params  : 
-    sb_length = vox_length * 8 ; 
+  if 'sub_block_length' in params :
+    vox_length = sb_length / 8.0;
+  elif 'vox_length' in params  :
+    sb_length = vox_length * 8 ;
 
   #set up tuples
-  if 'origin' in params: 
+  if 'origin' in params:
     orig_x, orig_y, orig_z = params['origin']
   if 'num_vox' in params:
     num_vox_x, num_vox_y, num_vox_z = params['num_vox']
@@ -941,9 +942,9 @@ def save_multi_block_scene(params) :
   scene = dbvalue(scene_id, scene_type);
 
   #calc number of sub blocks in each block
-  num_sb_x = num_vox_x / 8; 
-  num_sb_y = num_vox_y / 8; 
-  num_sb_z = num_vox_z / 8; 
+  num_sb_x = num_vox_x / 8;
+  num_sb_y = num_vox_y / 8;
+  num_sb_z = num_vox_z / 8;
   num_x = num_sb_x / n_x;
   num_y = num_sb_y / n_y;
   num_z = num_sb_z / n_z;
@@ -954,7 +955,7 @@ def save_multi_block_scene(params) :
      local_origin_z = k*num_z*sb_length + orig_z;
      local_origin_y = j*num_y*sb_length + orig_y;
      local_origin_x = i*num_x*sb_length + orig_x;
-     
+
      print("Adding block: ", i," ",j," ",k);
      boxm2_batch.init_process("boxm2AddBlockProcess");
      boxm2_batch.set_input_from_db(0,scene);
@@ -973,11 +974,11 @@ def save_multi_block_scene(params) :
      boxm2_batch.set_input_float(13,p_init);
      boxm2_batch.set_input_unsigned(14,init_level);
      boxm2_batch.run_process();
-       
+
   print("Write Scene");
   boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
   boxm2_batch.set_input_from_db(0,scene);
-  boxm2_batch.set_input_string(1, fname); 
+  boxm2_batch.set_input_string(1, fname);
   boxm2_batch.run_process();
 
 def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0) :
@@ -1000,7 +1001,7 @@ def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0) 
     local_cam = 0
     cropped_image = 0
     uncertainty = 0
-  return result, local_cam, cropped_image, uncertainty 
+  return result, local_cam, cropped_image, uncertainty
 
 def create_mask_image(scene, camera, ni, nj, ground_plane_only=False) :
   boxm2_batch.init_process("boxm2CreateSceneMaskProcess")
@@ -1019,16 +1020,16 @@ def create_mask_image(scene, camera, ni, nj, ground_plane_only=False) :
 # blob detection methods
 #####################################################################
 #runs blob change detection process
-def blob_change_detection( change_img, thresh, depth1=None, depth2=None ) : 
+def blob_change_detection( change_img, thresh, depth1=None, depth2=None ) :
   boxm2_batch.init_process("boxm2BlobChangeDetectionProcess")
   boxm2_batch.set_input_from_db(0,change_img)
   boxm2_batch.set_input_float(1, thresh)
-  if( depth1 and depth2 ):
+  if ( depth1 and depth2 ):
     boxm2_batch.set_input_from_db(2,depth1)
     boxm2_batch.set_input_from_db(3,depth2)
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
-  blobImg = dbvalue(id,type) 
+  blobImg = dbvalue(id,type)
   return blobImg
 
 #pixel wise roc process for change detection images
@@ -1051,10 +1052,10 @@ def blob_precision_recall(cd_img, gt_img, mask_img=None) :
 #########################################################################
 #Batch update process
 #########################################################################
-def update_aux_per_view(scene, cache, img, cam, imgString, device=None, mask=None) : 
+def update_aux_per_view(scene, cache, img, cam, imgString, device=None, mask=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update aux per view not yet implemented";
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclUpdateAuxPerViewProcess");
     boxm2_batch.set_input_from_db(0, device);
     boxm2_batch.set_input_from_db(1, scene);
@@ -1066,13 +1067,13 @@ def update_aux_per_view(scene, cache, img, cam, imgString, device=None, mask=Non
         boxm2_batch.set_input_from_db(6,mask)
     boxm2_batch.run_process();
   else:
-    print "ERROR: Cache type not recognized: ", cache.type; 
-   
+    print "ERROR: Cache type not recognized: ", cache.type;
+
 # Update Aux for normal-albedo-array appearance model
-def update_aux_per_view_naa(scene, cache, img, cam, metadata, atm_params, imgString, alt_prior, alt_density, device=None) : 
+def update_aux_per_view_naa(scene, cache, img, cam, metadata, atm_params, imgString, alt_prior, alt_density, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update aux per view_naa not yet implemented"
-  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclUpdateAuxPerViewNAAProcess")
     boxm2_batch.set_input_from_db(0, device)
     boxm2_batch.set_input_from_db(1, scene)
@@ -1086,8 +1087,8 @@ def update_aux_per_view_naa(scene, cache, img, cam, metadata, atm_params, imgStr
     boxm2_batch.set_input_from_db(9, alt_density)
     boxm2_batch.run_process();
   else:
-    print "ERROR: Cache type not recognized: ", cache.type; 
-   
+    print "ERROR: Cache type not recognized: ", cache.type;
+
 ###########################################################
 # create sun camera
 # astro_coords=True indicates az,el in degrees north of east, degrees above horizon
@@ -1107,8 +1108,8 @@ def compute_sun_affine_camera(scene, sun_az, sun_el, astro_coords = True):
        boxm2_batch.remove_data(ni_id)
        boxm2_batch.remove_data(nj_id)
        return sun_cam, ni, nj
-    
-    
+
+
 #######################################################
 # update sun visibility probabilities
 def update_sun_visibilities(scene,device,ocl_cache,cache,sun_camera,ni,nj,prefix_name):
@@ -1124,7 +1125,7 @@ def update_sun_visibilities(scene,device,ocl_cache,cache,sun_camera,ni,nj,prefix
     boxm2_batch.run_process()
 
 #######################################################
-# render shadow map 
+# render shadow map
 def render_shadow_map(scene,device, ocl_cache, camera, ni, nj, prefix_name=''):
     boxm2_batch.init_process("boxm2OclRenderExpectedShadowMapProcess")
     boxm2_batch.set_input_from_db(0,device)
@@ -1138,7 +1139,7 @@ def render_shadow_map(scene,device, ocl_cache, camera, ni, nj, prefix_name=''):
     (id,type) = boxm2_batch.commit_output(0)
     shadow_map = dbvalue(id,type)
     return shadow_map
-    
+
 def scene_illumination_info(scene):
     boxm2_batch.init_process("boxm2SceneIlluminationInfoProcess");
     boxm2_batch.set_input_from_db(0, scene);
@@ -1150,7 +1151,7 @@ def scene_illumination_info(scene):
     (nb_id,nb_type)=boxm2_batch.commit_output(2);
     nbins = boxm2_batch.get_output_int(nb_id);
     return longitude, latitude, nbins
-    
+
 # create stream cache
 def create_stream_cache(scene, type_id_fname, image_id_fname,mem=2.0):
     boxm2_batch.init_process("boxm2CreateStreamCacheProcess");
@@ -1162,7 +1163,7 @@ def create_stream_cache(scene, type_id_fname, image_id_fname,mem=2.0):
     (cache_id, cache_type) = boxm2_batch.commit_output(0);
     strcache = dbvalue(cache_id, cache_type);
     return strcache
-    
+
 def perspective_camera_from_scene(scene, cent_x, cent_y, cent_z, ni, nj):
     boxm2_batch.init_process("vpglPerspCameraFromSceneProcess");
     boxm2_batch.set_input_from_db(0,scene)
@@ -1197,7 +1198,7 @@ def generate_xyz_from_dem(scene, geotiff_dem, geoid_height, geocam=0,fill_in_val
     y_img = 0;
     z_img = 0;
   return x_img, y_img, z_img
-  
+
 # Create x y z images from a DEM at the resolution of the scene
 def generate_xyz_from_dem2(scene, geotiff_dem, geoid_height, geocam=0,fill_in_value=-1.0):
   boxm2_batch.init_process("boxm2DemToXYZProcess2");
@@ -1219,7 +1220,7 @@ def generate_xyz_from_dem2(scene, geotiff_dem, geoid_height, geocam=0,fill_in_va
     y_img = 0;
     z_img = 0;
   return x_img, y_img, z_img
-  
+
 def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
   boxm2_batch.init_process("boxm2ShadowHeightsToXYZProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1240,7 +1241,7 @@ def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
     y_img = 0;
     z_img = 0;
   return x_img, y_img, z_img
-  
+
 # Create x y z images from a DEM at the resolution of the scene
 def generate_xyz_from_lidar(scene, tiff_lidar):
   boxm2_batch.init_process("boxm2LidarToXYZProcess");
@@ -1276,7 +1277,7 @@ def roi_init_geotiff(scene, geocam, geotiff_img_name, level=0):
     gcam = 0
     cropped_image = 0
   return result, gcam, cropped_image
-  
+
 def extract_color_features(scene, cache, data_type, index):
   boxm2_batch.init_process("boxm2ExtractColorFeaturesProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1284,7 +1285,7 @@ def extract_color_features(scene, cache, data_type, index):
   boxm2_batch.set_input_string(2,data_type);
   boxm2_batch.set_input_unsigned(3,index);
   boxm2_batch.run_process()
-  
+
 def extract_surface_features(scene, cache, type, index):
   boxm2_batch.init_process("boxm2ExtractSurfaceFeaturesProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1292,7 +1293,7 @@ def extract_surface_features(scene, cache, type, index):
   boxm2_batch.set_input_string(2,type);
   boxm2_batch.set_input_unsigned(3,index);
   boxm2_batch.run_process()
-  
+
 def block_similarity(scene, cache, i, j, k, vrml_filename,feature_sim_variance,entropy_range_min,entropy_range_max):
   boxm2_batch.init_process("boxm2BlockSimilarityProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1305,7 +1306,7 @@ def block_similarity(scene, cache, i, j, k, vrml_filename,feature_sim_variance,e
   boxm2_batch.set_input_float(7,entropy_range_min); # for visualization
   boxm2_batch.set_input_float(8,entropy_range_max);
   boxm2_batch.run_process()
-  
+
 def compute_derivatives_process(scene, cache, prob_threshold, normal_threshold, kernel_x_file_name, kernel_y_file_name, kernel_z_file_name, i=-1, j=-1, k=-1):
   boxm2_batch.init_process("boxm2CppComputeDerivativeProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1349,7 +1350,7 @@ def cubic_compute_probabiltiy_of_image(device,scene,cache,cam,img,model_ident,im
   return outimg;
 
 def compute_visibility(device,scene,cache,camsfile,depthdir,x,y,z,outputdir,scale):
-  
+
   boxm2_batch.init_process("boxm2OclComputeVisibilityProcess");
   boxm2_batch.set_input_from_db(0,device);
   boxm2_batch.set_input_from_db(1,scene);
@@ -1363,9 +1364,9 @@ def compute_visibility(device,scene,cache,camsfile,depthdir,x,y,z,outputdir,scal
   boxm2_batch.set_input_int(9,scale);
   result = boxm2_batch.run_process()
   return result;
-  
+
 def compute_los_visibility(scene,cache,x0,y0,z0,x1,y1,z1, t = 5):
-  
+
   boxm2_batch.init_process("boxm2CppLosVisibilityProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_from_db(1,cache);
@@ -1380,9 +1381,9 @@ def compute_los_visibility(scene,cache,x0,y0,z0,x1,y1,z1, t = 5):
   (id,type) = boxm2_batch.commit_output(0)
   vis = boxm2_batch.get_output_float(id)
   return vis;
-  
+
 def get_scene_from_box_cams(camsdir,x0,y0,z0,x1,y1,z1,modeldir):
-  
+
   boxm2_batch.init_process("boxm2SceneFromBoxCamsProcess");
   boxm2_batch.set_input_string(0,camsdir);
   boxm2_batch.set_input_float(1,x0);
@@ -1396,7 +1397,7 @@ def get_scene_from_box_cams(camsdir,x0,y0,z0,x1,y1,z1,modeldir):
   result = boxm2_batch.run_process();
 
   return result;
-  
+
 def load_hypotheses(filename):
   boxm2_batch.init_process("boxm2LoadHypothesesProcess");
   boxm2_batch.set_input_string(0, filename);
@@ -1406,7 +1407,7 @@ def load_hypotheses(filename):
   (id, type) = boxm2_batch.commit_output(1);
   n = boxm2_batch.get_output_unsigned(id)
   return hyp, n;
-  
+
 def save_hypotheses(hyp, filename):
   boxm2_batch.init_process("boxm2SaveHypothesesProcess");
   boxm2_batch.set_input_from_db(0, hyp);
@@ -1425,7 +1426,7 @@ def create_hypotheses(lat, lon, scale_i, scale_j, ni, nj):
   (id, type) = boxm2_batch.commit_output(0);
   hyp = dbvalue(id, type);
   return hyp;
-  
+
 def add_hypotheses(hypo, lat, lon, cent_x, cent_y, cent_z):
   boxm2_batch.init_process("boxm2AddHypothesisProcess");
   boxm2_batch.set_input_from_db(0,hypo);
@@ -1470,7 +1471,7 @@ def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_h
   boxm2_batch.set_input_float(15, visibility_threshold);
   boxm2_batch.set_input_float(16, index_buffer_capacity);
   boxm2_batch.run_process();
-  
+
 def partition_hypotheses(scene_file, hyp_file, elev_dif, out_name):
   boxm2_batch.init_process("boxm2PartitionHypsProcess");
   boxm2_batch.set_input_string(0, scene_file);
@@ -1478,7 +1479,7 @@ def partition_hypotheses(scene_file, hyp_file, elev_dif, out_name):
   boxm2_batch.set_input_float(2, elev_dif);
   boxm2_batch.set_input_string(3, out_name);
   boxm2_batch.run_process();
-  
+
 # size is the size of mini box around the hypo, unit is arcseconds, e.g. 0.01
 def write_hypotheses_kml(hyp_file, start, skip, out_name, size=0.01):
   boxm2_batch.init_process("boxm2HypoKmlProcess");
@@ -1488,7 +1489,7 @@ def write_hypotheses_kml(hyp_file, start, skip, out_name, size=0.01):
   boxm2_batch.set_input_float(3, size);
   boxm2_batch.set_input_string(4, out_name);
   boxm2_batch.run_process();
-  
+
 def visualize_indices(index_file, cap_angle, point_angle, top_angle, bottom_angle, buffer_capacity, start_i, end_i, out_prefix):
   boxm2_batch.init_process("boxm2VisualizeIndicesProcess");
   boxm2_batch.set_input_string(0, index_file);
