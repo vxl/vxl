@@ -99,6 +99,9 @@ class depth_map_scene : public vbl_ref_count
 
   //: return a depth map of distance from the camera. Downsample accordingly
   vil_image_view<float> depth_map(unsigned log2_downsample_ratio);
+  
+  //: return a depth map of the specified region, use the 'ground_plane' and 'sky' strings to specify those two regions. downsample accordingly.
+  vil_image_view<float> depth_map(vcl_string region_name, unsigned log2_downsample_ratio);
 
   //: the iterator at the start of depth search. resets the depth_states_.
   scene_depth_iterator begin();
@@ -123,7 +126,12 @@ class depth_map_scene : public vbl_ref_count
 
   //: debug utilities
   void print_depth_states();
-
+  
+  //: match to a given continuous depth image 
+  bool match(vil_image_view<float> const& depth_img, vil_image_view<float> const& vis_img, unsigned level, float& score);
+  
+  //: match to a given continuous depth image, use the ground_plane constraint as well
+  bool match_with_ground(vil_image_view<float> const& depth_img, vil_image_view<float> const& vis_img, unsigned level, float ground_depth_std_dev, float& score);
 
  protected:
   unsigned ni_, nj_; //: depth map dimensions
