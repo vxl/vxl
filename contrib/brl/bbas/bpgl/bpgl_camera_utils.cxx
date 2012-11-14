@@ -130,3 +130,10 @@ horizon(vpgl_perspective_camera<double> const& cam)
   vgl_line_2d<double> hor_line(hor[0],hor[1],hor[2]);
   return hor_line;
 }
+
+vcl_string bpgl_camera_utils::get_string(double ni, double nj, double right_f, double top_f, double alt, double head, double tilt, double roll)
+{
+  vcl_stringstream str; 
+  str << "_h_" << head << "_t_" << tilt << "_r_" << roll << "_top_fov_" << top_f;
+  return str.str();
+}
