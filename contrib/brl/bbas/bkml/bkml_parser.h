@@ -1,11 +1,11 @@
 #ifndef bkml_parser_h_
 #define bkml_parser_h_
-
-
+//:
+// \file
 // \verbatim
 //  Modifications
-//     Yi Dong   SEP-2012   added parser for polygon (inner/outer) defined in kml
-//     Yi Dong   NOV-2012   added parser for deviations of heading, tilt, roll, right_fov, top_fov of camera
+//   Yi Dong   SEP-2012   added parser for polygon (inner/outer) defined in kml
+//   Yi Dong   NOV-2012   added parser for deviations of heading, tilt, roll, right_fov, top_fov of camera
 // \endverbatim
 
 // Tags for KML
@@ -50,8 +50,9 @@ class bkml_parser : public expatpp
   bkml_parser(void);
   // parser should not delete the site, it is used afterwards
   ~bkml_parser(void) {}
-  
-  //: the first sheet contains the outer polygon, and the second sheet contains the inner polygon if any, saves 2d points, only lat, lon
+
+  //:
+  // the first sheet contains the outer polygon, and the second sheet contains the inner polygon if any, saves 2d points, only lat, lon
   // in this poly lon is x, lat is y
   static vgl_polygon<double> parse_polygon(vcl_string poly_kml_file);
 
