@@ -6,10 +6,8 @@
 
 static void test_spherical_shell_container()
 {
-  float cap_angle = 180;
-  //double cap_angle = 90;
-  float point_angle = 10;
-  //double point_angle = 30;
+  float cap_angle = 180; // = 90;
+  float point_angle = 10; // = 30;
   double radius = 1;
   float top_angle = 40;
   float bottom_angle = 20;
@@ -20,13 +18,17 @@ static void test_spherical_shell_container()
            << " spherical center = " << sph_shell->cent() << '\n'
            << " for half spherical surface, point angle = " << point_angle << " degree, number of rays: " << sph_shell->get_container_size() << vcl_endl;
 
-  //TEST("# voxels of last layer with res min_res.. ", sph_shell->get_container_size(), 1026);
+#if 0
+  TEST("# voxels of last layer with res min_res.. ", sph_shell->get_container_size(), 1026);
+#endif
 
   vcl_vector<vgl_point_3d<double> >& cart_points = sph_shell->cart_points();
-  /*vcl_cout << "Cart points: ";
+#if 0
+  vcl_cout << "Cart points: ";
   for (vcl_vector<vgl_point_3d<double> >::const_iterator p = cart_points.begin(); p != cart_points.end(); ++p)
-    vcl_cout << *p << vcl_endl;*/
-    sph_shell->draw_template("./spherical_shell.vrml");
+    vcl_cout << *p << vcl_endl;
+#endif
+  sph_shell->draw_template("./spherical_shell.vrml");
 }
 
 TESTMAIN(test_spherical_shell_container);
