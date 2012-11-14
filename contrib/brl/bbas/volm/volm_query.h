@@ -56,8 +56,17 @@ public:
   void draw_template(vcl_string const& vrml_fname);
   //: write query image showing the depth map geometry and the penetrating ray
   void draw_query_images(vcl_string const& out_dir);
+  void draw_query_image(unsigned i, vcl_string const& out_name);
+  vcl_string get_cam_string(unsigned i) { return camera_strings_[i]; }
   //: visualized the query camera using the spherical shell geometry
   void visualize_query(vcl_string const& prefix);
+
+public:
+  double init_focal_;
+  double head_, head_d_, head_inc_;
+  double tilt_, tilt_d_, tilt_inc_;
+  double roll_, roll_d_, roll_inc_;
+  double tfov_, tfov_d_, tfov_inc_;
 
 protected:
   //: image size
@@ -81,17 +90,12 @@ protected:
   unsigned Nt_;
   unsigned Nr_;
 
-  double init_focal_;
-  double head_, head_d_;
-  double tilt_, tilt_d_;
-  double roll_, roll_d_;
-  double tfov_, tfov_d_;
-
   vcl_vector<double> top_fov_;
   vcl_vector<double> headings_;
   vcl_vector<double> tilts_;
   vcl_vector<double> rolls_;
   vcl_vector<vpgl_perspective_camera<double> > cameras_;
+  vcl_vector<vcl_string> camera_strings_;
   vcl_vector<vcl_vector<unsigned char> > min_dist_;
   vcl_vector<vcl_vector<unsigned char> > max_dist_;
   vcl_vector<vcl_vector<unsigned char> > order_;

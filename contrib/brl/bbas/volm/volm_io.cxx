@@ -145,7 +145,7 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   return true;
 }
 
-bool volm_io::write_status(vcl_string out_folder, int status_code, int percent)
+bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, vcl_string log_message)
 {
   vcl_ofstream file;
   vcl_string out_file = out_folder + "/status.xml";
@@ -158,10 +158,14 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent)
       file << "Error in executable arguments\n<percent>0</percent>\n"; break;
     case volm_io::SUCCESS:
       file << "Completed Successfully\n<percent>100</percent>\n"; break;
-    case volm_io::EXE_STARTED:
-      file << "Exe Started\n<percent>0</percent>\n"; break;
+    case volm_io::MATCHER_EXE_STARTED:
+      file << "Matcher Exe Started\n<percent>0</percent>\n"; break;
+    case volm_io::MATCHER_EXE_FINISHED:
+      file << "Matcher Exe Finished, composer starting..\n<percent>90</percent>\n"; break;
+    case volm_io::COMPOSE_STARTED:
+      file << "Composing output tiles\n<percent>90</percent>\n"; break;
     case volm_io::EXE_RUNNING:
-      file << "Exe Running\n<percent>\n" << percent << "\n</percent>\n"; break;
+      file << "Matcher Exe Running\n<percent>\n" << percent << "\n</percent>\n"; break;
     case volm_io::LABELME_FILE_IO_ERROR:
       file << "LABELME FILE IO Error\n<percent>0</percent>\n"; break;
     default:
@@ -169,9 +173,54 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent)
       vcl_cerr << "Unidentified status code!\n";
       break;
   }
+  file << "<code>\n" << status_code << "\n</code>\n";
+  file << "<log>\n" << log_message << "\n</log>\n";
   file << "</status>\n";
   file.close();
   return true;
 }   
+//: return true if MATCHER_EXE_FINISHED, otherwise return false
+bool volm_io::check_matcher_status(vcl_string out_folder)
+{
+  vcl_ifstream ifs;
+  vcl_string file = out_folder + "/status.xml";
+  ifs.open(file.c_str());
+  char buf[10000];
+  ifs.getline(buf, 10000);
+  ifs.close();
+  vcl_stringstream str(buf);
+  vcl_string dummy;
+  str >> dummy;
+  while (dummy.compare("<code>") != 0) 
+    str >> dummy;
+  int status_code;
+  str >> status_code;
+  if (status_code == volm_io::MATCHER_EXE_FINISHED) 
+    return true;
+  return false;
+}
+
+
+bool volm_io::write_log(vcl_string out_folder, vcl_string log)
+{
+  vcl_ofstream file;
+  vcl_string out_file = out_folder + "/log.xml";
+  file.open (out_file.c_str());
+  file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n";
+  file << "<log>\n"<<log<<"</log>\n";
+  file.close();
+  return true;
+}
+
+bool volm_io::write_composer_log(vcl_string out_folder, vcl_string log)
+{
+  vcl_ofstream file;
+  vcl_string out_file = out_folder + "/composer_log.xml";
+  file.open (out_file.c_str());
+  file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n";
+  file << "<log>\n"<<log<<"</log>\n";
+  file.close();
+  return true;
+}
 
 

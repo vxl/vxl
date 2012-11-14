@@ -80,6 +80,30 @@ vcl_vector<volm_tile> volm_tile::generate_p1_wr1_tiles()
   return p1_tiles;
 }
 
+vcl_vector<volm_tile> volm_tile::generate_p1_wr2_tiles()
+{
+  vcl_vector<volm_tile> p1_tiles;
+  unsigned ni = 3601;
+  unsigned nj = 3601;
+  float scale_i = 1;
+  float scale_j = 1;
+  p1_tiles.push_back(volm_tile(30, 82, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(31, 81, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(31, 82, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(32, 80, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(32, 81, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(33, 78, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(33, 79, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(33, 80, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(34, 77, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(34, 78, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(34, 79, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(35, 76, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(35, 77, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.push_back(volm_tile(36, 76, 'N', 'W', scale_i, scale_j, ni, nj));
+  return p1_tiles;
+}
+
 vcl_string volm_tile::get_string()
 {
   vcl_stringstream str;
@@ -176,6 +200,7 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
   }
 }
 
+// just overwrite whatever was in the image, cause it assumes that current value of the pixel is compared to this score before this function is called
 void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<vxl_byte>& img)
 {
   unsigned nrows = (unsigned)mask.rows();
@@ -189,14 +214,16 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
   int ni = (int)img.ni();
   int nj = (int)img.nj();
   if (score > 0.0f) {
+    
     for (int ii = is; ii < ie; ii++)
       for (int jj = js; jj < je; jj++) {
         int mask_i = ii - is;
         int mask_j = jj - js;
         if (mask[mask_j][mask_i] && ii >= 0 && jj >= 0 && ii < ni && jj < nj) {
           float val = score*kernel[mask_j][mask_i];
-          unsigned char pix_val = (unsigned char)(val*volm_io::SCALE_VALUE);  // scale it
-          if(pix_val < volm_io::UNKNOWN) {
+          //unsigned int pix_val = (unsigned int)(val*volm_io::SCALE_VALUE) + 1;  // scale it
+		      unsigned char pix_val = (unsigned char)(val*volm_io::SCALE_VALUE) + 1;
+		  /*if(pix_val < volm_io::UNKNOWN) {
             pix_val = volm_io::STRONG_NEGATIVE;
           }else if(pix_val == volm_io::UNKNOWN){
             pix_val = volm_io::UNKNOWN;
@@ -206,6 +233,7 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
           if (img(ii,jj) > 0)
             img(ii,jj) = (img(ii,jj)+pix_val)/2;  // overwrites whatever values was in the image
           else
+            img(ii,jj) = pix_val;*/
             img(ii,jj) = pix_val;
         }
       }

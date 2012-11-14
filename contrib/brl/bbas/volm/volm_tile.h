@@ -35,6 +35,7 @@ class volm_tile
    //: mark the uncertainty region around a given location using a gaussian mask, the center has the designated score, the rest diminishes with respect to a cutoff degree
    //  \p lambda_i and \p lambda_j are the radii of the gaussian mask in pixels
    //  \p cut_off is the percentage that shows how quickly the kernel dies off, typically 50
+   //  overwrites the value in the image, it assumes that current value of the pixel is compared to this score before this function is called
    static void get_uncertainty_region(float lambda_i, float lambda_j, float cut_off, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel);
    static void mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<unsigned int>& img);
    static void mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<vxl_byte>& img);
@@ -43,6 +44,7 @@ class volm_tile
 #endif
    static vcl_vector<volm_tile> generate_p1_tiles();
    static vcl_vector<volm_tile> generate_p1_wr1_tiles();
+   static vcl_vector<volm_tile> generate_p1_wr2_tiles();
 
    //: calculate width of the tile
    double calculate_width();

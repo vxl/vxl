@@ -25,22 +25,22 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   nj_ = dm_->nj();
   // set the default value based on img_category_ ( temporary having "desert" and "coast"
   if(img_category_ == "desert") {
-    head_ = 0.0;      head_d_ = 180.0;
-    tilt_ = 90.0;     tilt_d_ = 0.0;
-    roll_ = 0.0;      roll_d_ = 0.0;
-    tfov_ = 5.0;      tfov_d_ = 30.0;
+    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
+	tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 1.0;
+	roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
+	tfov_ = 5.0;      tfov_d_ = 30.0; tfov_inc_ = 4.0;
   }else if(img_category_ == "coast") {
     // temporary use desert default
-    head_ = 0.0;      head_d_ = 180.0;
-    tilt_ = 90.0;     tilt_d_ = 20.0;
-    roll_ = 0.0;      roll_d_ = 0.0;
-    tfov_ = 5.0;      tfov_d_ = 30.0;
+    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
+	tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 1.0;
+	roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
+	tfov_ = 5.0;      tfov_d_ = 30.0; tfov_inc_ = 4.0;
   }else{
     // undefined img category, use desert default
-    head_ = 0.0;      head_d_ = 180.0;
-    tilt_ = 90.0;     tilt_d_ = 20.0;
-    roll_ = 0.0;      roll_d_ = 0.0;
-    tfov_ = 5.0;      tfov_d_ = 30.0;
+    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
+	tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 1.0;
+	roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
+	tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 4.0;
   }
 
   // load the camera kml, fetch the camera value and deviation
@@ -59,7 +59,7 @@ void volm_query::create_cameras()
 {
   // set up the camera parameter arrays and constuct vector of cameras
   top_fov_.push_back(tfov_); // top viewing ranges from 1 to 89
-  for(unsigned i = 1; i <= tfov_d_; i++) {
+  for(double i = tfov_inc_; i <= tfov_d_; i+=tfov_inc_) {
     double right = tfov_ + i, left = tfov_ - i;
     if(right > 89)  right = 89;
     if(left  < 1)   left = 1;
@@ -67,7 +67,7 @@ void volm_query::create_cameras()
   }
 
   headings_.push_back(head_);
-  for(unsigned i = 1; i <= head_d_; i++) {   // heading ranges from 0 to 360
+  for(double i = head_inc_; i <= head_d_; i+=head_inc_) {   // heading ranges from 0 to 360
     double right = head_ + i, left = head_ - i;
     if(right > 360) right = right - 360;
     if(left < 0)    left = left + 360;
@@ -75,7 +75,7 @@ void volm_query::create_cameras()
   }
 
   tilts_.push_back(tilt_);  // tilt ranges from 0 to 180
-  for(unsigned i = 1; i <= tilt_d_; i++) {
+  for(double i =  tilt_inc_; i <= tilt_d_; i+= tilt_inc_) {
     double right = tilt_ + i, left = tilt_ - i;
     if(right > 180) right = 180;
     if(left < 0)    left = 0;
@@ -83,7 +83,7 @@ void volm_query::create_cameras()
   }
 
   rolls_.push_back(roll_); // roll ranges from -180 to 180 in kml, how about in camera_from_kml ?? (need to check...)
-  for(unsigned i = 1; i <= roll_d_; i++) {
+  for(double i = roll_inc_; i <= roll_d_; i+=roll_inc_) {
     double right = roll_ + i , left = roll_ - i;
     if(right > 180) right = right - 360;
     if(left < -180) left = left + 360;
@@ -96,11 +96,12 @@ void volm_query::create_cameras()
         for(unsigned h = 0; h < headings_.size(); h++){
           double tilt = tilts_[i], roll = rolls_[j], top_f = top_fov_[k], head = headings_[h];
           double dtor = vnl_math::pi_over_180;
-          double ttr = vcl_tan(top_f*dtor);
-          double right_f = vcl_atan(ni_*ttr/nj_)/dtor;
-          vpgl_perspective_camera<double> cam = bpgl_camera_utils::camera_from_kml((double)ni_, (double)nj_, right_f, top_f, 0.0, head, tilt, roll);
-          cameras_.push_back(cam);
-        }
+		  double ttr = vcl_tan(top_f*dtor);
+		  double right_f = vcl_atan(ni_*ttr/nj_)/dtor;
+		  vpgl_perspective_camera<double> cam = bpgl_camera_utils::camera_from_kml((double)ni_, (double)nj_, right_f, top_f, 0.0, head, tilt, roll);
+		  cameras_.push_back(cam);
+		  camera_strings_.push_back(bpgl_camera_utils::get_string((double)ni_, (double)nj_, right_f, top_f, 0.0, head, tilt, roll));
+		}
 }
 
 void volm_query::generate_depth_poly_order()
@@ -404,17 +405,15 @@ void volm_query::draw_dot(vil_image_view<vxl_byte>& img, vgl_point_3d<double> co
     }
 }
 
-void volm_query::draw_query_images(vcl_string const& out_dir)
+void volm_query::draw_query_image(unsigned i, vcl_string const& out_name)
 {
   // create a png img associated with each camera hypothesis, containing the geometry defined 
   //  in depth_map_scene and the img points corresponding to points inside the container
   // loop over all camera
-  for(unsigned i = 0; i < cameras_.size(); i++) {
-    // create a vil_image_view<vxl_byte> for png query_img geometry
-    vil_image_view<vxl_byte> img(ni_, nj_);
-    img.fill(150);
-    // draw the polygon
-    if(dm_->sky()) {
+	vil_image_view<vxl_byte> img(ni_, nj_);
+	img.fill(150);
+	//: draw the polygon
+	if(dm_->sky()) {
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly((dm_->sky())->region_2d());
       this->draw_polygon(img, poly);  
     }
@@ -430,16 +429,22 @@ void volm_query::draw_query_images(vcl_string const& out_dir)
     for(unsigned pidx = 0; pidx < query_size_; pidx++)
       if(single_layer[pidx] < 255){
         this->draw_dot(img, query_points_[pidx], single_layer[pidx], cameras_[i]);
-      }
-    // write into img
-    vcl_stringstream s_idx;
-    s_idx << i;
-    vcl_string fs = out_dir + "query_img_" + s_idx.str() + ".png";
-    char * fname = new char[fs.size() + 1];
-    fname[fs.size()] = 0;
-    vcl_memcpy(fname, fs.c_str(),fs.size());
-    vil_save(img,fname);
-    delete []fname;
+	  }
+	//: write into img
+	vil_save(img,out_name.c_str());
+}
+
+void volm_query::draw_query_images(vcl_string const& out_dir)
+{
+  // create a png img associated with each camera hypothesis, containing the geometry defined 
+  //  in depth_map_scene and the img points corresponding to points inside the container
+  // loop over all camera
+  for(unsigned i = 0; i < cameras_.size(); i++) {
+  	// write into img
+	  vcl_stringstream s_idx;
+	  s_idx << i;
+	  vcl_string fs = out_dir + "query_img_" + s_idx.str() + ".png";
+    this->draw_query_image(i, fs);
   }
 }
 
@@ -454,3 +459,4 @@ void volm_query::visualize_query(vcl_string const& prefix)
     sph_->draw_template(str.str(), single_layer, 254);
   }
 }
+
