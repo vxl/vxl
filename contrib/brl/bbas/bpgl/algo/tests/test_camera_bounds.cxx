@@ -93,12 +93,12 @@ static void test_camera_bounds()
   vcl_cout << " pixel "<< cone_axis << '\n'
            << " half angle (deg) " << half_ang*rad_to_deg
            << " solid_ang (ster) = " << sang << '\n';
-  TEST_NEAR("pixel bounds", sang, 4.48621e-007, 1.0e-008);
+  TEST_NEAR("pixel bounds", sang, 4.48621e-007, 1e-8);
   vpgl_camera_bounds::image_solid_angle(C,cone_axis,half_ang, sang);
   vcl_cout << " image "<< cone_axis << '\n'
            << " half angle (deg)" << half_ang*rad_to_deg
            << " solid_ang = " << sang << '\n';
-  TEST_NEAR("image bounds", sang, 0.434238, 1.0e-006);
+  TEST_NEAR("image bounds", sang, vnl_math::log10e, 1e-6);
   vgl_point_3d<double> minp(-0.3, -0.3, 0), maxp(-0.9, 0.3, 0.3);
   vgl_box_3d<double> box;
   box.add(minp); box.add(maxp);
@@ -108,12 +108,11 @@ static void test_camera_bounds()
   vcl_cout << " box "<< cone_axis << '\n'
            << " half angle (deg) " << half_ang*rad_to_deg
            << " solid_ang = " << sang << '\n';
-  TEST_NEAR("box bounds", sang, mask*0.0294621, 1.0e-006);
+  TEST_NEAR("box bounds", sang, mask*0.0294621, 1e-6);
 
   double pixel_interval = vpgl_camera_bounds::rotation_angle_interval(C);
   vcl_cout << " pixel angle interval (deg)  "<< pixel_interval*rad_to_deg << '\n';
-  TEST_NEAR("pixel interval (deg)", pixel_interval*rad_to_deg, 0.159155,
-            1.0e-005);
+  TEST_NEAR("pixel interval (deg)", pixel_interval*rad_to_deg, 0.159155, 1e-5);
   double scl = 0.0625;
   Km[0][0] = scl*1871.2; Km[1][1] = scl*1871.2;
   Km[0][2] = scl*640.0;   Km[1][2] = scl*360.0;
@@ -122,21 +121,20 @@ static void test_camera_bounds()
   vpgl_perspective_camera<double> Cs(Ks, Rr, t);
   pixel_interval = vpgl_camera_bounds::rotation_angle_interval(Cs);
   vcl_cout << " pixel angle interval (deg) - scaled K "<< pixel_interval*rad_to_deg << '\n';
-  TEST_NEAR("pixel interval (deg) -Ks ", pixel_interval*rad_to_deg, 2.54606,
-            1.0e-005);
+  TEST_NEAR("pixel interval (deg) -Ks ", pixel_interval*rad_to_deg, 2.54606, 1e-5);
   vpgl_camera_bounds::pixel_solid_angle(Cs, static_cast<unsigned>(scl*640),
                                         static_cast<unsigned>(scl*360),
                                         cone_axis,half_ang, sang);
   vcl_cout << " pixel  - Ks "<< cone_axis << '\n'
            << " half angle (deg)" << half_ang*rad_to_deg
            << " solid_ang (ster) = " << sang << '\n';
-  TEST_NEAR("pixel bounds - Ks", sang, 0.000114845, 1.0e-008);
+  TEST_NEAR("pixel bounds - Ks", sang, 0.000114845, 1e-8);
 
   vpgl_camera_bounds::image_solid_angle(Cs,cone_axis,half_ang, sang);
   vcl_cout << " image -Ks "<< cone_axis << '\n'
            << " half angle " << half_ang*rad_to_deg
            << " solid_ang = " << sang << '\n';
-  TEST_NEAR("image bounds -Ks", sang, 0.434238, 1.0e-006);
+  TEST_NEAR("image bounds -Ks", sang, vnl_math::log10e, 1e-006);
   // test sphere samples
   unsigned npts = 400;
   principal_ray_scan prs(0.785, npts);
@@ -161,7 +159,7 @@ static void test_camera_bounds()
            << " phi = " << prs.phi(indx)*rad_to_deg << '\n'
            << " pt on unit sphere " << pt << '\n'
            << " rotated zaxis " << rot_z << '\n';
-  TEST_NEAR("rotation scan", rot_z.x(), pt.x(), 1.0e-4);
+  TEST_NEAR("rotation scan", rot_z.x(), pt.x(), 1e-4);
 
   vnl_matrix_fixed<double, 3, 3> k;
   k.set_identity();
