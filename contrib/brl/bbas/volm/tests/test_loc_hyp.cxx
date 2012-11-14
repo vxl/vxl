@@ -16,14 +16,14 @@ static void test_loc_hyp()
   float y[] = {38.553f, 38.553f, 37.623f, 37.623f, 38.553f};
   vgl_polygon<float> poly(x, y, 5);
 
-  //: lvcs of world2
+  // lvcs of world2
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(38.074326, -117.654869, 1200.0, vpgl_lvcs::utm, 0.0, 0.0, vpgl_lvcs::DEG, vpgl_lvcs::METERS, 0.0, 0.0, 0.0);
   vcl_string dem_file = "D:/P-1A/Finder_Program_Only/ReferenceData/Desert/NAMDTM/NAM_DEM.tif";
   vil_image_resource_sptr dem_res = vil_load_image_resource(dem_file.c_str());
   vil_image_view<float> dem = dem_res->get_view();
   vpgl_geo_camera* geocam = 0;
   vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
-  
+
   volm_loc_hyp hyp(poly, dem, geocam, 5000, 5000);
   //volm_loc_hyp hyp(poly, dem, geocam, 1, 1);
 
@@ -45,21 +45,20 @@ static void test_loc_hyp()
   vcl_cout << "size on file: " << vul_file::size("C:/projects/FINDER/simple_index/nam_dem_locs_5000_5000.bin") << vcl_endl;
 
 
-#endif  
+#endif
   volm_loc_hyp hyp2("C:/projects/FINDER/simple_index/nam_dem_locs_5000_5000.bin");
   //volm_loc_hyp hyp2("C:/projects/FINDER/simple_index/nam_dem_locs_1_1.bin");
   vcl_cout << "hyp2 has " << hyp2.size() << " hyps!n";
   //TEST("size of loaded hyp", hyp2.size(), hyp.size());
-  
+
   vgl_point_3d<float> pt;
   hyp2.get_next(pt);
-  vcl_cout << " first point is: " << pt.x() << " " << pt.y() << " " << pt.z() << vcl_endl;
-  for (unsigned i = 1; i < hyp2.size()-1; i++) 
+  vcl_cout << " first point is: " << pt.x() << ' ' << pt.y() << ' ' << pt.z() << vcl_endl;
+  for (unsigned i = 1; i < hyp2.size()-1; i++)
     hyp2.get_next(pt);
   hyp2.get_next(pt);
-  vcl_cout << " last point is: " << pt.x() << " " << pt.y() << " " << pt.z() << vcl_endl;
+  vcl_cout << " last point is: " << pt.x() << ' ' << pt.y() << ' ' << pt.z() << vcl_endl;
   TEST("got all", hyp2.get_next(pt), false);
-  
 }
 
 
