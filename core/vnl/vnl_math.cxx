@@ -17,7 +17,7 @@
 #ifndef finitel
 # define finitel _finite
 #endif
-# define isnan _isnan
+// # define isnan _isnan // PVr commented out: we don't want to redefine vnl::isnan ...
 #elif VXL_IEEEFP_HAS_FINITE
 # include <ieeefp.h>
 # ifndef finitef
