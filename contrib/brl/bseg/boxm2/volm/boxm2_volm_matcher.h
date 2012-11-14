@@ -11,7 +11,7 @@
 //   Modifications
 //       created by Ozge C. Ozcanli - Oct 07, 2012
 // \endverbatim
-// 
+//
 
 #include <volm/volm_query_sptr.h>
 #include <volm/volm_query.h>
@@ -24,10 +24,10 @@
 
 class boxm2_volm_matcher
 {
-public:
+ public:
   //: default constructor
   boxm2_volm_matcher(){}
-  //: constructor 
+  //: constructor
   boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_index_sptr ind, unsigned long ei, bocl_device_sptr gpu);
   //: destructor
   ~boxm2_volm_matcher();
@@ -42,8 +42,8 @@ public:
   bool matching_cost_layer();
   //: Binary score to stream.
   bool write_score(vcl_string const& out_file);
-  
-private:
+
+ private:
   //: members
   volm_query_sptr query_;
   boxm2_volm_wr3db_index_sptr ind_;
@@ -60,10 +60,10 @@ private:
   vcl_size_t local_threads[2];
   vcl_size_t global_threads[2];
 
-  //: buffer defination for cost kernel
+  //: buffer definition for cost kernel
   cl_command_queue queue;
-         bocl_mem* query_cl;
-    unsigned char* queries_buff;
+  bocl_mem* query_cl;
+  unsigned char* queries_buff;
 };
 
 #endif  // boxm2_volm_matcher_h_
