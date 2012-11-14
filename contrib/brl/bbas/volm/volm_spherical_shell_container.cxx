@@ -1,8 +1,11 @@
 #include "volm_spherical_shell_container.h"
+//:
+// \file
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <bvrml/bvrml_write.h>
+#include <vcl_cassert.h>
 
 // constructor
 volm_spherical_shell_container::volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle)
@@ -168,7 +171,7 @@ void volm_spherical_shell_container::remove_top_and_bottom()
       cart_points_new.push_back(cart_points_[i]);
     }
   }
-  
+
   sph_points_.clear();
   sph_points_ = sph_points_new;
   cart_points_.clear();
@@ -231,7 +234,7 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
   bvrml_write::write_vrml_line(ofs, cent_ray, axis_y, (float)rad*20, 0.0f, 1.0f, 0.0f);
   bvrml_write::write_vrml_line(ofs, cent_ray, axis_z, (float)rad*20, 1.0f, 1.0f, 0.0f);
   // write the voxel structure
-  
+
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_points_.size(); i++) {
     vgl_vector_3d<double> ray = cart_points_[i]-orig;
@@ -245,7 +248,7 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
 void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vcl_vector<unsigned char>& values, unsigned char special)
 {
   assert(values.size() == cart_points_.size());
-  
+
   vcl_ofstream ofs(vrml_file_name.c_str());
   // write the header
   bvrml_write::write_vrml_header(ofs);
@@ -263,14 +266,14 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vc
   bvrml_write::write_vrml_line(ofs, cent_ray, axis_z, (float)rad*20, 0.0f, 1.0f, 1.0f);
   vgl_sphere_3d<float> sp2((float)cent.x(), (float)cent.y(), (float)cent.z()+20, (float)rad);
   bvrml_write::write_vrml_sphere(ofs, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
-  
+
   // write the voxel structure
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_points_.size(); i++) {
     vgl_vector_3d<double> ray = cart_points_[i]-orig;
     if (values[i] == special)
       bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 0.6f, 1.0f, 1.0f, 0.0f);
-    else 
+    else
       bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 0.6f, 0.0f, 0.0f, values[i]/255.0f);
   }
   ofs.close();
