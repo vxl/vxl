@@ -1,12 +1,11 @@
-// This is brl/bseg/boxm2/volm/pro/processes/boxm2_load_hypotheses_process.cxx
+// This is brl/bseg/boxm2/volm/pro/processes/boxm2_hypotheses_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for loading the hypotheses for a scene (e.g. created by exe generate_loc_hypotheses)
 //
 // \author Ozge C. Ozcanli
 // \date Oct 21, 2012
-
-#include <bprb/bprb_func_process.h>
 
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
@@ -16,6 +15,7 @@ namespace boxm2_load_hypotheses_process_globals
   const unsigned n_inputs_ = 1;
   const unsigned n_outputs_ = 2;
 }
+
 bool boxm2_load_hypotheses_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_load_hypotheses_process_globals;
@@ -54,16 +54,17 @@ namespace boxm2_save_hypotheses_process_globals
   const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 0;
 }
+
 bool boxm2_save_hypotheses_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_save_hypotheses_process_globals;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "boxm2_volm_loc_hypotheses_sptr";  
+  input_types_[0] = "boxm2_volm_loc_hypotheses_sptr";
   input_types_[1] = "vcl_string";
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -88,6 +89,7 @@ namespace boxm2_get_hypothesis_process_globals
   const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 3;
 }
+
 bool boxm2_get_hypothesis_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_get_hypothesis_process_globals;
@@ -124,6 +126,7 @@ bool boxm2_get_hypothesis_process(bprb_func_process& pro)
   pro.set_output_val<float>(i++, h->locs_[k].z());
   return true;
 }
+
 namespace boxm2_create_hypotheses_process_globals
 {
   const unsigned n_inputs_ = 6;
@@ -177,6 +180,7 @@ namespace boxm2_add_hypothesis_process_globals
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 0;
 }
+
 bool boxm2_add_hypothesis_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_add_hypothesis_process_globals;
@@ -209,7 +213,5 @@ bool boxm2_add_hypothesis_process(bprb_func_process& pro)
   float cent_x = pro.get_input<float>(i++);
   float cent_y = pro.get_input<float>(i++);
   float cent_z = pro.get_input<float>(i++);
-  if (!h->add(lon, lat, cent_x, cent_y, cent_z))
-    return false;
-  return true;
+  return h->add(lon, lat, cent_x, cent_y, cent_z);
 }
