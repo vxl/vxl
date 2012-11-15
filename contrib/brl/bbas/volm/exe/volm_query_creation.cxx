@@ -86,7 +86,7 @@ int main(int argc, char** argv)
   vcl_cout << " \t" << query->headings().size() << " headings = " << query->headings()[0] << " +/- " << query->head_d_ << " increment: " << query->head_inc_ << vcl_endl;
   vcl_cout << " \t" << query->tilts().size() << " tilts = " << query->tilts()[0] << " +/- " << query->tilt_d_ << " increments: " << query->tilt_inc_ << vcl_endl;
   vcl_cout << " \t" << query->rolls().size() << " rolls = " << query->rolls()[0] << " +/- " << query->roll_d_ << " increments: " << query->roll_inc_ << vcl_endl;
-  vcl_cout << " \t" << query->top_fovs().size() << " top_fov = " << query->top_fovs()[0] << " +/- " << query->tfov_d << " increment: " << query->tfov_inc_ << vcl_endl;
+  vcl_cout << " \t" << query->top_fovs().size() << " top_fov = " << query->top_fovs()[0] << " +/- " << query->tfov_d_ << " increment: " << query->tfov_inc_ << vcl_endl;
   vcl_cout << " For each camera hypothesis, generated query_size is " << query->get_query_size() << " byte" << vcl_endl;
   
 //#if 0  
