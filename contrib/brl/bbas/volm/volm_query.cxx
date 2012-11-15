@@ -363,14 +363,14 @@ void volm_query::draw_polygon(vil_image_view<vxl_byte>& img, vgl_polygon<double>
         if (s.x() <= e.x()) {
           for (unsigned xi = (unsigned)s.x(); xi <= (unsigned)e.x(); xi++) {
             unsigned xj = (unsigned)(k*xi+b);
-            if (  !(xi < 0 || xj < 0 || xi >= ni_ || xj >= nj_) )
+            if (xi < ni_ && xj < nj_)
               img(xi,xj) = 0;
           }
         }
         else {
           for (unsigned xi = (unsigned)e.x(); xi <= (unsigned)s.x(); xi++) {
             unsigned xj = (unsigned)(k*xi+b);
-            if (  !(xi < 0 || xj < 0 || xi >= ni_ || xj >= nj_) )
+            if (xi < ni_ && xj < nj_)
               img(xi,xj) = 0;
           }
         }
@@ -379,14 +379,14 @@ void volm_query::draw_polygon(vil_image_view<vxl_byte>& img, vgl_polygon<double>
         if (s.y() <= e.y()) {
           for (unsigned xj = (unsigned)s.y(); xj <= (unsigned)e.y(); xj++) {
             unsigned xi = (unsigned)((xj-b)/k);
-            if (  !(xi < 0 || xj < 0 || xi >= ni_ || xj >= nj_) )
+            if (xi < ni_ && xj < nj_)
               img(xi,xj) = 0;
           }
         }
         else {
           for (unsigned xj = (unsigned)e.y(); xj <= (unsigned)s.y(); xj++) {
             unsigned xi = (unsigned)((xj-b)/k);
-            if (  !(xi < 0 || xj < 0 || xi >= ni_ || xj >= nj_) )
+            if (xi < ni_ && xj < nj_)
               img(xi,xj) = 0;
           }
         }
