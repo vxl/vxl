@@ -5,6 +5,78 @@
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <vgl/vgl_box_3d.h>
 
+bool boxm2_volm_wr3db_index_params::write_params_file(vcl_string index_file_name)
+{
+  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  vcl_ofstream ofs(index_params_file.c_str());
+  if (!ofs.is_open())
+    return false;
+  ofs << "start " << start << vcl_endl;
+  ofs << "skip " << skip << vcl_endl;
+  ofs << "vmin " << vmin << vcl_endl;
+  ofs << "dmax " << dmax << vcl_endl;
+  ofs << "solid_angle " << solid_angle << vcl_endl;
+  ofs << "cap_angle " << cap_angle << vcl_endl;
+  ofs << "point_angle " << point_angle << vcl_endl;
+  ofs << "top_angle " << top_angle << vcl_endl;
+  ofs << "bottom_angle " << bottom_angle << vcl_endl;
+  ofs.close();
+  return true;
+}
+
+bool boxm2_volm_wr3db_index_params::read_params_file(vcl_string index_file_name)
+{
+  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  vcl_ifstream ifs(index_params_file.c_str());
+  if (!ifs.is_open())
+    return false;
+  vcl_string tmp;
+  ifs >> tmp >> start;
+  ifs >> tmp >> skip;
+  ifs >> tmp >> vmin;
+  ifs >> tmp >> dmax;
+  ifs >> tmp >> solid_angle;
+  ifs >> tmp >> cap_angle;
+  ifs >> tmp >> point_angle;
+  ifs >> tmp >> top_angle;
+  ifs >> tmp >> bottom_angle;
+  ifs.close();
+  return true;
+}
+bool boxm2_volm_wr3db_index_params::query_params_equal(boxm2_volm_wr3db_index_params& p1, boxm2_volm_wr3db_index_params& p2)
+{
+  return p1.bottom_angle == p2.bottom_angle && 
+         p1.cap_angle == p2.cap_angle && 
+         p1.dmax == p2.dmax && 
+         p1.point_angle == p2.point_angle && 
+         p1.solid_angle == p2.solid_angle &&
+         p1.top_angle == p2.top_angle && 
+         p1.vmin == p2.vmin;
+}
+
+
+bool boxm2_volm_wr3db_index_params::write_size_file(vcl_string index_file_name, unsigned long indexed_cnt)
+{
+  vcl_string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
+  vcl_ofstream ofs(index_size_file.c_str());
+  if (!ofs.is_open())
+    return false;
+  ofs << indexed_cnt << "\n";
+  ofs.close();
+  return true;
+}
+bool boxm2_volm_wr3db_index_params::read_size_file(vcl_string index_file_name, unsigned long& size)
+{
+  vcl_string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
+  vcl_ifstream ifs(index_size_file.c_str());
+  if (!ifs.is_open())
+    return false;
+  ifs >> size;
+  ifs.close();
+  return true;
+}
+    
+
 boxm2_volm_wr3db_index::boxm2_volm_wr3db_index(int layer_size, float buffer_capacity) : 
 layer_size_(layer_size), buffer_size_(0), current_id_(0), current_global_id_(0), m_(NOT_INITIALIZED), file_name_(""), active_buffer_(0) 
 {
@@ -30,8 +102,9 @@ bool boxm2_volm_wr3db_index::initialize_write(vcl_string file_name)
     this->finalize();
   m_ = WRITE;
   file_name_ = file_name;
-  f_obj_.open(file_name.c_str(), vcl_ios::app | vcl_ios::binary);
-  if (!f_obj_.good())
+  //f_obj_.open(file_name.c_str(), vcl_ios::app | vcl_ios::binary);
+  of_obj_.open(file_name.c_str(), vcl_ios::binary);
+  if (!of_obj_.good())
     return false;
   current_id_ = 0;
   current_global_id_ = 0;
@@ -44,8 +117,8 @@ bool boxm2_volm_wr3db_index::initialize_read(vcl_string file_name)
     this->finalize();
   m_ = READ;
   file_name_ = file_name;
-  f_obj_.open(file_name.c_str(), vcl_ios::in | vcl_ios::binary);
-  if (!f_obj_.good())
+  if_obj_.open(file_name.c_str(), vcl_ios::in | vcl_ios::binary);
+  if (!if_obj_.good())
     return false;
   current_id_ = 0;
   current_global_id_ = 0;
@@ -56,9 +129,12 @@ bool boxm2_volm_wr3db_index::initialize_read(vcl_string file_name)
 bool boxm2_volm_wr3db_index::finalize() 
 {
   if (m_ == WRITE && current_id_ != 0) { // write whatever is on the cache
-    f_obj_.write((char*)active_buffer_, (long)(current_id_*layer_size_));  
+    of_obj_.write((char*)active_buffer_, (long)(current_id_*layer_size_));  
+    of_obj_.close();
   }
-  f_obj_.close();
+  if (m_ == READ)
+    if_obj_.close();
+  
   m_ = NOT_INITIALIZED;
   return true;
 }
@@ -78,7 +154,7 @@ bool boxm2_volm_wr3db_index::add_to_index(vcl_vector<uchar>& values)
   }
   if (current_id_ == buffer_size_) {  // write the current cache 
     // initiate a write
-    f_obj_.write((char*)active_buffer_, (long)(buffer_size_*layer_size_));
+    of_obj_.write((char*)active_buffer_, (long)(buffer_size_*layer_size_));
     current_id_ = 0;
   }
   
@@ -98,7 +174,7 @@ if (m_ == READ) {
   }
   if (current_id_ == buffer_size_) {  // write the current cache 
     // initiate a write
-    f_obj_.write((char*)active_buffer_, (long)(buffer_size_*layer_size_));
+    of_obj_.write((char*)active_buffer_, (long)(buffer_size_*layer_size_));
     current_id_ = 0;
   }
   
@@ -113,11 +189,11 @@ unsigned int boxm2_volm_wr3db_index::read_to_buffer(uchar* buf)
 {
   long remaining = file_size_-read_so_far_;
   if ((long)(buffer_size_*layer_size_) <= remaining) {
-    f_obj_.read((char*)buf, (long)(buffer_size_*layer_size_));   
+    if_obj_.read((char*)buf, (long)(buffer_size_*layer_size_));   
     read_so_far_ += (long)(buffer_size_*layer_size_);
     return buffer_size_;
   } else if (remaining > 0) {
-    f_obj_.read((char*)buf, remaining);   
+    if_obj_.read((char*)buf, remaining);   
     read_so_far_ += remaining;
     return remaining/layer_size_;
   } else 

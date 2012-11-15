@@ -40,6 +40,28 @@
 
 #define uchar unsigned char
 
+class boxm2_volm_wr3db_index_params 
+{
+  public: 
+    
+    bool write_params_file(vcl_string index_file_name);
+    bool read_params_file(vcl_string index_file_name);
+    static bool write_size_file(vcl_string index_file_name, unsigned long size);
+    static bool read_size_file(vcl_string index_file_name, unsigned long& size);
+    static bool query_params_equal(boxm2_volm_wr3db_index_params& p1, boxm2_volm_wr3db_index_params& p2);
+    
+  public:
+    unsigned start;
+    unsigned skip;
+    float vmin;
+    float dmax;
+    float solid_angle;
+    float cap_angle;
+    float point_angle;
+    float top_angle;
+    float bottom_angle;
+};
+
 class boxm2_volm_wr3db_index : public vbl_ref_count
 {
   public:
@@ -94,7 +116,9 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     unsigned long read_so_far_;
     unsigned int active_buffer_size_;  // during reading there may be less than buffer_size_ on the active cache
     
-    vcl_fstream f_obj_;
+    //vcl_fstream f_obj_; // had issues on Linux..
+    vcl_ifstream if_obj_;
+    vcl_ofstream of_obj_;
 };
 
 #endif  // boxm2_volm_wr3db_index_h_
