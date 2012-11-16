@@ -65,4 +65,9 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_kml_process, "boxm2SceneKmlProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ingest_convex_mesh_process, "boxm2IngestConvexMeshProcess");
   REG_PROCESS_FUNC_CONS2(boxm2_add_aux_info_to_ply_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_lidar_to_xyz_process, "boxm2LidarToXYZProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_dem_to_xyz_process2, "boxm2DemToXYZProcess2");
+
+  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_fetch_alpha_process, "boxm2SceneReadingAlphaProcess");
+  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_crop_img_process, "boxm2CreateCropImgProcess");
 }
