@@ -29,50 +29,49 @@ static void test_volm_wr3db_index()
   vis_prob.resize(sph2->get_voxels().size());
   boxm2_volm_wr3db_index::inflate_index_vis_and_prob(values, sph2, vis_prob);
   sph2->draw_template_vis_prob("./container2.vrml", 0.0, vis_prob);
-  
-  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, 90.0, 30.0);
 
-    // test io
-    int layer_size = (int)sph_shell->get_container_size();
-    boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, 1.0f);
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, 90.0, 30.0, 0.0, 0.0);
 
-    vcl_vector<unsigned char> vals(layer_size, 0);
-    vals[0] = 'a'; vals[3] = 'c';
-  
-    vul_file::delete_file_glob("./test_ind.bin");
-    TEST("initialize write", ind->initialize_write("./test_ind.bin"), true);
-    // now fill up the active cache twice! before the second fill the first batch needs to be written to disc
-    for (unsigned i = 0; i < ind->buffer_size(); i++)
-      ind->add_to_index(vals);
-    // the one below should trigger a write to disc
-    vals[0] = 'b';  vals[layer_size-1] = 'd';
-    TEST("add to index", ind->add_to_index(vals), true);
-    unsigned char *vals_buf = new unsigned char[layer_size];
-    vals_buf[0] = 'e';  vals_buf[layer_size-1] = 'f';
-    TEST("add to index", ind->add_to_index(vals_buf), true);
-    vcl_cout << "global id: " << ind->current_global_id() << " current active cache id: " << ind->current_id() << vcl_endl;
-  
-    TEST("finalize write", ind->finalize(), true);
+  // test io
+  int layer_size = (int)sph_shell->get_container_size();
+  boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, 1.0f);
 
-    boxm2_volm_wr3db_index_sptr ind2 = ind;
-  
-    // initialize_read() finalizes write operations in case there is any active write operation
-    TEST("initialize read", ind2->initialize_read("./test_ind.bin"), true);
-    TEST("global id", ind2->current_global_id(), 0);
-  
-    vcl_vector<unsigned char> vals2(layer_size);
-    TEST("getting the first index", ind2->get_next(vals2), true);
-    TEST("test index 0", vals2[0] == 'a', true);
-    TEST("test index 0", vals2[3] == 'c', true);
-    for (unsigned i = 0; i < ind->buffer_size()-1; i++)
-      ind2->get_next(vals2);
+  vcl_vector<unsigned char> vals(layer_size, 0);
+  vals[0] = 'a'; vals[3] = 'c';
+
+  vul_file::delete_file_glob("./test_ind.bin");
+  TEST("initialize write", ind->initialize_write("./test_ind.bin"), true);
+  // now fill up the active cache twice! before the second fill the first batch needs to be written to disc
+  for (unsigned i = 0; i < ind->buffer_size(); i++)
+    ind->add_to_index(vals);
+  // the one below should trigger a write to disc
+  vals[0] = 'b';  vals[layer_size-1] = 'd';
+  TEST("add to index", ind->add_to_index(vals), true);
+  unsigned char *vals_buf = new unsigned char[layer_size];
+  vals_buf[0] = 'e';  vals_buf[layer_size-1] = 'f';
+  TEST("add to index", ind->add_to_index(vals_buf), true);
+  vcl_cout << "global id: " << ind->current_global_id() << " current active cache id: " << ind->current_id() << vcl_endl;
+
+  TEST("finalize write", ind->finalize(), true);
+
+  boxm2_volm_wr3db_index_sptr ind2 = ind;
+
+  // initialize_read() finalizes write operations in case there is any active write operation
+  TEST("initialize read", ind2->initialize_read("./test_ind.bin"), true);
+  TEST("global id", ind2->current_global_id(), 0);
+
+  vcl_vector<unsigned char> vals2(layer_size);
+  TEST("getting the first index", ind2->get_next(vals2), true);
+  TEST("test index 0", vals2[0] == 'a', true);
+  TEST("test index 0", vals2[3] == 'c', true);
+  for (unsigned i = 0; i < ind->buffer_size()-1; i++)
     ind2->get_next(vals2);
-    unsigned char *vals_buf2 = new unsigned char[layer_size];
-    ind2->get_next(vals_buf2);
-    TEST("test index end", vals_buf2[0] == 'e', true);
-    TEST("test index end", vals_buf2[layer_size-1] == 'f', true);
-    TEST("finalize read", ind2->finalize(), true);
-  
+  ind2->get_next(vals2);
+  unsigned char *vals_buf2 = new unsigned char[layer_size];
+  ind2->get_next(vals_buf2);
+  TEST("test index end", vals_buf2[0] == 'e', true);
+  TEST("test index end", vals_buf2[layer_size-1] == 'f', true);
+  TEST("finalize read", ind2->finalize(), true);
 }
 
 TESTMAIN(test_volm_wr3db_index);
@@ -81,7 +80,7 @@ TESTMAIN(test_volm_wr3db_index);
   float vmin = 10.0f;  // min voxel resolution
   float dmax = 60000.0f;
   float solid_angle = 4.0f;
-  
+
   volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle,vmin,dmax);
   vcl_vector<volm_voxel>& voxels = sph->get_voxels();
   int data_size = 1; // 1 byte if only vis values will be indexed, otherwise its 2 bytes
@@ -115,7 +114,7 @@ TESTMAIN(test_volm_wr3db_index);
   vcl_string out_name = out_file() + "_volm_index_" + tiles[i].get_string() + ".bin";
   if (!ind->write_index(out_name))
     vcl_cerr << "Problems writing index: " << out_name << vcl_endl;
-    
+
   for (unsigned i = 0; i < tiles.size(); i++) {
     vcl_string name = out_file() + "_volm_index_" + tiles[i].get_string() + ".bin";
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(sph);
