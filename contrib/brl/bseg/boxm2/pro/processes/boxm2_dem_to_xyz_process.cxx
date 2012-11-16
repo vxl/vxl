@@ -116,7 +116,6 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   }
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
-  vgl_vector_3d<unsigned> dims = scene->scene_dimensions();
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
   if (blks.size() < 1)
     return false;
@@ -166,27 +165,25 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y())/vox_length);
 
   vcl_cout <<"ni: " << ni << " nj: " << nj << vcl_endl;
-  vcl_cout.flush();
 
   // create x y z images
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
-  out_img_x->fill((float)(scene_bbox.min_x())-10.0f);  // local coord system min z
-  out_img_y->fill((float)(scene_bbox.min_y())-10.0f);  // local coord system min z
+  out_img_x->fill((float)(scene_bbox.min_x())-10.0f); // local coord system min z
+  out_img_y->fill((float)(scene_bbox.min_y())-10.0f); // local coord system min z
   out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
-  vcl_cout << "out img x(0,0): " << ((*out_img_x)(0,0)) << vcl_endl; vcl_cout.flush();
-  vcl_cout << "out img y(0,0): " << ((*out_img_y)(0,0)) << vcl_endl; vcl_cout.flush();
-  vcl_cout << "out img z(0,0): " << ((*out_img_z)(0,0)) << vcl_endl; vcl_cout.flush();
+  vcl_cout <<   "out img x(0,0): " << ((*out_img_x)(0,0))
+           << "\nout img y(0,0): " << ((*out_img_y)(0,0))
+           << "\nout img z(0,0): " << ((*out_img_z)(0,0)) << vcl_endl;
 
   double lon,lat,gz;
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84,lon, lat, gz);
   vcl_cout << "lvcs origin height: " << gz << vcl_endl;
   gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
   gz += scene_bbox.min_z();
-  
-  vcl_cout << " scene min z: " << scene_bbox.min_z() << " gz: " << gz << vcl_endl; 
-  vcl_cout.flush();
+
+  vcl_cout << " scene min z: " << scene_bbox.min_z() << " gz: " << gz << vcl_endl;
   if (fill_in_value <= 0)
     fill_in_value = vcl_numeric_limits<float>::max();
 
@@ -277,7 +274,6 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
   vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
-  vgl_vector_3d<unsigned> dims = scene->scene_dimensions();
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
   if (blks.size() < 1)
     return false;
@@ -378,9 +374,9 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vcl_string geotiff_fname = pro.get_input<vcl_string>(1);
-  double geoid_height = pro.get_input<double>(2);
+  double geoid_height = pro.get_input<double>(2); // TODO: unused!
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(3);
-  float fill_in_value = pro.get_input<float>(4);
+  float fill_in_value = pro.get_input<float>(4); // TODO: unused!
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
 
@@ -398,7 +394,6 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   }
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
-  vgl_vector_3d<unsigned> dims = scene->scene_dimensions();
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
   if (blks.size() < 1)
     return false;
@@ -422,15 +417,14 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
 
   unsigned int min_i = min_uu > 0 ? (unsigned int)min_uu : 0;
   unsigned int min_j = max_vv > 0 ? (unsigned int)max_vv : 0;  // scene box min projects to lower left corner of the scene in the image
-  
+
   int ni = max_uu-min_uu+1 < orig_dem_ni ? (int)(max_uu-min_uu+1) : orig_dem_ni;
   int nj = min_vv-max_vv+1 < orig_dem_nj ? (int)(min_vv-max_vv+1) : orig_dem_nj;
-  
-  vcl_cout <<"min_uu: " << min_uu << " min_vv: " << min_vv << vcl_endl;
-  vcl_cout <<"max_uu: " << max_uu << " max_vv: " << max_vv << vcl_endl;
-  vcl_cout <<"min_i: " << min_i << " min_j: " << min_j << " ni: " << ni << " nj: " << nj << vcl_endl;
-  vcl_cout.flush();
-  
+
+  vcl_cout <<  "min_uu: " << min_uu << " min_vv: " << min_vv
+           <<"\nmax_uu: " << max_uu << " max_vv: " << max_vv
+           <<"\nmin_i: " << min_i << " min_j: " << min_j << " ni: " << ni << " nj: " << nj << vcl_endl;
+
   vil_image_view_base_sptr dem_view_base = dem_res->get_view(min_i, ni, min_j, nj);
   vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
   if (!dem_view) {
@@ -451,15 +445,11 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
     dem_view = new vil_image_view<float>(temp);
   }
   vcl_cout <<"got dem image!" << vcl_endl;
-  vcl_cout.flush();
 
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
   float sb_length = info->block_len;
-  vcl_cout <<"sb_length: " << sb_length << "!\n" << vcl_endl;
-  vcl_cout.flush();
-
-  vcl_cout <<"ni: " << ni << " nj: " << nj << vcl_endl;
-  vcl_cout.flush();
+  vcl_cout <<"sb_length: " << sb_length << "!\n\n"
+           <<"ni: " << ni << " nj: " << nj << vcl_endl;
 
   // create x y z images
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
@@ -468,9 +458,9 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   out_img_x->fill((float)(scene_bbox.min_x())-10.0f);  // local coord system min z
   out_img_y->fill((float)(scene_bbox.min_y())-10.0f);  // local coord system min z
   out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
-  vcl_cout << "out img x(0,0): " << ((*out_img_x)(0,0)) << vcl_endl; vcl_cout.flush();
-  vcl_cout << "out img y(0,0): " << ((*out_img_y)(0,0)) << vcl_endl; vcl_cout.flush();
-  vcl_cout << "out img z(0,0): " << ((*out_img_z)(0,0)) << vcl_endl; vcl_cout.flush();
+  vcl_cout <<   "out img x(0,0): " << ((*out_img_x)(0,0))
+           << "\nout img y(0,0): " << ((*out_img_y)(0,0))
+           << "\nout img z(0,0): " << ((*out_img_z)(0,0)) << vcl_endl;
 
   for (int i = 0; i < ni; ++i)
     for (int j = 0; j < nj; ++j) {
@@ -483,9 +473,8 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
       vgl_point_3d<double> pt(lx, ly, lz);
       (*out_img_x)(i,j) = (float)lx;
       (*out_img_y)(i,j) = (float)ly;
-      (*out_img_z)(i,j) = (float)lz;           
+      (*out_img_z)(i,j) = (float)lz;
     }
-  
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
