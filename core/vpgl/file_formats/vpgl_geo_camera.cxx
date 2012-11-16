@@ -11,6 +11,7 @@
 
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_utm.h>
+#include <vul/vul_file.h>
 
 #include <vil/file_formats/vil_geotiff_header.h>
 #include <vil/file_formats/vil_tiff.h>
@@ -101,6 +102,33 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
     vcl_cout << "vpgl_geo_camera::init_geo_camera()-- if UTM only PCS_WGS84_UTM and PCS_NAD83_UTM, if geographic (GCS_WGS_84) only linear units in meters, angular units in degrees are supported, please define otherwise!" << vcl_endl;
     return false;
   }
+}
+
+//: warning specific to 'N' and 'W' cameras, TODO: generalize 
+bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
+{
+  // determine the translation matrix from the image file name and construct a geo camera
+  vcl_string name = vul_file::strip_directory(img_name);
+  name = name.substr(name.find_first_of('_')+1, name.size());
+  vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
+  vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
+  float lon, lat, scale;
+  vcl_stringstream str(n); str >> lat; 
+  n = name.substr(name.find_first_of('W')+1, name.find_first_of('_'));
+  vcl_stringstream str2(n); str2 >> lon; 
+  n = name.substr(name.find_first_of('x')+1, name.find_last_of('.'));
+  vcl_stringstream str3(n); str3 >> scale;
+  vcl_cout << " lat: " << lat << " lon: " << lon << " WARNING: using same scale for both ni and nj: scale:" << scale << vcl_endl;
+  
+  // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
+  vcl_cout << "upper left corner in the image is: " << lat+scale << " N " << lon << " W " << vcl_endl;
+  vcl_cout << "lower right corner in the image is: " << lat << " N " << lon-scale << " W " << vcl_endl;
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  trans_matrix[0][0] = -scale/ni; trans_matrix[1][1] = -scale/nj;
+  trans_matrix[0][3] = lon; trans_matrix[1][3] = lat+scale;
+  camera = new vpgl_geo_camera(trans_matrix, lvcs); 
+  camera->set_scale_format(true);
+  return true;
 }
 
 //: transforms a given local 3d world point to image plane

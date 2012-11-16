@@ -42,6 +42,11 @@ class vpgl_geo_camera : public vpgl_camera<double>
   static bool init_geo_camera(vil_image_resource_sptr const geotiff_img,
                               vpgl_lvcs_sptr lvcs,
                               vpgl_geo_camera*& camera);
+  
+  //: warning, use this camera cautiously, the output of img_to_global method needs to be adjusted sign wise 
+  //  for 'S' use -lat and for 'W' -lon 
+  //  TODO: generalize geo_camera so that img_to_global method makes this adjustment internally if camera is created using this method
+  static bool init_geo_camera(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
 
   ~vpgl_geo_camera() {}
 
