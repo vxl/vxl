@@ -114,7 +114,6 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
 
   //make correct data types are here
-  bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type,num_obs_type,options;
 
   if (use_sum) {
@@ -270,7 +269,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
           //load tree
           boxm2_block_metadata mdata = blk_iter->second;
           vul_timer transfer;
-          bocl_mem* blk       = opencl_cache->get_block(blk_iter->first);
+          /* bocl_mem* blk = */ opencl_cache->get_block(blk_iter->first);
           bocl_mem* blk_info  = opencl_cache->loaded_block_info();
           boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
           info_buffer->data_buffer_length = (int) (normals->num_bytes()/normalsTypeSize);

@@ -72,7 +72,6 @@ int main(int argc,  char** argv)
     x[0]= cam_center.x(); x[1] = cam_center.y() ; x[2] =cam_center.z();
     x[3]= 0.0; x[4] = 0.0 ; x[5] =0.0;
     boxm2_ocl_reg_depth_map_to_vol func(cam,fimg,cache,device,2);
-    double mi_max = 0.0;
     vul_timer t;
     t.mark();
     vil_image_view<float> output(49,31);

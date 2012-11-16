@@ -145,7 +145,7 @@ bool boxm2_ocl_update_alpha_wcubic_process(bprb_func_process& pro)
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
 
   //make correct data types are here
-  bool foundDataType = false, foundNumObsType = false;
+  bool foundDataType = false;
   vcl_string data_type,num_obs_type="boxm2_num_obs",options;
   vcl_vector<vcl_string> apps = scene->appearances();
   int appTypeSize;

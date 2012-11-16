@@ -58,7 +58,6 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
                              ray_ds = helper.ray_ds_,
                              ray_os = helper.ray_os_,
                              lookups = helper.lookups_;
-  vcl_size_t maxBlocks = helper.maxBlocks_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   vcl_vector<bocl_mem_sptr> vis_mems, pre_mems, norm_mems;
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
@@ -265,7 +264,6 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
   vcl_vector<cl_command_queue>& queues = helper.queues_;
   vcl_vector<bocl_mem_sptr>& out_imgs = helper.outputs_,
                              lookups = helper.lookups_;
-  vcl_size_t maxBlocks = helper.maxBlocks_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
 
   //Only bother updating the visible groups
@@ -288,7 +286,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       bocl_kernel* kern = kerns[1];
 
       //write the image values to the buffer
-      bocl_mem* blk       = ocl_cache->get_block(id);
+      /* bocl_mem* blk = */ ocl_cache->get_block(id);
       bocl_mem* blk_info  = ocl_cache->loaded_block_info();
       bocl_mem* alpha     = ocl_cache->get_data<BOXM2_ALPHA>(id,0,false);
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();

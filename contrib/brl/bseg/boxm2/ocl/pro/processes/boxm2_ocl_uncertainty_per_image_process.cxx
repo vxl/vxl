@@ -141,7 +141,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
 
     //make correct data types are here
-    bool foundDataType = false, foundNumObsType = false;
+    bool foundDataType = false;
     vcl_string data_type,num_obs_type="boxm2_num_obs",options;
     vcl_vector<vcl_string> apps = scene->appearances();
     int appTypeSize;
@@ -407,6 +407,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 kern->set_arg( blk );
                 kern->set_arg( alpha );
                 kern->set_arg( mog );
+                kern->set_arg( num_obs );
                 kern->set_arg( aux0 );
                 kern->set_arg( aux1 );
                 kern->set_arg( aux2 );
@@ -445,8 +446,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 boxm2_block_metadata mdata = scene->get_block_metadata(*id);
                 bocl_kernel* kern =  kernels[identifier][i];
                 //write the image values to the buffer
-                vul_timer transfer;
-                bocl_mem* blk       = opencl_cache->get_block(*id);
+                /* bocl_mem* blk = */ opencl_cache->get_block(*id);
                 bocl_mem* blk_info  = opencl_cache->loaded_block_info();
                 bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
                 boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();

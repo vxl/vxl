@@ -36,11 +36,11 @@ using namespace boxm2_ocl_change_detection_globals;
 //--------------------------------------------------
 //verifies data type for scene
 //--------------------------------------------------
-bool boxm2_ocl_change_detection_globals::get_scene_appearances( boxm2_scene_sptr    scene,
-    vcl_string&         data_type,
-    vcl_string&         num_obs_type,
-    vcl_string&         options,
-    int&                apptypesize)
+bool boxm2_ocl_change_detection_globals::get_scene_appearances( boxm2_scene_sptr scene,
+                                                                vcl_string&      data_type,
+                                                                vcl_string&      num_obs_type,
+                                                                vcl_string&      options,
+                                                                int&             apptypesize)
 {
     vcl_vector<vcl_string> apps = scene->appearances();
     bool foundDataType = false, foundNumObsType = false;
@@ -83,16 +83,16 @@ vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_change_detection::kerne
 
 //main change detect function
 bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change_img,
-    vil_image_view<vxl_byte>& rgb_change_img,
-    bocl_device_sptr          device,
-    boxm2_scene_sptr          scene,
-    boxm2_opencl_cache_sptr   opencl_cache,
-    vpgl_camera_double_sptr   cam,
-    vil_image_view_base_sptr  img,
-    vil_image_view_base_sptr  exp_img,
-    int                       n,
-    vcl_string                norm_type,
-    bool                      pmax )
+                                                vil_image_view<vxl_byte>& rgb_change_img,
+                                                bocl_device_sptr          device,
+                                                boxm2_scene_sptr          scene,
+                                                boxm2_opencl_cache_sptr   opencl_cache,
+                                                vpgl_camera_double_sptr   cam,
+                                                vil_image_view_base_sptr  img,
+                                                vil_image_view_base_sptr  exp_img,
+                                                int                       n,
+                                                vcl_string                norm_type,
+                                                bool                      pmax )
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -104,7 +104,6 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     vcl_size_t  global_threads[2] = {8,8};
 
     //---- get scene info -----
-    bool foundDataType = false, foundNumObsType = false;
     vcl_string data_type,num_obs_type,options;
     int apptypesize;
     get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize);
@@ -519,7 +518,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
 
     //if not, compile and cache them
     vcl_cout<<"===========Compiling multi update kernels===========\n"
-        <<"  for device: "<<device->device_identifier()<<vcl_endl;
+            <<"  for device: "<<device->device_identifier()<<vcl_endl;
 
     //gather all render sources... seems like a lot for rendering...
     vcl_vector<vcl_string> src_paths;
@@ -543,11 +542,11 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel = new bocl_kernel();
     ray_trace_kernel->create_kernel( &device->context(),
-        device->device_id(),
-        src_paths,
-        "change_detection_bit_scene",   //kernel name
-        opts,              //options
-        "boxm2 1x1 ocl change detection"); //kernel identifier (for error checking)
+                                     device->device_id(),
+                                     src_paths,
+                                     "change_detection_bit_scene",   //kernel name
+                                     opts,              //options
+                                     "boxm2 1x1 ocl change detection"); //kernel identifier (for error checking)
 
     //create nxn kernel
     vcl_stringstream pthresh;
@@ -555,11 +554,11 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
     opts += pthresh.str();
     bocl_kernel * nxn_kernel = new bocl_kernel();
     nxn_kernel->create_kernel( &device->context(),
-        device->device_id(),
-        src_paths,
-        "nxn_change_detection",
-        opts,
-        "boxm2 nxn ocl change detection kernel");
+                               device->device_id(),
+                               src_paths,
+                               "nxn_change_detection",
+                               opts,
+                               "boxm2 nxn ocl change detection kernel");
 
     //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
@@ -567,11 +566,11 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
     normalize_render_kernel->create_kernel( &device->context(),
-        device->device_id(),
-        norm_src_paths,
-        "normalize_change_kernel",   //kernel name
-        options,              //options
-        "normalize change detection kernel"); //kernel identifier (for error checking)
+                                            device->device_id(),
+                                            norm_src_paths,
+                                            "normalize_change_kernel",   //kernel name
+                                            options,              //options
+                                            "normalize change detection kernel"); //kernel identifier (for error checking)
 
     //store in a vector in the map and return
     vcl_vector<bocl_kernel*> vec_kernels;
@@ -659,15 +658,15 @@ double boxm2_ocl_change_detection::mutual_information_2d(const vnl_vector<double
 vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_two_pass_change::kernels_;
 
 bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_img,
-    bocl_device_sptr          device,
-    boxm2_scene_sptr          scene,
-    boxm2_opencl_cache_sptr   opencl_cache,
-    vpgl_camera_double_sptr   cam,
-    vil_image_view_base_sptr  img,
-    vil_image_view_base_sptr  exp_img,
-    int                       n,
-    vcl_string                norm_type,
-    bool                      pmax )
+                                              bocl_device_sptr          device,
+                                              boxm2_scene_sptr          scene,
+                                              boxm2_opencl_cache_sptr   opencl_cache,
+                                              vpgl_camera_double_sptr   cam,
+                                              vil_image_view_base_sptr  img,
+                                              vil_image_view_base_sptr  exp_img,
+                                              int                       n,
+                                              vcl_string                norm_type,
+                                              bool                      pmax )
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -679,7 +678,6 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
     vcl_size_t  global_threads[2] = {8,8};
 
     //---- get scene info -----
-    bool foundDataType = false, foundNumObsType = false;
     vcl_string data_type,num_obs_type,options;
     int apptypesize;
     get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize);
@@ -1066,7 +1064,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
 
     //if not, compile and cache them
     vcl_cout<<"===========Compiling two pass change kernels===========\n"
-        <<"  for device: "<<device->device_identifier()<<vcl_endl;
+            <<"  for device: "<<device->device_identifier()<<vcl_endl;
 
     //gather all render sources... seems like a lot for rendering...
     vcl_vector<vcl_string> src_paths;
@@ -1086,33 +1084,34 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
     vcl_string seg_options = opts + " -D CHANGE_SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
     bocl_kernel* seg_len = new bocl_kernel();
     seg_len->create_kernel( &device->context(),
-        device->device_id(),
-        src_paths,
-        "change_seg_len",   //kernel name
-        seg_options,              //options
-        "boxm2 change seg len (pass 1)"); //kernel identifier (for error checking)
+                            device->device_id(),
+                            src_paths,
+                            "change_seg_len",   //kernel name
+                            seg_options,              //options
+                            "boxm2 change seg len (pass 1)"); //kernel identifier (for error checking)
 
     //pass two, change detection
     vcl_string change_options = opts + " -D CHANGE -D STEP_CELL=step_cell_change(aux_args,data_ptr,llid,d) ";
     bocl_kernel* change_kernel = new bocl_kernel();
     change_kernel->create_kernel( &device->context(),
-        device->device_id(),
-        src_paths,
-        "two_pass_change_kernel",   //kernel name
-        change_options,              //options
-        "boxm2 two pass change kernel (pass 2)"); //kernel identifier (for error checking)
-
+                                  device->device_id(),
+                                  src_paths,
+                                  "two_pass_change_kernel",   //kernel name
+                                  change_options,              //options
+                                  "boxm2 two pass change kernel (pass 2)"); //kernel identifier (for error checking)
+#if 0
     //create nxn kernel
-    //vcl_stringstream pthresh;
-    //pthresh<<" -D PROB_THRESH="<<PROB_THRESH<<"  ";
-    //opts += pthresh.str();
-    //bocl_kernel * nxn_kernel = new bocl_kernel();
-    //nxn_kernel->create_kernel( &device->context(),
-    //device->device_id(),
-    //src_paths,
-    //"nxn_change_detection",
-    //opts,
-    //"boxm2 nxn ocl change detection kernel");
+    vcl_stringstream pthresh;
+    pthresh<<" -D PROB_THRESH="<<PROB_THRESH<<"  ";
+    opts += pthresh.str();
+    bocl_kernel * nxn_kernel = new bocl_kernel();
+    nxn_kernel->create_kernel( &device->context(),
+                               device->device_id(),
+                               src_paths,
+                               "nxn_change_detection",
+                               opts,
+                               "boxm2 nxn ocl change detection kernel");
+#endif // 0
 
     //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
@@ -1121,11 +1120,11 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
     vcl_string norm_opts = opts + " -D CHANGE ";
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
     normalize_render_kernel->create_kernel( &device->context(),
-        device->device_id(),
-        norm_src_paths,
-        "normalize_change_kernel",   //kernel name
-        norm_opts,                   //options
-        "normalize change detection kernel"); //kernel identifier (for error checking)
+                                            device->device_id(),
+                                            norm_src_paths,
+                                            "normalize_change_kernel",   //kernel name
+                                            norm_opts,                   //options
+                                            "normalize change detection kernel"); //kernel identifier (for error checking)
 
     //store in a vector in the map and return
     vcl_vector<bocl_kernel*> vec_kernels;
@@ -1140,12 +1139,12 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
 vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_aux_pass_change::kernels_;
 
 bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_img,
-    bocl_device_sptr          device,
-    boxm2_scene_sptr          scene,
-    boxm2_opencl_cache_sptr   opencl_cache,
-    vpgl_camera_double_sptr   cam,
-    vil_image_view_base_sptr  img,
-    bool max_density)
+                                              bocl_device_sptr          device,
+                                              boxm2_scene_sptr          scene,
+                                              boxm2_opencl_cache_sptr   opencl_cache,
+                                              vpgl_camera_double_sptr   cam,
+                                              vil_image_view_base_sptr  img,
+                                              bool max_density)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -1157,7 +1156,6 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     vcl_size_t  global_threads[2] = {8,8};
 
     //---- get scene info -----
-    bool foundDataType = false, foundNumObsType = false;
     vcl_string data_type,num_obs_type,options;
     int apptypesize;
     get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize);
@@ -1264,10 +1262,10 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
         transfer_time += (float) transfer.all();
 
-       
+
         //3. SET args
-        bool good = aux0->zero_gpu_buffer(queue,true);
-        bool good1 = aux1->zero_gpu_buffer(queue,true);
+        aux0->zero_gpu_buffer(queue,true);
+        aux1->zero_gpu_buffer(queue,true);
         kern->set_arg( blk_info );
         kern->set_arg( blk );
         kern->set_arg( alpha );
@@ -1353,34 +1351,36 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     change_image->read_to_buffer(queue);
     vis_image->read_to_buffer(queue);
 
-    ////----------------------------------------------------------------------------
-    //// STEP THREE: Do normalize pass on change image
-    ////----------------------------------------------------------------------------
-    //bocl_kernel* normalize_change_kernel =  kerns[2];
-    //{
-    //  // Image Dimensions
-    //  int rbelief_buff[1] = {1};
-    //  bocl_mem_sptr rbelief = new bocl_mem(device->context(), rbelief_buff, sizeof(int), "rbelief buffer");
-    //  rbelief->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+#if 0
+    //----------------------------------------------------------------------------
+    // STEP THREE: Do normalize pass on change image
+    //----------------------------------------------------------------------------
+    bocl_kernel* normalize_change_kernel =  kerns[2];
+    {
+      // Image Dimensions
+      int rbelief_buff[1] = {1};
+      bocl_mem_sptr rbelief = new bocl_mem(device->context(), rbelief_buff, sizeof(int), "rbelief buffer");
+      rbelief->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-    //  //true vis buff
-    //  bocl_mem_sptr vis_two = new bocl_mem(device->context(), true_vis, sizeof(float)*cl_ni*cl_nj, "oi=0,oj=0 visibility");
-    //  vis_two->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+      //true vis buff
+      bocl_mem_sptr vis_two = new bocl_mem(device->context(), true_vis, sizeof(float)*cl_ni*cl_nj, "oi=0,oj=0 visibility");
+      vis_two->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-    //  normalize_change_kernel->set_arg( change_image.ptr() );
-    //  normalize_change_kernel->set_arg( change_exp_image.ptr() );
-    //  normalize_change_kernel->set_arg( vis_two.ptr() );
-    //  normalize_change_kernel->set_arg( img_dim.ptr());
-    //  normalize_change_kernel->set_arg( rbelief.ptr());
-    //  normalize_change_kernel->execute( queue, 2, local_threads, global_threads);
-    //  clFinish(queue);
-    //  gpu_time += normalize_change_kernel->exec_time();
+      normalize_change_kernel->set_arg( change_image.ptr() );
+      normalize_change_kernel->set_arg( change_exp_image.ptr() );
+      normalize_change_kernel->set_arg( vis_two.ptr() );
+      normalize_change_kernel->set_arg( img_dim.ptr());
+      normalize_change_kernel->set_arg( rbelief.ptr());
+      normalize_change_kernel->execute( queue, 2, local_threads, global_threads);
+      clFinish(queue);
+      gpu_time += normalize_change_kernel->exec_time();
 
-    //  //clear render kernel args so it can reset em on next execution
-    //  normalize_change_kernel->clear_args();
-    //}
-    //// read out expected image
-    //change_image->read_to_buffer(queue);
+      //clear render kernel args so it can reset em on next execution
+      normalize_change_kernel->clear_args();
+    }
+    // read out expected image
+    change_image->read_to_buffer(queue);
+#endif // 0
     vcl_cout<<"Change Detection GPU Time: " << gpu_time << " ms" << vcl_endl;
 
     //----------------------------------------------------------------------------
@@ -1404,8 +1404,6 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     opencl_cache->unref_mem(ray_o_buff.ptr());
     opencl_cache->unref_mem(ray_d_buff.ptr());
 
-      
-      
     clReleaseCommandQueue(queue);
     return true;
 }
@@ -1419,12 +1417,12 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_spt
 
     //if not, compile and cache them
     vcl_cout<<"===========Compiling two pass change kernels===========\n"
-        <<"  for device: "<<device->device_identifier()<<vcl_endl;
+            <<"  for device: "<<device->device_identifier()<<vcl_endl;
 
     //gather all render sources... seems like a lot for rendering...
     vcl_vector<vcl_string> src_paths;
     vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
-    src_paths.push_back(source_dir + "scene_info.cl");  
+    src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
@@ -1436,47 +1434,47 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_spt
     src_paths.push_back(source_dir + "update_functors.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    
+
     //pass one, seglen
     vcl_string seg_options = opts + "  -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
     bocl_kernel* seg_len = new bocl_kernel();
     seg_len->create_kernel( &device->context(),
-        device->device_id(),
-        src_paths,
-        "seg_len_main",   //kernel name
-        seg_options,              //options
-        "boxm2 accumulate intensity (pass 1)"); //kernel identifier (for error checking)
+                            device->device_id(),
+                            src_paths,
+                            "seg_len_main",   //kernel name
+                            seg_options,              //options
+                            "boxm2 accumulate intensity (pass 1)"); //kernel identifier (for error checking)
 
     //pass two, change detection
-    
+
     vcl_string change_options;
-    
-    if(maxdensity)
+
+    if (maxdensity)
         change_options = opts + " -D AUX_CHANGE -D STEP_CELL=step_cell_change2_maxdensity(aux_args,data_ptr,llid,d) ";
     else
         change_options = opts + " -D AUX_CHANGE -D STEP_CELL=step_cell_change2(aux_args,data_ptr,llid,d) ";
-    
+
     bocl_kernel* change_kernel = new bocl_kernel();
     change_kernel->create_kernel( &device->context(),
-        device->device_id(),
-        src_paths,
-        "aux_pass_change_kernel",   //kernel name
-        change_options,              //options
-        "boxm2 aux pass change kernel (pass 2)"); //kernel identifier (for error checking)
-
-
-    //create normalize image kernel
-    //vcl_vector<vcl_string> norm_src_paths;
-    //norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
-    //norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    //vcl_string norm_opts = opts + " -D CHANGE ";
-    //bocl_kernel * normalize_render_kernel=new bocl_kernel();
-    //normalize_render_kernel->create_kernel( &device->context(),
-    //                                        device->device_id(),
-    //                                        norm_src_paths,
-    //                                        "normalize_change_kernel",   //kernel name
-    //                                        norm_opts,                   //options
-    //                                        "normalize change detection kernel"); //kernel identifier (for error checking)
+                                  device->device_id(),
+                                  src_paths,
+                                  "aux_pass_change_kernel",   //kernel name
+                                  change_options,              //options
+                                  "boxm2 aux pass change kernel (pass 2)"); //kernel identifier (for error checking)
+#if 0
+    create normalize image kernel
+    vcl_vector<vcl_string> norm_src_paths;
+    norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
+    norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
+    vcl_string norm_opts = opts + " -D CHANGE ";
+    bocl_kernel * normalize_render_kernel=new bocl_kernel();
+    normalize_render_kernel->create_kernel( &device->context(),
+                                            device->device_id(),
+                                            norm_src_paths,
+                                            "normalize_change_kernel",   //kernel name
+                                            norm_opts,                   //options
+                                            "normalize change detection kernel"); //kernel identifier (for error checking)
+#endif
 
     //store in a vector in the map and return
     vcl_vector<bocl_kernel*> vec_kernels;
@@ -1486,5 +1484,4 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_spt
     kernels_[identifier] = vec_kernels;
     return kernels_[identifier];
 }
-
 

@@ -360,7 +360,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
       }
       int status = clFinish(queue);
       if (status != 0) {
-        vcl_cerr << "status: " << status << "  INDEX EXECUTE FAILED: " + error_to_string(status) << vcl_endl;
+        vcl_cerr << "status: " << status << "  INDEX EXECUTE FAILED: " + error_to_string(status) << '\n';
         return false;
       }
       gpu_time += kern->exec_time();
@@ -498,8 +498,6 @@ bool boxm2_partition_hypotheses_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  float transfer_time=0.0f;
-  float gpu_time=0.0f;
 
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
@@ -530,7 +528,7 @@ bool boxm2_partition_hypotheses_process(bprb_func_process& pro)
   {
     vgl_point_3d<float> h_pt;
     if (!hyp.get_next(h_pt)) {
-      vcl_cerr << "!!Problem retrieving hyp: " << hi << " from file: " << hyp_file << vcl_endl;
+      vcl_cerr << "!!Problem retrieving hyp: " << hi << " from file: " << hyp_file << '\n';
       return false;
     }
     double lx, ly, lz;
@@ -586,8 +584,6 @@ bool boxm2_hypotheses_kml_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  float transfer_time=0.0f;
-  float gpu_time=0.0f;
 
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;

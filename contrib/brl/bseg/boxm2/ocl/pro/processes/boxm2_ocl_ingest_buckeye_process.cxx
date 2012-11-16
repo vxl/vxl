@@ -233,7 +233,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
         int count4 = count*4;
         double full_i = min_i + i + 0.5;
         double full_j = min_j + j + 0.5;
-        double lat,lon,el, x, y, z_first, z_last;
+        double lat,lon, x, y, z_first, z_last;
         double el_first = (*a1_view)(i,j) + geoid_height;
         double el_last = (*a2_view)(i,j) + geoid_height;
         geocam->img_to_global(full_i, full_j,  lon, lat);
@@ -409,7 +409,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     int datasize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     vcl_cout << "datasize = " << datasize << vcl_endl;
     int data_len = int(alpha_data->buffer_length() / boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix()));
-    vcl_cout << "data length = " << data_len << vcl_endl
+    vcl_cout << "data length = " << data_len << '\n'
              << "Updating Alpha values.." << vcl_endl;
     boxm2_data_leaves_serial_iterator<alpha_update_from_opinion_functor>(block, data_len, update_func);
     vcl_cout << "Done updating Alpha values." << vcl_endl;

@@ -5,7 +5,7 @@
 // \brief A process to interpolate the responses of first order derivatives filters into a normal
 // \author Ali Osman Ulusoy
 // \verbatim
-//  Modifications :
+//  Modifications
 //   April 17, 2012  Isabel Restrepo: Take the vector of filters an input. This provides filter names, number and orientation
 // \endverbatim
 // \date Feb 13, 2011
@@ -166,7 +166,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
     //load tree and alpha
     boxm2_block_metadata data = blk_iter->second;
     vul_timer transfer;
-    bocl_mem* blk       = opencl_cache->get_block(blk_iter->first);
+    /* bocl_mem* blk = */ opencl_cache->get_block(blk_iter->first);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
     bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(blk_iter->first,0,true);
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();

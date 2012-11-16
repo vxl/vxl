@@ -69,7 +69,6 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
                              ray_ds = helper.ray_ds_,
                              ray_os = helper.ray_os_,
                              lookups = helper.lookups_;
-  vcl_size_t maxBlocks = helper.maxBlocks_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and its cache
@@ -159,9 +158,9 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
 }
 
 //: Reads aux memory from GPU to CPU ram
-void boxm2_multi_store_aux::read_aux(const boxm2_block_id& id,
-                                           boxm2_opencl_cache* opencl_cache,
-                                           cl_command_queue&   queue)
+void boxm2_multi_store_aux::read_aux(boxm2_block_id const& id,
+                                     boxm2_opencl_cache*   opencl_cache,
+                                     cl_command_queue&     queue)
 {
   //calc data buffer length
   bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(id,0,false);
@@ -176,20 +175,20 @@ void boxm2_multi_store_aux::read_aux(const boxm2_block_id& id,
 }
 
 //: helper to call ocl kernel - stores aux per block
-void boxm2_multi_store_aux::store_aux_per_block(const boxm2_block_id&     id,
-                                                      boxm2_scene_sptr    scene,
-                                                      boxm2_opencl_cache* opencl_cache,
-                                                      cl_command_queue&   queue,
-                                                      bocl_kernel*        kernel,
-                                                      bocl_mem_sptr&      in_image,
-                                                      bocl_mem_sptr&      img_dim,
-                                                      bocl_mem_sptr&      ray_o_buff,
-                                                      bocl_mem_sptr&      ray_d_buff,
-                                                      bocl_mem_sptr&      cl_output,
-                                                      bocl_mem_sptr&      lookup,
-                                                      vcl_size_t*         lthreads,
-                                                      vcl_size_t*         gThreads,
-                                                      bool                store_rgb)
+void boxm2_multi_store_aux::store_aux_per_block(boxm2_block_id const& id,
+                                                boxm2_scene_sptr      scene,
+                                                boxm2_opencl_cache*   opencl_cache,
+                                                cl_command_queue&     queue,
+                                                bocl_kernel*          kernel,
+                                                bocl_mem_sptr&        in_image,
+                                                bocl_mem_sptr&        img_dim,
+                                                bocl_mem_sptr&        ray_o_buff,
+                                                bocl_mem_sptr&        ray_d_buff,
+                                                bocl_mem_sptr&        cl_output,
+                                                bocl_mem_sptr&        lookup,
+                                                vcl_size_t*           lthreads,
+                                                vcl_size_t*           gThreads,
+                                                bool                  store_rgb)
 {
   //vcl_cout<<(*id);
   //choose correct render kernel
@@ -211,7 +210,6 @@ void boxm2_multi_store_aux::store_aux_per_block(const boxm2_block_id&     id,
   blk_info->write_to_buffer(queue);
 
   //grab an appropriately sized AUX data buffer
-  int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
   bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(id, dataLen*boxm2_data_traits<BOXM2_AUX0>::datasize());
   bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(id, dataLen*boxm2_data_traits<BOXM2_AUX1>::datasize());
   aux0->zero_gpu_buffer(queue);

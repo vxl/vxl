@@ -74,8 +74,6 @@ int main(int argc,  char** argv)
   //-----------------------------------------------------------
   //render setup
   //-----------------------------------------------------------
-  float mean_time=0.0f;
-  int num_renders = 5;
   boxm2_multi_render renderer;
   int ni=1280, nj=720;
 
@@ -138,6 +136,7 @@ int main(int argc,  char** argv)
 
   float totalTime = t.all();
   vcl_cout<<"----------------------------------------\n"
+          <<" total time:        "<<totalTime/1000.0f<<" seconds\n"
           <<" total update time: "<<total_update_time/1000.0f<<" seconds\n"
           <<" total GPU time:    "<<total_gpu_time / 1000.0f<<" seconds\n"
           <<" GPU Time/Total Time:"<< total_gpu_time / total_update_time << '\n'

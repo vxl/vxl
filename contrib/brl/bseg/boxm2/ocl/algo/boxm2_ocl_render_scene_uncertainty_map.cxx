@@ -152,9 +152,11 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     phi_inc =  (phi_max-phi_min)/(float)(cl_ni)  ;
     theta_inc = (theta_max-theta_min)/ (float) (cl_nj) ;
 
+#if 0 // unused
     double radius = 10*vcl_sqrt(scene_bbox.width()*scene_bbox.width()+
-                             scene_bbox.depth()*scene_bbox.depth()+
-                             scene_bbox.height()*scene_bbox.height());
+                                scene_bbox.depth()*scene_bbox.depth()+
+                                scene_bbox.height()*scene_bbox.height());
+#endif
     for (unsigned j = 0 ; j < cl_nj; j++)
     {
         for (unsigned i = 0 ; i < cl_ni; i++)
@@ -207,7 +209,6 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         bocl_mem* blk       = opencl_cache->get_block(*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-        int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         // data type string may contain an identifier so determine the buffer size
         transfer_time += (float) transfer.all();
         //3. SET args
@@ -282,7 +283,9 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     vnl_float_4 x =boxm2_ocl_render_scene_uncertainty_map::compute_cubic_trajectory( phi_min,phi_max,theta_min,theta_max,exp_image);
     radial_image->set_size(cl_ni,cl_ni);
 
+#if 0 // unused
     float radial_phi_inc =  (phi_max-phi_min)/((float)cl_ni/vcl_sqrt(2.0))  ;
+#endif
     float radial_theta_inc = (theta_max-theta_min)/ ((float)cl_ni/vcl_sqrt(2.0))  ;
     float img_center_x = (float) cl_ni/2;
     float img_center_y = (float) cl_ni/2;
@@ -355,7 +358,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         vgl_point_3d<double> cc= pcam->get_camera_center();
         vgl_vector_3d<double> ray = cc - center;
 
-        float theta = vcl_acos( ray.z()/ray.length());
+        // float theta = vcl_acos(ray.z()/ray.length());
         float phi = vcl_atan2(ray.y(),ray.x());
 
         float r = vcl_floor((theta_max-theta_min)/radial_theta_inc/2);

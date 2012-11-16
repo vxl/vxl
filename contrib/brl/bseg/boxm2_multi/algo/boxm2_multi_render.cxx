@@ -363,8 +363,8 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     delete[] e;
   }
   float combine_time = (float) rtime.all();
-  vcl_cout<<"\nMulti Render Time: "<<combine_time + pre_time<<" ms"<<vcl_endl
-          <<"  pre_time (gpu+overhead): "<<pre_time<<" ms"<<vcl_endl
+  vcl_cout<<"\nMulti Render Time: "<<combine_time + pre_time<<" ms\n"
+          <<"  pre_time (gpu+overhead): "<<pre_time<<" ms\n"
           <<"  combine time (end):      "<<combine_time<<" ms"<<vcl_endl;
   return (float) combine_time+pre_time;
 #endif //Using second block method (commented out)
@@ -413,9 +413,6 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
     bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
-    //2. set global thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
     vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);

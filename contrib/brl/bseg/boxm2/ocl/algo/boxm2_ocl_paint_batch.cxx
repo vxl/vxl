@@ -107,7 +107,8 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   long totalSize = sizeof(int)*data_buff_length + (all_obs.size()+all_vis.size())*sizeof(vxl_byte);
   unsigned int numSamps = (unsigned int) all_obs.size();
   float time = (float) t.all();
-  vcl_cout<<"  num cells: "<<data_buff_length<<"; "
+  vcl_cout<<"  total time: "<<time<<"; "
+          <<"  num cells: "<<data_buff_length<<"; "
           <<"  num samps: "<<numSamps<<" = "<< (float)(numSamps/data_buff_length)<<" samples per cell (avg)\n"
           <<"  total size: "<<(float)totalSize/1024.0f/1024.0f<<" mb in "<<t.all()<<" ms ("<<stream_time<<" ms in stream cache)"<<vcl_endl;
 
@@ -135,7 +136,7 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   //write the image values to the buffer
   int mogTypeSize     = (int) boxm2_data_info::datasize(data_type);
   vul_timer transfer;
-  bocl_mem* blk       = opencl_cache->get_block(id);
+  /* bocl_mem* blk = */ opencl_cache->get_block(id);
   bocl_mem* mog       = opencl_cache->get_data(id, data_type, data_buff_length*mogTypeSize, false);
   bocl_mem* blk_info  = opencl_cache->loaded_block_info();
 
@@ -167,7 +168,7 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   vcl_cout<<" Batch paint block GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
 
   // clean up cmdqueue
-  opencl_cache->clear_cache(); 
+  opencl_cache->clear_cache();
   vcl_cout<<"Opencl Cache: "<<opencl_cache->to_string()<<vcl_endl;
   clReleaseCommandQueue(queue);
   delete[] sampleIndex;

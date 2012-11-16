@@ -61,16 +61,13 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
   }
 
   //divy up the blocks
-  const int nDev = sub_scenes_.size();
-  int dev_id=0;
-
   //iterate over groups in x/y
   for (int startX=min_ids.x(); startX<max_ids.x()+1; startX+=groupSizeX) {
     for (int startY=min_ids.y(); startY<max_ids.y()+1; startY+=groupSizeY) {
       //create a block group
       boxm2_multi_cache_group* grp = new boxm2_multi_cache_group;
       //add the vertical row of blocks to scene with dev_id
-      dev_id = 0;
+      int dev_id = 0;
       for (int i=0; i<groupSizeX; ++i) {
         for (int j=0; j<groupSizeY; ++j) {
           for (int k=min_ids.z(); k<max_ids.z()+1; ++k) {

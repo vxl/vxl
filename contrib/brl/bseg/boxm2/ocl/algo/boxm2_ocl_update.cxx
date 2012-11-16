@@ -122,10 +122,6 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
     norm_buff[i]=0.0f;
   }
 
-  //determine min/max i and j
-  unsigned int min_i=1000000000, max_i=0;
-  unsigned int min_j=1000000000, max_j=0;
-
   //copy input vals into image
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {

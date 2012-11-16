@@ -103,7 +103,7 @@ bool boxm2_ocl_probability_of_image_wcubic_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
-  
+
   brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
   pro.set_input(5, idx);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -132,7 +132,7 @@ bool boxm2_ocl_probability_of_image_wcubic_process(bprb_func_process& pro)
   vcl_string image_identifier =pro.get_input<vcl_string>(i++);
   unsigned ni=img->ni();
   unsigned nj=img->nj();
-  bool foundDataType = false, foundNumObsType = false;
+  bool foundDataType = false;
   vcl_string data_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
@@ -148,7 +148,7 @@ bool boxm2_ocl_probability_of_image_wcubic_process(bprb_func_process& pro)
     return false;
   }
 
-  if(data_identifier!="")
+  if (data_identifier!="")
       data_type = data_type+"_"+data_identifier;
 
 //: create a command queue.
@@ -187,10 +187,9 @@ bool boxm2_ocl_probability_of_image_wcubic_process(bprb_func_process& pro)
   float* prob_image_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
   {
-      vis_buff[i]=1.0f;
-      prob_image_buff[i]=0.0f;
+    vis_buff[i]=1.0f;
+    prob_image_buff[i]=0.0f;
   }
-  int count=0;
 
   bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_image_buff,cl_ni*cl_nj*sizeof(float),"expected image buffer");
   prob_image->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -237,12 +236,12 @@ bool boxm2_ocl_probability_of_image_wcubic_process(bprb_func_process& pro)
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
     blk_info->write_to_buffer((queue));
-    
+
     bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*mogTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
     vcl_string aux0_datatype = boxm2_data_traits<BOXM2_AUX0>::prefix(image_identifier);
-    bocl_mem* aux0       = opencl_cache->get_data(*id,aux0_datatype,alpha->num_bytes(),false);    
+    bocl_mem* aux0       = opencl_cache->get_data(*id,aux0_datatype,alpha->num_bytes(),false);
     vcl_string aux1_datatype = boxm2_data_traits<BOXM2_AUX1>::prefix(image_identifier);
-    bocl_mem* aux1       = opencl_cache->get_data(*id,aux1_datatype,alpha->num_bytes(),false);    
+    bocl_mem* aux1       = opencl_cache->get_data(*id,aux1_datatype,alpha->num_bytes(),false);
 
     transfer_time += (float) transfer.all();
 
@@ -275,7 +274,7 @@ bool boxm2_ocl_probability_of_image_wcubic_process(bprb_func_process& pro)
     kern->clear_args();
   }
 
-#if 1 
+#if 1
   // normalize
   bocl_kernel* normalize_prob_image_kernel =  kernels[identifier][1];
   {

@@ -86,7 +86,6 @@ static void lm_phongs_model(vnl_vector<double> & x,
   vnl_levenberg_marquardt lm(f);
 
   lm.set_verbose(true);
-  double min_error=1e5;
   lm.minimize(x);
 
   vcl_cout<<"\nSolution: "

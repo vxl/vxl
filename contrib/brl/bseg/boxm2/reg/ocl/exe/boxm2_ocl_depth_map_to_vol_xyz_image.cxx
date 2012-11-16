@@ -116,7 +116,6 @@ int main(int argc,  char** argv)
   double mi = -func.f(x);
   vcl_cout << "Initial value at " << x[0] << ", " << x[1] << ", " << x[2] << " is " << mi << vcl_endl;
   ofs << x[0] << ' ' << x[1] << ' ' << mi << '\n';
-  double mi_max = 0.0;
 
   double best_x = x[0]; double best_y = x[1]; double best_z = x[2];
   double best_mi = mi;

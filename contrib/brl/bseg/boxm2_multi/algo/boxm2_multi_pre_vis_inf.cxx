@@ -67,7 +67,6 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
                              ray_ds = helper.ray_ds_,
                              ray_os = helper.ray_os_,
                              lookups = helper.lookups_;
-  vcl_size_t maxBlocks = helper.maxBlocks_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   vcl_vector<bocl_mem_sptr> vis_mems, pre_mems, visInfMems, preInfMems;
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
@@ -91,12 +90,13 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   //initialize per group images (vis/pre)
   vcl_vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
   vul_timer t; t.mark();
-  float gpu_time = 0.0f, cpu_time = 0.0f, transfer_time = 0.0f;
+  float gpu_time = 0.0f, cpu_time = 0.0f;
 
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
-  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
+  for (unsigned int grpId=0; grpId<grp.size(); ++grpId)
+  {
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
     vcl_vector<int> indices = group.order_from_cam(cam);
@@ -153,8 +153,10 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
       //next update the vis and pre images
       clFinish(queues[i]);
+#if 0 // gpu_time will be overwritten after this for loop
       if (idx+1 == indices.size())
         gpu_time += t.all();
+#endif
       vis_mems[i]->read_to_buffer(queues[i]);
       pre_mems[i]->read_to_buffer(queues[i]);
       float* v = (float*) vis_mems[i]->cpu_buffer();

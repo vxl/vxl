@@ -76,8 +76,6 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  float transfer_time=0.0f;
-  float gpu_time=0.0f;
   //get the inputs
   unsigned i = 0;
   bocl_device_sptr device             = pro.get_input<bocl_device_sptr>(i++);
@@ -152,7 +150,6 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
 
     //grab an appropriately sized AUX data buffer
-    int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
     bocl_kernel * kern = kernels[(device->device_id())][0];
     str_blk_cache.init(*id);
 

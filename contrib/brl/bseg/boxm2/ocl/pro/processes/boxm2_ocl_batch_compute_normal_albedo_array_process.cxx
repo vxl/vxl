@@ -83,8 +83,6 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
       vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
       return false;
    }
-   float transfer_time=0.0f;
-   float gpu_time=0.0f;
    //get the inputs
    bocl_device_sptr device             = pro.get_input<bocl_device_sptr>(0);
    boxm2_scene_sptr scene              = pro.get_input<boxm2_scene_sptr>(1);
@@ -255,7 +253,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    vcl_vector<boxm2_block_id>::iterator id;
    for (id = block_ids.begin(); id != block_ids.end(); ++id)
    {
-      bocl_mem* blk       = opencl_cache->get_block(*id);
+      /* bocl_mem* blk = */ opencl_cache->get_block(*id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
       bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,true);
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());

@@ -77,8 +77,6 @@ bool boxm2_ocl_batch_synoptic_phongs_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  float transfer_time=0.0f;
-  float gpu_time=0.0f;
   //get the inputs
   unsigned i = 0;
   bocl_device_sptr device             = pro.get_input<bocl_device_sptr>(i++);
@@ -156,7 +154,7 @@ bool boxm2_ocl_batch_synoptic_phongs_process(bprb_func_process& pro)
   {
     //choose correct render kernel
 
-    bocl_mem* blk       = opencl_cache->get_block(*id);
+    /* bocl_mem* blk = */ opencl_cache->get_block(*id);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
     bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,true);
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());

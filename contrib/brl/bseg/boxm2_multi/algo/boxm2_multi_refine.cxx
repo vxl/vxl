@@ -29,7 +29,6 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   vcl_cout<<"------------ boxm2_multi_render -----------------------"<<vcl_endl;
   //verify appearance model
   vul_timer rtime; rtime.mark();
-  vcl_size_t lthreads[2] = {64,1};
   vcl_string data_type, options;
   int apptypesize;
   if ( !boxm2_multi_util::get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) )
@@ -127,7 +126,6 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   //------------------------------------------------------------------
   //STEP TWO: read out tree_sizes and do cumulative sum on it
   //------------------------------------------------------------------
-  unsigned num_cells     = 0;     //number of cells in the scene after refine
   unsigned num_refined   = 0;     //number of cells that split
   for (unsigned int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
@@ -364,10 +362,6 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
     kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
     kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
     kern->set_local_arg( lThreads[0]*73*sizeof(cl_uchar) );
-
-    //set workspace
-    vcl_size_t lThreads[] = {64, 1};
-    vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
     //execute kernel
     kern->execute( queue, 2, lThreads, gThreads);

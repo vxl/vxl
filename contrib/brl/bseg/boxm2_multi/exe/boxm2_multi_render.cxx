@@ -49,9 +49,11 @@ void test_render_expected_images(boxm2_scene_sptr scene,
   //////////////////////////////////////////////////////////////////////////////
   // Has to be done on each render
   //setup image size
+#ifdef DEBUG
   int num_renders = 10;
-  for (unsigned int i=0; i<cams.size(); ++i) {
-
+#endif
+  for (unsigned int i=0; i<cams.size(); ++i)
+  {
     //set up brdb_value_sptr arguments... (for generic passing)
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device);
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
