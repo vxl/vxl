@@ -131,21 +131,21 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type, num_obs_type, num_obs_type_short, options;
   vcl_vector<vcl_string> apps = scene->appearances();
-  int appTypeSize;
+  // int appTypeSize;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+      // appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+      // appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {

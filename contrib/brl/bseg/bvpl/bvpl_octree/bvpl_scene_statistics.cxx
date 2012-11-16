@@ -28,7 +28,7 @@ double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int bloc
     unsigned long sample = rng.lrand32(tree_ncells-1);
 
     boct_tree_cell<short, float> *center_cell = leaves[sample];
-    vgl_point_3d<double> center_cell_centroid = tree->global_centroid(center_cell);
+    // vgl_point_3d<double> center_cell_centroid = tree->global_centroid(center_cell);
 
     //if neighborhood is not inclusive we would have missing features
     if ((double)center_cell->data()< -0.5) {
@@ -63,7 +63,7 @@ double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int bloc
   for (unsigned i=0; i<leaves.size(); i++)
   {
     boct_tree_cell<short, float> *center_cell = leaves[i];
-    vgl_point_3d<double> center_cell_centroid = tree->global_centroid(center_cell);
+    // vgl_point_3d<double> center_cell_centroid = tree->global_centroid(center_cell);
 
     //if neighborhood is not inclusive we would have missing features
     if ((double)center_cell->data()< -0.5) {

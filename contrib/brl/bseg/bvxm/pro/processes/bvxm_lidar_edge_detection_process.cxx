@@ -60,14 +60,9 @@ bool bvxm_lidar_edge_detection_process(bprb_func_process& pro)
     return false;
   }
 
-  bool is_input_float = true;
-  if (input_pixel_format == VIL_PIXEL_FORMAT_BYTE){
-    is_input_float = false;
-  }
-  else if (input_pixel_format == VIL_PIXEL_FORMAT_FLOAT){
-    is_input_float = true;
-  }
-  else {
+  if (input_pixel_format != VIL_PIXEL_FORMAT_BYTE &&
+      input_pixel_format != VIL_PIXEL_FORMAT_FLOAT)
+  {
     vcl_cout << "this process only accepts vxl_float or vxl_byte pixel formats\n";
     return false;
   }

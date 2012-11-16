@@ -18,6 +18,7 @@ static void test_boxm_rational_camera_utils()
 
   rcam->project(495,431,200,u,v);
   vgl_plane_3d<double>  plane_parallel=boxm_rational_camera_utils::boxm_find_parallel_image_plane(rcam,top,bottom,ni,nj);
+  // TODO: do something with plane_parallel !
 }
 
 TESTMAIN(test_boxm_rational_camera_utils);

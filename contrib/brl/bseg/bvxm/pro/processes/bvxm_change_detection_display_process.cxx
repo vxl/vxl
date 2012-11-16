@@ -132,11 +132,9 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
                                           (int)vcl_floor(prob_image_scale*j) );
 #endif
       float this_prob = 1.0f;
-      float original_prob = 0.0f;
       unsigned original_prob_byte = 0;
 
       if ( prob_image(i,j) < prob_thresh && mask_image(i,j)) {
-        original_prob = prob_image (i, j);
         this_prob = prob_image( i,j )/(prob_thresh);
       }
 

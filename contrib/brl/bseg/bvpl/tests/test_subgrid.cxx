@@ -35,7 +35,6 @@ static void test_subgrid()
   // fill with test data
   float init_val = 0.5f;
   grid->initialize_data(init_val);
-  bool init_check = true;
 
   grid->increment_observations();
 
@@ -49,7 +48,6 @@ static void test_subgrid()
     for (vit = slab_it->begin(); vit != slab_it->end(); vit++, count++) {
       if (*vit != init_val) {
         vcl_cerr << "error: read in value does not match init value! count = " << count << '\n';
-        init_check = false;
       }
       // write new value
       *vit = static_cast<float>(count);

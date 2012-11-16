@@ -1821,22 +1821,19 @@ void segv_vil_segmentation_manager::create_polygon()
 {
   bgui_picker_tableau_sptr ptab = selected_picker_tab();
   if (!ptab) {
-    vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - "
-             << "no picker tableau\n";
+    vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - no picker tableau\n";
     return;
   }
   vsol_polygon_2d_sptr poly2d;
   ptab->pick_polygon(poly2d);
   if (!poly2d)
   {
-    vcl_cerr << "In segv_vil_segmentation_manager::create_polygon() - "
-             << "picking failed\n";
+    vcl_cerr << "In segv_vil_segmentation_manager::create_polygon() - picking failed\n";
     return;
   }
   bgui_vtol2D_tableau_sptr btab = selected_vtol2D_tab();
   if (!btab) {
-    vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - "
-             << "no vtol2D tableau\n";
+    vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - no vtol2D tableau\n";
     return;
   }
 //  btab->add(poly2d);
@@ -2157,8 +2154,7 @@ void segv_vil_segmentation_manager::gradient_mag_angle()
   vil_image_resource_sptr img = selected_image();
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::gradient_mag_angle() - "
-             << " no image\n";
+    vcl_cout << "In segv_vil_segmentation_manager::gradient_mag_angle() -  no image\n";
     return;
   }
   unsigned ni = img->ni(), nj = img->nj();

@@ -398,7 +398,8 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   if (blks.size() < 1)
     return false;
 
-  unsigned orig_dem_ni = dem_res->ni(); unsigned orig_dem_nj = dem_res->nj();
+  unsigned orig_dem_ni = dem_res->ni(),
+           orig_dem_nj = dem_res->nj();
   vcl_cout << "original dem resolution: " << orig_dem_ni << ' ' << orig_dem_nj << vcl_endl;
   brip_roi broi(orig_dem_ni, orig_dem_nj);
   vsol_box_2d_sptr bb = new vsol_box_2d();

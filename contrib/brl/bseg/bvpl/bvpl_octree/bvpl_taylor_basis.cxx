@@ -132,7 +132,7 @@ double bvpl_taylor_basis::sum_errors(boxm_scene_base_sptr error_scene_base,
     unsigned long sample = rng.lrand32(tree_ncells-1);
 
     boct_tree_cell<short, float> *center_cell = error_leaves[sample];
-    vgl_point_3d<double> center_cell_centroid = error_tree->global_centroid(center_cell);
+    // vgl_point_3d<double> center_cell_centroid = error_tree->global_centroid(center_cell);
 
     //if neighborhood is not inclusive we would have missing features
     if ((double)center_cell->data()< -0.5){

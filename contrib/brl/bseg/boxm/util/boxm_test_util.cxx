@@ -105,7 +105,6 @@ vcl_vector<vpgl_camera_double_sptr> generate_cameras_diagonal(vgl_box_3d<double>
     vgl_point_3d<double> camera_center  = centers[i];
     vpgl_perspective_camera<double> persp_cam;
     generate_persp_camera(boxm_focal_length, principal_point, boxm_x_scale, boxm_y_scale, camera_center, persp_cam);
-    vgl_point_3d<double> c = diag.point_t(0.5);
     persp_cam.look_at(vgl_homg_point_3d<double>(0,0,0)); //camera_center.x()+10, camera_center.y()+10, camera_center.z()));
     cameras.push_back(new vpgl_perspective_camera<double>(persp_cam));
   }
@@ -137,7 +136,6 @@ vcl_vector<vpgl_camera_double_sptr> generate_cameras_circular(vgl_box_3d<double>
     vgl_point_3d<double> camera_center  = centers[i];
     vpgl_perspective_camera<double> persp_cam;
     generate_persp_camera(boxm_focal_length, principal_point, boxm_x_scale, boxm_y_scale, camera_center, persp_cam);
-    //vgl_point_3d<double> c = diag.point_t(0.5);
     persp_cam.look_at(vgl_homg_point_3d<double>(0,0,0)); //camera_center.x()+10, camera_center.y()+10, camera_center.z()));
     cameras.push_back(new vpgl_perspective_camera<double>(persp_cam));
   }

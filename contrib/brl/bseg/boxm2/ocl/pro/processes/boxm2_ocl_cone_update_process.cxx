@@ -49,7 +49,7 @@ namespace boxm2_ocl_cone_update_process_globals
       src_paths.push_back(source_dir + "statistics_library_functions.cl");
       src_paths.push_back(source_dir + "cone/update_cone_kernels.cl");
       vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
-      src_paths.push_back(source_dir + "cone/cone_util.cl"); 
+      src_paths.push_back(source_dir + "cone/cone_util.cl");
       src_paths.push_back(source_dir + "cone/cast_cone_ray.cl");
 
       //compilation options
@@ -133,21 +133,20 @@ bool boxm2_ocl_cone_update_process(bprb_func_process& pro)
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type,num_obs_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
-  int appTypeSize;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+      // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+      // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {

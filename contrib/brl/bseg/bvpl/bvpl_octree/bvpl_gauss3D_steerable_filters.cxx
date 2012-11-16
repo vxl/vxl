@@ -443,8 +443,6 @@ bool bvpl_gauss3D_steerable_filters::rotation_invariant_interpolation(boxm_scene
       continue;
     }
 
-    vgl_point_3d<double> center_cell_centroid = cell_it.global_centroid();
-
     vnl_vector_fixed<float, DIM_> responses=center_cell->data();
 
     vgl_vector_3d<float> grad(responses[1], responses[2],responses[3]);

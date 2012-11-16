@@ -70,30 +70,26 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
     }
   }
 
-  bool iscolor = false;
-
-  if (scene->has_data_type("boxm2_gauss_rgb"))
-    iscolor = true ;
-
-  //vil3d_image_view<unsigned char> img3d;
-
   if (opacity_only)
     boxm2_export_stack_images_function::export_opacity_stack_images(scene,cache,outdir);
-  //else
-  //{
-  //  if (!iscolor)
-  //    boxm2_export_stack_images_function::export_greyscale_stack_images(scene,cache,img3d);
-  //  else
-  //    boxm2_export_stack_images_function::export_color_stack_images(scene,cache,img3d);
-  //}
-  //for (unsigned k = 0 ;  k < img3d.nk() ;  k ++)
-  //{
-  //  vil_image_view<unsigned char> img = vil3d_slice_ji(img3d,k);
-  //  vcl_stringstream ss;
-  //  ss<<outdir<<"/img_"<<vcl_setw(5) << vcl_setfill('0') << k<<".png";
-  //  vcl_cout<<"Filename : "<<ss.str()<<vcl_endl;
-  //  vil_save(img,ss.str().c_str());
-  //}
+#if 0
+  else
+  {
+    vil3d_image_view<unsigned char> img3d;
+    if (scene->has_data_type("boxm2_gauss_rgb"))
+      boxm2_export_stack_images_function::export_greyscale_stack_images(scene,cache,img3d);
+    else
+      boxm2_export_stack_images_function::export_color_stack_images(scene,cache,img3d);
+  }
+  for (unsigned k = 0 ;  k < img3d.nk() ;  k ++)
+  {
+    vil_image_view<unsigned char> img = vil3d_slice_ji(img3d,k);
+    vcl_stringstream ss;
+    ss<<outdir<<"/img_"<<vcl_setw(5) << vcl_setfill('0') << k<<".png";
+    vcl_cout<<"Filename : "<<ss.str()<<vcl_endl;
+    vil_save(img,ss.str().c_str());
+  }
+#endif
 
   return true;
 }

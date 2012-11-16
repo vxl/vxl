@@ -53,7 +53,7 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
 
     //proc norm pass computes the proc_norm image, mean_obs for each cell
     bocl_kernel* pass_one = new bocl_kernel();
-    vcl_string one_opts = options + " -D PASSONE "; 
+    vcl_string one_opts = options + " -D PASSONE ";
     one_opts += " -D IMG_TYPE=float ";
     one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) ";
     one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
@@ -63,7 +63,7 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
     //computes bayes ratio for each cell
     bocl_kernel* bayes_main = new bocl_kernel();
     vcl_string bayes_opt = options + " -D BAYES ";
-    bayes_opt += " -D IMG_TYPE=float "; 
+    bayes_opt += " -D IMG_TYPE=float ";
     bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  ";
     bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
     bayes_opt += " -D REDISTRIBUTE=redistribute(aux_args,data_ptr,intersect_volume)  ";
@@ -128,21 +128,20 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type,num_obs_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
-  int appTypeSize;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+      // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+      // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {
@@ -180,7 +179,7 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
   }
 
   //run ocl cone update function
-  float gpu_time = boxm2_ocl_adaptive_cone_update( scene,
+  float gpu_time = boxm2_ocl_adaptive_cone_update(scene,
                                                   device,
                                                   opencl_cache,
                                                   kernels[identifier],

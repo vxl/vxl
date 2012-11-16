@@ -48,20 +48,19 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type, num_obs_type;
   vcl_vector<vcl_string> apps = scene->appearances();
-  int appTypeSize;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+      // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
 
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+      // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {

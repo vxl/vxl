@@ -64,12 +64,12 @@ bool test_edge3d()
   bvpl_create_directions_b dir;
   bvpl_kernel_vector_sptr kernel_3d_vecs = kernel_3d.create_kernel_vector(dir);
 
+#if 0
   vcl_vector< bvpl_kernel_sptr >::iterator iter=kernel_3d_vecs->begin();
 
   for (;iter!=kernel_3d_vecs->end();iter++)
   {
     vnl_float_3 axis=(*iter)->axis();
-#if 0
     vcl_ostringstream s;
     s.precision(2);
     s << "D:/vj/scripts/Lidar_edges/test_masks/"
@@ -78,8 +78,8 @@ bool test_edge3d()
       << axis[2] << ".raw";
 
     (*iter)->save_raw(s.str());
-#endif
   }
+#endif
   return true;
 }
 

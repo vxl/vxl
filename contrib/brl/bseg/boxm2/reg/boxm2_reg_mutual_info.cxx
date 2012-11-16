@@ -75,9 +75,9 @@ void align_samples(boxm2_cache_sptr& cacheA,
   vgl_point_3d<double> minPoint = roi.min_point() + sbDim / 2.0;
   vgl_point_3d<double> maxPoint = roi.max_point();
 
+#if 0 // Warning: unused!
   //total points
   vgl_vector_3d<double> n = (maxPoint - minPoint);
-#if 0 // Warning: unused!
   unsigned totalPoints = (int) ( n.x()/sbDim.x() + .5) *
                          (int) ( n.y()/sbDim.y() + .5) *
                          (int) ( n.z()/sbDim.z() + .5);

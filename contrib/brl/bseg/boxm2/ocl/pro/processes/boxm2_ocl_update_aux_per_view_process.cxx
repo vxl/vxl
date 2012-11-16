@@ -134,7 +134,7 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       vil_convert_stretch_range_limited(*mask_float,mask, 0.0f, 1.0f, 0.0f, 1.0f);
     }
     else {
-      vcl_cerr << "ERROR: unknown mask pixel type" << vcl_endl;
+      vcl_cerr << "ERROR: unknown mask pixel type\n";
       return false;
     }
   }
@@ -149,28 +149,27 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
   bool foundDataType = false;
   vcl_string data_type,num_obs_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
-  int appTypeSize;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+      // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+      // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D BOXM2_NORMAL_ALBEDO_ARRAY ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
+      // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
     }
   }
   if (!foundDataType) {
@@ -258,44 +257,39 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  
+
   // set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
 
-    for (id = vis_order.begin(); id != vis_order.end(); ++id)
-    {
-
-
-
-        //write the image values to the buffer
-        vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
-        vcl_cout<<(*id)<<" "<<opencl_cache->bytes_in_cache()<<vcl_endl;
-        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
-        blk_info->write_to_buffer((queue));
-        
-
-        //grab an appropriately sized AUX data buffer
-        int auxTypeSize  = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux0   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
-        auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-        bocl_mem *aux1   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
-        auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-        bocl_mem *aux2   = opencl_cache->get_data(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix), info_buffer->data_buffer_length*auxTypeSize,false);
-        auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
-        bocl_mem *aux3   = opencl_cache->get_data(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix), info_buffer->data_buffer_length*auxTypeSize,false);
-        
-
-       // transfer_time += (float) transfer.all();
-  for (unsigned int i=0; i<kernels[identifier].size(); ++i)
+  for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
+    //write the image values to the buffer
+    vul_timer transfer;
+    bocl_mem* blk       = opencl_cache->get_block(*id);
+    vcl_cout<<(*id)<<' '<<opencl_cache->bytes_in_cache()<<vcl_endl;
+    bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
+    blk_info->write_to_buffer((queue));
+
+    //grab an appropriately sized AUX data buffer
+    int auxTypeSize  = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
+    bocl_mem *aux0   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+    auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
+    bocl_mem *aux1   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+    auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
+    bocl_mem *aux2   = opencl_cache->get_data(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix), info_buffer->data_buffer_length*auxTypeSize,false);
+    auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
+    bocl_mem *aux3   = opencl_cache->get_data(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix), info_buffer->data_buffer_length*auxTypeSize,false);
+
+    // transfer_time += (float) transfer.all();
+    for (unsigned int i=0; i<kernels[identifier].size(); ++i)
+    {
       bocl_kernel* kern =  kernels[identifier][i];
-       
+
       if (i==UPDATE_AUX_LEN_INT_VIS)
       {
         local_threads[0] = 8;
@@ -361,16 +355,13 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
         aux1->read_to_buffer(queue);
         aux2->read_to_buffer(queue);
         aux3->read_to_buffer(queue);
-
       }
       clFinish(queue);
-
     }
-      opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(suffix), true);
-      opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(suffix), true);
-      opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix), true);
-      opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix), true);
-
+    opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(suffix), true);
+    opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(suffix), true);
+    opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix), true);
+    opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix), true);
   }
 
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;

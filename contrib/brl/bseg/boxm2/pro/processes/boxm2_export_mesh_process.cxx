@@ -162,10 +162,8 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
     {
       //store three 3d points
       vcl_vector<vgl_point_3d<double> > points;
-      unsigned originalVertIdx[3];
       for (int i=0; i<3; ++i) {
         unsigned vertexId = faces[iface][i];
-        originalVertIdx[i] = vertexId;
         double x = verts[vertexId][0];
         double y = verts[vertexId][1];
         double z = verts[vertexId][2];

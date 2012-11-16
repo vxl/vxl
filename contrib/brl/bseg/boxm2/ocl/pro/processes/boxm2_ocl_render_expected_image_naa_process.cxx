@@ -64,13 +64,13 @@ namespace boxm2_ocl_render_expected_image_naa_process_globals
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
 
-    if(!ray_trace_kernel->create_kernel( &device->context(),
-                                     device->device_id(),
-                                     src_paths,
-                                     "render_bit_scene",   //kernel name
-                                     options,              //options
-                                     "boxm2 opencl render_bit_scene")) { //kernel identifier (for error checking)
-       vcl_cerr << "create_kernel (render kernel) returned error." << vcl_endl;
+    if (!ray_trace_kernel->create_kernel( &device->context(),
+                                          device->device_id(),
+                                          src_paths,
+                                          "render_bit_scene",   //kernel name
+                                          options,              //options
+                                          "boxm2 opencl render_bit_scene")) { //kernel identifier (for error checking)
+       vcl_cerr << "create_kernel (render kernel) returned error.\n";
        return false;
     }
     vec_kernels.push_back(ray_trace_kernel);
@@ -82,13 +82,13 @@ namespace boxm2_ocl_render_expected_image_naa_process_globals
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
 
     options = opts + " -D RENDER_NAA ";
-    if(!normalize_render_kernel->create_kernel( &device->context(),
-                                            device->device_id(),
-                                            norm_src_paths,
-                                            "normalize_render_kernel",   //kernel name
-                                            options,              //options
-                                            "normalize render kernel")){ //kernel identifier (for error checking)
-      vcl_cerr << "create_kernel (normalize kernel) returned error." << vcl_endl;
+    if (!normalize_render_kernel->create_kernel( &device->context(),
+                                                 device->device_id(),
+                                                 norm_src_paths,
+                                                 "normalize_render_kernel",   //kernel name
+                                                 options,              //options
+                                                 "normalize render kernel")){ //kernel identifier (for error checking)
+      vcl_cerr << "create_kernel (normalize kernel) returned error.\n";
       return false;
     }
     vec_kernels.push_back(normalize_render_kernel);
@@ -118,7 +118,7 @@ bool boxm2_ocl_render_expected_image_naa_process_cons(bprb_func_process& pro)
   output_types_[1] = "vil_image_view_base_sptr";
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  
+
   return good;
 }
 
@@ -126,7 +126,7 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_image_naa_process_globals;
 
-  vul_timer rtime; 
+  vul_timer rtime;
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
@@ -147,13 +147,12 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
   vcl_string data_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
 
-  int apptypesize = 0;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
     {
       data_type = apps[i];
       found_appearance = true;
-      apptypesize = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::datasize();
+      // boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::datasize();
     }
   }
   if (!found_appearance) {
@@ -173,8 +172,8 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
-    if(!compile_kernel(device,ks,options)){
-      vcl_cerr << "ERROR: compile_kernel returned false." << vcl_endl;
+    if (!compile_kernel(device,ks,options)){
+      vcl_cerr << "ERROR: compile_kernel returned false.\n";
       return false;
     }
     kernels[identifier]=ks;
@@ -211,10 +210,10 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
 
   // run expected image function
   render_expected_image_naa(scene, device, opencl_cache, queue,
-                        cam, exp_image, vis_image, exp_img_dim,
-                        kernels[identifier][0], lthreads, cl_ni, cl_nj, metadata, atm_params);
+                            cam, exp_image, vis_image, exp_img_dim,
+                            kernels[identifier][0], lthreads, cl_ni, cl_nj, metadata, atm_params);
 
-  vcl_cout << "Normalizing " << vcl_endl;
+  vcl_cout << "Normalizing" << vcl_endl;
 
   // normalize
   {
@@ -231,13 +230,13 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
     normalize_kern->clear_args();
   }
 
-  vcl_cout << "done normalizing " << vcl_endl;
+  vcl_cout << "done normalizing" << vcl_endl;
 
   // read out expected image
   exp_image->read_to_buffer(queue);
   vis_image->read_to_buffer(queue);
-  
-  vcl_cout << "done reading images " << vcl_endl;
+
+  vcl_cout << "done reading images" << vcl_endl;
 
 #if 1 //output a float image by default
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
@@ -259,7 +258,7 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
   opencl_cache->unref_mem(exp_image.ptr());
   opencl_cache->unref_mem(vis_image.ptr());
 
-  delete [] vis_buff; 
+  delete [] vis_buff;
   delete [] buff;
 
 

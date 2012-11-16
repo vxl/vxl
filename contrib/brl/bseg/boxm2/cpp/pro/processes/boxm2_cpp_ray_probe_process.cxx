@@ -77,19 +77,16 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     vcl_string prefix = pro.get_input<vcl_string>(k++);
     vcl_string identifier = pro.get_input<vcl_string>(k++);
 
-    bool foundDataType = false;
     vcl_string data_type;
     vcl_vector<vcl_string> apps = scene->appearances();
     for (unsigned int i=0; i<apps.size(); ++i) {
         if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
         {
             data_type = apps[i];
-            foundDataType = true;
         }
         else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
         {
             data_type = apps[i];
-            foundDataType = true;
         }
     }
 

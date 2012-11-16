@@ -79,7 +79,6 @@ int main(int argc,  char** argv)
     }
     else {
         vul_file::make_directory_path(dir());
-
     }
     //see if img folder exists
     vcl_string imgdir = dir() + "/img/";
@@ -88,7 +87,6 @@ int main(int argc,  char** argv)
     }
     else {
         vul_file::make_directory_path(imgdir);
-
     }
     //////////////////////////////////////////////////////////////////////////////
     // Now Render Scene Images
@@ -123,7 +121,6 @@ int main(int argc,  char** argv)
     //////////////////////////////////////////////////////////////////////////////
     //set up a view sphere, use find closest for closest neighbors
     vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), scene->bounding_box().depth()*radius());
-  
 
     //map of ID's that have been rendered
     vcl_map<int, vcl_string> saved_imgs;
@@ -168,7 +165,7 @@ int main(int argc,  char** argv)
                 vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
                 vpgl_calibration_matrix<double> mat = cam->get_calibration();
                 vgl_vector_3d<double> pp = normalized(cam->principal_axis());
-                vgl_vector_3d<double> ppnew = normalized(scene->bounding_box().centroid() - cart_point);
+                // vgl_vector_3d<double> ppnew = normalized(scene->bounding_box().centroid() - cart_point);
 
                 vgl_vector_3d<double> vdir(cam->get_rotation().as_matrix()(1,0),
                                            cam->get_rotation().as_matrix()(1,1),
@@ -179,9 +176,9 @@ int main(int argc,  char** argv)
                 double f = 1.0 / gsdofcentralpixel;
                 vbl_array_2d<vgl_ray_3d<double> > rays(nj(),ni());
                 cam_file_stream<<uid<<' '<<f<<' '<<cc.x()<<' '<<cc.y()<<' '<<cc.z()<<' '
-                                    <<pp.x()<<' '<<pp.y()<<' '<<pp.z()<<' '
-                                    <<udir.x()<<' '<<udir.y()<<' '<<udir.z()<<' '
-                                    <<vdir.x()<<' '<<vdir.y()<<' '<<vdir.z()<<' ';
+                               <<pp.x()<<' '<<pp.y()<<' '<<pp.z()<<' '
+                               <<udir.x()<<' '<<udir.y()<<' '<<udir.z()<<' '
+                               <<vdir.x()<<' '<<vdir.y()<<' '<<vdir.z()<<' ';
                 for (double k = 0 ; k < ni(); ++k){
                     for (double l = 0 ; l < nj(); ++l)
                     {
@@ -210,14 +207,12 @@ int main(int argc,  char** argv)
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                            << " no selections\n";
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
                     }
 
                     brdb_value_sptr value;
                     if (!S->get_value(vcl_string("value"), value)) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                            << " didn't get value\n";
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
                     }
                     vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
                     vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = static_cast<vil_image_view<vil_rgba<vxl_byte> > *>(outimg.ptr());
@@ -234,7 +229,6 @@ int main(int argc,  char** argv)
                     vcl_stringstream colorstream;
                     colorstream<<imgdir<<"scene_"<<uid<<".jpg";
                     vil_save( jpg_out, colorstream.str().c_str() );
-
                 }
                 if (scene->has_data_type(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) )
                 {
@@ -252,14 +246,12 @@ int main(int argc,  char** argv)
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                            << " no selections\n";
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
                     }
 
                     brdb_value_sptr value;
                     if (!S->get_value(vcl_string("value"), value)) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                            << " didn't get value\n";
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
                     }
                     vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
                     vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
@@ -289,13 +281,11 @@ int main(int argc,  char** argv)
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                            << " no selections\n";
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
                     }
                     brdb_value_sptr value;
                     if (!S->get_value(vcl_string("value"), value)) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                            << " didn't get value\n";
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
                     }
                     vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
                     vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
@@ -309,28 +299,25 @@ int main(int argc,  char** argv)
                 }
                 if (depth())
                 {
-                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedDepthProcess");
-                    good = good
+                    unsigned int img_id=0;
+                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedDepthProcess")
                         && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
                         && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
                         && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
                         && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
                         && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
                         && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
-                        && bprb_batch_process_manager::instance()->run_process();
-                    unsigned int img_id=0;
-                    good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+                        && bprb_batch_process_manager::instance()->run_process()
+                        && bprb_batch_process_manager::instance()->commit_output(0, img_id);
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                            << " no selections\n";
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
                     }
 
                     brdb_value_sptr value;
                     if (!S->get_value(vcl_string("value"), value)) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                            << " didn't get value\n";
+                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
                     }
                     vil_image_view_base_sptr depthimg=value->val<vil_image_view_base_sptr>();
                     vil_image_view<float>* depthimg_view = static_cast<vil_image_view<float>* >(depthimg.ptr());

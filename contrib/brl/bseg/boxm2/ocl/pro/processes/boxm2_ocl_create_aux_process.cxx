@@ -136,7 +136,7 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
   long binCache = opencl_cache.ptr()->bytes_in_cache();
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
 
-  bool foundDataType = false, foundNumObsType = false;;
+  bool foundDataType = false;
   vcl_string data_type,num_obs_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
   int appTypeSize;
@@ -158,7 +158,6 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {
       num_obs_type = boxm2_data_traits<BOXM2_NUM_OBS>::prefix();
-      foundNumObsType = true;
     }
   }
   if (!foundDataType) {

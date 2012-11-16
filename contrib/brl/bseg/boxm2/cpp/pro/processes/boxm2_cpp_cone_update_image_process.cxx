@@ -75,7 +75,6 @@ bool boxm2_cpp_cone_update_image_process(bprb_func_process& pro)
   if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {
     bool foundDataType = false;
-    bool foundNumObsType = false;
 
     vcl_string data_type;
     vcl_string num_obs_type;
@@ -91,7 +90,6 @@ bool boxm2_cpp_cone_update_image_process(bprb_func_process& pro)
       }
       else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ) {
         num_obs_type = apps[i];
-        foundNumObsType = true;
       }
     }
     if (!foundDataType) {

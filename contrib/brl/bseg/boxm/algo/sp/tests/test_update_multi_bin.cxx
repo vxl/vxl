@@ -27,13 +27,11 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_z_multi_bin(vgl_box_3d<dou
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 
   vgl_point_3d<double> centroid = world.centroid();
-  double x,z;
   double alpha = (vnl_math::pi_over_180)*65; // was: (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/36.;
   vcl_vector<vgl_point_3d<double> > centers;
   for (unsigned i=0; i<11; i++) {
-    x = boxm_camera_dist*vcl_cos(alpha)/10;
-    z = boxm_camera_dist*vcl_sin(alpha);
+    double z = boxm_camera_dist*vcl_sin(alpha);
     centers.push_back(vgl_point_3d<double> (centroid.x(), centroid.y(), centroid.z()+z));
     vcl_cout << centers[i] << vcl_endl;
     alpha += delta_alpha;
@@ -43,7 +41,6 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_z_multi_bin(vgl_box_3d<dou
   vcl_vector<vpgl_camera_double_sptr> rat_cameras;
   for (unsigned i=0; i<centers.size(); i++)
   {
-    vgl_point_3d<double> camera_center  = centers[i];
     vpgl_camera_double_sptr rat_cam = generate_camera_top(world);
     rat_cameras.push_back(rat_cam);
 
@@ -73,14 +70,13 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz_multi_bin(vgl_box_3d<do
 
   vgl_point_3d<double> centroid = world.centroid();
   vcl_cout << "centroid: " << centroid << vcl_endl;
-  double x,y;
   double alpha = (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/40.;
   vcl_vector<vgl_point_3d<double> > centers;
 
   for (unsigned i=0; i<num_train_images; i++) {
-    x = boxm_camera_dist*vcl_cos(alpha);
-    y = boxm_camera_dist*vcl_sin(alpha);
+    double x = boxm_camera_dist*vcl_cos(alpha);
+    double y = boxm_camera_dist*vcl_sin(alpha);
     centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
   if (verbose)
     vcl_cout << centers[i] << vcl_endl;

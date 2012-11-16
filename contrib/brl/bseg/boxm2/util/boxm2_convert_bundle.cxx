@@ -99,7 +99,7 @@ boxm2_convert_bundle::boxm2_convert_bundle(vcl_string bundle_file, vcl_string im
   // Dimensions of the World
   vcl_cout<<"Full Point Bounding Box "<<bounding_box<<vcl_endl;
   vgl_point_3d<double> c = centre(pts_3d);
-  vcl_cout<<"Center of Gravity "<<centre(pts_3d)<<vcl_endl;
+  vcl_cout<<"Center of Gravity "<<c<<vcl_endl;
   vnl_double_3 sigma = boxm2_point_util::stddev(pts_3d);
   vcl_cout<<"Point stddev "<< sigma <<vcl_endl;
 
