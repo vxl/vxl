@@ -239,4 +239,37 @@ bool vpgl_geo_cam_global_to_img_process(bprb_func_process& pro)
   return true;
 }
 
+//: construct the camera from the name of the image with a known specific format
+//  this geocam has no lvcs, so it's only useful for img_to_global or global_to_img operations
+bool vpgl_load_geo_camera_process2_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vcl_string"); // image name
+  input_types.push_back("unsigned"); // image size ni
+  input_types.push_back("unsigned"); // nj 
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vpgl_camera_double_sptr");  //camera output
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+//: Execute the process
+bool vpgl_load_geo_camera_process2(bprb_func_process& pro)
+{
+  if (pro.n_inputs()!= 3) {
+    vcl_cout << "vpgl_load_geo_camera_process2: The number of inputs should be 3" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vcl_string filename = pro.get_input<vcl_string>(0);
+  unsigned ni = pro.get_input<unsigned>(1);
+  unsigned nj = pro.get_input<unsigned>(2);
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
+
+  vpgl_geo_camera *cam;
+  vpgl_geo_camera::init_geo_camera(filename, ni, nj, lvcs, cam);
+  pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
+  return true;
+}
 
