@@ -358,8 +358,10 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
   float vis_threshold = 0.2;
 
   // first measure the correspondence of sky pixels
-  for (unsigned j = 0; j < nj; j++) {
-    for (unsigned i = 0; i < ni; i++) {
+  for (unsigned j = 0; j < nj; j++)
+  {
+    for (unsigned i = 0; i < ni; i++)
+    {
       if (processed_pixels(i,j))
         continue;
       if (sky_img(i,j) > 0) {
@@ -368,7 +370,8 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
         if (vis_img(i,j) >= vis_threshold)
           score++;
       }
-      else {
+      else
+      {
 #if 0
         // if not sky then first make sure this is an occupied portion of the image
         if (vis_img(i,j) >= 1.0f) { // TODO: TRY THIS CONDITION AFTER TRYING REGIONS AND IT CORRESPONDS TO GROUND PLANE, MAYBE DO STH..
@@ -377,8 +380,10 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
           continue;
         }
 #endif // 0
-        for (unsigned r = 0; r < region_imgs.size(); r++) {
-          if ((region_imgs[r])(i,j) > 0) {
+        for (unsigned r = 0; r < region_imgs.size(); r++)
+        {
+          if ((region_imgs[r])(i,j) > 0)
+          {
             // collect depth variation in the region
             float mean = 0.0;
             int cnt = 0;
@@ -446,7 +451,7 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
     vcl_cout << "region: " << scene.scene_regions()[r]->name() << ' ' << region_order[r].first << ' ' << region_order[r].second << '\n';
 #endif
   for (unsigned r = 0; r < this->scene_regions().size(); r++)
-    if (region_order[r].second != r+1) {
+    if (region_order[r].second != (int)r+1) {
       score = 0.0f;
       region_imgs.clear();
       return true;
@@ -572,10 +577,12 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
         scores["ground"].second = scores["ground"].second + 1;
         processed_pixels(i,j) = true;
       }
-      else {
-
-        for (unsigned r = 0; r < region_imgs.size(); r++) {
-          if ((region_imgs[r])(i,j) > 0) {
+      else
+      {
+        for (unsigned r = 0; r < region_imgs.size(); r++)
+        {
+          if ((region_imgs[r])(i,j) > 0)
+          {
             // collect depth variation in the region
             float mean = 0.0;
             int cnt = 0;
@@ -667,7 +674,8 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
     score_cnt++;
   }
   vcl_cout << "score: " << score << '\n';
-  for (unsigned r = 0; r < region_imgs.size(); r++) {
+  for (unsigned r = 0; r < region_imgs.size(); r++)
+  {
     float region_score = 0.0f;
     float mean = 0.0f;
     int cnt = 0;

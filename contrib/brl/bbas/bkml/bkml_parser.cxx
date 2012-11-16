@@ -1,14 +1,13 @@
 //:
 // \file
-// \brief Parses the kml configuration file for bwm tool.
+#include "bkml_parser.h"
 //
-// \verybatim
+// \brief Parses the kml configuration file for bwm tool.
+// \verbatim
 //  Modifications
 //   2012-09-10 Yi Dong - Modified to parser the polygon and path(LineString) coordinates stored in kml
 // \endverbatim
 //
-#include "bkml_parser.h"
-
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
@@ -101,7 +100,7 @@ bkml_parser::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, KML_NEAR_TAG) == 0) {
     last_tag = KML_NEAR_TAG;
   }
-  else if (vcl_strcmp(name, KML_CORD_TAG) == 0 && (cord_tag_ != "") ){
+  else if (vcl_strcmp(name, KML_CORD_TAG) == 0 && (cord_tag_ != "") ) {
     last_tag = KML_CORD_TAG;
   }
   else if (vcl_strcmp(name, KML_POLYOB_TAG) == 0) {
@@ -230,15 +229,15 @@ void bkml_parser::charData(const XML_Char* s, int len)
     vcl_string str_s;
     str_s = s;
     vcl_size_t cord_end = str_s.find(KML_POLYCORE_END_TAG);
-    while(str_s[cord_end] != '\n')
+    while (str_s[cord_end] != '\n')
       cord_end--;
-    while(str_s[cord_end-1] == ' ')
+    while (str_s[cord_end-1] == ' ')
       cord_end--;
-    if (cord_end > len)
+    if ((int)cord_end > len)
       len = (int)cord_end;
-    for (int i=0; i<cord_end; ++i)
+    for (unsigned int i=0; i<cord_end; ++i)
       str << s[i];
-    while(!str.eof()){
+    while (!str.eof()) {
       str >> x;
       str.ignore();
       str >> y;
@@ -280,13 +279,13 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
     delete parser;
     return out;
   }
-  if (!parser->parseFile(xmlFile)){
+  if (!parser->parseFile(xmlFile)) {
     vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
              << parser->XML_GetCurrentLineNumber() << '\n';
     delete parser;
     return out;
   }
-  if (parser->polyouter_.size()<2){
+  if (parser->polyouter_.size()<2) {
     vcl_cerr << "input polygon has no outerboundary" << '\n';
     delete parser;
     return out;
@@ -297,7 +296,7 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
     vgl_point_2d<double> pt(parser->polyouter_[i].x(), parser->polyouter_[i].y());
     out[0].push_back(pt);
   }
-  if (parser->polyinner_.size()<2){
+  if (parser->polyinner_.size()<2) {
     vcl_cerr << "input polygon has no innerboundary, skipping" << '\n';
     return out;
   }
