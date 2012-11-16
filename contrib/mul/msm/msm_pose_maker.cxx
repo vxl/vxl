@@ -76,6 +76,25 @@ void msm_pose_maker::create_vectors(const msm_points& points,
   }
 }
 
+//: Compute mean distance between equivalent points, measured along normals to curves
+//  Where normal not defined, use the absolute distance.
+double msm_pose_maker::mean_normal_distance(const msm_points& points1, 
+                                            const msm_points& points2) const
+{
+  assert(points1.size()==points2.size());
+  if (points1.size()==0) return 0.0;
+  vcl_vector<vgl_vector_2d<double> > dir(points1.size());
+  create_vectors(points1,dir);
+  double sum_d=0;
+  for (unsigned i=0;i<points1.size();++i)
+  {
+    vgl_vector_2d<double> dp = points2[i]-points1[i];
+    if (defined(i)) sum_d += vcl_fabs(dot_product(dp,dir[i]));
+    else            sum_d += dp.length();
+  }
+  return sum_d/points1.size();
+}
+
 //=======================================================================
 
 void msm_pose_maker::print_summary(vcl_ostream& os) const

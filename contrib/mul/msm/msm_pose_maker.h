@@ -35,12 +35,18 @@ class msm_pose_maker
   void set_from_curves(unsigned n_points, const msm_curves& curves);
 
   //: Returns true if direction defined at point i
-  bool defined(unsigned i) { return end0_[i]!=0 || end1_[i]!=0; }
+  bool defined(unsigned i) const { return end0_[i]!=0 || end1_[i]!=0; }
 
   //: Compute a direction at each point, usually normal to curve.
   void create_vectors(const msm_points& points,
                       vcl_vector<vgl_vector_2d<double> >& dir) const;
 
+  //: Compute mean distance between equivalent points, measured along normals to curves
+  //  d_i = abs dot((points2[i]-points1[i]),normal[i]) where normals are to curves 
+  //  through points1.
+  //  Where normal not defined, use the absolute distance.
+  double mean_normal_distance(const msm_points& points1, const msm_points& points2) const;
+  
   //: Print class to os
   void print_summary(vcl_ostream& os) const;
 
