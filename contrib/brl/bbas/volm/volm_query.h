@@ -5,17 +5,17 @@
 // \file
 // \brief  A class to represent a volumetric matching query through an image mark-up and estimated camera parameters
 //              The container is numbers of points distributed on a unit spherecial surface
-//              The camera parameters, heading, tilt, roll, right_fov, top_fov, have resolution one degree, and their 
+//              The camera parameters, heading, tilt, roll, right_fov, top_fov, have resolution one degree, and their
 //              default values are chosen based on query image category (desert/coast)
 //              Use top viewing angle to define the viewing volume
 //
-// \author  
+// \author
 // \date October 23, 2012
 // \verbatim
 //   Modifications
 //
 // \endverbatim
-// 
+//
 
 #include <vbl/vbl_ref_count.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
@@ -29,12 +29,12 @@
 
 class volm_query : public vbl_ref_count
 {
-public:
+ public:
   //: default consturctor
   volm_query() {}
   //: constructor
-  volm_query(vcl_string const& cam_kml_file, 
-             vcl_string const& label_xml_file, 
+  volm_query(vcl_string const& cam_kml_file,
+             vcl_string const& label_xml_file,
              volm_spherical_container_sptr const& sph,
              volm_spherical_shell_container_sptr const& sph_shell);
 
@@ -48,9 +48,9 @@ public:
   vcl_vector<double>& headings()  { return headings_; }
   vcl_vector<double>& tilts()     { return tilts_; }
   vcl_vector<double>& rolls()     { return rolls_; }
-  unsigned get_cam_num()          { return (unsigned)cameras_.size(); }
-  unsigned get_query_size()       { return query_size_; }
-  unsigned get_valid_ray_num(unsigned const& cam_idx)    { return ray_count_[cam_idx]; }
+  unsigned get_cam_num()   const  { return (unsigned)cameras_.size(); }
+  unsigned get_query_size() const { return query_size_; }
+  unsigned get_valid_ray_num(unsigned const& cam_idx) const { return ray_count_[cam_idx]; }
 
   //: write vrml for spherical container and camera hypothesis
   void draw_template(vcl_string const& vrml_fname);
@@ -61,14 +61,14 @@ public:
   //: visualized the query camera using the spherical shell geometry
   void visualize_query(vcl_string const& prefix);
 
-public:
+ public:
   double init_focal_;
   double head_, head_d_, head_inc_;
   double tilt_, tilt_d_, tilt_inc_;
   double roll_, roll_d_, roll_inc_;
   double tfov_, tfov_d_, tfov_inc_;
 
-protected:
+ protected:
   //: image size
   unsigned ni_, nj_;
   //: image category

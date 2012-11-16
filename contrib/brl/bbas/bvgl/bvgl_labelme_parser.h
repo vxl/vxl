@@ -65,10 +65,10 @@ class bvgl_labelme_parser : public expatpp
   ~bvgl_labelme_parser(void) {}
 
   //image filename/path, category, and size
-  vcl_string image_name() { return image_name_; }
-  vcl_string image_category() { return image_category_; }
-  unsigned image_ni() { return image_ni_; }
-  unsigned image_nj() { return image_nj_; }
+  vcl_string image_name() const { return image_name_; }
+  vcl_string image_category() const { return image_category_; }
+  unsigned image_ni() const { return image_ni_; }
+  unsigned image_nj() const { return image_nj_; }
   //object names (in the same order as polygons)
   vcl_vector<vcl_string>& obj_names() { return obj_names_; }
   vcl_vector<vcl_string>& obj_types() { return obj_types_; }
