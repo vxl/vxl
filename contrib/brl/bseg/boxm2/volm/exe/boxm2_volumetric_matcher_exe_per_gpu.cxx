@@ -7,8 +7,6 @@
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <vul/vul_arg.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_container_sptr.h>
 #include <volm/volm_spherical_shell_container.h>
@@ -19,7 +17,6 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
@@ -203,9 +200,9 @@ int main(int argc,  char** argv)
       log << " matcher exe failed for " << inp_files[ind_i].second << vcl_endl;
       if (do_log) {
         volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
-        volm_io::write_log(out_folder(), log.str()); }
+        volm_io::write_log(out_folder(), log.str());
+      }
       vcl_cout << log.str();
-      volm_io::MATCHER_EXE_FAILED;
     }
     log << " Volm matcher finished" << vcl_endl;
     // save the scores
