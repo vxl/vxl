@@ -35,6 +35,7 @@
 //   Amitha Perera - 13 Sep 2002 - make constant initialization standards compliant.
 //   Peter Vanroose -22 Oct 2012 - was a class, now is a namespace
 //                                 also renamed functions vnl_math_isnan etc. to vnl_math::isnan
+//   Peter Vanroose -15 Nov 2012 - the deprecated vnl_math_* #defines are now only available when VNL_CONFIG_LEGACY_METHODS==1
 // \endverbatim
 
 #include <vcl_cmath.h>
@@ -43,6 +44,9 @@
 #include <vnl/vnl_config.h> // for VNL_CONFIG_ENABLE_SSE2_ROUNDING
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
 # include <vcl_cassert.h>
+#endif
+#if VNL_CONFIG_LEGACY_METHODS
+# include <vcl_deprecated.h>
 #endif
 
 // Figure out when the fast implementation can be used
@@ -659,7 +663,7 @@ namespace vnl_math
 
 } // end of namespace vnl_math
 
-// Legacy definitions, for backward compatibility:
+#if VNL_CONFIG_LEGACY_METHODS // Legacy definitions, for backward compatibility; deprecated!
 #define vnl_math_isnan vnl_math::isnan
 #define vnl_math_isinf vnl_math::isinf
 #define vnl_math_isfinite vnl_math::isfinite
@@ -678,5 +682,6 @@ namespace vnl_math
 #define vnl_math_squared_magnitude vnl_math::squared_magnitude
 #define vnl_math_cuberoot vnl_math::cuberoot
 #define vnl_math_hypot vnl_math::hypot
+#endif // VNL_CONFIG_LEGACY_METHODS
 
 #endif // vnl_math_h_
