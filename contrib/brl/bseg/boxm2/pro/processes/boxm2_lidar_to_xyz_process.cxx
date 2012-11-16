@@ -106,7 +106,8 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
   out_img_x->fill(0.0f); out_img_y->fill(0.0f);
-  out_img_z->fill((float)(scene_bbox.min_z()-10.0));  // local coord system min z
+  //out_img_z->fill((float)(scene_bbox.min_z()-10.0));  // local coord system min z
+  out_img_z->fill((float)(-1.0));  // local coord system min z
 
   bool no_overlap = true;
   // iterate over the image and for each pixel, calculate, xyz in the local coordinate system
@@ -121,11 +122,12 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
       if (zone != lvcs_zone)
         continue;
       double lx, ly, lz;
-      if (img(i,j) <= 0)
-        continue; 
+      //if (img(i,j) <= 0) {
+      //  continue; 
+      //}
       lvcs->global_to_local(lon2, lat2, img(i,j), vpgl_lvcs::wgs84, lx, ly, lz);
       vgl_point_3d<double> pt(lx, ly, lz);
-      if (scene_bbox.contains(pt)) {
+      if (scene_bbox.contains(pt) && (*out_img_z)(i,j) < (float)lz) {
         no_overlap = false;
         (*out_img_x)(i,j) = (float)lx;
         (*out_img_y)(i,j) = (float)ly;
