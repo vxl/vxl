@@ -128,12 +128,11 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
       vil_image_view<float> step_mask(step_expected->ni(),step_expected->nj(),1);
 
       // generate expected image
-      bool result = false;
       if (apm_type == "apm_mog_grey") {
-        result = vox_world->expected_image<APM_MOG_GREY>(step_meta,step_expected,step_mask,bin_idx);
+        vox_world->expected_image<APM_MOG_GREY>(step_meta,step_expected,step_mask,bin_idx);
       }
       else if (apm_type == "apm_mog_rgb") {
-        result = vox_world->expected_image<APM_MOG_RGB>(step_meta,step_expected,step_mask,bin_idx);
+        vox_world->expected_image<APM_MOG_RGB>(step_meta,step_expected,step_mask,bin_idx);
       }
       else {
         vcl_cerr << "error: unsupported appearance model type " << apm_type << " !\n";

@@ -41,12 +41,11 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
     vgl_point_3d<int> idx = iter.index();
     scene.load_block(idx);
     boxm_block<tree_type>* block = scene.get_block(idx);
-    vgl_box_3d<double> block_bb = block->bounding_box();
     tree_type* tree = block->get_tree();
     if (tree->finest_level() < int(finest_level)) {
       finest_level = tree->finest_level();
     }
-    iter++;
+    ++iter;
   }
 
   // do not make the resolution smaller than finest level
@@ -104,11 +103,12 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   vgl_point_3d<int> idx = iter.index();
   scene.load_block(idx);
   boxm_block<tree_type>* block = scene.get_block(idx);
-  vgl_box_3d<double> block_bb = block->bounding_box();
   tree_type* tree = block->get_tree();
-
+#if 0
+  vgl_box_3d<double> block_bb = block->bounding_box();
   // assume that bounding box is a cube
-  //const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
+  const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
+#endif
 
   for (unsigned z=0; z<dimz; ++grid_it, ++z)
   {

@@ -163,7 +163,7 @@ static void test_bvxm_normalize_image_process()
 
   unsigned ni = 640, nj = 480;
 
-  //: first test various stages in the normalization process
+  // first test various stages in the normalization process
   vil_image_view<vxl_byte> input_img(ni, nj, 1);
   input_img.fill(200);
   vil_image_view_base_sptr input_img_sptr = new vil_image_view<vxl_byte>(input_img);
@@ -176,7 +176,7 @@ static void test_bvxm_normalize_image_process()
   vcl_cout << "format: " << input_img_rgb_sptr->pixel_format() << vcl_endl;
   TEST("check byte", input_img_rgb_sptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE, true);
 
-  //: test image conversions
+  // test image conversions
   vil_image_view<float> input_img_float = vil_convert_cast( float(), input_img_sptr );
   TEST("check float conversion", input_img_float.nplanes(), 1);
   TEST_NEAR("check float conversion", input_img_float(0,0), 200, 0.01);
@@ -195,7 +195,7 @@ static void test_bvxm_normalize_image_process()
   vil_image_view_base_sptr input_img_float_stretched_sptr2 = input_img_float_stretched_ptr2;
   vil_convert_stretch_range_limited<vxl_byte>(input_img, *input_img_float_stretched_ptr2, 0, 255, 0.0f, 1.0f);
 
-  //: test normalize image method
+  // test normalize image method
   vil_image_view<float> img1(100, 200, 3), out_img(100, 200, 3), img2(100, 200, 3), im_dif(100, 200, 3);
   img1.fill(10);
   img2.fill(3*10 + 5);
@@ -217,13 +217,13 @@ static void test_bvxm_normalize_image_process()
   vil_math_sum(sum, im_dif2, 0);
   TEST_NEAR("image dif 2 should sum to 0", sum, 0.0, 0.01);
 
-  //: test voxel_slab operations
+  // test voxel_slab operations
   bvxm_voxel_slab<float> weights(ni, nj, 1);
   weights.fill(1.0f/float(ni * nj));
   sum = bvxm_util::sum_slab(weights);
   TEST_NEAR("check slab sum", sum, 1.0f, 0.01);
 
-  //: test img to slab operation
+  // test img to slab operation
   typedef bvxm_voxel_traits<APM_MOG_RGB>::voxel_datatype mog_type_rgb;
   typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype obs_datatype_rgb;
 
@@ -240,9 +240,8 @@ static void test_bvxm_normalize_image_process()
   bvxm_voxel_slab<obs_datatype_rgb> image_slab_rgb(ni, nj, 1);
   bvxm_util::img_to_slab(input_img_rgb_float_stretched_sptr,image_slab_rgb);
   input_img_rgb_float_stretched_sptr = 0;
-  vnl_float_3 a = *(image_slab_rgb.begin());
 
-  //: create a GREY mog image from a known world
+  // create a GREY mog image from a known world
   vcl_string model_dir("test_world_dir");
   if (vul_file::is_directory(model_dir))
     vul_file::delete_file_glob(model_dir+"/*");
@@ -272,7 +271,7 @@ static void test_bvxm_normalize_image_process()
   float this_prob = bvxm_util::sum_slab(product);
   vcl_cout << "this prob: " << this_prob << vcl_endl;
 
-  //: create a test image
+  // create a test image
   float aa = 1.2f;
   //float aa = 1.0f;
   float bb = 20.0f;
@@ -282,7 +281,7 @@ static void test_bvxm_normalize_image_process()
   bvxm_normalization_util::normalize_image(expected_i, expected_i_norm, aa, bb, 255);
   vil_save(expected_i_norm, "./expected_normed.png");
 
-  //: set the inputs
+  // set the inputs
   vil_image_view_base_sptr expected_i_norm_sptr = new vil_image_view<unsigned char>(expected_i_norm);
   brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(expected_i_norm_sptr);
   vpgl_camera_double_sptr cam1 = create_camera();
@@ -349,7 +348,7 @@ static void test_bvxm_normalize_image_process()
   bool saved = vil_save(denormed_img_v, "./expected_denormed.png");
   TEST("saved", saved, true);
 
-  //: get a
+  // get a
   brdb_query_aptr Q_a = brdb_query_comp_new("id", brdb_query::EQ, id_a);
   brdb_selection_sptr S_a = DATABASE->select("float_data", Q_a);
   TEST("output a is in db", S_a->size(), 1);
@@ -361,7 +360,7 @@ static void test_bvxm_normalize_image_process()
   brdb_value_t<float>* resulta = static_cast<brdb_value_t<float>* >(value_a.ptr());
   float result_a = resulta->value();
 
-  //: get b
+  // get b
   brdb_query_aptr Q_b = brdb_query_comp_new("id", brdb_query::EQ, id_b);
   brdb_selection_sptr S_b = DATABASE->select("float_data", Q_b);
   TEST("output b is in db", S_b->size(), 1);

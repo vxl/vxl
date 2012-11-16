@@ -49,11 +49,8 @@ int bvxm_synth_world_generator::on_box_surface(vgl_box_3d<double> box, vgl_point
   in_box.set_min_point(vgl_point_3d<double>(box.min_x()+thickness, box.min_y()+thickness, box.min_z()+thickness));
   in_box.set_max_point(vgl_point_3d<double>(box.max_x()-thickness, box.max_y()-thickness, box.max_z()-thickness));
 
-  bool on = false;
   if (box.contains(v) && !in_box.contains(v))
   {
-    on = true;
-
     // find the face index
     if ((box.min_z() <= v.z()) && (v.z() <= box.min_z()+thickness))
       return 0;
@@ -246,14 +243,13 @@ bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
 
   bvxm_voxel_grid<apm_datatype>::iterator apm_slab_it;
   bvxm_voxel_grid<float>::iterator obs_it = intensity_grid->begin();
-  bool update_status;
   //slab thickness is 1
   bvxm_voxel_slab<float>* weight = new bvxm_voxel_slab<float>(grid_size.x(),grid_size.y(),1);
   weight->fill(1);
 
   for (apm_slab_it = apm_grid->begin(); apm_slab_it != apm_grid->end(); ++apm_slab_it,++obs_it) {
     bvxm_mog_grey_processor processor;
-    update_status = processor.update(*apm_slab_it, *obs_it, *weight);
+    /* bool update_status = */ processor.update(*apm_slab_it, *obs_it, *weight);
   }
 
   vcl_string path = world_dir_ + "/test_img";
