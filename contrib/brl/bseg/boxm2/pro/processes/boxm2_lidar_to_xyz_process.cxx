@@ -71,7 +71,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   vil_image_view<float> img(img_sptr);
   unsigned ni = img.ni(); unsigned nj = img.nj();
   vcl_cout << " tile size: "<< ni << " x " << nj << vcl_endl;
-
+#if 0
   // determine the translation matrix from the image file name and construct a geo camera
   vcl_string name = vul_file::strip_directory(tiff_fname);
   name = name.substr(name.find_first_of('_')+1, name.size());
@@ -92,8 +92,12 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   trans_matrix[0][0] = -scale/ni; trans_matrix[1][1] = -scale/nj;
   trans_matrix[0][3] = lon; trans_matrix[1][3] = lat+scale;
   vpgl_geo_camera cam(trans_matrix, lvcs); cam.set_scale_format(true);
+#endif
+  vpgl_geo_camera *cam;
+  vpgl_geo_camera::init_geo_camera(tiff_fname, ni, nj, lvcs, cam);
+  
   double lon2, lat2;
-  cam.img_to_global(ni, nj, lon2, lat2);
+  cam->img_to_global(ni, nj, lon2, lat2);
   vpgl_utm utm; double x, y; int zone; utm.transform(lat2, -lon2, x, y, zone);
   vcl_cout << "lower right corner in the image given by geocam is: " << lat2 << " N " << lon2 << " W " << " zone: " << zone << vcl_endl;
 
@@ -108,7 +112,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   // iterate over the image and for each pixel, calculate, xyz in the local coordinate system
   for (unsigned i = 0; i < ni; i++)
     for (unsigned j = 0; j < nj; j++) {
-      cam.img_to_global(i, j, lon2, lat2);
+      cam->img_to_global(i, j, lon2, lat2);
       // minus lon because it is WEST, WARNING, directions are hard-coded!
       lon2 = -lon2;
 
@@ -117,6 +121,8 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
       if (zone != lvcs_zone)
         continue;
       double lx, ly, lz;
+      if (img(i,j) <= 0)
+        continue; 
       lvcs->global_to_local(lon2, lat2, img(i,j), vpgl_lvcs::wgs84, lx, ly, lz);
       vgl_point_3d<double> pt(lx, ly, lz);
       if (scene_bbox.contains(pt)) {
