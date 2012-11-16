@@ -265,8 +265,6 @@ void mesh_break_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
   _connect_F_E_end(face1, newE2s);
   vcl_cout << newE2s->id() << "from " << newE2s->sV()->id() << " to" << newE2s->eV()->id() << vcl_endl;
   M->_add_face(face1);
-  bmsh3d_halfedge* nhe = E12->halfedge()->next();
-  bmsh3d_edge* ne = (bmsh3d_edge*) nhe->edge();
 
   vcl_ostringstream oss;
   face1->_sort_HEs_circular();
@@ -295,10 +293,12 @@ void mesh_break_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
   _connect_F_E_end(face2, newE1s);
   vcl_cout << newE1s->id() << "from " << newE1s->sV()->id() << " to" << newE1s->eV()->id() << vcl_endl;
   M->_add_face(face2);
-  nhe = E12->halfedge()->next();
-  ne = (bmsh3d_edge*) nhe->edge();
-  //if (ne->is_V_incident(E12->sV()))
-  //  E12->switch_s_e_vertex();
+#if 0
+  bmsh3d_halfedge* nhe = E12->halfedge()->next();
+  bmsh3d_edge* ne = (bmsh3d_edge*) nhe->edge();
+  if (ne->is_V_incident(E12->sV()))
+    E12->switch_s_e_vertex();
+#endif
   face2->_sort_HEs_circular();
   face2->_ifs_clear_vertices();
   face2->getInfo(oss);
@@ -505,7 +505,8 @@ void bmsh3d_mesh_mc::orient_face_normals()
     if (face_stack.size() > 0) {
       face = (bmsh3d_face_mc*) face_stack.front();
       face_stack.pop_front();
-    } else {
+    }
+    else {
       face = 0;
     }
   } while (face != 0);

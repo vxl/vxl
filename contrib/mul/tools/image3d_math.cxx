@@ -455,7 +455,7 @@ void check_size_and_plane_consistency(const vimt3d_image_3d_of<T>& im1,
   const vil3d_image_view<T>& im2im = im2.image();
 
   if (im1im.ni() == im2im.ni() && im1im.nj() == im2im.nj() &&
-     im1im.nk() == im2im.nk() && im1im.nplanes() == im2im.nplanes() )
+      im1im.nk() == im2im.nk() && im1im.nplanes() == im2im.nplanes() )
     return;
 
   vcl_cerr << "\nERROR: --" <<op_name<<" command. Two operand images are different size.\n"
@@ -2081,8 +2081,10 @@ void box__image_3d_of_float__double__double__double__double__double__double(opst
   vimt3d_image_3d_of<float> image_out(o1_image.ni(), o1_image.nj(), o1_image.nk(), 1,
                                       o1.world2im());
 
+#if 0 // unused
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
     vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
+#endif
 
   vgl_box_3d<double> box;
   box.add(o1.world2im()(min_x, min_y, min_z));
@@ -2156,8 +2158,10 @@ void checkerboard__image_3d_of_float__double__double__double(opstack_t& s)
                                 o1.world2im());
   vil3d_image_view<float>& out_image = out.image();
 
+#if 0 // unused
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
     vgl_point_3d<double>(0, 0, 0), vgl_vector_3d<double>(1.0, 1.0, 1.0) );
+#endif
 
   unsigned nk=o1_image.nk();
   unsigned nj=o1_image.nj();
@@ -2194,8 +2198,10 @@ void checkerboard__image_3d_of_int__double__double__double(opstack_t& s)
                               o1.world2im());
   vil3d_image_view<int>& out_image = out.image();
 
+#if 0 // unused
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
     vgl_point_3d<double>(0, 0, 0), vgl_vector_3d<double>(1.0, 1.0, 1.0) );
+#endif
 
   unsigned nk=o1_image.nk();
   unsigned nj=o1_image.nj();

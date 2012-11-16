@@ -587,18 +587,15 @@ bwm_observable_sptr bwm_observer_vgui::selected_face(unsigned& face_id)
 unsigned bwm_observer_vgui::get_selected_3d_vertex_index(unsigned poly_id)
 {
   bwm_observable_sptr found_obj = 0;
-  unsigned found_poly_index = 0;
   for (vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D* > >::iterator
        oit = objects_.begin();
        oit != objects_.end(); ++oit)
   {
-    unsigned pindex = 0;
     vcl_map<unsigned, bgui_vsol_soview2D* > polys = oit->second;
     for (vcl_map<unsigned, bgui_vsol_soview2D* >::iterator pit = polys.begin();
-         pit != polys.end(); ++pit, ++pindex)
+         pit != polys.end(); ++pit)
       if (pit->second && pit->second->get_id() == poly_id) {
         found_obj = oit->first;
-        found_poly_index = pindex;
       }
   }
 

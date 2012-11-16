@@ -60,8 +60,8 @@ void volm_spherical_shell_container::add_uniform_views()
   // iteratively refine the triangles
   // check the angle between two vertices (of the same triangle),
   // use the center of the spherical coordinate system
-  vgl_vector_3d<double> vector1=verts[triangles[0][0]]-center;
-  vgl_vector_3d<double> vector2=verts[triangles[0][1]]-center;
+  // vgl_vector_3d<double> vector1=verts[triangles[0][0]]-center;
+  // vgl_vector_3d<double> vector2=verts[triangles[0][1]]-center;
 
   bool done=false;
   while (!done) {

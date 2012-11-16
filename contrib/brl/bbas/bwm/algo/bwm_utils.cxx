@@ -99,12 +99,16 @@ void bwm_utils::load_from_txt(vcl_string filename,
       }
 
       is >> cam_path;
+#if 0
       int cam_type;
       if (camera_type == "projective")
         cam_type = 0;
-      if (camera_type == "rational")
+      else if (camera_type == "rational")
         cam_type = 1;
-      //create_cam_tableau(name, image_path, camera_path, cam_type);
+      else
+        cam_type = -1;
+      create_cam_tableau(name, image_path, camera_path, cam_type);
+#endif
     }
     // COIN3D Tableau
     else if (type == "COIN3D_TAB:")
@@ -288,7 +292,7 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
       res = pyr.ptr();
     }
     else {
-      vcl_cerr << "error loading image pyramid "<< filename << vcl_endl;
+      vcl_cerr << "error loading image pyramid "<< filename << '\n';
       return 0;
     }
   }
@@ -309,14 +313,14 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
           res = j2k_nitf;
         }
       }
-      else if (file_fmt == "j2k"){
+      else if (file_fmt == "j2k") {
         vil_j2k_pyramid_image_resource* j2k_pyr =
           new vil_j2k_pyramid_image_resource(res);
         res = j2k_pyr;
       }
 #endif //HAS_J2K
   }
-  if(!res) return 0;
+  if (!res) return 0;
   float gamma = 1.0f;
   bool invert = false;
   bool gl_map = false;
@@ -327,7 +331,7 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
 
   unsigned ni =res->ni(), nj = res->nj();
   unsigned area = ni*nj;
-  if(area>2500000) gl_map = true;
+  if (area>2500000) gl_map = true;
 
   bgui_image_utils biu(res);
 

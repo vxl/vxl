@@ -1190,7 +1190,6 @@ bool bmsh3d_save_xml(bmsh3d_mesh* mesh, const char* file)
     {
       bmsh3d_vertex* v = face->vertices(j);
       vcl_fprintf(fp, "\n<gml:pos srsDimension=\"3\">");
-      vgl_point_3d<double> pt = v->pt();
       vcl_fprintf(fp, "%.16f ", v->pt().x());
       vcl_fprintf(fp, "%.16f ", v->pt().y());
       vcl_fprintf(fp, "%.16f",  v->pt().z());
@@ -1199,7 +1198,6 @@ bool bmsh3d_save_xml(bmsh3d_mesh* mesh, const char* file)
     // Now print the first vertex again to close the polygon
     bmsh3d_vertex* v = face->vertices(0);
     vcl_fprintf(fp, "\n<gml:pos srsDimension=\"3\">");
-    vgl_point_3d<double> pt = v->pt();
     vcl_fprintf(fp, "%.16f ", v->pt().x());
     vcl_fprintf(fp, "%.16f ", v->pt().y());
     vcl_fprintf(fp, "%.16f",  v->pt().z());

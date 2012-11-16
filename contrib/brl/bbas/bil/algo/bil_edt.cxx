@@ -30,8 +30,8 @@ bool test_contiguous(vil_image_view<vxl_uint_32> &im)
 
    if (im.istep() != 1) {
 #ifndef NDEBUG
-      vcl_cerr << "edt(2): only contiguous row-wise images currently supported\n";
-      vcl_cerr << "istep: " << im.istep() << vcl_endl;
+      vcl_cerr << "edt(2): only contiguous row-wise images currently supported\n"
+               << "istep: " << im.istep() << '\n';
 #endif
       return false;
    }
@@ -55,27 +55,27 @@ bool test_contiguous(vil_image_view<vxl_uint_32> &im)
 bool
 bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx)
 {
-  unsigned i,r,c;
-  r = im.nj();  c = im.ni();
-  unsigned n = r*c;
+   unsigned i,r,c;
+   r = im.nj();  c = im.ni();
+   unsigned n = r*c;
 
-  unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c)) ) -1;
+   unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c)) ) -1;
 
-  unsigned nsqr = 2*(diag1 + 1);   // was: 2*r + 2 in Cuisenaire's code
-  vcl_vector<unsigned> sq;
-  sq.resize(nsqr);
-  for (i=0; i<nsqr; ++i)
-     sq[i] = i*i;
+   unsigned nsqr = 2*(diag1 + 1);   // was: 2*r + 2 in Cuisenaire's code
+   vcl_vector<unsigned> sq;
+   sq.resize(nsqr);
+   for (i=0; i<nsqr; ++i)
+      sq[i] = i*i;
 
-  infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
+   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
 
-  vxl_uint_32 *data;
-  data = im.top_left_ptr();
-  for (i=0;  i < n;  ++i)
-     if (data[i])
-        data[i] = infty_;
+   vxl_uint_32 *data;
+   data = im.top_left_ptr();
+   for (i=0;  i < n;  ++i)
+      if (data[i])
+         data[i] = infty_;
 
-  return bil_edt_saito(im, plane_idx, sq);
+   return bil_edt_saito(im, plane_idx, sq);
 }
 
 //: Exact EDT
@@ -89,107 +89,107 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx)
 bool
 bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
 {
-  unsigned i,r,c,nk;
-  r = im.nj();  c = im.ni(); nk = im.nplanes();
-  unsigned n = r*c*nk;
+   unsigned i,r,c,nk;
+   r = im.nj();  c = im.ni(); nk = im.nplanes();
+   unsigned n = r*c*nk;
 
-  unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c + nk*nk)) ) -1;
+   unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c + nk*nk)) ) -1;
 
-  unsigned nsqr = 2*(diag1 + 1);   // was: 2*r + 2 in Cuisenaire's code
-  vcl_vector<unsigned> sq;
-  sq.resize(nsqr);
-  for (i=0; i<nsqr; ++i)
-     sq[i] = i*i;
+   unsigned nsqr = 2*(diag1 + 1);   // was: 2*r + 2 in Cuisenaire's code
+   vcl_vector<unsigned> sq;
+   sq.resize(nsqr);
+   for (i=0; i<nsqr; ++i)
+      sq[i] = i*i;
 
-  infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c - nk*nk -1;
+   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c - nk*nk -1;
 
-  vxl_uint_32 *data;
-  data = im.top_left_ptr();
-  for (i=0;  i < n;  ++i)
-     if (data[i])
-        data[i] = infty_;
+   vxl_uint_32 *data;
+   data = im.top_left_ptr();
+   for (i=0;  i < n;  ++i)
+      if (data[i])
+         data[i] = infty_;
 
-  //: 2D EDT for each plane
-  for (unsigned k=0; k < nk; ++k) {
-    bool stat = bil_edt_saito(im, k, sq);
+   // 2D EDT for each plane
+   for (unsigned k=0; k < nk; ++k) {
+      bool stat = bil_edt_saito(im, k, sq);
 
-    if (!stat)
-      return false;
-  }
+      if (!stat)
+         return false;
+   }
 
-  // Now, for each pixel, compute final distance by searching along Z direction
+   // Now, for each pixel, compute final distance by searching along Z direction
 
-  unsigned rc = r*c;
-  for (unsigned j=0; j < r; ++j, data+=c) {
-    vcl_vector<unsigned> buff(nk);
+   unsigned rc = r*c;
+   for (unsigned j=0; j < r; ++j, data+=c) {
+      vcl_vector<unsigned> buff(nk);
 
-    vxl_uint_32 *pt;
+      vxl_uint_32 *pt;
 
-    for (unsigned i=0; i < c; ++i) {
-      pt = data + i;
+      for (unsigned i=0; i < c; ++i) {
+         pt = data + i;
 
-      for (unsigned k=0; k < nk; ++k, pt += rc)
-        buff[k]=*pt;
+         for (unsigned k=0; k < nk; ++k, pt += rc)
+            buff[k]=*pt;
 
-      pt = data + i + rc;
-      unsigned a = 0;
-      unsigned buffer = buff[0];
+         pt = data + i + rc;
+         unsigned a = 0;
+         unsigned buffer = buff[0];
 
-      for (unsigned k=1; k < nk; ++k, pt += rc) {
-        if (a != 0)
-          --a;
-        if (buff[k] > buffer+1) {
-           unsigned b = (buff[k] - buffer-1) / 2;
-           if (k+b+1 > nk)
-              b = nk-1 -k;
+         for (unsigned k=1; k < nk; ++k, pt += rc) {
+            if (a != 0)
+               --a;
+            if (buff[k] > buffer+1) {
+               unsigned b = (buff[k] - buffer-1) / 2;
+               if (k+b+1 > nk)
+                  b = nk-1 -k;
 
-           vxl_uint_32 *npt = pt + a*rc;
-           for (unsigned l=a; l<=b; ++l) {
-              unsigned m = buffer + sq[l+1];
-              if (buff[k+l] <= m)
-                 break;   // go to next plane k
-              if (m < *npt)
-                 *npt = m;
-              npt += rc;
-           }
-           a = b;
-        }
-        else
-           a = 0;
-        buffer = buff[k];
-      }
-
-      a = 0;
-      pt -= 2*rc;
-      buffer = buff[nk-1];
-
-      for (unsigned k=nk-2;  k != (unsigned)-1;  --k, pt-=rc) {
-         if (a != 0)
-            --a;
-         if (buff[k] > buffer+1) {
-            unsigned b = (buff[k] - buffer-1) / 2;
-            if (k < b)
-               b = k;
-
-            vxl_uint_32 *npt = pt - a*rc;
-            for (unsigned l=a; l<=b; ++l) {
-               unsigned m = buffer + sq[l+1];
-               if (buff[k-l] <= m)
-                  break;   // go to next column k
-               if (m < *npt)
-                  *npt = m;
-               npt -= rc;
+               vxl_uint_32 *npt = pt + a*rc;
+               for (unsigned l=a; l<=b; ++l) {
+                  unsigned m = buffer + sq[l+1];
+                  if (buff[k+l] <= m)
+                     break;   // go to next plane k
+                  if (m < *npt)
+                     *npt = m;
+                  npt += rc;
+               }
+               a = b;
             }
-            a = b;
+            else
+               a = 0;
+            buffer = buff[k];
          }
-         else
-            a = 0;
-         buffer = buff[k];
-      }
-    }
-  }
 
-  return true;
+         a = 0;
+         pt -= 2*rc;
+         buffer = buff[nk-1];
+
+         for (unsigned k=nk-2;  k != (unsigned)-1;  --k, pt-=rc) {
+            if (a != 0)
+               --a;
+            if (buff[k] > buffer+1) {
+               unsigned b = (buff[k] - buffer-1) / 2;
+               if (k < b)
+                  b = k;
+
+               vxl_uint_32 *npt = pt - a*rc;
+               for (unsigned l=a; l<=b; ++l) {
+                  unsigned m = buffer + sq[l+1];
+                  if (buff[k-l] <= m)
+                     break;   // go to next column k
+                  if (m < *npt)
+                     *npt = m;
+                  npt -= rc;
+               }
+               a = b;
+            }
+            else
+               a = 0;
+            buffer = buff[k];
+         }
+      }
+   }
+
+   return true;
 }
 
 //: Row-wise 1D EDT
@@ -285,38 +285,38 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vec
    unsigned *pt;
 
    for (unsigned i=0; i < c; ++i) {
-     pt = data + i;
+      pt = data + i;
 
-     for (unsigned j=0; j < r; ++j, pt+=c)
-       buff[j]=*pt;
+      for (unsigned j=0; j < r; ++j, pt+=c)
+         buff[j]=*pt;
 
-     pt = data + i + c;
-     unsigned a = 0;
-     unsigned buffer = buff[0];
+      pt = data + i + c;
+      unsigned a = 0;
+      unsigned buffer = buff[0];
 
-     for (unsigned j=1; j < r; ++j, pt += c) {
-       if (a != 0)
-         --a;
-       if (buff[j] > buffer+1) {
-          unsigned b = (buff[j] - buffer-1) / 2;
-          if (j+b+1 > r)
-             b = r-1 -j;
+      for (unsigned j=1; j < r; ++j, pt += c) {
+         if (a != 0)
+            --a;
+         if (buff[j] > buffer+1) {
+            unsigned b = (buff[j] - buffer-1) / 2;
+            if (j+b+1 > r)
+               b = r-1 -j;
 
-          unsigned *npt = pt + a*c;
-          for (unsigned l=a; l<=b; ++l) {
-             unsigned m = buffer + sq[l+1];
-             if (buff[j+l] <= m)
-                break;   // go to next column j
-             if (m < *npt)
-                *npt = m;
-             npt += c;
-          }
-          a = b;
-       }
-       else
-          a = 0;
-       buffer = buff[j];
-     }
+            unsigned *npt = pt + a*c;
+            for (unsigned l=a; l<=b; ++l) {
+               unsigned m = buffer + sq[l+1];
+               if (buff[j+l] <= m)
+                  break;   // go to next column j
+               if (m < *npt)
+                  *npt = m;
+               npt += c;
+            }
+            a = b;
+         }
+         else
+            a = 0;
+         buffer = buff[j];
+      }
 
       a = 0;
       pt -= 2*c;
@@ -405,12 +405,12 @@ static inline bool
 remove_edt(int du, int dv, int dw,
            int u,  int v,  int w)
 {
-    // 11 integer expressions
-    int a = v - u,
-        b = w - v,
-        c = w - u;
+   // 11 integer expressions
+   int a = v - u,
+       b = w - v,
+       c = w - u;
 
-    return (c*dv - b*du - a*dw) > (a*b*c);
+   return (c*dv - b*du - a*dw) > (a*b*c);
 }
 
 
@@ -418,14 +418,13 @@ remove_edt(int du, int dv, int dw,
 inline bool
 maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int *h)
 {
-   int l, ns, tmp0, tmp1, tmp2;
-   unsigned i, ni, nj;
+   int ns;
    vxl_uint_32 fi;
 
-   ni = im.ni(); nj=im.nj();
+   unsigned nj=im.nj();
 
-   l = -1;
-   for (i=0; i < nj; ++i){
+   int l = -1;
+   for (unsigned int i=0; i < nj; ++i) {
       if ((fi = im(j1,i)) != infty_) {
       // TODO: VIL uses asserts for bounds in the above code. Optimize this!
          while ( l >= 1 && remove_edt(g[l-1], g[l], fi, h[l-1], h[l], i) )
@@ -438,13 +437,13 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
    if ((ns=l) == -1) return true;
 
    l = 0;
-   for (i=0; i < im.nj(); ++i) {
-      tmp0 = h[l] - i;
-      tmp1 = g[l] + tmp0*tmp0;
+   for (unsigned int i=0; i < im.nj(); ++i) {
+      int tmp0 = h[l] - i;
+      int tmp1 = g[l] + tmp0*tmp0;
       while (true) {
          if (l >= ns) break;
 
-         tmp2 = h[l+1] - i;
+         int tmp2 = h[l+1] - i;
 
          if (tmp1 <= g[l+1] + tmp2*tmp2) break;
 
@@ -469,45 +468,45 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
 bool
 bil_edt_brute_force(vil_image_view<vxl_uint_32> &im)
 {
-  unsigned i, xi, yi, zi,
-           j, xj, yj, zj,
-           dx,dy, dz, ni,nj,np,
-           n, dst;
-  vxl_uint_32 *I=im.top_left_ptr();
+   unsigned i, xi, yi, zi,
+            j, xj, yj, zj,
+            dx,dy, dz, ni,nj,np,
+            n, dst;
+   vxl_uint_32 *I=im.top_left_ptr();
 
-  if (!test_contiguous(im))
-     return false;
+   if (!test_contiguous(im))
+      return false;
 
-  infty_ = vcl_numeric_limits<vxl_uint_32>::max();
+   infty_ = vcl_numeric_limits<vxl_uint_32>::max();
 
-  ni = im.ni();
-  nj = im.nj();
-  unsigned ninj = ni*nj;
-  np = im.nplanes();
-  n  = ninj*np;
+   ni = im.ni();
+   nj = im.nj();
+   unsigned ninj = ni*nj;
+   np = im.nplanes();
+   n  = ninj*np;
 
-  for (i=0; i<n; ++i)
-     if (I[i]) {
-        I[i] = infty_;
-        zi = i / ninj;
-        unsigned idx_2Dimg = i % ninj;
-        xi = idx_2Dimg % ni;   yi = idx_2Dimg / ni;
+   for (i=0; i<n; ++i)
+      if (I[i]) {
+         I[i] = infty_;
+         zi = i / ninj;
+         unsigned idx_2Dimg = i % ninj;
+         xi = idx_2Dimg % ni;   yi = idx_2Dimg / ni;
 
-        for (j=0; j<n; ++j)
-           if (I[j] == 0) {
-              zj = j / ninj;
-              unsigned j_idx_2dimg = j % ninj;
+         for (j=0; j<n; ++j)
+            if (I[j] == 0) {
+               zj = j / ninj;
+               unsigned j_idx_2dimg = j % ninj;
 
-              xj  = j_idx_2dimg % ni; yj = j_idx_2dimg / ni;
+               xj  = j_idx_2dimg % ni; yj = j_idx_2dimg / ni;
 
-              dx  = xi-xj; dy = yi-yj; dz = zi-zj; // ok if its unsigned (modular arithmetic)
-              dst = dx*dx + dy*dy + dz*dz;
-              if (I[i] > dst)
-                 I[i] = dst;
-           }
-     }
+               dx  = xi-xj; dy = yi-yj; dz = zi-zj; // ok if its unsigned (modular arithmetic)
+               dst = dx*dx + dy*dy + dz*dz;
+               if (I[i] > dst)
+                  I[i] = dst;
+            }
+      }
 
-  return true;
+   return true;
 }
 
 //:
@@ -575,45 +574,45 @@ bil_edt_signed(
     vil_image_view<unsigned int> &input_image,
     vil_image_view<float> &signed_edt_image)
 {
-  float distance_from_interior,
-        surface_value, diff;
-  unsigned ni = input_image.ni(),
-           nj = input_image.nj(),
-            n = ni*input_image.nj();
-  const float cutoff_margin = 1000.0; // what's this??
-  float *signed_edt;
-  unsigned i;
+   float distance_from_interior,
+         surface_value, diff;
+   unsigned ni = input_image.ni(),
+            nj = input_image.nj(),
+             n = ni*input_image.nj();
+   const float cutoff_margin = 1000.0; // what's this??
+   float *signed_edt;
+   unsigned i;
 
-  vxl_uint_32 *image_data = input_image.top_left_ptr();
+   vxl_uint_32 *image_data = input_image.top_left_ptr();
 
-  signed_edt_image.set_size(ni,nj);
-  signed_edt = signed_edt_image.top_left_ptr();
+   signed_edt_image.set_size(ni,nj);
+   signed_edt = signed_edt_image.top_left_ptr();
 
-  vil_image_view <vxl_uint_32> dt_complement_img(ni, nj);
-  vxl_uint_32 *dt_complement = dt_complement_img.top_left_ptr();
+   vil_image_view <vxl_uint_32> dt_complement_img(ni, nj);
+   vxl_uint_32 *dt_complement = dt_complement_img.top_left_ptr();
 
-  for (i=0; i<n; ++i)
-    dt_complement[i] = !image_data[i];
+   for (i=0; i<n; ++i)
+      dt_complement[i] = !image_data[i];
 
-  bil_edt_maurer(input_image);
-  const vxl_uint_32 *dt_input = image_data; // alias, for readability
+   bil_edt_maurer(input_image);
+   const vxl_uint_32 *dt_input = image_data; // alias, for readability
 
-  bil_edt_maurer(dt_complement_img);
+   bil_edt_maurer(dt_complement_img);
 
-  for (i=0; i<n; ++i) {
-    if (image_data[i] == 0) {
-      distance_from_interior = (float)((dt_complement[i] >= 1) ?  vcl_sqrt((double)dt_complement[i]-1.0) : 0.0);
-      diff = cutoff_margin - distance_from_interior;
-      if (diff < 0.0)
-        diff = 0.0;
-      surface_value = diff - cutoff_margin;
-    }
-    else {
-      surface_value = vcl_sqrt((float)dt_input[i]); // distance_from_exterior
-    }
+   for (i=0; i<n; ++i) {
+      if (image_data[i] == 0) {
+         distance_from_interior = (float)((dt_complement[i] >= 1) ?  vcl_sqrt((double)dt_complement[i]-1.0) : 0.0);
+         diff = cutoff_margin - distance_from_interior;
+         if (diff < 0.0)
+            diff = 0.0;
+         surface_value = diff - cutoff_margin;
+      }
+      else {
+         surface_value = vcl_sqrt((float)dt_input[i]); // distance_from_exterior
+      }
 
-    signed_edt[i] = (float)(surface_value - 0.5);
-  }
+      signed_edt[i] = (float)(surface_value - 0.5);
+   }
 
-  return true;
+   return true;
 }

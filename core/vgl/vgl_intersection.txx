@@ -175,7 +175,6 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
   if (!good_inter) return false;
   // check if ray origin is inside the box
   vgl_point_3d<T> org = ray.origin();
-  vgl_vector_3d<T> dir = ray.direction();
   if (!box.contains(org))
     //check if the intersection points are in the ray domain
     return ray.contains(p0)&&ray.contains(p1);
@@ -1008,7 +1007,7 @@ vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const
 
 template <class T>
 vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
-                                              vgl_line_2d<T> const& line){
+                                              vgl_line_2d<T> const& line) {
   vcl_vector<vgl_point_2d<T> > ret;
   T tol = vcl_sqrt(vgl_tolerance<T>::position);
   T a = line.a(), b = line.b(), c = line.c();

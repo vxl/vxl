@@ -46,11 +46,9 @@ class vpdt_mog_updater
     // Ensure that the number of components does not exceed the maximum.
     // Remove the last component if necessary to make room for the new one.
     // Components should be sorted such that the last component is least important.
-    bool removed = false;
     while (mixture.num_components() >= max_components_)
     {
       mixture.remove_last();
-      removed = true;
     }
 
     // this correction accounts for the fact that the remaining components

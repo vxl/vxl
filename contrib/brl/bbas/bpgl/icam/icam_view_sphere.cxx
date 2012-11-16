@@ -52,7 +52,6 @@ void icam_view_sphere::set_images(vcl_map<unsigned, vcl_string>& images,
                                   vcl_map<unsigned, vcl_string>& depth_images)
 {
   vcl_map<unsigned, vcl_string>::iterator it_imgs=images.begin();
-  vcl_map<unsigned, vcl_string>::iterator it_depths=depth_images.begin();
   while (it_imgs != images.end()) {
     unsigned uid = it_imgs->first;
     if (images[uid].size()>0) {

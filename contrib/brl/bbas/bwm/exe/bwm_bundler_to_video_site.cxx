@@ -24,10 +24,8 @@
 #include <vnl/vnl_quaternion.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_svd_fixed.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_calibration_matrix.h>
 #include <vsph/vsph_camera_bounds.h>
 
 #include <vidl/vidl_image_list_istream.h>
@@ -291,7 +289,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
       return false;
 
   vgl_homg_plane_3d<double> plane1=fit_plane1.get_plane();
-
+  // TODO: do something with this plane1 !!!
   return true;
 }
 
@@ -610,7 +608,7 @@ int main(int argc, char** argv)
   // Dimensions of the World
   vcl_cout<<"Bounding Box "<<bounding_box<<vcl_endl;
   vgl_point_3d<double> c = centre(pts_3d);
-  vcl_cout<<"Center       "<<centre(pts_3d)<<vcl_endl;
+  vcl_cout<<"Center       "<<c<<vcl_endl;
   vnl_vector_fixed<double,3> sigma = stddev(pts_3d);
   vcl_cout<<"Stddev       "<< sigma <<vcl_endl;
 

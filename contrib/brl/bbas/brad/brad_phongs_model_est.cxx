@@ -86,6 +86,7 @@ float brad_phongs_model_approx::val(float view_elev, float view_azim, float sun_
     sun_dir[1]=vcl_sin(sun_elev)*vcl_sin(sun_azim);
     sun_dir[2]=vcl_cos(sun_elev);
 
+#if 0 // apparently unused ...
     vnl_double_3 view_dir;
     view_dir[0]=vcl_sin(view_elev)*vcl_cos(view_azim);
     view_dir[1]=vcl_sin(view_elev)*vcl_sin(view_azim);
@@ -98,12 +99,11 @@ float brad_phongs_model_approx::val(float view_elev, float view_azim, float sun_
     vnl_double_3 half_vector = sun_dir + view_dir;
 
     half_vector = half_vector / half_vector.magnitude();
-
     vnl_double_3 reflected_light_vector =householder_xform * sun_dir;
+    double specular_term = ks_* vcl_pow(vcl_fabs(dot_product<double>(reflected_light_vector,view_dir)),(double)gamma_);
+    double specular_term = ks_* vcl_pow(vcl_fabs(dot_product<double>(normal_,half_vector)),(double)gamma_);
+#endif
     double diffuse_term  = kd_* vcl_fabs(dot_product<double>(normal_,sun_dir));
-    //double specular_term = ks_* vcl_pow(vcl_fabs(dot_product<double>(reflected_light_vector,view_dir)),(double)gamma_);
-    //double specular_term = ks_* vcl_pow(vcl_fabs(dot_product<double>(normal_,half_vector)),(double)gamma_);
-
     return float(diffuse_term); // + specular_term;
 }
 
@@ -119,10 +119,9 @@ float brad_phongs_model_approx::val(vnl_double_3 view_dir, float sun_elev, float
     normal_outer_product+=normal_outer_product; // multiply by 2
     vnl_double_3x3 householder_xform= I-normal_outer_product;
 
-    vnl_double_3 reflected_light_vector =householder_xform * sun_dir;
     vnl_double_3 half_vector = sun_dir + view_dir;
 
-    half_vector = half_vector / half_vector.magnitude();
+    half_vector /= half_vector.magnitude();
 
     double dp=vcl_fabs(dot_product<double>(normal_,half_vector));
 

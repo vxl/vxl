@@ -131,8 +131,8 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
   // iteratively refine the triangles
   // check the angle between two vertices (of the same triangle),
   // use the center of the spherical coordinate system
-  vgl_vector_3d<double> vector1=verts[triangles[0][0]]-center;
-  vgl_vector_3d<double> vector2=verts[triangles[0][1]]-center;
+  // vgl_vector_3d<double> vector1=verts[triangles[0][0]]-center;
+  // vgl_vector_3d<double> vector2=verts[triangles[0][1]]-center;
 
   bool done=false;
   while (!done) {

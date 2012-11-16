@@ -59,8 +59,8 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
   //get inputs:
   unsigned i = 0;
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
-  if ( !img ){
-      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!\n";
+  if ( !img ) {
+      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << vcl_endl;
       return false;
   }
   vil_image_view_base_sptr mask = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -69,13 +69,13 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
 
   //vil_save(mask,"./binary_mask");
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  if ( !camera ){
-      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!\n";
+  if ( !camera ) {
+      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << vcl_endl;
       return false;
   }
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  if ( !world ){
-      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!\n";
+  if ( !world ) {
+      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << vcl_endl;
       return false;
   }
   vcl_string output_path = pro.get_input<vcl_string>(i++);
@@ -98,7 +98,6 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
   else
     vcl_cerr << "Error in: bvxm_locate_region_processor: Unsuppported appearance model\n";
 
-  vcl_cout.flush();
-  return true;
+  return result;
 }
 

@@ -120,8 +120,10 @@ void test_rational_camera_approx()
   vpgl_scale_offset<double> sox = rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
   vpgl_scale_offset<double> soy = rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
   vpgl_scale_offset<double> soz = rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
+#if 0 // unused
   vpgl_scale_offset<double> sou = rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
   vpgl_scale_offset<double> sov = rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
+#endif
   vgl_point_3d<double> pmin(sox.offset()-sox.scale(), soy.offset()-soy.scale(), 0);
   vgl_point_3d<double> pmax(sox.offset()+sox.scale(), soy.offset()+soy.scale(), soz.scale());
   vgl_box_3d<double> approx_vol(pmin, pmax);

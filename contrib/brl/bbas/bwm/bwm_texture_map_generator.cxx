@@ -84,7 +84,7 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
     {
       // test each vertex for visibility, assume face visibility is AND of all tests
       bool is_visible = true;
-      for (unsigned j=0; j < face_vertices.size(); j++){
+      for (unsigned j=0; j < face_vertices.size(); j++) {
         vgl_point_2d<double> vert = vert_projections[obs_idx][face_vertices[j]->id()];
         // make sure vertex projection is within image
         if ( (vert.x() < 0) || (vert.x() >= img_sizes[obs_idx].x()) ||
@@ -100,11 +100,10 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
       {
         // compute normal in lvcs coordinates!
         vgl_vector_3d<double> face_normal = compute_face_normal_lvcs(tex_face,lvcs);
-
+#ifdef DEBUG
         vgl_vector_3d<double> face_normal_global = compute_normal_ifs(face_vertices);
         vgl_vector_3d<double> face_normal_phe = tex_face->compute_normal();
 
-#ifdef DEBUG
         vcl_cout << "face normal local = " << face_normal << vcl_endl
                  << "face normal phe =    " << face_normal_phe << vcl_endl
                  << "face normal global = "<< face_normal_global << vcl_endl << vcl_endl;
@@ -124,7 +123,7 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
     }
 
     if (best_observer_score > 0) {
-      for (unsigned j=0; j < face_vertices.size(); j++){
+      for (unsigned j=0; j < face_vertices.size(); j++) {
         bmsh3d_vertex* face_vert = (bmsh3d_vertex*)face_vertices[j];
         vgl_point_2d<double> vert_proj = vert_projections[best_observer_idx][face_vert->id()];
         // update bounding box of mesh
@@ -214,7 +213,7 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
 
 
       if (img_orig_res->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
-        vcl_cerr << "texture_map generator: unsupported image type "<<img_orig_res->pixel_format()<<vcl_endl;
+        vcl_cerr << "texture_map generator: unsupported image type "<<img_orig_res->pixel_format()<<'\n';
         continue;
       }
       vil_image_resource_sptr img_orig_cropped = vil_crop(img_orig_res,

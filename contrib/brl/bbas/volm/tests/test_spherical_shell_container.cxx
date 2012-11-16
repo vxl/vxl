@@ -22,8 +22,8 @@ static void test_spherical_shell_container()
   TEST("# voxels of last layer with res min_res.. ", sph_shell->get_container_size(), 1026);
 #endif
 
-  vcl_vector<vgl_point_3d<double> >& cart_points = sph_shell->cart_points();
 #if 0
+  vcl_vector<vgl_point_3d<double> >& cart_points = sph_shell->cart_points();
   vcl_cout << "Cart points: ";
   for (vcl_vector<vgl_point_3d<double> >::const_iterator p = cart_points.begin(); p != cart_points.end(); ++p)
     vcl_cout << *p << vcl_endl;

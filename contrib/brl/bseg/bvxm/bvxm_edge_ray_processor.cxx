@@ -947,8 +947,6 @@ display_edge_tangent_world_vrml(vcl_string const& vrml_path)
         dir_dist_t dir_dist = dir_dist_slab(c,r);
         double pnobs = pos_dist.num_observations;
         double dnobs = dir_dist.num_observations;
-        pos_t pos_mean = pos_dist.mean();
-        dir_t dir_mean = dir_dist.mean();
         if (pnobs > 0 && dnobs > 0)
         {
           h.upcount(pnobs,1.0);

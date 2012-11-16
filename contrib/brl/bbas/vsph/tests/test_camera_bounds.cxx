@@ -103,6 +103,7 @@ static void test_camera_bounds()
   vgl_box_3d<double> box;
   box.add(minp); box.add(maxp);
   vgl_box_2d<double> box_prj = bpgl_project::project_bounding_box(C, box);
+  vcl_cout << "Project bounding box: " << box_prj << '\n';
   bool good = vsph_camera_bounds::box_solid_angle(C, box, cone_axis,half_ang, sang);
   double mask = good ? 1.0 : 0.0;
   vcl_cout << " box "<< cone_axis << '\n'

@@ -17,17 +17,17 @@ bool NVMreplaceByAvgFocalLength(vcl_ifstream& in1,
 {
   int rotation_parameter_num = 4;
   vcl_string token;
-  bool format_r9t = false;
+  // bool format_r9t = false; // unused
   if (in1.peek() == 'N')
   {
     in1 >> token; //file header
     if (vcl_strstr(token.c_str(), "R9T"))
     {
       rotation_parameter_num = 9;    //rotation as 3x3 matrix
-      format_r9t = true;
+      // format_r9t = true;
     }
   }
-  int ncam = 0, npoint = 0, nproj = 0;
+  int ncam = 0;
   // read # of cameras
   in1 >> ncam;  if (ncam <= 1) return false;
 
@@ -59,10 +59,10 @@ bool NVMreplaceByAvgFocalLength(vcl_ifstream& in1,
     if (vcl_strstr(token.c_str(), "R9T"))
     {
       rotation_parameter_num = 9;    //rotation as 3x3 matrix
-      format_r9t = true;
+      // format_r9t = true;
     }
   }
-  ncam = 0, npoint = 0, nproj = 0;
+  ncam = 0;
   // read # of cameras
   in2 >> ncam;  if (ncam <= 1) return false;
 
@@ -85,6 +85,7 @@ bool NVMreplaceByAvgFocalLength(vcl_ifstream& in1,
   }
 
   //////////////////////////////////////
+  int npoint = 0;
   in2 >> npoint;   if (npoint <= 0) return false;
 
   out << npoint << '\n';

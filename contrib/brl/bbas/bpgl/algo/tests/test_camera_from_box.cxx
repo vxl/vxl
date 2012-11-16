@@ -9,7 +9,6 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <bpgl/algo/bpgl_project.h>
 #include <bpgl/algo/bpgl_camera_from_box.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 
 static void test_camera_from_box()
@@ -18,6 +17,7 @@ static void test_camera_from_box()
   vgl_box_3d<double> box;
   box.add(p0); box.add(p1);
   vgl_point_3d<double> cent = box.centroid();
+  TEST("Centroid", cent.x(), 0.5);
   unsigned ni = 150, nj = 100;
   double sq3 = 1.0/vcl_sqrt(3.0);
   vgl_vector_3d<double> ray(-sq3, -sq3, -sq3);
@@ -26,9 +26,10 @@ static void test_camera_from_box()
   vgl_point_2d<double> pmin = b2d.min_point(), pmax = b2d.max_point();
   vgl_point_2d<double> imin(0,0), imax(150, 100);
   double len = (pmin-imin).length() + (pmax-imax).length();
-  TEST_NEAR("affine_cam_from_box", len, 0.0, 1e-6); 
+  TEST_NEAR("affine_cam_from_box", len, 0.0, 1e-6);
   vgl_homg_point_2d<double> ph(ni/2.0+10, nj/2.0+10);
   vgl_homg_line_3d_2_points<double> line = C.backproject(ph);
+  TEST_NEAR("Backproject", line.point_infinite().x(), 1, 10);
   vgl_point_3d<double> cam_center(10, 10, 10);
   vpgl_perspective_camera<double> Cp = bpgl_camera_from_box::persp_camera_from_box(box, cam_center, ni, nj);
   vgl_box_2d<double> b2dp = bpgl_project::project_bounding_box(Cp, box);
@@ -44,8 +45,8 @@ static void test_camera_from_box()
   ni = 256; nj = 256;
   vpgl_affine_camera<double> sun_cam = bpgl_camera_from_box::affine_camera_from_box(sun_box, sun_ray, ni, nj);
   sun_cam.set_viewing_distance(300000);
-  vgl_box_2d<double> sun_b2d = 
-    bpgl_project::project_bounding_box(sun_cam, sun_box);
+  vgl_box_2d<double> sun_b2d = bpgl_project::project_bounding_box(sun_cam, sun_box);
+  TEST_NEAR("Project bounding box", sun_b2d.centroid().x(), 1, 10);
   vgl_homg_point_2d<double> sun_ph(ni/2.0, nj/2.0);
   vgl_homg_line_3d_2_points<double> sun_line = sun_cam.backproject(sun_ph);
   vgl_homg_point_3d<double> pi = sun_line.point_infinite();

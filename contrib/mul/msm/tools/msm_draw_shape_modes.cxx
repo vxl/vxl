@@ -390,7 +390,9 @@ int main(int argc, char** argv)
   mode_view.set_n_per_mode(params.n_per_mode);
   mode_view.set_overlap_shapes(params.overlap_shapes);
   mode_view.set_display_width(params.width);
+#if 0
   vgl_box_2d<int> win_box = mode_view.display_window();
+#endif // 0
 
   unsigned n_modes = vcl_min(params.max_modes,shape_model.n_modes());
 

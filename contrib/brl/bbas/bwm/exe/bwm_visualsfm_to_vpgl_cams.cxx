@@ -21,11 +21,8 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-
+#include <vpgl/vpgl_calibration_matrix.h>
 
 #include <vidl/vidl_image_list_istream.h>
 
@@ -308,14 +305,14 @@ bool LoadNVM(vcl_ifstream& in,
 {
   int rotation_parameter_num = 4;
   vcl_string token;
-  bool format_r9t = false;
+  // bool format_r9t = false; // unused
   if (in.peek() == 'N')
   {
     in >> token; //file header
     if (vcl_strstr(token.c_str(), "R9T"))
     {
       rotation_parameter_num = 9;  //rotation as 3x3 matrix
-      format_r9t = true;
+      // format_r9t = true;
     }
   }
   int ncam = 0, npoint = 0, nproj = 0;

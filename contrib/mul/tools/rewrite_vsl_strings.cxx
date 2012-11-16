@@ -32,7 +32,7 @@ int main2(int argc, char*argv[])
 
   // Find vsl's encoding of find and replace strings.
   vcl_vector<char> test, replace;
-  { 
+  {
     vcl_ostringstream ss;
     vsl_b_ostream bfs(&ss);
 
@@ -51,7 +51,6 @@ int main2(int argc, char*argv[])
     replace.assign(str.begin() + pos1, str.end());
   }
   vcl_vector<char>::const_iterator test_begin = test.begin(), test_it=test_begin, test_end=test.end();
-  vcl_vector<char>::const_iterator replace_begin = replace.begin(), replace_end=replace.end();
 
   vcl_vector<unsigned> selection(selection_list());
   vcl_sort(selection.begin(), selection.end());
@@ -61,10 +60,10 @@ int main2(int argc, char*argv[])
   if (!in_file) mbl_exception_throw_os_error(in_fname(), "Failed to open for reading");
   vcl_ofstream out_file(out_fname().c_str(), vcl_ios_trunc | vcl_ios_binary);
   if (!out_file) mbl_exception_throw_os_error(out_fname(), "Failed to open for writing");
-  
+
   std::istreambuf_iterator<char> file_it(in_file), eof;
   std::ostreambuf_iterator<char> out_it(out_file);
-  
+
   unsigned match_count=0;
 
   while (file_it != eof)
@@ -78,7 +77,7 @@ int main2(int argc, char*argv[])
         if (selection.empty() || vcl_binary_search(selection.begin(), selection.end(), match_count))
           vcl_copy(replace.begin(), replace.end(), out_it); // write out replacement.
         else
-          vcl_copy(test_begin, test_it, out_it); // skip this match - write any stuff already found - 
+          vcl_copy(test_begin, test_it, out_it); // skip this match - write any stuff already found -
         test_it=test_begin;
       }
       ++file_it;
@@ -87,14 +86,12 @@ int main2(int argc, char*argv[])
     {
       // not found - assume no potential overlaps.
       vcl_copy(test_begin, test_it, out_it); // write any stuff already found
-     
+
       test_it=test_begin;
 
       *out_it++ = *file_it++;
     }
-
   }
-
 
   return 0;
 }

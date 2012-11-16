@@ -157,7 +157,12 @@ template <class T, class M>
 void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<M> const& slab_in,
                                    vgl_h_matrix_2d<double> invH, bvxm_voxel_slab<T> &slab_out)
 {
+  // smoothing radius of filter
+  // TODO: is gaussian convolution with std = projected_size the right amount to get us to Nyquist res?
+  float xstd = 0.0f, ystd = 0.0f;
+
   vnl_matrix_fixed<double,3,3> Hd = invH.get_matrix();
+#if 0 // normalize homogeneous coordinates
   // test if slab_in's projection is higher resolution than slab out.
   // if so, we need to smooth slab_in
   // choose a pixel near the center of slab_out
@@ -166,11 +171,6 @@ void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<M> const& slab_in,
   vnl_vector_fixed<double,3> test_pix_out0 = Hd*test_pix0;
   vnl_vector_fixed<double,3> test_pix_out1 = Hd*test_pix1;
 
-  // smoothing radius of filter
-  // TODO: is gaussian convolution with std = projected_size the right amount to get us to Nyquist res?
-  float xstd = 0.0f, ystd = 0.0f;
-
-#if 0 // normalize homogeneous coordinates
   float max_projection_size = 20.0f;
 
   // if xsize is too big something is wrong - probably an invalid homography
@@ -329,7 +329,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         }
       }
       else {
-        vcl_cerr << "error: img_to_slab (multi-dimensional): nplanes = " << img_view->nplanes() <<", but N = " << N << vcl_endl;
+        vcl_cerr << "error: img_to_slab (multi-dimensional): nplanes = " << img_view->nplanes() <<", but N = " << N << '\n';
         return false;
       }
     }
@@ -385,7 +385,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         }
       }
       else {
-        vcl_cerr << "error: img_to_slab (multi-dimensional): nplanes = " << img_view->nplanes() <<", but N = " << N << vcl_endl;
+        vcl_cerr << "error: img_to_slab (multi-dimensional): nplanes = " << img_view->nplanes() <<", but N = " << N << '\n';
         return false;
       }
     }
@@ -474,7 +474,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         vil_convert_planes_to_grey(img_view_plane,img_view_grey);
       }
       else {
-        vcl_cerr << "error: pixel format RGB, but nplanes = " << img_view_rgb->nplanes() << vcl_endl;
+        vcl_cerr << "error: pixel format RGB, but nplanes = " << img_view_rgb->nplanes() << '\n';
         return false;
       }
       vil_image_view<float>::const_iterator img_it = img_view_grey.begin();
@@ -507,7 +507,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         vil_convert_planes_to_grey(img_view_plane,img_view_grey);
       }
       else {
-        vcl_cerr << "error: pixel format RGB, but nplanes = " << img_view_rgb->nplanes() << vcl_endl;
+        vcl_cerr << "error: pixel format RGB, but nplanes = " << img_view_rgb->nplanes() << '\n';
         return false;
       }
       vil_image_view<float>::const_iterator img_it = img_view_grey.begin();

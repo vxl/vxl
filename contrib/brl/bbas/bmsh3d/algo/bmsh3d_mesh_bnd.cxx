@@ -53,9 +53,9 @@ void bmsh3d_bnd_chain::trace_polyline (vcl_vector<vgl_point_3d<double> >& polyli
   polyline_vertices.push_back (Vo->pt());
 
   vcl_vector<bmsh3d_halfedge*>::iterator it = HE_list_.begin();
-  for (unsigned int i=0; i<HE_list_.size()-1; i++) {
-    HE0 = HE_list (i);
-    HE1 = HE_list (i+1);
+  for (; it != HE_list_.end(); ) {
+    HE0 = *it;
+    HE1 = *++it;
     V = incident_V_of_Es (HE0, HE1);
     polyline_vertices.push_back (V->pt());
   }

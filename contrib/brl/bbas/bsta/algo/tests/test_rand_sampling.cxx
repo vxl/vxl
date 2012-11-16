@@ -40,17 +40,14 @@ MAIN( test_rand_sampling)
     ho.upcount(sample,1.0f-vis);
   }
 
-  unsigned bmax = 0, bmaxo = 0;
   float nmax = 0, nmaxo = 0;
   for (unsigned b = 0; b<nbins; ++b)
     if (h.counts(b)>nmax) {
       nmax = h.counts(b);
-      bmax = b;
     }
   for (unsigned b = 0; b<nbins-1; ++b)
     if (ho.counts(b)>nmaxo) {
       nmaxo = ho.counts(b);
-      bmaxo = b;
     }
   if (nmax>nmaxo)
     hc.upcount(nmax, 1.0f);
@@ -63,5 +60,6 @@ MAIN( test_rand_sampling)
   vcl_cout << "\n histogram of bin population\n";
   for (unsigned b = 0; b<hc.nbins(); ++b)
     vcl_cout << hc.avg_bin_value(b) << ' ' << hc.counts(b) << '\n';
- return 0;
+
+  return 0;
 }

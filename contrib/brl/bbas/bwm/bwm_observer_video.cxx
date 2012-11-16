@@ -193,10 +193,10 @@ void bwm_observer_video::display_current_frame()
 #endif
     else {
       vil_image_view_base_sptr vb = vidl_convert_wrap_in_view(*frame);
-      if (vb){
+      if (vb) {
         img_tab_->set_image_view(*vb);
         vidl_image_list_istream* ilist_str = dynamic_cast<vidl_image_list_istream*>(video_istr_.ptr());
-        if (ilist_str){
+        if (ilist_str) {
           vcl_string cur_path = ilist_str->current_path();
           img_tab_->set_file_name(cur_path);
         }
@@ -677,8 +677,6 @@ void bwm_observer_video::display_selected_world_pt()
     return ;
   }
   vcl_vector<bwm_video_corr_sptr> corrs;
-  unsigned frame;
-  unsigned corr_index;
   for (vcl_vector<vgui_soview2D*>::iterator cit = selected.begin();
        cit != selected.end(); ++cit)
   {
@@ -687,21 +685,20 @@ void bwm_observer_video::display_selected_world_pt()
     vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
       corr_soview_map_.begin();
     bool found = false;
+    unsigned corr_index = 0;
     for (; fit != corr_soview_map_.end()&&!found; ++fit)
       for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
            mit != (*fit).second.end()&&!found; ++mit)
         if ((*mit).second == cross)
         {
           found = true;
-          frame = (*fit).first;
           corr_index = (*mit).first;
         }
-    if (!found)
-      return ;
-    bwm_video_corr_sptr corr = video_corrs_[corr_index];
-    if (!corr)
-      return ;
-    this->display_projected_3d_point(corr);
+    if (found) {
+      bwm_video_corr_sptr corr = video_corrs_[corr_index];
+      if (corr)
+        this->display_projected_3d_point(corr);
+    }
   }
 }
 
@@ -763,8 +760,6 @@ bool bwm_observer_video::extract_world_plane(vgl_plane_3d<double>&  plane)
     return false;
   }
   vcl_vector<bwm_video_corr_sptr> corrs;
-  unsigned frame;
-  unsigned corr_index;
   for (vcl_vector<vgui_soview2D*>::iterator cit = selected.begin();
        cit != selected.end(); ++cit)
   {
@@ -773,13 +768,13 @@ bool bwm_observer_video::extract_world_plane(vgl_plane_3d<double>&  plane)
     vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
       corr_soview_map_.begin();
     bool found = false;
+    unsigned corr_index = 0;
     for (; fit != corr_soview_map_.end()&&!found; ++fit)
       for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
            mit != (*fit).second.end()&&!found; ++mit)
         if ((*mit).second == cross)
         {
           found = true;
-          frame = (*fit).first;
           corr_index = (*mit).first;
         }
     if (!found)
@@ -816,8 +811,6 @@ extract_neighborhoods(unsigned nhd_radius_x,unsigned nhd_radius_y,
   int rd_x = nhd_radius_x;
   int rd_y = nhd_radius_y;
   vcl_vector<bwm_video_corr_sptr> corrs;
-  unsigned frame;
-  unsigned corr_index;
   for (vcl_vector<vgui_soview2D*>::iterator cit = selected.begin();
        cit != selected.end(); ++cit)
   {
@@ -826,13 +819,13 @@ extract_neighborhoods(unsigned nhd_radius_x,unsigned nhd_radius_y,
     vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
       corr_soview_map_.begin();
     bool found = false;
+    unsigned corr_index = 0;
     for (; fit != corr_soview_map_.end()&&!found; ++fit)
       for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
            mit != (*fit).second.end()&&!found; ++mit)
         if ((*mit).second == cross)
         {
           found = true;
-          frame = (*fit).first;
           corr_index = (*mit).first;
         }
     if (!found)

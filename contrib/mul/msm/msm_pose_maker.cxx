@@ -6,6 +6,7 @@
 #include "msm_pose_maker.h"
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 
@@ -55,7 +56,6 @@ void msm_pose_maker::create_vectors(const msm_points& points,
   dir.resize(n_points);
   for (unsigned i=0;i<n_points;++i)
   {
-    vgl_point_2d<double> p=points[i];
     if (end0_[i]==end1_[i])
     {
       dir[i]=vgl_vector_2d<double>(1,0);
@@ -63,7 +63,7 @@ void msm_pose_maker::create_vectors(const msm_points& points,
     else
     {
       vgl_vector_2d<double> t = points[end0_[i]]
-                                 - points[end1_[i]];
+                              - points[end1_[i]];
       double L=t.length();
       if (L<=1e-8)
         dir[i]=vgl_vector_2d<double>(1,0);
@@ -78,7 +78,7 @@ void msm_pose_maker::create_vectors(const msm_points& points,
 
 //: Compute mean distance between equivalent points, measured along normals to curves
 //  Where normal not defined, use the absolute distance.
-double msm_pose_maker::mean_normal_distance(const msm_points& points1, 
+double msm_pose_maker::mean_normal_distance(const msm_points& points1,
                                             const msm_points& points2) const
 {
   assert(points1.size()==points2.size());

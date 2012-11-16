@@ -56,6 +56,7 @@ static void test_depth_map()
   vsol_polygon_2d_sptr r2d = gpr->region_2d();
   vsol_polygon_3d_sptr r3d = gpr->region_3d();
   vgl_plane_3d<double> pl3d = r3d->plane();
+  vcl_cout << "Plane: " << pl3d << '\n';
   unsigned nv = r2d->size();
   double erh = 0.0;
   for (unsigned i = 0; i<nv; ++i) {

@@ -73,24 +73,30 @@ void brad_synoptic_function_1d::fit_intensity_cubic()
   vnl_matrix<double> W(n,n, 0.0);
   vnl_vector<double> y(n);
 
-  double min_s = 1e10;
-  double max_s = -1e10;
+  double min_s = 1e99;
+  double max_s = -1e99;
 
+#ifdef USE_MIN_MAX_VIS
   double min_vis=0.0;
   double max_vis=0.0;
+#endif
 
   for (unsigned r = 0; r<n;++r)
   {
     double s = this->arc_length(r);
-    if (min_s >   s)
+    if (min_s > s)
     {
       min_s = s;
+#ifdef USE_MIN_MAX_VIS
       min_vis = vis_[r];
+#endif
     }
     if ( max_s < s)
     {
-      max_vis = vis_[r];
       max_s =s;
+#ifdef USE_MIN_MAX_VIS
+      max_vis = vis_[r];
+#endif
     }
   }
   for (unsigned r = 0; r<n;++r) {
@@ -105,7 +111,11 @@ void brad_synoptic_function_1d::fit_intensity_cubic()
   l[2] = min_s*min_s - max_s*max_s ;
   l[3] = min_s*min_s*min_s - max_s*max_s*max_s ;
 
-  vnl_double_4x4 ll= /*vcl_min(min_vis, max_vis)*/outer_product<double>(l,l);
+#ifdef USE_MIN_MAX_VIS
+  vnl_double_4x4 ll= vcl_min(min_vis, max_vis);
+#else
+  vnl_double_4x4 ll= outer_product<double>(l,l);
+#endif
   //compute cubic coefficients
   vnl_matrix<double> Xt = X.transpose();
   vnl_matrix<double> Xtw = Xt*W;

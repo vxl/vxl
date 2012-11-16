@@ -523,12 +523,14 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
     rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
   vpgl_scale_offset<double> sov =
     rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
+#if 0 // unused
   vpgl_scale_offset<double> sox =
     rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
   vpgl_scale_offset<double> soy =
     rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
   vpgl_scale_offset<double> soz =
     rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
+#endif
   unsigned ni = static_cast<unsigned>(2*sou.scale());//# image columns
   unsigned nj = static_cast<unsigned>(2*sov.scale());//# image rows
 
@@ -724,8 +726,6 @@ upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
                      r01 = ray_nbrs[1];
   vgl_ray_3d<double> r10 = ray_nbrs[2],
                      r11 = ray_nbrs[3];
-  vgl_point_3d<double> org = ray.origin();
-  vgl_vector_3d<double> dir = ray.direction();
   vgl_point_3d<double> org00 = r00.origin(),
                        org01 = r01.origin();
   vgl_point_3d<double> org10 = r10.origin(),
@@ -1064,13 +1064,13 @@ convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
     return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
 
   if (vpgl_perspective_camera<double>* cam =
-    dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr())) {
-      return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
+      dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr())) {
+    return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
   }
 
   if (vpgl_proj_camera<double>* cam =
-    dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr())) {
-      return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
+      dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr())) {
+    return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
   }
 
   if (vpgl_affine_camera<double>* cam =
