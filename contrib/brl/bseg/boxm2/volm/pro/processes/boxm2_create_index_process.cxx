@@ -172,7 +172,6 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   global_threads[0] = RoundUp(layer_size, (int)local_threads[0]);
   vcl_cout << "layer_size: " << layer_size << ", # of global threads: " << global_threads[0] << '\n';
-  unsigned int thread_cnt = (unsigned)global_threads[0];
 
   //cache size sanity check
   long binCache = (long)(opencl_cache.ptr()->bytes_in_cache());
@@ -205,8 +204,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   // create directions buffer
   cl_float* ray_dirs = new cl_float[4*layer_size];
   vcl_vector<vgl_point_3d<double> >& cart_points = sph_shell->cart_points();
-  int cnt = 0;
-  for (int i = 0; i < layer_size; i++) {
+  for (int i = 0; i < layer_size; ++i) {
     ray_dirs[4*i  ] = (cl_float)cart_points[i].x();
     ray_dirs[4*i+1] = (cl_float)cart_points[i].y();
     ray_dirs[4*i+2] = (cl_float)cart_points[i].z();
@@ -254,13 +252,13 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
     // Output Arrays
     float* buff = new float[layer_size];
-    for (int i=0;i<layer_size;i++) buff[i]=0.0f;
+    for (int i=0;i<layer_size;++i) buff[i]=0.0f;
     float* vis_buff = new float[layer_size];
-    for (int i=0;i<layer_size;i++) vis_buff[i]=1.0f;
+    for (int i=0;i<layer_size;++i) vis_buff[i]=1.0f;
     float* prob_buff = new float[layer_size];
-    for (int i=0;i<layer_size;i++) prob_buff[i]=0.0f;
+    for (int i=0;i<layer_size;++i) prob_buff[i]=0.0f;
     float* t_infinity_buff = new float[layer_size];
-    for (int i=0;i<layer_size;i++) t_infinity_buff[i]=0.0f;
+    for (int i=0;i<layer_size;++i) t_infinity_buff[i]=0.0f;
 
     bocl_mem* exp_depth=new bocl_mem(device->context(),buff,layer_size*sizeof(float),"exp depth buffer");
     exp_depth->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -288,7 +286,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
         vcl_cerr << " Scene does not contain hypothesis: " << hyp.current_-skip << ' ' << local_h_pt_d << " writing empty array for it!\n";
         vcl_vector<unsigned char> values(layer_size, 0);
         ind->add_to_index(values);
-        indexed_cnt++;
+        ++indexed_cnt;
         // release the device and host memories
         delete exp_depth;  // calls release_memory() which enqueues a mem delete event, call clFinish to make sure it is executed
         delete vis;
@@ -316,7 +314,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
         vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator to_kick = order_cache.begin();
         if (to_kick->first != curr_block)
           order_cache.erase(to_kick);
-        else { to_kick++; order_cache.erase(to_kick); }
+        else { ++to_kick; order_cache.erase(to_kick); }
       }
     }
     vcl_vector<boxm2_block_id>& vis_blocks = order_cache[curr_block];
@@ -401,14 +399,14 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     }
 #if 0
     vcl_cout << "exp depths after normalization:\n";
-    for (unsigned i = 0; i < layer_size; i++) {
+    for (unsigned i = 0; i < layer_size; ++i) {
       vcl_cout << buff[i] << " (" << vis_buff[i] << ") ";
     }
     vcl_cout << vcl_endl;
 #endif
     // find each depth interval using spherical container
     vcl_vector<unsigned char> values;
-    for (int i = 0; i < layer_size; i++) {
+    for (int i = 0; i < layer_size; ++i) {
       // check if sky
       if (vis_buff[i] > vis_thres) {
         if (buff[i] > 0)  //  if the ray goes into the world vis stays 1 but depth stays 0 too, so don't confuse that with sky
@@ -424,7 +422,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 #endif
     // add to index
     ind->add_to_index(values);
-    indexed_cnt++;
+    ++indexed_cnt;
 
     // release the device and host memories
     delete exp_depth;  // calls release_memory() which enqueues a mem delete event, call clFinish to make sure it is executed
@@ -528,7 +526,7 @@ bool boxm2_partition_hypotheses_process(bprb_func_process& pro)
   volm_loc_hyp hyp2;  // empty one
   boxm2_block_id curr_block;
 
-  for (unsigned hi = 0; hi < hyp.size(); hi++)
+  for (unsigned hi = 0; hi < hyp.size(); ++hi)
   {
     vgl_point_3d<float> h_pt;
     if (!hyp.get_next(h_pt)) {
@@ -628,7 +626,7 @@ bool boxm2_hypotheses_kml_process(bprb_func_process& pro)
     vcl_stringstream box_id; box_id << hyp.current_-1;
     vcl_string desc = "desc";
     bkml_write::write_box(ofs, box_id.str(), desc, ul, ur, ll, lr);
-    cnt++;
+    ++cnt;
     if (cnt > 10)
       break;
   }
@@ -692,9 +690,9 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   ind->initialize_read(index_file);
 
   vcl_vector<unsigned char> values(layer_size);
-  for (unsigned j = 0; j < si; j++)
+  for (unsigned j = 0; j < si; ++j)
     ind->get_next(values);
-  for (unsigned j = si; j < ei; j++) {
+  for (unsigned j = si; j < ei; ++j) {
     vcl_stringstream str; str << prefix << '_' << j;
     vcl_string temp_name = str.str() + ".vrml";
     ind->get_next(values);
