@@ -1,6 +1,7 @@
 #include "boxm2_volm_matcher.h"
 #include "boxm2_volm_wr3db_index.h"
 #include <vcl_where_root_dir.h>
+#include <vcl_algorithm.h>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 
@@ -10,8 +11,8 @@ boxm2_volm_matcher::boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_i
   vul_timer transfer;
   // define the work item and work group based on number of camera and the number of voxels inside the query
   work_dim = 2;
-  unsigned int n_cam = query_->get_cam_num();     // number of camera;
-  unsigned int n_obj = query_->get_query_size();  // number of objects;
+  n_cam = query_->get_cam_num();     // number of camera;
+  n_obj = query_->get_query_size();  // number of objects;
   local_threads[0] = 8;
   local_threads[1] = 8;
   cl_ni=(unsigned)RoundUp(n_cam,(int)local_threads[0]);  // row is camera
@@ -26,9 +27,9 @@ boxm2_volm_matcher::boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_i
   for (unsigned i = 0; i < cl_ni*cl_nj; i++) {
     queries_buff[i] = (unsigned char)255;
   }
-  // fill the query array from query
-  for (unsigned i = 0; i < query_->get_cam_num(); i++) {
-    for (unsigned k = 0; k < query_->get_query_size(); k++){
+  // fill the query array from query 
+  for(unsigned i = 0; i < n_cam; i++) {
+    for(unsigned k = 0; k < n_obj; k++){
       unsigned idx = i * cl_nj + k;
       queries_buff[idx] = (query_->min_dist())[i][k];
     }
@@ -37,12 +38,37 @@ boxm2_volm_matcher::boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_i
   query_cl = new bocl_mem(gpu_->context(), queries_buff, sizeof(unsigned char)*cl_ni*cl_nj, " query " );
   if (!query_cl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )){
     delete query_cl;
-    vcl_cout << " ERROR: create buffer failed for query" << vcl_endl;
+    vcl_cout << " ERROR: create bocl_mem failed for QUERY " << vcl_endl;
   }
-  vcl_cout << "  1. Transfering queries to 1D array for all devices --- \t" << transfer.all()/1000.0 << " seconds." << vcl_endl;
+
+  // create bocl_mem for weight parameters (should read from query later)
+  weight_buff = new float[cl_ni*cl_nj];
+  for(unsigned wIdx = 0; wIdx < cl_ni*cl_nj; wIdx++){
+      weight_buff[wIdx] = 1.0f;
+  }
+  weight = new bocl_mem(gpu_->context(), weight_buff, sizeof(float)*cl_ni*cl_nj, " weight " );
+  if(!weight->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )){
+    vcl_cout << "\n ERROR: creating bocl_mem failed for WEIGHT " << vcl_endl;
+    delete weight;      delete [] weight_buff;
+    delete query_cl;
+  }
+  // create voxel_size for weight summation kernel
+  v_size_buff = new unsigned[2];
+  v_size_buff[0] = cl_nj;
+  v_size_buff[1] = n_obj;
+  voxel_size = new bocl_mem(gpu_->context(), v_size_buff, sizeof(unsigned)*2, " voxel_size " );
+  if(!voxel_size->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR) ){
+    vcl_cout << "\n ERROR: creating bocl_mem failed for VOXEL_SIZE " << vcl_endl;
+    delete voxel_size; 
+    delete weight;
+    delete query_cl;
+  }
+  vcl_cout << "  1. Transfering queries/weight to 1D array for all devices --- \t" << transfer.all()/1000.0 << " seconds. " << vcl_endl;
   // create command queue lists for all devices
   if (!this->setup_queue()) {
     vcl_cerr << "ERROR happens when create queue and setup queries for each device\n";
+    delete voxel_size; 
+    delete weight;
     delete query_cl;
   }
   // compile kernel
@@ -52,6 +78,8 @@ boxm2_volm_matcher::boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_i
     vcl_vector<bocl_kernel*> ks;
     if (!compile_kernel(gpu_,ks)) {
       vcl_cerr << " ERROR happens when compiling kernels on device " << identifier << '\n';
+      delete voxel_size; 
+      delete weight;
       delete query_cl;
     }
     kernels[identifier] = ks;
@@ -61,7 +89,9 @@ boxm2_volm_matcher::boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_i
 
 boxm2_volm_matcher::~boxm2_volm_matcher()
 {
-  delete queries_buff;
+  delete [] queries_buff;
+  delete [] v_size_buff;
+  delete [] weight_buff;
 }
 
 bool boxm2_volm_matcher::setup_queue()
@@ -83,13 +113,23 @@ bool boxm2_volm_matcher::compile_kernel(bocl_device_sptr device,vcl_vector<bocl_
   vcl_vector<vcl_string> src_paths;
   vcl_string volm_cl_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/volm/cl/";
   src_paths.push_back(volm_cl_source_dir + "generalized_volm_matching_layer.cl");
-  // create the kernel
-  vcl_cout << src_paths[0] << vcl_endl;
+  src_paths.push_back(volm_cl_source_dir + "generalized_volm_matching_score_order_weight_sum.cl");
+  //: create the kernel for matcher
   bocl_kernel* volm_match = new bocl_kernel();
   if (!volm_match->create_kernel(&device->context(), device->device_id(), src_paths, "generalized_volm_matching_layer", "", "generalized_volm_matching_layer") ) {
       return false;
   }
   vec_kernels.push_back(volm_match);
+
+  //: create the kernel for summrization
+  bocl_kernel* volm_sum = new bocl_kernel();
+  if(!volm_sum->create_kernel(&device->context(), device->device_id(), src_paths, 
+                              "generalized_volm_matching_score_order_weight_sum", 
+                              "", 
+                              "generalized_volm_matching_score_order_weight_sum") ){
+    return false;
+  }
+  vec_kernels.push_back(volm_sum);
   return true;
 }
 
@@ -99,90 +139,131 @@ bool boxm2_volm_matcher::matching_cost_layer()
   unsigned layer_size = (unsigned)query_->get_query_size();
   vul_timer transfer;
   float gpu_time = 0.0f;
+  float gpu_time_sum = 0.0f;
   unsigned count = (unsigned)(0.1*ei_);
-  vcl_cerr << "  3. Start to match all " << ei_ << '(' << ei_ << ") indices with " << query_->get_cam_num() << " cameras per index ";
-  for (unsigned indIdx = 0; indIdx < ei_; indIdx++)
-  {
-    if (!(indIdx % count) ) vcl_cerr << '.';
+  vcl_cerr << "  3. Start to match all " << ei_ << "(" << ei_ << ") indices with " << n_cam << " cameras per index " ;
+  for (unsigned indIdx = 0; indIdx < ei_; indIdx++) {
+    if (!(indIdx % count) ) vcl_cerr << "." ;
     bocl_device_sptr device = gpu_;
     vcl_string identifier = device->device_identifier();
     // create index buffer and index bocl_mem
     unsigned char* index_buff = new unsigned char[cl_nj];
-    for (unsigned k = 0; k < cl_nj; k++)
-      index_buff[k] = (unsigned char)0;
+    vcl_fill(index_buff, index_buff+cl_nj, (unsigned char)0); 
     vcl_vector<unsigned char> values(layer_size);
     ind_->get_next(values);
     for (unsigned k = 0; k < layer_size; k++)
       index_buff[k] = values[k];
     bocl_mem* index = new bocl_mem(device->context(), index_buff, sizeof(unsigned char)*cl_nj, " index " );
     if (!index->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )){
-      delete index;
-      delete query_cl;
-      delete [] index_buff;
-      vcl_cout << " ERROR: create buffer failed for index when handling index " << indIdx << vcl_endl;
+      delete index;       delete [] index_buff;
+      delete voxel_size;  delete weight;  delete query_cl;
+      vcl_cout << " ERROR: creating bocl_mem failed for SCORE when handling index " << indIdx << vcl_endl;
       return false;
     }
     // create score output buffer and index bocl_mem
     unsigned char* score_buff = new unsigned char[cl_ni*cl_nj];
-    for (unsigned k = 0; k < cl_ni*cl_nj; k++)
-      score_buff[k] = 0;
+    //vcl_fill(score_buff, score_buff + cl_ni*cl_nj, (unsigned char)0);
+    //for(unsigned k = 0; k < cl_ni*cl_nj; k++)
+    //  score_buff[k] = (unsigned char)0;
     bocl_mem* score = new bocl_mem(device->context(), score_buff, sizeof(unsigned char)*cl_ni*cl_nj, " score " );
     if (!score->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )){
-      delete index;
-      delete score;
-      delete query_cl;
-      delete [] index_buff;
-      delete [] score_buff;
-      vcl_cout << "\n ERROR: create buffer failed for score when handling index " << indIdx << vcl_endl;
+      vcl_cout << "\n ERROR: creating bocl_mem failed for SCORE when handling index " << indIdx << vcl_endl;
+      delete index;       delete [] index_buff;
+      delete score;       delete [] score_buff;
+      delete voxel_size;  delete weight;  delete query_cl;
       return false;
     }
     // execute kernel on each device for matching
-    if (!this->execute_kernel(device, queue, query_cl, score, index, kernels[identifier][0])){
-      delete index;
-      delete score;
-      delete query_cl;
-      status = clFinish(queue);
-      check_val(status, MEM_FAILURE, "\n release index buffer FAILED on device " + device->device_identifier() + error_to_string(status));
-      delete [] index_buff;
-      delete [] score_buff;
-      vcl_cerr << "\n ERROR happens when execute kernel for index " << indIdx << " on device " << identifier << '\n';
+    if (!this->execute_match_kernel(device, queue, query_cl, score, index, kernels[identifier][0])){
+      vcl_cout << "\n ERROR Executing MATCH kernel failed for index " << indIdx << " on device " << identifier << "\n";
+      delete index;       delete [] index_buff;
+      delete score;       delete [] score_buff;
+      delete voxel_size;  delete weight;  delete query_cl;
       return false;
     }
     gpu_time += kernels[identifier][0]->exec_time();
-    // extract the output
-    score->read_to_buffer(queue);
+    // delete index from host and device
+    delete index;
     status = clFinish(queue);
-    check_val(status, MEM_FAILURE, "\n Read to output buffers FAILED on device " + device->device_identifier() + error_to_string(status));
+    check_val(status, MEM_FAILURE, " release INDEX failed on device " + device->device_identifier() + error_to_string(status));
+    delete [] index_buff;
+
+    // execute kernel for weight summary
+    float * score_cam_buff = new float[cl_ni];
+    //vcl_fill(score_cam_buff, score_cam_buff+cl_ni, (float)0);
+    //for(unsigned sIdx = 0; sIdx < cl_ni; sIdx++){
+    //  score_cam_buff[sIdx] = 0.0f;
+    //}
+    bocl_mem* score_cam = new bocl_mem(device->context(), score_cam_buff, sizeof(float)*cl_ni, " score_cam " );
+    if (!score_cam->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cout << "\n ERROR: creating bocl_mem failed for SCORE_CAM when handling index " << indIdx << vcl_endl;
+      delete score;       delete [] score_buff;
+      delete score_cam;   delete [] score_cam_buff;
+      delete voxel_size;  delete weight;  delete query_cl;
+      return false;
+    }
+    // execute weight sum kernel
+    if (!this->execute_weight_sum_kernel(device, queue, score, voxel_size, weight, score_cam, kernels[identifier][1])) {
+      vcl_cout << "\n ERROR Executing WEIGHTED_SUM kernel failed for index " << indIdx << " on device " << identifier << "\n";
+      delete score;      delete [] score_buff;
+      delete score_cam;  delete [] score_cam_buff;
+      delete voxel_size;  delete weight;  delete query_cl;
+      return false;    
+    }
+    gpu_time_sum += kernels[identifier][1]->exec_time();
+    // extract score_cam output
+    score_cam->read_to_buffer(queue);
+    status = clFinish(queue);
+    check_val(status, MEM_FAILURE, " read SCORE_CAM output buffer FAILED on device " + device->device_identifier() + error_to_string(status));
+    // find the maximum from score_cam_buff using map
+    vcl_map<float, unsigned> score_map;
+    for(unsigned k = 0; k < n_cam; k++)
+      score_map[score_cam_buff[k]] = k;
+    vcl_map<float, unsigned>::iterator it = --score_map.end();
+    score_all_.push_back(it->first/query_->get_valid_ray_num(it->second));
+    cam_all_id_.push_back(it->second);
+
+#if 0
+    vcl_cout << " indIdx = " << indIdx << " score_gpu = " << it->first << " cam_gpu = " << it->second << vcl_endl; 
+    score->read_to_buffer(queue);
+    // ---------------  CPU summery , for testing purpose ------------------ //
     // summerize the score for each camera
-    vcl_vector<float> score_cam(cl_ni);
-    for (unsigned camIdx = 0; camIdx < cl_ni; camIdx++) {
-      score_cam[camIdx] = 0;
-      for (unsigned objIdx = 0; objIdx < cl_nj; objIdx++) {
+    vcl_vector<float> score_cam_cpu(cl_ni);
+    for(unsigned camIdx = 0; camIdx < n_cam; camIdx++) {
+      score_cam_cpu[camIdx] = 0;
+      for(unsigned objIdx = 0; objIdx < n_obj; objIdx++) {
         unsigned idx = camIdx * cl_nj + objIdx;
-        score_cam[camIdx] += (float)score_buff[idx];
+        score_cam_cpu[camIdx] += (float)score_buff[idx];
       }
     }
     // find the maximum score and normalize for current index
-    float max_score = 0;
-    unsigned int cam_id = 0;
-    for (unsigned k = 0; k < cl_ni; k++)
-      if (max_score < score_cam[k]){
-        max_score = score_cam[k];
-        cam_id = k;
+    float max_score_cpu = 0.0f;
+    unsigned int cam_id_cpu = 0;
+    for(unsigned k = 0; k < n_cam; k++)
+      if(max_score_cpu < score_cam_cpu[k]){
+        max_score_cpu = score_cam_cpu[k];
+        cam_id_cpu = k;
       }
-    score_all_.push_back(max_score/query_->get_valid_ray_num(cam_id));
-    cam_all_id_.push_back(cam_id);
-    // release device and host memory for index and score
+    vcl_cout << " indIdx = " << indIdx << " score_gpu = " << it->first << ", score_cpu = " << max_score_cpu
+             << " cam_gpu = " << it->second << ", cam_cpu = " << cam_id_cpu << vcl_endl; 
+    //score_all_.push_back(max_score/query_->get_valid_ray_num(cam_id_cpu));
+    //cam_all_id_.push_back(max_score_cpu);
+    // -------------- CPU summery, for testing purpose
+#endif
+    // release device and host memory for score, weight and score_cam
     delete score;
-    delete index;
+    delete score_cam;
     status = clFinish(queue);
-    check_val(status, MEM_FAILURE, " release index and score memory FAILED on device " + device->device_identifier() + error_to_string(status));
-    delete [] index_buff;
+    check_val(status, MEM_FAILURE, " release SCORE/WEIGHT/SCORE_CAM failed on device " + device->device_identifier() + error_to_string(status));
     delete [] score_buff;
+    delete [] score_cam_buff;
+
   } //loop over all indices
-  vcl_cout << '\n'
-           << "  \t kernel execution time ---\t " << gpu_time << " milliseconds" << '\n'
-           << "  \t total time for matching " << ei_ << " indices with " << query_->get_cam_num() << " cameras ---\t " << transfer.all()/1000 << " seconds" << vcl_endl;
+
+  vcl_cout << "\n";
+  vcl_cout << "  \t matcher kernel execution time ---\t " << gpu_time << " milliseconds" << vcl_endl;
+  vcl_cout << "  \t weight sum kernel execution time ---\t " << gpu_time_sum << " milliseconds" << vcl_endl;
+  vcl_cout << "  \t total time for matching " << ei_ << " indices with " << n_cam << " cameras ---\t " << transfer.all() << " milliseconds " << vcl_endl;
   // release device memory for queries
   delete query_cl;
   clFinish(queue);
@@ -191,12 +272,12 @@ bool boxm2_volm_matcher::matching_cost_layer()
   return true;
 }
 
-bool boxm2_volm_matcher::execute_kernel(bocl_device_sptr  device,
-                                        cl_command_queue& queue,
-                                        bocl_mem*         query,
-                                        bocl_mem*         score,
-                                        bocl_mem*         index,
-                                        bocl_kernel*      kern)
+bool boxm2_volm_matcher::execute_match_kernel(bocl_device_sptr device,
+                                             cl_command_queue& queue,
+                                                     bocl_mem* query,
+                                                     bocl_mem* score,
+                                                     bocl_mem* index,
+                                                  bocl_kernel* kern)
 {
   // create a buff for debug
   cl_int status;
@@ -222,7 +303,7 @@ bool boxm2_volm_matcher::execute_kernel(bocl_device_sptr  device,
     delete debug_out;
     status = clFinish(queue);
     check_val(status, MEM_FAILURE, " release debug buffer FAILED on device " + device->device_identifier() + error_to_string(status));
-    if (!debug_buff)  delete [] debug_buff;
+    delete [] debug_buff;
     return false;
   }
   // clear the kernel argument (has nothing to do with the queue)
@@ -240,6 +321,44 @@ bool boxm2_volm_matcher::execute_kernel(bocl_device_sptr  device,
   check_val(status, MEM_FAILURE, " release debug buffer FAILED on device " + device->device_identifier() + error_to_string(status));
   delete [] debug_buff;
 
+  return true;
+}
+
+
+bool boxm2_volm_matcher::execute_weight_sum_kernel(bocl_device_sptr device,
+                                                   cl_command_queue& queue,
+                                                   bocl_mem* score,
+                                                   bocl_mem* voxel_size,
+                                                   bocl_mem* weight,
+                                                   bocl_mem* score_cam,
+                                                   bocl_kernel* kern)
+{
+  cl_int status;
+  float* debug_buff = new float[100];
+  bocl_mem* debug_out = new bocl_mem(device->context(), debug_buff, sizeof(float)*100, " debug_output " );
+  debug_out->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
+  // redefine NR table stucture, where the current work_dim = 1
+  vcl_size_t local_threads_sum = 8;
+  vcl_size_t global_threads_sum = cl_ni;
+  // set up argument list (push_back args into bocl_kernel)
+  kern->set_arg(score);
+  kern->set_arg(voxel_size);
+  kern->set_arg(weight);
+  kern->set_arg(score_cam);
+  kern->set_arg(debug_out);
+  // execute kernel
+  if(!kern->execute(queue, 1, &local_threads_sum, &global_threads_sum)){
+    delete debug_out;
+    delete [] debug_buff;
+    return false;
+  }
+  // clear the kernal argument (has nothing to do with the queue)
+  kern->clear_args();
+  // clear the debug buffer
+  delete debug_out;
+  status = clFinish(queue);
+  check_val(status, MEM_FAILURE, " release debug buffer FAILED on device " + device->device_identifier() + error_to_string(status));
+  delete [] debug_buff;
   return true;
 }
 

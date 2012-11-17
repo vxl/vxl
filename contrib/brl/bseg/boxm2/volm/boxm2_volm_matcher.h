@@ -37,7 +37,11 @@ class boxm2_volm_matcher
   //: create queue, bocl_mem for queries
   bool setup_queue();
   //: execute_kernel for given chunk of indices
-  bool execute_kernel(bocl_device_sptr device, cl_command_queue& queue, bocl_mem* query, bocl_mem* score, bocl_mem* index, bocl_kernel* kern);
+  bool execute_match_kernel(bocl_device_sptr device, cl_command_queue& queue, 
+                            bocl_mem* query, bocl_mem* score, bocl_mem* index, bocl_kernel* kern);
+  //: exectue kernel of summerizing scores for each camera weighted by their order
+  bool execute_weight_sum_kernel(bocl_device_sptr device, cl_command_queue& queue, 
+                                 bocl_mem* score, bocl_mem* voxel_size, bocl_mem* weight, bocl_mem* score_cam, bocl_kernel* kern);
   //: main process to streaming indices into kernel
   bool matching_cost_layer();
   //: Binary score to stream.
@@ -54,6 +58,8 @@ class boxm2_volm_matcher
   bocl_device_sptr gpu_;
   vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
   //: GPU work item and work group (1D case)
+  unsigned int n_cam;
+  unsigned int n_obj;
   unsigned int cl_ni;
   unsigned int cl_nj;
   cl_uint work_dim;
@@ -64,6 +70,10 @@ class boxm2_volm_matcher
   cl_command_queue queue;
   bocl_mem* query_cl;
   unsigned char* queries_buff;
+  bocl_mem* weight;
+  float* weight_buff;
+  bocl_mem* voxel_size;
+  unsigned* v_size_buff;
 };
 
 #endif  // boxm2_volm_matcher_h_
