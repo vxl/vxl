@@ -101,7 +101,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     vcl_vector<float> alphas;
     vcl_vector<float> abs_depth;
     vcl_vector<float> data_to_return;
-    int nelems;
+    int nelems = 0; // initialise here, in case the "for" loop is empty
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         boxm2_block *     blk  =  cache->get_block(*id);
