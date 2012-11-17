@@ -2032,8 +2032,8 @@ void bwm_observer_cam::add_vertical_depth_region(double min_depth,
 vcl_vector<depth_map_region_sptr> bwm_observer_cam::scene_regions()
 {
   vcl_vector<depth_map_region_sptr> regions;
-  if (scene_.sky()) regions.push_back(scene_.sky());
-  if (scene_.ground_plane()) regions.push_back(scene_.ground_plane());
+  if (scene_.sky().size()) regions.push_back(scene_.sky()[0]);
+  if (scene_.ground_plane().size()) regions.push_back(scene_.ground_plane()[0]);
   vcl_vector<depth_map_region_sptr> temp = scene_.scene_regions();
   for (vcl_vector<depth_map_region_sptr>::iterator rit = temp.begin();
        rit != temp.end(); ++rit)
@@ -2043,8 +2043,8 @@ vcl_vector<depth_map_region_sptr> bwm_observer_cam::scene_regions()
 
 void bwm_observer_cam::set_ground_plane_max_depth()
 {
-  if (scene_.ground_plane()) {
-    double depth = scene_.ground_plane()->max_depth();
+  if (scene_.ground_plane().size()) {
+    double depth = scene_.ground_plane()[0]->max_depth();
     if (depth != -1.0)
       scene_.set_ground_plane_max_depth(depth);
   }
@@ -2062,7 +2062,7 @@ void bwm_observer_cam::save_depth_map_scene(vcl_string const& path)
 
 void bwm_observer_cam::display_depth_map_scene()
 {
-  depth_map_region_sptr gp = scene_.ground_plane();
+  depth_map_region_sptr gp = scene_.ground_plane()[0];
   if (gp) {
     bwm_observer_img::create_polygon(gp->region_2d());
     vsol_point_2d_sptr c = gp->centroid_2d();
@@ -2072,7 +2072,7 @@ void bwm_observer_cam::display_depth_map_scene()
       img_tab_->text_tab()->add(x, y, gp->name());
     }
   }
-  depth_map_region_sptr sky = scene_.sky();
+  depth_map_region_sptr sky = scene_.sky()[0];
   if (sky) {
     bwm_observer_img::create_polygon(sky->region_2d());
     vsol_point_2d_sptr c = sky->centroid_2d();
