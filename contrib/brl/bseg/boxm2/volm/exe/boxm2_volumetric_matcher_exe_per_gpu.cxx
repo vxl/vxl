@@ -59,7 +59,7 @@ int main(int argc,  char** argv)
     return volm_io::LABELME_FILE_IO_ERROR;
   }
   log << "input image category: " << img_category << " size: " << dm->ni() << " x " << dm->nj() << " regions:" << vcl_endl;
-  if (dm->sky())
+  if (dm->sky().size())
     log << "\t sky region, min_depth = " << 254 << vcl_endl;
   if (dm->scene_regions().size()) {
     for (unsigned i = 0; i < dm->scene_regions().size(); i++) {
@@ -73,13 +73,13 @@ int main(int argc,  char** argv)
 
   // check the camera input file
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
-  double top_fov, top_fov_dev;
-  if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev)) {
+  double top_fov, top_fov_dev, altitude;
+  if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude)) {
     if (do_log) { volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);  volm_io::write_log(out_folder(), log.str()); }
     vcl_cout << log.str() << vcl_endl;
     return volm_io::CAM_FILE_IO_ERROR;
   }
-  log << "cam params\nheading: " << heading << " dev: " << heading_dev << "\ntilt: " << tilt << " dev: " << tilt_dev << "\nroll: " << roll << " dev: " << roll_dev << "\ntop_fov: " << top_fov << " dev: " << top_fov_dev << vcl_endl;
+  log << "cam params\nheading: " << heading << " dev: " << heading_dev << "\ntilt: " << tilt << " dev: " << tilt_dev << "\nroll: " << roll << " dev: " << roll_dev << "\ntop_fov: " << top_fov << " dev: " << top_fov_dev << "\naltitude: " << altitude << vcl_endl;
 
   // read the input hyp and index file pairs, only from the image category
   vcl_ifstream input_fs(input_file().c_str());
