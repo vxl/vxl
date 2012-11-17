@@ -170,6 +170,24 @@ set_region_3d(double depth, vpgl_perspective_camera<double> const& cam)
     region_plane_ = vgl_plane_3d<double>(region_3d_->plane());
 }
 
+
+bool depth_map_region::region_ground_2d_to_3d(vpgl_perspective_camera<double> const& cam)
+{
+  vgl_plane_3d<double> region_plane(0.0,0.0,1.0,0.0);
+  unsigned nverts = (this->region_2d())->size();
+  vcl_vector<vsol_point_3d_sptr> verts_3d;
+  for (unsigned i = 0; i < nverts; ++i) {
+    vgl_point_2d<double> pimg = (this->region_2d())->vertex(i)->get_p();
+    vgl_ray_3d<double> ray = cam.backproject_ray(pimg);
+    vgl_point_3d<double> p3d;
+    bool success = vgl_intersection(ray, region_plane, p3d);
+    if (!success){
+      return false;
+    }
+  }
+  return true;
+}
+
 static  vgl_vector_2d<double>
 vector_to_closest_horizon_pt(vgl_point_2d<double> p,
                              vgl_line_2d<double> horiz)

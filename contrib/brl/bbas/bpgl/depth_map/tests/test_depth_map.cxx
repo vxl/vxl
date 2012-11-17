@@ -113,7 +113,7 @@ static void test_depth_map()
   good = s_in
       && s_in->ni() == ssptr->ni()
       && s_in->nj() == ssptr->nj()
-      && s_in->ground_plane()->region_2d()->size() == gpr->region_2d()->size()
+      && s_in->ground_plane()[0]->region_2d()->size() == gpr->region_2d()->size()
       && s_in->image_path() == image_path;
   TEST("binary read write - depth_map_scene", good, true);
 

@@ -11,6 +11,9 @@
 //  Modifications
 //     Yi Dong     NOV--2012    added an order argument in add_region method, with default 0
 //     Yi Dong     NOV--2012    added an method to set the depth image size
+//     Yi Dong     NOV--2012    modify sky, ground_plane as vectors and methods
+//                              associated to treat mutliple region defined as ground/sky in the query img.
+//                              Therefore when creating depth_map, need to ensure all ground/sky are active.
 // \endverbatim
 // The idea is that the absolute depth map for a scene cannot often
 // be extracted from a single image since there can be unknown parameters.
@@ -45,11 +48,11 @@ class depth_map_scene : public vbl_ref_count
 {
  public:
   depth_map_scene()
-  : ni_(0), nj_(0), image_path_(""), ground_plane_(0) {}
+  : ni_(0), nj_(0), image_path_("") {}
 
   //: ni and nj are the required image dimensions
   depth_map_scene(unsigned ni, unsigned nj)
-  : ni_(ni), nj_(nj),image_path_(""), ground_plane_(0) {}
+  : ni_(ni), nj_(nj),image_path_("") {}
 
   depth_map_scene(unsigned ni, unsigned nj,
                   vcl_string const& image_path,
@@ -57,12 +60,13 @@ class depth_map_scene : public vbl_ref_count
                   depth_map_region_sptr const& ground_plane,
                   depth_map_region_sptr const& sky,
                   vcl_vector<depth_map_region_sptr> const& scene_regions);
+  
   //: accessors
   unsigned ni() const {return ni_;}
   unsigned nj() const {return nj_;}
   vcl_string image_path() const {return image_path_;}
-  depth_map_region_sptr ground_plane() const {return ground_plane_;}
-  depth_map_region_sptr sky() const {return sky_;}
+  vcl_vector<depth_map_region_sptr> ground_plane() const {return ground_plane_;}
+  vcl_vector<depth_map_region_sptr> sky() const {return sky_;}
   vcl_vector<depth_map_region_sptr> scene_regions() const;
   vpgl_perspective_camera<double> cam() const{return cam_;}
   //: set members
@@ -97,11 +101,23 @@ class depth_map_scene : public vbl_ref_count
                   depth_map_region::orientation orient,
                   unsigned order = 0);
 
+  //: add a ground region into ground_plane_
+  void add_ground(vsol_polygon_2d_sptr const& ground_plane,
+                  double min_depth = 0,
+                  double max_depth = 0,
+                  unsigned order = 0,
+                  vcl_string name = "ground_plane");
+
+  //: add a sky region into sky_
+  void add_sky(vsol_polygon_2d_sptr const& sky,
+               unsigned order = 0,
+               vcl_string name = "sky");
+
   //: return a depth map of distance from the camera. Downsample accordingly
   vil_image_view<float> depth_map(unsigned log2_downsample_ratio);
 
   //: return a depth map of the specified region, use the 'ground_plane' and 'sky' strings to specify those two regions. downsample accordingly.
-  vil_image_view<float> depth_map(vcl_string region_name, unsigned log2_downsample_ratio);
+  vil_image_view<float> depth_map(vcl_string region_name, unsigned log2_downsample_ratio, double gp_dist_cutoff = 20000);
 
   //: the iterator at the start of depth search. resets the depth_states_.
   scene_depth_iterator begin();
@@ -137,8 +153,8 @@ class depth_map_scene : public vbl_ref_count
   unsigned ni_, nj_; //: depth map dimensions
   vcl_string image_path_;
   vcl_map<vcl_string, depth_map_region_sptr> scene_regions_;
-  depth_map_region_sptr ground_plane_;
-  depth_map_region_sptr sky_;
+  vcl_vector<depth_map_region_sptr> ground_plane_;
+  vcl_vector<depth_map_region_sptr> sky_;
   vpgl_perspective_camera<double> cam_;
   //: a vector of regions with assigned depths
   vcl_vector<depth_map_region_sptr> depth_states_;

@@ -9,6 +9,7 @@
 // \date July 31, 2012
 // \verbatim
 //  Modifications
+//     Yi Dong     NOV--2012    added an method to check whether the given camera hypothesis is consistent with defined 2-d ground plane in the image
 // \endverbatim
 // units are in meters
 #include <vbl/vbl_ref_count.h>
@@ -88,6 +89,10 @@ class depth_map_region : public vbl_ref_count
     region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d, 
                     vgl_plane_3d<double> const& region_plane,
                     vpgl_perspective_camera<double> const& cam);
+
+  //: The 3-d region is fixed as in the case of the ground plane.
+  //  it returns false when the input camera can NOT project the defined 2-d ground to 3-d ground
+  bool region_ground_2d_to_3d(vpgl_perspective_camera<double> const& cam);
 
   //: The direction vector that is parallel to the ground plane and lies in the plane of the camera principal ray and the z axis. 
   //  Provides the normal to the plane perpendicular to the gound plane
