@@ -1,4 +1,3 @@
-//#pragma opencl extension cl_khr_local_int32_base_atomics: enable
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
 # if NVIDIA
   #pragma OPENCL EXTENSION cl_khr_go_sharing : enable
@@ -21,7 +20,7 @@ void generalized_volm_matching_score_order_weight_sum (__global unsigned char* s
   unsigned int end = start+voxel_size[1];
   // get offset and end for current camera
   float score = 0.0f;
-  for(unsigned j = start; j < end; j++){
+  for (unsigned j = start; j < end; j++) {
     score += weight[j]*(float)score_obj[j];
   }
   score_cam[i] = score;

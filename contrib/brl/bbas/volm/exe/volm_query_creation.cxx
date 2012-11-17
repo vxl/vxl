@@ -27,16 +27,16 @@ int main(int argc, char** argv)
   vul_arg<float> bottom_angle("-btm", "bottom angle(deg)", 0.0f);
   vul_arg<vcl_string> out_folder("-out", "output folder", "");
   vul_arg<int> save_images("-save", "save out query images or not", 0);
-  
+
   vul_arg_parse(argc, argv);
-  
+
   if (cam_file().compare("") == 0 || label_file().compare("") == 0 || out_folder().compare("") == 0) {
     vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
+
   // check the query input file
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
   }
 
   // create containers
-  
+
   volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle(),vmin(),dmax());
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, cap_angle(), point_angle(), top_angle(), bottom_angle());
 
@@ -64,30 +64,30 @@ int main(int argc, char** argv)
   // screen output
   // query check
   dm = query->depth_scene();
-  vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region " << vcl_endl;
-  if(dm->sky().size()){
-    for(unsigned i = 0; i < dm->sky().size(); i++)
+  vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
+  if (dm->sky().size()) {
+    for (unsigned i = 0; i < dm->sky().size(); i++)
       vcl_cout << "\t " << (dm->sky()[i]->name()) << " region ,\t min_depth = " << 255 << vcl_endl;
   }
-  if(dm->ground_plane().size()) {
-	for(unsigned i = 0; i < dm->ground_plane().size(); i++)
+  if (dm->ground_plane().size()) {
+    for (unsigned i = 0; i < dm->ground_plane().size(); i++)
       vcl_cout << "\t " << (dm->ground_plane()[i]->name()) << " region ,\t min_depth = " << 0 << vcl_endl;
   }
-  if(dm->scene_regions().size()) {
-    for(unsigned i = 0; i < dm->scene_regions().size(); i++) {
-      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "  
-               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth() 
-               << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth() 
+  if (dm->scene_regions().size()) {
+    for (unsigned i = 0; i < dm->scene_regions().size(); i++) {
+      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
+               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
+               << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
                << ",\t order = " << (dm->scene_regions())[i]->order()
                << vcl_endl;
     }
   }
 
   vcl_vector<depth_map_region_sptr> drs = query->depth_regions();
-  vcl_cout << " The depth regions map inside query follows on order " << vcl_endl;
-  if(drs.size()) {
-    for(unsigned i = 0; i < drs.size(); i++){
-      vcl_cout << "\t " << drs[i]->name() << " region " 
+  vcl_cout << " The depth regions map inside query follows on order" << vcl_endl;
+  if (drs.size()) {
+    for (unsigned i = 0; i < drs.size(); i++) {
+      vcl_cout << "\t " << drs[i]->name() << " region "
                << ",\t\t order = " << drs[i]->order()
                << ",\t min_dist = " << drs[i]->min_depth()
                << ",\t max_dist = " << drs[i]->max_depth()
@@ -96,22 +96,22 @@ int main(int argc, char** argv)
     }
   }
 
-  vcl_cout << " for spherical surface, point angle = " << point_angle() << " degree, " 
+  vcl_cout << " for spherical surface, point angle = " << point_angle() << " degree, "
            << ", top_angle = " << top_angle()
            << ", bottom_angle = " << bottom_angle()
-           << ", generated query has size " << query->get_query_size() << vcl_endl;
+           << ", generated query has size " << query->get_query_size() << '\n'
 
-  vcl_cout << " The query has " << query->get_cam_num() << " cameras: " << vcl_endl;
-  vcl_cout << " Generated query_size for 1 camera is " << query->get_query_size() << " byte, " 
+           << " The query has " << query->get_cam_num() << " cameras:" << '\n'
+           << " Generated query_size for 1 camera is " << query->get_query_size() << " byte, "
            << " gives total query size = " << query->get_cam_num() << " x " << query->get_query_size()
            << " = " << (double)query->get_cam_num()*(double)query->get_query_size()/(1024*1024*1024) << " GB"
            << vcl_endl;
-  
+
   // visualize query
-  if(save_images()){
+  if (save_images()) {
     vcl_string prefix = out_folder();
     query->draw_query_images(out_folder());
   }
-  
+
   return volm_io::SUCCESS;
 }
