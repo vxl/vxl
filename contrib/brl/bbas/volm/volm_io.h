@@ -40,7 +40,8 @@ class volm_io
                                                double& heading,   double& heading_dev,
                                                double& tilt,      double& tilt_dev,
                                                double& roll,      double& roll_dev,
-                                               double& top_fov,   double& top_fov_dev);
+                                               double& top_fov,   double& top_fov_dev,
+                                               double& altitude);
 
   static bool read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category);
 };

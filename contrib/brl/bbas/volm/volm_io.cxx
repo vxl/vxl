@@ -14,12 +14,12 @@
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
 
-bool volm_io::read_camera(vcl_string kml_file,
-                          unsigned const& ni, unsigned const& nj,
-                          double& heading,   double& heading_dev,
-                          double& tilt,      double& tilt_dev,
-                          double& roll,      double& roll_dev,
-                          double& top_fov,   double& top_fov_dev)
+bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned const& nj,
+                                               double& heading,   double& heading_dev,
+                                               double& tilt,      double& tilt_dev,
+                                               double& roll,      double& roll_dev,
+                                               double& top_fov,   double& top_fov_dev,
+                                               double& altitude)
 {
   bkml_parser* parser = new bkml_parser();
   vcl_FILE* xmlFile = vcl_fopen(kml_file.c_str(), "r");
@@ -31,17 +31,16 @@ bool volm_io::read_camera(vcl_string kml_file,
   if (!parser->parseFile(xmlFile)) {
     vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
              << parser->XML_GetCurrentLineNumber() << '\n';
-
     delete parser;
     return false;
   }
 
-  if (parser->heading_)       heading = parser->heading_;
-  if (parser->heading_dev_)   heading_dev = parser->heading_dev_;
-  if (parser->tilt_)          tilt = parser->tilt_;
-  if (parser->tilt_dev_)      tilt_dev = parser->tilt_dev_;
-  if (parser->roll_)          roll = parser->roll_;
-
+  if(parser->heading_)       heading = parser->heading_;
+  if(parser->heading_dev_)   heading_dev = parser->heading_dev_;
+  if(parser->tilt_)          tilt = parser->tilt_;
+  if(parser->tilt_dev_)      tilt_dev = parser->tilt_dev_;
+  if(parser->roll_)          roll = parser->roll_;
+  if(parser->altitude_)      altitude = parser->altitude_;
   double dtor = vnl_math::pi_over_180;
   double ppu = 0.5*ni;
   double ppv = 0.5*nj;
@@ -103,12 +102,18 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   vcl_vector<vcl_string>& object_names = parser.obj_names();
   vcl_vector<vcl_string>& object_types = parser.obj_types();
   vcl_vector<int>& object_orders = parser.obj_depth_orders();
-#if 0 // unused
   vcl_vector<float>& object_mindist = parser.obj_mindists();
   vcl_vector<float>& object_maxdist = parser.obj_maxdists();
-#endif
-  if (polys.size() != object_names.size() || !parser.image_ni() || !parser.image_nj() || parser.image_category() == "" ) {
-    vcl_cerr << " ERROR in labelme xml file: defined names and shapes do not match\n";
+  if (polys.size() != object_names.size()) {
+    vcl_cerr << " ERROR in labelme xml file: number of defined name and and number of defined 2d polygons do not match\n";
+    return false;
+  }
+  if (!parser.image_ni() || !parser.image_nj()){
+    vcl_cerr << " ERROR in labelme xml file: Missing image size information, check <nrows> and <ncols>\n";
+    return false;
+  }
+  if (parser.image_category() == ""){
+    vcl_cerr << " ERROR in labelme xml file: Missing image category information, check <ImageCategory>\n";
     return false;
   }
   // load the image category
@@ -117,7 +122,6 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
     vcl_cout << " image_category is " << img_category << vcl_endl;
     vcl_cerr << " WARNING in labelme xml file: undefined img_category found\n";
   }
-
   // load the image size
   unsigned ni = parser.image_ni();
   unsigned nj = parser.image_nj();
@@ -126,7 +130,7 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   for (unsigned i = 0; i < polys.size(); i++) {
     vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
     if (object_types[i] == "sky") {
-      depth_scene->set_sky(poly);
+      depth_scene->add_sky(poly, object_orders[i], object_names[i]);
     }
     else {
       // check object type to define the region_normal
@@ -139,10 +143,13 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
       else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "water" || object_types[i] == "desert" || object_types[i] == "flat") {
         double min_depth = parser.obj_mindists()[i];
         double max_depth = parser.obj_maxdists()[i];
-        vgl_vector_3d<double> gp(0.0, 0.0, 1.0);//z axis is the plane normal temporary, flat object can have different normal values
-        depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i], depth_map_region::GROUND_PLANE, object_orders[i]);
-      }
-      else {
+        if(min_depth < 20){  // treat it as a GROUND_PLANE
+           depth_scene->add_ground(poly, min_depth, max_depth, object_orders[i], object_names[i]);
+        }else{               // treat it as some FLAT 
+           vgl_vector_3d<double> gp(0.0, 0.0, 1.0); //z axis is the plane normal temporary, flat object can have different normal values
+           depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i], depth_map_region::FLAT, object_orders[i]);
+        }
+      }else{
         double min_depth = parser.obj_mindists()[i];
         double max_depth = parser.obj_maxdists()[i];
         vgl_vector_3d<double> np(1.0, 1.0, 1.0);
