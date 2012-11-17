@@ -64,7 +64,7 @@ void volm_query::create_cameras()
   vcl_vector<double> headings_;
   vcl_vector<double> tilts_;
   vcl_vector<double> rolls_;
-  // set up the camera parameter arrays and constuct vector of cameras
+  // set up the camera parameter arrays and construct vector of cameras
   top_fov_.push_back(tfov_);    // top viewing ranges from 1 to 89
   for (double i = tfov_inc_; i <= tfov_d_; i+=tfov_inc_) {
     double right = tfov_ + i, left = tfov_ - i;
@@ -108,19 +108,21 @@ void volm_query::create_cameras()
           vpgl_perspective_camera<double> cam = bpgl_camera_utils::camera_from_kml((double)ni_, (double)nj_, right_f, top_f, altitude_, head, tilt, roll);
           // check whether current camera is consistent with defined ground plane
           bool success = true;
-          if(dm_->ground_plane().size()){
-            for(unsigned i = 0; (success && i < dm_->ground_plane().size()); i++){
+          if (dm_->ground_plane().size()) {
+            for (unsigned i = 0; (success && i < dm_->ground_plane().size()); i++) {
               success = dm_->ground_plane()[i]->region_ground_2d_to_3d(cam);
             }
-            if(success){
+            if (success) {
               cameras_.push_back(cam);
-            }else{
-              vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored" << vcl_endl;
-              vcl_cout << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll 
+            }
+            else {
+              vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored\n"
+                       << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll
                        << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;
             }
-          }else{
-             cameras_.push_back(cam); 
+          }
+          else {
+             cameras_.push_back(cam);
           }
           camera_strings_.push_back(bpgl_camera_utils::get_string((double)ni_, (double)nj_, right_f, top_f, 0.0, head, tilt, roll));
         }
@@ -133,14 +135,14 @@ void volm_query::generate_regions()
   vcl_sort(depth_regions_.begin(), depth_regions_.end(), compare_order());
   unsigned size = (unsigned)dm_->scene_regions().size();
   d_threshold_ = 20000.0;
-  for(unsigned i = 0; i < size; i++){
+  for (unsigned i = 0; i < size; i++) {
     //depth_regions_[(dm_->scene_regions())[i]->order()] = (dm_->scene_regions())[i];
-    if(d_threshold_ < (dm_->scene_regions())[i]->max_depth())
+    if (d_threshold_ < (dm_->scene_regions())[i]->max_depth())
       d_threshold_ = (dm_->scene_regions())[i]->max_depth();
   }
-  if(dm_->ground_plane().size()){
-    for(unsigned i = 0; i < dm_->ground_plane().size(); i++){
-      if(d_threshold_ < dm_->ground_plane()[i]->max_depth())
+  if (dm_->ground_plane().size()) {
+    for (unsigned i = 0; i < dm_->ground_plane().size(); i++) {
+      if (d_threshold_ < dm_->ground_plane()[i]->max_depth())
         d_threshold_ = dm_->ground_plane()[i]->max_depth();
     }
   }
@@ -196,7 +198,7 @@ bool volm_query::query_ingest()
 unsigned char volm_query::fetch_depth(double const& u, double const& v, unsigned char& order, unsigned char& max_dist, vil_image_view<float> const& depth_img)
 {
   unsigned char min_dist;
-  // check other objects before ground, 
+  // check other objects before ground,
   // e.g.,  for overlap region of a building and ground, building is on the ground and it is must closer than the ground
   if (depth_regions_.size()) {
     for (unsigned i = 0; i < depth_regions_.size(); i++) {
@@ -213,7 +215,7 @@ unsigned char volm_query::fetch_depth(double const& u, double const& v, unsigned
         else
           max_dist = sph_depth_->get_depth_interval(max_depth);
         order = (unsigned char)depth_regions_[i]->order();
-        return min_dist;  
+        return min_dist;
       }
     }
   }
@@ -243,7 +245,7 @@ unsigned char volm_query::fetch_depth(double const& u, double const& v, unsigned
   // the image points (u,v) is not inside any defined objectes
   max_dist = (unsigned char)255;
   order = (unsigned char)255;
-  return (unsigned char)255; 
+  return (unsigned char)255;
 }
 
 void volm_query::draw_template(vcl_string const& vrml_fname)
@@ -352,9 +354,9 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
       else k = (e.y()-s.y())/(e.x()-s.x());
       double b = s.y() - k * s.x();
       if (vcl_sqrt(k*k) < 1) {// loop x
-        if (s.x() <= e.x()){
+        if (s.x() <= e.x()) {
           for (unsigned xi = (unsigned)s.x(); xi <= (unsigned)e.x(); xi++) {
-            unsigned xj = (unsigned)(k*xi+b);  
+            unsigned xj = (unsigned)(k*xi+b);
             if (  !(xi < 0 || xj < 0 || xi >= ni_ || xj >= nj_) ) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
@@ -399,9 +401,9 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
   }
 }
 
-void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img, 
+void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
                           vgl_point_3d<double> const& world_point,
-                          unsigned char const& depth, 
+                          unsigned char const& depth,
                           vpgl_perspective_camera<double> const& cam)
 {
   int dot_size = ( img.ni() < img.nj() ) ? (int)(0.005*ni_) : (int)(0.005*nj_);
@@ -426,10 +428,9 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
 {
   // draw depth_map polygons on the depth images
   if (dm_->sky().size()) {
-    unsigned sky_size = (unsigned)dm_->sky().size();
     for (unsigned i = 0; i < dm_->sky().size(); i++) {
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly((dm_->sky()[i])->region_2d());
-      this->draw_polygon(out_img, poly, (unsigned char)254); 
+      this->draw_polygon(out_img, poly, (unsigned char)254);
     }
   }
   if (dm_->ground_plane().size()) {
@@ -457,10 +458,10 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
 
 void volm_query::draw_query_images(vcl_string const& out_dir)
 {
-  // create a png img associated with each camera hypothesis, containing the geometry defined 
+  // create a png img associated with each camera hypothesis, containing the geometry defined
   //  in depth_map_scene and the img points corresponding to points inside the container
   // loop over fist 100 camera
-  unsigned img_num = (cameras_.size() > 100) ? 100 : (unsigned)cameras_.size(); 
+  unsigned img_num = (cameras_.size() > 100) ? 100 : (unsigned)cameras_.size();
   for (unsigned cIdx = 0; cIdx < img_num; cIdx++) {
     vcl_stringstream s_idx;
     s_idx << cIdx;
