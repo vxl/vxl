@@ -69,6 +69,10 @@ bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned cons
   else if ( parser->top_fov_ ) {   // use top_fov directly in query
     top_fov = parser->top_fov_;
   }
+  heading_dev = 0;
+  tilt_dev = 0;
+  roll_dev = 0;
+  top_fov_dev = 0;
 
   // define the deviation of viewing volume
   if ( parser->right_fov_dev_ && parser->top_fov_dev_ ) {
@@ -234,6 +238,47 @@ bool volm_io::write_composer_log(vcl_string out_folder, vcl_string log)
   file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n"
        << "<log>\n"<<log<<"</log>\n";
   file.close();
+  return true;
+}
+
+bool operator>(const vcl_pair<float, volm_rationale>& a, const vcl_pair<float, volm_rationale>& b) 
+{  return a.first>b.first; }
+
+bool volm_rationale::write_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename)
+{
+  vcl_ofstream ofs(filename.c_str());
+  if (!ofs.is_open()) {
+    vcl_cerr << " cannot open: " << filename << " for write!\n";
+    return false;
+  }
+  vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >::iterator iter;
+  ofs << top_matches.size();
+  for (iter = top_matches.begin(); iter != top_matches.end(); iter++) {
+    ofs << iter->first << " " << iter->second.lat << " " << iter->second.lon << " " << iter->second.elev << " " << iter->second.hyp_id << " " << iter->second.index_id << " " << iter->second.cam_id << vcl_endl;
+    ofs << iter->second.index_file << vcl_endl;
+    ofs << iter->second.score_file << vcl_endl;
+  }
+  ofs.close();
+  return true;
+}
+bool volm_rationale::read_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename)
+{
+  vcl_ifstream ifs(filename.c_str());
+  if (!ifs.is_open()) {
+    vcl_cerr << " cannot open: " << filename << vcl_endl;
+    return false;
+  }
+  unsigned cnt = 0;
+  ifs >> cnt;
+  for (unsigned i = 0; i < cnt; i++) {
+    float score;
+    ifs >> score;
+    volm_rationale r;
+    ifs >> r.lat >> r.lon >> r.elev >> r.hyp_id >> r.index_id >> r.cam_id;
+    ifs >> r.index_file >> r.score_file;
+    top_matches.insert(vcl_pair<float, volm_rationale>(score, r));
+  }
+  ifs.close();
   return true;
 }
 

@@ -17,7 +17,8 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
 #include <bpgl/depth_map/depth_map_scene.h>
-
+#include <vcl_set.h>
+#include <vcl_utility.h>
 
 class volm_io
 {
@@ -44,6 +45,26 @@ class volm_io
                                                double& altitude);
 
   static bool read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category);
+};
+
+class volm_rationale;
+bool operator>(const vcl_pair<float, volm_rationale>& a, const vcl_pair<float, volm_rationale>& b);
+
+class volm_rationale {
+public:
+  unsigned hyp_id;
+  float lat;
+  float lon;
+  float elev;
+  unsigned index_id; // also index in score.bin and cam.bin files
+  unsigned cam_id;   // index for camera in volm_query
+  vcl_string index_file;
+  vcl_string score_file;
+  
+  static bool write_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename);
+  static bool read_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename);
+  
+
 };
 
 
