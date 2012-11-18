@@ -314,12 +314,8 @@ void depth_map_scene::b_write(vsl_b_ostream& os)
   vsl_b_write(os, nj_);
   vsl_b_write(os, image_path_);
   vsl_b_write(os, scene_regions_);
-  vsl_b_write(os, ground_plane_.size());
-  for (unsigned int i=0; i < ground_plane_.size(); ++i)
-    vsl_b_write(os, ground_plane_[i]);
-  vsl_b_write(os, sky_.size());
-  for (unsigned int i=0; i < sky_.size(); ++i)
-    vsl_b_write(os, sky_[i]);
+  vsl_b_write(os, ground_plane_);
+  vsl_b_write(os, sky_);
   vsl_b_write(os, cam_);
 }
 
@@ -333,15 +329,8 @@ void depth_map_scene::b_read(vsl_b_istream& is)
     vsl_b_read(is, nj_);
     vsl_b_read(is, image_path_);
     vsl_b_read(is, scene_regions_);
-    unsigned int sz;
-    vsl_b_read(is, sz); // this is ground_plane_.size()
-    ground_plane_.resize(sz);
-    for (unsigned int i=0; i < sz; ++i)
-      vsl_b_read(is, ground_plane_[i]);
-    vsl_b_read(is, sz); // this is sky_.size()
-    sky_.resize(sz);
-    for (unsigned int i=0; i < sz; ++i)
-      vsl_b_read(is, sky_[i]);
+    vsl_b_read(is, ground_plane_);
+    vsl_b_read(is, sky_);
     vsl_b_read(is, cam_);
   }
   else {
