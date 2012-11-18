@@ -21,6 +21,10 @@ bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned cons
                                                double& top_fov,   double& top_fov_dev,
                                                double& altitude)
 {
+  heading_dev = 0;
+  tilt_dev = 0;
+  roll_dev = 0;
+  top_fov_dev = 0;
   bkml_parser* parser = new bkml_parser();
   vcl_FILE* xmlFile = vcl_fopen(kml_file.c_str(), "r");
   if (!xmlFile) {
@@ -69,11 +73,6 @@ bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned cons
   else if ( parser->top_fov_ ) {   // use top_fov directly in query
     top_fov = parser->top_fov_;
   }
-  heading_dev = 0;
-  tilt_dev = 0;
-  roll_dev = 0;
-  top_fov_dev = 0;
-
   // define the deviation of viewing volume
   if ( parser->right_fov_dev_ && parser->top_fov_dev_ ) {
     // If both given, use the one that gives larger focal range
