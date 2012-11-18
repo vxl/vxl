@@ -112,7 +112,7 @@ int main(int argc,  char** argv)
     // save images
     if (save_images()) {
       for (unsigned i = 0; i < out_imgs.size(); i++) {
-        vcl_string out_name = out_folder() + "/VolM_" + tiles[i].get_string() + ".tif";
+        vcl_string out_name = out_folder() + "/ProbMap_" + tiles[i].get_string() + ".tif";
         vil_save(out_imgs[i], out_name.c_str());
       }
     }
@@ -144,15 +144,16 @@ int main(int argc,  char** argv)
       return volm_io::SCORE_FILE_MISSING;
     }
   }
-
+  
   volm_io::write_status(out_folder(), volm_io::COMPOSE_STARTED);
   // composer to generate final output
   vcl_cout << "\n Start to generate output images using tiles" << vcl_endl;
 
 
   // keep a map of scores to cam ids for top 30
-  vcl_multiset<vcl_pair<float, unsigned>, std::greater<vcl_pair<float, unsigned> > > top_matches;
-  vcl_multiset<vcl_pair<float, unsigned>, std::greater<vcl_pair<float, unsigned> > >::iterator top_matches_iter;
+  vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > > top_matches;
+  vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >::iterator top_matches_iter;
+
 
   vbl_array_2d<bool> mask;
   vbl_array_2d<float> kernel;
@@ -207,7 +208,16 @@ int main(int argc,  char** argv)
             current_score = (((float)out_imgs[k](u,v))-1.0f)/volm_io::SCALE_VALUE;
           if (scores[ind_idx] > current_score) {
             if (cam_ids[ind_idx] < query->get_cam_num()) {
-              top_matches.insert(vcl_pair<float, unsigned>(scores[ind_idx], cam_ids[ind_idx]));
+              volm_rationale r;
+              r.cam_id = cam_ids[ind_idx];
+              r.index_id = ind_idx;
+              r.hyp_id = hyp.current_;
+              r.lat = h_pt.y();
+              r.lon = h_pt.x();
+              r.elev = h_pt.z();
+              r.index_file = index_files[i];
+              r.score_file = score_files[i];
+              top_matches.insert(vcl_pair<float, volm_rationale>(scores[ind_idx], r));
               vcl_cout << "inserting " << scores[ind_idx] << " cam id: " << cam_ids[ind_idx] << vcl_endl;
               if (top_matches.size() > 30) {
                 top_matches_iter = top_matches.end();
@@ -233,19 +243,25 @@ int main(int argc,  char** argv)
   // save images
   if (save_images()) {
     for (unsigned i = 0; i < out_imgs.size(); i++) {
-      vcl_string out_name = out_folder() + "/VolM_" + tiles[i].get_string() + ".tif";
+      vcl_string out_name = out_folder() + "/ProbMap_" + tiles[i].get_string() + ".tif";
       vil_save(out_imgs[i], out_name.c_str());
     }
   }
-
+  
+  // save top 30 into rationale folder as a text file
+  vcl_string top_matches_filename = rat_folder() + "/top_matches.txt";
+  if (!volm_rationale::write_top_matches(top_matches, top_matches_filename))
+    vcl_cerr << "cannot write to " << top_matches_filename;
+  
   unsigned cnt = 0;
   vcl_cout << "creating rationale for top: " << top_matches.size() << vcl_endl;
   for (top_matches_iter = top_matches.begin(); top_matches_iter != top_matches.end(); top_matches_iter++) {
-    vcl_string cam_postfix = query->get_cam_string(top_matches_iter->second);
+    volm_rationale r = top_matches_iter->second;
+    vcl_string cam_postfix = query->get_cam_string(r.cam_id);
     vcl_stringstream str;
     str << rat_folder() + "/" << "query_top_" << cnt++ << cam_postfix << ".png";
     vcl_cout << "writing rat to: " << str.str() << vcl_endl; vcl_cout.flush();
-    query->draw_query_image(top_matches_iter->second,  str.str());
+    query->draw_query_image(r.cam_id, str.str());
   }
 
   volm_io::write_status(out_folder(), volm_io::SUCCESS, 100);
