@@ -25,12 +25,6 @@
 #include <vcl_set.h>
 #include <vul/vul_timer.h>
 
-// we want from highest score to lowest
-bool top_matches_compare(const vcl_pair<float, unsigned>& p1, const vcl_pair<float, unsigned>& p2)
-{
-  return (p1.first > p2.first) ? true : false;
-}
-
 int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> cam_file("-cam", "cam kml filename", "");
