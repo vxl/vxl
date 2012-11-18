@@ -79,8 +79,7 @@ int main(int argc,  char** argv)
     vcl_cout << log.str() << vcl_endl;
     return volm_io::CAM_FILE_IO_ERROR;
   }
-  log << "cam params\nheading: " << heading << " dev: " << heading_dev << "\ntilt: " << tilt << " dev: " << tilt_dev << "\nroll: " << roll << " dev: " << roll_dev << "\ntop_fov: " << top_fov << " dev: " << top_fov_dev << "\naltitude: " << altitude << vcl_endl;
-
+  vcl_cout << "cam params\nheading: " << heading << " dev: " << heading_dev << "\ntilt: " << tilt << " dev: " << tilt_dev << "\nroll: " << roll << " dev: " << roll_dev << "\ntop_fov: " << top_fov << " dev: " << top_fov_dev << " alt: " << altitude << vcl_endl;
   // read the input hyp and index file pairs, only from the image category
   vcl_ifstream input_fs(input_file().c_str());
   vcl_vector<vcl_pair<vcl_string, vcl_string> > inp_files;
@@ -152,10 +151,10 @@ int main(int argc,  char** argv)
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
   log << " generated query has size " << query->get_query_size() << '\n'
       << " The query has " << query->get_cam_num() << " cameras: " << '\n'
-      << " \t" << query->headings().size() << " headings = " << query->headings()[0] << " +/- " << (query->headings().size()-1)/2 << '\n'
-      << " \t" << query->tilts().size() << " tilts = " << query->tilts()[0] << " +/- " << (query->tilts().size() - 1)/2 << '\n'
-      << " \t" << query->rolls().size() << " rolls = " << query->rolls()[0] << " +/- " << (query->rolls().size() - 1)/2 << '\n'
-      << " \t" << query->top_fovs().size() << " top_fov = " << query->top_fovs()[0] << " +/- " << (query->top_fovs().size() - 1)/2 << '\n'
+      //<< " \t" << query->headings().size() << " headings = " << query->headings()[0] << " +/- " << (query->headings().size()-1)/2 << '\n'
+      //<< " \t" << query->tilts().size() << " tilts = " << query->tilts()[0] << " +/- " << (query->tilts().size() - 1)/2 << '\n'
+      //<< " \t" << query->rolls().size() << " rolls = " << query->rolls()[0] << " +/- " << (query->rolls().size() - 1)/2 << '\n'
+      //<< " \t" << query->top_fovs().size() << " top_fov = " << query->top_fovs()[0] << " +/- " << (query->top_fovs().size() - 1)/2 << '\n'
       << " Generated query_size for 1 camera is " << query->get_query_size() << " byte, "
       << " gives total query size = " << query->get_cam_num() << " x " << query->get_query_size()
       << " = " << (double)query->get_cam_num()*(double)query->get_query_size()/(1024*1024*1024) << " GB" << vcl_endl;
@@ -203,6 +202,7 @@ int main(int argc,  char** argv)
         volm_io::write_log(out_folder(), log.str());
       }
       vcl_cout << log.str();
+      return volm_io::MATCHER_EXE_FAILED;
     }
     log << " Volm matcher finished" << vcl_endl;
     // save the scores
