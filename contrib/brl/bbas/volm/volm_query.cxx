@@ -111,20 +111,21 @@ void volm_query::create_cameras()
           if (dm_->ground_plane().size()) {
             for (unsigned i = 0; (success && i < dm_->ground_plane().size()); i++) {
               success = dm_->ground_plane()[i]->region_ground_2d_to_3d(cam);
+              vcl_cout << "checking ground plane consistency for: " << dm_->ground_plane()[i]->name() << " min depth is: " << dm_->ground_plane()[i]->min_depth();
+              success ? vcl_cout << " consistent!\n" : vcl_cout << " not_consistent!\n";
             }
             if (success) {
               cameras_.push_back(cam);
+              camera_strings_.push_back(bpgl_camera_utils::get_string((double)ni_, (double)nj_, right_f, top_f, 0.0, head, tilt, roll));
             }
-            else {
-              vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored\n"
-                       << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll
+            else
+            {
+              vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored" << vcl_endl;
+              vcl_cout << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll 
+
                        << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;
             }
           }
-          else {
-             cameras_.push_back(cam);
-          }
-          camera_strings_.push_back(bpgl_camera_utils::get_string((double)ni_, (double)nj_, right_f, top_f, 0.0, head, tilt, roll));
         }
 }
 
@@ -456,30 +457,36 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
       }
 }
 
+void volm_query::draw_query_image(unsigned cam_i, vcl_string const& out_name)
+{
+  // create an rgb image instance
+  vil_image_view<vil_rgb<vxl_byte> > img(ni_, nj_);
+  // initialize the image
+  for (unsigned i = 0; i < ni_; i++)
+    for (unsigned j = 0; j < nj_; j++) {
+      img(i,j).r = (unsigned char)120;
+      img(i,j).g = (unsigned char)120;
+      img(i,j).b = (unsigned char)120;
+    }
+  // visualize the depth rgb image
+  vcl_vector<unsigned char> current_query = min_dist_[cam_i];
+  this->depth_rgb_image(current_query, cam_i, img);
+  // save the images
+  
+  vil_save(img,out_name.c_str());  
+}
+
 void volm_query::draw_query_images(vcl_string const& out_dir)
 {
   // create a png img associated with each camera hypothesis, containing the geometry defined
   //  in depth_map_scene and the img points corresponding to points inside the container
   // loop over fist 100 camera
   unsigned img_num = (cameras_.size() > 100) ? 100 : (unsigned)cameras_.size();
-  for (unsigned cIdx = 0; cIdx < img_num; cIdx++) {
+  for (unsigned i = 0; i < img_num; i++) {
     vcl_stringstream s_idx;
-    s_idx << cIdx;
-    // create an rgb image instance
-    vil_image_view<vil_rgb<vxl_byte> > img(ni_, nj_);
-    // initialize the image
-    for (unsigned i = 0; i < ni_; i++)
-      for (unsigned j = 0; j < nj_; j++) {
-        img(i,j).r = (unsigned char)120;
-        img(i,j).g = (unsigned char)120;
-        img(i,j).b = (unsigned char)120;
-      }
-    // visualize the depth rgb image
-    vcl_vector<unsigned char> current_query = min_dist_[cIdx];
-    this->depth_rgb_image(current_query, cIdx, img);
-    // save the images
+    s_idx << i;
     vcl_string fs = out_dir + "query_img_" + s_idx.str() + ".png";
-    vil_save(img,fs.c_str());
+    this->draw_query_image(i, fs);
   }
 }
 
