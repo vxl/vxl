@@ -47,8 +47,9 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
     tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 4.0;
   }
 
+  double lat, lon;
   // load the camera kml, fetch the camera value and deviation
-  volm_io::read_camera(cam_kml_file, ni_, nj_, head_, head_d_, tilt_, tilt_d_, roll_, roll_d_, tfov_, tfov_d_, altitude_);
+  volm_io::read_camera(cam_kml_file, ni_, nj_, head_, head_d_, tilt_, tilt_d_, roll_, roll_d_, tfov_, tfov_d_, altitude_, lat, lon);
 
   // create camera hypotheses
   this->create_cameras();
