@@ -19,7 +19,7 @@ bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned cons
                                                double& tilt,      double& tilt_dev,
                                                double& roll,      double& roll_dev,
                                                double& top_fov,   double& top_fov_dev,
-                                               double& altitude)
+                                               double& altitude, double& lat, double& lon)
 {
   heading_dev = 0;
   tilt_dev = 0;
@@ -39,12 +39,16 @@ bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned cons
     return false;
   }
 
+  lat = 0; lon = 0; 
   if(parser->heading_)       heading = parser->heading_;
   if(parser->heading_dev_)   heading_dev = parser->heading_dev_;
   if(parser->tilt_)          tilt = parser->tilt_;
   if(parser->tilt_dev_)      tilt_dev = parser->tilt_dev_;
   if(parser->roll_)          roll = parser->roll_;
   if(parser->altitude_)      altitude = parser->altitude_;
+  if (parser->latitude_) lat = parser->latitude_;
+  if (parser->longitude_) lon = parser->longitude_;
+  
   double dtor = vnl_math::pi_over_180;
   double ppu = 0.5*ni;
   double ppv = 0.5*nj;
@@ -143,7 +147,7 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
         vgl_vector_3d<double> vp(1.0, 0.0, 0.0);
         depth_scene->add_region(poly, vp, min_depth, max_depth, object_names[i], depth_map_region::VERTICAL, object_orders[i]);
       }
-      else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "water" || object_types[i] == "desert" || object_types[i] == "flat") {
+      else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "water" || object_types[i] == "desert" || object_types[i] == "flat" || object_types[i] == "ground") {
         double min_depth = parser.obj_mindists()[i];
         double max_depth = parser.obj_maxdists()[i];
         if(min_depth < 20){  // treat it as a GROUND_PLANE
@@ -240,6 +244,23 @@ bool volm_io::write_composer_log(vcl_string out_folder, vcl_string log)
   return true;
 }
 
+//: piecewise linear s.t. [1,127) -> [0,t), [127,255] -> [t,1]
+float volm_io::scale_score_to_0_1(unsigned char pix_value, float threshold)
+{
+  if (pix_value < 127) 
+    return ((float)pix_value/127)*threshold;
+  else 
+    return ((float)(pix_value-127)/128)*(1-threshold) + threshold;
+}
+//: piecewise linear s.t. [0,t) -> [1,127), [t,1] -> [127,255]"
+unsigned char volm_io::scale_score_to_1_255(float threshold, float score)
+{
+  if (score < threshold) 
+    return (unsigned char) ((score/threshold)*127);
+  else 
+    return (unsigned char) (((score-threshold)/(1-threshold))*128 + 127);
+}
+
 bool operator>(const vcl_pair<float, volm_rationale>& a, const vcl_pair<float, volm_rationale>& b) 
 {  return a.first>b.first; }
 
@@ -251,9 +272,9 @@ bool volm_rationale::write_top_matches(vcl_multiset<vcl_pair<float, volm_rationa
     return false;
   }
   vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >::iterator iter;
-  ofs << top_matches.size();
+  ofs << top_matches.size() << vcl_endl;
   for (iter = top_matches.begin(); iter != top_matches.end(); iter++) {
-    ofs << iter->first << " " << iter->second.lat << " " << iter->second.lon << " " << iter->second.elev << " " << iter->second.hyp_id << " " << iter->second.index_id << " " << iter->second.cam_id << vcl_endl;
+    ofs << iter->first << " " << iter->second.lat << " " << iter->second.lon << " " << iter->second.elev << " " << iter->second.index_id << " " << iter->second.cam_id << vcl_endl;
     ofs << iter->second.index_file << vcl_endl;
     ofs << iter->second.score_file << vcl_endl;
   }
@@ -273,7 +294,7 @@ bool volm_rationale::read_top_matches(vcl_multiset<vcl_pair<float, volm_rational
     float score;
     ifs >> score;
     volm_rationale r;
-    ifs >> r.lat >> r.lon >> r.elev >> r.hyp_id >> r.index_id >> r.cam_id;
+    ifs >> r.lat >> r.lon >> r.elev >> r.index_id >> r.cam_id;
     ifs >> r.index_file >> r.score_file;
     top_matches.insert(vcl_pair<float, volm_rationale>(score, r));
   }

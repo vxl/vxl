@@ -42,9 +42,14 @@ class volm_io
                                                double& tilt,      double& tilt_dev,
                                                double& roll,      double& roll_dev,
                                                double& top_fov,   double& top_fov_dev,
-                                               double& altitude);
+                                               double& altitude, double& lat, double& lon);
 
   static bool read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category);
+  
+  //: piecewise linear s.t. [1,127) -> [0,t), [127,255] -> [t,1]
+  static float scale_score_to_0_1(unsigned char pix_value, float threshold);
+  //: piecewise linear s.t. [0,t) -> [1,127), [t,1] -> [127,255]"
+  static unsigned char scale_score_to_1_255(float threshold, float score);
 };
 
 class volm_rationale;
@@ -52,7 +57,6 @@ bool operator>(const vcl_pair<float, volm_rationale>& a, const vcl_pair<float, v
 
 class volm_rationale {
 public:
-  unsigned hyp_id;
   float lat;
   float lon;
   float elev;
