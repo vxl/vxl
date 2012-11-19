@@ -33,6 +33,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> score_folder("-score", "score folder", "");  // composer will read the score files from this folder for this job
   vul_arg<vcl_string> rat_folder("-rat", "rationale folder", "");  // composer will write top 30 to this folder
   vul_arg<vcl_string> out_folder("-out", "job output folder", "");
+  vul_arg<float> thres("-t", "threshold to scale the score values to [1,254], piecewise linear s.t. [0,t) -> [1,127), [t,1] -> [127,254]", 0.5);
   vul_arg<bool> save_images("-save", "save out images or not", false);
   vul_arg_parse(argc, argv);
 
@@ -52,6 +53,8 @@ int main(int argc,  char** argv)
     volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR, 100);
     return volm_io::LABELME_FILE_IO_ERROR;
   }
+  float threshold = thres();
+  vcl_cout << "composer using threshold: " << threshold << " to scale the value to [1,255]\n";
   // generate tile and output imges
   vcl_vector<volm_tile> tiles;
   vcl_vector<vil_image_view<vxl_byte> > out_imgs;
@@ -159,7 +162,7 @@ int main(int argc,  char** argv)
     unsigned long ind_size;
     boxm2_volm_wr3db_index_params::read_size_file(index_files[i], ind_size);
 
-    //: read and scale the scores from binary
+    // read and scale the scores from binary
     vsl_b_ifstream is(score_files[i].c_str());
     vsl_b_ifstream isc(cam_files[i].c_str());
     vcl_vector<float> scores;
@@ -177,18 +180,19 @@ int main(int argc,  char** argv)
                << vcl_endl;
     }
 
-    //: read in the hypothese
+    // read in the hypotheses
     volm_loc_hyp hyp(hyp_files[i]);
     vcl_cout << hyp.size() << " hypotheses read from: " << hyp_files[i] << '\n'
              << scores.size() << " scores read from: " << score_files[i] << " params start: " << params.start << " skip: " << params.skip << vcl_endl;
 
     vgl_point_3d<float> h_pt;
+    unsigned ind_idx = 0;
     while (hyp.get_next(params.start, params.skip, h_pt))
     {
-      unsigned ind_idx = hyp.current_ - params.skip;
-#if 0
-      vcl_cout << "Processing hypothesis: " << ind_idx << " x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z()
-               << ", score = " << scores[ind_idx] << ", best cam_id = " << cam_ids[ind_idx]
+      //unsigned ind_idx = (unsigned)vcl_floor((float)(hyp.current_-params.skip)/params.skip) + params.start;
+#if 1
+      vcl_cout << "Processing hypothesis x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z()
+               << ", index id: " << ind_idx << " score = " << scores[ind_idx] << ", best cam_id = " << cam_ids[ind_idx]
                << vcl_endl;
 #endif
       // locate the tile/img pixel
@@ -199,20 +203,20 @@ int main(int argc,  char** argv)
           // check if this is the best value for this pixel
           float current_score = 0;
           if ((int)out_imgs[k](u,v) > 0)
-            current_score = (((float)out_imgs[k](u,v))-1.0f)/volm_io::SCALE_VALUE;
+            //current_score = (((float)out_imgs[k](u,v))-1.0f)/volm_io::SCALE_VALUE;
+            current_score = volm_io::scale_score_to_0_1(out_imgs[k](u,v), threshold);
           if (scores[ind_idx] > current_score) {
             if (cam_ids[ind_idx] < query->get_cam_num()) {
               volm_rationale r;
               r.cam_id = cam_ids[ind_idx];
               r.index_id = ind_idx;
-              r.hyp_id = hyp.current_;
               r.lat = h_pt.y();
               r.lon = h_pt.x();
               r.elev = h_pt.z();
               r.index_file = index_files[i];
               r.score_file = score_files[i];
               top_matches.insert(vcl_pair<float, volm_rationale>(scores[ind_idx], r));
-              vcl_cout << "inserting " << scores[ind_idx] << " cam id: " << cam_ids[ind_idx] << vcl_endl;
+              //vcl_cout << "inserting " << scores[ind_idx] << " cam id: " << cam_ids[ind_idx] << vcl_endl;
               if (top_matches.size() > 30) {
                 top_matches_iter = top_matches.end();
                 top_matches_iter--;
@@ -221,16 +225,19 @@ int main(int argc,  char** argv)
             }
             else {
               vcl_stringstream log;
-              log << "cam id: " << cam_id << " is invalid, query object has: " << query->get_cam_num() << " cams. In tile " << tiles[k].get_string() << " loc: (" << u << ", " << v << ") skipping rationale..\n"
+              log << "cam id: " << cam_ids[ind_idx] << " is invalid, query object has: " << query->get_cam_num() << " cams. In tile " << tiles[k].get_string() << " loc: (" << u << ", " << v << ") skipping rationale..\n"
                   << "score file is: " << score_files[i] << " id in the file: " << ind_idx << " hypo id: " << hyp.current_ << vcl_endl;
               vcl_cerr << log.str();
               volm_io::write_composer_log(out_folder(), log.str());
             }
-            out_imgs[k](u,v) = (vxl_byte)(scores[ind_idx]*volm_io::SCALE_VALUE + 1);
-            volm_tile::mark_uncertainty_region(u, v, scores[ind_idx], mask, kernel, out_imgs[k]);
+            //out_imgs[k](u,v) = (vxl_byte)(scores[ind_idx]*volm_io::SCALE_VALUE + 1);
+            out_imgs[k](u,v) = volm_io::scale_score_to_1_255(threshold, scores[ind_idx]);
+            vcl_cout << "writing score: " << scores[ind_idx] << " scaled to " << (int)out_imgs[k](u,v) << " to loc: " << u << ", " << v << vcl_endl;
+            //volm_tile::mark_uncertainty_region(u, v, scores[ind_idx], mask, kernel, out_imgs[k]);
           }
         }
       }
+      ind_idx++;
     }
   }
 
