@@ -73,8 +73,8 @@ int main(int argc,  char** argv)
 
   // check the camera input file
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
-  double top_fov, top_fov_dev, altitude;
-  if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude)) {
+  double top_fov, top_fov_dev, altitude, lat, lon;
+  if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude, lat, lon)) {
     if (do_log) { volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);  volm_io::write_log(out_folder(), log.str()); }
     vcl_cout << log.str() << vcl_endl;
     return volm_io::CAM_FILE_IO_ERROR;
@@ -167,7 +167,7 @@ int main(int argc,  char** argv)
     vcl_cout << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
-  
+
   for (unsigned ind_i = 0; ind_i < inp_files.size(); ind_i++) {
     boxm2_volm_wr3db_index_params params;
     // read the params of index
