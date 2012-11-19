@@ -40,14 +40,14 @@ bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned cons
   }
 
   lat = 0; lon = 0; 
-  if(parser->heading_)       heading = parser->heading_;
-  if(parser->heading_dev_)   heading_dev = parser->heading_dev_;
-  if(parser->tilt_)          tilt = parser->tilt_;
-  if(parser->tilt_dev_)      tilt_dev = parser->tilt_dev_;
-  if(parser->roll_)          roll = parser->roll_;
-  if(parser->altitude_)      altitude = parser->altitude_;
-  if (parser->latitude_) lat = parser->latitude_;
-  if (parser->longitude_) lon = parser->longitude_;
+  if (parser->heading_)       heading = parser->heading_;
+  if (parser->heading_dev_)   heading_dev = parser->heading_dev_;
+  if (parser->tilt_)          tilt = parser->tilt_;
+  if (parser->tilt_dev_)      tilt_dev = parser->tilt_dev_;
+  if (parser->roll_)          roll = parser->roll_;
+  if (parser->altitude_)      altitude = parser->altitude_;
+  if (parser->latitude_)      lat = parser->latitude_;
+  if (parser->longitude_)     lon = parser->longitude_;
   
   double dtor = vnl_math::pi_over_180;
   double ppu = 0.5*ni;

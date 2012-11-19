@@ -14,8 +14,9 @@
 volm_query::volm_query(vcl_string const& cam_kml_file,
                        vcl_string const& label_xml_file,
                        volm_spherical_container_sptr const& sph,
-                       volm_spherical_shell_container_sptr const& sph_shell)
-  : sph_depth_(sph), sph_(sph_shell)
+                       volm_spherical_shell_container_sptr const& sph_shell,
+                       bool const& use_default)
+  : sph_depth_(sph), sph_(sph_shell), use_default_(use_default)
 {
   query_points_ = sph_->cart_points();
   query_size_ = (unsigned)query_points_.size();
@@ -28,25 +29,24 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   // set the default value based on img_category_ ( temporary having "desert" and "coast"
   if (img_category_ == "desert") {
     head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
-    tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 1.0;
+    tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 2.0;
     roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
-    tfov_ = 5.0;      tfov_d_ = 30.0; tfov_inc_ = 4.0;
+    tfov_ = 5.0;      tfov_d_ = 30.0; tfov_inc_ = 2.0;
   }
   else if (img_category_ == "coast") {
     // temporary use desert default
     head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
-    tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 1.0;
+    tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 2.0;
     roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
-    tfov_ = 5.0;      tfov_d_ = 30.0; tfov_inc_ = 4.0;
+    tfov_ = 5.0;      tfov_d_ = 30.0; tfov_inc_ = 2.0;
   }
   else {
     // undefined img category, use desert default
     head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
-    tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 1.0;
+    tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 2.0;
     roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
-    tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 4.0;
+    tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 2.0;
   }
-
   double lat, lon;
   // load the camera kml, fetch the camera value and deviation
   volm_io::read_camera(cam_kml_file, ni_, nj_, head_, head_d_, tilt_, tilt_d_, roll_, roll_d_, tfov_, tfov_d_, altitude_, lat, lon);
@@ -66,12 +66,47 @@ void volm_query::create_cameras()
   vcl_vector<double> tilts_;
   vcl_vector<double> rolls_;
   // set up the camera parameter arrays and construct vector of cameras
-  top_fov_.push_back(tfov_);    // top viewing ranges from 1 to 89
-  for (double i = tfov_inc_; i <= tfov_d_; i+=tfov_inc_) {
-    double right = tfov_ + i, left = tfov_ - i;
-    if (right > 89)  right = 89;
-    if (left  < 1)   left = 1;
-    top_fov_.push_back(right);  top_fov_.push_back(left);
+  if (use_default_) {
+    if (img_category_ == "desert") {
+      double stock[] = {3.0,  4.0, 5.0,
+                        12.0, 17.0, 18.0,19.0,
+                       20.0, 24.0,};
+      top_fov_.insert(top_fov_.end(), stock, stock + 8);
+    }
+    else if (img_category_ == "coast") {
+      double stock[] = {3.0, 4.0, 5.0, 9.0,
+                        15.0, 16.0,
+                        20.0, 21.0, 22.0, 23.0, 24.0,};
+      if (ni_ >= nj_) { 
+        top_fov_.insert(top_fov_.end(), stock, stock + 8);
+      }
+      else {
+        double dtor = vnl_math::pi_over_180;
+        for (unsigned i = 0; i < 11; i++) {
+          double tr = vcl_tan(stock[i]*dtor);
+          double top = vcl_atan(nj_*tr/ni_)/dtor;
+          top_fov_.push_back(top);
+        }
+      }
+    }
+	else {
+      double stock[] = {3.0,  4.0, 5.0,
+                        12.0, 17.0, 18.0,19.0,
+                       20.0, 24.0,};
+      top_fov_.insert(top_fov_.end(), stock, stock + 8);
+	}
+  }
+  else {
+    if (tfov_ < 10)      tfov_inc_ = 1.0;
+    else if(tfov_ > 20)  tfov_inc_ = 4.0;
+    else                 tfov_inc_ = 2.0;
+    top_fov_.push_back(tfov_);    // top viewing ranges from 1 to 89
+    for (double i = tfov_inc_; i <= tfov_d_; i+=tfov_inc_) {
+      double right = tfov_ + i, left = tfov_ - i;
+      if (right > 89)  right = 89;
+      if (left  < 1)   left = 1;
+      top_fov_.push_back(right);  top_fov_.push_back(left);
+    }
   }
 
   headings_.push_back(head_);
@@ -112,8 +147,8 @@ void volm_query::create_cameras()
           if (dm_->ground_plane().size()) {
             for (unsigned i = 0; (success && i < dm_->ground_plane().size()); i++) {
               success = dm_->ground_plane()[i]->region_ground_2d_to_3d(cam);
-              vcl_cout << "checking ground plane consistency for: " << dm_->ground_plane()[i]->name() << " min depth is: " << dm_->ground_plane()[i]->min_depth();
-              success ? vcl_cout << " consistent!\n" : vcl_cout << " not_consistent!\n";
+              //vcl_cout << "checking ground plane consistency for: " << dm_->ground_plane()[i]->name() << " min depth is: " << dm_->ground_plane()[i]->min_depth();
+              //success ? vcl_cout << " consistent!\n" : vcl_cout << " not_consistent!\n";
             }
             if (success) {
               cameras_.push_back(cam);
@@ -121,10 +156,9 @@ void volm_query::create_cameras()
             }
             else
             {
-              vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored" << vcl_endl;
+             /* vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored" << vcl_endl;
               vcl_cout << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll 
-
-                       << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;
+                       << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;*/
             }
           }
         }
@@ -408,7 +442,7 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
                           unsigned char const& depth,
                           vpgl_perspective_camera<double> const& cam)
 {
-  int dot_size = ( img.ni() < img.nj() ) ? (int)(0.005*ni_) : (int)(0.005*nj_);
+  int dot_size = ( img.ni() < img.nj() ) ? (int)(0.007*ni_) : (int)(0.007*nj_);
   double u, v;
   cam.project(world_point.x(), world_point.y(), world_point.z()+altitude_, u, v);
   int cx = (int)u;

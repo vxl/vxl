@@ -36,7 +36,8 @@ class volm_query : public vbl_ref_count
   volm_query(vcl_string const& cam_kml_file,
              vcl_string const& label_xml_file,
              volm_spherical_container_sptr const& sph,
-             volm_spherical_shell_container_sptr const& sph_shell);
+             volm_spherical_shell_container_sptr const& sph_shell,
+             bool const& use_default = false);
 
   // === accessors ===
   vcl_vector<vcl_vector<unsigned char> >& min_dist() {return min_dist_;}
@@ -68,6 +69,8 @@ class volm_query : public vbl_ref_count
   double altitude_;
 
  protected:
+  //: a check whether use the viewing volume values provided by camera kml
+  bool use_default_;
   //: image size
   unsigned ni_, nj_;
   //: image category
