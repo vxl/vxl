@@ -37,7 +37,7 @@ class volm_query : public vbl_ref_count
              vcl_string const& label_xml_file,
              volm_spherical_container_sptr const& sph,
              volm_spherical_shell_container_sptr const& sph_shell,
-             bool const& use_default = false);
+             bool const& use_default = true);
 
   // === accessors ===
   vcl_vector<vcl_vector<unsigned char> >& min_dist() {return min_dist_;}

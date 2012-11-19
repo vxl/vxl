@@ -69,18 +69,12 @@ void volm_query::create_cameras()
   if (use_default_) {
     if (img_category_ == "desert") {
       double stock[] = {3.0,  4.0, 5.0,
-                        12.0, 17.0, 18.0,19.0,
-                       20.0, 24.0,};
-      top_fov_.insert(top_fov_.end(), stock, stock + 8);
-    }
-    else if (img_category_ == "coast") {
-      double stock[] = {3.0, 4.0, 5.0, 9.0,
-                        15.0, 16.0,
-                        20.0, 21.0, 22.0, 23.0, 24.0,};
-      if (ni_ >= nj_) { 
+                        12.0, 17.0, 18.0, 19.0,
+                        20.0, 24.0};
+      if (ni_ >= nj_) {  // landscape
         top_fov_.insert(top_fov_.end(), stock, stock + 8);
       }
-      else {
+      else {             // protrait
         double dtor = vnl_math::pi_over_180;
         for (unsigned i = 0; i < 11; i++) {
           double tr = vcl_tan(stock[i]*dtor);
@@ -89,12 +83,28 @@ void volm_query::create_cameras()
         }
       }
     }
-	else {
+    else if (img_category_ == "coast") {
+      double stock[] = {3.0, 4.0, 5.0, 9.0,
+                        15.0, 16.0,
+                        20.0, 21.0, 22.0, 23.0, 24.0};
+      if (ni_ >= nj_) {   // landscape
+        top_fov_.insert(top_fov_.end(), stock, stock + 8);
+      }
+      else {             // protrait
+        double dtor = vnl_math::pi_over_180;
+        for (unsigned i = 0; i < 11; i++) {
+          double tr = vcl_tan(stock[i]*dtor);
+          double top = vcl_atan(nj_*tr/ni_)/dtor;
+          top_fov_.push_back(top);
+        }
+      }
+    }
+    else {
       double stock[] = {3.0,  4.0, 5.0,
                         12.0, 17.0, 18.0,19.0,
                        20.0, 24.0,};
       top_fov_.insert(top_fov_.end(), stock, stock + 8);
-	}
+    }
   }
   else {
     if (tfov_ < 10)      tfov_inc_ = 1.0;
