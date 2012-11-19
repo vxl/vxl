@@ -159,11 +159,20 @@ int main(int argc,  char** argv)
       << " gives total query size = " << query->get_cam_num() << " x " << query->get_query_size()
       << " = " << (double)query->get_cam_num()*(double)query->get_query_size()/(1024*1024*1024) << " GB" << vcl_endl;
 
+  if (query->get_cam_num() == 0) {
+    log << "query has 0 cameras! Exiting!\n";
+    if (do_log) {
+      volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
+      volm_io::write_log(out_folder(), log.str()); }
+    vcl_cout << log.str();
+    return volm_io::MATCHER_EXE_FAILED;
+  }
+  
   for (unsigned ind_i = 0; ind_i < inp_files.size(); ind_i++) {
     boxm2_volm_wr3db_index_params params;
     // read the params of index
     unsigned long ei;
-    if (!params.read_params_file(inp_files[0].second) || !boxm2_volm_wr3db_index_params::read_size_file(inp_files[ind_i].second, ei)) {
+    if (!params.read_params_file(inp_files[ind_i].second) || !boxm2_volm_wr3db_index_params::read_size_file(inp_files[ind_i].second, ei)) {
       log << " cannot read size file for " << inp_files[ind_i].second << vcl_endl;
       if (do_log) {
         volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
@@ -184,7 +193,7 @@ int main(int argc,  char** argv)
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index((unsigned)(sph_shell->get_container_size()), buffer_capacity());
     ind->initialize_read(inp_files[ind_i].second);
 
-    vcl_cout << "\n Starting the volm matcher\n"
+    vcl_cout << "\n Starting the volm matcher for " << ei << "indices in " << inp_files[ind_i].second  << '\n'
              << log.str() << vcl_endl; // print log here
 
     // create the volm_matcher class
