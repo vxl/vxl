@@ -33,15 +33,18 @@ class volm_loc_hyp : public vbl_ref_count
   //: construct empty
   volm_loc_hyp() : cnt_(0), current_(0) {}
 
-  //: construct using a single dem file,
-  volm_loc_hyp(vgl_polygon<double>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int int_i, int int_j);
-
   //: construct by reading from a binary file
   volm_loc_hyp(vcl_string bin_file);
 
   //: add the location to the set
   bool add(float lat, float lon, float elev);
 
+  //: add all the points with elev higher than zero in this dem which are also within the given poly
+  //  for geocam's loaded from tfw files adjust_cam = false, 
+  //  however, if geocam is created explicitly using hemisphere and direction specifications for lat, lon then an adjustment is needed 
+  //  (e.g. for LIDAR tiles where cam is constructed using the naming convention)
+  void add(vgl_polygon<double>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int inc_i, int inc_j, bool adjust_cam = false,  char hemi = 'N', char dir = 'W');
+  
   unsigned size() { return cnt_; }
 
   bool write_hypotheses(vcl_string out_file);

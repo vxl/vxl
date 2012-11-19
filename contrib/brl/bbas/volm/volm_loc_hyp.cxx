@@ -8,16 +8,19 @@
 #include <vcl_cassert.h>
 
 //: construct using a single dem file
-volm_loc_hyp::volm_loc_hyp(vgl_polygon<double>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int int_i, int int_j) : current_(0)  
+void volm_loc_hyp::add(vgl_polygon<double>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int inc_i, int inc_j, bool adjust_cam, char hemi, char dir)
 {
-  cnt_ = 0;
-  for (unsigned i = 0; i < dem.ni(); i+=int_i)
-    for (unsigned j = 0; j < dem.nj(); j+=int_j) {
+  for (unsigned i = 0; i < dem.ni(); i+=inc_i)
+    for (unsigned j = 0; j < dem.nj(); j+=inc_j) {
       double lon, lat;
       geocam->img_to_global(i,j,lon,lat);
+      if (adjust_cam) {
+        if (hemi == 'S') lat = -lat;
+        if (dir == 'W') lon = -lon;
+      }
       if (dem(i,j) <= 0)
         continue;
-      if (!poly.contains(lon, lat))
+      if (!poly.contains(lon, lat)) 
         continue;
       vcl_map<float, vcl_map<float, float> >::iterator iter = locs_.find((float)lat);
       if (iter != locs_.end()) { // lat exists, there is only one lat, lon for now so just add to the map of this lat
