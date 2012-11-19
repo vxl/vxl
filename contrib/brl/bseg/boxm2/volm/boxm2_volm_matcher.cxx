@@ -220,7 +220,10 @@ bool boxm2_volm_matcher::matching_cost_layer()
     for (unsigned k = 0; k < n_cam; k++)
       score_map[score_cam_buff[k]] = k;
     vcl_map<float, unsigned>::iterator it = --score_map.end();
-    score_all_.push_back(it->first/query_->get_valid_ray_num(it->second));
+	if(query_->get_valid_ray_num(it->second))
+      score_all_.push_back(it->first/query_->get_valid_ray_num(it->second));
+	else
+      score_all_.push_back(0.0);
     cam_all_id_.push_back(it->second);
 
 #if 0
