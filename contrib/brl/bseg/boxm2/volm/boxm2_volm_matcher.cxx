@@ -22,7 +22,9 @@ boxm2_volm_matcher::boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_i
 
   // create the 1D query_array buffer for all devices, each 1D array has length cl_ni x cl_nj
   queries_buff = new unsigned char[cl_ni*cl_nj];
+#if 0 // unused
   vcl_vector<vcl_vector<unsigned char> >& layers = query_->min_dist();
+#endif
   // initialize 1D the query
   for (unsigned i = 0; i < cl_ni*cl_nj; i++) {
     queries_buff[i] = (unsigned char)255;
@@ -220,9 +222,9 @@ bool boxm2_volm_matcher::matching_cost_layer()
     for (unsigned k = 0; k < n_cam; k++)
       score_map[score_cam_buff[k]] = k;
     vcl_map<float, unsigned>::iterator it = --score_map.end();
-	if(query_->get_valid_ray_num(it->second))
+    if (query_->get_valid_ray_num(it->second))
       score_all_.push_back(it->first/query_->get_valid_ray_num(it->second));
-	else
+    else
       score_all_.push_back(0.0);
     cam_all_id_.push_back(it->second);
 
