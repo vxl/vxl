@@ -85,8 +85,8 @@ int main(int argc,  char** argv)
   }
   // check the camera input file
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev, altitude;
-  double top_fov, top_fov_dev;
-  if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude)) {
+  double top_fov, top_fov_dev, lat, lon;
+  if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude, lat, lon)) {
     volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);
     return volm_io::CAM_FILE_IO_ERROR;
   }
@@ -97,20 +97,20 @@ int main(int argc,  char** argv)
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
   // screen output
   dm = query->depth_scene();
-  vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region " << vcl_endl;
+  vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
     for (unsigned i = 0; i < dm->sky().size(); i++)
       vcl_cout << "\t " << (dm->sky()[i]->name()) << " region ,\t min_depth = " << 255 << vcl_endl;
   }
   if (dm->ground_plane().size()) {
-    for(unsigned i = 0; i < dm->ground_plane().size(); i++)
+    for (unsigned i = 0; i < dm->ground_plane().size(); i++)
       vcl_cout << "\t " << (dm->ground_plane()[i]->name()) << " region ,\t min_depth = " << 0 << vcl_endl;
   }
   if (dm->scene_regions().size()) {
     for (unsigned i = 0; i < dm->scene_regions().size(); i++) {
-      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "  
-               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth() 
-               << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth() 
+      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
+               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
+               << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
                << ",\t order = " << (dm->scene_regions())[i]->order()
                << vcl_endl;
     }
@@ -119,11 +119,10 @@ int main(int argc,  char** argv)
   vcl_cout << " for spherical surface, point angle = " << point_angle() << " degree, "
            << ", top_angle = " << top_angle()
            << ", bottom_angle = " << bottom_angle()
-           << ", generated query has size " << query->get_query_size() << vcl_endl;
+           << ", generated query has size " << query->get_query_size() << '\n'
 
-  vcl_cout << " The query has " << query->get_cam_num() << " cameras: " << vcl_endl;
-
-  vcl_cout << " Generated query_size for 1 camera is " << query->get_query_size() << " byte, "
+           << " The query has " << query->get_cam_num() << " cameras:\n"
+           << " Generated query_size for 1 camera is " << query->get_query_size() << " byte, "
            << " gives total query size = " << query->get_cam_num() << " x " << query->get_query_size()
            << " = " << (double)query->get_cam_num()*(double)query->get_query_size()/(1024*1024*1024) << " GB"
            << vcl_endl;
