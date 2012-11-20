@@ -6,6 +6,8 @@
 #include <bkml/bkml_write.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vcl_cassert.h>
+#include <vcl_limits.h>
+#include <vgl/vgl_distance.h>
 
 //: construct using a single dem file
 void volm_loc_hyp::add(vgl_polygon<double>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int inc_i, int inc_j, bool adjust_cam, char hemi, char dir)
@@ -123,6 +125,27 @@ bool volm_loc_hyp::get_next(unsigned start, unsigned skip, vgl_point_3d<float>& 
       break;
   return true;
 }
+
+//: get the hypothesis closest to the given and its id if get_next method were to be used, very dummy for now, TODO: use upper_bound and lower_bound to limit search in lat map
+bool volm_loc_hyp::get_closest(double lat, double lon, vgl_point_3d<float>& h, unsigned& hyp_id)
+{
+  vgl_point_3d<float> h_pt; vgl_point_3d<float> out_pt; 
+  float min_dist = vcl_numeric_limits<float>::max();
+  unsigned hyp_cnt = 0;
+  current_ = 0;
+  while (this->get_next(0, 1, h_pt))
+  {
+    vgl_point_3d<float> query_pt((float)lon, (float)lat, h_pt.z());  // make the z's equal cause we don't care about elev
+    float dist = vgl_distance(query_pt, h_pt);
+    if (dist < min_dist) {
+      min_dist = dist;
+      h = h_pt;
+      hyp_id = current_-1;
+    }
+  }
+  return true;
+}
+
   
 
 //: Binary save self to stream.

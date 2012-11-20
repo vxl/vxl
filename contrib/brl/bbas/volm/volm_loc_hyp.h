@@ -54,6 +54,9 @@ class volm_loc_hyp : public vbl_ref_count
 
   //: return false when all hyps are returned, return in a sequence which started from start and incremented by skip, e.g. i = start; i < cnt_; i+=skip
   bool get_next(unsigned start, unsigned skip, vgl_point_3d<float>& h);
+  
+  //: get the hypothesis closest to the given and its id if get_next method were to be used, very dummy for now, TODO: use upper_bound and lower_bound to limit search in lat map
+  bool get_closest(double lat, double lon, vgl_point_3d<float>& h, unsigned& hyp_id);
 
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
