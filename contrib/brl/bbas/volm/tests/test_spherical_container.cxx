@@ -11,15 +11,20 @@
 static void test_spherical_container()
 {
   float vmin = 10;
-  float dmax = 30000;
-  float angle = 2;
+  float dmax = 60000;
+  float angle = 4;
+  /*float vmin = 3;
+  float dmax = 2000;
+  float angle = 1.1;*/
+  
   volm_spherical_container sph(angle,vmin,dmax);
   vcl_cout << " solid angle = " << angle << "\t, finnest resolution = " << vmin << ", dmax = " << dmax  << ", number of voxel = " << (sph.get_voxels()).size() << vcl_endl;
   vcl_cout << "number of depth intervals.. " << sph.get_depth_offset_map().size() << vcl_endl;
+  
   TEST("number of depth intervals.. ", sph.get_depth_offset_map().size(), 144); // change if using an angle different than 4
   unsigned int offset, end_offset;
   double depth;
-  sph.last_res(vmin, offset, end_offset, depth);
+  /*sph.last_res(vmin, offset, end_offset, depth);
   TEST("# voxels of last layer with res min_res.. ", end_offset-offset, 20888); 
   sph.first_res(vmin*2, offset, end_offset, depth);
   TEST("# voxels of first layer with res min_res*2.. ", end_offset-offset, 5768); 
@@ -30,11 +35,13 @@ static void test_spherical_container()
   //sph.draw_template_painted("./2vmin_layer.vrml", 0, ids, 1.0f, 0.0f, 0.0f, 0.8f);
   unsigned off = sph.get_depth_offset_map()[depth];
   TEST("depth of layer with res min_res*2.. ", off, offset); 
-  
+  */
   vcl_map<double, unsigned char>& depth_interval_map = sph.get_depth_interval_map();
+  vcl_cout << " interval map size: " << depth_interval_map.size();
   TEST("number of depth intervals.. ", depth_interval_map.size(), 144);
   vcl_map<double, unsigned char>::iterator iter = depth_interval_map.end();
   iter--;
+  vcl_cout << " last interval: " << (unsigned)iter->second;
   TEST("last interval.. ", iter->second, (unsigned char)143);
   int cnt = 0; 
   for (vcl_map<double, unsigned char>::iterator iter = depth_interval_map.begin(); iter != depth_interval_map.end(); iter++, cnt++) {
