@@ -49,7 +49,10 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
             }
             else
             {
+                //init with zero
+                vcl_memset (&(buffer[global_index]), 0, bytes_per_data_type);
                 global_index+=bytes_per_data_type;
+                vcl_cerr << "For " << id << ", data type: " << data_types_list_[i] + "_" + identifier_list_[j] << " does not exist!\n";
             }
         }
 
