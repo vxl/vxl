@@ -16,7 +16,7 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
                        volm_spherical_container_sptr const& sph,
                        volm_spherical_shell_container_sptr const& sph_shell,
                        bool const& use_default)
-  : sph_depth_(sph), sph_(sph_shell), use_default_(use_default)
+  : use_default_(use_default), sph_depth_(sph), sph_(sph_shell)
 {
   query_points_ = sph_->cart_points();
   query_size_ = (unsigned)query_points_.size();
@@ -66,7 +66,8 @@ void volm_query::create_cameras()
   vcl_vector<double> tilts_;
   vcl_vector<double> rolls_;
   // set up the camera parameter arrays and construct vector of cameras
-  if (use_default_) {
+  if (use_default_)
+  {
     if (img_category_ == "desert") {
       double stock[] = {3.0,  4.0, 5.0,
                         12.0, 17.0, 18.0, 19.0,
@@ -120,7 +121,7 @@ void volm_query::create_cameras()
   }
   else {
     if (tfov_ < 10)      tfov_inc_ = 1.0;
-    else if(tfov_ > 20)  tfov_inc_ = 4.0;
+    else if (tfov_ > 20) tfov_inc_ = 4.0;
     else                 tfov_inc_ = 2.0;
     top_fov_.push_back(tfov_);    // top viewing ranges from 1 to 89
     for (double i = tfov_inc_; i <= tfov_d_; i+=tfov_inc_) {
@@ -155,10 +156,10 @@ void volm_query::create_cameras()
     rolls_.push_back(roll_ + i);  rolls_.push_back(roll_ - i);
   }
   // construct cameras
-  for (unsigned i = 0; i < tilts_.size(); i++)
-    for (unsigned j = 0; j < rolls_.size(); j++)
-      for (unsigned k = 0; k < top_fov_.size(); k++)
-        for (unsigned h = 0; h < headings_.size(); h++) {
+  for (unsigned i = 0; i < tilts_.size(); ++i)
+    for (unsigned j = 0; j < rolls_.size(); ++j)
+      for (unsigned k = 0; k < top_fov_.size(); ++k)
+        for (unsigned h = 0; h < headings_.size(); ++h) {
           double tilt = tilts_[i], roll = rolls_[j], top_f = top_fov_[k], head = headings_[h];
           double dtor = vnl_math::pi_over_180;
           double ttr = vcl_tan(top_f*dtor);
@@ -178,9 +179,10 @@ void volm_query::create_cameras()
             }
             else
             {
-             /* vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored" << vcl_endl;
-              vcl_cout << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll 
-                       << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;*/
+#ifdef DEBUG
+              vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored\n"
+                       << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;
+#endif
             }
           }
         }
@@ -529,8 +531,8 @@ void volm_query::draw_query_image(unsigned cam_i, vcl_string const& out_name)
   vcl_vector<unsigned char> current_query = min_dist_[cam_i];
   this->depth_rgb_image(current_query, cam_i, img);
   // save the images
-  
-  vil_save(img,out_name.c_str());  
+
+  vil_save(img,out_name.c_str());
 }
 
 void volm_query::draw_query_images(vcl_string const& out_dir)
