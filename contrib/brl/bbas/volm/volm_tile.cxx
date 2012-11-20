@@ -132,8 +132,8 @@ bool volm_tile::global_to_img(double lon, double lat, unsigned& i, unsigned& j)
   cam_.global_to_img(lon, lat, dummy_elev, u, v);
   if (u < 0 || v < 0 || u >= this->ni_ || v >= this->nj_)
     return false;
-  i = (unsigned)vcl_floor(u+0.5);
-  j = (unsigned)vcl_floor(v+0.5);
+  i = (unsigned)vcl_floor(u);
+  j = (unsigned)vcl_floor(v);
   return true;
 }
 
