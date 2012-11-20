@@ -30,8 +30,8 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   if (img_category_ == "desert") {
     head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
     tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 2.0;
-    roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
-    tfov_ = 5.0;      tfov_d_ = 30.0; tfov_inc_ = 2.0;
+    roll_ = 0.0;      roll_d_ = 0.0; roll_inc_ = 1.0;
+    tfov_ = 5.0;      tfov_d_ = 5.0; tfov_inc_ = 2.0;
   }
   else if (img_category_ == "coast") {
     // temporary use desert default
@@ -72,23 +72,27 @@ void volm_query::create_cameras()
                         12.0, 17.0, 18.0, 19.0,
                         20.0, 24.0};
       if (ni_ >= nj_) {  // landscape
-        top_fov_.insert(top_fov_.end(), stock, stock + 8);
+        top_fov_.insert(top_fov_.end(), stock, stock + 9);
       }
       else {             // protrait
         double dtor = vnl_math::pi_over_180;
-        for (unsigned i = 0; i < 11; i++) {
+        for (unsigned i = 0; i < 9; i++) {
           double tr = vcl_tan(stock[i]*dtor);
           double top = vcl_atan(nj_*tr/ni_)/dtor;
           top_fov_.push_back(top);
         }
       }
+      vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
+      for (unsigned i = 0; i < 9; i++)
+        vcl_cout << top_fov_[i] << ' ';
+      vcl_cout << ']' << vcl_endl;
     }
     else if (img_category_ == "coast") {
       double stock[] = {3.0, 4.0, 5.0, 9.0,
                         15.0, 16.0,
                         20.0, 21.0, 22.0, 23.0, 24.0};
       if (ni_ >= nj_) {   // landscape
-        top_fov_.insert(top_fov_.end(), stock, stock + 8);
+        top_fov_.insert(top_fov_.end(), stock, stock + 11);
       }
       else {             // protrait
         double dtor = vnl_math::pi_over_180;
@@ -98,12 +102,20 @@ void volm_query::create_cameras()
           top_fov_.push_back(top);
         }
       }
+      vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
+      for (unsigned i = 0; i < 11; i++)
+        vcl_cout << top_fov_[i] << ' ';
+      vcl_cout << ']' << vcl_endl;
     }
     else {
       double stock[] = {3.0,  4.0, 5.0,
                         12.0, 17.0, 18.0,19.0,
-                       20.0, 24.0,};
-      top_fov_.insert(top_fov_.end(), stock, stock + 8);
+                       20.0, 24.0};
+      top_fov_.insert(top_fov_.end(), stock, stock + 9);
+      vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
+      for (unsigned i = 0; i < 9; i++)
+        vcl_cout << top_fov_[i] << ' ';
+      vcl_cout << ']' << vcl_endl;
     }
   }
   else {
