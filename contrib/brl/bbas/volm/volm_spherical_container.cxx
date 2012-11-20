@@ -50,7 +50,7 @@ volm_spherical_container::volm_spherical_container(float d_solid_ang, float voxe
     vc = vmin;
   }
   // use current voxel size to mesh the space
-  this->meshcurrentlayer(d, vc);
+  //this->meshcurrentlayer(d, vc);
   // update and check current layer has even number of voxel along half
   d = d + vc;
   unsigned int N = (unsigned int)(d/vc);
