@@ -28,7 +28,7 @@ volm_tile::volm_tile(float lat, float lon, float scale_i, float scale_j, unsigne
 {
   if (lat < 0) { lat_ = -lat; hemisphere_ = 'S'; } else { lat_ = lat; hemisphere_ = 'N'; }
   if (lon < 0) { lon_ = -lon; direction_ = 'W'; } else { lon_ = lon; direction_ = 'E'; }
-  
+
   vnl_matrix<double> trans_matrix(4,4,0.0);
   trans_matrix[0][0] = -scale_i_/ni; trans_matrix[1][1] = -scale_j_/nj;
   trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
@@ -120,15 +120,16 @@ void volm_tile::img_to_global(unsigned i, unsigned j, double& lon, double& lat)
   if (hemisphere_ == 'S')
     lat = -lat;
 }
+
 bool volm_tile::global_to_img(double lon, double lat, unsigned& i, unsigned& j)
 {
   double u,v; double dummy_elev = 0;
-  
+
   if (direction_ == 'W')
     lon = -lon;
   if (hemisphere_ == 'S')
     lat = -lat;
-    
+
   cam_.global_to_img(lon, lat, dummy_elev, u, v);
   if (u < 0 || v < 0 || u >= this->ni_ || v >= this->nj_)
     return false;
@@ -146,6 +147,7 @@ double volm_tile::calculate_width()
   utm.transform(lat_, lon_+scale_i_, x2, y2, utm_zone);
   return vcl_abs(x-x2);
 }
+
 //: calculate width of the tile
 double volm_tile::calculate_height()
 {
@@ -154,7 +156,7 @@ double volm_tile::calculate_height()
   utm.transform(lat_, lon_, x,  y, utm_zone);
   utm.transform(lat_+scale_j_, lon_, x2, y2, utm_zone);
   return vcl_abs(y-y2);
-}   
+}
 
 void volm_tile::get_uncertainty_region(float lambda_i, float lambda_j, float cutoff, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel)
 {
@@ -214,7 +216,7 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
   int ni = (int)img.ni();
   int nj = (int)img.nj();
   if (score > 0.0f) {
-    
+
     for (int ii = is; ii < ie; ii++)
       for (int jj = js; jj < je; jj++) {
         int mask_i = ii - is;
@@ -222,18 +224,22 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
         if (mask[mask_j][mask_i] && ii >= 0 && jj >= 0 && ii < ni && jj < nj) {
           float val = score*kernel[mask_j][mask_i];
           //unsigned int pix_val = (unsigned int)(val*volm_io::SCALE_VALUE) + 1;  // scale it
-		      unsigned char pix_val = (unsigned char)(val*volm_io::SCALE_VALUE) + 1;
-		  /*if(pix_val < volm_io::UNKNOWN) {
+          unsigned char pix_val = (unsigned char)(val*volm_io::SCALE_VALUE) + 1;
+#if 0
+          if (pix_val < volm_io::UNKNOWN) {
             pix_val = volm_io::STRONG_NEGATIVE;
-          }else if(pix_val == volm_io::UNKNOWN){
+          }
+          else if (pix_val == volm_io::UNKNOWN) {
             pix_val = volm_io::UNKNOWN;
-          }else{
+          }
+          else {
             pix_val = volm_io::STRONG_POSITIVE;
           }
           if (img(ii,jj) > 0)
-            img(ii,jj) = (img(ii,jj)+pix_val)/2;  // overwrites whatever values was in the image
+            img(ii,jj) = (img(ii,jj)+pix_val)/2;
           else
-            img(ii,jj) = pix_val;*/
+            img(ii,jj) = pix_val;  // overwrites whatever value was in the image
+#endif // 0
             img(ii,jj) = pix_val;
         }
       }
@@ -302,7 +308,7 @@ void volm_tile::b_write(vsl_b_ostream &os) const
   vsl_b_write(os, scale_j_);
   vsl_b_write(os, ni_);
   vsl_b_write(os, nj_);
-  cam_.b_write(os); 
+  cam_.b_write(os);
 }
 
 //: Binary load self from stream.
@@ -313,17 +319,17 @@ void volm_tile::b_read(vsl_b_istream &is)
   vsl_b_read(is, ver);
   switch (ver)
   {
-   case 1: {
-     vsl_b_read(is, lat_);
-     vsl_b_read(is, lon_);
-     vsl_b_read(is, hemisphere_);
-     vsl_b_read(is, direction_);
-     vsl_b_read(is, scale_i_);
-     vsl_b_read(is, scale_j_);
-     vsl_b_read(is, ni_);
-     vsl_b_read(is, nj_);
-     cam_.b_read(is); 
-    break; }
+   case 1:
+    vsl_b_read(is, lat_);
+    vsl_b_read(is, lon_);
+    vsl_b_read(is, hemisphere_);
+    vsl_b_read(is, direction_);
+    vsl_b_read(is, scale_i_);
+    vsl_b_read(is, scale_j_);
+    vsl_b_read(is, ni_);
+    vsl_b_read(is, nj_);
+    cam_.b_read(is);
+    break;
 
    default:
     vcl_cerr << "I/O ERROR: vpgl_geo_camera::b_read(vsl_b_istream&)\n"
