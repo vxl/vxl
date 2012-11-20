@@ -108,7 +108,7 @@ void volm_query::create_cameras()
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
     }
-    else {
+	  else {
       double stock[] = {3.0,  4.0, 5.0,
                         12.0, 17.0, 18.0,19.0,
                        20.0, 24.0};
@@ -475,9 +475,15 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
     for (int j = -dot_size; j < dot_size; j++) {
       int x = cx + i ; int y = cy + j;
       if ( !(x < 0 || y < 0 || x >= (int)img.ni() || y >= (int)img.ni()) ) {
-        img((unsigned)x,(unsigned)y).r = bvrml_color::heatmap_classic[(int)depth][0];
-        img((unsigned)x,(unsigned)y).g = bvrml_color::heatmap_classic[(int)depth][1];
-        img((unsigned)x,(unsigned)y).b = bvrml_color::heatmap_classic[(int)depth][2];
+        if (depth == 254) { // special color for sky
+          img((unsigned)x,(unsigned)y).r = 255;
+          img((unsigned)x,(unsigned)y).g = 255;
+          img((unsigned)x,(unsigned)y).b = 255;
+        } else {
+          img((unsigned)x,(unsigned)y).r = bvrml_color::heatmap_classic[(int)depth][0];
+          img((unsigned)x,(unsigned)y).g = bvrml_color::heatmap_classic[(int)depth][1];
+          img((unsigned)x,(unsigned)y).b = bvrml_color::heatmap_classic[(int)depth][2];
+        }
       }
     }
 }
@@ -510,10 +516,10 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
     }
   }
   // draw the rays that current penetrate through the image
-  for (unsigned pidx = 0; pidx < query_size_; pidx++)
-      if (values[pidx] < 255) {
-        this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
-      }
+  for (unsigned pidx = 0; pidx < query_size_; pidx++) {
+    if (values[pidx] < 255) 
+      this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
+   }
 }
 
 void volm_query::draw_query_image(unsigned cam_i, vcl_string const& out_name)
