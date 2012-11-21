@@ -182,6 +182,8 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       bool copy_parent_buffer[1];
       *copy_parent_buffer = (data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ||
                              data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ||
+                             data_types[i] == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() ||
+                             data_types[i] == boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix() ||
                              data_types[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() );
       bocl_mem copy_parent(device->context(), copy_parent_buffer, sizeof(cl_bool), "copy_parent buffer");
       copy_parent.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
