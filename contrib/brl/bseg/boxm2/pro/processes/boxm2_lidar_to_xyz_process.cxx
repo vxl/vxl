@@ -22,7 +22,6 @@
 
 #include <brip/brip_roi.h>
 
-// OZGE TODO: IMPLEMENT THIS PROCESS !!!
 namespace boxm2_lidar_to_xyz_process_globals
 {
   const unsigned n_inputs_ = 2;
@@ -105,6 +104,8 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float> img_cnt(ni, nj, 1);
+  img_cnt.fill(0.0f);
   out_img_x->fill(0.0f); out_img_y->fill(0.0f);
   //out_img_z->fill((float)(scene_bbox.min_z()-10.0));  // local coord system min z
   out_img_z->fill((float)(-1.0));  // local coord system min z
@@ -127,11 +128,13 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
       //}
       lvcs->global_to_local(lon2, lat2, img(i,j), vpgl_lvcs::wgs84, lx, ly, lz);
       vgl_point_3d<double> pt(lx, ly, lz);
-      if (scene_bbox.contains(pt) && (*out_img_z)(i,j) < (float)lz) {
+      //if (scene_bbox.contains(pt) && (*out_img_z)(i,j) < (float)lz) {
+      if (scene_bbox.contains(pt)) {
         no_overlap = false;
-        (*out_img_x)(i,j) = (float)lx;
-        (*out_img_y)(i,j) = (float)ly;
-        (*out_img_z)(i,j) = (float)lz;
+        (*out_img_x)(i,j) += (float)lx;
+        (*out_img_y)(i,j) += (float)ly;
+        (*out_img_z)(i,j) += (float)lz;
+        img_cnt(i,j) += 1;
       }
     }
 
@@ -141,6 +144,16 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
     delete out_img_z;
     return false;
   }
+  // compute the averages
+  for (unsigned i = 0; i < ni; i++)
+    for (unsigned j = 0; j < nj; j++) {
+      if (img_cnt(i,j) > 0) {
+        (*out_img_x)(i,j) /= img_cnt(i,j);
+        (*out_img_y)(i,j) /= img_cnt(i,j);
+        (*out_img_z)(i,j) /= img_cnt(i,j);
+      } 
+    }
+  
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
