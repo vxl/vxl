@@ -367,6 +367,58 @@ void update_gauss_3_mixture(float x, float w, float t_match,
   }
 }
 
+
+void update_view_dep_app(float x, float w, 
+                            float* mu0, float* sk0, float w0, float* Nobs0,
+                            float* mu1, float* sk1, float w1, float* Nobs1,
+                            float* mu2, float* sk2, float w2, float* Nobs2)
+
+{
+  if( (*Nobs0)  == 0.0f)
+  {
+    (*Nobs0) = w*w0;
+    (*sk0) = 0.0f;
+    (*mu0) = x;
+  }
+  else
+  {
+    (*Nobs0) += w*w0;
+    float prev_mu0 = (*mu0);
+    (*mu0) =  prev_mu0 + (x-prev_mu0)*w*w0 / (*Nobs0);
+    (*sk0) += w*w0*(x-prev_mu0)*( x - (*mu0) );
+  }
+
+  if( (*Nobs1)  == 0.0f)
+  {
+    (*Nobs1) = w*w1;
+    (*sk1) = 0.0f;
+    (*mu1) = x;
+  }  
+  else
+  {
+    (*Nobs1) += w*w1;
+    float prev_mu1 = (*mu1);
+    (*mu1) =  prev_mu1 + (x-prev_mu1)*w*w1 / (*Nobs1);
+    (*sk1) += w*w1*(x-prev_mu1)*( x - (*mu1) );
+  }
+
+
+  if( (*Nobs2)  == 0.0f)
+  {
+    (*Nobs2) = w*w2;
+    (*sk2) = 0.0f;
+    (*mu2) = x;    
+  }
+  else
+  {
+    (*Nobs2) += w*w2;
+    float prev_mu2 = (*mu2);
+    (*mu2) =  prev_mu2 + (x-prev_mu2)*w*w2 / (*Nobs2);
+    (*sk2) += w*w2*(x-prev_mu2)*( x - (*mu2) );
+  }
+}
+
+
 #if 0
 void update_gauss_3_mixture(float x, float w, float t_match,
                             float init_sigma, float min_sigma,

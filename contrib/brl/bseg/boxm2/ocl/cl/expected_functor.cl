@@ -30,6 +30,45 @@ void step_cell_render(__global MOG_TYPE * cell_data,
 }
 #endif
 
+#ifdef RENDER_VIEW_DEP
+void step_cell_render(__global MOG_TYPE * cell_data,
+                              __global float    * alpha_data,
+                               int        data_ptr,
+                               float4     view_dir,
+                               float      d,
+                               float    * vis,
+                               float    * expected_i)
+{
+  float alpha = alpha_data[data_ptr];
+  float diff_omega=exp(-alpha*d);
+  float expected_int_cell=0.0f;
+  // for rendering only
+    
+  if (diff_omega<0.995f)
+  {
+    if( view_dir.x < 0)
+      expected_int_cell += -(view_dir.x) * cell_data[data_ptr].s0;
+    else
+      expected_int_cell += (view_dir.x) * cell_data[data_ptr].s6;
+    
+    if( view_dir.y < 0)
+      expected_int_cell += -(view_dir.y) * cell_data[data_ptr].s2;
+    else
+      expected_int_cell += (view_dir.y) * cell_data[data_ptr].s8;
+
+    if( view_dir.z < 0)
+      expected_int_cell += -(view_dir.z) * cell_data[data_ptr].s4;
+    else
+      expected_int_cell += (view_dir.z) * cell_data[data_ptr].sa;
+  }  
+
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*vis) *= diff_omega;
+  (*expected_i)+=expected_int_cell*omega; 
+
+}
+#endif //RENDER_VEW_DEP
+
 #ifdef RENDER_MAX
 void step_cell_render_max(__global MOG_TYPE * cell_data,
                           __global float    * alpha_data,

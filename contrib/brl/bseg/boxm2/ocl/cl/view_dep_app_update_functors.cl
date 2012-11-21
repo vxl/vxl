@@ -1,0 +1,223 @@
+
+#ifdef SEGLEN
+//Update step cell functor::seg_len
+void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+#ifdef ATOMIC_OPT
+    // --------- faster and less accurate method... --------------------------
+    //keep track of cells being hit
+    aux_args.cell_ptrs[llid] = data_ptr;
+    aux_args.cached_aux[llid] = (float4) 0.0f;  //leaders retain the mean obs and the cell length
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    //segment workgroup
+    load_data_mutable_opt(aux_args.ray_bundle_array,aux_args.cell_ptrs);
+
+    //back to normal mean of mean obs...
+    seg_len_obs_functor(d, aux_args.obs, aux_args.ray_bundle_array, aux_args.cached_aux);
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    //set aux data here (for each leader.. )
+    if (aux_args.ray_bundle_array[llid].y==1)
+    {
+        //scale!
+        int seg_int = convert_int_rte(aux_args.cached_aux[llid].x * SEGLEN_FACTOR);
+        int cum_obs = convert_int_rte(aux_args.cached_aux[llid].y * SEGLEN_FACTOR);
+
+        //atomically update the cells
+        atom_add(&aux_args.seg_len[data_ptr], seg_int);
+        atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
+    }
+    //reset cell_ptrs to negative one every time (prevents invisible layer bug)
+    aux_args.cell_ptrs[llid] = -1;
+    //------------------------------------------------------------------------
+#else
+    //SLOW and accurate method
+    int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
+    atom_add(&aux_args.seg_len[data_ptr], seg_int);
+    int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
+    atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
+
+#ifdef DEBUG
+    (*aux_args.ray_len) += d;
+#endif
+
+#endif
+}
+#endif // SEGLEN
+
+#ifdef PREINF
+
+void pre_infinity_opt_view_based(  float    seg_len,
+                                    float    cum_len,
+                                    float    mean_obs,
+                                    float  * vis_inf,
+                                    float  * pre_inf,
+                                    float    alpha,
+                                    float16   mixture,
+                                    float8 nobs,
+                                    float4 view_dir)
+{
+    /* if total length of rays is too small, do nothing */
+    float PI = 0.0f;
+    if (cum_len>1.0e-10f)
+    {
+        //select appearance model
+        float8 view_dep_mixture;
+        float4 view_dep_nobs;
+        float weight3 = select_view_dep_mog(mixture,view_dir,&view_dep_mixture); 
+        select_view_dep_nobs(nobs,view_dir,&view_dep_nobs); 
+        
+        compute_sigmas(&view_dep_mixture, &view_dep_nobs);
+
+        PI = gauss_3_mixture_prob_density( mean_obs,
+                                           view_dep_mixture.s0,
+                                           view_dep_mixture.s1,
+                                           view_dep_mixture.s2,
+                                           view_dep_mixture.s3,
+                                           view_dep_mixture.s4,
+                                           view_dep_mixture.s5,
+                                           view_dep_mixture.s6,
+                                           view_dep_mixture.s7,
+                                           weight3 //(1.0f-view_dep_mixture.s2-view_dep_mixture.s5)
+                                          );/* PI */
+
+
+    /* Calculate pre and vis infinity */
+    float diff_omega = exp(-alpha * seg_len);
+    float vis_prob_end = (*vis_inf) * diff_omega;
+
+    /* updated pre                      Omega         *   PI  */
+    (*pre_inf) += ((*vis_inf) - vis_prob_end) *  PI;
+
+    /* updated visibility probability */
+    (*vis_inf) = vis_prob_end;
+  }
+}
+
+//preinf step cell functor
+void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+    //keep track of cells being hit
+    ////cell data, i.e., alpha and app model is needed for some passes
+    float  alpha    = aux_args.alpha[data_ptr];
+    float16 mixture = aux_args.mog[data_ptr];
+    float8 num_obs = aux_args.num_obs[data_ptr];
+
+    int cum_int = aux_args.seg_len[data_ptr];
+    int mean_int = aux_args.mean_obs[data_ptr];
+    float mean_obs = convert_float(mean_int) / convert_float(cum_int);
+    float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
+
+    //calculate pre_infinity denomanator (shape of image)
+    pre_infinity_opt_view_based( d*aux_args.linfo->block_len,
+                                  cum_len*aux_args.linfo->block_len,
+                                  mean_obs,
+                                  aux_args.vis_inf,
+                                  aux_args.pre_inf,
+                                  alpha,
+                                  mixture,
+                                  num_obs,
+                                  aux_args.viewdir);
+                                  
+    //there is a race condition here, don't care for now.
+    aux_args.ray_dir[data_ptr] = aux_args.viewdir;
+}
+#endif // PREINF
+
+#ifdef BAYES
+
+
+/* bayes ratio independent functor (for independent rays) */
+void bayes_ratio_ind_view_based( float  seg_len,
+                                  float  alpha,
+                                  float16 mixture,
+                                  float8 nobs,
+                                  float4 view_dir,
+                                  float  cum_len,
+                                  float  mean_obs,
+                                  float  norm,
+                                  float* ray_pre,
+                                  float* ray_vis,
+                                  float* ray_beta,
+                                  float* vis_cont )
+{
+    float PI = 0.0;
+
+    /* Compute PI for all threads */
+    if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
+        
+        float8 view_dep_mixture;
+        float4 view_dep_nobs;
+        float weight3 = select_view_dep_mog(mixture,view_dir,&view_dep_mixture); 
+        select_view_dep_nobs(nobs,view_dir,&view_dep_nobs); 
+        
+        compute_sigmas(&view_dep_mixture, &view_dep_nobs);
+
+        PI = gauss_3_mixture_prob_density( mean_obs,
+                                           view_dep_mixture.s0,
+                                           view_dep_mixture.s1,
+                                           view_dep_mixture.s2,
+                                           view_dep_mixture.s3,
+                                           view_dep_mixture.s4,
+                                           view_dep_mixture.s5,
+                                           view_dep_mixture.s6,
+                                           view_dep_mixture.s7,
+                                           weight3 //(1.0f-view_dep_mixture.s2-view_dep_mixture.s5)
+                                          );/* PI */
+    }
+
+    //calculate this ray's contribution to beta
+    (*ray_beta) = ((*ray_pre) + PI*(*ray_vis))*seg_len/norm;
+    (*vis_cont) = (*ray_vis) * seg_len;
+
+    //update ray_pre and ray_vis
+    float temp  = exp(-alpha * seg_len);
+
+    /* updated pre                      Omega         *  PI         */
+    (*ray_pre) += (*ray_vis)*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
+    /* updated visibility probability */
+    (*ray_vis) *= temp;
+}
+
+
+//bayes step cell functor
+void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+
+    //slow beta calculation ----------------------------------------------------
+    float  alpha    = aux_args.alpha[data_ptr];
+    float16 mixture = aux_args.mog[data_ptr];
+    float8 num_obs = aux_args.num_obs[data_ptr];
+
+    //load aux data
+    int cum_int = aux_args.seg_len[data_ptr];
+    int mean_int = aux_args.mean_obs[data_ptr];
+    float mean_obs = convert_float(mean_int) / convert_float(cum_int);
+    float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
+
+    float ray_beta, vis_cont;
+    bayes_ratio_ind_view_based( d*aux_args.linfo->block_len,
+                                 alpha,
+                                 mixture,
+                                 num_obs,
+                                 aux_args.viewdir,
+                                 cum_len*aux_args.linfo->block_len,
+                                 mean_obs,
+                                 aux_args.norm,
+                                 aux_args.ray_pre,
+                                 aux_args.ray_vis,
+                                 &ray_beta,
+                                 &vis_cont);
+
+    //discretize and store beta and vis contribution
+    int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
+    atom_add(&aux_args.beta_array[data_ptr], beta_int);
+    int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
+    atom_add(&aux_args.vis_array[data_ptr], vis_int);
+
+
+    //reset cell_ptrs to -1 every time
+    aux_args.cell_ptrs[llid] = -1;
+}
+#endif // BAYES
