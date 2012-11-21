@@ -314,8 +314,12 @@ void depth_map_scene::b_write(vsl_b_ostream& os)
   vsl_b_write(os, nj_);
   vsl_b_write(os, image_path_);
   vsl_b_write(os, scene_regions_);
-  vsl_b_write(os, ground_plane_);
-  vsl_b_write(os, sky_);
+  vsl_b_write(os, ground_plane_.size());
+  for (unsigned i = 0; i < ground_plane_.size(); i++)
+    vsl_b_write(os, ground_plane_[i]);
+  vsl_b_write(os, sky_.size());
+  for (unsigned i = 0; i < sky_.size(); i++)
+    vsl_b_write(os, sky_[i]);
   vsl_b_write(os, cam_);
 }
 
@@ -329,11 +333,33 @@ void depth_map_scene::b_read(vsl_b_istream& is)
     vsl_b_read(is, nj_);
     vsl_b_read(is, image_path_);
     vsl_b_read(is, scene_regions_);
-    vsl_b_read(is, ground_plane_);
-    vsl_b_read(is, sky_);
+    depth_map_region_sptr gp;
+    vsl_b_read(is, gp);
+    ground_plane_.push_back(gp);
+    depth_map_region_sptr sky;
+    vsl_b_read(is, sky);
+    sky_.push_back(sky);
     vsl_b_read(is, cam_);
-  }
-  else {
+  } else if (ver == 2) {
+    vsl_b_read(is, ni_);
+    vsl_b_read(is, nj_);
+    vsl_b_read(is, image_path_);
+    vsl_b_read(is, scene_regions_);
+    unsigned cnt;
+    vsl_b_read(is, cnt);
+    for (unsigned i = 0; i < cnt; i++) {
+      depth_map_region_sptr gp;
+      vsl_b_read(is, gp);
+      ground_plane_.push_back(gp);
+    }
+    vsl_b_read(is, cnt);
+    for (unsigned i = 0; i < cnt; i++) {
+      depth_map_region_sptr sky;
+      vsl_b_read(is, sky);
+      sky_.push_back(sky);
+    }
+    vsl_b_read(is, cam_);
+  } else {
     vcl_cout << " in depth_map_scene::b_read - unknown version\n";
     return;
   }
