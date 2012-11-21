@@ -73,3 +73,7 @@ SUBDIRS(boxm_bridge)
 
 #multi gpu library
 SUBDIRS(boxm2_multi)
+
+#space-time modeling 
+SUBDIRS(bstm)
+SUBDIRS(bstm_batch)
