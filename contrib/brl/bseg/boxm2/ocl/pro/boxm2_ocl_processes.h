@@ -49,6 +49,8 @@ DECLARE_FUNC_CONS(boxm2_ocl_update_alpha_wphongs_process);
 DECLARE_FUNC_CONS(boxm2_ocl_probability_of_image_wcubic_process);
 DECLARE_FUNC_CONS(boxm2_ocl_compute_visibility_process);
 
+DECLARE_FUNC_CONS(boxm2_ocl_compute_expectation_per_view_process);
+DECLARE_FUNC_CONS(boxm2_ocl_batch_update_scene_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_render_scene_uncertainty_map_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_sun_visibilities_process); 
@@ -71,5 +73,9 @@ DECLARE_FUNC_CONS(boxm2_ocl_render_expected_albedo_normal_process);
 DECLARE_FUNC_CONS(boxm2_ocl_batch_compute_normal_albedo_array_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_ingest_dem_space_process);
+
+DECLARE_FUNC_CONS(boxm2_ocl_update_view_dep_app_process);
+DECLARE_FUNC_CONS(boxm2_ocl_render_view_dep_expected_image_process);
+DECLARE_FUNC_CONS(boxm2_ocl_render_gl_view_dep_app_expected_image_process);
 
 #endif
