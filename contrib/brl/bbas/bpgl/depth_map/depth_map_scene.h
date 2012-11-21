@@ -138,7 +138,7 @@ class depth_map_scene : public vbl_ref_count
   void b_read(vsl_b_istream& is);
 
   //: binary io version no
-  unsigned version(){return 1;}
+  unsigned version(){return 2;}
 
   //: debug utilities
   void print_depth_states();
