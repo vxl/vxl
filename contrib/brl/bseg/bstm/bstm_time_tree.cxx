@@ -35,11 +35,11 @@ bstm_time_tree::bstm_time_tree(const unsigned char* bits, int num_levels)
 
 int  bstm_time_tree::max_num_cells() const
 {
-  return vcl_pow(2,num_levels_) - 1.0;
+  return int(vcl_pow(2.0f,(float)num_levels_) - 1.0);
 }
 int bstm_time_tree::max_num_inner_cells() const
 {
-  return vcl_pow(2,num_levels_-1) - 1.0;
+  return int(vcl_pow(2.0f,(float)num_levels_-1) - 1.0);
 }
 int bstm_time_tree::depth_at(const int index) const
 {
