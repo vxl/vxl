@@ -75,7 +75,7 @@ int main(int argc,  char** argv)
     ind_file = vul_file::strip_directory(ind_file);
     ind_file = vul_file::strip_extension(ind_file);
     score_files.push_back(score_folder() + "/" + ind_file + "_score.bin");
-    cam_files.push_back(score_folder() + "/" + ind_file + "_cam.bin");
+    cam_files.push_back(score_folder() + "/" + ind_file + "_camera.bin");
   }
 
   if (!hyp_files.size()) {

@@ -17,6 +17,7 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher.h>
+#include <boxm2/volm/boxm2_volm_matcher_order.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
@@ -28,6 +29,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> label_file("-label", "xml file with labeled polygons", "");
   vul_arg<vcl_string> input_file("-input", "text file with a list of hyp and index files to process", "");
   vul_arg<float> buffer_capacity("-buff", "index buffer capacity (GB)",10.0f);
+  vul_arg<bool> use_order("-order", "choose to use order matcher or not", false);
   vul_arg<vcl_string> out_folder("-out", "output folder", "");
   vul_arg<vcl_string> score_folder("-score", "score folder", "");  // composer will read the score files from this folder for this job
   vul_arg<unsigned> devID("-gpuid", "the idx for the 1st GPU, e.g. 0 for gpu0", 0);
@@ -151,10 +153,6 @@ int main(int argc,  char** argv)
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
   log << " generated query has size " << query->get_query_size() << '\n'
       << " The query has " << query->get_cam_num() << " cameras: " << '\n'
-      //<< " \t" << query->headings().size() << " headings = " << query->headings()[0] << " +/- " << (query->headings().size()-1)/2 << '\n'
-      //<< " \t" << query->tilts().size() << " tilts = " << query->tilts()[0] << " +/- " << (query->tilts().size() - 1)/2 << '\n'
-      //<< " \t" << query->rolls().size() << " rolls = " << query->rolls()[0] << " +/- " << (query->rolls().size() - 1)/2 << '\n'
-      //<< " \t" << query->top_fovs().size() << " top_fov = " << query->top_fovs()[0] << " +/- " << (query->top_fovs().size() - 1)/2 << '\n'
       << " Generated query_size for 1 camera is " << query->get_query_size() << " byte, "
       << " gives total query size = " << query->get_cam_num() << " x " << query->get_query_size()
       << " = " << (double)query->get_cam_num()*(double)query->get_query_size()/(1024*1024*1024) << " GB" << vcl_endl;
@@ -197,31 +195,56 @@ int main(int argc,  char** argv)
              << log.str() << vcl_endl; // print log here
 
     // create the volm_matcher class
-    //ei = 1;
-    boxm2_volm_matcher matcher(query, ind, ei, mgr->gpus_[devID()]);
-    log << "\t using device: " << mgr->gpus_[devID()]->device_identifier() << vcl_endl;
-
-    // get the score for all indexes
-    if (do_log) volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_STARTED);
-
-    if (!matcher.matching_cost_layer()) {
-      log << " matcher exe failed for " << inp_files[ind_i].second << vcl_endl;
-      if (do_log) {
-        volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
-        volm_io::write_log(out_folder(), log.str());
+	if (use_order()) {
+      boxm2_volm_matcher_order matcher(query, ind, ei, mgr->gpus_[devID()]);
+      log << "\t using device: " << mgr->gpus_[devID()]->device_identifier() << vcl_endl;
+      // get the score for all indexes
+      if (do_log) volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_STARTED);
+      if (!matcher.matching_cost_layer_order()) {
+        log << " matcher exe failed for " << inp_files[ind_i].second << vcl_endl;
+        if (do_log) {
+          volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
+          volm_io::write_log(out_folder(), log.str());
+        }
+        vcl_cout << log.str();
+        return volm_io::MATCHER_EXE_FAILED;
       }
-      vcl_cout << log.str();
-      return volm_io::MATCHER_EXE_FAILED;
+      log << " Volm matcher finished" << vcl_endl;
+      // save the scores
+      vcl_string ind_pre = vul_file::strip_directory(inp_files[ind_i].second);
+      ind_pre = vul_file::strip_extension(ind_pre);
+      vcl_string out_prefix = score_folder() + "/" + ind_pre;
+      matcher.write_score_order(out_prefix);
+      vcl_string score_fname = score_folder() + "/" + ind_pre + "_score.bin";
+      vcl_string cam_fname = score_folder() + "/" + ind_pre + "_camera.bin";
+      vcl_cout << " Results are stored in file " << score_fname << " and " << cam_fname << vcl_endl;
     }
-    log << " Volm matcher finished" << vcl_endl;
-    // save the scores
-    vcl_string ind_pre = vul_file::strip_directory(inp_files[ind_i].second);
-    ind_pre = vul_file::strip_extension(ind_pre);
-    vcl_string out_prefix = score_folder() + "/" + ind_pre;
-    matcher.write_score(out_prefix);
-    vcl_string score_fname = score_folder() + "/" + ind_pre + "_score.bin";
-    vcl_string cam_fname = score_folder() + "/" + ind_pre + "_camera.bin";
-    vcl_cout << " Results are stored in file " << score_fname << " and " << cam_fname << vcl_endl;
+    else {
+      boxm2_volm_matcher matcher(query, ind, ei, mgr->gpus_[devID()]);
+	  log << "\t using device: " << mgr->gpus_[devID()]->device_identifier() << vcl_endl;
+
+      // get the score for all indexes
+      if (do_log) volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_STARTED);
+
+      if (!matcher.matching_cost_layer()) {
+        log << " matcher exe failed for " << inp_files[ind_i].second << vcl_endl;
+        if (do_log) {
+          volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
+          volm_io::write_log(out_folder(), log.str());
+        }
+        vcl_cout << log.str();
+        return volm_io::MATCHER_EXE_FAILED;
+      }
+      log << " Volm matcher finished" << vcl_endl;
+      // save the scores
+      vcl_string ind_pre = vul_file::strip_directory(inp_files[ind_i].second);
+      ind_pre = vul_file::strip_extension(ind_pre);
+      vcl_string out_prefix = score_folder() + "/" + ind_pre;
+      matcher.write_score(out_prefix);
+      vcl_string score_fname = score_folder() + "/" + ind_pre + "_score.bin";
+      vcl_string cam_fname = score_folder() + "/" + ind_pre + "_camera.bin";
+      vcl_cout << " Results are stored in file " << score_fname << " and " << cam_fname << vcl_endl;
+	}
   }
 
   if (do_log) {
