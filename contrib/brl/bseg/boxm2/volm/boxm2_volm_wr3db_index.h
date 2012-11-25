@@ -91,8 +91,8 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     //: retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc
     //  caller is responsible to resize values array to layer_size
     bool get_next(vcl_vector<uchar>& values);
-    //: caller is responsible to pass a valid array of size layer_size
-    bool get_next(uchar* values);
+    //: caller is responsible to pass a valid array of size at least layer_size, if size>layer_size, fill the rest with zeros
+    bool get_next(uchar* values, unsigned size);
     
     //: binary io
     bool close_file(vcl_string out_file);

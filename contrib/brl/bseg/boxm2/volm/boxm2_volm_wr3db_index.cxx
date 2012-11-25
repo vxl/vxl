@@ -4,6 +4,7 @@
 #include <bbas/volm/volm_spherical_container.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <vgl/vgl_box_3d.h>
+#include <vcl_algorithm.h>
 
 bool boxm2_volm_wr3db_index_params::write_params_file(vcl_string index_file_name)
 {
@@ -220,8 +221,8 @@ bool boxm2_volm_wr3db_index::get_next(vcl_vector<uchar>& values)
   current_id_++;
   return true;
 }
-//: caller is responsible to pass a valid array of size layer_size
-bool boxm2_volm_wr3db_index::get_next(uchar* values)
+//: caller is responsible to pass a valid array of size at least layer_size, if size>layer_size, fill the rest with zeros
+bool boxm2_volm_wr3db_index::get_next(uchar* values, unsigned size)
 {
   if (m_ == WRITE) {
     vcl_cout << "index object is in WRITE mode! cannot read from index!\n";
@@ -236,6 +237,10 @@ bool boxm2_volm_wr3db_index::get_next(uchar* values)
   }
   for (unsigned i = 0; i < layer_size_; i++)
     values[i] = active_buffer_[current_id_*layer_size_ + i];
+  //unsigned char val = (unsigned char)0;
+  //for (unsigned i = layer_size_; i < size; i++)
+  //  values[i] = val;
+  vcl_fill(values+layer_size_, values+size, (unsigned char)0);
   current_global_id_++;
   current_id_++;
   return true;
