@@ -24,6 +24,7 @@
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
 #include <vul/vul_timer.h>
+#include <vpl/vpl.h>
 
 int main(int argc,  char** argv)
 {
@@ -99,7 +100,7 @@ int main(int argc,  char** argv)
     ind_file = vul_file::strip_directory(ind_file);
     ind_file = vul_file::strip_extension(ind_file);
     score_files.push_back(score_folder() + "/" + ind_file + "_score.bin");
-    cam_files.push_back(score_folder() + "/" + ind_file + "_cam.bin");
+    cam_files.push_back(score_folder() + "/" + ind_file + "_camera.bin");
   }
 
   if (!hyp_files.size()) {
@@ -132,16 +133,24 @@ int main(int argc,  char** argv)
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
 
   vul_timer t;
-
-  // check if all the score files are available, if not return error
-  for (unsigned i = 0; i < score_files.size(); i++) {
-    if (!vul_file::exists(score_files[i]) && !(vul_file::size(score_files[i]) > 0)) {
-      vcl_cerr << " score file: " << score_files[i] << " is missing!\n";
-      volm_io::write_status(out_folder(), volm_io::SCORE_FILE_MISSING, 100);
-      return volm_io::SCORE_FILE_MISSING;
+  
+  // halt till all camera.bin files are available
+  volm_io::write_status(out_folder(), volm_io::COMPOSE_HALT);
+  
+  bool all_available = false;
+  while (!all_available) {
+    all_available = true;
+    for (unsigned i = 0; i < cam_files.size(); i++) {
+      if (!vul_file::exists(cam_files[i]) && !(vul_file::size(cam_files[i]) > 0)) {
+        log << " halting for: " << cam_files[i] << "!\n";
+        vcl_cout << " halting for: " << cam_files[i] << "!\n";
+        volm_io::write_status(out_folder(), volm_io::SCORE_FILE_MISSING, 100);
+        all_available = false;
+        vpl_sleep(30);
+        break;
+      }
     }
   }
-  
   volm_io::write_status(out_folder(), volm_io::COMPOSE_STARTED);
   // composer to generate final output
   vcl_cout << "\n Start to generate output images using tiles" << vcl_endl;
@@ -227,8 +236,7 @@ int main(int argc,  char** argv)
               vcl_stringstream log;
               log << "cam id: " << cam_ids[ind_idx] << " is invalid, query object has: " << query->get_cam_num() << " cams. In tile " << tiles[k].get_string() << " loc: (" << u << ", " << v << ") skipping rationale..\n"
                   << "score file is: " << score_files[i] << " id in the file: " << ind_idx << " hypo id: " << hyp.current_ << vcl_endl;
-              vcl_cerr << log.str();
-              volm_io::write_composer_log(out_folder(), log.str());
+              vcl_cerr << log.str(); 
             }
             //out_imgs[k](u,v) = (vxl_byte)(scores[ind_idx]*volm_io::SCALE_VALUE + 1);
             out_imgs[k](u,v) = volm_io::scale_score_to_1_255(threshold, scores[ind_idx]);
@@ -265,6 +273,7 @@ int main(int argc,  char** argv)
     query->draw_query_image(r.cam_id, str.str());
   }
 
+  volm_io::write_composer_log(out_folder(), log.str());
   volm_io::write_status(out_folder(), volm_io::SUCCESS, 100);
   return volm_io::SUCCESS;
 }
