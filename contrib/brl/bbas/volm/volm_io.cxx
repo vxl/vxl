@@ -49,6 +49,22 @@ bool volm_io::read_camera(vcl_string kml_file, unsigned const& ni, unsigned cons
   if (parser->latitude_)      lat = parser->latitude_;
   if (parser->longitude_)     lon = parser->longitude_;
   
+  //: check angle ranges
+  if (heading < 0 || heading > 360) {
+    vcl_cerr << "Problem reading heading from: " << kml_file << " setting head = 0\n";
+    heading = 0;
+  }
+  if (heading_dev < 0 || heading_dev > 360) {
+    heading_dev = 180; vcl_cerr << "Problem reading heading_dev from: " << kml_file << " setting heading_dev = 180\n"; }
+  if (tilt < 0 || tilt > 360) {
+    tilt = 90; vcl_cerr << "Problem reading tilt from: " << kml_file << " setting tilt = 90\n"; }
+  if (tilt_dev < 0 || tilt_dev > 360) {
+    tilt_dev = 0; vcl_cerr << "Problem reading tilt_dev from: " << kml_file << " setting tilt_dev = 90\n"; }
+  if (roll < 0 || roll > 360) {
+    roll = 0; vcl_cerr << "Problem reading roll from: " << kml_file << " setting roll = 90\n"; }
+  if (altitude < 0) {
+    altitude = 1.6; vcl_cerr << "Problem reading altitude from: " << kml_file << " setting altitude = 1.6\n"; }
+  
   double dtor = vnl_math::pi_over_180;
   double ppu = 0.5*ni;
   double ppv = 0.5*nj;
@@ -190,6 +206,9 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, 
       file << "Matcher Exe Running\n<percent>\n" << percent << "\n</percent>\n"; break;
     case volm_io::LABELME_FILE_IO_ERROR:
       file << "LABELME FILE IO Error\n<percent>0</percent>\n"; break;
+    case volm_io::COMPOSE_HALT:
+      file << "COMPOSER waiting for matcher to complete\n<percent>90</percent>\n"; break;
+    
     default:
       file << "Unidentified status code!\n";
       vcl_cerr << "Unidentified status code!\n";
