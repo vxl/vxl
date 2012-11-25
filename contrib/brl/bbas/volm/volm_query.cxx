@@ -5,6 +5,7 @@
 #include <volm/volm_spherical_container.h>
 #include <bsol/bsol_algs.h>
 #include <vil/vil_save.h>
+#include <vil/vil_resample_bilin.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <vcl_algorithm.h>
@@ -26,11 +27,16 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   volm_io::read_labelme(label_xml_file, dm_, img_category_);
   ni_ = dm_->ni();
   nj_ = dm_->nj();
+  log_downsample_ratio_ = 0;
+  unsigned bigger = ni_ > nj_ ? ni_ : nj_;
+  while (bigger/vcl_pow(2.0,log_downsample_ratio_) > 500) 
+    log_downsample_ratio_++;
+  vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
   // set the default value based on img_category_ ( temporary having "desert" and "coast"
   if (img_category_ == "desert") {
-    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
+    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 3.0;
     tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 2.0;
-    roll_ = 0.0;      roll_d_ = 0.0; roll_inc_ = 1.0;
+    roll_ = 0.0;      roll_d_ = 3.0; roll_inc_ = 2.0; // try +2 -2
     tfov_ = 5.0;      tfov_d_ = 5.0; tfov_inc_ = 2.0;
   }
   else if (img_category_ == "coast") {
@@ -47,14 +53,20 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
     roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
     tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 2.0;
   }
-  double lat, lon;
+  double lat, lon, head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude;
   // load the camera kml, fetch the camera value and deviation
-  volm_io::read_camera(cam_kml_file, ni_, nj_, head_, head_d_, tilt_, tilt_d_, roll_, roll_d_, tfov_, tfov_d_, altitude_, lat, lon);
-
+  // for now we don't trust angle params read from the camera file
+  volm_io::read_camera(cam_kml_file, ni_, nj_, head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude, lat, lon);
+  // overwrite roll deviation for now
+  altitude_ = 3.0;
+  roll_d_ = 3.0;
+  vcl_cout << "In volm_query() - read from file params\nheading: " << head_ << " dev: " << head_d_ << "\ntilt: " << tilt_ << " dev: " << tilt_d_ << "\nroll: " << roll_ << " dev: " << roll_d_ << " (hard-coded to 3 till .kml passes meaningful values!!)" << "\ntop_fov: " << tfov_ << " dev: " << tfov_d_ << " alt: " << altitude_ << vcl_endl;
   // create camera hypotheses
   this->create_cameras();
+  vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
   // generate polygon vector based on defined order
   this->generate_regions();
+  vcl_cout << "volm_query generated regions: " << this->depth_regions().size() << " regions! ingesting...\n"; vcl_cout.flush();
   // start to ingest query, with min_dist and order implemented
   this->query_ingest();
 }
@@ -133,28 +145,37 @@ void volm_query::create_cameras()
   }
 
   headings_.push_back(head_);
+  vcl_cout << "\t headings:\n\t " << head_ << ' ';
   for (double i = head_inc_; i <= head_d_; i+=head_inc_) {   // heading ranges from 0 to 360
     double right = head_ + i, left = head_ - i;
     if (right > 360) right = right - 360;
     if (left < 0)    left = left + 360;
-    headings_.push_back(right);  headings_.push_back(left);
+    headings_.push_back(right);  
+    if (left != right) {
+      headings_.push_back(left); vcl_cout << right << ' ' << left << ' ';
+    } else 
+      vcl_cout << right << ' '; 
   }
-
+  vcl_cout << "\n\t tilts:\n\t " << tilt_ << ' ';
   tilts_.push_back(tilt_);   // tilt ranges from 0 to 180
   for (double i =  tilt_inc_; i <= tilt_d_; i+= tilt_inc_) {
     double right = tilt_ + i, left = tilt_ - i;
     if (right > 180) right = 180;
     if (left < 0)    left = 0;
     tilts_.push_back(right);  tilts_.push_back(left);
+    vcl_cout << right << ' ' << left << ' ';
   }
 
+  vcl_cout << "\n\t rolls:\n\t " << roll_ << ' ';
   rolls_.push_back(roll_);    // roll ranges from -180 to 180 in kml, how about in camera_from_kml ?? (need to check...)
   for (double i = roll_inc_; i <= roll_d_; i+=roll_inc_) {
     double right = roll_ + i , left = roll_ - i;
     if (right > 180) right = right - 360;
     if (left < -180) left = left + 360;
     rolls_.push_back(roll_ + i);  rolls_.push_back(roll_ - i);
+    vcl_cout << right << ' ' << left << ' ';
   }
+  vcl_cout.flush();
   // construct cameras
   for (unsigned i = 0; i < tilts_.size(); ++i)
     for (unsigned j = 0; j < rolls_.size(); ++j)
@@ -175,7 +196,7 @@ void volm_query::create_cameras()
             }
             if (success) {
               cameras_.push_back(cam);
-              camera_strings_.push_back(bpgl_camera_utils::get_string((double)ni_, (double)nj_, right_f, top_f, 0.0, head, tilt, roll));
+              camera_strings_.push_back(bpgl_camera_utils::get_string((double)ni_, (double)nj_, right_f, top_f, altitude_, head, tilt, roll));
             }
             else
             {
@@ -184,6 +205,11 @@ void volm_query::create_cameras()
                        << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;
 #endif
             }
+          } 
+          else 
+          {
+            cameras_.push_back(cam);
+            camera_strings_.push_back(bpgl_camera_utils::get_string((double)ni_, (double)nj_, right_f, top_f, altitude_, head, tilt, roll));
           }
         }
 }
@@ -211,13 +237,17 @@ void volm_query::generate_regions()
 bool volm_query::query_ingest()
 {
   for (unsigned i = 0; i < cameras_.size(); i++) {
+    //vcl_cout << i << '.'; vcl_cout.flush();
     vcl_vector<unsigned char> min_dist_layer;
     vcl_vector<unsigned char> max_dist_layer;
     vcl_vector<unsigned char> order_layer;
     vpgl_perspective_camera<double> cam = cameras_[i];
     // create an depth image for current camera
     dm_->set_camera(cam);
-    vil_image_view<float> depth_img = dm_->depth_map("ground_plane", 0, d_threshold_);
+    //vil_image_view<float> depth_img = dm_->depth_map("ground_plane", 0, d_threshold_);
+    vil_image_view<float> depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
+    
+    depth_img.fill(-1.0f);
     unsigned count = 0;
     for (unsigned p_idx = 0; p_idx < query_size_; p_idx++) {
       vgl_point_3d<double> qp(query_points_[p_idx].x(), query_points_[p_idx].y(), query_points_[p_idx].z()+altitude_);
@@ -284,7 +314,14 @@ unsigned char volm_query::fetch_depth(double const& u, double const& v, unsigned
     for (unsigned i = 0; i < dm_->ground_plane().size(); i++) {
       vgl_polygon<double> vgl_ground = bsol_algs::vgl_from_poly((dm_->ground_plane()[i])->region_2d());
       if (vgl_ground.contains(u,v)) {
-        min_dist = sph_depth_->get_depth_interval(depth_img((int)u,(int)v));
+        //min_dist = sph_depth_->get_depth_interval(depth_img((int)u,(int)v));
+        // maybe better to do bilinear interpolation instead of casting to nearest pixel
+        int uu = (int)vcl_floor(u/vcl_pow(2.0,log_downsample_ratio_)+0.5);
+        uu = uu < 0 ? 0 : uu; uu = uu >= (int)ni_ ? ni_-1 : uu; 
+        int vv = (int)vcl_floor(v/vcl_pow(2.0,log_downsample_ratio_)+0.5);
+        vv = vv < 0 ? 0 : vv; vv = vv >= (int)nj_ ? nj_-1 : vv; 
+        float depth_uv = depth_img(uu,vv);
+        min_dist = sph_depth_->get_depth_interval(depth_uv);
         max_dist = (unsigned char)255;
         order = (unsigned char)(dm_->ground_plane()[i])->order();
         return min_dist;
@@ -468,6 +505,9 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
 {
   int dot_size = ( img.ni() < img.nj() ) ? (int)(0.007*ni_) : (int)(0.007*nj_);
   double u, v;
+  vgl_homg_point_3d<double> current_p(world_point.x(), world_point.y(), world_point.z()+altitude_);
+  if (!(cam.is_behind_camera(current_p))) {
+    
   cam.project(world_point.x(), world_point.y(), world_point.z()+altitude_, u, v);
   int cx = (int)u;
   int cy = (int)v;
@@ -486,11 +526,9 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
         }
       }
     }
+  }
 }
-
-void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
-                                 unsigned const& cam_id,
-                                 vil_image_view<vil_rgb<vxl_byte> >& out_img)
+void volm_query::draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img)
 {
   // draw depth_map polygons on the depth images
   if (dm_->sky().size()) {
@@ -515,6 +553,13 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
       this->draw_polygon(out_img, poly, depth);
     }
   }
+}
+
+void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
+                                 unsigned const& cam_id,
+                                 vil_image_view<vil_rgb<vxl_byte> >& out_img)
+{
+  this->draw_depth_map_regions(out_img);
   // draw the rays that current penetrate through the image
   for (unsigned pidx = 0; pidx < query_size_; pidx++) {
     if (values[pidx] < 255) 
@@ -538,6 +583,22 @@ void volm_query::draw_query_image(unsigned cam_i, vcl_string const& out_name)
   this->depth_rgb_image(current_query, cam_i, img);
   // save the images
 
+  vil_save(img,out_name.c_str());
+}
+
+void volm_query::draw_query_regions(vcl_string const& out_name)
+{
+  // create an rgb image instance
+  vil_image_view<vil_rgb<vxl_byte> > img(ni_, nj_);
+  // initialize the image
+  for (unsigned i = 0; i < ni_; i++)
+    for (unsigned j = 0; j < nj_; j++) {
+      img(i,j).r = (unsigned char)120;
+      img(i,j).g = (unsigned char)120;
+      img(i,j).b = (unsigned char)120;
+    }
+  this->draw_depth_map_regions(img);
+  // save the images
   vil_save(img,out_name.c_str());
 }
 

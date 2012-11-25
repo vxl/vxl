@@ -60,6 +60,10 @@ class volm_query : public vbl_ref_count
   void visualize_query(vcl_string const& prefix);
   //: generate rgb depth image for given camera id and depth value
   void depth_rgb_image(vcl_vector<unsigned char> const& values, unsigned const& cam_id, vil_image_view<vil_rgb<vxl_byte> >& out_img);
+  //: draw the polygons of regions on top of an rgb image
+  void draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img);
+  void draw_query_regions(vcl_string const& out_name);
+  
   //: initial camera parameters read from camera kml
   double init_focal_;
   double head_, head_d_, head_inc_;
@@ -73,6 +77,7 @@ class volm_query : public vbl_ref_count
   bool use_default_;
   //: image size
   unsigned ni_, nj_;
+  unsigned log_downsample_ratio_;  // 0,1,2 or 3 (ni-->ni/2^ratio_), to generate downsampled depth maps for ground regions
   //: image category
   vcl_string img_category_;
   //: depth map scene
