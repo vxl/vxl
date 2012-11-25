@@ -44,11 +44,17 @@ boxm2_volm_matcher::boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_i
   }
 
   // create bocl_mem for weight parameters (should read from query later)
-  weight_buff = new float[cl_ni*cl_nj];
-  for (unsigned wIdx = 0; wIdx < cl_ni*cl_nj; wIdx++) {
-      weight_buff[wIdx] = 1.0f;
+  //weight_buff = new float[cl_ni*cl_nj];
+  weight_buff = new float[cl_ni];
+  for (unsigned wIdx = 0; wIdx < n_cam; wIdx++) {
+    weight_buff[wIdx] = (float)query_->get_valid_ray_num(wIdx);
   }
-  weight = new bocl_mem(gpu_->context(), weight_buff, sizeof(float)*cl_ni*cl_nj, " weight " );
+  vcl_fill(weight_buff+n_cam, weight_buff+cl_ni, 1.0f);
+  //for(unsigned wIdx = 0; wIdx < cl_ni*cl_nj; wIdx++){
+  //    weight_buff[wIdx] = 1.0f;
+  //}
+  //weight = new bocl_mem(gpu_->context(), weight_buff, sizeof(float)*cl_ni*cl_nj, " weight " );
+  weight = new bocl_mem(gpu_->context(), weight_buff, sizeof(float)*cl_ni, " weight " );
   if (!weight->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
     vcl_cout << "\n ERROR: creating bocl_mem failed for WEIGHT" << vcl_endl;
     delete weight;      delete [] weight_buff;
@@ -142,19 +148,20 @@ bool boxm2_volm_matcher::matching_cost_layer()
   vul_timer transfer;
   float gpu_time = 0.0f;
   float gpu_time_sum = 0.0f;
-  unsigned count = (unsigned)(0.1*ei_);
+  //unsigned count = (unsigned)(0.1*ei_);
   vcl_cerr << "  3. Start to match all " << ei_ << '(' << ei_ << ") indices with " << n_cam << " cameras per index " ;
   for (unsigned indIdx = 0; indIdx < ei_; indIdx++) {
-    if (!(indIdx % count) ) vcl_cerr << '.';
+    //if (!(indIdx % count) ) vcl_cerr << "." ;
     bocl_device_sptr device = gpu_;
     vcl_string identifier = device->device_identifier();
     // create index buffer and index bocl_mem
     unsigned char* index_buff = new unsigned char[cl_nj];
-    vcl_fill(index_buff, index_buff+cl_nj, (unsigned char)0);
-    vcl_vector<unsigned char> values(layer_size);
-    ind_->get_next(values);
-    for (unsigned k = 0; k < layer_size; k++)
-      index_buff[k] = values[k];
+    //vcl_fill(index_buff, index_buff+cl_nj, (unsigned char)0); 
+    //vcl_vector<unsigned char> values(layer_size);
+    //ind_->get_next(values);
+    //for (unsigned k = 0; k < layer_size; k++)
+    //  index_buff[k] = values[k];
+    ind_->get_next(index_buff, cl_nj);
     bocl_mem* index = new bocl_mem(device->context(), index_buff, sizeof(unsigned char)*cl_nj, " index " );
     if (!index->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       delete index;       delete [] index_buff;
@@ -218,7 +225,7 @@ bool boxm2_volm_matcher::matching_cost_layer()
     status = clFinish(queue);
     check_val(status, MEM_FAILURE, " read SCORE_CAM output buffer FAILED on device " + device->device_identifier() + error_to_string(status));
     // find the maximum from score_cam_buff using map
-    vcl_map<float, unsigned> score_map;
+    /*vcl_map<float, unsigned> score_map;
     for (unsigned k = 0; k < n_cam; k++)
       score_map[score_cam_buff[k]] = k;
     vcl_map<float, unsigned>::iterator it = --score_map.end();
@@ -227,7 +234,19 @@ bool boxm2_volm_matcher::matching_cost_layer()
     else
       score_all_.push_back(0.0);
     cam_all_id_.push_back(it->second);
-
+    */
+    float max_score = score_cam_buff[0];
+    unsigned max_cam_id = 0;
+    for (unsigned k = 1; k < n_cam; k++) {
+      float current_score = score_cam_buff[k];
+      if (current_score > max_score) {
+        max_score = current_score;
+        max_cam_id = k;
+      } 
+    }
+    score_all_.push_back(max_score);
+    cam_all_id_.push_back(max_cam_id);
+    
 #if 0
     vcl_cout << " indIdx = " << indIdx << " score_gpu = " << it->first << " cam_gpu = " << it->second << vcl_endl;
     score->read_to_buffer(queue);
