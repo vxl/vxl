@@ -26,6 +26,7 @@
 #include <volm/volm_spherical_shell_container.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
+#include <vcl_set.h>
 
 class volm_query : public vbl_ref_count
 {
@@ -40,15 +41,17 @@ class volm_query : public vbl_ref_count
              bool const& use_default = true);
 
   // === accessors ===
-  vcl_vector<vcl_vector<unsigned char> >& min_dist() {return min_dist_;}
-  vcl_vector<vcl_vector<unsigned char> >& max_dist() {return max_dist_;}
-  vcl_vector<vcl_vector<unsigned char> >& order() { return order_; }
-  vcl_vector<unsigned>& valid_ray_num() { return ray_count_; }
-  depth_map_scene_sptr depth_scene() const { return dm_; }
-  vcl_vector<depth_map_region_sptr>& depth_regions() { return depth_regions_; }
-  unsigned get_cam_num()   const  { return (unsigned)cameras_.size(); }
-  unsigned get_query_size() const { return query_size_; }
-  unsigned get_valid_ray_num(unsigned const& cam_idx) const { return ray_count_[cam_idx]; }
+  vcl_vector<vcl_vector<unsigned char> >& min_dist()            { return min_dist_;}
+  vcl_vector<vcl_vector<unsigned char> >& max_dist()            { return max_dist_;}
+  vcl_vector<vcl_vector<unsigned char> >& order()               { return order_; }
+  vcl_vector<unsigned>& valid_ray_num()                         { return ray_count_; }
+  vcl_set<unsigned>& order_set()                                { return order_set_; }
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > >& order_index() { return order_index_; }
+  depth_map_scene_sptr depth_scene() const                      { return dm_; }
+  vcl_vector<depth_map_region_sptr>& depth_regions()            { return depth_regions_; }
+  unsigned get_cam_num() const                                  { return (unsigned)cameras_.size(); }
+  unsigned get_query_size() const                               { return query_size_; }
+  unsigned get_valid_ray_num(unsigned const& cam_idx) const     { return ray_count_[cam_idx]; }
 
   //: write vrml for spherical container and camera hypothesis
   void draw_template(vcl_string const& vrml_fname);
@@ -98,9 +101,14 @@ class volm_query : public vbl_ref_count
   vcl_vector<vcl_vector<unsigned char> > order_;
   unsigned int query_size_;
   vcl_vector<vgl_point_3d<double> > query_points_;
-
-  unsigned char fetch_depth(double const& u, double const& v, unsigned char& order, unsigned char& max_dist, vil_image_view<float> const& depth_img);
+  //: order vector to store the index id associated with object order
+  vcl_set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > > order_index_;
+  vcl_vector<vcl_vector<unsigned char> > order_offset_;
+  
   bool query_ingest();
+  bool order_ingest();
+  unsigned char fetch_depth(double const& u, double const& v, unsigned char& order, unsigned char& max_dist, vil_image_view<float> const& depth_img);
   void create_cameras();
   void generate_regions();
   void draw_viewing_volume(vcl_string const& fname, vpgl_perspective_camera<double> cam, float r, float g, float b);

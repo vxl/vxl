@@ -35,7 +35,7 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   // set the default value based on img_category_ ( temporary having "desert" and "coast"
   if (img_category_ == "desert") {
     head_ = 0.0;      head_d_ = 180.0; head_inc_ = 3.0;
-    tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 2.0;
+    tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 2.0;
     roll_ = 0.0;      roll_d_ = 3.0; roll_inc_ = 2.0; // try +2 -2
     tfov_ = 5.0;      tfov_d_ = 5.0; tfov_inc_ = 2.0;
   }
@@ -69,6 +69,8 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   vcl_cout << "volm_query generated regions: " << this->depth_regions().size() << " regions! ingesting...\n"; vcl_cout.flush();
   // start to ingest query, with min_dist and order implemented
   this->query_ingest();
+  // start to ingest order, store in order_index_
+  this->order_ingest();
 }
 
 void volm_query::create_cameras()
@@ -120,7 +122,7 @@ void volm_query::create_cameras()
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
     }
-	  else {
+    else {
       double stock[] = {3.0,  4.0, 5.0,
                         12.0, 17.0, 18.0,19.0,
                        20.0, 24.0};
@@ -191,8 +193,10 @@ void volm_query::create_cameras()
           if (dm_->ground_plane().size()) {
             for (unsigned i = 0; (success && i < dm_->ground_plane().size()); i++) {
               success = dm_->ground_plane()[i]->region_ground_2d_to_3d(cam);
-              //vcl_cout << "checking ground plane consistency for: " << dm_->ground_plane()[i]->name() << " min depth is: " << dm_->ground_plane()[i]->min_depth();
-              //success ? vcl_cout << " consistent!\n" : vcl_cout << " not_consistent!\n";
+#ifdef DEBUG
+              vcl_cout << "checking ground plane consistency for: " << dm_->ground_plane()[i]->name() << " min depth is: " << dm_->ground_plane()[i]->min_depth();
+              success ? vcl_cout << " consistent!\n" : vcl_cout << " not_consistent!\n";
+#endif
             }
             if (success) {
               cameras_.push_back(cam);
@@ -200,7 +204,7 @@ void volm_query::create_cameras()
             }
             else
             {
-#ifdef DEBUG
+#if 1
               vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored\n"
                        << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;
 #endif
@@ -222,7 +226,7 @@ void volm_query::generate_regions()
   unsigned size = (unsigned)dm_->scene_regions().size();
   d_threshold_ = 20000.0;
   for (unsigned i = 0; i < size; i++) {
-    //depth_regions_[(dm_->scene_regions())[i]->order()] = (dm_->scene_regions())[i];
+  //depth_regions_[(dm_->scene_regions())[i]->order()] = (dm_->scene_regions())[i];
     if (d_threshold_ < (dm_->scene_regions())[i]->max_depth())
       d_threshold_ = (dm_->scene_regions())[i]->max_depth();
   }
@@ -232,6 +236,57 @@ void volm_query::generate_regions()
         d_threshold_ = dm_->ground_plane()[i]->max_depth();
     }
   }
+  // create the order_set for all non-ground region
+  if (depth_regions_.size())
+    for (unsigned i = 0; i < depth_regions_.size(); i++)
+      order_set_.insert(depth_regions_[i]->order());
+  if (dm_->sky().size())
+    for (unsigned i = 0; i < dm_->sky().size(); i++)
+      order_set_.insert( (dm_->sky())[i]->order() );
+
+}
+
+bool volm_query::order_ingest()
+{
+  // loop over camera
+  unsigned cam_num = (unsigned)cameras_.size();
+  for (unsigned cam_id = 0; cam_id < cam_num; cam_id++) {
+    // create a vector store all objects and fetch the order for current lay
+    vcl_vector<vcl_vector<unsigned> > order_cam(order_set_.size());
+    vcl_vector<unsigned char> order_layer = order_[cam_id];
+    vcl_set<unsigned>::iterator iter = this->order_set_.begin();
+#if 0
+    vcl_cout << " --------------------- camera " << cam_id << " --------------------" << vcl_endl;
+#endif
+    for (unsigned idx = 0; idx < query_size_; idx++) {
+      unsigned count = 0;
+      //vcl_cout << " cam " << cam_id << ", order_layer[" << idx << "] = " << (int)order_layer[idx] << vcl_endl;
+      vcl_set<unsigned>::iterator iter = this->order_set_.begin();
+      for ( ; iter != order_set_.end(); ++iter) {
+        if ( (int)order_layer[idx] == *iter) {
+          order_cam[count].push_back(idx);
+          break;
+        }
+        else {
+          count++;
+        }
+      }
+    }
+    order_index_.push_back(order_cam);
+  } // loop over camera
+#if 0
+  vcl_cout << " order_index_size = " << order_index_.size() << vcl_endl;
+  for (unsigned k = 0; k < order_index_.size(); k++){
+    vcl_cout << " order_index_[" << k << "] = " << order_index_[k].size() << vcl_endl;
+    for (unsigned i = 0 ; i < order_index_[k].size(); i++) {
+      vcl_cout << "\t order_index_[" << k << "][" << i << "] = " << order_index_[k][i].size() << vcl_endl;
+      for (unsigned j = 0; j < order_index_[k][i].size(); j++) {
+        //vcl_cout << " cam " << k << ", object order " << i << ", order_index[" << j << "] =" << order_index_[k][i][j] << vcl_endl;
+      }
+    }
+  }
+#endif
+  return true;
 }
 
 bool volm_query::query_ingest()
@@ -525,7 +580,7 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
           img((unsigned)x,(unsigned)y).b = bvrml_color::heatmap_classic[(int)depth][2];
         }
       }
-    }
+  }
   }
 }
 void volm_query::draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img)
@@ -562,9 +617,15 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
   this->draw_depth_map_regions(out_img);
   // draw the rays that current penetrate through the image
   for (unsigned pidx = 0; pidx < query_size_; pidx++) {
-    if (values[pidx] < 255) 
+    if (values[pidx] < 255) {
+#if 0
+      vcl_cout << " inside draw, " << ", cam_id = " << cam_id << " idx = " << pidx 
+               << ", point = " << query_points_[pidx] 
+               << ", values = " << (int)values[pidx];
+#endif
       this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
-   }
+    }
+  }
 }
 
 void volm_query::draw_query_image(unsigned cam_i, vcl_string const& out_name)
