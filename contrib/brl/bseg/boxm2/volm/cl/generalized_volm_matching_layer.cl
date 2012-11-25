@@ -23,15 +23,12 @@ void generalized_volm_matching_layer (__global unsigned char* query_layer,
   if (ql == 254 && ql == il) {  // sky
     score = 1;
   }
-  else if (ql <= il && il != 254) {
+  else if(il < 253 && ql <= il) {
     score = 1;
   }
   score_obj[idx] = score;
-#if 0
-  if (query_layer[idx] <= ind_layer[j]) {  // sky
-    score_obj[idx] = 1.0f;
-  }
 
+#if 0
   if ( i == 125 && j == 9 ) {
     debug_output[0] = (float)i;
     debug_output[1] = (float)j;
@@ -41,4 +38,5 @@ void generalized_volm_matching_layer (__global unsigned char* query_layer,
     debug_output[5] = (float)score_obj[idx];
  }
 #endif
+
 }
