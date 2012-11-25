@@ -112,6 +112,12 @@ bkml_parser::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, KML_LINE_TAG) == 0) {
     cord_tag_ = KML_LINE_TAG;
   }
+  else if (vcl_strcmp(name, KML_COORDS_TAG) == 0) {
+  last_tag = KML_COORDS_TAG;
+  }
+  else if (vcl_strcmp(name, KML_PLACEMARK_NAME_TAG) == 0) {
+  last_tag = KML_PLACEMARK_NAME_TAG;
+  }
 }
 
 
@@ -137,6 +143,26 @@ void bkml_parser::charData(const XML_Char* s, int len)
     for (int i =0; i<len; ++i)
       str << s[i];
     str >> latitude_;
+    last_tag = "";
+  }
+  else if (last_tag == KML_COORDS_TAG) {
+    if (current_name_.compare("Camera Ground Truth") == 0) {
+      vcl_stringstream str;
+      for (int i =0; i<len; ++i) {
+        if (s[i] == ',') 
+          str << ' ';
+        else
+          str << s[i];
+      }
+      str >> longitude_ >> latitude_;
+    }
+    last_tag = "";
+  }
+  else if (last_tag == KML_PLACEMARK_NAME_TAG) {
+    vcl_stringstream str;
+    for (int i =0; i<len; ++i)
+      str << s[i];
+    current_name_ = str.str();
     last_tag = "";
   }
   else if (last_tag == KML_ALT_TAG) {
@@ -307,4 +333,24 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
     out[1].push_back(pt);
   }
   return out;
+}
+
+bool bkml_parser::parse_location_from_kml(vcl_string kml_file, double& lat, double& lon)
+{
+  bkml_parser* parser = new bkml_parser();
+  vcl_FILE* xmlFile = vcl_fopen(kml_file.c_str(), "r");
+  if(!xmlFile) {
+    vcl_cerr << kml_file.c_str() << " error on opening the input kml file\n";
+    delete parser;
+    return false;
+  }
+  if(!parser->parseFile(xmlFile)){
+    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+             << parser->XML_GetCurrentLineNumber() << '\n';
+    delete parser;
+    return false;
+  }
+  lat = parser->latitude_;
+  lon = parser->longitude_;
+  return true;
 }

@@ -26,6 +26,8 @@
 #define KML_CORD_TAG "coordinates"
 #define KML_POLYCORE_END_TAG "/coordinates"
 #define KML_LINE_TAG "LineString"
+#define KML_COORDS_TAG "coordinates"
+#define KML_PLACEMARK_NAME_TAG "name"
 
 
 #define KML_HEAD_DEV_TAG "heading_deviation"
@@ -55,6 +57,7 @@ class bkml_parser : public expatpp
   // the first sheet contains the outer polygon, and the second sheet contains the inner polygon if any, saves 2d points, only lat, lon
   // in this poly lon is x, lat is y
   static vgl_polygon<double> parse_polygon(vcl_string poly_kml_file);
+  static bool parse_location_from_kml(vcl_string kml_file, double& lat, double& lon);
 
   // results of parse
   double longitude_;
@@ -74,6 +77,8 @@ class bkml_parser : public expatpp
   vcl_vector<vgl_point_3d<double> > polyouter_;
   vcl_vector<vgl_point_3d<double> > polyinner_;
   vcl_vector<vgl_point_3d<double> > linecord_;
+  
+  vcl_string current_name_;
  private:
 
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
