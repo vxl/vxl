@@ -83,22 +83,22 @@ void volm_query::create_cameras()
   if (use_default_)
   {
     if (img_category_ == "desert") {
-      double stock[] = {3.0,  4.0, 5.0,
+      double stock[] = {4.0, 5.0,
                         12.0, 17.0, 18.0, 19.0,
                         20.0, 24.0};
       if (ni_ >= nj_) {  // landscape
-        top_fov_.insert(top_fov_.end(), stock, stock + 9);
+        top_fov_.insert(top_fov_.end(), stock, stock + 8);
       }
       else {             // protrait
         double dtor = vnl_math::pi_over_180;
-        for (unsigned i = 0; i < 9; i++) {
+        for (unsigned i = 0; i < 8; i++) {
           double tr = vcl_tan(stock[i]*dtor);
           double top = vcl_atan(nj_*tr/ni_)/dtor;
           top_fov_.push_back(top);
         }
       }
       vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
-      for (unsigned i = 0; i < 9; i++)
+      for (unsigned i = 0; i < 8; i++)
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
     }
@@ -204,7 +204,7 @@ void volm_query::create_cameras()
             }
             else
             {
-#if 1
+#if 0
               vcl_cout << "WARNING: following camera hypothesis is NOT consistent with defined ground plane in the query image and ignored\n"
                        << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;
 #endif
@@ -372,9 +372,11 @@ unsigned char volm_query::fetch_depth(double const& u, double const& v, unsigned
         //min_dist = sph_depth_->get_depth_interval(depth_img((int)u,(int)v));
         // maybe better to do bilinear interpolation instead of casting to nearest pixel
         int uu = (int)vcl_floor(u/vcl_pow(2.0,log_downsample_ratio_)+0.5);
-        uu = uu < 0 ? 0 : uu; uu = uu >= (int)ni_ ? ni_-1 : uu; 
+        uu = uu < 0 ? 0 : uu; 
+        uu = uu >= (int)depth_img.ni() ? depth_img.ni()-1 : uu; 
         int vv = (int)vcl_floor(v/vcl_pow(2.0,log_downsample_ratio_)+0.5);
-        vv = vv < 0 ? 0 : vv; vv = vv >= (int)nj_ ? nj_-1 : vv; 
+        vv = vv < 0 ? 0 : vv; 
+        vv = vv >= (int)depth_img.nj() ? depth_img.nj()-1 : vv; 
         float depth_uv = depth_img(uu,vv);
         min_dist = sph_depth_->get_depth_interval(depth_uv);
         max_dist = (unsigned char)255;
@@ -569,7 +571,7 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
   for (int i = -dot_size; i < dot_size; i++)
     for (int j = -dot_size; j < dot_size; j++) {
       int x = cx + i ; int y = cy + j;
-      if ( !(x < 0 || y < 0 || x >= (int)img.ni() || y >= (int)img.ni()) ) {
+      if ( !(x < 0 || y < 0 || x >= (int)img.ni() || y >= (int)img.nj()) ) {
         if (depth == 254) { // special color for sky
           img((unsigned)x,(unsigned)y).r = 255;
           img((unsigned)x,(unsigned)y).g = 255;
@@ -639,7 +641,6 @@ void volm_query::draw_query_image(unsigned cam_i, vcl_string const& out_name)
       img(i,j).g = (unsigned char)120;
       img(i,j).b = (unsigned char)120;
     }
-  // visualize the depth rgb image
   vcl_vector<unsigned char> current_query = min_dist_[cam_i];
   this->depth_rgb_image(current_query, cam_i, img);
   // save the images
