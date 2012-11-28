@@ -34,7 +34,7 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
   // set the default value based on img_category_ ( temporary having "desert" and "coast"
   if (img_category_ == "desert") {
-    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 3.0;
+    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
     tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 2.0;
     roll_ = 0.0;      roll_d_ = 3.0; roll_inc_ = 2.0; // try +2 -2
     tfov_ = 5.0;      tfov_d_ = 5.0; tfov_inc_ = 2.0;
@@ -53,14 +53,32 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
     roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
     tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 2.0;
   }
-  double lat, lon, head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude;
-  // load the camera kml, fetch the camera value and deviation
-  // for now we don't trust angle params read from the camera file
-  volm_io::read_camera(cam_kml_file, ni_, nj_, head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude, lat, lon);
-  // overwrite roll deviation for now
-  altitude_ = 3.0;
-  roll_d_ = 3.0;
-  vcl_cout << "In volm_query() - read from file params\nheading: " << head_ << " dev: " << head_d_ << "\ntilt: " << tilt_ << " dev: " << tilt_d_ << "\nroll: " << roll_ << " dev: " << roll_d_ << " (hard-coded to 3 till .kml passes meaningful values!!)" << "\ntop_fov: " << tfov_ << " dev: " << tfov_d_ << " alt: " << altitude_ << vcl_endl;
+  if(use_default_) {
+    double lat, lon, head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude;
+    // load the camera kml, fetch the camera value and deviation
+    // for now we don't trust angle params read from the camera file
+    volm_io::read_camera(cam_kml_file, ni_, nj_, head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude, lat, lon);
+    // overwrite roll deviation for now
+    altitude_ = 3.0;
+    roll_d_ = 3.0;
+    vcl_cout << "In volm_query() - default values are used:\nheading: " 
+             << head_ << " dev: " << head_d_
+             << "\ntilt: " << tilt_ << " dev: " << tilt_d_
+             << "\nroll: " << roll_ << " dev: " << roll_d_
+             << " (hard-coded to 3 till .kml passes meaningful values!!)"
+             << "\ntop_fov: " << tfov_ << " dev: " << tfov_d_
+             << " alt: " << altitude_ << vcl_endl;
+  }else{
+    double lat, lon;
+    volm_io::read_camera(cam_kml_file, ni_, nj_, head_, head_d_, tilt_, tilt_d_, roll_, roll_d_, tfov_, tfov_d_, altitude_, lat, lon);
+    vcl_cout << "In volm_query() - values are read:\nheading: " 
+             << head_ << " dev: " << head_d_
+             << "\ntilt: " << tilt_ << " dev: " << tilt_d_
+             << "\nroll: " << roll_ << " dev: " << roll_d_
+             << "\ntop_fov: " << tfov_ << " dev: " << tfov_d_
+             << " alt: " << altitude_ << vcl_endl;
+  }
+  
   // create camera hypotheses
   this->create_cameras();
   vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
@@ -75,17 +93,17 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
 
 void volm_query::create_cameras()
 {
-  vcl_vector<double> top_fov_;
-  vcl_vector<double> headings_;
-  vcl_vector<double> tilts_;
-  vcl_vector<double> rolls_;
   // set up the camera parameter arrays and construct vector of cameras
   if (use_default_)
   {
     if (img_category_ == "desert") {
-      double stock[] = {4.0, 5.0,
-                        12.0, 17.0, 18.0, 19.0,
-                        20.0, 24.0};
+      double stock[] = {18.0, 19.0,
+                        20.0, 24.0, 26.0,
+                        28.0, 30.0, 32.0};
+      //double stock[] = {3.0, 4.0,
+      //                  5.0, 6.0,  7.0,
+      //                  8.0, 10.0, 12.0};
+
       if (ni_ >= nj_) {  // landscape
         top_fov_.insert(top_fov_.end(), stock, stock + 8);
       }
@@ -236,13 +254,20 @@ void volm_query::generate_regions()
         d_threshold_ = dm_->ground_plane()[i]->max_depth();
     }
   }
+  // set a constant value for sky objects, which is equal to minimum order for all sky objects
+  if (dm_->sky().size()) {
+    order_sky_ = dm_->sky()[0]->order();
+    for (unsigned i = 1; i < dm_->sky().size(); i++) {
+      if( order_sky_ > dm_->sky()[i]->order() )
+        order_sky_ = dm_->sky()[i]->order();
+    }
+  }
   // create the order_set for all non-ground region
   if (depth_regions_.size())
     for (unsigned i = 0; i < depth_regions_.size(); i++)
       order_set_.insert(depth_regions_[i]->order());
   if (dm_->sky().size())
-    for (unsigned i = 0; i < dm_->sky().size(); i++)
-      order_set_.insert( (dm_->sky())[i]->order() );
+    order_set_.insert(order_sky_);
 
 }
 
@@ -391,7 +416,7 @@ unsigned char volm_query::fetch_depth(double const& u, double const& v, unsigned
       vgl_polygon<double> vgl_sky = bsol_algs::vgl_from_poly((dm_->sky()[i])->region_2d());
       if (vgl_sky.contains(u,v)) {
         max_dist = (unsigned char)254;
-        order = (dm_->sky()[i])->order();
+        order = order_sky_;
         return (unsigned char)254;
       }
     }
@@ -688,4 +713,64 @@ void volm_query::visualize_query(vcl_string const& prefix)
     str << prefix << "_query_" << i << ".vrml";
     sph_->draw_template(str.str(), single_layer, 254);
   }
+}
+
+unsigned volm_query::get_num_top_fov(double const& top_fov) const
+{
+  unsigned count = 0;
+  for (unsigned i = 0; i < cameras_.size(); i++) {
+    vcl_string cam_string = this->get_cam_string(i);
+    unsigned sindx = cam_string.find("top_fov");
+    sindx += 8;
+    vcl_stringstream ss( cam_string.substr(sindx, cam_string.size()-1) );
+    double top;
+    ss >> top;
+    if ((unsigned)top == (unsigned)top_fov) {
+      count++;
+    }
+  }
+  return count;
+}
+
+double volm_query::get_top_fov(unsigned const& id) const
+{
+  vcl_string cam_string = this->get_cam_string(id);
+  unsigned sindx = cam_string.find("top_fov");
+  sindx += 8;
+  vcl_stringstream ss( cam_string.substr(sindx, cam_string.size()-1) );
+  double top;
+  ss >> top;
+  return top;
+}
+
+vcl_vector<double> volm_query::get_valid_top_fov() const
+{
+  vcl_set<double> top_fov_set;
+  for (unsigned i = 0; i < cameras_.size(); i++) {
+    top_fov_set.insert(this->get_top_fov(i));
+  }
+  vcl_vector<double> valid_top_fov;
+  for (vcl_set<double>::iterator it = top_fov_set.begin(); it != top_fov_set.end(); ++it)
+    valid_top_fov.push_back(*it);
+  return valid_top_fov;
+}
+
+bool volm_query::check_camera_ground(vpgl_perspective_camera<double> const& cam)
+{
+  // check whether current camera satisfies the defined ground plane, given a cut_off = 10 pixel tolerance
+  // NOT IMPLEMENTED -- Should define a tolerance to check
+  //  1. whether camera satisifies ground plane constraint
+  //  2. if so, return true and redefine the ground plane polygon ( see method below)
+  //  3. if not, get rid of the camera
+  
+
+  return true;
+}
+
+bool volm_query::check_camera_ground(vpgl_perspective_camera<double> const& cam, vgl_polygon<double>& ground_poly)
+{
+  // check whether current camera satisfies the defined ground plane and also returns a resized polygon
+  // NOT IMPLEMENTED
+  
+  return true;
 }

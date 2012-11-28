@@ -9,7 +9,7 @@
 //              default values are chosen based on query image category (desert/coast)
 //              Use top viewing angle to define the viewing volume
 //
-// \author
+// \author Yi Dong
 // \date October 23, 2012
 // \verbatim
 //   Modifications
@@ -52,13 +52,24 @@ class volm_query : public vbl_ref_count
   unsigned get_cam_num() const                                  { return (unsigned)cameras_.size(); }
   unsigned get_query_size() const                               { return query_size_; }
   unsigned get_valid_ray_num(unsigned const& cam_idx) const     { return ray_count_[cam_idx]; }
+  vcl_vector<double>& top_fov()                                 { return top_fov_; }
+  vcl_vector<double>& headings()                                { return headings_; }
+  vcl_vector<double>& tilts()                                   { return tilts_; }
+  vcl_vector<double>& rolls()                                   { return rolls_; }
 
   //: write vrml for spherical container and camera hypothesis
   void draw_template(vcl_string const& vrml_fname);
   //: write query image showing the depth map geometry and the penetrating ray
   void draw_query_images(vcl_string const& out_dir);
   void draw_query_image(unsigned i, vcl_string const& out_name);
-  vcl_string get_cam_string(unsigned i) { return camera_strings_[i]; }
+  //: get camera string
+  vcl_string get_cam_string(unsigned i) const { return camera_strings_[i]; }
+  //: get the number of camera having the input top_fov value
+  unsigned get_num_top_fov(double const& top_fov) const;
+  //: extract the top_fov value from cam_id
+  double get_top_fov(unsigned const& i) const;
+  //: return valid top_fov from camera vector
+  vcl_vector<double> get_valid_top_fov() const;
   //: visualized the query camera using the spherical shell geometry
   void visualize_query(vcl_string const& prefix);
   //: generate rgb depth image for given camera id and depth value
@@ -93,13 +104,18 @@ class volm_query : public vbl_ref_count
   vcl_vector<vgl_polygon<double> > dm_poly_;
   vcl_vector<unsigned> ray_count_;
   //: camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered
+  vcl_vector<double> top_fov_;
+  vcl_vector<double> headings_;
+  vcl_vector<double> tilts_;
+  vcl_vector<double> rolls_;
   vcl_vector<vpgl_perspective_camera<double> > cameras_;
   vcl_vector<vcl_string> camera_strings_;
   //: ingested query information
   vcl_vector<vcl_vector<unsigned char> > min_dist_;
   vcl_vector<vcl_vector<unsigned char> > max_dist_;
   vcl_vector<vcl_vector<unsigned char> > order_;
-  unsigned int query_size_;
+  unsigned query_size_;
+  unsigned order_sky_;
   vcl_vector<vgl_point_3d<double> > query_points_;
   //: order vector to store the index id associated with object order
   vcl_set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
@@ -108,6 +124,8 @@ class volm_query : public vbl_ref_count
   
   bool query_ingest();
   bool order_ingest();
+  bool check_camera_ground(vpgl_perspective_camera<double> const& cam);
+  bool check_camera_ground(vpgl_perspective_camera<double> const& cam, vgl_polygon<double>& ground_poly);
   unsigned char fetch_depth(double const& u, double const& v, unsigned char& order, unsigned char& max_dist, vil_image_view<float> const& depth_img);
   void create_cameras();
   void generate_regions();
