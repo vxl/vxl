@@ -294,8 +294,11 @@ int main(int argc,  char** argv)
       out_img(i,j).b = (unsigned char)120;
     }
   query->depth_rgb_image(values, 0, out_img);
-  vcl_stringstream out_name; out_name << out_folder() << "/img_closest_id_" << closest_id << ".png";
+  vcl_stringstream out_name; out_name << out_folder() << "/img_index_closest_id_" << closest_id << ".png";
   vil_save(out_img, out_name.str().c_str());
+  vcl_stringstream out_name2; 
+  out_name2 << out_folder() << "/img_query_closest_id_" << closest_id << ".png";
+  query->draw_query_image(0, out_name2.str().c_str());
 
   return volm_io::SUCCESS;
 }
