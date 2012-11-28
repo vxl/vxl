@@ -195,7 +195,8 @@ int main(int argc,  char** argv)
              << log.str() << vcl_endl; // print log here
 
     // create the volm_matcher class
-	if (use_order()) {
+    if (use_order()) {
+      vcl_cout << "\n using order matcher " << vcl_endl;
       boxm2_volm_matcher_order matcher(query, ind, ei, mgr->gpus_[devID()]);
       log << "\t using device: " << mgr->gpus_[devID()]->device_identifier() << vcl_endl;
       // get the score for all indexes
@@ -221,7 +222,7 @@ int main(int argc,  char** argv)
     }
     else {
       boxm2_volm_matcher matcher(query, ind, ei, mgr->gpus_[devID()]);
-	  log << "\t using device: " << mgr->gpus_[devID()]->device_identifier() << vcl_endl;
+      log << "\t using device: " << mgr->gpus_[devID()]->device_identifier() << vcl_endl;
 
       // get the score for all indexes
       if (do_log) volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_STARTED);
@@ -244,7 +245,7 @@ int main(int argc,  char** argv)
       vcl_string score_fname = score_folder() + "/" + ind_pre + "_score.bin";
       vcl_string cam_fname = score_folder() + "/" + ind_pre + "_camera.bin";
       vcl_cout << " Results are stored in file " << score_fname << " and " << cam_fname << vcl_endl;
-	}
+    }
   }
 
   if (do_log) {

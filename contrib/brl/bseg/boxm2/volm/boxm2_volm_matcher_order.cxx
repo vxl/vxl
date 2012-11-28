@@ -75,8 +75,8 @@ boxm2_volm_matcher_order::boxm2_volm_matcher_order(volm_query_sptr query, boxm2_
 
     // define the weight parameter for score from order kernel and min_dist kernel
   weight_all_buff = new float[2];
-  weight_all_buff[0] = 0.3;      // weight for min_dist score
-  weight_all_buff[1] = 0.7;      // weight for order score
+  weight_all_buff[0] = 0.3f;      // weight for min_dist score
+  weight_all_buff[1] = 0.7f;      // weight for order score
   weight_all_cl = new bocl_mem(gpu_->context(), weight_all_buff, sizeof(float)*2, " weight_all ");
   if (!weight_all_cl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR)) {
     vcl_cout << "\n ERROR: create bocl_mem failed for WEIGHT_ALL" << vcl_endl;
@@ -332,10 +332,11 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
     score_order_cl->read_to_buffer(queue);
     vcl_cout << "\n ------ score for order matcher ---- " << vcl_endl;
     for (unsigned cam_id = 0; cam_id < n_cam; cam_id++) {
-      vcl_cout << " index " << ind_idx << ", cam_id = " << cam_id 
-               << " , score_order[ " << cam_id << "] = " << score_order_buff[cam_id] << vcl_endl;
+      if( cam_id == 167 ){
+        vcl_cout << " index " << ind_idx << ", cam_id = " << cam_id 
+                 << " , score_order[ " << cam_id << "] = " << score_order_buff[cam_id] << vcl_endl;
+      }
     }
-
 #endif
 
     // delete index from host and device
@@ -374,18 +375,21 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
 #if 0
     // read to host
     vcl_cout << "\n ------ score for min_dist matcher ---- " << vcl_endl;
-    for(unsigned cam_id = 0; cam_id < n_cam; cam_id++) {
-      vcl_cout << " index " << ind_idx << ", cam_id = " << cam_id 
-               << " , score_total[ " << cam_id << "] = " << score_cam_buff[cam_id] << vcl_endl;
+    for (unsigned cam_id = 0; cam_id < n_cam; cam_id++) {
+        vcl_cout << " index " << ind_idx << ", cam_id = " << cam_id 
+                 << " , score_total[ " << cam_id << "] = " << score_cam_buff[cam_id] << vcl_endl;
     }
 #endif
 
     status = clFinish(queue);
     check_val(status, MEM_FAILURE, " read SCORE_CAM output buffer FAILED on device " + device->device_identifier() + error_to_string(status));
-    // find the maximum from score_cam_buff using map
+    // find the maximum from score_cam_buff and also store score for each camera
     float max_score = score_cam_buff[0];
     unsigned max_cam_id = 0;
-    for (unsigned k = 1; k < n_cam; k++) {
+    for (unsigned k = 0; k < n_cam; k++) {
+      // store the score for each camera
+      index_score.push_back(boxm2_volm_score(ind_idx, k, score_cam_buff[k]));
+      // find the maximum
       float current_score = score_cam_buff[k];
       if (current_score > max_score) {
         max_score = current_score;
@@ -394,7 +398,6 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
     }
     score_all_.push_back(max_score);
     cam_all_id_.push_back(max_cam_id);
-
     // release device and host memory for score, score_order and score_cam
     delete score;
     delete score_cam;
@@ -574,8 +577,11 @@ bool boxm2_volm_matcher_order::write_score_order(vcl_string const& out_prefix)
   // write the score
   vcl_string out_score = out_prefix + "_score.bin";
   vsl_b_ofstream os(out_score.c_str());
-  if (!os)
+  if (!os) {
+    vcl_cerr << " writing score.bin failed " << vcl_endl;
     return false;
+  }
+
   //vsl_b_write(os,score_all_.size());
   for (unsigned i = 0; i < score_all_.size(); i++)
     vsl_b_write(os, score_all_[i]);
@@ -584,11 +590,50 @@ bool boxm2_volm_matcher_order::write_score_order(vcl_string const& out_prefix)
   // write the camera id
   vcl_string out_cam = out_prefix + "_camera.bin";
   vsl_b_ofstream osc(out_cam.c_str());
-  if (!osc)
+  if (!osc) {
+    vcl_cerr << " writing camera.bin failed " << vcl_endl;
     return false;
+  }
   for (unsigned i = 0; i < cam_all_id_.size(); i++)
     vsl_b_write(osc, cam_all_id_[i]);
   osc.close();
+  return true;
+}
 
+bool boxm2_volm_matcher_order::write_all_score(vcl_string const& out_prefix)
+{
+  // rearrange score by the top field of view of the camera
+  vcl_map<double, vcl_vector<boxm2_volm_score> > score_fov_map;
+  for (vcl_vector<boxm2_volm_score>::iterator iter = index_score.begin(); iter != index_score.end(); ++iter) {
+    score_fov_map[query_->get_top_fov((*iter).cam_id)].push_back(*iter);
+  }
+  // create filename based on valide top field of view and write the score into it
+  vcl_map<double, vcl_vector<boxm2_volm_score> >::iterator iter_map = score_fov_map.begin();
+  for ( ; iter_map != score_fov_map.end(); ++iter_map) {
+    vcl_stringstream ss;
+    ss << out_prefix << "_score_all_cam_top_fov_" << (unsigned)(iter_map->first) << ".bin";
+    vcl_string fname = ss.str();
+    vsl_b_ofstream os(fname.c_str());
+    if (!os) {
+      vcl_cerr << " writing " << fname << " failed " << vcl_endl;
+      return false;
+    }
+    vcl_vector<boxm2_volm_score> score_fov_vec = iter_map->second;
+    unsigned vec_size = score_fov_vec.size();
+    for (unsigned i = 0; i < vec_size; i++) {
+      vsl_b_write(os, score_fov_vec[i].ind_id);
+      vsl_b_write(os, score_fov_vec[i].cam_id);
+      vsl_b_write(os, score_fov_vec[i].score);
+#if 0
+      vcl_cout << " i = " << i
+               << " index = " << score_fov_vec[i].ind_id
+               << " camera = " << score_fov_vec[i].cam_id
+               << " score = " << score_fov_vec[i].score
+               << " top_fov = " << iter_map->first
+               << vcl_endl;
+#endif
+    }
+    os.close();
+  }
   return true;
 }

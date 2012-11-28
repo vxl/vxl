@@ -29,7 +29,7 @@ void generalized_volm_matching_score_order_weight_sum_order (__global unsigned c
     score_min_dist += (float)score_obj[j];
   }
   score_min_dist = score_min_dist/cam_weight;  // weight is the number of valid rays for this camera
-  score_min_dist = weight_all[0] * score_min_dist;  // weight_all is the weight parameter for 
+  score_min_dist = weight_all[0] * score_min_dist;  // weight_all is the weight parameter for order score and min_dist score
   
   score_cam[i] = score_min_dist + weight_all[1]*score_order[i];
 }

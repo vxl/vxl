@@ -22,9 +22,12 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 
+
+class boxm2_volm_score;
+
 class boxm2_volm_matcher_order
 {
- public:
+public:
   //: default constructor
   boxm2_volm_matcher_order(){}
   //: constructor
@@ -68,7 +71,10 @@ class boxm2_volm_matcher_order
   //: main process to streaming indices into kernel
   bool matching_cost_layer_order();
   //: Binary score to stream.
+  //: write the top30 score among all location and all cameras
   bool write_score_order(vcl_string const& out_file);
+  //: write score for all indices and all cameras, stored associated with the top field of view
+  bool write_all_score(vcl_string const& out_prefix);
 
 
  private:
@@ -78,6 +84,7 @@ class boxm2_volm_matcher_order
   unsigned long ei_;
   vcl_vector<float> score_all_;
   vcl_vector<unsigned> cam_all_id_;
+  vcl_vector<boxm2_volm_score> index_score;
   //: ocl instance
   bocl_device_sptr gpu_;
   vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -116,6 +123,19 @@ class boxm2_volm_matcher_order
 
   bocl_mem* voxel_size;
   unsigned* v_size_buff;
+};
+
+
+class boxm2_volm_score
+{
+public:
+  boxm2_volm_score() {}
+  boxm2_volm_score(unsigned const& index_id, unsigned const& camera_id, float const& current_score)
+    : ind_id(index_id), cam_id(camera_id), score(current_score) {}
+  ~boxm2_volm_score() {}
+  unsigned ind_id; // also index in score.bin and cam.bin files
+  unsigned cam_id;   // index for camera in volm_query
+  float score;       // score for current index and current camera
 };
 
 #endif  // boxm2_volm_matcher_h_
