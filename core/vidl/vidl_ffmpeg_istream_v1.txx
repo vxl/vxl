@@ -34,11 +34,13 @@ struct vidl_ffmpeg_istream::pimpl
   pimpl()
   : fmt_cxt_( NULL ),
   vid_index_( -1 ),
+  data_index_( -1 ),
   vid_str_( NULL ),
   last_dts( 0 ),
   frame_( NULL ),
   num_frames_( -2 ), // sentinel value to indicate not yet computed
   cur_frame_( NULL ),
+  metadata_( 0 ),
   deinterlace_( false ),
   frame_number_offset_( 0 )
   {
@@ -46,6 +48,7 @@ struct vidl_ffmpeg_istream::pimpl
 
   AVFormatContext* fmt_cxt_;
   int vid_index_;
+  int data_index_;
   AVStream* vid_str_;
 
   //: Decode time of last frame.
@@ -68,6 +71,9 @@ struct vidl_ffmpeg_istream::pimpl
 
   //: The last successfully decoded frame.
   mutable vidl_frame_sptr cur_frame_;
+
+  //: the buffer of metadata from the data stream
+  vcl_deque<vxl_byte> metadata_;
 
   //: Apply deinterlacing on the frames?
   bool deinterlace_;
@@ -126,8 +132,10 @@ open(const vcl_string& filename)
     return false;
   }
 
-  // Find a video stream. Use the first one we find.
+  // Find a video stream, and optionally a data stream.
+  // Use the first ones we find.
   is_->vid_index_ = -1;
+  is_->data_index_ = -1;
   for ( unsigned int i = 0; i < is_->fmt_cxt_->nb_streams; ++i ) {
 #if LIBAVFORMAT_BUILD <= 4628
     AVCodecContext *enc = &is_->fmt_cxt_->streams[i]->codec;
@@ -189,6 +197,8 @@ close()
   is_->num_frames_ = -2;
   is_->contig_memory_ = 0;
   is_->vid_index_ = -1;
+  is_->data_index_ = -1;
+  is_->metadata_.clear();
   if ( is_->vid_str_ ) {
 #if LIBAVFORMAT_BUILD <= 4628
     avcodec_close( &is_->vid_str_->codec );
@@ -408,6 +418,9 @@ advance()
   AVPacket pkt;
   int got_picture = 0;
 
+  // clear the metadata from the previous frame
+  is_->metadata_.clear();
+
   while ( got_picture == 0 )
   {
     if ( av_read_frame( is_->fmt_cxt_, &pkt ) < 0 ) {
@@ -437,6 +450,11 @@ advance()
                               is_->frame_, &got_picture,
                               pkt.data, pkt.size );
       }
+    }
+    // grab the metadata from this packet if from the metadata stream
+    else if (pkt.stream_index==is_->data_index_)
+    {
+      is_->metadata_.insert( is_->metadata_.end(), pkt.data, pkt.data+pkt.size);
     }
     av_free_packet( &pkt );
   }

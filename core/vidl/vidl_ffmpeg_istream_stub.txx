@@ -144,6 +144,7 @@ vidl_ffmpeg_istream
   return vidl_frame_sptr();
 }
 
+
 vidl_frame_sptr
 vidl_ffmpeg_istream
 ::current_frame()
@@ -173,7 +174,6 @@ vidl_ffmpeg_istream
 {
   return false;
 }
-
 
 double
 vidl_ffmpeg_istream::
