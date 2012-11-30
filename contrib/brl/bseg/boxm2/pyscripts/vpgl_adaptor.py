@@ -438,6 +438,16 @@ def load_geotiff_cam(tfw_filename, lvcs, utm_zone, utm_hemisphere):
     (c_id,c_type) = boxm2_batch.commit_output(0)
     cam = dbvalue(c_id,c_type);
     return cam
+    
+def load_geotiff_cam2(filename, ni, nj):
+    boxm2_batch.init_process("vpglLoadGeoCameraProcess2");
+    boxm2_batch.set_input_string(0, filename);
+    boxm2_batch.set_input_unsigned(1, ni);
+    boxm2_batch.set_input_unsigned(2, nj);
+    boxm2_batch.run_process()
+    (c_id,c_type) = boxm2_batch.commit_output(0)
+    cam = dbvalue(c_id,c_type);
+    return cam
 
 def translate_geo_camera(geocam, x, y):
     boxm2_batch.init_process("vpglTranslateGeoCameraProcess");
