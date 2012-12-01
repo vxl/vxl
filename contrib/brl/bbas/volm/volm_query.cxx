@@ -29,8 +29,8 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   nj_ = dm_->nj();
   log_downsample_ratio_ = 0;
   unsigned bigger = ni_ > nj_ ? ni_ : nj_;
-  while (bigger/vcl_pow(2.0,log_downsample_ratio_) > 500) 
-    log_downsample_ratio_++;
+  while ((bigger>>log_downsample_ratio_) > 500)
+    ++log_downsample_ratio_;
   vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
   // set the default value based on img_category_ ( temporary having "desert" and "coast"
   if (img_category_ == "desert") {
@@ -53,7 +53,7 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
     roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
     tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 2.0;
   }
-  if(use_default_) {
+  if (use_default_) {
     double lat, lon, head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude;
     // load the camera kml, fetch the camera value and deviation
     // for now we don't trust angle params read from the camera file
@@ -61,24 +61,25 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
     // overwrite roll deviation for now
     altitude_ = 3.0;
     roll_d_ = 3.0;
-    vcl_cout << "In volm_query() - default values are used:\nheading: " 
+    vcl_cout << "In volm_query() - default values are used:\nheading: "
              << head_ << " dev: " << head_d_
              << "\ntilt: " << tilt_ << " dev: " << tilt_d_
              << "\nroll: " << roll_ << " dev: " << roll_d_
              << " (hard-coded to 3 till .kml passes meaningful values!!)"
              << "\ntop_fov: " << tfov_ << " dev: " << tfov_d_
              << " alt: " << altitude_ << vcl_endl;
-  }else{
+  }
+  else {
     double lat, lon;
     volm_io::read_camera(cam_kml_file, ni_, nj_, head_, head_d_, tilt_, tilt_d_, roll_, roll_d_, tfov_, tfov_d_, altitude_, lat, lon);
-    vcl_cout << "In volm_query() - values are read:\nheading: " 
+    vcl_cout << "In volm_query() - values are read:\nheading: "
              << head_ << " dev: " << head_d_
              << "\ntilt: " << tilt_ << " dev: " << tilt_d_
              << "\nroll: " << roll_ << " dev: " << roll_d_
              << "\ntop_fov: " << tfov_ << " dev: " << tfov_d_
              << " alt: " << altitude_ << vcl_endl;
   }
-  
+
   // create camera hypotheses
   this->create_cameras();
   vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
@@ -170,11 +171,12 @@ void volm_query::create_cameras()
     double right = head_ + i, left = head_ - i;
     if (right > 360) right = right - 360;
     if (left < 0)    left = left + 360;
-    headings_.push_back(right);  
+    headings_.push_back(right);
     if (left != right) {
       headings_.push_back(left); vcl_cout << right << ' ' << left << ' ';
-    } else 
-      vcl_cout << right << ' '; 
+    }
+    else
+      vcl_cout << right << ' ';
   }
   vcl_cout << "\n\t tilts:\n\t " << tilt_ << ' ';
   tilts_.push_back(tilt_);   // tilt ranges from 0 to 180
@@ -227,8 +229,8 @@ void volm_query::create_cameras()
                        << " \t heading = " << head << ", tilt = " << tilt << ", roll = " << roll << ", top_fov = " << top_f << ", right_fov = " << right_f << vcl_endl;
 #endif
             }
-          } 
-          else 
+          }
+          else
           {
             cameras_.push_back(cam);
             camera_strings_.push_back(bpgl_camera_utils::get_string((double)ni_, (double)nj_, right_f, top_f, altitude_, head, tilt, roll));
@@ -258,7 +260,7 @@ void volm_query::generate_regions()
   if (dm_->sky().size()) {
     order_sky_ = dm_->sky()[0]->order();
     for (unsigned i = 1; i < dm_->sky().size(); i++) {
-      if( order_sky_ > dm_->sky()[i]->order() )
+      if ( order_sky_ > dm_->sky()[i]->order() )
         order_sky_ = dm_->sky()[i]->order();
     }
   }
@@ -268,7 +270,6 @@ void volm_query::generate_regions()
       order_set_.insert(depth_regions_[i]->order());
   if (dm_->sky().size())
     order_set_.insert(order_sky_);
-
 }
 
 bool volm_query::order_ingest()
@@ -326,7 +327,7 @@ bool volm_query::query_ingest()
     dm_->set_camera(cam);
     //vil_image_view<float> depth_img = dm_->depth_map("ground_plane", 0, d_threshold_);
     vil_image_view<float> depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
-    
+
     depth_img.fill(-1.0f);
     unsigned count = 0;
     for (unsigned p_idx = 0; p_idx < query_size_; p_idx++) {
@@ -396,12 +397,12 @@ unsigned char volm_query::fetch_depth(double const& u, double const& v, unsigned
       if (vgl_ground.contains(u,v)) {
         //min_dist = sph_depth_->get_depth_interval(depth_img((int)u,(int)v));
         // maybe better to do bilinear interpolation instead of casting to nearest pixel
-        int uu = (int)vcl_floor(u/vcl_pow(2.0,log_downsample_ratio_)+0.5);
-        uu = uu < 0 ? 0 : uu; 
-        uu = uu >= (int)depth_img.ni() ? depth_img.ni()-1 : uu; 
-        int vv = (int)vcl_floor(v/vcl_pow(2.0,log_downsample_ratio_)+0.5);
-        vv = vv < 0 ? 0 : vv; 
-        vv = vv >= (int)depth_img.nj() ? depth_img.nj()-1 : vv; 
+        int uu = (int)vcl_floor(u/(1<<log_downsample_ratio_)+0.5);
+        uu = uu < 0 ? 0 : uu;
+        uu = uu >= (int)depth_img.ni() ? depth_img.ni()-1 : uu;
+        int vv = (int)vcl_floor(v/(1<<log_downsample_ratio_)+0.5);
+        vv = vv < 0 ? 0 : vv;
+        vv = vv >= (int)depth_img.nj() ? depth_img.nj()-1 : vv;
         float depth_uv = depth_img(uu,vv);
         min_dist = sph_depth_->get_depth_interval(depth_uv);
         max_dist = (unsigned char)255;
@@ -589,27 +590,29 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
   double u, v;
   vgl_homg_point_3d<double> current_p(world_point.x(), world_point.y(), world_point.z()+altitude_);
   if (!(cam.is_behind_camera(current_p))) {
-    
-  cam.project(world_point.x(), world_point.y(), world_point.z()+altitude_, u, v);
-  int cx = (int)u;
-  int cy = (int)v;
-  for (int i = -dot_size; i < dot_size; i++)
-    for (int j = -dot_size; j < dot_size; j++) {
-      int x = cx + i ; int y = cy + j;
-      if ( !(x < 0 || y < 0 || x >= (int)img.ni() || y >= (int)img.nj()) ) {
-        if (depth == 254) { // special color for sky
-          img((unsigned)x,(unsigned)y).r = 255;
-          img((unsigned)x,(unsigned)y).g = 255;
-          img((unsigned)x,(unsigned)y).b = 255;
-        } else {
-          img((unsigned)x,(unsigned)y).r = bvrml_color::heatmap_classic[(int)depth][0];
-          img((unsigned)x,(unsigned)y).g = bvrml_color::heatmap_classic[(int)depth][1];
-          img((unsigned)x,(unsigned)y).b = bvrml_color::heatmap_classic[(int)depth][2];
+
+    cam.project(world_point.x(), world_point.y(), world_point.z()+altitude_, u, v);
+    int cx = (int)u;
+    int cy = (int)v;
+    for (int i = -dot_size; i < dot_size; i++)
+      for (int j = -dot_size; j < dot_size; j++) {
+        int x = cx + i ; int y = cy + j;
+        if ( !(x < 0 || y < 0 || x >= (int)img.ni() || y >= (int)img.nj()) ) {
+          if (depth == 254) { // special color for sky
+            img((unsigned)x,(unsigned)y).r = 255;
+            img((unsigned)x,(unsigned)y).g = 255;
+            img((unsigned)x,(unsigned)y).b = 255;
+          }
+          else {
+            img((unsigned)x,(unsigned)y).r = bvrml_color::heatmap_classic[(int)depth][0];
+            img((unsigned)x,(unsigned)y).g = bvrml_color::heatmap_classic[(int)depth][1];
+            img((unsigned)x,(unsigned)y).b = bvrml_color::heatmap_classic[(int)depth][2];
+          }
         }
       }
   }
-  }
 }
+
 void volm_query::draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img)
 {
   // draw depth_map polygons on the depth images
@@ -646,8 +649,8 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
   for (unsigned pidx = 0; pidx < query_size_; pidx++) {
     if (values[pidx] < 255) {
 #if 0
-      vcl_cout << " inside draw, " << ", cam_id = " << cam_id << " idx = " << pidx 
-               << ", point = " << query_points_[pidx] 
+      vcl_cout << " inside draw, " << ", cam_id = " << cam_id << " idx = " << pidx
+               << ", point = " << query_points_[pidx]
                << ", values = " << (int)values[pidx];
 #endif
       this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
@@ -762,7 +765,6 @@ bool volm_query::check_camera_ground(vpgl_perspective_camera<double> const& cam)
   //  1. whether camera satisifies ground plane constraint
   //  2. if so, return true and redefine the ground plane polygon ( see method below)
   //  3. if not, get rid of the camera
-  
 
   return true;
 }
@@ -771,6 +773,6 @@ bool volm_query::check_camera_ground(vpgl_perspective_camera<double> const& cam,
 {
   // check whether current camera satisfies the defined ground plane and also returns a resized polygon
   // NOT IMPLEMENTED
-  
+
   return true;
 }
