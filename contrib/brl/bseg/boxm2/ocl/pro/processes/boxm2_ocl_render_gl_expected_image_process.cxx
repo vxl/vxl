@@ -143,12 +143,13 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   }
 
   //make sure appearance identifier is correct
-  if (app_identifier.size() > 0)
-   data_type += "_" + app_identifier;
+
 
   //get initial options (MOG TYPE)
   vcl_string options = boxm2_ocl_util::mog_options(data_type);
 
+  if (app_identifier.size() > 0)
+    data_type += "_" + app_identifier;
   //: create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
