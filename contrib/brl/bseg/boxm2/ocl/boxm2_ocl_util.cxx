@@ -73,6 +73,7 @@ void boxm2_ocl_util::set_dodecahedron_orientations_lookup(cl_float4* dodecahedro
 #endif // CL_ALIGNED
 }
 
+
 //returns path to opencl src (cl files)
 vcl_string boxm2_ocl_util::ocl_src_root()
 {
@@ -310,6 +311,8 @@ vcl_string boxm2_ocl_util::mog_options(vcl_string data_type)
     return "-D GAUSS_TYPE_2 ";
   else if ( data_type == boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix() )
     return "-D SHORT ";
+  else if ( data_type == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() )
+    return "-D MOG_VIEW_DEP ";
   else
     return "";
 }
