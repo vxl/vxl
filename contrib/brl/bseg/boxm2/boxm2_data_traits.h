@@ -18,6 +18,8 @@
 class boxm2_mog3_grey_processor;
 class boxm2_gauss_grey_processor;
 class boxm2_gauss_rgb_processor;
+class boxm2_mog6_view_processor;
+class boxm2_mog6_view_compact_processor;
 
 enum boxm2_data_type
 {
@@ -26,6 +28,7 @@ enum boxm2_data_type
   BOXM2_MOG3_GREY,
   BOXM2_MOG3_GREY_16,
   BOXM2_MOG6_VIEW,
+  BOXM2_MOG6_VIEW_COMPACT,
   BOXM2_BATCH_HISTOGRAM,
   BOXM2_GAUSS_RGB,
   BOXM2_MOG2_RGB,
@@ -98,11 +101,22 @@ template<>
 class boxm2_data_traits<BOXM2_MOG6_VIEW>
 {
  public:
-  typedef boxm2_mog3_grey_processor processor;
+  typedef boxm2_mog6_view_processor processor;
   typedef vnl_vector_fixed<float, 16> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "boxm2_mog6_view"; else return "boxm2_mog6_view_"+identifier; }
+};
+
+template<>
+class boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>
+{
+ public:
+  typedef boxm2_mog6_view_compact_processor processor;
+  typedef vnl_vector_fixed<unsigned char, 16> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_mog6_view_compact"; else return "boxm2_mog6_view_compact_"+identifier; }
 };
 
 template<>
