@@ -236,6 +236,7 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
 
+
       int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix());
       // data type string may contain an identifier so determine the buffer size
       bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
@@ -304,7 +305,7 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
         kern->set_arg( lookup.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-
+        //kern->set_arg(app_model_view_dirs_lookup.ptr());
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( vis_image.ptr() );
         kern->set_arg( pre_image.ptr() );
@@ -342,6 +343,7 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
         kern->set_arg( lookup.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
+        //kern->set_arg(app_model_view_dirs_lookup.ptr());
 
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( vis_image.ptr() );
@@ -397,6 +399,7 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
         kern->set_arg( aux1 );
         kern->set_arg( aux2 );
         kern->set_arg( aux3 );
+        //kern->set_arg(app_model_view_dirs_lookup.ptr());
         kern->set_arg( up_alpha_mem.ptr() );
         kern->set_arg( mog_var_mem.ptr() );
         kern->set_arg( cl_output.ptr() );
@@ -526,7 +529,7 @@ bool boxm2_ocl_update_view_dep_app::validate_appearances(boxm2_scene_sptr scene,
     {
       data_type = apps[i];
       foundDataType = true;
-      options=" -D MOG6_VIEW ";
+      options=" -D MOG_VIEW_DEP ";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix() )
