@@ -6,6 +6,7 @@
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
 
+                      
 #ifdef SEGLEN
 typedef struct
 {
@@ -120,6 +121,7 @@ typedef struct
            float* vis_inf;
            float* pre_inf;
            float phi;
+           float* app_model_weights;
            float4 viewdir;
    __constant RenderSceneInfo * linfo;
 } AuxArgs;
@@ -181,9 +183,13 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   float4 ray_d = ray_directions[ j*get_global_size(0) + i ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+  
 
+  //compute weights for each app model viewing direction
+  //based on the ray dir
+  float app_model_weights[8] = {0};
   float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
-  viewdir /= fabs(ray_dx) + fabs(ray_dy) + fabs(ray_dz);
+  compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
   
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -200,6 +206,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   aux_args.vis_inf = &vis_inf;
   aux_args.pre_inf = &pre_inf;
   aux_args.phi     = atan2(ray_d.y,ray_d.x);
+  aux_args.app_model_weights = app_model_weights;
   aux_args.viewdir = viewdir;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
@@ -263,7 +270,7 @@ typedef struct
   __local  int*    cell_ptrs;
   __local  float*  cached_vis;
            float phi;
-           float4 viewdir;
+           float* app_model_weights;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -331,8 +338,13 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+
+  //compute weights for each app model viewing direction
+  //based on the ray dir
+  float app_model_weights[8] = {0};
   float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
-  viewdir /= fabs(ray_dx) + fabs(ray_dy) + fabs(ray_dz);
+  compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
+  
   
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -348,7 +360,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.vis_array  = aux_array2;
   aux_args.beta_array = aux_array3;
   aux_args.phi          = atan2(ray_d.y,ray_d.x);
-  aux_args.viewdir = viewdir;
+  aux_args.app_model_weights = app_model_weights;
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs = cell_ptrs;
   aux_args.cached_vis = cached_vis;
@@ -442,7 +454,6 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
   int datasize = info->data_len ;//* info->num_buffer;
   if (gid<datasize)
   {
-      
     //if alpha is less than zero don't update
     float  alpha    = alpha_array[gid];
     float  cell_min = info->block_len/(float)(1<<info->root_level);
@@ -464,17 +475,44 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float mean_obs = convert_float(obs_int) / convert_float(len_int);
       float cell_vis  = convert_float(vis_int) / (convert_float(len_int)*info->block_len);
       float cell_beta = convert_float(beta_int) / (convert_float(len_int)* info->block_len);
-      float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis);
+      
+      
+      //first, update alpha
+      clamp(cell_beta,0.5f,2.0f);
+      alpha *= cell_beta;
+      if ( *update_alpha != 0 )
+        alpha_array[gid] = max(alphamin,alpha);
+      
+      //second, update app model
       float8 nobs     = nobs_array[gid];
       float16 mixture = mixture_array[gid];
-      
+        
       //select view dependent mixture and nobs
+      float app_model_weights[8] = {0};
+      float4 viewdir = ray_dir[gid];
+      compute_app_model_weights(app_model_weights, viewdir, &app_model_view_directions); 
+      update_view_dep_app(mean_obs,cell_vis, app_model_weights, (float*)(&mixture), (float*)(&nobs) );
+      
+      if (*mog_var > 0.0f) {
+        (mixture).s1 = (*mog_var);
+        (mixture).s3 = (*mog_var);
+        (mixture).s5 = (*mog_var);
+        (mixture).s7 = (*mog_var);
+        (mixture).s9 = (*mog_var);
+        (mixture).sb = (*mog_var);
+        (mixture).sd = (*mog_var);
+      }
+      nobs_array[gid] = nobs;
+      mixture_array[gid] = mixture;
+      
+      
+       /*
       float8 view_dep_mixture;
       float4 view_dep_nobs;
-      select_view_dep_mog(mixture,ray_dir[gid],&view_dep_mixture); 
+      select_view_dep_mog(&mixture_float,ray_dir[gid],&view_dep_mixture); 
       select_view_dep_nobs(nobs,ray_dir[gid],&view_dep_nobs);  
-      
 
+     
       float16 data = (float16) (alpha,
                                  (view_dep_mixture.s0), (view_dep_mixture.s1), (view_dep_mixture.s2), (view_dep_nobs.s0),
                                  (view_dep_mixture.s3), (view_dep_mixture.s4), (view_dep_mixture.s5), (view_dep_nobs.s1),
@@ -487,27 +525,31 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
        //check if mog_var is fixed, if so, overwrite variance in post_mix
       if (*mog_var > 0.0f) {
-        (data).s2 = (*mog_var) * (*mog_var) * (data).s4;
-        (data).s6 = (*mog_var) * (*mog_var) * (data).s8;
-        (data).sa = (*mog_var) * (*mog_var) * (data).sb;
+        (data).s2 = (*mog_var);
+        (data).s6 = (*mog_var);
+        (data).sa = (*mog_var);
       }
       
-      float16 post_mix = mixture;
+      float16 post_mix = mixture_float;
       float8 post_nobs = nobs;
       update_view_dep_mixture(&post_mix, ray_dir[gid], &data);
       update_view_dep_nobs(&post_nobs, ray_dir[gid], &data);
 
+      //convert post_mix to int4
+      //int4 post_mix_compact = as_int4( convert_uchar16_sat_rte( post_mix *  (float) NORM));
+      
       //reset the cells in memory
-      mixture_array[gid] = post_mix;
       nobs_array[gid] = post_nobs;
-      if ( *update_alpha != 0 )
-        alpha_array[gid] = max(alphamin,data.s0);
-        
+      mixture_array[gid] = post_mix; //post_mix_compact; 
+      */  
+      
+      
+
+    
     }
-    else //Added for silhouettes, NEED TO REMOVE LATER
-      alpha_array[gid] = 0;
-        
-        
+    //else //Added for silhouettes, NEED TO REMOVE LATER
+    //  alpha_array[gid] = 0;
+    
     //clear out aux data
     aux_array0[gid] = 0;
     aux_array1[gid] = 0;

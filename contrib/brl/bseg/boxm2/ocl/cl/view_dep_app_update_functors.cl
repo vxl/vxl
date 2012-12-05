@@ -54,44 +54,25 @@ void pre_infinity_opt_view_based(  float    seg_len,
                                     float  * vis_inf,
                                     float  * pre_inf,
                                     float    alpha,
-                                    float16   mixture,
+                                    MOG_TYPE   mixture,
                                     float8 nobs,
-                                    float4 view_dir)
+                                    float* app_model_weights)
 {
     /* if total length of rays is too small, do nothing */
     float PI = 0.0f;
     if (cum_len>1.0e-10f)
     {
-        //select appearance model
-        float8 view_dep_mixture;
-        float4 view_dep_nobs;
-        float weight3 = select_view_dep_mog(mixture,view_dir,&view_dep_mixture); 
-        select_view_dep_nobs(nobs,view_dir,&view_dep_nobs); 
-        
-        compute_sigmas(&view_dep_mixture, &view_dep_nobs);
+        PI = view_dep_mixture_model(mean_obs, mixture, app_model_weights);
 
-        PI = gauss_3_mixture_prob_density( mean_obs,
-                                           view_dep_mixture.s0,
-                                           view_dep_mixture.s1,
-                                           view_dep_mixture.s2,
-                                           view_dep_mixture.s3,
-                                           view_dep_mixture.s4,
-                                           view_dep_mixture.s5,
-                                           view_dep_mixture.s6,
-                                           view_dep_mixture.s7,
-                                           weight3 //(1.0f-view_dep_mixture.s2-view_dep_mixture.s5)
-                                          );/* PI */
+        /* Calculate pre and vis infinity */
+        float diff_omega = exp(-alpha * seg_len);
+        float vis_prob_end = (*vis_inf) * diff_omega;
 
+        /* updated pre                      Omega         *   PI  */
+        (*pre_inf) += ((*vis_inf) - vis_prob_end) *  PI;
 
-    /* Calculate pre and vis infinity */
-    float diff_omega = exp(-alpha * seg_len);
-    float vis_prob_end = (*vis_inf) * diff_omega;
-
-    /* updated pre                      Omega         *   PI  */
-    (*pre_inf) += ((*vis_inf) - vis_prob_end) *  PI;
-
-    /* updated visibility probability */
-    (*vis_inf) = vis_prob_end;
+        /* updated visibility probability */
+        (*vis_inf) = vis_prob_end;
   }
 }
 
@@ -101,7 +82,7 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     //keep track of cells being hit
     ////cell data, i.e., alpha and app model is needed for some passes
     float  alpha    = aux_args.alpha[data_ptr];
-    float16 mixture = aux_args.mog[data_ptr];
+    MOG_TYPE mixture = aux_args.mog[data_ptr];
     float8 num_obs = aux_args.num_obs[data_ptr];
 
     int cum_int = aux_args.seg_len[data_ptr];
@@ -118,10 +99,9 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
                                   alpha,
                                   mixture,
                                   num_obs,
-                                  aux_args.viewdir);
+                                  aux_args.app_model_weights);
                                   
-    //there is a race condition here, don't care for now.
-    aux_args.ray_dir[data_ptr] = aux_args.viewdir;
+    aux_args.ray_dir[data_ptr] = aux_args.viewdir;                       
 }
 #endif // PREINF
 
@@ -131,9 +111,9 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 /* bayes ratio independent functor (for independent rays) */
 void bayes_ratio_ind_view_based( float  seg_len,
                                   float  alpha,
-                                  float16 mixture,
+                                  MOG_TYPE mixture,
                                   float8 nobs,
-                                  float4 view_dir,
+                                  float* app_model_weights,
                                   float  cum_len,
                                   float  mean_obs,
                                   float  norm,
@@ -146,25 +126,7 @@ void bayes_ratio_ind_view_based( float  seg_len,
 
     /* Compute PI for all threads */
     if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
-        
-        float8 view_dep_mixture;
-        float4 view_dep_nobs;
-        float weight3 = select_view_dep_mog(mixture,view_dir,&view_dep_mixture); 
-        select_view_dep_nobs(nobs,view_dir,&view_dep_nobs); 
-        
-        compute_sigmas(&view_dep_mixture, &view_dep_nobs);
-
-        PI = gauss_3_mixture_prob_density( mean_obs,
-                                           view_dep_mixture.s0,
-                                           view_dep_mixture.s1,
-                                           view_dep_mixture.s2,
-                                           view_dep_mixture.s3,
-                                           view_dep_mixture.s4,
-                                           view_dep_mixture.s5,
-                                           view_dep_mixture.s6,
-                                           view_dep_mixture.s7,
-                                           weight3 //(1.0f-view_dep_mixture.s2-view_dep_mixture.s5)
-                                          );/* PI */
+        PI = view_dep_mixture_model(mean_obs, mixture, app_model_weights);
     }
 
     //calculate this ray's contribution to beta
@@ -187,7 +149,7 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
     //slow beta calculation ----------------------------------------------------
     float  alpha    = aux_args.alpha[data_ptr];
-    float16 mixture = aux_args.mog[data_ptr];
+    MOG_TYPE mixture = aux_args.mog[data_ptr];
     float8 num_obs = aux_args.num_obs[data_ptr];
 
     //load aux data
@@ -201,7 +163,7 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
                                  alpha,
                                  mixture,
                                  num_obs,
-                                 aux_args.viewdir,
+                                 aux_args.app_model_weights,
                                  cum_len*aux_args.linfo->block_len,
                                  mean_obs,
                                  aux_args.norm,

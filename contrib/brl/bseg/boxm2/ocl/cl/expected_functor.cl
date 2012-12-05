@@ -32,12 +32,12 @@ void step_cell_render(__global MOG_TYPE * cell_data,
 
 #ifdef RENDER_VIEW_DEP
 void step_cell_render(__global MOG_TYPE * cell_data,
-                              __global float    * alpha_data,
-                               int        data_ptr,
-                               float4     view_dir,
-                               float      d,
-                               float    * vis,
-                               float    * expected_i)
+                       __global float   * alpha_data,
+                       int        data_ptr,
+                       float    * app_model_weights,
+                       float      d,
+                       float    * vis,
+                       float    * expected_i)
 {
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
@@ -46,26 +46,24 @@ void step_cell_render(__global MOG_TYPE * cell_data,
     
   if (diff_omega<0.995f)
   {
-    if( view_dir.x < 0)
-      expected_int_cell += -(view_dir.x) * cell_data[data_ptr].s0;
-    else
-      expected_int_cell += (view_dir.x) * cell_data[data_ptr].s6;
+      
+    //CONVERT_FUNC_FLOAT16(mixture_float,cell_data[data_ptr])/NORM;
+    float16 mixture = cell_data[data_ptr];
+    float* mixture_array = (float*)(&mixture);
     
-    if( view_dir.y < 0)
-      expected_int_cell += -(view_dir.y) * cell_data[data_ptr].s2;
-    else
-      expected_int_cell += (view_dir.y) * cell_data[data_ptr].s8;
-
-    if( view_dir.z < 0)
-      expected_int_cell += -(view_dir.z) * cell_data[data_ptr].s4;
-    else
-      expected_int_cell += (view_dir.z) * cell_data[data_ptr].sa;
+    float sum_weights = 0;
+    for(short i= 0; i < 8; i++)
+    {
+        if(app_model_weights[i] > 0.01f)
+            expected_int_cell += app_model_weights[i] * mixture_array[2*i];
+        
+    }
+    
   }  
 
   float omega=(*vis) * (1.0f - diff_omega);
   (*vis) *= diff_omega;
   (*expected_i)+=expected_int_cell*omega; 
-
 }
 #endif //RENDER_VEW_DEP
 

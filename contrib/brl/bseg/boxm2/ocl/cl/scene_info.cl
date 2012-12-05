@@ -35,11 +35,11 @@
     #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data)
     #define NORM 65535
 #endif
-#ifdef MOG6_VIEW
+#ifdef MOG_VIEW_DEP
     #define MOG_TYPE float16
+    #define CONVERT_FUNC_FLOAT16(lhs,data) float16 lhs = convert_float16( as_uchar16(data) )
+    #define NORM 255
 #endif
-
-
 #ifdef FLOAT8
     #define MOG_TYPE float8
     #define CONVERT_FUNC(lhs,data) float8 lhs = data

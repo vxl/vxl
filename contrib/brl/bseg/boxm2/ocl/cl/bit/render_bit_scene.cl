@@ -100,10 +100,10 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
 typedef struct
 {
   __global float* alpha;
-  __global float16*  mog;
+  __global MOG_TYPE*  mog;
   float* expint;
   float * maxomega;
-  float4 viewdir;
+  float* app_model_weights;
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
@@ -116,7 +116,7 @@ void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
-                  __global    float16           * mixture_array,
+                  __global    MOG_TYPE           * mixture_array,
                   __global    float4             * ray_origins,
                   __global    float4             * ray_directions,
                   __global    float              * exp_image,      // input image and store vis_inf and pre_inf
@@ -156,8 +156,9 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
+  float app_model_weights[8] = {0};
   float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
-  viewdir /= fabs(ray_dx) + fabs(ray_dy) + fabs(ray_dz);
+  compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
   
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -174,15 +175,17 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   aux_args.alpha  = alpha_array;
   aux_args.mog    = mixture_array;
   aux_args.expint = &expint;
-  aux_args.viewdir = viewdir;
+  aux_args.app_model_weights = app_model_weights;
   aux_args.maxomega = &max_omega;
+  
+
   
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
-   
+  
    
    
   //store the expected intensity (as UINT)
