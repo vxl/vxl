@@ -18,6 +18,8 @@
 //brdb stuff
 #include <brdb/brdb_value.h>
 
+#include <boxm2/boxm2_util.h>
+
 //directory utility
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
@@ -44,6 +46,7 @@ namespace boxm2_ocl_render_view_dep_expected_image_process_globals
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "view_dep_app_helper_functions.cl");
     src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
     src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
@@ -51,8 +54,7 @@ namespace boxm2_ocl_render_view_dep_expected_image_process_globals
     {
       vcl_string options = opts;
       options += "-D RENDER_VIEW_DEP ";
-
-      options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,aux_args.viewdir,d*linfo->block_len,vis,aux_args.expint)";
+      options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,aux_args.app_model_weights,d*linfo->block_len,vis,aux_args.expint)";
 
       //have kernel construct itself using the context and device
       bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -131,24 +133,17 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   unsigned nj=pro.get_input<unsigned>(i++);
   vcl_string ident = pro.get_input<vcl_string>(i++);
 
-  bool foundDataType = false;
-  vcl_string data_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
-
-  int apptypesize = 0;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-      options="-D MOG6_VIEW ";
-      apptypesize = boxm2_data_traits<BOXM2_MOG6_VIEW>::datasize();
-    }
-  }
-  if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG6_VIEW data type"<<vcl_endl;
+  vcl_string data_type;
+  int apptypesize;
+  vcl_vector<vcl_string> valid_types;
+  valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
+  if ( !boxm2_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
+    vcl_cout<<"boxm2_ocl_render_gl_view_dep_app_expected_image_process ERROR: scene doesn't have BOXM2_MOG6_VIEW data type"<<vcl_endl;
     return false;
   }
+
+  vcl_string options = boxm2_ocl_util::mog_options(data_type);
+
   if (ident.size() > 0) {
     data_type += "_" + ident;
   }

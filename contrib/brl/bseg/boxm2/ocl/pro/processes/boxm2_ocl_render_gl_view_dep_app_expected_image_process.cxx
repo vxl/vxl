@@ -44,6 +44,7 @@ namespace boxm2_ocl_render_gl_view_dep_app_expected_image_process_globals
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
+    src_paths.push_back(source_dir + "view_dep_app_helper_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
     src_paths.push_back(source_dir + "expected_functor.cl");
@@ -51,9 +52,10 @@ namespace boxm2_ocl_render_gl_view_dep_app_expected_image_process_globals
 
     //set kernel options
     //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-    vcl_string options = opts + " -D MOG6_VIEW  -D RENDER_VIEW_DEP ";
-    options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,aux_args.viewdir,d*linfo->block_len,vis,aux_args.expint) ";
+    vcl_string options = opts + " -D RENDER_VIEW_DEP ";
+    options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,aux_args.app_model_weights,d*linfo->block_len,vis,aux_args.expint) ";
 
+    vcl_cout << "Compiling with options: "  << options << vcl_endl;
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
 
@@ -180,6 +182,7 @@ bool boxm2_ocl_render_gl_view_dep_app_expected_image_process(bprb_func_process& 
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // run expected image function
+  vcl_cout << "Options in gl render: " << options << " and data type size: " << apptypesize << vcl_endl;
   float time = render_expected_image( scene, device, opencl_cache, queue,
                                       cam, exp_image, vis_image, max_omega_image, exp_img_dim,
                                       data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj, apptypesize);
