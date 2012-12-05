@@ -18,7 +18,8 @@ SET(boxm2_cpp_algo_sources
     boxm2_gauss_grey_processor.h      boxm2_gauss_grey_processor.cxx
     boxm2_gauss_rgb_processor.h       boxm2_gauss_rgb_processor.cxx
     boxm2_phongs_model_processor.h    boxm2_phongs_model_processor.cxx
-
+    boxm2_mog6_view_processor.h
+    
     boxm2_data_serial_iterator.h
     boxm2_cast_intensities_functor.h
     boxm2_mean_intensities_batch_functor.h
