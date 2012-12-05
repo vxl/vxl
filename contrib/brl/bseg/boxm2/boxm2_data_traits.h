@@ -456,6 +456,9 @@ class boxm2_data_info
     if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
 
+    if (prefix.find(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::datasize();
+
     if (prefix.find(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_MOG6_VIEW>::datasize();
 
