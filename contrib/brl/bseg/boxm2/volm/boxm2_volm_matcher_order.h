@@ -60,8 +60,9 @@ public:
                                         bocl_kernel* kern);
   //: execute kernel of summerizing scores for each camera weighted by their order
   bool execute_weight_sum_kernel_order(bocl_device_sptr device,
-                                       cl_command_queue& queue, 
+                                       cl_command_queue& queue,
                                        bocl_mem* score,
+                                       bocl_mem* index,
                                        bocl_mem* score_order,
                                        bocl_mem* weight_all,
                                        bocl_mem* voxel_size,

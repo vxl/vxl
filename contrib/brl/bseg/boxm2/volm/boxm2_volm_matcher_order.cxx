@@ -339,12 +339,6 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
     }
 #endif
 
-    // delete index from host and device
-    delete index;
-    status = clFinish(queue);
-    check_val(status, MEM_FAILURE, " release INDEX failed on device " + device->device_identifier() + error_to_string(status));
-    delete [] index_buff;
-
     // execute kernel for score summary
     float * score_cam_buff = new float[cl_ni];
     bocl_mem* score_cam = new bocl_mem(device->context(), score_cam_buff, sizeof(float)*cl_ni, " score_cam " );
@@ -358,7 +352,7 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
       delete weight_all_cl;
       return false;
     }
-    if (!this->execute_weight_sum_kernel_order(device, queue, score, score_order_cl, weight_all_cl, voxel_size, weight, score_cam, kernels[identifier][2])) {
+    if (!this->execute_weight_sum_kernel_order(device, queue, score, index, score_order_cl, weight_all_cl, voxel_size, weight, score_cam, kernels[identifier][2])) {
       vcl_cout << "\n ERROR Executing WEIGHTED_SUM kernel failed for index " << ind_idx << " on device " << identifier << vcl_endl;
       delete score;           delete [] score_buff;
       delete score_cam;       delete [] score_cam_buff;
@@ -398,7 +392,11 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
     }
     score_all_.push_back(max_score);
     cam_all_id_.push_back(max_cam_id);
-    // release device and host memory for score, score_order and score_cam
+    // release device and host memory for index, score, score_order and score_cam
+    delete index;
+    status = clFinish(queue);
+    check_val(status, MEM_FAILURE, " release INDEX failed on device " + device->device_identifier() + error_to_string(status));
+    delete [] index_buff;
     delete score;
     delete score_cam;
     delete score_order_cl;
@@ -534,6 +532,7 @@ bool boxm2_volm_matcher_order::execute_match_kernel_order_order(bocl_device_sptr
 bool boxm2_volm_matcher_order::execute_weight_sum_kernel_order(bocl_device_sptr device,
                                                                cl_command_queue& queue,
                                                                bocl_mem* score,
+															   bocl_mem* index,
                                                                bocl_mem* score_order,
                                                                bocl_mem* weight_all,
                                                                bocl_mem* voxel_size,
@@ -550,6 +549,7 @@ bool boxm2_volm_matcher_order::execute_weight_sum_kernel_order(bocl_device_sptr 
   vcl_size_t global_threads_sum = (unsigned)RoundUp(n_cam,(int)local_threads_sum);
   // set up argument list (push_back args into bocl_kernel)
   kern->set_arg(score);
+  kern->set_arg(index);
   kern->set_arg(score_order);
   kern->set_arg(weight_all);
   kern->set_arg(voxel_size);
@@ -602,6 +602,22 @@ bool boxm2_volm_matcher_order::write_score_order(vcl_string const& out_prefix)
 
 bool boxm2_volm_matcher_order::write_all_score(vcl_string const& out_prefix)
 {
+
+  // output all scores
+  vcl_stringstream ss;
+  ss << out_prefix << "_score_all_cam.bin" ;
+  vcl_string fname = ss.str();
+  vsl_b_ofstream os(fname.c_str());
+  if (!os) {
+    vcl_cerr << " writing " << fname << " failed " << vcl_endl;
+  }
+  for (vcl_vector<boxm2_volm_score>::iterator iter = index_score.begin(); iter != index_score.end(); ++iter) {
+    vsl_b_write(os, (*iter).ind_id);
+    vsl_b_write(os, (*iter).cam_id);
+    vsl_b_write(os, (*iter).score);
+  }
+
+#if 0
   // rearrange score by the top field of view of the camera
   vcl_map<double, vcl_vector<boxm2_volm_score> > score_fov_map;
   for (vcl_vector<boxm2_volm_score>::iterator iter = index_score.begin(); iter != index_score.end(); ++iter) {
@@ -635,5 +651,7 @@ bool boxm2_volm_matcher_order::write_all_score(vcl_string const& out_prefix)
     }
     os.close();
   }
+#endif
+
   return true;
 }
