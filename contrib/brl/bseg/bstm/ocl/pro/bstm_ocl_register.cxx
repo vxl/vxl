@@ -15,6 +15,9 @@ void bstm_ocl_register::register_datatype()
 void bstm_ocl_register::register_process()
 {
   // utilities
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_clear_opencl_cache_process, "bstmOclClearCacheProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_create_opencl_cache_process, "bstmOclCreateCacheProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_render_expected_image_process, "bstmOclRenderExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_render_gl_expected_image_process, "bstmOclRenderGlExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_render_gl_expected_color_process, "bstmOclRenderGlExpectedColorProcess");
 

@@ -49,3 +49,6 @@ subdirs(ocl)
 
 #view section
 subdirs(view)
+
+#processes
+subdirs(pro)

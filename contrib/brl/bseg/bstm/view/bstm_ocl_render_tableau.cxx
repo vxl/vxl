@@ -61,6 +61,9 @@ bool bstm_ocl_render_tableau::init(bocl_device_sptr device,
     opencl_cache_=opencl_cache;
     device_=device;
     do_init_ocl=true;
+    render_trajectory_ = true;
+    trajectory_ = new boxm2_trajectory(80.0, 80.0, -1.0, scene_->bounding_box(), ni, nj);
+    cam_iter_ = trajectory_->begin();
 
     //set bb for time
     scene->bounding_box_t(scene_min_t_,scene_max_t_);

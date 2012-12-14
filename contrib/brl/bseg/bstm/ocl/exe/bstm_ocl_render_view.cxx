@@ -91,7 +91,7 @@ int main(int argc, char ** argv)
 
     //create cache, grab singleton instance
     bstm_lru_cache::create(scene);
-    bstm_opencl_cache_sptr opencl_cache=new bstm_opencl_cache(scene, device, 4); //allow 4 blocks inthe cache
+    bstm_opencl_cache_sptr opencl_cache=new bstm_opencl_cache(scene, device, 4); //allow 4 blocks in the cache
 
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
     bstm_ocl_render_tableau_new bit_tableau;

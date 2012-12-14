@@ -23,7 +23,7 @@ IF(VGUI_FOUND)
      )
   ADD_LIBRARY(bstm_view ${bstm_view_sources} )
 
-  TARGET_LINK_LIBRARIES(bstm_view bocl boxm2_view  bstm_ocl_pro vgui bprb vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
+  TARGET_LINK_LIBRARIES(bstm_view bocl boxm2_view bstm_ocl_pro vgui bprb vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 
 
 ENDIF(VGUI_FOUND)

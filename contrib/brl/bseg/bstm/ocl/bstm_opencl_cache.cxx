@@ -10,7 +10,7 @@ bstm_opencl_cache::bstm_opencl_cache(bstm_scene_sptr scene,
 : scene_(scene), maxBlocksInCache(maxBlocks), bytesInCache_(0), block_info_(0), device_(device)
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
-  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * .8);
+  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * .75);
 
   // by default try to create an LRU cache
   bstm_lru_cache::create(scene);

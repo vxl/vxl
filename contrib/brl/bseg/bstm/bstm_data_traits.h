@@ -9,12 +9,16 @@
 class boxm2_mog3_grey_processor;
 class boxm2_gauss_grey_processor;
 class boxm2_gauss_rgb_processor;
+class boxm2_mog6_view_processor;
+class boxm2_mog6_view_compact_processor;
 
 enum bstm_data_type
 {
   BSTM_ALPHA=0,
   BSTM_MOG3_GREY,
   BSTM_MOG3_GREY_16,
+  BSTM_MOG6_VIEW,
+  BSTM_MOG6_VIEW_COMPACT,
   BSTM_GAUSS_RGB,
   BSTM_NUM_OBS,
   BSTM_UNKNOWN
@@ -66,6 +70,29 @@ class bstm_data_traits<BSTM_MOG3_GREY>
   { if (!identifier.size()) return "bstm_mog3_grey"; else return "bstm_mog3_grey_"+identifier; }
 };
 
+
+template<>
+class bstm_data_traits<BSTM_MOG6_VIEW>
+{
+ public:
+  typedef boxm2_mog6_view_processor processor;
+  typedef vnl_vector_fixed<float, 16> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "bstm_mog6_view"; else return "bstm_mog6_view_"+identifier; }
+};
+
+
+template<>
+class bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>
+{
+ public:
+  typedef boxm2_mog6_view_compact_processor processor;
+  typedef vnl_vector_fixed<unsigned char, 16> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "bstm_mog6_view_compact"; else return "bstm_mog6_view_compact_"+identifier; }
+};
 
 //: HACKY WAY TO GENERICALLY GET DATASIZES -
 class bstm_data_info

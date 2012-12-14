@@ -18,10 +18,12 @@
 #include <vcl_map.h>
 
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
+#include <boxm2/cpp/algo/boxm2_mog6_view_processor.h>
+#include <bstm/cpp/algo/bstm_data_similarity_traits.h>
 
 
-#define SIMILARITY_T 0.2
 
+template <bstm_data_type APM_TYPE, boxm2_data_type BOXM2_APM_TYPE>
 class bstm_ingest_boxm2_scene_function
 {
   public:
@@ -32,21 +34,26 @@ class bstm_ingest_boxm2_scene_function
     typedef vnl_vector_fixed<uchar, 8> uchar8;
     typedef vnl_vector_fixed<ushort, 4> ushort4;
 
-     //: "default" constructor
-     bstm_ingest_boxm2_scene_function() {}
-
-     //: initialize generic data base pointers as their data type
-     bool init_data(bstm_block* blk,bstm_time_block* blk_t, vcl_vector<bstm_data_base*> & datas,
-                       boxm2_block* boxm2_blk, vcl_vector<boxm2_data_base*> & boxm2_datas, double time);
-
-     bool ingest();
-
-     bool conform();
+     //: "default" constructor does all the work
+     bstm_ingest_boxm2_scene_function(bstm_block* blk,bstm_time_block* blk_t, vcl_map<vcl_string, bstm_data_base*> & datas,
+         boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double local_time);
 
   private:
 
+   //: initialize generic data base pointers as their data type
+   bool init_data(bstm_block* blk,bstm_time_block* blk_t,  vcl_map<vcl_string, bstm_data_base*> & datas,
+                     boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double time);
+
+   //main functions
+   bool ingest();  //inserts the boxm2 data into bstm blk
+   bool conform(); //make sure bstm blk conforms to the tree structure of boxm2 blk
+
+   //helpers
+
+   //: makes sure all the leaves of curr_tree is at least as deep as boxm2_curr_tree
    boct_bit_tree conform_tree(boct_bit_tree curr_tree, boct_bit_tree boxm2_curr_tree);
 
+   //: moves the time trees of new refined bstm blk
    int move_time_trees(boct_bit_tree& unrefined_tree, boct_bit_tree& refined_tree, bstm_time_block* newTimeBlk,char* depth_diff );
 
    //: refines all the time trees of a given cell, based on the boxm2 data input.
@@ -56,31 +63,31 @@ class bstm_ingest_boxm2_scene_function
    //: moves the data of all time trees of a given cell. Copies data from parents and places the boxm2 data to current time cell.
    int move_all_time_trees_data( boxm2_array_1d<uchar8>& time_trees_blk_copy,
                                          int bstm_data_offset,int boxm2_data_offset, int* dataIndex, int& currIndex,
-                                         float*  alpha_cpy, uchar8* mog_cpy, ushort4* num_obs_cpy, int depth_diff);
+                                         bstm_data_traits<BSTM_ALPHA>::datatype*  alpha_cpy, typename bstm_data_traits<APM_TYPE>::datatype * apm_cpy, int depth_diff);
 
-   int move_data(bstm_time_tree& unrefined_tree, bstm_time_tree& refined_tree, float*  alpha_cpy, uchar8* mog_cpy, ushort4* num_obs_cpy );
+   //: moves the data from the old time tree to the new time tree
+   int move_data(bstm_time_tree& unrefined_tree, bstm_time_tree& refined_tree, bstm_data_traits<BSTM_ALPHA>::datatype*  alpha_cpy, typename bstm_data_traits<APM_TYPE>::datatype * apm_cpy);
 
-   void place_curr_data( bstm_time_tree& refined_tree, int boxm2_data_offset, float*  alpha_cpy, uchar8* mog_cpy, ushort4* num_obs_cpy, int depth_diff );
+   //: inserts the current boxm2 data into the bstm scene
+   void place_curr_data( bstm_time_tree& refined_tree, int boxm2_data_offset, bstm_data_traits<BSTM_ALPHA>::datatype*  alpha_cpy, typename bstm_data_traits<APM_TYPE>::datatype * apm_cpy, int depth_diff );
 
    //: refine input tree and return refined tree
    bstm_time_tree refine_time_tree(const bstm_time_tree& input_tree, int boxm2_data_offset, int currDepth, int currDepth_boxm2);
 
    //: function to define similarity measure between bstm data and current boxm2 data.
-   bool is_similar(float p, uchar8 mog, float boxm2_p, uchar8 boxm2_mog);
+   bool is_similar(float p, typename bstm_data_traits<APM_TYPE>::datatype mog, float boxm2_p, typename boxm2_data_traits<BOXM2_APM_TYPE>::datatype boxm2_mog);
 
    bstm_block* blk_;
    bstm_time_block* blk_t_;
    boxm2_block* boxm2_blk_;
 
    //bstm datas
-   float*       alpha_;
-   uchar8*      mog_;
-   ushort4*     num_obs_;
+   bstm_data_traits<BSTM_ALPHA>::datatype *       alpha_;
+   typename bstm_data_traits<APM_TYPE>::datatype* apm_model_;
 
    //boxm2 datas
-   float*     boxm2_alpha_;
-   uchar8*     boxm2_mog_;
-   ushort4*    boxm2_num_obs_;
+   boxm2_data_traits<BOXM2_ALPHA>::datatype *     boxm2_alpha_;
+   typename boxm2_data_traits<BOXM2_APM_TYPE>::datatype*  boxm2_apm_model_;
 
    double local_time_;
 
@@ -100,14 +107,6 @@ class bstm_ingest_boxm2_scene_function
    int num_split_;
    int num_split_t_;
 };
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-//MAIN REFINE FUNCTION
-////////////////////////////////////////////////////////////////////////////////
-bool ingest_boxm2_blk(bstm_block* blk,bstm_time_block* blk_t, vcl_vector<bstm_data_base*> & datas,
-    boxm2_block* boxm2_blk, vcl_vector<boxm2_data_base*> & boxm2_datas, double time);
 
 
 #endif //bstm_ingest_boxm2_scene_function

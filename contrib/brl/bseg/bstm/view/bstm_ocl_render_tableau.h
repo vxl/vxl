@@ -87,6 +87,8 @@ class bstm_ocl_render_tableau : public bstm_cam_tableau
   bool init_clgl();
   bool do_init_ocl;
   
+  bool render_trajectory_;
+
 };
 
 //: declare smart pointer

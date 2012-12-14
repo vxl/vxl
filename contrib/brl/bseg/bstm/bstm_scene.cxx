@@ -423,27 +423,33 @@ void x_write(vcl_ostream &os, bstm_scene& scene, vcl_string name)
     block.add_attribute("id_i", id.i());
     block.add_attribute("id_j", id.j());
     block.add_attribute("id_k", id.k());
+    block.add_attribute("id_t", id.t());
 
     //block local origin
     block.add_attribute("origin_x", data.local_origin_.x());
     block.add_attribute("origin_y", data.local_origin_.y());
     block.add_attribute("origin_z", data.local_origin_.z());
+    block.add_attribute("origin_t", data.local_origin_t_ );
 
     //sub block dimensions
     block.add_attribute("dim_x", data.sub_block_dim_.x());
     block.add_attribute("dim_y", data.sub_block_dim_.y());
     block.add_attribute("dim_z", data.sub_block_dim_.z());
+    block.add_attribute("dim_t", data.sub_block_dim_t_);
 
     //sub block numbers
     block.add_attribute("num_x", (int) data.sub_block_num_.x());
     block.add_attribute("num_y", (int) data.sub_block_num_.y());
     block.add_attribute("num_z", (int) data.sub_block_num_.z());
+    block.add_attribute("num_t", (int) data.sub_block_num_t_);
 
     //block init level
     block.add_attribute("init_level", data.init_level_);
+    block.add_attribute("init_level_t", data.init_level_t_);
 
     //block max level
     block.add_attribute("max_level", data.max_level_);
+    block.add_attribute("max_level_t", data.max_level_t_);
 
     //block max_mb
     block.add_attribute("max_mb", data.max_mb_);

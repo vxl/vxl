@@ -7,4 +7,4 @@ SET(bstm_cpp_pro_sources
 AUX_SOURCE_DIRECTORY(processes bstm_cpp_pro_sources)
 ADD_LIBRARY(bstm_cpp_pro  ${bstm_cpp_pro_sources})
 
-TARGET_LINK_LIBRARIES(bstm_cpp_pro bstm_io bstm_cpp_algo boxm2_pro boxm2 brdb vpgl vil vgl vul vbl vcl)
+TARGET_LINK_LIBRARIES(bstm_cpp_pro bstm_cpp_algo bstm bstm_io boxm2 brdb vpgl vil vgl vul vbl vcl)

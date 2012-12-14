@@ -39,6 +39,7 @@ void bstm_cam_tableau::setup_gl_matrices()
 //: Handles tableau key and drag events
 bool bstm_cam_tableau::handle(vgui_event const &e)
 {
+
   //cam tableau just handles key presses and mouse manipulation
   if (e.type == vgui_KEY_PRESS)
   {
@@ -73,16 +74,40 @@ bool bstm_cam_tableau::handle(vgui_event const &e)
       this->setup_gl_matrices();
       this->post_redraw();
   }
+  if (e.type == vgui_KEY_PRESS && e.key == vgui_key('t')) {
+    vcl_cout<<"rendering trajectory..."<<vcl_endl;
+    render_trajectory_ = true;
+    this->post_idle_request();
+  }
   //Handles Idle events - should render trajectory
   else if (e.type == vgui_IDLE)
   {
-    return true;
+    if(render_trajectory_) {
+      vpgl_camera_double_sptr& camSptr = *cam_iter_;
+      vpgl_perspective_camera<double>* camPtr = (vpgl_perspective_camera<double>*) camSptr.ptr();
+      cam_ = *camPtr;
+
+      //increment cam iter
+      ++cam_iter_;
+      if(cam_iter_ == trajectory_->end())
+        cam_iter_ = trajectory_->begin();
+
+      //rerender
+      this->post_redraw();
+      return true;
+    }
+    else {
+      vcl_cout << "I also received " << e.type <<vcl_endl;
+      return false;
+    }
   }
 
   //see if drag should handle it
   event = e;
   if (vgui_drag_mixin::handle(e))
   {
+    vcl_cout << "HERE HERE" << vcl_endl;
+      render_trajectory_ = false;
       return true;
   }
   if (vgui_tableau::handle(e))

@@ -24,10 +24,11 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 
 #include <bstm/bstm_util.h>
+#include <boxm2/boxm2_util.h>
 
 namespace bstm_cpp_ingest_boxm2_scene_process_globals
 {
-  const unsigned n_inputs_ =  3;
+  const unsigned n_inputs_ =  5;
   const unsigned n_outputs_ = 0;
 }
 
@@ -38,17 +39,11 @@ bool bstm_cpp_ingest_boxm2_scene_process_cons(bprb_func_process& pro)
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
 
-  input_types_[0] = "vcl_string";
-  input_types_[1] = "vcl_string";
-  input_types_[2] = "double";
-
-  /*
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
   input_types_[2] = "boxm2_scene_sptr";
   input_types_[3] = "boxm2_cache_sptr";
   input_types_[4] = "double";
-  */
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -60,6 +55,7 @@ bool bstm_cpp_ingest_boxm2_scene_process_cons(bprb_func_process& pro)
 
 bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
 {
+
   using namespace bstm_cpp_ingest_boxm2_scene_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
@@ -69,52 +65,39 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
 
   //get the inputs
   unsigned i = 0;
-  vcl_string bstm_scene_filename  = pro.get_input<vcl_string>(i++);
-  vcl_string boxm2_scene_filename = pro.get_input<vcl_string>(i++);
-  double time =pro.get_input<double>(i++);
-  /*
   bstm_scene_sptr scene =pro.get_input<bstm_scene_sptr>(i++);
   bstm_cache_sptr cache= pro.get_input<bstm_cache_sptr>(i++);
   boxm2_scene_sptr boxm2_scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr boxm2_cache= pro.get_input<boxm2_cache_sptr>(i++);
-  */
-
-  //load scenes....
-  bstm_scene_sptr scene= new bstm_scene(bstm_scene_filename);
-
-  boxm2_scene_sptr boxm2Scene = new boxm2_scene(boxm2_scene_filename);
-
-  bstm_lru_cache::create(scene);
-  bstm_cache_sptr cache = bstm_lru_cache::instance();
-
-  boxm2_lru_cache::create(boxm2Scene);
-  boxm2_cache_sptr boxm2_cache = boxm2_lru_cache::instance();
+  double time =pro.get_input<double>(i++);
 
 
-
-  bool foundDataType = false;
+  //bstm app query
   vcl_string data_type;
-  vcl_vector<vcl_string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == bstm_data_traits<BSTM_MOG3_GREY>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-    }
-    else if ( apps[i] == bstm_data_traits<BSTM_GAUSS_RGB>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-    }
+  int apptypesize;
+  vcl_vector<vcl_string> valid_types;
+  valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
+  valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW>::prefix());
+  valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
+  if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
+    vcl_cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: scene doesn't have BSTM_MOG6_VIEW or BSTM_MOG3_GREY data type"<<vcl_endl;
+    return false;
   }
-  if (!foundDataType) {
-    vcl_cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: scene doesn't have BOXM2_MOG3_GREY  data type"<<vcl_endl;
+
+  vcl_string boxm2_data_type;
+  int boxm2_apptypesize;
+  vcl_vector<vcl_string> boxm2_valid_types;
+  boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix());
+  boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
+  if ( !boxm2_util::verify_appearance( *boxm2_scene, boxm2_valid_types, boxm2_data_type, boxm2_apptypesize ) ) {
+    vcl_cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: boxm2 scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
 
   //next check individual block meta data
   vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata> boxm2_blocks = boxm2Scene->blocks();
+  vcl_map<boxm2_block_id, boxm2_block_metadata> boxm2_blocks = boxm2_scene->blocks();
 
   //iter over boxm2 blocks to make sure meta data and id's are consistent
   vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter = boxm2_blocks.begin();
@@ -142,10 +125,8 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          }
 
          double local_time;
-         if(!bstm_metadata.contains_t(time,local_time)) {
-           vcl_cout << "Metadata " << bstm_id << " does not contain time " << time << "..." << vcl_endl;
+         if(!bstm_metadata.contains_t(time,local_time))
            continue;
-         }
 
 
          //now do the work
@@ -156,27 +137,34 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          bstm_time_block* blk_t = cache->get_time_block(bstm_metadata.id_);
          bstm_data_base * alph    = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_ALPHA>::prefix());
          bstm_data_base * mog     = cache->get_data_base(bstm_metadata.id_, data_type);
-         //bstm_data_base * num_obs = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_NUM_OBS>::prefix());
 
-         vcl_vector<bstm_data_base*> datas;
-         datas.push_back(alph);
-         datas.push_back(mog);
-         //datas.push_back(num_obs);
+         vcl_map<vcl_string, bstm_data_base*> datas;
+         datas[bstm_data_traits<BSTM_ALPHA>::prefix()] = alph;
+         datas[data_type] = mog;
 
          //get data from boxm2 scene
          boxm2_block *     boxm2_blk     = boxm2_cache->get_block(bstm_metadata.id_);
          boxm2_data_base * boxm2_alph    = boxm2_cache->get_data_base(bstm_metadata.id_,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-         boxm2_data_base * boxm2_mog     = boxm2_cache->get_data_base(bstm_metadata.id_,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-         //boxm2_data_base * boxm2_num_obs = boxm2_cache->get_data_base(bstm_metadata.id_,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+         boxm2_data_base * boxm2_mog     = boxm2_cache->get_data_base(bstm_metadata.id_,boxm2_data_type);
 
-         vcl_vector<boxm2_data_base*> boxm2_datas;
-         boxm2_datas.push_back(boxm2_alph);
-         boxm2_datas.push_back(boxm2_mog);
-         //boxm2_datas.push_back(boxm2_num_obs);
+         vcl_map<vcl_string, boxm2_data_base*> boxm2_datas;
+         boxm2_datas[boxm2_data_traits<BOXM2_ALPHA>::prefix()] = boxm2_alph;
+         boxm2_datas[boxm2_data_type] = boxm2_mog;
 
-
-         ingest_boxm2_blk(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time);
-
+         if(boxm2_data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() &&  data_type == bstm_data_traits<BSTM_MOG3_GREY>::prefix()  )
+         {
+           bstm_ingest_boxm2_scene_function<BSTM_MOG3_GREY, BOXM2_MOG3_GREY>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time);
+           vcl_cout << "Ingesting mog3 grey...\n";
+         }
+         else if( boxm2_data_type == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() && data_type == bstm_data_traits<BSTM_MOG6_VIEW>::prefix()  )
+         {
+           bstm_ingest_boxm2_scene_function<BSTM_MOG6_VIEW, BOXM2_MOG6_VIEW>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time);
+           vcl_cout << "Ingesting mog6 view...\n";
+         } if( boxm2_data_type == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() &&
+               data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()  )
+           bstm_ingest_boxm2_scene_function<BSTM_MOG6_VIEW_COMPACT, BOXM2_MOG6_VIEW_COMPACT>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time);
+         else
+           vcl_cout << "bstm_cpp_ingest_boxm2_scene_process ERROR!" << vcl_endl;
       }
 
     }
@@ -186,7 +174,5 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
 
 
   vcl_cout << "Finished ingesting scene..." << vcl_endl;
-  cache->write_to_disk();
-
   return true;
 }
