@@ -94,7 +94,7 @@ namespace boxm2_ocl_compute_expectation_per_view_process_globals
 
     //normalize aux and convert to float.
     bocl_kernel* convert_exp_to_float = new bocl_kernel();
-    vcl_string convert_opts2 = options + " -D CONVERT_EXP";
+    vcl_string convert_opts2 = options + " -D CONVERT_EXP ";
     convert_exp_to_float->create_kernel(&device->context(),device->device_id(), non_ray_tracing_paths, "convert_exp_to_float", convert_opts2, "batch_update::convert_exp_to_float");
     vec_kernels.push_back(convert_exp_to_float);
 
@@ -341,12 +341,21 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
 
       //Compute the log likelihood for this image
       exp_denom_image->read_to_buffer(queue);
+      pi_inf_image->read_to_buffer(queue);
+
+      vil_image_view<float>* exp_img_out=new vil_image_view<float>(cl_ni,cl_nj);
+      for (unsigned c=0;c<cl_nj;c++)
+        for (unsigned r=0;r<cl_ni;r++)
+          (*exp_img_out)(r,c)=vis_buff[c*cl_ni+r];
+      pro.set_output_val<vil_image_view_base_sptr>(0, exp_img_out);
+
       float expectation_sum = 0;
       for (unsigned int i=0;i<cl_ni*cl_nj;++i) {
           if(exp_denom_buff[i] > 0)
             expectation_sum += vcl_log(exp_denom_buff[i]);
       }
       pro.set_output_val<float>(1, expectation_sum);
+
 
       continue;
     }
@@ -385,7 +394,8 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_DATA_INDEX>::prefix());
         bocl_mem* currIdx   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_DATA_INDEX>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
 
-        aux0->zero_gpu_buffer(queue);
+        int int_zero = 0;
+        aux0->fill(queue,int_zero,"int",true);
         num_obs_single->zero_gpu_buffer(queue);
         currIdx->zero_gpu_buffer(queue);
 
@@ -483,12 +493,16 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         bocl_mem* currIdx   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_DATA_INDEX>::prefix(suffix));
 
         //init buffers
-        all_obs->zero_gpu_buffer(queue);
-        all_pre_exp->zero_gpu_buffer(queue);
-        all_seglen->zero_gpu_buffer(queue);
+        unsigned char zero_char = 0;
+        all_obs->fill(queue,zero_char,"char", true);
+
+        float zero_float = 0;
+        all_pre_exp->fill(queue,zero_float,"float", true);
+        all_seglen->fill(queue,zero_float,"float", true);
+
         const int minus_one = -1;
         //fill aux4 with -1s.
-        all_exp->init_gpu_buffer(&minus_one, sizeof(cl_int), queue);
+        all_exp->fill(queue,minus_one,"int", true);
 
         kern->set_arg( blk_info );
         kern->set_arg( blk );
@@ -530,6 +544,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         all_obs->read_to_buffer(queue);
         all_pre_exp->read_to_buffer(queue);
         all_seglen->read_to_buffer(queue);
+
       }
       else if(i == CONVERT_EXP)
       {
