@@ -9,15 +9,16 @@
 static void test_volm_wr3db_index()
 {
   // create a much smaller index for testing purposes
-  float vmin = 10.0f;  // min voxel resolution
-  float dmax = 100.0f;
-  float solid_angle = 40.0f;
+  float vmin = 2.0f;  // min voxel resolution
+  float dmax = 3000.0f;
+  float solid_angle = 2.0f;
   volm_spherical_container_sptr sph2 = new volm_spherical_container(solid_angle,vmin,dmax);
-  //boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(sph2);
-  //vcl_cout << "number of voxels in container: " << sph2->get_voxels().size() << vcl_endl;
+#if 0
+  boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(sph2);
+  vcl_cout << "number of voxels in container: " << sph2->get_voxels().size() << vcl_endl;
   sph2->draw_template("./container.vrml",0.0);
 
-  // fill the layer after vmin with some depth interval values:
+   fill the layer after vmin with some depth interval values:
   unsigned int offset, end_offset; double depth;
   sph2->first_res(sph2->min_voxel_res()*2, offset, end_offset, depth);
   vcl_vector<unsigned char> values(end_offset-offset);
@@ -29,7 +30,7 @@ static void test_volm_wr3db_index()
   vis_prob.resize(sph2->get_voxels().size());
   boxm2_volm_wr3db_index::inflate_index_vis_and_prob(values, sph2, vis_prob);
   sph2->draw_template_vis_prob("./container2.vrml", 0.0, vis_prob);
-
+#endif
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, 90.0, 30.0, 0.0, 0.0);
 
   // test io
@@ -67,7 +68,8 @@ static void test_volm_wr3db_index()
   for (unsigned i = 0; i < ind->buffer_size()-1; i++)
     ind2->get_next(vals2);
   ind2->get_next(vals2);
-  unsigned char *vals_buf2 = new unsigned char[layer_size];
+  
+  vcl_vector<unsigned char> vals_buf2(layer_size);
   ind2->get_next(vals_buf2);
   TEST("test index end", vals_buf2[0] == 'e', true);
   TEST("test index end", vals_buf2[layer_size-1] == 'f', true);
