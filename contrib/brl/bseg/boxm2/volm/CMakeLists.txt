@@ -30,6 +30,8 @@ TARGET_LINK_LIBRARIES(boxm2_volm boxm2 boxm2_io bocl brip baio vpgl volm vnl vid
 INSTALL_TARGETS(/lib boxm2_volm)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_volm/ ${boxm2_volm_sources})
 
+subdirs(io)
+
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
@@ -37,6 +39,8 @@ ENDIF( BUILD_TESTING )
 SUBDIRS(exe)
 
 ENDIF(OPENCL_FOUND)
+
 #pro
 subdirs(pro)
+
 
