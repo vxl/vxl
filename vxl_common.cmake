@@ -59,7 +59,7 @@ endif()
 
 # Select svn source to use.
 if(NOT DEFINED dashboard_url)
-  set(dashboard_url "http://vxl.svn.sourceforge.net/svnroot/vxl/trunk")
+  set(dashboard_url "http://svn.code.sf.net/p/vxl/svn/www/trunk")
 endif()
 
 # Select a source directory name.
