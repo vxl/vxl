@@ -11,3 +11,7 @@ TARGET_LINK_LIBRARIES(bstm_ocl_algo bstm_ocl boxm2_ocl_algo vgl vil vul)
 
 INSTALL_TARGETS(/lib bstm_ocl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm/ocl/algo ${bstm_ocl_algo_sources})
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

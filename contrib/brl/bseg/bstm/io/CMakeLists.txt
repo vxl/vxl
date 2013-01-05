@@ -16,3 +16,7 @@ TARGET_LINK_LIBRARIES(bstm_io bstm bstm_basic)
 #install the .h .txx and libs
 INSTALL_TARGETS(/lib bstm_io)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm/io ${bstm_io_sources})
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
