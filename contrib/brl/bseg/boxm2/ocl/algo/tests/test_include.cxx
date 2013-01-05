@@ -8,5 +8,6 @@
 #include <boxm2/ocl/algo/boxm2_ocl_render_scene_uncertainty_map.h>
 #include <boxm2/ocl/algo/boxm2_ocl_update.h>
 #include <boxm2/ocl/algo/boxm2_ocl_update_color.h>
+#include <boxm2/ocl/algo/boxm2_ocl_update_view_dep_app.h>
 
 int main() { return 0; }

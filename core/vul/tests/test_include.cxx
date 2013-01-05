@@ -2,6 +2,7 @@
 #include <vul/vul_whereami.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_awk.h>
+#include <vul/vul_checksum.h>
 #include <vul/vul_debug.h>
 #include <vul/vul_expand_path.h>
 #include <vul/vul_file.h>
@@ -23,5 +24,3 @@
 #include <vul/vul_url.h>
 
 int main() { return 0; }
-
-
