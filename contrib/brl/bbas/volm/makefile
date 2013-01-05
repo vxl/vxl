@@ -11,6 +11,8 @@ MANPAGE_SOURCES += volm_query_sptr.h
 MANPAGE_SOURCES += volm_spherical_container_sptr.h
 SOURCES += volm_spherical_shell_container.cxx
 MANPAGE_SOURCES += volm_spherical_shell_container_sptr.h
+SOURCES += volm_loc_hyp.cxx
+MANPAGE_SOURCES += volm_loc_hyp_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

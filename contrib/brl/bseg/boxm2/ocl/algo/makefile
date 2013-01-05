@@ -12,6 +12,7 @@ SOURCES += boxm2_ocl_update_color.cxx
 SOURCES += boxm2_ocl_refine.cxx
 SOURCES += boxm2_ocl_update.cxx
 SOURCES += boxm2_ocl_render_scene_uncertainty_map.cxx
+SOURCES += boxm2_ocl_update_view_dep_app.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

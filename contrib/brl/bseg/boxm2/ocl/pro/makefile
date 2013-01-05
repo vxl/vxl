@@ -64,6 +64,11 @@ SOURCES += processes/boxm2_ocl_update_alpha_wphongs_process.cxx
 SOURCES += processes/boxm2_ocl_compute_visibility_process.cxx
 SOURCES += processes/boxm2_ocl_probability_of_image_wcubic_process.cxx
 SOURCES += processes/boxm2_ocl_change_detection_process2.cxx
+SOURCES += processes/boxm2_ocl_update_view_dep_app_process.cxx
+SOURCES += processes/boxm2_ocl_compute_expectation_per_view_process.cxx
+SOURCES += processes/boxm2_ocl_batch_update_scene_process.cxx
+SOURCES += processes/boxm2_ocl_render_view_dep_expected_image_process.cxx
+SOURCES += processes/boxm2_ocl_render_gl_view_dep_app_expected_image_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

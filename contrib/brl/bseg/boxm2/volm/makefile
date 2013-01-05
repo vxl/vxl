@@ -7,8 +7,10 @@ SOURCES += boxm2_volm_wr3db_index.cxx
 SOURCES += boxm2_volm_locations.cxx
 MANPAGE_SOURCES += boxm2_volm_locations_sptr.h
 MANPAGE_SOURCES += boxm2_volm_wr3db_index_sptr.h
+SOURCES += boxm2_volm_matcher_order.cxx
+MANPAGE_SOURCES += boxm2_volm_io.h
 
-SUBDIRS += exe
+SUBDIRS += io pro exe
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

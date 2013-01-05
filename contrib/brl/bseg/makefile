@@ -64,6 +64,10 @@ SUBDIRS += bvpl_octree_batch
 
 SUBDIRS += bapl
 
+SUBDIRS += bstm
+
+SUBDIRS += bstm_batch
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

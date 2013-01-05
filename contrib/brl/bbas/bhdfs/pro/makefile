@@ -12,6 +12,8 @@ SOURCES += processes/bhdfs_save_image_view_process.cxx
 SOURCES += processes/bhdfs_mapper_scripting_processes.cxx
 SOURCES += processes/bhdfs_boxm2_load_scene_process.cxx
 SOURCES += processes/bhdfs_load_perspective_camera_process.cxx
+SOURCES += processes/bhdfs_load_txt_file_process.cxx
+SOURCES += processes/bhdfs_save_txt_file_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

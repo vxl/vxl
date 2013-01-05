@@ -44,6 +44,7 @@ SOURCES += boxm2_gauss_rgb_processor.cxx
 SOURCES += boxm2_export_stack_images_function.cxx
 MANPAGE_SOURCES += boxm2_create_mog_image_functor.h
 MANPAGE_SOURCES += boxm2_vis_probe_functor.h
+MANPAGE_SOURCES += boxm2_mog6_view_processor.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

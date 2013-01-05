@@ -1,0 +1,17 @@
+USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
+
+LIBRARY := bstm_ocl_algo
+
+SOURCES += bstm_ocl_render_expected_image_function.cxx
+
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
