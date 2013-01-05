@@ -126,6 +126,9 @@ SOURCE=.\test_generic_camera.cxx
 SOURCE=.\test_rational_camera.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_lvcs.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

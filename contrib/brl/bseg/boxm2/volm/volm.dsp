@@ -104,10 +104,13 @@ SOURCE=.\boxm2_volm_wr3db_index.cxx
 SOURCE=.\boxm2_volm_locations.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+boxm2_volm_locations-.cxx
+SOURCE=.\boxm2_volm_matcher_order.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_volm_wr3db_index-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_volm_loc_hypotheses-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -126,6 +129,12 @@ SOURCE=.\boxm2_volm_locations_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volm_wr3db_index_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_volm_matcher_order.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_volm_io.h
 # End Source File
 # End Group
 # End Target

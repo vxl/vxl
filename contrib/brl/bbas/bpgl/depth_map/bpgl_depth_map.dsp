@@ -110,6 +110,9 @@ SOURCE=.\Templates/vbl_smart_ptr+depth_map_scene-.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_map_io+vcl_string.depth_map_region_sptr-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+depth_map_region_sptr--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

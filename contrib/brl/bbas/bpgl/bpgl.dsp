@@ -93,6 +93,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\bpgl_camera_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bpgl_poly_radial_distortion+double.3-.cxx
 # End Source File
 # Begin Source File
@@ -175,6 +178,9 @@ SOURCE=.\bpgl_reg_fundamental_matrix.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bpgl_camera_estimator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bpgl_camera_utils.h
 # End Source File
 # End Group
 # End Target

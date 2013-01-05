@@ -218,6 +218,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_volm_wr3db_ind.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_volm_locations.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

@@ -131,6 +131,9 @@ SOURCE=.\bpgl_vsol_lens_warp.cxx
 # Begin Source File
 SOURCE=.\bpgl_bundle_rolling_shutter_adjust.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bpgl_transform_camera.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -175,6 +178,9 @@ SOURCE=.\bpgl_interpolate.h
 # End Source File
 # Begin Source File
 SOURCE=.\bpgl_fm_compute_reg_ransac.h
+# End Source File
+# Begin Source File
+SOURCE=.\bpgl_transform_camera.h
 # End Source File
 # End Group
 # End Target

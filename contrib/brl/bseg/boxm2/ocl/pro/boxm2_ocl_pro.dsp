@@ -272,6 +272,21 @@ SOURCE=.\processes/boxm2_ocl_probability_of_image_wcubic_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_change_detection_process2.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_update_view_dep_app_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_compute_expectation_per_view_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_batch_update_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_view_dep_expected_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_gl_view_dep_app_expected_image_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

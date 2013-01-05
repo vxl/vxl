@@ -97,6 +97,15 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\volm_dummy_matcher.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\volm_generate_hypos.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\volm_evaluate_output_tiles.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\volm_query_creation.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

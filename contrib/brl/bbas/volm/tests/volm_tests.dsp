@@ -249,6 +249,15 @@ SOURCE=.\test_spherical_container.cxx
 SOURCE=.\test_spherical_shell_container.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_loc_hyp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_tile.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_query.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

@@ -108,6 +108,12 @@ SOURCE=.\volm_tile.cxx
 SOURCE=.\volm_spherical_shell_container.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\volm_loc_hyp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+volm_loc_hyp-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+volm_query-.cxx
 # End Source File
 # Begin Source File
@@ -142,6 +148,12 @@ SOURCE=.\volm_spherical_shell_container.h
 # End Source File
 # Begin Source File
 SOURCE=.\volm_spherical_shell_container_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_loc_hyp_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_loc_hyp.h
 # End Source File
 # End Group
 # End Target

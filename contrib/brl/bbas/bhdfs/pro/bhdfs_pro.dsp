@@ -116,6 +116,12 @@ SOURCE=.\processes/bhdfs_load_perspective_camera_process.cxx
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bhdfs_manager_sptr-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/bhdfs_load_txt_file_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bhdfs_save_txt_file_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

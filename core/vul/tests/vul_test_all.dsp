@@ -105,9 +105,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_arg.cxx
 # End Source File
 # Begin Source File
@@ -154,6 +151,12 @@ SOURCE=.\test_awk.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_expand_path.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_checksum.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target

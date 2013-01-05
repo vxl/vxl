@@ -224,6 +224,9 @@ SOURCE=.\vul_debug.h
 # Begin Source File
 SOURCE=.\vul_ios_state.h
 # End Source File
+# Begin Source File
+SOURCE=.\vul_checksum.h
+# End Source File
 # End Group
 # End Target
 # End Project
