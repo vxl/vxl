@@ -10,6 +10,10 @@ IF(WIN32)
   SET(baio_sources ${baio_sources}
       baio_windows.cxx
      )
+ELSEIF(CYGWIN)
+  SET(baio_sources ${baio_sources}
+      baio_windows.cxx
+     )
 ELSEIF(APPLE)
   SET(baio_sources ${baio_sources}
       baio_osx.cxx
