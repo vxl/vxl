@@ -28,6 +28,7 @@
 #include <vcl_cstdio.h>
 #include <vcl_algorithm.h>
 #include <vcl_limits.h>
+#include <vcl_ios.h>
 
 //vul file includes
 #include <vul/vul_file.h>
