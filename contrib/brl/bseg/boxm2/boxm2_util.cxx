@@ -255,7 +255,7 @@ int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
 
     //find minimal dot product amongst cams/images
     double minAngle = 10e20;
-    unsigned minCam = -1;
+    int minCam = -1;
     for (unsigned int i=0; i<cams.size(); ++i) {
         double dotProd = dot_product( normal, -1*cams[i]->principal_axis());
         double ang = vcl_acos(dotProd); // vcl_fabs(angle(normal, -1*cams[i]->principal_axis()));
@@ -602,7 +602,7 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
 {
   vcl_vector<boxm2_block_id> vis_order;
   vcl_vector<boxm2_dist_id_pair> distances;
-  
+
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blk_map = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator it = blk_map.find(curr_block);
   if (it == blk_map.end()) {
@@ -610,12 +610,12 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
     return vis_order;
   }
   vgl_point_3d<double>& current_o = (it->second).local_origin_;
-  
+
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
   for (iter = blk_map.begin(); iter != blk_map.end(); ++iter) {
     vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
     double depth = (current_o-blk_o).length();
-    if(depth <=  distance)
+    if (depth <=  distance)
       distances.push_back( boxm2_dist_id_pair(depth, iter->first) );
   }
 
@@ -659,7 +659,7 @@ vcl_vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scen
                     orderdblocks.push_back(*iter);
                 }
             }
-        
+
         for (int j =-radius+curr_j; j<=radius+curr_j; j+=2*radius)
             for (int i =-radius+curr_i+1; i<radius+curr_i; ++i)
               for (int k = -radius+curr_k; k <= radius+curr_k; ++k)
@@ -695,13 +695,13 @@ bool boxm2_util::write_blocks_to_kml(boxm2_scene_sptr& scene, vcl_string kml_fil
   vcl_ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
   vcl_map<boxm2_block_id, boxm2_block_metadata> all_blks = scene->blocks();
-  
+
   //for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) {
   for (unsigned i = 0; i < blks.size(); i++) {
-    
+
     int redness = (int)vcl_floor((((float)i/blks.size())*255.0+0.5));
-    vcl_stringstream color_hex; 
-    color_hex.flags ( vcl_ios::right | vcl_ios::hex );
+    vcl_stringstream color_hex;
+    color_hex.flags ( vcl_ios_right | vcl_ios_hex );
     color_hex.width(2); color_hex.fill('0');
     color_hex << 255 << "0000";
     color_hex.width(2); color_hex.fill('0');
@@ -712,16 +712,16 @@ bool boxm2_util::write_blocks_to_kml(boxm2_scene_sptr& scene, vcl_string kml_fil
     double lon, lat, elev;
     lvcs.local_to_global(box.min_x(), box.min_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
     vnl_double_2 ll; ll[0] = lat; ll[1] = lon;
-    
+
     lvcs.local_to_global(box.max_x(), box.min_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
     vnl_double_2 lr; lr[0] = lat; lr[1] = lon;
-    
+
     lvcs.local_to_global(box.max_x(), box.max_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
     vnl_double_2 ur; ur[0] = lat; ur[1] = lon;
-    
+
     lvcs.local_to_global(box.min_x(), box.max_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
     vnl_double_2 ul; ul[0] = lat; ul[1] = lon;
-    
+
     vcl_string box_id = iter->first.to_string();
     vcl_string desc = scene->data_path() + " block footprint";
     bkml_write::write_box(ofs, box_id, desc, ul, ur, ll, lr, color_hex.str());
@@ -737,7 +737,7 @@ bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
     vcl_vector<vil_image_view<float>*> & raydirs,
     vcl_vector<vil_image_view<float>*> & tfinals,
     int scale)
-{  
+{
     if (!vul_file::is_directory(depthdir))
     {
         vcl_cout<<"Directory is not valid"<<vcl_endl;
@@ -774,7 +774,7 @@ bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
         vil_image_view_base_sptr im = vil_load(depthfilename.c_str());
         if (vil_image_view<unsigned char> * depthimg = dynamic_cast<vil_image_view<unsigned char> *> (im.ptr()))
         {
-            int scaled_ni = depthimg->ni() /scale; 
+            int scaled_ni = depthimg->ni() /scale;
             int scaled_nj = depthimg->nj() / scale;
             vil_image_view<unsigned char> * scaled_depthimg = new  vil_image_view<unsigned char>(scaled_ni,scaled_nj);
             vil_resample_nearest<unsigned char,unsigned char>(*depthimg, *scaled_depthimg, scaled_ni, scaled_nj);
@@ -802,7 +802,7 @@ bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
                     (*tfinalimg)(i,j) = float(length);
                 }
             }
-            
+
             delete scaled_depthimg;
             raydirs.push_back(tdirimg);
             tfinals.push_back(tfinalimg);
