@@ -24,7 +24,7 @@ enum bstm_data_type
   BSTM_UNKNOWN
 };
 
-//: Pixel properties for templates.
+// Pixel properties for templates.
 template <bstm_data_type type>
 class bstm_data_traits;
 
@@ -94,7 +94,7 @@ class bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>
   { if (!identifier.size()) return "bstm_mog6_view_compact"; else return "bstm_mog6_view_compact_"+identifier; }
 };
 
-//: HACKY WAY TO GENERICALLY GET DATASIZES -
+// HACKY WAY TO GENERICALLY GET DATASIZES -
 class bstm_data_info
 {
  public:
@@ -116,7 +116,6 @@ class bstm_data_info
     return 0;
   }
 
-
   static bstm_data_type data_type(vcl_string prefix)
   {
     // some of them changed to using find method to account for identifiers
@@ -131,7 +130,6 @@ class bstm_data_info
     else
       return BSTM_UNKNOWN;
   }
-
 };
 
 
