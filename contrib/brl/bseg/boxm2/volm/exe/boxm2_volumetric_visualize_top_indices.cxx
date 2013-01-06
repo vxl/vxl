@@ -31,7 +31,7 @@ int main(int argc,  char** argv)
   vul_arg<float> buffer_capacity("-buff", "index buffer capacity (GB)",1.0f);
   vul_arg<vcl_string> top_matches_filename("-top", "top_match.txt file", "");  // composer will read the score files from this folder for this job
   vul_arg<vcl_string> rat_folder("-rat", "rationale folder", "");      // composer will write top 30 to this folder
-  
+
   vul_arg_parse(argc, argv);
 
   if (cam_file().compare("") == 0 || top_matches_filename().compare("") == 0 || label_file().compare("") == 0 || rat_folder().compare("") == 0 ) {
@@ -40,16 +40,16 @@ int main(int argc,  char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-  vcl_cout << "argc: " << argc << vcl_endl;
-  vcl_cout << " check input" << vcl_endl;
-  vcl_cout << " input camera file = " << cam_file() << vcl_endl;
-  vcl_cout << " input labemme file = " << label_file() << vcl_endl;
-  vcl_cout << " input whether to use default = " << use_default() << vcl_endl;
-  vcl_cout << " buffer_capacity = " << buffer_capacity() << vcl_endl;
-  vcl_cout << " top_matches = " << top_matches_filename() << vcl_endl;
-  vcl_cout << " output folder = " << rat_folder() << vcl_endl;
+  vcl_cout << "argc: " << argc << '\n'
+           << " check input" << '\n'
+           << " input camera file = " << cam_file() << '\n'
+           << " input labemme file = " << label_file() << '\n'
+           << " input whether to use default = " << use_default() << '\n'
+           << " buffer_capacity = " << buffer_capacity() << '\n'
+           << " top_matches = " << top_matches_filename() << '\n'
+           << " output folder = " << rat_folder() << vcl_endl;
 
-  // read the top 30 list 
+  // read the top 30 list
   vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > > top_matches;
   vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >::iterator top_matches_iter;
   volm_rationale::read_top_matches(top_matches, top_matches_filename());
@@ -64,14 +64,14 @@ int main(int argc,  char** argv)
     vcl_cerr << "ERROR: cannot read params file for " << r.index_file << '\n';
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_cout << " solid_angle = " << q_params.solid_angle << vcl_endl;
-  vcl_cout << " vmin = " << q_params.vmin << vcl_endl;
-  vcl_cout << " dmax = " << q_params.dmax << vcl_endl;
-  vcl_cout << " cap_angle = " << q_params.cap_angle << vcl_endl;
-  vcl_cout << " point_angle = " << q_params.point_angle << vcl_endl;
-  vcl_cout << " top_angle = " << q_params.top_angle << vcl_endl;
-  vcl_cout << " bottom_angle = " << q_params.bottom_angle << vcl_endl;
-  vcl_cout << " total number of indices = " << ei << vcl_endl;
+  vcl_cout << " solid_angle = " << q_params.solid_angle << '\n'
+           << " vmin = " << q_params.vmin << '\n'
+           << " dmax = " << q_params.dmax << '\n'
+           << " cap_angle = " << q_params.cap_angle << '\n'
+           << " point_angle = " << q_params.point_angle << '\n'
+           << " top_angle = " << q_params.top_angle << '\n'
+           << " bottom_angle = " << q_params.bottom_angle << '\n'
+           << " total number of indices = " << ei << vcl_endl;
   // create container and depth values
   volm_spherical_container_sptr sph = new volm_spherical_container(q_params.solid_angle,q_params.vmin,q_params.dmax);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, q_params.cap_angle, q_params.point_angle, q_params.top_angle, q_params.bottom_angle);
@@ -105,17 +105,17 @@ int main(int argc,  char** argv)
                << ",\t max_dpeth = " << (dm->ground_plane()[i])->max_depth()
                << ",\t order = " << (dm->ground_plane()[i])->order()
                << vcl_endl;
-    
+
   if (dm->scene_regions().size()) {
     for (unsigned i = 0; i < dm->scene_regions().size(); i++) {
       vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
-          << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
-          << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
-          << ",\t order = " << (dm->scene_regions())[i]->order()
-          << vcl_endl;
+               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
+               << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
+               << ",\t order = " << (dm->scene_regions())[i]->order()
+               << vcl_endl;
      }
   }
-  vcl_cout << " cam params\n\t heading: " << heading << " dev: " << heading_dev 
+  vcl_cout << " cam params\n\t heading: " << heading << " dev: " << heading_dev
            << "\n\t tilt: " << tilt << " dev: " << tilt_dev
            << "\n\t roll: " << roll << " dev: " << roll_dev
            << "\n\t top_fov: " << top_fov << " dev: " << top_fov_dev
@@ -125,13 +125,13 @@ int main(int argc,  char** argv)
            << " The query has " << query->get_cam_num() << " cameras: " << '\n'
            << " Generated query_size for 1 camera is " << query->get_query_size() << " byte, "
            << " gives total query size = " << query->get_cam_num() << " x " << query->get_query_size()
-           << " = " << (double)query->get_cam_num()*(double)query->get_query_size()/(1024*1024*1024) << " GB" 
+           << " = " << (double)query->get_cam_num()*(double)query->get_query_size()/(1024*1024*1024) << " GB"
            << " query image size: ni = " << (query->depth_scene())->ni() << " nj = " << (query->depth_scene())->ni()
            << vcl_endl;
 
   unsigned ni = (query->depth_scene())->ni();
   unsigned nj = (query->depth_scene())->nj();
-  
+
   // save top 30 index images
   // loop over top 30 list
   unsigned count = 0;
@@ -139,7 +139,7 @@ int main(int argc,  char** argv)
     volm_rationale r = top_matches_iter->second;
     vcl_string cam_postfix = query->get_cam_string(r.cam_id);
     vcl_cout << " top " << count << " score = " << top_matches_iter->first
-             << " index_id = " << r.index_id 
+             << " index_id = " << r.index_id
              << " camera_id = " << r.cam_id << " cam_param = " << cam_postfix
              << " index_file = " << r.index_file << vcl_endl;
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index((unsigned)(sph_shell->get_container_size()), buffer_capacity());
@@ -149,8 +149,8 @@ int main(int argc,  char** argv)
       ind->get_next(values);
     // print it out
 #if 0
-    vcl_cout << " ---------------- top " << count << " ---------------------------" << vcl_endl;
-    vcl_cout << "index for top " << count << vcl_endl;
+    vcl_cout << " ---------------- top " << count << " ---------------------------" << '\n'
+             << "index for top " << count << vcl_endl;
     for (unsigned i = 0; i < values.size(); i++) {
       vcl_cout << " top " << count << " -- index[" << i << "] = " << (int)values[i] << vcl_endl;
     }
@@ -173,7 +173,7 @@ int main(int argc,  char** argv)
     query->depth_rgb_image(values, r.cam_id, img);
     //save the image
     vcl_stringstream str;
-    str << rat_folder() + "/" << "index_top_" << count++ << cam_postfix << ".png";
+    str << rat_folder() + '/' << "index_top_" << count++ << cam_postfix << ".png";
     // save the images
     vil_save(img,(str.str()).c_str());
     ind->finalize();

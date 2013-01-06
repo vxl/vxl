@@ -52,7 +52,7 @@ int main(int argc,  char** argv)
     volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR, 100);
     return volm_io::LABELME_FILE_IO_ERROR;
   }
-  
+
   // read the input hyp and index file pairs, only from the image category
   vcl_ifstream input_fs(input_file().c_str());
   vcl_vector<vcl_string> hyp_files;
@@ -69,7 +69,7 @@ int main(int argc,  char** argv)
       break;
     if (region_type.compare(img_category) != 0)
       continue;
-      
+
     hyp_files.push_back(hyp_file);
     index_files.push_back(ind_file);
     ind_file = vul_file::strip_directory(ind_file);
@@ -97,8 +97,8 @@ int main(int argc,  char** argv)
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
 
   vul_timer t;
-  
-  // read top 30 from rationale folder 
+
+  // read top 30 from rationale folder
   vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > > top_matches;
   vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >::iterator iter;
 
@@ -110,34 +110,34 @@ int main(int argc,  char** argv)
   // need to read one index at a time
   // go through top matches and figure out index file names
   vcl_map<vcl_string, vcl_map<unsigned, volm_rationale> > temp;
-  for (iter = top_matches.begin(); iter != top_matches.end(); iter++) 
+  for (iter = top_matches.begin(); iter != top_matches.end(); iter++)
   {
     vcl_map<vcl_string, vcl_map<unsigned, volm_rationale> >::iterator it = temp.find(iter->second.index_file);
-    if (it == temp.end()) 
+    if (it == temp.end())
     {
       vcl_map<unsigned, volm_rationale> tmp;
       tmp[iter->second.index_id] = iter->second;
       temp[iter->second.index_file] = tmp;
-    } 
-    else 
+    }
+    else
     {
       it->second[iter->second.index_id] = iter->second;
     }
   }
-  
+
   for (vcl_map<vcl_string, vcl_map<unsigned, volm_rationale> >::iterator it = temp.begin(); it != temp.end(); it++)
   {
     boxm2_volm_wr3db_index_params params;
     params.read_params_file(it->first);
     unsigned long ind_size;
     boxm2_volm_wr3db_index_params::read_size_file(it->first, ind_size);
-    
+
     for (vcl_map<unsigned, volm_rationale>::iterator ii = it->second.begin(); ii != it->second.end(); ii++) {
       if (ii->first >= ind_size) {
-        vcl_cerr << "problem here, index: " << ii->first << " is greater than size of 
-        return false; 
+        vcl_cerr << "problem here, index: " << ii->first << " is greater than size of
+        return false;
       }
-    } 
+    }
 
     //: read and scale the scores from binary
     vsl_b_ifstream is(score_files[i].c_str());
@@ -241,21 +241,21 @@ int main(int argc,  char** argv)
     volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR, 100);
     return volm_io::LABELME_FILE_IO_ERROR;
   }
- 
+
   volm_loc_hyp hyp(hyp_file());
   vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file() << '\n';
- 
+
   double lat, lon, head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude;
   // load the camera kml, fetch the camera value and deviation
   volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude, lat, lon);
-  vcl_cout << "from camera file, read location: " << lat << " " << lon << '\n';
-  
+  vcl_cout << "from camera file, read location: " << lat << ' ' << lon << '\n';
+
   // figure out closest hypothesis
   vgl_point_3d<float> closest_h; unsigned closest_id;
   hyp.get_closest(lat, lon, closest_h, closest_id);
-  vcl_cout << "closest hypothesis to camera location has id: " << closest_id << " its lat, lon is: " << closest_h.y() << " " << closest_h.x() << vcl_endl;
-  vcl_cout << "CAUTION: this exe assumes that index file has params start = 0 and skip = 1, so the index id will be the same as hypothesis id in the index file!\n";
-  
+  vcl_cout << "closest hypothesis to camera location has id: " << closest_id << " its lat, lon is: " << closest_h.y() << ' ' << closest_h.x() << '\n'
+           << "CAUTION: this exe assumes that index file has params start = 0 and skip = 1, so the index id will be the same as hypothesis id in the index file!\n";
+
   // read the params of index 0, assume the container params are the same for all these indices
   boxm2_volm_wr3db_index_params q_params;
   if (!q_params.read_params_file(input_file())) {
@@ -269,12 +269,12 @@ int main(int argc,  char** argv)
   volm_spherical_container_sptr sph = new volm_spherical_container(q_params.solid_angle,q_params.vmin,q_params.dmax);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, q_params.cap_angle, q_params.point_angle, q_params.top_angle, q_params.bottom_angle);
   unsigned layer_size = sph_shell->get_container_size();
-  
+
   unsigned long ind_size;
   boxm2_volm_wr3db_index_params::read_size_file(input_file(), ind_size);
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, 1.0);
   ind->initialize_read(input_file());
-  
+
   vcl_vector<unsigned char> values(layer_size, 0);
   // read index file and get to closest id
   for (unsigned indIdx = 0; indIdx <= closest_id; indIdx++) {
@@ -296,7 +296,7 @@ int main(int argc,  char** argv)
   query->depth_rgb_image(values, 0, out_img);
   vcl_stringstream out_name; out_name << out_folder() << "/img_index_closest_id_" << closest_id << ".png";
   vil_save(out_img, out_name.str().c_str());
-  vcl_stringstream out_name2; 
+  vcl_stringstream out_name2;
   out_name2 << out_folder() << "/img_query_closest_id_" << closest_id << ".png";
   query->draw_query_image(0, out_name2.str().c_str());
 
