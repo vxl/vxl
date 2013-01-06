@@ -22,5 +22,3 @@ ADD_TEST( imesh_test_imls_surface         ${EXECUTABLE_OUTPUT_PATH}/imesh_test_a
 
 ADD_EXECUTABLE( imesh_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( imesh_test_include imesh )
-ADD_EXECUTABLE( imesh_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( imesh_test_template_include imesh )
