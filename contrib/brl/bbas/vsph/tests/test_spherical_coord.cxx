@@ -14,7 +14,7 @@ static void test_spherical_coord()
 
   // test the conversions
   // convert to cartesian coordinates
-  double theta=vnl_math::pi/4.0, phi=vnl_math::pi/4.0;
+  double theta=vnl_math::pi_over_4, phi=vnl_math::pi_over_4;
   vgl_point_3d<double> point = coord.cart_coord(theta,phi);
 
   // convert back to spherical
@@ -50,7 +50,7 @@ static void test_spherical_coord()
   // test cart(2, 2, 2)-->sp(3.464, 0.9553, 0.7854)
   vgl_point_3d<double> test_p4(2, 2, 2);
   vsph_sph_point_3d sp4;
-  point.set(3.464101615137754, 0.9553166181245092, 0.7853981633974483);
+  point.set(3.464101615137754, 0.9553166181245092, vnl_math::pi_over_4);
   coord.spherical_coord(test_p4, sp4);
   diff = vgl_distance(vgl_point_3d<double>(sp4.radius_,sp4.theta_,sp4.phi_), point);
   TEST_NEAR("Reverse Conversion 2", diff, 0.0, 1e-9);
