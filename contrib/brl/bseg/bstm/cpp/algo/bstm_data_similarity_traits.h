@@ -3,6 +3,7 @@
 
 #include <boxm2/boxm2_data_traits.h>
 #include <bstm/bstm_data_traits.h>
+#include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h> // needed for bstm_data_traits<BSTM_MOG3_GREY>::processor::*
 
 #define SIMILARITY_T 0.3
 
