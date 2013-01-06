@@ -11,7 +11,6 @@ bstm_time_tree::bstm_time_tree()
 {
   bits_ = new unsigned char[TT_NUM_BYTES];
   vcl_memset(bits_, 0, TT_NUM_BYTES);
-
 }
 
 //: copy constructor
@@ -37,10 +36,12 @@ int  bstm_time_tree::max_num_cells() const
 {
   return int(vcl_pow(2.0f,(float)num_levels_) - 1.0);
 }
+
 int bstm_time_tree::max_num_inner_cells() const
 {
   return int(vcl_pow(2.0f,(float)num_levels_-1) - 1.0);
 }
+
 int bstm_time_tree::depth_at(const int index) const
 {
   return (int)(vcl_log(index+1)/vcl_log(2));
@@ -118,12 +119,12 @@ int  bstm_time_tree::get_relative_index(int bit_index) const
   unsigned char temp = bits_[byte_index]>>sub_bit_index;
 
 #ifdef DEBUG
-  vcl_cout << "parent bit: " << (int)oneuplevel << vcl_endl;
-  vcl_cout << "count up tp parents bit: " << count << vcl_endl;
-  vcl_cout << "sub_bit_index: " << (int)sub_bit_index << vcl_endl;
-  vcl_cout << "bits_[byte_index]: " << (int)bits_[byte_index] << vcl_endl;
-  vcl_cout << "bits_[byte_index] (after shift): " << (int)temp << vcl_endl;
-  vcl_cout << "bit_lookup[temp]: " << (int)bit_lookup[temp] << vcl_endl;
+  vcl_cout << "parent bit: " << (int)oneuplevel << '\n'
+           << "count up tp parents bit: " << count << '\n'
+           << "sub_bit_index: " << (int)sub_bit_index << '\n'
+           << "bits_[byte_index]: " << (int)bits_[byte_index] << '\n'
+           << "bits_[byte_index] (after shift): " << (int)temp << '\n'
+           << "bit_lookup[temp]: " << (int)bit_lookup[temp] << vcl_endl;
 #endif
 
   count = count + bit_lookup[temp];
@@ -149,23 +150,22 @@ int bstm_time_tree::traverse(const double t, int deepest) const
   double range_max = cell_len(0);
 
   //if outside of range
-  if(t < range_min || t >= range_max)
+  if (t < range_min || t >= range_max)
     return -1;
 
   // while the curr node has children
   while (bit_at(bit_index) && depth < deepest ) {
-    if(t < range_min + (range_max-range_min)/2 )
+    if (t < range_min + (range_max-range_min)/2 )
       bit_index = (2*bit_index + 1);                      //left child
     else
       bit_index = (2*bit_index + 2);                      //right child
 
     depth++;
 
-    if(t < range_min + (range_max-range_min)/2 )
+    if (t < range_min + (range_max-range_min)/2 )
       range_max -= cell_len(bit_index);
     else
       range_min += cell_len(bit_index);
-
   }
   return bit_index;
 }
@@ -248,9 +248,9 @@ float bstm_time_tree::cell_len(int bit_index) const
     return 0.5;
   else if (bit_index<7)
     return 0.25;
-  else if(bit_index<15)
+  else if (bit_index<15)
     return 0.125;
-  else if(bit_index<31)
+  else if (bit_index<31)
     return 0.0625;
   else
     return 0.03125;
@@ -275,17 +275,18 @@ unsigned char bstm_time_tree::bit_lookup[] =
   4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8
 };
 
-float bstm_time_tree::cell_centers[]={
+float bstm_time_tree::cell_centers[]=
+{
+ 0.5,
+ 0.25, 0.75, 0.125, 0.375,
+ 0.625, 0.875, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875,
+ 0.8125, 0.9375, 0.03125, 0.09375, 0.15625, 0.21875, 0.28125, 0.34375, 0.40625, 0.46875, 0.53125, 0.59375, 0.65625, 0.71875, 0.78125, 0.84375,
+ 0.90625, 0.96875, 0.015625, 0.046875, 0.078125, 0.10938, 0.14062, 0.17188, 0.20312, 0.23438, 0.26562, 0.29688, 0.32812, 0.35938, 0.39062,
+ 0.42188, 0.45312, 0.48438, 0.51562, 0.54688, 0.57812, 0.60938, 0.64062, 0.67188, 0.70312, 0.73438, 0.76562, 0.79688, 0.82812, 0.85938, 0.89062,
+ 0.92188, 0.95312, 0.98438
+};
 
-0.5,
-0.25, 0.75, 0.125, 0.375,
-0.625, 0.875, 0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875,
-0.8125, 0.9375, 0.03125, 0.09375, 0.15625, 0.21875, 0.28125, 0.34375, 0.40625, 0.46875, 0.53125, 0.59375, 0.65625, 0.71875, 0.78125, 0.84375,
-0.90625, 0.96875, 0.015625, 0.046875, 0.078125, 0.10938, 0.14062, 0.17188, 0.20312, 0.23438, 0.26562, 0.29688, 0.32812, 0.35938, 0.39062,
-0.42188, 0.45312, 0.48438, 0.51562, 0.54688, 0.57812, 0.60938, 0.64062, 0.67188, 0.70312, 0.73438, 0.76562, 0.79688, 0.82812, 0.85938, 0.89062,
-0.92188, 0.95312, 0.98438};
-
-/*
+#if 0
 //------ I/O ----------------------------------------------------------
 vcl_ostream& operator <<(vcl_ostream &s, bstm_time_tree &t)
 {
@@ -308,4 +309,5 @@ vcl_ostream& operator <<(vcl_ostream &s, bstm_time_tree &t)
 
   return s;
 }
-*/
+#endif // 0
+
