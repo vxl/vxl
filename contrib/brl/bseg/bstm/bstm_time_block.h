@@ -50,13 +50,13 @@ class bstm_time_block : public vbl_ref_count
   boxm2_array_1d<uchar8>    get_cell_all_tt(int cell_data_offset);
 
   //: sets all time trees corresponding to a cell
-  void    set_cell_all_tt(int cell_data_offset, const boxm2_array_1d<uchar8>& input);
+  void                      set_cell_all_tt(int cell_data_offset, const boxm2_array_1d<uchar8>& input);
 
   //: sets a given time tree corresponding to a cell
-  void    set_cell_tt(int cell_data_offset, const uchar8& input, double local_t);
+  void                      set_cell_tt(int cell_data_offset, const uchar8& input, double local_t);
 
   //: returns the index of the time tree that contains the given local time [0,sub_block_num_t_)
-  unsigned 					        tree_index(double local_time);
+  unsigned int              tree_index(double local_time);
 
   //: all IO manipulates char buffers
   bool                      b_read(char* buffer);

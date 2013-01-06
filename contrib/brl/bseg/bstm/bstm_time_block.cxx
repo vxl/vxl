@@ -86,11 +86,9 @@ bstm_time_block::bstm_time_block(bstm_block_metadata data)
 }
 
 
-
 //: initializes empty scene
 bool bstm_time_block::init_empty_block()
 {
-
   //--- Now initialize blocks and their pointers --------- ---------------------
   //6. initialize blocks in order
   int tree_index = 0;
@@ -112,7 +110,7 @@ bool bstm_time_block::init_empty_block()
       ++tree_index;
     }
     else
-      vcl_cerr << "Only init level 1 is supported for time trees currently..." << vcl_endl;
+      vcl_cerr << "Only init level 1 is supported for time trees currently...\n";
 
     //store this tree in the buffer
     for (int i=0; i<TT_NUM_BYTES; i++)
@@ -130,8 +128,8 @@ vnl_vector_fixed<unsigned char, 8>&  bstm_time_block::get_cell_tt(int cell_data_
 
 void  bstm_time_block::set_cell_tt(int cell_data_offset, const uchar8& input, double local_t)
 {
-	unsigned index = tree_index(local_t);
-	time_trees_[cell_data_offset*sub_block_num_t_ + index] = input;
+  unsigned index = tree_index(local_t);
+  time_trees_[cell_data_offset*sub_block_num_t_ + index] = input;
 }
 
 
@@ -144,7 +142,7 @@ boxm2_array_1d<vnl_vector_fixed<unsigned char, 8> >  bstm_time_block::get_cell_a
 void bstm_time_block::set_cell_all_tt(int cell_data_offset, const boxm2_array_1d<uchar8>& input)
 {
   assert(input.size() == sub_block_num_t_);
-  for(unsigned i = 0; i < sub_block_num_t_; i++) //copy each tt
+  for (unsigned i = 0; i < sub_block_num_t_; i++) //copy each tt
     time_trees_[cell_data_offset*sub_block_num_t_ + i] = input[i];
 }
 

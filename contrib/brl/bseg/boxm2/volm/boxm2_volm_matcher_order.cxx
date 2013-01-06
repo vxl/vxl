@@ -29,7 +29,7 @@ boxm2_volm_matcher_order::boxm2_volm_matcher_order(volm_query_sptr query, boxm2_
       unsigned idx = i * cl_nj + k;
       queries_buff[idx] = (query_->min_dist())[i][k];
 #if 0
-      vcl_cout << " insider matcher, cam " << i 
+      vcl_cout << " insider matcher, cam " << i
                << ", --> query[" << k << "] = " << (int)(query_->min_dist())[i][k] << vcl_endl;
 #endif
     }
@@ -100,10 +100,10 @@ boxm2_volm_matcher_order::boxm2_volm_matcher_order(volm_query_sptr query, boxm2_
     delete weight_all_cl;
   }
 
-  vcl_cout << "  1. Transfering queries/order to 1D array for all devices --- \t" << transfer.all()/1000.0 << " seconds.\n";
-  vcl_cout << " \t query size = " << n_cam * n_vox / (1024*1024) << " MB\n";
-  vcl_cout << " \t order size = " << sizeof(unsigned) * n_cam * n_obj / (1024*1024) << " MB\n";
-  vcl_cout << " \t weight size = " << sizeof(float)*cl_ni / (1024*1024) << " MB" << vcl_endl;
+  vcl_cout << "  1. Transfering queries/order to 1D array for all devices --- \t" << transfer.all()/1000.0 << " seconds.\n"
+           << " \t query size = " << n_cam * n_vox / (1024*1024) << " MB\n"
+           << " \t order size = " << sizeof(unsigned) * n_cam * n_obj / (1024*1024) << " MB\n"
+           << " \t weight size = " << sizeof(float)*cl_ni / (1024*1024) << " MB" << vcl_endl;
 
   // compile kernel
   vcl_string identifier = gpu_->device_identifier();
@@ -159,7 +159,7 @@ bool boxm2_volm_matcher_order::create_order_array()
   order_buff = new unsigned[order_size];
   for (unsigned i = 0; i < order_size; i++)
     order_buff[i] = order_all[i];
-  
+
   // create bocl_mem for order and order_offset
   order_cl = new bocl_mem(gpu_->context(), order_buff, sizeof(unsigned)*order_size, " order " );
   if (!order_cl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
@@ -299,7 +299,7 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
       return false;
     }
     gpu_time_min_dist += kernels[identifier][0]->exec_time();
-    
+
     // execute kernel for order matching
     float* score_order_buff = new float[n_cam];
     bocl_mem* score_order_cl = new bocl_mem(device->context(), score_order_buff, sizeof(float)*n_cam, " score_order " );
@@ -330,10 +330,10 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
 #if 0
     // read to host
     score_order_cl->read_to_buffer(queue);
-    vcl_cout << "\n ------ score for order matcher ---- " << vcl_endl;
+    vcl_cout << "\n ------ score for order matcher ----" << vcl_endl;
     for (unsigned cam_id = 0; cam_id < n_cam; cam_id++) {
-      if( cam_id == 167 ){
-        vcl_cout << " index " << ind_idx << ", cam_id = " << cam_id 
+      if ( cam_id == 167 ){
+        vcl_cout << " index " << ind_idx << ", cam_id = " << cam_id
                  << " , score_order[ " << cam_id << "] = " << score_order_buff[cam_id] << vcl_endl;
       }
     }
@@ -368,9 +368,9 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
 
 #if 0
     // read to host
-    vcl_cout << "\n ------ score for min_dist matcher ---- " << vcl_endl;
+    vcl_cout << "\n ------ score for min_dist matcher ----" << vcl_endl;
     for (unsigned cam_id = 0; cam_id < n_cam; cam_id++) {
-        vcl_cout << " index " << ind_idx << ", cam_id = " << cam_id 
+        vcl_cout << " index " << ind_idx << ", cam_id = " << cam_id
                  << " , score_total[ " << cam_id << "] = " << score_cam_buff[cam_id] << vcl_endl;
     }
 #endif
@@ -388,7 +388,7 @@ bool boxm2_volm_matcher_order::matching_cost_layer_order()
       if (current_score > max_score) {
         max_score = current_score;
         max_cam_id = k;
-      } 
+      }
     }
     score_all_.push_back(max_score);
     cam_all_id_.push_back(max_cam_id);
@@ -503,7 +503,7 @@ bool boxm2_volm_matcher_order::execute_match_kernel_order_order(bocl_device_sptr
   kern->set_arg(order_size);
   kern->set_arg(score_order);
   kern->set_arg(debug_out);
-  // execture kernel
+  // execute kernel
   if (!kern->execute(queue, 1, &local_threads_order, &global_threads_order)) {
     delete debug_out;
     delete [] debug_buff;
@@ -512,7 +512,7 @@ bool boxm2_volm_matcher_order::execute_match_kernel_order_order(bocl_device_sptr
 #if 0
   // read debug from device
   debug_out->read_to_buffer(queue);
-  vcl_cout << "\n ------- order_debug ------ " << vcl_endl;
+  vcl_cout << "\n ------- order_debug ------" << vcl_endl;
   for (unsigned i = 0; i < 8; i++) {
       vcl_cout << " debug_output[" << i << "] = " << debug_buff[i] << vcl_endl;
   }
@@ -532,7 +532,7 @@ bool boxm2_volm_matcher_order::execute_match_kernel_order_order(bocl_device_sptr
 bool boxm2_volm_matcher_order::execute_weight_sum_kernel_order(bocl_device_sptr device,
                                                                cl_command_queue& queue,
                                                                bocl_mem* score,
-															   bocl_mem* index,
+                                                               bocl_mem* index,
                                                                bocl_mem* score_order,
                                                                bocl_mem* weight_all,
                                                                bocl_mem* voxel_size,
@@ -578,7 +578,7 @@ bool boxm2_volm_matcher_order::write_score_order(vcl_string const& out_prefix)
   vcl_string out_score = out_prefix + "_score.bin";
   vsl_b_ofstream os(out_score.c_str());
   if (!os) {
-    vcl_cerr << " writing score.bin failed " << vcl_endl;
+    vcl_cerr << " writing score.bin failed\n";
     return false;
   }
 
@@ -591,7 +591,7 @@ bool boxm2_volm_matcher_order::write_score_order(vcl_string const& out_prefix)
   vcl_string out_cam = out_prefix + "_camera.bin";
   vsl_b_ofstream osc(out_cam.c_str());
   if (!osc) {
-    vcl_cerr << " writing camera.bin failed " << vcl_endl;
+    vcl_cerr << " writing camera.bin failed\n";
     return false;
   }
   for (unsigned i = 0; i < cam_all_id_.size(); i++)
@@ -602,14 +602,13 @@ bool boxm2_volm_matcher_order::write_score_order(vcl_string const& out_prefix)
 
 bool boxm2_volm_matcher_order::write_all_score(vcl_string const& out_prefix)
 {
-
   // output all scores
   vcl_stringstream ss;
   ss << out_prefix << "_score_all_cam.bin" ;
   vcl_string fname = ss.str();
   vsl_b_ofstream os(fname.c_str());
   if (!os) {
-    vcl_cerr << " writing " << fname << " failed " << vcl_endl;
+    vcl_cerr << " writing " << fname << " failed\n";
   }
   for (vcl_vector<boxm2_volm_score>::iterator iter = index_score.begin(); iter != index_score.end(); ++iter) {
     vsl_b_write(os, (*iter).ind_id);
@@ -631,7 +630,7 @@ bool boxm2_volm_matcher_order::write_all_score(vcl_string const& out_prefix)
     vcl_string fname = ss.str();
     vsl_b_ofstream os(fname.c_str());
     if (!os) {
-      vcl_cerr << " writing " << fname << " failed " << vcl_endl;
+      vcl_cerr << " writing " << fname << " failed\n";
       return false;
     }
     vcl_vector<boxm2_volm_score> score_fov_vec = iter_map->second;
