@@ -1,5 +1,5 @@
-#ifndef bstm_ingest_boxm2_scene_function_h
-#define bstm_ingest_boxm2_scene_function_h
+#ifndef bstm_ingest_boxm2_scene_function_h_
+#define bstm_ingest_boxm2_scene_function_h_
 //:
 // \file
 
@@ -22,27 +22,26 @@
 #include <bstm/cpp/algo/bstm_data_similarity_traits.h>
 
 
-
 template <bstm_data_type APM_TYPE, boxm2_data_type BOXM2_APM_TYPE>
 class bstm_ingest_boxm2_scene_function
 {
-  public:
+ public:
 
-    typedef unsigned char uchar;
-    typedef unsigned short ushort;
-    typedef vnl_vector_fixed<uchar, 16> uchar16;
-    typedef vnl_vector_fixed<uchar, 8> uchar8;
-    typedef vnl_vector_fixed<ushort, 4> ushort4;
+   typedef unsigned char uchar;
+   typedef unsigned short ushort;
+   typedef vnl_vector_fixed<uchar, 16> uchar16;
+   typedef vnl_vector_fixed<uchar, 8> uchar8;
+   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
-     //: "default" constructor does all the work
-     bstm_ingest_boxm2_scene_function(bstm_block* blk,bstm_time_block* blk_t, vcl_map<vcl_string, bstm_data_base*> & datas,
-         boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double local_time);
+   //: "default" constructor does all the work
+   bstm_ingest_boxm2_scene_function(bstm_block* blk,bstm_time_block* blk_t, vcl_map<vcl_string, bstm_data_base*> & datas,
+                                    boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double local_time);
 
-  private:
+ private:
 
    //: initialize generic data base pointers as their data type
    bool init_data(bstm_block* blk,bstm_time_block* blk_t,  vcl_map<vcl_string, bstm_data_base*> & datas,
-                     boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double time);
+                  boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double time);
 
    //main functions
    bool ingest();  //inserts the boxm2 data into bstm blk
@@ -58,12 +57,13 @@ class bstm_ingest_boxm2_scene_function
 
    //: refines all the time trees of a given cell, based on the boxm2 data input.
    void refine_all_time_trees(int bstm_data_offset,int boxm2_data_offset, int* dataIndex, int& currIndex, int& dataSize,
-                                 int currDepth, int currDepth_boxm2, bool is_leaf);
+                              int currDepth, int currDepth_boxm2, bool is_leaf);
 
    //: moves the data of all time trees of a given cell. Copies data from parents and places the boxm2 data to current time cell.
    int move_all_time_trees_data( boxm2_array_1d<uchar8>& time_trees_blk_copy,
-                                         int bstm_data_offset,int boxm2_data_offset, int* dataIndex, int& currIndex,
-                                         bstm_data_traits<BSTM_ALPHA>::datatype*  alpha_cpy, typename bstm_data_traits<APM_TYPE>::datatype * apm_cpy, int depth_diff);
+                                 int bstm_data_offset,int boxm2_data_offset, int* dataIndex, int& currIndex,
+                                 bstm_data_traits<BSTM_ALPHA>::datatype*  alpha_cpy,
+                                 typename bstm_data_traits<APM_TYPE>::datatype * apm_cpy, int depth_diff);
 
    //: moves the data from the old time tree to the new time tree
    int move_data(bstm_time_tree& unrefined_tree, bstm_time_tree& refined_tree, bstm_data_traits<BSTM_ALPHA>::datatype*  alpha_cpy, typename bstm_data_traits<APM_TYPE>::datatype * apm_cpy);
@@ -109,4 +109,4 @@ class bstm_ingest_boxm2_scene_function
 };
 
 
-#endif //bstm_ingest_boxm2_scene_function
+#endif // bstm_ingest_boxm2_scene_function_h_

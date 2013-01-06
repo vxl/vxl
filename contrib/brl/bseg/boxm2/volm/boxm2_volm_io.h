@@ -38,5 +38,4 @@ void vsl_b_read(vsl_b_istream& is, boxm2_volm_loc_hypotheses_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, boxm2_volm_loc_hypotheses_sptr const& sptr);
 
 
-#endif // boxm2_volm_loc_hypotheses_h_
-
+#endif // boxm2_volm_io_h_
