@@ -76,8 +76,8 @@ IF(NOT VXL_USING_NATIVE_PNG)
     #  set_target_properties(${PNG_LIB_NAME} PROPERTIES IMPORT_PREFIX "lib")
     #endif()
 
-    # With cygwin, the there are multiple user configurations
-    # possible. From pngconf.h:
+    # With cygwin, there are multiple user configurations possible.
+    # From pngconf.h:
     #     'Cygwin' defines/defaults:
     #       PNG_BUILD_DLL -- building the dll
     #       (no define)   -- building an application, linking to the dll
