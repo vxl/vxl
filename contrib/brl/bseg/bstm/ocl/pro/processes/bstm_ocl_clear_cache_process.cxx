@@ -1,4 +1,4 @@
-// This is brl/bseg/bstm/ocl/pro/processes/bstm_clear_opencl_cache_process.cxx
+// This is brl/bseg/bstm/ocl/pro/processes/bstm_ocl_clear_cache_process.cxx
 //:
 // \file
 

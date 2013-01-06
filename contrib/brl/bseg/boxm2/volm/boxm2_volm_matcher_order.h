@@ -1,4 +1,4 @@
-//This is brl/bseg/boxm2/volm/boxm2_volm_matcher.h
+// This is brl/bseg/boxm2/volm/boxm2_volm_matcher_order.h
 #ifndef boxm2_volm_matcher_order_h_
 #define boxm2_volm_matcher_order_h_
 //:
@@ -27,7 +27,7 @@ class boxm2_volm_score;
 
 class boxm2_volm_matcher_order
 {
-public:
+ public:
   //: default constructor
   boxm2_volm_matcher_order(){}
   //: constructor
@@ -43,8 +43,8 @@ public:
   //: create queue, bocl_mem for queries
   bool setup_queue_order();
   //: execute kernel for the min_dist matching
-  bool execute_match_kernel_min_dist_order(bocl_device_sptr device, 
-                                           cl_command_queue& queue, 
+  bool execute_match_kernel_min_dist_order(bocl_device_sptr device,
+                                           cl_command_queue& queue,
                                            bocl_mem* query,
                                            bocl_mem* score,
                                            bocl_mem* index,
@@ -72,7 +72,7 @@ public:
   //: main process to streaming indices into kernel
   bool matching_cost_layer_order();
   //: Binary score to stream.
-  //: write the top30 score among all location and all cameras
+  //  Write the top30 score among all location and all cameras
   bool write_score_order(vcl_string const& out_file);
   //: write score for all indices and all cameras, stored associated with the top field of view
   bool write_all_score(vcl_string const& out_prefix);
@@ -96,17 +96,17 @@ public:
   unsigned int cl_ni;
   unsigned int cl_nj;
   cl_uint work_dim;
-  
+
   vcl_size_t local_threads[2];
   //: work item size for min_dist kernel row -- camera; col -- voxels
   vcl_size_t global_threads[2];
 
   //: buffer definition for cost kernel
   cl_command_queue queue;
-  
+
   bocl_mem* query_cl;
   unsigned char* queries_buff;
-  
+
   bocl_mem* order_cl;
   unsigned* order_buff;
 
@@ -129,7 +129,7 @@ public:
 
 class boxm2_volm_score
 {
-public:
+ public:
   boxm2_volm_score() {}
   boxm2_volm_score(unsigned const& index_id, unsigned const& camera_id, float const& current_score)
     : ind_id(index_id), cam_id(camera_id), score(current_score) {}
@@ -139,4 +139,4 @@ public:
   float score;       // score for current index and current camera
 };
 
-#endif  // boxm2_volm_matcher_h_
+#endif  // boxm2_volm_matcher_order_h_

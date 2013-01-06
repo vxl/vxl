@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_view_based_update.cxx
+// This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_update_view_dep_app.cxx
 #include "boxm2_ocl_update_view_dep_app.h"
 //:
 // \file
@@ -25,16 +25,16 @@ vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_view_dep_app::ker
 
 //Main public method, updates color model
 bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
-                              bocl_device_sptr         device,
-                              boxm2_opencl_cache_sptr  opencl_cache,
-                              vpgl_camera_double_sptr  cam,
-                              vil_image_view_base_sptr img,
-                              vcl_string               ident,
-                              vil_image_view_base_sptr mask_sptr,
-                              bool                     update_alpha,
-                              float                    mog_var,
-                              vcl_size_t               startI,
-                              vcl_size_t               startJ)
+                                           bocl_device_sptr         device,
+                                           boxm2_opencl_cache_sptr  opencl_cache,
+                                           vpgl_camera_double_sptr  cam,
+                                           vil_image_view_base_sptr img,
+                                           vcl_string               ident,
+                                           vil_image_view_base_sptr mask_sptr,
+                                           bool                     update_alpha,
+                                           float                    mog_var,
+                                           vcl_size_t               startI,
+                                           vcl_size_t               startJ)
 {
   enum {
     UPDATE_SEGLEN = 0,
@@ -517,10 +517,10 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app::get_kernels(bocl_device
 
 //makes sure appearance types correspond correctly
 bool boxm2_ocl_update_view_dep_app::validate_appearances(boxm2_scene_sptr scene,
-                                            vcl_string& data_type,
-                                            int& appTypeSize,
-                                            vcl_string& num_obs_type,
-                                            vcl_string& options)
+                                                         vcl_string& data_type,
+                                                         int& appTypeSize,
+                                                         vcl_string& num_obs_type,
+                                                         vcl_string& options)
 {
   vcl_vector<vcl_string> apps = scene->appearances();
   bool foundDataType = false, foundNumObsType = false;
