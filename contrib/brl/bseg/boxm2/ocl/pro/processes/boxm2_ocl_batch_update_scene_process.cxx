@@ -2,12 +2,13 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief   This process updates the scene (alphas and mogs) given the expectations from all the images. Namely, the process expects to find
-//          the output of boxm2_ocl_compute_expectation_per_view_process for each image. The updates to the alpha and mog are done separately,
-//          in two optimizations. The alpha computation is done through gradient descent (newton's method). The mog computation is done through
-//          expectation-maximization of weighted samples. These computations correspond to performing a single M-step in EM style batch updating.
+// \brief This process updates the scene (alphas and mogs) given the expectations from all the images.
+//  Namely, the process expects to find
+//  the output of boxm2_ocl_compute_expectation_per_view_process for each image. The updates to the alpha and mog are done separately,
+//  in two optimizations. The alpha computation is done through gradient descent (newton's method). The mog computation is done through
+//  expectation-maximization of weighted samples. These computations correspond to performing a single M-step in EM style batch updating.
 //
-//          Important: MAX_OBS_PER_CELL must be bigger than the defined number in weighted_em.cl
+//  Important: MAX_OBS_PER_CELL must be bigger than the defined number in weighted_em.cl
 //
 // \author Ali Osman Ulusoy
 // \date Jun 12, 2012
@@ -78,7 +79,7 @@ namespace boxm2_ocl_batch_update_scene_process_globals
         if (buffer == 0) vcl_cout<<"Failed to Allocate Memory"<<vcl_endl;
         vcl_ifstream ifs;
         ifs.open(filename.c_str(), vcl_ios::in | vcl_ios::binary);
-        if (!ifs) vcl_cerr << "Failed to open file " << filename << vcl_endl;
+        if (!ifs) vcl_cerr << "Failed to open file " << filename << '\n';
         ifs.read(buffer, vul_file::size(filename));
         map[image_ids[j]] = buffer;
       }
@@ -247,7 +248,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
 
       //snap over each voxel
       unsigned max_obs_per_cell = 0;
-      for(unsigned s = 0; s < datasize; s++)
+      for (unsigned s = 0; s < datasize; s++)
       {
         sampleIndex[s] = currIdx;
 
@@ -261,7 +262,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
         {
           unsigned int index  = indices[(datasize)*k+s];
           unsigned int obs_num  = nobs[(datasize)*k+s];
-          if(obs_num == 0)
+          if (obs_num == 0)
             continue;
 
           boxm2_data_traits<BOXM2_EXPECTATION>::datatype* exp_imgK = (boxm2_data_traits<BOXM2_EXPECTATION>::datatype*) (expectations[image_ids[k]]);
@@ -269,14 +270,14 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
           boxm2_data_traits<BOXM2_AUX2>::datatype* pre_exp_imgK = (boxm2_data_traits<BOXM2_AUX2>::datatype*) (pre_expectations[image_ids[k]]);
           boxm2_data_traits<BOXM2_AUX3>::datatype* seglen_imgK = (boxm2_data_traits<BOXM2_AUX3>::datatype*) (seglens[image_ids[k]]);
 
-          if(exp_imgK == 0 || obs_imgK == 0) {
-            vcl_cerr << "ERROR!!!! exp/obs arrays empty..." << vcl_endl;
+          if (exp_imgK == 0 || obs_imgK == 0) {
+            vcl_cerr << "ERROR!!!! exp/obs arrays empty..." << '\n';
             continue;
           }
 
-          for(unsigned int l = 0; l < obs_num; l++)
+          for (unsigned int l = 0; l < obs_num; l++)
           {
-            if(exp_imgK[index+l] >= 0 && seglen_imgK[index+l] > 1.0e-07) //add (exp,obs) only if worthwhile
+            if (exp_imgK[index+l] >= 0 && seglen_imgK[index+l] > 1.0e-07) //add (exp,obs) only if worthwhile
             {
               exp_all.push_back(exp_imgK[index+l] );
               obs_all.push_back(obs_imgK[index+l] );
@@ -290,11 +291,10 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
               currIdx++;
               obs_per_cell++;
             }
-
           }
         }
 
-        if(max_obs_per_cell < obs_per_cell)
+        if (max_obs_per_cell < obs_per_cell)
           max_obs_per_cell  = obs_per_cell;
       }
       vcl_cout << "Max obs per cell: " << max_obs_per_cell << vcl_endl;
@@ -303,7 +303,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
       //delete expectations and pixels
       for (short k = 0; k < num_imgs; k++)
       {
-        if(expectations[image_ids[k]]) {
+        if (expectations[image_ids[k]]) {
           delete[] expectations[image_ids[k]];
           delete[] pixels[image_ids[k]];
           delete[] pre_expectations[image_ids[k]];
@@ -340,10 +340,9 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
 
       for (unsigned int i=0; i<kernels[identifier].size(); i++)
       {
-
         bocl_kernel* kern =  kernels[identifier][i];
 
-        if(i == COMPUTE_ALPHA)
+        if (i == COMPUTE_ALPHA)
         {
           vul_timer transfer;
 
@@ -395,11 +394,9 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
           //clear aux data
           opencl_cache->unref_mem(bocl_data_type0.ptr());
           opencl_cache->unref_mem(bocl_data_type2.ptr());
-
         }
-        else if(i == COMPUTE_MOG)
+        else if (i == COMPUTE_MOG)
         {
-
           vul_timer transfer;
 
           //allocate mem on gpu.
@@ -449,7 +446,6 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
           opencl_cache->unref_mem(bocl_data_type0.ptr());
           opencl_cache->unref_mem(bocl_data_type2.ptr());
         }
-
       }
       delete[] sampleIndex;
       delete[] weighted_pre_exp_sum;
@@ -458,10 +454,10 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
       delete[] exp_sum;
   }
 
-  vcl_cout << "Alpha transfer time: " << alpha_transfer_time << vcl_endl;
-  vcl_cout << "Mog transfer time: " << mog_transfer_time << vcl_endl;
-  vcl_cout << "Alpha kernel time: " << alpha_kernel_time << vcl_endl;
-  vcl_cout << "Mog kernel time: " << mog_kernel_time << vcl_endl;
+  vcl_cout << "Alpha transfer time: " << alpha_transfer_time << '\n'
+           << "Mog transfer time: " << mog_transfer_time << '\n'
+           << "Alpha kernel time: " << alpha_kernel_time << '\n'
+           << "Mog kernel time: " << mog_kernel_time << vcl_endl;
   clReleaseCommandQueue(queue);
 
   vcl_cout << vcl_endl << "EM M-STEP DONE." << vcl_endl;

@@ -1,14 +1,13 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_compute_expectation_per_view_process.cxx
 //:
 // \file
-// \brief   This process computes the expectation (probability that voxel produced the intensity along the ray) of each voxel along
-//          image rays. Its main purpose is to save the expectation in BOXM2_EXPECTATION as well as the intensity observed in BOXM2_PIXEL.
-//          The process accounts for the variable number of rays that pass through a voxel by keeping this information in BOXM2_NUM_OBS_SINGLE_INT.
-//          Once the total number of rays in all voxels is known, it allocates appropriately sized buffers to hold BOXM2_EXPECTATION and BOXM2_PIXEL.
-//          The data start indices of each voxel is saved in BOXM2_DATA_INDEX, which together with BOXM2_NUM_OBS_SINGLE_INT, describe the data layout.
-//          Furthermore, the process also saves segment lengths of each ray (BOXM2_AUX3) and the sum of expectations prior to the voxel
-//          (BOXM2_AUX2), via the same method. These quantities will be used to update the scene in boxm2_ocl_batch_update_scene_process.
-//
+// \brief   This process computes the expectation (probability that voxel produced the intensity along the ray) of each voxel along image rays.
+//  Its main purpose is to save the expectation in BOXM2_EXPECTATION as well as the intensity observed in BOXM2_PIXEL.
+//  The process accounts for the variable number of rays that pass through a voxel by keeping this information in BOXM2_NUM_OBS_SINGLE_INT.
+//  Once the total number of rays in all voxels is known, it allocates appropriately sized buffers to hold BOXM2_EXPECTATION and BOXM2_PIXEL.
+//  The data start indices of each voxel is saved in BOXM2_DATA_INDEX, which together with BOXM2_NUM_OBS_SINGLE_INT, describe the data layout.
+//  Furthermore, the process also saves segment lengths of each ray (BOXM2_AUX3) and the sum of expectations prior to the voxel
+//  (BOXM2_AUX2), via the same method. These quantities will be used to update the scene in boxm2_ocl_batch_update_scene_process.
 //
 // \author Ali Osman Ulusoy
 // \date Jun 12, 2012
@@ -51,7 +50,6 @@ namespace boxm2_ocl_compute_expectation_per_view_process_globals
 
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
   {
-
     //gather all render sources... seems like a lot for rendering...
     vcl_vector<vcl_string> src_paths;
     vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
@@ -179,8 +177,6 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
     }
   }
 
-
-
   bool foundDataType = false;
   vcl_string data_type,num_obs_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
@@ -247,7 +243,6 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
   }
 
 
-
   float* input_buff=new float[cl_ni*cl_nj];
   //copy input vals into image
   int count=0;
@@ -256,7 +251,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
       input_buff[count] = 0.0f;
       if ( i<img_view->ni() && j< img_view->nj() )
       {
-        if(use_mask)
+        if (use_mask)
         {
           if ((*mask_map)(i,j) > 0 )
             input_buff[count] = (*img_view)(i,j);
@@ -319,8 +314,8 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels[identifier].size(); i++)
   {
-    vcl_cout << "Running kernel no " << i << vcl_endl;
-    vcl_cout << "==================================" << vcl_endl;
+    vcl_cout << "Running kernel no " << i << '\n'
+             << "==================================" << vcl_endl;
 
     if ( i == REINIT_VIS ) {
       bocl_kernel * proc_kern=kernels[identifier][i];
@@ -351,7 +346,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
 
       float expectation_sum = 0;
       for (unsigned int i=0;i<cl_ni*cl_nj;++i) {
-          if(exp_denom_buff[i] > 0)
+          if (exp_denom_buff[i] > 0)
             expectation_sum += vcl_log(exp_denom_buff[i]);
       }
       pro.set_output_val<float>(1, expectation_sum);
@@ -387,7 +382,6 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
       transfer_time += (float) transfer.all();
       if (i==COMPUTE_SEGLEN)
       {
-
         int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix());
         bocl_mem* num_obs_single   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(suffix),info_buffer->data_buffer_length*nobsTypeSize,false);
 
@@ -431,7 +425,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         unsigned int * nobs =static_cast<unsigned int*> (num_obs_single->cpu_buffer());
         unsigned int * currIdx_buf =static_cast<unsigned int*> (currIdx->cpu_buffer());
         unsigned int total_num_rays = 0;
-        for(unsigned int i = 0; i < info_buffer->data_buffer_length; i++)
+        for (unsigned int i = 0; i < info_buffer->data_buffer_length; i++)
         {
           currIdx_buf[i] = total_num_rays;
           total_num_rays += nobs[i];
@@ -452,7 +446,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         int seglenTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
         bocl_mem* all_seglen = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix),total_num_rays*seglenTypeSize,false);
       }
-      else if(i == COMPUTE_EXPSUM)
+      else if (i == COMPUTE_EXPSUM)
       {
         kern->set_arg( blk_info );
         kern->set_arg( blk );
@@ -483,7 +477,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         exp_denom_image->read_to_buffer(queue);
         vis_image->read_to_buffer(queue);
       }
-      else if(i == COMPUTE_EXPECTATION)
+      else if (i == COMPUTE_EXPECTATION)
       {
         bocl_mem* all_obs     = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_PIXEL>::prefix(suffix));
         bocl_mem* all_exp     = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_EXPECTATION>::prefix(suffix));
@@ -544,9 +538,8 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         all_obs->read_to_buffer(queue);
         all_pre_exp->read_to_buffer(queue);
         all_seglen->read_to_buffer(queue);
-
       }
-      else if(i == CONVERT_EXP)
+      else if (i == CONVERT_EXP)
       {
         bocl_mem* all_exp     = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_EXPECTATION>::prefix(suffix));
         unsigned int total_num_rays = all_exp->num_bytes() /  sizeof(boxm2_data_traits<BOXM2_EXPECTATION>::datatype);
@@ -585,10 +578,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
 
       clFinish(queue);
     }
-
   }
-
-
 
   vcl_cout << "Done." << vcl_endl;
 
