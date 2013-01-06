@@ -1,7 +1,7 @@
 #
 # Root vxl
 #
-#   geoff.cross@crd.ge.com
+#   vxl-maintainers@lists.sf.net
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
 
@@ -9,6 +9,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
 IF( COMMAND CMAKE_POLICY )
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF( COMMAND CMAKE_POLICY )
+
+# CMake 2.8 stuff
+SET( CMAKE_LEGACY_CYGWIN_WIN32 0 ) # Remove when CMake >= 2.8.4 is required
 
 PROJECT(vxl)
 
@@ -89,6 +92,7 @@ OPTION( BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" YES )
 OPTION( BUILD_CORE_UTILITIES "Build VXL's utility libraries" YES )
 OPTION( BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" YES )
 OPTION( BUILD_CORE_IMAGING "Build VXL's imaging libraries" YES )
+OPTION( BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" NO )
 IF(BUILD_CORE_NUMERICS)
   IF( BUILD_FOR_VXL_DASHBOARD )
     OPTION( BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" YES )
@@ -120,8 +124,7 @@ ENDIF (VXL_LEGACY_ERROR_REPORTING)
 OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer actively maintained?" ${YES_FOR_DASHBOARD} )
 
 # Option to build Windows Unicode support, the string
-# type of which is wchar_t, each character is a 16-bit unsigned integer. 
-# 
+# type of which is wchar_t, each character is a 16-bit unsigned integer.
 IF(WIN32)
   IF(VXL_HAS_WIN_WCHAR_T)
     OPTION( VXL_USE_WIN_WCHAR_T "Build overloading functions that accept Windows wide char strings?" YES )
@@ -188,7 +191,7 @@ IF(VXL_NO_CMAKE_CONFIGURE)
   IF(WIN32)
     IF(NOT CYGWIN)
       SET(VCL_INCLUDE_DIR ${vxl_SOURCE_DIR}/vcl/config.win32 ${VCL_INCLUDE_DIR})
-      SET(VCL_INSTALL_INCLUDE_DIR 
+      SET(VCL_INSTALL_INCLUDE_DIR
         ${CMAKE_INSTALL_PREFIX}/include/vcl/config.win32
         ${VCL_INSTALL_INCLUDE_DIR}
       )
