@@ -18,42 +18,46 @@
 ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 
 # A. using vil_image_view<T> as 2D storage class:
-ADD_EXECUTABLE(vipl_example_convert example_convert.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_convert vipl vil )
+IF (BUILD_CORE_IMAGING)
+  ADD_EXECUTABLE(vipl_example_convert example_convert.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example_convert vipl vil )
 
-ADD_EXECUTABLE(vipl_example_add_random_noise example_add_random_noise.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_add_random_noise vipl vil )
+  ADD_EXECUTABLE(vipl_example_add_random_noise example_add_random_noise.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example_add_random_noise vipl vil )
 
-ADD_EXECUTABLE(vipl_example_std_dev example_std_dev.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_std_dev vipl vil )
+  ADD_EXECUTABLE(vipl_example_std_dev example_std_dev.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example_std_dev vipl vil )
 
-ADD_EXECUTABLE(vipl_example1_threshold example1_threshold.cxx)
-TARGET_LINK_LIBRARIES( vipl_example1_threshold vipl vil )
-
+  ADD_EXECUTABLE(vipl_example1_threshold example1_threshold.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example1_threshold vipl vil )
+ENDIF (BUILD_CORE_IMAGING)
 
 # B. using vil1_image as 2D storage class:
-ADD_EXECUTABLE(vipl_example4_threshold example4_threshold.cxx)
-TARGET_LINK_LIBRARIES( vipl_example4_threshold vipl vil1 )
-
+IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
+  ADD_EXECUTABLE(vipl_example4_threshold example4_threshold.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example4_threshold vipl vil1 )
+ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
 
 # C. using vnl_matrix<T> as 2D storage class:
-ADD_EXECUTABLE(vipl_example3_threshold example3_threshold.cxx)
-TARGET_LINK_LIBRARIES( vipl_example3_threshold vipl vnl )
+IF (BUILD_CORE_NUMERICS)
+  ADD_EXECUTABLE(vipl_example3_threshold example3_threshold.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example3_threshold vipl vnl )
 
-ADD_EXECUTABLE(vipl_example_median example_median.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_median vipl vnl )
+  ADD_EXECUTABLE(vipl_example_median example_median.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example_median vipl vnl )
 
-ADD_EXECUTABLE(vipl_example_gaussian_convolution example_gaussian_convolution.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_gaussian_convolution vipl vnl )
-
+  ADD_EXECUTABLE(vipl_example_gaussian_convolution example_gaussian_convolution.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example_gaussian_convolution vipl vnl )
+ENDIF (BUILD_CORE_NUMERICS)
 
 # D. using vbl_array_2d<T> as 2D storage class:
-ADD_EXECUTABLE(vipl_example_gradient_mag example_gradient_mag.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_gradient_mag vipl vbl )
+IF (BUILD_CORE_UTILITIES)
+  ADD_EXECUTABLE(vipl_example_gradient_mag example_gradient_mag.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example_gradient_mag vipl vbl )
 
-ADD_EXECUTABLE(vipl_example_sobel example_sobel.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_sobel vipl vbl )
-
+  ADD_EXECUTABLE(vipl_example_sobel example_sobel.cxx)
+  TARGET_LINK_LIBRARIES( vipl_example_sobel vipl vbl )
+ENDIF (BUILD_CORE_UTILITIES)
 
 # E. using section<T,2> as 2D storage class:
 ADD_EXECUTABLE(vipl_example_dilate_disk example_dilate_disk.cxx)
