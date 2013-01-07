@@ -50,9 +50,9 @@ bool bundler_sfm_impl_create_initial_recon::can_be_initial_recon(
 bool bundler_sfm_impl_create_initial_recon::operator()(
     bundler_inters_reconstruction &recon)
 {
-    const double t =
+    const int t = (int) (
         settings.inlier_threshold_homography *
-        settings.inlier_threshold_homography;
+        settings.inlier_threshold_homography);
 
     const int r = settings.number_ransac_rounds_homography;
 
@@ -70,17 +70,15 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
 
         if ( replace_best ) {
             best_match = &(*i);
-            best_inlier_p =
-                best_match->get_homography_inlier_percentage(t,r);
+            best_inlier_p = best_match->get_homography_inlier_percentage(t, r);
         }
     }
 
     // If we didn't find anything that can be in the initial
     // reconstruction, panic.
-    if ( ! best_match) {
+    if (! best_match) {
         vcl_cerr<< "Unable to create an initial reconstruction!\n"
-                << "There is not a match set that both has an initial guess"
-                << " from EXIF tags and at least "
+                << "There is not a match set that both has an initial guess from EXIF tags and at least "
                 << settings.min_number_of_matches_homography
                 << " matches.\n";
         return false;
