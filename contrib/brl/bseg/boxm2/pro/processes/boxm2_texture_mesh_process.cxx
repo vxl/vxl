@@ -512,7 +512,7 @@ int boxm2_texture_mesh_process_globals::get_best_view(vcl_vector<vpgl_perspectiv
 
   //find minimal dot product amongst cams/images
   double minAngle = 10e20;
-  unsigned minCam = -1;
+  int minCam = -1;
   for (unsigned int i=0; i<cams.size(); ++i) {
     //get the smooth norm corresponding to this camera view
     vgl_vector_3d<double> normal = calc_smooth_norm( cams[i], vis_images[i], normx[i], normy[i], normz[i], world_tri);
