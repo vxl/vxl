@@ -43,28 +43,31 @@ class bstm_block_metadata:  public vbl_ref_count
                         double p_init,
                         int version = 1,
                         int init_level_t=1,
-                        int max_level_t=6) :  id_(id),
-                                              local_origin_(local_origin),
-                                              local_origin_t_(local_t),
-                                              sub_block_dim_(sub_block_dim),
-                                              sub_block_dim_t_(sub_block_dim_t),
-                                              sub_block_num_(sub_block_num),
-                                              sub_block_num_t_(num_t),
-                                              init_level_(init_level),
-                                              max_level_(max_level),
-                                              max_mb_(max_mb),
-                                              p_init_(p_init), version_(version),
-                                              init_level_t_(init_level_t), max_level_t_(max_level_t) {}
+                        int max_level_t=6)
+  :  id_(id),
+     local_origin_(local_origin),
+     local_origin_t_(local_t),
+     sub_block_dim_t_(sub_block_dim_t),
+     sub_block_num_t_(num_t),
+     sub_block_dim_(sub_block_dim),
+     sub_block_num_(sub_block_num),
+     init_level_(init_level),
+     max_level_(max_level),
+     init_level_t_(init_level_t),
+     max_level_t_(max_level_t),
+     max_mb_(max_mb),
+     p_init_(p_init),
+     version_(version) {}
 
   bstm_block_metadata( const bstm_block_metadata& that)
   : vbl_ref_count ()
   , id_           (that.id_)
   , local_origin_ (that.local_origin_)
   , local_origin_t_ (that.local_origin_t_)
-  , sub_block_dim_(that.sub_block_dim_)
-  , sub_block_num_(that.sub_block_num_)
   , sub_block_dim_t_(that.sub_block_dim_t_)
   , sub_block_num_t_(that.sub_block_num_t_)
+  , sub_block_dim_(that.sub_block_dim_)
+  , sub_block_num_(that.sub_block_num_)
   , init_level_   (that.init_level_)
   , max_level_    (that.max_level_)
   , init_level_t_ (that.init_level_t_)
@@ -122,7 +125,6 @@ class bstm_block_metadata:  public vbl_ref_count
 
   bool operator==(bstm_block_metadata const& m) const;
   bool operator==(boxm2_block_metadata const& m) const;
-
 };
 
 //: Smart_Pointer typedef for bstm_block
