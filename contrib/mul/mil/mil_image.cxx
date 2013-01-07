@@ -10,7 +10,7 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_iostream.h>
 
-//=======================================================================
+//=======================================================
 
 short mil_image::version_no() const
 {
