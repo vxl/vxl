@@ -13,7 +13,7 @@
 // \date October 23, 2012
 // \verbatim
 //   Modifications
-//
+//    Yi Dong   Jan-2013   added functions to generate object based query infomation for object based volm_matcher
 // \endverbatim
 //
 
@@ -47,16 +47,36 @@ class volm_query : public vbl_ref_count
   vcl_vector<unsigned>& valid_ray_num()                         { return ray_count_; }
   vcl_set<unsigned>& order_set()                                { return order_set_; }
   vcl_vector<vcl_vector<vcl_vector<unsigned> > >& order_index() { return order_index_; }
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id()     { return dist_id_; }
+  vcl_vector<unsigned char>& max_obj_dist()                     { return max_obj_dist_; }
+  vcl_vector<unsigned char>& min_obj_dist()                     { return min_obj_dist_; }
+  vcl_vector<unsigned char>& order_obj()                        { return order_obj_; }
+  vcl_vector<vcl_vector<unsigned> >& ground_id()                { return ground_id_; }
+  vcl_vector<vcl_vector<unsigned char> >& ground_dist()         { return ground_dist_; }
+  vcl_vector<vcl_vector<unsigned> >& sky_id()                   { return sky_id_; }
   depth_map_scene_sptr depth_scene() const                      { return dm_; }
   vcl_vector<depth_map_region_sptr>& depth_regions()            { return depth_regions_; }
   unsigned get_cam_num() const                                  { return (unsigned)cameras_.size(); }
+  unsigned get_obj_order_num() const                            { return (unsigned)order_index_[0].size(); }
   unsigned get_query_size() const                               { return query_size_; }
   unsigned get_valid_ray_num(unsigned const& cam_idx) const     { return ray_count_[cam_idx]; }
   vcl_vector<double>& top_fov()                                 { return top_fov_; }
   vcl_vector<double>& headings()                                { return headings_; }
   vcl_vector<double>& tilts()                                   { return tilts_; }
   vcl_vector<double>& rolls()                                   { return rolls_; }
-
+  //: return number of voxels having ground properties
+  unsigned get_ground_id_size() const;
+  //: return stored distance for all ground voxels
+  unsigned get_ground_dist_size() const;
+  //: return number of voxels having non-ground, non-sky properties
+  unsigned get_dist_id_size() const;
+  //: return number of voxels having sky properties
+  unsigned get_sky_id_size() const;
+  //: return number of voxels for all non-ground objects (order_index)
+  unsigned get_order_size() const;
+  //: return the total query size in byte(object based)
+  unsigned obj_based_query_size_byte() const;
+  
   //: write vrml for spherical container and camera hypothesis
   void draw_template(vcl_string const& vrml_fname);
   //: write query image showing the depth map geometry and the penetrating ray
@@ -77,7 +97,6 @@ class volm_query : public vbl_ref_count
   //: draw the polygons of regions on top of an rgb image
   void draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img);
   void draw_query_regions(vcl_string const& out_name);
-  
   //: initial camera parameters read from camera kml
   double init_focal_;
   double head_, head_d_, head_inc_;
@@ -120,18 +139,41 @@ class volm_query : public vbl_ref_count
   //: order vector to store the index id associated with object order
   vcl_set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
   vcl_vector<vcl_vector<vcl_vector<unsigned> > > order_index_;
-  vcl_vector<vcl_vector<unsigned char> > order_offset_;
-  
+  //: ground plane distance
+  vcl_vector<vcl_vector<unsigned> > ground_id_;
+  vcl_vector<vcl_vector<unsigned char> > ground_dist_;
+  //: sky distance
+  vcl_vector<vcl_vector<unsigned> > sky_id_;
+  //: object id based on min_dist (since objects may have different min_dist but same order)
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > > dist_id_;
+  //: min and max distance for different objects, based on object orders
+  vcl_vector<unsigned char> min_obj_dist_;
+  vcl_vector<unsigned char> max_obj_dist_;
+  vcl_vector<unsigned char> order_obj_;
+
+  //: functions
   bool query_ingest();
   bool order_ingest();
-  bool check_camera_ground(vpgl_perspective_camera<double> const& cam);
-  bool check_camera_ground(vpgl_perspective_camera<double> const& cam, vgl_polygon<double>& ground_poly);
-  unsigned char fetch_depth(double const& u, double const& v, unsigned char& order, unsigned char& max_dist, vil_image_view<float> const& depth_img);
+  unsigned char fetch_depth(double const& u,
+                            double const& v,
+                            unsigned char& order,
+                            unsigned char& max_dist,
+                            unsigned& object_id,
+                            bool& is_ground,
+                            bool& is_sky,
+                            bool& is_object,
+                            vil_image_view<float> const& depth_img);
   void create_cameras();
   void generate_regions();
-  void draw_viewing_volume(vcl_string const& fname, vpgl_perspective_camera<double> cam, float r, float g, float b);
+  void draw_viewing_volume(vcl_string const& fname,
+                           vpgl_perspective_camera<double> cam,
+                           float r,
+                           float g,
+                           float b);
   void draw_rays(vcl_string const& fname);
-  void draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polygon<double> const& poly, unsigned char const& depth);
+  void draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img,
+                    vgl_polygon<double> const& poly,
+                    unsigned char const& depth);
   void draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img, 
                 vgl_point_3d<double> const& world_point,
                 unsigned char const& depth, 
