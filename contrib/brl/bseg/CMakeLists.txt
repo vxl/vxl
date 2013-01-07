@@ -9,7 +9,9 @@ SUBDIRS(brip)
 SUBDIRS(sdet)
 
 # Markov Random Fields - This library is deprecated
+IF (NOT BUILD_NONDEPRECATED_ONLY)
 SUBDIRS(bmrf)
+ENDIF (NOT BUILD_NONDEPRECATED_ONLY)
 
 # segmentation view library
 SUBDIRS(segv)
