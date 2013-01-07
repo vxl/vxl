@@ -1,6 +1,5 @@
 #ifndef BUNDLER_H
 #define BUNDLER_H
-
 // TODO:
 //       visibility matrix.
 //       check angle for adding new points.
@@ -64,7 +63,7 @@ bool bundler_driver(
 bool bundler_write_ply_file(
     const char *filename,
     const vcl_vector<vgl_point_3d<double> > &points);
-    
+
 bool bundler_write_bundle_file(
     const char* filename,
     const vcl_vector<vpgl_perspective_camera<double> > &cameras,
@@ -116,7 +115,7 @@ class bundler_tracks
 
         // The destructor that frees the allocations made in the
         // constructor, if there are any.
-        ~bundler_tracks() {
+        virtual ~bundler_tracks() {
             if (manage_pointers) {
                 delete detect_features;
                 delete propose_matches;
@@ -126,13 +125,12 @@ class bundler_tracks
             }
         }
 
-        // A convienence method that runs the entire feature matching
+        // A convenience method that runs the entire feature matching
         // pipeline. Alternatively, you can directly call functors
         // yourself.
         virtual void run_feature_stage(
             const vcl_vector<vil_image_resource_sptr> &imageset,
             const vcl_vector<double> &focal_lengths,
-
             bundler_inters_reconstruction &empty_recon) const;
 };
 
@@ -181,7 +179,7 @@ class bundler_sfm
 
         // The destructor that frees the allocations made in the
         // constructor, if there are any.
-        ~bundler_sfm() {
+        virtual ~bundler_sfm() {
             if (manage_pointers) {
                 delete create_initial_recon;
                 delete select_next_images;
@@ -196,7 +194,6 @@ class bundler_sfm
         // yourself.
         virtual bool run_sfm_stage(
             bundler_inters_reconstruction &empty_recon,
-
             vcl_vector<vpgl_perspective_camera<double> > &cameras,
             vcl_vector<vgl_point_3d<double> > &points,
             vnl_sparse_matrix<bool> visibility_graph) const;

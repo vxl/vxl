@@ -30,7 +30,7 @@ class icam_view_metadata
    icam_view_metadata(vcl_string const& exp_img,
                       vcl_string const& dt_path);
 
-   ~icam_view_metadata() {}
+   virtual ~icam_view_metadata() {}
 
    virtual void register_image(vil_image_view<float> const& source_img,
                                vpgl_camera_double_sptr camera,
