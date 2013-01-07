@@ -1,7 +1,6 @@
 #include "volm_loc_hyp.h"
 //:
 // \file
-#include <vbl/vbl_array_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <bkml/bkml_write.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
@@ -22,14 +21,15 @@ void volm_loc_hyp::add(vgl_polygon<double>& poly, vil_image_view<float>& dem, vp
       }
       if (dem(i,j) <= 0)
         continue;
-      if (!poly.contains(lon, lat)) 
+      if (!poly.contains(lon, lat))
         continue;
       vcl_map<float, vcl_map<float, float> >::iterator iter = locs_.find((float)lat);
       if (iter != locs_.end()) { // lat exists, there is only one lat, lon for now so just add to the map of this lat
         vcl_map<float, float>& tmp = iter->second;
         tmp[(float)lon] = dem(i,j);
         cnt_++;
-      } else {  // add this lat
+      }
+      else {  // add this lat
         vcl_map<float, float> tmp;
         tmp[(float)lon] = dem(i,j);
         locs_[(float)lat] = tmp;
@@ -46,7 +46,8 @@ bool volm_loc_hyp::add(float lat, float lon, float elev)
    vcl_map<float, float>& tmp = iter->second;
    tmp[(float)lon] = elev;  // replaces an existing loc if any
    cnt_++;
-  } else {  // add this lat
+  }
+  else {  // add this lat
    vcl_map<float, float> tmp;
    tmp[(float)lon] = elev;
    locs_[(float)lat] = tmp;
@@ -54,7 +55,7 @@ bool volm_loc_hyp::add(float lat, float lon, float elev)
   }
   return true;
 }
-  
+
 
 //: construct by reading from a binary file
 volm_loc_hyp::volm_loc_hyp(vcl_string bin_file) : current_(0)
@@ -74,11 +75,12 @@ bool volm_loc_hyp::write_hypotheses(vcl_string out_file)
   if (!os)
     return false;
   this->b_write(os);
-  os.close(); 
+  os.close();
   return true;
 }
 
-bool volm_loc_hyp::get_next(vgl_point_3d<float>& h) {
+bool volm_loc_hyp::get_next(vgl_point_3d<float>& h)
+{
   if (!current_) {
     current_lat_iter_ = locs_.begin();
     current_lon_iter_ = (current_lat_iter_->second).begin();
@@ -91,17 +93,19 @@ bool volm_loc_hyp::get_next(vgl_point_3d<float>& h) {
     current_++;
     current_lon_iter_++;
     return true;
-  } else {
+  }
+  else {
     current_lat_iter_++;
     if (current_lat_iter_ != locs_.end()) {
-      current_lon_iter_ = (current_lat_iter_->second).begin(); 
+      current_lon_iter_ = (current_lat_iter_->second).begin();
       h.set(current_lon_iter_->first,    // longitude is x (east)
             current_lat_iter_->first,    // latitude is y (north)
             current_lon_iter_->second);  // elev is z
       current_++;
       current_lon_iter_++;
       return true;
-    } else
+    }
+    else
       return false;
   }
 }
@@ -129,9 +133,8 @@ bool volm_loc_hyp::get_next(unsigned start, unsigned skip, vgl_point_3d<float>& 
 //: get the hypothesis closest to the given and its id if get_next method were to be used, very dummy for now, TODO: use upper_bound and lower_bound to limit search in lat map
 bool volm_loc_hyp::get_closest(double lat, double lon, vgl_point_3d<float>& h, unsigned& hyp_id)
 {
-  vgl_point_3d<float> h_pt; vgl_point_3d<float> out_pt; 
+  vgl_point_3d<float> h_pt; vgl_point_3d<float> out_pt;
   float min_dist = vcl_numeric_limits<float>::max();
-  unsigned hyp_cnt = 0;
   current_ = 0;
   while (this->get_next(0, 1, h_pt))
   {
@@ -146,7 +149,6 @@ bool volm_loc_hyp::get_closest(double lat, double lon, vgl_point_3d<float>& h, u
   return true;
 }
 
-  
 
 //: Binary save self to stream.
 void volm_loc_hyp::b_write(vsl_b_ostream &os) const
@@ -194,7 +196,7 @@ void volm_loc_hyp::b_read(vsl_b_istream &is)
      }
      if (read != cnt_) {
        vcl_cerr << "I/O ERROR: boxm2_volm_loc_hypotheses::b_read(vsl_b_istream&)\n"
-             << "           Unknown version number "<< ver << '\n';
+                << "           Unknown version number "<< ver << '\n';
        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
      }
      break; }
@@ -205,9 +207,4 @@ void volm_loc_hyp::b_read(vsl_b_istream &is)
     return;
   }
 }
-
-  
-
-
-
 

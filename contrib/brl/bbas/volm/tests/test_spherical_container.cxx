@@ -1,11 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vpl/vpl.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <vsl/vsl_binary_io.h>
-#include <vul/vul_timer.h>
 #include <bbas/volm/volm_spherical_container.h>
 
 static void test_spherical_container()
@@ -24,9 +20,9 @@ static void test_spherical_container()
            << "number of depth intervals.. " << sph.get_depth_offset_map().size() << vcl_endl;
 
   TEST("number of depth intervals.. ", sph.get_depth_offset_map().size(), 144); // change if using an angle different than 4
+#if 0
   unsigned int offset, end_offset;
   double depth;
-#if 0
   sph.last_res(vmin, offset, end_offset, depth);
   TEST("# voxels of last layer with res min_res.. ", end_offset-offset, 20888);
   sph.first_res(vmin*2, offset, end_offset, depth);

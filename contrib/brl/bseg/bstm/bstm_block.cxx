@@ -25,7 +25,6 @@ bstm_block::bstm_block(bstm_block_metadata data)
 
 bool bstm_block::b_read(char* buff)
 {
-
   uchar16* treesBuff = (uchar16*) (buff);
   byte_count_ = sizeof(uchar16)* sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
   trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
@@ -33,7 +32,6 @@ bool bstm_block::b_read(char* buff)
                                         sub_block_num_.z(),
                                         treesBuff);
   return true;
-
 }
 
 //:
@@ -75,9 +73,6 @@ bool bstm_block::init_empty_block(bstm_block_metadata data)
 
   //get member variable metadata straight, then write to the buffer
   long bytes_read = 0;
-
-//double dims[4];
-  int nums[4];
 
   sub_block_dim_ = data.sub_block_dim_;
   sub_block_num_ = data.sub_block_num_;

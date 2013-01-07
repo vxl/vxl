@@ -16,8 +16,8 @@
 
 bool bstm_util::query_point_color(bstm_scene_sptr& scene,
                                   bstm_cache_sptr& cache,
-                                    const vgl_point_3d<double>& point, unsigned time,
-                                    float& prob, vnl_vector_fixed< unsigned char, 3>& rgb)
+                                  const vgl_point_3d<double>& point, unsigned time,
+                                  float& prob, vnl_vector_fixed< unsigned char, 3>& rgb)
 {
   vgl_point_3d<double> local;
   double local_t;
@@ -46,9 +46,7 @@ bool bstm_util::query_point_color(bstm_scene_sptr& scene,
   float min,max;
   time_tree.cell_range(bit_index_t,min,max);
   vcl_cout << "cell range: [" << min << ',' << max << "] ";
-  int depth_t = time_tree.depth_at(bit_index_t);
   int data_offset_t = time_tree.get_data_index(bit_index_t);
-
 
   bstm_data_base *  alpha_base  = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
   float alpha = ((float*)alpha_base->data_buffer())[data_offset_t];
@@ -67,7 +65,7 @@ bool bstm_util::query_point_color(bstm_scene_sptr& scene,
   }
 
   if (!foundDataType) {
-      vcl_cerr<< "No gauss rgb...exiting"<<vcl_endl;
+      vcl_cerr<< "No gauss rgb...exiting\n";
       return false;
   }
 
@@ -103,7 +101,7 @@ vnl_vector_fixed<float,3>  bstm_util::expected_color( vnl_vector_fixed<unsigned 
 }
 
 bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   const vgl_point_3d<double>& point,
-                             unsigned time, float& prob, float& intensity)
+                            unsigned time, float& prob, float& intensity)
 {
   vgl_point_3d<double> local;
   double local_t;
@@ -133,7 +131,7 @@ bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   co
                                              float(cellCenter.z()*blk_data.sub_block_dim_.z() + blk_data.local_origin_.z()));
 
   vgl_box_3d<double> datBox(cellCenter_global,side_len,side_len,side_len,vgl_box_3d<double>::centre);
-  vcl_cout << "Found point at box: " << datBox << " " <<  id << vcl_endl;
+  vcl_cout << "Found point at box: " << datBox << ' ' <<  id << vcl_endl;
 
   //do the query with data_offset....
   bstm_time_block * time_blk= cache->get_time_block(id);
@@ -144,7 +142,6 @@ bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   co
   float min,max;
   time_tree.cell_range(bit_index_t,min,max);
   vcl_cout << "cell range: [" << min << ',' << max << "] ";
-  int depth_t = time_tree.depth_at(bit_index_t);
   int data_offset_t = time_tree.get_data_index(bit_index_t);
 
   bstm_data_base *  alpha_base  = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
@@ -178,7 +175,6 @@ bool bstm_util::verify_appearance(bstm_scene& scene, const vcl_vector<vcl_string
   }
   return foundDataType;
 }
-
 
 
 // private helper method prepares an input image to be processed by update
@@ -221,7 +217,6 @@ vil_image_view_base_sptr bstm_util::prepare_input_image(vil_image_view_base_sptr
   //else if loaded planes is just one...
   if (loaded_image->nplanes() == 1)
   {
-
     //prepare floatimg for stretched img
     vil_image_view<float>* floatimg;
     if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
