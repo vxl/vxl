@@ -56,15 +56,20 @@ bool volm_io::read_camera(vcl_string kml_file,
     heading = 0;
   }
   if (heading_dev < 0 || heading_dev > 360) {
-    heading_dev = 180; vcl_cerr << "Problem reading heading_dev from: " << kml_file << " setting heading_dev = 180\n"; }
+    heading_dev = 180; vcl_cerr << "Problem reading heading_dev from: " << kml_file << " setting heading_dev = 180\n";
+  }
   if (tilt < 0 || tilt > 360) {
-    tilt = 90; vcl_cerr << "Problem reading tilt from: " << kml_file << " setting tilt = 90\n"; }
+    tilt = 90; vcl_cerr << "Problem reading tilt from: " << kml_file << " setting tilt = 90\n";
+  }
   if (tilt_dev < 0 || tilt_dev > 360) {
-    tilt_dev = 0; vcl_cerr << "Problem reading tilt_dev from: " << kml_file << " setting tilt_dev = 90\n"; }
+    tilt_dev = 0; vcl_cerr << "Problem reading tilt_dev from: " << kml_file << " setting tilt_dev = 90\n";
+  }
   if (roll < 0 || roll > 360) {
-    roll = 0; vcl_cerr << "Problem reading roll from: " << kml_file << " setting roll = 90\n"; }
+    roll = 0; vcl_cerr << "Problem reading roll from: " << kml_file << " setting roll = 90\n"; 
+  }
   if (altitude < 0) {
-    altitude = 1.6; vcl_cerr << "Problem reading altitude from: " << kml_file << " setting altitude = 1.6\n"; }
+    altitude = 1.6; vcl_cerr << "Problem reading altitude from: " << kml_file << " setting altitude = 1.6\n";
+  }
 
   double dtor = vnl_math::pi_over_180;
   double ppu = 0.5*ni;
@@ -164,7 +169,7 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
         vgl_vector_3d<double> vp(1.0, 0.0, 0.0);
         depth_scene->add_region(poly, vp, min_depth, max_depth, object_names[i], depth_map_region::VERTICAL, object_orders[i]);
       }
-      else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "water" || object_types[i] == "desert" || object_types[i] == "flat" || object_types[i] == "ground") {
+      else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "desert" || object_types[i] == "flat" || object_types[i] == "ground") {
         double min_depth = object_mindist[i];
         double max_depth = object_maxdist[i];
         if (min_depth < 20) {  // treat it as a GROUND_PLANE
@@ -175,9 +180,11 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
            depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i], depth_map_region::FLAT, object_orders[i]);
         }
       }
-      else {
-        double min_depth = object_mindist[i];
-        double max_depth = object_maxdist[i];
+      else if (object_types[i] == "water") {  // disregard any labeled water region
+      }
+      else {  // all other objects
+        double min_depth = parser.obj_mindists()[i];
+        double max_depth = parser.obj_maxdists()[i];
         vgl_vector_3d<double> np(1.0, 1.0, 1.0);
         depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i], depth_map_region::NOT_DEF, object_orders[i]);
       }
