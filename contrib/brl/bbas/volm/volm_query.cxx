@@ -329,7 +329,8 @@ bool volm_query::order_ingest()
 
 bool volm_query::query_ingest()
 {
-  for (unsigned i = 0; i < cameras_.size(); i++) {
+  for (unsigned i = 0; i < cameras_.size(); i++)
+  {
     //vcl_cout << i << '.'; vcl_cout.flush();
     vcl_vector<unsigned char> min_dist_layer;
     vcl_vector<unsigned char> max_dist_layer;
@@ -452,7 +453,7 @@ unsigned char volm_query::fetch_depth(double const& u,
         vv = vv >= (int)depth_img.nj() ? depth_img.nj()-1 : vv;
         float depth_uv = depth_img(uu,vv);
         if (depth_uv < 0) {
-          vcl_cout << " ERROR: the depth value in depth_image for query ground_plane is negative " << vcl_endl;
+          vcl_cerr << " ERROR: the depth value in depth_image for query ground_plane is negative\n";
           assert(depth_uv);
         }
         min_dist = sph_depth_->get_depth_interval(depth_uv);
@@ -496,7 +497,8 @@ void volm_query::draw_template(vcl_string const& vrml_fname)
       g = 1.0f;
     else if (i%2 == 1){
       b = 1.0f; g = 0.0f;
-    } else {
+    }
+    else {
       r = 0.0f; g = 1.0f;
     }
     this->draw_viewing_volume(vrml_fname, cameras_[i], r, g, b);
@@ -658,7 +660,7 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
             img((unsigned)x,(unsigned)y).r = 0;
             img((unsigned)x,(unsigned)y).g = 0;
             img((unsigned)x,(unsigned)y).b = 0;
-          } 
+          }
           else {
             img((unsigned)x,(unsigned)y).r = bvrml_color::heatmap_classic[(int)depth][0];
             img((unsigned)x,(unsigned)y).g = bvrml_color::heatmap_classic[(int)depth][1];
@@ -853,9 +855,9 @@ unsigned volm_query::get_dist_id_size() const
     for (unsigned j = 0; j < obj_num; j++) {
       count += (unsigned)dist_id_[i][j].size();
 #if 0
-      vcl_cout << " camera " << i 
-               << ", # of the " << j << "th object voxels = " 
-               << (unsigned)dist_id_[i][j].size() 
+      vcl_cout << " camera " << i
+               << ", # of the " << j << "th object voxels = "
+               << (unsigned)dist_id_[i][j].size()
                << vcl_endl;
 #endif
     }
