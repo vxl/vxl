@@ -384,7 +384,7 @@ bool volm_query::query_ingest()
               dist_id_layer[obj_id].push_back(p_idx);
             }
             else {
-              vcl_cout << "ERROR in query creation: object id exceeds the size of non-ground, non-sky objects" << vcl_endl;
+              vcl_cerr << "ERROR in query creation: object id exceeds the size of non-ground, non-sky objects\n";
               return false;
             }
           }
@@ -507,7 +507,7 @@ bool volm_query::weight_ingest()
 
   if (depth_regions_.size()) {
     // TO BE IMPLEMENTED to read from depth_regions_
-    // now set equal weight 
+    // now set equal weight
     float unit_ratio = 0.5f * (1 - weight_grd_ - weight_sky_ );
     for (unsigned i = 0; i < depth_regions_.size(); i++) {
       weight_obj_.push_back(unit_ratio);
@@ -533,7 +533,8 @@ void volm_query::draw_template(vcl_string const& vrml_fname)
       g = 1.0f;
     else if (i%2 == 1){
       b = 1.0f; g = 0.0f;
-    } else {
+    }
+    else {
       r = 0.0f; g = 1.0f;
     }
     this->draw_viewing_volume(vrml_fname, cameras_[i], r, g, b);
@@ -695,7 +696,7 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
             img((unsigned)x,(unsigned)y).r = 0;
             img((unsigned)x,(unsigned)y).g = 0;
             img((unsigned)x,(unsigned)y).b = 0;
-          } 
+          }
           else {
             img((unsigned)x,(unsigned)y).r = bvrml_color::heatmap_classic[(int)depth][0];
             img((unsigned)x,(unsigned)y).g = bvrml_color::heatmap_classic[(int)depth][1];
@@ -890,9 +891,9 @@ unsigned volm_query::get_dist_id_size() const
     for (unsigned j = 0; j < obj_num; j++) {
       count += (unsigned)dist_id_[i][j].size();
 #if 0
-      vcl_cout << " camera " << i 
-               << ", # of the " << j << "th object voxels = " 
-               << (unsigned)dist_id_[i][j].size() 
+      vcl_cout << " camera " << i
+               << ", # of the " << j << "th object voxels = "
+               << (unsigned)dist_id_[i][j].size()
                << vcl_endl;
 #endif
     }
@@ -916,7 +917,7 @@ unsigned volm_query::obj_based_query_size_byte() const
   // ground voxel size
   size_byte += this->get_ground_id_size() * 4; // unsigned id
   size_byte += this->get_ground_dist_size();   // unsigned char distance
-  size_byte += 4;                            // float weight 
+  size_byte += 4;                            // float weight
   // sky voxel size
   size_byte += this->get_sky_id_size() * 4;    // unsigned id
   size_byte += 4;                              // float weight
