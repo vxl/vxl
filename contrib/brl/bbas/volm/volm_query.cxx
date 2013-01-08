@@ -91,6 +91,8 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   this->query_ingest();
   // start to ingest order, store in order_index_
   this->order_ingest();
+  // implement the weight parameters for all objects
+  this->weight_ingest();
 }
 
 void volm_query::create_cameras()
@@ -329,8 +331,7 @@ bool volm_query::order_ingest()
 
 bool volm_query::query_ingest()
 {
-  for (unsigned i = 0; i < cameras_.size(); i++)
-  {
+  for (unsigned i = 0; i < cameras_.size(); i++) {
     //vcl_cout << i << '.'; vcl_cout.flush();
     vcl_vector<unsigned char> min_dist_layer;
     vcl_vector<unsigned char> max_dist_layer;
@@ -452,9 +453,16 @@ unsigned char volm_query::fetch_depth(double const& u,
         vv = vv < 0 ? 0 : vv;
         vv = vv >= (int)depth_img.nj() ? depth_img.nj()-1 : vv;
         float depth_uv = depth_img(uu,vv);
+        // handle the case where the voxel/ray is too close to ground_plane boundary
         if (depth_uv < 0) {
-          vcl_cerr << " ERROR: the depth value in depth_image for query ground_plane is negative\n";
-          assert(depth_uv);
+#ifdef DEBUG
+          vcl_cout << " WARNING: point (" << (int)u << ',' << (int)v << ") "
+                   << " is too close to the ground boundary, disregard" << vcl_endl;
+#endif
+          is_ground = false;
+          max_dist = (unsigned char)255;
+          order = (unsigned char)255;
+          return (unsigned char)253; // invalid depth value
         }
         min_dist = sph_depth_->get_depth_interval(depth_uv);
         max_dist = (unsigned char)255;
@@ -481,6 +489,34 @@ unsigned char volm_query::fetch_depth(double const& u,
   return (unsigned char)255;
 }
 
+bool volm_query::weight_ingest()
+{
+  if (dm_->sky().size()) {
+    weight_sky_ = 0.4f;
+    // to be implemented to read from depth_scene
+  }
+  else
+    weight_sky_ = 0.0f;
+
+  if (dm_->ground_plane().size()) {
+    weight_grd_ = 0.3f;
+    // TO BE IMPLEMENTED to read from depth_scene
+  }
+  else
+    weight_grd_ = 0.0f;
+
+  if (depth_regions_.size()) {
+    // TO BE IMPLEMENTED to read from depth_regions_
+    // now set equal weight 
+    float unit_ratio = 0.5f * (1 - weight_grd_ - weight_sky_ );
+    for (unsigned i = 0; i < depth_regions_.size(); i++) {
+      weight_obj_.push_back(unit_ratio);
+    }
+  }
+
+  return true;
+}
+
 void volm_query::draw_template(vcl_string const& vrml_fname)
 {
   // write the header and shell container first
@@ -497,8 +533,7 @@ void volm_query::draw_template(vcl_string const& vrml_fname)
       g = 1.0f;
     else if (i%2 == 1){
       b = 1.0f; g = 0.0f;
-    }
-    else {
+    } else {
       r = 0.0f; g = 1.0f;
     }
     this->draw_viewing_volume(vrml_fname, cameras_[i], r, g, b);
@@ -660,7 +695,7 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
             img((unsigned)x,(unsigned)y).r = 0;
             img((unsigned)x,(unsigned)y).g = 0;
             img((unsigned)x,(unsigned)y).b = 0;
-          }
+          } 
           else {
             img((unsigned)x,(unsigned)y).r = bvrml_color::heatmap_classic[(int)depth][0];
             img((unsigned)x,(unsigned)y).g = bvrml_color::heatmap_classic[(int)depth][1];
@@ -855,9 +890,9 @@ unsigned volm_query::get_dist_id_size() const
     for (unsigned j = 0; j < obj_num; j++) {
       count += (unsigned)dist_id_[i][j].size();
 #if 0
-      vcl_cout << " camera " << i
-               << ", # of the " << j << "th object voxels = "
-               << (unsigned)dist_id_[i][j].size()
+      vcl_cout << " camera " << i 
+               << ", # of the " << j << "th object voxels = " 
+               << (unsigned)dist_id_[i][j].size() 
                << vcl_endl;
 #endif
     }
@@ -879,16 +914,17 @@ unsigned volm_query::obj_based_query_size_byte() const
 {
   unsigned size_byte = 0;
   // ground voxel size
-  size_byte += this->get_ground_id_size() * 4; // byte
-  size_byte += this->get_ground_dist_size();   // byte
+  size_byte += this->get_ground_id_size() * 4; // unsigned id
+  size_byte += this->get_ground_dist_size();   // unsigned char distance
+  size_byte += 4;                            // float weight 
   // sky voxel size
-  size_byte += this->get_sky_id_size() * 4;    // byte
-  size_byte += 1;                              // byte
-  size_byte += 1;                              // byte
+  size_byte += this->get_sky_id_size() * 4;    // unsigned id
+  size_byte += 4;                              // float weight
   // non-sky, non-ground object
-  size_byte += this->get_dist_id_size() * 4;   // byte
-  size_byte += (unsigned)min_obj_dist_.size(); // byte
-  size_byte += (unsigned)max_obj_dist_.size(); // byte
-  size_byte += (unsigned)order_obj_.size();    // byte
+  size_byte += this->get_dist_id_size() * 4;   // unsigned id
+  size_byte += (unsigned)min_obj_dist_.size(); // unsigned char distance
+  size_byte += (unsigned)max_obj_dist_.size(); // unsigned char distance
+  size_byte += (unsigned)order_obj_.size();    // unsigned char order
+  size_byte += (unsigned)weight_obj_.size()*4; // float weight
   return size_byte;
 }

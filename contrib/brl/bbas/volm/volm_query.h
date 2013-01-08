@@ -54,6 +54,9 @@ class volm_query : public vbl_ref_count
   vcl_vector<vcl_vector<unsigned> >& ground_id()                { return ground_id_; }
   vcl_vector<vcl_vector<unsigned char> >& ground_dist()         { return ground_dist_; }
   vcl_vector<vcl_vector<unsigned> >& sky_id()                   { return sky_id_; }
+  vcl_vector<float>& obj_weight()                               { return weight_obj_; }
+  float grd_weight() const                                      { return weight_grd_; }
+  float sky_weight() const                                      { return weight_sky_; }
   depth_map_scene_sptr depth_scene() const                      { return dm_; }
   vcl_vector<depth_map_region_sptr>& depth_regions()            { return depth_regions_; }
   unsigned get_cam_num() const                                  { return (unsigned)cameras_.size(); }
@@ -150,10 +153,14 @@ class volm_query : public vbl_ref_count
   vcl_vector<unsigned char> min_obj_dist_;
   vcl_vector<unsigned char> max_obj_dist_;
   vcl_vector<unsigned char> order_obj_;
-
+  vcl_vector<float> weight_obj_;
+  float weight_grd_;
+  float weight_sky_;
+  
   //: functions
   bool query_ingest();
   bool order_ingest();
+  bool weight_ingest();
   unsigned char fetch_depth(double const& u,
                             double const& v,
                             unsigned char& order,
