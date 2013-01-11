@@ -19,7 +19,6 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
@@ -133,10 +132,10 @@ int main(int argc,  char** argv)
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
 
   vul_timer t;
-  
+
   // halt till all camera.bin files are available
   volm_io::write_status(out_folder(), volm_io::COMPOSE_HALT);
-  
+
   bool all_available = false;
   while (!all_available) {
     all_available = true;
@@ -236,7 +235,7 @@ int main(int argc,  char** argv)
               vcl_stringstream log;
               log << "cam id: " << cam_ids[ind_idx] << " is invalid, query object has: " << query->get_cam_num() << " cams. In tile " << tiles[k].get_string() << " loc: (" << u << ", " << v << ") skipping rationale..\n"
                   << "score file is: " << score_files[i] << " id in the file: " << ind_idx << " hypo id: " << hyp.current_ << vcl_endl;
-              vcl_cerr << log.str(); 
+              vcl_cerr << log.str();
             }
             //out_imgs[k](u,v) = (vxl_byte)(scores[ind_idx]*volm_io::SCALE_VALUE + 1);
             out_imgs[k](u,v) = volm_io::scale_score_to_1_255(threshold, scores[ind_idx]);
@@ -256,19 +255,19 @@ int main(int argc,  char** argv)
       vil_save(out_imgs[i], out_name.c_str());
     }
   }
-  
+
   // save top 30 into rationale folder as a text file
   vcl_string top_matches_filename = rat_folder() + "/top_matches.txt";
   if (!volm_rationale::write_top_matches(top_matches, top_matches_filename))
     vcl_cerr << "cannot write to " << top_matches_filename;
-  
+
   unsigned cnt = 0;
   vcl_cout << "creating rationale for top: " << top_matches.size() << vcl_endl;
   for (top_matches_iter = top_matches.begin(); top_matches_iter != top_matches.end(); top_matches_iter++) {
     volm_rationale r = top_matches_iter->second;
     vcl_string cam_postfix = query->get_cam_string(r.cam_id);
     vcl_stringstream str;
-    str << rat_folder() + "/" << "query_top_" << cnt++ << cam_postfix << ".png";
+    str << rat_folder() << "/query_top_" << cnt++ << cam_postfix << ".png";
     vcl_cout << "writing rat to: " << str.str() << vcl_endl; vcl_cout.flush();
     query->draw_query_image(r.cam_id, str.str());
   }

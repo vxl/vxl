@@ -19,7 +19,6 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_set.h>
 
 
@@ -204,7 +203,7 @@ int main(int argc,  char** argv)
     //save the image
     vcl_string cam_postfix = query->get_cam_string(0);
     vcl_stringstream str;
-    str << rat_folder() + "/" << "index_gt_" << idx << cam_postfix << ".png";
+    str << rat_folder() << "/index_gt_" << idx << cam_postfix << ".png";
     // save the images
     vil_save(img,(str.str()).c_str());
   }
@@ -224,7 +223,7 @@ int main(int argc,  char** argv)
   //save the image
   vcl_string cam_postfix = query->get_cam_string(0);
   vcl_stringstream str;
-  str << rat_folder() + "/" << "query_gt_" << cam_postfix << ".png";
+  str << rat_folder() << "/query_gt_" << cam_postfix << ".png";
   // save the images
   vil_save(query_gt_img,(str.str()).c_str());
 

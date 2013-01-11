@@ -21,9 +21,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
-//vpgl camera stuff
-#include <vpgl/vpgl_perspective_camera.h>
-
 //det and imesh includes
 #include <sdet/sdet_image_mesh.h>
 #include <sdet/sdet_image_mesh_params.h>

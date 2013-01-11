@@ -23,7 +23,6 @@
 #include <vil/vil_image_view.h>
 
 #include <brip/brip_vil_float_ops.h>
-#include <vpgl/vpgl_perspective_camera.h>
 
 #include <brec/brec_bg_pair_density.h>
 #include <brec/pro/brec_processes.h>

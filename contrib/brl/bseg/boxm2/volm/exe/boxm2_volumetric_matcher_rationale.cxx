@@ -19,7 +19,6 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
@@ -205,7 +204,7 @@ int main(int argc,  char** argv)
   for (top_matches_iter = top_matches.begin(); top_matches_iter != top_matches.end(); top_matches_iter++) {
     vcl_string cam_postfix = query->get_cam_string(top_matches_iter->second);
     vcl_stringstream str;
-    str << rat_folder() + "/" << "query_top_" << cnt++ << cam_postfix << ".png";
+    str << rat_folder() << "/query_top_" << cnt++ << cam_postfix << ".png";
     vcl_cout << "writing rat to: " << str.str() << vcl_endl; vcl_cout.flush();
     query->draw_query_image(top_matches_iter->second,  str.str());
   }

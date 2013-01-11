@@ -5,7 +5,6 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpgl/vpgl_calibration_matrix.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <bwm/video/bwm_video_corr_processor.h>
 #include <bwm/video/bwm_video_site_io.h>
 

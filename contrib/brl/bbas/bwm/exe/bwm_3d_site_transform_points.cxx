@@ -15,7 +15,6 @@
 #include <vul/vul_file_iterator.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 
 #include <rply.h>   //.ply parser

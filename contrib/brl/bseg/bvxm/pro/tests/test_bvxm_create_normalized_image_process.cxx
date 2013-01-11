@@ -21,7 +21,6 @@
 #include <vil/vil_math.h>
 
 #include <brip/brip_vil_float_ops.h>
-#include <vpgl/vpgl_perspective_camera.h>
 
 //namespace bvxm_normalize_image_process_globals;
 
