@@ -11,7 +11,6 @@
 #include <ipts/ipts_draw.h>
 
 #include <vul/vul_timer.h>
-#include <vpgl/vpgl_fundamental_matrix.h>
 #include <bpgl/algo/bpgl_fm_compute_ransac.h>
 
 void draw_keypoint(vil_image_view<vxl_byte>& img, bapl_keypoint_sptr k)
