@@ -110,14 +110,14 @@ void volm_query::create_cameras()
       }
       else {             // protrait
         double dtor = vnl_math::pi_over_180;
-        for (unsigned i = 0; i < 8; i++) {
+        for (unsigned i = 0; i < 8; ++i) {
           double tr = vcl_tan(stock[i]*dtor);
           double top = vcl_atan(nj_*tr/ni_)/dtor;
           top_fov_.push_back(top);
         }
       }
       vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
-      for (unsigned i = 0; i < 8; i++)
+      for (unsigned i = 0; i < 8; ++i)
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
     }
@@ -130,14 +130,14 @@ void volm_query::create_cameras()
       }
       else {             // protrait
         double dtor = vnl_math::pi_over_180;
-        for (unsigned i = 0; i < 11; i++) {
+        for (unsigned i = 0; i < 11; ++i) {
           double tr = vcl_tan(stock[i]*dtor);
           double top = vcl_atan(nj_*tr/ni_)/dtor;
           top_fov_.push_back(top);
         }
       }
       vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
-      for (unsigned i = 0; i < 11; i++)
+      for (unsigned i = 0; i < 11; ++i)
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
     }
@@ -147,7 +147,7 @@ void volm_query::create_cameras()
                        20.0, 24.0};
       top_fov_.insert(top_fov_.end(), stock, stock + 9);
       vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
-      for (unsigned i = 0; i < 9; i++)
+      for (unsigned i = 0; i < 9; ++i)
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
     }
@@ -221,7 +221,7 @@ void volm_query::create_cameras()
           // check whether current camera is consistent with defined ground plane
           bool success = true;
           if (dm_->ground_plane().size()) {
-            for (unsigned i = 0; (success && i < dm_->ground_plane().size()); i++) {
+            for (unsigned i = 0; (success && i < dm_->ground_plane().size()); ++i) {
               success = dm_->ground_plane()[i]->region_ground_2d_to_3d(cam);
 #ifdef DEBUG
               vcl_cout << "checking ground plane consistency for: " << dm_->ground_plane()[i]->name() << " min depth is: " << dm_->ground_plane()[i]->min_depth();
@@ -254,20 +254,20 @@ void volm_query::generate_regions()
   depth_regions_ = dm_->scene_regions();
   vcl_sort(depth_regions_.begin(), depth_regions_.end(), compare_order());
   // obtain the min and max dist for different non-ground, non-sky objects
-  for (unsigned i = 0; i < depth_regions_.size(); i++) {
+  for (unsigned i = 0; i < depth_regions_.size(); ++i) {
     min_obj_dist_.push_back(sph_depth_->get_depth_interval(depth_regions_[i]->min_depth()));
     max_obj_dist_.push_back(sph_depth_->get_depth_interval(depth_regions_[i]->max_depth()));
     order_obj_.push_back((unsigned char)depth_regions_[i]->order());
   }
   unsigned size = (unsigned)dm_->scene_regions().size();
   d_threshold_ = 20000.0;
-  for (unsigned i = 0; i < size; i++) {
+  for (unsigned i = 0; i < size; ++i) {
   //depth_regions_[(dm_->scene_regions())[i]->order()] = (dm_->scene_regions())[i];
     if (d_threshold_ < (dm_->scene_regions())[i]->max_depth())
       d_threshold_ = (dm_->scene_regions())[i]->max_depth();
   }
   if (dm_->ground_plane().size()) {
-    for (unsigned i = 0; i < dm_->ground_plane().size(); i++) {
+    for (unsigned i = 0; i < dm_->ground_plane().size(); ++i) {
       if (d_threshold_ < dm_->ground_plane()[i]->max_depth())
         d_threshold_ = dm_->ground_plane()[i]->max_depth();
     }
@@ -275,14 +275,14 @@ void volm_query::generate_regions()
   // set a constant value for sky objects, which is equal to minimum order for all sky objects
   if (dm_->sky().size()) {
     order_sky_ = dm_->sky()[0]->order();
-    for (unsigned i = 1; i < dm_->sky().size(); i++) {
+    for (unsigned i = 1; i < dm_->sky().size(); ++i) {
       if ( order_sky_ > dm_->sky()[i]->order() )
         order_sky_ = dm_->sky()[i]->order();
     }
   }
   // create the order_set for all non-ground region
   if (depth_regions_.size())
-    for (unsigned i = 0; i < depth_regions_.size(); i++)
+    for (unsigned i = 0; i < depth_regions_.size(); ++i)
       order_set_.insert(depth_regions_[i]->order());
   if (dm_->sky().size())
     order_set_.insert(order_sky_);
@@ -292,7 +292,7 @@ bool volm_query::order_ingest()
 {
   // loop over camera
   unsigned cam_num = (unsigned)cameras_.size();
-  for (unsigned cam_id = 0; cam_id < cam_num; cam_id++) {
+  for (unsigned cam_id = 0; cam_id < cam_num; ++cam_id) {
     // create a vector store all objects and fetch the order for current lay
     vcl_vector<vcl_vector<unsigned> > order_cam(order_set_.size());
     vcl_vector<unsigned char> order_layer = order_[cam_id];
@@ -300,7 +300,7 @@ bool volm_query::order_ingest()
 #if 0
     vcl_cout << " --------------------- camera " << cam_id << " --------------------" << vcl_endl;
 #endif
-    for (unsigned idx = 0; idx < query_size_; idx++) {
+    for (unsigned idx = 0; idx < query_size_; ++idx) {
       unsigned count = 0;
       //vcl_cout << " cam " << cam_id << ", order_layer[" << idx << "] = " << (int)order_layer[idx] << vcl_endl;
       vcl_set<unsigned>::iterator iter = this->order_set_.begin();
@@ -310,7 +310,7 @@ bool volm_query::order_ingest()
           break;
         }
         else {
-          count++;
+          ++count;
         }
       }
     }
@@ -318,11 +318,11 @@ bool volm_query::order_ingest()
   } // loop over camera
 #if 0
   vcl_cout << " order_index_size = " << order_index_.size() << vcl_endl;
-  for (unsigned k = 0; k < order_index_.size(); k++){
+  for (unsigned k = 0; k < order_index_.size(); ++k){
     vcl_cout << " order_index_[" << k << "] = " << order_index_[k].size() << vcl_endl;
-    for (unsigned i = 0 ; i < order_index_[k].size(); i++) {
+    for (unsigned i = 0 ; i < order_index_[k].size(); ++i) {
       vcl_cout << "\t order_index_[" << k << "][" << i << "] = " << order_index_[k][i].size() << vcl_endl;
-      for (unsigned j = 0; j < order_index_[k][i].size(); j++) {
+      for (unsigned j = 0; j < order_index_[k][i].size(); ++j) {
         //vcl_cout << " cam " << k << ", object order " << i << ", order_index[" << j << "] =" << order_index_[k][i][j] << vcl_endl;
       }
     }
@@ -333,7 +333,7 @@ bool volm_query::order_ingest()
 
 bool volm_query::query_ingest()
 {
-  for (unsigned i = 0; i < cameras_.size(); i++)
+  for (unsigned i = 0; i < cameras_.size(); ++i)
   {
     //vcl_cout << i << '.'; vcl_cout.flush();
     vcl_vector<unsigned char> min_dist_layer;
@@ -350,7 +350,7 @@ bool volm_query::query_ingest()
     vil_image_view<float> depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
 
     unsigned count = 0;
-    for (unsigned p_idx = 0; p_idx < query_size_; p_idx++) {
+    for (unsigned p_idx = 0; p_idx < query_size_; ++p_idx) {
       vgl_point_3d<double> qp(query_points_[p_idx].x(), query_points_[p_idx].y(), query_points_[p_idx].z()+altitude_);
       unsigned char min_dist, order, max_dist;
       // check whether the point is behind the camera
@@ -392,7 +392,7 @@ bool volm_query::query_ingest()
             }
           }
           if ((unsigned)min_dist != 255)
-            count++;
+            ++count;
         }
       }
     } // loop over rays for current camera
@@ -422,7 +422,7 @@ unsigned char volm_query::fetch_depth(double const& u,
   // check other objects before ground,
   // e.g.,  for overlap region of a building and ground, building is on the ground and it is must closer than the ground
   if (depth_regions_.size()) {
-    for (unsigned i = 0; i < depth_regions_.size(); i++) {
+    for (unsigned i = 0; i < depth_regions_.size(); ++i) {
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly(depth_regions_[i]->region_2d());
       if (poly.contains(u,v)) {
         is_object = true;
@@ -444,7 +444,7 @@ unsigned char volm_query::fetch_depth(double const& u,
   }
   // ground plane
   if (dm_->ground_plane().size()) {
-    for (unsigned i = 0; i < dm_->ground_plane().size(); i++) {
+    for (unsigned i = 0; i < dm_->ground_plane().size(); ++i) {
       vgl_polygon<double> vgl_ground = bsol_algs::vgl_from_poly((dm_->ground_plane()[i])->region_2d());
       if (vgl_ground.contains(u,v)) {
         is_ground = true;
@@ -476,7 +476,7 @@ unsigned char volm_query::fetch_depth(double const& u,
   }
   // sky last since all objects should be closer than sky
   if (dm_->sky().size()) {
-    for (unsigned i = 0; i < dm_->sky().size(); i++) {
+    for (unsigned i = 0; i < dm_->sky().size(); ++i) {
       vgl_polygon<double> vgl_sky = bsol_algs::vgl_from_poly((dm_->sky()[i])->region_2d());
       if (vgl_sky.contains(u,v)) {
         is_sky = true;
@@ -512,7 +512,7 @@ bool volm_query::weight_ingest()
     // TO BE IMPLEMENTED to read from depth_regions_
     // now set equal weight
     float unit_ratio = 0.5f * (1 - weight_grd_ - weight_sky_ );
-    for (unsigned i = 0; i < depth_regions_.size(); i++) {
+    for (unsigned i = 0; i < depth_regions_.size(); ++i) {
       weight_obj_.push_back(unit_ratio);
     }
   }
@@ -528,7 +528,7 @@ void volm_query::draw_template(vcl_string const& vrml_fname)
   //this->draw_rays(vrml_fname);
   // write the camera
   unsigned cam_num = (unsigned)cameras_.size();
-  for (unsigned i = 0; i < cam_num; i++) {
+  for (unsigned i = 0; i < cam_num; ++i) {
     float r = 0.0f;
     float g = 0.0f;
     float b = 0.0f;
@@ -549,7 +549,7 @@ void volm_query::draw_rays(vcl_string const& fname)
   vcl_ofstream ofs(fname.c_str(), vcl_ios::app);
   double len = 800.0;
   vgl_point_3d<double> ori(0.0,0.0,0.0);
-  for (unsigned i=0; i<query_size_; i++) {
+  for (unsigned i=0; i<query_size_; ++i) {
     vgl_ray_3d<double> ray(ori, query_points_[i]);
     bvrml_write::write_vrml_cylinder(ofs, ori, ray.direction(), (float)3.0, (float)len, 0.0f, 0.0f, 0.0f, 1);
   }
@@ -618,9 +618,9 @@ void volm_query::draw_viewing_volume(vcl_string const& fname, vpgl_perspective_c
 
 void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polygon<double> const& poly, unsigned char const& depth)
 {
-  for (unsigned pi = 0; pi < poly.num_sheets(); pi++)
+  for (unsigned pi = 0; pi < poly.num_sheets(); ++pi)
   {
-    for (unsigned vi = 0; vi < poly[pi].size(); vi++)
+    for (unsigned vi = 0; vi < poly[pi].size(); ++vi)
     {
       vgl_point_2d<double> s = poly[pi][vi];
       vgl_point_2d<double> e;
@@ -632,9 +632,9 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
       double b = s.y() - k * s.x();
       if (vcl_sqrt(k*k) < 1) {// loop x
         if (s.x() <= e.x()) {
-          for (unsigned xi = (unsigned)s.x(); xi <= (unsigned)e.x(); xi++) {
+          for (unsigned xi = (unsigned)s.x(); xi <= (unsigned)e.x(); ++xi) {
             unsigned xj = (unsigned)(k*xi+b);
-            if (  !(xi < 0 || xj < 0 || xi >= ni_ || xj >= nj_) ) {
+            if (xi < ni_ && xj < nj_) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
               img(xi,xj).b = bvrml_color::heatmap_classic[(int)depth][2];
@@ -642,9 +642,9 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
           }
         }
         else {
-          for (unsigned xi = (unsigned)e.x(); xi <= (unsigned)s.x(); xi++) {
+          for (unsigned xi = (unsigned)e.x(); xi <= (unsigned)s.x(); ++xi) {
             unsigned xj = (unsigned)(k*xi+b);
-            if (  !(xi < 0 || xj < 0 || xi >= ni_ || xj >= nj_) ) {
+            if (xi < ni_ && xj < nj_) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
               img(xi,xj).b = bvrml_color::heatmap_classic[(int)depth][2];
@@ -654,9 +654,9 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
       }
       else {
         if (s.y() <= e.y()) {
-          for (unsigned xj = (unsigned)s.y(); xj <= (unsigned)e.y(); xj++) {
+          for (unsigned xj = (unsigned)s.y(); xj <= (unsigned)e.y(); ++xj) {
             unsigned xi = (unsigned)((xj-b)/k);
-            if (  !(xi < 0 || xj < 0 || xi >= ni_ || xj >= nj_) ) {
+            if (xi < ni_ && xj < nj_) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
               img(xi,xj).b = bvrml_color::heatmap_classic[(int)depth][2];
@@ -664,9 +664,9 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
           }
         }
         else {
-          for (unsigned xj = (unsigned)e.y(); xj <= (unsigned)s.y(); xj++) {
+          for (unsigned xj = (unsigned)e.y(); xj <= (unsigned)s.y(); ++xj) {
             unsigned xi = (unsigned)((xj-b)/k);
-            if (  !(xi < 0 || xj < 0 || xi >= ni_ || xj >= nj_) ) {
+            if (xi < ni_ && xj < nj_) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
               img(xi,xj).b = bvrml_color::heatmap_classic[(int)depth][2];
@@ -690,8 +690,8 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
     cam.project(world_point.x(), world_point.y(), world_point.z()+altitude_, u, v);
     int cx = (int)u;
     int cy = (int)v;
-    for (int i = -dot_size; i < dot_size; i++)
-      for (int j = -dot_size; j < dot_size; j++) {
+    for (int i = -dot_size; i < dot_size; ++i)
+      for (int j = -dot_size; j < dot_size; ++j) {
         int x = cx + i ; int y = cy + j;
         if ( !(x < 0 || y < 0 || x >= (int)img.ni() || y >= (int)img.nj()) ) {
           if (depth == 254) { // special color for sky
@@ -718,21 +718,21 @@ void volm_query::draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_
 {
   // draw depth_map polygons on the depth images
   if (dm_->sky().size()) {
-    for (unsigned i = 0; i < dm_->sky().size(); i++) {
+    for (unsigned i = 0; i < dm_->sky().size(); ++i) {
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly((dm_->sky()[i])->region_2d());
       this->draw_polygon(out_img, poly, (unsigned char)254);
     }
   }
   if (dm_->ground_plane().size()) {
     unsigned ground_size = (unsigned)dm_->ground_plane().size();
-    for (unsigned i = 0; i < ground_size; i++) {
+    for (unsigned i = 0; i < ground_size; ++i) {
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly((dm_->ground_plane()[i])->region_2d());
       this->draw_polygon(out_img, poly, (unsigned char)1);
     }
   }
   if (dm_->scene_regions().size()) {
     unsigned region_size = (unsigned)dm_->scene_regions().size();
-    for ( unsigned i = 0; i < region_size; i++) {
+    for ( unsigned i = 0; i < region_size; ++i) {
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly((dm_->scene_regions())[i]->region_2d());
       double value = (dm_->scene_regions())[i]->min_depth();
       unsigned char depth = sph_depth_->get_depth_interval(value);
@@ -747,7 +747,7 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
 {
   this->draw_depth_map_regions(out_img);
   // draw the rays that current penetrate through the image
-  for (unsigned pidx = 0; pidx < query_size_; pidx++) {
+  for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
     if (values[pidx] < 255) {
 #if 0
       vcl_cout << " inside draw, " << ", cam_id = " << cam_id << " idx = " << pidx
@@ -764,8 +764,8 @@ void volm_query::draw_query_image(unsigned cam_i, vcl_string const& out_name)
   // create an rgb image instance
   vil_image_view<vil_rgb<vxl_byte> > img(ni_, nj_);
   // initialize the image
-  for (unsigned i = 0; i < ni_; i++)
-    for (unsigned j = 0; j < nj_; j++) {
+  for (unsigned i = 0; i < ni_; ++i)
+    for (unsigned j = 0; j < nj_; ++j) {
       img(i,j).r = (unsigned char)120;
       img(i,j).g = (unsigned char)120;
       img(i,j).b = (unsigned char)120;
@@ -781,8 +781,8 @@ void volm_query::draw_query_regions(vcl_string const& out_name)
   // create an rgb image instance
   vil_image_view<vil_rgb<vxl_byte> > img(ni_, nj_);
   // initialize the image
-  for (unsigned i = 0; i < ni_; i++)
-    for (unsigned j = 0; j < nj_; j++) {
+  for (unsigned i = 0; i < ni_; ++i)
+    for (unsigned j = 0; j < nj_; ++j) {
       img(i,j).r = (unsigned char)120;
       img(i,j).g = (unsigned char)120;
       img(i,j).b = (unsigned char)120;
@@ -798,7 +798,7 @@ void volm_query::draw_query_images(vcl_string const& out_dir)
   //  in depth_map_scene and the img points corresponding to points inside the container
   // loop over fist 100 camera
   unsigned img_num = (cameras_.size() > 100) ? 100 : (unsigned)cameras_.size();
-  for (unsigned i = 0; i < img_num; i++) {
+  for (unsigned i = 0; i < img_num; ++i) {
     vcl_stringstream s_idx;
     s_idx << i;
     vcl_string fs = out_dir + "query_img_" + this->get_cam_string(i) + ".png";
@@ -810,7 +810,7 @@ void volm_query::visualize_query(vcl_string const& prefix)
 {
   // visualize the spherical shell by the query depth value -- used to compare with the generated index spherical shell
   // loop over all camera
-  for (unsigned i = 0; i < cameras_.size(); i++) {
+  for (unsigned i = 0; i < cameras_.size(); ++i) {
     vcl_vector<unsigned char> single_layer = min_dist_[i];
     vcl_stringstream str;
     str << prefix << "_query_" << i << ".vrml";
@@ -821,7 +821,7 @@ void volm_query::visualize_query(vcl_string const& prefix)
 unsigned volm_query::get_num_top_fov(double const& top_fov) const
 {
   unsigned count = 0;
-  for (unsigned i = 0; i < cameras_.size(); i++) {
+  for (unsigned i = 0; i < cameras_.size(); ++i) {
     vcl_string cam_string = this->get_cam_string(i);
     unsigned sindx = (unsigned)cam_string.find("top_fov");
     sindx += 8;
@@ -829,7 +829,7 @@ unsigned volm_query::get_num_top_fov(double const& top_fov) const
     double top;
     ss >> top;
     if ((unsigned)top == (unsigned)top_fov) {
-      count++;
+      ++count;
     }
   }
   return count;
@@ -849,7 +849,7 @@ double volm_query::get_top_fov(unsigned const& id) const
 vcl_vector<double> volm_query::get_valid_top_fov() const
 {
   vcl_set<double> top_fov_set;
-  for (unsigned i = 0; i < cameras_.size(); i++) {
+  for (unsigned i = 0; i < cameras_.size(); ++i) {
     top_fov_set.insert(this->get_top_fov(i));
   }
   vcl_vector<double> valid_top_fov;
@@ -863,8 +863,8 @@ unsigned volm_query::get_order_size() const
   unsigned count = 0;
   unsigned cam_num = (unsigned)cameras_.size();
   unsigned obj_num = this->get_obj_order_num();
-  for (unsigned i = 0; i < cam_num; i++)
-    for (unsigned j = 0; j < obj_num; j++)
+  for (unsigned i = 0; i < cam_num; ++i)
+    for (unsigned j = 0; j < obj_num; ++j)
       count += (unsigned)order_index_[i][j].size();
   return count;
 }
@@ -873,7 +873,7 @@ unsigned volm_query::get_ground_id_size() const
 {
   unsigned count = 0;
   unsigned cam_num = (unsigned)cameras_.size();
-  for (unsigned i = 0; i < cam_num; i++) {
+  for (unsigned i = 0; i < cam_num; ++i) {
     count += (unsigned)ground_id_[i].size();
     //vcl_cout << " camera " << i << ", # of the ground voxel = " << ground_id_[i].size() << vcl_endl;
   }
@@ -884,7 +884,7 @@ unsigned volm_query::get_ground_dist_size() const
 {
   unsigned count = 0;
   unsigned cam_num = (unsigned)cameras_.size();
-  for (unsigned i = 0; i < cam_num; i++)
+  for (unsigned i = 0; i < cam_num; ++i)
     count += (unsigned)ground_dist_[i].size();
   return count;
 }
@@ -894,8 +894,8 @@ unsigned volm_query::get_dist_id_size() const
   unsigned count = 0;
   unsigned cam_num = (unsigned)cameras_.size();
   unsigned obj_num = (unsigned)depth_regions_.size();
-  for (unsigned i = 0; i < cam_num; i++)
-    for (unsigned j = 0; j < obj_num; j++) {
+  for (unsigned i = 0; i < cam_num; ++i)
+    for (unsigned j = 0; j < obj_num; ++j) {
       count += (unsigned)dist_id_[i][j].size();
 #if 0
       vcl_cout << " camera " << i
@@ -911,7 +911,7 @@ unsigned volm_query::get_sky_id_size() const
 {
   unsigned count = 0;
   unsigned cam_num = (unsigned)cameras_.size();
-  for (unsigned i = 0; i < cam_num; i++) {
+  for (unsigned i = 0; i < cam_num; ++i) {
     count += (unsigned)sky_id_[i].size();
     //vcl_cout << " camera " << i << ", # of the SKY voxel = " << (unsigned)sky_id_[i].size() << vcl_endl;
   }
