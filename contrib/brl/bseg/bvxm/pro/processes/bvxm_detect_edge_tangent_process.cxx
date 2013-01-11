@@ -18,12 +18,12 @@
 #include <vdgl/vdgl_interpolator.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
-#include <vpgl/vpgl_rational_camera.h>
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vgl/vgl_line_2d.h>
+
 //: initialize input and output types
 bool bvxm_detect_edge_tangent_process_cons(bprb_func_process& pro)
 {
