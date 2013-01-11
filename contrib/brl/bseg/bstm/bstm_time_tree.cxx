@@ -83,7 +83,7 @@ int bstm_time_tree::get_data_ptr()
   return int((bits_[7]<<24) | (bits_[6]<<16) | (bits_[5]<<8) | (bits_[4]));
 }
 
-int bstm_time_tree::set_data_ptr(int ptr)
+void bstm_time_tree::set_data_ptr(int ptr)
 {
   this->bits_[4] = (ptr) & 0xff;
   this->bits_[5] = (ptr>>8)  & 0xff;

@@ -82,7 +82,7 @@ class bstm_time_tree
   int get_data_ptr();
 
   //: sets pointers stored in bits 4,5,6,7
-  int set_data_ptr(int ptr);
+  void set_data_ptr(int ptr);
 
   //: traverse tree to get leaf index that contains time t, assuming t \in [0,1]
   int traverse(const double t, int deepest=6) const;
