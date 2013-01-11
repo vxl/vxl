@@ -10,7 +10,6 @@
 
 //executable args
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
 
 //bstm scene stuff
 #include <bstm/ocl/bstm_opencl_cache.h>
@@ -102,8 +101,6 @@ int main(int argc, char ** argv)
     slider_h->set_value( 0.0f );
 
     bit_tableau->init(device, opencl_cache, scene, ni(), nj(), pcam, slider_h);
-
-
 
     // Fit the sliders and the easy2D into the window
     vgui_poly_tableau_new poly;

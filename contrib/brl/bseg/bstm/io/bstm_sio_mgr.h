@@ -9,7 +9,6 @@
 #include <bstm/bstm_data_base.h>
 #include <bstm/basic/bstm_block_id.h>
 #include <bstm/bstm_data_traits.h>
-#include <vul/vul_file.h>
 #include <vcl_iostream.h>
 
 //: disk level storage class.
