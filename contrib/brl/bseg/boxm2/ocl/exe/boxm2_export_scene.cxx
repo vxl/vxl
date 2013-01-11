@@ -5,6 +5,8 @@
 #include <vcl_fstream.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_generic_camera.h>
+#include <vpgl/algo/vpgl_camera_convert.h>
 #include <vsph/vsph_view_sphere.h>
 #include <vsph/vsph_view_point.h>
 #include <vil/vil_image_view_base.h>
@@ -37,8 +39,6 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-#include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/algo/vpgl_camera_convert.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vcl_algorithm.h>
 
