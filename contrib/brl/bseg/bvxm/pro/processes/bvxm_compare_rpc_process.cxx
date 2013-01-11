@@ -7,9 +7,9 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_rational_camera.h>
 
 //:sets input and output types for  bvxm_compare_rpc_process
 bool bvxm_compare_rpc_process_cons(bprb_func_process& pro)
