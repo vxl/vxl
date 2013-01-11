@@ -16,10 +16,10 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
+#include <vpgl/vpgl_camera.h>
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_timer.h>
 
 vcl_map<vcl_string, bocl_kernel*> boxm2_multi_store_aux::kernels_;

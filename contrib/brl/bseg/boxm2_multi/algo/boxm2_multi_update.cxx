@@ -12,8 +12,8 @@
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <vil/vil_image_view.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_timer.h>
+#include <vpgl/vpgl_camera.h>
 
 float boxm2_multi_update::update(boxm2_multi_cache& cache,
                                  vil_image_view<float>& img,

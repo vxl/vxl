@@ -8,12 +8,12 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
+#include <vpgl/vpgl_camera.h>
 
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <vil/vil_image_view.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_timer.h>
 
 
