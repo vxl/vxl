@@ -8,14 +8,13 @@
 #include <vsl/vsl_binary_io.h>
 
 //smart pointer stuff
-#include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
 #include <boxm2/basic/boxm2_block_id.h>
 
 class bstm_block_id : public boxm2_block_id
 {
-public:
+ public:
 
   int t_;
   inline int t() const { return t_; }
@@ -54,7 +53,6 @@ public:
 
   //: to string
   virtual vcl_string to_string() const;
-
 };
 
 
