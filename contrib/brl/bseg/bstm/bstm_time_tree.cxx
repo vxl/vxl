@@ -53,7 +53,7 @@ unsigned char bstm_time_tree::bit_at(int index) const
   if (index > 30)
     return 0;
 
-  int byte_index = vcl_floor(index/8);
+  int byte_index = index/8; // is already effectively a "floor()"; no need for std::floor() here
   int bit_index = index%8;
 #ifdef DEBUG
   vcl_cout << "query: " << index << " byte index: " << byte_index << " bit index: " << bit_index << vcl_endl;
@@ -68,7 +68,7 @@ void bstm_time_tree::set_bit_at(int index, bool val)
     return;
   }
 
-  int byte_index = vcl_floor(index/8);
+  int byte_index = index/8; // is already effectively a "floor()"; no need for std::floor() here
   int bit_index = index%8;
   unsigned char mask = 1<<(7-bit_index);
   unsigned char byte = bits_[byte_index];
@@ -107,7 +107,7 @@ int  bstm_time_tree::get_relative_index(int bit_index) const
 
   //otherwise get parent index, parent byte index and relative bit index
   const unsigned char oneuplevel = parent_index(bit_index);   //bit index of parent
-  unsigned char byte_index = vcl_floor(oneuplevel/8);         //byte where parent is found
+  unsigned char byte_index = oneuplevel/8;                    //byte where parent is found
 
   //count pre parent bits
   int count=0;
