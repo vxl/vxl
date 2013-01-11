@@ -33,7 +33,7 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vil/vil_image_view_base.h>
 #include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
+#include <vpgl/vpgl_lvcs.h>
 
 #include <bprb/bprb_parameters.h>
 
