@@ -7,8 +7,6 @@
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <vul/vul_arg.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_container_sptr.h>
 #include <volm/volm_spherical_shell_container.h>
@@ -19,7 +17,6 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
@@ -107,10 +104,10 @@ int main(int argc,  char** argv)
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell, false);
 
   vul_timer t;
-  
+
   // halt till all camera.bin files are available
   volm_io::write_status(out_folder(), volm_io::COMPOSE_HALT);
-  
+
   bool all_available = false;
   while (!all_available) {
     all_available = true;
@@ -166,17 +163,14 @@ int main(int argc,  char** argv)
           cnt_below++;
       }
     }
-    
-    vcl_cout << "For index file " << index_files[i] << '\n';
-    vcl_cout << "camera evaluated per location " << query->get_cam_num() << '\n';
-    vcl_cout << "tot location evaluated: " << ind_size << '\n';
-    vcl_cout << "tot cameras evaluated: " << total_cam_num << '\n';
-    vcl_cout << "tot cameras below threshold (" << threshold << ", " << threshold_unknown << "): " << cnt_below << '\n';
-    vcl_cout << "so knocked out " << (float)cnt_below/total_cam_num * 100 << " % of the of the evaluated CAMERAS!" << vcl_endl;
 
-
+    vcl_cout << "For index file " << index_files[i] << '\n'
+             << "camera evaluated per location " << query->get_cam_num() << '\n'
+             << "tot location evaluated: " << ind_size << '\n'
+             << "tot cameras evaluated: " << total_cam_num << '\n'
+             << "tot cameras below threshold (" << threshold << ", " << threshold_unknown << "): " << cnt_below << '\n'
+             << "so knocked out " << (float)cnt_below/total_cam_num * 100 << " % of the of the evaluated CAMERAS!" << vcl_endl;
   }
-
 
   volm_io::write_composer_log(out_folder(), log.str());
   volm_io::write_status(out_folder(), volm_io::SUCCESS, 100);
