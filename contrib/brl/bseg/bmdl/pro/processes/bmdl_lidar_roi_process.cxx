@@ -13,7 +13,6 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vpgl/vpgl_utm.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 
