@@ -1,6 +1,8 @@
 #include "bstm_sio_mgr.h"
+//
 #include <vcl_fstream.h>
 #include <sys/stat.h>  //for getting file sizes
+#include <vul/vul_file.h>
 
 bstm_block* bstm_sio_mgr::load_block(vcl_string dir, bstm_block_id block_id, bstm_block_metadata data )
 {
