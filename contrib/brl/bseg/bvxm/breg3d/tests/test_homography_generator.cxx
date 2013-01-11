@@ -14,8 +14,6 @@
 #include <vil/vil_convert.h>
 
 #include <vnl/vnl_matrix_fixed.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
 
 #include <ihog/ihog_transform_2d.h>
 #include <ihog/ihog_image.h>

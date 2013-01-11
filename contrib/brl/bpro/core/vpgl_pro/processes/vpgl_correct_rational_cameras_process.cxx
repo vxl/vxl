@@ -6,7 +6,6 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_fstream.h>
-#include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vul/vul_file.h>
@@ -72,7 +71,7 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
     double i, j;
     line >> i; line >> j;
     //ifs >> orig_cam_path;
-    vcl_cout << "reading cam: " << cam_path <<vcl_endl
+    vcl_cout << "reading cam: " << cam_path << '\n'
              << "\t corr i: " << i << " j: " << j << vcl_endl;
     vcl_string img_name = vul_file::strip_directory(cam_path);
     img_name = vul_file::strip_extension(img_name);

@@ -13,7 +13,6 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
-#include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
 #include "../breg3d_ekf_camera_optimizer.h"

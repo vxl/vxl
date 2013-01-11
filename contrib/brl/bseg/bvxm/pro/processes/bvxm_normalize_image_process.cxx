@@ -20,7 +20,6 @@
 
 #include <brdb/brdb_value.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vpgl/vpgl_camera.h>
 
 //:sets input and output types for bvxm_create_normalized_nplanes_image_process
 bool bvxm_normalize_image_process_cons(bprb_func_process& pro)

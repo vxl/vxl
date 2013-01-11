@@ -6,8 +6,6 @@
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 
-#include <vpgl/vpgl_camera.h>
-
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>

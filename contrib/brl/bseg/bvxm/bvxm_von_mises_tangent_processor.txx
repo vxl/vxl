@@ -5,7 +5,6 @@
 
 #include <bsta/algo/bsta_von_mises_updater.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
-#include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_proj_camera.h>//restricted to projective camera for now
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_closest_point.h>

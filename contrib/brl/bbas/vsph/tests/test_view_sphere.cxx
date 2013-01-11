@@ -5,7 +5,6 @@
 #include <vsph/vsph_view_point.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_camera.h>
 
 #include <vnl/vnl_math.h>
 

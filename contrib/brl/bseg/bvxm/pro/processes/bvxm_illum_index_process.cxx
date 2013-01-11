@@ -7,7 +7,6 @@
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 
-#include <vpgl/vpgl_camera.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>

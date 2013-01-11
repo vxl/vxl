@@ -16,7 +16,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 
-#include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
 // for computing homography

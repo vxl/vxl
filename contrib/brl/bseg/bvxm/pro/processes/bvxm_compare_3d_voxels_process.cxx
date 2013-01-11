@@ -5,8 +5,6 @@
 #include <bprb/bprb_func_process.h>
 
 #include <brip/brip_vil_float_ops.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/algo/vpgl_backproject.h>
 
 #include <bvxm/bvxm_voxel_world.h>
 
@@ -50,9 +48,6 @@ bool bvxm_compare_3d_voxels_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr multi_scale_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   unsigned input_scale = pro.get_input<unsigned>(i++);
   vcl_string filename = pro.get_input<vcl_string>(i++);
-
-  // for the ground truth
-  vpgl_lvcs_sptr lvcs=main_world->get_params()->lvcs();
 
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 

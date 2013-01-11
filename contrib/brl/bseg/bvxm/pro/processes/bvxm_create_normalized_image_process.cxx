@@ -10,7 +10,6 @@
 
 #include <vil/vil_image_view_base.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vpgl/vpgl_camera.h>
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_mog_grey_processor.h>

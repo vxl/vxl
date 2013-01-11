@@ -18,8 +18,6 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <icam/icam_depth_transform.h>
 #include <icam/icam_sample.h>
 

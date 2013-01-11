@@ -4,7 +4,6 @@
 // \file
 #include <vul/vul_file.h>
 #include <bprb/bprb_func_process.h>
-#include <vpgl/vpgl_camera.h>
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
