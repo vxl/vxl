@@ -4,7 +4,7 @@
 // \file
 
 #include<vil/vil_convert.h>
-#include<vil/vil_image_resource.h>
+#include<vil/vil_image_view.h>
 #include<vil/vil_math.h>
 
 namespace vil_image_sum_process_globals

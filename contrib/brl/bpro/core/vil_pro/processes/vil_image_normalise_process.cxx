@@ -4,7 +4,7 @@
 // \file
 // Scale and offset image to have zero mean and unit variance
 #include<vil/vil_convert.h>
-#include<vil/vil_image_resource.h>
+#include<vil/vil_image_view.h>
 #include<vil/vil_math.h>
 
 namespace vil_image_normalise_process_globals
@@ -18,7 +18,7 @@ bool vil_image_normalise_process_cons(bprb_func_process& pro)
     using namespace vil_image_normalise_process_globals;
 
     vcl_vector<vcl_string> input_types_(n_inputs_);
-    
+
     input_types_[0] = "vil_image_view_base_sptr";
 
     return pro.set_input_types(input_types_);
