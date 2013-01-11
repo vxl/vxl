@@ -12,8 +12,6 @@
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vpgl/vpgl_proj_camera.h>
-
 
 void test_delaunay()
 {
