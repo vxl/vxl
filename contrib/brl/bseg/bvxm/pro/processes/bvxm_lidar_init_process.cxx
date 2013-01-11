@@ -22,7 +22,6 @@
 #include <vil/vil_pixel_format.h>
 #include <vil/file_formats/vil_tiff.h>
 
-#include <vpgl/vpgl_utm.h>
 #include <brip/brip_roi.h>
 
 //: set input and output types
