@@ -87,7 +87,7 @@ int main(int argc,  char** argv)
       }
     unsigned u, v;
     tiles[i].global_to_img(lon, lat, u, v);
-    if (u >= 0 && v >= 0 && u < tile.ni() && v < tile.nj())
+    if (u < tile.ni() && v < tile.nj())
       vcl_cout << "GT location: " << lon << ", " << lat << " is at pixel: " << u << ", " << v << " and has value: " << (int)tile(u, v) << vcl_endl;
   }
   vcl_cout << "tot pixels within ROI: " << within_poly << '\n'
