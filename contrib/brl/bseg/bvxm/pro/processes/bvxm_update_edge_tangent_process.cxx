@@ -13,8 +13,7 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/vpgl_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vil/vil_image_view.h>
 #include <vcl_cstdio.h>
