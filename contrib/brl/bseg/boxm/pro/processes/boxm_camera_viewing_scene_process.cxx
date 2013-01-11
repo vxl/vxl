@@ -20,8 +20,6 @@
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/algo/bpgl_project.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vpgl/vpgl_lvcs.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>

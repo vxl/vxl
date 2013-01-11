@@ -19,9 +19,6 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -64,9 +61,9 @@ bool boxm_create_scene_process(bprb_func_process& pro)
 
   boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
   scene_ptr->load_scene(fname, parser);
-  vcl_cout << "Scene path: " << scene_ptr->filename()<< vcl_endl;
-  vcl_cout << "Scene appearance: " <<scene_ptr->appearence_model()<< vcl_endl;
-  
+  vcl_cout << "Scene path: " << scene_ptr->filename()<< '\n'
+           << "Scene appearance: " <<scene_ptr->appearence_model()<< vcl_endl;
+
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
     if (!scene_ptr->multi_bin())
     {
@@ -130,8 +127,8 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(fname);
       scene_ptr = scene;
-      vcl_cout << "Loading scene of type vnl_float_3" << vcl_endl;
-      vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;
+      vcl_cout << "Loading scene of type vnl_float_3" << '\n'
+               << "Scene path: " << scene->filename()<< vcl_endl;
     }
   }
   else if (scene_ptr->appearence_model() == VNL_FLOAT_10) {
@@ -141,8 +138,8 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(fname);
       scene_ptr = scene;
-      vcl_cout << "Loading scene of type vnl_float_10" << vcl_endl;
-      vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;
+      vcl_cout << "Loading scene of type vnl_float_10" << '\n'
+               << "Scene path: " << scene->filename()<< vcl_endl;
     }
   }
   else if (scene_ptr->appearence_model() == BOXM_BOOL) {

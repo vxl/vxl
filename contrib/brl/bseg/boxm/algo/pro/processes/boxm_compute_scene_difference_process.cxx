@@ -19,9 +19,6 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -71,9 +68,9 @@ bool boxm_compute_scene_difference_process(bprb_func_process& pro)
   boxm_scene_base_sptr sceneout_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   float t = pro.get_input<float>(i++);
 
-  if (scene1_ptr->appearence_model() == BOXM_APM_MOG_GREY && 
-      scene2_ptr->appearence_model() == BOXM_APM_MOG_GREY && 
-      sceneout_ptr->appearence_model() == BOXM_APM_MOG_GREY ) 
+  if (scene1_ptr->appearence_model() == BOXM_APM_MOG_GREY &&
+      scene2_ptr->appearence_model() == BOXM_APM_MOG_GREY &&
+      sceneout_ptr->appearence_model() == BOXM_APM_MOG_GREY )
   {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *scene1 = static_cast<boxm_scene<tree_type>*> (scene1_ptr.as_pointer());

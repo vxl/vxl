@@ -18,9 +18,6 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
