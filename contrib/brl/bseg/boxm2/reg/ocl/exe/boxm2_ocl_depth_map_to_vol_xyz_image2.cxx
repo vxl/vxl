@@ -11,8 +11,8 @@
 #include <bpgl/algo/bpgl_transform_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_timer.h>
 #include <vcl_algorithm.h>
@@ -22,14 +22,9 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
-#if 0
-#include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_vector_fixed.h>
-#endif
 #include <vcl_iostream.h>
-#include <vil/vil_save.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_load.h>
 
 #include <bvrml/bvrml_write.h>
 
@@ -163,7 +158,7 @@ int main(int argc,  char** argv)
       double maxmi = 0.0;
       // angles
       for (unsigned int k = 0; k < 1; k++) {
-        x[5] = vnl_math::pi/2 * ( double ) k ;
+        x[5] = vnl_math::pi_over_2 * ( double ) k ;
         double mi = -func.f(x);
 
         if ( maxmi < mi )
