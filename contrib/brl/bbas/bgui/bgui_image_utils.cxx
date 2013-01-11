@@ -6,7 +6,6 @@
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
 #include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_cached_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vgui/vgui_range_map_params.h>
 #include <vul/vul_timer.h>
