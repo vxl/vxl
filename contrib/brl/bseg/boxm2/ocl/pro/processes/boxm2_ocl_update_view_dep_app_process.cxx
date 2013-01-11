@@ -21,7 +21,6 @@
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 
-#include <vil/vil_new.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
