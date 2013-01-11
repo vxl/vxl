@@ -2,7 +2,6 @@
 #include "boxm2_volm_wr3db_index.h"
 #include <vcl_where_root_dir.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 
 boxm2_volm_matcher::boxm2_volm_matcher(volm_query_sptr query, boxm2_volm_wr3db_index_sptr ind, unsigned long ei, bocl_device_sptr gpu) :
