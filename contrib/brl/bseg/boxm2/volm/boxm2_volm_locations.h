@@ -14,7 +14,6 @@
 //
 
 #include <vbl/vbl_ref_count.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <volm/volm_tile.h>
 #include <vil/vil_image_view.h>
@@ -27,32 +26,32 @@
 class boxm2_volm_loc_hypotheses : public vbl_ref_count
 {
  public:
-  
+
   boxm2_volm_loc_hypotheses(volm_tile tile) : tile_(tile) {}
-  
+
   //: construct the locs_ and pixels_ vectors by generating a hypothesis according to interval amounts in given the tile.
   //  Intervals are in meters.
   //  Only one elev hypothesis per location for now..
   //  keep only the locations that the scene covers
   void add_dems(boxm2_scene_sptr scene, unsigned interval_i, unsigned interval_j, float altitude, vcl_vector<vil_image_view<float> >& dems, vcl_vector<vpgl_geo_camera*>& cams);
-  
-  //: add a hypothesis given as a global lon, lat and elev for the pixel (i,j) of the tile, pass the pre-computed bounding box 
+
+  //: add a hypothesis given as a global lon, lat and elev for the pixel (i,j) of the tile, pass the pre-computed bounding box
   bool add(boxm2_scene_sptr scene, vgl_box_3d<double>& scene_bounding_box, double lon, double lat, double elev, unsigned i, unsigned j);
 
   //: add a hypothesis given as a global lon, lat and as local coords for the scene
   bool add(double lon, double lat, float cent_x, float cent_y, float cent_z);
-  
+
   //: construct by reading from a binary file
   boxm2_volm_loc_hypotheses(vcl_string bin_file);
 
   //: construct the output tile image using the score, score vector's size need to be same as locs_ size
   void generate_output_tile(vcl_vector<float>& scores, int uncertainty_size_i, int uncertainty_size_j, float cut_off, vil_image_view<unsigned int>& out);
-  
-  bool write_hypotheses(vcl_string out_file); 
-  
+
+  bool write_hypotheses(vcl_string out_file);
+
   //: for debugging purposes
   bool write_hypotheses_kml(boxm2_scene_sptr scene, vcl_string kml_file);
-  
+
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
 
@@ -60,7 +59,7 @@ class boxm2_volm_loc_hypotheses : public vbl_ref_count
   void b_read(vsl_b_istream &is);
 
   //: Return IO version number;
-  short version() const { return 1; }  
+  short version() const { return 1; }
 
  public:
   volm_tile tile_;

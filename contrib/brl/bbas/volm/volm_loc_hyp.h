@@ -14,14 +14,13 @@
 //
 
 #include <vbl/vbl_ref_count.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <volm/volm_tile.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_3d.h>
 #include <boxm2/boxm2_scene.h>
 
-//: a set of 3d points as lat,lon,elev
+//: a set of 3d points as lat,lon,elev.
 //  stored as a map of lon values mapping to a map of lat values mapping to elev values --> this is for fast access later
 //  this class knows how to read kml polygons to construct hypotheses with a specified density,
 //  e.g. every X milliarcseconds, on the equator, 10m is 1000/3 milliarcseconds
@@ -39,12 +38,12 @@ class volm_loc_hyp : public vbl_ref_count
   //: add the location to the set
   bool add(float lat, float lon, float elev);
 
-  //: add all the points with elev higher than zero in this dem which are also within the given poly
-  //  for geocam's loaded from tfw files adjust_cam = false, 
-  //  however, if geocam is created explicitly using hemisphere and direction specifications for lat, lon then an adjustment is needed 
+  //: add all the points with elev higher than zero in this dem which are also within the given poly.
+  //  for geocam's loaded from tfw files adjust_cam = false,
+  //  however, if geocam is created explicitly using hemisphere and direction specifications for lat, lon then an adjustment is needed
   //  (e.g. for LIDAR tiles where cam is constructed using the naming convention)
   void add(vgl_polygon<double>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int inc_i, int inc_j, bool adjust_cam = false,  char hemi = 'N', char dir = 'W');
-  
+
   unsigned size() { return cnt_; }
 
   bool write_hypotheses(vcl_string out_file);
@@ -54,7 +53,7 @@ class volm_loc_hyp : public vbl_ref_count
 
   //: return false when all hyps are returned, return in a sequence which started from start and incremented by skip, e.g. i = start; i < cnt_; i+=skip
   bool get_next(unsigned start, unsigned skip, vgl_point_3d<float>& h);
-  
+
   //: get the hypothesis closest to the given and its id if get_next method were to be used, very dummy for now, TODO: use upper_bound and lower_bound to limit search in lat map
   bool get_closest(double lat, double lon, vgl_point_3d<float>& h, unsigned& hyp_id);
 

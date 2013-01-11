@@ -9,7 +9,6 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
 
 //: initialization
 bool vpgl_create_local_rational_camera_process_cons(bprb_func_process& pro)
