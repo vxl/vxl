@@ -6,9 +6,7 @@
 #include <bprb/bprb_parameters.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_string.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
-#include <vpgl/vpgl_local_rational_camera.h>
 
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
