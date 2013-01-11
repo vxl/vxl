@@ -5,7 +5,6 @@
 
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
-#include <vil/vil_image_view.h>
 
 class boxm2_vis_probe_functor
 {
@@ -30,7 +29,6 @@ class boxm2_vis_probe_functor
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
   float * vis_;
 };
-
 
 
 #endif

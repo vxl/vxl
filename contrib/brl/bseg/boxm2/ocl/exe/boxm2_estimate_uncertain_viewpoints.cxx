@@ -10,6 +10,7 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
+#include <vnl/vnl_math.h>
 
 //vul args
 #include <vul/vul_arg.h>
@@ -37,7 +38,6 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-#include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vil/vil_math.h>
