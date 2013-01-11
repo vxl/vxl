@@ -22,11 +22,12 @@ namespace bstm_scene_statistics_process_globals
   const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 0;
 }
+
 bool bstm_scene_statistics_process_cons(bprb_func_process& pro)
 {
   using namespace bstm_scene_statistics_process_globals;
 
-  //process takes 1 input
+  //process takes 2 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
@@ -54,13 +55,13 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
   bstm_cache_sptr cache = pro.get_input<bstm_cache_sptr>(i++);
 
   unsigned total_num_cells = 0;
-  unsigned average_time_tree_depths;
+  unsigned average_time_tree_depths = 0;
   unsigned num_time_trees = 0;
 
   //get blocks
   vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
   vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator bstm_iter = blocks.begin();
-  for(; bstm_iter != blocks.end(); bstm_iter++)
+  for (; bstm_iter != blocks.end(); bstm_iter++)
   {
     bstm_block_id bstm_id = bstm_iter->first;
     bstm_block_metadata bstm_metadata = bstm_iter->second;
@@ -90,9 +91,6 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
 
   vcl_cout << "Total number of cells: " << total_num_cells << vcl_endl;
   vcl_cout << "Average time tree number of cells: " << ((float)average_time_tree_depths)/num_time_trees << vcl_endl;
-
-
-
 
   return true;
 }
