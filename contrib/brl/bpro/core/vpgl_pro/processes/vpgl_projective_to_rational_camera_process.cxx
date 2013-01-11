@@ -7,9 +7,9 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+
 vpgl_rational_camera<double>
 projective_to_rational(vpgl_proj_camera<double>& cam_pers);
 
