@@ -9,9 +9,6 @@
 
 #include <vcl_fstream.h>
 #include <boxm2/view/boxm2_trajectory.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -28,7 +25,7 @@ bool boxm2_view_trajectory_size_process_cons(bprb_func_process& pro)
 
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "boxm2_trajectory_sptr"; //trajectory object 
+  input_types_[0] = "boxm2_trajectory_sptr"; //trajectory object
 
   // process has 1 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);

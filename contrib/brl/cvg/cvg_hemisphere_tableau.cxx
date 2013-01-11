@@ -1,8 +1,6 @@
 #include "cvg_hemisphere_tableau.h"
 //:
 // \file
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
 #include <vgui/vgui_modifier.h>
 #include <vgl/vgl_point_3d.h>

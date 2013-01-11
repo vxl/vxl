@@ -7,8 +7,6 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
 
 //: initialization
@@ -36,7 +34,7 @@ bool vpgl_project_process_cons(bprb_func_process& pro)
 bool vpgl_project_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 4) {
-    vcl_cout << "vpgl_save_perspective_camera_process: The number of inputs should be 4" << vcl_endl;
+    vcl_cout << "vpgl_project_process: The number of inputs should be 4" << vcl_endl;
     return false;
   }
 

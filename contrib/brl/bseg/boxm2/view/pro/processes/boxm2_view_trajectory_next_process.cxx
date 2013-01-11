@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A process for getting the next camera in a boxm2_trajectory object 
+// \brief A process for getting the next camera in a boxm2_trajectory object
 //
 // \author Andrew Miller
 // \date Mar 10, 2011
@@ -10,8 +10,6 @@
 #include <vcl_fstream.h>
 #include <boxm2/view/boxm2_trajectory.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -28,7 +26,7 @@ bool boxm2_view_trajectory_next_process_cons(bprb_func_process& pro)
 
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "boxm2_trajectory_sptr"; //Scene 
+  input_types_[0] = "boxm2_trajectory_sptr"; //Scene
 
   // process has 1 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -50,8 +48,8 @@ bool boxm2_view_trajectory_next_process(bprb_func_process& pro)
   boxm2_trajectory_sptr trajectory = pro.get_input<boxm2_trajectory_sptr>(argIdx++);
 
   //new trjaectory
-  vpgl_camera_double_sptr cam = trajectory->next(); 
-  
+  vpgl_camera_double_sptr cam = trajectory->next();
+
   // store trajectory pointer
   argIdx = 0;
   pro.set_output_val<vpgl_camera_double_sptr>(argIdx, cam);
