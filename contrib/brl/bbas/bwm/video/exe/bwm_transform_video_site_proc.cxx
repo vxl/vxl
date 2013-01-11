@@ -4,13 +4,13 @@
 #include <vcl_string.h>
 #include <vnl/vnl_double_4.h>
 #include <vpl/vpl.h> // vpl_unlink()
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/algo/bpgl_camera_homographies.h>
 #include <bwm/video/bwm_video_corr_processor.h>
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
+
 static bool process(vcl_string const& site_path,
                     vcl_string const& trans_site_path,
                     vcl_string const& trans_cam_dir,

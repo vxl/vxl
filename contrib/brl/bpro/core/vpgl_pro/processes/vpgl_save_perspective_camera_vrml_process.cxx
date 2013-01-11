@@ -8,7 +8,6 @@
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
 
 //: initialization

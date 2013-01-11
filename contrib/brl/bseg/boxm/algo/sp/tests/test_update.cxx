@@ -14,7 +14,6 @@
 #include <vul/vul_file.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vcl_sstream.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

@@ -8,7 +8,6 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_file.h>
 
@@ -77,8 +76,8 @@ bool vpgl_load_perspective_camera_from_kml_file_process_cons(bprb_func_process& 
   vcl_vector<vcl_string> output_types(4);
   output_types[0] = "vpgl_camera_double_sptr";  // output camera
   output_types[1] = "double";  // longitude, the returned camera is at 0,0,altitude however return the read lat, lon in case it is used by other processes
-  output_types[2] = "double";  // lattitude
-  output_types[3] = "double";  // altitude 
+  output_types[2] = "double";  // latitude
+  output_types[3] = "double";  // altitude
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 
@@ -100,7 +99,7 @@ bool vpgl_load_perspective_camera_from_kml_file_process(bprb_func_process& pro)
   unsigned ni = pro.get_input<unsigned>(0);
   unsigned nj = pro.get_input<unsigned>(1);
   vcl_string name = pro.get_input<vcl_string>(2);
-  
+
   bkml_parser* parser = new bkml_parser();
   vcl_FILE* xmlFile = vcl_fopen(name.c_str(), "r");
   if (!xmlFile) {
@@ -115,9 +114,9 @@ bool vpgl_load_perspective_camera_from_kml_file_process(bprb_func_process& pro)
     delete parser;
     return false;
   }
-  vpgl_perspective_camera<double> out_cam = 
-    bpgl_camera_utils::camera_from_kml((double)ni, (double)nj, parser->right_fov_, parser->top_fov_, parser->altitude_, parser->heading_, parser->tilt_, parser->roll_);  
-  
+  vpgl_perspective_camera<double> out_cam =
+    bpgl_camera_utils::camera_from_kml((double)ni, (double)nj, parser->right_fov_, parser->top_fov_, parser->altitude_, parser->heading_, parser->tilt_, parser->roll_);
+
   vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(out_cam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
   pro.set_output_val<double>(1, parser->longitude_);

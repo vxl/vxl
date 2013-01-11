@@ -12,7 +12,6 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/vgl_point_3d.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
 

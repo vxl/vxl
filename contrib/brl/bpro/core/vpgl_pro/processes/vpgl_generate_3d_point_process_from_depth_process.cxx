@@ -7,8 +7,8 @@
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
+
 namespace vpgl_generate_3d_point_from_depth_process_globals
 {
     const unsigned n_inputs_ = 4;
