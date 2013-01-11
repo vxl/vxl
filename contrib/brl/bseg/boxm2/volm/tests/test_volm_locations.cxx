@@ -1,8 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
-#include <vpgl/vpgl_lvcs.h>
 #include <boxm2/boxm2_scene.h>
-#include <vil/vil_load.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
 
