@@ -4,8 +4,9 @@
 #include <bpgl/bpgl_camera_utils.h>
 #include <volm/volm_spherical_container.h>
 #include <bsol/bsol_algs.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_rgb.h>
 #include <vil/vil_save.h>
-#include <vil/vil_resample_bilin.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <vcl_algorithm.h>
@@ -161,56 +162,57 @@ void volm_query::create_cameras()
     top_fov_.push_back(tfov_);    // top viewing ranges from 1 to 89
     vcl_cout << "\t top_fov:\n\t " << tfov_ << ' ';
     for (double i = tfov_inc_; i <= tfov_d_; i+=tfov_inc_) {
-      double right = tfov_ + i, left = tfov_ - i;
-      if (right > 89)  right = 89;
-      if (left  < 1)   left = 1;
-      top_fov_.push_back(right);
-      if (left != right) {
-        top_fov_.push_back(left);
-        vcl_cout << right << ' ' << left << ' ';
+      double right_fov = tfov_ + i, left_fov = tfov_ - i;
+      if (right_fov > 89)  right_fov = 89;
+      if (left_fov  < 1)   left_fov = 1;
+      top_fov_.push_back(right_fov);
+      if (left_fov != right_fov) {
+        top_fov_.push_back(left_fov);
+        vcl_cout << right_fov << ' ' << left_fov << ' ';
       }
       else
-        vcl_cout << right << ' ';
+        vcl_cout << right_fov << ' ';
     }
   }
   headings_.push_back(head_);
   vcl_cout << "\n\t headings:\n\t " << head_ << ' ';
   for (double i = head_inc_; i <= head_d_; i+= head_inc_) {   // heading ranges from 0 to 360
-    double right = head_ + i, left = head_ - i;
-    if (right > 360) right = right - 360;
-    if (left < 0)    left = left + 360;
-    headings_.push_back(right);
-    if (left != right) {
-      headings_.push_back(left); vcl_cout << right << ' ' << left << ' ';
+    double right_hd = head_ + i, left_hd = head_ - i;
+    if (right_hd > 360) right_hd = right_hd - 360;
+    if (left_hd < 0)    left_hd = left_hd + 360;
+    headings_.push_back(right_hd);
+    if (left_hd != right_hd) {
+      headings_.push_back(left_hd); vcl_cout << right_hd << ' ' << left_hd << ' ';
     }
     else
-      vcl_cout << right << ' ';
+      vcl_cout << right_hd << ' ';
   }
   vcl_cout << "\n\t tilts:\n\t " << tilt_ << ' ';
   tilts_.push_back(tilt_);   // tilt ranges from 0 to 180
   for (double i =  tilt_inc_; i <= tilt_d_; i+= tilt_inc_) {
-    double right = tilt_ + i, left = tilt_ - i;
-    if (right > 180) right = 180;
-    if (left < 0)    left = 0;
-    tilts_.push_back(right);  tilts_.push_back(left);
-    vcl_cout << right << ' ' << left << ' ';
+    double right_tlt = tilt_ + i, left_tlt = tilt_ - i;
+    if (right_tlt > 180) right_tlt = 180;
+    if (left_tlt < 0)    left_tlt = 0;
+    tilts_.push_back(right_tlt);  tilts_.push_back(left_tlt);
+    vcl_cout << right_tlt << ' ' << left_tlt << ' ';
   }
 
   vcl_cout << "\n\t rolls:\n\t " << roll_ << ' ';
   rolls_.push_back(roll_);    // roll ranges from -180 to 180 in kml, how about in camera_from_kml ?? (need to check...)
   for (double i = roll_inc_; i <= roll_d_; i+=roll_inc_) {
-    double right = roll_ + i , left = roll_ - i;
-    if (right > 180) right = right - 360;
-    if (left < -180) left = left + 360;
+    double right_rol = roll_ + i , left_rol = roll_ - i;
+    if (right_rol > 180) right_rol = right_rol - 360;
+    if (left_rol < -180) left_rol = left_rol + 360;
     rolls_.push_back(roll_ + i);  rolls_.push_back(roll_ - i);
-    vcl_cout << right << ' ' << left << ' ';
+    vcl_cout << right_rol << ' ' << left_rol << ' ';
   }
   vcl_cout.flush();
   // construct cameras
   for (unsigned i = 0; i < tilts_.size(); ++i)
     for (unsigned j = 0; j < rolls_.size(); ++j)
       for (unsigned k = 0; k < top_fov_.size(); ++k)
-        for (unsigned h = 0; h < headings_.size(); ++h) {
+        for (unsigned h = 0; h < headings_.size(); ++h)
+        {
           double tilt = tilts_[i], roll = rolls_[j], top_f = top_fov_[k], head = headings_[h];
           double dtor = vnl_math::pi_over_180;
           double ttr = vcl_tan(top_f*dtor);
@@ -331,7 +333,8 @@ bool volm_query::order_ingest()
 
 bool volm_query::query_ingest()
 {
-  for (unsigned i = 0; i < cameras_.size(); i++) {
+  for (unsigned i = 0; i < cameras_.size(); i++)
+  {
     //vcl_cout << i << '.'; vcl_cout.flush();
     vcl_vector<unsigned char> min_dist_layer;
     vcl_vector<unsigned char> max_dist_layer;
@@ -603,18 +606,22 @@ void volm_query::draw_viewing_volume(vcl_string const& fname, vpgl_perspective_c
       << "    ]\n"
       << "  }\n"
       << "}\n";
+#if 0 // TODO: not used !?!
   // draw image boundary
-  vgl_line_segment_3d<double> top(ptl,ptr);
-  vgl_line_segment_3d<double> left(ptl,pll);
-  vgl_line_segment_3d<double> right(plr,ptr);
-  vgl_line_segment_3d<double> bottom(plr,pll);
+  vgl_line_segment_3d<double> topline(ptl,ptr);
+  vgl_line_segment_3d<double> leftline(ptl,pll);
+  vgl_line_segment_3d<double> rightline(plr,ptr);
+  vgl_line_segment_3d<double> bottomline(plr,pll);
+#endif
   ofs.close();
 }
 
 void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polygon<double> const& poly, unsigned char const& depth)
 {
-  for (unsigned pi = 0; pi < poly.num_sheets(); pi++) {
-    for (unsigned vi = 0; vi < poly[pi].size(); vi++) {
+  for (unsigned pi = 0; pi < poly.num_sheets(); pi++)
+  {
+    for (unsigned vi = 0; vi < poly[pi].size(); vi++)
+    {
       vgl_point_2d<double> s = poly[pi][vi];
       vgl_point_2d<double> e;
       if (vi < poly[pi].size()-1)  e = poly[pi][vi+1];
