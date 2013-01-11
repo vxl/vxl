@@ -16,7 +16,6 @@
 #include <bstm/basic/bstm_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_vector_3d.h>
 #include <vcl_iosfwd.h>
 
 //smart pointer stuff
