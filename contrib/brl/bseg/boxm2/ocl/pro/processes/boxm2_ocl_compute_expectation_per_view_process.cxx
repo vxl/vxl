@@ -424,7 +424,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         unsigned int * nobs =static_cast<unsigned int*> (num_obs_single->cpu_buffer());
         unsigned int * currIdx_buf =static_cast<unsigned int*> (currIdx->cpu_buffer());
         unsigned int total_num_rays = 0;
-        for (unsigned int i = 0; i < info_buffer->data_buffer_length; i++)
+        for (int i = 0; i < info_buffer->data_buffer_length; ++i)
         {
           currIdx_buf[i] = total_num_rays;
           total_num_rays += nobs[i];

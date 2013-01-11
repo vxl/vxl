@@ -213,7 +213,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
       str_blk_cache.init(*id);
 
-      int datasize = str_blk_cache.block_size_in_bytes_["boxm2_data_index"]/ sizeof(unsigned int);
+      unsigned int datasize = str_blk_cache.block_size_in_bytes_["boxm2_data_index"]/ sizeof(unsigned int);
 
       //get data indices from str cache
       boxm2_data_base * data_type0 = str_blk_cache.data_types_["boxm2_data_index"];
@@ -248,7 +248,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
 
       //snap over each voxel
       unsigned max_obs_per_cell = 0;
-      for (unsigned s = 0; s < datasize; s++)
+      for (unsigned s = 0; s < datasize; ++s)
       {
         sampleIndex[s] = currIdx;
 
@@ -258,10 +258,10 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
         seglen_sum[s] = 0; //init pre_exp_sum
 
         unsigned obs_per_cell = 0;
-        for (short k = 0; k < num_imgs; k++)
+        for (unsigned short k = 0; k < num_imgs; ++k)
         {
-          unsigned int index  = indices[(datasize)*k+s];
-          unsigned int obs_num  = nobs[(datasize)*k+s];
+          unsigned int index  = indices[datasize*k+s];
+          unsigned int obs_num  = nobs[datasize*k+s];
           if (obs_num == 0)
             continue;
 
@@ -301,7 +301,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
 
 
       //delete expectations and pixels
-      for (short k = 0; k < num_imgs; k++)
+      for (unsigned short k = 0; k < num_imgs; k++)
       {
         if (expectations[image_ids[k]]) {
           delete[] expectations[image_ids[k]];
