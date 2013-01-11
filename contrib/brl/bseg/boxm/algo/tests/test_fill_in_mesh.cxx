@@ -10,9 +10,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
 #include <vcl_limits.h>

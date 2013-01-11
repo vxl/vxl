@@ -10,9 +10,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vul/vul_file.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
+#include <vpgl/vpgl_lvcs.h>
 
 static int test_save_scene_raw()
 {
