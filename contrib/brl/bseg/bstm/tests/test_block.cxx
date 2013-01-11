@@ -9,7 +9,6 @@
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_block_metadata.h>
 #include <bstm/bstm_time_block.h>
-#include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -19,7 +18,6 @@
 
 void test_block_id()
 {
-
   vcl_vector<bstm_block_id> list;
   vcl_map<bstm_block_id, vcl_string> bmap;
 

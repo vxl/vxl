@@ -12,7 +12,6 @@
 //   <none yet>
 // \endverbatim
 
-#include <vnl/vnl_vector_fixed.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h> // for std::pow()
@@ -108,7 +107,6 @@ class bstm_time_tree
 
   static unsigned char bit_lookup[256];
   static float cell_centers[63];
-
 };
 
 vcl_ostream& operator <<(vcl_ostream &s, bstm_time_tree &t);
