@@ -10,8 +10,7 @@
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
 #include <brad/brad_illum_util.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
+
 float render_expected_image(  boxm2_scene_sptr & scene,
                               bocl_device_sptr & device,
                               boxm2_opencl_cache_sptr & opencl_cache,
@@ -62,7 +61,7 @@ float render_expected_image(  boxm2_scene_sptr & scene,
 
     // set arguments
     vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_cout<<"Scene : "<<scene->data_path()<<" "<<scene->num_blocks()<<vcl_endl;
+    vcl_cout<<"Scene : "<<scene->data_path()<<' '<<scene->num_blocks()<<vcl_endl;
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
