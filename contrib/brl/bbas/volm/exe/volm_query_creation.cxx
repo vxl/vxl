@@ -12,7 +12,6 @@
 #include <volm/volm_io.h>
 #include <volm/volm_query.h>
 #include <volm/volm_query_sptr.h>
-#include <vpgl/vpgl_perspective_camera.h>
 
 int main(int argc, char** argv)
 {
