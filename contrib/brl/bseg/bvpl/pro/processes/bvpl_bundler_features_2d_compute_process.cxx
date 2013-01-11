@@ -40,7 +40,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 
-#include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 
 class coord_compare_2d
