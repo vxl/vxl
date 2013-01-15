@@ -27,7 +27,7 @@
 // \date October 07, 2012
 // \verbatim
 //   Modifications
-//
+//     JAN-2013 Yi Dong -- add an accessor to fetch the layer size from index
 // \endverbatim
 // 
 
@@ -81,7 +81,7 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     unsigned int buffer_size() { return buffer_size_; }
     unsigned int current_id() { return current_id_; }
     unsigned int current_global_id() { return current_global_id_; }
-    
+    unsigned int layer_size() { return layer_size_; }
     //: just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known, 
     //  caller is responsible to keep the ordering consistent with the hypotheses ordering
     bool add_to_index(vcl_vector<uchar>& values);
