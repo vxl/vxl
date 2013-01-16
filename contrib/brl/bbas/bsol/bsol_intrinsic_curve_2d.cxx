@@ -4,6 +4,7 @@
 // \file
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -42,6 +43,13 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr pol
   for (unsigned i = 0; i < poly->size(); i++)
     storage_->push_back(poly->vertex(i));
   isOpen_=true;
+}
+bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polygon_2d_sptr poly)
+{
+  storage_ = new vcl_vector<vsol_point_2d_sptr>();
+  for (unsigned i = 0; i < poly->size(); i++)
+    storage_->push_back(poly->vertex(i));
+  isOpen_=false;
 }
 
 
@@ -538,6 +546,7 @@ bool bsol_intrinsic_curve_2d::upsample(int new_size)
   }
 
   vcl_cout << "after upsampling bsol curve size: " << size() << " (should be " << new_size << ")\n";
+  this->computeProperties();
   return true;
 }
 
