@@ -154,7 +154,9 @@ open(const vcl_string& filename)
     AVCodecContext *enc = is_->fmt_cxt_->streams[i]->codec;
     if ( enc->codec_type == CODEC_TYPE_VIDEO ) {
       is_->vid_index_ = i;
-      break;
+    }
+    else if( enc->codec_type == CODEC_TYPE_DATA && is_->data_index_ < 0) {
+      is_->data_index_ = i;
     }
   }
   if ( is_->vid_index_ == -1 ) {
