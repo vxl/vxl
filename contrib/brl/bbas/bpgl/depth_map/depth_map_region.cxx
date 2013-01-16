@@ -85,35 +85,37 @@ region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
 }
 
 depth_map_region::depth_map_region() : active_(true),
-                                       order_(0), orient_type_(NOT_DEF), name_(""), depth_(-1.0),
+                                       order_(0), orient_type_(NON_PLANAR), name_(""), depth_(-1.0),
                                        min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
-                                       depth_inc_(1.0), region_2d_(0), region_3d_(0)
+                                       depth_inc_(1.0), region_2d_(0), region_3d_(0), nlcd_id_(21)
 {}
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vgl_plane_3d<double> const& region_plane,
                                    double min_depth, double max_depth,
                                    vcl_string name,
-                                   depth_map_region::orientation orient)
+                                   depth_map_region::orientation orient,
+                                   unsigned nlcd_id)
   : active_(true), order_(0), orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(min_depth), max_depth_(max_depth), depth_inc_(1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0)
+    region_plane_(region_plane), region_2d_(region), region_3d_(0), nlcd_id_(nlcd_id)
 {
 }
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vgl_plane_3d<double> const& region_plane,
                                    vcl_string name,
-                                   depth_map_region::orientation orient)
+                                   depth_map_region::orientation orient,
+                                   unsigned nlcd_id)
   : active_(true), order_(0), orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(-1.0), max_depth_(-1.0),depth_inc_(1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0)
+    region_plane_(region_plane), region_2d_(region), region_3d_(0), nlcd_id_(nlcd_id)
 {
 }
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name)
-  : active_(true), order_(0), orient_type_(INFINT), name_(name),
+  : active_(true), order_(0), orient_type_(NON_PLANAR), name_(name), nlcd_id_(0),
     depth_(vcl_numeric_limits<double>::max()),
     min_depth_(vcl_numeric_limits<double>::max()),
     max_depth_(vcl_numeric_limits<double>::max()),
@@ -147,7 +149,7 @@ set_region_3d(vpgl_perspective_camera<double> const& cam)
   // don't have region plane but is perpendicular to the ground plane
   // and perpendicular to the plane enclosing the camera principal ray and
   // the world z axis, sets region_plane_.
-  if (orient_type_ == INFINT) {
+  if (orient_type_ == NON_PLANAR) {
     // the plane normal
     vgl_vector_3d<double> normal_dir = depth_map_region::perp_ortho_dir(cam);
     vgl_vector_3d<double> ptv = min_depth_*normalized(cam.principal_axis());
@@ -234,7 +236,7 @@ set_ground_plane_max_depth(double max_depth,
                            vpgl_perspective_camera<double> const& cam,
                            double proximity_scale_factor)
 {
-  if (orient_type_ != GROUND_PLANE)
+  if (orient_type_ != HORIZONTAL)
     return false;
   double tol = vcl_sqrt(vgl_tolerance<double>::position);
   vgl_line_2d<double> horizon = bpgl_camera_utils::horizon(cam);

@@ -14,6 +14,40 @@
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
 
+vcl_map<vcl_string, depth_map_region::orientation> create_orient_map() {
+  vcl_map<vcl_string, depth_map_region::orientation> m;
+  m["vertical"] = depth_map_region::VERTICAL;
+  m["horizontal"] = depth_map_region::HORIZONTAL;
+  m["slanted_right"] = depth_map_region::SLANTED_RIGHT;
+  m["slanted_left"] = depth_map_region::SLANTED_LEFT;
+  m["porous"] = depth_map_region::POROUS;
+  m["non_planar"] = depth_map_region::NON_PLANAR;
+  return m;
+}
+
+vcl_map<int, unsigned char> create_nlcd_map() {
+  vcl_map<int, unsigned char> m;
+  m[11] = 0;
+  m[12] = 1;
+  m[21] = 2;
+  m[22] = 3;
+  m[24] = 4;
+  m[31] = 5;
+  m[41] = 6;
+  m[42] = 7;
+  m[43] = 8;
+  m[52] = 9;
+  m[71] = 10;
+  m[81] = 11;
+  m[82] = 12;
+  m[90] = 13;
+  return m;
+}
+
+vcl_map<vcl_string, depth_map_region::orientation> volm_orient_table::ori_id = create_orient_map();
+vcl_map<int, unsigned char> volm_nlcd_table::land_id = create_nlcd_map();
+
+
 bool volm_io::read_camera(vcl_string kml_file,
                           unsigned const& ni, unsigned const& nj,
                           double& heading,    double& heading_dev,
@@ -133,6 +167,8 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   vcl_vector<int>& object_orders = parser.obj_depth_orders();
   vcl_vector<float>& object_mindist = parser.obj_mindists();
   vcl_vector<float>& object_maxdist = parser.obj_maxdists();
+  vcl_vector<vcl_string>& object_orient = parser.obj_orientations();
+  vcl_vector<unsigned>& object_nlcd = parser.obj_nlcd_ids();
   if (polys.size() != object_names.size()) {
     vcl_cerr << " ERROR in labelme xml file: number of defined name and and number of defined 2d polygons do not match\n";
     return false;
@@ -158,9 +194,39 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   // push the depth_map_region into depth_scene in the order of defined order in xml
   for (unsigned i = 0; i < polys.size(); i++) {
     vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
+    // SKY region
     if (object_types[i] == "sky") {
       depth_scene->add_sky(poly, object_orders[i], object_names[i]);
     }
+    // GROUND region
+    else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "desert" || object_types[i] == "flat" 
+             || object_types[i] == "ground" || object_types[i] == "water" || object_types[i] == "ocean" )
+    {
+      double min_depth = object_mindist[i], max_depth = object_maxdist[i];
+      if (min_depth < 20) {  // define it as ground plane
+        depth_scene->add_ground(poly, min_depth, max_depth, object_orders[i], object_names[i], object_nlcd[i]);
+      }
+      else {
+        vgl_vector_3d<double> gp(0.0,0.0,1.0);
+        depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i], 
+                                volm_orient_table::ori_id[object_orient[i]], object_orders[i], object_nlcd[i]);
+      }
+    }
+    // non-sky/non-ground region
+    else {
+      double min_depth = parser.obj_mindists()[i], max_depth = parser.obj_maxdists()[i];
+      vgl_vector_3d<double> np; // surface normal
+      if (object_orient[i] == "horizontal")
+        np.set(0.0, 0.0, 1.0);
+      else if(object_orient[i] == "vertical")
+        np.set(1.0, 1.0, 0.0);
+      else
+        np.set(1.0, 1.0, 1.0);
+      depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i],
+                              volm_orient_table::ori_id[object_orient[i]], object_orders[i], object_nlcd[i]);
+    }
+
+#if 0
     else {
       // check object type to define the region_normal
       if (object_types[i] == "hotel" || object_types[i] == "building") {
@@ -173,11 +239,11 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
         double min_depth = object_mindist[i];
         double max_depth = object_maxdist[i];
         if (min_depth < 20) {  // treat it as a GROUND_PLANE
-           depth_scene->add_ground(poly, min_depth, max_depth, object_orders[i], object_names[i]);
+           depth_scene->add_ground(poly, min_depth, max_depth, object_orders[i], object_names[i], object_nlcd);
         }
         else {              // treat it as some FLAT
            vgl_vector_3d<double> gp(0.0, 0.0, 1.0); //z axis is the plane normal temporary, flat object can have different normal values
-           depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i], depth_map_region::FLAT, object_orders[i]);
+           depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i], depth_map_region::HORIZONTAL, object_orders[i]);
         }
       }
       else if (object_types[i] == "water") {  // disregard any labeled water region
@@ -186,9 +252,10 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
         double min_depth = parser.obj_mindists()[i];
         double max_depth = parser.obj_maxdists()[i];
         vgl_vector_3d<double> np(1.0, 1.0, 1.0);
-        depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i], depth_map_region::NOT_DEF, object_orders[i]);
+        depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i], depth_map_region::NON_PLANAR, object_orders[i]);
       }
     }
+#endif
   }
   return true;
 }

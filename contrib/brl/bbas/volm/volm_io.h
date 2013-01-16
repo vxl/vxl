@@ -19,6 +19,19 @@
 #include <vcl_set.h>
 #include <vcl_utility.h>
 
+class volm_orient_table
+{
+public:
+  static vcl_map<vcl_string, depth_map_region::orientation> ori_id;
+};
+
+
+class volm_nlcd_table
+{
+ public:
+  static vcl_map<int, unsigned char> land_id ; 
+};
+
 class volm_io
 {
  public:

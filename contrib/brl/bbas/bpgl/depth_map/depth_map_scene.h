@@ -99,14 +99,16 @@ class depth_map_scene : public vbl_ref_count
                   double max_distance,
                   vcl_string name,
                   depth_map_region::orientation orient,
-                  unsigned order = 0);
+                  unsigned order = 0,
+                  unsigned nlcd_id = 21);
 
   //: add a ground region into ground_plane_
   void add_ground(vsol_polygon_2d_sptr const& ground_plane,
                   double min_depth = 0,
                   double max_depth = 0,
                   unsigned order = 0,
-                  vcl_string name = "ground_plane");
+                  vcl_string name = "ground_plane",
+                  unsigned nlcd_id = 21);
 
   //: add a sky region into sky_
   void add_sky(vsol_polygon_2d_sptr const& sky,

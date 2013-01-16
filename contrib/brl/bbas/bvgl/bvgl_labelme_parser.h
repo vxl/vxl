@@ -6,6 +6,7 @@
 //  Modifications
 //     Yi Dong   OCT-2012   added parser for mindist, maxdist, name, polygon defined in xml
 //     Yi Dong   NOV-2012   added parser for order, image size, type and ImageCategory(desert or coast, etc) defined in xml
+//     Yi Dong   JAN-2013   added parser for object orientation and NLCD land classfication
 // \endverbatim
 
 #include <expatpplib.h>
@@ -31,6 +32,8 @@
 #define IMG_CAT_TAG "ImageCategory"
 #define IMG_NI_TAG "nrows"
 #define IMG_NJ_TAG "ncols"
+#define NLCD_TAG "class"
+#define ORIENT_TAG "orientation"
 
 
 #if 0
@@ -70,11 +73,13 @@ class bvgl_labelme_parser : public expatpp
   unsigned image_ni() const { return image_ni_; }
   unsigned image_nj() const { return image_nj_; }
   //object names (in the same order as polygons)
-  vcl_vector<vcl_string>& obj_names() { return obj_names_; }
-  vcl_vector<vcl_string>& obj_types() { return obj_types_; }
-  vcl_vector<float>& obj_mindists() { return obj_min_dists_; }
-  vcl_vector<float>& obj_maxdists() { return obj_max_dists_; }
-  vcl_vector<int>& obj_depth_orders() { return obj_depth_orders_; }
+  vcl_vector<vcl_string>& obj_names()        { return obj_names_; }
+  vcl_vector<vcl_string>& obj_types()        { return obj_types_; }
+  vcl_vector<float>& obj_mindists()          { return obj_min_dists_; }
+  vcl_vector<float>& obj_maxdists()          { return obj_max_dists_; }
+  vcl_vector<int>& obj_depth_orders()        { return obj_depth_orders_; }
+  vcl_vector<vcl_string>& obj_orientations() { return obj_orientations_; }
+  vcl_vector<unsigned>& obj_nlcd_ids()       { return obj_nlcd_ids_; }
 
   // ACCESSORS for parser info
   vcl_vector<vgl_polygon<double> >& polygons() { return polygons_; }
@@ -91,16 +96,21 @@ class bvgl_labelme_parser : public expatpp
   vcl_vector<vgl_point_2d<double> > pts_;
   double x_, y_;
 
-  vcl_vector<vcl_string> obj_names_;
-  vcl_vector<vcl_string> obj_types_;
-  vcl_vector<float> obj_min_dists_;
-  vcl_vector<float> obj_max_dists_;
-  vcl_vector<int> obj_depth_orders_;
+  vcl_vector<vcl_string>         obj_names_;
+  vcl_vector<vcl_string>         obj_types_;
+  vcl_vector<float>          obj_min_dists_;
+  vcl_vector<float>          obj_max_dists_;
+  vcl_vector<int>         obj_depth_orders_;
+  vcl_vector<unsigned>        obj_nlcd_ids_;
+  vcl_vector<vcl_string>  obj_orientations_;
+
   float min_dist_;
   float max_dist_;
   int order_;
   vcl_string image_category_;
   vcl_string image_name_;
+  vcl_string obj_orient_;
+  unsigned nlcd_id_;
   unsigned image_ni_;
   unsigned image_nj_;
 

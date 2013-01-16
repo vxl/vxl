@@ -46,10 +46,11 @@ void depth_map_scene::add_ground(vsol_polygon_2d_sptr const& ground_plane,
                                  double min_depth,
                                  double max_depth,
                                  unsigned order,
-                                 vcl_string name)
+                                 vcl_string name,
+                                 unsigned nlcd_id)
 {
   vgl_plane_3d<double> gp(0.0, 0.0, 1.0, 0.0); // z axis is the plane normal
-  depth_map_region_sptr ground = new depth_map_region(ground_plane, gp, name, depth_map_region::GROUND_PLANE);
+  depth_map_region_sptr ground = new depth_map_region(ground_plane, gp, name, depth_map_region::HORIZONTAL, nlcd_id);
   ground->set_order(order);
   ground->set_min_depth(min_depth);
   ground->set_max_depth(max_depth);
@@ -77,13 +78,15 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
                                  double max_depth,
                                  vcl_string name,
                                  depth_map_region::orientation orient,
-                                 unsigned order)
+                                 unsigned order,
+                                 unsigned nlcd_id)
 {
   vgl_plane_3d<double> plane(region_normal.x(), region_normal.y(), region_normal.z(), 0.0);
   depth_map_region_sptr reg = new depth_map_region(region, plane,
                                                    min_depth, max_depth,
                                                    name,
-                                                   orient);
+                                                   orient,
+                                                   nlcd_id);
   reg->set_order(order);
   scene_regions_[name]=reg;
 }

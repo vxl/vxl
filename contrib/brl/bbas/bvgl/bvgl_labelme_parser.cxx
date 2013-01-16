@@ -77,6 +77,7 @@ void bvgl_labelme_parser::endElement(const XML_Char* name)
     obj_min_dists_.push_back(min_dist_);
     obj_max_dists_.push_back(max_dist_);
     obj_depth_orders_.push_back(order_);
+    obj_nlcd_ids_.push_back(nlcd_id_);
   }
 }
 
@@ -113,6 +114,13 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
       obj_types_.push_back(type);
   }
 
+  if (active_tag_ == ORIENT_TAG) {
+    vcl_string orientation = vcl_string(s,len);
+    this->trim_string(orientation);
+    if (orientation.length() != 0)
+      obj_orientations_.push_back(orientation);
+  }
+
   if (active_tag_ == OBJECT_MINDIST_TAG)
     convert(vcl_string(s,len), min_dist_);
 
@@ -127,6 +135,9 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
 
   if (active_tag_ == IMG_NJ_TAG)
     convert(vcl_string(s,len), image_nj_);
+
+  if (active_tag_ == NLCD_TAG)
+    convert(vcl_string(s,len), nlcd_id_);
 }
 
 void bvgl_labelme_parser::trim_string(vcl_string& s)

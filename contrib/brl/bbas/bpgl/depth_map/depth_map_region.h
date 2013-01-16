@@ -29,7 +29,7 @@
 class depth_map_region : public vbl_ref_count
 {
  public:
-  enum orientation{GROUND_PLANE, VERTICAL, INFINT, FLAT, NOT_DEF};
+  enum orientation{VERTICAL, HORIZONTAL, SLANTED_RIGHT, SLANTED_LEFT, POROUS, NON_PLANAR, GROUND_PLANE, INFINT};
   //: default constructor
   depth_map_region();
   //: standard constructor for a plane that can be moved along the camera ray
@@ -37,24 +37,20 @@ class depth_map_region : public vbl_ref_count
                    vgl_plane_3d<double> const& region_plane,
                    double min_depth, double max_depth,
                    vcl_string name,
-                   depth_map_region::orientation orient);
+                   depth_map_region::orientation orient,
+                   unsigned nlcd_id = 21);
 
   //: constructor for a fixed plane, e.g. the ground plane
   depth_map_region(vsol_polygon_2d_sptr const& region, 
                    vgl_plane_3d<double> const& region_plane,
                    vcl_string name,
-                   depth_map_region::orientation orient);
+                   depth_map_region::orientation orient,
+                   unsigned nlcd_id = 21);
 
   //: constructor for a region of infinite distance
   depth_map_region(vsol_polygon_2d_sptr const& region,
                    vcl_string name);
 
-  //: unique name
-  vcl_string name() const {return name_;}
-  //: region orientation
-  orientation orient_type() const{return orient_type_;}
-
- 
   void set_region_3d(vpgl_perspective_camera<double> const& cam);
   void set_region_3d(double depth, vpgl_perspective_camera<double> const& cam);
 
@@ -66,6 +62,12 @@ class depth_map_region : public vbl_ref_count
   //:accessors
   double min_depth() const {return min_depth_;}
   double max_depth() const {return max_depth_;}
+  //: unique name
+  vcl_string name() const {return name_;}
+  //: region orientation
+  orientation orient_type() const{return orient_type_;}
+  //: region nlcd land classfication id
+  unsigned nlcd_id() const { return nlcd_id_; }
   vsol_polygon_3d_sptr region_3d() const {return region_3d_;}
   vsol_polygon_2d_sptr region_2d() const {return region_2d_;}
   double depth() const {return depth_;}
@@ -129,8 +131,9 @@ class depth_map_region : public vbl_ref_count
   void b_read(vsl_b_istream& is);
 
  protected:
-  bool active_; // if active is true then inserted into the depth map
-  unsigned order_;//depth order
+  bool active_;      // if active is true then inserted into the depth map
+  unsigned order_;   // depth order
+  unsigned nlcd_id_; // NLCD land classification id 
   orientation orient_type_;
   vcl_string name_;
   // depth value for region centroid

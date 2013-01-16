@@ -14,6 +14,7 @@
 // \verbatim
 //   Modifications
 //    Yi Dong   Jan-2013   added functions to generate object based query infomation for object based volm_matcher
+//    Yi Dong   Jan-2013   added object orientation and object NLCD land classification
 // \endverbatim
 //
 
@@ -50,9 +51,13 @@ class volm_query : public vbl_ref_count
   vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id()     { return dist_id_; }
   vcl_vector<unsigned char>& max_obj_dist()                     { return max_obj_dist_; }
   vcl_vector<unsigned char>& min_obj_dist()                     { return min_obj_dist_; }
+  vcl_vector<unsigned char>& obj_orient()                       { return obj_orient_; }
+  vcl_vector<unsigned char>& obj_nlcd()                         { return obj_nlcd_; }
   vcl_vector<unsigned char>& order_obj()                        { return order_obj_; }
   vcl_vector<vcl_vector<unsigned> >& ground_id()                { return ground_id_; }
   vcl_vector<vcl_vector<unsigned char> >& ground_dist()         { return ground_dist_; }
+  vcl_vector<vcl_vector<unsigned char> >& ground_nlcd()         { return ground_nlcd_; }
+  unsigned char ground_orient()                                 { return ground_orient_; }
   vcl_vector<vcl_vector<unsigned> >& sky_id()                   { return sky_id_; }
   vcl_vector<float>& obj_weight()                               { return weight_obj_; }
   float grd_weight() const                                      { return weight_grd_; }
@@ -115,47 +120,52 @@ class volm_query : public vbl_ref_count
   unsigned ni_, nj_;
   unsigned log_downsample_ratio_;  // 0,1,2 or 3 (ni-->ni/2^ratio_), to generate downsampled depth maps for ground regions
   //: image category
-  vcl_string img_category_;
+  vcl_string                       img_category_;
   //: depth map scene
-  depth_map_scene_sptr dm_;
-  volm_spherical_container_sptr sph_depth_;
-  volm_spherical_shell_container_sptr sph_;
+  depth_map_scene_sptr                       dm_;
+  volm_spherical_container_sptr       sph_depth_;
+  volm_spherical_shell_container_sptr       sph_;
   //: vector of depth_map_region which arranged by their orders
   double d_threshold_;
   vcl_vector<depth_map_region_sptr> depth_regions_;
-  vcl_vector<vgl_polygon<double> > dm_poly_;
-  vcl_vector<unsigned> ray_count_;
+  vcl_vector<vgl_polygon<double> >        dm_poly_;
+  vcl_vector<unsigned>                  ray_count_;
   //: camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered
-  vcl_vector<double> top_fov_;
+  vcl_vector<double>  top_fov_;
   vcl_vector<double> headings_;
-  vcl_vector<double> tilts_;
-  vcl_vector<double> rolls_;
+  vcl_vector<double>    tilts_;
+  vcl_vector<double>    rolls_;
   vcl_vector<vpgl_perspective_camera<double> > cameras_;
   vcl_vector<vcl_string> camera_strings_;
   //: ingested query information
   vcl_vector<vcl_vector<unsigned char> > min_dist_;
   vcl_vector<vcl_vector<unsigned char> > max_dist_;
-  vcl_vector<vcl_vector<unsigned char> > order_;
+  vcl_vector<vcl_vector<unsigned char> >    order_;
   unsigned query_size_;
   unsigned order_sky_;
   vcl_vector<vgl_point_3d<double> > query_points_;
   //: order vector to store the index id associated with object order
   vcl_set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
   vcl_vector<vcl_vector<vcl_vector<unsigned> > > order_index_;
-  //: ground plane distance
-  vcl_vector<vcl_vector<unsigned> > ground_id_;
-  vcl_vector<vcl_vector<unsigned char> > ground_dist_;
+  //: ground plane distance, id, and NLCD classification
+  vcl_vector<vcl_vector<unsigned> >          ground_id_;
+  vcl_vector<vcl_vector<unsigned char> >   ground_dist_;
+  vcl_vector<vcl_vector<unsigned char> >   ground_nlcd_;
+  unsigned char                          ground_orient_;  // always horizontal
   //: sky distance
   vcl_vector<vcl_vector<unsigned> > sky_id_;
   //: object id based on min_dist (since objects may have different min_dist but same order)
   vcl_vector<vcl_vector<vcl_vector<unsigned> > > dist_id_;
-  //: min and max distance for different objects, based on object orders
+  //: min and max distance, object orders, orientation and land clarifications for different objects, based on object orders
   vcl_vector<unsigned char> min_obj_dist_;
   vcl_vector<unsigned char> max_obj_dist_;
-  vcl_vector<unsigned char> order_obj_;
+  vcl_vector<unsigned char>    order_obj_;
+  vcl_vector<unsigned char>   obj_orient_;
+  vcl_vector<unsigned char>     obj_nlcd_;
+  //: weight parameters
   vcl_vector<float> weight_obj_;
-  float weight_grd_;
-  float weight_sky_;
+  float             weight_grd_;
+  float             weight_sky_;
   
   //: functions
   bool query_ingest();
@@ -166,6 +176,7 @@ class volm_query : public vbl_ref_count
                             unsigned char& order,
                             unsigned char& max_dist,
                             unsigned& object_id,
+                            unsigned char& grd_nlcd,
                             bool& is_ground,
                             bool& is_sky,
                             bool& is_object,

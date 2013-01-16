@@ -87,6 +87,7 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
   // generate polygon vector based on defined order
   this->generate_regions();
+  ground_orient_ = volm_orient_table::ori_id["horizontal"];
   vcl_cout << "volm_query generated regions: " << this->depth_regions().size() << " regions! ingesting...\n"; vcl_cout.flush();
   // start to ingest query, with min_dist and order implemented
   this->query_ingest();
@@ -258,6 +259,8 @@ void volm_query::generate_regions()
     min_obj_dist_.push_back(sph_depth_->get_depth_interval(depth_regions_[i]->min_depth()));
     max_obj_dist_.push_back(sph_depth_->get_depth_interval(depth_regions_[i]->max_depth()));
     order_obj_.push_back((unsigned char)depth_regions_[i]->order());
+    obj_orient_.push_back((unsigned char)depth_regions_[i]->orient_type());
+    obj_nlcd_.push_back((unsigned char)volm_nlcd_table::land_id[depth_regions_[i]->nlcd_id()]);
   }
   unsigned size = (unsigned)dm_->scene_regions().size();
   d_threshold_ = 20000.0;
@@ -335,12 +338,12 @@ bool volm_query::query_ingest()
 {
   for (unsigned i = 0; i < cameras_.size(); ++i)
   {
-    //vcl_cout << i << '.'; vcl_cout.flush();
     vcl_vector<unsigned char> min_dist_layer;
     vcl_vector<unsigned char> max_dist_layer;
     vcl_vector<unsigned char> order_layer;
     vcl_vector<unsigned> ground_id_layer;
     vcl_vector<unsigned char> ground_dist_layer;
+    vcl_vector<unsigned char> ground_nlcd_layer;
     vcl_vector<unsigned> sky_id_layer;
     vcl_vector<vcl_vector<unsigned> > dist_id_layer(depth_regions_.size());
     vpgl_perspective_camera<double> cam = cameras_[i];
@@ -348,7 +351,6 @@ bool volm_query::query_ingest()
     dm_->set_camera(cam);
     //vil_image_view<float> depth_img = dm_->depth_map("ground_plane", 0, d_threshold_);
     vil_image_view<float> depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
-
     unsigned count = 0;
     for (unsigned p_idx = 0; p_idx < query_size_; ++p_idx) {
       vgl_point_3d<double> qp(query_points_[p_idx].x(), query_points_[p_idx].y(), query_points_[p_idx].z()+altitude_);
@@ -371,13 +373,15 @@ bool volm_query::query_ingest()
         else {
           bool is_ground = false, is_sky = false, is_object = false;
           unsigned obj_id;
-          min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, is_ground, is_sky, is_object, depth_img);
+          unsigned char grd_nlcd;
+          min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_nlcd, is_ground, is_sky, is_object, depth_img);
           min_dist_layer.push_back(min_dist);
           max_dist_layer.push_back(max_dist);
           order_layer.push_back(order);
           if (is_ground) {
             ground_id_layer.push_back(p_idx);
             ground_dist_layer.push_back(min_dist);
+            ground_nlcd_layer.push_back(grd_nlcd);
           }
           else if (is_sky) {
             sky_id_layer.push_back(p_idx);
@@ -402,6 +406,7 @@ bool volm_query::query_ingest()
     ray_count_.push_back(count);
     ground_id_.push_back(ground_id_layer);
     ground_dist_.push_back(ground_dist_layer);
+    ground_nlcd_.push_back(ground_nlcd_layer);
     sky_id_.push_back(sky_id_layer);
     dist_id_.push_back(dist_id_layer);
   } // loop over cameras
@@ -413,6 +418,7 @@ unsigned char volm_query::fetch_depth(double const& u,
                                       unsigned char& order,
                                       unsigned char& max_dist,
                                       unsigned& object_id,
+                                      unsigned char& grd_nlcd,
                                       bool& is_ground,
                                       bool& is_sky,
                                       bool& is_object,
@@ -470,6 +476,7 @@ unsigned char volm_query::fetch_depth(double const& u,
         min_dist = sph_depth_->get_depth_interval(depth_uv);
         max_dist = (unsigned char)255;
         order = (unsigned char)(dm_->ground_plane()[i])->order();
+        grd_nlcd = (unsigned char)volm_nlcd_table::land_id[dm_->ground_plane()[i]->nlcd_id()];
         return min_dist;
       }
     }
@@ -494,6 +501,7 @@ unsigned char volm_query::fetch_depth(double const& u,
 
 bool volm_query::weight_ingest()
 {
+#if 0
   if (dm_->sky().size()) {
     weight_sky_ = 0.4f;
     // to be implemented to read from depth_scene
@@ -516,6 +524,14 @@ bool volm_query::weight_ingest()
       weight_obj_.push_back(unit_ratio);
     }
   }
+#endif
+  // equal weight setting, i.e. w_sky = w_ground = w_obj for any objects
+  // note we have socre = w_s*S_s + w_g*S_g+ sum(w_k*S_k^ord)/M + sum(w_k*S_k^dist)/M = 1 for ground truth
+  // w_s = w_k = w_g = w gives 4w = 1 give w = 0.25
+  weight_sky_ = 0.25f;
+  weight_grd_ = 0.25f;
+  for (unsigned i = 0; i < depth_regions_.size(); i++)
+    weight_obj_.push_back(0.25f);
 
   return true;
 }
