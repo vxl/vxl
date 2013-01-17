@@ -433,7 +433,7 @@ def render_scene_uncertainty(scene, cache,  ni=1280, nj=720, device=None, ident_
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 #####################################################################
-def render_grey_and_vis(scene, cache, cam, ni=1280, nj=720, device=None) :
+def render_grey_and_vis(scene, cache, cam, ni=1280, nj=720, device=None,ident="") :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU render grey and vis not yet implemented";
     return;
@@ -445,6 +445,7 @@ def render_grey_and_vis(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.set_input_from_db(3,cam);
     boxm2_batch.set_input_unsigned(4,ni);
     boxm2_batch.set_input_unsigned(5,nj);
+    boxm2_batch.set_input_string(6,ident);
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
@@ -703,7 +704,7 @@ def init_trajectory(scene, startInc, endInc, radius, ni=1280, nj=720) :
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   trajectory = dbvalue(id,type);
-  return trajectory;
+  return trajectory; 
 
 def trajectory_next(trajectory) :
   boxm2_batch.init_process("boxm2ViewTrajectoryNextProcess");
