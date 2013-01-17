@@ -6,6 +6,7 @@
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
+#include <vnl/vnl_math.h>
 
 #include <boxm2/view/boxm2_include_glew.h>
 #include <vcl_fstream.h>

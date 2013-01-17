@@ -63,7 +63,8 @@ bool boxm2_view_init_trajectory_process(bprb_func_process& pro)
 
   // store trajectory pointer
   argIdx = 0;
-  pro.set_output_val<boxm2_trajectory_sptr>(argIdx, traj);
+  pro.set_output_val<boxm2_trajectory_sptr>(argIdx++, traj);
+
   return true;
 }
 
