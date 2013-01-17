@@ -6,7 +6,7 @@
 // \brief A tableau for updating/refining and viewing a model.
 // \author Vishal Jain
 // \date Mar 25, 2011
-
+#include <vnl/vnl_math.h>
 #include "boxm2_include_glew.h"
 #include "boxm2_ocl_render_tableau.h"
 

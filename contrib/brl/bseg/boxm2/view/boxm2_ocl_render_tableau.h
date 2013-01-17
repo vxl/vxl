@@ -6,7 +6,7 @@
 // \brief A tableau to render using new processes.
 // \author Vishal Jain
 // \date Mar 25, 2011
-
+#include <vnl/vnl_math.h>
 #include "boxm2_include_glew.h"
 #include "boxm2_cam_tableau.h"
 
@@ -25,6 +25,7 @@
 #include <boxm2/boxm2_data.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <bocl/bocl_manager.h>
+
 //brdb stuff
 #include <brdb/brdb_value.h>
 

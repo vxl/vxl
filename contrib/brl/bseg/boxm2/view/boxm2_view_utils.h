@@ -3,6 +3,7 @@
 //:
 // \file
 // \brief boxm2_view_utils contains factored out methods used in multiple tableaus
+#include <vnl/vnl_math.h>
 #include "boxm2_include_glew.h"
 #include <vcl_iostream.h>
 #include <bocl/bocl_cl.h>
