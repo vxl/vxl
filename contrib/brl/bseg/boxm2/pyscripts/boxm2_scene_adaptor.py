@@ -131,7 +131,7 @@ class boxm2_scene_adaptor(object):
     return expimg;
 
   #render wrapper, same as above
-  def render_vis(self, cam, ni=1280, nj=720, device_string="") :
+  def render_vis(self, cam, ni=1280, nj=720, device_string="", ident="") :
     cache = self.active_cache;
     dev = self.device;
     #check if force gpu or cpu
@@ -141,9 +141,9 @@ class boxm2_scene_adaptor(object):
       cache = self.cpu_cache;
       dev = None;
     if self.rgb :
-      expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev);
+      expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev,ident);
     else :
-      expimg, vis_image = render_grey_and_vis(self.scene, cache, cam, ni, nj, dev);
+      expimg, vis_image = render_grey_and_vis(self.scene, cache, cam, ni, nj, dev,ident);
     return expimg, vis_image;
 
   #render depth image wrapper
@@ -581,3 +581,10 @@ class boxm2_scene_adaptor(object):
     mask = create_mask_image(self.scene, camera, ni, nj, ground_plane_only);
     return mask;
 
+  def normals_to_id(self) :  
+	
+	print("Normals to id ");
+	boxm2_batch.init_process("boxm2CppNormalsToIdProcess");
+	boxm2_batch.set_input_from_db(0,self.scene);
+	boxm2_batch.set_input_from_db(1,self.cpu_cache);
+	return boxm2_batch.run_process();
