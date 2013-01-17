@@ -22,7 +22,7 @@
 
 namespace boxm2_cpp_los_visibility_process_globals
 {
-    const unsigned n_inputs_  = 8;
+    const unsigned n_inputs_  = 9;
     const unsigned n_outputs_ = 1;
 }
 
@@ -40,10 +40,12 @@ bool boxm2_cpp_los_visibility_process_cons(bprb_func_process& pro)
     input_types_[5] = "float";  //x1
     input_types_[6] = "float";  //y1
     input_types_[7] = "float";  //z1
+    input_types_[8] = "float";  //paramter to move away from the points.
     // process has 1 output:
     vcl_vector<vcl_string>  output_types_(n_outputs_);
     output_types_[0] = "float"; //seg_len
-
+    brdb_value_sptr param  = new brdb_value_t<float>(5.0);
+    pro.set_input(8, param);
     return pro.set_input_types(input_types_) &&
            pro.set_output_types(output_types_);
 }
@@ -69,12 +71,19 @@ bool boxm2_cpp_los_visibility_process(bprb_func_process& pro)
     float y1 = pro.get_input<float>(k++);
     float z1 = pro.get_input<float>(k++);
 
+
+    float t  = pro.get_input<float>(k++);
+    
     vgl_point_3d<double> p0(x0,y0,z0);
     vgl_point_3d<double> p1(x1,y1,z1);
     vgl_vector_3d<double > dir = p1-p0;
+    float length = dir.length();
+
     dir = normalize(dir);
-    vgl_point_3d<double> p0_adjusted( p0+5*dir);
-    vgl_point_3d<double> p1_adjusted( p1-5*dir);
+
+
+    vgl_point_3d<double> p0_adjusted( p0+vcl_min(t,length/2)*dir);
+    vgl_point_3d<double> p1_adjusted( p1-vcl_min(t,length/2)*dir);
     vgl_ray_3d<double> ray_01(p0_adjusted,p1_adjusted);
 
     vcl_vector<boxm2_block_id> vis_order=boxm2_util::blocks_along_a_ray(scene,p0_adjusted,p1_adjusted);
@@ -94,7 +103,7 @@ bool boxm2_cpp_los_visibility_process(bprb_func_process& pro)
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
         boxm2_cast_ray_function<boxm2_vis_probe_functor>(ray_01,
                                                          scene_info_wrapper->info,
-                                                         blk,0,0,vis_probe_functor);
+                                                         blk,0,0,vis_probe_functor,length-vcl_min(2*t,length));
     }
 
     vcl_cout<<"Visibilty is "<<vis<<vcl_endl;
