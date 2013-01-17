@@ -50,11 +50,11 @@ class boxm2_normals_to_id_functor
 
     if (normal[3] >= nmag_t_ && vis_score >= vis_t_ &&  point[3] != -1)
     {
-        if( normal[2] > vcl_cos(vnl_math::pi/4)) // horizontal surface
+        if( vcl_fabs(normal[2]) > vcl_cos(vnl_math::pi/4)) // horizontal surface
         {
             label_short = 1;
         }
-        else if( normal[2] < vcl_cos(vnl_math::pi/4)) // vertical surface
+        else if( vcl_fabs(normal[2]) < vcl_cos(vnl_math::pi/4)) // vertical surface
         {
             int thetaindex = vcl_floor((vcl_atan2(normal[1],normal[0]) + vnl_math::pi)/(vnl_math::pi/4));
             label_short = 2+(short)thetaindex;
