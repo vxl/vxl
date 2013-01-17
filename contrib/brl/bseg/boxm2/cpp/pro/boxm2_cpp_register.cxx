@@ -67,4 +67,6 @@ void boxm2_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_create_mog_image_process, "boxm2CppCreateMogImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_los_visibility_process, "boxm2CppLosVisibilityProcess");
 
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_normals_to_id_process, "boxm2CppNormalsToIdProcess");
+
 }
