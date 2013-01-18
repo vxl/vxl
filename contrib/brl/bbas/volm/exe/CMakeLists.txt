@@ -8,7 +8,7 @@ ADD_EXECUTABLE( volm_dummy_matcher
 
 ADD_EXECUTABLE( volm_query_creation
                 volm_query_creation.cxx
-              )			  
+              )
 
 ADD_EXECUTABLE( volm_generate_hypos
                 volm_generate_hypos.cxx
