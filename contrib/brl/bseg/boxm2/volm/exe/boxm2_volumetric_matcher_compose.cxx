@@ -19,6 +19,7 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
@@ -54,7 +55,7 @@ int main(int argc,  char** argv)
     return volm_io::LABELME_FILE_IO_ERROR;
   }
   float threshold = thres();
-  vcl_cout << "composer using threshold: " << threshold << " to scale the value to [1,255]\n";
+  vcl_cout << "composer using threshold: " << threshold << " to scale the value to [1,127]\n";
   // generate tile and output imges
   vcl_vector<volm_tile> tiles;
   vcl_vector<vil_image_view<vxl_byte> > out_imgs;
@@ -130,12 +131,26 @@ int main(int argc,  char** argv)
   volm_spherical_container_sptr sph = new volm_spherical_container(q_params.solid_angle,q_params.vmin,q_params.dmax);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, q_params.cap_angle, q_params.point_angle, q_params.top_angle, q_params.bottom_angle);
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
+  
+  query->draw_query_regions(rat_folder() + "/query_regions.png");
 
+  if (query->get_cam_num() == 0) {
+    log << "query has 0 cameras! Exiting!\n";
+    volm_io::write_composer_log(out_folder(), log.str());
+    if (save_images()) {
+    for (unsigned i = 0; i < out_imgs.size(); i++) {
+      vcl_string out_name = out_folder() + "/ProbMap_" + tiles[i].get_string() + ".tif";
+      vil_save(out_imgs[i], out_name.c_str());
+      }
+    }
+    volm_io::write_status(out_folder(), volm_io::SUCCESS, 100);
+    return volm_io::SUCCESS;
+  }
   vul_timer t;
-
+  
   // halt till all camera.bin files are available
   volm_io::write_status(out_folder(), volm_io::COMPOSE_HALT);
-
+  
   bool all_available = false;
   while (!all_available) {
     all_available = true;
@@ -182,7 +197,7 @@ int main(int argc,  char** argv)
       vsl_b_read(isc,cam_id);
       scores.push_back(score);
       cam_ids.push_back(cam_id);
-      vcl_cout << " for index " << i << ", score = " << score
+      log << " for index " << i << ", score = " << score
                << ",\t camera id = " << cam_id
                << "\t with valid rays = " << query->get_valid_ray_num(cam_id)
                << vcl_endl;
@@ -193,12 +208,12 @@ int main(int argc,  char** argv)
     vcl_cout << hyp.size() << " hypotheses read from: " << hyp_files[i] << '\n'
              << scores.size() << " scores read from: " << score_files[i] << " params start: " << params.start << " skip: " << params.skip << vcl_endl;
 
-    vgl_point_3d<float> h_pt;
+    vgl_point_3d<double> h_pt;
     unsigned ind_idx = 0;
     while (hyp.get_next(params.start, params.skip, h_pt))
     {
       //unsigned ind_idx = (unsigned)vcl_floor((float)(hyp.current_-params.skip)/params.skip) + params.start;
-#if 1
+#if 0
       vcl_cout << "Processing hypothesis x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z()
                << ", index id: " << ind_idx << " score = " << scores[ind_idx] << ", best cam_id = " << cam_ids[ind_idx]
                << vcl_endl;
@@ -232,14 +247,11 @@ int main(int argc,  char** argv)
               }
             }
             else {
-              vcl_stringstream log;
-              log << "cam id: " << cam_ids[ind_idx] << " is invalid, query object has: " << query->get_cam_num() << " cams. In tile " << tiles[k].get_string() << " loc: (" << u << ", " << v << ") skipping rationale..\n"
+              vcl_cerr << "cam id: " << cam_ids[ind_idx] << " is invalid, query object has: " << query->get_cam_num() << " cams. In tile " << tiles[k].get_string() << " loc: (" << u << ", " << v << ") skipping rationale..\n"
                   << "score file is: " << score_files[i] << " id in the file: " << ind_idx << " hypo id: " << hyp.current_ << vcl_endl;
-              vcl_cerr << log.str();
             }
-            //out_imgs[k](u,v) = (vxl_byte)(scores[ind_idx]*volm_io::SCALE_VALUE + 1);
-            out_imgs[k](u,v) = volm_io::scale_score_to_1_255(threshold, scores[ind_idx]);
-            vcl_cout << "writing score: " << scores[ind_idx] << " scaled to " << (int)out_imgs[k](u,v) << " to loc: " << u << ", " << v << vcl_endl;
+            out_imgs[k](u,v) = volm_io::scale_score_to_1_127(threshold, scores[ind_idx]);
+            //vcl_cout << "writing score: " << scores[ind_idx] << " scaled to " << (int)out_imgs[k](u,v) << " to loc: " << u << ", " << v << vcl_endl;
             //volm_tile::mark_uncertainty_region(u, v, scores[ind_idx], mask, kernel, out_imgs[k]);
           }
         }
@@ -255,19 +267,19 @@ int main(int argc,  char** argv)
       vil_save(out_imgs[i], out_name.c_str());
     }
   }
-
+  
   // save top 30 into rationale folder as a text file
   vcl_string top_matches_filename = rat_folder() + "/top_matches.txt";
   if (!volm_rationale::write_top_matches(top_matches, top_matches_filename))
     vcl_cerr << "cannot write to " << top_matches_filename;
-
+  
   unsigned cnt = 0;
   vcl_cout << "creating rationale for top: " << top_matches.size() << vcl_endl;
   for (top_matches_iter = top_matches.begin(); top_matches_iter != top_matches.end(); top_matches_iter++) {
     volm_rationale r = top_matches_iter->second;
     vcl_string cam_postfix = query->get_cam_string(r.cam_id);
     vcl_stringstream str;
-    str << rat_folder() << "/query_top_" << cnt++ << cam_postfix << ".png";
+    str << rat_folder() + "/" << "query_top_" << cnt++ << cam_postfix << ".png";
     vcl_cout << "writing rat to: " << str.str() << vcl_endl; vcl_cout.flush();
     query->draw_query_image(r.cam_id, str.str());
   }
