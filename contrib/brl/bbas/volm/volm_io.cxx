@@ -47,13 +47,12 @@ vcl_map<int, unsigned char> create_nlcd_map() {
 vcl_map<vcl_string, depth_map_region::orientation> volm_orient_table::ori_id = create_orient_map();
 vcl_map<int, unsigned char> volm_nlcd_table::land_id = create_nlcd_map();
 
-
 bool volm_io::read_camera(vcl_string kml_file,
                           unsigned const& ni, unsigned const& nj,
-                          double& heading,    double& heading_dev,
-                          double& tilt,       double& tilt_dev,
-                          double& roll,       double& roll_dev,
-                          double& top_fov,    double& top_fov_dev,
+                          double& heading,   double& heading_dev,
+                          double& tilt,      double& tilt_dev,
+                          double& roll,      double& roll_dev,
+                          double& top_fov,   double& top_fov_dev,
                           double& altitude, double& lat, double& lon)
 {
   heading_dev = 0;
@@ -74,7 +73,7 @@ bool volm_io::read_camera(vcl_string kml_file,
     return false;
   }
 
-  lat = 0; lon = 0;
+  lat = 0; lon = 0; 
   if (parser->heading_)       heading = parser->heading_;
   if (parser->heading_dev_)   heading_dev = parser->heading_dev_;
   if (parser->tilt_)          tilt = parser->tilt_;
@@ -83,28 +82,7 @@ bool volm_io::read_camera(vcl_string kml_file,
   if (parser->altitude_)      altitude = parser->altitude_;
   if (parser->latitude_)      lat = parser->latitude_;
   if (parser->longitude_)     lon = parser->longitude_;
-
-  //: check angle ranges
-  if (heading < 0 || heading > 360) {
-    vcl_cerr << "Problem reading heading from: " << kml_file << " setting head = 0\n";
-    heading = 0;
-  }
-  if (heading_dev < 0 || heading_dev > 360) {
-    heading_dev = 180; vcl_cerr << "Problem reading heading_dev from: " << kml_file << " setting heading_dev = 180\n";
-  }
-  if (tilt < 0 || tilt > 360) {
-    tilt = 90; vcl_cerr << "Problem reading tilt from: " << kml_file << " setting tilt = 90\n";
-  }
-  if (tilt_dev < 0 || tilt_dev > 360) {
-    tilt_dev = 0; vcl_cerr << "Problem reading tilt_dev from: " << kml_file << " setting tilt_dev = 90\n";
-  }
-  if (roll < 0 || roll > 360) {
-    roll = 0; vcl_cerr << "Problem reading roll from: " << kml_file << " setting roll = 90\n"; 
-  }
-  if (altitude < 0) {
-    altitude = 1.6; vcl_cerr << "Problem reading altitude from: " << kml_file << " setting altitude = 1.6\n";
-  }
-
+  
   double dtor = vnl_math::pi_over_180;
   double ppu = 0.5*ni;
   double ppv = 0.5*nj;
@@ -229,30 +207,35 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
 #if 0
     else {
       // check object type to define the region_normal
-      if (object_types[i] == "hotel" || object_types[i] == "building") {
-        double min_depth = object_mindist[i];
-        double max_depth = object_maxdist[i];
+      if (object_types[i] == "hotel" || object_types[i] == "building" || object_types[i] == "pier") {
+        double min_depth = parser.obj_mindists()[i];
+        double max_depth = parser.obj_maxdists()[i];
         vgl_vector_3d<double> vp(1.0, 0.0, 0.0);
         depth_scene->add_region(poly, vp, min_depth, max_depth, object_names[i], depth_map_region::VERTICAL, object_orders[i]);
       }
-      else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "desert" || object_types[i] == "flat" || object_types[i] == "ground") {
-        double min_depth = object_mindist[i];
-        double max_depth = object_maxdist[i];
-        if (min_depth < 20) {  // treat it as a GROUND_PLANE
+      else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "water" || object_types[i] == "desert" || object_types[i] == "flat" || object_types[i] == "ground") {
+        double min_depth = parser.obj_mindists()[i];
+        double max_depth = parser.obj_maxdists()[i];
+        if(min_depth < 20){  // treat it as a GROUND_PLANE
            depth_scene->add_ground(poly, min_depth, max_depth, object_orders[i], object_names[i], object_nlcd);
         }
-        else {              // treat it as some FLAT
+        else
+        {               // treat it as some FLAT 
            vgl_vector_3d<double> gp(0.0, 0.0, 1.0); //z axis is the plane normal temporary, flat object can have different normal values
            depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i], depth_map_region::HORIZONTAL, object_orders[i]);
         }
       }
-      else if (object_types[i] == "water") {  // disregard any labeled water region
-      }
-      else {  // all other objects
+      else if (img_category == "desert" && (object_types[i] == "transition" || object_types[i] == "mountain" || object_types[i] == "ridge" || object_types[i] == "hill")) {
         double min_depth = parser.obj_mindists()[i];
         double max_depth = parser.obj_maxdists()[i];
         vgl_vector_3d<double> np(1.0, 1.0, 1.0);
         depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i], depth_map_region::NON_PLANAR, object_orders[i]);
+      } 
+      else if (img_category == "coast") {
+        double min_depth = parser.obj_mindists()[i];
+        double max_depth = parser.obj_maxdists()[i];
+        vgl_vector_3d<double> np(1.0, 1.0, 1.0);
+        depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i], depth_map_region::NOT_DEF, object_orders[i]);
       }
     }
 #endif
@@ -285,7 +268,8 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, 
       file << "LABELME FILE IO Error\n<percent>0</percent>\n"; break;
     case volm_io::COMPOSE_HALT:
       file << "COMPOSER waiting for matcher to complete\n<percent>90</percent>\n"; break;
-
+    case volm_io::EXE_STARTED:
+      file << "PREP exe starterd\n<percent>0</percent>\n"; break; 
     default:
       file << "Unidentified status code!\n";
       vcl_cerr << "Unidentified status code!\n";
@@ -343,22 +327,29 @@ bool volm_io::write_composer_log(vcl_string out_folder, vcl_string log)
 //: piecewise linear s.t. [1,127) -> [0,t), [127,255] -> [t,1]
 float volm_io::scale_score_to_0_1(unsigned char pix_value, float threshold)
 {
-  if (pix_value < 127)
+  if (pix_value < 127) 
     return ((float)pix_value/127)*threshold;
-  else
+  else 
     return ((float)(pix_value-127)/128)*(1-threshold) + threshold;
 }
-
 //: piecewise linear s.t. [0,t) -> [1,127), [t,1] -> [127,255]"
 unsigned char volm_io::scale_score_to_1_255(float threshold, float score)
 {
-  if (score < threshold)
+  if (score < threshold) 
     return (unsigned char) ((score/threshold)*127);
-  else
+  else 
     return (unsigned char) (((score-threshold)/(1-threshold))*128 + 127);
 }
+//: piecewise linear s.t. [0,t) -> [1,63), [t,1] -> [63,127]"
+unsigned char volm_io::scale_score_to_1_127(float threshold, float score)
+{
+  if (score < threshold) 
+    return (unsigned char) ((score/threshold)*63);
+  else 
+    return (unsigned char) (((score-threshold)/(1-threshold))*64 + 63);
+}
 
-bool operator>(const vcl_pair<float, volm_rationale>& a, const vcl_pair<float, volm_rationale>& b)
+bool operator>(const vcl_pair<float, volm_rationale>& a, const vcl_pair<float, volm_rationale>& b) 
 {  return a.first>b.first; }
 
 bool volm_rationale::write_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename)
@@ -371,14 +362,13 @@ bool volm_rationale::write_top_matches(vcl_multiset<vcl_pair<float, volm_rationa
   vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >::iterator iter;
   ofs << top_matches.size() << vcl_endl;
   for (iter = top_matches.begin(); iter != top_matches.end(); iter++) {
-    ofs << iter->first << ' ' << iter->second.lat << ' ' << iter->second.lon << ' ' << iter->second.elev << ' ' << iter->second.index_id << ' ' << iter->second.cam_id << '\n'
-        << iter->second.index_file << '\n'
-        << iter->second.score_file << vcl_endl;
+    ofs << iter->first << " " << iter->second.lat << " " << iter->second.lon << " " << iter->second.elev << " " << iter->second.index_id << " " << iter->second.cam_id << vcl_endl;
+    ofs << iter->second.index_file << vcl_endl;
+    ofs << iter->second.score_file << vcl_endl;
   }
   ofs.close();
   return true;
 }
-
 bool volm_rationale::read_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename)
 {
   vcl_ifstream ifs(filename.c_str());
@@ -399,4 +389,52 @@ bool volm_rationale::read_top_matches(vcl_multiset<vcl_pair<float, volm_rational
   ifs.close();
   return true;
 }
+
+// x is lon, y is lat
+void volm_io::read_polygons(vcl_string poly_file, vgl_polygon<double>& out)
+{
+  vcl_ifstream ifs(poly_file.c_str());
+  unsigned np, nvert;
+  double x,y;
+
+  ifs >> np;
+  for (unsigned i = 0; i < np; i++) {
+    ifs >> nvert;
+    if (nvert < 3) {
+      for (unsigned j = 0; j < nvert; j++) {
+        ifs >> x; ifs >> y;
+      }
+      continue; // do not insert as a sheet
+    }
+    out.new_sheet();
+    
+    for (unsigned j = 0; j < nvert; j++) {
+      ifs >> x; ifs >> y;
+      vgl_point_2d<double> pt(x,y);
+      out[i].push_back(pt);
+    }
+    unsigned cnt = 0;
+    for (int j = (int)nvert-1; j > 0; j--) 
+      if (out[i][j] == out[i][0])
+        cnt++;
+    if (cnt > 0) {
+      out[i].erase(out[i].begin()+nvert-cnt, out[i].end());
+    }
+  }
+  assert(np == out.num_sheets());
+}
+void volm_io::convert_polygons(vgl_polygon<double> const& in, vgl_polygon<float>& out)
+{
+  // convert poly
+  for (unsigned i = 0; i < in.num_sheets(); i++) 
+    out.new_sheet();
+
+  for (unsigned i = 0; i < in.num_sheets(); i++) {
+    for (unsigned j = 0; j < in[i].size(); j++) {
+      vgl_point_2d<float> pt((float)in[i][j].x(), (float)in[i][j].y());
+      out[i].push_back(pt);
+    }
+  }
+}
+
 
