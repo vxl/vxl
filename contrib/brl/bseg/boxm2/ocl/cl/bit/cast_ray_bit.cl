@@ -219,8 +219,8 @@ void cast_ray_render_vis(
   float min_facey = (ray_dy < 0.0f) ? (linfo->dims.y) : 0.0f;
   float min_facez = (ray_dz < 0.0f) ? (linfo->dims.z) : 0.0f;
   float tblock = calc_tnear(ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, min_facex, min_facey, min_facez);
-  tblock = (tblock > 2.0f) ? tblock : 2.0f;    //make sure tnear is at least 0...
-  tfar = tfar > (*tfar_max) ? (*tfar_max)-2.0: tfar;
+  tblock = (tblock > 0.0f) ? tblock : 0.0f;    //make sure tnear is at least 0...
+  tfar = tfar > (*tfar_max) ? (*tfar_max) : tfar;
   tfar -= BLOCK_EPSILON;   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
 
   if (tfar <= tblock)
