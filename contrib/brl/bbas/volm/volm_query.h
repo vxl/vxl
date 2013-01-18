@@ -105,6 +105,9 @@ class volm_query : public vbl_ref_count
   //: draw the polygons of regions on top of an rgb image
   void draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img);
   void draw_query_regions(vcl_string const& out_name);
+
+  static void draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polygon<double> const& poly, unsigned char const& depth);
+
   //: initial camera parameters read from camera kml
   double init_focal_;
   double head_, head_d_, head_inc_;
@@ -189,9 +192,7 @@ class volm_query : public vbl_ref_count
                            float g,
                            float b);
   void draw_rays(vcl_string const& fname);
-  void draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img,
-                    vgl_polygon<double> const& poly,
-                    unsigned char const& depth);
+
   void draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img, 
                 vgl_point_3d<double> const& world_point,
                 unsigned char const& depth, 

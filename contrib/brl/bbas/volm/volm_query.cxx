@@ -650,7 +650,7 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
         if (s.x() <= e.x()) {
           for (unsigned xi = (unsigned)s.x(); xi <= (unsigned)e.x(); ++xi) {
             unsigned xj = (unsigned)(k*xi+b);
-            if (xi < ni_ && xj < nj_) {
+            if (xi < img.ni() && xj < img.nj()) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
               img(xi,xj).b = bvrml_color::heatmap_classic[(int)depth][2];
@@ -660,7 +660,7 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
         else {
           for (unsigned xi = (unsigned)e.x(); xi <= (unsigned)s.x(); ++xi) {
             unsigned xj = (unsigned)(k*xi+b);
-            if (xi < ni_ && xj < nj_) {
+            if (xi < img.ni() && xj < img.nj()) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
               img(xi,xj).b = bvrml_color::heatmap_classic[(int)depth][2];
@@ -672,7 +672,7 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
         if (s.y() <= e.y()) {
           for (unsigned xj = (unsigned)s.y(); xj <= (unsigned)e.y(); ++xj) {
             unsigned xi = (unsigned)((xj-b)/k);
-            if (xi < ni_ && xj < nj_) {
+            if (xi < img.ni() && xj < img.nj()) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
               img(xi,xj).b = bvrml_color::heatmap_classic[(int)depth][2];
@@ -682,7 +682,7 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
         else {
           for (unsigned xj = (unsigned)e.y(); xj <= (unsigned)s.y(); ++xj) {
             unsigned xi = (unsigned)((xj-b)/k);
-            if (xi < ni_ && xj < nj_) {
+            if (xi < img.ni() && xj < img.nj()) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
               img(xi,xj).b = bvrml_color::heatmap_classic[(int)depth][2];
