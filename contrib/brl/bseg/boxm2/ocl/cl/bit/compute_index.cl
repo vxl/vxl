@@ -18,10 +18,14 @@ typedef struct
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
-void cast_ray(int,int,float,float,float,float,float,float,
+/*void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs);*/
+void cast_ray_render_vis(int,int,float,float,float,float,float,float,
+                         __constant RenderSceneInfo*, __global int4*,
+                         __local uchar16*, __constant uchar *,__local uchar *,
+                         float*, AuxArgs);
               
       
 void step_cell_compute_index(float depth,
@@ -37,13 +41,10 @@ void step_cell_compute_index(float depth,
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
   float omega=(*vis) * (1.0f - diff_omega);
-  if (omega> 0.005)
-  {
-    (*probsum)+=omega;
-    (*vis)    *= diff_omega;
-    (*expected_depth)+=depth*omega;
-    (*expected_depth_square)+=depth*depth*omega;
-  }
+  (*probsum)+=omega;
+  (*vis)    *= diff_omega;
+  (*expected_depth)+=depth*omega;
+  (*expected_depth_square)+=depth*depth*omega;
   (*t)=depth;
 }
 
@@ -57,6 +58,7 @@ compute_loc_index(
               __constant  uchar              * bit_lookup,       // used to get data_index
               __global    float              * alpha_array,
               __constant  float4            * ray_o,
+              __constant  float              * max_dist,
               __global    float              * exp_depth_buf,
               __global    float              * vis_buf,
               __global    float              * prob_buf,
@@ -84,6 +86,7 @@ compute_loc_index(
     float probsum     = prob_buf[ gid ];
     float vis_rec     = vis_buf[ gid ];
     float t           = t_infinity_buf[ gid ];
+    float tfar_max = (*max_dist)/linfo->block_len;
     
     AuxArgs aux_args;
     aux_args.alpha  = alpha_array;
@@ -93,12 +96,19 @@ compute_loc_index(
     aux_args.t = &t;
     aux_args.vis = &vis_rec;
 
-    float vis = 1.0;
+    /*float vis = 1.0;
     cast_ray( 1, 1,
               ray_ox, ray_oy, ray_oz,
               ray_dx, ray_dy, ray_dz,
               linfo, tree_array,                                    //scene info
-              local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+              local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info*/
+              
+              
+    cast_ray_render_vis( 1, 1,
+                         ray_ox, ray_oy, ray_oz,
+                         ray_dx, ray_dy, ray_dz,
+                         linfo, tree_array,                                    //scene info
+                         local_tree, bit_lookup, cumsum, &tfar_max, aux_args); //utility info
 
     //store values at the end of this block
     exp_depth_buf[ gid ] += (* aux_args.expdepth)*linfo->block_len;
