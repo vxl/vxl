@@ -52,6 +52,7 @@ namespace boxm2_create_index_process_globals
     //set kernel options
     //vcl_string options = " -D RENDER_DEPTH -D COMPINDEX ";
     vcl_string options = " -D COMPINDEX -D DETERMINISTIC";
+    options += " -D RENDER_VISIBILITY ";
     options += " -D STEP_CELL=step_cell_compute_index(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
     bocl_kernel* compute_index = new bocl_kernel();
 
@@ -150,7 +151,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   float buffer_capacity = pro.get_input<float>(i++);
 
   volm_spherical_container_sptr sph2 = new volm_spherical_container(params.solid_angle,params.vmin,params.dmax);
-  vcl_cout << "number of voxels in container: " << sph2->get_voxels().size() << vcl_endl;
+  vcl_cout << "number of depth intervals in container: " << sph2->get_depth_offset_map().size() << " with solid angle: " << params.solid_angle << " vmin: " << params.vmin << " dmax: " << params.dmax << vcl_endl;
 
   //: read the location hypotheses
   if (!vul_file::exists(hyp_file)) {
@@ -226,6 +227,10 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   bocl_mem* ray_dim_mem = new bocl_mem(device->context(), &(layer_size), sizeof(int), "ray directions size");
   ray_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+  
+  bocl_mem* max_dist = new bocl_mem(device->context(), &(params.dmax), sizeof(int), "max distance to shoot rays");
+  max_dist->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+  vcl_cout << " will stop ray casting at distance: " << params.dmax << vcl_endl;
 
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
   vcl_cout << "number of blocks: " << blocks.size() << vcl_endl;
@@ -242,7 +247,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   boxm2_block_id curr_block;
 
   //zip through each location hypothesis
-  vgl_point_3d<float> h_pt;
+  vgl_point_3d<double> h_pt;
   unsigned indexed_cnt = 0;
   while (hyp.get_next(params.start, params.skip, h_pt))
   {
@@ -251,7 +256,8 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << ".";
     double lx, ly, lz;
     lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
-    lz = lz - elev_dif;
+    lz = 2.0*(vcl_ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model
+    lz = lz - elev_dif;  // this is where the camera is
     vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
 
     cl_float loc_arr[4];
@@ -344,6 +350,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
       kern->set_arg( lookup  );
       kern->set_arg( alpha  );
       kern->set_arg( hypo_location );
+      kern->set_arg( max_dist );
       kern->set_arg( exp_depth );
       kern->set_arg( vis );
       kern->set_arg( probs );
@@ -526,7 +533,7 @@ bool boxm2_partition_hypotheses_process(bprb_func_process& pro)
 
   for (unsigned hi = 0; hi < hyp.size(); ++hi)
   {
-    vgl_point_3d<float> h_pt;
+    vgl_point_3d<double> h_pt;
     if (!hyp.get_next(h_pt)) {
       vcl_cerr << "!!Problem retrieving hyp: " << hi << " from file: " << hyp_file << '\n';
       return false;
@@ -608,7 +615,7 @@ bool boxm2_hypotheses_kml_process(bprb_func_process& pro)
   volm_loc_hyp hyp(hyp_file);
   vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file << vcl_endl;
 
-  vgl_point_3d<float> h_pt;
+  vgl_point_3d<double> h_pt;
   unsigned cnt = 0;
   while (hyp.get_next(start, skip, h_pt))
   {
@@ -674,6 +681,13 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
     vcl_cerr << "cannot read: " << param_file << vcl_endl;
     return false;
   }
+  if (ei == 0) {
+    unsigned long eis;
+    vcl_string size_file = vul_file::strip_extension(index_file) + ".txt";
+    params.read_size_file(size_file, eis);
+    vcl_cout << " ei was zero so made it size of the index file: " << eis << vcl_endl;
+    ei = (unsigned)eis;
+  }
 
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   double radius = 1;
@@ -700,7 +714,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
     vcl_cout << vcl_endl;
 #endif
     sph_shell->draw_template(temp_name, values, (unsigned char)254);
-    vil_image_view<vxl_byte> img;
+    vil_image_view<vil_rgb<vxl_byte> > img;
     sph_shell->panaroma_img(img, values);
     vcl_string img_name = str.str() + ".png";
     vil_save(img, img_name.c_str());
