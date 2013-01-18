@@ -51,28 +51,48 @@ int main(int argc, char** argv)
     volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);
     return volm_io::CAM_FILE_IO_ERROR;
   }
-
+  vcl_cout << " heading = " << heading << ", heading_deviation = " << heading_dev << "\n"
+           << "    tilt = " << tilt << ", tilt_deviation = " << tilt_dev << "\n" 
+           << " top_fov = " << top_fov << ", top_fov_deviation = " << top_fov_dev << vcl_endl;
   // create containers
-
   volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle(),vmin(),dmax());
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, cap_angle(), point_angle(), top_angle(), bottom_angle());
-
-  // create query array
-  volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
-
+  // create query
+  volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell, false);
   // screen output
+  unsigned total_size = query->obj_based_query_size_byte();
+  vcl_cout << " For spherical surface, point angle = " << point_angle() << " degree, "
+           << ", top_angle = " << top_angle()
+           << ", bottom_angle = " << bottom_angle()
+           << ", generated query has " << query->get_query_size() << " rays, "
+           << query->get_cam_num() << " cameras:" << '\n'
+           << " The query with " << query->get_cam_num() << " has " << (float)total_size/1024 << " Kbyte in total "
+           << vcl_endl;
   // query check
   dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
+    vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
     for (unsigned i = 0; i < dm->sky().size(); i++)
-      vcl_cout << "\t " << (dm->sky()[i]->name()) << " region ,\t min_depth = " << 255 << vcl_endl;
+      vcl_cout << "\t name = " << (dm->sky()[i]->name())
+               << ", depth = " << 254
+               << ", orient = " << dm->sky()[i]->orient_type()
+               << ", NLCD_id = " << dm->sky()[i]->nlcd_id() 
+               << " ---> " << (int)volm_nlcd_table::land_id[dm->sky()[i]->nlcd_id()]
+               << vcl_endl;
   }
   if (dm->ground_plane().size()) {
+    vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
     for (unsigned i = 0; i < dm->ground_plane().size(); i++)
-      vcl_cout << "\t " << (dm->ground_plane()[i]->name()) << " region ,\t min_depth = " << 0 << vcl_endl;
+      vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
+               << ", depth = " << dm->ground_plane()[i]->min_depth()
+               << ", orient = " << dm->ground_plane()[i]->orient_type()
+               << ", NLCD_id = " << dm->ground_plane()[i]->nlcd_id() 
+               << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()]
+               << vcl_endl;
   }
   if (dm->scene_regions().size()) {
+    vcl_cout << " -------------- DEPTH REGIONS -------------- " << vcl_endl;
     for (unsigned i = 0; i < dm->scene_regions().size(); i++) {
       vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
                << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
@@ -86,31 +106,84 @@ int main(int argc, char** argv)
   vcl_cout << " The depth regions map inside query follows on order" << vcl_endl;
   if (drs.size()) {
     for (unsigned i = 0; i < drs.size(); i++) {
-      vcl_cout << "\t " << drs[i]->name() << " region "
-               << ",\t\t order = " << drs[i]->order()
-               << ",\t min_dist = " << drs[i]->min_depth()
-               << ",\t max_dist = " << drs[i]->max_depth()
-               << ",\t orientation = " << drs[i]->orient_type()
+      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
+               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
+               << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
+               << ",\t order = " << (dm->scene_regions())[i]->order()
+               << ",\t orient = " << (dm->scene_regions())[i]->orient_type()
+               << ",\t NLCD_id = " << (dm->scene_regions())[i]->nlcd_id()
+               << " ---> " << (int)volm_nlcd_table::land_id[dm->scene_regions()[i]->nlcd_id()]
                << vcl_endl;
     }
   }
-
-  vcl_cout << " for spherical surface, point angle = " << point_angle() << " degree, "
-           << ", top_angle = " << top_angle()
-           << ", bottom_angle = " << bottom_angle()
-           << ", generated query has size " << query->get_query_size() << '\n'
-
-           << " The query has " << query->get_cam_num() << " cameras:" << '\n'
-           << " Generated query_size for 1 camera is " << query->get_query_size() << " byte, "
-           << " gives total query size = " << query->get_cam_num() << " x " << query->get_query_size()
-           << " = " << (double)query->get_cam_num()*(double)query->get_query_size()/(1024*1024*1024) << " GB"
-           << vcl_endl;
-
   // visualize query
   if (save_images()) {
     vcl_string prefix = out_folder();
+    vcl_cout << " save the images in " << prefix << vcl_endl;
     query->draw_query_images(out_folder());
   }
+#if 0
+  // check the min_obj_dist and max_obj_dist
+  vcl_vector<unsigned char> min_obj_dist = query->min_obj_dist();
+  vcl_vector<unsigned char> max_obj_dist = query->max_obj_dist();
+  vcl_vector<unsigned char> order_obj = query->order_obj();
+  vcl_vector<unsigned char> obj_orient = query->obj_orient();
+  vcl_vector<unsigned char> obj_nlcd = query->obj_nlcd();
+  vcl_cout << " Check the min_obj and max_obj\n" << vcl_endl;
+  for (unsigned i = 0; i < min_obj_dist.size(); i++) {
+    vcl_cout << " i = " << i 
+             << ", min_obj_dist = " << (int)min_obj_dist[i]
+             << ", max_obj_dist = " << (int)max_obj_dist[i]
+             << ", order_obj = " << (int)order_obj[i] 
+             << ", orientation = " << (int)obj_orient[i]
+             << ", nlcd = " << (int)obj_nlcd[i]
+             << vcl_endl;
+  }
+  // check the ground_id and ground_dist
+  vcl_vector<vcl_vector<unsigned> > ground_id = query->ground_id();
+  vcl_vector<vcl_vector<unsigned char> > ground_dist = query->ground_dist();
+  vcl_vector<vcl_vector<unsigned char> > ground_nlcd = query->ground_nlcd();
+  unsigned char ground_orient = query->ground_orient();
+  vcl_cout << " Check the ground plane dist and id\n";
+  for (unsigned cam_id = 0; cam_id < query->get_cam_num(); cam_id++) {
+    vcl_cout << " for camera " << cam_id << '\n';
+    vcl_vector<unsigned> ground_id_layer = ground_id[cam_id];
+    vcl_vector<unsigned char> ground_dist_layer = ground_dist[cam_id];
+    vcl_vector<unsigned char> ground_nlcd_layer = ground_nlcd[cam_id];
+    for (unsigned i = 0; i < ground_id_layer.size(); i++) {
+      vcl_cout << "\t i = " << i 
+               << ", ground_id = " << ground_id_layer[i]
+               << ", ground_dist = " << (int)ground_dist_layer[i]
+               << ", ground_nlcd = " << (int)ground_nlcd_layer[i]
+               << ", ground_orient = " << (int)ground_orient
+               << vcl_endl;
+    }
+  }
+  // check sky_id
+  vcl_vector<vcl_vector<unsigned> > sky_id = query->sky_id();
+  vcl_cout << " Check the sky id\n";
+  for (unsigned cam_id = 0; cam_id < query->get_cam_num(); cam_id++) {
+    vcl_cout << " for camera " << cam_id << '\n';
+    for (unsigned i = 0; i < sky_id[cam_id].size(); i++) {
+      vcl_cout << "\t i = " << i << ", sky_id = " << sky_id[cam_id][i] << vcl_endl;
+    }
+  }
+  // check dist_id
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > > dist_id = query->dist_id();
+  vcl_cout << " total size of dist id = " << query->get_dist_id_size() << vcl_endl;
+  for (unsigned cam_id = 0; cam_id < query->get_cam_num(); cam_id++) {
+    vcl_cout << " for camera " << cam_id << ", size of dist_id = " << dist_id[cam_id].size() << vcl_endl;
+    for (unsigned obj_id = 0; obj_id < query->depth_regions().size(); obj_id++) {
+      for (unsigned i = 0; i < dist_id[cam_id][obj_id].size(); i++) {
+        vcl_cout << "\t cam_id = " << cam_id
+                 << " obj_id = " << obj_id
+                 << " i = " << i
+                 << " dist_id = " << dist_id[cam_id][obj_id][i] << vcl_endl;
+      }
+    }
+  }
+#endif
 
   return volm_io::SUCCESS;
 }
+
