@@ -268,29 +268,44 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vc
   bvrml_write::write_vrml_sphere(ofs, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
 
   // write the voxel structure
+  float disc_radius = 0.05f;
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_points_.size(); i++) {
     vgl_vector_3d<double> ray = cart_points_[i]-orig;
     if (values[i] == special)
-      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 0.6f, 1.0f, 1.0f, 0.0f);
+      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, disc_radius, 1.0f, 1.0f, 0.0f);
+    else if (values[i] == 253) // invalid
+      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, disc_radius, 1.0f, 0.0f, 0.0f);
     else
-      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 0.6f, 0.0f, 0.0f, values[i]/255.0f);
+      bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, disc_radius, 0.0f, 0.0f, values[i]/255.0f);
   }
   ofs.close();
 }
 
 //: generate panaroma image
 //  create an image with width 360 and height 180 to pour all the ray values such that left most column is east direction, and the viewsphere is painted clockwise
-void volm_spherical_shell_container::panaroma_img(vil_image_view<vxl_byte>& img, vcl_vector<unsigned char>& values)
+void volm_spherical_shell_container::panaroma_img(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
 {
   assert(values.size() == sph_points_.size());
   img.set_size(360, 180);
   img.fill(127);
   for (unsigned i = 0; i < sph_points_.size(); i++) {
     vsph_sph_point_3d pt = sph_points_[i];
-    unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180);
-    unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180);
-    img(ii,jj) = values[i];
+    unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180.0+0.5);
+    unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180.0+0.5);
+    if (values[i] == 253) { // invalid
+      img(ii,jj).r = 255;
+      img(ii,jj).g = 0;
+      img(ii,jj).b = 0;
+    } else if (values[i] == 254) { // sky
+      img(ii,jj).r = 0;
+      img(ii,jj).g = 0;
+      img(ii,jj).b = 255;
+    } else {
+      img(ii,jj).r = values[i];
+      img(ii,jj).g = values[i];
+      img(ii,jj).b = values[i];
+    }
   }
 }
 

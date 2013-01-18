@@ -6,6 +6,7 @@ DECLARE( test_tile );
 DECLARE( test_spherical_shell_container );
 DECLARE( test_loc_hyp );
 DECLARE( test_query );
+DECLARE( test_index );
 
 void
 register_tests()
@@ -15,6 +16,7 @@ register_tests()
   REGISTER( test_spherical_shell_container );
   REGISTER( test_loc_hyp );
   REGISTER( test_query );
+  REGISTER( test_index );
 }
 
 DEFINE_MAIN;

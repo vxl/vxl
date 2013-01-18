@@ -1,6 +1,13 @@
 # bbas/volm/CMakeLists.txt
 # Volumetric Matching and 3-d indexing library
 
+# some classes depend on OPENCL being found...
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+IF(OPENCL_FOUND)
+
+ADD_DEFINITIONS(-DHAS_OPENCL=1)
+INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
+
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
@@ -24,6 +31,8 @@ SET(volm_sources
  volm_query_sptr.h
  volm_loc_hyp.h                          volm_loc_hyp.cxx
  volm_loc_hyp_sptr.h
+ volm_geo_index.h  volm_geo_index.cxx
+ volm_geo_index_sptr.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_sources)
@@ -37,3 +46,5 @@ IF(BUILD_TESTING)
 ENDIF(BUILD_TESTING)
 
 SUBDIRS(exe)
+
+ENDIF(OPENCL_FOUND)

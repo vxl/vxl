@@ -15,10 +15,10 @@
 #include <vpgl/vpgl_utm.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <bkml/bkml_parser.h>
+#include <vul/vul_timer.h>
 
-float next_mult_2(float val)
-{
-  return 2*vcl_ceil(val/2.0);
+float next_mult_2(float val) {
+  return (float)(2*vcl_ceil(val/2.0));
 }
 
 #if 0  // region 1
@@ -38,10 +38,10 @@ int main(int argc,  char** argv)
   }
   vcl_cout << "will use increments " << inc_i() << " pixels along i and " << inc_j() << " pixels along j in the DEM image!\n";
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(38.074326, -117.654869, 1200.0, vpgl_lvcs::utm, 0.0, 0.0, vpgl_lvcs::DEG, vpgl_lvcs::METERS, 0.0, 0.0, 0.0);
-
+  
 
   //vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
-
+  
   double x[] = {-118.21f, -117.102f, -117.102f, -118.21f, -118.21f};
   double y[] = {38.553f, 38.553f, 37.623f, 37.623f, 38.553f};
   vgl_polygon<double> poly(x, y, 5);
@@ -51,8 +51,8 @@ int main(int argc,  char** argv)
   vpgl_lvcs_sptr dummy_lvcs = new vpgl_lvcs();
 
   volm_loc_hyp hyp;
-#if 0
-  // add region 1 gt positions
+
+  /* // add region 1 gt positions
   hyp.add(37.6763153076, -117.978889465, 1891.40698242);
   hyp.add(37.6763076782, -117.978881836, 1891.40698242);
   hyp.add(37.9629554749, -117.964019775, 1670.87597656);
@@ -64,7 +64,7 @@ int main(int argc,  char** argv)
   hyp.add(37.7081604004, -117.416557312, 1860.39599609);
   hyp.add(37.7084999084, -117.416664124, 1863.23205566);
   hyp.add(37.7082748413, -117.416511536, 1860.99194336);
-#endif
+  */
 
   //vcl_string data_folder = "I:/";
   vcl_string data_folder = "/home/ozge/mnt/fileserver/projects/FINDER/";
@@ -77,7 +77,7 @@ int main(int argc,  char** argv)
   hyp.add(poly, dem, geocam, inc_i(), inc_j());
 
   vcl_cout << "after addition hyp has: " << hyp.size() << " elements\n";
-
+  
   vcl_stringstream str;
   str << out_pre() << '_' << inc_i() << '_' << inc_j() << ".bin";
   hyp.write_hypotheses(str.str());
@@ -99,38 +99,38 @@ int main(int argc,  char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-
-  vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
+  
+  vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly()); 
   vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
-
+  
   vpgl_lvcs_sptr dummy_lvcs = new vpgl_lvcs();
-
+  
   volm_loc_hyp hyp;
-
+  
   // add region 2 gt positions
   // note to self, the order here is not necessarily the order given by get_next() method of hyp
   // increase elev by 1 meter
-  hyp.add(33.912397,-78.281430,next_mult_2(1.60));  // p1a_res12_trashcan-GROUNDTRUTH
-  hyp.add(33.912068,-78.282300,next_mult_2(1.60)); // p1a_res13_shakypier-GROUNDTRUTH
-  hyp.add(34.370855,-77.627093,next_mult_2(1.60)); // p1a_res14_boat-GROUNDTRUTH.kml
-  hyp.add(34.368807,-77.624855,next_mult_2(3.61)); // p1a_res15_walkway-GROUNDTRUTH.kml
-  hyp.add(34.370836,-77.627113,next_mult_2(1.60)); // p1a_res16_whitehouse-GROUNDTRUTH
-  hyp.add(32.650674,-79.948996,next_mult_2(3.00)); // p1a_res17_beachgrass-GROUNDTRUTH.kml
-  hyp.add(32.648747,-79.952434,next_mult_2(1.40)); // p1a_res18_rocks-GROUNDTRUTH.kml
-  hyp.add(36.116348,-75.741750,next_mult_2(1.60)); // p1a_res19_channelfront-GROUNDTRUTH.kml
-  hyp.add(36.126512,-75.743331,next_mult_2(1.60)); // p1a_res20_drivingbyboats-GROUNDTRUTH.kml
-  hyp.add(32.375492,-80.436054,next_mult_2(1.60)); // p1a_res21_360spin-GROUNDTRUTH.kml
-  hyp.add(32.375502,-80.437492,next_mult_2(40.30)); // p1a_res22_lookingsouth-GROUNDTRUTH.kml
-
-  vcl_stringstream str;
+  hyp.add(33.912397,-78.281430,next_mult_2(1.60));  // p1a_res12_trashcan-GROUNDTRUTH          
+  hyp.add(33.912068,-78.282300,next_mult_2(1.60)); // p1a_res13_shakypier-GROUNDTRUTH          
+  hyp.add(34.370855,-77.627093,next_mult_2(1.60)); // p1a_res14_boat-GROUNDTRUTH.kml           
+  hyp.add(34.368807,-77.624855,next_mult_2(3.61)); // p1a_res15_walkway-GROUNDTRUTH.kml        
+  hyp.add(34.370836,-77.627113,next_mult_2(1.60)); // p1a_res16_whitehouse-GROUNDTRUTH         
+  hyp.add(32.650674,-79.948996,next_mult_2(3.00)); // p1a_res17_beachgrass-GROUNDTRUTH.kml     
+  hyp.add(32.648747,-79.952434,next_mult_2(1.40)); // p1a_res18_rocks-GROUNDTRUTH.kml          
+  hyp.add(36.116348,-75.741750,next_mult_2(1.60)); // p1a_res19_channelfront-GROUNDTRUTH.kml   
+  hyp.add(36.126512,-75.743331,next_mult_2(1.60)); // p1a_res20_drivingbyboats-GROUNDTRUTH.kml 
+  hyp.add(32.375492,-80.436054,next_mult_2(1.60)); // p1a_res21_360spin-GROUNDTRUTH.kml        
+  hyp.add(32.375502,-80.437492,next_mult_2(40.30)); // p1a_res22_lookingsouth-GROUNDTRUTH.kml  
+  
+  vcl_stringstream str; 
   str << out_pre() << ".bin";
   hyp.write_hypotheses(str.str());
-
+  
   return volm_io::SUCCESS;
 }
 #endif
 
-# if 1 // adding region 2 using LIDAR
+# if 0 // adding region 2 using LIDAR, go over each lidar tile and for each pixel add a hypo
 int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> in_folder("-in", "input folder to read files as .tif", "");
@@ -138,6 +138,7 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> inc_i("-inc_i", "increments in pixels in the DEM image", 1);
   vul_arg<unsigned> inc_j("-inc_j", "increments in pixels in the DEM image", 1);
   vul_arg<vcl_string> out_pre("-out_pre", "output file prefix", "");
+  vul_arg<bool> add_gt("-addgt", "add known gt locations?", false); // if no -addgt argument then the value is false, if there is one then the value is true
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
@@ -194,6 +195,18 @@ int main(int argc,  char** argv)
     delete cam;
     vcl_cout << "after addition hyp has: " << hyp.size() << " elements\n";
   }
+  if (add_gt()) {
+    //: add any gt positions if any
+    hyp.add(32.759063, -79.857689, 1.60);  // p1a_test1_06-GROUNDTRUTH   
+    hyp.add(32.775959, -79.813014, 4.41);  // p1a_test1_28-GROUNDTRUTH
+    hyp.add(33.911997, -78.282153, 1.60);  // p1a_test1_08-GROUNDTRUTH
+    hyp.add(33.912397, -78.281430, 1.60);  // p1a_test1_46-GROUNDTRUTH
+    hyp.add(30.720336, -81.550366, 1.60);  // p1a_test1_18-GROUNDTRUTH
+    hyp.add(32.648980, -79.951930, 1.60);  // p1a_test1_38-GROUNDTRUTH
+    hyp.add(33.365799, -79.268871, 1.60);  // p1a_test1_34-GROUNDTRUTH
+
+    vcl_cout << "after addition of some gt points hyp has: " << hyp.size() << " elements\n";
+  }
   vcl_stringstream str;
   str << out_pre() << '_' << inc_i() << '_' << inc_j() << ".bin";
   hyp.write_hypotheses(str.str());
@@ -202,3 +215,151 @@ int main(int argc,  char** argv)
 }
 
 #endif
+
+#include <volm/volm_geo_index.h>
+
+// read the tiles of the region, create a geo index and write the hyps
+int main(int argc,  char** argv)
+{
+  vul_timer t;
+  t.mark();
+
+  vul_arg<vcl_string> in_folder("-in", "input folder to read files as .tif", "");
+  vul_arg<vcl_string> in_poly("-poly", "region polygon as kml, only the hypos inside this will be added", "");
+  vul_arg<float> inc("-inc", "increments in arcseconds, e.g. 0.1 for ~3m increments", 0.1f);
+  vul_arg<unsigned> nh("-nh", "number of hyps in each direction in one leaf tile, e.g. 100 so that each tile has 100x100 hyps", 100); 
+  vul_arg<vcl_string> out_pre("-out_pre", "output file folder with file seperator at the end", "");
+  vul_arg<bool> add_gt("-addgt", "add known gt locations?", false); // if no -addgt argument then the value is false, if there is one then the value is true
+  vul_arg<unsigned> tile_id("-tile", "id of the tile", 0);
+  vul_arg<unsigned> utm_zone("-zone", "utm zone to fill", 17);
+  vul_arg_parse(argc, argv);
+
+  vcl_cout << "argc: " << argc << vcl_endl;
+  if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || in_poly().compare("") == 0) {
+    vul_arg_display_usage_and_exit();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  vcl_cout << "will use increments " << inc() << " arcseconds along north and east directions!\n";
+
+  vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
+  vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
+
+  // determine depth of the geo index depending on inc, if we want to have 100x100 = 10K hyps in each leaf
+  double arcsec_to_sec = 1.0f/3600.0f;
+  double inc_in_sec = inc()*arcsec_to_sec;
+  double inc_in_sec_rad = 3.0*inc_in_sec/4.0;
+  double size = nh()*inc_in_sec; // inc() is given in arcseconds, convert it to seconds;
+  vcl_cout << " each leaf has size: " << size << " seconds in geographic coords..\n";
+  vcl_cout << " increments in seconds: " << inc_in_sec << '\n';
+  vcl_cout << " only putting hyps in UTM zone: " << utm_zone() << '\n';
+
+  // change to wr1 tiles for desert
+  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
+  unsigned i = tile_id();
+  if (i >= tiles.size()) {
+    vcl_cerr << "tile id: " << i << " is greater than number of tiles: " << tiles.size() << "!\n";
+    return 0;
+  }
+  
+  volm_geo_index_node_sptr root = volm_geo_index::construct_tree(tiles[i], (float)size, poly); 
+
+  // write the geo index and the hyps
+  vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << i << ".txt";
+  volm_geo_index::write(root, file_name.str(), (float)size);
+  unsigned depth = volm_geo_index::depth(root);
+  vcl_stringstream file_name2; file_name2 << out_pre() << "geo_index_tile_" << i << ".kml";
+  volm_geo_index::write_to_kml(root, 0, file_name2.str());
+  vcl_stringstream file_name3; file_name3 << out_pre() << "geo_index_tile_" << i << "_depth_" << depth << ".kml";
+  volm_geo_index::write_to_kml(root, depth, file_name3.str());
+
+  // prune the out of zone leaves
+  if (!volm_geo_index::prune_by_zone(root, utm_zone())) {
+    vcl_cout << " root " << i << " is not in zone: " << utm_zone() << "! no hypotheses in its leaves!\n";
+    return 0;
+  }
+
+  vcl_string file_glob = in_folder() + "/*.tif";
+  unsigned cnt = 0;
+  for (vul_file_iterator fn=file_glob; fn; ++fn, cnt++) {
+    vcl_string tiff_fname = fn();
+
+    vil_image_view_base_sptr img_sptr = vil_load(tiff_fname.c_str());
+    vil_image_view<float> img(img_sptr);
+    unsigned ni = img.ni(); unsigned nj = img.nj();
+    volm_tile t(tiff_fname, ni, nj);
+    //t.write_kml(out_pre() + t.get_string() + ".kml", 0);
+
+    // write the geo index and the hyps
+    vcl_vector<volm_geo_index_node_sptr> leaves;
+    vgl_box_2d<float> leaf_box = t.bbox();
+    volm_geo_index::get_leaves(root, leaves, leaf_box);
+    if (!leaves.size())
+      continue;
+    float size_leaf = leaves[0]->extent_.width();
+    /*volm_index_node_sptr dummy_root = new volm_index_node(t.bbox());
+    dummy_root->children_ = leaves;
+    vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << i << "_intersection_" << cnt << ".kml";
+    volm_index::write_to_kml(dummy_root, 1, file_name.str());*/
+    // generate the hyps and find heights from LIDAR
+    for (unsigned j = 0; j < leaves.size(); j++) {
+      if (!leaves[j]->hyps_)
+        leaves[j]->hyps_ = new volm_loc_hyp();
+      float lower_left_lon = leaves[j]->extent_.min_point().x();
+      float lower_left_lat = leaves[j]->extent_.min_point().y();
+      unsigned nhi = (unsigned)vcl_ceil(size_leaf/inc_in_sec);
+      for (unsigned hi = 0; hi < nhi; hi++) {
+        double lon = lower_left_lon + hi*inc_in_sec;
+        for (unsigned hj = 0; hj < nhi; hj++) {
+          double lat = lower_left_lat + hj*inc_in_sec;
+          vpgl_utm u; int zone;  double x, y;
+          u.transform(lat, lon, x, y, zone);
+          if (zone != utm_zone())
+            continue;
+          unsigned ii, jj;
+          bool contains = t.global_to_img(lon, lat, ii, jj);
+          if (contains) {
+            float z = img(ii, jj);
+            unsigned id;
+            if (z > 0  && !(leaves[j]->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
+              leaves[j]->hyps_->add(lat, lon, z);
+          }
+        }
+      }
+    }
+    
+    //if (cnt > 0)
+    //  break;
+  }
+  unsigned r_cnt = volm_geo_index::hypo_size(root) ;
+  vcl_cout << " root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
+  
+  if (add_gt()) {
+    //: add any gt positions if any
+    if (volm_geo_index::add_hypothesis(root, -79.857689, 32.759063, 1.60))
+      vcl_cout << " added p1a_test1_06-GROUNDTRUTH\n";
+    
+    if (volm_geo_index::add_hypothesis(root, -79.813014, 32.775959, 4.41))
+      vcl_cout << " added p1a_test1_28-GROUNDTRUTH\n";
+    if (volm_geo_index::add_hypothesis(root, -78.282153, 33.911997, 1.60))
+      vcl_cout << " added p1a_test1_08-GROUNDTRUTH\n";
+    if (volm_geo_index::add_hypothesis(root, -78.281430, 33.912397, 1.60))
+      vcl_cout << " added p1a_test1_46-GROUNDTRUTH\n";
+    if (volm_geo_index::add_hypothesis(root, -81.550366, 30.720336, 1.60))
+      vcl_cout << " added p1a_test1_18-GROUNDTRUTH\n";
+    if (volm_geo_index::add_hypothesis(root, -79.951930, 32.648980, 1.60))
+      vcl_cout << " added p1a_test1_38-GROUNDTRUTH\n";
+    if (volm_geo_index::add_hypothesis(root, -79.268871, 33.365799, 1.60))
+      vcl_cout << " added p1a_test1_34-GROUNDTRUTH\n";
+
+    unsigned r_cnt = volm_geo_index::hypo_size(root) ;
+    vcl_cout << " after addition of gt locs, root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
+  }
+
+  // write the hypos
+  vcl_stringstream file_name4; file_name4 << out_pre() << "geo_index_tile_" << i;
+  volm_geo_index::write_hyps(root, file_name4.str());
+    
+  vcl_cout << "total time: " << t.all()/1000 << " seconds = " << t.all()/(1000*60) << " mins.\n";
+  return volm_io::SUCCESS;
+}
+

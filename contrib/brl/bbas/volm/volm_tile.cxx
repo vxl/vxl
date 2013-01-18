@@ -8,6 +8,7 @@
 #include <brip/brip_vil_float_ops.h>
 #include <bkml/bkml_write.h>
 #include <vpgl/vpgl_utm.h>
+#include <vul/vul_file.h>
 
 //: specify lat lon in positive numbers but specify hemisphere ('N' or 'S') and direction ('W' or 'E')
 volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, float scale_i, float scale_j, unsigned ni, unsigned nj) :
@@ -21,6 +22,40 @@ volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, floa
   vpgl_geo_camera cam(trans_matrix, lv); cam.set_scale_format(true);
   cam_ = cam;
 }
+
+//: parse the name string and construct tile
+volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), nj_(nj)
+{
+  vcl_string name = vul_file::strip_directory(file_name);
+  name = name.substr(name.find_first_of('_')+1, name.size());
+  //vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
+  vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
+  assert(n.size() != 0);  // for now there is no support for 'S' and/or 'E'
+  hemisphere_ = 'N';
+  direction_ = 'W';
+
+  vcl_stringstream str(n); str >> lat_;
+  n = name.substr(name.find_first_of('W')+1, name.find_first_of('_'));
+  vcl_stringstream str2(n); str2 >> lon_;
+  
+  name = name.substr(name.find_first_of('_'), name.size());
+  n = name.substr(name.find_first_of('S')+1, name.find_first_of('x'));
+  vcl_stringstream str3(n); str3 >> scale_i_;
+  n = name.substr(name.find_first_of('x')+1, name.find_last_of('.'));
+  vcl_stringstream str4(n); str4 >> scale_j_;
+  //vcl_cout << " lat: " << lat_ << " lon: " << lon_ << " scale_i:" << scale_i_ << " scale_j: " << scale_j_ << vcl_endl;
+
+  // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
+  //vcl_cout << "upper left corner in the image is: " << lat_+scale_j_ << " N " << lon_ << " W\n"
+  //          << "lower right corner in the image is: " << lat_ << " N " << lon_-scale_i_ << " W" << vcl_endl;
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  trans_matrix[0][0] = -scale_i_/ni; trans_matrix[1][1] = -scale_j_/nj;
+  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
+  vpgl_lvcs_sptr dummy_lvcs = new vpgl_lvcs;
+  cam_ = vpgl_geo_camera(trans_matrix, dummy_lvcs);
+  cam_.set_scale_format(true);
+}
+
 
 //: specify lat lon as regular, e.g. negative lon for 'W'
 volm_tile::volm_tile(float lat, float lon, float scale_i, float scale_j, unsigned ni, unsigned nj) :
@@ -120,6 +155,20 @@ void volm_tile::img_to_global(unsigned i, unsigned j, double& lon, double& lat)
   if (hemisphere_ == 'S')
     lat = -lat;
 }
+//: do the conversions in reporting lon,lat
+double volm_tile::lower_left_lon() {
+  if (direction_ == 'W')
+    return -lon_;
+  else
+    return lon_;
+}
+double volm_tile::lower_left_lat() {
+  if (hemisphere_ == 'S')
+    return -lat_;
+  else
+    return lat_;
+}
+
 
 bool volm_tile::global_to_img(double lon, double lat, unsigned& i, unsigned& j)
 {
@@ -262,7 +311,7 @@ void volm_tile::write_kml(vcl_string name, int n)
   this->img_to_global(this->ni_, 0, lon, lat);
   vnl_double_2 ur; ur[0] = lat; ur[1] = lon;
   bkml_write::write_box(ofs, this->get_string(), this->get_string(), ul, ur, ll, lr);
-
+  if (n != 0) {
   double arcsecond = (n/2.0) * (1.0/3600.0);
   for (unsigned i = 0; i < this->ni_; i+=n)
     for (unsigned j = 0; j < this->nj_; j+=n) {
@@ -273,7 +322,7 @@ void volm_tile::write_kml(vcl_string name, int n)
       ur[0] = lat; ur[1] = lon+arcsecond;
       bkml_write::write_box(ofs, this->get_string(), this->get_string(), ul, ur, ll, lr);
     }
-
+  }
   bkml_write::close_document(ofs);
   ofs.close();
 }
@@ -339,3 +388,10 @@ void volm_tile::b_read(vsl_b_istream &is)
   }
 }
 
+vgl_box_2d<float> volm_tile::bbox()
+{
+  vgl_point_2d<float> p1((float)this->lower_left_lon(), (float)this->lower_left_lat());
+  vgl_point_2d<float> p2(p1.x()+this->scale_i_, p1.y()+this->scale_j_);
+  vgl_box_2d<float> box(p1, p2);
+  return box;
+}

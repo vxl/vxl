@@ -9,8 +9,8 @@ static void test_spherical_shell_container()
   float cap_angle = 180; // = 90;
   float point_angle = 10; // = 30;
   double radius = 1;
-  float top_angle = 40;
-  float bottom_angle = 20;
+  float top_angle = 70;
+  float bottom_angle = 50;
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, cap_angle, point_angle, top_angle, bottom_angle);
 
   vcl_cout << " for half spherical surface, point angle = " << point_angle << " degree, number of rays: " << sph_shell->get_container_size() << '\n'

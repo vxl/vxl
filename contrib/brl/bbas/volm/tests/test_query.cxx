@@ -8,6 +8,9 @@
 #include <volm/volm_query_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_save.h>
+#include <volm/volm_io.h>
+#include <volm/volm_query_pass2.h>
+#include <bpgl/bpgl_camera_utils.h>
 
 static void test_query()
 {

@@ -14,6 +14,7 @@
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
+#include <vgl/vgl_box_2d.h>
 
 class volm_tile
 {
@@ -22,8 +23,19 @@ class volm_tile
    volm_tile(float lat, float lon, char hemisphere, char direction, float scale_i, float scale_j, unsigned ni, unsigned nj);
    //: specify lat lon as regular, e.g. negative lon for 'W'
    volm_tile(float lat, float lon, float scale_i, float scale_j, unsigned ni, unsigned nj);
+
+   //: parse the name string and construct tile, for now only parses for 'N' and 'W'
+   volm_tile(vcl_string name, unsigned ni, unsigned nj);
+
    volm_tile() {}
    vcl_string get_string();
+
+   //: do the conversions in reporting lon,lat
+   double lower_left_lon();
+   double lower_left_lat();
+
+   //: create a bounding box where lon is x and lat is y and lower left corner has geo coords
+   vgl_box_2d<float> bbox();
 
    void img_to_global(unsigned i, unsigned j, double& lon, double& lat);
    
