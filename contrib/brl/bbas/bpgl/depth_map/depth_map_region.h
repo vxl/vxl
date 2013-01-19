@@ -59,6 +59,7 @@ class depth_map_region : public vbl_ref_count
   void set_depth_inc(double depth_inc){depth_inc_ = depth_inc;}
   void set_order(unsigned order){order_ = order;}
   void set_active(bool active){active_ = active;}
+  void set_orient_type(orientation type){orient_type_ = type;}
   //:accessors
   double min_depth() const {return min_depth_;}
   double max_depth() const {return max_depth_;}

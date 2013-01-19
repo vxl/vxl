@@ -47,7 +47,7 @@ static void test_depth_map()
   vgl_plane_3d<double> plane(0.0, 0.0, 1.0, 0.0);
   depth_map_region_sptr gpr =
     new depth_map_region(gp, plane, "test_region",
-                         depth_map_region::GROUND_PLANE);
+                         depth_map_region::HORIZONTAL);
   gpr->set_ground_plane_max_depth(10000.0, cam, 3.0);
   // test ground plane homography
   vgl_h_matrix_2d<double> H;
@@ -131,19 +131,36 @@ static void test_depth_map()
 
 #if 0
   //  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res03_coloredmounds_depthscene_v2.vsl";
-    vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
+    vcl_string spath = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
   // vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res17_beachgrass_depthmap_scene.vsl";
-  vsl_b_ifstream tis(spath.c_str());
+  vsl_b_ifstream tis(spath.c_str()); 
   depth_map_scene scin;
   scin.b_read(tis);
+  tis.close();
+#if 0 // needed to convert old depthmap scenes to new region types
+  vcl_vector<depth_map_region_sptr> regs = scin.scene_regions();
+  for(vcl_vector<depth_map_region_sptr>::iterator rit = regs.begin(); rit !=regs.end();++rit)
+    if((*rit)->orient_type() == depth_map_region::HORIZONTAL)
+      (*rit)->set_orient_type( depth_map_region::VERTICAL);
+  vcl_vector<depth_map_region_sptr> gps = scin.ground_plane();
+  for(vcl_vector<depth_map_region_sptr>::iterator rit = gps.begin(); rit !=gps.end();++rit)
+    (*rit)->set_orient_type( depth_map_region::GROUND_PLANE);
+
+  vcl_vector<depth_map_region_sptr> sks = scin.sky();
+  for(vcl_vector<depth_map_region_sptr>::iterator rit = sks.begin(); rit !=sks.end();++rit)
+    (*rit)->set_orient_type( depth_map_region::INFINT);
+
+  vsl_b_ofstream tos(spath.c_str());
+  scin.b_write(tos);
+#endif
   scene_depth_iterator dend = scin.end();
   scene_depth_iterator sit = scin.begin();
   for (; sit != dend; ++sit)
     scin.print_depth_states();
-
+#if 0
   vil_image_view<float> dv = sit->depth_map(0);
   vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator_v2.tiff");
-
+#endif
 #endif
 }
 
