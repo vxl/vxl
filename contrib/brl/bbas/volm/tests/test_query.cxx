@@ -9,7 +9,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_save.h>
 #include <volm/volm_io.h>
-#include <volm/volm_query_pass2.h>
+//#include <volm/volm_query_pass2.h>
 #include <bpgl/bpgl_camera_utils.h>
 
 static void test_query()
@@ -32,7 +32,7 @@ static void test_query()
   //: create spherical shell for query rays
   // parameter for coast
   float cap_angle = 180.0f;
-  float point_angle = 2.0f;
+  float point_angle = 2.0f;//for coast
   double radius = 1;
   float top_angle = 70.0f;
   float bottom_angle = 60.0f;
@@ -45,12 +45,11 @@ static void test_query()
   float bottom_angle = 70.0f;
 #endif
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, cap_angle, point_angle, top_angle, bottom_angle);
-  
+#if 0 //files not available
   //: labelme file and camera files
   vcl_string out_folder = "D:\\work\\FINDER\\volumetric_algo\\queries\\coast\\job_160\\viewing_volume\\";
   vcl_string label_file = "D:\\work\\FINDER\\volm_matcher\\finderuploads\\coast\\job_160\\Result_USC_calibration_noFurther.xml";
   vcl_string cam_file =   "D:\\work\\FINDER\\volm_matcher\\finderuploads\\coast\\job_160\\Camera_test.kml";
-
   //: check the labelme file and camera file
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
@@ -62,9 +61,11 @@ static void test_query()
   if (!volm_io::read_camera(cam_file, dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude, lat, lon)) {
     volm_io::write_status(out_folder, volm_io::CAM_FILE_IO_ERROR);  
   }
-
+#endif
+#if 0
+  vcl_string depth_scene_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
   // create the query
-  volm_query_sptr query = new volm_query(cam_file, label_file, sph, sph_shell, false);
+  volm_query_sptr query = new volm_query(depth_scene_path, "desert", sph, sph_shell, 1.6);
 
   // query infomation
   vcl_cout << " for spherical surface, point angle = " << point_angle << " degree, "
@@ -74,7 +75,7 @@ static void test_query()
            << "\n The query has " << query->get_cam_num() << " cameras:"
            << vcl_endl;
   // the depth_map_scene stored in query (can be used to fetch all attributes and polygons)
-  dm = query->depth_scene();  
+  depth_map_scene_sptr dm = query->depth_scene();  
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
   vcl_cout << " -------------- SKY -------------- " << vcl_endl;
@@ -134,6 +135,7 @@ static void test_query()
 
 
   TEST("number of rays for current query", query->get_query_size(), 29440); // for 2 degree resolution
+#endif//NEED FILES TO RUN!! JLM
 }
 
 

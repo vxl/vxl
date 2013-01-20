@@ -7,6 +7,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_save.h>
+#include <vsl/vsl_binary_io.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <vcl_algorithm.h>
@@ -21,20 +22,29 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
                        bool const& use_default)
   : use_default_(use_default), sph_depth_(sph), sph_(sph_shell)
 {
+  //the discrete rays defined on the sphere as x, y, z
   query_points_ = sph_->cart_points();
   query_size_ = (unsigned)query_points_.size();
 
   // load the labelme xml to define depth_map_scene and associated default value of camera parameters
   dm_ = new depth_map_scene;
   volm_io::read_labelme(label_xml_file, dm_, img_category_);
+  // the dimensions of the depth image
   ni_ = dm_->ni();
   nj_ = dm_->nj();
-  log_downsample_ratio_ = 0;
+  // the image may be downsampled to provide more efficient matching
+  log_downsample_ratio_ = 0;//initial scale = 1
+  // the larger dimension of the image
   unsigned bigger = ni_ > nj_ ? ni_ : nj_;
+  // find the scale that keeps the largest image dimension > 500
   while ((bigger>>log_downsample_ratio_) > 500)
     ++log_downsample_ratio_;
   vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
-  // set the default value based on img_category_ ( temporary having "desert" and "coast"
+  
+  //
+  // set the default camera hypothesis parameters
+  // based on img_category_ ( "desert" and "coast")
+  //
   if (img_category_ == "desert") {
     head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
     tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 2.0;
@@ -55,6 +65,8 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
     roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
     tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 2.0;
   }
+  // read the camera file but don't use the values
+  // use the default values instead
   if (use_default_) {
     double lat, lon, head, head_d, tilt, tilt_d, roll, roll_d, tfov, tfov_d, altitude;
     // load the camera kml, fetch the camera value and deviation
@@ -71,7 +83,7 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
              << "\ntop_fov: " << tfov_ << " dev: " << tfov_d_
              << " alt: " << altitude_ << vcl_endl;
   }
-  else {
+  else {//overwrite the camera parameters with those in the camera file
     double lat, lon;
     volm_io::read_camera(cam_kml_file, ni_, nj_, head_, head_d_, tilt_, tilt_d_, roll_, roll_d_, tfov_, tfov_d_, altitude_, lat, lon);
     vcl_cout << "In volm_query() - values are read:\nheading: "
@@ -96,20 +108,90 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   // implement the weight parameters for all objects
   this->weight_ingest();
 }
+// build a query from an existing depth map scene
+volm_query::volm_query(vcl_string const& depth_map_scene_file,
+                       vcl_string const& image_category,
+                       volm_spherical_container_sptr const& sph,
+                       volm_spherical_shell_container_sptr const& sph_shell,
+                       double altitude)  : 
+                       img_category_(image_category), use_default_(true), sph_depth_(sph), sph_(sph_shell), altitude_(altitude)
+{
+  //the discrete rays defined on the sphere as x, y, z
+  query_points_ = sph_->cart_points();
+  query_size_ = (unsigned)query_points_.size();
+  dm_ = new depth_map_scene;
+  vsl_b_ifstream dis(depth_map_scene_file.c_str()); 
+  dm_->b_read(dis);
+  dis.close();
+  // the dimensions of the depth image
+  ni_ = dm_->ni();
+  nj_ = dm_->nj();
+  // the image may be downsampled to provide more efficient matching
+  log_downsample_ratio_ = 0;//initial scale = 1
+  // the larger dimension of the image
+  unsigned bigger = ni_ > nj_ ? ni_ : nj_;
+  // find the scale that keeps the largest image dimension > 500
+  while ((bigger>>log_downsample_ratio_) > 500)
+    ++log_downsample_ratio_;
+  vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
+  
+  //
+  // set the default camera hypothesis parameters
+  // based on img_category_ ( "desert" and "coast")
+  //
+  if (img_category_ == "desert") {
+    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
+    tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 2.0;
+    roll_ = 0.0;      roll_d_ = 3.0; roll_inc_ = 2.0; // try +2 -2
+    tfov_ = 5.0;      tfov_d_ = 5.0; tfov_inc_ = 2.0;
+  }
+  else if (img_category_ == "coast") {
+    // temporary use desert default
+    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
+    tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 2.0;
+    roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
+    tfov_ = 5.0;      tfov_d_ = 30.0; tfov_inc_ = 2.0;
+  }
+  else {
+    // undefined img category, use desert default
+    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
+    tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 2.0;
+    roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
+    tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 2.0;
+  }
 
+  // create camera hypotheses
+  this->create_cameras();
+  vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
+  // generate polygon vector based on defined order
+  this->generate_regions();
+  ground_orient_ = volm_orient_table::ori_id["horizontal"];
+  vcl_cout << "volm_query generated regions: " << this->depth_regions().size() << " regions! ingesting...\n"; vcl_cout.flush();
+  // start to ingest query, with min_dist and order implemented
+  this->query_ingest();
+  // start to ingest order, store in order_index_
+  this->order_ingest();
+  // implement the weight parameters for all objects
+  this->weight_ingest();
+}
+// generate the set of camera hypotheses
+// the camera space includes multiple
+// choices for focal length, heading, tilt and roll
 void volm_query::create_cameras()
 {
   // set up the camera parameter arrays and construct vector of cameras
-  if (use_default_)
+  if (use_default_)//define focal length search space
   {
     if (img_category_ == "desert") {
+      //field of view angle choices (degrees)
       double stock[] = {18.0, 19.0,
                         20.0, 24.0, 26.0,
                         28.0, 30.0, 32.0};
+      //store in vector
       if (ni_ >= nj_) {  // landscape
         top_fov_.insert(top_fov_.end(), stock, stock + 8);
       }
-      else {             // protrait
+      else { // protrait, so take into account aspect ratio
         double dtor = vnl_math::pi_over_180;
         for (unsigned i = 0; i < 8; ++i) {
           double tr = vcl_tan(stock[i]*dtor);
@@ -144,7 +226,7 @@ void volm_query::create_cameras()
     }
     else {
       double stock[] = {3.0,  4.0, 5.0,
-                        12.0, 17.0, 18.0,19.0,
+                        12.0, 17.0, 18.0,19.0, 
                        20.0, 24.0};
       top_fov_.insert(top_fov_.end(), stock, stock + 9);
       vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
@@ -152,7 +234,7 @@ void volm_query::create_cameras()
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
     }
-  }
+  }// end use_default == true
   else {
     tfov_inc_ = 2.0;
 #if 0
@@ -175,6 +257,7 @@ void volm_query::create_cameras()
         vcl_cout << right_fov << ' ';
     }
   }
+  // store heading hypotheses
   headings_.push_back(head_);
   vcl_cout << "\n\t headings:\n\t " << head_ << ' ';
   for (double i = head_inc_; i <= head_d_; i+= head_inc_) {   // heading ranges from 0 to 360
@@ -188,6 +271,7 @@ void volm_query::create_cameras()
     else
       vcl_cout << right_hd << ' ';
   }
+  // store tilt hypotheses
   vcl_cout << "\n\t tilts:\n\t " << tilt_ << ' ';
   tilts_.push_back(tilt_);   // tilt ranges from 0 to 180
   for (double i =  tilt_inc_; i <= tilt_d_; i+= tilt_inc_) {
@@ -197,7 +281,7 @@ void volm_query::create_cameras()
     tilts_.push_back(right_tlt);  tilts_.push_back(left_tlt);
     vcl_cout << right_tlt << ' ' << left_tlt << ' ';
   }
-
+  // store roll hypotheses
   vcl_cout << "\n\t rolls:\n\t " << roll_ << ' ';
   rolls_.push_back(roll_);    // roll ranges from -180 to 180 in kml, how about in camera_from_kml ?? (need to check...)
   for (double i = roll_inc_; i <= roll_d_; i+=roll_inc_) {
@@ -208,7 +292,7 @@ void volm_query::create_cameras()
     vcl_cout << right_rol << ' ' << left_rol << ' ';
   }
   vcl_cout.flush();
-  // construct cameras
+  // construct the camera hypotheses
   for (unsigned i = 0; i < tilts_.size(); ++i)
     for (unsigned j = 0; j < rolls_.size(); ++j)
       for (unsigned k = 0; k < top_fov_.size(); ++k)
@@ -220,6 +304,7 @@ void volm_query::create_cameras()
           double right_f = vcl_atan(ni_*ttr/nj_)/dtor;
           vpgl_perspective_camera<double> cam = bpgl_camera_utils::camera_from_kml((double)ni_, (double)nj_, right_f, top_f, altitude_, head, tilt, roll);
           // check whether current camera is consistent with defined ground plane
+          // that is, if the 2-d ground plane region actually projects onto the 3-d ground plane
           bool success = true;
           if (dm_->ground_plane().size()) {
             for (unsigned i = 0; (success && i < dm_->ground_plane().size()); ++i) {
@@ -248,22 +333,27 @@ void volm_query::create_cameras()
           }
         }
 }
-
+// convert min and max distances from scene depth regions to voxel indices
+// insure consistent order indices
+// obtain the maximum distance bound (meters)
 void volm_query::generate_regions()
 {
   // generate the map of the depth_map_region based on their order
+  // a vector of regions not including sky or ground plane
   depth_regions_ = dm_->scene_regions();
+  unsigned size = (unsigned)depth_regions_.size();
+  // sort the regions on depth order
   vcl_sort(depth_regions_.begin(), depth_regions_.end(), compare_order());
   // obtain the min and max dist for different non-ground, non-sky objects
-  for (unsigned i = 0; i < depth_regions_.size(); ++i) {
+  // distances are in terms of voxel indices
+  for (unsigned i = 0; i < size; ++i) {
     min_obj_dist_.push_back(sph_depth_->get_depth_interval(depth_regions_[i]->min_depth()));
     max_obj_dist_.push_back(sph_depth_->get_depth_interval(depth_regions_[i]->max_depth()));
     order_obj_.push_back((unsigned char)depth_regions_[i]->order());
     obj_orient_.push_back((unsigned char)depth_regions_[i]->orient_type());
     obj_nlcd_.push_back((unsigned char)volm_nlcd_table::land_id[depth_regions_[i]->nlcd_id()]);
   }
-  unsigned size = (unsigned)dm_->scene_regions().size();
-  d_threshold_ = 20000.0;
+  d_threshold_ = 20000.0; //upper depth bound
   for (unsigned i = 0; i < size; ++i) {
   //depth_regions_[(dm_->scene_regions())[i]->order()] = (dm_->scene_regions())[i];
     if (d_threshold_ < (dm_->scene_regions())[i]->max_depth())
@@ -276,6 +366,7 @@ void volm_query::generate_regions()
     }
   }
   // set a constant value for sky objects, which is equal to minimum order for all sky objects
+  // actually, order for sky shouldn't matter - JLM
   if (dm_->sky().size()) {
     order_sky_ = dm_->sky()[0]->order();
     for (unsigned i = 1; i < dm_->sky().size(); ++i) {
@@ -284,7 +375,8 @@ void volm_query::generate_regions()
     }
   }
   // create the order_set for all non-ground region
-  if (depth_regions_.size())
+  // vcl_set<unsigned>
+ if (depth_regions_.size())
     for (unsigned i = 0; i < depth_regions_.size(); ++i)
       order_set_.insert(depth_regions_[i]->order());
   if (dm_->sky().size())
@@ -293,16 +385,17 @@ void volm_query::generate_regions()
 
 bool volm_query::order_ingest()
 {
-  // loop over camera
+  // loop over camera hypotheses
   unsigned cam_num = (unsigned)cameras_.size();
   for (unsigned cam_id = 0; cam_id < cam_num; ++cam_id) {
-    // create a vector store all objects and fetch the order for current lay
+    // create a vector to store all objects and fetch the order for current layer
     vcl_vector<vcl_vector<unsigned> > order_cam(order_set_.size());
     vcl_vector<unsigned char> order_layer = order_[cam_id];
     vcl_set<unsigned>::iterator iter = this->order_set_.begin();
 #if 0
     vcl_cout << " --------------------- camera " << cam_id << " --------------------" << vcl_endl;
 #endif
+    // loop over rays on query sphere
     for (unsigned idx = 0; idx < query_size_; ++idx) {
       unsigned count = 0;
       //vcl_cout << " cam " << cam_id << ", order_layer[" << idx << "] = " << (int)order_layer[idx] << vcl_endl;
@@ -333,24 +426,37 @@ bool volm_query::order_ingest()
 #endif
   return true;
 }
-
+// computes a set of spherical shell layers for each camera hypothesis
+// the layer contents are indexed by the camera ray, p_idx
 bool volm_query::query_ingest()
 {
+  // loop over the set of camera hypotheses
   for (unsigned i = 0; i < cameras_.size(); ++i)
   {
+    // the layers for camera hypothesis i
+    // the minimum distance for each ray
     vcl_vector<unsigned char> min_dist_layer;
+    // the maximum distance for each ray
     vcl_vector<unsigned char> max_dist_layer;
+    // the region order for each ray
     vcl_vector<unsigned char> order_layer;
+    // the set of rays intersecting the ground plane
     vcl_vector<unsigned> ground_id_layer;
+    // the ground plane distance for the ray
     vcl_vector<unsigned char> ground_dist_layer;
+    // the ground plane land class for the ray
     vcl_vector<unsigned char> ground_nlcd_layer;
+    // the set of rays intersecting sky
     vcl_vector<unsigned> sky_id_layer;
+    // the set of rays for each non-gp, non-sky region
     vcl_vector<vcl_vector<unsigned> > dist_id_layer(depth_regions_.size());
     vpgl_perspective_camera<double> cam = cameras_[i];
     // create an depth image for current camera
     dm_->set_camera(cam);
     //vil_image_view<float> depth_img = dm_->depth_map("ground_plane", 0, d_threshold_);
+    // depth image for the ground plane
     vil_image_view<float> depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
+    // loop over rays on sphere
     unsigned count = 0;
     for (unsigned p_idx = 0; p_idx < query_size_; ++p_idx) {
       vgl_point_3d<double> qp(query_points_[p_idx].x(), query_points_[p_idx].y(), query_points_[p_idx].z()+altitude_);
@@ -412,7 +518,10 @@ bool volm_query::query_ingest()
   } // loop over cameras
   return true;
 }
-
+// u, v defines the pixel location in a depth image
+// depth image is the ground plane depth map
+// returns min distance to depth region that contains
+// u, v
 unsigned char volm_query::fetch_depth(double const& u,
                                       double const& v,
                                       unsigned char& order,
@@ -427,6 +536,7 @@ unsigned char volm_query::fetch_depth(double const& u,
   unsigned char min_dist;
   // check other objects before ground,
   // e.g.,  for overlap region of a building and ground, building is on the ground and it is must closer than the ground
+  // find if (u, v) is contained in non-ground, non-sky region
   if (depth_regions_.size()) {
     for (unsigned i = 0; i < depth_regions_.size(); ++i) {
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly(depth_regions_[i]->region_2d());
@@ -448,12 +558,13 @@ unsigned char volm_query::fetch_depth(double const& u,
       }
     }
   }
-  // ground plane
+  // not contained in a non-ground non_sky region, check ground_plane
   if (dm_->ground_plane().size()) {
     for (unsigned i = 0; i < dm_->ground_plane().size(); ++i) {
       vgl_polygon<double> vgl_ground = bsol_algs::vgl_from_poly((dm_->ground_plane()[i])->region_2d());
       if (vgl_ground.contains(u,v)) {
         is_ground = true;
+        // get the depth of the pixel
         // maybe better to do bilinear interpolation instead of casting to nearest pixel
         int uu = (int)vcl_floor(u/(1<<log_downsample_ratio_)+0.5);
         uu = uu < 0 ? 0 : uu;
@@ -481,7 +592,8 @@ unsigned char volm_query::fetch_depth(double const& u,
       }
     }
   }
-  // sky last since all objects should be closer than sky
+  // check if (u, v) is contained in sky 
+  // considered last since all objects should be closer than sky
   if (dm_->sky().size()) {
     for (unsigned i = 0; i < dm_->sky().size(); ++i) {
       vgl_polygon<double> vgl_sky = bsol_algs::vgl_from_poly((dm_->sky()[i])->region_2d());

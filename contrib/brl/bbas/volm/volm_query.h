@@ -15,6 +15,7 @@
 //   Modifications
 //    Yi Dong   Jan-2013   added functions to generate object based query infomation for object based volm_matcher
 //    Yi Dong   Jan-2013   added object orientation and object NLCD land classification
+//    JLM       Jan 20, 2013 Added constructor from depth_map_scene
 // \endverbatim
 //
 
@@ -34,12 +35,20 @@ class volm_query : public vbl_ref_count
  public:
   //: default consturctor
   volm_query() {}
-  //: constructor
+  //: constructor from files
   volm_query(vcl_string const& cam_kml_file,
              vcl_string const& label_xml_file,
              volm_spherical_container_sptr const& sph,
              volm_spherical_shell_container_sptr const& sph_shell,
              bool const& use_default = true);
+
+  //: constructor from depth map scene
+  volm_query(vcl_string const& depth_map_scene_file,
+             vcl_string const& image_category,
+             volm_spherical_container_sptr const& sph,
+             volm_spherical_shell_container_sptr const& sph_shell,
+             double altitude);
+
 
   // === accessors ===
   vcl_vector<vcl_vector<unsigned char> >& min_dist()            { return min_dist_;}
@@ -122,18 +131,24 @@ class volm_query : public vbl_ref_count
   //: image size
   unsigned ni_, nj_;
   unsigned log_downsample_ratio_;  // 0,1,2 or 3 (ni-->ni/2^ratio_), to generate downsampled depth maps for ground regions
-  //: image category
+  //: image category (e.g., desert, coast)
   vcl_string                       img_category_;
   //: depth map scene
   depth_map_scene_sptr                       dm_;
+  //: voxel array used to get voxel index
   volm_spherical_container_sptr       sph_depth_;
+  //: a unit sphere 
   volm_spherical_shell_container_sptr       sph_;
-  //: vector of depth_map_region which arranged by their orders
+  //: upper bound on depth
   double d_threshold_;
+  //: vector of depth_map_region sorted by depth order
   vcl_vector<depth_map_region_sptr> depth_regions_;
+  //: depth region polygons (maybe not used)
   vcl_vector<vgl_polygon<double> >        dm_poly_;
+  //: number of valid rays for a given camera
   vcl_vector<unsigned>                  ray_count_;
   //: camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered
+  //: vectors store the space of camera hypotheses
   vcl_vector<double>  top_fov_;
   vcl_vector<double> headings_;
   vcl_vector<double>    tilts_;
@@ -144,8 +159,11 @@ class volm_query : public vbl_ref_count
   vcl_vector<vcl_vector<unsigned char> > min_dist_;
   vcl_vector<vcl_vector<unsigned char> > max_dist_;
   vcl_vector<vcl_vector<unsigned char> >    order_;
+  //: number of spherical shell rays
   unsigned query_size_;
+  //: the order index assigned to sky
   unsigned order_sky_;
+  //: the set of Cartesian points on the unit sphere
   vcl_vector<vgl_point_3d<double> > query_points_;
   //: order vector to store the index id associated with object order
   vcl_set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
