@@ -307,6 +307,25 @@ def ingest_height_map(scene, cache,x_img,y_img,z_img, zero_out_alpha=True,device
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
+def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_adaptor, ingest label map cpp process not implemented";
+
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    boxm2_batch.init_process("boxm2OclIngestLabelProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,x_img);
+    boxm2_batch.set_input_from_db(4,y_img);
+    boxm2_batch.set_input_from_db(5,z_img);
+    boxm2_batch.set_input_from_db(6,label_img);
+    boxm2_batch.run_process();
+    return ;
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+
+
 def ingest_mesh(scene,cache,plyfile,label_id,category):
   boxm2_batch.init_process("boxm2IngestConvexMeshProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -334,23 +353,67 @@ def ingest_height_map_space(scene, cache,x_img,y_img,z_img, crust_thickness,devi
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
+# selectively zero out the alphas along the passed rays
+def ingest_to_zero_out_alpha(scene, cache,x_img,y_img,z_img,device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_adaptor, render height map cpp process not implemented";
+
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    boxm2_batch.init_process("boxm2OclIngestZeroProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,z_img);
+    boxm2_batch.set_input_from_db(4,x_img);
+    boxm2_batch.set_input_from_db(5,y_img);
+    boxm2_batch.run_process();
+    return ;
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+
+
 # refine count should not exceed 3 for scenes with max_octree_level=4
-def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=2):
-  scene.ingest_height_map(x_img, y_img, z_img);
+def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=2, ingest_space = 1, zero_out_alpha=True):
+  if zero_out_alpha:
+    scene.ingest_height_map(x_img, y_img, z_img);
+  else:
+    scene.ingest_to_zero_out_alpha(x_img,y_img,z_img);
+    scene.ingest_height_map(x_img, y_img, z_img,False);
+
   # to save space by not refining empty voxels below surface voxels
-  scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
+  if ingest_space:
+    scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
   #scene.write_cache()
 
   for i in range(0,refine_cnt,1):
     scene.refine();
     #scene.write_cache();
 
-    scene.ingest_height_map(x_img,y_img,z_img);
-    scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
+    if zero_out_alpha:
+      scene.ingest_height_map(x_img,y_img,z_img);
+    else:
+      scene.ingest_to_zero_out_alpha(x_img,y_img,z_img);
+      scene.ingest_height_map(x_img,y_img,z_img, False);
+      
+    if ingest_space:
+      scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
     #scene.write_cache();
 
   # ingest one more time to fill up the empty voxels below the surface (They are not refined but they still need to be occupied)
-  scene.ingest_height_map(x_img,y_img,z_img);
+  if zero_out_alpha:
+    scene.ingest_height_map(x_img,y_img,z_img);
+  else:
+    scene.ingest_to_zero_out_alpha(x_img,y_img,z_img);
+    scene.ingest_height_map(x_img,y_img,z_img,False);
+  scene.write_cache();
+  
+def initialize_ground(scene, global_ground_z, refine_cnt=2):
+  (x_ground, y_ground, z_ground) = generate_xyz_for_ground_initialization(scene.scene, global_ground_z);
+  
+  scene.ingest_height_map(x_ground, y_ground, z_ground, False);
+  for i in range(0,refine_cnt,1):
+    scene.refine();
+    scene.ingest_height_map(x_ground,y_ground,z_ground, False);
   scene.write_cache();
 
 
@@ -1222,6 +1285,21 @@ def generate_xyz_from_dem2(scene, geotiff_dem, geoid_height, geocam=0,fill_in_va
     z_img = 0;
   return x_img, y_img, z_img
 
+# generate x,y,z images to ingest to the world such that ground plane of the scene will be initialized as occupied
+def generate_xyz_for_ground_initialization(scene, global_ground_z):
+  boxm2_batch.init_process("boxm2InitializeGroundXYZProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_int(1, global_ground_z);
+  boxm2_batch.run_process();
+  (xi_id, xi_type) = boxm2_batch.commit_output(0);
+  x_img = dbvalue(xi_id, xi_type);
+  (yi_id, yi_type) = boxm2_batch.commit_output(1);
+  y_img = dbvalue(yi_id, yi_type);
+  (zi_id, zi_type) = boxm2_batch.commit_output(2);
+  z_img = dbvalue(zi_id, zi_type);
+  return x_img, y_img, z_img
+
+  
 def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
   boxm2_batch.init_process("boxm2ShadowHeightsToXYZProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1261,6 +1339,28 @@ def generate_xyz_from_lidar(scene, tiff_lidar):
     y_img = 0;
     z_img = 0;
   return x_img, y_img, z_img
+
+# Create x y z images from a class image at the resolution of the scene, reads image geo cam from the image file name
+def generate_xyz_from_label_img(scene, label_tiff):
+  boxm2_batch.init_process("boxm2LabelImgToXYZProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1,label_tiff);
+  result = boxm2_batch.run_process();
+  if result:
+    (xi_id, xi_type) = boxm2_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = boxm2_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = boxm2_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+    (li_id, li_type) = boxm2_batch.commit_output(3);
+    l_img = dbvalue(li_id, li_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
+    l_img = 0;
+  return x_img, y_img, z_img, l_img
 
 def roi_init_geotiff(scene, geocam, geotiff_img_name, level=0):
   boxm2_batch.init_process("boxm2RoiInitGeotiffProcess");
@@ -1472,6 +1572,26 @@ def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_h
   boxm2_batch.set_input_float(15, visibility_threshold);
   boxm2_batch.set_input_float(16, index_buffer_capacity);
   boxm2_batch.run_process();
+  
+def index_hypotheses2(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle, cap_angle, point_angle, top_angle, bottom_angle, out_name, visibility_threshold, index_buffer_capacity):
+  boxm2_batch.init_process("boxm2IndexHypothesesProcess2");
+  boxm2_batch.set_input_from_db(0, device);
+  boxm2_batch.set_input_from_db(1, scene);
+  boxm2_batch.set_input_from_db(2, opencl_cache);
+  boxm2_batch.set_input_string(3, geo_hyp_file);
+  boxm2_batch.set_input_unsigned(4, tile_id);
+  boxm2_batch.set_input_float(5, elev_dif);
+  boxm2_batch.set_input_float(6, vmin);
+  boxm2_batch.set_input_float(7, dmax);
+  boxm2_batch.set_input_float(8, solid_angle);
+  boxm2_batch.set_input_float(9, cap_angle);
+  boxm2_batch.set_input_float(10, point_angle);
+  boxm2_batch.set_input_float(11, top_angle);
+  boxm2_batch.set_input_float(12, bottom_angle);
+  boxm2_batch.set_input_string(13, out_name);
+  boxm2_batch.set_input_float(14, visibility_threshold);
+  boxm2_batch.set_input_float(15, index_buffer_capacity);
+  boxm2_batch.run_process();
 
 def partition_hypotheses(scene_file, hyp_file, elev_dif, out_name):
   boxm2_batch.init_process("boxm2PartitionHypsProcess");
@@ -1491,15 +1611,11 @@ def write_hypotheses_kml(hyp_file, start, skip, out_name, size=0.01):
   boxm2_batch.set_input_string(4, out_name);
   boxm2_batch.run_process();
 
-def visualize_indices(index_file, cap_angle, point_angle, top_angle, bottom_angle, buffer_capacity, start_i, end_i, out_prefix):
+def visualize_indices(index_file, buffer_capacity, start_i, end_i, out_prefix):
   boxm2_batch.init_process("boxm2VisualizeIndicesProcess");
   boxm2_batch.set_input_string(0, index_file);
-  boxm2_batch.set_input_float(1, cap_angle);
-  boxm2_batch.set_input_float(2, point_angle);
-  boxm2_batch.set_input_float(3, top_angle);
-  boxm2_batch.set_input_float(4, bottom_angle);
-  boxm2_batch.set_input_float(5, buffer_capacity);
-  boxm2_batch.set_input_unsigned(6, start_i);
-  boxm2_batch.set_input_unsigned(7, end_i);
-  boxm2_batch.set_input_string(8, out_prefix);
+  boxm2_batch.set_input_float(1, buffer_capacity);
+  boxm2_batch.set_input_unsigned(2, start_i);
+  boxm2_batch.set_input_unsigned(3, end_i);
+  boxm2_batch.set_input_string(4, out_prefix);
   boxm2_batch.run_process();
