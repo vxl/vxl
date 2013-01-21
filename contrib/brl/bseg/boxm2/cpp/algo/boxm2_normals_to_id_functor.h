@@ -20,13 +20,7 @@ class boxm2_normals_to_id_functor
 
   bool init_data(vcl_vector<boxm2_data_base *> & datas, float nmag_t, float vis_t)
   {
-      /*
-              datas.push_back(alpha);
-        datas.push_back(points);
-        datas.push_back(normals);
-        datas.push_back(vis);
-        datas.push_back(normalids);
-        */
+
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     point_data_=new boxm2_data<BOXM2_POINT>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
     normal_data_=new boxm2_data<BOXM2_NORMAL>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
@@ -48,13 +42,13 @@ class boxm2_normals_to_id_functor
     boxm2_data<BOXM2_VIS_SCORE>::datatype & vis_score=vis_score_data_->data()[index];
     boxm2_data<BOXM2_LABEL_SHORT>::datatype & label_short=label_short_data_->data()[index];
 
-    if (normal[3] >= nmag_t_ && vis_score >= vis_t_ &&  point[3] != -1)
+    if (normal[3] >= nmag_t_ && /*vis_score >= vis_t_ && */ point[3] != -1)
     {
         if( vcl_fabs(normal[2]) > vcl_cos(vnl_math::pi/4)) // horizontal surface
         {
             label_short = 1;
         }
-        else if( vcl_fabs(normal[2]) < vcl_cos(vnl_math::pi/4)) // vertical surface
+        else if(  vcl_fabs(normal[2]) <  vcl_cos(vnl_math::pi/4)) // vertical surface
         {
             int thetaindex = vcl_floor((vcl_atan2(normal[1],normal[0]) + vnl_math::pi)/(vnl_math::pi/4));
             label_short = 2+(short)thetaindex;
