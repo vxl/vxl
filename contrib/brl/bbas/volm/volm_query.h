@@ -29,6 +29,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
 #include <vcl_set.h>
+#include <vpgl/io/vpgl_io_perspective_camera.h>
 
 class volm_query : public vbl_ref_count
 {
@@ -58,6 +59,7 @@ class volm_query : public vbl_ref_count
   vcl_set<unsigned>& order_set()                                { return order_set_; }
   vcl_vector<vcl_vector<vcl_vector<unsigned> > >& order_index() { return order_index_; }
   vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id()     { return dist_id_; }
+  vcl_vector<unsigned>& dist_offset()                           { return dist_offset_; }
   vcl_vector<unsigned char>& max_obj_dist()                     { return max_obj_dist_; }
   vcl_vector<unsigned char>& min_obj_dist()                     { return min_obj_dist_; }
   vcl_vector<unsigned char>& obj_orient()                       { return obj_orient_; }
@@ -65,9 +67,12 @@ class volm_query : public vbl_ref_count
   vcl_vector<unsigned char>& order_obj()                        { return order_obj_; }
   vcl_vector<vcl_vector<unsigned> >& ground_id()                { return ground_id_; }
   vcl_vector<vcl_vector<unsigned char> >& ground_dist()         { return ground_dist_; }
+  vcl_vector<unsigned>& ground_offset()                         { return ground_offset_; }
   vcl_vector<vcl_vector<unsigned char> >& ground_nlcd()         { return ground_nlcd_; }
   unsigned char ground_orient()                                 { return ground_orient_; }
   vcl_vector<vcl_vector<unsigned> >& sky_id()                   { return sky_id_; }
+  vcl_vector<unsigned>& sky_offset()                            { return sky_offset_; }
+  unsigned char sky_orient()                                    { return sky_orient_; }
   vcl_vector<float>& obj_weight()                               { return weight_obj_; }
   float grd_weight() const                                      { return weight_grd_; }
   float sky_weight() const                                      { return weight_sky_; }
@@ -82,18 +87,17 @@ class volm_query : public vbl_ref_count
   vcl_vector<double>& tilts()                                   { return tilts_; }
   vcl_vector<double>& rolls()                                   { return rolls_; }
   //: return number of voxels having ground properties
-  unsigned get_ground_id_size() const;
+  unsigned get_ground_id_size() const                           { return ground_offset_[ground_offset_.size()-1]; }
   //: return stored distance for all ground voxels
-  unsigned get_ground_dist_size() const;
+  unsigned get_ground_dist_size() const                         { return ground_offset_[ground_offset_.size()-1]; }
   //: return number of voxels having non-ground, non-sky properties
-  unsigned get_dist_id_size() const;
+  unsigned get_dist_id_size() const                             { return dist_offset_[dist_offset_.size()-1]; }
   //: return number of voxels having sky properties
-  unsigned get_sky_id_size() const;
+  unsigned get_sky_id_size() const                              { return sky_offset_[sky_offset_.size()-1]; }
   //: return number of voxels for all non-ground objects (order_index)
   unsigned get_order_size() const;
   //: return the total query size in byte(object based)
   unsigned obj_based_query_size_byte() const;
-  
   //: write vrml for spherical container and camera hypothesis
   void draw_template(vcl_string const& vrml_fname);
   //: write query image showing the depth map geometry and the penetrating ray
@@ -114,6 +118,10 @@ class volm_query : public vbl_ref_count
   //: draw the polygons of regions on top of an rgb image
   void draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img);
   void draw_query_regions(vcl_string const& out_name);
+  //: write the binary output for query
+  bool write_query_binary(vcl_string out_fold);
+  //: load query from binary file
+  bool read_query_binary(vcl_string inp_fold);
 
   static void draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polygon<double> const& poly, unsigned char const& depth);
 
@@ -128,6 +136,8 @@ class volm_query : public vbl_ref_count
  protected:
   //: a check whether use the viewing volume values provided by camera kml
   bool use_default_;
+  //: 
+  unsigned char invalid_;
   //: image size
   unsigned ni_, nj_;
   unsigned log_downsample_ratio_;  // 0,1,2 or 3 (ni-->ni/2^ratio_), to generate downsampled depth maps for ground regions
@@ -169,20 +179,24 @@ class volm_query : public vbl_ref_count
   vcl_set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
   vcl_vector<vcl_vector<vcl_vector<unsigned> > > order_index_;
   //: ground plane distance, id, and NLCD classification
-  vcl_vector<vcl_vector<unsigned> >          ground_id_;
-  vcl_vector<vcl_vector<unsigned char> >   ground_dist_;
-  vcl_vector<vcl_vector<unsigned char> >   ground_nlcd_;
-  unsigned char                          ground_orient_;  // always horizontal
+  vcl_vector<vcl_vector<unsigned> >            ground_id_;
+  vcl_vector<vcl_vector<unsigned char> >     ground_dist_;
+  vcl_vector<vcl_vector<unsigned char> >     ground_nlcd_;
+  vcl_vector<unsigned>                     ground_offset_;
+  unsigned char                            ground_orient_;  // always horizontal
   //: sky distance
-  vcl_vector<vcl_vector<unsigned> > sky_id_;
+  vcl_vector<vcl_vector<unsigned> >               sky_id_;
+  vcl_vector<unsigned>                        sky_offset_;
+  unsigned char                               sky_orient_;  // always 100 (100 is the label for uncertain or ambiguous cells)
   //: object id based on min_dist (since objects may have different min_dist but same order)
   vcl_vector<vcl_vector<vcl_vector<unsigned> > > dist_id_;
+  vcl_vector<unsigned>                       dist_offset_;
   //: min and max distance, object orders, orientation and land clarifications for different objects, based on object orders
-  vcl_vector<unsigned char> min_obj_dist_;
-  vcl_vector<unsigned char> max_obj_dist_;
-  vcl_vector<unsigned char>    order_obj_;
-  vcl_vector<unsigned char>   obj_orient_;
-  vcl_vector<unsigned char>     obj_nlcd_;
+  vcl_vector<unsigned char>                 min_obj_dist_;
+  vcl_vector<unsigned char>                 max_obj_dist_;
+  vcl_vector<unsigned char>                    order_obj_;
+  vcl_vector<unsigned char>                   obj_orient_;
+  vcl_vector<unsigned char>                     obj_nlcd_;
   //: weight parameters
   vcl_vector<float> weight_obj_;
   float             weight_grd_;
@@ -190,6 +204,7 @@ class volm_query : public vbl_ref_count
   
   //: functions
   bool query_ingest();
+  bool offset_ingest();
   bool order_ingest();
   bool weight_ingest();
   unsigned char fetch_depth(double const& u,
@@ -215,6 +230,7 @@ class volm_query : public vbl_ref_count
                 vgl_point_3d<double> const& world_point,
                 unsigned char const& depth, 
                 vpgl_perspective_camera<double> const& cam);
+  unsigned version() const {return 1;}
 };
 
 #endif  // volm_query_h_
