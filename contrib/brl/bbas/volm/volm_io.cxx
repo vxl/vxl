@@ -147,8 +147,13 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   vcl_vector<float>& object_maxdist = parser.obj_maxdists();
   vcl_vector<vcl_string>& object_orient = parser.obj_orientations();
   vcl_vector<unsigned>& object_nlcd = parser.obj_nlcd_ids();
-  if (polys.size() != object_names.size()) {
-    vcl_cerr << " ERROR in labelme xml file: number of defined name and and number of defined 2d polygons do not match\n";
+  if (polys.size() != object_names.size()   ||
+      polys.size() != object_orient.size()  ||
+      polys.size() != object_nlcd.size()    ||
+      polys.size() != object_types.size()   ||
+      polys.size() != object_mindist.size() ||
+      polys.size() != object_orders.size()     ) {
+    vcl_cerr << " ERROR in labelme xml file: imcomplete object properties defination, check object attributes\n";
     return false;
   }
   if (!parser.image_ni() || !parser.image_nj()){
@@ -169,6 +174,7 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   unsigned ni = parser.image_ni();
   unsigned nj = parser.image_nj();
   depth_scene->set_image_size(nj, ni);
+  
   // push the depth_map_region into depth_scene in the order of defined order in xml
   for (unsigned i = 0; i < polys.size(); i++) {
     vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
@@ -203,42 +209,6 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
       depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i],
                               volm_orient_table::ori_id[object_orient[i]], object_orders[i], object_nlcd[i]);
     }
-
-#if 0
-    else {
-      // check object type to define the region_normal
-      if (object_types[i] == "hotel" || object_types[i] == "building" || object_types[i] == "pier") {
-        double min_depth = parser.obj_mindists()[i];
-        double max_depth = parser.obj_maxdists()[i];
-        vgl_vector_3d<double> vp(1.0, 0.0, 0.0);
-        depth_scene->add_region(poly, vp, min_depth, max_depth, object_names[i], depth_map_region::VERTICAL, object_orders[i]);
-      }
-      else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "water" || object_types[i] == "desert" || object_types[i] == "flat" || object_types[i] == "ground") {
-        double min_depth = parser.obj_mindists()[i];
-        double max_depth = parser.obj_maxdists()[i];
-        if(min_depth < 20){  // treat it as a GROUND_PLANE
-           depth_scene->add_ground(poly, min_depth, max_depth, object_orders[i], object_names[i], object_nlcd);
-        }
-        else
-        {               // treat it as some FLAT 
-           vgl_vector_3d<double> gp(0.0, 0.0, 1.0); //z axis is the plane normal temporary, flat object can have different normal values
-           depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i], depth_map_region::HORIZONTAL, object_orders[i]);
-        }
-      }
-      else if (img_category == "desert" && (object_types[i] == "transition" || object_types[i] == "mountain" || object_types[i] == "ridge" || object_types[i] == "hill")) {
-        double min_depth = parser.obj_mindists()[i];
-        double max_depth = parser.obj_maxdists()[i];
-        vgl_vector_3d<double> np(1.0, 1.0, 1.0);
-        depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i], depth_map_region::NON_PLANAR, object_orders[i]);
-      } 
-      else if (img_category == "coast") {
-        double min_depth = parser.obj_mindists()[i];
-        double max_depth = parser.obj_maxdists()[i];
-        vgl_vector_3d<double> np(1.0, 1.0, 1.0);
-        depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i], depth_map_region::NOT_DEF, object_orders[i]);
-      }
-    }
-#endif
   }
   return true;
 }
