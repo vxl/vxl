@@ -10,6 +10,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
+#include <volm/volm_spherical_layers.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 
@@ -451,6 +452,11 @@ bool volm_query::query_ingest()
     // the set of rays for each non-gp, non-sky region
     vcl_vector<vcl_vector<unsigned> > dist_id_layer(depth_regions_.size());
     vpgl_perspective_camera<double> cam = cameras_[i];
+    if(i==0){
+    vcl_cout << "original camera \n" << cam << '\n';
+    vcl_cout << "from original query code\n";
+    }
+#if 0
     // create an depth image for current camera
     dm_->set_camera(cam);
     //vil_image_view<float> depth_img = dm_->depth_map("ground_plane", 0, d_threshold_);
@@ -481,6 +487,16 @@ bool volm_query::query_ingest()
           unsigned obj_id;
           unsigned char grd_nlcd;
           min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_nlcd, is_ground, is_sky, is_object, depth_img);
+	  if(i == 0){
+	    vcl_cout << p_idx << ' ' << count << ' ' 
+		     << (unsigned)min_dist << ' ' << u << ' ' << v 
+		     << ' ' << (unsigned)order << ' ' 
+		     << (unsigned)max_dist 
+		     << ' ' << (unsigned)obj_id 
+		     << ' ' << (unsigned)grd_nlcd << ' ' 
+		     << is_ground << ' ' << is_sky << ' ' 
+		     << is_object << '\n';
+	  }
           min_dist_layer.push_back(min_dist);
           max_dist_layer.push_back(max_dist);
           order_layer.push_back(order);
@@ -506,6 +522,7 @@ bool volm_query::query_ingest()
         }
       }
     } // loop over rays for current camera
+
     min_dist_.push_back(min_dist_layer);
     max_dist_.push_back(max_dist_layer);
     order_.push_back(order_layer);
@@ -515,6 +532,23 @@ bool volm_query::query_ingest()
     ground_nlcd_.push_back(ground_nlcd_layer);
     sky_id_.push_back(sky_id_layer);
     dist_id_.push_back(dist_id_layer);
+#endif
+    volm_spherical_layers sph_lays(cam, dm_, altitude_, sph_depth_, sph_,
+				   (unsigned char)255, order_sky_, 
+				   d_threshold_, log_downsample_ratio_);
+    bool good = sph_lays.compute_layers();
+#if 1
+    min_dist_.push_back(sph_lays.min_dist_layer());
+    max_dist_.push_back(sph_lays.max_dist_layer());
+    order_.push_back(sph_lays.order_layer());
+    ray_count_.push_back(sph_lays.count());
+    ground_id_.push_back(sph_lays.ground_id_layer());
+    ground_dist_.push_back(sph_lays.ground_dist_layer());
+    ground_nlcd_.push_back(sph_lays.ground_nlcd_layer());
+    sky_id_.push_back(sph_lays.sky_id_layer());
+    dist_id_.push_back(sph_lays.dist_id_layer());
+#endif
+
   } // loop over cameras
   return true;
 }

@@ -35,6 +35,10 @@ SET(volm_sources
  volm_loc_hyp_sptr.h
  volm_geo_index.h  volm_geo_index.cxx
  volm_geo_index_sptr.h
+ volm_camera_space.h			volm_camera_space.cxx
+# volm_spherical_region.h                volm_spherical_region.cxx 
+# volm_spherical_region_query.h          volm_spherical_region_query.cxx
+ volm_spherical_layers.h                volm_spherical_layers.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_sources)

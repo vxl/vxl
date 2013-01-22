@@ -7,6 +7,7 @@ DECLARE( test_spherical_shell_container );
 DECLARE( test_loc_hyp );
 DECLARE( test_query );
 DECLARE( test_index );
+DECLARE( test_camera_space );
 
 void
 register_tests()
@@ -17,6 +18,7 @@ register_tests()
   REGISTER( test_loc_hyp );
   REGISTER( test_query );
   REGISTER( test_index );
+  REGISTER( test_camera_space );
 }
 
 DEFINE_MAIN;
