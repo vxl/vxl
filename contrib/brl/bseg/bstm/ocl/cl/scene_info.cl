@@ -53,20 +53,3 @@ typedef struct
   int       data_len;                 // length of data buffer (number of cells)
 
 } RenderSceneInfo;
-
-
-typedef struct
-{
-    float x;
-    float y;
-    float z;
-} point3d;
-
-
-typedef struct
-{
-  float cum_len;
-  float beta;
-  uchar mean_obs;
-  uchar cum_vis;
-} AuxData;

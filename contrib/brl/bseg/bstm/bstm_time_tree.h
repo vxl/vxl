@@ -9,7 +9,7 @@
 // \date   August 05, 2012
 // \verbatim
 //  Modifications
-//   <none yet>
+//    15 Jan 2012 Modified to store data for leaf cells only.
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -52,7 +52,7 @@ class bstm_time_tree
   float cell_len(int bit_index) const;
 
   //: tells you if a valid cell is at bit_index (if and only if its parent is 1)
-  bool valid_cell(int bit_index);
+  bool valid_cell(int bit_index) const;
 
   //: returns value (0 or 1) of bit at given index (0,73);
   unsigned char bit_at(int index) const;
@@ -61,10 +61,13 @@ class bstm_time_tree
   int depth_at(int index) const;
 
   //: tells you if the bit_index is a leaf
-  bool is_leaf(int bit_index);
+  bool is_leaf(int bit_index) const;
 
   //: Return number of cells in this tree
   int num_cells() const;
+
+  //: Return number of leaves in this tree
+  int num_leaves() const;
 
   //: returns parent index (invalid for bit_index = 0)
   int parent_index(int bit_index) const { return (bit_index-1)>>1; }
@@ -87,8 +90,8 @@ class bstm_time_tree
   //: traverse tree to get leaf index that contains time t, assuming t \in [0,1]
   int traverse(const double t, int deepest=6) const;
 
-  //: returns bit indices of leaf nodes under rootBit
-  vcl_vector<int> get_leaf_bits(int rootBit=0);
+  //: returns bit indices of leaf nodes under rootBit, using pre-order traversal
+  vcl_vector<int> get_leaf_bits(int rootBit=0) const;
 
   //: gets the cell center (tree is assumed to be [0,1)
   float cell_center(int bit_index) const;
@@ -98,6 +101,9 @@ class bstm_time_tree
 
   //: the extent of the tree, aka max number of leaves.
   static float tree_range() {return 32;}
+
+  //: erase tree to only the root, retain the data ptr.
+  void erase_cells();
 
  private:
   //: Tree structure stored as "bits" = really a char array

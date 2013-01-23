@@ -113,6 +113,10 @@ class bstm_data_info
 
     if (prefix.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != vcl_string::npos)
       return bstm_data_traits<BSTM_GAUSS_RGB>::datasize();
+    if (prefix.find(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()) != vcl_string::npos)
+      return bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize();
+    if (prefix.find(bstm_data_traits<BSTM_MOG6_VIEW>::prefix()) != vcl_string::npos)
+      return bstm_data_traits<BSTM_MOG6_VIEW>::datasize();
     return 0;
   }
 

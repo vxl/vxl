@@ -78,6 +78,18 @@ void bstm_time_tree::set_bit_at(int index, bool val)
 #endif
 }
 
+//: erase tree to only the root, retain the data ptr.
+void bstm_time_tree::erase_cells()
+{
+  unsigned char zeros[TT_NUM_BYTES];
+  vcl_fill_n(zeros,TT_NUM_BYTES,(unsigned char)0);
+
+  int data_ptr = this->get_data_ptr();
+  vcl_memcpy(bits_, zeros, TT_NUM_BYTES);
+  this->set_data_ptr(data_ptr);
+}
+
+
 int bstm_time_tree::get_data_ptr()
 {
   return int((bits_[7]<<24) | (bits_[6]<<16) | (bits_[5]<<8) | (bits_[4]));
@@ -92,13 +104,19 @@ void bstm_time_tree::set_data_ptr(int ptr)
 }
 
 
-//: Return cell with a particular locational code
+//: Return cell with a particular locational code, the bit index must be a leaf
 int bstm_time_tree::get_data_index(int bit_index) const
 {
   int root_data_ptr = (int) (bits_[7]<<24) | (bits_[6]<<16) | (bits_[5]<<8) | (bits_[4]);
-  return root_data_ptr + this->get_relative_index(bit_index);
+  int relative_index = this->get_relative_index(bit_index);
+  if(relative_index == -1)
+    return -1;
+  else
+    return root_data_ptr + relative_index;
 }
 
+//OLD DEPRECATED CODE
+#if 0
 //: returns bit index assuming root data is located at 0
 int  bstm_time_tree::get_relative_index(int bit_index) const
 {
@@ -131,6 +149,45 @@ int  bstm_time_tree::get_relative_index(int bit_index) const
 
   unsigned char finestleveloffset=(bit_index-1)&(2-1);
   count = 2*count+1 +finestleveloffset;
+
+  return count;
+}
+#endif
+
+
+//: returns bit index assuming root data is located at 0
+//: the bit_index must be a leaf, otherwise returns -1
+int  bstm_time_tree::get_relative_index(int bit_index) const
+{
+  if(!is_leaf(bit_index))
+    return -1;
+
+  //if looking for root
+  if(bit_index == 0)
+    return 0;
+
+  //initialize stack with the root node
+  unsigned char stack[TT_NUM_LVLS];
+  stack[0] = 0;
+  char ptr = 0;
+
+  unsigned char curr_bit;
+  int count = 0;
+
+  while(ptr != -1)
+  {
+    curr_bit = stack[ptr--]; //pop
+    if(curr_bit == bit_index)
+      break;
+
+    if(!is_leaf(curr_bit)) // push right child and then left child
+    {
+      stack[++ptr] = (2*curr_bit + 2);
+      stack[++ptr] = (2*curr_bit + 1);
+    }
+    else                  // reached leaf, increment count
+      count++;
+  }
 
   return count;
 }
@@ -170,12 +227,12 @@ int bstm_time_tree::traverse(const double t, int deepest) const
   return bit_index;
 }
 
-bool bstm_time_tree::valid_cell(int bit_index)
+bool bstm_time_tree::valid_cell(int bit_index) const
 {
   return (bit_index==0) || this->bit_at(parent_index(bit_index));
 }
 
-bool bstm_time_tree::is_leaf(int bit_index)
+bool bstm_time_tree::is_leaf(int bit_index) const
 {
   return this->valid_cell(bit_index) && (this->bit_at(bit_index)==0);
 }
@@ -195,9 +252,49 @@ int bstm_time_tree::num_cells() const
   return 2*count+1;
 }
 
+//returns the number of leaf cells
+int bstm_time_tree::num_leaves() const
+{
+  return get_leaf_bits(0).size();
+}
 
+
+//returns bit indices of leaf nodes under rootBit, using pre-order traversal
+vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
+{
+  vcl_vector<int> leafBits;
+
+  //special root case
+  if ( bits_[0] == 0 && rootBit == 0 ) {
+    leafBits.push_back(0);
+    return leafBits;
+  }
+
+  //initialize stack with the root node
+  unsigned stack[TT_NUM_LVLS];
+  stack[0] = rootBit;
+  int ptr = 0;
+
+  int curr_bit;
+  while(ptr != -1)
+  {
+    curr_bit = stack[ptr--]; //pop
+
+    if(!is_leaf(curr_bit)) // push right child and then left child
+    {
+      stack[++ptr] = (2*curr_bit + 2);
+      stack[++ptr] = (2*curr_bit + 1);
+    }
+    else                  // reached leaf, increment count
+      leafBits.push_back(curr_bit);
+  }
+  return leafBits;
+}
+
+//OLD DEPRECATED CODE
+#if 0
 //returns bit indices of leaf nodes under rootBit
-vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit)
+vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
 {
   //use num cells to accelerate (cut off for loop)
   vcl_vector<int> leafBits;
@@ -226,6 +323,7 @@ vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit)
   }
   return subTree;
 }
+#endif
 
 float bstm_time_tree::cell_center(int bit_index) const
 {

@@ -263,8 +263,7 @@ void bstm_lru_cache::remove_data_base(bstm_block_id id, vcl_string type)
 void bstm_lru_cache::replace_data_base(bstm_block_id id, vcl_string type, bstm_data_base* replacement)
 {
   // grab a reference to the map of cached_data_
-  vcl_map<bstm_block_id, bstm_data_base*>& data_map =
-    this->cached_data_map(type);
+  vcl_map<bstm_block_id, bstm_data_base*>& data_map = this->cached_data_map(type);
 
   // find old data base and copy it's read_only/write status
   vcl_map<bstm_block_id, bstm_data_base*>::iterator rem = data_map.find(id);

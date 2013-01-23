@@ -7,7 +7,7 @@ SET(bstm_cpp_algo_sources
 AUX_SOURCE_DIRECTORY(Templates bstm_cpp_algo_sources)
 
 ADD_LIBRARY(bstm_cpp_algo  ${bstm_cpp_algo_sources})
-TARGET_LINK_LIBRARIES(bstm_cpp_algo bstm_basic boxm2 boxm2_cpp_algo bstm vcl)
+TARGET_LINK_LIBRARIES(bstm_cpp_algo bstm_basic boxm2 boxm2_cpp_algo bstm bstm_io vcl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

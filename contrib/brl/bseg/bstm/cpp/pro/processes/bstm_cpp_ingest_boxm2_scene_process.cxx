@@ -108,7 +108,6 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
     boxm2_block_metadata boxm2_metadata = iter->second;
 
     //search for it in the bstm scene
-
     vcl_map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
     for(; bstm_iter != blocks.end() ; bstm_iter++)
     {

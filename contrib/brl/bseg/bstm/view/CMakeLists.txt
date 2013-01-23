@@ -20,6 +20,7 @@ IF(VGUI_FOUND)
       bstm_include_glew.h
       bstm_cam_tableau.h        bstm_cam_tableau.cxx
       bstm_ocl_render_tableau.h  bstm_ocl_render_tableau.cxx
+      bstm_ocl_multi_render_tableau.h  bstm_ocl_multi_render_tableau.cxx
      )
   ADD_LIBRARY(bstm_view ${bstm_view_sources} )
 

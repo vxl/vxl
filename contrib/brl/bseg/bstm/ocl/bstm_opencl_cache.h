@@ -30,11 +30,10 @@ class bstm_opencl_cache: public vbl_ref_count
 
   public:
     bstm_opencl_cache(bstm_scene_sptr scene,
-                       bocl_device_sptr device,
-                       unsigned int maxBlocks=1);
+                       bocl_device_sptr device);
     ~bstm_opencl_cache() { if (cpu_cache_) cpu_cache_ = 0;
                             this->clear_cache();
-                          }
+                           }
 
     void set_context(cl_context& context);
     bstm_cache_sptr get_cpu_cache() { return cpu_cache_; }
@@ -84,6 +83,9 @@ class bstm_opencl_cache: public vbl_ref_count
     //: to string method prints out LRU order
     vcl_string to_string(); 
 
+    //: get max mem size
+    unsigned long max_memory_in_cache() { return maxBytesInCache_; }
+
   private:
 
     //: scene this cache is operating on
@@ -96,7 +98,6 @@ class bstm_opencl_cache: public vbl_ref_count
     void lru_push_front( bstm_block_id id );
     bool lru_remove_last(bstm_block_id& id); //removes all data and block with this ID. returns false if lru is empty
     vcl_list<bstm_block_id> lru_order_;
-    unsigned int maxBlocksInCache;
     unsigned long bytesInCache_;
     unsigned long maxBytesInCache_;
 

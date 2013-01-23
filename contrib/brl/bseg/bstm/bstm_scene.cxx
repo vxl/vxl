@@ -21,6 +21,7 @@
 //vsph include
 #include <vsph/vsph_camera_bounds.h>
 
+#include <vcl_limits.h>
 
 bstm_scene::bstm_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version)
 {
@@ -288,6 +289,25 @@ void bstm_scene::bounding_box_t(double& min_t, double& max_t) const
       max_t = blk_max;
   }
 }
+
+//: gets a tight bounding box of the block ids
+unsigned  bstm_scene::blocks_ids_bounding_box_t() const
+{
+  unsigned min_t_blk_id = vcl_numeric_limits<unsigned>::max() ;
+  unsigned max_t_blk_id = vcl_numeric_limits<unsigned>::min() ;
+
+  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
+  {
+    if(iter->first.t_ < min_t_blk_id)
+      min_t_blk_id = iter->first.t_;
+
+    if(iter->first.t_ > max_t_blk_id)
+      max_t_blk_id = iter->first.t_;
+  }
+  return max_t_blk_id - min_t_blk_id + 1;
+}
+
 
 
 vgl_box_3d<double> bstm_scene::bounding_box() const

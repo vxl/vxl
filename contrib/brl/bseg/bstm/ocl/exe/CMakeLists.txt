@@ -8,6 +8,9 @@ IF(GLEW_FOUND)
   ADD_EXECUTABLE( bstm_ocl_render_view bstm_ocl_render_view.cxx )
   TARGET_LINK_LIBRARIES( bstm_ocl_render_view boxm2 bstm_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
+  ADD_EXECUTABLE( bstm_ocl_multi_render_view bstm_ocl_multi_render_view.cxx )
+  TARGET_LINK_LIBRARIES( bstm_ocl_multi_render_view boxm2 bstm_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
+  
  ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
 

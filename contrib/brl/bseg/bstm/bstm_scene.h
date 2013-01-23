@@ -127,6 +127,9 @@ class bstm_scene : public vbl_ref_count
     //: gets a tight bounding box for the scene
     void      bounding_box_t(double& min_t, double& max_t) const;
 
+    //: gets a tight bounding box of the block ids
+    unsigned      blocks_ids_bounding_box_t() const;
+
     //: scene dimensions accessors
     vgl_point_3d<double>    local_origin()const { return local_origin_; }
     vgl_point_3d<double>    rpc_origin()  const { return rpc_origin_; }

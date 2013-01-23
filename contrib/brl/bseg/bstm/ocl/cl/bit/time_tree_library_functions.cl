@@ -1,4 +1,7 @@
+//Misc. time tree functions
+//Taken directly from bstm_time_tree implementation in c++. 
 
+#define TT_NUM_LVLS 6
 
 float cell_len_tt(int bit_index) 
 {
@@ -29,11 +32,64 @@ uchar bit_at_tt(__local uchar* tree, int index)
 }
 
 
+int parent_index_tt( int bit_index ) 
+{
+  return (bit_index-1)>>1;
+}
+bool valid_cell_tt(__local uchar* tree, int bit_index) 
+{
+  return (bit_index==0) || bit_at_tt(tree, parent_index_tt(bit_index));
+}
+bool is_leaf_tt(__local uchar* tree,int bit_index) 
+{
+  return valid_cell_tt(tree, bit_index) && (bit_at_tt(tree, bit_index)==0);
+}
+
 int data_index_root_tt(__local uchar* tree)
 {
   return as_int((uchar4) (tree[4], tree[5], tree[6], tree[7]));
 }
 
+
+// returns data index assuming root data is located at 0
+char get_relative_index_tt(__local uchar* time_tree, int bit_index, __constant uchar* bit_lookup) 
+{
+  //if(!is_leaf_tt(time_tree, bit_index))
+  //    return -1;
+    
+  //if looking for root
+  if(bit_index == 0)
+    return 0;
+    
+  //initialize stack with the root node
+  unsigned char stack[TT_NUM_LVLS];
+  stack[0] = 0;
+  char ptr = 0;
+  
+  
+  char curr_bit;
+  char count = 0;
+
+  while(ptr != -1)
+  {
+    curr_bit = stack[ptr--]; //pop
+    if(curr_bit == bit_index)
+      break;
+
+    if(!is_leaf_tt(time_tree, curr_bit)) // push right child and then left child
+    {
+      stack[++ptr] = (2*curr_bit + 2);
+      stack[++ptr] = (2*curr_bit + 1);
+    }
+    else                      // reached leaf, increment count
+      count++;
+  }
+
+  return count;
+}
+
+//OLD DEPRECATED CODE
+#if 0
 // returns data index assuming root data is located at 0
 int get_relative_index_tt(__local uchar* time_tree, int bit_index, __constant uchar* bit_lookup) 
 {
@@ -60,12 +116,12 @@ int get_relative_index_tt(__local uchar* time_tree, int bit_index, __constant uc
 
   return count;
 }
-
+#endif
 
 
 int traverse_tt(__local uchar* time_tree, float t)
 {
-  ushort deepest = 6; //HARDCODED FOR NOW
+  ushort deepest = TT_NUM_LVLS; //HARDCODED FOR NOW
   
   ushort depth = 0;
 
@@ -96,4 +152,4 @@ int traverse_tt(__local uchar* time_tree, float t)
 
   }
   return bit_index;
-  }
+}

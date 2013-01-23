@@ -10,6 +10,7 @@
 
 //executable args
 #include <vul/vul_arg.h>
+#include <vul/vul_file.h>
 
 //bstm scene stuff
 #include <bstm/ocl/bstm_opencl_cache.h>
@@ -18,7 +19,7 @@
 #include <boxm2/boxm2_util.h>
 
 //vgui stuff
-#include <bstm/view/bstm_ocl_render_tableau.h>
+#include <bstm/view/bstm_ocl_multi_render_tableau.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
@@ -63,23 +64,19 @@ int main(int argc, char ** argv)
     vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
     vul_arg<unsigned>   ni("-ni", "Width of output image", 1280);
     vul_arg<unsigned>   nj("-nj", "Height of output image", 720);
-    vul_arg<unsigned>   gpu_idx("-gpu_idx", "GPU index for multi GPU set up", 0);
 
     // need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
 
     //make bocl manager
     bocl_manager_child_sptr mgr =bocl_manager_child::instance();
-    if (gpu_idx() >= mgr->gpus_.size()){
-      vcl_cout << "GPU index out of bounds" << vcl_endl;
-      return -1;
-    }
-    bocl_device_sptr device = mgr->gpus_[gpu_idx()];
-    vcl_cout << "Using: " << *device;
+    vcl_vector<bocl_device_sptr> gpus(mgr->gpus_.size());
+
+    for(int i = 0; i < mgr->gpus_.size(); i++)
+      gpus[i] = (bocl_device_sptr) (mgr->gpus_[i]);
+
+
     bstm_scene_sptr scene = new bstm_scene(scene_file());
-
-
-    //create initial cam
     double currInc = 45.0;
     double currRadius = scene->bounding_box().height(); //2.0f;
     double currAz = 0.0;
@@ -90,17 +87,22 @@ int main(int argc, char ** argv)
 
     //create cache, grab singleton instance
     bstm_lru_cache::create(scene);
-    bstm_opencl_cache_sptr opencl_cache=new bstm_opencl_cache(scene, device);
+
+    vcl_vector<bstm_opencl_cache_sptr> opencl_caches(gpus.size());
+    for(int i = 0; i < gpus.size(); i++)
+      opencl_caches[i] = new bstm_opencl_cache(scene, gpus[i]);
 
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
-    bstm_ocl_render_tableau_new bit_tableau;
+    bstm_ocl_multi_render_tableau_new bit_tableau;
 
     //create
     vgui_slider_tableau_new slider_h( vgui_slider_tableau::horiz );
     slider_h->add_motion_callback( slide_time, bit_tableau->time() );
     slider_h->set_value( 0.0f );
 
-    bit_tableau->init(device, opencl_cache, scene, ni(), nj(), pcam, slider_h);
+    bit_tableau->init(gpus, opencl_caches, scene, ni(), nj(), pcam, slider_h);
+
+
 
     // Fit the sliders and the easy2D into the window
     vgui_poly_tableau_new poly;

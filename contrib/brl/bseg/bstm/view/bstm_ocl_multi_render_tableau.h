@@ -1,6 +1,6 @@
-// This is brl/bseg/bstm/view/bstm_ocl_render_tableau.h
-#ifndef bstm_ocl_render_tableau_h
-#define bstm_ocl_render_tableau_h
+// This is brl/bseg/bstm/view/bstm_ocl_multi_render_tableau.h
+#ifndef bstm_ocl_multi_render_tableau_h
+#define bstm_ocl_multi_render_tableau_h
 //:
 // \file
 // \brief A tableau to render bstm scenes.
@@ -30,15 +30,15 @@
 #include <vgui/vgui_poly_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
-class bstm_ocl_render_tableau : public bstm_cam_tableau
+class bstm_ocl_multi_render_tableau : public bstm_cam_tableau
 {
  public:
-  bstm_ocl_render_tableau();
-  virtual ~bstm_ocl_render_tableau() {}
+  bstm_ocl_multi_render_tableau();
+  virtual ~bstm_ocl_multi_render_tableau() {}
 
   //: initialize tableau with scene_file, viewport size, initial cam,
-  bool init(bocl_device_sptr device,
-            bstm_opencl_cache_sptr opencl_cache,
+  bool init(vcl_vector<bocl_device_sptr> devices,
+            vcl_vector<bstm_opencl_cache_sptr> opencl_caches,
             bstm_scene_sptr scene,
             unsigned ni,
             unsigned nj,
@@ -55,15 +55,24 @@ class bstm_ocl_render_tableau : public bstm_cam_tableau
 
   vgui_shell_tableau_sptr shell_;
 
+  //: returns the index of te gpu to do the processing
+  unsigned gpu_id(double time);
+
  protected:
 
-  //vector of image files, vector of
+  unsigned long total_gpu_mem_;
+  vcl_vector<unsigned> gpu_ids_;
+  unsigned num_gpus_;
+
   bocl_manager_child_sptr mgr_;
-  bocl_device_sptr device_;
-  cl_command_queue queue_;
+
+  vcl_vector<cl_command_queue> queues_;
+  vcl_vector<bocl_device_sptr> devices_;
+  vcl_vector<bstm_opencl_cache_sptr> opencl_caches_;
+
   //: Boxm2 Scene
   bstm_scene_sptr scene_;
-  bstm_opencl_cache_sptr opencl_cache_;
+
   unsigned ni_;
   unsigned nj_;
   vgui_statusbar* status_;
@@ -74,30 +83,35 @@ class bstm_ocl_render_tableau : public bstm_cam_tableau
 
   vgui_slider_tableau_sptr slider_;
 
-  //: shared GL_CL image buffer
-  GLuint pbuffer_;
-  cl_mem clgl_buffer_;
-  bocl_mem_sptr exp_img_;
-  bocl_mem_sptr exp_img_dim_; 
+  //: shared GL_CL image buffers
+  vcl_vector<GLuint> pbuffer_;
+  vcl_vector<cl_mem> clgl_buffer_;
+  vcl_vector<bocl_mem_sptr> exp_img_;
+  vcl_vector<bocl_mem_sptr> exp_img_dim_;
+
+  //computes the gpu assignment to each blk of scene.
+  void compute_gpu_assignments();
+
   //--Render, update, refine, save helper methods ------------------------------
   //func to render frame on GPU (returns gpu time)
   float render_frame();
 
   bool init_clgl();
   bool do_init_ocl;
-  
+
   bool render_trajectory_;
+
 };
 
 //: declare smart pointer
-typedef vgui_tableau_sptr_t<bstm_ocl_render_tableau> bstm_ocl_render_tableau_sptr;
+typedef vgui_tableau_sptr_t<bstm_ocl_multi_render_tableau> bstm_ocl_multi_render_tableau_sptr;
 
-//: Create a smart-pointer to a bstm_ocl_render_tableau tableau.
-struct bstm_ocl_render_tableau_new : public bstm_ocl_render_tableau_sptr
+//: Create a smart-pointer to a bstm_ocl_multi_render_tableau tableau.
+struct bstm_ocl_multi_render_tableau_new : public bstm_ocl_multi_render_tableau_sptr
 {
   //: Constructor - create an empty vgui_easy3D_tableau.
-  typedef bstm_ocl_render_tableau_sptr base;
-  bstm_ocl_render_tableau_new() : base( new bstm_ocl_render_tableau ) { }
+  typedef bstm_ocl_multi_render_tableau_sptr base;
+  bstm_ocl_multi_render_tableau_new() : base( new bstm_ocl_multi_render_tableau ) { }
 };
 
-#endif // bstm_ocl_render_tableau_h
+#endif // bstm_ocl_multi_render_tableau_h
