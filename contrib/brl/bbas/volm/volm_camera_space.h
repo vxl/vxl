@@ -50,23 +50,51 @@ class volm_camera_space
   double head_mid() const {return head_mid_;}
   double head_radius() const {return head_radius_;}
   double head_inc() const {return head_inc_;}
+  double n_head() const {return n_head_;}
 
   double tilt_mid() const {return tilt_mid_;}
   double tilt_radius() const {return tilt_radius_;}
   double tilt_inc() const {return tilt_inc_;}
+  double n_tilt() const {return n_tilt_;}
 
   double roll_mid() const {return roll_mid_;}
   double roll_radius() const {return roll_radius_;}
   double roll_inc() const {return roll_inc_;}
+  double n_roll() const {return n_roll_;}
 
   //: focal length space
   vcl_vector<double> top_fovs() const {return top_fovs_;}
-  
+  double n_fovs() const {return n_fovs_;}
+
   //: camera at current state of iterator
   vpgl_perspective_camera<double> camera() const;
-  
+
   //: camera angles at current state of iterator
   cam_angles camera_angles() const;
+
+  //: 1-d camera index at current state of iterator
+  unsigned cam_index() const;
+
+  //: individual camera angle indices at current state of iterator
+  void cam_indices(unsigned & roll_index, unsigned& fov_index,
+		   unsigned & head_index, unsigned& tilt_index) const
+  { roll_index = roll_index_; fov_index = fov_index_; head_index = head_index_;
+    tilt_index = tilt_index_;}
+
+  //: transform 1-d index to indices
+  void cam_indices(unsigned cam_index,
+		   unsigned & roll_index, unsigned& fov_index,
+		   unsigned & head_index, unsigned& tilt_index) const;
+  
+    //: transform indices to 1-d index
+  unsigned cam_index(unsigned roll_index, unsigned fov_index,
+		     unsigned head_index, unsigned tilt_index) const;
+
+  //: camera at specified index
+  vpgl_perspective_camera<double> camera(unsigned cam_index) const;
+  
+  //: camera angles at specified index
+  cam_angles camera_angles(unsigned cam_index) const;
 
   //: the iterator at the start of camera space
   camera_space_iterator begin();
@@ -89,22 +117,30 @@ class volm_camera_space
   double head_mid_;
   double head_radius_;
   double head_inc_;
+  unsigned n_head_;
   //: tilt space
   double tilt_mid_;
   double tilt_radius_;
   double tilt_inc_;
+  unsigned n_tilt_;
   //: roll space
   double roll_mid_;
   double roll_radius_;
   double roll_inc_;
+  unsigned n_roll_;
   //: focal length space
   vcl_vector<double> top_fovs_;
-  //: current camera state
+  unsigned n_fovs_;
+  //: current camera state for iterator
   bool freeze_roll_;
   double heading_;
+  unsigned head_index_;
   double tilt_;
+  unsigned tilt_index_;
   double roll_;
-  unsigned fov_idx_;
+  unsigned roll_index_;
+  unsigned fov_index_;
+  unsigned index_;
 };
 
 class camera_space_iterator

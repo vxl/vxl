@@ -19,7 +19,23 @@ static void test_camera_space()
   for(camera_space_iterator cit = csp.begin(0.0); cit != csp.end(); ++cit){
     cam_angles ca = cit->camera_angles();
     ca.print();
+    unsigned indx = cit->cam_index();
+    unsigned roll_index,  fov_index,  head_index, tilt_index;
+    cit->cam_indices(roll_index,  fov_index,  head_index, tilt_index);
+    unsigned de_roll_index,  de_fov_index,  de_head_index, de_tilt_index;
+    cit->cam_indices(indx,de_roll_index,  de_fov_index,  
+		     de_head_index, de_tilt_index);
+    unsigned de_indx = cit->cam_index(roll_index,  fov_index,  
+				      head_index, tilt_index);
+    
+    vcl_cout << "(index " << indx << ' ' << de_indx << ")\n";
+    vcl_cout << "(" << roll_index << ' ' << fov_index << ' '
+	     << head_index << ' ' << tilt_index << ")\n";
+    vcl_cout << "(" << de_roll_index << ' ' << de_fov_index << ' '
+	     << de_head_index << ' ' << de_tilt_index << ")\n";
   }
+
 }
+
 
 TESTMAIN(test_camera_space);
