@@ -5,6 +5,8 @@
 
 // processes
 #include <bstm/cpp/pro/bstm_cpp_register.h>
+#include <bstm/pro/bstm_register.h>
+#include <bstm/ocl/pro/bstm_ocl_register.h>
 
 #include <boxm2/pro/boxm2_register.h>
 
@@ -32,7 +34,7 @@
 PyObject *
 register_processes(PyObject *self, PyObject *args)
 {
-  bstm_cpp_register::register_process();
+
   boxm2_register::register_process();
   boxm2_cpp_register::register_process();
   vpgl_register::register_process();
@@ -42,6 +44,7 @@ register_processes(PyObject *self, PyObject *args)
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_process();
   boxm2_ocl_register::register_process();
+  bstm_ocl_register::register_process();
 #if defined(HAS_GLEW) && HAS_GLEW
   boxm2_view_register::register_process();
 #endif
@@ -54,6 +57,11 @@ register_processes(PyObject *self, PyObject *args)
 #if defined(HAS_HDFS) && HAS_HDFS
   bhdfs_register::register_process();
 #endif
+
+  bstm_register::register_process();
+  bstm_cpp_register::register_process();
+
+
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -64,7 +72,7 @@ register_datatypes(PyObject *self, PyObject *args)
 {
   register_basic_datatypes();
 
-  bstm_cpp_register::register_datatype();
+
 
   boxm2_register::register_datatype();
   boxm2_cpp_register::register_datatype();
@@ -75,6 +83,7 @@ register_datatypes(PyObject *self, PyObject *args)
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_datatype();
   boxm2_ocl_register::register_datatype();
+  bstm_ocl_register::register_datatype();
 #if defined(HAS_GLEW) && HAS_GLEW
   boxm2_view_register::register_datatype();
 #endif
@@ -87,6 +96,11 @@ register_datatypes(PyObject *self, PyObject *args)
 #if defined(HAS_HDFS) && HAS_HDFS
   bhdfs_register::register_datatype();
 #endif
+
+  bstm_register::register_datatype();
+  bstm_cpp_register::register_datatype();
+
+
   Py_INCREF(Py_None);
   return Py_None;
 }
