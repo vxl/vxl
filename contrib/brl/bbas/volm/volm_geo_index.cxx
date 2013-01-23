@@ -308,7 +308,7 @@ void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, vcl_vector<volm_g
 vcl_string volm_geo_index_node::get_string()
 {
   vcl_stringstream str;
-  str << "node_" << this->extent_.min_point().x() << "_" << this->extent_.min_point().y() << "_" << this->extent_.max_point().x() << "_" << this->extent_.max_point().y();
+  str << "node_" << vcl_setprecision(6) << vcl_fixed << this->extent_.min_point().x() << "_" << vcl_setprecision(6) << vcl_fixed << this->extent_.min_point().y() << "_" << vcl_setprecision(6) << vcl_fixed << this->extent_.max_point().x() << "_" << vcl_setprecision(6) << vcl_fixed << this->extent_.max_point().y();
   return str.str();
 }
 void volm_geo_index::write_hyps(volm_geo_index_node_sptr root, vcl_string const& file_name_pre)
@@ -362,4 +362,26 @@ bool volm_geo_index::add_hypothesis(volm_geo_index_node_sptr root, double lon, d
   for (unsigned i = 0; i < root->children_.size(); i++) 
     added = add_hypothesis(root->children_[i], lon, lat, elev);
   return added;
+}
+
+void volm_geo_index::get_leaves_with_hyps(volm_geo_index_node_sptr root, vcl_vector<volm_geo_index_node_sptr>& leaves)
+{
+  if (!root)
+    return;
+  if (!root->children_.size() && root->hyps_ && root->hyps_->size() > 0) {
+    leaves.push_back(root);
+    return;
+  } 
+  bool at_least_one_child = false;
+  for (unsigned i = 0; i < root->children_.size(); i++) {
+    if (!root->children_[i])
+      continue;
+    else {
+      get_leaves_with_hyps(root->children_[i], leaves);
+      at_least_one_child = true;
+    }
+  }
+  if (!at_least_one_child && root->hyps_ && root->hyps_->size() > 0)
+    leaves.push_back(root);
+   
 }

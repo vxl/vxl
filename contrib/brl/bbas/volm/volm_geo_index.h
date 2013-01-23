@@ -81,6 +81,7 @@ public:
   //: return all the leaves that intersect a given rectangular area
   static void get_leaves(volm_geo_index_node_sptr root, vcl_vector<volm_geo_index_node_sptr>& leaves, vgl_box_2d<float>& area);
 
+  static void get_leaves_with_hyps(volm_geo_index_node_sptr root, vcl_vector<volm_geo_index_node_sptr>& leaves);
   //: write the geo index hyps
   static void write_hyps(volm_geo_index_node_sptr root, vcl_string const& file_name_pre);
   static void read_hyps(volm_geo_index_node_sptr root, vcl_string const& file_name_pre);
