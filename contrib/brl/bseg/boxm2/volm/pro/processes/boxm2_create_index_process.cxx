@@ -14,6 +14,7 @@
 #include <bbas/volm/volm_spherical_shell_container.h>
 #include <bbas/volm/volm_spherical_shell_container_sptr.h>
 #include <bbas/volm/volm_loc_hyp.h>
+#include <bbas/volm/volm_geo_index.h>
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
 #include <vil/vil_save.h>
@@ -166,6 +167,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   double radius = 1;
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
   int layer_size = (int)(sph_shell->get_container_size());
+  params.layer_size = layer_size;
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
   if (!ind->initialize_write(index_file)) {
     vcl_cerr << "Cannot initialize " << index_file << " for write!\n";
@@ -475,170 +477,6 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   return true;
 }
 
-
-namespace boxm2_partition_hypotheses_process_globals
-{
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
-}
-
-bool boxm2_partition_hypotheses_process_cons(bprb_func_process& pro)
-{
-  using namespace boxm2_partition_hypotheses_process_globals;
-
-  vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "vcl_string"; // scene xml file
-  input_types_[1] = "vcl_string"; // binary hypotheses file with lat, lon, elev positions to generate indices for
-  input_types_[2] = "float"; // elevation difference to adjust local heights, some scenes need a height adjustment according to their resolution
-  input_types_[3] = "vcl_string"; // postfix of name of output file to save the hyp file, ".bin" will be added to save hyps and ".txt" will be added to save size
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-}
-
-bool boxm2_partition_hypotheses_process(bprb_func_process& pro)
-{
-  using namespace boxm2_partition_hypotheses_process_globals;
-
-  //sanity check inputs
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-    return false;
-  }
-
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-    return false;
-  }
-  //get the inputs
-  unsigned i = 0;
-  vcl_string scene_file = pro.get_input<vcl_string>(i++);
-  boxm2_scene_sptr scene = new boxm2_scene(scene_file);
-  vpgl_lvcs lvcs = scene->lvcs();
-  vcl_string hyp_file = pro.get_input<vcl_string>(i++);
-  float elev_dif = pro.get_input<float>(i++);
-  vcl_string out_file = pro.get_input<vcl_string>(i++);
-
-  //: read the location hypotheses
-  if (!vul_file::exists(hyp_file)) {
-    vcl_cerr << "Cannot find: " << hyp_file << "!\n";
-    return false;
-  }
-
-  volm_loc_hyp hyp(hyp_file);
-  vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file << vcl_endl;
-  vcl_cout.flush();
-  volm_loc_hyp hyp2;  // empty one
-  boxm2_block_id curr_block;
-
-  for (unsigned hi = 0; hi < hyp.size(); ++hi)
-  {
-    vgl_point_3d<double> h_pt;
-    if (!hyp.get_next(h_pt)) {
-      vcl_cerr << "!!Problem retrieving hyp: " << hi << " from file: " << hyp_file << '\n';
-      return false;
-    }
-    double lx, ly, lz;
-    lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
-    lz = lz - elev_dif;
-    vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
-
-    vgl_point_3d<double> local;
-    if (!scene->contains(local_h_pt_d, curr_block, local))
-      continue;
-
-    // bool add(float lat, float lon, float elev);  // longitude is x (east) / latitude is y (north) // elev is z
-    hyp2.add(h_pt.y(), h_pt.x(), h_pt.z());
-  }
-  hyp2.write_hypotheses(out_file+".bin");
-  vcl_string out_txt(out_file+".txt");
-  vcl_ofstream ofs(out_txt.c_str());
-  ofs << hyp2.size() << vcl_endl;
-  vcl_cout << hyp2.size() << " hyps written to " << out_file+".bin" << vcl_endl;
-  ofs.close();
-
-  return true;
-}
-
-
-namespace boxm2_hypotheses_kml_process_globals
-{
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
-}
-
-bool boxm2_hypotheses_kml_process_cons(bprb_func_process& pro)
-{
-  using namespace boxm2_hypotheses_kml_process_globals;
-
-  vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "vcl_string"; // binary hypotheses file with lat, lon, elev positions to generate indices for
-  input_types_[1] = "unsigned"; // start
-  input_types_[2] = "unsigned"; // skip
-  input_types_[3] = "float"; // size of boxes to draw in arcseconds, e.g. 0.01
-  input_types_[4] = "vcl_string"; // output kml file
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-}
-
-bool boxm2_hypotheses_kml_process(bprb_func_process& pro)
-{
-  using namespace boxm2_hypotheses_kml_process_globals;
-
-  //sanity check inputs
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-    return false;
-  }
-
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-    return false;
-  }
-  //get the inputs
-  unsigned i = 0;
-  vcl_string hyp_file = pro.get_input<vcl_string>(i++);
-  unsigned start = pro.get_input<unsigned>(i++);
-  unsigned skip = pro.get_input<unsigned>(i++);
-  float b_size = pro.get_input<float>(i++);
-  vcl_string out_file = pro.get_input<vcl_string>(i++);
-
-  //: read the location hypotheses
-  if (!vul_file::exists(hyp_file)) {
-    vcl_cerr << "Cannot find: " << hyp_file << "!\n";
-    return false;
-  }
-  vcl_ofstream ofs(out_file.c_str());
-  bkml_write::open_document(ofs);
-
-  volm_loc_hyp hyp(hyp_file);
-  vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file << vcl_endl;
-
-  vgl_point_3d<double> h_pt;
-  unsigned cnt = 0;
-  while (hyp.get_next(start, skip, h_pt))
-  {
-    //vcl_cout.precision(6);
-    //vcl_cout << h_pt.y() << ' ' << h_pt.x() << vcl_endl;
-    vnl_double_2 ll; ll[0] = h_pt.y(); ll[1] = h_pt.x();  // longitude is x (east) / latitude is y (north) // elev is z
-    vnl_double_2 lr; lr[0] = h_pt.y(); lr[1] = h_pt.x()+b_size;
-    vnl_double_2 ur; ur[0] = h_pt.y()+b_size; ur[1] = h_pt.x()+b_size;
-    vnl_double_2 ul; ul[0] = h_pt.y()+b_size; ul[1] = h_pt.x();
-
-    vcl_stringstream box_id; box_id << hyp.current_-1;
-    vcl_string desc = "desc";
-    bkml_write::write_box(ofs, box_id.str(), desc, ul, ur, ll, lr);
-    ++cnt;
-  }
-  vcl_cout << cnt << " hypos!! a box for each is written to the output " << out_file << vcl_endl;
-  bkml_write::close_document(ofs);
-  ofs.close();
-
-  return true;
-}
-
-
 namespace boxm2_visualize_index_process_globals
 {
   const unsigned n_inputs_ = 5;
@@ -721,4 +559,117 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   }
   return true;
 }
+
+
+//////// visualize the index closest to the given lat, lon position
+//       assumes that hyp file order and index file order are the same, so uses hyp_id to retrieve index from the binary index file
+namespace boxm2_visualize_index_process2_globals
+{
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 0;
+}
+
+bool boxm2_visualize_index_process2_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_visualize_index_process2_globals;
+
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vcl_string"; // geo index folder
+  input_types_[1] = "unsigned";  // tile id
+  input_types_[2] = "float";  // lat
+  input_types_[3] = "float";  // lon
+
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_visualize_index_process2(bprb_func_process& pro)
+{
+  using namespace boxm2_visualize_index_process2_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  unsigned i = 0;
+  vcl_string geo_index_folder = pro.get_input<vcl_string>(i++);
+  unsigned tile_id = pro.get_input<unsigned>(i++);
+  float lat = pro.get_input<float>(i++);
+  float lon = pro.get_input<float>(i++);
+
+  vcl_stringstream file_name_pre; file_name_pre << geo_index_folder << "geo_index_tile_" << tile_id;
+  vcl_cout << "constructing: " << file_name_pre.str() << vcl_endl;
+  float min_size;
+  volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
+  volm_geo_index::read_hyps(root, file_name_pre.str());
+  unsigned size = volm_geo_index::hypo_size(root);
+  
+  if (!size) {
+    vcl_cout << " there are no hypos in this tile!.. returning!\n";
+    return true;
+  } else
+    vcl_cout << " there are " << size << " hyps in this tile!\n";
+
+  unsigned hyp_id;
+  volm_geo_index_node_sptr leaf = volm_geo_index::get_closest(root, lat, lon, hyp_id);
+  if (!leaf) {
+    vcl_cerr << " the geo index: " << geo_index_folder <<" do not contain any hyp close to " << lat << ", " << lon << vcl_endl;
+    return true;
+  }
+  vcl_cout << "hyp " << lat << ", " << lon << " is in leaf: " << leaf->extent_ << vcl_endl;
+  vcl_cout << "\t closest to hyp: " << leaf->hyps_->locs_[hyp_id].y() << ", " << leaf->hyps_->locs_[hyp_id].x() << vcl_endl;
+
+  // first visualize regular index
+  vcl_string index_file = leaf->get_index_name(file_name_pre.str());
+  vcl_string param_file = vul_file::strip_extension(index_file) + ".params";
+  boxm2_volm_wr3db_index_params params;
+  if (!params.read_params_file(param_file)) {
+    vcl_cerr << "cannot read: " << param_file << vcl_endl;
+    return false;
+  }
+  vcl_string size_file = vul_file::strip_extension(index_file) + ".txt";
+  unsigned long eis;
+  params.read_size_file(size_file, eis);
+  if (hyp_id < 0 || (unsigned long)hyp_id >= eis) {
+    vcl_cerr << " the hyp id is: " << hyp_id << " which is invalid for the index with: " << eis << " indices read from: " << size_file << vcl_endl;
+    return false;
+  }
+ 
+  int layer_size = (int)params.layer_size;
+  boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, 1);
+  if (!ind->initialize_read(index_file)) {
+    vcl_cerr << "Cannot initialize index from file: " << index_file << vcl_endl;
+    return false;
+  }
+
+  vcl_vector<unsigned char> values(layer_size);
+  for (unsigned j = 0; j < hyp_id; ++j)
+    ind->get_next(values);
+  ind->get_next(values);  // this one is the hyp_id'th one
+
+  vcl_string prefix = vul_file::strip_extension(index_file);
+  vcl_stringstream str; str << prefix << "_lat_" << lat << "_lon_" << lon;
+  vcl_string temp_name = str.str() + ".vrml";
+
+#if 0
+    vcl_cout << "j: " << j << " values array: \n";
+    for (unsigned i = 0; i < layer_size; i++) {
+      vcl_cout << (int)values[i] << " ";
+    }
+    vcl_cout << vcl_endl;
+#endif
+  
+  // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
+  double radius = 1;
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
+  
+  sph_shell->draw_template(temp_name, values, (unsigned char)254);
+  vil_image_view<vil_rgb<vxl_byte> > img;
+  sph_shell->panaroma_img(img, values);
+  vcl_string img_name = str.str() + ".png";
+  vil_save(img, img_name.c_str());
+  
+  return true;
+}
+
 

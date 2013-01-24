@@ -33,7 +33,7 @@
 
 namespace boxm2_create_index_process2_globals
 {
-  const unsigned n_inputs_ = 16;
+  const unsigned n_inputs_ = 17;
   const unsigned n_outputs_ = 0;
 
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
@@ -100,6 +100,7 @@ bool boxm2_create_index_process2_cons(bprb_func_process& pro)
   input_types_[13] = "vcl_string"; // name of output folder to save index binaries for each leaf node
   input_types_[14] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
   input_types_[15] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
+  input_types_[16] = "int"; // the leaf id of the tile, if passed as -1 then run on all leaves
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
@@ -121,7 +122,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   float transfer_time=0.0f;
   float gpu_time=0.0f;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -150,6 +151,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   vcl_string out_index_folder = pro.get_input<vcl_string>(i++);
   float vis_thres = pro.get_input<float>(i++);
   float buffer_capacity = pro.get_input<float>(i++);
+  int leaf_id = pro.get_input<int>(i++);
 
   volm_spherical_container_sptr sph2 = new volm_spherical_container(params.solid_angle,params.vmin,params.dmax);
   vcl_cout << "number of depth intervals in container: " << sph2->get_depth_offset_map().size() << " with solid angle: " << params.solid_angle << " vmin: " << params.vmin << " dmax: " << params.dmax << vcl_endl;
@@ -161,15 +163,26 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   volm_geo_index_node_sptr r = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
   volm_geo_index::read_hyps(r, file_name_pre.str());
   unsigned size = volm_geo_index::hypo_size(r);
-  vcl_cout << "will index " << size << " hyps in the geo index: " << file_name_pre.str() << '\n';
   vcl_vector<volm_geo_index_node_sptr> leaves;
-  volm_geo_index::get_leaves(r, leaves);
+  //volm_geo_index::get_leaves(r, leaves);
+  volm_geo_index::get_leaves_with_hyps(r, leaves);
   vcl_stringstream out_file_name_pre; out_file_name_pre << out_index_folder << "geo_index_tile_" << tile_id;
+  if (!leaves.size()) {
+    vcl_cout << " there are no leaves in this tile!.. returning!\n";
+    return true;
+  } else
+    vcl_cout << " there are " << leaves.size() << " leaves with total: " << size << " hyps in this tile!\n";
+
+  if (leaf_id >= (int)leaves.size()) {
+    vcl_cout << " leaf id: " << leaf_id << " is larger than the number of leaves: " << leaves.size() << ".. returning!\n"; 
+    return false;
+  }
 
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   double radius = 1;
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
   int layer_size = (int)(sph_shell->get_container_size());
+  params.layer_size = layer_size; 
 
   //: adjust dmax if scene has very few blocks
   float dmax = params.dmax;
@@ -241,15 +254,19 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
 
   boxm2_block_id curr_block;
 
-  unsigned indexed_cnt = 0;
   //zip through each location hypothesis
-  for (unsigned li = 0; li < leaves.size(); li++) {
-    if (!leaves[li]->hyps_)
+  vcl_vector<volm_geo_index_node_sptr> leaves2; 
+  if (leaf_id < 0) leaves2 = leaves;
+  else leaves2.push_back(leaves[leaf_id]);
+  vcl_cout << " will index " << leaves2.size() << " leaves!\n"; vcl_cout.flush();
+  for (unsigned li = 0; li < leaves2.size(); li++) {
+    if (!leaves2[li]->hyps_)
       continue;
+    vcl_cout << " will index " << volm_geo_index::hypo_size(leaves2[li]) << " indices in leaf: " << leaves2[li]->get_hyp_name("") << vcl_endl; vcl_cout.flush();
     
     // create a binary index file for each hypo set in a leaf
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
-    vcl_string index_file = leaves[li]->get_index_name(out_file_name_pre.str());
+    vcl_string index_file = leaves2[li]->get_index_name(out_file_name_pre.str());
     if (!ind->initialize_write(index_file)) {
       vcl_cerr << "Cannot initialize " << index_file << " for write!\n";
       return false;
@@ -260,9 +277,10 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
     }
 
     vgl_point_3d<double> h_pt;
-    while (leaves[li]->hyps_->get_next(0, 1, h_pt))
+    unsigned indexed_cnt = 0;
+    while (leaves2[li]->hyps_->get_next(0, 1, h_pt))
     {
-      vcl_cout << "Processing hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
+      //vcl_cout << "Processing hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
       if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << ".";
       double lx, ly, lz;
       lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
