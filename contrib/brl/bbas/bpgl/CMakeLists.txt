@@ -6,9 +6,6 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
 SET(bpgl_sources
 bpgl_comp_rational_camera.h         bpgl_comp_rational_camera.txx
-bpgl_lens_distortion.h              bpgl_lens_distortion.txx
-bpgl_radial_distortion.h            bpgl_radial_distortion.txx
-bpgl_poly_radial_distortion.h       bpgl_poly_radial_distortion.txx
 bpgl_reg_fundamental_matrix.h       bpgl_reg_fundamental_matrix.txx
 bpgl_rolling_shutter_camera.h
 bpgl_segmented_rolling_shutter_camera.h bpgl_segmented_rolling_shutter_camera.txx

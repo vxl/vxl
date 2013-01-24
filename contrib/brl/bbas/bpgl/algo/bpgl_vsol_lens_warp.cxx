@@ -18,7 +18,7 @@
 //: Apply lens distortion to this vsol_spatial_object_2d and produce a new spatial object
 vsol_spatial_object_2d_sptr
 bpgl_vsol_lens_warp(const vsol_spatial_object_2d_sptr& obj,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert,
                     double midpt_thresh)
 {
@@ -54,7 +54,7 @@ bpgl_vsol_lens_warp(const vsol_spatial_object_2d_sptr& obj,
 //: Apply lens distortion to this vsol_point_2d and produce a new point
 vsol_point_2d_sptr
 bpgl_vsol_lens_warp(const vsol_point_2d_sptr& pt,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert,
                     double midpt_thresh)
 {
@@ -71,7 +71,7 @@ bpgl_vsol_lens_warp(const vsol_point_2d_sptr& pt,
 static bool
 bpgl_vsol_warp_divide(const vsol_line_2d_sptr& ln,
                       const vsol_line_2d_sptr& wln,
-                      const bpgl_lens_distortion<double>& lens,
+                      const vpgl_lens_distortion<double>& lens,
                       bool invert,
                       double midpt_thresh,
                       vcl_list<vsol_point_2d_sptr>& pts)
@@ -102,7 +102,7 @@ bpgl_vsol_warp_divide(const vsol_line_2d_sptr& ln,
 //: Apply lens distortion to this vsol_line_2d and produce a new line
 vsol_curve_2d_sptr
 bpgl_vsol_lens_warp(const vsol_line_2d_sptr& ln,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert,
                     double midpt_thresh)
 {
@@ -128,7 +128,7 @@ bpgl_vsol_lens_warp(const vsol_line_2d_sptr& ln,
 //: Apply lens distortion to this vsol_polyline_2d and produce a new polyline
 vsol_polyline_2d_sptr
 bpgl_vsol_lens_warp(const vsol_polyline_2d_sptr& pln,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert,
                     double midpt_thresh)
 {
@@ -162,7 +162,7 @@ bpgl_vsol_lens_warp(const vsol_polyline_2d_sptr& pln,
 //: Apply lens distortion to this vsol_digital_curve_2d and produce a new digital curve
 vsol_digital_curve_2d_sptr
 bpgl_vsol_lens_warp(const vsol_digital_curve_2d_sptr& dc,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert,
                     double midpt_thresh)
 {
@@ -195,7 +195,7 @@ bpgl_vsol_lens_warp(const vsol_digital_curve_2d_sptr& dc,
 //: Apply lens distortion to this vsol_polygon_2d and produce a new polygon
 vsol_polygon_2d_sptr
 bpgl_vsol_lens_warp(const vsol_polygon_2d_sptr& pg,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert,
                     double midpt_thresh)
 {
@@ -229,7 +229,7 @@ bpgl_vsol_lens_warp(const vsol_polygon_2d_sptr& pg,
 // \return true if successful
 bool
 bpgl_vsol_lens_warp(vsol_spatial_object_2d_sptr& obj,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
   if (invert)
@@ -269,7 +269,7 @@ bpgl_vsol_lens_warp(vsol_spatial_object_2d_sptr& obj,
 // \return true if successful
 bool
 bpgl_vsol_lens_warp(vsol_point_2d_sptr& pt,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
   vgl_point_2d<double> new_pt;
@@ -288,7 +288,7 @@ bpgl_vsol_lens_warp(vsol_point_2d_sptr& pt,
 // \note only the end points are warped
 bool
 bpgl_vsol_lens_warp(vsol_line_2d_sptr& ln,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
   if (invert)
@@ -304,7 +304,7 @@ bpgl_vsol_lens_warp(vsol_line_2d_sptr& ln,
 // \note only the segment end points are warped
 bool
 bpgl_vsol_lens_warp(vsol_polyline_2d_sptr& pln,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
   if (invert)
@@ -324,7 +324,7 @@ bpgl_vsol_lens_warp(vsol_polyline_2d_sptr& pln,
 // \note only the sample points are warped
 bool
 bpgl_vsol_lens_warp(vsol_digital_curve_2d_sptr& dc,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
   if (invert)
@@ -344,7 +344,7 @@ bpgl_vsol_lens_warp(vsol_digital_curve_2d_sptr& dc,
 // \note only the segment end points are warped
 bool
 bpgl_vsol_lens_warp(vsol_polygon_2d_sptr& pg,
-                    const bpgl_lens_distortion<double>& lens,
+                    const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
   if (invert)

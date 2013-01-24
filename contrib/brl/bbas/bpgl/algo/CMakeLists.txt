@@ -6,7 +6,6 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
 SET( bpgl_algo_sources
   bpgl_construct_cameras.h         bpgl_construct_cameras.cxx
-  bpgl_lens_warp_mapper.h
   bpgl_vsol_lens_warp.h            bpgl_vsol_lens_warp.cxx
   bpgl_list.h                      bpgl_list.txx
   bpgl_interpolate.h               bpgl_interpolate.cxx

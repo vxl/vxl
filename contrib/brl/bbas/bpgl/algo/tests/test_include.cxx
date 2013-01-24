@@ -19,7 +19,6 @@
 #include <bpgl/algo/bpgl_fm_compute_reg_ransac.h>
 #include <bpgl/algo/bpgl_interpolate.h>
 //#include <bpgl/algo/bpgl_invmap_cost_function.h>
-#include <bpgl/algo/bpgl_lens_warp_mapper.h>
 #include <bpgl/algo/bpgl_list.h>
 #include <bpgl/algo/bpgl_nitf_camera_coverage.h>
 //#include <bpgl/algo/bpgl_optimize_camera.h>

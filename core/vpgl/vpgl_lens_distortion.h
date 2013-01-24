@@ -1,6 +1,6 @@
-// This is bbas/bpgl/bpgl_lens_distortion.h
-#ifndef bpgl_lens_distortion_h_
-#define bpgl_lens_distortion_h_
+// This is core/vpgl/vpgl_lens_distortion.h
+#ifndef vpgl_lens_distortion_h_
+#define vpgl_lens_distortion_h_
 //:
 // \file
 // \brief An abstract base class for all lens distortions.
@@ -17,11 +17,11 @@
 
 //: A base class for lens distortions
 template <class T>
-class bpgl_lens_distortion
+class vpgl_lens_distortion
 {
  public:
 
-  virtual ~bpgl_lens_distortion(){}
+  virtual ~vpgl_lens_distortion(){}
 
   //: Distort a projected point on the image plane
   virtual vgl_homg_point_2d<T> distort( const vgl_homg_point_2d<T>& point ) const = 0;
@@ -39,4 +39,4 @@ class bpgl_lens_distortion
 };
 
 
-#endif // bpgl_lens_distortion_h_
+#endif // vpgl_lens_distortion_h_

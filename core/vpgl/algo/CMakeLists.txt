@@ -11,6 +11,7 @@ SET( vpgl_algo_sources
   vpgl_fm_compute_8_point.h        vpgl_fm_compute_8_point.cxx
   vpgl_fm_compute_2_point.h        vpgl_fm_compute_2_point.cxx
   vpgl_em_compute_5_point.h        vpgl_em_compute_5_point.txx
+  vpgl_lens_warp_mapper.h
   vpgl_invmap_cost_function.h      vpgl_invmap_cost_function.cxx
   vpgl_backproject.h               vpgl_backproject.cxx
   vpgl_ray.h                       vpgl_ray.cxx
