@@ -173,6 +173,7 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
   bocl_mem_sptr app_density = new bocl_mem(device->context(), app_buffer, sizeof(cl_float4), "app density buffer");
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
+
   // set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
@@ -385,6 +386,12 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
         bocl_mem_sptr mog_var_mem = new bocl_mem(device->context(), &mog_var, sizeof(mog_var), "update gauss variance");
         mog_var_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
+        cl_int use_mask_buf[1];
+        use_mask_buf[0] = use_mask ? 1 : 0;
+        bocl_mem_sptr use_mask_mem = new bocl_mem(device->context(), use_mask_buf, sizeof(use_mask_buf), "update with mask");
+        use_mask_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+
         local_threads[0] = 64;
         local_threads[1] = 1 ;
         global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
@@ -401,6 +408,7 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
         kern->set_arg( aux3 );
         //kern->set_arg(app_model_view_dirs_lookup.ptr());
         kern->set_arg( up_alpha_mem.ptr() );
+        kern->set_arg( use_mask_mem.ptr() );
         kern->set_arg( mog_var_mem.ptr() );
         kern->set_arg( cl_output.ptr() );
 
