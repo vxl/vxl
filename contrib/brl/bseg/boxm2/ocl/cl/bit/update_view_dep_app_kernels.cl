@@ -447,6 +447,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global int              * aux_array2,
                       __global int              * aux_array3,
                       __global int              * update_alpha,     //update if not zero
+                      __global int              * use_mask,         //use mask if not zero
                       __global float            * mog_var,          //if 0 or less, variable var, otherwise use as fixed var
                       __global float            * output)
 {
@@ -506,7 +507,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       mixture_array[gid] = mixture;
       
     }
-    else //Added for silhouettes, NEED TO REMOVE LATER
+    else if(*use_mask)
       alpha_array[gid] = 0;
     
     //clear out aux data
