@@ -9,7 +9,6 @@
 //DECLARE app_model_view_directions
 
 //used for aerial scenes.
-/*
 __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
                                                       (float4)(0.707,    0,      0.707,0),
                                                       (float4)(0.354,    0.612,  0.707, 0),
@@ -19,8 +18,9 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
                                                       (float4)(0.354,    -0.612, 0.707,0),
                                                       (float4)(0,         0,     0,0)}; 
 
-*/
 
+
+/*
 //used for motion capture scenes
 __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
                                                       (float4)(1,    0,      0,0),
@@ -30,7 +30,7 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
                                                       (float4)(-0.5,   -0.866, 0,0),
                                                       (float4)(0.5,   -0.866, 0,0),
                                                       (float4)(0,         0,     0,0)}; 
-                                             
+*/
 void compute_app_model_weights(float* app_model_weights, float4 viewdir,__constant float4* app_model_view_directions)
 {
     //compute the dot product btw ray dir and canonical directions
