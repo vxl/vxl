@@ -27,7 +27,7 @@
 // \date October 07, 2012
 // \verbatim
 //   Modifications
-//     JAN-2013 Yi Dong -- add an accessor to fetch the layer size from index
+//
 // \endverbatim
 // 
 
@@ -44,10 +44,14 @@ class boxm2_volm_wr3db_index_params
 {
   public: 
     
+    // text i/o
     bool write_params_file(vcl_string index_file_name);
     bool read_params_file(vcl_string index_file_name);
+    
+    // text i/o
     static bool write_size_file(vcl_string index_file_name, unsigned long size);
     static bool read_size_file(vcl_string index_file_name, unsigned long& size);
+
     static bool query_params_equal(boxm2_volm_wr3db_index_params& p1, boxm2_volm_wr3db_index_params& p2);
     
   public:
@@ -60,6 +64,8 @@ class boxm2_volm_wr3db_index_params
     float point_angle;
     float top_angle;
     float bottom_angle;
+    unsigned layer_size;
+
 };
 
 class boxm2_volm_wr3db_index : public vbl_ref_count
@@ -69,7 +75,7 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     enum mode { READ = 0, WRITE = 1, NOT_INITIALIZED = 2 };
     
     //: layer_size is the size of index array for each hypothesis, buffer_capacity is the max GBs on RAM for this class to use
-    boxm2_volm_wr3db_index(int layer_size, float buffer_capacity);
+    boxm2_volm_wr3db_index(unsigned layer_size, float buffer_capacity);
     ~boxm2_volm_wr3db_index();
     
     //: io as chunks of data to a set of files in the specified folder
@@ -82,6 +88,7 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     unsigned int current_id() { return current_id_; }
     unsigned int current_global_id() { return current_global_id_; }
     unsigned int layer_size() { return layer_size_; }
+    
     //: just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known, 
     //  caller is responsible to keep the ordering consistent with the hypotheses ordering
     bool add_to_index(vcl_vector<uchar>& values);
@@ -89,7 +96,7 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     bool add_to_index(uchar* values); 
     
     //: retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc
-    //  caller is responsible to resize values array to layer_size
+    //  caller is responsible to resize values array to layer_size before passing to this method
     bool get_next(vcl_vector<uchar>& values);
     //: caller is responsible to pass a valid array of size at least layer_size, if size>layer_size, fill the rest with zeros
     bool get_next(uchar* values, unsigned size);

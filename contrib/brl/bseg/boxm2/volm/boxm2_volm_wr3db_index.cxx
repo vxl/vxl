@@ -3,8 +3,7 @@
 // \file
 #include <bbas/volm/volm_spherical_container.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vcl_algorithm.h>
 
 bool boxm2_volm_wr3db_index_params::write_params_file(vcl_string index_file_name)
@@ -21,7 +20,8 @@ bool boxm2_volm_wr3db_index_params::write_params_file(vcl_string index_file_name
       << "cap_angle " << cap_angle << '\n'
       << "point_angle " << point_angle << '\n'
       << "top_angle " << top_angle << '\n'
-      << "bottom_angle " << bottom_angle << vcl_endl;
+      << "bottom_angle " << bottom_angle << '\n'
+      << "layer_size " << layer_size << vcl_endl;
   ofs.close();
   return true;
 }
@@ -42,19 +42,20 @@ bool boxm2_volm_wr3db_index_params::read_params_file(vcl_string index_file_name)
   ifs >> tmp >> point_angle;
   ifs >> tmp >> top_angle;
   ifs >> tmp >> bottom_angle;
+  ifs >> tmp >> layer_size;
   ifs.close();
   return true;
 }
-
 bool boxm2_volm_wr3db_index_params::query_params_equal(boxm2_volm_wr3db_index_params& p1, boxm2_volm_wr3db_index_params& p2)
 {
-  return p1.bottom_angle == p2.bottom_angle &&
-         p1.cap_angle == p2.cap_angle &&
-         p1.dmax == p2.dmax &&
-         p1.point_angle == p2.point_angle &&
+  return p1.bottom_angle == p2.bottom_angle && 
+         p1.cap_angle == p2.cap_angle && 
+         p1.dmax == p2.dmax && 
+         p1.point_angle == p2.point_angle && 
          p1.solid_angle == p2.solid_angle &&
-         p1.top_angle == p2.top_angle &&
-         p1.vmin == p2.vmin;
+         p1.top_angle == p2.top_angle && 
+         p1.vmin == p2.vmin &&
+         p1.layer_size == p2.layer_size;
 }
 
 
@@ -68,7 +69,6 @@ bool boxm2_volm_wr3db_index_params::write_size_file(vcl_string index_file_name, 
   ofs.close();
   return true;
 }
-
 bool boxm2_volm_wr3db_index_params::read_size_file(vcl_string index_file_name, unsigned long& size)
 {
   vcl_string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
@@ -79,25 +79,21 @@ bool boxm2_volm_wr3db_index_params::read_size_file(vcl_string index_file_name, u
   ifs.close();
   return true;
 }
+    
 
-
-boxm2_volm_wr3db_index::boxm2_volm_wr3db_index(int layer_size, float buffer_capacity) :
-layer_size_(layer_size), buffer_size_(0), current_id_(0), current_global_id_(0), m_(NOT_INITIALIZED), file_name_(""), active_buffer_(0)
+boxm2_volm_wr3db_index::boxm2_volm_wr3db_index(unsigned layer_size, float buffer_capacity) : 
+layer_size_(layer_size), buffer_size_(0), current_id_(0), current_global_id_(0), m_(NOT_INITIALIZED), file_name_(""), active_buffer_(0) 
 {
-  vcl_cout << "In boxm2_volm_wr3db_index constructor:\n"
-           << "max active cache size on CPU: " << buffer_capacity << " Gb." << vcl_endl;
   buffer_size_ = (unsigned int)vcl_floor((buffer_capacity*1024*1024*1024)/(2.0f*layer_size));
-  vcl_cout << layer_size << " elements in each index, at max: " << buffer_size_ << " indices on active cache.." << vcl_endl;
   active_buffer_ = new uchar[buffer_size_*layer_size_];
 }
 
 boxm2_volm_wr3db_index::~boxm2_volm_wr3db_index()
 {
   finalize();
-
+  
   if (active_buffer_)
     delete [] active_buffer_;
-  vcl_cout << "In boxm2_volm_wr3db_index destructor!\n";
 }
 
 bool boxm2_volm_wr3db_index::initialize_write(vcl_string file_name)
@@ -130,23 +126,21 @@ bool boxm2_volm_wr3db_index::initialize_read(vcl_string file_name)
   read_so_far_ = 0;
   return true;
 }
-
-bool boxm2_volm_wr3db_index::finalize()
+bool boxm2_volm_wr3db_index::finalize() 
 {
   if (m_ == WRITE && current_id_ != 0) { // write whatever is on the cache
-    of_obj_.write((char*)active_buffer_, (long)(current_id_*layer_size_));
+    of_obj_.write((char*)active_buffer_, (long)(current_id_*layer_size_));  
     of_obj_.close();
   }
   if (m_ == READ)
     if_obj_.close();
-
+  
   m_ = NOT_INITIALIZED;
   return true;
 }
 
 
-//:
-// just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known,
+//: just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known, 
 //  caller is responsible to keep the ordering consistent with the hypotheses ordering
 bool boxm2_volm_wr3db_index::add_to_index(vcl_vector<uchar>& values)
 {
@@ -158,68 +152,65 @@ bool boxm2_volm_wr3db_index::add_to_index(vcl_vector<uchar>& values)
     vcl_cout << "In boxm2_volm_wr3db_index::add_to_index() -- size of value array is not consistent with layer size of this index object!\n";
     return false;
   }
-  if (current_id_ == buffer_size_) {  // write the current cache
+  if (current_id_ == buffer_size_) {  // write the current cache 
     // initiate a write
     of_obj_.write((char*)active_buffer_, (long)(buffer_size_*layer_size_));
     current_id_ = 0;
   }
-
-  for (unsigned i = 0; i < layer_size_; i++)
+  
+  for (unsigned i = 0; i < layer_size_; i++) 
     active_buffer_[current_id_*layer_size_ + i] = values[i];
   current_id_++;
   current_global_id_++;
-
+  
   return true;
 }
 
 //: caller is responsible to pass a valid array of size layer_size
-bool boxm2_volm_wr3db_index::add_to_index(uchar* values)
-{
-  if (m_ == READ) {
+bool boxm2_volm_wr3db_index::add_to_index(uchar* values) { 
+if (m_ == READ) {
     vcl_cout << "index object is in READ mode! cannot add to index!\n";
     return false;
   }
-  if (current_id_ == buffer_size_) {  // write the current cache
+  if (current_id_ == buffer_size_) {  // write the current cache 
     // initiate a write
     of_obj_.write((char*)active_buffer_, (long)(buffer_size_*layer_size_));
     current_id_ = 0;
   }
-
-  for (unsigned i = 0; i < layer_size_; i++)
+  
+  for (unsigned i = 0; i < layer_size_; i++) 
     active_buffer_[current_id_*layer_size_ + i] = values[i];
   current_id_++;
   current_global_id_++;
   return true;
 }
 
-unsigned int boxm2_volm_wr3db_index::read_to_buffer(uchar* buf)
+unsigned int boxm2_volm_wr3db_index::read_to_buffer(uchar* buf) 
 {
   long remaining = file_size_-read_so_far_;
   if ((long)(buffer_size_*layer_size_) <= remaining) {
-    if_obj_.read((char*)buf, (long)(buffer_size_*layer_size_));
+    if_obj_.read((char*)buf, (long)(buffer_size_*layer_size_));   
     read_so_far_ += (long)(buffer_size_*layer_size_);
     return buffer_size_;
-  }
-  else if (remaining > 0) {
-    if_obj_.read((char*)buf, remaining);
+  } else if (remaining > 0) {
+    if_obj_.read((char*)buf, remaining);   
     read_so_far_ += remaining;
     return remaining/layer_size_;
-  }
-  else
+  } else 
     return 0;
 }
 
 //: retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc, values array is resized to layer_size
 bool boxm2_volm_wr3db_index::get_next(vcl_vector<uchar>& values)
-{
+{  
   if (m_ == WRITE) {
     vcl_cout << "index object is in WRITE mode! cannot read from index!\n";
     return false;
   }
-
+  
   if (!current_global_id_ || current_id_ == active_buffer_size_) { // never read before or the cache is exhausted, get a chunk from the disc
     active_buffer_size_ = read_to_buffer(active_buffer_);
-    if (!active_buffer_size_)
+    if (!active_buffer_size_) 
       return false;
     current_id_ = 0;
   }
@@ -229,7 +220,6 @@ bool boxm2_volm_wr3db_index::get_next(vcl_vector<uchar>& values)
   current_id_++;
   return true;
 }
-
 //: caller is responsible to pass a valid array of size at least layer_size, if size>layer_size, fill the rest with zeros
 bool boxm2_volm_wr3db_index::get_next(uchar* values, unsigned size)
 {
@@ -237,10 +227,10 @@ bool boxm2_volm_wr3db_index::get_next(uchar* values, unsigned size)
     vcl_cout << "index object is in WRITE mode! cannot read from index!\n";
     return false;
   }
-
+  
   if (!current_global_id_ || current_id_ == active_buffer_size_) { // never read before or the cache is exhausted, get a chunk from the disc
     active_buffer_size_ = read_to_buffer(active_buffer_);
-    if (!active_buffer_size_)
+    if (!active_buffer_size_) 
       return false;
     current_id_ = 0;
   }
@@ -253,20 +243,19 @@ bool boxm2_volm_wr3db_index::get_next(uchar* values, unsigned size)
   current_global_id_++;
   current_id_++;
   return true;
-}
-
+}   
 
 //: inflate the index for ith location and return a vector of char values where last bit is visibility and second to last is prob (occupied or not)
-bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(vcl_vector<uchar>& values,
-                                                        volm_spherical_container_sptr cont,
+bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(vcl_vector<uchar>& values, 
+                                                        volm_spherical_container_sptr cont, 
                                                         vcl_vector<char>& vis_prob)
 {
   // get the voxel on the indexed layer for a given voxel
   vcl_vector<volm_voxel>& voxels = cont->get_voxels();
-
+  
   unsigned int offset, end_offset; double depth;
   cont->first_res(cont->min_voxel_res()*2, offset, end_offset, depth);
-
+  
   vcl_map<double, unsigned int>& depth_offset_map = cont->get_depth_offset_map();
   vcl_map<double, unsigned int>::iterator iter = depth_offset_map.begin();
   vgl_point_3d<double> origin(0,0,0);
