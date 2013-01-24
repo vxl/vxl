@@ -55,7 +55,7 @@ class volm_loc_hyp : public vbl_ref_count
   bool get_next(unsigned start, unsigned skip, vgl_point_3d<double>& h);
 
   //: get the hypothesis closest to the given and its id if get_next method were to be used, very dummy for now, TODO: use upper_bound and lower_bound to limit search in lat map
-  bool get_closest(double lat, double lon, vgl_point_3d<double>& h, unsigned& hyp_id);
+  double get_closest(double lat, double lon, vgl_point_3d<double>& h, unsigned& hyp_id);
 
   //: check if there exists a hyp closer than the given size and return its id if there is
   //  warning: assumes that size is small enough so that euclidean distance approximates geodesic distance well

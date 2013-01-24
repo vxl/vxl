@@ -89,7 +89,7 @@ bool volm_loc_hyp::get_next(unsigned start, unsigned skip, vgl_point_3d<double>&
 }
 
 //: get the hypothesis closest to the given and its id if get_next method were to be used, 
-bool volm_loc_hyp::get_closest(double lat, double lon, vgl_point_3d<double>& h, unsigned& hyp_id)
+double volm_loc_hyp::get_closest(double lat, double lon, vgl_point_3d<double>& h, unsigned& hyp_id)
 {
   double min_dist = vcl_numeric_limits<double>::max();
   unsigned hyp_cnt = 0;
@@ -104,7 +104,7 @@ bool volm_loc_hyp::get_closest(double lat, double lon, vgl_point_3d<double>& h, 
       hyp_id = i;
     }
   }
-  return true;
+  return min_dist;
 }
 
 //: check if there exists a hyp closer than the given size and return its id if there is
