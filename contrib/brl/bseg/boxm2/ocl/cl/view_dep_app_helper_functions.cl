@@ -1,13 +1,15 @@
 //The BOXM2_MOG6_view datatype is a float16 and is laid out as follows:
-// [mu_x, sigma_x, mu_y, sigma_y, mu_z, sigma_z, mu_(-x), sigma_(-x), mu_(-y), sigma_(-y), mu_(-z), sigma_(-z)]
+// [mu_dir1, sigma_dir1, mu_dir2, sigma_dir2...etc]
 
 //The BOXM2_NUM_OBS_VIEW datatype is a float8 and is laid out as follows:
-// [num_obs_(x),num_obs_(y),num_obs_(z),num_obs_(-x),num_obs_(-y),num_obs_(-z) ]
+// [num_obs_dir1,num_obs_dir2...etc]
 // num_obs_(x) is simply the sum of weights received so far for the appearance model at direction x.
 // The weights are computed as visibility times the dot product between the viewing direction and appearance model direction. 
 
 //DECLARE app_model_view_directions
 
+//used for aerial scenes.
+/*
 __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
                                                       (float4)(0.707,    0,      0.707,0),
                                                       (float4)(0.354,    0.612,  0.707, 0),
@@ -17,7 +19,9 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
                                                       (float4)(0.354,    -0.612, 0.707,0),
                                                       (float4)(0,         0,     0,0)}; 
 
-/*
+*/
+
+//used for motion capture scenes
 __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
                                                       (float4)(1,    0,      0,0),
                                                       (float4)(0.5,    0.866,  0, 0),
@@ -26,7 +30,7 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
                                                       (float4)(-0.5,   -0.866, 0,0),
                                                       (float4)(0.5,   -0.866, 0,0),
                                                       (float4)(0,         0,     0,0)}; 
-*/                                             
+                                             
 void compute_app_model_weights(float* app_model_weights, float4 viewdir,__constant float4* app_model_view_directions)
 {
     //compute the dot product btw ray dir and canonical directions
