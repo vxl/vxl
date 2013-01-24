@@ -565,7 +565,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
 //       assumes that hyp file order and index file order are the same, so uses hyp_id to retrieve index from the binary index file
 namespace boxm2_visualize_index_process2_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 0;
 }
 
@@ -574,10 +574,11 @@ bool boxm2_visualize_index_process2_cons(bprb_func_process& pro)
   using namespace boxm2_visualize_index_process2_globals;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "vcl_string"; // geo index folder
-  input_types_[1] = "unsigned";  // tile id
-  input_types_[2] = "float";  // lat
-  input_types_[3] = "float";  // lon
+  input_types_[0] = "vcl_string"; // geo index hyp folder
+  input_types_[1] = "vcl_string"; // visibility index folder
+  input_types_[2] = "unsigned";  // tile id
+  input_types_[3] = "float";  // lat
+  input_types_[4] = "float";  // lon
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -592,12 +593,13 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
     return false;
   }
   unsigned i = 0;
-  vcl_string geo_index_folder = pro.get_input<vcl_string>(i++);
+  vcl_string geo_index_hyp_folder = pro.get_input<vcl_string>(i++);
+  vcl_string visibility_index_folder = pro.get_input<vcl_string>(i++);
   unsigned tile_id = pro.get_input<unsigned>(i++);
   float lat = pro.get_input<float>(i++);
   float lon = pro.get_input<float>(i++);
 
-  vcl_stringstream file_name_pre; file_name_pre << geo_index_folder << "geo_index_tile_" << tile_id;
+  vcl_stringstream file_name_pre; file_name_pre << geo_index_hyp_folder << "geo_index_tile_" << tile_id;
   vcl_cout << "constructing: " << file_name_pre.str() << vcl_endl;
   float min_size;
   volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
@@ -613,14 +615,15 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   unsigned hyp_id;
   volm_geo_index_node_sptr leaf = volm_geo_index::get_closest(root, lat, lon, hyp_id);
   if (!leaf) {
-    vcl_cerr << " the geo index: " << geo_index_folder <<" do not contain any hyp close to " << lat << ", " << lon << vcl_endl;
+    vcl_cerr << " the geo index: " << geo_index_hyp_folder <<" do not contain any hyp close to " << lat << ", " << lon << vcl_endl;
     return true;
   }
   vcl_cout << "hyp " << lat << ", " << lon << " is in leaf: " << leaf->extent_ << vcl_endl;
   vcl_cout << "\t closest to hyp: " << leaf->hyps_->locs_[hyp_id].y() << ", " << leaf->hyps_->locs_[hyp_id].x() << vcl_endl;
 
   // first visualize regular index
-  vcl_string index_file = leaf->get_index_name(file_name_pre.str());
+  vcl_stringstream file_name_pre2; file_name_pre2 << visibility_index_folder << "geo_index_tile_" << tile_id;
+  vcl_string index_file = leaf->get_index_name(file_name_pre2.str());
   vcl_string param_file = vul_file::strip_extension(index_file) + ".params";
   boxm2_volm_wr3db_index_params params;
   if (!params.read_params_file(param_file)) {
@@ -647,25 +650,26 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   ind->get_next(values);  // this one is the hyp_id'th one
 
   vcl_string prefix = vul_file::strip_extension(index_file);
-  vcl_stringstream str; str << prefix << "_lat_" << lat << "_lon_" << lon;
-  vcl_string temp_name = str.str() + ".vrml";
+  vcl_stringstream str; str << prefix << "_hyp_" << leaf->hyps_->locs_[hyp_id].y() << "_" << leaf->hyps_->locs_[hyp_id].x();
 
-#if 0
-    vcl_cout << "j: " << j << " values array: \n";
-    for (unsigned i = 0; i < layer_size; i++) {
-      vcl_cout << (int)values[i] << " ";
-    }
-    vcl_cout << vcl_endl;
-#endif
+  vcl_string txt_name = str.str() + ".txt";
+  vcl_ofstream ofs(txt_name.c_str());
+  ofs << params.layer_size << '\n';
+  for (unsigned ii = 0; ii < params.layer_size; ii++) 
+    ofs << (int)values[ii] << '\n';
+  ofs.close();
   
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   double radius = 1;
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
   
-  sph_shell->draw_template(temp_name, values, (unsigned char)254);
+  //vcl_string temp_name = str.str() + ".vrml";
+  //sph_shell->draw_template(temp_name, values, (unsigned char)254);
+
   vil_image_view<vil_rgb<vxl_byte> > img;
   sph_shell->panaroma_img(img, values);
   vcl_string img_name = str.str() + ".png";
+  vcl_cout << "saving image to: " << img_name << vcl_endl;
   vil_save(img, img_name.c_str());
   
   return true;
