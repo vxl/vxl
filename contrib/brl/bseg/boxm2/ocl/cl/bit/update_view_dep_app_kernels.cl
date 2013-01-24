@@ -505,50 +505,9 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       nobs_array[gid] = nobs;
       mixture_array[gid] = mixture;
       
-      
-       /*
-      float8 view_dep_mixture;
-      float4 view_dep_nobs;
-      select_view_dep_mog(&mixture_float,ray_dir[gid],&view_dep_mixture); 
-      select_view_dep_nobs(nobs,ray_dir[gid],&view_dep_nobs);  
-
-     
-      float16 data = (float16) (alpha,
-                                 (view_dep_mixture.s0), (view_dep_mixture.s1), (view_dep_mixture.s2), (view_dep_nobs.s0),
-                                 (view_dep_mixture.s3), (view_dep_mixture.s4), (view_dep_mixture.s5), (view_dep_nobs.s1),
-                                 (view_dep_mixture.s6), (view_dep_mixture.s7), (view_dep_nobs.s2), 
-                                 0.0, 0.0, 0.0, 0.0);
-        
-      //use aux data to update cells
-      view_dep_update_cell(&data, aux_data);
-
-
-       //check if mog_var is fixed, if so, overwrite variance in post_mix
-      if (*mog_var > 0.0f) {
-        (data).s2 = (*mog_var);
-        (data).s6 = (*mog_var);
-        (data).sa = (*mog_var);
-      }
-      
-      float16 post_mix = mixture_float;
-      float8 post_nobs = nobs;
-      update_view_dep_mixture(&post_mix, ray_dir[gid], &data);
-      update_view_dep_nobs(&post_nobs, ray_dir[gid], &data);
-
-      //convert post_mix to int4
-      //int4 post_mix_compact = as_int4( convert_uchar16_sat_rte( post_mix *  (float) NORM));
-      
-      //reset the cells in memory
-      nobs_array[gid] = post_nobs;
-      mixture_array[gid] = post_mix; //post_mix_compact; 
-      */  
-      
-      
-
-    
     }
-    //else //Added for silhouettes, NEED TO REMOVE LATER
-    //  alpha_array[gid] = 0;
+    else //Added for silhouettes, NEED TO REMOVE LATER
+      alpha_array[gid] = 0;
     
     //clear out aux data
     aux_array0[gid] = 0;
