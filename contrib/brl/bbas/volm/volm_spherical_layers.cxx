@@ -8,7 +8,7 @@
 #define TOL -1E-8
 volm_spherical_layers::
 volm_spherical_layers(vpgl_perspective_camera<double> const& cam,
-			depth_map_scene_sptr const& dm_scene,
+                      depth_map_scene_sptr const& dm_scene,
 		      double altitude,
 		      volm_spherical_container_sptr const& sph_vol,
 		      volm_spherical_shell_container_sptr const& sph_shell,
@@ -16,11 +16,25 @@ volm_spherical_layers(vpgl_perspective_camera<double> const& cam,
 		      unsigned char default_sky_order,
 		      double d_threshold,
 		      unsigned log_downsample_ratio
-		      ): cam_(cam), dm_scene_(dm_scene),altitude_(altitude),
-  sph_vol_(sph_vol), sph_shell_(sph_shell), invalid_(invalid),
+		      ): cam_(cam),dm_scene_(dm_scene),altitude_(altitude),
+  sph_vol_(sph_vol), sph_shell_(sph_shell), invalid_(invalid), 
   default_sky_order_(default_sky_order), d_threshold_(d_threshold),
   log_downsample_ratio_(log_downsample_ratio){
-}
+  }
+
+volm_spherical_layers::
+volm_spherical_layers(depth_map_scene_sptr const& dm_scene,
+		      double altitude,
+		      volm_spherical_container_sptr const& sph_vol,
+		      volm_spherical_shell_container_sptr const& sph_shell,
+		      unsigned char invalid,
+		      unsigned char default_sky_order,
+		      double d_threshold,
+		      unsigned log_downsample_ratio)
+: dm_scene_(dm_scene),altitude_(altitude),
+    sph_vol_(sph_vol), sph_shell_(sph_shell), invalid_(invalid), default_sky_order_(default_sky_order), d_threshold_(d_threshold),
+    log_downsample_ratio_(log_downsample_ratio){
+    }
 							
 unsigned char volm_spherical_layers::
 fetch_depth(double const& u, double const& v,
@@ -86,7 +100,7 @@ fetch_depth(double const& u, double const& v,
           is_ground = false;
           max_dist = invalid_;
           order = invalid_;
-	    return (unsigned char)253; // invalid depth value
+	  return (unsigned char)253; // invalid depth value
         }
         min_dist = sph_vol_->get_depth_interval(depth_uv);
         max_dist = invalid_;
@@ -188,4 +202,15 @@ bool volm_spherical_layers::compute_layers(){
     }
   } // loop over rays for current camera
   return true;
+}
+void volm_spherical_layers::clear(){
+  min_dist_layer_.clear();
+  max_dist_layer_.clear();
+  order_layer_.clear();
+  ground_id_layer_.clear();
+  ground_dist_layer_.clear();
+  ground_nlcd_layer_.clear();
+  sky_id_layer_.clear();
+  dist_id_layer_.clear();
+  count_= 0;
 }

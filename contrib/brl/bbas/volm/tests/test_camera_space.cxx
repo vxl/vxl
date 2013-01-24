@@ -16,25 +16,55 @@ static void test_camera_space()
 			head_mid, head_radius, head_inc,
 			tilt_mid, tilt_radius, tilt_inc,
 			roll_mid, roll_radius, roll_inc);
-  for(camera_space_iterator cit = csp.begin(0.0); cit != csp.end(); ++cit){
-    cam_angles ca = cit->camera_angles();
-    ca.print();
-    unsigned indx = cit->cam_index();
-    unsigned roll_index,  fov_index,  head_index, tilt_index;
-    cit->cam_indices(roll_index,  fov_index,  head_index, tilt_index);
-    unsigned de_roll_index,  de_fov_index,  de_head_index, de_tilt_index;
-    cit->cam_indices(indx,de_roll_index,  de_fov_index,  
-		     de_head_index, de_tilt_index);
-    unsigned de_indx = cit->cam_index(roll_index,  fov_index,  
-				      head_index, tilt_index);
-    
-    vcl_cout << "(index " << indx << ' ' << de_indx << ")\n";
-    vcl_cout << "(" << roll_index << ' ' << fov_index << ' '
-	     << head_index << ' ' << tilt_index << ")\n";
-    vcl_cout << "(" << de_roll_index << ' ' << de_fov_index << ' '
-	     << de_head_index << ' ' << de_tilt_index << ")\n";
-  }
+  //test iterator functions
+  camera_space_iterator cit = csp.begin(0.0);
+  cit += 110;
+  ++cit;
+  cam_angles ca = cit->camera_angles();
+  ca.print();
+  //test accessors and index transforms
+  unsigned indx = cit->cam_index();
+  unsigned roll_index,  fov_index,  head_index, tilt_index;
+  cit->cam_indices(roll_index,  fov_index,  head_index, tilt_index);
+  unsigned de_roll_index,  de_fov_index,  de_head_index, de_tilt_index;
+  cit->cam_indices(indx,de_roll_index,  de_fov_index,  
+		   de_head_index, de_tilt_index);
+  unsigned de_indx = cit->cam_index(roll_index,  fov_index,  
+				    head_index, tilt_index);
+  vcl_cout << "(index " << indx << ' ' << de_indx << ")\n";
+  vcl_cout << "(" << roll_index << ' ' << fov_index << ' '
+	   << head_index << ' ' << tilt_index << ")\n";
+  vcl_cout << "(" << de_roll_index << ' ' << de_fov_index << ' '
+	   << de_head_index << ' ' << de_tilt_index << ")\n";
+  bool good = indx==471;
+  good = good && (cit != csp.end());
+  good = good && (de_indx == indx);
+  good = good && (roll_index == 1)&&(fov_index == 2)&&(head_index ==6);
+  good = good && (tilt_index = 1);
+  good = good && (roll_index == de_roll_index)&&(fov_index == de_fov_index)&&
+    (head_index ==de_head_index)&&(tilt_index == de_tilt_index);
+  TEST("camera iterator and index transforms", good, true);
+  // test camera angles
+  double er = vcl_fabs(ca.roll_-0.0) + vcl_fabs(ca.top_fov_ - 5.0);
+  er += vcl_fabs(ca.heading_-90.0) + vcl_fabs(ca.tilt_-80.0);
+  TEST_NEAR("camera angles", er, 0.0, 0.01);
+  //test generation of full camera space
+  csp.generate_full_camera_index_space();
+  good = csp.remove_camera_index(indx);
+  TEST("full camera space, remove camera", good, true);
 
+  // test binary I/O
+  vsl_b_ofstream os("./temp.bin");
+  vsl_b_write(os, &csp);
+  os.close();
+  vsl_b_ifstream is("./temp.bin");
+  volm_camera_space* csp_in;
+  vsl_b_read(is, csp_in);
+  cam_angles in_angs = csp_in->camera_angles(indx);
+  double er_in = vcl_fabs(in_angs.roll_-0.0) + vcl_fabs(in_angs.top_fov_ - 5.0);
+  er_in += vcl_fabs(in_angs.heading_-90.0) + vcl_fabs(in_angs.tilt_-80.0);
+  TEST_NEAR("camera angles from binary", er_in, 0.0, 0.01);
+  TEST("number of valid indices", (csp_in->valid_indices().size()), 1079);
 }
 
 

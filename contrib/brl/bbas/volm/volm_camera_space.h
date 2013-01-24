@@ -15,26 +15,32 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vbl/vbl_ref_count.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vsl/vsl_binary_io.h>
 // a struct to hold cam angles
 class cam_angles{
  public:
- cam_angles(double heading, double tilt, double roll, double top_fov):
-  heading_(heading), tilt_(tilt), roll_(roll), top_fov_(top_fov){}
+ cam_angles(double roll, double top_fov, double heading, double tilt):
+  roll_(roll), top_fov_(top_fov), heading_(heading), tilt_(tilt) {}
   void print() const{
-    vcl_cout << "(h: " << heading_ << " t: " << tilt_
-             << " r: " << roll_ << " f: " << top_fov_ << ")\n";}
-  double  heading_;
-  double  tilt_;
+    vcl_cout << "(r: " << roll_ << " f: " << top_fov_
+             << " h: " << heading_ << " t: " << tilt_ << ")\n";}
   double  roll_;
   double  top_fov_;
+  double  heading_;
+  double  tilt_;
 };
 //: defines a space of camera hypotheses
 // heading x tilt x roll x focal length
 class camera_space_iterator;
-class volm_camera_space
+class volm_camera_space : public vbl_ref_count
 {
  public:
+  //default constructor
+  volm_camera_space():altitude_(0.0),ni_(0), nj_(0), head_mid_(0.0),
+    head_radius_(0.0), head_inc_(0.0),tilt_mid_(0.0), tilt_radius_(0.0),
+    tilt_inc_(0.0), roll_mid_(0.0),roll_radius_(0.0), roll_inc_(0.0){}
   // angle units in degrees
   volm_camera_space(vcl_vector<double> const& top_fov, double altitude,
                     unsigned ni, unsigned nj,
@@ -50,24 +56,25 @@ class volm_camera_space
   double head_mid() const {return head_mid_;}
   double head_radius() const {return head_radius_;}
   double head_inc() const {return head_inc_;}
-  double n_head() const {return n_head_;}
+  unsigned n_head() const {return n_head_;}
 
   double tilt_mid() const {return tilt_mid_;}
   double tilt_radius() const {return tilt_radius_;}
   double tilt_inc() const {return tilt_inc_;}
-  double n_tilt() const {return n_tilt_;}
+  unsigned n_tilt() const {return n_tilt_;}
 
   double roll_mid() const {return roll_mid_;}
   double roll_radius() const {return roll_radius_;}
   double roll_inc() const {return roll_inc_;}
-  double n_roll() const {return n_roll_;}
+  unsigned n_roll() const {return n_roll_;}
 
   //: focal length space
   vcl_vector<double> top_fovs() const {return top_fovs_;}
-  double n_fovs() const {return n_fovs_;}
+  unsigned n_fovs() const {return n_fovs_;}
 
   //: camera at current state of iterator
-  vpgl_perspective_camera<double> camera() const;
+  vpgl_perspective_camera<double> camera() const{
+    return this->camera(index_);}
 
   //: camera angles at current state of iterator
   cam_angles camera_angles() const;
@@ -86,7 +93,7 @@ class volm_camera_space
 		   unsigned & roll_index, unsigned& fov_index,
 		   unsigned & head_index, unsigned& tilt_index) const;
   
-    //: transform indices to 1-d index
+  //: transform indices to 1-d index
   unsigned cam_index(unsigned roll_index, unsigned fov_index,
 		     unsigned head_index, unsigned tilt_index) const;
 
@@ -95,6 +102,16 @@ class volm_camera_space
   
   //: camera angles at specified index
   cam_angles camera_angles(unsigned cam_index) const;
+  
+  //: generate the full set of camera indices
+  void generate_full_camera_index_space();
+
+  //: remove a camera from the index space
+  bool remove_camera_index(unsigned cam_index);
+
+  //: access valid camera indices  
+  const vcl_vector<unsigned>& valid_indices() const{
+    return valid_camera_indices_;}
 
   //: the iterator at the start of camera space
   camera_space_iterator begin();
@@ -108,8 +125,27 @@ class volm_camera_space
   void init();
   bool next_cam();
 
+  //: iterator for valid camera indices
+  vcl_vector<unsigned>::iterator valid_begin(){
+    return valid_camera_indices_.begin();}
+
+  vcl_vector<unsigned>::iterator valid_end(){
+    return valid_camera_indices_.end();}
+
+  // ===========  binary I/O ================
+  //: version
+  unsigned version() const {return 1;}
+
+  //: binary IO write
+  void b_write(vsl_b_ostream& os);
+
+  //: binary IO read
+  void b_read(vsl_b_istream& is);
+
  private:
-  //: camera center high above terrain
+  //: make angle ranges consistent
+  void adjust_limits();
+  //: camera center height above terrain
   double altitude_;
   //: image dimensions
   unsigned ni_, nj_;
@@ -141,6 +177,7 @@ class volm_camera_space
   unsigned roll_index_;
   unsigned fov_index_;
   unsigned index_;
+  vcl_vector<unsigned> valid_camera_indices_;
 };
 
 class camera_space_iterator
@@ -196,4 +233,12 @@ class camera_space_iterator
   volm_camera_space* cam_space_;
 };
 
+#include "volm_camera_space_sptr.h"
+void vsl_b_write(vsl_b_ostream& os, const volm_camera_space* rptr);
+
+void vsl_b_read(vsl_b_istream &is, volm_camera_space*& rptr);
+
+void vsl_b_write(vsl_b_ostream& os, const volm_camera_space_sptr& rptr);
+
+void vsl_b_read(vsl_b_istream &is, volm_camera_space_sptr& rptr);
 #endif // volm_volm_camera_space_h_

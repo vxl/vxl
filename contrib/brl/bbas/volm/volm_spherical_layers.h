@@ -34,6 +34,14 @@ class volm_spherical_layers
 			unsigned char default_sky_order,
 			double d_threshold,
 			unsigned log_downsample_ratio);
+  volm_spherical_layers(depth_map_scene_sptr const& dm_scene,
+			double altitude,
+			volm_spherical_container_sptr const& sph_vol,
+			volm_spherical_shell_container_sptr const& sph_shell,
+			unsigned char invalid,
+			unsigned char default_sky_order,
+			double d_threshold,
+			unsigned log_downsample_ratio);
 		   
   //: accessors
   //: the minimum distance for each ray
@@ -65,8 +73,12 @@ class volm_spherical_layers
     {return cam_;}
   //: the count of valid rays
   unsigned count() const {return count_;}
+  //: set the perspective camera
+  void set_camera(vpgl_perspective_camera<double> const& cam)
+  { cam_ = cam;}
   //: compute shell layers
   bool compute_layers();
+  void clear();
  private:
   unsigned char fetch_depth(double const& u, double const& v,
 			    vcl_vector<depth_map_region_sptr> const& depth_regions,
