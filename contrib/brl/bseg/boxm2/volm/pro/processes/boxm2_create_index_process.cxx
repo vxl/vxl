@@ -166,9 +166,9 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   double radius = 1;
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
-  int layer_size = (int)(sph_shell->get_container_size());
-  params.layer_size = layer_size;
-  boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
+  params.layer_size = sph_shell->get_container_size();
+  int layer_size = (int)params.layer_size;
+  boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, buffer_capacity);
   if (!ind->initialize_write(index_file)) {
     vcl_cerr << "Cannot initialize " << index_file << " for write!\n";
     return false;
@@ -530,7 +530,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   double radius = 1;
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
-  int layer_size = (int)(sph_shell->get_container_size());
+  unsigned layer_size = sph_shell->get_container_size();
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
   if (!ind->initialize_read(index_file)) {
     vcl_cerr << "Cannot initialize index from file: " << index_file << vcl_endl;
@@ -635,14 +635,13 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
     return false;
   }
  
-  int layer_size = (int)params.layer_size;
-  boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, 1);
+  boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, 1);
   if (!ind->initialize_read(index_file)) {
     vcl_cerr << "Cannot initialize index from file: " << index_file << vcl_endl;
     return false;
   }
 
-  vcl_vector<unsigned char> values(layer_size);
+  vcl_vector<unsigned char> values(params.layer_size);
   for (unsigned j = 0; j < hyp_id; ++j)
     ind->get_next(values);
   ind->get_next(values);  // this one is the hyp_id'th one

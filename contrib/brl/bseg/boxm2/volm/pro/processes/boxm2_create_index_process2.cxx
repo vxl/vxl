@@ -181,8 +181,8 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   double radius = 1;
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
-  int layer_size = (int)(sph_shell->get_container_size());
-  params.layer_size = layer_size; 
+  params.layer_size = sph_shell->get_container_size();
+  int layer_size = (int)params.layer_size; 
 
   //: adjust dmax if scene has very few blocks
   float dmax = params.dmax;
