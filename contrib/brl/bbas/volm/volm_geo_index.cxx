@@ -53,7 +53,7 @@ void construct_sub_tree(volm_geo_index_node_sptr parent, float min_size) {
 // the stopping criterion is when a child's box is less equal than min_size arcseconds
 volm_geo_index_node_sptr volm_geo_index::construct_tree(volm_tile t, float min_size)
 {
-  vgl_point_2d<float> p1(t.lower_left_lon(), t.lower_left_lat());
+  vgl_point_2d<float> p1((float)t.lower_left_lon(), (float)t.lower_left_lat());
   vgl_point_2d<float> p2(p1.x()+t.scale_i_, p1.y()+t.scale_j_);
   vgl_box_2d<float> box(p1, p2);
   vcl_cout << "box: " << box << vcl_endl;
@@ -359,8 +359,10 @@ bool volm_geo_index::add_hypothesis(volm_geo_index_node_sptr root, double lon, d
     }
   }
   bool added = false;
-  for (unsigned i = 0; i < root->children_.size(); i++) 
-    added = add_hypothesis(root->children_[i], lon, lat, elev);
+  for (unsigned i = 0; i < root->children_.size(); i++) {
+    if (root->children_[i] && root->children_[i]->extent_.contains((float)lon, (float)lat))
+      added = add_hypothesis(root->children_[i], lon, lat, elev);
+  } 
   return added;
 }
 
@@ -384,4 +386,29 @@ void volm_geo_index::get_leaves_with_hyps(volm_geo_index_node_sptr root, vcl_vec
   if (!at_least_one_child && root->hyps_ && root->hyps_->size() > 0)
     leaves.push_back(root);
    
+}
+
+//: return the leaf and the hyp id of the closest hyp to the given location
+volm_geo_index_node_sptr volm_geo_index::get_closest(volm_geo_index_node_sptr root, double lat, double lon, unsigned& hyp_id)
+{
+  if (!root)
+    return 0;
+
+  vgl_point_3d<double> h;
+  if (root->hyps_) {
+    root->hyps_->get_closest(lat, lon, h, hyp_id);
+    return root;
+  }
+  if (!root->children_.size())
+    return 0;
+  for (unsigned i = 0; i < root->children_.size(); i++) {
+    if (!root->children_[i])
+      continue;
+    if (root->children_[i]->extent_.contains((float)lon, (float)lat)) {
+      volm_geo_index_node_sptr c = get_closest(root->children_[i], lat, lon, hyp_id);
+      if (c)
+        return c;
+    }
+  }
+  return 0;
 }
