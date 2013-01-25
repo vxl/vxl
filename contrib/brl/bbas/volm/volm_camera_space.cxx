@@ -285,3 +285,16 @@ void volm_camera_space::b_read(vsl_b_istream& is)
     return;
   }
 }
+
+vcl_string cam_angles::get_string() const
+{
+  vcl_stringstream str; 
+  str << "_h_" << heading_ << "_t_" << tilt_ << "_r_" << roll_ << "_top_fov_" << top_fov_;
+  return str.str();
+}
+
+vcl_string volm_camera_space::get_string(unsigned cam_index) const
+{
+  cam_angles angles = this->camera_angles(cam_index);
+  return angles.get_string();
+}

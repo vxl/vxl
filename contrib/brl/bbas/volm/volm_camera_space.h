@@ -26,6 +26,8 @@ class cam_angles{
   void print() const{
     vcl_cout << "(r: " << roll_ << " f: " << top_fov_
              << " h: " << heading_ << " t: " << tilt_ << ")\n";}
+  vcl_string get_string() const;
+
   double  roll_;
   double  top_fov_;
   double  heading_;
@@ -102,6 +104,7 @@ class volm_camera_space : public vbl_ref_count
   
   //: camera angles at specified index
   cam_angles camera_angles(unsigned cam_index) const;
+  vcl_string get_string(unsigned cam_index) const;
   
   //: generate the full set of camera indices
   void generate_full_camera_index_space();
