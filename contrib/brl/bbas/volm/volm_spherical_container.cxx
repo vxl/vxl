@@ -378,3 +378,10 @@ void volm_spherical_container::first_res(double res, unsigned int& offset, unsig
   }
 }
 
+void volm_spherical_container::get_depth_intervals(vcl_vector<float>& ints)
+{
+  vcl_map<double, unsigned char>::iterator iter = depth_interval_map_.begin();
+  for (; iter != depth_interval_map_.end(); ++iter)
+    ints.push_back((float)iter->first);
+}
+

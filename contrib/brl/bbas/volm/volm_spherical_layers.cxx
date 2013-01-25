@@ -75,7 +75,7 @@ fetch_depth(double const& u, double const& v,
     }
   }
   // no object regions, check if ground plane exists
-  unsigned gp_size = ground_plane.size();
+  unsigned gp_size = (unsigned)ground_plane.size();
   if (gp_size) {
     for (unsigned i = 0; i < gp_size; ++i) {
       vgl_polygon<double> vgl_ground = 
@@ -105,14 +105,14 @@ fetch_depth(double const& u, double const& v,
         min_dist = sph_vol_->get_depth_interval(depth_uv);
         max_dist = invalid_;
         order = (unsigned char)(ground_plane[i]->order());
-        grd_nlcd = (unsigned char)volm_nlcd_table::land_id[ground_plane[i]->nlcd_id()];
+        grd_nlcd = volm_nlcd_table::land_id[ground_plane[i]->nlcd_id()].first;
         return min_dist;
       }
     }
   }
   // check if (u, v) is contained in sky 
   // considered last since all objects should be closer than sky
-  unsigned sky_size = sky.size();
+  unsigned sky_size = (unsigned)sky.size();
   if (sky_size) {
     for (unsigned i = 0; i < sky_size; ++i) {
       vgl_polygon<double> vgl_sky = 

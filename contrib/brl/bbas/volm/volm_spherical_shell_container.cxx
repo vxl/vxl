@@ -5,6 +5,7 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <bvrml/bvrml_write.h>
+#include <volm/volm_io.h>
 #include <vcl_cassert.h>
 
 // constructor
@@ -268,7 +269,7 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vc
   bvrml_write::write_vrml_sphere(ofs, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
 
   // write the voxel structure
-  float disc_radius = 0.05f;
+  float disc_radius = 0.09f;
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_points_.size(); i++) {
     vgl_vector_3d<double> ray = cart_points_[i]-orig;
@@ -309,3 +310,29 @@ void volm_spherical_shell_container::panaroma_img(vil_image_view<vil_rgb<vxl_byt
   }
 }
 
+void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
+{
+  assert(values.size() == sph_points_.size());
+  img.set_size(360, 180);
+  img.fill(127);
+  for (unsigned i = 0; i < sph_points_.size(); i++) {
+    vsph_sph_point_3d pt = sph_points_[i];
+    unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180.0+0.5);
+    unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180.0+0.5);
+    if (values[i] == 253) { // invalid
+      img(ii,jj).r = 255;
+      img(ii,jj).g = 0;
+      img(ii,jj).b = 0;
+    } else if (values[i] == 254) { // sky
+      img(ii,jj).r = 0;
+      img(ii,jj).g = 0;
+      img(ii,jj).b = 255;
+    } else {
+      if (volm_nlcd_table::land_id.find((int)values[i]) == volm_nlcd_table::land_id.end()) {
+        vcl_cerr << "cannot find this value: " << (int)values[i] << " in the color table!\n";
+        img(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
+      } else 
+        img(ii,jj) = volm_nlcd_table::land_id[(int)values[i]].second; 
+    }
+  }
+}

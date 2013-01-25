@@ -48,6 +48,7 @@ class volm_spherical_container : public vbl_ref_count
   vcl_vector<volm_voxel>& get_voxels() { return voxels_; }
   vcl_map<double, unsigned int>& get_depth_offset_map() { return depth_offset_map_;}
   vcl_map<double, unsigned char>& get_depth_interval_map() { return depth_interval_map_; }
+  void get_depth_intervals(vcl_vector<float>& ints);
   //: find the interval of the given depth value, i.e. return interval such that d1 <= value < d2 (caution: interval id is 1 + index in depth_interval_map_)
   unsigned char get_depth_interval(double value);
 
