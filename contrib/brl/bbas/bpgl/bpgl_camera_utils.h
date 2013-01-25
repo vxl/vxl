@@ -50,5 +50,16 @@ class bpgl_camera_utils
     
   static vcl_string get_string(double ni, double nj, double right_f, double top_f, double alt, double head, double tilt, double roll);
   
+  static void 
+    ray_spherical_coordinates(vpgl_perspective_camera<double> const& cam,
+			      double u, double v, 
+			      double& elevation, double& azimuth,
+			      vcl_string units = "radians");
+  
+  static vgl_polygon<double> 
+    project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
+				  vgl_polygon<double> const& image_poly,
+				  vcl_string units = "radians");
+  
 };
 #endif //bpgl_camera_utils_h_
