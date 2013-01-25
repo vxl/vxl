@@ -4,7 +4,7 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
                                                   __global unsigned*                 n_obj,         // query -- number of objects (single unsigned)
                                                   __global unsigned*                grd_id,         // query -- ground index id
                                                   __global unsigned*            grd_offset,         // query -- ground array offset indicator
-                                                  __global unsigned char*         grd_dist,         // query -- ground query distance (single float)
+                                                  __global unsigned char*         grd_dist,         // query -- ground query distance   (single float)
                                                   __global float*               grd_weight,         // query -- ground weight parameter (single float)
                                                   __global unsigned*                sky_id,         // query -- sky index id
                                                   __global unsigned*            sky_offset,         // query -- sky array offset indicator
@@ -13,14 +13,17 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
                                                   __global unsigned*            obj_offset,         // query -- object array offset indicator
                                                   __global unsigned char*     obj_min_dist,         // query -- object query minimium distance
                                                   __global float*               obj_weight,         // query -- object weight parameter array
-                                                  __global unsigned*                 n_ind,         // index -- number of indices passed into device
+                                                  __global unsigned*                 n_ind,         // index -- number of indices passed into device (single unsigned)
+                                                  __global unsigned*            layer_size,         // index -- size of spherical shell container (single unsigned)
                                                   __global unsigned char*            index,         // index -- index depth array
-                                                  __global unsigned*          index_offset,         // index -- index depth array offset indicator
-                                                  __global unsigned char*               mu,         // average depth array for index
-                                                  __global float*                    score,         // score array (score per index per camera
+                                                  __global float*                    score,         // score array (score per index per camera)
+                                                  __global float*                       mu,         // average depth array for index
+                                                  __global float*           depth_interval,         // depth_interval
+                                                  __global unsigned*          depth_length,         // length of depth_interval table
                                                   __global float*                    debug,         // debug array
-                                                   __local unsigned char*   local_min_dist,         // query -- object minimimu distance on local memory
-                                                   __local float*         local_obj_weight)         // query -- object order list on local memory
+                                                  __local unsigned char*    local_min_dist,         // query -- object minimimu distance on local memory
+                                                  __local float*          local_obj_weight,         // query -- object order list on local memory
+                                                  __local float*      local_depth_interval)         // depth_interval on local memory
 {
   // get the cam_id and ind_id
   unsigned cam_id = 0, ind_id = 0;
@@ -31,12 +34,13 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
   //bool debug_bool = (ind_id == 143) && (cam_id == 3);
   
   // passing necessary values from global to the local memory
-  __local unsigned ln_cam, ln_obj, ln_ind;
+  __local unsigned ln_cam, ln_obj, ln_ind, ln_layer_size;
   __local float l_grd_weight, l_sky_weight;
   if (llid == 0) {
     ln_cam = *n_cam;
     ln_obj = *n_obj;
     ln_ind = *n_ind;
+    ln_layer_size = *layer_size;
     l_grd_weight = *grd_weight;
     l_sky_weight = *sky_weight;
   }
@@ -45,7 +49,19 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
     local_obj_weight[llid] = obj_weight[llid];
   }
   barrier(CLK_LOCAL_MEM_FENCE);
+  if (llid == 0) {
+    for(unsigned i = 0; i < (*depth_length); i++) {
+      local_depth_interval[i] = depth_interval[i];
+    }
+  }
+  barrier(CLK_LOCAL_MEM_FENCE);
 
+  //if( cam_id == 0 && ind_id == 1) {
+  //  debug[0] = *depth_length;
+  //  for(unsigned i =0 ; i < (*depth_length); i++) {
+  //    debug[i+1] = depth_interval[i];
+  //  }
+  //}
 //  if( debug_bool ){
 //    debug[0] = (float)get_global_id(0);
 //    debug[1] = (float)get_global_id(1);
@@ -64,8 +80,7 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
   
   if ( cam_id < ln_cam && ind_id < ln_ind ) {
     // locate index offset
-    unsigned start_ind = index_offset[ind_id];
-    
+    unsigned start_ind = ind_id * (ln_layer_size);
     // calculate sky score 
     // locate the sky array
     unsigned start_sky = sky_offset[cam_id];
@@ -88,7 +103,7 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
       unsigned id = start_ind + grd_id[k];
       uchar ind_d = index[id];
       uchar grd_d = grd_dist[k];
-      if ( ind_d >= (grd_d-1) && ind_d <= (grd_d+1) )
+      if ( ind_d >= (grd_d-1) && ind_d <= (grd_d+5) )
         grd_count += 1;
     }
     float score_grd;
@@ -103,19 +118,20 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
       unsigned offset_id = k + ln_obj * cam_id;
       unsigned start_obj = obj_offset[offset_id];
       unsigned end_obj = obj_offset[offset_id+1];
-      unsigned mu_obj = 0;
+         float mu_obj = 0;
       unsigned count = 0;
+      
       for (unsigned i = start_obj; i < end_obj; i++) {   // loop over each voxel in object k
         unsigned id = start_ind + obj_id[i];
         unsigned d = index[id];
-        if (d != 254) {
-          mu_obj += d;
+        if (d < 253) {
+          mu_obj += local_depth_interval[d];
           count += 1;
         }
       }
       mu_obj = (count > 0) ? mu_obj/count : 0;
       unsigned mu_id = k + mu_start_id;
-      mu[mu_id] =  convert_uchar(mu_obj);
+      mu[mu_id] =  mu_obj;
     }
     // calculate object score
     // note that the two neighboring objects may have same order 
@@ -133,12 +149,12 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
         unsigned d = index[id];
         unsigned s_vox_ord = 1;
         unsigned s_vox_min = 0;
-        if (d != 254) {
+        if (d < 253) {
           // calculate order score for voxel i
           for (unsigned mu_id = 0; (s_vox_ord && mu_id < k); mu_id++)
-            s_vox_ord = s_vox_ord * (d >= mu[mu_id + mu_start_id]);
+            s_vox_ord = s_vox_ord * (local_depth_interval[d] >= mu[mu_id + mu_start_id]);
           for (unsigned mu_id = k+1; (s_vox_ord && mu_id < ln_obj); mu_id++)
-            s_vox_ord = s_vox_ord * (d <= mu[mu_id + mu_start_id]);
+            s_vox_ord = s_vox_ord * (local_depth_interval[d] <= mu[mu_id + mu_start_id]);
           // calculate min_distance socre for voxel i
           if( d > local_min_dist[k] )
             s_vox_min = 1;
@@ -172,6 +188,5 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
     }
 */
   }  // end of the calculation of index ind_id and camera cam_id
-  
 
 }

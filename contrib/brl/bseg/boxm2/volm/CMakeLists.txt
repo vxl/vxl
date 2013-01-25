@@ -16,6 +16,8 @@ SET(boxm2_volm_sources
     boxm2_volm_locations.h boxm2_volm_locations.cxx
     boxm2_volm_locations_sptr.h
     boxm2_volm_obj_based_matcher.h  boxm2_volm_obj_based_matcher.cxx
+    boxm2_volm_matcher_p1.h         boxm2_volm_matcher_p1.cxx
+    boxm2_volm_matcher_p2.h         boxm2_volm_matcher_p2.cxx
     boxm2_volm_wr3db_index.h        boxm2_volm_wr3db_index.cxx
     boxm2_volm_wr3db_index_sptr.h
    )
