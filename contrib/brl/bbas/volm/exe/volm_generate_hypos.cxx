@@ -229,12 +229,46 @@ int main(int argc,  char** argv)
   vul_arg<float> inc("-inc", "increments in arcseconds, e.g. 0.1 for ~3m increments", 0.1f);
   vul_arg<unsigned> nh("-nh", "number of hyps in each direction in one leaf tile, e.g. 100 so that each tile has 100x100 hyps", 100); 
   vul_arg<vcl_string> out_pre("-out_pre", "output file folder with file seperator at the end", "");
-  vul_arg<bool> add_gt("-addgt", "add known gt locations?", false); // if no -addgt argument then the value is false, if there is one then the value is true
+  vul_arg<vcl_string> add_gt("-addgt", "add known gt locations? pass the name of txt file containing gt locations", ""); // if no -addgt argument then the value is false, if there is one then the value is true
   vul_arg<unsigned> tile_id("-tile", "id of the tile", 0);
   vul_arg<unsigned> utm_zone("-zone", "utm zone to fill", 17);
+  vul_arg<bool> read("-read", "if passed only read the index in the out_pre() folder and report some statistics", false);
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
+
+  // change to wr1 tiles for desert
+  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
+  vcl_cout << " number of tiles: " << tiles.size() << vcl_endl;
+  unsigned i = tile_id();
+  if (i >= tiles.size()) {
+    vcl_cerr << "tile id: " << i << " is greater than number of tiles: " << tiles.size() << "!\n";
+    vul_arg_display_usage_and_exit();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+
+  if (read()) {
+    if (in_folder().compare("") == 0) {
+      vul_arg_display_usage_and_exit();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    } 
+    float min_s;
+    vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << i;
+    volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name.str() + ".txt", min_s);
+    vcl_vector<volm_geo_index_node_sptr> leaves2;
+    volm_geo_index::get_leaves(root, leaves2);
+    vcl_cout << "\t number of leaves: " << leaves2.size() << vcl_endl;
+    volm_geo_index::read_hyps(root, file_name.str());
+    vcl_cout << " read hyps!\n";
+    vcl_vector<volm_geo_index_node_sptr> leaves;
+    volm_geo_index::get_leaves_with_hyps(root, leaves);
+    vcl_cout << "Geo index for tile: " << i << " stored in: " << file_name.str() << vcl_endl;
+    vcl_cout << "\t number of leaves with hyps: " << leaves.size() << vcl_endl;
+    unsigned size = volm_geo_index::hypo_size(root);
+    vcl_cout << "\t total number of hypos: " << size << vcl_endl;
+    return volm_io::SUCCESS;
+  }
+
   if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || in_poly().compare("") == 0) {
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
@@ -253,13 +287,7 @@ int main(int argc,  char** argv)
   vcl_cout << " increments in seconds: " << inc_in_sec << '\n';
   vcl_cout << " only putting hyps in UTM zone: " << utm_zone() << '\n';
 
-  // change to wr1 tiles for desert
-  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
-  unsigned i = tile_id();
-  if (i >= tiles.size()) {
-    vcl_cerr << "tile id: " << i << " is greater than number of tiles: " << tiles.size() << "!\n";
-    return 0;
-  }
+  
   
   volm_geo_index_node_sptr root = volm_geo_index::construct_tree(tiles[i], (float)size, poly); 
 
@@ -333,8 +361,8 @@ int main(int argc,  char** argv)
   unsigned r_cnt = volm_geo_index::hypo_size(root) ;
   vcl_cout << " root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
   
-  if (add_gt()) {
-    //: add any gt positions if any
+  if (add_gt().compare("") != 0) {  // user passed the path to a text file with the gt locations
+#if 0    //: add any gt positions if any
     if (volm_geo_index::add_hypothesis(root, -79.857689, 32.759063, 1.60))
       vcl_cout << " added p1a_test1_06-GROUNDTRUTH\n";
     
@@ -350,7 +378,24 @@ int main(int argc,  char** argv)
       vcl_cout << " added p1a_test1_38-GROUNDTRUTH\n";
     if (volm_geo_index::add_hypothesis(root, -79.268871, 33.365799, 1.60))
       vcl_cout << " added p1a_test1_34-GROUNDTRUTH\n";
-
+#endif
+    vcl_ifstream ifs(add_gt().c_str());
+    int cnt; ifs >> cnt; vcl_cout << " adding " << cnt <<" gt locs!\n";
+    for (int j = 0; j < cnt; j++) {
+      vcl_string name; ifs >> name;
+      double lat, lon, elev; ifs >> lat; ifs >> lon; ifs >> elev;
+      vpgl_utm u; int zone;  double x, y;
+      u.transform(lat, lon, x, y, zone);
+      if (zone != utm_zone()) {
+        vcl_cout << name << " is in zone: " << zone <<" not in " << utm_zone() << " skipping!\n";
+        continue;
+      }
+      vcl_cout << name << " adding.. " << lat <<", " << lon << " ";
+      bool added = volm_geo_index::add_hypothesis(root, lon, lat, elev); 
+      if (added) vcl_cout << " success!\n";
+      else vcl_cout <<" not found in tree of tile: " << tile_id() << "!\n";
+    }
+    
     unsigned r_cnt = volm_geo_index::hypo_size(root) ;
     vcl_cout << " after addition of gt locs, root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
   }
