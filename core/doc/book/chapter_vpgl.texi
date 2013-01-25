@@ -370,7 +370,7 @@ vgl_homg_point<double> p(1.0, 2.0);
 //The right epipolar line
 vgl_homg_line_2d<double> l_r = F.r_epipolar_line( p );
 @end example
-@subsection @code{vpgl_algo}
+@section Algorithms in @code{vpgl_algo}
 A number of algorithms have been developed that make use of the camera data structures in vpgl. These algorithms are described in the following subsections.
 @subsubsection @code{vpgl_fm_compute_*_point}
 The library contains implementations of computing the fundamental matrix from differing numbers of correspondences between the left and right images. The most widely used algorithm is the so-called eight-point algorithm. An example of its application follows.
