@@ -298,3 +298,9 @@ vcl_string volm_camera_space::get_string(unsigned cam_index) const
   cam_angles angles = this->camera_angles(cam_index);
   return angles.get_string();
 }
+
+void volm_camera_space::print_valid_cams() const
+{
+  for (unsigned i = 0; i < valid_camera_indices_.size(); i++) 
+    vcl_cout << i << ": " << this->get_string(valid_camera_indices_[i]) << "\n";
+}

@@ -119,6 +119,8 @@ class volm_camera_space : public vbl_ref_count
   const vcl_vector<unsigned>& valid_indices() const{
     return valid_camera_indices_;}
 
+  void print_valid_cams() const;
+
   //: the iterator at the start of camera space
   camera_space_iterator begin();
 
