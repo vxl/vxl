@@ -372,7 +372,7 @@ vgl_homg_line_2d<double> l_r = F.r_epipolar_line( p );
 @end example
 @subsection @code{vpgl_algo}
 A number of algorithms have been developed that make use of the camera data structures in vpgl. These algorithms are described in the following subsections.
-@subsubsection{@code{vpgl_fm_compute_*_point}}
+@subsubsection @code{vpgl_fm_compute_*_point}
 The library contains implementations of computing the fundamental matrix from differing numbers of correspondences between the left and right images. The most widely used algorithm is the so-called eight-point algorithm. An example of its application follows.
 @example
 // corresponding points
@@ -382,7 +382,7 @@ vpgl_fundamental_matrix<double> fm1est;
 fmc.compute( p1r, p1l, fm1est );
 @end example
 
-@subsubsection{@code{vpgl_ortho_procrustes}}
+@subsubsection @code{vpgl_ortho_procrustes}
 The orthogonal procrustes problem is defined by the relationship between
 two given 3-d pointsets, i.e.,
 
@@ -404,7 +404,7 @@ trigger solution processing. An example of using the algorithm follows.
 
 @end example
 
-@subsubsection{@code{vpgl_camera_compute} }
+@subsubsection @code{vpgl_camera_compute}
 This algorithm computes camera parameters from known correspondences between a set of 3-d points and their projection into the camera image plane. An example is the  static method,
 
 @example
@@ -415,7 +415,7 @@ bool vpgl_proj_camera_compute::
 @end example
 
 There is also the class @code{vpgl_perspective_camera_compute}, which can find the @math{K}, @math{R}, @math{t} parameters of the perspective camera, or just @math{R} and @math{t}, given @math{K}.
-@subsubsection{@code{vpgl_camera_convert} }
+@subsubsection @code{vpgl_camera_convert}
 This algorithm class converts between various camera types. A typical example is to convert from a rational camera to a generic camera. Recall that a generic camera is represented by a grid of 3-d rays, one for each pixel in a specified image. It is effective to convert the rational camera to a generic camera to enable efficient ray tracing computations. An example of the conversion interface follows.
 @example
 bool convert( vpgl_local_rational_camera<double> const& rat_cam,
@@ -423,7 +423,7 @@ bool convert( vpgl_local_rational_camera<double> const& rat_cam,
               vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
 @end example
 The @code{level} argument refers to the representation of the camera rays, which are stored in a pyramid structure to enable fast computation for projecting a 3-d point into the camera image. @code{level=0} corresponds to the base image resolution of the pyramid.
-@subsubsection{@code{vpgl_rational_adjust_onept}}
+@subsubsection @code{vpgl_rational_adjust_onept}
 In many cases the rational polynomial projection exhibits very high
 relative accuracy, but there can be a small pointing error that can be
 corrected by translating the image plane. It is often the case that an
@@ -455,7 +455,7 @@ bool good  = vpgl_rational_adjust_onept::adjust(cams, corrs, cam_trans,
 
 @end example
 
-@subsubsection{@code{vpgl_rational_adjust}}
+@subsubsection @code{vpgl_rational_adjust}
 This algorithm carries out a similar function to @code{vpgl_rational_adjust_onept} but instead adjusts the translation of a single rational camera from a set of correspondences between 3-d points and 2-d image points. The signature is,
 @example
 bool adjust(vpgl_rational_camera<double> const& initial_rcam,
@@ -464,7 +464,7 @@ bool adjust(vpgl_rational_camera<double> const& initial_rcam,
             vpgl_rational_camera<double> & adj_rcam)
 @end example
 
-@subsection{@code{vpgl_backproject} }
+@subsection @code{vpgl_backproject}
 It is useful for many applications to determine a 3-d point as the
 backprojection of an image point. The 3-d point is not defined unless
 a 3-d surface is also specified. This algorithm class applies
@@ -496,7 +496,7 @@ bool success =
                                 initial_guess, world_point);
 @end example
 
-@subsubsection{@code{vpgl_ray}}
+@subsubsection @code{vpgl_ray}
 This class contains various static methods for computing camera rays. For example, a non-linear computation is needed to determine a ray from a rational camera at a given 3-d point in space. The method signature is,
 @example
 bool ray(vpgl_rational_camera<double> const& rcam,
@@ -513,7 +513,7 @@ bool ray(const vpgl_camera<double>*  cam,
 
 This method polymorphically computes the ray, depending on the camera subclass.
 
-@subsubsection{@code{vpgl_ray_intersect}}
+@subsubsection @code{vpgl_ray_intersect}
 This algorithm class computes the 3-d point that lies closest to a set of camera rays. The algorithm assumes a non-linear solution to include the rational camera. An example intersection computation is illustrated in the following example.
 @example
   vcl_vector<vpgl_camera<double>* > cams(2);
