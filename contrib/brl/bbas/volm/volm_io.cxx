@@ -25,27 +25,34 @@ vcl_map<vcl_string, depth_map_region::orientation> create_orient_map() {
   return m;
 }
 
-vcl_map<int, unsigned char> create_nlcd_map() {
-  vcl_map<int, unsigned char> m;
-  m[11] = 0;
-  m[12] = 1;
-  m[21] = 2;
-  m[22] = 3;
-  m[24] = 4;
-  m[31] = 5;
-  m[41] = 6;
-  m[42] = 7;
-  m[43] = 8;
-  m[52] = 9;
-  m[71] = 10;
-  m[81] = 11;
-  m[82] = 12;
-  m[90] = 13;
+vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > create_nlcd_map() {
+  vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > m;
+  m[0] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (20, vil_rgb<vxl_byte>(255, 0, 0));  // open water
+  m[11] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (0, vil_rgb<vxl_byte>(0, 0, 100));  // open water
+  m[12] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (1, vil_rgb<vxl_byte>(255, 255, 255));  // perennial ice/snow
+  m[21] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (2, vil_rgb<vxl_byte>(50, 0, 0));  // developed, open space
+  m[22] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (3, vil_rgb<vxl_byte>(100, 0, 10));  // developed, low intensity
+  m[23] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (3, vil_rgb<vxl_byte>(200, 0, 100));  // developed, medium intensity  (combined with prev class)
+  m[24] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (4, vil_rgb<vxl_byte>(220, 0, 100));  // developed, high intensity
+  m[31] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (5, vil_rgb<vxl_byte>(170, 170, 170));  // barren land/beach (rock/sand/clay)
+  m[41] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (6, vil_rgb<vxl_byte>(0, 200, 0));  // deciduous forest
+  m[42] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (7, vil_rgb<vxl_byte>(0, 250, 0));  // evergreen forest
+  m[43] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (8, vil_rgb<vxl_byte>(0, 100, 0));  // mixed forest
+  m[51] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (9, vil_rgb<vxl_byte>(10, 50, 0));  // dwarf scrub - alaska only
+  m[52] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (9, vil_rgb<vxl_byte>(10, 50, 0));  // shrub/scrub
+  m[71] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (10, vil_rgb<vxl_byte>(0, 100, 20)); // grassland/herbaceous
+  m[72] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (10, vil_rgb<vxl_byte>(0, 150, 10)); // sedge/herbaceous
+  m[73] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (10, vil_rgb<vxl_byte>(0, 170, 10)); // lichens
+  m[74] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (10, vil_rgb<vxl_byte>(0, 200, 10)); // moss
+  m[81] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (11, vil_rgb<vxl_byte>(0, 120, 120)); // pasture hay
+  m[82] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (12, vil_rgb<vxl_byte>(210, 105, 30)); // cultivated crops
+  m[90] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (13, vil_rgb<vxl_byte>(176, 196, 222)); // woody wetland -- marina
+  m[95] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (13, vil_rgb<vxl_byte>(176, 196, 255)); // Emergent Herbaceous Wetlands 
   return m;
 }
 
 vcl_map<vcl_string, depth_map_region::orientation> volm_orient_table::ori_id = create_orient_map();
-vcl_map<int, unsigned char> volm_nlcd_table::land_id = create_nlcd_map();
+vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > volm_nlcd_table::land_id = create_nlcd_map();
 
 bool volm_io::read_camera(vcl_string kml_file,
                           unsigned const& ni, unsigned const& nj,

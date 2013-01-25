@@ -29,7 +29,7 @@ public:
 class volm_nlcd_table
 {
  public:
-  static vcl_map<int, unsigned char> land_id ; 
+  static vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > land_id ; 
 };
 
 class volm_io
