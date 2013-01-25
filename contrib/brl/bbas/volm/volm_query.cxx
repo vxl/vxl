@@ -355,7 +355,7 @@ void volm_query::generate_regions()
     max_obj_dist_.push_back(sph_depth_->get_depth_interval(depth_regions_[i]->max_depth()));
     order_obj_.push_back((unsigned char)depth_regions_[i]->order());
     obj_orient_.push_back((unsigned char)depth_regions_[i]->orient_type());
-    obj_nlcd_.push_back((unsigned char)volm_nlcd_table::land_id[depth_regions_[i]->nlcd_id()]);
+    obj_nlcd_.push_back(volm_nlcd_table::land_id[depth_regions_[i]->nlcd_id()].first);
   }
   d_threshold_ = 20000.0; //upper depth bound
   for (unsigned i = 0; i < size; ++i) {
@@ -584,7 +584,7 @@ bool volm_query::offset_ingest()
 
   // create object offset
   count = 0;
-  unsigned n_obj = depth_regions_.size();
+  unsigned n_obj = (unsigned)depth_regions_.size();
   dist_offset_.push_back(count);
   for (unsigned cam_id = 0; cam_id < n_cam; cam_id++)
     for (unsigned obj_id = 0; obj_id < n_obj; obj_id++) {
@@ -660,7 +660,7 @@ unsigned char volm_query::fetch_depth(double const& u,
         min_dist = sph_depth_->get_depth_interval(depth_uv);
         max_dist = (unsigned char)255;
         order = (unsigned char)(dm_->ground_plane()[i])->order();
-        grd_nlcd = (unsigned char)volm_nlcd_table::land_id[dm_->ground_plane()[i]->nlcd_id()];
+        grd_nlcd = volm_nlcd_table::land_id[dm_->ground_plane()[i]->nlcd_id()].first;
         return min_dist;
       }
     }
@@ -1097,17 +1097,17 @@ unsigned volm_query::obj_based_query_size_byte() const
   size_byte += this->get_ground_dist_size();   // unsigned char distance
   size_byte += this->get_ground_id_size();     // unsigned char land classfication
   size_byte += 1;                               // unsigned char orientation
-  size_byte += ground_offset_.size()*4;        // unsinged ground offset
+  size_byte += (unsigned)ground_offset_.size()*4;        // unsinged ground offset
   size_byte += 4;                              // float weight
 
   // sky voxel size
   size_byte += this->get_sky_id_size() * 4;    // unsigned id
-  size_byte += sky_offset_.size()*4;           // unsigned sky offset
+  size_byte += (unsigned)sky_offset_.size()*4;           // unsigned sky offset
   size_byte += 4;                              // float weight
 
   // non-sky, non-ground object
   size_byte += this->get_dist_id_size() * 4;   // unsigned id
-  size_byte += dist_offset_.size() * 4;        // unsigned offset
+  size_byte += (unsigned)dist_offset_.size() * 4;        // unsigned offset
   size_byte += (unsigned)min_obj_dist_.size(); // unsigned char distance
   size_byte += (unsigned)max_obj_dist_.size(); // unsigned char distance
   size_byte += (unsigned)obj_orient_.size();   // unsigned char orientation
