@@ -10,7 +10,9 @@
 //   A lens distortion is a 2D warping of the image plane to account for lens effects
 //   not accounted for by the simple camera models.  It is assumed that the map is
 //   bijective, though a closed form solution for the inverse may not exist in general.
-//   A default iterative solver is implemented to solve
+//   A default iterative solver is provided to solve for the inverse mapping.
+//   Currently the iterative solver has only been implemented for the specialized
+//   radial symmetric case in derived class vpgl_radial_distortion.
 
 //: forward declare vgl_homg_point_2d<T> and vgl_vector_2d<T>
 #include <vgl/vgl_fwd.h>

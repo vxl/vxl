@@ -16,7 +16,7 @@
 #include <vcl_cassert.h>
 
 //: Compute a bounding box in the distorted space for an existing box
-// This is computed by sampling alone the box boundary edges
+// This is computed by sampling along the box boundary edges
 // \note in general this is not the inverse of vpgl_lens_unwarp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
@@ -41,7 +41,7 @@ vpgl_lens_warp_bounds(const vpgl_lens_distortion<DataT>& lens,
 }
 
 //: Compute a bounding box for an existing box in the distorted space
-// This is computed by sampling alone the box boundary edges
+// This is computed by sampling along the box boundary edges
 // \note in general this is not the inverse of vpgl_lens_warp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
