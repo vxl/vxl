@@ -858,29 +858,29 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
   for (vcl_map<vcl_string, vil_image_view<float> >::iterator iter = debug_imgs.begin(); iter != debug_imgs.end(); iter++) {
     vcl_string name = "C:\\projects\\FINDER\\query_matching\\scene_depth_exp\\reg_debug_"+iter->first+".tif";
     vil_save(iter->second, name.c_str());
-    name = "C:\\projects\\FINDER\\query_matching\\scene_depth_exp\\reg_debug_"+iter->first+".png";
+    name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_debug_"+iter->first+".png";
     vil_image_view<vxl_byte> dest(ni, nj);
     vil_convert_stretch_range(iter->second, dest);
     vil_save(dest, name.c_str());
   }
 
-  vcl_string name = "C:\\projects\\FINDER\\query_matching\\scene_depth_exp\\reg_sky.tif";
+  vcl_string name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_sky.tif";
   vil_save(sky_img, name.c_str());
-  name = "C:\\projects\\FINDER\\query_matching\\scene_depth_exp\\reg_sky.png";
+  name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_sky.png";
   vil_image_view<vxl_byte> dest(ni, nj);
   vil_convert_stretch_range(sky_img, dest);
   vil_save(dest, name.c_str());
 
-  name = "C:\\projects\\FINDER\\query_matching\\scene_depth_exp\\reg_ground.tif";
+  name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_ground.tif";
   vil_save(ground_img, name.c_str());
-  name = "C:\\projects\\FINDER\\query_matching\\scene_depth_exp\\reg_ground.png";
+  name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_ground.png";
   vil_convert_stretch_range(ground_img, dest);
   vil_save(dest, name.c_str());
 
   for (unsigned r = 0, rr = 0; r < this->scene_regions().size(); r++) {
     if (this->scene_regions()[r]->active()) {
       vcl_stringstream ss; ss << this->scene_regions()[r]->name();
-      vcl_string name = "C:\\projects\\FINDER\\query_matching\\scene_depth_exp\\reg_"+ss.str()+".png";
+      vcl_string name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_"+ss.str()+".png";
       vil_convert_stretch_range(region_imgs[rr], dest);
       vil_save(dest, name.c_str());
       rr++;

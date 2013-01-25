@@ -436,6 +436,7 @@ void depth_map_region::b_write(vsl_b_ostream& os)
   vsl_b_write(os, depth_);
   vsl_b_write(os, min_depth_);
   vsl_b_write(os, max_depth_);
+  vsl_b_write(os, nlcd_id_);
   vsl_b_write(os, depth_inc_);
   vsl_b_write(os, region_plane_);
   vsl_b_write(os, region_2d_.ptr());
@@ -457,6 +458,26 @@ void depth_map_region::b_read(vsl_b_istream& is)
     vsl_b_read(is, depth_);
     vsl_b_read(is, min_depth_);
     vsl_b_read(is, max_depth_);
+    vsl_b_read(is, depth_inc_);
+    vsl_b_read(is, region_plane_);
+    vsol_polygon_2d* r2d=0;
+    vsl_b_read(is, r2d);
+    region_2d_ = r2d;
+    vsol_polygon_3d* r3d=0;
+    vsl_b_read(is, r3d);
+    region_3d_ = r3d;
+  }
+  else if(ver == 2) {
+        vsl_b_read(is, active_);
+    vsl_b_read(is, order_);
+    unsigned temp;
+    vsl_b_read(is, temp);
+    orient_type_ = static_cast<orientation>(temp);
+    vsl_b_read(is, name_);
+    vsl_b_read(is, depth_);
+    vsl_b_read(is, min_depth_);
+    vsl_b_read(is, max_depth_);
+    vsl_b_read(is, nlcd_id_);
     vsl_b_read(is, depth_inc_);
     vsl_b_read(is, region_plane_);
     vsol_polygon_2d* r2d=0;

@@ -10,6 +10,7 @@
 // \verbatim
 //  Modifications
 //     Yi Dong     NOV--2012    added an method to check whether the given camera hypothesis is consistent with defined 2-d ground plane in the image
+//     Yi Dong     JAN--2013    added attributed nlcd_id for land classification
 // \endverbatim
 // units are in meters
 #include <vbl/vbl_ref_count.h>
@@ -123,7 +124,7 @@ class depth_map_region : public vbl_ref_count
                           vpgl_perspective_camera<double> const& cam,
                           double downsample_ratio = 1.0) const;
   //: version
-  unsigned version() const {return 1;}
+  unsigned version() const {return 2;}
 
   //: binary IO write
   void b_write(vsl_b_ostream& os);
