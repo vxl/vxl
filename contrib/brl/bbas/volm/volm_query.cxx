@@ -712,12 +712,31 @@ bool volm_query::weight_ingest()
 #endif
   // equal weight setting, i.e. w_sky = w_ground = w_obj for any objects
   // note we have socre = w_s*S_s + w_g*S_g+ sum(w_k*S_k^ord)/M + sum(w_k*S_k^dist)/M = 1 for ground truth
-  // w_s = w_k = w_g = w gives 4w = 1 give w = 0.25
-  weight_sky_ = 0.25f;
-  weight_grd_ = 0.25f;
-  for (unsigned i = 0; i < depth_regions_.size(); i++)
-    weight_obj_.push_back(0.25f);
-
+  // w_s = w_k = w_g = w gives 4w = 1 give w = 0.25  
+  if (dm_->sky().size() && dm_->ground_plane().size()) {
+    weight_sky_ = 0.25f;
+    weight_grd_ = 0.25f;
+    for (unsigned i = 0; i < depth_regions_.size(); i++)
+      weight_obj_.push_back(0.25f);
+  }
+  else if (dm_->sky().size()) {     // no ground , only sky
+    weight_sky_ = 0.3333333f;
+    weight_grd_ = 0.0f;
+    for (unsigned i = 0; i < depth_regions_.size(); i++)
+      weight_obj_.push_back(0.333333f);
+  }
+  else if (dm_->ground_plane().size()) {  // no sky , only ground
+    weight_grd_ = 0.333333f;
+    weight_sky_ = 0.0f;
+    for (unsigned i = 0; i < depth_regions_.size(); i++)
+      weight_obj_.push_back(0.333333f);
+  }
+  else {                            // no sky, nor ground
+    weight_grd_ = 0.0f;
+    weight_sky_ = 0.0f;
+    for (unsigned i = 0; i < depth_regions_.size(); i++)
+      weight_obj_.push_back(0.5f);
+  }
   return true;
 }
 

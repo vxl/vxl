@@ -187,7 +187,7 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
              || object_types[i] == "ground" || object_types[i] == "water" || object_types[i] == "ocean" )
     {
       double min_depth = object_mindist[i], max_depth = object_maxdist[i];
-      if (min_depth < 20) {  // define it as ground plane
+      if (min_depth < 4) {  // define it as ground plane
         depth_scene->add_ground(poly, min_depth, max_depth, object_orders[i], object_names[i], object_nlcd[i]);
       }
       else {
