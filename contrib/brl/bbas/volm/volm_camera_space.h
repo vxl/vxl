@@ -106,6 +106,9 @@ class volm_camera_space : public vbl_ref_count
   //: generate the full set of camera indices
   void generate_full_camera_index_space();
 
+  //: add the given index to valid camera indices array
+  void add_camera_index(unsigned cam_index) { valid_camera_indices_.push_back(cam_index); }
+
   //: remove a camera from the index space
   bool remove_camera_index(unsigned cam_index);
 
