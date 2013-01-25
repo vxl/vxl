@@ -370,6 +370,36 @@ vgl_homg_point<double> p(1.0, 2.0);
 //The right epipolar line
 vgl_homg_line_2d<double> l_r = F.r_epipolar_line( p );
 @end example
+
+
+@section Lens Distortion
+In addition to camera projection models, there is often a need to model camera lens distortions.
+Lens distortions are modeled as a 2D-to-2D image-space transformations.
+Currently, lens distortion is implemented separately from camera models, but it should be
+possible to build compound camera classes that combine a simple camera projections with a lens distortion.
+Lens distortion is implemented in a class hierarchy analogous to the camera classes.
+
+@subsection @code{vpgl_lens_distortion}
+The base class for all lens distortions is @code{vpgl_lens_distortion}.
+This abstract base class provides method distorting and undistorting pixel locations.
+The @code{distort} function is abstract and should be implemented by derived classes.
+The @code{undistort} function is the inverse operation of @code{distort}.
+The base class is designed to have a default implementation @code{undistort} which uses
+an iterative solver to find an inverse mapping.
+However, this solver still needs to be implemented for the general case.
+
+@subsection @code{vpgl_radial_distortion}
+This class is derived from @code{vpgl_lens_distortion} and is specialized for the case
+of lens distortions which are radially symmetric about some center point.
+Distortion is simplified to a 1D function applied along rays emanating from the center point.
+This class implements @code{distort} in terms of an abstract function @code{distort_radius}.
+An implementation of an iterative solver is provided for @code{undistort}.
+
+@subsection @code{vpgl_poly_radial_distortion}
+This is a concrete class derived from @code{vpgl_radial_distortion} that models
+the 1D radial distortion function with an n-th order polynomial.
+
+
 @section Algorithms in @code{vpgl_algo}
 A number of algorithms have been developed that make use of the camera data structures in vpgl. These algorithms are described in the following subsections.
 @subsection @code{vpgl_fm_compute_*_point}
