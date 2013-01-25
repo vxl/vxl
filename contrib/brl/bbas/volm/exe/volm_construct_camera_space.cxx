@@ -98,7 +98,9 @@ int main(int argc, char** argv)
 
   } else 
     cam_space.generate_full_camera_index_space();
-      
+  
+  cam_space.print_valid_cams();
+
   vsl_b_ofstream ofs(local_out_folder() + "camera_space.bin");
   vsl_b_write(ofs, &cam_space);
   ofs.close();
