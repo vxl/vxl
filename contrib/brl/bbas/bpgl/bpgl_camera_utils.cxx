@@ -184,7 +184,9 @@ project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
       double elevation, azimuth;
       bpgl_camera_utils::ray_spherical_coordinates(cam, vert.x(), vert.y(),
 						   elevation, azimuth, units);
-      vgl_point_2d<double> sph_vert(azimuth, elevation);
+      //maintain consistent coordinate order with the vsph library
+      // elevation == x, azmiuth == y
+      vgl_point_2d<double> sph_vert(elevation,azimuth);
       sph_sheet.push_back(sph_vert);
     }
     sph_sheets.push_back(sph_sheet);

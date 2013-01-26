@@ -50,16 +50,27 @@ class bpgl_camera_utils
     
   static vcl_string get_string(double ni, double nj, double right_f, double top_f, double alt, double head, double tilt, double roll);
   
+  // compute the ray passing through a given pixel. 
+  // the units of elevation and azimuth are set according to the choice,
+  // {"radians", "degrees"}
   static void 
     ray_spherical_coordinates(vpgl_perspective_camera<double> const& cam,
 			      double u, double v, 
 			      double& elevation, double& azimuth,
 			      vcl_string units = "radians");
-  
+
+  // project an image polygon onto the surface of the unit  
+  // sphere with origin at the camera center. The edges of the 
+  // spherical polygon are circular arcs but only the vertices are defined
+  // in this function. Each vertex lies on the surface of the sphere
+  //
+  // Note that the camera is needed only to set the focal length. The
+  // camera rotation parameters only change the location of the region on
+  // the sphere (i.e. translation on the surface of the sphere). 
+  //
   static vgl_polygon<double> 
     project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
 				  vgl_polygon<double> const& image_poly,
 				  vcl_string units = "radians");
-  
 };
 #endif //bpgl_camera_utils_h_

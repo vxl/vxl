@@ -54,8 +54,9 @@ static void test_camera_utils()
   vgl_point_2d<double> sp0 = sph_poly[0][0];
   vgl_point_2d<double> sp2 = sph_poly[0][2];
   vgl_point_2d<double> sp3 = sph_poly[0][3];
-  double t_fov = vcl_fabs(sp0.y()-sp3.y());
-  double r_fov = vcl_fabs(sp2.x()-sp3.x());
+  //x is elevation and y is azimuth
+  double t_fov = vcl_fabs(sp0.x()-sp3.x());
+  double r_fov = vcl_fabs(sp2.y()-sp3.y());
   // shouldn't expect exact recovery since focal length is 
   // the average of top and right fov
   er = vcl_fabs(t_fov-top_fov) + vcl_fabs(r_fov-right_fov);
