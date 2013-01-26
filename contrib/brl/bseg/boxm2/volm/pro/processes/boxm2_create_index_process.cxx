@@ -621,8 +621,14 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   vcl_cout << "hyp " << lat << ", " << lon << " is in leaf: " << leaf->extent_ << vcl_endl;
   vcl_cout << "\t closest to hyp: " << leaf->hyps_->locs_[hyp_id].y() << ", " << leaf->hyps_->locs_[hyp_id].x() << vcl_endl;
 
-  // first visualize regular index
-  vcl_stringstream file_name_pre2; file_name_pre2 << visibility_index_folder << "geo_index_tile_" << tile_id;
+
+   vcl_stringstream file_name_pre2; file_name_pre2 << visibility_index_folder << "geo_index_tile_" << tile_id;
+
+#if 1
+  ////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////// visualize depth interval index //////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////
+ 
   vcl_string index_file = leaf->get_index_name(file_name_pre2.str());
   vcl_string param_file = vul_file::strip_extension(index_file) + ".params";
   boxm2_volm_wr3db_index_params params;
@@ -671,7 +677,61 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   vcl_string img_name = str.str() + ".png";
   vcl_cout << "saving image to: " << img_name << vcl_endl;
   vil_save(img, img_name.c_str());
+#else
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////// visualize label index /////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  vcl_string index_file = leaf->get_label_index_name(file_name_pre2.str());
+  vcl_string param_file = vul_file::strip_extension(index_file) + ".params";
+  boxm2_volm_wr3db_index_params params;
+  if (!params.read_params_file(param_file)) {
+    vcl_cerr << "cannot read: " << param_file << vcl_endl;
+    return false;
+  }
+  vcl_string size_file = vul_file::strip_extension(index_file) + ".txt";
+  unsigned long eis;
+  params.read_size_file(size_file, eis);
+  if (hyp_id < 0 || (unsigned long)hyp_id >= eis) {
+    vcl_cerr << " the hyp id is: " << hyp_id << " which is invalid for the index with: " << eis << " indices read from: " << size_file << vcl_endl;
+    return false;
+  }
+ 
+  boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, 1);
+  if (!ind->initialize_read(index_file)) {
+    vcl_cerr << "Cannot initialize index from file: " << index_file << vcl_endl;
+    return false;
+  }
+
+  vcl_vector<unsigned char> values(params.layer_size);
+  for (unsigned j = 0; j < hyp_id; ++j)
+    ind->get_next(values);
+  ind->get_next(values);  // this one is the hyp_id'th one
+
+  vcl_string prefix = vul_file::strip_extension(index_file);
+  vcl_stringstream str; str << prefix << "_hyp_" << leaf->hyps_->locs_[hyp_id].y() << "_" << leaf->hyps_->locs_[hyp_id].x();
+
+  vcl_string txt_name = str.str() + ".txt";
+  vcl_ofstream ofs(txt_name.c_str());
+  ofs << params.layer_size << '\n';
+  for (unsigned ii = 0; ii < params.layer_size; ii++) 
+    ofs << (int)values[ii] << '\n';
+  ofs.close();
   
+  // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
+  double radius = 1;
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
+  
+  //vcl_string temp_name = str.str() + ".vrml";
+  //sph_shell->draw_template(temp_name, values, (unsigned char)254);
+
+  vil_image_view<vil_rgb<vxl_byte> > img;
+  sph_shell->panaroma_img_class_labels(img, values);
+  vcl_string img_name = str.str() + ".png";
+  vcl_cout << "saving image to: " << img_name << vcl_endl;
+  vil_save(img, img_name.c_str());
+#endif
   return true;
 }
 
