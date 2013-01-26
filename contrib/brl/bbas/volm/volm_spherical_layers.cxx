@@ -3,6 +3,7 @@
 #include <bpgl/depth_map/depth_map_scene.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_shell_container.h>
+#include <vcl_algorithm.h>
 #include <bsol/bsol_algs.h>
 
 #define TOL -1E-8
@@ -20,6 +21,8 @@ volm_spherical_layers(vpgl_perspective_camera<double> const& cam,
   sph_vol_(sph_vol), sph_shell_(sph_shell), invalid_(invalid), 
   default_sky_order_(default_sky_order), d_threshold_(d_threshold),
   log_downsample_ratio_(log_downsample_ratio){
+    scn_regs_ = dm_scene_->scene_regions();
+    vcl_sort(scn_regs_.begin(), scn_regs_.end(), compare_order());
   }
 
 volm_spherical_layers::
@@ -34,6 +37,8 @@ volm_spherical_layers(depth_map_scene_sptr const& dm_scene,
 : dm_scene_(dm_scene),altitude_(altitude),
     sph_vol_(sph_vol), sph_shell_(sph_shell), invalid_(invalid), default_sky_order_(default_sky_order), d_threshold_(d_threshold),
     log_downsample_ratio_(log_downsample_ratio){
+      scn_regs_ = dm_scene_->scene_regions();
+      vcl_sort(scn_regs_.begin(), scn_regs_.end(), compare_order());
     }
 							
 unsigned char volm_spherical_layers::
@@ -134,7 +139,9 @@ fetch_depth(double const& u, double const& v,
 
 bool volm_spherical_layers::compute_layers(){
   vcl_cout << "layers camera \n" << cam_ << '\n';
+#if 0
   vcl_vector<depth_map_region_sptr> scn_regs = dm_scene_->scene_regions();  
+#endif
   dist_id_layer_.resize(scn_regs.size());
   vcl_vector<depth_map_region_sptr> gp_regs = dm_scene_->ground_plane();  
   vcl_vector<depth_map_region_sptr> sky_regs = dm_scene_->sky();  
@@ -164,8 +171,9 @@ bool volm_spherical_layers::compute_layers(){
 	bool is_ground = false, is_sky = false, is_object = false;
 	unsigned obj_id;
 	unsigned char grd_nlcd;
+    // Yi Dong -- modify here to use the scn_regs_ vector which is sorted by depth_region orders
 	min_dist = this->fetch_depth(u, v, 
-				     scn_regs, gp_regs, sky_regs,
+				     scn_regs_, gp_regs, sky_regs,
 				     order, max_dist,
 				     obj_id, grd_nlcd, is_ground,
 				     is_sky, is_object, gp_depth_img);

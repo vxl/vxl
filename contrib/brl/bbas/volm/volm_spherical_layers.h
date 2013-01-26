@@ -95,6 +95,8 @@ class volm_spherical_layers
 
   vpgl_perspective_camera<double> cam_;  
   depth_map_scene_sptr dm_scene_;
+  //: the vector depth_map_regions sorted by their orders
+  vcl_vector<depth_map_region_sptr> scn_regs_;
   double altitude_;
   volm_spherical_container_sptr sph_vol_;
   volm_spherical_shell_container_sptr sph_shell_;
