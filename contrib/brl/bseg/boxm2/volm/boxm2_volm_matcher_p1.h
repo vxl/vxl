@@ -37,7 +37,9 @@ public:
   //: constructor
   boxm2_volm_matcher_p1(volm_query_sptr const& query,
                         vcl_vector<volm_geo_index_node_sptr> const& leaves,
-                        vcl_vector<boxm2_volm_wr3db_index_sptr> const& ind_vec,
+                        float const& buffer_capacity,
+                        vcl_string const& geo_index_folder,
+                        unsigned const& tile_id,
                         vcl_vector<float> const& depth_interval,
                         vgl_polygon<double> const& cand_poly,
                         bocl_device_sptr gpu,
@@ -45,11 +47,7 @@ public:
                         bool const& is_last_pass,
                         vcl_string const& out_folder,
                         float const& score_thres = 0.5,
-                        float const& cam_thres = 0.95) :
-  query_(query), leaves_(leaves), ind_vec_(ind_vec), depth_interval_(depth_interval),
-  cand_poly_(cand_poly), gpu_(gpu), is_candidate_(is_candidate), is_last_pass_(is_last_pass),
-  score_thres_(score_thres), cam_thres_(cam_thres), out_folder_(out_folder)
-  { layer_size_ = query_->get_query_size(); }
+                        float const& cam_thres = 0.95);
   
   //: destructor
   ~boxm2_volm_matcher_p1();
@@ -62,7 +60,10 @@ private:
   //: query, indices, device
   volm_query_sptr                                   query_;
   vcl_vector<volm_geo_index_node_sptr>             leaves_;
-  vcl_vector<boxm2_volm_wr3db_index_sptr>         ind_vec_;
+  boxm2_volm_wr3db_index_sptr                         ind_;
+  float                                        ind_buffer_;
+  vcl_stringstream                          file_name_pre_;
+  
   //: shell container size
   unsigned                                     layer_size_;
   unsigned*                               layer_size_buff_;
@@ -88,6 +89,9 @@ private:
   vcl_map<vcl_string, vcl_vector<bocl_kernel*> >  kernels_;
 
   //: query related
+  bool                       is_grd_reg_;
+  bool                       is_sky_reg_;
+  bool                       is_obj_reg_;
   unsigned*                       n_cam_;
   bocl_mem*                n_cam_cl_mem_;
   unsigned*                       n_obj_;
@@ -148,6 +152,8 @@ private:
                   vcl_vector<unsigned>& l_id,
                   vcl_vector<unsigned>& h_id,
                   unsigned& actual_n_ind);
+  //: check the given leaf has un-read hypothesis or not
+  bool is_leaf_finish(unsigned const& leaf_id);
   //: clare all query cl_mem pointer
   bool clean_query_cl_mem();
   //: compile kernel
@@ -155,14 +161,15 @@ private:
   //: create queue
   bool create_queue();
    //: kernel execution function
-  bool execute_matcher_kernel(bocl_device_sptr             device,
-                              cl_command_queue&             queue,
-                              bocl_kernel*                   kern,
-                              bocl_mem*             n_ind_cl_mem_,
-                              bocl_mem*              index_cl_mem,
-                              bocl_mem*             score_cl_mem_,
-                              bocl_mem*                mu_cl_mem_);
+  bool execute_matcher_kernel(bocl_device_sptr                         device,
+                              cl_command_queue&                         queue,
+                              vcl_vector<bocl_kernel*>                   kern,
+                              bocl_mem*                         n_ind_cl_mem_,
+                              bocl_mem*                         index_cl_mem_,
+                              bocl_mem*                         score_cl_mem_,
+                              bocl_mem*                            mu_cl_mem_);
 
+  
   //: a test function to check the kernel implementation
   bool volm_matcher_p1_test(unsigned n_ind, unsigned char* index, float* score_buff, float* mu_buff);
 
