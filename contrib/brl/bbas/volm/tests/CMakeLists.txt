@@ -9,6 +9,7 @@ ADD_EXECUTABLE( volm_test_all
   test_query.cxx
   test_index.cxx
   test_camera_space.cxx
+  test_region_query.cxx
 )
 
 TARGET_LINK_LIBRARIES( volm_test_all volm testlib vpl )
@@ -20,6 +21,7 @@ ADD_TEST(volm_test_loc ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_loc_hyp)
 ADD_TEST(volm_test_query ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_query)
 ADD_TEST(volm_test_index ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_index)
 ADD_TEST(volm_test_camera_space ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_camera_space)
+ADD_TEST(volm_test_region_query ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_region_query)
 
 ADD_EXECUTABLE(volm_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(volm_test_include volm)

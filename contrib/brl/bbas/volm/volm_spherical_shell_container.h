@@ -7,6 +7,10 @@
 // The radius of that sphere is pre-defined. Each point represents the ray from sphere center (0,0,0) to the surface point.
 // The uniform distribution is accomplished by triangle division on octahedron to certain density.
 // The points are stored both as cartesian coordinates and spherical coordinates.
+// The spherical coordinate system is based on bbas/vsph:
+//  elevation is zero at the North pole and 180 at the South pole
+//  azimuth is zero pointing along X and positive rotating towards Y
+//  azimuth is +- 180 pointing along -X
 //
 // \author Yi Dong
 // \date October 24, 2012

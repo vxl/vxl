@@ -76,6 +76,8 @@ class volm_spherical_layers
   //: set the perspective camera
   void set_camera(vpgl_perspective_camera<double> const& cam)
   { cam_ = cam;}
+  depth_map_scene_sptr depth_map_scene() const 
+  {return dm_scene_;}
   //: compute shell layers
   bool compute_layers();
   void clear();
