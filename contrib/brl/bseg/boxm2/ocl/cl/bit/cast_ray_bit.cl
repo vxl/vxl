@@ -309,3 +309,129 @@ void cast_ray_render_vis(
 }
 
 #endif
+
+#ifdef RENDER_VISIBILITY2
+
+// the following version has vis as input too, some step cell methods are updating this vis value so it is needed for the step cell
+void cast_ray_render_vis2(
+          //---- RAY ARGUMENTS -------------------------------------------------
+          int i, int j,                                     //pixel information
+          float ray_ox, float ray_oy, float ray_oz,         //ray origin
+          float ray_dx, float ray_dy, float ray_dz,         //ray direction
+
+          //---- SCENE ARGUMENTS------------------------------------------------
+          __constant  RenderSceneInfo    * linfo,           //scene info (origin, block size, etc)
+          __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
+
+          //---- UTILITY ARGUMENTS----------------------------------------------
+          __local     uchar16            * local_tree,      //local tree for traversing
+          __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
+          __local     uchar              * cumsum,          //cumulative sum helper for data pointer
+                      float              * tfar_max,         // max distance for the ray tracing to go
+					  float              * vis,     //passed in as starting visibility
+
+          //----aux arguments defined by host at compile time-------------------
+          AuxArgs aux_args )
+{
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+
+  //determine the minimum face:
+  //get parameters tnear and tfar for the scene
+  float max_facex = (ray_dx > 0.0f) ? (linfo->dims.x) : 0.0f;
+  float max_facey = (ray_dy > 0.0f) ? (linfo->dims.y) : 0.0f;
+  float max_facez = (ray_dz > 0.0f) ? (linfo->dims.z) : 0.0f;
+  float tfar = calc_tfar(ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, max_facex, max_facey, max_facez);
+  float min_facex = (ray_dx < 0.0f) ? (linfo->dims.x) : 0.0f;
+  float min_facey = (ray_dy < 0.0f) ? (linfo->dims.y) : 0.0f;
+  float min_facez = (ray_dz < 0.0f) ? (linfo->dims.z) : 0.0f;
+  float tblock = calc_tnear(ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, min_facex, min_facey, min_facez);
+  tblock = (tblock > 0.0f) ? tblock : 0.0f;    //make sure tnear is at least 0...
+  tfar = tfar > (*tfar_max) ? (*tfar_max) : tfar;
+  tfar -= BLOCK_EPSILON;   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
+
+  if (tfar <= tblock)
+    return;
+
+  //calculate entry point here, entry sub_block, and its index
+  min_facex = calc_pos(tblock, ray_ox, ray_dx); //(ray_ox + (tblock + TREE_EPSILON)*ray_dx);
+  min_facey = calc_pos(tblock, ray_oy, ray_dy); //(ray_oy + (tblock + TREE_EPSILON)*ray_dy);
+  min_facez = calc_pos(tblock, ray_oz, ray_dz); //(ray_oz + (tblock + TREE_EPSILON)*ray_dz);
+
+  //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
+  float cell_minx, cell_miny, cell_minz;
+  calc_cell_min( &cell_minx, &cell_miny, &cell_minz, min_facex, min_facey, min_facez, linfo->dims);
+
+  //load current block/tree
+  int blkIndex = calc_blkI(cell_minx, cell_miny, cell_minz, linfo->dims);
+  local_tree[llid] = as_uchar16(tree_array[blkIndex]);
+  ushort buff_index = as_ushort((uchar2) (local_tree[llid].sd, local_tree[llid].sc));
+
+  //initialize cumsum buffer and cumIndex
+  cumsum[llid*10] = local_tree[llid].s0;
+  int cumIndex = 1;
+
+  //When rays are close to axis aligned, t values found for intersection become ill-defined, causing an infinite block loop
+  float texit = calc_cell_exit(cell_minx, cell_miny, cell_minz, 1.0f, ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz);
+
+  //----------------------------------------------------------------------------
+  // Begin traversing the blocks, break when any curr_block_index value is
+  // illegal (not between 0 and scenedims)
+  //----------------------------------------------------------------------------
+  while (tblock < tfar  )
+  {
+    //-------------------------------------------------------------------------
+    //find entry point (adjusted) and the current block index
+    float posx = calc_pos(tblock, ray_ox, ray_dx);
+    float posy = calc_pos(tblock, ray_oy, ray_dy);
+    float posz = calc_pos(tblock, ray_oz, ray_dz);
+    if (tblock >= texit)
+    {
+      //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
+      calc_cell_min( &cell_minx, &cell_miny, &cell_minz, posx, posy, posz, linfo->dims);
+
+      //load current block/tree
+      blkIndex = calc_blkI(cell_minx, cell_miny, cell_minz, linfo->dims);
+      local_tree[llid] = as_uchar16(tree_array[blkIndex]);
+      buff_index = as_ushort((uchar2) (local_tree[llid].sd, local_tree[llid].sc));
+
+      //initialize cumsum buffer and cumIndex
+      cumsum[llid*10] = local_tree[llid].s0;
+      cumIndex = 1;
+
+      //get scene level t exit value.  check to make sure that the ray is progressing.
+      //When rays are close to axis aligned, t values found for intersection become ill-defined, causing an infinite block loop
+      texit = calc_cell_exit(cell_minx, cell_miny, cell_minz, 1.0f, ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz);
+    }
+
+    // traverse to leaf cell that contains the entry point, set bounding box
+    float vox_len=1.0f;
+    float vox_minx, vox_miny, vox_minz;
+    int bit_index = traverse_three(&local_tree[llid],
+                                  posx-cell_minx, posy-cell_miny, posz-cell_minz,
+                                  &vox_minx, &vox_miny, &vox_minz, &vox_len);
+    //data index is relative data (data_index_cached) plus data_index_root
+    int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex)
+                    + data_index_root(&local_tree[llid]);
+
+    // get texit along the voxel
+    float t_vox_exit = calc_cell_exit(vox_minx+cell_minx, vox_miny+cell_miny, vox_minz+cell_minz, vox_len,
+                                      ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz);
+
+    //make sure ray goes through the cell with positive seg length (or push it along)
+    if (t_vox_exit <= tblock) break;
+
+    //// distance must be multiplied by the dimension of the bounding box
+    float d = (t_vox_exit - tblock); // * linfo->block_len;
+    tblock = t_vox_exit;
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Step Cell Functor
+    ////////////////////////////////////////////////////////////////////////////////
+    STEP_CELL;
+    ////////////////////////////////////////////////////////////////////////////////
+    // END Step Cell Functor
+    ////////////////////////////////////////////////////////////////////////////////
+  }
+}
+
+#endif
