@@ -6,6 +6,9 @@
 #include <vcl_iostream.h>
 
 //: a point in the spherical coordinate system
+// theta is elevation with zero at the North pole
+// phi is azimuth with zero pointing East, positive heading North
+
 class vsph_sph_point_3d
 {
  public:

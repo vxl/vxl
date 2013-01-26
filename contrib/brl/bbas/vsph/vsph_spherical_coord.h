@@ -17,7 +17,10 @@
 #include <vcl_iostream.h>
 
 
-//: 3D coordinate system specified by distance rho, angles theta (azimuth) and phi (polar, zenith).
+//: 3D coordinate system specified by distance rho, angles theta (elevation) and phi (azimuth).
+// theta is zero at the North Pole and 180 at the South Pole
+// phi is zero pointing East, positive values rotating towards North
+
 class vsph_spherical_coord : public vbl_ref_count
 {
  public:

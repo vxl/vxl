@@ -6,6 +6,7 @@ ADD_EXECUTABLE( vsph_test_all
   test_view_sphere.cxx
   test_spherical_coord.cxx
   test_camera_bounds.cxx
+  test_sph_geom.cxx
 )
 
 TARGET_LINK_LIBRARIES( vsph_test_all vsph testlib vgl vpgl vcl vnl )
@@ -13,6 +14,7 @@ TARGET_LINK_LIBRARIES( vsph_test_all vsph testlib vgl vpgl vcl vnl )
 ADD_TEST( vsph_test_view_sphere      ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_view_sphere )
 ADD_TEST( vsph_test_spherical_coord  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_spherical_coord )
 ADD_TEST( vsph_test_camera_bounds  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_camera_bounds )
+ADD_TEST( vsph_test_sph_geom  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_sph_geom )
 
 ADD_EXECUTABLE( vsph_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vsph_test_include vsph)
