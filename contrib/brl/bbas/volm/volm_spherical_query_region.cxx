@@ -3,16 +3,14 @@
 #include <bsol/bsol_algs.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include "volm_spherical_container.h"
-#include "volm_spherical_shell_container.h"
 #include "volm_char_codes.h"
 #include <bpgl/depth_map/depth_map_region.h>
 #include <vcl_vector.h>
 void volm_spherical_query_region::
 set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
 			  depth_map_region_sptr const& dm_region,
-			  volm_spherical_container_sptr const& sph_vol,
-			  volm_spherical_shell_container_sptr const& sph_shell){
-  
+			  volm_spherical_container_sptr const& sph_vol)
+{
   //extract object attributes
   depth_map_region::orientation otype = dm_region->orient_type();
   double min_depth = dm_region->min_depth();

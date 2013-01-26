@@ -19,7 +19,6 @@
 #include <bpgl/depth_map/depth_map_region.h>
 #include <vsph/vsph_sph_box_2d.h>
 #include <volm/volm_spherical_container_sptr.h>
-#include <volm/volm_spherical_shell_container_sptr.h>
 class volm_spherical_query_region
 {
  public:
@@ -29,8 +28,7 @@ class volm_spherical_query_region
  
   void set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
 				 depth_map_region_sptr const& dm_region,
-				 volm_spherical_container_sptr const& sph_vol,
-				 volm_spherical_shell_container_sptr const& sph_shell);
+				 volm_spherical_container_sptr const& sph_vol);
 
   //:accessors
   const vsph_sph_box_2d& bbox_ref(){return box_;}

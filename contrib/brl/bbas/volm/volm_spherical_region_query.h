@@ -27,8 +27,7 @@ class volm_spherical_region_query
  public:
   volm_spherical_region_query(depth_map_scene_sptr const& dm_scene,
 			      volm_camera_space_sptr const& cam_space,
-			      volm_spherical_container_sptr const& sph_vol,
-			      volm_spherical_shell_container_sptr const& sph_shell);
+			      volm_spherical_container_sptr const& sph_vol);
   
   void construct_spherical_regions();
 
@@ -36,7 +35,6 @@ class volm_spherical_region_query
   depth_map_scene_sptr dm_scene_;
   volm_camera_space_sptr cam_space_;
   volm_spherical_container_sptr sph_vol_;
-  volm_spherical_shell_container_sptr sph_shell_;
   //     roll index                 regions on sphere
   vcl_map< unsigned, vcl_vector<volm_spherical_query_region> > sph_regions_;
 };
