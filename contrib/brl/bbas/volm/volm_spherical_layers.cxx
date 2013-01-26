@@ -142,7 +142,7 @@ bool volm_spherical_layers::compute_layers(){
 #if 0
   vcl_vector<depth_map_region_sptr> scn_regs = dm_scene_->scene_regions();  
 #endif
-  dist_id_layer_.resize(scn_regs.size());
+  dist_id_layer_.resize(scn_regs_.size());
   vcl_vector<depth_map_region_sptr> gp_regs = dm_scene_->ground_plane();  
   vcl_vector<depth_map_region_sptr> sky_regs = dm_scene_->sky();  
   vcl_vector<vgl_point_3d<double> > rays = sph_shell_->cart_points();
@@ -195,7 +195,7 @@ bool volm_spherical_layers::compute_layers(){
 	  sky_id_layer_.push_back(ray_idx);
 	}
 	else if (is_object){
-	  if (obj_id < scn_regs.size()) {
+	  if (obj_id < scn_regs_.size()) {
 	    dist_id_layer_[obj_id].push_back(ray_idx);
 	  }
 	  else {
