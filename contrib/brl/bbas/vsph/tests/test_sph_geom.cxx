@@ -48,9 +48,7 @@ static void test_sph_geom()
   bba.add(p2); bba.add(p3);
   bbb.add(p4); bbb.add(p5);
   double min_ph_a = bba.min_phi(false), max_ph_a = bba.max_phi(false);
-  double min_th_a = bba.min_theta(false), max_theta_a = bba.max_theta(false);
   double min_ph_b = bbb.min_phi(false), max_ph_b = bbb.max_phi(false);
-  double min_th_b = bbb.min_theta(false), max_theta_b = bbb.max_theta(false);
   bool min_altb = vsph_utils::a_lt_b(min_ph_a, min_ph_b, false);
   bool max_blta = vsph_utils::a_lt_b(max_ph_b, max_ph_a, false);
   TEST("comparison operators", (!min_altb)&&max_blta, true);
@@ -68,5 +66,6 @@ static void test_sph_geom()
   good = good && vsph_utils::a_eq_b(min_th_int, p4.theta_);
   good = good && vsph_utils::a_eq_b(max_th_int, p3.theta_);
   TEST("intersection", good, true);
+}
 
 TESTMAIN(test_sph_geom);
