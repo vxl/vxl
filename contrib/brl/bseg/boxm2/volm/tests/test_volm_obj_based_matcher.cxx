@@ -34,7 +34,7 @@ static void test_volm_obj_based_matcher()
   vcl_string img_category;
   if (!volm_io::read_labelme(label_file, dm, img_category))
     vcl_cout << "volm_io::LABELME_FILE_IO_ERROR" << vcl_endl;
-  
+
   // check the camera kml file
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
   double top_fov, top_fov_dev, altitude, lat, lon;
@@ -70,34 +70,34 @@ static void test_volm_obj_based_matcher()
   volm_spherical_container_sptr sph = new volm_spherical_container(q_params.solid_angle, q_params.vmin, q_params.dmax);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(1.0, q_params.cap_angle, q_params.point_angle, q_params.top_angle, q_params.bottom_angle);
   vcl_cout << "index layer size: " << sph_shell->get_container_size() << vcl_endl;
-  
+
   // create query
   vul_timer query_prep;
   volm_query_sptr query = new volm_query(cam_file, label_file, sph, sph_shell, false);
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << " 1. Creating query costs --------------------------------------------> " << query_prep.all()/1000.0 << " seconds.\n";
-  vcl_cout << "\t The query has " << query->get_cam_num() 
+  vcl_cout << "\n==================================================================================================\n"
+           << " 1. Creating query costs --------------------------------------------> " << query_prep.all()/1000.0 << " seconds.\n"
+           << "\t The query has " << query->get_cam_num()
            << " cameras, " << query->depth_regions().size() + 2 << " labeled objects"
            << " and has resolution p_a = " << q_params.point_angle
            << ", top_a = " << q_params.top_angle
-           << ", bottom_a = " << q_params.bottom_angle << vcl_endl;
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
+           << ", bottom_a = " << q_params.bottom_angle << '\n'
+           << "==================================================================================================\n" << vcl_endl;
 #if 0
   dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
-    vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
-    for (unsigned i = 0; i < dm->sky().size(); i++)
+    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
+    for (unsigned i = 0; i < dm->sky().size(); ++i)
       vcl_cout << "\t " << (dm->sky()[i]->name()) << " region ,\t min_depth = " << 255 << vcl_endl;
   }
   if (dm->ground_plane().size()) {
-    vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
-    for (unsigned i = 0; i < dm->ground_plane().size(); i++)
+    vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
+    for (unsigned i = 0; i < dm->ground_plane().size(); ++i)
       vcl_cout << "\t " << (dm->ground_plane()[i]->name()) << " region ,\t min_depth = " << 0 << vcl_endl;
   }
   if (dm->scene_regions().size()) {
-    vcl_cout << " -------------- DEPTH REGIONS -------------- " << vcl_endl;
-    for (unsigned i = 0; i < dm->scene_regions().size(); i++) {
+    vcl_cout << " -------------- DEPTH REGIONS --------------" << vcl_endl;
+    for (unsigned i = 0; i < dm->scene_regions().size(); ++i) {
       vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
                << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
                << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
@@ -111,10 +111,10 @@ static void test_volm_obj_based_matcher()
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
   if (dev_id >= (unsigned)mgr->numGPUs())
     vcl_cout << "volm_io::EXE_DEVICE_ID_ERROR" << vcl_endl;
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << " 2. Finding available devices for current platform --------> Use device " << mgr->gpus_[dev_id]->info().device_name_ << vcl_endl;
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
-  
+  vcl_cout << "\n==================================================================================================\n"
+           << " 2. Finding available devices for current platform --------> Use device " << mgr->gpus_[dev_id]->info().device_name_ << '\n'
+           << "==================================================================================================\n" << vcl_endl;
+
   // create index
   boxm2_volm_wr3db_index_params params;
   unsigned long ei;
@@ -122,37 +122,36 @@ static void test_volm_obj_based_matcher()
       !boxm2_volm_wr3db_index_params::read_size_file(inp_files[0].second, ei)) {
     vcl_cout << " cannot read size file for " << inp_files[0].second << vcl_endl;
   }
-  if (!boxm2_volm_wr3db_index_params::query_params_equal(params, q_params)) 
-    vcl_cout << " volm_query params for indices are not the same " << vcl_endl;
-  
+  if (!boxm2_volm_wr3db_index_params::query_params_equal(params, q_params))
+    vcl_cout << " volm_query params for indices are not the same" << vcl_endl;
+
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index((unsigned)(sph_shell->get_container_size()),buffer_capacity);
   ind->initialize_read(inp_files[0].second);
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << " 3. Initialize indices ------------------------------------> " << ei << " indices " << vcl_endl;
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
-  
+  vcl_cout << "\n==================================================================================================\n"
+           << " 3. Initialize indices ------------------------------------> " << ei << " indices\n"
+           << "==================================================================================================\n" << vcl_endl;
+
 #if 0
-  vcl_cout << " read in index from " <<  inp_files[0].second << " for checking purpose " << vcl_endl;
+  vcl_cout << " read in index from " <<  inp_files[0].second << " for checking purpose" << vcl_endl;
   boxm2_volm_wr3db_index_sptr ind_out = new boxm2_volm_wr3db_index((unsigned)(sph_shell->get_container_size()),buffer_capacity);
   ind_out->initialize_read(inp_files[0].second);
-  
+
   vcl_vector<unsigned char> values(query->get_query_size());
-  for (unsigned long i = 0; i < ei; i++) {
+  for (unsigned long i = 0; i < ei; ++i) {
     ind_out->get_next(values);
-    for (unsigned long j = 0; j < values.size(); j++) {
+    for (unsigned long j = 0; j < values.size(); ++j) {
       vcl_cout << " INDEX_out " << i << ", values_out[" << j << "] = " << (int)values[j] << vcl_endl;
     }
   }
   ind_out->finalize();
 #endif
 
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << " 4. Start the Object-Based matcher for " << ei << " indices and " << query->get_cam_num() << " cameras" << vcl_endl;
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
-  
-  boxm2_volm_obj_based_matcher matcher(query, ind, ei, mgr->gpus_[dev_id]);  
-  TEST("obj_based_matcher ", matcher.obj_based_matcher(), true);
+  vcl_cout << "\n==================================================================================================\n"
+           << " 4. Start the Object-Based matcher for " << ei << " indices and " << query->get_cam_num() << " cameras\n"
+           << "==================================================================================================\n" << vcl_endl;
 
+  boxm2_volm_obj_based_matcher matcher(query, ind, ei, mgr->gpus_[dev_id]);
+  TEST("obj_based_matcher ", matcher.obj_based_matcher(), true);
 }
 
 TESTMAIN(test_volm_obj_based_matcher);

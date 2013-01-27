@@ -56,33 +56,33 @@ int main(int argc, char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
-  
+
+
   // check the query input files
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
   vcl_cout << label_file() << vcl_endl;
   if (!volm_io::read_labelme(label_file(), dm, img_category)) {
-    
+
     log << "problem parsing: " << label_file() << vcl_endl;
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str() << '\n';
     return volm_io::LABELME_FILE_IO_ERROR;
   }
-  
+
   // check camera input file
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
   double top_fov, top_fov_dev, altitude, lat, lon;
   if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude, lat, lon)) {
     if (do_log) { volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);  volm_io::write_log(out_folder(), log.str()); }
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str() << '\n';
     return volm_io::CAM_FILE_IO_ERROR;
   }
-  vcl_cout << "cam params\nheading: " << heading << " dev: " << heading_dev 
-           << "\ntilt: " << tilt << " dev: " << tilt_dev 
-           << "\nroll: " << roll << " dev: " << roll_dev 
-           << "\ntop_fov: " << top_fov << " dev: " << top_fov_dev 
+  vcl_cout << "cam params\nheading: " << heading << " dev: " << heading_dev
+           << "\ntilt: " << tilt << " dev: " << tilt_dev
+           << "\nroll: " << roll << " dev: " << roll_dev
+           << "\ntop_fov: " << top_fov << " dev: " << top_fov_dev
            << " alt: " << altitude << vcl_endl;
-  
+
   // To be decided, ---> based on initial camera space, how to create a global camera space for all passes
   // TO BE IMPLEMENTED
 
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
   file_name_pre << geo_index_folder() << "geo_index_tile_" << tile_id();
   if (!vul_file::exists(file_name_pre.str() + ".txt")) {
     if (do_log) { volm_io::write_status(out_folder(), volm_io::GEO_INDEX_FILE_MISSING); volm_io::write_log(out_folder(), log.str()); }
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str() << '\n';
     return volm_io::GEO_INDEX_FILE_MISSING;
   }
   float min_size;
@@ -102,12 +102,13 @@ int main(int argc, char** argv)
   bool is_candidate = false;
   vgl_polygon<double> cand_poly;
   vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
-  
+
   if ( candidate_list().compare("") != 0) {
     if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
       is_candidate = true;
       volm_io::read_polygons(candidate_list(), cand_poly);
-    } else {
+    }
+    else {
       if (do_log) { volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR); volm_io::write_log(out_folder(), log.str()); }
       log << " ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
       return volm_io::EXE_ARGUMENT_ERROR;
@@ -121,7 +122,7 @@ int main(int argc, char** argv)
   volm_geo_index::get_leaves(root, all_leaves);
   // prune the tree to get rid of leaves without any hypothesis
   vcl_vector<volm_geo_index_node_sptr> leaves;
-  for (unsigned li = 0; li < all_leaves.size(); li++)
+  for (unsigned li = 0; li < all_leaves.size(); ++li)
     if (all_leaves[li]->hyps_)
       leaves.push_back(all_leaves[li]);
 
@@ -132,9 +133,9 @@ int main(int argc, char** argv)
     log << " ERROR: cannot read params file from " << index_file << '\n';
     if (do_log) {
        volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
-       volm_io::write_log(out_folder(), log.str()); 
+       volm_io::write_log(out_folder(), log.str());
     }
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str() << '\n';
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   volm_spherical_container_sptr sph = new volm_spherical_container(params.solid_angle, params.vmin, params.dmax);
@@ -148,74 +149,75 @@ int main(int argc, char** argv)
     depth_interval.push_back((float)iter->first);
 
   // create index vector
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << "\t  1. Load indeice based on geo_index_tree (and candidate list)\n";
-  vcl_cout << "\t  point_angle = " << params.point_angle << ", top_angle = " << params.top_angle
-           << ", bottom_angle = " << params.bottom_angle << ", index_layer_size = " << layer_size << '\n';
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
+  vcl_cout << "\n==================================================================================================\n"
+           << "\t  1. Load indeice based on geo_index_tree (and candidate list)\n"
+           << "\t  point_angle = " << params.point_angle << ", top_angle = " << params.top_angle
+           << ", bottom_angle = " << params.bottom_angle << ", index_layer_size = " << layer_size << '\n'
+           << "==================================================================================================\n" << vcl_endl;
   vcl_vector<boxm2_volm_wr3db_index_sptr> ind_vec;
-  for (unsigned i = 0; i < leaves.size(); i++) {
-    if(!leaves[i]->hyps_)
+  for (unsigned i = 0; i < leaves.size(); ++i) {
+    if (!leaves[i]->hyps_)
       continue;
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity());
     vcl_string index_file = leaves[i]->get_index_name(file_name_pre.str());
-    if(!ind->initialize_read(index_file)) {
+    if (!ind->initialize_read(index_file)) {
       log << " ERROR: cannot load index from " << index_file << '\n';
       if (do_log) {
         volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
         volm_io::write_log(out_folder(), log.str());
       }
-      vcl_cerr << log.str();
+      vcl_cerr << log.str() << '\n';
       return volm_io::EXE_ARGUMENT_ERROR;
     }
     ind_vec.push_back(ind);
   }
   if (ind_vec.size() != leaves.size()) {
-    log << " create indices for every leaf failed " << vcl_endl;
+    log << " create indices for every leaf failed" << vcl_endl;
     if (do_log) {
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
       volm_io::write_log(out_folder(), log.str());
     }
-    vcl_cerr << log.str();
+    vcl_cerr << log.str() << '\n';
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
 #if 0
-  // test 
+  // test
   unsigned leaf_id = 0;
   unsigned ind_num = 4;
   unsigned char* index_buff = new unsigned char[ind_num * layer_size];
 
   while (leaf_id < leaves.size()) {
-    unsigned li; 
+    unsigned li;
     unsigned cnt = 0;
-    for (li = leaf_id; li < leaves.size(); li++) {
+    for (li = leaf_id; li < leaves.size(); ++li) {
       if (!leaves[li]->hyps_)
         continue;
-      vcl_cout << "leaf " << leaf_id << ", li = " << li 
+      vcl_cout << "leaf " << leaf_id << ", li = " << li
                << ", current_ = " << leaves[li]->hyps_->current_ << vcl_endl;
       vgl_point_3d<double> h_pt;
-      while (cnt < ind_num && leaves[li]->hyps_->get_next(0, 1, h_pt) ) { 
+      while (cnt < ind_num && leaves[li]->hyps_->get_next(0, 1, h_pt) ) {
         if (cand_poly.contains(h_pt.x(), h_pt.y())) {
           // put this index into buffer
           unsigned char* values = index_buff + cnt * layer_size;
           ind_vec[li]->get_next(values, layer_size);
-          cnt++;
+          ++cnt;
           vcl_cout << " in leaf[" << li << "] --->"
                    << " hypo " << h_pt << " is inside candidiate list, take the index (cnt = "
                    << cnt << ')' <<  vcl_endl;
-          for (unsigned vi = 0; vi < layer_size; vi++) {
+          for (unsigned vi = 0; vi < layer_size; ++vi) {
             vcl_cout << ' ' << (int)values[vi];
           }
           vcl_cout << '\n';
-        } else {
+        }
+        else {
           // load this index and throw it away
           vcl_cout << " in leaf[" << li << "] --->"
                    << " hypo " << h_pt << " is OUTSIDE candidiate list, throw its index away (cnt = "
                    << cnt << ')' << vcl_endl;
           vcl_vector<unsigned char> values(layer_size);
           ind_vec[li]->get_next(values);
-          for (unsigned vi = 0; vi < layer_size; vi++) {
+          for (unsigned vi = 0; vi < layer_size; ++vi) {
             vcl_cout << (int)values[vi] << ' ';
           }
           vcl_cout << '\n';
@@ -229,39 +231,39 @@ int main(int argc, char** argv)
       leaf_id = li;
   }
 #endif
-  
+
   // create query
   volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell, false);
   // screen output of query
   unsigned total_size = query->obj_based_query_size_byte();
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << "\t\t  2. Create query from given camera space and Labelme geometry\n";
-  vcl_cout << "\t\t  generate query has " << query->get_cam_num() << " cameras "
-           << " and " << (float)total_size/1024 << " Kbyte in total\n";
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
+  vcl_cout << "\n==================================================================================================\n"
+           << "\t\t  2. Create query from given camera space and Labelme geometry\n"
+           << "\t\t  generate query has " << query->get_cam_num() << " cameras "
+           << " and " << (float)total_size/1024 << " Kbyte in total\n"
+           << "==================================================================================================\n" << vcl_endl;
   dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
-    vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
-    for (unsigned i = 0; i < dm->sky().size(); i++)
+    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
+    for (unsigned i = 0; i < dm->sky().size(); ++i)
       vcl_cout << "\t name = " << (dm->sky()[i]->name())
                << ", depth = " << 254
                << ", orient = " << (int)query->sky_orient()
                << vcl_endl;
   }
   if (dm->ground_plane().size()) {
-    vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
-    for (unsigned i = 0; i < dm->ground_plane().size(); i++)
+    vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
+    for (unsigned i = 0; i < dm->ground_plane().size(); ++i)
       vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
                << ", depth = " << dm->ground_plane()[i]->min_depth()
                << ", orient = " << dm->ground_plane()[i]->orient_type()
-               << ", NLCD_id = " << dm->ground_plane()[i]->nlcd_id() 
+               << ", NLCD_id = " << dm->ground_plane()[i]->nlcd_id()
                << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()]
                << vcl_endl;
   }
   if (dm->scene_regions().size()) {
-    vcl_cout << " -------------- DEPTH REGIONS -------------- " << vcl_endl;
-    for (unsigned i = 0; i < dm->scene_regions().size(); i++) {
+    vcl_cout << " -------------- DEPTH REGIONS --------------" << vcl_endl;
+    for (unsigned i = 0; i < dm->scene_regions().size(); ++i) {
       vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
                << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
                << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
@@ -272,9 +274,9 @@ int main(int argc, char** argv)
                << vcl_endl;
     }
   }
-  
+
   // define the device that will be used
-  
+
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
   if (dev_id() >= (unsigned)mgr->numGPUs()) {
     log << " GPU is " << dev_id() << " is invalid, only " << mgr->numGPUs() << " are available\n";
@@ -282,61 +284,62 @@ int main(int argc, char** argv)
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
       volm_io::write_log(out_folder(), log.str());
     }
-    vcl_cerr << log.str();
+    vcl_cerr << log.str() << '\n';
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << "\t\t  3. Following device is used for volm_matcher\n";
-  vcl_cout << "\t\t  " << mgr->gpus_[dev_id()]->info() << '\n';
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
-
-
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << "\t\t  4. Start volumetric matching with following matchers\n";
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
+  vcl_cout << "\n==================================================================================================\n"
+           << "\t\t  3. Following device is used for volm_matcher\n"
+           << "\t\t  " << mgr->gpus_[dev_id()]->info() << '\n'
+           << "==================================================================================================\n\n"
+           << "\n==================================================================================================\n"
+           << "\t\t  4. Start volumetric matching with following matchers\n"
+           << "==================================================================================================\n" << vcl_endl;
 
   // to be implemented, what kind of infomation needs for pass 0 and what the output will be
   bool is_last_pass = false;
   if (use_ps0()) {
-    vcl_cout << " we will use pass 0, i.e. regional matcher... TO be implemented " << vcl_endl;
+    vcl_cout << " we will use pass 0, i.e. regional matcher... TO be implemented" << vcl_endl;
     is_last_pass = true;
-  } else {
-    vcl_cout << " regional matcher (pass 0) is avoided " << vcl_endl;
+  }
+  else {
+    vcl_cout << " regional matcher (pass 0) is avoided" << vcl_endl;
   }
 
-  
+
   // start pass 1 matcher
   if (use_ps1()) {
     boxm2_volm_matcher_p1 obj_order_matcher(query, leaves, ind_vec, depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder());
-    if(! obj_order_matcher.volm_matcher_p1()) {
+    if (! obj_order_matcher.volm_matcher_p1()) {
       log << " ERROR: pass 1 volm_matcher failed for geo_index " << index_file << '\n';
       if (do_log) {
         volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
-        volm_io::write_log(out_folder(), log.str()); 
+        volm_io::write_log(out_folder(), log.str());
       }
-      vcl_cerr << log.str() << vcl_endl;
+      vcl_cerr << log.str() << '\n';
       return volm_io::MATCHER_EXE_FAILED;
     }
-  } else {
+  }
+  else {
     vcl_cout << " object based depth/order matcher (pass 1) is avoided" << vcl_endl;
   }
 
-  
+
 
   // start pass 2 matcher
   if (use_ps2()) {
-    vcl_cout << " we will use pass 2, i.e. object based, ray based ORIENT/NLCD matcher " << vcl_endl;
-    vcl_cout << " input: query, index, leaves, candidate list(is_candidate), depth_interval" << vcl_endl;
-    vcl_cout << " NEED TO CHECK WHETHEER WE HAVE PASS 0 MATCHER RESULT, IF SO, LOAD THE REDUCED SPACE FROM PASS 0" << vcl_endl;
-  } else {
+    vcl_cout << " we will use pass 2, i.e. object based, ray based ORIENT/NLCD matcher\n"
+             << " input: query, index, leaves, candidate list(is_candidate), depth_interval\n"
+             << " NEED TO CHECK WHETHEER WE HAVE PASS 0 MATCHER RESULT, IF SO, LOAD THE REDUCED SPACE FROM PASS 0" << vcl_endl;
+  }
+  else {
     vcl_cout << " object based orientation/land classification matcher (pass 2) is avoided" << vcl_endl;
   }
 
   // output will be a probability map
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << "\t\t  5. Generate probablity map and store it in\n";
-  vcl_cout << "\t\t     " << out_folder() << vcl_endl;
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
+  vcl_cout << "\n==================================================================================================\n"
+           << "\t\t  5. Generate probability map and store it in\n"
+           << "\t\t     " << out_folder() << '\n'
+           << "==================================================================================================\n" << vcl_endl;
 
   return volm_io::SUCCESS;
 }

@@ -30,9 +30,9 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
   ind_id = get_global_id(0);
   cam_id = get_global_id(1);
   unsigned llid = (get_local_id(0) + get_local_size(0)*get_local_id(1));
-  
+
   //bool debug_bool = (ind_id == 143) && (cam_id == 3);
-  
+
   // passing necessary values from global to the local memory
   __local unsigned ln_cam, ln_obj, ln_ind, ln_layer_size;
   __local float l_grd_weight, l_sky_weight;
@@ -50,56 +50,57 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
   }
   barrier(CLK_LOCAL_MEM_FENCE);
   if (llid == 0) {
-    for(unsigned i = 0; i < (*depth_length); i++) {
+    for (unsigned i=0; i < (*depth_length); ++i) {
       local_depth_interval[i] = depth_interval[i];
     }
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 
-  //if( cam_id == 0 && ind_id == 1) {
-  //  debug[0] = *depth_length;
-  //  for(unsigned i =0 ; i < (*depth_length); i++) {
-  //    debug[i+1] = depth_interval[i];
-  //  }
-  //}
-//  if( debug_bool ){
-//    debug[0] = (float)get_global_id(0);
-//    debug[1] = (float)get_global_id(1);
-//    debug[2] = (float)get_local_size(0);
-//    debug[3] = (float)get_local_size(1);
-//    debug[4] = (float)llid;
-//    debug[5] = (float)ln_ind;
-//    debug[6] = (float)ln_cam;
-//    debug[7] = (float)ln_obj;
-//    debug[8] = (float)ind_id;
-//    debug[9] = (float)cam_id;
-//  }
-
+#if 0
+  if ( cam_id == 0 && ind_id == 1) {
+    debug[0] = *depth_length;
+    for (unsigned i =0 ; i < (*depth_length); ++i) {
+      debug[i+1] = depth_interval[i];
+    }
+  }
+  if ( debug_bool ) {
+    debug[0] = (float)get_global_id(0);
+    debug[1] = (float)get_global_id(1);
+    debug[2] = (float)get_local_size(0);
+    debug[3] = (float)get_local_size(1);
+    debug[4] = (float)llid;
+    debug[5] = (float)ln_ind;
+    debug[6] = (float)ln_cam;
+    debug[7] = (float)ln_obj;
+    debug[8] = (float)ind_id;
+    debug[9] = (float)cam_id;
+  }
+#endif
 
   // locate the index
-  
+
   if ( cam_id < ln_cam && ind_id < ln_ind ) {
     // locate index offset
     unsigned start_ind = ind_id * (ln_layer_size);
-    // calculate sky score 
+    // calculate sky score
     // locate the sky array
     unsigned start_sky = sky_offset[cam_id];
     unsigned end_sky = sky_offset[cam_id+1];
     unsigned sky_count = 0;
-    for (unsigned k = start_sky; k < end_sky; k++) {
+    for (unsigned k = start_sky; k < end_sky; ++k) {
       unsigned id = start_ind + sky_id[k];
       if ( index[id] == 254 )
         sky_count += 1;
     }
     float score_sky;
     score_sky = (end_sky != start_sky) ? (float)sky_count/(end_sky-start_sky) : 0;
-    score_sky = score_sky * l_sky_weight; 
-    
+    score_sky = score_sky * l_sky_weight;
+
     // calculate ground score
     unsigned start_grd = grd_offset[cam_id];
     unsigned end_grd = grd_offset[cam_id+1];
     unsigned grd_count = 0;
-    for (unsigned k = start_grd; k < end_grd; k++) {
+    for (unsigned k = start_grd; k < end_grd; ++k) {
       unsigned id = start_ind + grd_id[k];
       uchar ind_d = index[id];
       uchar grd_d = grd_dist[k];
@@ -114,14 +115,14 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
     // calcualte average mean depth value first
     // locate the mu index to store the mean value
     unsigned mu_start_id = cam_id*ln_obj + ind_id*ln_cam*ln_obj;
-    for (unsigned k = 0; k < ln_obj; k++) {              // loop over each object for cam_id and ind_id
+    for (unsigned k = 0; k < ln_obj; ++k) {              // loop over each object for cam_id and ind_id
       unsigned offset_id = k + ln_obj * cam_id;
       unsigned start_obj = obj_offset[offset_id];
       unsigned end_obj = obj_offset[offset_id+1];
          float mu_obj = 0;
       unsigned count = 0;
-      
-      for (unsigned i = start_obj; i < end_obj; i++) {   // loop over each voxel in object k
+
+      for (unsigned i = start_obj; i < end_obj; ++i) {   // loop over each voxel in object k
         unsigned id = start_ind + obj_id[i];
         unsigned d = index[id];
         if (d < 253) {
@@ -134,29 +135,29 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
       mu[mu_id] =  mu_obj;
     }
     // calculate object score
-    // note that the two neighboring objects may have same order 
+    // note that the two neighboring objects may have same order
     // therefore voxel depth could be less or eqaul the meaning depth of the objects with lower order
     // and could be greater or eqaul the meaning depth of the object with higher order
     float score_obj = 0.0f;
-    for (unsigned k = 0; k < ln_obj; k++) {
+    for (unsigned k = 0; k < ln_obj; ++k) {
       unsigned offset_id = k + ln_obj * cam_id;
       unsigned start_obj = obj_offset[offset_id];
       unsigned end_obj = obj_offset[offset_id+1];
       float score_k_ord = 0.0f;
       float score_k_min = 0.0f;
-      for (unsigned i = start_obj; i < end_obj; i++) {
+      for (unsigned i = start_obj; i < end_obj; ++i) {
         unsigned id = start_ind + obj_id[i];
         unsigned d = index[id];
         unsigned s_vox_ord = 1;
         unsigned s_vox_min = 0;
         if (d < 253) {
           // calculate order score for voxel i
-          for (unsigned mu_id = 0; (s_vox_ord && mu_id < k); mu_id++)
+          for (unsigned mu_id = 0; (s_vox_ord && mu_id < k); ++mu_id)
             s_vox_ord = s_vox_ord * (local_depth_interval[d] >= mu[mu_id + mu_start_id]);
-          for (unsigned mu_id = k+1; (s_vox_ord && mu_id < ln_obj); mu_id++)
+          for (unsigned mu_id = k+1; (s_vox_ord && mu_id < ln_obj); ++mu_id)
             s_vox_ord = s_vox_ord * (local_depth_interval[d] <= mu[mu_id + mu_start_id]);
           // calculate min_distance socre for voxel i
-          if( d > local_min_dist[k] )
+          if ( d > local_min_dist[k] )
             s_vox_min = 1;
         }
         else {
@@ -165,7 +166,7 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
         score_k_ord += (float)s_vox_ord;
         score_k_min += (float)s_vox_min;
       }
-      // normalized the score for object k 
+      // normalized the score for object k
       float score_k = score_k_ord + score_k_min;
       score_k = (end_obj != start_obj) ? score_k/(end_obj-start_obj) : 0;
       score_k = score_k * local_obj_weight[k];
@@ -174,11 +175,11 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
     }
     // normalized the order score
     score_obj = score_obj / ln_obj;
-    
+
     // summerize the scores
     unsigned score_id = cam_id + ind_id*ln_cam;
     score[score_id] = score_sky + score_grd + score_obj;
-/*    
+#if 0
     if (debug_bool) {
       debug[10] = (float)score_sky;
       debug[11] = (float)score_grd;
@@ -186,7 +187,6 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
       debug[13] = (float)score[score_id];
       debug[14] = score_id;
     }
-*/
+#endif
   }  // end of the calculation of index ind_id and camera cam_id
-
 }

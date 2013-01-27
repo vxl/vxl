@@ -25,27 +25,27 @@
 
 class boxm2_volm_matcher_p2
 {
-public:
+ public:
   //: default constructor
   boxm2_volm_matcher_p2() {}
   //: constructor
   boxm2_volm_matcher_p2(volm_query_sptr query,
                         boxm2_volm_wr3db_index_sptr ind,
                         unsigned long ei,
-                        bocl_device_sptr gpu) :
-  query_(query), ind_(ind), ei_(ei), gpu_(gpu) {}
+                        bocl_device_sptr gpu)
+  : query_(query), ind_(ind), gpu_(gpu), ei_(ei) {}
   //: destructor
   ~boxm2_volm_matcher_p2();
 
   //: matcher function
   bool volm_matcher_p2();
 
-private:
+ private:
   //: query, indices and devices
   volm_query_sptr                 query_;
   boxm2_volm_wr3db_index_sptr       ind_;
   bocl_device_sptr                  gpu_;
-  
+
   //: kernel related
   vcl_size_t                    matcher_local_threads_[2];
   vcl_size_t                   matcher_global_threads_[2];
@@ -85,7 +85,7 @@ private:
   bocl_mem*     sky_orient_cl_mem_;
   float*          sky_weight_buff_;
   bocl_mem*     sky_weight_cl_mem_;
-  
+
   unsigned*           obj_id_buff_;
   bocl_mem*         obj_id_cl_mem_;
   unsigned*       obj_offset_buff_;
@@ -112,7 +112,6 @@ private:
   bool execute_matcher_kernel();
   //: clean all query cl_mem pointer
   bool clean_query_cl_mem();
-
 };
 
 #endif // boxm2_volm_matcher_p2_h_
