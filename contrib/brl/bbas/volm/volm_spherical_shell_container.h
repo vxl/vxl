@@ -55,6 +55,7 @@ class volm_spherical_shell_container : public vbl_ref_count
   //: generate panaroma image
   void panaroma_img(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
   void panaroma_img_class_labels(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
+  void panaroma_img_orientations(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
 
  protected:
   void add_uniform_views();

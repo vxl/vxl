@@ -336,3 +336,30 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
     }
   }
 }
+
+void volm_spherical_shell_container::panaroma_img_orientations(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
+{
+  assert(values.size() == sph_points_.size());
+  img.set_size(360, 180);
+  img.fill(127);
+  for (unsigned i = 0; i < sph_points_.size(); i++) {
+    vsph_sph_point_3d pt = sph_points_[i];
+    unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180.0+0.5);
+    unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180.0+0.5);
+    if (values[i] == 253) { // invalid
+      img(ii,jj).r = 255;
+      img(ii,jj).g = 0;
+      img(ii,jj).b = 0;
+    } else if (values[i] == 254) { // sky
+      img(ii,jj).r = 0;
+      img(ii,jj).g = 0;
+      img(ii,jj).b = 255;
+    } else {
+      if (volm_orient_table::ori_index_colors.find((int)values[i]) == volm_orient_table::ori_index_colors.end()) {
+        vcl_cerr << "cannot find this value: " << (int)values[i] << " in the color table!\n";
+        img(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
+      } else 
+        img(ii,jj) = volm_orient_table::ori_index_colors[(int)values[i]]; 
+    }
+  }
+}
