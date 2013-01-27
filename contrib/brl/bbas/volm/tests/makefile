@@ -8,6 +8,9 @@ TESTS += test_spherical_shell_container.cxx
 TESTS += test_loc_hyp.cxx
 TESTS += test_tile.cxx
 TESTS += test_query.cxx
+TESTS += test_index.cxx
+TESTS += test_region_query.cxx
+TESTS += test_camera_space.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

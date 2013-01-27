@@ -7,6 +7,7 @@ TESTMAIN := test_driver.cxx
 TESTS += test_camera_bounds.cxx
 TESTS += test_view_sphere.cxx
 TESTS += test_spherical_coord.cxx
+TESTS += test_sph_geom.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

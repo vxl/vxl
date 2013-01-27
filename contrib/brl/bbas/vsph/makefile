@@ -6,8 +6,12 @@ VERSION := 1.0
 SOURCES += vsph_camera_bounds.cxx
 SOURCES += vsph_spherical_coord.cxx
 SOURCES += vsph_sph_point_3d.cxx
-MANPAGE_SOURCES += vsph_view_sphere.txx
+SOURCES += vsph_sph_point_2d.cxx
+SOURCES += vsph_sph_box_2d.cxx
+SOURCES += vsph_utils.cxx
+
 MANPAGE_SOURCES += vsph_view_point.h
+MANPAGE_SOURCES += vsph_view_sphere.txx
 MANPAGE_SOURCES += vsph_spherical_coord_sptr.h
 
 #######################################
