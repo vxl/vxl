@@ -9,11 +9,13 @@
 #include <volm/volm_loc_hyp.h>
 #include <vcl_iomanip.h>
 
-volm_geo_index_node::~volm_geo_index_node() { 
-  children_.clear(); 
+volm_geo_index_node::~volm_geo_index_node()
+{
+  children_.clear();
 }
 
-void construct_sub_tree(volm_geo_index_node_sptr parent, float min_size) {
+void construct_sub_tree(volm_geo_index_node_sptr parent, float min_size)
+{
   float w = parent->extent_.width();
   float h = parent->extent_.height();
   if (w <= min_size || h <= min_size)
@@ -64,7 +66,8 @@ volm_geo_index_node_sptr volm_geo_index::construct_tree(volm_tile t, float min_s
 }
 
 
-void construct_sub_tree_poly(volm_geo_index_node_sptr parent, float min_size, vgl_polygon<float> const& poly) {
+void construct_sub_tree_poly(volm_geo_index_node_sptr parent, float min_size, vgl_polygon<float> const& poly)
+{
   float w = parent->extent_.width();
   float h = parent->extent_.height();
   if (w <= min_size || h <= min_size)
@@ -117,9 +120,10 @@ volm_geo_index_node_sptr volm_geo_index::construct_tree(volm_tile t, float min_s
     root = new volm_geo_index_node(box);
     // recursively add children
     construct_sub_tree_poly(root, min_size, poly);
-  } 
+  }
   return root;
 }
+
 volm_geo_index_node_sptr volm_geo_index::construct_tree(volm_tile t, float min_size, vgl_polygon<double> const& poly)
 {
   vgl_polygon<float> out;
@@ -139,24 +143,26 @@ bool volm_geo_index::prune_tree(volm_geo_index_node_sptr root, vgl_polygon<float
     if (!prune_tree(root->children_[i], poly)) // the child does not intersect poly
       root->children_[i] = 0;  // sptr deallocates this child
   }
- 
+
   return true;
 }
+
 bool volm_geo_index::prune_tree(volm_geo_index_node_sptr root, vgl_polygon<double> const& poly)
 {
   vgl_polygon<float> poly2;
   volm_io::convert_polygons(poly, poly2);
   return volm_geo_index::prune_tree(root, poly2);
 }
+
 //: prune nodes whose bbox is not in the utm_zone
 bool volm_geo_index::prune_by_zone(volm_geo_index_node_sptr root, unsigned utm_zone)
 {
   vpgl_utm u; int zone1, zone2;  double x, y;
   u.transform(root->extent_.min_point().y(), root->extent_.min_point().x(), x, y, zone1);
   u.transform(root->extent_.max_point().y(), root->extent_.max_point().x(), x, y, zone2);
-  if (zone1 != utm_zone && zone2 != utm_zone)
+  if (zone1 != (int)utm_zone && zone2 != (int)utm_zone)
     return false;
-  
+
   for (unsigned i = 0; i < root->children_.size(); i++) {
     if (!root->children_[i])
       continue;
@@ -167,7 +173,7 @@ bool volm_geo_index::prune_by_zone(volm_geo_index_node_sptr root, unsigned utm_z
 }
 
 unsigned volm_geo_index::depth(volm_geo_index_node_sptr node)
-{ 
+{
   if (!node->children_.size())
     return 0;
   unsigned d = 0;
@@ -194,8 +200,9 @@ void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index_node_sptr n, unsigned c
     lr[0] = n->extent_.min_point().y(); lr[1] = n->extent_.max_point().x();
     ur[0] = n->extent_.max_point().y(); ur[1] = n->extent_.max_point().x();
     bkml_write::write_box(ofs, " ", "location", ul, ur,ll,lr);
-  } else {
-    for (unsigned i = 0; i < n->children_.size(); i++) 
+  }
+  else {
+    for (unsigned i = 0; i < n->children_.size(); i++)
       write_to_kml_node(ofs, n->children_[i], current_depth + 1, depth);
   }
 }
@@ -211,8 +218,11 @@ void volm_geo_index::write_to_kml(volm_geo_index_node_sptr root, unsigned depth,
 
 void write_to_text(vcl_ofstream& ofs, volm_geo_index_node_sptr n)
 {
-  ofs << vcl_setprecision(6) << vcl_fixed << n->extent_.min_point().x() << " " << vcl_setprecision(6) << vcl_fixed << n->extent_.min_point().y() << " " << vcl_setprecision(6) << vcl_fixed << n->extent_.max_point().x() << " " << vcl_setprecision(6) << vcl_fixed << n->extent_.max_point().y() << "\n";
-  ofs << n->children_.size() << '\n';
+  ofs << vcl_setprecision(6) << vcl_fixed << n->extent_.min_point().x() << ' '
+      << vcl_setprecision(6) << vcl_fixed << n->extent_.min_point().y() << ' '
+      << vcl_setprecision(6) << vcl_fixed << n->extent_.max_point().x() << ' '
+      << vcl_setprecision(6) << vcl_fixed << n->extent_.max_point().y() << '\n'
+      << n->children_.size() << '\n';
   for (unsigned i = 0; i < n->children_.size(); i++) {
     if (!n->children_[i]) ofs << " 0";
     else ofs << " 1";
@@ -223,32 +233,35 @@ void write_to_text(vcl_ofstream& ofs, volm_geo_index_node_sptr n)
       write_to_text(ofs, n->children_[i]);
   }
 }
+
 void volm_geo_index::write(volm_geo_index_node_sptr root, vcl_string const& file_name, float min_size)
 {
   vcl_ofstream ofs(file_name.c_str());
   ofs << min_size << '\n';
   write_to_text(ofs, root);
 }
+
 volm_geo_index_node_sptr read_and_construct_node(vcl_ifstream& ifs, volm_geo_index_node_sptr parent)
 {
   float x,y;
-  ifs >> x; ifs >> y; vgl_point_2d<float> min(x,y);
-  ifs >> x; ifs >> y; vgl_point_2d<float> max(x,y);
-  vgl_box_2d<float> b(min, max);
+  ifs >> x; ifs >> y; vgl_point_2d<float> min_pt(x,y);
+  ifs >> x; ifs >> y; vgl_point_2d<float> max_pt(x,y);
+  vgl_box_2d<float> b(min_pt, max_pt);
   volm_geo_index_node_sptr n = new volm_geo_index_node(b, parent);
   unsigned nc;
   ifs >> nc;
   vcl_vector<unsigned> existence(nc);
-  for (unsigned i = 0; i < nc; i++) 
+  for (unsigned i = 0; i < nc; i++)
     ifs >> existence[i];
   for (unsigned i = 0; i < nc; i++) {
     volm_geo_index_node_sptr child;
-    if (existence[i]) 
+    if (existence[i])
       child = read_and_construct_node(ifs, n);
     n->children_.push_back(child);
   }
   return n;
 }
+
 // even if a child has zero pointer, it's order in the children_ array is the same, this is to make sure that the children have consistent geographic meaning
 volm_geo_index_node_sptr volm_geo_index::read_and_construct(vcl_string const& file_name, float& min_size)
 {
@@ -277,7 +290,7 @@ void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, vcl_vector<volm_g
     }
     if (!at_least_one_child)
       leaves.push_back(root);
-  }  
+  }
 }
 
 //: return all the leaves that intersect a given rectangular area
@@ -285,7 +298,7 @@ void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, vcl_vector<volm_g
 {
   if (!root)
     return;
-  
+
   if (vgl_intersection(root->extent_, area).area() == 0.0f)
     return;
 
@@ -303,14 +316,20 @@ void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, vcl_vector<volm_g
     }
     if (!at_least_one_child)
       leaves.push_back(root);
-  }  
+  }
 }
+
 vcl_string volm_geo_index_node::get_string()
 {
   vcl_stringstream str;
-  str << "node_" << vcl_setprecision(6) << vcl_fixed << this->extent_.min_point().x() << "_" << vcl_setprecision(6) << vcl_fixed << this->extent_.min_point().y() << "_" << vcl_setprecision(6) << vcl_fixed << this->extent_.max_point().x() << "_" << vcl_setprecision(6) << vcl_fixed << this->extent_.max_point().y();
+  str << "node_"
+      << vcl_setprecision(6) << vcl_fixed << this->extent_.min_point().x() << '_'
+      << vcl_setprecision(6) << vcl_fixed << this->extent_.min_point().y() << '_'
+      << vcl_setprecision(6) << vcl_fixed << this->extent_.max_point().x() << '_'
+      << vcl_setprecision(6) << vcl_fixed << this->extent_.max_point().y();
   return str.str();
 }
+
 void volm_geo_index::write_hyps(volm_geo_index_node_sptr root, vcl_string const& file_name_pre)
 {
   if (!root)
@@ -319,9 +338,10 @@ void volm_geo_index::write_hyps(volm_geo_index_node_sptr root, vcl_string const&
     vcl_string str = root->get_hyp_name(file_name_pre);
     root->hyps_->write_hypotheses(str);
   }
-  for (unsigned i = 0; i < root->children_.size(); i++) 
+  for (unsigned i = 0; i < root->children_.size(); i++)
     write_hyps(root->children_[i], file_name_pre);
 }
+
 void volm_geo_index::read_hyps(volm_geo_index_node_sptr root, vcl_string const& file_name_pre)
 {
   if (!root)
@@ -331,10 +351,10 @@ void volm_geo_index::read_hyps(volm_geo_index_node_sptr root, vcl_string const& 
     volm_loc_hyp_sptr hyp = new volm_loc_hyp(str);
     root->hyps_ = hyp;
   }
-  for (unsigned i = 0; i < root->children_.size(); i++) 
+  for (unsigned i = 0; i < root->children_.size(); i++)
     read_hyps(root->children_[i], file_name_pre);
-
 }
+
 unsigned volm_geo_index::hypo_size(volm_geo_index_node_sptr root)
 {
   if (!root)
@@ -342,7 +362,7 @@ unsigned volm_geo_index::hypo_size(volm_geo_index_node_sptr root)
   unsigned cnt = 0;
   if (root->hyps_)
     cnt = root->hyps_->size();
-  for (unsigned i = 0; i < root->children_.size(); i++) 
+  for (unsigned i = 0; i < root->children_.size(); i++)
     cnt += hypo_size(root->children_[i]);
   return cnt;
 }
@@ -351,7 +371,7 @@ bool volm_geo_index::add_hypothesis(volm_geo_index_node_sptr root, double lon, d
 {
   if (!root)
     return false;
-  
+
   if (root->hyps_) {
     if (root->extent_.contains((float)lon, (float)lat)) {
       root->hyps_->add(lat, lon, elev);
@@ -362,7 +382,7 @@ bool volm_geo_index::add_hypothesis(volm_geo_index_node_sptr root, double lon, d
   for (unsigned i = 0; i < root->children_.size(); i++) {
     if (root->children_[i] && root->children_[i]->extent_.contains((float)lon, (float)lat))
       added = add_hypothesis(root->children_[i], lon, lat, elev);
-  } 
+  }
   return added;
 }
 
@@ -373,7 +393,7 @@ void volm_geo_index::get_leaves_with_hyps(volm_geo_index_node_sptr root, vcl_vec
   if (!root->children_.size() && root->hyps_ && root->hyps_->size() > 0) {
     leaves.push_back(root);
     return;
-  } 
+  }
   bool at_least_one_child = false;
   for (unsigned i = 0; i < root->children_.size(); i++) {
     if (!root->children_[i])
@@ -385,7 +405,6 @@ void volm_geo_index::get_leaves_with_hyps(volm_geo_index_node_sptr root, vcl_vec
   }
   if (!at_least_one_child && root->hyps_ && root->hyps_->size() > 0)
     leaves.push_back(root);
-   
 }
 
 //: return the leaf and the hyp id of the closest hyp to the given location
