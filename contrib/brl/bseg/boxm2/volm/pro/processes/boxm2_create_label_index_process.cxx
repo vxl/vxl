@@ -2,7 +2,7 @@
 //:
 // \file
 // \brief  A process for creating a class label index for each location hypothesis of a scene, uses volm_geo_index to access location hypotheses and save index files
-//         this process assumes that all the hypotheses in the input set are in the same UTM zone of the world, hypo set generation makes sure the zone is the same for all
+// This process assumes that all the hypotheses in the input set are in the same UTM zone of the world, hypo set generation makes sure the zone is the same for all
 //
 // \author Ozge C. Ozcanli
 // \date Oct 21, 2012
@@ -68,7 +68,7 @@ namespace boxm2_create_label_index_process_globals
     //create normalize image kernel
     bocl_kernel* norm_kernel=new bocl_kernel();
     options += " -D RENDER ";
-    norm_kernel->create_kernel(&device->context(),device->device_id(), norm_src_paths, "normalize_render_kernel", options, "normalize render kernel"); 
+    norm_kernel->create_kernel(&device->context(),device->device_id(), norm_src_paths, "normalize_render_kernel", options, "normalize render kernel");
     vec_kernels.push_back(norm_kernel);
 
     return ;
@@ -143,9 +143,9 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
   params.dmax = pro.get_input<float>(i++);
   params.solid_angle = pro.get_input<float>(i++);
   params.cap_angle = pro.get_input<float>(i++);
-  params.point_angle = pro.get_input<float>(i++); 
-  params.top_angle = pro.get_input<float>(i++); 
-  params.bottom_angle = pro.get_input<float>(i++); 
+  params.point_angle = pro.get_input<float>(i++);
+  params.top_angle = pro.get_input<float>(i++);
+  params.bottom_angle = pro.get_input<float>(i++);
   vcl_string out_index_folder = pro.get_input<vcl_string>(i++);
   float vis_thres = pro.get_input<float>(i++);
   float buffer_capacity = pro.get_input<float>(i++);
@@ -169,11 +169,12 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
   if (!leaves.size()) {
     vcl_cout << " there are no leaves in this tile!.. returning!\n";
     return true;
-  } else
+  }
+  else
     vcl_cout << " there are " << leaves.size() << " leaves with hyps in this tile!\n";
 
   if (leaf_id >= (int)leaves.size()) {
-    vcl_cout << " leaf id: " << leaf_id << " is larger than the number of leaves: " << leaves.size() << ".. returning!\n"; 
+    vcl_cout << " leaf id: " << leaf_id << " is larger than the number of leaves: " << leaves.size() << ".. returning!\n";
     return false;
   }
 
@@ -191,9 +192,9 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
 
   //: adjust dmax if scene has very few blocks
   float dmax = params.dmax;
-  if (scene->get_block_ids().size() < 5) 
+  if (scene->get_block_ids().size() < 5)
     dmax = (float)(scene->bounding_box().height()+scene->bounding_box().width());
-  
+
   global_threads[0] = RoundUp(layer_size, (int)local_threads[0]);
   vcl_cout << "layer_size: " << layer_size << ", # of global threads: " << global_threads[0] << '\n';
 
@@ -240,7 +241,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
 
   bocl_mem* ray_dim_mem = new bocl_mem(device->context(), &(layer_size), sizeof(int), "ray directions size");
   ray_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-  
+
   bocl_mem* max_dist = new bocl_mem(device->context(), &(params.dmax), sizeof(int), "max distance to shoot rays");
   max_dist->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   vcl_cout << " will stop ray casting at distance: " << params.dmax << vcl_endl;
@@ -260,7 +261,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
   boxm2_block_id curr_block;
 
   //zip through each location hypothesis
-  vcl_vector<volm_geo_index_node_sptr> leaves2; 
+  vcl_vector<volm_geo_index_node_sptr> leaves2;
   if (leaf_id < 0) leaves2 = leaves;
   else leaves2.push_back(leaves[leaf_id]);
   vcl_cout << " will index " << leaves2.size() << " leaves!\n"; vcl_cout.flush();
@@ -268,7 +269,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
     if (!leaves2[li]->hyps_)
       continue;
     vcl_cout << " will index " << volm_geo_index::hypo_size(leaves2[li]) << " indices in leaf: " << leaves2[li]->get_hyp_name("") << vcl_endl; vcl_cout.flush();
-    
+
     // create a binary index file for each hypo set in a leaf
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
     vcl_string index_file = leaves2[li]->get_label_index_name(out_file_name_pre.str(), ident);
@@ -286,7 +287,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
     while (leaves2[li]->hyps_->get_next(0, 1, h_pt))
     {
       //vcl_cout << "Processing hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
-      if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << ".";
+      if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << '.';
       double lx, ly, lz;
       lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
       lz = 2.0*(vcl_ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model
@@ -306,7 +307,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
       for (int i=0;i<layer_size;++i) vis_buff[i]=1.0f;
       float* max_omega_buff = new float[layer_size];
       vcl_fill(max_omega_buff, max_omega_buff + layer_size, 0.0f);
-  
+
       bocl_mem* exp_image=new bocl_mem(device->context(),buff,layer_size*sizeof(float),"exp image buffer");
       exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -340,7 +341,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
           continue;
         }
       }
-    
+
       vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
       if (!(ord_iter != order_cache.end())) {
         order_cache[curr_block] =  boxm2_util::order_about_a_block(scene, curr_block, dmax);
@@ -365,7 +366,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
         bocl_mem* blk       = opencl_cache->get_block(id_inner);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id_inner);
-        
+
         //bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
         bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,0,true);
 
@@ -400,7 +401,6 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
 
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
-
       }
       if (vis_blocks.size() != 0)  // normalize
       {
@@ -438,9 +438,9 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
           values.push_back((unsigned)buff[i]);
       }
     #if 0
-      vcl_cout << "values array: \n";
+      vcl_cout << "values array:\n";
       for (unsigned i = 0; i < layer_size; i++) {
-        vcl_cout << (int)values[i] << " ";
+        vcl_cout << (int)values[i] << ' ';
       }
       vcl_cout << vcl_endl;
       sph_shell->draw_template("./test.vrml", values, 254);
@@ -478,8 +478,8 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
 
   delete [] ray_dirs;
 
-  vcl_cout<<"\nGPU Execute time "<<gpu_time<<" ms = " << gpu_time/(1000.0*60.0) << " secs. " << vcl_endl;
-  vcl_cout<<"GPU Transfe time "<<transfer_time<<" ms = " << transfer_time/(1000.0*60.0) << " secs. " << vcl_endl;
+  vcl_cout<<"\nGPU Execute time "<<gpu_time<<" ms = " << gpu_time/(1000.0*60.0) << " secs.\n"
+          <<"GPU Transfe time "<<transfer_time<<" ms = " << transfer_time/(1000.0*60.0) << " secs." << vcl_endl;
   clReleaseCommandQueue(queue);
 
   //cache size sanity check
