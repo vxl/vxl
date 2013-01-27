@@ -13,6 +13,7 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
+#include <vsl/vsl_vector_io.h>
 
 vcl_map<vcl_string, depth_map_region::orientation> create_orient_map() {
   vcl_map<vcl_string, depth_map_region::orientation> m;
@@ -22,6 +23,23 @@ vcl_map<vcl_string, depth_map_region::orientation> create_orient_map() {
   m["slanted_left"] = depth_map_region::SLANTED_LEFT;
   m["porous"] = depth_map_region::POROUS;
   m["non_planar"] = depth_map_region::NON_PLANAR;
+  return m;
+}
+
+// list of the possible values for indexed orientations from the reference world
+vcl_map<int, vil_rgb<vxl_byte> > create_orient_colors() {
+  vcl_map<int, vil_rgb<vxl_byte> > m;
+  m[0] = vil_rgb<vxl_byte>(255, 0, 0);  // no value
+  m[100] = vil_rgb<vxl_byte>(255, 0, 0);  // no value
+  m[1] = vil_rgb<vxl_byte>(0, 255, 0);  // horizontal surfaces (e.g. ground, water, etc.)
+  m[2] = vil_rgb<vxl_byte>(0, 255, 255);  // vertical facing west
+  m[3] = vil_rgb<vxl_byte>(0, 255, 155);  // vertical facing south west 
+  m[4] = vil_rgb<vxl_byte>(255, 255, 0);  // vertical facing south
+  m[5] = vil_rgb<vxl_byte>(155, 255, 0);  // vertical facing south east
+  m[6] = vil_rgb<vxl_byte>(155, 255, 155);  // vertical facing east
+  m[7] = vil_rgb<vxl_byte>(155, 155, 155);  // vertical facing north east
+  m[8] = vil_rgb<vxl_byte>(155, 0, 155);  // vertical facing north
+  m[9] = vil_rgb<vxl_byte>(0, 155, 155);  // vertical facing north west
   return m;
 }
 
@@ -53,6 +71,7 @@ vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > create_nlcd_map() {
 
 vcl_map<vcl_string, depth_map_region::orientation> volm_orient_table::ori_id = create_orient_map();
 vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > volm_nlcd_table::land_id = create_nlcd_map();
+vcl_map<int, vil_rgb<vxl_byte> > volm_orient_table::ori_index_colors = create_orient_colors();
 
 bool volm_io::read_camera(vcl_string kml_file,
                           unsigned const& ni, unsigned const& nj,
@@ -411,6 +430,38 @@ void volm_io::convert_polygons(vgl_polygon<double> const& in, vgl_polygon<float>
       vgl_point_2d<float> pt((float)in[i][j].x(), (float)in[i][j].y());
       out[i].push_back(pt);
     }
+  }
+}
+
+//: binary IO write
+void volm_score::b_write(vsl_b_ostream& os)
+{
+  unsigned ver = this->version();
+  vsl_b_write(os, ver);
+  vsl_b_write(os, leaf_id_);
+  vsl_b_write(os, hypo_id_);
+  vsl_b_write(os, max_score_);
+  vsl_b_write(os, max_cam_id_);
+  vsl_b_write(os, cam_id_);
+}
+
+//: binary IO read
+void volm_score::b_read(vsl_b_istream& is)
+{
+  unsigned ver;
+  vsl_b_read(is, ver);
+  if (ver == 1) {
+    vsl_b_read(is, leaf_id_);
+    vsl_b_read(is, hypo_id_);
+    vsl_b_read(is, max_score_);
+    vsl_b_read(is, max_cam_id_);
+    vsl_b_read(is, cam_id_);
+  } 
+  else 
+  {
+    vcl_cerr << "I/O ERROR: volm_score::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 

@@ -23,6 +23,9 @@ class volm_orient_table
 {
 public:
   static vcl_map<vcl_string, depth_map_region::orientation> ori_id;
+  
+  // list of the possible values for indexed orientations from the reference world
+  static vcl_map<int, vil_rgb<vxl_byte> >  ori_index_colors;
 };
 
 
@@ -88,6 +91,35 @@ class volm_rationale
   static bool write_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename);
   static bool read_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename);
   
+};
+
+// \brief  A class to store the highest score for each location
+// leaf_id     ----> id of the leaf in leaves vector
+// hypo_id     ----> local id of the hypothesis in the leaf
+// max_score_  ----> highest score for current location
+// max_cam_id_ ----> the camera id associated with the highest score
+// cam_id      ----> vector of camera ids whose score is higher than defined threshold
+
+class volm_score {
+public:
+  volm_score () {}
+  volm_score(unsigned const& leaf_id, unsigned const& hypo_id, float const& max_score, unsigned const& max_cam_id, vcl_vector<unsigned> const& cam_id)
+    : leaf_id_(leaf_id), hypo_id_(hypo_id), max_score_(max_score), max_cam_id_(max_cam_id), cam_id_(cam_id) {}
+  ~volm_score() {}
+  unsigned leaf_id_;
+  unsigned hypo_id_;
+  float    max_score_;
+  unsigned max_cam_id_;
+  vcl_vector<unsigned> cam_id_;
+
+  //: version
+  unsigned version() const {return 1;}
+
+  //: binary IO write
+  void b_write(vsl_b_ostream& os);
+
+  //: binary IO read
+  void b_read(vsl_b_istream& is);
 };
 
 
