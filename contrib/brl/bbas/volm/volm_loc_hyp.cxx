@@ -8,7 +8,6 @@
 #include <vcl_cassert.h>
 #include <vcl_limits.h>
 #include <vgl/vgl_distance.h>
-#include <bkml/bkml_write.h>
 #include <vcl_fstream.h>
 
 //: construct using a single dem file
@@ -24,7 +23,7 @@ void volm_loc_hyp::add(vgl_polygon<double>& poly, vil_image_view<float>& dem, vp
       }
       if (dem(i,j) <= 0)
         continue;
-      if (!poly.contains(lon, lat)) 
+      if (!poly.contains(lon, lat))
         continue;
       // create the point such that lon is x and lat is y
       vgl_point_3d<double> pt(lon, lat, dem(i,j));
@@ -39,7 +38,7 @@ bool volm_loc_hyp::add(double lat, double lon, double elev)
   locs_.push_back(pt);
   return true;
 }
-  
+
 
 //: construct by reading from a binary file
 volm_loc_hyp::volm_loc_hyp(vcl_string bin_file) : current_(0)
@@ -59,16 +58,18 @@ bool volm_loc_hyp::write_hypotheses(vcl_string out_file)
   if (!os)
     return false;
   this->b_write(os);
-  os.close(); 
+  os.close();
   return true;
 }
 
-bool volm_loc_hyp::get_next(vgl_point_3d<double>& h) {
+bool volm_loc_hyp::get_next(vgl_point_3d<double>& h)
+{
   if (current_ < locs_.size()) {
     h = locs_[current_];
     current_++;
     return true;
-  } else
+  }
+  else
     return false;
 }
 
@@ -79,7 +80,7 @@ bool volm_loc_hyp::get_next(unsigned start, unsigned skip, vgl_point_3d<double>&
     h = locs_[start];
     current_ = start+skip;
     return true;
-  } 
+  }
   if (current_ < locs_.size()) {
     h = locs_[current_];
     current_ += skip;
@@ -88,13 +89,12 @@ bool volm_loc_hyp::get_next(unsigned start, unsigned skip, vgl_point_3d<double>&
   return false;
 }
 
-//: get the hypothesis closest to the given and its id if get_next method were to be used, 
+//: get the hypothesis closest to the given and its id if get_next method were to be used,
 double volm_loc_hyp::get_closest(double lat, double lon, vgl_point_3d<double>& h, unsigned& hyp_id)
 {
   double min_dist = vcl_numeric_limits<double>::max();
-  unsigned hyp_cnt = 0;
-  current_ = 0; 
-  for (unsigned i = 0; i < locs_.size(); i++) 
+  current_ = 0;
+  for (unsigned i = 0; i < locs_.size(); ++i)
   {
     vgl_point_3d<double> query_pt(lon, lat, locs_[i].z());  // make the z's equal cause we don't care about elev
     double dist = vgl_distance(query_pt, locs_[i]);
@@ -112,7 +112,7 @@ double volm_loc_hyp::get_closest(double lat, double lon, vgl_point_3d<double>& h
 bool volm_loc_hyp::exist(double lat, double lon, double size, unsigned& id)
 {
   vgl_point_2d<double> query_pt(lon, lat);  // make the z's equal cause we don't care about elev
-  for (unsigned i = 0; i < locs_.size(); i++) 
+  for (unsigned i = 0; i < locs_.size(); ++i)
   {
     vgl_point_2d<double> h_pt(locs_[i].x(), locs_[i].y());  // make the z's equal cause we don't care about elev
     double dist = vgl_distance(query_pt, h_pt);
@@ -129,7 +129,7 @@ void volm_loc_hyp::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, version());
   vsl_b_write(os, locs_.size());
-  for (unsigned i = 0; i < locs_.size(); i++) {
+  for (unsigned i = 0; i < locs_.size(); ++i) {
     vsl_b_write(os, locs_[i].x());
     vsl_b_write(os, locs_[i].y());
     vsl_b_write(os, locs_[i].z());
@@ -147,14 +147,14 @@ void volm_loc_hyp::b_read(vsl_b_istream &is)
   {
    case 1: {
      vcl_cerr << "I/O ERROR: boxm2_volm_loc_hypotheses::b_read(vsl_b_istream&)\n"
-             << "           Version 1 is not supported anymore!\n";
+              << "           Version 1 is not supported anymore!\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     break;
            }
    case 2: {
      unsigned cnt;
      vsl_b_read(is, cnt);
-     for (unsigned i = 0; i < cnt; i++) {
+     for (unsigned i = 0; i < cnt; ++i) {
        double x, y, z;
        vsl_b_read(is, x);
        vsl_b_read(is, y);
@@ -182,11 +182,11 @@ void volm_loc_hyp::write_to_kml(vcl_string out_file, double size)
   vnl_double_2 ul, ll, lr, ur;
   //double arcsecond = (n/2.0) * (1.0/3600.0);
 
-  for (unsigned i = 0; i < locs_.size(); i++) {
-   
+  for (unsigned i = 0; i < locs_.size(); ++i) {
+
    double lon = locs_[i].x();
-   double lat = locs_[i].y(); 
-   vcl_stringstream str; str << i << "_" << lat << "_" << lon;
+   double lat = locs_[i].y();
+   vcl_stringstream str; str << i << '_' << lat << '_' << lon;
    ll[0] = lat; ll[1] = lon;
    ul[0] = lat+size; ul[1] = lon;
    lr[0] = lat; lr[1] = lon+size;
