@@ -14,6 +14,14 @@ volm_geo_index_node::~volm_geo_index_node()
   children_.clear();
 }
 
+vcl_string volm_geo_index_node::get_label_index_name(vcl_string const& geo_index_name_pre, vcl_string const& identifier)
+{ 
+  if (identifier.compare("") == 0)
+    return geo_index_name_pre + "_" + this->get_string() + "_index_label.bin"; 
+  else
+    return geo_index_name_pre + "_" + this->get_string() + "_index_label_"+identifier+".bin"; 
+}
+
 void construct_sub_tree(volm_geo_index_node_sptr parent, float min_size)
 {
   float w = parent->extent_.width();
