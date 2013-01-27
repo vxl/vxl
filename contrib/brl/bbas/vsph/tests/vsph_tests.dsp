@@ -105,6 +105,9 @@ SOURCE=.\test_camera_bounds.cxx
 SOURCE=.\test_view_sphere.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_sph_geom.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

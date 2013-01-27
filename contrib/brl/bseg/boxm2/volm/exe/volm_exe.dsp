@@ -115,6 +115,9 @@ SOURCE=.\boxm2_volumetric_matcher_exe_per_gpu.cxx
 # Begin Source File
 SOURCE=.\boxm2_volumetric_matcher_rationale.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_volumetric_matcher_integration.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

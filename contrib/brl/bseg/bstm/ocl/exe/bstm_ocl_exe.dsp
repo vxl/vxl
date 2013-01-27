@@ -97,6 +97,9 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\bstm_ocl_render_view.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bstm_ocl_multi_render_view.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

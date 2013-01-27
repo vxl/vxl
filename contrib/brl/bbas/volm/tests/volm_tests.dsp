@@ -258,6 +258,15 @@ SOURCE=.\test_tile.cxx
 SOURCE=.\test_query.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_region_query.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_camera_space.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

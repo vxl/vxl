@@ -111,6 +111,21 @@ SOURCE=.\volm_spherical_shell_container.cxx
 SOURCE=.\volm_loc_hyp.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\volm_spherical_region_query.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_layers.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_query_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\volm_geo_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\volm_camera_space.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+volm_loc_hyp-.cxx
 # End Source File
 # Begin Source File
@@ -121,6 +136,12 @@ SOURCE=.\Templates/vbl_smart_ptr+volm_spherical_container-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+volm_spherical_shell_container-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+volm_camera_space-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+volm_geo_index_node-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -154,6 +175,30 @@ SOURCE=.\volm_loc_hyp_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\volm_loc_hyp.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_camera_space.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_region_query.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_geo_index_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_layers.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_query_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_geo_index.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_char_codes.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_camera_space_sptr.h
 # End Source File
 # End Group
 # End Target

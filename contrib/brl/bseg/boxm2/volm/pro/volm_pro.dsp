@@ -93,16 +93,16 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\processes/boxm2_hypotheses_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+boxm2_volm_loc_hypotheses_sptr-.cxx
+SOURCE=.\boxm2_volm_register.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm2_create_index_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_volm_register.cxx
+SOURCE=.\processes/boxm2_create_index_process2.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_create_label_index_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

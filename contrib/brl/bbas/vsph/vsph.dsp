@@ -102,6 +102,15 @@ SOURCE=.\vsph_spherical_coord.cxx
 SOURCE=.\vsph_sph_point_3d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vsph_sph_point_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_sph_box_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsph_view_sphere+vsph_view_point+double--.cxx
 # End Source File
 # Begin Source File
@@ -133,6 +142,15 @@ SOURCE=.\vsph_spherical_coord.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsph_view_point.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_sph_point_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_sph_box_2d.h
 # End Source File
 # End Group
 # End Target

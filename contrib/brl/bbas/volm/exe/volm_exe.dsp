@@ -106,6 +106,9 @@ SOURCE=.\volm_evaluate_output_tiles.cxx
 # Begin Source File
 SOURCE=.\volm_query_creation.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\volm_construct_camera_space.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

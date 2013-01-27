@@ -100,6 +100,9 @@ SOURCE=.\bstm_cam_tableau.cxx
 # Begin Source File
 SOURCE=.\bstm_ocl_render_tableau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bstm_ocl_multi_render_tableau.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -111,6 +114,9 @@ SOURCE=.\bstm_ocl_render_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\bstm_cam_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\bstm_ocl_multi_render_tableau.h
 # End Source File
 # End Group
 # End Target

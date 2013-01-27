@@ -102,7 +102,7 @@ SOURCE=.\test_poly_radial_distortion.cxx
 SOURCE=.\test_segmented_rolling_shutter_camera.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_kml_camera.cxx
+SOURCE=.\test_camera_utils.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
