@@ -34,7 +34,7 @@ class volm_geo_index_node : public vbl_ref_count
    vcl_string get_string();
    vcl_string get_hyp_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + ".bin"; }
    vcl_string get_index_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + "_index.bin"; }
-   vcl_string get_label_index_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + "_index_label.bin"; }
+   vcl_string get_label_index_name(vcl_string const& geo_index_name_pre, vcl_string const& identifier); 
 
  public:
    // mini tile
