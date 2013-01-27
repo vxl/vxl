@@ -1,4 +1,6 @@
 #include <testlib/testlib_test.h>
+
+#if HAS_OPENCL
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <bbas/volm/volm_query.h>
@@ -153,5 +155,9 @@ static void test_volm_obj_based_matcher()
   boxm2_volm_obj_based_matcher matcher(query, ind, ei, mgr->gpus_[dev_id]);
   TEST("obj_based_matcher ", matcher.obj_based_matcher(), true);
 }
+
+#else // HAS_OPENCL
+static void test_volm_obj_based_matcher() {}
+#endif // HAS_OPENCL
 
 TESTMAIN(test_volm_obj_based_matcher);
