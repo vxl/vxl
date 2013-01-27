@@ -271,7 +271,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
     
     // create a binary index file for each hypo set in a leaf
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
-    vcl_string index_file = leaves2[li]->get_label_index_name(out_file_name_pre.str());
+    vcl_string index_file = leaves2[li]->get_label_index_name(out_file_name_pre.str(), ident);
     if (!ind->initialize_write(index_file)) {
       vcl_cerr << "Cannot initialize " << index_file << " for write!\n";
       return false;
@@ -313,7 +313,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
       bocl_mem* vis=new bocl_mem(device->context(),vis_buff,layer_size*sizeof(float),"visibility buffer");
       vis->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      bocl_mem* max_omega_image = opencl_cache->alloc_mem(layer_size*sizeof(float), max_omega_buff,"vis image buffer");
+      bocl_mem* max_omega_image = new bocl_mem(device->context(),max_omega_buff,layer_size*sizeof(float), "max omega image buffer");
       max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
       // find its block
@@ -354,9 +354,6 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
       vcl_vector<boxm2_block_id>& vis_blocks = order_cache[curr_block];
 
       vcl_vector<boxm2_block_id>::iterator blk_iter_inner;
-
-      vcl_cout << "indexing lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
-
       for (blk_iter_inner = vis_blocks.begin(); blk_iter_inner != vis_blocks.end(); ++blk_iter_inner) {
         boxm2_block_id id_inner = *blk_iter_inner;
 
@@ -365,15 +362,11 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
 
         vul_timer transfer;
 
-        vcl_cout << "trying to allocate blk!\n"; vcl_cout.flush();
         bocl_mem* blk       = opencl_cache->get_block(id_inner);
-        vcl_cout << "trying to allocate blk_info!\n"; vcl_cout.flush();
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        vcl_cout << "trying to allocate alpha for: " << id_inner << "!\n"; vcl_cout.flush();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id_inner);
         
         //bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
-        vcl_cout << "trying to allocate mog for: " << id_inner << "!\n"; vcl_cout.flush();
         bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,0,true);
 
         transfer_time += (float) transfer.all();
@@ -408,17 +401,6 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
 
-        //remove from device memory unnecessary items
-        //opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        //opencl_cache->shallow_remove_block(id_inner); // also remove blk_info
-        //opencl_cache->clear_cache();
-
-        status = clFinish(queue);
-        check_val(status, MEM_FAILURE, "opencl clear cache FAILED: " + error_to_string(status));
-
-        vcl_cout << "after kernel blk num_bytes: " << blk->num_bytes() << vcl_endl;
-        vcl_cout << "after kernel alpha num_bytes: " << alpha->num_bytes() << vcl_endl;
-        vcl_cout << "after kernel mog num_bytes: " << mog->num_bytes() << vcl_endl; vcl_cout.flush();
       }
       if (vis_blocks.size() != 0)  // normalize
       {
