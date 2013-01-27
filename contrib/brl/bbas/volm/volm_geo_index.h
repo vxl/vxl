@@ -5,11 +5,11 @@
 // \file
 // \brief Classes to enable fast access to geographic areas and attributes
 // Units are in lat, lon
-//        index is a quadtree 
+//        index is a quadtree
 //        some of the 4 children of a node may have zero as sptr which means that region is pruned (out of ROI or eliminated for some reason)
-//        WARNING: this class assumes that the areas in question are small enough so that Euclidean distances approximate geodesic distances 
+//        WARNING: this class assumes that the areas in question are small enough so that Euclidean distances approximate geodesic distances
 //                 also assumes that the regions do not cross over lon = 0
-//        
+//
 //
 //
 // \author Ozge C. Ozcanli
@@ -30,28 +30,28 @@ class volm_geo_index_node : public vbl_ref_count
  public:
    volm_geo_index_node(vgl_box_2d<float> const& extent, volm_geo_index_node_sptr& parent) : extent_(extent), parent_(parent) {}
    volm_geo_index_node(vgl_box_2d<float> const& extent) : extent_(extent), parent_(0) {}
-   ~volm_geo_index_node(); 
+   ~volm_geo_index_node();
    vcl_string get_string();
    vcl_string get_hyp_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + ".bin"; }
    vcl_string get_index_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + "_index.bin"; }
    vcl_string get_label_index_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + "_index_label.bin"; }
 
- public: 
-   // mini tile 
+ public:
+   // mini tile
    vgl_box_2d<float> extent_;   // min point of this box is lower left corner of the mini tile of this node
                                  // max point of this box is used as upper bound if pixels in the mini tile are iterated
 
    volm_geo_index_node_sptr parent_;
    vcl_vector<volm_geo_index_node_sptr> children_;
-   
+
    // other data, e.g. keywords of geographic attributes that this tile contains, a set of hypotheses
    //
    volm_loc_hyp_sptr hyps_;
 };
 
-class volm_geo_index 
+class volm_geo_index
 {
-public:
+ public:
   //: construct a tree such that the given tile is the root, and the hierarchy of its children form a quadtree space partition
   static volm_geo_index_node_sptr construct_tree(volm_tile t, float min_size);
 
@@ -73,7 +73,7 @@ public:
 
   //: write index quadtree in a text file, only the tree structure and not the leaf data
   static void write(volm_geo_index_node_sptr root, vcl_string const& file_name, float min_size);
-  
+
   //: even if a child has zero pointer, it's order in the children_ array is the same, this is to make sure that the children have consistent geographic meaning
   static volm_geo_index_node_sptr read_and_construct(vcl_string const& file_name, float& min_size);
 
@@ -93,7 +93,6 @@ public:
 
   //: return the leaf and the hyp id of the closest hyp to the given location
   static volm_geo_index_node_sptr get_closest(volm_geo_index_node_sptr root, double lat, double lon, unsigned& hyp_id);
-
 };
 
-#endif // volm_index_h_
+#endif // volm_geo_index_h_
