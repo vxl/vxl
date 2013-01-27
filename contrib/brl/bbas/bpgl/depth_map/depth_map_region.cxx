@@ -84,10 +84,12 @@ region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
   return poly_3d;
 }
 
-depth_map_region::depth_map_region() : active_(true),
-                                       order_(0), orient_type_(NON_PLANAR), name_(""), depth_(-1.0),
-                                       min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
-                                       depth_inc_(1.0), region_2d_(0), region_3d_(0), nlcd_id_(21)
+depth_map_region::depth_map_region()
+  : active_(true), order_(0), nlcd_id_(21),
+    orient_type_(NON_PLANAR), name_(""), depth_(-1.0),
+    min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
+    depth_inc_(1.0),
+    region_2d_(0), region_3d_(0)
 {}
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -96,9 +98,11 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name,
                                    depth_map_region::orientation orient,
                                    unsigned nlcd_id)
-  : active_(true), order_(0), orient_type_(orient), name_(name), depth_(-1.0),
-    min_depth_(min_depth), max_depth_(max_depth), depth_inc_(1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0), nlcd_id_(nlcd_id)
+  : active_(true), order_(0), nlcd_id_(nlcd_id),
+    orient_type_(orient), name_(name), depth_(-1.0),
+    min_depth_(min_depth), max_depth_(max_depth),
+    depth_inc_(1.0),
+    region_plane_(region_plane), region_2d_(region), region_3d_(0)
 {
 }
 
@@ -107,15 +111,17 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name,
                                    depth_map_region::orientation orient,
                                    unsigned nlcd_id)
-  : active_(true), order_(0), orient_type_(orient), name_(name), depth_(-1.0),
-    min_depth_(-1.0), max_depth_(-1.0),depth_inc_(1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0), nlcd_id_(nlcd_id)
+  : active_(true), order_(0), nlcd_id_(nlcd_id),
+    orient_type_(orient), name_(name), depth_(-1.0),
+    min_depth_(-1.0), max_depth_(-1.0),
+    depth_inc_(1.0),
+    region_plane_(region_plane), region_2d_(region), region_3d_(0)
 {
 }
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name)
-  : active_(true), order_(0), orient_type_(NON_PLANAR), name_(name), nlcd_id_(0),
+  : active_(true), order_(0), nlcd_id_(0), orient_type_(NON_PLANAR), name_(name),
     depth_(vcl_numeric_limits<double>::max()),
     min_depth_(vcl_numeric_limits<double>::max()),
     max_depth_(vcl_numeric_limits<double>::max()),
@@ -467,8 +473,8 @@ void depth_map_region::b_read(vsl_b_istream& is)
     vsl_b_read(is, r3d);
     region_3d_ = r3d;
   }
-  else if(ver == 2) {
-        vsl_b_read(is, active_);
+  else if (ver == 2) {
+    vsl_b_read(is, active_);
     vsl_b_read(is, order_);
     unsigned temp;
     vsl_b_read(is, temp);
