@@ -6,15 +6,16 @@
 #include <vcl_iostream.h>
 
 //: a point in the spherical coordinate system on the surface of a unit sphere
-// theta is elevation with zero at the North Pole, 180 degress at the South Pole
-// phi is azimuth with zero pointing East, positive heading North
+// \p theta is elevation with zero at the North Pole, 180 degress at the South Pole
+// \p phi is azimuth with zero pointing East, positive heading North
 class vsph_sph_point_2d
 {
  public:
   //: Default constructor
   vsph_sph_point_2d() : theta_(0.0), phi_(0.0) {}
 
- vsph_sph_point_2d(double theta, double phi, bool in_radians = true) : theta_(theta), phi_(phi), in_radians_(in_radians) {}
+ vsph_sph_point_2d(double theta, double phi, bool in_radians = true)
+ : in_radians_(in_radians), theta_(theta), phi_(phi) {}
 
   ~vsph_sph_point_2d() {}
 
