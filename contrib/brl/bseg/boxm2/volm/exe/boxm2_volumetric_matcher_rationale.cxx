@@ -250,7 +250,7 @@ int main(int argc,  char** argv)
   vcl_cout << "from camera file, read location: " << lat << ' ' << lon << '\n';
 
   // figure out closest hypothesis
-  vgl_point_3d<float> closest_h; unsigned closest_id;
+  vgl_point_3d<double> closest_h; unsigned closest_id;
   hyp.get_closest(lat, lon, closest_h, closest_id);
   vcl_cout << "closest hypothesis to camera location has id: " << closest_id << " its lat, lon is: " << closest_h.y() << ' ' << closest_h.x() << '\n'
            << "CAUTION: this exe assumes that index file has params start = 0 and skip = 1, so the index id will be the same as hypothesis id in the index file!\n";
