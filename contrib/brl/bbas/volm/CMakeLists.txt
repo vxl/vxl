@@ -23,20 +23,20 @@ IF(EXPAT_FOUND)
 ENDIF(EXPAT_FOUND)
 
 SET(volm_sources
- volm_io.h                               volm_io.cxx
- volm_tile.h                             volm_tile.cxx
- volm_spherical_container.h              volm_spherical_container.cxx
+ volm_io.h                              volm_io.cxx
+ volm_tile.h                            volm_tile.cxx
+ volm_spherical_container.h             volm_spherical_container.cxx
  volm_spherical_container_sptr.h
- volm_spherical_shell_container.h        volm_spherical_shell_container.cxx
+ volm_spherical_shell_container.h       volm_spherical_shell_container.cxx
  volm_spherical_shell_container_sptr.h
- volm_query.h                            volm_query.cxx
+ volm_query.h                           volm_query.cxx
  volm_query_sptr.h
- volm_loc_hyp.h                          volm_loc_hyp.cxx
+ volm_loc_hyp.h                         volm_loc_hyp.cxx
  volm_loc_hyp_sptr.h
  volm_geo_index.h  volm_geo_index.cxx
  volm_geo_index_sptr.h
- volm_camera_space.h			volm_camera_space.cxx
- volm_spherical_query_region.h          volm_spherical_query_region.cxx 
+ volm_camera_space.h                    volm_camera_space.cxx
+ volm_spherical_query_region.h          volm_spherical_query_region.cxx
  volm_spherical_region_query.h          volm_spherical_region_query.cxx
  volm_spherical_layers.h                volm_spherical_layers.cxx
 )
@@ -52,5 +52,3 @@ IF(BUILD_TESTING)
 ENDIF(BUILD_TESTING)
 
 SUBDIRS(exe)
-
-

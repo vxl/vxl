@@ -18,9 +18,9 @@ ADD_EXECUTABLE( volm_evaluate_output_tiles
                 volm_evaluate_output_tiles.cxx
               )
 
-ADD_EXECUTABLE( volm_construct_camera_space 
+ADD_EXECUTABLE( volm_construct_camera_space
                 volm_construct_camera_space.cxx
-			  )
+              )
 
 TARGET_LINK_LIBRARIES( volm_dummy_matcher volm depth_map )
 TARGET_LINK_LIBRARIES( volm_query_creation volm depth_map bvrml )

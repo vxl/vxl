@@ -19,7 +19,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_gauss_rgb_processor.h       boxm2_gauss_rgb_processor.cxx
     boxm2_phongs_model_processor.h    boxm2_phongs_model_processor.cxx
     boxm2_mog6_view_processor.h
-    
+
     boxm2_data_serial_iterator.h
     boxm2_cast_intensities_functor.h
     boxm2_mean_intensities_batch_functor.h
@@ -29,7 +29,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_export_oriented_point_cloud_function.h     boxm2_export_oriented_point_cloud_function.cxx
     boxm2_batch_functors.h
     boxm2_ray_probe_functor.h
-	boxm2_vis_probe_functor.h
+    boxm2_vis_probe_functor.h
     boxm2_shadow_model_functor.h
     boxm2_batch_opt2_functors.h
     boxm2_batch_opt2_phongs_functors.h
@@ -44,9 +44,9 @@ SET(boxm2_cpp_algo_sources
     boxm2_compute_normal_albedo_functor.h  boxm2_compute_normal_albedo_functor.cxx
     boxm2_compute_normal_albedo_functor_opt.h  boxm2_compute_normal_albedo_functor_opt.cxx
     boxm2_points_to_volume_function.h  boxm2_points_to_volume_function.cxx
-	boxm2_export_stack_images_function.h boxm2_export_stack_images_function.cxx
-	boxm2_normals_to_id_functor.h
-  )
+    boxm2_export_stack_images_function.h boxm2_export_stack_images_function.cxx
+    boxm2_normals_to_id_functor.h
+   )
 AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 
 ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})

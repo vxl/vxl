@@ -4,7 +4,6 @@
 
 static void test_camera_space()
 {
-
   double head_mid=0.0, head_radius=180.0, head_inc=45.0;
   double tilt_mid=90.0, tilt_radius=20.0, tilt_inc=10.0;
   double roll_mid=0.0,  roll_radius=3.0,  roll_inc=3.0;
@@ -13,9 +12,9 @@ static void test_camera_space()
   double altitude = 1.6;
   unsigned ni = 1280, nj = 760;
   volm_camera_space csp(fovs, altitude, ni, nj,
-			head_mid, head_radius, head_inc,
-			tilt_mid, tilt_radius, tilt_inc,
-			roll_mid, roll_radius, roll_inc);
+                        head_mid, head_radius, head_inc,
+                        tilt_mid, tilt_radius, tilt_inc,
+                        roll_mid, roll_radius, roll_inc);
   //test iterator functions
   camera_space_iterator cit = csp.begin(0.0);
   cit += 110;
@@ -27,15 +26,15 @@ static void test_camera_space()
   unsigned roll_index,  fov_index,  head_index, tilt_index;
   cit->cam_indices(roll_index,  fov_index,  head_index, tilt_index);
   unsigned de_roll_index,  de_fov_index,  de_head_index, de_tilt_index;
-  cit->cam_indices(indx,de_roll_index,  de_fov_index,  
-		   de_head_index, de_tilt_index);
-  unsigned de_indx = cit->cam_index(roll_index,  fov_index,  
-				    head_index, tilt_index);
-  vcl_cout << "(index " << indx << ' ' << de_indx << ")\n";
-  vcl_cout << "(" << roll_index << ' ' << fov_index << ' '
-	   << head_index << ' ' << tilt_index << ")\n";
-  vcl_cout << "(" << de_roll_index << ' ' << de_fov_index << ' '
-	   << de_head_index << ' ' << de_tilt_index << ")\n";
+  cit->cam_indices(indx,de_roll_index,  de_fov_index,
+                   de_head_index, de_tilt_index);
+  unsigned de_indx = cit->cam_index(roll_index,  fov_index,
+                                    head_index, tilt_index);
+  vcl_cout << "(index " << indx << ' ' << de_indx << ")\n"
+           << '(' << roll_index << ' ' << fov_index << ' '
+           << head_index << ' ' << tilt_index << ")\n"
+           << '(' << de_roll_index << ' ' << de_fov_index << ' '
+           << de_head_index << ' ' << de_tilt_index << ")\n";
   bool good = indx==471;
   good = good && (cit != csp.end());
   good = good && (de_indx == indx);

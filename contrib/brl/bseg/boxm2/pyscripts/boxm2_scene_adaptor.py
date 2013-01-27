@@ -581,10 +581,10 @@ class boxm2_scene_adaptor(object):
     mask = create_mask_image(self.scene, camera, ni, nj, ground_plane_only);
     return mask;
 
-  def normals_to_id(self) :  
-	
-	print("Normals to id ");
-	boxm2_batch.init_process("boxm2CppNormalsToIdProcess");
-	boxm2_batch.set_input_from_db(0,self.scene);
-	boxm2_batch.set_input_from_db(1,self.cpu_cache);
-	return boxm2_batch.run_process();
+  def normals_to_id(self) :
+
+    print("Normals to id ");
+    boxm2_batch.init_process("boxm2CppNormalsToIdProcess");
+    boxm2_batch.set_input_from_db(0,self.scene);
+    boxm2_batch.set_input_from_db(1,self.cpu_cache);
+    return boxm2_batch.run_process();

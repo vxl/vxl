@@ -28,7 +28,6 @@ inline float calc_tfar( float ray_ox, float ray_oy, float ray_oz,
                         float max_facex, float max_facey, float max_facez)
 {
   return min(min( (max_facex-ray_ox)*(1.0f/ray_dx), (max_facey-ray_oy)*(1.0f/ray_dy)), (max_facez-ray_oz)*(1.0f/ray_dz));
- 
 }
 
 inline float calc_tnear(float ray_ox, float ray_oy, float ray_oz,
@@ -161,8 +160,8 @@ void cast_ray(
     float vox_len=1.0f;
     float vox_minx, vox_miny, vox_minz;
     int bit_index = traverse_three(&local_tree[llid],
-                                  posx-cell_minx, posy-cell_miny, posz-cell_minz,
-                                  &vox_minx, &vox_miny, &vox_minz, &vox_len);
+                                   posx-cell_minx, posy-cell_miny, posz-cell_minz,
+                                   &vox_minx, &vox_miny, &vox_minz, &vox_len);
     //data index is relative data (data_index_cached) plus data_index_root
     int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex)
                     + data_index_root(&local_tree[llid]);
@@ -281,8 +280,8 @@ void cast_ray_render_vis(
     float vox_len=1.0f;
     float vox_minx, vox_miny, vox_minz;
     int bit_index = traverse_three(&local_tree[llid],
-                                  posx-cell_minx, posy-cell_miny, posz-cell_minz,
-                                  &vox_minx, &vox_miny, &vox_minz, &vox_len);
+                                   posx-cell_minx, posy-cell_miny, posz-cell_minz,
+                                   &vox_minx, &vox_miny, &vox_minz, &vox_len);
     //data index is relative data (data_index_cached) plus data_index_root
     int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex)
                     + data_index_root(&local_tree[llid]);
@@ -328,7 +327,7 @@ void cast_ray_render_vis2(
           __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
           __local     uchar              * cumsum,          //cumulative sum helper for data pointer
                       float              * tfar_max,         // max distance for the ray tracing to go
-					  float              * vis,     //passed in as starting visibility
+                      float              * vis,     //passed in as starting visibility
 
           //----aux arguments defined by host at compile time-------------------
           AuxArgs aux_args )
@@ -407,8 +406,8 @@ void cast_ray_render_vis2(
     float vox_len=1.0f;
     float vox_minx, vox_miny, vox_minz;
     int bit_index = traverse_three(&local_tree[llid],
-                                  posx-cell_minx, posy-cell_miny, posz-cell_minz,
-                                  &vox_minx, &vox_miny, &vox_minz, &vox_len);
+                                   posx-cell_minx, posy-cell_miny, posz-cell_minz,
+                                   &vox_minx, &vox_miny, &vox_minz, &vox_len);
     //data index is relative data (data_index_cached) plus data_index_root
     int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex)
                     + data_index_root(&local_tree[llid]);

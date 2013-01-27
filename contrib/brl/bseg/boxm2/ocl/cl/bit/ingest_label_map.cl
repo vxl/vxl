@@ -1,4 +1,4 @@
-// Ingest label map kernel, 
+// Ingest label map kernel,
 // MOG type: boxm2_label_short
 // assign the label of the ray to all voxels along the ray, when rendering boxm2_label_short, low prob ones aren't displayed anyways
 
@@ -24,15 +24,15 @@ void cast_ray(int,int,float,float,float,float,float,float,
               float*, AuxArgs);
 __kernel
 void ingest_label_map(__constant  RenderSceneInfo    * linfo,
-                       __global    uint4              * image_dims,
-                       __global    float4             * ray_origin_buff,
-                       __global    int4               * tree_array,
-                       __global    ushort             * data_array,
-					   __global    uchar              * data_buff,
-                       __constant  uchar              * bit_lookup,
-                       __local     uchar16            * local_tree,
-                       __local     uchar              * cumsum,        // cumulative sum helper for data pointer
-                       __local     int                * imIndex)
+                      __global    uint4              * image_dims,
+                      __global    float4             * ray_origin_buff,
+                      __global    int4               * tree_array,
+                      __global    ushort             * data_array,
+                      __global    uchar              * data_buff,
+                      __constant  uchar              * bit_lookup,
+                      __local     uchar16            * local_tree,
+                      __local     uchar              * cumsum,        // cumulative sum helper for data pointer
+                      __local     int                * imIndex)
 {
   //----------------------------------------------------------------------------
   //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
@@ -60,8 +60,8 @@ void ingest_label_map(__constant  RenderSceneInfo    * linfo,
   float ray_ox = 0.0f;float ray_oy = 0.0f;float ray_oz = 0.0f;
   float ray_dx = 0.0f;float ray_dy = 0.0f;float ray_dz = 0.0f;
 
-  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, 
-                             &ray_ox, &ray_oy, &ray_oz, 
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d,
+                             &ray_ox, &ray_oy, &ray_oz,
                              &ray_dx, &ray_dy, &ray_dz);
 
   ////----------------------------------------------------------------------------
@@ -81,6 +81,6 @@ void ingest_label_map(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
-
 }
+
 #endif // INGEST_LABEL_MAP

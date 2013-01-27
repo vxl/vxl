@@ -26,24 +26,25 @@ class volm_spherical_layers
 {
  public:
   volm_spherical_layers(vpgl_perspective_camera<double> const& cam,
-			depth_map_scene_sptr const& dm_scene,
-			double altitude,
-			volm_spherical_container_sptr const& sph_vol,
-			volm_spherical_shell_container_sptr const& sph_shell,
-			unsigned char invalid,
-			unsigned char default_sky_order,
-			double d_threshold,
-			unsigned log_downsample_ratio);
+                        depth_map_scene_sptr const& dm_scene,
+                        double altitude,
+                        volm_spherical_container_sptr const& sph_vol,
+                        volm_spherical_shell_container_sptr const& sph_shell,
+                        unsigned char invalid,
+                        unsigned char default_sky_order,
+                        double d_threshold,
+                        unsigned log_downsample_ratio);
   volm_spherical_layers(depth_map_scene_sptr const& dm_scene,
-			double altitude,
-			volm_spherical_container_sptr const& sph_vol,
-			volm_spherical_shell_container_sptr const& sph_shell,
-			unsigned char invalid,
-			unsigned char default_sky_order,
-			double d_threshold,
-			unsigned log_downsample_ratio);
-		   
-  //: accessors
+                        double altitude,
+                        volm_spherical_container_sptr const& sph_vol,
+                        volm_spherical_shell_container_sptr const& sph_shell,
+                        unsigned char invalid,
+                        unsigned char default_sky_order,
+                        double d_threshold,
+                        unsigned log_downsample_ratio);
+
+  // === accessors ===
+
   //: the minimum distance for each ray
   const vcl_vector<unsigned char>& min_dist_layer() const
     {return min_dist_layer_;}
@@ -76,24 +77,24 @@ class volm_spherical_layers
   //: set the perspective camera
   void set_camera(vpgl_perspective_camera<double> const& cam)
   { cam_ = cam;}
-  depth_map_scene_sptr depth_map_scene() const 
+  depth_map_scene_sptr depth_map_scene() const
   {return dm_scene_;}
   //: compute shell layers
   bool compute_layers();
   void clear();
  private:
   unsigned char fetch_depth(double const& u, double const& v,
-			    vcl_vector<depth_map_region_sptr> const& depth_regions,
-			    vcl_vector<depth_map_region_sptr> const& ground_plane,
-			    vcl_vector<depth_map_region_sptr> const& sky,
-			    unsigned char& order, unsigned char& max_dist,
-			    unsigned& object_id,  unsigned char& grd_nlcd,
-			    bool& is_ground,  bool& is_sky,
-			    bool& is_object,  
-			    vil_image_view<float> const& gp_depth_img);
+                            vcl_vector<depth_map_region_sptr> const& depth_regions,
+                            vcl_vector<depth_map_region_sptr> const& ground_plane,
+                            vcl_vector<depth_map_region_sptr> const& sky,
+                            unsigned char& order, unsigned char& max_dist,
+                            unsigned& object_id,  unsigned char& grd_nlcd,
+                            bool& is_ground,  bool& is_sky,
+                            bool& is_object,
+                            vil_image_view<float> const& gp_depth_img);
 
 
-  vpgl_perspective_camera<double> cam_;  
+  vpgl_perspective_camera<double> cam_;
   depth_map_scene_sptr dm_scene_;
   //: the vector depth_map_regions sorted by their orders
   vcl_vector<depth_map_region_sptr> scn_regs_;
@@ -114,4 +115,5 @@ class volm_spherical_layers
   vcl_vector<vcl_vector<unsigned> > dist_id_layer_;
   unsigned count_;
 };
-#endif //spherical_layers_h_
+
+#endif // volm_spherical_layers_h_

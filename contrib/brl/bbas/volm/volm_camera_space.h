@@ -1,4 +1,4 @@
-//This is brl/bbas/volm/volm_spherical_region_query.h
+//This is brl/bbas/volm/volm_camera_space.h
 #ifndef volm_camera_space_h_
 #define volm_camera_space_h_
 //:
@@ -18,8 +18,10 @@
 #include <vbl/vbl_ref_count.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsl/vsl_binary_io.h>
+
 // a struct to hold cam angles
-class cam_angles{
+class cam_angles
+{
  public:
  cam_angles(double roll, double top_fov, double heading, double tilt):
   roll_(roll), top_fov_(top_fov), heading_(heading), tilt_(tilt) {}
@@ -33,16 +35,18 @@ class cam_angles{
   double  heading_;
   double  tilt_;
 };
+
+class camera_space_iterator;
+
 //: defines a space of camera hypotheses
 // heading x tilt x roll x focal length
-class camera_space_iterator;
 class volm_camera_space : public vbl_ref_count
 {
  public:
   //default constructor
   volm_camera_space():altitude_(0.0),ni_(0), nj_(0), head_mid_(0.0),
     head_radius_(0.0), head_inc_(0.0),tilt_mid_(0.0), tilt_radius_(0.0),
-    tilt_inc_(0.0), roll_mid_(0.0),roll_radius_(0.0), roll_inc_(0.0){}
+    tilt_inc_(0.0), roll_mid_(0.0),roll_radius_(0.0), roll_inc_(0.0) {}
   // angle units in degrees
   volm_camera_space(vcl_vector<double> const& top_fov, double altitude,
                     unsigned ni, unsigned nj,
@@ -86,26 +90,26 @@ class volm_camera_space : public vbl_ref_count
 
   //: individual camera angle indices at current state of iterator
   void cam_indices(unsigned & roll_index, unsigned& fov_index,
-		   unsigned & head_index, unsigned& tilt_index) const
+                   unsigned & head_index, unsigned& tilt_index) const
   { roll_index = roll_index_; fov_index = fov_index_; head_index = head_index_;
     tilt_index = tilt_index_;}
 
   //: transform 1-d index to indices
   void cam_indices(unsigned cam_index,
-		   unsigned & roll_index, unsigned& fov_index,
-		   unsigned & head_index, unsigned& tilt_index) const;
-  
+                   unsigned & roll_index, unsigned& fov_index,
+                   unsigned & head_index, unsigned& tilt_index) const;
+
   //: transform indices to 1-d index
   unsigned cam_index(unsigned roll_index, unsigned fov_index,
-		     unsigned head_index, unsigned tilt_index) const;
+                     unsigned head_index, unsigned tilt_index) const;
 
   //: camera at specified index
   vpgl_perspective_camera<double> camera(unsigned cam_index) const;
-  
+
   //: camera angles at specified index
   cam_angles camera_angles(unsigned cam_index) const;
   vcl_string get_string(unsigned cam_index) const;
-  
+
   //: generate the full set of camera indices
   void generate_full_camera_index_space();
 
@@ -115,7 +119,7 @@ class volm_camera_space : public vbl_ref_count
   //: remove a camera from the index space
   bool remove_camera_index(unsigned cam_index);
 
-  //: access valid camera indices  
+  //: access valid camera indices
   const vcl_vector<unsigned>& valid_indices() const{
     return valid_camera_indices_;}
 
@@ -134,13 +138,12 @@ class volm_camera_space : public vbl_ref_count
   bool next_cam();
 
   //: iterator for valid camera indices
-  vcl_vector<unsigned>::iterator valid_begin(){
-    return valid_camera_indices_.begin();}
+  vcl_vector<unsigned>::iterator valid_begin() {return valid_camera_indices_.begin();}
 
-  vcl_vector<unsigned>::iterator valid_end(){
-    return valid_camera_indices_.end();}
+  vcl_vector<unsigned>::iterator valid_end() {return valid_camera_indices_.end();}
 
   // ===========  binary I/O ================
+
   //: version
   unsigned version() const {return 1;}
 
@@ -234,7 +237,7 @@ class camera_space_iterator
   }
 
   //: defines the state of completing the camera space
-  void set_end(){end_ = true;}
+  void set_end() {end_ = true;}
   bool end() const{return end_;}
  private:
   bool end_;
@@ -249,4 +252,4 @@ void vsl_b_read(vsl_b_istream &is, volm_camera_space*& rptr);
 void vsl_b_write(vsl_b_ostream& os, const volm_camera_space_sptr& rptr);
 
 void vsl_b_read(vsl_b_istream &is, volm_camera_space_sptr& rptr);
-#endif // volm_volm_camera_space_h_
+#endif // volm_camera_space_h_

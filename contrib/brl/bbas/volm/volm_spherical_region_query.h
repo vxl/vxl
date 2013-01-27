@@ -26,9 +26,9 @@ class volm_spherical_region_query
 {
  public:
   volm_spherical_region_query(depth_map_scene_sptr const& dm_scene,
-			      volm_camera_space_sptr const& cam_space,
-			      volm_spherical_container_sptr const& sph_vol);
-  
+                              volm_camera_space_sptr const& cam_space,
+                              volm_spherical_container_sptr const& sph_vol);
+
   void construct_spherical_regions();
 
  private:

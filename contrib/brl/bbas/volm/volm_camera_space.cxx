@@ -1,14 +1,17 @@
 #include <volm/volm_camera_space.h>
+//:
+// \file
 #include <vcl_algorithm.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vsl/vsl_vector_io.h>
   //it is possible for radius and increment to be inconsistent
   //that is, the radius is not a multiple of the increment
-  //perhaps the best assumption is that increment rules and 
+  //perhaps the best assumption is that increment rules and
   //the radius adjusted accordingly
 
   // always use floor in case inc does not evenly divide
-void volm_camera_space::adjust_limits(){
+void volm_camera_space::adjust_limits()
+{
   unsigned n_inc = static_cast<unsigned>(head_radius_/head_inc_);
   head_radius_ = n_inc * head_inc_;
   n_head_ = 2*n_inc +1;
@@ -16,7 +19,7 @@ void volm_camera_space::adjust_limits(){
   //check for duplication of heading i.e. +- 180
   double head_start = head_mid_ - head_radius_;
   double head_end = head_mid_ + head_radius_;
-  if((head_start == -180.0) && (head_end == 180.0))
+  if ((head_start == -180.0) && (head_end == 180.0))
     n_head_--;
 
   n_inc = static_cast<unsigned>(tilt_radius_/tilt_inc_);
@@ -27,24 +30,26 @@ void volm_camera_space::adjust_limits(){
   n_roll_ = 2*n_inc +1;
   n_fovs_ = (unsigned)top_fovs_.size();
 }
+
 volm_camera_space::
-volm_camera_space(vcl_vector<double> const& top_fovs,double altitude, 
+volm_camera_space(vcl_vector<double> const& top_fovs,double altitude,
                   unsigned ni, unsigned nj,
                   double head_mid,  double head_radius, double head_inc,
                   double tilt_mid, double tilt_radius,  double tilt_inc,
-                  double roll_mid,  double roll_radius,   double roll_inc):
-  top_fovs_(top_fovs), altitude_(altitude), ni_(ni), nj_(nj), 
+                  double roll_mid,  double roll_radius,   double roll_inc)
+: altitude_(altitude), ni_(ni), nj_(nj),
   head_mid_(head_mid), head_radius_(head_radius), head_inc_(head_inc),
   tilt_mid_(tilt_mid), tilt_radius_(tilt_radius),tilt_inc_(tilt_inc),
   roll_mid_(roll_mid),roll_radius_(roll_radius),roll_inc_(roll_inc),
-  freeze_roll_(false),heading_(0.0), tilt_(0.0), roll_(0.0), fov_index_(0)
+  top_fovs_(top_fovs), freeze_roll_(false),
+  heading_(0.0), tilt_(0.0), roll_(0.0), fov_index_(0)
 {
   this->adjust_limits();
 }
 
 void  volm_camera_space::cam_indices(unsigned cam_index,
-		 unsigned & roll_index, unsigned& fov_index,
-		 unsigned & head_index, unsigned& tilt_index) const{
+                                     unsigned & roll_index, unsigned& fov_index,
+                                     unsigned & head_index, unsigned& tilt_index) const {
   unsigned prd = n_head_*n_tilt_*n_fovs_;
   roll_index= cam_index/prd;
   unsigned resid = cam_index - (prd*roll_index);
@@ -54,14 +59,16 @@ void  volm_camera_space::cam_indices(unsigned cam_index,
   head_index = resid/n_tilt_;
   tilt_index = resid - (head_index*n_tilt_);
 }
-  
+
 unsigned  volm_camera_space::cam_index(unsigned roll_index, unsigned fov_index,
-		   unsigned head_index, unsigned tilt_index) const{
+                                       unsigned head_index, unsigned tilt_index) const {
   unsigned temp = tilt_index + n_tilt_*head_index;
   temp += (n_head_*n_tilt_)*fov_index + (n_head_*n_tilt_*n_fovs_)*roll_index;
   return temp;
 }
-cam_angles volm_camera_space::camera_angles(unsigned cam_index) const{
+
+cam_angles volm_camera_space::camera_angles(unsigned cam_index) const
+{
   unsigned roll_index,  fov_index;
   unsigned head_index,  tilt_index;
   this->cam_indices(cam_index, roll_index, fov_index, head_index, tilt_index);
@@ -72,30 +79,34 @@ cam_angles volm_camera_space::camera_angles(unsigned cam_index) const{
   return cam_angles(roll, top_fov, heading, tilt);
 }
 
-void volm_camera_space::generate_full_camera_index_space(){
+void volm_camera_space::generate_full_camera_index_space()
+{
   valid_camera_indices_.clear();
   camera_space_iterator cit = this->begin();
-  for(; cit != this->end(); ++cit)
+  for (; cit != this->end(); ++cit)
     valid_camera_indices_.push_back(this->cam_index());
 }
 
-bool volm_camera_space::remove_camera_index(unsigned cam_index){
+bool volm_camera_space::remove_camera_index(unsigned cam_index)
+{
   // find if index exists
   vcl_vector<unsigned>::iterator it;
   it = vcl_find(valid_camera_indices_.begin(), valid_camera_indices_.end(),
-		cam_index);
-  if(it == valid_camera_indices_.end())
+                cam_index);
+  if (it == valid_camera_indices_.end())
     return false;
   valid_camera_indices_.erase(it);
   return true;
 }
 
-unsigned volm_camera_space::cam_index() const{
+unsigned volm_camera_space::cam_index() const
+{
   unsigned temp = cam_index(roll_index_, fov_index_, head_index_, tilt_index_);
   return temp;
 }
 
-cam_angles volm_camera_space::camera_angles() const{
+cam_angles volm_camera_space::camera_angles() const
+{
   return cam_angles(roll_, top_fovs_[fov_index_], heading_, tilt_);
 }
 
@@ -105,8 +116,10 @@ camera_space_iterator volm_camera_space::begin()
   this->init();
   return camera_space_iterator(this);
 }
+
 //: the iterator at the start of camera space, freeze roll to value
-camera_space_iterator volm_camera_space::begin(double roll){
+camera_space_iterator volm_camera_space::begin(double roll)
+{
   this->init();
   roll_ = roll;
   roll_index_ = static_cast<unsigned>((roll-roll_mid_+roll_radius_)/roll_inc_);
@@ -147,13 +160,13 @@ bool volm_camera_space::next_cam()
   //   focal length
   //    heading
   //     tilt
-  if(tilt_index_ <  (n_tilt_-1)){
+  if (tilt_index_ <  (n_tilt_-1)) {
     tilt_+=tilt_inc_;
     index_++;
     tilt_index_++;
     return true;
   }
-  if(head_index_ < (n_head_-1)){
+  if (head_index_ < (n_head_-1)) {
     heading_+=head_inc_;
     head_index_++;
     index_++;
@@ -161,16 +174,16 @@ bool volm_camera_space::next_cam()
     tilt_index_ = 0;
     return true;
   }
-  if(fov_index_ < (n_fovs_-1)){
+  if (fov_index_ < (n_fovs_-1)) {
     fov_index_++;
     index_ ++;
     tilt_ = tilt_mid_-tilt_radius_;
     heading_ = head_mid_-head_radius_;
-	tilt_index_ = 0;
+    tilt_index_ = 0;
     head_index_ = 0;
     return true;
   }
-  if(!freeze_roll_&& (roll_index_< (n_roll_-1))){
+  if (!freeze_roll_&& (roll_index_< (n_roll_-1))) {
     tilt_ = tilt_mid_-tilt_radius_;
     heading_ = head_mid_-head_radius_;
     tilt_index_ = 0;
@@ -184,15 +197,16 @@ bool volm_camera_space::next_cam()
   return false;
 }
 
-vpgl_perspective_camera<double> volm_camera_space::camera(unsigned cam_index) const{
+vpgl_perspective_camera<double> volm_camera_space::camera(unsigned cam_index) const
+{
   cam_angles ca = this->camera_angles(cam_index);
   double top_fov = ca.top_fov_;
   double dtor = vnl_math::pi_over_180;
   double tan_top_fov = vcl_tan(top_fov*dtor);
   double right_fov = vcl_atan(ni_*tan_top_fov/nj_)/dtor;
   return bpgl_camera_utils::camera_from_kml(ni_, nj_, right_fov, top_fov,
-					    altitude_, ca.heading_,
-					    ca.tilt_, ca.roll_);
+                                            altitude_, ca.heading_,
+                                            ca.tilt_, ca.roll_);
 }
 
 
@@ -280,7 +294,8 @@ void volm_camera_space::b_read(vsl_b_istream& is)
     fov_index_ = 0;
     this->adjust_limits();
     this->init();
-  }else{
+  }
+  else {
     vcl_cout << "volm_camera_space - unknown binary io version " << ver <<'\n';
     return;
   }
@@ -288,7 +303,7 @@ void volm_camera_space::b_read(vsl_b_istream& is)
 
 vcl_string cam_angles::get_string() const
 {
-  vcl_stringstream str; 
+  vcl_stringstream str;
   str << "_h_" << heading_ << "_t_" << tilt_ << "_r_" << roll_ << "_top_fov_" << top_fov_;
   return str.str();
 }
@@ -301,6 +316,6 @@ vcl_string volm_camera_space::get_string(unsigned cam_index) const
 
 void volm_camera_space::print_valid_cams() const
 {
-  for (unsigned i = 0; i < valid_camera_indices_.size(); i++) 
-    vcl_cout << i << ": " << this->get_string(valid_camera_indices_[i]) << "\n";
+  for (unsigned i = 0; i < valid_camera_indices_.size(); ++i)
+    vcl_cout << i << ": " << this->get_string(valid_camera_indices_[i]) << vcl_endl;
 }

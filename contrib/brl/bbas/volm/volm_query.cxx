@@ -21,7 +21,7 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
                        volm_spherical_container_sptr const& sph,
                        volm_spherical_shell_container_sptr const& sph_shell,
                        bool const& use_default)
-  : use_default_(use_default), sph_depth_(sph), sph_(sph_shell), invalid_((unsigned char)255)
+  : use_default_(use_default), invalid_((unsigned char)255), sph_depth_(sph), sph_(sph_shell)
 {
   //the discrete rays defined on the sphere as x, y, z
   query_points_ = sph_->cart_points();
@@ -41,7 +41,7 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
   while ((bigger>>log_downsample_ratio_) > 500)
     ++log_downsample_ratio_;
   vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
-  
+
   //
   // set the default camera hypothesis parameters
   // based on img_category_ ( "desert" and "coast")
@@ -117,14 +117,14 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
                        vcl_string const& image_category,
                        volm_spherical_container_sptr const& sph,
                        volm_spherical_shell_container_sptr const& sph_shell,
-                       double altitude)  : 
-                       img_category_(image_category), use_default_(true), sph_depth_(sph), sph_(sph_shell), altitude_(altitude)
+                       double altitude)
+: altitude_(altitude), use_default_(true), img_category_(image_category), sph_depth_(sph), sph_(sph_shell)
 {
   //the discrete rays defined on the sphere as x, y, z
   query_points_ = sph_->cart_points();
   query_size_ = (unsigned)query_points_.size();
   dm_ = new depth_map_scene;
-  vsl_b_ifstream dis(depth_map_scene_file.c_str()); 
+  vsl_b_ifstream dis(depth_map_scene_file.c_str());
   dm_->b_read(dis);
   dis.close();
   // the dimensions of the depth image
@@ -138,7 +138,7 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
   while ((bigger>>log_downsample_ratio_) > 500)
     ++log_downsample_ratio_;
   vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
-  
+
   //
   // set the default camera hypothesis parameters
   // based on img_category_ ( "desert" and "coast")
@@ -178,6 +178,7 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
   // implement the weight parameters for all objects
   this->weight_ingest();
 }
+
 // generate the set of camera hypotheses
 // the camera space includes multiple
 // choices for focal length, heading, tilt and roll
@@ -230,7 +231,7 @@ void volm_query::create_cameras()
     }
     else {
       double stock[] = {3.0,  4.0, 5.0,
-                        12.0, 17.0, 18.0,19.0, 
+                        12.0, 17.0, 18.0,19.0,
                        20.0, 24.0};
       top_fov_.insert(top_fov_.end(), stock, stock + 9);
       vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
@@ -314,8 +315,8 @@ void volm_query::create_cameras()
             for (unsigned i = 0; (success && i < dm_->ground_plane().size()); ++i) {
               success = dm_->ground_plane()[i]->region_ground_2d_to_3d(cam);
 #ifdef DEBUG
-              vcl_cout << "checking ground plane consistency for: " << dm_->ground_plane()[i]->name() << " min depth is: " << dm_->ground_plane()[i]->min_depth();
-              success ? vcl_cout << " consistent!\n" : vcl_cout << " not_consistent!\n";
+              vcl_cout << "checking ground plane consistency for: " << dm_->ground_plane()[i]->name() << " min depth is: " << dm_->ground_plane()[i]->min_depth()
+                       << ' ' << (success ? "" : "not_") << "consistent!\n"
 #endif
             }
             if (success) {
@@ -337,6 +338,7 @@ void volm_query::create_cameras()
           }
         }
 }
+
 // convert min and max distances from scene depth regions to voxel indices
 // insure consistent order indices
 // obtain the maximum distance bound (meters)
@@ -418,7 +420,7 @@ bool volm_query::order_ingest()
   } // loop over camera
 #if 0
   vcl_cout << " order_index_size = " << order_index_.size() << vcl_endl;
-  for (unsigned k = 0; k < order_index_.size(); ++k){
+  for (unsigned k = 0; k < order_index_.size(); ++k) {
     vcl_cout << " order_index_[" << k << "] = " << order_index_[k].size() << vcl_endl;
     for (unsigned i = 0 ; i < order_index_[k].size(); ++i) {
       vcl_cout << "\t order_index_[" << k << "][" << i << "] = " << order_index_[k][i].size() << vcl_endl;
@@ -459,8 +461,8 @@ bool volm_query::query_ingest()
     dm_->set_camera(cam);
 #if 0
     if (i==0) {
-      vcl_cout << "original camera \n" << cam << '\n';
-      vcl_cout << "from original query code\n";
+      vcl_cout << "original camera\n" << cam << '\n'
+               << "from original query code\n";
     }
 #endif
 #if 0
@@ -471,7 +473,8 @@ bool volm_query::query_ingest()
     vil_image_view<float> depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
     // loop over rays on sphere
     unsigned count = 0;
-    for (unsigned p_idx = 0; p_idx < query_size_; ++p_idx) {
+    for (unsigned p_idx = 0; p_idx < query_size_; ++p_idx)
+    {
       vgl_point_3d<double> qp(query_points_[p_idx].x(), query_points_[p_idx].y(), query_points_[p_idx].z()+altitude_);
       unsigned char min_dist, order, max_dist;
       // check whether the point is behind the camera
@@ -494,16 +497,16 @@ bool volm_query::query_ingest()
           unsigned obj_id;
           unsigned char grd_nlcd;
           min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_nlcd, is_ground, is_sky, is_object, depth_img);
-	  if(i == 0){
-	    vcl_cout << p_idx << ' ' << count << ' ' 
-		     << (unsigned)min_dist << ' ' << u << ' ' << v 
-		     << ' ' << (unsigned)order << ' ' 
-		     << (unsigned)max_dist 
-		     << ' ' << (unsigned)obj_id 
-		     << ' ' << (unsigned)grd_nlcd << ' ' 
-		     << is_ground << ' ' << is_sky << ' ' 
-		     << is_object << '\n';
-	  }
+          if (i == 0) {
+            vcl_cout << p_idx << ' ' << count << ' '
+                     << (unsigned)min_dist << ' ' << u << ' ' << v
+                     << ' ' << (unsigned)order << ' '
+                     << (unsigned)max_dist
+                     << ' ' << (unsigned)obj_id
+                     << ' ' << (unsigned)grd_nlcd << ' '
+                     << is_ground << ' ' << is_sky << ' '
+                     << is_object << '\n';
+          }
           min_dist_layer.push_back(min_dist);
           max_dist_layer.push_back(max_dist);
           order_layer.push_back(order);
@@ -515,7 +518,7 @@ bool volm_query::query_ingest()
           else if (is_sky) {
             sky_id_layer.push_back(p_idx);
           }
-          else if (is_object){
+          else if (is_object) {
             if (obj_id < depth_regions_.size()) {
               dist_id_layer[obj_id].push_back(p_idx);
             }
@@ -541,9 +544,9 @@ bool volm_query::query_ingest()
     dist_id_.push_back(dist_id_layer);
 #endif
     volm_spherical_layers sph_lays(cam, dm_, altitude_, sph_depth_, sph_,
-				   (unsigned char)invalid_, order_sky_, 
-				   d_threshold_, log_downsample_ratio_);
-    bool good = sph_lays.compute_layers();
+                                   (unsigned char)invalid_, order_sky_,
+                                   d_threshold_, log_downsample_ratio_);
+    sph_lays.compute_layers();
 #if 1
     min_dist_.push_back(sph_lays.min_dist_layer());
     max_dist_.push_back(sph_lays.max_dist_layer());
@@ -569,7 +572,7 @@ bool volm_query::offset_ingest()
   // create ground offset
   unsigned count = 0;
   ground_offset_.push_back(count);
-  for (unsigned cam_id = 0; cam_id < n_cam; cam_id++) {
+  for (unsigned cam_id = 0; cam_id < n_cam; ++cam_id) {
     count += (unsigned)ground_id_[cam_id].size();
     ground_offset_.push_back(count);
   }
@@ -577,7 +580,7 @@ bool volm_query::offset_ingest()
   // create sky offset
   count = 0;
   sky_offset_.push_back(count);
-  for (unsigned cam_id = 0; cam_id < n_cam; cam_id++) {
+  for (unsigned cam_id = 0; cam_id < n_cam; ++cam_id) {
     count += (unsigned)sky_id_[cam_id].size();
     sky_offset_.push_back(count);
   }
@@ -586,8 +589,8 @@ bool volm_query::offset_ingest()
   count = 0;
   unsigned n_obj = (unsigned)depth_regions_.size();
   dist_offset_.push_back(count);
-  for (unsigned cam_id = 0; cam_id < n_cam; cam_id++)
-    for (unsigned obj_id = 0; obj_id < n_obj; obj_id++) {
+  for (unsigned cam_id = 0; cam_id < n_cam; ++cam_id)
+    for (unsigned obj_id = 0; obj_id < n_obj; ++obj_id) {
       count += (unsigned)dist_id_[cam_id][obj_id].size();
       dist_offset_.push_back(count);
     }
@@ -665,7 +668,7 @@ unsigned char volm_query::fetch_depth(double const& u,
       }
     }
   }
-  // check if (u, v) is contained in sky 
+  // check if (u, v) is contained in sky
   // considered last since all objects should be closer than sky
   if (dm_->sky().size()) {
     for (unsigned i = 0; i < dm_->sky().size(); ++i) {
@@ -712,29 +715,29 @@ bool volm_query::weight_ingest()
 #endif
   // equal weight setting, i.e. w_sky = w_ground = w_obj for any objects
   // note we have socre = w_s*S_s + w_g*S_g+ sum(w_k*S_k^ord)/M + sum(w_k*S_k^dist)/M = 1 for ground truth
-  // w_s = w_k = w_g = w gives 4w = 1 give w = 0.25  
+  // w_s = w_k = w_g = w gives 4w = 1 give w = 0.25
   if (dm_->sky().size() && dm_->ground_plane().size()) {
     weight_sky_ = 0.25f;
     weight_grd_ = 0.25f;
-    for (unsigned i = 0; i < depth_regions_.size(); i++)
+    for (unsigned i = 0; i < depth_regions_.size(); ++i)
       weight_obj_.push_back(0.25f);
   }
   else if (dm_->sky().size()) {     // no ground , only sky
     weight_sky_ = 0.3333333f;
     weight_grd_ = 0.0f;
-    for (unsigned i = 0; i < depth_regions_.size(); i++)
+    for (unsigned i = 0; i < depth_regions_.size(); ++i)
       weight_obj_.push_back(0.333333f);
   }
   else if (dm_->ground_plane().size()) {  // no sky , only ground
     weight_grd_ = 0.333333f;
     weight_sky_ = 0.0f;
-    for (unsigned i = 0; i < depth_regions_.size(); i++)
+    for (unsigned i = 0; i < depth_regions_.size(); ++i)
       weight_obj_.push_back(0.333333f);
   }
   else {                            // no sky, nor ground
     weight_grd_ = 0.0f;
     weight_sky_ = 0.0f;
-    for (unsigned i = 0; i < depth_regions_.size(); i++)
+    for (unsigned i = 0; i < depth_regions_.size(); ++i)
       weight_obj_.push_back(0.5f);
   }
   return true;
@@ -754,7 +757,7 @@ void volm_query::draw_template(vcl_string const& vrml_fname)
     float b = 0.0f;
     if (i%2 == 0)
       g = 1.0f;
-    else if (i%2 == 1){
+    else if (i%2 == 1) {
       b = 1.0f; g = 0.0f;
     }
     else {
@@ -1125,7 +1128,7 @@ bool volm_query::write_query_binary(vcl_string out_fold)
   unsigned ver = this->version();
   vsl_b_write(cam_os, ver);
   vsl_b_write(cam_os, cameras_.size());
-  for (unsigned cam_id = 0; cam_id < cameras_.size(); cam_id++)
+  for (unsigned cam_id = 0; cam_id < cameras_.size(); ++cam_id)
     vsl_b_write(cam_os, cameras_[cam_id]);
   cam_os.close();
   return true;
@@ -1133,18 +1136,16 @@ bool volm_query::write_query_binary(vcl_string out_fold)
 
 bool volm_query::read_query_binary(vcl_string inp_fold)
 {
-  vcl_cout << " reading camera " << vcl_endl;
+  vcl_cout << " reading camera" << vcl_endl;
   vcl_string cam_file = inp_fold + "/camera_id.bin";
   vsl_b_ifstream cam_is(cam_file);
   unsigned ver = 1;
   vsl_b_read(cam_is, ver);
   if (ver == this->version()) {
-    unsigned n_cam = 0;
-
-  } else {
-    vcl_cerr << " current binary version is different from camera binary file" << vcl_endl;
+    return true;
+  }
+  else {
+    vcl_cerr << " current binary version is different from camera binary file\n";
     return false;
   }
-
-  return true;
 }

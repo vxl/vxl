@@ -23,22 +23,22 @@ class volm_spherical_query_region
 {
  public:
   //: default constructor
- volm_spherical_query_region(): min_depth_(0), max_depth_(0), order_(0), nlcd_id_(0){}
+  volm_spherical_query_region(): min_depth_(0), max_depth_(0), order_(0), nlcd_id_(0) {}
 
- 
+
   void set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
-				 depth_map_region_sptr const& dm_region,
-				 volm_spherical_container_sptr const& sph_vol);
+                                 depth_map_region_sptr const& dm_region,
+                                 volm_spherical_container_sptr const& sph_vol);
 
   //:accessors
-  const vsph_sph_box_2d& bbox_ref(){return box_;}
-  vsph_sph_box_2d& bbox(){return box_;}
+  const vsph_sph_box_2d& bbox_ref() {return box_;}
+  vsph_sph_box_2d& bbox() {return box_;}
   unsigned char min_depth() const {return min_depth_;}
   unsigned char max_depth() const {return max_depth_;}
   unsigned char order() const {return order_;}
   unsigned char nlcd_id() const {return nlcd_id_;}
-  
-  
+
+
  private:
   //: box in spherical coordinates
   vsph_sph_box_2d box_;

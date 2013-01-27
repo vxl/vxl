@@ -20,7 +20,7 @@ class vsph_utils
   static bool a_eq_b(double phi_a, double phi_b, bool in_radians = true);
   static bool a_lt_b(double phi_a, double phi_b, bool in_radians = true);
   static vsph_sph_box_2d intersection(vsph_sph_box_2d const& b1,
-				      vsph_sph_box_2d const& b2);
+                                      vsph_sph_box_2d const& b2);
  private:
   vsph_utils();
 };
