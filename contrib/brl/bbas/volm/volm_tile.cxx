@@ -4,6 +4,7 @@
 // \file
 #include <vcl_iomanip.h>
 #include <vcl_sstream.h>
+#include <vcl_cassert.h>
 
 #include <brip/brip_vil_float_ops.h>
 #include <bkml/bkml_write.h>
@@ -37,7 +38,7 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
   vcl_stringstream str(n); str >> lat_;
   n = name.substr(name.find_first_of('W')+1, name.find_first_of('_'));
   vcl_stringstream str2(n); str2 >> lon_;
-  
+
   name = name.substr(name.find_first_of('_'), name.size());
   n = name.substr(name.find_first_of('S')+1, name.find_first_of('x'));
   vcl_stringstream str3(n); str3 >> scale_i_;
@@ -155,14 +156,18 @@ void volm_tile::img_to_global(unsigned i, unsigned j, double& lon, double& lat)
   if (hemisphere_ == 'S')
     lat = -lat;
 }
+
 //: do the conversions in reporting lon,lat
-double volm_tile::lower_left_lon() {
+double volm_tile::lower_left_lon()
+{
   if (direction_ == 'W')
     return -lon_;
   else
     return lon_;
 }
-double volm_tile::lower_left_lat() {
+
+double volm_tile::lower_left_lat()
+{
   if (hemisphere_ == 'S')
     return -lat_;
   else
@@ -216,8 +221,8 @@ void volm_tile::get_uncertainty_region(float lambda_i, float lambda_j, float cut
   unsigned ncols = (unsigned)mask.cols();
   float kernel_max = kernel[nrows/2][ncols/2];
   // normalize kernel
-  for (unsigned i = 0; i < ncols; i++)
-    for (unsigned j = 0; j < nrows; j++)
+  for (unsigned i = 0; i < ncols; ++i)
+    for (unsigned j = 0; j < nrows; ++j)
       kernel[j][i] /= kernel_max;
 }
 
@@ -235,8 +240,8 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
   int ni = (int)img.ni();
   int nj = (int)img.nj();
   if (score > 0.0f) {
-    for (int ii = is; ii < ie; ii++)
-      for (int jj = js; jj < je; jj++) {
+    for (int ii = is; ii < ie; ++ii)
+      for (int jj = js; jj < je; ++jj) {
         int mask_i = ii - is;
         int mask_j = jj - js;
         if (mask[mask_j][mask_i] && ii >= 0 && jj >= 0 && ii < ni && jj < nj) {
@@ -266,8 +271,8 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
   int nj = (int)img.nj();
   if (score > 0.0f) {
 
-    for (int ii = is; ii < ie; ii++)
-      for (int jj = js; jj < je; jj++) {
+    for (int ii = is; ii < ie; ++ii)
+      for (int jj = js; jj < je; ++jj) {
         int mask_i = ii - is;
         int mask_j = jj - js;
         if (mask[mask_j][mask_i] && ii >= 0 && jj >= 0 && ii < ni && jj < nj) {
