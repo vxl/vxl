@@ -34,3 +34,8 @@ ENDIF(OPENCL_FOUND)
   TARGET_LINK_LIBRARIES(boxm2_volm_pro boxm2_volm boxm2_volm_io boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml)
 
 ENDIF(EXPAT_FOUND)
+
+#tests
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
