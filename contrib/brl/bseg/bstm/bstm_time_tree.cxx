@@ -109,14 +109,14 @@ int bstm_time_tree::get_data_index(int bit_index) const
 {
   int root_data_ptr = (int) (bits_[7]<<24) | (bits_[6]<<16) | (bits_[5]<<8) | (bits_[4]);
   int relative_index = this->get_relative_index(bit_index);
-  if(relative_index == -1)
+  if (relative_index == -1)
     return -1;
   else
     return root_data_ptr + relative_index;
 }
 
-//OLD DEPRECATED CODE
-#if 0
+#if 0 //OLD DEPRECATED CODE
+
 //: returns bit index assuming root data is located at 0
 int  bstm_time_tree::get_relative_index(int bit_index) const
 {
@@ -152,35 +152,36 @@ int  bstm_time_tree::get_relative_index(int bit_index) const
 
   return count;
 }
-#endif
+
+#endif // OLD DEPRECATED CODE
 
 
 //: returns bit index assuming root data is located at 0
-//: the bit_index must be a leaf, otherwise returns -1
+//  \p bit_index must be a leaf, otherwise returns -1
 int  bstm_time_tree::get_relative_index(int bit_index) const
 {
-  if(!is_leaf(bit_index))
+  if (!is_leaf(bit_index))
     return -1;
 
   //if looking for root
-  if(bit_index == 0)
+  if (bit_index == 0)
     return 0;
 
   //initialize stack with the root node
   unsigned char stack[TT_NUM_LVLS];
   stack[0] = 0;
-  char ptr = 0;
+  int ptr = 0;
 
   unsigned char curr_bit;
   int count = 0;
 
-  while(ptr != -1)
+  while (ptr >= 0)
   {
     curr_bit = stack[ptr--]; //pop
-    if(curr_bit == bit_index)
+    if (curr_bit == bit_index)
       break;
 
-    if(!is_leaf(curr_bit)) // push right child and then left child
+    if (!is_leaf(curr_bit)) // push right child and then left child
     {
       stack[++ptr] = (2*curr_bit + 2);
       stack[++ptr] = (2*curr_bit + 1);
@@ -276,11 +277,11 @@ vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
   int ptr = 0;
 
   int curr_bit;
-  while(ptr != -1)
+  while (ptr != -1)
   {
     curr_bit = stack[ptr--]; //pop
 
-    if(!is_leaf(curr_bit)) // push right child and then left child
+    if (!is_leaf(curr_bit)) // push right child and then left child
     {
       stack[++ptr] = (2*curr_bit + 2);
       stack[++ptr] = (2*curr_bit + 1);
