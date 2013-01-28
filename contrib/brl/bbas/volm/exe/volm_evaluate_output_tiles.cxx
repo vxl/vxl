@@ -1,6 +1,6 @@
 //:
 // \file
-// \brief executable to evaluate output tiles using the ground truth camera 
+// \brief executable to evaluate output tiles using the ground truth camera
 // \author Ozge C. Ozcanli
 // \date Nov 18, 2012
 
@@ -8,7 +8,6 @@
 #include <volm/volm_tile.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <bkml/bkml_parser.h>
@@ -29,24 +28,24 @@ int main(int argc,  char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   unsigned threshold = thres();
-  
+
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
   if (!volm_io::read_labelme(label_file(), dm, img_category)) {
-    vcl_cerr << "problem parsing: " << label_file() << vcl_endl;
+    vcl_cerr << "problem parsing: " << label_file() << '\n';
     return volm_io::LABELME_FILE_IO_ERROR;
   }
   vcl_cout << "parsed image category: " << img_category << '\n';
-  vgl_polygon<double> poly = bkml_parser::parse_polygon(poly_in()); 
+  vgl_polygon<double> poly = bkml_parser::parse_polygon(poly_in());
   vcl_cout << "ROI poly has: " << poly[0].size() << " vertices!\n";
-  
+
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
   double top_fov, top_fov_dev, altitude, lat, lon;
   if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude, lat, lon)) {
     return volm_io::CAM_FILE_IO_ERROR;
   }
   vcl_cout << "cam params\nheading: " << heading << " dev: " << heading_dev << "\ntilt: " << tilt << " dev: " << tilt_dev << "\nroll: " << roll << " dev: " << roll_dev << "\ntop_fov: " << top_fov << " dev: " << top_fov_dev << " alt: " << altitude << vcl_endl;
-  
+
   // read the output tiles
   unsigned cnt_below = 0;
   unsigned tot_pix_count = 0;
@@ -55,50 +54,48 @@ int main(int argc,  char** argv)
   vcl_vector<volm_tile> tiles;
   if (img_category == "desert")
     tiles = volm_tile::generate_p1_wr1_tiles();
-  else 
+  else
     tiles = volm_tile::generate_p1_wr2_tiles();
   for (unsigned i = 0; i < tiles.size(); i++)
   {
-    vcl_string name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif"; 
+    vcl_string name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
     vcl_cout << "reading " << name << vcl_endl;
-    if (!vul_file::exists(name)) 
+    if (!vul_file::exists(name))
     {
       vcl_cerr << name << " is missing!\n";
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-      
+
     vil_image_view<vxl_byte> tile = vil_load(name.c_str());
     for (unsigned ii = 0; ii < tile.ni(); ii++)
-      for (unsigned jj = 0; jj < tile.nj(); jj++) 
+      for (unsigned jj = 0; jj < tile.nj(); jj++)
       {
         double tlat, tlon;
         tiles[i].img_to_global(ii, jj, tlon, tlat);
-        if (poly.contains(tlon, tlat)) 
+        if (poly.contains(tlon, tlat))
         {
           within_poly++;
-          if (tile(ii, jj) == 0) 
+          if (tile(ii, jj) == 0)
             tot_pix_unevaluated++;
-          else 
+          else
           {
             tot_pix_count++;
             if (tile(ii, jj) < threshold)
               cnt_below++;
           }
-        } 
+        }
       }
     unsigned u, v;
     tiles[i].global_to_img(lon, lat, u, v);
-    if (u >= 0 && v >= 0 && u < tile.ni() && v < tile.nj()) 
+    if (u < tile.ni() && v < tile.nj())
       vcl_cout << "GT location: " << lon << ", " << lat << " is at pixel: " << u << ", " << v << " and has value: " << (int)tile(u, v) << vcl_endl;
-    
-      
   }
-  vcl_cout << "tot pixels within ROI: " << within_poly << '\n';
-  vcl_cout << "tot pixels unevaluated: " << tot_pix_unevaluated << '\n';
-  vcl_cout << "tot pixels evaluated: " << tot_pix_count << '\n';
-  vcl_cout << "tot pixels below threshold " << threshold << ": " << cnt_below << '\n';
-  vcl_cout << "so knocked out " << (float)cnt_below/tot_pix_count*100 << " percent of the evaluated ROI!\n";
-  
+  vcl_cout << "tot pixels within ROI: " << within_poly << '\n'
+           << "tot pixels unevaluated: " << tot_pix_unevaluated << '\n'
+           << "tot pixels evaluated: " << tot_pix_count << '\n'
+           << "tot pixels below threshold " << threshold << ": " << cnt_below << '\n'
+           << "so knocked out " << (float)cnt_below/tot_pix_count*100 << " percent of the evaluated ROI!\n";
+
   return volm_io::SUCCESS;
 }
 
