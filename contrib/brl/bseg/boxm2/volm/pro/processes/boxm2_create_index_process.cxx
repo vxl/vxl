@@ -63,9 +63,9 @@ namespace boxm2_create_index_process_globals
     //create normalize image kernel
     bocl_kernel * norm_kernel=new bocl_kernel();
     if (!norm_kernel) {
-      vcl_cout << " cannot allocate kernel object!\n" << vcl_endl; vcl_cout.flush(); }
+      vcl_cout << " cannot allocate kernel object!" << vcl_endl; }
     else
-      vcl_cout << " got a new kernel object!\n";
+      vcl_cout << " got a new kernel object!" << vcl_endl;
 
     norm_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "normalize_index_depth_kernel", options,
                                "normalize_index_depth_kernel"); //kernel identifier (for error checking)
@@ -130,7 +130,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
   vcl_cout << " device: " << device->info().device_name_ << " total memory: " << device->info().total_global_memory_ << '\n'
            << " max allowed work items in a group: " << device->info().max_work_group_size_ << '\n'
-           << " max work item sizes in each dimensions: " << device->info().max_work_item_sizes_ << '\n';
+           << " max work item sizes in each dimensions: " << device->info().max_work_item_sizes_ << vcl_endl;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   vpgl_lvcs lvcs = scene->lvcs();
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
@@ -144,9 +144,9 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   params.dmax = pro.get_input<float>(i++);
   params.solid_angle = pro.get_input<float>(i++);
   params.cap_angle = pro.get_input<float>(i++);
-  params.point_angle = pro.get_input<float>(i++); 
-  params.top_angle = pro.get_input<float>(i++); 
-  params.bottom_angle = pro.get_input<float>(i++); 
+  params.point_angle = pro.get_input<float>(i++);
+  params.top_angle = pro.get_input<float>(i++);
+  params.bottom_angle = pro.get_input<float>(i++);
   vcl_string index_file = pro.get_input<vcl_string>(i++);
   float vis_thres = pro.get_input<float>(i++);
   float buffer_capacity = pro.get_input<float>(i++);
@@ -180,11 +180,11 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   //: adjust dmax if scene has very few blocks
   float dmax = params.dmax;
-  if (scene->get_block_ids().size() < 5) 
+  if (scene->get_block_ids().size() < 5)
     dmax = (float)(scene->bounding_box().height()+scene->bounding_box().width());
-  
+
   global_threads[0] = RoundUp(layer_size, (int)local_threads[0]);
-  vcl_cout << "layer_size: " << layer_size << ", # of global threads: " << global_threads[0] << '\n';
+  vcl_cout << "layer_size: " << layer_size << ", # of global threads: " << global_threads[0] << vcl_endl;
 
   //cache size sanity check
   long binCache = (long)(opencl_cache.ptr()->bytes_in_cache());
@@ -229,7 +229,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   bocl_mem* ray_dim_mem = new bocl_mem(device->context(), &(layer_size), sizeof(int), "ray directions size");
   ray_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-  
+
   bocl_mem* max_dist = new bocl_mem(device->context(), &(params.dmax), sizeof(int), "max distance to shoot rays");
   max_dist->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   vcl_cout << " will stop ray casting at distance: " << params.dmax << vcl_endl;
@@ -255,7 +255,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   {
     //vcl_cout << "Processing hypothesis: " << hi << " x: " << hyp->locs_[hi].x() << " y: " << hyp->locs_[hi].y() << " z: " << hyp->locs_[hi].z() << vcl_endl;
     //vcl_cout << "Processing hypothesis: " << hyp.current_-skip << " x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
-    if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << ".";
+    if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << '.';
     double lx, ly, lz;
     lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
     lz = 2.0*(vcl_ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model
@@ -308,7 +308,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
         status = clFinish(queue);
         check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
         if (!buff)
-          vcl_cout << "buff is zero after release mem!\n"; vcl_cout.flush();
+          vcl_cout << "buff is zero after release mem!" << vcl_endl;
         delete [] buff;
         delete [] vis_buff;
         delete [] prob_buff;
@@ -316,7 +316,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
         continue;
       }
     }
-    
+
     vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
     if (!(ord_iter != order_cache.end())) {
       order_cache[curr_block] =  boxm2_util::order_about_a_block(scene, curr_block, dmax);
@@ -425,9 +425,9 @@ bool boxm2_create_index_process(bprb_func_process& pro)
         values.push_back(sph2->get_depth_interval((double)buff[i]));
     }
 #if 0
-    vcl_cout << "values array: \n";
+    vcl_cout << "values array:\n";
     for (unsigned i = 0; i < layer_size; i++) {
-      vcl_cout << (int)values[i] << " ";
+      vcl_cout << (int)values[i] << ' ';
     }
     vcl_cout << vcl_endl;
     sph_shell->draw_template("./test.vrml", values, 254);
@@ -447,7 +447,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
 
     if (!buff)
-      vcl_cout << "buff is zero after release mem!\n"; vcl_cout.flush();
+      vcl_cout << "buff is zero after release mem!" << vcl_endl;
     delete [] buff;
     delete [] vis_buff;
     delete [] prob_buff;
@@ -464,8 +464,8 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   delete [] ray_dirs;
 
-  vcl_cout<<"\nGPU Execute time "<<gpu_time<<" ms = " << gpu_time/(1000.0*60.0) << " secs. " << vcl_endl;
-  vcl_cout<<"GPU Transfe time "<<transfer_time<<" ms = " << transfer_time/(1000.0*60.0) << " secs. " << vcl_endl;
+  vcl_cout<<"\nGPU Execute time "<<gpu_time<<" ms = " << gpu_time/(1000.0*60.0) << " secs."
+          <<"\nGPU Transfer time "<<transfer_time<<" ms = " << transfer_time/(1000.0*60.0) << " secs." << vcl_endl;
   clReleaseCommandQueue(queue);
 
   //cache size sanity check
@@ -516,7 +516,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   vcl_string param_file = vul_file::strip_extension(index_file) + ".params";
   boxm2_volm_wr3db_index_params params;
   if (!params.read_params_file(param_file)) {
-    vcl_cerr << "cannot read: " << param_file << vcl_endl;
+    vcl_cerr << "cannot read: " << param_file << '\n';
     return false;
   }
   if (ei == 0) {
@@ -533,7 +533,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   unsigned layer_size = sph_shell->get_container_size();
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
   if (!ind->initialize_read(index_file)) {
-    vcl_cerr << "Cannot initialize index from file: " << index_file << vcl_endl;
+    vcl_cerr << "Cannot initialize index from file: " << index_file << '\n';
     return false;
   }
 
@@ -545,9 +545,9 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
     vcl_string temp_name = str.str() + ".vrml";
     ind->get_next(values);
 #if 0
-    vcl_cout << "j: " << j << " values array: \n";
+    vcl_cout << "j: " << j << " values array:\n";
     for (unsigned i = 0; i < layer_size; i++) {
-      vcl_cout << (int)values[i] << " ";
+      vcl_cout << (int)values[i] << ' ';
     }
     vcl_cout << vcl_endl;
 #endif
@@ -607,17 +607,18 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
   volm_geo_index::read_hyps(root, file_name_pre.str());
   unsigned size = volm_geo_index::hypo_size(root);
-  
+
   if (!size) {
-    vcl_cout << " there are no hypos in this tile!.. returning!\n";
+    vcl_cout << " there are no hypos in this tile!.. returning!" << vcl_endl;
     return true;
-  } else
-    vcl_cout << " there are " << size << " hyps in this tile!\n";
+  }
+  else
+    vcl_cout << " there are " << size << " hyps in this tile!" << vcl_endl;
 
   unsigned hyp_id;
   volm_geo_index_node_sptr leaf = volm_geo_index::get_closest(root, lat, lon, hyp_id);
   if (!leaf) {
-    vcl_cerr << " the geo index: " << geo_index_hyp_folder <<" do not contain any hyp close to " << lat << ", " << lon << vcl_endl;
+    vcl_cerr << " the geo index: " << geo_index_hyp_folder <<" do not contain any hyp close to " << lat << ", " << lon << '\n';
     return true;
   }
   vcl_cout << "hyp " << lat << ", " << lon << " is in leaf: " << leaf->extent_ << vcl_endl;
@@ -636,24 +637,24 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   ////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// visualize depth interval index //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////
- 
+
   vcl_string param_file = vul_file::strip_extension(index_file) + ".params";
   boxm2_volm_wr3db_index_params params;
   if (!params.read_params_file(param_file)) {
-    vcl_cerr << "cannot read: " << param_file << vcl_endl;
+    vcl_cerr << "cannot read: " << param_file << '\n';
     return false;
   }
   vcl_string size_file = vul_file::strip_extension(index_file) + ".txt";
   unsigned long eis;
   params.read_size_file(size_file, eis);
-  if (hyp_id < 0 || (unsigned long)hyp_id >= eis) {
-    vcl_cerr << " the hyp id is: " << hyp_id << " which is invalid for the index with: " << eis << " indices read from: " << size_file << vcl_endl;
+  if ((unsigned long)hyp_id >= eis) {
+    vcl_cerr << " the hyp id is: " << hyp_id << " which is invalid for the index with: " << eis << " indices read from: " << size_file << '\n';
     return false;
   }
- 
+
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, 1);
   if (!ind->initialize_read(index_file)) {
-    vcl_cerr << "Cannot initialize index from file: " << index_file << vcl_endl;
+    vcl_cerr << "Cannot initialize index from file: " << index_file << '\n';
     return false;
   }
 
@@ -663,35 +664,34 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   ind->get_next(values);  // this one is the hyp_id'th one
 
   vcl_string prefix = vul_file::strip_extension(index_file);
-  vcl_stringstream str; str << prefix << "_hyp_" << leaf->hyps_->locs_[hyp_id].y() << "_" << leaf->hyps_->locs_[hyp_id].x() << "_" << leaf->hyps_->locs_[hyp_id].z();
+  vcl_stringstream str; str << prefix << "_hyp_" << leaf->hyps_->locs_[hyp_id].y() << '_' << leaf->hyps_->locs_[hyp_id].x() << '_' << leaf->hyps_->locs_[hyp_id].z();
 
   vcl_string txt_name = str.str() + ".txt";
   vcl_ofstream ofs(txt_name.c_str());
   ofs << params.layer_size << '\n';
-  for (unsigned ii = 0; ii < params.layer_size; ii++) 
+  for (unsigned ii = 0; ii < params.layer_size; ii++)
     ofs << (int)values[ii] << '\n';
   ofs.close();
-  
+
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   double radius = 1;
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
-  
+
   //vcl_string temp_name = str.str() + ".vrml";
   //sph_shell->draw_template(temp_name, values, (unsigned char)254);
 
   vil_image_view<vil_rgb<vxl_byte> > img;
   if (data_type == 0)
    sph_shell->panaroma_img(img, values);
-  else if (data_type == 1) // visualize label index 
+  else if (data_type == 1) // visualize label index
    sph_shell->panaroma_img_class_labels(img, values);
-  else // visualize orientation label index 
+  else // visualize orientation label index
    sph_shell->panaroma_img_orientations(img, values);
 
   vcl_string img_name = str.str() + ".png";
   vcl_cout << "saving image to: " << img_name << vcl_endl;
-  vil_save(img, img_name.c_str()); 
+  vil_save(img, img_name.c_str());
 
   return true;
 }
-
 
