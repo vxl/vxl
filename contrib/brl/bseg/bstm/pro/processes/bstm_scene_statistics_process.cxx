@@ -59,7 +59,7 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
   unsigned total_leaf_cells = 0;
   unsigned total_inner_cells = 0;
   unsigned total_num_cells = 0;
-  unsigned average_time_tree_depths;
+  unsigned average_time_tree_depths = 0;
   unsigned num_time_trees = 0;
   unsigned total_innercell_time_tree_cells = 0;
   unsigned innercell_time_tree_cell_count = 0;
@@ -115,8 +115,8 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
            << "Total number of inner cells: " << total_inner_cells << '\n'
            << "Total number of cells: " << total_num_cells << '\n'
 //         << "Average number of time tree cells of non-leaf octree cells: " << total_innercell_time_tree_cells / innercell_time_tree_cell_count << '\n'
-           << "Total time tree number of cells: " << (average_time_tree_depths) << '\n'
-           << "Average time tree number of cells: " << ((float)average_time_tree_depths)/num_time_trees << vcl_endl;
+           << "Total time tree number of cells: " << average_time_tree_depths << '\n'
+           << "Average time tree number of cells: " << float(average_time_tree_depths)/num_time_trees << vcl_endl;
 
   return true;
 }
