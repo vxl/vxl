@@ -13,7 +13,6 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_ray.h>
-#include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
@@ -165,11 +164,11 @@ static void test_perspective_compute_direct_linear_transform()
   }
 }
 
-static void test_camera_compute(int argc, char* argv[])
+static void test_camera_compute()
 {
   test_camera_compute_setup();
   test_perspective_compute();
   test_perspective_compute_direct_linear_transform();
 }
 
-TESTMAIN_ARGS(test_camera_compute)
+TESTMAIN(test_camera_compute);

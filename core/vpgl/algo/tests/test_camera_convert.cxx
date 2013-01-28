@@ -242,11 +242,11 @@ void test_generic_camera_convert()
   }
 }
 
-static void test_camera_convert(int argc, char* argv[])
+static void test_camera_convert()
 {
   test_rational_camera_approx();
   vcl_cout << "=== End test_rational_camera_approx" << vcl_endl;
   test_generic_camera_convert();
 }
 
-TESTMAIN_ARGS(test_camera_convert)
+TESTMAIN(test_camera_convert);
