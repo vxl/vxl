@@ -25,11 +25,11 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     double zplane  = (bbox.max_z()-bbox.min_z()) / 2.0;
 
     //run planar bounding box
-    vgl_box_2d<double> b2box;
-    if (vsph_camera_bounds::planar_bounding_box(cams,b2box,zplane))
-        vcl_cout<<"Bounding box found: "<<b2box<<vcl_endl;
-    else
-        vcl_cout<<"Bounding box not found."<<vcl_endl;
+    vgl_box_2d<double> b2box(bbox.min_x(),bbox.max_x(),bbox.min_y(),bbox.max_y());
+    //if (vsph_camera_bounds::planar_bounding_box(cams,b2box,zplane))
+    //    vcl_cout<<"Bounding box found: "<<b2box<<vcl_endl;
+    //else
+    //    vcl_cout<<"Bounding box not found."<<vcl_endl;
 
     //---------------------------------------------------------------------------
     //create zplane count map
