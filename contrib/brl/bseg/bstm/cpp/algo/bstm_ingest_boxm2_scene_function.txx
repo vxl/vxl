@@ -283,13 +283,14 @@ int bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::move_time_trees(
 
       if (!refined_tree.is_leaf(j)) //if the time trees being copied belong to an inner cell, erase their time trees
       {
-        vnl_vector_fixed<unsigned char, 8> erased_old_time_trees[ sub_block_num_t_ ];
+        vnl_vector_fixed<unsigned char, 8> * erased_old_time_trees = new vnl_vector_fixed<unsigned char, 8>[sub_block_num_t_];
         for (unsigned int t_idx = 0;t_idx < sub_block_num_t_; ++t_idx) {
           bstm_time_tree tmp_tree(old_time_trees[t_idx].data_block() );   //create tree by copying the tree data
           tmp_tree.erase_cells();                                         //erase all cells except for root.
           erased_old_time_trees[t_idx].set( tmp_tree.get_bits() );        //copy to erased_old_time_trees
         }
         newTimeBlk->set_cell_all_tt(newDataPtr, boxm2_array_1d<vnl_vector_fixed<unsigned char, 8> > (sub_block_num_t_, erased_old_time_trees) ); //set all tt to new loc
+        delete[] erased_old_time_trees;
       }
       else //if the time trees being copied belong to a leaf, copy them as they are.
         newTimeBlk->set_cell_all_tt(newDataPtr, old_time_trees); //set all tt to new loc
