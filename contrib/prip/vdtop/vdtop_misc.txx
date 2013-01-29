@@ -451,9 +451,10 @@ void vdtop_set_veinerization_structure(TMap & res, const vil_image_view<T> & arg
   int nb_darts = 1 , nb_vertices = 0 ;
 #endif
   res.initialise_darts(nb_darts) ;
-  int dart[mask.ni()][4] ;
+  int **dart;
   for (int j=0; j<mask.ni(); j++)
   {
+    dart[j] = new int[4];
     dart[j][0]=dart[j][1]=dart[j][2]=dart[j][3]=-1 ;
   }
   nb_darts=nb_vertices=0 ;
@@ -505,6 +506,8 @@ void vdtop_set_veinerization_structure(TMap & res, const vil_image_view<T> & arg
       }
     }
   }
+  for (int j=0; j<mask.ni(); j++)
+    delete[] dart[j];
 }
 
 template <class T, class TMap>
@@ -532,9 +535,10 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
   int nb_darts = 1 , nb_vertices = 0 ;
 #endif
   res.initialise_darts(nb_darts) ;
-  int dart[mask.ni()][4] ;
+  int **dart;
   for (int j=0; j<mask.ni(); j++)
   {
+    dart[j] = new int[4];
     dart[j][0]=dart[j][1]=dart[j][2]=dart[j][3]=-1 ;
   }
   nb_darts=nb_vertices=0 ;
@@ -601,6 +605,8 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
       }
     }
   }
+  for (int j=0; j<mask.ni(); j++)
+    delete[] dart[j];
 }
 
 template <class T, class TMap>
@@ -635,10 +641,11 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
   int nb_darts = 1 , nb_vertices = 0 ;
 #endif
   res.initialise_darts(nb_darts) ;
-  int dart[mask.ni()][4] ;
+  int **dart;
   int vertex_first_dart[mask.ni()] ;
   for (int j=0; j<mask.ni(); j++)
   {
+    dart[j] = new int[4];
     dart[j][0]=dart[j][1]=dart[j][2]=dart[j][3]=-1 ;
   }
   nb_darts=nb_vertices=0 ;
@@ -699,6 +706,8 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
     }
   }
   vcl_cout<<"V:"<<img.ni()*img.nj()<<'/'<<nb_vertices<<vcl_endl ;
+  for (int j=0; j<mask.ni(); j++)
+    delete[] dart[j];
 }
 
 #endif // vdtop_misc_txx_
