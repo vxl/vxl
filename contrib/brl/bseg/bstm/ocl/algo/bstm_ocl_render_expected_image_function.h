@@ -21,7 +21,8 @@ float render_expected_image( bstm_scene_sptr & scene,
                             vcl_size_t * lthreads,
                             unsigned cl_ni,
                             unsigned cl_nj,
-                            int apptypesize,  float time);
+                            int apptypesize,  float time,
+                            vcl_string label_data_type = "", int label_apptypesize = 0, bool render_label = false);
 
                             
 #endif // bstm_ocl_render_expected_image_function_h_

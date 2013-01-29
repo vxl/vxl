@@ -10,7 +10,7 @@ typedef struct
 {
   __global float* alpha;
   __global MOG_TYPE*  mog;
-  float* expint;
+  float4* expint;
   float*   vis;
 } AuxArgs;
 
@@ -26,7 +26,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    MOG_TYPE           * mixture_array,
                   __global    float4             * ray_origins,
                   __global    float4             * ray_directions,
-                  __global    float              * exp_image,      // input image and store vis_inf and pre_inf
+                  __global    float4             * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,
                   __global    float              * output,
                   __constant  uchar              * bit_lookup,
@@ -69,10 +69,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  //uint  eint    = as_uint(exp_image[imIndex[llid]]);
-  //uchar echar   = convert_uchar(eint);
-  //float expint  = convert_float(echar)/255.0f;
-  float expint  = exp_image[imIndex[llid]];
+  float4 expint  = exp_image[imIndex[llid]];
   float vis     = vis_image[imIndex[llid]];
   
   AuxArgs aux_args;
@@ -107,9 +104,11 @@ typedef struct
 {
   __global float* alpha;
   __global MOG_TYPE*  mog;
-  float* expint;
+  __global LABEL_TYPE* label;
+  float4* expint;
   float*   vis;
   float* app_model_weights;
+  bool render_label;
     
 } AuxArgs;
 
@@ -123,9 +122,11 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int2               * time_tree_array,
                   __global    float              * alpha_array,
                   __global    MOG_TYPE           * mixture_array,
+                  __global    LABEL_TYPE         * label_array,
+                  __global    bool               * render_label,
                   __global    float4             * ray_origins,
                   __global    float4             * ray_directions,
-                  __global    float              * exp_image,      // input image and store vis_inf and pre_inf
+                  __global    float4             * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,
                   __global    float              * output,
                   __constant  uchar              * bit_lookup,
@@ -171,19 +172,17 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  //uint  eint    = as_uint(exp_image[imIndex[llid]]);
-  //uchar echar   = convert_uchar(eint);
-  //float expint  = convert_float(echar)/255.0f;
-  float expint  = exp_image[imIndex[llid]];
+  float4 expint  = exp_image[imIndex[llid]];
   float vis     = vis_image[imIndex[llid]];
   
   AuxArgs aux_args;
   aux_args.alpha  = alpha_array;
   aux_args.mog    = mixture_array;
+  aux_args.label = label_array;
   aux_args.expint = &expint;
   aux_args.vis    = &vis;
   aux_args.app_model_weights = app_model_weights;
-  
+  aux_args.render_label = (*render_label);
   
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
@@ -192,8 +191,6 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             linfo, tree_array, time_tree_array,                   //scene info
             local_tree, local_time_tree, bit_lookup, cumsum, &vis, aux_args); 
               
-              
-  //store the expected intensity (as UINT)
   exp_image[imIndex[llid]] =  expint;
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;

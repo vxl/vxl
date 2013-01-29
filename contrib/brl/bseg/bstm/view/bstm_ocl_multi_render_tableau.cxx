@@ -70,6 +70,7 @@ bool bstm_ocl_multi_render_tableau::init(vcl_vector<bocl_device_sptr> devices,
 
     do_init_ocl=true;
     render_trajectory_ = true;
+    render_label_ = false;
     trajectory_ = new boxm2_trajectory(80.0, 80.0, -1.0, scene_->bounding_box(), ni, nj);
     cam_iter_ = trajectory_->begin();
 
@@ -118,6 +119,9 @@ bool bstm_ocl_multi_render_tableau::handle(vgui_event const &e)
   if (e.type == vgui_KEY_PRESS) {
     if (e.key == vgui_key('p')) {
       //play...
+    }
+    if (e.key == vgui_key('l')) {
+      render_label_ = !render_label_;
     }
   }
   else if (e.type == vgui_DRAW) //draw handler - called on post_draw()
@@ -184,6 +188,7 @@ float bstm_ocl_multi_render_tableau::render_frame()
   brdb_value_sptr exp_img = new brdb_value_t<bocl_mem_sptr>(exp_img_[gpu_idx]);
   brdb_value_sptr exp_img_dim = new brdb_value_t<bocl_mem_sptr>(exp_img_dim_[gpu_idx]);
   brdb_value_sptr brdb_time = new brdb_value_t<float>(scaled_time);
+  brdb_value_sptr brdb_render_label = new brdb_value_t<bool>(render_label_);
 
   //if scene has RGB data type, use color render process
   bool good = true;
@@ -202,8 +207,7 @@ float bstm_ocl_multi_render_tableau::render_frame()
   good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
   good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
   good = good && bprb_batch_process_manager::instance()->set_input(8, brdb_time);   // time
-
-
+  good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_render_label);   // render_label?
 
   good = good && bprb_batch_process_manager::instance()->run_process();
 

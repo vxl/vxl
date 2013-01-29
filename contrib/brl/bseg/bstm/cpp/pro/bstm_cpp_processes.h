@@ -6,6 +6,6 @@
 
 //the init functions
 DECLARE_FUNC_CONS(bstm_cpp_ingest_boxm2_scene_process);
-
+DECLARE_FUNC_CONS(bstm_cpp_label_bb_process);
 
 #endif

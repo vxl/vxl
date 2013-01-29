@@ -25,7 +25,7 @@
 
 namespace bstm_ocl_render_gl_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 9 ;
+  const unsigned n_inputs_ = 10 ;
   const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 
@@ -77,9 +77,9 @@ namespace bstm_ocl_render_gl_expected_image_process_globals
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
                                             norm_src_paths,
-                                            "normalize_render_kernel_gl",   //kernel name
-                                            "-D NORMALIZE_RENDER_GL",              //options
-                                            "normalize render kernel gl"); //kernel identifier (for error checking)
+                                            "normalize_render_kernel_rgb_gl",   //kernel name
+                                            "-D NORMALIZE_RENDER_GL ",       //options
+                                            "normalize render kernel rgb gl"); //kernel identifier (for error checking)
 
     vec_kernels.push_back(normalize_render_kernel);
   }
@@ -100,6 +100,7 @@ bool bstm_ocl_render_gl_expected_image_process_cons(bprb_func_process& pro)
   input_types_[6] = "bocl_mem_sptr"; // exp image buffer;
   input_types_[7] = "bocl_mem_sptr"; // exp image dimensions buffer;
   input_types_[8] = "float"; // time
+  input_types_[9] = "bool"; // render label?
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "float";
@@ -128,10 +129,12 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   bocl_mem_sptr exp_image =pro.get_input<bocl_mem_sptr>(i++);
   bocl_mem_sptr exp_img_dim =pro.get_input<bocl_mem_sptr>(i++);
   float time = pro.get_input<float>(i++);
+  bool render_label = pro.get_input<bool>(i++);
+
 
   //get scene data type and appTypeSize
-  vcl_string data_type;
-  int apptypesize;
+  vcl_string data_type,label_data_type;
+  int apptypesize,label_apptypesize;
   vcl_vector<vcl_string> valid_types;
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
@@ -146,10 +149,22 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   //get initial options (MOG TYPE)
   vcl_string options = bstm_ocl_util::mog_options(data_type);
 
+
+  //get scene label data type and appTypeSize if any.
+  vcl_vector<vcl_string> valid_label_types;
+  valid_label_types.push_back(bstm_data_traits<BSTM_LABEL>::prefix());
+  bool foundLabelDataType = bstm_util::verify_appearance( *scene, valid_label_types, label_data_type, label_apptypesize );
+  if ( !foundLabelDataType )
+    vcl_cout<<"Scene doesn't have BSTM_LABEL label type...rendering without it..."<<vcl_endl;
+  else
+    vcl_cout<<"Scene has " << label_data_type << " type...rendering with it..."<<vcl_endl;
+
+  //get options for teh label
+  options += bstm_ocl_util::label_options(label_data_type);
+
   //: create a command queue.
   int status=0;
-  cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
-                                                CL_QUEUE_PROFILING_ENABLE,&status);
+  cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()), CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
   vcl_string identifier=device->device_identifier()+options;
 
@@ -165,22 +180,28 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
 
+  float* buff = new float[4*cl_ni*cl_nj];
+  vcl_fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
+  bocl_mem_sptr exp_color = new bocl_mem(device->context(), buff, 4*cl_ni*cl_nj*sizeof(float), "color im buffer (float4) buffer");
+  exp_color->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  float* max_omega_buff = new float[cl_ni*cl_nj];
-  vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
-  bocl_mem_sptr max_omega_image = new bocl_mem(device->context(), max_omega_buff, cl_ni*cl_nj*sizeof(float), "vis image (single float) buffer");
-  max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
 
   // run expected image function
-  float render_time = render_expected_image( scene, device, opencl_cache, queue,
-                                      cam, exp_image, vis_image, exp_img_dim,
+  float render_time;
+  if(!foundLabelDataType || !render_label)
+    render_time = render_expected_image( scene, device, opencl_cache, queue,
+                                      cam, exp_color, vis_image, exp_img_dim,
                                       data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj, apptypesize,time);
+  else
+    render_time = render_expected_image( scene, device, opencl_cache, queue,
+                                          cam, exp_color, vis_image, exp_img_dim,
+                                          data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj, apptypesize,time, label_data_type, label_apptypesize, render_label);
 
 
 
@@ -188,9 +209,10 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern= kernels[identifier][1];
-    normalize_kern->set_arg( exp_image.ptr() );
+    normalize_kern->set_arg( exp_color.ptr() );
     normalize_kern->set_arg( vis_image.ptr() );
     normalize_kern->set_arg( exp_img_dim.ptr());
+    normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->execute( queue, 2, lthreads, gThreads);
     clFinish(queue);
 
@@ -204,6 +226,7 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   clReleaseCommandQueue(queue);
 
   delete[] vis_buff;
+  delete[] buff;
 
   //store render time
   int argIdx = 0;

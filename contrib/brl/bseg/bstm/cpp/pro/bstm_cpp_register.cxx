@@ -17,4 +17,6 @@ void bstm_cpp_register::register_process()
 {
   // utilities
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_cpp_ingest_boxm2_scene_process, "bstmCppIngestBoxm2SceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_cpp_label_bb_process, "bstmCppLabelBBProcess");
+
 }

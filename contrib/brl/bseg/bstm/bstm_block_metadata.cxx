@@ -34,3 +34,13 @@ bool bstm_block_metadata::operator==(boxm2_block_metadata const& m) const
           (this->sub_block_dim_ == m.sub_block_dim_) &&
           (this->sub_block_num_ == m.sub_block_num_);
 }
+
+vgl_box_3d<double> bstm_block_metadata::bbox()
+{
+  //max point
+  vgl_point_3d<double> max_pt( local_origin_.x() + sub_block_num_.x()*sub_block_dim_.x(),
+                               local_origin_.y() + sub_block_num_.y()*sub_block_dim_.y(),
+                               local_origin_.z() + sub_block_num_.z()*sub_block_dim_.z() );
+  vgl_box_3d<double> box(local_origin_, max_pt);
+  return box;
+}

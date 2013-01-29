@@ -28,6 +28,9 @@ class bstm_ocl_util
 
     //: mog optoins
     static vcl_string mog_options(vcl_string data_type);
+
+    //: label optoins
+    static vcl_string label_options(vcl_string data_type);
  };
 
 #endif // bstm_ocl_util_h

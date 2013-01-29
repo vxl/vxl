@@ -240,3 +240,11 @@ vcl_string bstm_ocl_util::mog_options(vcl_string data_type)
   else
     return "";
 }
+
+vcl_string bstm_ocl_util::label_options(vcl_string data_type)
+{
+  if ( data_type == bstm_data_traits<BSTM_LABEL>::prefix() )
+    return "-D LABEL_UCHAR ";
+  else
+    return "";
+}

@@ -24,6 +24,14 @@
     #define NORM 255
 #endif
 
+#ifdef LABEL_UCHAR
+    #define LABEL_TYPE uchar
+#endif
+
+//default label type is uchar
+#ifndef LABEL_TYPE
+    #define LABEL_TYPE uchar
+#endif
 
 //pixel type (RGB or GREY)
 #ifdef PIXEL_GREY

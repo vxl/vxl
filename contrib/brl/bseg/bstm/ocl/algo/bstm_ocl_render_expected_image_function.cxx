@@ -22,7 +22,10 @@ float render_expected_image(  bstm_scene_sptr & scene,
                                 unsigned cl_ni,
                                 unsigned cl_nj,
                                 int apptypesize,
-                                float time)
+                                float time,
+                                vcl_string label_data_type,
+                                int label_apptypesize,
+                                bool render_label)
   {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -52,6 +55,13 @@ float render_expected_image(  bstm_scene_sptr & scene,
     bstm_ocl_util::set_bit_lookup(lookup_arr);
     bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+    //render label or not?
+    cl_int render_label_buf[1];
+    render_label_buf[0] = render_label ? 1 : 0;
+    bocl_mem_sptr render_label_mem = new bocl_mem(device->context(), render_label_buf, sizeof(render_label_buf), "render label?");
+    render_label_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
 
     //2. set global thread size
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
@@ -88,10 +98,13 @@ float render_expected_image(  bstm_scene_sptr & scene,
         // data type string may contain an identifier so determine the buffer size
 
         bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+
+        //if rendering label, actually get the data for it, otherwise don't bother.
+        bocl_mem* label = mog;
+        if(render_label)
+          label = opencl_cache->get_data(*id,label_data_type,alpha->num_bytes()/alphaTypeSize*label_apptypesize,true);
+
         transfer_time += (float) transfer.all();
-
-        vcl_cout << "Ocl cache size: " << opencl_cache->bytes_in_cache() << vcl_endl;
-
 
         ////3. SET args
         kern->set_arg( blk_info );
@@ -99,6 +112,8 @@ float render_expected_image(  bstm_scene_sptr & scene,
         kern->set_arg( blk_t );
         kern->set_arg( alpha );
         kern->set_arg( mog );
+        kern->set_arg( label );
+        kern->set_arg( render_label_mem.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
         kern->set_arg( exp_image.ptr() );
@@ -113,6 +128,8 @@ float render_expected_image(  bstm_scene_sptr & scene,
         kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar8) );
         kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) );
         kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_int) );
+
+        vcl_cout << "Ocl cache size: " << opencl_cache->bytes_in_cache() << vcl_endl;
 
         //execute kernel
         kern->execute(queue, 2, lthreads, gThreads);

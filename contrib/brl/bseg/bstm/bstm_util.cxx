@@ -126,7 +126,7 @@ bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   co
 
   vgl_point_3d<double> localCenter = tree.cell_center(bit_index);
   vgl_point_3d<double> cellCenter(localCenter.x() + index_x, localCenter.y() + index_y, localCenter.z() + index_z);
-  vgl_point_3d<double> cellCenter_global(    float(cellCenter.x()*blk_data.sub_block_dim_.x() + blk_data.local_origin_.x()),
+  vgl_point_3d<double> cellCenter_global(   float(cellCenter.x()*blk_data.sub_block_dim_.x() + blk_data.local_origin_.x()),
                                              float(cellCenter.y()*blk_data.sub_block_dim_.y() + blk_data.local_origin_.y()),
                                              float(cellCenter.z()*blk_data.sub_block_dim_.z() + blk_data.local_origin_.z()));
 

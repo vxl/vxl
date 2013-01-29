@@ -111,15 +111,6 @@ class bstm_block_metadata:  public vbl_ref_count
 
   //: bounding box for this block
   vgl_box_3d<double>      bbox();
-  vgl_box_3d<double>      bbox(int x, int y, int z) {
-    return vgl_box_3d<double>( local_origin_.x() + x*sub_block_dim_.x(),
-                               local_origin_.y() + y*sub_block_dim_.y(),
-                               local_origin_.z() + z*sub_block_dim_.z(),
-                               local_origin_.x() + (x+1)*sub_block_dim_.x(),
-                               local_origin_.y() + (y+1)*sub_block_dim_.y(),
-                               local_origin_.z() + (z+1)*sub_block_dim_.z() );
-  }
-
   void   bbox_t(double& min_t, double& max_t) const {min_t = local_origin_t_; max_t = local_origin_t_ + sub_block_num_t_*sub_block_dim_t_; };
 
 

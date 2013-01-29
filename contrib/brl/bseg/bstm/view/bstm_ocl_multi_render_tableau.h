@@ -100,7 +100,7 @@ class bstm_ocl_multi_render_tableau : public bstm_cam_tableau
   bool do_init_ocl;
 
   bool render_trajectory_;
-
+  bool render_label_;
 };
 
 //: declare smart pointer
