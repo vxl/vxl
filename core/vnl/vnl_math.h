@@ -60,10 +60,11 @@
 #else
 # define USE_SSE2_IMPL 0
 #endif
+
+#define DEFINED_INTEL  ((defined(__i386__) || defined(__i386) || defined(__x86_64__) || defined(__x86_64)))
 // Turn on fast impl when using GCC on Intel-based machines with the following exception:
-//   PPC with Mac OS X
 //   GCCXML
-#if defined(__GNUC__) && (defined(__i386__) || defined(__i386) || defined(__x86_64__) || defined(__x86_64)) && (!defined(__APPLE__)  || !defined(__ppc__) )
+#if defined(__GNUC__) && DEFINED_INTEL
 # define GCC_USE_FAST_IMPL 1
 #else
 # define GCC_USE_FAST_IMPL 0
