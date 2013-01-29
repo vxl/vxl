@@ -75,33 +75,32 @@ bool bvpl_compute_pca_error_scene_process(bprb_func_process& pro)
   unsigned num_components = pro.get_input<unsigned>(i++);
 
   if (!vul_file::is_directory(pca_dir))
-     return false;
+    return false;
 
   if (!pca_error_scenes)
-     return false;
+    return false;
 
   bvpl_discover_pca_kernels *pca_extractor = new bvpl_discover_pca_kernels(pca_dir);
   vgl_vector_3d<unsigned int> num_blocks = pca_extractor->data_scene_dim();
   boxm_scene<boct_tree<short, float> >* error_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (pca_error_scenes->get_scene(num_components).as_pointer());
 
-
-  #if BVPL_OCTREE_HAS_PTHREADS
+#if BVPL_OCTREE_HAS_PTHREADS
   pca_extractor->load_all_scene_blocks();
   error_scene->read_all_blocks();
   unsigned num_threads = 0;
   vcl_vector<vgl_point_3d<int> > block_indices;
-  for (unsigned block_i = 0; block_i < num_blocks.x(); block_i++) {
-    for (unsigned block_j = 0; block_j < num_blocks.y(); block_j++) {
-      for (unsigned block_k = 0; block_k < num_blocks.z(); block_k++) {
+  for (unsigned block_i = 0; block_i < num_blocks.x(); ++block_i) {
+    for (unsigned block_j = 0; block_j < num_blocks.y(); ++block_j) {
+      for (unsigned block_k = 0; block_k < num_blocks.z(); ++block_k) {
         block_indices.push_back(vgl_point_3d<int>(block_i,block_j,block_k));
-        num_threads++;
+        ++num_threads;
       }
     }
   }
 
-  pthread_t thread_id[num_threads];
+  pthread_t* thread_id = new pthread_t[num_threads]; // beware of memory leaks ...
 
-  for (unsigned i =0; i < 1; i++)
+  for (unsigned i =0; i < num_threads; ++i)
   {
     pthread_data* pd = new pthread_data();
     pd->pca_extractor = pca_extractor;
@@ -112,17 +111,18 @@ bool bvpl_compute_pca_error_scene_process(bprb_func_process& pro)
     //pthread_detach(thread_id[i]);
     if (rc)
     {
-      vcl_cerr << "Error creating pthread, return code: "<<rc<<vcl_endl;
+      vcl_cerr << "Error creating pthread, return code: "<<rc<<'\n';
       vcl_exit(-1);
     }
   }
 #if 0
-  for (unsigned i =0; i < 1; i++)
+  for (unsigned i =0; i < num_threads; ++i)
   {
     pca_extractor.compute_testing_error_thread_safe(error_scene, num_components, block_indices[i].x(), block_indices[i].y(), block_indices[i].z());
   }
+  pca_extractor.unload_all_scene_blocks();
 #endif
-  //pca_extractor.unload_all_scene_blocks();
-  #endif
+
+#endif // PTHREADS
   return true;
 }
