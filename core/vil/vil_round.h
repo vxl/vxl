@@ -25,9 +25,10 @@
 # endif
 #endif
 
+#define DEFINED_INTEL    (defined(__i386__) || defined(__x86_64__))
 // Turn on fast impl when using GCC on Intel-based machines with the following exception:
 //   PPC with Mac OS X
-#if defined(__GNUC__) && (!defined(__APPLE__)  || !defined(__ppc__) )
+#if defined(__GNUC__) && DEFINED_INTEL
 # define GCC_USE_FAST_IMPL 1
 #else
 # define GCC_USE_FAST_IMPL 0
