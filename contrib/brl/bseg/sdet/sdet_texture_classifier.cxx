@@ -942,21 +942,21 @@ unsigned sdet_texture_classifier::max_filter_radius() const
 
 //dummy vsl io functions to allow sdet_texture_classifier to be inserted into
 //brdb as a dbvalue
-void vsl_b_write(vsl_b_ostream & os, sdet_texture_classifier const &tc)
+void vsl_b_write(vsl_b_ostream & os, sdet_texture_classifier const& /*tc*/)
 { /* do nothing */ }
-void vsl_b_read(vsl_b_istream & is, sdet_texture_classifier &tc)
+void vsl_b_read(vsl_b_istream & is, sdet_texture_classifier & /*tc*/)
 { /* do nothing */ }
-void vsl_print_summary(vcl_ostream &os, const sdet_texture_classifier &tc)
+void vsl_print_summary(vcl_ostream &os, const sdet_texture_classifier & /*tc*/)
 { /* do nothing */ }
-void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier* tc)
+void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier * /*tc*/)
 { /* do nothing */ }
-void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier* &tc)
+void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier* & /*tc*/)
 { /* do nothing */ }
-void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier* &tc)
+void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier* & /*tc*/)
 { /* do nothing */ }
-void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier_sptr& tc)
+void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier_sptr& /*tc*/)
 { /* do nothing */ }
-void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier_sptr &tc)
+void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier_sptr & /*tc*/)
 { /* do nothing */ }
-void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier_sptr &tc)
+void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier_sptr & /*tc*/)
 { /* do nothing */ }

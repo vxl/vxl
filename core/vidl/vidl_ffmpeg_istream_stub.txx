@@ -22,7 +22,7 @@ vidl_ffmpeg_istream
 }
 
 vidl_ffmpeg_istream
-::vidl_ffmpeg_istream(const vcl_string& filename)
+::vidl_ffmpeg_istream(const vcl_string& /*filename*/)
 {
 }
 
@@ -34,7 +34,7 @@ vidl_ffmpeg_istream
 
 bool
 vidl_ffmpeg_istream
-::open(const vcl_string& filename)
+::open(const vcl_string& /*filename*/)
 {
   return false;
 }

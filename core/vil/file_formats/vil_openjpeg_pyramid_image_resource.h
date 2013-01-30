@@ -83,8 +83,8 @@ class vil_openjpeg_pyramid_image_resource : public vil_pyramid_image_resource
   { return get_copy_view(0, ni(), 0, nj(), scale, actual_scale); }
 
   //: Copy a resource into the pyramid, level is determined by resource scale
-  virtual bool put_resource(vil_image_resource_sptr const& resc)
-    {return false;}
+  virtual bool put_resource(vil_image_resource_sptr const& /*resc*/)
+  { return false; }
 
   //: Get an image resource from the pyramid at the specified level
   virtual vil_image_resource_sptr get_resource(const unsigned level) const;

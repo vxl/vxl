@@ -57,7 +57,6 @@ struct check_types
       return pix_type;
     return check_types<vidl_pixel_format(pix_type-1)>::from_string(s);
   }
-
 };
 
 
@@ -66,7 +65,7 @@ VCL_DEFINE_SPECIALIZATION
 struct check_types<VIDL_PIXEL_FORMAT_UNKNOWN>
 {
   static inline
-  void traits(vidl_pixel_format f, vidl_pixel_traits& t)
+  void traits(vidl_pixel_format /*f*/, vidl_pixel_traits& t)
   {
     t.name           = vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_UNKNOWN>::name();
     t.type           = &typeid(vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_UNKNOWN>::type);
@@ -78,11 +77,10 @@ struct check_types<VIDL_PIXEL_FORMAT_UNKNOWN>
     t.chroma_shift_y = vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_UNKNOWN>::chroma_shift_y;
   }
 
-  static inline vidl_pixel_format from_string(const vcl_string& s)
+  static inline vidl_pixel_format from_string(const vcl_string& /*s*/)
   {
     return VIDL_PIXEL_FORMAT_UNKNOWN;
   }
-
 };
 
 
@@ -90,9 +88,9 @@ struct check_types<VIDL_PIXEL_FORMAT_UNKNOWN>
 
 //: Return the number of channels needed in a color mode
 unsigned
-    vidl_pixel_color_num_channels(vidl_pixel_color c)
+vidl_pixel_color_num_channels(vidl_pixel_color c)
 {
-  switch(c){
+  switch (c) {
     case VIDL_PIXEL_COLOR_MONO:
       return vidl_color_traits_of<VIDL_PIXEL_COLOR_MONO>::num_channels;
     case VIDL_PIXEL_COLOR_RGB:

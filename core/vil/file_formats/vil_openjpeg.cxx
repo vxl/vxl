@@ -19,6 +19,7 @@
 #include <vcl_iostream.h>
 #include <vcl_stdexcept.h>
 #include <vcl_limits.h>
+#include <vcl_cassert.h>
 
 #include <vil/vil_stream.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -53,16 +54,18 @@ vil_openjpeg_file_format
     delete im;
     return 0;
   }
-  return im;
+  else
+    return im;
 }
 
 
 vil_image_resource_sptr
 vil_openjpeg_file_format
-::make_output_image(vil_stream* vs,
-                    unsigned int ni, unsigned int nj, unsigned int nplanes,
-                    vil_pixel_format format, vil_openjpeg_format opjfmt)
+::make_output_image(vil_stream* /*vs*/,
+                    unsigned int /*ni*/, unsigned int /*nj*/, unsigned int /*nplanes*/,
+                    vil_pixel_format /*format*/, vil_openjpeg_format /*opjfmt*/)
 {
+  assert(!"openjpeg write support is currently not implemented");
   return 0;
 }
 
@@ -454,7 +457,7 @@ vil_openjpeg_decoder
 
 void
 vil_openjpeg_decoder
-::opj_event_info(const char *msg, void *data)
+::opj_event_info(const char *msg, void * /*data*/)
 {
   vcl_clog << "vil_openjpeg_decoder::INFO  : " << msg << vcl_endl;
 }
@@ -462,7 +465,7 @@ vil_openjpeg_decoder
 
 void
 vil_openjpeg_decoder
-::opj_event_warning(const char *msg, void *data)
+::opj_event_warning(const char *msg, void * /*data*/)
 {
   vcl_clog << "vil_openjpeg_decoder::WARN  : " << msg << vcl_endl;
 }
@@ -484,12 +487,12 @@ vil_openjpeg_decoder
 //
 
 vil_openjpeg_image
-::vil_openjpeg_image (vil_stream* is,
-                      unsigned int ni, unsigned int nj, unsigned int nplanes,
-                      vil_pixel_format format, vil_openjpeg_format opjfmt)
+::vil_openjpeg_image (vil_stream* /*is*/,
+                      unsigned int /*ni*/, unsigned int /*nj*/, unsigned int /*nplanes*/,
+                      vil_pixel_format /*format*/, vil_openjpeg_format /*opjfmt*/)
 : impl_(new vil_openjpeg_image_impl)
 {
-  // Write support is currently not implemented
+  assert(!"openjpeg write support is currently not implemented");
 }
 
 
@@ -825,15 +828,16 @@ vil_openjpeg_image
 
 bool
 vil_openjpeg_image
-::put_view(const vil_image_view_base& im, unsigned int i0, unsigned int j0)
+::put_view(const vil_image_view_base& /*im*/, unsigned int /*i0*/, unsigned int /*j0*/)
 {
+  assert(!"openjpeg write support is currently not implemented");
   return false;
 }
 
 
 bool
 vil_openjpeg_image
-::get_property(char const* tag, void* property_value) const
+::get_property(char const* /*tag*/, void* /*property_value*/) const
 {
   return false;
 }

@@ -9,7 +9,7 @@
 
 //=======================================================================
 
-void mipa_identity_normaliser::normalise(vnl_vector<double>& v) const
+void mipa_identity_normaliser::normalise(vnl_vector<double>& ) const
 {
 }
 

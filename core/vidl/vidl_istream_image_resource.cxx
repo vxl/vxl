@@ -106,7 +106,7 @@ vidl_istream_image_resource::pixel_format() const
 
 
 bool
-vidl_istream_image_resource::get_property(char const *key, void * value) const
+vidl_istream_image_resource::get_property(char const * /*key*/, void * /*value*/) const
 {
   return false;
 }
@@ -184,8 +184,8 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni,
 
 
 bool
-vidl_istream_image_resource::put_view(const vil_image_view_base &view,
-                                      unsigned x0, unsigned y0)
+vidl_istream_image_resource::put_view(vil_image_view_base const& /*view*/,
+                                      unsigned /*x0*/, unsigned /*y0*/)
 {
   vcl_cerr << "vidl_istream_image_resource::put_view not supported\n";
   return false;

@@ -127,6 +127,6 @@ vil_openjpeg_pyramid_image_resource::get_resource(const unsigned level) const
 }
 
 //: for debug purposes
-void vil_openjpeg_pyramid_image_resource::print(const unsigned level)
+void vil_openjpeg_pyramid_image_resource::print(const unsigned /*level*/)
 {
 }

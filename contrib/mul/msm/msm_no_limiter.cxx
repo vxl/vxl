@@ -29,7 +29,7 @@ void msm_no_limiter::set_acceptance(double, unsigned)
 }
 
 //: Apply limit to parameter vector b (does nothing)
-void msm_no_limiter::apply_limit(vnl_vector<double>& b) const
+void msm_no_limiter::apply_limit(vnl_vector<double>&) const
 {
 }
 

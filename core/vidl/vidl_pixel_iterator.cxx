@@ -23,7 +23,7 @@ struct populate_has_iterator
 VCL_DEFINE_SPECIALIZATION
 struct populate_has_iterator<VIDL_PIXEL_FORMAT_UNKNOWN>
 {
-  static inline void apply(bool* element)
+  static inline void apply(bool* /*element*/)
   {
     return;
   }
@@ -60,7 +60,7 @@ struct make_pixel_iterator
     if (frame.pixel_format() == pix_type){
       if (vidl_pixel_iterator_valid<pix_type>::value)
         return new vidl_pixel_iterator_of<pix_type>(frame);
-      return NULL;
+      return (vidl_pixel_iterator*)0;
     }
     return make_pixel_iterator<vidl_pixel_format(pix_type-1)>::apply(frame);
   }
@@ -70,9 +70,9 @@ struct make_pixel_iterator
 VCL_DEFINE_SPECIALIZATION
 struct make_pixel_iterator<VIDL_PIXEL_FORMAT_UNKNOWN>
 {
-  static inline vidl_pixel_iterator* apply(const vidl_frame& frame)
+  static inline vidl_pixel_iterator* apply(vidl_frame const& /*frame*/)
   {
-    return NULL;
+    return (vidl_pixel_iterator*)0;
   }
 };
 

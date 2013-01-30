@@ -32,10 +32,10 @@ template <class T> int  parse       (vul_arg<T>*, char**);
 //: This is the base class for the templated vul_arg<T>s
 class vul_arg_base
 {
-protected:
+ protected:
    struct required_option_type {}; // see constructors of vul_arg
 
-public:
+ public:
   static required_option_type is_required;
 
   static void parse_deprecated(int& argc, char **& argv,
@@ -173,7 +173,7 @@ class vul_arg : public vul_arg_base
   // \seealso is_required
   vul_arg(char const* option_string,
           char const* helpstring,
-          required_option_type dummy)
+          required_option_type /*dummy*/)
     : vul_arg_base(option_string,helpstring, true),
       value_(T()) { settype(); }
 
@@ -181,7 +181,7 @@ class vul_arg : public vul_arg_base
   vul_arg(vul_arg_info_list & l,
           char const * option_string,
           char const * helpstring,
-          required_option_type dummy )
+          required_option_type /*dummy*/ )
     : vul_arg_base(l, option_string, helpstring, true),
       value_(T()) { settype(); }
 
