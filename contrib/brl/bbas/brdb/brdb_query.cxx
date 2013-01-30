@@ -71,7 +71,8 @@ brdb_query_branch::brdb_query_branch(brdb_query_aptr q1, brdb_query_aptr q2)
 
 //: Copy constructor
 brdb_query_branch::brdb_query_branch(const brdb_query_branch& other)
-  : first_(other.first_->clone()),
+  : brdb_query(other),
+    first_(other.first_->clone()),
     second_(other.second_->clone())
 {
 }
@@ -164,7 +165,8 @@ brdb_query_comp::brdb_query_comp(const vcl_string& attribute_name,
 
 //: Copy Constructor
 brdb_query_comp::brdb_query_comp(const brdb_query_comp& other)
-  : attribute_name_(other.attribute_name_),
+  : brdb_query(other),
+    attribute_name_(other.attribute_name_),
     comparison_type_(other.comparison_type_),
     value_(other.value_->clone())
 {

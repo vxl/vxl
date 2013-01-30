@@ -27,13 +27,13 @@ vpgl_geo_camera::vpgl_geo_camera()
 }
 
 vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const& rhs)
-{
-  this->trans_matrix_ = rhs.trans_matrix_;
-  this->lvcs_ = new vpgl_lvcs(*(rhs.lvcs_));
-  this->is_utm = rhs.is_utm;
-  this->utm_zone_ = rhs.utm_zone_;
-  this->scale_tag_ = rhs.scale_tag_;
-}
+: vpgl_camera<double>(rhs),
+  trans_matrix_(rhs.trans_matrix_),
+  lvcs_(new vpgl_lvcs(*(rhs.lvcs_))),
+  is_utm(rhs.is_utm),
+  utm_zone_(rhs.utm_zone_),
+  scale_tag_(rhs.scale_tag_)
+{}
 
 bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
                                       vpgl_lvcs_sptr lvcs,
@@ -104,7 +104,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
   }
 }
 
-//: warning specific to 'N' and 'W' cameras, TODO: generalize 
+//: warning specific to 'N' and 'W' cameras, TODO: generalize
 bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
 {
   // determine the translation matrix from the image file name and construct a geo camera
@@ -113,20 +113,20 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
   vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
   vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
   float lon, lat, scale;
-  vcl_stringstream str(n); str >> lat; 
+  vcl_stringstream str(n); str >> lat;
   n = name.substr(name.find_first_of('W')+1, name.find_first_of('_'));
-  vcl_stringstream str2(n); str2 >> lon; 
+  vcl_stringstream str2(n); str2 >> lon;
   n = name.substr(name.find_first_of('x')+1, name.find_last_of('.'));
   vcl_stringstream str3(n); str3 >> scale;
   vcl_cout << " lat: " << lat << " lon: " << lon << " WARNING: using same scale for both ni and nj: scale:" << scale << vcl_endl;
-  
+
   // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
-  vcl_cout << "upper left corner in the image is: " << lat+scale << " N " << lon << " W " << vcl_endl;
-  vcl_cout << "lower right corner in the image is: " << lat << " N " << lon-scale << " W " << vcl_endl;
+  vcl_cout << "upper left corner in the image is: " << lat+scale << " N " << lon << " W\n"
+           << "lower right corner in the image is: " << lat << " N " << lon-scale << " W" << vcl_endl;
   vnl_matrix<double> trans_matrix(4,4,0.0);
   trans_matrix[0][0] = -scale/ni; trans_matrix[1][1] = -scale/nj;
   trans_matrix[0][3] = lon; trans_matrix[1][3] = lat+scale;
-  camera = new vpgl_geo_camera(trans_matrix, lvcs); 
+  camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(true);
   return true;
 }
@@ -439,7 +439,7 @@ bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,
   return true;
 }
 
-void vpgl_geo_camera::img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev)
+void vpgl_geo_camera::img_to_wgs(unsigned /*i*/, unsigned /*j*/, unsigned /*k*/, double& /*lon*/, double& /*lat*/, double& /*elev*/)
 {
   assert(!"Not yet implemented");
 }
@@ -453,12 +453,12 @@ void vpgl_geo_camera::b_write(vsl_b_ostream& os) const
   for (unsigned i = 0; i < trans_matrix_.rows(); i++)
     for (unsigned j = 0; j < trans_matrix_.cols(); j++)
       vsl_b_write(os, trans_matrix_[i][j]);
-  
+
   lvcs_->b_write(os);
   vsl_b_write(os, is_utm);
-  vsl_b_write(os, utm_zone_); 
-  vsl_b_write(os, northing_); 
-  vsl_b_write(os, scale_tag_);      
+  vsl_b_write(os, utm_zone_);
+  vsl_b_write(os, northing_);
+  vsl_b_write(os, scale_tag_);
 }
 
 
@@ -476,15 +476,15 @@ void vpgl_geo_camera::b_read(vsl_b_istream& is)
      vsl_b_read(is, ncols);
      trans_matrix_.set_size(nrows, ncols);
      for (unsigned i = 0; i < nrows; i++)
-      for (unsigned j = 0; j < ncols; j++) 
+      for (unsigned j = 0; j < ncols; j++)
         vsl_b_read(is, trans_matrix_[i][j]);
-      
+
      vpgl_lvcs_sptr lvcs_ = new vpgl_lvcs(0,0,0);
      lvcs_->b_read(is);
      vsl_b_read(is, is_utm);
-     vsl_b_read(is, utm_zone_); 
-     vsl_b_read(is, northing_); 
-     vsl_b_read(is, scale_tag_);      
+     vsl_b_read(is, utm_zone_);
+     vsl_b_read(is, northing_);
+     vsl_b_read(is, scale_tag_);
     break; }
 
    default:

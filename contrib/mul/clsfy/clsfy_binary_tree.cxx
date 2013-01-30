@@ -18,6 +18,7 @@
 
 
 clsfy_binary_tree::clsfy_binary_tree(const clsfy_binary_tree& srcTree)
+: clsfy_classifier_base(srcTree)
 {
     root_=cache_node_=0;
     copy(srcTree);

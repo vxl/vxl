@@ -30,7 +30,7 @@ vsol_spatial_object_2d::vsol_spatial_object_2d()
 }
 
 vsol_spatial_object_2d::vsol_spatial_object_2d(vsol_spatial_object_2d const& s)
-  : bounding_box_(0)
+  : vsol_spatial_object(s), bounding_box_(0)
 {
   this->tag_ = 0;
   this->id_ = s.get_id();

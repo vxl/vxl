@@ -9,6 +9,7 @@
 //
 
 brip_watershed_params::brip_watershed_params(const brip_watershed_params& wp)
+: gevd_param_mixin(wp)
 {
   InitParams(wp.sigma_, wp.thresh_,
              wp.eight_connected_, wp.verbose_);

@@ -56,7 +56,8 @@ mbl_file_data_collector<T>::mbl_file_data_collector(const mbl_data_collector_bas
 //: Copy constructor
 template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector(const mbl_file_data_collector & c)
-: bfs_( 0 ),
+: mbl_data_collector<T>( c ),
+  bfs_( 0 ),
   wrapper_( 0 )
 {
   assert( c.is_class( is_a() ) );

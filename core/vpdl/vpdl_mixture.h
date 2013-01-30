@@ -91,8 +91,8 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   vpdl_mixture() {}
 
   // Copy Constructor
-  vpdl_mixture(const vpdl_mixture<T,n>& other)
-    : components_(other.components_.size(),NULL)
+  vpdl_mixture(vpdl_mixture<T,n> const& other)
+    : vpdl_multi_cmp_dist<T,n>(other), components_(other.components_.size(),NULL)
   {
     // deep copy of the data
     for (unsigned int i=0; i<components_.size(); ++i) {
@@ -109,7 +109,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   }
 
   //: Assignment operator
-  vpdl_mixture<T,n>& operator= (const vpdl_mixture<T,n>& rhs)
+  vpdl_mixture<T,n>& operator= (vpdl_mixture<T,n> const& rhs)
   {
     if (this != &rhs) {
       for (unsigned int i=0; i<components_.size(); ++i) {
