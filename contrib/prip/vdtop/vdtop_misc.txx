@@ -642,7 +642,7 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
 #endif
   res.initialise_darts(nb_darts) ;
   int **dart;
-  int vertex_first_dart[mask.ni()] ;
+  int* vertex_first_dart = new int[mask.ni()];
   for (int j=0; j<mask.ni(); j++)
   {
     dart[j] = new int[4];
@@ -708,6 +708,7 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
   vcl_cout<<"V:"<<img.ni()*img.nj()<<'/'<<nb_vertices<<vcl_endl ;
   for (int j=0; j<mask.ni(); j++)
     delete[] dart[j];
+  delete[] vertex_first_dart;
 }
 
 #endif // vdtop_misc_txx_
