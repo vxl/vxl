@@ -4,19 +4,20 @@
 //
 void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base* hptr)
 {
-  if (hptr ==0)
+  if (hptr == 0)
     vsl_b_write(os, false);
-  else
+  else {
     vsl_b_write(os, true);
-  if (hptr->type_ == bsta_histogram_base::HIST_TYPE_FLOAT) {
-   const bsta_histogram<float>* hf =
-     static_cast<const bsta_histogram<float>*>(hptr);
-    vsl_b_write(os, *hf);
-  }
-  else if (hptr->type_ == bsta_histogram_base::HIST_TYPE_DOUBLE) {
-    const bsta_histogram<double>* hf =
-      static_cast<const bsta_histogram<double>*>(hptr);
-    vsl_b_write(os, *hf);
+    if (hptr->type_ == bsta_histogram_base::HIST_TYPE_FLOAT) {
+     const bsta_histogram<float>* hf =
+       static_cast<const bsta_histogram<float>*>(hptr);
+      vsl_b_write(os, *hf);
+    }
+    else if (hptr->type_ == bsta_histogram_base::HIST_TYPE_DOUBLE) {
+      const bsta_histogram<double>* hf =
+        static_cast<const bsta_histogram<double>*>(hptr);
+      vsl_b_write(os, *hf);
+    }
   }
 }
 
@@ -69,19 +70,20 @@ void vsl_b_read(vsl_b_istream &is, bsta_histogram_base_sptr& hptr)
 
 void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_base* hptr)
 {
-  if (hptr==0)
+  if (hptr == 0)
     vsl_b_write(os, false);
-  else
+  else {
     vsl_b_write(os, true);
-  if (hptr->type_ == bsta_joint_histogram_base::HIST_TYPE_FLOAT) {
-   const bsta_joint_histogram<float>* hf =
-     static_cast<const bsta_joint_histogram<float>*>(hptr);
-    vsl_b_write(os, *hf);
-  }
-  else if (hptr->type_ == bsta_joint_histogram_base::HIST_TYPE_DOUBLE) {
-    const bsta_joint_histogram<double>* hf =
-      static_cast<const bsta_joint_histogram<double>*>(hptr);
-    vsl_b_write(os, *hf);
+    if (hptr->type_ == bsta_joint_histogram_base::HIST_TYPE_FLOAT) {
+      const bsta_joint_histogram<float>* hf =
+        static_cast<const bsta_joint_histogram<float>*>(hptr);
+      vsl_b_write(os, *hf);
+    }
+    else if (hptr->type_ == bsta_joint_histogram_base::HIST_TYPE_DOUBLE) {
+      const bsta_joint_histogram<double>* hf =
+        static_cast<const bsta_joint_histogram<double>*>(hptr);
+      vsl_b_write(os, *hf);
+    }
   }
 }
 
@@ -115,6 +117,7 @@ void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base*& hptr)
 //  else if (type == bsta_joint_histogram_base::HIST_TYPE_UNKNOWN) ;// do nothing
   }
 }
+
 void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_base_sptr& hptr)
 {
   vsl_b_write(os, hptr.ptr());
@@ -134,17 +137,18 @@ void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d_base* hptr)
 {
   if (hptr==0)
     vsl_b_write(os, false);
-  else
+  else {
     vsl_b_write(os, true);
-  if (hptr->type_ == bsta_joint_histogram_3d_base::HIST_TYPE_FLOAT) {
-   const bsta_joint_histogram_3d<float>* hf =
-     static_cast<const bsta_joint_histogram_3d<float>*>(hptr);
-    vsl_b_write(os, *hf);
-  }
-  else if (hptr->type_ == bsta_joint_histogram_3d_base::HIST_TYPE_DOUBLE) {
-    const bsta_joint_histogram_3d<double>* hf =
-      static_cast<const bsta_joint_histogram_3d<double>*>(hptr);
-    vsl_b_write(os, *hf);
+    if (hptr->type_ == bsta_joint_histogram_3d_base::HIST_TYPE_FLOAT) {
+      const bsta_joint_histogram_3d<float>* hf =
+        static_cast<const bsta_joint_histogram_3d<float>*>(hptr);
+      vsl_b_write(os, *hf);
+    }
+    else if (hptr->type_ == bsta_joint_histogram_3d_base::HIST_TYPE_DOUBLE) {
+      const bsta_joint_histogram_3d<double>* hf =
+        static_cast<const bsta_joint_histogram_3d<double>*>(hptr);
+      vsl_b_write(os, *hf);
+    }
   }
 }
 
