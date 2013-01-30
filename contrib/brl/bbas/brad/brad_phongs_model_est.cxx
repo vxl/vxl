@@ -259,16 +259,9 @@ void brad_phongs_model_est::gradf(vnl_vector<double> const& x, vnl_matrix<double
     {
         vnl_double_3 view_vector=viewing_dirs_[i];
         double dp_rlv_vv=vcl_fabs(dot_product<double>(rlv,view_vector));
-        double sign_of_x0 = x[0];
-        double sign_of_x1 = x[0];
-        if ( x[0] == 0.0)
-            sign_of_x0 =1;
-        else
-            sign_of_x0 =x[0]/vcl_fabs(x[0]);
-        if ( x[1] == 0.0)
-            sign_of_x1 =1;
-        else
-            sign_of_x1 =x[1]/vcl_fabs(x[1]);
+
+        double sign_of_x0 = (x[0] >= 0.0) ? 1.0 : -1.0;
+        double sign_of_x1 = (x[1] >= 0.0) ? 1.0 : -1.0;
 
         J[i][0]=sign_of_x0*vcl_fabs(dot_product<double>(nv,lv))* vcl_sqrt(obs_weights_[i]);
         J[i][1]=sign_of_x1*vcl_pow(dp_rlv_vv,x[2])*vcl_sqrt(obs_weights_[i]);
@@ -289,7 +282,7 @@ brad_phongs_model_approx_est::brad_phongs_model_approx_est(double sun_elev,
                                                            vnl_vector<double> & obs,
                                                            vnl_vector<double> & obs_weights,
                                                            bool with_grad)
-                                                           : vnl_least_squares_function(5, obs.size(), with_grad ? use_gradient : no_gradient)
+: vnl_least_squares_function(5, obs.size(), with_grad ? use_gradient : no_gradient)
 {
     sun_elev_    = sun_elev;
     sun_azim_    = sun_azim;
@@ -394,16 +387,8 @@ void brad_phongs_model_approx_est::gradf(vnl_vector<double> const& x, vnl_matrix
 
         double dp=vcl_fabs(dot_product<double>(nv,half_vector));
 
-        double sign_of_x0 = x[0];
-        double sign_of_x1 = x[0];
-        if ( x[0] == 0.0)
-            sign_of_x0 =1.0;
-        else
-            sign_of_x0 =x[0]/vcl_fabs(x[0]);
-        if ( x[1] == 0.0)
-            sign_of_x1 =1.0;
-        else
-            sign_of_x1 =x[1]/vcl_fabs(x[1]);
+        double sign_of_x0 = (x[0] >= 0.0) ? 1.0 : -1.0;
+        double sign_of_x1 = (x[1] >= 0.0) ? 1.0 : -1.0;
 
         J[i][0]=sign_of_x0*vcl_fabs(dot_product<double>(nv,lv))* vcl_sqrt(obs_weights_[i]);//+vcl_pow(dp_rlv_vv,x[2])* /*vcl_sqrt*/(obs_weights_[i]);
         J[i][1]=sign_of_x1*vcl_pow(dp,x[2])*vcl_sqrt(obs_weights_[i]);
@@ -415,12 +400,12 @@ void brad_phongs_model_approx_est::gradf(vnl_vector<double> const& x, vnl_matrix
         J[i][4]=vcl_fabs(x[0])*dot_product<double>(nvdp,lv)*vcl_sqrt(obs_weights_[i])+
                 vcl_fabs(x[1])*vcl_pow(dp_rlv_vv,x[2])*vcl_log(dp_rlv_vv)
                 *dot_product<double>(householder_xform_dp_lv,view_vector)*vcl_sqrt(obs_weights_[i]);
-#else
+#else // 0
         J[i][3]=vcl_fabs(x[0])*dot_product<double>(nvdt,lv)*vcl_sqrt(obs_weights_[i])+
                 vcl_fabs(x[1])*x[2]*vcl_pow(dp,x[2]-1)*dot_product<double>(nvdt,half_vector)*vcl_sqrt(obs_weights_[i]);
 
         J[i][4]=vcl_fabs(x[0])*dot_product<double>(nvdp,lv)*vcl_sqrt(obs_weights_[i])+
                 vcl_fabs(x[1])*x[2]*vcl_pow(dp,x[2]-1)*dot_product<double>(nvdp,half_vector)*vcl_sqrt(obs_weights_[i]);
-#endif
+#endif // 0
     }
 }
