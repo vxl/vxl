@@ -57,7 +57,6 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-
   // check the query input files
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
@@ -258,7 +257,7 @@ int main(int argc, char** argv)
                << ", depth = " << dm->ground_plane()[i]->min_depth()
                << ", orient = " << dm->ground_plane()[i]->orient_type()
                << ", NLCD_id = " << dm->ground_plane()[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()]
+               << " ---> " << int(volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()])
                << vcl_endl;
   }
   if (dm->scene_regions().size()) {
@@ -270,7 +269,7 @@ int main(int argc, char** argv)
                << ",\t order = " << (dm->scene_regions())[i]->order()
                << ",\t orient = " << (dm->scene_regions())[i]->orient_type()
                << ",\t NLCD_id = " << (dm->scene_regions())[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dm->scene_regions()[i]->nlcd_id()]
+               << " ---> " << int(volm_nlcd_table::land_id[dm->scene_regions()[i]->nlcd_id()])
                << vcl_endl;
     }
   }
@@ -305,7 +304,6 @@ int main(int argc, char** argv)
     vcl_cout << " regional matcher (pass 0) is avoided" << vcl_endl;
   }
 
-
   // start pass 1 matcher
   if (use_ps1()) {
     boxm2_volm_matcher_p1 obj_order_matcher(query, leaves, ind_vec, depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder());
@@ -322,8 +320,6 @@ int main(int argc, char** argv)
   else {
     vcl_cout << " object based depth/order matcher (pass 1) is avoided" << vcl_endl;
   }
-
-
 
   // start pass 2 matcher
   if (use_ps2()) {
