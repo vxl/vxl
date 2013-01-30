@@ -272,7 +272,6 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   clsfy_classifier_1d* c1d = weak_builder_->new_classifier();
   clsfy_classifier_1d* best_c1d= weak_builder_->new_classifier();
 
-  double beta, alpha;
   long old_time = vcl_clock();
   double tot_time=0;
 
@@ -309,7 +308,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
     if (min_error<1e-10)  // Hooray!
     {
       vcl_cout<<"min_error<1e-10 !!!\n";
-      alpha  = vcl_log(2.0*n);   //is this appropriate???
+      double alpha  = vcl_log(2.0*n);   //is this appropriate???
       strong_classifier.add_classifier( best_c1d, alpha, best_i);
 
       // delete classifiers on heap, because clones taken by strong_classifier
@@ -319,10 +318,9 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
     }
 
 
-    if (0.5-min_error<1e-10) // Oh dear, no further improvement possible
+    else if (0.5-min_error<1e-10) // Oh dear, no further improvement possible
     {
       vcl_cout<<"min_error => 0.5 !!!\n";
-      beta=1.0;
 
       // delete classifiers on heap, because clones taken by strong_classifier
       delete c1d;
@@ -330,20 +328,21 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       return clsfy_test_error(strong_classifier, inputs, outputs);
     }
 
-    // update the classifier
-    beta = min_error/(1.0-min_error);
-    alpha  = -1.0*vcl_log(beta);
-    strong_classifier.add_classifier( best_c1d, alpha, best_i);
+    else { // update the classifier
+      double beta = min_error/(1.0-min_error);
+      double alpha  = -1.0*vcl_log(beta);
+      strong_classifier.add_classifier( best_c1d, alpha, best_i);
 
+      // extract the best weak classifier results
+      wrapper.set_index(best_i);
+      const vcl_vector< vbl_triple<double,int,int> >& vec = wrapper.current();
 
-    // extract the best weak classifier results
-    wrapper.set_index(best_i);
-    const vcl_vector< vbl_triple<double,int,int> >& vec = wrapper.current();
-
-    // update the wts using the best weak classifier
-    for (unsigned int j=0;j<n;++j)
-      if ( best_c1d-> classify( vec[j].first ) == (unsigned) vec[j].second)
-        wts[vec[j].third]*=beta;
+      // update the wts using the best weak classifier
+      for (unsigned int j=0; j<n; ++j)
+        if ( best_c1d-> classify( vec[j].first ) == (unsigned) vec[j].second)
+          wts[vec[j].third]*=beta;
+      // no return yet!
+    }
 
     double w_sum= wts.mean()*n;
     wts/=w_sum;
