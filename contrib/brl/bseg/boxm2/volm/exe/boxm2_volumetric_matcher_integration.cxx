@@ -102,7 +102,6 @@ int main(int argc, char** argv)
   }
   float min_size;
   volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
-  volm_geo_index::read_hyps(root, file_name_pre.str());
 
   // check whether we have candidate list for this query
   bool is_candidate = false;
@@ -127,6 +126,8 @@ int main(int argc, char** argv)
   if (is_candidate) {
     volm_geo_index::prune_tree(root, cand_poly);
   }
+  volm_geo_index::read_hyps(root, file_name_pre.str());
+
   vcl_vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves); 
   
