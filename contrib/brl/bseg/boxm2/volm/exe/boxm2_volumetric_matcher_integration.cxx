@@ -127,15 +127,8 @@ int main(int argc, char** argv)
   if (is_candidate) {
     volm_geo_index::prune_tree(root, cand_poly);
   }
-  vcl_vector<volm_geo_index_node_sptr> all_leaves;
-  volm_geo_index::get_leaves(root, all_leaves);
-  
-  // prune the tree to get rid of leaves without any hypothesis
   vcl_vector<volm_geo_index_node_sptr> leaves;
-  for (unsigned li = 0; li < all_leaves.size(); li++)
-    if (all_leaves[li]->hyps_)
-      leaves.push_back(all_leaves[li]);
-
+  volm_geo_index::get_leaves_with_hyps(root, leaves); 
   
   // read in the parameter, create depth_interval table and spherical shell container
   boxm2_volm_wr3db_index_params params;
