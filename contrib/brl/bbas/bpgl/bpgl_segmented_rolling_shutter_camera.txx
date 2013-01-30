@@ -25,7 +25,6 @@ template <class T>
 bpgl_segmented_rolling_shutter_camera<T>::bpgl_segmented_rolling_shutter_camera(maptype camera_segments):
 cam_map_(camera_segments)
 {
-    
 }
 
 template <class T>
@@ -40,21 +39,20 @@ void bpgl_segmented_rolling_shutter_camera<T>::project(const T x, const T y, con
 {
    this->project(x,y,z,u,v);
 }
+
 template <class T>
-void bpgl_segmented_rolling_shutter_camera<T>::project(const T x, const T y, const T z,T& u, T& v) 
+void bpgl_segmented_rolling_shutter_camera<T>::project(const T x, const T y, const T z,T& u, T& v)
 {
-   
- for(iterator iter=cam_map_.begin();iter!=cam_map_.end(); )
-    {
-        iter->second.project(x,y,z,u,v);
-        ++iter;
+  for (iterator iter=cam_map_.begin();iter!=cam_map_.end(); )
+  {
+    iter->second.project(x,y,z,u,v);
+    ++iter;
 
-        if(cam_map_.upper_bound((unsigned int)v)==iter)
-            return;
-    }
-
+    if (cam_map_.upper_bound((unsigned int)v)==iter)
+      return;
+  }
 }
-   
+
 //vnl interface methods
 template <class T>
 vnl_vector_fixed<T, 2>
@@ -73,44 +71,45 @@ vgl_point_2d<T> bpgl_segmented_rolling_shutter_camera<T>::project(vgl_point_3d<T
   this->project(world_point.x(),world_point.y(),world_point.z(),u,v);
   return vgl_point_2d<T>(u, v);
 }
+
 template <class T>
 bool bpgl_segmented_rolling_shutter_camera<T>::cam_index(T v, unsigned int & index)
 {
     index=0;
-    for(iterator iter=cam_map_.begin();iter!=cam_map_.end();)
+    for (iterator iter=cam_map_.begin();iter!=cam_map_.end();)
     {
         ++iter;
-        if(cam_map_.upper_bound((unsigned int)v)==iter)
+        if (cam_map_.upper_bound((unsigned int)v)==iter)
             return true;
         ++index;
-
     }
 
     return false;
 }
+
 template <class T>
 bool bpgl_segmented_rolling_shutter_camera<T>::add_camera(unsigned int v, vpgl_perspective_camera<double> cam)
 {
-    if(cam_map_.find(v)==cam_map_.end())
-        cam_map_[v]=cam;
-    else
-        return false;
-    return true;
+  if (cam_map_.find(v)==cam_map_.end())
+  { cam_map_[v]=cam; return true; }
+  else
+    return false;
 }
+
 template <class T>
 bool bpgl_segmented_rolling_shutter_camera<T>::update_camera(unsigned int v, vpgl_perspective_camera<double> cam)
 {
-    if(cam_map_.find(v)!=cam_map_.end())
-        cam_map_[v]=cam;
-    else
-        return false;
-    return true;
+  if (cam_map_.find(v)!=cam_map_.end())
+  { cam_map_[v]=cam; return true; }
+  else
+    return false;
 }
+
 //: print the camera parameters
 template <class T>
 void bpgl_segmented_rolling_shutter_camera<T>::print(vcl_ostream& s) const
 {
-
+  s << "<bpgl_segmented_rolling_shutter_camera>";
 }
 
 template <class T>
@@ -122,9 +121,10 @@ bool bpgl_segmented_rolling_shutter_camera<T>::save(vcl_string cam_path)
     vcl_cerr << "error: bad filename: " << cam_path << vcl_endl;
     return false;
   }
-
-  return true;
+  else
+    return true;
 }
+
 // Binary I/O
 
 //: Binary read self from stream
@@ -146,14 +146,13 @@ b_write(vsl_b_ostream &os) const
 template <class T>
 bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(vcl_string cam_path)
 {
-
   return new bpgl_segmented_rolling_shutter_camera<T>();
 }
+
 //: read from an open istream
 template <class T>
 bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(vcl_istream& istr)
 {
-
   return new bpgl_segmented_rolling_shutter_camera<T>();
 }
 
