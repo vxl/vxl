@@ -34,7 +34,7 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
   //bool debug_bool = (ind_id == 143) && (cam_id == 3);
 
   // passing necessary values from global to the local memory
-  __local unsigned ln_cam, ln_obj, ln_ind, ln_layer_size;
+  __local unsigned ln_cam, ln_obj, ln_ind, ln_layer_size, ln_depth_size;
   __local float l_grd_weight, l_sky_weight;
   if (llid == 0) {
     ln_cam = *n_cam;
@@ -43,6 +43,7 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
     ln_layer_size = *layer_size;
     l_grd_weight = *grd_weight;
     l_sky_weight = *sky_weight;
+    ln_depth_size = *depth_length;
   }
   if (llid < *n_obj) {
     local_min_dist[llid] = obj_min_dist[llid];
@@ -95,17 +96,24 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
     float score_sky;
     score_sky = (end_sky != start_sky) ? (float)sky_count/(end_sky-start_sky) : 0;
     score_sky = score_sky * l_sky_weight;
-
+    
     // calculate ground score
+    // define the altitude ratio, suppose the altitude in index could ba up to 3 meter
+    // assuming the read-in alt values in query is normally ~1m, the altiutide ratio would be (2-1)/1 ~2
+    // the altitude ratio defined the tolerance for ground distance d as delta_d = alt_ratio * d
+    unsigned char alt_ratio = 2;
     unsigned start_grd = grd_offset[cam_id];
     unsigned end_grd = grd_offset[cam_id+1];
     unsigned grd_count = 0;
     for (unsigned k = start_grd; k < end_grd; ++k) {
       unsigned id = start_ind + grd_id[k];
-      uchar ind_d = index[id];
-      uchar grd_d = grd_dist[k];
-      if ( ind_d >= (grd_d-1) && ind_d <= (grd_d+5) )
-        grd_count += 1;
+      if (index[id] < ln_depth_size && grd_dist[k] < ln_depth_size ) {
+        float ind_d = local_depth_interval[index[id]];
+        float grd_d = local_depth_interval[grd_dist[k]];
+        float delta_d = alt_ratio * grd_d;
+        if ( ind_d >= (grd_d - delta_d) && ind_d <= (grd_d+delta_d) )
+          grd_count += 1;
+      }
     }
     float score_grd;
     score_grd = (end_grd != start_grd) ? (float)grd_count / (end_grd-start_grd) : 0;
@@ -125,7 +133,7 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
       for (unsigned i = start_obj; i < end_obj; ++i) {   // loop over each voxel in object k
         unsigned id = start_ind + obj_id[i];
         unsigned d = index[id];
-        if (d < 253) {
+        if (d < 253 && d < ln_depth_size) {
           mu_obj += local_depth_interval[d];
           count += 1;
         }
@@ -150,12 +158,14 @@ __kernel void generalized_volm_obj_based_matching(__global unsigned*            
         unsigned d = index[id];
         unsigned s_vox_ord = 1;
         unsigned s_vox_min = 0;
-        if (d < 253) {
+        if (d < 253 && d < ln_depth_size) {
           // calculate order score for voxel i
           for (unsigned mu_id = 0; (s_vox_ord && mu_id < k); ++mu_id)
-            s_vox_ord = s_vox_ord * (local_depth_interval[d] >= mu[mu_id + mu_start_id]);
+            if(mu[mu_id+mu_start_id] != 0)
+              s_vox_ord = s_vox_ord * (local_depth_interval[d] >= mu[mu_id + mu_start_id]);
           for (unsigned mu_id = k+1; (s_vox_ord && mu_id < ln_obj); ++mu_id)
-            s_vox_ord = s_vox_ord * (local_depth_interval[d] <= mu[mu_id + mu_start_id]);
+            if(mu[mu_id+mu_start_id] != 0)
+              s_vox_ord = s_vox_ord * (local_depth_interval[d] <= mu[mu_id + mu_start_id]);
           // calculate min_distance socre for voxel i
           if ( d > local_min_dist[k] )
             s_vox_min = 1;

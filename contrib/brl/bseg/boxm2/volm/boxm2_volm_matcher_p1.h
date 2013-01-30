@@ -54,7 +54,7 @@ public:
   //: matcher function
   bool volm_matcher_p1();
   //: generate output -- probability map, binary score file, etc
-  bool write_matcher_result();
+  bool write_matcher_result(vcl_string const& out_fname_pre);
     
 private:
   //: query, indices, device
@@ -195,6 +195,19 @@ public:
   float    max_score_;
   unsigned max_cam_id_;
   vcl_vector<unsigned> cam_id_;
+};
+
+class boxm2_volm_score_out_max{
+public:
+  boxm2_volm_score_out_max() {}
+  boxm2_volm_score_out_max(unsigned const& hypo_id, float const& max_score, unsigned const& max_cam_id)
+    : hypo_id_(hypo_id), max_score_(max_score), max_cam_id_(max_cam_id) {}
+  ~boxm2_volm_score_out_max() {}
+
+public: 
+  unsigned   hypo_id_;
+  float    max_score_;
+  float   max_cam_id_;
 };
 
 #endif // boxm2_volm_matcher_p1_h_

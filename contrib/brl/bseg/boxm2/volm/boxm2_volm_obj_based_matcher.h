@@ -103,6 +103,9 @@ private:
   bocl_mem*            obj_order_cl_mem_;
   float*                obj_weight_buff_;
   bocl_mem*           obj_weight_cl_mem_;
+  //: depth interval
+  unsigned*         depth_interval_buff_;
+  bocl_mem*       depth_interval_cl_mem_;
 
   //: kernels
   vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
