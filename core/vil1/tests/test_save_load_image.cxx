@@ -26,6 +26,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()
@@ -158,6 +159,7 @@ void vil1_test_image_type_raw(char const* type_name, //!< type for image to read
                               vil1_image const & image, //!< test image to save and restore
                               bool exact = true) //!< require read back image identical
 {
+  assert(type_name);
   int n = image.bits_per_component() * image.components();
   vcl_cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << vcl_flush;
 
@@ -166,7 +168,7 @@ void vil1_test_image_type_raw(char const* type_name, //!< type for image to read
   // create a file name
   vcl_string fname = vul_temp_filename();
   fname += ".";
-  if (type_name) fname += type_name;
+  fname += type_name;
 
   vcl_cout << "vil1_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
 
@@ -189,7 +191,7 @@ void vil1_test_image_type_raw(char const* type_name, //!< type for image to read
     if (!image2) return; // fatal error
 
     // make sure saved image has the same pixels as the original image
-    tst = !(vcl_strcmp(type_name,image2.file_format()));
+    tst = !(vcl_strcmp(type_name,image2.file_format())); // NOTE: the analyzer notes it's invalid to pass null to strcmp, and since 'type_name' was tested above against null, it assumes this could occur. From the looks of it, this test function is meant to never be passed null, so I added an assert and removed the test.
     TEST ("compare image file formats", tst, true);
     if (!tst)
       vcl_cout << "read back image type is " << image2.file_format()
@@ -287,6 +289,7 @@ void vil1_test_image_type(char const* type_name, // type for image to read and w
                           vil1_image const & image, // test image to save and restore
                           bool exact = true) // require read back image identical
 {
+  assert(type_name);
   int n = image.bits_per_component() * image.components();
   vcl_cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << vcl_flush;
 
@@ -295,7 +298,7 @@ void vil1_test_image_type(char const* type_name, // type for image to read and w
   // create a file name
   vcl_string fname = vul_temp_filename();
   fname += ".";
-  if (type_name) fname += type_name;
+  fname += type_name;
 
   vcl_cout << "vil1_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
 

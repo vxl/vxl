@@ -175,6 +175,7 @@ void test_csp_solver_loop_b(unsigned n)
     node_labels_subset[middle].erase(middle);
     vcl_cout<<"Now erase the middle nodes arc to create inconsistent problem"<<vcl_endl;
     arcConsistent=solver(node_labels_subset,links_subset);
+    TEST("now NOT Arc Consistent",arcConsistent,false);
     {
         unsigned v1=arcs[middle].min_v();
         unsigned v2=arcs[middle].max_v();

@@ -338,12 +338,9 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
   // Double precision work array of length at least NCV**2 + 8*NCV
   double *workl = new double[lworkl + 1];
 
-  // start from scratch
-  bool basisCalculated = false;
-
   vnl_vector<double> workVector;
 
-  while (!basisCalculated)
+  while (true)
   {
     // Calling arpack routine dsaupd.
     v3p_netlib_dsaupd_(
@@ -356,7 +353,6 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
     if (ido==DONE)
     {
       nconv = iParam[5];
-      basisCalculated = true;
       break;
     }
     else
