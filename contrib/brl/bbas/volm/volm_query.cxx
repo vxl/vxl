@@ -101,7 +101,8 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
     vcl_cout << " Under ground plane constriant, volm_query created : " << this->get_cam_num()
              << " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
              << vcl_endl;
-  } else {
+  }
+  else {
     vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
   }
   // generate polygon vector based on defined order
@@ -176,7 +177,8 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
     vcl_cout << " Under ground plane constriant, volm_query created : " << this->get_cam_num()
              << " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
              << vcl_endl;
-  } else {
+  }
+  else {
     vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
   }
 
@@ -512,16 +514,18 @@ bool volm_query::query_ingest()
           unsigned obj_id;
           unsigned char grd_nlcd;
           min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_nlcd, is_ground, is_sky, is_object, depth_img);
-	  //if(i == 0){
-	  //  vcl_cout << p_idx << ' ' << count << ' ' 
-		 //    << (unsigned)min_dist << ' ' << u << ' ' << v 
-		 //    << ' ' << (unsigned)order << ' ' 
-		 //    << (unsigned)max_dist 
-		 //    << ' ' << (unsigned)obj_id 
-		 //    << ' ' << (unsigned)grd_nlcd << ' ' 
-		 //    << is_ground << ' ' << is_sky << ' ' 
-		 //    << is_object << '\n';
-	  //}
+#if 0
+          if (i == 0) {
+            vcl_cout << p_idx << ' ' << count << ' '
+                     << (unsigned)min_dist << ' ' << u << ' ' << v
+                     << ' ' << (unsigned)order << ' '
+                     << (unsigned)max_dist
+                     << ' ' << (unsigned)obj_id
+                     << ' ' << (unsigned)grd_nlcd << ' '
+                     << is_ground << ' ' << is_sky << ' '
+                     << is_object << '\n';
+          }
+#endif // 0
           min_dist_layer.push_back(min_dist);
           max_dist_layer.push_back(max_dist);
           order_layer.push_back(order);
