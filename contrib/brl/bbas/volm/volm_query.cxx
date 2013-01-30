@@ -97,7 +97,13 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
 
   // create camera hypotheses
   this->create_cameras();
-  vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
+  if (dm_->ground_plane().size()) {
+    vcl_cout << " Under ground plane constriant, volm_query created : " << this->get_cam_num()
+             << " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
+             << vcl_endl;
+  } else {
+    vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
+  }
   // generate polygon vector based on defined order
   this->generate_regions();
   ground_orient_ = volm_orient_table::ori_id["horizontal"];
@@ -166,7 +172,14 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
 
   // create camera hypotheses
   this->create_cameras();
-  vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
+  if (dm_->ground_plane().size()) {
+    vcl_cout << " Under ground plane constriant, volm_query created : " << this->get_cam_num()
+             << " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
+             << vcl_endl;
+  } else {
+    vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
+  }
+
   // generate polygon vector based on defined order
   this->generate_regions();
   ground_orient_ = volm_orient_table::ori_id["horizontal"];
@@ -296,7 +309,9 @@ void volm_query::create_cameras()
     rolls_.push_back(roll_ + i);  rolls_.push_back(roll_ - i);
     vcl_cout << right_rol << ' ' << left_rol << ' ';
   }
+  vcl_cout << '\n';
   vcl_cout.flush();
+
   // construct the camera hypotheses
   for (unsigned i = 0; i < tilts_.size(); ++i)
     for (unsigned j = 0; j < rolls_.size(); ++j)
@@ -314,7 +329,7 @@ void volm_query::create_cameras()
           if (dm_->ground_plane().size()) {
             for (unsigned i = 0; (success && i < dm_->ground_plane().size()); ++i) {
               success = dm_->ground_plane()[i]->region_ground_2d_to_3d(cam);
-#ifdef DEBUG
+#if 0
               vcl_cout << "checking ground plane consistency for: " << dm_->ground_plane()[i]->name() << " min depth is: " << dm_->ground_plane()[i]->min_depth()
                        << ' ' << (success ? "" : "not_") << "consistent!\n"
 #endif
@@ -465,10 +480,10 @@ bool volm_query::query_ingest()
                << "from original query code\n";
     }
 #endif
-#if 0
+#if 1
     // create an depth image for current camera
-    dm_->set_camera(cam);
-    //vil_image_view<float> depth_img = dm_->depth_map("ground_plane", 0, d_threshold_);
+    // dm_->set_camera(cam);
+    // vil_image_view<float> depth_img = dm_->depth_map("ground_plane", 0, d_threshold_);
     // depth image for the ground plane
     vil_image_view<float> depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
     // loop over rays on sphere
@@ -497,16 +512,16 @@ bool volm_query::query_ingest()
           unsigned obj_id;
           unsigned char grd_nlcd;
           min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_nlcd, is_ground, is_sky, is_object, depth_img);
-          if (i == 0) {
-            vcl_cout << p_idx << ' ' << count << ' '
-                     << (unsigned)min_dist << ' ' << u << ' ' << v
-                     << ' ' << (unsigned)order << ' '
-                     << (unsigned)max_dist
-                     << ' ' << (unsigned)obj_id
-                     << ' ' << (unsigned)grd_nlcd << ' '
-                     << is_ground << ' ' << is_sky << ' '
-                     << is_object << '\n';
-          }
+	  //if(i == 0){
+	  //  vcl_cout << p_idx << ' ' << count << ' ' 
+		 //    << (unsigned)min_dist << ' ' << u << ' ' << v 
+		 //    << ' ' << (unsigned)order << ' ' 
+		 //    << (unsigned)max_dist 
+		 //    << ' ' << (unsigned)obj_id 
+		 //    << ' ' << (unsigned)grd_nlcd << ' ' 
+		 //    << is_ground << ' ' << is_sky << ' ' 
+		 //    << is_object << '\n';
+	  //}
           min_dist_layer.push_back(min_dist);
           max_dist_layer.push_back(max_dist);
           order_layer.push_back(order);
@@ -532,7 +547,6 @@ bool volm_query::query_ingest()
         }
       }
     } // loop over rays for current camera
-
     min_dist_.push_back(min_dist_layer);
     max_dist_.push_back(max_dist_layer);
     order_.push_back(order_layer);
@@ -542,12 +556,16 @@ bool volm_query::query_ingest()
     ground_nlcd_.push_back(ground_nlcd_layer);
     sky_id_.push_back(sky_id_layer);
     dist_id_.push_back(dist_id_layer);
+    //dist_id_.push_back(dist_id_layer);
 #endif
+
+// sperhical layer -- the scene_region is not ordered by its order, so it ruins my basic data structure
+#if 0
     volm_spherical_layers sph_lays(cam, dm_, altitude_, sph_depth_, sph_,
                                    (unsigned char)invalid_, order_sky_,
                                    d_threshold_, log_downsample_ratio_);
     sph_lays.compute_layers();
-#if 1
+
     min_dist_.push_back(sph_lays.min_dist_layer());
     max_dist_.push_back(sph_lays.max_dist_layer());
     order_.push_back(sph_lays.order_layer());
@@ -620,7 +638,7 @@ unsigned char volm_query::fetch_depth(double const& u,
         is_object = true;
         object_id = i;
         double min_depth = depth_regions_[i]->min_depth();
-        if (min_depth < sph_depth_->min_voxel_res())
+        if (min_depth < 0)
           min_dist = (unsigned char)255;
         else
           min_dist = sph_depth_->get_depth_interval(min_depth);
@@ -906,7 +924,7 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
                           unsigned char const& depth,
                           vpgl_perspective_camera<double> const& cam)
 {
-  int dot_size = ( img.ni() < img.nj() ) ? (int)(0.007*ni_) : (int)(0.007*nj_);
+  int dot_size = ( img.ni() < img.nj() ) ? (int)(0.003*ni_) : (int)(0.003*nj_);
   double u, v;
   vgl_homg_point_3d<double> current_p(world_point.x(), world_point.y(), world_point.z()+altitude_);
   if (!(cam.is_behind_camera(current_p))) {

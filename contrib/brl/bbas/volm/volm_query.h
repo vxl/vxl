@@ -179,24 +179,24 @@ class volm_query : public vbl_ref_count
   vcl_set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
   vcl_vector<vcl_vector<vcl_vector<unsigned> > > order_index_;
   //: ground plane distance, id, and NLCD classification
-  vcl_vector<vcl_vector<unsigned> >            ground_id_;
-  vcl_vector<vcl_vector<unsigned char> >     ground_dist_;
-  vcl_vector<vcl_vector<unsigned char> >     ground_nlcd_;
-  vcl_vector<unsigned>                     ground_offset_;
-  unsigned char                            ground_orient_;  // always horizontal
+  vcl_vector<vcl_vector<unsigned> >                ground_id_;
+  vcl_vector<vcl_vector<unsigned char> >         ground_dist_;
+  vcl_vector<vcl_vector<unsigned char> >         ground_nlcd_;
+  vcl_vector<unsigned>                         ground_offset_;
+  unsigned char                                ground_orient_;  // always horizontal
   //: sky distance
-  vcl_vector<vcl_vector<unsigned> >               sky_id_;
-  vcl_vector<unsigned>                        sky_offset_;
-  unsigned char                               sky_orient_;  // always 100 (100 is the label for uncertain or ambiguous cells)
+  vcl_vector<vcl_vector<unsigned> >                   sky_id_;
+  vcl_vector<unsigned>                            sky_offset_;
+  unsigned char                                   sky_orient_;  // always 100 (100 is the label for uncertain or ambiguous cells)
   //: object id based on min_dist (since objects may have different min_dist but same order)
-  vcl_vector<vcl_vector<vcl_vector<unsigned> > > dist_id_;
-  vcl_vector<unsigned>                       dist_offset_;
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > >     dist_id_;
+  vcl_vector<unsigned>                           dist_offset_;
   //: min and max distance, object orders, orientation and land clarifications for different objects, based on object orders
-  vcl_vector<unsigned char>                 min_obj_dist_;
-  vcl_vector<unsigned char>                 max_obj_dist_;
-  vcl_vector<unsigned char>                    order_obj_;
-  vcl_vector<unsigned char>                   obj_orient_;
-  vcl_vector<unsigned char>                     obj_nlcd_;
+  vcl_vector<unsigned char>                     min_obj_dist_;
+  vcl_vector<unsigned char>                     max_obj_dist_;
+  vcl_vector<unsigned char>                        order_obj_;
+  vcl_vector<unsigned char>                       obj_orient_;
+  vcl_vector<unsigned char>                         obj_nlcd_;
   //: weight parameters
   vcl_vector<float> weight_obj_;
   float             weight_grd_;

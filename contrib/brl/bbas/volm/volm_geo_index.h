@@ -35,7 +35,14 @@ class volm_geo_index_node : public vbl_ref_count
    vcl_string get_hyp_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + ".bin"; }
    vcl_string get_index_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + "_index.bin"; }
    vcl_string get_label_index_name(vcl_string const& geo_index_name_pre, vcl_string const& identifier); 
-
+   
+   //: output file name creation
+   vcl_string get_score_txt_name(vcl_string const& geo_out_index_name_pre, unsigned const& matcher) 
+   { 
+     vcl_stringstream str;
+     str << geo_out_index_name_pre << "_" << this->get_string() << "_ps_" << matcher << "_score.txt";
+     return str.str();
+   }
  public:
    // mini tile
    vgl_box_2d<float> extent_;   // min point of this box is lower left corner of the mini tile of this node
