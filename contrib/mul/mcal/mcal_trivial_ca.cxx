@@ -122,6 +122,7 @@ mcal_component_analyzer* mcal_trivial_ca::clone() const
 
 void mcal_trivial_ca::print_summary(vcl_ostream& os) const
 {
+  os << is_a();
 }
 
 //=======================================================================

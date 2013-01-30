@@ -210,12 +210,13 @@ vcl_string mbl_dyn_prog::is_a() const
 }
 
 //=======================================================================
-// Method: print
+// Method: print_summary
 //=======================================================================
 
-  // required if data is present in this class
+// required if data is present in this class
 void mbl_dyn_prog::print_summary(vcl_ostream& os) const
 {
+  os << is_a();
 }
 
 //=======================================================================

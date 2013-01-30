@@ -88,6 +88,7 @@ mcal_single_basis_cost* mcal_var_basis_cost::clone() const
 
 void mcal_var_basis_cost::print_summary(vcl_ostream& os) const
 {
+  os << is_a();
 }
 
 //=======================================================================

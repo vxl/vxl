@@ -182,18 +182,18 @@ void mbl_eps_writer::write_image_data(vcl_ostream& os,
                                       const vil_image_view<vxl_byte>& image)
 {
   unsigned ni=image.ni(),nj=image.nj();
-  ofs_<<"{<";
+  os<<"{<";
   for (unsigned j=0;j<nj;++j)
   {
     // Write each row
     for (unsigned i=0;i<ni;++i)
     {
-      ofs_<<vcl_hex<<int(image(i,j))/16<<int(image(i,j))%16;
+      os<<vcl_hex<<int(image(i,j))/16<<int(image(i,j))%16;
     }
-    ofs_<<vcl_endl;
+    os<<vcl_endl;
   }
-  ofs_<<">}\n"
-      <<vcl_dec;  // Ensure returns to decimal
+  os<<">}\n"
+    <<vcl_dec;  // Ensure returns to decimal
 }
 
 void mbl_eps_writer::draw_image(const vil_image_view<vxl_byte>& image,

@@ -338,6 +338,7 @@ vcl_string msm_ref_shape_instance::is_a() const
   // required if data is present in this class
 void msm_ref_shape_instance::print_summary(vcl_ostream& os) const
 {
+  os << is_a();
 }
 
 //=======================================================================
