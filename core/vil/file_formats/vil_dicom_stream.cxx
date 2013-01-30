@@ -60,7 +60,7 @@ avail() const
   //apparently dicom streams only support 32 bit positions
   //whereas vil_streams now support 64 bit positions (when
   //available)
-  assert( n <= vcl_numeric_limits<Uint32>::max() );
+  assert( n <= (vil_streampos)vcl_numeric_limits<Uint32>::max() );
   return (Uint32)n;
 }
 
@@ -70,11 +70,12 @@ vil_dicom_stream_producer::
 read( void *buf, Uint32 buflen )
 {
   vil_streampos n = vs_->read( buf, buflen );
+  assert( n >= 0 );
   //assert ensures that the cast will succeed.
   //apparently dicom streams only support 32 bit positions
   //whereas vil_streams now support 64 bit positions (when
   //available)
-  assert( n <= vcl_numeric_limits<Uint32>::max() );
+  assert( n <= (vil_streampos)vcl_numeric_limits<Uint32>::max() );
   return (Uint32)n;
 }
 
