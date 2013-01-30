@@ -138,7 +138,7 @@ vcl_vector<bstm_block_id> bstm_scene::get_vis_blocks(vpgl_perspective_camera<dou
 
 vcl_vector<bstm_block_id>
 bstm_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
-                                   vgl_box_2d<double> camBox)
+                                  vgl_box_2d<double> camBox)
 {
   //Map of distance, id
   vcl_vector<bstm_block_id> vis_order;
@@ -178,11 +178,10 @@ bstm_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
 }
 
 
-
 //: find the block containing the specified point, else return false
 //  Local coordinates are also returned
 bool bstm_scene::contains(vgl_point_3d<double> const& p, bstm_block_id& bid,
-                           vgl_point_3d<double>& local_coords, double const t, double& local_time) const
+                          vgl_point_3d<double>& local_coords, double const t, double& local_time) const
 {
     vcl_vector<bstm_block_id> block_ids = this->get_block_ids();
     for (vcl_vector<bstm_block_id>::iterator id = block_ids.begin();
@@ -198,7 +197,7 @@ bool bstm_scene::contains(vgl_point_3d<double> const& p, bstm_block_id& bid,
       if (bbox.contains(p.x(), p.y(), p.z())) {
 
         //now check for time
-        if(md.contains_t(t,local_time))
+        if (md.contains_t(t,local_time))
         {
           bid = (*id);
           double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
@@ -218,7 +217,7 @@ bool bstm_scene::contains_t(double const t, bstm_block_id& bid, double& local_ti
 {
   vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
-    if((iter->second).contains_t(t,local_time))
+    if ((iter->second).contains_t(t,local_time))
     {
       bid = iter->first;
       return true;
@@ -268,8 +267,6 @@ bstm_scene_info* bstm_scene::get_blk_metadata(bstm_block_id id)
   info->tree_buffer_length = 0;
   info->data_buffer_length = 0;
 
-
-
   return info;
 }
 
@@ -282,10 +279,10 @@ void bstm_scene::bounding_box_t(double& min_t, double& max_t) const
   {
     double blk_min, blk_max;
     (iter->second).bbox_t(blk_min,blk_max);
-    if(blk_min < min_t)
+    if (blk_min < min_t)
       min_t = blk_min;
 
-    if(blk_max > max_t)
+    if (blk_max > max_t)
       max_t = blk_max;
   }
 }
@@ -299,15 +296,14 @@ unsigned  bstm_scene::blocks_ids_bounding_box_t() const
   vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
   {
-    if(iter->first.t_ < min_t_blk_id)
+    if (iter->first.t_ < (int)min_t_blk_id)
       min_t_blk_id = iter->first.t_;
 
-    if(iter->first.t_ > max_t_blk_id)
+    if (iter->first.t_ > (int)max_t_blk_id)
       max_t_blk_id = iter->first.t_;
   }
   return max_t_blk_id - min_t_blk_id + 1;
 }
-
 
 
 vgl_box_3d<double> bstm_scene::bounding_box() const
@@ -528,7 +524,6 @@ vcl_ostream& operator <<(vcl_ostream &s, bstm_scene& scene)
   s << "<=====:end blocks\n";
   return s;
 }
-
 
 
 //: Binary write bstm_scene to stream
