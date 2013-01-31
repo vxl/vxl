@@ -6,8 +6,10 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vcl_algorithm.h>
-bool operator < (vsph_edge const& a, vsph_edge const& b){ 
-  if(a.vs_!=b.vs_)
+
+bool operator < (vsph_edge const& a, vsph_edge const& b)
+{
+  if (a.vs_!=b.vs_)
     return a.vs_ < b.vs_;
   return a.ve_ < b.ve_;
 }
@@ -84,15 +86,15 @@ void vsph_unit_sphere::add_uniform_views(double cap_angle, double point_angle)
       for (int j=0; j<3; j++) {
         // find the mid points of edges
         int next=j+1; if (next == 3) next=0;
-	vgl_vector_3d<double> v0 = verts[triangles[i][j]];
-	vgl_vector_3d<double> vn = verts[triangles[i][next]];
-	vgl_point_3d<double> p0(v0.x(), v0.y(), v0.z());
-	vgl_point_3d<double> pn(vn.x(), vn.y(), vn.z());
+        vgl_vector_3d<double> v0 = verts[triangles[i][j]];
+        vgl_vector_3d<double> vn = verts[triangles[i][next]];
+        vgl_point_3d<double> p0(v0.x(), v0.y(), v0.z());
+        vgl_point_3d<double> pn(vn.x(), vn.y(), vn.z());
         vgl_line_segment_3d<double> edge1(p0,pn);
         vgl_point_3d<double> midp=edge1.point_t(0.5);
-	// convert to a unit vector on the sphere surface
-	vgl_vector_3d<double> mid(midp.x(), midp.y(), midp.z());
-	mid  = normalized(mid);
+        // convert to a unit vector on the sphere surface
+        vgl_vector_3d<double> mid(midp.x(), midp.y(), midp.z());
+        mid  = normalized(mid);
         // add a new vertex for mid points of the edges of the triangle
         int idx = verts.size();
         verts.push_back(mid);
@@ -158,13 +160,13 @@ void vsph_unit_sphere::add_uniform_views(double cap_angle, double point_angle)
       //is cv already in cart_pts?
       int id = -1;
       bool equal = this->find_near_equal(cv, id);
-      if(equal)
-	equivalent_ids_[vidx]=id;// keep track of map between old and new ids
+      if (equal)
+        equivalent_ids_[vidx]=id;// keep track of map between old and new ids
       // if not add it
-      if(!equal&&(sv.theta_ <= cap_angle_rad)) {
-	int np = cart_pts_.size();
-	cart_pts_.push_back(cv);
-	sph_pts_.push_back(sv);
+      if (!equal&&(sv.theta_ <= cap_angle_rad)) {
+        int np = cart_pts_.size();
+        cart_pts_.push_back(cv);
+        sph_pts_.push_back(sv);
       }
     }
   }
@@ -178,11 +180,11 @@ void vsph_unit_sphere::add_uniform_views(double cap_angle, double point_angle)
     v[1] = equivalent_ids_[triangles[i][1]];//cart and sphere vertex ids
     v[2] = equivalent_ids_[triangles[i][2]];//updated from initial "verts" id
     //traverse the edges of the triangle
-    for(int j = 0; j<3; ++j){
+    for (int j = 0; j<3; ++j) {
       vsph_edge e(v[j],v[(j+1)%3]);//wrap around to 0
       eit = vcl_find(edges_.begin(), edges_.end(), e);
-      if(eit == edges_.end())
-	edges_.push_back(e);
+      if (eit == edges_.end())
+        edges_.push_back(e);
     }
   }
 }
@@ -198,25 +200,26 @@ void vsph_unit_sphere::remove_top_and_bottom(double top_angle, double bottom_ang
   int indx = 0;
   for (; pit!=sph_pts_.end();++pit, ++indx) {
     vsph_sph_point_2d& sp = (*pit);
-    if (sp.theta_ > top_angle_rad && 
-	sp.theta_ < (vnl_math::pi - bottom_angle_rad)) {
+    if (sp.theta_ > top_angle_rad &&
+        sp.theta_ < (vnl_math::pi - bottom_angle_rad)) {
       int ns = cart_pts_new.size();
       equivalent_ids_[indx] = ns;
       sph_pts_new.push_back(sp);
       cart_pts_new.push_back(cart_pts_[indx]);
-    }else{equivalent_ids_[indx] = -1;}
+    }
+    else { equivalent_ids_[indx] = -1; }
   }
-  
+
   sph_pts_.clear();
   sph_pts_ = sph_pts_new;
   cart_pts_.clear();
   cart_pts_ = cart_pts_new;
   vcl_vector<vsph_edge> new_edges;
-  for(vcl_vector<vsph_edge>::iterator eit = edges_.begin();
-      eit != edges_.end(); ++eit){
+  for (vcl_vector<vsph_edge>::iterator eit = edges_.begin();
+       eit != edges_.end(); ++eit) {
     int is = equivalent_ids_[(*eit).vs_],
-      ie = equivalent_ids_[(*eit).ve_];
-    if(is == -1 || ie == -1)
+        ie = equivalent_ids_[(*eit).ve_];
+    if (is == -1 || ie == -1)
       continue;
     new_edges.push_back(vsph_edge(is, ie));
   }
@@ -225,13 +228,14 @@ void vsph_unit_sphere::remove_top_and_bottom(double top_angle, double bottom_ang
 }
 
 bool vsph_unit_sphere::
-find_near_equal(vgl_vector_3d<double>const& p, int& id, double tol){
+find_near_equal(vgl_vector_3d<double>const& p, int& id, double tol)
+{
   vcl_vector<vgl_vector_3d<double> >::iterator it = cart_pts_.begin();
   id = 0;
-  for(;it != cart_pts_.end(); it++, ++id) {
+  for (;it != cart_pts_.end(); it++, ++id) {
     vgl_vector_3d<double>& cp = *it;
     double dist = 1.0 - dot_product(p, cp);
-    if(dist<tol)
+    if (dist<tol)
       return true;
   }
   id = -1;
@@ -243,8 +247,8 @@ void vsph_unit_sphere::print(vcl_ostream& os) const
 {
   os << "vsph_unit_sphere: " << size() << vcl_endl;
   unsigned idx = 0;
-  for(vcl_vector<vsph_sph_point_2d>::const_iterator sit = sph_pts_.begin();
-      sit != sph_pts_.end(); ++sit, ++idx)
+  for (vcl_vector<vsph_sph_point_2d>::const_iterator sit = sph_pts_.begin();
+       sit != sph_pts_.end(); ++sit, ++idx)
     os << '(' << idx << ") " << *sit << vcl_endl;
   os << vcl_endl;
 }
@@ -252,7 +256,7 @@ void vsph_unit_sphere::print(vcl_ostream& os) const
 
 // point_angle must be in radians
 bool vsph_unit_sphere::min_angle(vcl_vector<vgl_vector_3d<double> > list,
-				 double point_angle)
+                                 double point_angle)
 {
   if (list.size() < 2)
     return false;
@@ -269,86 +273,87 @@ bool vsph_unit_sphere::min_angle(vcl_vector<vgl_vector_3d<double> > list,
 }
 
 
-
-void vsph_unit_sphere::display_vertices(vcl_string const & path) const{
+void vsph_unit_sphere::display_vertices(vcl_string const & path) const
+{
   vcl_ofstream os(path.c_str());
-  if(!os.is_open())
+  if (!os.is_open())
     return;
-  os << "VRML V2.0 utf8\n";
-  os << "Shape { \n";
-  os << "   appearance Appearance {\n";
-  os << "      material Material {\n";
-  os << "         emissiveColor 1.0 1.0 1.0\n";
-  os <<        "}\n";
-  os <<    "}\n";
-  os << "  geometry PointSet {\n";
-  os << "     coord Coordinate {\n";
-  os << "      point [\n";
+  os << "VRML V2.0 utf8\n"
+     << "Shape {\n"
+     << "   appearance Appearance {\n"
+     << "      material Material {\n"
+     << "         emissiveColor 1.0 1.0 1.0\n"
+     <<        "}\n"
+     <<    "}\n"
+     << "  geometry PointSet {\n"
+     << "     coord Coordinate {\n"
+     << "      point [\n";
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for(vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
-      cit != cart_pts_.end(); ++cit, ++cnt){
+  for (vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+       cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
-    if(cnt != np) os << ",\n";
-    else os << "\n";
+    if (cnt != np) os << ',';
+    os << '\n';
   }
-  os <<"    ]\n";
-  os <<"   }\n";
-  os << " }\n";
-  os <<"}\n";
+  os <<"    ]\n"
+     <<"   }\n"
+     << " }\n"
+     <<"}\n";
 }
 
-void vsph_unit_sphere::display_edges(vcl_string const & path) const{
- 
+void vsph_unit_sphere::display_edges(vcl_string const & path) const
+{
   vcl_ofstream os(path.c_str());
-  if(!os.is_open())
+  if (!os.is_open())
     return;
-  os << "VRML V2.0 utf8\n";
-  os << "Shape { \n";
-  os << "   appearance Appearance {\n";
-  os << "      material Material {\n";
-  os << "         emissiveColor 1.0 1.0 1.0\n";
-  os <<        "}\n";
-  os <<    "}\n";
-  os << "  geometry IndexedLineSet {\n";
-  os << "     coord Coordinate {\n";
-  os << "      point [\n";
+  os << "VRML V2.0 utf8\n"
+     << "Shape {\n"
+     << "   appearance Appearance {\n"
+     << "      material Material {\n"
+     << "         emissiveColor 1.0 1.0 1.0\n"
+     <<        "}\n"
+     <<    "}\n"
+     << "  geometry IndexedLineSet {\n"
+     << "     coord Coordinate {\n"
+     << "      point [\n";
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for(vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
-      cit != cart_pts_.end(); ++cit, ++cnt){
+  for (vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+       cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
-    if(cnt != np) os << ",\n";
-    else os << "\n";
+    if (cnt != np) os << ',';
+    os << '\n';
   }
-  os <<             "]\n";
-  os <<      "}\n";
-  os << "     coordIndex [\n";
+  os <<             "]\n"
+     <<      "}\n"
+     << "     coordIndex [\n";
 
   cnt = 0;
   int ne = edges_.size()-1;
-  for(vcl_vector<vsph_edge>::const_iterator eit = edges_.begin();
-      eit != edges_.end(); ++eit, ++cnt){
+  for (vcl_vector<vsph_edge>::const_iterator eit = edges_.begin();
+       eit != edges_.end(); ++eit, ++cnt) {
     const vsph_edge& e = *eit;
     os << e.vs_ << ',' << e.ve_;
-    if(cnt != ne)
+    if (cnt != ne)
       os << ",-1,\n";
     else os << '\n';
   }
-  os <<        "]\n";
-  os << "    }\n";
-  os << "  }\n";
+  os <<        "]\n"
+     << "    }\n"
+     << "  }\n";
   os.close();
 }
+
 void vsph_unit_sphere::b_read(vsl_b_istream& is)
 {
 #if 0
   short version;
   vsl_b_read(is, version);
   switch (version) {
-  case 1:
+   case 1:
     {
       if (!coord_sys_) coord_sys_ = new vsph_spherical_coord();
       coord_sys_->b_read(is);
@@ -356,16 +361,16 @@ void vsph_unit_sphere::b_read(vsl_b_istream& is)
       T view;
       vsl_b_read(is, size);
       for (unsigned i=0; i<size; i++) {
-	vsl_b_read(is, uid);
-	view.b_read(is);
-	views_[uid] = view;
+        vsl_b_read(is, uid);
+        view.b_read(is);
+        views_[uid] = view;
       }
       vsl_b_read(is, uid_);
       break;
     }
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_unit_sphere&)\n"
-	     << "           Unknown version number "<< version << '\n';
+             << "           Unknown version number "<< version << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }

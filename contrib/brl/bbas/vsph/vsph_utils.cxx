@@ -2,35 +2,40 @@
 #include <vnl/vnl_math.h>
 
 // compute b-a on the circle
-double vsph_utils::azimuth_diff(double phi_a, double phi_b,
-                                bool in_radians) {
-  double a = phi_a, b = phi_b, pi = vnl_math::pi,
-         two_pi = vnl_math::twopi;
+double vsph_utils::azimuth_diff(double a, double b,
+                                bool in_radians)
+{
   double diff = b-a;
   if (!in_radians) {
     if (diff > 180)  diff -= 360;
     if (diff < -180) diff += 360;
   }
   else {
-    if (diff > pi)  diff -= two_pi;
-    if (diff < -pi) diff += two_pi;
+    if (diff >  vnl_math::pi) diff -= vnl_math::two_pi;
+    if (diff < -vnl_math::pi) diff += vnl_math::two_pi;
   }
   return diff;
 }
 
 double vsph_utils::distance_on_usphere(vsph_sph_point_2d const& a,
-				       vsph_sph_point_2d const& b){
+                                       vsph_sph_point_2d const& b)
+{
   double dist = vcl_fabs(vsph_utils::azimuth_diff(a.phi_, b.phi_));
   dist += vcl_fabs(a.theta_-b.theta_);
   return dist;
 }
 
-bool vsph_utils::a_eq_b(double phi_a, double phi_b, bool in_radians){
-  double a = phi_a, b = phi_b, pi = vnl_math::pi;
+bool vsph_utils::a_eq_b(double a, double b, bool in_radians)
+{
   if (!in_radians) {
-    if (((a == -180)&&(b == 180))||((a == 180)&&(b == -180))) return true;
+    if (( a == -180 || a == 180 ) && ( b == 180 || b == -180 ))
+      return true;
   }
-  if (((a == -pi)&&(b == pi))||((a == pi)&&(b == -pi))) return true;
+  else {
+    const double pi = vnl_math::pi;
+    if (( a == -pi || a == pi ) && ( b == pi || b == -pi ))
+      return true;
+  }
   return a == b;
 }
 
@@ -41,7 +46,8 @@ bool vsph_utils::a_lt_b(double phi_a, double phi_b, bool in_radians)
 }
 
 vsph_sph_box_2d vsph_utils::intersection(vsph_sph_box_2d const& b1,
-                                         vsph_sph_box_2d const& b2) {
+                                         vsph_sph_box_2d const& b2)
+{
   vsph_sph_box_2d rbox;
 
   double phi_min =
