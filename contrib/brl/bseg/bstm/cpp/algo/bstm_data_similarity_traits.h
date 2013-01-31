@@ -34,7 +34,9 @@ template<>
 class bstm_similarity_traits<BSTM_MOG6_VIEW, BOXM2_MOG6_VIEW>
 {
  public:
-  static bool is_similar(bstm_data_traits<BSTM_MOG6_VIEW>::datatype app, boxm2_data_traits<BOXM2_MOG6_VIEW>::datatype boxm2_app, float p, float boxm2_p ) { return true; }
+  static bool is_similar(bstm_data_traits<BSTM_MOG6_VIEW>::datatype /*app*/,
+                         boxm2_data_traits<BOXM2_MOG6_VIEW>::datatype /*boxm2_app*/,
+                         float /*p*/, float /*boxm2_p*/ )                           { return true; }
 };
 
 template<>

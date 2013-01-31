@@ -542,7 +542,12 @@ void bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refine_all_time
 template <bstm_data_type APM_TYPE, boxm2_data_type BOXM2_APM_TYPE>
 void bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::place_curr_data(bstm_time_tree& refined_tree, int boxm2_data_offset,
                                                                                  bstm_data_traits<BSTM_ALPHA>::datatype*  alpha_cpy,
-                                                                                 typename bstm_data_traits<APM_TYPE>::datatype * apm_cpy, int depth_diff )
+                                                                                 typename bstm_data_traits<APM_TYPE>::datatype * apm_cpy,
+                                                                                 int
+#ifdef ALPHA_SCALING
+                                                                                     depth_diff
+#endif
+                                                                                )
 {
   float trees_local_time = local_time_ - blk_t_->tree_index(local_time_);
   int new_ptr = refined_tree.get_data_index( refined_tree.traverse(trees_local_time) );
