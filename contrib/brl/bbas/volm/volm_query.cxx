@@ -13,15 +13,15 @@
 #include <volm/volm_spherical_layers.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
+#include <volm/volm_camera_space.h>
 
 #define TOL -1E-8
 
-volm_query::volm_query(vcl_string const& cam_kml_file,
+volm_query::volm_query(volm_camera_space_sptr cam_space,
                        vcl_string const& label_xml_file,
                        volm_spherical_container_sptr const& sph,
-                       volm_spherical_shell_container_sptr const& sph_shell,
-                       bool const& use_default)
-  : use_default_(use_default), invalid_((unsigned char)255), sph_depth_(sph), sph_(sph_shell)
+                       volm_spherical_shell_container_sptr const& sph_shell)
+  : cam_space_(cam_space), sph_depth_(sph), sph_(sph_shell), invalid_((unsigned char)255)
 {
   //the discrete rays defined on the sphere as x, y, z
   query_points_ = sph_->cart_points();
@@ -42,6 +42,7 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
     ++log_downsample_ratio_;
   vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
 
+#if NO_CAM_SPACE_CLASS
   //
   // set the default camera hypothesis parameters
   // based on img_category_ ( "desert" and "coast")
@@ -94,12 +95,15 @@ volm_query::volm_query(vcl_string const& cam_kml_file,
              << "\ntop_fov: " << tfov_ << " dev: " << tfov_d_
              << " alt: " << altitude_ << vcl_endl;
   }
+#endif
+  
+  altitude_ = cam_space_->altitude();
 
   // create camera hypotheses
   this->create_cameras();
   if (dm_->ground_plane().size()) {
     vcl_cout << " Under ground plane constriant, volm_query created : " << this->get_cam_num()
-             << " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
+             //<< " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
              << vcl_endl;
   }
   else {
@@ -124,8 +128,8 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
                        vcl_string const& image_category,
                        volm_spherical_container_sptr const& sph,
                        volm_spherical_shell_container_sptr const& sph_shell,
-                       double altitude)
-: altitude_(altitude), use_default_(true), img_category_(image_category), sph_depth_(sph), sph_(sph_shell)
+                       double altitude)  : 
+                       img_category_(image_category), sph_depth_(sph), sph_(sph_shell), altitude_(altitude)
 {
   //the discrete rays defined on the sphere as x, y, z
   query_points_ = sph_->cart_points();
@@ -146,6 +150,7 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
     ++log_downsample_ratio_;
   vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
 
+#if NO_CAM_SPACE_CLASS
   //
   // set the default camera hypothesis parameters
   // based on img_category_ ( "desert" and "coast")
@@ -170,12 +175,22 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
     roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
     tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 2.0;
   }
+#endif
+
+  double head = 0.0;  double head_d = 180.0; double head_inc = 2.0;
+  double tilt = 90.0; double tilt_d = 0.0; double tilt_inc = 2.0;
+  double roll = 0.0; double roll_d = 1.0; double roll_inc = 1.0;
+  double tfov = 5.0;  double tfov_d = 30.0; double tfov_inc = 2.0;
+
+  // construct camera space
+  cam_space_ = new volm_camera_space(tfov, tfov_d, tfov_inc, altitude_, ni_, nj_, 
+                                     head, head_d, head_inc, tilt, tilt_d, tilt_inc, roll, roll_d, roll_inc);
 
   // create camera hypotheses
   this->create_cameras();
   if (dm_->ground_plane().size()) {
     vcl_cout << " Under ground plane constriant, volm_query created : " << this->get_cam_num()
-             << " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
+             //<< " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
              << vcl_endl;
   }
   else {
@@ -194,6 +209,7 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
   this->weight_ingest();
 }
 
+#if NO_CAM_SPACE_CLASS
 // generate the set of camera hypotheses
 // the camera space includes multiple
 // choices for focal length, heading, tilt and roll
@@ -354,6 +370,18 @@ void volm_query::create_cameras()
             camera_strings_.push_back(bpgl_camera_utils::get_string((double)ni_, (double)nj_, right_f, top_f, altitude_, head, tilt, roll));
           }
         }
+}
+#endif
+void volm_query::create_cameras()
+{
+  // iterate over valid cameras in the camera space
+  vcl_vector<unsigned int> const& valid_cams = cam_space_->valid_indices();
+  for (unsigned i = 0; i < valid_cams.size(); i++) {
+    vpgl_perspective_camera<double> cam = cam_space_->camera(valid_cams[i]);
+    cameras_.push_back(cam);
+    vcl_string cam_str = cam_space_->get_string(valid_cams[i]);
+    camera_strings_.push_back(cam_str);
+  }
 }
 
 // convert min and max distances from scene depth regions to voxel indices

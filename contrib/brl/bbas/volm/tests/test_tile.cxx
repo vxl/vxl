@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vpl/vpl.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vsl/vsl_binary_io.h>
@@ -52,6 +53,17 @@ static void test_tile()
   t.img_to_global(0, t.nj_, lon3, lat3);
   TEST_NEAR("tile 2 img to global lat ", lat3, lat2, 0.01);
   TEST_NEAR("tile 2 img to global lon ", lon3, lon2, 0.01);
+
+  vil_image_view<float> img = vil_load("I:/Public_LIDAR/2_meter_lidar_tiles/lidar_N32.7500W079.8750_S0.0625x0.0625.tif");
+  volm_tile ttest("I:/Public_LIDAR/2_meter_lidar_tiles/lidar_N32.7500W079.8750_S0.0625x0.0625.tif", img.ni(), img.nj());
+
+  lat = 32.776000;
+  lon = -79.813000;
+  unsigned ii, jj;
+  bool inside = ttest.global_to_img(lon, lat, ii, jj);
+  double val = img(ii, jj);
+  vcl_cout << val;
+
 }
 
 

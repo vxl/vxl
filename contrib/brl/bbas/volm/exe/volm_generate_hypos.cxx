@@ -381,19 +381,24 @@ int main(int argc,  char** argv)
     if (volm_geo_index::add_hypothesis(root, -79.268871, 33.365799, 1.60))
       vcl_cout << " added p1a_test1_34-GROUNDTRUTH\n";
 #endif
-    vcl_ifstream ifs(add_gt().c_str());
-    int cnt; ifs >> cnt; vcl_cout << " adding " << cnt <<" gt locs!\n";
+    
+    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
+    int cnt = volm_io::read_gt_file(add_gt(), samples);
+    vcl_cout << " adding " << cnt <<" gt locs!\n";
     for (int j = 0; j < cnt; ++j) {
-      vcl_string name; ifs >> name;
-      double lat, lon, elev; ifs >> lat; ifs >> lon; ifs >> elev;
       vpgl_utm u; int zone;  double x, y;
-      u.transform(lat, lon, x, y, zone);
+      u.transform(samples[j].first.y(), samples[j].first.x(), x, y, zone);
       if (zone != (int)utm_zone()) {
-        vcl_cout << name << " is in zone: " << zone <<" not in " << utm_zone() << " skipping!\n";
+        vcl_cout << samples[j].second.first << " is in zone: " << zone <<" not in " << utm_zone() << " skipping!\n";
         continue;
       }
+<<<<<<< .mine
+      vcl_cout << samples[j].second.first << " adding.. " << samples[j].first.y() << ", " << samples[j].first.x() << " ";
+      bool added = volm_geo_index::add_hypothesis(root, samples[j].first.x(), samples[j].first.y(), samples[j].first.z()); 
+=======
       vcl_cout << name << " adding.. " << lat <<", " << lon << ' ';
       bool added = volm_geo_index::add_hypothesis(root, lon, lat, elev);
+>>>>>>> .r36432
       if (added) vcl_cout << " success!\n";
       else       vcl_cout <<" not found in tree of tile: " << tile_id() << "!\n";
     }
@@ -404,6 +409,7 @@ int main(int argc,  char** argv)
 
   // write the hypos
   vcl_stringstream file_name4; file_name4 << out_pre() << "geo_index_tile_" << i;
+  vcl_cout << "writing hyps to: " << file_name4.str() << vcl_endl;
   volm_geo_index::write_hyps(root, file_name4.str());
 
   vcl_cout << "total time: " << t.all()/1000 << " seconds = " << t.all()/(1000*60) << " mins.\n";

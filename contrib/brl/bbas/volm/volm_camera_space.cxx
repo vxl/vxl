@@ -47,6 +47,31 @@ volm_camera_space(vcl_vector<double> const& top_fovs,double altitude,
   this->adjust_limits();
 }
 
+volm_camera_space::
+volm_camera_space(double top_fov_mid, double top_fov_rad, double top_fov_inc, 
+                  double altitude,
+                  unsigned ni, unsigned nj,
+                  double head_mid,  double head_radius, double head_inc,
+                  double tilt_mid, double tilt_radius,  double tilt_inc,
+                  double roll_mid,  double roll_radius,   double roll_inc):
+  altitude_(altitude), ni_(ni), nj_(nj), 
+  head_mid_(head_mid), head_radius_(head_radius), head_inc_(head_inc),
+  tilt_mid_(tilt_mid), tilt_radius_(tilt_radius),tilt_inc_(tilt_inc),
+  roll_mid_(roll_mid),roll_radius_(roll_radius),roll_inc_(roll_inc),
+  freeze_roll_(false),heading_(0.0), tilt_(0.0), roll_(0.0), fov_index_(0)
+{
+  top_fovs_.push_back(top_fov_mid);    // top viewing ranges from 1 to 89
+  for (double i = top_fov_inc; i <= top_fov_rad; i+=top_fov_inc) {
+    double right_fov = top_fov_mid + i, left_fov = top_fov_mid - i;
+    if (right_fov > 89)  right_fov = 89;
+    if (left_fov  < 1)   left_fov = 1;
+    top_fovs_.push_back(right_fov);
+    if (left_fov != right_fov) 
+      top_fovs_.push_back(left_fov);
+  }
+  this->adjust_limits();
+}
+
 void  volm_camera_space::cam_indices(unsigned cam_index,
                                      unsigned & roll_index, unsigned& fov_index,
                                      unsigned & head_index, unsigned& tilt_index) const {

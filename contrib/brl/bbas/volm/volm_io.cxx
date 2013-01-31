@@ -465,4 +465,57 @@ void volm_score::b_read(vsl_b_istream& is)
   }
 }
 
+int volm_io::read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > >& samples)
+{
+  vcl_ifstream ifs(gt_file.c_str());
+  int cnt; ifs >> cnt; 
+  for (int j = 0; j < cnt; j++) {
+    vcl_string name; ifs >> name; vcl_string type;
+    double lat, lon, elev; 
+    ifs >> lat; ifs >> lon; ifs >> elev; 
+    ifs >> type;
+    vgl_point_3d<double> pt(lon, lat, elev);
+    samples.push_back(vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> >(pt, vcl_pair<vcl_string, vcl_string>(name, type) ) );
+  }
+  ifs.close();
+  return cnt;
+}
 
+void volm_score::write_scores(vcl_vector<volm_score_sptr>& scores, vcl_string& file_name)
+{
+  vsl_b_ofstream ofs(file_name);
+  vsl_b_write(ofs, (unsigned)(scores.size()));
+  for (unsigned i = 0; i < scores.size(); i++) 
+    scores[i]->b_write(ofs);
+  ofs.close();
+}
+void volm_score::read_scores(vcl_vector<volm_score_sptr>& scores, vcl_string& file_name)
+{
+  vsl_b_ifstream ifs(file_name);
+  unsigned size;
+  vsl_b_read(ifs, size);
+  scores.clear();
+  for (unsigned i = 0; i < size; i++) {
+    volm_score_sptr s = new volm_score;
+    s->b_read(ifs);
+    scores.push_back(s);
+  }
+  ifs.close();
+}
+
+void volm_io_expt_params::read_params(vcl_string params_file)
+{
+  vcl_ifstream ifs(params_file.c_str());
+  vcl_string dummy;
+  ifs >> dummy; ifs >> fov_inc;     vcl_cout << dummy << " " << fov_inc << ' ';
+  ifs >> dummy; ifs >> tilt_inc;    vcl_cout << dummy << " " << tilt_inc << ' ';
+  ifs >> dummy; ifs >> roll_inc;    vcl_cout << dummy << " " << roll_inc << ' ';
+  ifs >> dummy; ifs >> head_inc;    vcl_cout << dummy << " " << head_inc << ' ';
+  ifs >> dummy; ifs >> vmin;        vcl_cout << dummy << " " << vmin << ' ';
+  ifs >> dummy; ifs >> solid_angle; vcl_cout << dummy << " " << solid_angle << ' ';
+  ifs >> dummy; ifs >> dmax;        vcl_cout << dummy << " " << dmax << ' ';
+  ifs >> dummy; ifs >> cap_angle;   vcl_cout << dummy << " " << cap_angle << ' ';
+  ifs >> dummy; ifs >> point_angle; vcl_cout << dummy << " " << point_angle << ' ';
+  ifs >> dummy; ifs >> top_angle;   vcl_cout << dummy << " " << top_angle << ' ';
+  ifs >> dummy; ifs >> bottom_angle;  vcl_cout << dummy << " " << bottom_angle << '\n';
+}

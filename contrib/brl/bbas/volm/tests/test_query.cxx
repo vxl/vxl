@@ -82,7 +82,7 @@ static void test_query()
              << ", depth = " << 254
              << ", orient = " << dm->sky()[i]->orient_type()
              << ", NLCD_id = " << dm->sky()[i]->nlcd_id()
-             << " ---> " << (int)volm_nlcd_table::land_id[dm->sky()[i]->nlcd_id()]
+             << " ---> " << (int)volm_nlcd_table::land_id[dm->sky()[i]->nlcd_id()].first
              << vcl_endl;
     }
   }
@@ -93,7 +93,7 @@ static void test_query()
                << ", depth = " << dm->ground_plane()[i]->min_depth()
                << ", orient = " << dm->ground_plane()[i]->orient_type()
                << ", NLCD_id = " << dm->ground_plane()[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()]
+               << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()].first
                << vcl_endl;
     }
   }
@@ -106,7 +106,7 @@ static void test_query()
                << ",\t order = " << (dm->scene_regions())[i]->order()
                << ",\t orient = " << (dm->scene_regions())[i]->orient_type()
                << ",\t NLCD_id = " << (dm->scene_regions())[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dm->scene_regions()[i]->nlcd_id()]
+               << " ---> " << (int)volm_nlcd_table::land_id[dm->scene_regions()[i]->nlcd_id()].first
                << vcl_endl;
     }
   }

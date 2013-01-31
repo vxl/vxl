@@ -16,6 +16,7 @@
 //    Yi Dong   Jan-2013   added functions to generate object based query infomation for object based volm_matcher
 //    Yi Dong   Jan-2013   added object orientation and object NLCD land classification
 //    JLM       Jan 20, 2013 Added constructor from depth_map_scene
+//    Ozge C. Ozcanli Jan 30, 2013 -- replacing old camera space construction functionality with the use of volm_camera_space class
 // \endverbatim
 //
 
@@ -30,6 +31,7 @@
 #include <vil/vil_image_view.h>
 #include <vcl_set.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
+#include <volm/volm_camera_space_sptr.h>
 
 class volm_query : public vbl_ref_count
 {
@@ -37,11 +39,10 @@ class volm_query : public vbl_ref_count
   //: default consturctor
   volm_query() {}
   //: constructor from files
-  volm_query(vcl_string const& cam_kml_file,
+  volm_query(volm_camera_space_sptr cam_space,
              vcl_string const& label_xml_file,
              volm_spherical_container_sptr const& sph,
-             volm_spherical_shell_container_sptr const& sph_shell,
-             bool const& use_default = true);
+             volm_spherical_shell_container_sptr const& sph_shell);
 
   //: constructor from depth map scene
   volm_query(vcl_string const& depth_map_scene_file,
@@ -82,10 +83,10 @@ class volm_query : public vbl_ref_count
   unsigned get_obj_order_num() const                            { return (unsigned)order_index_[0].size(); }
   unsigned get_query_size() const                               { return query_size_; }
   unsigned get_valid_ray_num(unsigned const& cam_idx) const     { return ray_count_[cam_idx]; }
-  vcl_vector<double>& top_fov()                                 { return top_fov_; }
-  vcl_vector<double>& headings()                                { return headings_; }
-  vcl_vector<double>& tilts()                                   { return tilts_; }
-  vcl_vector<double>& rolls()                                   { return rolls_; }
+  //vcl_vector<double>& top_fov()                                 { return top_fov_; }
+  //vcl_vector<double>& headings()                                { return headings_; }
+  //vcl_vector<double>& tilts()                                   { return tilts_; }
+  //vcl_vector<double>& rolls()                                   { return rolls_; }
   //: return number of voxels having ground properties
   unsigned get_ground_id_size() const                           { return ground_offset_[ground_offset_.size()-1]; }
   //: return stored distance for all ground voxels
@@ -125,17 +126,23 @@ class volm_query : public vbl_ref_count
 
   static void draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polygon<double> const& poly, unsigned char const& depth);
 
+#if NO_CAM_SPACE
   //: initial camera parameters read from camera kml
   double init_focal_;
   double head_, head_d_, head_inc_;
   double tilt_, tilt_d_, tilt_inc_;
   double roll_, roll_d_, roll_inc_;
   double tfov_, tfov_d_, tfov_inc_;
+#endif
   double altitude_;
 
  protected:
+#if NO_CAM_SPACE_CLASS
   //: a check whether use the viewing volume values provided by camera kml
   bool use_default_;
+#endif
+  volm_camera_space_sptr cam_space_;
+
   //: 
   unsigned char invalid_;
   //: image size
@@ -159,10 +166,10 @@ class volm_query : public vbl_ref_count
   vcl_vector<unsigned>                  ray_count_;
   //: camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered
   //: vectors store the space of camera hypotheses
-  vcl_vector<double>  top_fov_;
-  vcl_vector<double> headings_;
-  vcl_vector<double>    tilts_;
-  vcl_vector<double>    rolls_;
+  //vcl_vector<double>  top_fov_;
+  //vcl_vector<double> headings_;
+  //vcl_vector<double>    tilts_;
+  //vcl_vector<double>    rolls_;
   vcl_vector<vpgl_perspective_camera<double> > cameras_;
   vcl_vector<vcl_string> camera_strings_;
   //: ingested query information

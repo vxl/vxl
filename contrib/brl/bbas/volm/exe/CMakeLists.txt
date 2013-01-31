@@ -18,12 +18,17 @@ ADD_EXECUTABLE( volm_evaluate_output_tiles
                 volm_evaluate_output_tiles.cxx
               )
 
-ADD_EXECUTABLE( volm_construct_camera_space
-                volm_construct_camera_space.cxx
+ADD_EXECUTABLE( volm_construct_cam_space_query 
+                volm_construct_cam_space_query.cxx
+              )
+
+ADD_EXECUTABLE( volm_evaluate
+                volm_evaluate.cxx
               )
 
 TARGET_LINK_LIBRARIES( volm_dummy_matcher volm depth_map )
 TARGET_LINK_LIBRARIES( volm_query_creation volm depth_map bvrml )
 TARGET_LINK_LIBRARIES( volm_generate_hypos volm depth_map bvrml )
 TARGET_LINK_LIBRARIES( volm_evaluate_output_tiles volm depth_map bvrml )
-TARGET_LINK_LIBRARIES( volm_construct_camera_space volm vbl vgl depth_map bvrml)
+TARGET_LINK_LIBRARIES( volm_construct_cam_space_query volm vbl vgl depth_map bvrml)
+TARGET_LINK_LIBRARIES( volm_evaluate volm depth_map bvrml )

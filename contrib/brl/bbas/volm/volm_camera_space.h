@@ -53,6 +53,14 @@ class volm_camera_space : public vbl_ref_count
                     double head_mid=0.0,  double head_radius=180.0, double head_inc=2.0,
                     double tilt_mid=90.0, double tilt_radius=20.0,  double tilt_inc=2.0,
                     double roll_mid=0.0,  double roll_radius=3.0,   double roll_inc=2.0);
+  
+  volm_camera_space(double top_fov_mid, double top_fov_rad, double top_fov_inc, 
+                    double altitude,
+                    unsigned ni, unsigned nj,
+                    double head_mid=0.0,  double head_radius=180.0, double head_inc=2.0,
+                    double tilt_mid=90.0, double tilt_radius=20.0,  double tilt_inc=2.0,
+                    double roll_mid=0.0,  double roll_radius=3.0,   double roll_inc=2.0);
+  
   //: accessors
   double altitude() const {return altitude_;}
   //: image dimensions
