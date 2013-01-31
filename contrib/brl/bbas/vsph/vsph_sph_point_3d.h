@@ -36,4 +36,8 @@ class vsph_sph_point_3d
 
 vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_3d const& p);
 
+void vsl_b_write(vsl_b_ostream& os, vsph_sph_point_3d& p);
+void vsl_b_read(vsl_b_istream &is, vsph_sph_point_3d& p);
+
+
 #endif

@@ -37,3 +37,13 @@ vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_3d const& p)
   return os;
 }
 
+void vsl_b_write(vsl_b_ostream& os, vsph_sph_point_3d& p)
+{
+  p.b_write(os);
+}
+void vsl_b_read(vsl_b_istream &is, vsph_sph_point_3d& p)
+{
+  p.b_read(is);
+}
+
+
