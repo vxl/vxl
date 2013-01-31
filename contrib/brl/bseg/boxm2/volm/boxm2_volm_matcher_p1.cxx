@@ -718,7 +718,7 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& out_fname_pre
      boxm2_volm_score_out score = score_all_[i];
      vcl_string fname = leaves_[score.leaf_id_]->get_score_txt_name(out_fname_pre,1);
      //vcl_cout << " leaf_id = " << score.leaf_id_ << " output filename  = " << fname << vcl_endl;
-     vcl_ofstream ofs(fname, vcl_ios_app);
+     vcl_ofstream ofs(fname.c_str(), vcl_ios_app);
      ofs << vcl_setprecision(6) << score.hypo_id_ << ' ' << score.max_score_ << ' ' << score.max_cam_id_ << '\n';
   }
   return true;
