@@ -14,7 +14,6 @@
 #include <vul/vul_timer.h>
 #include <bbas/volm/volm_io.h>
 #include <bbas/volm/volm_tile.h>
-#include <vil/vil_save.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
 #include <bbas/bocl/bocl_manager.h>
@@ -112,10 +111,10 @@ static void test_volm_obj_based_matcher()
   // create device
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
   if (dev_id >= (unsigned)mgr->numGPUs())
-    vcl_cout << "volm_io::EXE_DEVICE_ID_ERROR" << vcl_endl;
-  vcl_cout << "\n==================================================================================================\n"
-           << " 2. Finding available devices for current platform --------> Use device " << mgr->gpus_[dev_id]->info().device_name_ << '\n'
-           << "==================================================================================================\n" << vcl_endl;
+    vcl_cout << "volm_io::EXE_DEVICE_ID_ERROR\n"
+             << "\n==================================================================================================\n"
+             << " 2. Finding available devices for current platform --------> Use device " << mgr->gpus_[dev_id]->info().device_name_ << '\n'
+             << "==================================================================================================\n" << vcl_endl;
 
   // create index
   boxm2_volm_wr3db_index_params params;

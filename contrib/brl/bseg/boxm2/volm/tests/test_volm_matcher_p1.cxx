@@ -12,10 +12,8 @@
 #include <volm/volm_spherical_shell_container_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher_p1.h>
 #include <volm/volm_loc_hyp.h>
-#include <vul/vul_timer.h>
 #include <bbas/volm/volm_io.h>
 #include <bbas/volm/volm_tile.h>
-#include <vil/vil_save.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
 #include <bbas/bocl/bocl_manager.h>
@@ -61,7 +59,7 @@ static void test_volm_matcher_p1()
   vsl_b_read(sis, s_in);
 
   if (dms->sky().size()) {
-    vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
+    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
     for (unsigned i = 0; i < dms->sky().size(); i++)
       vcl_cout << "\t name = " << (dms->sky()[i]->name())
                << ", depth = " << 254
@@ -69,17 +67,17 @@ static void test_volm_matcher_p1()
                << vcl_endl;
   }
   if (dms->ground_plane().size()) {
-    vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
+    vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
     for (unsigned i = 0; i < dms->ground_plane().size(); i++)
       vcl_cout << "\t name = " << dms->ground_plane()[i]->name()
                << ", depth = " << dms->ground_plane()[i]->min_depth()
                << ", orient = " << dms->ground_plane()[i]->orient_type()
-               << ", NLCD_id = " << dms->ground_plane()[i]->nlcd_id() 
+               << ", NLCD_id = " << dms->ground_plane()[i]->nlcd_id()
                << " ---> " << (int)volm_nlcd_table::land_id[dms->ground_plane()[i]->nlcd_id()]
                << vcl_endl;
   }
   if (dms->scene_regions().size()) {
-    vcl_cout << " -------------- DEPTH REGIONS -------------- " << vcl_endl;
+    vcl_cout << " -------------- DEPTH REGIONS --------------" << vcl_endl;
     for (unsigned i = 0; i < dms->scene_regions().size(); i++) {
       vcl_cout << "\t " <<  (dms->scene_regions())[i]->name()  << " region "
                << ",\t min_depth = " << (dms->scene_regions())[i]->min_depth()
@@ -93,10 +91,10 @@ static void test_volm_matcher_p1()
   }
 
 
-  vcl_cout << " READED FROM BINARY --- CHECK " << vcl_endl;
+  vcl_cout << " READED FROM BINARY --- CHECK" << vcl_endl;
 
   if (s_in->sky().size()) {
-  vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
+  vcl_cout << " -------------- SKYs --------------" << vcl_endl;
   for (unsigned i = 0; i < s_in->sky().size(); i++)
       vcl_cout << "\t name = " << (s_in->sky()[i]->name())
                << ", depth = " << 254
@@ -104,17 +102,17 @@ static void test_volm_matcher_p1()
                << vcl_endl;
   }
   if (s_in->ground_plane().size()) {
-    vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
+    vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
     for (unsigned i = 0; i < s_in->ground_plane().size(); i++)
       vcl_cout << "\t name = " << s_in->ground_plane()[i]->name()
                << ", depth = " << s_in->ground_plane()[i]->min_depth()
                << ", orient = " << s_in->ground_plane()[i]->orient_type()
-               << ", NLCD_id = " << s_in->ground_plane()[i]->nlcd_id() 
+               << ", NLCD_id = " << s_in->ground_plane()[i]->nlcd_id()
                << " ---> " << (int)volm_nlcd_table::land_id[s_in->ground_plane()[i]->nlcd_id()]
                << vcl_endl;
   }
   if (s_in->scene_regions().size()) {
-    vcl_cout << " -------------- DEPTH REGIONS -------------- " << vcl_endl;
+    vcl_cout << " -------------- DEPTH REGIONS --------------" << vcl_endl;
     for (unsigned i = 0; i < s_in->scene_regions().size(); i++) {
       vcl_cout << "\t " <<  (s_in->scene_regions())[i]->name()  << " region "
                << ",\t min_depth = " << (s_in->scene_regions())[i]->min_depth()
@@ -142,7 +140,7 @@ static void test_volm_matcher_p1()
   vcl_vector<volm_geo_index_node_sptr> leaves_bef;
   volm_geo_index::get_leaves(root, leaves_bef);
   for (unsigned li = 0; li < leaves_bef.size(); li++) {
-    if (leaves_bef[li]->hyps_){
+    if (leaves_bef[li]->hyps_) {
       vcl_cout << " li = " << li << " index_file = " << leaves_bef[li]->get_index_name(file_name_pre.str()) << vcl_endl;
     }
   }
@@ -183,7 +181,7 @@ static void test_volm_matcher_p1()
     vcl_cout << " depth = " << iter->first << " --- interval = " << (int)iter->second << vcl_endl;
     depth_interval_rev.push_back((float)iter->first);
   }
-  vcl_cout << " check the table " << vcl_endl;
+  vcl_cout << " check the table" << vcl_endl;
   for ( unsigned i = 0; i < depth_interval_rev.size(); i++) {
     vcl_cout << " depth = " << depth_interval_rev[i] << " --- interval = " << i << vcl_endl;
   }
@@ -192,17 +190,17 @@ static void test_volm_matcher_p1()
   // load the indices for all leaves
   vcl_vector<boxm2_volm_wr3db_index_sptr> ind_vec;
   for (unsigned i = 0; i < leaves.size(); i++) {
-    if(!leaves[i]->hyps_)
+    if (!leaves[i]->hyps_)
       continue;
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index((unsigned)(sph_shell->get_container_size()), buffer_capacity);
     vcl_string index_file = leaves[i]->get_index_name(file_name_pre.str());
-    if(!ind->initialize_read(index_file))
+    if (!ind->initialize_read(index_file))
       vcl_cerr << "ERROR: can not load index for leaf " << i << ", file name = " << index_file << vcl_endl;
     ind_vec.push_back(ind);
   }
-  
 
-  if(ind_vec.size() != leaves.size())
+
+  if (ind_vec.size() != leaves.size())
     vcl_cerr << " ERROR: the index vector NOT equal to leaves size" << vcl_endl;
   else
     vcl_cout << ind_vec.size() << " index files are loaded for " << leaves.size() << " leaves" << vcl_endl;
@@ -214,15 +212,15 @@ static void test_volm_matcher_p1()
 
   // screen output of query
   unsigned total_size = query->obj_based_query_size_byte();
-  vcl_cout << "\n==================================================================================================\n";
-  vcl_cout << "\t\t  2. Create query from given camera space and Labelme geometry\n";
-  vcl_cout << "\t\t  generate query has " << query->get_cam_num() << " cameras "
-           << " and " << (float)total_size/1024 << " Kbyte in total\n";
-  vcl_cout << "==================================================================================================\n " << vcl_endl;
+  vcl_cout << "\n==================================================================================================\n"
+           << "\t\t  2. Create query from given camera space and Labelme geometry\n"
+           << "\t\t  generate query has " << query->get_cam_num() << " cameras "
+           << " and " << (float)total_size/1024 << " Kbyte in total\n"
+           << "==================================================================================================\n" << vcl_endl;
   depth_map_scene_sptr dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
-    vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
+    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->sky().size(); i++)
       vcl_cout << "\t name = " << (dm->sky()[i]->name())
                << ", depth = " << 254
@@ -230,17 +228,17 @@ static void test_volm_matcher_p1()
                << vcl_endl;
   }
   if (dm->ground_plane().size()) {
-    vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
+    vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->ground_plane().size(); i++)
       vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
                << ", depth = " << dm->ground_plane()[i]->min_depth()
                << ", orient = " << dm->ground_plane()[i]->orient_type()
-               << ", NLCD_id = " << dm->ground_plane()[i]->nlcd_id() 
+               << ", NLCD_id = " << dm->ground_plane()[i]->nlcd_id()
                << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()].first
                << vcl_endl;
   }
   if (dm->scene_regions().size()) {
-    vcl_cout << " -------------- DEPTH REGIONS -------------- " << vcl_endl;
+    vcl_cout << " -------------- DEPTH REGIONS --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->scene_regions().size(); i++) {
       vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
                << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
@@ -252,9 +250,9 @@ static void test_volm_matcher_p1()
                << vcl_endl;
     }
   }
-  
+
   // define the device that will be used
-  
+
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
 
   boxm2_volm_matcher_p1 obj_order_matcher(query, leaves, buffer_capacity, geo_index_folder, tile_id, depth_interval_rev, cand_poly, mgr->gpus_[0], is_candidate, is_last_pass, out_folder);
@@ -263,7 +261,6 @@ static void test_volm_matcher_p1()
   for (unsigned i = 0; i < ind_vec.size(); i++) {
     ind_vec[i]->finalize();
   }
-
 }
 
 #else // HAS_OPENCL

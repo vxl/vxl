@@ -24,8 +24,8 @@ boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_query_sptr const& query,
   query_(query), leaves_(leaves), depth_interval_(depth_interval), ind_buffer_(buffer_capacity),
   cand_poly_(cand_poly), gpu_(gpu), is_candidate_(is_candidate), is_last_pass_(is_last_pass),
   score_thres_(score_thres), cam_thres_(cam_thres), out_folder_(out_folder)
-{ 
-    layer_size_ = query_->get_query_size(); 
+{
+    layer_size_ = query_->get_query_size();
     ind_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
     file_name_pre_ << geo_index_folder << "geo_index_tile_" << tile_id;
     // initialize the pionters
@@ -72,7 +72,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   *n_cam_ = (unsigned)query_->get_cam_num();
   n_cam_cl_mem_ = new bocl_mem(gpu_->context(), n_cam_, sizeof(unsigned), " n_cam " );
   if (!n_cam_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for N_CAM" << vcl_endl;
+    vcl_cerr << "\n ERROR: creating bocl_mem failed for N_CAM\n";
     delete n_cam_cl_mem_;
     return false;
   }
@@ -80,7 +80,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   *n_obj_ = (unsigned)(query_->depth_regions()).size();
   n_obj_cl_mem_ = new bocl_mem(gpu_->context(), n_obj_, sizeof(unsigned), " n_obj " );
   if (!n_obj_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for N_OBJ" << vcl_endl;
+    vcl_cerr << "\n ERROR: creating bocl_mem failed for N_OBJ\n";
     delete n_cam_cl_mem_;  delete n_obj_cl_mem_;
     return false;
   }
@@ -91,25 +91,25 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   query_local_mem_ = 0;
   vul_timer trans_query_time;
   if (!this->transfer_query()) {
-    vcl_cerr << "\n ERROR: transfering query to 1D structure failed." << vcl_endl;
+    vcl_cerr << "\n ERROR: transfering query to 1D structure failed.\n";
     return false;
   }
   vcl_cout << "\t 4.1.1 Setting up query in pass 1 matcher for GPU ------> \t" << trans_query_time.all()/1000.0 << " seconds." << vcl_endl;
-  
+
   // create queue
   if (!this->create_queue()) {
-    vcl_cerr << "\n ERROR: creating pass 1 matcher queue failed." << vcl_endl;
+    vcl_cerr << "\n ERROR: creating pass 1 matcher queue failed.\n";
     return false;
   }
 
-  // create depth_interval 
+  // create depth_interval
   depth_interval_buff_ = new float[depth_interval_.size()];
   for (unsigned i = 0; i < depth_interval_.size(); i++)
     depth_interval_buff_[i] = depth_interval_[i];
 
   depth_interval_cl_mem_ = new bocl_mem(gpu_->context(), depth_interval_buff_, sizeof(float)*(depth_interval_.size()), " depth_interval ");
-  if(!depth_interval_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for DEPTH_INTERVAL" << vcl_endl;
+  if (!depth_interval_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+    vcl_cerr << "\n ERROR: creating bocl_mem failed for DEPTH_INTERVAL\n";
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;
     return false;
@@ -118,7 +118,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   *depth_length_buff_ = depth_interval_.size();
   depth_length_cl_mem_ = new bocl_mem(gpu_->context(), depth_length_buff_, sizeof(unsigned), " depth_length ");
   if (!depth_length_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for DEPTH_LENGTH" << vcl_endl;
+    vcl_cerr << "\n ERROR: creating bocl_mem failed for DEPTH_LENGTH\n";
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;    delete depth_length_cl_mem_;
     return false;
@@ -129,7 +129,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     vcl_cout << "\t 4.1.2 Comipling kernels for device " << identifier << vcl_endl;
     vcl_vector<bocl_kernel*> ks;
     if (!this->compile_kernel(ks)) {
-      vcl_cerr << "\n ERROR: compiling matcher kernel failed." << vcl_endl;
+      vcl_cerr << "\n ERROR: compiling matcher kernel failed.\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;    delete depth_length_cl_mem_;
       return false;
@@ -149,7 +149,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   }
   cl_ulong index_global_mem = avail_global_mem - extra_global_mem;  // in byte
 
-  // note that for each index, we require space for 
+  // note that for each index, we require space for
   // a float score array with length n_cam
   // a float mean value array with length n_cam*n_obj
   // an uchar index array with length layer_size
@@ -158,7 +158,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;    delete depth_length_cl_mem_;
     vcl_cerr << "\n ERROR: available memory can not take a single index, reduce the extra memory space (current value = "
-             << extra_global_mem / GBYTE  << ')' << vcl_endl; 
+             << extra_global_mem / GBYTE  << ')' << vcl_endl;
     return false;
   }
   unsigned ni = index_global_mem / per_index_mem;
@@ -168,7 +168,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   *layer_size_buff_ = layer_size_;
   layer_size_cl_mem_ = new bocl_mem(gpu_->context(), layer_size_buff_, sizeof(unsigned), " layer_size ");
   if (!layer_size_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for LAYER_SIZE" << vcl_endl;
+    vcl_cerr << "\n ERROR: creating bocl_mem failed for LAYER_SIZE\n";
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
     delete layer_size_cl_mem_;
@@ -177,15 +177,15 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
 
   // hack here for debug purpose
   ni = 256;
-  
-  
+
+
   vcl_cout << "\t 4.1.3: device have total " << device_global_mem_ << " Byte (" << (float)device_global_mem_/(float)GBYTE << " GB) memory space\n"
-           << "\t        query requres " << query_global_mem_ << " Byte (" << (float)query_global_mem_/(float)GBYTE << " GB)\n"
+           << "\t        query requires " << query_global_mem_ << " Byte (" << (float)query_global_mem_/(float)GBYTE << " GB)\n"
            << "\t        leave " << extra_global_mem  << " Byte (" << (float)extra_global_mem/(float)GBYTE << " GB) extra empty space on device\n"
            << "\t        a single index require " << per_index_mem << " Byte given " << nc << " cameras and " << no << " objects\n"
-           << "\t        ---> kernel can calcualte " << ni << " indices per lunching " << vcl_endl;
+           << "\t        ---> kernel can calcualte " << ni << " indices per lunching" << vcl_endl;
 
-  // define the work group size and NDRange dimenstion
+  // define the work group size and NDRange dimension
   work_dim_ = 2;
   local_threads_[0] = 8;
   local_threads_[1] = 8;
@@ -200,17 +200,18 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   vul_timer total_matcher_time;
   cl_int status;
   cl_ulong total_index_num = 0;
-  
+
   vcl_string index_file = leaves_[leaf_id]->get_index_name(file_name_pre_.str());
   ind_->initialize_read(index_file);
-  while (leaf_id < leaves_.size()) {
+  while (leaf_id < leaves_.size())
+  {
     unsigned char* index_buff_ = new unsigned char[ni*layer_size_];
     // fill the index buffer
     vcl_vector<unsigned> l_id;  // leaf_id for indices filled into buffer
     vcl_vector<unsigned> h_id;  // hypo_id in this leaf_id for indices filled into buffer
     unsigned actual_n_ind = ni; // handling the last round where the number of loaded indices is smaller than pre-computed ni
-    if(!this->fill_index(ni, layer_size_, leaf_id, index_buff_, l_id, h_id, actual_n_ind) ) {
-      vcl_cerr << "\n ERROR: passing index into index buffer failed for " << leaf_id << " leaf" << vcl_endl;
+    if (!this->fill_index(ni, layer_size_, leaf_id, index_buff_, l_id, h_id, actual_n_ind) ) {
+      vcl_cerr << "\n ERROR: passing index into index buffer failed for " << leaf_id << " leaf\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -231,7 +232,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     *n_ind_ = ni;
     bocl_mem* n_ind_cl_mem_ = new bocl_mem(gpu_->context(), n_ind_, sizeof(unsigned), " n_ind ");
     if (!n_ind_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for N_IND" << vcl_endl;
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for N_IND\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -246,24 +247,24 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     global_threads_[0] = cl_ni;
     global_threads_[1] = cl_nj;
 
-    vcl_cout << " --------  in round " << round_cnt++ << " ------ " << vcl_endl;
-    vcl_cout << " Giving " << nc << " camera hypos per location and " << ni << " locations pre lunching\n";
-    vcl_cout << " NDRange stucture:\n";
-    vcl_cout << " \t dimension = " << work_dim_ << vcl_endl;
-    vcl_cout << " \t work group size = (" << local_threads_[0] << ", " << local_threads_[1] << ")\n";
-    vcl_cout << " \t number of work item =  (" << global_threads_[0] << ", " << global_threads_[1] << ")\n";
-    vcl_cout << " \t number of work group = (" << global_threads_[0]/local_threads_[0]
+    vcl_cout << " --------  in round " << round_cnt++ << " ------\n"
+             << " Giving " << nc << " camera hypos per location and " << ni << " locations pre lunching\n"
+             << " NDRange stucture:\n"
+             << " \t dimension = " << work_dim_ << '\n'
+             << " \t work group size = (" << local_threads_[0] << ", " << local_threads_[1] << ")\n"
+             << " \t number of work item =  (" << global_threads_[0] << ", " << global_threads_[1] << ")\n"
+             << " \t number of work group = (" << global_threads_[0]/local_threads_[0]
              << ", " << global_threads_[1]/local_threads_[1] << ')' << vcl_endl;
 
 #if 0
     // check loaded indices and associated ids
     vcl_cout << " -------> leaf_id_updated = " << leaf_id << vcl_endl;
-    for(unsigned i = 0; i < ni; i++) {
+    for (unsigned i = 0; i < ni; i++) {
       vcl_cout << " i = " << i << ", leaf_id = " << l_id[i] << " hypo_id = " << h_id[i] << "\n\t";
       unsigned start = i*layer_size_;
       unsigned end = (i+1)*layer_size_;
       for (unsigned j = start; j < end; j++)
-        vcl_cout << " " << (int)index_buff_[j];
+        vcl_cout << ' ' << (int)index_buff_[j];
       vcl_cout << '\n';
     }
 #endif
@@ -272,7 +273,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     // Note: here the data passed into device may be smaller than the pre-assigned index_buff size (since actual_n_ind < pre-calculated ni)
     bocl_mem* index_cl_mem_ = new bocl_mem(gpu_->context(), index_buff_, sizeof(unsigned char)*ni*layer_size_, " index ");
     if (!index_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for INDEX" << vcl_endl;
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for INDEX\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -283,7 +284,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     }
     bocl_mem* score_cl_mem_ = new bocl_mem(gpu_->context(), score_buff_, sizeof(float)*ni*nc, " score ");
     if (!score_cl_mem_->create_buffer( CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SCORE" << vcl_endl;
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for SCORE\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -294,7 +295,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     }
     bocl_mem* mu_cl_mem_ = new bocl_mem(gpu_->context(), mu_buff_, sizeof(float)*ni*nc*no, " mu ");
     if (!mu_cl_mem_->create_buffer( CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for MU" << vcl_endl;
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for MU\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -316,7 +317,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
         delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
         return false;
     }
-    
+
     // block everything to ensure the reading score
     status = clFinish(queue_);
     // read score
@@ -335,7 +336,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
 
 
     // post-processing data
-    for(unsigned ind_id = 0; ind_id < ni; ind_id++) {
+    for (unsigned ind_id = 0; ind_id < ni; ind_id++) {
       boxm2_volm_score_out score_out;
       // find maximum for index ind_id
       float max_score = 0.0f;
@@ -367,21 +368,20 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     status = clFinish(queue_);
     check_val(status, MEM_FAILURE, " release MU(average depth value) failed on device " + gpu_->device_identifier() + error_to_string(status));
 
-   
+
     // do the test to ensure kernel is correct
     // this->volm_matcher_p1_test(ni, index_buff_, score_buff_, mu_buff_);
 
     // finish current round, clean host memory
     delete n_ind_;
     delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-
   } // end of loop over all leaves
-  
+
   // time
   float total_time = total_matcher_time.all();
-  vcl_cout << "\t\t total time for " << total_index_num << " indices and " << *n_cam_ << " cameras -------> " << total_time/1000.0 << " seconds (" << total_time << " ms)\n" ;
-  vcl_cout << "\t\t GPU kernel execution ------------------> " << gpu_matcher_time/1000.0 << " seconds (" << gpu_matcher_time << " ms)\n";
-  vcl_cout << "\t\t CPU host execution --------------------> " << (total_time - gpu_matcher_time)/1000.0 << " seconds (" << total_time - gpu_matcher_time << " ms)" << vcl_endl;
+  vcl_cout << "\t\t total time for " << total_index_num << " indices and " << *n_cam_ << " cameras -------> " << total_time/1000.0 << " seconds (" << total_time << " ms)\n" 
+           << "\t\t GPU kernel execution ------------------> " << gpu_matcher_time/1000.0 << " seconds (" << gpu_matcher_time << " ms)\n"
+           << "\t\t CPU host execution --------------------> " << (total_time - gpu_matcher_time)/1000.0 << " seconds (" << total_time - gpu_matcher_time << " ms)" << vcl_endl;
 
   // clear query_cl_mem
   this->clean_query_cl_mem();
@@ -397,9 +397,11 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
                                        unsigned& actual_n_ind)
 {
   if (is_last_pass_) {
-    vcl_cerr << " pass 1 check whether we have last_pass is NOT implemented yet ... " << vcl_endl;
+    vcl_cerr << " pass 1 check whether we have last_pass is NOT implemented yet ...\n";
     return false;
-  } else {
+  }
+  else
+  {
     // for no previous output case
     unsigned cnt = 0;
     unsigned li;
@@ -408,17 +410,19 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
         continue;
       vgl_point_3d<double> h_pt;
       while (cnt < n_ind && leaves_[li]->hyps_->get_next(0,1,h_pt) ) {
-        if(is_candidate_) {
+        if (is_candidate_) {
           if (cand_poly_.contains(h_pt.x(), h_pt.y())) {  // having candiate list and current hypo is inside it --> accept
             unsigned char* values = index_buff + cnt * layer_size;
             ind_->get_next(values, layer_size);
             cnt++;
             l_id.push_back(li);  h_id.push_back(leaves_[li]->hyps_->current_-1);
-          } else {                                       // having candidate list but current hypo is outside candidate list --> ignore
+          }
+          else {                                       // having candidate list but current hypo is outside candidate list --> ignore
             vcl_vector<unsigned char> values(layer_size);
             ind_->get_next(values);
           }
-        } else {                                         // no candidate list, put all indices into buffer
+        }
+        else {                                         // no candidate list, put all indices into buffer
           unsigned char* values = index_buff + cnt * layer_size;
           ind_->get_next(values, layer_size);
           cnt++;
@@ -426,19 +430,20 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
         }
       }
       if (cnt == n_ind) {
-        leaf_id = li; 
+        leaf_id = li;
         break;
-      } else {
-        if (is_leaf_finish(li)){
+      }
+      else {
+        if (is_leaf_finish(li)) {
           ind_->finalize();
-          if(li < leaves_.size()-1)
+          if (li < leaves_.size()-1)
             ind_->initialize_read(leaves_[li+1]->get_index_name(file_name_pre_.str()));
         }
       }
     } // loop over all leaves
-    if(li == leaves_.size())
+    if (li == leaves_.size())
       leaf_id = li;
-    if(cnt != n_ind) 
+    if (cnt != n_ind)
       actual_n_ind = cnt;
     return true;
 
@@ -452,17 +457,19 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
       vgl_point_3d<double> h_pt;
       unsigned h_cnt = 0;
       while (cnt < n_ind && leaves_[li]->hyps_->get_next(0,1,h_pt) ) {
-        if(is_candidate_) {
+        if (is_candidate_) {
           if (cand_poly_.contains(h_pt.x(), h_pt.y())) {  // having candiate list and current hypo is inside it --> accept
             unsigned char* values = index_buff + cnt * layer_size;
             ind_vec_[li]->get_next(values, layer_size);
             cnt++;
             l_id.push_back(li);  h_id.push_back(leaves_[li]->hyps_->current_-1);
-          } else {                                       // having candidate list but current hypo is outside candidate list --> ignore
+          }
+          else {                                       // having candidate list but current hypo is outside candidate list --> ignore
             vcl_vector<unsigned char> values(layer_size);
             ind_vec_[li]->get_next(values);
           }
-        } else {                                         // no candidate list, put all indices into buffer
+        }
+        else {                                         // no candidate list, put all indices into buffer
           unsigned char* values = index_buff + cnt * layer_size;
           ind_vec_[li]->get_next(values, layer_size);
           cnt++;
@@ -470,13 +477,13 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
         }
       } // end of while loop for hypos
       if (cnt == n_ind) {
-          leaf_id = li; 
+          leaf_id = li;
           break;
       }
     } // end of for loop for leaves
     if (li == leaves_.size())
       leaf_id = li;              // ensures that we can finish the while loop outside ... (ln 128)
-    if (cnt != n_ind) 
+    if (cnt != n_ind)
       actual_n_ind = cnt;
     return true;
 #endif
@@ -486,7 +493,7 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
 // check if the hypothesis inside given leaf has been loaded
 bool boxm2_volm_matcher_p1::is_leaf_finish(unsigned const& leaf_id)
 {
-  return ( leaves_[leaf_id]->hyps_->current_ ==  leaves_[leaf_id]->hyps_->size() );
+  return leaves_[leaf_id]->hyps_->current_  ==  leaves_[leaf_id]->hyps_->size();
 }
 
 // execute kernel
@@ -505,7 +512,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel(bocl_device_sptr             
   vcl_fill(debug_buff_, debug_buff_+debug_size, (float)12.31);
   bocl_mem* debug_cl_mem_ = new bocl_mem(gpu_->context(), debug_buff_, sizeof(float)*debug_size, " debug ");
   if (!debug_cl_mem_->create_buffer( CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for DEBUG" << vcl_endl;
+    vcl_cerr << "\n ERROR: creating bocl_mem failed for DEBUG\n";
     delete debug_cl_mem_;     delete [] debug_buff_;
     return false;
   }
@@ -520,7 +527,8 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel(bocl_device_sptr             
     kern->set_arg(n_obj_cl_mem_);
     kern->set_arg(grd_id_cl_mem_);        kern->set_arg(grd_id_offset_cl_mem_);    kern->set_arg(grd_dist_cl_mem_);    kern->set_arg(grd_weight_cl_mem_);
     kern->set_arg(sky_id_cl_mem_);        kern->set_arg(sky_id_offset_cl_mem_);    kern->set_arg(sky_weight_cl_mem_);
-  } else if ( !is_grd_reg_ && is_sky_reg_) {     // no ground but sky
+  }
+  else if ( !is_grd_reg_ && is_sky_reg_) {     // no ground but sky
     vcl_cout << "\t using NO grd kernel" << vcl_endl;
     kern = kern_vec[1];
     // set up argument list
@@ -530,22 +538,23 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel(bocl_device_sptr             
 
 #if 0
     // check the global memory
-    vcl_cerr << " ------------ INSIDE execute_kernel ------------------------------- " << vcl_endl;
-    vcl_cerr << " n_cam_cl_mem = " << n_cam_cl_mem_->num_bytes() << vcl_endl;
-    vcl_cerr << " n_obj_cl_mem = " << n_obj_cl_mem_->num_bytes() << vcl_endl;
-    vcl_cerr << " sky_id_cl_mem_ = " << sky_id_cl_mem_->num_bytes() << vcl_endl;
-    vcl_cerr << " sky_offset_cl_mem_ = " << sky_id_offset_cl_mem_->num_bytes() << vcl_endl;
-    vcl_cerr << " sky_weight_cl_mem_ = " << sky_weight_cl_mem_->num_bytes() << vcl_endl;
+    vcl_cerr << " ------------ INSIDE execute_kernel -------------------------------\n"
+             << " n_cam_cl_mem = " << n_cam_cl_mem_->num_bytes() << '\n'
+             << " n_obj_cl_mem = " << n_obj_cl_mem_->num_bytes() << '\n'
+             << " sky_id_cl_mem_ = " << sky_id_cl_mem_->num_bytes() << '\n'
+             << " sky_offset_cl_mem_ = " << sky_id_offset_cl_mem_->num_bytes() << '\n'
+             << " sky_weight_cl_mem_ = " << sky_weight_cl_mem_->num_bytes() << '\n';
 #endif
-
-  } else if (  is_grd_reg_ && !is_sky_reg_) {    // no sky but ground
+  }
+  else if (  is_grd_reg_ && !is_sky_reg_) {    // no sky but ground
     vcl_cout << "\t using NO sky kernel" << vcl_endl;
     kern = kern_vec[2];
     // set up argument list
     kern->set_arg(n_cam_cl_mem_);
     kern->set_arg(n_obj_cl_mem_);
     kern->set_arg(grd_id_cl_mem_);        kern->set_arg(grd_id_offset_cl_mem_);    kern->set_arg(grd_dist_cl_mem_);    kern->set_arg(grd_weight_cl_mem_);
-  } else {                                       // neight sky nor ground
+  }
+  else {                                       // neither sky nor ground
     vcl_cout << "\t using NO grd NOR sky kernel" << vcl_endl;
     kern = kern_vec[3];
     kern->set_arg(n_cam_cl_mem_);
@@ -571,26 +580,26 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel(bocl_device_sptr             
   kern->set_local_arg((*depth_length_buff_)*sizeof(float));   // local memory for depth_interval table
 
 #if 0
-  vcl_cerr << " obj_id = " << obj_id_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " obj_offset = " << obj_id_offset_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " obj_min_dist = " << obj_min_dist_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " obj_weight = " << obj_weight_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " n_ind = " << n_ind_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " lyaer_size = " << layer_size_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " index_cl_mem_ = " << index_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " score_cl_mem = " << score_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " mu_cl_mem_ = " << mu_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " depth_interval = " << depth_interval_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " depth_length = " << depth_length_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " debug_cl_mem_ = " << debug_cl_mem_->num_bytes() << vcl_endl;
-  vcl_cerr << " local for min_dist = " << (*n_obj_)*sizeof(unsigned char) << vcl_endl;
-  vcl_cerr << " local for weight = " << (*n_obj_)*sizeof(float) << vcl_endl;
-  vcl_cerr << " local for depth_interval = " << (*depth_length_buff_)*sizeof(float) << vcl_endl;
+  vcl_cerr << " obj_id = " << obj_id_cl_mem_->num_bytes() << '\n'
+           << " obj_offset = " << obj_id_offset_cl_mem_->num_bytes() << '\n'
+           << " obj_min_dist = " << obj_min_dist_cl_mem_->num_bytes() << '\n'
+           << " obj_weight = " << obj_weight_cl_mem_->num_bytes() << '\n'
+           << " n_ind = " << n_ind_cl_mem_->num_bytes() << '\n'
+           << " lyaer_size = " << layer_size_cl_mem_->num_bytes() << '\n'
+           << " index_cl_mem_ = " << index_cl_mem_->num_bytes() << '\n'
+           << " score_cl_mem = " << score_cl_mem_->num_bytes() << '\n'
+           << " mu_cl_mem_ = " << mu_cl_mem_->num_bytes() << '\n'
+           << " depth_interval = " << depth_interval_cl_mem_->num_bytes() << '\n'
+           << " depth_length = " << depth_length_cl_mem_->num_bytes() << '\n'
+           << " debug_cl_mem_ = " << debug_cl_mem_->num_bytes() << '\n'
+           << " local for min_dist = " << (*n_obj_)*sizeof(unsigned char) << '\n'
+           << " local for weight = " << (*n_obj_)*sizeof(float) << '\n'
+           << " local for depth_interval = " << (*depth_length_buff_)*sizeof(float) << '\n';
 #endif
 
   // execute kernel
   if (!kern->execute(queue, work_dim_, local_threads_, global_threads_)) {
-    vcl_cerr << "\n ERROR: kernel execuation failed" << vcl_endl;
+    vcl_cerr << "\n ERROR: kernel execuation failed\n";
     delete debug_cl_mem_;
     delete debug_buff_;
     return false;
@@ -606,7 +615,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel(bocl_device_sptr             
   // read debug data from device
   debug_cl_mem_->read_to_buffer(queue);
   unsigned i = 0;
-  while( (debug_buff_[i]-12.31)*(debug_buff_[i]-12.31)>0.0001 && i < 1000){
+  while ((debug_buff_[i]-12.31)*(debug_buff_[i]-12.31)>0.0001 && i < 1000) {
     vcl_cout << " debug[" << i << "] = " << debug_buff_[i] << vcl_endl;
     i++;
   }
@@ -615,7 +624,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel(bocl_device_sptr             
   delete debug_cl_mem_;
   status = clFinish(queue);
   check_val(status, MEM_FAILURE, " release DEBUG failed on device " + device->device_identifier() + error_to_string(status));
-  
+
   delete [] debug_buff_;
   return true;
 }
@@ -693,15 +702,15 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& out_fname_pre
 {
   // write the output into file
   // for testing purpose, create a text file to store the highest score for each locations
-  
-  // clear previous matcher ourput 
+
+  // clear previous matcher ourput
   for (unsigned i = 0; i < leaves_.size(); i++) {
     vcl_string fname = leaves_[i]->get_score_txt_name(out_fname_pre,1);
-    if(vul_file::exists(fname))
-      if(!vul_file::delete_file_glob(fname)) {
-        vcl_cerr << "\n ERROR: trying to delete previous output file " << fname << " failed" << vcl_endl;
+    if (vul_file::exists(fname))
+      if (!vul_file::delete_file_glob(fname)) {
+        vcl_cerr << "\n ERROR: trying to delete previous output file " << fname << " failed\n";
         return false;
-      } 
+      }
   }
 
   unsigned all_loc = score_all_.size();
@@ -710,7 +719,7 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& out_fname_pre
      vcl_string fname = leaves_[score.leaf_id_]->get_score_txt_name(out_fname_pre,1);
      //vcl_cout << " leaf_id = " << score.leaf_id_ << " output filename  = " << fname << vcl_endl;
      vcl_ofstream ofs(fname, vcl_ios_app);
-     ofs << vcl_setprecision(6) << score.hypo_id_ << " " << score.max_score_ << " " << score.max_cam_id_ << '\n';
+     ofs << vcl_setprecision(6) << score.hypo_id_ << ' ' << score.max_score_ << ' ' << score.max_cam_id_ << '\n';
   }
   return true;
 }
@@ -728,19 +737,20 @@ bool boxm2_volm_matcher_p1::transfer_query()
   if (!query_->depth_regions().size())
     is_obj_reg_ = false;
 
-  if ( !is_grd_reg_ && !is_sky_reg_ && !is_obj_reg_ ){
-    vcl_cerr << "\n ERROR: no depth_map_region defined in query image, check the labelme.xml" << vcl_endl;
+  if ( !is_grd_reg_ && !is_sky_reg_ && !is_obj_reg_ ) {
+    vcl_cerr << "\n ERROR: no depth_map_region defined in query image, check the labelme.xml\n";
     return false;
   }
   if (!is_obj_reg_) {
-    vcl_cerr << "\n ERROR: current pass 01 matcher is not able to match query without any non_grd, non_sky object, add at least one in the labelme.xml" << vcl_endl;
+    vcl_cerr << "\n ERROR: current pass 01 matcher is not able to match query without any non_grd, non_sky object, add at least one in the labelme.xml\n";
     return false;
   }
   query_global_mem_ = 3 * sizeof(unsigned);   // n_cam + n_obj + n_ind
    query_local_mem_ = 3 * sizeof(unsigned);   // n_cam + n_obj + n_ind
 
   // construct the ground_id, ground_dist, ground_offset 1D array
-  if (is_grd_reg_) {
+  if (is_grd_reg_)
+  {
     unsigned grd_vox_size = query_->get_ground_id_size();
     grd_id_buff_ = new unsigned[grd_vox_size];
     grd_dist_buff_ = new unsigned char[grd_vox_size];
@@ -763,28 +773,28 @@ bool boxm2_volm_matcher_p1::transfer_query()
     *grd_weight_buff_ = query_->grd_weight();
     grd_id_cl_mem_ = new bocl_mem(gpu_->context(), grd_id_buff_, sizeof(unsigned)*grd_vox_size, " grd_id " );
     if (!grd_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_ID" << vcl_endl;
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_ID\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;
       return false;
     }
     grd_dist_cl_mem_ = new bocl_mem(gpu_->context(), grd_dist_buff_, sizeof(unsigned char)*grd_vox_size, " grd_dist " );
     if (!grd_dist_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_DIST" << vcl_endl;
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_DIST\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;
       return false;
     }
     grd_id_offset_cl_mem_ = new bocl_mem(gpu_->context(), grd_id_offset_buff_, sizeof(unsigned)*(*n_cam_+1), " grd_offset " );
     if (!grd_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_OFFSET" << vcl_endl;
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_OFFSET\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;
       return false;
     }
     grd_weight_cl_mem_ = new bocl_mem(gpu_->context(), grd_weight_buff_, sizeof(float), " grd_weight " );
     if (!grd_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_WEIGHT" << vcl_endl;
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_WEIGHT\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_;
       return false;
@@ -793,9 +803,10 @@ bool boxm2_volm_matcher_p1::transfer_query()
     query_global_mem_ += sizeof(unsigned)*(query_->ground_offset().size());      // ground offset array
     query_global_mem_ += sizeof(float);                                          // ground weight
   }
-  
+
   // construct sky_id buff
-  if (is_sky_reg_) {
+  if (is_sky_reg_)
+  {
     unsigned sky_vox_size = query_->get_sky_id_size();
     sky_id_buff_ = new unsigned[sky_vox_size];
     sky_id_offset_buff_ = new unsigned[*n_cam_+1];
@@ -814,26 +825,26 @@ bool boxm2_volm_matcher_p1::transfer_query()
     sky_weight_buff_ = new float;
     *sky_weight_buff_ = query_->sky_weight();
     sky_id_cl_mem_ = new bocl_mem(gpu_->context(), sky_id_buff_, sizeof(unsigned)*sky_vox_size, " sky_id " );
-    if(!sky_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_ID" << vcl_endl;
+    if (!sky_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_ID\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if(is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
       delete sky_id_cl_mem_;
       return false;
     }
     sky_id_offset_cl_mem_ = new bocl_mem(gpu_->context(), sky_id_offset_buff_, sizeof(unsigned)*(*n_cam_+1), " sky_offset " );
-    if(!sky_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_OFFSET" << vcl_endl;
+    if (!sky_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_OFFSET\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if(is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
       delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;
       return false;
     }
     sky_weight_cl_mem_ = new bocl_mem(gpu_->context(), sky_weight_buff_, sizeof(float), " sky_weight " );
-    if(!sky_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT" << vcl_endl;
+    if (!sky_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if(is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
       delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_;
       return false;
     }
@@ -841,14 +852,15 @@ bool boxm2_volm_matcher_p1::transfer_query()
     query_global_mem_ += sizeof(unsigned)*query_->sky_offset().size();           // sky dist
     query_global_mem_ += sizeof(float);                                          // sky weight
   }
-  
+
   // construct obj_id, obj_offset 1D array
-  if (is_obj_reg_) {
+  if (is_obj_reg_)
+  {
     unsigned obj_vox_size = query_->get_dist_id_size();
     unsigned obj_offset_size = (*n_cam_) * (*n_obj_);
     obj_id_buff_ = new unsigned[obj_vox_size];
     obj_id_offset_buff_ = new unsigned[obj_offset_size+1];
-    vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id = query_->dist_id(); 
+    vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id = query_->dist_id();
     unsigned obj_count = 0;
     for (unsigned cam_id = 0; cam_id < *n_cam_; cam_id++) {
       for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++) {
@@ -875,48 +887,48 @@ bool boxm2_volm_matcher_p1::transfer_query()
       obj_weight_buff_[obj_id] = query_->obj_weight()[obj_id];
     // create corresponding cl_mem
     obj_id_cl_mem_ = new bocl_mem(gpu_->context(), obj_id_buff_, sizeof(unsigned)*obj_vox_size, " obj_id " );
-    if(!obj_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_ID" << vcl_endl;
+    if (!obj_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_ID\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if(is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-      if(is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
       delete obj_id_cl_mem_;
       return false;
     }
     obj_id_offset_cl_mem_ = new bocl_mem(gpu_->context(), obj_id_offset_buff_, sizeof(unsigned)*(obj_offset_size+1), " obj_offset " );
-    if(!obj_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_OFFSET" << vcl_endl;
+    if (!obj_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_OFFSET\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if(is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-      if(is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
       delete obj_id_cl_mem_;  delete obj_id_offset_cl_mem_;
       return false;
     }
     obj_weight_cl_mem_ = new bocl_mem(gpu_->context(), obj_weight_buff_, sizeof(float)*(*n_obj_), " obj_weight " );
-    if(!obj_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_WEIGHT" << vcl_endl;
+    if (!obj_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_WEIGHT\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if(is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-      if(is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
       delete obj_id_cl_mem_;  delete obj_id_offset_cl_mem_;  delete obj_weight_cl_mem_;
       return false;
     }
     obj_min_dist_cl_mem_ = new bocl_mem(gpu_->context(), obj_min_dist_buff_, sizeof(unsigned char)*(*n_obj_), " obj_min_dist " );
-    if(!obj_min_dist_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_MIN_DIST" << vcl_endl;
+    if (!obj_min_dist_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_MIN_DIST\n";
       delete n_cam_cl_mem_;         delete n_obj_cl_mem_;
-      if(is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-      if(is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
       delete obj_id_cl_mem_;        delete obj_id_offset_cl_mem_;  delete obj_weight_cl_mem_;
       delete obj_min_dist_cl_mem_;
       return false;
     }
     obj_order_cl_mem_ = new bocl_mem(gpu_->context(), obj_order_buff_, sizeof(unsigned char)*(*n_obj_), " obj_order " );
-    if(!obj_order_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_ORDER" << vcl_endl;
+    if (!obj_order_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_ORDER\n";
       delete n_cam_cl_mem_;         delete n_obj_cl_mem_;
-      if(is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-      if(is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
       delete obj_id_cl_mem_;        delete obj_id_offset_cl_mem_;  delete obj_weight_cl_mem_;
       delete obj_min_dist_cl_mem_;  delete obj_order_cl_mem_;
       return false;
@@ -937,19 +949,19 @@ bool boxm2_volm_matcher_p1::transfer_query()
 
   if (query_global_mem_ > device_global_mem_) {
     vcl_cerr << " ERROR: the required global memory for query "  << query_global_mem_/1073741824.0
-             << " GByte is larger than available global memory " << device_global_mem_/1073741824.0 
-             << " GB" << vcl_endl;
+             << " GByte is larger than available global memory " << device_global_mem_/1073741824.0
+             << " GB\n";
     this->clean_query_cl_mem();
     return false;
   }
   if (query_local_mem_ > device_local_mem_) {
     vcl_cerr << " ERROR: the required local memoery for query " << query_local_mem_/1024.0
              << " KByte is larger than available local memory " << device_local_mem_/1024.0
-             << " KB" << vcl_endl;
+             << " KB\n";
     this->clean_query_cl_mem();
     return false;
   }
-  
+
   return true;
 }
 
@@ -1038,8 +1050,10 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
   // calculate the object score
   vcl_vector<float> score_order_all;
   vcl_vector<float> score_min_all;
-  if( is_obj_reg_) {  
-    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
+  if ( is_obj_reg_)
+  {
+    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
+    {
       unsigned start_ind = ind_id * layer_size_;
       for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
         float score_order = 0.0f;
@@ -1057,31 +1071,31 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
             unsigned s_vox = 1;
             unsigned s_min = 0;
             unsigned min_k = obj_min_dist_buff_[k];
-            if ( d < 253 ){  // valid object voxel
+            if ( d < 253 ) {  // valid object voxel
               // do the order checking
-              for (unsigned mu_id = 0; (mu_id < k && s_vox); mu_id++){
+              for (unsigned mu_id = 0; (mu_id < k && s_vox); mu_id++) {
                 float depth_d = depth_interval_[d];
                 float depth_m = mu[mu_id+mu_start_id];
-                if(mu[mu_id+mu_start_id] != 0)
+                if (mu[mu_id+mu_start_id] != 0)
                   s_vox = s_vox * ( depth_interval_[d] >= mu[mu_id+mu_start_id] );
               }
               for (unsigned mu_id = k+1; (mu_id < no && s_vox); mu_id++) {
                 float depth_d = depth_interval_[d];
                 float depth_m = mu[mu_id+mu_start_id];
-                if(mu[mu_id+mu_start_id] != 0)
+                if (mu[mu_id+mu_start_id] != 0)
                 s_vox = s_vox * ( depth_interval_[d] <= mu[mu_id+mu_start_id] );
               }
               if ( d > obj_min_dist_buff_[k] )
                 s_min = 1;
-            } else {
+            }
+            else {
               s_vox = 0;
             }
-            if( ind_id == 0 ) {
-              vcl_cout << " check min ----" << " ind_id = " << ind_id << ", obj = " << k 
+            if ( ind_id == 0 ) {
+              vcl_cout << " check min ----" << " ind_id = " << ind_id << ", obj = " << k
                        << ", id = " << id << " index_depth = " << d
                        << ", min_depth = " << min_k
                        << ", s_order = " << s_vox << ", s_min = " << s_min << vcl_endl;
-
             }
             score_k += (float)s_vox;
             score_min_k += (float)s_min;
@@ -1094,7 +1108,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
           score_min_k = score_min_k * obj_weight_buff_[k];
           // summerize order score for index ind_id and camera cam_id
           score_order += score_k;
-          score_min += score_min_k; 
+          score_min += score_min_k;
         }  // end for loop over objects
         score_order = score_order / no;
         score_order_all.push_back(score_order);
@@ -1103,7 +1117,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
       } // end of loop over cameras
     } // end of loop over indices
   }
-  
+
 
   // get the overall score
   vcl_vector<float> score_all;
@@ -1116,34 +1130,33 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
         score_all.push_back(score_sky_all[id] + score_order_all[id] + score_min_all[id]);
       else if ( !is_sky_reg_ && is_grd_reg_)
         score_all.push_back(score_grd_all[id] + score_order_all[id] + score_min_all[id]);
-      else 
+      else
         score_all.push_back(score_order_all[id] + score_min_all[id]);
     }
   }
 
-  // output all sky and ground score for checking
 #if 0
+  // output all sky and ground score for checking
   for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
     for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
       unsigned id = cam_id + ind_id * nc;
-      vcl_cout << " ind_id = " << ind_id << " cam_id = " << cam_id 
-               << " score_sky[" << id << "] = " << score_sky_all[id] 
+      vcl_cout << " ind_id = " << ind_id << " cam_id = " << cam_id
+               << " score_sky[" << id << "] = " << score_sky_all[id]
                << "\t\t score_grd[" << id << "] = " << score_grd_all[id]
                << "\t\t score_order[" << id << "] = " << score_order_all[id]
                << "\t\t score_min[" << id << "] = " << score_min_all[id]
                << vcl_endl;
     }
   }
-#endif
+
   // output for objects
-#if 0
   // mean values
   for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
     for (unsigned cam_id = 0; cam_id < nc; cam_id++)
       for (unsigned obj_id = 0; obj_id < no; obj_id++) {
         unsigned start_ind = ind_id * layer_size_;
         unsigned id = obj_id + cam_id * no + ind_id * nc * no;
-        //if( mu[id] - mu_buff[id]  != 0){
+        //if ( mu[id] - mu_buff[id]  != 0) {
           vcl_cout << " ind_id = " << ind_id
                    << " cam_id = " << cam_id
                    << " obj_id = " << obj_id
@@ -1155,32 +1168,34 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
                    << vcl_endl;
        //}
       }
-#endif
 
   // score_order
-  //for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-  //  for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-  //    unsigned id = cam_id + ind_id * nc;
-  //    vcl_cout << " ind_id = " << ind_id << " cam_id = " << cam_id << " score_order[" << id << "] = " << score_order_all[id] << vcl_endl;
-  //  }
-  //}
+  for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
+    for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
+      unsigned id = cam_id + ind_id * nc;
+      vcl_cout << " ind_id = " << ind_id << " cam_id = " << cam_id
+               << " score_order[" << id << "] = " << score_order_all[id] << vcl_endl;
+    }
+  }
 
-  // score_min
-  //for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-  //  for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-  //    unsigned id = cam_id + ind_id * nc;
-  //    vcl_cout << " ind = " << ind_id << " cam = " << cam_id << " score_min[" << id << "] = " << score_min_all[id] << vcl_endl;
-  //  }
-  //}
+   score_min
+  for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
+    for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
+      unsigned id = cam_id + ind_id * nc;
+      vcl_cout << " ind = " << ind_id << " cam = " << cam_id
+               << " score_min[" << id << "] = " << score_min_all[id] << vcl_endl;
+    }
+  }
+#endif
 
-    // check the score output
+  // check the score output
   for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
     for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
       unsigned id = cam_id + ind_id * nc;
       vcl_cout << " ind = " << ind_id << " cam = " << cam_id << " id = " << id
-               << "\t score_cpu = " << score_all[id]
-               << "\t score_gpu = " << score_buff[id]
-               << "\t diff = " << score_all[id] - score_buff[id]
+               << "\tscore_cpu = " << score_all[id]
+               << "\tscore_gpu = " << score_buff[id]
+               << "\tdiff = " << score_all[id] - score_buff[id]
                << vcl_endl;
     }
   }
