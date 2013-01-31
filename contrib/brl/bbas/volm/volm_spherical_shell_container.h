@@ -57,6 +57,18 @@ class volm_spherical_shell_container : public vbl_ref_count
   void panaroma_img_class_labels(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
   void panaroma_img_orientations(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
 
+  // ===========  binary I/O ================
+  //: version
+  unsigned version() const {return 1;}
+
+  //: binary IO write
+  void b_write(vsl_b_ostream& os);
+
+  //: binary IO read
+  void b_read(vsl_b_istream& is);
+
+  bool operator== (const volm_spherical_shell_container &other) const;
+    
  protected:
   void add_uniform_views();
   bool min_angle(vcl_vector<vgl_point_3d<double> > list, double point_angle);

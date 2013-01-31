@@ -7,6 +7,7 @@
 #include <bvrml/bvrml_write.h>
 #include <volm/volm_io.h>
 #include <vcl_cassert.h>
+#include <vsl/vsl_vector_io.h>
 
 // constructor
 volm_spherical_shell_container::volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle)
@@ -362,4 +363,70 @@ void volm_spherical_shell_container::panaroma_img_orientations(vil_image_view<vi
         img(ii,jj) = volm_orient_table::ori_index_colors[(int)values[i]]; 
     }
   }
+}
+
+//: binary IO write
+void volm_spherical_shell_container::b_write(vsl_b_ostream& os)
+{
+  unsigned ver = this->version();
+  vsl_b_write(os, ver);
+  vsl_b_write(os, radius_);
+  vsl_b_write(os, point_angle_);
+  vsl_b_write(os, cap_angle_);
+  vsl_b_write(os, top_angle_);
+  vsl_b_write(os, bottom_angle_);
+  coord_sys_->b_write(os);
+  vsl_b_write(os, cart_points_);
+  vsl_b_write(os, (unsigned)sph_points_.size());
+  for (unsigned i = 0; i < cart_points_.size(); i++)
+    vsl_b_write(os, sph_points_[i]);
+}
+
+//: binary IO read
+void volm_spherical_shell_container::b_read(vsl_b_istream& is)
+{
+  unsigned ver;
+  vsl_b_read(is, ver);
+  if (ver ==1) {
+    vsl_b_read(is, radius_);
+    vsl_b_read(is, point_angle_);
+    vsl_b_read(is, cap_angle_);
+    vsl_b_read(is, top_angle_);
+    vsl_b_read(is, bottom_angle_);
+    coord_sys_ = new vsph_spherical_coord;
+    coord_sys_->b_read(is);
+    vsl_b_read(is, cart_points_);
+    unsigned size;
+    vsl_b_read(is, size);
+    for (unsigned i = 0; i < size; i++) {
+      vsph_sph_point_3d pt;
+      vsl_b_read(is, pt);
+      sph_points_.push_back(pt);
+    }
+  }else{
+    vcl_cerr << "volm_spherical_shell_container - unknown binary io version " << ver <<'\n';
+    return;
+  }
+}
+
+bool volm_spherical_shell_container::operator== (const volm_spherical_shell_container &other) const
+{
+  bool equal = radius_ == other.radius_ && point_angle_ == other.point_angle_ && cap_angle_ == other.cap_angle_ && 
+    top_angle_ == other.top_angle_ && bottom_angle_ == other.bottom_angle_;
+  if (!equal)
+    return false;
+  
+  if (cart_points_.size() != other.cart_points_.size() || sph_points_.size() != other.sph_points_.size())
+    return false;
+
+  for (unsigned i = 0; i < cart_points_.size(); i++)
+    if (cart_points_[i] != other.cart_points_[i])
+      return false;
+  for (unsigned i = 0; i < sph_points_.size(); i++)
+    if (sph_points_[i].radius_ != other.sph_points_[i].radius_ ||
+        sph_points_[i].phi_ != other.sph_points_[i].phi_ ||
+        sph_points_[i].theta_ != other.sph_points_[i].theta_)
+      return false;
+  
+  return true;
 }
