@@ -21,9 +21,9 @@ boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_query_sptr const& query,
                                              vcl_string const& out_folder,
                                              float const& score_thres,
                                              float const& cam_thres) :
-  query_(query), leaves_(leaves), depth_interval_(depth_interval), ind_buffer_(buffer_capacity),
-  cand_poly_(cand_poly), gpu_(gpu), is_candidate_(is_candidate), is_last_pass_(is_last_pass),
-  score_thres_(score_thres), cam_thres_(cam_thres), out_folder_(out_folder)
+  query_(query), leaves_(leaves), ind_buffer_(buffer_capacity), is_candidate_(is_candidate),
+  cand_poly_(cand_poly), is_last_pass_(is_last_pass), out_folder_(out_folder),
+  depth_interval_(depth_interval), gpu_(gpu), score_thres_(score_thres), cam_thres_(cam_thres)
 {
     layer_size_ = query_->get_query_size();
     ind_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
@@ -379,7 +379,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
 
   // time
   float total_time = total_matcher_time.all();
-  vcl_cout << "\t\t total time for " << total_index_num << " indices and " << *n_cam_ << " cameras -------> " << total_time/1000.0 << " seconds (" << total_time << " ms)\n" 
+  vcl_cout << "\t\t total time for " << total_index_num << " indices and " << *n_cam_ << " cameras -------> " << total_time/1000.0 << " seconds (" << total_time << " ms)\n"
            << "\t\t GPU kernel execution ------------------> " << gpu_matcher_time/1000.0 << " seconds (" << gpu_matcher_time << " ms)\n"
            << "\t\t CPU host execution --------------------> " << (total_time - gpu_matcher_time)/1000.0 << " seconds (" << total_time - gpu_matcher_time << " ms)" << vcl_endl;
 
@@ -690,9 +690,9 @@ bool boxm2_volm_matcher_p1::create_queue()
 {
   cl_int status = SDK_FAILURE;
   queue_ = clCreateCommandQueue(gpu_->context(),
-                               *(gpu_->device_id()),
-                               CL_QUEUE_PROFILING_ENABLE,
-                               &status);
+                                *(gpu_->device_id()),
+                                CL_QUEUE_PROFILING_ENABLE,
+                                &status);
   if ( !check_val(status, CL_SUCCESS, error_to_string(status)) )
     return false;
   return true;
