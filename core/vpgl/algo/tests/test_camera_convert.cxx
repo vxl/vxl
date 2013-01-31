@@ -160,9 +160,9 @@ void test_generic_camera_convert()
     gray = gcam.ray(tu, tv);
     vgl_point_3d<double> lorg = lray.origin(), gorg = gray.origin();
     vgl_vector_3d<double> ldir = lray.direction(), gdir = gray.direction();
-    double dorg = (lorg-gorg).length();
-    double dang = angle(ldir, gdir);
-    TEST("lcam rays", success && dorg<1.1 && dang < 0.001, true);
+    double dorg = (lorg-gorg).length(); dorg -= 265.285;
+    double dang = vcl_fabs(angle(ldir, gdir));
+    TEST("lcam rays", success && vcl_fabs(dorg)<0.1 && dang < 0.001, true);
     double u, v;
     gcam.project(x, y, z, u, v);
     vcl_cout << "(u v)=(" << u << ' ' << v << ")\n";
