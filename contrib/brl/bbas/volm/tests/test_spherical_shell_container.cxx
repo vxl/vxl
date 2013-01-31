@@ -29,6 +29,19 @@ static void test_spherical_shell_container()
     vcl_cout << *p << vcl_endl;
 #endif
   sph_shell->draw_template("./spherical_shell.vrml");
+  
+  vsl_b_ofstream os("./temp.bin");
+  sph_shell->b_write(os);
+  os.close();
+
+  vsl_b_ifstream ifs("./temp.bin");
+  volm_spherical_shell_container_sptr sp2 = new volm_spherical_shell_container;
+  sp2->b_read(ifs);
+  ifs.close();
+
+  TEST("binary i/o", sph_shell->get_container_size(), sp2->get_container_size());
+  TEST("binary i/o", *sph_shell == *sp2, true);
+
 }
 
 TESTMAIN(test_spherical_shell_container);
