@@ -18,8 +18,14 @@ double vsph_utils::azimuth_diff(double phi_a, double phi_b,
   return diff;
 }
 
-bool vsph_utils::a_eq_b(double phi_a, double phi_b, bool in_radians)
-{
+double vsph_utils::distance_on_usphere(vsph_sph_point_2d const& a,
+				       vsph_sph_point_2d const& b){
+  double dist = vcl_fabs(vsph_utils::azimuth_diff(a.phi_, b.phi_));
+  dist += vcl_fabs(a.theta_-b.theta_);
+  return dist;
+}
+
+bool vsph_utils::a_eq_b(double phi_a, double phi_b, bool in_radians){
   double a = phi_a, b = phi_b, pi = vnl_math::pi;
   if (!in_radians) {
     if (((a == -180)&&(b == 180))||((a == 180)&&(b == -180))) return true;

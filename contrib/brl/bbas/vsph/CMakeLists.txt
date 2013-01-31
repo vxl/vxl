@@ -12,6 +12,7 @@ SET(vsph_sources
     vsph_sph_box_2d.h        vsph_sph_box_2d.cxx
     vsph_camera_bounds.h     vsph_camera_bounds.cxx
     vsph_utils.h             vsph_utils.cxx
+    vsph_unit_sphere.h       vsph_unit_sphere.cxx
    )
 AUX_SOURCE_DIRECTORY(Templates vsph_sources)
 
