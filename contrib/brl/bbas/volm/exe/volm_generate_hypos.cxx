@@ -288,7 +288,6 @@ int main(int argc,  char** argv)
            << " only putting hyps in UTM zone: " << utm_zone() << '\n';
 
 
-
   volm_geo_index_node_sptr root = volm_geo_index::construct_tree(tiles[i], (float)size, poly);
 
   // write the geo index and the hyps
@@ -381,7 +380,7 @@ int main(int argc,  char** argv)
     if (volm_geo_index::add_hypothesis(root, -79.268871, 33.365799, 1.60))
       vcl_cout << " added p1a_test1_34-GROUNDTRUTH\n";
 #endif
-    
+
     vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
     int cnt = volm_io::read_gt_file(add_gt(), samples);
     vcl_cout << " adding " << cnt <<" gt locs!\n";
@@ -392,13 +391,8 @@ int main(int argc,  char** argv)
         vcl_cout << samples[j].second.first << " is in zone: " << zone <<" not in " << utm_zone() << " skipping!\n";
         continue;
       }
-<<<<<<< .mine
-      vcl_cout << samples[j].second.first << " adding.. " << samples[j].first.y() << ", " << samples[j].first.x() << " ";
-      bool added = volm_geo_index::add_hypothesis(root, samples[j].first.x(), samples[j].first.y(), samples[j].first.z()); 
-=======
-      vcl_cout << name << " adding.. " << lat <<", " << lon << ' ';
-      bool added = volm_geo_index::add_hypothesis(root, lon, lat, elev);
->>>>>>> .r36432
+      vcl_cout << samples[j].second.first << " adding.. " << samples[j].first.y() << ", " << samples[j].first.x() << ' ';
+      bool added = volm_geo_index::add_hypothesis(root, samples[j].first.x(), samples[j].first.y(), samples[j].first.z());
       if (added) vcl_cout << " success!\n";
       else       vcl_cout <<" not found in tree of tile: " << tile_id() << "!\n";
     }
