@@ -164,7 +164,6 @@ void vsph_unit_sphere::add_uniform_views(double cap_angle, double point_angle)
         equivalent_ids_[vidx]=id;// keep track of map between old and new ids
       // if not add it
       if (!equal&&(sv.theta_ <= cap_angle_rad)) {
-        int np = cart_pts_.size();
         cart_pts_.push_back(cv);
         sph_pts_.push_back(sv);
       }
