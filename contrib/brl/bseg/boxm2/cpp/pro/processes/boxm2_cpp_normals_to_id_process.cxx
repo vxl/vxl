@@ -4,7 +4,7 @@
 // \file
 // \brief  A process to convert normals to preidentified ids
 // 0- for horizontal surface or (0,0,1)
-// 1- for vertical surface 
+// 1- for vertical surface
 //
 //10 - for unknown normal
 // \author Vishal Jain
@@ -65,7 +65,6 @@ bool boxm2_cpp_normals_to_id_process(bprb_func_process& pro)
     for (vcl_vector<boxm2_block_id>::iterator id = blocks.begin(); id != blocks.end(); ++id)
     {
         vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
-        boxm2_block *     blk  =  cache->get_block(*id);
         vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
         vcl_size_t normalTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
@@ -76,12 +75,12 @@ bool boxm2_cpp_normals_to_id_process(bprb_func_process& pro)
         boxm2_data_base * alpha =        cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int data_buff_length    = (int) (alpha->buffer_length()/alphaTypeSize);
 
- 
+
         boxm2_data_base * points = cache->get_data_base(*id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
         boxm2_data_base * normals = cache->get_data_base(*id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
         boxm2_data_base * vis = cache->get_data_base(*id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
         boxm2_data_base * normalids = cache->get_data_base(*id,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("orientation"), data_buff_length * labelshortSize,false);
-        
+
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(alpha);
         datas.push_back(points);
@@ -89,11 +88,9 @@ bool boxm2_cpp_normals_to_id_process(bprb_func_process& pro)
         datas.push_back(vis);
         datas.push_back(normalids);
 
-        
+
         functor.init_data(datas,0.1,0.1);//alpha,cubic_model_data);
         boxm2_data_serial_iterator<boxm2_normals_to_id_functor>(data_buff_length,functor);
-
-        
     }
     cache->write_to_disk();
 
