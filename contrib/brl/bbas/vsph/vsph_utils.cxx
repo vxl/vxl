@@ -11,8 +11,8 @@ double vsph_utils::azimuth_diff(double a, double b,
     if (diff < -180) diff += 360;
   }
   else {
-    if (diff >  vnl_math::pi) diff -= vnl_math::two_pi;
-    if (diff < -vnl_math::pi) diff += vnl_math::two_pi;
+    if (diff >  vnl_math::pi) diff -= vnl_math::twopi;
+    if (diff < -vnl_math::pi) diff += vnl_math::twopi;
   }
   return diff;
 }
