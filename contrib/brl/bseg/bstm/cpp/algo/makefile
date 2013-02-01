@@ -4,6 +4,7 @@ LIBRARY := bstm_cpp_algo
 
 MANPAGE_SOURCES += bstm_data_similarity_traits.h
 MANPAGE_SOURCES += bstm_ingest_boxm2_scene_function.txx
+MANPAGE_SOURCES += bstm_label_bb_function.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

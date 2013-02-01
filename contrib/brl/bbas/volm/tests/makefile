@@ -11,6 +11,7 @@ TESTS += test_query.cxx
 TESTS += test_index.cxx
 TESTS += test_region_query.cxx
 TESTS += test_camera_space.cxx
+TESTS += test_io.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

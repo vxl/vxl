@@ -9,6 +9,7 @@ SOURCES += vsph_sph_point_3d.cxx
 SOURCES += vsph_sph_point_2d.cxx
 SOURCES += vsph_sph_box_2d.cxx
 SOURCES += vsph_utils.cxx
+SOURCES += vsph_unit_sphere.cxx
 
 MANPAGE_SOURCES += vsph_view_point.h
 MANPAGE_SOURCES += vsph_view_sphere.txx

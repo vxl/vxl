@@ -6,6 +6,7 @@ SOURCES += bstm_cpp_register.cxx
 MANPAGE_SOURCES += bstm_cpp_processes.h
 
 SOURCES += processes/bstm_cpp_ingest_boxm2_scene_process.cxx
+SOURCES += processes/bstm_cpp_label_bb_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
