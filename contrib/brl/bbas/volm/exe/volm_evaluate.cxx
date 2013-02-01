@@ -133,7 +133,7 @@ int main(int argc,  char** argv)
 
     vcl_cout << " \t\t size of the file is: " << (float)(vul_file::size(score_file_name.str()))/(1024.0*1024.0*1024.0) << " Gb, assuming it fits memory!!\n";
     vcl_vector<volm_score_sptr> scores;
-    volm_score::read_scores_tile(scores, score_file_name.str());  // this file may be too large, make sure it fits to memory!!
+    volm_score::read_scores(scores, score_file_name.str());  // this file may be too large, make sure it fits to memory!!
     tot_hyp_count += scores.size();
     for (unsigned j = 0; j < scores.size(); j++) {
       //vcl_cout << "leaf id: " << scores[j]->leaf_id_ << " hyp_id: " << scores[j]->hypo_id_ << " max score: " << scores[j]->max_score_ << " # of cams: " << scores[j]->cam_id_.size() << '\n';
