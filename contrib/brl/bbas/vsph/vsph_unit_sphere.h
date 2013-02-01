@@ -21,29 +21,28 @@
 class vsph_edge
 {
  public:
- vsph_edge(): vs_(-1), ve_(-1){}
- vsph_edge(int vs, int ve): vs_(vs), ve_(ve){}
-  bool operator==(vsph_edge const& e) const{
-    bool temp = (vs_==e.vs_) && (ve_==e.ve_);
-    temp = temp || (vs_==e.ve_)&&(ve_==e.vs_);
-    return temp;}
+  vsph_edge(): vs_(-1), ve_(-1) {}
+  vsph_edge(int vs, int ve): vs_(vs), ve_(ve) {}
+  bool operator==(vsph_edge const& e) const {
+    return (vs_==e.vs_ && ve_==e.ve_)
+        || (vs_==e.ve_ && ve_==e.vs_);      }
   short version() const { return 1;}
   void b_read(vsl_b_istream& is);
   void b_write(vsl_b_ostream& os) const;
-  void print(vcl_ostream& os) const {
-    os << "(" << vs_ << ' ' << ve_<<")\n";}
+  void print(vcl_ostream& os) const { os << '(' << vs_ << ' ' << ve_ << ")\n"; }
   //: start vertex
   int vs_;
   //: end vertex
   int ve_;
 };
+
 bool operator < (vsph_edge const& a, vsph_edge const& b);
 
 class vsph_unit_sphere : public vbl_ref_count
 {
  public:
   //: default constructor
- vsph_unit_sphere() : point_angle_(0.0), min_theta_(0.0), max_theta_(0.0){}
+  vsph_unit_sphere() : point_angle_(0.0), min_theta_(0.0), max_theta_(0.0){}
   //: constructor, angles are in degrees
   // point_angle is the maximum angle between adjacent triangle vertices
   // min_theta and max_theta bound the points constructed on the sphere surface
@@ -69,11 +68,11 @@ class vsph_unit_sphere : public vbl_ref_count
 
   //: spherical points
   vcl_vector<vsph_sph_point_2d> sph_points() const{
-	  return sph_pts_;}
+          return sph_pts_;}
 
   //: Cartesian points
   vcl_vector<vgl_vector_3d<double> > cart_points() const{
-	  return cart_pts_;}
+          return cart_pts_;}
 
   //: get the triangle edges
   vcl_vector<vsph_edge> edges() const{return edges_;}
@@ -84,7 +83,7 @@ class vsph_unit_sphere : public vbl_ref_count
   //: have neighbors been collected yet ?
   bool neighbors_valid() const {return neighbors_valid_;}
 
-  //: get the neigboring vertices based on triangle edges (hex neighborhood)
+  //: get the neighboring vertices based on triangle edges (hex neighborhood)
   vcl_vector<int> neighbors(int vert_id) const {return neighbors_[vert_id];}
 
   //: display the vertices in a vrml format
@@ -94,12 +93,12 @@ class vsph_unit_sphere : public vbl_ref_count
   void display_edges(vcl_string const & path) const;
 
   //: display segmented region data
-  void display_region_data(vcl_string const & path, 
-			   vcl_vector<double> const& data) const;
+  void display_region_data(vcl_string const & path,
+                           vcl_vector<double> const& data) const;
 
-    //: display segmented region data
-  void display_region_color(vcl_string const & path, 
-			    vcl_vector<vcl_vector<float> > const& cdata) const;
+  //: display segmented region data
+  void display_region_color(vcl_string const & path,
+                            vcl_vector<vcl_vector<float> > const& cdata) const;
 
   //: Iterator
 
@@ -122,13 +121,13 @@ class vsph_unit_sphere : public vbl_ref_count
 
  protected:
   //: adds uniformly placed vertices on the sphere in the area defined by elevation angle \a cap_angle, and the vertices are at most \a point_angle apart
-  // algorithm uses iterative triangle division on octahedron until the point angle is achieved
+  // Algorithm uses iterative triangle division on octahedron until the point angle is achieved
   void add_uniform_views();
 
   //: eliminate vertices above min_theta and below max_theta in elevation
   void remove_top_and_bottom();
 
-  //: construct Cartesian vectors from spherical points 
+  //: construct Cartesian vectors from spherical points
   void set_cart_points();
 
   bool find_near_equal(vgl_vector_3d<double>const& p,int& id,double tol=0.0001);

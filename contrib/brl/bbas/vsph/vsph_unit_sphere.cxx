@@ -10,15 +10,19 @@
 
 #include <bvrml/bvrml_write.h>
 #include <vcl_limits.h>
-bool operator < (vsph_edge const& a, vsph_edge const& b){ 
-  if(a.vs_!=b.vs_)
+
+bool operator < (vsph_edge const& a, vsph_edge const& b)
+{
+  if (a.vs_!=b.vs_)
     return a.vs_ < b.vs_;
   return a.ve_ < b.ve_;
 }
-vsph_unit_sphere::vsph_unit_sphere(double point_angle, 
-				   double min_theta, double max_theta) :
-  neighbors_valid_(false), point_angle_(point_angle), 
-  min_theta_(min_theta), max_theta_(max_theta){
+
+vsph_unit_sphere::vsph_unit_sphere(double point_angle,
+                                   double min_theta, double max_theta) :
+  neighbors_valid_(false), point_angle_(point_angle),
+  min_theta_(min_theta), max_theta_(max_theta)
+{
   add_uniform_views();
   remove_top_and_bottom();
 }
@@ -175,13 +179,13 @@ void vsph_unit_sphere::add_uniform_views()
       if (equal)
         equivalent_ids_[vidx]=id;// keep track of map between old and new ids
       // if not add it
-      if(!equal&&(sv.theta_ <= cap_angle_rad)) {
-	cart_pts_.push_back(cv);
-	sph_pts_.push_back(sv);
+      if (!equal&&(sv.theta_ <= cap_angle_rad)) {
+        cart_pts_.push_back(cv);
+        sph_pts_.push_back(sv);
       }
     }
 #if 1
-    if(i%1000 ==0)
+    if (i%1000 ==0)
       vcl_cout << '.' << vcl_flush;
       //vcl_cout << "susN:" << sph_pts_.size() << ' ' << vcl_flush;
 #endif
@@ -216,8 +220,7 @@ void vsph_unit_sphere::add_uniform_views()
 void vsph_unit_sphere::remove_top_and_bottom()
 {
 #if 0
-  vcl_cout << "entering top and bottom" << sph_pts_.size() << '\n'
-	   << vcl_flush;
+  vcl_cout << "entering top and bottom" << sph_pts_.size() << vcl_endl;
 #endif
   equivalent_ids_.clear();
   double min_theta_rad = min_theta_/vnl_math::deg_per_rad;
@@ -228,8 +231,8 @@ void vsph_unit_sphere::remove_top_and_bottom()
   int indx = 0;
   for (; pit!=sph_pts_.end();++pit, ++indx) {
     vsph_sph_point_2d& sp = (*pit);
-    if (sp.theta_ > min_theta_rad && 
-	sp.theta_ < max_theta_rad) {
+    if (sp.theta_ > min_theta_rad &&
+        sp.theta_ < max_theta_rad) {
       int ns = cart_pts_new.size();
       equivalent_ids_[indx] = ns;
       sph_pts_new.push_back(sp);
@@ -262,16 +265,17 @@ void vsph_unit_sphere::remove_top_and_bottom()
   neighbors_valid_ = false;
 }
 
-void vsph_unit_sphere::find_neighbors(){
+void vsph_unit_sphere::find_neighbors()
+{
   int nv = this->size();
   neighbors_.clear();
   neighbors_.resize(nv);
   int ne = edges_.size();
-  for(int iv = 0; iv<nv; ++iv)
-    for(int ie =0; ie<ne; ++ie){
+  for (int iv = 0; iv<nv; ++iv)
+    for (int ie =0; ie<ne; ++ie) {
       vsph_edge& e = edges_[ie];
-      if(e.vs_ == iv) neighbors_[iv].push_back(e.ve_);
-      if(e.ve_ == iv) neighbors_[iv].push_back(e.vs_);
+      if (e.vs_ == iv) neighbors_[iv].push_back(e.ve_);
+      if (e.ve_ == iv) neighbors_[iv].push_back(e.vs_);
     }
   neighbors_valid_ = true;
 }
@@ -281,22 +285,23 @@ find_near_equal(vgl_vector_3d<double>const& p, int& id, double tol)
 {
   vcl_vector<vgl_vector_3d<double> >::iterator it = cart_pts_.begin();
   id = 0;
-  double px = p.x(), py = p.y(), pz = p.z();
-  for(;it != cart_pts_.end(); it++, ++id) {
+  for (;it != cart_pts_.end(); it++, ++id) {
     vgl_vector_3d<double>& cp = *it;
     //    double dist = 1.0 - dot_product(p, cp);
     vgl_vector_3d<double> dif = cp-p;
     double dist = length(dif);
-    if(dist<=tol)
+    if (dist<=tol)
       return true;
   }
   id = -1;
   return false;
 }
-//: construct Cartesian vectors from spherical points 
-void vsph_unit_sphere::set_cart_points(){
-  for(vcl_vector<vsph_sph_point_2d>::iterator sit = sph_pts_.begin();
-      sit != sph_pts_.end(); ++sit)
+
+// construct Cartesian vectors from spherical points
+void vsph_unit_sphere::set_cart_points()
+{
+  for (vcl_vector<vsph_sph_point_2d>::iterator sit = sph_pts_.begin();
+       sit != sph_pts_.end(); ++sit)
     cart_pts_.push_back(cart_coord(*sit));
 }
 
@@ -314,7 +319,7 @@ void vsph_unit_sphere::print(vcl_ostream& os) const
 
 // point_angle must be in radians
 bool vsph_unit_sphere::min_angle(vcl_vector<vgl_vector_3d<double> > list,
-				 double angle_rad)
+                                 double angle_rad)
 {
   if (list.size() < 2)
     return false;
@@ -406,23 +411,23 @@ void vsph_unit_sphere::display_edges(vcl_string const & path) const
 }
 
 void vsph_unit_sphere::
-display_region_data(vcl_string const & path, 
-		    vcl_vector<double> const& data) const{
-  
+display_region_data(vcl_string const & path,
+                    vcl_vector<double> const& data) const{
+
   vcl_ofstream os(path.c_str());
-  if(!os.is_open())
+  if (!os.is_open())
     return;
   // find range of data
   double minv = vcl_numeric_limits<double>::max();
   double maxv = -vcl_numeric_limits<double>::max();
   int nd = data.size();
-  for(int i=0; i<nd; ++i){
+  for (int i=0; i<nd; ++i) {
     double d = data[i];
-    if(d < minv) minv = d;
-    if(d > maxv) maxv = d;
+    if (d < minv) minv = d;
+    if (d > maxv) maxv = d;
   }
   double dif = maxv-minv;
-  if(dif == 0.0)
+  if (dif == 0.0)
     dif = 1.0;
   bvrml_write::write_vrml_header(os);
   // write a world center and world axis
@@ -447,30 +452,31 @@ display_region_data(vcl_string const & path,
     vgl_vector_3d<double> ray = cart_pts_[i];
     float val = static_cast<float>((data[i]-minv)/dif);
     bvrml_write::write_vrml_disk(os, orig+10*ray, ray, disc_radius,
-				 val, val, 0.0f);
+                                 val, val, 0.0f);
   }
   os.close();
 
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for(vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
-      cit != cart_pts_.end(); ++cit, ++cnt){
+  for (vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+       cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
-    if(cnt != np) os << ",\n";
-    else os << "\n";
+    if (cnt != np) os << ',';
+    os << '\n';
   }
-  os <<"    ]\n";
-  os <<"   }\n";
-  os << " }\n";
-  os <<"}\n";
+  os <<"    ]\n"
+     <<"   }\n"
+     << " }\n"
+     <<"}\n";
 }
+
 void vsph_unit_sphere::
-display_region_color(vcl_string const & path, 
-		     vcl_vector<vcl_vector<float> > const& cdata) const{
+display_region_color(vcl_string const & path,
+                     vcl_vector<vcl_vector<float> > const& cdata) const{
 
   vcl_ofstream os(path.c_str());
-  if(!os.is_open())
+  if (!os.is_open())
     return;
   bvrml_write::write_vrml_header(os);
   // write a world center and world axis
@@ -495,24 +501,25 @@ display_region_color(vcl_string const & path,
     vgl_vector_3d<double> ray = cart_pts_[i];
     const vcl_vector<float>& cl = cdata[i];
     bvrml_write::write_vrml_disk(os, orig+10*ray, ray, disc_radius,
-				 cl[0], cl[1], cl[2]);
+                                 cl[0], cl[1], cl[2]);
   }
   os.close();
 
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for(vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
-      cit != cart_pts_.end(); ++cit, ++cnt){
+  for (vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+       cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
-    if(cnt != np) os << ",\n";
-    else os << "\n";
+    if (cnt != np) os << ',';
+    os << '\n';
   }
-  os <<"    ]\n";
-  os <<"   }\n";
-  os << " }\n";
-  os <<"}\n";
+  os <<"    ]\n"
+     <<"   }\n"
+     << " }\n"
+     <<"}\n";
 }
+
 // =================   binary I/O ==========================
 void vsph_unit_sphere::b_read(vsl_b_istream& is)
 {
@@ -548,45 +555,54 @@ void vsph_unit_sphere::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, edges_);
 }
 
-void vsl_b_read(vsl_b_istream& is, vsph_unit_sphere& usph){
+void vsl_b_read(vsl_b_istream& is, vsph_unit_sphere& usph)
+{
   usph.b_read(is);
 }
 
-void vsl_b_write(vsl_b_ostream& os, vsph_unit_sphere const& usph){
+void vsl_b_write(vsl_b_ostream& os, vsph_unit_sphere const& usph)
+{
   usph.b_write(os);
 }
 
-void vsph_edge::b_read(vsl_b_istream& is){
+void vsph_edge::b_read(vsl_b_istream& is)
+{
   short version;
   vsl_b_read(is, version);
   switch (version) {
-  case 1:
+   case 1:
     {
-      vsl_b_read(is, vs_);  
+      vsl_b_read(is, vs_);
       vsl_b_read(is, ve_);
       break;
     }
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_edge&)\n"
-	     << "           Unknown version number "<< version << '\n';
+             << "           Unknown version number "<< version << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
 }
-void vsph_edge::b_write(vsl_b_ostream& os) const{
+
+void vsph_edge::b_write(vsl_b_ostream& os) const
+{
   vsl_b_write(os, (short)version());
-  vsl_b_write(os, vs_);  
+  vsl_b_write(os, vs_);
   vsl_b_write(os, ve_);
 }
-void vsl_print_summary(vcl_ostream& os, vsph_edge const& e){
+
+void vsl_print_summary(vcl_ostream& os, vsph_edge const& e)
+{
   e.print(os);
 }
 
-void vsl_b_read(vsl_b_istream& is, vsph_edge& e){
+void vsl_b_read(vsl_b_istream& is, vsph_edge& e)
+{
   e.b_read(is);
 }
 
-void vsl_b_write(vsl_b_ostream& os, vsph_edge const& e){
+void vsl_b_write(vsl_b_ostream& os, vsph_edge const& e)
+{
   e.b_write(os);
 }
 
@@ -595,7 +611,9 @@ vcl_ostream& operator<<(vcl_ostream& os, vsph_unit_sphere const& vs)
   vs.print(os);
   return os;
 }
-void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere const* usph_ptr){
+
+void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere const* usph_ptr)
+{
   if (usph_ptr==0)
     vsl_b_write(os, false);
   else {
@@ -604,7 +622,8 @@ void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere const* usph_ptr){
   }
 }
 
-void vsl_b_read(vsl_b_istream &is, vsph_unit_sphere*& usph_ptr){
+void vsl_b_read(vsl_b_istream &is, vsph_unit_sphere*& usph_ptr)
+{
   delete usph_ptr; usph_ptr = 0;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
@@ -615,11 +634,13 @@ void vsl_b_read(vsl_b_istream &is, vsph_unit_sphere*& usph_ptr){
   }
 }
 
-void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere_sptr const&  usph_sptr){
+void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere_sptr const&  usph_sptr)
+{
   vsl_b_write(os, usph_sptr.ptr());
 }
 
-void vsl_b_read(vsl_b_istream &is, vsph_unit_sphere_sptr& usph_sptr){
+void vsl_b_read(vsl_b_istream &is, vsph_unit_sphere_sptr& usph_sptr)
+{
   vsph_unit_sphere* usph_ptr = 0;
   vsl_b_read(is, usph_ptr);
   usph_sptr = usph_ptr;
