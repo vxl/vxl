@@ -329,16 +329,10 @@ SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOB_GREY---.c
 SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample_multi_bin+BOXM_APM_MOG_GREY---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.float--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.vgl_point_3d+double---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---.cxx

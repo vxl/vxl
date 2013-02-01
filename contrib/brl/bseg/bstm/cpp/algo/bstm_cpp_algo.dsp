@@ -112,6 +112,9 @@ SOURCE=.\bstm_data_similarity_traits.h
 # Begin Source File
 SOURCE=.\bstm_ingest_boxm2_scene_function.txx
 # End Source File
+# Begin Source File
+SOURCE=.\bstm_label_bb_function.h
+# End Source File
 # End Group
 # End Target
 # End Project

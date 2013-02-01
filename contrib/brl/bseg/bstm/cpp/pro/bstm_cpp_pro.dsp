@@ -100,6 +100,9 @@ SOURCE=.\bstm_cpp_register.cxx
 # Begin Source File
 SOURCE=.\processes/bstm_cpp_ingest_boxm2_scene_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/bstm_cpp_label_bb_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

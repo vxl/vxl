@@ -267,6 +267,9 @@ SOURCE=.\test_region_query.cxx
 SOURCE=.\test_camera_space.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_io.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
