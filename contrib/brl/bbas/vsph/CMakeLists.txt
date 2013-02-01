@@ -13,11 +13,13 @@ SET(vsph_sources
     vsph_camera_bounds.h     vsph_camera_bounds.cxx
     vsph_utils.h             vsph_utils.cxx
     vsph_unit_sphere.h       vsph_unit_sphere.cxx
-   )
+#    segment_graph.h          disjoint_set.h
+#    vsph_segment_sphere.h    vsph_segment_sphere.cxx
+  )
 AUX_SOURCE_DIRECTORY(Templates vsph_sources)
 
 ADD_LIBRARY(vsph ${vsph_sources})
-TARGET_LINK_LIBRARIES(vsph vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl bpgl_algo)
+TARGET_LINK_LIBRARIES(vsph vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl bpgl_algo bvrml)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

@@ -26,7 +26,7 @@ class vsph_sph_point_2d
 
   void b_read(vsl_b_istream& is);
 
-  void b_write(vsl_b_ostream& os);
+  void b_write(vsl_b_ostream& os) const;
 
   short version() const {return 1;}
   bool in_radians_;
@@ -34,6 +34,12 @@ class vsph_sph_point_2d
   double phi_;
 };
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_2d const& p);
+void vsl_b_read(vsl_b_istream& is, vsph_sph_point_2d& sp);
+
+void vsl_b_write(vsl_b_ostream& os, vsph_sph_point_2d const& sp);
+
+void vsl_print_summary(vcl_ostream& os, vsph_sph_point_2d const& sp);
+
+vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_2d const& sp);
 
 #endif

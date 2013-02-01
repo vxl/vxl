@@ -6,6 +6,7 @@ DECLARE( test_spherical_coord );
 DECLARE( test_camera_bounds );
 DECLARE( test_sph_geom );
 DECLARE( test_unit_sphere );
+//DECLARE( test_sph_segment );
 
 void
 register_tests()
@@ -14,6 +15,7 @@ register_tests()
   REGISTER( test_spherical_coord );
   REGISTER( test_camera_bounds );
   REGISTER( test_unit_sphere );
+  //REGISTER( test_sph_segment );
 }
 
 DEFINE_MAIN;
