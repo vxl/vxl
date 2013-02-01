@@ -37,7 +37,7 @@ class volm_nlcd_table
 
 class volm_io_expt_params
 {
-public:
+ public:
   float fov_inc, tilt_inc, roll_inc, head_inc, vmin, solid_angle, dmax, cap_angle, point_angle, top_angle, bottom_angle;
   void read_params(vcl_string params_file);
 };
@@ -80,7 +80,7 @@ class volm_io
   static void read_polygons(vcl_string poly_file, vgl_polygon<double>& out);
   static void convert_polygons(vgl_polygon<double> const& in, vgl_polygon<float>& out);
 
-  static int read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > >& samples); 
+  static int read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > >& samples);
 };
 
 class volm_rationale;
@@ -112,8 +112,9 @@ class volm_rationale
 class volm_score;
 typedef vbl_smart_ptr<volm_score> volm_score_sptr;
 
-class volm_score : public vbl_ref_count {
-public:
+class volm_score : public vbl_ref_count
+{
+ public:
   volm_score () {}
   volm_score(unsigned leaf_id, unsigned hypo_id) : leaf_id_(leaf_id), hypo_id_(hypo_id) {}
   volm_score(unsigned const& leaf_id, unsigned const& hypo_id, float const& max_score, unsigned const& max_cam_id, vcl_vector<unsigned> const& cam_id)
@@ -134,8 +135,8 @@ public:
   //: binary IO read
   void b_read(vsl_b_istream& is);
 
-  static void write_scores(vcl_vector<volm_score_sptr>& scores, vcl_string& file_name);
-  static void read_scores(vcl_vector<volm_score_sptr>& scores, vcl_string& file_name);
+  static void write_scores(vcl_vector<volm_score_sptr>& scores, vcl_string const& file_name);
+  static void read_scores(vcl_vector<volm_score_sptr>& scores, vcl_string const& file_name);
 };
 
 
