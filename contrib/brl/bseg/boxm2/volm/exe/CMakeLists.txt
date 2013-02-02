@@ -20,4 +20,7 @@ TARGET_LINK_LIBRARIES( boxm2_volumetric_visualize_top_indices boxm2_volm volm vb
 ADD_EXECUTABLE( boxm2_volumetric_matcher_integration boxm2_volumetric_matcher_integration.cxx)
 TARGET_LINK_LIBRARIES( boxm2_volumetric_matcher_integration boxm2_volm vbl vgl volm depth_map bvrml)
 
+ADD_EXECUTABLE( boxm2_volumetric_matcher_p0 boxm2_volumetric_matcher_p0.cxx)
+TARGET_LINK_LIBRARIES( boxm2_volumetric_matcher_p0 boxm2_volm vbl vgl volm depth_map bvrml)
+
 ENDIF(OPENCL_FOUND)
