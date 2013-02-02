@@ -122,6 +122,10 @@ int main(int argc, char** argv)
       return volm_io::EXE_ARGUMENT_ERROR;
     }
   }
+  else {
+    vcl_cout << " NO candidate list for this query image, full index space is considered " << vcl_endl;
+    is_candidate = false;
+  }
   // prune the tree, only leaves with non-zero hypos are left
   if (is_candidate) {
     volm_geo_index::prune_tree(root, cand_poly);

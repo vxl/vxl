@@ -18,7 +18,6 @@
 #include <volm/volm_loc_hyp.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
-#include <boxm2/volm/boxm2_volm_matcher.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
@@ -283,7 +282,7 @@ int main(int argc,  char** argv)
 
   // create query array
   // create containers
-  volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell);
+  volm_query_sptr query = new volm_query(cam_file(), label_file(), sph, sph_shell, false);
   vcl_cout << "query has: " << query->get_cam_num() << " cams!\n";
   vil_image_view<vil_rgb<vxl_byte> > out_img(dm->ni(), dm->nj());
   for (unsigned i = 0; i < dm->ni(); i++)
@@ -292,6 +291,13 @@ int main(int argc,  char** argv)
       out_img(i,j).g = (unsigned char)120;
       out_img(i,j).b = (unsigned char)120;
     }
+#if 0
+    vcl_cout << " values array: \n";
+    for (unsigned i = 0; i < layer_size; i++) {
+      vcl_cout << (int)values[i] << " ";
+    }
+    vcl_cout << vcl_endl;
+#endif
   query->depth_rgb_image(values, 0, out_img);
   vcl_stringstream out_name; out_name << out_folder() << "/img_index_closest_id_" << closest_id << ".png";
   vil_save(out_img, out_name.str().c_str());

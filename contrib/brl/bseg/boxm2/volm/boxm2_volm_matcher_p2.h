@@ -16,11 +16,11 @@
 #include <volm/volm_query_sptr.h>
 #include <volm/volm_query.h>
 #include "boxm2_volm_wr3db_index_sptr.h"
-#include "boxm2_volm_matcher_order.h"
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
+#include <volm/volm_io.h>
 
 
 class boxm2_volm_matcher_p2
@@ -98,7 +98,7 @@ class boxm2_volm_matcher_p2
   bocl_mem*     obj_weight_cl_mem_;
 
   //: score output
-  vcl_vector<boxm2_volm_score> index_score_all;
+  vcl_vector<volm_score> index_score_all;
 
   //: transfer volm_query to 1D array for kernel calculation
   bool transfer_query();

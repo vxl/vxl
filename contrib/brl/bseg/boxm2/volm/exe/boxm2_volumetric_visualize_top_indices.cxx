@@ -18,7 +18,6 @@
 #include <volm/volm_loc_hyp.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
-#include <boxm2/volm/boxm2_volm_matcher.h>
 #include <vcl_set.h>
 
 
@@ -147,7 +146,7 @@ int main(int argc,  char** argv)
     for (unsigned i = 0; i <= r.index_id; i++)
       ind->get_next(values);
     // print it out
-#if 0
+#if 1
     vcl_cout << " ---------------- top " << count << " ---------------------------" << '\n'
              << "index for top " << count << vcl_endl;
     for (unsigned i = 0; i < values.size(); i++) {
