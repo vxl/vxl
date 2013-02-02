@@ -5,7 +5,6 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <bbas/volm/volm_query.h>
 #include <bbas/volm/volm_query_sptr.h>
-#include <boxm2/volm/boxm2_volm_obj_based_matcher.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_container_sptr.h>
 #include <volm/volm_spherical_shell_container.h>
@@ -29,8 +28,8 @@ static void test_volm_matcher_p1()
   // input parameters (modify accordingly)
   vcl_string geo_index_folder = "D:\\work\\Dropbox\\FINDER\\index\\geoindex_zone_17_inc_2_nh_100\\";
   vcl_string cam_file = "D:\\work\\find\\volm_matcher\\finderuploads\\coast\\job_174\\Camera_test.kml";
-  vcl_string label_file = "D:\\work\\find\\volm_matcher\\finderuploads\\coast\\job_174\\Result_own_calibration_ori.xml";
-  vcl_string out_folder = "D:\\work\\find\\volm_matcher\\finderuploads\\coast\\job_174\\integration_matcher_test\\";
+  vcl_string label_file = "D:\\work\\find\\volm_matcher\\test_query_charleston\\p1a_test83\\p1a_test83_groundtruth_labelme.xml";
+  vcl_string out_folder = "D:\\work\\find\\volm_matcher\\test_query_charleston\\p1a_test83\\";
   vcl_string candidate_file = "D:\\work\\find\\volm_matcher\\candidate_lists\\p1a_test1_36\\out.txt";
 
 
@@ -48,7 +47,7 @@ static void test_volm_matcher_p1()
   }
   // generate depth_map_scene binary
 #if 0
-  vcl_string dm_binary = out_folder + "dms_bindary.vsl";
+  vcl_string dm_binary = out_folder + "p1a_res83_groundtruth_labelme.vsl";
   // write
   vsl_b_ofstream sos(dm_binary);
   vsl_b_write(sos, dms);
@@ -73,7 +72,7 @@ static void test_volm_matcher_p1()
                << ", depth = " << dms->ground_plane()[i]->min_depth()
                << ", orient = " << dms->ground_plane()[i]->orient_type()
                << ", NLCD_id = " << dms->ground_plane()[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dms->ground_plane()[i]->nlcd_id()]
+               << " ---> " << (int)volm_nlcd_table::land_id[dms->ground_plane()[i]->nlcd_id()].first
                << vcl_endl;
   }
   if (dms->scene_regions().size()) {
@@ -85,7 +84,7 @@ static void test_volm_matcher_p1()
                << ",\t order = " << (dms->scene_regions())[i]->order()
                << ",\t orient = " << (dms->scene_regions())[i]->orient_type()
                << ",\t NLCD_id = " << (dms->scene_regions())[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dms->scene_regions()[i]->nlcd_id()]
+               << " ---> " << (int)volm_nlcd_table::land_id[dms->scene_regions()[i]->nlcd_id()].first
                << vcl_endl;
     }
   }
@@ -108,7 +107,7 @@ static void test_volm_matcher_p1()
                << ", depth = " << s_in->ground_plane()[i]->min_depth()
                << ", orient = " << s_in->ground_plane()[i]->orient_type()
                << ", NLCD_id = " << s_in->ground_plane()[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[s_in->ground_plane()[i]->nlcd_id()]
+               << " ---> " << (int)volm_nlcd_table::land_id[s_in->ground_plane()[i]->nlcd_id()].first
                << vcl_endl;
   }
   if (s_in->scene_regions().size()) {
@@ -120,13 +119,13 @@ static void test_volm_matcher_p1()
                << ",\t order = " << (s_in->scene_regions())[i]->order()
                << ",\t orient = " << (s_in->scene_regions())[i]->orient_type()
                << ",\t NLCD_id = " << (s_in->scene_regions())[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[s_in->scene_regions()[i]->nlcd_id()]
+               << " ---> " << (int)volm_nlcd_table::land_id[s_in->scene_regions()[i]->nlcd_id()].first
                << vcl_endl;
     }
   }
 #endif
 
-
+#if 1
   // constrcture the tree
   vcl_stringstream file_name_pre;
   file_name_pre << geo_index_folder << "geo_index_tile_" << tile_id;
@@ -261,6 +260,7 @@ static void test_volm_matcher_p1()
   for (unsigned i = 0; i < ind_vec.size(); i++) {
     ind_vec[i]->finalize();
   }
+#endif
 }
 
 #else // HAS_OPENCL
