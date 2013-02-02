@@ -112,7 +112,7 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
   // generate polygon vector based on defined order
   this->generate_regions();
   ground_orient_ = volm_orient_table::ori_id["horizontal"];
-  sky_orient_ = (unsigned char)100;
+  sky_orient_ = volm_orient_table::ori_id["infinite"];
   vcl_cout << "volm_query generated regions: " << this->depth_regions().size() << " regions! ingesting...\n"; vcl_cout.flush();
   // start to ingest query, with min_dist and order implemented
   this->query_ingest();
@@ -123,6 +123,7 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
   // implement the weight parameters for all objects
   this->weight_ingest();
 }
+
 // build a query from an existing depth map scene
 volm_query::volm_query(vcl_string const& depth_map_scene_file,
                        vcl_string const& image_category,
@@ -504,18 +505,12 @@ bool volm_query::query_ingest()
     vpgl_perspective_camera<double> cam = cameras_[i];
     // put current camera into depth_map_scene
     dm_->set_camera(cam);
-#if 0
-    if (i==0) {
-      vcl_cout << "original camera\n" << cam << '\n'
-               << "from original query code\n";
+    // create an depth image for current camera if there is ground plane
+    vil_image_view<float> depth_img;
+    if (dm_->ground_plane().size()) {
+      depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
     }
-#endif
-#if 1
-    // create an depth image for current camera
-    // dm_->set_camera(cam);
-    // vil_image_view<float> depth_img = dm_->depth_map("ground_plane", 0, d_threshold_);
-    // depth image for the ground plane
-    vil_image_view<float> depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
+    
     // loop over rays on sphere
     unsigned count = 0;
     for (unsigned p_idx = 0; p_idx < query_size_; ++p_idx)
@@ -582,15 +577,11 @@ bool volm_query::query_ingest()
     min_dist_.push_back(min_dist_layer);
     max_dist_.push_back(max_dist_layer);
     order_.push_back(order_layer);
-    ray_count_.push_back(count);
     ground_id_.push_back(ground_id_layer);
     ground_dist_.push_back(ground_dist_layer);
     ground_nlcd_.push_back(ground_nlcd_layer);
     sky_id_.push_back(sky_id_layer);
     dist_id_.push_back(dist_id_layer);
-    //dist_id_.push_back(dist_id_layer);
-#endif
-
 // sperhical layer -- the scene_region is not ordered by its order, so it ruins my basic data structure
 #if 0
     volm_spherical_layers sph_lays(cam, dm_, altitude_, sph_depth_, sph_,
@@ -601,7 +592,6 @@ bool volm_query::query_ingest()
     min_dist_.push_back(sph_lays.min_dist_layer());
     max_dist_.push_back(sph_lays.max_dist_layer());
     order_.push_back(sph_lays.order_layer());
-    ray_count_.push_back(sph_lays.count());
     ground_id_.push_back(sph_lays.ground_id_layer());
     ground_dist_.push_back(sph_lays.ground_dist_layer());
     ground_nlcd_.push_back(sph_lays.ground_nlcd_layer());

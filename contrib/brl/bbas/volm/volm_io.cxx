@@ -18,12 +18,12 @@
 vcl_map<vcl_string, depth_map_region::orientation> create_orient_map()
 {
   vcl_map<vcl_string, depth_map_region::orientation> m;
-  m["vertical"] = depth_map_region::VERTICAL;
   m["horizontal"] = depth_map_region::HORIZONTAL;
+  m["front_parallel"] = depth_map_region::FRONT_PARALLEL;
   m["slanted_right"] = depth_map_region::SLANTED_RIGHT;
   m["slanted_left"] = depth_map_region::SLANTED_LEFT;
   m["porous"] = depth_map_region::POROUS;
-  m["non_planar"] = depth_map_region::NON_PLANAR;
+  m["infinite"] = depth_map_region::INFINT;
   return m;
 }
 

@@ -56,7 +56,6 @@ class volm_query : public vbl_ref_count
   vcl_vector<vcl_vector<unsigned char> >& min_dist()            { return min_dist_;}
   vcl_vector<vcl_vector<unsigned char> >& max_dist()            { return max_dist_;}
   vcl_vector<vcl_vector<unsigned char> >& order()               { return order_; }
-  vcl_vector<unsigned>& valid_ray_num()                         { return ray_count_; }
   vcl_set<unsigned>& order_set()                                { return order_set_; }
   vcl_vector<vcl_vector<vcl_vector<unsigned> > >& order_index() { return order_index_; }
   vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id()     { return dist_id_; }
@@ -82,7 +81,6 @@ class volm_query : public vbl_ref_count
   unsigned get_cam_num() const                                  { return (unsigned)cameras_.size(); }
   unsigned get_obj_order_num() const                            { return (unsigned)order_index_[0].size(); }
   unsigned get_query_size() const                               { return query_size_; }
-  unsigned get_valid_ray_num(unsigned const& cam_idx) const     { return ray_count_[cam_idx]; }
   //vcl_vector<double>& top_fov()                                 { return top_fov_; }
   //vcl_vector<double>& headings()                                { return headings_; }
   //vcl_vector<double>& tilts()                                   { return tilts_; }
@@ -162,8 +160,6 @@ class volm_query : public vbl_ref_count
   vcl_vector<depth_map_region_sptr> depth_regions_;
   //: depth region polygons (maybe not used)
   vcl_vector<vgl_polygon<double> >        dm_poly_;
-  //: number of valid rays for a given camera
-  vcl_vector<unsigned>                  ray_count_;
   //: camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered
   //: vectors store the space of camera hypotheses
   //vcl_vector<double>  top_fov_;
