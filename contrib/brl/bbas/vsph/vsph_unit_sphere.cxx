@@ -446,7 +446,7 @@ display_region_data(vcl_string const & path,
   bvrml_write::write_vrml_sphere(os, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
 
   // write the voxel structure
-  float disc_radius = 0.09f;
+  float disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad);
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vgl_vector_3d<double> ray = cart_pts_[i];
@@ -495,7 +495,7 @@ display_region_color(vcl_string const & path,
   bvrml_write::write_vrml_sphere(os, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
 
   // write the voxel structure
-  float disc_radius = 0.09f;
+  float disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad);
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vgl_vector_3d<double> ray = cart_pts_[i];
@@ -520,6 +520,21 @@ display_region_color(vcl_string const & path,
      <<"}\n";
 }
 
+bool vsph_unit_sphere::operator==(const vsph_unit_sphere &other) const{
+  bool equal = point_angle_ == other.point_angle() && 
+    min_theta_ == other.min_theta() && max_theta_ == other.max_theta();
+  if (!equal)
+    return false;
+  
+  if (this->size() != other.size())
+    return false;
+  const vcl_vector<vsph_sph_point_2d>& osph_pts = other.sph_points();
+  for (unsigned i = 0; i < sph_pts_.size(); i++){
+    if(!(sph_pts_[i]==osph_pts[i]))
+      return false;
+    return true;
+  }
+}
 // =================   binary I/O ==========================
 void vsph_unit_sphere::b_read(vsl_b_istream& is)
 {

@@ -1,12 +1,28 @@
 // This is bbas/vsph/vsph_sph_point_2d.cxx
 #include "vsph_sph_point_2d.h"
-
+#include <vnl/vnl_math.h>
 
 void vsph_sph_point_2d::print(vcl_ostream& os) const
 {
   os << " vsph_sph_point_2d(";
   if(in_radians_) os << "rad"; else os << "deg";
   os << "):[theta=" << theta_ << ",phi=" << phi_ << "] ";
+}
+
+bool vsph_sph_point_2d::operator==(const vsph_sph_point_2d &other) const{
+  double tol = 0.0000001; //close enough for angles in radians
+  double th = theta_, ph = phi_;
+  if(!in_radians_){
+    th /= vnl_math::deg_per_rad;
+    ph /= vnl_math::deg_per_rad;
+  }
+  double oth = other.theta_, oph = other.phi_;
+  if(!other.in_radians_){
+    oth /= vnl_math::deg_per_rad;
+    oph /= vnl_math::deg_per_rad;
+  }
+  double er = vcl_fabs(oth-th) + vcl_fabs(oph - ph);
+  return (er <= tol);
 }
 
 void vsph_sph_point_2d::b_read(vsl_b_istream& is)

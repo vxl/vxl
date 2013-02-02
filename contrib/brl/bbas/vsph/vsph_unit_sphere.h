@@ -67,12 +67,20 @@ class vsph_unit_sphere : public vbl_ref_count
   vsph_sph_point_2d spher_coord(vgl_vector_3d<double> const& cp) const;
 
   //: spherical points
+  // copy
   vcl_vector<vsph_sph_point_2d> sph_points() const{
-          return sph_pts_;}
+    return sph_pts_;}
+  // const reference
+  const vcl_vector<vsph_sph_point_2d>& sph_points_ref() const{
+    return sph_pts_;}
 
-  //: Cartesian points
-  vcl_vector<vgl_vector_3d<double> > cart_points() const{
-          return cart_pts_;}
+  //: Cartesian unit vectors
+  // copy
+  vcl_vector<vgl_vector_3d<double> > cart_vectors() const{
+    return cart_pts_;}
+  // const reference
+  const vcl_vector<vgl_vector_3d<double> >& cart_vectors_ref() const{
+    return cart_pts_;}
 
   //: get the triangle edges
   vcl_vector<vsph_edge> edges() const{return edges_;}
@@ -110,6 +118,7 @@ class vsph_unit_sphere : public vbl_ref_count
   typedef vcl_vector<vsph_sph_point_2d>::const_iterator const_iterator;
   const_iterator begin() const { const_iterator it=sph_pts_.begin(); return it; }
   const_iterator end() const   { const_iterator it=sph_pts_.end();   return it; }
+  bool operator==(const vsph_unit_sphere &other) const;
 
   void print(vcl_ostream& os) const;
 
