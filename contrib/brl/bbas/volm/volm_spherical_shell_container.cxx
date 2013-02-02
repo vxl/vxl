@@ -10,217 +10,47 @@
 #include <vsl/vsl_vector_io.h>
 
 // constructor
-volm_spherical_shell_container::volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle)
-  : radius_(radius),
-    point_angle_(point_angle*vnl_math::pi_over_180),
-    cap_angle_(cap_angle*vnl_math::pi_over_180), top_angle_(top_angle*vnl_math::pi_over_180), bottom_angle_(bottom_angle*vnl_math::pi_over_180)
-{
-  coord_sys_ = new vsph_spherical_coord(vgl_point_3d<double>(0.0,0.0,0.0), radius_);
-  this->add_uniform_views();
-  this->remove_top_and_bottom();
+volm_spherical_shell_container::volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle){
+
+  usph_ = new vsph_unit_sphere(point_angle, top_angle, 180.0-bottom_angle);
 }
 
-void volm_spherical_shell_container::add_uniform_views()
-{
-  // create a octahedron on the sphere, define 6 points for the vertices of the triangles
-  double radius = radius_;
-  vgl_point_3d<double> center = coord_sys_->origin();
-  vcl_vector<vgl_point_3d<double> > verts;
-  vgl_point_3d<double> v1(center.x(),center.y(),center.z()+radius); verts.push_back(v1);
-  vgl_point_3d<double> v2(center.x(),center.y(),center.z()-radius); verts.push_back(v2);
-  vgl_point_3d<double> v3(center.x()+radius,center.y(),center.z()); verts.push_back(v3);
-  vgl_point_3d<double> v4(center.x()-radius,center.y(),center.z()); verts.push_back(v4);
-  vgl_point_3d<double> v5(center.x(),center.y()+radius,center.z()); verts.push_back(v5);
-  vgl_point_3d<double> v6(center.x(),center.y()-radius,center.z()); verts.push_back(v6);
-
-  // vector of triangles (vector of 3 points, only indices of the vertices kept)
-  vcl_vector<vcl_vector<int> > triangles;
-
-  vcl_vector<int> tri1;
-  tri1.push_back(0); tri1.push_back(2); tri1.push_back(4); triangles.push_back(tri1);
-
-  vcl_vector<int> tri2;
-  tri2.push_back(0); tri2.push_back(4); tri2.push_back(3); triangles.push_back(tri2);
-
-  vcl_vector<int> tri3;
-  tri3.push_back(0); tri3.push_back(3); tri3.push_back(5); triangles.push_back(tri3);
-
-  vcl_vector<int> tri4;
-  tri4.push_back(0); tri4.push_back(5); tri4.push_back(2); triangles.push_back(tri4);
-
-  vcl_vector<int> tri5;
-  tri5.push_back(1); tri5.push_back(2); tri5.push_back(4); triangles.push_back(tri5);
-
-  vcl_vector<int> tri6;
-  tri6.push_back(1); tri6.push_back(3); tri6.push_back(4); triangles.push_back(tri6);
-
-  vcl_vector<int> tri7;
-  tri7.push_back(1); tri7.push_back(5); tri7.push_back(3); triangles.push_back(tri7);
-
-  vcl_vector<int> tri8;
-  tri8.push_back(1); tri8.push_back(2); tri8.push_back(5); triangles.push_back(tri8);
-  // iteratively refine the triangles
-  // check the angle between two vertices (of the same triangle),
-  // use the center of the spherical coordinate system
-  // vgl_vector_3d<double> vector1=verts[triangles[0][0]]-center;
-  // vgl_vector_3d<double> vector2=verts[triangles[0][1]]-center;
-
-  bool done=false;
-  while (!done) {
-    vcl_vector<vcl_vector<int> >  new_triangles;
-    int ntri=(int)triangles.size();
-    for (int i=0; i<ntri; i++) {
-      vcl_vector<int> points;
-      for (int j=0; j<3; j++) {
-        // find the mid points of edges
-        int next=j+1; if (next == 3) next=0;
-        vgl_line_segment_3d<double> edge1(verts[triangles[i][j]],verts[triangles[i][next]]);
-        vgl_point_3d<double> mid=edge1.point_t(0.5);
-
-        // move the point onto the surface of the sphere
-        vsph_sph_point_3d sv;
-        coord_sys_->spherical_coord(mid, sv);
-        coord_sys_->move_point(sv);
-        mid = coord_sys_->cart_coord(sv);
-
-        // add a new vertex for mid points of the edges of the triangle
-        int idx = (int)verts.size();
-        verts.push_back(mid);
-
-        points.push_back(triangles[i][j]);  // existing vertex of the bigger triangle
-        points.push_back(idx);              // new mid-point vertex
-      }
-
-      // add new samller 4 triangles instead of the old big one
-      /******************************
-                   /\
-                  /  \
-                 /    \
-                /      \
-               /--------\
-              / \      / \
-             /   \    /   \
-            /     \  /     \
-           /       \/       \
-           -------------------
-      *******************************/
-      done=true;
-      vcl_vector<int> list(3); list[0]=points[0]; list[1]=points[5]; list[2]=points[1];
-      new_triangles.push_back(list);
-      // check for point_angles
-      vcl_vector<vgl_point_3d<double> > triangle;
-      triangle.push_back(verts[list[0]]); triangle.push_back(verts[list[1]]); triangle.push_back(verts[list[2]]);
-      if (!min_angle(triangle, point_angle_)) done=false;
-
-      list[0]=points[1]; list[1]=points[3]; list[2]=points[2];
-      new_triangles.push_back(list);
-      triangle.clear();
-      triangle.push_back(verts[list[0]]); triangle.push_back(verts[list[1]]); triangle.push_back(verts[list[2]]);
-      if (!min_angle(triangle, point_angle_)) done=false;
-
-      list[0]=points[3]; list[1]=points[5]; list[2]=points[4];
-      new_triangles.push_back(list);
-      triangle.clear();
-      triangle.push_back(verts[list[0]]); triangle.push_back(verts[list[1]]); triangle.push_back(verts[list[2]]);
-      if (!min_angle(triangle, point_angle_)) done=false;
-
-      list[0]=points[1]; list[1]=points[5]; list[2]=points[3];
-      new_triangles.push_back(list);
-      triangle.clear();
-      triangle.push_back(verts[list[0]]); triangle.push_back(verts[list[1]]); triangle.push_back(verts[list[2]]);
-      if (!min_angle(triangle, point_angle_)) done=false;
-    }
-#if 0
-    // check the angle again to see if the threshold is met
-    vgl_vector_3d<double> vector1=verts[new_triangles[0][0]]-center;
-    vgl_vector_3d<double> vector2=verts[new_triangles[0][1]]-center;
-#endif
-    triangles.clear();
-    triangles=new_triangles;
-  }  // done for the refine process
-
-  // refine the vertices to points, eliminate duplicate ones and
-  // also eliminate the ones below given elevation
-  int ntri=(int)triangles.size();
-  for (int i=0; i<ntri; i++) {
-    for (int j=0; j<3; j++) {
-      vsph_sph_point_3d sv;
-      coord_sys_->spherical_coord(verts[triangles[i][j]], sv);
-      if (sv.theta_ < cap_angle_) {
-        double dist;
-        if ( find_closest(verts[triangles[i][j]],dist) ) {
-          if (dist > 0.0001) { // make sure the two points are far enough
-            cart_points_.push_back(verts[triangles[i][j]]);
-            sph_points_.push_back(sv);
-          }
-        }
-        else {
-          cart_points_.push_back(verts[triangles[i][j]]);
-          sph_points_.push_back(sv);
-        }
-      }
-    }
-  }
+//: Minimal constructor (to internally construct vsph_unit_sphere)
+volm_spherical_shell_container::
+volm_spherical_shell_container(double point_angle, double min_theta,
+			       double max_theta){
+  usph_ = new vsph_unit_sphere(point_angle, min_theta, max_theta);
 }
 
-void volm_spherical_shell_container::remove_top_and_bottom()
-{
-  vcl_vector<vgl_point_3d<double> > cart_points_new;
-  vcl_vector<vsph_sph_point_3d> sph_points_new;
-  for (unsigned i = 0; i < sph_points_.size(); i++) {
-    if (sph_points_[i].theta_ > top_angle_ && sph_points_[i].theta_ < vnl_math::pi - bottom_angle_) {
-      sph_points_new.push_back(sph_points_[i]);
-      cart_points_new.push_back(cart_points_[i]);
-    }
+vcl_vector<vgl_point_3d<double> > volm_spherical_shell_container::cart_points() const{
+  const vcl_vector<vgl_vector_3d<double> >& cart_vects = usph_->cart_vectors_ref();
+  unsigned n  = cart_vects.size();
+  vcl_vector<vgl_point_3d<double> > temp(n);
+  for(unsigned i = 0; i<n; ++i){
+    const vgl_vector_3d<double>& v = cart_vects[i];
+    temp[i].set(v.x(), v.y(), v.z());
   }
-
-  sph_points_.clear();
-  sph_points_ = sph_points_new;
-  cart_points_.clear();
-  cart_points_ = cart_points_new;
+  return temp;
 }
-
-
-bool volm_spherical_shell_container::find_closest(vgl_point_3d<double> p, double& dist)
-{
-  double min_dist = 1E20;
-  int uid = -1;
-  for (unsigned i = 1; i < (unsigned)cart_points_.size(); i++) {
-    vgl_point_3d<double> cp = cart_points_[i];
-    double d = vgl_distance(cp,p);
-    if (d < min_dist) {
-      min_dist = d;
-      uid = i;
-    }
-  }
-  dist = min_dist;
-  if (uid > -1)
-    return true;
-  else
-    return false;
-}
-
-
-bool volm_spherical_shell_container::min_angle(vcl_vector<vgl_point_3d<double> > list, double point_angle)
-{
-  if (list.size() < 2)
-    return false;
-
-  vgl_point_3d<double> center = coord_sys_->origin();
-  for (unsigned i=0; (unsigned)i<list.size(); i++) {
-    unsigned next = i+1;
-    if (next == list.size()) next = 0;
-    vgl_vector_3d<double> vector1=list[i]-center;
-    vgl_vector_3d<double> vector2=list[next]-center;
-    if (angle(vector1, vector2) > point_angle)
-      return false;
-  }
-  return true;
+// the angle units are as maintained in usph_
+vcl_vector<vsph_sph_point_3d> volm_spherical_shell_container::sph_points() const{
+  const vcl_vector<vsph_sph_point_2d>& sph_pts = usph_->sph_points_ref();
+  unsigned n  = sph_pts.size();
+  vcl_vector<vsph_sph_point_3d> temp(n);
+  for(unsigned i = 0; i<n; ++i)
+    temp[i].set(1.0, sph_pts[i].theta_, sph_pts[i].phi_);
+  return temp;
 }
 
 void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
 {
   vcl_ofstream ofs(vrml_file_name.c_str());
+  if(!ofs.is_open()){
+    vcl_cout << " in ::draw_template vrml path does not exist - " 
+	     << vrml_file_name << '\n';
+    return;
+  }
+  vcl_vector<vgl_point_3d<double> > cart_pts = this->cart_points();
   // write the header
   bvrml_write::write_vrml_header(ofs);
   // write a world center and world axis
@@ -238,8 +68,8 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
   // write the voxel structure
 
   vgl_point_3d<double> orig(0.0,0.0,0.0);
-  for (unsigned i = 0; i < cart_points_.size(); i++) {
-    vgl_vector_3d<double> ray = cart_points_[i]-orig;
+  for (unsigned i = 0; i < cart_pts.size(); i++) {
+    vgl_vector_3d<double> ray = cart_pts[i]-orig;
     //bvrml_write::write_vrml_line(ofs, orig, ray, 10.0f, 0.0f, 0.0f, 1.0f);
     bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 0.5f, 0.0f, 0.0f, 1.0f);
   }
@@ -249,9 +79,16 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
 //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
 void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vcl_vector<unsigned char>& values, unsigned char special)
 {
-  assert(values.size() == cart_points_.size());
+  assert(values.size() == usph_->size());
 
   vcl_ofstream ofs(vrml_file_name.c_str());
+  if(!ofs.is_open()){
+    vcl_cout << " in ::draw_template vrml path does not exist - " 
+	     << vrml_file_name << '\n';
+    return;
+  }
+  vcl_vector<vgl_point_3d<double> > cart_pts = this->cart_points();
+
   // write the header
   bvrml_write::write_vrml_header(ofs);
   // write a world center and world axis
@@ -272,8 +109,8 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vc
   // write the voxel structure
   float disc_radius = 0.09f;
   vgl_point_3d<double> orig(0.0,0.0,0.0);
-  for (unsigned i = 0; i < cart_points_.size(); i++) {
-    vgl_vector_3d<double> ray = cart_points_[i]-orig;
+  for (unsigned i = 0; i < cart_pts.size(); i++) {
+    vgl_vector_3d<double> ray = cart_pts[i]-orig;
     if (values[i] == special)
       bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, disc_radius, 1.0f, 1.0f, 0.0f);
     else if (values[i] == 253) // invalid
@@ -288,11 +125,12 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vc
 //  create an image with width 360 and height 180 to pour all the ray values such that left most column is east direction, and the viewsphere is painted clockwise
 void volm_spherical_shell_container::panaroma_img(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
 {
-  assert(values.size() == sph_points_.size());
+  assert(values.size() == usph_->size());
+  vcl_vector<vsph_sph_point_3d> sph_pts = this->sph_points();
   img.set_size(360, 180);
   img.fill(127);
-  for (unsigned i = 0; i < sph_points_.size(); i++) {
-    vsph_sph_point_3d pt = sph_points_[i];
+  for (unsigned i = 0; i < sph_pts.size(); i++) {
+    vsph_sph_point_3d pt = sph_pts[i];
     unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180.0+0.5);
     unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180.0+0.5);
     if (values[i] == 253) { // invalid
@@ -313,11 +151,12 @@ void volm_spherical_shell_container::panaroma_img(vil_image_view<vil_rgb<vxl_byt
 
 void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
 {
-  assert(values.size() == sph_points_.size());
+  assert(values.size() == usph_->size());
+  vcl_vector<vsph_sph_point_3d> sph_pts = this->sph_points();
   img.set_size(360, 180);
   img.fill(127);
-  for (unsigned i = 0; i < sph_points_.size(); i++) {
-    vsph_sph_point_3d pt = sph_points_[i];
+  for (unsigned i = 0; i < sph_pts.size(); i++) {
+    vsph_sph_point_3d pt = sph_pts[i];
     unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180.0+0.5);
     unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180.0+0.5);
     if (values[i] == 253) { // invalid
@@ -340,11 +179,12 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
 
 void volm_spherical_shell_container::panaroma_img_orientations(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
 {
-  assert(values.size() == sph_points_.size());
+  assert(values.size() == usph_.size());
+  vcl_vector<vsph_sph_point_3d> sph_pts = this->sph_points();
   img.set_size(360, 180);
   img.fill(127);
-  for (unsigned i = 0; i < sph_points_.size(); i++) {
-    vsph_sph_point_3d pt = sph_points_[i];
+  for (unsigned i = 0; i < sph_pts.size(); i++) {
+    vsph_sph_point_3d pt = sph_pts[i];
     unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180.0+0.5);
     unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180.0+0.5);
     if (values[i] == 253) { // invalid
@@ -370,16 +210,7 @@ void volm_spherical_shell_container::b_write(vsl_b_ostream& os)
 {
   unsigned ver = this->version();
   vsl_b_write(os, ver);
-  vsl_b_write(os, radius_);
-  vsl_b_write(os, point_angle_);
-  vsl_b_write(os, cap_angle_);
-  vsl_b_write(os, top_angle_);
-  vsl_b_write(os, bottom_angle_);
-  coord_sys_->b_write(os);
-  vsl_b_write(os, cart_points_);
-  vsl_b_write(os, (unsigned)sph_points_.size());
-  for (unsigned i = 0; i < cart_points_.size(); i++)
-    vsl_b_write(os, sph_points_[i]);
+  vsl_b_write(os, usph_);
 }
 
 //: binary IO read
@@ -388,21 +219,7 @@ void volm_spherical_shell_container::b_read(vsl_b_istream& is)
   unsigned ver;
   vsl_b_read(is, ver);
   if (ver ==1) {
-    vsl_b_read(is, radius_);
-    vsl_b_read(is, point_angle_);
-    vsl_b_read(is, cap_angle_);
-    vsl_b_read(is, top_angle_);
-    vsl_b_read(is, bottom_angle_);
-    coord_sys_ = new vsph_spherical_coord;
-    coord_sys_->b_read(is);
-    vsl_b_read(is, cart_points_);
-    unsigned size;
-    vsl_b_read(is, size);
-    for (unsigned i = 0; i < size; i++) {
-      vsph_sph_point_3d pt;
-      vsl_b_read(is, pt);
-      sph_points_.push_back(pt);
-    }
+    vsl_b_read(is, usph_);
   }else{
     vcl_cerr << "volm_spherical_shell_container - unknown binary io version " << ver <<'\n';
     return;
@@ -411,22 +228,5 @@ void volm_spherical_shell_container::b_read(vsl_b_istream& is)
 
 bool volm_spherical_shell_container::operator== (const volm_spherical_shell_container &other) const
 {
-  bool equal = radius_ == other.radius_ && point_angle_ == other.point_angle_ && cap_angle_ == other.cap_angle_ && 
-    top_angle_ == other.top_angle_ && bottom_angle_ == other.bottom_angle_;
-  if (!equal)
-    return false;
-  
-  if (cart_points_.size() != other.cart_points_.size() || sph_points_.size() != other.sph_points_.size())
-    return false;
-
-  for (unsigned i = 0; i < cart_points_.size(); i++)
-    if (cart_points_[i] != other.cart_points_[i])
-      return false;
-  for (unsigned i = 0; i < sph_points_.size(); i++)
-    if (sph_points_[i].radius_ != other.sph_points_[i].radius_ ||
-        sph_points_[i].phi_ != other.sph_points_[i].phi_ ||
-        sph_points_[i].theta_ != other.sph_points_[i].theta_)
-      return false;
-  
-  return true;
+  return *usph_ == *(other.unit_sphere());
 }

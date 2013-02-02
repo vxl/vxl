@@ -16,7 +16,12 @@
 // \date October 24, 2012
 // \verbatim
 //  Modifications
-//
+// February 2, 2013
+// Replaced the internals of this class by the more basic vsph_unit_sphere
+// Older constructors are maintained for compatiblity. For example,
+// radius_ is no longer needed since its value is always one. Note also that
+// cap_angle is no longer used since min,max theta accomplish the same
+// purpose.
 // \endverbatim
 //
 
@@ -27,6 +32,7 @@
 #include <vsph/vsph_spherical_coord_sptr.h>
 #include <vsph/vsph_spherical_coord.h>
 #include <vsph/vsph_sph_point_3d.h>
+#include <vsph/vsph_unit_sphere.h>
 #include <vil/vil_image_view.h>
 
 class volm_spherical_shell_container : public vbl_ref_count
@@ -34,19 +40,30 @@ class volm_spherical_shell_container : public vbl_ref_count
  public:
   //: Default constructor
   volm_spherical_shell_container() {}
-  //: Constructor
+  //: Legacy Constructor
   volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle);
+  //: Minimal constructor (to internally construct vsph_unit_sphere)
+  volm_spherical_shell_container(double point_angle, double min_theta,
+				 double max_theta);
+  //: Construct using an existing unit sphere smart ptr
+ volm_spherical_shell_container(vsph_unit_sphere_sptr usph_ptr) : 
+  usph_(usph_ptr){}
 
   // === accessors ===
 
-  double cap_angle() const { return cap_angle_; }
-  double radius() const { return radius_; }
-  double point_angle() const { return point_angle_; }
-  vgl_point_3d<double> cent() const { return coord_sys_->origin(); }
-  vcl_vector<vgl_point_3d<double> >& cart_points() { return cart_points_; }
-  vcl_vector<vsph_sph_point_3d>& sph_points() { return sph_points_;}
+  double cap_angle() const { return 180.0; }
+  double radius() const { return 1.0; }
+  double point_angle() const { return usph_->point_angle(); }
+  double top_angle() const {return usph_->min_theta();}
+  double bottom_angle() const {return (180.0 - usph_->max_theta());}
+  vgl_point_3d<double> cent() const { return vgl_point_3d<double>(0.0, 0.0, 0.0);}
+  vcl_vector<vgl_point_3d<double> > cart_points() const;
 
-  vcl_size_t get_container_size() const { return cart_points_.size(); }
+  vcl_vector<vsph_sph_point_3d> sph_points() const;
+
+  vsph_unit_sphere_sptr unit_sphere() const {return usph_;}
+
+  vcl_size_t get_container_size() const { return usph_->size(); }
   
   void draw_template(vcl_string vrml_file_name);
   //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
@@ -70,20 +87,7 @@ class volm_spherical_shell_container : public vbl_ref_count
   bool operator== (const volm_spherical_shell_container &other) const;
     
  protected:
-  void add_uniform_views();
-  bool min_angle(vcl_vector<vgl_point_3d<double> > list, double point_angle);
-  bool find_closest(vgl_point_3d<double> p, double& dist);
-  void remove_top_and_bottom();
-  
-  double radius_;
-  double point_angle_;
-  double cap_angle_;
-  double top_angle_;
-  double bottom_angle_;
-  vsph_spherical_coord_sptr coord_sys_;
-  vcl_vector<vgl_point_3d<double> > cart_points_;
-  vcl_vector<vsph_sph_point_3d> sph_points_;
-  
+  vsph_unit_sphere_sptr usph_;
 };
 
 #endif  // volm_spherical_shell_container_h_

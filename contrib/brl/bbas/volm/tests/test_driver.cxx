@@ -10,6 +10,7 @@ DECLARE( test_index );
 DECLARE( test_camera_space );
 DECLARE( test_region_query );
 
+
 void
 register_tests()
 {
@@ -21,6 +22,7 @@ register_tests()
   REGISTER( test_index );
   REGISTER( test_camera_space );
   REGISTER( test_region_query );
+
 }
 
 DEFINE_MAIN;
