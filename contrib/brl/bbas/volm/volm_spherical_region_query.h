@@ -21,7 +21,7 @@
 #include <volm/volm_spherical_container_sptr.h>
 #include <volm/volm_spherical_shell_container_sptr.h>
 #include <volm/volm_spherical_query_region.h>
-#include <volm/volm_spherical_layers.h>
+#include <vsph/vsph_unit_sphere_sptr.h>
 class volm_spherical_region_query
 {
  public:
@@ -29,9 +29,17 @@ class volm_spherical_region_query
                               volm_camera_space_sptr const& cam_space,
                               volm_spherical_container_sptr const& sph_vol);
 
-  void construct_spherical_regions();
+
+
+  vcl_vector<volm_spherical_query_region> query_regions(unsigned roll_indx);
+
+  //: display query regions on the surface of a unit sphere
+  void display_query_regions(vsph_unit_sphere_sptr const& usph_ptr,
+			     vcl_string const& path, unsigned roll_index);
+
 
  private:
+  void construct_spherical_regions();
   depth_map_scene_sptr dm_scene_;
   volm_camera_space_sptr cam_space_;
   volm_spherical_container_sptr sph_vol_;

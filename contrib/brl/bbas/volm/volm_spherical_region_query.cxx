@@ -16,11 +16,6 @@ volm_spherical_region_query(depth_map_scene_sptr const& dm_scene,
 
 void volm_spherical_region_query::construct_spherical_regions()
 {
-#if 0 // 2 unused variables
-  // roll affects the shape of the axis-aligned boxes on the sphere
-  double roll_start = cam_space_->roll_mid()-cam_space_->roll_radius();
-  double rinc = cam_space_->roll_inc();
-#endif
   unsigned n_roll = cam_space_->n_roll();
   unsigned roll_idx = 0;
   for ( roll_idx = 0; roll_idx < n_roll; ++roll_idx) {
@@ -57,4 +52,15 @@ void volm_spherical_region_query::construct_spherical_regions()
       sph_regions_[roll_idx].push_back(sph_reg);
     }
   }
+}
+vcl_vector<volm_spherical_query_region> volm_spherical_region_query::
+query_regions(unsigned roll_indx) {
+  return sph_regions_[roll_indx];
+}
+
+void volm_spherical_region_query::
+display_query_regions(vsph_unit_sphere_sptr const& usph_ptr,
+		      vcl_string const& path, unsigned roll_index){
+  vcl_vector<volm_spherical_query_region>& qrs = sph_regions_[roll_index];
+  vcl_vector<vcl_vector<float> > region_color;
 }

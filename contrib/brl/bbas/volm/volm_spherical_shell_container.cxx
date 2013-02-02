@@ -179,7 +179,7 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
 
 void volm_spherical_shell_container::panaroma_img_orientations(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
 {
-  assert(values.size() == usph_.size());
+  assert(values.size() == usph_->size());
   vcl_vector<vsph_sph_point_3d> sph_pts = this->sph_points();
   img.set_size(360, 180);
   img.fill(127);

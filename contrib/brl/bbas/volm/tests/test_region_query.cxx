@@ -45,6 +45,10 @@ static void test_region_query()
                           tilt_mid, tilt_radius, tilt_inc,
                           roll_mid, roll_radius, roll_inc);
   volm_spherical_region_query srq(dms, cs_ptr, sph);
+  
+
+
+
 #if 0
   /// test unit sphere equivalence
   // create spherical shell for query rays
