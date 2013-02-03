@@ -29,7 +29,9 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
 {
   vcl_string name = vul_file::strip_directory(file_name);
   name = name.substr(name.find_first_of('_')+1, name.size());
-  //vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
+#endif
   vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
   assert(n.size() != 0);  // for now there is no support for 'S' and/or 'E'
   hemisphere_ = 'N';
@@ -44,11 +46,13 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
   vcl_stringstream str3(n); str3 >> scale_i_;
   n = name.substr(name.find_first_of('x')+1, name.find_last_of('.'));
   vcl_stringstream str4(n); str4 >> scale_j_;
-  //vcl_cout << " lat: " << lat_ << " lon: " << lon_ << " scale_i:" << scale_i_ << " scale_j: " << scale_j_ << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << " lat: " << lat_ << " lon: " << lon_ << " scale_i:" << scale_i_ << " scale_j: " << scale_j_ << vcl_endl;
 
   // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
-  //vcl_cout << "upper left corner in the image is: " << lat_+scale_j_ << " N " << lon_ << " W\n"
-  //          << "lower right corner in the image is: " << lat_ << " N " << lon_-scale_i_ << " W" << vcl_endl;
+  vcl_cout << "upper left corner in the image is: " << lat_+scale_j_ << " N " << lon_ << " W\n"
+           << "lower right corner in the image is: " << lat_ << " N " << lon_-scale_i_ << " W" << vcl_endl;
+#endif
   vnl_matrix<double> trans_matrix(4,4,0.0);
   trans_matrix[0][0] = -scale_i_/ni; trans_matrix[1][1] = -scale_j_/nj;
   trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
@@ -214,9 +218,13 @@ double volm_tile::calculate_height()
 
 void volm_tile::get_uncertainty_region(float lambda_i, float lambda_j, float cutoff, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel)
 {
+#if 0
   //brip_vil_float_ops::extrema_kernel_mask(lambda_i, lambda_j, 0.0, kernel, mask, cutoff);
   //brip_vil_float_ops::gaussian_kernel_mask(lambda_i, lambda_j, 0.0, kernel, mask, cutoff, true);
+#else
+  assert(lambda_i == lambda_j);
   brip_vil_float_ops::gaussian_kernel_square_mask(lambda_i, kernel, mask, cutoff);
+#endif
   unsigned nrows = (unsigned)mask.rows();
   unsigned ncols = (unsigned)mask.cols();
   float kernel_max = kernel[nrows/2][ncols/2];
@@ -345,7 +353,7 @@ volm_tile volm_tile::parse_string(vcl_string& filename)
   vcl_stringstream str2(n); str2 >> lon;
   n = name.substr(name.find_first_of('x')+1, name.find_last_of('.'));
   vcl_stringstream str3(n); str3 >> scale;
-  vcl_cout << " lat: " << lat << " lon: " << lon << " scale:" << scale << vcl_endl;
+  vcl_cout << " lat: " << lat << " lon: " << lon << " scale: " << scale << vcl_endl;
 }
 #endif
 
