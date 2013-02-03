@@ -24,15 +24,17 @@ static void test_tile()
   unsigned i, j;
   tiles[0].img_to_global(0, tiles[0].nj_-1, lon2, lat2);
   TEST("tile1 global to img", tiles[0].global_to_img(lon2, lat2, i, j), true);
-  TEST("tile1 global to img", i == 0, true);
-  TEST("tile1 global to img", j == tiles[0].nj_-1, true);
+  TEST("tile1 global to img", i, 0);
+  vcl_cout << "j=" << j << ", tiles[0].nj_ = " <<  tiles[0].nj_ << '\n';
+  TEST("tile1 global to img", j+1, tiles[0].nj_);
   
   TEST("tile1 global to img", tiles[0].global_to_img(lon2+5, lat2, i, j), false);
   
   volm_tile tt(37, -118, tiles[0].scale_i_, tiles[0].scale_j_, tiles[0].ni_, tiles[0].nj_);
   TEST("tt global to img", tt.global_to_img(lon2, lat2, i, j), true);
-  TEST("tt global to img", i == 0, true);
-  TEST("tt global to img", j == tt.nj_-1, true);
+  TEST("tt global to img", i, 0);
+  vcl_cout << "j=" << j << ", tt.nj_ = " <<  tt.nj_ << '\n';
+  TEST("tt global to img", j+1, tt.nj_);
 
   //volm_tile ttt(37.622991f, 118.209999f, 'N', 'W', 1.108007f, 0.930012f, (unsigned)10000, (unsigned)10000);
   volm_tile ttt(37.622991f, 118.209999f, 'N', 'W', 1.0f, 0.9f, (unsigned)10000, (unsigned)10000);
@@ -51,20 +53,22 @@ static void test_tile()
   TEST("tile 2", t.lat_, 37);
   double lat3, lon3;
   t.img_to_global(0, t.nj_, lon3, lat3);
-  TEST_NEAR("tile 2 img to global lat ", lat3, lat2, 0.01);
-  TEST_NEAR("tile 2 img to global lon ", lon3, lon2, 0.01);
+  TEST_NEAR("tile 2 img to global lat", lat3, lat2, 0.01);
+  TEST_NEAR("tile 2 img to global lon", lon3, lon2, 0.01);
 
-  vil_image_view<float> img = vil_load("I:/Public_LIDAR/2_meter_lidar_tiles/lidar_N32.7500W079.8750_S0.0625x0.0625.tif");
-  volm_tile ttest("I:/Public_LIDAR/2_meter_lidar_tiles/lidar_N32.7500W079.8750_S0.0625x0.0625.tif", img.ni(), img.nj());
+  vil_image_view<float> img = vil_load("lidar_N32.7500W079.8750_S0.0625x0.0625.tif");
+  TEST("Load lidar?", !img, false);
+  if (img) {
+    volm_tile ttest("lidar_N32.7500W079.8750_S0.0625x0.0625.tif", img.ni(), img.nj());
 
-  lat = 32.776000;
-  lon = -79.813000;
-  unsigned ii, jj;
-  bool inside = ttest.global_to_img(lon, lat, ii, jj);
-  double val = img(ii, jj);
-  vcl_cout << val;
-
+    lat = 32.776000;
+    lon = -79.813000;
+    unsigned ii, jj;
+    bool inside = ttest.global_to_img(lon, lat, ii, jj);
+    TEST("Inside?", inside, true);
+    double val = img(ii, jj);
+    vcl_cout << val;
+  }
 }
-
 
 TESTMAIN(test_tile);
