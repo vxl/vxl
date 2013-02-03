@@ -33,7 +33,7 @@
 
 namespace boxm2_create_index_process2_globals
 {
-  const unsigned n_inputs_ = 17;
+  const unsigned n_inputs_ = 14;
   const unsigned n_outputs_ = 0;
 
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
@@ -93,14 +93,11 @@ bool boxm2_create_index_process2_cons(bprb_func_process& pro)
   input_types_[6] = "float"; // minimum voxel resolution to create spherical container
   input_types_[7] = "float"; // maximum distance in the world that the spherical container will cover
   input_types_[8] = "float"; // the solid angle for the spherical container, the resolution of the voxels will get coarser based on this angle
-  input_types_[9] = "float"; // cap angle to create the spherical shell container  -- 180 for full sphere, 90 for half sphere
-  input_types_[10] = "float"; // point angle to create the spherical shell container
-  input_types_[11] = "float"; // top angle to remove from shp shell
-  input_types_[12] = "float"; // bottom angle to remove from sph sheel
-  input_types_[13] = "vcl_string"; // name of output folder to save index binaries for each leaf node
-  input_types_[14] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
-  input_types_[15] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
-  input_types_[16] = "int"; // the leaf id of the tile, if passed as -1 then run on all leaves
+  input_types_[9] = "vcl_string"; // name of the binary file to read spherical rays
+  input_types_[10] = "vcl_string"; // name of output folder to save index binaries for each leaf node
+  input_types_[11] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
+  input_types_[12] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
+  input_types_[13] = "int"; // the leaf id of the tile, if passed as -1 then run on all leaves
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
@@ -144,10 +141,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   params.vmin = pro.get_input<float>(i++);
   params.dmax = pro.get_input<float>(i++);
   params.solid_angle = pro.get_input<float>(i++);
-  params.cap_angle = pro.get_input<float>(i++);
-  params.point_angle = pro.get_input<float>(i++); 
-  params.top_angle = pro.get_input<float>(i++); 
-  params.bottom_angle = pro.get_input<float>(i++); 
+  vcl_string ray_file = pro.get_input<vcl_string>(i++);
   vcl_string out_index_folder = pro.get_input<vcl_string>(i++);
   float vis_thres = pro.get_input<float>(i++);
   float buffer_capacity = pro.get_input<float>(i++);
@@ -178,11 +172,17 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
     return false;
   }
 
-  // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
-  double radius = 1;
-  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
-  params.layer_size = sph_shell->get_container_size();
+  // read spherical shell container 
+  vsl_b_ifstream ifs(ray_file);
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
+  sph_shell->b_read(ifs);
+  ifs.close();
+
+  params.layer_size = (unsigned)sph_shell->get_container_size();
   int layer_size = (int)params.layer_size; 
+
+  vcl_stringstream out_sph_namet; out_sph_namet << out_index_folder << "geo_index_tile_" << tile_id << "_index_sph_shell.vrml";
+  sph_shell->draw_template(out_sph_namet.str());
 
   //: adjust dmax if scene has very few blocks
   float dmax = params.dmax;
@@ -222,7 +222,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
 
   // create directions buffer
   cl_float* ray_dirs = new cl_float[4*layer_size];
-  vcl_vector<vgl_point_3d<double> >& cart_points = sph_shell->cart_points();
+  vcl_vector<vgl_point_3d<double> > cart_points = sph_shell->cart_points();
   for (int i = 0; i < layer_size; ++i) {
     ray_dirs[4*i  ] = (cl_float)cart_points[i].x();
     ray_dirs[4*i+1] = (cl_float)cart_points[i].y();
@@ -284,8 +284,9 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
       if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << ".";
       double lx, ly, lz;
       lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
-      lz = 2.0*(vcl_ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model
-      lz = lz - elev_dif;  // this is where the camera is
+      //lz = 2.0*(vcl_ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model
+      lz = vcl_ceil(lz); // get ceil to get terrain height for world with res 1 m
+      lz = lz - elev_dif;  // the camera is elev dif above the terrain height
       vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
 
       cl_float loc_arr[4];
@@ -403,7 +404,6 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
 
         //remove from device memory unnecessary items
         //opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        //opencl_cache->shallow_remove_block(id_inner); // also remove blk_info
         //opencl_cache->clear_cache();
 
         status = clFinish(queue);
@@ -481,6 +481,8 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
     }
     ind->finalize();
     boxm2_volm_wr3db_index_params::write_size_file(index_file, indexed_cnt);
+
+    opencl_cache->clear_cache();
   }
 
   delete ray_dir_buffer;

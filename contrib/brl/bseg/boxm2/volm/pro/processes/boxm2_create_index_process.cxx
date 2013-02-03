@@ -32,7 +32,7 @@
 
 namespace boxm2_create_index_process_globals
 {
-  const unsigned n_inputs_ = 17;
+  const unsigned n_inputs_ = 14;
   const unsigned n_outputs_ = 0;
 
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
@@ -93,13 +93,10 @@ bool boxm2_create_index_process_cons(bprb_func_process& pro)
   input_types_[7] = "float"; // minimum voxel resolution to create spherical container
   input_types_[8] = "float"; // maximum distance in the world that the spherical container will cover
   input_types_[9] = "float"; // the solid angle for the spherical container, the resolution of the voxels will get coarser based on this angle
-  input_types_[10] = "float"; // cap angle to create the spherical shell container  -- 180 for full sphere, 90 for half sphere
-  input_types_[11] = "float"; // point angle to create the spherical shell container
-  input_types_[12] = "float"; // top angle to remove from shp shell
-  input_types_[13] = "float"; // bottom angle to remove from sph sheel
-  input_types_[14] = "vcl_string"; // name of output file to save the index
-  input_types_[15] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
-  input_types_[16] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
+  input_types_[10] = "vcl_string"; // ray array binary file
+  input_types_[11] = "vcl_string"; // name of output file to save the index
+  input_types_[12] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
+  input_types_[13] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
@@ -143,10 +140,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   params.vmin = pro.get_input<float>(i++);
   params.dmax = pro.get_input<float>(i++);
   params.solid_angle = pro.get_input<float>(i++);
-  params.cap_angle = pro.get_input<float>(i++);
-  params.point_angle = pro.get_input<float>(i++);
-  params.top_angle = pro.get_input<float>(i++);
-  params.bottom_angle = pro.get_input<float>(i++);
+  vcl_string ray_file = pro.get_input<vcl_string>(i++);
   vcl_string index_file = pro.get_input<vcl_string>(i++);
   float vis_thres = pro.get_input<float>(i++);
   float buffer_capacity = pro.get_input<float>(i++);
@@ -163,16 +157,21 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   volm_loc_hyp hyp(hyp_file);
   vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file << vcl_endl;
 
-  // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
-  double radius = 1;
-  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
-  params.layer_size = sph_shell->get_container_size();
-  int layer_size = (int)params.layer_size;
+  // read spherical shell container 
+  vsl_b_ifstream ifs(ray_file);
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
+  sph_shell->b_read(ifs);
+  ifs.close();
+
+  params.layer_size = (unsigned)sph_shell->get_container_size();
+  int layer_size = (int)params.layer_size; 
+
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, buffer_capacity);
   if (!ind->initialize_write(index_file)) {
     vcl_cerr << "Cannot initialize " << index_file << " for write!\n";
     return false;
   }
+
   if (!params.write_params_file(index_file)) {
     vcl_cerr << "Cannot write params file for " << index_file << "!\n";
     return false;
@@ -216,7 +215,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   // create directions buffer
   cl_float* ray_dirs = new cl_float[4*layer_size];
-  vcl_vector<vgl_point_3d<double> >& cart_points = sph_shell->cart_points();
+  vcl_vector<vgl_point_3d<double> > cart_points = sph_shell->cart_points();
   for (int i = 0; i < layer_size; ++i) {
     ray_dirs[4*i  ] = (cl_float)cart_points[i].x();
     ray_dirs[4*i+1] = (cl_float)cart_points[i].y();
@@ -479,7 +478,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
 namespace boxm2_visualize_index_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 0;
 }
 
@@ -493,6 +492,7 @@ bool boxm2_visualize_index_process_cons(bprb_func_process& pro)
   input_types_[2] = "unsigned";  // start id of the indices to visualize
   input_types_[3] = "unsigned";  // end id of the indices to visualize
   input_types_[4] = "vcl_string";  // prefix for the output files
+  input_types_[5] = "vcl_string"; // ray array binary file
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -512,6 +512,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   unsigned si = pro.get_input<unsigned>(i++);
   unsigned ei = pro.get_input<unsigned>(i++);
   vcl_string prefix = pro.get_input<vcl_string>(i++);
+  vcl_string ray_file = pro.get_input<vcl_string>(i++);
 
   vcl_string param_file = vul_file::strip_extension(index_file) + ".params";
   boxm2_volm_wr3db_index_params params;
@@ -527,10 +528,13 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
     ei = (unsigned)eis;
   }
 
-  // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
-  double radius = 1;
-  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
-  unsigned layer_size = sph_shell->get_container_size();
+  // read spherical shell container 
+  vsl_b_ifstream ifs(ray_file);
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
+  sph_shell->b_read(ifs);
+  ifs.close();
+
+  unsigned layer_size = (unsigned)sph_shell->get_container_size();
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
   if (!ind->initialize_read(index_file)) {
     vcl_cerr << "Cannot initialize index from file: " << index_file << '\n';
@@ -565,7 +569,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
 //       assumes that hyp file order and index file order are the same, so uses hyp_id to retrieve index from the binary index file
 namespace boxm2_visualize_index_process2_globals
 {
-  const unsigned n_inputs_ = 6;
+  const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 0;
 }
 
@@ -576,10 +580,11 @@ bool boxm2_visualize_index_process2_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // geo index hyp folder
   input_types_[1] = "vcl_string"; // visibility index folder
-  input_types_[2] = "unsigned";  // tile id
-  input_types_[3] = "float";  // lat
-  input_types_[4] = "float";  // lon
-  input_types_[5] = "int"; // 0: visualize depth interval, 1: class labels, 2: orientation labels (in this case, identifier for the data blocks is assumed to "orientation")
+  input_types_[2] = "vcl_string"; // ray array binary file
+  input_types_[3] = "unsigned";  // tile id
+  input_types_[4] = "float";  // lat
+  input_types_[5] = "float";  // lon
+  input_types_[6] = "int"; // 0: visualize depth interval, 1: class labels, 2: orientation labels (in this case, identifier for the data blocks is assumed to "orientation")
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -596,6 +601,7 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   unsigned i = 0;
   vcl_string geo_index_hyp_folder = pro.get_input<vcl_string>(i++);
   vcl_string visibility_index_folder = pro.get_input<vcl_string>(i++);
+  vcl_string ray_file = pro.get_input<vcl_string>(i++);
   unsigned tile_id = pro.get_input<unsigned>(i++);
   float lat = pro.get_input<float>(i++);
   float lon = pro.get_input<float>(i++);
@@ -625,14 +631,25 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   vcl_cout << "\t closest to hyp: " << leaf->hyps_->locs_[hyp_id].y() << ", " << leaf->hyps_->locs_[hyp_id].x() << vcl_endl;
 
 
-   vcl_stringstream file_name_pre2; file_name_pre2 << visibility_index_folder << "geo_index_tile_" << tile_id;
-   vcl_string index_file;
-   if (data_type == 0)
-     index_file = leaf->get_index_name(file_name_pre2.str());
-   else if (data_type == 1)
-     index_file = leaf->get_label_index_name(file_name_pre2.str(), "");
-   else
-     index_file = leaf->get_label_index_name(file_name_pre2.str(), "orientation");
+  vcl_stringstream file_name_pre2; file_name_pre2 << visibility_index_folder << "geo_index_tile_" << tile_id;
+  vcl_string index_file;
+  if (data_type == 0)
+    index_file = leaf->get_index_name(file_name_pre2.str());
+  else if (data_type == 1)
+    index_file = leaf->get_label_index_name(file_name_pre2.str(), "");
+  else
+    index_file = leaf->get_label_index_name(file_name_pre2.str(), "orientation");
+
+
+  // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
+  //double radius = 1;
+  //volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
+  
+  vsl_b_ifstream ifs(ray_file);
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
+  sph_shell->b_read(ifs);
+  ifs.close();
+  
 
   ////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// visualize depth interval index //////////////////////////////
@@ -673,12 +690,8 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
     ofs << (int)values[ii] << '\n';
   ofs.close();
 
-  // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
-  double radius = 1;
-  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
-
-  //vcl_string temp_name = str.str() + ".vrml";
-  //sph_shell->draw_template(temp_name, values, (unsigned char)254);
+  vcl_string temp_name = str.str() + ".vrml";
+  sph_shell->draw_template(temp_name, values, (unsigned char)254);
 
   vil_image_view<vil_rgb<vxl_byte> > img;
   if (data_type == 0)
