@@ -53,14 +53,17 @@ void volm_spherical_region_query::construct_spherical_regions()
     }
   }
 }
+
 vcl_vector<volm_spherical_query_region> volm_spherical_region_query::
-query_regions(unsigned roll_indx) {
+query_regions(unsigned roll_indx)
+{
   return sph_regions_[roll_indx];
 }
 
 void volm_spherical_region_query::
 display_query_regions(vsph_unit_sphere_sptr const& usph_ptr,
-		      vcl_string const& path, unsigned roll_index){
+                      vcl_string const& path, unsigned roll_index)
+{
   vcl_vector<volm_spherical_query_region>& qrs = sph_regions_[roll_index];
   vcl_vector<vcl_vector<float> > region_color;
 }
