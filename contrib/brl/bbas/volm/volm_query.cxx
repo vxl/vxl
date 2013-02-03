@@ -21,7 +21,7 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
                        vcl_string const& label_xml_file,
                        volm_spherical_container_sptr const& sph,
                        volm_spherical_shell_container_sptr const& sph_shell)
-  : cam_space_(cam_space), sph_depth_(sph), sph_(sph_shell), invalid_((unsigned char)255)
+: cam_space_(cam_space), invalid_((unsigned char)255), sph_depth_(sph), sph_(sph_shell)
 {
   //the discrete rays defined on the sphere as x, y, z
   query_points_ = sph_->cart_points();
@@ -96,7 +96,7 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
              << " alt: " << altitude_ << vcl_endl;
   }
 #endif
-  
+
   altitude_ = cam_space_->altitude();
 
   // create camera hypotheses
@@ -129,8 +129,8 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
                        vcl_string const& image_category,
                        volm_spherical_container_sptr const& sph,
                        volm_spherical_shell_container_sptr const& sph_shell,
-                       double altitude)  : 
-                       img_category_(image_category), sph_depth_(sph), sph_(sph_shell), altitude_(altitude)
+                       double altitude)
+: altitude_(altitude), img_category_(image_category), sph_depth_(sph), sph_(sph_shell)
 {
   //the discrete rays defined on the sphere as x, y, z
   query_points_ = sph_->cart_points();
@@ -184,7 +184,7 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
   double tfov = 5.0;  double tfov_d = 30.0; double tfov_inc = 2.0;
 
   // construct camera space
-  cam_space_ = new volm_camera_space(tfov, tfov_d, tfov_inc, altitude_, ni_, nj_, 
+  cam_space_ = new volm_camera_space(tfov, tfov_d, tfov_inc, altitude_, ni_, nj_,
                                      head, head_d, head_inc, tilt, tilt_d, tilt_inc, roll, roll_d, roll_inc);
 
   // create camera hypotheses
@@ -510,7 +510,7 @@ bool volm_query::query_ingest()
     if (dm_->ground_plane().size()) {
       depth_img = dm_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
     }
-    
+
     // loop over rays on sphere
     unsigned count = 0;
     for (unsigned p_idx = 0; p_idx < query_size_; ++p_idx)
