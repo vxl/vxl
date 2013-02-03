@@ -95,22 +95,16 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm2_volm_matcher.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_volm_wr3db_index.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volm_locations.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_volm_matcher_order.cxx
+SOURCE=.\boxm2_volm_matcher_p0.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volm_matcher_p1.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_volm_obj_based_matcher.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volm_matcher_p2.cxx
@@ -128,9 +122,6 @@ SOURCE=.\Templates/vbl_smart_ptr+boxm2_volm_loc_hypotheses-.cxx
 SOURCE=.\boxm2_volm_locations.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_volm_matcher.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_volm_wr3db_index.h
 # End Source File
 # Begin Source File
@@ -140,19 +131,16 @@ SOURCE=.\boxm2_volm_locations_sptr.h
 SOURCE=.\boxm2_volm_wr3db_index_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_volm_matcher_order.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_volm_io.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_volm_obj_based_matcher.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volm_matcher_p2.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volm_matcher_p1.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_volm_matcher_p0.h
 # End Source File
 # End Group
 # End Target

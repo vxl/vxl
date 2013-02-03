@@ -118,6 +118,9 @@ SOURCE=.\boxm2_volumetric_matcher_rationale.cxx
 # Begin Source File
 SOURCE=.\boxm2_volumetric_matcher_integration.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_volumetric_matcher_p0.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

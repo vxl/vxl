@@ -111,6 +111,9 @@ SOURCE=.\vsph_sph_box_2d.cxx
 SOURCE=.\vsph_utils.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vsph_unit_sphere.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsph_view_sphere+vsph_view_point+double--.cxx
 # End Source File
 # Begin Source File
@@ -118,6 +121,15 @@ SOURCE=.\Templates/vsph_view_sphere+vsph_view_point+vcl_string--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vsph_spherical_coord-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsph_unit_sphere-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsph_edge-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsph_sph_point_2d-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -151,6 +163,12 @@ SOURCE=.\vsph_sph_point_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsph_sph_box_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_unit_sphere.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_unit_sphere_sptr.h
 # End Source File
 # End Group
 # End Target
