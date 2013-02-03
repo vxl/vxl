@@ -35,7 +35,6 @@ int main(int argc,  char** argv)
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
-  vcl_stringstream log;
   //: check input parameters
   if (input_file().compare("") == 0 || out_folder().compare("") == 0) {
     vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
@@ -132,7 +131,7 @@ int main(int argc,  char** argv)
 
     for (vcl_map<unsigned, volm_rationale>::iterator ii = it->second.begin(); ii != it->second.end(); ii++) {
       if (ii->first >= ind_size) {
-        vcl_cerr << "problem here, index: " << ii->first << " is greater than size of
+        vcl_cerr << "problem here, index: " << ii->first << " is greater than size of index\n"
         return false;
       }
     }
@@ -186,7 +185,7 @@ int main(int argc,  char** argv)
             else {
               vcl_stringstream log;
               log << "cam id: " << cam_id << " is invalid, query object has: " << query->get_cam_num() << " cams. In tile " << tiles[k].get_string() << " loc: (" << u << ", " << v << ") skipping rationale..\n"
-                  << "score file is: " << score_files[i] << " id in the file: " << ind_idx << " hypo id: " << hyp.current_ << vcl_endl;
+                  << "score file is: " << score_files[i] << " id in the file: " << ind_idx << " hypo id: " << hyp.current_ << '\n';
               vcl_cerr << log.str();
               volm_io::write_composer_log(out_folder(), log.str());
             }
@@ -224,7 +223,6 @@ int main(int argc,  char** argv)
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
-  vcl_stringstream log;
   //: check input parameters
   if (input_file().compare("") == 0 || out_folder().compare("") == 0) {
     vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
@@ -292,9 +290,9 @@ int main(int argc,  char** argv)
       out_img(i,j).b = (unsigned char)120;
     }
 #if 0
-    vcl_cout << " values array: \n";
+    vcl_cout << " values array:\n";
     for (unsigned i = 0; i < layer_size; i++) {
-      vcl_cout << (int)values[i] << " ";
+      vcl_cout << (int)values[i] << ' ';
     }
     vcl_cout << vcl_endl;
 #endif
