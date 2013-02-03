@@ -412,8 +412,8 @@ void vsph_unit_sphere::display_edges(vcl_string const & path) const
 
 void vsph_unit_sphere::
 display_region_data(vcl_string const & path,
-                    vcl_vector<double> const& data) const{
-
+                    vcl_vector<double> const& data) const
+{
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
     return;
@@ -473,8 +473,8 @@ display_region_data(vcl_string const & path,
 
 void vsph_unit_sphere::
 display_region_color(vcl_string const & path,
-                     vcl_vector<vcl_vector<float> > const& cdata) const{
-
+                     vcl_vector<vcl_vector<float> > const& cdata) const
+{
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
     return;
@@ -520,21 +520,21 @@ display_region_color(vcl_string const & path,
      <<"}\n";
 }
 
-bool vsph_unit_sphere::operator==(const vsph_unit_sphere &other) const{
-  bool equal = point_angle_ == other.point_angle() && 
-    min_theta_ == other.min_theta() && max_theta_ == other.max_theta();
-  if (!equal)
-    return false;
-  
-  if (this->size() != other.size())
+bool vsph_unit_sphere::operator==(const vsph_unit_sphere &other) const
+{
+  if (point_angle_ != other.point_angle() ||
+      min_theta_   != other.min_theta() ||
+      max_theta_   != other.max_theta() ||
+      this->size() != other.size())
     return false;
   const vcl_vector<vsph_sph_point_2d>& osph_pts = other.sph_points();
-  for (unsigned i = 0; i < sph_pts_.size(); i++){
-    if(!(sph_pts_[i]==osph_pts[i]))
+  for (unsigned i = 0; i < sph_pts_.size(); ++i) {
+    if (!(sph_pts_[i]==osph_pts[i]))
       return false;
-    return true;
   }
+  return true;
 }
+
 // =================   binary I/O ==========================
 void vsph_unit_sphere::b_read(vsl_b_istream& is)
 {
