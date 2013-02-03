@@ -43,6 +43,7 @@
 class boxm2_volm_wr3db_index_params 
 {
   public: 
+    boxm2_volm_wr3db_index_params() : start(0), skip(1), vmin(-1.0), dmax(-1.0), solid_angle(-1.0), layer_size(0) {}
     
     // text i/o
     bool write_params_file(vcl_string index_file_name);
@@ -60,10 +61,6 @@ class boxm2_volm_wr3db_index_params
     float vmin;
     float dmax;
     float solid_angle;
-    float cap_angle;
-    float point_angle;
-    float top_angle;
-    float bottom_angle;
     unsigned layer_size;
 
 };

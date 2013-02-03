@@ -17,10 +17,10 @@ bool boxm2_volm_wr3db_index_params::write_params_file(vcl_string index_file_name
       << "vmin " << vmin << '\n'
       << "dmax " << dmax << '\n'
       << "solid_angle " << solid_angle << '\n'
-      << "cap_angle " << cap_angle << '\n'
+  /*    << "cap_angle " << cap_angle << '\n'
       << "point_angle " << point_angle << '\n'
       << "top_angle " << top_angle << '\n'
-      << "bottom_angle " << bottom_angle << '\n'
+      << "bottom_angle " << bottom_angle << '\n'*/
       << "layer_size " << layer_size << vcl_endl;
   ofs.close();
   return true;
@@ -38,22 +38,22 @@ bool boxm2_volm_wr3db_index_params::read_params_file(vcl_string index_file_name)
   ifs >> tmp >> vmin;
   ifs >> tmp >> dmax;
   ifs >> tmp >> solid_angle;
-  ifs >> tmp >> cap_angle;
+  /*ifs >> tmp >> cap_angle;
   ifs >> tmp >> point_angle;
   ifs >> tmp >> top_angle;
-  ifs >> tmp >> bottom_angle;
+  ifs >> tmp >> bottom_angle;*/
   ifs >> tmp >> layer_size;
   ifs.close();
   return true;
 }
 bool boxm2_volm_wr3db_index_params::query_params_equal(boxm2_volm_wr3db_index_params& p1, boxm2_volm_wr3db_index_params& p2)
 {
-  return p1.bottom_angle == p2.bottom_angle && 
-         p1.cap_angle == p2.cap_angle && 
+  return //p1.bottom_angle == p2.bottom_angle && 
+         //p1.cap_angle == p2.cap_angle && 
          p1.dmax == p2.dmax && 
-         p1.point_angle == p2.point_angle && 
+         //p1.point_angle == p2.point_angle && 
          p1.solid_angle == p2.solid_angle &&
-         p1.top_angle == p2.top_angle && 
+         //p1.top_angle == p2.top_angle && 
          p1.vmin == p2.vmin &&
          p1.layer_size == p2.layer_size;
 }
