@@ -141,7 +141,7 @@ class volm_query : public vbl_ref_count
 #endif
   volm_camera_space_sptr cam_space_;
 
-  //: 
+  //:
   unsigned char invalid_;
   //: image size
   unsigned ni_, nj_;
@@ -152,7 +152,7 @@ class volm_query : public vbl_ref_count
   depth_map_scene_sptr                       dm_;
   //: voxel array used to get voxel index
   volm_spherical_container_sptr       sph_depth_;
-  //: a unit sphere 
+  //: a unit sphere
   volm_spherical_shell_container_sptr       sph_;
   //: upper bound on depth
   double d_threshold_;
@@ -160,12 +160,16 @@ class volm_query : public vbl_ref_count
   vcl_vector<depth_map_region_sptr> depth_regions_;
   //: depth region polygons (maybe not used)
   vcl_vector<vgl_polygon<double> >        dm_poly_;
-  //: camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered
+
+  // === camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered ===
+
+#if 0
   //: vectors store the space of camera hypotheses
-  //vcl_vector<double>  top_fov_;
-  //vcl_vector<double> headings_;
-  //vcl_vector<double>    tilts_;
-  //vcl_vector<double>    rolls_;
+  vcl_vector<double>  top_fov_;
+  vcl_vector<double> headings_;
+  vcl_vector<double>    tilts_;
+  vcl_vector<double>    rolls_;
+#endif
   vcl_vector<vpgl_perspective_camera<double> > cameras_;
   vcl_vector<vcl_string> camera_strings_;
   //: ingested query information
@@ -204,7 +208,7 @@ class volm_query : public vbl_ref_count
   vcl_vector<float> weight_obj_;
   float             weight_grd_;
   float             weight_sky_;
-  
+
   //: functions
   bool query_ingest();
   bool offset_ingest();
@@ -229,9 +233,9 @@ class volm_query : public vbl_ref_count
                            float b);
   void draw_rays(vcl_string const& fname);
 
-  void draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img, 
+  void draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
                 vgl_point_3d<double> const& world_point,
-                unsigned char const& depth, 
+                unsigned char const& depth,
                 vpgl_perspective_camera<double> const& cam);
   unsigned version() const {return 1;}
 };

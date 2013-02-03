@@ -49,17 +49,18 @@ class volm_spherical_shell_container : public vbl_ref_count
   vcl_vector<vsph_sph_point_3d>& sph_points() { return sph_points_;}
 
   vcl_size_t get_container_size() const { return cart_points_.size(); }
-  
+
   void draw_template(vcl_string vrml_file_name);
   //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
   void draw_template(vcl_string vrml_file_name, vcl_vector<unsigned char>& values, unsigned char special);
-  
+
   //: generate panaroma image
   void panaroma_img(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
   void panaroma_img_class_labels(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
   void panaroma_img_orientations(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
 
   // ===========  binary I/O ================
+
   //: version
   unsigned version() const {return 1;}
 
@@ -70,13 +71,13 @@ class volm_spherical_shell_container : public vbl_ref_count
   void b_read(vsl_b_istream& is);
 
   bool operator== (const volm_spherical_shell_container &other) const;
-    
+
  protected:
   void add_uniform_views();
   bool min_angle(vcl_vector<vgl_point_3d<double> > list, double point_angle);
   bool find_closest(vgl_point_3d<double> p, double& dist);
   void remove_top_and_bottom();
-  
+
   double radius_;
   double point_angle_;
   double cap_angle_;
@@ -85,7 +86,6 @@ class volm_spherical_shell_container : public vbl_ref_count
   vsph_spherical_coord_sptr coord_sys_;
   vcl_vector<vgl_point_3d<double> > cart_points_;
   vcl_vector<vsph_sph_point_3d> sph_points_;
-  
 };
 
 #endif  // volm_spherical_shell_container_h_
