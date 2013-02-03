@@ -3,12 +3,10 @@ USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 LIBRARY := boxm2_volm
 
 MANPAGE_SOURCES += boxm2_volm_io.h
-SOURCES += boxm2_volm_matcher.cxx
 SOURCES += boxm2_volm_wr3db_index.cxx
 SOURCES += boxm2_volm_locations.cxx
-SOURCES += boxm2_volm_matcher_order.cxx
+SOURCES += boxm2_volm_matcher_p0.cxx
 SOURCES += boxm2_volm_matcher_p1.cxx
-SOURCES += boxm2_volm_obj_based_matcher.cxx
 SOURCES += boxm2_volm_matcher_p2.cxx
 
 MANPAGE_SOURCES += boxm2_volm_locations_sptr.h

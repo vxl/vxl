@@ -14,6 +14,7 @@ SOURCES += vsph_unit_sphere.cxx
 MANPAGE_SOURCES += vsph_view_point.h
 MANPAGE_SOURCES += vsph_view_sphere.txx
 MANPAGE_SOURCES += vsph_spherical_coord_sptr.h
+MANPAGE_SOURCES += vsph_unit_sphere_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
