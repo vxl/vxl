@@ -104,6 +104,31 @@ cam_angles volm_camera_space::camera_angles(unsigned cam_index) const
   return cam_angles(roll, top_fov, heading, tilt);
 }
 
+double cam_angles::dif(cam_angles& b)
+{
+  return vcl_sqrt(vcl_pow(roll_ - b.roll_, 2.0) + vcl_pow(top_fov_ - b.top_fov_, 2.0) + 
+    vcl_pow(heading_ - b.heading_, 2.0) + vcl_pow(tilt_ - b.tilt_, 2.0) );
+}
+
+//: return the index of the camera with params closest to the input angles, only the cameras in the valid array are searched
+vcl_pair<unsigned, cam_angles> volm_camera_space::cam_index_nearest_in_valid_array(cam_angles a)
+{
+  double min = 4*360.0;
+  cam_angles min_b(0,0,0,0);
+  unsigned min_id;
+  for (unsigned i = 0; i < valid_camera_indices_.size(); i++) {
+    cam_angles b = this->camera_angles(valid_camera_indices_[i]);
+    double val = a.dif(b);
+    if (min > val) {
+      min_b = b;
+      min_id = i;
+      min = val;
+    }
+  }
+  return vcl_pair<unsigned, cam_angles>(min_id, min_b);
+}
+
+
 void volm_camera_space::generate_full_camera_index_space()
 {
   valid_camera_indices_.clear();

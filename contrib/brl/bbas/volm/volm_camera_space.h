@@ -30,6 +30,9 @@ class cam_angles
              << " h: " << heading_ << " t: " << tilt_ << ")\n";}
   vcl_string get_string() const;
 
+  double dif(cam_angles& b);
+
+
   double  roll_;
   double  top_fov_;
   double  heading_;
@@ -110,6 +113,9 @@ class volm_camera_space : public vbl_ref_count
   //: transform indices to 1-d index
   unsigned cam_index(unsigned roll_index, unsigned fov_index,
                      unsigned head_index, unsigned tilt_index) const;
+
+  //: return the index of the camera with params closest to the input angles, only the cameras in the valid array are searched
+  vcl_pair<unsigned, cam_angles> cam_index_nearest_in_valid_array(cam_angles a);
 
   //: camera at specified index
   vpgl_perspective_camera<double> camera(unsigned cam_index) const;
