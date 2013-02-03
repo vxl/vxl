@@ -3,8 +3,7 @@
 #define boxm2_volm_matcher_p2_h_
 //:
 // \file
-// \brief  A class to match a voxelized query volume to an indexed reference volume
-//         based on the orientation and land classification of voxels
+// \brief  A class to match a voxelized query volume to an indexed reference volume based on the orientation and land classification of voxels
 //
 // \author Yi Dong
 // \date January 15, 2012
