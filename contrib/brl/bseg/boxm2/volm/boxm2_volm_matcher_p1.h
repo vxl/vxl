@@ -16,6 +16,7 @@
 
 #include <volm/volm_query_sptr.h>
 #include <volm/volm_query.h>
+#include <volm/volm_io.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_loc_hyp.h>
@@ -46,23 +47,31 @@ public:
                         bool const& is_candidate,
                         bool const& is_last_pass,
                         vcl_string const& out_folder,
-                        float const& score_thres = 0.5,
-                        float const& cam_thres = 0.95);
+                        float const& threshold,
+                        unsigned const& max_cam_per_loc,
+                        bool const& use_orient = false);
   
   //: destructor
   ~boxm2_volm_matcher_p1();
   //: matcher function
   bool volm_matcher_p1();
   //: generate output -- probability map, binary score file, etc
-  bool write_matcher_result(vcl_string const& out_fname_pre);
+  bool write_matcher_result(vcl_string const& tile_fname_bin, vcl_string const& tile_fname_txt);
+  bool write_matcher_result(vcl_string const& tile_fname_bin);
+  //: for testing purpose -- output score for all camera (should only be used for ground truth location)
+  bool write_matcher_result_all(unsigned const& leaf_id, unsigned const& hypo_id, vcl_string const& out_fname);
     
 private:
   //: query, indices, device
   volm_query_sptr                                   query_;
   vcl_vector<volm_geo_index_node_sptr>             leaves_;
   boxm2_volm_wr3db_index_sptr                         ind_;
+  boxm2_volm_wr3db_index_sptr                  ind_orient_;
   float                                        ind_buffer_;
   vcl_stringstream                          file_name_pre_;
+
+  //: option to use orientation attirbute
+  bool                                         use_orient_;
   
   //: shell container size
   unsigned                                     layer_size_;
@@ -124,7 +133,9 @@ private:
   bocl_mem*            obj_order_cl_mem_;
   float*                obj_weight_buff_;
   bocl_mem*           obj_weight_cl_mem_;
-  
+  unsigned char*        obj_orient_buff_;
+  bocl_mem*           obj_orient_cl_mem_;
+
   //: depth interval
   float*            depth_interval_buff_;
   bocl_mem*       depth_interval_cl_mem_;
@@ -135,15 +146,17 @@ private:
   unsigned*                       n_ind_;
   
   //: output related
-  // threshold value for current matcher to exclude indice from last matcher whosh score is lower than given threshold here
-  float                               score_thres_;
-  // threshold value for current matcher to exclude the camera whose score is lower than given threshold
-  float                                 cam_thres_;
-  vcl_vector<boxm2_volm_score_out>      score_all_;
+  // threshold that only the camera with score higher than threshold will be considered to put into output
+  float                            threshold_;
+  // maximum number of cameras for each location
+  unsigned                   max_cam_per_loc_;
+  vcl_vector<volm_score_sptr>      score_all_;
   
   
   //: transfer volm_query to 1D array for kernel calculation
   bool transfer_query();
+  //: transfer volm_query orientation information to 1D array for kernel calculation, if necessary
+  bool transfer_orient();
   //: read given number of indeices from volo_geo_index
   bool fill_index(unsigned const& n_ind,
                   unsigned const& layer_size,
@@ -152,6 +165,15 @@ private:
                   vcl_vector<unsigned>& l_id,
                   vcl_vector<unsigned>& h_id,
                   unsigned& actual_n_ind);
+  //: read given number of indeice from volm_geo_index, with two index files, index depth and index orientation
+  bool fill_index_orient(unsigned const& n_ind,
+                         unsigned const& layer_size,
+                         unsigned& leaf_id,
+                         unsigned char* index_buff,
+                         unsigned char* index_orient_buff,
+                         vcl_vector<unsigned>& l_id,
+                         vcl_vector<unsigned>& h_id,
+                         unsigned& actual_n_ind);
   //: check the given leaf has un-read hypothesis or not
   bool is_leaf_finish(unsigned const& leaf_id);
   //: clare all query cl_mem pointer
@@ -168,46 +190,21 @@ private:
                               bocl_mem*                         index_cl_mem_,
                               bocl_mem*                         score_cl_mem_,
                               bocl_mem*                            mu_cl_mem_);
+  // kernel execution function with orientation
+  bool execute_matcher_kernel_orient(bocl_device_sptr                  device,
+                                     cl_command_queue&                  queue,
+                                     vcl_vector<bocl_kernel*>        kern_vec,
+                                     bocl_mem*                  n_ind_cl_mem_,
+                                     bocl_mem*                  index_cl_mem_,
+                                     bocl_mem*           index_orient_cl_mem_,
+                                     bocl_mem*                  score_cl_mem_,
+                                     bocl_mem*                     mu_cl_mem_);
 
   
   //: a test function to check the kernel implementation
   bool volm_matcher_p1_test(unsigned n_ind, unsigned char* index, float* score_buff, float* mu_buff);
+  bool volm_matcher_p1_test_ori(unsigned n_ind, unsigned char* index, unsigned char* index_orient, float* score_buff, float* mu_buff);
 
-};
-
-
-
-// \brief  A class to store the highest score for each location
-// leaf_id     ----> id of the leaf in leaves vector
-// hypo_id     ----> local id of the hypothese in the leaf
-// max_score_  ----> highest score for current location
-// max_cam_id_ ----> the camera id associated with the highest score
-// cam_id      ----> vector of camera ids whose score is higher than defined threshold
-
-class boxm2_volm_score_out{
-public:
-  boxm2_volm_score_out () {}
-  boxm2_volm_score_out(unsigned const& leaf_id, unsigned const& hypo_id, float const& max_score, unsigned const& max_cam_id, vcl_vector<unsigned> const& cam_id)
-    : leaf_id_(leaf_id), hypo_id_(hypo_id), max_score_(max_score), max_cam_id_(max_cam_id), cam_id_(cam_id) {}
-  ~boxm2_volm_score_out() {}
-  unsigned leaf_id_;
-  unsigned hypo_id_;
-  float    max_score_;
-  unsigned max_cam_id_;
-  vcl_vector<unsigned> cam_id_;
-};
-
-class boxm2_volm_score_out_max{
-public:
-  boxm2_volm_score_out_max() {}
-  boxm2_volm_score_out_max(unsigned const& hypo_id, float const& max_score, unsigned const& max_cam_id)
-    : hypo_id_(hypo_id), max_score_(max_score), max_cam_id_(max_cam_id) {}
-  ~boxm2_volm_score_out_max() {}
-
-public: 
-  unsigned   hypo_id_;
-  float    max_score_;
-  float   max_cam_id_;
 };
 
 #endif // boxm2_volm_matcher_p1_h_
