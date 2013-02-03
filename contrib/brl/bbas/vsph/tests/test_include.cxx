@@ -1,4 +1,5 @@
 #include <vsph/vsph_spherical_coord_sptr.h>
+#include <vsph/vsph_unit_sphere_sptr.h>
 //
 #include <vsph/vsph_camera_bounds.h>
 #include <vsph/vsph_sph_box_2d.h>
