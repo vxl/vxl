@@ -12,7 +12,7 @@
 // \endverbatim
 #include <vbl/vbl_ref_count.h>
 #include "vsph_sph_point_2d.h"
-#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
@@ -107,8 +107,8 @@ class vsph_unit_sphere : public vbl_ref_count
   //: display segmented region data
   void display_region_color(vcl_string const & path,
                             vcl_vector<vcl_vector<float> > const& cdata,
-			    vcl_vector<float> const& skip_color = 
-			    vcl_vector<float>(3, 0.0f)) const;
+                            vcl_vector<float> const& skip_color =
+                            vcl_vector<float>(3, 0.0f)) const;
 
   //: Iterator
 

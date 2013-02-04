@@ -3,7 +3,6 @@
 #include "vsph_sph_point_2d.h"
 #include <vsl/vsl_vector_io.h>
 #include "vsph_utils.h"
-#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vcl_algorithm.h>
@@ -475,7 +474,7 @@ display_region_data(vcl_string const & path,
 void vsph_unit_sphere::
 display_region_color(vcl_string const & path,
                      vcl_vector<vcl_vector<float> > const& cdata,
-		     vcl_vector<float> const& skip_color) const
+                     vcl_vector<float> const& skip_color) const
 {
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
@@ -502,7 +501,7 @@ display_region_color(vcl_string const & path,
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vgl_vector_3d<double> ray = cart_pts_[i];
     const vcl_vector<float>& cl = cdata[i];
-    if(cl[0]==skip_color[0]&&cl[1]==skip_color[1]&&cl[2]==skip_color[2])
+    if (cl[0]==skip_color[0]&&cl[1]==skip_color[1]&&cl[2]==skip_color[2])
       continue;
     bvrml_write::write_vrml_disk(os, orig+10*ray, ray, disc_radius,
                                  cl[0], cl[1], cl[2]);
