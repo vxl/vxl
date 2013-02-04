@@ -222,6 +222,7 @@ void vsph_unit_sphere::remove_top_and_bottom()
 #if 0
   vcl_cout << "entering top and bottom" << sph_pts_.size() << vcl_endl;
 #endif
+  double margin = 0.00035;
   equivalent_ids_.clear();
   double min_theta_rad = min_theta_/vnl_math::deg_per_rad;
   double max_theta_rad = max_theta_/vnl_math::deg_per_rad;
@@ -231,8 +232,8 @@ void vsph_unit_sphere::remove_top_and_bottom()
   int indx = 0;
   for (; pit!=sph_pts_.end();++pit, ++indx) {
     vsph_sph_point_2d& sp = (*pit);
-    if (sp.theta_ > min_theta_rad &&
-        sp.theta_ < max_theta_rad) {
+    if (sp.theta_ > (min_theta_rad-margin) &&
+        sp.theta_ < (max_theta_rad+margin)) {
       int ns = cart_pts_new.size();
       equivalent_ids_[indx] = ns;
       sph_pts_new.push_back(sp);
@@ -473,7 +474,8 @@ display_region_data(vcl_string const & path,
 
 void vsph_unit_sphere::
 display_region_color(vcl_string const & path,
-                     vcl_vector<vcl_vector<float> > const& cdata) const
+                     vcl_vector<vcl_vector<float> > const& cdata,
+		     vcl_vector<float> const& skip_color) const
 {
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
@@ -500,6 +502,8 @@ display_region_color(vcl_string const & path,
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vgl_vector_3d<double> ray = cart_pts_[i];
     const vcl_vector<float>& cl = cdata[i];
+    if(cl[0]==skip_color[0]&&cl[1]==skip_color[1]&&cl[2]==skip_color[2])
+      continue;
     bvrml_write::write_vrml_disk(os, orig+10*ray, ray, disc_radius,
                                  cl[0], cl[1], cl[2]);
   }

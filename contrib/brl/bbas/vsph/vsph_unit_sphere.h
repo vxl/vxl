@@ -106,7 +106,9 @@ class vsph_unit_sphere : public vbl_ref_count
 
   //: display segmented region data
   void display_region_color(vcl_string const & path,
-                            vcl_vector<vcl_vector<float> > const& cdata) const;
+                            vcl_vector<vcl_vector<float> > const& cdata,
+			    vcl_vector<float> const& skip_color = 
+			    vcl_vector<float>(3, 0.0f)) const;
 
   //: Iterator
 

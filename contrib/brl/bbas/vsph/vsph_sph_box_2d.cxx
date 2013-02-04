@@ -112,7 +112,7 @@ void vsph_sph_box_2d::add( double theta, double phi, bool in_radians)
 
 bool vsph_sph_box_2d::contains(vsph_sph_point_2d const& p) const
 {
-  return contains(p.phi_, p.theta_, p.in_radians_);
+  return contains(p.theta_, p.phi_, p.in_radians_);
 }
 
 bool vsph_sph_box_2d::contains(double const& theta, double const& phi,
@@ -132,10 +132,12 @@ bool vsph_sph_box_2d::contains(double const& theta, double const& phi,
   // treatment of the +-180 cut
   double min_ph = min_phi(in_radians_);
   double max_ph = max_phi(in_radians_);
-  return vsph_utils::a_eq_b(ph, min_ph)
-      || vsph_utils::a_eq_b(ph, max_ph)
-      || vsph_utils::a_lt_b(min_ph, ph)
-      || vsph_utils::a_lt_b(ph, max_ph);
+
+  bool in = vsph_utils::a_eq_b(ph, min_ph);
+  in = in ||vsph_utils::a_eq_b(ph, max_ph);
+  if(in) return true;
+  in = vsph_utils::a_lt_b(min_ph, ph)&&vsph_utils::a_lt_b(ph, max_ph);
+  return in;
 }
 
 bool vsph_sph_box_2d::contains(vsph_sph_box_2d const& b) const

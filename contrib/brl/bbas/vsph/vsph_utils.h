@@ -4,6 +4,7 @@
 // \file
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include "vsph_sph_box_2d.h"
 #include "vsph_sph_point_2d.h"
 
@@ -29,6 +30,29 @@ class vsph_utils
   static bool a_lt_b(double phi_a, double phi_b, bool in_radians = true);
   static vsph_sph_box_2d intersection(vsph_sph_box_2d const& b1,
                                       vsph_sph_box_2d const& b2);
+  // compute the ray passing through a given pixel.
+  // the units of elevation and azimuth are set according to the choice,
+  // {"radians", "degrees"}
+  static void
+    ray_spherical_coordinates(vpgl_perspective_camera<double> const& cam,
+                              double u, double v,
+                              double& elevation, double& azimuth,
+                              vcl_string units = "radians");
+
+  // project an image polygon onto the surface of the unit
+  // sphere with origin at the camera center. The edges of the
+  // spherical polygon are circular arcs but only the vertices are defined
+  // in this function. Each vertex lies on the surface of the sphere
+  //
+  // Note that the camera is needed only to set the focal length. The
+  // camera rotation parameters only change the location of the region on
+  // the sphere (i.e. translation on the surface of the sphere).
+  //
+  static vgl_polygon<double>
+    project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
+                                  vgl_polygon<double> const& image_poly,
+                                  vcl_string units = "radians");
+  static bool read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data);
  private:
   vsph_utils();
 };
