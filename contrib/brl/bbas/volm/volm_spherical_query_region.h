@@ -14,6 +14,7 @@
 // \endverbatim
 
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/depth_map/depth_map_region.h>
@@ -29,15 +30,19 @@ class volm_spherical_query_region
   void set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
                                  depth_map_region_sptr const& dm_region,
                                  volm_spherical_container_sptr const& sph_vol);
+  bool inside(vsph_sph_point_2d const& sp) const{
+    return box_.contains(sp);}
 
   //:accessors
   const vsph_sph_box_2d& bbox_ref() {return box_;}
   vsph_sph_box_2d& bbox() {return box_;}
+  unsigned char orientation() const {return orientation_;}
   unsigned char min_depth() const {return min_depth_;}
   unsigned char max_depth() const {return max_depth_;}
   unsigned char order() const {return order_;}
   unsigned char nlcd_id() const {return nlcd_id_;}
-
+  
+  void print(vcl_ostream& os) const;
 
  private:
   //: box in spherical coordinates

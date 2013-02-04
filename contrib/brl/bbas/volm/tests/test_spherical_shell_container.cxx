@@ -27,7 +27,7 @@ static void test_spherical_shell_container()
   vcl_cout << "Cart points: ";
   for (vcl_vector<vgl_point_3d<double> >::const_iterator p = cart_points.begin(); p != cart_points.end(); ++p)
     vcl_cout << *p << vcl_endl;
-#endif
+
   sph_shell->draw_template("./spherical_shell.vrml");
   
   vsl_b_ofstream os("./temp.bin");
@@ -41,7 +41,7 @@ static void test_spherical_shell_container()
 
   TEST("binary i/o", sph_shell->get_container_size(), sp2->get_container_size());
   TEST("binary i/o", *sph_shell == *sp2, true);
-
+#endif
 }
 
 TESTMAIN(test_spherical_shell_container);

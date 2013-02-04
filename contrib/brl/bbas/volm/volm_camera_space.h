@@ -19,7 +19,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsl/vsl_binary_io.h>
 
-// a struct to hold cam angles
+// a struct to hold cam angles (in degrees )
 class cam_angles
 {
  public:
@@ -29,7 +29,6 @@ class cam_angles
     vcl_cout << "(r: " << roll_ << " f: " << top_fov_
              << " h: " << heading_ << " t: " << tilt_ << ")\n";}
   vcl_string get_string() const;
-
   double dif(cam_angles& b);
 
 
@@ -38,11 +37,14 @@ class cam_angles
   double  heading_;
   double  tilt_;
 };
+//angles are in degrees
+double distance(cam_angles const& a, cam_angles const& b);
 
 class camera_space_iterator;
 
 //: defines a space of camera hypotheses
 // heading x tilt x roll x focal length
+/// ANGLES ARE IN DEGREES!!
 class volm_camera_space : public vbl_ref_count
 {
  public:
@@ -85,6 +87,18 @@ class volm_camera_space : public vbl_ref_count
   double roll_inc() const {return roll_inc_;}
   unsigned n_roll() const {return n_roll_;}
 
+  double roll(unsigned roll_index) const 
+  { return (-roll_radius_ + roll_inc_*roll_index);}
+
+  double head(unsigned head_index) const 
+  { return (-head_radius_ + head_inc_*head_index);}
+
+  double tilt(unsigned tilt_index) const 
+  { return (-tilt_radius_ + tilt_inc_*tilt_index);}
+
+  double top_fov(unsigned fov_index) const 
+  { return top_fovs_[fov_index];}
+
   //: focal length space
   vcl_vector<double> top_fovs() const {return top_fovs_;}
   unsigned n_fovs() const {return n_fovs_;}
@@ -123,6 +137,9 @@ class volm_camera_space : public vbl_ref_count
   //: camera angles at specified index
   cam_angles camera_angles(unsigned cam_index) const;
   vcl_string get_string(unsigned cam_index) const;
+
+  //: find 1-d index closest to specified camera angles, if -1 cangs were invalid
+  int closest_index(cam_angles const& cangs);
 
   //: generate the full set of camera indices
   void generate_full_camera_index_space();

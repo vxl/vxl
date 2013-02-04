@@ -527,3 +527,16 @@ void volm_io_expt_params::read_params(vcl_string params_file)
   ifs >> dummy; ifs >> top_angle;   vcl_cout << dummy << ' ' << top_angle << ' ';
   ifs >> dummy; ifs >> bottom_angle;vcl_cout << dummy << ' ' << bottom_angle << '\n';
 }
+bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data){
+  vcl_ifstream is(path.c_str());
+  if(!is.is_open())
+    return false;
+  int nrays;
+  is >> nrays;
+  if(nrays <= 0)
+    return false;
+  data.resize(nrays);
+  for(int i = 0; i< nrays; ++i)
+    is >> data[i];
+  return true;
+}

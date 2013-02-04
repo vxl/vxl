@@ -14,6 +14,7 @@
 // \endverbatim
 
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 #include <vcl_map.h>
 #include <vcl_string.h>
 #include <volm/volm_camera_space_sptr.h>
@@ -34,6 +35,7 @@ class volm_spherical_region_query
   //: display query regions on the surface of a unit sphere
   void display_query_regions(vsph_unit_sphere_sptr const& usph_ptr,
                              vcl_string const& path, unsigned roll_index);
+  void print(vcl_ostream& os) const;
 
  private:
   void construct_spherical_regions();

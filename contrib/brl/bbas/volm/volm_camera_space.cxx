@@ -4,6 +4,8 @@
 #include <vcl_algorithm.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vsl/vsl_vector_io.h>
+#include <vsph/vsph_utils.h>
+#include <vcl_limits.h>
   //it is possible for radius and increment to be inconsistent
   //that is, the radius is not a multiple of the increment
   //perhaps the best assumption is that increment rules and
@@ -349,6 +351,43 @@ void volm_camera_space::b_read(vsl_b_istream& is)
     vcl_cout << "volm_camera_space - unknown binary io version " << ver <<'\n';
     return;
   }
+}
+int volm_camera_space::closest_index(cam_angles const& cangs){
+  
+  camera_space_iterator cit = this->begin();
+  double mind = vcl_numeric_limits<double>::max();
+  int mindx = -1;
+  for (; cit != this->end(); ++cit){
+    cam_angles cit_cangs = this->camera_angles();
+    double d = distance(cit_cangs, cangs);
+    if(d<mind){
+      mind = d;
+      mindx = this->cam_index();
+    }
+  }
+  return mindx;
+}
+double distance(cam_angles const& a, cam_angles const& b){
+  //angles are assumed to be in radians.
+  double rola = a.roll_, rolb = b.roll_;
+  double ha = a.heading_, hb = b.heading_;
+  double ta = a.tilt_, tb = b.tilt_;
+  double fa = a.top_fov_, fb = b.top_fov_;
+  double d = vcl_numeric_limits<double>::max();
+  //don't allow invalid tilt angles
+  if(rola<-90.0||rola>90.0||rolb<-90.0||rolb>90.0)
+    return d;
+  //don't allow invalid focal angles
+  if(fa <= 0.0 || fa>90.0 ||fb <= 0.0 || fb>90.0)
+    return d;
+  //don't allow invalid tilt angles
+  if(ta < -90.0  || ta>90.0 ||
+     tb < -90.0  || tb>90.0)
+    return d;
+  d = vcl_fabs(vsph_utils::azimuth_diff(ha, hb));
+  d += vcl_fabs(rola - rolb);
+  d += (vcl_fabs(ta - tb) + vcl_fabs(fa - fb));
+  return d;
 }
 
 vcl_string cam_angles::get_string() const
