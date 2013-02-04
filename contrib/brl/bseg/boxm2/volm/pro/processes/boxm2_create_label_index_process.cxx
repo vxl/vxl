@@ -155,7 +155,6 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
   float min_size;
   volm_geo_index_node_sptr r = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
   volm_geo_index::read_hyps(r, file_name_pre.str());
-  //unsigned size = volm_geo_index::hypo_size(r);
   vcl_vector<volm_geo_index_node_sptr> leaves;
   //volm_geo_index::get_leaves(r, leaves);
   volm_geo_index::get_leaves_with_hyps(r, leaves);
@@ -178,19 +177,19 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
   if (ident.size() > 0) data_type += "_" + ident;
   vcl_cout << " indexing data blocks with type: " << data_type << vcl_endl;
 
-  // read spherical shell container 
+  // read spherical shell container
   vsl_b_ifstream ifs(ray_file);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
   sph_shell->b_read(ifs);
   ifs.close();
 
   params.layer_size = (unsigned)sph_shell->get_container_size();
-  int layer_size = (int)params.layer_size; 
+  int layer_size = (int)params.layer_size;
 
   vcl_stringstream out_sph_namet; out_sph_namet << out_index_folder << "geo_index_tile_" << tile_id << "_index_label_sph_shell.vrml";
   sph_shell->draw_template(out_sph_namet.str());
-  
-  //: adjust dmax if scene has very few blocks
+
+  // adjust dmax if scene has very few blocks
   float dmax = params.dmax;
   if (scene->get_block_ids().size() < 5)
     dmax = (float)(scene->bounding_box().height()+scene->bounding_box().width());
@@ -249,7 +248,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
   vcl_cout << "number of blocks: " << blocks.size() << vcl_endl;
   vcl_cout.flush();
-  //: get subblk dimension
+  // get subblk dimension
   boxm2_block_metadata mdata = scene->get_block_metadata(blocks.begin()->first);
   float subblk_dim = (float)mdata.sub_block_dim_.x();
   vcl_cout << "subblk_dim: " << subblk_dim << vcl_endl;
@@ -286,7 +285,9 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
     vgl_point_3d<double> h_pt;
     while (leaves2[li]->hyps_->get_next(0, 1, h_pt))
     {
-      //vcl_cout << "Processing hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "Processing hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
+#endif
       if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << '.';
       double lx, ly, lz;
       lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
@@ -324,7 +325,10 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
       if (!scene->block_contains(local_h_pt_d, curr_block, local))
       {
         if (!scene->contains(local_h_pt_d, curr_block, local)) {
-          //vcl_cerr << " Scene does not contain hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << ' ' << local_h_pt_d << " writing empty array for it!\n";
+#ifdef DEBUG
+          vcl_cerr << " Scene does not contain hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y()
+                   << ' ' << local_h_pt_d << " writing empty array for it!\n";
+#endif
           vcl_vector<unsigned char> values(layer_size, 0);
           ind->add_to_index(values);
           ++indexed_cnt;
@@ -369,9 +373,10 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id_inner);
 
-        //bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
         bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,0,true);
-
+#if 0 // was:
+        bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+#endif
         transfer_time += (float) transfer.all();
 
         kern->set_arg( blk_info );
@@ -403,11 +408,12 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
 
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
-
-        //opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        //opencl_cache->shallow_remove_data(id_inner,data_type);
-
+#if 0
+        opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        opencl_cache->shallow_remove_data(id_inner,data_type);
+#endif
       }
+
       if (vis_blocks.size() != 0)  // normalize
       {
         bocl_kernel* normalize_kern= kernels[identifier][1];
@@ -472,22 +478,24 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
     }
     ind->finalize();
     boxm2_volm_wr3db_index_params::write_size_file(index_file, indexed_cnt);
-    /*
+#if 0
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
     for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
     {
       boxm2_block_id id = blk_iter->first;
       opencl_cache->deep_remove_data(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),false);
       opencl_cache->deep_remove_data(id,data_type,false);
-    }*/
+    }
+#endif // 0
     opencl_cache->clear_cache();
-
   }
 
   delete ray_dir_buffer;
   delete ray_dim_mem;
   delete lookup;
-//  delete subblk_dim_mem;
+#if 0 // why not?
+  delete subblk_dim_mem;
+#endif
 
   status = clFinish(queue);
   check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
