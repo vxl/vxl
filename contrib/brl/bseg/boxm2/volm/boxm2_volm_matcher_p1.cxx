@@ -254,7 +254,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   ind_->initialize_read(index_file);
   ind_orient_->initialize_read(index_orient_file);
 
-  while (leaf_id < leaves_.size()) {
+  while (leaf_id < leaves_.size())
+  {
     unsigned char* index_buff_ = new unsigned char[ni*layer_size_];
     unsigned char* index_orient_buff_ = 0;
 
@@ -1079,7 +1080,7 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& tile_fname_bi
     volm_score_sptr score = score_all_[i];
     vcl_vector<unsigned> cam_ids = score->cam_id_;
     // write the txt output
-    vcl_ofstream txt_ofs(tile_fname_txt, vcl_ios_app);
+    vcl_ofstream txt_ofs(tile_fname_txt.c_str(), vcl_ios_app);
     txt_ofs << vcl_setprecision(6) << score->leaf_id_ << ' ' << score->hypo_id_ << ' ' << score->max_score_ << ' ' << score->max_cam_id_ << '\n';
     for (unsigned jj = 0; jj < cam_ids.size(); jj++)
       txt_ofs << ' ' << cam_ids[jj];
@@ -1206,7 +1207,8 @@ bool boxm2_volm_matcher_p1::transfer_query()
    query_local_mem_ = 3 * sizeof(unsigned);   // n_cam + n_obj + n_ind
 
   // construct the ground_id, ground_dist, ground_offset 1D array
-  if (is_grd_reg_) {
+  if (is_grd_reg_)
+  {
     unsigned grd_vox_size = query_->get_ground_id_size();
     grd_id_buff_ = new unsigned[grd_vox_size];
     grd_dist_buff_ = new unsigned char[grd_vox_size];
@@ -1313,7 +1315,8 @@ bool boxm2_volm_matcher_p1::transfer_query()
   }
 
   // construct obj_id, obj_offset 1D array
-  if (is_obj_reg_) {
+  if (is_obj_reg_)
+  {
     unsigned obj_vox_size = query_->get_dist_id_size();
     unsigned obj_offset_size = (*n_cam_) * (*n_obj_);
     obj_id_buff_ = new unsigned[obj_vox_size];
@@ -1551,7 +1554,6 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
     }
   }
 
-
   // calculate the object score
   vcl_vector<float> score_order_all;
   vcl_vector<float> score_min_all;
@@ -1614,7 +1616,6 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
       } // end of loop over cameras
     } // end of loop over indices
   }
-
 
   // get the overall score
   vcl_vector<float> score_all;
@@ -1786,20 +1787,23 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
     }
   }
 
-
   // calculate the object score
   vcl_vector<float> score_order_all;
   vcl_vector<float> score_min_all;
   vcl_vector<float> score_ori_all;
-  if ( is_obj_reg_) {
-    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
+  if (is_obj_reg_)
+  {
+    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
+    {
       unsigned start_ind = ind_id * layer_size_;
-      for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
+      for (unsigned cam_id = 0; cam_id < nc; cam_id++)
+      {
         float score_order = 0.0f;
         float score_min = 0.0f;
         float score_ori = 0.0f;
         unsigned mu_start_id = cam_id*no + ind_id*no*nc;
-        for (unsigned k = 0; k < no; k++) {
+        for (unsigned k = 0; k < no; k++)
+        {
           unsigned offset_id = k + no*cam_id;
           unsigned start_obj = obj_id_offset_buff_[offset_id];
           unsigned end_obj = obj_id_offset_buff_[offset_id+1];
@@ -1867,7 +1871,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
         score_ori_all.push_back(score_ori);
       } // end of loop over cameras
     } // end of loop over indices
-  }
+  } /// end of if
 
 
   // get the overall score
