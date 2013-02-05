@@ -121,7 +121,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name)
-  : active_(true), order_(0), nlcd_id_(0), orient_type_(NON_PLANAR), name_(name),
+  : active_(true), order_(0), nlcd_id_(0), orient_type_(INFINT), name_(name),
     depth_(vcl_numeric_limits<double>::max()),
     min_depth_(vcl_numeric_limits<double>::max()),
     max_depth_(vcl_numeric_limits<double>::max()),
