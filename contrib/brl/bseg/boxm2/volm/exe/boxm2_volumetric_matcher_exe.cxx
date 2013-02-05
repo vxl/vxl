@@ -18,7 +18,7 @@
 #include <volm/volm_loc_hyp.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
-#include <boxm2/volm/boxm2_volm_matcher.h>
+#include <boxm2/volm/boxm2_volm_matcher_p0.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
@@ -156,7 +156,7 @@ int main(int argc,  char** argv)
 
   // create the volm_matcher class
   vcl_cout << "\n Starting the volm matcher" << vcl_endl;
-  boxm2_volm_matcher matcher(query, ind, ei, gpu);
+  boxm2_volm_matcher_p0 matcher(query, ind, ei, gpu);
   // get the score for all indexes
   volm_io::write_status(out_folder(), volm_io::EXE_STARTED);
   if (!matcher.matching_cost_layer()) {
