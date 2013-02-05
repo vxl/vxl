@@ -131,13 +131,16 @@ static void test_depth_map()
 
 #if 0
   //  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res03_coloredmounds_depthscene_v2.vsl";
-    vcl_string spath = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
+  //    vcl_string spath = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
   // vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res17_beachgrass_depthmap_scene.vsl";
+vcl_string spath = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/feb_test_queries/tile6_drainage/p1a_test20/p1a_res20_groundtruth_labelme.vsl";
   vsl_b_ifstream tis(spath.c_str()); 
   depth_map_scene scin;
   scin.b_read(tis);
   tis.close();
-#if 0 // needed to convert old depthmap scenes to new region types
+#endif
+#if 0 
+// needed to convert old depthmap scenes to new region types
   vcl_vector<depth_map_region_sptr> regs = scin.scene_regions();
   for(vcl_vector<depth_map_region_sptr>::iterator rit = regs.begin(); rit !=regs.end();++rit)
     if((*rit)->orient_type() == depth_map_region::HORIZONTAL)
@@ -152,15 +155,15 @@ static void test_depth_map()
 
   vsl_b_ofstream tos(spath.c_str());
   scin.b_write(tos);
-#endif
+
   scene_depth_iterator dend = scin.end();
   scene_depth_iterator sit = scin.begin();
   for (; sit != dend; ++sit)
     scin.print_depth_states();
-#if 0
+
   vil_image_view<float> dv = sit->depth_map(0);
   vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator_v2.tiff");
-#endif
+
 #endif
 }
 

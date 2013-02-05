@@ -68,6 +68,10 @@ class depth_map_region : public vbl_ref_count
   vcl_string name() const {return name_;}
   //: region orientation
   orientation orient_type() const{return orient_type_;}
+  //: orientation color
+  static vcl_vector<float> orient_color(unsigned char orient_code);
+  //: string name for orientation
+  static vcl_string orient_string(unsigned char orient_code);
   //: region nlcd land classfication id
   unsigned nlcd_id() const { return nlcd_id_; }
   vsol_polygon_3d_sptr region_3d() const {return region_3d_;}

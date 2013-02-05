@@ -5,6 +5,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
+
 SET(depth_map_sources
  depth_map_scene.h   depth_map_scene.cxx  depth_map_scene_sptr.h
  depth_map_region.h  depth_map_region.cxx depth_map_region_sptr.h

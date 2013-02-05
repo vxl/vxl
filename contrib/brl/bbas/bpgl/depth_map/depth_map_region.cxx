@@ -1,4 +1,5 @@
 #include "depth_map_region.h"
+#include "depth_map_defs.h"
 //:
 // \file
 #include <vgl/vgl_plane_3d.h>
@@ -497,4 +498,89 @@ void depth_map_region::b_read(vsl_b_istream& is)
     vcl_cout << "depth_map_region - unknown binary io version " << ver <<'\n';
     return;
   }
+}
+vcl_vector<float> depth_map_region::orient_color(unsigned char orient_code)
+{
+  vcl_vector<float> c(3);
+  switch(orient_code){
+  case static_cast<unsigned char>(HORIZONTAL):{
+    c[0]=horz_r; c[1]=horz_g; c[2]=horz_b;
+    break;
+  }
+  case static_cast<unsigned char>(FRONT_PARALLEL):{
+    c[0]=frp_r; c[1]=frp_g; c[2]=frp_b;
+    break;
+  }
+  case static_cast<unsigned char>(SLANTED_RIGHT):{
+    c[0]=slr_r; c[1]=slr_g; c[2]=slr_b;
+    break;
+  }
+  case static_cast<unsigned char>(SLANTED_LEFT):{
+    c[0]=sll_r; c[1]=sll_g; c[2]=sll_b;
+    break;
+  }
+  case static_cast<unsigned char>(POROUS):{
+    c[0]=po_r; c[1]=po_g; c[2]=po_b;
+    break;
+  }
+  case static_cast<unsigned char>(NON_PLANAR):{
+    c[0]=np_r; c[1]=np_g; c[2]=np_b;
+    break;
+  }
+  case static_cast<unsigned char>(GROUND_PLANE):{
+    c[0]=gp_r; c[1]=gp_g; c[2]=gp_b;
+    break;
+  }
+  case static_cast<unsigned char>(INFINT):{
+    c[0]=inf_r; c[1]=inf_g; c[2]=inf_b;
+    break;
+  }
+  case static_cast<unsigned char>(VERTICAL):{
+    c[0]=vrt_r; c[1]=vrt_g; c[2]=vrt_b;
+    break;
+  }
+  default:
+    vcl_cout << "unknown orientation\n";
+  }
+  return c;
+}
+vcl_string depth_map_region::orient_string(unsigned char orient_code){
+  switch(orient_code){
+  case static_cast<unsigned char>(HORIZONTAL):{
+    return "Horizontal    ";
+    break;
+  }
+  case static_cast<unsigned char>(FRONT_PARALLEL):{
+    return "FrontoParallel";
+    break;
+  }
+  case static_cast<unsigned char>(SLANTED_RIGHT):{
+    return "SlantedRight  ";
+    break;
+  }
+  case static_cast<unsigned char>(SLANTED_LEFT):{
+    return "SlantedLeft   ";
+    break;
+  }
+  case static_cast<unsigned char>(POROUS):{
+    return "Porous        ";
+    break;
+  }
+  case static_cast<unsigned char>(NON_PLANAR):{
+    return "NonPlanar     ";
+    break;
+  }
+  case static_cast<unsigned char>(GROUND_PLANE):{
+    return "GroundPlane   ";
+    break;
+  }
+  case static_cast<unsigned char>(INFINT):{
+    return "Sky           ";
+    break;
+  }
+  case static_cast<unsigned char>(VERTICAL):{
+    break;
+  }
+  }
+  return "Unknown         ";
 }
