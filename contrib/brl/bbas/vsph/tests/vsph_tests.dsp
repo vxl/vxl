@@ -111,6 +111,9 @@ SOURCE=.\test_sph_geom.cxx
 SOURCE=.\test_unit_sphere.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

@@ -128,6 +128,9 @@ SOURCE=.\depth_map_region_sptr.h
 # Begin Source File
 SOURCE=.\depth_map_scene_sptr.h
 # End Source File
+# Begin Source File
+SOURCE=.\depth_map_defs.h
+# End Source File
 # End Group
 # End Target
 # End Project
