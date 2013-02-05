@@ -21,7 +21,6 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher_p1.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
@@ -102,8 +101,8 @@ int main(int argc,  char** argv)
     index_files.push_back(ind_file);
     ind_file = vul_file::strip_directory(ind_file);
     ind_file = vul_file::strip_extension(ind_file);
-    score_files.push_back(score_folder() + "/" + ind_file + "_score.bin");
-    cam_files.push_back(score_folder() + "/" + ind_file + "_camera.bin");
+    score_files.push_back(score_folder() + '/' + ind_file + "_score.bin");
+    cam_files.push_back(score_folder() + '/' + ind_file + "_camera.bin");
   }
 
   if (!hyp_files.size()) {
@@ -290,7 +289,7 @@ int main(int argc,  char** argv)
     volm_rationale r = top_matches_iter->second;
     vcl_string cam_postfix = query->get_cam_string(r.cam_id);
     vcl_stringstream str;
-    str << rat_folder() + "/" << "query_top_" << cnt++ << cam_postfix << ".png";
+    str << rat_folder() + "/query_top_" << cnt++ << cam_postfix << ".png";
     vcl_cout << "writing rat to: " << str.str() << vcl_endl; vcl_cout.flush();
     query->draw_query_image(r.cam_id, str.str());
   }
@@ -492,7 +491,7 @@ int main(int argc,  char** argv)
 #endif
       // read score and data for current leaf
       vcl_ifstream ifs(score_file.c_str());
-      vcl_vector<boxm2_volm_score_out_max> score_all;
+      vcl_vector<boxm2_volm_score_out> score_all;
       while ( !ifs.eof() ) {
         boxm2_volm_score_out_max score;
         ifs >> score.hypo_id_; ifs >> score.max_score_;  ifs >> score.max_cam_id_;
