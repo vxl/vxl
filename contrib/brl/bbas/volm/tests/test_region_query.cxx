@@ -12,8 +12,6 @@
 #include <volm/volm_spherical_shell_container_sptr.h>
 #include <volm/volm_io.h>
 #include <volm/volm_camera_space.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_save.h>
 
 static void test_region_query()
 {
@@ -46,7 +44,7 @@ static void test_region_query()
                           tilt_mid, tilt_radius, tilt_inc,
                           roll_mid, roll_radius, roll_inc);
   volm_spherical_region_query srq(dms, cs_ptr, sph);
-  
+
   srq.print(vcl_cout);
 
 
@@ -84,45 +82,44 @@ static void test_region_query()
   unsigned nshell = shell_cart_pts.size();
   unsigned nusph = usph_cart_pts.size();
   vcl_cout << "Nsh =" << nshell << " Nusp = " << nusph << vcl_flush;
-  if(nshell != nusph) {
-    vcl_cout << ">>>>>>>BAD COUNT <<<<<<\n";
+  if (nshell != nusph) {
+    vcl_cout << ">>>>>>> BAD COUNT <<<<<<\n";
   }
   double max_mind = 0.0;
-  for(unsigned i = 0; i<nusph; ++i){
+  for (unsigned i = 0; i<nusph; ++i) {
     double min_d = 10000.0;
     vgl_vector_3d<double> usp = usph_cart_pts[i];
     vsph_sph_point_2d uspp = usph_sph_pts[i];
     vgl_vector_3d<double> v_close;
-    int jclose;
-    for(unsigned j = 0; j<nshell; ++j){
+    unsigned int jclose;
+    for (unsigned j = 0; j<nshell; ++j) {
       vgl_point_3d<double> ssp = shell_cart_pts[j];
       vgl_vector_3d<double> temp(ssp.x(), ssp.y(), ssp.z());
       double dist = angle(usp, temp);
-      if(dist<min_d){
-	min_d = dist;
-	v_close = temp;
-	jclose = j;
+      if (dist<min_d) {
+        min_d = dist;
+        v_close = temp;
+        jclose = j;
       }
     }
-    if(min_d > max_mind)
+    if (min_d > max_mind)
       max_mind = min_d;
     vsph_sph_point_3d shpp = shell_sph_pts[jclose];
     double dist_sph = vcl_fabs(shpp.theta_-uspp.theta_) +
       vcl_fabs(shpp.phi_-uspp.phi_);
-    if(min_d > tol||jclose!=i || dist_sph >tol)
-      vcl_cout << "[" << i << "]/[" << jclose << "]-[" << min_d << "]:(" << usp.x() << ' ' << v_close.x() << "),(" 
-	       << usp.y() << ' ' << v_close.y() << "),("
-	       << usp.z() << ' ' << v_close.z() << ")\n";
+    if (min_d > tol || jclose!=i || dist_sph >tol)
+      vcl_cout << '[' << i << "]/[" << jclose << "]-[" << min_d << "]:(" << usp.x() << ' ' << v_close.x() << "),("
+               << usp.y() << ' ' << v_close.y() << "),("
+               << usp.z() << ' ' << v_close.z() << ")\n";
   }
   vcl_cout << "Max distance between corresponding verts = " << max_mind << '\n';
-  
 
   vcl_string vert_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/verts.wrl";
   usph.display_vertices(vert_path);
-   vcl_string edge_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/edges.wrl";
+  vcl_string edge_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/edges.wrl";
   usph.display_edges(edge_path);
 
-#endif
+#endif // 1
 }
 
 TESTMAIN(test_region_query);
