@@ -16,7 +16,7 @@
 #include <volm/volm_loc_hyp.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
-#include <boxm2/volm/boxm2_volm_matcher.h>
+#include <boxm2/volm/boxm2_volm_matcher_p0.h>
 #include <boxm2/volm/boxm2_volm_matcher_order.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
@@ -221,7 +221,7 @@ int main(int argc,  char** argv)
       vcl_cout << " Results are stored in file " << score_fname << " and " << cam_fname << vcl_endl;
     }
     else {
-      boxm2_volm_matcher matcher(query, ind, ei, mgr->gpus_[devID()]);
+      boxm2_volm_matcher_p0 matcher(query, ind, ei, mgr->gpus_[devID()]);
       log << "\t using device: " << mgr->gpus_[devID()]->device_identifier() << vcl_endl;
 
       // get the score for all indexes
