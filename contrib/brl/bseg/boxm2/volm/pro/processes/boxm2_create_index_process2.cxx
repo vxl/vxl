@@ -71,7 +71,6 @@ namespace boxm2_create_index_process2_globals
     norm_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "normalize_index_depth_kernel", options,
                                "normalize_index_depth_kernel"); //kernel identifier (for error checking)
 
-
     vec_kernels.push_back(norm_kernel);
 
     return ;
@@ -164,31 +163,32 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   if (!leaves.size()) {
     vcl_cout << " there are no leaves in this tile!.. returning!\n";
     return true;
-  } else
+  }
+  else
     vcl_cout << " there are " << leaves.size() << " leaves with total: " << size << " hyps in this tile!\n";
 
   if (leaf_id >= (int)leaves.size()) {
-    vcl_cout << " leaf id: " << leaf_id << " is larger than the number of leaves: " << leaves.size() << ".. returning!\n"; 
+    vcl_cout << " leaf id: " << leaf_id << " is larger than the number of leaves: " << leaves.size() << ".. returning!\n";
     return false;
   }
 
-  // read spherical shell container 
+  // read spherical shell container
   vsl_b_ifstream ifs(ray_file);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
   sph_shell->b_read(ifs);
   ifs.close();
 
   params.layer_size = (unsigned)sph_shell->get_container_size();
-  int layer_size = (int)params.layer_size; 
+  int layer_size = (int)params.layer_size;
 
   vcl_stringstream out_sph_namet; out_sph_namet << out_index_folder << "geo_index_tile_" << tile_id << "_index_sph_shell.vrml";
   sph_shell->draw_template(out_sph_namet.str());
 
-  //: adjust dmax if scene has very few blocks
+  // adjust dmax if scene has very few blocks
   float dmax = params.dmax;
-  if (scene->get_block_ids().size() < 5) 
+  if (scene->get_block_ids().size() < 5)
     dmax = (float)(scene->bounding_box().height()+scene->bounding_box().width());
-  
+
   global_threads[0] = RoundUp(layer_size, (int)local_threads[0]);
   vcl_cout << "layer_size: " << layer_size << ", # of global threads: " << global_threads[0] << '\n';
 
@@ -235,7 +235,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
 
   bocl_mem* ray_dim_mem = new bocl_mem(device->context(), &(layer_size), sizeof(int), "ray directions size");
   ray_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-  
+
   bocl_mem* max_dist = new bocl_mem(device->context(), &(params.dmax), sizeof(int), "max distance to shoot rays");
   max_dist->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   vcl_cout << " will stop ray casting at distance: " << params.dmax << vcl_endl;
@@ -243,7 +243,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
   vcl_cout << "number of blocks: " << blocks.size() << vcl_endl;
   vcl_cout.flush();
-  //: get subblk dimension
+  // get subblk dimension
   boxm2_block_metadata mdata = scene->get_block_metadata(blocks.begin()->first);
   float subblk_dim = (float)mdata.sub_block_dim_.x();
   vcl_cout << "subblk_dim: " << subblk_dim << vcl_endl;
@@ -255,7 +255,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   boxm2_block_id curr_block;
 
   //zip through each location hypothesis
-  vcl_vector<volm_geo_index_node_sptr> leaves2; 
+  vcl_vector<volm_geo_index_node_sptr> leaves2;
   if (leaf_id < 0) leaves2 = leaves;
   else leaves2.push_back(leaves[leaf_id]);
   vcl_cout << " will index " << leaves2.size() << " leaves!\n"; vcl_cout.flush();
@@ -263,7 +263,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
     if (!leaves2[li]->hyps_)
       continue;
     vcl_cout << " will index " << volm_geo_index::hypo_size(leaves2[li]) << " indices in leaf: " << leaves2[li]->get_hyp_name("") << vcl_endl; vcl_cout.flush();
-    
+
     // create a binary index file for each hypo set in a leaf
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
     vcl_string index_file = leaves2[li]->get_index_name(out_file_name_pre.str());
@@ -343,7 +343,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
           continue;
         }
       }
-    
+
       vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
       if (!(ord_iter != order_cache.end())) {
         order_cache[curr_block] =  boxm2_util::order_about_a_block(scene, curr_block, dmax);
@@ -480,7 +480,6 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
     boxm2_volm_wr3db_index_params::write_size_file(index_file, indexed_cnt);
 
     opencl_cache->clear_cache();
-    
   }
 
   delete ray_dir_buffer;
