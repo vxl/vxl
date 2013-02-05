@@ -30,7 +30,7 @@ set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
     min_depth_ = sky_depth;
     max_depth_ = sky_depth;
     order_ = sky_order;
-	orientation_ = static_cast<unsigned char>(depth_map_region::INFINT);
+    orientation_ = static_cast<unsigned char>(depth_map_region::INFINT);
   }
   else {
     orientation_ = static_cast<unsigned char>(otype);
@@ -51,7 +51,9 @@ set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
     }
   }
 }
-void volm_spherical_query_region::print(vcl_ostream& os) const{
+
+void volm_spherical_query_region::print(vcl_ostream& os) const
+{
   vcl_cout << depth_map_region::orient_string(orientation_) << "::";
   box_.print(os, false);
 }

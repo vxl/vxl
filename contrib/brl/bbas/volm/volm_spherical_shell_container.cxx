@@ -10,34 +10,37 @@
 #include <vsl/vsl_vector_io.h>
 
 // constructor
-volm_spherical_shell_container::volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle){
-
+volm_spherical_shell_container::volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle)
+{
   usph_ = new vsph_unit_sphere(point_angle, top_angle, 180.0-bottom_angle);
 }
 
 //: Minimal constructor (to internally construct vsph_unit_sphere)
 volm_spherical_shell_container::
 volm_spherical_shell_container(double point_angle, double min_theta,
-			       double max_theta){
+                               double max_theta) {
   usph_ = new vsph_unit_sphere(point_angle, min_theta, max_theta);
 }
 
-vcl_vector<vgl_point_3d<double> > volm_spherical_shell_container::cart_points() const{
+vcl_vector<vgl_point_3d<double> > volm_spherical_shell_container::cart_points() const
+{
   const vcl_vector<vgl_vector_3d<double> >& cart_vects = usph_->cart_vectors_ref();
   unsigned n  = cart_vects.size();
   vcl_vector<vgl_point_3d<double> > temp(n);
-  for(unsigned i = 0; i<n; ++i){
+  for (unsigned i = 0; i<n; ++i) {
     const vgl_vector_3d<double>& v = cart_vects[i];
     temp[i].set(v.x(), v.y(), v.z());
   }
   return temp;
 }
+
 // the angle units are as maintained in usph_
-vcl_vector<vsph_sph_point_3d> volm_spherical_shell_container::sph_points() const{
+vcl_vector<vsph_sph_point_3d> volm_spherical_shell_container::sph_points() const
+{
   const vcl_vector<vsph_sph_point_2d>& sph_pts = usph_->sph_points_ref();
   unsigned n  = sph_pts.size();
   vcl_vector<vsph_sph_point_3d> temp(n);
-  for(unsigned i = 0; i<n; ++i)
+  for (unsigned i = 0; i<n; ++i)
     temp[i].set(1.0, sph_pts[i].theta_, sph_pts[i].phi_);
   return temp;
 }
@@ -45,9 +48,9 @@ vcl_vector<vsph_sph_point_3d> volm_spherical_shell_container::sph_points() const
 void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name)
 {
   vcl_ofstream ofs(vrml_file_name.c_str());
-  if(!ofs.is_open()){
-    vcl_cout << " in ::draw_template vrml path does not exist - " 
-	     << vrml_file_name << '\n';
+  if (!ofs.is_open()) {
+    vcl_cout << " in ::draw_template vrml path does not exist - "
+             << vrml_file_name << '\n';
     return;
   }
   vcl_vector<vgl_point_3d<double> > cart_pts = this->cart_points();
@@ -82,9 +85,9 @@ void volm_spherical_shell_container::draw_template(vcl_string vrml_file_name, vc
   assert(values.size() == usph_->size());
 
   vcl_ofstream ofs(vrml_file_name.c_str());
-  if(!ofs.is_open()){
-    vcl_cout << " in ::draw_template vrml path does not exist - " 
-	     << vrml_file_name << '\n';
+  if (!ofs.is_open()) {
+    vcl_cout << " in ::draw_template vrml path does not exist - "
+             << vrml_file_name << '\n';
     return;
   }
   vcl_vector<vgl_point_3d<double> > cart_pts = this->cart_points();
@@ -137,11 +140,13 @@ void volm_spherical_shell_container::panaroma_img(vil_image_view<vil_rgb<vxl_byt
       img(ii,jj).r = 255;
       img(ii,jj).g = 0;
       img(ii,jj).b = 0;
-    } else if (values[i] == 254) { // sky
+    }
+    else if (values[i] == 254) { // sky
       img(ii,jj).r = 0;
       img(ii,jj).g = 0;
       img(ii,jj).b = 255;
-    } else {
+    }
+    else {
       img(ii,jj).r = values[i];
       img(ii,jj).g = values[i];
       img(ii,jj).b = values[i];
@@ -163,17 +168,18 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
       img(ii,jj).r = 255;
       img(ii,jj).g = 0;
       img(ii,jj).b = 0;
-    } else if (values[i] == 254) { // sky
+    }
+    else if (values[i] == 254) { // sky
       img(ii,jj).r = 0;
       img(ii,jj).g = 0;
       img(ii,jj).b = 255;
-    } else {
-      if (volm_nlcd_table::land_id.find((int)values[i]) == volm_nlcd_table::land_id.end()) {
-        vcl_cerr << "cannot find this value: " << (int)values[i] << " in the color table!\n";
-        img(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
-      } else 
-        img(ii,jj) = volm_nlcd_table::land_id[(int)values[i]].second; 
     }
+    else if (volm_nlcd_table::land_id.find((int)values[i]) == volm_nlcd_table::land_id.end()) {
+      vcl_cerr << "cannot find this value: " << (int)values[i] << " in the color table!\n";
+      img(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
+    }
+    else
+      img(ii,jj) = volm_nlcd_table::land_id[(int)values[i]].second;
   }
 }
 
@@ -191,17 +197,18 @@ void volm_spherical_shell_container::panaroma_img_orientations(vil_image_view<vi
       img(ii,jj).r = 255;
       img(ii,jj).g = 0;
       img(ii,jj).b = 0;
-    } else if (values[i] == 254) { // sky
+    }
+    else if (values[i] == 254) { // sky
       img(ii,jj).r = 0;
       img(ii,jj).g = 0;
       img(ii,jj).b = 255;
-    } else {
-      if (volm_orient_table::ori_index_colors.find((int)values[i]) == volm_orient_table::ori_index_colors.end()) {
-        vcl_cerr << "cannot find this value: " << (int)values[i] << " in the color table!\n";
-        img(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
-      } else 
-        img(ii,jj) = volm_orient_table::ori_index_colors[(int)values[i]]; 
     }
+    else if (volm_orient_table::ori_index_colors.find((int)values[i]) == volm_orient_table::ori_index_colors.end()) {
+      vcl_cerr << "cannot find this value: " << (int)values[i] << " in the color table!\n";
+      img(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
+    }
+    else
+      img(ii,jj) = volm_orient_table::ori_index_colors[(int)values[i]];
   }
 }
 
@@ -220,7 +227,8 @@ void volm_spherical_shell_container::b_read(vsl_b_istream& is)
   vsl_b_read(is, ver);
   if (ver ==1) {
     vsl_b_read(is, usph_);
-  }else{
+  }
+  else {
     vcl_cerr << "volm_spherical_shell_container - unknown binary io version " << ver <<'\n';
     return;
   }

@@ -60,7 +60,6 @@ void volm_spherical_region_query::construct_spherical_regions()
       sph_reg.set_from_depth_map_region(cam, obj_reg, sph_vol_);
       sph_regions_[roll_idx].push_back(sph_reg);
     }
-
   }
 }
 
@@ -70,14 +69,15 @@ query_regions(unsigned roll_indx)
   return sph_regions_[roll_indx];
 }
 
-void volm_spherical_region_query::print(vcl_ostream& os) const{
+void volm_spherical_region_query::print(vcl_ostream& os) const
+{
   vcl_map< unsigned, vcl_vector<volm_spherical_query_region> >::const_iterator rolit =  sph_regions_.begin();
-  for(; rolit != sph_regions_.end(); ++rolit){
+  for (; rolit != sph_regions_.end(); ++rolit) {
     vcl_cout << "BoundingBoxes for roll = " << cam_space_->roll(rolit->first)
-	     << " degrees \n";
+             << " degrees\n";
     const vcl_vector<volm_spherical_query_region>& sr = rolit->second;
-    for(vcl_vector<volm_spherical_query_region>::const_iterator rit=sr.begin();
-	rit != sr.end(); ++rit){
+    for (vcl_vector<volm_spherical_query_region>::const_iterator rit=sr.begin();
+         rit != sr.end(); ++rit) {
       rit->print(os);
     }
     vcl_cout << '\n';
@@ -94,15 +94,15 @@ display_query_regions(vsph_unit_sphere_sptr const& usph_ptr,
   unsigned n = qrs.size();
   vsph_unit_sphere::const_iterator sit = usph_ptr->begin();
   unsigned idx = 0;
-  for(; sit != usph_ptr->end(); ++sit, ++idx){
+  for (; sit != usph_ptr->end(); ++sit, ++idx) {
     const vsph_sph_point_2d & sp = *sit;
 
-    for(unsigned i = 0; i<n; ++i){
+    for (unsigned i = 0; i<n; ++i) {
       volm_spherical_query_region& qr = qrs[i];
-      if(qr.inside(sp)){
-	unsigned char ocode = qr.orientation();
-	vcl_vector<float> c = depth_map_region::orient_color(ocode);
-	reg_color[idx]= c;
+      if (qr.inside(sp)) {
+        unsigned char ocode = qr.orientation();
+        vcl_vector<float> c = depth_map_region::orient_color(ocode);
+        reg_color[idx]= c;
       }
     }
   }
