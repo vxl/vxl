@@ -26,8 +26,10 @@ extern "C" {
 # include "vidl_ffmpeg_ostream_v2.txx"
 #elif LIBAVCODEC_BUILD < ((53<<16)+(0<<8)+0)  // before ver 53.0.0
 # include "vidl_ffmpeg_ostream_v3.txx"
-#else
+#elif LIBAVCODEC_BUILD < ((53<<16)+(24<<8)+0)  // before ver 53.24.0
 # include "vidl_ffmpeg_ostream_v4.txx"
+#else
+# include "vidl_ffmpeg_ostream_v0.9.txx"
 #endif
 
 #else // VIDL_HAS_FFMPEG

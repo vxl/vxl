@@ -25,8 +25,10 @@ extern "C" {
 # include "vidl_ffmpeg_istream_v1.txx"
 #elif LIBAVFORMAT_BUILD < ((53<<16)+(0<<8)+0)  // before ver 53.0.0
 # include "vidl_ffmpeg_istream_v2.txx"
-#else
+#elif LIBAVFORMAT_BUILD < ((53<<16)+(24<<8)+0)  // before ver 53.24.0
 # include "vidl_ffmpeg_istream_v3.txx"
+#else
+# include "vidl_ffmpeg_istream_v0.9.txx"
 #endif
 
 #else // VIDL_HAS_FFMPEG
