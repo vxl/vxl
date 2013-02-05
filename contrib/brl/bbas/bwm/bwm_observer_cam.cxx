@@ -2062,24 +2062,29 @@ void bwm_observer_cam::save_depth_map_scene(vcl_string const& path)
 
 void bwm_observer_cam::display_depth_map_scene()
 {
-  depth_map_region_sptr gp = scene_.ground_plane()[0];
-  if (gp) {
-    bwm_observer_img::create_polygon(gp->region_2d());
-    vsol_point_2d_sptr c = gp->centroid_2d();
-    if (c) {
-      float x = static_cast<float>(c->x());
-      float y = static_cast<float>(c->y());
-      img_tab_->text_tab()->add(x, y, gp->name());
+  for (unsigned i = 0; i < scene_.ground_plane().size(); i++) {
+    depth_map_region_sptr gp = scene_.ground_plane()[i];
+    if (gp) {
+      bwm_observer_img::create_polygon(gp->region_2d());
+      vsol_point_2d_sptr c = gp->centroid_2d();
+      if (c) {
+        float x = static_cast<float>(c->x());
+        float y = static_cast<float>(c->y());
+        img_tab_->text_tab()->add(x, y, gp->name());
+      }
     }
   }
-  depth_map_region_sptr sky = scene_.sky()[0];
-  if (sky) {
-    bwm_observer_img::create_polygon(sky->region_2d());
-    vsol_point_2d_sptr c = sky->centroid_2d();
-    if (c) {
-      float x = static_cast<float>(c->x());
-      float y = static_cast<float>(c->y());
-      img_tab_->text_tab()->add(x, y, sky->name());
+  for (unsigned i = 0; i < scene_.sky().size(); i++) {
+    depth_map_region_sptr sky = scene_.sky()[i];
+    if (sky) {
+      bwm_observer_img::create_polygon(sky->region_2d());
+      vsol_point_2d_sptr c = sky->centroid_2d();
+      if (c) {
+        float x = static_cast<float>(c->x());
+        float y = static_cast<float>(c->y());
+        vcl_stringstream tmp; tmp << i;
+        img_tab_->text_tab()->add(x, y, "sky_" + tmp.str());
+      }
     }
   }
   vcl_vector<depth_map_region_sptr> regions = scene_.scene_regions();
