@@ -1,4 +1,4 @@
-//This is brl/bbas/bpgl/depth_map_defs.h
+//This is brl/bbas/bpgl/depth_map/depth_map_defs.h
 #ifndef depth_map_defs_h_
 #define depth_map_defs_h_
 //:
@@ -9,7 +9,7 @@
 // \date February 2, 2013
 // \verbatim
 //  Modifications
-// None
+//   <None>
 // \endverbatim
 
 // color codes for region attributes
