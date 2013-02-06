@@ -21,7 +21,7 @@ SET(boxm2_volm_sources
 
 IF(OPENCL_FOUND)
 SET(boxm2_volm_sources ${boxm2_volm_sources}
-	boxm2_volm_matcher_p0.h         boxm2_volm_matcher_p0.cxx
+    boxm2_volm_matcher_p0.h         boxm2_volm_matcher_p0.cxx
     boxm2_volm_matcher_p1.h         boxm2_volm_matcher_p1.cxx
     boxm2_volm_matcher_p2.h         boxm2_volm_matcher_p2.cxx
    )
