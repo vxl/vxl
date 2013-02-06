@@ -46,7 +46,6 @@ struct vidl_ffmpeg_ostream::pimpl
   AVFormatContext* fmt_cxt_;
   bool file_opened_;
   bool codec_opened_;
-  vil_memory_chunk_sptr bit_buf_;
   unsigned int cur_frame_;
   char* video_rc_eq_;
 };
@@ -91,10 +90,6 @@ open()
 {
   // Close any open files
   close();
-
-  // a raw video packet is the same size as the input image. Others
-  // are smaller.
-  os_->bit_buf_ = new vil_memory_chunk( params_.ni_ * params_.nj_ * 3, VIL_PIXEL_FORMAT_BYTE );
 
   os_->fmt_cxt_ = avformat_alloc_context();
 
