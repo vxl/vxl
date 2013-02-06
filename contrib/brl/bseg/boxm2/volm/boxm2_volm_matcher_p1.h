@@ -3,8 +3,9 @@
 #define boxm2_volm_matcher_p1_h_
 //:
 // \file
-// \brief  A class to match a voxelized query volume to an indexed reference volume based on the depth value and relative order of voxels.
-// The index and hypotheses are now referred by \a volm_geo_index.
+// \brief  A class to match a voxelized query volume to an indexed reference volume
+//         based on the depth value and relative order of voxels.  The index and hypotheses
+//         are now referred by volm_geo_index
 //
 // \author Yi Dong
 // \date January 21, 2012
@@ -31,7 +32,7 @@ class boxm2_volm_score_out;
 
 class boxm2_volm_matcher_p1
 {
- public:
+public:
   //: default constructor
   boxm2_volm_matcher_p1() {}
   //: constructor
@@ -49,7 +50,7 @@ class boxm2_volm_matcher_p1
                         float const& threshold,
                         unsigned const& max_cam_per_loc,
                         bool const& use_orient = false);
-
+  
   //: destructor
   ~boxm2_volm_matcher_p1();
   //: matcher function
@@ -58,9 +59,9 @@ class boxm2_volm_matcher_p1
   bool write_matcher_result(vcl_string const& tile_fname_bin, vcl_string const& tile_fname_txt);
   bool write_matcher_result(vcl_string const& tile_fname_bin);
   //: for testing purpose -- output score for all camera (should only be used for ground truth location)
-  bool write_matcher_result_all(unsigned const& leaf_id, unsigned const& hypo_id, vcl_string const& out_fname);
-
- private:
+  bool write_gt_cam_score(unsigned const& leaf_id, unsigned const& hypo_id, vcl_string const& out_fname);
+    
+private:
   //: query, indices, device
   volm_query_sptr                                   query_;
   vcl_vector<volm_geo_index_node_sptr>             leaves_;
@@ -71,7 +72,7 @@ class boxm2_volm_matcher_p1
 
   //: option to use orientation attirbute
   bool                                         use_orient_;
-
+  
   //: shell container size
   unsigned                                     layer_size_;
   unsigned*                               layer_size_buff_;
@@ -113,14 +114,14 @@ class boxm2_volm_matcher_p1
   bocl_mem*        grd_id_offset_cl_mem_;
   float*                grd_weight_buff_;
   bocl_mem*           grd_weight_cl_mem_;
-
+  
   unsigned*                 sky_id_buff_;
   bocl_mem*               sky_id_cl_mem_;
   unsigned*          sky_id_offset_buff_;
   bocl_mem*        sky_id_offset_cl_mem_;
   float*                sky_weight_buff_;
   bocl_mem*           sky_weight_cl_mem_;
-
+  
   unsigned*                 obj_id_buff_;
   bocl_mem*               obj_id_cl_mem_;
   unsigned*          obj_id_offset_buff_;
@@ -140,18 +141,19 @@ class boxm2_volm_matcher_p1
   bocl_mem*       depth_interval_cl_mem_;
   unsigned*           depth_length_buff_;
   bocl_mem*         depth_length_cl_mem_;
-
+  
   //: indices related
   unsigned*                       n_ind_;
-
+  
   //: output related
   // threshold that only the camera with score higher than threshold will be considered to put into output
   float                            threshold_;
   // maximum number of cameras for each location
   unsigned                   max_cam_per_loc_;
   vcl_vector<volm_score_sptr>      score_all_;
-
-
+  vcl_vector<boxm2_volm_score_out> score_cam_;
+  
+  
   //: transfer volm_query to 1D array for kernel calculation
   bool transfer_query();
   //: transfer volm_query orientation information to 1D array for kernel calculation, if necessary
@@ -199,10 +201,28 @@ class boxm2_volm_matcher_p1
                                      bocl_mem*                  score_cl_mem_,
                                      bocl_mem*                     mu_cl_mem_);
 
-
+  
   //: a test function to check the kernel implementation
   bool volm_matcher_p1_test(unsigned n_ind, unsigned char* index, float* score_buff, float* mu_buff);
   bool volm_matcher_p1_test_ori(unsigned n_ind, unsigned char* index, unsigned char* index_orient, float* score_buff, float* mu_buff);
+
 };
+
+class boxm2_volm_score_out
+{
+public:
+  boxm2_volm_score_out() {}
+  boxm2_volm_score_out(unsigned const& leaf_id, unsigned const& hypo_id,
+                       vcl_vector<unsigned> const& cam_id,
+                       vcl_vector<float> const& cam_score)
+                       : l_id_(leaf_id), h_id_(hypo_id), cam_id_(cam_id), cam_score_(cam_score) {}
+  ~boxm2_volm_score_out() {}
+
+  unsigned l_id_;
+  unsigned h_id_;
+  vcl_vector<unsigned> cam_id_;
+  vcl_vector<float> cam_score_;
+};
+
 
 #endif // boxm2_volm_matcher_p1_h_
