@@ -541,6 +541,9 @@ write_frame(const vidl_frame_sptr& frame)
     vcl_cerr << "FFMPEG video encoding failed" <<vcl_endl;
     return false;
   }
+  // the encoder may not produce a packet on every frame
+  // it may accumulate several frames before releasing a packet
+  // contain the data from all of those frames
   if ( got_packet ) {
     if ( codec->coded_frame ) {
       pkt.pts = codec->coded_frame->pts;
@@ -549,9 +552,7 @@ write_frame(const vidl_frame_sptr& frame)
       pkt.flags |= AV_PKT_FLAG_KEY;
     }
     av_interleaved_write_frame( os_->fmt_cxt_, &pkt );
-  }
-  else {
-    return false;
+    av_free_packet(&pkt);
   }
 
   ++os_->cur_frame_;
