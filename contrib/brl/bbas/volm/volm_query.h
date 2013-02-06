@@ -78,13 +78,10 @@ class volm_query : public vbl_ref_count
   float sky_weight() const                                      { return weight_sky_; }
   depth_map_scene_sptr depth_scene() const                      { return dm_; }
   vcl_vector<depth_map_region_sptr>& depth_regions()            { return depth_regions_; }
+  volm_spherical_shell_container_sptr sph_shell() const         { return sph_; }
   unsigned get_cam_num() const                                  { return (unsigned)cameras_.size(); }
   unsigned get_obj_order_num() const                            { return (unsigned)order_index_[0].size(); }
   unsigned get_query_size() const                               { return query_size_; }
-  //vcl_vector<double>& top_fov()                                 { return top_fov_; }
-  //vcl_vector<double>& headings()                                { return headings_; }
-  //vcl_vector<double>& tilts()                                   { return tilts_; }
-  //vcl_vector<double>& rolls()                                   { return rolls_; }
   //: return number of voxels having ground properties
   unsigned get_ground_id_size() const                           { return ground_offset_[ground_offset_.size()-1]; }
   //: return stored distance for all ground voxels
