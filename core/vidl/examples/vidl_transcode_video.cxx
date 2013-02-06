@@ -20,7 +20,7 @@ int main( int argc, char** argv )
   vidl_ffmpeg_istream istr;
   if ( ! istr.open( input_filename() ) )
   {
-    vcl_cerr << "Couldn't open " << input_filename() << '\n';
+    vcl_cerr << "Couldn't open " << input_filename() << vcl_endl;
     return EXIT_FAILURE;
   }
 
@@ -34,7 +34,7 @@ int main( int argc, char** argv )
   ostr.set_filename( output_filename() );
   if ( ! ostr.open() )
   {
-    vcl_cerr << "Couldn't open " << output_filename() << " for writing\n";
+    vcl_cerr << "Couldn't open " << output_filename() << " for writing" << vcl_endl;
     return EXIT_FAILURE;
   }
 
@@ -43,6 +43,7 @@ int main( int argc, char** argv )
   {
     if ( ! ostr.write_frame( istr.current_frame() ) )
     {
+      vcl_cerr << "failed to write frame" << vcl_endl;
       break;
     }
     ++count;
