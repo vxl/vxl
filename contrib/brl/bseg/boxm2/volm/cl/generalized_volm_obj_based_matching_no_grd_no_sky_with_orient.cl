@@ -122,10 +122,10 @@ __kernel void generalized_volm_obj_based_matching_no_grd_no_sky_with_orient(__gl
         if (d < 253 && d < ln_depth_size) {
           // calculate order score for voxel i
           for (unsigned mu_id = 0; (s_vox_ord && mu_id < k); ++mu_id)
-            if(mu[mu_id+mu_start_id] != 0)
+            if (mu[mu_id+mu_start_id] != 0)
               s_vox_ord = s_vox_ord * (local_depth_interval[d] >= mu[mu_id + mu_start_id]);
           for (unsigned mu_id = k+1; (s_vox_ord && mu_id < ln_obj); ++mu_id)
-            if(mu[mu_id+mu_start_id] != 0)
+            if (mu[mu_id+mu_start_id] != 0)
               s_vox_ord = s_vox_ord * (local_depth_interval[d] <= mu[mu_id + mu_start_id]);
           // calculate min_distance socre for voxel i
           s_vox_min = (d > local_min_dist[k]) ? 1 : 0;
@@ -135,11 +135,11 @@ __kernel void generalized_volm_obj_based_matching_no_grd_no_sky_with_orient(__gl
         }
         // calculate orientation of object
         unsigned char ind_ori = index_orient[id];
-        if(ind_ori > 0 && ind_ori < 10) {  // check whether index orientation is meaningful
+        if (ind_ori > 0 && ind_ori < 10) {  // check whether index orientation is meaningful
           s_vox_ori = (ind_ori == local_obj_orient[k]) ? 1 : 0;               // index and query are both horzontal or exactly vertical
           if (!s_vox_ori)
-            s_vox_ori = (ind_ori != 1 && local_obj_orient[k] == 2) ? 1 : 0;  // index are non-horizontal and query are vertical 
-          // we have overlap but ensure the s_vox_ori happens only when 
+            s_vox_ori = (ind_ori != 1 && local_obj_orient[k] == 2) ? 1 : 0;  // index are non-horizontal and query are vertical
+          // we have overlap but ensure the s_vox_ori happens only when
           // ind_ori == 1 and query_ori == 1  ---> all horizontal
           // ind_ori == 2 and query_ori == 2  ---> all exactly vertical (front-parallel)
           // ind_ori == 3-9 and query_ori == 2 --> index is heading to 8 different direction, e.g, southwest, but transfer to vertical
@@ -162,5 +162,4 @@ __kernel void generalized_volm_obj_based_matching_no_grd_no_sky_with_orient(__gl
     unsigned score_id = cam_id + ind_id*ln_cam;
     score[score_id] = score_obj;
   }  // end of the calculation of index ind_id and camera cam_id
-
 }

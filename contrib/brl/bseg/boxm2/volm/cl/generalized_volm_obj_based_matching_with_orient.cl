@@ -100,7 +100,7 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
     float score_sky;
     score_sky = (end_sky != start_sky) ? (float)sky_count/(end_sky-start_sky) : 0;
     score_sky = score_sky * l_sky_weight;
-    
+
     // calculate ground score
     // define the altitude ratio, suppose the altitude in index could ba up to 3 meter
     // assuming the read-in alt values in query is normally ~1m, the altiutide ratio would be (2-1)/1 ~2
@@ -126,7 +126,7 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
     score_grd = (float)(grd_count + grd_count_ori); // ground score is composed by distance and orientation
     score_grd = (end_grd != start_grd) ? score_grd / (end_grd-start_grd) : 0;
     score_grd = score_grd * l_grd_weight;
-    
+
     // calculate object score
     // calcualte average mean depth value first
     // locate the mu index to store the mean value
@@ -171,10 +171,10 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
         if (d < 253 && d < ln_depth_size) {
           // calculate order score for voxel i
           for (unsigned mu_id = 0; (s_vox_ord && mu_id < k); ++mu_id)
-            if(mu[mu_id+mu_start_id] != 0)
+            if (mu[mu_id+mu_start_id] != 0)
               s_vox_ord = s_vox_ord * (local_depth_interval[d] >= mu[mu_id + mu_start_id]);
           for (unsigned mu_id = k+1; (s_vox_ord && mu_id < ln_obj); ++mu_id)
-            if(mu[mu_id+mu_start_id] != 0)
+            if (mu[mu_id+mu_start_id] != 0)
               s_vox_ord = s_vox_ord * (local_depth_interval[d] <= mu[mu_id + mu_start_id]);
           // calculate min_distance socre for voxel i
           s_vox_min = (d > local_min_dist[k]) ? 1 : 0;
@@ -184,11 +184,11 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
         }
         // calculate orientation of object
         unsigned char ind_ori = index_orient[id];
-        if(ind_ori > 0 && ind_ori < 10) {  // check whether index orientation is meaningful
+        if (ind_ori > 0 && ind_ori < 10) {  // check whether index orientation is meaningful
           s_vox_ori = (ind_ori == local_obj_orient[k]) ? 1 : 0;               // index and query are both horzontal or exactly vertical
           if (!s_vox_ori)
-            s_vox_ori = (ind_ori != 1 && local_obj_orient[k] == 2) ? 1 : 0;  // index are non-horizontal and query are vertical 
-          // we have overlap but ensure the s_vox_ori happens only when 
+            s_vox_ori = (ind_ori != 1 && local_obj_orient[k] == 2) ? 1 : 0;  // index are non-horizontal and query are vertical
+          // we have overlap but ensure the s_vox_ori happens only when
           // ind_ori == 1 and query_ori == 1  ---> all horizontal
           // ind_ori == 2 and query_ori == 2  ---> all exactly vertical (front-parallel)
           // ind_ori == 3-9 and query_ori == 2 --> index is heading to 8 different direction, e.g, southwest, but transfer to vertical
@@ -211,5 +211,4 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
     unsigned score_id = cam_id + ind_id*ln_cam;
     score[score_id] = score_sky + score_grd + score_obj;
   }  // end of the calculation of index ind_id and camera cam_id
-
 }
