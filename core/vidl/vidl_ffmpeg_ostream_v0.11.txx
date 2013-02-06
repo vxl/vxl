@@ -7,7 +7,7 @@
 // \author Matt Leotta
 // \author Amitha Perera
 // \author David Law
-// \date   5 Jan 2013
+// \date   5 Feb 2013
 //
 // Update implementation based on FFMPEG release version 0.11
 // ffmpeg git hash 734cfa8e8bb66d7a5ae69066fdd219e0a517027d

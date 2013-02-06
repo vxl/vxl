@@ -6,7 +6,7 @@
 // \file
 // \author Matt Leotta
 // \author Amitha Perera
-// \date   5 Nov 2013
+// \date   5 Feb 2013
 //
 // Update implementation based on FFMPEG release version 0.9
 // ffmpeg git hash f8d8c57fbb780d6e6e630f16d530f392b31faae

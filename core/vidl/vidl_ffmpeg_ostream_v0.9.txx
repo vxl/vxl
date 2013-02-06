@@ -7,7 +7,7 @@
 // \author Matt Leotta
 // \author Amitha Perera
 // \author David Law
-// \date   5 Jan 2013
+// \date   5 Feb 2013
 //
 // Update implementation based on FFMPEG release version 0.9
 // ffmpeg git hash f8d8c57fbb780d6e6e630f16d530f392b31faae
@@ -551,4 +551,4 @@ write_frame(const vidl_frame_sptr& frame)
   return true;
 }
 
-#endif // vidl_ffmpeg_ostream_v0.9_txx_
+#endif // vidl_ffmpeg_ostream_v0_9_txx_
