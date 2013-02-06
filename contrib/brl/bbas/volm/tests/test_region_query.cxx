@@ -77,7 +77,6 @@ static void test_region_query()
   vcl_vector<vsph_sph_point_3d> shell_sph_pts = sph_shell->sph_points();
   vcl_vector<vsph_sph_point_2d > usph_sph_pts = usph.sph_points();
 
-  bool good = true;
   double tol = 0.002;
   unsigned nshell = shell_cart_pts.size();
   unsigned nusph = usph_cart_pts.size();
