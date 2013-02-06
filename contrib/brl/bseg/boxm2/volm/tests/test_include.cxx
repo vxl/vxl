@@ -7,7 +7,6 @@
 #ifdef HAS_OPENCL
 #include <boxm2/volm/boxm2_volm_matcher_p0.h>
 #include <boxm2/volm/boxm2_volm_matcher_p1.h>
-#include <boxm2/volm/boxm2_volm_matcher_p2.h>
 #endif
 
 int main() { return 0; }
