@@ -221,9 +221,6 @@ SOURCE=.\test_volm_wr3db_ind.cxx
 SOURCE=.\test_volm_locations.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_volm_obj_based_matcher.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_volm_matcher_p1.cxx
 # End Source File
 # Begin Source File

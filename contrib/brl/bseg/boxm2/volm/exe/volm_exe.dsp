@@ -95,31 +95,16 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm2_volumetric_matcher_exe.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_volm_prepare_location_hypotheses.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_volumetric_visualize_top_indices.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_volumetric_matcher_compose_cam.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volumetric_matcher_compose.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_volumetric_matcher_exe_per_gpu.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_volumetric_matcher_rationale.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_volumetric_matcher_integration.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_volumetric_matcher_p0.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_volumetric_matcher_p1.cxx
 # End Source File
 # End Group
 # End Target
