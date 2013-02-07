@@ -473,7 +473,8 @@ foreach my $dir (@DIRS)
       &duplicate_message($s, $cmakef, '# !!')
         unless ($s eq 'impl/glut/menu_hack_none.cxx' ||
                 $s eq 'my_pyramid.cxx' ||
-                $s eq 'baio_unix.cxx')
+                $s eq 'baio_unix.cxx' ||
+                $s eq 'baio_windows.cxx')
     }
     delete $source_files{$s};
     unless (exists $sources{$s})
