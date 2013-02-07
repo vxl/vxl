@@ -167,6 +167,8 @@ bool bocl_kernel::execute(const cl_command_queue& cmd_queue,
     return false;
   else
     return true;
+
+
 }
 
 bool bocl_kernel::set_local_arg(vcl_size_t size)
@@ -195,6 +197,14 @@ float bocl_kernel::exec_time()
   //store execution time
   unsigned long diff = (unsigned long)(tend - tstart);
   return 1.0e-6f*float(diff);
+}
+
+bool bocl_kernel::release_current_event()
+{
+  int status = clReleaseEvent(ceEvent_);
+  if ( !check_val(status,CL_SUCCESS,"clReleaseEvent failed (" + id_ + ") " +error_to_string(status)) )
+    return false;
+  return true;
 }
 
 unsigned long bocl_kernel::local_mem_size()

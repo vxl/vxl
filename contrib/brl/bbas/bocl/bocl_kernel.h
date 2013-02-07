@@ -77,6 +77,9 @@ class bocl_kernel
   //: returns the number of arguments that you've given this kernel
   int arg_cnt() const { return (int)args_.size() + (int)local_args_.size(); }
 
+  //: calls clReleaseEvent on ceEvent_
+  bool release_current_event();
+
   ////////////////////////////////////////////////////////////////////////////
   // Profiling functions
 
