@@ -32,6 +32,7 @@ class volm_orient_table
 class volm_nlcd_table
 {
  public:
+  enum nlcd_values {SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, DOCK = 100, BUILDING = 101};
   static vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > land_id ;
 };
 
@@ -82,6 +83,9 @@ class volm_io
 
   static int read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > >& samples);
   static bool read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data);
+
+  //: read the building footpring file
+  static bool read_building_file(vcl_string file, vcl_vector<vgl_polygon<double> >& builds);
 };
 
 class volm_rationale;

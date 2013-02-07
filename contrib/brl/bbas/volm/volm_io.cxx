@@ -32,7 +32,8 @@ vcl_map<int, vil_rgb<vxl_byte> > create_orient_colors()
 {
   vcl_map<int, vil_rgb<vxl_byte> > m;
   m[0] = vil_rgb<vxl_byte>(255, 0, 0);  // no value
-  m[100] = vil_rgb<vxl_byte>(255, 0, 0);  // no value
+  m[10] = vil_rgb<vxl_byte>(255, 255, 255);  // no value
+  m[100] = vil_rgb<vxl_byte>(100, 0, 0);  // no value
   m[1] = vil_rgb<vxl_byte>(0, 255, 0);  // horizontal surfaces (e.g. ground, water, etc.)
   m[2] = vil_rgb<vxl_byte>(0, 255, 255);  // vertical facing west
   m[3] = vil_rgb<vxl_byte>(0, 255, 155);  // vertical facing south west
@@ -48,14 +49,14 @@ vcl_map<int, vil_rgb<vxl_byte> > create_orient_colors()
 vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > create_nlcd_map()
 {
   vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > m;
-  m[0] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (20, vil_rgb<vxl_byte>(255, 0, 0));  // open water
-  m[11] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (0, vil_rgb<vxl_byte>(0, 0, 100));  // open water
-  m[12] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (1, vil_rgb<vxl_byte>(255, 255, 255));  // perennial ice/snow
-  m[21] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (2, vil_rgb<vxl_byte>(50, 0, 0));  // developed, open space
-  m[22] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (3, vil_rgb<vxl_byte>(100, 0, 10));  // developed, low intensity
-  m[23] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (3, vil_rgb<vxl_byte>(200, 0, 100));  // developed, medium intensity  (combined with prev class)
-  m[24] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (4, vil_rgb<vxl_byte>(220, 0, 100));  // developed, high intensity
-  m[31] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (5, vil_rgb<vxl_byte>(170, 170, 170));  // barren land/beach (rock/sand/clay)
+  m[0] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (20, vil_rgb<vxl_byte>(255, 0, 0));  // invalid
+  m[volm_nlcd_table::WATER] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (0, vil_rgb<vxl_byte>(0, 0, 100));  // open water
+  m[12] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (1, vil_rgb<vxl_byte>(255, 255, 200));  // perennial ice/snow
+  m[volm_nlcd_table::DEVELOPED_OPEN] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (2, vil_rgb<vxl_byte>(50, 0, 0));  // developed, open space
+  m[volm_nlcd_table::DEVELOPED_LOW] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (3, vil_rgb<vxl_byte>(100, 0, 10));  // developed, low intensity
+  m[volm_nlcd_table::DEVELOPED_MED] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (3, vil_rgb<vxl_byte>(200, 0, 100));  // developed, medium intensity  (combined with prev class)
+  m[volm_nlcd_table::DEVELOPED_HIGH] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (4, vil_rgb<vxl_byte>(220, 0, 100));  // developed, high intensity
+  m[volm_nlcd_table::SAND] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (5, vil_rgb<vxl_byte>(170, 170, 170));  // barren land/beach (rock/sand/clay)
   m[41] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (6, vil_rgb<vxl_byte>(0, 200, 0));  // deciduous forest
   m[42] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (7, vil_rgb<vxl_byte>(0, 250, 0));  // evergreen forest
   m[43] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (8, vil_rgb<vxl_byte>(0, 100, 0));  // mixed forest
@@ -69,6 +70,8 @@ vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > create_nlcd_map()
   m[82] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (12, vil_rgb<vxl_byte>(210, 105, 30)); // cultivated crops
   m[90] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (13, vil_rgb<vxl_byte>(176, 196, 222)); // woody wetland -- marina
   m[95] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (13, vil_rgb<vxl_byte>(176, 196, 255)); // Emergent Herbaceous Wetlands
+  m[volm_nlcd_table::DOCK] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (14, vil_rgb<vxl_byte>(0, 0, 0)); // dock
+  m[volm_nlcd_table::BUILDING] = vcl_pair<unsigned char, vil_rgb<vxl_byte> > (15, vil_rgb<vxl_byte>(255, 255, 255)); // dock
   return m;
 }
 
@@ -538,5 +541,58 @@ bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& da
   data.resize(nrays);
   for(int i = 0; i< nrays; ++i)
     is >> data[i];
+  return true;
+}
+
+//: read the building footpring file
+bool volm_io::read_building_file(vcl_string file, vcl_vector<vgl_polygon<double> >& builds)
+{
+  vcl_cout << "\t\t !!!!!!!!!!!!!! reading file: " << file << vcl_endl;
+  vcl_ifstream ifs(file.c_str());
+  if (!ifs.is_open())
+    return false;
+  
+  while (!ifs.eof()) {
+    // each line is one building
+    double height, volume, area, confidence, cent_lon, cent_lat, lon, lat;
+    char buffer[10000];
+    ifs.getline(buffer, 10000);
+    vcl_string temp_buf(buffer);
+    if (ifs.eof()) break;
+    
+    char *tok = vcl_strtok(buffer, ",");
+    vcl_stringstream th(tok); th >> height;
+    
+    tok = vcl_strtok(NULL, ","); // tokenize the remaining string
+    vcl_stringstream tv(tok); tv >> volume;
+
+    tok = vcl_strtok(NULL, ",");
+    vcl_stringstream ta(tok); ta >> area;
+
+    tok = vcl_strtok(NULL, ",");
+    vcl_stringstream tc(tok); tc >> confidence;
+
+    tok = vcl_strtok(NULL, ",");
+    vcl_stringstream tcl(tok); tcl >> cent_lon;
+
+    tok = vcl_strtok(NULL, ",");
+    vcl_stringstream tcla(tok); tcla >> cent_lat;
+    
+    vgl_polygon<double> poly(1);
+    tok = vcl_strtok(NULL, ",");  
+    while (tok != NULL) {
+      vcl_stringstream tl(tok);
+      tl >> lon;
+      
+      tok = vcl_strtok(NULL, ",");
+      vcl_stringstream tlat(tok);
+      tlat >> lat;
+
+      vgl_point_2d<double> pt(lon, lat);  // lon is x
+      poly[0].push_back(pt);
+      tok = vcl_strtok(NULL, ",");
+    }
+    builds.push_back(poly);
+  }
   return true;
 }
