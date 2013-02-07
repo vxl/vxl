@@ -119,7 +119,7 @@ SOURCE=.\bstm_data_base.cxx
 SOURCE=.\bstm_util.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bstm_block-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bstm_block_metadata-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bstm_scene_sptr-.cxx
