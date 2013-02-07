@@ -22,37 +22,21 @@ boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_query_sptr const& query,
                                              float const& threshold,
                                              unsigned const& max_cam_per_loc,
                                              bool const& use_orient) :
-  query_(query), leaves_(leaves), depth_interval_(depth_interval), ind_buffer_(buffer_capacity),
-  cand_poly_(cand_poly), gpu_(gpu), is_candidate_(is_candidate), is_last_pass_(is_last_pass),
-  out_folder_(out_folder), threshold_(threshold), max_cam_per_loc_(max_cam_per_loc), use_orient_(use_orient)
+  query_(query), leaves_(leaves), ind_buffer_(buffer_capacity), use_orient_(use_orient),
+  layer_size_buff_(0), is_candidate_(is_candidate), cand_poly_(cand_poly),
+  is_last_pass_(is_last_pass), out_folder_(out_folder), depth_interval_(depth_interval),
+  gpu_(gpu), is_grd_reg_(true), is_sky_reg_(true), is_obj_reg_(true), n_cam_(0), n_obj_(0),
+  grd_id_buff_(0), grd_dist_buff_(-1), grd_id_offset_buff_(0), grd_weight_buff_(0),
+  sky_id_buff_(0), sky_id_offset_buff_(0), sky_weight_buff_(0), obj_id_buff_(0),
+  obj_id_offset_buff_(0), obj_min_dist_buff_(0), obj_order_buff_(0), obj_weight_buff_(0),
+  obj_orient_buff_(0), depth_interval_buff_(0), depth_length_buff_(0),
+  threshold_(threshold), max_cam_per_loc_(max_cam_per_loc)
 {
     layer_size_ = query_->get_query_size();
     ind_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
     ind_orient_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
     file_name_pre_ << geo_index_folder << "geo_index_tile_" << tile_id;
-    // initialize the pionters
-    n_cam_ = 0;
-    n_obj_ = 0;
-    layer_size_buff_ = 0;
-    depth_length_buff_ = 0;
-    grd_id_buff_ = 0;
-    grd_dist_buff_ = 0;
-    grd_id_offset_buff_ = 0;
-    grd_weight_buff_ = 0;
-    sky_id_buff_ = 0;
-    sky_id_offset_buff_ = 0;
-    sky_weight_buff_ = 0;
-    obj_id_buff_ = 0;
-    obj_id_offset_buff_ = 0;
-    obj_min_dist_buff_ = 0;
-    obj_order_buff_ = 0;
-    obj_weight_buff_ = 0;
-    obj_orient_buff_ = 0;
-    depth_interval_buff_ = 0;
-    depth_length_buff_ = 0;
-    is_grd_reg_ = true;
-    is_sky_reg_ = true;
-    is_obj_reg_ = true;
+
     if (!query_->depth_scene()->ground_plane().size())
       is_grd_reg_ = false;
     if (!query_->depth_scene()->sky().size())
@@ -138,7 +122,6 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     }
   }
 #endif
-
 
   vcl_cout << "\t 4.1.1 Setting up query in pass 1 matcher for GPU ------> \t" << trans_query_time.all()/1000.0 << " seconds." << vcl_endl;
 
@@ -254,10 +237,10 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   ind_->initialize_read(index_file);
   ind_orient_->initialize_read(index_orient_file);
 
-  while (leaf_id < leaves_.size()) {
+  while (leaf_id < leaves_.size())
+  {
     unsigned char* index_buff_ = new unsigned char[ni*layer_size_];
     unsigned char* index_orient_buff_ = 0;
-
 
     // fill the index buffer
     vcl_vector<unsigned> l_id;  // leaf_id for indices filled into buffer
@@ -457,7 +440,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     }
 
     // post-processing data
-    for (unsigned ind_id = 0; ind_id < ni; ind_id++) {
+    for (unsigned ind_id = 0; ind_id < ni; ind_id++)
+    {
       // for each location, find maximum score, top cameras and best camera giving max_score
       float max_score = 0.0f;
       unsigned max_cam_id = 0;
@@ -623,7 +607,8 @@ bool boxm2_volm_matcher_p1::fill_index_orient(unsigned const& n_ind,
     vcl_cerr << " pass 1 check whether we have last_pass is NOT implemented yet ...\n";
     return false;
   }
-  else {
+  else
+  {
     // for no previous output case
     unsigned cnt = 0;
     unsigned li;
@@ -1082,7 +1067,7 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& tile_fname_bi
     volm_score_sptr score = score_all_[i];
     vcl_vector<unsigned> cam_ids = score->cam_id_;
     // write the txt output
-    vcl_ofstream txt_ofs(tile_fname_txt, vcl_ios_app);
+    vcl_ofstream txt_ofs(tile_fname_txt.c_str(), vcl_ios_app);
     txt_ofs << vcl_setprecision(6) << score->leaf_id_ << ' ' << score->hypo_id_ << ' ' << score->max_score_ << ' ' << score->max_cam_id_ << '\n';
     for (unsigned jj = 0; jj < cam_ids.size(); jj++)
       txt_ofs << ' ' << cam_ids[jj];
@@ -1138,7 +1123,7 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& tile_fname_bi
 // write the score for all cameras whose score higher than threshold
 bool boxm2_volm_matcher_p1::write_gt_cam_score(unsigned const& leaf_id, unsigned const& hypo_id, vcl_string const& out_fname)
 {
-  vcl_ofstream ofs(out_fname);
+  vcl_ofstream ofs(out_fname.c_str());
   for (unsigned i = 0; i < score_cam_.size(); i++) {
     if (score_cam_[i].l_id_ == leaf_id && score_cam_[i].h_id_ == hypo_id) {
       ofs << score_cam_[i].l_id_ << ' ' << score_cam_[i].h_id_ << '\n';
@@ -1164,7 +1149,6 @@ bool boxm2_volm_matcher_p1::transfer_query()
     vcl_cerr << "\n ERROR: current pass 01 matcher is not able to match query without any non_grd, non_sky object, add at least one in the labelme.xml\n";
     return false;
   }
-
 
   // check whether we use orientation attribute, if yes, modify the weight parameters first
   float weight = 0;
@@ -1229,7 +1213,8 @@ bool boxm2_volm_matcher_p1::transfer_query()
    query_local_mem_ = 3 * sizeof(unsigned);   // n_cam + n_obj + n_ind
 
   // construct the ground_id, ground_dist, ground_offset 1D array
-  if (is_grd_reg_) {
+  if (is_grd_reg_)
+  {
     unsigned grd_vox_size = query_->get_ground_id_size();
     grd_id_buff_ = new unsigned[grd_vox_size];
     grd_dist_buff_ = new unsigned char[grd_vox_size];
@@ -1332,7 +1317,8 @@ bool boxm2_volm_matcher_p1::transfer_query()
   }
 
   // construct obj_id, obj_offset 1D array
-  if (is_obj_reg_) {
+  if (is_obj_reg_)
+  {
     unsigned obj_vox_size = query_->get_dist_id_size();
     unsigned obj_offset_size = (*n_cam_) * (*n_obj_);
     obj_id_buff_ = new unsigned[obj_vox_size];
@@ -1562,10 +1548,13 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
   // calculate the object score
   vcl_vector<float> score_order_all;
   vcl_vector<float> score_min_all;
-  if ( is_obj_reg_) {
-    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
+  if ( is_obj_reg_)
+  {
+    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
+    {
       unsigned start_ind = ind_id * layer_size_;
-      for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
+      for (unsigned cam_id = 0; cam_id < nc; cam_id++)
+      {
         float score_order = 0.0f;
         float score_min = 0.0f;
         unsigned mu_start_id = cam_id*no + ind_id*no*nc;
@@ -1621,7 +1610,6 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
       } // end of loop over cameras
     } // end of loop over indices
   }
-
 
   // get the overall score
   vcl_vector<float> score_all;
@@ -1795,20 +1783,23 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
     }
   }
 
-
   // calculate the object score
   vcl_vector<float> score_order_all;
   vcl_vector<float> score_min_all;
   vcl_vector<float> score_ori_all;
-  if ( is_obj_reg_) {
-    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
+  if ( is_obj_reg_)
+  {
+    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
+    {
       unsigned start_ind = ind_id * layer_size_;
-      for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
+      for (unsigned cam_id = 0; cam_id < nc; cam_id++)
+      {
         float score_order = 0.0f;
         float score_min = 0.0f;
         float score_ori = 0.0f;
         unsigned mu_start_id = cam_id*no + ind_id*no*nc;
-        for (unsigned k = 0; k < no; k++) {
+        for (unsigned k = 0; k < no; k++)
+        {
           unsigned offset_id = k + no*cam_id;
           unsigned start_obj = obj_id_offset_buff_[offset_id];
           unsigned end_obj = obj_id_offset_buff_[offset_id+1];
@@ -1877,7 +1868,6 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
       } // end of loop over cameras
     } // end of loop over indices
   }
-
 
   // get the overall score
   vcl_vector<float> score_all;
