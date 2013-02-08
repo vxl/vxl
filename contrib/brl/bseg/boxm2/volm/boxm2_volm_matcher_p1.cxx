@@ -26,7 +26,7 @@ boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_query_sptr const& query,
   layer_size_buff_(0), is_candidate_(is_candidate), cand_poly_(cand_poly),
   is_last_pass_(is_last_pass), out_folder_(out_folder), depth_interval_(depth_interval),
   gpu_(gpu), is_grd_reg_(true), is_sky_reg_(true), is_obj_reg_(true), n_cam_(0), n_obj_(0),
-  grd_id_buff_(0), grd_dist_buff_(-1), grd_id_offset_buff_(0), grd_weight_buff_(0),
+  grd_id_buff_(0), grd_dist_buff_(0), grd_id_offset_buff_(0), grd_weight_buff_(0),
   sky_id_buff_(0), sky_id_offset_buff_(0), sky_weight_buff_(0), obj_id_buff_(0),
   obj_id_offset_buff_(0), obj_min_dist_buff_(0), obj_order_buff_(0), obj_weight_buff_(0),
   obj_orient_buff_(0), depth_interval_buff_(0), depth_length_buff_(0),
@@ -518,7 +518,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
 
   // time
   float total_time = total_matcher_time.all();
-  vcl_cout << "\t\t total time for " << total_index_num << " indices and " << *n_cam_ << " cameras -------> " << total_time/1000.0 << " seconds (" << total_time << " ms)\n" 
+  vcl_cout << "\t\t total time for " << total_index_num << " indices and " << *n_cam_ << " cameras -------> " << total_time/1000.0 << " seconds (" << total_time << " ms)\n"
            << "\t\t GPU kernel execution ------------------> " << gpu_matcher_time/1000.0 << " seconds (" << gpu_matcher_time << " ms)\n"
            << "\t\t CPU host execution --------------------> " << (total_time - gpu_matcher_time)/1000.0 << " seconds (" << total_time - gpu_matcher_time << " ms)" << vcl_endl;
 
