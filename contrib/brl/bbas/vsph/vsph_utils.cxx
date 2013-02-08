@@ -13,16 +13,18 @@ double vsph_utils::azimuth_diff(double a, double b,
   }
   else {
     if (diff >  vnl_math::pi) diff -= vnl_math::twopi;
-	else if (diff < -vnl_math::pi) diff += vnl_math::twopi;
+    else if (diff < -vnl_math::pi) diff += vnl_math::twopi;
   }
   return diff;
 }
-void vsph_utils::half_angle(double phi_a, double phi_b, double& ang_1, 
-			    double& ang_2, bool in_radians){
+
+void vsph_utils::half_angle(double phi_a, double phi_b, double& ang_1,
+                            double& ang_2, bool in_radians)
+{
   double hd = 0.5*vsph_utils::azimuth_diff(phi_a, phi_b, in_radians);
   ang_1 = phi_a + hd;
   ang_1 = vsph_utils::azimuth_diff(0.0, ang_1, in_radians);
-  if(in_radians)
+  if (in_radians)
     ang_2 = vsph_utils::azimuth_diff(-vnl_math::pi, ang_1, in_radians);
   else
     ang_2 = vsph_utils::azimuth_diff(-180.0, ang_1, in_radians);
@@ -102,7 +104,7 @@ project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
       vgl_point_2d<double> vert = sheet[vidx];
       double elevation, azimuth;
       vsph_utils::ray_spherical_coordinates(cam, vert.x(), vert.y(),
-                                                   elevation, azimuth, units);
+                                            elevation, azimuth, units);
       //maintain consistent coordinate order with the vsph library
       // elevation == x, azmiuth == y
       vgl_point_2d<double> sph_vert(elevation,azimuth);
@@ -112,16 +114,18 @@ project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
   }
   return vgl_polygon<double>(sph_sheets);
 }
-bool vsph_utils::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data){
+
+bool vsph_utils::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data)
+{
   vcl_ifstream is(path.c_str());
-  if(!is.is_open())
+  if (!is.is_open())
     return false;
   int nrays;
   is >> nrays;
-  if(nrays <= 0)
+  if (nrays <= 0)
     return false;
   data.resize(nrays);
-  for(int i = 0; i< nrays; ++i)
+  for (int i = 0; i< nrays; ++i)
     is >> data[i];
   return true;
 }
