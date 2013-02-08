@@ -28,12 +28,22 @@ class volm_orient_table
   static vcl_map<int, vil_rgb<vxl_byte> >  ori_index_colors;
 };
 
+class volm_attributes
+{
+public:
+  volm_attributes() : id_(0), name_(""), color_(vil_rgb<vxl_byte>(0,0,0)) {}
+  volm_attributes(unsigned char id, vcl_string name, vil_rgb<vxl_byte> color): id_(id), name_(name), color_(color) {}
+  
+  unsigned char id_;
+  vcl_string name_;
+  vil_rgb<vxl_byte> color_;
+};
 
-class volm_nlcd_table
+class volm_label_table
 {
  public:
-  enum nlcd_values {SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, DOCK = 100, BUILDING = 101};
-  static vcl_map<int, vcl_pair<unsigned char, vil_rgb<vxl_byte> > > land_id ;
+  enum label_values {SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, BUILDING = 100};
+  static vcl_map<int, volm_attributes > land_id ;
 };
 
 class volm_io_expt_params
