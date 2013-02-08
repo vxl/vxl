@@ -38,7 +38,7 @@ vcl_map<int, vil_rgb<vxl_byte> > create_orient_colors()
   m[2] = vil_rgb<vxl_byte>(0, 255, 255);  // vertical facing west
   m[3] = vil_rgb<vxl_byte>(0, 255, 155);  // vertical facing south west
   m[4] = vil_rgb<vxl_byte>(255, 255, 0);  // vertical facing south
-  m[5] = vil_rgb<vxl_byte>(155, 255, 0);  // vertical facing south east
+  m[5] = vil_rgb<vxl_byte>(155, 255, 0);    // vertical facing south east
   m[6] = vil_rgb<vxl_byte>(155, 255, 155);  // vertical facing east
   m[7] = vil_rgb<vxl_byte>(155, 155, 155);  // vertical facing north east
   m[8] = vil_rgb<vxl_byte>(155, 0, 155);  // vertical facing north
@@ -97,6 +97,18 @@ vcl_map<int, volm_attributes > create_label_map()
 vcl_map<vcl_string, depth_map_region::orientation> volm_orient_table::ori_id = create_orient_map();
 vcl_map<int, volm_attributes > volm_label_table::land_id = create_label_map();
 vcl_map<int, vil_rgb<vxl_byte> > volm_orient_table::ori_index_colors = create_orient_colors();
+
+vcl_string volm_label_table::land_string(unsigned char id)
+{
+  vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  for (; mit != volm_label_table::land_id.end(); ++mit) {
+    if ( mit->second.id_ == id ) {
+      return mit->second.name_;
+    }
+  }
+  return "invalid";
+}
+
 
 bool volm_io::read_camera(vcl_string kml_file,
                           unsigned const& ni, unsigned const& nj,

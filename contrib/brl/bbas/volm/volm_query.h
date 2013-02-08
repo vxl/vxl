@@ -63,12 +63,12 @@ class volm_query : public vbl_ref_count
   vcl_vector<unsigned char>& max_obj_dist()                     { return max_obj_dist_; }
   vcl_vector<unsigned char>& min_obj_dist()                     { return min_obj_dist_; }
   vcl_vector<unsigned char>& obj_orient()                       { return obj_orient_; }
-  vcl_vector<unsigned char>& obj_nlcd()                         { return obj_nlcd_; }
+  vcl_vector<unsigned char>& obj_land_id()                      { return obj_land_id_; }
   vcl_vector<unsigned char>& order_obj()                        { return order_obj_; }
   vcl_vector<vcl_vector<unsigned> >& ground_id()                { return ground_id_; }
   vcl_vector<vcl_vector<unsigned char> >& ground_dist()         { return ground_dist_; }
   vcl_vector<unsigned>& ground_offset()                         { return ground_offset_; }
-  vcl_vector<vcl_vector<unsigned char> >& ground_nlcd()         { return ground_nlcd_; }
+  vcl_vector<vcl_vector<unsigned char> >& ground_land_id()      { return ground_land_id_; }
   unsigned char ground_orient()                                 { return ground_orient_; }
   vcl_vector<vcl_vector<unsigned> >& sky_id()                   { return sky_id_; }
   vcl_vector<unsigned>& sky_offset()                            { return sky_offset_; }
@@ -185,7 +185,7 @@ class volm_query : public vbl_ref_count
   //: ground plane distance, id, and NLCD classification
   vcl_vector<vcl_vector<unsigned> >                ground_id_;
   vcl_vector<vcl_vector<unsigned char> >         ground_dist_;
-  vcl_vector<vcl_vector<unsigned char> >         ground_nlcd_;
+  vcl_vector<vcl_vector<unsigned char> >      ground_land_id_;
   vcl_vector<unsigned>                         ground_offset_;
   unsigned char                                ground_orient_;  // always horizontal
   //: sky distance
@@ -200,7 +200,7 @@ class volm_query : public vbl_ref_count
   vcl_vector<unsigned char>                     max_obj_dist_;
   vcl_vector<unsigned char>                        order_obj_;
   vcl_vector<unsigned char>                       obj_orient_;
-  vcl_vector<unsigned char>                         obj_nlcd_;
+  vcl_vector<unsigned char>                      obj_land_id_;
   //: weight parameters
   vcl_vector<float> weight_obj_;
   float             weight_grd_;
@@ -216,7 +216,7 @@ class volm_query : public vbl_ref_count
                             unsigned char& order,
                             unsigned char& max_dist,
                             unsigned& object_id,
-                            unsigned char& grd_nlcd,
+                            unsigned char& grd_land_id,
                             bool& is_ground,
                             bool& is_sky,
                             bool& is_object,

@@ -17,7 +17,7 @@ static void test_query()
   // parameter for coast
   float vmin = 2.0f;         // min voxel resolution
   float dmax = 3000.0f;      // maximum depth
-  float solid_angle = 2.0f;
+  float solid_angle = 5.0f;
 #if 0
   // parameters for desert
   float vmin = 5.0f;
@@ -30,7 +30,7 @@ static void test_query()
   // create spherical shell for query rays
   // parameter for coast
   float cap_angle = 180.0f;
-  float point_angle = 2.0f;//for coast
+  float point_angle = 5.0f;
   double radius = 1;
   float top_angle = 70.0f;
   float bottom_angle = 60.0f;
@@ -43,11 +43,11 @@ static void test_query()
   float bottom_angle = 70.0f;
 #endif
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, cap_angle, point_angle, top_angle, bottom_angle);
-#if 0 //files not available
+#if 1 //files not available
   // labelme file and camera files
-  vcl_string out_folder = "D:\\work\\FINDER\\volumetric_algo\\queries\\coast\\job_160\\viewing_volume\\";
-  vcl_string label_file = "D:\\work\\FINDER\\volm_matcher\\finderuploads\\coast\\job_160\\Result_USC_calibration_noFurther.xml";
-  vcl_string cam_file =   "D:\\work\\FINDER\\volm_matcher\\finderuploads\\coast\\job_160\\Camera_test.kml";
+  vcl_string out_folder = "D:/work/find/volumetric_algo/queries/coast/job_160/viewing_volume/";
+  vcl_string label_file = "D:/work/find/volm_matcher/finderuploads/coast/job_160/Result_USC_calibration_noFurther.xml";
+  vcl_string cam_file =   "D:/work/find/volm_matcher/finderuploads/coast/job_160/Camera_test.kml";
   // check the labelme file and camera file
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
@@ -59,6 +59,8 @@ static void test_query()
   if (!volm_io::read_camera(cam_file, dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude, lat, lon)) {
     volm_io::write_status(out_folder, volm_io::CAM_FILE_IO_ERROR);
   }
+  volm_query_sptr query = new volm_query(cam_file, label_file, sph, sph_shell, false);
+  
 #endif
 #if 0
   vcl_string depth_scene_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
@@ -82,7 +84,7 @@ static void test_query()
              << ", depth = " << 254
              << ", orient = " << dm->sky()[i]->orient_type()
              << ", NLCD_id = " << dm->sky()[i]->nlcd_id()
-             << " ---> " << (int)volm_nlcd_table::land_id[dm->sky()[i]->nlcd_id()].first
+             << " ---> " << (int)volm_nlcd_table::land_id[dm->sky()[i]->nlcd_id()]
              << vcl_endl;
     }
   }
@@ -93,7 +95,7 @@ static void test_query()
                << ", depth = " << dm->ground_plane()[i]->min_depth()
                << ", orient = " << dm->ground_plane()[i]->orient_type()
                << ", NLCD_id = " << dm->ground_plane()[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()].first
+               << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()]
                << vcl_endl;
     }
   }
@@ -106,7 +108,7 @@ static void test_query()
                << ",\t order = " << (dm->scene_regions())[i]->order()
                << ",\t orient = " << (dm->scene_regions())[i]->orient_type()
                << ",\t NLCD_id = " << (dm->scene_regions())[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dm->scene_regions()[i]->nlcd_id()].first
+               << " ---> " << (int)volm_nlcd_table::land_id[dm->scene_regions()[i]->nlcd_id()]
                << vcl_endl;
     }
   }
@@ -131,8 +133,15 @@ static void test_query()
   }
 #endif
 
+  if (!query->write_query_binary(out_folder) ){
+    vcl_cerr << "ERROR: write query binary file failed" << vcl_endl;
+  }
 
-  TEST("number of rays for current query", query->get_query_size(), 29440); // for 2 degree resolution
+
+  volm_query query_l;
+  query_l.read_query_binary(out_folder);
+
+  //TEST("number of rays for current query", query->get_query_size(), 29440); // for 2 degree resolution
 #endif//NEED FILES TO RUN!! JLM
 }
 

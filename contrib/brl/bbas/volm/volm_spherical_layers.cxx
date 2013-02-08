@@ -116,7 +116,8 @@ fetch_depth(double const& u, double const& v,
         min_dist = sph_vol_->get_depth_interval(depth_uv);
         max_dist = invalid_;
         order = (unsigned char)(ground_plane[i]->order());
-        grd_nlcd = volm_nlcd_table::land_id[ground_plane[i]->nlcd_id()].first;
+        grd_nlcd = ground_plane[i]->land_id();
+        //grd_nlcd = volm_nlcd_table::land_id[ground_plane[i]->nlcd_id()].first;
         return min_dist;
       }
     }

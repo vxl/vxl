@@ -403,7 +403,7 @@ void volm_query::generate_regions()
     max_obj_dist_.push_back(sph_depth_->get_depth_interval(depth_regions_[i]->max_depth()));
     order_obj_.push_back((unsigned char)depth_regions_[i]->order());
     obj_orient_.push_back((unsigned char)depth_regions_[i]->orient_type());
-    obj_nlcd_.push_back(volm_nlcd_table::land_id[depth_regions_[i]->nlcd_id()].first);
+    obj_land_id_.push_back((unsigned char)depth_regions_[i]->land_id());
   }
   d_threshold_ = 20000.0; //upper depth bound
   for (unsigned i = 0; i < size; ++i) {
@@ -497,7 +497,7 @@ bool volm_query::query_ingest()
     // the ground plane distance for the ray
     vcl_vector<unsigned char> ground_dist_layer;
     // the ground plane land class for the ray
-    vcl_vector<unsigned char> ground_nlcd_layer;
+    vcl_vector<unsigned char> ground_land_layer;
     // the set of rays intersecting sky
     vcl_vector<unsigned> sky_id_layer;
     // the set of rays for each non-gp, non-sky region
@@ -535,8 +535,8 @@ bool volm_query::query_ingest()
         else {
           bool is_ground = false, is_sky = false, is_object = false;
           unsigned obj_id;
-          unsigned char grd_nlcd;
-          min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_nlcd, is_ground, is_sky, is_object, depth_img);
+          unsigned char grd_land;
+          min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_land, is_ground, is_sky, is_object, depth_img);
 #if 0
           if (i == 0) {
             vcl_cout << p_idx << ' ' << count << ' '
@@ -544,7 +544,7 @@ bool volm_query::query_ingest()
                      << ' ' << (unsigned)order << ' '
                      << (unsigned)max_dist
                      << ' ' << (unsigned)obj_id
-                     << ' ' << (unsigned)grd_nlcd << ' '
+                     << ' ' << (unsigned)grd_land << ' '
                      << is_ground << ' ' << is_sky << ' '
                      << is_object << '\n';
           }
@@ -555,7 +555,7 @@ bool volm_query::query_ingest()
           if (is_ground) {
             ground_id_layer.push_back(p_idx);
             ground_dist_layer.push_back(min_dist);
-            ground_nlcd_layer.push_back(grd_nlcd);
+            ground_land_layer.push_back(grd_land);
           }
           else if (is_sky) {
             sky_id_layer.push_back(p_idx);
@@ -579,7 +579,7 @@ bool volm_query::query_ingest()
     order_.push_back(order_layer);
     ground_id_.push_back(ground_id_layer);
     ground_dist_.push_back(ground_dist_layer);
-    ground_nlcd_.push_back(ground_nlcd_layer);
+    ground_land_id_.push_back(ground_land_layer);
     sky_id_.push_back(sky_id_layer);
     dist_id_.push_back(dist_id_layer);
 // sperhical layer -- the scene_region is not ordered by its order, so it ruins my basic data structure
@@ -594,7 +594,7 @@ bool volm_query::query_ingest()
     order_.push_back(sph_lays.order_layer());
     ground_id_.push_back(sph_lays.ground_id_layer());
     ground_dist_.push_back(sph_lays.ground_dist_layer());
-    ground_nlcd_.push_back(sph_lays.ground_nlcd_layer());
+    ground_land_.push_back(sph_lays.ground_land_layer());
     sky_id_.push_back(sph_lays.sky_id_layer());
     dist_id_.push_back(sph_lays.dist_id_layer());
 #endif
@@ -643,7 +643,7 @@ unsigned char volm_query::fetch_depth(double const& u,
                                       unsigned char& order,
                                       unsigned char& max_dist,
                                       unsigned& object_id,
-                                      unsigned char& grd_nlcd,
+                                      unsigned char& grd_land,
                                       bool& is_ground,
                                       bool& is_sky,
                                       bool& is_object,
@@ -703,7 +703,7 @@ unsigned char volm_query::fetch_depth(double const& u,
         min_dist = sph_depth_->get_depth_interval(depth_uv);
         max_dist = (unsigned char)255;
         order = (unsigned char)(dm_->ground_plane()[i])->order();
-        grd_nlcd = volm_nlcd_table::land_id[dm_->ground_plane()[i]->nlcd_id()].first;
+        grd_land = dm_->ground_plane()[i]->land_id();
         return min_dist;
       }
     }
@@ -1154,7 +1154,7 @@ unsigned volm_query::obj_based_query_size_byte() const
   size_byte += (unsigned)min_obj_dist_.size(); // unsigned char distance
   size_byte += (unsigned)max_obj_dist_.size(); // unsigned char distance
   size_byte += (unsigned)obj_orient_.size();   // unsigned char orientation
-  size_byte += (unsigned)obj_nlcd_.size();     // unsigned char land clarification
+  size_byte += (unsigned)obj_land_id_.size();     // unsigned char land clarification
   size_byte += (unsigned)order_obj_.size();    // unsigned char order
   size_byte += (unsigned)weight_obj_.size()*4; // float weight
   return size_byte;

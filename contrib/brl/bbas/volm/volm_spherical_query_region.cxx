@@ -18,7 +18,8 @@ set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
   double min_depth = dm_region->min_depth();
   double max_depth = dm_region->max_depth();
   order_ =  static_cast<unsigned char>(dm_region->order());
-  nlcd_id_ = static_cast<unsigned char>(dm_region->nlcd_id());
+  nlcd_id_ = static_cast<unsigned char>(dm_region->land_id());
+  //nlcd_id_ = static_cast<unsigned char>(dm_region->nlcd_id());
   vcl_string nam = dm_region->name();
   if (otype == depth_map_region::GROUND_PLANE) {
     orientation_ = static_cast<unsigned char>(depth_map_region::HORIZONTAL);
