@@ -10,7 +10,7 @@
 // \verbatim
 //  Modifications
 //     Yi Dong     NOV--2012    added an method to check whether the given camera hypothesis is consistent with defined 2-d ground plane in the image
-//     Yi Dong     JAN--2013    added attributed nlcd_id for land classification
+//     Yi Dong     JAN--2013    added attributed land_id for land classification
 // \endverbatim
 // units are in meters
 #include <vbl/vbl_ref_count.h>
@@ -39,14 +39,14 @@ class depth_map_region : public vbl_ref_count
                    double min_depth, double max_depth,
                    vcl_string name,
                    depth_map_region::orientation orient,
-                   unsigned nlcd_id = 21);
+                   unsigned land_id = 40);
 
   //: constructor for a fixed plane, e.g. the ground plane
   depth_map_region(vsol_polygon_2d_sptr const& region, 
                    vgl_plane_3d<double> const& region_plane,
                    vcl_string name,
                    depth_map_region::orientation orient,
-                   unsigned nlcd_id = 21);
+                   unsigned land_id = 21);
 
   //: constructor for a region of infinite distance
   depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -61,6 +61,9 @@ class depth_map_region : public vbl_ref_count
   void set_order(unsigned order){order_ = order;}
   void set_active(bool active){active_ = active;}
   void set_orient_type(orientation type){orient_type_ = type;}
+  void set_orient_type(unsigned ori_code);
+  void set_orient_type(unsigned char ori_code)  { this->set_orient_type(static_cast<unsigned int>(ori_code)); }
+  void set_land_type(unsigned land_id) { land_id_ = land_id; }
   //:accessors
   double min_depth() const {return min_depth_;}
   double max_depth() const {return max_depth_;}
@@ -72,8 +75,8 @@ class depth_map_region : public vbl_ref_count
   static vcl_vector<float> orient_color(unsigned char orient_code);
   //: string name for orientation
   static vcl_string orient_string(unsigned char orient_code);
-  //: region nlcd land classfication id
-  unsigned nlcd_id() const { return nlcd_id_; }
+  //: region land land classfication id
+  unsigned land_id() const { return land_id_; }
   vsol_polygon_3d_sptr region_3d() const {return region_3d_;}
   vsol_polygon_2d_sptr region_2d() const {return region_2d_;}
   double depth() const {return depth_;}
@@ -139,7 +142,7 @@ class depth_map_region : public vbl_ref_count
  protected:
   bool active_;      // if active is true then inserted into the depth map
   unsigned order_;   // depth order
-  unsigned nlcd_id_; // NLCD land classification id 
+  unsigned land_id_; // land classification id defined in volm_label_table (in volm_io)
   orientation orient_type_;
   vcl_string name_;
   // depth value for region centroid

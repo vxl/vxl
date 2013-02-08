@@ -86,7 +86,7 @@ region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
 }
 
 depth_map_region::depth_map_region()
-  : active_(true), order_(0), nlcd_id_(21),
+  : active_(true), order_(0), land_id_(40),
     orient_type_(NON_PLANAR), name_(""), depth_(-1.0),
     min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
     depth_inc_(1.0),
@@ -98,8 +98,8 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    double min_depth, double max_depth,
                                    vcl_string name,
                                    depth_map_region::orientation orient,
-                                   unsigned nlcd_id)
-  : active_(true), order_(0), nlcd_id_(nlcd_id),
+                                   unsigned land_id)
+  : active_(true), order_(0), land_id_(land_id),
     orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(min_depth), max_depth_(max_depth),
     depth_inc_(1.0),
@@ -111,8 +111,8 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vgl_plane_3d<double> const& region_plane,
                                    vcl_string name,
                                    depth_map_region::orientation orient,
-                                   unsigned nlcd_id)
-  : active_(true), order_(0), nlcd_id_(nlcd_id),
+                                   unsigned land_id)
+  : active_(true), order_(0), land_id_(land_id),
     orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(-1.0), max_depth_(-1.0),
     depth_inc_(1.0),
@@ -120,9 +120,10 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
 {
 }
 
+// constructor for sky region
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name)
-  : active_(true), order_(0), nlcd_id_(0), orient_type_(INFINT), name_(name),
+  : active_(true), order_(0), land_id_(40), orient_type_(INFINT), name_(name),
     depth_(vcl_numeric_limits<double>::max()),
     min_depth_(vcl_numeric_limits<double>::max()),
     max_depth_(vcl_numeric_limits<double>::max()),
@@ -443,7 +444,7 @@ void depth_map_region::b_write(vsl_b_ostream& os)
   vsl_b_write(os, depth_);
   vsl_b_write(os, min_depth_);
   vsl_b_write(os, max_depth_);
-  vsl_b_write(os, nlcd_id_);
+  vsl_b_write(os, land_id_);
   vsl_b_write(os, depth_inc_);
   vsl_b_write(os, region_plane_);
   vsl_b_write(os, region_2d_.ptr());
@@ -484,7 +485,7 @@ void depth_map_region::b_read(vsl_b_istream& is)
     vsl_b_read(is, depth_);
     vsl_b_read(is, min_depth_);
     vsl_b_read(is, max_depth_);
-    vsl_b_read(is, nlcd_id_);
+    vsl_b_read(is, land_id_);
     vsl_b_read(is, depth_inc_);
     vsl_b_read(is, region_plane_);
     vsol_polygon_2d* r2d=0;
@@ -583,4 +584,38 @@ vcl_string depth_map_region::orient_string(unsigned char orient_code){
   }
   }
   return "Unknown         ";
+}
+
+void depth_map_region::set_orient_type(unsigned int ori_code)
+{
+  switch (ori_code)
+  {
+    case 0:
+      orient_type_ = depth_map_region::HORIZONTAL;
+      break;
+    case 1:
+      orient_type_ = depth_map_region::FRONT_PARALLEL;
+      break;
+    case 2:
+      orient_type_ = depth_map_region::SLANTED_RIGHT;
+      break;
+    case 3:
+      orient_type_ = depth_map_region::SLANTED_LEFT;
+      break;
+    case 4:
+      orient_type_ = depth_map_region::POROUS;
+      break;
+    case 5:
+      orient_type_ = depth_map_region::NON_PLANAR;
+      break;
+    case 6:
+      orient_type_ = depth_map_region::INFINT;
+      break;
+    case 7:
+      orient_type_ = depth_map_region::VERTICAL;
+      break;
+    default:
+      orient_type_ = depth_map_region::INFINT;
+      break;
+  }
 }

@@ -100,7 +100,7 @@ class depth_map_scene : public vbl_ref_count
                   vcl_string name,
                   depth_map_region::orientation orient,
                   unsigned order = 0,
-                  unsigned nlcd_id = 21);
+                  unsigned land_id = 40);
 
   //: add a ground region into ground_plane_
   void add_ground(vsol_polygon_2d_sptr const& ground_plane,
@@ -108,7 +108,7 @@ class depth_map_scene : public vbl_ref_count
                   double max_depth = 0,
                   unsigned order = 0,
                   vcl_string name = "ground_plane",
-                  unsigned nlcd_id = 21);
+                  unsigned land_id = 40);
 
   //: add a sky region into sky_
   void add_sky(vsol_polygon_2d_sptr const& sky,
@@ -140,7 +140,7 @@ class depth_map_scene : public vbl_ref_count
   void b_read(vsl_b_istream& is);
 
   //: binary io version no
-  unsigned version(){return 2;}
+  unsigned version(){return 3;}
 
   //: debug utilities
   void print_depth_states();

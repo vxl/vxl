@@ -47,10 +47,10 @@ void depth_map_scene::add_ground(vsol_polygon_2d_sptr const& ground_plane,
                                  double max_depth,
                                  unsigned order,
                                  vcl_string name,
-                                 unsigned nlcd_id)
+                                 unsigned land_id)
 {
   vgl_plane_3d<double> gp(0.0, 0.0, 1.0, 0.0); // z axis is the plane normal
-  depth_map_region_sptr ground = new depth_map_region(ground_plane, gp, name, depth_map_region::HORIZONTAL, nlcd_id);
+  depth_map_region_sptr ground = new depth_map_region(ground_plane, gp, name, depth_map_region::HORIZONTAL, land_id);
   ground->set_order(order);
   ground->set_min_depth(min_depth);
   ground->set_max_depth(max_depth);
@@ -79,14 +79,14 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
                                  vcl_string name,
                                  depth_map_region::orientation orient,
                                  unsigned order,
-                                 unsigned nlcd_id)
+                                 unsigned land_id)
 {
   vgl_plane_3d<double> plane(region_normal.x(), region_normal.y(), region_normal.z(), 0.0);
   depth_map_region_sptr reg = new depth_map_region(region, plane,
                                                    min_depth, max_depth,
                                                    name,
                                                    orient,
-                                                   nlcd_id);
+                                                   land_id);
   reg->set_order(order);
   scene_regions_[name]=reg;
 }
@@ -317,12 +317,8 @@ void depth_map_scene::b_write(vsl_b_ostream& os)
   vsl_b_write(os, nj_);
   vsl_b_write(os, image_path_);
   vsl_b_write(os, scene_regions_);
-  vsl_b_write(os, ground_plane_.size());
-  for (unsigned i = 0; i < ground_plane_.size(); i++)
-    vsl_b_write(os, ground_plane_[i]);
-  vsl_b_write(os, sky_.size());
-  for (unsigned i = 0; i < sky_.size(); i++)
-    vsl_b_write(os, sky_[i]);
+  vsl_b_write(os, sky_);
+  vsl_b_write(os, ground_plane_);
   vsl_b_write(os, cam_);
 }
 
@@ -361,6 +357,14 @@ void depth_map_scene::b_read(vsl_b_istream& is)
       vsl_b_read(is, sky);
       sky_.push_back(sky);
     }
+    vsl_b_read(is, cam_);
+  } else if (ver == 3) {
+    vsl_b_read(is, ni_);
+    vsl_b_read(is, nj_);
+    vsl_b_read(is, image_path_);
+    vsl_b_read(is, scene_regions_);
+    vsl_b_read(is, sky_);
+    vsl_b_read(is, ground_plane_);
     vsl_b_read(is, cam_);
   } else {
     vcl_cout << " in depth_map_scene::b_read - unknown version\n";
