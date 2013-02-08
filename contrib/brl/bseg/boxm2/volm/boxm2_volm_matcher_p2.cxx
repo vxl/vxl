@@ -137,7 +137,7 @@ bool boxm2_volm_matcher_p2::transfer_query()
 {
   // ground id, offset, orientation, nlcd, weight
   vcl_vector<vcl_vector<unsigned> >& grd_id = query_->ground_id();
-  vcl_vector<vcl_vector<unsigned char> >& grd_nlcd = query_->ground_nlcd();
+  vcl_vector<vcl_vector<unsigned char> >& grd_land = query_->ground_land_id();
   vcl_vector<unsigned>& grd_offset = query_->ground_offset();
   unsigned grd_vox_size = query_->get_ground_id_size();
   grd_id_buff_ = new unsigned[grd_vox_size];
@@ -153,7 +153,7 @@ bool boxm2_volm_matcher_p2::transfer_query()
     unsigned n_vox = grd_id[cam_id].size();
     for (unsigned vox_id = 0; vox_id < n_vox; vox_id++) {
       grd_id_buff_[id] = grd_id[cam_id][vox_id];
-      grd_nlcd_buff_[id++] = grd_nlcd[cam_id][vox_id];
+      grd_nlcd_buff_[id++] = grd_land[cam_id][vox_id];
     }
   }
   for (unsigned i = 0; i < grd_offset.size(); i++)
@@ -255,7 +255,7 @@ bool boxm2_volm_matcher_p2::transfer_query()
   vcl_vector<unsigned>& obj_offset = query_->dist_offset();
   vcl_vector<float> & obj_weight = query_->obj_weight();
   vcl_vector<unsigned char>& obj_orient = query_->obj_orient();
-  vcl_vector<unsigned char>& obj_nlcd = query_->obj_nlcd();
+  vcl_vector<unsigned char>& obj_land = query_->obj_land_id();
   unsigned obj_vox_size = query_->get_dist_id_size();
   obj_id_buff_ = new unsigned[obj_vox_size];
   obj_offset_buff_ = new unsigned[obj_offset.size()];
@@ -274,7 +274,7 @@ bool boxm2_volm_matcher_p2::transfer_query()
   for (unsigned i = 0; i < *n_obj_; i++) {
     obj_orient_buff_[i] = obj_orient[i];
     obj_weight_buff_[i] = obj_weight[i];
-    obj_nlcd_buff_[i] = obj_nlcd[i];
+    obj_nlcd_buff_[i] = obj_land[i];
   }
 
   obj_id_cl_mem_ = new bocl_mem(gpu_->context(), obj_id_buff_, sizeof(unsigned)*obj_vox_size, " obj_id ");

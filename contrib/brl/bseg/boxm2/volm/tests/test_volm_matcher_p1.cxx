@@ -150,7 +150,6 @@ static void test_volm_matcher_p1()
 
   // create query
   volm_query_sptr query = new volm_query(csp_ptr, label_file, sph, sph_shell);
-
   // screen output of query
   unsigned total_size = query->obj_based_query_size_byte();
   vcl_cout << "\n==================================================================================================\n"
@@ -174,8 +173,8 @@ static void test_volm_matcher_p1()
       vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
                << ", depth = " << dm->ground_plane()[i]->min_depth()
                << ", orient = " << dm->ground_plane()[i]->orient_type()
-               << ", NLCD_id = " << dm->ground_plane()[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()].first
+               << ", land_id = " << dm->ground_plane()[i]->land_id()
+               << ", land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
                << vcl_endl;
   }
   if (dm->scene_regions().size()) {
@@ -186,8 +185,8 @@ static void test_volm_matcher_p1()
                << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
                << ",\t order = " << (dm->scene_regions())[i]->order()
                << ",\t orient = " << (dm->scene_regions())[i]->orient_type()
-               << ",\t NLCD_id = " << (dm->scene_regions())[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dm->scene_regions()[i]->nlcd_id()].first
+               << ",\t NLCD_id = " << (dm->scene_regions())[i]->land_id()
+               << ",\t land_name = " << volm_label_table::land_string((dm->scene_regions())[i]->land_id())
                << vcl_endl;
     }
   }

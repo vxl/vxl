@@ -262,8 +262,8 @@ int main(int argc, char** argv)
       vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
                << ",\t depth = " << dm->ground_plane()[i]->min_depth()
                << ",\t orient = " << dm->ground_plane()[i]->orient_type()
-               << ",\t NLCD_id = " << dm->ground_plane()[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dm->ground_plane()[i]->nlcd_id()].first
+               << ",\t land_id = " << dm->ground_plane()[i]->land_id()
+               << ",\t land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
                << ",\t weight = " << query->grd_weight()
                << vcl_endl;
   }
@@ -278,8 +278,8 @@ int main(int argc, char** argv)
                << ",\t\t max_depth = " << dmr[i]->max_depth()
                << ",\t\t order = " << dmr[i]->order()
                << ",\t\t orient = " << dmr[i]->orient_type()
-               << ",\t\t NLCD_id = " << dmr[i]->nlcd_id()
-               << " ---> " << (int)volm_nlcd_table::land_id[dmr[i]->nlcd_id()].first
+               << ",\t\t NLCD_id = " << dmr[i]->land_id()
+               << ",\t\t land_name = " << volm_label_table::land_string(dmr[i]->land_id())
                << " weight = " << obj_weight[i]
                << vcl_endl;
     }
