@@ -500,10 +500,11 @@ void depth_map_region::b_read(vsl_b_istream& is)
     return;
   }
 }
+
 vcl_vector<float> depth_map_region::orient_color(unsigned char orient_code)
 {
   vcl_vector<float> c(3);
-  switch(orient_code){
+  switch (orient_code) {
   case static_cast<unsigned char>(HORIZONTAL):{
     c[0]=horz_r; c[1]=horz_g; c[2]=horz_b;
     break;
@@ -545,8 +546,10 @@ vcl_vector<float> depth_map_region::orient_color(unsigned char orient_code)
   }
   return c;
 }
-vcl_string depth_map_region::orient_string(unsigned char orient_code){
-  switch(orient_code){
+
+vcl_string depth_map_region::orient_string(unsigned char orient_code)
+{
+  switch (orient_code) {
   case static_cast<unsigned char>(HORIZONTAL):{
     return "Horizontal    ";
     break;
