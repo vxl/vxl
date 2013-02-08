@@ -20,6 +20,11 @@ class vsph_utils
   //differences greater in magnitude than 180 reverse sign
   // that is, the sense of the smallest circular arc is used
   static double azimuth_diff(double phi_a, double phi_b, bool in_radians = true);
+  //:find the angles half way between two angles on the circle, cut at +-pi
+  // the result is ambiguous since two points on a circle define two arcs
+  static void half_angle(double phi_a, double phi_b, double& ang_1, 
+			 double& ang_2,bool in_radians = true);
+
   //: The "distance" between two points on the unit sphere
   // Currently the Manhattan distance in elevation and azimuth
   // Should be the arc of the great circle passing through the points -FIX!
@@ -28,8 +33,7 @@ class vsph_utils
 
   static bool a_eq_b(double phi_a, double phi_b, bool in_radians = true);
   static bool a_lt_b(double phi_a, double phi_b, bool in_radians = true);
-  static vsph_sph_box_2d intersection(vsph_sph_box_2d const& b1,
-                                      vsph_sph_box_2d const& b2);
+
   // compute the ray passing through a given pixel.
   // the units of elevation and azimuth are set according to the choice,
   // {"radians", "degrees"}
