@@ -87,6 +87,7 @@ vcl_map<int, volm_attributes > create_label_map()
   m[113] =        volm_attributes(32, "parks",                                          vil_rgb<vxl_byte>(10,   255,  1));
   m[114] =        volm_attributes(33, "piers",                                          vil_rgb<vxl_byte>(255,  0,    40));
   m[115] =      volm_attributes(34, "wharves",                                          vil_rgb<vxl_byte>(255,  0,    41));
+  m[116] =      volm_attributes(35, "roads",                                            vil_rgb<vxl_byte>(255,  100,    41));
 
   return m;
 }
