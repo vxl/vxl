@@ -136,6 +136,8 @@ void volm_spherical_shell_container::panaroma_img(vil_image_view<vil_rgb<vxl_byt
     vsph_sph_point_3d pt = sph_pts[i];
     unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180.0+0.5);
     unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180.0+0.5);
+    if (ii < 0 || jj < 0 || ii >= img.ni() || jj >= img.nj())
+      continue;
     if (values[i] == 253) { // invalid
       img(ii,jj).r = 255;
       img(ii,jj).g = 0;
@@ -164,6 +166,8 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
     vsph_sph_point_3d pt = sph_pts[i];
     unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180.0+0.5);
     unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180.0+0.5);
+    if (ii < 0 || jj < 0 || ii >= img.ni() || jj >= img.nj())
+      continue;
     if (values[i] == 253) { // invalid
       img(ii,jj).r = 255;
       img(ii,jj).g = 0;
@@ -174,12 +178,12 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
       img(ii,jj).g = 0;
       img(ii,jj).b = 255;
     }
-    else if (volm_nlcd_table::land_id.find((int)values[i]) == volm_nlcd_table::land_id.end()) {
+    else if (volm_label_table::land_id.find((int)values[i]) == volm_label_table::land_id.end()) {
       vcl_cerr << "cannot find this value: " << (int)values[i] << " in the color table!\n";
       img(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
     }
     else
-      img(ii,jj) = volm_nlcd_table::land_id[(int)values[i]].second;
+      img(ii,jj) = volm_label_table::land_id[(int)values[i]].color_;
   }
 }
 
@@ -193,6 +197,8 @@ void volm_spherical_shell_container::panaroma_img_orientations(vil_image_view<vi
     vsph_sph_point_3d pt = sph_pts[i];
     unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::one_over_pi*180.0+0.5);
     unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::one_over_pi*180.0+0.5);
+    if (ii < 0 || jj < 0 || ii >= img.ni() || jj >= img.nj())
+      continue;
     if (values[i] == 253) { // invalid
       img(ii,jj).r = 255;
       img(ii,jj).g = 0;
