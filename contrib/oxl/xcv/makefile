@@ -35,9 +35,9 @@ MANPAGE_SOURCES += xcv_axes_tableau_sptr.h
 MANPAGE_SOURCES += xcv_image_tableau_sptr.h
 MANPAGE_SOURCES += xcv_picker_tableau_sptr.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
 
 ifeq "$(IU_COMPILER)" "egcs"
 FLAGS_xcv_geometry.cxx := -ftemplate-depth-100
@@ -49,3 +49,11 @@ ifeq "$(TJ_GCC30)" "1"# otherwise gcc 3.0 needs too much virtual memory
 FLAGS_xcv_geometry.cxx := -O0
 FLAGS_xcv_multiview.cxx := -O0
 endif
+
+ifndef NOTEST
+SUBDIRS = tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

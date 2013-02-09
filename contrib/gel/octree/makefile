@@ -17,6 +17,14 @@ SOURCES += ConvexHull.cxx
 MANPAGE_SOURCES += BaseCube.h
 MANPAGE_SOURCES += Cube.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS = tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

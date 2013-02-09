@@ -10,6 +10,14 @@ SOURCES += bwm_wx_app.cxx
 SOURCES += bwm_wx_frame.cxx
 MANPAGE_SOURCES += bwm_wx_menu.h
 
-###################################
-include ${VXLROOT}/config/params.mk
-###################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS = tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

@@ -9,7 +9,14 @@ SOURCES += carmen_interface.cpp
 SOURCES += main.cpp
 endif
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
 
+ifndef NOTEST
+SUBDIRS = tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
