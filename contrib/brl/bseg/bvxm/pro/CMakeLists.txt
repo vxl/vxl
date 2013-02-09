@@ -65,18 +65,15 @@ IF(EXPAT_FOUND)
     processes/bvxm_synth_world_generator.h            processes/bvxm_synth_world_generator.cxx
     processes/bvxm_gen_synthetic_world_process.h      processes/bvxm_gen_synthetic_world_process.cxx
     processes/bvxm_save_edges_raw_process.h           processes/bvxm_save_edges_raw_process.cxx
-    processes/bvxm_display_edge_tangent_world_vrml_process.h
-    processes/bvxm_display_edge_tangent_world_vrml_process.cxx
-    processes/bvxm_expected_edge_image_process.h
-    processes/bvxm_expected_edge_image_process.cxx
+    processes/bvxm_display_edge_tangent_world_vrml_process.h processes/bvxm_display_edge_tangent_world_vrml_process.cxx
+    processes/bvxm_expected_edge_image_process.h      processes/bvxm_expected_edge_image_process.cxx
     processes/bvxm_create_synth_lidar_data_process.h  processes/bvxm_create_synth_lidar_data_process.cxx
     processes/bvxm_update_point_cloud_process.h       processes/bvxm_update_point_cloud_process.cxx
     processes/bvxm_report_statistics_point_cloud_process.h processes/bvxm_report_statistics_point_cloud_process.cxx
     processes/bvxm_estimate_camera_process.h          processes/bvxm_estimate_camera_process.cxx
     processes/bvxm_expected_edge_functor.h            processes/bvxm_expected_edge_functor.cxx
-    processes/bvxm_estimate_camera_utils.cxx
-    processes/bvxm_atmospheric_corr_process.cxx
-    processes/bvxm_atmospheric_corr_process.h
+    processes/bvxm_estimate_camera_utils.h            processes/bvxm_estimate_camera_utils.cxx
+    processes/bvxm_atmospheric_corr_process.h         processes/bvxm_atmospheric_corr_process.cxx
    )
 
   ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
