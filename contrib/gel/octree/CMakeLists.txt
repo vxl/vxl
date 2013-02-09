@@ -15,3 +15,7 @@ SET(octree_sources
 ADD_EXECUTABLE(octree ${octree_sources})
 INSTALL_TARGETS(/bin octree)
 TARGET_LINK_LIBRARIES(octree mvl vil1 vgl vnl vbl vul)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

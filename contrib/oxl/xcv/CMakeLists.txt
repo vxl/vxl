@@ -34,4 +34,8 @@ ADD_EXECUTABLE(xcv ${xcv_sources})
 INSTALL_TARGETS(/bin xcv)
 TARGET_LINK_LIBRARIES(xcv osl mvl vgui vgl vil1 vnl vul vcl)
 
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
+
 ENDIF (HAS_VGUI)

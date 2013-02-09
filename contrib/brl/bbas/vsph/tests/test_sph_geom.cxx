@@ -76,10 +76,10 @@ static void test_sph_geom()
   vsph_sph_box_2d bb_ext(p10, p12, p11);
   bb_ext.add(p14); 
   bb_ext.add(p15a);
-  bool ext_15 = bb_ext.contains(p15);
-  bool ext_20 = bb_ext.contains(p20);
+  TEST("bb_ext.contains(p15)", bb_ext.contains(p15), true);
+  TEST("bb_ext.contains(p20)", bb_ext.contains(p20), true);
   bb_ext.add(p15);
-  bool ext_17 = bb_ext.contains(p17);
+  TEST("bb_ext.contains(p17)", bb_ext.contains(p17), true);
   // test incremental updates 
   vsph_sph_box_2d bb_inc(false);
   bb_inc.add(p10); bb_inc.add(p11); bb_inc.add(p12);

@@ -51,4 +51,7 @@
 #include <bwm/bwm_texture_map_generator.h>
 #include <bwm/bwm_world.h>
 
+#include <bwm/process/bwm_process.h>
+#include <bwm/process/bwm_site_process.h>
+
 int main() { return 0; }

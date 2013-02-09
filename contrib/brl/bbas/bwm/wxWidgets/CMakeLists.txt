@@ -18,4 +18,8 @@ IF(wxWidgets_FOUND)
   ADD_EXECUTABLE(bwm_wx_example WIN32 ${bwm_wx_example_sources} )
   TARGET_LINK_LIBRARIES(bwm_wx_example bwm vgui vgui_wx ${wxWidgets_LIBRARIES})
 
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
+
 ENDIF(wxWidgets_FOUND)
