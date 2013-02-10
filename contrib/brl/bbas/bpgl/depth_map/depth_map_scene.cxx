@@ -339,7 +339,8 @@ void depth_map_scene::b_read(vsl_b_istream& is)
     vsl_b_read(is, sky);
     sky_.push_back(sky);
     vsl_b_read(is, cam_);
-  } else if (ver == 2) {
+  }
+  else if (ver == 2) {
     vsl_b_read(is, ni_);
     vsl_b_read(is, nj_);
     vsl_b_read(is, image_path_);
@@ -358,7 +359,8 @@ void depth_map_scene::b_read(vsl_b_istream& is)
       sky_.push_back(sky);
     }
     vsl_b_read(is, cam_);
-  } else if (ver == 3) {
+  }
+  else if (ver == 3) {
     vsl_b_read(is, ni_);
     vsl_b_read(is, nj_);
     vsl_b_read(is, image_path_);
@@ -366,7 +368,8 @@ void depth_map_scene::b_read(vsl_b_istream& is)
     vsl_b_read(is, sky_);
     vsl_b_read(is, ground_plane_);
     vsl_b_read(is, cam_);
-  } else {
+  }
+  else {
     vcl_cout << " in depth_map_scene::b_read - unknown version\n";
     return;
   }
@@ -850,9 +853,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
     score /= pixel_cnt;
   else
     score = 0.0f;
-#endif
 
-#if 0
   for (unsigned v = 0; v < nj; v++)
     for (unsigned u = 0; u < ni; u++) {
       if (ground_img(u,v) > 0)  // if labeled region and on a visible surface == use this as mask
