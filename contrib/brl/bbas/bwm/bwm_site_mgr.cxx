@@ -916,6 +916,8 @@ void bwm_site_mgr::load_cam_tableau()
 {
   vgui_dialog_extensions params ("Camera Tableau");
   vcl_string ext, name, img_file, cam_file, empty="";
+  //vcl_string ext, name, cam_file, empty="";
+  //static vcl_string img_file = "";
   static int camera_type = 0;
   vcl_vector<vcl_string> types;
   types.push_back("generic");
@@ -926,7 +928,8 @@ void bwm_site_mgr::load_cam_tableau()
   types.push_back("geo");
   params.field("Tableau Name", name);
   params.line_break();
-  params.dir("Image...", ext, img_file);
+  //params.dir("Image...", ext, img_file);
+  params.file("Image...", ext, img_file);
   params.line_break();
   params.choice("Camera Type",types, camera_type);
   params.line_break();
@@ -935,7 +938,7 @@ void bwm_site_mgr::load_cam_tableau()
   if (!params.ask())
     return;
 
-  if ((img_file == "") || (cam_file == "")) {
+  if ((img_file == "") || (cam_file == "" && camera_type != 4)) {  // for identity camera type, cam_file can be empty ?
     vgui_dialog error ("Error");
     error.message ("Please specify an input file (prefix)." );
     error.ask();
@@ -958,8 +961,12 @@ void bwm_site_mgr::load_cam_tableau()
     cam_str = "perspective";
     break;
    case 4:
+    cam_str = "identity";
+    break;
+   case 5:
     cam_str = "geo";
-    break;   default:
+    break;
+   default:
     cam_str = "unknown";
   }
 

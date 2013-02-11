@@ -212,7 +212,10 @@ class bwm_observer_cam : public bwm_observer_vgui
   //=====================  depth map methods ========================
   void set_depth_map_scene(depth_map_scene const& scene){scene_ = scene;}
   void set_ground_plane();
+  void add_ground_plane(unsigned order, unsigned nlcd_id, vcl_string name);
   void set_sky();
+  void add_sky(unsigned order, vcl_string name);
+  void add_region(vcl_string name, double min_depth, double max_depth, unsigned order, unsigned orient, unsigned land_id);
   void add_vertical_depth_region(double min_depth, double max_depth,
                                  vcl_string name);
   void save_depth_map_scene(vcl_string const& path);

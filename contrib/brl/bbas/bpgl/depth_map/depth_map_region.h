@@ -30,7 +30,7 @@
 class depth_map_region : public vbl_ref_count
 {
  public:
-  enum orientation{HORIZONTAL, FRONT_PARALLEL, SLANTED_RIGHT, SLANTED_LEFT, POROUS, NON_PLANAR, GROUND_PLANE, INFINT, VERTICAL};
+  enum orientation{HORIZONTAL, FRONT_PARALLEL, SLANTED_RIGHT, SLANTED_LEFT, POROUS, INFINT, NON_PLANAR, GROUND_PLANE, VERTICAL};
   //: default constructor
   depth_map_region();
   //: standard constructor for a plane that can be moved along the camera ray
@@ -39,14 +39,14 @@ class depth_map_region : public vbl_ref_count
                    double min_depth, double max_depth,
                    vcl_string name,
                    depth_map_region::orientation orient,
-                   unsigned land_id = 40);
+                   unsigned land_id = 0);
 
   //: constructor for a fixed plane, e.g. the ground plane
   depth_map_region(vsol_polygon_2d_sptr const& region, 
                    vgl_plane_3d<double> const& region_plane,
                    vcl_string name,
                    depth_map_region::orientation orient,
-                   unsigned land_id = 21);
+                   unsigned land_id = 0);
 
   //: constructor for a region of infinite distance
   depth_map_region(vsol_polygon_2d_sptr const& region,

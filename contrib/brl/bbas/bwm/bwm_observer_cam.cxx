@@ -47,6 +47,7 @@
 #include <vgui/vgui_projection_inspector.h>
 #include <bgui/bgui_vsol_soview2D.h>
 
+
 #if 0
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene_parser.h>
@@ -2005,6 +2006,18 @@ void bwm_observer_cam::set_ground_plane()
   scene_.set_ground_plane( p->sptr() );
 }
 
+void bwm_observer_cam::add_ground_plane(unsigned order, unsigned nlcd_id, vcl_string name)
+{
+  // get the slected polygon
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+  if (polys.size()!=1) {
+    vcl_cout << "Not a single polygon selected - select a single polygon\n";
+    return;
+  }
+  bgui_vsol_soview2D_polygon* p = reinterpret_cast<bgui_vsol_soview2D_polygon*>(polys[0]);
+  scene_.add_ground(p->sptr(), 0.0, 0.0, order, name, nlcd_id);
+}
+
 void bwm_observer_cam::set_sky()
 {
   vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
@@ -2015,6 +2028,17 @@ void bwm_observer_cam::set_sky()
   bgui_vsol_soview2D_polygon* p = reinterpret_cast<bgui_vsol_soview2D_polygon*>(polys[0]);
 
   scene_.set_sky( p->sptr());
+}
+
+void bwm_observer_cam::add_sky(unsigned order, vcl_string name)
+{
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+  if (polys.size()!=1) {
+    vcl_cout << "Not a single polygon selected - select a single polygon\n";
+    return;
+  }
+  bgui_vsol_soview2D_polygon* p = reinterpret_cast<bgui_vsol_soview2D_polygon*>(polys[0]);
+  scene_.add_sky(p->sptr(), order, name);
 }
 
 void bwm_observer_cam::add_vertical_depth_region(double min_depth,
@@ -2029,14 +2053,63 @@ void bwm_observer_cam::add_vertical_depth_region(double min_depth,
   scene_.add_ortho_perp_region(p->sptr(), min_depth, max_depth, name);
 }
 
+void bwm_observer_cam::add_region(vcl_string name,
+                                  double min_depth,
+                                  double max_depth,
+                                  unsigned order,
+                                  unsigned orient,
+                                  unsigned land_id)
+{
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+  if (polys.size() != 1) {
+    vcl_cout << "Not a single polygon selected - select a single polygon\n";
+    return;
+  }
+  bgui_vsol_soview2D_polygon* p = reinterpret_cast<bgui_vsol_soview2D_polygon*>(polys[0]);
+  vgl_vector_3d<double> np; // surface normal
+  if (orient == 0)
+    np.set(0.0, 0.0, 1.0);
+  else
+    np.set(1.0, 1.0, 0.0);
+
+  switch (orient)
+  {
+   case 0:
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::HORIZONTAL, order,land_id);
+    break;
+   case 1:
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::FRONT_PARALLEL, order,land_id);
+    break;
+   case 2:
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::SLANTED_RIGHT, order,land_id);
+    break;
+   case 3:
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::SLANTED_LEFT, order,land_id);
+    break;
+   case 4:
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::POROUS, order,land_id);
+    break;
+   case 5:
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::NON_PLANAR, order,land_id);
+    break;
+   default:
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::INFINT, order,land_id);
+  }
+}
+
 vcl_vector<depth_map_region_sptr> bwm_observer_cam::scene_regions()
 {
+  // this scene_regions returns all possible depth_map_region previously define
   vcl_vector<depth_map_region_sptr> regions;
-  if (scene_.sky().size()) regions.push_back(scene_.sky()[0]);
-  if (scene_.ground_plane().size()) regions.push_back(scene_.ground_plane()[0]);
-  vcl_vector<depth_map_region_sptr> temp = scene_.scene_regions();
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = temp.begin();
-       rit != temp.end(); ++rit)
+  vcl_vector<depth_map_region_sptr> sky_regions = scene_.sky();
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = sky_regions.begin(); rit != sky_regions.end(); ++rit)
+    regions.push_back((*rit));
+
+  vcl_vector<depth_map_region_sptr> grd_regions = scene_.ground_plane();
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = grd_regions.begin(); rit != grd_regions.end(); ++rit)
+    regions.push_back((*rit));
+  vcl_vector<depth_map_region_sptr> obj_regions = scene_.scene_regions();
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = obj_regions.begin(); rit != obj_regions.end(); ++rit)
     regions.push_back((*rit));
   return regions;
 }

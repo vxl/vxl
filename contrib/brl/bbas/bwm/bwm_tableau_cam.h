@@ -142,9 +142,16 @@ class bwm_tableau_cam : public bwm_tableau_img
   void calibrate_cam_from_horizon()
     {my_observer_->calibrate_cam_from_horizon();}
   void toggle_cam_horizon(){my_observer_->toggle_cam_horizon();}
+  vcl_vector<vcl_string> set_land_types();
+  vcl_vector<vcl_string> set_orient_types();
+#if 0
   void set_ground_plane(){ my_observer_->set_ground_plane();}
   void set_sky(){ my_observer_->set_sky();}
   void add_vertical_depth_region();
+#endif
+  void add_ground_plane();
+  void add_sky();
+  void add_region();
   void edit_region_props();
   void save_depth_map_scene();
  protected:

@@ -25,6 +25,8 @@
 
 #include <vcl_sstream.h>
 
+#include <volm/volm_io.h>
+
 #define NUM_CIRCL_SEC 12
 
 void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu)
@@ -442,6 +444,34 @@ void bwm_tableau_cam::set_cam_height()
   my_observer_->set_cam_height(cam_height);
 }
 
+void bwm_tableau_cam::add_ground_plane()
+{
+  // allowed land class
+  vcl_vector<vcl_string> land_types = this->set_land_types();
+
+  static vcl_string name = "ground_plane";
+  static unsigned order = 0;
+  static unsigned land_id = 0;
+  vgui_dialog vdval("Ground Plane Region");
+  vdval.field("Name ", name);
+  vdval.choice("Land Class ", land_types, land_id);
+  if (!vdval.ask())
+    return;
+  my_observer_->add_ground_plane(order, land_id, name);
+}
+
+void bwm_tableau_cam::add_sky()
+{
+  static vcl_string name = "sky";
+  static unsigned  order = 255;
+  vgui_dialog vdval("Sky Region");
+  vdval.field("Name ", name);
+  if (!vdval.ask())
+    return;
+  my_observer_->add_sky(order, name);
+}
+
+#if 0
 void bwm_tableau_cam::add_vertical_depth_region()
 {
   static double min_depth = 0.0;
@@ -455,15 +485,54 @@ void bwm_tableau_cam::add_vertical_depth_region()
     return;
   my_observer_->add_vertical_depth_region(min_depth, max_depth, name);
 }
+#endif
+
+void bwm_tableau_cam::add_region()
+{
+  // allowed orientation 
+  vcl_vector<vcl_string> orient_types;
+  orient_types = this->set_orient_types();
+  // allowed land class
+  vcl_vector<vcl_string> land_types;
+  land_types = this->set_land_types();
+
+  static vcl_string name = "";
+  static double     min_depth = 0.0;
+  static double     max_depth = 100.0;
+  static unsigned   order = 0;
+  static unsigned   orientation = 0;
+  static unsigned   land_id = 0;
+  // create menu
+  vgui_dialog vdval("Add Region");
+  vdval.field("Name ", name);
+  vdval.field("Min Depth (m)", min_depth);
+  vdval.field("Max Depth (m)", max_depth);
+  vdval.field("Order ", order);
+  vdval.choice("Orientation ", orient_types, orientation);
+  vdval.choice("Land Class ", land_types, land_id);
+  if (!vdval.ask())
+    return;
+  // create associated depth_map_region
+  my_observer_->add_region(name, min_depth, max_depth, order, orientation, land_id);
+  
+}
 
 void bwm_tableau_cam::edit_region_props()
 {
+  // allowed orientation 
+  vcl_vector<vcl_string> orient_types;
+  orient_types = this->set_orient_types();
+  // allowed land class
+  vcl_vector<vcl_string> land_types;
+  land_types = this->set_land_types();
+  // fetch all regions in depth_map_scene, including all sky regions, ground regions and objects
   vcl_vector<depth_map_region_sptr> regions = my_observer_->scene_regions();
   // initialize region properties
   static vcl_map<vcl_string, unsigned> depth_order;
   static vcl_map<vcl_string, double> min_depth;
   static vcl_map<vcl_string, double> max_depth;
-  static vcl_map<vcl_string, double> depth_inc;
+  static vcl_map<vcl_string, unsigned> orient;
+  static vcl_map<vcl_string, unsigned> land_id;
   static vcl_map<vcl_string, bool> active;;
   // for padding to align fields
   unsigned max_string_size = 0;
@@ -475,33 +544,34 @@ void bwm_tableau_cam::edit_region_props()
     depth_order[name] = (*rit)->order();
     min_depth[name]   = (*rit)->min_depth();
     max_depth[name]   = (*rit)->max_depth();
-    depth_inc[name]   = (*rit)->depth_inc();
+    //depth_inc[name]   = (*rit)->depth_inc();
     active[name]      = (*rit)->active();
+    orient[name]      = (*rit)->orient_type();
+    land_id[name]     = (*rit)->land_id();
   }
   vgui_dialog_extensions reg_dialog("Scene Region Editor");
   vcl_vector<depth_map_region_sptr>::iterator gpit;
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
-       rit != regions.end(); ++rit) {
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
     vcl_string temp = (*rit)->name();
     // compute padding
     int pad_cnt = max_string_size-temp.size();
     for (int k = 0; k<pad_cnt; ++k)
       temp += ' ';
     reg_dialog.message(temp.c_str()) ;
-    if ((*rit)->name() == "sky" ) {
+    if ( ((*rit)->name()).find("sky") != vcl_string::npos ) { 
       reg_dialog.line_break();
       continue;
     }
-    if ((*rit)->name() == "ground_plane" ) {
-      reg_dialog.field("MaxDepth", max_depth[(*rit)->name()]);
-      gpit = rit;
-      reg_dialog.line_break();
-      continue;
-    }
+    //if ( ((*rit)->name()).find("ground_plane") != vcl_string::npos ) {
+    //  reg_dialog.choice("Land Class", land_types, land_id[(*rit)->name()]);
+    //  reg_dialog.line_break();
+    //  continue;
+    //}
     reg_dialog.field("Order", depth_order[(*rit)->name()]);
     reg_dialog.field("MinDepth", min_depth[(*rit)->name()]);
     reg_dialog.field("MaxDepth", max_depth[(*rit)->name()]);
-    reg_dialog.field("Depth Inc.", depth_inc[(*rit)->name()]);
+    reg_dialog.choice("Orientation", orient_types, orient[(*rit)->name()]);
+    reg_dialog.choice("Land Class", land_types, land_id[(*rit)->name()]);
     reg_dialog.checkbox("Active", active[(*rit)->name()]);
     reg_dialog.line_break();
   }
@@ -509,16 +579,16 @@ void bwm_tableau_cam::edit_region_props()
   if (!reg_dialog.ask())
     return;
   // update region properties
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
-       rit != regions.end(); ++rit) {
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
     vcl_string name = (*rit)->name();
     (*rit)->set_order(depth_order[name]);
     (*rit)->set_min_depth(min_depth[name]);
     (*rit)->set_max_depth(max_depth[name]);
-    (*rit)->set_depth_inc(depth_inc[name]);
+    (*rit)->set_land_type(land_id[name]);
     (*rit)->set_active(active[name]);
+    (*rit)->set_orient_type(orient[name]);
   }
-  my_observer_->set_ground_plane_max_depth();
+  //my_observer_->set_ground_plane_max_depth();
 }
 
 void bwm_tableau_cam::save_depth_map_scene()
@@ -527,5 +597,36 @@ void bwm_tableau_cam::save_depth_map_scene()
   my_observer_->save_depth_map_scene(path);
 }
 
+vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()
+{
+  vcl_vector<vcl_string> land_types;
+  vcl_map<unsigned char, vcl_vector<vcl_string> > temp;
+  vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  unsigned cnt = 0;
+  for (; mit != volm_label_table::land_id.end(); ++mit) {
+    temp[mit->second.id_].push_back(mit->second.name_);
+  }
+  vcl_map<unsigned char, vcl_vector<vcl_string> >::iterator it = temp.begin();
+  for (; it != temp.end(); ++it) {
+    vcl_string land_name;
+    for ( vcl_vector<vcl_string>::iterator vit = it->second.begin(); vit != it->second.end(); ++vit) {
+      land_name += (*vit);
+      if(vit != it->second.end()-1) land_name += " OR ";
+    }
+    land_types.push_back(land_name);
+  }
+  return land_types;
+}
 
-
+vcl_vector<vcl_string> bwm_tableau_cam::set_orient_types()
+{
+  vcl_vector<vcl_string> orient_types;
+  vcl_map<depth_map_region::orientation, vcl_string> orient_string;
+  vcl_map<vcl_string, depth_map_region::orientation>::iterator mit = volm_orient_table::ori_id.begin();
+  for (; mit != volm_orient_table::ori_id.end(); ++mit)
+    orient_string[mit->second] = mit->first;
+  vcl_map<depth_map_region::orientation, vcl_string>::iterator it = orient_string.begin();
+  for (; it != orient_string.end(); ++it)
+    orient_types.push_back(it->second);
+  return orient_types;
+}
