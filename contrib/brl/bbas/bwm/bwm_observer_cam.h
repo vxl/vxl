@@ -218,6 +218,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   void add_region(vcl_string name, double min_depth, double max_depth, unsigned order, unsigned orient, unsigned land_id);
   void add_vertical_depth_region(double min_depth, double max_depth,
                                  vcl_string name);
+  void set_image_path(vcl_string const& ipath);
   void save_depth_map_scene(vcl_string const& path);
   void display_depth_map_scene();
   vcl_vector<depth_map_region_sptr> scene_regions();

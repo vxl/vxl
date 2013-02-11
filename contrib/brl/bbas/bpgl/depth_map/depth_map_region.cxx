@@ -86,7 +86,7 @@ region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
 }
 
 depth_map_region::depth_map_region()
-  : active_(true), order_(0), land_id_(40),
+  : active_(true), order_(0), land_id_(0),
     orient_type_(NON_PLANAR), name_(""), depth_(-1.0),
     min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
     depth_inc_(1.0),

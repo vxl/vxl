@@ -593,6 +593,9 @@ void bwm_tableau_cam::edit_region_props()
 
 void bwm_tableau_cam::save_depth_map_scene()
 {
+  // before save, put the image path into depth_map_scene
+  my_observer_->set_image_path(this->img_path());
+  // save depth_map_scene
   vcl_string path = bwm_utils::select_file();
   my_observer_->save_depth_map_scene(path);
 }

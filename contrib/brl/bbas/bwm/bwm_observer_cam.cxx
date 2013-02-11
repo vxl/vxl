@@ -2123,6 +2123,12 @@ void bwm_observer_cam::set_ground_plane_max_depth()
   }
 }
 
+
+void bwm_observer_cam::set_image_path(vcl_string const& ipath)
+{
+  scene_.set_image_path(ipath);
+}
+
 void bwm_observer_cam::save_depth_map_scene(vcl_string const& path)
 {
   vsl_b_ofstream os(path.c_str());
