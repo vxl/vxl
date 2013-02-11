@@ -47,15 +47,13 @@ void bwm_tableau_cam::create_polygon_mesh()
   set_color(1, 0, 0);
   pick_polygon(poly2d);
   if (! poly2d) {
-    vcl_cerr << "In bwm_tableau_cam::create_polygon_mesh -"
-             << " pick_polygon failed\n";
+    vcl_cerr << "In bwm_tableau_cam::create_polygon_mesh - pick_polygon failed\n";
     return ;
   }
   vsol_polygon_3d_sptr poly3d;
   my_observer_->backproj_poly(poly2d, poly3d);
   if (!poly3d) {
-    vcl_cout << "in bwm_tableau_cam::create_polygon_mesh -"
-             << " backprojection failed\n";
+    vcl_cout << "in bwm_tableau_cam::create_polygon_mesh - backprojection failed\n";
     return;
   }
   bwm_observable_mesh_sptr my_polygon = new bwm_observable_mesh(bwm_observable_mesh::BWM_MESH_FEATURE);
@@ -82,8 +80,7 @@ void bwm_tableau_cam::create_circular_polygon()
   unsigned max = 10;
   pick_point_set(ps_list, max);
   if (ps_list.size() == 0) {
-    vcl_cerr << "In bwm_tableau_cam::create_circle -"
-             << " pick_points failed\n";
+    vcl_cerr << "In bwm_tableau_cam::create_circle - pick_points failed\n";
     return ;
   }
   vsol_polygon_3d_sptr poly3d;
@@ -266,7 +263,7 @@ void bwm_tableau_cam::load_mesh_multiple()
   vcl_string master_filename = bwm_utils::select_file();
   vcl_ifstream file_inp(master_filename.data());
   if (!file_inp.good()) {
-    vcl_cerr << "error opening file "<< master_filename <<vcl_endl;
+    vcl_cerr << "error opening file "<< master_filename << '\n';
     return;
   }
 
@@ -489,7 +486,7 @@ void bwm_tableau_cam::add_vertical_depth_region()
 
 void bwm_tableau_cam::add_region()
 {
-  // allowed orientation 
+  // allowed orientation
   vcl_vector<vcl_string> orient_types;
   orient_types = this->set_orient_types();
   // allowed land class
@@ -514,12 +511,11 @@ void bwm_tableau_cam::add_region()
     return;
   // create associated depth_map_region
   my_observer_->add_region(name, min_depth, max_depth, order, orientation, land_id);
-  
 }
 
 void bwm_tableau_cam::edit_region_props()
 {
-  // allowed orientation 
+  // allowed orientation
   vcl_vector<vcl_string> orient_types;
   orient_types = this->set_orient_types();
   // allowed land class
@@ -558,7 +554,7 @@ void bwm_tableau_cam::edit_region_props()
     for (int k = 0; k<pad_cnt; ++k)
       temp += ' ';
     reg_dialog.message(temp.c_str()) ;
-    if ( ((*rit)->name()).find("sky") != vcl_string::npos ) { 
+    if ( ((*rit)->name()).find("sky") != vcl_string::npos ) {
       reg_dialog.line_break();
       continue;
     }
@@ -614,7 +610,7 @@ vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()
     vcl_string land_name;
     for ( vcl_vector<vcl_string>::iterator vit = it->second.begin(); vit != it->second.end(); ++vit) {
       land_name += (*vit);
-      if(vit != it->second.end()-1) land_name += " OR ";
+      if (vit != it->second.end()-1) land_name += " OR ";
     }
     land_types.push_back(land_name);
   }
