@@ -156,11 +156,14 @@ class depth_map_region : public vbl_ref_count
 };
 
 #include "depth_map_region_sptr.h"
-void vsl_b_write(vsl_b_ostream& os, const depth_map_region* rptr);
 
-void vsl_b_read(vsl_b_istream &is, depth_map_region*& rptr);
+void vsl_b_write(vsl_b_ostream& os, depth_map_region const*);
+void vsl_b_read(vsl_b_istream &is, depth_map_region*&);
 
-void vsl_b_write(vsl_b_ostream& os, const depth_map_region_sptr& rptr);
+void vsl_b_write(vsl_b_ostream& os, depth_map_region_sptr const&);
+void vsl_b_read(vsl_b_istream &is, depth_map_region_sptr&);
 
-void vsl_b_read(vsl_b_istream &is, depth_map_region_sptr& rptr);
+void vsl_b_write(vsl_b_ostream& os, vcl_vector<depth_map_region_sptr> const&);
+void vsl_b_read(vsl_b_istream &is, vcl_vector<depth_map_region_sptr>&);
+
 #endif //depth_map_region_h_
