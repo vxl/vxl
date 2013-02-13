@@ -2,12 +2,10 @@
 #include <vsph/vsph_sph_point_2d.h>
 #include <vsph/vsph_utils.h>
 #include <vsph/vsph_grid_index_2d.h>
-#include <vnl/vnl_math.h>
 
 
 static void test_grid_index()
 {
-  double er = 0;
   // test box spanning 360 degrees in azimuth
   vsph_sph_point_2d p9(0.0, 80.0, false);
   vsph_sph_point_2d p10(80.0, 0.0, false);
@@ -37,7 +35,7 @@ static void test_grid_index()
   vsph_sph_point_2d p28(50.0, 40.0, false);
   vsph_sph_point_2d p29(50.0, 41.0, false);
   vsph_sph_point_2d p30(51.0, 40.0, false);
-    
+
   // check th_min, ph_max bound neighbors
   // to insert
   vsph_sph_point_2d p31(49.9999, 41.0, false);
