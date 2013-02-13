@@ -46,7 +46,7 @@ class vsph_unit_sphere : public vbl_ref_count
 {
  public:
   //: default constructor
-  vsph_unit_sphere() : point_angle_(0.0), min_theta_(0.0), max_theta_(0.0){}
+  vsph_unit_sphere() : point_angle_(0.0), min_theta_(0.0), max_theta_(0.0) {}
   //: constructor, angles are in degrees
   // point_angle is the maximum angle between adjacent triangle vertices
   // min_theta and max_theta bound the points constructed on the sphere surface
@@ -107,15 +107,14 @@ class vsph_unit_sphere : public vbl_ref_count
   //: display segmented region data
   void display_region_data(vcl_string const & path,
                            vcl_vector<double> const& data,
-			   vsph_sph_box_2d const& mask = 
-			   vsph_sph_box_2d()) const;
+                           vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
 
   //: display segmented region data
   void display_region_color(vcl_string const & path,
                             vcl_vector<vcl_vector<float> > const& cdata,
                             vcl_vector<float> const& skip_color =
                             vcl_vector<float>(3, -1.0f),
-			    vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
+                            vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
 
   //: Iterator
 

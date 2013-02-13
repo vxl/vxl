@@ -1,5 +1,5 @@
-
 #include "vsph_unit_sphere.h"
+//
 #include "vsph_sph_point_2d.h"
 #include <vsl/vsl_vector_io.h>
 #include "vsph_utils.h"
@@ -83,7 +83,7 @@ void vsph_unit_sphere::add_uniform_views()
 
   vcl_vector<int> tri8;
   tri8.push_back(1); tri8.push_back(2); tri8.push_back(5); triangles.push_back(tri8);
-  vcl_cout << "formed octahedron-- \n" << vcl_flush;
+  vcl_cout << "formed octahedron--" << vcl_endl;
   // iteratively refine the triangles
   // check the angle between two vertices (of the same triangle),
   // use the center of the spherical coordinate system
@@ -94,7 +94,7 @@ void vsph_unit_sphere::add_uniform_views()
   while (!done) {
     vcl_vector<vcl_vector<int> >  new_triangles;
     int ntri=triangles.size();
-	vcl_cout << "subdivide " << ntri << " triangles\n" << vcl_flush;
+    vcl_cout << "subdivide " << ntri << " triangles\n" << vcl_flush;
     for (int i=0; i<ntri; i++) {
       vcl_vector<int> points;
       for (int j=0; j<3; j++) {
@@ -185,7 +185,7 @@ void vsph_unit_sphere::add_uniform_views()
         equivalent_ids_[vidx]=id;// keep track of map between old and new ids
       // if not add it
       if (!equal&&(sv.theta_ <= cap_angle_rad)) {
-	index_.insert(sv, cart_pts_.size());//new
+        index_.insert(sv, cart_pts_.size());//new
         cart_pts_.push_back(cv);
         sph_pts_.push_back(sv);
       }
@@ -419,7 +419,7 @@ void vsph_unit_sphere::display_edges(vcl_string const & path) const
 void vsph_unit_sphere::
 display_region_data(vcl_string const & path,
                     vcl_vector<double> const& data,
-		    vsph_sph_box_2d const& mask) const
+                    vsph_sph_box_2d const& mask) const
 {
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
@@ -457,7 +457,7 @@ display_region_data(vcl_string const & path,
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vsph_sph_point_2d sp = sph_pts_[i];
-    if(!mask.is_empty()&&mask.defined()&&!mask.contains(sp)) continue;
+    if (!mask.is_empty()&&mask.defined()&&!mask.contains(sp)) continue;
     vgl_vector_3d<double> ray = cart_pts_[i];
     float val = static_cast<float>((data[i]-minv)/dif);
     bvrml_write::write_vrml_disk(os, orig+10*ray, ray, disc_radius,
@@ -484,7 +484,7 @@ void vsph_unit_sphere::
 display_region_color(vcl_string const & path,
                      vcl_vector<vcl_vector<float> > const& cdata,
                      vcl_vector<float> const& skip_color,
-		     vsph_sph_box_2d const& mask) const
+                     vsph_sph_box_2d const& mask) const
 {
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
@@ -511,7 +511,7 @@ display_region_color(vcl_string const & path,
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vgl_vector_3d<double> ray = cart_pts_[i];
     vsph_sph_point_2d sp = sph_pts_[i];
-    if(!mask.is_empty()&&mask.defined()&&!mask.contains(sp)) continue;
+    if (!mask.is_empty()&&mask.defined()&&!mask.contains(sp)) continue;
     const vcl_vector<float>& cl = cdata[i];
     if (cl[0]==skip_color[0]&&cl[1]==skip_color[1]&&cl[2]==skip_color[2])
       continue;
@@ -558,15 +558,13 @@ void vsph_unit_sphere::b_read(vsl_b_istream& is)
   vsl_b_read(is, version);
   switch (version) {
    case 1:
-    {
-      vsl_b_read(is, point_angle_);
-      vsl_b_read(is, min_theta_);
-      vsl_b_read(is, max_theta_);
-      vsl_b_read(is, sph_pts_);
-      vsl_b_read(is, edges_);
-      this->set_cart_points();
-      break;
-    }
+    vsl_b_read(is, point_angle_);
+    vsl_b_read(is, min_theta_);
+    vsl_b_read(is, max_theta_);
+    vsl_b_read(is, sph_pts_);
+    vsl_b_read(is, edges_);
+    this->set_cart_points();
+    break;
    default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_unit_sphere&)\n"
              << "           Unknown version number "<< version << '\n';
@@ -601,11 +599,9 @@ void vsph_edge::b_read(vsl_b_istream& is)
   vsl_b_read(is, version);
   switch (version) {
    case 1:
-    {
-      vsl_b_read(is, vs_);
-      vsl_b_read(is, ve_);
-      break;
-    }
+    vsl_b_read(is, vs_);
+    vsl_b_read(is, ve_);
+    break;
    default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_edge&)\n"
              << "           Unknown version number "<< version << '\n';
