@@ -22,6 +22,7 @@ vsph_unit_sphere::vsph_unit_sphere(double point_angle,
   neighbors_valid_(false), point_angle_(point_angle),
   min_theta_(min_theta), max_theta_(max_theta)
 {
+  vcl_cout << "Start construction\n" << vcl_flush;
   add_uniform_views();
   remove_top_and_bottom();
 }
@@ -82,7 +83,7 @@ void vsph_unit_sphere::add_uniform_views()
 
   vcl_vector<int> tri8;
   tri8.push_back(1); tri8.push_back(2); tri8.push_back(5); triangles.push_back(tri8);
-
+  vcl_cout << "formed octahedron-- \n" << vcl_flush;
   // iteratively refine the triangles
   // check the angle between two vertices (of the same triangle),
   // use the center of the spherical coordinate system
@@ -93,6 +94,7 @@ void vsph_unit_sphere::add_uniform_views()
   while (!done) {
     vcl_vector<vcl_vector<int> >  new_triangles;
     int ntri=triangles.size();
+	vcl_cout << "subdivide " << ntri << " triangles\n" << vcl_flush;
     for (int i=0; i<ntri; i++) {
       vcl_vector<int> points;
       for (int j=0; j<3; j++) {
@@ -159,13 +161,15 @@ void vsph_unit_sphere::add_uniform_views()
     //vgl_vector_3d<double> vector2=verts[new_triangles[0][1]]-center;
     triangles.clear();
     triangles=new_triangles;
-#if 0
-    vcl_cout << "sus:" << verts.size() << ' ' << vcl_flush;
+#if 1
+    vcl_cout << "found " << triangles.size() << " trianges\n";
+    vcl_cout << "found " << verts.size() << " vertices\n" << vcl_flush;
 #endif
   }
   // refine the vertices to points, eliminate duplicate ones and also eliminate the ones below given elevation
   // note that the relationship between vertex id and the id of the
   // cart and sphere containers is changed by this filter
+  vcl_cout << "Start finding equivalent vertices n = " << verts.size() << '\n' << vcl_flush;
   int ntri = triangles.size();
   for (int i=0; i<ntri; i++) {
     for (int j=0; j<3; j++) {
@@ -174,11 +178,14 @@ void vsph_unit_sphere::add_uniform_views()
       vsph_sph_point_2d sv = spher_coord(cv);
       //is cv already in cart_pts?
       int id = -1;
-      bool equal = this->find_near_equal(cv, id);
+      //      bool equal = this->find_near_equal(cv, id);
+      unsigned th_idx=0, ph_idx=0;//new
+      bool equal = index_.find(sv, th_idx, ph_idx, id);//new
       if (equal)
         equivalent_ids_[vidx]=id;// keep track of map between old and new ids
       // if not add it
       if (!equal&&(sv.theta_ <= cap_angle_rad)) {
+	index_.insert(sv, cart_pts_.size());//new
         cart_pts_.push_back(cv);
         sph_pts_.push_back(sv);
       }
@@ -221,7 +228,6 @@ void vsph_unit_sphere::remove_top_and_bottom()
 #if 0
   vcl_cout << "entering top and bottom" << sph_pts_.size() << vcl_endl;
 #endif
-  double margin = 0.00035;
   equivalent_ids_.clear();
   double min_theta_rad = min_theta_/vnl_math::deg_per_rad;
   double max_theta_rad = max_theta_/vnl_math::deg_per_rad;
@@ -231,8 +237,8 @@ void vsph_unit_sphere::remove_top_and_bottom()
   int indx = 0;
   for (; pit!=sph_pts_.end();++pit, ++indx) {
     vsph_sph_point_2d& sp = (*pit);
-    if (sp.theta_ > (min_theta_rad-margin) &&
-        sp.theta_ < (max_theta_rad+margin)) {
+    if (sp.theta_ > (min_theta_rad-MARGIN_RAD) &&
+        sp.theta_ < (max_theta_rad+MARGIN_RAD)) {
       int ns = cart_pts_new.size();
       equivalent_ids_[indx] = ns;
       sph_pts_new.push_back(sp);
@@ -412,7 +418,8 @@ void vsph_unit_sphere::display_edges(vcl_string const & path) const
 
 void vsph_unit_sphere::
 display_region_data(vcl_string const & path,
-                    vcl_vector<double> const& data) const
+                    vcl_vector<double> const& data,
+		    vsph_sph_box_2d const& mask) const
 {
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
@@ -449,6 +456,8 @@ display_region_data(vcl_string const & path,
   float disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad);
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
+    vsph_sph_point_2d sp = sph_pts_[i];
+    if(!mask.is_empty()&&mask.defined()&&!mask.contains(sp)) continue;
     vgl_vector_3d<double> ray = cart_pts_[i];
     float val = static_cast<float>((data[i]-minv)/dif);
     bvrml_write::write_vrml_disk(os, orig+10*ray, ray, disc_radius,
@@ -474,7 +483,8 @@ display_region_data(vcl_string const & path,
 void vsph_unit_sphere::
 display_region_color(vcl_string const & path,
                      vcl_vector<vcl_vector<float> > const& cdata,
-                     vcl_vector<float> const& skip_color) const
+                     vcl_vector<float> const& skip_color,
+		     vsph_sph_box_2d const& mask) const
 {
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
@@ -500,6 +510,8 @@ display_region_color(vcl_string const & path,
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vgl_vector_3d<double> ray = cart_pts_[i];
+    vsph_sph_point_2d sp = sph_pts_[i];
+    if(!mask.is_empty()&&mask.defined()&&!mask.contains(sp)) continue;
     const vcl_vector<float>& cl = cdata[i];
     if (cl[0]==skip_color[0]&&cl[1]==skip_color[1]&&cl[2]==skip_color[2])
       continue;

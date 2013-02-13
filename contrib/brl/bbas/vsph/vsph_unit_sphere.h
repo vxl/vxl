@@ -10,14 +10,18 @@
 //  Modifications
 //   2013/01/13 Initial version
 // \endverbatim
-#include <vbl/vbl_ref_count.h>
 #include "vsph_sph_point_2d.h"
+#include "vsph_sph_box_2d.h"
+#include "vsph_grid_index_2d.h"
+#include "vsph_defs.h"//DIST_TOL, MARGIN
+#include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_set.h>
 #include <vcl_iosfwd.h>
+
 class vsph_edge
 {
  public:
@@ -102,13 +106,16 @@ class vsph_unit_sphere : public vbl_ref_count
 
   //: display segmented region data
   void display_region_data(vcl_string const & path,
-                           vcl_vector<double> const& data) const;
+                           vcl_vector<double> const& data,
+			   vsph_sph_box_2d const& mask = 
+			   vsph_sph_box_2d()) const;
 
   //: display segmented region data
   void display_region_color(vcl_string const & path,
                             vcl_vector<vcl_vector<float> > const& cdata,
                             vcl_vector<float> const& skip_color =
-                            vcl_vector<float>(3, 0.0f)) const;
+                            vcl_vector<float>(3, -1.0f),
+			    vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
 
   //: Iterator
 
@@ -141,7 +148,7 @@ class vsph_unit_sphere : public vbl_ref_count
   //: construct Cartesian vectors from spherical points
   void set_cart_points();
 
-  bool find_near_equal(vgl_vector_3d<double>const& p,int& id,double tol=0.0001);
+  bool find_near_equal(vgl_vector_3d<double>const& p,int& id,double tol=DIST_TOL);
   void filter_intersecting_edges(double point_angle);
 
   //: views are associated with an id, all the view centers are on the sphere (r) of the coordinate system
@@ -150,6 +157,7 @@ class vsph_unit_sphere : public vbl_ref_count
   vcl_vector<vsph_edge> edges_;
   vcl_map<int, int> equivalent_ids_;
   vcl_vector<vcl_vector<int> > neighbors_;
+  vsph_grid_index_2d index_;
  private:
   bool neighbors_valid_;
   //: these angles are stored in degrees for convenient interpretation

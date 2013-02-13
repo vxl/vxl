@@ -125,7 +125,34 @@ bool vsph_utils::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>&
   if (nrays <= 0)
     return false;
   data.resize(nrays);
-  for (int i = 0; i< nrays; ++i)
-    is >> data[i];
+  for(int i = 0; i< nrays; ++i){
+    int temp;
+    is >> temp ;
+    data[i] = static_cast<unsigned char>(temp);
+  }
   return true;
+}
+vsph_sph_box_2d vsph_utils::box_from_camera(vpgl_perspective_camera<double> const& cam, vcl_string units){
+  bool in_radians = true;
+  if(units == "degrees")
+    in_radians = false;
+  // extract the image bounds
+  vpgl_calibration_matrix<double> K = cam.get_calibration();
+  vgl_point_2d<double> pp = K.principal_point();
+  double ni = 2.0*pp.x(), nj = 2.0*pp.y();
+  double elevation, azimuth;
+  vsph_utils::ray_spherical_coordinates(cam,0.0,0.0, elevation, azimuth, units);
+  vsph_sph_point_2d p0(elevation, azimuth, in_radians);
+  vsph_utils::ray_spherical_coordinates(cam, ni,0.0, elevation, azimuth, units);
+  vsph_sph_point_2d p1(elevation, azimuth, in_radians);
+  vsph_utils::ray_spherical_coordinates(cam, ni, nj, elevation, azimuth, units);
+  vsph_sph_point_2d p2(elevation, azimuth, in_radians);
+  vsph_utils::ray_spherical_coordinates(cam, 0.0, nj,elevation, azimuth, units);
+  vsph_sph_point_2d p3(elevation, azimuth, in_radians);
+  vsph_utils::ray_spherical_coordinates(cam, 0.5*ni, 0.5*nj, elevation, azimuth, units);
+  // need center of image to define azimuthal interval (see vsph_sph_box_2d)
+  vsph_sph_point_2d p4(elevation, azimuth, in_radians);
+  vsph_sph_box_2d box(p1, p0, p4);
+  box.add(p2); box.add(p3);
+  return box;
 }

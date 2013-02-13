@@ -55,6 +55,10 @@ class vsph_utils
     project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
                                   vgl_polygon<double> const& image_poly,
                                   vcl_string units = "radians");
+
+  // find the spherical bounding box for an image with camera
+  static vsph_sph_box_2d box_from_camera(vpgl_perspective_camera<double> const& cam, vcl_string units);
+    //read a set of unit sphere ray data (assumed in unsigned char format)
   static bool read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data);
 
  private: // only static functions in this class: disallow instantiation
