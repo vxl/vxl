@@ -8,6 +8,7 @@ DECLARE( test_sph_geom );
 DECLARE( test_unit_sphere );
 //DECLARE( test_sph_segment );
 DECLARE( test_utils );
+DECLARE( test_grid_index );
 
 void
 register_tests()
@@ -15,9 +16,11 @@ register_tests()
   REGISTER( test_view_sphere );
   REGISTER( test_spherical_coord );
   REGISTER( test_camera_bounds );
+  REGISTER( test_sph_geom );
   REGISTER( test_unit_sphere );
-  // REGISTER( test_sph_segment );
+  //  REGISTER( test_sph_segment );
   REGISTER( test_utils );
+  REGISTER( test_grid_index );
 }
 
 DEFINE_MAIN;
