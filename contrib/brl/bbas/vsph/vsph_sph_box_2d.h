@@ -40,11 +40,12 @@ class vsph_sph_box_2d
   vsph_sph_box_2d(bool in_radians);
 
 
-  //: Three points, pa, pb and pc, are needed to define an 
+  //: Constructor from three points.
+  // Three points, pa, pb and pc, are needed to define an
   // unambiguous order on azimuth having a cut at +-180.
-  // Two of the points, pa and pb, bound the interval and the third 
+  // Two of the points, pa and pb, bound the interval and the third
   // point, c, defines which complementary arc of the circle is "in" the box.
-  // pa < pb by definition. pc lies on the  smaller or larger arc to 
+  // pa < pb by definition. pc lies on the  smaller or larger arc to
   // break the ambiguity
   vsph_sph_box_2d(vsph_sph_point_2d const& pa, vsph_sph_point_2d const& pb,
                   vsph_sph_point_2d const& pc);
@@ -56,7 +57,7 @@ class vsph_sph_box_2d
   //: the angle units (radians or degrees) maintained by *this box
   bool in_radians() const {return in_radians_;}
 
-  //: bounds on azimuth and elevation, if in_radians == false, 
+  //: bounds on azimuth and elevation, if in_radians == false.
   // the return is in degrees.
   double min_phi(bool in_radians = true) const;
   double min_theta(bool in_radians = true) const;
@@ -70,7 +71,7 @@ class vsph_sph_box_2d
   //: is box empty, i.e. no points have been added
   bool is_empty() const;
 
-  //: add point to update box bounds
+  //: add point to update box bounds.
   // assumes the box already has the three point basis
   // or the added point sequence is from a "compact" set on the circle
   void add( double theta, double phi, bool in_radians = true);
@@ -103,7 +104,7 @@ class vsph_sph_box_2d
  private:
   //: the value of pi in the units of *this box
   double pye() const;
-  //: update the current theta bounds 
+  //: update the current theta bounds
   void update_theta(double th);
   //: the azimuth angle ph is outside the current interval so extend it
   bool extend_interval(double ph);
