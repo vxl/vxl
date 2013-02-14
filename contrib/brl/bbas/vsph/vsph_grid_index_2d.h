@@ -9,29 +9,31 @@
 //  except at the end of the range
 //  for elevation two special bins are allocated for elev = 0 and pi
 //  since the azimuth is not defined for these points on the sphere
-//  for azimuth  -180 < v < -180+inc and 180-inc <= v <= p180 
+//  for azimuth  -180 < v < -180+inc and 180-inc <= v <= p180
 //  where a point with phi = -180 is put in the bin bounded by +180
-// 
+//
 #include <vcl_iostream.h>
 #include "vsph_sph_point_2d.h"
 #include "vsph_defs.h"//DIST_TOL
 #include <vcl_vector.h>
 #include <vcl_map.h>
+
 class vsph_grid_index_2d
 {
  public:
   vsph_grid_index_2d();
-  vsph_grid_index_2d(unsigned n_bins_theta, unsigned n_bins_phi, 
+  vsph_grid_index_2d(unsigned n_bins_theta, unsigned n_bins_phi,
                      bool in_radians = true);
   //: grid index corresponding to spherical point sp
   bool index(vsph_sph_point_2d const& sp, unsigned& th_idx, unsigned& ph_idx) const;
-  //: insert a point in the index, returns false if a point already 
-  //  exists or coordinates are outside the range of the index
-  bool vsph_grid_index_2d::insert(vsph_sph_point_2d const& sp, int id=-1);
+  //: insert a point in the index
+  //  \returns false if a point already exists or coordinates are outside the range of the index
+  bool insert(vsph_sph_point_2d const& sp, int id=-1);
 
-  //: find if a point is near sp within tolerance, return the point id
-  // an id of -1 indicates that the point id was not defined or the
-  // point was not found
+  //: find if a point is near sp within tolerance
+  //  \return the point id
+  //  an id of -1 indicates that the point id was not defined or the
+  //  point was not found
   bool find(vsph_sph_point_2d const& sp, unsigned& th_idx, unsigned& ph_idx,
             int& id, double tol = DIST_TOL )const;
 
