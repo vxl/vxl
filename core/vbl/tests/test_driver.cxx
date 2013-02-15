@@ -16,6 +16,7 @@ DECLARE(vbl_test_scoped_ptr);
 DECLARE(vbl_test_shared_pointer);
 DECLARE(vbl_test_local_minima);
 DECLARE(vbl_test_attributes);
+DECLARE(vbl_test_disjoint_sets);
 
 void register_tests()
 {
@@ -35,6 +36,7 @@ void register_tests()
   REGISTER(vbl_test_shared_pointer);
   REGISTER(vbl_test_local_minima);
   REGISTER(vbl_test_attributes);
+  REGISTER(vbl_test_disjoint_sets);
 }
 
 DEFINE_MAIN;
