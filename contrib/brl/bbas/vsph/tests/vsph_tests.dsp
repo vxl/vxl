@@ -114,6 +114,9 @@ SOURCE=.\test_unit_sphere.cxx
 SOURCE=.\test_utils.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_grid_index.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

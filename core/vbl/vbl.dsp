@@ -108,6 +108,12 @@ SOURCE=.\vbl_qsort.cxx
 SOURCE=.\vbl_sort.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vbl_disjoint_sets.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_edge.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_array_1d+double-.cxx
 # End Source File
 # Begin Source File
@@ -358,6 +364,15 @@ SOURCE=.\vbl_batch_multimap.h
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_batch_compact_multimap.h
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_disjoint_sets.h
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_edge.h
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_graph_partition.h
 # End Source File
 # End Group
 # End Target

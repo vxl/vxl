@@ -141,6 +141,9 @@ SOURCE=.\vbl_test_batch_compact_multimap.cxx
 SOURCE=.\vbl_test_batch_multimap.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vbl_test_disjoint_sets.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

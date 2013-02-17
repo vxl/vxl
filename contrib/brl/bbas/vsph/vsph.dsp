@@ -114,6 +114,9 @@ SOURCE=.\vsph_utils.cxx
 SOURCE=.\vsph_unit_sphere.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vsph_grid_index_2d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsph_view_sphere+vsph_view_point+double--.cxx
 # End Source File
 # Begin Source File
@@ -169,6 +172,12 @@ SOURCE=.\vsph_unit_sphere.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsph_unit_sphere_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_grid_index_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_defs.h
 # End Source File
 # End Group
 # End Target
