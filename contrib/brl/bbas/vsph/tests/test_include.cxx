@@ -2,6 +2,8 @@
 #include <vsph/vsph_unit_sphere_sptr.h>
 //
 #include <vsph/vsph_camera_bounds.h>
+#include <vsph/vsph_defs.h>
+#include <vsph/vsph_grid_index_2d.h>
 #include <vsph/vsph_sph_box_2d.h>
 #include <vsph/vsph_sph_point_2d.h>
 #include <vsph/vsph_sph_point_3d.h>

@@ -30,4 +30,8 @@
 #include <vbl/vbl_local_minima.h>
 #include <vbl/vbl_attributes.h>
 
+#include <vbl/vbl_edge.h>
+#include <vbl/vbl_disjoint_sets.h>
+#include <vbl/vbl_graph_partition.h>
+
 int main() { return 0; }
