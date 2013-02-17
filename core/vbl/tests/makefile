@@ -22,6 +22,7 @@ TESTS += vbl_test_local_minima.cxx
 TESTS += vbl_test_attributes.cxx
 TESTS += vbl_test_batch_compact_multimap.cxx
 TESTS += vbl_test_batch_multimap.cxx
+TESTS += vbl_test_disjoint_sets.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

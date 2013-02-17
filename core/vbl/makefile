@@ -38,6 +38,10 @@ MANPAGE_SOURCES += vbl_attributes.txx
 MANPAGE_SOURCES += vbl_batch_multimap.h
 MANPAGE_SOURCES += vbl_batch_compact_multimap.h
 
+SOURCES += vbl_disjoint_sets.cxx
+SOURCES += vbl_edge.cxx
+MANPAGE_SOURCES += vbl_graph_partition.h
+
 # debugging
 
 DEFINES += -DBUILDING_VBL_DLL

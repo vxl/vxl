@@ -10,6 +10,7 @@ TESTS += test_spherical_coord.cxx
 TESTS += test_sph_geom.cxx
 TESTS += test_unit_sphere.cxx
 TESTS += test_utils.cxx
+TESTS += test_grid_index.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx
