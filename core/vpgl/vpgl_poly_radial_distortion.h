@@ -65,6 +65,7 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
 
   void set_coefficients(const T* k)
   {
+    if ( k == NULL ) return;
     const T* kptr = k;
     T* coptr = coefficients_;
     for (unsigned int i=0; i<n; ++i, ++kptr, ++coptr)
