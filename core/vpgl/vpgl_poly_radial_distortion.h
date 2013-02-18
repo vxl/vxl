@@ -41,7 +41,7 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
   //: Constructor
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
                                    const vcl_vector<T>& k)
-   : vpgl_radial_distortion<T>(center)
+   : vpgl_radial_distortion<T>(center,true)
   {
     set_coefficients(k);
   }
@@ -50,7 +50,7 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
                                    const vgl_point_2d<T>& distorted_center,
                                    const vcl_vector<T>& k)
-   : vpgl_radial_distortion<T>(center, distorted_center)
+   : vpgl_radial_distortion<T>(center, distorted_center,true)
   {
     set_coefficients(k);
   }
