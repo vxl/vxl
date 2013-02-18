@@ -4,7 +4,7 @@
 #include <vsph/vsph_sph_point_2d.h>
 #include <vsph/vsph_sph_box_2d.h>
 #include <vsph/vsph_utils.h>
-
+#include <vcl_fstream.h>
 #include <vnl/vnl_math.h>
 
 
@@ -76,10 +76,10 @@ static void test_sph_geom()
   vsph_sph_box_2d bb_ext(p10, p12, p11);
   bb_ext.add(p14); 
   bb_ext.add(p15a);
-  TEST("bb_ext.contains(p15)", bb_ext.contains(p15), true);
+  TEST("bb_ext.contains(p15)", bb_ext.contains(p15), false);
   TEST("bb_ext.contains(p20)", bb_ext.contains(p20), true);
   bb_ext.add(p15);
-  TEST("bb_ext.contains(p17)", bb_ext.contains(p17), true);
+  TEST("bb_ext.contains(p15)", bb_ext.contains(p15), true);
   // test incremental updates 
   vsph_sph_box_2d bb_inc(false);
   bb_inc.add(p10); bb_inc.add(p11); bb_inc.add(p12);
@@ -124,17 +124,88 @@ static void test_sph_geom()
   er = vcl_fabs(area_a-0.179081) + vcl_fabs(area_b-0.121229);
   TEST_NEAR("areas spanning +-180", er, 0.0, 0.001);
   //test intersection of boxes spanning cut
-  vsph_sph_box_2d bint = intersection(bba, bbb);
+  vcl_vector<vsph_sph_box_2d> boxes;
+  bool good = intersection(bba, bbb, boxes);
+  vsph_sph_box_2d bint;
+  if(good) 
+   bint = boxes[0];
   double min_ph_int = bint.min_phi(false), max_ph_int = bint.max_phi(false);
   double min_th_int = bint.min_theta(false), max_th_int = bint.max_theta(false);
 
-  bool good = vsph_utils::a_eq_b(min_ph_int, p2.phi_);
-  good = good && vsph_utils::a_eq_b(max_ph_int, p5.phi_);
-  good = good && vsph_utils::a_eq_b(min_th_int, p4.theta_);
-  good = good && vsph_utils::a_eq_b(max_th_int, p3.theta_);
+  good = good && vsph_utils::a_eq_b(min_ph_int, p2.phi_, false);
+  good = good && vsph_utils::a_eq_b(max_ph_int, p5.phi_, false);
+  good = good && vsph_utils::a_eq_b(min_th_int, p4.theta_, false);
+  good = good && vsph_utils::a_eq_b(max_th_int, p3.theta_,false);
   TEST("intersection", good, true);
-  
+  // test boxes forming a cross (no endpoints inside each box
+  vsph_sph_point_2d p6 ( 50.0,  -10.0, false);
+  vsph_sph_point_2d p7 (130.0,   10.0, false);
+  vsph_sph_point_2d p8 ( 90.0,    0.0, false); 
+  vsph_sph_point_2d p9 ( 75.0,  -60.0, false); 
+  vsph_sph_point_2d p100(105.0,   60.0, false);
 
+  vsph_sph_box_2d bbc1(p6, p7, p8), bbc2(p9,p100,p8);
+  boxes.clear();
+  good = intersection(bbc1, bbc2, boxes);
+  vsph_sph_box_2d bint_cross;
+  if(good) bint_cross = boxes[0];
+  boxes.clear();
+  good = good && intersection(bbc2, bbc1, boxes);
+  vsph_sph_box_2d bint_cross_rev;
+  if(good) bint_cross_rev = boxes[0];
+  good = vsph_utils::a_eq_b(bint_cross.min_phi(false), p6.phi_, false);
+  good = good&&vsph_utils::a_eq_b(bint_cross.max_phi(false), p7.phi_, false);
+  good = good&&vsph_utils::a_eq_b(bint_cross_rev.max_phi(false),bint_cross.max_phi(false) , false);
+  good = good&&bint_cross.min_theta(false) == p9.theta_;
+  good = good&&bint_cross.max_theta(false) == p100.theta_;
+  TEST("Crossing box arrangement", good, true);
+  // one box essentially covers the entire +- 180 phi circle
+  vsph_sph_box_2d box_s1, box_s2, box_s12;
+  double b1_thmin = 1.4836689630573823, b1_thmax = 1.6579236905324111;
+  double b1_phia = -1.5707963267948966, b1_phib =1.5707963267948966;
+  double b1_phic = 0.51656139130052758;
+  box_s1.set(b1_thmin, b1_thmax, b1_phia, b1_phib, b1_phic);
+  double b2_thmin = 1.3088871075562318, b2_thmax =1.8327055460335613 ;
+  double b2_phia =-0.31728356503269012 , b2_phib = -0.31911878808324995;
+  double b2_phic = 0.54737987781481912;
+  box_s2.set(b2_thmin, b2_thmax, b2_phia, b2_phib, b2_phic);
+  boxes.clear();
+  // two boxes are produced
+  good = intersection(box_s1, box_s2, boxes);
+  good = good&& box_s1.contains(boxes[0])&& box_s1.contains(boxes[1]);
+  TEST("each box contains the other's bounds", good, true);
+  double tol = 0.001;
+  vcl_string box_path = 
+    "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/box_display.wrl";
+#if 0
+  vcl_vector<vgl_vector_3d<double> > verts;
+  vcl_vector<vcl_vector<int> > quads;
+  box_s1.planar_quads(verts, quads, tol);
+  vcl_ofstream os(box_path.c_str());
+  box_s1.display_box(os, 1.0f, 0.0f, 0.0f, tol);
+  os.close();
+#endif
+#if 0
+  vcl_vector<vsph_sph_box_2d> dis_boxes(2);
+  dis_boxes[0]=box_s1;   dis_boxes[1]=box_s2;
+  vcl_vector<float> c0(3, 0.0f), c1(3, 0.0f);
+  c0[0]=1.0f; c1[0]=1.0f; c1[1] = 1.0f;
+  vcl_vector<vcl_vector<float> > colors(2);
+  colors[0]=c0; colors[1]=c1;
+  vsph_sph_box_2d::display_boxes(box_path, dis_boxes, colors, tol);
+#endif
+  double grok_a_phi = -2.7617465101715433;
+  double grok_b_phi = -2.4723473031673180;
+  double grok_c_phi = -2.5151716844356731;
+  double grok_min_th  = 1.6235700411813854;
+  double grok_max_th = 1.8268944131886669;
+  vsph_sph_box_2d grok;
+  grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
+  vcl_string grok_path = 
+    "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/grok_box_display.wrl";
+  vcl_ofstream os(grok_path.c_str());
+  grok.display_box(os, 1.0f, 1.0f, 0.0f, tol);
+  os.close();
 }
 
 TESTMAIN(test_sph_geom);

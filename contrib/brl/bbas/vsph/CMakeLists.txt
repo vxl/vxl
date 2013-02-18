@@ -13,8 +13,7 @@ SET(vsph_sources
     vsph_camera_bounds.h     vsph_camera_bounds.cxx
     vsph_utils.h             vsph_utils.cxx
     vsph_unit_sphere.h       vsph_unit_sphere.cxx
-#    segment_graph.h          disjoint_set.h
-#    vsph_segment_sphere.h    vsph_segment_sphere.cxx
+    vsph_segment_sphere.h    vsph_segment_sphere.cxx
     vsph_grid_index_2d.h     vsph_grid_index_2d.cxx
   )
 AUX_SOURCE_DIRECTORY(Templates vsph_sources)

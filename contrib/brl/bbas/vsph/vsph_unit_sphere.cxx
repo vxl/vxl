@@ -27,20 +27,31 @@ vsph_unit_sphere::vsph_unit_sphere(double point_angle,
   remove_top_and_bottom();
 }
 
-vgl_vector_3d<double> vsph_unit_sphere::cart_coord(vsph_sph_point_2d const& sp) const
+vgl_vector_3d<double> vsph_unit_sphere::cart_coord(vsph_sph_point_2d const& sp)
 {
-  double x = vcl_sin(sp.theta_)*vcl_cos(sp.phi_);
-  double y = vcl_sin(sp.theta_)*vcl_sin(sp.phi_);
+  double th = sp.theta_, ph = sp.phi_;
+  if(!sp.in_radians_){
+    th /= vnl_math::deg_per_rad;
+    ph /= vnl_math::deg_per_rad;
+  }
+  double x = vcl_sin(th)*vcl_cos(ph);
+  double y = vcl_sin(th)*vcl_sin(ph);
   double z = vcl_cos(sp.theta_);
   return vgl_vector_3d<double>(x, y, z);
 }
 
-vsph_sph_point_2d vsph_unit_sphere::spher_coord(vgl_vector_3d<double> const& cp) const
+
+vsph_sph_point_2d vsph_unit_sphere::spher_coord(vgl_vector_3d<double> const& cp,
+						bool in_radians)
 {
   double x = cp.x(), y = cp.y(), z = cp.z();
   double phi = vcl_atan2(y,x);
   double theta = vcl_acos(z);
-  return vsph_sph_point_2d(theta, phi);
+  if(!in_radians){
+    theta *= vnl_math::deg_per_rad;
+    phi *= vnl_math::deg_per_rad;
+  }
+  return vsph_sph_point_2d(theta, phi, in_radians);
 }
 
 void vsph_unit_sphere::add_uniform_views()
@@ -225,7 +236,7 @@ void vsph_unit_sphere::add_uniform_views()
 
 void vsph_unit_sphere::remove_top_and_bottom()
 {
-#if 0
+#if 1
   vcl_cout << "entering top and bottom" << sph_pts_.size() << vcl_endl;
 #endif
   equivalent_ids_.clear();
@@ -251,7 +262,7 @@ void vsph_unit_sphere::remove_top_and_bottom()
   sph_pts_ = sph_pts_new;
   cart_pts_.clear();
   cart_pts_ = cart_pts_new;
-#if 0
+#if 1
   vcl_cout << "starting to remap edges\n" << vcl_flush;
 #endif
   vcl_vector<vsph_edge> new_edges;
@@ -277,11 +288,10 @@ void vsph_unit_sphere::find_neighbors()
   neighbors_.clear();
   neighbors_.resize(nv);
   int ne = edges_.size();
-  for (int iv = 0; iv<nv; ++iv)
-    for (int ie =0; ie<ne; ++ie) {
-      vsph_edge& e = edges_[ie];
-      if (e.vs_ == iv) neighbors_[iv].push_back(e.ve_);
-      if (e.ve_ == iv) neighbors_[iv].push_back(e.vs_);
+  for (int ie =0; ie<ne; ++ie) {
+    vsph_edge& e = edges_[ie];
+    neighbors_[e.vs_].insert(e.ve_);
+    neighbors_[e.ve_].insert(e.vs_);
     }
   neighbors_valid_ = true;
 }
@@ -341,6 +351,12 @@ bool vsph_unit_sphere::min_angle(vcl_vector<vgl_vector_3d<double> > list,
   return true;
 }
 
+vgl_plane_3d<double> vsph_unit_sphere::
+tangent_plane(vsph_sph_point_2d const& sp){
+  vgl_vector_3d<double> cv = cart_coord(sp);
+  vgl_point_3d<double> p(cv.x(), cv.y(), cv.z());
+  return vgl_plane_3d<double>(cv, p);
+}
 
 void vsph_unit_sphere::display_vertices(vcl_string const & path) const
 {
@@ -416,10 +432,10 @@ void vsph_unit_sphere::display_edges(vcl_string const & path) const
   os.close();
 }
 
-void vsph_unit_sphere::
-display_region_data(vcl_string const & path,
-                    vcl_vector<double> const& data,
-                    vsph_sph_box_2d const& mask) const
+
+void vsph_unit_sphere::display_data(vcl_string const & path,
+				    vcl_vector<double> const& data,
+				    vsph_sph_box_2d const& mask) const
 {
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
@@ -480,11 +496,11 @@ display_region_data(vcl_string const & path,
      <<"}\n";
 }
 
-void vsph_unit_sphere::
-display_region_color(vcl_string const & path,
-                     vcl_vector<vcl_vector<float> > const& cdata,
-                     vcl_vector<float> const& skip_color,
-                     vsph_sph_box_2d const& mask) const
+
+void vsph_unit_sphere::display_color(vcl_string const & path,
+				     vcl_vector<vcl_vector<float> > const& cdata,
+				     vcl_vector<float> const& skip_color,
+				     vsph_sph_box_2d const& mask) const
 {
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
@@ -520,19 +536,10 @@ display_region_color(vcl_string const & path,
   }
   os.close();
 
-  int cnt = 0;
-  int np = cart_pts_.size()-1;
-  for (vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
-       cit != cart_pts_.end(); ++cit, ++cnt) {
-    const vgl_vector_3d<double>& cp = *cit;
-    os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
-    if (cnt != np) os << ',';
-    os << '\n';
-  }
-  os <<"    ]\n"
-     <<"   }\n"
-     << " }\n"
-     <<"}\n";
+}
+void vsph_unit_sphere::display_boxes(vcl_string const & path,
+				     vcl_vector<vsph_sph_box_2d> const& boxes){
+  //need to break each region into smaller planar pieces
 }
 
 bool vsph_unit_sphere::operator==(const vsph_unit_sphere &other) const
@@ -558,13 +565,16 @@ void vsph_unit_sphere::b_read(vsl_b_istream& is)
   vsl_b_read(is, version);
   switch (version) {
    case 1:
-    vsl_b_read(is, point_angle_);
-    vsl_b_read(is, min_theta_);
-    vsl_b_read(is, max_theta_);
-    vsl_b_read(is, sph_pts_);
-    vsl_b_read(is, edges_);
-    this->set_cart_points();
-    break;
+    {
+      vsl_b_read(is, point_angle_);
+      vsl_b_read(is, min_theta_);
+      vsl_b_read(is, max_theta_);
+      vsl_b_read(is, sph_pts_);
+      vsl_b_read(is, edges_);
+      this->set_cart_points();
+      this->find_neighbors();
+      break;
+    }
    default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_unit_sphere&)\n"
              << "           Unknown version number "<< version << '\n';

@@ -12,7 +12,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 #include <vsph/vsph_sph_point_2d.h>
-
+#include <vcl_vector.h>
+#include <vgl/vgl_vector_3d.h>
 //:
 // theta is elevation, phi is azimuth
 //
@@ -83,7 +84,7 @@ class vsph_sph_box_2d
   //: is an azimuth angle contained in the current bounded azimuth interval
   bool in_interval(double phi, bool in_radians=true) const;
 
-  //: does the box contain the specified spherical point
+  //: does the box contain the specified spherical point ?
   bool contains(double const& theta, double const& phi, bool in_radians = true) const;
   bool contains(vsph_sph_point_2d const& p) const;
 
@@ -92,6 +93,24 @@ class vsph_sph_box_2d
 
   //: area on the surface of unit sphere
   double area() const;
+
+  //: the spherical point corresponding to the center of the box
+  vsph_sph_point_2d center(bool in_radians = true) const;
+
+  //: decompose box into approximately planar quadrilaterals
+  void planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
+		    vcl_vector<vcl_vector<int> >& quads,
+		    double tol = 0.01) const;
+
+  //: display the box as a set of planar quadrilaterals in vrml
+  void display_box(vcl_ostream& os, float r, float g, float b,
+		   double tol = 0.01) const;
+
+  //: display a set of boxes
+  static void display_boxes(vcl_string const& path,
+			    vcl_vector<vsph_sph_box_2d> const& boxes,
+			    vcl_vector<vcl_vector<float> > colors,
+			    double tol = 0.01);
 
   //: support for binary I/O
   void print(vcl_ostream& os, bool in_radians = true) const;
@@ -104,7 +123,14 @@ class vsph_sph_box_2d
  private:
   //: the value of pi in the units of *this box
   double pye() const;
-  //: update the current theta bounds
+
+  //: reduce phi to the range +-180 (assumed in *this angle units)
+  double reduce_phi(double phi) const;
+
+  //: bounds of ccw traversal of phi interval in *this angle units
+  void phi_bounds(double& phi_start, double& phi_end) const;
+
+  //: update the current theta bounds 
   void update_theta(double th);
   //: the azimuth angle ph is outside the current interval so extend it
   bool extend_interval(double ph);
@@ -118,8 +144,9 @@ class vsph_sph_box_2d
 };
 
 //: return a box that represents the intersection of two boxes (could be empty)
-vsph_sph_box_2d intersection(vsph_sph_box_2d const& b1,
-                             vsph_sph_box_2d const& b2);
+// note that it is possible to have two disjoint intervals in phi (2 boxes)
+bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
+		  vcl_vector<vsph_sph_box_2d>& boxes);
 
 vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_box_2d const& p);
 

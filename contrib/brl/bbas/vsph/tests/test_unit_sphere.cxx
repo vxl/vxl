@@ -37,12 +37,12 @@ static void test_unit_sphere()
   TEST("binary read write - vsph_unit_sphere", good, true);
   vpl_unlink("./temp.bin");
 #if 1
-  point_angle = 0.2;
+  point_angle = 0.5;
   min_theta = 75.0;
   max_theta = 105.0;
   vsph_unit_sphere_sptr usph2 = 
     new vsph_unit_sphere(point_angle, min_theta, max_theta);
-  vsl_b_ofstream os2("c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/unit_sphere_0.2_75_105.vsl");
+  vsl_b_ofstream os2("c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/unit_sphere_0.5_75_105.vsl");
   if(!os2)
    return;
 #if 0

@@ -9,9 +9,7 @@ double vsph_grid_index_2d::pye() const
     return vnl_math::pi;
   return 180.0;
 }
-
-vsph_grid_index_2d::vsph_grid_index_2d(): n_bins_theta_(18), n_bins_phi_(36), in_radians_(true)
-{
+vsph_grid_index_2d::vsph_grid_index_2d(): n_bins_theta_(36), n_bins_phi_(72), in_radians_(true){
   vcl_vector<vcl_pair<vsph_sph_point_2d, int> > temp0;
   vcl_vector<vcl_vector<vcl_pair<vsph_sph_point_2d, int> > > temp(n_bins_phi_+1, temp0);
   // two extra bins are reserved for theta = 0 and theta = 180
