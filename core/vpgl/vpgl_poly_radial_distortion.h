@@ -71,6 +71,20 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
     for (unsigned int i=0; i<n; ++i, ++kptr, ++coptr)
       *coptr = *kptr;
   };
+    
+  //: Read-only coefficient accessor
+  T coefficient( unsigned int i ) const
+  {
+    assert( i < n );
+    return this->coefficients_[i];
+  }
+	
+  //: Read-write coefficient accessor
+  T& coefficient( unsigned int i )
+  {
+    assert( i < n );
+    return this->coefficients_[i];
+  }
 
   //: Distort a radial length
   virtual T distort_radius( T radius ) const;
