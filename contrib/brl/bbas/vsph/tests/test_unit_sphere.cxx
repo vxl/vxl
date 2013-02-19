@@ -45,8 +45,8 @@ static void test_unit_sphere()
   vsl_b_ofstream os2("c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/unit_sphere_0.5_75_105.vsl");
   if(!os2)
    return;
-#if 0
   vsl_b_write(os2, usph2);
+#if 1
   vcl_string vert_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/verts.wrl";
   usph2->display_vertices(vert_path);
    vcl_string edge_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/edges.wrl";

@@ -158,8 +158,9 @@ class vsph_unit_sphere : public vbl_ref_count
   void set_cart_points();
 
   bool find_near_equal(vgl_vector_3d<double>const& p,int& id,double tol=DIST_TOL);
-  void filter_intersecting_edges(double point_angle);
-
+  bool find_edge(vsph_edge const&  e);
+  void insert_edge(vsph_edge const&  e);
+  
   //: views are associated with an id, all the view centers are on the sphere (r) of the coordinate system
   vcl_vector<vsph_sph_point_2d> sph_pts_;
   vcl_vector<vgl_vector_3d<double> > cart_pts_;

@@ -16,6 +16,19 @@ bool operator < (vsph_edge const& a, vsph_edge const& b)
     return a.vs_ < b.vs_;
   return a.ve_ < b.ve_;
 }
+// an edge exists if either vertex is a neighbor of the other
+bool vsph_unit_sphere::find_edge(vsph_edge const&  e){
+  vcl_set<int>& ss = neighbors_[e.vs_];
+  vcl_set<int>::iterator sit;
+  sit = vcl_find(ss.begin(), ss.end(), e.ve_);
+  return sit != ss.end();
+}
+// insert an edge into the neighbor index and the list of edges
+void vsph_unit_sphere::insert_edge(vsph_edge const&  e){
+    neighbors_[e.vs_].insert(e.ve_);
+    neighbors_[e.ve_].insert(e.vs_);
+    edges_.push_back(e);
+}
 
 vsph_unit_sphere::vsph_unit_sphere(double point_angle,
                                    double min_theta, double max_theta) :
@@ -204,16 +217,18 @@ void vsph_unit_sphere::add_uniform_views()
 #if 1
     if (i%1000 ==0)
       vcl_cout << '.' << vcl_flush;
-      //vcl_cout << "susN:" << sph_pts_.size() << ' ' << vcl_flush;
 #endif
   }
   vcl_cout << '\n' << vcl_flush;
-#if 0
+#if 1
   vcl_cout << "finished refine\n" << vcl_flush;
+  vcl_cout << "start constructing edges\n" << vcl_flush;
 #endif
+  neighbors_.clear();
+  neighbors_.resize(this->size());
   // step through the triangles and construct unique edges
   // two edges are equal if their end points are equal regardless
-  // of order.
+  // of order. 
   vcl_vector<vsph_edge>::iterator eit;
   for (int i=0; i<ntri; i++) {
     int v[3];// triangle vertices
@@ -223,13 +238,19 @@ void vsph_unit_sphere::add_uniform_views()
     //traverse the edges of the triangle
     for (int j = 0; j<3; ++j) {
       vsph_edge e(v[j],v[(j+1)%3]);//wrap around to 0
+#if 0 // original n^2 find
       eit = vcl_find(edges_.begin(), edges_.end(), e);
       if (eit == edges_.end())
         edges_.push_back(e);
+#endif
+      if(!find_edge(e))
+	this->insert_edge(e);
     }
+    if (i%1000 ==0)
+      vcl_cout << '+' << vcl_flush;
   }
-#if 0
-  vcl_cout << "finished find edges\n" << vcl_flush;
+#if 1
+  vcl_cout << "\nfinished find edges\n" << vcl_flush;
 #endif
   neighbors_valid_ = false;
 }
