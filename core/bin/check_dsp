@@ -102,7 +102,10 @@ foreach my $dir (@DIRS)
       }
       closedir(UPDIR);
     }
-    foreach my $subdir (qw(algo io util file_formats gui pro xio vpdt sample filter section accessors vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors))
+    my @subdirs = qw(algo io util file_formats gui pro xio vpdt sample filter section accessors vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors);
+    push @subdirs,'process' if ($dir =~ m!\bbwm/tests$!);
+    push @subdirs,'processes' if ($dir =~ m!\b(bpro/core/sdet_pro|bseg/boxm2/ocl/pro|bseg/bvxm/pro)/tests$!);
+    foreach my $subdir (@subdirs)
     {
       if (! -d "$dir/../$subdir/tests" && opendir UPDIR,"$dir/../$subdir") {
         foreach (grep {m/\.h(|xx)$/} readdir(UPDIR))
