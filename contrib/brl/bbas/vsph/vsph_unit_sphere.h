@@ -49,8 +49,8 @@ class vsph_unit_sphere : public vbl_ref_count
   //: default constructor
   vsph_unit_sphere() : point_angle_(0.0), min_theta_(0.0), max_theta_(0.0) {}
   //: constructor, angles are in degrees
-  // point_angle is the maximum angle between adjacent triangle vertices
-  // min_theta and max_theta bound the points constructed on the sphere surface
+  // \p point_angle is the maximum angle between adjacent triangle vertices
+  // \p min_theta and \p max_theta bound the points constructed on the sphere surface
   vsph_unit_sphere(double point_angle, double min_theta, double max_theta);
 
   //: destructor
@@ -62,35 +62,31 @@ class vsph_unit_sphere : public vbl_ref_count
   double min_theta() const {return min_theta_;}
   double max_theta() const {return max_theta_;}
 
-  //: returns the number of spherical vertices
+  //: \returns the number of spherical vertices
   unsigned size() const { return sph_pts_.size(); }
 
   //: transforms a spherical coordinate to a Cartesian unit vector
   static vgl_vector_3d<double> cart_coord(vsph_sph_point_2d const& vp);
 
   //: transforms a Cartesian unit vector to a spherical coordinate
-  // if in_radians == false units are in degrees
+  // If \p in_radians == false units are in degrees
   static vsph_sph_point_2d spher_coord(vgl_vector_3d<double> const& cp,
-				       bool in_radians = true);
+                                       bool in_radians = true);
 
   //: spherical points
-  // copy
-  vcl_vector<vsph_sph_point_2d> sph_points() const{
-    return sph_pts_;}
-  // const reference
-  const vcl_vector<vsph_sph_point_2d>& sph_points_ref() const{
-    return sph_pts_;}
+  // \returns a copy
+  vcl_vector<vsph_sph_point_2d> sph_points() const { return sph_pts_; }
+  // \returns a const reference
+  const vcl_vector<vsph_sph_point_2d>& sph_points_ref() const { return sph_pts_; }
 
   //: Cartesian unit vectors
-  // copy
-  vcl_vector<vgl_vector_3d<double> > cart_vectors() const{
-    return cart_pts_;}
-  // const reference
-  const vcl_vector<vgl_vector_3d<double> >& cart_vectors_ref() const{
-    return cart_pts_;}
+  // \returns a copy
+  vcl_vector<vgl_vector_3d<double> > cart_vectors() const { return cart_pts_; }
+  // \returns a const reference
+  const vcl_vector<vgl_vector_3d<double> >& cart_vectors_ref() const { return cart_pts_; }
 
   //: get the triangle edges
-  vcl_vector<vsph_edge> edges() const{return edges_;}
+  vcl_vector<vsph_edge> edges() const {return edges_;}
 
   //: find the nearest neighbors (connected by a single edge traversal)
   void find_neighbors();
@@ -112,20 +108,19 @@ class vsph_unit_sphere : public vbl_ref_count
 
   //: display data values associated with spherical positions
   void display_data(vcl_string const & path,
-                           vcl_vector<double> const& data,
-                           vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
-
+                    vcl_vector<double> const& data,
+                    vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
 
   //: display a color distribution on the unit sphere
   void display_color(vcl_string const & path,
-		     vcl_vector<vcl_vector<float> > const& cdata,
-		     vcl_vector<float> const& skip_color =
-		     vcl_vector<float>(3, -1.0f),
-		     vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
+                     vcl_vector<vcl_vector<float> > const& cdata,
+                     vcl_vector<float> const& skip_color =
+                     vcl_vector<float>(3, -1.0f),
+                     vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
 
   //: display a set of axis aligned boxes on the sphere
-  void display_boxes(vcl_string const & path, 
-		     vcl_vector<vsph_sph_box_2d> const& boxes);
+  void display_boxes(vcl_string const & path,
+                     vcl_vector<vsph_sph_box_2d> const& boxes);
 
   //: Iterator over the set of spherical points
   typedef vcl_vector<vsph_sph_point_2d>::iterator iterator;
@@ -160,7 +155,7 @@ class vsph_unit_sphere : public vbl_ref_count
   bool find_near_equal(vgl_vector_3d<double>const& p,int& id,double tol=DIST_TOL);
   bool find_edge(vsph_edge const&  e);
   void insert_edge(vsph_edge const&  e);
-  
+
   //: views are associated with an id, all the view centers are on the sphere (r) of the coordinate system
   vcl_vector<vsph_sph_point_2d> sph_pts_;
   vcl_vector<vgl_vector_3d<double> > cart_pts_;

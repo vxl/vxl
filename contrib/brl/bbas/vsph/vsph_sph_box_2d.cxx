@@ -4,43 +4,48 @@
 #include "vsph_unit_sphere.h"
 #include <bvrml/bvrml_write.h>
 #include <vcl_cassert.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_distance.h>
+#include <vgl/vgl_vector_3d.h>
+
 double vsph_sph_box_2d::pye() const
 {
   if (in_radians_) return vnl_math::pi;
   return 180.0;
 }
-double vsph_sph_box_2d::reduce_phi(double phi) const{
+
+double vsph_sph_box_2d::reduce_phi(double phi) const
+{
   double ph = phi;
-  if(ph>pye()) ph -= vnl_math::twopi;
-  if(ph<-pye()) ph +=  vnl_math::twopi;
+  if (ph>pye()) ph -= vnl_math::twopi;
+  if (ph<-pye()) ph +=  vnl_math::twopi;
   return ph;
 }
 
-void vsph_sph_box_2d::phi_bounds(double& phi_start, double& phi_end) const{
+void vsph_sph_box_2d::phi_bounds(double& phi_start, double& phi_end) const
+{
   double ph_min = min_phi(in_radians_), ph_max = max_phi(in_radians_);
   // does interval span cut?
-  if(ph_min>0 && ph_max<0)
-    if(in_interval(pye())){
-	phi_start = ph_min;
-	phi_end = ph_max;
-	return;
-      }else{
-	phi_start = ph_max;
-	phi_end = ph_min;
-	return;
+  if (ph_min>0 && ph_max<0)
+    if (in_interval(pye())) {
+        phi_start = ph_min;
+        phi_end = ph_max;
+        return;
+      }
+      else {
+        phi_start = ph_max;
+        phi_end = ph_min;
+        return;
       }
   double mid = 0.5*(ph_min+ph_max);
-  if(in_interval(mid, in_radians_)){//small interval
+  if (in_interval(mid, in_radians_)) {//small interval
     phi_start = ph_min;
     phi_end = ph_max;
-  }else{//large interval
+  }
+  else {//large interval
     phi_start = ph_max;
     phi_end = ph_min;
   }
 }
+
 vsph_sph_box_2d::vsph_sph_box_2d(): in_radians_(true)
 {
   min_th_ = max_th_= 1000.0; //empty
@@ -76,7 +81,7 @@ vsph_sph_box_2d::vsph_sph_box_2d(vsph_sph_point_2d const& pa,
 double vsph_sph_box_2d::min_phi(bool in_radians) const
 {
   double aph = a_phi_, bph = b_phi_;
-  if(vsph_utils::azimuth_diff(aph, bph,  in_radians_) < 0)
+  if (vsph_utils::azimuth_diff(aph, bph,  in_radians_) < 0)
     aph = b_phi_;
   if ((in_radians&&in_radians_)||(!in_radians&&!in_radians_))
     return aph;
@@ -99,7 +104,7 @@ double vsph_sph_box_2d::min_theta(bool in_radians) const
 double vsph_sph_box_2d::max_phi(bool in_radians) const
 {
   double aph = a_phi_, bph = b_phi_;
-  if(vsph_utils::azimuth_diff(aph, bph,  in_radians_) < 0)
+  if (vsph_utils::azimuth_diff(aph, bph,  in_radians_) < 0)
     bph = a_phi_;
   if ((in_radians&&in_radians_)||(!in_radians&&!in_radians_))
     return bph;
@@ -365,7 +370,7 @@ double vsph_sph_box_2d::area() const
     ha = ang1;
   double ph_start, ph_end;
   this->phi_bounds(ph_start, ph_end);
-  if(!this->in_radians_){
+  if (!this->in_radians_) {
     ph_start /= vnl_math::deg_per_rad;
     ph_end /= vnl_math::deg_per_rad;
   }
@@ -374,7 +379,8 @@ double vsph_sph_box_2d::area() const
   return a*dif;
 }
 
-vsph_sph_point_2d vsph_sph_box_2d::center(bool in_radians) const{
+vsph_sph_point_2d vsph_sph_box_2d::center(bool in_radians) const
+{
   double min_ph = min_phi(true), max_ph = max_phi(true);
   double min_th = min_theta(true), max_th = max_theta(true);
   double half_th = (min_th + max_th)/2.0;
@@ -383,11 +389,11 @@ vsph_sph_point_2d vsph_sph_box_2d::center(bool in_radians) const{
   double ha = ang2;
   if (this->in_interval(ang1, true))
     ha = ang1;
-  if(this->in_radians_ && !in_radians){
+  if (this->in_radians_ && !in_radians) {
     half_th *= vnl_math::deg_per_rad;
     ha *= vnl_math::deg_per_rad;
   }
-  if(!this->in_radians_ && in_radians){
+  if (!this->in_radians_ && in_radians) {
     half_th /= vnl_math::deg_per_rad;
     ha /= vnl_math::deg_per_rad;
   }
@@ -395,13 +401,13 @@ vsph_sph_point_2d vsph_sph_box_2d::center(bool in_radians) const{
 }
 
 void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
-				   vcl_vector<vcl_vector<int> >& quads,
-				   double tol) const{
-  assert(tol >0.0 && tol < 1.0); 
+                                   vcl_vector<vcl_vector<int> >& quads,
+                                   double tol) const{
+  assert(tol >0.0 && tol < 1.0);
   verts.clear(); quads.clear();
   double temp = 1.0-tol;
   double max_ang = 2.0*vcl_acos(temp);
-  if(!in_radians_)
+  if (!in_radians_)
     max_ang *= vnl_math::deg_per_rad;
   double min_th = min_theta(in_radians_), max_th = max_theta(in_radians_);
   double theta_range =  vcl_fabs(max_th - min_th);
@@ -420,9 +426,9 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
   double n_phd = vcl_ceil(phi_range/max_ang);
   double th_inc = theta_range/n_thd, ph_inc = phi_range/n_phd;
   int n_th = static_cast<int>(n_thd), n_ph = static_cast<int>(n_phd);
-  if(n_th == 0) n_th = 1;
-  if(n_ph == 0) n_ph = 1;
-  if(n_th ==1 && n_ph ==1){//a single quad
+  if (n_th == 0) n_th = 1;
+  if (n_ph == 0) n_ph = 1;
+  if (n_th ==1 && n_ph ==1) {//a single quad
     vsph_sph_point_2d ul(min_th, ph_start, in_radians_);
     vsph_sph_point_2d ur(min_th, ph_end, in_radians_);
     vsph_sph_point_2d lr(max_th, ph_end, in_radians_);
@@ -432,7 +438,7 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
     vgl_vector_3d<double> vlr = vsph_unit_sphere::cart_coord(lr);
     vgl_vector_3d<double> vll = vsph_unit_sphere::cart_coord(ll);
     verts.resize(4);
-    int ill = 0, ilr = 1, iur =2 , iul = 3;//ccw order 
+    int ill = 0, ilr = 1, iur =2 , iul = 3;//ccw order
     verts[iul]=vul; verts[iur]=vur; verts[ilr]=vlr; verts[ill]=vll;
     vcl_vector<int> quad(4);
     quad[ill]=ill; quad[ilr]=ilr; quad[iur]=iur; quad[iul]=iul;
@@ -442,7 +448,7 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
   double th_end = max_th - 0.001*th_inc;//take care of roundoff error
   double ph_fin = phi_last -0.001*ph_inc;
   double th_prev = min_th;
-  while(th_prev < th_end){
+  while (th_prev < th_end) {
     double ph_prev = ph_start;
     double th_next = th_prev + th_inc;
 
@@ -456,7 +462,7 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
     int ill = verts.size();
     verts.push_back(vll);
 
-    while(ph_prev<ph_fin){
+    while (ph_prev<ph_fin) {
       double ph_next = ph_prev + ph_inc;
       double ph_n=reduce_phi(ph_next);
       vsph_sph_point_2d ur(th_prev, ph_n, in_radians_);
@@ -479,6 +485,7 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
     th_prev = th_next;
   }
 }
+
 void vsph_sph_box_2d::print(vcl_ostream& os, bool in_radians) const
 {
   os << " vsph_sph_box_2d:[(" << min_theta(in_radians) << ' '
@@ -487,46 +494,49 @@ void vsph_sph_box_2d::print(vcl_ostream& os, bool in_radians) const
 }
 
 void vsph_sph_box_2d::display_box(vcl_ostream& os,
-				  float r, float g, float b, double tol) const{
+                                  float r, float g, float b, double tol) const
+{
   vcl_vector<vgl_vector_3d<double> > verts;
   vcl_vector<vcl_vector<int> > quads;
   this->planar_quads(verts, quads, tol);
-  os << "Shape {\n";
-  os <<"  appearance Appearance{\n";
-  os <<"    material Material {\n"; 
-  os <<"     diffuseColor  " << r << ' ' << g << ' ' << b << '\n';
-  os <<"          }\n";
-  os <<"    }\n";
-  os << " geometry IndexedFaceSet\n";
-  os << "  {\n";
-  os << "   coord Coordinate{\n";
-  os << "     point [\n";
+  os << "Shape {\n"
+     <<"  appearance Appearance{\n"
+     <<"    material Material {\n"
+     <<"     diffuseColor  " << r << ' ' << g << ' ' << b << '\n'
+     <<"          }\n"
+     <<"    }\n"
+     << " geometry IndexedFaceSet\n"
+     << "  {\n"
+     << "   coord Coordinate{\n"
+     << "     point [\n";
   unsigned n = verts.size();
-  for(unsigned iv = 0; iv<n; ++iv){
+  for (unsigned iv = 0; iv<n; ++iv) {
     vgl_vector_3d<double>& v = verts[iv];
     os << v.x() << ',' << v.y() << ',' << v.z();
-    if(iv < (n-1)) os << ",\n";
+    if (iv < (n-1)) os << ",\n";
     else os << '\n';
   }
-  os << "      ]\n";
-  os << "    }\n";
-  os << "  coordIndex [\n";
+  os << "      ]\n"
+     << "    }\n"
+     << "  coordIndex [\n";
   unsigned nq = quads.size();
-  for(unsigned iq = 0; iq<nq; ++iq){
+  for (unsigned iq = 0; iq<nq; ++iq) {
     vcl_vector<int> quad = quads[iq];
     os << quad[0] << ',' << quad[1] << ',' << quad[2] << ','
        << quad[3] << ", -1";
-    if(iq < (nq-1)) os << ",\n";
+    if (iq < (nq-1)) os << ",\n";
     else os << '\n';
   }
-  os << "   ]\n";
-  os << " } \n";
-  os << "}\n";
+  os << "   ]\n"
+     << " }\n"
+     << "}\n";
 }
+
 void vsph_sph_box_2d::display_boxes(vcl_string const& path,
-		   vcl_vector<vsph_sph_box_2d> const& boxes,
-		   vcl_vector<vcl_vector<float> > colors,
-		   double tol){
+                                    vcl_vector<vsph_sph_box_2d> const& boxes,
+                                    vcl_vector<vcl_vector<float> > colors,
+                                    double tol)
+{
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
     return;
@@ -534,7 +544,7 @@ void vsph_sph_box_2d::display_boxes(vcl_string const& path,
   unsigned nb = boxes.size();
   unsigned nc = colors.size();
   assert(nc == nb);
-  for(unsigned i = 0; i<nb; ++i){
+  for (unsigned i = 0; i<nb; ++i) {
     vcl_vector<float> c = colors[i];
     boxes[i].display_box(os, c[0], c[1],c[2],tol);
   }
@@ -568,8 +578,9 @@ void vsph_sph_box_2d::b_write(vsl_b_ostream& /*os*/)
   vsl_b_write(os, max_pos_[1]);
 #endif
 }
+
 bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
-		  vcl_vector<vsph_sph_box_2d>& boxes)
+                  vcl_vector<vsph_sph_box_2d>& boxes)
 {
   bool in_radians = b1.in_radians();
   vsph_sph_box_2d rbox(in_radians);
@@ -632,7 +643,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
     return true;
   }
 
-  if(b1min_in_b2 && b1max_in_b2&&!b2min_in_b1&&!b2max_in_b1){
+  if (b1min_in_b2 && b1max_in_b2&&!b2min_in_b1&&!b2max_in_b1) {
     vsph_utils::half_angle(b1.min_phi(in_radians), b1.max_phi(in_radians),
                            ha1, ha2, in_radians);
     if (b1.in_interval(ha1,in_radians)&& b2.in_interval(ha1,in_radians))
@@ -645,7 +656,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
     return true;
   }
 
-  if(!b1min_in_b2 && !b1max_in_b2 && b2min_in_b1 && b2max_in_b1){
+  if (!b1min_in_b2 && !b1max_in_b2 && b2min_in_b1 && b2max_in_b1) {
     vsph_utils::half_angle(b2.min_phi(in_radians), b2.max_phi(in_radians),
                            ha1, ha2, in_radians);
     if (b2.in_interval(ha1,in_radians)&& b1.in_interval(ha1,in_radians))
@@ -658,7 +669,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
     return true;
   }
   // This condition produces two boxes (b1min=>b2max  b2min=>b1max)
-  if(b1min_in_b2 && b1max_in_b2 && b2min_in_b1 && b2max_in_b1){
+  if (b1min_in_b2 && b1max_in_b2 && b2min_in_b1 && b2max_in_b1) {
     vsph_sph_box_2d rbox2(in_radians);
     vsph_utils::half_angle(b1.min_phi(in_radians), b2.max_phi(in_radians),
                            ha1, ha2, in_radians);
@@ -673,10 +684,10 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
                            ha1, ha2, in_radians);
     if (b2.in_interval(ha1,in_radians)&& b1.in_interval(ha1,in_radians))
       rbox2.set(theta_min, theta_max, b2.min_phi(in_radians),
-               b1.max_phi(in_radians),ha1,in_radians);
+                b1.max_phi(in_radians),ha1,in_radians);
     else
       rbox2.set(theta_min, theta_max, b2.min_phi(in_radians),
-               b1.max_phi(in_radians),ha2,in_radians);
+                b1.max_phi(in_radians),ha2,in_radians);
     boxes.push_back(rbox2);
     return true;
   }
@@ -684,6 +695,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
   assert(false); //shouldn't happen
   return false;
 }
+
 vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_box_2d const& p)
 {
   p.print(os);
