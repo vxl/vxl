@@ -7,6 +7,7 @@
 #include <vcl_fstream.h>
 #include <vnl/vnl_math.h>
 
+static vcl_string MyDIR = "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/";
 
 static void test_sph_geom()
 {
@@ -127,15 +128,15 @@ static void test_sph_geom()
   vcl_vector<vsph_sph_box_2d> boxes;
   bool good = intersection(bba, bbb, boxes);
   vsph_sph_box_2d bint;
-  if(good) 
+  if (good) 
    bint = boxes[0];
   double min_ph_int = bint.min_phi(false), max_ph_int = bint.max_phi(false);
   double min_th_int = bint.min_theta(false), max_th_int = bint.max_theta(false);
 
-  good = good && vsph_utils::a_eq_b(min_ph_int, p2.phi_, false);
-  good = good && vsph_utils::a_eq_b(max_ph_int, p5.phi_, false);
-  good = good && vsph_utils::a_eq_b(min_th_int, p4.theta_, false);
-  good = good && vsph_utils::a_eq_b(max_th_int, p3.theta_,false);
+  good = good && vsph_utils::a_eq_b(min_ph_int, p2.phi_, false)
+              && vsph_utils::a_eq_b(max_ph_int, p5.phi_, false)
+              && vsph_utils::a_eq_b(min_th_int, p4.theta_, false)
+              && vsph_utils::a_eq_b(max_th_int, p3.theta_,false);
   TEST("intersection", good, true);
   // test boxes forming a cross (no endpoints inside each box
   vsph_sph_point_2d p6 ( 50.0,  -10.0, false);
@@ -148,35 +149,34 @@ static void test_sph_geom()
   boxes.clear();
   good = intersection(bbc1, bbc2, boxes);
   vsph_sph_box_2d bint_cross;
-  if(good) bint_cross = boxes[0];
+  if (good) bint_cross = boxes[0];
   boxes.clear();
   good = good && intersection(bbc2, bbc1, boxes);
   vsph_sph_box_2d bint_cross_rev;
-  if(good) bint_cross_rev = boxes[0];
-  good = vsph_utils::a_eq_b(bint_cross.min_phi(false), p6.phi_, false);
-  good = good&&vsph_utils::a_eq_b(bint_cross.max_phi(false), p7.phi_, false);
-  good = good&&vsph_utils::a_eq_b(bint_cross_rev.max_phi(false),bint_cross.max_phi(false) , false);
-  good = good&&bint_cross.min_theta(false) == p9.theta_;
-  good = good&&bint_cross.max_theta(false) == p100.theta_;
+  if (good) bint_cross_rev = boxes[0];
+  good = vsph_utils::a_eq_b(bint_cross.min_phi(false), p6.phi_, false)
+      && vsph_utils::a_eq_b(bint_cross.max_phi(false), p7.phi_, false)
+      && vsph_utils::a_eq_b(bint_cross_rev.max_phi(false),bint_cross.max_phi(false) , false)
+      && bint_cross.min_theta(false) == p9.theta_
+      && bint_cross.max_theta(false) == p100.theta_;
   TEST("Crossing box arrangement", good, true);
   // one box essentially covers the entire +- 180 phi circle
   vsph_sph_box_2d box_s1, box_s2, box_s12;
   double b1_thmin = 1.4836689630573823, b1_thmax = 1.6579236905324111;
-  double b1_phia = -1.5707963267948966, b1_phib =1.5707963267948966;
+  double b1_phia = -vnl_math::pi_over_2, b1_phib =vnl_math::pi_over_2;
   double b1_phic = 0.51656139130052758;
   box_s1.set(b1_thmin, b1_thmax, b1_phia, b1_phib, b1_phic);
-  double b2_thmin = 1.3088871075562318, b2_thmax =1.8327055460335613 ;
-  double b2_phia =-0.31728356503269012 , b2_phib = -0.31911878808324995;
+  double b2_thmin = 1.3088871075562318, b2_thmax = vnl_math::pi*7/12;
+  double b2_phia =-0.31728356503269012, b2_phib = -0.31911878808324995;
   double b2_phic = 0.54737987781481912;
   box_s2.set(b2_thmin, b2_thmax, b2_phia, b2_phib, b2_phic);
   boxes.clear();
   // two boxes are produced
-  good = intersection(box_s1, box_s2, boxes);
-  good = good&& box_s1.contains(boxes[0])&& box_s1.contains(boxes[1]);
+  good = intersection(box_s1, box_s2, boxes)
+      && box_s1.contains(boxes[0])&& box_s1.contains(boxes[1]);
   TEST("each box contains the other's bounds", good, true);
   double tol = 0.001;
-  vcl_string box_path = 
-    "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/box_display.wrl";
+  vcl_string box_path = MyDIR + "box_display.wrl";
 #if 0
   vcl_vector<vgl_vector_3d<double> > verts;
   vcl_vector<vcl_vector<int> > quads;
@@ -201,8 +201,7 @@ static void test_sph_geom()
   double grok_max_th = 1.8268944131886669;
   vsph_sph_box_2d grok;
   grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
-  vcl_string grok_path = 
-    "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/grok_box_display.wrl";
+  vcl_string grok_path = MyDIR + "grok_box_display.wrl";
   vcl_ofstream os(grok_path.c_str());
   grok.display_box(os, 1.0f, 1.0f, 0.0f, tol);
   os.close();
