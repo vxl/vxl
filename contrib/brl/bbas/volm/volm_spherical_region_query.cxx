@@ -4,14 +4,14 @@
 #include <bpgl/depth_map/depth_map_scene.h>
 #include "volm_spherical_container.h"
 #include <bsol/bsol_algs.h>
-#include <vgl/vgl_polygon.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
+
 volm_spherical_region_query::
 volm_spherical_region_query(depth_map_scene_sptr const& dm_scene,
                             volm_camera_space_sptr const& cam_space,
-                            volm_spherical_container_sptr const& sph_vol):
-  dm_scene_(dm_scene), cam_space_(cam_space), sph_vol_(sph_vol)
+                            volm_spherical_container_sptr const& sph_vol)
+: dm_scene_(dm_scene), cam_space_(cam_space), sph_vol_(sph_vol)
 {
   this->construct_spherical_regions();
 }
@@ -106,5 +106,9 @@ display_query_regions(vsph_unit_sphere_sptr const& usph_ptr,
       }
     }
   }
+#ifdef vsph_unit_sphere_has_member_named_display_region_color // FIXME
   usph_ptr->display_region_color(path, reg_color, ndef);
+#else
+  assert("Bummer!");
+#endif
 }
