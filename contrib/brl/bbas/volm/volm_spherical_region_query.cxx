@@ -106,9 +106,5 @@ display_query_regions(vsph_unit_sphere_sptr const& usph_ptr,
       }
     }
   }
-#ifdef vsph_unit_sphere_has_member_named_display_region_color // FIXME
-  usph_ptr->display_region_color(path, reg_color, ndef);
-#else
-  assert("Bummer!");
-#endif
+  usph_ptr->display_color(path, reg_color, ndef);
 }
