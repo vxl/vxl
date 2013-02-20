@@ -96,7 +96,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     return false;
   }
 
-#if 1
+#if 0
   if (use_orient_) {
     vcl_cout << " we are using orientation attributes as follows" << vcl_endl;
     // check the transferred orientation
@@ -205,10 +205,14 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   }
 
   // hack here for debug purpose
-  if (use_orient_)
-    ni = 32;  // since we double the index size, including index_orient and index_depth
-  else
-    ni = 64;
+  if (*n_cam_ < 10000)      ni = 128;
+  else if (*n_cam_ < 15000) ni = 64;
+  else if (*n_cam_ < 20000) ni = 32;
+  else                      ni = 16;
+  //if (use_orient_)
+  //  ni = 32;  // since we double the index size, including index_orient and index_depth
+  //else
+  //  ni = 64;
 
   vcl_cout << "\t 4.1.3: device have total " << device_global_mem_ << " Byte (" << (float)device_global_mem_/(float)GBYTE << " GB) memory space\n"
            << "\t        query requires " << query_global_mem_ << " Byte (" << (float)query_global_mem_/(float)GBYTE << " GB)\n"
@@ -522,6 +526,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
            << "\t\t GPU kernel execution ------------------> " << gpu_matcher_time/1000.0 << " seconds (" << gpu_matcher_time << " ms)\n"
            << "\t\t CPU host execution --------------------> " << (total_time - gpu_matcher_time)/1000.0 << " seconds (" << total_time - gpu_matcher_time << " ms)" << vcl_endl;
 
+  clReleaseCommandQueue(queue_);
   // clear query_cl_mem
   this->clean_query_cl_mem();
   delete depth_interval_cl_mem_;
@@ -624,8 +629,8 @@ bool boxm2_volm_matcher_p1::fill_index_orient(unsigned const& n_ind,
             ind_->get_next(values, layer_size);
             ind_orient_->get_next(values_orient, layer_size);
             cnt++;
-            vcl_cout << " leaf_id = " << li << " hypo_id = " << leaves_[li]->hyps_->current_-1
-                     << " h_pt = " << h_pt << vcl_endl;
+            //vcl_cout << " leaf_id = " << li << " hypo_id = " << leaves_[li]->hyps_->current_-1
+            //         << " h_pt = " << h_pt << vcl_endl;
             l_id.push_back(li);  h_id.push_back(leaves_[li]->hyps_->current_-1);
           }
           else {                                       // having candidate list but current hypo is outside candidate list --> ignore
