@@ -1,9 +1,11 @@
 #include <bil/algo/bil_debayer_image.h>
+
 static bool isodd(unsigned int x)
 {
   return x % 2 != 0;
 }
-void 
+
+void
 bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image_view<vil_rgb<vxl_byte> > * debayer_img)
 {
   vil_image_view<vil_rgb<vxl_byte> >out_img(in_img->ni(),in_img->nj());
@@ -54,9 +56,9 @@ bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image
         {
           b =((int)out_img(k-1,l).B() +(int)out_img(k+1,l).B())/2;
           r =((int)out_img(k,l-1).R() +(int)out_img(k,l+1).R())/2;
-         }
+        }
 
-       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
+        (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
       }
     }
     unsigned k = 0;
@@ -72,10 +74,8 @@ bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image
       }
       else
       {
-
         g =((int)out_img(k,l-1).G()+(int)out_img(k+1,l).G())/2;
         r =((int)out_img(k+1,l-1).R()+(int)out_img(k+1,l+1).R())/2;
-
       }
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
@@ -90,16 +90,14 @@ bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image
       {
         g =((int)out_img(k,l-1).G()+(int)out_img(k-1,l).G())/2;
         b =((int)out_img(k-1,l-1).B()+(int)out_img(k-1,l+1).B())/2;
-       
       }
       else
       {
-         b =(int)out_img(k-1,l).B();
+        b =(int)out_img(k-1,l).B();
         r =((int)out_img(k,l-1).R()+(int)out_img(k,l+1).R())/2;
       }
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
-
 
     unsigned l = 0;
     for (unsigned k = 1 ; k < in_img_byte->ni()-1; k++)
@@ -182,5 +180,4 @@ bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image
     g =((int)out_img(k,l+1).G()+(int)out_img(k-1,l).G())/2;
     (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
   }
-
 }
