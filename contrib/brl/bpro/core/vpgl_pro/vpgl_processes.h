@@ -19,6 +19,7 @@ DECLARE_FUNC_CONS(vpgl_projective_to_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process);
 DECLARE_FUNC_CONS(vpgl_save_perspective_camera_vrml_process);
+DECLARE_FUNC_CONS(vpgl_save_perspective_cameras_vrml_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_refine_process);
@@ -55,5 +56,9 @@ DECLARE_FUNC_CONS(vpgl_convert_to_local_coordinates_process2);
 DECLARE_FUNC_CONS(vpgl_load_perspective_camera_from_kml_file_process);
 DECLARE_FUNC_CONS(vpgl_geo_cam_global_to_img_process);
 DECLARE_FUNC_CONS(vpgl_load_geo_camera_process2);
+DECLARE_FUNC_CONS(vpgl_export_cameras_to_nvm_process);
+DECLARE_FUNC_CONS(vpgl_create_lvcs_process);
+DECLARE_FUNC_CONS(vpgl_convert_local_to_global_coordinates_process);
+
 
 #endif
