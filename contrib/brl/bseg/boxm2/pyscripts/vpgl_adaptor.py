@@ -27,7 +27,7 @@ def load_projective_camera(file_path) :
   cam = dbvalue(id,type);
   return cam;  
 #Scale = (scale_u, scale_v), ppoint = (u,v), center = (x,y,z), look_pt = (x,y,z), up = (x,y,z)
-def create_perspective_camera( scale, ppoint, center, look_pt, up ) :
+def create_perspective_camera( scale, ppoint, center, look_pt,up ) :
   boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess");
   boxm2_batch.set_input_double(0, scale[0]);
   boxm2_batch.set_input_double(1, ppoint[0]);
@@ -92,6 +92,18 @@ def resample_perspective_camera( cam, size0, size1 ):
   (id,type) = boxm2_batch.commit_output(0)
   out = dbvalue(id,type)
   return out
+#resize a camera from size0 =(ni,nj) to size1 (ni_1, nj_1)
+def get_perspective_camera_center( cam):
+  boxm2_batch.init_process("vpglGetPerspectiveCamCenterProcess")
+  boxm2_batch.set_input_from_db(0, cam) 
+  boxm2_batch.run_process()
+  (id, type) = boxm2_batch.commit_output(0);
+  x=boxm2_batch.get_output_float(id);
+  (id, type) = boxm2_batch.commit_output(1);
+  y=boxm2_batch.get_output_float(id);
+  (id, type) = boxm2_batch.commit_output(2);
+  z=boxm2_batch.get_output_float(id);
+  return x,y,z;
 
 # returns cartesian cam center from azimuth (degrees), elevation (degrees), radius, look point
 def get_camera_center( azimuth, elevation, radius, lookPt) :
@@ -159,7 +171,18 @@ def save_perspective_camera(camera,path) :
   boxm2_batch.set_input_from_db(0,camera);
   boxm2_batch.set_input_string(1,path);
   boxm2_batch.run_process();  
-  
+def save_perspective_camera_vrml(camera,path) :
+  boxm2_batch.init_process("vpglSavePerspectiveCameraVrmlProcess");
+  boxm2_batch.set_input_from_db(0,camera);
+  boxm2_batch.set_input_string(1,path);
+  boxm2_batch.set_input_float(2,5.0);
+  boxm2_batch.run_process(); 
+def save_perspective_cameras_vrml(camerafolder,path) :
+  boxm2_batch.init_process("vpglSavePerspectiveCamerasVrmlProcess");
+  boxm2_batch.set_input_string(0,camerafolder);
+  boxm2_batch.set_input_string(1,path);
+  boxm2_batch.set_input_float(2,5.0);
+  boxm2_batch.run_process();    
 #################################################
 # perspective go generic conversion
 #################################################
@@ -339,7 +362,35 @@ def convert_to_local_coordinates2(lvcs,lat,lon,el):
     z = boxm2_batch.get_output_float(id)
     boxm2_batch.remove_data(id)
     return (x,y,z)
-
+# convert lat,lon,el to local coordinates
+def convert_local_to_global_coordinates(lvcs,x,y,z):
+    boxm2_batch.init_process('vpglConvertLocalToGlobalCoordinatesProcess')
+    boxm2_batch.set_input_from_db(0,lvcs)
+    boxm2_batch.set_input_float(1,x)
+    boxm2_batch.set_input_float(2,y)
+    boxm2_batch.set_input_float(3,z)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    lat = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
+    (id,type) = boxm2_batch.commit_output(1)
+    lon = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
+    (id,type) = boxm2_batch.commit_output(2)
+    el = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
+    return (lat,lon,el)	
+# convert lat,lon,el to local coordinates
+def create_lvcs(lat,lon,el,csname):
+    boxm2_batch.init_process('vpglCreateLVCSProcess')
+    boxm2_batch.set_input_float(0,lat)
+    boxm2_batch.set_input_float(1,lon)
+    boxm2_batch.set_input_float(2,el)
+    boxm2_batch.set_input_string(3,csname)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    lvcs = dbvalue(id,type)
+    return lvcs;
 
 # randomly sample a camera rotated around principle axis
 def perturb_camera(cam_in, angle, rng):
@@ -492,4 +543,10 @@ def geo_cam_global_to_img(geocam, lon, lat):
     v = boxm2_batch.get_output_int(id);
     return u, v
 
+def convert_perspective_to_nvm(cams_dir,imgs_dir, output_nvm):
+    boxm2_batch.init_process("vpglExportCamerasToNvmProcess");
+    boxm2_batch.set_input_string(0, cams_dir);
+    boxm2_batch.set_input_string(1, imgs_dir);
+    boxm2_batch.set_input_string(2, output_nvm);
+    return boxm2_batch.run_process();
 
