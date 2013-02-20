@@ -431,21 +431,6 @@ void vsl_b_read(vsl_b_istream &is, depth_map_region_sptr& dm_ptr)
   dm_ptr = dm;
 }
 
-void vsl_b_write(vsl_b_ostream& os, vcl_vector<depth_map_region_sptr> const& v)
-{
-  vsl_b_write(os, v.size());
-  for (unsigned int i=0; i<v.size(); ++i)
-    vsl_b_write(os, v[i]);
-}
-
-void vsl_b_read(vsl_b_istream &is, vcl_vector<depth_map_region_sptr>& v)
-{
-  unsigned int n; vsl_b_read(is,n);
-  v.resize(n);
-  for (unsigned int i=0; i<n; ++i)
-    vsl_b_read(is, v[i]);
-}
-
 //: binary IO write
 void depth_map_region::b_write(vsl_b_ostream& os)
 {
