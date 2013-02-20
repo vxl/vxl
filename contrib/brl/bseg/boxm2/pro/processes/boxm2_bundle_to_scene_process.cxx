@@ -20,7 +20,7 @@
 
 namespace boxm2_bundle_to_scene_process_globals
 {
-  const unsigned n_inputs_ = 6;
+  const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 2;
 }
 
@@ -35,7 +35,8 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   input_types_[2] = "vcl_string"; // appearnce model
   input_types_[3] = "vcl_string"; // num_obs model
   input_types_[4] = "int";
-  input_types_[5] = "vcl_string"; // optional arg - output dir to save cams/imgs
+  input_types_[5] = "bool";
+  input_types_[6] = "vcl_string"; // optional arg - output dir to save cams/imgs
 
   // process has 2 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -46,8 +47,10 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   //default arguments - default filename is "scene"
+  brdb_value_sptr do_axis_align = new brdb_value_t<bool>(true);
+  pro.set_input(5, do_axis_align);
   brdb_value_sptr dir_name = new brdb_value_t<vcl_string>("");
-  pro.set_input(4, dir_name);
+  pro.set_input(6, dir_name);
   return good;
 }
 
@@ -69,9 +72,10 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   vcl_vector<vcl_string> appearance(2,"");
   appearance[0]          = pro.get_input<vcl_string>(i++); //Appearance Model String
   appearance[1]          = pro.get_input<vcl_string>(i++); //Occupancy Model String
-  int nblks              = pro.get_input<int>(i++);        // TODO: unused!!!
-
+  int nblks              = pro.get_input<int>(i++);        
+  bool axis_align        = pro.get_input<bool>(i++);        // TODO: unused!!!
   vcl_string out_dir     = pro.get_input<vcl_string>(i++); //output dir for imgs/files
+  vcl_cout<<"AXIS ALIGN "<<axis_align<<vcl_endl;
 
   //----------------------------------------------------------------------------
   //run bundle to scene
@@ -82,7 +86,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   if (vul_file::extension(bundler_out) == ".out")
     boxm2_util_convert_bundle(bundler_out, in_img_dir, cams, bbox, resolution);
   else if (vul_file::extension(bundler_out) == ".nvm")
-    boxm2_util_convert_nvm(bundler_out, in_img_dir, cams, bbox, resolution);
+    boxm2_util_convert_nvm(bundler_out, in_img_dir, cams, bbox, resolution,axis_align);
 
   //create vector of camera objects
   vcl_vector<vpgl_perspective_camera<double> > cs;
