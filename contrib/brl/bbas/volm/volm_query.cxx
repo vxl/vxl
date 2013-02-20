@@ -29,7 +29,8 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
 
   // load the labelme xml to define depth_map_scene and associated default value of camera parameters
   dm_ = new depth_map_scene;
-  volm_io::read_labelme(label_xml_file, dm_, img_category_);
+  vcl_string img_category;
+  volm_io::read_labelme(label_xml_file, dm_, img_category);
   // the dimensions of the depth image
   ni_ = dm_->ni();
   nj_ = dm_->nj();
@@ -45,15 +46,15 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
 #if NO_CAM_SPACE_CLASS
   //
   // set the default camera hypothesis parameters
-  // based on img_category_ ( "desert" and "coast")
+  // based on img_category ( "desert" and "coast")
   //
-  if (img_category_ == "desert") {
+  if (img_category == "desert") {
     head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
     tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 2.0;
     roll_ = 0.0;      roll_d_ = 3.0; roll_inc_ = 2.0; // try +2 -2
     tfov_ = 5.0;      tfov_d_ = 5.0; tfov_inc_ = 2.0;
   }
-  else if (img_category_ == "coast") {
+  else if (img_category == "coast") {
     // temporary use desert default
     head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
     tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 2.0;
@@ -98,22 +99,14 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
 #endif
 
   altitude_ = cam_space_->altitude();
-
   // create camera hypotheses
   this->create_cameras();
-  if (dm_->ground_plane().size()) {
-    vcl_cout << " Under ground plane constriant, volm_query created : " << this->get_cam_num()
-             //<< " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
-             << vcl_endl;
-  }
-  else {
-    vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
-  }
+  vcl_cout << " volm_query has " << this->get_cam_num() << " cameras" << vcl_endl;
   // generate polygon vector based on defined order
   this->generate_regions();
   ground_orient_ = volm_orient_table::ori_id["horizontal"];
   sky_orient_ = volm_orient_table::ori_id["infinite"];
-  vcl_cout << "volm_query generated regions: " << this->depth_regions().size() << " regions! ingesting...\n"; vcl_cout.flush();
+  vcl_cout << "volm_query generated " << this->depth_regions().size() << " regions! ingesting...\n"; vcl_cout.flush();
   // start to ingest query, with min_dist and order implemented
   this->query_ingest();
   // create offset vector
@@ -125,16 +118,17 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
 }
 
 // build a query from an existing depth map scene
-volm_query::volm_query(vcl_string const& depth_map_scene_file,
-                       vcl_string const& image_category,
-                       volm_spherical_container_sptr const& sph,
+volm_query::volm_query(volm_camera_space_sptr cam_space,
+                       vcl_string const& depth_map_scene_file,
                        volm_spherical_shell_container_sptr const& sph_shell,
-                       double altitude)
-: altitude_(altitude), img_category_(image_category), sph_depth_(sph), sph_(sph_shell)
+                       volm_spherical_container_sptr const& sph)
+: cam_space_(cam_space), invalid_((unsigned char)255), sph_depth_(sph), sph_(sph_shell)
 {
   //the discrete rays defined on the sphere as x, y, z
   query_points_ = sph_->cart_points();
   query_size_ = (unsigned)query_points_.size();
+
+  // load the depth_map_scene from depth_map_scene binary
   dm_ = new depth_map_scene;
   vsl_b_ifstream dis(depth_map_scene_file.c_str());
   dm_->b_read(dis);
@@ -151,59 +145,18 @@ volm_query::volm_query(vcl_string const& depth_map_scene_file,
     ++log_downsample_ratio_;
   vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
 
-#if NO_CAM_SPACE_CLASS
-  //
-  // set the default camera hypothesis parameters
-  // based on img_category_ ( "desert" and "coast")
-  //
-  if (img_category_ == "desert") {
-    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
-    tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 2.0;
-    roll_ = 0.0;      roll_d_ = 3.0; roll_inc_ = 2.0; // try +2 -2
-    tfov_ = 5.0;      tfov_d_ = 5.0; tfov_inc_ = 2.0;
-  }
-  else if (img_category_ == "coast") {
-    // temporary use desert default
-    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
-    tilt_ = 90.0;     tilt_d_ = 0.0; tilt_inc_ = 2.0;
-    roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
-    tfov_ = 5.0;      tfov_d_ = 30.0; tfov_inc_ = 2.0;
-  }
-  else {
-    // undefined img category, use desert default
-    head_ = 0.0;      head_d_ = 180.0; head_inc_ = 2.0;
-    tilt_ = 90.0;     tilt_d_ = 20.0; tilt_inc_ = 2.0;
-    roll_ = 0.0;      roll_d_ = 1.0; roll_inc_ = 1.0;
-    tfov_ = 5.0;      tfov_d_ = 30.0;  tfov_inc_ = 2.0;
-  }
-#endif
-
-  double head = 0.0;  double head_d = 180.0; double head_inc = 2.0;
-  double tilt = 90.0; double tilt_d = 0.0; double tilt_inc = 2.0;
-  double roll = 0.0; double roll_d = 1.0; double roll_inc = 1.0;
-  double tfov = 5.0;  double tfov_d = 30.0; double tfov_inc = 2.0;
-
-  // construct camera space
-  cam_space_ = new volm_camera_space(tfov, tfov_d, tfov_inc, altitude_, ni_, nj_,
-                                     head, head_d, head_inc, tilt, tilt_d, tilt_inc, roll, roll_d, roll_inc);
-
-  // create camera hypotheses
+  altitude_ = cam_space_->altitude();
   this->create_cameras();
-  if (dm_->ground_plane().size()) {
-    vcl_cout << " Under ground plane constriant, volm_query created : " << this->get_cam_num()
-             //<< " valid cameras among " << tilts_.size()*rolls_.size()*headings_.size()*top_fov_.size()
-             << vcl_endl;
-  }
-  else {
-    vcl_cout << "volm_query created: " << this->get_cam_num() << " cameras!\n"; vcl_cout.flush();
-  }
-
+  vcl_cout << " volm_query has " << this->get_cam_num() << " cameras" << vcl_endl;
   // generate polygon vector based on defined order
   this->generate_regions();
   ground_orient_ = volm_orient_table::ori_id["horizontal"];
-  vcl_cout << "volm_query generated regions: " << this->depth_regions().size() << " regions! ingesting...\n"; vcl_cout.flush();
+  sky_orient_ = volm_orient_table::ori_id["infinite"];
+  vcl_cout << "volm_query generated " << this->depth_regions().size() << " regions! ingesting...\n"; vcl_cout.flush();
   // start to ingest query, with min_dist and order implemented
   this->query_ingest();
+  // create offset vector
+  this->offset_ingest();
   // start to ingest order, store in order_index_
   this->order_ingest();
   // implement the weight parameters for all objects
@@ -219,7 +172,7 @@ void volm_query::create_cameras()
   // set up the camera parameter arrays and construct vector of cameras
   if (use_default_)//define focal length search space
   {
-    if (img_category_ == "desert") {
+    if (img_category == "desert") {
       //field of view angle choices (degrees)
       double stock[] = {18.0, 19.0,
                         20.0, 24.0, 26.0,
@@ -241,7 +194,7 @@ void volm_query::create_cameras()
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
     }
-    else if (img_category_ == "coast") {
+    else if (img_category == "coast") {
       double stock[] = {3.0, 4.0, 5.0, 9.0,
                         15.0, 16.0,
                         20.0, 21.0, 22.0, 23.0, 24.0};
@@ -1060,7 +1013,7 @@ void volm_query::draw_query_images(vcl_string const& out_dir)
   // create a png img associated with each camera hypothesis, containing the geometry defined
   //  in depth_map_scene and the img points corresponding to points inside the container
   // loop over fist 100 camera
-  unsigned img_num = (cameras_.size() > 100) ? 100 : (unsigned)cameras_.size();
+  unsigned img_num = (cameras_.size() > 20) ? 20 : (unsigned)cameras_.size();
   for (unsigned i = 0; i < img_num; ++i) {
     vcl_stringstream s_idx;
     s_idx << i;

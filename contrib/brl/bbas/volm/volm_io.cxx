@@ -545,6 +545,38 @@ void volm_score::read_scores(vcl_vector<volm_score_sptr>& scores, vcl_string con
   ifs.close();
 }
 
+void volm_weight::read_weight(vcl_vector<volm_weight>& weights, vcl_string const& file_name)
+{
+  vcl_ifstream ifs(file_name.c_str());
+  vcl_string dummy;
+  vcl_getline(ifs, dummy); vcl_getline(ifs, dummy); vcl_getline(ifs, dummy); vcl_getline(ifs, dummy);
+  
+  vcl_string w_typ;
+  float w_ori, w_lnd, w_dst, w_ord, w_obj;
+  while( !ifs.eof()) {
+    ifs >> dummy; ifs >> w_typ, ifs >> w_ori; ifs >> w_lnd; ifs >> w_dst; ifs >> w_ord; ifs >> w_obj;
+    //vcl_cout << " " << w_typ << " " << w_ori << " " << w_lnd << " " << w_dst << " " << w_ord << " " << w_obj << vcl_endl;
+    weights.push_back(volm_weight(w_typ, w_ori, w_lnd, w_ord, w_dst, w_obj));
+  }
+}
+
+void volm_weight::equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene_sptr dms)
+{
+  unsigned tot_num_obj = dms->sky().size() + dms->ground_plane().size() + dms->scene_regions().size();
+  float w_obj = 1.0f/tot_num_obj;
+  vcl_vector<depth_map_region_sptr> sky_reg = dms->sky();
+  for ( vcl_vector<depth_map_region_sptr>::iterator vit = sky_reg.begin(); vit != sky_reg.end(); ++vit)
+    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_obj));
+  
+  vcl_vector<depth_map_region_sptr> grd_reg = dms->ground_plane();
+  for ( vcl_vector<depth_map_region_sptr>::iterator vit = grd_reg.begin(); vit != grd_reg.end(); ++vit)
+    weights.push_back(volm_weight("ground", 0.3333f, 0.3333f, 0.0f, 0.3333f, w_obj)); 
+  
+  vcl_vector<depth_map_region_sptr> obj_reg = dms->scene_regions();
+  for ( vcl_vector<depth_map_region_sptr>::iterator vit = obj_reg.begin(); vit != obj_reg.end(); ++vit)
+    weights.push_back(volm_weight("object", 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
+}
+
 void volm_io_expt_params::read_params(vcl_string params_file)
 {
   vcl_ifstream ifs(params_file.c_str());

@@ -45,11 +45,10 @@ class volm_query : public vbl_ref_count
              volm_spherical_shell_container_sptr const& sph_shell);
 
   //: constructor from depth map scene
-  volm_query(vcl_string const& depth_map_scene_file,
-             vcl_string const& image_category,
-             volm_spherical_container_sptr const& sph,
+  volm_query(volm_camera_space_sptr cam_space,
+             vcl_string const& depth_map_scene_file,
              volm_spherical_shell_container_sptr const& sph_shell,
-             double altitude);
+             volm_spherical_container_sptr const& sph);
 
 
   // === accessors ===
@@ -143,8 +142,7 @@ class volm_query : public vbl_ref_count
   //: image size
   unsigned ni_, nj_;
   unsigned log_downsample_ratio_;  // 0,1,2 or 3 (ni-->ni/2^ratio_), to generate downsampled depth maps for ground regions
-  //: image category (e.g., desert, coast)
-  vcl_string                       img_category_;
+
   //: depth map scene
   depth_map_scene_sptr                       dm_;
   //: voxel array used to get voxel index

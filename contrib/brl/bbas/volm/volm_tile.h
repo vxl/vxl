@@ -30,6 +30,10 @@ class volm_tile
    volm_tile() {}
    vcl_string get_string();
 
+   //: assessors
+   unsigned ni() { return ni_; }
+   unsigned nj() { return nj_; }
+
    //: do the conversions in reporting lon,lat
    double lower_left_lon();
    double lower_left_lat();

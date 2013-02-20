@@ -58,7 +58,7 @@ class volm_io
  public:
 
   //: warning: always add to the end of this error code list, python script on the server has a hard copy of some of these values, they should not be changed
-  enum VOLM_ERROR_CODES {SUCCESS, EXE_ARGUMENT_ERROR, EXE_RUNNING, CAM_FILE_IO_ERROR, MATCHER_EXE_STARTED, MATCHER_EXE_FINISHED, MATCHER_EXE_FAILED, COMPOSE_STARTED, LABELME_FILE_IO_ERROR, GEO_INDEX_FILE_MISSING, SCORE_FILE_MISSING, EXE_STARTED, EXE_MATCHER_FAILED, COMPOSE_HALT};
+  enum VOLM_ERROR_CODES {SUCCESS, EXE_ARGUMENT_ERROR, EXE_RUNNING, CAM_FILE_IO_ERROR, MATCHER_EXE_STARTED, MATCHER_EXE_FINISHED, MATCHER_EXE_FAILED, COMPOSE_STARTED, DEPTH_SCENE_FILE_IO_ERROR, LABELME_FILE_IO_ERROR, GEO_INDEX_FILE_MISSING, SCORE_FILE_MISSING, EXE_STARTED, EXE_MATCHER_FAILED, COMPOSE_HALT};
 
   //: scale value is STRONG_POSITIVE-STRONG_NEGATIVE
   enum VOLM_IMAGE_CODES {UNEVALUATED = 0, STRONG_NEGATIVE = 1, UNKNOWN = 127, STRONG_POSITIVE = 255, SCALE_VALUE = 254};
@@ -152,6 +152,35 @@ class volm_score : public vbl_ref_count
 
   static void write_scores(vcl_vector<volm_score_sptr>& scores, vcl_string const& file_name);
   static void read_scores(vcl_vector<volm_score_sptr>& scores, vcl_string const& file_name);
+};
+
+// \brief  A class to store the highest score for each location
+// a class defines the weight parameters for a given depth_map_region
+class volm_weight
+{
+public:
+  volm_weight () {}
+  volm_weight (vcl_string const& w_typ, float const& w_ori, float const& w_lnd, float const& w_ord, float const& w_dst, float const w_obj)
+    : w_typ_(w_typ), w_ori_(w_ori), w_lnd_(w_lnd), w_ord_(w_ord), w_dst_(w_dst), w_obj_(w_obj) {}
+  ~volm_weight() {}
+
+  //: type of the depth_map_region, i.e.: ground, sky or others
+  vcl_string w_typ_;
+  //: weight parameter for orientation attributes
+  float w_ori_;
+  //: weight parameter for land type
+  float w_lnd_;
+  //: weight parameter for relative order
+  float w_ord_;
+  //: weight parameter for minimum distance
+  float w_dst_;
+  //: weight parameter for current object relative to all other objects in the query_image
+  float w_obj_;
+
+  //: functions that reads the weight parameters from weight_param.txt
+  static void read_weight(vcl_vector<volm_weight>& weights, vcl_string const& file_name);
+  //: functions that implements a default equal weight parameters, given the depth_map_scene
+  static void equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene_sptr dms);
 };
 
 

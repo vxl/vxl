@@ -19,15 +19,16 @@
 int main(int argc, char** argv)
 {
   // input
-  vul_arg<vcl_string> in_folder("-in", "input folder where the camera space and spherical shell binary are stored", "");                                  // query camera kml
-  vul_arg<vcl_string> params_file("-params", "text file with the params to construct camera space, spherical containers and query", "");
-  vul_arg<vcl_string> label_file("-label", "xml file with labeled polygons", "");                // query labelme xml
-  vul_arg<vcl_string> out_folder("-out", "output folder where the generated query images are stored", "");
+  vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");                                       // query camera binary
+  vul_arg<vcl_string> params_file("-params", "camera incremetal param file for depth interval", "");    // depth interval
+  vul_arg<vcl_string> dms_bin("-dms", "xml file with labeled polygons", "");                            // query labelme xml
+  vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary file", "");                               // query spherical container
+  vul_arg<vcl_string> out_folder("-out", "output folder where the generated query images are stored", ""); // options to save the query depth image
   vul_arg<bool> save_images("-save", "save out query images or not", false);
   vul_arg_parse(argc, argv);
 
   // check the input argument
-  if(in_folder().compare("") == 0 || label_file().compare("") == 0 || params_file().compare("") == 0 || out_folder().compare("") == 0 ) {
+  if(cam_bin().compare("") == 0 || dms_bin().compare("") == 0 || sph_bin().compare("") == 0 || params_file().compare("") == 0 || out_folder().compare("") == 0 ) {
     vcl_cerr << " ERROR: input file/folders can not be empty!\n";
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     vul_arg_display_usage_and_exit();
@@ -35,58 +36,58 @@ int main(int argc, char** argv)
   }
 
   // read in the camera file
-  vcl_string cam_space_bin = in_folder() + "camera_space.bin";
-  if (!vul_file::exists(cam_space_bin)) {
-    vcl_cerr << " ERROR: camera_space binary --> " << cam_space_bin << " can not be found!\n";
+  if (!vul_file::exists(cam_bin())) {
+    vcl_cerr << " ERROR: camera_space binary --> " << cam_bin() << " can not be found!\n";
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vsl_b_ifstream is_cam(cam_space_bin);
+  vsl_b_ifstream is_cam(cam_bin());
   volm_camera_space_sptr cam_space = new volm_camera_space();
   cam_space->b_read(is_cam);
+  is_cam.close();
 
   // read in the spherical shell container
-  vcl_string sph_shell_fname = in_folder() + "sph_shell_container.bin";
-  if (!vul_file::exists(sph_shell_fname)) {
-    vcl_cerr << " ERROR: spherical shell binary --> " << sph_shell_fname << " cam not be found!\n";
+  if (!vul_file::exists(sph_bin())) {
+    vcl_cerr << " ERROR: spherical shell binary --> " << sph_bin() << " cam not be found!\n";
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container();
-  vsl_b_ifstream is_sph(sph_shell_fname);
+  vsl_b_ifstream is_sph(sph_bin());
   sph_shell->b_read(is_sph);
-
-  vcl_cout << " For spherical surface, point angle = " << sph_shell->point_angle()*180/vnl_math::pi << " degree, "
-           << ", top_angle = " << sph_shell->top_angle()*180/vnl_math::pi << " degree, "
-           << ", bottom_angle = " << sph_shell->bottom_angle()*180/vnl_math::pi << " degree, " << vcl_endl;
+  is_sph.close();
 
   // create the depth interval from parameter file
-  volm_io_expt_params params; params.read_params(params_file());
+  if (!vul_file::exists(params_file())) {
+    vcl_cerr << " ERROR: camera incremental parameter file can not be found ---> " << params_file() << vcl_endl;
+    volm_io::write_status(out_folder(),volm_io::EXE_ARGUMENT_ERROR);
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  volm_io_expt_params params; 
+  params.read_params(params_file());
   volm_spherical_container_sptr sph = new volm_spherical_container(params.solid_angle,params.vmin,params.dmax);
 
-  // check the labelme xml
-  depth_map_scene_sptr dm = new depth_map_scene;
-  vcl_string img_category;
-  if (!volm_io::read_labelme(label_file(), dm, img_category)) {
-    vcl_cerr << " ERROR: labelme xml file --> " << label_file() << " can not be used!\n";
-    volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR);
-    return volm_io::LABELME_FILE_IO_ERROR;
+  // load the depth map scene
+  if (!vul_file::exists(dms_bin())) {
+    vcl_cerr << " ERROR: depth map scene binary can not be found ---> " << dms_bin() << vcl_endl;
+    volm_io::write_status(out_folder(), volm_io::DEPTH_SCENE_FILE_IO_ERROR);
+    return volm_io::EXE_ARGUMENT_ERROR;
   }
 
   // create query
-  volm_query_sptr query = new volm_query(cam_space, label_file(), sph, sph_shell);
+  volm_query_sptr query = new volm_query(cam_space, dms_bin(), sph_shell, sph);
 
   // screen output
   unsigned total_size = query->obj_based_query_size_byte();
-  vcl_cout << " For spherical surface, point angle = " << sph_shell->point_angle()*180/vnl_math::pi << " degree, "
-           << ", top_angle = " << sph_shell->top_angle()*180/vnl_math::pi << " degree, "
-           << ", bottom_angle = " << sph_shell->bottom_angle()*180/vnl_math::pi << " degree, "
+  vcl_cout << " For spherical surface, point angle = " << sph_shell->point_angle() << " degree, "
+           << ", top_angle = " << sph_shell->top_angle() << " degree, "
+           << ", bottom_angle = " << sph_shell->bottom_angle() << " degree, "
            << ", generated query has " << query->get_query_size() << " rays, "
            << query->get_cam_num() << " cameras:" << '\n'
            << " The query with " << query->get_cam_num() << " has " << (float)total_size/1024 << " Kbyte in total "
            << vcl_endl;
   // query check
-  dm = query->depth_scene();
+  depth_map_scene_sptr dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
     vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
@@ -140,4 +141,6 @@ int main(int argc, char** argv)
     query->draw_query_images(out_folder());
   }
 
+  volm_io::write_status(out_folder(), volm_io::SUCCESS);
+  return volm_io::SUCCESS;
 }
