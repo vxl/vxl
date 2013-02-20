@@ -60,6 +60,6 @@ void imesh_flip_faces( imesh_mesh& mesh, const vcl_set<unsigned int>& sel_faces)
 //: Compute the dual mesh using face centroids for vertices
 imesh_mesh dual_mesh(const imesh_mesh& mesh);
 
-bool contains_point(const imesh_mesh& mesh,vgl_point_3d<double> p);
+bool contains_point( imesh_mesh& mesh,vgl_point_3d<double> p);
 
 #endif // imesh_operations_h_
