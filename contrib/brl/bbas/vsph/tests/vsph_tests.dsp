@@ -117,6 +117,9 @@ SOURCE=.\test_utils.cxx
 SOURCE=.\test_grid_index.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_sph_segment.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
