@@ -3,8 +3,7 @@
 #define volm_io_h_
 //:
 // \file
-// \brief A class to hold xml file io methods for volumetric matchers
-// Units are in meters
+// \brief This file holds several volm I/O oriented classes
 //
 // \author Ozge C. Ozcanli
 // \date September 18, 2012
@@ -19,6 +18,8 @@
 #include <vcl_set.h>
 #include <vcl_utility.h>
 
+//: A class to hold xml file io methods for volumetric matchers
+// Units are in meters
 class volm_orient_table
 {
  public:
@@ -30,7 +31,7 @@ class volm_orient_table
 
 class volm_attributes
 {
-public:
+ public:
   volm_attributes() : id_(0), name_(""), color_(vil_rgb<vxl_byte>(0,0,0)) {}
   volm_attributes(unsigned char id, vcl_string name, vil_rgb<vxl_byte> color): id_(id), name_(name), color_(color) {}
   unsigned char id_;
@@ -56,7 +57,6 @@ class volm_io_expt_params
 class volm_io
 {
  public:
-
   //: warning: always add to the end of this error code list, python script on the server has a hard copy of some of these values, they should not be changed
   enum VOLM_ERROR_CODES {SUCCESS, EXE_ARGUMENT_ERROR, EXE_RUNNING, CAM_FILE_IO_ERROR, MATCHER_EXE_STARTED, MATCHER_EXE_FINISHED, MATCHER_EXE_FAILED, COMPOSE_STARTED, DEPTH_SCENE_FILE_IO_ERROR, LABELME_FILE_IO_ERROR, GEO_INDEX_FILE_MISSING, SCORE_FILE_MISSING, EXE_STARTED, EXE_MATCHER_FAILED, COMPOSE_HALT};
 
@@ -98,9 +98,6 @@ class volm_io
   static bool read_building_file(vcl_string file, vcl_vector<vgl_polygon<double> >& builds);
 };
 
-class volm_rationale;
-bool operator>(const vcl_pair<float, volm_rationale>& a, const vcl_pair<float, volm_rationale>& b);
-
 class volm_rationale
 {
  public:
@@ -116,16 +113,14 @@ class volm_rationale
   static bool read_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename);
 };
 
-// \brief  A class to store the highest score for each location
-// leaf_id     ----> id of the leaf in leaves vector
-// hypo_id     ----> local id of the hypothesis in the leaf
-// max_score_  ----> highest score for current location
-// max_cam_id_ ----> the camera id associated with the highest score
-// cam_id      ----> vector of camera ids whose score is higher than defined threshold
+bool operator>(const vcl_pair<float, volm_rationale>& a, const vcl_pair<float, volm_rationale>& b);
 
-#include <vbl/vbl_smart_ptr.h>
-class volm_score;
-typedef vbl_smart_ptr<volm_score> volm_score_sptr;
+//: A class to store the highest score for each location
+// * \p leaf_id     ----> id of the leaf in leaves vector
+// * \p hypo_id     ----> local id of the hypothesis in the leaf
+// * \p max_score_  ----> highest score for current location
+// * \p max_cam_id_ ----> the camera id associated with the highest score
+// * \p cam_id      ----> vector of camera ids whose score is higher than defined threshold
 
 class volm_score : public vbl_ref_count
 {
@@ -150,15 +145,15 @@ class volm_score : public vbl_ref_count
   //: binary IO read
   void b_read(vsl_b_istream& is);
 
-  static void write_scores(vcl_vector<volm_score_sptr>& scores, vcl_string const& file_name);
-  static void read_scores(vcl_vector<volm_score_sptr>& scores, vcl_string const& file_name);
+  static void write_scores(vcl_vector<vbl_smart_ptr<volm_score> >& scores, vcl_string const& file_name);
+  static void read_scores(vcl_vector<vbl_smart_ptr<volm_score> >& scores, vcl_string const& file_name);
 };
 
-// \brief  A class to store the highest score for each location
-// a class defines the weight parameters for a given depth_map_region
+//: A class to store the highest score for each location
+// Each class defines the weight parameters for a given depth_map_region
 class volm_weight
 {
-public:
+ public:
   volm_weight () {}
   volm_weight (vcl_string const& w_typ, float const& w_ori, float const& w_lnd, float const& w_ord, float const& w_dst, float const w_obj)
     : w_typ_(w_typ), w_ori_(w_ori), w_lnd_(w_lnd), w_ord_(w_ord), w_dst_(w_dst), w_obj_(w_obj) {}
@@ -183,5 +178,7 @@ public:
   static void equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene_sptr dms);
 };
 
+#include <vbl/vbl_smart_ptr.h>
+typedef vbl_smart_ptr<volm_score> volm_score_sptr;
 
 #endif // volm_io_h_
