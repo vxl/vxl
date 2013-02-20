@@ -1,6 +1,6 @@
 //:
 // \file
-// \executable to read score profile from generated probablity map, given threshold ranging from 0.4 to 0.9
+// \executable to read score profile from generated probability map, given threshold ranging from 0.4 to 0.9
 //
 //
 // \author Yi Dong
@@ -13,6 +13,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vcl_set.h>
+#include <vcl_ios.h>
 
 // generate gt hypos
 int main(int argc,  char** argv)
@@ -21,12 +22,12 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> out_root("-out_rt", "experiment output root", "");
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg_parse(argc, argv);
-  
+
   vcl_cout << "argc: " << argc << vcl_endl;
   vcl_stringstream log;
-  if(out_root().compare("") == 0 ||
-     gt_file().compare("") == 0 ||
-     pass_id() > 2)
+  if (out_root().compare("") == 0 ||
+      gt_file().compare("") == 0 ||
+      pass_id() > 2)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
@@ -45,8 +46,7 @@ int main(int argc,  char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
-  unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
-  
+  /* unsigned int cnt = */ volm_io::read_gt_file(gt_file(), samples);
 
   // the overall ROI for each test_image
   // key -- test_img_id, vector< gt_max_score, ROI for different thres, total_pixel_evaluated >
@@ -55,7 +55,7 @@ int main(int argc,  char** argv)
   for (unsigned i = 4; i < 10; i++) {
     thresholds.push_back(0.1*i);
   }
-  for(unsigned id = 0; id < 100; id++) {
+  for (unsigned id = 0; id < 100; id++) {
     vcl_stringstream out_folder;
     if (id < 10)
       out_folder << out_root() << "/p1a_test1_0" << id;
@@ -77,7 +77,7 @@ int main(int argc,  char** argv)
       cnt_pair.first = *vit;  cnt_pair.second = cnt_vec;
       cnt_map.insert(cnt_pair);
     }
-    
+
     // test
     //vcl_map<float, vcl_vector<unsigned> >::iterator mit = cnt_map.begin();
     //for (; mit != cnt_map.end(); ++mit) {
@@ -92,7 +92,7 @@ int main(int argc,  char** argv)
       tiles = volm_tile::generate_p1_wr1_tiles();
     else
       tiles = volm_tile::generate_p1_wr2_tiles();
-    
+
     float gt_score = 0.0f;
     // loop over all tiles of current test images
     for (unsigned i = 0; i < tiles.size(); i++) {
@@ -125,14 +125,14 @@ int main(int argc,  char** argv)
           gt_score = tile_img(u,v);
           vcl_stringstream out_log;
           out_log << "\t id = " << id << ", GT location: " << samples[id].first.x() << ", "
-                                    << samples[id].first.y() << " is at pixel: "
-                                    << u << ", " << v << " in tile " << i << " and has value: "
-                                    << gt_score << '\n';
+                  << samples[id].first.y() << " is at pixel: "
+                  << u << ", " << v << " in tile " << i << " and has value: "
+                  << gt_score << '\n';
           volm_io::write_composer_log(out_folder.str(), out_log.str());
           vcl_cout << out_log.str();
       }
     } // end of tile loop
-    
+
     // calculate ROI, save the gt_score and ROI for current test_id
     vcl_vector<float> score_roi;
     score_roi.push_back(gt_score);
@@ -144,10 +144,10 @@ int main(int argc,  char** argv)
     }
     score_roi.push_back(cnt_map.begin()->second[1]);
     vcl_pair<unsigned, vcl_vector<float> > pair_roi;
-    pair_roi.first = id; 
+    pair_roi.first = id;
     pair_roi.second = score_roi;
     test_img_roi.insert(pair_roi);
-    
+
 #if 0
     // create png tile images for different thresholds, only generate png tile prob_map with thres smaller than ground truth score
     for (unsigned ti = 0; ti < tiles.size(); ti++) {
@@ -180,31 +180,28 @@ int main(int argc,  char** argv)
   } // end of test_id loop
 
   vcl_string eoi_file = out_root() + "/roi_result.txt";
-  vcl_ofstream fout(eoi_file);
-  
-  fout << "                                                          thresholds\n";
-  fout << "  test_id      gt_loc_score";
+  vcl_ofstream fout(eoi_file.c_str());
+
+  fout << "                                                          thresholds\n"
+       << "  test_id      gt_loc_score";
   for (vcl_vector<float>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
-    fout.setf(vcl_ios::right);
-    if ( *vit > 0.6) { fout.precision(2); fout.fill(' '); fout.width(12); }
-    else             { fout.precision(2); fout.fill(' '); fout.width(10); }
+    fout.setf(vcl_ios_right);
+    fout.precision(2); fout.fill(' '); fout.width(*vit > 0.6 ? 12 : 10);
     fout << *vit;
   }
-    
+
   fout << '\n';
-  fout.setf(vcl_ios::right);
+  fout.setf(vcl_ios_right);
   vcl_map<unsigned, vcl_vector<float> >::iterator mit = test_img_roi.begin();
   for (; mit != test_img_roi.end(); ++mit) {
     vcl_stringstream out_str;
     if (mit->first < 10) out_str << "p1a_test1_0" << mit->first;
     else                 out_str << "p1a_test1_"  << mit->first;
     fout << out_str.str();
-    fout.precision(5);
-    fout.width(13);
-    fout.fill(' ');
-    fout << mit->second[0] << " ";
+    fout.precision(5); fout.width(13); fout.fill(' ');
+    fout << mit->second[0] << ' ';
     for (unsigned i = 1; i < 7; i++) {
-      fout.setf(vcl_ios::right);
+      fout.setf(vcl_ios_right);
       fout.precision(5); fout.width(12); fout.fill(' ');
       fout << mit->second[i];
     }

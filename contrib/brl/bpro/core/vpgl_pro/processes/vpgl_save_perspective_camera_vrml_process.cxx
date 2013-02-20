@@ -93,7 +93,7 @@ bool vpgl_save_perspective_cameras_vrml_process(bprb_func_process& pro)
       << "  skyColor [ 0 0 0 ]\n"
       << "  groundColor [ 0 0 0 ]\n"
       << "}\n";
-  for(unsigned i = 0 ; i < cams.size(); i++)
+  for (unsigned i = 0 ; i < cams.size(); ++i)
     vrml_write(os, cams[i], (double)radius);
   os.close();
   return true;
