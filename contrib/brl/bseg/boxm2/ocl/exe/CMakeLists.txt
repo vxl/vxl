@@ -6,7 +6,7 @@ ADD_EXECUTABLE( boxm2_export_scene boxm2_export_scene.cxx )
 TARGET_LINK_LIBRARIES( boxm2_export_scene boxm2 boxm2_basic boxm2_io sdet boxm2_ocl_pro boxm2_ocl bocl vil_pro vpgl_pro vsph vil vbl vul)
 
 ADD_EXECUTABLE( boxm2_ocl_refine_scene boxm2_ocl_refine_scene.cxx )
-TARGET_LINK_LIBRARIES( boxm2_ocl_refine_scene boxm2 boxm2_basic boxm2_io boxm2_ocl boxm2_ocl_pro bocl vil_pro)
+TARGET_LINK_LIBRARIES(  boxm2_ocl_refine_scene boxm2 boxm2_pro boxm2_basic boxm2_io boxm2_ocl boxm2_ocl_pro bocl vil_pro)
 
 ADD_EXECUTABLE(boxm2_estimate_uncertain_viewpoints boxm2_estimate_uncertain_viewpoints.cxx )
 TARGET_LINK_LIBRARIES( boxm2_estimate_uncertain_viewpoints boxm2 boxm2_basic boxm2_io sdet boxm2_ocl_pro boxm2_ocl bocl vil_pro vpgl_pro vsph vil vbl vul)
