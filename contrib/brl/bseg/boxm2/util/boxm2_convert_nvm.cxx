@@ -11,6 +11,7 @@
 #include <vnl/vnl_quaternion.h>
 #include <vcl_cassert.h>
 #include <vul/vul_file.h>
+#include <vpgl/algo/vpgl_ortho_procrustes.h>
 
 //: Main boxm2_convert_nvm function
 //  Takes in bundle.out file and image directory that created img_dir
@@ -18,16 +19,16 @@ void boxm2_util_convert_nvm(vcl_string nvm_file,
                             vcl_string img_dir,
                             vcl_map<vcl_string, vpgl_perspective_camera<double>* >& cams,
                             vgl_box_3d<double>& bbox,
-                            double& resolution)
+                            double& resolution,bool axis_align)
 {
-  boxm2_convert_nvm b2s(nvm_file, img_dir);
+  boxm2_convert_nvm b2s(nvm_file, img_dir,axis_align);
   cams        = b2s.get_cams();
   bbox        = b2s.get_bbox();
   resolution  = b2s.get_resolution();
 }
 
 // reads bundler file and populates list of cameras, and a scene bounding box
-boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
+boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,bool axis_align)
 {
   img_dir_ = img_dir;
   nvm_file_ = nvm_file;
@@ -68,13 +69,14 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
   //--------------------------------------------------------------------------
   // make sure the scene is axis aligned
   ////--------------------------------------------------------------------------
+  if(axis_align)
   if (!boxm2_point_util::axis_align_scene(corrs_,cams_))
     return;
 
   //------------------------------------------------------------------------
   // Filter out the cams with very high error
   //------------------------------------------------------------------------
-  boxm2_point_util::report_error(view_error_map_, view_count_map_, bad_cams_, 1.5f);
+  boxm2_point_util::report_error(view_error_map_, view_count_map_, bad_cams_, 2.5f);
   vcl_cout<<"Num bad cams: "<<bad_cams_.size()<<vcl_endl;
 
   //------------------------------------------------------------------------
@@ -115,8 +117,8 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
   // Note: x-y dimensions are kind of a good approximation
   // the z-dimension however suffers because most points tend to be on the ground and the average miss represents points off the gound
   //--------------------------------------------------------------------------
-  double minx=-3.0f*sigma[0], miny=-3.0f*sigma[1], minz=c.z()-3.0f*sigma[2];
-  double maxx= 3.0f*sigma[0], maxy= 3.0f*sigma[1], maxz=c.z()+3.0f*sigma[2];
+  double minx=c.x()-3.0f*sigma[0], miny=c.y()-3.0f*sigma[1], minz=c.z()-3.0f*sigma[2];
+  double maxx=c.x()+ 3.0f*sigma[0], maxy= c.y()+3.0f*sigma[1], maxz=c.z()+3.0f*sigma[2];
   bbox_ = vgl_box_3d<double>(minx, miny, minz, maxx, maxy,maxz);
 
   //--------------------------------------------------------------------------

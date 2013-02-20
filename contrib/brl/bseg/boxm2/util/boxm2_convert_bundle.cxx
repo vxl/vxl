@@ -70,7 +70,7 @@ boxm2_convert_bundle::boxm2_convert_bundle(vcl_string bundle_file, vcl_string im
   //------------------------------------------------------------------------
   // Filter out the cams with very high error
   //------------------------------------------------------------------------
-  boxm2_point_util::report_error(view_error_map_, view_count_map_, bad_cams_, 1.5f);
+  boxm2_point_util::report_error(view_error_map_, view_count_map_, bad_cams_, 2.5f);
 
   //------------------------------------------------------------------------
   // Save camera and corresponding image file

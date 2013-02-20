@@ -25,17 +25,17 @@ void boxm2_util_convert_nvm (vcl_string nvm_file,
                              vcl_string img_dir,
                              vcl_map<vcl_string, CamType*>& cams,
                              vgl_box_3d<double>& bbox,
-                             double& resolution);
+                             double& resolution,bool axis_align = true);
 
 //: Utility class with static methods
 class boxm2_convert_nvm
 {
   public:
-    boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir);
+    boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,bool axis_align = true);
     vcl_map<vcl_string, CamType*>&       get_cams() { return final_cams_; }
     vgl_box_3d<double>                   get_bbox() const { return bbox_; }
     double                               get_resolution() const { return resolution_; }
-  private:
+   private:
 
     //final cams (map from image file name to camera
     vcl_map<vcl_string, CamType*>                 final_cams_;
