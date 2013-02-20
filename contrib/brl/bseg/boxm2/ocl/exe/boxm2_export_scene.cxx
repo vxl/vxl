@@ -41,7 +41,8 @@
 #include <bprb/bprb_func_process.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vcl_algorithm.h>
-
+#include <vil/file_formats/vil_jpeg.h>
+#include <vil/vil_open.h>
 // Boxm2_Export_Scene executable will create a small, portable, pre rendered
 // scene that can be viewed on many devices.  Currently the output is a folder
 // with the following structure
@@ -51,7 +52,51 @@
 //      - img directory (contains a rendering of stills
 //
 //   * Pre Rendered Stills
+bool vil_save_jpeg(const vil_image_view_base &im,const char* filename)
+{
+  vil_stream* os = vil_open(filename, "w");
+  if (!os || !os->ok()) {
+    std::wcerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
+    return false;
+  }
+  vil_jpeg_image jimage(os, im.ni(),im.nj(),im.nplanes(), vil_pixel_format_component_format(im.pixel_format()));
 
+  jimage.set_quality(30);
+
+  // Use smart copy constructor to convert multi-component images
+  // into multi-plane ones.
+  switch (vil_pixel_format_component_format(im.pixel_format()))
+  {
+  case VIL_PIXEL_FORMAT_BYTE:
+    vcl_cout<<"BYTE"<<vcl_endl;
+    return jimage.put_view(vil_image_view<vxl_byte>(im),0,0);
+  case VIL_PIXEL_FORMAT_UINT_16:
+    return jimage.put_view(vil_image_view<vxl_uint_16>(im),0,0);
+  case VIL_PIXEL_FORMAT_INT_16:
+    return jimage.put_view(vil_image_view<vxl_int_16>(im),0,0);
+  case VIL_PIXEL_FORMAT_UINT_32:
+    return jimage.put_view(vil_image_view<vxl_uint_32>(im),0,0);
+  case VIL_PIXEL_FORMAT_INT_32:
+    return jimage.put_view(vil_image_view<vxl_int_32>(im),0,0);
+#if VXL_HAS_INT_64
+  case VIL_PIXEL_FORMAT_UINT_64:
+    return jimage.put_view(vil_image_view<vxl_uint_64>(im),0,0);
+  case VIL_PIXEL_FORMAT_INT_64:
+    return jimage.put_view(vil_image_view<vxl_int_64>(im),0,0);
+#endif
+  case VIL_PIXEL_FORMAT_FLOAT:
+    return jimage.put_view(vil_image_view<float>(im),0,0);
+  case VIL_PIXEL_FORMAT_BOOL:
+    return jimage.put_view(vil_image_view<bool>(im),0,0);
+  case VIL_PIXEL_FORMAT_SBYTE:
+    return jimage.put_view(vil_image_view<vxl_sbyte>(im),0,0);
+  case VIL_PIXEL_FORMAT_DOUBLE:
+    return jimage.put_view(vil_image_view<double>(im),0,0);
+  default:
+    // In case any one has an odd pixel format that actually works with this file_format.
+    return jimage.put_view(im, 0, 0);
+  }
+}
 int main(int argc,  char** argv)
 {
     vcl_cout<<"Boxm2 Hemisphere"<<vcl_endl;
@@ -62,7 +107,7 @@ int main(int argc,  char** argv)
     vul_arg<unsigned> ni("-ni", "Width of image", 640);
     vul_arg<unsigned> nj("-nj", "Height of image", 480);
     vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
-    vul_arg<unsigned> num_in("-num_in", "Number of views along 90 degree incline", 3);
+    vul_arg<unsigned> num_in("-num_in", "Number of views along 90 degree incline", 5);
     vul_arg<double> incline_0("-init_incline", "Initial angle of incline (degrees)", 45.0);
     vul_arg<double> incline_1("-end_incline", "Angle of incline nearest zenith (degrees)", 15.0);
     vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0);
@@ -228,7 +273,8 @@ int main(int argc,  char** argv)
                     }
                     vcl_stringstream colorstream;
                     colorstream<<imgdir<<"scene_"<<uid<<".jpg";
-                    vil_save( jpg_out, colorstream.str().c_str() );
+                    vil_save_jpeg( jpg_out, (colorstream.str().c_str()) );
+
                 }
                 if (scene->has_data_type(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) )
                 {
@@ -262,7 +308,8 @@ int main(int argc,  char** argv)
                     vcl_stringstream graystream;
                     graystream<<imgdir<<"ir_"<<uid<<".jpg";
                     saved_imgs[uid] = idstream.str();
-                    vil_save(*byte_img, graystream.str().c_str() );
+                     vil_save_jpeg( *byte_img, graystream.str().c_str() );
+                    //vil_save(*byte_img, graystream.str().c_str() );
                 }
                 if (scene->has_data_type(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()))
                 {
@@ -327,7 +374,8 @@ int main(int argc,  char** argv)
                     cam_file_stream<<vmin<<' '<<vmax<<'\n';
                     vcl_stringstream depthstream;
                     depthstream<<imgdir<<"depth_"<<uid<<".jpg";
-                    vil_save( byte_img, depthstream.str().c_str() );
+                    vil_save_jpeg( byte_img, depthstream.str().c_str() );
+                    //vil_save( byte_img, depthstream.str().c_str() );
                 }
             }
         }
