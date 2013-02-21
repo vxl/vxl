@@ -1,6 +1,7 @@
 // This is bbas/vsph/vsph_sph_box_2d.cxx
 #include "vsph_sph_box_2d.h"
 #include "vsph_utils.h"
+#include "vsph_defs.h"
 #include "vsph_unit_sphere.h"
 #include <bvrml/bvrml_write.h>
 #include <vcl_cassert.h>
@@ -24,17 +25,16 @@ void vsph_sph_box_2d::phi_bounds(double& phi_start, double& phi_end) const
 {
   double ph_min = min_phi(in_radians_), ph_max = max_phi(in_radians_);
   // does interval span cut?
-  if (ph_min>0 && ph_max<0)
-    if (in_interval(pye())) {
-        phi_start = ph_min;
-        phi_end = ph_max;
-        return;
-      }
-      else {
-        phi_start = ph_max;
-        phi_end = ph_min;
-        return;
-      }
+  if(ph_min>0 && ph_max<0)
+    if(in_interval(pye(), in_radians_)){
+      phi_start = ph_min;
+      phi_end = ph_max;
+      return;
+    }else{
+      phi_start = ph_max;
+      phi_end = ph_min;
+      return;
+    }
   double mid = 0.5*(ph_min+ph_max);
   if (in_interval(mid, in_radians_)) {//small interval
     phi_start = ph_min;
@@ -66,7 +66,7 @@ vsph_sph_box_2d::vsph_sph_box_2d(vsph_sph_point_2d const& pa,
   a_phi_ = b_phi_ = c_phi_ = 1000.0;
   //assume all the points are in the same units
   in_radians_ = pa.in_radians_;
- double a_th = pa.theta_, b_th = pb.theta_, c_th = pc.theta_;
+  double a_th = pa.theta_, b_th = pb.theta_, c_th = pc.theta_;
   min_th_ = a_th;
   max_th_ = b_th;
   if (b_th < a_th) {
@@ -77,18 +77,18 @@ vsph_sph_box_2d::vsph_sph_box_2d(vsph_sph_point_2d const& pa,
   if (c_th>max_th_) max_th_ = c_th;
   a_phi_ = pa.phi_;   b_phi_ = pb.phi_; c_phi_ = pc.phi_;
 }
-
+// want the phi value that is clockwise of phi_c in the box interval
 double vsph_sph_box_2d::min_phi(bool in_radians) const
 {
-  double aph = a_phi_, bph = b_phi_;
-  if (vsph_utils::azimuth_diff(aph, bph,  in_radians_) < 0)
-    aph = b_phi_;
+  double ph_min = a_phi_;
+  if(vsph_utils::azimuth_diff(ph_min, c_phi_,  in_radians_) < 0)
+    ph_min = b_phi_;
   if ((in_radians&&in_radians_)||(!in_radians&&!in_radians_))
-    return aph;
+    return ph_min;
   else if (in_radians&&!in_radians_)
-    return aph/vnl_math::deg_per_rad;
+    return ph_min/vnl_math::deg_per_rad;
   else
-    return aph*vnl_math::deg_per_rad;
+    return ph_min*vnl_math::deg_per_rad;
 }
 
 double vsph_sph_box_2d::min_theta(bool in_radians) const
@@ -100,18 +100,18 @@ double vsph_sph_box_2d::min_theta(bool in_radians) const
   else
     return min_th_*vnl_math::deg_per_rad;
 }
-
+// want the phi value that is counter clockwise of phi_c in the box interval
 double vsph_sph_box_2d::max_phi(bool in_radians) const
 {
-  double aph = a_phi_, bph = b_phi_;
-  if (vsph_utils::azimuth_diff(aph, bph,  in_radians_) < 0)
-    bph = a_phi_;
+  double ph_max = b_phi_;
+  if(vsph_utils::azimuth_diff(c_phi_, ph_max,  in_radians_) < 0)
+    ph_max = a_phi_;
   if ((in_radians&&in_radians_)||(!in_radians&&!in_radians_))
-    return bph;
+    return ph_max;
   else if (in_radians&&!in_radians_)
-    return bph/vnl_math::deg_per_rad;
+    return ph_max/vnl_math::deg_per_rad;
   else
-    return bph*vnl_math::deg_per_rad;
+    return ph_max*vnl_math::deg_per_rad;
 }
 
 double vsph_sph_box_2d::max_theta(bool in_radians) const
@@ -122,6 +122,24 @@ double vsph_sph_box_2d::max_theta(bool in_radians) const
     return max_th_/vnl_math::deg_per_rad;
   else
     return max_th_*vnl_math::deg_per_rad;
+}
+double vsph_sph_box_2d::a_phi(bool in_radians) const{
+  if ((in_radians&&in_radians_)||(!in_radians&&!in_radians_))
+    return a_phi_;
+  else if (in_radians&&!in_radians_)
+    return a_phi_/vnl_math::deg_per_rad;
+  else
+    return a_phi_*vnl_math::deg_per_rad;
+}
+
+double vsph_sph_box_2d::b_phi(bool in_radians) const{
+  if ((in_radians&&in_radians_)||(!in_radians&&!in_radians_))
+    return b_phi_;
+  else if (in_radians&&!in_radians_)
+    return b_phi_/vnl_math::deg_per_rad;
+  else
+    return b_phi_*vnl_math::deg_per_rad;
+
 }
 
 double vsph_sph_box_2d::c_phi(bool in_radians) const
@@ -148,7 +166,7 @@ vsph_sph_point_2d vsph_sph_box_2d::max_point(bool in_radians) const
   double phi_max = b_phi_;
   if (!in_radians) phi_max*=vnl_math::deg_per_rad;
   double theta_max = max_th_;
- // if (!in_radians) theta_max*=vnl_math::deg_per_rad;
+  // if (!in_radians) theta_max*=vnl_math::deg_per_rad;
   return vsph_sph_point_2d(phi_max, theta_max);
 }
 
@@ -168,7 +186,7 @@ bool vsph_sph_box_2d::is_empty() const
 
 bool vsph_sph_box_2d::defined() const
 {
- return c_phi_ != 1000.0;
+  return c_phi_ != 1000.0;
 }
 
 void  vsph_sph_box_2d::update_theta(double th)
@@ -305,7 +323,7 @@ bool vsph_sph_box_2d::in_interval(double phi, bool in_radians) const
         (c_phi_ >= -pye() && c_phi_ < end_ang)) {
       //yes
       bool in = (ph>= start_ang && ph<=pye()) ||
-                (ph >= -pye() && ph <= end_ang);
+	(ph >= -pye() && ph <= end_ang);
       return in;
     }
     // is the interval the long interval
@@ -313,7 +331,7 @@ bool vsph_sph_box_2d::in_interval(double phi, bool in_radians) const
         (c_phi_ < 0 && c_phi_ > end_ang)) {
       //yes
       bool in = (ph<= start_ang && ph>=0.0) ||
-                (ph <= 0 && ph >= end_ang);
+	(ph <= 0 && ph >= end_ang);
       return in;
     }
     // can't happen
@@ -324,7 +342,7 @@ bool vsph_sph_box_2d::in_interval(double phi, bool in_radians) const
     return ph >= start_ang && ph <= end_ang;
   else //long interval
     return (ph<=start_ang && ph>=-pye() ) ||
-           (ph<=pye()     && ph>=end_ang);
+      (ph<=pye()     && ph>=end_ang);
 }
 
 bool vsph_sph_box_2d::contains(double const& theta, double const& phi,
@@ -352,8 +370,8 @@ bool vsph_sph_box_2d::contains(vsph_sph_box_2d const& b) const
   bool in_theta = b_min_th >= min_th_ && b_max_th<=max_th_;
   if (!in_theta) return false;
   bool in_phi = in_interval(b.min_phi(in_radians_), in_radians_) &&
-                in_interval(b.max_phi(in_radians_), in_radians_) &&
-                in_interval(b.c_phi(in_radians_), in_radians_);
+    in_interval(b.max_phi(in_radians_), in_radians_) &&
+    in_interval(b.c_phi(in_radians_), in_radians_);
   return in_phi;
 }
 
@@ -389,15 +407,65 @@ vsph_sph_point_2d vsph_sph_box_2d::center(bool in_radians) const
   double ha = ang2;
   if (this->in_interval(ang1, true))
     ha = ang1;
-  if (this->in_radians_ && !in_radians) {
+
+  if(!in_radians){
     half_th *= vnl_math::deg_per_rad;
     ha *= vnl_math::deg_per_rad;
   }
-  if (!this->in_radians_ && in_radians) {
-    half_th /= vnl_math::deg_per_rad;
-    ha /= vnl_math::deg_per_rad;
-  }
+
   return vsph_sph_point_2d(half_th, ha, in_radians);
+}
+
+vsph_sph_box_2d vsph_sph_box_2d::transform(double t_theta, 
+					   double t_phi, double scale,
+					   bool in_radians) const{
+  
+  //work in units of *this box
+  double d_th = t_theta, d_ph = t_phi;
+  if(this->in_radians_ && !in_radians){
+    d_th /= vnl_math::deg_per_rad;
+    d_ph /= vnl_math::deg_per_rad;
+  }
+  if(!this->in_radians_ && in_radians){
+    d_th *= vnl_math::deg_per_rad;
+    d_ph *= vnl_math::deg_per_rad;
+  }
+  //first scale *this box and then rotate
+  //scaling should occur around the box center
+  //angular spread of both theta and phi is multiplied by scale
+  vsph_sph_point_2d center = this->center(in_radians_);
+  double min_th = min_theta(in_radians_), max_th = max_theta(in_radians_);
+  double cth = center.theta_, scth = (cth-min_th)*scale;
+  min_th = cth-scth, max_th = cth + scth;
+  // now rotate theta
+  min_th += d_th, max_th += d_th;
+  // don't allow transformations on theta that move outside range  
+  if(min_th<0.0) min_th = 0.0;
+  if(max_th>pye())max_th = pye();
+  // for phi it is possible to scale beyond 360 degrees. Don't allow this.
+  // stop at the full circle and put phi_c at half angle opposite the 
+  // circle cut.
+  double c_ph = center.phi_;
+  double ph_start, ph_end;
+  this->phi_bounds(ph_start, ph_end);
+  double difs = vcl_fabs(vsph_utils::azimuth_diff(ph_start, c_ph, in_radians_));
+  double dife = vcl_fabs(vsph_utils::azimuth_diff(c_ph, ph_end, in_radians_));  
+  double s = scale;
+  if(s*(difs+dife) > 2.0*pye()){
+    ph_end = ph_start;
+  }else{
+    //extend the start and end positions
+    difs *=s; dife*=s;
+    ph_start = c_ph -difs + d_ph;
+    ph_end = c_ph + difs + d_ph;
+    c_ph += d_ph;
+    ph_start = reduce_phi(ph_start);
+    ph_end = reduce_phi(ph_end);
+    c_ph = reduce_phi(c_ph);
+  }    
+  vsph_sph_box_2d rbox;
+  rbox.set(min_th, max_th, ph_start, ph_end, c_ph, in_radians_);
+  return rbox;
 }
 
 void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
@@ -445,8 +513,8 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
     quads.push_back(quad);
     return;
   }
-  double th_end = max_th - 0.001*th_inc;//take care of roundoff error
-  double ph_fin = phi_last -0.001*ph_inc;
+  double th_end = max_th - DIST_TOL*th_inc;//take care of roundoff error
+  double ph_fin = phi_last -DIST_TOL*ph_inc;
   double th_prev = min_th;
   while (th_prev < th_end) {
     double ph_prev = ph_start;
@@ -533,10 +601,9 @@ void vsph_sph_box_2d::display_box(vcl_ostream& os,
 }
 
 void vsph_sph_box_2d::display_boxes(vcl_string const& path,
-                                    vcl_vector<vsph_sph_box_2d> const& boxes,
-                                    vcl_vector<vcl_vector<float> > colors,
-                                    double tol)
-{
+				    vcl_vector<vsph_sph_box_2d> const& boxes,
+				    vcl_vector<vcl_vector<float> > colors,
+				    double tol){
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
     return;
@@ -557,12 +624,12 @@ void vsph_sph_box_2d::b_read(vsl_b_istream& /*is*/)
   short version;
   vsl_b_read(is, version);
   switch (version) {
-    case 1:
-      vsl_b_read(is,in_radians_);
-      vsl_b_read(is, min_pos_[0]); // theta
-      vsl_b_read(is, min_pos_[1]); // phi
-      vsl_b_read(is, max_pos_[0]);
-      vsl_b_read(is, max_pos_[1]);
+  case 1:
+    vsl_b_read(is,in_radians_);
+    vsl_b_read(is, min_pos_[0]); // theta
+    vsl_b_read(is, min_pos_[1]); // phi
+    vsl_b_read(is, max_pos_[0]);
+    vsl_b_read(is, max_pos_[1]);
   }
 #endif
 }
@@ -586,11 +653,11 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
   vsph_sph_box_2d rbox(in_radians);
   double theta_min =
     b1.min_theta(in_radians) < b2.min_theta(in_radians) ?
-    b2.min_theta(in_radians) : b1.min_theta(in_radians);
+			       b2.min_theta(in_radians) : b1.min_theta(in_radians);
 
   double theta_max =
-    b1.max_theta(in_radians) < b2.max_theta(in_radians) ?
-    b1.max_theta(in_radians) : b2.max_theta(in_radians);
+			       b1.max_theta(in_radians) < b2.max_theta(in_radians) ?
+							  b1.max_theta(in_radians) : b2.max_theta(in_radians);
   // empty box.
   if (theta_max <= theta_min)
     return false;
@@ -598,8 +665,8 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
   bool b1min_in_b2 = b2.in_interval(b1.min_phi(in_radians), in_radians);
   bool b2max_in_b1 = b1.in_interval(b2.max_phi(in_radians), in_radians);
   bool b1max_in_b2 = b2.in_interval(b1.max_phi(in_radians), in_radians);
-  // no overlap return an empty box
 
+  // no overlap return an empty box
   if (!b2min_in_b1&&!b1min_in_b2&&!b2max_in_b1&&!b1max_in_b2)
     return false;
   double ha1, ha2;
@@ -684,14 +751,14 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
                            ha1, ha2, in_radians);
     if (b2.in_interval(ha1,in_radians)&& b1.in_interval(ha1,in_radians))
       rbox2.set(theta_min, theta_max, b2.min_phi(in_radians),
-                b1.max_phi(in_radians),ha1,in_radians);
+		b1.max_phi(in_radians),ha1,in_radians);
     else
       rbox2.set(theta_min, theta_max, b2.min_phi(in_radians),
-                b1.max_phi(in_radians),ha2,in_radians);
+		b1.max_phi(in_radians),ha2,in_radians);
     boxes.push_back(rbox2);
     return true;
   }
-  vcl_cout << "INTERSECTION CONDITION NOT HANDLED!!\n";
+  vcl_cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
   assert(false); //shouldn't happen
   return false;
 }

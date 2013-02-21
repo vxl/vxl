@@ -42,6 +42,8 @@ vsph_unit_sphere::vsph_unit_sphere(double point_angle,
   vcl_cout << "Start construction" << vcl_endl;
   add_uniform_views();
   remove_top_and_bottom();
+  vcl_cout << "Unit sphere complete with " << sph_pts_.size() << " verts and "
+	   <<  edges_.size() << " edges\n"<< vcl_endl;
 }
 
 vgl_vector_3d<double> vsph_unit_sphere::cart_coord(vsph_sph_point_2d const& sp)
@@ -198,6 +200,7 @@ void vsph_unit_sphere::add_uniform_views()
   // note that the relationship between vertex id and the id of the
   // cart and sphere containers is changed by this filter
   vcl_cout << "Start finding equivalent vertices n = " << verts.size() << '\n' << vcl_flush;
+  equivalent_ids_.resize(verts.size(), -1);
   int ntri = triangles.size();
   for (int i=0; i<ntri; i++) {
     for (int j=0; j<3; j++) {
@@ -230,15 +233,26 @@ void vsph_unit_sphere::add_uniform_views()
 #endif
   neighbors_.clear();
   neighbors_.resize(this->size());
+  int neq = equivalent_ids_.size();
   // step through the triangles and construct unique edges
   // two edges are equal if their end points are equal regardless
   // of order.
   vcl_vector<vsph_edge>::iterator eit;
   for (int i=0; i<ntri; i++) {
     int v[3];// triangle vertices
-    v[0] = equivalent_ids_[triangles[i][0]];//construct edges with current
-    v[1] = equivalent_ids_[triangles[i][1]];//cart and sphere vertex ids
-    v[2] = equivalent_ids_[triangles[i][2]];//updated from initial "verts" id
+    int ti0 = triangles[i][0], ti1 = triangles[i][1], ti2 = triangles[i][2];
+    if(!(ti0>=0 && ti0<neq &&ti1>=0 && ti1<neq &&ti2>=0 && ti2<neq)){
+      vcl_cout << "Bad Tri[" << ti0 << ',' << ti1 << ',' << ti2 << "]\n";
+      continue;
+    }
+    v[0] = equivalent_ids_[ti0];//construct edges with current
+    v[1] = equivalent_ids_[ti1];//cart and sphere vertex ids
+    v[2] = equivalent_ids_[ti2];//updated from initial "verts" id
+    if(v[0]<0||v[1]<0||v[2]<0){
+      vcl_cout << "Bad Equivalent Tri[" << v[0]<< ',' 
+	       << v[1] << ',' << v[2] << "]\n";
+      continue;
+    }
     //traverse the edges of the triangle
     for (int j = 0; j<3; ++j) {
       vsph_edge e(v[j],v[(j+1)%3]);//wrap around to 0
@@ -261,10 +275,12 @@ void vsph_unit_sphere::add_uniform_views()
 
 void vsph_unit_sphere::remove_top_and_bottom()
 {
+  int nsph = sph_pts_.size();
 #ifdef DEBUG
   vcl_cout << "entering top and bottom " << sph_pts_.size() << vcl_endl;
 #endif
   equivalent_ids_.clear();
+  equivalent_ids_.resize(nsph, -1);
   double min_theta_rad = min_theta_/vnl_math::deg_per_rad;
   double max_theta_rad = max_theta_/vnl_math::deg_per_rad;
   vcl_vector<vgl_vector_3d<double> > cart_pts_new;
@@ -299,8 +315,8 @@ void vsph_unit_sphere::remove_top_and_bottom()
       continue;
     new_edges.push_back(vsph_edge(is, ie));
   }
-#if 0
-  vcl_cout << "finished remap edges" << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "finished remap edges in remove top and bottom\n" << vcl_flush;
 #endif
   edges_.clear();
   edges_ = new_edges;

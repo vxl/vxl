@@ -160,7 +160,7 @@ class vsph_unit_sphere : public vbl_ref_count
   vcl_vector<vsph_sph_point_2d> sph_pts_;
   vcl_vector<vgl_vector_3d<double> > cart_pts_;
   vcl_vector<vsph_edge> edges_;
-  vcl_map<int, int> equivalent_ids_;
+  vcl_vector<int> equivalent_ids_;
   vcl_vector<vcl_set<int> > neighbors_;
   vsph_grid_index_2d index_;
  private:

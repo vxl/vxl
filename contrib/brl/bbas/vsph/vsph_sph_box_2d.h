@@ -64,6 +64,9 @@ class vsph_sph_box_2d
   double min_theta(bool in_radians = true) const;
   double max_phi(bool in_radians = true) const;
   double max_theta(bool in_radians = true) const;
+
+  double a_phi(bool in_radians = true) const;
+  double b_phi(bool in_radians = true) const;
   double c_phi(bool in_radians = true) const;
 
   vsph_sph_point_2d min_point(bool in_radians = true) const;
@@ -96,6 +99,11 @@ class vsph_sph_box_2d
 
   //: the spherical point corresponding to the center of the box
   vsph_sph_point_2d center(bool in_radians = true) const;
+
+  //: transform the box on the unit sphere
+  vsph_sph_box_2d transform(double t_theta, double t_phi, double scale,
+			    bool in_radians) const;
+
 
   //: decompose box into approximately planar quadrilaterals
   void planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
@@ -148,6 +156,7 @@ class vsph_sph_box_2d
 bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
                   vcl_vector<vsph_sph_box_2d>& boxes);
 
+
 vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_box_2d const& p);
 
-#endif
+#endif //vsph_sph_box_2d_h_

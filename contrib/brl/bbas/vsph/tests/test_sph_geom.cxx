@@ -177,6 +177,21 @@ static void test_sph_geom()
   TEST("each box contains the other's bounds", good, true);
   double tol = 0.001;
   vcl_string box_path = MyDIR + "box_display.wrl";
+  // transform a box
+  vsph_sph_box_2d tb1 = box_s1.transform(0.5, 0.25, 1.2, true);
+  double tth_min = 1.96624, tth_max = 2.17535;
+  double tph_min =-1.63496, tph_max = 2.13496, tphc = 0.25;
+  er = vcl_fabs(tb1.min_theta()-tth_min) + vcl_fabs(tb1.max_theta()-tth_max);
+  double tb_a_ph = tb1.a_phi(), tb_b_phi = tb1.b_phi(), tb_c_phi = tb1.c_phi();
+  er += vcl_fabs(tph_min-tb_a_ph) + vcl_fabs(tph_max-tb_b_phi) +
+    vcl_fabs(tphc-tb_c_phi);
+  TEST_NEAR("transform box no phi cut", er, 0.0, 0.001);
+   vsph_sph_box_2d tb2 = bba.transform(0.5, 0.25, 1.2, true);
+   double tb2_a_ph = tb2.a_phi(false), tb2_b_phi = tb2.b_phi(false), tb2_c_phi = tb2.c_phi(false);
+   double tb2_ph_min = -168.676, tb2_ph_max = -132.676, tb2_c = -150.676;
+   er = vcl_fabs(tb2_ph_min-tb2_a_ph) + vcl_fabs(tb2_ph_max-tb2_b_phi) +
+    vcl_fabs(tb2_c-tb2_c_phi);
+   TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
 #if 0
   vcl_vector<vgl_vector_3d<double> > verts;
   vcl_vector<vcl_vector<int> > quads;
