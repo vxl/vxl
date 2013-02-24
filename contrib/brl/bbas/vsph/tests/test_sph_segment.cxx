@@ -70,7 +70,7 @@ static void test_sph_segment()
   double sigma = (0.1*point_angle)/dpr,  c =300.0;
   int min_size = 10;
   vcl_cout << "Start segment\n" << vcl_flush;
-#if 0
+#if 1
   vsph_segment_sphere seg(*usph, sigma, c, min_size);
   seg.set_data(data);
   seg.smooth_data();
@@ -89,7 +89,8 @@ static void test_sph_segment()
   vcl_string test_path = MyDIR + "rseg_box_color.wrl";
   double tol = 0.001;
   vsph_sph_box_2d::display_boxes(test_path, dboxes, colors, tol);
-#else
+#endif
+#if 0
   vcl_string path1 = MyDIR + "vol_indices/geoindex_vsph_zone_17_high_res_only_gt_pa_2/geo_index_tile_3_node_-80.000000_32.500000_-79.500000_33.000000_index_hyp_32.649_-79.9519_1.02686.txt";
   vcl_string path2 = MyDIR + "vol_indices/geoindex_vsph_zone_17_high_res_only_gt_pa_2/geo_index_tile_3_node_-80.000000_32.500000_-79.500000_33.000000_index_label_orientation_hyp_32.6507_-79.949_3.07477.txt";
   vcl_string path3 = MyDIR + "vol_indices/geoindex_vsph_zone_17_high_res_only_gt_pa_1/geo_index_tile_3_node_-80.000000_32.500000_-79.500000_33.000000_index_label_orientation_hyp_32.649_-79.9519_1.02686.txt";

@@ -73,7 +73,6 @@ static void test_sph_geom()
   bool c18s = bb_short.contains(p18);//true
   bool test2 = c12s&&!c15s&&c18s;
   TEST("Short interval contains c", test2, true);
-
   vsph_sph_box_2d bb_ext(p10, p12, p11);
   bb_ext.add(p14); 
   bb_ext.add(p15a);
@@ -92,6 +91,12 @@ static void test_sph_geom()
   bool inc_cut_20 = bb_inc_cut.contains(p20);//true
   bool test_inc = inc18&&!incp15a&&!inc_cut_14&&inc_cut_20;
   TEST("incremental update", test_inc, true);
+  //test min, max points
+  vsph_sph_point_2d pl_min = bb_long.min_point(false), pl_max = bb_long.max_point(false);
+  er = vcl_fabs(pl_min.phi_-165.0)+vcl_fabs(pl_max.phi_-10.0);
+  vsph_sph_point_2d pl_inc_min = bb_inc_cut.min_point(false), pl_inc_max = bb_inc_cut.max_point(false);
+  er += vcl_fabs(pl_inc_min.phi_-166.0)+vcl_fabs(pl_inc_max.phi_+175.0);
+  TEST_NEAR("min and max points", er, 0.0, 0.01);
   // test constructors
   // points in degrees
   vsph_sph_point_2d p0(0.0, 0.0, false), p1(90.0, 90.0, false), pc(45.0, 45.0, false);
@@ -186,13 +191,29 @@ static void test_sph_geom()
   er += vcl_fabs(tph_min-tb_a_ph) + vcl_fabs(tph_max-tb_b_phi) +
     vcl_fabs(tphc-tb_c_phi);
   TEST_NEAR("transform box no phi cut", er, 0.0, 0.001);
-   vsph_sph_box_2d tb2 = bba.transform(0.5, 0.25, 1.2, true);
-   double tb2_a_ph = tb2.a_phi(false), tb2_b_phi = tb2.b_phi(false), tb2_c_phi = tb2.c_phi(false);
-   double tb2_ph_min = -168.676, tb2_ph_max = -132.676, tb2_c = -150.676;
-   er = vcl_fabs(tb2_ph_min-tb2_a_ph) + vcl_fabs(tb2_ph_max-tb2_b_phi) +
+  vsph_sph_box_2d tb2 = bba.transform(0.5, 0.25, 1.2, true);
+  double tb2_a_ph = tb2.a_phi(false), tb2_b_phi = tb2.b_phi(false), tb2_c_phi = tb2.c_phi(false);
+  double tb2_ph_min = -168.676, tb2_ph_max = -132.676, tb2_c = -150.676;
+  er = vcl_fabs(tb2_ph_min-tb2_a_ph) + vcl_fabs(tb2_ph_max-tb2_b_phi) +
     vcl_fabs(tb2_c-tb2_c_phi);
-   TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
+  TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
+  double grok_a_phi = -2.7617465101715433;
+  double grok_b_phi = -2.4723473031673180;
+  double grok_c_phi = -2.5151716844356731;
+  double grok_min_th  = 1.6235700411813854;
+  double grok_max_th = 1.8268944131886669;
+  vsph_sph_box_2d grok;
+  grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
+  vsph_sph_box_2d tb3 = grok.transform(0.75, -1.0, 1.2, true);
+  double t_grok_a = 2.4925, t_grok_b = 2.83984;
+  er = vcl_fabs(t_grok_a-tb3.a_phi()) + vcl_fabs(t_grok_b-tb3.b_phi());
+  TEST_NEAR("negative trans with roll-over", er, 0.0, 0.001);
 #if 0
+
+  vcl_string grok_path = MyDIR + "grok_box_display.wrl";
+  vcl_ofstream os(grok_path.c_str());
+  grok.display_box(os, 1.0f, 1.0f, 0.0f, tol);
+  os.close();
   vcl_vector<vgl_vector_3d<double> > verts;
   vcl_vector<vcl_vector<int> > quads;
   box_s1.planar_quads(verts, quads, tol);
@@ -209,17 +230,6 @@ static void test_sph_geom()
   colors[0]=c0; colors[1]=c1;
   vsph_sph_box_2d::display_boxes(box_path, dis_boxes, colors, tol);
 #endif
-  double grok_a_phi = -2.7617465101715433;
-  double grok_b_phi = -2.4723473031673180;
-  double grok_c_phi = -2.5151716844356731;
-  double grok_min_th  = 1.6235700411813854;
-  double grok_max_th = 1.8268944131886669;
-  vsph_sph_box_2d grok;
-  grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
-  vcl_string grok_path = MyDIR + "grok_box_display.wrl";
-  vcl_ofstream os(grok_path.c_str());
-  grok.display_box(os, 1.0f, 1.0f, 0.0f, tol);
-  os.close();
 }
 
 TESTMAIN(test_sph_geom);
