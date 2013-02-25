@@ -114,7 +114,7 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
   // start to ingest order, store in order_index_
   this->order_ingest();
   // implement the weight parameters for all objects
-  this->weight_ingest();
+  //this->weight_ingest();
 }
 
 // build a query from an existing depth map scene
@@ -160,7 +160,7 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
   // start to ingest order, store in order_index_
   this->order_ingest();
   // implement the weight parameters for all objects
-  this->weight_ingest();
+  //this->weight_ingest();
 }
 
 #if NO_CAM_SPACE_CLASS
@@ -680,6 +680,7 @@ unsigned char volm_query::fetch_depth(double const& u,
   return (unsigned char)255;
 }
 
+#if 0
 bool volm_query::weight_ingest()
 {
 #if 0
@@ -735,6 +736,7 @@ bool volm_query::weight_ingest()
   }
   return true;
 }
+#endif
 
 void volm_query::draw_template(vcl_string const& vrml_fname)
 {
@@ -1113,12 +1115,12 @@ unsigned volm_query::obj_based_query_size_byte() const
   size_byte += this->get_ground_id_size();     // unsigned char land classfication
   size_byte += 1;                               // unsigned char orientation
   size_byte += (unsigned)ground_offset_.size()*4;        // unsinged ground offset
-  size_byte += 4;                              // float weight
+  //size_byte += 4;                              // float weight
 
   // sky voxel size
   size_byte += this->get_sky_id_size() * 4;    // unsigned id
   size_byte += (unsigned)sky_offset_.size()*4;           // unsigned sky offset
-  size_byte += 4;                              // float weight
+  //size_byte += 4;                              // float weight
 
   // non-sky, non-ground object
   size_byte += this->get_dist_id_size() * 4;   // unsigned id
@@ -1128,10 +1130,11 @@ unsigned volm_query::obj_based_query_size_byte() const
   size_byte += (unsigned)obj_orient_.size();   // unsigned char orientation
   size_byte += (unsigned)obj_land_id_.size();     // unsigned char land clarification
   size_byte += (unsigned)order_obj_.size();    // unsigned char order
-  size_byte += (unsigned)weight_obj_.size()*4; // float weight
+  //size_byte += (unsigned)weight_obj_.size()*4; // float weight
   return size_byte;
 }
 
+#if 0
 bool volm_query::write_query_binary(vcl_string out_fold)
 {
   // write vpgl_perspective_camera
@@ -1161,3 +1164,4 @@ bool volm_query::read_query_binary(vcl_string inp_fold)
     return false;
   }
 }
+#endif

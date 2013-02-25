@@ -17,6 +17,7 @@
 //    Yi Dong   Jan-2013   added object orientation and object NLCD land classification
 //    JLM       Jan 20, 2013 Added constructor from depth_map_scene
 //    Ozge C. Ozcanli Jan 30, 2013 -- replacing old camera space construction functionality with the use of volm_camera_space class
+//    Yi Dong   Feb-2013   added binary i/o
 // \endverbatim
 //
 
@@ -73,9 +74,9 @@ class volm_query : public vbl_ref_count
   vcl_vector<vcl_vector<unsigned> >& sky_id()                   { return sky_id_; }
   vcl_vector<unsigned>& sky_offset()                            { return sky_offset_; }
   unsigned char sky_orient()                                    { return sky_orient_; }
-  vcl_vector<float>& obj_weight()                               { return weight_obj_; }
-  float grd_weight() const                                      { return weight_grd_; }
-  float sky_weight() const                                      { return weight_sky_; }
+  //vcl_vector<float>& obj_weight()                               { return weight_obj_; }
+  //float grd_weight() const                                      { return weight_grd_; }
+  //float sky_weight() const                                      { return weight_sky_; }
   depth_map_scene_sptr depth_scene() const                      { return dm_; }
   vcl_vector<depth_map_region_sptr>& depth_regions()            { return depth_regions_; }
   volm_spherical_shell_container_sptr sph_shell() const         { return sph_; }
@@ -129,12 +130,6 @@ class volm_query : public vbl_ref_count
   //: draw the polygons of regions on top of an rgb image
   void draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img);
   void draw_query_regions(vcl_string const& out_name);
-  
-  //: write the binary output for query
-  bool write_query_binary(vcl_string out_fold);
-  
-  //: load query from binary file
-  bool read_query_binary(vcl_string inp_fold);
   
   // ===========  binary I/O ================
   //: version
@@ -228,9 +223,9 @@ class volm_query : public vbl_ref_count
   vcl_vector<unsigned char>                       obj_orient_;
   vcl_vector<unsigned char>                      obj_land_id_;
   //: weight parameters
-  vcl_vector<float> weight_obj_;
-  float             weight_grd_;
-  float             weight_sky_;
+  //vcl_vector<float> weight_obj_;
+  //float             weight_grd_;
+  //float             weight_sky_;
 
   //: functions
   bool query_ingest();
