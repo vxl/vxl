@@ -1,6 +1,8 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vpl/vpl.h>
+#include <depth_map/depth_map_scene.h>
+#include <depth_map/depth_map_region_sptr.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -10,12 +12,64 @@
 #include <bbas/volm/volm_geo_index.h>
 #include <bbas/volm/volm_io.h>
 #include <bkml/bkml_parser.h>
+#include <vul/vul_file.h>
 
 static void test_io()
 {
-  vcl_string path =  "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/vol_indices/geo_index_tile_3_node_-79.968750_32.656250_-79.937500_32.687500_index_label_orientation_hyp_32.6574_-79.9432_4.24473.txt";
-  vcl_vector<unsigned char> data;
-  bool good = volm_io::read_ray_index_data(path, data);
+  //vcl_string path =  "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/vol_indices/geo_index_tile_3_node_-79.968750_32.656250_-79.937500_32.687500_index_label_orientation_hyp_32.6574_-79.9432_4.24473.txt";
+  //vcl_vector<unsigned char> data;
+  //bool good = volm_io::read_ray_index_data(path, data);
+
+  vcl_string weight_file = "z:/projects/FINDER/test1/p1a_test1_83/weight_param.txt";
+
+  vcl_vector<volm_weight> weights;
+
+  if (vul_file::exists(weight_file)) {
+    vcl_cout << " reading weight from file ---> " << weight_file << vcl_endl;
+    volm_weight::read_weight(weights, weight_file);
+  } else {
+    // load the depth_map_scene and create a set of equal weight parameters, given the number of objects defined in the depth_map_scene
+    vcl_string dms_bin = "Z://projects//FINDER//test1//p1a_test1_06//p1a_test1_06.vsl";
+    vsl_b_ifstream dms_is(dms_bin.c_str());
+    depth_map_scene_sptr dm = new depth_map_scene;
+    dm->b_read(dms_is);
+    dms_is.close();
+    volm_weight::equal_weight(weights, dm);
+  }
+  
+  float sum_obj = 0;
+  for (vcl_vector<volm_weight>::iterator vit = weights.begin(); vit != weights.end(); ++vit) {
+    vcl_cout << ' ' << vit->w_typ_ << ' ' << vit->w_ori_ << ' ' << vit->w_lnd_ << ' ' << vit->w_dst_ << ' ' << vit->w_ord_ << ' ' << vit->w_obj_ << vcl_endl;
+    float sum_att = vit->w_ori_ + vit->w_lnd_ + vit->w_dst_ + vit->w_ord_;
+    vcl_string test_str = "summation of attributes for " + vit->w_typ_;
+    sum_obj += vit->w_obj_;
+    TEST_NEAR(test_str.c_str(), sum_att, 1, 0.001);
+  }
+  TEST_NEAR("summation of all object weight", sum_obj, 1, 0.001);
+
+#if 0
+  vcl_cout << " LAND_ID\n";
+
+  vcl_vector<vcl_string> land_types;
+
+  vcl_map<unsigned char, vcl_vector<vcl_string> > temp;
+  vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  unsigned cnt = 0;
+  for (; mit != volm_label_table::land_id.end(); ++mit) {
+    temp[mit->second.id_].push_back(mit->second.name_);
+  }
+  vcl_map<unsigned char, vcl_vector<vcl_string> >::iterator it = temp.begin();
+  for (; it != temp.end(); ++it) {
+    vcl_string land_name;
+    for ( vcl_vector<vcl_string>::iterator vit = it->second.begin(); vit != it->second.end(); ++vit) {
+      land_name += (*vit);
+      if(vit != it->second.end()-1) land_name += " OR ";
+    }
+    land_types.push_back(land_name);
+    vcl_cout << "land id = " << (int)it->first << " string = " << land_name << vcl_endl;
+  }
+#endif
+
 }
 
 TESTMAIN(test_io);

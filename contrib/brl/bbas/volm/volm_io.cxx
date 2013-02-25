@@ -357,6 +357,16 @@ bool volm_io::write_composer_log(vcl_string out_folder, vcl_string log)
   return true;
 }
 
+bool volm_io::write_post_processing_log(vcl_string log_file, vcl_string log)
+{
+  vcl_ofstream file;
+  file.open(log_file.c_str());
+  file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n"
+       << "<log>\n"<<log<<"</log>\n</status>";
+  file.close();
+  return true;
+}
+
 //: piecewise linear s.t. [1,127) -> [0,t), [127,255] -> [t,1]
 float volm_io::scale_score_to_0_1(unsigned char pix_value, float threshold)
 {
@@ -560,18 +570,32 @@ void volm_weight::read_weight(vcl_vector<volm_weight>& weights, vcl_string const
   }
 }
 
+bool volm_weight::check_weight(vcl_vector<volm_weight> const& weight)
+{
+  return true;
+}
+
 void volm_weight::equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene_sptr dms)
 {
-  unsigned tot_num_obj = dms->sky().size() + dms->ground_plane().size() + dms->scene_regions().size();
-  float w_obj = 1.0f/tot_num_obj;
-  vcl_vector<depth_map_region_sptr> sky_reg = dms->sky();
-  for ( vcl_vector<depth_map_region_sptr>::iterator vit = sky_reg.begin(); vit != sky_reg.end(); ++vit)
+  // create a set of equal weight parameters
+  float w_obj;
+  if (!dms->sky().empty() && !dms->ground_plane().empty()) {
+    unsigned tot_num_obj = 2 + dms->scene_regions().size();
+    w_obj = 1.0f/tot_num_obj;
     weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_obj));
-  
-  vcl_vector<depth_map_region_sptr> grd_reg = dms->ground_plane();
-  for ( vcl_vector<depth_map_region_sptr>::iterator vit = grd_reg.begin(); vit != grd_reg.end(); ++vit)
-    weights.push_back(volm_weight("ground", 0.3333f, 0.3333f, 0.0f, 0.3333f, w_obj)); 
-  
+    weights.push_back(volm_weight("ground", 0.3333f, 0.3333f, 0.0f, 0.3333f, w_obj));
+  }
+  else if (!dms->sky().empty()) {
+    unsigned tot_num_obj = 1 + dms->scene_regions().size();
+    w_obj = 1.0f/tot_num_obj;
+    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_obj));
+  }
+  else if (!dms->ground_plane().empty()) {
+    unsigned tot_num_obj = 1 + dms->scene_regions().size();
+    w_obj = 1.0f/tot_num_obj;
+    weights.push_back(volm_weight("ground", 0.3333f, 0.3333f, 0.0f, 0.3333f, w_obj));
+  }
+
   vcl_vector<depth_map_region_sptr> obj_reg = dms->scene_regions();
   for ( vcl_vector<depth_map_region_sptr>::iterator vit = obj_reg.begin(); vit != obj_reg.end(); ++vit)
     weights.push_back(volm_weight("object", 0.25f, 0.25f, 0.25f, 0.25f, w_obj));

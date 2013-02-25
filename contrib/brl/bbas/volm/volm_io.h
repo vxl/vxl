@@ -58,7 +58,7 @@ class volm_io
 {
  public:
   //: warning: always add to the end of this error code list, python script on the server has a hard copy of some of these values, they should not be changed
-  enum VOLM_ERROR_CODES {SUCCESS, EXE_ARGUMENT_ERROR, EXE_RUNNING, CAM_FILE_IO_ERROR, MATCHER_EXE_STARTED, MATCHER_EXE_FINISHED, MATCHER_EXE_FAILED, COMPOSE_STARTED, DEPTH_SCENE_FILE_IO_ERROR, LABELME_FILE_IO_ERROR, GEO_INDEX_FILE_MISSING, SCORE_FILE_MISSING, EXE_STARTED, EXE_MATCHER_FAILED, COMPOSE_HALT};
+  enum VOLM_ERROR_CODES {SUCCESS, EXE_ARGUMENT_ERROR, EXE_RUNNING, CAM_FILE_IO_ERROR, MATCHER_EXE_STARTED, MATCHER_EXE_FINISHED, MATCHER_EXE_FAILED, COMPOSE_STARTED, DEPTH_SCENE_FILE_IO_ERROR, LABELME_FILE_IO_ERROR, GEO_INDEX_FILE_MISSING, SCORE_FILE_MISSING, EXE_STARTED, EXE_MATCHER_FAILED, COMPOSE_HALT, POST_PROCESS_HALT};
 
   //: scale value is STRONG_POSITIVE-STRONG_NEGATIVE
   enum VOLM_IMAGE_CODES {UNEVALUATED = 0, STRONG_NEGATIVE = 1, UNKNOWN = 127, STRONG_POSITIVE = 255, SCALE_VALUE = 254};
@@ -66,6 +66,7 @@ class volm_io
   static bool write_status(vcl_string out_folder, int status_code, int percent=0, vcl_string log_message = "");
   static bool write_log(vcl_string out_folder, vcl_string log);
   static bool write_composer_log(vcl_string out_folder, vcl_string log);
+  static bool write_post_processing_log(vcl_string log_file, vcl_string log);
 
   //: return true if MATCHER_EXE_FINISHED, otherwise return false
   static bool check_matcher_status(vcl_string out_folder);
@@ -172,6 +173,8 @@ class volm_weight
   //: weight parameter for current object relative to all other objects in the query_image
   float w_obj_;
 
+  //: check validity of weight parameters
+  static bool check_weight(vcl_vector<volm_weight> const& weight);
   //: functions that reads the weight parameters from weight_param.txt
   static void read_weight(vcl_vector<volm_weight>& weights, vcl_string const& file_name);
   //: functions that implements a default equal weight parameters, given the depth_map_scene

@@ -15,9 +15,9 @@
 static void test_query()
 {
   // input files
-  vcl_string cam_bin_file = "D:\\work\\find\\volm_matcher\\test1\\local_output\\p1a_test1_p1a_test1_83\\camera_space.bin";
-  vcl_string dms_bin_file = "Z:\\projects\\find\\test1\\p1a_test1_83\\p1a_test1_83.vsl";
-  vcl_string sph_shell_file = "Z:\\projects\\find\\index\\sph_shell_vsph_ca_180_pa_5_ta_75_ba_75.bin";
+  vcl_string cam_bin_file = "D:\\work\\find\\volm_matcher\\test1\\local_output\\pa_5\\p1a_test1_40\\camera_space.bin";
+  vcl_string dms_bin_file = "Z:\\projects\\FINDER\\test1\\p1a_test1_40\\p1a_test1_40_1.vsl";
+  vcl_string sph_shell_file = "Z:\\projects\\FINDER\\index\\sph_shell_vsph_ca_180_pa_5_ta_75_ba_75.bin";
   
   // parameter for depth_map_interval
   float vmin = 2.0f;         // min voxel resolution
@@ -88,13 +88,13 @@ static void test_query()
   vcl_cout << " The depth regions map inside query follows on order" << vcl_endl;
   if (drs.size()) {
     for (unsigned i = 0; i < drs.size(); i++) {
-      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
-               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
-               << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
-               << ",\t order = " << (dm->scene_regions())[i]->order()
-               << ",\t orient = " << (dm->scene_regions())[i]->orient_type()
-               << ",\t land_id = " << (dm->scene_regions())[i]->land_id()
-               << ",\t land_name = " << volm_label_table::land_string( (dm->scene_regions())[i]->land_id() )
+      vcl_cout << "\t " <<  drs[i]->name()  << " region "
+               << ",\t min_depth = " << drs[i]->min_depth()
+               << ",\t max_depth = " << drs[i]->max_depth()
+               << ",\t order = " << drs[i]->order()
+               << ",\t orient = " << drs[i]->orient_type()
+               << ",\t land_id = " << drs[i]->land_id()
+               << ",\t land_name = " << volm_label_table::land_string( drs[i]->land_id() )
                << vcl_endl;
     }
   }

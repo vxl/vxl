@@ -959,18 +959,37 @@ void volm_query::draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_
 
 void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
                                  unsigned const& cam_id,
-                                 vil_image_view<vil_rgb<vxl_byte> >& out_img)
+                                 vil_image_view<vil_rgb<vxl_byte> >& out_img,
+                                 vcl_string value_type)
 {
   this->draw_depth_map_regions(out_img);
   // draw the rays that current penetrate through the image
-  for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
-    if (values[pidx] < 255) {
-#if 0
-      vcl_cout << " inside draw, " << ", cam_id = " << cam_id << " idx = " << pidx
-               << ", point = " << query_points_[pidx]
-               << ", values = " << (int)values[pidx];
-#endif
-      this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
+  if (value_type == "depth") {
+    for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
+      if (values[pidx] < 255) {
+  #if 0
+        vcl_cout << " inside draw, " << ", cam_id = " << cam_id << " idx = " << pidx
+                 << ", point = " << query_points_[pidx]
+                 << ", values = " << (int)values[pidx];
+  #endif
+        this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
+      }
+    }
+  }
+  if (value_type == "orientation") {
+    for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
+      unsigned char color_id;
+      if (values[pidx] == 0 || values[pidx] == 100)       //    invalid --> black
+        color_id = 253;
+      else if (values[pidx] == 1)                         // horizontal --> red
+        color_id = 28;
+      else if (values[pidx] > 1 && values[pidx] < 10)     //   vertical --> green
+        color_id = 141;
+      else if (values[pidx] == 254)                       //        sky --> white
+        color_id = 254;
+      else
+        color_id = 253;
+      this->draw_dot(out_img, query_points_[pidx], color_id, cameras_[cam_id]);
     }
   }
 }
