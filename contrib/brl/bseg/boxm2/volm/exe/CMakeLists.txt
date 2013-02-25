@@ -12,6 +12,9 @@ TARGET_LINK_LIBRARIES( boxm2_volumetric_create_prob_map boxm2_volm vbl vgl volm 
 ADD_EXECUTABLE( boxm2_volumetric_evaluate_roi boxm2_volumetric_evaluate_roi.cxx )
 TARGET_LINK_LIBRARIES( boxm2_volumetric_evaluate_roi boxm2_volm vbl vgl volm )
 
+ADD_EXECUTABLE( boxm2_volumetric_render_index_depth_img boxm2_volumetric_render_index_depth_img.cxx )
+TARGET_LINK_LIBRARIES( boxm2_volumetric_render_index_depth_img boxm2_volm vbl vgl volm )
+
 IF(OPENCL_FOUND)
 
 ADD_EXECUTABLE( boxm2_volumetric_matcher_p0 boxm2_volumetric_matcher_p0.cxx)

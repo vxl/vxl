@@ -1,8 +1,8 @@
 //:
 // \file
 // \executable to create probability map and evaluate ROI from volm_matcher scores
-//        given a result (score) for test query image, generate paorbability map for given tile
-//                                      and report the score for the ground truth loc, associated with its best camera
+// Given a result (score) for test query image, generate paorbability map for given tiles
+// and report the score for the ground truth loc, associated with its best camera
 // \author Yi Dong
 // \date Feb 18, 2013
 
@@ -27,19 +27,19 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> id("-id", "id of the test image", 6);
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg_parse(argc, argv);
-
+  
   vcl_cout << "argc: " << argc << vcl_endl;
   vcl_stringstream log;
-  if (out().compare("") == 0 ||
-      geo_index_folder().compare("") == 0 ||
-      gt_file().compare("") == 0 ||
-      pass_id() > 2 ||
-      id() > 100)
+  vcl_string log_file = out() + "/create_prob_map_log.xml";
+  if(out().compare("") == 0 ||
+     geo_index_folder().compare("") == 0 ||
+     gt_file().compare("") == 0 ||
+     pass_id() > 2 ||
+     id() > 100)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
-    volm_io::write_composer_log(out(), log.str());
-    volm_io::write_log(out(), log.str());
+    volm_io::write_post_processing_log(log_file, log.str());
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -47,18 +47,19 @@ int main(int argc,  char** argv)
   // read gt location, i.e., lat and lon
   if (!vul_file::exists(gt_file())) {
     log << "ERROR : can not find ground truth position file -->" << gt_file() << '\n';
-    volm_io::write_composer_log(out(), log.str());
-    volm_io::write_log(out(), log.str());
+    volm_io::write_post_processing_log(log_file, log.str());
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
   unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
   if (id() >= cnt) {
-    vcl_cerr << "the file: " << gt_file() << " does not contain test id: " << id() << "!\n";
+    log << "ERROR: gt_file " << gt_file() << " does not contain test id: " << id() << "!\n";
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-
+  
   // check whether we have candidate list for this query
   bool is_candidate = false;
   vgl_polygon<double> cand_poly;
@@ -67,12 +68,10 @@ int main(int argc,  char** argv)
     if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
       is_candidate = true;
       volm_io::read_polygons(candidate_list(), cand_poly);
-    }
-    else {
+    } else {
       log << " ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
-      volm_io::write_composer_log(out(), log.str());
-      volm_io::write_status(out(), volm_io::EXE_ARGUMENT_ERROR);
-      vcl_cerr << log;
+      volm_io::write_post_processing_log(log_file, log.str());
+      vcl_cerr << log.str();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
   }
@@ -109,7 +108,7 @@ int main(int argc,  char** argv)
     }
     vcl_vector<volm_geo_index_node_sptr> leaves;
     volm_geo_index::get_leaves_with_hyps(root, leaves);
-
+    
     // load score binary from output folder if exists
     vcl_stringstream score_file;
     score_file << out() << "ps_" << pass_id() << "_scores_tile_" << i << ".bin";
@@ -140,12 +139,11 @@ int main(int argc,  char** argv)
     unsigned u, v;
     if (tiles[i].global_to_img(samples[id()].first.x(), samples[id()].first.y(), u, v) ) {
       if (u < tiles[i].ni() && v < tiles[i].nj()) {
-        log << "\t GT location: "
-            << samples[id()].first.x() << ", "
-            << samples[id()].first.y() << " is at pixel: "
-            << u << ", " << v << " in tile " << i << " and has value: "
-            << tile_imgs[i](u, v) << '\n';
-        volm_io::write_composer_log(out(), log.str());
+        log << "\t GT location: " << samples[id()].first.x() << ", "
+                                  << samples[id()].first.y() << " is at pixel: "
+                                  << u << ", " << v << " in tile " << i << " and has value: "
+                                  << tile_imgs[i](u, v) << '\n';
+        volm_io::write_post_processing_log(log_file, log.str());
         vcl_cout << log.str();
       }
     }

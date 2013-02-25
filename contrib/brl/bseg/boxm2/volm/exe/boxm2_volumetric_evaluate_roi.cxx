@@ -1,6 +1,6 @@
 //:
 // \file
-// \executable to read score profile from generated probability map, given threshold ranging from 0.4 to 0.9
+// \executable to read score profile from generated probability map for threshold ranging from 0.4 to 0.9
 //
 //
 // \author Yi Dong
@@ -68,6 +68,9 @@ int main(int argc,  char** argv)
     vcl_cout << " we have test image folder --> " << out_folder.str() << vcl_endl;
     vcl_cout << " with image category --> " << samples[id].second.second << vcl_endl;
 
+    vcl_stringstream log_test_img;
+    vcl_string log_file = out_folder.str() + "/evaluate_roi_log.xml";
+
     // calculate roi for current valid out_folder
     //  cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
     vcl_map<float, vcl_vector<unsigned> > cnt_map;
@@ -98,7 +101,9 @@ int main(int argc,  char** argv)
     for (unsigned i = 0; i < tiles.size(); i++) {
       vcl_string img_name = out_folder.str() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
       if (!vul_file::exists(img_name)) {
-        vcl_cerr << " WARNING: missing prob_map: " << img_name << '\n';
+        log_test_img << " WARNING: missing prob_map: " << img_name << '\n';
+        volm_io::write_post_processing_log(log_file, log_test_img.str());
+        vcl_cerr << log_test_img.str();
         continue;
       }
       vil_image_view<float> tile_img = vil_load(img_name.c_str());
@@ -123,13 +128,12 @@ int main(int argc,  char** argv)
       if (tiles[i].global_to_img(samples[id].first.x(), samples[id].first.y(), u, v)) {
         if (u < tile_img.ni() && v < tile_img.nj())
           gt_score = tile_img(u,v);
-          vcl_stringstream out_log;
-          out_log << "\t id = " << id << ", GT location: " << samples[id].first.x() << ", "
+          log_test_img << "\t id = " << id << ", GT location: " << samples[id].first.x() << ", "
                   << samples[id].first.y() << " is at pixel: "
                   << u << ", " << v << " in tile " << i << " and has value: "
                   << gt_score << '\n';
-          volm_io::write_composer_log(out_folder.str(), out_log.str());
-          vcl_cout << out_log.str();
+          volm_io::write_post_processing_log(log_file, log_test_img.str());
+          vcl_cerr << log_test_img.str();
       }
     } // end of tile loop
 
@@ -148,12 +152,14 @@ int main(int argc,  char** argv)
     pair_roi.second = score_roi;
     test_img_roi.insert(pair_roi);
 
-#if 0
+#if 1
     // create png tile images for different thresholds, only generate png tile prob_map with thres smaller than ground truth score
     for (unsigned ti = 0; ti < tiles.size(); ti++) {
       vcl_string img_name = out_folder.str() + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";
       if (!vul_file::exists(img_name)) {
-        vcl_cerr << " WARNING: missing prob_map: " << img_name << '\n';
+        log_test_img << " WARNING: missing prob_map: " << img_name << '\n';
+        volm_io::write_post_processing_log(log_file, log_test_img.str());
+        vcl_cerr << log_test_img.str();
         continue;
       }
       vil_image_view<float> tile_img = vil_load(img_name.c_str());

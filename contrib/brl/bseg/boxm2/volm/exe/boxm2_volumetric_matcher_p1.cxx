@@ -1,6 +1,6 @@
 //:
 // \file
-// \brief executable to use object/ray based matcher for query image using obj_min_dist, obj_order, ground_depth, sky_region and orientation (if required)
+// \brief executable to use object/ray based matcher for query image using obj_min_dist, obj_order, ground_depth, sky_region and orientation
 // \author Yi Dong
 // \date Feb 05, 2013
 
@@ -40,10 +40,10 @@ int main(int argc, char** argv)
   vul_arg<unsigned>   dev_id("-gpuid", "device used for current matcher", 0);                    // matcher -- device id
   vul_arg<float>      threshold("-thres", "threshold for choosing valid cameras (0~1)", 0.4f);   // matcher -- threshold for choosing cameras
   vul_arg<unsigned>   max_cam_per_loc("-max_cam", "maximum number of cameras to be saved", 200); // matcher -- output related
-  vul_arg<bool>       use_orient("-ori", "choose to use orientation attribute", false);          // matcher -- matcher option
   vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "");      // matcher -- output folder
   vul_arg<bool>       logger("-logger", "designate one of the exes as logger", false);           // matcher -- log file generation
 #if 0
+  vul_arg<bool>       use_orient("-ori", "choose to use orientation attribute", false);          // matcher -- matcher option
   vul_arg<bool>        use_ps0("-ps0", "choose to use pass 0 regional matcher", false);
   vul_arg<bool>        use_ps1("-ps1", "choose to use pass 1 obj_based order matcher", false);
   vul_arg<bool>        use_ps2("-ps2", "choose to use pass 2 obj_based orient matcher", false);
@@ -178,7 +178,7 @@ int main(int argc, char** argv)
   // screen output of query
   unsigned total_size = query->obj_based_query_size_byte();
   vcl_cout << "\n==================================================================================================\n"
-           << "\t\t  2. Create query from given camera space and Depth map scene\n"
+           << "\t\t  1. Create query from given camera space and Depth map scene\n"
            << "\t\t  " << dms_bin() << '\n'
            << "\t\t  generate query has " << query->get_cam_num() << " cameras "
            << " and " << (float)total_size/1024 << " Kbyte in total\n"
@@ -237,10 +237,22 @@ int main(int argc, char** argv)
   if (vul_file::exists(weight_file()) ) {
     // read the weight parameter from pre-loaded 
     volm_weight::read_weight(weights, weight_file());
+    // check whether the loaded weight parameters satisfy the requirement, if not, create default equal weight parameters
+    if (!volm_weight::check_weight(weights)) {
+      weights.clear();
+      volm_weight::equal_weight(weights, dm);
+    }
   } else {
     // create equal weight parameter for all objects
     volm_weight::equal_weight(weights, dm);
   }
+
+  vcl_cout << "\n==================================================================================================\n"
+           << "\t\t  2. Weight parameters used are as following\n";
+  for (vcl_vector<volm_weight>::iterator vit = weights.begin(); vit != weights.end(); ++vit)
+    vcl_cout << ' ' << vit->w_typ_ << ' ' << vit->w_ori_ << ' ' << vit->w_lnd_ << ' ' << vit->w_dst_ << ' ' << vit->w_ord_ << ' ' << vit->w_obj_ << vcl_endl;
+  vcl_cout << "==================================================================================================\n\n";
+
 
   // define the device that will be used
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
@@ -263,7 +275,7 @@ int main(int argc, char** argv)
   // start pass 1 volm_matcher
   boxm2_volm_matcher_p1 obj_ps1_matcher(query, leaves, buffer_capacity(), geo_index_folder(), tile_id(),
                                           depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
-                                          threshold(), max_cam_per_loc(), use_orient());
+                                          threshold(), max_cam_per_loc(), weights);
 
   if (!obj_ps1_matcher.volm_matcher_p1()) {
     log << " ERROR: pass 1 volm_matcher failed for geo_index " << index_file << '\n';

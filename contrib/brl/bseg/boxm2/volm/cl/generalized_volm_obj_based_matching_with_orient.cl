@@ -6,6 +6,7 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
                                                               __global unsigned*            grd_offset,         // query -- ground array offset indicator
                                                               __global unsigned char*         grd_dist,         // query -- ground query distance   (single float)
                                                               __global float*               grd_weight,         // query -- ground weight parameter (single float)
+                                                              __global float*            grd_wgt_attri,         // query -- ground weight parameters for different attributes (3 floats)
                                                               __global unsigned*                sky_id,         // query -- sky index id
                                                               __global unsigned*            sky_offset,         // query -- sky array offset indicator
                                                               __global float*               sky_weight,         // query -- sky weight parameter
@@ -13,7 +14,8 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
                                                               __global unsigned*            obj_offset,         // query -- object array offset indicator
                                                               __global unsigned char*     obj_min_dist,         // query -- object query minimium distance
                                                               __global unsigned char*       obj_orient,         // query -- object query orientation
-                                                              __global float*               obj_weight,         // query -- object weight parameter array
+                                                              __global float*               obj_weight,         // query -- object weight parameter array (n_obj floats)
+                                                              __global float*            obj_wgt_attri,         // query -- object wieght parameter array (4*n_obj floats)
                                                               __global unsigned*                 n_ind,         // index -- number of indices passed into device (single unsigned)
                                                               __global unsigned*            layer_size,         // index -- size of spherical shell container (single unsigned)
                                                               __global unsigned char*            index,         // index -- index depth array
@@ -25,7 +27,9 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
                                                               __global float*                    debug,         // debug array
                                                               __local unsigned char*    local_min_dist,         // query -- object minimimu distance on local memory
                                                               __local unsigned char*  local_obj_orient,         // query -- object orientation on local memory
-                                                              __local float*          local_obj_weight,         // query -- object order list on local memory
+                                                              __local float*          local_obj_weight,         // query -- object weight parameters on local memory
+                                                              __local float*       local_obj_wgt_attri,         // query -- object weight parameters (for attributes) on local memory
+                                                              __local float*       local_grd_wgt_attri,         // query -- object wieght parameters (for attributes) on local memory
                                                               __local float*      local_depth_interval)         // depth_interval on local memory
 {
   // get the cam_id and ind_id
@@ -39,6 +43,7 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
   // passing necessary values from global to the local memory
   __local unsigned ln_cam, ln_obj, ln_ind, ln_layer_size, ln_depth_size;
   __local float l_grd_weight, l_sky_weight;
+
   if (llid == 0) {
     ln_cam = *n_cam;
     ln_obj = *n_obj;
@@ -54,36 +59,25 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
     local_obj_weight[llid] = obj_weight[llid];
   }
   barrier(CLK_LOCAL_MEM_FENCE);
+
+  // doing this copy using only one work item because the size of depth_interval can be larger than than the work group size...
   if (llid == 0) {
-    for (unsigned i=0; i < (*depth_length); ++i) {
-      local_depth_interval[i] = depth_interval[i];
-    }
+    for (unsigned di = 0; di < ln_depth_size; di++)
+      local_depth_interval[di] = depth_interval[di];
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 
-#if 0
-  if ( cam_id == 0 && ind_id == 1) {
-    debug[0] = *depth_length;
-    for (unsigned i =0 ; i < (*depth_length); ++i) {
-      debug[i+1] = depth_interval[i];
-    }
+  if (llid < ln_obj*4) {
+    local_obj_wgt_attri[llid] = obj_wgt_attri[llid];
   }
-  if ( debug_bool ) {
-    debug[0] = (float)get_global_id(0);
-    debug[1] = (float)get_global_id(1);
-    debug[2] = (float)get_local_size(0);
-    debug[3] = (float)get_local_size(1);
-    debug[4] = (float)llid;
-    debug[5] = (float)ln_ind;
-    debug[6] = (float)ln_cam;
-    debug[7] = (float)ln_obj;
-    debug[8] = (float)ind_id;
-    debug[9] = (float)cam_id;
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  if (llid < 3) {
+    local_grd_wgt_attri[llid] = grd_wgt_attri[llid];
   }
-#endif
+  barrier(CLK_LOCAL_MEM_FENCE);
 
-  // locate the index
-
+  // Start the matcher
   if ( cam_id < ln_cam && ind_id < ln_ind ) {
     // locate index offset
     unsigned start_ind = ind_id * (ln_layer_size);
@@ -123,7 +117,7 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
        grd_count_ori += 1;
     }
     float score_grd;
-    score_grd = (float)(grd_count + grd_count_ori); // ground score is composed by distance and orientation
+    score_grd = (float)(local_grd_wgt_attri[2] * grd_count + local_grd_wgt_attri[0] * grd_count_ori); // ground score is composed by distance and orientation
     score_grd = (end_grd != start_grd) ? score_grd / (end_grd-start_grd) : 0;
     score_grd = score_grd * l_grd_weight;
 
@@ -198,14 +192,26 @@ __kernel void generalized_volm_obj_based_matching_with_orient(__global unsigned*
         score_k_ori += (float)s_vox_ori;
       }
       // normalized the score for object k
-      float score_k = score_k_ord + score_k_min + score_k_ori;  // object score is composed by relative order, depth, and orientation
+      float score_k = local_obj_wgt_attri[k*4+3]*score_k_ord + local_obj_wgt_attri[k*4+2]*score_k_min + local_obj_wgt_attri[k*4]*score_k_ori;  // object score is composed by relative order, depth, and orientation
       score_k = (end_obj != start_obj) ? score_k/(end_obj-start_obj) : 0;
-      score_k = score_k * local_obj_weight[k];
+      score_k *= local_obj_weight[k];
       // summerize the object score
       score_obj += score_k;
     }
-    // normalized the order score
-    score_obj = score_obj / ln_obj;
+
+#if 0
+    if ( cam_id == 3 && ind_id == 8 ) {
+       debug[0] = cam_id;
+       debug[1] = ind_id;
+       debug[2] = local_grd_wgt_attri[0];
+       debug[3] = local_grd_wgt_attri[1];
+       debug[4] = local_grd_wgt_attri[2];
+       debug[5] = l_grd_weight;
+       debug[6] = score_sky;
+       debug[7] = score_grd;
+       debug[8] = score_obj;
+    }
+#endif
 
     // summerize the scores
     unsigned score_id = cam_id + ind_id*ln_cam;

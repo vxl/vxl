@@ -49,7 +49,7 @@ public:
                         vcl_string const& out_folder,
                         float const& threshold,
                         unsigned const& max_cam_per_loc,
-                        bool const& use_orient = false);
+                        vcl_vector<volm_weight> weights);
   
   //: destructor
   ~boxm2_volm_matcher_p1();
@@ -69,10 +69,7 @@ private:
   boxm2_volm_wr3db_index_sptr                  ind_orient_;
   float                                        ind_buffer_;
   vcl_stringstream                          file_name_pre_;
-
-  //: option to use orientation attirbute
-  bool                                         use_orient_;
-  
+  vcl_vector<volm_weight>                         weights_;
   //: shell container size
   unsigned                                     layer_size_;
   unsigned*                               layer_size_buff_;
@@ -114,6 +111,8 @@ private:
   bocl_mem*        grd_id_offset_cl_mem_;
   float*                grd_weight_buff_;
   bocl_mem*           grd_weight_cl_mem_;
+  float*             grd_wgt_attri_buff_;
+  bocl_mem*        grd_wgt_attri_cl_mem_;
   
   unsigned*                 sky_id_buff_;
   bocl_mem*               sky_id_cl_mem_;
@@ -133,6 +132,8 @@ private:
   bocl_mem*            obj_order_cl_mem_;
   float*                obj_weight_buff_;
   bocl_mem*           obj_weight_cl_mem_;
+  float*             obj_wgt_attri_buff_;
+  bocl_mem*        obj_wgt_attri_cl_mem_;
   unsigned char*        obj_orient_buff_;
   bocl_mem*           obj_orient_cl_mem_;
 
@@ -154,20 +155,14 @@ private:
   vcl_vector<boxm2_volm_score_out> score_cam_;
   
   
-  //: transfer volm_query to 1D array for kernel calculation
+  //: transfer volm_query to 1D array for kernel
   bool transfer_query();
-  //: transfer volm_query orientation information to 1D array for kernel calculation, if necessary
+  //: transfer volm_query orientation information to 1D array for kernel
   bool transfer_orient();
-  //: read given number of indeices from volo_geo_index
-  bool fill_index(unsigned const& n_ind,
-                  unsigned const& layer_size,
-                  unsigned& leaf_id,
-                  unsigned char* index_buff,
-                  vcl_vector<unsigned>& l_id,
-                  vcl_vector<unsigned>& h_id,
-                  unsigned& actual_n_ind);
+  //: transfer volm_weight parameters to 1D array for kernel
+  bool transfer_weight();
   //: read given number of indeice from volm_geo_index, with two index files, index depth and index orientation
-  bool fill_index_orient(unsigned const& n_ind,
+  bool fill_index(unsigned const& n_ind,
                          unsigned const& layer_size,
                          unsigned& leaf_id,
                          unsigned char* index_buff,
@@ -177,12 +172,16 @@ private:
                          unsigned& actual_n_ind);
   //: check the given leaf has un-read hypothesis or not
   bool is_leaf_finish(unsigned const& leaf_id);
-  //: clare all query cl_mem pointer
+  //: clear all query cl_mem pointer
   bool clean_query_cl_mem();
+  //: clear all weight cl_mem pointer
+  bool clean_weight_cl_mem();
   //: compile kernel
   bool compile_kernel(vcl_vector<bocl_kernel*>& vec_kernels);
   //: create queue
   bool create_queue();
+
+#if 0
    //: kernel execution function
   bool execute_matcher_kernel(bocl_device_sptr                         device,
                               cl_command_queue&                         queue,
@@ -191,6 +190,8 @@ private:
                               bocl_mem*                         index_cl_mem_,
                               bocl_mem*                         score_cl_mem_,
                               bocl_mem*                            mu_cl_mem_);
+#endif
+
   // kernel execution function with orientation
   bool execute_matcher_kernel_orient(bocl_device_sptr                  device,
                                      cl_command_queue&                  queue,
@@ -203,7 +204,6 @@ private:
 
   
   //: a test function to check the kernel implementation
-  bool volm_matcher_p1_test(unsigned n_ind, unsigned char* index, float* score_buff, float* mu_buff);
   bool volm_matcher_p1_test_ori(unsigned n_ind, unsigned char* index, unsigned char* index_orient, float* score_buff, float* mu_buff);
 
 };

@@ -29,13 +29,13 @@ static void test_volm_matcher_p1()
 {
 
   // input parameters (modify accordingly)
-  vcl_string geo_index_folder = "D:/work/Dropbox/index/geoindex_zone_17_only_gt_world1_low_pa_5/";
-  vcl_string         cam_file = "D:/work/find/volm_matcher/finderuploads/coast/job_174/Camera_test.kml";
-  vcl_string       label_file = "D:/work/find/volm_matcher/finderuploads/coast/job_174/Result_own_calibration_ori.xml";
-  vcl_string     cam_inc_file = "D:/work/find/volm_matcher/finderuploads/coast/job_174/cam_inc_params.txt";
-  vcl_string       out_folder = "D:/work/find/volm_matcher/finderoutput/coast/job_174/integration_matcher_test/";
-  vcl_string   candidate_file = "D:/work/find/volm_matcher/candidate_lists/p1a_test1_36/out.txt";
-  vcl_string    sph_shell_bin = "D:/work/Dropbox/sph_shell_ca_180_pa_1_ta_75_ba_75.bin";
+  vcl_string geo_index_folder = "Z:/projects/FINDER/index/geoindex_zone_17_inc_2_nh_100_pa_5/";
+  vcl_string         cam_file = "D:/work/find/volm_matcher/test1/local_output/test_weight_pa_5/p1a_test1_40/camera_space.bin";
+  vcl_string         dms_file = "Z:/projects/FINDER/test1/p1a_test1_40/p1a_test1_40.vsl";
+  vcl_string       out_folder = "D:/work/find/volm_matcher/test1/output/test_weight_pa_5/p1a_test1_40/";
+  vcl_string   candidate_file = "Z:/projects/FINDER/test1/candidate_lists/p1a_test1_40/out.txt";
+  vcl_string    sph_shell_bin = "Z:/projects/FINDER/index/sph_shell_vsph_ca_180_pa_5_ta_75_ba_75.bin";
+  vcl_string      weight_file = "D:/work/find/volm_matcher/test1/local_output/test_weight_pa_5/p1a_test1_40/weight_param.txt";
 
   unsigned tile_id = 3;
   float buffer_capacity = 1.0f;
@@ -98,58 +98,14 @@ static void test_volm_matcher_p1()
     depth_interval_rev.push_back((float)iter->first);
   }
   
-  // create camera space
-  // check the query input files
-  depth_map_scene_sptr dm = new depth_map_scene;
-  vcl_string img_category;
-  if (!volm_io::read_labelme(label_file, dm, img_category))
-    vcl_cerr << "problem parsing: " << label_file << vcl_endl;
-  
-  // check camera input file
-  double head, head_dev, tilt, tilt_dev, roll, roll_dev;
-  double tfov, top_fov_dev, altitude, lat, lon;
-  if (!volm_io::read_camera(cam_file, dm->ni(), dm->nj(), head, head_dev, tilt, tilt_dev, roll, roll_dev, tfov, top_fov_dev, altitude, lat, lon))
-    vcl_cerr << "problem parsing: " << cam_file << vcl_endl;
-
-  // read the camera incremantal parameter
-  volm_io_expt_params inc_params; 
-  inc_params.read_params(cam_inc_file);
-  vcl_cout << "cam params"
-           << "\nhead: " << head << " dev: " << head_dev << " inc: " << inc_params.head_inc
-           << "\ntilt: " << tilt << " dev: " << tilt_dev    << " inc: " << inc_params.tilt_inc
-           << "\nroll: " << roll << " dev: " << roll_dev    << " inc: " << inc_params.roll_inc
-           << "\ntop_fov: " << tfov << " dev: " << top_fov_dev << " inc: " << inc_params.fov_inc
-           << " alt: " << altitude << vcl_endl;
-
-  // construct camera space
-  volm_camera_space_sptr csp_ptr = new volm_camera_space(tfov, top_fov_dev, inc_params.fov_inc, 
-                                                         altitude, dm->ni(), dm->nj(),
-                                                         head, head_dev, inc_params.head_inc,
-                                                         tilt, tilt_dev, inc_params.tilt_inc,
-                                                         roll, roll_dev, inc_params.roll_inc);
-  if (dm->ground_plane().size() > 0)  // enforce ground plane constraint if user specified a ground plane
-  {
-    camera_space_iterator cit = csp_ptr->begin();
-    for ( ; cit != csp_ptr->end(); ++cit) {
-      unsigned current = csp_ptr->cam_index();
-      vpgl_perspective_camera<double> cam = csp_ptr->camera(); // camera at current state of iterator
-      bool success = true;
-      for (unsigned i = 0; success && i < dm->ground_plane().size(); i++)
-        success = dm->ground_plane()[i]->region_ground_2d_to_3d(cam);
-      if (success) // add this camera
-        csp_ptr->add_camera_index(current);
-    }
-  }
-  else
-    csp_ptr->generate_full_camera_index_space();
-
-  // write the camera binary
-  vsl_b_ofstream csp_ofs(out_folder + "camera_space.bin");
-  csp_ptr->b_write(csp_ofs);
-  csp_ofs.close();
+  // read camera space binary
+  vsl_b_ifstream ifs_cam(cam_file);
+  volm_camera_space_sptr cam_space = new volm_camera_space();
+  cam_space->b_read(ifs_cam);
+  ifs_cam.close();
 
   // create query
-  volm_query_sptr query = new volm_query(csp_ptr, label_file, sph, sph_shell);
+  volm_query_sptr query = new volm_query(cam_space, dms_file, sph_shell, sph);
   // screen output of query
   unsigned total_size = query->obj_based_query_size_byte();
   vcl_cout << "\n==================================================================================================\n"
@@ -157,7 +113,7 @@ static void test_volm_matcher_p1()
            << "\t\t  generate query has " << query->get_cam_num() << " cameras "
            << " and " << (float)total_size/1024 << " Kbyte in total\n"
            << "==================================================================================================\n" << vcl_endl;
-  dm = query->depth_scene();
+  depth_map_scene_sptr dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
     vcl_cout << " -------------- SKYs --------------" << vcl_endl;
@@ -191,13 +147,18 @@ static void test_volm_matcher_p1()
     }
   }
 
+
+  // read (or create) weight parameters for depth_map_scene
+  vcl_vector<volm_weight> weights;
+  volm_weight::read_weight(weights, weight_file);
+
   // define the device that will be used
 
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
 
   boxm2_volm_matcher_p1 obj_order_matcher(query, leaves, buffer_capacity, geo_index_folder, tile_id,
                                           depth_interval_rev, cand_poly, mgr->gpus_[dev_id], is_candidate, is_last_pass, out_folder,
-                                          threshold, max_cam_per_loc, use_orient);
+                                          threshold, max_cam_per_loc, weights);
   bool good = obj_order_matcher.volm_matcher_p1();
  
   // output

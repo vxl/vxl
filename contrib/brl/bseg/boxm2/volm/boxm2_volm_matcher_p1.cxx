@@ -21,16 +21,17 @@ boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_query_sptr const& query,
                                              vcl_string const& out_folder,
                                              float const& threshold,
                                              unsigned const& max_cam_per_loc,
-                                             bool const& use_orient) :
-  query_(query), leaves_(leaves), ind_buffer_(buffer_capacity), use_orient_(use_orient),
+                                             vcl_vector<volm_weight> weights) :
+  query_(query), leaves_(leaves), ind_buffer_(buffer_capacity),
   layer_size_buff_(0), is_candidate_(is_candidate), cand_poly_(cand_poly),
   is_last_pass_(is_last_pass), out_folder_(out_folder), depth_interval_(depth_interval),
   gpu_(gpu), is_grd_reg_(true), is_sky_reg_(true), is_obj_reg_(true), n_cam_(0), n_obj_(0),
-  grd_id_buff_(0), grd_dist_buff_(0), grd_id_offset_buff_(0), grd_weight_buff_(0),
-  sky_id_buff_(0), sky_id_offset_buff_(0), sky_weight_buff_(0), obj_id_buff_(0),
-  obj_id_offset_buff_(0), obj_min_dist_buff_(0), obj_order_buff_(0), obj_weight_buff_(0),
+  grd_id_buff_(0), grd_dist_buff_(0), grd_id_offset_buff_(0), grd_weight_buff_(0), grd_wgt_attri_buff_(0),
+  sky_id_buff_(0), sky_id_offset_buff_(0), sky_weight_buff_(0),
+  obj_id_buff_(0), obj_id_offset_buff_(0), obj_min_dist_buff_(0), obj_order_buff_(0),
+  obj_weight_buff_(0), obj_wgt_attri_buff_(0),
   obj_orient_buff_(0), depth_interval_buff_(0), depth_length_buff_(0),
-  threshold_(threshold), max_cam_per_loc_(max_cam_per_loc)
+  threshold_(threshold), max_cam_per_loc_(max_cam_per_loc), weights_(weights)
 {
     layer_size_ = query_->get_query_size();
     ind_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
@@ -55,6 +56,7 @@ boxm2_volm_matcher_p1::~boxm2_volm_matcher_p1()
   if (grd_dist_buff_)       delete []       grd_dist_buff_;
   if (grd_id_offset_buff_)  delete []  grd_id_offset_buff_;
   if (grd_weight_buff_)     delete        grd_weight_buff_;
+  if (grd_wgt_attri_buff_)  delete []  grd_wgt_attri_buff_;
   if (sky_id_buff_)         delete []         sky_id_buff_;
   if (sky_id_offset_buff_)  delete []  sky_id_offset_buff_;
   if (sky_weight_buff_)     delete        sky_weight_buff_;
@@ -64,6 +66,7 @@ boxm2_volm_matcher_p1::~boxm2_volm_matcher_p1()
   if (obj_orient_buff_)     delete []     obj_orient_buff_;
   if (obj_order_buff_)      delete []      obj_order_buff_;
   if (obj_weight_buff_)     delete []     obj_weight_buff_;
+  if (obj_wgt_attri_buff_)  delete []  obj_wgt_attri_buff_;
   if (depth_interval_buff_) delete [] depth_interval_buff_;
 }
 
@@ -97,28 +100,26 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   }
 
 #if 0
-  if (use_orient_) {
-    vcl_cout << " we are using orientation attributes as follows" << vcl_endl;
-    // check the transferred orientation
-    vcl_vector<unsigned char>& obj_orient = query_->obj_orient();
+  vcl_cout << " we are using orientation attributes as follows" << vcl_endl;
+  // check the transferred orientation
+  vcl_vector<unsigned char>& obj_orient = query_->obj_orient();
+  for (unsigned i = 0; i < *n_obj_; i++) {
+    vcl_cout << " i = " << i << ", query_orient = "  << (int)obj_orient[i]
+              << ", orient_buff = " << (int)obj_orient_buff_[i] << vcl_endl;
+  }
+  vcl_cout << " The orient cl_mem_ has size " << obj_orient_cl_mem_->num_bytes() << '\n'
+            << " Weight parameters looks like" << vcl_endl;
+  if (is_sky_reg_)
+    vcl_cout << " sky_weight = " << *sky_weight_buff_ << vcl_endl;
+  else
+    vcl_cout << " no sky region for this query" << vcl_endl;
+  if (is_grd_reg_)
+    vcl_cout << " grd_weight = " << *grd_weight_buff_ << vcl_endl;
+  else
+    vcl_cout << " no grd region for this query" << vcl_endl;
+  if (is_obj_reg_) {
     for (unsigned i = 0; i < *n_obj_; i++) {
-      vcl_cout << " i = " << i << ", query_orient = "  << (int)obj_orient[i]
-               << ", orient_buff = " << (int)obj_orient_buff_[i] << vcl_endl;
-    }
-    vcl_cout << " The orient cl_mem_ has size " << obj_orient_cl_mem_->num_bytes() << '\n'
-             << " Weight parameters looks like" << vcl_endl;
-    if (is_sky_reg_)
-      vcl_cout << " sky_weight = " << *sky_weight_buff_ << vcl_endl;
-    else
-      vcl_cout << " no sky region for this query" << vcl_endl;
-    if (is_grd_reg_)
-      vcl_cout << " grd_weight = " << *grd_weight_buff_ << vcl_endl;
-    else
-      vcl_cout << " no grd region for this query" << vcl_endl;
-    if (is_obj_reg_) {
-      for (unsigned i = 0; i < *n_obj_; i++) {
-        vcl_cout << " i = " << i << ", weight = " << obj_weight_buff_[i] << vcl_endl;
-      }
+      vcl_cout << " i = " << i << ", weight = " << obj_weight_buff_[i] << vcl_endl;
     }
   }
 #endif
@@ -204,15 +205,20 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     return false;
   }
 
-  // hack here for debug purpose
-  if (*n_cam_ < 10000)      ni = 128;
-  else if (*n_cam_ < 15000) ni = 64;
-  else if (*n_cam_ < 20000) ni = 32;
-  else                      ni = 16;
-  //if (use_orient_)
-  //  ni = 32;  // since we double the index size, including index_orient and index_depth
-  //else
-  //  ni = 64;
+  // hack here to specify the number of indice per lunching, instead of use calculated value
+  // because of CL_INVALID_COMMAND error for large number of indices given large number of cameras...
+  if(layer_size_ < 20000) {
+    if (*n_cam_ < 10000)      ni = 128;
+    else if (*n_cam_ < 15000) ni = 64;
+    else if (*n_cam_ < 20000) ni = 32;
+    else                      ni = 16;
+  }
+  else {
+    if (*n_cam_ < 10000)      ni = 8;
+    else if (*n_cam_ < 15000) ni = 4;
+    else                      ni = 2;
+  }
+  
 
   vcl_cout << "\t 4.1.3: device have total " << device_global_mem_ << " Byte (" << (float)device_global_mem_/(float)GBYTE << " GB) memory space\n"
            << "\t        query requires " << query_global_mem_ << " Byte (" << (float)query_global_mem_/(float)GBYTE << " GB)\n"
@@ -251,27 +257,14 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     vcl_vector<unsigned> h_id;  // hypo_id in this leaf_id for indices filled into buffer
     unsigned actual_n_ind = ni; // handling the last round where the number of loaded indices is smaller than pre-computed ni
 
-    if (use_orient_) {
-      index_orient_buff_ = new unsigned char[ni*layer_size_];
-      if (!this->fill_index_orient(ni, layer_size_, leaf_id, index_buff_, index_orient_buff_, l_id, h_id, actual_n_ind) ) {
-        this->clean_query_cl_mem();
-        delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
-        delete layer_size_cl_mem_;
-        delete [] index_buff_;
-        if (index_orient_buff_) delete [] index_orient_buff_;
-        return false;
-      }
-    }
-    else {
-      if (!this->fill_index(ni, layer_size_, leaf_id, index_buff_, l_id, h_id, actual_n_ind) ) {
-        vcl_cerr << "\n ERROR: passing index into index buffer failed for " << leaf_id << " leaf\n";
-        this->clean_query_cl_mem();
-        delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
-        delete layer_size_cl_mem_;
-        delete [] index_buff_;
-        if (use_orient_) { delete [] index_orient_buff_; }
-        return false;
-      }
+    index_orient_buff_ = new unsigned char[ni*layer_size_];
+    if (!this->fill_index(ni, layer_size_, leaf_id, index_buff_, index_orient_buff_, l_id, h_id, actual_n_ind) ) {
+      this->clean_query_cl_mem();
+      delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
+      delete layer_size_cl_mem_;
+      delete [] index_buff_;
+      if (index_orient_buff_) delete [] index_orient_buff_;
+      return false;
     }
 
     // resize the index buffer if actual loaded index size is smaller than pre-defined
@@ -294,7 +287,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       delete layer_size_cl_mem_;
       delete n_ind_cl_mem_;     delete [] n_ind_;
       delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-      if (use_orient_) { delete [] index_orient_buff_; }
+      delete [] index_orient_buff_;
       return false;
     }
 
@@ -323,11 +316,9 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       for (unsigned j = start; j < end; j++)
         vcl_cout << ' ' << (int)index_buff_[j];
       vcl_cout << "\n\nindex_orient\t";
-      if (use_orient_) {
-        for (unsigned j = start; j < end; j++)
-          vcl_cout << ' ' << (int)index_orient_buff_[j];
-        vcl_cout << '\n';
-      }
+      for (unsigned j = start; j < end; j++)
+        vcl_cout << ' ' << (int)index_orient_buff_[j];
+      vcl_cout << '\n';
     }
 #endif
 
@@ -342,26 +333,24 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       delete n_ind_cl_mem_;     delete [] n_ind_;
       delete index_cl_mem_;
       delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-      if (use_orient_) { delete [] index_orient_buff_; }
+      delete [] index_orient_buff_;
       return false;
     }
-    // create index orientation if necessary
-    bocl_mem* index_orient_cl_mem_ = 0;
-    if (use_orient_) {
-      index_orient_cl_mem_ = new bocl_mem(gpu_->context(), index_orient_buff_, sizeof(unsigned char)*ni*layer_size_, " index_orient ");
-      if (!index_orient_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-        vcl_cerr << "\n ERROR: creating bocl_mem failed for INDEX_ORIENT\n";
-        this->clean_query_cl_mem();
-        delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
-        delete layer_size_cl_mem_;
-        delete n_ind_cl_mem_;     delete [] n_ind_;
-        delete index_cl_mem_;
-        delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-        if (use_orient_) { delete [] index_orient_buff_; }
-        return false;
-      }
+    // create index orientation
+    bocl_mem* index_orient_cl_mem_ = new bocl_mem(gpu_->context(), index_orient_buff_, sizeof(unsigned char)*ni*layer_size_, " index_orient ");
+    if (!index_orient_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for INDEX_ORIENT\n";
+      this->clean_query_cl_mem();
+      delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
+      delete layer_size_cl_mem_;
+      delete n_ind_cl_mem_;     delete [] n_ind_;
+      delete index_cl_mem_;
+      delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
+      delete [] index_orient_buff_; delete index_orient_cl_mem_;
+      return false;
     }
 
+    // create score cl_mem
     bocl_mem* score_cl_mem_ = new bocl_mem(gpu_->context(), score_buff_, sizeof(float)*ni*nc, " score ");
     if (!score_cl_mem_->create_buffer( CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for SCORE\n";
@@ -371,50 +360,39 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       delete n_ind_cl_mem_;
       delete index_cl_mem_;     delete score_cl_mem_;
       delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-      if (use_orient_) { delete [] index_orient_buff_; }
+      delete [] index_orient_buff_; delete index_orient_cl_mem_;
       return false;
     }
+
+    // create mu cl_mem
     bocl_mem* mu_cl_mem_ = new bocl_mem(gpu_->context(), mu_buff_, sizeof(float)*ni*nc*no, " mu ");
     if (!mu_cl_mem_->create_buffer( CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for MU\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
-      delete n_ind_cl_mem_;     delete [] n_ind_;
-      delete index_cl_mem_;     delete score_cl_mem_;     delete mu_cl_mem_;
-      delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-      if (use_orient_) { delete [] index_orient_buff_; }
+      delete n_ind_cl_mem_;         delete [] n_ind_;
+      delete index_cl_mem_;         delete score_cl_mem_;         delete mu_cl_mem_;
+      delete [] index_buff_;        delete [] score_buff_;        delete [] mu_buff_;
+      delete [] index_orient_buff_; delete index_orient_cl_mem_;
       return false;
     }
 
     // start the obj_based kernel matcher
     vcl_string identifier = gpu_->device_identifier();
-    if (use_orient_) {
-      if (!this->execute_matcher_kernel_orient(gpu_, queue_, kernels_[identifier], n_ind_cl_mem_, index_cl_mem_, index_orient_cl_mem_, score_cl_mem_, mu_cl_mem_)) {
-        vcl_cerr << "\n ERROR: executing pass 1 kernel(with orientation) failed on device " << identifier << '\n';
-        this->clean_query_cl_mem();
-        delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
-        delete layer_size_cl_mem_;
-        delete n_ind_cl_mem_;     delete [] n_ind_;
-        delete index_cl_mem_;     delete score_cl_mem_;     delete mu_cl_mem_;
-        delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-        if (use_orient_) { delete [] index_orient_buff_; }
-        return false;
-      }
+    if (!this->execute_matcher_kernel_orient(gpu_, queue_, kernels_[identifier], n_ind_cl_mem_, index_cl_mem_, index_orient_cl_mem_, score_cl_mem_, mu_cl_mem_)) {
+      vcl_cerr << "\n ERROR: executing pass 1 kernel(with orientation) failed on device " << identifier << '\n';
+      this->clean_query_cl_mem();
+      delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
+      delete layer_size_cl_mem_;
+      delete n_ind_cl_mem_;         delete [] n_ind_;
+      delete index_cl_mem_;         delete score_cl_mem_;        delete mu_cl_mem_;
+      delete [] index_buff_;        delete [] score_buff_;       delete [] mu_buff_;
+      delete [] index_orient_buff_; delete index_orient_cl_mem_;
+      return false;
     }
-    else {
-      if (!this->execute_matcher_kernel(gpu_, queue_, kernels_[identifier], n_ind_cl_mem_, index_cl_mem_, score_cl_mem_, mu_cl_mem_)) {
-        vcl_cerr << "\n ERROR: executing pass 1 kernel failed on device " << identifier << '\n';
-        this->clean_query_cl_mem();
-        delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
-        delete layer_size_cl_mem_;
-        delete n_ind_cl_mem_;     delete [] n_ind_;
-        delete index_cl_mem_;     delete score_cl_mem_;     delete mu_cl_mem_;
-        delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-        if (use_orient_) { delete [] index_orient_buff_; }
-        return false;
-      }
-    }
+
+    
     // block everything to ensure the reading score
     status = clFinish(queue_);
     // read score
@@ -422,26 +400,14 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     mu_cl_mem_->read_to_buffer(queue_);
     status = clFinish(queue_);
     // count time
-    if (use_orient_) {
-      if (is_grd_reg_ && is_sky_reg_)
-        gpu_matcher_time += kernels_[identifier][4]->exec_time();
-      else if (!is_grd_reg_ && is_sky_reg_)
-        gpu_matcher_time += kernels_[identifier][5]->exec_time();
-      else if (is_grd_reg_ && !is_sky_reg_)
-        gpu_matcher_time += kernels_[identifier][6]->exec_time();
-      else
-        gpu_matcher_time += kernels_[identifier][7]->exec_time();
-    }
-    else {
-      if (is_grd_reg_ && is_sky_reg_)
-        gpu_matcher_time += kernels_[identifier][0]->exec_time();
-      else if (!is_grd_reg_ && is_sky_reg_)
-        gpu_matcher_time += kernels_[identifier][1]->exec_time();
-      else if (is_grd_reg_ && !is_sky_reg_)
-        gpu_matcher_time += kernels_[identifier][2]->exec_time();
-      else
-        gpu_matcher_time += kernels_[identifier][3]->exec_time();
-    }
+    if (is_grd_reg_ && is_sky_reg_)
+      gpu_matcher_time += kernels_[identifier][0]->exec_time();
+    else if (!is_grd_reg_ && is_sky_reg_)
+      gpu_matcher_time += kernels_[identifier][1]->exec_time();
+    else if (is_grd_reg_ && !is_sky_reg_)
+      gpu_matcher_time += kernels_[identifier][2]->exec_time();
+    else
+      gpu_matcher_time += kernels_[identifier][3]->exec_time();
 
     // post-processing data
     for (unsigned ind_id = 0; ind_id < ni; ind_id++)
@@ -499,25 +465,19 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     delete mu_cl_mem_;
     status = clFinish(queue_);
     check_val(status, MEM_FAILURE, " release MU(average depth value) failed on device " + gpu_->device_identifier() + error_to_string(status));
-    if (use_orient_) {
-      // delete cl_mem for index orientation
-      delete index_orient_cl_mem_;
-      status = clFinish(queue_);
-      check_val(status, MEM_FAILURE, " release INDEX_ORIENT failed on device " + gpu_->device_identifier() + error_to_string(status));
-    }
-
+    delete index_orient_cl_mem_;
+    status = clFinish(queue_);
+    check_val(status, MEM_FAILURE, " release INDEX_ORIENT failed on device " + gpu_->device_identifier() + error_to_string(status));
+    
     // do the test to ensure kernel is correct
 #if 0
-    if (use_orient_)
-      this->volm_matcher_p1_test_ori(ni, index_buff_, index_orient_buff_, score_buff_, mu_buff_);
-    else
-      this->volm_matcher_p1_test(ni, index_buff_, score_buff_, mu_buff_);
+    this->volm_matcher_p1_test_ori(ni, index_buff_, index_orient_buff_, score_buff_, mu_buff_);
 #endif
 
     // finish current round, clean host memory
     delete n_ind_;
     delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-    if (use_orient_) { delete [] index_orient_buff_; }
+    delete [] index_orient_buff_;
   } // end of loop over all leaves
 
   // time
@@ -539,67 +499,6 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
 }
 
 bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
-                                       unsigned const& layer_size,
-                                       unsigned& leaf_id,
-                                       unsigned char* index_buff,
-                                       vcl_vector<unsigned>& l_id,
-                                       vcl_vector<unsigned>& h_id,
-                                       unsigned& actual_n_ind)
-{
-  if (is_last_pass_) {
-    vcl_cerr << " pass 1 check whether we have last_pass is NOT implemented yet ...\n";
-    return false;
-  }
-  else {
-    // for no previous output case
-    unsigned cnt = 0;
-    unsigned li;
-    for (li = leaf_id; li < leaves_.size(); li++) {
-      if (!leaves_[li]->hyps_ )
-        continue;
-      vgl_point_3d<double> h_pt;
-      while (cnt < n_ind && leaves_[li]->hyps_->get_next(0,1,h_pt) ) {
-        if (is_candidate_) {
-          if (cand_poly_.contains(h_pt.x(), h_pt.y())) {  // having candiate list and current hypo is inside it --> accept
-            unsigned char* values = index_buff + cnt * layer_size;
-            ind_->get_next(values, layer_size);
-            cnt++;
-            l_id.push_back(li);  h_id.push_back(leaves_[li]->hyps_->current_-1);
-          }
-          else {                                       // having candidate list but current hypo is outside candidate list --> ignore
-            vcl_vector<unsigned char> values(layer_size);
-            ind_->get_next(values);
-          }
-        }
-        else {                                         // no candidate list, put all indices into buffer
-          unsigned char* values = index_buff + cnt * layer_size;
-          ind_->get_next(values, layer_size);
-          cnt++;
-          l_id.push_back(li);  h_id.push_back(leaves_[li]->hyps_->current_-1);
-        }
-      }
-      if (cnt == n_ind) {
-        leaf_id = li;
-        break;
-      }
-      else {
-        if (is_leaf_finish(li)) {
-          ind_->finalize();
-          if (li < leaves_.size()-1)
-            ind_->initialize_read(leaves_[li+1]->get_index_name(file_name_pre_.str()));
-        }
-      }
-    } // loop over all leaves
-    if (li == leaves_.size())
-      leaf_id = li;
-    if (cnt != n_ind)
-      actual_n_ind = cnt;
-    return true;
-  }
-}
-
-
-bool boxm2_volm_matcher_p1::fill_index_orient(unsigned const& n_ind,
                                               unsigned const& layer_size,
                                               unsigned& leaf_id,
                                               unsigned char* index_buff,
@@ -678,6 +577,7 @@ bool boxm2_volm_matcher_p1::is_leaf_finish(unsigned const& leaf_id)
   return leaves_[leaf_id]->hyps_->current_  ==  leaves_[leaf_id]->hyps_->size();
 }
 
+#if 0
 // execute kernel
 bool boxm2_volm_matcher_p1::execute_matcher_kernel(bocl_device_sptr                         device,
                                                    cl_command_queue&                         queue,
@@ -811,6 +711,8 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel(bocl_device_sptr             
   return true;
 }
 
+#endif
+
 // execute kernel with orientation considered
 bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr                  device,
                                                           cl_command_queue&                  queue,
@@ -837,16 +739,17 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   // choose whether kernel to use
   if (is_grd_reg_ && is_sky_reg_) {              // both sky and ground
     vcl_cout << "\t using both sky and grd kernel with orientatl attribute" << vcl_endl;
-    kern = kern_vec[4];
+    kern = kern_vec[0];
     // set up argument list
     kern->set_arg(n_cam_cl_mem_);
     kern->set_arg(n_obj_cl_mem_);
-    kern->set_arg(grd_id_cl_mem_);        kern->set_arg(grd_id_offset_cl_mem_);    kern->set_arg(grd_dist_cl_mem_);    kern->set_arg(grd_weight_cl_mem_);
+    kern->set_arg(grd_id_cl_mem_);        kern->set_arg(grd_id_offset_cl_mem_);    kern->set_arg(grd_dist_cl_mem_);    
+    kern->set_arg(grd_weight_cl_mem_);    kern->set_arg(grd_wgt_attri_cl_mem_);
     kern->set_arg(sky_id_cl_mem_);        kern->set_arg(sky_id_offset_cl_mem_);    kern->set_arg(sky_weight_cl_mem_);
   }
   else if ( !is_grd_reg_ && is_sky_reg_) {     // no ground but sky
     vcl_cout << "\t using NO grd kernel with orientation attribute" << vcl_endl;
-    kern = kern_vec[5];
+    kern = kern_vec[1];
     // set up argument list
     kern->set_arg(n_cam_cl_mem_);
     kern->set_arg(n_obj_cl_mem_);
@@ -864,15 +767,16 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   }
   else if (  is_grd_reg_ && !is_sky_reg_) {    // no sky but ground
     vcl_cout << "\t using NO sky kernel with orientation attribute" << vcl_endl;
-    kern = kern_vec[6];
+    kern = kern_vec[2];
     // set up argument list
     kern->set_arg(n_cam_cl_mem_);
     kern->set_arg(n_obj_cl_mem_);
-    kern->set_arg(grd_id_cl_mem_);        kern->set_arg(grd_id_offset_cl_mem_);    kern->set_arg(grd_dist_cl_mem_);    kern->set_arg(grd_weight_cl_mem_);
+    kern->set_arg(grd_id_cl_mem_);        kern->set_arg(grd_id_offset_cl_mem_);    kern->set_arg(grd_dist_cl_mem_);
+    kern->set_arg(grd_weight_cl_mem_);    kern->set_arg(grd_wgt_attri_cl_mem_);
   }
   else {                                       // neither sky nor ground
     vcl_cout << "\t using NO grd NOR sky kernel" << vcl_endl;
-    kern = kern_vec[7];
+    kern = kern_vec[3];
     kern->set_arg(n_cam_cl_mem_);
     kern->set_arg(n_obj_cl_mem_);
   }
@@ -883,6 +787,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   kern->set_arg(obj_min_dist_cl_mem_);
   kern->set_arg(obj_orient_cl_mem_);
   kern->set_arg(obj_weight_cl_mem_);
+  kern->set_arg(obj_wgt_attri_cl_mem_);
   kern->set_arg(n_ind_cl_mem_);
   kern->set_arg(layer_size_cl_mem_);
   kern->set_arg(index_cl_mem_);
@@ -896,6 +801,10 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   kern->set_local_arg((*n_obj_)*sizeof(unsigned char));       // local memory for obj_min_dist
   kern->set_local_arg((*n_obj_)*sizeof(unsigned char));       // local memory for orientation
   kern->set_local_arg((*n_obj_)*sizeof(float));               // local memory for obj_weight
+  kern->set_local_arg(4*(*n_obj_)*sizeof(float));             // local memory for obj_wgt_attri
+  if (is_grd_reg_) {
+    kern->set_local_arg(3*(*n_obj_)*sizeof(float));           // local memory for grd_wgt_attri
+  }
   kern->set_local_arg((*depth_length_buff_)*sizeof(float));   // local memory for depth_interval table
 
 #if 0
@@ -930,6 +839,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   }
   // clear bocl_kernel argument list
   kern->clear_args();
+
 #if 1
   // read debug data from device
   debug_cl_mem_->read_to_buffer(queue);
@@ -939,24 +849,38 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
     i++;
   }
 #endif
+
   // clear debug buffer
   delete debug_cl_mem_;
   status = clFinish(queue);
   check_val(status, MEM_FAILURE, " release DEBUG failed on device " + device->device_identifier() + error_to_string(status));
-
   delete [] debug_buff_;
   return true;
 }
 
-// clare all query cl_mem pointer
+// clear all query cl_mem pointer
 bool boxm2_volm_matcher_p1::clean_query_cl_mem()
 {
   delete n_cam_cl_mem_;
   delete n_obj_cl_mem_;
-  if ( is_grd_reg_ ) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;       delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-  if ( is_sky_reg_ ) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
-  if ( is_obj_reg_ ) { delete obj_id_cl_mem_;  delete obj_id_offset_cl_mem_;  delete obj_weight_cl_mem_; delete obj_min_dist_cl_mem_;  delete obj_order_cl_mem_; }
-  if ( use_orient_ ) { delete obj_orient_cl_mem_; }
+  if ( is_grd_reg_ ) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_; }
+  if ( is_sky_reg_ ) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_; }
+  if ( is_obj_reg_ ) { 
+    delete obj_id_cl_mem_;     delete obj_id_offset_cl_mem_;  
+    delete obj_orient_cl_mem_; delete obj_min_dist_cl_mem_;  delete obj_order_cl_mem_;
+  }
+  if (this->clean_weight_cl_mem())
+    return true;
+  else
+    return true;
+}
+
+// clear all query weight cl_mem pointer
+bool boxm2_volm_matcher_p1::clean_weight_cl_mem()
+{
+  if ( is_grd_reg_ ) { delete grd_weight_cl_mem_;   delete grd_wgt_attri_cl_mem_; }
+  if ( is_sky_reg_ ) { delete sky_weight_cl_mem_; }
+  if ( is_obj_reg_ ) { delete obj_weight_cl_mem_;   delete obj_wgt_attri_cl_mem_; }
   return true;
 }
 
@@ -966,15 +890,21 @@ bool boxm2_volm_matcher_p1::compile_kernel(vcl_vector<bocl_kernel*>& vec_kernels
   // declare the kernel source
   vcl_vector<vcl_string> src_paths;
   vcl_string volm_cl_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/volm/cl/";
-  src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching.cl");
-  src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_grd.cl");
-  src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_sky.cl");
-  src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_grd_no_sky.cl");
+
+#if 0
+  //src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching.cl");
+  //src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_grd.cl");
+  //src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_sky.cl");
+  //src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_grd_no_sky.cl");
+#endif
+
   // add orientation kernels in
   src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_with_orient.cl");
   src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_grd_with_orient.cl");
   src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_sky_with_orient.cl");
   src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_grd_no_sky_with_orient.cl");
+
+#if 0
   // create the obj_based matching kernel
   bocl_kernel* kern_matcher = new bocl_kernel();
   if (!kern_matcher->create_kernel(&gpu_->context(), gpu_->device_id(), src_paths,
@@ -1007,6 +937,7 @@ bool boxm2_volm_matcher_p1::compile_kernel(vcl_vector<bocl_kernel*>& vec_kernels
                                                  "generalized_volm_obj_based_matching_no_grd_no_sky") )
     return false;
   vec_kernels.push_back(kern_matcher_no_sky_no_grd);
+#endif
 
   // create the matching orientation kernel
   bocl_kernel* kern_matcher_with_orient = new bocl_kernel();
@@ -1116,6 +1047,7 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& tile_fname_bi
     txt_ofs << '\n';
   }
 #endif
+
   return true;
 }
 
@@ -1155,67 +1087,47 @@ bool boxm2_volm_matcher_p1::transfer_query()
     return false;
   }
 
+#if 0
   // check whether we use orientation attribute, if yes, modify the weight parameters first
   float weight = 0;
-  if (use_orient_) {
-    float w = 0;
-    if (is_grd_reg_ && is_sky_reg_) {       // both ground and sky
-      w = 1.0f/6.0f;
-      grd_weight_buff_ = new float;    *grd_weight_buff_ = w;
-      sky_weight_buff_ = new float;    *sky_weight_buff_ = w;
-      obj_weight_buff_ = new float[*n_obj_];
-      for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
-        obj_weight_buff_[obj_id] = w;
-    }
-    else if (is_grd_reg_) {                  // no sky but ground
-      w = 1.0f/5.0f;
-      grd_weight_buff_ = new float;     *grd_weight_buff_ = w;
-      for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
-        obj_weight_buff_[obj_id] = w;
-    }
-    else if (is_sky_reg_) {                  // no ground but sky
-      w = 0.25f;
-      sky_weight_buff_ = new float;    *sky_weight_buff_ = w;
-      obj_weight_buff_ = new float[*n_obj_];
-      for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
-        obj_weight_buff_[obj_id] = w;
-    }
-    else {                                   // no ground no sky
-      w = 1.0f/3.0f;
-      obj_weight_buff_ = new float[*n_obj_];
-      for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
-        obj_weight_buff_[obj_id] = w;
-    }
+  float w = 0;
+  if (is_grd_reg_ && is_sky_reg_) {       // both ground and sky
+    w = 1.0f/6.0f;
+    grd_weight_buff_ = new float;    *grd_weight_buff_ = w;
+    sky_weight_buff_ = new float;    *sky_weight_buff_ = w;
+    obj_weight_buff_ = new float[*n_obj_];
+    for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
+      obj_weight_buff_[obj_id] = w;
   }
-  else {
-    // use the buffer define in volm_query
-    if (is_grd_reg_ && is_sky_reg_) {       // both ground and sky
-      grd_weight_buff_ = new float;    *grd_weight_buff_ = query_->grd_weight();
-      sky_weight_buff_ = new float;    *sky_weight_buff_ = query_->sky_weight();
-      obj_weight_buff_ = new float[*n_obj_];
-      for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
-        obj_weight_buff_[obj_id] = query_->obj_weight()[obj_id];
-    }
-    else if (is_grd_reg_) {                  // no sky but ground
-      grd_weight_buff_ = new float;     *grd_weight_buff_ = query_->grd_weight();
-      for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
-        obj_weight_buff_[obj_id] = query_->obj_weight()[obj_id];
-    }
-    else if (is_sky_reg_) {                  // no ground but sky
-      sky_weight_buff_ = new float;    *sky_weight_buff_ = query_->sky_weight();
-      obj_weight_buff_ = new float[*n_obj_];
-      for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
-        obj_weight_buff_[obj_id] = query_->obj_weight()[obj_id];
-    }
-    else {                                   // no ground no sky
-      obj_weight_buff_ = new float[*n_obj_];
-      for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
-        obj_weight_buff_[obj_id] = query_->obj_weight()[obj_id];
-    }
+  else if (is_grd_reg_) {                  // no sky but ground
+    w = 1.0f/5.0f;
+    grd_weight_buff_ = new float;     *grd_weight_buff_ = w;
+    for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
+      obj_weight_buff_[obj_id] = w;
   }
+  else if (is_sky_reg_) {                  // no ground but sky
+    w = 0.25f;
+    sky_weight_buff_ = new float;    *sky_weight_buff_ = w;
+    obj_weight_buff_ = new float[*n_obj_];
+    for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
+      obj_weight_buff_[obj_id] = w;
+  }
+  else {                                   // no ground no sky
+    w = 1.0f/3.0f;
+    obj_weight_buff_ = new float[*n_obj_];
+    for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
+      obj_weight_buff_[obj_id] = w;
+  }
+#endif
 
   query_global_mem_ = 3 * sizeof(unsigned);   // n_cam + n_obj + n_ind
-   query_local_mem_ = 3 * sizeof(unsigned);   // n_cam + n_obj + n_ind
+  query_local_mem_  = 3 * sizeof(unsigned);   // n_cam + n_obj + n_ind
+
+  // transfer weight parameter from volm_weights
+  if (!this->transfer_weight()) {
+    vcl_cerr << "\n ERROR: failed when transferring volm_weight parameters to 1D weight buffer\n";
+    return false;
+  }
 
   // construct the ground_id, ground_dist, ground_offset 1D array
   if (is_grd_reg_)
@@ -1238,11 +1150,11 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     // construct weight parameters
     grd_id_offset_buff_[*n_cam_] = grd_count;
-    //grd_weight_buff_ = new float;
-    //*grd_weight_buff_ = query_->grd_weight();
+
     grd_id_cl_mem_ = new bocl_mem(gpu_->context(), grd_id_buff_, sizeof(unsigned)*grd_vox_size, " grd_id " );
     if (!grd_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_ID\n";
+      this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;
       return false;
@@ -1250,6 +1162,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     grd_dist_cl_mem_ = new bocl_mem(gpu_->context(), grd_dist_buff_, sizeof(unsigned char)*grd_vox_size, " grd_dist " );
     if (!grd_dist_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_DIST\n";
+      this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;
       return false;
@@ -1257,23 +1170,24 @@ bool boxm2_volm_matcher_p1::transfer_query()
     grd_id_offset_cl_mem_ = new bocl_mem(gpu_->context(), grd_id_offset_buff_, sizeof(unsigned)*(*n_cam_+1), " grd_offset " );
     if (!grd_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_OFFSET\n";
+      this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;
       return false;
     }
-    grd_weight_cl_mem_ = new bocl_mem(gpu_->context(), grd_weight_buff_, sizeof(float), " grd_weight " );
-    if (!grd_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_WEIGHT\n";
-      delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_;
-      return false;
-    }
+    //grd_weight_cl_mem_ = new bocl_mem(gpu_->context(), grd_weight_buff_, sizeof(float), " grd_weight " );
+    //if (!grd_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+    //  vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_WEIGHT\n";
+    //  delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
+    //  delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_;
+    //  return false;
+    //}
     query_global_mem_ += (sizeof(unsigned char)+sizeof(unsigned))*grd_vox_size;  // ground id and dist
     query_global_mem_ += sizeof(unsigned)*(query_->ground_offset().size());      // ground offset array
-    query_global_mem_ += sizeof(float);                                          // ground weight
+    //query_global_mem_ += sizeof(float);                                          // ground weight
   }
 
-  // construct sky_id buff
+  // construct sky_id buff and cl_mem
   if (is_sky_reg_) {
     unsigned sky_vox_size = query_->get_sky_id_size();
     sky_id_buff_ = new unsigned[sky_vox_size];
@@ -1289,36 +1203,37 @@ bool boxm2_volm_matcher_p1::transfer_query()
       sky_count += (unsigned)sky_id[cam_id].size();
     }
     sky_id_offset_buff_[*n_cam_] = sky_count;
-    // construct weight parameters
-    //sky_weight_buff_ = new float;
-    //*sky_weight_buff_ = query_->sky_weight();
+    
     sky_id_cl_mem_ = new bocl_mem(gpu_->context(), sky_id_buff_, sizeof(unsigned)*sky_vox_size, " sky_id " );
     if (!sky_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_ID\n";
+      this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_; }
       delete sky_id_cl_mem_;
       return false;
     }
     sky_id_offset_cl_mem_ = new bocl_mem(gpu_->context(), sky_id_offset_buff_, sizeof(unsigned)*(*n_cam_+1), " sky_offset " );
     if (!sky_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_OFFSET\n";
+      this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_; }
       delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;
       return false;
     }
-    sky_weight_cl_mem_ = new bocl_mem(gpu_->context(), sky_weight_buff_, sizeof(float), " sky_weight " );
-    if (!sky_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT\n";
-      delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-      delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_;
-      return false;
-    }
+    //sky_weight_cl_mem_ = new bocl_mem(gpu_->context(), sky_weight_buff_, sizeof(float), " sky_weight " );
+    //if (!sky_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+    //  vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT\n";
+    //  this->clean_weight_cl_mem();
+    //  delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
+    //  if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+    //  delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_;
+    //  return false;
+    //}
     query_global_mem_ += sizeof(unsigned)*sky_vox_size;                          // sky id
     query_global_mem_ += sizeof(unsigned)*query_->sky_offset().size();           // sky dist
-    query_global_mem_ += sizeof(float);                                          // sky weight
+    //query_global_mem_ += sizeof(float);                                          // sky weight
   }
 
   // construct obj_id, obj_offset 1D array
@@ -1342,37 +1257,37 @@ bool boxm2_volm_matcher_p1::transfer_query()
       }
     }
     obj_id_offset_buff_[obj_offset_size] = obj_count;
+
     // construct min_dist, max_dist and order_obj for non-ground, non-sky object
     obj_min_dist_buff_ = new unsigned char[*n_obj_];
-    //max_obj_dist_buff = new unsigned char[n_obj_];
     obj_order_buff_ = new unsigned char[*n_obj_];
     for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++) {
       obj_min_dist_buff_[obj_id] = query_->min_obj_dist()[obj_id];
       obj_order_buff_[obj_id] = query_->order_obj()[obj_id];
     }
-    //obj_weight_buff_ = new float[*n_obj_];
-    //for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++)
-    //  obj_weight_buff_[obj_id] = query_->obj_weight()[obj_id];
+    
     // create corresponding cl_mem
     obj_id_cl_mem_ = new bocl_mem(gpu_->context(), obj_id_buff_, sizeof(unsigned)*obj_vox_size, " obj_id " );
     if (!obj_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_ID\n";
+      this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_; }
+      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_; }
       delete obj_id_cl_mem_;
       return false;
     }
     obj_id_offset_cl_mem_ = new bocl_mem(gpu_->context(), obj_id_offset_buff_, sizeof(unsigned)*(obj_offset_size+1), " obj_offset " );
     if (!obj_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_OFFSET\n";
+      this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
-      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_; }
+      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_; }
       delete obj_id_cl_mem_;  delete obj_id_offset_cl_mem_;
       return false;
     }
-    obj_weight_cl_mem_ = new bocl_mem(gpu_->context(), obj_weight_buff_, sizeof(float)*(*n_obj_), " obj_weight " );
+    /*obj_weight_cl_mem_ = new bocl_mem(gpu_->context(), obj_weight_buff_, sizeof(float)*(*n_obj_), " obj_weight " );
     if (!obj_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_WEIGHT\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
@@ -1380,44 +1295,44 @@ bool boxm2_volm_matcher_p1::transfer_query()
       if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
       delete obj_id_cl_mem_;  delete obj_id_offset_cl_mem_;  delete obj_weight_cl_mem_;
       return false;
-    }
+    }*/
     obj_min_dist_cl_mem_ = new bocl_mem(gpu_->context(), obj_min_dist_buff_, sizeof(unsigned char)*(*n_obj_), " obj_min_dist " );
     if (!obj_min_dist_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_MIN_DIST\n";
+      this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;         delete n_obj_cl_mem_;
-      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_; }
       if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
-      delete obj_id_cl_mem_;        delete obj_id_offset_cl_mem_;  delete obj_weight_cl_mem_;
+      delete obj_id_cl_mem_;        delete obj_id_offset_cl_mem_;
       delete obj_min_dist_cl_mem_;
       return false;
     }
     obj_order_cl_mem_ = new bocl_mem(gpu_->context(), obj_order_buff_, sizeof(unsigned char)*(*n_obj_), " obj_order " );
     if (!obj_order_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
       vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_ORDER\n";
+      this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;         delete n_obj_cl_mem_;
-      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;  delete grd_weight_cl_mem_; }
-      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_;  delete sky_weight_cl_mem_; }
-      delete obj_id_cl_mem_;        delete obj_id_offset_cl_mem_;  delete obj_weight_cl_mem_;
+      if (is_grd_reg_) { delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_; }
+      if (is_obj_reg_) { delete sky_id_cl_mem_;  delete sky_id_offset_cl_mem_; }
+      delete obj_id_cl_mem_;        delete obj_id_offset_cl_mem_;
       delete obj_min_dist_cl_mem_;  delete obj_order_cl_mem_;
       return false;
     }
     query_global_mem_ += sizeof(unsigned)*obj_vox_size;                          // object id
     query_global_mem_ += sizeof(unsigned)*query_->dist_offset().size();          // object offset
-    query_global_mem_ += sizeof(float)*(*n_obj_);                                // object weight
+    //query_global_mem_ += sizeof(float)*(*n_obj_);                                // object weight
     query_global_mem_ += sizeof(unsigned char)*2*(*n_obj_);                      // object dist and order
     query_local_mem_ += sizeof(unsigned char)*2*(*n_obj_);                       // object dist and order
     query_local_mem_ += sizeof(unsigned char)*2*(*n_obj_);                       // object dist and order
-    query_local_mem_ += sizeof(float)*(2+*n_obj_);                               // grd, sky, object weight
+    //query_local_mem_ += sizeof(float)*(2+*n_obj_);                               // grd, sky, object weight
   }
   // implement orientation transfer function
-  if (use_orient_) {
-    if (!this->transfer_orient()) {
-      vcl_cerr << " ERROR: transfering query orientation failed\n";
-      return false;
-    }
-    query_global_mem_ += sizeof(unsigned char)*(*n_obj_);
-    query_local_mem_ += sizeof(unsigned char)*(*n_obj_);
+  if (!this->transfer_orient()) {
+    vcl_cerr << " ERROR: transfering query orientation failed\n";
+    return false;
   }
+  query_global_mem_ += sizeof(unsigned char)*(*n_obj_);
+  query_local_mem_ += sizeof(unsigned char)*(*n_obj_);
 
   // check the device memory
   // check whether query size has exceeded the available global memory and local_memory
@@ -1469,235 +1384,188 @@ bool boxm2_volm_matcher_p1::transfer_orient()
   return true;
 }
 
-bool boxm2_volm_matcher_p1::volm_matcher_p1_test(unsigned n_ind,
-                                                 unsigned char* index,
-                                                 float* score_buff,
-                                                 float* mu_buff)
+bool boxm2_volm_matcher_p1::transfer_weight()
 {
-  vcl_vector<float> mu;
-  unsigned nc = *n_cam_;
-  unsigned no = *n_obj_;
+  // construct all the weight buffer and cl_mem
+  // Note that the order of the weight parameters in the weight_param.txt has been ordered accordingly
+  if (is_sky_reg_ && is_grd_reg_) {
+    if (this->weights_.size() != (2+(*n_obj_)) ) {
+      vcl_cerr << "\n ERROR: inconsistancy between volm_query and volm_weight\n";
+      return false;
+    }
+    // sky is line 1, grd is line 2
+    sky_weight_buff_ = new float;  *sky_weight_buff_ = this->weights_[0].w_obj_;
+    
+    grd_weight_buff_ = new float;  *grd_weight_buff_ = this->weights_[1].w_obj_;
+    grd_wgt_attri_buff_ = new float[3];
+    grd_wgt_attri_buff_[0] = this->weights_[1].w_ori_;
+    grd_wgt_attri_buff_[1] = this->weights_[1].w_lnd_;
+    grd_wgt_attri_buff_[2] = this->weights_[1].w_dst_;
 
-  if (is_obj_reg_) {
-    // calcualte mean depth value
-    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-      unsigned start_ind = ind_id * (layer_size_);
-      for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-        for (unsigned k = 0; k < no; k++) {
-          unsigned offset_id = k + no * cam_id;
-          unsigned start_obj = obj_id_offset_buff_[offset_id];
-          unsigned end_obj = obj_id_offset_buff_[offset_id+1];
-          float    mu_obj = 0;
-          unsigned cnt = 0;
-          for (unsigned i = start_obj; i < end_obj; i++) {
-            unsigned id = start_ind + obj_id_buff_[i];
-            if ( (unsigned)index[id] < 253 ) {
-              mu_obj += depth_interval_[index[id]];
-              cnt += 1;
-            }
-          }
-          mu_obj = (cnt > 0) ? mu_obj/cnt : 0;
-
-          mu.push_back(mu_obj);
-        }
-      }
+    obj_weight_buff_ = new float[*n_obj_];
+    obj_wgt_attri_buff_ = new float[4*(*n_obj_)];
+    unsigned cnt = 0;
+    for (unsigned i = 2; i < this->weights_.size(); i++) {
+      obj_wgt_attri_buff_[cnt*4]   = this->weights_[i].w_ori_;
+      obj_wgt_attri_buff_[cnt*4+1] = this->weights_[i].w_lnd_;
+      obj_wgt_attri_buff_[cnt*4+2] = this->weights_[i].w_dst_;
+      obj_wgt_attri_buff_[cnt*4+3] = this->weights_[i].w_ord_;
+      obj_weight_buff_[cnt++] = this->weights_[i].w_obj_;
+    }
+    // create cl_mem for sky and ground
+    sky_weight_cl_mem_ = new bocl_mem(gpu_->context(), sky_weight_buff_, sizeof(float), " sky_weight " );
+    if (!sky_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT\n";
+      delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
+      delete sky_weight_cl_mem_;
+      return false;
+    }
+    grd_weight_cl_mem_ = new bocl_mem(gpu_->context(), grd_weight_buff_, sizeof(float), " grd_weight " );
+    if (!grd_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: create bocl_mem failed for GRD_WEIGHT\n";
+      delete sky_weight_cl_mem_;
+      delete grd_weight_cl_mem_;
+      return false;
+    }
+    grd_wgt_attri_cl_mem_ = new bocl_mem(gpu_->context(), grd_wgt_attri_buff_, 3*sizeof(float), " grd_wgt_attri " );
+    if (!grd_wgt_attri_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: create bocl_mem failed for GRD_WGT_ATTRI\n";
+      delete sky_weight_cl_mem_;
+      delete grd_weight_cl_mem_;  delete grd_wgt_attri_cl_mem_;
+      return false;
     }
   }
-  // calculate sky score
-  vcl_vector<float> score_sky_all;
-  if (is_sky_reg_) {
-    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-      unsigned start_ind = ind_id * (layer_size_);
-      for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-        unsigned start = sky_id_offset_buff_[cam_id];
-        unsigned end = sky_id_offset_buff_[cam_id+1];
-        unsigned cnt = 0;
-        for (unsigned k = start; k < end; k++) {
-          unsigned id = start_ind + sky_id_buff_[k];
-          if (index[id] == 254) cnt++;
-        }
-        float score_sky = (end != start) ? (float)cnt/(end-start) : 0.0f;
-        score_sky *= (*sky_weight_buff_);
-        score_sky_all.push_back(score_sky);
-      }
+  else if (is_sky_reg_) {
+    for (vcl_vector<volm_weight>::iterator vit = this->weights_.begin(); vit != this->weights_.end(); ++vit)
+      vcl_cerr << ' ' << vit->w_typ_ << ' ' << vit->w_ori_ << ' ' << vit->w_lnd_ << ' ' << vit->w_dst_ << ' ' << vit->w_ord_ << ' ' << vit->w_obj_ << vcl_endl;
+
+    if (this->weights_.size() != (1+(*n_obj_)) ) {
+      vcl_cerr << "\n ERROR: inconsistancy between volm_query and volm_weight\n";
+      return false;
+    }
+    // sky is line 1, all other objects starts from line 2
+    sky_weight_buff_ = new float;  *sky_weight_buff_ = this->weights_[0].w_obj_;
+
+    obj_weight_buff_ = new float[*n_obj_];
+    obj_wgt_attri_buff_ = new float[4*(*n_obj_)];
+    unsigned cnt = 0;
+    for (unsigned i = 1; i < this->weights_.size(); i++) {
+      obj_wgt_attri_buff_[cnt*4]   = this->weights_[i].w_ori_;
+      obj_wgt_attri_buff_[cnt*4+1] = this->weights_[i].w_lnd_;
+      obj_wgt_attri_buff_[cnt*4+2] = this->weights_[i].w_dst_;
+      obj_wgt_attri_buff_[cnt*4+3] = this->weights_[i].w_ord_;
+      obj_weight_buff_[cnt++] = this->weights_[i].w_obj_;
+    }
+    // create cl_mem for sky
+    sky_weight_cl_mem_ = new bocl_mem(gpu_->context(), sky_weight_buff_, sizeof(float), " sky_weight " );
+    if (!sky_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT\n";
+      delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
+      delete sky_weight_cl_mem_;
+      return false;
     }
   }
-  // calculate the ground score
-  // define the altitude ratio, suppose the altitude in index could ba up to 3 meter
-  // assuming the read-in alt values in query is normally ~1m, the altiutide ratio would be (2-1)/1 ~2
-  // the altitude ratio defined the tolerance for ground distance d as delta_d = alt_ratio * d
-  // this delte_d coule be in depth_interval unit ?
-  unsigned char alt_ratio = 2;
-  vcl_vector<float> score_grd_all;
-  if (is_grd_reg_) {
-    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-      unsigned start_ind = ind_id * layer_size_;
-      for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-        unsigned start = grd_id_offset_buff_[cam_id];
-        unsigned end = grd_id_offset_buff_[cam_id+1];
-        unsigned cnt = 0;
-        for (unsigned k = start; k < end; k++) {
-          unsigned id = start_ind + grd_id_buff_[k];
-          unsigned char ind_d = index[id];
-          unsigned char grd_d = grd_dist_buff_[k];
-          unsigned char delta_d = alt_ratio * grd_d;
-          if ( ind_d >= (grd_d-delta_d) && ind_d <= (grd_d+delta_d) ) cnt++;
-        }
-        float score_grd = (end!=start) ? (float)cnt/(end-start) : 0.0f;
-        score_grd *= (*grd_weight_buff_);
-        score_grd_all.push_back(score_grd);
-      }
+  else if (is_grd_reg_) {
+    if (this->weights_.size() != (1+(*n_obj_)) ) {
+      vcl_cerr << "\n ERROR: inconsistancy between volm_query and volm_weight\n";
+      return false;
+    }
+    // grd is line 1, objects starts from line 2
+    grd_weight_buff_ = new float;  *grd_weight_buff_ = this->weights_[0].w_obj_;
+    grd_wgt_attri_buff_ = new float[3];
+    grd_wgt_attri_buff_[0] = this->weights_[0].w_ori_;
+    grd_wgt_attri_buff_[1] = this->weights_[0].w_lnd_;
+    grd_wgt_attri_buff_[2] = this->weights_[0].w_dst_;
+    
+    obj_weight_buff_ = new float[*n_obj_];
+    obj_wgt_attri_buff_ = new float[4*(*n_obj_)];
+    unsigned cnt = 0;
+    for (unsigned i = 1; i < this->weights_.size(); i++) {
+      obj_wgt_attri_buff_[cnt*4]   = this->weights_[i].w_ori_;
+      obj_wgt_attri_buff_[cnt*4+1] = this->weights_[i].w_lnd_;
+      obj_wgt_attri_buff_[cnt*4+2] = this->weights_[i].w_dst_;
+      obj_wgt_attri_buff_[cnt*4+3] = this->weights_[i].w_ord_;
+      obj_weight_buff_[cnt++] = this->weights_[i].w_obj_;
+    }
+    // create cl_mem for ground
+    grd_weight_cl_mem_ = new bocl_mem(gpu_->context(), grd_weight_buff_, sizeof(float), " grd_weight " );
+    if (!grd_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: create bocl_mem failed for GRD_WEIGHT\n";
+      delete grd_weight_cl_mem_;
+      return false;
+    }
+    grd_wgt_attri_cl_mem_ = new bocl_mem(gpu_->context(), grd_wgt_attri_buff_, 3*sizeof(float), " grd_wgt_attri " );
+    if (!grd_wgt_attri_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+      vcl_cerr << "\n ERROR: create bocl_mem failed for GRD_WGT_ATTRI\n";
+      delete grd_weight_cl_mem_;  delete grd_wgt_attri_cl_mem_;
+      return false;
     }
   }
-
-  // calculate the object score
-  vcl_vector<float> score_order_all;
-  vcl_vector<float> score_min_all;
-  if ( is_obj_reg_)
-  {
-    for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
-    {
-      unsigned start_ind = ind_id * layer_size_;
-      for (unsigned cam_id = 0; cam_id < nc; cam_id++)
-      {
-        float score_order = 0.0f;
-        float score_min = 0.0f;
-        unsigned mu_start_id = cam_id*no + ind_id*no*nc;
-        for (unsigned k = 0; k < no; k++) {
-          unsigned offset_id = k + no*cam_id;
-          unsigned start_obj = obj_id_offset_buff_[offset_id];
-          unsigned end_obj = obj_id_offset_buff_[offset_id+1];
-          float score_k = 0.0f;
-          float score_min_k = 0.0f;
-          for (unsigned i = start_obj; i < end_obj; i++) {
-            unsigned id = start_ind + obj_id_buff_[i];
-            unsigned d = index[id];
-            unsigned s_vox = 1;
-            unsigned s_min = 0;
-            unsigned min_k = obj_min_dist_buff_[k];
-            if ( d < 253 ) {  // valid object voxel
-              // do the order checking
-              for (unsigned mu_id = 0; (mu_id < k && s_vox); mu_id++) {
-                float depth_d = depth_interval_[d];
-                float depth_m = mu[mu_id+mu_start_id];
-                if (mu[mu_id+mu_start_id] != 0)
-                  s_vox = s_vox * ( depth_interval_[d] >= mu[mu_id+mu_start_id] );
-              }
-              for (unsigned mu_id = k+1; (mu_id < no && s_vox); mu_id++) {
-                float depth_d = depth_interval_[d];
-                float depth_m = mu[mu_id+mu_start_id];
-                if (mu[mu_id+mu_start_id] != 0)
-                s_vox = s_vox * ( depth_interval_[d] <= mu[mu_id+mu_start_id] );
-              }
-              if ( d > obj_min_dist_buff_[k] )
-                s_min = 1;
-            }
-            else {
-              s_vox = 0;
-            }
-            score_k += (float)s_vox;
-            score_min_k += (float)s_min;
-          } // end for loop over voxel in object k
-          // normalized the order score for object k
-          score_k = (end_obj != start_obj) ? score_k/(end_obj-start_obj) : 0;
-          score_k = score_k * obj_weight_buff_[k];
-          // normalized the min_dist score for object k
-          score_min_k = (end_obj != start_obj) ? score_min_k/(end_obj-start_obj) : 0;
-          score_min_k = score_min_k * obj_weight_buff_[k];
-          // summerize order score for index ind_id and camera cam_id
-          score_order += score_k;
-          score_min += score_min_k;
-        }  // end for loop over objects
-        score_order = score_order / no;
-        score_order_all.push_back(score_order);
-        score_min = score_min / no;
-        score_min_all.push_back(score_min);
-      } // end of loop over cameras
-    } // end of loop over indices
-  }
-
-  // get the overall score
-  vcl_vector<float> score_all;
-  for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-    for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-      unsigned id = cam_id + ind_id * nc;
-      if (is_grd_reg_ && is_sky_reg_)
-        score_all.push_back(score_sky_all[id] + score_grd_all[id] + score_order_all[id] + score_min_all[id]);
-      else if ( !is_grd_reg_ && is_sky_reg_)
-        score_all.push_back(score_sky_all[id] + score_order_all[id] + score_min_all[id]);
-      else if ( !is_sky_reg_ && is_grd_reg_)
-        score_all.push_back(score_grd_all[id] + score_order_all[id] + score_min_all[id]);
-      else
-        score_all.push_back(score_order_all[id] + score_min_all[id]);
+  else {
+    if (this->weights_.size() != (*n_obj_) ) {
+      vcl_cerr << "\n ERROR: inconsistancy between volm_query and volm_weight\n";
+      return false;
+    }
+    // objects starts from line1
+    obj_weight_buff_ = new float[*n_obj_];
+    obj_wgt_attri_buff_ = new float[4*(*n_obj_)];
+    for (unsigned i = 0; i < this->weights_.size(); i++) {
+      obj_wgt_attri_buff_[i*4]   = this->weights_[i].w_ori_;
+      obj_wgt_attri_buff_[i*4+1] = this->weights_[i].w_lnd_;
+      obj_wgt_attri_buff_[i*4+2] = this->weights_[i].w_dst_;
+      obj_wgt_attri_buff_[i*4+3] = this->weights_[i].w_ord_;
+      obj_weight_buff_[i] = this->weights_[i].w_obj_;
     }
   }
 
-  // output all sky and ground score for checking
-#if 0
-  for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-    for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-      unsigned id = cam_id + ind_id * nc;
-      vcl_cout << " ind_id = " << ind_id << " cam_id = " << cam_id
-               << " score_sky[" << id << "] = " << score_sky_all[id]
-               << "\t\t score_grd[" << id << "] = " << score_grd_all[id]
-               << "\t\t score_order[" << id << "] = " << score_order_all[id]
-               << "\t\t score_min[" << id << "] = " << score_min_all[id]
-               << vcl_endl;
-    }
-  }
-#endif
-  // output for objects
-#if 0
-  // mean values
-  for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
-    for (unsigned cam_id = 0; cam_id < nc; cam_id++)
-      for (unsigned obj_id = 0; obj_id < no; obj_id++) {
-        unsigned start_ind = ind_id * layer_size_;
-        unsigned id = obj_id + cam_id * no + ind_id * nc * no;
-        //if ( mu[id] - mu_buff[id]  != 0) {
-          vcl_cout << " ind_id = " << ind_id
-                   << " cam_id = " << cam_id
-                   << " obj_id = " << obj_id
-                   << " start_ind = " << start_ind
-                   << " id = " << id
-                   << " mu_cpu = " << mu[id]
-                   << " mu_gpu = " << mu_buff[id]
-                   << " mu_diff = " << mu[id] - mu_buff[id]
-                   << vcl_endl;
-       //}
-      }
-
-  // score_order
-  for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-    for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-      unsigned id = cam_id + ind_id * nc;
-      vcl_cout << " ind_id = " << ind_id << " cam_id = " << cam_id << " score_order[" << id << "] = " << score_order_all[id] << vcl_endl;
-    }
+  // create cl_mem for non sky/grd objects
+  obj_weight_cl_mem_ = new bocl_mem(gpu_->context(), obj_weight_buff_, (*n_obj_)*sizeof(float), " obj_weight ");
+  if (!obj_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+    vcl_cerr << "\n ERROR: create bocl_mem failed for OBJ_WEIGHT\n";
+    delete sky_weight_cl_mem_;
+    delete grd_weight_cl_mem_;  delete grd_wgt_attri_cl_mem_;
+    delete obj_weight_cl_mem_;
+    return false;
   }
 
-  // score_min
-  for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-    for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-      unsigned id = cam_id + ind_id * nc;
-      vcl_cout << " ind = " << ind_id << " cam = " << cam_id << " score_min[" << id << "] = " << score_min_all[id] << vcl_endl;
-    }
+  obj_wgt_attri_cl_mem_ = new bocl_mem(gpu_->context(), obj_wgt_attri_buff_, 4*(*n_obj_)*sizeof(float), " obj_wgt_attri " );
+  if (!obj_wgt_attri_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
+    vcl_cerr << "\n ERROR: create bocl_mem fialed for OBJ_WGT_ATTRI\n";
+    delete sky_weight_cl_mem_;
+    delete grd_weight_cl_mem_;  delete grd_wgt_attri_cl_mem_;
+    delete obj_weight_cl_mem_;  delete obj_wgt_attri_cl_mem_;
+    return false;
   }
+
+#if 1
+  // screen output
+  vcl_cout << " we have weight parameters in p1_matcher as follows " << vcl_endl;
+  for (vcl_vector<volm_weight>::iterator vit = this->weights_.begin(); vit != this->weights_.end(); ++vit)
+    vcl_cout << ' ' << vit->w_typ_ << ' ' << vit->w_ori_ << ' ' << vit->w_lnd_ << ' ' << vit->w_dst_ << ' ' << vit->w_ord_ << ' ' << vit->w_obj_ << vcl_endl;
+
+  vcl_cout << " ---------------- WEIGHT BUFFER ------------------ " << vcl_endl;
+  if (is_sky_reg_ && is_grd_reg_) {
+    vcl_cout << ' ' << "sky" << " 0.0 0.0 1.0 0.0 " << *sky_weight_buff_ << vcl_endl;
+    vcl_cout << ' ' << "ground " << grd_wgt_attri_buff_[0] << ' ' << grd_wgt_attri_buff_[1] << ' ' << grd_wgt_attri_buff_[2] << " 0.0 " << *grd_weight_buff_ << vcl_endl;
+  }
+  else if (is_sky_reg_) {
+    vcl_cout << ' ' << "sky" << " 0.0 0.0 1.0 0.0 " << *sky_weight_buff_ << vcl_endl;
+  }
+  else if (is_grd_reg_) {
+    vcl_cout << ' ' << "ground " << grd_wgt_attri_buff_[0] << ' ' << grd_wgt_attri_buff_[1] << ' ' << grd_wgt_attri_buff_[2] << " 0.0 " << *grd_weight_buff_ << vcl_endl;
+  }
+  for (unsigned i = 0; i < (*n_obj_); i++) {
+    vcl_cout << ' ' << "object " << obj_wgt_attri_buff_[i*4] << ' '
+                                  << obj_wgt_attri_buff_[i*4+1] << ' '
+                                  << obj_wgt_attri_buff_[i*4+2] << ' '
+                                  << obj_wgt_attri_buff_[i*4+3] << ' '
+                                  << obj_weight_buff_[i] << vcl_endl;
+  }
+
 #endif
 
-  // check the score output
-  for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
-    for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
-      unsigned id = cam_id + ind_id * nc;
-      vcl_cout << " ind = " << ind_id << " cam = " << cam_id << " id = " << id
-               << "\t score_cpu = " << score_all[id]
-               << "\t score_gpu = " << score_buff[id]
-               << "\t diff = " << score_all[id] - score_buff[id]
-               << vcl_endl;
-    }
-  }
   return true;
 }
-
 
 bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
                                                      unsigned char* index,
@@ -1722,7 +1590,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
           unsigned cnt = 0;
           for (unsigned i = start_obj; i < end_obj; i++) {
             unsigned id = start_ind + obj_id_buff_[i];
-            if ( (unsigned)index[id] < 253 ) {
+            if ( (unsigned)index[id] < 253 && (unsigned)index[id] < depth_interval_.size() ) {
               mu_obj += depth_interval_[index[id]];
               cnt += 1;
             }
@@ -1783,7 +1651,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
         float score_grd_ori = (end!=start) ? (float)ori_cnt/(end-start) : 0.0f;
         score_grd *= (*grd_weight_buff_);
         score_grd_ori *= (*grd_weight_buff_);
-        score_grd_all.push_back(score_grd + score_grd_ori);
+        score_grd_all.push_back( this->grd_wgt_attri_buff_[2] * score_grd + this->grd_wgt_attri_buff_[0] * score_grd_ori);
       }
     }
   }
@@ -1818,18 +1686,18 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
             unsigned s_min = 0;
             unsigned s_ori = 0;
             unsigned min_k = obj_min_dist_buff_[k];
-            if ( d < 253 ) {  // valid object voxel
+            if ( d < 253 && d < depth_interval_.size()) {  // valid object voxel
               // do the order checking
               for (unsigned mu_id = 0; (mu_id < k && s_vox); mu_id++) {
                 float depth_d = depth_interval_[d];
                 float depth_m = mu[mu_id+mu_start_id];
-                if (mu[mu_id+mu_start_id] != 0)
+                if (mu[mu_id+mu_start_id]*mu[mu_id+mu_start_id] > 1E-7)
                   s_vox = s_vox * ( depth_interval_[d] >= mu[mu_id+mu_start_id] );
               }
               for (unsigned mu_id = k+1; (mu_id < no && s_vox); mu_id++) {
                 float depth_d = depth_interval_[d];
                 float depth_m = mu[mu_id+mu_start_id];
-                if (mu[mu_id+mu_start_id] != 0)
+                if (mu[mu_id+mu_start_id]*mu[mu_id+mu_start_id] > 1E-7)
                 s_vox = s_vox * ( depth_interval_[d] <= mu[mu_id+mu_start_id] );
               }
               if ( d > obj_min_dist_buff_[k] )
@@ -1852,23 +1720,23 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
           } // end for loop over voxel in object k
           // normalized the order score for object k
           score_k = (end_obj != start_obj) ? score_k/(end_obj-start_obj) : 0;
-          score_k = score_k * obj_weight_buff_[k];
+          score_k = score_k * obj_weight_buff_[k] * this->obj_wgt_attri_buff_[4*k+3];
           // normalized the min_dist score for object k
           score_min_k = (end_obj != start_obj) ? score_min_k/(end_obj-start_obj) : 0;
-          score_min_k = score_min_k * obj_weight_buff_[k];
+          score_min_k = score_min_k * obj_weight_buff_[k] * this->obj_wgt_attri_buff_[4*k+2];
           // normalized the orient score for object k
           score_ori_k = (end_obj != start_obj) ? score_ori_k/(end_obj-start_obj) : 0;
-          score_ori_k = score_ori_k * obj_weight_buff_[k];
+          score_ori_k = score_ori_k * obj_weight_buff_[k] * this->obj_wgt_attri_buff_[4*k+0];
           // summerize order score for index ind_id and camera cam_id
           score_order += score_k;
           score_min += score_min_k;
           score_ori += score_ori_k;
         }  // end for loop over objects
-        score_order = score_order / no;
+        score_order = score_order;
         score_order_all.push_back(score_order);
-        score_min = score_min / no;
+        score_min = score_min;
         score_min_all.push_back(score_min);
-        score_ori = score_ori / no;
+        score_ori = score_ori;
         score_ori_all.push_back(score_ori);
       } // end of loop over cameras
     } // end of loop over indices
@@ -1891,7 +1759,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
   }
 
   // output all sky and ground score for checking
-#if 0
+#if 1
   for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
     for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
       unsigned id = cam_id + ind_id * nc;
@@ -1900,7 +1768,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
                << "\t\t score_grd[" << id << "] = " << score_grd_all[id]
                << "\t\t score_order[" << id << "] = " << score_order_all[id]
                << "\t\t score_min[" << id << "] = " << score_min_all[id]
-               << "\t\t score_orient[" << id << " = " << score_ori_all[id]
+               << "\t\t score_orient[" << id << "] = " << score_ori_all[id]
+               << "\t\t score_obj[" << id << "] = " << score_order_all[id] + score_min_all[id] + score_ori_all[id]
                << vcl_endl;
     }
   }
@@ -1944,6 +1813,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
                    << vcl_endl;
       }
 #endif
+
     // check the score output
   for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
     for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
