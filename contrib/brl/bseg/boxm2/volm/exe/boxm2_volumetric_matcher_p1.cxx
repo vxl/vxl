@@ -195,12 +195,10 @@ int main(int argc, char** argv)
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
     vcl_cout << " -------------- SKYs --------------" << vcl_endl;
-    float sky_weight = query->sky_weight();
     for (unsigned i = 0; i < dm->sky().size(); i++)
       vcl_cout << "\t name = " << (dm->sky()[i]->name())
                << ",\t depth = " << 254
                << ",\t orient = " << (int)query->sky_orient()
-               << ",\t weight = " << sky_weight
                << vcl_endl;
   }
   if (dm->ground_plane().size()) {
@@ -211,13 +209,11 @@ int main(int argc, char** argv)
                << ",\t orient = " << dm->ground_plane()[i]->orient_type()
                << ",\t land_id = " << dm->ground_plane()[i]->land_id()
                << ",\t land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
-               << ",\t weight = " << query->grd_weight()
                << vcl_endl;
   }
   vcl_vector<depth_map_region_sptr> dmr = query->depth_regions();
   if (dmr.size()) {
     vcl_cout << " -------------- DEPTH REGIONS --------------" << vcl_endl;
-    vcl_vector<float>& obj_weight = query->obj_weight();
     for (unsigned i = 0; i < dmr.size(); i++) {
       vcl_cout << "\t\t " <<  dmr[i]->name()  << " region "
                << ",\t\t min_depth = " << dmr[i]->min_depth()
@@ -227,7 +223,6 @@ int main(int argc, char** argv)
                << ",\t\t orient = " << dmr[i]->orient_type()
                << ",\t\t NLCD_id = " << dmr[i]->land_id()
                << ",\t\t land_name = " << volm_label_table::land_string(dmr[i]->land_id())
-               << " weight = " << obj_weight[i]
                << vcl_endl;
     }
   }
