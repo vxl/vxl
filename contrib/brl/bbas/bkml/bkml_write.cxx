@@ -88,3 +88,28 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
        << "</Placemark>\n" << vcl_endl;
 }
 
+void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
+                                     double lon, double lat, double alt,
+                                     double head, double tilt, double roll,
+                                     double t_fov, double r_fov)
+{
+  ofs << "<PhotoOverlay>\n"
+      << "  <name>" << name << "</name>\n"
+      << "  <Camera>\n"
+      << "    <longitude>" << lon << "</longitude>\n"
+      << "    <latitude>"  << lat << "</latitude>\n"
+      << "    <altitude>"  << alt << "</altitude>\n"
+      << "    <heading>"   << head << "</heading>\n"
+      << "    <tilt>"      << tilt << "</tilt>\n"
+      << "    <roll>"      << roll << "</roll>\n"
+      << "    <altitudeMode>relativeToGround</altitudeMode>\n"
+      << "  </Camera>\n"
+      << "  <ViewVolume>\n"
+      << "    <leftFov>"   << -1*r_fov << "</leftFov>\n"
+      << "    <rightFov>"  << r_fov    << "</rightFov>\n"
+      << "    <bottomFov>" << -1*t_fov << "</bottomFov>\n"
+      << "    <topFov>"    << t_fov    << "</topFov>\n"
+      << "    <near></near>\n"
+      << "  </ViewVolume>\n"
+      << "</PhotoOverlay>\n" << vcl_endl;
+}

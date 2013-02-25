@@ -10,7 +10,7 @@
 //
 // \verbatim
 //  Modifications
-//   <none yet>
+//   Yi Dong --- Feb, 2013  adding functions to write the Photooverlay
 // \endverbatim
 
 #include <vcl_fstream.h>
@@ -32,6 +32,12 @@ class bkml_write
   
   //: Write a box with color, color is in hexadecimale format: 0 - 255 --> 00 to ff, aabbggrr --> alpha alpha, blue blue, gree green , red red.. alpha is the opacity, ffffffff is white fully opaque
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, vcl_string hex_color);
+
+  //: Write a photooverlay without img and correct near parameter though)
+  static void write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
+                                  double lon, double lat, double alt,
+                                  double head, double tilt, double roll,
+                                  double t_fov, double r_fov);
 };
 
 #endif
