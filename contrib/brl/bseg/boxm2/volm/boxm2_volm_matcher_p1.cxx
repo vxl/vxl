@@ -8,7 +8,8 @@
 #define GBYTE 1073741824
 
 
-boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_query_sptr const& query,
+boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_camera_space_sptr const& cam_space,
+                                             volm_query_sptr const& query,
                                              vcl_vector<volm_geo_index_node_sptr> const& leaves,
                                              float const& buffer_capacity,
                                              vcl_string const& geo_index_folder,
@@ -22,7 +23,7 @@ boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_query_sptr const& query,
                                              float const& threshold,
                                              unsigned const& max_cam_per_loc,
                                              vcl_vector<volm_weight> weights) :
-  query_(query), leaves_(leaves), ind_buffer_(buffer_capacity),
+  cam_space_(cam_space), query_(query), leaves_(leaves), ind_buffer_(buffer_capacity),
   layer_size_buff_(0), is_candidate_(is_candidate), cand_poly_(cand_poly),
   is_last_pass_(is_last_pass), out_folder_(out_folder), depth_interval_(depth_interval),
   gpu_(gpu), is_grd_reg_(true), is_sky_reg_(true), is_obj_reg_(true), n_cam_(0), n_obj_(0),
@@ -33,6 +34,7 @@ boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_query_sptr const& query,
   obj_orient_buff_(0), depth_interval_buff_(0), depth_length_buff_(0),
   threshold_(threshold), max_cam_per_loc_(max_cam_per_loc), weights_(weights)
 {
+    valid_cam_indices_ = cam_space_->valid_indices();
     layer_size_ = query_->get_query_size();
     ind_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
     ind_orient_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
@@ -423,12 +425,12 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
         float s = score_buff_[id];
         // find the max_score and max_cam_id
         if (s > max_score) {
-          max_score = s;  max_cam_id = cam_id;
+          max_score = s;  max_cam_id = valid_cam_indices_[cam_id];
         }
         // decide to keep the camera or not
         if (s > threshold_) {
           if (cam_ids.size() < max_cam_per_loc_) {
-            cam_ids.push_back(cam_id);
+            cam_ids.push_back(valid_cam_indices_[cam_id]);
             cam_scores.push_back(s);
           }
           else if (s > min_score_in_list) {
@@ -443,7 +445,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
             }
             // replace the id that have min_score among the camera id list
             cam_scores[min_score_id] = s;
-            cam_ids[min_score_id] = cam_id;
+            cam_ids[min_score_id] = valid_cam_indices_[cam_id];
           }
         }
       }
@@ -499,13 +501,13 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
 }
 
 bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
-                                              unsigned const& layer_size,
-                                              unsigned& leaf_id,
-                                              unsigned char* index_buff,
-                                              unsigned char* index_orient_buff,
-                                              vcl_vector<unsigned>& l_id,
-                                              vcl_vector<unsigned>& h_id,
-                                              unsigned& actual_n_ind)
+                                       unsigned const& layer_size,
+                                       unsigned& leaf_id,
+                                       unsigned char* index_buff,
+                                       unsigned char* index_orient_buff,
+                                       vcl_vector<unsigned>& l_id,
+                                       vcl_vector<unsigned>& h_id,
+                                       unsigned& actual_n_ind)
 {
   if (is_last_pass_) {
     vcl_cerr << " pass 1 check whether we have last_pass is NOT implemented yet ...\n";

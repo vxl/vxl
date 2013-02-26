@@ -14,6 +14,8 @@
 // \endverbatim
 //
 
+#include <volm/volm_camera_space.h>
+#include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_query_sptr.h>
 #include <volm/volm_query.h>
 #include <volm/volm_io.h>
@@ -36,7 +38,8 @@ public:
   //: default constructor
   boxm2_volm_matcher_p1() {}
   //: constructor
-  boxm2_volm_matcher_p1(volm_query_sptr const& query,
+  boxm2_volm_matcher_p1(volm_camera_space_sptr const& cam_space,
+                        volm_query_sptr const& query,
                         vcl_vector<volm_geo_index_node_sptr> const& leaves,
                         float const& buffer_capacity,
                         vcl_string const& geo_index_folder,
@@ -63,6 +66,8 @@ public:
     
 private:
   //: query, indices, device
+  volm_camera_space_sptr                        cam_space_;
+  vcl_vector<unsigned>                  valid_cam_indices_;
   volm_query_sptr                                   query_;
   vcl_vector<volm_geo_index_node_sptr>             leaves_;
   boxm2_volm_wr3db_index_sptr                         ind_;

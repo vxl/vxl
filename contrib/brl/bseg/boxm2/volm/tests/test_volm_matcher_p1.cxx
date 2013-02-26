@@ -156,7 +156,7 @@ static void test_volm_matcher_p1()
 
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
 
-  boxm2_volm_matcher_p1 obj_order_matcher(query, leaves, buffer_capacity, geo_index_folder, tile_id,
+  boxm2_volm_matcher_p1 obj_order_matcher(cam_space, query, leaves, buffer_capacity, geo_index_folder, tile_id,
                                           depth_interval_rev, cand_poly, mgr->gpus_[dev_id], is_candidate, is_last_pass, out_folder,
                                           threshold, max_cam_per_loc, weights);
   bool good = obj_order_matcher.volm_matcher_p1();

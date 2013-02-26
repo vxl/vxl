@@ -251,7 +251,7 @@ int main(int argc,  char** argv)
 
   log << " For GT location, closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
       << " has best score = " << score_gt << ", best camera stored in BestCamera.kml ( "
-      << gt_cam_ang.get_string() << " img size " << query_img.ni() << " by " << query_img.nj() << '\n';
+      << gt_cam_ang.get_string() << ", id = " << cam_gt_best << " ) img size " << query_img.ni() << " by " << query_img.nj() << '\n';
   volm_io::write_post_processing_log(log_file, log.str());
 
   // render the index_depth image
@@ -271,6 +271,7 @@ int main(int argc,  char** argv)
     ind_dst->get_next(values_dst);
     ind_ori->get_next(values_ori);
     if (h_id == h_gt) {
+      //vcl_cout << "h_id = " << h_id << " h_gt = " << h_gt << ", camera = " << cam_space->camera_angles(cam_gt_best).get_string() << vcl_endl;
       vcl_stringstream dst_img_fname;
       vcl_stringstream ori_img_fname;
       dst_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_depth_best_cam.png";
@@ -284,10 +285,75 @@ int main(int argc,  char** argv)
           dst_img(i,j).g = (unsigned char)120;    ori_img(i,j).g = (unsigned char)120;
           dst_img(i,j).b = (unsigned char)120;    ori_img(i,j).b = (unsigned char)120;
         }
-      query->depth_rgb_image(values_dst, cam_gt_best, dst_img, "depth");
-      query->depth_rgb_image(values_ori, cam_gt_best, ori_img, "orientation");
+      // locate the camera inside the volm_query
+      unsigned query_cam_id;
+      vcl_vector<unsigned> valid_cam_id = cam_space->valid_indices();
+      for (unsigned jj = 0; jj < valid_cam_id.size(); jj++) {
+        if (cam_gt_best == valid_cam_id[jj]) {
+          query_cam_id = jj;
+          break;
+        }
+      }
+      query->depth_rgb_image(values_dst, query_cam_id, dst_img, "depth");
+      query->depth_rgb_image(values_ori, query_cam_id, ori_img, "orientation");
+
+      log << " For GT location, from query, the camera string is " << query->get_cam_string(query_cam_id) << vcl_endl;
+      volm_io::write_post_processing_log(log_file, log.str());
+      vcl_cout << log.str();
       vil_save(dst_img, (dst_img_fname.str()).c_str());
       vil_save(ori_img, (ori_img_fname.str()).c_str());
+
+      // hack here to render the gt camera for test_id_36
+      if (id() == 36) {
+        cam_angles gt_cam_ang(0.31, 29.03, 68.0, 77.13);
+        vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
+        log << " For GT location , closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
+                 << " GT camera " << gt_cam_pair.first << " --> " << gt_cam_pair.second.get_string() << '\n';
+        volm_io::write_post_processing_log(log_file, log.str());
+        vcl_cout << log.str();
+        vcl_stringstream dst_gt_img_fname;
+        vcl_stringstream ori_gt_img_fname;
+        dst_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_depth_gt_cam.png";
+        ori_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_orient_gt_cam.png";
+        vil_image_view<vil_rgb<vxl_byte> > dst_gt_img(query_img.ni(), query_img.nj());
+        vil_image_view<vil_rgb<vxl_byte> > ori_gt_img(query_img.ni(), query_img.nj());
+        // initialize the image
+        for (unsigned i = 0; i < query_img.ni(); i++)
+          for (unsigned j = 0; j < query_img.nj(); j++) {
+            dst_gt_img(i,j).r = (unsigned char)120;    ori_gt_img(i,j).r = (unsigned char)120;
+            dst_gt_img(i,j).g = (unsigned char)120;    ori_gt_img(i,j).g = (unsigned char)120;
+            dst_gt_img(i,j).b = (unsigned char)120;    ori_gt_img(i,j).b = (unsigned char)120;
+          }
+        query->depth_rgb_image(values_dst, gt_cam_pair.first, dst_gt_img, "depth");
+        query->depth_rgb_image(values_ori, gt_cam_pair.first, ori_gt_img, "orientation");
+        vil_save(dst_gt_img, (dst_gt_img_fname.str()).c_str());
+        vil_save(ori_gt_img, (ori_gt_img_fname.str()).c_str());
+      } 
+      else if (id() == 40) {
+        cam_angles gt_cam_ang(-0.74, 5.30, 67.0, 87.70);
+        vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
+        log << " For GT location , closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
+                 << " GT camera " << gt_cam_pair.first << " --> " << gt_cam_pair.second.get_string() << '\n';
+        volm_io::write_post_processing_log(log_file, log.str());
+        vcl_cout << log.str();
+        vcl_stringstream dst_gt_img_fname;
+        vcl_stringstream ori_gt_img_fname;
+        dst_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_depth_gt_cam.png";
+        ori_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_orient_gt_cam.png";
+        vil_image_view<vil_rgb<vxl_byte> > dst_gt_img(query_img.ni(), query_img.nj());
+        vil_image_view<vil_rgb<vxl_byte> > ori_gt_img(query_img.ni(), query_img.nj());
+        // initialize the image
+        for (unsigned i = 0; i < query_img.ni(); i++)
+          for (unsigned j = 0; j < query_img.nj(); j++) {
+            dst_gt_img(i,j).r = (unsigned char)120;    ori_gt_img(i,j).r = (unsigned char)120;
+            dst_gt_img(i,j).g = (unsigned char)120;    ori_gt_img(i,j).g = (unsigned char)120;
+            dst_gt_img(i,j).b = (unsigned char)120;    ori_gt_img(i,j).b = (unsigned char)120;
+          }
+        query->depth_rgb_image(values_dst, gt_cam_pair.first, dst_gt_img, "depth");
+        query->depth_rgb_image(values_ori, gt_cam_pair.first, ori_gt_img, "orientation");
+        vil_save(dst_gt_img, (dst_gt_img_fname.str()).c_str());
+        vil_save(ori_gt_img, (ori_gt_img_fname.str()).c_str());
+      }
     }
   }
 
