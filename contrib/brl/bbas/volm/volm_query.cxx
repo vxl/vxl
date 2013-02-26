@@ -964,6 +964,8 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
                                  vil_image_view<vil_rgb<vxl_byte> >& out_img,
                                  vcl_string value_type)
 {
+  vcl_cout << " ------------- inside volm_query" << vcl_endl;
+  vcl_cout << "cam_id = " << cam_id << vcl_endl;
   this->draw_depth_map_regions(out_img);
   // draw the rays that current penetrate through the image
   if (value_type == "depth") {
