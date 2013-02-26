@@ -33,6 +33,7 @@
 #include <vcl_set.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
 #include <volm/volm_camera_space_sptr.h>
+#include <volm/volm_camera_space.h>
 #include <vsl/vsl_binary_io.h>
 
 class volm_query : public vbl_ref_count
@@ -48,6 +49,12 @@ class volm_query : public vbl_ref_count
 
   //: constructor from depth map scene
   volm_query(volm_camera_space_sptr cam_space,
+             vcl_string const& depth_map_scene_file,
+             volm_spherical_shell_container_sptr const& sph_shell,
+             volm_spherical_container_sptr const& sph);
+
+  //: constructor from a binary file of data members
+  volm_query(vcl_string const& query_file, volm_camera_space_sptr cam_space,
              vcl_string const& depth_map_scene_file,
              volm_spherical_shell_container_sptr const& sph_shell,
              volm_spherical_container_sptr const& sph);
@@ -80,7 +87,7 @@ class volm_query : public vbl_ref_count
   depth_map_scene_sptr depth_scene() const                      { return dm_; }
   vcl_vector<depth_map_region_sptr>& depth_regions()            { return depth_regions_; }
   volm_spherical_shell_container_sptr sph_shell() const         { return sph_; }
-  unsigned get_cam_num() const                                  { return (unsigned)cameras_.size(); }
+  unsigned get_cam_num() const                                  { return (unsigned)cam_space_->valid_indices().size(); }
   unsigned get_obj_order_num() const                            { return (unsigned)order_index_[0].size(); }
   unsigned get_query_size() const                               { return query_size_; }
   
@@ -135,11 +142,14 @@ class volm_query : public vbl_ref_count
   //: version
   unsigned version() const {return 1;}
 
-  //: binary IO write
-  void b_write(vsl_b_ostream& os);
+  //: binary IO write  -- does not write all of self, not a regular b_write
+  void write_data(vsl_b_ostream& os);
 
-  //: binary IO read
-  void b_read(vsl_b_istream& is);
+  //: binary IO read   -- does not read all of self, not a regular b_read
+  void read_data(vsl_b_istream& is);
+
+  //: CAUTION: not all fields are checked for equality, only the fields which are saved in write_data() are checked
+  bool operator== (const volm_query &other) const;
 
   static void draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polygon<double> const& poly, unsigned char const& depth);
 
@@ -176,8 +186,6 @@ class volm_query : public vbl_ref_count
   double d_threshold_;
   //: vector of depth_map_region sorted by depth order
   vcl_vector<depth_map_region_sptr> depth_regions_;
-  //: depth region polygons (maybe not used)
-  vcl_vector<vgl_polygon<double> >        dm_poly_;
 
   // === camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered ===
 

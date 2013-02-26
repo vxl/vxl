@@ -14,6 +14,8 @@
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <volm/volm_camera_space.h>
+#include <vsl/vsl_vector_io.h>
+#include <vsl/vsl_set_io.h>
 
 #define TOL -1E-8
 
@@ -162,6 +164,49 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
   // implement the weight parameters for all objects
   //this->weight_ingest();
 }
+
+volm_query::volm_query(vcl_string const& query_file, volm_camera_space_sptr cam_space,
+                       vcl_string const& depth_map_scene_file,
+                       volm_spherical_shell_container_sptr const& sph_shell,
+                       volm_spherical_container_sptr const& sph)
+: cam_space_(cam_space), invalid_((unsigned char)255), sph_depth_(sph), sph_(sph_shell)
+{
+  //the discrete rays defined on the sphere as x, y, z
+  query_points_ = sph_->cart_points();
+  query_size_ = (unsigned)query_points_.size();
+
+  // load the depth_map_scene from depth_map_scene binary
+  dm_ = new depth_map_scene;
+  vsl_b_ifstream dis(depth_map_scene_file.c_str());
+  dm_->b_read(dis);
+  dis.close();
+  // the dimensions of the depth image
+  ni_ = dm_->ni();
+  nj_ = dm_->nj();
+  // the image may be downsampled to provide more efficient matching
+  log_downsample_ratio_ = 0;//initial scale = 1
+  // the larger dimension of the image
+  unsigned bigger = ni_ > nj_ ? ni_ : nj_;
+  // find the scale that keeps the largest image dimension > 500
+  while ((bigger>>log_downsample_ratio_) > 500)
+    ++log_downsample_ratio_;
+  vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
+
+  depth_regions_ = dm_->scene_regions();
+  unsigned size = (unsigned)depth_regions_.size();
+  // sort the regions on depth order
+  vcl_sort(depth_regions_.begin(), depth_regions_.end(), compare_order());
+
+  altitude_ = cam_space_->altitude();
+
+  // read the rest from the binary file
+  vsl_b_ifstream dis_self(query_file.c_str());
+  this->read_data(dis_self);
+  dis_self.close();
+
+  vcl_cout << " volm_query has " << this->get_cam_num() << " cameras" << vcl_endl;
+}
+
 
 #if NO_CAM_SPACE_CLASS
 // generate the set of camera hypotheses
@@ -976,7 +1021,9 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
                  << ", point = " << query_points_[pidx]
                  << ", values = " << (int)values[pidx];
   #endif
-        this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
+        //this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
+        vpgl_perspective_camera<double> cam = cam_space_->camera(cam_id);
+        this->draw_dot(out_img, query_points_[pidx], values[pidx], cam);
       }
     }
   }
@@ -1136,34 +1183,113 @@ unsigned volm_query::obj_based_query_size_byte() const
   return size_byte;
 }
 
-#if 0
-bool volm_query::write_query_binary(vcl_string out_fold)
+//: binary IO write
+void volm_query::write_data(vsl_b_ostream& os)
 {
-  // write vpgl_perspective_camera
-  vcl_string cam_file = out_fold + "/camera_id.bin";
-  vsl_b_ofstream cam_os(cam_file);
   unsigned ver = this->version();
-  vsl_b_write(cam_os, ver);
-  vsl_b_write(cam_os, cameras_.size());
-  for (unsigned cam_id = 0; cam_id < cameras_.size(); ++cam_id)
-    vsl_b_write(cam_os, cameras_[cam_id]);
-  cam_os.close();
-  return true;
+  vsl_b_write(os, ver);
+  vsl_b_write(os, invalid_);
+  vsl_b_write(os, d_threshold_);
+  vsl_b_write(os, camera_strings_);
+  vsl_b_write(os, order_set_);  // store the non-ground order, using set to ensure objects having same order are put together
+  
+  vsl_b_write(os, (unsigned)(order_index_.size()));
+  for (unsigned i = 0; i < order_index_.size(); i++)
+    vsl_b_write(os, order_index_[i]);
+  
+  vsl_b_write(os, ground_id_);
+  vsl_b_write(os, ground_dist_);
+  vsl_b_write(os, ground_land_id_);
+  vsl_b_write(os, ground_offset_);
+  vsl_b_write(os, ground_orient_);
+  vsl_b_write(os, sky_id_);
+  vsl_b_write(os, sky_offset_);
+  vsl_b_write(os, sky_orient_);
+
+  vsl_b_write(os, (unsigned)(dist_id_.size()));
+  for (unsigned i = 0; i < dist_id_.size(); i++)
+    vsl_b_write(os, dist_id_[i]);
+
+  vsl_b_write(os, dist_offset_);
+  vsl_b_write(os, min_obj_dist_);
+  vsl_b_write(os, max_obj_dist_);
+  vsl_b_write(os, order_obj_);
+  vsl_b_write(os, obj_orient_);
+  vsl_b_write(os, obj_land_id_);
 }
 
-bool volm_query::read_query_binary(vcl_string inp_fold)
+//: binary IO read
+void volm_query::read_data(vsl_b_istream& is)
 {
-  vcl_cout << " reading camera" << vcl_endl;
-  vcl_string cam_file = inp_fold + "/camera_id.bin";
-  vsl_b_ifstream cam_is(cam_file);
-  unsigned ver = 1;
-  vsl_b_read(cam_is, ver);
-  if (ver == this->version()) {
-    return true;
+  unsigned ver;
+  vsl_b_read(is, ver);
+  if (ver ==1) {
+    vsl_b_read(is, invalid_);
+    vsl_b_read(is, d_threshold_);
+    vsl_b_read(is, camera_strings_);
+    vsl_b_read(is, order_set_);  // store the non-ground order, using set to ensure objects having same order are put together
+    unsigned size;
+    vsl_b_read(is, size);
+    for (unsigned i = 0; i < size; i++) {
+      vcl_vector<vcl_vector<unsigned> > o;
+      vsl_b_read(is, o);
+      order_index_.push_back(o);
+    }
+
+    vsl_b_read(is, ground_id_);
+    vsl_b_read(is, ground_dist_);
+    vsl_b_read(is, ground_land_id_);
+    vsl_b_read(is, ground_offset_);
+    vsl_b_read(is, ground_orient_);
+    vsl_b_read(is, sky_id_);
+    vsl_b_read(is, sky_offset_);
+    vsl_b_read(is, sky_orient_);
+    
+    vsl_b_read(is, size);
+    for (unsigned i = 0; i < size; i++) {
+      vcl_vector<vcl_vector<unsigned> > o;
+      vsl_b_read(is, o);
+      dist_id_.push_back(o);
+    }
+
+    vsl_b_read(is, dist_offset_);
+    vsl_b_read(is, min_obj_dist_);
+    vsl_b_read(is, max_obj_dist_);
+    vsl_b_read(is, order_obj_);
+    vsl_b_read(is, obj_orient_);
+    vsl_b_read(is, obj_land_id_);
   }
   else {
-    vcl_cerr << " current binary version is different from camera binary file\n";
-    return false;
+    vcl_cerr << "volm_spherical_shell_container - unknown binary io version " << ver <<'\n';
+    return;
   }
 }
-#endif
+
+bool volm_query::operator== (const volm_query &other) const
+{
+  return this->get_cam_num() == other.get_cam_num() && 
+  ni_ == other.ni_ && nj_ == other.nj_ &&
+  log_downsample_ratio_ == other.log_downsample_ratio_ &&
+  d_threshold_ == other.d_threshold_ &&
+  depth_regions_.size() == other.depth_regions_.size() &&
+  camera_strings_ == other.camera_strings_ &&
+  order_set_ == other.order_set_ &&
+  order_index_ == other.order_index_ && 
+  ground_id_ == other.ground_id_ && 
+  ground_dist_ == other.ground_dist_ && 
+  ground_land_id_ == other.ground_land_id_ && 
+  ground_offset_ == other.ground_offset_ && 
+  ground_orient_ == other.ground_orient_ &&
+  sky_id_ == other.sky_id_ && 
+  sky_offset_ == other.sky_offset_ && 
+  sky_orient_ == other.sky_orient_ &&
+  dist_id_ == other.dist_id_ && 
+  dist_offset_ == other.dist_offset_ && 
+  min_obj_dist_ == other.min_obj_dist_ && 
+  max_obj_dist_ == other.max_obj_dist_ && 
+  order_obj_ == other.order_obj_ && 
+  obj_orient_ == other.obj_orient_ && 
+  obj_land_id_ == other.obj_land_id_;
+}
+
+
