@@ -15,8 +15,7 @@
 static void test_query()
 {
   // input files
-  vcl_string cam_bin_file = "D:\\work\\find\\volm_matcher\\test1\\local_output\\pa_5\\p1a_test1_40\\camera_space.bin";
-  vcl_string dms_bin_file = "Z:\\projects\\FINDER\\test1\\p1a_test1_40\\p1a_test1_40_1.vsl";
+  vcl_string dms_bin_file = "Z:\\projects\\FINDER\\test1\\p1a_test1_40\\p1a_test1_40.vsl";
   vcl_string sph_shell_file = "Z:\\projects\\FINDER\\index\\sph_shell_vsph_ca_180_pa_5_ta_75_ba_75.bin";
   
   // parameter for depth_map_interval
@@ -31,11 +30,23 @@ static void test_query()
   sph_shell->b_read(sph_ifs);
   sph_ifs.close();
 
+  /*
   // load cam_space 
+  vcl_string cam_bin_file = "D:\\work\\find\\volm_matcher\\test1\\local_output\\pa_5\\p1a_test1_40\\camera_space.bin";
   vsl_b_ifstream cam_ifs(cam_bin_file);
   volm_camera_space_sptr csp_in = new volm_camera_space;
-  csp_in->b_read(cam_ifs);
+  csp_in->b_read(cam_ifs);*/
 
+  double head_mid=0.0, head_radius=180.0, head_inc=90.0;
+  double tilt_mid=90.0, tilt_radius=20.0, tilt_inc=10.0;
+  double roll_mid=0.0,  roll_radius=3.0,  roll_inc=3.0;
+  double top_fov_vals[] = {3.0,  4.0};
+  vcl_vector<double> fovs(top_fov_vals, top_fov_vals + 2);
+  double altitude = 1.6;
+  unsigned ni = 4000, nj = 3000;
+  volm_camera_space_sptr csp_in = new volm_camera_space(fovs, altitude, ni, nj, head_mid, head_radius, head_inc, tilt_mid, tilt_radius, tilt_inc, roll_mid, roll_radius, roll_inc);\
+  csp_in->generate_full_camera_index_space();  // don't bother with removing cams that don't satisfy ground plane constraint for testing purposes
+  
   // create volm_query
   volm_query_sptr query = new volm_query(csp_in, dms_bin_file, sph_shell, sph);
 
@@ -99,6 +110,14 @@ static void test_query()
     }
   }
 
+ vsl_b_ofstream ofs("./test_query.bin");
+ query->write_data(ofs);
+ ofs.close();
+
+ volm_query query_test("./test_query.bin", csp_in, dms_bin_file, sph_shell, sph);
+ TEST("binary i/o", *query == query_test, true);
+ 
+  
 #if 0
   vcl_string depth_scene_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
   // create the query
@@ -169,14 +188,6 @@ static void test_query()
     }
   }
 #endif
-
-  if (!query->write_query_binary(out_folder) ){
-    vcl_cerr << "ERROR: write query binary file failed" << vcl_endl;
-  }
-
-
-  volm_query query_l;
-  query_l.read_query_binary(out_folder);
 
   //TEST("number of rays for current query", query->get_query_size(), 29440); // for 2 degree resolution
 #endif//NEED FILES TO RUN!! JLM
