@@ -16,6 +16,7 @@
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vnl/vnl_double_2.h>
+#include <vgl/vgl_box_2d.h>
 
 class bkml_write
 {
@@ -29,9 +30,13 @@ class bkml_write
 
   //: Write a box
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr);
+  static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vgl_box_2d<double> bbox);
   
   //: Write a box with color, color is in hexadecimale format: 0 - 255 --> 00 to ff, aabbggrr --> alpha alpha, blue blue, gree green , red red.. alpha is the opacity, ffffffff is white fully opaque
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, vcl_string hex_color);
+
+  //: put a pin at the given location
+  static void write_location(vcl_ofstream &ofs, vcl_string name, vcl_string description, double lat, double lon, double elev);
 
   //: Write a photooverlay without img and correct near parameter though)
   static void write_photo_overlay(vcl_ofstream& ofs, vcl_string name,

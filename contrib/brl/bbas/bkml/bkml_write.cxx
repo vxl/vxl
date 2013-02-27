@@ -19,6 +19,7 @@ void bkml_write::close_document(vcl_ofstream& str)
 //: Write a box
 void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr)
 {
+   ofs.precision(8);
    ofs << "<Placemark>\n"
        << "  <name>" << name << "</name>\n"
        << "  <description>" << description << "</description>\n"
@@ -50,6 +51,16 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
        << "   </outerBoundaryIs>\n"
        << "  </Polygon>\n"
        << "</Placemark>\n" << vcl_endl;
+}
+//: kml requires lon, lat, elev in polygon definition
+void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vgl_box_2d<double> bbox)
+{
+  // in ul x is lat y is lon, in vgl bbox x is lon, y is lat so reverse
+  vnl_double_2 ul(bbox.max_y(), bbox.min_x());
+  vnl_double_2 ur(bbox.max_y(), bbox.max_x());
+  vnl_double_2 ll(bbox.min_y(), bbox.min_x());
+  vnl_double_2 lr(bbox.min_y(), bbox.max_x());
+  bkml_write::write_box(ofs, name, description, ul, ur, ll, lr); 
 }
 
 //: Write a box with color
@@ -88,6 +99,19 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
        << "</Placemark>\n" << vcl_endl;
 }
 
+//: put a pin at the given location
+void bkml_write::write_location(vcl_ofstream &ofs, vcl_string name, vcl_string description, double lat, double lon, double elev)
+{
+  ofs << "<Placemark>\n"
+      << "  <name>" << name << "</name>\n"
+      << "  <description>" << description << "</description>\n"
+      << "  <styleUrl>#m_ylw-pushpin</styleUrl>\n"
+		  << "  <Point>\n"
+			<< "    <coordinates>" << lon << ", " << lat << ", " << elev << "</coordinates>\n"
+		  << "  </Point>\n"
+      << "</Placemark>\n" << vcl_endl;
+}
+
 void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
                                      double lon, double lat, double alt,
                                      double head, double tilt, double roll,
@@ -113,3 +137,4 @@ void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
       << "  </ViewVolume>\n"
       << "</PhotoOverlay>\n" << vcl_endl;
 }
+
