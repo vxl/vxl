@@ -37,7 +37,8 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> candidate_list("-cand", "candidate list if exist", "");
   vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");                                // query -- camera space binary
   vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
-  vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");
+  vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");                             // query -- spherical_shell binary
+  vul_arg<vcl_string> query_bin("-query", "query binary file", "");
   vul_arg<float>      buffer_capacity("-buff", "index buffer capacity (GB)", 1.0f);
   vul_arg<vcl_string> out("-out", "job output folder", "");
   vul_arg<unsigned>   id("-id", "id of the test image", 6);
@@ -53,6 +54,7 @@ int main(int argc,  char** argv)
      gt_file().compare("") == 0 ||
      pass_id() > 2 ||
      img().compare("") == 0 ||
+     query_bin().compare("") == 0 ||
      id() > 100)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
@@ -179,6 +181,7 @@ int main(int argc,  char** argv)
     log << "ERROR: can not find camera_space binary: " << cam_bin() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
     vcl_cerr << log.str() << vcl_endl;
+    return volm_io::EXE_ARGUMENT_ERROR;
   }
   vsl_b_ifstream cam_ifs(cam_bin());
   volm_camera_space_sptr cam_space = new volm_camera_space();
@@ -186,13 +189,26 @@ int main(int argc,  char** argv)
   cam_ifs.close();
   // check depth_map_scene binary
   if (!vul_file::exists(dms_bin())) {
-    vcl_cerr << "ERROR: can not find depth_map_scene " << dms_bin() << vcl_endl;
+    log << "ERROR: can not find depth_map_scene " << dms_bin() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
+
+#if 0
   // create volm_query
   volm_query_sptr query = new volm_query(cam_space, dms_bin(), sph_shell, sph);
-  
+#endif
+  // locd the query
+  if (!vul_file::exists(query_bin())) {
+    log << "ERROR: can not find query_binar " << query_bin() << '\n';
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  volm_query_sptr query = new volm_query(query_bin(), cam_space, dms_bin(), sph_shell, sph);
+
+
   // load associate score binary file
   vcl_stringstream score_file;
   score_file << out() << "ps_" << pass_id() << "_scores_tile_" << tile_id << ".bin";
@@ -252,6 +268,7 @@ int main(int argc,  char** argv)
   log << " For GT location, closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
       << " has best score = " << score_gt << ", best camera stored in BestCamera.kml ( "
       << gt_cam_ang.get_string() << ", id = " << cam_gt_best << " ) img size " << query_img.ni() << " by " << query_img.nj() << '\n';
+
   volm_io::write_post_processing_log(log_file, log.str());
 
   // render the index_depth image
@@ -286,18 +303,19 @@ int main(int argc,  char** argv)
           dst_img(i,j).b = (unsigned char)120;    ori_img(i,j).b = (unsigned char)120;
         }
       // locate the camera inside the volm_query
-      unsigned query_cam_id;
-      vcl_vector<unsigned> valid_cam_id = cam_space->valid_indices();
-      for (unsigned jj = 0; jj < valid_cam_id.size(); jj++) {
-        if (cam_gt_best == valid_cam_id[jj]) {
-          query_cam_id = jj;
-          break;
-        }
-      }
-      query->depth_rgb_image(values_dst, query_cam_id, dst_img, "depth");
-      query->depth_rgb_image(values_ori, query_cam_id, ori_img, "orientation");
+      //unsigned query_cam_id;
+      //vcl_vector<unsigned> valid_cam_id = cam_space->valid_indices();
+      //for (unsigned jj = 0; jj < valid_cam_id.size(); jj++) {
+      //  if (cam_gt_best == valid_cam_id[jj]) {
+      //    query_cam_id = jj;
+      //    break;
+      //  }
+      //}
+      vcl_cout << " cam_id = " << cam_gt_best << vcl_endl;
+      query->depth_rgb_image(values_dst, cam_gt_best, dst_img, "depth");
+      query->depth_rgb_image(values_ori, cam_gt_best, ori_img, "orientation");
 
-      log << " For GT location, from query, the camera string is " << query->get_cam_string(query_cam_id) << vcl_endl;
+      log << " For GT location, from query, the camera string is " << query->get_cam_string(cam_gt_best) << vcl_endl;
       volm_io::write_post_processing_log(log_file, log.str());
       vcl_cout << log.str();
       vil_save(dst_img, (dst_img_fname.str()).c_str());

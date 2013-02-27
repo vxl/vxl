@@ -32,6 +32,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");                                // query -- camera space binary
   vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
   vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");                             // query -- spherical shell container binary
+  vul_arg<vcl_string> query_bin("-query", "query binary file", "");                              // query -- query binary file
   vul_arg<vcl_string> weight_file("-wgt", "weight parameters for query", "");                    // query -- weight parameter file
   vul_arg<vcl_string> geo_index_folder("-geo", "folder to read the geo index and the hypo", ""); // index -- folder to read the geo_index and hypos for each leaf
   vul_arg<vcl_string> candidate_list("-cand", "candidate list for given query (txt file)", "");  // index -- candidate list file containing polygons
@@ -64,6 +65,7 @@ int main(int argc, char** argv)
        dms_bin().compare("") == 0 ||
        sph_bin().compare("") == 0 ||
        geo_index_folder().compare("") == 0 ||
+       query_bin().compare("") == 0 ||
        out_folder().compare("") == 0 )
   {
     log << " ERROR: input file/folders can not be empty\n";
@@ -171,9 +173,18 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
+#if 0
   // create volm_query
   volm_query_sptr query = new volm_query(cam_space, dms_bin(), sph_shell, sph);
-
+#endif
+  // load the volm_query
+  // check the query_binary file
+  if (!vul_file::exists(query_bin())) {
+    vcl_cerr << " ERROR: volm_query binary can not be found ---> " << query_bin() << vcl_endl;
+    volm_io::write_status(out_folder(), volm_io::DEPTH_SCENE_FILE_IO_ERROR);
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  volm_query_sptr query = new volm_query(query_bin(), cam_space, dms_bin(), sph_shell, sph);
 
   // screen output of query
   unsigned total_size = query->obj_based_query_size_byte();
