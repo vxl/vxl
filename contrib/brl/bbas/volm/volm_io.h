@@ -57,6 +57,7 @@ public:
   //: key -- assigned land_id in depth_map_scene, element -- an array with 4-elements defines the possible fallback land_id for given land type
   static vcl_map<unsigned char, vcl_vector<unsigned char> > fallback_id;
   static vcl_map<unsigned char, vcl_vector<float> > fallback_weight;
+  static void size(unsigned char& fallback_size) { fallback_size = (unsigned char)volm_fallback_label::fallback_id[0].size(); }
   static void print_id(unsigned char id)
   {
     vcl_cout << '[';
