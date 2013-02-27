@@ -2,6 +2,7 @@
 //:
 // \file
 #include <bkml/bkml_parser.h>
+#include <bkml/bkml_write.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <bvgl/bvgl_labelme_parser.h>
 #include <depth_map/depth_map_region_sptr.h>
@@ -85,7 +86,7 @@ vcl_map<int, volm_attributes > create_label_map()
   m[111] =      volm_attributes(26, "marinas",                                          vil_rgb<vxl_byte>(255,  255,  100));
   m[112] =        volm_attributes(27, "mines",                                          vil_rgb<vxl_byte>(255,  0,    100));
   m[113] =        volm_attributes(28, "parks",                                          vil_rgb<vxl_byte>(10,   255,  1));
-  m[114] =        volm_attributes(29, "piers",                                          vil_rgb<vxl_byte>(255,  0,    40));
+  m[volm_label_table::PIER] = volm_attributes(29, "piers",                              vil_rgb<vxl_byte>(255,  0,    40));
   m[115] =      volm_attributes(30, "wharves",                                          vil_rgb<vxl_byte>(255,  0,    41));
   m[116] =      volm_attributes(31, "roads",                                            vil_rgb<vxl_byte>(255,  100,    41));
   m[117] =      volm_attributes(32, "parking_lots",                                     vil_rgb<vxl_byte>(255,  200,    41));
@@ -98,17 +99,6 @@ vcl_map<vcl_string, depth_map_region::orientation> volm_orient_table::ori_id = c
 vcl_map<int, volm_attributes > volm_label_table::land_id = create_label_map();
 vcl_map<int, vil_rgb<vxl_byte> > volm_orient_table::ori_index_colors = create_orient_colors();
 
-vcl_string volm_label_table::land_string(unsigned char id)
-{
-  vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
-  for (; mit != volm_label_table::land_id.end(); ++mit) {
-    if ( mit->second.id_ == id ) {
-      return mit->second.name_;
-    }
-  }
-  return "invalid";
-}
-
 vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
 {
   vcl_map<unsigned char, vcl_vector<unsigned char> > m;
@@ -116,9 +106,9 @@ vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
   f.clear();  f.push_back(0);  f.push_back(0);  f.push_back(0);  f.push_back(0);  m[0] = f;   // invalid    ----------> [invalid, invalid, invalid, invalid]
   f.clear();  f.push_back(1);  f.push_back(6);  f.push_back(17); f.push_back(3);  m[1] = f;   // open water ----------> [open water, sand, beach, develop(open space)]
   f.clear();  f.push_back(2);  f.push_back(1);  f.push_back(6);  f.push_back(3);  m[2] = f;   // perennial ice/snow --> [perennial ice/snow, water, sand, develop(open)]
-  f.clear();  f.push_back(3);  f.push_back(1);  f.push_back(4);  f.push_back(6);  m[3] = f;   // 
-  f.clear();  f.push_back(4);  f.push_back(3);  f.push_back(5);  f.push_back(6);  m[4] = f;   // 
-  f.clear();  f.push_back(5);  f.push_back(4);  f.push_back(15); f.push_back(31); m[5] = f;   // 
+  f.clear();  f.push_back(3);  f.push_back(4);  f.push_back(5);  f.push_back(6);  m[3] = f;   // 
+  f.clear();  f.push_back(4);  f.push_back(15);  f.push_back(5);  f.push_back(6);  m[4] = f;   // 
+  f.clear();  f.push_back(5);  f.push_back(4);  f.push_back(15); f.push_back(24); m[5] = f;   // 
   f.clear();  f.push_back(6);  f.push_back(1);  f.push_back(3);  f.push_back(17); m[6] = f;   // 
   f.clear();  f.push_back(7);  f.push_back(8);  f.push_back(9);  f.push_back(3);  m[7] = f;   // 
   f.clear();  f.push_back(8);  f.push_back(7);  f.push_back(9);  f.push_back(3);  m[8] = f;   // 
@@ -127,7 +117,7 @@ vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
   f.clear();  f.push_back(11); f.push_back(10); f.push_back(3);  f.push_back(12); m[11] = f;   // 
   f.clear();  f.push_back(12); f.push_back(11); f.push_back(10); f.push_back(3);  m[12] = f;   // 
   f.clear();  f.push_back(13); f.push_back(12); f.push_back(3);  f.push_back(4);  m[13] = f;   // 
-  f.clear();  f.push_back(14); f.push_back(1);  f.push_back(4);  f.push_back(23); m[14] = f;   // 
+  f.clear();  f.push_back(14); f.push_back(1);  f.push_back(4);  f.push_back(6); m[14] = f;   // 
   f.clear();  f.push_back(15); f.push_back(4);  f.push_back(5);  f.push_back(24); m[15] = f;   // 
   f.clear();  f.push_back(16); f.push_back(4);  f.push_back(3);  f.push_back(5);  m[16] = f;   // 
   f.clear();  f.push_back(17); f.push_back(1);  f.push_back(6);  f.push_back(3);  m[17] = f;   // 
@@ -155,16 +145,16 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   vcl_map<unsigned char, vcl_vector<float> > m;
   vcl_vector<float> f(4, 0.0f);
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(1.0f);  m[0] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.7f);  f.push_back(0.5f);  m[1] = f; // 
+  f.clear();  f.push_back(1.0f);  f.push_back(0.1f);  f.push_back(0.1f);  f.push_back(0.1f);  m[1] = f; // 
   f.clear();  f.push_back(1.0f);  f.push_back(0.5f);  f.push_back(0.4f);  f.push_back(0.1f);  m[2] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.7f);  f.push_back(0.7f);  m[3] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.7f);  f.push_back(0.5f);  m[4] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.7f);  f.push_back(0.7f);  m[5] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(1.0f);  m[6] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.2f);  f.push_back(0.2f);  f.push_back(0.1f);  m[3] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.1f);  m[4] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(1.0f);  f.push_back(1.0f);  m[5] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.7f);  f.push_back(1.0f);  m[6] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.8f);  m[7] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.8f);  m[8] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.8f);  m[9] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.6f);  f.push_back(0.6f);  f.push_back(0.8f);  m[10] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.1f);  m[8] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.1f);  m[9] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.6f);  f.push_back(0.6f);  f.push_back(0.1f);  m[10] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.6f);  f.push_back(0.6f);  f.push_back(0.8f);  m[11] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.6f);  f.push_back(0.6f);  m[12] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.6f);  f.push_back(0.6f);  m[13] = f; //
@@ -183,7 +173,7 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.9f);  f.push_back(0.8f);  m[26] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.6f);  f.push_back(0.6f);  m[27] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.8f);  f.push_back(0.5f);  m[28] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.7f);  m[29] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.7f);  f.push_back(0.7f);  m[29] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.6f);  m[30] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.8f);  f.push_back(0.6f);  m[31] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.8f);  f.push_back(0.8f);  m[32] = f; //
@@ -193,6 +183,41 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
 
 vcl_map<unsigned char, vcl_vector<unsigned char> > volm_fallback_label::fallback_id = create_fallback_label();
 vcl_map<unsigned char, vcl_vector<float> > volm_fallback_label::fallback_weight = create_fallback_weight();
+
+void volm_fallback_label::print_fallback_table()
+{
+  for (vcl_map<unsigned char, vcl_vector<unsigned char> >::iterator iter = fallback_id.begin(); iter != fallback_id.end(); iter++) {
+    vcl_cout << volm_label_table::land_string(iter->first) << " (" << (int)iter->first << "):\t";
+    for (unsigned k = 0; k < iter->second.size(); k++) {
+      vcl_cout << volm_label_table::land_string(iter->second[k]) << "(" << (int)iter->second[k] << ", w: " << fallback_weight[iter->first][k] << ")\t";
+    }
+    vcl_cout << '\n';
+  }
+}
+
+vcl_string volm_label_table::land_string(unsigned char id)
+{
+  vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  for (; mit != volm_label_table::land_id.end(); ++mit) {
+    if ( mit->second.id_ == id ) {
+      return mit->second.name_;
+    }
+  }
+  return "invalid";
+}
+
+//: pass the id of the class labeled in the query (volm_attribute.id_)
+vil_rgb<vxl_byte> volm_label_table::get_color(unsigned char id)
+{
+  vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  for (; mit != volm_label_table::land_id.end(); ++mit) {
+    if ( mit->second.id_ == id ) {
+      return mit->second.color_;
+    }
+  }
+  vcl_cerr << "cannot find id: " << id << " (and thus color) in the land class table, returning invalid color!\n";
+  return vil_rgb<vxl_byte>(255,0,0); // default invalid color
+}
 
 bool volm_io::read_camera(vcl_string kml_file,
                           unsigned const& ni, unsigned const& nj,
@@ -716,7 +741,7 @@ bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& da
 }
 
 //: read the building footpring file
-bool volm_io::read_building_file(vcl_string file, vcl_vector<vgl_polygon<double> >& builds)
+bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds)
 {
   vcl_cout << "\t\t !!!!!!!!!!!!!! reading file: " << file << vcl_endl;
   vcl_ifstream ifs(file.c_str());
@@ -748,6 +773,8 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vgl_polygon<double>
 
     tok = vcl_strtok(NULL, ",");
     vcl_stringstream tcla(tok); tcla >> cent_lat;
+
+    vgl_point_2d<double> cent_pt(cent_lon, cent_lat);
     
     vgl_polygon<double> poly(1);
     tok = vcl_strtok(NULL, ",");  
@@ -763,7 +790,76 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vgl_polygon<double>
       poly[0].push_back(pt);
       tok = vcl_strtok(NULL, ",");
     }
-    builds.push_back(poly);
+    builds.push_back(vcl_pair<vgl_polygon<double>, vgl_point_2d<double> >(poly, cent_pt));
   }
+  return true;
+}
+
+//: read the sme labels
+bool volm_io::read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects)
+{
+  vcl_cout << "\t\t !!!!!!!!!!!!!! reading file: " << file << vcl_endl;
+  vcl_ifstream ifs(file.c_str());
+  if (!ifs.is_open())
+    return false;
+  
+  while (!ifs.eof()) {
+    // each line is one object
+    vcl_string name, type;
+    double lon, lat;
+    char buffer[10000];
+    ifs.getline(buffer, 10000);
+    vcl_string temp_buf(buffer);
+    if (ifs.eof()) break;
+    
+    char *tok = vcl_strtok(buffer, ",");
+    vcl_stringstream th(tok); th >> name;
+    
+    tok = vcl_strtok(NULL, ","); // tokenize the remaining string
+    vcl_stringstream tv(tok); tv >> lon;
+
+    tok = vcl_strtok(NULL, ",");
+    vcl_stringstream ta(tok); ta >> lat;
+
+    tok = vcl_strtok(NULL, ",");
+    vcl_stringstream tc(tok); tc >> type;
+
+    vgl_point_2d<double> pt(lon, lat);
+
+    // find its label code
+    int label = 0;
+    for (vcl_map<int, volm_attributes >::iterator iter = volm_label_table::land_id.begin(); iter != volm_label_table::land_id.end(); iter++)
+      if (iter->second.name_.compare(type) == 0)
+        label = iter->first;
+
+    objects.push_back(vcl_pair<vgl_point_2d<double>, int>(pt, label));
+  }
+  return true;
+}
+
+bool volm_io::write_sme_kml(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects)
+{
+  vcl_ofstream ofs(file.c_str());
+  bkml_write::open_document(ofs);
+  for (unsigned i = 0; i < objects.size(); i++) {
+    vcl_stringstream ids; ids << i;
+    vcl_string name = volm_label_table::land_id[objects[i].second].name_;
+    bkml_write::write_location(ofs, name, ids.str(), objects[i].first.y(), objects[i].first.x(), 0.0);
+  }
+  bkml_write::close_document(ofs);
+  return true;
+}
+bool volm_io::write_sme_kml_type(vcl_string file, vcl_string type_name, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects)
+{
+  vcl_ofstream ofs(file.c_str());
+  bkml_write::open_document(ofs);
+  for (unsigned i = 0; i < objects.size(); i++) {
+    vcl_string name = volm_label_table::land_id[objects[i].second].name_;
+    if (name.compare(type_name) != 0)
+      continue;
+    vcl_stringstream ids; ids << i;
+    bkml_write::write_location(ofs, name, ids.str(), objects[i].first.y(), objects[i].first.x(), 0.0);
+  }
+  bkml_write::close_document(ofs);
   return true;
 }

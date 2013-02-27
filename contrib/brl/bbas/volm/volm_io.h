@@ -43,9 +43,11 @@ class volm_attributes
 class volm_label_table
 {
  public:
-  enum label_values {SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, BUILDING = 100};
+  enum label_values {INVALID = 0, SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, BUILDING = 100, PIER = 114};
   static vcl_map<int, volm_attributes > land_id ;
   static vcl_string land_string(unsigned char id);
+  //: pass the id of the class labeled in the query (volm_attribute.id_)
+  static vil_rgb<vxl_byte> get_color(unsigned char id);
 };
 
 //: A class to hold the fallback categories for the labelled landtype id
@@ -69,6 +71,7 @@ public:
       vcl_cout << vcl_setprecision(3) << *vit << ' ';
     vcl_cout << ']';
   }
+  static void print_fallback_table();
 };
 
 class volm_io_expt_params
@@ -120,7 +123,12 @@ class volm_io
   static bool read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data);
 
   //: read the building footpring file
-  static bool read_building_file(vcl_string file, vcl_vector<vgl_polygon<double> >& builds);
+  static bool read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds);
+
+  //: read the sme labels
+  static bool read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects);
+  static bool write_sme_kml(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects);
+  static bool write_sme_kml_type(vcl_string file, vcl_string type_name, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects);
 };
 
 class volm_rationale
