@@ -20,6 +20,25 @@ static void test_io()
   //vcl_vector<unsigned char> data;
   //bool good = volm_io::read_ray_index_data(path, data);
 
+  vcl_map<unsigned char, vcl_vector<unsigned char> >::iterator mit = volm_fallback_label::fallback_id.begin();
+  vcl_map<unsigned char, vcl_vector<float> >::iterator mit_w = volm_fallback_label::fallback_weight.begin();
+
+    for(; mit != volm_fallback_label::fallback_id.end(); ++mit) {
+    vcl_cout << (int)mit->first << "(" << volm_label_table::land_string(mit_w->first) << ") ---> ";
+    volm_fallback_label::print_id(mit->first);
+    //for (vcl_vector<unsigned char>::iterator vit = mit->second.begin(); vit != mit->second.end(); ++vit)
+    //  vcl_cout << volm_label_table::land_string(*vit) << ", ";
+    vcl_cout << vcl_setw(10) << vcl_setfill(' ') << " ------ ";
+    volm_fallback_label::print_wgt(mit->first);
+    /*for (vcl_vector<float>::iterator vit = mit_w->second.begin(); vit != mit_w->second.end(); ++vit)
+      vcl_cout << vcl_setprecision(3) << *vit << ' ';*/
+    vcl_cout << "\n" << vcl_endl;
+    ++mit_w;
+  }
+  
+  TEST("number of fallback_label and weight", volm_fallback_label::fallback_id.size(), volm_fallback_label::fallback_weight.size());
+
+#if 0
   vcl_string weight_file = "z:/projects/FINDER/test1/p1a_test1_83/weight_param.txt";
 
   vcl_vector<volm_weight> weights;
@@ -46,7 +65,7 @@ static void test_io()
     TEST_NEAR(test_str.c_str(), sum_att, 1, 0.001);
   }
   TEST_NEAR("summation of all object weight", sum_obj, 1, 0.001);
-
+#endif
 #if 0
   vcl_cout << " LAND_ID\n";
 

@@ -61,35 +61,34 @@ class volm_query : public vbl_ref_count
 
 
   // === accessors ===
-  vcl_vector<vcl_vector<unsigned char> >& min_dist()            { return min_dist_;}
-  vcl_vector<vcl_vector<unsigned char> >& max_dist()            { return max_dist_;}
-  vcl_vector<vcl_vector<unsigned char> >& order()               { return order_; }
-  vcl_set<unsigned>& order_set()                                { return order_set_; }
-  vcl_vector<vcl_vector<vcl_vector<unsigned> > >& order_index() { return order_index_; }
-  vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id()     { return dist_id_; }
-  vcl_vector<unsigned>& dist_offset()                           { return dist_offset_; }
-  vcl_vector<unsigned char>& max_obj_dist()                     { return max_obj_dist_; }
-  vcl_vector<unsigned char>& min_obj_dist()                     { return min_obj_dist_; }
-  vcl_vector<unsigned char>& obj_orient()                       { return obj_orient_; }
-  vcl_vector<unsigned char>& obj_land_id()                      { return obj_land_id_; }
-  vcl_vector<unsigned char>& order_obj()                        { return order_obj_; }
-  vcl_vector<vcl_vector<unsigned> >& ground_id()                { return ground_id_; }
-  vcl_vector<vcl_vector<unsigned char> >& ground_dist()         { return ground_dist_; }
-  vcl_vector<unsigned>& ground_offset()                         { return ground_offset_; }
-  vcl_vector<vcl_vector<unsigned char> >& ground_land_id()      { return ground_land_id_; }
-  unsigned char ground_orient()                                 { return ground_orient_; }
-  vcl_vector<vcl_vector<unsigned> >& sky_id()                   { return sky_id_; }
-  vcl_vector<unsigned>& sky_offset()                            { return sky_offset_; }
-  unsigned char sky_orient()                                    { return sky_orient_; }
-  //vcl_vector<float>& obj_weight()                               { return weight_obj_; }
-  //float grd_weight() const                                      { return weight_grd_; }
-  //float sky_weight() const                                      { return weight_sky_; }
-  depth_map_scene_sptr depth_scene() const                      { return dm_; }
-  vcl_vector<depth_map_region_sptr>& depth_regions()            { return depth_regions_; }
-  volm_spherical_shell_container_sptr sph_shell() const         { return sph_; }
-  unsigned get_cam_num() const                                  { return (unsigned)cam_space_->valid_indices().size(); }
-  unsigned get_obj_order_num() const                            { return (unsigned)order_index_[0].size(); }
-  unsigned get_query_size() const                               { return query_size_; }
+  vcl_vector<vcl_vector<unsigned char> >& min_dist()                         { return min_dist_;}
+  vcl_vector<vcl_vector<unsigned char> >& max_dist()                         { return max_dist_;}
+  vcl_vector<vcl_vector<unsigned char> >& order()                            { return order_; }
+  vcl_set<unsigned>& order_set()                                             { return order_set_; }
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > >& order_index()              { return order_index_; }
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id()                  { return dist_id_; }
+  vcl_vector<unsigned>& dist_offset()                                        { return dist_offset_; }
+  vcl_vector<unsigned char>& max_obj_dist()                                  { return max_obj_dist_; }
+  vcl_vector<unsigned char>& min_obj_dist()                                  { return min_obj_dist_; }
+  vcl_vector<unsigned char>& obj_orient()                                    { return obj_orient_; }
+  vcl_vector<vcl_vector<unsigned char> >& obj_land_id()                      { return obj_land_id_; }
+  vcl_vector<vcl_vector<float> >& obj_land_wgt()                             { return obj_land_wgt_; }
+  vcl_vector<unsigned char>& order_obj()                                     { return order_obj_; }
+  vcl_vector<vcl_vector<unsigned> >& ground_id()                             { return ground_id_; }
+  vcl_vector<vcl_vector<unsigned char> >& ground_dist()                      { return ground_dist_; }
+  vcl_vector<unsigned>& ground_offset()                                      { return ground_offset_; }
+  vcl_vector<vcl_vector<vcl_vector<unsigned char> > >& ground_land_id()      { return ground_land_id_; }
+  vcl_vector<vcl_vector<vcl_vector<float> > >& ground_land_wgt()             { return ground_land_wgt_; }
+  unsigned char ground_orient()                                              { return ground_orient_; }
+  vcl_vector<vcl_vector<unsigned> >& sky_id()                                { return sky_id_; }
+  vcl_vector<unsigned>& sky_offset()                                         { return sky_offset_; }
+  unsigned char sky_orient()                                                 { return sky_orient_; }
+  depth_map_scene_sptr depth_scene() const                                   { return dm_; }
+  vcl_vector<depth_map_region_sptr>& depth_regions()                         { return depth_regions_; }
+  volm_spherical_shell_container_sptr sph_shell() const                      { return sph_; }
+  unsigned get_cam_num() const                                               { return (unsigned)cam_space_->valid_indices().size(); }
+  unsigned get_obj_order_num() const                                         { return (unsigned)order_index_[0].size(); }
+  unsigned get_query_size() const                                            { return query_size_; }
   
   //: return number of voxels having ground properties
   unsigned get_ground_id_size() const                           { return ground_offset_[ground_offset_.size()-1]; }
@@ -117,7 +116,11 @@ class volm_query : public vbl_ref_count
   void draw_query_image(unsigned i, vcl_string const& out_name);
   
   //: get camera string
-  vcl_string get_cam_string(unsigned i) const { return camera_strings_[i]; }
+  vcl_string get_cam_string(unsigned i) const 
+  { 
+    return cam_space_->camera_angles(i).get_string();
+    //return cam_space_->get_string(cam_space_->valid_indices()[i]);
+  }
   
   //: get the number of camera having the input top_fov value
   unsigned get_num_top_fov(double const& top_fov) const;
@@ -149,7 +152,7 @@ class volm_query : public vbl_ref_count
   void read_data(vsl_b_istream& is);
 
   //: CAUTION: not all fields are checked for equality, only the fields which are saved in write_data() are checked
-  bool operator== (const volm_query &other) const;
+  bool operator == (const volm_query &other) const;
 
   static void draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polygon<double> const& poly, unsigned char const& depth);
 
@@ -177,15 +180,15 @@ class volm_query : public vbl_ref_count
   unsigned log_downsample_ratio_;  // 0,1,2 or 3 (ni-->ni/2^ratio_), to generate downsampled depth maps for ground regions
 
   //: depth map scene
-  depth_map_scene_sptr                       dm_;
+  depth_map_scene_sptr                           dm_;
   //: voxel array used to get voxel index
-  volm_spherical_container_sptr       sph_depth_;
+  volm_spherical_container_sptr           sph_depth_;
   //: a unit sphere
-  volm_spherical_shell_container_sptr       sph_;
+  volm_spherical_shell_container_sptr           sph_;
   //: upper bound on depth
   double d_threshold_;
   //: vector of depth_map_region sorted by depth order
-  vcl_vector<depth_map_region_sptr> depth_regions_;
+  vcl_vector<depth_map_region_sptr>   depth_regions_;
 
   // === camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered ===
 
@@ -211,25 +214,27 @@ class volm_query : public vbl_ref_count
   //: order vector to store the index id associated with object order
   vcl_set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
   vcl_vector<vcl_vector<vcl_vector<unsigned> > > order_index_;
-  //: ground plane distance, id, and NLCD classification
-  vcl_vector<vcl_vector<unsigned> >                ground_id_;
-  vcl_vector<vcl_vector<unsigned char> >         ground_dist_;
-  vcl_vector<vcl_vector<unsigned char> >      ground_land_id_;
-  vcl_vector<unsigned>                         ground_offset_;
-  unsigned char                                ground_orient_;  // always horizontal
+  //: ground plane distance, id, and fallback land category
+  vcl_vector<vcl_vector<unsigned> >                             ground_id_;
+  vcl_vector<vcl_vector<unsigned char> >                      ground_dist_;
+  vcl_vector<vcl_vector<vcl_vector<unsigned char> > >      ground_land_id_;
+  vcl_vector<vcl_vector<vcl_vector<float> > >             ground_land_wgt_;
+  vcl_vector<unsigned>                                      ground_offset_;
+  unsigned char                                             ground_orient_;  // always horizontal
   //: sky distance
-  vcl_vector<vcl_vector<unsigned> >                   sky_id_;
-  vcl_vector<unsigned>                            sky_offset_;
-  unsigned char                                   sky_orient_;  // always 100 (100 is the label for uncertain or ambiguous cells)
+  vcl_vector<vcl_vector<unsigned> >                                sky_id_;
+  vcl_vector<unsigned>                                         sky_offset_;
+  unsigned char                                                sky_orient_;  // always 100 (100 is the label for uncertain or ambiguous cells)
   //: object id based on min_dist (since objects may have different min_dist but same order)
-  vcl_vector<vcl_vector<vcl_vector<unsigned> > >     dist_id_;
-  vcl_vector<unsigned>                           dist_offset_;
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > >                  dist_id_;
+  vcl_vector<unsigned>                                        dist_offset_;
   //: min and max distance, object orders, orientation and land clarifications for different objects, based on object orders
-  vcl_vector<unsigned char>                     min_obj_dist_;
-  vcl_vector<unsigned char>                     max_obj_dist_;
-  vcl_vector<unsigned char>                        order_obj_;
-  vcl_vector<unsigned char>                       obj_orient_;
-  vcl_vector<unsigned char>                      obj_land_id_;
+  vcl_vector<unsigned char>                                  min_obj_dist_;
+  vcl_vector<unsigned char>                                  max_obj_dist_;
+  vcl_vector<unsigned char>                                     order_obj_;
+  vcl_vector<unsigned char>                                    obj_orient_;
+  vcl_vector<vcl_vector<unsigned char> >                      obj_land_id_;
+  vcl_vector<vcl_vector<float> >                             obj_land_wgt_;
   //: weight parameters
   //vcl_vector<float> weight_obj_;
   //float             weight_grd_;
@@ -245,7 +250,8 @@ class volm_query : public vbl_ref_count
                             unsigned char& order,
                             unsigned char& max_dist,
                             unsigned& object_id,
-                            unsigned char& grd_land_id,
+                            vcl_vector<unsigned char>& grd_fallback_id,
+                            vcl_vector<float>& grd_fallback_wgt,
                             bool& is_ground,
                             bool& is_sky,
                             bool& is_object,

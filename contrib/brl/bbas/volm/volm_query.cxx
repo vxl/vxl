@@ -401,7 +401,12 @@ void volm_query::generate_regions()
     max_obj_dist_.push_back(sph_depth_->get_depth_interval(depth_regions_[i]->max_depth()));
     order_obj_.push_back((unsigned char)depth_regions_[i]->order());
     obj_orient_.push_back((unsigned char)depth_regions_[i]->orient_type());
-    obj_land_id_.push_back((unsigned char)depth_regions_[i]->land_id());
+
+    unsigned char land_id = (unsigned char)depth_regions_[i]->land_id();
+    vcl_vector<unsigned char> land_fallback_id = volm_fallback_label::fallback_id[land_id];
+    obj_land_id_.push_back(land_fallback_id);
+    vcl_vector<float> land_fallback_wgt = volm_fallback_label::fallback_weight[land_id];
+    obj_land_wgt_.push_back(land_fallback_wgt);
   }
   d_threshold_ = 20000.0; //upper depth bound
   for (unsigned i = 0; i < size; ++i) {
@@ -494,8 +499,10 @@ bool volm_query::query_ingest()
     vcl_vector<unsigned> ground_id_layer;
     // the ground plane distance for the ray
     vcl_vector<unsigned char> ground_dist_layer;
-    // the ground plane land class for the ray
-    vcl_vector<unsigned char> ground_land_layer;
+    // the ground plane land fallback class for the ray
+    vcl_vector<vcl_vector<unsigned char> > ground_land_layer;
+    // the ground pland land fallback class weight
+    vcl_vector<vcl_vector<float> > ground_land_wgt_layer;
     // the set of rays intersecting sky
     vcl_vector<unsigned> sky_id_layer;
     // the set of rays for each non-gp, non-sky region
@@ -533,8 +540,9 @@ bool volm_query::query_ingest()
         else {
           bool is_ground = false, is_sky = false, is_object = false;
           unsigned obj_id;
-          unsigned char grd_land;
-          min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_land, is_ground, is_sky, is_object, depth_img);
+          vcl_vector<unsigned char> grd_fallback_id;
+          vcl_vector<float> grd_fallback_wgt;
+          min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_fallback_id, grd_fallback_wgt, is_ground, is_sky, is_object, depth_img);
 #if 0
           if (i == 0) {
             vcl_cout << p_idx << ' ' << count << ' '
@@ -553,7 +561,8 @@ bool volm_query::query_ingest()
           if (is_ground) {
             ground_id_layer.push_back(p_idx);
             ground_dist_layer.push_back(min_dist);
-            ground_land_layer.push_back(grd_land);
+            ground_land_layer.push_back(grd_fallback_id);
+            ground_land_wgt_layer.push_back(grd_fallback_wgt);
           }
           else if (is_sky) {
             sky_id_layer.push_back(p_idx);
@@ -578,6 +587,7 @@ bool volm_query::query_ingest()
     ground_id_.push_back(ground_id_layer);
     ground_dist_.push_back(ground_dist_layer);
     ground_land_id_.push_back(ground_land_layer);
+    ground_land_wgt_.push_back(ground_land_wgt_layer);
     sky_id_.push_back(sky_id_layer);
     dist_id_.push_back(dist_id_layer);
 // sperhical layer -- the scene_region is not ordered by its order, so it ruins my basic data structure
@@ -641,7 +651,8 @@ unsigned char volm_query::fetch_depth(double const& u,
                                       unsigned char& order,
                                       unsigned char& max_dist,
                                       unsigned& object_id,
-                                      unsigned char& grd_land,
+                                      vcl_vector<unsigned char>& grd_fallback_id,
+                                      vcl_vector<float>& grd_fallback_wgt,
                                       bool& is_ground,
                                       bool& is_sky,
                                       bool& is_object,
@@ -701,7 +712,9 @@ unsigned char volm_query::fetch_depth(double const& u,
         min_dist = sph_depth_->get_depth_interval(depth_uv);
         max_dist = (unsigned char)255;
         order = (unsigned char)(dm_->ground_plane()[i])->order();
-        grd_land = dm_->ground_plane()[i]->land_id();
+        unsigned char grd_land = dm_->ground_plane()[i]->land_id();
+        grd_fallback_id = volm_fallback_label::fallback_id[grd_land];
+        grd_fallback_wgt = volm_fallback_label::fallback_weight[grd_land];
         return min_dist;
       }
     }
@@ -790,7 +803,7 @@ void volm_query::draw_template(vcl_string const& vrml_fname)
   // write rays
   //this->draw_rays(vrml_fname);
   // write the camera
-  unsigned cam_num = (unsigned)cameras_.size();
+  unsigned cam_num = this->get_cam_num();
   for (unsigned i = 0; i < cam_num; ++i) {
     float r = 0.0f;
     float g = 0.0f;
@@ -1009,9 +1022,9 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
                                  vil_image_view<vil_rgb<vxl_byte> >& out_img,
                                  vcl_string value_type)
 {
-  vcl_cout << " ------------- inside volm_query" << vcl_endl;
-  vcl_cout << "cam_id = " << cam_id << vcl_endl;
   this->draw_depth_map_regions(out_img);
+  
+  vpgl_perspective_camera<double> cam = cam_space_->camera(cam_id);
   // draw the rays that current penetrate through the image
   if (value_type == "depth") {
     for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
@@ -1022,7 +1035,6 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
                  << ", values = " << (int)values[pidx];
   #endif
         //this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
-        vpgl_perspective_camera<double> cam = cam_space_->camera(cam_id);
         this->draw_dot(out_img, query_points_[pidx], values[pidx], cam);
       }
     }
@@ -1040,7 +1052,9 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
         color_id = 254;
       else
         color_id = 253;
-      this->draw_dot(out_img, query_points_[pidx], color_id, cameras_[cam_id]);
+      //this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
+      //vpgl_perspective_camera<double> cam = cam_space_->camera(cam_id);
+      this->draw_dot(out_img, query_points_[pidx], color_id, cam);
     }
   }
 }
@@ -1083,7 +1097,7 @@ void volm_query::draw_query_images(vcl_string const& out_dir)
   // create a png img associated with each camera hypothesis, containing the geometry defined
   //  in depth_map_scene and the img points corresponding to points inside the container
   // loop over fist 100 camera
-  unsigned img_num = (cameras_.size() > 20) ? 20 : (unsigned)cameras_.size();
+  unsigned img_num = (this->get_cam_num() > 20) ? 20 : (unsigned)cameras_.size();
   for (unsigned i = 0; i < img_num; ++i) {
     vcl_stringstream s_idx;
     s_idx << i;
@@ -1096,7 +1110,7 @@ void volm_query::visualize_query(vcl_string const& prefix)
 {
   // visualize the spherical shell by the query depth value -- used to compare with the generated index spherical shell
   // loop over all camera
-  for (unsigned i = 0; i < cameras_.size(); ++i) {
+  for (unsigned i = 0; i < this->get_cam_num(); ++i) {
     vcl_vector<unsigned char> single_layer = min_dist_[i];
     vcl_stringstream str;
     str << prefix << "_query_" << i << ".vrml";
@@ -1107,7 +1121,7 @@ void volm_query::visualize_query(vcl_string const& prefix)
 unsigned volm_query::get_num_top_fov(double const& top_fov) const
 {
   unsigned count = 0;
-  for (unsigned i = 0; i < cameras_.size(); ++i) {
+  for (unsigned i = 0; i < this->get_cam_num(); ++i) {
     vcl_string cam_string = this->get_cam_string(i);
     unsigned sindx = (unsigned)cam_string.find("top_fov");
     sindx += 8;
@@ -1135,7 +1149,7 @@ double volm_query::get_top_fov(unsigned const& id) const
 vcl_vector<double> volm_query::get_valid_top_fov() const
 {
   vcl_set<double> top_fov_set;
-  for (unsigned i = 0; i < cameras_.size(); ++i) {
+  for (unsigned i = 0; i < this->get_cam_num(); ++i) {
     top_fov_set.insert(this->get_top_fov(i));
   }
   vcl_vector<double> valid_top_fov;
@@ -1147,7 +1161,7 @@ vcl_vector<double> volm_query::get_valid_top_fov() const
 unsigned volm_query::get_order_size() const
 {
   unsigned count = 0;
-  unsigned cam_num = (unsigned)cameras_.size();
+  unsigned cam_num = this->get_cam_num();
   unsigned obj_num = this->get_obj_order_num();
   for (unsigned i = 0; i < cam_num; ++i)
     for (unsigned j = 0; j < obj_num; ++j)
@@ -1159,25 +1173,26 @@ unsigned volm_query::obj_based_query_size_byte() const
 {
   unsigned size_byte = 0;
   // ground voxel size
-  size_byte += this->get_ground_id_size() * 4; // unsigned id
-  size_byte += this->get_ground_dist_size();   // unsigned char distance
-  size_byte += this->get_ground_id_size();     // unsigned char land classfication
-  size_byte += 1;                               // unsigned char orientation
-  size_byte += (unsigned)ground_offset_.size()*4;        // unsinged ground offset
-  //size_byte += 4;                              // float weight
+  size_byte += this->get_ground_id_size()*4;     // unsigned id
+  size_byte += this->get_ground_dist_size();       // unsigned char distance
+  size_byte += this->get_ground_id_size()*4;     // unsigned char land classfication
+  size_byte += this->get_ground_id_size()*4*4; // float land fallback category weight
+  size_byte += 1;                                  // unsigned char orientation
+  size_byte += (unsigned)ground_offset_.size()*4;  // unsinged ground offset
 
   // sky voxel size
-  size_byte += this->get_sky_id_size() * 4;    // unsigned id
-  size_byte += (unsigned)sky_offset_.size()*4;           // unsigned sky offset
-  //size_byte += 4;                              // float weight
+  size_byte += this->get_sky_id_size()*4;        // unsigned id
+  size_byte += (unsigned)sky_offset_.size()*4;     // unsigned sky offset
+  //size_byte += 4;                                // float weight
 
   // non-sky, non-ground object
-  size_byte += this->get_dist_id_size() * 4;   // unsigned id
-  size_byte += (unsigned)dist_offset_.size() * 4;        // unsigned offset
-  size_byte += (unsigned)min_obj_dist_.size(); // unsigned char distance
-  size_byte += (unsigned)max_obj_dist_.size(); // unsigned char distance
-  size_byte += (unsigned)obj_orient_.size();   // unsigned char orientation
-  size_byte += (unsigned)obj_land_id_.size();     // unsigned char land clarification
+  size_byte += this->get_dist_id_size()*4;         // unsigned id
+  size_byte += (unsigned)dist_offset_.size()*4;    // unsigned offset
+  size_byte += (unsigned)min_obj_dist_.size();     // unsigned char distance
+  size_byte += (unsigned)max_obj_dist_.size();     // unsigned char distance
+  size_byte += (unsigned)obj_orient_.size();       // unsigned char orientation
+  size_byte += (unsigned)obj_land_id_.size()*4;    // unsigned char land clarification
+  size_byte += (unsigned)obj_land_wgt_.size()*4*4; // float land fallback category weight 
   size_byte += (unsigned)order_obj_.size();    // unsigned char order
   //size_byte += (unsigned)weight_obj_.size()*4; // float weight
   return size_byte;
@@ -1199,7 +1214,16 @@ void volm_query::write_data(vsl_b_ostream& os)
   
   vsl_b_write(os, ground_id_);
   vsl_b_write(os, ground_dist_);
-  vsl_b_write(os, ground_land_id_);
+  
+  //vsl_b_write(os, ground_land_id_);
+  vsl_b_write(os, (unsigned)(ground_land_id_.size()));
+  for (unsigned i = 0; i < ground_land_id_.size(); i++)
+    vsl_b_write(os, ground_land_id_[i]);
+
+  vsl_b_write(os, (unsigned)(ground_land_wgt_.size()));
+  for (unsigned i = 0; i < ground_land_wgt_.size(); i++)
+    vsl_b_write(os, ground_land_wgt_[i]);
+
   vsl_b_write(os, ground_offset_);
   vsl_b_write(os, ground_orient_);
   vsl_b_write(os, sky_id_);
@@ -1216,6 +1240,7 @@ void volm_query::write_data(vsl_b_ostream& os)
   vsl_b_write(os, order_obj_);
   vsl_b_write(os, obj_orient_);
   vsl_b_write(os, obj_land_id_);
+  vsl_b_write(os, obj_land_wgt_);
 }
 
 //: binary IO read
@@ -1238,7 +1263,22 @@ void volm_query::read_data(vsl_b_istream& is)
 
     vsl_b_read(is, ground_id_);
     vsl_b_read(is, ground_dist_);
-    vsl_b_read(is, ground_land_id_);
+    
+    // vsl_b_read(is, ground_land_id_);
+    vsl_b_read(is, size);
+    for (unsigned i = 0; i < size; i++) {
+      vcl_vector<vcl_vector<unsigned char> > temp;
+      vsl_b_read(is, temp);
+      ground_land_id_.push_back(temp);
+    }
+
+    vsl_b_read(is, size);
+    for (unsigned i = 0; i < size; i++) {
+      vcl_vector<vcl_vector<float> > temp;
+      vsl_b_read(is, temp);
+      ground_land_wgt_.push_back(temp);
+    }
+
     vsl_b_read(is, ground_offset_);
     vsl_b_read(is, ground_orient_);
     vsl_b_read(is, sky_id_);
@@ -1258,6 +1298,7 @@ void volm_query::read_data(vsl_b_istream& is)
     vsl_b_read(is, order_obj_);
     vsl_b_read(is, obj_orient_);
     vsl_b_read(is, obj_land_id_);
+    vsl_b_read(is, obj_land_wgt_);
   }
   else {
     vcl_cerr << "volm_spherical_shell_container - unknown binary io version " << ver <<'\n';

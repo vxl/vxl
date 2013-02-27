@@ -17,6 +17,7 @@
 #include <bpgl/depth_map/depth_map_scene.h>
 #include <vcl_set.h>
 #include <vcl_utility.h>
+#include <vcl_iomanip.h>
 
 //: A class to hold xml file io methods for volumetric matchers
 // Units are in meters
@@ -45,6 +46,29 @@ class volm_label_table
   enum label_values {SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, BUILDING = 100};
   static vcl_map<int, volm_attributes > land_id ;
   static vcl_string land_string(unsigned char id);
+};
+
+//: A class to hold the fallback categories for the labelled landtype id
+class volm_fallback_label
+{
+public:
+  //: key -- assigned land_id in depth_map_scene, element -- an array with 4-elements defines the possible fallback land_id for given land type
+  static vcl_map<unsigned char, vcl_vector<unsigned char> > fallback_id;
+  static vcl_map<unsigned char, vcl_vector<float> > fallback_weight;
+  static void print_id(unsigned char id)
+  {
+    vcl_cout << '[';
+    for (vcl_vector<unsigned char>::iterator vit = volm_fallback_label::fallback_id[id].begin(); vit != volm_fallback_label::fallback_id[id].end(); ++vit)
+      vcl_cout << volm_label_table::land_string(*vit) << ", ";
+    vcl_cout << ']';
+  }
+  static void print_wgt(unsigned char id)
+  {
+    vcl_cout << '[';
+    for (vcl_vector<float>::iterator vit = volm_fallback_label::fallback_weight[id].begin(); vit != volm_fallback_label::fallback_weight[id].end(); ++vit)
+      vcl_cout << vcl_setprecision(3) << *vit << ' ';
+    vcl_cout << ']';
+  }
 };
 
 class volm_io_expt_params
