@@ -477,7 +477,7 @@ void vsph_unit_sphere::display_edges(vcl_string const & path) const
 
 void vsph_unit_sphere::display_data(vcl_string const & path,
                                     vcl_vector<double> const& data,
-                                    vsph_sph_box_2d const& mask) const
+                                    vsph_sph_box_2d const& mask ) const
 {
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
@@ -511,7 +511,7 @@ void vsph_unit_sphere::display_data(vcl_string const & path,
   bvrml_write::write_vrml_sphere(os, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
 
   // write the voxel structure
-  float disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad);
+  float disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad );
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vsph_sph_point_2d sp = sph_pts_[i];
@@ -556,15 +556,15 @@ void vsph_unit_sphere::display_color(vcl_string const & path,
   vgl_vector_3d<double> axis_y(0.0, 1.0, 0.0);
   vgl_vector_3d<double> axis_z(0.0, 0.0, 1.0);
   vgl_sphere_3d<float> sp((float)cent.x(), (float)cent.y(), (float)cent.z(), (float)rad);
-  bvrml_write::write_vrml_sphere(os, sp, 1.0f, 0.0f, 0.0f, 0.0f);
-  bvrml_write::write_vrml_line(os, cent_ray, axis_x, (float)rad*20, 1.0f, 0.0f, 0.0f);
-  bvrml_write::write_vrml_line(os, cent_ray, axis_y, (float)rad*20, 0.0f, 1.0f, 0.0f);
-  bvrml_write::write_vrml_line(os, cent_ray, axis_z, (float)rad*20, 0.0f, 1.0f, 1.0f);
-  vgl_sphere_3d<float> sp2((float)cent.x(), (float)cent.y(), (float)cent.z()+20, (float)rad);
+  bvrml_write::write_vrml_sphere(os, sp, 0.5f, 0.5f, 0.5f, 0.0f);
+  bvrml_write::write_vrml_line(os, cent_ray, axis_x, (float)rad*2, 1.0f, 0.0f, 0.0f);
+  bvrml_write::write_vrml_line(os, cent_ray, axis_y, (float)rad*2, 0.0f, 1.0f, 0.0f);
+  bvrml_write::write_vrml_line(os, cent_ray, axis_z, (float)rad*2, 0.0f, 1.0f, 1.0f);
+  vgl_sphere_3d<float> sp2((float)cent.x(), (float)cent.y()+2, (float)cent.z(), (float)rad/10);
   bvrml_write::write_vrml_sphere(os, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
 
   // write the voxel structure
-  float disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad);
+  float disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad/6);
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vgl_vector_3d<double> ray = cart_pts_[i];
@@ -573,7 +573,7 @@ void vsph_unit_sphere::display_color(vcl_string const & path,
     const vcl_vector<float>& cl = cdata[i];
     if (cl[0]==skip_color[0]&&cl[1]==skip_color[1]&&cl[2]==skip_color[2])
       continue;
-    bvrml_write::write_vrml_disk(os, orig+10*ray, ray, disc_radius,
+    bvrml_write::write_vrml_disk(os, orig+ray, ray, disc_radius,
                                  cl[0], cl[1], cl[2]);
   }
   os.close();

@@ -484,6 +484,67 @@ vsph_sph_box_2d vsph_sph_box_2d::transform(double t_theta,
   return rbox;
 }
 
+vsph_sph_box_2d vsph_sph_box_2d::transform(double t_theta, 
+					                       double t_phi, double scale,
+                                           double theta_c,double phi_c,
+					                       bool in_radians) const
+{
+  
+  //work in units of *this box
+  double d_th = t_theta, d_ph = t_phi;
+  if(this->in_radians_ && !in_radians){
+    d_th /= vnl_math::deg_per_rad;
+    d_ph /= vnl_math::deg_per_rad;
+    phi_c/=vnl_math::deg_per_rad;
+    theta_c/=vnl_math::deg_per_rad;
+  }
+  if(!this->in_radians_ && in_radians){
+    d_th *= vnl_math::deg_per_rad;
+    d_ph *= vnl_math::deg_per_rad;
+    phi_c   *=vnl_math::deg_per_rad;
+    theta_c *=vnl_math::deg_per_rad;
+  }
+  //first scale *this box and then rotate
+  //scaling should occur around the box center
+  //angular spread of both theta and phi is multiplied by scale
+  vsph_sph_point_2d center = this->center(in_radians_);
+  double min_th = min_theta(in_radians_), max_th = max_theta(in_radians_);
+  min_th = (min_th-theta_c)*scale + theta_c +d_th;
+  max_th = (max_th-theta_c)*scale + theta_c +d_th;
+
+
+  // don't allow transformations on theta that move outside range  
+  if(min_th<0.0) min_th = 0.0;
+  if(max_th>pye())max_th = pye();
+  // for phi it is possible to scale beyond 360 degrees. Don't allow this.
+  // stop at the full circle and put phi_c at half angle opposite the 
+  // circle cut.
+  double c_ph = center.phi_;
+  double ph_start, ph_end;
+  this->phi_bounds(ph_start, ph_end);
+  double difs = (vsph_utils::azimuth_diff(phi_c, ph_start, in_radians_));
+  double dife = (vsph_utils::azimuth_diff(phi_c, ph_end, in_radians_));
+  double difc = (vsph_utils::azimuth_diff(phi_c, c_ph, in_radians_));
+
+  double s = scale;
+
+  if(s*(difs+dife) > 2.0*pye()){
+    ph_end = ph_start;
+  }else{
+    //extend the start and end positions
+    difs *=s; dife*=s;difc*=s;
+    ph_start = phi_c + difs + d_ph;
+    ph_end =   phi_c + dife + d_ph;
+    c_ph = phi_c + difc + d_ph;
+    ph_start = reduce_phi(ph_start);
+    ph_end = reduce_phi(ph_end);
+    c_ph = reduce_phi(c_ph);
+  }    
+  vsph_sph_box_2d rbox;
+  rbox.set(min_th, max_th, ph_start, ph_end, c_ph, in_radians_);
+  return rbox;
+}
+
 void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
                                    vcl_vector<vcl_vector<int> >& quads,
                                    double tol) const{
@@ -572,13 +633,14 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
 
 void vsph_sph_box_2d::print(vcl_ostream& os, bool in_radians) const
 {
-  os << " vsph_sph_box_2d:[(" << min_theta(in_radians) << ' '
-     << min_phi(in_radians) << ")->(" << max_theta(in_radians)
-     << ' ' << max_phi(in_radians) << ")]\n";
+  os << " vsph_sph_box_2d:[(" << min_theta(!in_radians) << ' '
+     << min_phi(!in_radians) << ")->(" << max_theta(!in_radians)
+     << ' ' << max_phi(!in_radians) << ")]\n";
 }
 
 void vsph_sph_box_2d::display_box(vcl_ostream& os,
-                                  float r, float g, float b, double tol) const
+                                  float r, float g, float b, 
+                                  double tol, double factor) const
 {
   vcl_vector<vgl_vector_3d<double> > verts;
   vcl_vector<vcl_vector<int> > quads;
@@ -589,14 +651,14 @@ void vsph_sph_box_2d::display_box(vcl_ostream& os,
      <<"     diffuseColor  " << r << ' ' << g << ' ' << b << '\n'
      <<"          }\n"
      <<"    }\n"
-     << " geometry IndexedFaceSet\n"
+     << " geometry IndexedFaceSet\n" 
      << "  {\n"
      << "   coord Coordinate{\n"
      << "     point [\n";
   unsigned n = verts.size();
   for (unsigned iv = 0; iv<n; ++iv) {
     vgl_vector_3d<double>& v = verts[iv];
-    os << v.x() << ',' << v.y() << ',' << v.z();
+    os << v.x() * factor<< ',' << v.y()* factor << ',' << v.z()* factor;
     if (iv < (n-1)) os << ",\n";
     else os << '\n';
   }
@@ -619,7 +681,7 @@ void vsph_sph_box_2d::display_box(vcl_ostream& os,
 void vsph_sph_box_2d::display_boxes(vcl_string const& path,
 				    vcl_vector<vsph_sph_box_2d> const& boxes,
 				    vcl_vector<vcl_vector<float> > colors,
-				    double tol){
+				    double tol,double factor ){
   vcl_ofstream os(path.c_str());
   if (!os.is_open())
     return;
@@ -629,7 +691,7 @@ void vsph_sph_box_2d::display_boxes(vcl_string const& path,
   assert(nc == nb);
   for (unsigned i = 0; i<nb; ++i) {
     vcl_vector<float> c = colors[i];
-    boxes[i].display_box(os, c[0], c[1],c[2],tol);
+    boxes[i].display_box(os, c[0], c[1],c[2],tol,factor);
   }
   os.close();
 }

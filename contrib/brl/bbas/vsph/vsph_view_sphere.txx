@@ -18,7 +18,9 @@ vsph_view_sphere<T>::vsph_view_sphere(vgl_point_3d<double> const& center, double
 template <class T>
 vsph_view_sphere<T>::vsph_view_sphere(vgl_box_3d<double> bb, double radius)
   : coord_sys_(new vsph_spherical_coord(bb.centroid(),radius)),uid_(0) { }
-
+template <class T>
+vsph_view_sphere<T>::vsph_view_sphere(vgl_point_3d<double> pt, double radius)
+  : coord_sys_(new vsph_spherical_coord(pt,radius)),uid_(0) { }
 template <class T>
 vgl_point_3d<double> vsph_view_sphere<T>::cart_coord(vsph_sph_point_3d const& vp) const
 {

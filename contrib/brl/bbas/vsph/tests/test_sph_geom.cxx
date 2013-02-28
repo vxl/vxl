@@ -182,15 +182,33 @@ static void test_sph_geom()
   TEST("each box contains the other's bounds", good, true);
   double tol = 0.001;
   vcl_string box_path = MyDIR + "box_display.wrl";
+
   // transform a box
   vsph_sph_box_2d tb1 = box_s1.transform(0.5, 0.25, 1.2, true);
   double tth_min = 1.96624, tth_max = 2.17535;
   double tph_min =-1.63496, tph_max = 2.13496, tphc = 0.25;
   er = vcl_fabs(tb1.min_theta()-tth_min) + vcl_fabs(tb1.max_theta()-tth_max);
   double tb_a_ph = tb1.a_phi(), tb_b_phi = tb1.b_phi(), tb_c_phi = tb1.c_phi();
-  er += vcl_fabs(tph_min-tb_a_ph) + vcl_fabs(tph_max-tb_b_phi) +
-    vcl_fabs(tphc-tb_c_phi);
+  er += vcl_fabs(tph_min-tb_a_ph) + vcl_fabs(tph_max-tb_b_phi) +vcl_fabs(tphc-tb_c_phi);
   TEST_NEAR("transform box no phi cut", er, 0.0, 0.001);
+
+  vsph_sph_box_2d tb2 = bba.transform(0.5, 0.25, 1.2, true);
+  double tb2_a_ph = tb2.a_phi(false), tb2_b_phi = tb2.b_phi(false), tb2_c_phi = tb2.c_phi(false);
+  double tb2_ph_min = -168.676, tb2_ph_max = -132.676, tb2_c = -150.676;
+  er = vcl_fabs(tb2_ph_min-tb2_a_ph) + vcl_fabs(tb2_ph_max-tb2_b_phi) +
+      vcl_fabs(tb2_c-tb2_c_phi);
+  TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
+
+  vsph_sph_box_2d tb1_about = box_s1.transform(0.5, 0.25, 1.6,1.57,2.2, true);
+  double tth_min_about = 1.4318703408918116, tth_max_about = 1.7106779048518577;
+  double tph_min_about = 0.18663706143591696, 
+         tph_max_about = 1.4432741228718344, 
+         tphc_about = -1.0700000000000003;
+  er = vcl_fabs(tb1_about.min_theta()-tth_min_about) + vcl_fabs(tb1_about.max_theta()-tth_max_about);
+  double tb_a_ph_about = tb1_about.a_phi(), tb_b_phi_about = tb1_about.b_phi(), tb_c_phi_about = tb1_about.c_phi();
+  er += vcl_fabs(tph_min_about-tb_a_ph_about) + vcl_fabs(tph_max_about-tb_b_phi_about) +vcl_fabs(tphc_about-tb_c_phi_about);
+  TEST_NEAR("transform box about a point no phi cut", er, 0.0, 0.001);
+
   vsph_sph_box_2d tb2 = bba.transform(0.5, 0.25, 1.2, true);
   double tb2_a_ph = tb2.a_phi(false), tb2_b_phi = tb2.b_phi(false), tb2_c_phi = tb2.c_phi(false);
   double tb2_ph_min = -168.676, tb2_ph_max = -132.676, tb2_c = -150.676;
@@ -208,6 +226,7 @@ static void test_sph_geom()
   double t_grok_a = 2.4925, t_grok_b = 2.83984;
   er = vcl_fabs(t_grok_a-tb3.a_phi()) + vcl_fabs(t_grok_b-tb3.b_phi());
   TEST_NEAR("negative trans with roll-over", er, 0.0, 0.001);
+
 #if 0
 
   vcl_string grok_path = MyDIR + "grok_box_display.wrl";
