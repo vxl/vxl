@@ -17,11 +17,13 @@
 #include <vcl_iostream.h>
 #include <vcl_map.h>
 #include <vcl_string.h>
+#include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <depth_map/depth_map_scene_sptr.h>
+#include <depth_map/depth_map_region_sptr.h>
 #include <volm/volm_spherical_container_sptr.h>
 #include <volm/volm_spherical_shell_container_sptr.h>
-#include <volm/volm_spherical_query_region.h>
+#include <volm/volm_spherical_region.h>
 #include <vsph/vsph_unit_sphere_sptr.h>
 class volm_spherical_region_query
 {
@@ -30,20 +32,25 @@ class volm_spherical_region_query
                               volm_camera_space_sptr const& cam_space,
                               volm_spherical_container_sptr const& sph_vol);
 
-  vcl_vector<volm_spherical_query_region> query_regions(unsigned roll_indx);
+  volm_spherical_regions_layer query_regions(unsigned roll_indx);
 
-  //: display query regions on the surface of a unit sphere
-  void display_query_regions(vsph_unit_sphere_sptr const& usph_ptr,
-                             vcl_string const& path, unsigned roll_index);
   void print(vcl_ostream& os) const;
 
  private:
   void construct_spherical_regions();
+  volm_spherical_region set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
+                                                  depth_map_region_sptr const& dm_region);
+
   depth_map_scene_sptr dm_scene_;
   volm_camera_space_sptr cam_space_;
   volm_spherical_container_sptr sph_vol_;
-  //     roll index                 regions on sphere
-  vcl_map< unsigned, vcl_vector<volm_spherical_query_region> > sph_regions_;
+
+  //     roll index  regions on sphere
+  vcl_map< unsigned, volm_spherical_regions_layer > sph_regions_;
+ 
+  double canonical_top_fov_ ;
+  double canonical_head_    ;
+  double canonical_tilt_    ;
 };
 
 #endif // volm_spherical_region_query_h_
