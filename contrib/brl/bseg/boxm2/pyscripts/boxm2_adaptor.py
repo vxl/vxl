@@ -846,7 +846,7 @@ def init_trajectory_height_map(scene, x_img, y_img, z_img, ni, nj, right_fov, to
 ######################################################################
 # camera/scene methods
 #####################################################################
-def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="nvm_out") :
+def bundle2scene(bundle_file, img_dir,axis_align= True, nblks =8, app_model="boxm2_mog3_grey", out_dir="nvm_out", lvcscenter=[0.0,0.0,0.0]) :
   if app_model == "boxm2_mog3_grey" or app_model =="boxm2_mog3_grey_16":
     nobs_model = "boxm2_num_obs";
   elif app_model == "boxm2_gauss_rgb" :
@@ -861,7 +861,12 @@ def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="nvm
   boxm2_batch.set_input_string(1, img_dir);
   boxm2_batch.set_input_string(2, app_model);
   boxm2_batch.set_input_string(3, nobs_model);
-  boxm2_batch.set_input_string(4, out_dir);
+  boxm2_batch.set_input_int(4, nblks)	
+  boxm2_batch.set_input_bool(5, axis_align); 
+  boxm2_batch.set_input_string(6, out_dir);
+  boxm2_batch.set_input_float(7, lvcscenter[0]);
+  boxm2_batch.set_input_float(8, lvcscenter[1]);
+  boxm2_batch.set_input_float(9, lvcscenter[2]);
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   uscene = dbvalue(scene_id, scene_type);
