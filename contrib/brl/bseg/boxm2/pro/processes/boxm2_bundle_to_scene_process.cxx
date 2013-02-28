@@ -20,7 +20,7 @@
 
 namespace boxm2_bundle_to_scene_process_globals
 {
-  const unsigned n_inputs_ = 7;
+  const unsigned n_inputs_ = 10;
   const unsigned n_outputs_ = 2;
 }
 
@@ -37,7 +37,9 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   input_types_[4] = "int";
   input_types_[5] = "bool";
   input_types_[6] = "vcl_string"; // optional arg - output dir to save cams/imgs
-
+  input_types_[7] = "float";
+  input_types_[8] = "float";
+  input_types_[9] = "float";
   // process has 2 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_scene_sptr";  //update scene
@@ -51,6 +53,14 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   pro.set_input(5, do_axis_align);
   brdb_value_sptr dir_name = new brdb_value_t<vcl_string>("");
   pro.set_input(6, dir_name);
+
+  brdb_value_sptr x = new brdb_value_t<float>(0.0);
+  pro.set_input(7, x);
+  brdb_value_sptr y = new brdb_value_t<float>(0.0);
+  pro.set_input(8, y);
+  brdb_value_sptr z = new brdb_value_t<float>(0.0);
+  pro.set_input(9, z);
+
   return good;
 }
 
@@ -76,7 +86,11 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   bool axis_align        = pro.get_input<bool>(i++);
   vcl_string out_dir     = pro.get_input<vcl_string>(i++); //output dir for imgs/files
   vcl_cout<<"AXIS ALIGN "<<axis_align<<vcl_endl;
+  float x = pro.get_input<float>(i++);
+  float y = pro.get_input<float>(i++);
+  float z = pro.get_input<float>(i++);
 
+  vpgl_lvcs lvcs(x,y,z);
   //----------------------------------------------------------------------------
   //run bundle to scene
   //----------------------------------------------------------------------------
@@ -102,11 +116,15 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   if (!vul_file::make_directory_path( scene_dir.c_str()))
     return false;
   boxm2_scene_sptr uscene = new boxm2_scene(scene_dir, bbox.min_point());
+  uscene->set_lvcs(lvcs);
+  uscene->set_local_origin(vgl_point_3d<double>(0.0,0.0,0.0));
   uscene->set_appearances(appearance);
   uscene->save_scene();
 
   //create render scene
   boxm2_scene_sptr rscene = new boxm2_scene(scene_dir, bbox.min_point());
+  rscene->set_lvcs(lvcs);
+  rscene->set_local_origin(vgl_point_3d<double>(0.0,0.0,0.0));
   rscene->set_appearances(appearance);
   rscene->save_scene();
 
@@ -178,7 +196,6 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
       }
     }
   }
-
 
   //----------------------------------------------------------------------------
   // set output and return
