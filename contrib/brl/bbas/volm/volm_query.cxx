@@ -467,20 +467,9 @@ bool volm_query::order_ingest()
     }
     order_index_.push_back(order_cam);
   } // loop over camera
-#if 0
-  vcl_cout << " order_index_size = " << order_index_.size() << vcl_endl;
-  for (unsigned k = 0; k < order_index_.size(); ++k) {
-    vcl_cout << " order_index_[" << k << "] = " << order_index_[k].size() << vcl_endl;
-    for (unsigned i = 0 ; i < order_index_[k].size(); ++i) {
-      vcl_cout << "\t order_index_[" << k << "][" << i << "] = " << order_index_[k][i].size() << vcl_endl;
-      for (unsigned j = 0; j < order_index_[k][i].size(); ++j) {
-        //vcl_cout << " cam " << k << ", object order " << i << ", order_index[" << j << "] =" << order_index_[k][i][j] << vcl_endl;
-      }
-    }
-  }
-#endif
   return true;
 }
+
 // computes a set of spherical shell layers for each camera hypothesis
 // the layer contents are indexed by the camera ray, p_idx
 bool volm_query::query_ingest()
@@ -543,18 +532,6 @@ bool volm_query::query_ingest()
           vcl_vector<unsigned char> grd_fallback_id;
           vcl_vector<float> grd_fallback_wgt;
           min_dist = this->fetch_depth(u, v, order, max_dist, obj_id, grd_fallback_id, grd_fallback_wgt, is_ground, is_sky, is_object, depth_img);
-#if 0
-          if (i == 0) {
-            vcl_cout << p_idx << ' ' << count << ' '
-                     << (unsigned)min_dist << ' ' << u << ' ' << v
-                     << ' ' << (unsigned)order << ' '
-                     << (unsigned)max_dist
-                     << ' ' << (unsigned)obj_id
-                     << ' ' << (unsigned)grd_land << ' '
-                     << is_ground << ' ' << is_sky << ' '
-                     << is_object << '\n';
-          }
-#endif // 0
           min_dist_layer.push_back(min_dist);
           max_dist_layer.push_back(max_dist);
           order_layer.push_back(order);
@@ -590,26 +567,10 @@ bool volm_query::query_ingest()
     ground_land_wgt_.push_back(ground_land_wgt_layer);
     sky_id_.push_back(sky_id_layer);
     dist_id_.push_back(dist_id_layer);
-// sperhical layer -- the scene_region is not ordered by its order, so it ruins my basic data structure
-#if 0
-    volm_spherical_layers sph_lays(cam, dm_, altitude_, sph_depth_, sph_,
-                                   (unsigned char)invalid_, order_sky_,
-                                   d_threshold_, log_downsample_ratio_);
-    sph_lays.compute_layers();
-
-    min_dist_.push_back(sph_lays.min_dist_layer());
-    max_dist_.push_back(sph_lays.max_dist_layer());
-    order_.push_back(sph_lays.order_layer());
-    ground_id_.push_back(sph_lays.ground_id_layer());
-    ground_dist_.push_back(sph_lays.ground_dist_layer());
-    ground_land_.push_back(sph_lays.ground_land_layer());
-    sky_id_.push_back(sph_lays.sky_id_layer());
-    dist_id_.push_back(sph_lays.dist_id_layer());
-#endif
-
   } // loop over cameras
   return true;
 }
+
 // u, v defines the pixel location in a depth image
 // depth image is the ground plane depth map
 // returns min distance to depth region that contains
@@ -738,64 +699,6 @@ unsigned char volm_query::fetch_depth(double const& u,
   return (unsigned char)255;
 }
 
-#if 0
-bool volm_query::weight_ingest()
-{
-#if 0
-  if (dm_->sky().size()) {
-    weight_sky_ = 0.4f;
-    // to be implemented to read from depth_scene
-  }
-  else
-    weight_sky_ = 0.0f;
-
-  if (dm_->ground_plane().size()) {
-    weight_grd_ = 0.3f;
-    // TO BE IMPLEMENTED to read from depth_scene
-  }
-  else
-    weight_grd_ = 0.0f;
-
-  if (depth_regions_.size()) {
-    // TO BE IMPLEMENTED to read from depth_regions_
-    // now set equal weight
-    float unit_ratio = 0.5f * (1 - weight_grd_ - weight_sky_ );
-    for (unsigned i = 0; i < depth_regions_.size(); ++i) {
-      weight_obj_.push_back(unit_ratio);
-    }
-  }
-#endif
-  // equal weight setting, i.e. w_sky = w_ground = w_obj for any objects
-  // note we have socre = w_s*S_s + w_g*S_g+ sum(w_k*S_k^ord)/M + sum(w_k*S_k^dist)/M = 1 for ground truth
-  // w_s = w_k = w_g = w gives 4w = 1 give w = 0.25
-  if (dm_->sky().size() && dm_->ground_plane().size()) {
-    weight_sky_ = 0.25f;
-    weight_grd_ = 0.25f;
-    for (unsigned i = 0; i < depth_regions_.size(); ++i)
-      weight_obj_.push_back(0.25f);
-  }
-  else if (dm_->sky().size()) {     // no ground , only sky
-    weight_sky_ = 0.3333333f;
-    weight_grd_ = 0.0f;
-    for (unsigned i = 0; i < depth_regions_.size(); ++i)
-      weight_obj_.push_back(0.333333f);
-  }
-  else if (dm_->ground_plane().size()) {  // no sky , only ground
-    weight_grd_ = 0.333333f;
-    weight_sky_ = 0.0f;
-    for (unsigned i = 0; i < depth_regions_.size(); ++i)
-      weight_obj_.push_back(0.333333f);
-  }
-  else {                            // no sky, nor ground
-    weight_grd_ = 0.0f;
-    weight_sky_ = 0.0f;
-    for (unsigned i = 0; i < depth_regions_.size(); ++i)
-      weight_obj_.push_back(0.5f);
-  }
-  return true;
-}
-#endif
-
 void volm_query::draw_template(vcl_string const& vrml_fname)
 {
   // write the header and shell container first
@@ -882,13 +785,6 @@ void volm_query::draw_viewing_volume(vcl_string const& fname, vpgl_perspective_c
       << "    ]\n"
       << "  }\n"
       << "}\n";
-#if 0 // TODO: not used !?!
-  // draw image boundary
-  vgl_line_segment_3d<double> topline(ptl,ptr);
-  vgl_line_segment_3d<double> leftline(ptl,pll);
-  vgl_line_segment_3d<double> rightline(plr,ptr);
-  vgl_line_segment_3d<double> bottomline(plr,pll);
-#endif
   ofs.close();
 }
 
@@ -1025,20 +921,7 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
   this->draw_depth_map_regions(out_img);
   
   vpgl_perspective_camera<double> cam = cam_space_->camera(cam_id);
-  // draw the rays that current penetrate through the image
-  if (value_type == "depth") {
-    for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
-      if (values[pidx] < 255) {
-  #if 0
-        vcl_cout << " inside draw, " << ", cam_id = " << cam_id << " idx = " << pidx
-                 << ", point = " << query_points_[pidx]
-                 << ", values = " << (int)values[pidx];
-  #endif
-        //this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
-        this->draw_dot(out_img, query_points_[pidx], values[pidx], cam);
-      }
-    }
-  }
+
   if (value_type == "orientation") {
     for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
       unsigned char color_id;
@@ -1052,11 +935,34 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
         color_id = 254;
       else
         color_id = 253;
-      //this->draw_dot(out_img, query_points_[pidx], values[pidx], cameras_[cam_id]);
-      //vpgl_perspective_camera<double> cam = cam_space_->camera(cam_id);
       this->draw_dot(out_img, query_points_[pidx], color_id, cam);
     }
   }
+  else if (value_type == "land") {
+    vcl_cout << " land_type index: ";
+    for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
+      unsigned char color_id;
+      if (values[pidx] == 0)                   // invalid --> black
+        color_id = 253;
+      else if (values[pidx] == 254)            // sky --> white
+        color_id = 254;
+      else
+        color_id = values[pidx]*6;             // increase color difference
+      this->draw_dot(out_img, query_points_[pidx], color_id, cam);
+    }
+  }
+  else if (value_type == "depth") {
+    for (unsigned pidx = 0; pidx < query_size_; ++pidx)
+      if (values[pidx] < 255) 
+        this->draw_dot(out_img, query_points_[pidx], values[pidx], cam);
+  }
+  else {
+    vcl_cerr << "WARNING: given image type " << value_type << " is not found in volm_query::depth_rgb_image, generate depth image instead" << vcl_endl;
+    for (unsigned pidx = 0; pidx < query_size_; ++pidx)
+      if (values[pidx] < 255) 
+        this->draw_dot(out_img, query_points_[pidx], values[pidx], cam);
+  }
+
 }
 
 void volm_query::draw_query_image(unsigned cam_i, vcl_string const& out_name)
@@ -1332,5 +1238,3 @@ bool volm_query::operator== (const volm_query &other) const
   obj_orient_ == other.obj_orient_ && 
   obj_land_id_ == other.obj_land_id_;
 }
-
-
