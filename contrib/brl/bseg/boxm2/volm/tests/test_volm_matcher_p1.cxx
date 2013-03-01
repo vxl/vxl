@@ -28,14 +28,15 @@
 static void test_volm_matcher_p1()
 {
 
-  // input parameters (modify accordingly)
-  vcl_string geo_index_folder = "Z:/projects/FINDER/index/geoindex_zone_17_inc_2_nh_100_pa_5/";
-  vcl_string         cam_file = "D:/work/find/volm_matcher/test1/local_output/test_weight_pa_5/p1a_test1_40/camera_space.bin";
-  vcl_string         dms_file = "Z:/projects/FINDER/test1/p1a_test1_40/p1a_test1_40.vsl";
-  vcl_string       out_folder = "D:/work/find/volm_matcher/test1/output/test_weight_pa_5/p1a_test1_40/";
-  vcl_string   candidate_file = "Z:/projects/FINDER/test1/candidate_lists/p1a_test1_40/out.txt";
-  vcl_string    sph_shell_bin = "Z:/projects/FINDER/index/sph_shell_vsph_ca_180_pa_5_ta_75_ba_75.bin";
-  vcl_string      weight_file = "D:/work/find/volm_matcher/test1/local_output/test_weight_pa_5/p1a_test1_40/weight_param.txt";
+  // input parameters (input file required...)
+  vcl_string geo_index_folder = "Z:/projects/find/index/geoindex_zone_17_inc_2_nh_100_pa_5/";
+  vcl_string         cam_file = "Z:/projects/find/test1_result/local_output/test_query_binary_gt_pa_5/p1a_test1_36/camera_space.bin";
+  vcl_string         dms_file = "Z:/projects/find/test1/p1a_test1_36/p1a_test1_36.vsl";
+  vcl_string       out_folder = "D:/work/find/volm_matcher/test1/output/test_query_binary_gt_pa_5/p1a_test1_36/";
+  vcl_string   candidate_file = "Z:/projects/find/test1/candidate_lists/p1a_test1_36/out.txt";
+  vcl_string    sph_shell_bin = "Z:/projects/find/index/sph_shell_vsph_ca_180_pa_5_ta_75_ba_75.bin";
+  vcl_string        query_bin = "Z:/projects/find/test1_result/local_output/test_query_binary_gt_pa_5/p1a_test1_36/p1a_test1_36_query_pa_5.bin";
+  vcl_string      weight_file = "Z:/projects/find/test1_result/local_output/test_query_binary_gt_pa_5/p1a_test1_36/weight_param.txt";
 
   unsigned tile_id = 3;
   float buffer_capacity = 1.0f;
@@ -104,8 +105,13 @@ static void test_volm_matcher_p1()
   cam_space->b_read(ifs_cam);
   ifs_cam.close();
 
+#if 0
   // create query
   volm_query_sptr query = new volm_query(cam_space, dms_file, sph_shell, sph);
+#endif
+  // load volm_query
+  volm_query_sptr query = new volm_query(query_bin, cam_space, dms_file, sph_shell, sph);
+
   // screen output of query
   unsigned total_size = query->obj_based_query_size_byte();
   vcl_cout << "\n==================================================================================================\n"
@@ -116,34 +122,51 @@ static void test_volm_matcher_p1()
   depth_map_scene_sptr dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
-    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
-    for (unsigned i = 0; i < dm->sky().size(); i++)
+    vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
+    for (unsigned i = 0; i < dm->sky().size(); i++) {
       vcl_cout << "\t name = " << (dm->sky()[i]->name())
                << ", depth = " << 254
                << ", orient = " << (int)query->sky_orient()
-               << vcl_endl;
+               << ", land_id = " << dm->sky()[i]->land_id() 
+               << ", land_name = " << volm_label_table::land_string(dm->sky()[i]->land_id())
+               << ", land_fallback_category = ";
+      volm_fallback_label::print_id(dm->sky()[i]->land_id());
+      vcl_cout << ", land_fallback_weight = " ;
+      volm_fallback_label::print_wgt(dm->sky()[i]->land_id());
+      vcl_cout << vcl_endl;
+    }
   }
   if (dm->ground_plane().size()) {
-    vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
-    for (unsigned i = 0; i < dm->ground_plane().size(); i++)
-      vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
-               << ", depth = " << dm->ground_plane()[i]->min_depth()
-               << ", orient = " << dm->ground_plane()[i]->orient_type()
-               << ", land_id = " << dm->ground_plane()[i]->land_id()
-               << ", land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
-               << vcl_endl;
+    vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
+    for (unsigned i = 0; i < dm->ground_plane().size(); i++) {
+        vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
+                 << ", depth = " << dm->ground_plane()[i]->min_depth()
+                 << ", orient = " << dm->ground_plane()[i]->orient_type()
+                 << ", land_id = " << dm->ground_plane()[i]->land_id() 
+                 << ", land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
+                 << ", land_fallback = ";
+        volm_fallback_label::print_id(dm->ground_plane()[i]->land_id());
+        vcl_cout << ", land_fallback_wgt = ";
+        volm_fallback_label::print_wgt(dm->ground_plane()[i]->land_id());
+        vcl_cout << vcl_endl;
+    }
   }
-  if (dm->scene_regions().size()) {
-    vcl_cout << " -------------- DEPTH REGIONS --------------" << vcl_endl;
-    for (unsigned i = 0; i < dm->scene_regions().size(); i++) {
-      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
-               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
-               << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
-               << ",\t order = " << (dm->scene_regions())[i]->order()
-               << ",\t orient = " << (dm->scene_regions())[i]->orient_type()
-               << ",\t NLCD_id = " << (dm->scene_regions())[i]->land_id()
-               << ",\t land_name = " << volm_label_table::land_string((dm->scene_regions())[i]->land_id())
-               << vcl_endl;
+  vcl_vector<depth_map_region_sptr> drs = query->depth_regions();
+  vcl_cout << " The depth regions map inside query follows on order" << vcl_endl;
+  if (drs.size()) {
+    for (unsigned i = 0; i < drs.size(); i++) {
+      vcl_cout << "\t " <<  drs[i]->name()  << " region "
+               << ",\t min_depth = " << drs[i]->min_depth()
+               << ",\t max_depth = " << drs[i]->max_depth()
+               << ",\t order = " << drs[i]->order()
+               << ",\t orient = " << drs[i]->orient_type()
+               << ",\t land_id = " << drs[i]->land_id()
+               << ",\t land_name = " << volm_label_table::land_string( drs[i]->land_id() )
+               << ",\t fallback_category = ";
+      volm_fallback_label::print_id(drs[i]->land_id());
+      vcl_cout << ",\t fallback_wgt = ";
+      volm_fallback_label::print_wgt(drs[i]->land_id());
+      vcl_cout << vcl_endl;
     }
   }
 
@@ -159,7 +182,11 @@ static void test_volm_matcher_p1()
   boxm2_volm_matcher_p1 obj_order_matcher(cam_space, query, leaves, buffer_capacity, geo_index_folder, tile_id,
                                           depth_interval_rev, cand_poly, mgr->gpus_[dev_id], is_candidate, is_last_pass, out_folder,
                                           threshold, max_cam_per_loc, weights);
+  
+  // execute the kernel
   bool good = obj_order_matcher.volm_matcher_p1();
+  //bool good = obj_order_matcher.transfer_query();
+  
  
   // output
 
@@ -168,7 +195,7 @@ static void test_volm_matcher_p1()
   vcl_stringstream out_fname_txt;
   out_fname_txt << out_folder << "pass1_scores_tile_" << tile_id << ".txt";
 
-  good = obj_order_matcher.write_matcher_result(out_fname_bin.str(), out_fname_txt.str());
+  //good = obj_order_matcher.write_matcher_result(out_fname_bin.str(), out_fname_txt.str());
 
 #if 0
   vcl_vector<volm_score_sptr> scores;

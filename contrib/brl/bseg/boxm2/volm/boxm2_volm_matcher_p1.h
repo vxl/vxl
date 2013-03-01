@@ -63,7 +63,9 @@ public:
   bool write_matcher_result(vcl_string const& tile_fname_bin);
   //: for testing purpose -- output score for all camera (should only be used for ground truth location)
   bool write_gt_cam_score(unsigned const& leaf_id, unsigned const& hypo_id, vcl_string const& out_fname);
-    
+  
+  
+
 private:
   //: query, indices, device
   volm_camera_space_sptr                        cam_space_;
@@ -72,9 +74,15 @@ private:
   vcl_vector<volm_geo_index_node_sptr>             leaves_;
   boxm2_volm_wr3db_index_sptr                         ind_;
   boxm2_volm_wr3db_index_sptr                  ind_orient_;
+  boxm2_volm_wr3db_index_sptr                    ind_land_;
   float                                        ind_buffer_;
   vcl_stringstream                          file_name_pre_;
   vcl_vector<volm_weight>                         weights_;
+  
+  //: land fallback category table size
+  unsigned char                             fallback_size_;
+  unsigned char*                       fallback_size_buff_;
+  bocl_mem*                          fallback_size_cl_mem_;
   //: shell container size
   unsigned                                     layer_size_;
   unsigned*                               layer_size_buff_;
@@ -112,13 +120,17 @@ private:
   bocl_mem*               grd_id_cl_mem_;
   unsigned char*          grd_dist_buff_;
   bocl_mem*             grd_dist_cl_mem_;
+  unsigned char*          grd_land_buff_;
+  bocl_mem*             grd_land_cl_mem_;
+  float*              grd_land_wgt_buff_;
+  bocl_mem*         grd_land_wgt_cl_mem_;
   unsigned*          grd_id_offset_buff_;
   bocl_mem*        grd_id_offset_cl_mem_;
   float*                grd_weight_buff_;
   bocl_mem*           grd_weight_cl_mem_;
   float*             grd_wgt_attri_buff_;
   bocl_mem*        grd_wgt_attri_cl_mem_;
-  
+
   unsigned*                 sky_id_buff_;
   bocl_mem*               sky_id_cl_mem_;
   unsigned*          sky_id_offset_buff_;
@@ -141,6 +153,10 @@ private:
   bocl_mem*        obj_wgt_attri_cl_mem_;
   unsigned char*        obj_orient_buff_;
   bocl_mem*           obj_orient_cl_mem_;
+  unsigned char*          obj_land_buff_;
+  bocl_mem*             obj_land_cl_mem_;
+  float*              obj_land_wgt_buff_;
+  bocl_mem*         obj_land_wgt_cl_mem_;
 
   //: depth interval
   float*            depth_interval_buff_;
@@ -172,6 +188,7 @@ private:
                          unsigned& leaf_id,
                          unsigned char* index_buff,
                          unsigned char* index_orient_buff,
+                         unsigned char* index_land_buff,
                          vcl_vector<unsigned>& l_id,
                          vcl_vector<unsigned>& h_id,
                          unsigned& actual_n_ind);
@@ -204,12 +221,18 @@ private:
                                      bocl_mem*                  n_ind_cl_mem_,
                                      bocl_mem*                  index_cl_mem_,
                                      bocl_mem*           index_orient_cl_mem_,
+                                     bocl_mem*             index_land_cl_mem_,
                                      bocl_mem*                  score_cl_mem_,
                                      bocl_mem*                     mu_cl_mem_);
 
   
   //: a test function to check the kernel implementation
-  bool volm_matcher_p1_test_ori(unsigned n_ind, unsigned char* index, unsigned char* index_orient, float* score_buff, float* mu_buff);
+  bool volm_matcher_p1_test_ori(unsigned n_ind,
+                                unsigned char* index,
+                                unsigned char* index_orient,
+                                unsigned char* index_land,
+                                float* score_buff,
+                                float* mu_buff);
 
 };
 

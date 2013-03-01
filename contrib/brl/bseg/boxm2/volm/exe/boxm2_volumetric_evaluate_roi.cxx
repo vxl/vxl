@@ -188,11 +188,11 @@ int main(int argc,  char** argv)
   vcl_string eoi_file = out_root() + "/roi_result.txt";
   vcl_ofstream fout(eoi_file.c_str());
 
-  fout << "                                                          thresholds\n"
-       << "  test_id      gt_loc_score";
+  fout << "                                                                thresholds\n"
+       << "  test_id      gt_loc_score      total_locs     ";
   for (vcl_vector<float>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
     fout.setf(vcl_ios_right);
-    fout.precision(2); fout.fill(' '); fout.width(*vit > 0.6 ? 12 : 10);
+    fout.precision(2); fout.fill(' '); fout.width(*vit > 0.6 ? 13 : 10);
     fout << *vit;
   }
 
@@ -206,6 +206,9 @@ int main(int argc,  char** argv)
     fout << out_str.str();
     fout.precision(5); fout.width(13); fout.fill(' ');
     fout << mit->second[0] << ' ';
+    unsigned tot_loc = mit->second[mit->second.size()-1];
+    fout.width(13); fout.fill(' ');
+    fout << tot_loc << "        ";
     for (unsigned i = 1; i < 7; i++) {
       fout.setf(vcl_ios_right);
       fout.precision(5); fout.width(12); fout.fill(' ');
