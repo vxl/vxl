@@ -144,7 +144,7 @@ int main(int argc, char** argv)
   vcl_string weight_file = weight_folder() + "/weight_param.txt";
 
   if (!vul_file::exists(weight_file)) {
-    vcl_ofstream ofs_weight(weight_file);
+    vcl_ofstream ofs_weight(weight_file.c_str());
     ofs_weight << "Note: 1. for all objects, the summation of weight in the last col should be equal to 1";
     ofs_weight << " (average = " << 1/float(!dm->sky().empty() + !dm->ground_plane().empty() + dm->scene_regions().size()) << ")\n";
     ofs_weight << "      2. for any objects, the summation of all weights from different attributes should be equal to 1\n\n";
