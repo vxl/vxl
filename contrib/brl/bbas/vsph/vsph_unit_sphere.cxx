@@ -43,7 +43,7 @@ vsph_unit_sphere::vsph_unit_sphere(double point_angle,
   add_uniform_views();
   remove_top_and_bottom();
   vcl_cout << "Unit sphere complete with " << sph_pts_.size() << " verts and "
-	   <<  edges_.size() << " edges\n"<< vcl_endl;
+           <<  edges_.size() << " edges\n"<< vcl_endl;
 }
 
 vgl_vector_3d<double> vsph_unit_sphere::cart_coord(vsph_sph_point_2d const& sp)
@@ -241,16 +241,16 @@ void vsph_unit_sphere::add_uniform_views()
   for (int i=0; i<ntri; i++) {
     int v[3];// triangle vertices
     int ti0 = triangles[i][0], ti1 = triangles[i][1], ti2 = triangles[i][2];
-    if(!(ti0>=0 && ti0<neq &&ti1>=0 && ti1<neq &&ti2>=0 && ti2<neq)){
+    if (!(ti0>=0 && ti0<neq &&ti1>=0 && ti1<neq &&ti2>=0 && ti2<neq)){
       vcl_cout << "Bad Tri[" << ti0 << ',' << ti1 << ',' << ti2 << "]\n";
       continue;
     }
     v[0] = equivalent_ids_[ti0];//construct edges with current
     v[1] = equivalent_ids_[ti1];//cart and sphere vertex ids
     v[2] = equivalent_ids_[ti2];//updated from initial "verts" id
-    if(v[0]<0||v[1]<0||v[2]<0){
-      vcl_cout << "Bad Equivalent Tri[" << v[0]<< ',' 
-	       << v[1] << ',' << v[2] << "]\n";
+    if (v[0]<0||v[1]<0||v[2]<0){
+      vcl_cout << "Bad Equivalent Tri[" << v[0]<< ','
+               << v[1] << ',' << v[2] << "]\n";
       continue;
     }
     //traverse the edges of the triangle

@@ -102,11 +102,11 @@ class vsph_sph_box_2d
 
   //: transform the box on the unit sphere
   vsph_sph_box_2d transform(double t_theta, double t_phi, double scale,
-			    bool in_radians) const;
-  vsph_sph_box_2d transform(double t_theta, 
-					                       double t_phi, double scale,
-                                           double theta_c,double phi_c,
-					                       bool in_radians) const;
+                            bool in_radians) const;
+  vsph_sph_box_2d transform(double t_theta,
+                            double t_phi, double scale,
+                            double theta_c,double phi_c,
+                            bool in_radians) const;
 
   //: decompose box into approximately planar quadrilaterals
   void planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
@@ -123,7 +123,7 @@ class vsph_sph_box_2d
                             vcl_vector<vsph_sph_box_2d> const& boxes,
                             vcl_vector<vcl_vector<float> > colors,
                             double tol = 0.01,
-                   double factor =1.0);
+                            double factor =1.0);
 
   //: support for binary I/O
   void print(vcl_ostream& os, bool in_radians = true) const;
