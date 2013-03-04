@@ -52,8 +52,11 @@ class vsl_b_ostream
 
   //: Clear the stream's record of any serialisation operations
   // Calling this function while outputting serialisable things to stream,
-  // will mean
-  // that a second copy of an object may get stored to the stream.
+  // will mean that a second copy of an object may get stored to the stream.
+  // Calling this function may be required if you change the state of your program whilst
+  // you are writing to the same vsl_b_ostream. If the program is at any risk of
+  // reallocating the same memory to two different objects controlled by a smart pointer,
+  // then calling this function between writing then will prevent them being confused. 
   virtual void clear_serialisation_records();
 
 
