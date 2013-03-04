@@ -38,6 +38,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> candidate_list("-cand", "candidate list for given query (txt file)", "");  // index -- candidate list file containing polygons
   vul_arg<float>      buffer_capacity("-buff", "index buffer capacity (GB)", 1.0f);              // index -- buffer capacity
   vul_arg<unsigned>   tile_id("-tile", "ID of the tile that current matcher consdier", 3);       // matcher -- tile id
+  vul_arg<unsigned>   zone_id("-zone", "ID of the utm zone of current tile",17);                 // matcher -- zone id
   vul_arg<unsigned>   dev_id("-gpuid", "device used for current matcher", 0);                    // matcher -- device id
   vul_arg<float>      threshold("-thres", "threshold for choosing valid cameras (0~1)", 0.4f);   // matcher -- threshold for choosing cameras
   vul_arg<unsigned>   max_cam_per_loc("-max_cam", "maximum number of cameras to be saved", 200); // matcher -- output related
@@ -73,6 +74,21 @@ int main(int argc, char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
+
+  // check the consistency of tile_id and zone_id
+  // for coast --- zone 18 contains only tile 8 to tile 14 and zone 17 contains only tile 0 to tile 8
+  // for desert --- all tiles (4 tiles) are in zone 11
+  if (tile_id() > 8 && zone_id() == 17 ||
+      tile_id() < 8 && zone_id() == 18 ||
+      tile_id() > 3 && zone_id() == 11 )
+  {
+    log << " ERROR: inconsistency between tile_id and utm zone_id, tile_id = " << tile_id() << ", zone_id = " << zone_id() << '\n';
+    if (do_log) { volm_io::write_log(out_folder(), log.str()); }
+    vcl_cerr << log.str();
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+
 
   // load geo_index
   vcl_stringstream file_name_pre;
@@ -139,10 +155,13 @@ int main(int argc, char** argv)
     log << " ERROR: can not find spherical shell binary: " << sph_bin() << '\n';
     if (do_log) volm_io::write_log(out_folder(), log.str());
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
+  } else {
+    vcl_cerr << "loading spherical shell from " << sph_bin() << vcl_endl;
   }
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container();
+  
   vsl_b_ifstream is_sph(sph_bin());
   sph_shell->b_read(is_sph);
   is_sph.close();
@@ -280,8 +299,8 @@ int main(int argc, char** argv)
 
   // start pass 1 volm_matcher
   boxm2_volm_matcher_p1 obj_ps1_matcher(cam_space, query, leaves, buffer_capacity(), geo_index_folder(), tile_id(),
-                                          depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
-                                          threshold(), max_cam_per_loc(), weights);
+                                        depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
+                                        threshold(), max_cam_per_loc(), weights);
 
   if (!obj_ps1_matcher.volm_matcher_p1()) {
     log << " ERROR: pass 1 volm_matcher failed for geo_index " << index_file << '\n';
@@ -297,10 +316,10 @@ int main(int argc, char** argv)
              << "\t\t     " << out_folder() << '\n'
              << "==================================================================================================\n" << vcl_endl;
   vcl_stringstream out_fname_bin;
-  out_fname_bin << out_folder() << "ps_1_scores_tile_" << tile_id() << ".bin";
+  out_fname_bin << out_folder() << "ps_1_scores_zone_" << zone_id() << "_tile_" << tile_id() << ".bin";
 #if 0
   vcl_stringstream out_fname_txt;
-  out_fname_txt << out_folder() << "ps_1_scores_tile_" << tile_id() << ".txt";
+  out_fname_txt << out_folder() << "ps_1_scores_zone_" << zone_id() << "_tile_" << tile_id() << ".txt";
 #endif
   if (!obj_ps1_matcher.write_matcher_result(out_fname_bin.str())) {
     log << " ERROR: writing output failed for pass 1 ray_based matcher\n";
