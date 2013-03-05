@@ -10,7 +10,7 @@
 class bbas_1d_array_unsigned: public vbl_ref_count
 {
  public:
-  bbas_1d_array_unsigned(unsigned n):data_array(n,-1){}
+  bbas_1d_array_unsigned(unsigned n) : data_array(n, (unsigned)(-1)) {}
   vbl_array_1d<unsigned> data_array;
 };
 
