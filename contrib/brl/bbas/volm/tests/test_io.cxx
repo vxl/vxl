@@ -23,19 +23,21 @@ static void test_io()
   vcl_map<unsigned char, vcl_vector<unsigned char> >::iterator mit = volm_fallback_label::fallback_id.begin();
   vcl_map<unsigned char, vcl_vector<float> >::iterator mit_w = volm_fallback_label::fallback_weight.begin();
 
-    for(; mit != volm_fallback_label::fallback_id.end(); ++mit) {
+    for (; mit != volm_fallback_label::fallback_id.end(); ++mit) {
     vcl_cout << (int)mit->first << "(" << volm_label_table::land_string(mit_w->first) << ") ---> ";
     volm_fallback_label::print_id(mit->first);
     //for (vcl_vector<unsigned char>::iterator vit = mit->second.begin(); vit != mit->second.end(); ++vit)
     //  vcl_cout << volm_label_table::land_string(*vit) << ", ";
     vcl_cout << vcl_setw(10) << vcl_setfill(' ') << " ------ ";
     volm_fallback_label::print_wgt(mit->first);
-    /*for (vcl_vector<float>::iterator vit = mit_w->second.begin(); vit != mit_w->second.end(); ++vit)
-      vcl_cout << vcl_setprecision(3) << *vit << ' ';*/
+#ifdef DEBUG
+    for (vcl_vector<float>::iterator vit = mit_w->second.begin(); vit != mit_w->second.end(); ++vit)
+      vcl_cout << vcl_setprecision(3) << *vit << ' ';
+#endif
     vcl_cout << "\n" << vcl_endl;
     ++mit_w;
   }
-  
+
   TEST("number of fallback_label and weight", volm_fallback_label::fallback_id.size(), volm_fallback_label::fallback_weight.size());
 
 #if 0
@@ -46,7 +48,8 @@ static void test_io()
   if (vul_file::exists(weight_file)) {
     vcl_cout << " reading weight from file ---> " << weight_file << vcl_endl;
     volm_weight::read_weight(weights, weight_file);
-  } else {
+  }
+  else {
     // load the depth_map_scene and create a set of equal weight parameters, given the number of objects defined in the depth_map_scene
     vcl_string dms_bin = "Z://projects//FINDER//test1//p1a_test1_06//p1a_test1_06.vsl";
     vsl_b_ifstream dms_is(dms_bin.c_str());
@@ -55,7 +58,7 @@ static void test_io()
     dms_is.close();
     volm_weight::equal_weight(weights, dm);
   }
-  
+
   float sum_obj = 0;
   for (vcl_vector<volm_weight>::iterator vit = weights.begin(); vit != weights.end(); ++vit) {
     vcl_cout << ' ' << vit->w_typ_ << ' ' << vit->w_ori_ << ' ' << vit->w_lnd_ << ' ' << vit->w_dst_ << ' ' << vit->w_ord_ << ' ' << vit->w_obj_ << vcl_endl;
@@ -88,7 +91,6 @@ static void test_io()
     vcl_cout << "land id = " << (int)it->first << " string = " << land_name << vcl_endl;
   }
 #endif
-
 }
 
 TESTMAIN(test_io);
