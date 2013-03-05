@@ -71,9 +71,9 @@ static void test_sph_segment()
   int min_size = 10;
   vcl_cout << "Start segment\n" << vcl_flush;
 #if 1
-  vsph_segment_sphere seg(*usph, sigma, c, min_size);
+  vsph_segment_sphere seg(*usph, sigma, int(c), min_size, true);
   seg.set_data(data);
-  seg.smooth_data();
+  /* seg.smooth_data(); -- is private !! */
   seg.segment();
   seg.extract_region_bounding_boxes();
   const vcl_map<int, vsph_sph_box_2d>& boxes = seg.region_boxes();
