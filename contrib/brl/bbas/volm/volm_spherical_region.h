@@ -20,7 +20,8 @@
 #include <vcl_algorithm.h>
 
 
-enum spherical_region_attributes{
+enum spherical_region_attributes
+{
     MIN_DEPTH = 0,
     MAX_DEPTH,
     DEPTH_ORDER,
@@ -31,7 +32,7 @@ enum spherical_region_attributes{
 // Currently the spherical region has a bounding box for a region but will be appended to have a polygon as well.
 class volm_spherical_region
 {
-public:
+ public:
     volm_spherical_region(vsph_sph_box_2d box):box_(box){}
     //:accessors
     const vsph_sph_box_2d& bbox_ref() {return box_;}
@@ -49,7 +50,7 @@ public:
     vcl_vector<spherical_region_attributes> attribute_types();
     void print(vcl_ostream& os) ;
 
-private:
+ private:
     //: box in spherical coordinates
     vsph_sph_box_2d box_;
 
@@ -58,11 +59,10 @@ private:
 };
 
 
-
 // container to store a group of regions and a dictionary for the attributes.
 class volm_spherical_regions_layer
 {
-public:
+ public:
 
     volm_spherical_regions_layer(){}
     void add_region(volm_spherical_region region);
@@ -70,12 +70,11 @@ public:
     int size(){return regions_.size();}
     vcl_vector<unsigned int>  attributed_regions(spherical_region_attributes att);
 
-private:
+ private:
 
     vcl_vector<volm_spherical_region> regions_;
     void update_attribute_map(int id);
     vcl_map<spherical_region_attributes,vcl_vector<unsigned int> > attributed_regions_;
-
 };
 
 #endif // volm_spherical_region_h_

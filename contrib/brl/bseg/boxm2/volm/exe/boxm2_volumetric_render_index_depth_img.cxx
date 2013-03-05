@@ -46,16 +46,16 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> img("-img", "query images, to get the image size", "");
   vul_arg<unsigned>   pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg_parse(argc, argv);
-  
+
   vcl_stringstream log;
   vcl_string log_file = out() + "/render_img_log.xml";
-  if(out().compare("") == 0 ||
-     geo_index_folder().compare("") == 0 ||
-     gt_file().compare("") == 0 ||
-     pass_id() > 2 ||
-     img().compare("") == 0 ||
-     query_bin().compare("") == 0 ||
-     id() > 100)
+  if (out().compare("") == 0 ||
+      geo_index_folder().compare("") == 0 ||
+      gt_file().compare("") == 0 ||
+      pass_id() > 2 ||
+      img().compare("") == 0 ||
+      query_bin().compare("") == 0 ||
+      id() > 100)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
@@ -90,7 +90,8 @@ int main(int argc,  char** argv)
     if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
       is_candidate = true;
       volm_io::read_polygons(candidate_list(), cand_poly);
-    } else {
+    }
+    else {
       log << "ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
       vcl_cerr << log;
@@ -104,32 +105,33 @@ int main(int argc,  char** argv)
     tiles = volm_tile::generate_p1_wr1_tiles();
   else
     tiles = volm_tile::generate_p1_wr2_tiles();
-  
+
   // locate which tile contains current locations
   unsigned tile_id = tiles.size();
   for (unsigned i = 0; i < tiles.size(); i++) {
     unsigned u, v;
-    if(tiles[i].global_to_img(samples[id()].first.x(), samples[id()].first.y(), u, v) )
+    if (tiles[i].global_to_img(samples[id()].first.x(), samples[id()].first.y(), u, v) )
       if (u < tiles[i].ni() && v < tiles[i].nj())
         tile_id = i;
   }
-  
+
   // check the existance of index for current tile
   vcl_stringstream file_name_pre;
   file_name_pre << geo_index_folder() << "geo_index_tile_" << tile_id;
-  if(!vul_file::exists(file_name_pre.str() + ".txt")) {
+  if (!vul_file::exists(file_name_pre.str() + ".txt")) {
     log << "for GT location " << id() << " ---> "
-                              << samples[id()].first.x() << ", "
-                              << samples[id()].first.y() << " is in the tile "
-                              << tile_id << " but no geo_index for this tile, stop the post_processing\n";
+        << samples[id()].first.x() << ", "
+        << samples[id()].first.y() << " is in the tile "
+        << tile_id << " but no geo_index for this tile, stop the post_processing\n";
     volm_io::write_post_processing_log(log_file, log.str());
     vcl_cout << log.str();
     return volm_io::POST_PROCESS_HALT;
-  } else {
+  }
+  else {
     log << "for GT location: " << id() << " ---> "
-                              << samples[id()].first.x() << ", "
-                              << samples[id()].first.y() << " is in the tile "
-                              << tile_id << '\n';
+        << samples[id()].first.x() << ", "
+        << samples[id()].first.y() << " is in the tile "
+        << tile_id << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
     vcl_cout << log.str();
   }
@@ -156,7 +158,7 @@ int main(int argc,  char** argv)
   }
 
   volm_spherical_container_sptr sph = new volm_spherical_container(params.solid_angle, params.vmin, params.dmax);
-  
+
   // load sph_shell
   if (!vul_file::exists(sph_bin())) {
     log << "ERROR: cannot read spherical shell binary from " << sph_bin() << '\n';
@@ -221,14 +223,14 @@ int main(int argc,  char** argv)
   volm_score::read_scores(scores, score_file.str());
 
 #if 0
-    vcl_cout << " THE READ IN BINRAY SCORE FILE " << vcl_endl;
-    vcl_cout << " file name = " << score_file.str() << vcl_endl;
+    vcl_cout << " THE READ IN BINRAY SCORE FILE\n"
+             << " file name = " << score_file.str() << vcl_endl;
     for (unsigned i = 0; i < scores.size(); i++) {
-      vcl_cout << scores[i]->leaf_id_ << " " << scores[i]->hypo_id_
-               << " " << scores[i]->max_score_ << " " << scores[i]->max_cam_id_ << vcl_endl;
+      vcl_cout << scores[i]->leaf_id_ << ' ' << scores[i]->hypo_id_
+               << ' ' << scores[i]->max_score_ << ' ' << scores[i]->max_cam_id_ << vcl_endl;
     }
 #endif
-  
+
   // get the ground truth score and camera from score binary
   vgl_point_3d<double> gt_loc;
   gt_loc = samples[id()].first;
@@ -242,9 +244,9 @@ int main(int argc,  char** argv)
   double gt_dist = gt_dist_vec.sqr_length();
   if (gt_dist > min_size) {
     log << "WARNING: the GT location [" << gt_loc.x() << ", " << gt_loc.y() << "] to the closest location ["
-                                         << gt_closest.x() << ", " << gt_closest.y() << "] in geo_index is "
-                                         << gt_dist << ", larger than hypotheses interval "
-                                         << hypo_interval << " meters in geo_index\n";
+        << gt_closest.x() << ", " << gt_closest.y() << "] in geo_index is "
+        << gt_dist << ", larger than hypotheses interval "
+        << hypo_interval << " meters in geo_index\n";
     volm_io::write_post_processing_log(log_file, log.str());
     vcl_cerr << log.str();
   }
@@ -328,7 +330,7 @@ int main(int argc,  char** argv)
         vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
         gt_cam_id = gt_cam_pair.first;
         log << " For GT location , closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
-                 << " GT camera " << gt_cam_pair.first << " --> " << gt_cam_pair.second.get_string() << '\n';
+            << " GT camera " << gt_cam_pair.first << " --> " << gt_cam_pair.second.get_string() << '\n';
         volm_io::write_post_processing_log(log_file, log.str());
         vcl_cout << log.str();
       }
@@ -337,7 +339,7 @@ int main(int argc,  char** argv)
         vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
         gt_cam_id = gt_cam_pair.first;
         log << " For GT location , closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
-                 << " GT camera " << gt_cam_pair.first << " --> " << gt_cam_pair.second.get_string() << '\n';
+            << " GT camera " << gt_cam_pair.first << " --> " << gt_cam_pair.second.get_string() << '\n';
         volm_io::write_post_processing_log(log_file, log.str());
         vcl_cout << log.str();
       }
@@ -364,30 +366,29 @@ int main(int argc,  char** argv)
         vil_save(dst_gt_img, (dst_gt_img_fname.str()).c_str());
         vil_save(ori_gt_img, (ori_gt_img_fname.str()).c_str());
         vil_save(lnd_gt_img, (lnd_gt_img_fname.str()).c_str());
-      } 
-      
+      }
     }
   }
 
   // write out the camera.kml
   vcl_string cam_kml = out() + "/BestCamera.kml";
   vcl_ofstream ofs_kml(cam_kml);
-  
+
   vcl_stringstream kml_name;
   kml_name << "p1a_test1_" << id();
   bkml_write::open_document(ofs_kml);
-  
+
   double head = (gt_cam_ang.heading_ < 0) ? gt_cam_ang.heading_ + 360.0 : gt_cam_ang.heading_;
   double tilt = (gt_cam_ang.tilt_ < 0) ? gt_cam_ang.tilt_ + 360 : gt_cam_ang.tilt_;
   double roll;
-  if(gt_cam_ang.roll_ * gt_cam_ang.roll_ < 1E-10) roll = 0;
-  else                                            roll = gt_cam_ang.roll_;
-  
+  if (gt_cam_ang.roll_ * gt_cam_ang.roll_ < 1E-10) roll = 0;
+  else                                             roll = gt_cam_ang.roll_;
+
   double tfov = gt_cam_ang.top_fov_;
   double tv_rad = tfov / vnl_math::deg_per_rad;
   double ttr = vcl_tan(tv_rad);
   double rfov = vcl_atan( query_img.ni() * ttr / query_img.nj() ) * vnl_math::deg_per_rad;
-  
+
   bkml_write::write_photo_overlay(ofs_kml, kml_name.str(), gt_closest.x(), gt_closest.y(), cam_space->altitude(),
                                   head, tilt, roll, tfov, rfov);
   bkml_write::close_document(ofs_kml);
