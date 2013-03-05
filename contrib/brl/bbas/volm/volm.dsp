@@ -126,6 +126,18 @@ SOURCE=.\volm_geo_index.cxx
 SOURCE=.\volm_camera_space.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\volm_vrml_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_region_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_index_query_matcher.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_region.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+volm_loc_hyp-.cxx
 # End Source File
 # Begin Source File
@@ -199,6 +211,18 @@ SOURCE=.\volm_char_codes.h
 # End Source File
 # Begin Source File
 SOURCE=.\volm_camera_space_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_region_index.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_spherical_index_query_matcher.h
+# End Source File
+# Begin Source File
+SOURCE=.\volm_vrml_io.h
 # End Source File
 # End Group
 # End Target

@@ -123,6 +123,9 @@ SOURCE=.\bil_trace_4con_boundary.cxx
 SOURCE=.\bil_trace_8con_boundary.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bil_debayer_image.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bil_detect_ridges+float-.cxx
 # End Source File
 # Begin Source File
@@ -223,6 +226,9 @@ SOURCE=.\bil_blob_finder.h
 # End Source File
 # Begin Source File
 SOURCE=.\bil_trace_4con_boundary.h
+# End Source File
+# Begin Source File
+SOURCE=.\bil_debayer_image.h
 # End Source File
 # End Group
 # End Target

@@ -98,13 +98,19 @@ LIB32=link.exe -lib
 SOURCE=.\boxm2_volm_prepare_location_hypotheses.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_volumetric_matcher_compose.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_volumetric_matcher_p0.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volumetric_matcher_p1.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_volumetric_render_index_depth_img.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_volumetric_evaluate_roi.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_volumetric_create_prob_map.cxx
 # End Source File
 # End Group
 # End Target

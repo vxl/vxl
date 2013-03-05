@@ -270,6 +270,15 @@ SOURCE=.\test_camera_space.cxx
 SOURCE=.\test_io.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_region_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_spherical_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_index_query_matcher.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

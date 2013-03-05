@@ -107,9 +107,6 @@ SOURCE=.\boxm2_volm_matcher_p0.cxx
 SOURCE=.\boxm2_volm_matcher_p1.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_volm_matcher_p2.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_volm_wr3db_index-.cxx
 # End Source File
 # Begin Source File
@@ -132,9 +129,6 @@ SOURCE=.\boxm2_volm_wr3db_index_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volm_io.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_volm_matcher_p2.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_volm_matcher_p1.h

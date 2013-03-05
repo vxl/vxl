@@ -266,6 +266,9 @@ SOURCE=.\Templates/vsl_map_io+vcl_string.vcl_vector+float--.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+bool--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+uchar--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
