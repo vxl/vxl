@@ -74,13 +74,13 @@ static void test_sph_geom()
   bool test2 = c12s&&!c15s&&c18s;
   TEST("Short interval contains c", test2, true);
   vsph_sph_box_2d bb_ext(p10, p12, p11);
-  bb_ext.add(p14); 
+  bb_ext.add(p14);
   bb_ext.add(p15a);
   TEST("bb_ext.contains(p15)", bb_ext.contains(p15), false);
   TEST("bb_ext.contains(p20)", bb_ext.contains(p20), true);
   bb_ext.add(p15);
   TEST("bb_ext.contains(p15)", bb_ext.contains(p15), true);
-  // test incremental updates 
+  // test incremental updates
   vsph_sph_box_2d bb_inc(false);
   bb_inc.add(p10); bb_inc.add(p11); bb_inc.add(p12);
   bool inc18 = bb_inc.contains(p18);//true
@@ -133,7 +133,7 @@ static void test_sph_geom()
   vcl_vector<vsph_sph_box_2d> boxes;
   bool good = intersection(bba, bbb, boxes);
   vsph_sph_box_2d bint;
-  if (good) 
+  if (good)
    bint = boxes[0];
   double min_ph_int = bint.min_phi(false), max_ph_int = bint.max_phi(false);
   double min_th_int = bint.min_theta(false), max_th_int = bint.max_theta(false);
@@ -146,8 +146,8 @@ static void test_sph_geom()
   // test boxes forming a cross (no endpoints inside each box
   vsph_sph_point_2d p6 ( 50.0,  -10.0, false);
   vsph_sph_point_2d p7 (130.0,   10.0, false);
-  vsph_sph_point_2d p8 ( 90.0,    0.0, false); 
-  vsph_sph_point_2d p9 ( 75.0,  -60.0, false); 
+  vsph_sph_point_2d p8 ( 90.0,    0.0, false);
+  vsph_sph_point_2d p9 ( 75.0,  -60.0, false);
   vsph_sph_point_2d p100(105.0,   60.0, false);
 
   vsph_sph_box_2d bbc1(p6, p7, p8), bbc2(p9,p100,p8);
@@ -180,7 +180,6 @@ static void test_sph_geom()
   good = intersection(box_s1, box_s2, boxes)
       && box_s1.contains(boxes[0])&& box_s1.contains(boxes[1]);
   TEST("each box contains the other's bounds", good, true);
-  double tol = 0.001;
   vcl_string box_path = MyDIR + "box_display.wrl";
 
   // transform a box
@@ -196,39 +195,39 @@ static void test_sph_geom()
   double tb2_a_ph = tb2.a_phi(false), tb2_b_phi = tb2.b_phi(false), tb2_c_phi = tb2.c_phi(false);
   double tb2_ph_min = -168.676, tb2_ph_max = -132.676, tb2_c = -150.676;
   er = vcl_fabs(tb2_ph_min-tb2_a_ph) + vcl_fabs(tb2_ph_max-tb2_b_phi) +
-      vcl_fabs(tb2_c-tb2_c_phi);
+       vcl_fabs(tb2_c-tb2_c_phi);
   TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
 
   vsph_sph_box_2d tb1_about = box_s1.transform(0.5, 0.25, 1.6,1.57,2.2, true);
   double tth_min_about = 1.4318703408918116, tth_max_about = 1.7106779048518577;
-  double tph_min_about = 0.18663706143591696, 
-         tph_max_about = 1.4432741228718344, 
+  double tph_min_about = 0.18663706143591696,
+         tph_max_about = 1.4432741228718344,
          tphc_about = -1.0700000000000003;
   er = vcl_fabs(tb1_about.min_theta()-tth_min_about) + vcl_fabs(tb1_about.max_theta()-tth_max_about);
   double tb_a_ph_about = tb1_about.a_phi(), tb_b_phi_about = tb1_about.b_phi(), tb_c_phi_about = tb1_about.c_phi();
   er += vcl_fabs(tph_min_about-tb_a_ph_about) + vcl_fabs(tph_max_about-tb_b_phi_about) +vcl_fabs(tphc_about-tb_c_phi_about);
   TEST_NEAR("transform box about a point no phi cut", er, 0.0, 0.001);
 
-  vsph_sph_box_2d tb2 = bba.transform(0.5, 0.25, 1.2, true);
-  double tb2_a_ph = tb2.a_phi(false), tb2_b_phi = tb2.b_phi(false), tb2_c_phi = tb2.c_phi(false);
-  double tb2_ph_min = -168.676, tb2_ph_max = -132.676, tb2_c = -150.676;
-  er = vcl_fabs(tb2_ph_min-tb2_a_ph) + vcl_fabs(tb2_ph_max-tb2_b_phi) +
-    vcl_fabs(tb2_c-tb2_c_phi);
+  vsph_sph_box_2d tb3 = bba.transform(0.5, 0.25, 1.2, true);
+  double tb3_a_ph = tb3.a_phi(false), tb3_b_phi = tb3.b_phi(false), tb3_c_phi = tb3.c_phi(false);
+  double tb3_ph_min = -168.676, tb3_ph_max = -132.676, tb3_c = -150.676;
+  er = vcl_fabs(tb3_ph_min-tb3_a_ph) + vcl_fabs(tb3_ph_max-tb3_b_phi) +
+    vcl_fabs(tb3_c-tb3_c_phi);
   TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
   double grok_a_phi = -2.7617465101715433;
   double grok_b_phi = -2.4723473031673180;
   double grok_c_phi = -2.5151716844356731;
-  double grok_min_th  = 1.6235700411813854;
+  double grok_min_th = 1.6235700411813854;
   double grok_max_th = 1.8268944131886669;
   vsph_sph_box_2d grok;
   grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
-  vsph_sph_box_2d tb3 = grok.transform(0.75, -1.0, 1.2, true);
+  vsph_sph_box_2d tb4 = grok.transform(0.75, -1.0, 1.2, true);
   double t_grok_a = 2.4925, t_grok_b = 2.83984;
-  er = vcl_fabs(t_grok_a-tb3.a_phi()) + vcl_fabs(t_grok_b-tb3.b_phi());
+  er = vcl_fabs(t_grok_a-tb4.a_phi()) + vcl_fabs(t_grok_b-tb4.b_phi());
   TEST_NEAR("negative trans with roll-over", er, 0.0, 0.001);
 
 #if 0
-
+  double tol = 0.001;
   vcl_string grok_path = MyDIR + "grok_box_display.wrl";
   vcl_ofstream os(grok_path.c_str());
   grok.display_box(os, 1.0f, 1.0f, 0.0f, tol);
