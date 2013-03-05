@@ -93,8 +93,8 @@ static void test_index_query_matcher()
     volm_spherical_index_query_matcher matcher(region_index,srq,cam_space);
     matcher.match();
 
-    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,srq.query_regions(0),spherical_region_attributes::ORIENTATION,1.1,0.01);
-    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,region_index.index_regions(),spherical_region_attributes::ORIENTATION,0.9,0.01);
+    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,srq.query_regions(0),ORIENTATION,1.1,0.01);
+    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,region_index.index_regions(),ORIENTATION,0.9,0.01);
     os.close();
 }
 
