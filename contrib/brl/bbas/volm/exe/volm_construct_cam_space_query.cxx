@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 {
   // input
   vul_arg<vcl_string> cam_file("-cam", "cam kml filename", "");                                  // query camera kml
-  
+
   vul_arg<vcl_string> params_file("-params", "text file with the incremental params to construct camera space", "");
   vul_arg<vcl_string> dms_file("-dms", "binary file with depth map scene", "");                // query labelme xml
   vul_arg<vcl_string> local_out_folder("-loc_out", "local output folder where the intermediate files are stored", "");
@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 
   // check the input parameters
   if (cam_file().compare("") == 0 || dms_file().compare("") == 0 ||
-      local_out_folder().compare("") == 0 || params_file().compare("") == 0 || weight_folder().compare("") == 0) 
+      local_out_folder().compare("") == 0 || params_file().compare("") == 0 || weight_folder().compare("") == 0)
   {
     vcl_cerr << " ERROR: input file/folders can not be empty!\n";
     volm_io::write_status(local_out_folder(), volm_io::EXE_ARGUMENT_ERROR);
@@ -56,22 +56,22 @@ int main(int argc, char** argv)
     volm_io::write_status(local_out_folder(), volm_io::DEPTH_SCENE_FILE_IO_ERROR, 0, log.str());
     return volm_io::DEPTH_SCENE_FILE_IO_ERROR;
   }
-  
+
   vsl_b_ifstream dms_is(dms_file().c_str());
   depth_map_scene_sptr dm = new depth_map_scene;
   dm->b_read(dms_is);
   dms_is.close();
-  
+
 #if 0
   // screen output
-  vcl_cout << " Loaded depth_map_scene info" << vcl_endl;
-  vcl_cout << " image path = " << dm->image_path() << vcl_endl;
-  vcl_cout << " ----------------  SKY -------------------------- \n";
+  vcl_cout << " Loaded depth_map_scene info\n"
+           << " image path = " << dm->image_path() << '\n'
+           << " ----------------  SKY --------------------------\n";
   vcl_vector<depth_map_region_sptr> sky_reg = dm->sky();
   for (vcl_vector<depth_map_region_sptr>::iterator rit = sky_reg.begin(); rit != sky_reg.end(); ++rit)
     vcl_cout << "\tname = " <<  (*rit)->name() << "\t orient = " << (*rit)->orient_type() << "\t NLCD = " << (*rit)->land_id()
              << "\t order = " << (*rit)->order() << vcl_endl;
-  vcl_cout << " ----------------  GROUND ----------------------- \n";
+  vcl_cout << " ----------------  GROUND -----------------------\n";
   vcl_vector<depth_map_region_sptr> grd_reg = dm->ground_plane();
   for (vcl_vector<depth_map_region_sptr>::iterator rit = grd_reg.begin(); rit != grd_reg.end(); ++rit)
     vcl_cout << "\tname = " << (*rit)->name() << "\t orient_id = " << (*rit)->orient_type() << " orient = " << (*rit)->orient_string( (unsigned char)(*rit)->orient_type())
@@ -79,9 +79,9 @@ int main(int argc, char** argv)
              << "\t order = " << (*rit)->order() << vcl_endl;
   vcl_cout << " ----------------- OBJECTS ----------------------\n";
   vcl_vector<depth_map_region_sptr> regs = dm->scene_regions();
-  for(vcl_vector<depth_map_region_sptr>::iterator rit = regs.begin(); rit !=regs.end();++rit)
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = regs.begin(); rit !=regs.end();++rit)
     vcl_cout << "name = " << (*rit)->name() << ",\t orient = " << (*rit)->orient_type() << "\t orient_string = " << (*rit)->orient_string( (unsigned char)(*rit)->orient_type())
-             << "\t min_depth = " << (*rit)->min_depth() << ",\t order = " << (*rit)->order() 
+             << "\t min_depth = " << (*rit)->min_depth() << ",\t order = " << (*rit)->order()
              << "\t land_id = " << (*rit)->land_id() << "\t land_name = " << volm_label_table::land_string( (unsigned char)(*rit)->land_id())
              << vcl_endl;
 #endif
@@ -145,27 +145,26 @@ int main(int argc, char** argv)
 
   if (!vul_file::exists(weight_file)) {
     vcl_ofstream ofs_weight(weight_file.c_str());
-    ofs_weight << "Note: 1. for all objects, the summation of weight in the last col should be equal to 1";
-    ofs_weight << " (average = " << 1/float(!dm->sky().empty() + !dm->ground_plane().empty() + dm->scene_regions().size()) << ")\n";
-    ofs_weight << "      2. for any objects, the summation of all weights from different attributes should be equal to 1\n\n";
-    ofs_weight << "name                      type      orientation      land_class      min_distance      relative_order       obj_weight\n";
-    ofs_weight.setf(vcl_ios::left);
-  
+    ofs_weight << "Note: 1. for all objects, the summation of weight in the last col should be equal to 1"
+               << " (average = " << 1/float(!dm->sky().empty() + !dm->ground_plane().empty() + dm->scene_regions().size()) << ")\n"
+               << "      2. for any objects, the summation of all weights from different attributes should be equal to 1\n\n"
+               << "name                      type      orientation      land_class      min_distance      relative_order       obj_weight\n";
+    ofs_weight.setf(vcl_ios_left);
+
     // sky weight
     if (dm->sky().size()) {
       ofs_weight.width(20);
       ofs_weight.fill(' ');
-      ofs_weight << "sky" << "     sky";
-      ofs_weight << "            0.0             0.0              1.0              0.0\n";
+      ofs_weight << "sky     sky            0.0             0.0              1.0              0.0\n";
     }
-  
-    // ground weight 
+
+    // ground weight
     if (dm->ground_plane().size()) {
       ofs_weight.width(20);
       ofs_weight.fill(' ');
-      ofs_weight << "ground" << "     ground\n";
+      ofs_weight << "ground     ground\n";
     }
-  
+
     // object weight, the sequence should follow the pre-defined order
 
     vcl_vector<depth_map_region_sptr> obj_reg = dm->scene_regions();
@@ -174,14 +173,14 @@ int main(int argc, char** argv)
     for (vcl_vector<depth_map_region_sptr>::iterator rit = obj_reg.begin(); rit != obj_reg.end(); ++rit) {
       ofs_weight.width(20);
       ofs_weight.fill(' ');
-      if( rit == obj_reg.end() - 1)
+      if ( rit == obj_reg.end() - 1)
         ofs_weight << (*rit)->name() << "     object";
       else
         ofs_weight << (*rit)->name() << "     object\n";
     }
     ofs_weight.close();
   }
-  
+
 
 #if 0
   // test binary I/O
@@ -192,10 +191,10 @@ int main(int argc, char** argv)
   vcl_cout << " number of valid indics: " << (csp_in->valid_indices().size()) << vcl_endl;
   for (unsigned i = 0 ; i < csp_in->valid_indices().size(); i++) {
     cam_angles cam_ang = csp_in->camera_angles(i);
-    vcl_cout << " first camera angle: heading = " << cam_ang.heading_ 
+    vcl_cout << " first camera angle: heading = " << cam_ang.heading_
              << " tilt = " << cam_ang.tilt_ << " roll = " << cam_ang.roll_ << " tfov = " << cam_ang.top_fov_ << vcl_endl;
   }
-#endif  
+#endif
   volm_io::write_status(local_out_folder(), volm_io::SUCCESS, 0, log.str());
   return volm_io::SUCCESS;
 }
