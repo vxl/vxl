@@ -3,17 +3,21 @@
 #define boxm2_volm_matcher_p1_h_
 //:
 // \file
-// \brief  A class to match a voxelized query volume to an indexed reference volume
-//         based on the depth value and relative order of voxels.  The index and hypotheses
-//         are now referred by volm_geo_index
+// \brief Match a voxelized query volume to an indexed reference volume.
+//  A class to match a voxelized query volume to an indexed reference volume
+//  based on the depth value and relative order of voxels.  The index and hypotheses
+//  are now referred by volm_geo_index
 //
 // \author Yi Dong
 // \date January 21, 2012
 // \verbatim
-//   Modifications
+//  Modifications
+//   <none yet>
 // \endverbatim
 //
 
+#include "boxm2_volm_wr3db_index_sptr.h"
+#include "boxm2_volm_wr3db_index.h"
 #include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_query_sptr.h>
@@ -23,8 +27,6 @@
 #include <volm/volm_geo_index.h>
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
-#include "boxm2_volm_wr3db_index_sptr.h"
-#include "boxm2_volm_wr3db_index.h"
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
@@ -34,7 +36,7 @@ class boxm2_volm_score_out;
 
 class boxm2_volm_matcher_p1
 {
-public:
+ public:
   //: default constructor
   boxm2_volm_matcher_p1() {}
   //: constructor
@@ -53,7 +55,7 @@ public:
                         float const& threshold,
                         unsigned const& max_cam_per_loc,
                         vcl_vector<volm_weight> weights);
-  
+
   //: destructor
   ~boxm2_volm_matcher_p1();
   //: matcher function
@@ -63,10 +65,9 @@ public:
   bool write_matcher_result(vcl_string const& tile_fname_bin);
   //: for testing purpose -- output score for all camera (should only be used for ground truth location)
   bool write_gt_cam_score(unsigned const& leaf_id, unsigned const& hypo_id, vcl_string const& out_fname);
-  
-  
 
-private:
+
+ private:
   //: query, indices, device
   volm_camera_space_sptr                        cam_space_;
   vcl_vector<unsigned>                  valid_cam_indices_;
@@ -78,7 +79,7 @@ private:
   float                                        ind_buffer_;
   vcl_stringstream                          file_name_pre_;
   vcl_vector<volm_weight>                         weights_;
-  
+
   //: land fallback category table size
   unsigned char                             fallback_size_;
   unsigned char*                       fallback_size_buff_;
@@ -137,7 +138,7 @@ private:
   bocl_mem*        sky_id_offset_cl_mem_;
   float*                sky_weight_buff_;
   bocl_mem*           sky_weight_cl_mem_;
-  
+
   unsigned*                 obj_id_buff_;
   bocl_mem*               obj_id_cl_mem_;
   unsigned*          obj_id_offset_buff_;
@@ -163,10 +164,10 @@ private:
   bocl_mem*       depth_interval_cl_mem_;
   unsigned*           depth_length_buff_;
   bocl_mem*         depth_length_cl_mem_;
-  
+
   //: indices related
   unsigned*                       n_ind_;
-  
+
   //: output related
   // threshold that only the camera with score higher than threshold will be considered to put into output
   float                            threshold_;
@@ -174,8 +175,7 @@ private:
   unsigned                   max_cam_per_loc_;
   vcl_vector<volm_score_sptr>      score_all_;
   vcl_vector<boxm2_volm_score_out> score_cam_;
-  
-  
+
   //: transfer volm_query to 1D array for kernel
   bool transfer_query();
   //: transfer volm_query orientation information to 1D array for kernel
@@ -184,14 +184,14 @@ private:
   bool transfer_weight();
   //: read given number of indeice from volm_geo_index, with two index files, index depth and index orientation
   bool fill_index(unsigned const& n_ind,
-                         unsigned const& layer_size,
-                         unsigned& leaf_id,
-                         unsigned char* index_buff,
-                         unsigned char* index_orient_buff,
-                         unsigned char* index_land_buff,
-                         vcl_vector<unsigned>& l_id,
-                         vcl_vector<unsigned>& h_id,
-                         unsigned& actual_n_ind);
+                  unsigned const& layer_size,
+                  unsigned& leaf_id,
+                  unsigned char* index_buff,
+                  unsigned char* index_orient_buff,
+                  unsigned char* index_land_buff,
+                  vcl_vector<unsigned>& l_id,
+                  vcl_vector<unsigned>& h_id,
+                  unsigned& actual_n_ind);
   //: check the given leaf has un-read hypothesis or not
   bool is_leaf_finish(unsigned const& leaf_id);
   //: clear all query cl_mem pointer
@@ -204,7 +204,7 @@ private:
   bool create_queue();
 
 #if 0
-   //: kernel execution function
+  //: kernel execution function
   bool execute_matcher_kernel(bocl_device_sptr                         device,
                               cl_command_queue&                         queue,
                               vcl_vector<bocl_kernel*>                   kern,
@@ -225,7 +225,6 @@ private:
                                      bocl_mem*                  score_cl_mem_,
                                      bocl_mem*                     mu_cl_mem_);
 
-  
   //: a test function to check the kernel implementation
   bool volm_matcher_p1_test_ori(unsigned n_ind,
                                 unsigned char* index,
@@ -233,17 +232,16 @@ private:
                                 unsigned char* index_land,
                                 float* score_buff,
                                 float* mu_buff);
-
 };
 
 class boxm2_volm_score_out
 {
-public:
+ public:
   boxm2_volm_score_out() {}
   boxm2_volm_score_out(unsigned const& leaf_id, unsigned const& hypo_id,
                        vcl_vector<unsigned> const& cam_id,
                        vcl_vector<float> const& cam_score)
-                       : l_id_(leaf_id), h_id_(hypo_id), cam_id_(cam_id), cam_score_(cam_score) {}
+  : l_id_(leaf_id), h_id_(hypo_id), cam_id_(cam_id), cam_score_(cam_score) {}
   ~boxm2_volm_score_out() {}
 
   unsigned l_id_;
