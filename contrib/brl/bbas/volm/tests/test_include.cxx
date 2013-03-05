@@ -12,10 +12,14 @@
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_query.h>
 #include <volm/volm_spherical_container.h>
+#include <volm/volm_spherical_index_query_matcher.h>
 #include <volm/volm_spherical_layers.h>
 #include <volm/volm_spherical_query_region.h>
+#include <volm/volm_spherical_region.h>
+#include <volm/volm_spherical_region_index.h>
 #include <volm/volm_spherical_region_query.h>
 #include <volm/volm_spherical_shell_container.h>
 #include <volm/volm_tile.h>
+#include <volm/volm_vrml_io.h>
 
 int main() { return 0; }
