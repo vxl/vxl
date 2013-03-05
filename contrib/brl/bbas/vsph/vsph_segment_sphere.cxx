@@ -1,4 +1,6 @@
 #include "vsph_segment_sphere.h"
+//:
+// \file
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
@@ -7,7 +9,7 @@
 #include <vbl/vbl_edge.h>
 
 static void random_rgb(float& r, float&g, float& b)
-{ 
+{
     float rmax = static_cast<float>(RAND_MAX);
     r = static_cast<float>(vcl_rand())/rmax;
     g = static_cast<float>(vcl_rand())/rmax;
@@ -36,18 +38,17 @@ void vsph_segment_sphere::smooth_data()
         if (nn == 0) continue;
         double weight_sum = static_cast<double>(nn)*neigh_weight + 1.0;
         for (vcl_set<int>::iterator nit = neighbors.begin();
-            nit != neighbors.end(); ++nit)
+             nit != neighbors.end(); ++nit)
             sum += neigh_weight*data_[*nit];
 
-
-        sum /= weight_sum; 
+        sum /= weight_sum;
         smooth_data_[i]=sum;
     }
 }
 
 void vsph_segment_sphere::segment()
 {
-    if(dosmoothing_)
+    if (dosmoothing_)
     {
         this->smooth_data();
     }
@@ -66,7 +67,7 @@ void vsph_segment_sphere::segment()
     for (int i = 0; i<ne; ++i) {
         vsph_edge& sphe = sph_edges[i];
         int is = sphe.vs_, ie = sphe.ve_;
-        edges[i].v0_ = is; edges[i].v1_ = ie; 
+        edges[i].v0_ = is; edges[i].v1_ = ie;
         double diff = smooth_data_[is]-smooth_data_[ie];
         edges[i].w_ = static_cast<float>(vcl_sqrt(diff*diff));
     }
@@ -88,10 +89,10 @@ void vsph_segment_sphere::segment()
     }
     unsigned maxsize = 0, minsize = nv+1;
     for (vcl_map<int,  vcl_vector<int> >::const_iterator rit = regions_.begin();
-        rit != regions_.end(); ++rit) {
-            unsigned n = rit->second.size();
-            if (n<minsize) minsize = n;
-            if (n>maxsize) maxsize = n;
+         rit != regions_.end(); ++rit) {
+        unsigned n = rit->second.size();
+        if (n<minsize) minsize = n;
+        if (n>maxsize) maxsize = n;
     }
     vcl_cout << "Found " << num_ccs_ << " regions\n";
     vcl_cout << "minArea = " << minsize << "  MaxArea = " << maxsize << '\n';
@@ -99,27 +100,26 @@ void vsph_segment_sphere::segment()
 }
 
 //: function to compute mean of the pixels in a region using the oringal values of the spherical segment
-
 double vsph_segment_sphere::region_mean(int id)
 {
     vcl_vector<int>  region = regions_[id];
     double sum = 0.0;
     for (unsigned int i = 0; i<region.size(); ++i)
         sum += data_[region[i]];
-    if(region.size() > 0)
+    if (region.size() > 0)
         return sum/region.size();
     else return 0.0;
 }
-//: function to compute median of the pixels in a region using the oringal values of the spherical segment
 
+//: function to compute median of the pixels in a region using the oringal values of the spherical segment
 double vsph_segment_sphere::region_median(int id)
 {
     vcl_vector<double> vals;
     vcl_vector<int>  region = regions_[id];
     for (unsigned int i = 0; i<region.size(); ++i)
         vals.push_back( data_[region[i]] );
-    vcl_sort(vals.begin(), vals.end());  
-    if( vals.size() > 0)
+    vcl_sort(vals.begin(), vals.end());
+    if ( vals.size() > 0)
         return vals[vals.size()/2];
     else
         return 0.0;
@@ -161,7 +161,7 @@ vcl_vector<vcl_vector<float> > vsph_segment_sphere::region_color() const
             cdata[pt_ids[i]]=color;
     }
     return cdata;
-} 
+}
 
 bool vsph_segment_sphere::extract_region_bounding_boxes()
 {
@@ -180,18 +180,18 @@ bool vsph_segment_sphere::extract_region_bounding_boxes()
             int ray = rays[i];
             vcl_set<int> neigh = usph_.neighbors(ray);
             for (vcl_set<int>::iterator nit = neigh.begin();
-                nit != neigh.end()&&!done; ++nit) {
-                    int nid = *nit;
-                    int nbr_set_id = ds_.find_set(nid);
-                    if (reg_set_id == nbr_set_id)
-                        if (ra == -1) {
-                            ra = ray;
-                            rb = nid;
-                        }
-                        else if (rc==-1) {
-                            rc = nid;
-                            done = true;
-                        }
+                 nit != neigh.end()&&!done; ++nit) {
+                int nid = *nit;
+                int nbr_set_id = ds_.find_set(nid);
+                if (reg_set_id == nbr_set_id)
+                    if (ra == -1) {
+                        ra = ray;
+                        rb = nid;
+                    }
+                    else if (rc==-1) {
+                        rc = nid;
+                        done = true;
+                    }
             }
             if (!done) {
                 ra = -1; rb = -1; rc = -1;
