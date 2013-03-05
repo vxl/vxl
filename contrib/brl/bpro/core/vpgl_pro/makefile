@@ -42,6 +42,9 @@ SOURCES += processes/vpgl_perturb_perspective_camera_processes.cxx
 SOURCES += processes/vpgl_load_affine_camera_process.cxx
 SOURCES += processes/vpgl_persp_cam_from_photo_overlay_process.cxx
 SOURCES += processes/vpgl_save_lvcs_process.cxx
+SOURCES += processes/vpgl_convert_local_to_global_coordinates_process.cxx
+SOURCES += processes/vpgl_create_lvcs_process.cxx
+SOURCES += processes/vpgl_export_cameras_to_nvm_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

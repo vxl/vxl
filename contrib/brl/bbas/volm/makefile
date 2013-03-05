@@ -15,6 +15,10 @@ SOURCES += volm_spherical_layers.cxx
 SOURCES += volm_spherical_query_region.cxx
 SOURCES += volm_geo_index.cxx
 SOURCES += volm_camera_space.cxx
+SOURCES += volm_vrml_io.cxx
+SOURCES += volm_spherical_region_index.cxx
+SOURCES += volm_spherical_index_query_matcher.cxx
+SOURCES += volm_spherical_region.cxx
 
 MANPAGE_SOURCES += volm_query_sptr.h
 MANPAGE_SOURCES += volm_spherical_container_sptr.h

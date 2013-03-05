@@ -22,6 +22,7 @@ SOURCES += bil_nms.cxx
 SOURCES += bil_blob_finder.cxx
 SOURCES += bil_trace_4con_boundary.cxx
 SOURCES += bil_trace_8con_boundary.cxx
+SOURCES += bil_debayer_image.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
