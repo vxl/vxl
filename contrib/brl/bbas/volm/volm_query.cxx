@@ -84,8 +84,8 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
              << head_ << " dev: " << head_d_
              << "\ntilt: " << tilt_ << " dev: " << tilt_d_
              << "\nroll: " << roll_ << " dev: " << roll_d_
-             << " (hard-coded to 3 till .kml passes meaningful values!!)"
-             << "\ntop_fov: " << tfov_ << " dev: " << tfov_d_
+             << " (hard-coded to 3 till .kml passes meaningful values!!)\n"
+             << "top_fov: " << tfov_ << " dev: " << tfov_d_
              << " alt: " << altitude_ << vcl_endl;
   }
   else {//overwrite the camera parameters with those in the camera file
@@ -193,7 +193,6 @@ volm_query::volm_query(vcl_string const& query_file, volm_camera_space_sptr cam_
   vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
 
   depth_regions_ = dm_->scene_regions();
-  unsigned size = (unsigned)depth_regions_.size();
   // sort the regions on depth order
   vcl_sort(depth_regions_.begin(), depth_regions_.end(), compare_order());
 
@@ -234,7 +233,7 @@ void volm_query::create_cameras()
           top_fov_.push_back(top);
         }
       }
-      vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
+      vcl_cout << " NOTE: default top field of view is used:\n\t[ ";
       for (unsigned i = 0; i < 8; ++i)
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
@@ -254,7 +253,7 @@ void volm_query::create_cameras()
           top_fov_.push_back(top);
         }
       }
-      vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
+      vcl_cout << " NOTE: default top field of view is used:\n\t[ ";
       for (unsigned i = 0; i < 11; ++i)
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
@@ -264,7 +263,7 @@ void volm_query::create_cameras()
                         12.0, 17.0, 18.0,19.0,
                        20.0, 24.0};
       top_fov_.insert(top_fov_.end(), stock, stock + 9);
-      vcl_cout << " NOTE: default top field of view is used:\n" << "\t[ ";
+      vcl_cout << " NOTE: default top field of view is used:\n\t[ ";
       for (unsigned i = 0; i < 9; ++i)
         vcl_cout << top_fov_[i] << ' ';
       vcl_cout << ']' << vcl_endl;
@@ -662,8 +661,8 @@ unsigned char volm_query::fetch_depth(double const& u,
         // handle the case where the voxel/ray is too close to ground_plane boundary
         if (depth_uv < 0) {
 #ifdef DEBUG
-          vcl_cout << " WARNING: point (" << (int)u << ',' << (int)v << ") "
-                   << " is too close to the ground boundary, disregard" << vcl_endl;
+          vcl_cout << " WARNING: point (" << (int)u << ',' << (int)v
+                   << ") is too close to the ground boundary, disregarded." << vcl_endl;
 #endif
           is_ground = false;
           max_dist = (unsigned char)255;
@@ -919,7 +918,7 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
                                  vcl_string value_type)
 {
   this->draw_depth_map_regions(out_img);
-  
+
   vpgl_perspective_camera<double> cam = cam_space_->camera(cam_id);
 
   if (value_type == "orientation") {
@@ -953,16 +952,15 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
   }
   else if (value_type == "depth") {
     for (unsigned pidx = 0; pidx < query_size_; ++pidx)
-      if (values[pidx] < 255) 
+      if (values[pidx] < 255)
         this->draw_dot(out_img, query_points_[pidx], values[pidx], cam);
   }
   else {
-    vcl_cerr << "WARNING: given image type " << value_type << " is not found in volm_query::depth_rgb_image, generate depth image instead" << vcl_endl;
+    vcl_cerr << "WARNING: given image type " << value_type << " is not found in volm_query::depth_rgb_image, generate depth image instead\n";
     for (unsigned pidx = 0; pidx < query_size_; ++pidx)
-      if (values[pidx] < 255) 
+      if (values[pidx] < 255)
         this->draw_dot(out_img, query_points_[pidx], values[pidx], cam);
   }
-
 }
 
 void volm_query::draw_query_image(unsigned cam_i, vcl_string const& out_name)
@@ -1098,7 +1096,7 @@ unsigned volm_query::obj_based_query_size_byte() const
   size_byte += (unsigned)max_obj_dist_.size();     // unsigned char distance
   size_byte += (unsigned)obj_orient_.size();       // unsigned char orientation
   size_byte += (unsigned)obj_land_id_.size()*4;    // unsigned char land clarification
-  size_byte += (unsigned)obj_land_wgt_.size()*4*4; // float land fallback category weight 
+  size_byte += (unsigned)obj_land_wgt_.size()*4*4; // float land fallback category weight
   size_byte += (unsigned)order_obj_.size();    // unsigned char order
   //size_byte += (unsigned)weight_obj_.size()*4; // float weight
   return size_byte;
@@ -1113,14 +1111,14 @@ void volm_query::write_data(vsl_b_ostream& os)
   vsl_b_write(os, d_threshold_);
   vsl_b_write(os, camera_strings_);
   vsl_b_write(os, order_set_);  // store the non-ground order, using set to ensure objects having same order are put together
-  
+
   vsl_b_write(os, (unsigned)(order_index_.size()));
   for (unsigned i = 0; i < order_index_.size(); i++)
     vsl_b_write(os, order_index_[i]);
-  
+
   vsl_b_write(os, ground_id_);
   vsl_b_write(os, ground_dist_);
-  
+
   //vsl_b_write(os, ground_land_id_);
   vsl_b_write(os, (unsigned)(ground_land_id_.size()));
   for (unsigned i = 0; i < ground_land_id_.size(); i++)
@@ -1169,7 +1167,7 @@ void volm_query::read_data(vsl_b_istream& is)
 
     vsl_b_read(is, ground_id_);
     vsl_b_read(is, ground_dist_);
-    
+
     // vsl_b_read(is, ground_land_id_);
     vsl_b_read(is, size);
     for (unsigned i = 0; i < size; i++) {
@@ -1190,7 +1188,7 @@ void volm_query::read_data(vsl_b_istream& is)
     vsl_b_read(is, sky_id_);
     vsl_b_read(is, sky_offset_);
     vsl_b_read(is, sky_orient_);
-    
+
     vsl_b_read(is, size);
     for (unsigned i = 0; i < size; i++) {
       vcl_vector<vcl_vector<unsigned> > o;
@@ -1214,27 +1212,27 @@ void volm_query::read_data(vsl_b_istream& is)
 
 bool volm_query::operator== (const volm_query &other) const
 {
-  return this->get_cam_num() == other.get_cam_num() && 
+  return this->get_cam_num() == other.get_cam_num() &&
   ni_ == other.ni_ && nj_ == other.nj_ &&
   log_downsample_ratio_ == other.log_downsample_ratio_ &&
   d_threshold_ == other.d_threshold_ &&
   depth_regions_.size() == other.depth_regions_.size() &&
   camera_strings_ == other.camera_strings_ &&
   order_set_ == other.order_set_ &&
-  order_index_ == other.order_index_ && 
-  ground_id_ == other.ground_id_ && 
-  ground_dist_ == other.ground_dist_ && 
-  ground_land_id_ == other.ground_land_id_ && 
-  ground_offset_ == other.ground_offset_ && 
+  order_index_ == other.order_index_ &&
+  ground_id_ == other.ground_id_ &&
+  ground_dist_ == other.ground_dist_ &&
+  ground_land_id_ == other.ground_land_id_ &&
+  ground_offset_ == other.ground_offset_ &&
   ground_orient_ == other.ground_orient_ &&
-  sky_id_ == other.sky_id_ && 
-  sky_offset_ == other.sky_offset_ && 
+  sky_id_ == other.sky_id_ &&
+  sky_offset_ == other.sky_offset_ &&
   sky_orient_ == other.sky_orient_ &&
-  dist_id_ == other.dist_id_ && 
-  dist_offset_ == other.dist_offset_ && 
-  min_obj_dist_ == other.min_obj_dist_ && 
-  max_obj_dist_ == other.max_obj_dist_ && 
-  order_obj_ == other.order_obj_ && 
-  obj_orient_ == other.obj_orient_ && 
+  dist_id_ == other.dist_id_ &&
+  dist_offset_ == other.dist_offset_ &&
+  min_obj_dist_ == other.min_obj_dist_ &&
+  max_obj_dist_ == other.max_obj_dist_ &&
+  order_obj_ == other.order_obj_ &&
+  obj_orient_ == other.obj_orient_ &&
   obj_land_id_ == other.obj_land_id_;
 }
