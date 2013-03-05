@@ -9,7 +9,8 @@
 class vsph_segment_sphere
 {
  public:
-  vsph_segment_sphere(vsph_unit_sphere const& usph, double c, int min_size,double sigma, bool dosmoothing  ) : seg_valid_(false),usph_(usph),sigma_(sigma), c_(c), min_size_(min_size), num_ccs_(0),dosmoothing_(dosmoothing){}
+  vsph_segment_sphere(vsph_unit_sphere const& usph, double c, int min_size,double sigma, bool dosmoothing  )
+  : seg_valid_(false),usph_(usph),sigma_(sigma), c_(c), min_size_(min_size),dosmoothing_(dosmoothing),num_ccs_(0) {}
   // === accessors ==-
   double sigma() const {return sigma_;}
   double c() const {return c_;}
