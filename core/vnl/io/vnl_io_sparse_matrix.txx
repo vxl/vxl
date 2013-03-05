@@ -124,9 +124,9 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
     vsl_b_read(is, n_rows);
     vsl_b_read(is, n_cols);
     // As we cannot resize the matrix, check that it is the correct size.
-    assert (n_rows==(int)p.rows());
-    assert (n_cols==(int)p.columns());
-    for (unsigned i=0;i<n_rows;i++)
+    assert (n_rows==p.rows());
+    assert (n_cols==p.columns());
+    for (unsigned i=0;i<n_rows;++i)
     {
       vsl_b_read(is,row_size);
       indexes.resize(row_size);
