@@ -52,10 +52,10 @@ int main(int argc,  char** argv)
   // key -- test_img_id, vector< gt_max_score, ROI for different thres, total_pixel_evaluated >
   vcl_map<unsigned, vcl_vector<float> > test_img_roi;
   vcl_vector<float> thresholds;
-  for (unsigned i = 4; i < 10; i++) {
+  for (unsigned i = 4; i < 10; ++i) {
     thresholds.push_back(0.1*i);
   }
-  for (unsigned id = 0; id < 100; id++) {
+  for (unsigned id = 0; id < 100; ++id) {
     vcl_stringstream out_folder;
     if (id < 10)
       out_folder << out_root() << "/p1a_test1_0" << id;
@@ -98,7 +98,7 @@ int main(int argc,  char** argv)
 
     float gt_score = 0.0f;
     // loop over all tiles of current test images
-    for (unsigned i = 0; i < tiles.size(); i++) {
+    for (unsigned i = 0; i < tiles.size(); ++i) {
       vcl_string img_name = out_folder.str() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
       if (!vul_file::exists(img_name)) {
         log_test_img << " WARNING: missing prob_map: " << img_name << '\n';
@@ -107,8 +107,8 @@ int main(int argc,  char** argv)
         continue;
       }
       vil_image_view<float> tile_img = vil_load(img_name.c_str());
-      for (unsigned ii = 0; ii < tile_img.ni(); ii++) {
-        for (unsigned jj = 0; jj < tile_img.nj(); jj++) {
+      for (unsigned ii = 0; ii < tile_img.ni(); ++ii) {
+        for (unsigned jj = 0; jj < tile_img.nj(); ++jj) {
           // loop over all threshold
           for ( vcl_map<float, vcl_vector<unsigned> >::iterator mit = cnt_map.begin(); mit != cnt_map.end(); ++mit)
           {
@@ -129,9 +129,9 @@ int main(int argc,  char** argv)
         if (u < tile_img.ni() && v < tile_img.nj())
           gt_score = tile_img(u,v);
           log_test_img << "\t id = " << id << ", GT location: " << samples[id].first.x() << ", "
-                  << samples[id].first.y() << " is at pixel: "
-                  << u << ", " << v << " in tile " << i << " and has value: "
-                  << gt_score << '\n';
+                       << samples[id].first.y() << " is at pixel: "
+                       << u << ", " << v << " in tile " << i << " and has value: "
+                       << gt_score << '\n';
           volm_io::write_post_processing_log(log_file, log_test_img.str());
           vcl_cerr << log_test_img.str();
       }
@@ -154,7 +154,7 @@ int main(int argc,  char** argv)
 
 #if 1
     // create png tile images for different thresholds, only generate png tile prob_map with thres smaller than ground truth score
-    for (unsigned ti = 0; ti < tiles.size(); ti++) {
+    for (unsigned ti = 0; ti < tiles.size(); ++ti) {
       vcl_string img_name = out_folder.str() + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";
       if (!vul_file::exists(img_name)) {
         log_test_img << " WARNING: missing prob_map: " << img_name << '\n';
@@ -168,8 +168,8 @@ int main(int argc,  char** argv)
           vil_image_view<vxl_byte> out_png(tile_img.ni(), tile_img.nj());
           out_png.fill(volm_io::UNEVALUATED);
           // loop over current tile image to rescale the score to [0, 255]
-          for (unsigned ii = 0; ii < tile_img.ni(); ii++) {
-            for (unsigned jj = 0; jj< tile_img.nj(); jj++) {
+          for (unsigned ii = 0; ii < tile_img.ni(); ++ii) {
+            for (unsigned jj = 0; jj< tile_img.nj(); ++jj) {
               if (tile_img(ii, jj) > 0)
                 out_png(ii, jj) = volm_io::scale_score_to_1_255(*vit, tile_img(ii,jj));
             }
@@ -206,10 +206,10 @@ int main(int argc,  char** argv)
     fout << out_str.str();
     fout.precision(5); fout.width(13); fout.fill(' ');
     fout << mit->second[0] << ' ';
-    unsigned tot_loc = mit->second[mit->second.size()-1];
+    unsigned tot_loc = (unsigned)(mit->second[mit->second.size()-1]);
     fout.width(13); fout.fill(' ');
     fout << tot_loc << "        ";
-    for (unsigned i = 1; i < 7; i++) {
+    for (unsigned i = 1; i < 7; ++i) {
       fout.setf(vcl_ios_right);
       fout.precision(5); fout.width(12); fout.fill(' ');
       fout << mit->second[i];
