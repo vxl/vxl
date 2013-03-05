@@ -63,15 +63,14 @@ class volm_spherical_region
 class volm_spherical_regions_layer
 {
  public:
-
     volm_spherical_regions_layer(){}
     void add_region(volm_spherical_region region);
-    vcl_vector<volm_spherical_region> & regions(){return regions_;}
-    int size(){return regions_.size();}
-    vcl_vector<unsigned int>  attributed_regions(spherical_region_attributes att);
+    vcl_vector<volm_spherical_region> & regions() {return regions_;}
+    vcl_vector<volm_spherical_region> regions() const {return regions_;}
+    int size() const {return regions_.size();}
+    vcl_vector<unsigned int> attributed_regions(spherical_region_attributes att) const;
 
  private:
-
     vcl_vector<volm_spherical_region> regions_;
     void update_attribute_map(int id);
     vcl_map<spherical_region_attributes,vcl_vector<unsigned int> > attributed_regions_;

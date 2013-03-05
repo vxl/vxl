@@ -53,15 +53,15 @@ void volm_spherical_regions_layer::add_region(volm_spherical_region region)
 
 
 vcl_vector<unsigned int>
-volm_spherical_regions_layer::attributed_regions(spherical_region_attributes att)
+volm_spherical_regions_layer::attributed_regions(spherical_region_attributes att) const
 {
-    if ( attributed_regions_.find(att)!= attributed_regions_.end())
-        return attributed_regions_[att];
-    else // return an empty vector
+    vcl_vector<unsigned int> ids;
+    if ( attributed_regions_.find(att) != attributed_regions_.end())
     {
-        vcl_vector<unsigned int> ids;
-        return ids;
+        // a map is not changed by looking up one of its values ...
+        ids = (const_cast<volm_spherical_regions_layer*>(this))->attributed_regions_[att];
     }
+    return ids;
 }
 
 void volm_spherical_regions_layer::update_attribute_map(int id)
