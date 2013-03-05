@@ -22,13 +22,13 @@ class volm_vrml_io
     static void display_spherical_region_by_attrbute(vcl_ostream& str ,
                                                      volm_spherical_region & r,
                                                      spherical_region_attributes att,
-                                                     double factor,                // this mis multipled by 1.0 and is used to display outwards or inwards of the unit sphere.
+                                                     double factor,                //: this is multiplied by 1.0 and is used to display outwards or inwards of the unit sphere.
                                                      double tol);
 
     static void display_spherical_region_layer_by_attrbute(vcl_ostream& str ,
-                                                           volm_spherical_regions_layer & r,
+                                                           volm_spherical_regions_layer const& r,
                                                            spherical_region_attributes att,
-                                                           double factor,                // this mis multipled by 1.0 and is used to display outwards or inwards of the unit sphere.
+                                                           double factor,                //: this is multiplied by 1.0 and is used to display outwards or inwards of the unit sphere.
                                                            double tol);
 };
 

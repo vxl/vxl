@@ -3,7 +3,7 @@
 void volm_vrml_io::display_spherical_region_by_attrbute(vcl_ostream& str ,
                                                         volm_spherical_region & region,
                                                         spherical_region_attributes att,
-                                                        double factor,                // this mis multipled by 1.0 and is used to display outwards or inwards of the unit sphere.
+                                                        double factor,  // this is multiplied by 1.0 and is used to display outwards or inwards of the unit sphere.
                                                         double tol)
 {
     float r,g,b ;
@@ -18,9 +18,9 @@ void volm_vrml_io::display_spherical_region_by_attrbute(vcl_ostream& str ,
 }
 
 void volm_vrml_io::display_spherical_region_layer_by_attrbute(vcl_ostream& str ,
-                                                              volm_spherical_regions_layer & layer,
+                                                              volm_spherical_regions_layer const& layer,
                                                               spherical_region_attributes att,
-                                                              double factor,                // this mis multipled by 1.0 and is used to display outwards or inwards of the unit sphere.
+                                                              double factor,  // this is multiplied by 1.0 and is used to display outwards or inwards of the unit sphere.
                                                               double tol)
 {
     vcl_vector<unsigned int> ids = layer.attributed_regions(att);
