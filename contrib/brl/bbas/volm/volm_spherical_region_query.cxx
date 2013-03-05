@@ -1,13 +1,16 @@
 #include "volm_spherical_region_query.h"
+//
 #include <vsph/vsph_unit_sphere.h>
 #include <bsol/bsol_algs.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vsph/vsph_utils.h>
-#include <volm/volm_char_codes.h>
 #include <depth_map/depth_map_region.h>
 #include <depth_map/depth_map_scene.h>
+#include <volm/volm_char_codes.h>
 #include <volm/volm_spherical_container.h>
+#include <volm/volm_spherical_region.h>
+
 volm_spherical_region_query::volm_spherical_region_query(depth_map_scene_sptr const& dm_scene,
                                                          volm_camera_space_sptr const& cam_space,
                                                          volm_spherical_container_sptr const& sph_vol)
@@ -37,29 +40,32 @@ volm_spherical_region volm_spherical_region_query::set_from_depth_map_region(vpg
     volm_spherical_region r(bbox);
     //extract object attributes
     depth_map_region::orientation otype = dm_region->orient_type();
-    double min_depth = dm_region->min_depth();
-    double max_depth = dm_region->max_depth();
-    unsigned char order =  static_cast<unsigned char>(dm_region->order());
+    unsigned char min_depth = static_cast<unsigned char>(dm_region->min_depth());
+    unsigned char max_depth = static_cast<unsigned char>(dm_region->max_depth());
+#if 0 // unused ...
+    unsigned char order  =  static_cast<unsigned char>(dm_region->order());
     unsigned char nlcd_id = static_cast<unsigned char>(dm_region->land_id());
+#endif
     vcl_string nam = dm_region->name();
     if (otype == depth_map_region::GROUND_PLANE) {
-        r.set_attribute(spherical_region_attributes::ORIENTATION, static_cast<unsigned char>(depth_map_region::HORIZONTAL));
-        r.set_attribute(spherical_region_attributes::MIN_DEPTH, static_cast<unsigned char>(sph_vol_->min_voxel_res()));
-        r.set_attribute(spherical_region_attributes::MAX_DEPTH, static_cast<unsigned char>(sph_vol_->get_depth_interval(max_depth)));
+        r.set_attribute(ORIENTATION, static_cast<unsigned char>(depth_map_region::HORIZONTAL));
+        r.set_attribute(MIN_DEPTH, static_cast<unsigned char>(sph_vol_->min_voxel_res()));
+        r.set_attribute(MAX_DEPTH, static_cast<unsigned char>(sph_vol_->get_depth_interval(max_depth)));
     }
     if (otype == depth_map_region::INFINT||nam=="sky") {
-        r.set_attribute(spherical_region_attributes::ORIENTATION, static_cast<unsigned char>(depth_map_region::INFINT));
-        r.set_attribute(spherical_region_attributes::MIN_DEPTH, sky_depth);
-        r.set_attribute(spherical_region_attributes::MAX_DEPTH, sky_depth);
-        r.set_attribute(spherical_region_attributes::DEPTH_ORDER, sky_order);
+        r.set_attribute(ORIENTATION, static_cast<unsigned char>(depth_map_region::INFINT));
+        r.set_attribute(MIN_DEPTH, sky_depth);
+        r.set_attribute(MAX_DEPTH, sky_depth);
+        r.set_attribute(DEPTH_ORDER, sky_order);
     }
     else {
-        r.set_attribute(spherical_region_attributes::ORIENTATION, static_cast<unsigned char>(otype));
-        r.set_attribute(spherical_region_attributes::MIN_DEPTH, min_depth);
-        r.set_attribute(spherical_region_attributes::MAX_DEPTH, max_depth);
+        r.set_attribute(ORIENTATION, static_cast<unsigned char>(otype));
+        r.set_attribute(MIN_DEPTH, min_depth);
+        r.set_attribute(MAX_DEPTH, max_depth);
     }
     return r;
 }
+
 void volm_spherical_region_query::construct_spherical_regions()
 {
     unsigned n_roll = cam_space_->n_roll();
@@ -75,14 +81,14 @@ void volm_spherical_region_query::construct_spherical_regions()
         // ====  construct object regions =====
         vcl_vector<depth_map_region_sptr> sky_regions =dm_scene_->sky();
         for (vcl_vector<depth_map_region_sptr>::iterator sit = sky_regions.begin();
-            sit != sky_regions.end(); ++sit) {
-                volm_spherical_region sph_reg = this->set_from_depth_map_region(cam, *sit);
-                sph_regions_[roll_idx].add_region(sph_reg);
+             sit != sky_regions.end(); ++sit) {
+            volm_spherical_region sph_reg = this->set_from_depth_map_region(cam, *sit);
+            sph_regions_[roll_idx].add_region(sph_reg);
         }
         vcl_vector<depth_map_region_sptr> gp_regions = dm_scene_->ground_plane();
         for (vcl_vector<depth_map_region_sptr>::iterator git = gp_regions.begin();git != gp_regions.end(); ++git) {
-                volm_spherical_region sph_reg = this->set_from_depth_map_region(cam, *git);
-                sph_regions_[roll_idx].add_region(sph_reg);
+            volm_spherical_region sph_reg = this->set_from_depth_map_region(cam, *git);
+            sph_regions_[roll_idx].add_region(sph_reg);
         }
         vcl_vector<depth_map_region_sptr> object_regions =dm_scene_->scene_regions();
         unsigned n_regions = object_regions.size();
@@ -106,8 +112,7 @@ void volm_spherical_region_query::print(vcl_ostream& os) const
         volm_spherical_regions_layer  region_layer = rolit->second;
         vcl_vector<volm_spherical_region> regions = region_layer.regions();
         for (unsigned i = 0 ; i < regions.size(); i++) {
-                regions[i].print(os);
-                
+            regions[i].print(os);
         }
         vcl_cout << '\n';
     }
