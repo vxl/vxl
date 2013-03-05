@@ -21,11 +21,11 @@ volm_spherical_region_index(vcl_string index_file_path,
     data_.push_back(static_cast<double>(cdata[i]));
 
   load_unitsphere(usph_file_path);
-  double dpr = vnl_math::deg_per_rad;
-  double sigma = (0.1*usph_->point_angle())/dpr,  c =0.0;
+  double sigma = 0.1*usph_->point_angle()/vnl_math::deg_per_rad,
+         c =0.0;
   int min_size = 8;
   bool dosmoothing = false;
-  seg = new vsph_segment_sphere(*usph_.ptr(),  c, min_size,sigma,dosmoothing);
+  seg = new vsph_segment_sphere(*usph_.ptr(), c, min_size,sigma,dosmoothing);
   seg->set_data(data_);
   seg->segment();
   seg->extract_region_bounding_boxes();
@@ -34,25 +34,24 @@ volm_spherical_region_index(vcl_string index_file_path,
 
   for (; bit != boxes.end(); ++bit) {
     volm_spherical_region r(bit->second);
-    r.set_attribute(spherical_region_attributes::ORIENTATION,(unsigned char) seg->region_median(bit->first));
+    r.set_attribute(ORIENTATION,(unsigned char) seg->region_median(bit->first));
     sph_regions_.add_region(r);
   }
-
 }
+
 void volm_spherical_region_index::load_unitsphere(vcl_string usph_file_path)
 {
   vsl_b_ifstream is(usph_file_path);
-  if(!is)
+  if (!is)
   {
-      vcl_cout<<"Cannot Open file "<<usph_file_path<<vcl_endl;
-      return;
+    vcl_cout<<"Cannot Open file "<<usph_file_path<<vcl_endl;
+    return;
   }
   vsl_b_read(is, usph_);
 }
+
 void volm_spherical_region_index::construct_spherical_regions()
 {
-
-
 }
 
 volm_spherical_regions_layer
@@ -64,10 +63,10 @@ volm_spherical_region_index::index_regions()
 void volm_spherical_region_index::print(vcl_ostream& os) 
 {
   vcl_vector<volm_spherical_region> regions = sph_regions_.regions();
-  vcl_vector<volm_spherical_region>::iterator iter =  regions.begin();
+  vcl_vector<volm_spherical_region>::iterator iter = regions.begin();
   for (; iter != regions.end(); ++iter) {
-      iter->print(os);
-    }
-    vcl_cout << '\n';
+    iter->print(os);
+  }
+  vcl_cout << '\n';
 }
 
