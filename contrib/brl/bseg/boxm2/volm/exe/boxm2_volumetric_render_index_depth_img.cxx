@@ -94,7 +94,7 @@ int main(int argc,  char** argv)
     else {
       log << "ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
-      vcl_cerr << log;
+      vcl_cerr << log.str();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
   }
@@ -182,7 +182,7 @@ int main(int argc,  char** argv)
   if (!vul_file::exists(cam_bin())) {
     log << "ERROR: can not find camera_space binary: " << cam_bin() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vsl_b_ifstream cam_ifs(cam_bin());
@@ -372,7 +372,7 @@ int main(int argc,  char** argv)
 
   // write out the camera.kml
   vcl_string cam_kml = out() + "/BestCamera.kml";
-  vcl_ofstream ofs_kml(cam_kml);
+  vcl_ofstream ofs_kml(cam_kml.c_str());
 
   vcl_stringstream kml_name;
   kml_name << "p1a_test1_" << id();
