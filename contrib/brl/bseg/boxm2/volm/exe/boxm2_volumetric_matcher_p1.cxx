@@ -214,7 +214,7 @@ int main(int argc, char** argv)
            << "\t\t  generate query has " << query->get_cam_num() << " cameras "
            << " and " << (float)total_size/1024 << " Kbyte in total\n"
            << "==================================================================================================\n\n";
-           << " The spherical shell for current query has parameters: point_angle = " << query->sph_shell()->point_angle()
+  vcl_cout << " The spherical shell for current query has parameters: point_angle = " << query->sph_shell()->point_angle()
            << ", top_angle = "    << query->sph_shell()->top_angle()
            << ", bottom_angle = " << query->sph_shell()->bottom_angle()
            << ", size = " << query->get_query_size() << '\n'
