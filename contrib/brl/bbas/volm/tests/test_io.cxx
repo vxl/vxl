@@ -3,16 +3,14 @@
 #include <vpl/vpl.h>
 #include <depth_map/depth_map_scene.h>
 #include <depth_map/depth_map_region_sptr.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <vsl/vsl_binary_io.h>
-#include <vul/vul_timer.h>
 #include <bbas/volm/volm_tile.h>
 #include <bbas/volm/volm_geo_index.h>
 #include <bbas/volm/volm_io.h>
 #include <bkml/bkml_parser.h>
+#if 0 // used in commented-out part
 #include <vul/vul_file.h>
+#endif
 
 static void test_io()
 {
@@ -24,7 +22,7 @@ static void test_io()
   vcl_map<unsigned char, vcl_vector<float> >::iterator mit_w = volm_fallback_label::fallback_weight.begin();
 
     for (; mit != volm_fallback_label::fallback_id.end(); ++mit) {
-    vcl_cout << (int)mit->first << "(" << volm_label_table::land_string(mit_w->first) << ") ---> ";
+    vcl_cout << (int)mit->first << '(' << volm_label_table::land_string(mit_w->first) << ") ---> ";
     volm_fallback_label::print_id(mit->first);
     //for (vcl_vector<unsigned char>::iterator vit = mit->second.begin(); vit != mit->second.end(); ++vit)
     //  vcl_cout << volm_label_table::land_string(*vit) << ", ";
@@ -34,7 +32,7 @@ static void test_io()
     for (vcl_vector<float>::iterator vit = mit_w->second.begin(); vit != mit_w->second.end(); ++vit)
       vcl_cout << vcl_setprecision(3) << *vit << ' ';
 #endif
-    vcl_cout << "\n" << vcl_endl;
+    vcl_cout << '\n' << vcl_endl;
     ++mit_w;
   }
 
@@ -85,7 +83,7 @@ static void test_io()
     vcl_string land_name;
     for ( vcl_vector<vcl_string>::iterator vit = it->second.begin(); vit != it->second.end(); ++vit) {
       land_name += (*vit);
-      if(vit != it->second.end()-1) land_name += " OR ";
+      if (vit != it->second.end()-1) land_name += " OR ";
     }
     land_types.push_back(land_name);
     vcl_cout << "land id = " << (int)it->first << " string = " << land_name << vcl_endl;
