@@ -6,6 +6,7 @@
 #include <volm/volm_spherical_region.h>
 #include <vcl_iosfwd.h>
 
+#if 0 // unused here, and declared "static"
 static float color_codes[8][3] ={ {1.0,0.5,0.5},
                                   {0.0,1.0,0.0},
                                   {1.0,0.0,1.0},
@@ -14,6 +15,8 @@ static float color_codes[8][3] ={ {1.0,0.5,0.5},
                                   {1.0,0.0,0.0},
                                   {0.5,0.5,1.0},
                                   {0.0,0.0,1.0}};
+#endif
+
 class volm_vrml_io
 {
  public:
