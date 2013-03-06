@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//   <none yet>
+//   2013-03-05 P.Vanroose - signature of contains_point made consistent w. .cxx
 // \endverbatim
 
 
@@ -60,6 +60,6 @@ void imesh_flip_faces( imesh_mesh& mesh, const vcl_set<unsigned int>& sel_faces)
 //: Compute the dual mesh using face centroids for vertices
 imesh_mesh dual_mesh(const imesh_mesh& mesh);
 
-bool contains_point( imesh_mesh& mesh,vgl_point_3d<double> p);
+bool contains_point( imesh_mesh const& mesh,vgl_point_3d<double> p);
 
 #endif // imesh_operations_h_
