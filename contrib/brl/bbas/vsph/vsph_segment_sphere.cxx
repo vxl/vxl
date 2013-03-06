@@ -2,7 +2,7 @@
 //:
 // \file
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
+#include <vcl_cstdlib.h> // for std::rand()
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vbl/vbl_graph_partition.h>
@@ -10,10 +10,10 @@
 
 static void random_rgb(float& r, float&g, float& b)
 {
-    float rmax = static_cast<float>(RAND_MAX);
-    r = static_cast<float>(vcl_rand())/rmax;
-    g = static_cast<float>(vcl_rand())/rmax;
-    b = static_cast<float>(vcl_rand())/rmax;
+    float rmaxinv = 1.f / RAND_MAX;
+    r = static_cast<float>(vcl_rand())*rmaxinv;
+    g = static_cast<float>(vcl_rand())*rmaxinv;
+    b = static_cast<float>(vcl_rand())*rmaxinv;
 }
 
 void vsph_segment_sphere::smooth_data()
@@ -183,7 +183,7 @@ bool vsph_segment_sphere::extract_region_bounding_boxes()
                  nit != neigh.end()&&!done; ++nit) {
                 int nid = *nit;
                 int nbr_set_id = ds_.find_set(nid);
-                if (reg_set_id == nbr_set_id)
+                if (reg_set_id == nbr_set_id) {
                     if (ra == -1) {
                         ra = ray;
                         rb = nid;
@@ -192,6 +192,7 @@ bool vsph_segment_sphere::extract_region_bounding_boxes()
                         rc = nid;
                         done = true;
                     }
+                }
             }
             if (!done) {
                 ra = -1; rb = -1; rc = -1;
