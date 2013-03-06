@@ -78,9 +78,9 @@ int main(int argc, char** argv)
   // check the consistency of tile_id and zone_id
   // for coast --- zone 18 contains only tile 8 to tile 14 and zone 17 contains only tile 0 to tile 8
   // for desert --- all tiles (4 tiles) are in zone 11
-  if (tile_id() > 8 && zone_id() == 17 ||
-      tile_id() < 8 && zone_id() == 18 ||
-      tile_id() > 3 && zone_id() == 11 )
+  if ((tile_id() > 8 && zone_id() == 17) ||
+      (tile_id() < 8 && zone_id() == 18) ||
+      (tile_id() > 3 && zone_id() == 11) )
   {
     log << " ERROR: inconsistency between tile_id and utm zone_id, tile_id = " << tile_id() << ", zone_id = " << zone_id() << '\n';
     if (do_log) { volm_io::write_log(out_folder(), log.str()); }
@@ -95,9 +95,9 @@ int main(int argc, char** argv)
   file_name_pre << geo_index_folder() << "geo_index_tile_" << tile_id();
   vcl_cout << " geo_index_hyps_file = " << file_name_pre.str() + ".txt" << vcl_endl;
   if (!vul_file::exists(file_name_pre.str() + ".txt")) {
-    log << " ERROR: gen_index_folder is wrong (missing last slash/ ?), no geo_index_files found in " << geo_index_folder() << vcl_endl;
+    log << " ERROR: gen_index_folder is wrong (missing last slash/ ?), no geo_index_files found in " << geo_index_folder() << '\n';
     if (do_log) { volm_io::write_log(out_folder(), log.str()); }
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str();
     volm_io::write_status(out_folder(), volm_io::GEO_INDEX_FILE_MISSING);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -116,13 +116,13 @@ int main(int argc, char** argv)
     else {
       log << " ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
       if (do_log)  volm_io::write_composer_log(out_folder(), log.str());
-      vcl_cerr << log;
+      vcl_cerr << log.str();
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
       return volm_io::EXE_ARGUMENT_ERROR;
     }
   }
   else {
-    vcl_cout << " NO candidate list for this query image, full index space is considered " << vcl_endl;
+    vcl_cout << " NO candidate list for this query image, full index space is considered" << vcl_endl;
     is_candidate = false;
   }
   // prune the tree, only leaves with non-zero hypos are left
@@ -139,7 +139,7 @@ int main(int argc, char** argv)
     log << " ERROR: cannot read params file from " << index_file << '\n';
     if (do_log)  volm_io::write_log(out_folder(), log.str());
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   volm_spherical_container_sptr sph = new volm_spherical_container(params.solid_angle, params.vmin, params.dmax);
@@ -157,11 +157,12 @@ int main(int argc, char** argv)
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
-  } else {
-    vcl_cerr << "loading spherical shell from " << sph_bin() << vcl_endl;
+  }
+  else {
+    vcl_cerr << "loading spherical shell from " << sph_bin() << '\n';
   }
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container();
-  
+
   vsl_b_ifstream is_sph(sph_bin());
   sph_shell->b_read(is_sph);
   is_sph.close();
@@ -169,7 +170,7 @@ int main(int argc, char** argv)
     log << " ERROR: The loaded spherical shell has different layer size from the index\n";
     if (do_log) volm_io::write_log(out_folder(), log.str());
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   unsigned layer_size = (unsigned)sph_shell->get_container_size();
@@ -187,7 +188,7 @@ int main(int argc, char** argv)
 
   // check depth_map_scene binary
   if (!vul_file::exists(dms_bin())) {
-    vcl_cerr << " ERROR: depth map scene binary can not be found ---> " << dms_bin() << vcl_endl;
+    vcl_cerr << " ERROR: depth map scene binary can not be found ---> " << dms_bin() << '\n';
     volm_io::write_status(out_folder(), volm_io::DEPTH_SCENE_FILE_IO_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -199,7 +200,7 @@ int main(int argc, char** argv)
   // load the volm_query
   // check the query_binary file
   if (!vul_file::exists(query_bin())) {
-    vcl_cerr << " ERROR: volm_query binary can not be found ---> " << query_bin() << vcl_endl;
+    vcl_cerr << " ERROR: volm_query binary can not be found ---> " << query_bin() << '\n';
     volm_io::write_status(out_folder(), volm_io::DEPTH_SCENE_FILE_IO_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -212,13 +213,12 @@ int main(int argc, char** argv)
            << "\t\t  " << dms_bin() << '\n'
            << "\t\t  generate query has " << query->get_cam_num() << " cameras "
            << " and " << (float)total_size/1024 << " Kbyte in total\n"
-           << "==================================================================================================\n" << vcl_endl;
-  vcl_cout << " The spherical shell for current query has parameters: point_angle = " << query->sph_shell()->point_angle()
+           << "==================================================================================================\n\n";
+           << " The spherical shell for current query has parameters: point_angle = " << query->sph_shell()->point_angle()
            << ", top_angle = "    << query->sph_shell()->top_angle()
            << ", bottom_angle = " << query->sph_shell()->bottom_angle()
-           << ", size = " << query->get_query_size() << vcl_endl;
-  
-  vcl_cout << " The depth interval used for current query has size " << depth_interval.size() 
+           << ", size = " << query->get_query_size() << '\n'
+           << " The depth interval used for current query has size " << depth_interval.size()
            << ", max depth = " << depth_interval[depth_interval.size()-1] << vcl_endl;
 
   depth_map_scene_sptr dm = query->depth_scene();
@@ -260,14 +260,15 @@ int main(int argc, char** argv)
   // read (or create) weight parameters for depth_map_scene
   vcl_vector<volm_weight> weights;
   if (vul_file::exists(weight_file()) ) {
-    // read the weight parameter from pre-loaded 
+    // read the weight parameter from pre-loaded
     volm_weight::read_weight(weights, weight_file());
     // check whether the loaded weight parameters satisfy the requirement, if not, create default equal weight parameters
     if (!volm_weight::check_weight(weights)) {
       weights.clear();
       volm_weight::equal_weight(weights, dm);
     }
-  } else {
+  }
+  else {
     // create equal weight parameter for all objects
     volm_weight::equal_weight(weights, dm);
   }
@@ -275,7 +276,12 @@ int main(int argc, char** argv)
   vcl_cout << "\n==================================================================================================\n"
            << "\t\t  2. Weight parameters used are as following\n";
   for (vcl_vector<volm_weight>::iterator vit = weights.begin(); vit != weights.end(); ++vit)
-    vcl_cout << ' ' << vit->w_typ_ << ' ' << vit->w_ori_ << ' ' << vit->w_lnd_ << ' ' << vit->w_dst_ << ' ' << vit->w_ord_ << ' ' << vit->w_obj_ << vcl_endl;
+    vcl_cout << ' ' << vit->w_typ_
+             << ' ' << vit->w_ori_
+             << ' ' << vit->w_lnd_
+             << ' ' << vit->w_dst_
+             << ' ' << vit->w_ord_
+             << ' ' << vit->w_obj_ << vcl_endl;
   vcl_cout << "==================================================================================================\n\n";
 
 
@@ -306,15 +312,15 @@ int main(int argc, char** argv)
     log << " ERROR: pass 1 volm_matcher failed for geo_index " << index_file << '\n';
     if (do_log) volm_io::write_log(out_folder(), log.str());
     volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
 
   // write the score output binary
   vcl_cout << "\n==================================================================================================\n"
-             << "\t\t  5. Generate output for pass 1 matcher and store it in\n"
-             << "\t\t     " << out_folder() << '\n'
-             << "==================================================================================================\n" << vcl_endl;
+           << "\t\t  5. Generate output for pass 1 matcher and store it in\n"
+           << "\t\t     " << out_folder() << '\n'
+           << "==================================================================================================\n" << vcl_endl;
   vcl_stringstream out_fname_bin;
   out_fname_bin << out_folder() << "ps_1_scores_zone_" << zone_id() << "_tile_" << tile_id() << ".bin";
 #if 0
@@ -325,7 +331,7 @@ int main(int argc, char** argv)
     log << " ERROR: writing output failed for pass 1 ray_based matcher\n";
     if (do_log) volm_io::write_log(out_folder(), log.str());
     volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
-    vcl_cerr << log.str() << vcl_endl;
+    vcl_cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
 
@@ -347,9 +353,8 @@ int main(int argc, char** argv)
       log << " ERROR: pass 1 volm_matcher failed for geo_index " << index_file << '\n';
       if (do_log) {
         volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
-        
       }
-      vcl_cerr << log.str() << vcl_endl;
+      vcl_cerr << log.str();
       return volm_io::MATCHER_EXE_FAILED;
     }
     // output will be a probability map
@@ -367,7 +372,7 @@ int main(int argc, char** argv)
         volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
         volm_io::write_log(out_folder(), log.str());
       }
-      vcl_cerr << log.str() << vcl_endl;
+      vcl_cerr << log.str();
       return volm_io::MATCHER_EXE_FAILED;
     }
     // output the camera score for desired ground truth location
@@ -380,7 +385,7 @@ int main(int argc, char** argv)
           volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
           volm_io::write_log(out_folder(), log.str());
         }
-        vcl_cerr << log.str() << vcl_endl;
+        vcl_cerr << log.str();
         return volm_io::MATCHER_EXE_FAILED;
       }
       vcl_cout << " ground truth score stored in " << gt_score_txt.str() << vcl_endl;
@@ -407,11 +412,11 @@ int main(int argc, char** argv)
   vcl_stringstream out_fname_bin;
   out_fname_bin << out_folder() << "ps_1_scores_tile_" << tile_id() << ".bin";
   volm_score::read_scores(scores, out_fname_bin.str());  // this file may be too large, make sure it fits to memory!!
-  vcl_cout << " THE READ IN BINRAY SCORE FILE " << vcl_endl;
+  vcl_cout << " THE READ IN BINRAY SCORE FILE" << vcl_endl;
   for (unsigned i = 0; i < scores.size(); i++) {
-    vcl_cout << scores[i]->leaf_id_ << " " << scores[i]->hypo_id_
-             << " " << scores[i]->max_score_ << " " << scores[i]->max_cam_id_ << vcl_endl;
-    vcl_cout << " cam_id: \t";
+    vcl_cout << scores[i]->leaf_id_ << ' ' << scores[i]->hypo_id_
+             << ' ' << scores[i]->max_score_ << ' ' << scores[i]->max_cam_id_ << '\n'
+             << " cam_id: \t";
     vcl_vector<unsigned> cam_ids = scores[i]->cam_id_;
     for (unsigned jj = 0; jj < cam_ids.size(); jj++)
       vcl_cout << ' ' << cam_ids[jj];
