@@ -26,6 +26,7 @@
 #include <vil/vil_load.h>
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
+#include <vpgl/vpgl_utm.h>
 #include <vnl/vnl_math.h>
 
 
@@ -33,7 +34,8 @@
 int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
-  vul_arg<vcl_string> geo_index_folder("-geo", "folder to read the geo index and the hypo","");
+  vul_arg<vcl_string> geo_index_folder_pre("-geo_pre", "folder prefix to read the geo index and the hypo","");
+  vul_arg<unsigned> point_angle("-point", "point_angle use to locate geo index", 0);
   vul_arg<vcl_string> candidate_list("-cand", "candidate list if exist", "");
   vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");                                // query -- camera space binary
   vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
@@ -49,13 +51,14 @@ int main(int argc,  char** argv)
 
   vcl_stringstream log;
   vcl_string log_file = out() + "/render_img_log.xml";
-  if (out().compare("") == 0 ||
-      geo_index_folder().compare("") == 0 ||
-      gt_file().compare("") == 0 ||
-      pass_id() > 2 ||
-      img().compare("") == 0 ||
-      query_bin().compare("") == 0 ||
-      id() > 100)
+  if(out().compare("") == 0 ||
+     geo_index_folder_pre().compare("") == 0 ||
+     point_angle() == 0 ||
+     gt_file().compare("") == 0 ||
+     pass_id() > 2 ||
+     img().compare("") == 0 ||
+     query_bin().compare("") == 0 ||
+     id() > 100)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
@@ -115,9 +118,26 @@ int main(int argc,  char** argv)
         tile_id = i;
   }
 
+  // calculate the utm zone id from [lat,lon]
+  int zone_id;
+  /*zone_id = 17;*/
+  vpgl_utm utm;
+  double x, y;
+  utm.transform(samples[id()].first.y(), samples[id()].first.x(), x, y, zone_id);
+  vcl_cerr << " for GT location " << id() << " ----> " 
+                                  << samples[id()].first.y() << ", "
+                                  << samples[id()].first.x() << ", the zone is "
+                                  << zone_id << " and the utm coord = " << x << ", " << y << vcl_endl;
+
+  vcl_stringstream geo_index_ss;
+  geo_index_ss << geo_index_folder_pre() << zone_id << "_inc_2_nh_100_pa_" << point_angle() << "/";
+  vcl_string geo_index_folder = geo_index_ss.str();
+
+  vcl_cerr << " geo_index_folder = " << geo_index_folder << vcl_endl;
+
   // check the existance of index for current tile
   vcl_stringstream file_name_pre;
-  file_name_pre << geo_index_folder() << "geo_index_tile_" << tile_id;
+  file_name_pre << geo_index_folder << "geo_index_tile_" << tile_id;
   if (!vul_file::exists(file_name_pre.str() + ".txt")) {
     log << "for GT location " << id() << " ---> "
         << samples[id()].first.x() << ", "
@@ -197,10 +217,6 @@ int main(int argc,  char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-#if 0
-  // create volm_query
-  volm_query_sptr query = new volm_query(cam_space, dms_bin(), sph_shell, sph);
-#endif
   // locd the query
   if (!vul_file::exists(query_bin())) {
     log << "ERROR: can not find query_binar " << query_bin() << '\n';
@@ -213,7 +229,7 @@ int main(int argc,  char** argv)
 
   // load associate score binary file
   vcl_stringstream score_file;
-  score_file << out() << "ps_" << pass_id() << "_scores_tile_" << tile_id << ".bin";
+  score_file << out() << "ps_1_scores_zone_" << zone_id << "_tile_" << tile_id << ".bin";
   if (!vul_file::exists(score_file.str())) {
     log << "ERROR: can not find score file " << score_file << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
@@ -241,6 +257,10 @@ int main(int argc,  char** argv)
   // check the distance from ground trugh location to the closest in geo_index
   vgl_point_3d<double> gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
   vgl_vector_2d<double> gt_dist_vec(gt_loc.x()-gt_closest.x(), gt_loc.y()-gt_closest.y()); // don't care about the elev difference
+  
+  vcl_cerr << " leaf is = " << leaf_gt->get_string() << vcl_endl;
+  vcl_cerr << " hypo id = " << hyp_gt << vcl_endl;
+  
   double gt_dist = gt_dist_vec.sqr_length();
   if (gt_dist > min_size) {
     log << "WARNING: the GT location [" << gt_loc.x() << ", " << gt_loc.y() << "] to the closest location ["
@@ -250,6 +270,9 @@ int main(int argc,  char** argv)
     volm_io::write_post_processing_log(log_file, log.str());
     vcl_cerr << log.str();
   }
+
+#if 1
+
   unsigned h_gt, cam_gt_best;
   float score_gt;
   for (unsigned i = 0; i < scores.size(); i++) {
@@ -266,12 +289,14 @@ int main(int argc,  char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vil_image_view<vxl_byte> query_img = vil_load(img().c_str());
-
-  log << " For GT location, closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
+  log << " For GT location, leaf is " << leaf_gt->get_string() << '\n'
+      << " hypo_id = " << hyp_gt << '\n'
+      << " For GT location, closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
       << " has best score = " << score_gt << ", best camera stored in BestCamera.kml ( "
       << gt_cam_ang.get_string() << ", id = " << cam_gt_best << " ) img size " << query_img.ni() << " by " << query_img.nj() << '\n';
 
   volm_io::write_post_processing_log(log_file, log.str());
+
 
   // render the index_depth image
   vcl_stringstream out_fname_pre;
@@ -415,5 +440,6 @@ int main(int argc,  char** argv)
            << ", tfov = " << parser->top_fov_ << ", rfov = " << parser->right_fov_ << vcl_endl;
 #endif
 
+#endif
   return volm_io::SUCCESS;
 }

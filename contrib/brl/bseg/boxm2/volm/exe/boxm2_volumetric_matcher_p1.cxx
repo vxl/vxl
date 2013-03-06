@@ -78,9 +78,9 @@ int main(int argc, char** argv)
   // check the consistency of tile_id and zone_id
   // for coast --- zone 18 contains only tile 8 to tile 14 and zone 17 contains only tile 0 to tile 8
   // for desert --- all tiles (4 tiles) are in zone 11
-  if ((tile_id() > 8 && zone_id() == 17) ||
-      (tile_id() < 8 && zone_id() == 18) ||
-      (tile_id() > 3 && zone_id() == 11) )
+  if (tile_id() >= 8 && zone_id() == 17 ||
+      tile_id() < 8 && zone_id() == 18 ||
+      tile_id() > 3 && zone_id() == 11 )
   {
     log << " ERROR: inconsistency between tile_id and utm zone_id, tile_id = " << tile_id() << ", zone_id = " << zone_id() << '\n';
     if (do_log) { volm_io::write_log(out_folder(), log.str()); }

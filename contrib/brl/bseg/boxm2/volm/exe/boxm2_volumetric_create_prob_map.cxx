@@ -15,13 +15,16 @@
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <vil/vil_save.h>
+#include <vil/vil_load.h>
 #include <vcl_set.h>
+#include <vcl_iomanip.h>
 
 // generate gt hypos
 int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
   vul_arg<vcl_string> geo_index_folder("-geo", "folder to read the geo index and the hypo","");
+  vul_arg<unsigned> zone_id("-zone", "zone_id", 0);
   vul_arg<vcl_string> candidate_list("-cand", "candidate list if exist", "");
   vul_arg<vcl_string> out("-out", "job output folder", "");
   vul_arg<unsigned> id("-id", "id of the test image", 6);
@@ -35,6 +38,7 @@ int main(int argc,  char** argv)
      geo_index_folder().compare("") == 0 ||
      gt_file().compare("") == 0 ||
      pass_id() > 2 ||
+     zone_id() == 0 ||
      id() > 100)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
@@ -83,23 +87,40 @@ int main(int argc,  char** argv)
   else
     tiles = volm_tile::generate_p1_wr2_tiles();
 
-  // initialize the Prob_map image
+  // initialize the Prob_map image if the prob_map doesn't exist
+  // if the image exists, load the image instead
   vcl_vector<vil_image_view<float> > tile_imgs;
   for (unsigned i = 0 ; i < tiles.size(); i++) {
-    vil_image_view<float> out_img(3601, 3601);
-    out_img.fill(-1.0f);
-    tile_imgs.push_back(out_img);
+    vcl_string img_name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
+    if (vul_file::exists(img_name)) {
+      // load the image
+      vil_image_view<float> out_img = vil_load(img_name.c_str());
+      tile_imgs.push_back(out_img);
+    } else {
+      // create the image
+      vil_image_view<float> out_img(3601, 3601);
+      out_img.fill(-1.0f);
+      tile_imgs.push_back(out_img);
+    }
   }
 
   for (unsigned i = 0; i < tiles.size(); i++) {
     volm_tile tile = tiles[i];
-    // read in the volm_geo_index
+    // read in the volm_geo_index for tile i
     vcl_stringstream file_name_pre;
     file_name_pre << geo_index_folder() << "geo_index_tile_" << i;
     // no index for tile i exists, continue
     if (!vul_file::exists(file_name_pre.str() + ".txt")) {
       continue;
     }
+    // check the zone and tile_id
+    if (zone_id() == 17 && i >= 8)
+      continue;
+    else if (zone_id() == 18 && i < 8)
+      continue;
+    else if (zone_id()  == 11 && i > 4)
+      continue;
+
     float min_size;
     volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
     volm_geo_index::read_hyps(root, file_name_pre.str());
@@ -111,7 +132,7 @@ int main(int argc,  char** argv)
     
     // load score binary from output folder if exists
     vcl_stringstream score_file;
-    score_file << out() << "ps_" << pass_id() << "_scores_tile_" << i << ".bin";
+    score_file << out() << "ps_1_scores_zone_" << zone_id() << "_tile_" << i << ".bin";
     // continue if no score binary exists for this tile
     if (!vul_file::exists(score_file.str()))
       continue;
@@ -121,6 +142,10 @@ int main(int argc,  char** argv)
     unsigned total_ind = scores.size();
     for (unsigned ii = 0; ii < total_ind; ii++) {
       vgl_point_3d<double> h_pt = leaves[scores[ii]->leaf_id_]->hyps_->locs_[scores[ii]->hypo_id_];
+#if 0
+      vcl_cout << " total_ind = " << total_ind << " ii = " << ii << " leaf_id = " << scores[ii]->leaf_id_ << ", hypo_id = " << scores[ii]->hypo_id_
+               << vcl_setprecision(10) << " lon = " << h_pt.x() << " , lat = " << h_pt.y() << ", score = " << scores[ii]->max_score_ << vcl_endl;
+#endif
       unsigned u, v;
       if (tile.global_to_img(h_pt.x(), h_pt.y(), u, v)) {
         if (u < tile.ni() && v < tile.nj()) {
@@ -139,7 +164,8 @@ int main(int argc,  char** argv)
     unsigned u, v;
     if (tiles[i].global_to_img(samples[id()].first.x(), samples[id()].first.y(), u, v) ) {
       if (u < tiles[i].ni() && v < tiles[i].nj()) {
-        log << "\t GT location: " << samples[id()].first.x() << ", "
+        log << "\t GT location: " << id() << ", "
+                                  << samples[id()].first.x() << ", "
                                   << samples[id()].first.y() << " is at pixel: "
                                   << u << ", " << v << " in tile " << i << " and has value: "
                                   << tile_imgs[i](u, v) << '\n';

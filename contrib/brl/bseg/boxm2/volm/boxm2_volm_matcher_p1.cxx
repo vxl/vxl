@@ -211,7 +211,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   if (layer_size_ < 20000) {
     if (*n_cam_ < 10000)      ni = 64;
     else if (*n_cam_ < 15000) ni = 32;
-    else if (*n_cam_ < 20000) ni = 32;
+    else if (*n_cam_ < 20000) ni = 16;
     else                      ni = 16;
   }
   else {
