@@ -8,8 +8,6 @@
 #include <volm/volm_io.h>
 #include <volm/volm_query.h>
 #include <volm/volm_query_sptr.h>
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_save.h>
 #include <bpgl/bpgl_camera_utils.h>
 
 static void test_query()
@@ -33,12 +31,11 @@ static void test_query()
   sph_shell->b_read(sph_ifs);
   sph_ifs.close();
 
-  
-  // load cam_space 
+
+  // load cam_space
   vsl_b_ifstream cam_ifs(cam_bin_file);
   volm_camera_space_sptr csp_in = new volm_camera_space;
   csp_in->b_read(cam_ifs);
-
 
   volm_query query_test(query_bin, csp_in, dms_bin_file, sph_shell, sph);
 
@@ -53,12 +50,12 @@ static void test_query()
   depth_map_scene_sptr dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
-    vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
+    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->sky().size(); i++) {
       vcl_cout << "\t name = " << (dm->sky()[i]->name())
                << ", depth = " << 254
                << ", orient = " << (int)query->sky_orient()
-               << ", land_id = " << dm->sky()[i]->land_id() 
+               << ", land_id = " << dm->sky()[i]->land_id()
                << ", land_name = " << volm_label_table::land_string(dm->sky()[i]->land_id())
                << ", land_fallback_category = ";
       volm_fallback_label::print_id(dm->sky()[i]->land_id());
@@ -78,14 +75,14 @@ static void test_query()
     TEST("size of grd_dist vector equals n_cam", grd_dist.size(), query->get_cam_num());
     TEST("size of grd_land vector euqals n_cam", grd_land.size(), query->get_cam_num());
     TEST("size of grd_offset euqals n_cam+1", grd_offset.size(), 1+query->get_cam_num());
-  
+
     if (dm->ground_plane().size()) {
-      vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
+      vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
       for (unsigned i = 0; i < dm->ground_plane().size(); i++) {
         vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
                  << ", depth = " << dm->ground_plane()[i]->min_depth()
                  << ", orient = " << dm->ground_plane()[i]->orient_type()
-                 << ", land_id = " << dm->ground_plane()[i]->land_id() 
+                 << ", land_id = " << dm->ground_plane()[i]->land_id()
                  << ", land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
                  << ", land_fallback = ";
         volm_fallback_label::print_id(dm->ground_plane()[i]->land_id());
@@ -103,7 +100,6 @@ static void test_query()
     }
   }
 
-  
 
   // object
   vcl_vector<vcl_vector<vcl_vector<unsigned> > >& obj_id = query->dist_id();
@@ -126,8 +122,8 @@ static void test_query()
 
   if (drs.size()) {
     for (unsigned i = 0; i < drs.size(); i++) {
-      vcl_cout << "\t " <<  drs[i]->name()  << " region "
-               << ",\t min_depth = " << drs[i]->min_depth()
+      vcl_cout << "\t " <<  drs[i]->name()
+               << " region,\t min_depth = " << drs[i]->min_depth()
                << ",\t max_depth = " << drs[i]->max_depth()
                << ",\t order = " << drs[i]->order()
                << ",\t orient = " << drs[i]->orient_type()
@@ -138,8 +134,7 @@ static void test_query()
       vcl_cout << " (";
       for (unsigned jj =0; jj < obj_land[i].size(); jj++)
         vcl_cout << volm_label_table::land_string(obj_land[i][jj]) << ", ";
-      vcl_cout << " )";
-      vcl_cout << ",\t fallback_wgt = ";
+      vcl_cout << " ),\t fallback_wgt = ";
       volm_fallback_label::print_wgt(drs[i]->land_id());
       vcl_cout << " (";
       for (unsigned jj = 0; jj < obj_land_wgt[i].size(); jj++)
@@ -147,16 +142,14 @@ static void test_query()
       vcl_cout << ')' << vcl_endl;
     }
   }
-
-
-
 #endif
+
 #if 0
   // input files
   vcl_string cam_bin_file = "Z:/projects/FINDER/test1_result/local_output/test_weight_gt_pa_5/p1a_test1_36/camera_space.bin";
   vcl_string dms_bin_file = "Z:/projects/FINDER/test1/p1a_test1_36/p1a_test1_36.vsl";
   vcl_string sph_shell_file = "Z:/projects/FINDER/index/sph_shell_vsph_ca_180_pa_5_ta_75_ba_75.bin";
-  
+
   // parameter for depth_map_interval
   float vmin = 2.0f;         // min voxel resolution
   float dmax = 3000.0f;      // maximum depth
@@ -169,35 +162,35 @@ static void test_query()
   sph_shell->b_read(sph_ifs);
   sph_ifs.close();
 
-  
-  // load cam_space 
+
+  // load cam_space
   vsl_b_ifstream cam_ifs(cam_bin_file);
   volm_camera_space_sptr csp_in = new volm_camera_space;
   csp_in->b_read(cam_ifs);
 
-  // double head_mid=0.0, head_radius=180.0, head_inc=90.0;
-  // double tilt_mid=90.0, tilt_radius=20.0, tilt_inc=10.0;
-  // double roll_mid=0.0,  roll_radius=3.0,  roll_inc=3.0;
-  // double top_fov_vals[] = {3.0,  4.0};
-  // vcl_vector<double> fovs(top_fov_vals, top_fov_vals + 2);
-  // double altitude = 1.6;
-  // unsigned ni = 4000, nj = 3000;
-  // volm_camera_space_sptr csp_in = new volm_camera_space(fovs, altitude, ni, nj, head_mid, head_radius, head_inc, tilt_mid, tilt_radius, tilt_inc, roll_mid, roll_radius, roll_inc);\
-  // csp_in->generate_full_camera_index_space();  // don't bother with removing cams that don't satisfy ground plane constraint for testing purposes
-  
+#if 0 // nested if !!
+  double head_mid=0.0, head_radius=180.0, head_inc=90.0;
+  double tilt_mid=90.0, tilt_radius=20.0, tilt_inc=10.0;
+  double roll_mid=0.0,  roll_radius=3.0,  roll_inc=3.0;
+  double top_fov_vals[] = {3.0,  4.0};
+  vcl_vector<double> fovs(top_fov_vals, top_fov_vals + 2);
+  double altitude = 1.6;
+  unsigned ni = 4000, nj = 3000;
+  volm_camera_space_sptr csp_in = new volm_camera_space(fovs, altitude, ni, nj, head_mid, head_radius, head_inc, tilt_mid, tilt_radius, tilt_inc, roll_mid, roll_radius, roll_inc);
+  csp_in->generate_full_camera_index_space();  // don't bother with removing cams that don't satisfy ground plane constraint for testing purposes
+#endif // 0
 
-
-  //// create volm_query
+  // create volm_query
   volm_query_sptr query = new volm_query(csp_in, dms_bin_file, sph_shell, sph);
 
   // screen output for query information
   unsigned total_size = query->obj_based_query_size_byte();
-  vcl_cout << " For spherical surface, point angle = " << sph_shell->point_angle() << " degree, "
-           << ", top_angle = " << sph_shell->top_angle() << " degree, "
-           << ", bottom_angle = " << sph_shell->bottom_angle() << " degree, "
-           << ", generated query has " << query->get_query_size() << " rays, "
-           << query->get_cam_num() << " cameras:" << '\n'
-           << " The query with " << query->get_cam_num() << " has " << (float)total_size/1024 << " Kbyte in total "
+  vcl_cout << " For spherical surface, point angle = " << sph_shell->point_angle()
+           << " degree, top_angle = " << sph_shell->top_angle()
+           << " degree, bottom_angle = " << sph_shell->bottom_angle()
+           << " degree, generated query has " << query->get_query_size() << " rays, "
+           << query->get_cam_num() << " cameras:\n"
+           << " The query with " << query->get_cam_num() << " has " << (float)total_size/1024 << " Kbyte in total"
            << vcl_endl;
 
   // query check
@@ -209,12 +202,12 @@ static void test_query()
   depth_map_scene_sptr dm = query->depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
-    vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
+    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->sky().size(); i++) {
       vcl_cout << "\t name = " << (dm->sky()[i]->name())
                << ", depth = " << 254
                << ", orient = " << (int)query->sky_orient()
-               << ", land_id = " << dm->sky()[i]->land_id() 
+               << ", land_id = " << dm->sky()[i]->land_id()
                << ", land_name = " << volm_label_table::land_string(dm->sky()[i]->land_id())
                << ", land_fallback_category = ";
       volm_fallback_label::print_id(dm->sky()[i]->land_id());
@@ -234,14 +227,14 @@ static void test_query()
     TEST("size of grd_dist vector equals n_cam", grd_dist.size(), query->get_cam_num());
     TEST("size of grd_land vector euqals n_cam", grd_land.size(), query->get_cam_num());
     TEST("size of grd_offset euqals n_cam+1", grd_offset.size(), 1+query->get_cam_num());
-  
+
     if (dm->ground_plane().size()) {
-      vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
+      vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
       for (unsigned i = 0; i < dm->ground_plane().size(); i++) {
         vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
                  << ", depth = " << dm->ground_plane()[i]->min_depth()
                  << ", orient = " << dm->ground_plane()[i]->orient_type()
-                 << ", land_id = " << dm->ground_plane()[i]->land_id() 
+                 << ", land_id = " << dm->ground_plane()[i]->land_id()
                  << ", land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
                  << ", land_fallback = ";
         volm_fallback_label::print_id(dm->ground_plane()[i]->land_id());
@@ -258,8 +251,6 @@ static void test_query()
       vcl_cout << vcl_endl;
     }
   }
-
-  
 
   // object
   vcl_vector<vcl_vector<vcl_vector<unsigned> > >& obj_id = query->dist_id();
@@ -282,8 +273,8 @@ static void test_query()
 
   if (drs.size()) {
     for (unsigned i = 0; i < drs.size(); i++) {
-      vcl_cout << "\t " <<  drs[i]->name()  << " region "
-               << ",\t min_depth = " << drs[i]->min_depth()
+      vcl_cout << "\t " <<  drs[i]->name()
+               << " region,\t min_depth = " << drs[i]->min_depth()
                << ",\t max_depth = " << drs[i]->max_depth()
                << ",\t order = " << drs[i]->order()
                << ",\t orient = " << drs[i]->orient_type()
@@ -294,8 +285,7 @@ static void test_query()
       vcl_cout << " (";
       for (unsigned jj =0; jj < obj_land[i].size(); jj++)
         vcl_cout << volm_label_table::land_string(obj_land[i][jj]) << ", ";
-      vcl_cout << " )";
-      vcl_cout << ",\t fallback_wgt = ";
+      vcl_cout << " ),\t fallback_wgt = ";
       volm_fallback_label::print_wgt(drs[i]->land_id());
       vcl_cout << " (";
       for (unsigned jj = 0; jj < obj_land_wgt[i].size(); jj++)
@@ -304,17 +294,17 @@ static void test_query()
     }
   }
 
- vsl_b_ofstream ofs("./test_query.bin");
- query->write_data(ofs);
- ofs.close();
+  vsl_b_ofstream ofs("./test_query.bin");
+  query->write_data(ofs);
+  ofs.close();
 
- volm_query query_test("./test_query.bin", csp_in, dms_bin_file, sph_shell, sph);
- TEST("binary i/o", *query == query_test, true);
-#endif
+  volm_query query_test("./test_query.bin", csp_in, dms_bin_file, sph_shell, sph);
+  TEST("binary i/o", *query == query_test, true);
+#endif // 0
 
 
 #if 0
- // query check
+  // query check
   // sky
   sky_id = query_test.sky_id();
   sky_offset = query_test.sky_offset();
@@ -323,12 +313,12 @@ static void test_query()
   dm = query_test.depth_scene();
   vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
-    vcl_cout << " -------------- SKYs -------------- " << vcl_endl;
+    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->sky().size(); i++) {
       vcl_cout << "\t name = " << (dm->sky()[i]->name())
                << ", depth = " << 254
                << ", orient = " << (int)query_test.sky_orient()
-               << ", land_id = " << dm->sky()[i]->land_id() 
+               << ", land_id = " << dm->sky()[i]->land_id()
                << ", land_name = " << volm_label_table::land_string(dm->sky()[i]->land_id())
                << ", land_fallback_category = ";
       volm_fallback_label::print_id(dm->sky()[i]->land_id());
@@ -348,14 +338,14 @@ static void test_query()
     TEST("size of grd_dist vector equals n_cam", grd_dist.size(), query_test.get_cam_num());
     TEST("size of grd_land vector euqals n_cam", grd_land.size(), query_test.get_cam_num());
     TEST("size of grd_offset euqals n_cam+1", grd_offset.size(), 1+query_test.get_cam_num());
-  
+
     if (dm->ground_plane().size()) {
-      vcl_cout << " -------------- GROUND PLANE -------------- " << vcl_endl;
+      vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
       for (unsigned i = 0; i < dm->ground_plane().size(); i++) {
         vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
                  << ", depth = " << dm->ground_plane()[i]->min_depth()
                  << ", orient = " << dm->ground_plane()[i]->orient_type()
-                 << ", land_id = " << dm->ground_plane()[i]->land_id() 
+                 << ", land_id = " << dm->ground_plane()[i]->land_id()
                  << ", land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
                  << ", land_fallback = ";
         volm_fallback_label::print_id(dm->ground_plane()[i]->land_id());
@@ -372,8 +362,6 @@ static void test_query()
       vcl_cout << vcl_endl;
     }
   }
-
-  
 
   // object
   obj_id = query_test.dist_id();
@@ -396,8 +384,8 @@ static void test_query()
 
   if (drs.size()) {
     for (unsigned i = 0; i < drs.size(); i++) {
-      vcl_cout << "\t " <<  drs[i]->name()  << " region "
-               << ",\t min_depth = " << drs[i]->min_depth()
+      vcl_cout << "\t " <<  drs[i]->name()
+               << " region,\t min_depth = " << drs[i]->min_depth()
                << ",\t max_depth = " << drs[i]->max_depth()
                << ",\t order = " << drs[i]->order()
                << ",\t orient = " << drs[i]->orient_type()
@@ -408,8 +396,7 @@ static void test_query()
       vcl_cout << " (";
       for (unsigned jj =0; jj < obj_land[i].size(); jj++)
         vcl_cout << volm_label_table::land_string(obj_land[i][jj]) << ", ";
-      vcl_cout << " )";
-      vcl_cout << ",\t fallback_wgt = ";
+      vcl_cout << " ),\t fallback_wgt = ";
       volm_fallback_label::print_wgt(drs[i]->land_id());
       vcl_cout << " (";
       for (unsigned jj = 0; jj < obj_land_wgt[i].size(); jj++)
@@ -418,15 +405,15 @@ static void test_query()
     }
   }
 #endif
-  
+
 #if 0
   vcl_string depth_scene_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
   // create the query
   volm_query_sptr query = new volm_query(depth_scene_path, "desert", sph, sph_shell, 1.6);
 
   // query infomation
-  vcl_cout << " for spherical surface, point angle = " << point_angle << " degree, "
-           << ", top_angle = " << top_angle
+  vcl_cout << " for spherical surface, point angle = " << point_angle
+           << " degree, top_angle = " << top_angle
            << ", bottom_angle = " << bottom_angle
            << ", number of rays = " << query->get_query_size()
            << "\n The query has " << query->get_cam_num() << " cameras:"
@@ -459,8 +446,8 @@ static void test_query()
   if (dm->scene_regions().size()) {
     vcl_cout << " --------------- OBJECTS ------------------" << vcl_endl;
     for (unsigned i = 0; i < dm->scene_regions().size(); ++i) {
-      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()  << " region "
-               << ",\t min_depth = " << (dm->scene_regions())[i]->min_depth()
+      vcl_cout << "\t " <<  (dm->scene_regions())[i]->name()
+               << " region,\t min_depth = " << (dm->scene_regions())[i]->min_depth()
                << ",\t max_depth = " << (dm->scene_regions())[i]->max_depth()
                << ",\t order = " << (dm->scene_regions())[i]->order()
                << ",\t orient = " << (dm->scene_regions())[i]->orient_type()
@@ -476,8 +463,8 @@ static void test_query()
   vcl_cout << " The depth regions map inside query follows on order" << vcl_endl;
   if (drs.size()) {
     for (unsigned i = 0; i < drs.size(); ++i) {
-      vcl_cout << "\t " << drs[i]->name() << " region "
-               << ",\t\t order = " << drs[i]->order()
+      vcl_cout << "\t " << drs[i]->name()
+               << " region,\t\t order = " << drs[i]->order()
                << ",\t min_dist = " << drs[i]->min_depth()
                << ",\t min_dist_interval = " << (int)sph->get_depth_interval(drs[i]->min_depth())
                << ",\t max_dist = " << drs[i]->max_depth()
@@ -490,9 +477,8 @@ static void test_query()
   }
 #endif
 
-  //TEST("number of rays for current query", query->get_query_size(), 29440); // for 2 degree resolution
+  TEST("number of rays for current query", query->get_query_size(), 29440); // for 2 degree resolution
 #endif//NEED FILES TO RUN!! JLM
-
 }
 
 
