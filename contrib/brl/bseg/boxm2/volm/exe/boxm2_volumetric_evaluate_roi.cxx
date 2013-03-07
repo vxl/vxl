@@ -106,9 +106,9 @@ int main(int argc,  char** argv)
         if (u < tile_img.ni() && v < tile_img.nj())
           gt_score = tile_img(u,v);
           log_test_img << "\t id = " << id << ", GT location: " << samples[id].first.x() << ", "
-                  << samples[id].first.y() << " is at pixel: "
-                  << u << ", " << v << " in tile " << i << " and has value: "
-                  << gt_score << '\n';
+                       << samples[id].first.y() << " is at pixel: "
+                       << u << ", " << v << " in tile " << i << " and has value: "
+                       << gt_score << '\n';
           volm_io::write_post_processing_log(log_file, log_test_img.str());
           vcl_cerr << log_test_img.str();
       }
@@ -126,7 +126,7 @@ int main(int argc,  char** argv)
     p_thres.second = thresholds;
     test_img_thres.insert(p_thres);
 
-    vcl_cerr << " test_id = " << id << ", gt_score = " << gt_score << ", max_score = " << max_score_all << vcl_endl;
+    vcl_cerr << " test_id = " << id << ", gt_score = " << gt_score << ", max_score = " << max_score_all << '\n';
     // calculate roi for current valid out_folder
     //  cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
     vcl_map<float, vcl_vector<unsigned> > cnt_map;
@@ -136,7 +136,7 @@ int main(int argc,  char** argv)
       cnt_pair.first = *vit;  cnt_pair.second = cnt_vec;
       cnt_map.insert(cnt_pair);
     }
-    
+
     // loop over all tiles of current test images
     for (unsigned i = 0; i < tiles.size(); ++i) {
       vcl_string img_name = out_folder.str() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
@@ -254,9 +254,9 @@ int main(int argc,  char** argv)
   vcl_string eoi_file = out_root() + "/roi_result.txt";
   vcl_ofstream fout(eoi_file.c_str());
 
-  fout << "  test_id      gt_loc_score      total_locs                                       thresholds\n";
-  fout << "----------------------------------------------------------------------------------------------------------------------------\n";
-  
+  fout << "  test_id      gt_loc_score      total_locs                                       thresholds\n"
+       << "----------------------------------------------------------------------------------------------------------------------------\n";
+
   //for (vcl_vector<float>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
   //  fout.setf(vcl_ios_right);
   //  fout.precision(2); fout.fill(' '); fout.width(*vit > 0.6 ? 13 : 10);
@@ -281,7 +281,7 @@ int main(int argc,  char** argv)
     fout << out_str.str();
     fout.precision(4); fout.width(13); fout.fill(' ');
     fout << mit->second[0] << ' ';
-    unsigned tot_loc = mit->second[(unsigned int)mit->second.size()-1];
+    unsigned tot_loc = (unsigned int)mit->second[mit->second.size()-1];
     fout.width(13); fout.fill(' ');
     fout << tot_loc << "        ";
     for (unsigned i = 1; i < thresholds.size()+1; i++) {
@@ -295,7 +295,7 @@ int main(int argc,  char** argv)
 
 #if 0
   vcl_map<unsigned, vcl_vector<float> >::iterator mit = test_img_roi.begin();
-  
+
   for (; mit != test_img_roi.end(); ++mit) {
     vcl_stringstream out_str;
     if (mit->first < 10) out_str << "p1a_test1_0" << mit->first;
