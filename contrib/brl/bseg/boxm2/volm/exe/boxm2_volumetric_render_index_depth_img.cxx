@@ -51,14 +51,14 @@ int main(int argc,  char** argv)
 
   vcl_stringstream log;
   vcl_string log_file = out() + "/render_img_log.xml";
-  if(out().compare("") == 0 ||
-     geo_index_folder_pre().compare("") == 0 ||
-     point_angle() == 0 ||
-     gt_file().compare("") == 0 ||
-     pass_id() > 2 ||
-     img().compare("") == 0 ||
-     query_bin().compare("") == 0 ||
-     id() > 100)
+  if (out().compare("") == 0 ||
+      geo_index_folder_pre().compare("") == 0 ||
+      point_angle() == 0 ||
+      gt_file().compare("") == 0 ||
+      pass_id() > 2 ||
+      img().compare("") == 0 ||
+      query_bin().compare("") == 0 ||
+      id() > 100)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
@@ -89,7 +89,9 @@ int main(int argc,  char** argv)
   bool is_candidate = false;
   vgl_polygon<double> cand_poly;
   if ( candidate_list().compare("") != 0) {
-    //vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
+#endif
     if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
       is_candidate = true;
       volm_io::read_polygons(candidate_list(), cand_poly);
@@ -124,16 +126,16 @@ int main(int argc,  char** argv)
   vpgl_utm utm;
   double x, y;
   utm.transform(samples[id()].first.y(), samples[id()].first.x(), x, y, zone_id);
-  vcl_cerr << " for GT location " << id() << " ----> " 
-                                  << samples[id()].first.y() << ", "
-                                  << samples[id()].first.x() << ", the zone is "
-                                  << zone_id << " and the utm coord = " << x << ", " << y << vcl_endl;
+  vcl_cerr << " for GT location " << id() << " ----> "
+           << samples[id()].first.y() << ", "
+           << samples[id()].first.x() << ", the zone is "
+           << zone_id << " and the utm coord = " << x << ", " << y << '\n';
 
   vcl_stringstream geo_index_ss;
-  geo_index_ss << geo_index_folder_pre() << zone_id << "_inc_2_nh_100_pa_" << point_angle() << "/";
+  geo_index_ss << geo_index_folder_pre() << zone_id << "_inc_2_nh_100_pa_" << point_angle() << '/';
   vcl_string geo_index_folder = geo_index_ss.str();
 
-  vcl_cerr << " geo_index_folder = " << geo_index_folder << vcl_endl;
+  vcl_cerr << " geo_index_folder = " << geo_index_folder << '\n';
 
   // check the existance of index for current tile
   vcl_stringstream file_name_pre;
@@ -238,7 +240,7 @@ int main(int argc,  char** argv)
   vcl_vector<volm_score_sptr> scores;
   volm_score::read_scores(scores, score_file.str());
 
-#if 0
+#ifdef DEBUG
     vcl_cout << " THE READ IN BINRAY SCORE FILE\n"
              << " file name = " << score_file.str() << vcl_endl;
     for (unsigned i = 0; i < scores.size(); i++) {
@@ -257,10 +259,10 @@ int main(int argc,  char** argv)
   // check the distance from ground trugh location to the closest in geo_index
   vgl_point_3d<double> gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
   vgl_vector_2d<double> gt_dist_vec(gt_loc.x()-gt_closest.x(), gt_loc.y()-gt_closest.y()); // don't care about the elev difference
-  
-  vcl_cerr << " leaf is = " << leaf_gt->get_string() << vcl_endl;
-  vcl_cerr << " hypo id = " << hyp_gt << vcl_endl;
-  
+
+  vcl_cerr << " leaf is = " << leaf_gt->get_string() << '\n'
+           << " hypo id = " << hyp_gt << '\n';
+
   double gt_dist = gt_dist_vec.sqr_length();
   if (gt_dist > min_size) {
     log << "WARNING: the GT location [" << gt_loc.x() << ", " << gt_loc.y() << "] to the closest location ["
@@ -319,7 +321,11 @@ int main(int argc,  char** argv)
     ind_ori->get_next(values_ori);
     ind_lnd->get_next(values_lnd);
     if (h_id == h_gt) {
-      //vcl_cout << "h_id = " << h_id << " h_gt = " << h_gt << ", camera = " << cam_space->camera_angles(cam_gt_best).get_string() << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "h_id = " << h_id
+               << ", h_gt = " << h_gt
+               << ", camera = " << cam_space->camera_angles(cam_gt_best).get_string() << vcl_endl;
+#endif
       vcl_stringstream dst_img_fname;
       vcl_stringstream ori_img_fname;
       vcl_stringstream lnd_img_fname;
@@ -338,7 +344,9 @@ int main(int argc,  char** argv)
           ori_img(i,j).r = (unsigned char)120;  ori_img(i,j).g = (unsigned char)120;  ori_img(i,j).b = (unsigned char)120;
           lnd_img(i,j).r = (unsigned char)120;  lnd_img(i,j).g = (unsigned char)120;  lnd_img(i,j).b = (unsigned char)120;
         }
-      //vcl_cout << " cam_id = " << cam_gt_best << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << " cam_id = " << cam_gt_best << vcl_endl;
+#endif
       query->depth_rgb_image(values_dst, cam_gt_best, dst_img, "depth");
       query->depth_rgb_image(values_ori, cam_gt_best, ori_img, "orientation");
       query->depth_rgb_image(values_lnd, cam_gt_best, lnd_img, "land");
@@ -434,8 +442,8 @@ int main(int argc,  char** argv)
     delete parser;
     return false;
   }
-  vcl_cout << "test reading Bestcamera.kml -------" << vcl_endl;
-  vcl_cout << "\t\t lon = " << parser->longitude_ << ", lat = " << parser->latitude_ << ", alt = " << parser->altitude_
+  vcl_cout << "test reading Bestcamera.kml -------\n"
+           << "\t\t lon = " << parser->longitude_ << ", lat = " << parser->latitude_ << ", alt = " << parser->altitude_
            << ", head = " << parser->heading_ << ", tilt = " << parser->tilt_ << ", roll = " << parser->roll_
            << ", tfov = " << parser->top_fov_ << ", rfov = " << parser->right_fov_ << vcl_endl;
 #endif
