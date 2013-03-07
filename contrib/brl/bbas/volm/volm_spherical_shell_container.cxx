@@ -178,13 +178,15 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
       img(ii,jj).g = 0;
       img(ii,jj).b = 255;
     }
-    /*else if (volm_label_table::land_id.find((int)values[i]) == volm_label_table::land_id.end()) {
+#if 0
+    else if (volm_label_table::land_id.find((int)values[i]) == volm_label_table::land_id.end()) {
       vcl_cerr << "cannot find this value: " << (int)values[i] << " in the color table!\n";
       img(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
     }
     else
-      img(ii,jj) = volm_label_table::land_id[(int)values[i]].color_;*/
-    else 
+      img(ii,jj) = volm_label_table::land_id[(int)values[i]].color_;
+#endif // 0
+    else
       img(ii,jj) = volm_label_table::get_color(values[i]); // returns invalid color if it cannot find this id
   }
 }
@@ -220,6 +222,7 @@ void volm_spherical_shell_container::panaroma_img_orientations(vil_image_view<vi
       img(ii,jj) = volm_orient_table::ori_index_colors[(int)values[i]];
   }
 }
+
 void volm_spherical_shell_container::panaroma_images_from_combined(vil_image_view<vil_rgb<vxl_byte> >& img_orientation, vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
 {
   assert(values.size() == usph_->size());
@@ -234,7 +237,7 @@ void volm_spherical_shell_container::panaroma_images_from_combined(vil_image_vie
     unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::deg_per_rad+0.5);
     if (ii >= img.ni() || jj >= img.nj()) // cannot be negative since unsigned ...
       continue;
-    vcl_cout << "(" << (int)values[i] << ", ";
+    vcl_cout << '(' << (int)values[i] << ", ";
     if (values[i] == 253) { // invalid
       img(ii,jj).r = 255;
       img(ii,jj).g = 0;
@@ -259,7 +262,8 @@ void volm_spherical_shell_container::panaroma_images_from_combined(vil_image_vie
       if (volm_orient_table::ori_index_colors.find((int)orientation_value) == volm_orient_table::ori_index_colors.end()) {
         vcl_cerr << "cannot find this value: " << (int)orientation_value << " in the color table!\n";
         img_orientation(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
-      } else
+      }
+      else
         img_orientation(ii,jj) = volm_orient_table::ori_index_colors[(int)orientation_value];
 
       img(ii,jj) = volm_label_table::get_color(label_value); // returns invalid color if it cannot find this id

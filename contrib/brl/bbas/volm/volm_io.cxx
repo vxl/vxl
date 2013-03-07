@@ -51,27 +51,27 @@ vcl_map<int, volm_attributes > create_label_map()
 {
   vcl_map<int, volm_attributes > m;
   m[0] = volm_attributes(0, "invalid",                                                 vil_rgb<vxl_byte>(255,  0,    0));  // invalid
-  m[volm_label_table::WATER] = volm_attributes(1, "open water",                         vil_rgb<vxl_byte>(0,    0,    100));  
-  m[12] = volm_attributes(2, "perennial ice/snow",                                      vil_rgb<vxl_byte>(255,  255,  200));  // 
-  m[volm_label_table::DEVELOPED_OPEN] = volm_attributes(3, "developed, open space",     vil_rgb<vxl_byte>(50,   0,    0));   
-  m[volm_label_table::DEVELOPED_LOW] = volm_attributes(4, "developed, low intsty",   vil_rgb<vxl_byte>(100,  0,    10));   
+  m[volm_label_table::WATER] = volm_attributes(1, "open water",                         vil_rgb<vxl_byte>(0,    0,    100));
+  m[12] = volm_attributes(2, "perennial ice/snow",                                      vil_rgb<vxl_byte>(255,  255,  200));  //
+  m[volm_label_table::DEVELOPED_OPEN] = volm_attributes(3, "developed, open space",     vil_rgb<vxl_byte>(50,   0,    0));
+  m[volm_label_table::DEVELOPED_LOW] = volm_attributes(4, "developed, low intsty",   vil_rgb<vxl_byte>(100,  0,    10));
   m[volm_label_table::DEVELOPED_MED] = volm_attributes(4, "developed, medium intsty",vil_rgb<vxl_byte>(200,  0,    100));  //  (combined with prev class)
-  m[volm_label_table::DEVELOPED_HIGH] = volm_attributes(5, "developed, high intsty", vil_rgb<vxl_byte>(220,  0,    100));  // 
-  m[volm_label_table::SAND] = volm_attributes(6, "barren land/beach (rock/sand/clay)",  vil_rgb<vxl_byte>(170,  170,  170));  // 
-  m[41] =                     volm_attributes(7, "deciduous forest",                    vil_rgb<vxl_byte>(0,    200,  0));  // 
-  m[42] =                     volm_attributes(8, "evergreen forest",                    vil_rgb<vxl_byte>(0,    250,  0));  // 
-  m[43] =                     volm_attributes(9, "mixed forest",                        vil_rgb<vxl_byte>(0,    100,  0));  // 
-  m[51] =                     volm_attributes(10, "dwarf scrub(alaska only)",           vil_rgb<vxl_byte>(10,   50,   0));  // 
-  m[52] =                     volm_attributes(10, "shrub/scrub",                         vil_rgb<vxl_byte>(10,   50,   0));  // 
-  m[71] =                     volm_attributes(11, "grassland/herbaceous",               vil_rgb<vxl_byte>(0,    100,  20)); // 
-  m[72] =                     volm_attributes(11, "sedge/herbaceous",                   vil_rgb<vxl_byte>(0,    150,  10)); // 
-  m[73] =                     volm_attributes(11, "lichens",                            vil_rgb<vxl_byte>(0,    170,  10)); // 
-  m[74] =                     volm_attributes(11, "moss",                               vil_rgb<vxl_byte>(0,    200,  10)); // 
-  m[81] =                     volm_attributes(12, "pasture hay",                        vil_rgb<vxl_byte>(0,    120,  120)); // 
-  m[82] =                     volm_attributes(13, "cultivated crops",                   vil_rgb<vxl_byte>(210,  105,  30)); // 
-  m[90] =                     volm_attributes(14, "Woody wetland/marina",            vil_rgb<vxl_byte>(176,  196,  222)); // 
-  m[95] =                     volm_attributes(14, "Emergent Herbaceous Wetlands",       vil_rgb<vxl_byte>(176,  196,  255)); // 
-  m[volm_label_table::BUILDING] = volm_attributes(15, "building",                       vil_rgb<vxl_byte>(255,  255,  255)); // 
+  m[volm_label_table::DEVELOPED_HIGH] = volm_attributes(5, "developed, high intsty", vil_rgb<vxl_byte>(220,  0,    100));  //
+  m[volm_label_table::SAND] = volm_attributes(6, "barren land/beach (rock/sand/clay)",  vil_rgb<vxl_byte>(170,  170,  170));  //
+  m[41] =                     volm_attributes(7, "deciduous forest",                    vil_rgb<vxl_byte>(0,    200,  0));  //
+  m[42] =                     volm_attributes(8, "evergreen forest",                    vil_rgb<vxl_byte>(0,    250,  0));  //
+  m[43] =                     volm_attributes(9, "mixed forest",                        vil_rgb<vxl_byte>(0,    100,  0));  //
+  m[51] =                     volm_attributes(10, "dwarf scrub(alaska only)",           vil_rgb<vxl_byte>(10,   50,   0));  //
+  m[52] =                     volm_attributes(10, "shrub/scrub",                         vil_rgb<vxl_byte>(10,   50,   0));  //
+  m[71] =                     volm_attributes(11, "grassland/herbaceous",               vil_rgb<vxl_byte>(0,    100,  20)); //
+  m[72] =                     volm_attributes(11, "sedge/herbaceous",                   vil_rgb<vxl_byte>(0,    150,  10)); //
+  m[73] =                     volm_attributes(11, "lichens",                            vil_rgb<vxl_byte>(0,    170,  10)); //
+  m[74] =                     volm_attributes(11, "moss",                               vil_rgb<vxl_byte>(0,    200,  10)); //
+  m[81] =                     volm_attributes(12, "pasture hay",                        vil_rgb<vxl_byte>(0,    120,  120)); //
+  m[82] =                     volm_attributes(13, "cultivated crops",                   vil_rgb<vxl_byte>(210,  105,  30)); //
+  m[90] =                     volm_attributes(14, "Woody wetland/marina",            vil_rgb<vxl_byte>(176,  196,  222)); //
+  m[95] =                     volm_attributes(14, "Emergent Herbaceous Wetlands",       vil_rgb<vxl_byte>(176,  196,  255)); //
+  m[volm_label_table::BUILDING] = volm_attributes(15, "building",                       vil_rgb<vxl_byte>(255,  255,  255)); //
 
   m[101] =     volm_attributes(16, "airports",                                          vil_rgb<vxl_byte>(0,    255,  255));
   m[102] =      volm_attributes(17, "beaches",                                          vil_rgb<vxl_byte>(0,    200,  255));
@@ -109,6 +109,7 @@ unsigned volm_label_table::compute_number_of_labels()
   }
   return max+1;
 }
+
 unsigned volm_label_table::number_of_labels_ = compute_number_of_labels();
 
 vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
@@ -118,37 +119,37 @@ vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
   f.clear();  f.push_back(0);  f.push_back(0);  f.push_back(0);  f.push_back(0);  m[0] = f;   // invalid    ----------> [invalid, invalid, invalid, invalid]
   f.clear();  f.push_back(1);  f.push_back(6);  f.push_back(17); f.push_back(3);  m[1] = f;   // open water ----------> [open water, sand, beach, develop(open space)]
   f.clear();  f.push_back(2);  f.push_back(1);  f.push_back(6);  f.push_back(3);  m[2] = f;   // perennial ice/snow --> [perennial ice/snow, water, sand, develop(open)]
-  f.clear();  f.push_back(3);  f.push_back(4);  f.push_back(5);  f.push_back(6);  m[3] = f;   // 
-  f.clear();  f.push_back(4);  f.push_back(15);  f.push_back(5);  f.push_back(6);  m[4] = f;  // 
-  f.clear();  f.push_back(5);  f.push_back(4);  f.push_back(15); f.push_back(24); m[5] = f;   // 
-  f.clear();  f.push_back(6);  f.push_back(1);  f.push_back(3);  f.push_back(17); m[6] = f;   // 
-  f.clear();  f.push_back(7);  f.push_back(8);  f.push_back(9);  f.push_back(3);  m[7] = f;   // 
-  f.clear();  f.push_back(8);  f.push_back(7);  f.push_back(9);  f.push_back(3);  m[8] = f;   // 
-  f.clear();  f.push_back(9);  f.push_back(7);  f.push_back(8);  f.push_back(3);  m[9] = f;   // 
-  f.clear();  f.push_back(10); f.push_back(11); f.push_back(12); f.push_back(3);  m[10] = f;  // 
-  f.clear();  f.push_back(11); f.push_back(10); f.push_back(3);  f.push_back(12); m[11] = f;  // 
-  f.clear();  f.push_back(12); f.push_back(11); f.push_back(10); f.push_back(3);  m[12] = f;  // 
-  f.clear();  f.push_back(13); f.push_back(12); f.push_back(3);  f.push_back(4);  m[13] = f;  // 
-  f.clear();  f.push_back(14); f.push_back(1);  f.push_back(4);  f.push_back(6); m[14] = f;   // 
-  f.clear();  f.push_back(15); f.push_back(4);  f.push_back(5);  f.push_back(24); m[15] = f;  // 
-  f.clear();  f.push_back(16); f.push_back(4);  f.push_back(3);  f.push_back(5);  m[16] = f;  // 
-  f.clear();  f.push_back(17); f.push_back(1);  f.push_back(6);  f.push_back(3);  m[17] = f;  // 
-  f.clear();  f.push_back(18); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[18] = f;  // 
-  f.clear();  f.push_back(19); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[19] = f;  // 
-  f.clear();  f.push_back(20); f.push_back(4);  f.push_back(5);  f.push_back(15); m[20] = f;  // 
-  f.clear();  f.push_back(21); f.push_back(4);  f.push_back(5);  f.push_back(15); m[21] = f;  // 
-  f.clear();  f.push_back(22); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[22] = f;  // 
-  f.clear();  f.push_back(23); f.push_back(1);  f.push_back(4);  f.push_back(26); m[23] = f;  // 
-  f.clear();  f.push_back(24); f.push_back(4);  f.push_back(5);  f.push_back(15); m[24] = f;  // 
-  f.clear();  f.push_back(25); f.push_back(4);  f.push_back(5);  f.push_back(15); m[25] = f;  // 
-  f.clear();  f.push_back(26); f.push_back(23); f.push_back(1);  f.push_back(4);  m[26] = f;  // 
-  f.clear();  f.push_back(27); f.push_back(3);  f.push_back(6);  f.push_back(4);  m[27] = f;  // 
-  f.clear();  f.push_back(28); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[28] = f;  // 
-  f.clear();  f.push_back(29); f.push_back(1);  f.push_back(15); f.push_back(6);  m[29] = f;  // 
-  f.clear();  f.push_back(30); f.push_back(1);  f.push_back(29); f.push_back(23); m[30] = f;  // 
-  f.clear();  f.push_back(31); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[31] = f;  // 
-  f.clear();  f.push_back(32); f.push_back(31); f.push_back(4);  f.push_back(5);  m[32] = f;  // 
-  f.clear();  f.push_back(33); f.push_back(6);  f.push_back(15); f.push_back(1);  m[33] = f;  // 
+  f.clear();  f.push_back(3);  f.push_back(4);  f.push_back(5);  f.push_back(6);  m[3] = f;   //
+  f.clear();  f.push_back(4);  f.push_back(15);  f.push_back(5);  f.push_back(6);  m[4] = f;  //
+  f.clear();  f.push_back(5);  f.push_back(4);  f.push_back(15); f.push_back(24); m[5] = f;   //
+  f.clear();  f.push_back(6);  f.push_back(1);  f.push_back(3);  f.push_back(17); m[6] = f;   //
+  f.clear();  f.push_back(7);  f.push_back(8);  f.push_back(9);  f.push_back(3);  m[7] = f;   //
+  f.clear();  f.push_back(8);  f.push_back(7);  f.push_back(9);  f.push_back(3);  m[8] = f;   //
+  f.clear();  f.push_back(9);  f.push_back(7);  f.push_back(8);  f.push_back(3);  m[9] = f;   //
+  f.clear();  f.push_back(10); f.push_back(11); f.push_back(12); f.push_back(3);  m[10] = f;  //
+  f.clear();  f.push_back(11); f.push_back(10); f.push_back(3);  f.push_back(12); m[11] = f;  //
+  f.clear();  f.push_back(12); f.push_back(11); f.push_back(10); f.push_back(3);  m[12] = f;  //
+  f.clear();  f.push_back(13); f.push_back(12); f.push_back(3);  f.push_back(4);  m[13] = f;  //
+  f.clear();  f.push_back(14); f.push_back(1);  f.push_back(4);  f.push_back(6); m[14] = f;   //
+  f.clear();  f.push_back(15); f.push_back(4);  f.push_back(5);  f.push_back(24); m[15] = f;  //
+  f.clear();  f.push_back(16); f.push_back(4);  f.push_back(3);  f.push_back(5);  m[16] = f;  //
+  f.clear();  f.push_back(17); f.push_back(1);  f.push_back(6);  f.push_back(3);  m[17] = f;  //
+  f.clear();  f.push_back(18); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[18] = f;  //
+  f.clear();  f.push_back(19); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[19] = f;  //
+  f.clear();  f.push_back(20); f.push_back(4);  f.push_back(5);  f.push_back(15); m[20] = f;  //
+  f.clear();  f.push_back(21); f.push_back(4);  f.push_back(5);  f.push_back(15); m[21] = f;  //
+  f.clear();  f.push_back(22); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[22] = f;  //
+  f.clear();  f.push_back(23); f.push_back(1);  f.push_back(4);  f.push_back(26); m[23] = f;  //
+  f.clear();  f.push_back(24); f.push_back(4);  f.push_back(5);  f.push_back(15); m[24] = f;  //
+  f.clear();  f.push_back(25); f.push_back(4);  f.push_back(5);  f.push_back(15); m[25] = f;  //
+  f.clear();  f.push_back(26); f.push_back(23); f.push_back(1);  f.push_back(4);  m[26] = f;  //
+  f.clear();  f.push_back(27); f.push_back(3);  f.push_back(6);  f.push_back(4);  m[27] = f;  //
+  f.clear();  f.push_back(28); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[28] = f;  //
+  f.clear();  f.push_back(29); f.push_back(1);  f.push_back(15); f.push_back(6);  m[29] = f;  //
+  f.clear();  f.push_back(30); f.push_back(1);  f.push_back(29); f.push_back(23); m[30] = f;  //
+  f.clear();  f.push_back(31); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[31] = f;  //
+  f.clear();  f.push_back(32); f.push_back(31); f.push_back(4);  f.push_back(5);  m[32] = f;  //
+  f.clear();  f.push_back(33); f.push_back(6);  f.push_back(15); f.push_back(1);  m[33] = f;  //
   return m;
 }
 
@@ -157,7 +158,7 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   vcl_map<unsigned char, vcl_vector<float> > m;
   vcl_vector<float> f(4, 0.0f);
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(1.0f);  m[0] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.1f);  f.push_back(0.1f);  f.push_back(0.1f);  m[1] = f; // 
+  f.clear();  f.push_back(1.0f);  f.push_back(0.1f);  f.push_back(0.1f);  f.push_back(0.1f);  m[1] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.5f);  f.push_back(0.4f);  f.push_back(0.1f);  m[2] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.2f);  f.push_back(0.2f);  f.push_back(0.1f);  m[3] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.1f);  m[4] = f; //
@@ -201,7 +202,7 @@ void volm_fallback_label::print_fallback_table()
   for (vcl_map<unsigned char, vcl_vector<unsigned char> >::iterator iter = fallback_id.begin(); iter != fallback_id.end(); iter++) {
     vcl_cout << volm_label_table::land_string(iter->first) << " (" << (int)iter->first << "):\t";
     for (unsigned k = 0; k < iter->second.size(); k++) {
-      vcl_cout << volm_label_table::land_string(iter->second[k]) << "(" << (int)iter->second[k] << ", w: " << fallback_weight[iter->first][k] << ")\t";
+      vcl_cout << volm_label_table::land_string(iter->second[k]) << '(' << (int)iter->second[k] << ", w: " << fallback_weight[iter->first][k] << ")\t";
     }
     vcl_cout << '\n';
   }
@@ -220,12 +221,14 @@ vcl_string volm_label_table::land_string(unsigned char id)
 
 void volm_io_extract_values(unsigned char combined_value, unsigned char& orientation_value, unsigned char& label_value)
 {
-  /*MOG_TYPE current = aux_args.label_data[data_ptr];
+#if 0
+  MOG_TYPE current = aux_args.label_data[data_ptr];
   if (current >= 2)  // 0 is invalid, 1 is horizontal, 2 and up are vertical
     current = 2;     // make all types of vertical 2, so we have 3 values as orientation
   current << 6;      // shift 6 bits to the left, so upper 2 bits are orientation bits
   current += (MOG_TYPE)aux_args.label;   // add the land type, so the lower 6 bits will represent the land type
-  aux_args.label_data[data_ptr] = current;*/
+  aux_args.label_data[data_ptr] = current;
+#endif // 0
 
   orientation_value = combined_value >> 6;
   label_value = combined_value - (orientation_value << 6);
@@ -241,10 +244,11 @@ bool volm_attributes::contains(vcl_string name)
     return true;
   return false;
 }
+
 unsigned char volm_label_table::get_id_closest_name(vcl_string name)
 {
   for (vcl_map<int, volm_attributes >::iterator iter = land_id.begin(); iter != land_id.end(); iter++) {
-    if (iter->second.contains(name)) 
+    if (iter->second.contains(name))
       return iter->first;
   }
   return volm_label_table::INVALID;
@@ -560,7 +564,12 @@ bool volm_rationale::write_top_matches(vcl_multiset<vcl_pair<float, volm_rationa
   vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >::iterator iter;
   ofs << top_matches.size() << vcl_endl;
   for (iter = top_matches.begin(); iter != top_matches.end(); iter++) {
-    ofs << iter->first << ' ' << iter->second.lat << ' ' << iter->second.lon << ' ' << iter->second.elev << ' ' << iter->second.index_id << ' ' << iter->second.cam_id << '\n'
+    ofs << iter->first
+        << ' ' << iter->second.lat
+        << ' ' << iter->second.lon
+        << ' ' << iter->second.elev
+        << ' ' << iter->second.index_id
+        << ' ' << iter->second.cam_id << '\n'
         << iter->second.index_file << '\n'
         << iter->second.score_file << vcl_endl;
   }
@@ -572,7 +581,7 @@ bool volm_rationale::read_top_matches(vcl_multiset<vcl_pair<float, volm_rational
 {
   vcl_ifstream ifs(filename.c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << " cannot open: " << filename << vcl_endl;
+    vcl_cerr << " cannot open: " << filename << '\n';
     return false;
   }
   unsigned cnt = 0;
@@ -679,7 +688,8 @@ int volm_io::read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<d
     ifs >> lat; ifs >> lon; ifs >> elev;
     ifs >> type;
     vgl_point_3d<double> pt(lon, lat, elev);
-    samples.push_back(vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> >(pt, vcl_pair<vcl_string, vcl_string>(name, type) ) );
+    samples.push_back(vcl_pair<vgl_point_3d<double>,
+                      vcl_pair<vcl_string, vcl_string> >(pt, vcl_pair<vcl_string, vcl_string>(name, type) ) );
   }
   ifs.close();
   return cnt;
@@ -713,12 +723,14 @@ void volm_weight::read_weight(vcl_vector<volm_weight>& weights, vcl_string const
   vcl_ifstream ifs(file_name.c_str());
   vcl_string dummy;
   vcl_getline(ifs, dummy); vcl_getline(ifs, dummy); vcl_getline(ifs, dummy); vcl_getline(ifs, dummy);
-  
+
   vcl_string w_typ;
   float w_ori, w_lnd, w_dst, w_ord, w_obj;
-  while( !ifs.eof()) {
+  while ( !ifs.eof()) {
     ifs >> dummy; ifs >> w_typ, ifs >> w_ori; ifs >> w_lnd; ifs >> w_dst; ifs >> w_ord; ifs >> w_obj;
-    //vcl_cout << " " << w_typ << " " << w_ori << " " << w_lnd << " " << w_dst << " " << w_ord << " " << w_obj << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << ' ' << w_typ << ' ' << w_ori << ' ' << w_lnd << ' ' << w_dst << ' ' << w_ord << ' ' << w_obj << vcl_endl;
+#endif
     weights.push_back(volm_weight(w_typ, w_ori, w_lnd, w_ord, w_dst, w_obj));
   }
 }
@@ -770,16 +782,18 @@ void volm_io_expt_params::read_params(vcl_string params_file)
   ifs >> dummy; ifs >> top_angle;   vcl_cout << dummy << ' ' << top_angle << ' ';
   ifs >> dummy; ifs >> bottom_angle;vcl_cout << dummy << ' ' << bottom_angle << '\n';
 }
-bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data){
+
+bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data)
+{
   vcl_ifstream is(path.c_str());
-  if(!is.is_open())
+  if (!is.is_open())
     return false;
   int nrays;
   is >> nrays;
-  if(nrays <= 0)
+  if (nrays <= 0)
     return false;
   data.resize(nrays);
-  for(int i = 0; i< nrays; ++i)
+  for (int i = 0; i< nrays; ++i)
     is >> data[i];
   return true;
 }
@@ -791,7 +805,7 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygo
   vcl_ifstream ifs(file.c_str());
   if (!ifs.is_open())
     return false;
-  
+
   while (!ifs.eof()) {
     // each line is one building
     double height, volume, area, confidence, cent_lon, cent_lat, lon, lat;
@@ -799,10 +813,10 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygo
     ifs.getline(buffer, 10000);
     vcl_string temp_buf(buffer);
     if (ifs.eof()) break;
-    
+
     char *tok = vcl_strtok(buffer, ",");
     vcl_stringstream th(tok); th >> height;
-    
+
     tok = vcl_strtok(NULL, ","); // tokenize the remaining string
     vcl_stringstream tv(tok); tv >> volume;
 
@@ -819,13 +833,13 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygo
     vcl_stringstream tcla(tok); tcla >> cent_lat;
 
     vgl_point_2d<double> cent_pt(cent_lon, cent_lat);
-    
+
     vgl_polygon<double> poly(1);
-    tok = vcl_strtok(NULL, ",");  
+    tok = vcl_strtok(NULL, ",");
     while (tok != NULL) {
       vcl_stringstream tl(tok);
       tl >> lon;
-      
+
       tok = vcl_strtok(NULL, ",");
       vcl_stringstream tlat(tok);
       tlat >> lat;
@@ -846,7 +860,7 @@ bool volm_io::read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<do
   vcl_ifstream ifs(file.c_str());
   if (!ifs.is_open())
     return false;
-  
+
   while (!ifs.eof()) {
     // each line is one object
     vcl_string name, type;
@@ -855,10 +869,10 @@ bool volm_io::read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<do
     ifs.getline(buffer, 10000);
     vcl_string temp_buf(buffer);
     if (ifs.eof()) break;
-    
+
     char *tok = vcl_strtok(buffer, ",");
     vcl_stringstream th(tok); th >> name;
-    
+
     tok = vcl_strtok(NULL, ","); // tokenize the remaining string
     vcl_stringstream tv(tok); tv >> lon;
 
@@ -872,7 +886,8 @@ bool volm_io::read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<do
 
     // find its label code
     int label = 0;
-    for (vcl_map<int, volm_attributes >::iterator iter = volm_label_table::land_id.begin(); iter != volm_label_table::land_id.end(); iter++)
+    for (vcl_map<int, volm_attributes >::iterator iter = volm_label_table::land_id.begin();
+         iter != volm_label_table::land_id.end(); ++iter)
       if (iter->second.name_.compare(type) == 0)
         label = iter->first;
 
@@ -893,6 +908,7 @@ bool volm_io::write_sme_kml(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<do
   bkml_write::close_document(ofs);
   return true;
 }
+
 bool volm_io::write_sme_kml_type(vcl_string file, vcl_string type_name, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects)
 {
   vcl_ofstream ofs(file.c_str());

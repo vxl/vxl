@@ -147,7 +147,9 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   float buffer_capacity = pro.get_input<float>(i++);
 
   volm_spherical_container_sptr sph2 = new volm_spherical_container(params.solid_angle,params.vmin,params.dmax);
-  vcl_cout << "number of depth intervals in container: " << sph2->get_depth_offset_map().size() << " with solid angle: " << params.solid_angle << " vmin: " << params.vmin << " dmax: " << params.dmax << vcl_endl;
+  vcl_cout << "number of depth intervals in container: " << sph2->get_depth_offset_map().size()
+           << " with solid angle: " << params.solid_angle
+           << " vmin: " << params.vmin << " dmax: " << params.dmax << vcl_endl;
 
   //: read the location hypotheses
   if (!vul_file::exists(hyp_file)) {
@@ -158,14 +160,14 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   volm_loc_hyp hyp(hyp_file);
   vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file << vcl_endl;
 
-  // read spherical shell container 
+  // read spherical shell container
   vsl_b_ifstream ifs(ray_file);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
   sph_shell->b_read(ifs);
   ifs.close();
 
   params.layer_size = (unsigned)sph_shell->get_container_size();
-  int layer_size = (int)params.layer_size; 
+  int layer_size = (int)params.layer_size;
 
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, buffer_capacity);
   if (!ind->initialize_write(index_file)) {
@@ -253,8 +255,12 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   unsigned indexed_cnt = 0;
   while (hyp.get_next(params.start, params.skip, h_pt))
   {
-    //vcl_cout << "Processing hypothesis: " << hi << " x: " << hyp->locs_[hi].x() << " y: " << hyp->locs_[hi].y() << " z: " << hyp->locs_[hi].z() << vcl_endl;
-    //vcl_cout << "Processing hypothesis: " << hyp.current_-skip << " x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "Processing hypothesis: " << hi
+             << " x: " << hyp->locs_[hi].x() << " y: " << hyp->locs_[hi].y() << " z: " << hyp->locs_[hi].z() << '\n'
+             << "Processing hypothesis: " << hyp.current_-skip
+             << " x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
+#endif
     if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << '.';
     double lx, ly, lz;
     lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
@@ -295,7 +301,8 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     if (!scene->block_contains(local_h_pt_d, curr_block, local))
     {
       if (!scene->contains(local_h_pt_d, curr_block, local)) {
-        vcl_cerr << " Scene does not contain hypothesis: " << hyp.current_-params.skip << ' ' << local_h_pt_d << " writing empty array for it!\n";
+        vcl_cerr << " Scene does not contain hypothesis: " << hyp.current_-params.skip
+                 << ' ' << local_h_pt_d << " writing empty array for it!\n";
         vcl_vector<unsigned char> values(layer_size, 0);
         ind->add_to_index(values);
         ++indexed_cnt;
@@ -464,8 +471,8 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   delete [] ray_dirs;
 
-  vcl_cout<<"\nGPU Execute time "<<gpu_time<<" ms = " << gpu_time/(1000.0*60.0) << " secs."
-          <<"\nGPU Transfer time "<<transfer_time<<" ms = " << transfer_time/(1000.0*60.0) << " secs." << vcl_endl;
+  vcl_cout<<"\nGPU Execute time "<<gpu_time<<" ms = " << gpu_time/(1000.0*60.0) << " secs.\n"
+          <<"GPU Transfer time "<<transfer_time<<" ms = " << transfer_time/(1000.0*60.0) << " secs." << vcl_endl;
   clReleaseCommandQueue(queue);
 
   //cache size sanity check
@@ -529,7 +536,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
     ei = (unsigned)eis;
   }
 
-  // read spherical shell container 
+  // read spherical shell container
   vsl_b_ifstream ifs(ray_file);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
   sph_shell->b_read(ifs);
@@ -640,19 +647,19 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
     index_file = leaf->get_label_index_name(file_name_pre2.str(), "");
   else if (data_type == 2)
     index_file = leaf->get_label_index_name(file_name_pre2.str(), "orientation");
-  else 
+  else
     index_file = leaf->get_label_index_name(file_name_pre2.str(), "combined");
 
 
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
   //double radius = 1;
   //volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container(radius, params.cap_angle, params.point_angle, params.top_angle, params.bottom_angle);
-  
+
   vsl_b_ifstream ifs(ray_file);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
   sph_shell->b_read(ifs);
   ifs.close();
-  
+
 
   ////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// visualize depth interval index //////////////////////////////
@@ -675,14 +682,17 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
     vcl_cerr << "cannot read: " << param_file << '\n';
     return false;
   }
-  /*
+#if 0
   vcl_string size_file = vul_file::strip_extension(index_file) + ".txt";
   unsigned long eis;
   params.read_size_file(size_file, eis);
   if ((unsigned long)hyp_id >= eis) {
-    vcl_cerr << " the hyp id is: " << hyp_id << " which is invalid for the index with: " << eis << " indices read from: " << size_file << '\n';
+    vcl_cerr << " the hyp id is: " << hyp_id
+             << " which is invalid for the index with: " << eis
+             << "; indices read from: " << size_file << '\n';
     return false;
-  }*/
+  }
+#endif // 0
 
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, 1);
   if (!ind->initialize_read(index_file)) {
@@ -696,7 +706,9 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   ind->get_next(values);  // this one is the hyp_id'th one
 
   vcl_string prefix = vul_file::strip_extension(index_file);
-  vcl_stringstream str; str << prefix << "_hyp_" << leaf->hyps_->locs_[hyp_id].y() << '_' << leaf->hyps_->locs_[hyp_id].x() << '_' << leaf->hyps_->locs_[hyp_id].z();
+  vcl_stringstream str;
+  str << prefix << "_hyp_" << leaf->hyps_->locs_[hyp_id].y()
+      << '_' << leaf->hyps_->locs_[hyp_id].x() << '_' << leaf->hyps_->locs_[hyp_id].z();
 
   vcl_string txt_name = str.str() + ".txt";
   vcl_ofstream ofs(txt_name.c_str());
@@ -718,7 +730,9 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   else {
    vil_image_view<vil_rgb<vxl_byte> > img_orientation;
    sph_shell->panaroma_images_from_combined(img_orientation, img, values);
-   vcl_stringstream str; str << prefix << "_orientation_hyp_" << leaf->hyps_->locs_[hyp_id].y() << '_' << leaf->hyps_->locs_[hyp_id].x() << '_' << leaf->hyps_->locs_[hyp_id].z();
+   vcl_stringstream str;
+   str << prefix << "_orientation_hyp_" << leaf->hyps_->locs_[hyp_id].y()
+       << '_' << leaf->hyps_->locs_[hyp_id].x() << '_' << leaf->hyps_->locs_[hyp_id].z();
    vcl_string img_name = str.str() + ".png";
    vcl_cout << "saving image to: " << img_name << vcl_endl;
    vil_save(img_orientation, img_name.c_str());
