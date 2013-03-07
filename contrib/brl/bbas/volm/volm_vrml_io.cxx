@@ -1,4 +1,4 @@
-#include <volm/volm_vrml_io.h>
+#include "volm_vrml_io.h"
 
 void volm_vrml_io::display_spherical_region_by_attrbute(vcl_ostream& str ,
                                                         volm_spherical_region & region,
@@ -10,9 +10,10 @@ void volm_vrml_io::display_spherical_region_by_attrbute(vcl_ostream& str ,
     unsigned char val;
     if (!region.attribute_value(att,val))
         return;
-    r = color_codes[val%8][0];
-    g = color_codes[val%8][1];
-    b = color_codes[val%8][2];
+
+    r = volm_vrml_io_data::color_codes[val%8][0];
+    g = volm_vrml_io_data::color_codes[val%8][1];
+    b = volm_vrml_io_data::color_codes[val%8][2];
 
     region.bbox_ref().display_box(str,r,g,b,tol,factor);
 }
