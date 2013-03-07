@@ -178,14 +178,17 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
       img(ii,jj).g = 0;
       img(ii,jj).b = 255;
     }
-    else if (volm_label_table::land_id.find((int)values[i]) == volm_label_table::land_id.end()) {
+    /*else if (volm_label_table::land_id.find((int)values[i]) == volm_label_table::land_id.end()) {
       vcl_cerr << "cannot find this value: " << (int)values[i] << " in the color table!\n";
       img(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
     }
     else
-      img(ii,jj) = volm_label_table::land_id[(int)values[i]].color_;
+      img(ii,jj) = volm_label_table::land_id[(int)values[i]].color_;*/
+    else 
+      img(ii,jj) = volm_label_table::get_color(values[i]); // returns invalid color if it cannot find this id
   }
 }
+
 
 void volm_spherical_shell_container::panaroma_img_orientations(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
 {
@@ -215,6 +218,52 @@ void volm_spherical_shell_container::panaroma_img_orientations(vil_image_view<vi
     }
     else
       img(ii,jj) = volm_orient_table::ori_index_colors[(int)values[i]];
+  }
+}
+void volm_spherical_shell_container::panaroma_images_from_combined(vil_image_view<vil_rgb<vxl_byte> >& img_orientation, vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values)
+{
+  assert(values.size() == usph_->size());
+  vcl_vector<vsph_sph_point_3d> sph_pts = this->sph_points();
+  img.set_size(360, 180);
+  img_orientation.set_size(360, 180);
+  img.fill(127);
+  img_orientation.fill(127);
+  for (unsigned i = 0; i < sph_pts.size(); i++) {
+    vsph_sph_point_3d pt = sph_pts[i];
+    unsigned ii = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.phi_)*vnl_math::deg_per_rad+0.5);
+    unsigned jj = (unsigned)vcl_floor(vnl_math::angle_0_to_2pi(pt.theta_)*vnl_math::deg_per_rad+0.5);
+    if (ii >= img.ni() || jj >= img.nj()) // cannot be negative since unsigned ...
+      continue;
+    vcl_cout << "(" << (int)values[i] << ", ";
+    if (values[i] == 253) { // invalid
+      img(ii,jj).r = 255;
+      img(ii,jj).g = 0;
+      img(ii,jj).b = 0;
+      img_orientation(ii,jj).r = 255;
+      img_orientation(ii,jj).g = 0;
+      img_orientation(ii,jj).b = 0;
+    }
+    else if (values[i] == 254) { // sky
+      img(ii,jj).r = 0;
+      img(ii,jj).g = 0;
+      img(ii,jj).b = 255;
+      img_orientation(ii,jj).r = 0;
+      img_orientation(ii,jj).g = 0;
+      img_orientation(ii,jj).b = 255;
+    }
+    else {
+      unsigned char orientation_value, label_value;
+      volm_io_extract_values(values[i], orientation_value, label_value);
+      vcl_cout << (int)orientation_value << ", " << (int)label_value << ") ";
+
+      if (volm_orient_table::ori_index_colors.find((int)orientation_value) == volm_orient_table::ori_index_colors.end()) {
+        vcl_cerr << "cannot find this value: " << (int)orientation_value << " in the color table!\n";
+        img_orientation(ii,jj) = vil_rgb<vxl_byte>(255, 0, 0);
+      } else
+        img_orientation(ii,jj) = volm_orient_table::ori_index_colors[(int)orientation_value];
+
+      img(ii,jj) = volm_label_table::get_color(label_value); // returns invalid color if it cannot find this id
+    }
   }
 }
 

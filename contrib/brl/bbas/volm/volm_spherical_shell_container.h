@@ -73,6 +73,7 @@ class volm_spherical_shell_container : public vbl_ref_count
   void panaroma_img(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
   void panaroma_img_class_labels(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
   void panaroma_img_orientations(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
+  void panaroma_images_from_combined(vil_image_view<vil_rgb<vxl_byte> >& img_orientation, vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
 
   // ===========  binary I/O ================
 
