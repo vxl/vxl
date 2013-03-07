@@ -17,6 +17,7 @@
 #include <bbas/volm/volm_geo_index.h>
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 #include <vil/vil_save.h>
 #include <bkml/bkml_write.h>
 
@@ -637,8 +638,10 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
     index_file = leaf->get_index_name(file_name_pre2.str());
   else if (data_type == 1)
     index_file = leaf->get_label_index_name(file_name_pre2.str(), "");
-  else
+  else if (data_type == 2)
     index_file = leaf->get_label_index_name(file_name_pre2.str(), "orientation");
+  else 
+    index_file = leaf->get_label_index_name(file_name_pre2.str(), "combined");
 
 
   // construct spherical shell container, radius is always 1 cause points will be used to compute ray directions
@@ -655,19 +658,31 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   ////////////////////////// visualize depth interval index //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////
 
-  vcl_string param_file = vul_file::strip_extension(index_file) + ".params";
+  vcl_string param_file;
+  if (data_type < 3)
+    param_file = vul_file::strip_extension(index_file) + ".params";
+  else {
+    vcl_string dir_name = vul_file::dirname(index_file);
+    vcl_string in_dir = dir_name + "/*.params";
+    for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
+      param_file = fn();
+      vcl_cout << "reading from params file: " << param_file << '\n';
+      break;
+    }
+  }
   boxm2_volm_wr3db_index_params params;
   if (!params.read_params_file(param_file)) {
     vcl_cerr << "cannot read: " << param_file << '\n';
     return false;
   }
+  /*
   vcl_string size_file = vul_file::strip_extension(index_file) + ".txt";
   unsigned long eis;
   params.read_size_file(size_file, eis);
   if ((unsigned long)hyp_id >= eis) {
     vcl_cerr << " the hyp id is: " << hyp_id << " which is invalid for the index with: " << eis << " indices read from: " << size_file << '\n';
     return false;
-  }
+  }*/
 
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, 1);
   if (!ind->initialize_read(index_file)) {
@@ -698,8 +713,16 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
    sph_shell->panaroma_img(img, values);
   else if (data_type == 1) // visualize label index
    sph_shell->panaroma_img_class_labels(img, values);
-  else // visualize orientation label index
+  else if (data_type == 2) // visualize orientation label index
    sph_shell->panaroma_img_orientations(img, values);
+  else {
+   vil_image_view<vil_rgb<vxl_byte> > img_orientation;
+   sph_shell->panaroma_images_from_combined(img_orientation, img, values);
+   vcl_stringstream str; str << prefix << "_orientation_hyp_" << leaf->hyps_->locs_[hyp_id].y() << '_' << leaf->hyps_->locs_[hyp_id].x() << '_' << leaf->hyps_->locs_[hyp_id].z();
+   vcl_string img_name = str.str() + ".png";
+   vcl_cout << "saving image to: " << img_name << vcl_endl;
+   vil_save(img_orientation, img_name.c_str());
+  }
 
   vcl_string img_name = str.str() + ".png";
   vcl_cout << "saving image to: " << img_name << vcl_endl;
