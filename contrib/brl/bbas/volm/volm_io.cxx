@@ -99,6 +99,18 @@ vcl_map<vcl_string, depth_map_region::orientation> volm_orient_table::ori_id = c
 vcl_map<int, volm_attributes > volm_label_table::land_id = create_label_map();
 vcl_map<int, vil_rgb<vxl_byte> > volm_orient_table::ori_index_colors = create_orient_colors();
 
+// assume that ids are ordered from 0 to n so the number of labels is n+1
+unsigned volm_label_table::compute_number_of_labels()
+{
+  unsigned max = 0;
+  for (vcl_map<int, volm_attributes >::iterator it = land_id.begin(); it != land_id.end(); it++) {
+    if (it->second.id_ > max)
+      max = it->second.id_;
+  }
+  return max+1;
+}
+unsigned volm_label_table::number_of_labels_ = compute_number_of_labels();
+
 vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
 {
   vcl_map<unsigned char, vcl_vector<unsigned char> > m;
@@ -150,7 +162,7 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   f.clear();  f.push_back(1.0f);  f.push_back(0.2f);  f.push_back(0.2f);  f.push_back(0.1f);  m[3] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.1f);  m[4] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(1.0f);  f.push_back(1.0f);  m[5] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.7f);  f.push_back(1.0f);  m[6] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.5f);  f.push_back(0.7f);  f.push_back(1.0f);  m[6] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.8f);  m[7] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.1f);  m[8] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.1f);  m[9] = f; //
@@ -173,7 +185,7 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.9f);  f.push_back(0.8f);  m[26] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.6f);  f.push_back(0.6f);  m[27] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.8f);  f.push_back(0.5f);  m[28] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.7f);  f.push_back(0.7f);  m[29] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.1f);  f.push_back(0.5f);  m[29] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.6f);  m[30] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.8f);  f.push_back(0.6f);  m[31] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.8f);  f.push_back(0.8f);  m[32] = f; //
@@ -206,6 +218,38 @@ vcl_string volm_label_table::land_string(unsigned char id)
   return "invalid";
 }
 
+void volm_io_extract_values(unsigned char combined_value, unsigned char& orientation_value, unsigned char& label_value)
+{
+  /*MOG_TYPE current = aux_args.label_data[data_ptr];
+  if (current >= 2)  // 0 is invalid, 1 is horizontal, 2 and up are vertical
+    current = 2;     // make all types of vertical 2, so we have 3 values as orientation
+  current << 6;      // shift 6 bits to the left, so upper 2 bits are orientation bits
+  current += (MOG_TYPE)aux_args.label;   // add the land type, so the lower 6 bits will represent the land type
+  aux_args.label_data[data_ptr] = current;*/
+
+  orientation_value = combined_value >> 6;
+  label_value = combined_value - (orientation_value << 6);
+}
+
+bool volm_attributes::contains(vcl_string name)
+{
+  unsigned found = name_.find(name);
+  if (found != vcl_string::npos)
+    return true;
+  found = name.find(name_);
+  if (found != vcl_string::npos)
+    return true;
+  return false;
+}
+unsigned char volm_label_table::get_id_closest_name(vcl_string name)
+{
+  for (vcl_map<int, volm_attributes >::iterator iter = land_id.begin(); iter != land_id.end(); iter++) {
+    if (iter->second.contains(name)) 
+      return iter->first;
+  }
+  return volm_label_table::INVALID;
+}
+
 //: pass the id of the class labeled in the query (volm_attribute.id_)
 vil_rgb<vxl_byte> volm_label_table::get_color(unsigned char id)
 {
@@ -215,7 +259,7 @@ vil_rgb<vxl_byte> volm_label_table::get_color(unsigned char id)
       return mit->second.color_;
     }
   }
-  vcl_cerr << "cannot find id: " << id << " (and thus color) in the land class table, returning invalid color!\n";
+  vcl_cerr << "cannot find id: " << (int)id << " (and thus color) in the land class table, returning invalid color!\n";
   return vil_rgb<vxl_byte>(255,0,0); // default invalid color
 }
 

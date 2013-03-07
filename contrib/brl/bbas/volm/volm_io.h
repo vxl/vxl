@@ -36,6 +36,7 @@ class volm_attributes
  public:
   volm_attributes() : id_(0), name_(""), color_(vil_rgb<vxl_byte>(0,0,0)) {}
   volm_attributes(unsigned char id, vcl_string name, vil_rgb<vxl_byte> color): id_(id), name_(name), color_(color) {}
+  bool contains(vcl_string name);
   unsigned char id_;
   vcl_string name_;
   vil_rgb<vxl_byte> color_;
@@ -44,11 +45,14 @@ class volm_attributes
 class volm_label_table
 {
  public:
+  static unsigned number_of_labels_;
   enum label_values {INVALID = 0, SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, BUILDING = 100, PIER = 114};
   static vcl_map<int, volm_attributes > land_id ;
   static vcl_string land_string(unsigned char id);
   //: pass the id of the class labeled in the query (volm_attribute.id_)
   static vil_rgb<vxl_byte> get_color(unsigned char id);
+  static unsigned char get_id_closest_name(vcl_string name);
+  static unsigned compute_number_of_labels();
 };
 
 //: A class to hold the fallback categories for the labelled landtype id
@@ -75,6 +79,8 @@ class volm_fallback_label
   }
   static void print_fallback_table();
 };
+
+void volm_io_extract_values(unsigned char combined_value, unsigned char& orientation_value, unsigned char& label_value);
 
 class volm_io_expt_params
 {
