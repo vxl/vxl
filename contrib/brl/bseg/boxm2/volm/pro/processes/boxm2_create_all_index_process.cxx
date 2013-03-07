@@ -1,15 +1,15 @@
-// This is brl/bseg/boxm2/volm/pro/processes/boxm2_create_label_index_process.cxx
+// This is brl/bseg/boxm2/volm/pro/processes/boxm2_create_all_index_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for creating a depth interval, orientation and class label indices for each location hypothesis of a scene simultaneously, 
-//         all the info is compressed into a single byte and saved
-//         uses volm_geo_index to access location hypotheses and save index files
-//         This process assumes that all the hypotheses in the input set are in the same UTM zone of the world, hypo set generation makes sure the zone is the same for all
+// \brief  A process for creating a depth interval, orientation and class label indices for each location hypothesis of a scene simultaneously.
+//  All the info is compressed into a single byte and saved.
+//  Uses volm_geo_index to access location hypotheses and save index files.
+//  This process assumes that all the hypotheses in the input set are in the same UTM zone of the world,
+//  hypo set generation makes sure the zone is the same for all
 //
 // \author Ozge C. Ozcanli
 // \date Oct 21, 2012
-
-#include <bprb/bprb_func_process.h>
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
@@ -19,8 +19,6 @@
 #include <bbas/volm/volm_loc_hyp.h>
 #include <bbas/volm/volm_geo_index.h>
 #include <vul/vul_timer.h>
-#include <vul/vul_file.h>
-#include <vil/vil_save.h>
 #include <bkml/bkml_write.h>
 
 #include <vcl_fstream.h>
@@ -97,8 +95,9 @@ namespace boxm2_create_all_index_process_globals
 
     //create normalize image kernel
     bocl_kernel * norm_kernel_depth=new bocl_kernel();
-    norm_kernel_depth->create_kernel(&device->context(),device->device_id(), src_paths2, "normalize_index_depth_kernel", options2,
-                                    "normalize_index_depth_kernel"); //kernel identifier (for error checking)
+    norm_kernel_depth->create_kernel(&device->context(),device->device_id(), src_paths2,
+                                     "normalize_index_depth_kernel", options2,
+                                     "normalize_index_depth_kernel"); //kernel identifier (for error checking)
 
     vec_kernels.push_back(norm_kernel_depth);
 
@@ -356,7 +355,7 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
           ind->add_to_index(values);
           ind2->add_to_index(values);
           ++indexed_cnt;
-          
+
           continue;
         }
       }
@@ -406,7 +405,7 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
       bocl_mem* t_infinity=new bocl_mem(device->context(),t_infinity_buff,layer_size*sizeof(float),"t infinity buffer");
       t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-   
+
       vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
       if (!(ord_iter != order_cache.end())) {
         order_cache[curr_block] =  boxm2_util::order_about_a_block(scene, curr_block, dmax);
@@ -501,7 +500,6 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
         }
         gpu_time += kern->exec_time();
         kern->clear_args();
-
       }
 
       if (vis_blocks.size() != 0)  // normalize
@@ -544,13 +542,13 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
         status = clFinish(queue);
         check_val(status, MEM_FAILURE, "read to output buffers FAILED: " + error_to_string(status));
       }
-    #if 0  //---> run on the world and print these values, then fix values array to reflect class labels and visualize
+#if 0  //---> run on the world and print these values, then fix values array to reflect class labels and visualize
       vcl_cout << "exp depths after normalization:\n";
       for (unsigned i = 0; i < layer_size; ++i) {
         vcl_cout << buff[i] << " (" << vis_buff[i] << ") ";
       }
       vcl_cout << vcl_endl;
-    #endif
+#endif
 
       // find each depth interval using spherical container
       vcl_vector<unsigned char> values2, values;
@@ -560,28 +558,29 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
           if (buff2[i] > 0) {  //  if the ray goes into the world vis stays 1 but depth stays 0 too, so don't confuse that with sky
             values2.push_back(sky_val);
             values.push_back(sky_val);
-          } else {
+          }
+          else {
               values2.push_back(invalid_val); // pass an invalid depth interval, not a valid occupied surface, vis = 1 but depth = 0
               values.push_back(invalid_val);
           }
         }
         else {
-          // depth values are assumed to be in the interval 
+          // depth values are assumed to be in the interval
           values2.push_back(sph2->get_depth_interval((double)buff2[i]));
 
           // these are values in the interval [0-60]
           values.push_back((unsigned char)buff[i]);
         }
       }
-         
-    #if 0
+
+#if 0
       vcl_cout << "values array:\n";
       for (unsigned i = 0; i < layer_size; i++) {
         vcl_cout << (int)values[i] << ' ';
       }
       vcl_cout << vcl_endl;
       sph_shell->draw_template("./test.vrml", values, 254);
-    #endif
+#endif
       // add to index
       ind->add_to_index(values);
       ind2->add_to_index(values2);
