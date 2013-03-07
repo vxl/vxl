@@ -18,4 +18,5 @@ void boxm2_volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_index_process2, "boxm2IndexHypothesesProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_label_index_process, "boxm2IndexLabelDataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_visualize_index_process2, "boxm2VisualizeHypIndexProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_all_index_process, "boxm2IndexLabelCombinedDataProcess");
 }
