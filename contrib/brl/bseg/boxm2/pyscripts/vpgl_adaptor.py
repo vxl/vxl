@@ -46,6 +46,25 @@ def create_perspective_camera( scale, ppoint, center, look_pt,up ) :
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam;
+def create_perspective_camera( scale, ppoint, center, look_pt ) :
+  boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess");
+  boxm2_batch.set_input_double(0, scale[0]);
+  boxm2_batch.set_input_double(1, ppoint[0]);
+  boxm2_batch.set_input_double(2, scale[1]);
+  boxm2_batch.set_input_double(3, ppoint[1]);
+  boxm2_batch.set_input_double(4, center[0]);
+  boxm2_batch.set_input_double(5, center[1]);
+  boxm2_batch.set_input_double(6, center[2]);
+  boxm2_batch.set_input_double(7, look_pt[0]);
+  boxm2_batch.set_input_double(8, look_pt[1]);
+  boxm2_batch.set_input_double(9, look_pt[2]);
+  # boxm2_batch.set_input_double(10, up[0]);
+  # boxm2_batch.set_input_double(11, up[1]);
+  # boxm2_batch.set_input_double(12, up[2]);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cam = dbvalue(id,type);
+  return cam;
   
 def create_perspective_camera_from_kml(ni, nj, right_fov, top_fov, altitude, heading, tilt, roll, cent_x, cent_y) :
   boxm2_batch.init_process("vpglCreatePerspCameraFromKMLProcess");
@@ -549,4 +568,5 @@ def convert_perspective_to_nvm(cams_dir,imgs_dir, output_nvm):
     boxm2_batch.set_input_string(1, imgs_dir);
     boxm2_batch.set_input_string(2, output_nvm);
     return boxm2_batch.run_process();
+
 
