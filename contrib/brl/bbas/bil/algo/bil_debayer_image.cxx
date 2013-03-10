@@ -1,27 +1,43 @@
 #include <bil/algo/bil_debayer_image.h>
 
-static bool isodd(unsigned int x)
+inline static bool isodd(unsigned int x)
 {
   return x % 2 != 0;
+}
+
+inline static bool iseven(unsigned int x)
+{
+  return x % 2 == 0;
+}
+
+inline static vxl_byte avg(vxl_byte a, vxl_byte b)
+{
+  return ((int)a+(int)b)/2;
+}
+
+inline static vxl_byte avg(vxl_byte a, vxl_byte b, vxl_byte c, vxl_byte d)
+{
+  return ((int)a+(int)b+(int)c+(int)d)/4;
 }
 
 void
 bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image_view<vil_rgb<vxl_byte> > * debayer_img)
 {
   vil_image_view<vil_rgb<vxl_byte> >out_img(in_img->ni(),in_img->nj());
-  if (vil_image_view<unsigned char>* in_img_byte= dynamic_cast<vil_image_view<unsigned char>* > (in_img.ptr()))
+  if (vil_image_view<vxl_byte>* in_img_byte= dynamic_cast<vil_image_view<vxl_byte>* > (in_img.ptr()))
   {
+    vxl_byte r, g, b;
     for (unsigned k = 0 ; k < in_img_byte->ni(); k++)
     {
       for (unsigned l = 0 ; l < in_img_byte->nj(); l++)
       {
-        unsigned char  r=0,g=0,b = 0 ;
-        if (k % 2 == 0 && l % 2==1)
-          b=(*in_img_byte)(k,l);
-        else if (k % 2 == 1 && l % 2==0)
-          r=(*in_img_byte)(k,l);
+        r=g=b=0;
+        if (iseven(k) && isodd(l))
+          b = (*in_img_byte)(k,l);
+        else if (isodd(k) && iseven(l))
+          r = (*in_img_byte)(k,l);
         else
-          g =(*in_img_byte)(k,l);
+          g = (*in_img_byte)(k,l);
         out_img(k,l) = vil_rgb<vxl_byte>(r,g,b);
       }
     }
@@ -30,32 +46,33 @@ bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image
     {
       for (unsigned l = 1 ; l < in_img_byte->nj()-1; l++)
       {
-        unsigned char r = out_img(k,l).R();
-        unsigned char g = out_img(k,l).G();
-        unsigned char b = out_img(k,l).B();
         //(0,0)
-        if (!isodd(k) && !isodd(l))
+        if (iseven(k) && iseven(l))
         {
-          b =((int)out_img(k,l-1).B() +(int)out_img(k,l+1).B())/2;
-          r =((int)out_img(k-1,l).R() +(int)out_img(k+1,l).R())/2;
+          r = avg(out_img(k-1,l).R(), out_img(k+1,l).R());
+          g = out_img(k,l).G();
+          b = avg(out_img(k,l-1).B(), out_img(k,l+1).B());
         }
         //(0,1)
-        if (!isodd(k) && isodd(l))
+        else if (iseven(k) && isodd(l))
         {
-          g =((int)out_img(k-1,l).G() +(int)out_img(k,l-1).G()+(int)out_img(k,l+1).G()+(int)out_img(k+1,l).G())/4;
-          r =((int)out_img(k-1,l-1).R() + (int) out_img(k+1,l-1).R()+(int) out_img(k+1,l+1).R()+ (int) out_img(k-1,l+1).R())/4;
+          r = avg(out_img(k-1,l-1).R(), out_img(k+1,l-1).R(), out_img(k+1,l+1).R(), out_img(k-1,l+1).R());
+          g = avg(out_img(k-1,l).G()  , out_img(k,l-1).G()  , out_img(k,l+1).G()  , out_img(k+1,l).G()  );
+          b = out_img(k,l).B();
         }
         //(1,0)
-        if (isodd(k) && !isodd(l))
+        else if (isodd(k) && iseven(l))
         {
-          b =((int)out_img(k-1,l-1).B() + (int) out_img(k+1,l-1).B()+(int) out_img(k+1,l+1).B()+ (int) out_img(k-1,l+1).B())/4;
-          g =((int)out_img(k-1,l).G() +(int)out_img(k,l-1).G()+(int)out_img(k,l+1).G()+(int)out_img(k+1,l).G())/4;
+          r = out_img(k,l).R();
+          g = avg(out_img(k-1,l).G()  , out_img(k,l-1).G()  , out_img(k,l+1).G()  , out_img(k+1,l).G()  );
+          b = avg(out_img(k-1,l-1).B(), out_img(k+1,l-1).B(), out_img(k+1,l+1).B(), out_img(k-1,l+1).B());
         }
         //(1,1)
-        if (isodd(k) && isodd(l))
+        else // if (isodd(k) && isodd(l))
         {
-          b =((int)out_img(k-1,l).B() +(int)out_img(k+1,l).B())/2;
-          r =((int)out_img(k,l-1).R() +(int)out_img(k,l+1).R())/2;
+          r = avg(out_img(k,l-1).R(), out_img(k,l+1).R());
+          g = out_img(k,l).G();
+          b = avg(out_img(k-1,l).B(), out_img(k+1,l).B());
         }
 
         (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
@@ -64,108 +81,65 @@ bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image
     unsigned k = 0;
     for (unsigned l = 1 ; l < in_img_byte->nj()-1; l++)
     {
-      unsigned char r = out_img(k,l).R();
-      unsigned char g = out_img(k,l).G();
-      unsigned char b = out_img(k,l).B();
-      if (!isodd(l))
-      {
-        b =((int)out_img(k,l-1).B() +(int)out_img(k,l+1).B())/2;
-        r =(int)out_img(k+1,l).R();
-      }
-      else
-      {
-        g =((int)out_img(k,l-1).G()+(int)out_img(k+1,l).G())/2;
-        r =((int)out_img(k+1,l-1).R()+(int)out_img(k+1,l+1).R())/2;
-      }
+      r = isodd(l)  ? avg(out_img(k+1,l-1).R(), out_img(k+1,l+1).R()) : out_img(k+1,l).R();
+      g = isodd(l)  ? avg(out_img(k,l-1).G()  , out_img(k+1,l).G())   : out_img(k,l).G();
+      b = iseven(l) ? avg(out_img(k,l-1).B()  , out_img(k,l+1).B())   : out_img(k,l).B();
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
 
     k = in_img_byte->ni()-1; // assumed to be even
     for (unsigned l = 1 ; l < in_img_byte->nj()-1; l++)
     {
-      unsigned char r = out_img(k,l).R();
-      unsigned char g = out_img(k,l).G();
-      unsigned char b = out_img(k,l).B();
-      if (!isodd(l))
-      {
-        g =((int)out_img(k,l-1).G()+(int)out_img(k-1,l).G())/2;
-        b =((int)out_img(k-1,l-1).B()+(int)out_img(k-1,l+1).B())/2;
-      }
-      else
-      {
-        b =(int)out_img(k-1,l).B();
-        r =((int)out_img(k,l-1).R()+(int)out_img(k,l+1).R())/2;
-      }
+      r = isodd(l)  ? avg(out_img(k  ,l-1).R(), out_img(k  ,l+1).R()) : out_img(k,l).R();
+      g = iseven(l) ? avg(out_img(k  ,l-1).G(), out_img(k-1,l  ).G()) : out_img(k,l).G();
+      b = iseven(l) ? avg(out_img(k-1,l-1).B(), out_img(k-1,l+1).B()) : out_img(k-1,l).B();
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
 
     unsigned l = 0;
     for (unsigned k = 1 ; k < in_img_byte->ni()-1; k++)
     {
-      unsigned char r = out_img(k,l).R();
-      unsigned char g = out_img(k,l).G();
-      unsigned char b = out_img(k,l).B();
-      if (!isodd(k))
-      {
-        b = (int)out_img(k,l+1).B() ;
-        r =((int)out_img(k-1,l).R() +(int)out_img(k+1,l).R())/2;
-      }
-      else
-      {
-        g =((int)out_img(k+1,l).G()+(int)out_img(k,l+1).G())/2;
-        b =((int)out_img(k+1,l+1).B()+(int)out_img(k-1,l+1).B())/2;
-      }
+      r = iseven(k) ? avg(out_img(k-1,l  ).R(), out_img(k+1,l  ).R()) : out_img(k,l).R();
+      g = isodd(k)  ? avg(out_img(k+1,l  ).G(), out_img(k  ,l+1).G()) : out_img(k,l).G();
+      b = isodd(k)  ? avg(out_img(k+1,l+1).B(), out_img(k-1,l+1).B()) : out_img(k,l+1).B();
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
+
     l = in_img_byte->nj()-1;
     for (unsigned k = 1 ; k < in_img_byte->ni()-1; k++)
     {
-      unsigned char r = out_img(k,l).R();
-      unsigned char g = out_img(k,l).G();
-      unsigned char b = out_img(k,l).B();
-
-      if (!isodd(k))
-      {
-        r =((int)out_img(k-1,l-1).R() +(int)out_img(k+1,l-1).R())/2;
-        g =((int)out_img(k,l-1).G() +(int)out_img(k+1,l).G())/2;
-      }
-      else
-      {
-        r =((int)out_img(k,l-1).R());
-        b =((int)out_img(k+1,l).B()+(int)out_img(k-1,l).B())/2;
-      }
+      r = iseven(k) ? avg(out_img(k-1,l-1).R(), out_img(k+1,l-1).R()) : out_img(k,l-1).R();
+      g = iseven(k) ? avg(out_img(k  ,l-1).G(), out_img(k+1,l  ).G()) : out_img(k,l).G();
+      b = isodd(k)  ? avg(out_img(k+1,l  ).B(), out_img(k-1,l  ).B()) : out_img(k,l).B();
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
 
     //// four corners
 
+    //(0,0)
     k = 0; l = 0;
-    unsigned char r = out_img(k,l).R();
-    unsigned char g = out_img(k,l).G();
-    unsigned char b = out_img(k,l).B();
-    b =(int)out_img(k,l+1).B();
-    r =(int)out_img(k+1,l).R();
+
+    r = out_img(k+1,l).R();
+    g = out_img(k  ,l).G();
+    b = out_img(k,l+1).B();
     (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
 
-    k = 0; l = in_img_byte->nj()-1;
-    r = out_img(k,l).R();
-    g = out_img(k,l).G();
-    b = out_img(k,l).B();
+    //(1,0)
+    k = 0;
+    l = in_img_byte->nj()-1;
 
-    g =((int)out_img(k,l-1).G()+(int)out_img(k+1,l).G())/2;
-    r =(int)out_img(k+1,l-1).R();
+    r = out_img(k+1,l-1).R();
+    g = avg(out_img(k,l-1).G(), out_img(k+1,l).G());
+    b = out_img(k,l).B();
     (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
 
     //(1,1)
     k = in_img_byte->ni()-1;
     l = in_img_byte->nj()-1;
 
-    r = out_img(k,l).R();
-    g = out_img(k,l).G();
-    b = out_img(k,l).B();
-
-    b =(int)out_img(k-1,l).B();
-    r =(int)out_img(k,l-1).R();
+    r = out_img(k,l-1).R();
+    g = out_img(k,l  ).G();
+    b = out_img(k-1,l).B();
     (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
 
     //(0,1)
@@ -173,11 +147,8 @@ bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image
     l = 0;
 
     r = out_img(k,l).R();
-    g = out_img(k,l).G();
-    b = out_img(k,l).B();
-
-    b =(int)out_img(k-1,l+1).B();
-    g =((int)out_img(k,l+1).G()+(int)out_img(k-1,l).G())/2;
+    g = avg(out_img(k,l+1).G(), out_img(k-1,l).G());
+    b = out_img(k-1,l+1).B();
     (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
   }
 }
@@ -185,21 +156,21 @@ bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image
 void
 bil_debayer_image::bil_debayer_BGGR(vil_image_view_base_sptr& in_img,  vil_image_view<vil_rgb<vxl_byte> > * debayer_img)
 {
-
   vil_image_view<vil_rgb<vxl_byte> >out_img(in_img->ni(),in_img->nj());
-  if (vil_image_view<unsigned char>* in_img_byte= dynamic_cast<vil_image_view<unsigned char>* > (in_img.ptr()))
+  if (vil_image_view<vxl_byte>* in_img_byte= dynamic_cast<vil_image_view<vxl_byte>* > (in_img.ptr()))
   {
+    vxl_byte r, g, b;
     for (unsigned k = 0 ; k < in_img_byte->ni(); k++)
     {
       for (unsigned l = 0 ; l < in_img_byte->nj(); l++)
       {
-        unsigned char  r=0,g=0,b = 0 ;
-        if (k % 2 == 0 && l % 2  == 0)
-          b=(*in_img_byte)(k,l);
-        else if (k % 2 == 1 && l % 2==1)
-          r=(*in_img_byte)(k,l);
+        r=g=b=0;
+        if (iseven(k) && iseven(l))
+          b = (*in_img_byte)(k,l);
+        else if (isodd(k) && isodd(l))
+          r = (*in_img_byte)(k,l);
         else
-          g =(*in_img_byte)(k,l);
+          g = (*in_img_byte)(k,l);
         out_img(k,l) = vil_rgb<vxl_byte>(r,g,b);
       }
     }
@@ -208,32 +179,33 @@ bil_debayer_image::bil_debayer_BGGR(vil_image_view_base_sptr& in_img,  vil_image
     {
       for (unsigned l = 1 ; l < in_img_byte->nj()-1; l++)
       {
-        unsigned char r = out_img(k,l).R();
-        unsigned char g = out_img(k,l).G();
-        unsigned char b = out_img(k,l).B();
         //(0,0)
-        if (!isodd(k) && !isodd(l))
+        if (iseven(k) && iseven(l))
         {
-          g =((int)out_img(k-1,l).G() +(int)out_img(k,l-1).G()+(int)out_img(k,l+1).G()+(int)out_img(k+1,l).G())/4;
-          r =((int)out_img(k-1,l-1).R() + (int) out_img(k+1,l-1).R()+(int) out_img(k+1,l+1).R()+ (int) out_img(k-1,l+1).R())/4;
+          r = avg(out_img(k-1,l-1).R() , out_img(k+1,l-1).R(), out_img(k+1,l+1).R(),  out_img(k-1,l+1).R());
+          g = avg(out_img(k-1,l).G() , out_img(k,l-1).G(), out_img(k,l+1).G(), out_img(k+1,l).G());
+          b = out_img(k,l).B();
         }
         //(0,1)
-        if (!isodd(k) && isodd(l))
+        else if (iseven(k) && isodd(l))
         {
-          b =((int)out_img(k,l-1).B() +(int)out_img(k,l+1).B())/2;
-          r =((int)out_img(k-1,l).R() +(int)out_img(k+1,l).R())/2;
+          r = avg(out_img(k-1,l).R() , out_img(k+1,l).R());
+          g = out_img(k,l).G();
+          b = avg(out_img(k,l-1).B() , out_img(k,l+1).B());
         }
         //(1,0)
-        if (isodd(k) && !isodd(l))
+        else if (isodd(k) && iseven(l))
         {
-          b =((int)out_img(k-1,l).B() +(int)out_img(k+1,l).B())/2;
-          r =((int)out_img(k,l-1).R() +(int)out_img(k,l+1).R())/2;
+          r = avg(out_img(k,l-1).R() , out_img(k,l+1).R());
+          g = out_img(k,l).G();
+          b = avg(out_img(k-1,l).B() , out_img(k+1,l).B());
         }
         //(1,1)
-        if (isodd(k) && isodd(l))
+        else // if (isodd(k) && isodd(l))
         {
-          b =((int)out_img(k-1,l-1).B() + (int) out_img(k+1,l-1).B()+(int) out_img(k+1,l+1).B()+ (int) out_img(k-1,l+1).B())/4;
-          g =((int)out_img(k-1,l).G() +(int)out_img(k,l-1).G()+(int)out_img(k,l+1).G()+(int)out_img(k+1,l).G())/4;
+          r = out_img(k,l).R();
+          g = avg(out_img(k-1,l).G() , out_img(k,l-1).G(), out_img(k,l+1).G(), out_img(k+1,l).G());
+          b = avg(out_img(k-1,l-1).B() , out_img(k+1,l-1).B(), out_img(k+1,l+1).B(),  out_img(k-1,l+1).B());
         }
 
        (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
@@ -242,96 +214,55 @@ bil_debayer_image::bil_debayer_BGGR(vil_image_view_base_sptr& in_img,  vil_image
     unsigned k = 0;
     for (unsigned l = 1 ; l < in_img_byte->nj()-1; l++)
     {
-      unsigned char r = out_img(k,l).R();
-      unsigned char g = out_img(k,l).G();
-      unsigned char b = out_img(k,l).B();
-      if (!isodd(l))
-      {
-        g =((int)out_img(k,l-1).G()+(int)out_img(k+1,l).G())/2;
-        r =((int)out_img(k+1,l-1).R()+(int)out_img(k+1,l+1).R())/2;
-      }
-      else
-      {
-        b =((int)out_img(k,l-1).B() +(int)out_img(k,l+1).B())/2;
-        r =(int)out_img(k+1,l).R();
-      }
+      r = iseven(l) ? avg(out_img(k+1,l-1).R(), out_img(k+1,l+1).R()) : out_img(k+1,l).R();
+      g = iseven(l) ? avg(out_img(k,l-1).G()  , out_img(k+1,l).G())   : out_img(k,l).G();
+      b = isodd(l)  ? avg(out_img(k,l-1).B()  , out_img(k,l+1).B())   : out_img(k,l).B();
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
 
     k = in_img_byte->ni()-1; // assumed to be even
     for (unsigned l = 1 ; l < in_img_byte->nj()-1; l++)
     {
-      unsigned char r = out_img(k,l).R();
-      unsigned char g = out_img(k,l).G();
-      unsigned char b = out_img(k,l).B();
-      if (!isodd(l))
-      {
-        b =(int)out_img(k-1,l).B();
-        r =((int)out_img(k,l-1).R()+(int)out_img(k,l+1).R())/2;
-      }
-      else
-      {
-        g =((int)out_img(k,l-1).G()+(int)out_img(k-1,l).G())/2;
-        b =((int)out_img(k-1,l-1).B()+(int)out_img(k-1,l+1).B())/2;
-      }
+      r = iseven(l) ? avg(out_img(k,l-1).R()  , out_img(k,l+1).R())   : out_img(k,l).R();
+      g = isodd(l)  ? avg(out_img(k,l-1).G()  , out_img(k-1,l).G())   : out_img(k,l).G();
+      b = isodd(l)  ? avg(out_img(k-1,l-1).B(), out_img(k-1,l+1).B()) : out_img(k-1,l).B();
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
 
     unsigned l = 0;
     for (unsigned k = 1 ; k < in_img_byte->ni()-1; k++)
     {
-      unsigned char r = out_img(k,l).R();
-      unsigned char g = out_img(k,l).G();
-      unsigned char b = out_img(k,l).B();
-      if (!isodd(k))
-      {
-        g =((int)out_img(k+1,l).G()+(int)out_img(k,l+1).G())/2;
-        r =((int)out_img(k+1,l+1).R()+(int)out_img(k-1,l+1).R())/2;
-      }
-      else
-      {
-        b =((int)out_img(k-1,l).B() +(int)out_img(k+1,l).B())/2;
-        r =(int)out_img(k,l+1).R();
-      }
+      r = iseven(k) ? avg(out_img(k+1,l+1).R(), out_img(k-1,l+1).R()) : out_img(k,l+1).R();
+      g = iseven(k) ? avg(out_img(k+1,l).G()  , out_img(k,l+1).G())   : out_img(k,l).G();
+      b = isodd(k)  ? avg(out_img(k-1,l).B()  , out_img(k+1,l).B())   : out_img(k,l).B();
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
     l = in_img_byte->nj()-1;
     for (unsigned k = 1 ; k < in_img_byte->ni()-1; k++)
     {
-      unsigned char r = out_img(k,l).R();
-      unsigned char g = out_img(k,l).G();
-      unsigned char b = out_img(k,l).B();
-
-      if (!isodd(k))
-      {
-        b =(int)out_img(k,l-1).B();
-        r =((int)out_img(k-1,l).R() +(int)out_img(k+1,l).R())/2;
-      }
-      else
-      {
-        g =((int)out_img(k-1,l).G()+(int)out_img(k,l-1).G())/2;
-        b =((int)out_img(k+1,l-1).B()+(int)out_img(k-1,l-1).B())/2;
-      }
+      r = iseven(k) ? avg(out_img(k-1,l).R()  , out_img(k+1,l).R())   : out_img(k,l).R();
+      g = isodd(k)  ? avg(out_img(k-1,l).G()  , out_img(k,l-1).G())   : out_img(k,l).G();
+      b = isodd(k)  ? avg(out_img(k+1,l-1).B(), out_img(k-1,l-1).B()) : out_img(k,l-1).B();
       (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
     }
 
     // four corners
 
+    //(0,0)
     k = 0; l = 0;
-    unsigned char r = out_img(k,l).R();
-    unsigned char g = out_img(k,l).G();
-    unsigned char b = out_img(k,l).B();
-    g =((int)out_img(k+1,l).G()+(int)out_img(k,l+1).G())/2;
-    r =(int)out_img(k+1,l+1).R();
+
+    r = out_img(k+1,l+1).R();
+    g = avg(out_img(k+1,l).G(), out_img(k,l+1).G());
+    b = out_img(k,l).B();
     (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
 
-    k = 0; l = in_img_byte->nj()-1;
-    r = out_img(k,l).R();
-    g = out_img(k,l).G();
-    b = out_img(k,l).B();
+    //(1,0)
+    k = 0;
+    l = in_img_byte->nj()-1;
 
-    b =(int)out_img(k,l-1).B();
-    r =(int)out_img(k+1,l).R();
+    r = out_img(k+1,l).R();
+    g = out_img(k,l).G();
+    b = out_img(k,l-1).B();
     (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
 
     //(1,1)
@@ -339,24 +270,17 @@ bil_debayer_image::bil_debayer_BGGR(vil_image_view_base_sptr& in_img,  vil_image
     l = in_img_byte->nj()-1;
 
     r = out_img(k,l).R();
-    g = out_img(k,l).G();
-    b = out_img(k,l).B();
-
-    b =(int)out_img(k-1,l-1).B();
-    g =((int)out_img(k-1,l).G()+(int)out_img(k,l-1).G())/2;
+    g = avg(out_img(k-1,l).G(), out_img(k,l-1).G());
+    b = out_img(k-1,l-1).B();
     (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
 
     //(0,1)
     k = in_img_byte->ni()-1;
     l = 0;
 
-    r = out_img(k,l).R();
+    r = out_img(k,l+1).R();
     g = out_img(k,l).G();
-    b = out_img(k,l).B();
-
-    b =(int)out_img(k-1,l).B();
-    r =(int)out_img(k,l+1).R();
+    b = out_img(k-1,l).B();
     (*debayer_img)(k,l) = vil_rgb<vxl_byte>(r,g,b);
   }
-
-  }
+}
