@@ -9,7 +9,10 @@
 
 #include <bvrml/bvrml_write.h>
 #include <vcl_limits.h>
+#include <vcl_cassert.h>
+
 #define DEBUG
+
 bool operator < (vsph_edge const& a, vsph_edge const& b)
 {
   if (a.vs_!=b.vs_)
@@ -131,14 +134,14 @@ void vsph_unit_sphere::add_uniform_views()
       for (int j=0; j<3; j++) {
         // find the mid points of edges
         int next=j+1; if (next == 3) next=0;
-	//bounds check
-	int i0 = triangles[i][j], inx = triangles[i][next];
-	int nv = (*verts).size();
-	if(i0<0||i0>=nv||inx<0||inx>=nv){
-	  vcl_cout << "address error (" << i0 << ' ' << inx << ")[" 
-		   << nv << "]\n";
-	    assert(false);
-	}
+        //bounds check
+        int i0 = triangles[i][j], inx = triangles[i][next];
+        int nv = (*verts).size();
+        if (i0<0||i0>=nv||inx<0||inx>=nv) {
+          vcl_cout << "address error (" << i0 << ' ' << inx << ")["
+                   << nv << "]\n";
+            assert(false);
+        }
         vgl_vector_3d<double> v0 = (*verts)[i0];
         vgl_vector_3d<double> vn = (*verts)[inx];
         vgl_point_3d<double> p0(v0.x(), v0.y(), v0.z());
@@ -158,15 +161,15 @@ void vsph_unit_sphere::add_uniform_views()
 
       // add new samller 4 triangles instead of the old big one
       /******************************
-                   /\
-                  /  \
-                 /    \
-                /      \
-               /--------\
-              / \      / \
-             /   \    /   \
-            /     \  /     \
-           /       \/       \
+                   /\                .
+                  /  \               .
+                 /    \              .
+                /      \             .
+               /--------\            .
+              / \      / \           .
+             /   \    /   \          .
+            /     \  /     \         .
+           /       \/       \        .
            -------------------
       *******************************/
       done=true;
@@ -222,18 +225,18 @@ void vsph_unit_sphere::add_uniform_views()
       //      bool equal = this->find_near_equal(cv, id);
       unsigned th_idx=0, ph_idx=0;//new
       bool equal = index_.find(sv, th_idx, ph_idx, id);//new
-      if (equal){
-	if(id<0||id>=nv){
-	  vcl_cout << "address error (" << id << ")[" 
-		   << nv << "]\n";
-	    assert(false);
-	}
+      if (equal) {
+        if (id<0||id>=nv) {
+          vcl_cout << "address error (" << id << ")["
+                   << nv << "]\n";
+            assert(false);
+        }
         equivalent_ids_[vidx]=id;// keep track of map between old and new ids
       }
       // if not add
       if (!equal&&(sv.theta_ <= cap_angle_rad)) {
         index_.insert(sv, sph_pts_.size());//new
-	//        cart_pts_.push_back(cv);
+        //        cart_pts_.push_back(cv);
         sph_pts_.push_back(sv);
       }
     }
@@ -245,8 +248,8 @@ void vsph_unit_sphere::add_uniform_views()
   vcl_cout << '\n' << vcl_flush;
 #ifdef DEBUG
   vcl_cout << "finished refine\n"
-           << "start constructing edges from " << ntri << " triangles\n" 
-	   << vcl_flush;
+           << "start constructing edges from " << ntri << " triangles"
+           << vcl_endl;
 #endif
   delete verts;
   neighbors_.clear();
@@ -259,14 +262,14 @@ void vsph_unit_sphere::add_uniform_views()
   for (int i=0; i<ntri; i++) {
     int v[3];// triangle vertices
     int ti0 = triangles[i][0], ti1 = triangles[i][1], ti2 = triangles[i][2];
-    if (!(ti0>=0 && ti0<neq &&ti1>=0 && ti1<neq &&ti2>=0 && ti2<neq)){
+    if (!(ti0>=0 && ti0<neq &&ti1>=0 && ti1<neq &&ti2>=0 && ti2<neq)) {
       vcl_cout << "Bad Tri[" << ti0 << ',' << ti1 << ',' << ti2 << "]\n";
       continue;
     }
     v[0] = equivalent_ids_[ti0];//construct edges with current
     v[1] = equivalent_ids_[ti1];//cart and sphere vertex ids
     v[2] = equivalent_ids_[ti2];//updated from initial "verts" id
-    if (v[0]<0||v[1]<0||v[2]<0){
+    if (v[0]<0||v[1]<0||v[2]<0) {
       vcl_cout << "Bad Equivalent Tri[" << v[0]<< ','
                << v[1] << ',' << v[2] << "]\n";
       continue;
@@ -286,8 +289,8 @@ void vsph_unit_sphere::add_uniform_views()
       vcl_cout << '+' << vcl_flush;
   }
 #ifdef DEBUG
-  vcl_cout << "\nfinished find edges "<< edges_.size() 
-	   << " edges found\n" << vcl_flush;
+  vcl_cout << "\nfinished find edges "<< edges_.size()
+           << " edges found\n" << vcl_flush;
 #endif
   neighbors_valid_ = true;
 }

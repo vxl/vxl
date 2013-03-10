@@ -110,9 +110,9 @@ class vsph_sph_box_2d
 
   //:subdivide box into potentially a 2x2 set of sub-boxes. Don't subdivide
   // along a given axis if resulting angular range is less than min_ang
-  void sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes, 
-		  double min_ang = 0.035) const;
-  
+  void sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
+                  double min_ang = 0.035) const;
+
   //: decompose box into approximately planar quadrilaterals
   void planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
                     vcl_vector<vcl_vector<int> >& quads,

@@ -37,25 +37,25 @@ static void test_sph_cover()
   double s = (reg_max_theta-reg_min_theta - dth)/(reg_max_phi-reg_min_phi);
   vcl_vector<double> data(nv, 0.0);
   vcl_vector<float> cb(3), cf(3);
-    random_rgb(cb[0],cb[1],cb[2]);
-	 random_rgb(cf[0],cf[1],cf[2]);
+  random_rgb(cb[0],cb[1],cb[2]);
+  random_rgb(cf[0],cf[1],cf[2]);
   vcl_vector<vcl_vector<float> > cdata(nv, cb);
   int cnt = 0;
   vsph_unit_sphere::iterator sit = usph->begin();
   for (; sit!=usph->end(); ++sit, cnt++)
   {
     vsph_sph_point_2d& sp = *sit;
-    if (sp.phi_>=reg_min_phi && sp.phi_<=reg_max_phi){
+    if (sp.phi_>=reg_min_phi && sp.phi_<=reg_max_phi) {
       double th_up = reg_max_theta - (sp.phi_-reg_min_phi)*s;
-      double th_low = th_up - dth; 
-	  if(sp.theta_>=th_low && sp.theta_<=th_up){
-	data[cnt] = 50.0;
-	cdata[cnt] = cf;
-	  }
-	}
+      double th_low = th_up - dth;
+      if (sp.theta_>=th_low && sp.theta_<=th_up) {
+        data[cnt] = 50.0;
+        cdata[cnt] = cf;
+      }
+    }
   }
   vcl_string dpath = MyDIR + "slope_region.wrl";
- usph->display_color(dpath, cdata);
+  usph->display_color(dpath, cdata);
     double sigma = (0.1*point_angle)/dpr,  c =300.0;
     int min_size = 10;
 
@@ -64,7 +64,7 @@ static void test_sph_cover()
     ssph.set_data(data);
     ssph.segment();
     ssph.extract_region_bounding_boxes();
-	const vcl_map<int,  vcl_vector<int> >& regs = ssph.regions();
+    const vcl_map<int,  vcl_vector<int> >& regs = ssph.regions();
     const vcl_map<int, vsph_sph_box_2d>& boxes = ssph.region_boxes();
 
   vcl_vector<vsph_sph_box_2d> dboxes;
@@ -85,9 +85,9 @@ static void test_sph_cover()
   vsph_sph_box_2d dia_box = bit->second;
   const vcl_vector<vsph_sph_point_2d>& sph_pts = usph->sph_points_ref();
   vcl_vector<vsph_sph_point_2d> rays;
-  for(vcl_vector<int>::const_iterator iit = ray_idx.begin(); 
-      iit != ray_idx.end(); ++iit)
-	  rays.push_back(sph_pts[*iit]);
+  for (vcl_vector<int>::const_iterator iit = ray_idx.begin();
+       iit != ray_idx.end(); ++iit)
+    rays.push_back(sph_pts[*iit]);
   vsph_sph_cover_2d cover(dia_box,rays,ray_area);
 }
 

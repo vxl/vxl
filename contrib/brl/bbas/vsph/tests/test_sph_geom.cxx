@@ -28,7 +28,7 @@ static void test_sph_geom()
   az_a = -90.0, az_b = 91.0;
   double diff2 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-   double haer2 =  vcl_fabs(ang2+179.5)+vcl_fabs(ang1-0.5);
+  double haer2 =  vcl_fabs(ang2+179.5)+vcl_fabs(ang1-0.5);
   az_a = -179.0, az_b = 180.0;
   double diff3 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
@@ -137,7 +137,7 @@ static void test_sph_geom()
   bool good = intersection(bba, bbb, boxes);
   vsph_sph_box_2d bint;
   if (good)
-   bint = boxes[0];
+  bint = boxes[0];
   double min_ph_int = bint.min_phi(false), max_ph_int = bint.max_phi(false);
   double min_th_int = bint.min_theta(false), max_th_int = bint.max_theta(false);
 
@@ -156,7 +156,7 @@ static void test_sph_geom()
   vsph_sph_box_2d bbc1(p6, p7, p8), bbc2(p9,p100,p8);
   boxes.clear();
   good = intersection(bbc1, bbc2, boxes);
-      
+
   vsph_sph_box_2d bint_cross;
   if (good) bint_cross = boxes[0];
   boxes.clear();
@@ -237,52 +237,49 @@ static void test_sph_geom()
   grok.sub_divide(sub_boxes);
   unsigned nb = sub_boxes.size();
   TEST("number of boxes", nb, 4);
-  if(nb!=4) 
-	return;
+  if (nb!=4)
+    return;
 
   double a00 = sub_boxes[0].area(), sum = a00;
   vcl_cout << "a00 " << a00 << '\n';
   er = 0.0;
-  for(unsigned i = 1; i<nb; ++i){
-	  double a = sub_boxes[i].area();
-	  vcl_cout<< "a = " << a << '\n';
+  for (unsigned i = 1; i<nb; ++i) {
+    double a = sub_boxes[i].area();
+    vcl_cout<< "a = " << a << '\n';
     er += vcl_fabs(a00-a);
-	sum += a;
+    sum += a;
   }
   vcl_cout << "grok area  " << grok.area() << " sum " << sum << '\n';
   er += vcl_fabs(sum - grok.area());
   TEST_NEAR("equal angle subdivision of a box", er, 0.0, 0.001);
-  
-  
+
+
   double abba = bint.area();
   double abba_area = intersection_area(bba,bbb);
   er = vcl_fabs(abba-abba_area);
   TEST_NEAR("intersection area", er, 0.0, 0.001);
   vul_timer t;
-   vcl_vector<vsph_sph_box_2d> bxs;
-   nb = 100000000;
+  vcl_vector<vsph_sph_box_2d> bxs;
+  nb = 100000000;
   vgl_point_2d<double> vp0(0.0, 0.0), vp1(1.0, 1.0);
   vgl_point_2d<double> vp2(0.25, 0.0), vp3(0.75, 1.0);
   vgl_box_2d<double> b1, b2;
   b1.add(vp0);  b1.add(vp1);   b2.add(vp2);  b2.add(vp3);
-  for(unsigned i = 0; i<nb; ++i){
+#if 0
+  for (unsigned i = 0; i<nb; ++i) {
     double a0 = intersection_area(bbc1, bbc2);
     double a1 = intersection_area(bba, bbb);
-    //good = intersection(bbc1, bbc2, bxs);
-    //good = intersection(bba, bbb, bxs);
-    // bba.in_interval(180.0, false);
-    //bba.in_interval(180.0, false);
-    //grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);  
-    //grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);  
-    //diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
-    //diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
-    //vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-    //vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
+    good = intersection(bbc1, bbc2, bxs); // = intersection(bba, bbb, bxs);
+    bba.in_interval(180.0, false);
+    grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
+    diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
+    vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
   }
+#endif
   double td_vsph = static_cast<double>(t.real())/(2.0*nb*1000.0);
   vcl_cout << "vsph box intersection time = " << td_vsph << " secs\n";
   t.mark();
-  for(unsigned i = 0; i<nb; ++i){
+  for (unsigned i = 0; i<nb; ++i) {
     vgl_box_2d<double> tin = vgl_intersection(b1, b2);
     vgl_box_2d<double> tYn = vgl_intersection(b1, b2);
   }
