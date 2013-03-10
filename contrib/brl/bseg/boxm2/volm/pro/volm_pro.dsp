@@ -104,6 +104,9 @@ SOURCE=.\processes/boxm2_create_index_process2.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_create_label_index_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_create_all_index_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
