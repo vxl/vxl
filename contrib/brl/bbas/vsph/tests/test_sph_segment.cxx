@@ -70,7 +70,7 @@ static void test_sph_segment()
   double sigma = (0.1*point_angle)/dpr,  c =300.0;
   int min_size = 10;
   vcl_cout << "Start segment\n" << vcl_flush;
-#if 1
+#if 0
   vsph_segment_sphere seg(*usph, sigma, int(c), min_size, true);
   seg.set_data(data);
   /* seg.smooth_data(); -- is private !! */

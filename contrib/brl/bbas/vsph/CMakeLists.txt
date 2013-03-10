@@ -15,6 +15,7 @@ SET(vsph_sources
     vsph_unit_sphere.h       vsph_unit_sphere.cxx
     vsph_segment_sphere.h    vsph_segment_sphere.cxx
     vsph_grid_index_2d.h     vsph_grid_index_2d.cxx
+    vsph_sph_cover_2d.h      vsph_sph_cover_2d.cxx
   )
 AUX_SOURCE_DIRECTORY(Templates vsph_sources)
 

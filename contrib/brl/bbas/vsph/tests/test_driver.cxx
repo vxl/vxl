@@ -9,6 +9,7 @@ DECLARE( test_unit_sphere );
 DECLARE( test_sph_segment );
 DECLARE( test_utils );
 DECLARE( test_grid_index );
+DECLARE( test_sph_cover );
 
 void
 register_tests()
@@ -21,6 +22,7 @@ register_tests()
   REGISTER( test_sph_segment );
   REGISTER( test_utils );
   REGISTER( test_grid_index );
+  REGISTER( test_sph_cover);
 }
 
 DEFINE_MAIN;

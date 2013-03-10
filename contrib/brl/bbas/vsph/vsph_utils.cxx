@@ -6,28 +6,25 @@
 double vsph_utils::azimuth_diff(double a, double b,
                                 bool in_radians)
 {
+  double pye = in_radians?vnl_math::pi:180.0;
+  double two_pye = 2.0*pye;
   double diff = b-a;
-  if (!in_radians) {
-    if (diff > 180)  diff -= 360;
-    else if (diff < -180) diff += 360;
-  }
-  else {
-    if (diff >  vnl_math::pi) diff -= vnl_math::twopi;
-    else if (diff < -vnl_math::pi) diff += vnl_math::twopi;
-  }
+  diff = (diff>pye)?(diff-two_pye):diff;
+  diff = (diff<-pye)?(diff+two_pye):diff;
   return diff;
 }
-
 void vsph_utils::half_angle(double phi_a, double phi_b, double& ang_1,
                             double& ang_2, bool in_radians)
 {
-  double hd = 0.5*vsph_utils::azimuth_diff(phi_a, phi_b, in_radians);
+  double pye = in_radians?vnl_math::pi:180.0;
+  double two_pye = 2.0*pye;
+  double hd = 0.5*(phi_b - phi_a);
   ang_1 = phi_a + hd;
-  ang_1 = vsph_utils::azimuth_diff(0.0, ang_1, in_radians);
-  if (in_radians)
-    ang_2 = vsph_utils::azimuth_diff(-vnl_math::pi, ang_1, in_radians);
-  else
-    ang_2 = vsph_utils::azimuth_diff(-180.0, ang_1, in_radians);
+  if(ang_1>pye) ang_1 -=two_pye;
+  else if (ang_1< -pye) ang_1 += two_pye;
+  ang_2 = ang_1 + pye;
+  if(ang_2>pye) ang_2 -=two_pye;
+  else if (ang_2< -pye) ang_2 += two_pye;
 }
 
 double vsph_utils::distance_on_usphere(vsph_sph_point_2d const& a,

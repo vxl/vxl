@@ -39,8 +39,8 @@ class vsph_sph_box_2d
   vsph_sph_box_2d();
   //: Specify units
   vsph_sph_box_2d(bool in_radians);
-
-
+  //: copy constructor
+  vsph_sph_box_2d(const vsph_sph_box_2d& sbox);
   //: Constructor from three points.
   // Three points, pa, pb and pc, are needed to define an
   // unambiguous order on azimuth having a cut at +-180.
@@ -108,6 +108,11 @@ class vsph_sph_box_2d
                             double theta_c,double phi_c,
                             bool in_radians) const;
 
+  //:subdivide box into potentially a 2x2 set of sub-boxes. Don't subdivide
+  // along a given axis if resulting angular range is less than min_ang
+  void sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes, 
+		  double min_ang = 0.035) const;
+  
   //: decompose box into approximately planar quadrilaterals
   void planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
                     vcl_vector<vcl_vector<int> >& quads,
@@ -126,7 +131,7 @@ class vsph_sph_box_2d
                             double factor =1.0);
 
   //: support for binary I/O
-  void print(vcl_ostream& os, bool in_radians = true) const;
+  void print(vcl_ostream& os, bool in_radians = false) const;
 
   void b_read(vsl_b_istream& is);
 
@@ -143,6 +148,10 @@ class vsph_sph_box_2d
   //: bounds of ccw traversal of phi interval in *this angle units
   void phi_bounds(double& phi_start, double& phi_end) const;
 
+  //: assign phi_a, phi_b so that b is ccw of a
+  void b_ccw_a();
+  //: assign comparisons
+  void set_comparisons();
   //: update the current theta bounds
   void update_theta(double th);
   //: the azimuth angle ph is outside the current interval so extend it
@@ -152,8 +161,13 @@ class vsph_sph_box_2d
   //: the three azimuth angles that define an unambigous bounded set
   // a and b define two circular intervals and c determines the bounded interval
   double a_phi_, b_phi_, c_phi_;
+  double min_phi_, max_phi_;
   //: the bounds on elevation
   double min_th_, max_th_;
+  bool a_ge_zero_, b_le_zero_, b_lt_zero_;
+  bool c_gt_a_, c_lt_b_;
+  bool c_le_pi_, c_ge_mpi_;
+  bool c_ge_zero_;
 };
 
 //: return a box that represents the intersection of two boxes (could be empty)
@@ -161,6 +175,8 @@ class vsph_sph_box_2d
 bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
                   vcl_vector<vsph_sph_box_2d>& boxes);
 
+//: return the area of the intersection
+double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2);
 
 vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_box_2d const& p);
 

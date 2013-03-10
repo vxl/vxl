@@ -6,7 +6,10 @@
 #include <vsph/vsph_utils.h>
 #include <vcl_fstream.h>
 #include <vnl/vnl_math.h>
-
+#include <vul/vul_timer.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_intersection.h>
 static vcl_string MyDIR = "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/";
 
 static void test_sph_geom()
@@ -25,15 +28,15 @@ static void test_sph_geom()
   az_a = -90.0, az_b = 91.0;
   double diff2 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-   double haer2 =  vcl_fabs(ang1+179.5)+vcl_fabs(ang2-0.5);
+   double haer2 =  vcl_fabs(ang2+179.5)+vcl_fabs(ang1-0.5);
   az_a = -179.0, az_b = 180.0;
   double diff3 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-  double haer3 =  vcl_fabs(ang1+179.5)+vcl_fabs(ang2-0.5);
+  double haer3 =  vcl_fabs(ang2+179.5)+vcl_fabs(ang1-0.5);
   az_a = 179.0, az_b = -180.0;
   double diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-  double haer4 =  vcl_fabs(ang1-179.5)+vcl_fabs(ang2+0.5);
+  double haer4 =  vcl_fabs(ang2-179.5)+vcl_fabs(ang1+0.5);
   er = vcl_fabs(diff0-165.0) + vcl_fabs(diff1 + 165.0);
   er += vcl_fabs(diff2+179.0) + vcl_fabs(diff3+1.0);
   er += vcl_fabs(diff4-1.0);
@@ -153,6 +156,7 @@ static void test_sph_geom()
   vsph_sph_box_2d bbc1(p6, p7, p8), bbc2(p9,p100,p8);
   boxes.clear();
   good = intersection(bbc1, bbc2, boxes);
+      
   vsph_sph_box_2d bint_cross;
   if (good) bint_cross = boxes[0];
   boxes.clear();
@@ -176,10 +180,12 @@ static void test_sph_geom()
   double b2_phic = 0.54737987781481912;
   box_s2.set(b2_thmin, b2_thmax, b2_phia, b2_phib, b2_phic);
   boxes.clear();
+
   // two boxes are produced
   good = intersection(box_s1, box_s2, boxes)
       && box_s1.contains(boxes[0])&& box_s1.contains(boxes[1]);
   TEST("each box contains the other's bounds", good, true);
+
   vcl_string box_path = MyDIR + "box_display.wrl";
 
   // transform a box
@@ -187,7 +193,7 @@ static void test_sph_geom()
   double tth_min = 1.96624, tth_max = 2.17535;
   double tph_min =-1.63496, tph_max = 2.13496, tphc = 0.25;
   er = vcl_fabs(tb1.min_theta()-tth_min) + vcl_fabs(tb1.max_theta()-tth_max);
-  double tb_a_ph = tb1.a_phi(), tb_b_phi = tb1.b_phi(), tb_c_phi = tb1.c_phi();
+  double tb_a_ph = tb1.min_phi(), tb_b_phi = tb1.max_phi(), tb_c_phi = tb1.c_phi();
   er += vcl_fabs(tph_min-tb_a_ph) + vcl_fabs(tph_max-tb_b_phi) +vcl_fabs(tphc-tb_c_phi);
   TEST_NEAR("transform box no phi cut", er, 0.0, 0.001);
 
@@ -199,7 +205,7 @@ static void test_sph_geom()
   TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
 
   vsph_sph_box_2d tb1_about = box_s1.transform(0.5, 0.25, 1.6,1.57,2.2, true);
-  double tth_min_about = 1.4318703408918116, tth_max_about = 1.7106779048518577;
+  double tth_min_about = 1.93187, tth_max_about = 2.21068;
   double tph_min_about = 0.18663706143591696,
          tph_max_about = 1.4432741228718344,
          tphc_about = -1.0700000000000003;
@@ -213,6 +219,7 @@ static void test_sph_geom()
   double tb3_ph_min = -168.676, tb3_ph_max = -132.676, tb3_c = -150.676;
   er = vcl_fabs(tb3_ph_min-tb3_a_ph) + vcl_fabs(tb3_ph_max-tb3_b_phi) +
     vcl_fabs(tb3_c-tb3_c_phi);
+
   TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
   double grok_a_phi = -2.7617465101715433;
   double grok_b_phi = -2.4723473031673180;
@@ -226,6 +233,62 @@ static void test_sph_geom()
   er = vcl_fabs(t_grok_a-tb4.a_phi()) + vcl_fabs(t_grok_b-tb4.b_phi());
   TEST_NEAR("negative trans with roll-over", er, 0.0, 0.001);
 
+  vcl_vector<vsph_sph_box_2d> sub_boxes;
+  grok.sub_divide(sub_boxes);
+  unsigned nb = sub_boxes.size();
+  TEST("number of boxes", nb, 4);
+  if(nb!=4) 
+	return;
+
+  double a00 = sub_boxes[0].area(), sum = a00;
+  vcl_cout << "a00 " << a00 << '\n';
+  er = 0.0;
+  for(unsigned i = 1; i<nb; ++i){
+	  double a = sub_boxes[i].area();
+	  vcl_cout<< "a = " << a << '\n';
+    er += vcl_fabs(a00-a);
+	sum += a;
+  }
+  vcl_cout << "grok area  " << grok.area() << " sum " << sum << '\n';
+  er += vcl_fabs(sum - grok.area());
+  TEST_NEAR("equal angle subdivision of a box", er, 0.0, 0.001);
+  
+  
+  double abba = bint.area();
+  double abba_area = intersection_area(bba,bbb);
+  er = vcl_fabs(abba-abba_area);
+  TEST_NEAR("intersection area", er, 0.0, 0.001);
+  vul_timer t;
+   vcl_vector<vsph_sph_box_2d> bxs;
+   nb = 100000000;
+  vgl_point_2d<double> vp0(0.0, 0.0), vp1(1.0, 1.0);
+  vgl_point_2d<double> vp2(0.25, 0.0), vp3(0.75, 1.0);
+  vgl_box_2d<double> b1, b2;
+  b1.add(vp0);  b1.add(vp1);   b2.add(vp2);  b2.add(vp3);
+  for(unsigned i = 0; i<nb; ++i){
+    double a0 = intersection_area(bbc1, bbc2);
+    double a1 = intersection_area(bba, bbb);
+    //good = intersection(bbc1, bbc2, bxs);
+    //good = intersection(bba, bbb, bxs);
+    // bba.in_interval(180.0, false);
+    //bba.in_interval(180.0, false);
+    //grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);  
+    //grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);  
+    //diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
+    //diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
+    //vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
+    //vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
+  }
+  double td_vsph = static_cast<double>(t.real())/(2.0*nb*1000.0);
+  vcl_cout << "vsph box intersection time = " << td_vsph << " secs\n";
+  t.mark();
+  for(unsigned i = 0; i<nb; ++i){
+    vgl_box_2d<double> tin = vgl_intersection(b1, b2);
+    vgl_box_2d<double> tYn = vgl_intersection(b1, b2);
+  }
+  double td_vgl = static_cast<double>(t.real())/(2.0*nb*1000.0);
+  vcl_cout << "vgl box intersection time = " << td_vgl << " secs\n";
+  vcl_cout << "ratio = " << td_vsph/td_vgl << '\n';
 #if 0
   double tol = 0.001;
   vcl_string grok_path = MyDIR + "grok_box_display.wrl";
