@@ -1,33 +1,32 @@
 #pragma OPENCL EXTENSION cl_khr_fp64 : enable
 
 __kernel void generalized_volm_obj_based_matching_no_grd_no_sky_with_orient(__global unsigned*                 n_cam,         // query -- number of cameras (single unsigned)
-                                                                     __global unsigned*                 n_obj,         // query -- number of objects (single unsigned)
-                                                                     __global unsigned*                obj_id,         // query -- object index id
-                                                                     __global unsigned*            obj_offset,         // query -- object array offset indicator
-                                                                     __global unsigned char*     obj_min_dist,         // query -- object query minimium distance
-                                                                     __global unsigned char*       obj_orient,         // query -- object query orientation
-                                                                     __global unsigned char*         obj_land,         // query -- object query land fallback category (4 uchar per ray)
-                                                                     __global float*             obj_land_wgt,         // query -- object query land fallback category weight (4 float per ray)
-                                                                     __global float*               obj_weight,         // query -- object weight parameter array (n_obj floats)
-                                                                     __global float*            obj_wgt_attri,         // query -- object wieght parameter array (4*n_obj floats)
-                                                                     __global unsigned*                 n_ind,         // index -- number of indices passed into device (single unsigned)
-                                                                     __global unsigned*            layer_size,         // index -- size of spherical shell container (single unsigned)
-                                                                     __global unsigned char*    fallback_size,         // index -- number of the possible land type store in fallback land category
-                                                                     __global unsigned char*            index,         // index -- index depth array
-                                                                     __global unsigned char*     index_orient,         // index -- index orientation array (0,100 invalid, 1 -- horizontal, 2 - 9 vertical, 254 -- sky)
-                                                                     __global unsigned char*       index_land,         // index -- index land array
-                                                                     __global float*                    score,         // score array (score per index per camera)
-                                                                     __global float*                       mu,         // average depth array for index
-                                                                     __global float*           depth_interval,         // depth_interval
-                                                                     __global unsigned*          depth_length,         // length of depth_interval table
-                                                                     __global float*                    debug,         // debug array
-                                                                     __local unsigned char*    local_min_dist,         // query -- object minimimu distance on local memory
-                                                                     __local unsigned char*  local_obj_orient,         // query -- object orientation on local memory
-                                                                     __local unsigned char*    local_obj_land,         // query -- object land fallback category on local memory
-                                                                     __local float*        local_obj_land_wgt,         // query -- object land fallback category weight on local memory
-                                                                     __local float*          local_obj_weight,         // query -- object weight parameters on local memory
-                                                                     __local float*       local_obj_wgt_attri,         // query -- object weight parameters (for attributes) on local memory
-                                                                     __local float*      local_depth_interval)         // depth_interval on local memory
+                                                                            __global unsigned*                 n_obj,         // query -- number of objects (single unsigned)
+                                                                            __global unsigned*                obj_id,         // query -- object index id
+                                                                            __global unsigned*            obj_offset,         // query -- object array offset indicator
+                                                                            __global unsigned char*     obj_min_dist,         // query -- object query minimium distance
+                                                                            __global unsigned char*       obj_orient,         // query -- object query orientation
+                                                                            __global unsigned char*         obj_land,         // query -- object query land fallback category (4 uchar per ray)
+                                                                            __global float*             obj_land_wgt,         // query -- object query land fallback category weight (4 float per ray)
+                                                                            __global float*               obj_weight,         // query -- object weight parameter array (n_obj floats)
+                                                                            __global float*            obj_wgt_attri,         // query -- object wieght parameter array (4*n_obj floats)
+                                                                            __global unsigned*                 n_ind,         // index -- number of indices passed into device (single unsigned)
+                                                                            __global unsigned*            layer_size,         // index -- size of spherical shell container (single unsigned)
+                                                                            __global unsigned char*    fallback_size,         // index -- number of the possible land type store in fallback land category
+                                                                            __global unsigned char*            index,         // index -- index depth array
+                                                                            __global unsigned char*    index_combine,         // index -- index orientation and land array (ori -> 0:invalid, 1:horizontal, 2:vertical;)
+                                                                            __global float*                    score,         // score array (score per index per camera)
+                                                                            __global float*                       mu,         // average depth array for index
+                                                                            __global float*           depth_interval,         // depth_interval
+                                                                            __global unsigned*          depth_length,         // length of depth_interval table
+                                                                            __global float*                    debug,         // debug array
+                                                                            __local unsigned char*    local_min_dist,         // query -- object minimimu distance on local memory
+                                                                            __local unsigned char*  local_obj_orient,         // query -- object orientation on local memory
+                                                                            __local unsigned char*    local_obj_land,         // query -- object land fallback category on local memory
+                                                                            __local float*        local_obj_land_wgt,         // query -- object land fallback category weight on local memory
+                                                                            __local float*          local_obj_weight,         // query -- object weight parameters on local memory
+                                                                            __local float*       local_obj_wgt_attri,         // query -- object weight parameters (for attributes) on local memory
+                                                                            __local float*      local_depth_interval)         // depth_interval on local memory
 {
   // get the cam_id and ind_id
   unsigned cam_id = 0, ind_id = 0;
@@ -116,12 +115,13 @@ __kernel void generalized_volm_obj_based_matching_no_grd_no_sky_with_orient(__gl
       for (unsigned i = start_obj; i < end_obj; ++i) {
         unsigned id = start_ind + obj_id[i];
         unsigned d = index[id];
-        unsigned s_vox_ord = 1;
+        unsigned s_vox_ord = 0;
         unsigned s_vox_min = 0;
         unsigned s_vox_ori = 0;
 
         // calculate order and distance score
         if (d < 253 && d < ln_depth_size) {
+          s_vox_ord = 1;
           // calculate order score for voxel i
           for (unsigned mu_id = 0; (s_vox_ord && mu_id < k); ++mu_id)
             if (mu[mu_id+mu_start_id]*mu[mu_id+mu_start_id] > 1E-7)
@@ -132,29 +132,21 @@ __kernel void generalized_volm_obj_based_matching_no_grd_no_sky_with_orient(__gl
           // calculate min_distance socre for voxel i
           s_vox_min = (d > local_min_dist[k]) ? 1 : 0;
         }
-        else {
-          s_vox_ord = 0;
-        }
 
-        // calculate orientation of object
-        unsigned char ind_ori = index_orient[id];
-        if (ind_ori > 0 && ind_ori < 10) {  // check whether index orientation is meaningful
-          s_vox_ori = (ind_ori == local_obj_orient[k]) ? 1 : 0;               // index and query are both horzontal or exactly vertical
-          if (!s_vox_ori)
-            s_vox_ori = (ind_ori != 1 && local_obj_orient[k] == 2) ? 1 : 0;  // index are non-horizontal and query are vertical
-          // we have overlap but ensure the s_vox_ori happens only when
-          // ind_ori == 1 and query_ori == 1  ---> all horizontal
-          // ind_ori == 2 and query_ori == 2  ---> all exactly vertical (front-parallel)
-          // ind_ori == 3-9 and query_ori == 2 --> index is heading to 8 different direction, e.g, southwest, but transfer to vertical
-        }
-        
-        // calculate land_type score
-        unsigned char ind_lnd = index_land[id];
-        if (ind_lnd != 0 && ind_lnd != 254) {
-          for (unsigned ii = lnd_start; ii < lnd_end; ii++) {
-            if (ind_lnd == local_obj_land[ii]) {
-              score_k_lnd += local_obj_land_wgt[ii];
-              break;
+        // calcualte score for orientation and land type
+        unsigned char ind_combine = index_combine[id];
+        if (ind_combine < 253) {
+          unsigned char ind_ori = ind_combine / (unsigned char)64;
+          unsigned char ind_lnd = ind_combine - (ind_ori * 64);
+          // the score of orientation for object k and ray i
+          s_vox_ori = (ind_ori != 0 && ind_ori == local_obj_orient[k]) ? 1 : 0;
+          // the score for land type
+          if (ind_lnd != 0) {
+            for (unsigned ii = lnd_start; ii < lnd_end; ii++) {
+              if (ind_lnd == local_obj_land[ii]) {
+                score_k_lnd += local_obj_land_wgt[ii];
+                break;
+              }
             }
           }
         }

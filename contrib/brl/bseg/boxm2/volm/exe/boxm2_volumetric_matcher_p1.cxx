@@ -34,7 +34,8 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");                             // query -- spherical shell container binary
   vul_arg<vcl_string> query_bin("-query", "query binary file", "");                              // query -- query binary file
   vul_arg<vcl_string> weight_file("-wgt", "weight parameters for query", "");                    // query -- weight parameter file
-  vul_arg<vcl_string> geo_index_folder("-geo", "folder to read the geo index and the hypo", ""); // index -- folder to read the geo_index and hypos for each leaf
+  vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses", "");         // index -- folder to read the hypos for each leaf
+  vul_arg<vcl_string> geo_index_folder("-geo", "folder to read the geo index", "");              // index -- folder to read the index for each location
   vul_arg<vcl_string> candidate_list("-cand", "candidate list for given query (txt file)", "");  // index -- candidate list file containing polygons
   vul_arg<float>      buffer_capacity("-buff", "index buffer capacity (GB)", 1.0f);              // index -- buffer capacity
   vul_arg<unsigned>   tile_id("-tile", "ID of the tile that current matcher consdier", 3);       // matcher -- tile id
@@ -65,6 +66,7 @@ int main(int argc, char** argv)
   if ( cam_bin().compare("") == 0 ||
        dms_bin().compare("") == 0 ||
        sph_bin().compare("") == 0 ||
+       geo_hypo_folder().compare("") == 0 ||
        geo_index_folder().compare("") == 0 ||
        query_bin().compare("") == 0 ||
        out_folder().compare("") == 0 )
@@ -92,10 +94,10 @@ int main(int argc, char** argv)
 
   // load geo_index
   vcl_stringstream file_name_pre;
-  file_name_pre << geo_index_folder() << "geo_index_tile_" << tile_id();
+  file_name_pre << geo_hypo_folder() << "geo_index_tile_" << tile_id();
   vcl_cout << " geo_index_hyps_file = " << file_name_pre.str() + ".txt" << vcl_endl;
   if (!vul_file::exists(file_name_pre.str() + ".txt")) {
-    log << " ERROR: gen_index_folder is wrong (missing last slash/ ?), no geo_index_files found in " << geo_index_folder() << '\n';
+    log << " ERROR: gen_index_folder is wrong (missing last slash/ ?), no geo_index_files found in " << geo_hypo_folder() << '\n';
     if (do_log) { volm_io::write_log(out_folder(), log.str()); }
     vcl_cerr << log.str();
     volm_io::write_status(out_folder(), volm_io::GEO_INDEX_FILE_MISSING);
@@ -132,11 +134,12 @@ int main(int argc, char** argv)
   volm_geo_index::get_leaves_with_hyps(root, leaves);
 
   // read in the parameter, create depth_interval
-  boxm2_volm_wr3db_index_params params;
-  vcl_string index_file = leaves[0]->get_index_name(file_name_pre.str());
+  vcl_stringstream params_file;
+  params_file << geo_index_folder() << "geo_index_tile_" << tile_id() << "_index.params";
 
-  if (!params.read_params_file(index_file)) {
-    log << " ERROR: cannot read params file from " << index_file << '\n';
+  boxm2_volm_wr3db_index_params params;
+  if (!params.read_params_file(params_file.str())) {
+    log << " ERROR: cannot read params file from " << params_file.str() << '\n';
     if (do_log)  volm_io::write_log(out_folder(), log.str());
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     vcl_cerr << log.str();
@@ -193,17 +196,14 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-#if 0
-  // create volm_query
-  volm_query_sptr query = new volm_query(cam_space, dms_bin(), sph_shell, sph);
-#endif
   // load the volm_query
-  // check the query_binary file
+#if 0
   if (!vul_file::exists(query_bin())) {
     vcl_cerr << " ERROR: volm_query binary can not be found ---> " << query_bin() << '\n';
     volm_io::write_status(out_folder(), volm_io::DEPTH_SCENE_FILE_IO_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
+#endif
   volm_query_sptr query = new volm_query(query_bin(), cam_space, dms_bin(), sph_shell, sph);
 
   // screen output of query
@@ -309,7 +309,7 @@ int main(int argc, char** argv)
                                         threshold(), max_cam_per_loc(), weights);
 
   if (!obj_ps1_matcher.volm_matcher_p1()) {
-    log << " ERROR: pass 1 volm_matcher failed for geo_index " << index_file << '\n';
+    log << " ERROR: pass 1 volm_matcher failed for geo_index " << params_file.str() << '\n';
     if (do_log) volm_io::write_log(out_folder(), log.str());
     volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
     vcl_cerr << log.str();

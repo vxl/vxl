@@ -74,8 +74,7 @@ class boxm2_volm_matcher_p1
   volm_query_sptr                                   query_;
   vcl_vector<volm_geo_index_node_sptr>             leaves_;
   boxm2_volm_wr3db_index_sptr                         ind_;
-  boxm2_volm_wr3db_index_sptr                  ind_orient_;
-  boxm2_volm_wr3db_index_sptr                    ind_land_;
+  boxm2_volm_wr3db_index_sptr                 ind_combine_;
   float                                        ind_buffer_;
   vcl_stringstream                          file_name_pre_;
   vcl_vector<volm_weight>                         weights_;
@@ -187,8 +186,7 @@ class boxm2_volm_matcher_p1
                   unsigned const& layer_size,
                   unsigned& leaf_id,
                   unsigned char* index_buff,
-                  unsigned char* index_orient_buff,
-                  unsigned char* index_land_buff,
+                  unsigned char* index_combine_buff,
                   vcl_vector<unsigned>& l_id,
                   vcl_vector<unsigned>& h_id,
                   unsigned& actual_n_ind);
@@ -220,16 +218,14 @@ class boxm2_volm_matcher_p1
                                      vcl_vector<bocl_kernel*>        kern_vec,
                                      bocl_mem*                  n_ind_cl_mem_,
                                      bocl_mem*                  index_cl_mem_,
-                                     bocl_mem*           index_orient_cl_mem_,
-                                     bocl_mem*             index_land_cl_mem_,
+                                     bocl_mem*          index_combine_cl_mem_,
                                      bocl_mem*                  score_cl_mem_,
                                      bocl_mem*                     mu_cl_mem_);
 
   //: a test function to check the kernel implementation
   bool volm_matcher_p1_test_ori(unsigned n_ind,
                                 unsigned char* index,
-                                unsigned char* index_orient,
-                                unsigned char* index_land,
+                                unsigned char* index_combine,
                                 float* score_buff,
                                 float* mu_buff);
 };

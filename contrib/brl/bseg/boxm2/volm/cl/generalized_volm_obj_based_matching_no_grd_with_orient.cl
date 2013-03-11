@@ -17,8 +17,7 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
                                                                      __global unsigned*            layer_size,         // index -- size of spherical shell container (single unsigned)
                                                                      __global unsigned char*    fallback_size,         // index -- number of the possible land type store in fallback land category
                                                                      __global unsigned char*            index,         // index -- index depth array
-                                                                     __global unsigned char*     index_orient,         // index -- index orientation array (0,100 invalid, 1 -- horizontal, 2 - 9 vertical, 254 -- sky)
-                                                                     __global unsigned char*       index_land,         // index -- index land array
+                                                                     __global unsigned char*    index_combine,         // index -- index orientation and land array (ori -> 0:invalid, 1:horizontal, 2:vertical;)
                                                                      __global float*                    score,         // score array (score per index per camera)
                                                                      __global float*                       mu,         // average depth array for index
                                                                      __global float*           depth_interval,         // depth_interval
@@ -79,8 +78,8 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
   if ( cam_id < ln_cam && ind_id < ln_ind ) {
     // locate index offset
     unsigned start_ind = ind_id * (ln_layer_size);
+
     // calculate sky score
-    // locate the sky array
     unsigned start_sky = sky_offset[cam_id];
     unsigned end_sky = sky_offset[cam_id+1];
     unsigned sky_count = 0;
@@ -134,11 +133,13 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
       for (unsigned i = start_obj; i < end_obj; ++i) {
         unsigned id = start_ind + obj_id[i];
         unsigned d = index[id];
-        unsigned s_vox_ord = 1;
+        unsigned s_vox_ord = 0;
         unsigned s_vox_min = 0;
         unsigned s_vox_ori = 0;
+
         // calculate order and distance score
         if (d < 253 && d < ln_depth_size) {
+          s_vox_ord = 1;
           // calculate order score for voxel i
           for (unsigned mu_id = 0; (s_vox_ord && mu_id < k); ++mu_id)
             if (mu[mu_id+mu_start_id]*mu[mu_id+mu_start_id] > 1E-7)
@@ -149,28 +150,21 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
           // calculate min_distance socre for voxel i
           s_vox_min = (d > local_min_dist[k]) ? 1 : 0;
         }
-        else {
-          s_vox_ord = 0;
-        }
-        // calculate orientation of object
-        unsigned char ind_ori = index_orient[id];
-        if (ind_ori > 0 && ind_ori < 10) {  // check whether index orientation is meaningful
-          s_vox_ori = (ind_ori == local_obj_orient[k]) ? 1 : 0;               // index and query are both horzontal or exactly vertical
-          if (!s_vox_ori)
-            s_vox_ori = (ind_ori != 1 && local_obj_orient[k] == 2) ? 1 : 0;  // index are non-horizontal and query are vertical
-          // we have overlap but ensure the s_vox_ori happens only when
-          // ind_ori == 1 and query_ori == 1  ---> all horizontal
-          // ind_ori == 2 and query_ori == 2  ---> all exactly vertical (front-parallel)
-          // ind_ori == 3-9 and query_ori == 2 --> index is heading to 8 different direction, e.g, southwest, but transfer to vertical
-        }
-        
-        // calculate land_type score
-        unsigned char ind_lnd = index_land[id];
-        if (ind_lnd != 0 && ind_lnd != 254) {
-          for (unsigned ii = lnd_start; ii < lnd_end; ii++) {
-            if (ind_lnd == local_obj_land[ii]) {
-              score_k_lnd += local_obj_land_wgt[ii];
-              break;
+
+        // calcualte score for orientation and land type
+        unsigned char ind_combine = index_combine[id];
+        if (ind_combine < 253) {
+          unsigned char ind_ori = ind_combine / (unsigned char)64;
+          unsigned char ind_lnd = ind_combine - (ind_ori * 64);
+          // the score of orientation for object k and ray i
+          s_vox_ori = (ind_ori != 0 && ind_ori == local_obj_orient[k]) ? 1 : 0;
+          // the score for land type
+          if (ind_lnd != 0) {
+            for (unsigned ii = lnd_start; ii < lnd_end; ii++) {
+              if (ind_lnd == local_obj_land[ii]) {
+                score_k_lnd += local_obj_land_wgt[ii];
+                break;
+              }
             }
           }
         }
@@ -193,7 +187,7 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
     }
 
 #if 0
-    if ( cam_id == 245 && ind_id == 0 ) {
+    if ( cam_id == 0 && ind_id == 6 ) {
        debug[0] = cam_id;
        debug[1] = ind_id;
        debug[2] = score_sky;
