@@ -993,7 +993,6 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
                   vcl_vector<vsph_sph_box_2d>& boxes)
 {
   bool in_radians = b1.in_radians();
-  vsph_sph_box_2d rbox(in_radians);
   double theta_min =
     b1.min_theta(in_radians) < b2.min_theta(in_radians) ?
     b2.min_theta(in_radians) : b1.min_theta(in_radians);
@@ -1026,61 +1025,56 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
    }
     // b2 contained in b1
    case 3:{
-    rbox.set(theta_min, theta_max, b2_min_ph,
-             b2_max_ph, b2.c_phi(in_radians),in_radians);
     boxes.resize(1);
-    boxes[0]=rbox;
+    boxes[0].set(theta_min, theta_max, b2_min_ph,
+             b2_max_ph, b2.c_phi(in_radians),in_radians);
     return true;
    }
     //  b2_min => b1_max
    case 6:{
+    boxes.resize(1);
     vsph_utils::half_angle(b2_min_ph, b1_max_ph, ha1, ha2, in_radians);
     //either ha1 or  ha2 has to be in both box intervals
     if (b1.in_interval(ha1,in_radians)&& b2.in_interval(ha1,in_radians))
-      rbox.set(theta_min, theta_max, b2_min_ph, b1_max_ph,ha1,in_radians);
+      boxes[0].set(theta_min, theta_max, b2_min_ph, b1_max_ph,ha1,in_radians);
     else
-      rbox.set(theta_min, theta_max, b2_min_ph, b1_max_ph, ha2,in_radians);
-    boxes.resize(1);
-    boxes[0]=rbox;
+      boxes[0].set(theta_min, theta_max, b2_min_ph, b1_max_ph, ha2,in_radians);
     return true;
    }
     //  b1_min => b2_max
    case 9:{
+    boxes.resize(1);
     vsph_utils::half_angle(b1_min_ph, b2_max_ph, ha1, ha2, in_radians);
     //eithr ha1 or ha2 has to be in both intervals
     if (b1.in_interval(ha1, in_radians)&& b2.in_interval(ha1, in_radians))
-      rbox.set(theta_min, theta_max, b1_min_ph, b2_max_ph, ha1,in_radians);
+      boxes[0].set(theta_min, theta_max, b1_min_ph, b2_max_ph, ha1,in_radians);
     else
-      rbox.set(theta_min, theta_max, b1_min_ph, b2_max_ph, ha2,in_radians);
-    boxes.resize(1);
-    boxes[0]=rbox;
+
+      boxes[0].set(theta_min, theta_max, b1_min_ph, b2_max_ph, ha2,in_radians);
     return true;
    }
     // b1 contained in b2
-   case 12:{
-    rbox.set(theta_min, theta_max, b1_min_ph, b1_max_ph,
-             b1.c_phi(in_radians),in_radians);
+  case 12:{
     boxes.resize(1);
-    boxes[0]=rbox;
+    boxes[0].set(theta_min, theta_max, b1_min_ph, b1_max_ph, 
+	     b1.c_phi(in_radians),in_radians);
     return true;
    }
 
   // This condition produces two boxes (b1min=>b2max  b2min=>b1max)
    case 15:{
-    vsph_sph_box_2d rbox2(in_radians);
     boxes.resize(2);
     vsph_utils::half_angle(b1_min_ph, b2_max_ph, ha1, ha2, in_radians);
     if (b2.in_interval(ha1,in_radians)&& b1.in_interval(ha1,in_radians))
-      rbox.set(theta_min, theta_max, b1_min_ph, b2_max_ph,ha1,in_radians);
+      boxes[0].set(theta_min, theta_max, b1_min_ph, b2_max_ph,ha1,in_radians);
     else
-      rbox.set(theta_min, theta_max, b1_min_ph, b2_max_ph,ha2,in_radians);
-    boxes[0]=rbox;
+      boxes[0].set(theta_min, theta_max, b1_min_ph, b2_max_ph,ha2,in_radians);
+
     vsph_utils::half_angle(b2_min_ph, b1_max_ph, ha1, ha2, in_radians);
     if (b2.in_interval(ha1,in_radians)&& b1.in_interval(ha1,in_radians))
-      rbox2.set(theta_min, theta_max, b2_min_ph, b1_max_ph, ha1,in_radians);
+      boxes[1].set(theta_min, theta_max, b2_min_ph, b1_max_ph, ha1,in_radians);
     else
-      rbox2.set(theta_min, theta_max, b2_min_ph, b1_max_ph, ha2,in_radians);
-    boxes[1]=rbox2;
+      boxes[1].set(theta_min, theta_max, b2_min_ph, b1_max_ph, ha2,in_radians);
     return true;
    }
    default:
