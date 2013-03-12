@@ -51,7 +51,6 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
   //catch a "null" mask (not really null because that throws an error)
   bool use_mask = false;
   if ( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
-    vcl_cout<<"Update using mask."<<vcl_endl;
     use_mask = true;
   }
   vil_image_view<unsigned char >* mask_map = 0;
@@ -128,6 +127,22 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
     }
   }
 
+  if (use_mask)
+  {
+    int count = 0;
+    for (unsigned int j=0;j<cl_nj;++j) {
+      for (unsigned int i=0;i<cl_ni;++i) {
+        if ( i<mask_map->ni() && j<mask_map->nj() )
+          if ( (*mask_map)(i,j)==0 ) {
+            input_buff[count] = -1.0f;
+            vis_buff  [count] = -1.0f;
+          }
+        ++count;
+      }
+    }
+  }
+
+
   //bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff,cl_ni*cl_nj*sizeof(float),"input image buffer");
   bocl_mem_sptr in_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), input_buff, "input image buffer");
   in_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -174,6 +189,23 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
 
+  // update_alpha boolean buffer
+  cl_int up_alpha[1];
+  up_alpha[0] = update_alpha ? 1 : 0;
+  bocl_mem_sptr up_alpha_mem = new bocl_mem(device->context(), up_alpha, sizeof(up_alpha), "update alpha bool buffer");
+  up_alpha_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+  //mog variance, if 0.0f or less, then var will be learned
+  bocl_mem_sptr mog_var_mem = new bocl_mem(device->context(), &mog_var, sizeof(mog_var), "update gauss variance");
+  mog_var_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+  cl_int use_mask_buf[1];
+  use_mask_buf[0] = use_mask ? 1 : 0;
+  bocl_mem_sptr use_mask_mem = new bocl_mem(device->context(), use_mask_buf, sizeof(use_mask_buf), "update with mask");
+  use_mask_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+
+
   // set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
@@ -198,27 +230,6 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
       norm_image->read_to_buffer(queue);
 
       continue;
-    }
-
-    //set masked values
-    vis_image->read_to_buffer(queue);
-    if (use_mask)
-    {
-      int count = 0;
-      for (unsigned int j=0;j<cl_nj;++j) {
-        for (unsigned int i=0;i<cl_ni;++i) {
-          if ( i<mask_map->ni() && j<mask_map->nj() ) {
-            if ( (*mask_map)(i,j)==0 ) {
-              input_buff[count] = -1.0f;
-              vis_buff  [count] = 0.0f;
-            }
-          }
-          ++count;
-        }
-      }
-      in_image->write_to_buffer(queue);
-      vis_image->write_to_buffer(queue);
-      clFinish(queue);
     }
 
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -286,14 +297,12 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
 
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
-
         aux0->read_to_buffer(queue);
         aux1->read_to_buffer(queue);
       }
       else if (i==UPDATE_PREINF)
       {
         aux->zero_gpu_buffer(queue);
-
 
         kern->set_arg( blk_info );
         kern->set_arg( blk );
@@ -376,22 +385,6 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
         bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
 
-        // update_alpha boolean buffer
-        cl_int up_alpha[1];
-        up_alpha[0] = update_alpha ? 1 : 0;
-        bocl_mem_sptr up_alpha_mem = new bocl_mem(device->context(), up_alpha, sizeof(up_alpha), "update alpha bool buffer");
-        up_alpha_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
-        //mog variance, if 0.0f or less, then var will be learned
-        bocl_mem_sptr mog_var_mem = new bocl_mem(device->context(), &mog_var, sizeof(mog_var), "update gauss variance");
-        mog_var_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
-        cl_int use_mask_buf[1];
-        use_mask_buf[0] = use_mask ? 1 : 0;
-        bocl_mem_sptr use_mask_mem = new bocl_mem(device->context(), use_mask_buf, sizeof(use_mask_buf), "update with mask");
-        use_mask_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
-
         local_threads[0] = 64;
         local_threads[1] = 1 ;
         global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
@@ -426,6 +419,30 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
         alpha->read_to_buffer(queue);
         mog->read_to_buffer(queue);
         num_obs->read_to_buffer(queue);
+
+//        if(id->i_ == 1 && id->j_ == 1 && id->k_ == 0)
+//        {
+//        vcl_cout << vcl_endl << *id << vcl_endl;
+//        vnl_vector_fixed<float, 16>* app_compact_buf = ( vnl_vector_fixed<float, 16>*)mog->cpu_buffer();
+//        vnl_vector_fixed<float, 8>* nobs_buf = ( vnl_vector_fixed<float, 8>*)num_obs->cpu_buffer();
+//
+//
+//        for(int i = 0; i < 10;i++)
+//        {
+//          vnl_vector_fixed<float, 16> tmp = app_compact_buf[i];
+//          vnl_vector_fixed<float, 8> nobs_tmp = nobs_buf[i];
+//          for(unsigned  j = 0;j<16;j++) {
+//            vcl_cout << tmp[j] << " ";
+//          }
+//          vcl_cout << vcl_endl;
+//          for(unsigned  j = 0;j<8;j++) {
+//            vcl_cout << nobs_tmp[j] << " ";
+//          }
+//          vcl_cout << vcl_endl;
+//        }
+//        }
+
+
       }
 
       //read image out to buffer (from gpu)
