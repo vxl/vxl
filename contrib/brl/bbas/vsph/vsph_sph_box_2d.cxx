@@ -1083,14 +1083,14 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
     return false;
   }
 }
-
+#if 0
 double d_phi(double min_ph, double max_ph, double c_ph)
 {
   double dif = vcl_fabs(vsph_utils::azimuth_diff(min_ph, c_ph, true));
   dif += vcl_fabs(vsph_utils::azimuth_diff(c_ph, max_ph, true));
   return dif;
 }
-
+#endif
 double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
 {
   bool in_radians = true;
@@ -1128,7 +1128,7 @@ double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
     }
       // b2 contained in b1
     case 3:{
-      dph = d_phi(b2_min_ph, b2_max_ph, b2.c_phi(in_radians));
+      dph = vsph_utils::arc_len(b2_min_ph, b2_max_ph, b2.c_phi(in_radians));
       return dph*a;
     }
       //  b2_min => b1_max
@@ -1136,9 +1136,9 @@ double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
       vsph_utils::half_angle(b2_min_ph, b1_max_ph, ha1, ha2, in_radians);
       //either ha1 or  ha2 has to be in both box intervals
       if (b1.in_interval(ha1,in_radians)&& b2.in_interval(ha1,in_radians))
-        dph = d_phi(b2_min_ph, b1_max_ph,ha1);
+        dph = vsph_utils::arc_len(b2_min_ph, b1_max_ph,ha1);
       else
-        dph =  d_phi(b2_min_ph, b1_max_ph, ha2);
+        dph =  vsph_utils::arc_len(b2_min_ph, b1_max_ph, ha2);
       return dph*a;
     }
       //  b1_min => b2_max
@@ -1146,14 +1146,14 @@ double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
       vsph_utils::half_angle(b1_min_ph, b2_max_ph, ha1, ha2, in_radians);
       //eithr ha1 or ha2 has to be in both intervals
       if (b1.in_interval(ha1, in_radians)&& b2.in_interval(ha1, in_radians))
-        dph = d_phi(b1_min_ph, b2_max_ph, ha1);
+        dph = vsph_utils::arc_len(b1_min_ph, b2_max_ph, ha1);
       else
-        dph = d_phi(b1_min_ph, b2_max_ph, ha2);
+        dph = vsph_utils::arc_len(b1_min_ph, b2_max_ph, ha2);
       return dph*a;
     }
       // b1 contained in b2
     case 12:{
-      dph = d_phi(b1_min_ph, b1_max_ph, b1.c_phi(in_radians));
+      dph = vsph_utils::arc_len(b1_min_ph, b1_max_ph, b1.c_phi(in_radians));
       return dph*a;
     }
 
@@ -1162,15 +1162,15 @@ double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
       double dph2 =0.0;
       vsph_utils::half_angle(b1_min_ph, b2_max_ph, ha1, ha2, in_radians);
       if (b2.in_interval(ha1,in_radians)&& b1.in_interval(ha1,in_radians))
-        dph = d_phi(b1_min_ph, b2_max_ph,ha1);
+        dph = vsph_utils::arc_len(b1_min_ph, b2_max_ph,ha1);
       else
-        dph = d_phi(b1_min_ph, b2_max_ph,ha2);
+        dph = vsph_utils::arc_len(b1_min_ph, b2_max_ph,ha2);
 
       vsph_utils::half_angle(b2_min_ph, b1_max_ph, ha1, ha2, in_radians);
       if (b2.in_interval(ha1,in_radians)&& b1.in_interval(ha1,in_radians))
-        dph2 = d_phi(b2_min_ph, b1_max_ph, ha1);
+        dph2 = vsph_utils::arc_len(b2_min_ph, b1_max_ph, ha1);
       else
-        dph2 = d_phi(b2_min_ph, b1_max_ph, ha2);
+        dph2 = vsph_utils::arc_len(b2_min_ph, b1_max_ph, ha2);
       return a*(dph+dph2);
     }
     default:

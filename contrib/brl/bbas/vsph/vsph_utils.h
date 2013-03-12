@@ -60,7 +60,15 @@ class vsph_utils
   static vsph_sph_box_2d box_from_camera(vpgl_perspective_camera<double> const& cam, vcl_string units);
     //read a set of unit sphere ray data (assumed in unsigned char format)
   static bool read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data);
+  //total azimuth arc length from min_ph through c_ph to max_ph.
+  static double vsph_utils::arc_len(double min_ph, double max_ph,
+				    double c_ph);
 
+  //is a azimuth value in the interval of a box
+  static bool azimuth_in_interval(double phi, double a_phi_, double b_phi,
+				  double c_phi, bool in_radians);
+  // a streamlined function for porting to parallel computation
+  static double sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2);
  private: // only static functions in this class: disallow instantiation
   vsph_utils();
 };

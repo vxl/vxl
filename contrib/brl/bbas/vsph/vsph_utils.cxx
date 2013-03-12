@@ -27,6 +27,140 @@ void vsph_utils::half_angle(double phi_a, double phi_b, double& ang_1,
   else if (ang_2< -pye) ang_2 += two_pye;
 }
 
+
+bool vsph_utils::azimuth_in_interval(double phi, double a_phi, double b_phi,
+				     double c_phi, bool in_radians){
+  double pye = in_radians?vnl_math::pi:180.0;
+  // small interval contains 180
+  if (a_phi >0 && b_phi<0) {
+    // is the interval the short interval?
+    if ((c_phi> a_phi && c_phi<=pye) ||
+        (c_phi >= -pye && c_phi < b_phi)) {
+      //yes
+      bool in = (phi>= a_phi && phi<=pye) ||
+                (phi >= -pye && phi <= b_phi);
+      return in;
+    }
+    // is the interval the long interval
+    if ((c_phi< a_phi && c_phi>=0.0) ||
+        (c_phi < 0 && c_phi > b_phi)) {
+      //yes
+      bool in = (phi<= a_phi && phi>=0.0) ||
+                (phi <= 0 && phi >= b_phi);
+      return in;
+    }
+    // can't happen
+    assert(false);
+    return false;
+  }
+  // small interval doesn't contain 180
+  if (c_phi > a_phi && c_phi < b_phi)  // small interval
+    return phi >= a_phi && phi <= b_phi;
+  else //long interval
+    return (phi<=a_phi && phi>=-pye ) ||
+      (phi<=pye && phi>=b_phi);
+}
+
+double vsph_utils::arc_len(double min_ph, double max_ph, double c_ph)
+{
+  double dif = vcl_fabs(vsph_utils::azimuth_diff(min_ph, c_ph, true));
+  dif += vcl_fabs(vsph_utils::azimuth_diff(c_ph, max_ph, true));
+  return dif;
+}
+double vsph_utils::sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2){
+  bool in_radians = true;
+  double theta_min =
+    b1.min_theta(in_radians) < b2.min_theta(in_radians) ?
+    b2.min_theta(in_radians) : b1.min_theta(in_radians);
+
+  double theta_max =
+    b1.max_theta(in_radians) < b2.max_theta(in_radians) ?
+    b1.max_theta(in_radians) : b2.max_theta(in_radians);
+  // empty box.
+  if (theta_max <= theta_min)
+    return 0.0;
+  double a = vcl_fabs(vcl_cos(theta_min)-vcl_cos(theta_max));
+
+  double b1_a_phi = b1.a_phi(in_radians), b1_b_phi = b1.b_phi(in_radians),
+    b1_c_phi = b1.c_phi(in_radians);
+  double b2_a_phi = b2.a_phi(in_radians), b2_b_phi = b2.b_phi(in_radians),
+    b2_c_phi = b2.c_phi(in_radians);
+
+  double b2_min_ph = b2.min_phi(in_radians), b1_min_ph = b1.min_phi(in_radians);
+  double b2_max_ph = b2.max_phi(in_radians), b1_max_ph = b1.max_phi(in_radians);
+
+  bool b2min_in_b1 = vsph_utils::azimuth_in_interval(b2_min_ph, b1_a_phi, b1_b_phi, b1_c_phi,in_radians);
+  bool b1min_in_b2 = vsph_utils::azimuth_in_interval(b1_min_ph, b2_a_phi, b2_b_phi, b2_c_phi,in_radians);
+  bool b2max_in_b1 = vsph_utils::azimuth_in_interval(b2_max_ph, b1_a_phi, b1_b_phi, b1_c_phi,in_radians);
+  bool b1max_in_b2 = vsph_utils::azimuth_in_interval(b1_max_ph, b2_a_phi, b2_b_phi, b2_c_phi, in_radians);
+
+  unsigned short flags = 0;
+  if (b2max_in_b1) flags = flags | 1;
+  if (b2min_in_b1) flags = flags | 2;
+  if (b1max_in_b2) flags = flags | 4;
+  if (b1min_in_b2) flags = flags | 8;
+  double ha1, ha2, dph =0.0;
+  switch (flags)
+  {
+    // no intersection
+    case 0:{
+      return 0.0;
+    }
+      // b2 contained in b1
+    case 3:{
+      dph = vsph_utils::arc_len(b2_min_ph, b2_max_ph, b2_c_phi);
+      return dph*a;
+    }
+      //  b2_min => b1_max
+    case 6:{
+      vsph_utils::half_angle(b2_min_ph, b1_max_ph, ha1, ha2, in_radians);
+      //either ha1 or  ha2 has to be in both box intervals
+      if (vsph_utils::azimuth_in_interval(ha1,b1_a_phi, b1_b_phi, b1_c_phi,in_radians)&& vsph_utils::azimuth_in_interval(ha1,b2_a_phi, b2_b_phi, b2_c_phi,in_radians))
+        dph = vsph_utils::arc_len(b2_min_ph, b1_max_ph,ha1);
+      else
+        dph =  vsph_utils::arc_len(b2_min_ph, b1_max_ph, ha2);
+      return dph*a;
+    }
+      //  b1_min => b2_max
+    case 9:{
+      vsph_utils::half_angle(b1_min_ph, b2_max_ph, ha1, ha2, in_radians);
+      //eithr ha1 or ha2 has to be in both intervals
+      if (vsph_utils::azimuth_in_interval(ha1, b1_a_phi, b1_b_phi, b1_c_phi,in_radians)&& vsph_utils::azimuth_in_interval(ha1, b2_a_phi, b2_b_phi, b2_c_phi,in_radians))
+        dph = vsph_utils::arc_len(b1_min_ph, b2_max_ph, ha1);
+      else
+        dph = vsph_utils::arc_len(b1_min_ph, b2_max_ph, ha2);
+      return dph*a;
+    }
+      // b1 contained in b2
+    case 12:{
+      dph = vsph_utils::arc_len(b1_min_ph, b1_max_ph, b1_c_phi);
+      return dph*a;
+    }
+
+    // This condition produces two boxes (b1min=>b2max  b2min=>b1max)
+    case 15:{
+      double dph2 =0.0;
+      vsph_utils::half_angle(b1_min_ph, b2_max_ph, ha1, ha2, in_radians);
+      if (vsph_utils::azimuth_in_interval(ha1, b2_a_phi, b2_b_phi, b2_c_phi, in_radians)&& vsph_utils::azimuth_in_interval(ha1,b1_a_phi, b1_b_phi, b1_c_phi,in_radians))
+        dph = vsph_utils::arc_len(b1_min_ph, b2_max_ph,ha1);
+      else
+        dph = vsph_utils::arc_len(b1_min_ph, b2_max_ph,ha2);
+
+      vsph_utils::half_angle(b2_min_ph, b1_max_ph, ha1, ha2, in_radians);
+      if (vsph_utils::azimuth_in_interval(ha1,b2_a_phi, b2_b_phi, b2_c_phi,in_radians)&&
+	  vsph_utils::azimuth_in_interval(ha1,b1_a_phi, b1_b_phi, b1_c_phi,in_radians))
+        dph2 = vsph_utils::arc_len(b2_min_ph, b1_max_ph, ha1);
+      else
+        dph2 = vsph_utils::arc_len(b2_min_ph, b1_max_ph, ha2);
+      return a*(dph+dph2);
+    }
+    default:
+      vcl_cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
+      assert(false); //shouldn't happen
+      return false;
+  }
+}
+
 double vsph_utils::distance_on_usphere(vsph_sph_point_2d const& a,
                                        vsph_sph_point_2d const& b)
 {
