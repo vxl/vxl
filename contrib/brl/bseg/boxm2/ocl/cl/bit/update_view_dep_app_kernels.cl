@@ -376,7 +376,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
-            linfo, tree_array,                                  //scene info
+            linfo, tree_array,                                   //scene info
             local_tree, bit_lookup, cumsum, &vis0, aux_args);    //utility info
 
   //write out vis and pre
@@ -418,12 +418,12 @@ proc_norm_image (  __global float* norm_image,
   */
     vis = vis_image[j*get_global_size(0) + i]; 
     
-  if (i>=(*imgdims).z && j>=(*imgdims).w && vis<0.0f)
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y || vis < 0.0f)
     return;
   
   float pre = pre_image[j*get_global_size(0) + i]; 
   float norm = (pre+vis);
-  norm_image[j*get_global_size(0) + i] = norm; 
+  norm_image[j*get_global_size(0) + i] = norm;
 
   // the following  quantities have to be re-initialized before
   // the bayes_ratio kernel is executed
@@ -440,7 +440,7 @@ void
 update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * alpha_array,
                       __global MOG_TYPE         * mixture_array,
-                      __global float8           * nobs_array,
+                      __global float8          * nobs_array,
                       __global float4           * ray_dir,
                       __global int              * aux_array0,
                       __global int              * aux_array1,
@@ -448,7 +448,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global int              * aux_array3,
                       __global int              * update_alpha,     //update if not zero
                       __global int              * use_mask,         //use mask if not zero
-                      __global float            * mog_var,          //if 0 or less, variable var, otherwise use as fixed var
+                      __global float            *  mog_fixed_std,   //if 0 or less, variable var, otherwise use as fixed var
                       __global float            * output)
 {
   int gid=get_global_id(0);
@@ -492,17 +492,9 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float app_model_weights[8] = {0};
       float4 viewdir = ray_dir[gid];
       compute_app_model_weights(app_model_weights, viewdir, &app_model_view_directions); 
-      update_view_dep_app(mean_obs,cell_vis, app_model_weights, (float*)(&mixture), (float*)(&nobs) );
+      update_view_dep_app(mean_obs,cell_vis, app_model_weights, (float*)(&mixture), (float*)(&nobs),* mog_fixed_std );
       
-      if (*mog_var > 0.0f) {
-        (mixture).s1 = (*mog_var);
-        (mixture).s3 = (*mog_var);
-        (mixture).s5 = (*mog_var);
-        (mixture).s7 = (*mog_var);
-        (mixture).s9 = (*mog_var);
-        (mixture).sb = (*mog_var);
-        (mixture).sd = (*mog_var);
-      }
+
       nobs_array[gid] = nobs;
       mixture_array[gid] = mixture;
       
