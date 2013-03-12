@@ -1,6 +1,7 @@
 #include "vsph_utils.h"
 #include <vgl/vgl_polygon.h>
 #include <vnl/vnl_math.h>
+#include <vcl_cassert.h>
 
 // compute b-a on the circle
 double vsph_utils::azimuth_diff(double a, double b,
@@ -13,6 +14,7 @@ double vsph_utils::azimuth_diff(double a, double b,
   diff = (diff<-pye)?(diff+two_pye):diff;
   return diff;
 }
+
 void vsph_utils::half_angle(double phi_a, double phi_b, double& ang_1,
                             double& ang_2, bool in_radians)
 {
@@ -20,16 +22,16 @@ void vsph_utils::half_angle(double phi_a, double phi_b, double& ang_1,
   double two_pye = 2.0*pye;
   double hd = 0.5*(phi_b - phi_a);
   ang_1 = phi_a + hd;
-  if(ang_1>pye) ang_1 -=two_pye;
+  if (ang_1>pye) ang_1 -=two_pye;
   else if (ang_1< -pye) ang_1 += two_pye;
   ang_2 = ang_1 + pye;
-  if(ang_2>pye) ang_2 -=two_pye;
+  if (ang_2>pye) ang_2 -=two_pye;
   else if (ang_2< -pye) ang_2 += two_pye;
 }
 
-
 bool vsph_utils::azimuth_in_interval(double phi, double a_phi, double b_phi,
-				     double c_phi, bool in_radians){
+                                     double c_phi, bool in_radians)
+{
   double pye = in_radians?vnl_math::pi:180.0;
   // small interval contains 180
   if (a_phi >0 && b_phi<0) {
@@ -67,7 +69,9 @@ double vsph_utils::arc_len(double min_ph, double max_ph, double c_ph)
   dif += vcl_fabs(vsph_utils::azimuth_diff(c_ph, max_ph, true));
   return dif;
 }
-double vsph_utils::sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2){
+
+double vsph_utils::sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
+{
   bool in_radians = true;
   double theta_min =
     b1.min_theta(in_radians) < b2.min_theta(in_radians) ?
@@ -147,8 +151,8 @@ double vsph_utils::sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d con
         dph = vsph_utils::arc_len(b1_min_ph, b2_max_ph,ha2);
 
       vsph_utils::half_angle(b2_min_ph, b1_max_ph, ha1, ha2, in_radians);
-      if (vsph_utils::azimuth_in_interval(ha1,b2_a_phi, b2_b_phi, b2_c_phi,in_radians)&&
-	  vsph_utils::azimuth_in_interval(ha1,b1_a_phi, b1_b_phi, b1_c_phi,in_radians))
+      if (vsph_utils::azimuth_in_interval(ha1,b2_a_phi, b2_b_phi, b2_c_phi,in_radians) &&
+          vsph_utils::azimuth_in_interval(ha1,b1_a_phi, b1_b_phi, b1_c_phi,in_radians))
         dph2 = vsph_utils::arc_len(b2_min_ph, b1_max_ph, ha1);
       else
         dph2 = vsph_utils::arc_len(b2_min_ph, b1_max_ph, ha2);
@@ -256,16 +260,18 @@ bool vsph_utils::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>&
   if (nrays <= 0)
     return false;
   data.resize(nrays);
-  for(int i = 0; i< nrays; ++i){
+  for (int i = 0; i< nrays; ++i) {
     int temp;
     is >> temp ;
     data[i] = static_cast<unsigned char>(temp);
   }
   return true;
 }
-vsph_sph_box_2d vsph_utils::box_from_camera(vpgl_perspective_camera<double> const& cam, vcl_string units){
+
+vsph_sph_box_2d vsph_utils::box_from_camera(vpgl_perspective_camera<double> const& cam, vcl_string units)
+{
   bool in_radians = true;
-  if(units == "degrees")
+  if (units == "degrees")
     in_radians = false;
   // extract the image bounds
   vpgl_calibration_matrix<double> K = cam.get_calibration();
