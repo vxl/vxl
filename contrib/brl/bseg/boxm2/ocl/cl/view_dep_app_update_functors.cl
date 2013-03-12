@@ -127,19 +127,21 @@ void bayes_ratio_ind_view_based( float  seg_len,
     /* Compute PI for all threads */
     if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
         PI = view_dep_mixture_model(mean_obs, mixture, app_model_weights);
+    
+
+        //calculate this ray's contribution to beta
+        (*ray_beta) = ((*ray_pre) + PI*(*ray_vis))*seg_len/norm;
+        (*vis_cont) = (*ray_vis) * seg_len;
+
+        //update ray_pre and ray_vis
+        float temp  = exp(-alpha * seg_len);
+
+        /* updated pre                      Omega         *  PI         */
+        (*ray_pre) += (*ray_vis)*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
+        /* updated visibility probability */
+        (*ray_vis) *= temp;
+
     }
-
-    //calculate this ray's contribution to beta
-    (*ray_beta) = ((*ray_pre) + PI*(*ray_vis))*seg_len/norm;
-    (*vis_cont) = (*ray_vis) * seg_len;
-
-    //update ray_pre and ray_vis
-    float temp  = exp(-alpha * seg_len);
-
-    /* updated pre                      Omega         *  PI         */
-    (*ray_pre) += (*ray_vis)*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
-    /* updated visibility probability */
-    (*ray_vis) *= temp;
 }
 
 
