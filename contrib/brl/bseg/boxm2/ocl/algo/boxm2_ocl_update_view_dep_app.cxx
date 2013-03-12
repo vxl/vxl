@@ -76,7 +76,6 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
     num_obs_type += "_" + ident;
   }
 
-
   // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue( device->context(),
@@ -142,7 +141,6 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
     }
   }
 
-
   //bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff,cl_ni*cl_nj*sizeof(float),"input image buffer");
   bocl_mem_sptr in_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), input_buff, "input image buffer");
   in_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -203,7 +201,6 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
   use_mask_buf[0] = use_mask ? 1 : 0;
   bocl_mem_sptr use_mask_mem = new bocl_mem(device->context(), use_mask_buf, sizeof(use_mask_buf), "update with mask");
   use_mask_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
 
 
   // set arguments
@@ -419,30 +416,28 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
         alpha->read_to_buffer(queue);
         mog->read_to_buffer(queue);
         num_obs->read_to_buffer(queue);
+#if 0
+        if (id->i_ == 1 && id->j_ == 1 && id->k_ == 0)
+        {
+          vcl_cout << vcl_endl << *id << vcl_endl;
+          vnl_vector_fixed<float, 16>* app_compact_buf = ( vnl_vector_fixed<float, 16>*)mog->cpu_buffer();
+          vnl_vector_fixed<float, 8>* nobs_buf = ( vnl_vector_fixed<float, 8>*)num_obs->cpu_buffer();
 
-//        if(id->i_ == 1 && id->j_ == 1 && id->k_ == 0)
-//        {
-//        vcl_cout << vcl_endl << *id << vcl_endl;
-//        vnl_vector_fixed<float, 16>* app_compact_buf = ( vnl_vector_fixed<float, 16>*)mog->cpu_buffer();
-//        vnl_vector_fixed<float, 8>* nobs_buf = ( vnl_vector_fixed<float, 8>*)num_obs->cpu_buffer();
-//
-//
-//        for(int i = 0; i < 10;i++)
-//        {
-//          vnl_vector_fixed<float, 16> tmp = app_compact_buf[i];
-//          vnl_vector_fixed<float, 8> nobs_tmp = nobs_buf[i];
-//          for(unsigned  j = 0;j<16;j++) {
-//            vcl_cout << tmp[j] << " ";
-//          }
-//          vcl_cout << vcl_endl;
-//          for(unsigned  j = 0;j<8;j++) {
-//            vcl_cout << nobs_tmp[j] << " ";
-//          }
-//          vcl_cout << vcl_endl;
-//        }
-//        }
-
-
+          for (int i = 0; i < 10;i++)
+          {
+            vnl_vector_fixed<float, 16> tmp = app_compact_buf[i];
+            vnl_vector_fixed<float, 8> nobs_tmp = nobs_buf[i];
+            for (unsigned  j = 0;j<16;j++) {
+              vcl_cout << tmp[j] << ' ';
+            }
+            vcl_cout << vcl_endl;
+            for (unsigned  j = 0;j<8;j++) {
+              vcl_cout << nobs_tmp[j] << ' ';
+            }
+            vcl_cout << vcl_endl;
+          }
+        }
+#endif // 0
       }
 
       //read image out to buffer (from gpu)
