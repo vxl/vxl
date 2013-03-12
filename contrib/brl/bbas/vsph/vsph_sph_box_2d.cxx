@@ -1027,7 +1027,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
    case 3:{
     boxes.resize(1);
     boxes[0].set(theta_min, theta_max, b2_min_ph,
-             b2_max_ph, b2.c_phi(in_radians),in_radians);
+                 b2_max_ph, b2.c_phi(in_radians),in_radians);
     return true;
    }
     //  b2_min => b1_max
@@ -1056,8 +1056,8 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
     // b1 contained in b2
   case 12:{
     boxes.resize(1);
-    boxes[0].set(theta_min, theta_max, b1_min_ph, b1_max_ph, 
-	     b1.c_phi(in_radians),in_radians);
+    boxes[0].set(theta_min, theta_max, b1_min_ph, b1_max_ph,
+                 b1.c_phi(in_radians),in_radians);
     return true;
    }
 
@@ -1083,6 +1083,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
     return false;
   }
 }
+
 #if 0
 double d_phi(double min_ph, double max_ph, double c_ph)
 {
@@ -1091,6 +1092,7 @@ double d_phi(double min_ph, double max_ph, double c_ph)
   return dif;
 }
 #endif
+
 double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
 {
   bool in_radians = true;
