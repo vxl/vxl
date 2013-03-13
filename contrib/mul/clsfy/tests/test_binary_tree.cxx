@@ -186,10 +186,10 @@ void test_binary_tree()
     double testTNR=double (tnr)/dtn;
     double testFNR=double (fnr)/dtp;
 
-    vcl_cout<<"True Positive Rate "<<double (tpr)/dtp<<vcl_endl
-            <<"False Positive Rate "<<double (fpr)/dtn<<vcl_endl
-            <<"True Negative Rate "<<double (tnr)/dtn<<vcl_endl
-            <<"False Negative Rate "<<double (fnr)/dtp<<vcl_endl;
+    vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+            <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
+            <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
+            <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
 
     // simple test for binary threshold
     TEST("tpr>0.9", double (tpr)/dtp>0.9, true);
@@ -221,7 +221,7 @@ void test_binary_tree()
     TEST("Can cast to binary tree",pClassifierIn != 0,true);
 
     {
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1);
+        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -246,10 +246,10 @@ void test_binary_tree()
         }
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
-        vcl_cout<<"True Positive Rate "<<double (tpr)/dtp<<vcl_endl
-                <<"False Positive Rate "<<double (fpr)/dtn<<vcl_endl
-                <<"True Negative Rate "<<double (tnr)/dtn<<vcl_endl
-                <<"False Negative Rate "<<double (fnr)/dtp<<vcl_endl;
+        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+                <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
+                <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
+                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
 
         // simple test for binary threshold
         double tpr_=double (tpr)/dtp;
@@ -264,7 +264,7 @@ void test_binary_tree()
     {
         clsfy_binary_tree treeCopy= *pClassifierIn;
 
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1);
+        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -289,10 +289,10 @@ void test_binary_tree()
         }
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
-        vcl_cout<<"True Positive Rate "<<double (tpr)/dtp<<vcl_endl
-                <<"False Positive Rate "<<double (fpr)/dtn<<vcl_endl
-                <<"True Negative Rate "<<double (tnr)/dtn<<vcl_endl
-                <<"False Negative Rate "<<double (fnr)/dtp<<vcl_endl;
+        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+                <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
+                <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
+                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
 
         // simple test for binary threshold
         double tpr_=double (tpr)/dtp;
@@ -329,7 +329,7 @@ void test_binary_tree()
 
     {
         const int NPOINTS=500;
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1);
+        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -354,10 +354,10 @@ void test_binary_tree()
         }
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
-        vcl_cout<<"True Positive Rate "<<double (tpr)/dtp<<vcl_endl
-                <<"False Positive Rate "<<double (fpr)/dtn<<vcl_endl
-                <<"True Negative Rate "<<double (tnr)/dtn<<vcl_endl
-                <<"False Negative Rate "<<double (fnr)/dtp<<vcl_endl;
+        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+                <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
+                <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
+                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
 
         TEST("tpr>0.9", double (tpr)/dtp>0.9, true);
         TEST("fpr<0.1", double (fpr)/dtn<0.1, true);
@@ -504,9 +504,9 @@ void test_binary_tree()
         double testTNR=double (tnr)/dtn;
         double testFNR=double (fnr)/dtp;
 
-        vcl_cout<<"True Positive Rate " <<testTPR<<vcl_endl
-                <<"False Positive Rate "<<testFPR<<vcl_endl
-                <<"True Negative Rate " <<testTNR<<vcl_endl
+        vcl_cout<<"True Positive Rate " <<testTPR<<'\n'
+                <<"False Positive Rate "<<testFPR<<'\n'
+                <<"True Negative Rate " <<testTNR<<'\n'
                 <<"False Negative Rate "<<testFNR<<vcl_endl;
 
         // simple test for binary threshold
@@ -539,7 +539,7 @@ void test_binary_tree()
 
     vcl_cout<<"Applied to test set (with +ve and -ve other way round:\n";
     tpr=(tp*1.0)/n_neg, fpr= (fp*1.0)/n_pos;
-    vcl_cout<<"True positives= "<<tpr<<vcl_endl
+    vcl_cout<<"True positives= "<<tpr<<'\n'
             <<"False positives= "<<fpr<<vcl_endl;
 
     te= ((n_neg-tp+fp)*1.0)/(n_pos+n_neg);
@@ -594,7 +594,7 @@ void test_binary_tree()
 #endif
 
     vcl_cout<<"Saved :\n"
-            << *b_thresh_clsfr << vcl_endl
+            << *b_thresh_clsfr << '\n'
             <<"Loaded:\n"
             << classifier_in << vcl_endl;
 
