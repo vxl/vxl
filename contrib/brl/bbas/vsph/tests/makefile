@@ -12,6 +12,7 @@ TESTS += test_unit_sphere.cxx
 TESTS += test_utils.cxx
 TESTS += test_grid_index.cxx
 TESTS += test_sph_segment.cxx
+TESTS += test_sph_cover.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

@@ -12,6 +12,7 @@ SOURCES += vsph_utils.cxx
 SOURCES += vsph_unit_sphere.cxx
 SOURCES += vsph_grid_index_2d.cxx
 SOURCES += vsph_segment_sphere.cxx
+SOURCES += vsph_sph_cover_2d.cxx
 
 MANPAGE_SOURCES += vsph_defs.h
 MANPAGE_SOURCES += vsph_view_point.h
