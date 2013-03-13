@@ -12,6 +12,7 @@
 
 static vcl_string MyDIR = "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/";
 
+#if 0 // only used in commented-out code below
 static void random_rgb(float& r, float&g, float& b)
 {
   float rmax = static_cast<float>(RAND_MAX);
@@ -19,8 +20,9 @@ static void random_rgb(float& r, float&g, float& b)
   g = static_cast<float>(vcl_rand())/rmax;
   b = static_cast<float>(vcl_rand())/rmax;
 }
+#endif
 
-#if 0 // This static function is not used in here
+#if 0 // This static function is not used in here at all
 static vcl_vector<vcl_vector<float> > convert_orient_code(vcl_vector<unsigned char> const& cdata)
 {
   unsigned n = cdata.size();
