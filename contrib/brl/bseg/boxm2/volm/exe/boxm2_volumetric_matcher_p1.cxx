@@ -80,9 +80,9 @@ int main(int argc, char** argv)
   // check the consistency of tile_id and zone_id
   // for coast --- zone 18 contains only tile 8 to tile 14 and zone 17 contains only tile 0 to tile 8
   // for desert --- all tiles (4 tiles) are in zone 11
-  if (tile_id() >= 8 && zone_id() == 17 ||
-      tile_id() < 8 && zone_id() == 18 ||
-      tile_id() > 3 && zone_id() == 11 )
+  if ((tile_id() >= 8 && zone_id() == 17) ||
+      (tile_id()  < 8 && zone_id() == 18) ||
+      (tile_id()  > 3 && zone_id() == 11) )
   {
     log << " ERROR: inconsistency between tile_id and utm zone_id, tile_id = " << tile_id() << ", zone_id = " << zone_id() << '\n';
     if (do_log) { volm_io::write_log(out_folder(), log.str()); }
@@ -213,8 +213,9 @@ int main(int argc, char** argv)
            << "\t\t  " << dms_bin() << '\n'
            << "\t\t  generate query has " << query->get_cam_num() << " cameras "
            << " and " << (float)total_size/1024 << " Kbyte in total\n"
-           << "==================================================================================================\n\n";
-  vcl_cout << " The spherical shell for current query has parameters: point_angle = " << query->sph_shell()->point_angle()
+           << "==================================================================================================\n\n"
+
+           << " The spherical shell for current query has parameters: point_angle = " << query->sph_shell()->point_angle()
            << ", top_angle = "    << query->sph_shell()->top_angle()
            << ", bottom_angle = " << query->sph_shell()->bottom_angle()
            << ", size = " << query->get_query_size() << '\n'
@@ -297,7 +298,7 @@ int main(int argc, char** argv)
   vcl_cout << "\n==================================================================================================\n"
            << "\t\t  3. Following device is used for volm_matcher\n"
            << "\t\t  " << mgr->gpus_[dev_id()]->info() << '\n'
-           << "==================================================================================================\n\n"
+           << "==================================================================================================\n"
 
            << "\n==================================================================================================\n"
            << "\t\t  4. Start volumetric matching with following matchers\n"
