@@ -61,8 +61,7 @@ class vsph_utils
     //read a set of unit sphere ray data (assumed in unsigned char format)
   static bool read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data);
   //total azimuth arc length from min_ph through c_ph to max_ph.
-  static double vsph_utils::arc_len(double min_ph, double max_ph,
-                                    double c_ph);
+  static double arc_len(double min_ph, double max_ph, double c_ph);
 
   //is a azimuth value in the interval of a box
   static bool azimuth_in_interval(double phi, double a_phi_, double b_phi,
