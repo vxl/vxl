@@ -186,16 +186,16 @@ void test_random_forest()
                 ++fnr;
         }
     }
-    double dtp=double (tp);
-    double dtn=double (NPOINTS-tp);
-    double testTPR=double (tpr)/dtp;
-    double testFPR=double (fpr)/dtn;
-    double testTNR=double (tnr)/dtn;
-    double testFNR=double (fnr)/dtp;
+    double dtp=double(tp);
+    double dtn=double(NPOINTS-tp);
+    double testTPR=double(tpr)/dtp;
+    double testFPR=double(fpr)/dtn;
+    double testTNR=double(tnr)/dtn;
+    double testFNR=double(fnr)/dtp;
 
-    vcl_cout<<"True Positive Rate " <<testTPR<<vcl_endl
-            <<"False Positive Rate "<<testFPR<<vcl_endl
-            <<"True Negative Rate " <<testTNR<<vcl_endl
+    vcl_cout<<"True Positive Rate " <<testTPR<<'\n'
+            <<"False Positive Rate "<<testFPR<<'\n'
+            <<"True Negative Rate " <<testTNR<<'\n'
             <<"False Negative Rate "<<testFNR<<vcl_endl;
 
     // simple test for binary threshold
@@ -231,7 +231,7 @@ void test_random_forest()
     TEST("Can cast to random forest",pClassifierIn != 0,true);
 
     {
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1);
+        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -254,21 +254,19 @@ void test_random_forest()
                     ++fnr;
             }
         }
-        double dtp=double (tp);
-        double dtn=double (NPOINTS-tp);
-        double tpr_=double (tpr)/dtp;
-        double fpr_=double (fpr)/dtn;
+        double dtp=double(tp);
+        double dtn=double(NPOINTS-tp);
 
-        vcl_cout<<"True Positive Rate " <<tpr_<<vcl_endl
-                <<"False Positive Rate "<<fpr_<<vcl_endl
-                <<"True Negative Rate " <<double (tnr)/dtn<<vcl_endl
-                <<"False Negative Rate "<<double (fnr)/dtp<<vcl_endl;
+        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+                <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
+                <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
+                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
 
         // simple test for binary threshold
-        TEST("tpr>0.7", tpr_>0.9, true);
-        TEST("fpr<0.3", fpr_<0.1, true);
-        TEST("Same TPR as pre-IO ",vcl_fabs(testTPR- tpr_)<1.0E-6,true);
-        TEST("Same FPR as pre-IO ",vcl_fabs(testFPR- fpr_)<1.0E-6,true);
+        TEST("tpr>0.9", tpr>0.9*dtp, true);
+        TEST("fpr<0.1", fpr<0.1*dtn, true);
+        TEST_NEAR("Same TPR as pre-IO ",testTPR, double(tpr)/dtp, 1e-6);
+        TEST_NEAR("Same FPR as pre-IO ",testFPR, double(fpr)/dtn, 1e-6);
     }
 
     vcl_cout<<"=========swap pos and neg samples round===========\n";
@@ -297,7 +295,7 @@ void test_random_forest()
 
     {
         const unsigned NPOINTS=500;
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1);
+        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -320,15 +318,15 @@ void test_random_forest()
                     ++fnr;
             }
         }
-        double dtp=double (tp);
-        double dtn=double (NPOINTS-tp);
-        vcl_cout<<"True Positive Rate " <<double (tpr)/dtp<<vcl_endl
-                <<"False Positive Rate "<<double (fpr)/dtn<<vcl_endl
-                <<"True Negative Rate " <<double (tnr)/dtn<<vcl_endl
-                <<"False Negative Rate "<<double (fnr)/dtp<<vcl_endl;
+        double dtp=double(tp);
+        double dtn=double(NPOINTS-tp);
+        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+                <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
+                <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
+                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
 
-        TEST("tpr>0.9", double (tpr)/dtp>0.9, true);
-        TEST("fpr<0.1", double (fpr)/dtn<0.1, true);
+        TEST("tpr>0.9", double(tpr)/dtp>0.9, true);
+        TEST("fpr<0.1", double(fpr)/dtn<0.1, true);
     }
 
     {
@@ -409,10 +407,8 @@ void test_random_forest()
             training_outputs[i]=label;
         }
 
-        unsigned ntpos=vcl_count(training_outputs.begin(),training_outputs.end(),
-                                 1);
-        unsigned ntneg=vcl_count(training_outputs.begin(),training_outputs.end(),
-                                 0);
+        unsigned ntpos=vcl_count(training_outputs.begin(),training_outputs.end(), 1U);
+        unsigned ntneg=vcl_count(training_outputs.begin(),training_outputs.end(), 0U);
         vcl_cout<<"TRAINING Number of pos ="<<ntpos<<"\t num neg "<<ntneg<<vcl_endl;
 
         mbl_data_array_wrapper<vnl_vector<double> > training_set_inputs(data);
@@ -466,8 +462,8 @@ void test_random_forest()
             test_outputs[i]=label;
         }
 
-        tp=vcl_count(test_outputs.begin(),test_outputs.end(), 1);
-        unsigned tneg=vcl_count(test_outputs.begin(),test_outputs.end(), 0);
+        tp=vcl_count(test_outputs.begin(),test_outputs.end(), 1U);
+        unsigned tneg=vcl_count(test_outputs.begin(),test_outputs.end(), 0U);
         vcl_cout<<"TESTING Number of pos ="<<tp<<"\t num neg "<<tneg<<vcl_endl;
 
         unsigned tpr=0;
@@ -493,17 +489,17 @@ void test_random_forest()
                     ++fnr;
             }
         }
-        vcl_cout<<"tp "<<tp<<" tn "<<vcl_endl;
-        double dtp=double (tp);
-        double dtn=double (NPOINTS-tp);
-        double testTPR=double (tpr)/dtp;
-        double testFPR=double (fpr)/dtn;
-        double testTNR=double (tnr)/dtn;
-        double testFNR=double (fnr)/dtp;
+        vcl_cout<<"tp "<<tp<<" tn"<<vcl_endl;
+        double dtp=double(tp);
+        double dtn=double(NPOINTS-tp);
+        double testTPR=double(tpr)/dtp;
+        double testFPR=double(fpr)/dtn;
+        double testTNR=double(tnr)/dtn;
+        double testFNR=double(fnr)/dtp;
 
-        vcl_cout<<"True Positive Rate " <<testTPR<<vcl_endl
-                <<"False Positive Rate "<<testFPR<<vcl_endl
-                <<"True Negative Rate " <<testTNR<<vcl_endl
+        vcl_cout<<"True Positive Rate " <<testTPR<<'\n'
+                <<"False Positive Rate "<<testFPR<<'\n'
+                <<"True Negative Rate " <<testTNR<<'\n'
                 <<"False Negative Rate "<<testFNR<<vcl_endl;
 
         // simple test for binary threshold
@@ -653,16 +649,16 @@ void test_random_forest()
                         ++fnr;
                 }
             }
-            double dtp=double (tp);
-            double dtn=double (NPOINTS-tp);
-            double testTPR=double (tpr)/dtp;
-            double testFPR=double (fpr)/dtn;
-            double testTNR=double (tnr)/dtn;
-            double testFNR=double (fnr)/dtp;
+            double dtp=double(tp);
+            double dtn=double(NPOINTS-tp);
+            double testTPR=double(tpr)/dtp;
+            double testFPR=double(fpr)/dtn;
+            double testTNR=double(tnr)/dtn;
+            double testFNR=double(fnr)/dtp;
 
-            vcl_cout<<"True Positive Rate " <<testTPR<<vcl_endl
-                    <<"False Positive Rate "<<testFPR<<vcl_endl
-                    <<"True Negative Rate " <<testTNR<<vcl_endl
+            vcl_cout<<"True Positive Rate " <<testTPR<<'\n'
+                    <<"False Positive Rate "<<testFPR<<'\n'
+                    <<"True Negative Rate " <<testTNR<<'\n'
                     <<"False Negative Rate "<<testFNR<<vcl_endl;
 
             // simple test for binary threshold
@@ -671,8 +667,7 @@ void test_random_forest()
         }
         {
             //Now repeat with out of bag estimates
-            tp=vcl_count(training_outputs.begin(),training_outputs.end(),
-                         1);
+            tp=vcl_count(training_outputs.begin(),training_outputs.end(), 1U);
 
             vcl_cout<<"True positives in training = "<<tp<<vcl_endl;
             unsigned tpr=0;
@@ -697,16 +692,16 @@ void test_random_forest()
                         ++fnr;
                 }
             }
-            double dtp=double (tp);
-            double dtn=double (NPOINTS-tp);
-            double testTPR=double (tpr)/dtp;
-            double testFPR=double (fpr)/dtn;
-            double testTNR=double (tnr)/dtn;
-            double testFNR=double (fnr)/dtp;
+            double dtp=double(tp);
+            double dtn=double(NPOINTS-tp);
+            double testTPR=double(tpr)/dtp;
+            double testFPR=double(fpr)/dtn;
+            double testTNR=double(tnr)/dtn;
+            double testFNR=double(fnr)/dtp;
 
-            vcl_cout<<"OOB True Positive Rate " <<testTPR<<vcl_endl
-                    <<"OOB False Positive Rate "<<testFPR<<vcl_endl
-                    <<"OOB True Negative Rate " <<testTNR<<vcl_endl
+            vcl_cout<<"OOB True Positive Rate " <<testTPR<<'\n'
+                    <<"OOB False Positive Rate "<<testFPR<<'\n'
+                    <<"OOB True Negative Rate " <<testTNR<<'\n'
                     <<"OOB False Negative Rate "<<testFNR<<vcl_endl;
 
             // simple test for binary threshold
@@ -740,7 +735,7 @@ void test_random_forest()
 
     vcl_cout<<"Applied to test set (with +ve and -ve other way round:\n";
     tpr=(tp*1.0)/n_neg, fpr= (fp*1.0)/n_pos;
-    vcl_cout<<"True positives= "<<tpr<<vcl_endl
+    vcl_cout<<"True positives= "<<tpr<<'\n'
             <<"False positives= "<<fpr<<vcl_endl;
 
     te= ((n_neg-tp+fp)*1.0)/(n_pos+n_neg);
@@ -795,7 +790,7 @@ void test_random_forest()
 #endif
 
     vcl_cout<<"Saved :\n"
-            << *b_thresh_clsfr << vcl_endl
+            << *b_thresh_clsfr << '\n'
             <<"Loaded:\n"
             << classifier_in << vcl_endl;
 
