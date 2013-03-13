@@ -120,6 +120,9 @@ SOURCE=.\vsph_grid_index_2d.cxx
 SOURCE=.\vsph_segment_sphere.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vsph_sph_cover_2d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsph_view_sphere+vsph_view_point+double--.cxx
 # End Source File
 # Begin Source File
@@ -184,6 +187,9 @@ SOURCE=.\vsph_defs.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsph_segment_sphere.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_sph_cover_2d.h
 # End Source File
 # End Group
 # End Target
