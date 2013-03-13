@@ -236,13 +236,8 @@ void volm_io_extract_values(unsigned char combined_value, unsigned char& orienta
 
 bool volm_attributes::contains(vcl_string name)
 {
-  unsigned found = name_.find(name);
-  if (found != vcl_string::npos)
-    return true;
-  found = name.find(name_);
-  if (found != vcl_string::npos)
-    return true;
-  return false;
+  return name_.find(name) != vcl_string::npos
+     ||  name.find(name_) != vcl_string::npos;
 }
 
 unsigned char volm_label_table::get_id_closest_name(vcl_string name)
