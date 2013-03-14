@@ -440,6 +440,26 @@ bool vsph_sph_box_2d::in_interval(double phi, bool in_radians) const
 }
 #endif
 
+bool vsph_sph_box_2d::operator==(const vsph_sph_box_2d& other) const{
+   if(this == &other) return true; //the same instance
+  // can't convert units and still be exactly equal
+  if(other.in_radians()!=in_radians_)
+    return false;
+  double min_th = other.min_theta(), max_th = other.max_theta();
+  if((min_th != min_th_) || (max_th != max_th_))
+    return false;
+  double a = other.a_phi(), b = other.b_phi(), c = other.c_phi();
+  if(!(((a==a_phi_)&&(b==b_phi_))||((a==b_phi_)&&(b==a_phi_))))
+    return false;
+  if(c_phi_==c) return true;
+  // the c location can differ without altering the actual spherical interval.
+  if(!this->in_interval(c, in_radians_))
+    return false;
+  if(!other.in_interval(c_phi_, in_radians_))
+    return false;
+  return true;
+}
+
 bool vsph_sph_box_2d::contains(double const& theta, double const& phi,
                                bool in_radians) const
 {
@@ -992,6 +1012,11 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
 bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
                   vcl_vector<vsph_sph_box_2d>& boxes)
 {
+  if(b1 == b2){
+    boxes.resize(1);
+    boxes[0]=b1;
+    return true;
+  }
   bool in_radians = b1.in_radians();
   double theta_min =
     b1.min_theta(in_radians) < b2.min_theta(in_radians) ?
@@ -1084,17 +1109,10 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
   }
 }
 
-#if 0
-double d_phi(double min_ph, double max_ph, double c_ph)
-{
-  double dif = vcl_fabs(vsph_utils::azimuth_diff(min_ph, c_ph, true));
-  dif += vcl_fabs(vsph_utils::azimuth_diff(c_ph, max_ph, true));
-  return dif;
-}
-#endif
-
 double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
 {
+  if(b1 == b2)
+    return b1.area();
   bool in_radians = true;
   double theta_min =
     b1.min_theta(in_radians) < b2.min_theta(in_radians) ?
@@ -1130,7 +1148,12 @@ double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
     }
       // b2 contained in b1
     case 3:{
-      dph = vsph_utils::arc_len(b2_min_ph, b2_max_ph, b2.c_phi(in_radians));
+      vsph_utils::half_angle(b2_min_ph, b2_max_ph, ha1, ha2, in_radians);
+      //either ha1 or  ha2 has to be in the box interval
+      if (b2.in_interval(ha1,in_radians))
+        dph = vsph_utils::arc_len(b2_min_ph, b2_max_ph,ha1);
+      else
+        dph =  vsph_utils::arc_len(b2_min_ph, b2_max_ph, ha2);
       return dph*a;
     }
       //  b2_min => b1_max
@@ -1155,7 +1178,12 @@ double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
     }
       // b1 contained in b2
     case 12:{
-      dph = vsph_utils::arc_len(b1_min_ph, b1_max_ph, b1.c_phi(in_radians));
+      vsph_utils::half_angle(b1_min_ph, b1_max_ph, ha1, ha2, in_radians);
+      //either ha1 or  ha2 has to be in the box interval
+      if (b1.in_interval(ha1,in_radians))
+        dph = vsph_utils::arc_len(b1_min_ph, b1_max_ph,ha1);
+      else
+        dph =  vsph_utils::arc_len(b1_min_ph, b1_max_ph, ha2);
       return dph*a;
     }
 
@@ -1178,7 +1206,7 @@ double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
     default:
       vcl_cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
       assert(false); //shouldn't happen
-      return false;
+      return 0.0;
   }
 }
 

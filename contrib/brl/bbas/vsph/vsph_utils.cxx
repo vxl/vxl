@@ -161,7 +161,7 @@ double vsph_utils::sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d con
     default:
       vcl_cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
       assert(false); //shouldn't happen
-      return false;
+      return 0.0;
   }
 }
 

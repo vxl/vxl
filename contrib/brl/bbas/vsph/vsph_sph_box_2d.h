@@ -80,6 +80,8 @@ class vsph_sph_box_2d
   // or the added point sequence is from a "compact" set on the circle
   void add( double theta, double phi, bool in_radians = true);
   void add( vsph_sph_point_2d const& pt) { add(pt.theta_, pt.phi_, pt.in_radians_); }
+  //: are two boxes the same box (same spherical domain)
+  bool operator==(const vsph_sph_box_2d& other) const;
 
   //: does the box have enough added points to uniquely define interval bounds
   bool defined() const;

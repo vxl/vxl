@@ -252,7 +252,8 @@ static void test_sph_geom()
   vcl_cout << "grok area  " << grok.area() << " sum " << sum << '\n';
   er += vcl_fabs(sum - grok.area());
   TEST_NEAR("equal angle subdivision of a box", er, 0.0, 0.001);
-
+  double grok_a = intersection_area(grok, grok);
+  TEST_NEAR("box self-intersection area  ", grok_a, grok.area(), 0.001);
 
   double abba = bint.area();
   double abba_area = intersection_area(bba,bbb);
@@ -261,26 +262,27 @@ static void test_sph_geom()
   double abba_area_utils = vsph_utils::sph_inter_area(bba, bbb);
   er = vcl_fabs(abba-abba_area_utils);
   TEST_NEAR("intersection area utils", er, 0.0, 0.001);
-  vul_timer t;
   vcl_vector<vsph_sph_box_2d> bxs;
   nb = 100000000;
-  vgl_point_2d<double> vp0(0.0, 0.0), vp1(1.0, 1.0);
-  vgl_point_2d<double> vp2(0.25, 0.0), vp3(0.75, 1.0);
-  vgl_box_2d<double> b1, b2;
-  b1.add(vp0);  b1.add(vp1);   b2.add(vp2);  b2.add(vp3);
-#if 0
+  vul_timer t;
+#if 1
   for (unsigned i = 0; i<nb; ++i) {
-    double a0 = intersection_area(bbc1, bbc2);
-    double a1 = intersection_area(bba, bbb);
-    good = intersection(bbc1, bbc2, bxs); // = intersection(bba, bbb, bxs);
-    bba.in_interval(180.0, false);
-    grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
-    diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
-    vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
+    //        double a0 = vsph_utils::sph_inter_area(bbc1, bbc2);
+    //        double a1 = vsph_utils::sph_inter_area(bba, bbb);
+          double a0  = intersection_area(bbc1, bbc2); 
+          double a1  = intersection_area(bba, bbb);
+    //    bba.in_interval(180.0, false);
+    //    grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
+    //    diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
+    //    vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
   }
 #endif
   double td_vsph = static_cast<double>(t.real())/(2.0*nb*1000.0);
   vcl_cout << "vsph box intersection time = " << td_vsph << " secs\n";
+  vgl_point_2d<double> vp0(0.0, 0.0), vp1(1.0, 1.0);
+  vgl_point_2d<double> vp2(0.25, 0.0), vp3(0.75, 1.0);
+  vgl_box_2d<double> b1, b2;
+  b1.add(vp0);  b1.add(vp1);   b2.add(vp2);  b2.add(vp3);
   t.mark();
   for (unsigned i = 0; i<nb; ++i) {
     vgl_box_2d<double> tin = vgl_intersection(b1, b2);
