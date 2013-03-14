@@ -262,6 +262,11 @@ static void test_sph_geom()
   double abba_area_utils = vsph_utils::sph_inter_area(bba, bbb);
   er = vcl_fabs(abba-abba_area_utils);
   TEST_NEAR("intersection area utils", er, 0.0, 0.001);
+  vsph_sph_box_2d prod_a, prod_b;
+  prod_a.set(88.9573,  99.6052, 165.913, -179.858,173.027, false);
+  prod_b.set(90.7031,  90.7073, 171.554, 180,172.258, false);
+  double prod_area = intersection_area(prod_a,prod_b);
+
   vcl_vector<vsph_sph_box_2d> bxs;
   nb = 100000000;
   vul_timer t;
