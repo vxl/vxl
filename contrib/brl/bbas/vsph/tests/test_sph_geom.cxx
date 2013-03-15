@@ -10,6 +10,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_intersection.h>
+
 static vcl_string MyDIR = "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/";
 
 static void test_sph_geom()
@@ -266,20 +267,19 @@ static void test_sph_geom()
   prod_a.set(88.9573,  99.6052, 165.913, -179.858,173.027, false);
   prod_b.set(90.7031,  90.7073, 171.554, 180,172.258, false);
   double prod_area = intersection_area(prod_a,prod_b);
+  vcl_cout << "Prod area: " << prod_area << vcl_endl;
 
   vcl_vector<vsph_sph_box_2d> bxs;
   nb = 100000000;
   vul_timer t;
-#if 1
+#if 0
   for (unsigned i = 0; i<nb; ++i) {
-    //        double a0 = vsph_utils::sph_inter_area(bbc1, bbc2);
-    //        double a1 = vsph_utils::sph_inter_area(bba, bbb);
-          double a0  = intersection_area(bbc1, bbc2); 
-          double a1  = intersection_area(bba, bbb);
-    //    bba.in_interval(180.0, false);
-    //    grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
-    //    diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
-    //    vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
+    double a0 = intersection_area(bbc1, bbc2); // vsph_utils::sph_inter_area(bbc1, bbc2);
+    double a1 = intersection_area(bba, bbb); // vsph_utils::sph_inter_area(bba, bbb);
+    bba.in_interval(180.0, false);
+    grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
+    diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
+    vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
   }
 #endif
   double td_vsph = static_cast<double>(t.real())/(2.0*nb*1000.0);
@@ -294,8 +294,8 @@ static void test_sph_geom()
     vgl_box_2d<double> tYn = vgl_intersection(b1, b2);
   }
   double td_vgl = static_cast<double>(t.real())/(2.0*nb*1000.0);
-  vcl_cout << "vgl box intersection time = " << td_vgl << " secs\n";
-  vcl_cout << "ratio = " << td_vsph/td_vgl << '\n';
+  vcl_cout << "vgl box intersection time = " << td_vgl << " secs\n"
+           << "ratio = " << td_vsph/td_vgl << '\n';
 #if 0
   double tol = 0.001;
   vcl_string grok_path = MyDIR + "grok_box_display.wrl";
@@ -308,8 +308,7 @@ static void test_sph_geom()
   vcl_ofstream os(box_path.c_str());
   box_s1.display_box(os, 1.0f, 0.0f, 0.0f, tol);
   os.close();
-#endif
-#if 0
+
   vcl_vector<vsph_sph_box_2d> dis_boxes(2);
   dis_boxes[0]=box_s1;   dis_boxes[1]=box_s2;
   vcl_vector<float> c0(3, 0.0f), c1(3, 0.0f);
