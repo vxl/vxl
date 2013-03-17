@@ -96,10 +96,10 @@ vsph_sph_box_2d::vsph_sph_box_2d(const vsph_sph_box_2d& sbox)
   a_phi_ = sbox.a_phi(in_radians_);
   b_phi_ = sbox.b_phi(in_radians_);
   c_phi_ = sbox.c_phi(in_radians_);
-  min_th_ = sbox.min_theta();
-  max_th_ = sbox.max_theta();
-  min_phi_ = sbox.min_phi();
-  max_phi_ = sbox.max_phi();
+  min_th_ = sbox.min_theta(in_radians_);
+  max_th_ = sbox.max_theta(in_radians_);
+  min_phi_ = sbox.min_phi(in_radians_);
+  max_phi_ = sbox.max_phi(in_radians_);
   this->set_comparisons();
 }
 
@@ -232,7 +232,15 @@ void vsph_sph_box_2d::set(double min_theta, double max_theta,
   this->set_comparisons();
   this->phi_bounds(min_phi_, max_phi_);
 }
-
+vsph_sph_box_2d& vsph_sph_box_2d::operator= (const vsph_sph_box_2d & rhs){
+  if (this != &rhs) {
+    bool in_radians = rhs.in_radians();
+    this->set(rhs.min_theta(in_radians), rhs.max_theta(in_radians),
+	      rhs.a_phi(in_radians), rhs.b_phi(in_radians),
+	      rhs.c_phi(in_radians), in_radians);
+  }
+  return *this;
+}
 bool vsph_sph_box_2d::is_empty() const
 {
   return min_th_ == 1000.0;
@@ -475,7 +483,7 @@ bool vsph_sph_box_2d::contains(double const& theta, double const& phi,
   double min_th = min_theta(in_radians_);
   double max_th = max_theta(in_radians_);
   if (th < min_th || th > max_th) return false;
-  // treatment of the +-180 cut
+  // treatment of the +-180 cut and large vs. small arc defined by two points
   return in_interval(ph, in_radians_);
 }
 
@@ -726,7 +734,7 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
   }
 }
 
-void vsph_sph_box_2d::sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
+bool vsph_sph_box_2d::sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
                                  double min_ang) const{
   sub_boxes.clear();
   double min_th = this->min_theta(in_radians_);
@@ -744,7 +752,8 @@ void vsph_sph_box_2d::sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
   double dph = vcl_fabs(vsph_utils::azimuth_diff(ph_start, ha, in_radians_));
   bool div_ph = dph > min_ang;
   if (!div_th&&!div_ph)
-    return; // no division
+    return false; // no division
+
   if (!div_th&div_ph) {
     vsph_sph_box_2d box_phi_i, box_phi_j;
     vsph_utils::half_angle(ph_start, ha, ha1, ha2, in_radians_);
@@ -759,7 +768,7 @@ void vsph_sph_box_2d::sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
     box_phi_j.set(min_th, max_th, ha, ph_end, haj, in_radians_);
     sub_boxes.resize(2);
     sub_boxes[0]=box_phi_i; sub_boxes[1]=box_phi_j;
-    return;
+    return true;
   }
   if (div_th&!div_ph) {
     vsph_sph_box_2d box_th_i, box_th_j;
@@ -767,7 +776,7 @@ void vsph_sph_box_2d::sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
     box_th_j.set(c_th, max_th, a_phi_, b_phi_, c_phi_, in_radians_);
     sub_boxes.resize(2);
     sub_boxes[0]=box_th_i; sub_boxes[1]=box_th_j;
-    return;
+    return true;
   }
   //final choice, sub-divide in both dimensions
   vsph_sph_box_2d box_th0_ph0, box_th0_ph1, box_th1_ph0, box_th1_ph1;
@@ -786,6 +795,7 @@ void vsph_sph_box_2d::sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
   sub_boxes.resize(4);
   sub_boxes[0]=box_th0_ph0;   sub_boxes[1]=box_th0_ph1;
   sub_boxes[2]=box_th1_ph0;   sub_boxes[3]=box_th1_ph1;
+  return true;
 }
 
 void vsph_sph_box_2d::print(vcl_ostream& os, bool in_radians) const

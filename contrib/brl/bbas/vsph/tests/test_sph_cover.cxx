@@ -22,6 +22,39 @@ static void random_rgb(float& r, float&g, float& b)
 
 static void test_sph_cover()
 {
+  // construct a cover with two regions
+    vsph_sph_point_2d p10(80.0, 0.0, false);
+  vsph_sph_point_2d p11(110.0,10.0, false);
+  vsph_sph_point_2d p12(80.0, 60.0, false);
+  vsph_sph_point_2d p13(110.0, 110.0, false);
+  vsph_sph_point_2d p19(80.0, -10.0, false);
+  vsph_sph_box_2d bb_a(p10, p12, p11);
+  vsph_sph_box_2d bb_b(p19, p13, p11);
+  double area_a = bb_a.area(), area_b = bb_b.area();
+  vcl_vector<vsph_sph_box_2d> boxes_a, boxes_b, boxes_int;
+  bb_a.sub_divide(boxes_a);
+  bb_b.sub_divide(boxes_b);
+  vcl_vector<cover_el> cels_a, cels_b;
+  for(vcl_vector<vsph_sph_box_2d>::iterator bit = boxes_a.begin();
+	  bit != boxes_a.end(); ++bit)
+	  cels_a.push_back(cover_el(*bit, 1.0));
+  for(vcl_vector<vsph_sph_box_2d>::iterator bit = boxes_b.begin();
+	  bit != boxes_b.end(); ++bit)
+	  cels_b.push_back(cover_el(*bit, 1.0));
+  vsph_sph_cover_2d cov_a, cov_b, cov_int;
+  cov_a.set(1.0, area_a, 1.0, cels_a);
+  cov_b.set(1.0, area_b, 1.0, cels_b);
+ bool cover_inter = intersection(cov_a, cov_b, cov_int);
+ bool orig_inter = intersection(bb_a, bb_b, boxes_int);
+ double orig_int_area = 0.0;
+ for(vcl_vector<vsph_sph_box_2d>::iterator iit = boxes_int.begin();
+	 iit != boxes_int.end(); ++iit)
+ orig_int_area += (*iit).area();
+ double cover_int_area = cov_int.area();
+ TEST_NEAR("intersection of disjoint covers", orig_int_area, cover_int_area, 0.001);
+ double cover_inter_area = intersection_area(cov_a, cov_b);
+ TEST_NEAR("intersection area of two covers", orig_int_area, cover_inter_area, 0.001);
+#if 0
   vsl_b_ifstream is(MyDIR + "unit_sphere_2_75_105.vsl");
   vsph_unit_sphere_sptr usph;
   vsl_b_read(is, usph);
@@ -36,8 +69,8 @@ static void test_sph_cover()
   double dth = 2.0/dpr;
   double s = (reg_max_theta-reg_min_theta - dth)/(reg_max_phi-reg_min_phi);
   vcl_vector<double> data(nv, 0.0);
-  vcl_vector<float> cb(3), cf(3);
-  random_rgb(cb[0],cb[1],cb[2]);
+  vcl_vector<float> cf(3);
+  vcl_vector<float> cb(3, -1.0f);
   random_rgb(cf[0],cf[1],cf[2]);
   vcl_vector<vcl_vector<float> > cdata(nv, cb);
   int cnt = 0;
@@ -55,12 +88,12 @@ static void test_sph_cover()
     }
   }
   vcl_string dpath = MyDIR + "slope_region.wrl";
-  usph->display_color(dpath, cdata);
+  usph->display_color(dpath, cdata, cb);
+
     double sigma = (0.1*point_angle)/dpr,  c =300.0;
     int min_size = 10;
 
     vsph_segment_sphere ssph(*usph, c, min_size, sigma, false);
-    vcl_cout << "Start segment\n" << vcl_flush;
     ssph.set_data(data);
     ssph.segment();
     ssph.extract_region_bounding_boxes();
@@ -76,9 +109,11 @@ static void test_sph_cover()
     random_rgb(c[0],c[1],c[2]);
     colors.push_back(c);
   }
+
   vcl_string test_path = MyDIR + "rseg_box_color_2.wrl";
   double tol = 0.001;
   vsph_sph_box_2d::display_boxes(test_path, dboxes, colors, tol);
+
   vcl_map<int,  vcl_vector<int> >::const_iterator rit = regs.begin();
   const vcl_vector<int>& ray_idx = rit->second;
   bit = boxes.begin();
@@ -88,7 +123,31 @@ static void test_sph_cover()
   for (vcl_vector<int>::const_iterator iit = ray_idx.begin();
        iit != ray_idx.end(); ++iit)
     rays.push_back(sph_pts[*iit]);
-  vsph_sph_cover_2d cover(dia_box,rays,ray_area);
+  vsph_sph_cover_2d dia_cover(dia_box,rays,ray_area, 0.5);
+  const vcl_vector<cover_el>& cov = dia_cover.cover();
+  bool good = true;
+  for(vcl_vector<vsph_sph_point_2d>::iterator sit = rays.begin();
+      sit != rays.end(); ++sit){
+    bool hit = false;
+    for(vcl_vector<cover_el>::const_iterator cit = cov.begin();
+	(cit != cov.end())&& !hit; ++cit)
+      if((cit->box_).contains(*sit))
+	hit = true;
+    good = good && hit;
+  }
+  TEST("test cover coverage", good, true);
+  colors.clear();
+  dboxes.clear();
+  for(vcl_vector<cover_el>::const_iterator cit = cov.begin();
+      cit != cov.end(); ++cit){
+    dboxes.push_back(cit->box_);
+    vcl_vector<float> c(3);
+    random_rgb(c[0],c[1],c[2]);
+    colors.push_back(c);
+  }
+  test_path = MyDIR + "rseg_cover_color_2.wrl";
+  vsph_sph_box_2d::display_boxes(test_path, dboxes, colors, tol);
+#endif
 }
 
 TESTMAIN(test_sph_cover);

@@ -55,6 +55,9 @@ class vsph_sph_box_2d
 
   void set(double min_theta, double max_theta, double a_phi, double b_phi,
            double c_phi, bool in_radians = true);
+  
+  vsph_sph_box_2d& operator= (const vsph_sph_box_2d & rhs);
+
   //: the angle units (radians or degrees) maintained by *this box
   bool in_radians() const {return in_radians_;}
 
@@ -88,7 +91,6 @@ class vsph_sph_box_2d
 
   //: is an azimuth angle contained in the current bounded azimuth interval
   bool in_interval(double phi, bool in_radians=true) const;
-
   //: does the box contain the specified spherical point ?
   bool contains(double const& theta, double const& phi, bool in_radians = true) const;
   bool contains(vsph_sph_point_2d const& p) const;
@@ -112,7 +114,7 @@ class vsph_sph_box_2d
 
   //:subdivide box into potentially a 2x2 set of sub-boxes. Don't subdivide
   // along a given axis if resulting angular range is less than min_ang
-  void sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
+  bool sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
                   double min_ang = 0.035) const;
 
   //: decompose box into approximately planar quadrilaterals
