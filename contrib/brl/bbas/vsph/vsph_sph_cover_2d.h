@@ -41,20 +41,19 @@ class vsph_sph_cover_2d
   //: accessors
   double min_area_fraction() const { return min_area_fraction_;}
   double actual_area_fraction() const { return actual_area_fraction_;}
+  //: total area of the cover
   double area() const {return total_area_;}
-  const vcl_vector<cover_el>& cover() const{
-    return cover_;}
-  
+  const vcl_vector<cover_el>& cover() const {return cover_;}
+
   //: set the members
   void set(double min_area_fraction, double total_area, double actual_area_fraction, vcl_vector<cover_el> const& cover);
 
-  //: total area of the cover
   //: transform the cover on the unit sphere about center point (theta_c, phi_c)
-  // translation  (t_theta, t_phi), and scale
+  // translation (\p t_theta, \p t_phi), and \p scale
   vsph_sph_cover_2d transform(double t_theta,
-			      double t_phi, double scale,
-			      double theta_c,double phi_c,
-			      bool in_radians) const;
+                              double t_phi, double scale,
+                              double theta_c,double phi_c,
+                              bool in_radians) const;
 
  private:
   //: compute area fraction inside the region
@@ -70,6 +69,7 @@ class vsph_sph_cover_2d
   //: the cover_2d as a set of boxes with associated fractional area
   vcl_vector<cover_el> cover_;
 };
+
 //: return a cover that represents the intersection of two covers (could be empty)
 bool intersection(vsph_sph_cover_2d const& c1, vsph_sph_cover_2d const& c2,
                   vsph_sph_cover_2d& cover_inter);

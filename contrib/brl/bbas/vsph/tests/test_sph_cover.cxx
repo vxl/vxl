@@ -12,6 +12,7 @@
 
 static vcl_string MyDIR = "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/";
 
+#if 0 // only used in commented-out code
 static void random_rgb(float& r, float&g, float& b)
 {
   float rmax = static_cast<float>(RAND_MAX);
@@ -19,11 +20,12 @@ static void random_rgb(float& r, float&g, float& b)
   g = static_cast<float>(vcl_rand())/rmax;
   b = static_cast<float>(vcl_rand())/rmax;
 }
+#endif
 
 static void test_sph_cover()
 {
   // construct a cover with two regions
-    vsph_sph_point_2d p10(80.0, 0.0, false);
+  vsph_sph_point_2d p10(80.0, 0.0, false);
   vsph_sph_point_2d p11(110.0,10.0, false);
   vsph_sph_point_2d p12(80.0, 60.0, false);
   vsph_sph_point_2d p13(110.0, 110.0, false);
@@ -35,20 +37,20 @@ static void test_sph_cover()
   bb_a.sub_divide(boxes_a);
   bb_b.sub_divide(boxes_b);
   vcl_vector<cover_el> cels_a, cels_b;
-  for(vcl_vector<vsph_sph_box_2d>::iterator bit = boxes_a.begin();
-	  bit != boxes_a.end(); ++bit)
-	  cels_a.push_back(cover_el(*bit, 1.0));
-  for(vcl_vector<vsph_sph_box_2d>::iterator bit = boxes_b.begin();
-	  bit != boxes_b.end(); ++bit)
-	  cels_b.push_back(cover_el(*bit, 1.0));
+  for (vcl_vector<vsph_sph_box_2d>::iterator bit = boxes_a.begin();
+       bit != boxes_a.end(); ++bit)
+    cels_a.push_back(cover_el(*bit, 1.0));
+  for (vcl_vector<vsph_sph_box_2d>::iterator bit = boxes_b.begin();
+       bit != boxes_b.end(); ++bit)
+    cels_b.push_back(cover_el(*bit, 1.0));
   vsph_sph_cover_2d cov_a, cov_b, cov_int;
   cov_a.set(1.0, area_a, 1.0, cels_a);
   cov_b.set(1.0, area_b, 1.0, cels_b);
- bool cover_inter = intersection(cov_a, cov_b, cov_int);
- bool orig_inter = intersection(bb_a, bb_b, boxes_int);
+ intersection(cov_a, cov_b, cov_int);
+ intersection(bb_a, bb_b, boxes_int);
  double orig_int_area = 0.0;
- for(vcl_vector<vsph_sph_box_2d>::iterator iit = boxes_int.begin();
-	 iit != boxes_int.end(); ++iit)
+ for (vcl_vector<vsph_sph_box_2d>::iterator iit = boxes_int.begin();
+      iit != boxes_int.end(); ++iit)
  orig_int_area += (*iit).area();
  double cover_int_area = cov_int.area();
  TEST_NEAR("intersection of disjoint covers", orig_int_area, cover_int_area, 0.001);
@@ -126,20 +128,20 @@ static void test_sph_cover()
   vsph_sph_cover_2d dia_cover(dia_box,rays,ray_area, 0.5);
   const vcl_vector<cover_el>& cov = dia_cover.cover();
   bool good = true;
-  for(vcl_vector<vsph_sph_point_2d>::iterator sit = rays.begin();
-      sit != rays.end(); ++sit){
+  for (vcl_vector<vsph_sph_point_2d>::iterator sit = rays.begin();
+       sit != rays.end(); ++sit){
     bool hit = false;
-    for(vcl_vector<cover_el>::const_iterator cit = cov.begin();
-	(cit != cov.end())&& !hit; ++cit)
-      if((cit->box_).contains(*sit))
-	hit = true;
+    for (vcl_vector<cover_el>::const_iterator cit = cov.begin();
+         cit != cov.end() && !hit; ++cit)
+      if (cit->box_.contains(*sit))
+        hit = true;
     good = good && hit;
   }
   TEST("test cover coverage", good, true);
   colors.clear();
   dboxes.clear();
-  for(vcl_vector<cover_el>::const_iterator cit = cov.begin();
-      cit != cov.end(); ++cit){
+  for (vcl_vector<cover_el>::const_iterator cit = cov.begin();
+       cit != cov.end(); ++cit){
     dboxes.push_back(cit->box_);
     vcl_vector<float> c(3);
     random_rgb(c[0],c[1],c[2]);

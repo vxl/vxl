@@ -232,15 +232,18 @@ void vsph_sph_box_2d::set(double min_theta, double max_theta,
   this->set_comparisons();
   this->phi_bounds(min_phi_, max_phi_);
 }
-vsph_sph_box_2d& vsph_sph_box_2d::operator= (const vsph_sph_box_2d & rhs){
+
+vsph_sph_box_2d& vsph_sph_box_2d::operator= (const vsph_sph_box_2d & rhs)
+{
   if (this != &rhs) {
     bool in_radians = rhs.in_radians();
     this->set(rhs.min_theta(in_radians), rhs.max_theta(in_radians),
-	      rhs.a_phi(in_radians), rhs.b_phi(in_radians),
-	      rhs.c_phi(in_radians), in_radians);
+              rhs.a_phi(in_radians), rhs.b_phi(in_radians),
+              rhs.c_phi(in_radians), in_radians);
   }
   return *this;
 }
+
 bool vsph_sph_box_2d::is_empty() const
 {
   return min_th_ == 1000.0;
@@ -448,22 +451,23 @@ bool vsph_sph_box_2d::in_interval(double phi, bool in_radians) const
 }
 #endif
 
-bool vsph_sph_box_2d::operator==(const vsph_sph_box_2d& other) const{
-   if(this == &other) return true; //the same instance
+bool vsph_sph_box_2d::operator==(const vsph_sph_box_2d& other) const
+{
+  if (this == &other) return true; //the same instance
   // can't convert units and still be exactly equal
-  if(other.in_radians()!=in_radians_)
+  if (other.in_radians()!=in_radians_)
     return false;
   double min_th = other.min_theta(), max_th = other.max_theta();
-  if((min_th != min_th_) || (max_th != max_th_))
+  if ((min_th != min_th_) || (max_th != max_th_))
     return false;
   double a = other.a_phi(), b = other.b_phi(), c = other.c_phi();
-  if(!(((a==a_phi_)&&(b==b_phi_))||((a==b_phi_)&&(b==a_phi_))))
+  if (!(((a==a_phi_)&&(b==b_phi_))||((a==b_phi_)&&(b==a_phi_))))
     return false;
-  if(c_phi_==c) return true;
+  if (c_phi_==c) return true;
   // the c location can differ without altering the actual spherical interval.
-  if(!this->in_interval(c, in_radians_))
+  if (!this->in_interval(c, in_radians_))
     return false;
-  if(!other.in_interval(c_phi_, in_radians_))
+  if (!other.in_interval(c_phi_, in_radians_))
     return false;
   return true;
 }
@@ -985,7 +989,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
     else
       rbox.set(theta_min, theta_max, b2.min_phi(in_radians),
                b2.max_phi(in_radians),ha2,in_radians);
-   boxes.resize(1);
+    boxes.resize(1);
     boxes[0]=rbox;
     return true;
   }
@@ -1022,7 +1026,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
 bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
                   vcl_vector<vsph_sph_box_2d>& boxes)
 {
-  if(b1 == b2){
+  if (b1 == b2){
     boxes.resize(1);
     boxes[0]=b1;
     return true;
@@ -1121,7 +1125,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
 
 double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
 {
-  if(b1 == b2)
+  if (b1 == b2)
     return b1.area();
   bool in_radians = true;
   double theta_min =
