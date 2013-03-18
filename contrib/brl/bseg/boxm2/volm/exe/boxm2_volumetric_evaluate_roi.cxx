@@ -119,6 +119,7 @@ int main(int argc,  char** argv)
     float ds = 0.05f * gt_score;
     for (int i = -4; i < 0; i++)
       thresholds.push_back(gt_score + ds*i);
+    thresholds.push_back(0.99*gt_score);
     thresholds.push_back(gt_score);
     thresholds.push_back(max_score_all);
     vcl_pair<unsigned, vcl_vector<float> > p_thres;
@@ -198,6 +199,38 @@ int main(int argc,  char** argv)
           for (unsigned ii = 0; ii < tile_img.ni(); ++ii) {
             for (unsigned jj = 0; jj< tile_img.nj(); ++jj) {
               if (tile_img(ii, jj) > 0)
+                out_png(ii, jj) = volm_io::scale_score_to_1_255_sig(200.0f, 100.0f, *vit, tile_img(ii,jj));
+                //out_png(ii, jj) = volm_io::scale_score_to_1_255(*vit, tile_img(ii,jj));
+            }
+          }
+          // save the image
+          vcl_stringstream out_png_name;
+          out_png_name << out_folder.str() << "/ProbMap_" << tiles[ti].get_string() << "_thres_sgi_" << *vit << ".png";
+          vil_save(out_png, (out_png_name.str()).c_str());
+        }
+      }
+    }
+#endif
+
+#if 0
+    // create png tile images for different thresholds, only generate png tile prob_map with thres smaller than ground truth score
+    for (unsigned ti = 0; ti < tiles.size(); ++ti) {
+      vcl_string img_name = out_folder.str() + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";
+      if (!vul_file::exists(img_name)) {
+        log_test_img << " WARNING: missing prob_map: " << img_name << '\n';
+        volm_io::write_post_processing_log(log_file, log_test_img.str());
+        vcl_cerr << log_test_img.str();
+        continue;
+      }
+      vil_image_view<float> tile_img = vil_load(img_name.c_str());
+      for (vcl_vector<float>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
+        if (*vit < gt_score) {
+          vil_image_view<vxl_byte> out_png(tile_img.ni(), tile_img.nj());
+          out_png.fill(volm_io::UNEVALUATED);
+          // loop over current tile image to rescale the score to [0, 255]
+          for (unsigned ii = 0; ii < tile_img.ni(); ++ii) {
+            for (unsigned jj = 0; jj< tile_img.nj(); ++jj) {
+              if (tile_img(ii, jj) > 0)
                 out_png(ii, jj) = volm_io::scale_score_to_1_255(*vit, tile_img(ii,jj));
             }
           }
@@ -210,7 +243,7 @@ int main(int argc,  char** argv)
     }
 #endif
 
-#if 1
+#if 0
     // create color png tile images for different thresholds, only generate png tile porb_map with thres lower than ground truth score
     for (unsigned ti = 0; ti < tiles.size(); ti++) {
       vcl_string img_name = out_folder.str() + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";

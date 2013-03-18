@@ -13,6 +13,9 @@ TARGET_LINK_LIBRARIES( boxm2_volumetric_create_prob_map boxm2_volm vbl vgl volm 
 ADD_EXECUTABLE( boxm2_volumetric_evaluate_roi boxm2_volumetric_evaluate_roi.cxx )
 TARGET_LINK_LIBRARIES( boxm2_volumetric_evaluate_roi boxm2_volm vbl vgl volm bvrml)
 
+ADD_EXECUTABLE( boxm2_volumetric_evaluate_roi_max_score boxm2_volumetric_evaluate_roi_max_score.cxx )
+TARGET_LINK_LIBRARIES( boxm2_volumetric_evaluate_roi_max_score boxm2_volm vbl vgl volm bvrml)
+
 ADD_EXECUTABLE( boxm2_volumetric_render_index_depth_img boxm2_volumetric_render_index_depth_img.cxx )
 TARGET_LINK_LIBRARIES( boxm2_volumetric_render_index_depth_img boxm2_volm vbl vgl volm )
 
