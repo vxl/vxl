@@ -20,7 +20,7 @@ vsph_sph_cover_2d(vsph_sph_box_2d const& cover_bb,
                   vcl_vector<vsph_sph_point_2d> const& region_rays,
                   double ray_area,
                   double min_area_fraction):
-  min_area_fraction_(min_area_fraction)
+  cover_bb_(cover_bb), min_area_fraction_(min_area_fraction)
 {
   double total_area = cover_bb.area();
   assert(total_area > 0.0);
