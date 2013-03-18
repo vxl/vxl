@@ -120,6 +120,8 @@ class volm_io
   static float scale_score_to_0_1(unsigned char pix_value, float threshold);
   //: piecewise linear s.t. [0,t) -> [1,127), [t,1] -> [127,255]"
   static unsigned char scale_score_to_1_255(float threshold, float score);
+  //: piecewise non-linear s.t. using sigmoid function 255/(1+exp(-k(s-t)))
+  static unsigned char scale_score_to_1_255_sig(float const& kl, float const & ku, float const& threshold, float const& score);
   //: piecewise linear s.t. [0,t) -> [1,63), [t,1] -> [63,127]"
   static unsigned char scale_score_to_1_127(float threshold, float score);
 

@@ -537,6 +537,18 @@ unsigned char volm_io::scale_score_to_1_255(float threshold, float score)
     return (unsigned char) (((score-threshold)/(1-threshold))*128 + 127);
 }
 
+unsigned char volm_io::scale_score_to_1_255_sig(float const& kl, float const & ku, float const& threshold, float const& score)
+{
+  float t = threshold;
+  float x;
+  if (score > t)
+    x = -1*ku*(score-threshold);
+  else
+    x = -1*kl*(score-threshold);
+  return (unsigned char) 255 / ( 1+vcl_exp(x));
+}
+
+
 //: piecewise linear s.t. [0,t) -> [1,63), [t,1] -> [63,127]"
 unsigned char volm_io::scale_score_to_1_127(float threshold, float score)
 {
