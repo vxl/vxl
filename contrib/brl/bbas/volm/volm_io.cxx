@@ -539,13 +539,9 @@ unsigned char volm_io::scale_score_to_1_255(float threshold, float score)
 
 unsigned char volm_io::scale_score_to_1_255_sig(float const& kl, float const & ku, float const& threshold, float const& score)
 {
-  float t = threshold;
-  float x;
-  if (score > t)
-    x = -1*ku*(score-threshold);
-  else
-    x = -1*kl*(score-threshold);
-  return (unsigned char) 255 / ( 1+vcl_exp(x));
+  float x = (score > threshold) ? ku*(threshold-score)
+                                : kl*(threshold-score);
+  return (unsigned char) (255.99f / (1+vcl_exp(x)));
 }
 
 
@@ -742,7 +738,7 @@ void volm_weight::read_weight(vcl_vector<volm_weight>& weights, vcl_string const
   }
 }
 
-bool volm_weight::check_weight(vcl_vector<volm_weight> const& weight)
+bool volm_weight::check_weight(vcl_vector<volm_weight> const& /*weight*/)
 {
   return true;
 }
