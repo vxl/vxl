@@ -21,10 +21,14 @@ int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
   vul_arg<vcl_string> out_root("-out_rt", "experiment output root", "");
+  vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
+  vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 50.0f);
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
+
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
+  vcl_cout << "ku = " << ku() << ", kl = " << kl() << vcl_endl;
   vcl_stringstream log;
   if (out_root().compare("") == 0 ||
       gt_file().compare("") == 0 ||
@@ -288,3 +292,4 @@ int main(int argc,  char** argv)
 
   return volm_io::SUCCESS;
 }
+
