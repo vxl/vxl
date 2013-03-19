@@ -1,7 +1,16 @@
 // This is bbas/vsph/vsph_sph_point_2d.cxx
 #include "vsph_sph_point_2d.h"
 #include <vnl/vnl_math.h>
-
+#include <vcl_cassert.h>
+vsph_sph_point_2d::vsph_sph_point_2d(double theta, double phi, bool in_radians)
+  : in_radians_(in_radians), theta_(theta){
+  double pye = in_radians?vnl_math::pi:180.0;
+  double two_pye = 2.0*pye;
+  assert(theta>=0.0);
+  assert(theta<=pye);
+  if(phi<-pye) phi_ = phi + two_pye;
+  if(phi> pye) phi_ = phi - two_pye;
+}
 void vsph_sph_point_2d::print(vcl_ostream& os) const
 {
   os << " vsph_sph_point_2d(";

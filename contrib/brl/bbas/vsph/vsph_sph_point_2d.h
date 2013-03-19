@@ -14,8 +14,7 @@ class vsph_sph_point_2d
   //: Default constructor
   vsph_sph_point_2d() : theta_(0.0), phi_(0.0) {}
 
- vsph_sph_point_2d(double theta, double phi, bool in_radians = true)
- : in_radians_(in_radians), theta_(theta), phi_(phi) {}
+  vsph_sph_point_2d(double theta, double phi, bool in_radians = true);
 
   ~vsph_sph_point_2d() {}
 
