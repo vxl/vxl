@@ -49,14 +49,14 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 #ifdef PREINF
 
 void pre_infinity_opt_view_based(  float    seg_len,
-                                    float    cum_len,
-                                    float    mean_obs,
-                                    float  * vis_inf,
-                                    float  * pre_inf,
-                                    float    alpha,
-                                    MOG_TYPE   mixture,
-                                    float8 nobs,
-                                    float* app_model_weights)
+                                   float    cum_len,
+                                   float    mean_obs,
+                                   float  * vis_inf,
+                                   float  * pre_inf,
+                                   float    alpha,
+                                   MOG_TYPE   mixture,
+                                   float8 nobs,
+                                   float* app_model_weights)
 {
     /* if total length of rays is too small, do nothing */
     float PI = 0.0f;
@@ -92,16 +92,16 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
     //calculate pre_infinity denomanator (shape of image)
     pre_infinity_opt_view_based( d*aux_args.linfo->block_len,
-                                  cum_len*aux_args.linfo->block_len,
-                                  mean_obs,
-                                  aux_args.vis_inf,
-                                  aux_args.pre_inf,
-                                  alpha,
-                                  mixture,
-                                  num_obs,
-                                  aux_args.app_model_weights);
-                                  
-    aux_args.ray_dir[data_ptr] = aux_args.viewdir;                       
+                                 cum_len*aux_args.linfo->block_len,
+                                 mean_obs,
+                                 aux_args.vis_inf,
+                                 aux_args.pre_inf,
+                                 alpha,
+                                 mixture,
+                                 num_obs,
+                                 aux_args.app_model_weights);
+
+    aux_args.ray_dir[data_ptr] = aux_args.viewdir;
 }
 #endif // PREINF
 
@@ -110,24 +110,24 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
 /* bayes ratio independent functor (for independent rays) */
 void bayes_ratio_ind_view_based( float  seg_len,
-                                  float  alpha,
-                                  MOG_TYPE mixture,
-                                  float8 nobs,
-                                  float* app_model_weights,
-                                  float  cum_len,
-                                  float  mean_obs,
-                                  float  norm,
-                                  float* ray_pre,
-                                  float* ray_vis,
-                                  float* ray_beta,
-                                  float* vis_cont )
+                                 float  alpha,
+                                 MOG_TYPE mixture,
+                                 float8 nobs,
+                                 float* app_model_weights,
+                                 float  cum_len,
+                                 float  mean_obs,
+                                 float  norm,
+                                 float* ray_pre,
+                                 float* ray_vis,
+                                 float* ray_beta,
+                                 float* vis_cont )
 {
-    float PI = 0.0;
+    float PI = 0.0f;
 
     /* Compute PI for all threads */
     if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
         PI = view_dep_mixture_model(mean_obs, mixture, app_model_weights);
-    
+
 
         //calculate this ray's contribution to beta
         (*ray_beta) = ((*ray_pre) + PI*(*ray_vis))*seg_len/norm;
@@ -140,7 +140,6 @@ void bayes_ratio_ind_view_based( float  seg_len,
         (*ray_pre) += (*ray_vis)*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
         /* updated visibility probability */
         (*ray_vis) *= temp;
-
     }
 }
 
@@ -148,7 +147,6 @@ void bayes_ratio_ind_view_based( float  seg_len,
 //bayes step cell functor
 void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
-
     //slow beta calculation ----------------------------------------------------
     float  alpha    = aux_args.alpha[data_ptr];
     MOG_TYPE mixture = aux_args.mog[data_ptr];
@@ -162,17 +160,17 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
     float ray_beta, vis_cont;
     bayes_ratio_ind_view_based( d*aux_args.linfo->block_len,
-                                 alpha,
-                                 mixture,
-                                 num_obs,
-                                 aux_args.app_model_weights,
-                                 cum_len*aux_args.linfo->block_len,
-                                 mean_obs,
-                                 aux_args.norm,
-                                 aux_args.ray_pre,
-                                 aux_args.ray_vis,
-                                 &ray_beta,
-                                 &vis_cont);
+                                alpha,
+                                mixture,
+                                num_obs,
+                                aux_args.app_model_weights,
+                                cum_len*aux_args.linfo->block_len,
+                                mean_obs,
+                                aux_args.norm,
+                                aux_args.ray_pre,
+                                aux_args.ray_vis,
+                                &ray_beta,
+                                &vis_cont);
 
     //discretize and store beta and vis contribution
     int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
