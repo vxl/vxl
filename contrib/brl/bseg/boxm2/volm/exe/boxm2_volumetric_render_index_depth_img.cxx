@@ -141,8 +141,8 @@ int main(int argc,  char** argv)
   geo_index_ss << geo_index_folder_pre() << zone_id << "_inc_2_nh_100_combined_pa_" << point_angle() << '/';
   vcl_string geo_index_folder = geo_index_ss.str();
 
-  vcl_cerr << " geo_hypo_folder = " << geo_hypo_folder << '\n';
-  vcl_cerr << " geo_index_folder = " << geo_index_folder << '\n';
+  vcl_cerr << " geo_hypo_folder = " << geo_hypo_folder << '\n'
+           << " geo_index_folder = " << geo_index_folder << '\n';
 
   // check the existance of index for current tile
   vcl_stringstream file_name_pre;
@@ -342,7 +342,7 @@ int main(int argc,  char** argv)
         values_ori.push_back(ind_ori);
         values_lnd.push_back(ind_lnd);
       }
-      
+
 #if 0
       if (id() == 40) {
         vcl_cout << "id = " << id() << ", h_id = " << h_id << ", h_gt = " << h_gt << ", point = " << h_pt << vcl_endl;

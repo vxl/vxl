@@ -6,7 +6,7 @@
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
 
-                      
+
 #ifdef SEGLEN
 typedef struct
 {
@@ -183,14 +183,14 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   float4 ray_d = ray_directions[ j*get_global_size(0) + i ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-  
+
 
   //compute weights for each app model viewing direction
   //based on the ray dir
   float app_model_weights[8] = {0};
   float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
   compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
-  
+
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
@@ -199,7 +199,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   aux_args.linfo   = linfo;
   aux_args.alpha   = alpha_array;
   aux_args.mog     = mixture_array;
-  aux_args.num_obs = num_obs_array;  
+  aux_args.num_obs = num_obs_array;
   aux_args.seg_len   = aux_array0;
   aux_args.mean_obs  = aux_array1;
   aux_args.ray_dir = aux_array;
@@ -217,7 +217,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   //store the vis_inf/pre_inf in the image
   vis_image[j*get_global_size(0)+i] = vis_inf;
   pre_image[j*get_global_size(0)+i] = pre_inf;
-  
 }
 #endif // PREINF
 
@@ -344,8 +343,8 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   float app_model_weights[8] = {0};
   float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
   compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
-  
-  
+
+
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
@@ -396,9 +395,9 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 //
 __kernel
 void
-proc_norm_image (  __global float* norm_image, 
-                   __global float* vis_image, 
-                   __global float* pre_image,                     
+proc_norm_image (  __global float* norm_image,
+                   __global float* vis_image,
+                   __global float* pre_image,
                    __global uint4 * imgdims,
                    __global float * in_image,
                    __global float4 * app_density)
@@ -409,19 +408,19 @@ proc_norm_image (  __global float* norm_image,
   i=get_global_id(0);
   j=get_global_id(1);
   float vis;
-  
+
   //CORRECT HERE!!!!!!!!!!!!!!!!!!!!!!!!!
   /*
-  if(app_density[0].x == 0.0f)
+  if (app_density[0].x == 0.0f)
     vis = vis_image[j*get_global_size(0) + i] * gauss_prob_density(in_image[j*get_global_size(0) + i] , app_density[0].y,app_density[0].z);
   else
   */
-    vis = vis_image[j*get_global_size(0) + i]; 
-    
+    vis = vis_image[j*get_global_size(0) + i];
+
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y || vis < 0.0f)
     return;
-  
-  float pre = pre_image[j*get_global_size(0) + i]; 
+
+  float pre = pre_image[j*get_global_size(0) + i];
   float norm = (pre+vis);
   norm_image[j*get_global_size(0) + i] = norm;
 
@@ -476,32 +475,31 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float mean_obs = convert_float(obs_int) / convert_float(len_int);
       float cell_vis  = convert_float(vis_int) / (convert_float(len_int)*info->block_len);
       float cell_beta = convert_float(beta_int) / (convert_float(len_int)* info->block_len);
-      
-      
+
+
       //first, update alpha
       clamp(cell_beta,0.5f,2.0f);
       alpha *= cell_beta;
       if ( *update_alpha != 0 )
         alpha_array[gid] = max(alphamin,alpha);
-      
+
       //second, update app model
       float8 nobs     = nobs_array[gid];
       float16 mixture = mixture_array[gid];
-        
+
       //select view dependent mixture and nobs
       float app_model_weights[8] = {0};
       float4 viewdir = ray_dir[gid];
-      compute_app_model_weights(app_model_weights, viewdir, &app_model_view_directions); 
+      compute_app_model_weights(app_model_weights, viewdir, &app_model_view_directions);
       update_view_dep_app(mean_obs,cell_vis, app_model_weights, (float*)(&mixture), (float*)(&nobs),* mog_fixed_std );
-      
+
 
       nobs_array[gid] = nobs;
       mixture_array[gid] = mixture;
-      
     }
-    else if(*use_mask)
+    else if (*use_mask)
       alpha_array[gid] = 0;
-    
+
     //clear out aux data
     aux_array0[gid] = 0;
     aux_array1[gid] = 0;

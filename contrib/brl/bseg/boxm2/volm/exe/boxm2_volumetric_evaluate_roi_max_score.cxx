@@ -27,8 +27,8 @@ int main(int argc,  char** argv)
 
   vul_arg_parse(argc, argv);
 
-  vcl_cout << "argc: " << argc << vcl_endl;
-  vcl_cout << "ku = " << ku() << ", kl = " << kl() << vcl_endl;
+  vcl_cout << "argc: " << argc << '\n'
+           << "ku = " << ku() << ", kl = " << kl() << vcl_endl;
   vcl_stringstream log;
   if (out_root().compare("") == 0 ||
       gt_file().compare("") == 0 ||
@@ -75,8 +75,8 @@ int main(int argc,  char** argv)
     if (!vul_file::is_directory(out_folder.str())) {
       continue;
     }
-    vcl_cout << " we have test image folder --> " << out_folder.str() << vcl_endl;
-    vcl_cout << " with image category --> " << samples[id].second.second << vcl_endl;
+    vcl_cout << " we have test image folder --> " << out_folder.str() << '\n'
+             << " with image category --> " << samples[id].second.second << vcl_endl;
 
     vcl_stringstream log_test_img;
     vcl_string log_file = out_folder.str() + "/evaluate_roi_log.xml";

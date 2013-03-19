@@ -35,18 +35,18 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> id("-id", "id of the test image", 6);
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg_parse(argc, argv);
-  
+
   vcl_cout << "argc: " << argc << vcl_endl;
   vcl_stringstream log;
   vcl_string log_file = out() + "/create_prob_map_log.xml";
-  if(out().compare("") == 0 ||
-     geo_hypo_folder().compare("") == 0 ||
-     gt_file().compare("") == 0 ||
-     cam_bin().compare("") == 0 ||
-     img().compare("") == 0 ||
-     pass_id() > 2 ||
-     zone_id() == 0 ||
-     id() > 100)
+  if (out().compare("") == 0 ||
+      geo_hypo_folder().compare("") == 0 ||
+      gt_file().compare("") == 0 ||
+      cam_bin().compare("") == 0 ||
+      img().compare("") == 0 ||
+      pass_id() > 2 ||
+      zone_id() == 0 ||
+      id() > 100)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
@@ -70,7 +70,7 @@ int main(int argc,  char** argv)
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
+
   // check whether we have candidate list for this query
   bool is_candidate = false;
   vgl_polygon<double> cand_poly;
@@ -79,7 +79,8 @@ int main(int argc,  char** argv)
     if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
       is_candidate = true;
       volm_io::read_polygons(candidate_list(), cand_poly);
-    } else {
+    }
+    else {
       log << " ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
       vcl_cerr << log.str();
@@ -103,7 +104,8 @@ int main(int argc,  char** argv)
       // load the image
       vil_image_view<float> out_img = vil_load(img_name.c_str());
       tile_imgs.push_back(out_img);
-    } else {
+    }
+    else {
       // create the image
       vil_image_view<float> out_img(3601, 3601);
       out_img.fill(-1.0f);
@@ -141,7 +143,7 @@ int main(int argc,  char** argv)
     }
     vcl_vector<volm_geo_index_node_sptr> leaves;
     volm_geo_index::get_leaves_with_hyps(root, leaves);
-    
+
     // load score binary from output folder if exists
     vcl_stringstream score_file;
     score_file << out() << "ps_1_scores_zone_" << zone_id() << "_tile_" << i << ".bin";
@@ -227,21 +229,19 @@ int main(int argc,  char** argv)
     if (tiles[i].global_to_img(samples[id()].first.x(), samples[id()].first.y(), u, v) ) {
       if (u < tiles[i].ni() && v < tiles[i].nj()) {
         log << "\t GT location: " << id() << ", "
-                                  << samples[id()].first.x() << ", "
-                                  << samples[id()].first.y() << " is at pixel: "
-                                  << u << ", " << v << " in tile " << i << " and has value: "
-                                  << tile_imgs[i](u, v) 
-                                  << " max score for this test_img = " << max_score
-                                  << " given by camera " << max_cam_ang.get_string()
-                                  << " at location " << max_score_loc.x() << ", " << max_score_loc.y()
-                                  << '\n';
+            << samples[id()].first.x() << ", "
+            << samples[id()].first.y() << " is at pixel: "
+            << u << ", " << v << " in tile " << i << " and has value: "
+            << tile_imgs[i](u, v)
+            << " max score for this test_img = " << max_score
+            << " given by camera " << max_cam_ang.get_string()
+            << " at location " << max_score_loc.x() << ", " << max_score_loc.y()
+            << '\n';
         volm_io::write_post_processing_log(log_file, log.str());
         vcl_cout << log.str();
       }
     }
   }
-
-  
 
   return volm_io::SUCCESS;
 }
