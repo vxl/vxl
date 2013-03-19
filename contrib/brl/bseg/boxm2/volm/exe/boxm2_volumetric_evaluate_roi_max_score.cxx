@@ -212,7 +212,7 @@ int main(int argc,  char** argv)
         for (unsigned ii = 0; ii < tile_img.ni(); ++ii) {
           for (unsigned jj = 0; jj< tile_img.nj(); ++jj) {
             if (tile_img(ii, jj) > 0)
-              out_png(ii, jj) = volm_io::scale_score_to_1_255_sig(200.0f, 100.0f, *vit, tile_img(ii,jj));
+              out_png(ii, jj) = volm_io::scale_score_to_1_255_sig(kl(), ku(), *vit, tile_img(ii,jj));
               //out_png(ii, jj) = volm_io::scale_score_to_1_255(*vit, tile_img(ii,jj));
           }
         }

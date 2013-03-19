@@ -22,6 +22,8 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
   vul_arg<vcl_string> out_root("-out_rt", "experiment output root", "");
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
+  vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
+  vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 50.0f);
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
@@ -199,7 +201,7 @@ int main(int argc,  char** argv)
           for (unsigned ii = 0; ii < tile_img.ni(); ++ii) {
             for (unsigned jj = 0; jj< tile_img.nj(); ++jj) {
               if (tile_img(ii, jj) > 0)
-                out_png(ii, jj) = volm_io::scale_score_to_1_255_sig(200.0f, 100.0f, *vit, tile_img(ii,jj));
+                out_png(ii, jj) = volm_io::scale_score_to_1_255_sig(kl(), ku(), *vit, tile_img(ii,jj));
                 //out_png(ii, jj) = volm_io::scale_score_to_1_255(*vit, tile_img(ii,jj));
             }
           }
