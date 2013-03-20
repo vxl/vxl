@@ -112,6 +112,9 @@ SOURCE=.\boxm2_volumetric_evaluate_roi.cxx
 # Begin Source File
 SOURCE=.\boxm2_volumetric_create_prob_map.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_volumetric_evaluate_roi_max_score.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
