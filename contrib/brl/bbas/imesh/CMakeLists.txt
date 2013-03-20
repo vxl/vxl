@@ -32,5 +32,5 @@ IF( BUILD_TESTING )
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib imesh)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/imash/ ${imesh_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/imesh/ ${imesh_sources})
 
