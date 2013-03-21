@@ -21,6 +21,9 @@ vxl_uint_16 vil_stream_read_little_endian_uint_16(vil_stream *);
 vxl_uint_32 vil_stream_read_big_endian_uint_32(vil_stream *);
 vxl_uint_32 vil_stream_read_little_endian_uint_32(vil_stream *);
 
+vxl_int_32 vil_stream_read_big_endian_int_32(vil_stream *s);
+vxl_int_32 vil_stream_read_little_endian_int_32(vil_stream *s);
+
 #if VXL_HAS_INT_64
 vxl_uint_64 vil_stream_read_big_endian_uint_64(vil_stream *);
 vxl_uint_64 vil_stream_read_little_endian_uint_64(vil_stream *);

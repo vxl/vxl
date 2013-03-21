@@ -63,10 +63,9 @@ class vil_bmp_image : public vil_image_resource
   ~vil_bmp_image();
 
   //: Dimensions:  planes x width x height x components
-  virtual unsigned nplanes() const {
-    return (core_hdr.bitsperpixel<24)?1:core_hdr.bitsperpixel/8; }  // FIXME
-  virtual unsigned ni() const { return core_hdr.width; }
-  virtual unsigned nj() const { return core_hdr.height; }
+  virtual unsigned nplanes() const;
+  virtual unsigned ni() const;
+  virtual unsigned nj() const;
 
   virtual enum vil_pixel_format pixel_format() const {return VIL_PIXEL_FORMAT_BYTE; }
 

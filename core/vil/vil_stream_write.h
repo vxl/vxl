@@ -36,6 +36,13 @@ void vil_stream_write_big_endian_uint_32(vil_stream *, vxl_uint_32);
 // \relatesalso vil_stream
 void vil_stream_write_little_endian_uint_32(vil_stream *, vxl_uint_32);
 
+//:
+// \relatesalso vil_stream
+void vil_stream_write_big_endian_int_32(vil_stream *, vxl_int_32);
+//:
+// \relatesalso vil_stream
+void vil_stream_write_little_endian_int_32(vil_stream *, vxl_int_32);
+
 #if VXL_HAS_INT_64
 //:
 // \relatesalso vil_stream

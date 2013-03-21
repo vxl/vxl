@@ -73,6 +73,19 @@ vxl_uint_32 vil_stream_read_little_endian_uint_32(vil_stream *s)
   return (vxl_uint_32(bytes[3])<<24) | (vxl_uint_32(bytes[2])<<16) | (vxl_uint_32(bytes[1])<<8) | (vxl_uint_32(bytes[0]));
 }
 
+vxl_int_32 vil_stream_read_big_endian_int_32(vil_stream *s)
+{
+  vxl_byte bytes[4];
+  if (s->read(bytes, sizeof bytes) != sizeof bytes) return 0;
+  return (vxl_int_32(bytes[0])<<24) | (vxl_int_32(bytes[1])<<16) | (vxl_int_32(bytes[2])<<8) | (vxl_int_32(bytes[3]));
+}
+
+vxl_int_32 vil_stream_read_little_endian_int_32(vil_stream *s)
+{
+  vxl_byte bytes[4];
+  if (s->read(bytes, sizeof bytes) != sizeof bytes) return 0;
+  return (vxl_int_32(bytes[3])<<24) | (vxl_int_32(bytes[2])<<16) | (vxl_int_32(bytes[1])<<8) | (vxl_int_32(bytes[0]));
+}
 
 // The following function should be moved to relevant places in vil soon
 // This static function is only needed if it will be used below
