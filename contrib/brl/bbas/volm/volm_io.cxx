@@ -539,9 +539,13 @@ unsigned char volm_io::scale_score_to_1_255(float threshold, float score)
 
 unsigned char volm_io::scale_score_to_1_255_sig(float const& kl, float const & ku, float const& threshold, float const& score)
 {
-  float x = (score > threshold) ? ku*(threshold-score)
-                                : kl*(threshold-score);
-  return (unsigned char) (255.99f / (1+vcl_exp(x)));
+  float t = threshold;
+  float x;
+  if (score > t)
+    x = -1*ku*(score-threshold);
+  else
+    x = -1*kl*(score-threshold);
+  return (1+(unsigned char) 254.0f / ( 1+vcl_exp(x)));
 }
 
 
