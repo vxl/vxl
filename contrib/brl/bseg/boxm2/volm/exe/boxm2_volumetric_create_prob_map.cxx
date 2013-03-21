@@ -128,9 +128,9 @@ int main(int argc,  char** argv)
       continue;
     }
     // check the zone and tile_id
-    if (zone_id() == 17 && i >= 8)
+    if (zone_id() == 17 && i > 8)
       continue;
-    else if (zone_id() == 18 && i < 8)
+    else if (zone_id() == 18 && i < 8 && i != 5)
       continue;
     else if (zone_id()  == 11 && i > 4)
       continue;

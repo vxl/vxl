@@ -207,7 +207,7 @@ int main(int argc,  char** argv)
       unsigned cnt = 0;
       for (vcl_vector<float>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
         vil_image_view<vxl_byte> out_png(tile_img.ni(), tile_img.nj());
-        out_png.fill(volm_io::UNEVALUATED);
+        out_png.fill(volm_io::UNKNOWN);
         // loop over current tile image to rescale the score to [0, 255]
         for (unsigned ii = 0; ii < tile_img.ni(); ++ii) {
           for (unsigned jj = 0; jj< tile_img.nj(); ++jj) {

@@ -227,12 +227,12 @@ int main(int argc,  char** argv)
   }
 
   // locd the query
-  if (!vul_file::exists(query_bin())) {
-    log << "ERROR: can not find query_binar " << query_bin() << '\n';
-    volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
+  //if (!vul_file::exists(query_bin())) {
+  //  log << "ERROR: can not find query_binar " << query_bin() << '\n';
+  //  volm_io::write_post_processing_log(log_file, log.str());
+  //  vcl_cerr << log.str();
+  //  return volm_io::EXE_ARGUMENT_ERROR;
+  //}
   volm_query_sptr query = new volm_query(query_bin(), cam_space, dms_bin(), sph_shell, sph);
 
 
