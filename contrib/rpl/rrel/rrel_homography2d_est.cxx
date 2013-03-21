@@ -254,9 +254,6 @@ rrel_homography2d_est :: normalize( const std::vector< vnl_vector<double> >& pts
                                         vnl_math::sqr( pts[i][1] / pts[i][2] - center[1] ) );
   }
 
-  vcl_cout << "RREL: sum_wgt = " << sum_wgt << vcl_endl;
-  vcl_cout << "RREL: avg_distance = " << avg_distance << vcl_endl;
-
   avg_distance /= sum_wgt;
 
   norm_matrix( 0, 0 ) = 1.0 / avg_distance;
