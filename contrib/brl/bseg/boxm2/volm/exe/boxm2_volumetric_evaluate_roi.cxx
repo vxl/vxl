@@ -207,7 +207,7 @@ int main(int argc,  char** argv)
           }
           // save the image
           vcl_stringstream out_png_name;
-          out_png_name << out_folder.str() << "/ProbMap_" << tiles[ti].get_string() << "_thres_sgi_" << *vit << ".png";
+          out_png_name << out_folder.str() << "/ProbMap_" << tiles[ti].get_string() << "_thres_sgi_" << *vit << ".tif";
           vil_save(out_png, (out_png_name.str()).c_str());
         }
       }
