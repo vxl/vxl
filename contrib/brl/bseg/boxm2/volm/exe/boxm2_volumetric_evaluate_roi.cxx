@@ -183,6 +183,15 @@ int main(int argc,  char** argv)
     test_img_roi.insert(pair_roi);
 
 #if 1
+    // create folder for different thresholds,
+    vcl_vector<vcl_string> prob_thres_folders;
+    for (vcl_vector<float>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
+      vcl_stringstream folder_name;
+      float pre = *vit/max_score_all;
+      folder_name << out_folder.str() << "/ProbMap_thres_" << *vit;
+      vul_file::make_directory(folder_name.str());
+      prob_thres_folders.push_back(folder_name.str());
+    }
     // create png tile images for different thresholds, only generate png tile prob_map with thres smaller than ground truth score
     for (unsigned ti = 0; ti < tiles.size(); ++ti) {
       vcl_string img_name = out_folder.str() + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";
@@ -193,6 +202,7 @@ int main(int argc,  char** argv)
         continue;
       }
       vil_image_view<float> tile_img = vil_load(img_name.c_str());
+      unsigned cnt = 0;
       for (vcl_vector<float>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
         if (*vit < gt_score) {
           vil_image_view<vxl_byte> out_png(tile_img.ni(), tile_img.nj());
@@ -206,9 +216,9 @@ int main(int argc,  char** argv)
             }
           }
           // save the image
-          vcl_stringstream out_png_name;
-          out_png_name << out_folder.str() << "/ProbMap_" << tiles[ti].get_string() << "_thres_sgi_" << *vit << ".tif";
-          vil_save(out_png, (out_png_name.str()).c_str());
+          //vcl_stringstream out_png_name;
+          vcl_string out_png_name = prob_thres_folders[cnt++] + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";
+          vil_save(out_png, out_png_name.c_str());
         }
       }
     }
