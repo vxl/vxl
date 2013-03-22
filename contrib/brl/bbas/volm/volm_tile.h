@@ -40,6 +40,7 @@ class volm_tile
 
    //: create a bounding box where lon is x and lat is y and lower left corner has geo coords
    vgl_box_2d<float> bbox();
+   vgl_box_2d<double> bbox_double();
 
    void img_to_global(unsigned i, unsigned j, double& lon, double& lat);
    
