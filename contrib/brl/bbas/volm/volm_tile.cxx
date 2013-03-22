@@ -18,7 +18,7 @@ volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, floa
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
   trans_matrix[0][0] = -scale_i_/(ni-1.0); trans_matrix[1][1] = -scale_j_/(nj-1.0);
-  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
+  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
   // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
   vpgl_lvcs_sptr lv = new vpgl_lvcs;
   vpgl_geo_camera cam(trans_matrix, lv); cam.set_scale_format(true);
@@ -57,7 +57,7 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
   trans_matrix[0][0] = -scale_i_/(ni-1.0); trans_matrix[1][1] = -scale_j_/(nj-1.0);
-  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
+  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
   vpgl_lvcs_sptr dummy_lvcs = new vpgl_lvcs;
   cam_ = vpgl_geo_camera(trans_matrix, dummy_lvcs);
   cam_.set_scale_format(true);
@@ -74,7 +74,7 @@ volm_tile::volm_tile(float lat, float lon, float scale_i, float scale_j, unsigne
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
   trans_matrix[0][0] = -scale_i_/(ni-1.0); trans_matrix[1][1] = -scale_j_/(nj-1.0);
-  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
+  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
   // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
   vpgl_lvcs_sptr lv = new vpgl_lvcs;
   vpgl_geo_camera cam(trans_matrix, lv); cam.set_scale_format(true);
@@ -195,7 +195,7 @@ bool volm_tile::global_to_img(double lon, double lat, unsigned& i, unsigned& j)
   if (u < 0 || v < 0 || u >= this->ni_ || v >= this->nj_)
     return false;
   i = (unsigned)vcl_floor(u);
-  j = (unsigned)vcl_floor(v);
+  j = (unsigned)vcl_floor(v);  // this may be ceil cause image direction is in reverse in latitude
   return true;
 }
 
