@@ -16,8 +16,8 @@ volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, floa
         lat_(lat), lon_(lon), hemisphere_(hemisphere), direction_(direction), scale_i_(scale_i), scale_j_(scale_j), ni_(ni), nj_(nj)
 {
   vnl_matrix<double> trans_matrix(4,4,0.0);
-  //trans_matrix[0][0] = -scale_i_/ni; trans_matrix[1][1] = -scale_j_/nj;
-  trans_matrix[0][0] = -scale_i_/3600.0; trans_matrix[1][1] = -scale_j_/3600.0;
+  //divide by ni-1 to account for 1 pixel overlap with the next tile
+  trans_matrix[0][0] = -scale_i_/(ni-1.0); trans_matrix[1][1] = -scale_j_/(nj-1.0);
   trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
   // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
   vpgl_lvcs_sptr lv = new vpgl_lvcs;
@@ -55,8 +55,8 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
            << "lower right corner in the image is: " << lat_ << " N " << lon_-scale_i_ << " W" << vcl_endl;
 #endif
   vnl_matrix<double> trans_matrix(4,4,0.0);
-  //trans_matrix[0][0] = -scale_i_/ni; trans_matrix[1][1] = -scale_j_/nj;
-  trans_matrix[0][0] = -scale_i_/3600.0; trans_matrix[1][1] = -scale_j_/3600.0;
+  //divide by ni-1 to account for 1 pixel overlap with the next tile
+  trans_matrix[0][0] = -scale_i_/(ni-1.0); trans_matrix[1][1] = -scale_j_/(nj-1.0);
   trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
   vpgl_lvcs_sptr dummy_lvcs = new vpgl_lvcs;
   cam_ = vpgl_geo_camera(trans_matrix, dummy_lvcs);
@@ -72,8 +72,8 @@ volm_tile::volm_tile(float lat, float lon, float scale_i, float scale_j, unsigne
   if (lon < 0) { lon_ = -lon; direction_ = 'W'; } else { lon_ = lon; direction_ = 'E'; }
 
   vnl_matrix<double> trans_matrix(4,4,0.0);
-  //trans_matrix[0][0] = -scale_i_/ni; trans_matrix[1][1] = -scale_j_/nj;
-  trans_matrix[0][0] = -scale_i_/3600.0; trans_matrix[1][1] = -scale_j_/3600.0;
+  //divide by ni-1 to account for 1 pixel overlap with the next tile
+  trans_matrix[0][0] = -scale_i_/(ni-1.0); trans_matrix[1][1] = -scale_j_/(nj-1.0);
   trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_;
   // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
   vpgl_lvcs_sptr lv = new vpgl_lvcs;
