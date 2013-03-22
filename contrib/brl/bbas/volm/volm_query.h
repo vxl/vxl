@@ -267,7 +267,7 @@ class volm_query : public vbl_ref_count
 
   void draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
                 vgl_point_3d<double> const& world_point,
-                unsigned char const& depth,
+                vil_rgb<vxl_byte>,
                 vpgl_perspective_camera<double> const& cam);
 };
 

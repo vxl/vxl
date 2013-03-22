@@ -851,7 +851,7 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
 
 void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
                           vgl_point_3d<double> const& world_point,
-                          unsigned char const& depth,
+                          vil_rgb<vxl_byte> color,
                           vpgl_perspective_camera<double> const& cam)
 {
   int dot_size = ( img.ni() < img.nj() ) ? (int)(0.003*ni_) : (int)(0.003*nj_);
@@ -865,21 +865,7 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
       for (int j = -dot_size; j < dot_size; ++j) {
         int x = cx + i ; int y = cy + j;
         if ( !(x < 0 || y < 0 || x >= (int)img.ni() || y >= (int)img.nj()) ) {
-          if (depth == 254) { // special color for sky
-            img((unsigned)x,(unsigned)y).r = 255;
-            img((unsigned)x,(unsigned)y).g = 255;
-            img((unsigned)x,(unsigned)y).b = 255;
-          }
-          else if (depth == 253) { // special color for invalid index
-            img((unsigned)x,(unsigned)y).r = 0;
-            img((unsigned)x,(unsigned)y).g = 0;
-            img((unsigned)x,(unsigned)y).b = 0;
-          }
-          else {
-            img((unsigned)x,(unsigned)y).r = bvrml_color::heatmap_classic[(int)depth][0];
-            img((unsigned)x,(unsigned)y).g = bvrml_color::heatmap_classic[(int)depth][1];
-            img((unsigned)x,(unsigned)y).b = bvrml_color::heatmap_classic[(int)depth][2];
-          }
+          img((unsigned)x, (unsigned)y) = color;
         }
       }
   }
@@ -923,37 +909,46 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
 
   if (value_type == "orientation") {
     for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
-      unsigned char color_id;
+      vil_rgb<vxl_byte> color_id;
       if (values[pidx] == 0 || values[pidx] == 100)       //    invalid --> black
-        color_id = 253;
+        color_id = vil_rgb<vxl_byte>(0,0,0);
       else if (values[pidx] == 1)                         // horizontal --> red
-        color_id = 28;
+        color_id = vil_rgb<vxl_byte>(255,0,0);
       else if (values[pidx] > 1 && values[pidx] < 10)     //   vertical --> green
-        color_id = 141;
-      else if (values[pidx] == 254)                       //        sky --> white
-        color_id = 254;
+        color_id = vil_rgb<vxl_byte>(0,180,60);
+      else if (values[pidx] == 254)                       //        sky --> blue
+        color_id = vil_rgb<vxl_byte>(51,102,255);
       else
-        color_id = 253;
+        color_id = vil_rgb<vxl_byte>(49,50,62);
       this->draw_dot(out_img, query_points_[pidx], color_id, cam);
     }
   }
   else if (value_type == "land") {
     vcl_cout << " land_type index: ";
     for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
-      unsigned char color_id;
+      vil_rgb<vxl_byte> color_id;
       if (values[pidx] == 0)                   // invalid --> black
-        color_id = 253;
-      else if (values[pidx] == 254)            // sky --> white
-        color_id = 254;
-      else
-        color_id = values[pidx]*6;             // increase color difference
+        color_id = vil_rgb<vxl_byte>(49,50,62);
+      else if (values[pidx] == 254)            // sky --> blue
+        color_id = vil_rgb<vxl_byte>(51,102,255);
+      else 
+        color_id = volm_label_table::get_color(values[pidx]);
       this->draw_dot(out_img, query_points_[pidx], color_id, cam);
     }
   }
   else if (value_type == "depth") {
-    for (unsigned pidx = 0; pidx < query_size_; ++pidx)
-      if (values[pidx] < 255)
-        this->draw_dot(out_img, query_points_[pidx], values[pidx], cam);
+    for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
+      vil_rgb<vxl_byte> color_id;
+      if (values[pidx] == 254)
+        color_id = vil_rgb<vxl_byte>(51,102,255);
+      else if (values[pidx] == 253)
+        color_id = vil_rgb<vxl_byte>(0,0,0);
+      else
+        color_id = vil_rgb<vxl_byte>(bvrml_color::heatmap_classic[(int)values[pidx]][0],
+                                     bvrml_color::heatmap_classic[(int)values[pidx]][1],
+                                     bvrml_color::heatmap_classic[(int)values[pidx]][2]);
+      this->draw_dot(out_img, query_points_[pidx], color_id, cam);
+    }
   }
   else {
     vcl_cerr << "WARNING: given image type " << value_type << " is not found in volm_query::depth_rgb_image, generate depth image instead\n";
