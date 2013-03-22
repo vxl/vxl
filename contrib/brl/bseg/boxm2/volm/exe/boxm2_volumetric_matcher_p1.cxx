@@ -9,6 +9,7 @@
 #include <volm/volm_tile.h>
 #include <vul/vul_file.h>
 #include <vul/vul_arg.h>
+#include <vpgl/vpgl_utm.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_spherical_container.h>
@@ -45,6 +46,9 @@ int main(int argc, char** argv)
   vul_arg<unsigned>   max_cam_per_loc("-max_cam", "maximum number of cameras to be saved", 200); // matcher -- output related
   vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "");      // matcher -- output folder
   vul_arg<bool>       logger("-logger", "designate one of the exes as logger", false);           // matcher -- log file generation
+  vul_arg<unsigned>   gt_id("-gt", "test image id (40 or 83)", 0);                                      // for experiments
+  vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");               // for experiments
+
 #if 0
   vul_arg<bool>       use_orient("-ori", "choose to use orientation attribute", false);          // matcher -- matcher option
   vul_arg<bool>        use_ps0("-ps0", "choose to use pass 0 regional matcher", false);
@@ -77,12 +81,19 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
+  if ( gt_id() != 0 && gt_file().compare("") == 0) {
+    log << " ERROR: require file with the gt locs for test image id " << gt_id() << '\n';
+    vcl_cerr << log.str();
+    vul_arg_display_usage_and_exit();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+
   // check the consistency of tile_id and zone_id
   // for coast --- zone 18 contains only tile 8 to tile 14 and zone 17 contains only tile 0 to tile 8
   // for desert --- all tiles (4 tiles) are in zone 11
-  if ((tile_id() >= 8 && zone_id() == 17) ||
-      (tile_id()  < 8 && zone_id() == 18) ||
-      (tile_id()  > 3 && zone_id() == 11) )
+  if (tile_id() > 8 && zone_id() == 17 ||
+      tile_id() < 8 && tile_id() != 5 && zone_id() == 18 ||
+      tile_id() > 3 && zone_id() == 11 )
   {
     log << " ERROR: inconsistency between tile_id and utm zone_id, tile_id = " << tile_id() << ", zone_id = " << zone_id() << '\n';
     if (do_log) { volm_io::write_log(out_folder(), log.str()); }
@@ -335,6 +346,70 @@ int main(int argc, char** argv)
     vcl_cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
+
+  // output the ground truth score for all cameras
+  if (gt_id() != 0 && gt_id() < 100) {
+    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
+    unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
+    // obtain the zone_id and tile_id from gt_locs
+    int gt_utm_id;
+    double x, y;
+    vpgl_utm utm;
+    utm.transform(samples[gt_id()].first.y(), samples[gt_id()].first.x(), x, y, gt_utm_id);
+    
+    vcl_vector<volm_tile> tiles;
+    if (samples[gt_id()].second.second == "desert")
+      tiles = volm_tile::generate_p1_wr1_tiles();
+    else
+      tiles = volm_tile::generate_p1_wr2_tiles();
+    unsigned gt_tile_id = tiles.size();
+    for (unsigned i = 0; i < tiles.size(); i++) {
+      unsigned u, v;
+      if (tiles[i].global_to_img(samples[gt_id()].first.x(), samples[gt_id()].first.y(), u, v) )
+        if (u < tiles[i].ni() && v < tiles[i].nj())
+          gt_tile_id = i;
+    }
+
+    if ( gt_tile_id != tile_id() || gt_utm_id != zone_id() ) {
+      vcl_cerr << " GT location " << gt_id() << samples[gt_id()].first.y() << ", " << samples[gt_id()].first.x()
+               << " is in zone " << gt_utm_id << " and tile " << gt_tile_id << '\n';
+      vcl_cerr << " Current matcher runs on zone " << zone_id() << " tile " << tile_id() << '\n';
+      vcl_cerr << " Ignore score output along the camera space " << vcl_endl;
+    } else {
+      vgl_point_3d<double> gt_loc;
+      gt_loc = samples[gt_id()].first;
+      double gt_lon, gt_lat;
+      gt_lon = gt_loc.x();  gt_lat = gt_loc.y();
+      unsigned gt_h_id = 0;
+      volm_geo_index_node_sptr leaf_gt = volm_geo_index::get_closest(root, gt_lat, gt_lon, gt_h_id);
+
+      // obtain the leaf_id and hypo_id for test images
+      unsigned gt_l_id = 0;
+      for (unsigned i = 0; i < leaves.size(); i++)
+        if (leaf_gt->get_string() == leaves[i]->get_string() ) { gt_l_id = i; i = leaves.size(); }
+
+      vcl_cout << "\n==================================================================================================\n"
+                << "\t\t  6. write out the score for " << max_cam_per_loc() << " cameras which is higher than " << threshold() << "\n"
+                << "\t\t     " << out_folder() << '\n'
+                << "\t\t for GT location " << gt_id() << samples[gt_id()].first.y() << ", " << samples[gt_id()].first.x()
+                << ", is in utm zone " << gt_utm_id << " and tile " << gt_tile_id << '\n'
+                << "\t\t Associated leaf is " << leaf_gt->get_string() << "(leaf_id " << gt_l_id << ")  and "<< " hypo_id = "
+                << gt_h_id << "(" << leaves[gt_l_id]->hyps_->locs_[gt_h_id] << ")\n"
+                << "==================================================================================================\n" << vcl_endl;
+      vcl_stringstream gt_score_txt;
+      gt_score_txt << out_folder() << "ps_1_gt_l_" << gt_l_id << "_h_" << gt_h_id << "_cam_scores.txt";
+      if (!obj_ps1_matcher.write_gt_cam_score(gt_l_id, gt_h_id, gt_score_txt.str())) {
+        log << " ERROR: writing output failed --> can not find ground truth leaf_id " << gt_l_id << ", hypo_id " << gt_h_id << '\n';
+        if (do_log) {
+          volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
+          volm_io::write_log(out_folder(), log.str());
+        }
+        vcl_cerr << log.str();
+        return volm_io::MATCHER_EXE_FAILED;
+      }
+    }
+  }
+
 
 #if 0
   if (use_ps0()) {
