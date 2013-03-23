@@ -69,7 +69,9 @@ int main(int argc,  char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
+#if 0 // used in commented-out section
   double hypo_interval = 3*(inc()/0.1);
+#endif
 
   // read the gt location for test image id, i.e., lat and lon
   if (!vul_file::exists(gt_file())) {
@@ -272,19 +274,20 @@ int main(int argc,  char** argv)
   double y_dist = (gt_loc.y()-gt_closest.y())*deg_to_meter;
   vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
   double gt_dist = gt_dist_vec.sqr_length();
-  vcl_cerr << vcl_setprecision(10) << " GT_location = " << gt_loc 
+  vcl_cerr << vcl_setprecision(10) << " GT_location = " << gt_loc
            << ", closest location = " << gt_closest
-           << ", distance = " << gt_dist << " meter "
-           << vcl_endl;
-  //double gt_dist = gt_dist_vec.sqr_length();
-  //if (gt_dist > min_size) {
-  //  log << "WARNING: the GT location [" << gt_loc.x() << ", " << gt_loc.y() << "] to the closest location ["
-  //      << gt_closest.x() << ", " << gt_closest.y() << "] in geo_index is "
-  //      << gt_dist << ", larger than hypotheses interval "
-  //      << hypo_interval << " meters in geo_index\n";
-  //  volm_io::write_post_processing_log(log_file, log.str());
-  //  vcl_cerr << log.str();
-  //}
+           << ", distance = " << gt_dist << " meter\n";
+#if 0
+  double gt_dist = gt_dist_vec.sqr_length();
+  if (gt_dist > min_size) {
+    log << "WARNING: the GT location [" << gt_loc.x() << ", " << gt_loc.y() << "] to the closest location ["
+        << gt_closest.x() << ", " << gt_closest.y() << "] in geo_index is "
+        << gt_dist << ", larger than hypotheses interval "
+        << hypo_interval << " meters in geo_index\n";
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+  }
+#endif
 
 #if 1
 
