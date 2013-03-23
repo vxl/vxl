@@ -4,10 +4,10 @@
 //:
 // \file
 // \brief  A class to represent a volumetric matching query through an image mark-up and estimated camera parameters
-//              The container is numbers of points distributed on a unit spherecial surface
-//              The camera parameters, heading, tilt, roll, right_fov, top_fov, have resolution one degree, and their
-//              default values are chosen based on query image category (desert/coast)
-//              Use top viewing angle to define the viewing volume
+// The container is numbers of points distributed on a unit spherecial surface
+// The camera parameters, heading, tilt, roll, right_fov, top_fov, have resolution one degree, and their
+// default values are chosen based on query image category (desert/coast)
+// Use top viewing angle to define the viewing volume
 //
 // \author Yi Dong
 // \date October 23, 2012
@@ -89,59 +89,60 @@ class volm_query : public vbl_ref_count
   unsigned get_cam_num() const                                               { return (unsigned)cam_space_->valid_indices().size(); }
   unsigned get_obj_order_num() const                                         { return (unsigned)order_index_[0].size(); }
   unsigned get_query_size() const                                            { return query_size_; }
-  
+
   //: return number of voxels having ground properties
   unsigned get_ground_id_size() const                           { return ground_offset_[ground_offset_.size()-1]; }
-  
+
   //: return stored distance for all ground voxels
   unsigned get_ground_dist_size() const                         { return ground_offset_[ground_offset_.size()-1]; }
-  
+
   //: return number of voxels having non-ground, non-sky properties
   unsigned get_dist_id_size() const                             { return dist_offset_[dist_offset_.size()-1]; }
-  
+
   //: return number of voxels having sky properties
   unsigned get_sky_id_size() const                              { return sky_offset_[sky_offset_.size()-1]; }
-  
+
   //: return number of voxels for all non-ground objects (order_index)
   unsigned get_order_size() const;
-  
+
   //: return the total query size in byte(object based)
   unsigned obj_based_query_size_byte() const;
-  
+
   //: write vrml for spherical container and camera hypothesis
   void draw_template(vcl_string const& vrml_fname);
-  
+
   //: write query image showing the depth map geometry and the penetrating ray
   void draw_query_images(vcl_string const& out_dir);
   void draw_query_image(unsigned i, vcl_string const& out_name);
-  
+
   //: get camera string
-  vcl_string get_cam_string(unsigned i) const 
-  { 
+  vcl_string get_cam_string(unsigned i) const
+  {
     return cam_space_->camera_angles(i).get_string();
     //return cam_space_->get_string(cam_space_->valid_indices()[i]);
   }
-  
+
   //: get the number of camera having the input top_fov value
   unsigned get_num_top_fov(double const& top_fov) const;
-  
+
   //: extract the top_fov value from cam_id
   double get_top_fov(unsigned const& i) const;
-  
+
   //: return valid top_fov from camera vector
   vcl_vector<double> get_valid_top_fov() const;
-  
+
   //: visualized the query camera using the spherical shell geometry
   void visualize_query(vcl_string const& prefix);
-  
+
   //: generate rgb depth image for given camera id and given depth value
   void depth_rgb_image(vcl_vector<unsigned char> const& values, unsigned const& cam_id, vil_image_view<vil_rgb<vxl_byte> >& out_img, vcl_string value_type = "depth");
-  
+
   //: draw the polygons of regions on top of an rgb image
   void draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img);
   void draw_query_regions(vcl_string const& out_name);
-  
+
   // ===========  binary I/O ================
+
   //: version
   unsigned version() const {return 1;}
 
@@ -235,11 +236,12 @@ class volm_query : public vbl_ref_count
   vcl_vector<unsigned char>                                    obj_orient_;
   vcl_vector<vcl_vector<unsigned char> >                      obj_land_id_;
   vcl_vector<vcl_vector<float> >                             obj_land_wgt_;
+#if 0
   //: weight parameters
-  //vcl_vector<float> weight_obj_;
-  //float             weight_grd_;
-  //float             weight_sky_;
-
+  vcl_vector<float> weight_obj_;
+  float             weight_grd_;
+  float             weight_sky_;
+#endif
   //: functions
   bool query_ingest();
   bool offset_ingest();
