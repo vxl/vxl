@@ -78,7 +78,7 @@ vcl_map<int, volm_attributes > create_label_map()
   m[103] =      volm_attributes(18, "bridges",                                          vil_rgb<vxl_byte>(255,  10,   0));
   m[104] =   volm_attributes(19, "cemeteries",                                          vil_rgb<vxl_byte>(176,  176,  176));
   m[105] =   volm_attributes(20, "fcc_towers",                                          vil_rgb<vxl_byte>(255,  20,   0));
-  m[106] =        volm_attributes(21, "forts",                                          vil_rgb<vxl_byte>(255,  50,   0));
+  m[volm_label_table::FORT] =        volm_attributes(21, "forts",                                          vil_rgb<vxl_byte>(255,  50,   0));
   m[107] = volm_attributes(22, "golf_courses",                                          vil_rgb<vxl_byte>(0,    255,  200));
   m[108] =      volm_attributes(23, "harbors",                                          vil_rgb<vxl_byte>(255,  100,  0));
   m[109] =       volm_attributes(24, "hotels",                                          vil_rgb<vxl_byte>(255,  255,  200));
@@ -86,11 +86,12 @@ vcl_map<int, volm_attributes > create_label_map()
   m[111] =      volm_attributes(26, "marinas",                                          vil_rgb<vxl_byte>(255,  255,  100));
   m[112] =        volm_attributes(27, "mines",                                          vil_rgb<vxl_byte>(255,  0,    100));
   m[113] =        volm_attributes(28, "parks",                                          vil_rgb<vxl_byte>(10,   255,  1));
-  m[volm_label_table::PIER] = volm_attributes(29, "piers",                              vil_rgb<vxl_byte>(255,  0,    40));
+  m[volm_label_table::PIER] = volm_attributes(29, "piers",                              vil_rgb<vxl_byte>(0,  0,    0));
   m[115] =      volm_attributes(30, "wharves",                                          vil_rgb<vxl_byte>(255,  0,    41));
   m[116] =      volm_attributes(31, "roads",                                            vil_rgb<vxl_byte>(255,  100,    41));
   m[117] =      volm_attributes(32, "parking_lots",                                     vil_rgb<vxl_byte>(255,  200,    41));
   m[118] =      volm_attributes(33, "beach_walkway",                                    vil_rgb<vxl_byte>(255,  200,    241));
+  m[volm_label_table::BUILDING_TALL] =      volm_attributes(34, "tall_building",            vil_rgb<vxl_byte>(255,  200,    41)); // has more than 5 floor height, >20 m of height (building itself), e.g. count at least 5 floors on the building. warning: if a building with 3 floors (12 m) is on top of a hill of ~8 m, it may be categorized as tall
 
   return m;
 }
@@ -806,7 +807,7 @@ bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& da
 }
 
 //: read the building footpring file
-bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds)
+bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds, vcl_vector<double>& heights)
 {
   vcl_cout << "\t\t !!!!!!!!!!!!!! reading file: " << file << vcl_endl;
   vcl_ifstream ifs(file.c_str());
@@ -856,6 +857,7 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygo
       tok = vcl_strtok(NULL, ",");
     }
     builds.push_back(vcl_pair<vgl_polygon<double>, vgl_point_2d<double> >(poly, cent_pt));
+    heights.push_back(height);
   }
   return true;
 }

@@ -46,7 +46,7 @@ class volm_label_table
 {
  public:
   static unsigned number_of_labels_;
-  enum label_values {INVALID = 0, SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, BUILDING = 100, PIER = 114};
+  enum label_values {INVALID = 0, SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, BUILDING = 100, FORT = 106, PIER = 114, BUILDING_TALL = 119};
   static vcl_map<int, volm_attributes > land_id ;
   static vcl_string land_string(unsigned char id);
   //: pass the id of the class labeled in the query (volm_attribute.id_)
@@ -133,7 +133,7 @@ class volm_io
   static bool read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data);
 
   //: read the building footpring file
-  static bool read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds);
+  static bool read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds, vcl_vector<double>& heights);
 
   //: read the sme labels
   static bool read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects);
