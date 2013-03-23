@@ -27,7 +27,6 @@ def load_scene(scene_str):
   scene = dbvalue(scene_id, scene_type);
   return scene;
 
-
 #does the opencl prep work on an input scene
 def load_opencl(scene_str, device_string="gpu"):
   scene = load_scene(scene_str);
@@ -66,7 +65,6 @@ def load_opencl(scene_str, device_string="gpu"):
   openclcache = dbvalue(id, type);
 
   return scene, cache, mgr, device, openclcache;
-
 
 #Just loads up CPP cache
 def load_cpp(scene_str) :
@@ -127,7 +125,6 @@ def write_scene_to_kml(scene, kml_filename):
   boxm2_batch.set_input_string(1,kml_filename);
   boxm2_batch.run_process();
 
-
 ###############################################
 # Model building stuff
 ###############################################
@@ -183,7 +180,6 @@ def update_grey_with_alt(scene, cache, cam, img, device=None, ident="", mask=Non
     boxm2_batch.run_process();
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
-
 
 def update_app_grey(scene, cache, cam, img, device=None) :
   #If no device is passed in, do cpu update
@@ -325,7 +321,6 @@ def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, device=None) 
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
-
 def ingest_mesh(scene,cache,plyfile,label_id,category):
   boxm2_batch.init_process("boxm2IngestConvexMeshProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -371,7 +366,6 @@ def ingest_to_zero_out_alpha(scene, cache,x_img,y_img,z_img,device=None) :
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
-
 # refine count should not exceed 3 for scenes with max_octree_level=4
 def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=2, ingest_space = 1, zero_out_alpha=True):
   if zero_out_alpha:
@@ -394,7 +388,7 @@ def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickne
     else:
       scene.ingest_to_zero_out_alpha(x_img,y_img,z_img);
       scene.ingest_height_map(x_img,y_img,z_img, False);
-      
+
     if ingest_space:
       scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
     #scene.write_cache();
@@ -406,16 +400,15 @@ def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickne
     scene.ingest_to_zero_out_alpha(x_img,y_img,z_img);
     scene.ingest_height_map(x_img,y_img,z_img,False);
   scene.write_cache();
-  
+
 def initialize_ground(scene, global_ground_z, refine_cnt=2):
   (x_ground, y_ground, z_ground) = generate_xyz_for_ground_initialization(scene.scene, global_ground_z);
-  
+
   scene.ingest_height_map(x_ground, y_ground, z_ground, False);
   for i in range(0,refine_cnt,1):
     scene.refine();
     scene.ingest_height_map(x_ground,y_ground,z_ground, False);
   scene.write_cache();
-
 
 def refine_and_ingest_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=1):
   for i in range(0,refine_cnt,1):
@@ -565,7 +558,7 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
     return exp_image, var_image, vis_image
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
-    
+
 #####################################################################
 # render depth map by loading block inside certain region
 #####################################################################
@@ -594,8 +587,6 @@ def render_depth_region(scene, cache, cam, lat, lon, elev, radius, ni=1280, nj=7
     return exp_image, var_image, vis_image
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
-    
-  
 
 #####################################################################
 # render image of expected z values
@@ -620,6 +611,7 @@ def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize = False, device
     return z_exp_image, z_var_image
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
+
 #####################################################################
 # change detection wrapper
 #####################################################################
@@ -756,7 +748,6 @@ def median_filter(scene, cache, device=None) :
   else :
     print "ERROR: Cache type unrecognized: ", cache.type;
 
-
 ######################################################################
 # cache methods
 #####################################################################
@@ -783,7 +774,6 @@ def clear_cache(cache) :
   else :
     print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type;
 
-
 ######################################################################
 # trajectory methods
 #####################################################################
@@ -798,7 +788,7 @@ def init_trajectory(scene, startInc, endInc, radius, ni=1280, nj=720) :
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   trajectory = dbvalue(id,type);
-  return trajectory; 
+  return trajectory;
 
 def trajectory_next(trajectory) :
   boxm2_batch.init_process("boxm2ViewTrajectoryNextProcess");
@@ -892,8 +882,8 @@ def bundle2scene(bundle_file, img_dir,axis_align= True, nblks =8, app_model="box
   boxm2_batch.set_input_string(1, img_dir);
   boxm2_batch.set_input_string(2, app_model);
   boxm2_batch.set_input_string(3, nobs_model);
-  boxm2_batch.set_input_int(4, nblks)	
-  boxm2_batch.set_input_bool(5, axis_align); 
+  boxm2_batch.set_input_int(4, nblks)
+  boxm2_batch.set_input_bool(5, axis_align);
   boxm2_batch.set_input_string(6, out_dir);
   boxm2_batch.set_input_float(7, lvcscenter[0]);
   boxm2_batch.set_input_float(8, lvcscenter[1]);
@@ -904,7 +894,6 @@ def bundle2scene(bundle_file, img_dir,axis_align= True, nblks =8, app_model="box
   (scene_id, scene_type) = boxm2_batch.commit_output(1);
   rscene = dbvalue(scene_id, scene_type);
   return uscene, rscene;
-
 
 def save_scene(scene, fname) :
   boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
@@ -1115,7 +1104,6 @@ def create_mask_image(scene, camera, ni, nj, ground_plane_only=False) :
   mask = dbvalue(id,type)
   return mask
 
-
 ######################################################################
 # blob detection methods
 #####################################################################
@@ -1147,7 +1135,6 @@ def blob_precision_recall(cd_img, gt_img, mask_img=None) :
 
   #return tuple of true positives, true negatives, false positives, etc..
   return (precision, recall);
-
 
 #########################################################################
 #Batch update process
@@ -1208,7 +1195,6 @@ def compute_sun_affine_camera(scene, sun_az, sun_el, astro_coords = True):
        boxm2_batch.remove_data(ni_id)
        boxm2_batch.remove_data(nj_id)
        return sun_cam, ni, nj
-
 
 #######################################################
 # update sun visibility probabilities
@@ -1335,7 +1321,6 @@ def generate_xyz_for_ground_initialization(scene, global_ground_z):
   z_img = dbvalue(zi_id, zi_type);
   return x_img, y_img, z_img
 
-  
 def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
   boxm2_batch.init_process("boxm2ShadowHeightsToXYZProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1608,7 +1593,7 @@ def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_h
   boxm2_batch.set_input_float(15, visibility_threshold);
   boxm2_batch.set_input_float(16, index_buffer_capacity);
   boxm2_batch.run_process();
-  
+
 def index_hypotheses2(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle, cap_angle, point_angle, top_angle, bottom_angle, out_name, visibility_threshold, index_buffer_capacity):
   boxm2_batch.init_process("boxm2IndexHypothesesProcess2");
   boxm2_batch.set_input_from_db(0, device);
@@ -1655,3 +1640,4 @@ def visualize_indices(index_file, buffer_capacity, start_i, end_i, out_prefix):
   boxm2_batch.set_input_unsigned(3, end_i);
   boxm2_batch.set_input_string(4, out_prefix);
   boxm2_batch.run_process();
+
