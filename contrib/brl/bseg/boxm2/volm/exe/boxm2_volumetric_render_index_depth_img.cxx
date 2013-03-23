@@ -134,11 +134,11 @@ int main(int argc,  char** argv)
            << zone_id << " and the utm coord = " << x << ", " << y << '\n';
 
   vcl_stringstream geo_hypo_ss;
-  geo_hypo_ss << geo_hypo_folder_pre() << zone_id << "_inc_0.99_nh_1000/";
+  geo_hypo_ss << geo_hypo_folder_pre() << zone_id << "_inc_2_nh_100/";
   vcl_string geo_hypo_folder = geo_hypo_ss.str();
 
   vcl_stringstream geo_index_ss;
-  geo_index_ss << geo_index_folder_pre() << zone_id << "_inc_0.99_nh_1000_pa_" << point_angle() << '/';
+  geo_index_ss << geo_index_folder_pre() << zone_id << "_inc_2_nh_100_combined_pa_" << point_angle() << '/';
   vcl_string geo_index_folder = geo_index_ss.str();
 
   vcl_cerr << " geo_hypo_folder = " << geo_hypo_folder << '\n'
@@ -266,17 +266,25 @@ int main(int argc,  char** argv)
   volm_geo_index_node_sptr leaf_gt = volm_geo_index::get_closest(root, gt_lat, gt_lon, hyp_gt);
   // check the distance from ground trugh location to the closest in geo_index
   vgl_point_3d<double> gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
-  vgl_vector_2d<double> gt_dist_vec(gt_loc.x()-gt_closest.x(), gt_loc.y()-gt_closest.y()); // don't care about the elev difference
 
+  double deg_to_meter = 30.0/3600.0;  // 1 arcsec ~ 30 meter ~ 1/3600 degree
+  double x_dist = (gt_loc.x()-gt_closest.x())*deg_to_meter;
+  double y_dist = (gt_loc.y()-gt_closest.y())*deg_to_meter;
+  vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
   double gt_dist = gt_dist_vec.sqr_length();
-  if (gt_dist > min_size) {
-    log << "WARNING: the GT location [" << gt_loc.x() << ", " << gt_loc.y() << "] to the closest location ["
-        << gt_closest.x() << ", " << gt_closest.y() << "] in geo_index is "
-        << gt_dist << ", larger than hypotheses interval "
-        << hypo_interval << " meters in geo_index\n";
-    volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
-  }
+  vcl_cerr << vcl_setprecision(10) << " GT_location = " << gt_loc 
+           << ", closest location = " << gt_closest
+           << ", distance = " << gt_dist << " meter "
+           << vcl_endl;
+  //double gt_dist = gt_dist_vec.sqr_length();
+  //if (gt_dist > min_size) {
+  //  log << "WARNING: the GT location [" << gt_loc.x() << ", " << gt_loc.y() << "] to the closest location ["
+  //      << gt_closest.x() << ", " << gt_closest.y() << "] in geo_index is "
+  //      << gt_dist << ", larger than hypotheses interval "
+  //      << hypo_interval << " meters in geo_index\n";
+  //  volm_io::write_post_processing_log(log_file, log.str());
+  //  vcl_cerr << log.str();
+  //}
 
 #if 1
 
