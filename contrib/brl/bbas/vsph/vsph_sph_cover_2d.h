@@ -13,21 +13,22 @@
 // \endverbatim
 // The parameter, min_area_fraction, determines if a box in the cover is to
 // be subdivided. Boxes containing a fractional area of the spherical region
-// rays less than min_area_fraction are subdivided until: 1) a limit on the 
-// extent of box dimensions is reached (box too small); or 2) the fractional 
-// area of the region contained in the box is greater than or equal to 
+// rays less than min_area_fraction are subdivided until: 1) a limit on the
+// extent of box dimensions is reached (box too small); or 2) the fractional
+// area of the region contained in the box is greater than or equal to
 // min_area_fraction.
 //
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vsph/vsph_sph_box_2d.h>
+
 // A struct associating an axis aligned box with an area fraction of coverage.
 // Forms the elements of the cover.
 class cover_el
 {
  public:
-  cover_el():frac_inside_(0.0){}
+  cover_el():frac_inside_(0.0) {}
   cover_el(vsph_sph_box_2d const& box, double frac_in)
   : frac_inside_(frac_in), box_(box) {}
 
@@ -39,7 +40,7 @@ class vsph_sph_cover_2d
 {
  public:
   //: default constructor
- vsph_sph_cover_2d():min_area_fraction_(0.0){};
+  vsph_sph_cover_2d():min_area_fraction_(0.0) {}
   //: constructor from a parent box and the set of region rays
   vsph_sph_cover_2d(vsph_sph_box_2d const& region_bb,
                     vcl_vector<vsph_sph_point_2d> const& region_rays,
@@ -57,8 +58,7 @@ class vsph_sph_cover_2d
   //: set the members
   void set(double min_area_fraction, double total_area, double actual_area_fraction, vcl_vector<cover_el> const& cover);
 
-  //: transform the cover on the unit sphere about center point (theta_c, phi_c)
-  // translation (\p t_theta, \p t_phi), and \p scale
+  //: transform the cover on the unit sphere about center point (theta_c, phi_c), translation (\p t_theta, \p t_phi), and \p scale
   vsph_sph_cover_2d transform(double t_theta,
                               double t_phi, double scale,
                               double theta_c,double phi_c,
