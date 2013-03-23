@@ -69,6 +69,7 @@ SOURCES += processes/boxm2_ocl_compute_expectation_per_view_process.cxx
 SOURCES += processes/boxm2_ocl_batch_update_scene_process.cxx
 SOURCES += processes/boxm2_ocl_render_view_dep_expected_image_process.cxx
 SOURCES += processes/boxm2_ocl_render_gl_view_dep_app_expected_image_process.cxx
+SOURCES += processes/boxm2_ocl_render_expected_depth_region_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
