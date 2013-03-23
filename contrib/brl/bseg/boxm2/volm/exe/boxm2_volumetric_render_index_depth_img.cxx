@@ -299,6 +299,7 @@ int main(int argc,  char** argv)
   log << " For GT location, leaf is " << leaf_gt->get_string()
       << " hypo_id = " << hyp_gt << '\n'
       << " For GT location, closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
+      << " distance from closest to GT location is " << gt_dist
       << " has best score = " << score_gt << ", best camera stored in BestCamera.kml ( "
       << gt_cam_ang.get_string() << ", id = " << cam_gt_best << " ) img size " << query_img.ni() << " by " << query_img.nj() << '\n';
   vcl_cout << log.str();
