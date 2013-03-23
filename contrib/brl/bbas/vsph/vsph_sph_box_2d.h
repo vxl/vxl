@@ -14,8 +14,9 @@
 #include <vsph/vsph_sph_point_2d.h>
 #include <vcl_vector.h>
 #include <vgl/vgl_vector_3d.h>
-//:
-// theta is elevation, phi is azimuth
+
+//: An axis-aligned box on the unit sphere.
+// \theta is elevation, \phi is azimuth
 //
 // Note that the creation of intervals on the azimuth circle is not
 // well-defined. In contrast to intervals on the real line,
@@ -31,7 +32,6 @@
 // the predicate < means counter clockwise, i.e., a<b indicates that
 // rotation to go from a to b is less than 180 and is counter-clockwise.
 //
-
 class vsph_sph_box_2d
 {
  public:
@@ -55,7 +55,7 @@ class vsph_sph_box_2d
 
   void set(double min_theta, double max_theta, double a_phi, double b_phi,
            double c_phi, bool in_radians = true);
-  
+
   vsph_sph_box_2d& operator= (const vsph_sph_box_2d & rhs);
 
   //: the angle units (radians or degrees) maintained by *this box
