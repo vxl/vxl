@@ -26,6 +26,17 @@
 
 int main(int argc, char** argv)
 {
+  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
+  unsigned gpus = mgr->numGPUs();
+  for (unsigned i = 0; i < gpus; i++) {
+    vcl_cout << "gpu_id = " << i << " info = " << mgr->gpus_[i]->device_identifier() << vcl_endl;
+  }
+
+}
+
+#if 0
+int main(int argc, char** argv)
+{
   // input
   vul_arg<vcl_string> local_folder("-loc_out", "local output folder where the intermediate files are stored", ""); // camera space will be read from here
   vul_arg<vcl_string> params_file("-params", "text file with the params to construct camera space, spherical containers and query", "");
@@ -234,3 +245,4 @@ int main(int argc, char** argv)
 
   return volm_io::SUCCESS;
 }
+#endif
