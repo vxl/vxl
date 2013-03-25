@@ -19,8 +19,8 @@
 #include <vcl_string.h>
 #include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
-#include <depth_map/depth_map_scene_sptr.h>
-#include <depth_map/depth_map_region_sptr.h>
+#include <bpgl/depth_map/depth_map_scene_sptr.h>
+#include <bpgl/depth_map/depth_map_region_sptr.h>
 #include <volm/volm_spherical_container_sptr.h>
 #include <volm/volm_spherical_shell_container_sptr.h>
 #include <volm/volm_spherical_region.h>
@@ -40,7 +40,10 @@ class volm_spherical_region_query
   void construct_spherical_regions();
   volm_spherical_region set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
                                                   depth_map_region_sptr const& dm_region);
-
+  volm_spherical_region set_ground_from_depth_map_region(vpgl_perspective_camera<double> const& cam, 
+                                                       depth_map_region_sptr const& dm_region);
+  volm_spherical_region set_sky_from_depth_map_region(vpgl_perspective_camera<double> const& cam, 
+                                                       depth_map_region_sptr const& dm_region);
   depth_map_scene_sptr dm_scene_;
   volm_camera_space_sptr cam_space_;
   volm_spherical_container_sptr sph_vol_;

@@ -19,20 +19,22 @@
 #include <vsph/vsph_sph_box_2d.h>
 #include <vcl_algorithm.h>
 
-
-enum spherical_region_attributes
-{
+//const char* spherical_attributes_names[] = {"MIN_DEPTH","MAX_DEPTH","DEPTH_ORDER","DEPTH_INTERVAL","ORIENTATION","NLCD","SKY"};
+enum spherical_region_attributes{
     MIN_DEPTH = 0,
     MAX_DEPTH,
     DEPTH_ORDER,
+    DEPTH_INTERVAL,
     ORIENTATION,
-    NLCD
+    NLCD,
+    SKY,
+    GROUND
 };
 
 // Currently the spherical region has a bounding box for a region but will be appended to have a polygon as well.
 class volm_spherical_region
 {
- public:
+public:
     volm_spherical_region(vsph_sph_box_2d box):box_(box){}
     //:accessors
     const vsph_sph_box_2d& bbox_ref() {return box_;}
@@ -46,11 +48,12 @@ class volm_spherical_region
     //: returns false if the attribute does not exist.
     bool attribute_value(spherical_region_attributes att, unsigned char & value);
 
+
     //: returns the existing attribute types for this region
     vcl_vector<spherical_region_attributes> attribute_types();
     void print(vcl_ostream& os) ;
 
- private:
+private:
     //: box in spherical coordinates
     vsph_sph_box_2d box_;
 
@@ -59,21 +62,29 @@ class volm_spherical_region
 };
 
 
+
 // container to store a group of regions and a dictionary for the attributes.
 class volm_spherical_regions_layer
 {
- public:
+public:
+
     volm_spherical_regions_layer(){}
     void add_region(volm_spherical_region region);
-    vcl_vector<volm_spherical_region> & regions() {return regions_;}
-    vcl_vector<volm_spherical_region> regions() const {return regions_;}
-    int size() const {return regions_.size();}
-    vcl_vector<unsigned int> attributed_regions(spherical_region_attributes att) const;
+    vcl_vector<volm_spherical_region> & regions(){return regions_;}
+    int size(){return regions_.size();}
+    //vcl_vector<unsigned int>  attributed_regions(spherical_region_attributes att, unsigned char value);
+    //: returns the existing attribute types for this region
+    vcl_map<unsigned char,vcl_vector<unsigned int > >  attributed_regions_by_type(spherical_region_attributes att);
+    vcl_vector<unsigned int > attributed_regions_by_type_only(spherical_region_attributes att);
+    //: returns the existing attribute vlaues for this region
+    vcl_vector<unsigned int>  attributed_regions_by_value(spherical_region_attributes att,unsigned char & val);
+private:
 
- private:
     vcl_vector<volm_spherical_region> regions_;
     void update_attribute_map(int id);
-    vcl_map<spherical_region_attributes,vcl_vector<unsigned int> > attributed_regions_;
+    //: map of attribute types and values ( need to make a map of attrobute values )
+    vcl_map<spherical_region_attributes,vcl_map<unsigned char, vcl_vector<unsigned int> > > attributed_regions_;
+
 };
 
 #endif // volm_spherical_region_h_
