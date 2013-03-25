@@ -101,7 +101,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         r.set_attribute(spherical_region_attributes::DEPTH_INTERVAL,ival);
         sph_regions_.add_region(r);
     }
-        for (unsigned i = 0 ; i < num_orientation_regions; i++,count++)
+        for (int i = 0 ; i < num_orientation_regions; ++i,++count)
     {
         vsph_sph_box_2d box2d;
        box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
@@ -110,7 +110,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         r.set_attribute(spherical_region_attributes::ORIENTATION,ival);
         sph_regions_.add_region(r);
     }
-                for (unsigned i = 0 ; i < num_nlcd_regions; i++,count++)
+    for (int i = 0 ; i < num_nlcd_regions; ++i,++count)
     {
         vsph_sph_box_2d box2d;
         box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
@@ -119,7 +119,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         r.set_attribute(spherical_region_attributes::NLCD,ival);
         sph_regions_.add_region(r);
     }
-    for (unsigned i = 0 ; i < sky_regions; i++,count++)
+    for (int i = 0 ; i < sky_regions; ++i,++count)
     {
         vsph_sph_box_2d box2d;
         box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
