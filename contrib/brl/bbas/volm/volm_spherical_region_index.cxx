@@ -14,86 +14,84 @@ volm_spherical_region_index::
 volm_spherical_region_index(vcl_map<vcl_string,vcl_string> & index_file_paths,
                             vcl_string usph_file_path)
 {
-   
-  vcl_map<vcl_string,vcl_string>::iterator iter = index_file_paths.begin();
-  for(;iter!=index_file_paths.end(); iter++)
-  {
-      bool keep_sky = false;
-      spherical_region_attributes att;
-      if(iter->first=="DEPTH_INTERVAL")
-      {
-          keep_sky = true; 
-          att = spherical_region_attributes::DEPTH_INTERVAL;
-      }
-      else if(iter->first=="ORIENTATION")
-      {
-          keep_sky = false; 
-          att = spherical_region_attributes::ORIENTATION;
-      }
-      else if(iter->first=="NLCD")
-      {
-           keep_sky = false; 
-           att = spherical_region_attributes::NLCD;
-      }
-      else 
-          continue;
+    vcl_map<vcl_string,vcl_string>::iterator iter = index_file_paths.begin();
+    for (;iter!=index_file_paths.end(); iter++)
+    {
+        bool keep_sky = false;
+        spherical_region_attributes att;
+        if (iter->first=="DEPTH_INTERVAL")
+        {
+            keep_sky = true;
+            att = spherical_region_attributes::DEPTH_INTERVAL;
+        }
+        else if (iter->first=="ORIENTATION")
+        {
+            keep_sky = false;
+            att = spherical_region_attributes::ORIENTATION;
+        }
+        else if (iter->first=="NLCD")
+        {
+             keep_sky = false;
+             att = spherical_region_attributes::NLCD;
+        }
+        else
+            continue;
 
+        vcl_vector<unsigned char> cdata;
+        vsph_utils::read_ray_index_data(iter->second, cdata);
+        data_.clear();
+        int n = cdata.size();
+        for (int i = 0; i<n; ++i)
+          data_.push_back(static_cast<double>(cdata[i]));
 
-      vcl_vector<unsigned char> cdata;
-      vsph_utils::read_ray_index_data(iter->second, cdata);
-      data_.clear();
-      int n = cdata.size();
-      for (int i = 0; i<n; ++i)
-        data_.push_back(static_cast<double>(cdata[i]));
+        load_unitsphere(usph_file_path);
+        double dpr = vnl_math::deg_per_rad;
+        double sigma = (0.1*usph_->point_angle())/dpr,  c =0.0;
+        int min_size = 3;
+        bool dosmoothing = true;
+        seg = new vsph_segment_sphere(*usph_.ptr(),  c, min_size,sigma,dosmoothing);
+        seg->set_data(data_);
+        seg->segment();
+        seg->extract_region_bounding_boxes();
+        const vcl_map<int, vsph_sph_box_2d>& boxes = seg->region_boxes();
+        vcl_map<int, vsph_sph_box_2d>::const_iterator bit = boxes.begin();
 
-      load_unitsphere(usph_file_path);
-      double dpr = vnl_math::deg_per_rad;
-      double sigma = (0.1*usph_->point_angle())/dpr,  c =0.0;
-      int min_size = 3;
-      bool dosmoothing = true;
-      seg = new vsph_segment_sphere(*usph_.ptr(),  c, min_size,sigma,dosmoothing);
-      seg->set_data(data_);
-      seg->segment();
-      seg->extract_region_bounding_boxes();
-      const vcl_map<int, vsph_sph_box_2d>& boxes = seg->region_boxes();
-      vcl_map<int, vsph_sph_box_2d>::const_iterator bit = boxes.begin();
-
-      for (; bit != boxes.end(); ++bit) {
-          volm_spherical_region r(bit->second);
-          if(keep_sky && (unsigned char) seg->region_median(bit->first) == 254)
-              r.set_attribute(spherical_region_attributes::SKY,(unsigned char) 254);
-          else
-          {
-              if(att==spherical_region_attributes::ORIENTATION)
-              {
-                  unsigned char ival = (unsigned char) seg->region_median(bit->first);
-                  if(ival >=2 && ival <=9)
-                      r.set_attribute(att,(unsigned char) 2);
-                  else if(ival == 1)
-                      r.set_attribute(att,ival);
-              }
-              else
-                  r.set_attribute(att,(unsigned char) seg->region_median(bit->first));
-          }
-          sph_regions_.add_region(r);
-      }
-  }
-
+        for (; bit != boxes.end(); ++bit) {
+            volm_spherical_region r(bit->second);
+            if (keep_sky && (unsigned char) seg->region_median(bit->first) == 254)
+                r.set_attribute(spherical_region_attributes::SKY,(unsigned char) 254);
+            else
+            {
+                if (att==spherical_region_attributes::ORIENTATION)
+                {
+                    unsigned char ival = (unsigned char) seg->region_median(bit->first);
+                    if (ival >=2 && ival <=9)
+                        r.set_attribute(att,(unsigned char) 2);
+                    else if (ival == 1)
+                        r.set_attribute(att,ival);
+                }
+                else
+                    r.set_attribute(att,(unsigned char) seg->region_median(bit->first));
+            }
+            sph_regions_.add_region(r);
+        }
+    }
 }
+
 float volm_spherical_region_index::check_phi_bounds(float  phi)
 {
-        double pye = vnl_math::pi;
-        double two_pye = 2* vnl_math::pi;
-        if(phi<-pye) phi += two_pye;
-        if(phi> pye) phi -= two_pye;
+    double pye = vnl_math::pi;
+    double two_pye = 2* vnl_math::pi;
+    if (phi<-pye) phi += two_pye;
+    if (phi> pye) phi -= two_pye;
 
-        return phi;
+    return phi;
 }
+
 volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_depth_regions, int num_orientation_regions, int num_nlcd_regions, int sky_regions)
-                              
 {
     unsigned count = 0;
-    for(unsigned i = 0 ; i < num_depth_regions; i++,count++)
+    for (int i = 0 ; i < num_depth_regions; ++i,++count)
     {
         vsph_sph_box_2d box2d;
 
@@ -103,7 +101,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         r.set_attribute(spherical_region_attributes::DEPTH_INTERVAL,ival);
         sph_regions_.add_region(r);
     }
-        for(unsigned i = 0 ; i < num_orientation_regions; i++,count++)
+        for (unsigned i = 0 ; i < num_orientation_regions; i++,count++)
     {
         vsph_sph_box_2d box2d;
        box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
@@ -112,7 +110,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         r.set_attribute(spherical_region_attributes::ORIENTATION,ival);
         sph_regions_.add_region(r);
     }
-                for(unsigned i = 0 ; i < num_nlcd_regions; i++,count++)
+                for (unsigned i = 0 ; i < num_nlcd_regions; i++,count++)
     {
         vsph_sph_box_2d box2d;
         box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
@@ -121,7 +119,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         r.set_attribute(spherical_region_attributes::NLCD,ival);
         sph_regions_.add_region(r);
     }
-    for(unsigned i = 0 ; i < sky_regions; i++,count++)
+    for (unsigned i = 0 ; i < sky_regions; i++,count++)
     {
         vsph_sph_box_2d box2d;
         box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
@@ -131,30 +129,31 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         sph_regions_.add_region(r);
     }
 }
+
 volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_vector<unsigned char> > & index_buffers,
-                              vsph_unit_sphere_sptr & usph)
+                                                         vsph_unit_sphere_sptr & usph)
 {
     vcl_map<vcl_string,vcl_vector<unsigned char> >::iterator iter = index_buffers.begin();
-    for(;iter!=index_buffers.end(); iter++)
+    for (;iter!=index_buffers.end(); iter++)
     {
         bool keep_sky = false;
         spherical_region_attributes att;
-        if(iter->first=="DEPTH_INTERVAL")
+        if (iter->first=="DEPTH_INTERVAL")
         {
-            keep_sky = true; 
+            keep_sky = true;
             att = spherical_region_attributes::DEPTH_INTERVAL;
         }
-        else if(iter->first=="ORIENTATION")
+        else if (iter->first=="ORIENTATION")
         {
-            keep_sky = false; 
+            keep_sky = false;
             att = spherical_region_attributes::ORIENTATION;
         }
-        else if(iter->first=="NLCD")
+        else if (iter->first=="NLCD")
         {
-            keep_sky = false; 
+            keep_sky = false;
             att = spherical_region_attributes::NLCD;
         }
-        else 
+        else
             continue;
         vcl_vector<unsigned char> cdata = iter->second;
         vcl_cout<<"Size of the data is "<<cdata.size()<<vcl_endl;
@@ -162,7 +161,7 @@ volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_
         int n = cdata.size();
         for (int i = 0; i<n; ++i)
             data_.push_back(static_cast<double>(cdata[i]));
-        usph_ = usph; 
+        usph_ = usph;
         double dpr = vnl_math::deg_per_rad;
         double sigma = (0.1*usph_->point_angle())/dpr,  c =0.0;
         int min_size = 3;
@@ -176,16 +175,16 @@ volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_
 
         for (; bit != boxes.end(); ++bit) {
             volm_spherical_region r(bit->second);
-            if(keep_sky && (unsigned char) seg->region_median(bit->first) == 254)
+            if (keep_sky && (unsigned char) seg->region_median(bit->first) == 254)
                 r.set_attribute(spherical_region_attributes::SKY,(unsigned char) 254);
             else if ( (unsigned char) seg->region_median(bit->first) < 253 )
             {
-                if(att==spherical_region_attributes::ORIENTATION)
+                if (att==spherical_region_attributes::ORIENTATION)
                 {
                     unsigned char ival = (unsigned char) seg->region_median(bit->first);
-                    if(ival >=2 && ival <=9)
+                    if (ival >=2 && ival <=9)
                         r.set_attribute(att,(unsigned char) 2);
-                    else if(ival == 1)
+                    else if (ival == 1)
                         r.set_attribute(att,ival);
                 }
                 else
@@ -194,22 +193,22 @@ volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_
             sph_regions_.add_region(r);
         }
         delete seg;
-    }  
+    }
 }
+
 void volm_spherical_region_index::load_unitsphere(vcl_string usph_file_path)
 {
   vsl_b_ifstream is(usph_file_path);
-  if(!is)
+  if (!is)
   {
-      vcl_cout<<"Cannot Open file "<<usph_file_path<<vcl_endl;
-      return;
+    vcl_cout<<"Cannot Open file "<<usph_file_path<<vcl_endl;
+    return;
   }
   vsl_b_read(is, usph_);
 }
+
 void volm_spherical_region_index::construct_spherical_regions()
 {
-
-
 }
 
 volm_spherical_regions_layer
@@ -218,15 +217,16 @@ volm_spherical_region_index::index_regions()
   return sph_regions_;
 }
 
-void volm_spherical_region_index::print(vcl_ostream& os) 
+void volm_spherical_region_index::print(vcl_ostream& os)
 {
   vcl_vector<volm_spherical_region> regions = sph_regions_.regions();
   vcl_vector<volm_spherical_region>::iterator iter =  regions.begin();
   for (; iter != regions.end(); ++iter) {
-      iter->print(os);
-    }
-    vcl_cout << '\n';
+    iter->print(os);
+  }
+  vcl_cout << '\n';
 }
+
 void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstream & odata)
 {
     vcl_vector<volm_spherical_region> regions = sph_regions_.regions();
@@ -235,7 +235,7 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
     int num_regions[5];
     num_regions[1] =depth_regions.size();
     unsigned char ival ;
-    for(unsigned i = 0 ; i < depth_regions.size();i++)
+    for (unsigned i = 0 ; i < depth_regions.size();i++)
     {
         volm_spherical_region r = regions[depth_regions[i]];
         float vals[6];
@@ -252,7 +252,7 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
 
     vcl_vector<unsigned int> orientation_regions =sph_regions_.attributed_regions_by_type_only(spherical_region_attributes::ORIENTATION);
     num_regions[2] =orientation_regions.size();
-    for(unsigned i = 0 ; i < orientation_regions.size();i++)
+    for (unsigned i = 0 ; i < orientation_regions.size();i++)
     {
         volm_spherical_region r = regions[orientation_regions[i]];
         float vals[6];
@@ -268,7 +268,7 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
     }
     vcl_vector<unsigned int> nlcd_regions =sph_regions_.attributed_regions_by_type_only(spherical_region_attributes::NLCD);
     num_regions[3] =nlcd_regions.size();
-    for(unsigned i = 0 ; i < nlcd_regions.size();i++)
+    for (unsigned i = 0 ; i < nlcd_regions.size();i++)
     {
         volm_spherical_region r = regions[nlcd_regions[i]];
         float vals[6];
@@ -281,10 +281,10 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
         vals[5] = (float) ival;
 
         odata.write(reinterpret_cast<char*>(&vals[0]),sizeof(float)*6);
-    } 
+    }
     vcl_vector<unsigned int> sky_regions =sph_regions_.attributed_regions_by_type_only(spherical_region_attributes::SKY);
     num_regions[4] =sky_regions.size();
-    for(unsigned i = 0 ; i < sky_regions.size();i++)
+    for (unsigned i = 0 ; i < sky_regions.size();i++)
     {
         volm_spherical_region r = regions[sky_regions[i]];
         float vals[6];
@@ -298,7 +298,7 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
         vals[5] = (float) 1;
 
         odata.write(reinterpret_cast<char*>(&vals[0]),sizeof(float)*6);
-    }     
+    }
 
     num_regions[0] = num_regions[1]+num_regions[2]+num_regions[3]+num_regions[4];
     oconfig.write(reinterpret_cast<char*>(&num_regions[0]),sizeof(int)*5);
@@ -307,5 +307,4 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
 volm_spherical_region_index::
 ~volm_spherical_region_index()
 {
-
 }

@@ -12,7 +12,7 @@ bool volm_spherical_index_query_matcher::match()
 {
     volm_spherical_regions_layer index_layer = index_.index_regions();
     vcl_vector<volm_spherical_region> i_regions = index_layer.regions();
-    for ( camera_space_iterator iter = cam_space_->begin(); iter != cam_space_->end(); iter++)
+    for (camera_space_iterator iter = cam_space_->begin(); iter != cam_space_->end(); ++iter)
     {
         cam_angles camera = iter->camera_angles();
         unsigned roll_index;
@@ -23,7 +23,7 @@ bool volm_spherical_index_query_matcher::match()
 
         double score = 0.0;
         volm_spherical_regions_layer q_regions =query_.query_regions(roll_index);
-        for (unsigned i = 0; i< q_regions.size(); i++)
+        for (int i = 0; i< q_regions.size(); ++i)
         {
             // transform query_region box
             volm_spherical_region query_region = q_regions.regions()[i];
