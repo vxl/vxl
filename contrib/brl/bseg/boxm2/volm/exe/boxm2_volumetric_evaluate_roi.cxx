@@ -187,7 +187,6 @@ int main(int argc,  char** argv)
     vcl_vector<vcl_string> prob_thres_folders;
     for (vcl_vector<float>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
       vcl_stringstream folder_name;
-      float pre = *vit/max_score_all;
       folder_name << out_folder.str() << "/ProbMap_thres_" << *vit;
       vul_file::make_directory(folder_name.str());
       prob_thres_folders.push_back(folder_name.str());
