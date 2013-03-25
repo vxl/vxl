@@ -10,6 +10,10 @@
 #include <vcl_fstream.h>
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
+#include <vpgl/vpgl_utm.h>
+#include <vcl_limits.h>
+#include <vgl/vgl_distance.h>
+#include <vcl_utility.h>
 
 namespace boxm2_create_scene_process_globals
 {
@@ -219,6 +223,14 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
            << "input scene length y: " << ly << " blocked y: " << n_y*num_xy*sb_length << '\n'
            << "input scene length z: " << lz << " blocked z: " << n_z*num_z*sb_length << vcl_endl;
 
+  vcl_cout << "memory requirements for a block at finest resolution: ";
+  int n_subb = n_x*n_y*n_z;
+  int n_cells_subb = 1+8+64+512;
+  int n_bytes_subb = 36*n_cells_subb;  // alpha:4, mog3/gauss:8, num_obs:8,aux:16
+  float bytes = (float)(n_subb*n_bytes_subb);
+  vcl_cout << "n_subblocks: " << n_subb << " num_bytes per subblock: " << n_bytes_subb << " total: " << bytes/1000000.0 << " MB " << vcl_endl;
+  vcl_cout << " total including bit tree: " << (bytes + n_subb*16)/1000000 << " MB " << vcl_endl;
+
   for (int i = 0; i < n_x; ++i)
     for (int j = 0; j < n_y; ++j)
       for (int k = 0; k < n_z; ++k) {
@@ -312,7 +324,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   vcl_string cs_name  = pro.get_input<vcl_string>(i++);
   unsigned init_level = 1;
   unsigned max_level = 4;
-  float max_data_mb = 1000.0;
+  float max_data_mb = 4000.0;
   float p_init = (float)0.001;
   // check the parameters has been successfully passed
   vcl_cout << "input kml file = " << poly_kml_name << '\n'
@@ -369,20 +381,37 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
     return false;
   }
   vpgl_lvcs lv(origin_lat, origin_lon, origin_elev, cs_id, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  vpgl_utm utm;
+  double x, y; int orig_zone;
+  utm.transform(origin_lat, origin_lon, x, y, orig_zone);
   vgl_polygon<double> poly;
   poly.new_sheet();
   for (unsigned int i=0; i<n_out; i++) {
-    double local_x, local_y, local_z;
+    int zone;
+    utm.transform(parser->polyouter_[i].y(), parser->polyouter_[i].x(), x, y, zone);
+    if (zone != orig_zone)
+      continue;
+    double local_x = vcl_numeric_limits<double>::max(), local_y, local_z;
     lv.global_to_local(parser->polyouter_[i].x(), parser->polyouter_[i].y(), parser->polyouter_[i].z(),
                        vpgl_lvcs::wgs84, local_x, local_y, local_z);
-    poly.push_back(local_x, local_y);
+    if (local_x != vcl_numeric_limits<double>::max()) 
+      poly.push_back(local_x, local_y);
+    else
+      vcl_cout << "skipped this point of the polygon!\n";
   }
   poly.new_sheet();
   for (unsigned int i=0; i<n_in; i++) {
-    double local_x, local_y, local_z;
+    int zone;
+    utm.transform(parser->polyinner_[i].y(), parser->polyinner_[i].x(), x, y, zone);
+    if (zone != orig_zone)
+      continue;
+    double local_x = vcl_numeric_limits<double>::max(), local_y, local_z;
     lv.global_to_local(parser->polyinner_[i].x(), parser->polyinner_[i].y(), parser->polyinner_[i].z(),
                        vpgl_lvcs::wgs84, local_x, local_y, local_z);
-    poly.push_back(local_x, local_y);
+    if (local_x != vcl_numeric_limits<double>::max()) 
+      poly.push_back(local_x, local_y);
+    else
+      vcl_cout << "skipped this point of the polygon!\n";
   }
   // create the boundary of the polygon on the ground
   double lower = poly[0][0].y();
@@ -400,6 +429,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
     delete parser;
     return false;
   }
+  vcl_cout << "in local coords, lower: " << lower << " left: " << left << vcl_endl;
   double local_origin_x, local_origin_y, local_origin_z;
   local_origin_x = left;
   local_origin_y = lower;
@@ -536,9 +566,50 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
 
   vpgl_lvcs lv = scene->lvcs();
 
-  vcl_vector<boxm2_scene_sptr> small_scenes;
+  vcl_vector<vcl_pair<boxm2_scene_sptr, vgl_box_2d<double> > > small_scenes;
 
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blks=scene->blocks();
+  vcl_cout << "!!! NUMBER OF BLOCKS to be distributed: " << blks.size() << vcl_endl;
+  vgl_point_3d<double> orig = scene->local_origin();
+  vcl_cout << "orig: " << orig << '\n'; vcl_cout.flush();
+  double w = scene->bounding_box().width();
+  double h = scene->bounding_box().height();
+  int ww = int(vcl_ceil(w/scene_dim))+1;
+  int hh = int(vcl_ceil(h/scene_dim))+1;
+  int scene_cnt = ww*hh;
+  vcl_cout << "scene cnt: " << scene_cnt << vcl_endl; vcl_cout.flush();
+  
+  // create this many scenes
+  for (int i = 0; i < ww; i++) 
+    for (int j = 0; j < hh; j++) 
+  {
+    boxm2_scene_sptr small_scene = new boxm2_scene(scene->data_path(), scene->local_origin());
+    small_scene->set_appearances(scene->appearances());
+    small_scene->set_lvcs(lv);
+    small_scene->set_num_illumination_bins(scene->num_illumination_bins());
+    vgl_box_2d<double> small_scene_box;
+    small_scene_box.add(vgl_point_2d<double>(orig.x() + i*scene_dim, orig.y() + j*scene_dim));
+    small_scene_box.add(vgl_point_2d<double>(orig.x() + (i+1)*scene_dim, orig.y() + (j+1)*scene_dim));
+    small_scenes.push_back(vcl_pair<boxm2_scene_sptr, vgl_box_2d<double> >(small_scene, small_scene_box));
+  }
+  // add the blocks -- makes sure all the blocks are added to one of the scenes
+  unsigned cnt = 0;
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) 
+  {
+    boxm2_block_metadata md = iter->second;
+    vgl_point_2d<double> lo(iter->second.local_origin_.x(), iter->second.local_origin_.y());
+    for (unsigned i = 0; i < small_scenes.size(); i++) {
+      if (small_scenes[i].second.contains(lo)) {
+        vcl_map<boxm2_block_id, boxm2_block_metadata>& small_scene_blks = small_scenes[i].first->blocks();
+        small_scene_blks[iter->first] = iter->second;
+        cnt++;
+      }
+    }
+  }
+  if (cnt != blks.size())
+    vcl_cerr << "Not all blocks are added to one of the small scene!!!! cnt: " << cnt << " blocks cnt: " << blks.size() << '\n';
+
+#if 0
   vcl_cout << "number of blocks in the scene: " << blks.size() << vcl_endl;
   vgl_box_3d<double> bb = scene->bounding_box();
   for (double orig_x = bb.min_point().x(); orig_x <= bb.max_point().x(); orig_x += scene_dim)
@@ -562,22 +633,117 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
 
       small_scenes.push_back(small_scene);
     }
-
+#endif
+  
+  // elimiate scenes with no blocks
+  vcl_vector<boxm2_scene_sptr> scenes;
+  for (unsigned i = 0; i < small_scenes.size(); i++) {
+    if (small_scenes[i].first->blocks().size() > 0)
+      scenes.push_back(small_scenes[i].first);
+  }
+  
   vcl_cout << output_path + name_prefix + ".xml\n"
-           << " number of small scenes: " << small_scenes.size() << vcl_endl;
+           << " number of small scenes: " << scenes.size() << vcl_endl;
 
   // write each scene
-  for (unsigned i = 0; i < small_scenes.size(); i++) {
+  for (unsigned i = 0; i < scenes.size(); i++) {
     vcl_stringstream ss; ss << i;
     vcl_string filename = name_prefix + ss.str();
     vcl_string filename_full = output_path + name_prefix + ss.str() + ".xml";
 
-    small_scenes[i]->set_xml_path(filename_full);
+    scenes[i]->set_xml_path(filename_full);
 
     //make file and x_write to file
     vcl_ofstream ofile(filename_full.c_str());
-    x_write(ofile,(*small_scenes[i].ptr()), "scene");
+    x_write(ofile,(*scenes[i].ptr()), "scene");
   }
 
+  return true;
+}
+
+
+//: A process to prune the blocks which has never been refined, i.e. with the default alpha size
+namespace boxm2_prune_scene_blocks_process_globals
+{
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 0;
+}
+
+bool boxm2_prune_scene_blocks_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_prune_scene_blocks_process_globals;
+
+  //process takes 13 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr"; // big scene
+  input_types_[1] = "boxm2_cache_sptr";
+  input_types_[2] = "vcl_string"; // output folder to write the pruned scene xml file
+  input_types_[3] = "vcl_string"; // xml name prefix
+
+  // process has 1 output
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+#include <boxm2/io/boxm2_cache.h>
+bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
+{
+  using namespace boxm2_prune_scene_blocks_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ) {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  //get the inputs
+  vcl_vector<vcl_string> appearance(2,"");
+  unsigned i = 0;
+
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
+  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  vcl_string name_prefix = pro.get_input<vcl_string>(i++);
+
+  vpgl_lvcs lv = scene->lvcs();
+
+  vcl_map<boxm2_block_id, boxm2_block_metadata>& blks=scene->blocks();
+  vcl_cout << "!!! NUMBER OF BLOCKS to be pruned: " << blks.size() << vcl_endl;
+  boxm2_block_metadata md_first = blks.begin()->second;
+  long size = md_first.sub_block_num_.x()*md_first.sub_block_num_.y()*md_first.sub_block_num_.z();
+  
+  boxm2_scene_sptr pruned_scene = new boxm2_scene(scene->data_path(), scene->local_origin());
+  pruned_scene->set_appearances(scene->appearances());
+  pruned_scene->set_lvcs(lv);
+  pruned_scene->set_num_illumination_bins(scene->num_illumination_bins());  
+  vcl_map<boxm2_block_id, boxm2_block_metadata>& pruned_scene_blks = pruned_scene->blocks();
+
+  // load the blocks - check the size and only add the ones which have gone through some refinement
+  unsigned cnt = 0;
+  long min_size = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix())*size;
+  vcl_cout << " size of alpha block with no refinement: " << min_size << vcl_endl;
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) 
+  {
+    boxm2_block_id id = iter->first;
+    vcl_cout<<"Block id "<<id<<' ';
+    vcl_stringstream file_name; file_name << scene->data_path() << "alpha_" << id << ".bin";
+    long buf_len = vul_file::size(file_name.str());
+    boxm2_block_metadata md = iter->second;
+    /*boxm2_data_base *  alph = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    long buf_len = (long)alph->buffer_length(); */
+    vcl_cout << " size: " << buf_len << " ";
+    if (buf_len > min_size) {
+      pruned_scene_blks[id] = md;
+      vcl_cout << " kept..\n";
+    } else
+      vcl_cout << " pruned..\n";
+  }
+  vcl_cout << "original scene had: " << blks.size() << " blocks!\n";
+  vcl_cout << " after pruning, the scene has: " << pruned_scene_blks.size() << " blocks!\n";
+  
+  vcl_string filename_full = output_path + name_prefix + "_pruned.xml";
+  pruned_scene->set_xml_path(filename_full);
+  //make file and x_write to file
+  vcl_ofstream ofile(filename_full.c_str());
+  x_write(ofile,(*pruned_scene.ptr()), "scene");
   return true;
 }
