@@ -23,7 +23,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> out_root("-out_rt", "experiment output root", "");
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
-  vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 50.0f);
+  vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
