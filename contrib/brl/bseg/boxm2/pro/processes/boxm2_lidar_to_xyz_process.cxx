@@ -21,6 +21,8 @@
 #include <vsol/vsol_box_2d.h>
 
 #include <brip/brip_roi.h>
+#include <volm/volm_tile.h>
+#include <vgl/vgl_intersection.h>
 
 namespace boxm2_lidar_to_xyz_process_globals
 {
@@ -44,7 +46,7 @@ bool boxm2_lidar_to_xyz_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-
+#if 0
 bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
 {
   using namespace boxm2_lidar_to_xyz_process_globals;
@@ -158,6 +160,216 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
   pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
+
+  return true;
+}
+#endif
+
+bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
+{
+  using namespace boxm2_lidar_to_xyz_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
+  vgl_box_3d<double> scene_bbox = scene->bounding_box();
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
+  vcl_string fname = pro.get_input<vcl_string>(1);
+  volm_tile t(fname, 0, 0); // pass ni, nj as 0 cause just need to parse the name string 
+  vgl_box_2d<float> bbox = t.bbox();
+  
+  // find scene bbox to see if it intersects with the image box -- WARNING: assumes that these boxes are small enough (both image and scene are small in area) so that Euclidean distances approximate the geodesic distances in geographic coordinates
+  double min_lon, min_lat, gz, max_lon, max_lat;
+  lvcs->local_to_global(scene_bbox.min_point().x(), scene_bbox.min_point().y(), 0, vpgl_lvcs::wgs84, min_lon, min_lat, gz); 
+  lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz); 
+  vgl_box_2d<float> sbbox((float)min_lon, (float)max_lon, (float)min_lat, (float)max_lat);
+  //vcl_cout << " scene bbox in geo coords: " << sbbox << vcl_endl;
+  if (vgl_intersection(bbox, sbbox).area() <= 0)
+  {
+    //vcl_cout << "scene does not intersect with the image: " << fname << " with box: " << bbox << vcl_endl;
+    return false;
+  }
+  vcl_cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ingesting: " << fname << vcl_endl;
+
+  vil_image_view_base_sptr img_sptr = vil_load(fname.c_str()); 
+  vil_image_view<float> img(img_sptr);
+  unsigned nii = img.ni(); unsigned nji = img.nj();
+  vcl_cout << " image size: "<< nii << " x " << nji << vcl_endl;
+
+  vpgl_geo_camera *cam;
+  vpgl_geo_camera::init_geo_camera(fname, nii, nji, lvcs, cam);
+  double lon2, lat2;
+  cam->img_to_global(nii, nji, lon2, lat2);
+  vpgl_utm utm; double x, y; int zone; utm.transform(lat2, -lon2, x, y, zone);
+  vcl_cout << "lower right corner in the image given by geocam is: " << lat2 << " N " << lon2 << " W " << " zone: " << zone << vcl_endl;
+  
+  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
+  float sb_length = info->block_len;
+  float vox_length = sb_length/8.0f;
+  
+  double orig_lat, orig_lon, orig_elev; scene->lvcs().get_origin(orig_lat, orig_lon, orig_elev);
+
+  // prepare an image for the finest resolution
+  int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x()+1.0)/vox_length);
+  int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y()+1.0)/vox_length);
+  vcl_cout <<"image size needs ni: " << ni << " nj: " << nj << " to support voxel res: " << vox_length << vcl_endl;
+
+  // create x y z images
+  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  out_img_x->fill(0.0f); out_img_y->fill(0.0f);
+  //out_img_z->fill((float)(scene_bbox.min_z()-10.0));  // local coord system min z
+  out_img_z->fill((float)(-1.0));  // local coord system min z
+
+  // iterate over the image and for each pixel, calculate, xyz in the local coordinate system
+  for (int i = 0; i < ni; i++)
+    for (int j = 0; j < nj; j++) {
+      float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
+      (*out_img_x)(i,j) = local_x;
+      (*out_img_y)(i,j) = local_y;
+
+      double lon, lat, gz;
+      lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
+
+      // find pixel in image
+      double u, v;
+      cam->global_to_img(-lon, lat, gz, u, v);  // minus lon because it is WEST, WARNING, directions are hard-coded!
+      unsigned uu = (unsigned)vcl_floor(u + 0.5);
+      unsigned vv = (unsigned)vcl_floor(v + 0.5);
+      if (uu > 0 && vv > 0 && uu < img.ni() && vv < img.nj())
+        (*out_img_z)(i,j) = img(uu, vv)-orig_elev;
+    }
+  
+
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
+  pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
+  pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
+
+  return true;
+}
+
+
+
+// turn an ortho image of unsigned int to xyz and a label (e.g. each pixel has an id of some class) image ready to be ingested
+namespace boxm2_label_to_xyz_process_globals
+{
+  const unsigned n_inputs_ = 2;
+  const unsigned n_outputs_ = 4;
+}
+
+bool boxm2_label_to_xyz_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_label_to_xyz_process_globals;
+
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr";
+  input_types_[1] = "vcl_string";  // ortho label image with class ids/labels for each pixel
+
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  output_types_[0] = "vil_image_view_base_sptr";  // x image
+  output_types_[1] = "vil_image_view_base_sptr";  // y image
+  output_types_[2] = "vil_image_view_base_sptr";  // z image
+  output_types_[3] = "vil_image_view_base_sptr";  // label image vil_image_view<short> to be ingested
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+
+
+bool boxm2_label_to_xyz_process(bprb_func_process& pro)
+{
+  using namespace boxm2_label_to_xyz_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
+  vgl_box_3d<double> scene_bbox = scene->bounding_box();
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
+  vcl_string fname = pro.get_input<vcl_string>(1);
+  volm_tile t(fname, 0, 0); // pass ni, nj as 0 cause just need to parse the name string 
+  vgl_box_2d<float> bbox = t.bbox();
+  
+  // find scene bbox to see if it intersects with the image box -- WARNING: assumes that these boxes are small enough (both image and scene are small in area) so that Euclidean distances approximate the geodesic distances in geographic coordinates
+  double min_lon, min_lat, gz, max_lon, max_lat;
+  lvcs->local_to_global(scene_bbox.min_point().x(), scene_bbox.min_point().y(), 0, vpgl_lvcs::wgs84, min_lon, min_lat, gz); 
+  lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz); 
+  vgl_box_2d<float> sbbox((float)min_lon, (float)max_lon, (float)min_lat, (float)max_lat);
+  //vcl_cout << " scene bbox in geo coords: " << sbbox << vcl_endl;
+  if (vgl_intersection(bbox, sbbox).area() <= 0)
+  {
+    //vcl_cout << "scene does not intersect with the image: " << fname << " with box: " << bbox << vcl_endl;
+    return false;
+  }
+
+  vil_image_view_base_sptr img_sptr = vil_load(fname.c_str());
+  if (img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
+    vcl_cout << "Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
+    return false;
+  } 
+  vil_image_view<vxl_byte> img(img_sptr);
+  unsigned nii = img.ni(); unsigned nji = img.nj();
+  vcl_cout << " image size: "<< nii << " x " << nji << vcl_endl;
+
+  vpgl_geo_camera *cam;
+  vpgl_geo_camera::init_geo_camera(fname, nii, nji, lvcs, cam);
+  double lon2, lat2;
+  cam->img_to_global(nii, nji, lon2, lat2);
+  vpgl_utm utm; double x, y; int zone; utm.transform(lat2, -lon2, x, y, zone);
+  vcl_cout << "lower right corner in the image given by geocam is: " << lat2 << " N " << lon2 << " W " << " zone: " << zone << vcl_endl;
+  
+  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
+  float sb_length = info->block_len;
+  float vox_length = sb_length/8.0f;
+
+  // prepare an image for the finest resolution
+  int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x())/vox_length);
+  int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y())/vox_length);
+  vcl_cout <<"image size needs ni: " << ni << " nj: " << nj << " to support voxel res: " << vox_length << vcl_endl;
+
+  // create x y z images
+  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<vxl_byte>* out_img_label = new vil_image_view<vxl_byte>(ni, nj, 1);
+  out_img_x->fill(0.0f); out_img_y->fill(0.0f);
+  out_img_z->fill((float)(scene_bbox.max_z()+100.0));  // local coord system min z, initialize to constant
+  out_img_label->fill((vxl_byte)0);
+
+  // iterate over the image and for each pixel, calculate, xyz in the local coordinate system
+  for (int i = 0; i < ni; i++)
+    for (int j = 0; j < nj; j++) {
+      float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
+      (*out_img_x)(i,j) = local_x;
+      (*out_img_y)(i,j) = local_y;
+
+      double lon, lat, gz;
+      lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
+
+      // find pixel in image
+      double u, v;
+      cam->global_to_img(-lon, lat, gz, u, v);  // minus lon because it is WEST, WARNING, directions are hard-coded!
+      unsigned uu = (unsigned)vcl_floor(u + 0.5);
+      unsigned vv = (unsigned)vcl_floor(v + 0.5);
+      if (uu > 0 && vv > 0 && uu < img.ni() && vv < img.nj())
+        (*out_img_label)(i,j) = img(uu, vv);
+    }
+  
+
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
+  pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
+  pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
+  pro.set_output_val<vil_image_view_base_sptr>(3, out_img_label);
 
   return true;
 }
