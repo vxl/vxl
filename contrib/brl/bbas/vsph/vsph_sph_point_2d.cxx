@@ -4,8 +4,7 @@
 #include <vcl_cassert.h>
 
 vsph_sph_point_2d::vsph_sph_point_2d(double theta, double phi, bool in_radians)
-  : in_radians_(in_radians), theta_(theta)
-{
+  : in_radians_(in_radians), theta_(theta),phi_(phi){
   double pye = in_radians?vnl_math::pi:180.0;
   double two_pye = 2.0*pye;
   assert(theta>=0.0);

@@ -208,6 +208,12 @@ bool vsph_segment_sphere::extract_region_bounding_boxes()
                 continue;
             rbox.add(spts[rays[i]]);
         }
+        double delta = usph_.point_angle()/2.0/vnl_math::deg_per_rad;
+        vsph_sph_point_2d pmin (rbox.min_theta()-delta,rbox.min_phi()-delta);
+        vsph_sph_point_2d pmax (rbox.max_theta()+delta,rbox.max_phi()+delta);
+
+        rbox.add(pmin);
+        rbox.add(pmax);
         bboxes_[reg_set_id]=rbox;
     }
     return true;

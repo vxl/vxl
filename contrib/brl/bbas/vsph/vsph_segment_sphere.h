@@ -21,7 +21,7 @@ class vsph_segment_sphere
   void set_data(vcl_vector<double> data){data_ = data;}
   void segment();
   bool extract_region_bounding_boxes();
-  const vcl_map<int, vsph_sph_box_2d>& region_boxes() const {return bboxes_;}
+  const vcl_map<int, vsph_sph_box_2d> region_boxes() const {return bboxes_;}
   vcl_vector<double> region_data() const;
   vcl_vector<vcl_vector<float> > region_color() const;
 
