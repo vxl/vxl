@@ -67,10 +67,12 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 
-  if (llid < ln_obj*4) {
-    local_obj_wgt_attri[llid] = obj_wgt_attri[llid];
-    local_obj_land[llid] = obj_land[llid];
-    local_obj_land_wgt[llid] = obj_land_wgt[llid];
+  if (llid == 0) {
+    for (unsigned di = 0; di < ln_obj*4; di++) {
+      local_obj_wgt_attri[di] = obj_wgt_attri[di];
+      local_obj_land[di] = obj_land[di];
+      local_obj_land_wgt[di] = obj_land_wgt[di];
+    }
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 

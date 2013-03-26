@@ -77,13 +77,19 @@ __kernel void generalized_volm_obj_based_matching_with_orient(
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 
-  if (llid < ln_obj*4) {
-    local_obj_wgt_attri[llid] = obj_wgt_attri[llid];
-    local_obj_land[llid] = obj_land[llid];
-    local_obj_land_wgt[llid] = obj_land_wgt[llid];
+  //if (llid < ln_obj*4) {
+  //  local_obj_wgt_attri[llid] = obj_wgt_attri[llid];
+  //  local_obj_land[llid] = obj_land[llid];
+  //  local_obj_land_wgt[llid] = obj_land_wgt[llid];
+  //}
+  if (llid == 0) {
+    for (unsigned di = 0; di < ln_obj*4; di++) {
+      local_obj_wgt_attri[di] = obj_wgt_attri[di];
+      local_obj_land[di] = obj_land[di];
+      local_obj_land_wgt[di] = obj_land_wgt[di];
+    }
   }
   barrier(CLK_LOCAL_MEM_FENCE);
-
   if (llid < 3) {
     local_grd_wgt_attri[llid] = grd_wgt_attri[llid];
   }
@@ -241,7 +247,6 @@ __kernel void generalized_volm_obj_based_matching_with_orient(
                       local_obj_wgt_attri[att_s+1] * score_k_lnd +
                       local_obj_wgt_attri[att_s+2] * score_k_min +
                       local_obj_wgt_attri[att_s+3] * score_k_ord;
-
       score_k = (end_obj != start_obj) ? score_k/(end_obj-start_obj) : 0;
       score_k *= local_obj_weight[k];
       // summerize the object score
@@ -250,15 +255,9 @@ __kernel void generalized_volm_obj_based_matching_with_orient(
 
 #if 0
     if ( cam_id == 0 && ind_id == 6 ) {
-      debug[0] = cam_id;
-      debug[1] = ind_id;
-      debug[2] = local_grd_wgt_attri[0];
-      debug[3] = local_grd_wgt_attri[1];
-      debug[4] = local_grd_wgt_attri[2];
-      debug[5] = l_grd_weight;
-      debug[6] = score_sky;
-      debug[7] = score_grd;
-      debug[8] = score_obj;
+       debug[0] = score_sky;
+       debug[1] = score_grd;
+       debug[2] = score_obj;
     }
 #endif
     // summerize the scores
