@@ -174,7 +174,7 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.6f);  f.push_back(0.6f);  m[12] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.6f);  f.push_back(0.6f);  m[13] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.6f);  f.push_back(0.6f);  m[14] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.8f);  f.push_back(1.0f);  m[15] = f; // building --> building ,developed low, developed high, tall_building
+  f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.8f);  f.push_back(0.5f);  m[15] = f; // building --> building ,developed low, developed high, tall_building
   f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.8f);  f.push_back(0.7f);  m[16] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(0.7f);  m[17] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.8f);  f.push_back(0.7f);  m[18] = f; //
@@ -193,7 +193,7 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.8f);  f.push_back(0.6f);  m[31] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.8f);  f.push_back(0.8f);  m[32] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.7f);  f.push_back(0.7f);  m[33] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.1f);  f.push_back(0.8f);  f.push_back(0.8f);  m[34] = f; // tall_building --> high_building, building, developed low, developed high
+  f.clear();  f.push_back(1.0f);  f.push_back(0.4f);  f.push_back(0.8f);  f.push_back(0.8f);  m[34] = f; // tall_building --> high_building, building, developed low, developed high
   return m;
 }
 
