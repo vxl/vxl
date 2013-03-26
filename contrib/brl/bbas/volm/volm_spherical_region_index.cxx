@@ -22,17 +22,17 @@ volm_spherical_region_index(vcl_map<vcl_string,vcl_string> & index_file_paths,
         if (iter->first=="DEPTH_INTERVAL")
         {
             keep_sky = true;
-            att = spherical_region_attributes::DEPTH_INTERVAL;
+            att = DEPTH_INTERVAL;
         }
         else if (iter->first=="ORIENTATION")
         {
             keep_sky = false;
-            att = spherical_region_attributes::ORIENTATION;
+            att = ORIENTATION;
         }
         else if (iter->first=="NLCD")
         {
              keep_sky = false;
-             att = spherical_region_attributes::NLCD;
+             att = NLCD;
         }
         else
             continue;
@@ -59,10 +59,10 @@ volm_spherical_region_index(vcl_map<vcl_string,vcl_string> & index_file_paths,
         for (; bit != boxes.end(); ++bit) {
             volm_spherical_region r(bit->second);
             if (keep_sky && (unsigned char) seg->region_median(bit->first) == 254)
-                r.set_attribute(spherical_region_attributes::SKY,(unsigned char) 254);
+                r.set_attribute(SKY,(unsigned char) 254);
             else
             {
-                if (att==spherical_region_attributes::ORIENTATION)
+                if (att==ORIENTATION)
                 {
                     unsigned char ival = (unsigned char) seg->region_median(bit->first);
                     if (ival >=2 && ival <=9)
@@ -98,7 +98,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
         volm_spherical_region r(box2d);
         unsigned char ival = (unsigned char) boxes[count*6+5];
-        r.set_attribute(spherical_region_attributes::DEPTH_INTERVAL,ival);
+        r.set_attribute(DEPTH_INTERVAL,ival);
         sph_regions_.add_region(r);
     }
         for (int i = 0 ; i < num_orientation_regions; ++i,++count)
@@ -107,7 +107,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
        box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
         volm_spherical_region r(box2d);
         unsigned char ival = (unsigned char) boxes[count*6+5];
-        r.set_attribute(spherical_region_attributes::ORIENTATION,ival);
+        r.set_attribute(ORIENTATION,ival);
         sph_regions_.add_region(r);
     }
     for (int i = 0 ; i < num_nlcd_regions; ++i,++count)
@@ -116,7 +116,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
        volm_spherical_region r(box2d);
         unsigned char ival = (unsigned char) boxes[count*6+5];
-        r.set_attribute(spherical_region_attributes::NLCD,ival);
+        r.set_attribute(NLCD,ival);
         sph_regions_.add_region(r);
     }
     for (int i = 0 ; i < sky_regions; ++i,++count)
@@ -125,7 +125,7 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
         box2d.set(boxes[count*6+3],boxes[count*6+4],this->check_phi_bounds(boxes[count*6+0]),this->check_phi_bounds(boxes[count*6+1]),this->check_phi_bounds(boxes[count*6+2]));
         volm_spherical_region r(box2d);
         unsigned char ival = (unsigned char) boxes[count*6+5];
-        r.set_attribute(spherical_region_attributes::SKY,ival);
+        r.set_attribute(SKY,ival);
         sph_regions_.add_region(r);
     }
 }
@@ -141,17 +141,17 @@ volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_
         if (iter->first=="DEPTH_INTERVAL")
         {
             keep_sky = true;
-            att = spherical_region_attributes::DEPTH_INTERVAL;
+            att = DEPTH_INTERVAL;
         }
         else if (iter->first=="ORIENTATION")
         {
             keep_sky = false;
-            att = spherical_region_attributes::ORIENTATION;
+            att = ORIENTATION;
         }
         else if (iter->first=="NLCD")
         {
             keep_sky = false;
-            att = spherical_region_attributes::NLCD;
+            att = NLCD;
         }
         else
             continue;
@@ -176,10 +176,10 @@ volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_
         for (; bit != boxes.end(); ++bit) {
             volm_spherical_region r(bit->second);
             if (keep_sky && (unsigned char) seg->region_median(bit->first) == 254)
-                r.set_attribute(spherical_region_attributes::SKY,(unsigned char) 254);
+                r.set_attribute(SKY,(unsigned char) 254);
             else if ( (unsigned char) seg->region_median(bit->first) < 253 )
             {
-                if (att==spherical_region_attributes::ORIENTATION)
+                if (att==ORIENTATION)
                 {
                     unsigned char ival = (unsigned char) seg->region_median(bit->first);
                     if (ival >=2 && ival <=9)
@@ -230,7 +230,7 @@ void volm_spherical_region_index::print(vcl_ostream& os)
 void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstream & odata)
 {
     vcl_vector<volm_spherical_region> regions = sph_regions_.regions();
-    vcl_vector<unsigned int> depth_regions =sph_regions_.attributed_regions_by_type_only(spherical_region_attributes::DEPTH_INTERVAL);
+    vcl_vector<unsigned int> depth_regions =sph_regions_.attributed_regions_by_type_only(DEPTH_INTERVAL);
 
     int num_regions[5];
     num_regions[1] =depth_regions.size();
@@ -244,13 +244,13 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
         vals[2] = r.bbox_ref().c_phi();
         vals[3] = r.bbox_ref().min_theta();
         vals[4] = r.bbox_ref().max_theta();
-        r.attribute_value(spherical_region_attributes::DEPTH_INTERVAL,ival);
+        r.attribute_value(DEPTH_INTERVAL,ival);
         vals[5] = (float) ival;
 
         odata.write(reinterpret_cast<char*>(&vals[0]),sizeof(float)*6);
     }
 
-    vcl_vector<unsigned int> orientation_regions =sph_regions_.attributed_regions_by_type_only(spherical_region_attributes::ORIENTATION);
+    vcl_vector<unsigned int> orientation_regions =sph_regions_.attributed_regions_by_type_only(ORIENTATION);
     num_regions[2] =orientation_regions.size();
     for (unsigned i = 0 ; i < orientation_regions.size();i++)
     {
@@ -261,12 +261,12 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
         vals[2] = r.bbox_ref().c_phi();
         vals[3] = r.bbox_ref().min_theta();
         vals[4] = r.bbox_ref().max_theta();
-        r.attribute_value(spherical_region_attributes::ORIENTATION,ival);
+        r.attribute_value(ORIENTATION,ival);
         vals[5] = (float) ival;
 
         odata.write(reinterpret_cast<char*>(&vals[0]),sizeof(float)*6);
     }
-    vcl_vector<unsigned int> nlcd_regions =sph_regions_.attributed_regions_by_type_only(spherical_region_attributes::NLCD);
+    vcl_vector<unsigned int> nlcd_regions =sph_regions_.attributed_regions_by_type_only(NLCD);
     num_regions[3] =nlcd_regions.size();
     for (unsigned i = 0 ; i < nlcd_regions.size();i++)
     {
@@ -277,12 +277,12 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
         vals[2] = r.bbox_ref().c_phi();
         vals[3] = r.bbox_ref().min_theta();
         vals[4] = r.bbox_ref().max_theta();
-        r.attribute_value(spherical_region_attributes::NLCD,ival);
+        r.attribute_value(NLCD,ival);
         vals[5] = (float) ival;
 
         odata.write(reinterpret_cast<char*>(&vals[0]),sizeof(float)*6);
     }
-    vcl_vector<unsigned int> sky_regions =sph_regions_.attributed_regions_by_type_only(spherical_region_attributes::SKY);
+    vcl_vector<unsigned int> sky_regions =sph_regions_.attributed_regions_by_type_only(SKY);
     num_regions[4] =sky_regions.size();
     for (unsigned i = 0 ; i < sky_regions.size();i++)
     {
@@ -293,7 +293,7 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
         vals[2] = r.bbox_ref().c_phi();
         vals[3] = r.bbox_ref().min_theta();
         vals[4] = r.bbox_ref().max_theta();
-        r.attribute_value(spherical_region_attributes::SKY,ival);
+        r.attribute_value(SKY,ival);
         vals[5] = (float) ival;
         vals[5] = (float) 1;
 

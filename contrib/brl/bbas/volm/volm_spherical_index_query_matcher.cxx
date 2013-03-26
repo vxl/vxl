@@ -2,9 +2,9 @@
 #include <vsph/vsph_sph_box_2d.h>
 
 volm_spherical_index_query_matcher::volm_spherical_index_query_matcher(volm_spherical_region_index & index,
-    volm_spherical_region_query & query,
-    volm_camera_space_sptr & cam_space)
-    :index_(index),query_(query), cam_space_(cam_space)
+                                                                       volm_spherical_region_query & query,
+                                                                       volm_camera_space_sptr & cam_space)
+: index_(index),query_(query), cam_space_(cam_space)
 {
 }
 
@@ -28,22 +28,22 @@ bool volm_spherical_index_query_matcher::match()
             // transform query_region box
             volm_spherical_region query_region = q_regions.regions()[i];
             unsigned char qval = 0;
-            if (!query_region.attribute_value(spherical_region_attributes::ORIENTATION,qval))
+            if (!query_region.attribute_value(ORIENTATION,qval))
                 continue;
             vsph_sph_box_2d qbox = query_region.bbox_ref();
             // convert google coordinate axis( z is down and x is north) to spherical coordinate system ( z is up and x is east)
             vsph_sph_box_2d qbox_xfomred = qbox.transform(camera.tilt_-cam_space_->tilt_mid(),
-                camera.heading_-cam_space_->head_mid(),
-                (camera.top_fov_)/cam_space_->top_fov(0),
-                180-camera.tilt_,90-camera.heading_,false);
+                                                          camera.heading_-cam_space_->head_mid(),
+                                                          (camera.top_fov_)/cam_space_->top_fov(0),
+                                                          180-camera.tilt_,90-camera.heading_,false);
             // match it with index bboxes;
             vcl_vector<unsigned int> attribute_poly_ids
-                = index_layer.attributed_regions_by_value(spherical_region_attributes::ORIENTATION, qval);
+                = index_layer.attributed_regions_by_value(ORIENTATION, qval);
             for (unsigned j = 0; j< attribute_poly_ids.size(); j++)
             {
                 volm_spherical_region index_region = i_regions[attribute_poly_ids[j]];
                 unsigned char ival = 0;
-                if (!index_region.attribute_value(spherical_region_attributes::ORIENTATION,ival))
+                if (!index_region.attribute_value(ORIENTATION,ival))
                     continue;
                 // just considering horizontal and vertical
                 //if (qval >=1 && ival>=2 && qval <= 3 && ival<=9 )
