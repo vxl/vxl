@@ -21,18 +21,20 @@ int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
   vul_arg<vcl_string> out_root("-out_rt", "experiment output root", "");
+  vul_arg<unsigned> test_id("-test", "test1 or 2 or 3", 1);
   vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
   vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
 
   vul_arg_parse(argc, argv);
 
-  vcl_cout << "argc: " << argc << '\n'
-           << "ku = " << ku() << ", kl = " << kl() << vcl_endl;
+  vcl_cout << "argc: " << argc << vcl_endl;
   vcl_stringstream log;
   if (out_root().compare("") == 0 ||
       gt_file().compare("") == 0 ||
-      pass_id() > 2)
+      pass_id() > 2 ||
+      test_id() > 3 ||
+      test_id() < 1)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
@@ -68,9 +70,9 @@ int main(int argc,  char** argv)
   for (unsigned id = 0; id < 100; ++id) {
     vcl_stringstream out_folder;
     if (id < 10)
-      out_folder << out_root() << "/p1a_test1_0" << id;
+      out_folder << out_root() << "/p1a_test" << test_id() << "_0" << id;
     else
-      out_folder << out_root() << "/p1a_test1_" << id;
+      out_folder << out_root() << "/p1a_test" << test_id() << "_" << id;
     //vcl_cout << "out_folder = " << out_folder.str() << vcl_endl;
     if (!vul_file::is_directory(out_folder.str())) {
       continue;
