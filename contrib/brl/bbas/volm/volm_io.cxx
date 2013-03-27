@@ -165,7 +165,7 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   f.clear();  f.push_back(1.0f);  f.push_back(0.2f);  f.push_back(0.2f);  f.push_back(0.1f);  m[3] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(0.1f);  m[4] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.7f);  f.push_back(1.0f);  f.push_back(1.0f);  m[5] = f; //
-  f.clear();  f.push_back(1.0f);  f.push_back(0.5f);  f.push_back(0.7f);  f.push_back(1.0f);  m[6] = f; //
+  f.clear();  f.push_back(1.0f);  f.push_back(0.1f);  f.push_back(0.7f);  f.push_back(1.0f);  m[6] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.8f);  m[7] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.1f);  m[8] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.9f);  f.push_back(0.9f);  f.push_back(0.1f);  m[9] = f; //
