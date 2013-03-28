@@ -57,11 +57,11 @@ namespace boxm2_texture_mesh_process_globals
 
   //populates a vector of visibility images (by face id int)
   void boxm2_visible_faces( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
-                            imesh_mesh& in_mesh);
+                            imesh_mesh& in_mesh,  unsigned int ni, unsigned int nj);
 
   //stores a norm image (3d face norm) for each of the texture images
   void compute_norm_images( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
-                            imesh_mesh& in_mesh);
+                            imesh_mesh& in_mesh,unsigned int ni, unsigned int nj);
 
   //smooths the vector of norm images above
   void smooth_norm_images(double sigma);
@@ -207,17 +207,15 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   vcl_vector<vcl_string> imfiles;
   vcl_vector<vpgl_perspective_camera<double>* > cameras;
 
-  unsigned int handpicked[] = {0,1,13,25,33,40,51,64,73,82,96,105,109,114,125,133,140,147,153,164,175};
+  //unsigned int handpicked[] = {0,1,13,25,33,40,51,64,73,82,96,105,109,114,125,133,140,147,153,164,175};
   //int handpicked[] = { 0,1,13,25,33,51,73,96,109,114,133,147,164};
   //int handpicked[] = {0,12,18};
   //int handpicked[] = {0, 1, 26, 33, 56, 96, 114, 133 };
   //int handpicked[] = {0, 8, 16, 23 };
-  for (unsigned int i=0; i*sizeof(int)<sizeof(handpicked); ++i) {
-    if (handpicked[i] < allims.size()) {
-      imfiles.push_back(allims[handpicked[i]]);
-      cameras.push_back(allcams[handpicked[i]]);
+  for (unsigned int i=0; i<allims.size(); ++i) {
+      imfiles.push_back(allims[i]);
+      cameras.push_back(allcams[i]);
       vcl_cout<<"added image: "<<imfiles[i]<<vcl_endl;
-    }
   }
 #if 0
   vnl_random rand(9667566);
@@ -237,13 +235,13 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   // Render Visibility Images
   ////////////////////////////////////////////////////////////////////////////////
   vcl_cout<<"calculating visibility images (for each textured image)"<<vcl_endl;
-  boxm2_visible_faces(cameras, in_mesh);
+  boxm2_visible_faces(cameras, in_mesh,first_im->ni(),first_im->nj());
 
   ////////////////////////////////////////////////////////////////////////////////
   // Render norm images (and then smooth them)
   ////////////////////////////////////////////////////////////////////////////////
   vcl_cout<<"calculating norm images (for each texture image)"<<vcl_endl;
-  compute_norm_images(cameras, in_mesh);
+  compute_norm_images(cameras, in_mesh,first_im->ni(),first_im->nj());
   smooth_norm_images(30.0);
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +258,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   //   - create a face list
   //   - create a sub mesh that is textured
   ////////////////////////////////////////////////////////////////////////////////
-  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
+  imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
   //for each appearance (texture image), create an imesh_mesh (subMesh);
   vcl_cout<<"Creating Sub Meshes for each texture"<<vcl_endl;
@@ -269,7 +267,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   {
     //for each appearance, we're creating a whole new mesh
     // first create the face list
-    imesh_regular_face_array<3>* flist = new imesh_regular_face_array<3>();
+    imesh_face_array* flist = new imesh_face_array();
 
     //now create the vertex list
     imesh_vertex_array<3>* verts3 = new imesh_vertex_array<3>();
@@ -364,7 +362,7 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
                                                               vcl_map<vcl_string, vpgl_perspective_camera<double>* >& texture_cams)
 {
   //grab faces and vertices from the mesh
-  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
+  imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
   unsigned nfaces = in_mesh.num_faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
@@ -658,20 +656,25 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
 //: Constructs vector of visibility images - images that identify which triangle is visible at which pixel.
 // Function is more or less complete - not much more to it.
 void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
-                                                              imesh_mesh& in_mesh)
+                                                              imesh_mesh& in_mesh, unsigned int ni=1024, unsigned int nj=768)
 {
-  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
+  imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
+
+  
   unsigned nfaces = in_mesh.num_faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
   // iterate over each camera, creating a visibility image for each
   for (unsigned int i=0; i<cameras.size(); ++i)
   {
-    // get the principal point of the cam for image size
+
+    //// get the principal point of the cam for image size
     vpgl_perspective_camera<double>* pcam = cameras[i];
-    vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
-    unsigned ni = (unsigned) (principal_point.x()*2.0);
-    unsigned nj = (unsigned) (principal_point.y()*2.0);
+
+    //vcl_cout<<(*pcam);
+    //vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
+    //unsigned ni = (unsigned) (principal_point.x()*2.0);
+    //unsigned nj = (unsigned) (principal_point.y()*2.0);
 
     // render the face_id/distance image
     vil_image_view<double> depth_im(ni, nj);
@@ -680,18 +683,19 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_pe
     face_im->fill(-1); //initial face id is -1
     for (unsigned iface = 0; iface<nfaces; ++iface)
     {
+
       // get the vertices from the face, project into UVs
       double us[3], vs[3], dists[3];
-      for (int vIdx=0; vIdx<3; ++vIdx) {
-        unsigned vertIdx = in_faces[iface][vIdx];
 
+      for (int vIdx=0; vIdx<3; ++vIdx) {
+        
+        unsigned vertIdx = in_faces[iface][vIdx];
         // project these verts into UV
         double x = in_verts[vertIdx][0], y = in_verts[vertIdx][1], z = in_verts[vertIdx][2];
         double u,v;
         pcam->project(x, y, z, u, v);
         us[vIdx] = u;
         vs[vIdx] = v;
-
         // keep track of distance to each vertex
         dists[vIdx] = vgl_distance(vgl_point_3d<double>(x,y,z), pcam->get_camera_center());
       }
@@ -711,17 +715,17 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_pe
 //: Constructs vector of visibility images - images that identify which triangle is visible at which pixel.
 // Function is more or less complete - not much more to it.
 void boxm2_texture_mesh_process_globals::compute_norm_images( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
-                                                              imesh_mesh& in_mesh)
+                                                              imesh_mesh& in_mesh,unsigned int ni, unsigned int nj)
 {
-  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
+  imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
   unsigned nfaces = in_mesh.num_faces();
 
   for (unsigned int i=0; i<vis_images_.size(); ++i) {
     // get the principal point/ni,nj
     vpgl_perspective_camera<double>* pcam = cameras[i];
-    vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
-    unsigned ni = (unsigned) (principal_point.x()*2.0);
-    unsigned nj = (unsigned) (principal_point.y()*2.0);
+    //vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
+    //unsigned ni = (unsigned) (principal_point.x()*2.0);
+    //unsigned nj = (unsigned) (principal_point.y()*2.0);
 
     // create a norm x,y, and z image for each visibility image
     vil_image_view<int>* vis = vis_images_[i];

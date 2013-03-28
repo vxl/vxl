@@ -52,6 +52,7 @@ DECLARE_FUNC_CONS(boxm2_dem_to_xyz_process2);
 DECLARE_FUNC_CONS(boxm2_initialize_ground_xyz_process);
 DECLARE_FUNC_CONS(boxm2_label_to_xyz_process);
 DECLARE_FUNC_CONS(boxm2_prune_scene_blocks_process);
+DECLARE_FUNC_CONS(boxm2_load_mesh_process);
 
 //DECLARE_FUNC_CONS(boxm2_scene_fetch_alpha_process);
 //DECLARE_FUNC_CONS(boxm2_create_crop_img_process);
