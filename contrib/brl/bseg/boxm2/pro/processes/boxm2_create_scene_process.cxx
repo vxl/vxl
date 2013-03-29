@@ -223,13 +223,13 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
            << "input scene length y: " << ly << " blocked y: " << n_y*num_xy*sb_length << '\n'
            << "input scene length z: " << lz << " blocked z: " << n_z*num_z*sb_length << vcl_endl;
 
-  vcl_cout << "memory requirements for a block at finest resolution: ";
   int n_subb = n_x*n_y*n_z;
   int n_cells_subb = 1+8+64+512;
   int n_bytes_subb = 36*n_cells_subb;  // alpha:4, mog3/gauss:8, num_obs:8,aux:16
   float bytes = (float)(n_subb*n_bytes_subb);
-  vcl_cout << "n_subblocks: " << n_subb << " num_bytes per subblock: " << n_bytes_subb << " total: " << bytes/1000000.0 << " MB " << vcl_endl;
-  vcl_cout << " total including bit tree: " << (bytes + n_subb*16)/1000000 << " MB " << vcl_endl;
+  vcl_cout << "memory requirements for a block at finest resolution:\n"
+           << "n_subblocks: " << n_subb << " num_bytes per subblock: " << n_bytes_subb << " total: " << bytes/1000000.0 << " MB\n"
+           << " total including bit tree: " << (bytes + n_subb*16)/1000000 << " MB" << vcl_endl;
 
   for (int i = 0; i < n_x; ++i)
     for (int j = 0; j < n_y; ++j)
@@ -386,7 +386,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   utm.transform(origin_lat, origin_lon, x, y, orig_zone);
   vgl_polygon<double> poly;
   poly.new_sheet();
-  for (unsigned int i=0; i<n_out; i++) {
+  for (unsigned int i=0; i<n_out; ++i) {
     int zone;
     utm.transform(parser->polyouter_[i].y(), parser->polyouter_[i].x(), x, y, zone);
     if (zone != orig_zone)
@@ -394,13 +394,13 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
     double local_x = vcl_numeric_limits<double>::max(), local_y, local_z;
     lv.global_to_local(parser->polyouter_[i].x(), parser->polyouter_[i].y(), parser->polyouter_[i].z(),
                        vpgl_lvcs::wgs84, local_x, local_y, local_z);
-    if (local_x != vcl_numeric_limits<double>::max()) 
+    if (local_x != vcl_numeric_limits<double>::max())
       poly.push_back(local_x, local_y);
     else
       vcl_cout << "skipped this point of the polygon!\n";
   }
   poly.new_sheet();
-  for (unsigned int i=0; i<n_in; i++) {
+  for (unsigned int i=0; i<n_in; ++i) {
     int zone;
     utm.transform(parser->polyinner_[i].y(), parser->polyinner_[i].x(), x, y, zone);
     if (zone != orig_zone)
@@ -408,7 +408,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
     double local_x = vcl_numeric_limits<double>::max(), local_y, local_z;
     lv.global_to_local(parser->polyinner_[i].x(), parser->polyinner_[i].y(), parser->polyinner_[i].z(),
                        vpgl_lvcs::wgs84, local_x, local_y, local_z);
-    if (local_x != vcl_numeric_limits<double>::max()) 
+    if (local_x != vcl_numeric_limits<double>::max())
       poly.push_back(local_x, local_y);
     else
       vcl_cout << "skipped this point of the polygon!\n";
@@ -418,7 +418,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   double upper = poly[0][0].y();
   double left = poly[0][0].x();
   double right = poly[0][0].x();
-  for (unsigned int i=0; i<poly[0].size(); i++) {
+  for (unsigned int i=0; i<poly[0].size(); ++i) {
     if (lower > poly[0][i].y())  lower = poly[0][i].y();
     if (upper < poly[0][i].y())  upper = poly[0][i].y();
     if (left > poly[0][i].x())   left =  poly[0][i].x();
@@ -440,7 +440,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   scene->set_appearances(appearance);
   scene->set_lvcs(lv);
   scene->set_num_illumination_bins(num_bins);
-   // calculate number of voxel and blocks and subblock sizes along z direction
+  // calculate number of voxel and blocks and subblock sizes along z direction
   double sb_length = 8*voxel_size;
   double lx, ly, lz;
   lx = right - left;
@@ -466,8 +466,8 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
            << "input scene boundary z: " << lz << " blocked z: " << n_z*num_z*sb_length << vcl_endl;
   unsigned int index_i = 0;
   unsigned int index_j = 0;
-  for (unsigned int i=0; i<n_x; i++) {
-    for (unsigned int j=0; j<n_y; j++) {
+  for (unsigned int i=0; i<n_x; ++i) {
+    for (unsigned int j=0; j<n_y; ++j) {
       double local_x = i*bxy + local_origin_x;
       double local_y = j*bxy + local_origin_y;
       vcl_vector<vgl_point_2d<double> > vblock;
@@ -478,7 +478,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
       bool block_contains = false;
       bool block_intersect = false;
       // check if any end point of the block inside the polygon
-      for (unsigned ii=0; (ii<vblock.size() && !block_contains); ii++)
+      for (unsigned ii=0; (ii<vblock.size() && !block_contains); ++ii)
         block_contains = poly.contains(vblock[ii]);
       // if the four endpoins are all out, check whether block intersects with polygon
       if (!block_contains) {
@@ -492,7 +492,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
         block_intersect = !(e1.empty() && e2.empty() && ip.empty());
       }
       if (block_contains || block_intersect) {
-        for (unsigned int k=0; k<n_z; k++) {
+        for (unsigned int k=0; k<n_z; ++k) {
           double local_z = k*bz + local_origin_z;
           boxm2_block_id id(i,j,k);
           vcl_map<boxm2_block_id, boxm2_block_metadata>& blks=scene->blocks();
@@ -507,9 +507,9 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
                                      init_level,max_level,max_data_mb,p_init);
           blks[id] = mdata;
         } // end of for loop along z
-        index_j++;
+        ++index_j;
         if (j == (n_y-1)) {
-          index_i++;
+          ++index_i;
           index_j = 0;
         }
       } // end of block adding
@@ -578,10 +578,10 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
   int hh = int(vcl_ceil(h/scene_dim))+1;
   int scene_cnt = ww*hh;
   vcl_cout << "scene cnt: " << scene_cnt << vcl_endl; vcl_cout.flush();
-  
+
   // create this many scenes
-  for (int i = 0; i < ww; i++) 
-    for (int j = 0; j < hh; j++) 
+  for (int i = 0; i < ww; ++i)
+    for (int j = 0; j < hh; ++j)
   {
     boxm2_scene_sptr small_scene = new boxm2_scene(scene->data_path(), scene->local_origin());
     small_scene->set_appearances(scene->appearances());
@@ -594,15 +594,15 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
   }
   // add the blocks -- makes sure all the blocks are added to one of the scenes
   unsigned cnt = 0;
-  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) 
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); ++iter)
   {
     boxm2_block_metadata md = iter->second;
     vgl_point_2d<double> lo(iter->second.local_origin_.x(), iter->second.local_origin_.y());
-    for (unsigned i = 0; i < small_scenes.size(); i++) {
+    for (unsigned i = 0; i < small_scenes.size(); ++i) {
       if (small_scenes[i].second.contains(lo)) {
         vcl_map<boxm2_block_id, boxm2_block_metadata>& small_scene_blks = small_scenes[i].first->blocks();
         small_scene_blks[iter->first] = iter->second;
-        cnt++;
+        ++cnt;
       }
     }
   }
@@ -624,7 +624,7 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
       small_scene_box.add(vgl_point_2d<double>(orig_x, orig_y));
       small_scene_box.add(vgl_point_2d<double>(orig_x + scene_dim - scene_dim/1000, orig_y + scene_dim - scene_dim/1000));
       // find all the blocks in the scene with (orig_x, orig_y) <-> (orig_x + scene_dim, orig_y + scene_dim)
-      for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) {
+      for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); ++iter) {
         boxm2_block_metadata md = iter->second;
         vgl_point_2d<double> lo(iter->second.local_origin_.x(), iter->second.local_origin_.y());
         if (small_scene_box.contains(lo))
@@ -634,19 +634,19 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
       small_scenes.push_back(small_scene);
     }
 #endif
-  
+
   // elimiate scenes with no blocks
   vcl_vector<boxm2_scene_sptr> scenes;
-  for (unsigned i = 0; i < small_scenes.size(); i++) {
+  for (unsigned i = 0; i < small_scenes.size(); ++i) {
     if (small_scenes[i].first->blocks().size() > 0)
       scenes.push_back(small_scenes[i].first);
   }
-  
+
   vcl_cout << output_path + name_prefix + ".xml\n"
            << " number of small scenes: " << scenes.size() << vcl_endl;
 
   // write each scene
-  for (unsigned i = 0; i < scenes.size(); i++) {
+  for (unsigned i = 0; i < scenes.size(); ++i) {
     vcl_stringstream ss; ss << i;
     vcl_string filename = name_prefix + ss.str();
     vcl_string filename_full = output_path + name_prefix + ss.str() + ".xml";
@@ -710,36 +710,38 @@ bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
   vcl_cout << "!!! NUMBER OF BLOCKS to be pruned: " << blks.size() << vcl_endl;
   boxm2_block_metadata md_first = blks.begin()->second;
   long size = md_first.sub_block_num_.x()*md_first.sub_block_num_.y()*md_first.sub_block_num_.z();
-  
+
   boxm2_scene_sptr pruned_scene = new boxm2_scene(scene->data_path(), scene->local_origin());
   pruned_scene->set_appearances(scene->appearances());
   pruned_scene->set_lvcs(lv);
-  pruned_scene->set_num_illumination_bins(scene->num_illumination_bins());  
+  pruned_scene->set_num_illumination_bins(scene->num_illumination_bins());
   vcl_map<boxm2_block_id, boxm2_block_metadata>& pruned_scene_blks = pruned_scene->blocks();
 
   // load the blocks - check the size and only add the ones which have gone through some refinement
-  unsigned cnt = 0;
   long min_size = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix())*size;
   vcl_cout << " size of alpha block with no refinement: " << min_size << vcl_endl;
-  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) 
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); ++iter)
   {
     boxm2_block_id id = iter->first;
     vcl_cout<<"Block id "<<id<<' ';
     vcl_stringstream file_name; file_name << scene->data_path() << "alpha_" << id << ".bin";
     long buf_len = vul_file::size(file_name.str());
     boxm2_block_metadata md = iter->second;
-    /*boxm2_data_base *  alph = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    long buf_len = (long)alph->buffer_length(); */
-    vcl_cout << " size: " << buf_len << " ";
+#if 0
+    boxm2_data_base *  alph = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    long buf_len = (long)alph->buffer_length();
+#endif
+    vcl_cout << " size: " << buf_len << ' ';
     if (buf_len > min_size) {
       pruned_scene_blks[id] = md;
       vcl_cout << " kept..\n";
-    } else
+    }
+    else
       vcl_cout << " pruned..\n";
   }
-  vcl_cout << "original scene had: " << blks.size() << " blocks!\n";
-  vcl_cout << " after pruning, the scene has: " << pruned_scene_blks.size() << " blocks!\n";
-  
+  vcl_cout << "original scene had " << blks.size() << " blocks!\n"
+           << " after pruning, the scene has " << pruned_scene_blks.size() << " blocks!\n";
+
   vcl_string filename_full = output_path + name_prefix + "_pruned.xml";
   pruned_scene->set_xml_path(filename_full);
   //make file and x_write to file
