@@ -201,6 +201,9 @@ SOURCE=.\processes/boxm2_scene_from_box_cams_process.cxx
 SOURCE=.\processes/boxm2_lidar_to_xyz_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm2_load_mesh_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group
