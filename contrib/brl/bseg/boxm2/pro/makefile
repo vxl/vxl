@@ -40,6 +40,7 @@ SOURCES += processes/boxm2_scene_kml_process.cxx
 SOURCES += processes/boxm2_ingest_convex_mesh_process.cxx
 SOURCES += processes/boxm2_scene_from_box_cams_process.cxx
 SOURCES += processes/boxm2_lidar_to_xyz_process.cxx
+SOURCES += processes/boxm2_load_mesh_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
