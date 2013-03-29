@@ -54,14 +54,13 @@ static void test_sph_segment()
   vsph_unit_sphere_sptr usph;
   vsl_b_read(is, usph);
   int nv = usph->size();
-  double point_angle = usph->point_angle();//for coast (2 really)
   double dpr = vnl_math::deg_per_rad;
   double reg_min_theta = 85.0/dpr, reg_max_theta = 95.0/dpr;
   double reg_min_phi = -90.0/dpr, reg_max_phi = 90.0/dpr;
   vcl_vector<double> data(nv, 0.0);
   int cnt = 0;
   vsph_unit_sphere::iterator sit = usph->begin();
-  for (; sit!=usph->end(); ++sit, cnt++)
+  for (; sit!=usph->end(); ++sit, ++cnt)
   {
     vsph_sph_point_2d& sp = *sit;
     if (sp.theta_ >=reg_min_theta && sp.theta_<=reg_max_theta &&
@@ -71,6 +70,7 @@ static void test_sph_segment()
 
 #if 0
   vcl_cout << "Start segment" << vcl_endl;
+  double point_angle = usph->point_angle();//for coast (2 really)
   double sigma = (0.1*point_angle)/dpr,  c =300.0;
   int min_size = 10;
   vsph_segment_sphere seg(*usph, sigma, int(c), min_size, true);
@@ -122,9 +122,9 @@ static void test_sph_segment()
     colors.push_back(c);
   }
   vcl_string seg_path_boxes = MyDIR + "vol_indices/geoindex_vsph_zone_17_high_res_only_gt_pa_1/joe_seg_boxes_geo_index_tile_3_node_32.649_-79.9519_1.02686.wrl";
-   double tol = 0.001;
+  double tol = 0.001;
   vsph_sph_box_2d::display_boxes(seg_path_boxes, dboxes, colors, tol);
-#endif // 0 / 1
+#endif // 0
 }
 
 TESTMAIN(test_sph_segment);
