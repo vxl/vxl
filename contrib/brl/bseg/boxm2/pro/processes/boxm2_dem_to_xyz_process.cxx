@@ -498,7 +498,7 @@ bool boxm2_initialize_ground_xyz_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "int";   // desired height of ground plane in global coords, e.g. for ground plane to be at global z = 0, pass 0
-  
+
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
@@ -520,7 +520,7 @@ bool boxm2_initialize_ground_xyz_process(bprb_func_process& pro)
   int ground_height = pro.get_input<int>(1);
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
-  
+
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
   float sb_length = info->block_len;
@@ -531,7 +531,7 @@ bool boxm2_initialize_ground_xyz_process(bprb_func_process& pro)
   int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x()+1.0)/vox_length);
   int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y()+1.0)/vox_length);
   vcl_cout <<"image size needs ni: " << ni << " nj: " << nj << " to support voxel res: " << vox_length << vcl_endl;
-  
+
   // create x y z images
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
@@ -539,13 +539,13 @@ bool boxm2_initialize_ground_xyz_process(bprb_func_process& pro)
   out_img_x->fill((float)(scene_bbox.min_x())-10.0f);  // local coord system min z
   out_img_y->fill((float)(scene_bbox.min_y())-10.0f);  // local coord system min z
   out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
-  
+
   double lat, lon, elev; scene->lvcs().get_origin(lat, lon, elev);
   vcl_cout << "global scene origin is at z = " << elev << vcl_endl;
-  int g_h = ground_height - elev;
-  vcl_cout << " in global coords, ground plane is at z = " << ground_height << '\n'; 
-  vcl_cout << " in local coords, this corresponds to z = " << scene_bbox.min_z()+g_h  << '\n';
-  
+  double g_h = ground_height - elev;
+  vcl_cout << " in global coords, ground plane is at z = " << ground_height << '\n'
+           << " in local coords, this corresponds to z = " << scene_bbox.min_z()+g_h  << '\n';
+
   for (int i = 0; i < ni; i++)
     for (int j = 0; j < nj; j++) {
       (*out_img_x)(i,j) = scene_bbox.min_x() + i + 0.5;
