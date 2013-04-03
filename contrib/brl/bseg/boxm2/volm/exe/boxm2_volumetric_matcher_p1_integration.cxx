@@ -73,10 +73,6 @@ int main(int argc, char** argv)
   vcl_string dms_bin = out_folder() + "/depth_map_scene.bin";
   vcl_string query_bin = out_folder() + "/volm_query.bin";
 
-
-  vcl_cerr << " cam_bin = " << cam_bin << vcl_endl;
-  vcl_cerr << " dms_bin = " << dms_bin << vcl_endl;
-  vcl_cerr << " query_bin = " << query_bin << vcl_endl;
   // check(waiting) for all available query file
   bool all_available = false;
   while (!all_available) {
@@ -162,7 +158,7 @@ int main(int argc, char** argv)
   
   // screen output
   unsigned total_size = query->obj_based_query_size_byte();
-  vcl_cerr << "\n==================================================================================================\n"
+  vcl_cout << "\n==================================================================================================\n"
            << "\t\t  1. Create query from given camera space and Depth map scene\n"
            << "\t\t  " << dms_bin << '\n'
            << "\t\t  generate query has " << query->get_cam_num() << " cameras "
@@ -176,19 +172,19 @@ int main(int argc, char** argv)
            << " The depth interval used for current query has size " << depth_interval.size()
            << ", max depth = " << depth_interval[depth_interval.size()-1] << vcl_endl;
 
-  vcl_cerr << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
+  vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
-    vcl_cerr << " -------------- SKYs --------------" << vcl_endl;
+    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->sky().size(); i++)
-      vcl_cerr << "\t name = " << (dm->sky()[i]->name())
+      vcl_cout << "\t name = " << (dm->sky()[i]->name())
                << ",\t depth = " << 254
                << ",\t orient = " << (int)query->sky_orient()
                << vcl_endl;
   }
   if (dm->ground_plane().size()) {
-    vcl_cerr << " -------------- GROUND PLANE --------------" << vcl_endl;
+    vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->ground_plane().size(); i++)
-      vcl_cerr << "\t name = " << dm->ground_plane()[i]->name()
+      vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
                << ",\t depth = " << dm->ground_plane()[i]->min_depth()
                << ",\t orient = " << dm->ground_plane()[i]->orient_type()
                << ",\t land_id = " << dm->ground_plane()[i]->land_id()
@@ -197,9 +193,9 @@ int main(int argc, char** argv)
   }
   vcl_vector<depth_map_region_sptr> dmr = query->depth_regions();
   if (dmr.size()) {
-    vcl_cerr << " -------------- DEPTH REGIONS --------------" << vcl_endl;
+    vcl_cout << " -------------- DEPTH REGIONS --------------" << vcl_endl;
     for (unsigned i = 0; i < dmr.size(); i++) {
-      vcl_cerr << "\t\t " <<  dmr[i]->name()  << " region "
+      vcl_cout << "\t\t " <<  dmr[i]->name()  << " region "
                << ",\t\t min_depth = " << dmr[i]->min_depth()
                << " ---> interval = " << (int)sph->get_depth_interval(dmr[i]->min_depth())
                << ",\t\t max_depth = " << dmr[i]->max_depth()
@@ -211,16 +207,16 @@ int main(int argc, char** argv)
     }
   }
 
-  vcl_cerr << "\n==================================================================================================\n"
+  vcl_cout << "\n==================================================================================================\n"
            << "\t\t  2. Weight parameters used are as following\n";
   for (vcl_vector<volm_weight>::iterator vit = weights.begin(); vit != weights.end(); ++vit)
-    vcl_cerr << ' ' << vit->w_typ_
+    vcl_cout << ' ' << vit->w_typ_
              << ' ' << vit->w_ori_
              << ' ' << vit->w_lnd_
              << ' ' << vit->w_dst_
              << ' ' << vit->w_ord_
              << ' ' << vit->w_obj_ << vcl_endl;
-  vcl_cerr << "==================================================================================================\n\n";
+  vcl_cout << "==================================================================================================\n\n";
 
   // define device that will be used
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
