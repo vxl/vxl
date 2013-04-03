@@ -85,31 +85,31 @@ int main(int argc, char** argv)
            << "\n  alt: " << altitude << vcl_endl;
 
   // construct camera space
-  volm_camera_space cam_space(tfov, top_fov_dev, params.fov_inc, altitude, dm->ni(), dm->nj(),
-                              heading, heading_dev, params.head_inc,
-                              tilt, tilt_dev, params.tilt_inc,
-                              roll, roll_dev, params.roll_inc);
+  volm_camera_space_sptr cam_space = new volm_camera_space(tfov, top_fov_dev, params.fov_inc, altitude, dm->ni(), dm->nj(),
+                                                           heading, heading_dev, params.head_inc,
+                                                           tilt, tilt_dev, params.tilt_inc,
+                                                           roll, roll_dev, params.roll_inc);
 
   if (dm->ground_plane().size() > 0)  // enforce ground plane constraint if user specified a ground plane
   {
-    camera_space_iterator cit = cam_space.begin();
-    for ( ; cit != cam_space.end(); ++cit) {
-      unsigned current = cam_space.cam_index();
-      vpgl_perspective_camera<double> cam = cam_space.camera(); // camera at current state of iterator
+    camera_space_iterator cit = cam_space->begin();
+    for ( ; cit != cam_space->end(); ++cit) {
+      unsigned current = cam_space->cam_index();
+      vpgl_perspective_camera<double> cam = cam_space->camera(); // camera at current state of iterator
       bool success = true;
       for (unsigned i = 0; success && i < dm->ground_plane().size(); i++)
         success = dm->ground_plane()[i]->region_ground_2d_to_3d(cam);
       if (success) // add this camera
-        cam_space.add_camera_index(current);
+        cam_space->add_camera_index(current);
     }
   }
   else
-    cam_space.generate_full_camera_index_space();
+    cam_space->generate_full_camera_index_space();
 
   //cam_space.print_valid_cams();
   vcl_string cam_bin_file = out_folder() + "/camera_space.bin";
   vsl_b_ofstream ofs_cam(cam_bin_file);
-  cam_space.b_write(ofs_cam);
+  cam_space->b_write(ofs_cam);
   ofs_cam.close();
 
   // create depth interval
@@ -127,7 +127,7 @@ int main(int argc, char** argv)
   ifs_sph.close();
 
   // create volm_query
-  volm_query_sptr query = new volm_query(&cam_space, dms_bin_file, sph_shell, sph);
+  volm_query_sptr query = new volm_query(cam_space, dms_bin_file, sph_shell, sph);
 
   // save the volm_query 
   vcl_string query_bin_file = out_folder() + "/volm_query.bin";
