@@ -34,9 +34,11 @@ int main(int argc, char** argv)
   // input
   vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");                                          // query -- spherical shell container binary
   vul_arg<vcl_string> param_file("-param", "parameter file to read the parameters for depth interval", "");   // query -- parameter file for depth interval
-  vul_arg<vcl_string> weight_file("-wgt", "weight parameters for query", "");                    // query -- weight parameter file
+  vul_arg<vcl_string> weight_file("-wgt", "weight parameters for query", "");                                 // query -- weight parameter file
   vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses", "");                      // index -- folder to read the hypos for each leaf
   vul_arg<vcl_string> geo_index_folder("-geo", "folder to read the geo index", "");                           // index -- folder to read the index for each location
+  vul_arg<unsigned>   tile_id("-tile", "tile id", 0);                                                         // index -- tile_id
+  vul_arg<unsigned>   zone_id("-zone", "zone id", 17);                                                        // index -- zone_id
   vul_arg<float>      buffer_capacity("-buff", "index buffer capacity (GB)", 1.0f);                           // index -- buffer capacity
   vul_arg<unsigned>   dev_id("-gpuid", "device used for current matcher", 0);                                 // matcher -- device id
   vul_arg<float>      threshold("-thres", "threshold for choosing valid cameras (0~1)", 0.4f);                // matcher -- threshold for choosing cameras
@@ -44,7 +46,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "");                   // matcher -- output folder
   vul_arg<bool>       logger("-logger", "designate one of the exes as logger", false);                        // matcher -- log file generation
   vul_arg_parse(argc, argv);
-
+  
   vcl_stringstream log;
   bool do_log = false;
   if (logger())
@@ -72,9 +74,9 @@ int main(int argc, char** argv)
   vcl_string query_bin = out_folder() + "/volm_query.bin";
 
 
-  vcl_cerr << " cam_bin = " << cam_bin << '\n'
-           << " dms_bin = " << dms_bin << '\n'
-           << " query_bin = " << query_bin << '\n';
+  vcl_cerr << " cam_bin = " << cam_bin << vcl_endl;
+  vcl_cerr << " dms_bin = " << dms_bin << vcl_endl;
+  vcl_cerr << " query_bin = " << query_bin << vcl_endl;
   // check(waiting) for all available query file
   bool all_available = false;
   while (!all_available) {
@@ -136,15 +138,12 @@ int main(int argc, char** argv)
   volm_camera_space_sptr cam_space = new volm_camera_space();
   cam_space->b_read(ifs_cam);
   ifs_cam.close();
-
+  
   // load the volm_query
-  vcl_cout << " sph_shell , point angle = " << sph_shell->point_angle()
-           << " top_angle = " << sph_shell->top_angle() << vcl_endl;
+  vcl_cout << " sph_shell , point angle = " << sph_shell->point_angle() << " top_angle = " << sph_shell->top_angle() << vcl_endl;
 
   volm_query_sptr query = new volm_query(query_bin, cam_space, dms_bin, sph_shell, sph);
-#ifdef DEBUG
-  vcl_cout << " I am here" << vcl_endl;
-#endif
+  vcl_cout << " I am here " << vcl_endl;
   // create volm_weight if weight_file is given or create equal weight
   vcl_vector<volm_weight> weights;
   depth_map_scene_sptr dm = query->depth_scene();
@@ -161,7 +160,7 @@ int main(int argc, char** argv)
     // create equal weight
     volm_weight::equal_weight(weights, dm);
   }
-
+  
   // screen output
   unsigned total_size = query->obj_based_query_size_byte();
   vcl_cerr << "\n==================================================================================================\n"
@@ -176,30 +175,30 @@ int main(int argc, char** argv)
            << ", bottom_angle = " << query->sph_shell()->bottom_angle()
            << ", size = " << query->get_query_size() << '\n'
            << " The depth interval used for current query has size " << depth_interval.size()
-           << ", max depth = " << depth_interval[depth_interval.size()-1] << '\n'
+           << ", max depth = " << depth_interval[depth_interval.size()-1] << vcl_endl;
 
-           << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region\n";
+  vcl_cerr << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
   if (dm->sky().size()) {
-    vcl_cerr << " -------------- SKYs --------------\n";
+    vcl_cerr << " -------------- SKYs --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->sky().size(); i++)
       vcl_cerr << "\t name = " << (dm->sky()[i]->name())
                << ",\t depth = " << 254
                << ",\t orient = " << (int)query->sky_orient()
-               << '\n';
+               << vcl_endl;
   }
   if (dm->ground_plane().size()) {
-    vcl_cerr << " -------------- GROUND PLANE --------------\n";
+    vcl_cerr << " -------------- GROUND PLANE --------------" << vcl_endl;
     for (unsigned i = 0; i < dm->ground_plane().size(); i++)
       vcl_cerr << "\t name = " << dm->ground_plane()[i]->name()
                << ",\t depth = " << dm->ground_plane()[i]->min_depth()
                << ",\t orient = " << dm->ground_plane()[i]->orient_type()
                << ",\t land_id = " << dm->ground_plane()[i]->land_id()
                << ",\t land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
-               << '\n';
+               << vcl_endl;
   }
   vcl_vector<depth_map_region_sptr> dmr = query->depth_regions();
   if (dmr.size()) {
-    vcl_cerr << " -------------- DEPTH REGIONS --------------\n";
+    vcl_cerr << " -------------- DEPTH REGIONS --------------" << vcl_endl;
     for (unsigned i = 0; i < dmr.size(); i++) {
       vcl_cerr << "\t\t " <<  dmr[i]->name()  << " region "
                << ",\t\t min_depth = " << dmr[i]->min_depth()
@@ -209,7 +208,7 @@ int main(int argc, char** argv)
                << ",\t\t orient = " << dmr[i]->orient_type()
                << ",\t\t NLCD_id = " << dmr[i]->land_id()
                << ",\t\t land_name = " << volm_label_table::land_string(dmr[i]->land_id())
-               << '\n';
+               << vcl_endl;
     }
   }
 
@@ -221,7 +220,7 @@ int main(int argc, char** argv)
              << ' ' << vit->w_lnd_
              << ' ' << vit->w_dst_
              << ' ' << vit->w_ord_
-             << ' ' << vit->w_obj_ << '\n';
+             << ' ' << vit->w_obj_ << vcl_endl;
   vcl_cerr << "==================================================================================================\n\n";
 
   // define device that will be used
@@ -235,146 +234,74 @@ int main(int argc, char** argv)
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-
-  // define the tile and zone from device id (for cluster)
-  unsigned zone_id;
-  vcl_vector<unsigned> tile_ids;
-
-  if (dev_id() == 4) {
-    zone_id = 17;
-    tile_ids.push_back(0);
-    tile_ids.push_back(3);
-    tile_ids.push_back(6);
-    tile_ids.push_back(7);
-#if 0
-    tile_ids.push_back(0);  tile_ids.push_back(1);  tile_ids.push_back(2);
-    tile_ids.push_back(3);  tile_ids.push_back(4);  tile_ids.push_back(6);
-    tile_ids.push_back(7);
-#endif
-  }
-  else if (dev_id() == 6) {
-    zone_id = 18;
-    tile_ids.push_back(9);
-#if 0
-    tile_ids.push_back(5);   tile_ids.push_back(8);   tile_ids.push_back(9);
-    tile_ids.push_back(11);  tile_ids.push_back(12);  tile_ids.push_back(13);
-#endif
-  }
-
-#if 0
-  if (dev_id() == 0) {
-    zone_id = 17;
-    tile_ids.push_back(0);  tile_ids.push_back(1);  tile_ids.push_back(3);
-  }
-  else if (dev_id() == 1) {
-    zone_id = 17;
-    tile_ids.push_back(2);  tile_ids.push_back(4);
-  }
-  else if (dev_id() == 2) {
-    zone_id = 17;
-    tile_ids.push_back(6);
-  }
-  else if (dev_id() == 3) {
-    zone_id = 17;
-    tile_ids.push_back(7);
-  }
-  else if (dev_id() == 4) {
-    zone_id = 18;
-    tile_ids.push_back(5);  tile_ids.push_back(9);  tile_ids.push_back(12);
-  }
-  else if (dev_id() == 5) {
-    zone_id = 18;
-    tile_ids.push_back(8);
-  }
-  else if (dev_id() == 6) {
-    zone_id = 18;
-    tile_ids.push_back(11);
-  }
-  else if (dev_id() == 7) {
-    zone_id = 18;
-    tile_ids.push_back(13);
-  }
-#endif
-
-  // check the geo_hypo_folder and geo_index_folder
-  for (unsigned i = 0; i < tile_ids.size(); i++) {
-    vcl_stringstream file_name_pre_hypo;
-    file_name_pre_hypo << geo_hypo_folder() << "/geo_index_tile_" << tile_ids[i] <<".txt";
-    vcl_stringstream file_name_pre_indx;
-    file_name_pre_indx << geo_index_folder() << "/geo_index_tile_" << tile_ids[i] << "_index.params";
-
-    vcl_cout << "geo_hypo = " << file_name_pre_hypo.str() << '\n'
-             << "geo_index = " << file_name_pre_indx.str() << vcl_endl;
-
-    if (!vul_file::exists(file_name_pre_hypo.str()) || !vul_file::exists(file_name_pre_indx.str())) {
-      log << " ERROR: geo_index is missing for tile " << tile_ids[i] << '\n';
-      if (do_log) {
-        volm_io::write_log(out_folder(), log.str());
-        volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
-      }
-      vcl_cerr << log.str();
-      return volm_io::EXE_ARGUMENT_ERROR;
-    }
-  }
-
   vcl_cout << "\n==================================================================================================\n"
            << "\t\t  3. Following device is used for volm_matcher\n"
            << "\t\t  " << mgr->gpus_[dev_id()]->info() << '\n'
-           << "\t device used to match utm zone " << zone_id << " and tiles [";
-  for (vcl_vector<unsigned>::iterator it = tile_ids.begin(); it != tile_ids.end(); ++it)
-    vcl_cout << *it << ' ';
-  vcl_cout << "]\n==================================================================================================" << vcl_endl;
+           << "\n==================================================================================================" << vcl_endl;
 
-  for (unsigned i = 0; i < tile_ids.size(); i++) {
-    unsigned tile_id = tile_ids[i];
-    vcl_cout << "\n==================================================================================================\n"
-             << "\t\t  4. Start volumetric matcher for tile " << tile_id << '\n'
+  // check the geo_hypo_folder and geo_index_folder
+
+  vcl_stringstream file_name_pre_hypo;
+  file_name_pre_hypo << geo_hypo_folder() << "/geo_index_tile_" << tile_id() <<".txt";
+  vcl_stringstream file_name_pre_indx;
+  file_name_pre_indx << geo_index_folder() << "/geo_index_tile_" << tile_id() << "_index.params";
+  if (!vul_file::exists(file_name_pre_hypo.str()) || !vul_file::exists(file_name_pre_indx.str())) {
+    log << " ERROR: geo_index is missing for tile " << tile_id() << '\n';
+    if (do_log) {
+      volm_io::write_log(out_folder(), log.str());
+      volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+    }
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+
+  // load associate geo_hypo
+  vcl_stringstream file_name_pre;
+  file_name_pre << geo_hypo_folder() << "/geo_index_tile_" << tile_id();
+  float min_size;
+  volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
+  volm_geo_index::read_hyps(root, file_name_pre.str());
+  vcl_vector<volm_geo_index_node_sptr> leaves;
+  volm_geo_index::get_leaves_with_hyps(root, leaves);
+
+  vcl_cout << "\n==================================================================================================\n"
+             << "\t\t  4. Start volumetric matcher for tile " << tile_id() << '\n'
              << "==================================================================================================\n" << vcl_endl;
 
-    // load associate geo_hypo
-    vcl_stringstream file_name_pre;
-    file_name_pre << geo_hypo_folder() << "/geo_index_tile_" << tile_id;
-    float min_size;
-    volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
-    volm_geo_index::read_hyps(root, file_name_pre.str());
-    vcl_vector<volm_geo_index_node_sptr> leaves;
-    volm_geo_index::get_leaves_with_hyps(root, leaves);
+  // start the volm_matcher
+  vgl_polygon<double> cand_poly;
+  bool is_candidate = false;
+  bool is_last_pass = false;
+  boxm2_volm_matcher_p1 obj_ps1_matcher(cam_space, query, leaves, buffer_capacity(), geo_index_folder(), tile_id(),
+                                        depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
+                                        threshold(), max_cam_per_loc(), weights);
 
-    // start the volm_matcher
-    vgl_polygon<double> cand_poly;
-    bool is_candidate = false;
-    bool is_last_pass = false;
-    boxm2_volm_matcher_p1 obj_ps1_matcher(cam_space, query, leaves, buffer_capacity(), geo_index_folder(), tile_id,
-                                          depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
-                                          threshold(), max_cam_per_loc(), weights);
-
-    if (!obj_ps1_matcher.volm_matcher_p1()) {
-      log << " ERROR: pass 1 volm_matcher failed for zone " << zone_id << " and tile " << tile_id << '\n';
-      if (do_log) {
-        volm_io::write_log(out_folder(), log.str());
-        volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
-      }
-      vcl_cerr << log.str();
-      return volm_io::MATCHER_EXE_FAILED;
+  if (!obj_ps1_matcher.volm_matcher_p1()) {
+    log << " ERROR: pass 1 volm_matcher failed for zone " << zone_id() << " and tile " << tile_id() << '\n';
+    if (do_log) {
+      volm_io::write_log(out_folder(), log.str());
+      volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
     }
-
-    // write the score output binary
-    vcl_cout << "\n==================================================================================================\n"
-             << "\t\t  5. Generate output of pass 1 matcher for zone " << zone_id << " and tile " << tile_id << ", store it in\n"
-             << "\t\t     " << out_folder() << '\n'
-             << "==================================================================================================\n" << vcl_endl;
-    vcl_stringstream out_fname_bin;
-    out_fname_bin << out_folder() << "/ps_1_scores_zone_" << zone_id << "_tile_" << tile_id << ".bin";
-    if (!obj_ps1_matcher.write_matcher_result(out_fname_bin.str())) {
-      log << " ERROR: write output failed for pass 1 matcher for zone " << zone_id << ", tile " << tile_id << '\n';
-      if (do_log) {
-        volm_io::write_log(out_folder(), log.str());
-        volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
-      }
-      vcl_cerr << log.str();
-      return volm_io::MATCHER_EXE_FAILED;
+    vcl_cerr << log.str();
+    return volm_io::MATCHER_EXE_FAILED;
+  }
+    
+  // write the score output binary
+  vcl_cout << "\n==================================================================================================\n"
+          << "\t\t  5. Generate output of pass 1 matcher for zone " << zone_id() << " and tile " << tile_id() << ", store it in\n"
+          << "\t\t     " << out_folder() << '\n'
+          << "==================================================================================================\n" << vcl_endl;
+  vcl_stringstream out_fname_bin;
+  out_fname_bin << out_folder() << "/ps_1_scores_zone_" << zone_id() << "_tile_" << tile_id() << ".bin";
+  if (!obj_ps1_matcher.write_matcher_result(out_fname_bin.str())) {
+    log << " ERROR: write output failed for pass 1 matcher for zone " << zone_id() << ", tile " << tile_id() << '\n';
+    if (do_log) {
+      volm_io::write_log(out_folder(), log.str());
+      volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
     }
-  } // end of loop on tiles
+    vcl_cerr << log.str();
+    return volm_io::MATCHER_EXE_FAILED;
+  }
 
   volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FINISHED);
   return volm_io::MATCHER_EXE_FINISHED;
