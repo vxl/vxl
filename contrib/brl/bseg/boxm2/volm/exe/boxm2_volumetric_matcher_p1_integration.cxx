@@ -143,7 +143,6 @@ int main(int argc, char** argv)
   vcl_cout << " sph_shell , point angle = " << sph_shell->point_angle() << " top_angle = " << sph_shell->top_angle() << vcl_endl;
 
   volm_query_sptr query = new volm_query(query_bin, cam_space, dms_bin, sph_shell, sph);
-  vcl_cout << " I am here " << vcl_endl;
   // create volm_weight if weight_file is given or create equal weight
   vcl_vector<volm_weight> weights;
   depth_map_scene_sptr dm = query->depth_scene();
@@ -302,7 +301,7 @@ int main(int argc, char** argv)
     vcl_cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
-
-  volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FINISHED);
+  if (do_log)  
+    volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FINISHED);
   return volm_io::MATCHER_EXE_FINISHED;
 }
