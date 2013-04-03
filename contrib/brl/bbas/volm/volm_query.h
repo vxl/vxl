@@ -44,6 +44,7 @@ class volm_query : public vbl_ref_count
   //: constructor from files
   volm_query(volm_camera_space_sptr cam_space,
              vcl_string const& label_xml_file,
+             vcl_string const& category_file,
              volm_spherical_container_sptr const& sph,
              volm_spherical_shell_container_sptr const& sph_shell);
 

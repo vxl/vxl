@@ -113,6 +113,25 @@ unsigned volm_label_table::compute_number_of_labels()
 
 unsigned volm_label_table::number_of_labels_ = compute_number_of_labels();
 
+
+void volm_category_attribute::read_category(vcl_map<vcl_string, volm_category_attribute> & category_table, vcl_string fname)
+{
+  vcl_ifstream ifs(fname.c_str());
+  vcl_string type;
+  vcl_string lnd;
+  vcl_string ori;
+  unsigned   is_active;
+  while (!ifs.eof()) {
+    ifs >> type; ifs >> ori;  ifs >> lnd;  ifs >> is_active;
+    vcl_pair<vcl_string, volm_category_attribute> pair;
+    pair.first = type;
+    pair.second = volm_category_attribute(lnd, ori, is_active);
+    category_table.insert(pair);
+  }
+  ifs.close();
+}
+
+
 vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
 {
   vcl_map<unsigned char, vcl_vector<unsigned char> > m;
@@ -354,7 +373,7 @@ bool volm_io::read_camera(vcl_string kml_file,
   return true;
 }
 
-bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category)
+bool volm_io::read_labelme(vcl_string xml_file, vcl_string category_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category)
 {
   bvgl_labelme_parser parser(xml_file);
   vcl_vector<vgl_polygon<double> > polys = parser.polygons();
@@ -366,9 +385,8 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   vcl_vector<vcl_string>& object_orient = parser.obj_orientations();
   vcl_vector<unsigned>& object_nlcd = parser.obj_nlcd_ids();
   if (polys.size() != object_names.size()   ||
-      polys.size() != object_orient.size()  ||
-      polys.size() != object_nlcd.size()    ||
       polys.size() != object_types.size()   ||
+      polys.size() != object_maxdist.size() ||
       polys.size() != object_mindist.size() ||
       polys.size() != object_orders.size()     ) {
     vcl_cerr << " ERROR in labelme xml file: imcomplete object properties defination, check object attributes\n";
@@ -393,39 +411,35 @@ bool volm_io::read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scen
   unsigned nj = parser.image_nj();
   depth_scene->set_image_size(nj, ni);
 
-  // push the depth_map_region into depth_scene in the order of defined order in xml
+  // create depth_map_scene from labelme
+  vcl_map<vcl_string, volm_category_attribute> category_table;
+  volm_category_attribute::read_category(category_table, category_file);
+
   for (unsigned i = 0; i < polys.size(); i++) {
     vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
-    // SKY region
-    if (object_types[i] == "sky") {
-      depth_scene->add_sky(poly, object_orders[i], object_names[i]);
+    double min_dist = object_mindist[i], max_dist = object_maxdist[i];
+    unsigned order = object_orders[i];
+    vcl_string type = object_types[i];
+    vcl_string name = object_names[i];
+    // sky region
+    if (type == "sky")
+      depth_scene->add_sky(poly, 255, object_names[i]);
+    // ground plane
+    else if ( min_dist < 4 && (type == "beach" || type == "water" || type == "flat" || type == "road" || type == "grass" || type == "sand" ||
+                                        type == "dock") ) {
+      unsigned land_id = volm_label_table::land_id[volm_label_table::get_id_closest_name(category_table[type].lnd_)].id_;
+      depth_scene->add_ground(poly, 0.0, 0.0, 0, name, land_id);
     }
-    // GROUND region
-    else if (object_types[i] == "road" || object_types[i] == "beach" || object_types[i] == "desert" || object_types[i] == "flat"
-             || object_types[i] == "ground" || object_types[i] == "water" || object_types[i] == "ocean" )
-    {
-      double min_depth = object_mindist[i], max_depth = object_maxdist[i];
-      if (min_depth < 4) {  // define it as ground plane
-        depth_scene->add_ground(poly, min_depth, max_depth, object_orders[i], object_names[i], object_nlcd[i]);
-      }
-      else {
-        vgl_vector_3d<double> gp(0.0,0.0,1.0);
-        depth_scene->add_region(poly, gp, min_depth, max_depth, object_names[i],
-                                volm_orient_table::ori_id[object_orient[i]], object_orders[i], object_nlcd[i]);
-      }
-    }
-    // non-sky/non-ground region
     else {
-      double min_depth = parser.obj_mindists()[i], max_depth = parser.obj_maxdists()[i];
-      vgl_vector_3d<double> np; // surface normal
-      if (object_orient[i] == "horizontal")
-        np.set(0.0, 0.0, 1.0);
-      else if (object_orient[i] == "vertical")
-        np.set(1.0, 1.0, 0.0);
-      else
-        np.set(1.0, 1.0, 1.0);
-      depth_scene->add_region(poly, np, min_depth, max_depth, object_names[i],
-                              volm_orient_table::ori_id[object_orient[i]], object_orders[i], object_nlcd[i]);
+      if (category_table[type].is_active_) {
+        unsigned land_id = volm_label_table::land_id[volm_label_table::get_id_closest_name(category_table[type].lnd_)].id_;
+        vcl_string orient = category_table[type].ori_;
+        vgl_vector_3d<double> np;
+        if (orient == "horizontal")          np.set(0.0, 0.0, 1.0);
+        else if (orient == "front_parallel") np.set(1.0, 1.0, 0.0);
+        else                                 np.set(1.0, 1.0, 1.0);
+        depth_scene->add_region(poly, np, min_dist, max_dist, name, volm_orient_table::ori_id[orient], order, land_id);
+      }
     }
   }
   return true;
@@ -458,6 +472,12 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, 
       file << "COMPOSER waiting for matcher to complete\n<percent>90</percent>\n"; break;
     case volm_io::EXE_STARTED:
       file << "PREP exe starterd\n<percent>0</percent>\n"; break;
+    case volm_io::PRE_PROCESS_STARTED :
+      file << "PREP exe started\n<percent>0</percent>\n"; break;
+    case volm_io::PRE_PROCESS_FAILED :
+      file << "PREP exe failed\n<percent>0</percent>\n"; break;
+    case volm_io::PRE_PROCESS_FINISHED :
+      file << "PREP exe finished\n<percent>30</percent>\n"; break;
     default:
       file << "Unidentified status code!\n";
       vcl_cerr << "Unidentified status code!\n";
@@ -743,6 +763,7 @@ void volm_weight::read_weight(vcl_vector<volm_weight>& weights, vcl_string const
 #endif
     weights.push_back(volm_weight(w_typ, w_ori, w_lnd, w_ord, w_dst, w_obj));
   }
+  ifs.close();
 }
 
 bool volm_weight::check_weight(vcl_vector<volm_weight> const& /*weight*/)
@@ -752,6 +773,37 @@ bool volm_weight::check_weight(vcl_vector<volm_weight> const& /*weight*/)
 
 void volm_weight::equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene_sptr dms)
 {
+  float w_avg;
+  float w_obj;
+  if (!dms->sky().empty() && !dms->ground_plane().empty()) {
+    w_avg = 1.0f / (2 + dms->scene_regions().size());
+    float w_sky = w_avg * 2.0f;
+    float w_grd = w_avg * 1.5f;
+    w_obj = (1.0f - w_sky - w_grd) / dms->scene_regions().size();
+    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
+    weights.push_back(volm_weight("ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+  }
+  else if (!dms->sky().empty()) {
+    w_avg = 1.0f / (1 + dms->scene_regions().size());
+    float w_sky = w_avg * 2.5f;
+    w_obj = (1.0f - w_sky) / dms->scene_regions().size();
+    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
+  }
+  else if (!dms->ground_plane().empty()) {
+    w_avg = 1.0f / (1 + dms->scene_regions().size());
+    float w_grd = w_avg *2.0f;
+    w_obj = (1.0f - w_grd) / dms->scene_regions().size();
+    weights.push_back(volm_weight("ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+  }
+  else {
+    w_avg = 1.0f / dms->scene_regions().size();
+    w_obj = w_avg;
+  }
+  for (unsigned i = 0; i < dms->scene_regions().size(); i++) {
+      weights.push_back(volm_weight(dms->scene_regions()[i]->name(), 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
+  }
+
+#if 0
   // create a set of equal weight parameters
   float w_obj;
   if (!dms->sky().empty() && !dms->ground_plane().empty()) {
@@ -774,6 +826,7 @@ void volm_weight::equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene
   vcl_vector<depth_map_region_sptr> obj_reg = dms->scene_regions();
   for ( vcl_vector<depth_map_region_sptr>::iterator vit = obj_reg.begin(); vit != obj_reg.end(); ++vit)
     weights.push_back(volm_weight("object", 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
+#endif
 }
 
 void volm_io_expt_params::read_params(vcl_string params_file)

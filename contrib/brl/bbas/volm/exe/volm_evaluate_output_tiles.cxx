@@ -18,12 +18,13 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> poly_in("-poly", "region polygon as kml, only the pixels of the output tiles within this polygon will be used for evaluation", "");
   vul_arg<vcl_string> cam_file("-cam", "ground truth camera", "");
   vul_arg<vcl_string> label_file("-label", "xml file with labeled polygons", "");
+  vul_arg<vcl_string> category_file("-cat", "category file for transferring labelme type to land id", "");
   vul_arg<vcl_string> out("-out", "folder which has the output tiles", "");
   vul_arg<unsigned> thres("-t", "threshold to count # of pixels less than", 127);
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
-  if (out().compare("") == 0 || poly_in().compare("") == 0 || cam_file().compare("") == 0 || label_file().compare("") == 0) {
+  if (out().compare("") == 0 || poly_in().compare("") == 0 || cam_file().compare("") == 0 || label_file().compare("") == 0 || category_file().compare("") == 0) {
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -31,7 +32,7 @@ int main(int argc,  char** argv)
 
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
-  if (!volm_io::read_labelme(label_file(), dm, img_category)) {
+  if (!volm_io::read_labelme(label_file(), category_file(), dm, img_category)) {
     vcl_cerr << "problem parsing: " << label_file() << '\n';
     return volm_io::LABELME_FILE_IO_ERROR;
   }

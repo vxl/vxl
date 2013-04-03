@@ -21,6 +21,7 @@
 
 volm_query::volm_query(volm_camera_space_sptr cam_space,
                        vcl_string const& label_xml_file,
+                       vcl_string const& category_file,
                        volm_spherical_container_sptr const& sph,
                        volm_spherical_shell_container_sptr const& sph_shell)
 : cam_space_(cam_space), invalid_((unsigned char)255), sph_depth_(sph), sph_(sph_shell)
@@ -32,7 +33,7 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
   // load the labelme xml to define depth_map_scene and associated default value of camera parameters
   dm_ = new depth_map_scene;
   vcl_string img_category;
-  volm_io::read_labelme(label_xml_file, dm_, img_category);
+  volm_io::read_labelme(label_xml_file, category_file, dm_, img_category);
   // the dimensions of the depth image
   ni_ = dm_->ni();
   nj_ = dm_->nj();
@@ -171,13 +172,17 @@ volm_query::volm_query(vcl_string const& query_file, volm_camera_space_sptr cam_
                        volm_spherical_container_sptr const& sph)
 : cam_space_(cam_space), invalid_((unsigned char)255), sph_depth_(sph), sph_(sph_shell)
 {
+  
   //the discrete rays defined on the sphere as x, y, z
+  vcl_cout << "depth_map_scene_file = " << depth_map_scene_file << vcl_endl;
+
   query_points_ = sph_->cart_points();
   query_size_ = (unsigned)query_points_.size();
-
+  
   // load the depth_map_scene from depth_map_scene binary
   dm_ = new depth_map_scene;
   vsl_b_ifstream dis(depth_map_scene_file.c_str());
+  
   dm_->b_read(dis);
   dis.close();
   // the dimensions of the depth image

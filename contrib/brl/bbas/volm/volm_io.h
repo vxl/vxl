@@ -55,6 +55,19 @@ class volm_label_table
   static unsigned compute_number_of_labels();
 };
 
+//: A class to transfer bae labeled object category to volm_label_table and orientation
+class volm_category_attribute
+{
+ public:
+  volm_category_attribute() : lnd_("invalid"), ori_("porous"), is_active_(0) {}
+  volm_category_attribute(vcl_string lnd, vcl_string ori, unsigned is_active) : lnd_(lnd), ori_(ori), is_active_(is_active) {}
+  static void read_category(vcl_map<vcl_string, volm_category_attribute> & category_table, vcl_string fname);
+  vcl_string lnd_;
+  vcl_string ori_;
+  unsigned is_active_;
+};
+
+
 //: A class to hold the fallback categories for the labelled landtype id
 class volm_fallback_label
 {
@@ -93,7 +106,7 @@ class volm_io
 {
  public:
   //: warning: always add to the end of this error code list, python script on the server has a hard copy of some of these values, they should not be changed
-  enum VOLM_ERROR_CODES {SUCCESS, EXE_ARGUMENT_ERROR, EXE_RUNNING, CAM_FILE_IO_ERROR, MATCHER_EXE_STARTED, MATCHER_EXE_FINISHED, MATCHER_EXE_FAILED, COMPOSE_STARTED, DEPTH_SCENE_FILE_IO_ERROR, LABELME_FILE_IO_ERROR, GEO_INDEX_FILE_MISSING, SCORE_FILE_MISSING, EXE_STARTED, EXE_MATCHER_FAILED, COMPOSE_HALT, POST_PROCESS_HALT};
+  enum VOLM_ERROR_CODES {SUCCESS, EXE_ARGUMENT_ERROR, EXE_RUNNING, CAM_FILE_IO_ERROR, MATCHER_EXE_STARTED, MATCHER_EXE_FINISHED, MATCHER_EXE_FAILED, COMPOSE_STARTED, DEPTH_SCENE_FILE_IO_ERROR, LABELME_FILE_IO_ERROR, GEO_INDEX_FILE_MISSING, SCORE_FILE_MISSING, EXE_STARTED, EXE_MATCHER_FAILED, COMPOSE_HALT, PRE_PROCESS_STARTED, PRE_PROCESS_FAILED, PRE_PROCESS_FINISHED, POST_PROCESS_HALT};
 
   //: scale value is STRONG_POSITIVE-STRONG_NEGATIVE
   enum VOLM_IMAGE_CODES {UNEVALUATED = 0, STRONG_NEGATIVE = 1, UNKNOWN = 127, STRONG_POSITIVE = 255, SCALE_VALUE = 254};
@@ -114,7 +127,7 @@ class volm_io
                           double& top_fov,   double& top_fov_dev,
                           double& altitude, double& lat, double& lon);
 
-  static bool read_labelme(vcl_string xml_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category);
+  static bool read_labelme(vcl_string xml_file, vcl_string category_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category);
 
   //: piecewise linear s.t. [1,127) -> [0,t), [127,255] -> [t,1]
   static float scale_score_to_0_1(unsigned char pix_value, float threshold);

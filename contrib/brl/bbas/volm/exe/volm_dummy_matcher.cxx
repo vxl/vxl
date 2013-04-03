@@ -14,12 +14,13 @@ int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> cam_file("-cam", "cam kml filename", "");
   vul_arg<vcl_string> label_file("-label", "xml file with labeled polygons", "");
+  vul_arg<vcl_string> category_file("-cat", "category file for transferring labelme type to land id", "");
   vul_arg<vcl_string> out_folder("-out", "output folder", "");
   vul_arg<bool> save_images("-save", "save out images or not", false);
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
-  if (cam_file().compare("") == 0 || label_file().compare("") == 0 || out_folder().compare("") == 0) {
+  if (cam_file().compare("") == 0 || label_file().compare("") == 0 || out_folder().compare("") == 0 || category_file().compare("") == 0) {
     vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     vul_arg_display_usage_and_exit();
@@ -29,7 +30,7 @@ int main(int argc,  char** argv)
   // check the query input file
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
-  if (!volm_io::read_labelme(label_file(), dm, img_category)) {
+  if (!volm_io::read_labelme(label_file(), category_file(), dm, img_category)) {
     volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR);
   }
 
