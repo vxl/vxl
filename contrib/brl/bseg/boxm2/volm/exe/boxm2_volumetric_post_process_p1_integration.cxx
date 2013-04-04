@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 
   // load depth map scene
   if (!vul_file::exists(label_xml()) || vul_file::exists(category_file())) {
-    log << "EXE_ARGUMENT_ERROR!\n";  vcl_cerr << log.str();
+    log << "EXE_ARGUMENT_ERROR! can not find labelme xml / category file\n";  vcl_cerr << log.str();
     volm_io::write_composer_log(out(), log.str());
     volm_io::write_status(out(), volm_io::EXE_ARGUMENT_ERROR, 100);
     return volm_io::EXE_ARGUMENT_ERROR;
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
   if (!volm_io::read_labelme(label_xml(), category_file(), dm, img_category)) {
-    log << "EXE_ARGUMENT_ERROR!\n";  vcl_cerr << log.str();
+    log << "EXE_ARGUMENT_ERROR! parsing label me file failed\n";  vcl_cerr << log.str();
     volm_io::write_composer_log(out(), log.str());
     volm_io::write_status(out(), volm_io::LABELME_FILE_IO_ERROR, 100);
     return volm_io::LABELME_FILE_IO_ERROR;
