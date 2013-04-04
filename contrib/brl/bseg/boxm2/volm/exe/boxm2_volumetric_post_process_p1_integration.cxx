@@ -15,7 +15,6 @@
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <vil/vil_save.h>
-#include <vil/vil_load.h>
 #include <vcl_set.h>
 #include <vcl_ios.h>
 #include <bkml/bkml_write.h>
@@ -30,7 +29,7 @@ inline float minimum(const float& v1, const float& v2)
 int main(int argc, char** argv)
 {
   vul_arg<vcl_string> label_xml("-label", "labelme kml file", "");
-  vul_arg<vcl_string> category_file("-cat", "category file for transferring labled type to land id", "");
+  vul_arg<vcl_string> category_file("-cat", "category file for transferring labeled type to land id", "");
   vul_arg<vcl_string> geo_hypo_folder_a("-hypoa", "hypo folder for utm zone 17", "");
   vul_arg<vcl_string> geo_hypo_folder_b("-hypob", "hypo folder for utm zone 18", "");
   vul_arg<vcl_string> out("-out", "job output folder", "");
@@ -60,7 +59,7 @@ int main(int argc, char** argv)
     volm_io::write_status(out(), volm_io::EXE_ARGUMENT_ERROR, 100);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
+
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
   if (!volm_io::read_labelme(label_xml(), category_file(), dm, img_category)) {
@@ -94,7 +93,8 @@ int main(int argc, char** argv)
     vcl_string geo_hypo_folder;
     if (tile_id < 8 && tile_id != 5) {
       zone_id = 17;  geo_hypo_folder = geo_hypo_folder_a();
-    } else {
+    }
+    else {
       zone_id = 18;  geo_hypo_folder = geo_hypo_folder_b();
     }
     // load associate geo_hypo
@@ -174,7 +174,8 @@ int main(int argc, char** argv)
     vcl_string geo_hypo_folder;
     if (tile_id < 8 && tile_id != 5) {
       zone_id = 17;  geo_hypo_folder = geo_hypo_folder_a();
-    } else {
+    }
+    else {
       zone_id = 18;  geo_hypo_folder = geo_hypo_folder_b();
     }
     // load associate geo_hypo
@@ -224,7 +225,7 @@ int main(int argc, char** argv)
 
   // calculate roi based on maximum score
   float max_score_all = 0;
-  for(vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
+  for (vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
     for (vcl_vector<float>::iterator vit = mit->second.begin(); vit != mit->second.end(); ++vit)
       if (max_score_all < *vit) max_score_all = *vit;
   }
@@ -306,11 +307,11 @@ int main(int argc, char** argv)
   vcl_string eoi_file = out() + "/roi_result_max_score.txt";
   vcl_ofstream fout(eoi_file.c_str());
   fout << "  test_id      gt_loc_score      total_locs                                       thresholds\n"
-       << "----------------------------------------------------------------------------------------------------------------------------\n";
-  fout << "                                        ";
+       << "----------------------------------------------------------------------------------------------------------------------------\n"
+       << "                                        ";
   fout.setf(vcl_ios_right);
   for (vcl_vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
-    fout.precision(6); fout.width(13); fout.fill(' '); 
+    fout.precision(6); fout.width(13); fout.fill(' ');
     fout << *vit;
   }
   fout << '\n';
@@ -330,7 +331,7 @@ int main(int argc, char** argv)
   fout << "\n----------------------------------------------------------------------------------------------------------------------------\n";
   fout.close();
 
-  
+
   // generate top 30 BestCamera.kml
   // load camera space
   vcl_string cam_bin = out() + "/camera_space.bin";
@@ -353,7 +354,7 @@ int main(int argc, char** argv)
   // key-score -- pair.first--cam_id, pair.second -- locs
   vcl_map<float, vcl_pair<unsigned, vgl_point_3d<double> > > score_map_all;
   for (vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
-    for(unsigned ii = 0; ii < mit->second.size(); ii++) {
+    for (unsigned ii = 0; ii < mit->second.size(); ii++) {
       vcl_pair<float, vcl_pair<unsigned, vgl_point_3d<double> > > pair_out;
       vcl_pair<unsigned, vgl_point_3d<double> > pair_in;
       pair_in.first = max_cameras[mit->first][ii];  pair_in.second = max_locs[mit->first][ii];
@@ -366,7 +367,7 @@ int main(int argc, char** argv)
   vcl_ofstream ofs_log(log_fname.c_str());
   unsigned cnt = 30;
   vcl_map<float, vcl_pair<unsigned, vgl_point_3d<double> > >::iterator mit_all = score_map_all.end();
-  while(cnt) {
+  while (cnt) {
     --mit_all; --cnt;
 
     cam_angles cam_ang = cam_space->camera_angles(mit_all->second.first);
@@ -396,25 +397,24 @@ int main(int argc, char** argv)
                                     << ' ' << vcl_setprecision(8) << mit_all->second.second.x()
                                     << ' ' << vcl_setprecision(8) << head << "    0\n";
 
-    vcl_cout << " top " << (29-cnt) << '(' << cnt << ") " << " score = " << mit_all->first << ", cam = " << mit_all->second.first << ", loc = " << mit_all->second.second << vcl_endl;
+    vcl_cout << " top " << (29-cnt) << '(' << cnt << ") " << " score = " << mit_all->first
+             << ", cam = " << mit_all->second.first << ", loc = " << mit_all->second.second << vcl_endl;
   }
   ofs_log.close();
   // screen output here ...
-  /*for (vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
-    vcl_cout << " for tile " << mit->first << ")\n";
-    vcl_cout << "\t 1st max = " << mit->second[0] << " --- cam = " << max_cameras[mit->first][0] << " --- locs = " << max_locs[mit->first][0] << '\n';
-    vcl_cout << "\t 2nd max = " << mit->second[1] << " --- cam = " << max_cameras[mit->first][1] << " --- locs = " << max_locs[mit->first][1] << '\n';
-    vcl_cout << "\t 3rd max = " << mit->second[2] << " --- cam = " << max_cameras[mit->first][2] << " --- locs = " << max_locs[mit->first][2] << vcl_endl;
+#if 0
+  for (vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
+    vcl_cout << " for tile " << mit->first << ")\n"
+             << "\t 1st max = " << mit->second[0] << " --- cam = " << max_cameras[mit->first][0] << " --- locs = " << max_locs[mit->first][0] << '\n'
+             << "\t 2nd max = " << mit->second[1] << " --- cam = " << max_cameras[mit->first][1] << " --- locs = " << max_locs[mit->first][1] << '\n'
+             << "\t 3rd max = " << mit->second[2] << " --- cam = " << max_cameras[mit->first][2] << " --- locs = " << max_locs[mit->first][2] << vcl_endl;
   }
-  vcl_cout << " --------------- combined map --------------- " << vcl_endl;
+  vcl_cout << " --------------- combined map ---------------" << vcl_endl;
   unsigned cnt_temp = 0;
   for (vcl_map<float, vcl_pair<unsigned, vgl_point_3d<double> > >::iterator mit_all = score_map_all.begin(); mit_all != score_map_all.end(); ++mit_all) {
     vcl_cout << " top " << cnt_temp++ << " score = " << mit_all->first << ", cam = " << mit_all->second.first << ", loc = " << mit_all->second.second << vcl_endl;
-  }*/
-
-  
-
-
+  }
+#endif
 
 #if 0
   // generate top 30 BestCamera.kml
@@ -437,32 +437,29 @@ int main(int argc, char** argv)
     pair_out.first = mit->first;
     pair_out.second = map_in;
     score_map_all.insert(pair_out);
-    for(unsigned i = 0; i < mit->second.size(); i++)
+    for (unsigned i = 0; i < mit->second.size(); i++)
       score_set_all.insert(mit->second[i]);
     ++mit_locs;
     ++mit_cams;
   }
   // obtain the top 30
-  /*vcl_map<float, vcl_map<unsigned, vgl_point_3d<double> > > top_thrity_locs;
+  vcl_map<float, vcl_map<unsigned, vgl_point_3d<double> > > top_thrity_locs;
   for (vcl_set<float>::iterator sit = score_set_all.begin(); sit != score_set_all.end(); ++sit) {
     float socre = *sit;
     for (
-  }*/
-
+  }
 
   for (; mit_all != score_map_all.end(); ++mit_all) {
     vcl_cout << " for tile " << mit_all->first << '\n';
     vcl_map<vcl_vector<float>, vcl_pair<vcl_vector<unsigned>, vcl_vector<vgl_point_3d<double> > > >::iterator mit_in = mit_all->second.begin();
     for (; mit_in != mit_all->second.end(); ++mit_in) {
-      vcl_cout << "\t 1st max = " << mit_in->first[0] << " --> cam = " << mit_in->second.first[0] << " --> loc = " << mit_in->second.second[0] << '\n';
-      vcl_cout << "\t 2nd max = " << mit_in->first[1] << " --> cam = " << mit_in->second.first[1] << " --> loc = " << mit_in->second.second[1] << '\n';
-      vcl_cout << "\t 3rd max = " << mit_in->first[2] << " --> cam = " << mit_in->second.first[2] << " --> loc = " << mit_in->second.second[2] << '\n';
+      vcl_cout << "\t 1st max = " << mit_in->first[0] << " --> cam = " << mit_in->second.first[0] << " --> loc = " << mit_in->second.second[0] << '\n'
+               << "\t 2nd max = " << mit_in->first[1] << " --> cam = " << mit_in->second.first[1] << " --> loc = " << mit_in->second.second[1] << '\n'
+               << "\t 3rd max = " << mit_in->first[2] << " --> cam = " << mit_in->second.first[2] << " --> loc = " << mit_in->second.second[2] << '\n';
     }
   }
 #endif
 
-
   volm_io::write_status(out(), volm_io::SUCCESS,100);
   return volm_io::SUCCESS;
-
 }
