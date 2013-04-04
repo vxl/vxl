@@ -22,6 +22,9 @@ TARGET_LINK_LIBRARIES( boxm2_volumetric_render_index_depth_img boxm2_volm vbl vg
 ADD_EXECUTABLE( boxm2_volumetric_pre_process_p1_integration boxm2_volumetric_pre_process_p1_integration.cxx )
 TARGET_LINK_LIBRARIES( boxm2_volumetric_pre_process_p1_integration boxm2_volm vbl vgl volm )
 
+ADD_EXECUTABLE( boxm2_volumetric_post_process_p1_integration boxm2_volumetric_post_process_p1_integration.cxx )
+TARGET_LINK_LIBRARIES( boxm2_volumetric_post_process_p1_integration boxm2_volm vbl vgl volm )
+
 IF(OPENCL_FOUND)
 
 ADD_EXECUTABLE( boxm2_volumetric_matcher_p0 boxm2_volumetric_matcher_p0.cxx)
