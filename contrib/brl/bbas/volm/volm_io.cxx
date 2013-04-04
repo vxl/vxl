@@ -382,8 +382,6 @@ bool volm_io::read_labelme(vcl_string xml_file, vcl_string category_file, depth_
   vcl_vector<int>& object_orders = parser.obj_depth_orders();
   vcl_vector<float>& object_mindist = parser.obj_mindists();
   vcl_vector<float>& object_maxdist = parser.obj_maxdists();
-  vcl_vector<vcl_string>& object_orient = parser.obj_orientations();
-  vcl_vector<unsigned>& object_nlcd = parser.obj_nlcd_ids();
   if (polys.size() != object_names.size()   ||
       polys.size() != object_types.size()   ||
       polys.size() != object_maxdist.size() ||
