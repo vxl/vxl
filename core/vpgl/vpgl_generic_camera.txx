@@ -120,8 +120,8 @@ nearest_ray_to_point(vgl_point_3d<T> const& p,
     start_r = 2*nearest_r-1; start_c = 2*nearest_c-1;
     end_r = start_r + 2; end_c = start_c +2;
     // check if the image sizes are odd, so search range is extended
-    if (lev ==1&&nr_[0]%2!=0) end_r++;
-    if (lev ==1&&nc_[0]%2!=0) end_c++;
+    if ( (lev > 0) && (nr_[lev-1]%2 != 0) ) end_r++;
+    if ( (lev > 0) && (nc_[lev-1]%2 != 0) ) end_c++;
   }
 }
 
