@@ -455,7 +455,7 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, 
     case volm_io::EXE_ARGUMENT_ERROR:
       file << "Error in executable arguments\n<percent>0</percent>\n"; break;
     case volm_io::SUCCESS:
-      file << "Completed Successfully\n<percent>100</percent>\n"; break;
+      file << "Post Process Completed Successfully, rendering the rationale image\n<percent>95</percent>\n"; break;
     case volm_io::MATCHER_EXE_STARTED:
       file << "Matcher Exe Started\n<percent>0</percent>\n"; break;
     case volm_io::MATCHER_EXE_FINISHED:

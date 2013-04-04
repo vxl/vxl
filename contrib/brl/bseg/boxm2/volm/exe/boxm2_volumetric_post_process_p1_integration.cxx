@@ -15,21 +15,16 @@
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <vil/vil_save.h>
+#include <vil/vil_load.h>
 #include <vcl_set.h>
 #include <vcl_ios.h>
 #include <bkml/bkml_write.h>
 
 
-inline float minimum(const float& v1, const float& v2)
-{
-  return (v1 > v2) ? v2 : v1;
-}
-
-
 int main(int argc, char** argv)
 {
   vul_arg<vcl_string> label_xml("-label", "labelme kml file", "");
-  vul_arg<vcl_string> category_file("-cat", "category file for transferring labeled type to land id", "");
+  vul_arg<vcl_string> category_file("-cat", "category file for transferring labled type to land id", "");
   vul_arg<vcl_string> geo_hypo_folder_a("-hypoa", "hypo folder for utm zone 17", "");
   vul_arg<vcl_string> geo_hypo_folder_b("-hypob", "hypo folder for utm zone 18", "");
   vul_arg<vcl_string> out("-out", "job output folder", "");
@@ -47,31 +42,30 @@ int main(int argc, char** argv)
       log << "EXE_ARGUMENT_ERROR!\n";
       vcl_cerr << log.str();
       volm_io::write_composer_log(out(), log.str());
-      volm_io::write_status(out(), volm_io::EXE_ARGUMENT_ERROR, 100);
+      volm_io::write_status(out(), volm_io::EXE_ARGUMENT_ERROR, 95);
       vul_arg_display_usage_and_exit();
       return volm_io::EXE_ARGUMENT_ERROR;
   }
-
   // load depth map scene
   if (!vul_file::exists(label_xml()) || !vul_file::exists(category_file())) {
     log << "EXE_ARGUMENT_ERROR! can not find labelme xml / category file\n";  vcl_cerr << log.str();
     volm_io::write_composer_log(out(), log.str());
-    volm_io::write_status(out(), volm_io::EXE_ARGUMENT_ERROR, 100);
+    volm_io::write_status(out(), volm_io::EXE_ARGUMENT_ERROR, 95);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-
+  
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
   if (!volm_io::read_labelme(label_xml(), category_file(), dm, img_category)) {
     log << "EXE_ARGUMENT_ERROR! parsing label me file failed\n";  vcl_cerr << log.str();
     volm_io::write_composer_log(out(), log.str());
-    volm_io::write_status(out(), volm_io::LABELME_FILE_IO_ERROR, 100);
+    volm_io::write_status(out(), volm_io::LABELME_FILE_IO_ERROR, 95);
     return volm_io::LABELME_FILE_IO_ERROR;
   }
   if (img_category == "desert") {
     log << "ERROR: current matcher works only on coast\n";  vcl_cerr << log.str();
     volm_io::write_composer_log(out(), log.str());
-    volm_io::write_status(out(), volm_io::LABELME_FILE_IO_ERROR, 100);
+    volm_io::write_status(out(), volm_io::LABELME_FILE_IO_ERROR, 95);
     return volm_io::LABELME_FILE_IO_ERROR;
   }
 
@@ -93,8 +87,7 @@ int main(int argc, char** argv)
     vcl_string geo_hypo_folder;
     if (tile_id < 8 && tile_id != 5) {
       zone_id = 17;  geo_hypo_folder = geo_hypo_folder_a();
-    }
-    else {
+    } else {
       zone_id = 18;  geo_hypo_folder = geo_hypo_folder_b();
     }
     // load associate geo_hypo
@@ -131,7 +124,7 @@ int main(int argc, char** argv)
 
   // save the probmap
   for (unsigned i = 0; i < tiles.size(); i++) {
-    vcl_string img_name = out() + "/ProbMap_" + tiles[i].get_string() + ".tif";
+    vcl_string img_name = out() + "/ProbMap_float_" + tiles[i].get_string() + ".tif";
     vil_save(tile_imgs[i], img_name.c_str());
   }
 
@@ -174,8 +167,7 @@ int main(int argc, char** argv)
     vcl_string geo_hypo_folder;
     if (tile_id < 8 && tile_id != 5) {
       zone_id = 17;  geo_hypo_folder = geo_hypo_folder_a();
-    }
-    else {
+    } else {
       zone_id = 18;  geo_hypo_folder = geo_hypo_folder_b();
     }
     // load associate geo_hypo
@@ -225,16 +217,17 @@ int main(int argc, char** argv)
 
   // calculate roi based on maximum score
   float max_score_all = 0;
-  for (vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
+  for(vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
     for (vcl_vector<float>::iterator vit = mit->second.begin(); vit != mit->second.end(); ++vit)
       if (max_score_all < *vit) max_score_all = *vit;
   }
   vcl_vector<double> thresholds;
   float ds = 0.1f * max_score_all;
-  for (int i = -3; i < 0; i++)
-    thresholds.push_back(max_score_all + ds*i);
-  thresholds.push_back(0.95*max_score_all);
-  thresholds.push_back(max_score_all);
+  thresholds.push_back(max_score_all - ds*3);
+  //for (int i = -3; i < 0; i++)
+  //  thresholds.push_back(max_score_all + ds*i);
+  //thresholds.push_back(0.95*max_score_all);
+  //thresholds.push_back(max_score_all);
   //  cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
   vcl_map<float, vcl_vector<unsigned> > cnt_map;
   for (vcl_vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
@@ -272,16 +265,7 @@ int main(int argc, char** argv)
   }
   score_roi.push_back((float)cnt_map.begin()->second[1]);
 
-#if 0
-  // create folder for different thresholds,
-  vcl_vector<vcl_string> prob_thres_folders;
-  for (vcl_vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
-    vcl_stringstream folder_name;
-    float pre = *vit/max_score_all;
-    folder_name << out() << "/ProbMap_scaled_" << *vit;
-    vul_file::make_directory(folder_name.str());
-    prob_thres_folders.push_back(folder_name.str());
-  }
+#if 1
   // create png tile images for different thresholds, only generate png tile prob_map with thres smaller than ground truth score
   for (unsigned ti = 0; ti < tiles.size(); ++ti) {
     vil_image_view<float> tile_img = tile_imgs[ti];
@@ -298,7 +282,7 @@ int main(int argc, char** argv)
         }
       }
       // save the image
-      vcl_string out_png_name = prob_thres_folders[cnt++] + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";
+      vcl_string out_png_name = out() + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";
       vil_save(out_png, out_png_name.c_str());
     }
   }
@@ -307,11 +291,11 @@ int main(int argc, char** argv)
   vcl_string eoi_file = out() + "/roi_result_max_score.txt";
   vcl_ofstream fout(eoi_file.c_str());
   fout << "  test_id      gt_loc_score      total_locs                                       thresholds\n"
-       << "----------------------------------------------------------------------------------------------------------------------------\n"
-       << "                                        ";
+       << "----------------------------------------------------------------------------------------------------------------------------\n";
+  fout << "                                        ";
   fout.setf(vcl_ios_right);
   for (vcl_vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
-    fout.precision(6); fout.width(13); fout.fill(' ');
+    fout.precision(6); fout.width(13); fout.fill(' '); 
     fout << *vit;
   }
   fout << '\n';
@@ -331,14 +315,14 @@ int main(int argc, char** argv)
   fout << "\n----------------------------------------------------------------------------------------------------------------------------\n";
   fout.close();
 
-
+  
   // generate top 30 BestCamera.kml
   // load camera space
   vcl_string cam_bin = out() + "/camera_space.bin";
   if (!vul_file::exists(cam_bin)) {
     log << "ERROR: can not find camera_space binary: " << cam_bin << '\n';
     volm_io::write_composer_log(out(), log.str());
-    volm_io::write_status(out(), volm_io::CAM_FILE_IO_ERROR, 100);
+    volm_io::write_status(out(), volm_io::CAM_FILE_IO_ERROR, 95);
     return volm_io::CAM_FILE_IO_ERROR;
   }
   vsl_b_ifstream cam_ifs(cam_bin);
@@ -354,7 +338,7 @@ int main(int argc, char** argv)
   // key-score -- pair.first--cam_id, pair.second -- locs
   vcl_map<float, vcl_pair<unsigned, vgl_point_3d<double> > > score_map_all;
   for (vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
-    for (unsigned ii = 0; ii < mit->second.size(); ii++) {
+    for(unsigned ii = 0; ii < mit->second.size(); ii++) {
       vcl_pair<float, vcl_pair<unsigned, vgl_point_3d<double> > > pair_out;
       vcl_pair<unsigned, vgl_point_3d<double> > pair_in;
       pair_in.first = max_cameras[mit->first][ii];  pair_in.second = max_locs[mit->first][ii];
@@ -367,7 +351,7 @@ int main(int argc, char** argv)
   vcl_ofstream ofs_log(log_fname.c_str());
   unsigned cnt = 30;
   vcl_map<float, vcl_pair<unsigned, vgl_point_3d<double> > >::iterator mit_all = score_map_all.end();
-  while (cnt) {
+  while(cnt) {
     --mit_all; --cnt;
 
     cam_angles cam_ang = cam_space->camera_angles(mit_all->second.first);
@@ -388,7 +372,9 @@ int main(int argc, char** argv)
     kml_name << "matchimg_" << (29-cnt) << ".jpg";
     vcl_ofstream ofs_kml(cam_kml.str().c_str());
     bkml_write::open_document(ofs_kml);
-    bkml_write::write_photo_overlay(ofs_kml,kml_name.str(),mit_all->second.second.x(), mit_all->second.second.y(), 1.60, head, tilt, roll, tfov, rfov);
+    bkml_write::write_photo_overlay(ofs_kml,kml_name.str(),
+                                    mit_all->second.second.x(), mit_all->second.second.y(), mit_all->second.second.z(),
+                                    head, tilt, roll, tfov, rfov);
     bkml_write::close_document(ofs_kml);
     ofs_kml.close();
     //write the log file
@@ -397,69 +383,10 @@ int main(int argc, char** argv)
                                     << ' ' << vcl_setprecision(8) << mit_all->second.second.x()
                                     << ' ' << vcl_setprecision(8) << head << "    0\n";
 
-    vcl_cout << " top " << (29-cnt) << '(' << cnt << ") " << " score = " << mit_all->first
-             << ", cam = " << mit_all->second.first << ", loc = " << mit_all->second.second << vcl_endl;
+    vcl_cout << " top " << (29-cnt) << '(' << cnt << ") " << " score = " << mit_all->first << ", cam = " << mit_all->second.first << ", loc = " << mit_all->second.second << vcl_endl;
   }
   ofs_log.close();
-  // screen output here ...
-#if 0
-  for (vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
-    vcl_cout << " for tile " << mit->first << ")\n"
-             << "\t 1st max = " << mit->second[0] << " --- cam = " << max_cameras[mit->first][0] << " --- locs = " << max_locs[mit->first][0] << '\n'
-             << "\t 2nd max = " << mit->second[1] << " --- cam = " << max_cameras[mit->first][1] << " --- locs = " << max_locs[mit->first][1] << '\n'
-             << "\t 3rd max = " << mit->second[2] << " --- cam = " << max_cameras[mit->first][2] << " --- locs = " << max_locs[mit->first][2] << vcl_endl;
-  }
-  vcl_cout << " --------------- combined map ---------------" << vcl_endl;
-  unsigned cnt_temp = 0;
-  for (vcl_map<float, vcl_pair<unsigned, vgl_point_3d<double> > >::iterator mit_all = score_map_all.begin(); mit_all != score_map_all.end(); ++mit_all) {
-    vcl_cout << " top " << cnt_temp++ << " score = " << mit_all->first << ", cam = " << mit_all->second.first << ", loc = " << mit_all->second.second << vcl_endl;
-  }
-#endif
 
-#if 0
-  // generate top 30 BestCamera.kml
-  // combine everything
-  // key-tile_id, (key-score -- pair.first--cam_id, pair.second -- locs
-  vcl_map<unsigned, vcl_map<vcl_vector<float>, vcl_pair<vcl_vector<unsigned>, vcl_vector<vgl_point_3d<double> > > > > score_map_all;
-  vcl_set<float> score_set_all;
-
-  vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin();
-  vcl_map<unsigned, vcl_vector<vgl_point_3d<double> > >::iterator mit_locs = max_locs.begin();
-  vcl_map<unsigned, vcl_vector<unsigned> >::iterator mit_cams = max_cameras.begin();
-  for (; mit != max_scores.end(); ++mit) {
-    vcl_pair<unsigned, vcl_map<vcl_vector<float>, vcl_pair<vcl_vector<unsigned>, vcl_vector<vgl_point_3d<double> > > > > pair_out;
-    vcl_pair<vcl_vector<float>, vcl_pair<vcl_vector<unsigned>, vcl_vector<vgl_point_3d<double> > > >   pair_in;
-    pair_in.first = mit->second;
-    pair_in.second.first = mit_cams->second;
-    pair_in.second.second = mit_locs->second;
-    vcl_map<vcl_vector<float>, vcl_pair<vcl_vector<unsigned>, vcl_vector<vgl_point_3d<double> > > > map_in;
-    map_in.insert(pair_in);
-    pair_out.first = mit->first;
-    pair_out.second = map_in;
-    score_map_all.insert(pair_out);
-    for (unsigned i = 0; i < mit->second.size(); i++)
-      score_set_all.insert(mit->second[i]);
-    ++mit_locs;
-    ++mit_cams;
-  }
-  // obtain the top 30
-  vcl_map<float, vcl_map<unsigned, vgl_point_3d<double> > > top_thrity_locs;
-  for (vcl_set<float>::iterator sit = score_set_all.begin(); sit != score_set_all.end(); ++sit) {
-    float socre = *sit;
-    for (
-  }
-
-  for (; mit_all != score_map_all.end(); ++mit_all) {
-    vcl_cout << " for tile " << mit_all->first << '\n';
-    vcl_map<vcl_vector<float>, vcl_pair<vcl_vector<unsigned>, vcl_vector<vgl_point_3d<double> > > >::iterator mit_in = mit_all->second.begin();
-    for (; mit_in != mit_all->second.end(); ++mit_in) {
-      vcl_cout << "\t 1st max = " << mit_in->first[0] << " --> cam = " << mit_in->second.first[0] << " --> loc = " << mit_in->second.second[0] << '\n'
-               << "\t 2nd max = " << mit_in->first[1] << " --> cam = " << mit_in->second.first[1] << " --> loc = " << mit_in->second.second[1] << '\n'
-               << "\t 3rd max = " << mit_in->first[2] << " --> cam = " << mit_in->second.first[2] << " --> loc = " << mit_in->second.second[2] << '\n';
-    }
-  }
-#endif
-
-  volm_io::write_status(out(), volm_io::SUCCESS,100);
+  volm_io::write_status(out(), volm_io::SUCCESS, 95);
   return volm_io::SUCCESS;
 }
