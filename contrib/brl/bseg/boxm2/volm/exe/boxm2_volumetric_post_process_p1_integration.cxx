@@ -55,7 +55,7 @@ int main(int argc, char** argv)
   }
 
   // load depth map scene
-  if (!vul_file::exists(label_xml()) || vul_file::exists(category_file())) {
+  if (!vul_file::exists(label_xml()) || !vul_file::exists(category_file())) {
     log << "EXE_ARGUMENT_ERROR! can not find labelme xml / category file\n";  vcl_cerr << log.str();
     volm_io::write_composer_log(out(), log.str());
     volm_io::write_status(out(), volm_io::EXE_ARGUMENT_ERROR, 100);
