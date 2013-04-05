@@ -424,7 +424,7 @@ bool volm_io::read_labelme(vcl_string xml_file, vcl_string category_file, depth_
       depth_scene->add_sky(poly, 255, object_names[i]);
     // ground plane
     else if ( min_dist < 4 && (type == "beach" || type == "water" || type == "flat" || type == "road" || type == "grass" || type == "sand" ||
-                                        type == "dock") ) {
+                               type == "dock" || type == "street") ) {
       unsigned land_id = volm_label_table::land_id[volm_label_table::get_id_closest_name(category_table[type].lnd_)].id_;
       depth_scene->add_ground(poly, 0.0, 0.0, 0, name, land_id);
     }
