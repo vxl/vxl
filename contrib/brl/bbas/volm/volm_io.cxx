@@ -451,9 +451,9 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, 
   file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n";
   switch (status_code) {
     case volm_io::CAM_FILE_IO_ERROR:
-      file << "Camera FILE IO Error\n<percent>0</percent>\n"; break;
+      file << "Camera FILE IO Error\n<percent>100</percent>\n"; break;
     case volm_io::EXE_ARGUMENT_ERROR:
-      file << "Error in executable arguments\n<percent>0</percent>\n"; break;
+      file << "Error in executable arguments\n<percent>100</percent>\n"; break;
     case volm_io::SUCCESS:
       file << "Post Process Completed Successfully, rendering the rationale image\n<percent>95</percent>\n"; break;
     case volm_io::MATCHER_EXE_STARTED:
@@ -465,7 +465,7 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, 
     case volm_io::EXE_RUNNING:
       file << "Matcher Exe Running\n<percent>\n" << percent << "\n</percent>\n"; break;
     case volm_io::LABELME_FILE_IO_ERROR:
-      file << "LABELME FILE IO Error\n<percent>0</percent>\n"; break;
+      file << "LABELME FILE IO Error\n<percent>100</percent>\n"; break;
     case volm_io::COMPOSE_HALT:
       file << "COMPOSER waiting for matcher to complete\n<percent>90</percent>\n"; break;
     case volm_io::EXE_STARTED:
@@ -473,7 +473,7 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, 
     case volm_io::PRE_PROCESS_STARTED :
       file << "PREP exe started\n<percent>0</percent>\n"; break;
     case volm_io::PRE_PROCESS_FAILED :
-      file << "PREP exe failed\n<percent>0</percent>\n"; break;
+      file << "PREP exe failed\n<percent>100</percent>\n"; break;
     case volm_io::PRE_PROCESS_FINISHED :
       file << "PREP exe finished\n<percent>30</percent>\n"; break;
     default:
