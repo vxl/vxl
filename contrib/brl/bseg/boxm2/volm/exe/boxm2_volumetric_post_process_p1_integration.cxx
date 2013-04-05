@@ -101,7 +101,7 @@ int main(int argc, char** argv)
 
     // load the score binary
     vcl_stringstream score_file;
-    score_file << out() << "ps_1_scores_zone_" << zone_id << "_tile_" << tile_id << ".bin";
+    score_file << out() << "/ps_1_scores_zone_" << zone_id << "_tile_" << tile_id << ".bin";
     if (!vul_file::exists(score_file.str())) {
       vcl_cout << " WARNING: score file " << score_file.str() << " does not exist" << vcl_endl;
       continue;
@@ -138,7 +138,7 @@ int main(int argc, char** argv)
     if (i < 8 && i != 5) zone_id = 17;
     else                 zone_id = 18;
     vcl_stringstream score_file;
-    score_file << out() << "ps_1_scores_zone_" << zone_id << "_tile_" << i << ".bin";
+    score_file << out() << "/ps_1_scores_zone_" << zone_id << "_tile_" << i << ".bin";
     if (!vul_file::exists(score_file.str()))
       continue;
     vil_image_view<float> tile_img = tile_imgs[i];
@@ -180,7 +180,7 @@ int main(int argc, char** argv)
     volm_geo_index::get_leaves_with_hyps(root, leaves);
     // load the score binary
     vcl_stringstream score_file;
-    score_file << out() << "ps_1_scores_zone_" << zone_id << "_tile_" << tile_id << ".bin";
+    score_file << out() << "/ps_1_scores_zone_" << zone_id << "_tile_" << tile_id << ".bin";
     if (!vul_file::exists(score_file.str()))
       continue;
     vcl_vector<vgl_point_3d<double> > loc_vec;
