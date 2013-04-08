@@ -49,6 +49,7 @@ IF(EXPAT_FOUND)
     processes/bvxm_normalize_image_process.h          processes/bvxm_normalize_image_process.cxx
     processes/bvxm_roi_init_process.h                 processes/bvxm_roi_init_process.cxx
     processes/bvxm_heightmap_process.h                processes/bvxm_heightmap_process.cxx
+	processes/bvxm_heightmap_ortho_process.h          processes/bvxm_heightmap_ortho_process.cxx
     processes/bvxm_update_process.h                   processes/bvxm_update_process.cxx
     processes/bvxm_detect_changes_process.h           processes/bvxm_detect_changes_process.cxx
     processes/bvxm_save_occupancy_raw_process.h       processes/bvxm_save_occupancy_raw_process.cxx
