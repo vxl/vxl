@@ -32,7 +32,7 @@ DECLARE_FUNC_CONS(bvxm_create_mog_image_process);
 DECLARE_FUNC_CONS(bvxm_locate_region_process);
 DECLARE_FUNC_CONS(bvxm_get_grid_process);
 DECLARE_FUNC_CONS(bvxm_expected_edge_image_process);
-
+DECLARE_FUNC_CONS(bvxm_heightmap_ortho_process);
 
 //io
 DECLARE_FUNC_CONS(bvxm_save_occupancy_raw_process);
@@ -53,5 +53,6 @@ DECLARE_FUNC_CONS(bvxm_save_edges_raw_process);
 DECLARE_FUNC_CONS(bvxm_display_edge_tangent_world_vrml_process);
 DECLARE_FUNC_CONS(bvxm_report_statistics_point_cloud_process);
 DECLARE_FUNC_CONS(bvxm_estimate_camera_process);
+
 
 #endif
