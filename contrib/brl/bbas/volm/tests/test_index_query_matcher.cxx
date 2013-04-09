@@ -87,9 +87,10 @@ static void test_index_query_matcher()
 
     volm_spherical_region_query srq(dms, cam_space, sph);
     srq.print(vcl_cout);
-
+    vcl_map<vcl_string,vcl_string> filenames;
+    filenames["ORIENTATION"] = sph_index_file; 
     // index
-    volm_spherical_region_index region_index(sph_index_file,unit_sph_file);
+    volm_spherical_region_index region_index(filenames,unit_sph_file);
     volm_spherical_index_query_matcher matcher(region_index,srq,cam_space);
     matcher.match();
 
