@@ -214,9 +214,16 @@ refine_projection(int nearest_c, int nearest_r, vgl_point_3d<T> const& p,
   vgl_vector_3d<T> v0 = inter_pts[1]- p0;
   vgl_vector_3d<T> v1 = inter_pts[2]- p0;
   vgl_vector_3d<T> vp = p-p0;
-  // coordinates of p in the plane
-  T x0 = dot_product(v0, vp), x1 = dot_product(v1, vp);
-
+  // compute coordinates of p in the plane
+  T v0v0 = dot_product(v0,v0);
+  T v0v1 = dot_product(v0,v1);
+  T v1v1 = dot_product(v1,v1);
+  T one_over_det = static_cast<T>(1)/(v0v0*v1v1 - v0v1*v0v1);
+  // b0 and b1 are rows of coordinate transformation matrix
+  vgl_vector_3d<T> b0 = one_over_det * (v1v1*v0 - v0v1*v1); 
+  vgl_vector_3d<T> b1 = one_over_det * (v0v0*v1 - v0v1*v0); 
+  // x0,x1 are coordinates of p in the plane
+  T x0 = dot_product(b0, vp), x1 = dot_product(b1, vp);
   // in image space
   vgl_point_2d<T> ip0 = img_pts[0];
   vgl_vector_2d<T> iv0 = img_pts[1]-ip0;
