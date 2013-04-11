@@ -1,4 +1,6 @@
 #include "bpgl_camera_utils.h"
+//:
+// \file
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
@@ -17,7 +19,6 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_polygon.h>
 
 vpgl_perspective_camera<double> bpgl_camera_utils::
 camera_from_horizon(double focal_length, double principal_pt_u,
