@@ -11,6 +11,7 @@
 #include <bpgl/algo/bpgl_camera_from_box.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/util/boxm2_cams_and_box_to_scene.h>
+#include <bpgl/bpgl_camera_utils.h>
 namespace boxm2_scene_from_box_cams_process_globals
 {
   const unsigned n_inputs_ = 8;
@@ -59,7 +60,7 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
   // get the scene bounding box
   vgl_box_3d<double> box(vgl_point_3d<double>(xmin,ymin,zmin),
                          vgl_point_3d<double>(xmin+width,ymin+height,zmin+depth));
-  vcl_vector<vpgl_perspective_camera<double>* > ptrcams = boxm2_util::cameras_from_directory(camdir);
+  vcl_vector<vpgl_perspective_camera<double>* > ptrcams = bpgl_camera_utils::cameras_from_directory(camdir);
   vcl_vector<vpgl_perspective_camera<double> > cams;
   for(unsigned int i = 0 ; i < ptrcams.size(); i++)
       cams.push_back( * (ptrcams[i]) );

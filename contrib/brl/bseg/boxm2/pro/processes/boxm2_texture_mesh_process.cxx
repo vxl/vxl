@@ -26,6 +26,8 @@
 
 //vpgl camera stuff
 #include <vpgl/vpgl_perspective_camera.h>
+// for loading cameras from directory
+#include <bpgl/bpgl_camera_utils.h>
 
 //det and imesh includes
 #include <sdet/sdet_image_mesh.h>
@@ -197,7 +199,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
     vcl_string rel_path = vul_file::basename(full_path);
     allims[i] = rel_path;
   }
-  vcl_vector<vpgl_perspective_camera<double>* > allcams = boxm2_util::cameras_from_directory(cam_dir);
+  vcl_vector<vpgl_perspective_camera<double>* > allcams = bpgl_camera_utils::cameras_from_directory(cam_dir);
   if (allims.size() != allcams.size()) {
     vcl_cout<<"Texture images are not 1 to 1 with cameras:: dirs "<<im_dir<<" and "<<cam_dir<<vcl_endl;
     return;

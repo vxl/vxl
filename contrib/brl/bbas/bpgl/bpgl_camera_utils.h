@@ -44,6 +44,9 @@ class bpgl_camera_utils
                     double altitude, double heading,
                     double tilt, double roll);
 
+  // return a vector of cameras saved in the specified directory
+  static vcl_vector<vpgl_perspective_camera<double>* > cameras_from_directory(vcl_string dir);
+
   // the horizon line for a given camera
   static vgl_line_2d<double>
     horizon(vpgl_perspective_camera<double> const& cam);

@@ -1,6 +1,11 @@
 #include "bpgl_camera_utils.h"
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
+#include <vcl_algorithm.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -118,6 +123,46 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
            << "cam center " << cam.get_camera_center()<< '\n';
 #endif
   return cam;
+}
+
+//: returns a list of cameras from specified directory
+vcl_vector<vpgl_perspective_camera<double>* > bpgl_camera_utils::cameras_from_directory(vcl_string dir)
+{
+    vcl_vector<vpgl_perspective_camera<double>* > toReturn;
+    if (!vul_file::is_directory(dir.c_str()) ) {
+        vcl_cerr<<"Cam dir is not a directory\n";
+        return toReturn;
+    }
+
+    //get all of the cam and image files, sort them
+    vcl_string camglob=dir+"/*.txt";
+    vul_file_iterator file_it(camglob.c_str());
+    vcl_vector<vcl_string> cam_files;
+    while (file_it) {
+        vcl_string camName(file_it());
+        cam_files.push_back(camName);
+        ++file_it;
+    }
+    vcl_sort(cam_files.begin(), cam_files.end());
+
+    //take sorted lists and load from file
+    vcl_vector<vcl_string>::iterator iter;
+    for (iter = cam_files.begin(); iter != cam_files.end(); ++iter)
+    {
+        //load camera from file
+        vcl_ifstream ifs(iter->c_str());
+        vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
+        if (!ifs.is_open()) {
+            vcl_cerr << "Failed to open file " << *iter << '\n';
+            return toReturn;
+        }
+        else  {
+            ifs >> *pcam;
+        }
+
+        toReturn.push_back(pcam);
+    }
+    return toReturn;
 }
 
 // the horizon line is the cross product of the X and Y axis vanishing points

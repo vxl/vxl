@@ -8,7 +8,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_quaternion.h>
 #include <vul/vul_file_iterator.h>
-#include <boxm2/boxm2_util.h>
+#include <bpgl/bpgl_camera_utils.h>
 //: Init function
 bool vpgl_export_cameras_to_nvm_process_cons(bprb_func_process& pro)
 {
@@ -42,7 +42,7 @@ bool vpgl_export_cameras_to_nvm_process(bprb_func_process& pro)
 
   //populate vector of cameras
   //: returns a list of cameras from specified directory
-  vcl_vector<vpgl_perspective_camera<double> *> cams = boxm2_util::cameras_from_directory(cam_dir);
+  vcl_vector<vpgl_perspective_camera<double> *> cams = bpgl_camera_utils::cameras_from_directory(cam_dir);
 
   vcl_ofstream ofile(output_nvm.c_str());
   if(!ofile)
