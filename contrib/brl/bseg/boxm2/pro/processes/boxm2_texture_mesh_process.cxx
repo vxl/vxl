@@ -662,14 +662,12 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_pe
 {
   imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
 
-  
   unsigned nfaces = in_mesh.num_faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
   // iterate over each camera, creating a visibility image for each
   for (unsigned int i=0; i<cameras.size(); ++i)
   {
-
     //// get the principal point of the cam for image size
     vpgl_perspective_camera<double>* pcam = cameras[i];
 
@@ -685,12 +683,10 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_pe
     face_im->fill(-1); //initial face id is -1
     for (unsigned iface = 0; iface<nfaces; ++iface)
     {
-
       // get the vertices from the face, project into UVs
       double us[3], vs[3], dists[3];
 
       for (int vIdx=0; vIdx<3; ++vIdx) {
-        
         unsigned vertIdx = in_faces[iface][vIdx];
         // project these verts into UV
         double x = in_verts[vertIdx][0], y = in_verts[vertIdx][1], z = in_verts[vertIdx][2];
@@ -723,12 +719,13 @@ void boxm2_texture_mesh_process_globals::compute_norm_images( vcl_vector<vpgl_pe
   unsigned nfaces = in_mesh.num_faces();
 
   for (unsigned int i=0; i<vis_images_.size(); ++i) {
+#if 0
     // get the principal point/ni,nj
     vpgl_perspective_camera<double>* pcam = cameras[i];
-    //vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
-    //unsigned ni = (unsigned) (principal_point.x()*2.0);
-    //unsigned nj = (unsigned) (principal_point.y()*2.0);
-
+    vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
+    unsigned ni = (unsigned) (principal_point.x()*2.0);
+    unsigned nj = (unsigned) (principal_point.y()*2.0);
+#endif // 0
     // create a norm x,y, and z image for each visibility image
     vil_image_view<int>* vis = vis_images_[i];
     vil_image_view<float>* nx = new vil_image_view<float>(ni, nj);
