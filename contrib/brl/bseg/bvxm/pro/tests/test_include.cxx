@@ -21,6 +21,7 @@
 #include <bvxm/pro/processes/bvxm_expected_edge_image_process.h>
 #include <bvxm/pro/processes/bvxm_gen_synthetic_world_process.h>
 #include <bvxm/pro/processes/bvxm_get_grid_process.h>
+#include <bvxm/pro/processes/bvxm_heightmap_ortho_process.h>
 #include <bvxm/pro/processes/bvxm_heightmap_process.h>
 #include <bvxm/pro/processes/bvxm_illum_index_process.h>
 #include <bvxm/pro/processes/bvxm_lidar_edge_detection_process.h>
