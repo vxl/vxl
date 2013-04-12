@@ -237,6 +237,9 @@ SOURCE=.\processes/bvxm_expected_edge_functor.cxx
 SOURCE=.\processes/bvxm_atmospheric_corr_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_heightmap_ortho_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -397,6 +400,9 @@ SOURCE=.\processes/bvxm_expected_edge_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_atmospheric_corr_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_heightmap_ortho_process.h
 # End Source File
 # End Group
 # End Target
