@@ -6,6 +6,12 @@ IF(OPENCL_FOUND)
   INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
+  # some calls may be different for versions prior to 1.2 (e.g. clCreateImage2D)
+  OPTION(OPENCL_IS_PRE_V1.2 "OpenCL library version prior to 1.2" ON)
+  IF (OPENCL_IS_PRE_V1.2)
+    ADD_DEFINITIONS(-DOPENCL_IS_PRE_V12)
+  ENDIF(OPENCL_IS_PRE_V1.2)
+
   SET(bocl_sources
       bocl_manager.h      bocl_manager.txx  bocl_manager.cxx
       bocl_cl.h

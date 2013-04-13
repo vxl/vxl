@@ -73,10 +73,10 @@ bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_for
   cl_int status = MEM_FAILURE;
   //
   // NOTE: clCreateImage2D has been replaced with clCreateImage as of v1.2
-  // Should probably have a switch here based on OpenCL version present on system
-  // - D. Crispell 10/2012
+  // CMakeLists defines a switch based on OpenCL version present on system
+  // Even better would be for FindOpenCL.cmake to automatically figure this out.
+  // - D. Crispell 4/2013
   //
-#define OPENCL_IS_PRE_V12 1
 #if OPENCL_IS_PRE_V12 // use this call for versions prior to v1.2
   buffer_ = clCreateImage2D(this->context_, flags, format, width, height,
                             this->num_bytes_, this->cpu_buf_, &status);
