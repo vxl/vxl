@@ -24,7 +24,7 @@
 int main(int argc, char** argv)
 {
   vul_arg<vcl_string> label_xml("-label", "labelme kml file", "");
-  vul_arg<vcl_string> category_file("-cat", "category file for transferring labled type to land id", "");
+  vul_arg<vcl_string> category_file("-cat", "category file for transferring labeled type to land id", "");
   vul_arg<vcl_string> geo_hypo_folder_a("-hypoa", "hypo folder for utm zone 17", "");
   vul_arg<vcl_string> geo_hypo_folder_b("-hypob", "hypo folder for utm zone 18", "");
   vul_arg<vcl_string> out("-out", "job output folder", "");
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     volm_io::write_status(out(), volm_io::EXE_ARGUMENT_ERROR, 95);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
+
   depth_map_scene_sptr dm = new depth_map_scene;
   vcl_string img_category;
   if (!volm_io::read_labelme(label_xml(), category_file(), dm, img_category)) {
@@ -87,7 +87,8 @@ int main(int argc, char** argv)
     vcl_string geo_hypo_folder;
     if (tile_id < 8 && tile_id != 5) {
       zone_id = 17;  geo_hypo_folder = geo_hypo_folder_a();
-    } else {
+    }
+    else {
       zone_id = 18;  geo_hypo_folder = geo_hypo_folder_b();
     }
     // load associate geo_hypo
@@ -167,7 +168,8 @@ int main(int argc, char** argv)
     vcl_string geo_hypo_folder;
     if (tile_id < 8 && tile_id != 5) {
       zone_id = 17;  geo_hypo_folder = geo_hypo_folder_a();
-    } else {
+    }
+    else {
       zone_id = 18;  geo_hypo_folder = geo_hypo_folder_b();
     }
     // load associate geo_hypo
@@ -217,7 +219,7 @@ int main(int argc, char** argv)
 
   // calculate roi based on maximum score
   float max_score_all = 0;
-  for(vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
+  for (vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
     for (vcl_vector<float>::iterator vit = mit->second.begin(); vit != mit->second.end(); ++vit)
       if (max_score_all < *vit) max_score_all = *vit;
   }
@@ -258,7 +260,7 @@ int main(int argc, char** argv)
   vcl_vector<double> score_roi;
   score_roi.push_back(0.0f);
   for (vcl_map<float, vcl_vector<unsigned> >::iterator mit = cnt_map.begin();
-         mit != cnt_map.end(); ++mit)
+       mit != cnt_map.end(); ++mit)
   {
     double roi = 1.0 - (double)mit->second[0]/mit->second[1];
     score_roi.push_back(roi);
@@ -269,7 +271,6 @@ int main(int argc, char** argv)
   // create png tile images for different thresholds, only generate png tile prob_map with thres smaller than ground truth score
   for (unsigned ti = 0; ti < tiles.size(); ++ti) {
     vil_image_view<float> tile_img = tile_imgs[ti];
-    unsigned cnt = 0;
     for (vcl_vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
       vil_image_view<vxl_byte> out_png(tile_img.ni(), tile_img.nj());
       out_png.fill(volm_io::UNKNOWN);
@@ -291,11 +292,11 @@ int main(int argc, char** argv)
   vcl_string eoi_file = out() + "/roi_result_max_score.txt";
   vcl_ofstream fout(eoi_file.c_str());
   fout << "  test_id      gt_loc_score      total_locs                                       thresholds\n"
-       << "----------------------------------------------------------------------------------------------------------------------------\n";
-  fout << "                                        ";
+       << "----------------------------------------------------------------------------------------------------------------------------\n"
+       << "                                        ";
   fout.setf(vcl_ios_right);
   for (vcl_vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
-    fout.precision(6); fout.width(13); fout.fill(' '); 
+    fout.precision(6); fout.width(13); fout.fill(' ');
     fout << *vit;
   }
   fout << '\n';
@@ -315,7 +316,6 @@ int main(int argc, char** argv)
   fout << "\n----------------------------------------------------------------------------------------------------------------------------\n";
   fout.close();
 
-  
   // generate top 30 BestCamera.kml
   // load camera space
   vcl_string cam_bin = out() + "/camera_space.bin";
@@ -338,7 +338,7 @@ int main(int argc, char** argv)
   // key-score -- pair.first--cam_id, pair.second -- locs
   vcl_map<float, vcl_pair<unsigned, vgl_point_3d<double> > > score_map_all;
   for (vcl_map<unsigned, vcl_vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
-    for(unsigned ii = 0; ii < mit->second.size(); ii++) {
+    for (unsigned ii = 0; ii < mit->second.size(); ii++) {
       vcl_pair<float, vcl_pair<unsigned, vgl_point_3d<double> > > pair_out;
       vcl_pair<unsigned, vgl_point_3d<double> > pair_in;
       pair_in.first = max_cameras[mit->first][ii];  pair_in.second = max_locs[mit->first][ii];
@@ -351,7 +351,7 @@ int main(int argc, char** argv)
   vcl_ofstream ofs_log(log_fname.c_str());
   unsigned cnt = 30;
   vcl_map<float, vcl_pair<unsigned, vgl_point_3d<double> > >::iterator mit_all = score_map_all.end();
-  while(cnt) {
+  while (cnt) {
     --mit_all; --cnt;
 
     cam_angles cam_ang = cam_space->camera_angles(mit_all->second.first);
