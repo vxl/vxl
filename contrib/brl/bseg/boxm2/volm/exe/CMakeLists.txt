@@ -34,6 +34,6 @@ ADD_EXECUTABLE( boxm2_volumetric_matcher_p1 boxm2_volumetric_matcher_p1.cxx)
 TARGET_LINK_LIBRARIES( boxm2_volumetric_matcher_p1 boxm2_volm vbl vgl volm depth_map bvrml)
 
 ADD_EXECUTABLE( boxm2_volumetric_matcher_p1_integration boxm2_volumetric_matcher_p1_integration.cxx)
-TARGET_LINK_LIBRARIES( boxm2_volumetric_matcher_p1_integration boxm2_volm vbl vgl volm depth_map bvrml)
+TARGET_LINK_LIBRARIES( boxm2_volumetric_matcher_p1_integration boxm2_volm vbl vgl volm depth_map bvrml vpl)
 
 ENDIF(OPENCL_FOUND)
