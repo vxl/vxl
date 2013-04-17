@@ -292,6 +292,16 @@ vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
   return leafBits;
 }
 
+//returns the maximum depth of its elements
+int bstm_time_tree::max_depth(int rootBit) const
+{
+  int max_depth = 0;
+  vcl_vector<int> leaves = get_leaf_bits(0);
+  for(int i = 0; i < leaves.size(); i++)
+    max_depth = vcl_max(max_depth, depth_at(leaves[i]));
+  return max_depth;
+}
+
 //OLD DEPRECATED CODE
 #if 0
 //returns bit indices of leaf nodes under rootBit

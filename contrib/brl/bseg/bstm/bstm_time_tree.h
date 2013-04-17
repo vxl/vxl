@@ -105,6 +105,9 @@ class bstm_time_tree
   //: erase tree to only the root, retain the data ptr.
   void erase_cells();
 
+  //: return max depth of its leaves
+  int max_depth(int rootBit) const;
+
  private:
   //: Tree structure stored as "bits" = really a char array
   unsigned char* bits_;
