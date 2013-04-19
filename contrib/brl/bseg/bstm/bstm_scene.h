@@ -23,31 +23,6 @@
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
-//: block info that can be easily made into a buffer and sent to gpu
-struct bstm_scene_info
-{
-  //world information
-  float    scene_origin[4];          // scene origin (4d point)
-  int      scene_dims[4];            // number of blocks in each dimension
-  float    block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
-  float    time_block_len;           // dimension of the time axis
-  float    epsilon;                  // block_len/100.0 (placed here to avoid using a register)
-
-  // tree meta information
-  int      root_level;               // root_level of trees
-  int      num_buffer;               // number of buffers (both data and tree)
-  int      tree_buffer_length;       // length of tree buffer (number of cells/trees)
-  int      data_buffer_length;       // length of data buffer (number of cells)
-
-
-};
-
-class bstm_scene_info_wrapper : public vbl_ref_count
-{
-  public:
-  bstm_scene_info * info;
-};
-
 //: bstm_scene_scene: simple scene model that maintains (in world coordinates)
 //      - scene origin
 //      - number of blocks in each dimension
@@ -91,7 +66,6 @@ class bstm_scene : public vbl_ref_count
                           vgl_box_2d<double> camBox = vgl_box_2d<double>());
 
     //: return a heap pointer to a scene info
-    bstm_scene_info* get_blk_metadata(bstm_block_id id);
     bool block_exists(bstm_block_id id) const { return blocks_.find(id) != blocks_.end(); }
     bool block_on_disk(bstm_block_id id) const { return vul_file::exists( data_path_ + id.to_string() + ".bin"); }
     bool data_on_disk(bstm_block_id id, vcl_string data_type) {
@@ -110,10 +84,20 @@ class bstm_scene : public vbl_ref_count
 
     vcl_vector<bstm_block_id> get_block_ids() const;
 
+    //: returns the block ids of blocks that intersect the given bounding box at given time, as well as the local time
+    vcl_vector<bstm_block_id> get_block_ids(vgl_box_3d<double> bb, float time) const;
+
+
     //: gets a tight bounding box for the scene
     vgl_box_3d<double>      bounding_box() const;
     //: gets a tight bounding box for the scene
     vgl_box_3d<int>         bounding_box_blk_ids() const;
+
+    //: gets a tight bounding box for the scene
+    void      bounding_box_t(double& min_t, double& max_t) const;
+
+    //: gets a tight bounding box of the block ids
+    void      blocks_ids_bounding_box_t(unsigned& min_block_id, unsigned& max_block_id) const;
 
     // returns the dimesnsion of the scene grid where each grid element is a block
     vgl_vector_3d<unsigned int>   scene_dimensions() const;
@@ -121,14 +105,9 @@ class bstm_scene : public vbl_ref_count
     //: If a block contains a 3-d point, set the block id, else return false. The local coordinates of the point are also returned
     bool contains(vgl_point_3d<double> const& p, bstm_block_id& bid, vgl_point_3d<double>& local_coords, double const t, double& local_time) const;
 
-    //: returns bstm_block_id that contains specified time. The local coordinates of t is also returned
-    bool contains_t(double const t, bstm_block_id& bid, double& local_time) const;
+    //: returns the local time if t is contained in scene
+    bool local_time(double const t, double& local_time) const;
 
-    //: gets a tight bounding box for the scene
-    void      bounding_box_t(double& min_t, double& max_t) const;
-
-    //: gets a tight bounding box of the block ids
-    unsigned      blocks_ids_bounding_box_t() const;
 
     //: scene dimensions accessors
     vgl_point_3d<double>    local_origin()const { return local_origin_; }
@@ -191,10 +170,8 @@ class bstm_dist_id_pair
     }
 };
 
-
-//Smart_Pointer typedef for bstm_scene
 typedef vbl_smart_ptr<bstm_scene> bstm_scene_sptr;
-typedef vbl_smart_ptr<bstm_scene_info_wrapper> bstm_scene_info_wrapper_sptr;
+
 //: scene output stream operator
 vcl_ostream& operator<<(vcl_ostream &s, bstm_scene& scene);
 
@@ -214,18 +191,6 @@ void vsl_b_read(vsl_b_istream& is, bstm_scene &scene);
 void vsl_b_read(vsl_b_istream& is, bstm_scene* p);
 void vsl_b_read(vsl_b_istream& is, bstm_scene_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, bstm_scene_sptr const& sptr);
-
-//: Binary write bstm_scene scene to stream
-void vsl_b_write(vsl_b_ostream& os, bstm_scene_info_wrapper const& scene);
-void vsl_b_write(vsl_b_ostream& os, const bstm_scene_info_wrapper* &p);
-void vsl_b_write(vsl_b_ostream& os, bstm_scene_info_wrapper_sptr& sptr);
-void vsl_b_write(vsl_b_ostream& os, bstm_scene_info_wrapper_sptr const& sptr);
-
-//: Binary load bstm_scene scene from stream.
-void vsl_b_read(vsl_b_istream& is, bstm_scene_info_wrapper &scene);
-void vsl_b_read(vsl_b_istream& is, bstm_scene_info_wrapper* p);
-void vsl_b_read(vsl_b_istream& is, bstm_scene_info_wrapper_sptr& sptr);
-void vsl_b_read(vsl_b_istream& is, bstm_scene_info_wrapper_sptr const& sptr);
 
 
 #endif // bstm_scene_h_

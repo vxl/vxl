@@ -48,6 +48,7 @@ bstm_scene::bstm_scene(vcl_string filename)
                  << parser.XML_GetCurrentLineNumber() << '\n';
         return;
       }
+      vcl_fclose(xmlFile);
     }
 
     //store data path
@@ -65,6 +66,8 @@ bstm_scene::bstm_scene(vcl_string filename)
     //store list of appearances
     appearances_ = parser.appearances();
     version_ = parser.version();
+
+
 }
 
 
@@ -85,6 +88,26 @@ vcl_vector<bstm_block_id> bstm_scene::get_block_ids() const
   vcl_vector<bstm_block_id> block_ids;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
     block_ids.push_back(iter->first);
+  }
+  return block_ids;
+}
+
+vcl_vector<bstm_block_id> bstm_scene::get_block_ids(vgl_box_3d<double> bb, float time) const
+{
+  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  vcl_vector<bstm_block_id> block_ids;
+  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
+
+    vgl_point_3d<double>  blk_o = (iter->second).local_origin_;
+    vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_;
+    vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
+    vgl_vector_3d<double>   length(blk_dim.x()*blk_num.x(),
+                                   blk_dim.y()*blk_num.y(),
+                                   blk_dim.z()*blk_num.z());
+    vgl_box_3d<double> block_bb(blk_o,length.x(),length.y(),length.z(),vgl_box_3d<double>::min_pos);
+    double local_time;
+    if(!vgl_intersection(bb,block_bb).is_empty() && (iter->second).contains_t(time,local_time) )
+      block_ids.push_back(iter->first);
   }
   return block_ids;
 }
@@ -211,20 +234,19 @@ bool bstm_scene::contains(vgl_point_3d<double> const& p, bstm_block_id& bid,
     return false;
 }
 
-//: find the block containing the specified time, else return false
+
 //  Local coordinates are also returned
-bool bstm_scene::contains_t(double const t, bstm_block_id& bid, double& local_time) const
+bool bstm_scene::local_time(double const t,  double& local_time) const
 {
   vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
     if ((iter->second).contains_t(t,local_time))
-    {
-      bid = iter->first;
       return true;
-    }
+    
   }
   return false;
 }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //: save scene (xml file)
@@ -234,40 +256,6 @@ void bstm_scene::save_scene()
   vcl_ofstream xmlstrm(xml_path_.c_str());
   x_write(xmlstrm, (*this), "scene");
   xmlstrm.close();
-}
-
-//: return a heap pointer to a scene info
-bstm_scene_info* bstm_scene::get_blk_metadata(bstm_block_id id)
-{
-  if ( blocks_.find(id) == blocks_.end() )
-  {
-    vcl_cerr<<"\nbstm_scene::get_blk_metadata: Block doesn't exist: "<<id<<"\n\n";
-    return 0;
-  }
-
-  bstm_block_metadata data = blocks_[id];
-  bstm_scene_info* info = new bstm_scene_info();
-
-  info->scene_origin[0] = (float) data.local_origin_.x();
-  info->scene_origin[1] = (float) data.local_origin_.y();
-  info->scene_origin[2] = (float) data.local_origin_.z();
-  info->scene_origin[3] = (float) data.local_origin_t_;
-
-  info->scene_dims[0] = (int) data.sub_block_num_.x();  // number of blocks in each dimension
-  info->scene_dims[1] = (int) data.sub_block_num_.y();
-  info->scene_dims[2] = (int) data.sub_block_num_.z();
-  info->scene_dims[3] = (int) data.sub_block_num_t_;
-
-  info->block_len = (float) data.sub_block_dim_.x();
-  info->time_block_len = (float) data.sub_block_dim_t_;
-  info->epsilon   = (float) (info->block_len / 100.0f);
-
-  info->root_level = data.max_level_-1;
-  info->num_buffer = 0;
-  info->tree_buffer_length = 0;
-  info->data_buffer_length = 0;
-
-  return info;
 }
 
 void bstm_scene::bounding_box_t(double& min_t, double& max_t) const
@@ -288,21 +276,20 @@ void bstm_scene::bounding_box_t(double& min_t, double& max_t) const
 }
 
 //: gets a tight bounding box of the block ids
-unsigned  bstm_scene::blocks_ids_bounding_box_t() const
+void  bstm_scene::blocks_ids_bounding_box_t(unsigned& min_block_id, unsigned& max_block_id) const
 {
-  unsigned min_t_blk_id = vcl_numeric_limits<unsigned>::max() ;
-  unsigned max_t_blk_id = vcl_numeric_limits<unsigned>::min() ;
+  min_block_id = vcl_numeric_limits<unsigned>::max() ;
+  max_block_id = vcl_numeric_limits<unsigned>::min() ;
 
   vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
   {
-    if (iter->first.t_ < (int)min_t_blk_id)
-      min_t_blk_id = iter->first.t_;
+    if (iter->first.t_ < (int)min_block_id)
+      min_block_id = iter->first.t_;
 
-    if (iter->first.t_ > (int)max_t_blk_id)
-      max_t_blk_id = iter->first.t_;
+    if (iter->first.t_ > (int)max_block_id)
+      max_block_id = iter->first.t_;
   }
-  return max_t_blk_id - min_t_blk_id + 1;
 }
 
 
@@ -544,21 +531,5 @@ void vsl_b_read(vsl_b_istream& /*is*/, bstm_scene_sptr&) {}
 //: Binary load boxm scene smart pointer from stream.
 void vsl_b_read(vsl_b_istream& /*is*/, bstm_scene_sptr const&) {}
 
-//: Binary write bstm_scene_info_wrapper to stream
-void vsl_b_write(vsl_b_ostream& /*os*/, bstm_scene_info_wrapper const&) {}
-//: Binary write bstm_scene_info_wrapper pointer to stream
-void vsl_b_write(vsl_b_ostream& /*os*/, const bstm_scene_info_wrapper* &) {}
-//: Binary write bstm_scene_info_wrapper smart pointer to stream
-void vsl_b_write(vsl_b_ostream& /*os*/, bstm_scene_info_wrapper_sptr&) {}
-//: Binary write bstm_scene_info_wrapper smart pointer to stream
-void vsl_b_write(vsl_b_ostream& /*os*/, bstm_scene_info_wrapper_sptr const&) {}
 
-//: Binary load bstm_scene_info_wrapper from stream.
-void vsl_b_read(vsl_b_istream& /*is*/, bstm_scene_info_wrapper &) {}
-//: Binary load bstm_scene_info_wrapper pointer from stream.
-void vsl_b_read(vsl_b_istream& /*is*/, bstm_scene_info_wrapper*) {}
-//: Binary load bstm_scene_info_wrapper smart pointer from stream.
-void vsl_b_read(vsl_b_istream& /*is*/, bstm_scene_info_wrapper_sptr&) {}
-//: Binary load bstm_scene_info_wrapper smart pointer from stream.
-void vsl_b_read(vsl_b_istream& /*is*/, bstm_scene_info_wrapper_sptr const&) {}
 
