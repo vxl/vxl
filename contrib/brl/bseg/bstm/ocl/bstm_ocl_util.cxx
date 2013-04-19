@@ -237,6 +237,8 @@ vcl_string bstm_ocl_util::mog_options(vcl_string data_type)
     return "-D MOG_TYPE_8 ";
   else if ( data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix())
     return "-D MOG_VIEW_DEP ";
+  else if ( data_type == bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix())
+    return "-D MOG_VIEW_DEP_COLOR_COMPACT ";
   else
     return "";
 }
