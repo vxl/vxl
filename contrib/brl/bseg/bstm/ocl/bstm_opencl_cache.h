@@ -21,6 +21,8 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
+#include <bstm/ocl/bstm_scene_info.h>
+
 //: bstm_dumb_cache - example realization of abstract cache class
 class bstm_opencl_cache: public vbl_ref_count
 {
@@ -49,6 +51,7 @@ class bstm_opencl_cache: public vbl_ref_count
     //: get scene info in bocl_mem*
     bocl_mem* get_block_info(bstm_block_id id);
     bocl_mem* loaded_block_info() { return block_info_; }
+    bocl_mem* loaded_time_block_info() { return block_info_t_; }
 
     //: returns data pointer to data block specified by ID
     template<bstm_data_type T>
@@ -56,7 +59,7 @@ class bstm_opencl_cache: public vbl_ref_count
     bocl_mem* get_data(bstm_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
 
     template<bstm_data_type T>
-        bocl_mem* get_data_new(bstm_block_id, vcl_size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data_new(bstm_block_id, vcl_size_t num_bytes=0, bool read_only = true);
     bocl_mem* get_data_new(bstm_block_id id, vcl_string type, vcl_size_t num_bytes = 0, bool read_only = true);
 
     //: returns a flat bocl_mem of a certain size
@@ -106,6 +109,9 @@ class bstm_opencl_cache: public vbl_ref_count
     ////////////////////////////////////////////////////////////////////////////
     //: scene/block info for current blocks
     bocl_mem* block_info_;
+
+    //: scene/block info for current time blocks
+    bocl_mem* block_info_t_;
 
     //: dumb cache keeps one cached block, the last one used.
     vcl_map<bstm_block_id, bocl_mem*> cached_blocks_;

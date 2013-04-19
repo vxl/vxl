@@ -6,11 +6,16 @@
 //: scene/device constructor
 bstm_opencl_cache::bstm_opencl_cache(bstm_scene_sptr scene,
                                        bocl_device_sptr device)
-: scene_(scene),  bytesInCache_(0), block_info_(0), device_(device)
+: scene_(scene),  bytesInCache_(0), block_info_(0), device_(device),block_info_t_(0)
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
-  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * .90);
+  unsigned long total_global_mem =  device->info().total_global_memory_;
+  if(device->info().addr_bits_ == 32 && total_global_mem > (cl_ulong)4096000000)
+    total_global_mem =   (cl_ulong)4096000000;
 
+  maxBytesInCache_ = (unsigned long) (total_global_mem * .85);
+
+  vcl_cout << "Opencl cache max bytes in cache: " << maxBytesInCache_ << vcl_endl;
   // by default try to create an LRU cache
   bstm_lru_cache::create(scene);
   cpu_cache_ = bstm_cache::instance();
@@ -57,12 +62,34 @@ bool bstm_opencl_cache::clear_cache()
     block_info_=0;
   }
 
+  if (block_info_t_) {
+    bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
+    delete buff;
+    delete block_info_t_;
+    block_info_t_=0;
+  }
+
+
   // delete blocks in cache
   vcl_map<bstm_block_id, bocl_mem*>::iterator blks;
+  // delete time blocks in cache
+  for (blks=cached_time_blocks_.begin(); blks!=cached_time_blocks_.end(); ++blks)
+  {
+    bocl_mem* toDelete = blks->second;
+    //toDelete->read_to_buffer( *queue_ );
+    bytesInCache_ -= toDelete->num_bytes();
+#ifdef DEBUG
+    vcl_cout<<"Deleting time block: "<<toDelete->id()<<"...size: "<<toDelete->num_bytes()<<vcl_endl;
+#endif
+    delete toDelete;
+  }
+  cached_time_blocks_.clear();
+
+
   for (blks=cached_blocks_.begin(); blks!=cached_blocks_.end(); ++blks)
   {
     bocl_mem* toDelete = blks->second;
-    toDelete->read_to_buffer( *queue_ );
+    //toDelete->read_to_buffer( *queue_ );
     bytesInCache_ -= toDelete->num_bytes();
 #ifdef DEBUG
     vcl_cout<<"Deleting block: "<<toDelete->id()<<"...size: "<<toDelete->num_bytes()<<vcl_endl;
@@ -71,18 +98,7 @@ bool bstm_opencl_cache::clear_cache()
   }
   cached_blocks_.clear();
 
-  // delete time blocks in cache
-  for (blks=cached_time_blocks_.begin(); blks!=cached_time_blocks_.end(); ++blks)
-  {
-    bocl_mem* toDelete = blks->second;
-    toDelete->read_to_buffer( *queue_ );
-    bytesInCache_ -= toDelete->num_bytes();
-#ifdef DEBUG
-    vcl_cout<<"Deleting time block: "<<toDelete->id()<<"...size: "<<toDelete->num_bytes()<<vcl_endl;
-#endif
-    delete toDelete;
-  }
-  cached_time_blocks_.clear();
+
 
   // delete data from each cache
   vcl_map<vcl_string, vcl_map<bstm_block_id, bocl_mem*> >::iterator datas;
@@ -93,7 +109,7 @@ bool bstm_opencl_cache::clear_cache()
     for (data_blks=data_map.begin(); data_blks!=data_map.end(); ++data_blks)
     {
       bocl_mem* toDelete = data_blks->second;
-      toDelete->read_to_buffer( *queue_ );
+      //toDelete->read_to_buffer( *queue_ );
       bytesInCache_ -= toDelete->num_bytes();
       bstm_block_id bid = data_blks->first;
 #ifdef DEBUG
@@ -102,6 +118,9 @@ bool bstm_opencl_cache::clear_cache()
       delete toDelete;
     }
     data_map.clear();
+#ifdef DEBUG
+      vcl_cout<<"Deleted data type: "<<datas->first <<vcl_endl;
+#endif
   }
   cached_data_.clear();
 
@@ -169,8 +188,7 @@ bocl_mem* bstm_opencl_cache::get_block(bstm_block_id id)
        delete buff;
        delete block_info_;
     }
-    bstm_scene_info* info_buffer = scene_->get_blk_metadata(id);
-    info_buffer->num_buffer = loaded->num_buffers();
+    bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id));
     info_buffer->tree_buffer_length = loaded->tree_buff_length();
     info_buffer->data_buffer_length = 65536;
     block_info_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
@@ -185,7 +203,7 @@ bocl_mem* bstm_opencl_cache::get_block(bstm_block_id id)
   vcl_size_t toLoadSize = trees.size()*sizeof(uchar16);
   unsigned long totalBytes = this->bytes_in_cache() + toLoadSize;
   if (totalBytes > maxBytesInCache_) {
-    
+
 #ifdef DEBUG
     vcl_cout<<"Loading Block "<<id<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
             <<"    removing... ";
@@ -223,8 +241,7 @@ bocl_mem* bstm_opencl_cache::get_block(bstm_block_id id)
     delete buff;
     delete block_info_;
   }
-  bstm_scene_info* info_buffer = scene_->get_blk_metadata(id);
-  info_buffer->num_buffer = loaded->num_buffers();
+  bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id));
   info_buffer->tree_buffer_length = loaded->tree_buff_length();
   info_buffer->data_buffer_length = 65536;
   block_info_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
@@ -245,16 +262,16 @@ bocl_mem* bstm_opencl_cache::get_time_block(bstm_block_id id)
   if ( cached_time_blocks_.find(id) != cached_time_blocks_.end() ) {
     // load block info
     bstm_time_block* loaded = cpu_cache_->get_time_block(id);
-    if (block_info_) {
-       bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
+    if (block_info_t_) {
+       bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
        delete buff;
-       delete block_info_;
+       delete block_info_t_;
     }
-    bstm_scene_info* info_buffer = scene_->get_blk_metadata(id);
+    bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id));
     info_buffer->tree_buffer_length = loaded->tree_buff_length();
     info_buffer->data_buffer_length = 65536;
-    block_info_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
-    block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+    block_info_t_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
+    block_info_t_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
     return cached_time_blocks_[id];
   }
 
@@ -287,16 +304,16 @@ bocl_mem* bstm_opencl_cache::get_time_block(bstm_block_id id)
 
   //////////////////////////////////////////////////////
   // load block info
-  if (block_info_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
+  if (block_info_t_) {
+    bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
     delete buff;
-    delete block_info_;
+    delete block_info_t_;
   }
-  bstm_scene_info* info_buffer = scene_->get_blk_metadata(id);
+  bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id));
   info_buffer->tree_buffer_length = loaded->tree_buff_length();
   info_buffer->data_buffer_length = 65536;
-  block_info_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
-  block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+  block_info_t_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
+  block_info_t_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   //////////////////////////////////////////////////////
 
   return blk;
@@ -313,9 +330,8 @@ bocl_mem* bstm_opencl_cache::get_block_info(bstm_block_id id)
   }
 
   // get block info from scene/block
-  bstm_scene_info* info_buffer = scene_->get_blk_metadata(id);
+  bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id) );
   bstm_block* blk = cpu_cache_->get_block(id);
-  info_buffer->num_buffer = blk->num_buffers();
   info_buffer->tree_buffer_length = blk->tree_buff_length();
   info_buffer->data_buffer_length = 65536;
   block_info_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
@@ -331,8 +347,7 @@ bocl_mem* bstm_opencl_cache::get_data(bstm_block_id id, vcl_string type, vcl_siz
   this->lru_push_front(id);
 
   // grab a reference to the map of cached_data_
-  vcl_map<bstm_block_id, bocl_mem*>& data_map =
-    this->cached_data_map(type);
+  vcl_map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
 
   // then look for the block you're requesting
   vcl_map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
@@ -356,7 +371,7 @@ bocl_mem* bstm_opencl_cache::get_data(bstm_block_id id, vcl_string type, vcl_siz
     vcl_cout<<"Loading data "<<id<<" type "<<type<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
             <<"    removing... ";
 #endif
-    while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() )
+    while ( this->bytes_in_cache()+toLoadSize*2 > maxBytesInCache_ && !data_map.empty() )
     {
       bstm_block_id lru_id;
       if(!this->lru_remove_last(lru_id)) {
@@ -628,7 +643,7 @@ bool bstm_opencl_cache::lru_remove_last(bstm_block_id &lru_id)
   vcl_map<bstm_block_id, bocl_mem*>::iterator blk = cached_blocks_.find(lru_id);
   if ( blk != cached_blocks_.end() ) {
     bocl_mem* toDelete = blk->second;
-    toDelete->read_to_buffer( *queue_ );
+    //toDelete->read_to_buffer( *queue_ );
     bytesInCache_ -= toDelete->num_bytes();
     cached_blocks_.erase(blk);
     delete toDelete;
@@ -642,7 +657,7 @@ bool bstm_opencl_cache::lru_remove_last(bstm_block_id &lru_id)
   blk = cached_time_blocks_.find(lru_id);
   if ( blk != cached_time_blocks_.end() ) {
     bocl_mem* toDelete = blk->second;
-    toDelete->read_to_buffer( *queue_ );
+    //toDelete->read_to_buffer( *queue_ );
     bytesInCache_ -= toDelete->num_bytes();
     cached_time_blocks_.erase(blk);
     delete toDelete;
@@ -650,8 +665,6 @@ bool bstm_opencl_cache::lru_remove_last(bstm_block_id &lru_id)
   else {
     vcl_cout<<"bstm_opencl_cache::lru_remove_last failed to find last element of list (time block) "<<vcl_endl;
   }
-
-
 
   //now look for data to delete
   vcl_map<vcl_string, vcl_map<bstm_block_id, bocl_mem*> >::iterator datas;
@@ -662,7 +675,7 @@ bool bstm_opencl_cache::lru_remove_last(bstm_block_id &lru_id)
     vcl_map<bstm_block_id, bocl_mem*>::iterator dat = data_map.find(lru_id);
     if ( dat != data_map.end() ) {
       bocl_mem* toDelete = dat->second;
-      toDelete->read_to_buffer( *queue_ );
+      //toDelete->read_to_buffer( *queue_ );
       bytesInCache_ -= toDelete->num_bytes();
       data_map.erase(dat);
       delete toDelete;
