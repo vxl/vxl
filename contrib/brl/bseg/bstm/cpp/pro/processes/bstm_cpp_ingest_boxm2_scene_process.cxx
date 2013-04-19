@@ -28,7 +28,7 @@
 
 namespace bstm_cpp_ingest_boxm2_scene_process_globals
 {
-  const unsigned n_inputs_ =  5;
+  const unsigned n_inputs_ =  7;
   const unsigned n_outputs_ = 0;
 }
 
@@ -43,7 +43,10 @@ bool bstm_cpp_ingest_boxm2_scene_process_cons(bprb_func_process& pro)
   input_types_[1] = "bstm_cache_sptr";
   input_types_[2] = "boxm2_scene_sptr";
   input_types_[3] = "boxm2_cache_sptr";
-  input_types_[4] = "double";
+  input_types_[4] = "double"; //time
+  input_types_[5] = "double"; //p_threshold
+  input_types_[6] = "double"; //app_threshold
+
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -70,7 +73,8 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   boxm2_scene_sptr boxm2_scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr boxm2_cache= pro.get_input<boxm2_cache_sptr>(i++);
   double time =pro.get_input<double>(i++);
-
+  double p_threshold =pro.get_input<double>(i++);
+  double app_threshold =pro.get_input<double>(i++);
 
   //bstm app query
   vcl_string data_type;
@@ -79,6 +83,8 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
+  valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
+
   if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
     vcl_cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: scene doesn't have BSTM_MOG6_VIEW or BSTM_MOG3_GREY data type"<<vcl_endl;
     return false;
@@ -90,6 +96,7 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix());
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
+  boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix());
   if ( !boxm2_util::verify_appearance( *boxm2_scene, boxm2_valid_types, boxm2_data_type, boxm2_apptypesize ) ) {
     vcl_cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: boxm2 scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
@@ -129,7 +136,7 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
 
 
          //now do the work
-         vcl_cout << "Ingesting " << boxm2_id << vcl_endl;
+         //vcl_cout << "Ingesting " << boxm2_id << " into " <<  bstm_metadata.id_ << vcl_endl;
 
          //get data from bstm scene
          bstm_block* blk = cache->get_block(bstm_metadata.id_);
@@ -152,23 +159,22 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
 
          if(boxm2_data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() &&  data_type == bstm_data_traits<BSTM_MOG3_GREY>::prefix()  )
          {
-           bstm_ingest_boxm2_scene_function<BSTM_MOG3_GREY, BOXM2_MOG3_GREY>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time);
+           bstm_ingest_boxm2_scene_function<BSTM_MOG3_GREY, BOXM2_MOG3_GREY>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time, p_threshold, app_threshold);
            vcl_cout << "Ingesting mog3 grey...\n";
          }
          else if( boxm2_data_type == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() && data_type == bstm_data_traits<BSTM_MOG6_VIEW>::prefix()  )
          {
-           bstm_ingest_boxm2_scene_function<BSTM_MOG6_VIEW, BOXM2_MOG6_VIEW>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time);
+           bstm_ingest_boxm2_scene_function<BSTM_MOG6_VIEW, BOXM2_MOG6_VIEW>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time, p_threshold, app_threshold);
            vcl_cout << "Ingesting mog6 view...\n";
          } if( boxm2_data_type == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() &&
                data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()  )
-           bstm_ingest_boxm2_scene_function<BSTM_MOG6_VIEW_COMPACT, BOXM2_MOG6_VIEW_COMPACT>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time);
+           bstm_ingest_boxm2_scene_function<BSTM_MOG6_VIEW_COMPACT, BOXM2_MOG6_VIEW_COMPACT>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time, p_threshold, app_threshold);
+         else if( boxm2_data_type == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix() && data_type == bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix()  )
+           bstm_ingest_boxm2_scene_function<BSTM_GAUSS_RGB_VIEW_COMPACT, BOXM2_GAUSS_RGB_VIEW_COMPACT>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time, p_threshold, app_threshold);
          else
            vcl_cout << "bstm_cpp_ingest_boxm2_scene_process ERROR!" << vcl_endl;
       }
-
     }
-
-
   }
 
 
