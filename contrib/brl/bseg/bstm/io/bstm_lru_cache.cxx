@@ -9,7 +9,18 @@
 void bstm_lru_cache::create(bstm_scene_sptr scene)
 {
   if (bstm_cache::exists())
-    vcl_cout << "bstm_lru_cache:: bstm_cache singleton already created" << vcl_endl;
+  {
+    if(bstm_cache::instance_->get_scene()->xml_path() == scene->xml_path())
+    {
+      vcl_cout << "bstm_lru_cache:: boxm2_cache singleton already created" << vcl_endl;
+    }
+    else
+    {
+      vcl_cout << "bstm_lru_cache:: destroying current cache and creating new one: " << scene->data_path() << vcl_endl;
+      instance_ = new bstm_lru_cache(scene);
+      destroyer_.set_singleton(instance_);
+    }
+  }
   else {
     instance_ = new bstm_lru_cache(scene);
     destroyer_.set_singleton(instance_);
@@ -31,7 +42,7 @@ bstm_lru_cache::~bstm_lru_cache()
   {
     for (vcl_map<bstm_block_id, bstm_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
       bstm_block_id id = it->first;
-#if 1 // Currently causing some blocks to not save
+#if 0 // Currently causing some blocks to not save
       if (!it->second->read_only_) {
         bstm_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter->first);
       }
@@ -46,7 +57,7 @@ bstm_lru_cache::~bstm_lru_cache()
        iter != cached_blocks_.end(); iter++)
   {
     bstm_block_id id = iter->first;
-#if 1 // Currently causing some blocks to not save
+#if 0 // Currently causing some blocks to not save
     if (!iter->second->read_only())
       bstm_sio_mgr::save_block(scene_dir_, iter->second);
 #endif
@@ -57,7 +68,7 @@ bstm_lru_cache::~bstm_lru_cache()
        iter != cached_time_blocks_.end(); iter++)
   {
     bstm_block_id id = iter->first;
-#if 1 // Currently causing some blocks to not save
+#if 0 // Currently causing some blocks to not save
     if (!iter->second->read_only())
       bstm_sio_mgr::save_time_block(scene_dir_, iter->second);
 #endif
