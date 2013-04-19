@@ -165,17 +165,6 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
          }
         }
       }
-      /*
-      boxm2_array_1d<uchar8>&  time_trees = blk_t->time_trees();
-      boxm2_array_1d<uchar8>::iterator time_trees_iter;
-      for (time_trees_iter = time_trees.begin(); time_trees_iter != time_trees.end(); ++time_trees_iter)
-      {
-        bstm_time_tree new_time_tree((unsigned char*) (*time_trees_iter).data_block(), bstm_metadata.max_level_t_);
-        total_num_time_tree_leaf_cells += new_time_tree.num_leaves();
-        total_time_tree_dephts += new_time_tree.max_depth(0);
-        ++num_time_trees;
-      }
-      */
 
     }
 
