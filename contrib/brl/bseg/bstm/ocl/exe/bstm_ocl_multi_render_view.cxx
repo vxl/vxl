@@ -108,13 +108,13 @@ int main(int argc, char ** argv)
     vgui_poly_tableau_new poly;
     poly->add( bit_tableau, 0.0f, 0.05f, 1.0f, 1.0f );
     int id = poly->add( slider_h, 0.0f, 0.0f, 1.0f, 0.05f );
-    poly->set_outline_color(id,0,1,0);
+    poly->set_outline_color(id,0,0,1);
     vgui_shell_tableau_new shell(poly);
 
     bit_tableau->shell_ = shell;
 
     //create window, attach the new tableau and status bar
-    vgui_window* win = vgui::produce_window(ni(), nj(), "bstm OpenCl Volume Visualizer (Render)");
+    vgui_window* win = vgui::produce_window(ni()+10, nj()+60, "bstm OpenCl Volume Visualizer (Render)");
     win->get_adaptor()->set_tableau(shell);
     bit_tableau->set_statusbar(win->get_statusbar());
     win->show();
