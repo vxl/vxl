@@ -19,6 +19,7 @@ void bstm_register::register_process()
 {
 
   // utilities
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_clear_cache_process, "bstmClearCacheProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_create_scene_process, "bstmCreateSceneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_write_scene_xml_process, "bstmWriteSceneXMLProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_load_scene_process, "bstmLoadSceneProcess");
