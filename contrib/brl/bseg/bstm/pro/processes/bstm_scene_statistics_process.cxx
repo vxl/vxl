@@ -16,11 +16,11 @@
 
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <boct/boct_bit_tree.h>
-
+#include <vgl/vgl_intersection.h>
 namespace bstm_scene_statistics_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+  const unsigned n_inputs_ = 8;
+  const unsigned n_outputs_ = 3;
 }
 
 #define MAX_CELLS_ 585
@@ -33,8 +33,33 @@ bool bstm_scene_statistics_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
+  input_types_[2] = "float"; //center x
+  input_types_[3] = "float"; //center y
+  input_types_[4] = "float"; //center z
+  input_types_[5] = "float"; //len x
+  input_types_[6] = "float"; //len y
+  input_types_[7] = "float"; //len z
 
-  return pro.set_input_types(input_types_) ;
+  vcl_vector<vcl_string> output_types(n_outputs_);
+  output_types[0] = "float";
+  output_types[1] = "float";
+  output_types[2] = "unsigned";
+
+  //default values for the box is empty
+  brdb_value_sptr def_center_x    = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_center_y    = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_center_z    = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_len_x    = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_len_y    = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_len_z    = new brdb_value_t<float>(-1.0f);
+  pro.set_input(2, def_center_x);
+  pro.set_input(3, def_center_y);
+  pro.set_input(4, def_center_z);
+  pro.set_input(5, def_len_x);
+  pro.set_input(6, def_len_y);
+  pro.set_input(7, def_len_z);
+
+  return pro.set_input_types(input_types_)  &&  pro.set_output_types(output_types);
 }
 
 bool bstm_scene_statistics_process(bprb_func_process& pro)
@@ -55,14 +80,23 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
   unsigned i = 0;
   bstm_scene_sptr scene = pro.get_input<bstm_scene_sptr>(i++);
   bstm_cache_sptr cache = pro.get_input<bstm_cache_sptr>(i++);
+  float center_x = pro.get_input<float>(i++);
+  float center_y = pro.get_input<float>(i++);
+  float center_z = pro.get_input<float>(i++);
+  float len_x = pro.get_input<float>(i++);
+  float len_y = pro.get_input<float>(i++);
+  float len_z = pro.get_input<float>(i++);
 
-  unsigned total_leaf_cells = 0;
-  unsigned total_inner_cells = 0;
-  unsigned total_num_cells = 0;
-  unsigned average_time_tree_depths = 0;
+  //create vgl box
+  const vgl_point_3d<double> center(center_x,center_y,center_z);
+  vgl_box_3d<double> box(center,len_x,len_y,len_z, vgl_box_3d<double>::centre);
+  if(len_x <= 0.0f ||len_y <= 0.0f ||len_z <= 0.0f ) //if box is empty, set it to scene's 
+    box = scene->bounding_box();
+
+  unsigned total_num_time_tree_leaf_cells = 0;
   unsigned num_time_trees = 0;
-  unsigned total_innercell_time_tree_cells = 0;
-  unsigned innercell_time_tree_cell_count = 0;
+  unsigned total_time_tree_dephts = 0;
+  unsigned num_cells = 0;
 
   //get blocks
   vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
@@ -72,51 +106,84 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
     bstm_block_id bstm_id = bstm_iter->first;
     bstm_block_metadata bstm_metadata = bstm_iter->second;
 
-    bstm_block* blk = cache->get_block(bstm_id);
-    bstm_time_block* blk_t = cache->get_time_block(bstm_id);
-
-
-    boxm2_array_3d<uchar16>&  trees = blk->trees();
-    boxm2_array_3d<uchar16>::iterator blk_iter;
-    for (blk_iter = trees.begin(); blk_iter != trees.end(); ++blk_iter)
+    if(!vgl_intersection<double>( bstm_metadata.bbox(), box).is_empty() ) //if the two boxes intersect
     {
-      uchar16 tree  = (*blk_iter);
-      boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), bstm_metadata.max_level_);
-      total_num_cells += curr_tree.num_cells();
-      total_inner_cells += curr_tree.num_cells() - curr_tree.get_leaf_bits().size();
-      total_leaf_cells += curr_tree.get_leaf_bits().size();
+      bstm_block* blk = cache->get_block(bstm_id);
+      bstm_time_block* blk_t = cache->get_time_block(bstm_id);
 
-      //traverse non-leaf cells
-      for (int i=0; i<MAX_CELLS_ ; ++i)
-      {
-        int pi = (i-1)>>3;
-        if ( ((i==0) || curr_tree.bit_at(pi)) && !curr_tree.is_leaf(i)) //check if non-leaf cell
-        {
-          boxm2_array_1d<vnl_vector_fixed<unsigned char, 8> > time_trees = blk_t->get_cell_all_tt(curr_tree.get_data_index( i));
-          for (unsigned int t_idx = 0; t_idx < bstm_metadata.sub_block_num_t_;++t_idx, ++innercell_time_tree_cell_count) {
-            bstm_time_tree tree(time_trees[t_idx].data_block() );
-            total_innercell_time_tree_cells += tree.num_cells();
-          }
+      boxm2_array_3d<uchar16>&  trees = blk->trees();
+      for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
+        for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
+         for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
+           uchar16 tree = trees(x, y, z); //load current block/tree
+           boct_bit_tree bit_tree((unsigned char*) tree.data_block());
+
+           //first check if the tree box is contained in the box,
+           vgl_point_3d<double> tree_min_pt(bstm_metadata.local_origin_.x() + x*bstm_metadata.sub_block_dim_.x(),
+                                             bstm_metadata.local_origin_.y() + y*bstm_metadata.sub_block_dim_.y(),
+                                             bstm_metadata.local_origin_.z() + z*bstm_metadata.sub_block_dim_.z());
+           vgl_box_3d<double> tree_box(tree_min_pt,bstm_metadata.sub_block_dim_.x(), bstm_metadata.sub_block_dim_.y(),bstm_metadata.sub_block_dim_.z(),vgl_box_3d<double>::min_pos);
+           if(!vgl_intersection<double>(tree_box,box).is_empty()) //if the tree intersects the box
+           {
+             //iterate through leaves of the tree
+             vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
+             vcl_vector<int>::iterator iter;
+
+             for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
+               int currBitIndex = (*iter);
+
+               //compute cell box
+               int curr_depth = bit_tree.depth_at(currBitIndex);
+               double side_len = 1.0 / (double) (1<<curr_depth);
+
+               vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
+               vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y() + y, localCenter.z() + z);
+               vgl_point_3d<double> cellCenter_global(   float(cellCenter.x()*bstm_metadata.sub_block_dim_.x() + bstm_metadata.local_origin_.x()),
+                                                          float(cellCenter.y()*bstm_metadata.sub_block_dim_.y() + bstm_metadata.local_origin_.y()),
+                                                          float(cellCenter.z()*bstm_metadata.sub_block_dim_.z() + bstm_metadata.local_origin_.z()));
+               vgl_box_3d<double> cell_box(cellCenter_global, bstm_metadata.sub_block_dim_.x() * side_len, bstm_metadata.sub_block_dim_.y() * side_len, bstm_metadata.sub_block_dim_.z() * side_len,
+                                             vgl_box_3d<double>::centre);
+
+               //check if cell box and box intersect
+               if(!vgl_intersection<double>(cell_box,box).is_empty())
+               {
+                 num_cells++;
+                 //finally found the cell!
+                 int data_offset = bit_tree.get_data_index(currBitIndex); //mdata index
+                 boxm2_array_1d<vnl_vector_fixed<unsigned char, 8> >time_treebits = blk_t->get_cell_all_tt(data_offset);
+                 for(vnl_vector_fixed<unsigned char, 8>* time_tree_iter = time_treebits.begin(); time_tree_iter != time_treebits.end(); time_tree_iter++ )
+                 {
+                   bstm_time_tree time_tree( time_tree_iter->data_block(),bstm_metadata.max_level_t_);
+                   total_num_time_tree_leaf_cells += time_tree.num_leaves();
+                   total_time_tree_dephts += time_tree.max_depth(0);
+                   num_time_trees++;
+                 }
+               }
+            }
+
+           }
+         }
         }
       }
+      /*
+      boxm2_array_1d<uchar8>&  time_trees = blk_t->time_trees();
+      boxm2_array_1d<uchar8>::iterator time_trees_iter;
+      for (time_trees_iter = time_trees.begin(); time_trees_iter != time_trees.end(); ++time_trees_iter)
+      {
+        bstm_time_tree new_time_tree((unsigned char*) (*time_trees_iter).data_block(), bstm_metadata.max_level_t_);
+        total_num_time_tree_leaf_cells += new_time_tree.num_leaves();
+        total_time_tree_dephts += new_time_tree.max_depth(0);
+        ++num_time_trees;
+      }
+      */
+
     }
 
-    boxm2_array_1d<uchar8>&  time_trees = blk_t->time_trees();
-    boxm2_array_1d<uchar8>::iterator time_trees_iter;
-    for (time_trees_iter = time_trees.begin(); time_trees_iter != time_trees.end(); ++time_trees_iter)
-    {
-      bstm_time_tree new_time_tree((unsigned char*) (*time_trees_iter).data_block(), bstm_metadata.max_level_t_);
-      average_time_tree_depths += new_time_tree.num_leaves();
-      ++num_time_trees;
-    }
+
   }
 
-  vcl_cout << "Total number of leaf cells: " << total_leaf_cells << '\n'
-           << "Total number of inner cells: " << total_inner_cells << '\n'
-           << "Total number of cells: " << total_num_cells << '\n'
-//         << "Average number of time tree cells of non-leaf octree cells: " << total_innercell_time_tree_cells / innercell_time_tree_cell_count << '\n'
-           << "Total time tree number of cells: " << average_time_tree_depths << '\n'
-           << "Average time tree number of cells: " << float(average_time_tree_depths)/num_time_trees << vcl_endl;
-
+  pro.set_output_val<float>(0, total_num_time_tree_leaf_cells);
+  pro.set_output_val<float>(1, float(total_time_tree_dephts)/num_time_trees);
+  pro.set_output_val<unsigned>(2, num_cells);
   return true;
 }
