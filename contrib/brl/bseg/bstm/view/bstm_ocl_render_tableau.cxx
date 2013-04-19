@@ -63,7 +63,9 @@ bool bstm_ocl_render_tableau::init(bocl_device_sptr device,
     do_init_ocl=true;
     render_trajectory_ = true;
     render_label_ = false;
-    trajectory_ = new boxm2_trajectory(80.0, 80.0, -1.0, scene_->bounding_box(), ni, nj);
+    vgl_box_3d<double> bb= scene_->bounding_box();
+    bb.set_centroid_z(bb.centroid_z() - bb.depth()/4 );
+    trajectory_ = new boxm2_trajectory(80.0, 20, -1.0, bb, ni, nj);
     cam_iter_ = trajectory_->begin();
 
     //set bb for time
@@ -152,6 +154,8 @@ float bstm_ocl_render_tableau::render_frame()
     else
       good = bprb_batch_process_manager::instance()->init_process("bstmOclRenderGlExpectedImageProcess");
 
+    vcl_cout << "trying to render frame..." << vcl_endl;
+
     //set process args
     good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
     good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
@@ -165,6 +169,9 @@ float bstm_ocl_render_tableau::render_frame()
     good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_render_label);   // render_label?
     good = good && bprb_batch_process_manager::instance()->run_process();
     
+
+    vcl_cout << "reached here..." << vcl_endl;
+
     //grab float output from render gl process
     unsigned int time_id = 0;
     good = good && bprb_batch_process_manager::instance()->commit_output(0, time_id);

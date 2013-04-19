@@ -95,8 +95,11 @@ void bstm_ocl_multi_render_tableau::compute_gpu_assignments()
 
   unsigned long curr_mem_size = 0;
   unsigned curr_gpu_id = 0;
-  vcl_cout << "Scene is comprised of " << scene_->blocks_ids_bounding_box_t() << " time blocks..." << vcl_endl;
-  gpu_ids_.resize(scene_->blocks_ids_bounding_box_t());
+
+  unsigned min_block_id,max_block_id;
+  scene_->blocks_ids_bounding_box_t(min_block_id,max_block_id);
+  vcl_cout << "Scene is comprised of " << max_block_id - min_block_id << " time blocks..." << vcl_endl;
+  gpu_ids_.resize(max_block_id - min_block_id);
   for(int scene_blk_id = 0; scene_blk_id< gpu_ids_.size(); scene_blk_id++)
   {
     vcl_cout << "Is " << (float)scene_blk_id / gpu_ids_.size() << " smaller than " << (float)(curr_mem_size  + opencl_caches_[curr_gpu_id]->max_memory_in_cache()) / total_gpu_mem_ << vcl_endl;
@@ -189,6 +192,8 @@ float bstm_ocl_multi_render_tableau::render_frame()
   brdb_value_sptr exp_img_dim = new brdb_value_t<bocl_mem_sptr>(exp_img_dim_[gpu_idx]);
   brdb_value_sptr brdb_time = new brdb_value_t<float>(scaled_time);
   brdb_value_sptr brdb_render_label = new brdb_value_t<bool>(render_label_);
+
+
 
   //if scene has RGB data type, use color render process
   bool good = true;
