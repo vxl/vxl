@@ -13,8 +13,11 @@ bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::bstm_ingest_boxm2_sc
                                                                                              boxm2_block* boxm2_blk,
                                                                                              vcl_map<vcl_string,
                                                                                              boxm2_data_base*> & boxm2_datas,
-                                                                                             double local_time)
+                                                                                             double local_time, double p_threshold, double app_threshold)
 {
+  p_threshold_ = p_threshold;
+  app_threshold_ = app_threshold;
+
   init_data(blk, blk_t, datas, boxm2_blk, boxm2_datas, local_time);
   conform();
   ingest();
@@ -148,7 +151,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::conform()
   bstm_time_block* newTimeBlk = new bstm_time_block(id, m_data, dataSize); //create empty time block
 
   boxm2_array_1d<uchar8>&  new_time_trees = newTimeBlk->time_trees();    //refined trees
-  vcl_cout<<"Number of new time trees: "<<  new_time_trees.size() - blk_t_->time_trees().size() <<vcl_endl;
+  //vcl_cout<<"Number of new time trees: "<<  new_time_trees.size() - blk_t_->time_trees().size() <<vcl_endl;
 
   //allocate buffer to hold depth differences, one difference per time tree
   //will be used to scale alpha later on
@@ -403,7 +406,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
      tree_index++;
   }
 
-  vcl_cout << "New data size is " << dataSize << vcl_endl;
+  //vcl_cout << "New data size is " << dataSize << vcl_endl;
 
   //alloc new data buffers with appropriate size
   bstm_block_id id = blk_->block_id();
@@ -453,7 +456,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
      }
   }
 
-  vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
+  //vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
 
   //replace databases
   bstm_cache_sptr cache = bstm_cache::instance();
@@ -495,8 +498,9 @@ int bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::move_all_time_tr
     {
       float cell_min,cell_max;
       refined_tree.cell_range(refined_tree.traverse(local_time_ - blk_t_->tree_index(local_time_)), cell_min,cell_max);
-      if (  cell_min == local_time_ - blk_t_->tree_index(local_time_) )  //if the current time is the start of a cell in which new data will be placed
+      if (  cell_min == local_time_ - blk_t_->tree_index(local_time_) )  { //if the current time is the start of a cell in which new data will be placed
         this->place_curr_data(refined_tree, boxm2_data_offset, alpha_cpy, apm_cpy, depth_diff);
+      }
     }
 
     //make sure to write the refined bits to blk_t_
@@ -557,7 +561,7 @@ void bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::place_curr_data
     vcl_cerr << "ERROR, data index is -1\n";
 #endif
 
-    alpha_cpy[ new_ptr] = boxm2_alpha_[boxm2_data_offset];
+  alpha_cpy[ new_ptr] = boxm2_alpha_[boxm2_data_offset];
   apm_cpy[new_ptr] = boxm2_apm_model_[boxm2_data_offset];
 
 #ifdef ALPHA_SCALING
@@ -625,7 +629,7 @@ template <bstm_data_type APM_TYPE, boxm2_data_type BOXM2_APM_TYPE>
 bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::is_similar(float p, typename bstm_data_traits<APM_TYPE>::datatype mog,
                                                                             float boxm2_p, typename boxm2_data_traits<BOXM2_APM_TYPE>::datatype boxm2_mog)
 {
-  return bstm_similarity_traits<APM_TYPE,BOXM2_APM_TYPE>::is_similar(mog, boxm2_mog, p, boxm2_p);
+  return bstm_similarity_traits<APM_TYPE,BOXM2_APM_TYPE>::is_similar(mog, boxm2_mog, p, boxm2_p,p_threshold_,app_threshold_);
 }
 
 

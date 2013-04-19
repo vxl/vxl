@@ -17,8 +17,6 @@
 #include <boxm2/io/boxm2_cache.h>
 #include <vcl_map.h>
 
-#include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
-#include <boxm2/cpp/algo/boxm2_mog6_view_processor.h>
 #include <bstm/cpp/algo/bstm_data_similarity_traits.h>
 
 
@@ -35,7 +33,7 @@ class bstm_ingest_boxm2_scene_function
 
    //: "default" constructor does all the work
    bstm_ingest_boxm2_scene_function(bstm_block* blk,bstm_time_block* blk_t, vcl_map<vcl_string, bstm_data_base*> & datas,
-                                    boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double local_time);
+                                    boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double local_time, double p_threshold, double app_threshold);
 
  private:
 
@@ -106,6 +104,9 @@ class bstm_ingest_boxm2_scene_function
 
    int num_split_;
    int num_split_t_;
+
+   double p_threshold_;
+   double app_threshold_;
 };
 
 
