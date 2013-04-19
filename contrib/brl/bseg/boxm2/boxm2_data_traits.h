@@ -31,6 +31,9 @@ enum boxm2_data_type
   BOXM2_MOG6_VIEW_COMPACT,
   BOXM2_BATCH_HISTOGRAM,
   BOXM2_GAUSS_RGB,
+  BOXM2_GAUSS_RGB_VIEW,
+  BOXM2_GAUSS_RGB_VIEW_COMPACT,
+  BOXM2_GAUSS_UV_VIEW,
   BOXM2_MOG2_RGB,
   BOXM2_NUM_OBS,
   BOXM2_NUM_OBS_SINGLE,
@@ -58,6 +61,7 @@ enum boxm2_data_type
   BOXM2_PIXEL,
   BOXM2_EXPECTATION,
   BOXM2_DATA_INDEX,
+  BOXM2_RAY_DIR,
   BOXM2_UNKNOWN
 };
 
@@ -154,6 +158,40 @@ class boxm2_data_traits<BOXM2_GAUSS_GREY>
 };
 
 template<>
+class boxm2_data_traits<BOXM2_GAUSS_UV_VIEW>
+{
+ public:
+  typedef boxm2_mog6_view_processor processor;
+  typedef vnl_vector_fixed<int, 4> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_gauss_uv_view"; else return "boxm2_gauss_UV_view_"+identifier; }
+};
+
+template<>
+class boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>
+{
+ public:
+  typedef boxm2_mog6_view_processor processor;
+  typedef vnl_vector_fixed<int, 16> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_gauss_rgb_view"; else return "boxm2_gauss_rgb_view_"+identifier; }
+};
+
+template<>
+class boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>
+{
+ public:
+  typedef boxm2_mog6_view_processor processor;
+  typedef vnl_vector_fixed<int, 8> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_gauss_rgb_view_compact"; else return "boxm2_gauss_rgb_view_compact_"+identifier; }
+};
+
+
+template<>
 class boxm2_data_traits<BOXM2_MOG2_RGB>
 {
  public:
@@ -173,6 +211,18 @@ class boxm2_data_traits<BOXM2_NORMAL>
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "boxm2_normal"; else return "boxm2_normal_"+identifier; }
 };
+
+
+template<>
+class boxm2_data_traits<BOXM2_RAY_DIR>
+{
+ public:
+  typedef vnl_vector_fixed<float, 4> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_ray_dir"; else return "boxm2_ray_dir_"+identifier; }
+};
+
 
 
 template<>
@@ -462,6 +512,12 @@ class boxm2_data_info
     if (prefix.find(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_MOG6_VIEW>::datasize();
 
+    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::datasize();
+
+    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::datasize();
+
     if (prefix == boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix())
       return boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::datasize();
 
@@ -540,7 +596,8 @@ class boxm2_data_info
     if (prefix.find(boxm2_data_traits<BOXM2_DATA_INDEX>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_DATA_INDEX>::datasize();
 
-
+    if (prefix.find(boxm2_data_traits<BOXM2_RAY_DIR>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_RAY_DIR>::datasize();
     return 0;
   }
 
@@ -606,6 +663,8 @@ class boxm2_data_info
       return  BOXM2_EXPECTATION ;
     else if (prefix.find(boxm2_data_traits<BOXM2_DATA_INDEX>::prefix()) != vcl_string::npos)
       return  BOXM2_DATA_INDEX ;
+    else if (prefix.find(boxm2_data_traits<BOXM2_RAY_DIR>::prefix()) != vcl_string::npos)
+          return  BOXM2_RAY_DIR ;
     else
       return BOXM2_UNKNOWN;
   }
