@@ -115,6 +115,9 @@ SOURCE=.\bstm_ocl_util.h
 # Begin Source File
 SOURCE=.\bstm_opencl_cache.h
 # End Source File
+# Begin Source File
+SOURCE=.\bstm_scene_info.h
+# End Source File
 # End Group
 # End Target
 # End Project

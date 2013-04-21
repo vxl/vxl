@@ -100,6 +100,9 @@ SOURCE=.\Templates/bstm_ingest_boxm2_function+BSTM_MOG6_VIEW.cxx
 SOURCE=.\Templates/bstm_ingest_boxm2_function+BSTM_MOG3_GREY-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/bstm_ingest_boxm2_function+BSTM_GAUSS_RGB_VIEW-.cxx
+# End Source File
+# Begin Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

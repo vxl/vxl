@@ -115,6 +115,9 @@ SOURCE=.\processes/bstm_create_cache_process.cxx
 # Begin Source File
 SOURCE=.\processes/bstm_load_scene_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/bstm_clear_cache_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
