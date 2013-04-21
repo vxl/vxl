@@ -122,7 +122,7 @@ class bstm_similarity_traits<BSTM_GAUSS_RGB_VIEW_COMPACT, BOXM2_GAUSS_RGB_VIEW_C
   static bool is_similar(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::datatype app, boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::datatype boxm2_app, float p, float boxm2_p, double p_threshold, double app_threshold )
   {
     return (  p_threshold < 0.0f || kl_div_surf(p,boxm2_p) < p_threshold)
-       &&  (app_threshold < 0.0f || p < APP_COMP_P_THRESHOLD ||  (app_rms(app,boxm2_app)  < app_threshold) ):
+       &&  (app_threshold < 0.0f || p < APP_COMP_P_THRESHOLD ||  (app_rms(app,boxm2_app)  < app_threshold) );
   }
 
   //D(boxm2_P || P), measure of information lost when P is used to approximate boxm2_P
@@ -156,5 +156,7 @@ class bstm_similarity_traits<BSTM_GAUSS_RGB_VIEW_COMPACT, BOXM2_GAUSS_RGB_VIEW_C
     return rms / 8;
   }
 };
+
+#undef square_of
 
 #endif
