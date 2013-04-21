@@ -20,7 +20,7 @@ template<>
 class bstm_similarity_traits<BSTM_MOG3_GREY, BOXM2_MOG3_GREY>
 {
  public:
-  static bool is_similar(bstm_data_traits<BSTM_MOG3_GREY>::datatype app, boxm2_data_traits<BOXM2_MOG3_GREY>::datatype boxm2_app, float p, float boxm2_p, double p_threshold, double app_threshold )
+  static bool is_similar(bstm_data_traits<BSTM_MOG3_GREY>::datatype app, boxm2_data_traits<BOXM2_MOG3_GREY>::datatype boxm2_app, float p, float boxm2_p, double /* p_threshold */, double /* app_threshold */ )
   {
     double isabel_measure = (bstm_data_traits<BSTM_MOG3_GREY>::processor::expected_color(app) + 1) * p;
     double isabel_measure_boxm2 = (boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(boxm2_app) + 1) * boxm2_p;
