@@ -11,6 +11,7 @@ SOURCES += processes/bstm_write_cache_process.cxx
 SOURCES += processes/bstm_add_block_process.cxx
 SOURCES += processes/bstm_create_cache_process.cxx
 SOURCES += processes/bstm_load_scene_process.cxx
+SOURCES += processes/bstm_clear_cache_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

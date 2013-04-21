@@ -4,6 +4,7 @@ LIBRARY := bstm_ocl
 
 SOURCES += bstm_ocl_util.cxx
 SOURCES += bstm_opencl_cache.cxx
+MANPAGE_SOURCES += bstm_scene_info.h
 
 SUBDIRS += pro algo
 
