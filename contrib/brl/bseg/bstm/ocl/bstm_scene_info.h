@@ -1,6 +1,7 @@
 #ifndef bstm_scene_info_h
 #define  bstm_scene_info_h
-
+//:
+// \file
 #include <bocl/bocl_cl.h>
 #include <bstm/bstm_block_metadata.h>
 
@@ -43,7 +44,7 @@ static bstm_scene_info* populate_scene_info(bstm_block_metadata data)
 
 class bstm_scene_info_wrapper : public vbl_ref_count
 {
-  public:
+ public:
   bstm_scene_info * info;
 };
 
