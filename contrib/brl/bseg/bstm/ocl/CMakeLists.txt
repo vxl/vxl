@@ -11,7 +11,7 @@ INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
 SET(bstm_ocl_sources
-    bstm_ocl_util.h 	    bstm_ocl_util.cxx
+    bstm_ocl_util.h         bstm_ocl_util.cxx
     bstm_opencl_cache.h     bstm_opencl_cache.cxx
     bstm_scene_info.h
    )
