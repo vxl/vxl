@@ -1,0 +1,197 @@
+#!/usr/bin/env bash
+#=============================================================================
+# Copyright 2010-2013 Kitware, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#=============================================================================
+
+# Run this script to set up the local Git repository to push to
+# the SourceForge repository for this project.
+
+# Project configuration instructions:
+#
+# - Create the project and repository on https://sourceforge.net
+#
+# - Populate adjacent "config" file with:
+#    sourceforge.project = SF project name
+#    sourceforge.mount = SF Git repository mount point under project
+#    sourceforge.remote = SF remote name, if not "origin"
+
+die() {
+	echo 1>&2 "$@" ; exit 1
+}
+
+egrep-q() {
+	egrep "$@" >/dev/null 2>/dev/null
+}
+
+push_protocol() {
+	case "$1" in
+		ssh://*) echo "ssh" ;;
+		https://*) echo "https" ;;
+		*://*) return 1 ;;
+		*@*:*) echo "ssh" ;;
+		*) return 1 ;;
+	esac
+}
+
+ask_fetch() {
+	ans='?'
+	while test "$ans" = '?'; do
+		read -ep "$1" ans &&
+		case "$ans" in
+			h|H|http) ans='http' ;;
+			g|G|git) ans='git' ;;
+			y|Y|yes) ans='yes' ;;
+			n|N|no) ans='no' ;;
+			'') ans='' ;;
+			*) echo "Invalid response '$ans'!"; ans='?' ;;
+		esac
+	done
+	eval "$2='$ans'"
+}
+
+ask_push() {
+	ans='?'
+	while test "$ans" = '?'; do
+		read -ep "$1" ans &&
+		case "$ans" in
+			h|H|https) ans='https' ;;
+			s|S|ssh) ans='ssh' ;;
+			y|Y|yes) ans='yes' ;;
+			n|N|no) ans='no' ;;
+			'') ans='' ;;
+			*) echo "Invalid response '$ans'!"; ans='?' ;;
+		esac
+	done
+	eval "$2='$ans'"
+}
+
+push_test() {
+	echo -n "Testing SourceForge access by $push_protocol..."
+	if git ls-remote --heads "$pushurl" >/dev/null; then
+		echo 'passed.'
+	else
+		echo 'failed.' &&
+		if test "$push_protocol" = "ssh"; then
+			advice='  Add your SSH public keys at
+
+  https://sourceforge.net/account/ssh
+'
+		else
+			advice=''
+		fi
+		die 'Could not access SourceForge.'"$advice"
+	fi
+}
+
+#-----------------------------------------------------------------------------
+
+# Make sure we are inside the repository.
+cd "${BASH_SOURCE%/*}" &&
+
+# Load the project configuration.
+project=$(git config -f config --get sourceforge.project) &&
+mount=$(git config -f config --get sourceforge.mount) &&
+remote=$(git config -f config --get sourceforge.remote || echo 'origin') ||
+die 'This project is not configured to use SourceForge.'
+
+# Get current SF remote URLs.
+fetchurl=$(git config --get remote."$remote".url || echo '') &&
+pushurl=$(git config --get remote."$remote".pushurl || echo "$fetchurl") &&
+
+# Skip setup if named remote does not look like SF.
+sf_repo_regex='[@/]git\.code\.(sf|sourceforge)\.net[:/]' &&
+if test -n "$fetchurl" &&
+   ! echo "$fetchurl" | egrep-q "$sf_repo_regex"; then
+	echo 'Remote "'"$remote"'" with url
+
+  '"$fetchurl"'
+
+does not look like a SourceForge repository.'
+	exit 0
+fi &&
+
+# Perform fetch setup if necessary.
+if test -z "$fetchurl"; then
+	echo 'Remote "'"$remote"'" is not currently configured.'
+	ask_fetch 'Configure '"$project"' SourceForge repository as "'"$remote"'"? [Y/n/http/git]: ' ans &&
+	case "$ans" in
+		http|git) setup_fetch="$ans" ;;
+		''|yes) setup_fetch='http' ;;
+		*) exit 0 ;;
+	esac
+	fetchurl="$setup_fetch://git.code.sf.net/p/$project/$mount" &&
+	git remote add "$remote" "$fetchurl" &&
+	echo 'SourceForge remote "'"$remote"'" is now configured to fetch from
+
+  '"$fetchurl"'
+'
+fi &&
+
+# Tell user about current configuration.
+if push_protocol=$(push_protocol "$pushurl"); then
+	echo 'SourceForge remote "'"$remote"'" is currently configured to push to
+
+  '"$pushurl"'
+' &&
+	ask_push 'Reconfigure SourceForge push? [y/N/https/ssh]: ' ans &&
+	case "$ans" in
+		https|ssh) setup="$ans" ;;
+		''|no) setup='' ;;
+		*) setup='https' ;;
+	esac
+else
+	echo 'SourceForge remote "'"$remote"'" is not yet configured for pushing.
+
+'"$project"' changes may be pushed to its SourceForge repository
+only by registered users authorized for the project.
+' &&
+	ask_push 'Configure SourceForge push? [Y/n/https/ssh]: ' ans &&
+	case "$ans" in
+		https|ssh) setup="$ans" ;;
+		''|yes) setup=https ;;
+		*) exit 0 ;;
+	esac
+fi &&
+
+# Perform push setup if necessary.
+if test -n "$setup"; then
+	echo "Configure SourceForge push access by $setup..." &&
+	if test "$setup" = 'ssh'; then
+		echo 'Sign-in to SourceForge and add your SSH public keys at
+
+  https://sourceforge.net/account/ssh
+'
+	fi &&
+	read -ep "SourceForge username? [$USER]: " username &&
+	if test -z "$username"; then
+		username="$USER"
+	fi &&
+	pushurl="$setup://$username@git.code.sf.net/p/$project/$mount" &&
+	if test "$pushurl" != "$fetchurl"; then
+		git config remote."$remote".pushurl "$pushurl"
+	fi &&
+	echo 'SourceForge remote "'"$remote"'" is now configured to push to
+
+  '"$pushurl"'
+'
+fi &&
+
+# Optionally test SF access.
+if push_protocol=$(push_protocol "$pushurl"); then
+	read -ep "Test access to SourceForge by $push_protocol? [y/N]: " ans &&
+	if [ "$ans" == "y" ] || [ "$ans" == "Y" ]; then
+		push_test
+	fi
+fi
