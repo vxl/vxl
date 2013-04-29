@@ -1,5 +1,7 @@
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
+
 SET(boxm2_cpp_pro_sources
     boxm2_cpp_register.h                              boxm2_cpp_register.cxx
     boxm2_cpp_processes.h
