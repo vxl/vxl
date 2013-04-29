@@ -78,3 +78,28 @@ def flip_normals(scene, cache, device, use_sum=False) :
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
     return False;
+	
+def make_inside_empty(scene, cache, device, use_sum=False) :  
+  if cache.type == "boxm2_opencl_cache_sptr": 
+    print("Flipping Normal");
+    boxm2_batch.init_process("boxm2OclMakeInsideVoxelsEmptyProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_bool(3, use_sum);
+    return boxm2_batch.run_process();
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
+    return False;	
+	
+def update_parents_alpha(scene, cache, device, use_sum=False) :  
+  if cache.type == "boxm2_opencl_cache_sptr": 
+    print("Update Parents Alpha");
+    boxm2_batch.init_process("boxm2OclUpdateParentsAlphaProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    return boxm2_batch.run_process();
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
+    return False;		
