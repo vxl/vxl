@@ -85,7 +85,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   int nblks              = pro.get_input<int>(i++);        // TODO: unused!!!
   bool axis_align        = pro.get_input<bool>(i++);
   vcl_string out_dir     = pro.get_input<vcl_string>(i++); //output dir for imgs/files
-  vcl_cout<<"AXIS ALIGN "<<axis_align<<vcl_endl;
+
   float x = pro.get_input<float>(i++);
   float y = pro.get_input<float>(i++);
   float z = pro.get_input<float>(i++);
