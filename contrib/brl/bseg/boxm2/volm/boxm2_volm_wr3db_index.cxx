@@ -224,6 +224,7 @@ bool boxm2_volm_wr3db_index::get_next(vcl_vector<uchar>& values)
       return false;
     current_id_ = 0;
   }
+  values.resize(layer_size_,0);
   for (unsigned i = 0; i < layer_size_; i++)
     values[i] = active_buffer_[current_id_*layer_size_ + i];
   current_global_id_++;
