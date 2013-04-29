@@ -18,7 +18,9 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
                               __global    unsigned int    * sceneB_alpha_offsets,
                               __global    float           * translation,
                               __global    float           * rotation,
+                              __global    float           * scale,
                               __global    int             * nbins,
+                              __global    int             * depth,                  // coarsness or fineness at which voxels should be matched.
                               __global    int             * global_joint_histogram,
                               __global    float           * output,
                               __local     int             * joint_histogram,
@@ -31,31 +33,41 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
   int blk_num_x = sceneB_bbox_ids[6];
   int blk_num_y = sceneB_bbox_ids[7];
   int blk_num_z = sceneB_bbox_ids[8];
+  float s = *scale;
   int numTrees = linfo->dims.x * linfo->dims.y * linfo->dims.z;
-  if (lid == 0)
-  {
-    for (unsigned int i = 0; i < (*nbins)*(*nbins); i++)
-      joint_histogram[i] = 0 ;
-  }
-  barrier(CLK_LOCAL_MEM_FENCE);
-  if (gid < numTrees)
-  {
-    local_trees[lid] = as_uchar16(tree_array[gid]);
-    int index_x = gid/(linfo->dims.y * linfo->dims.z);
-    int rem_x= gid- index_x*(linfo->dims.y * linfo->dims.z);
-    int index_y = rem_x/linfo->dims.z;
-    int rem_y =  rem_x - index_y*linfo->dims.z;
-    int index_z =rem_y;
 
-    float x = index_x* linfo->block_len;
-    float y = index_y* linfo->block_len;
-    float z = index_z* linfo->block_len;
+  if (gid >= numTrees)
+    return;
+  if (lid == 0)
+    for (unsigned int i = 0; i < (*nbins)*(*nbins); i++)
+        joint_histogram[i] = 0 ;      
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  local_trees[lid] = as_uchar16(tree_array[gid]);
+  int index_x = gid/(linfo->dims.y * linfo->dims.z);
+  int rem_x= gid- index_x*(linfo->dims.y * linfo->dims.z);
+  int index_y = rem_x/linfo->dims.z;
+  int rem_y =  rem_x - index_y*linfo->dims.z;
+  int index_z =rem_y;
+
+
+    if((index_x == 0 ||  index_x == linfo->dims.x -1 || 
+       index_y == 0  ||  index_y == linfo->dims.y -1  ||
+       index_z == 0  ||  index_y == linfo->dims.z -1  ))
+    {
+    }
+    else
+    {
+       float x = index_x* linfo->block_len;
+       float y = index_y* linfo->block_len;
+       float z = index_z* linfo->block_len;
 
     __local uchar16* local_tree = &local_trees[lid];
     __local uchar * cumsum = &cumsum_wkgp[lid*10];
     // iterate through leaves
     cumsum[0] = (*local_tree).s0;
     int cumIndex = 1;
+    
     for (int i=0; i<585; i++) {
       //if current bit is 0 and parent bit is 1, you're at a leaf
       int pi = (i-1)>>3;           //Bit_index of parent bit
@@ -79,10 +91,12 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
         float orig_y = linfo->origin.y + ((float)index_y+centerY[i])*linfo->block_len ;
         float orig_z = linfo->origin.z + ((float)index_z+centerZ[i])*linfo->block_len ;
 
-        float xformed_x = rotation[0]*orig_x +rotation[1]*orig_y + rotation[2]*orig_z + translation[0];
-        float xformed_y = rotation[3]*orig_x +rotation[4]*orig_y + rotation[5]*orig_z + translation[1];
-        float xformed_z = rotation[6]*orig_x +rotation[7]*orig_y + rotation[8]*orig_z + translation[2];
+        float xformed_x = s*(rotation[0]*orig_x +rotation[1]*orig_y + rotation[2]*orig_z + translation[0]);
+        float xformed_y = s*(rotation[3]*orig_x +rotation[4]*orig_y + rotation[5]*orig_z + translation[1]);
+        float xformed_z = s*(rotation[6]*orig_x +rotation[7]*orig_y + rotation[8]*orig_z + translation[2]);
 
+
+            
         int blk_index_x = (int) floor((xformed_x - sceneB_origin[0])/sceneB_blk_dims[0] );
         int blk_index_y = (int) floor((xformed_y - sceneB_origin[1])/sceneB_blk_dims[1] );
         int blk_index_z = (int) floor((xformed_z - sceneB_origin[2])/sceneB_blk_dims[2] );
@@ -93,16 +107,19 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
             blk_index_z >= sceneB_bbox_ids[2] && blk_index_z<=sceneB_bbox_ids[5])
         {
           int blk_offset_index = blk_index_x * ( sceneB_bbox_ids[5] - sceneB_bbox_ids[2] + 1 )* ( sceneB_bbox_ids[4] - sceneB_bbox_ids[1]+1 )
-            + blk_index_y * ( sceneB_bbox_ids[5] - sceneB_bbox_ids[2] + 1 )
-            + blk_index_z;
+                               + blk_index_y * ( sceneB_bbox_ids[5] - sceneB_bbox_ids[2] + 1 )
+                               + blk_index_z;
 
+               
           float local_blk_x = xformed_x - sceneB_origin[0]- (blk_index_x -  sceneB_bbox_ids[0])*sceneB_blk_dims[0];
           float local_blk_y = xformed_y - sceneB_origin[1]- (blk_index_y -  sceneB_bbox_ids[1])*sceneB_blk_dims[1];
           float local_blk_z = xformed_z - sceneB_origin[2]- (blk_index_z -  sceneB_bbox_ids[2])*sceneB_blk_dims[2];
 
+          
           int tree_index_x = (int) floor((local_blk_x)/(*sub_block_len));
           int tree_index_y = (int) floor((local_blk_y)/(*sub_block_len));
           int tree_index_z = (int) floor((local_blk_z)/(*sub_block_len));
+          
 
           int tree_offset = tree_index_x * ( blk_num_y)* ( blk_num_z) +tree_index_y * ( blk_num_z)+tree_index_z;
 
@@ -113,10 +130,14 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
           float local_tree_x = (local_blk_x)/(*sub_block_len) - tree_index_x;
           float local_tree_y = (local_blk_y)/(*sub_block_len) - tree_index_y;
           float local_tree_z = (local_blk_z)/(*sub_block_len) - tree_index_z;
+          
 
+          
           float cell_minx,cell_miny,cell_minz,cell_len;
-          ushort bit_index =  traverse_three(curr_tree_ptr,local_tree_x,local_tree_y,local_tree_z,
-                                             &cell_minx,&cell_miny,&cell_minz, &cell_len);
+          ushort bit_index =  traverse_deepest(curr_tree_ptr,
+                                             local_tree_x,local_tree_y,local_tree_z,
+                                             &cell_minx,&cell_miny,&cell_minz, 
+                                             &cell_len, depth[0] );
 
           unsigned int alpha_blk_offset =data_index_root(curr_tree_ptr)+data_index_relative(curr_tree_ptr,bit_index,bit_lookup);
           unsigned int alpha_offset = sceneB_alpha_offsets[blk_offset_index]+ alpha_blk_offset;
@@ -124,23 +145,40 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
           float alphaB = sceneB_alphas[alpha_offset];
 
           float probB = 1 - exp(-alphaB*cell_len*(*sub_block_len));
-
+          
+          //printf("%f, %f ", prob, probB);
           int hist_index_B =(int)(0.5+((*nbins)-1)*probB) ;// (int)clamp((int)floor(probB*(*nbins)),0,(*nbins)-1);
-          int hist_index_A =(int)(0.5+((*nbins)-1)*prob) ;// (int)clamp((int)floor(prob*(*nbins)),0,(*nbins)-1);
-          atom_inc(&joint_histogram[hist_index_A*(*nbins)+hist_index_B]);
+          int hist_index_A =(int)(0.5+((*nbins)-1)*prob) ;// (int)clamp((int)floor(prob*(*nbins)),0,(*nbins)-1);      
+          int index = hist_index_A*(*nbins)+hist_index_B;
+
+          //if(probB > 0.5 && prob > 0.5 )
+          //    printf("%f %f %f %d\n",xformed_x,xformed_y,xformed_z,index);
+          atom_inc(&global_joint_histogram[index]);
+          
         }
         ////////////////////////////////////////////
         //END LEAF SPECIFIC CODE
         ////////////////////////////////////////////
       }
     }
-    if (gid<1000)
-      output[gid] = joint_histogram[lid];
-  }
-  if (lid == 0)
-  {
-    for (unsigned int i = 0; i < (*nbins)*(*nbins); i++)
-      atom_add(&global_joint_histogram[i],joint_histogram[i]) ;
-  }
-  barrier(CLK_LOCAL_MEM_FENCE);
+    //if (gid<10)
+    //{
+    //  output[gid] = joint_histogram[lid];
+    //   
+    //}
+        if(joint_histogram[3] > 0 && lid == 0)
+            printf("%d ", global_joint_histogram[3]);
+     }
+    
+ 
+
+    //if (lid == 0)
+    //{
+
+    //    for (unsigned int i = 0; i < (*nbins)*(*nbins); i++)
+    //        atom_add(&global_joint_histogram[i],joint_histogram[i]) ;
+
+    //}
+    //barrier(CLK_LOCAL_MEM_FENCE);
+
 }
