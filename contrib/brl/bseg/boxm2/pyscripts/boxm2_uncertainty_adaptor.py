@@ -21,11 +21,11 @@ class UncertainScene(boxm2_scene_adaptor):
   def update_batch(self):
     """ Run one batch update pass """
     #create aux data for each view
-    self.create_all_view_directions();
+    #self.create_all_view_directions();
     #compute vis/seglen/appearance etc
     self.create_all_aux_data()
     #update synoptic function (per voxel cubic)
-    self.batch_synoptic_function();
+    #self.batch_synoptic_function();
 
     #update alphas
     #TODO incorporate alpha update (for now separate call)
@@ -38,13 +38,14 @@ class UncertainScene(boxm2_scene_adaptor):
 
 
   #store all uncertainty aux data for each view
-  def store_all_uncertainty_aux(self):
+  def store_all_uncertainty_aux(self, offset = 0):
     for i,img in enumerate(self.imgList):
       cam = load_perspective_camera(self.camList[i])
       img,ni,nj = load_image(self.imgList[i])
-      self.uncertainty_per_view(cam,img,i)
-      remove_from_db([img,cam])
-    self.write_cache(True)
+      gcam = persp2gen(cam,ni,nj);
+      self.uncertainty_per_view(gcam,img,i+offset)
+      remove_from_db([img,cam,gcam])
+    self.write_cache()
 
   def uncertainty_per_view(self, cam, img, viewNum):
     """Store uncertainty aux data per image for this model """
@@ -54,18 +55,13 @@ class UncertainScene(boxm2_scene_adaptor):
     boxm2_batch.set_input_from_db(2, self.opencl_cache);
     boxm2_batch.set_input_from_db(3, cam);
     boxm2_batch.set_input_from_db(4, img);
-    boxm2_batch.set_input_string(5,"img_"+"%05d"%viewNum);
+    boxm2_batch.set_input_string(5,"uncertain_"+"%05d"%viewNum);
     boxm2_batch.run_process();
 
-  def batch_uncertainty(self):
+  def batch_uncertainty(self, image_id_fname):
     """Calculate voxel uncertainty"""
     # write image identifiers to file
-    image_id_fname = self.model_dir + "/image_list.txt"
-    fd = open(image_id_fname,"w")
-    print >> fd, len(self.imgList)
-    for i,img in enumerate(self.imgList):
-      print >> fd, "img_%05d"%i
-    fd.close()
+
     #open the stream cache, this is a read-only cache
     boxm2_batch.init_process("boxm2OclBatchUncertaintyProcess");
     boxm2_batch.set_input_from_db(0,self.device);
@@ -127,7 +123,7 @@ class UncertainScene(boxm2_scene_adaptor):
       img,ni,nj = load_image(self.imgList[i])
       self.update_alpha_with_cubic(cam,img)
       remove_from_db([img, cam])
-    self.write_cache(True)
+    self.write_cache()
 
   def update_alpha_with_cubic(self, pcam, img):
     """ Update occupancy (alpha) values using the cubic appearances """
@@ -169,27 +165,67 @@ class UncertainScene(boxm2_scene_adaptor):
     boxm2_batch.set_input_from_db(2,self.opencl_cache);
     boxm2_batch.set_input_unsigned(3,len(self.imgList));
     boxm2_batch.set_input_string(4,image_id_fname);
-    boxm2_batch.set_input_float(5,0.09);
+    boxm2_batch.set_input_float(5,0.09	);
     boxm2_batch.run_process();
-    self.write_cache(True)
+
 
 
   def batch_synoptic_alpha_update(self):
     """ Create synoptic function (cubic function) at each voxel """
     image_id_fname = self.model_dir + "/image_list.txt"
+    fd = open(image_id_fname,"w")
+    print >> fd, len(self.imgList);
     for i,img in enumerate(self.imgList):
-      if i > 0:
-        fd = open(image_id_fname,"w")
-        print >> fd, 1
-        print >> fd, "img_%05d"%i
-        fd.close()
+		print img;
+		print >> fd, "img_%05d"%i
+    fd.close()
+		
+    boxm2_batch.init_process("boxm2OclSynopticUpdateAlphaProcess");
+    boxm2_batch.set_input_from_db(0,self.device);
+    boxm2_batch.set_input_from_db(1,self.scene);
+    boxm2_batch.set_input_from_db(2,self.opencl_cache);
+    boxm2_batch.set_input_unsigned(3,len(self.imgList));
+    boxm2_batch.set_input_string(4,image_id_fname);
+    boxm2_batch.run_process();
+    
+    self.write_cache()
+	
+  def batch_synoptic_alpha_update_one_atatime(self):
+    """ Create synoptic function (cubic function) at each voxel """
+    image_id_fname = self.model_dir + "/image_list.txt"
 
-        #open the stream cache, this is a read-only cache
-        boxm2_batch.init_process("boxm2OclSynopticUpdateAlphaProcess");
-        boxm2_batch.set_input_from_db(0,self.device);
-        boxm2_batch.set_input_from_db(1,self.scene);
-        boxm2_batch.set_input_from_db(2,self.opencl_cache);
-        boxm2_batch.set_input_unsigned(3,1);
-        boxm2_batch.set_input_string(4,image_id_fname);
-        boxm2_batch.run_process();
-    self.write_cache(True)
+    for i,img in enumerate(self.imgList):
+		if i <=5:
+			fd = open(image_id_fname,"w")
+			print >> fd, 1;
+			print >> fd, "img_%05d"%i
+			fd.close()
+			
+			boxm2_batch.init_process("boxm2OclSynopticUpdateAlphaProcess");
+			boxm2_batch.set_input_from_db(0,self.device);
+			boxm2_batch.set_input_from_db(1,self.scene);
+			boxm2_batch.set_input_from_db(2,self.opencl_cache);
+			boxm2_batch.set_input_unsigned(3,1);
+			boxm2_batch.set_input_string(4,image_id_fname);
+			boxm2_batch.run_process();
+    
+		self.write_cache()
+
+  def render_uncertainty_map(self,ni,nj,ident="",cam_dir_1="",cam_dir_2=""):
+	""" Render Hemispherical Uncertainty Map """
+	#open the stream cache, this is a read-only cache
+	boxm2_batch.init_process("boxm2OclRenderSceneUncertaintyMapProcess");
+	boxm2_batch.set_input_from_db(0,self.device);
+	boxm2_batch.set_input_from_db(1,self.scene);
+	boxm2_batch.set_input_from_db(2,self.opencl_cache);
+	boxm2_batch.set_input_unsigned(3,ni);
+	boxm2_batch.set_input_unsigned(4,nj);
+	boxm2_batch.set_input_string(5,ident);
+	boxm2_batch.set_input_string(6,cam_dir_1);
+	boxm2_batch.set_input_string(7,cam_dir_2);
+	boxm2_batch.run_process();
+	(id, type) = boxm2_batch.commit_output(0);
+	exp_img = dbvalue(id, type);
+	(id, type) = boxm2_batch.commit_output(1);
+	vis_img = dbvalue(id, type);
+	return exp_img, vis_img;
