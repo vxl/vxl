@@ -298,6 +298,8 @@ class boxm2_scene_adaptor(object):
   #  Flip normals towards direction of maximum visibility
   def flip_normals(self, use_sum=False) :
     return flip_normals(self.scene, self.opencl_cache, self.device, use_sum)
+  def make_inside_empty(self, use_sum=False) :
+    return make_inside_empty(self.scene, self.opencl_cache, self.device, use_sum)
 
   # Export points and normals to a .PLY file or XYZ. Points and normals need to be extracted first
   def export_points_and_normals(self, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, bbox_file=""):
