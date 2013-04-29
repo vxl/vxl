@@ -56,6 +56,7 @@ DECLARE_FUNC_CONS(bil_arf_read_frame_process);
 DECLARE_FUNC_CONS(bil_arf_seek_frame_process);
 DECLARE_FUNC_CONS(bil_read_CLIF07_data_process);
 DECLARE_FUNC_CONS(vil_fill_holes_in_regions_process);
+DECLARE_FUNC_CONS(vil_EO_IR_combine_process);
 
 
 #endif

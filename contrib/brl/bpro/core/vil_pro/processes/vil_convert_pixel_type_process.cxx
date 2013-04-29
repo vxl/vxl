@@ -61,7 +61,7 @@ bool vil_convert_pixel_type_process(bprb_func_process& pro)
     if (img->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
       vil_math_scale_values(fimage,1.0/255.0);
     if (img->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
-      vil_math_scale_values(fimage,1.0/65536);
+      vil_math_scale_values(fimage,1.0/4096);
   }
   unsigned ni = fimage.ni();
   unsigned nj = fimage.nj();

@@ -85,7 +85,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   }
 
   // true positive, true negative, false positive, false negative
-  const unsigned int numPoints = 100;
+  const unsigned int numPoints = 10000;
   bbas_1d_array_float * tp=new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * tn=new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * fp=new bbas_1d_array_float(numPoints);
@@ -145,6 +145,8 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     for (unsigned i=0; i<detection_map->ni(); ++i) {
       if (use_mask && (*mask_map)(i,j) == 0)
         continue;
+      if(  (*ground_truth_map)(i,j) == 0 || (*ground_truth_map)(i,j) == 255)
+      {
       Pair p;
       p.change = (*detection_map)(i,j);
       p.gt     = (*ground_truth_map)(i,j);
@@ -153,6 +155,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
       //pairs[c] = p;
       pairs.push_back(p);
       ++c;
+      }
     }
   }
 
@@ -168,6 +171,8 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   // grab 100 points for the ROC curve
   unsigned int incr = totPix / numPoints;
   for (unsigned int pnt=0; pnt<numPoints; ++pnt) {
+     if (pnt%100 == 0 )
+         vcl_cout<<".";
     tp->data_array[pnt]=0.0f;
     fp->data_array[pnt]=0.0f;
     tn->data_array[pnt]=0.0f;
@@ -177,7 +182,9 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
 
     // all classified examples in this loop are negative
     for (unsigned int i=0; i<exampleIdx; ++i) {
-      bool truth = (pairs[i].gt > 0);
+      bool truth = (pairs[i].gt == 255);
+      bool ignore= (pairs[i].gt > 0 && pairs[i].gt < 255);
+      if(!ignore)
       if (truth)
         fn->data_array[pnt]++; // gt=true, class=false => false neg
       else
@@ -186,13 +193,15 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
 
     // all classified examples in this loop are positive
     for (unsigned int i=exampleIdx; i<totPix; ++i) {
-      bool truth = (pairs[i].gt > 0);
-      if (truth)
+      bool truth = (pairs[i].gt == 255);
+      bool ignore= (pairs[i].gt > 0 && pairs[i].gt < 255);
+      if(!ignore)
+      if (truth )
         tp->data_array[pnt]++; // gt = true, class = true => true pos
       else
         fp->data_array[pnt]++; // gt = false, class = true => false pos
     }
-  }
+  } 
 
   bbas_1d_array_float * tpr=new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * fpr=new bbas_1d_array_float(numPoints);
@@ -202,32 +211,32 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     fpr->data_array[pnt]= fp->data_array[pnt] / (fp->data_array[pnt] + tn->data_array[pnt]);
   }
   //: find the point when tpr > 0.8
-  float change = 0.0f;
-  for (unsigned int pnt=0; pnt<numPoints; ++pnt) {
-    if (tpr->data_array[pnt] > 0.8f) {
-      unsigned int exampleIdx = pnt*incr;
-      change = pairs[exampleIdx].change;
-      break;
-    }
-  }
+  //float change = 0.0f;
+  //for (unsigned int pnt=0; pnt<numPoints; ++pnt) {
+  //  if (tpr->data_array[pnt] > 0.8f) {
+  //    unsigned int exampleIdx = pnt*incr;
+  //    change = pairs[exampleIdx].change;
+  //    break;
+  //  }
+  //}
 
   vil_image_view<vxl_byte>* temp = new vil_image_view<vxl_byte>(detection_map->ni(), detection_map->nj(), 3);
   temp->fill(0);
 
-  for (unsigned k = 0; k < totPix; ++k) {
-    unsigned i = pairs[k].i;
-    unsigned j = pairs[k].j;
-    if (pairs[k].change >= change) {
-      (*temp)(i,j,1) = 0;
-      (*temp)(i,j,2) = 0;
-      (*temp)(i,j,0) = 255;
-    }
-    else {
-      (*temp)(i,j,1) = 255*(*detection_map)(i,j) > 255 ? 255 : (vxl_byte)(255*(*detection_map)(i,j));
-      (*temp)(i,j,2) = 255*(*detection_map)(i,j) > 255 ? 255 : (vxl_byte)(255*(*detection_map)(i,j));
-      (*temp)(i,j,0) = 255*(*detection_map)(i,j) > 255 ? 255 : (vxl_byte)(255*(*detection_map)(i,j));
-    }
-  }
+  //for (unsigned k = 0; k < totPix; ++k) {
+  //  unsigned i = pairs[k].i;
+  //  unsigned j = pairs[k].j;
+  //  if (pairs[k].change >= change) {
+  //    (*temp)(i,j,1) = 0;
+  //    (*temp)(i,j,2) = 0;
+  //    (*temp)(i,j,0) = 255;
+  //  }
+  //  else {
+  //    (*temp)(i,j,1) = 255*(*detection_map)(i,j) > 255 ? 255 : (vxl_byte)(255*(*detection_map)(i,j));
+  //    (*temp)(i,j,2) = 255*(*detection_map)(i,j) > 255 ? 255 : (vxl_byte)(255*(*detection_map)(i,j));
+  //    (*temp)(i,j,0) = 255*(*detection_map)(i,j) > 255 ? 255 : (vxl_byte)(255*(*detection_map)(i,j));
+  //  }
+  //}
 
   pro.set_output_val<bbas_1d_array_float_sptr>(0, tp);
   pro.set_output_val<bbas_1d_array_float_sptr>(1, tn);
