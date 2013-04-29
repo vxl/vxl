@@ -64,9 +64,9 @@ open(const vcl_string& rawFile)
   raw_.read( (char*) &pixelSize, sizeof(pixelSize) );
   raw_.read( (char*) &numFrames, sizeof(numFrames) );
   //vj modification
-  vxl_int_64 timestamp;
-  for (int i = 0; i < numFrames; ++i)
-    raw_.read( (char*) &timestamp, sizeof(timestamp) );
+  //vxl_int_64 timestamp;
+  //for (int i = 0; i < numFrames; ++i)
+  //  raw_.read( (char*) &timestamp, sizeof(timestamp) );
 
   vcl_cout<<"Raw file header:\n"
           <<"  size: "<<ni<<','<<nj<<'\n'
@@ -82,8 +82,11 @@ open(const vcl_string& rawFile)
     format_ = VIDL_PIXEL_FORMAT_RGB_24;
   else if (pixelSize==8)
     format_ = VIDL_PIXEL_FORMAT_MONO_8;
-  else if (pixelSize==16)
+  else if (pixelSize<=16 && pixelSize > 8)
+  {
+      pixel_size_ =16;
     format_ = VIDL_PIXEL_FORMAT_MONO_16;
+  }
 
   //index is invalid until advance is called
   index_ = INIT_INDEX;
@@ -140,9 +143,9 @@ bil_raw_image_istream::current_frame()
       //calc image size, seek to offset
       unsigned int imgSize = ni_*nj_*pixel_size_/8;
       //  vj Modification
-      long long loc = 20+8*num_frames_ + (long long) index_* ( (long long)imgSize );
+      long long loc = 20+8*index_ + (long long) index_* ( (long long)imgSize );
       raw_.seekg(loc, vcl_ios::beg);
-
+      vcl_cout<<"The location is "<<loc<<" and image size is "<<ni_<<" "<<nj_<<" "<<pixel_size_<<vcl_endl;
       //allocate vil memory chunk
       vil_memory_chunk_sptr mem_chunk = new vil_memory_chunk(imgSize,VIL_PIXEL_FORMAT_BYTE);
 
@@ -161,9 +164,9 @@ bil_raw_image_istream::current_frame()
       }
       //  vj Modification
       //read timestamp
-      //vxl_int_64 timeStamp;
-      //raw_.read( (char*) &timeStamp, sizeof(timeStamp) );
-      //time_stamp_ = timeStamp;
+      vxl_int_64 timeStamp;
+      raw_.read( (char*) &timeStamp, sizeof(timeStamp) );
+      time_stamp_ = timeStamp;
     }
     return current_frame_;
   }
@@ -189,6 +192,7 @@ seek_frame(unsigned int frame_nr)
     if (index_ != frame_nr)
       current_frame_ = NULL;
     index_ = frame_nr;
+    vcl_cout<<"Index is "<<index_<<vcl_endl;
     return true;
   }
   return false;
