@@ -1,4 +1,12 @@
-from boxm2_register import boxm2_batch, dbvalue;
+import boxm2_batch
+boxm2_batch.not_verbose();
+boxm2_batch.register_processes();
+boxm2_batch.register_datatypes();
+class dbvalue:
+  def __init__(self, index, type):
+    self.id = index    # unsigned integer
+    self.type = type   # string
+
 
 ###################################################
 # Vil loading and saving
@@ -36,9 +44,12 @@ def convert_image(img, type="byte") :
 ################################
 # BAE raw file image stream
 ################################
-def bae_raw_stream(file_path) :
+def bae_raw_stream(file_path,ni=0,nj=0,pixelsize=0) :
   boxm2_batch.init_process("bilCreateRawImageIstreamProcess")
   boxm2_batch.set_input_string(0,file_path);
+  boxm2_batch.set_input_int(1,ni);
+  boxm2_batch.set_input_int(2,nj);
+  boxm2_batch.set_input_int(3,pixelsize);
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   stream = dbvalue(id, type);
@@ -52,9 +63,9 @@ def next_frame(rawStream) :
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   img = dbvalue(id,type);
-  (id, type) = boxm2_batch.commit_output(1);
-  time = boxm2_batch.get_output_unsigned(id);
-  return img, time
+  #(id, type) = boxm2_batch.commit_output(1);
+  #time = boxm2_batch.get_output_unsigned(id);
+  return img
 
 def seek_frame(rawStream, frame) :
   boxm2_batch.init_process("bilSeekFrameProcess")
@@ -63,9 +74,9 @@ def seek_frame(rawStream, frame) :
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   img = dbvalue(id,type);
-  (id, type) = boxm2_batch.commit_output(1);
-  time = boxm2_batch.get_output_unsigned(id);
-  return img, time
+  #(id, type) = boxm2_batch.commit_output(1);
+  #time = boxm2_batch.get_output_unsigned(id);
+  return img
 def arf_stream(file_path) :
   boxm2_batch.init_process("bilCreateArfImageIstreamProcess")
   boxm2_batch.set_input_string(0,file_path);
@@ -127,9 +138,10 @@ def pixel_wise_roc(cd_img, gt_img, mask_img=None) :
   fp = boxm2_batch.get_bbas_1d_array_float(id);
   (id,type) = boxm2_batch.commit_output(3);
   fn = boxm2_batch.get_bbas_1d_array_float(id);
-
+  (id,type) = boxm2_batch.commit_output(6);
+  outimg = dbvalue(id,type);
   #return tuple of true positives, true negatives, false positives, etc..
-  return (tp, tn, fp, fn);
+  return (tp, tn, fp, fn,outimg);
 
 #get image pixel value (always 0-1 float)
 def pixel(img, point):
