@@ -5,6 +5,7 @@
 
 #include <volm/volm_spherical_region.h>
 #include <vcl_iosfwd.h>
+#include <vsph/vsph_segment_sphere.h>
 
 namespace volm_vrml_io_data
 {
@@ -15,7 +16,7 @@ namespace volm_vrml_io_data
                                       {1.0f,0.5f,1.0f},
                                       {1.0f,0.0f,0.0f},
                                       {0.5f,0.5f,1.0f},
-                                      {0.0f,0.0f,1.0f} };
+                                      {0.0f,0.0f,1.0f} };   
 }
 
 class volm_vrml_io
@@ -34,6 +35,9 @@ class volm_vrml_io
                                                            spherical_region_attributes att,
                                                            double factor,                //: this is multiplied by 1.0 and is used to display outwards or inwards of the unit sphere.
                                                            double tol);
+    static void display_segment_sphere(vcl_ostream& str ,
+                                          vsph_segment_sphere * sph,
+                                          double factor=1.0);
 };
 
 #endif
