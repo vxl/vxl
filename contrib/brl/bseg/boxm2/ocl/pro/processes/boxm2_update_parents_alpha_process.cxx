@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_parents_alpha_process.cxx
+// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_update_parents_alpha_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -22,7 +22,6 @@
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
-        
 
 namespace boxm2_ocl_update_parents_alpha_process_globals
 {
@@ -37,15 +36,13 @@ namespace boxm2_ocl_update_parents_alpha_process_globals
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
         src_paths.push_back(source_dir + "bit/update_parents_alpha.cl");
 
-
-        merge_kernel->create_kernel( &device->context(), 
-                                     device->device_id(), 
+        merge_kernel->create_kernel( &device->context(),
+                                     device->device_id(),
                                      src_paths,
-                                     "update_parents_alpha", 
+                                     "update_parents_alpha",
                                      "",
                                      "boxm2 opencl update parents alpha"); //kernel identifier (for error checking)
     }
-
 
     //map of compiled kernels, organized by data type
     static vcl_map<vcl_string,bocl_kernel* > kernels;
@@ -60,7 +57,6 @@ bool boxm2_ocl_update_parents_alpha_process_cons(bprb_func_process& pro)
     input_types_[0] = "bocl_device_sptr";
     input_types_[1] = "boxm2_scene_sptr";
     input_types_[2] = "boxm2_opencl_cache_sptr";
-
 
     // process has 1 output:
     // output[0]: scene sptr
@@ -83,7 +79,6 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
     boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
 
-
     vcl_string identifier=device->device_identifier();
     // create a command queue.
     int status=0;
@@ -94,8 +89,8 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
         vcl_cout<<" ERROR in initializing a queue"<<vcl_endl;
         return false;
     }
-    
-    //set tree identifier and compile (indexes into merge tree kernel)   
+
+    //set tree identifier and compile (indexes into merge tree kernel)
     if (kernels.find(identifier)==kernels.end())
     {
         vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -121,13 +116,12 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
         bocl_kernel* kern=kernels[identifier];
     for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
     {
-        boxm2_block_id id = blk_iter->first; 
+        boxm2_block_id id = blk_iter->first;
         vcl_cout<<"Updating Parents Alpha"<<id<<vcl_endl;
         //clear cache
         boxm2_block_metadata data = blk_iter->second;
         int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z();
 
-        
         //write the image values to the buffer
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(id);
@@ -136,16 +130,15 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
         transfer_time += (float) transfer.all();
         vcl_size_t lThreads[] = {64, 1};
         vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
-        
+
         //set first kernel args
         kern->set_arg( blk_info );
         kern->set_arg( lookup.ptr() );
         kern->set_arg( blk );
         kern->set_arg( alpha );
-        kern->set_local_arg(lThreads[0]*lThreads[1]*16*sizeof(cl_uchar)  ); 
-        kern->set_local_arg(lThreads[0]*lThreads[1]*10*sizeof(cl_uchar)  ); 
+        kern->set_local_arg(lThreads[0]*lThreads[1]*16*sizeof(cl_uchar)  );
+        kern->set_local_arg(lThreads[0]*lThreads[1]*10*sizeof(cl_uchar)  );
         //kern->set_arg( cl_output.ptr() );
-
 
         //execute kernel
         kern->execute( queue, 2, lThreads, gThreads);
@@ -157,7 +150,7 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
         alpha->read_to_buffer(queue);
         clFinish(queue);
     }
-  
+
     vcl_cout<<"Update Parents Alpha: "<<gpu_time<<vcl_endl;
     return true;
 }
