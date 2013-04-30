@@ -11,11 +11,11 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 
 //: A cost function for registering video frames by minimizing square difference in intensities.
-class boxm2_ocl_reg_mutual_info 
+class boxm2_ocl_reg_mutual_info
 {
  public:
   //: Constructor. The source image is mapped to the destination frame by dt. nbins is the number of histogram bins used to compute entropies.
-  boxm2_ocl_reg_mutual_info( boxm2_opencl_cache_sptr& cacheA,
+  boxm2_ocl_reg_mutual_info(boxm2_opencl_cache_sptr& cacheA,
                             boxm2_stream_scene_cache& cacheB,
                             bocl_device_sptr device,
                             int nbins,
@@ -43,7 +43,7 @@ class boxm2_ocl_reg_mutual_info
   bocl_mem_sptr centerY;
   bocl_mem_sptr centerZ;
   bocl_mem_sptr lookup;
-  bocl_mem_sptr sceneB_origin;  
+  bocl_mem_sptr sceneB_origin;
   bocl_mem_sptr sceneB_bbox_ids;
   bocl_mem_sptr sceneB_block_dims;
   bocl_mem_sptr sceneB_sub_block_len;
@@ -62,10 +62,8 @@ class boxm2_ocl_reg_mutual_info
   int subblk_num_buff[4];
   float output_buff[1000];
 
-
   double scale_ ;
 };
 
 
-#endif // boxm2_ocl_reg_mutual_info_h_
-
+#endif // boxm2_ocl_reg_mutual_info_h
