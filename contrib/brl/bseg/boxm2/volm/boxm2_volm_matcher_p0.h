@@ -7,7 +7,6 @@
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_spherical_region_index.h>
 #include <volm/volm_spherical_region_query.h>
-#include <volm/volm_io.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_loc_hyp.h>
@@ -20,21 +19,17 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 
-
-
 class boxm2_volm_matcher_p0
 {
-
-public:
+ public:
     ~boxm2_volm_matcher_p0();
-    boxm2_volm_matcher_p0(volm_camera_space_sptr cam_space,volm_spherical_region_query srq,float threshold);//:cam_space_(cam_space),query_(srq),threshold_(threshold),count_(0){}
-    //: matcher function
+    boxm2_volm_matcher_p0(volm_camera_space_sptr cam_space,volm_spherical_region_query srq,float threshold);
+    // matcher function
     bool match(volm_spherical_region_index & index, volm_score_sptr score);
-
 
     bool match_order(volm_spherical_regions_layer & index_layer, double & score, volm_spherical_regions_layer & q_regions, camera_space_iterator & iter, vsph_sph_box_2d & imbox);
     long count_ ;
-private:
+ private:
 
     volm_camera_space_sptr cam_space_;
     volm_spherical_region_query query_;
@@ -43,7 +38,6 @@ private:
 
     vcl_map<unsigned int, vcl_vector<vsph_sph_box_2d> > query_xformed_boxes_;
     vcl_map<unsigned int,vsph_sph_box_2d > imbox_xformed_;
-
 };
 
 #endif
