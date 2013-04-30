@@ -30,6 +30,8 @@ class vsph_segment_sphere
   //: function to compute median of the pixels in a region using the oringal values of the spherical segment
   double region_median(int id);
 
+  vsph_unit_sphere & unit_sphere(){return usph_;}
+    vcl_vector<double> data_;
  private:
   void smooth_data();
 
@@ -40,7 +42,7 @@ class vsph_segment_sphere
   int min_size_;
   bool dosmoothing_;
   //: spherical "image" data
-  vcl_vector<double> data_;
+
   vcl_vector<double> smooth_data_;
   int num_ccs_;
   //: segmented regions
