@@ -16,8 +16,6 @@
 #include <bbas/volm/volm_tile.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
-#include <bbas/bocl/bocl_manager.h>
-#include <bbas/bocl/bocl_device.h>
 #include <vcl_set.h>
 #include <vcl_iostream.h>
 #include <volm/volm_geo_index.h>
@@ -33,34 +31,33 @@ static void test_volm_matcher_p0()
     vsl_b_read(is, usph_ptr);
     // inputs for query
 #if 1
-    vcl_string depth_scene_path = "Z://projects//FINDER//test1//p1a_test1_40//p1a_test1_40.vsl";
+    vcl_string depth_scene_path = "Z:/projects/FINDER/test1/p1a_test1_40/p1a_test1_40.vsl";
     vcl_string params_file = "e:/data/Finder/cam_inc_params.txt";
     vcl_string gt_camera_file ="e:/data/Finder/Camera.kml";
     // index file
-    vcl_string orientation_index_file = "Z:\\projects\\FINDER\\index\\old_indices_remove\\geoindex_zone_17_inc_2_nh_100_pa_2\\geo_index_tile_3_node_-79.968750_32.625000_-79.937500_32.656250_index_label_orientation_hyp_32.6507_-79.949_3.07477.txt";
-    vcl_string nlcd_index_file = "Z:\\projects\\FINDER\\index\\old_indices_remove\\geoindex_zone_17_inc_2_nh_100_pa_2\\geo_index_tile_3_node_-79.968750_32.625000_-79.937500_32.656250_index_label_hyp_32.6507_-79.949_3.07477.txt";
-    vcl_string depth_index_file = "Z:\\projects\\FINDER\\index\\old_indices_remove\\geoindex_zone_17_inc_2_nh_100_pa_2\\geo_index_tile_3_node_-79.968750_32.625000_-79.937500_32.656250_index_hyp_32.6507_-79.949_3.07477.txt";
+    vcl_string orientation_index_file = "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_2/geo_index_tile_3_node_-79.968750_32.625000_-79.937500_32.656250_index_label_orientation_hyp_32.6507_-79.949_3.07477.txt";
+    vcl_string nlcd_index_file = "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_2/geo_index_tile_3_node_-79.968750_32.625000_-79.937500_32.656250_index_label_hyp_32.6507_-79.949_3.07477.txt";
+    vcl_string depth_index_file = "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_2/geo_index_tile_3_node_-79.968750_32.625000_-79.937500_32.656250_index_hyp_32.6507_-79.949_3.07477.txt";
 #endif
 
 #if 0
-    vcl_string depth_scene_path = "Z://projects//FINDER//test1//p1a_test1_20//p1a_test1_20.vsl";
+    vcl_string depth_scene_path = "Z:/projects/FINDER/test1/p1a_test1_20/p1a_test1_20.vsl";
     vcl_string params_file = "e:/data/Finder/cam_inc_params_20.txt";
     vcl_string gt_camera_file ="e:/data/Finder/Camera20.kml";
-    vcl_string orientation_index_file = "Z:\\projects\\FINDER\\index\\old_indices_remove\\geoindex_zone_17_inc_2_nh_100_pa_2\\geo_index_tile_6_node_-78.718750_33.781250_-78.687500_33.812500_index_label_orientation_hyp_33.8013_-78.7113_0.735645.txt";
-    vcl_string nlcd_index_file = "Z:\\projects\\FINDER\\index\\old_indices_remove\\geoindex_zone_17_inc_2_nh_100_pa_2\\geo_index_tile_6_node_-78.718750_33.781250_-78.687500_33.812500_index_label_hyp_33.8013_-78.7113_0.735645.txt";
-    vcl_string depth_index_file = "Z:\\projects\\FINDER\\index\\old_indices_remove\\geoindex_zone_17_inc_2_nh_100_pa_2\\geo_index_tile_6_node_-78.718750_33.781250_-78.687500_33.812500_index_hyp_33.8013_-78.7113_0.735645.txt";
+    vcl_string orientation_index_file = "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_2/geo_index_tile_6_node_-78.718750_33.781250_-78.687500_33.812500_index_label_orientation_hyp_33.8013_-78.7113_0.735645.txt";
+    vcl_string nlcd_index_file = "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_2/geo_index_tile_6_node_-78.718750_33.781250_-78.687500_33.812500_index_label_hyp_33.8013_-78.7113_0.735645.txt";
+    vcl_string depth_index_file = "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_2/geo_index_tile_6_node_-78.718750_33.781250_-78.687500_33.812500_index_hyp_33.8013_-78.7113_0.735645.txt";
 #endif
 
 #if 0
-        vcl_string depth_scene_path = "Z://projects//FINDER//test1//p1a_test1_28//p1a_test1_28.vsl";
+    vcl_string depth_scene_path = "Z:/projects/FINDER/test1/p1a_test1_28/p1a_test1_28.vsl";
     vcl_string params_file = "e:/data/Finder/cam_inc_params_28.txt";
     vcl_string gt_camera_file ="e:/data/Finder/Camera_28.kml";
-    vcl_string orientation_index_file = "Z:\\projects\\FINDER\\index\\old_indices_remove\\geoindex_zone_17_inc_2_nh_100_pa_2\\geo_index_tile_3_node_-79.843750_32.750000_-79.812500_32.781250_index_label_orientation_hyp_32.776_-79.813_5.24157.txt";
-    vcl_string nlcd_index_file = "Z:\\projects\\FINDER\\index\\old_indices_remove\\geoindex_zone_17_inc_2_nh_100_pa_2\\geo_index_tile_3_node_-79.843750_32.750000_-79.812500_32.781250_index_label_hyp_32.776_-79.813_5.24157.txt";
-    vcl_string depth_index_file = "Z:\\projects\\FINDER\\index\\old_indices_remove\\geoindex_zone_17_inc_2_nh_100_pa_2\\geo_index_tile_3_node_-79.843750_32.750000_-79.812500_32.781250_index_hyp_32.776_-79.813_5.24157.txt";
-
-
+    vcl_string orientation_index_file = "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_2/geo_index_tile_3_node_-79.843750_32.750000_-79.812500_32.781250_index_label_orientation_hyp_32.776_-79.813_5.24157.txt";
+    vcl_string nlcd_index_file = "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_2/geo_index_tile_3_node_-79.843750_32.750000_-79.812500_32.781250_index_label_hyp_32.776_-79.813_5.24157.txt";
+    vcl_string depth_index_file = "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_2/geo_index_tile_3_node_-79.843750_32.750000_-79.812500_32.781250_index_hyp_32.776_-79.813_5.24157.txt";
 #endif
+
     vcl_map<vcl_string,vcl_string> index_files;
     //index_files["ORIENTATION"] = orientation_index_file;
     index_files["NLCD"] = nlcd_index_file;
@@ -72,7 +69,6 @@ static void test_volm_matcher_p0()
     vgl_vector_3d<double> axis_x(1.0, 0.0, 0.0);
     vgl_vector_3d<double> axis_y(0.0, 1.0, 0.0);
     vgl_vector_3d<double> axis_z(0.0, 0.0, 1.0);
-
 
     vcl_ofstream os("e:/data/Finder/matcher.wrl");
     if (!os.is_open())
@@ -123,9 +119,7 @@ static void test_volm_matcher_p0()
                                                                      params.vmin,
                                                                      params.dmax);
 
-
     volm_spherical_region_query srq(dms, cam_space, sph);
-
     srq.print(vcl_cout);
 
     // index
@@ -137,12 +131,14 @@ static void test_volm_matcher_p0()
     vul_timer t; t.mark();
     //matcher.match(region_index,score);
     vcl_cout<<"Matching Time is "<<t.all()<<vcl_endl;
-    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,region_index.index_regions(),spherical_region_attributes::NLCD,0.9,0.01);
-    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,region_index.index_regions(),spherical_region_attributes::SKY,0.9,0.01);
-    //volm_vrml_io::display_segment_sphere(os,region_index.seg,1.1);
-    //region_index.seg->unit_sphere().display_edges("e:/data/Finder/usph_mesh.wrl");
-    //volm_vrml_io::display_spherical_region_layer_by_attrbute(os,srq.query_regions(0),spherical_region_attributes::NLCD,1.1,0.01);
-    //volm_vrml_io::display_spherical_region_layer_by_attrbute(os,srq.query_regions(0),spherical_region_attributes::SKY,1.1,0.01);
+    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,region_index.index_regions(),NLCD,0.9,0.01);
+    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,region_index.index_regions(),SKY,0.9,0.01);
+#if 0
+    volm_vrml_io::display_segment_sphere(os,region_index.seg,1.1);
+    region_index.seg->unit_sphere().display_edges("e:/data/Finder/usph_mesh.wrl");
+    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,srq.query_regions(0),NLCD,1.1,0.01);
+    volm_vrml_io::display_spherical_region_layer_by_attrbute(os,srq.query_regions(0),SKY,1.1,0.01);
+#endif
     os.close();
 }
 
