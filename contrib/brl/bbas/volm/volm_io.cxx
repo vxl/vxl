@@ -562,13 +562,25 @@ unsigned char volm_io::scale_score_to_1_255_sig(float const& kl, float const & k
 {
   float t = threshold;
   float x;
-  if (score > t)
-    x = -1*ku*(score-threshold);
-  else
+  if (score < t) {
     x = -1*kl*(score-threshold);
-  return 1+(unsigned char)(254.999f / ( 1+vcl_exp(x)));
+    return 1 + (unsigned char)(253.999f / ( 1+vcl_exp(x)));
+  }
+  else
+    return  volm_io::scale_score_to_1_255(threshold, score);
 }
 
+float volm_io::scale_score_to_0_1_sig(float const& kl, float const& ku, float const& threshold, unsigned char pix_value)
+{
+  if (pix_value < 127) 
+    if (pix_value == 1)
+      return 0.0f;
+    else
+      return (threshold - vcl_log(253.999/(pix_value-1)-1)/kl);
+  else {
+    return volm_io::scale_score_to_0_1(pix_value, threshold);
+  }
+}
 
 //: piecewise linear s.t. [0,t) -> [1,63), [t,1] -> [63,127]"
 unsigned char volm_io::scale_score_to_1_127(float threshold, float score)
@@ -775,21 +787,21 @@ void volm_weight::equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene
   float w_obj;
   if (!dms->sky().empty() && !dms->ground_plane().empty()) {
     w_avg = 1.0f / (2 + dms->scene_regions().size());
-    float w_sky = w_avg * 2.0f;
-    float w_grd = w_avg * 1.5f;
+    float w_sky = w_avg * 1.5f;
+    float w_grd = w_avg * 1.0f;
     w_obj = (1.0f - w_sky - w_grd) / dms->scene_regions().size();
     weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
     weights.push_back(volm_weight("ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
   }
   else if (!dms->sky().empty()) {
     w_avg = 1.0f / (1 + dms->scene_regions().size());
-    float w_sky = w_avg * 2.5f;
+    float w_sky = w_avg * 1.5f;
     w_obj = (1.0f - w_sky) / dms->scene_regions().size();
     weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
   }
   else if (!dms->ground_plane().empty()) {
     w_avg = 1.0f / (1 + dms->scene_regions().size());
-    float w_grd = w_avg *2.0f;
+    float w_grd = w_avg * 1.0f;
     w_obj = (1.0f - w_grd) / dms->scene_regions().size();
     weights.push_back(volm_weight("ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
   }

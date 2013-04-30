@@ -106,7 +106,11 @@ class volm_io
 {
  public:
   //: warning: always add to the end of this error code list, python script on the server has a hard copy of some of these values, they should not be changed
-  enum VOLM_ERROR_CODES {SUCCESS, EXE_ARGUMENT_ERROR, EXE_RUNNING, CAM_FILE_IO_ERROR, MATCHER_EXE_STARTED, MATCHER_EXE_FINISHED, MATCHER_EXE_FAILED, COMPOSE_STARTED, DEPTH_SCENE_FILE_IO_ERROR, LABELME_FILE_IO_ERROR, GEO_INDEX_FILE_MISSING, SCORE_FILE_MISSING, EXE_STARTED, EXE_MATCHER_FAILED, COMPOSE_HALT, PRE_PROCESS_STARTED, PRE_PROCESS_FAILED, PRE_PROCESS_FINISHED, POST_PROCESS_HALT};
+  enum VOLM_ERROR_CODES {SUCCESS, EXE_ARGUMENT_ERROR, EXE_RUNNING, CAM_FILE_IO_ERROR, MATCHER_EXE_STARTED, MATCHER_EXE_FINISHED, MATCHER_EXE_FAILED, 
+                         COMPOSE_STARTED, DEPTH_SCENE_FILE_IO_ERROR, LABELME_FILE_IO_ERROR, GEO_INDEX_FILE_MISSING, 
+                         SCORE_FILE_MISSING, EXE_STARTED, EXE_MATCHER_FAILED, COMPOSE_HALT, 
+                         PRE_PROCESS_STARTED, PRE_PROCESS_FAILED, PRE_PROCESS_FINISHED, 
+                         POST_PROCESS_FAILED, POST_PROCESS_HALT};
 
   //: scale value is STRONG_POSITIVE-STRONG_NEGATIVE
   enum VOLM_IMAGE_CODES {UNEVALUATED = 0, STRONG_NEGATIVE = 1, UNKNOWN = 127, STRONG_POSITIVE = 255, SCALE_VALUE = 254};
@@ -131,6 +135,8 @@ class volm_io
 
   //: piecewise linear s.t. [1,127) -> [0,t), [127,255] -> [t,1]
   static float scale_score_to_0_1(unsigned char pix_value, float threshold);
+  //: piecewise non-linear s.t. [1,255] -> [0,1]
+  static float scale_score_to_0_1_sig(float const& k1, float const &ku, float const& threshold, unsigned char score);
   //: piecewise linear s.t. [0,t) -> [1,127), [t,1] -> [127,255]"
   static unsigned char scale_score_to_1_255(float threshold, float score);
   //: piecewise non-linear s.t. using sigmoid function 255/(1+exp(-k(s-t)))

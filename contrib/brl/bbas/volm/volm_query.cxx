@@ -117,7 +117,6 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
   // start to ingest order, store in order_index_
   this->order_ingest();
   // implement the weight parameters for all objects
-  //this->weight_ingest();
 }
 
 // build a query from an existing depth map scene
@@ -195,7 +194,7 @@ volm_query::volm_query(vcl_string const& query_file, volm_camera_space_sptr cam_
   // find the scale that keeps the largest image dimension > 500
   while ((bigger>>log_downsample_ratio_) > 500)
     ++log_downsample_ratio_;
-  vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
+  //vcl_cout << "log_downsample_ratio_: " << log_downsample_ratio_ << vcl_endl; // need flush
 
   depth_regions_ = dm_->scene_regions();
   // sort the regions on depth order
@@ -207,7 +206,6 @@ volm_query::volm_query(vcl_string const& query_file, volm_camera_space_sptr cam_
   vsl_b_ifstream dis_self(query_file.c_str());
   this->read_data(dis_self);
   dis_self.close();
-
   vcl_cout << " volm_query has " << this->get_cam_num() << " cameras" << vcl_endl;
 }
 
@@ -375,6 +373,7 @@ void volm_query::create_cameras()
         }
 }
 #endif
+
 void volm_query::create_cameras()
 {
   // iterate over valid cameras in the camera space
@@ -859,7 +858,7 @@ void volm_query::draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
                           vil_rgb<vxl_byte> color,
                           vpgl_perspective_camera<double> const& cam)
 {
-  int dot_size = ( img.ni() < img.nj() ) ? (int)(0.003*ni_) : (int)(0.003*nj_);
+  int dot_size = ( img.ni() < img.nj() ) ? (int)(0.01*ni_) : (int)(0.01*nj_);
   double u, v;
   vgl_homg_point_3d<double> current_p(world_point.x(), world_point.y(), world_point.z()+altitude_);
   if (!(cam.is_behind_camera(current_p))) {
@@ -933,7 +932,7 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
     for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
       vil_rgb<vxl_byte> color_id;
       if (values[pidx] == 0)                   // invalid --> black
-        color_id = vil_rgb<vxl_byte>(49,50,62);
+        color_id = vil_rgb<vxl_byte>(255,0,0);
       else if (values[pidx] == 254)            // sky --> blue
         color_id = vil_rgb<vxl_byte>(51,102,255);
       else 

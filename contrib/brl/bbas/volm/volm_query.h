@@ -13,11 +13,11 @@
 // \date October 23, 2012
 // \verbatim
 //   Modifications
-//    Yi Dong   Jan-2013   added functions to generate object based query infomation for object based volm_matcher
-//    Yi Dong   Jan-2013   added object orientation and object NLCD land classification
-//    JLM       Jan 20, 2013 Added constructor from depth_map_scene
+//    Yi Dong         Jan-2013   added functions to generate object based query infomation for object based volm_matcher
+//    Yi Dong         Jan-2013   added object orientation and object NLCD land classification
+//    JLM             Jan 20, 2013 Added constructor from depth_map_scene
 //    Ozge C. Ozcanli Jan 30, 2013 -- replacing old camera space construction functionality with the use of volm_camera_space class
-//    Yi Dong   Feb-2013   added binary i/o
+//    Yi Dong         Feb-2013   added binary i/o
 // \endverbatim
 //
 
