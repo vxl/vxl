@@ -19,8 +19,6 @@
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
 #include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 #include <boxm2/volm/boxm2_volm_matcher_p0.h>
-#include <bbas/bocl/bocl_manager.h>
-#include <bbas/bocl/bocl_device.h>
 #include <bkml/bkml_parser.h>
 #include <bbas/volm/volm_io.h>
 #include <bbas/volm/volm_vrml_io.h>
@@ -98,8 +96,6 @@ int main(int argc, char** argv)
     unsigned int test_hyp_id;
     vul_timer t;
     t.mark();
-
-    long ttime = 0;
 
     unsigned leaf_id = 0;
     boxm2_volm_wr3db_index_sptr ind= new boxm2_volm_wr3db_index(usph_ptr->size(),1);
@@ -180,7 +176,7 @@ int main(int argc, char** argv)
                 volm_spherical_region_index region_index(index_buffers,usph_ptr);
                 volm_vrml_io::display_spherical_region_layer_by_attrbute(os,region_index.index_regions(),NLCD,1.05,0.01);
                 volm_vrml_io::display_spherical_region_layer_by_attrbute(os,region_index.index_regions(),SKY,1.05,0.01);
-                volm_vrml_io::display_segment_sphere(os,region_index.seg,0.9);
+                volm_vrml_io::display_segment_sphere(os,region_index.seg(),0.9);
                 os.close();
                 region_index.write_binary(oconfig,odata);
             }
