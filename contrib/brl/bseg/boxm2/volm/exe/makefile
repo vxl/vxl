@@ -11,6 +11,8 @@ MINI_PROG_SOURCES += boxm2_volumetric_evaluate_roi_max_score.cxx
 MINI_PROG_SOURCES += boxm2_volumetric_matcher_p1_integration.cxx
 MINI_PROG_SOURCES += boxm2_volumetric_pre_process_p1_integration.cxx
 MINI_PROG_SOURCES += boxm2_volumetric_post_process_p1_integration.cxx
+MINI_PROG_SOURCES += boxm2_volm_segment_index.cxx
+MINI_PROG_SOURCES += boxm2_pass0_compile_results.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
