@@ -26,6 +26,7 @@
 
 #include <vsph/vsph_unit_sphere_sptr.h>
 #include <vsph/vsph_segment_sphere.h>
+
 class volm_spherical_region_index
 {
  public:
@@ -39,6 +40,7 @@ class volm_spherical_region_index
 
   void write_binary(vcl_ofstream & oconfig,vcl_ofstream & odata);
   ~volm_spherical_region_index();
+  vsph_segment_sphere * seg() { return seg_; }
  private:
   void construct_spherical_regions();
   void load_unitsphere(vcl_string usph_file_path);
@@ -46,7 +48,7 @@ class volm_spherical_region_index
   float check_phi_bounds(float  phi);
   vcl_vector<double> data_;
   vsph_unit_sphere_sptr usph_;
-  vsph_segment_sphere * seg;
+  vsph_segment_sphere * seg_;
 };
 
 #endif // volm_spherical_region_index_h_

@@ -49,29 +49,29 @@ volm_spherical_region_index(vcl_map<vcl_string,vcl_string> & index_file_paths,
         double sigma = (0.1*usph_->point_angle())/dpr,  c =0.0;
         int min_size = 3;
         bool dosmoothing = true;
-        seg = new vsph_segment_sphere(*usph_.ptr(),  c, min_size,sigma,dosmoothing);
-        seg->set_data(data_);
-        seg->segment();
-        seg->extract_region_bounding_boxes();
-        const vcl_map<int, vsph_sph_box_2d>& boxes = seg->region_boxes();
+        seg_ = new vsph_segment_sphere(*usph_.ptr(),  c, min_size,sigma,dosmoothing);
+        seg_->set_data(data_);
+        seg_->segment();
+        seg_->extract_region_bounding_boxes();
+        const vcl_map<int, vsph_sph_box_2d>& boxes = seg_->region_boxes();
         vcl_map<int, vsph_sph_box_2d>::const_iterator bit = boxes.begin();
 
         for (; bit != boxes.end(); ++bit) {
             volm_spherical_region r(bit->second);
-            if (keep_sky && (unsigned char) seg->region_median(bit->first) == 254)
+            if (keep_sky && (unsigned char) seg_->region_median(bit->first) == 254)
                 r.set_attribute(SKY,(unsigned char) 254);
             else
             {
                 if (att==ORIENTATION)
                 {
-                    unsigned char ival = (unsigned char) seg->region_median(bit->first);
+                    unsigned char ival = (unsigned char) seg_->region_median(bit->first);
                     if (ival >=2 && ival <=9)
                         r.set_attribute(att,(unsigned char) 2);
                     else if (ival == 1)
                         r.set_attribute(att,ival);
                 }
                 else
-                    r.set_attribute(att,(unsigned char) seg->region_median(bit->first));
+                    r.set_attribute(att,(unsigned char) seg_->region_median(bit->first));
             }
             sph_regions_.add_region(r);
         }
@@ -166,33 +166,33 @@ volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_
         double sigma = (0.1*usph_->point_angle())/dpr,  c =0.0;
         int min_size = 3;
         bool dosmoothing = false;
-        seg = new vsph_segment_sphere(*usph_.ptr(),  c, min_size,sigma,dosmoothing);
-        seg->set_data(data_);
-        seg->segment();
-        seg->extract_region_bounding_boxes();
-        const vcl_map<int, vsph_sph_box_2d> boxes = seg->region_boxes();
+        seg_ = new vsph_segment_sphere(*usph_.ptr(),  c, min_size,sigma,dosmoothing);
+        seg_->set_data(data_);
+        seg_->segment();
+        seg_->extract_region_bounding_boxes();
+        const vcl_map<int, vsph_sph_box_2d> boxes = seg_->region_boxes();
         vcl_map<int, vsph_sph_box_2d>::const_iterator bit = boxes.begin();
 
         for (; bit != boxes.end(); ++bit) {
             volm_spherical_region r(bit->second);
-            if (keep_sky && (unsigned char) seg->region_median(bit->first) == 254)
+            if (keep_sky && (unsigned char) seg_->region_median(bit->first) == 254)
                 r.set_attribute(SKY,(unsigned char) 254);
-            else if ( (unsigned char) seg->region_median(bit->first) < 253 )
+            else if ( (unsigned char) seg_->region_median(bit->first) < 253 )
             {
                 if (att==ORIENTATION)
                 {
-                    unsigned char ival = (unsigned char) seg->region_median(bit->first);
+                    unsigned char ival = (unsigned char) seg_->region_median(bit->first);
                     if (ival >=2 && ival <=9)
                         r.set_attribute(att,(unsigned char) 2);
                     else if (ival == 1)
                         r.set_attribute(att,ival);
                 }
                 else
-                    r.set_attribute(att,(unsigned char) seg->region_median(bit->first));
+                    r.set_attribute(att,(unsigned char) seg_->region_median(bit->first));
             }
             sph_regions_.add_region(r);
         }
-        delete seg;
+        delete seg_;
     }
 }
 
