@@ -260,5 +260,57 @@ decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
     }
 }
 
+__kernel
+void
+decide_inside_cell(     __constant  RenderSceneInfo    * linfo,
+                       __global    float             * alpha,
+                       __global    float              * vis,
+                       __global    float16            * vis_sphere )
+{
+    int gid=get_global_id(0);
+    int datasize = linfo->data_len ;
+    if (gid<datasize) {
+        vis[gid] = -1.0f;
+
+      //check if there is meaningful data here
+      if (vis_sphere[gid].sf != -1.0f) {
+          //declare ray
+
+
+          float max_vis = 0.0f;
+          float sum_vis = 0.0f;
+          float private_vis[12];
+          private_vis[0] = vis_sphere[gid].s0;
+          private_vis[1] = vis_sphere[gid].s1;
+          private_vis[2] = vis_sphere[gid].s2;
+          private_vis[3] = vis_sphere[gid].s3;
+          private_vis[4] = vis_sphere[gid].s4;
+          private_vis[5] = vis_sphere[gid].s5;
+          private_vis[6] = vis_sphere[gid].s6;
+          private_vis[7] = vis_sphere[gid].s7;
+          private_vis[8] = vis_sphere[gid].s8;
+          private_vis[9] = vis_sphere[gid].s9;
+          private_vis[10] = vis_sphere[gid].sa;
+          private_vis[11] = vis_sphere[gid].sb;
+
+          //compute max visibility in normal and opposite hemisphere
+          for (unsigned int i = 0; i < 12; i++) 
+          {
+                  max_vis = (max_vis < private_vis[i]) ? private_vis[i] : max_vis;
+                  sum_vis+=private_vis[i]; 
+          }
+  #ifdef USESUM //use the sum of visibilities for the given hemisphere
+         
+            vis[gid] = sum_vis;
+           
+  #else //use the max  visibility for the given hemisphere
+          vis[gid] =  max_vis;
+  #endif //USESUM
+
+          if(vis[gid] < 0.75 )
+              alpha[gid] =0.0;
+      }
+    }
+}
 #endif //COMPVIS
 
