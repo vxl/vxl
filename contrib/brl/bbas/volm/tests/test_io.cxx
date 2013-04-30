@@ -14,10 +14,7 @@
 
 static void test_io()
 {
-  //vcl_string path =  "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/vol_indices/geo_index_tile_3_node_-79.968750_32.656250_-79.937500_32.687500_index_label_orientation_hyp_32.6574_-79.9432_4.24473.txt";
-  //vcl_vector<unsigned char> data;
-  //bool good = volm_io::read_ray_index_data(path, data);
-
+  // test the volm_fallback_category
   vcl_map<unsigned char, vcl_vector<unsigned char> >::iterator mit = volm_fallback_label::fallback_id.begin();
   vcl_map<unsigned char, vcl_vector<float> >::iterator mit_w = volm_fallback_label::fallback_weight.begin();
 
@@ -28,14 +25,11 @@ static void test_io()
     //  vcl_cout << volm_label_table::land_string(*vit) << ", ";
     vcl_cout << vcl_setw(10) << vcl_setfill(' ') << " ------ ";
     volm_fallback_label::print_wgt(mit->first);
-#ifdef DEBUG
     for (vcl_vector<float>::iterator vit = mit_w->second.begin(); vit != mit_w->second.end(); ++vit)
       vcl_cout << vcl_setprecision(3) << *vit << ' ';
-#endif
     vcl_cout << '\n' << vcl_endl;
     ++mit_w;
   }
-
   TEST("number of fallback_label and weight", volm_fallback_label::fallback_id.size(), volm_fallback_label::fallback_weight.size());
 
 #if 0
