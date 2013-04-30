@@ -290,6 +290,12 @@ SOURCE=.\processes/boxm2_ocl_render_gl_view_dep_app_expected_image_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_render_expected_depth_region_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_update_parents_alpha_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_make_inside_voxels_empty_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
