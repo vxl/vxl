@@ -58,7 +58,7 @@ DECLARE_FUNC_CONS(boxm2_ocl_update_sun_visibilities_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_shadow_map_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_create_norm_intensities_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_create_aux_process); 
-DECLARE_FUNC_CONS(boxm2_ocl_flip_normals_using_vis_process);
+DECLARE_FUNC_CONS(boxm2_ocl_make_inside_voxels_empty_process);
 DECLARE_FUNC_CONS(boxm2_ocl_aggregate_normal_from_filter_process);
 DECLARE_FUNC_CONS(boxm2_ocl_aggregate_normal_from_filter_vector_process);
 DECLARE_FUNC_CONS(boxm2_ocl_kernel_filter_process);
@@ -78,5 +78,8 @@ DECLARE_FUNC_CONS(boxm2_ocl_ingest_dem_space_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_view_dep_app_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_view_dep_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_gl_view_dep_app_expected_image_process);
+DECLARE_FUNC_CONS(boxm2_ocl_make_inside_voxels_empty_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_parents_alpha_process);
+
 
 #endif

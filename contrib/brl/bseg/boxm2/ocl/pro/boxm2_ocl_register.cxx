@@ -62,7 +62,7 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_probability_of_image_gl_process, "boxm2OclProbabilityOfImageGlProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_sun_visibilities_process, "boxm2OclUpdateSunVisibilitiesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_shadow_map_process, "boxm2OclRenderExpectedShadowMapProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_flip_normals_using_vis_process, "boxm2OclFlipNormalsUsingVisProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_make_inside_voxels_empty_process, "boxm2OclFlipNormalsUsingVisProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_aggregate_normal_from_filter_process, "boxm2OclAggregateNormalFromFilterProcess");
   REG_PROCESS_FUNC_CONS2(boxm2_ocl_aggregate_normal_from_filter_vector_process);
   REG_PROCESS_FUNC_CONS2(boxm2_ocl_kernel_filter_process);
@@ -98,5 +98,9 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_view_dep_expected_image_process, "boxm2OclRenderViewDepExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_view_dep_app_expected_image_process, "boxm2OclRenderGlViewDepExpectedImageProcess");
 
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_make_inside_voxels_empty_process, "boxm2OclMakeInsideVoxelsEmptyProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_parents_alpha_process, "boxm2OclUpdateParentsAlphaProcess");
+
+  
 
 }
