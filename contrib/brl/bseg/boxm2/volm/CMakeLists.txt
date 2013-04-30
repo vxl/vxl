@@ -17,11 +17,11 @@ SET(boxm2_volm_sources
     boxm2_volm_locations_sptr.h
     boxm2_volm_wr3db_index.h        boxm2_volm_wr3db_index.cxx
     boxm2_volm_wr3db_index_sptr.h
+    boxm2_volm_matcher_p0.h         boxm2_volm_matcher_p0.cxx
    )
 
 IF(OPENCL_FOUND)
 SET(boxm2_volm_sources ${boxm2_volm_sources}
-    boxm2_volm_matcher_p0.h         boxm2_volm_matcher_p0.cxx
     boxm2_volm_matcher_p1.h         boxm2_volm_matcher_p1.cxx
    )
 ENDIF(OPENCL_FOUND)
