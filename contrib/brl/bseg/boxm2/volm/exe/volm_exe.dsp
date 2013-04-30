@@ -124,6 +124,12 @@ SOURCE=.\boxm2_volumetric_pre_process_p1_integration.cxx
 # Begin Source File
 SOURCE=.\boxm2_volumetric_post_process_p1_integration.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_volm_segment_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_pass0_compile_results.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

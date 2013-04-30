@@ -106,6 +106,9 @@ SOURCE=.\boxm2_ocl_reg_depth_map_to_vol.cxx
 # Begin Source File
 SOURCE=.\boxm2_ocl_reg_depth_map_to_vol2.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_monte_carlo_reg.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -120,6 +123,9 @@ SOURCE=.\boxm2_ocl_reg_depth_map_to_vol.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_reg_depth_map_to_vol2.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_monte_carlo_reg.h
 # End Source File
 # End Group
 # End Target
