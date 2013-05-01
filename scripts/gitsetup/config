@@ -1,0 +1,5 @@
+[hooks]
+	url = http://git.code.sf.net/p/vxl/git
+[sourceforge]
+	project = vxl
+	mount = git
