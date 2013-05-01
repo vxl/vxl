@@ -9,7 +9,7 @@ set(CTEST_BUILD_NAME "Linux-gcc")
 #set(CTEST_BUILD_FLAGS "-j2") # parallel build for makefiles
 set(CTEST_BUILD_CONFIGURATION Release)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
-#set(CTEST_UPDATE_COMMAND /path/to/svn)
+#set(CTEST_GIT_COMMAND /path/to/git)
 
 #set(dashboard_model Experimental)
 #set(dashboard_model Continuous)
