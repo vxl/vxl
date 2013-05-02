@@ -99,6 +99,17 @@ check_no_lf_at_eof() {
 }
 
 # Custom whitespace checks.
+check_crlf() {
+	crlf=$(git check-attr crlf -- "$1" | sed 's/^[^:]*: crlf: //')
+	if test "x$crlf" = "xunset"; then
+		return
+	fi
+	# Check the patch for CRLF newlines
+	if git diff-index -p --cached $against -- "$1" |
+	   grep -q '^\+.*'$'\r''$'; then
+		echo "$1: Adds CRLF newlines"
+	fi
+}
 check_whitespace() {
 	ws=$(git check-attr whitespace -- "$file" |
 	     sed 's/^[^:]*: whitespace: //')
@@ -113,6 +124,7 @@ check_whitespace() {
 }
 bad=$(git diff-index --name-only --cached $against -- |
 while read file; do
+	check_crlf "$file"
 	check_whitespace "$file"
 done)
 test -z "$bad" || die "$bad"
