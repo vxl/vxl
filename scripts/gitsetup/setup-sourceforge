@@ -118,7 +118,8 @@ if test -n "$fetchurl" &&
 
   '"$fetchurl"'
 
-does not look like a SourceForge repository.'
+does not look like a SourceForge repository; not configuring for push.
+This is okay if you will not be pushing to the SourceForge repository.'
 	exit 0
 fi &&
 
