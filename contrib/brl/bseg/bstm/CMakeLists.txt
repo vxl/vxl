@@ -15,10 +15,8 @@ SET(bstm_sources bstm_block_metadata.h bstm_block_metadata.cxx
 
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
-
   INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
-
 ENDIF(EXPAT_FOUND)
 
 
