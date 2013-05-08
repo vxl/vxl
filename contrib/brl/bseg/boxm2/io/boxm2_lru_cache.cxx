@@ -8,7 +8,18 @@
 void boxm2_lru_cache::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)
 {
   if (boxm2_cache::exists())
-    vcl_cout << "boxm2_lru_cache:: boxm2_cache singleton already created" << vcl_endl;
+  {
+    if(boxm2_cache::instance_->get_scene()->xml_path() == scene->xml_path())
+    {
+      vcl_cout << "boxm2_lru_cache:: boxm2_cache singleton already created" << vcl_endl;
+    }
+    else
+    {
+      vcl_cout << "boxm2_lru_cache:: destroying current cache and creating new one: " << scene->data_path() << vcl_endl;
+      instance_ = new boxm2_lru_cache(scene, fs_type);
+      destroyer_.set_singleton(instance_);
+    }
+  }
   else {
     instance_ = new boxm2_lru_cache(scene, fs_type);
     destroyer_.set_singleton(instance_);
