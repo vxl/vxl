@@ -74,11 +74,12 @@ boxm2_scene::boxm2_scene(vcl_string filename)
                << parser.XML_GetCurrentLineNumber() << '\n';
       return;
     }
+
+    vcl_fclose(xmlFile);
   }
 
   //store data path
   data_path_ = parser.path();
-  xml_path_  = data_path_ + "scene.xml";
 
   //lvcs, origin, block dimension
   parser.lvcs(lvcs_);
@@ -92,6 +93,8 @@ boxm2_scene::boxm2_scene(vcl_string filename)
   appearances_ = parser.appearances();
   num_illumination_bins_ = parser.num_illumination_bins();
   version_ = parser.version();
+
+
 }
 
 
