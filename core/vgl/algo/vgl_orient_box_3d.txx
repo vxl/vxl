@@ -6,6 +6,7 @@
 
 #include "vgl_orient_box_3d.h"
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_tolerance.h>
 #include <vnl/vnl_det.h>
 #include <vcl_iostream.h>
 
@@ -19,6 +20,9 @@ vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_point_3d<Type> const& p0,
 {
   // The normalized main axes of the box:
   vgl_vector_3d<Type> vx = px - p0, vy = py - p0, vz = pz - p0;
+  assert(vx.x() * vy.x() + vx.y() * vy.y() + vx.z() * vy.z() < 0.001  );
+  assert(vz.x() * vy.x() + vz.y() * vy.y() + vz.z() * vy.z() < 0.001  );
+
   double lx = vx.length(), ly = vy.length(), lz = vz.length();
   // the quaternion rotation matrix:
   vnl_matrix_fixed<double,3,3> rotation;
