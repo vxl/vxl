@@ -59,9 +59,8 @@ float render_expected_image(  bstm_scene_sptr & scene,
     //render label or not?
     cl_int render_label_buf[1];
     render_label_buf[0] = render_label ? 1 : 0;
-    bocl_mem_sptr render_label_mem = new bocl_mem(device->context(), render_label_buf, sizeof(render_label_buf), "render label?");
+    bocl_mem_sptr render_label_mem = new bocl_mem(device->context(), render_label_buf, sizeof(cl_int), "render label?");
     render_label_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
 
     //2. set global thread size
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
@@ -79,7 +78,7 @@ float render_expected_image(  bstm_scene_sptr & scene,
         if(!mdata.contains_t(time,local_time))
           continue;
 
-        vcl_cout << "Time: " << time << " local time: " << local_time << vcl_endl;
+
         cl_float cl_time = (cl_float)local_time;
         bocl_mem_sptr time_mem =new bocl_mem(device->context(), &cl_time, sizeof(cl_float), "time instance buffer");
         time_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -89,15 +88,14 @@ float render_expected_image(  bstm_scene_sptr & scene,
         //write the image values to the buffer
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);
-        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* blk_t     = opencl_cache->get_time_block(*id);
+        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
 
 
         bocl_mem* alpha     = opencl_cache->get_data<BSTM_ALPHA>(*id);
         int alphaTypeSize   = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_ALPHA>::prefix());
         // data type string may contain an identifier so determine the buffer size
-
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+        bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,false);
 
         //if rendering label, actually get the data for it, otherwise don't bother.
         bocl_mem* label = mog;
@@ -105,6 +103,7 @@ float render_expected_image(  bstm_scene_sptr & scene,
           label = opencl_cache->get_data(*id,label_data_type,alpha->num_bytes()/alphaTypeSize*label_apptypesize,true);
 
         transfer_time += (float) transfer.all();
+
 
         ////3. SET args
         kern->set_arg( blk_info );
@@ -129,8 +128,6 @@ float render_expected_image(  bstm_scene_sptr & scene,
         kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) );
         kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_int) );
 
-        vcl_cout << "Ocl cache size: " << opencl_cache->bytes_in_cache() << vcl_endl;
-
         //execute kernel
         kern->execute(queue, 2, lthreads, gThreads);
         clFinish(queue);
@@ -140,6 +137,7 @@ float render_expected_image(  bstm_scene_sptr & scene,
         kern->clear_args();
         kern->release_current_event();
     }
+    vcl_cout << "Ocl cache size: " << opencl_cache->bytes_in_cache() << vcl_endl;
 
     //clean up cam
     delete[] ray_origins;

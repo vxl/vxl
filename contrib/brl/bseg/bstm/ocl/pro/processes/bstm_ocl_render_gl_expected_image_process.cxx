@@ -132,6 +132,8 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   bool render_label = pro.get_input<bool>(i++);
 
 
+
+
   //get scene data type and appTypeSize
   vcl_string data_type,label_data_type;
   int apptypesize,label_apptypesize;
@@ -139,26 +141,28 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
+  valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
   if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
     vcl_cout<<"bstm_ocl_render_gl_expected_image_process ERROR: scene doesn't have BSTM_MOG3_GREY or BSTM_GAUSS_RGB data type"<<vcl_endl;
     return false;
   }
 
-  bool isViewDep = (data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
+  bool isViewDep = (data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()) || (data_type == bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
 
   //get initial options (MOG TYPE)
   vcl_string options = bstm_ocl_util::mog_options(data_type);
 
-
+  vcl_cout << data_type << " " << options << " " << apptypesize <<vcl_endl;
   //get scene label data type and appTypeSize if any.
   vcl_vector<vcl_string> valid_label_types;
   valid_label_types.push_back(bstm_data_traits<BSTM_LABEL>::prefix());
   bool foundLabelDataType = bstm_util::verify_appearance( *scene, valid_label_types, label_data_type, label_apptypesize );
+#ifdef DEBUG
   if ( !foundLabelDataType )
     vcl_cout<<"Scene doesn't have BSTM_LABEL label type...rendering without it..."<<vcl_endl;
   else
     vcl_cout<<"Scene has " << label_data_type << " type...rendering with it..."<<vcl_endl;
-
+#endif
   //get options for teh label
   options += bstm_ocl_util::label_options(label_data_type);
 
@@ -188,12 +192,13 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-  bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
+  bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float),"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
 
   // run expected image function
   float render_time;
+
   if(!foundLabelDataType || !render_label)
     render_time = render_expected_image( scene, device, opencl_cache, queue,
                                       cam, exp_color, vis_image, exp_img_dim,
@@ -222,11 +227,15 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   }
 
 
+
   // read out expected image
   clReleaseCommandQueue(queue);
 
   delete[] vis_buff;
   delete[] buff;
+
+  //opencl_cache->free_mem(exp_color.ptr());
+  //opencl_cache->free_mem(vis_image.ptr());
 
   //store render time
   int argIdx = 0;

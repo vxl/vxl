@@ -17,6 +17,7 @@ TARGET_LINK_LIBRARIES(bstm_ocl_pro bstm_ocl bstm_ocl_algo  boct brdb vbl_io expa
 INSTALL_TARGETS(/lib bstm_ocl_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm/ocl/pro ${bstm_ocl_pro_sources})
 
+
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
