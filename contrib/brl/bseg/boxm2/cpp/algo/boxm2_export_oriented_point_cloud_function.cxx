@@ -10,15 +10,19 @@
 
 
 void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
-                                                                     boxm2_data_base* alpha, boxm2_data_base* vis,
+                                                                     boxm2_data_base* alpha, boxm2_data_base* vis, boxm2_data_base* vis_sum, boxm2_data_base* exp,boxm2_data_base* nobs,
                                                                      boxm2_data_base* points, boxm2_data_base* normals,
-                                                                     vcl_ofstream& file,
-                                                                     bool output_aux, float vis_t, float nmag_t, float prob_t, vgl_box_3d<double> bb)
+                                                                     boxm2_data_base* ray_dir_sum, vcl_ofstream& file,
+                                                                     bool output_aux, float vis_t, float nmag_t, float prob_t, float exp_t, vgl_box_3d<double> bb)
 {
   boxm2_data_traits<BOXM2_ALPHA>::datatype *     alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
   boxm2_data_traits<BOXM2_POINT>::datatype *     points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
   boxm2_data_traits<BOXM2_NORMAL>::datatype *    normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
   boxm2_data_traits<BOXM2_VIS_SCORE>::datatype * vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
+  boxm2_data_traits<BOXM2_VIS_SCORE>::datatype * vis_sum_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis_sum->data_buffer();
+  boxm2_data_traits<BOXM2_EXPECTATION>::datatype *  exp_data = (boxm2_data_traits<BOXM2_EXPECTATION>::datatype*) exp->data_buffer();
+  boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::datatype *  nobs_data = (boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::datatype*) nobs->data_buffer();
+  boxm2_data_traits<BOXM2_RAY_DIR>::datatype *  ray_dir_sum_data = (boxm2_data_traits<BOXM2_RAY_DIR>::datatype*) ray_dir_sum->data_buffer();
 
   file << vcl_fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
@@ -31,7 +35,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2
         continue;
 
       //check prob
-      if (prob >= prob_t)
+      if (prob >= prob_t && exp_data[currIdx] >= exp_t)
       {
         //check bounding box
         if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
@@ -39,8 +43,11 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2
           file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' '
                <<  normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ';
 
-          if (output_aux)
-            file  <<  prob << ' ' <<  vis_data[currIdx] << ' ' <<  normals_data[currIdx][3];
+          if (output_aux) {
+            file  <<  prob  << ' ' <<  normals_data[currIdx][3] << ' ' <<  vis_data[currIdx] << ' ' <<  vis_sum_data[currIdx];
+            file << ' ' << ray_dir_sum_data[currIdx][0] << " " << ray_dir_sum_data[currIdx][1] << " " << ray_dir_sum_data[currIdx][2] << " ";
+            file << ' ' <<  exp_data[currIdx] << ' ' <<  nobs_data[currIdx];
+          }
           file << vcl_endl;
         }
       }
@@ -50,15 +57,23 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2
 
 void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                                                      boxm2_data_base* alpha, boxm2_data_base* mog, boxm2_data_base* vis,
-                                                                     boxm2_data_base* points, boxm2_data_base* normals,
-                                                                     vcl_ofstream& file, bool output_aux, float vis_t, float nmag_t, float prob_t,
+                                                                     boxm2_data_base* exp, boxm2_data_base* nobs,
+                                                                     boxm2_data_base* points, boxm2_data_base* normals, vcl_vector<boxm2_data_base*> taylor_coeff,
+                                                                     boxm2_data_base* ray_dir_sum, boxm2_data_base* ray_dir_weighted_sum, vcl_ofstream& file, bool output_aux, float vis_t, float nmag_t, float prob_t, float exp_t,
                                                                      vgl_box_3d<double> bb, unsigned& num_vertices)
 {
   boxm2_data_traits<BOXM2_ALPHA>::datatype *   alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
   boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
   boxm2_data_traits<BOXM2_NORMAL>::datatype *  normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
   boxm2_data_traits<BOXM2_VIS_SCORE>::datatype *    vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
+  boxm2_data_traits<BOXM2_EXPECTATION>::datatype *  exp_data = (boxm2_data_traits<BOXM2_EXPECTATION>::datatype*) exp->data_buffer();
+  boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::datatype *  nobs_data = (boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::datatype*) nobs->data_buffer();
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *    mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
+  vcl_vector<boxm2_data_traits<BOXM2_FLOAT>::datatype * > taylor_coeff_data;
+  for(int i = 0; i < 10; i++)
+    taylor_coeff_data.push_back((boxm2_data_traits<BOXM2_FLOAT>::datatype *) taylor_coeff[i]->data_buffer() );
+  boxm2_data_traits<BOXM2_RAY_DIR>::datatype *  ray_dir_sum_data = (boxm2_data_traits<BOXM2_RAY_DIR>::datatype*) ray_dir_sum->data_buffer();
+  boxm2_data_traits<BOXM2_RAY_DIR>::datatype *  ray_dir_weighted_sum_data = (boxm2_data_traits<BOXM2_RAY_DIR>::datatype*) ray_dir_weighted_sum->data_buffer();
 
   file << vcl_fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
@@ -71,18 +86,23 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
         continue;
 
       //check prob
-      if (prob >= prob_t)
+      if (prob >= prob_t && exp_data[currIdx] >= exp_t)
       {
         //check bounding box
         if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
         {
           file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' '
-               <<  normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ';
+               <<  ray_dir_sum_data[currIdx][0] / nobs_data[currIdx] << ' ' << ray_dir_sum_data[currIdx][1] / nobs_data[currIdx] << ' ' << ray_dir_sum_data[currIdx][2] / nobs_data[currIdx]<< ' ';
           num_vertices++;
 
           if (output_aux){
             unsigned int intensity = (unsigned int)(boxm2_mog3_grey_processor::expected_color(mog_data[currIdx])*255.0f);
-            file  <<  prob << ' ' <<  vis_data[currIdx] << ' ' <<  normals_data[currIdx][3] << ' ' << intensity << ' ' << intensity << ' ' << intensity;
+            file  <<  prob << ' ' <<  vis_data[currIdx] << ' ' <<  normals_data[currIdx][3] << ' ' <<  exp_data[currIdx] << ' ' <<  nobs_data[currIdx] <<  ' '  << intensity << ' ' << intensity << ' ' << intensity;
+            file << ' ';
+            for(int i = 0; i < 10; i++)
+              file << taylor_coeff_data[i][currIdx] << " ";
+            file << ray_dir_sum_data[currIdx][0] << " " << ray_dir_sum_data[currIdx][1] << " " << ray_dir_sum_data[currIdx][2] << " ";
+            file << ray_dir_weighted_sum_data[currIdx][0] << " " << ray_dir_weighted_sum_data[currIdx][1] << " " << ray_dir_weighted_sum_data[currIdx][2] << " ";
           }
           file << vcl_endl;
         }
@@ -242,7 +262,7 @@ void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& fi
    file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
         << "\nproperty float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\n";
    if (output_aux) {
-     file << "property float prob\nproperty float vis_score\nproperty float nmag\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n";
+     file << "property float prob\nproperty float vis_score\nproperty float nmag\nproperty float exp\nproperty float nobs\nproperty uchar red\nproperty uchar green\nproperty uchar blue\nproperty float f0\nproperty float f1\nproperty float f2\nproperty float f3\nproperty float f4\nproperty float f5\nproperty float f6\nproperty float f7\nproperty float f8\nproperty float f9\n";
    }
 
    file << "end_header\n"
