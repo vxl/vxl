@@ -35,15 +35,15 @@ SET(volm_sources
  volm_loc_hyp_sptr.h
  volm_geo_index.h  volm_geo_index.cxx
  volm_geo_index_sptr.h
- volm_camera_space.h					volm_camera_space.cxx
+ volm_camera_space.h                    volm_camera_space.cxx
  volm_camera_space_sptr.h
  volm_spherical_query_region.h          volm_spherical_query_region.cxx
  volm_spherical_region_query.h          volm_spherical_region_query.cxx
- volm_spherical_region_index.h			volm_spherical_region_index.cxx
+ volm_spherical_region_index.h          volm_spherical_region_index.cxx
  volm_spherical_layers.h                volm_spherical_layers.cxx
  volm_spherical_index_query_matcher.h   volm_spherical_index_query_matcher.cxx
- volm_spherical_region.h				volm_spherical_region.cxx
- volm_vrml_io.h							volm_vrml_io.cxx
+ volm_spherical_region.h                volm_spherical_region.cxx
+ volm_vrml_io.h                         volm_vrml_io.cxx
 
 )
 
