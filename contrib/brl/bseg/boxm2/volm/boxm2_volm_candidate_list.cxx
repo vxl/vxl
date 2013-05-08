@@ -178,17 +178,6 @@ bool boxm2_volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile&
   unsigned n_point = poly_[sh_idx].size();
   double deg_per_half_pixel_i = 0.5 * tile.scale_i()/(tile.ni() - 1);
   double deg_per_half_pixel_j = 0.5 * tile.scale_j()/(tile.nj() - 1);
-
-#if 0
-  vcl_vector<vgl_point_2d<double> > points_global;
-  for (unsigned i = 0; i < n_point; i++) {
-    double lon, lat;
-    tile.img_to_global(poly_[sh_idx][i].x(), poly_[sh_idx][i].y(), lon, lat);
-    points_global.push_back(vgl_point_2d<double>(lon, lat));
-  }
-  vgl_polygon<double> poly_global(points_global);
-#endif
-
   vcl_vector<vgl_point_2d<double> > points;
   for (unsigned i = 0; i < n_point; i++) {
     double lon, lat;
@@ -241,6 +230,19 @@ bool boxm2_volm_candidate_list::find(unsigned const& i, unsigned const& j, unsig
 
 bool boxm2_volm_candidate_list::contains(vcl_vector<vgl_point_2d<int> > const& sheet, unsigned const& u, unsigned const& v)
 {
+  // for each sheet, create a covex hull and check wehter the pixel is inside the polygon
+  unsigned n_points = sheet.size();
+  vcl_vector<vgl_point_2d<double> > points;
+  for (unsigned i = 0; i < n_points; i++) {
+    points.push_back(vgl_point_2d<double>(sheet[i].x()+0.5, sheet[i].y()+0.5));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()+0.5));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()-0.5));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()-0.5));
+  }
+  vgl_convex_hull_2d<double> ch(points);
+  vgl_polygon<double> poly = ch.hull();
+  return poly.contains(u, v);
+#if 0
   // first check whether the point is on the boundary sicen the sheel can be a single long line (not polygon)
   unsigned n_verts = sheet.size();
   for (unsigned i = 0; i < n_verts; i++)
@@ -249,6 +251,7 @@ bool boxm2_volm_candidate_list::contains(vcl_vector<vgl_point_2d<int> > const& s
   // check wether the point is inside the sheet
   vgl_polygon<int> poly(sheet);
   return poly.contains(u, v);
+#endif
 }
 
 bool boxm2_volm_candidate_list::candidate_list_image(vil_image_view<vxl_byte>& image)
