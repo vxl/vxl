@@ -26,6 +26,8 @@ TARGET_LINK_LIBRARIES( boxm2_volm_segment_index boxm2_volm vbl vgl volm )
 ADD_EXECUTABLE( boxm2_pass0_compile_results boxm2_pass0_compile_results.cxx)
 TARGET_LINK_LIBRARIES( boxm2_pass0_compile_results boxm2_volm vbl vgl volm )
 
+ADD_EXECUTABLE( boxm2_volumetric_create_candidate_list boxm2_volumetric_create_candidate_list.cxx )
+TARGET_LINK_LIBRARIES( boxm2_volumetric_create_candidate_list boxm2_volm vbl vgl volm vil)
 
 ADD_EXECUTABLE( boxm2_volumetric_pre_process_p1_integration boxm2_volumetric_pre_process_p1_integration.cxx )
 TARGET_LINK_LIBRARIES( boxm2_volumetric_pre_process_p1_integration boxm2_volm vbl vgl volm )

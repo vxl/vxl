@@ -33,6 +33,8 @@ class volm_tile
    //: assessors
    unsigned ni() { return ni_; }
    unsigned nj() { return nj_; }
+   float scale_i() { return scale_i_; }
+   float scale_j() { return scale_j_; }
 
    //: do the conversions in reporting lon,lat
    double lower_left_lon();
