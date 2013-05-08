@@ -201,10 +201,15 @@ float bocl_kernel::exec_time()
 
 bool bocl_kernel::release_current_event()
 {
-  int status = clReleaseEvent(ceEvent_);
-  if ( !check_val(status,CL_SUCCESS,"clReleaseEvent failed (" + id_ + ") " +error_to_string(status)) )
-    return false;
-  return true;
+  if(ceEvent_)
+  {
+    int status = clReleaseEvent(ceEvent_);
+    if ( !check_val(status,CL_SUCCESS,"clReleaseEvent failed (" + id_ + ") " +error_to_string(status)) )
+      return false;
+    return true;
+  }
+  else
+    return true;
 }
 
 unsigned long bocl_kernel::local_mem_size()
