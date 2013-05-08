@@ -107,7 +107,7 @@ int main(int argc,  char** argv)
   vcl_cerr << " test_id = " << id() << ", gt_score = " << gt_score << ", max_score = " << max_score_all << '\n';
 
   // calculate roi for current valid out_folder
-  //  cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
+  // cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
   vcl_map<float, vcl_vector<unsigned> > cnt_map;
   for (vcl_vector<double>::iterator vit = test_img_thres.begin(); vit != test_img_thres.end(); ++vit) {
     vcl_vector<unsigned> cnt_vec(3,0);

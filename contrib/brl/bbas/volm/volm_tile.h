@@ -8,6 +8,10 @@
 //
 // \author Ozge C. Ozcanli
 // \date September 18, 2012
+// \verbatim
+// Modifications
+//  Yi Dong - May 08 2012 - add assessors
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_vector.h>

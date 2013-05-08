@@ -1,6 +1,6 @@
 //:
 // \file
-// \executable to read the probability map and generate candidate list given a threshold from 127 to 255
+// \executable to read the probability map and generate candidate list given a threshold from 128 to 255
 //
 //
 // \author Yi Dong

@@ -39,7 +39,6 @@ boxm2_volm_candidate_list::boxm2_volm_candidate_list(vil_image_view<vxl_byte> co
     poly_.push_back(sheet);
   }
   n_sheet_ = poly_.num_sheets();
-
 #if 0
   //for(mit = pt_map_.begin(); mit != pt_map_.end(); ++mit)
   //  vcl_cout << " score = " << mit->first << " , pixel = " << mit->second << vcl_endl;
@@ -206,22 +205,6 @@ bool boxm2_volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile&
   vcl_vector<vgl_point_2d<double> >::iterator vit = poly[0].begin();
   for (; vit != poly[0].end(); ++vit)
     region_global.push_back(*vit);
-  //// sort the points to be counterclock wise
-  //// calculate the center points
-  //double c_x = 0, c_y = 0;
-  //for (vcl_vector<vgl_point_2d<double> >::iterator vit = points.begin(); vit != points.end(); ++vit) {
-  //  c_x += vit->x(); c_y += vit->y();
-  //}
-  //c_x /= points.size();
-  //c_y /= points.size();
-
-  //c_less cl(vgl_point_2d<double>(c_x, c_y));
-  //vcl_set<vgl_point_2d<double>, c_less> counter_points(cl);
-  //for (vcl_vector<vgl_point_2d<double> >::iterator vit = points.begin(); vit != points.end(); ++vit)
-  //  counter_points.insert(*vit);
-  //for (vcl_set<vgl_point_2d<double>, c_less>::iterator sit = counter_points.begin(); sit != counter_points.end(); ++sit)
-  //  region_global.push_back(*sit);
-  
   return true;
 }
 

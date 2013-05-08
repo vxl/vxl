@@ -29,7 +29,7 @@ ENDIF(OPENCL_FOUND)
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_volm_sources)
 
-ADD_LIBRARY(boxm2_volm  ${boxm2_volm_sources})
+ADD_LIBRARY(boxm2_volm ${boxm2_volm_sources})
 TARGET_LINK_LIBRARIES(boxm2_volm boxm2 boxm2_io brip baio vpgl volm vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
 IF(OPENCL_FOUND)
 TARGET_LINK_LIBRARIES(boxm2_volm bocl)

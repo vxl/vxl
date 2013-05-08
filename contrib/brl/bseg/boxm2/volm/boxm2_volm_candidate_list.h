@@ -26,37 +26,6 @@
 
 typedef vcl_multimap<unsigned, vgl_point_2d<int>, vcl_greater<unsigned> > mymap;
 
-#if 0
-//: a class use to rearrange the points in counterclock wise
-class c_less
-{
-public:
-  c_less() : cent_(vgl_point_2d<double>(0.0,0.0)) {}
-  c_less(vgl_point_2d<double> const& center) : cent_(center) {}
-  ~c_less() {}
-  // the predicate function
-  bool operator() (vgl_point_2d<double> const& pa, vgl_point_2d<double> const& pb) const
-  {
-    if (pa.x() >=0 && pb.x() < 0)
-      return false;
-    if (pa.x() == 0 && pb.x() == 0)
-      return pa.y() < pb.y();
-    // compute the cross product of vector (cent-a) x (cent-b) to define the counter-clock order
-    double det = (pa.x()-cent_.x())*(pb.y()-cent_.y()) - (pb.x()-cent_.x())*(pa.y()-cent_.y());
-    if (det < 0)
-      return false;
-    if (det > 0)
-      return true;
-    // if det == 0, pa and pb are colinear and check which point is closer than the center 
-    double da = (pa.x() - cent_.x())*(pa.x() - cent_.x()) + (pa.y() - cent_.y())*(pa.y() - cent_.y());
-    double db = (pb.x() - cent_.x())*(pb.x() - cent_.x()) + (pb.y() - cent_.y())*(pb.y() - cent_.y());
-    return da < db;
-  }
-private:
-  vgl_point_2d<double> cent_;
-};
-#endif
-
 class boxm2_volm_candidate_list
 {
   public:
@@ -126,7 +95,6 @@ class boxm2_volm_candidate_list
     vgl_polygon<int> poly_;
     //: check whether the pixel is inside the candidate poly
     bool contains(vcl_vector<vgl_point_2d<int> > const& sheet, unsigned const& i, unsigned const& j);
-    
 };
 
 #endif
