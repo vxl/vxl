@@ -99,7 +99,7 @@ int main(int argc,  char** argv)
   // if the image exists, load the image instead
   vcl_vector<vil_image_view<float> > tile_imgs;
   for (unsigned i = 0 ; i < tiles.size(); i++) {
-    vcl_string img_name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
+    vcl_string img_name = out() + "/" + "ProbMap_float_" + tiles[i].get_string() + ".tif";
     if (vul_file::exists(img_name)) {
       // load the image
       vil_image_view<float> out_img = vil_load(img_name.c_str());
@@ -178,7 +178,7 @@ int main(int argc,  char** argv)
     }
   } // end of tiles
 
-
+#if 0
   // save the location and camera which give maximum score
   if (!vul_file::exists(cam_bin())) {
     log << "ERROR: can not find camera_space binary: " << cam_bin() << '\n';
@@ -220,10 +220,11 @@ int main(int argc,  char** argv)
                                   head, tilt, roll, tfov, rfov);
   bkml_write::close_document(ofs_kml);
   ofs_kml.close();
+#endif
 
   // save the ProbMap image and output the grount truth score
   for (unsigned i = 0; i < tiles.size(); i++) {
-    vcl_string img_name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
+    vcl_string img_name = out() + "/" + "ProbMap_float_" + tiles[i].get_string() + ".tif";
     vil_save(tile_imgs[i],img_name.c_str());
     unsigned u, v;
     if (tiles[i].global_to_img(samples[id()].first.x(), samples[id()].first.y(), u, v) ) {
@@ -234,7 +235,7 @@ int main(int argc,  char** argv)
             << u << ", " << v << " in tile " << i << " and has value: "
             << tile_imgs[i](u, v)
             << " max score for this test_img = " << max_score
-            << " given by camera " << max_cam_ang.get_string()
+            //<< " given by camera " << max_cam_ang.get_string()
             << " at location " << max_score_loc.x() << ", " << max_score_loc.y()
             << '\n';
         volm_io::write_post_processing_log(log_file, log.str());
