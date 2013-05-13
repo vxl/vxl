@@ -136,6 +136,18 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_texture_classifier_params&
   os << "---]\n";
   return os;
 }
+vcl_string sdet_texture_classifier_params::filter_dir_name() 
+{ 
+  vcl_stringstream str; 
+  if (signed_response_)
+    str << "filter_bank_" << n_scales_ << "_" << lambda0_ << "_" << lambda1_ << "_" << scale_interval_ << "_" << angle_interval_ << "_"
+        << laplace_radius_ << "_" << gauss_radius_ << "_" << cutoff_per_ << "_signed";
+  else
+    str << "filter_bank_" << n_scales_ << "_" << lambda0_ << "_" << lambda1_ << "_" << scale_interval_ << "_" << angle_interval_ << "_"
+        << laplace_radius_ << "_" << gauss_radius_ << "_" << cutoff_per_ << "_not_signed";
+  return str.str();
+}
+
 //: Binary save vgl_point_2d to stream.
 void vsl_b_write(vsl_b_ostream &os, 
                  const sdet_texture_classifier_params & tcp)

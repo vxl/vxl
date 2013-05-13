@@ -48,11 +48,14 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //  TODO: generalize geo_camera so that img_to_global method makes this adjustment internally if camera is created using this method
   static bool init_geo_camera(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
 
+  //: init using a tfw file, reads the transformation matrix from the tfw
+  static bool init_geo_camera(vcl_string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera);
+
   ~vpgl_geo_camera() {}
 
   virtual vcl_string type_name() const { return "vpgl_geo_camera"; }
 
-  //northing=0 means North, 1 is east
+  //northing=0 means North, 1 is south
   void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
 
   void set_lvcs(vpgl_lvcs_sptr lvcs) {lvcs_ = new vpgl_lvcs(*lvcs); }

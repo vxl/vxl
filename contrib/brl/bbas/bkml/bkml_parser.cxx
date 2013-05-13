@@ -112,12 +112,12 @@ bkml_parser::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, KML_LINE_TAG) == 0) {
     cord_tag_ = KML_LINE_TAG;
   }
-  else if (vcl_strcmp(name, KML_COORDS_TAG) == 0) {
+  /*else if (vcl_strcmp(name, KML_COORDS_TAG) == 0) {
   last_tag = KML_COORDS_TAG;
   }
   else if (vcl_strcmp(name, KML_PLACEMARK_NAME_TAG) == 0) {
   last_tag = KML_PLACEMARK_NAME_TAG;
-  }
+  }*/
 }
 
 
@@ -145,7 +145,7 @@ void bkml_parser::charData(const XML_Char* s, int len)
     str >> latitude_;
     last_tag = "";
   }
-  else if (last_tag == KML_COORDS_TAG) {
+  /*else if (last_tag == KML_COORDS_TAG) {
     if (current_name_.compare("Camera Ground Truth") == 0) {
       vcl_stringstream str;
       for (int i =0; i<len; ++i) {
@@ -164,7 +164,7 @@ void bkml_parser::charData(const XML_Char* s, int len)
       str << s[i];
     current_name_ = str.str();
     last_tag = "";
-  }
+  }*/
   else if (last_tag == KML_ALT_TAG) {
     vcl_stringstream str;
     for (int i =0; i<len; ++i)
@@ -314,7 +314,8 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
   if (parser->polyouter_.size()<2) {
     vcl_cerr << "input polygon has no outerboundary" << '\n';
     delete parser;
-    return out;
+    vgl_polygon<double> out2;
+    return out2;
   }
   unsigned int n_out = (unsigned int)parser->polyouter_.size();
   n_out--;   // note that the last point in kml is same as the first point
@@ -324,7 +325,9 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
   }
   if (parser->polyinner_.size()<2) {
     vcl_cerr << "input polygon has no innerboundary, skipping" << '\n';
-    return out;
+    vgl_polygon<double> out2(1);
+    out2[0] = out[0];
+    return out2;
   }
   unsigned int n_in = (unsigned int)parser->polyinner_.size();
   n_in--;   // note that the last point in kml is same as the first point

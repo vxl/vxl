@@ -120,7 +120,10 @@ sdet_texture_classifier(sdet_texture_classifier_params const& params)
                                      params.cutoff_per_)),
   distances_valid_(false), inter_prob_valid_(false), color_map_valid_(false),
   texton_index_valid_(false), texton_weights_valid_(false)
-{}
+{ 
+  maxr_ = this->max_filter_radius(); 
+  vcl_cout << " the max image border eaten by classifier: " << maxr_ << '\n'; 
+}
 
 
 bool sdet_texture_classifier::
@@ -159,6 +162,80 @@ compute_filter_bank(vil_image_view<float> const& img)
 #endif
   return true;
 }
+
+#include <vil/vil_convert.h>
+#include <vil/vil_math.h>
+#include <vul/vul_file.h>
+
+//: check the folder if already computed using the image name, otherwise compute and save
+bool sdet_texture_classifier::compute_filter_bank_color_img(vcl_string const& filter_folder, vcl_string const& img_name)
+{
+  vcl_cout << "computing filter bank on: " << img_name << vcl_endl;
+  vcl_string name = vul_file::strip_directory(img_name);
+  name = vul_file::strip_extension(name);
+
+  vcl_string filterbank_dir = filter_folder + this->filter_dir_name();
+  if (!vul_file::exists(filterbank_dir))
+    vul_file::make_directory(filterbank_dir);
+
+  // first check filter folder if already computed
+  vcl_string img_out_dir = filterbank_dir + "/" + name + "/";
+  bool exists = vul_file::exists(img_out_dir);
+  if (!exists || !this->load_filter_responses(img_out_dir))
+  {
+    vil_image_resource_sptr img = vil_load_image_resource(img_name.c_str());
+    vil_image_view<unsigned char> out_img(img->ni(),img->nj());
+    vil_image_view<float> out_imgf(img->ni(),img->nj());
+    vil_convert_planes_to_grey<unsigned char,unsigned char>(*((img->get_view()).as_pointer()),out_img);
+    vil_convert_stretch_range(out_img, out_imgf, 0.0f, 1.0f);
+    //vil_save(out_imgf, (in_poly() + imgs[ii].first + "_stretched.tif").c_str());
+
+    if (!this->compute_filter_bank(out_imgf))
+      return false;
+    if (!exists) 
+      if (!vul_file::make_directory(img_out_dir)) {
+        vcl_cerr << " in sdet_texture_classifier::compute_filter_bank_color_img - cannot create directory: " << img_out_dir << vcl_endl;
+        return false;
+      }
+    this->save_filter_responses(img_out_dir);
+  }
+  return true;
+}
+
+//: check the folder if already computed using the image name, otherwise compute and save
+bool sdet_texture_classifier::compute_filter_bank_float_img(vcl_string const& filter_folder, vcl_string const& img_name, float max_val)
+{
+  vcl_cout << "computing filter bank on: " << img_name << vcl_endl;
+  vcl_string name = vul_file::strip_directory(img_name);
+  name = vul_file::strip_extension(name);
+  
+  vcl_string filterbank_dir = filter_folder + this->filter_dir_name();
+  if (!vul_file::exists(filterbank_dir))
+    vul_file::make_directory(filterbank_dir);
+
+  // first check filter folder if already computed
+  vcl_string img_out_dir = filterbank_dir + "/" + name + "/";
+  bool exists = vul_file::exists(img_out_dir);
+  if (!exists || !this->load_filter_responses(img_out_dir))
+  {
+    vil_image_view<float> lidar_img_orig = vil_load(img_name.c_str());
+    vil_math_truncate_range(lidar_img_orig, 0.0f, max_val);
+    // stretch the lidar as classification requires an image in [0,1]
+    vil_image_view<float> lidar_img(lidar_img_orig.ni(),lidar_img_orig.nj());
+    vil_convert_stretch_range_limited(lidar_img_orig, lidar_img, 0.0f, max_val, 0.0f, 1.0f);
+
+    if (!this->compute_filter_bank(lidar_img))
+      return false;
+    if (!exists)
+      if (!vul_file::make_directory(img_out_dir)) {
+        vcl_cerr << " in sdet_texture_classifier::compute_filter_bank_float_img() - cannot create directory: " << img_out_dir << vcl_endl;
+        return false;
+      }
+    this->save_filter_responses(img_out_dir);
+  }
+  return true;
+}
+
 
 // Used to define the initial k means cluster centers
 // by random selection from the training data
@@ -227,6 +304,29 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category)
   vcl_cout << "Collect texture samples in texture box region" << t.real()/1000.0 << " secs.\n";
   return true;
 }
+#include <vul/vul_file.h>
+//: save filter responses
+bool sdet_texture_classifier::save_filter_responses(vcl_string const& dir) 
+{
+  if (!filter_responses_.save_filter_responses(dir))
+    return false;
+  vcl_string path = dir + "/filter_response_gauss.tif";
+  vil_save(gauss_, path.c_str());
+  vcl_string path2 = dir + "/filter_response_laplace.tif";
+  vil_save(laplace_, path2.c_str());
+  return true;
+}
+bool sdet_texture_classifier::load_filter_responses(vcl_string const& dir) 
+{
+  if (!filter_responses_.load_filter_responses(dir, this->n_scales_))
+    return false;
+  vcl_string path = dir + "/filter_response_gauss.tif";
+  gauss_ = vil_load(path.c_str());
+  vcl_string path2 = dir + "/filter_response_laplace.tif";
+  laplace_ = vil_load(path2.c_str());
+  return true;
+}
+
 
 // compute a vector of filter responses, which are sampled from the
 // response pixels for the input image. Only responses within the
@@ -358,6 +458,80 @@ compute_training_data(vcl_string const& category,
   return true;
 }
 
+//: extract trainig data for the pixels in the array
+bool sdet_texture_classifier::compute_training_data(vcl_string const& category, vcl_vector<vcl_pair<int, int> >const& pixels)
+{
+  // dimension of filter bank
+  unsigned dim = filter_responses_.n_levels();
+  if (!dim) {
+    vcl_cout << "zero dimensional filter bank\n" << vcl_flush;
+    return false;
+  }
+  vul_timer t;
+  //vcl_cout << " texton dimension: " << dim + 2 << '\n' << vcl_flush;
+
+  // collect set of points
+  //unsigned maxr = this->max_filter_radius();
+  vcl_vector<vnl_vector<double> > training_data, sampled_data;
+  // assume all filter response images are the same size;
+  int ni = filter_responses_.ni()-maxr_;
+  int nj = filter_responses_.nj()-maxr_;
+  if (ni<=0||nj<=0) {
+    vcl_cout << "training image too small ni or nj <= " << maxr_ << '\n';
+    return false;
+  }
+  for (unsigned kk = 0; kk < pixels.size(); kk++) {
+    int ii = pixels[kk].first;
+    int jj = pixels[kk].second;
+    if (ii < 0 || jj < 0 || ii >= ni || jj >= nj) continue;  // invalid pixels are marked -1, -1 in the input
+    vnl_vector<double> tx(dim+2);
+    for (unsigned f = 0; f<dim; ++f)
+      tx[f]=filter_responses_.response(f)(ii,jj);
+    double g = gauss_(ii,jj);
+    tx[dim]=laplace_(ii,jj); tx[dim+1]=g;
+    training_data.push_back(tx);
+  }
+  // reduce the number of samples to specified size
+  unsigned ns = training_data.size();
+  if (ns>n_samples_) {
+    for (unsigned i = 0; i<n_samples_; ++i) {
+      unsigned s = static_cast<unsigned>((n_samples_-1)*(vcl_rand()/(RAND_MAX+1.0)));
+      sampled_data.push_back(training_data[s]);
+    }
+    training_data.clear();
+    training_data = sampled_data;
+  }
+
+  this->add_training_data(category, training_data);
+
+}
+//: extract filter outputs for the specified pixels 
+bool sdet_texture_classifier::compute_data(vcl_vector<vcl_pair<int, int> >const& pixels, vcl_vector<vnl_vector<double> >& data)
+{
+  // dimension of filter bank
+  unsigned dim = filter_responses_.n_levels();
+  assert(dim != 0);
+
+  // assume all filter response images are the same size;
+  int ni = filter_responses_.ni()-maxr_;
+  int nj = filter_responses_.nj()-maxr_;
+  if (ni<=0||nj<=0) {
+    vcl_cout << "training image too small ni or nj <= " << maxr_ << '\n';
+    return false;
+  }
+  for (unsigned kk = 0; kk < pixels.size(); kk++) {
+    int ii = pixels[kk].first;
+    int jj = pixels[kk].second;
+    if (ii < 0 || jj < 0 || ii >= ni || jj >= nj) continue;  // invalid pixels are marked -1, -1 in the input
+    vnl_vector<double> tx(dim+2);
+    for (unsigned f = 0; f<dim; ++f)
+      tx[f]=filter_responses_.response(f)(ii,jj);
+    double g = gauss_(ii,jj);
+    tx[dim]=laplace_(ii,jj); tx[dim+1]=g;
+    data.push_back(tx);
+  }
+}
+
 bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
                                                     vcl_string const& poly_path)
 {
@@ -397,6 +571,12 @@ bool sdet_texture_classifier::compute_textons(vcl_string const& category)
   texton_dictionary_[category]=centers;
   vcl_cout << "Compute k means in " << t.real()/1000.0 << " secs.\n";
   return true;
+}
+//: compute textons with k_means for all the categories with training data
+void sdet_texture_classifier::compute_textons_all()
+{
+  for (vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::iterator iter = training_data_.begin(); iter != training_data_.end(); iter++) 
+    this->compute_textons(iter->first);
 }
 
 bool sdet_texture_classifier::
@@ -520,6 +700,85 @@ bool sdet_texture_classifier::load_dictionary(vcl_string const& path)
   is.close();
   return true;
 }
+
+//: save current training data, binary (includes classifier params at top of file)
+bool sdet_texture_classifier::save_data(vcl_string const& path) const
+{
+  vsl_b_ofstream os(path.c_str());
+  if (!os) {
+    vcl_cout << "Can't open binary stream in save_dictionary\n";
+    return false;
+  }
+  vcl_cout << "Save training data to " << path << '\n';
+  sdet_texture_classifier_params const * tcp_ptr =
+    dynamic_cast<sdet_texture_classifier_params const*>(this);
+  vsl_b_write(os, *tcp_ptr);
+  vsl_b_write(os, training_data_);
+  os.close();
+  return true;
+}
+
+int sdet_texture_classifier::data_size(vcl_string const& cat)
+{
+  vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::iterator iter = training_data_.find(cat);
+  if (iter == training_data_.end())
+    return -1;
+  else
+    return (int)(iter->second.size());
+}
+
+//: load current training data, binary
+bool sdet_texture_classifier::load_data(vcl_string const& path)
+{
+  vsl_b_ifstream is(path.c_str());
+  if (!is) {
+    vcl_cout << "Can't open binary stream in load_dictionary in " << path << vcl_endl;
+    return false;
+  }
+  vcl_cout << "Loading training data in: " << path << '\n' << vcl_flush;
+  training_data_.clear();
+  sdet_texture_classifier_params* tcp_ptr
+    = dynamic_cast<sdet_texture_classifier_params*>(this);
+  vsl_b_read(is, *tcp_ptr);
+  vsl_b_read(is, training_data_);
+  is.close();
+  return true;
+}
+
+void sdet_texture_classifier::add_training_data(vcl_string const& category, vcl_vector<vnl_vector<double> >& training_data)
+{
+  vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::iterator dit;
+  dit = training_data_.find(category);
+  if (dit == training_data_.end()) {
+    training_data_[category]=training_data;
+  }
+  else {
+    training_data_[category].insert(training_data_[category].end(),
+                                    training_data.begin(),
+                                    training_data.end());
+  }
+}
+bool sdet_texture_classifier::get_training_data(vcl_string const& category, vcl_vector<vnl_vector<double> >& data)
+{
+  vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::iterator dit;
+  dit = training_data_.find(category);
+  if (dit == training_data_.end()) {
+    return false;
+  }
+  else {
+    data.insert(data.end(), dit->second.begin(), dit->second.end());
+    return true;
+  }
+}
+//: return a list of category names for which training data is available
+vcl_vector<vcl_string> sdet_texture_classifier::get_training_categories()
+{
+  vcl_vector<vcl_string> cats;
+  for (vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::iterator iter = training_data_.begin(); iter != training_data_.end(); iter++)
+    cats.push_back(iter->first);
+  return cats;
+}
+
 
 void sdet_texture_classifier::print_dictionary() const
 {
@@ -795,6 +1054,12 @@ update_hist(vnl_vector<double> const& f, float weight, vcl_vector<float>& hist)
   unsigned indx = this->nearest_texton_index(f);
   hist[indx]+=weight;// for example, counts are normalized to probability
 }
+//: update the texton histogram with a vector of filter outputs, use the same weight for all the samples
+void sdet_texture_classifier::update_hist(vcl_vector<vnl_vector<double> > const& f, float weight, vcl_vector<float>& hist)
+{
+  for (unsigned i = 0; i < f.size(); i++)
+    this->update_hist(f[i], weight, hist);
+}
 
 vcl_map<vcl_string, float>  sdet_texture_classifier::
 texture_probabilities(vcl_vector<float> const& hist)
@@ -819,6 +1084,20 @@ texture_probabilities(vcl_vector<float> const& hist)
   }
   return probs;
 }
+//: get the class name and prob value with the highest probability for the given histogram
+vcl_pair<vcl_string, float> sdet_texture_classifier::highest_prob_class(vcl_vector<float> const& hist)
+{
+  vcl_map<vcl_string, float> class_map = this->texture_probabilities(hist);
+  vcl_map<vcl_string, float>::iterator iter_max = class_map.begin();
+  for (vcl_map<vcl_string, float>::iterator iter = class_map.begin(); iter != class_map.end(); iter++) {
+    if (iter->second > iter_max->second)
+      iter_max = iter;
+  }
+  vcl_pair<vcl_string, float> r(iter_max->first, iter_max->second);
+  return r;
+}
+
+
 
 void sdet_texture_classifier::
 category_color_mix(vcl_map<vcl_string, float>  & probs,
@@ -942,21 +1221,21 @@ unsigned sdet_texture_classifier::max_filter_radius() const
 
 //dummy vsl io functions to allow sdet_texture_classifier to be inserted into
 //brdb as a dbvalue
-void vsl_b_write(vsl_b_ostream & os, sdet_texture_classifier const& /*tc*/)
+void vsl_b_write(vsl_b_ostream & os, sdet_texture_classifier const &tc)
 { /* do nothing */ }
-void vsl_b_read(vsl_b_istream & is, sdet_texture_classifier & /*tc*/)
+void vsl_b_read(vsl_b_istream & is, sdet_texture_classifier &tc)
 { /* do nothing */ }
-void vsl_print_summary(vcl_ostream &os, const sdet_texture_classifier & /*tc*/)
+void vsl_print_summary(vcl_ostream &os, const sdet_texture_classifier &tc)
 { /* do nothing */ }
-void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier * /*tc*/)
+void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier* tc)
 { /* do nothing */ }
-void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier* & /*tc*/)
+void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier* &tc)
 { /* do nothing */ }
-void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier* & /*tc*/)
+void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier* &tc)
 { /* do nothing */ }
-void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier_sptr& /*tc*/)
+void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier_sptr& tc)
 { /* do nothing */ }
-void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier_sptr & /*tc*/)
+void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier_sptr &tc)
 { /* do nothing */ }
-void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier_sptr & /*tc*/)
+void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier_sptr &tc)
 { /* do nothing */ }

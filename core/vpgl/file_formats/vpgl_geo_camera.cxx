@@ -131,6 +131,35 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
   return true;
 }
 
+//: init using a tfw file, reads the transformation matrix from the tfw
+bool vpgl_geo_camera::init_geo_camera(vcl_string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera)
+{
+  
+  vcl_ifstream ifs(tfw_name.c_str());
+  
+  if (!ifs.is_open()) {
+    vcl_cerr << "in vpgl_geo_camera::init_geo_camera() -- cannot open: " << tfw_name << '\n';
+    return false;
+  }
+  
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  ifs >> trans_matrix[0][0];
+  ifs >> trans_matrix[0][1];
+  ifs >> trans_matrix[1][0];
+  ifs >> trans_matrix[1][1];
+  ifs >> trans_matrix[0][3];
+  ifs >> trans_matrix[1][3];
+  trans_matrix[3][3] = 1.0;
+
+  camera = new vpgl_geo_camera(trans_matrix, lvcs);
+  if (utm_zone != 0)
+    camera->set_utm(utm_zone, northing);
+  camera->set_scale_format(true);
+  
+  ifs.close();
+  return true;
+}
+
 //: transforms a given local 3d world point to image plane
 void vpgl_geo_camera::project(const double x, const double y, const double z,
                               double& u, double& v) const

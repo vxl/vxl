@@ -26,8 +26,7 @@
 #define KML_CORD_TAG "coordinates"
 #define KML_POLYCORE_END_TAG "/coordinates"
 #define KML_LINE_TAG "LineString"
-#define KML_COORDS_TAG "coordinates"
-#define KML_PLACEMARK_NAME_TAG "name"
+//#define KML_PLACEMARK_NAME_TAG "name"
 
 
 #define KML_HEAD_DEV_TAG "heading_deviation"
@@ -58,6 +57,8 @@ class bkml_parser : public expatpp
   // in this poly lon is x, lat is y
   static vgl_polygon<double> parse_polygon(vcl_string poly_kml_file);
   static bool parse_location_from_kml(vcl_string kml_file, double& lat, double& lon);
+
+  static void trim_string(vcl_string& s);
 
   // results of parse
   double longitude_;
@@ -91,7 +92,8 @@ class bkml_parser : public expatpp
   //element parser
   vcl_string last_tag;
   vcl_string cord_tag_;
-  void trim_string(vcl_string& s);
+  
 };
+
 
 #endif

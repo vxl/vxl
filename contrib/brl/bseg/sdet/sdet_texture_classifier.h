@@ -91,6 +91,13 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   //: compute filter responses for a given texture category training image
   bool compute_filter_bank(vil_image_view<float> const& img);
+  
+  //: check the folder if already computed using the image name, otherwise compute and save
+  bool compute_filter_bank_color_img(vcl_string const& filter_folder, vcl_string const& img_name);
+
+  //: check the folder if already computed using the image name, otherwise compute and save
+  bool compute_filter_bank_float_img(vcl_string const& filter_folder, vcl_string const& img_name, float max_val);
+
 
   //: the max image border width eaten up by filter kernels
   unsigned max_filter_radius() const;
@@ -112,8 +119,17 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   bool compute_training_data(vcl_string const& category,
                              vcl_string const& poly_path = "");
 
+  //: extract trainig data for the pixels in the array
+  bool compute_training_data(vcl_string const& category, vcl_vector<vcl_pair<int, int> >const& pixels);
+  //: extract filter outputs for the specified pixels 
+  bool compute_data(vcl_vector<vcl_pair<int, int> >const& pixels, vcl_vector<vnl_vector<double> >& data);
+
   //: compute textons with k_means for the specified texture category
   bool compute_textons(vcl_string const& category);
+  //: compute textons with k_means for all the categories with training data
+  void compute_textons_all();
+
+  unsigned get_number_of_textons() { return texton_index_.size(); }
 
   //: compute textons from set of images (and polygons).
   //  If polygon_paths is empty or some element contains a null string
@@ -132,6 +148,25 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   //: load dictionary, binary
   bool load_dictionary(vcl_string const& path);
 
+  //: save current training data, binary (includes classifier params at top of file)
+  bool save_data(vcl_string const& path) const;
+  //: load current training data, binary
+  bool load_data(vcl_string const& path);
+
+  //: save filter responses
+  bool save_filter_responses(vcl_string const& dir);
+  bool load_filter_responses(vcl_string const& dir);
+
+  int data_size(vcl_string const& cat);
+  void add_training_data(vcl_string const& cat, vcl_vector<vnl_vector<double> >& data);
+  bool get_training_data(vcl_string const& cat, vcl_vector<vnl_vector<double> >& data);
+  
+  //: clear all the training data for all categories
+  void clear_training_data() { training_data_.clear(); }
+
+  //: return a list of category names for which training data is available
+  vcl_vector<vcl_string> get_training_categories();
+
   //: set category colors
   void set_category_colors(vcl_map< vcl_string, vnl_vector_fixed<float, 3> > const& color_map)
   {color_map_ = color_map; color_map_valid_ = true;}
@@ -145,6 +180,14 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   void print_category_histograms() const;
   void print_interclass_probs() const;
   void print_texton_weights() const;
+
+  // === testing utilities ===
+
+  //: update the texton histogram with a vector of filter outputs, use the same weight for all the samples
+  void update_hist(vcl_vector<vnl_vector<double> > const& f, float weight, vcl_vector<float>& hist);
+
+  //: get the class name and prob value with the highest probability for the given histogram
+  vcl_pair<vcl_string, float> highest_prob_class(vcl_vector<float> const& hist);
 
   // ===  debug utilities ===
 
@@ -167,6 +210,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   //: update the texton histogram with a filter vector
   void update_hist(vnl_vector<double> const& f, float weight,
                    vcl_vector<float>& hist);
+
   //: compute the vector of texture probabilities
   vcl_map<vcl_string, float> texture_probabilities(vcl_vector<float> const& hist);
   //: color representing the mix of texture probabilites
@@ -198,6 +242,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   vcl_map<vcl_string, vcl_vector<float> > category_histograms_;
   vcl_vector<float> texton_weights_;
   bool texton_weights_valid_;
+  unsigned maxr_;
 };
 #include <sdet/sdet_texture_classifier_sptr.h>
 //: Binary save parameters to stream.

@@ -27,6 +27,7 @@ def load_scene(scene_str):
   scene = dbvalue(scene_id, scene_type);
   return scene;
 
+
 #does the opencl prep work on an input scene
 def load_opencl(scene_str, device_string="gpu"):
   scene = load_scene(scene_str);
@@ -65,6 +66,7 @@ def load_opencl(scene_str, device_string="gpu"):
   openclcache = dbvalue(id, type);
 
   return scene, cache, mgr, device, openclcache;
+
 
 #Just loads up CPP cache
 def load_cpp(scene_str) :
@@ -125,6 +127,7 @@ def write_scene_to_kml(scene, kml_filename):
   boxm2_batch.set_input_string(1,kml_filename);
   boxm2_batch.run_process();
 
+
 ###############################################
 # Model building stuff
 ###############################################
@@ -180,6 +183,7 @@ def update_grey_with_alt(scene, cache, cam, img, device=None, ident="", mask=Non
     boxm2_batch.run_process();
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
+
 
 def update_app_grey(scene, cache, cam, img, device=None) :
   #If no device is passed in, do cpu update
@@ -303,7 +307,8 @@ def ingest_height_map(scene, cache,x_img,y_img,z_img, zero_out_alpha=True,device
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
-def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, device=None) :
+def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, ident, device=None) :
+#def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_adaptor, ingest label map cpp process not implemented";
 
@@ -316,10 +321,12 @@ def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, device=None) 
     boxm2_batch.set_input_from_db(4,y_img);
     boxm2_batch.set_input_from_db(5,z_img);
     boxm2_batch.set_input_from_db(6,label_img);
+    boxm2_batch.set_input_string(7,ident);
     boxm2_batch.run_process();
     return ;
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
+
 
 def ingest_mesh(scene,cache,plyfile,label_id,category):
   boxm2_batch.init_process("boxm2IngestConvexMeshProcess");
@@ -366,6 +373,7 @@ def ingest_to_zero_out_alpha(scene, cache,x_img,y_img,z_img,device=None) :
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
+
 # refine count should not exceed 3 for scenes with max_octree_level=4
 def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=2, ingest_space = 1, zero_out_alpha=True):
   if zero_out_alpha:
@@ -409,6 +417,7 @@ def initialize_ground(scene, global_ground_z, refine_cnt=2):
     scene.refine();
     scene.ingest_height_map(x_ground,y_ground,z_ground, False);
   scene.write_cache();
+
 
 def refine_and_ingest_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=1):
   for i in range(0,refine_cnt,1):
@@ -560,35 +569,6 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
     print "ERROR: Cache type not recognized: ", cache.type;
 
 #####################################################################
-# render depth map by loading block inside certain region
-#####################################################################
-def render_depth_region(scene, cache, cam, lat, lon, elev, radius, ni=1280, nj=720, device=None) :
-  if cache.type == "boxm2_cache_sptr" :
-    print "boxm2_batch CPU render depth not yet implemented";
-  elif cache.type == "boxm2_opencl_cache_sptr" and device :
-    boxm2_batch.init_process("boxm2OclRenderExpectedDepthRegionProcess");
-    boxm2_batch.set_input_from_db(0, device);
-    boxm2_batch.set_input_from_db(1, scene);
-    boxm2_batch.set_input_from_db(2, cache);
-    boxm2_batch.set_input_from_db(3, cam);
-    boxm2_batch.set_input_double(4, lat);
-    boxm2_batch.set_input_double(5, lon);
-    boxm2_batch.set_input_double(6, elev);
-    boxm2_batch.set_input_double(7, radius);
-    boxm2_batch.set_input_unsigned(8, ni);
-    boxm2_batch.set_input_unsigned(9, nj);
-    boxm2_batch.run_process();
-    (id, type) = boxm2_batch.commit_output(0);
-    exp_image = dbvalue(id,type);
-    (id,type) = boxm2_batch.commit_output(1);
-    var_image = dbvalue(id,type);
-    (id,type) = boxm2_batch.commit_output(2);
-    vis_image = dbvalue(id,type);
-    return exp_image, var_image, vis_image
-  else :
-    print "ERROR: Cache type not recognized: ", cache.type;
-
-#####################################################################
 # render image of expected z values
 #####################################################################
 def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize = False, device=None) :
@@ -611,7 +591,6 @@ def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize = False, device
     return z_exp_image, z_var_image
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
-
 #####################################################################
 # change detection wrapper
 #####################################################################
@@ -748,6 +727,7 @@ def median_filter(scene, cache, device=None) :
   else :
     print "ERROR: Cache type unrecognized: ", cache.type;
 
+
 ######################################################################
 # cache methods
 #####################################################################
@@ -773,6 +753,7 @@ def clear_cache(cache) :
     boxm2_batch.run_process();
   else :
     print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type;
+
 
 ######################################################################
 # trajectory methods
@@ -867,7 +848,7 @@ def init_trajectory_height_map(scene, x_img, y_img, z_img, ni, nj, right_fov, to
 ######################################################################
 # camera/scene methods
 #####################################################################
-def bundle2scene(bundle_file, img_dir,axis_align= True, nblks =8, app_model="boxm2_mog3_grey", out_dir="nvm_out", lvcscenter=[0.0,0.0,0.0]) :
+def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="nvm_out") :
   if app_model == "boxm2_mog3_grey" or app_model =="boxm2_mog3_grey_16":
     nobs_model = "boxm2_num_obs";
   elif app_model == "boxm2_gauss_rgb" :
@@ -882,18 +863,14 @@ def bundle2scene(bundle_file, img_dir,axis_align= True, nblks =8, app_model="box
   boxm2_batch.set_input_string(1, img_dir);
   boxm2_batch.set_input_string(2, app_model);
   boxm2_batch.set_input_string(3, nobs_model);
-  boxm2_batch.set_input_int(4, nblks)
-  boxm2_batch.set_input_bool(5, axis_align);
-  boxm2_batch.set_input_string(6, out_dir);
-  boxm2_batch.set_input_float(7, lvcscenter[0]);
-  boxm2_batch.set_input_float(8, lvcscenter[1]);
-  boxm2_batch.set_input_float(9, lvcscenter[2]);
+  boxm2_batch.set_input_string(4, out_dir);
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   uscene = dbvalue(scene_id, scene_type);
   (scene_id, scene_type) = boxm2_batch.commit_output(1);
   rscene = dbvalue(scene_id, scene_type);
   return uscene, rscene;
+
 
 def save_scene(scene, fname) :
   boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
@@ -974,6 +951,14 @@ def distribute_scene_blocks(scene, small_scene_dim, xml_output_path, xml_name_pr
   boxm2_batch.init_process("boxm2DistributeSceneBlocksProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_double(1,small_scene_dim);
+  boxm2_batch.set_input_string(2,xml_output_path);
+  boxm2_batch.set_input_string(3,xml_name_prefix);
+  boxm2_batch.run_process();
+
+def prune_scene_blocks(scene, cache, xml_output_path, xml_name_prefix):
+  boxm2_batch.init_process("boxm2PruneSceneBlocksProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_from_db(1, cache);
   boxm2_batch.set_input_string(2,xml_output_path);
   boxm2_batch.set_input_string(3,xml_name_prefix);
   boxm2_batch.run_process();
@@ -1104,6 +1089,7 @@ def create_mask_image(scene, camera, ni, nj, ground_plane_only=False) :
   mask = dbvalue(id,type)
   return mask
 
+
 ######################################################################
 # blob detection methods
 #####################################################################
@@ -1135,6 +1121,7 @@ def blob_precision_recall(cd_img, gt_img, mask_img=None) :
 
   #return tuple of true positives, true negatives, false positives, etc..
   return (precision, recall);
+
 
 #########################################################################
 #Batch update process
@@ -1195,6 +1182,7 @@ def compute_sun_affine_camera(scene, sun_az, sun_el, astro_coords = True):
        boxm2_batch.remove_data(ni_id)
        boxm2_batch.remove_data(nj_id)
        return sun_cam, ni, nj
+
 
 #######################################################
 # update sun visibility probabilities
@@ -1321,6 +1309,7 @@ def generate_xyz_for_ground_initialization(scene, global_ground_z):
   z_img = dbvalue(zi_id, zi_type);
   return x_img, y_img, z_img
 
+
 def generate_xyz_from_shadow(scene, height_img, generic_cam, dem_fname, scale):
   boxm2_batch.init_process("boxm2ShadowHeightsToXYZProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -1382,6 +1371,31 @@ def generate_xyz_from_label_img(scene, label_tiff):
     z_img = 0;
     l_img = 0;
   return x_img, y_img, z_img, l_img
+
+
+# Create x y z images from an orhographic height map image,
+# assumes that the height map has the pixel GSD the same as the finest voxel resolution of the scene
+# assumes that the image is aligned with the world at its upper left corner,
+# generate the local x,y,z images using this kind of an ortho height map
+def generate_xyz_from_ortho_height_map(scene, height_map, height_map_mask, thres):
+  boxm2_batch.init_process("boxm2HeightMapToXYZProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,height_map);
+  boxm2_batch.set_input_from_db(2,height_map_mask);
+  boxm2_batch.set_input_float(3,thres);
+  result = boxm2_batch.run_process();
+  if result:
+    (xi_id, xi_type) = boxm2_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = boxm2_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = boxm2_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
+  return x_img, y_img, z_img
 
 def roi_init_geotiff(scene, geocam, geotiff_img_name, level=0):
   boxm2_batch.init_process("boxm2RoiInitGeotiffProcess");
@@ -1520,60 +1534,11 @@ def get_scene_from_box_cams(camsdir,x0,y0,z0,x1,y1,z1,modeldir):
 
   return result;
 
-def load_hypotheses(filename):
-  boxm2_batch.init_process("boxm2LoadHypothesesProcess");
-  boxm2_batch.set_input_string(0, filename);
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  hyp = dbvalue(id, type);
-  (id, type) = boxm2_batch.commit_output(1);
-  n = boxm2_batch.get_output_unsigned(id)
-  return hyp, n;
+####################################
+## visibility index processes
+####################################
 
-def save_hypotheses(hyp, filename):
-  boxm2_batch.init_process("boxm2SaveHypothesesProcess");
-  boxm2_batch.set_input_from_db(0, hyp);
-  boxm2_batch.set_input_string(1, filename);
-  boxm2_batch.run_process();
-
-def create_hypotheses(lat, lon, scale_i, scale_j, ni, nj):
-  boxm2_batch.init_process("boxm2CreateHypothesesProcess");
-  boxm2_batch.set_input_float(0, lat);
-  boxm2_batch.set_input_float(1, lon);
-  boxm2_batch.set_input_float(2, scale_i);
-  boxm2_batch.set_input_float(3, scale_j);
-  boxm2_batch.set_input_unsigned(4, ni);
-  boxm2_batch.set_input_unsigned(5, nj);
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  hyp = dbvalue(id, type);
-  return hyp;
-
-def add_hypotheses(hypo, lat, lon, cent_x, cent_y, cent_z):
-  boxm2_batch.init_process("boxm2AddHypothesisProcess");
-  boxm2_batch.set_input_from_db(0,hypo);
-  boxm2_batch.set_input_double(1, lon);
-  boxm2_batch.set_input_double(2, lat);
-  boxm2_batch.set_input_float(3, cent_x);
-  boxm2_batch.set_input_float(4, cent_y);
-  boxm2_batch.set_input_float(5, cent_z);
-  status = boxm2_batch.run_process();
-  return status;
-
-def get_hypothesis(hypo,j):
-  boxm2_batch.init_process("boxm2GetHypothesisProcess");
-  boxm2_batch.set_input_from_db(0,hypo);
-  boxm2_batch.set_input_unsigned(1,j);
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  x = boxm2_batch.get_output_float(id)
-  (id, type) = boxm2_batch.commit_output(1);
-  y = boxm2_batch.get_output_float(id)
-  (id, type) = boxm2_batch.commit_output(2);
-  z = boxm2_batch.get_output_float(id)
-  return x,y,z;
-
-def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_hyp_id, elev_dif, vmin, dmax, solid_angle, cap_angle, point_angle, top_angle, bottom_angle, out_name, visibility_threshold, index_buffer_capacity):
+def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_hyp_id, elev_dif, vmin, dmax, solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity):
   boxm2_batch.init_process("boxm2IndexHypothesesProcess");
   boxm2_batch.set_input_from_db(0, device);
   boxm2_batch.set_input_from_db(1, scene);
@@ -1585,16 +1550,14 @@ def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_h
   boxm2_batch.set_input_float(7, vmin);
   boxm2_batch.set_input_float(8, dmax);
   boxm2_batch.set_input_float(9, solid_angle);
-  boxm2_batch.set_input_float(10, cap_angle);
-  boxm2_batch.set_input_float(11, point_angle);
-  boxm2_batch.set_input_float(12, top_angle);
-  boxm2_batch.set_input_float(13, bottom_angle);
-  boxm2_batch.set_input_string(14, out_name);
-  boxm2_batch.set_input_float(15, visibility_threshold);
-  boxm2_batch.set_input_float(16, index_buffer_capacity);
+  boxm2_batch.set_input_string(10, ray_file);
+  boxm2_batch.set_input_string(11, out_name);
+  boxm2_batch.set_input_float(12, visibility_threshold);
+  boxm2_batch.set_input_float(13, index_buffer_capacity);
   boxm2_batch.run_process();
 
-def index_hypotheses2(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle, cap_angle, point_angle, top_angle, bottom_angle, out_name, visibility_threshold, index_buffer_capacity):
+## pass leaf_id = -1 to index all the leaves in the given tile
+def index_hypotheses2(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity, leaf_id = -1):
   boxm2_batch.init_process("boxm2IndexHypothesesProcess2");
   boxm2_batch.set_input_from_db(0, device);
   boxm2_batch.set_input_from_db(1, scene);
@@ -1605,39 +1568,75 @@ def index_hypotheses2(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_d
   boxm2_batch.set_input_float(6, vmin);
   boxm2_batch.set_input_float(7, dmax);
   boxm2_batch.set_input_float(8, solid_angle);
-  boxm2_batch.set_input_float(9, cap_angle);
-  boxm2_batch.set_input_float(10, point_angle);
-  boxm2_batch.set_input_float(11, top_angle);
-  boxm2_batch.set_input_float(12, bottom_angle);
-  boxm2_batch.set_input_string(13, out_name);
-  boxm2_batch.set_input_float(14, visibility_threshold);
-  boxm2_batch.set_input_float(15, index_buffer_capacity);
+  boxm2_batch.set_input_string(9, ray_file);
+  boxm2_batch.set_input_string(10, out_name);
+  boxm2_batch.set_input_float(11, visibility_threshold);
+  boxm2_batch.set_input_float(12, index_buffer_capacity);
+  boxm2_batch.set_input_int(13, leaf_id);
   boxm2_batch.run_process();
 
-def partition_hypotheses(scene_file, hyp_file, elev_dif, out_name):
-  boxm2_batch.init_process("boxm2PartitionHypsProcess");
-  boxm2_batch.set_input_string(0, scene_file);
-  boxm2_batch.set_input_string(1, hyp_file);
-  boxm2_batch.set_input_float(2, elev_dif);
-  boxm2_batch.set_input_string(3, out_name);
+## pass leaf_id = -1 to index all the leaves in the given tile
+def index_label_data(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity, identifier, leaf_id = -1):
+  boxm2_batch.init_process("boxm2IndexLabelDataProcess");
+  boxm2_batch.set_input_from_db(0, device);
+  boxm2_batch.set_input_from_db(1, scene);
+  boxm2_batch.set_input_from_db(2, opencl_cache);
+  boxm2_batch.set_input_string(3, geo_hyp_file);
+  boxm2_batch.set_input_unsigned(4, tile_id);
+  boxm2_batch.set_input_float(5, elev_dif);
+  boxm2_batch.set_input_float(6, vmin);
+  boxm2_batch.set_input_float(7, dmax);
+  boxm2_batch.set_input_float(8, solid_angle);
+  boxm2_batch.set_input_string(9, ray_file);
+  boxm2_batch.set_input_string(10, out_name);
+  boxm2_batch.set_input_float(11, visibility_threshold);
+  boxm2_batch.set_input_float(12, index_buffer_capacity);
+  boxm2_batch.set_input_int(13, leaf_id);
+  boxm2_batch.set_input_string(14, identifier);
   boxm2_batch.run_process();
 
-# size is the size of mini box around the hypo, unit is arcseconds, e.g. 0.01
-def write_hypotheses_kml(hyp_file, start, skip, out_name, size=0.01):
-  boxm2_batch.init_process("boxm2HypoKmlProcess");
-  boxm2_batch.set_input_string(0, hyp_file);
-  boxm2_batch.set_input_unsigned(1, start);
-  boxm2_batch.set_input_unsigned(2, skip);
-  boxm2_batch.set_input_float(3, size);
-  boxm2_batch.set_input_string(4, out_name);
+## pass leaf_id = -1 to index all the leaves in the given tile
+def index_label_data_combined(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity, identifier, leaf_id = -1):
+  boxm2_batch.init_process("boxm2IndexLabelCombinedDataProcess");
+  boxm2_batch.set_input_from_db(0, device);
+  boxm2_batch.set_input_from_db(1, scene);
+  boxm2_batch.set_input_from_db(2, opencl_cache);
+  boxm2_batch.set_input_string(3, geo_hyp_file);
+  boxm2_batch.set_input_unsigned(4, tile_id);
+  boxm2_batch.set_input_float(5, elev_dif);
+  boxm2_batch.set_input_float(6, vmin);
+  boxm2_batch.set_input_float(7, dmax);
+  boxm2_batch.set_input_float(8, solid_angle);
+  boxm2_batch.set_input_string(9, ray_file);
+  boxm2_batch.set_input_string(10, out_name);
+  boxm2_batch.set_input_float(11, visibility_threshold);
+  boxm2_batch.set_input_float(12, index_buffer_capacity);
+  boxm2_batch.set_input_int(13, leaf_id);
+  boxm2_batch.set_input_string(14, identifier);
   boxm2_batch.run_process();
 
-def visualize_indices(index_file, buffer_capacity, start_i, end_i, out_prefix):
+
+def visualize_indices(index_file, buffer_capacity, start_i, end_i, out_prefix, ray_file):
   boxm2_batch.init_process("boxm2VisualizeIndicesProcess");
   boxm2_batch.set_input_string(0, index_file);
   boxm2_batch.set_input_float(1, buffer_capacity);
   boxm2_batch.set_input_unsigned(2, start_i);
   boxm2_batch.set_input_unsigned(3, end_i);
   boxm2_batch.set_input_string(4, out_prefix);
+  boxm2_batch.set_input_string(5, ray_file);
+  boxm2_batch.run_process();
+
+## index_type = 0 --> visualize depth interval index
+##            = 1 --> visualize land class label index
+##            = 2 --> visualize orientation label index
+def visualize_hyp_index(geo_hyp_file, geo_index_file, ray_file, tile_id, lat, lon, index_type):
+  boxm2_batch.init_process("boxm2VisualizeHypIndexProcess");
+  boxm2_batch.set_input_string(0, geo_hyp_file);
+  boxm2_batch.set_input_string(1, geo_index_file);
+  boxm2_batch.set_input_string(2, ray_file);
+  boxm2_batch.set_input_unsigned(3, tile_id);
+  boxm2_batch.set_input_float(4, lat);
+  boxm2_batch.set_input_float(5, lon);
+  boxm2_batch.set_input_int(6, index_type);
   boxm2_batch.run_process();
 

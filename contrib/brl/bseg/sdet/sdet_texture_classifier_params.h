@@ -38,6 +38,7 @@ class sdet_texture_classifier_params : public gevd_param_mixin
  ~sdet_texture_classifier_params() {}
 
   bool SanityCheck();
+  vcl_string filter_dir_name();
  friend
   vcl_ostream& operator<<(vcl_ostream& os, const sdet_texture_classifier_params& imp);
  protected:

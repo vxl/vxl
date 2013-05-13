@@ -4,6 +4,7 @@
 #include <brip/brip_vil_ops.h>
 #include <vil/vil_resample_bicub.h>
 #include <vil/vil_save.h>
+#include <vil/vil_load.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_sstream.h>
@@ -69,6 +70,7 @@ void brip_filter_bank::construct_scale_pyramid()
   unsigned radius =
     static_cast<unsigned>(gauss_radius(static_cast<float>(scale_ratio_), cutoff_ratio_));
   unsigned int n_samples = 2*radius +1;
+  vcl_cout << " \t in brip_filter_bank level: 0 (original) size of img: " << ni_ << " " << nj_ << '\n';
   for (unsigned level = 1; level<n_levels_; ++level) {
     vil_image_view<float> smooth;
     double scale_m1;
@@ -85,6 +87,7 @@ void brip_filter_bank::construct_scale_pyramid()
     double scale = scale_m1 / scale_ratio_;
     unsigned sni = static_cast<unsigned>(dni+0.5);
     unsigned snj = static_cast<unsigned>(dnj+0.5);
+    vcl_cout << " \t in brip_filter_bank level: " << level << " size of img: " << sni << " " << snj << '\n';
     vil_image_view<float>* lview = new vil_image_view<float>();
     vil_image_view_base_sptr lview_ptr = lview;
     vil_resample_bicub(smooth, *lview, sni, snj);
@@ -124,18 +127,27 @@ unsigned brip_filter_bank::invalid_border() const
 {
   // the radius due to Gauss smoothing
   double g_rad = gauss_radius(static_cast<float>(scale_ratio_), cutoff_ratio_);
+  //vcl_cout << " \t \t filter border: gaussian radius: " << g_rad << vcl_endl;
   // the radius due to the anisotropic filter
   double f_rad = gauss_radius(lambda0_, cutoff_ratio_);
+  //vcl_cout << " \t \t filter border: filter radius: " << g_rad << vcl_endl;
   double r = 0.42*vcl_sqrt(g_rad*g_rad + f_rad*f_rad);//fudge factor
+  //vcl_cout << " \t \t filter border: r: " << r << vcl_endl;
   double scale_int = vcl_pow(scale_ratio_, double(n_levels_-1));
+  //vcl_cout << " \t \t filter border: scale int: " << scale_int << vcl_endl;
   r *= scale_int;
+  //vcl_cout << " \t \t filter border: invalid border: " << r+0.5 << vcl_endl;
   return static_cast<unsigned>(r+0.5);
 }
 
 bool brip_filter_bank::save_filter_responses(vcl_string const& dir) const
 {
-  if (!vul_file::is_directory(dir)) {
-    vcl_cout << "filepath is not a directory in brip_filter_bank::save_filter_responses(.)\n";
+  /*if (!vul_file::is_directory(dir)) {
+    vcl_cout << "filepath: " << dir << " is not a directory in brip_filter_bank::save_filter_responses(.)\n";
+    return false;
+  }*/
+  if (!vul_file::exists(dir)) {
+    vcl_cout << "filepath: " << dir << " is not a directory in brip_filter_bank::save_filter_responses(.)\n";
     return false;
   }
   for (unsigned level = 0; level<n_levels_; ++level) {
@@ -146,6 +158,34 @@ bool brip_filter_bank::save_filter_responses(vcl_string const& dir) const
   }
   return true;
 }
+bool brip_filter_bank::load_filter_responses(vcl_string const& dir, unsigned n_levels)
+{
+  /*if (!vul_file::is_directory(dir)) {
+    vcl_cout << "filepath is not a directory in brip_filter_bank::save_filter_responses(.)\n";
+    return false;
+  }*/
+  if (!vul_file::exists(dir)) {
+    vcl_cout << "filepath: " << dir << " is not a directory in brip_filter_bank::save_filter_responses(.)\n";
+    return false;
+  }
+  filter_responses_.clear();
+  n_levels_ = n_levels;
+  for (unsigned level = 0; level<n_levels; ++level) {
+    vcl_stringstream str;
+    str << "/filter_response_" << level << ".tiff" << vcl_ends;
+    vcl_string path = dir + str.str();
+    if (!vul_file::exists(path)) {
+      vcl_cout << "file does not exist: " << path << " in brip_filter_bank::load_filter_responses(.)\n";
+      return false;
+    }
+    vil_image_view<float> img = vil_load(path.c_str());
+    filter_responses_.push_back(img);
+    ni_ = img.ni();
+    nj_ = img.nj();
+  }
+  return true;
+}
+
 
 vcl_ostream&  operator<<(vcl_ostream& s, brip_filter_bank const& r)
 {

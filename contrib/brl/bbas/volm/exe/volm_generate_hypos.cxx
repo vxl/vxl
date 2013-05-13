@@ -230,6 +230,7 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> nh("-nh", "number of hyps in each direction in one leaf tile, e.g. 100 so that each tile has 100x100 hyps", 100);
   vul_arg<vcl_string> out_pre("-out_pre", "output file folder with file separator at the end", "");
   vul_arg<vcl_string> add_gt("-addgt", "add known gt locations? pass the name of txt file containing gt locations", ""); // if no -addgt argument then the value is false, if there is one then the value is true
+  vul_arg<bool> only_gt("-onlygt", "add only known gt locations", false);
   vul_arg<unsigned> tile_id("-tile", "id of the tile", 0);
   vul_arg<unsigned> utm_zone("-zone", "utm zone to fill", 17);
   vul_arg<bool> read("-read", "if passed only read the index in the out_pre() folder and report some statistics", false);
@@ -281,10 +282,11 @@ int main(int argc,  char** argv)
   // determine depth of the geo index depending on inc, if we want to have 100x100 = 10K hyps in each leaf
   double arcsec_to_sec = 1.0f/3600.0f;
   double inc_in_sec = inc()*arcsec_to_sec;
-  double inc_in_sec_rad = 3.0*inc_in_sec/4.0;
+  double inc_in_sec_rad = 3.0*inc_in_sec/4.0; // radius to search for existence of before adding a new one
   double size = nh()*inc_in_sec; // inc() is given in arcseconds, convert it to seconds;
   vcl_cout << " each leaf has size: " << size << " seconds in geographic coords..\n"
            << " increments in seconds: " << inc_in_sec << '\n'
+           << " increments in meters: " << (inc_in_sec*21/0.000202) << '\n'
            << " only putting hyps in UTM zone: " << utm_zone() << '\n';
 
 
@@ -304,7 +306,7 @@ int main(int argc,  char** argv)
     vcl_cout << " root " << i << " is not in zone: " << utm_zone() << "! no hypotheses in its leaves!\n";
     return 0;
   }
-
+  if (!only_gt()) {
   vcl_string file_glob = in_folder() + "/*.tif";
   unsigned cnt = 0;
   for (vul_file_iterator fn=file_glob; fn; ++fn, ++cnt) {
@@ -359,10 +361,25 @@ int main(int argc,  char** argv)
     //if (cnt > 0)
     //  break;
   }
+  }
   unsigned r_cnt = volm_geo_index::hypo_size(root) ;
   vcl_cout << " root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
-
+ 
   if (add_gt().compare("") != 0) {  // user passed the path to a text file with the gt locations
+
+    // load the images
+    vcl_string file_glob = in_folder() + "/*.tif";
+    vcl_vector<vcl_pair<vil_image_view_base_sptr,  volm_tile > > tiles;
+    for (vul_file_iterator fn=file_glob; fn; ++fn) {
+      vcl_string tiff_fname = fn();
+
+      vil_image_view_base_sptr img_sptr = vil_load(tiff_fname.c_str());
+      unsigned ni = img_sptr->ni(); unsigned nj = img_sptr->nj();
+      volm_tile t(tiff_fname, ni, nj);
+      tiles.push_back(vcl_pair<vil_image_view_base_sptr, volm_tile>(img_sptr, t));
+    }
+
+
 #if 0    //: add any gt positions if any
     if (volm_geo_index::add_hypothesis(root, -79.857689, 32.759063, 1.60))
       vcl_cout << " added p1a_test1_06-GROUNDTRUTH\n";
@@ -392,7 +409,33 @@ int main(int argc,  char** argv)
         continue;
       }
       vcl_cout << samples[j].second.first << " adding.. " << samples[j].first.y() << ", " << samples[j].first.x() << ' ';
-      bool added = volm_geo_index::add_hypothesis(root, samples[j].first.x(), samples[j].first.y(), samples[j].first.z());
+
+      // find which box contains it
+      bool added = false;
+      for (unsigned kk = 0; kk < tiles.size(); kk++) {
+         unsigned ii, jj;
+         bool contains = tiles[kk].second.global_to_img(samples[j].first.x(), samples[j].first.y(), ii, jj);
+         if (contains) {
+          vil_image_view<float> img(tiles[kk].first);
+          float z = img(ii, jj);
+          // check the neighborhood
+          for (int ii2 = ii - 1; ii2 <= ii+1; ii2++)
+            for (int jj2 = jj - 1; jj2 <= jj+1; jj2++) {
+              if (ii2 >= 0 && jj2 >= 0 && ii2 < img.ni() && jj2 < img.nj()) {
+                if (z < img(ii2, jj2)) z = img(ii2, jj2);
+              }
+            }
+          if (z > 0.0f) {
+            vcl_cout << " corrected height from: " << samples[j].first.z() << " to: " << z+1.6 << '\n';
+            added = volm_geo_index::add_hypothesis(root, samples[j].first.x(), samples[j].first.y(), z+1.6);
+          } else {
+            vcl_cout << " height from LIDAR is: " << z << " writing original height: " << samples[j].first.z() << '\n';
+            added = volm_geo_index::add_hypothesis(root, samples[j].first.x(), samples[j].first.y(), samples[j].first.z());
+          }
+          break;
+         }
+      }
+      //bool added = volm_geo_index::add_hypothesis(root, samples[j].first.x(), samples[j].first.y(), samples[j].first.z());
       if (added) vcl_cout << " success!\n";
       else       vcl_cout <<" not found in tree of tile: " << tile_id() << "!\n";
     }
@@ -405,6 +448,12 @@ int main(int argc,  char** argv)
   vcl_stringstream file_name4; file_name4 << out_pre() << "geo_index_tile_" << i;
   vcl_cout << "writing hyps to: " << file_name4.str() << vcl_endl;
   volm_geo_index::write_hyps(root, file_name4.str());
+//#if DEBUG
+  vcl_vector<volm_geo_index_node_sptr> leaves;
+  volm_geo_index::get_leaves_with_hyps(root, leaves);
+  vcl_stringstream file_name5; file_name5 << out_pre() << "geo_index_tile_" << i << "_hyps.kml";
+  leaves[0]->hyps_->write_to_kml(file_name5.str(), inc_in_sec);
+//#endif
 
   vcl_cout << "total time: " << t.all()/1000 << " seconds = " << t.all()/(1000*60) << " mins.\n";
   return volm_io::SUCCESS;

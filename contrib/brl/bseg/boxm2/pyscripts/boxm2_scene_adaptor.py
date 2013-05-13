@@ -34,8 +34,10 @@ class boxm2_scene_adaptor(object):
       self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
       self.active_cache = self.opencl_cache;
     elif device_string[0:3]=="cpu" :
-      self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
-      self.active_cache = self.opencl_cache;
+      #self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
+      #self.active_cache = self.opencl_cache;
+      self.scene, self.cpu_cache = load_cpp(scene_str);
+      self.active_cache = self.cpu_cache;
     elif device_string[0:3]=="cpp" :
       self.scene, self.cpu_cache = load_cpp(scene_str);
       self.active_cache = self.cpu_cache;
@@ -159,19 +161,6 @@ class boxm2_scene_adaptor(object):
     expimg,varimg,visimg = render_depth(self.scene, cache, cam, ni, nj, dev);
     return expimg,varimg,visimg;
 
-  def render_depth_region(self, cam, lat, lon, elev, radius, ni=1280, nj=720, device_string="") :
-    cache = self.active_cache;
-    dev = self.device;
-    #check if force gpu or cpu
-    if device_string=="gpu" :
-      cache = self.opencl_cache;
-    elif device_string=="cpp" :
-      cache = self.cpu_cache;
-      dev = None;
-    expimg, varimg, visimg = render_depth_region(self.scene, cache, cam, lat, lon, elev, radius, ni, nj, dev);
-    return expimg, varimg, visimg;
-    
-  
   #render z image wrapper
   def render_z_image(self, cam, ni=1280, nj=720, normalize = False, device_string="") :
     cache = self.active_cache;
@@ -220,6 +209,32 @@ class boxm2_scene_adaptor(object):
       cache = self.cpu_cache;
       dev = None;
     ingest_height_map_space(self.scene, cache,x_img,y_img,z_img, crust_thickness, dev);
+    return ;
+
+  #ingest to zero out alphas along the rays given by the input images
+  def ingest_to_zero_out_alpha(self,x_img,y_img,z_img,device_string="") :
+    cache = self.active_cache;
+    dev = self.device;
+    if device_string=="gpu" :
+      cache = self.opencl_cache;
+    elif device_string=="cpp" :
+      cache = self.cpu_cache;
+      dev = None;
+    ingest_to_zero_out_alpha(self.scene, cache, x_img, y_img, z_img, dev);
+    return ;
+
+  #ingest label map
+  #def ingest_label_map(self,x_img,y_img,z_img,label_img,device_string="") :
+  def ingest_label_map(self,x_img,y_img,z_img,label_img,ident,device_string="") :
+    cache = self.active_cache;
+    dev = self.device;
+    if device_string=="gpu" :
+      cache = self.opencl_cache;
+    elif device_string=="cpp" :
+      cache = self.cpu_cache;
+      dev = None;
+    #ingest_label_map(self.scene, cache, x_img, y_img, z_img, label_img, dev);
+    ingest_label_map(self.scene, cache, x_img, y_img, z_img, label_img, ident, dev);
     return ;
 
   #ingest buckeye-style dem
@@ -298,8 +313,6 @@ class boxm2_scene_adaptor(object):
   #  Flip normals towards direction of maximum visibility
   def flip_normals(self, use_sum=False) :
     return flip_normals(self.scene, self.opencl_cache, self.device, use_sum)
-  def make_inside_empty(self, use_sum=False) :
-    return make_inside_empty(self.scene, self.opencl_cache, self.device, use_sum)
 
   # Export points and normals to a .PLY file or XYZ. Points and normals need to be extracted first
   def export_points_and_normals(self, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, bbox_file=""):
@@ -597,7 +610,6 @@ class boxm2_scene_adaptor(object):
     return mask;
 
   def normals_to_id(self) :
-
     print("Normals to id ");
     boxm2_batch.init_process("boxm2CppNormalsToIdProcess");
     boxm2_batch.set_input_from_db(0,self.scene);
