@@ -50,7 +50,7 @@ public:
 
 bool read_box(vcl_string bbox_file, vgl_box_2d<double>& bbox) {
   char buffer[1000];
-  vcl_ifstream ifs(bbox_file);
+  vcl_ifstream ifs(bbox_file.c_str());
   if (!ifs.is_open()) {
     vcl_cerr << " cannot open: " << bbox_file << "!\n";
     return false;
