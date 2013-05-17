@@ -270,7 +270,9 @@
 // if the compiler doesn't understand "export", we just leave it out.
 // gcc and SunPro 5.0 understand it, but they ignore it noisily.
 #if !VCL_HAS_EXPORT||defined(VCL_EGCS)||defined(VCL_GCC_295)||defined(VCL_GCC_3)||defined(VCL_GCC_4)||defined(VCL_SUNPRO_CC_5)
-# define export /* ignore */
+# define VCL_TEMPLATE_EXPORT /* ignore */
+#else
+# define VCL_TEMPLATE_EXPORT export
 #endif
 
 #if VCL_NEEDS_INLINE_INSTANTIATION

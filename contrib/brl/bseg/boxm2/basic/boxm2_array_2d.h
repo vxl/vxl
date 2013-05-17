@@ -139,7 +139,7 @@ class boxm2_array_2d
   }
 };
 
-export template <class T>
+VCL_TEMPLATE_EXPORT template <class T>
 vcl_ostream& operator<<(vcl_ostream &, boxm2_array_2d<T> const &);
 
 #define BOXM2_ARRAY_2D_INSTANTIATE \

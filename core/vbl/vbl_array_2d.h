@@ -170,7 +170,7 @@ class vbl_array_2d
   }
 };
 
-export template <class T>
+VCL_TEMPLATE_EXPORT template <class T>
 vcl_ostream& operator<<(vcl_ostream &, vbl_array_2d<T> const &);
 
 #define VBL_ARRAY_2D_INSTANTIATE \

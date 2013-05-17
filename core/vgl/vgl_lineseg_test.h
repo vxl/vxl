@@ -23,12 +23,12 @@
 
 //: true if the line joining [1], [2] meets the linesegment joining [3], [4].
 // End points are considered to belong to a line segment.
-export template <class T>
+VCL_TEMPLATE_EXPORT template <class T>
 bool vgl_lineseg_test_line(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4);
 
 //: true if the linesegment joining [1], [2] meets the linesegment joining [3], [4].
 // End points are considered to belong to a line segment.
-export template <class T>
+VCL_TEMPLATE_EXPORT template <class T>
 bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4);
 
 //: true if the line meets the linesegment.
@@ -50,7 +50,7 @@ inline bool vgl_lineseg_test_line(vgl_line_2d<T> const& l1,
 //: true if the point lies on the line segment and is between the endpoints
 // \relatesalso vgl_point_2d
 // \relatesalso vgl_line_segment_2d
-export template <class T>
+VCL_TEMPLATE_EXPORT template <class T>
 bool vgl_lineseg_test_point(vgl_point_2d<T> const& p,
                             vgl_line_segment_2d<T> const& lseg);
 

@@ -83,7 +83,7 @@ struct boxm2_array_1d
     size_type n_;
 };
 
-export template <class T>
+VCL_TEMPLATE_EXPORT template <class T>
 vcl_ostream& operator<<(vcl_ostream &, boxm2_array_1d<T> const &);
 
 #endif // boxm2_array_1d_h_

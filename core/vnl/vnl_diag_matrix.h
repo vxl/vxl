@@ -35,8 +35,7 @@ template <class T> vnl_vector<T> operator*(vnl_diag_matrix<T> const&, vnl_vector
 //  operations (currently *, + and -) are overloaded to use more efficient
 //  algorithms.
 
-export
-template <class T>
+VCL_TEMPLATE_EXPORT template <class T>
 class vnl_diag_matrix
 {
   vnl_vector<T> diagonal_;

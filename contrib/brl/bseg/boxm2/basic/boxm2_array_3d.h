@@ -16,7 +16,7 @@
 
 //: Simple 3d wrapper over a 1D buffer
 //
-export template <class T>
+VCL_TEMPLATE_EXPORT template <class T>
 class boxm2_array_3d
 {
  public:
@@ -125,10 +125,10 @@ class boxm2_array_3d
 // formatted I/O
 //
 #include <vcl_iosfwd.h>
-export template <class T> vcl_ostream& operator<<(vcl_ostream&,
+VCL_TEMPLATE_EXPORT template <class T> vcl_ostream& operator<<(vcl_ostream&,
                                                   boxm2_array_3d<T >const&);
 
-export template <class T> vcl_istream& operator>>(vcl_istream&,
+VCL_TEMPLATE_EXPORT template <class T> vcl_istream& operator>>(vcl_istream&,
                                                   boxm2_array_3d<T >&);
 
 #define BOXM2_ARRAY_3D_INSTANTIATE \

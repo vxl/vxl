@@ -3,11 +3,11 @@
 
 #include <vcl_compiler.h> // for export keyword
 
-export
+VCL_TEMPLATE_EXPORT
 template <class T> class vbl_array_1d;
-export
+VCL_TEMPLATE_EXPORT
 template <class T> class vbl_array_2d;
-export
+VCL_TEMPLATE_EXPORT
 template <class T> class vbl_array_3d;
 template <class T> class vbl_sparse_array_1d;
 template <class T> class vbl_sparse_array_2d;

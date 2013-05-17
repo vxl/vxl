@@ -165,7 +165,7 @@ class vbl_array_1d
   }
 };
 
-export template <class T>
+VCL_TEMPLATE_EXPORT template <class T>
 vcl_ostream& operator<<(vcl_ostream &, vbl_array_1d<T> const &);
 
 #endif // vbl_array_1d_h_

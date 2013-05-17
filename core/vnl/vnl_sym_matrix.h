@@ -20,7 +20,7 @@
 //  vnl_sym_matrix stores a symmetric matrix for time and space efficiency.
 //  Specifically, only the diagonal and lower triangular elements are stored.
 
-export
+VCL_TEMPLATE_EXPORT
 template <class T>
 class vnl_sym_matrix
 {
