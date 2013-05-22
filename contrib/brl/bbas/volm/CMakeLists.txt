@@ -53,6 +53,9 @@ ADD_LIBRARY(volm  ${volm_sources})
 
 TARGET_LINK_LIBRARIES(volm vsph bpgl vgl_algo vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul bvrml depth_map )
 
+# Base matcher, Proximity matcher, Visibility matcher related
+SUBDIRS(desc)
+
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
