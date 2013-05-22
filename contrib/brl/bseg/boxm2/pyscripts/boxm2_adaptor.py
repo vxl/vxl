@@ -569,6 +569,35 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
     print "ERROR: Cache type not recognized: ", cache.type;
 
 #####################################################################
+# render depth map by loading block inside certain region
+#####################################################################
+def render_depth_region(scene, cache, cam, lat, lon, elev, radius, ni=1280, nj=720, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU render depth not yet implemented";
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    boxm2_batch.init_process("boxm2OclRenderExpectedDepthRegionProcess");
+    boxm2_batch.set_input_from_db(0, device);
+    boxm2_batch.set_input_from_db(1, scene);
+    boxm2_batch.set_input_from_db(2, cache);
+    boxm2_batch.set_input_from_db(3, cam);
+    boxm2_batch.set_input_double(4, lat);
+    boxm2_batch.set_input_double(5, lon);
+    boxm2_batch.set_input_double(6, elev);
+    boxm2_batch.set_input_double(7, radius);
+    boxm2_batch.set_input_unsigned(8, ni);
+    boxm2_batch.set_input_unsigned(9, nj);
+    boxm2_batch.run_process();
+    (id, type) = boxm2_batch.commit_output(0);
+    exp_image = dbvalue(id,type);
+    (id,type) = boxm2_batch.commit_output(1);
+    var_image = dbvalue(id,type);
+    (id,type) = boxm2_batch.commit_output(2);
+    vis_image = dbvalue(id,type);
+    return exp_image, var_image, vis_image
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+
+#####################################################################
 # render image of expected z values
 #####################################################################
 def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize = False, device=None) :
