@@ -88,6 +88,90 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, flo
   this->add_element(a2);
 }
 
+void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, bool is_scale_x, float stroke_width)
+{
+  if (is_scale_x) 
+    this->add_axes(x_min, x_max, y_min, y_max, stroke_width);
+  else {
+    float height_y = y_max - y_min;
+    // find origin so that height of the plot is scaled wrt to the svg document width and height
+    h2_y = h_ - 4*margin_;
+    scale_factor_ = h2_y/height_y;
+
+    axes_orig_x_ = 2*margin_;
+    axes_orig_y_ = 2*margin_+h2_y;
+
+    bsvg_line* line_y = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_, axes_orig_y_-h2_y-margin_);
+    line_y->set_stroke_color("black");
+    line_y->set_stroke_width(stroke_width);
+
+    float height_x = x_max - x_min;
+    // find origin so that height of the plot is scaled wrt to the svg document width and height
+    h2_x = height_x;
+
+    bsvg_line* line_x = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_+h2_x+margin_, axes_orig_y_);
+    line_x->set_stroke_color("black");
+    line_x->set_stroke_width(stroke_width);
+
+    this->add_element(line_y);
+    this->add_element(line_x);
+
+    // add text to denote x_min
+    vcl_stringstream ss; ss << x_min;
+    bsvg_text* t = new bsvg_text(ss.str());
+    t->set_location(axes_orig_x_, axes_orig_y_+margin_);
+    t->set_font_size(font_size_);
+    this->add_element(t);
+
+    // add text to denote y_min
+    vcl_stringstream ssy; ssy << y_min;
+    bsvg_text* ty = new bsvg_text(ssy.str());
+    ty->set_location(axes_orig_x_-margin_, axes_orig_y_);
+    ty->set_font_size(font_size_);
+    this->add_element(ty);
+
+    // add text to denote x_max
+    vcl_stringstream ssx; ssx << x_max;
+    bsvg_text* txm = new bsvg_text(ssx.str());
+    txm->set_location(axes_orig_x_+h2_x, axes_orig_y_+margin_);
+    txm->set_font_size(font_size_);
+    this->add_element(txm);
+
+    // add a short line to denote x_max
+    bsvg_line* line_xm = new bsvg_line(axes_orig_x_ + h2_x, axes_orig_y_, axes_orig_x_ + h2_x, axes_orig_y_+(margin_/4.0f));
+    line_xm->set_stroke_color("black");
+    line_xm->set_stroke_width(stroke_width);
+    this->add_element(line_xm);
+
+    // add text to denote y_max
+    vcl_stringstream ssym; ssym << y_max;
+    bsvg_text* tym = new bsvg_text(ssym.str());
+    tym->set_location(axes_orig_x_-margin_, axes_orig_y_-h2_y);
+    tym->set_font_size(font_size_);
+    this->add_element(tym);
+
+    // add a short line to denote y_max
+    bsvg_line* line_ym = new bsvg_line(axes_orig_x_-(margin_/4.0f), axes_orig_y_-h2_y, axes_orig_x_, axes_orig_y_-h2_y);
+    line_ym->set_stroke_color("black");
+    line_ym->set_stroke_width(stroke_width);
+    this->add_element(line_ym);
+
+    // put an arrow head at the end of x axis
+    bsvg_arrow_head* a1 = new bsvg_arrow_head(axes_orig_x_+h2_x+margin_, axes_orig_y_, 10.0f);
+    a1->set_stroke_width(stroke_width);
+    a1->set_stroke_color("black");
+    this->add_element(a1);
+
+    // put an arrow head at the end of y axis
+    bsvg_arrow_head* a2 = new bsvg_arrow_head(axes_orig_x_, axes_orig_y_-h2_y-margin_, 10.0f);
+    a2->set_stroke_width(stroke_width);
+    a2->set_rotation(-90);
+    a2->set_stroke_color("black");
+    this->add_element(a2);
+  }
+  
+}
+
 void bsvg_plot::add_title(const vcl_string& t)
 {
   bsvg_text* title = new bsvg_text(t);

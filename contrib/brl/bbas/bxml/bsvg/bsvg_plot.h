@@ -10,6 +10,7 @@
 // \verbatim
 //  Modifications
 //   Ozge C. Ozcanli - July 08, 09 - ported to vxl from local repository - minor fixes
+//   Yi Dong - May 20, 2013 - add a mothod to add axes given a scale_factor
 // \endverbatim
 
 #include "bsvg_document.h"
@@ -32,6 +33,7 @@ class bsvg_plot : public bsvg_document
     bsvg_plot(float w, float h, float viewBox_x, float viewBox_y, float viewBox_w, float viewBox_h) : bsvg_document(w,h,viewBox_x, viewBox_y, viewBox_w, viewBox_h), margin_(default_margin), font_size_(default_font_size) {}
 
     void add_axes(float x_min, float x_max, float y_min, float y_max, float stroke_width = default_stroke_width);
+    void add_axes(float x_min, float x_max, float y_min, float y_max, bool is_scale_x, float stroke_width);
     //: assumes add_axes have been called
     void add_x_increments(float x_inc, float stroke_width = default_stroke_width);
     void add_y_increments(float y_inc, float stroke_width = default_stroke_width);
@@ -39,7 +41,7 @@ class bsvg_plot : public bsvg_document
     void set_margin(float m) { margin_ = m; }
     void set_font_size(int s) { font_size_ = s; }
     void add_title(const vcl_string& t);
-
+    
     void add_line(const vcl_vector<float>& xs, const vcl_vector<float>& ys, const vcl_string& color, float stroke_width = default_stroke_width);
 
     //: add equally spaced and equal width bars with the given heights
