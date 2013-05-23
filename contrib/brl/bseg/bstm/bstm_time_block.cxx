@@ -40,33 +40,6 @@ bstm_time_block::bstm_time_block(bstm_block_id id, bstm_block_metadata data, uns
 }
 
 
-void octree_num_cell_calc(bstm_block_metadata& data, long& num_cells)
-{
-  //determine number of cells to allocate - based on init_level
-  long init_cells_per_tree;
-
-  if ( data.init_level_ == 1) {
-    init_cells_per_tree = 1;
-  }
-  else if ( data.init_level_ == 2) {
-    init_cells_per_tree = 1 + 8;
-  }
-  else if ( data.init_level_ == 3) {
-    init_cells_per_tree = 1 + 8 + 64;
-  }
-  else if ( data.init_level_ == 4) {
-    init_cells_per_tree = 1 + 8 + 64 + 512;
-  }
-  else
-    init_cells_per_tree = 0; // dummy setting, to avoid compiler warning
-
-  //total number of cells = numTrees * init_cells_per_tree
-  num_cells = data.sub_block_num_.x() *
-              data.sub_block_num_.y() *
-              data.sub_block_num_.z() * init_cells_per_tree;
-}
-
-
 bstm_time_block::bstm_time_block(bstm_block_metadata data)
 {
   init_level_t_ = data.init_level_t_;
@@ -151,6 +124,33 @@ unsigned bstm_time_block::tree_index(double local_time)
   //compute the index of the time tree that contains local_time
   return (unsigned)vcl_floor(local_time);
 }
+
+void bstm_time_block::octree_num_cell_calc(bstm_block_metadata& data, long& num_cells)
+{
+  //determine number of cells to allocate - based on init_level
+  long init_cells_per_tree;
+
+  if ( data.init_level_ == 1) {
+    init_cells_per_tree = 1;
+  }
+  else if ( data.init_level_ == 2) {
+    init_cells_per_tree = 1 + 8;
+  }
+  else if ( data.init_level_ == 3) {
+    init_cells_per_tree = 1 + 8 + 64;
+  }
+  else if ( data.init_level_ == 4) {
+    init_cells_per_tree = 1 + 8 + 64 + 512;
+  }
+  else
+    init_cells_per_tree = 0; // dummy setting, to avoid compiler warning
+
+  //total number of cells = numTrees * init_cells_per_tree
+  num_cells = data.sub_block_num_.x() *
+              data.sub_block_num_.y() *
+              data.sub_block_num_.z() * init_cells_per_tree;
+}
+
 
 // \return size of byte stream
 long bstm_time_block::calc_byte_count(bstm_block_metadata& data)

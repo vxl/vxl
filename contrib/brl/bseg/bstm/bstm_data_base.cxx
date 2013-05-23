@@ -1,5 +1,4 @@
 #include "bstm_data_base.h"
-#include "bstm_time_block.cxx"
 #include <vcl_algorithm.h>
 //:
 // \file

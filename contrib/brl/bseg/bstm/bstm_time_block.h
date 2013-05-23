@@ -86,6 +86,9 @@ class bstm_time_block : public vbl_ref_count
 
  private:
 
+  //: helper to calc number of cells given metadata
+  void octree_num_cell_calc(bstm_block_metadata& data, long& num_cells);
+
   //: calculate the number of bytes in a time block
   long calc_byte_count(bstm_block_metadata& data);
 
@@ -114,7 +117,6 @@ class bstm_time_block : public vbl_ref_count
   bool read_only_;
 };
 
-
 //: Smart_Pointer typedef for bstm_block
 typedef vbl_smart_ptr<bstm_time_block> bstm_time_block_sptr;
 
@@ -132,5 +134,9 @@ void vsl_b_read(vsl_b_istream& is, bstm_time_block &scene);
 void vsl_b_read(vsl_b_istream& is, bstm_time_block* p);
 void vsl_b_read(vsl_b_istream& is, bstm_time_block_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, bstm_time_block_sptr const& sptr);
+
+
+
+
 
 #endif // bstm_time_block_h_
