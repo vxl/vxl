@@ -153,15 +153,15 @@ void bstm_ocl_annealed_particle_filter::perturb_particles(unsigned prev_time, un
   inft_.push_back(new_inft);
 }
 
-float bstm_ocl_annealed_particle_filter::survival_diagnostic(unsigned cur_time, float beta)
+float bstm_ocl_annealed_particle_filter::survival_diagnostic(unsigned cur_time, double beta)
 {
-  float sum_weights = 0;
-  float sum_weights_sq = 0;
+  double sum_weights = 0;
+  double sum_weights_sq = 0;
   for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     if(mi_[cur_time - start_t_][particle_no] > 0.0f)
     {
-      sum_weights += vcl_pow(mi_[cur_time - start_t_][particle_no],beta);
+      sum_weights += vcl_pow(mi_[cur_time - start_t_][particle_no], beta);
       sum_weights_sq += vcl_pow(mi_[cur_time - start_t_][particle_no],beta) * vcl_pow(mi_[cur_time - start_t_][particle_no],beta);
     }
   }

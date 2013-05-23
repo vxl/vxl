@@ -7,6 +7,7 @@
 DECLARE_FUNC_CONS(bstm_ocl_render_expected_image_process);
 DECLARE_FUNC_CONS(bstm_ocl_render_gl_expected_image_process);
 DECLARE_FUNC_CONS(bstm_ocl_render_gl_expected_color_process);
+DECLARE_FUNC_CONS(bstm_ocl_change_detection_process);
 
 DECLARE_FUNC_CONS(bstm_ocl_get_surface_pt_process);
 DECLARE_FUNC_CONS(bstm_ocl_minfo_process);

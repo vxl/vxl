@@ -71,7 +71,7 @@ def load_opencl(scene_str, device_string="gpu"):
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 #####################################################################
-def render(scene, cache, cam, time=0, ni=1624, nj=1224, render_label=False, device=None,ident="") :
+def render(scene, device, cache, cam, time=0, ni=1624, nj=1224, render_label=False) :
   if cache.type == "bstm_cache_sptr" :
     print "bstm_batch CPU render grey and vis not yet implemented";
     return;
@@ -136,7 +136,7 @@ def init_trajectory(scene, startInc, endInc, radius, ni=1280, nj=720) :
   bstm_batch.run_process();
   (id,type) = bstm_batch.commit_output(0);
   trajectory = dbvalue(id,type);
-  return trajectory; 
+  return trajectory;
 
 def trajectory_next(trajectory) :
   bstm_batch.init_process("bstmViewTrajectoryNextProcess");
@@ -156,3 +156,20 @@ def trajectory_size(trajectory):
   return size
 
 
+# detect change wrapper,
+def change_detect(scene, device, cache, cam, img, exp_img, time, raybelief="", max_mode=False, rgb=False, device_string="") :
+    bstm_batch.init_process("bstmOclChangeDetectionProcess");
+    bstm_batch.set_input_from_db(0,device);
+    bstm_batch.set_input_from_db(1,scene);
+    bstm_batch.set_input_from_db(2,cache);
+    bstm_batch.set_input_from_db(3,cam);
+    bstm_batch.set_input_from_db(4,img);
+    bstm_batch.set_input_from_db(5,exp_img);
+    bstm_batch.set_input_string(6, raybelief);
+    bstm_batch.set_input_bool(7, max_mode);
+    bstm_batch.set_input_float(8, time);
+
+    bstm_batch.run_process();
+    (id,type) = bstm_batch.commit_output(0);
+    cd_img = dbvalue(id,type);
+    return cd_img;

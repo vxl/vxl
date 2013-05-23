@@ -23,6 +23,8 @@ enum bstm_data_type
   BSTM_GAUSS_RGB_VIEW_COMPACT,
   BSTM_NUM_OBS,
   BSTM_LABEL,
+  BSTM_AUX0,
+  BSTM_AUX1,
   BSTM_UNKNOWN
 };
 
@@ -116,7 +118,25 @@ class bstm_data_traits<BSTM_LABEL>
   { if (!identifier.size()) return "bstm_label"; else return "bstm_label_"+identifier; }
 };
 
+template<>
+class bstm_data_traits<BSTM_AUX0>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "aux0"; else return "aux0_"+identifier; }
+};
 
+template<>
+class bstm_data_traits<BSTM_AUX1>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "aux1"; else return "aux1_"+identifier; }
+};
 
 // HACKY WAY TO GENERICALLY GET DATASIZES -
 class bstm_data_info
@@ -143,6 +163,10 @@ class bstm_data_info
 
     if (prefix.find(bstm_data_traits<BSTM_MOG6_VIEW>::prefix()) != vcl_string::npos)
       return bstm_data_traits<BSTM_MOG6_VIEW>::datasize();
+    if (prefix.find(bstm_data_traits<BSTM_AUX0>::prefix()) != vcl_string::npos)
+      return bstm_data_traits<BSTM_AUX0>::datasize();
+    if (prefix.find(bstm_data_traits<BSTM_AUX1>::prefix()) != vcl_string::npos)
+      return bstm_data_traits<BSTM_AUX1>::datasize();
     if (prefix.find(bstm_data_traits<BSTM_LABEL>::prefix()) != vcl_string::npos)
       return bstm_data_traits<BSTM_LABEL>::datasize();
     return 0;

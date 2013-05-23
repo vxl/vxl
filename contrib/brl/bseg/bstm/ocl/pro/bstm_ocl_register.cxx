@@ -21,7 +21,7 @@ void bstm_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_render_expected_image_process, "bstmOclRenderExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_render_gl_expected_image_process, "bstmOclRenderGlExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_render_gl_expected_color_process, "bstmOclRenderGlExpectedColorProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_change_detection_process, "bstmOclChangeDetectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_get_surface_pt_process, "bstmOclGetSurfacePtProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_minfo_process, "bstmOclMIProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_ocl_track_process, "bstmOclTrackProcess");

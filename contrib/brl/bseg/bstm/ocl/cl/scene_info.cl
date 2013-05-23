@@ -1,10 +1,7 @@
 //------------------------------------------------------------------------------
 // Scene info struct - contains values (no pointers) for scene
 // and world meta information.  can be passed into kernel to cut down on args
-// NOTE that this is missing information, like mem pointers and number of
-// blocks per buffer (info needed for update)
 //------------------------------------------------------------------------------
-
 
 //appearance model SIZE for the scene.
 //note that merge and refine use this for both numobs and alpha

@@ -18,6 +18,7 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
                                                       (float4)(0,         0,     0,0)};
  */
 
+//for motion capture scenes
 __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
                                                       (float4)(1,    0,      0,0),
                                                       (float4)(0.5,    0.866,  0, 0),

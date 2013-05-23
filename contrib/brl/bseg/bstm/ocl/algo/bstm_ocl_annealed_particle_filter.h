@@ -25,7 +25,7 @@ class bstm_ocl_annealed_particle_filter : public bstm_ocl_particle_filter
 
   float scale_obs_density(unsigned cur_time, float cur_beta, unsigned m);
 
-  float survival_diagnostic(unsigned cur_time, float beta);
+  float survival_diagnostic(unsigned cur_time, double beta);
 
   void dump_particles(unsigned cur_time, unsigned cascade);
 

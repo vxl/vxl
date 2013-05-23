@@ -40,7 +40,7 @@ IF( PYTHON_FOUND )
     ENDIF(APPLE)
     SET_TARGET_PROPERTIES(bstm_batch PROPERTIES PREFIX "")
 
-    TARGET_LINK_LIBRARIES(bstm_batch bstm_pro bstm_cpp_pro bpro_batch boxm2_pro boxm2_view boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
+    TARGET_LINK_LIBRARIES(bstm_batch bstm_pro bstm_cpp_pro bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
 
     IF(OPENCL_FOUND)
       ADD_DEFINITIONS(-DHAS_OPENCL=1)

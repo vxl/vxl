@@ -68,18 +68,20 @@ inline float calc_cell_exit(float cell_minx, float cell_miny, float cell_minz, f
 // END Helper methods
 ////////////////////////////////////////////////////////////////////////////////
 
+
+
 void cast_ray(
           //---- RAY ARGUMENTS -------------------------------------------------
           int i, int j,                                     //pixel information
           float ray_ox, float ray_oy, float ray_oz,         //ray origin
           float ray_dx, float ray_dy, float ray_dz,         //ray direction
           float time,                                    //the time index
-          
+
           //---- SCENE ARGUMENTS------------------------------------------------
           __constant  RenderSceneInfo    * linfo,           //scene info (origin, block size, etc)
           __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
           __global    int2               * time_tree_array,      //time tree buffers (loaded as int2, but read as uchar8
-          
+
           //---- UTILITY ARGUMENTS----------------------------------------------
           __local     uchar16            * local_tree,      //local tree for traversing
           __local     uchar8             * local_time_tree, //local tree for traversing
@@ -91,7 +93,7 @@ void cast_ray(
           AuxArgs aux_args )
 {
 
-    
+
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
   //determine the minimum face:
@@ -132,7 +134,7 @@ void cast_ray(
   float texit = calc_cell_exit(cell_minx, cell_miny, cell_minz, 1.0f, ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz);
 
 
-    
+
   //----------------------------------------------------------------------------
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
@@ -170,9 +172,9 @@ void cast_ray(
                                   posx-cell_minx, posy-cell_miny, posz-cell_minz,
                                   &vox_minx, &vox_miny, &vox_minz, &vox_len);
     //data index is relative data (data_index_cached) plus data_index_root
-    int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex) 
+    int data_ptr =    data_index_cached(&local_tree[llid], bit_index, bit_lookup, &cumsum[llid*10], &cumIndex)
                     + data_index_root(&local_tree[llid]);
-    
+
 
     // get texit along the voxel
     float t_vox_exit = calc_cell_exit(vox_minx+cell_minx, vox_miny+cell_miny, vox_minz+cell_minz, vox_len,
@@ -188,15 +190,15 @@ void cast_ray(
     //TIME TREE CODE START
     //compute tree index given local time [0,linfo->dims.w)
     int time_tree_index = floor( (float) time);
-    
+
     //load the time tree
     local_time_tree[llid] = as_uchar8( time_tree_array[data_ptr * linfo->dims.w + time_tree_index ]);
     int bit_index_t = traverse_tt(&local_time_tree[llid], time - time_tree_index);
     int data_ptr_tt = data_index_root_tt(&local_time_tree[llid])+ get_relative_index_tt(&local_time_tree[llid],bit_index_t,bit_lookup);
     //check here is the relative index is -1 ?
-    
+
     //TIME TREE CODE END
-        
+
     ////////////////////////////////////////////////////////////////////////////////
     // Step Cell Functor
     ////////////////////////////////////////////////////////////////////////////////
@@ -205,5 +207,6 @@ void cast_ray(
     // END Step Cell Functor
     ////////////////////////////////////////////////////////////////////////////////
   }
+
 }
 

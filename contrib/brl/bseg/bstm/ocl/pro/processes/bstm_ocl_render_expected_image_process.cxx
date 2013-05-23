@@ -190,12 +190,6 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
   bocl_mem_sptr exp_image = new bocl_mem(device->context(), buff ,  4*cl_ni*cl_nj*sizeof(float), "exp image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-
-  float* single_buff = new float[cl_ni*cl_nj];
-  vcl_fill(single_buff , single_buff  + cl_ni*cl_nj, 0.0f);
-  bocl_mem_sptr grey_exp_image=  new bocl_mem(device->context(),single_buff , cl_ni*cl_nj*sizeof(float), "grey exp image buffer");
-  grey_exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
   int img_dim_buff[4];
   img_dim_buff[0] = 0;   img_dim_buff[2] = ni;
   img_dim_buff[1] = 0;   img_dim_buff[3] = nj;
@@ -222,13 +216,13 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
                                       data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj, apptypesize,time, label_data_type, label_apptypesize, render_label);
   // normalize
 
+
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern= kernels[identifier][1];
     normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->set_arg( vis_image.ptr() );
     normalize_kern->set_arg( exp_img_dim.ptr());
-    normalize_kern->set_arg( grey_exp_image.ptr());
     normalize_kern->execute( queue, 2, lthreads, gThreads);
     clFinish(queue);
 
@@ -237,12 +231,12 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
     render_time += normalize_kern->exec_time();
   }
 
+
   float all_time = rtime.all();
   vcl_cout<<"Total Render time: "<<render_time <<" ms"<<vcl_endl;
 
   vis_image->read_to_buffer(queue);
   exp_image->read_to_buffer(queue);
-  grey_exp_image->read_to_buffer(queue);
 
 
   vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(ni,nj);
@@ -267,7 +261,6 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
 
   delete [] vis_buff;
   delete [] buff;
-  delete [] single_buff;
 
   // read out expected image
   clReleaseCommandQueue(queue);

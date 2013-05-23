@@ -31,8 +31,7 @@ float render_expected_image(  bstm_scene_sptr & scene,
     float gpu_time=0.0f;
 
     //camera check
-    if (cam->type_name()!= "vpgl_perspective_camera" &&
-        cam->type_name()!= "vpgl_generic_camera" ) {
+    if (cam->type_name()!= "vpgl_perspective_camera" &&  cam->type_name()!= "vpgl_generic_camera" ) {
       vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
       return 0.0f;
     }
@@ -62,6 +61,10 @@ float render_expected_image(  bstm_scene_sptr & scene,
     bocl_mem_sptr render_label_mem = new bocl_mem(device->context(), render_label_buf, sizeof(cl_int), "render label?");
     render_label_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
+    cl_float cl_time = 0;
+    bocl_mem_sptr time_mem =new bocl_mem(device->context(), &cl_time, sizeof(cl_float), "time instance buffer");
+    time_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
     //2. set global thread size
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
@@ -78,10 +81,10 @@ float render_expected_image(  bstm_scene_sptr & scene,
         if(!mdata.contains_t(time,local_time))
           continue;
 
+        //write cl_time
+        cl_time = (cl_float)local_time;
+        time_mem->write_to_buffer(queue);
 
-        cl_float cl_time = (cl_float)local_time;
-        bocl_mem_sptr time_mem =new bocl_mem(device->context(), &cl_time, sizeof(cl_float), "time instance buffer");
-        time_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
         bocl_kernel* kern =  kernel;
 
