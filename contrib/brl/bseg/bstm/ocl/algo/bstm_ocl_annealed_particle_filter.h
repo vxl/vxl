@@ -23,7 +23,7 @@ class bstm_ocl_annealed_particle_filter : public bstm_ocl_particle_filter
 
   void perturb_particles(unsigned prev_time, unsigned cur_time, unsigned m);
 
-  float scale_obs_density(unsigned cur_time, float cur_beta, unsigned m);
+  float scale_obs_density(unsigned cur_time, double cur_beta, unsigned m);
 
   float survival_diagnostic(unsigned cur_time, double beta);
 

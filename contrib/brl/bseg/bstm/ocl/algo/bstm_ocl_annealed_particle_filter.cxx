@@ -170,7 +170,7 @@ float bstm_ocl_annealed_particle_filter::survival_diagnostic(unsigned cur_time, 
 }
 
 
-float bstm_ocl_annealed_particle_filter::scale_obs_density(unsigned cur_time, float cur_beta, unsigned m)
+float bstm_ocl_annealed_particle_filter::scale_obs_density(unsigned cur_time, double cur_beta, unsigned m)
 {
   float grad_step = 0.0001;
   if(m != num_annealing_layers_)
