@@ -614,16 +614,17 @@ unsigned int vidl_v4l2_device::current_input() const
 bool vidl_v4l2_device::set_input(unsigned int i)
 {
   if (current_input()==i)
-    return true;
+    return true; 
+
   if (!is_open()) reset();
   if (!is_open() || i>=n_inputs())
     return false;
 
-    if (capturing)
-      stop_capturing();
-    if (buffers)
-      uninit_mmap();
-
+  if (capturing)
+    stop_capturing();
+  if (buffers)
+    uninit_mmap();
+  if (current_input()!=i)
     if (-1==xioctl(fd,VIDIOC_S_INPUT,&i))
       return false;
 
@@ -633,7 +634,6 @@ bool vidl_v4l2_device::set_input(unsigned int i)
   try_formats();
 #endif
   update_controls();
-
   return true;
 }
 

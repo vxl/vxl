@@ -108,7 +108,7 @@ vidl_v4l2_control_menu::vidl_v4l2_control_menu(const v4l2_queryctrl& ctr, int f)
                 if (0 == ioctl (fd, VIDIOC_QUERYMENU, &menu)) {
                         items.push_back((char *)menu.name);
                 } else {
-                        vcl_cerr << "VIDIOC_QUERYMENU\n";
+                        //vcl_cerr << "VIDIOC_QUERYMENU\n";
                         items.clear(); // control menu is not added to the list
                         return;
                 }
