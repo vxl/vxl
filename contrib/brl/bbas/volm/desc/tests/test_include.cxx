@@ -1,4 +1,3 @@
-#include <volm/desc/volm_descriptor.h>
-#include <volm/desc/volm_descriptor_query.h>
+#include <volm/desc/volm_descriptor_factory.h>
 
 int main() { return 0; }

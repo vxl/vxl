@@ -2,15 +2,12 @@
 
 ADD_EXECUTABLE( volm_desc_test_all
   test_driver.cxx
-  test_volm_descriptor.cxx
-  test_volm_descriptor_query.cxx
+  test_volm_descriptor_factory.cxx
 )
 
 TARGET_LINK_LIBRARIES( volm_desc_test_all volm_desc testlib )
 
-ADD_TEST( volm_desc_test_descriptor ${EXECUTABLE_OUTPUT_PATH}/volm_desc_test_all test_descriptor )
-ADD_TEST( volm_desc_test_query ${EXECUTABLE_OUTPUT_PATH}/volm_desc_test_all test_desc_query )
-
+ADD_TEST( volm_desc_test_descriptor ${EXECUTABLE_OUTPUT_PATH}/volm_desc_test_all test_descriptor_factory )
 
 ADD_EXECUTABLE( volm_desc_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( volm_desc_test_include volm_desc )

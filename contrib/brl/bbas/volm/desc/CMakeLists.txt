@@ -7,9 +7,9 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bsta )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
 
 SET(volm_desc_sources
-  volm_descriptor.h            volm_descriptor.cxx
-  volm_descriptor_sptr.h
-  volm_descriptor_query.h      volm_descriptor_query.cxx
+  volm_descriptor_factory.h               volm_descriptor_factory.cxx
+  volm_existance_descriptor_factory.h     volm_existance_descriptor_factory.cxx
+  volm_upcount_descriptor_factory.h       volm_upcount_descriptor_factory.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_desc_sources)
