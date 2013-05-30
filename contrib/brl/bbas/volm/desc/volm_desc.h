@@ -53,10 +53,10 @@ public:
   //: Accerror to the value at bin i in the histogram
   unsigned char operator[] (unsigned int i) const { return h_.counts(i);}
 
-   // ===========  binary I/O ================
+  // ===========  binary I/O ================
 
   //: version
-  unsigned version() const {return 1;}
+  virtual unsigned version() const = 0;
 
   //: binary IO write
   virtual void b_write(vsl_b_ostream& os);
