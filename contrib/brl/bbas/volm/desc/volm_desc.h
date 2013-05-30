@@ -16,9 +16,8 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <bsta_histogram.h>
-#include <bsta_histogram.txx>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_vector.h>
 
 class volm_desc;
 typedef vbl_smart_ptr<volm_desc> volm_desc_sptr;
@@ -36,7 +35,7 @@ public:
   virtual vcl_string name() { return "volm_desc base"; }
 
   //: return the number of bins of the histogram
-  unsigned int nbins() { return h_.nbins(); }
+  unsigned int nbins() { return nbins_; }
 
   //: pretty print (prevent creation of base class by setting = 0)
   virtual void print() const = 0;
@@ -48,10 +47,10 @@ public:
   void visualize(vcl_string outfile, unsigned char const& y_max = 10) const;
 
   //: return the value of bin
-  unsigned char count(unsigned const& i) const { return h_.counts(i); }
+  unsigned char count(unsigned const& i) const { return h_[i]; }
 
   //: Accerror to the value at bin i in the histogram
-  unsigned char operator[] (unsigned int i) const { return h_.counts(i);}
+  unsigned char operator[] (unsigned int i) const { return h_[i];}
 
   // ===========  binary I/O ================
 
@@ -59,10 +58,10 @@ public:
   virtual unsigned version() const = 0;
 
   //: binary IO write
-  virtual void b_write(vsl_b_ostream& os);
+  virtual void b_write(vsl_b_ostream& os) = 0;
 
   //: binary IO read
-  virtual void b_read(vsl_b_istream& is);
+  virtual void b_read(vsl_b_istream& is) = 0;
 
 protected:
   //: name of the descriptor
@@ -71,8 +70,8 @@ protected:
   //: number of bins of the histogram
   unsigned int nbins_;
 
-  //: histogram
-  bsta_histogram<unsigned char> h_;
+  //: a simple 1D histogram
+  vcl_vector<unsigned char> h_;
 };
 
 #endif  // volm_desc_h_

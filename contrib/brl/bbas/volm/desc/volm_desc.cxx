@@ -16,7 +16,7 @@ void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
   int font_size_label = 10;
   float stroke_width = 2.0f;
   float width = (float)nbins_ + 2*margin;
-  float height = (float)h_.max();
+  float height = 255.0f;
   bsvg_plot pl(width, height);
   pl.set_font_size(font_size_label);
 
@@ -36,7 +36,7 @@ void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
   vcl_vector<float> ps;
   vcl_vector<float> x_labels;
   for (unsigned i = 0; i < nbins_; i++) {
-    ps.push_back(float(h_.counts(i)));
+    ps.push_back(float(h_[i]));
     x_labels.push_back(float(i));
   }
   pl.add_bars(ps, "red");

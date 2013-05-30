@@ -56,13 +56,13 @@ public:
   volm_desc_ex(depth_map_scene_sptr const& dms,
                vcl_vector<double> const& radius,
                unsigned const& norients = 3,
-               unsigned const& nlands = volm_label_table::land_id.size(),
+               unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                unsigned char const& initial_mag = 0);
   
   //: constrcutor from created index
   volm_desc_ex(vcl_vector<unsigned char> const& index_dst,
-               vcl_vector<unsigned char> const& index_lnd,
-               vcl_vector<unsigned char> const& index_ori,
+               vcl_vector<unsigned char> const& index_combined,
+               vcl_vector<double> depth_interval,
                vcl_vector<double> const& radius,
                unsigned const& norients = 3,
                unsigned const& nlands = volm_label_table::land_id.size(),
@@ -87,34 +87,49 @@ public:
   void initialize_bin(unsigned char const& mag);
 
   //: get the bin index from object distance, height, orientation type and land type (return idx larger than nbins if invalid)
-  unsigned bin_index(double const& dist, double const& height,
-                     depth_map_region::orientation const& orient, unsigned const& land) const;
+  unsigned bin_index(double const& dist, depth_map_region::orientation const& orient, unsigned const& land) const;
 
   //: get the bin index from distance index, height index, orientation index and land index (return idx larger than nbins if invalid)
-  unsigned bin_index(unsigned const& dist_idx, unsigned const& height_idx,
-                     unsigned const& orient_idx, unsigned const& land_idx) const;
+  unsigned bin_index(unsigned const& dist_idx, unsigned const& orient_idx, unsigned const& land_idx) const;
 
   //: get the bin index from an object
   unsigned bin_index(volm_object const& ob) const
-  {  return this->bin_index(ob.dist_, ob.height_, ob.orient_, ob.land_); }
+  {  return this->bin_index(ob.dist_, ob.orient_, ob.land_); }
 
-  //: method to update the bin value given bin index
+  //: set the bin value given bin index (do nothing if bin is bigger than number of bins)
   void set_count(unsigned const& bin, unsigned char const& count);
 
-  //: set the bin value given object distance, height, orientation and land type
-  void set_count(double const& dist, double const& height,
-                         depth_map_region::orientation const& orient, unsigned const& land,
-                         unsigned char const& count);
+  //: set the bin value given object distance, orientation and land type
+  void set_count(double const& dist, depth_map_region::orientation const& orient, unsigned const& land,
+                 unsigned char const& count);
 
-  //: set the bin to count value given object dist_id, height_id, orient_id and land_id
-  void set_count(unsigned const& dist_idx, unsigned const& height_idx,
-                         unsigned const& orient_idx, unsigned const& land_idx,
-                         unsigned char const& count);
+  void set_count(double const& dist, unsigned const& orient, unsigned const& land,
+                 unsigned char const& count);
+
+  //: set the bin to count value given object dist_id, orient_id and land_id
+  void set_count(unsigned const& dist_idx, unsigned const& orient_idx, unsigned const& land_idx,
+                 unsigned char const& count);
 
   //: set the bin to count value given an object
-  void set_count(volm_object const& ob, unsigned char const& count);
+  void set_count(volm_object const& ob, unsigned char const& count)
+  {  this->set_count(ob.dist_, ob.orient_, ob.land_, count);  }
 
-  //: upcount the bin 
+  //: screen print
+  void print() const;
+
+  //: similarity method
+  float similarity(volm_desc_sptr other);
+
+  // ===========  binary I/O ================
+
+  //: version
+  unsigned version() const { return 1; }
+
+  //: binary IO write
+  void b_write(vsl_b_ostream& os);
+
+  //: binary IO read
+  void b_read(vsl_b_istream& is);
 
 private:
   //: histogram structure
