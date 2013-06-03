@@ -27,7 +27,7 @@ volm_desc_land::volm_desc_land(vcl_string& filename)
   h_.resize(nbins_, (unsigned char)0);
 
   // read the file and determine the land type of the camera location of the query
-  vcl_ifstream ifs(filename);
+  vcl_ifstream ifs(filename.c_str());
   vcl_string cat_name; ifs >> cat_name;
 
   // now search in the land_type table in volm_io
