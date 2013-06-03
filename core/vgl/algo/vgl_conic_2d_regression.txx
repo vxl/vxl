@@ -49,6 +49,10 @@ T vgl_conic_2d_regression<T>::get_rms_error_est(vgl_point_2d<T> const& p) const
 {
   vgl_homg_point_2d<T> hp(p);
   vgl_homg_point_2d<T> hc = vgl_homg_operators_2d<T>::closest_point(conic_, p);
+  // make sure point is not ideal - if it is, return a very large number
+  if (hp.w() == 0 || hc.w() == 0) {
+    return vnl_numeric_traits<T>::maxval;
+  }
   return static_cast<T>(vgl_distance(hp, hc));
 }
 
