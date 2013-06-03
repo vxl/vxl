@@ -24,6 +24,7 @@ ENDIF(EXPAT_FOUND)
 
 SET(volm_sources
  volm_io.h                              volm_io.cxx
+ volm_io_tools.h                        volm_io_tools.cxx
  volm_tile.h                            volm_tile.cxx
  volm_spherical_container.h             volm_spherical_container.cxx
  volm_spherical_container_sptr.h
@@ -44,7 +45,7 @@ SET(volm_sources
  volm_spherical_index_query_matcher.h   volm_spherical_index_query_matcher.cxx
  volm_spherical_region.h                volm_spherical_region.cxx
  volm_vrml_io.h                         volm_vrml_io.cxx
-
+ volm_buffered_index.h					volm_buffered_index.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_sources)

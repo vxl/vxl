@@ -1,8 +1,8 @@
 //:
 // \file
-// \brief  A class to represent 
+// \brief  A class to extract descriptors from an ROI using its geoindex
 //
-// \author
+// \author Ozge C. Ozcanli
 // \date May 29, 2013
 // \verbatim
 //  Modifications
@@ -13,9 +13,42 @@
 #if !defined(_VOLM_DESC_INDEXER_H)
 #define _VOLM_DESC_INDEXER_H
 
+#include <vbl/vbl_ref_count.h>
+#include <vcl_string.h>
+#include <vcl_vector.h>
+#include <volm/volm_geo_index.h>
+#include <volm/volm_geo_index_sptr.h>
 
-class volm_desc_indexer
+
+class volm_desc_indexer : public vbl_ref_count
 {
+public:
+  // constructor
+  volm_desc_indexer(vcl_string const& out_index_folder) : out_index_folder_(out_index_folder) {}
+
+  bool load_tile_hypos(vcl_string const& geo_hypo_folder, int tile_id);
+
+  //: go over each hypo in each leaf and run 'extract' at each location
+  bool index(float buffer_capacity);
+
+  virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values) = 0;
+
+  virtual vcl_string get_index_type_str() = 0;
+  
+  //: each driving indexer should overwrite with the size of the descriptor
+  virtual unsigned layer_size() = 0;
+
+
+public:
+  vcl_string out_index_folder_;
+  vcl_stringstream out_file_name_;
+  volm_geo_index_node_sptr root_;
+  vcl_vector<volm_geo_index_node_sptr> leaves_;
+
+
 };
+
+#include <vbl/vbl_smart_ptr.h>
+typedef vbl_smart_ptr<volm_desc_indexer> volm_desc_indexer_sptr;
 
 #endif  //_VOLM_DESC_INDEXER_H

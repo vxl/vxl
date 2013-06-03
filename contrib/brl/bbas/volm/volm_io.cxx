@@ -51,25 +51,25 @@ vcl_map<int, volm_attributes > create_label_map()
 {
   vcl_map<int, volm_attributes > m;
   m[0] = volm_attributes(0, "invalid",                                                 vil_rgb<vxl_byte>(255,  0,    0));  // invalid
-  m[volm_label_table::WATER] = volm_attributes(1, "open water",                         vil_rgb<vxl_byte>(0,    0,    100));
-  m[12] = volm_attributes(2, "perennial ice/snow",                                      vil_rgb<vxl_byte>(255,  255,  200));  //
-  m[volm_label_table::DEVELOPED_OPEN] = volm_attributes(3, "developed, open space",     vil_rgb<vxl_byte>(50,   0,    0));
-  m[volm_label_table::DEVELOPED_LOW] = volm_attributes(4, "developed, low intsty",   vil_rgb<vxl_byte>(100,  0,    10));
-  m[volm_label_table::DEVELOPED_MED] = volm_attributes(4, "developed, medium intsty",vil_rgb<vxl_byte>(200,  0,    100));  //  (combined with prev class)
-  m[volm_label_table::DEVELOPED_HIGH] = volm_attributes(5, "developed, high intsty", vil_rgb<vxl_byte>(220,  0,    100));  //
-  m[volm_label_table::SAND] = volm_attributes(6, "barren land/beach (rock/sand/clay)",  vil_rgb<vxl_byte>(170,  170,  170));  //
-  m[41] =                     volm_attributes(7, "deciduous forest",                    vil_rgb<vxl_byte>(0,    200,  0));  //
-  m[42] =                     volm_attributes(8, "evergreen forest",                    vil_rgb<vxl_byte>(0,    250,  0));  //
-  m[43] =                     volm_attributes(9, "mixed forest",                        vil_rgb<vxl_byte>(0,    100,  0));  //
-  m[51] =                     volm_attributes(10, "dwarf scrub(alaska only)",           vil_rgb<vxl_byte>(10,   50,   0));  //
-  m[52] =                     volm_attributes(10, "shrub/scrub",                         vil_rgb<vxl_byte>(10,   50,   0));  //
-  m[71] =                     volm_attributes(11, "grassland/herbaceous",               vil_rgb<vxl_byte>(0,    100,  20)); //
-  m[72] =                     volm_attributes(11, "sedge/herbaceous",                   vil_rgb<vxl_byte>(0,    150,  10)); //
+  m[volm_label_table::WATER] = volm_attributes(1, "Open Water",                         vil_rgb<vxl_byte>(0,    0,    100));
+  m[12] = volm_attributes(2, "Perennial Ice/Snow",                                      vil_rgb<vxl_byte>(255,  255,  200));  //
+  m[volm_label_table::DEVELOPED_OPEN] = volm_attributes(3, "Developed, Open Space",     vil_rgb<vxl_byte>(50,   0,    0));
+  m[volm_label_table::DEVELOPED_LOW] = volm_attributes(4, "Developed, Low Intensity",   vil_rgb<vxl_byte>(100,  0,    10));
+  m[volm_label_table::DEVELOPED_MED] = volm_attributes(4, "Developed, Medium Intensity",vil_rgb<vxl_byte>(200,  0,    100));  //  (combined with prev class)
+  m[volm_label_table::DEVELOPED_HIGH] = volm_attributes(5, "Developed, High Intensity", vil_rgb<vxl_byte>(220,  0,    100));  //
+  m[volm_label_table::SAND] = volm_attributes(6, "Barren Land Beach",  vil_rgb<vxl_byte>(170,  170,  170));  //
+  m[41] =                     volm_attributes(7, "Deciduous Forest",                    vil_rgb<vxl_byte>(0,    200,  0));  //
+  m[42] =                     volm_attributes(8, "Evergreen Forest",                    vil_rgb<vxl_byte>(0,    250,  0));  //
+  m[43] =                     volm_attributes(9, "Mixed Forest",                        vil_rgb<vxl_byte>(0,    100,  0));  //
+  m[51] =                     volm_attributes(10, "Dwarf Scrub (Alaska only)",           vil_rgb<vxl_byte>(10,   50,   0));  //
+  m[52] =                     volm_attributes(10, "Shrub/Scrub",                         vil_rgb<vxl_byte>(10,   50,   0));  //
+  m[71] =                     volm_attributes(11, "Grassland/Herbaceous",               vil_rgb<vxl_byte>(0,    100,  20)); //
+  m[72] =                     volm_attributes(11, "Sedge/Herbaceous (Alaska only)",     vil_rgb<vxl_byte>(0,    150,  10)); //
   m[73] =                     volm_attributes(11, "lichens",                            vil_rgb<vxl_byte>(0,    170,  10)); //
-  m[74] =                     volm_attributes(11, "moss",                               vil_rgb<vxl_byte>(0,    200,  10)); //
-  m[81] =                     volm_attributes(12, "pasture hay",                        vil_rgb<vxl_byte>(0,    120,  120)); //
-  m[82] =                     volm_attributes(13, "cultivated crops",                   vil_rgb<vxl_byte>(210,  105,  30)); //
-  m[90] =                     volm_attributes(14, "Woody wetland/marina",            vil_rgb<vxl_byte>(176,  196,  222)); //
+  m[74] =                     volm_attributes(11, "Moss (Alaska only)",                 vil_rgb<vxl_byte>(0,    200,  10)); //
+  m[81] =                     volm_attributes(12, "Pasture Hay",                        vil_rgb<vxl_byte>(0,    120,  120)); //
+  m[82] =                     volm_attributes(13, "Cultivated Crops",                   vil_rgb<vxl_byte>(210,  105,  30)); //
+  m[90] =                     volm_attributes(14, "Woody Wetlands Marina",            vil_rgb<vxl_byte>(176,  196,  222)); //
   m[95] =                     volm_attributes(14, "Emergent Herbaceous Wetlands",       vil_rgb<vxl_byte>(176,  196,  255)); //
   m[volm_label_table::BUILDING] = volm_attributes(15, "building",                       vil_rgb<vxl_byte>(255,  255,  255)); //
 

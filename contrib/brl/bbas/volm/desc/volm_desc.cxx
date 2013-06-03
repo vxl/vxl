@@ -2,6 +2,7 @@
 //:
 // \file
 #include <bsta/vis/bsta_svg_tools.h>
+#include <vsl/vsl_vector_io.h>
 
 float volm_desc::similarity(volm_desc_sptr other)
 {
@@ -43,4 +44,47 @@ void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
 
   bxml_write(outfile, pl);
 }
+
+
+void volm_desc::print() const
+{
+  vcl_cout << "descriptor name: " << name_ << '\n';
+  vcl_cout << "number of total bins:" << nbins_ << '\n'
+           << "counts: ";
+  for (unsigned i = 0; i < nbins_; i++)
+    vcl_cout << (int)h_[i] << ' ';
+  vcl_cout << vcl_endl;
+}
+
+void volm_desc::b_write(vsl_b_ostream& os)
+{
+  unsigned ver = this->version();
+  vsl_b_write(os, ver);
+  vsl_b_write(os, name_);
+  vsl_b_write(os, nbins_);
+  vsl_b_write(os, h_);
+}
+
+void volm_desc::b_read(vsl_b_istream& is)
+{
+  unsigned ver;
+  vsl_b_read(is, ver);
+  if (ver == 1) {
+    vsl_b_read(is, name_);
+    vsl_b_read(is, nbins_);
+    h_.resize(nbins_);
+    vsl_b_read(is, h_);
+  }
+  else {
+    vcl_cout << "volm_descriptor -- unknown binary io version " << ver << '\n';
+    return;
+  }
+}
+
+void volm_desc::get_char_array(vcl_vector<unsigned char>& values) const
+{
+  values.resize(nbins_);
+  values = h_;
+}
+
 

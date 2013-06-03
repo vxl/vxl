@@ -6,7 +6,7 @@
 // \brief  A base class to represent of volumetric descriptor which constructs a histogram
 //  to represent the scene observed from a hypothesized location
 //
-// \author Ozge C. Ozcanli
+// \author Yi Dong
 // \date May 29, 2013
 //
 // \verbatim
@@ -37,10 +37,10 @@ public:
   //: return the number of bins of the histogram
   unsigned int nbins() { return nbins_; }
 
-  //: pretty print (prevent creation of base class by setting = 0)
-  virtual void print() const = 0;
+  //: pretty print 
+  virtual void print() const;
 
-  //: general similarity matric for histogram
+  //: general similarity metric for histogram
   virtual float similarity(volm_desc_sptr other);
 
   //: visualization using bsvg
@@ -52,16 +52,18 @@ public:
   //: Accerror to the value at bin i in the histogram
   unsigned char operator[] (unsigned int i) const { return h_[i];}
 
+  void get_char_array(vcl_vector<unsigned char>& values) const;
+
   // ===========  binary I/O ================
 
   //: version
-  virtual unsigned version() const = 0;
+  virtual unsigned version() const { return 1; }
 
   //: binary IO write
-  virtual void b_write(vsl_b_ostream& os) = 0;
+  virtual void b_write(vsl_b_ostream& os);
 
   //: binary IO read
-  virtual void b_read(vsl_b_istream& is) = 0;
+  virtual void b_read(vsl_b_istream& is);
 
 protected:
   //: name of the descriptor

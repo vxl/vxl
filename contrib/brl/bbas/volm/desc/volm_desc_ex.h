@@ -6,7 +6,7 @@
 // \brief  A class to represent a location with a descriptor as an existence histogram of surfaces 
 //         with various land types and/or orientations etc at certain distance
 //
-// \author Ozge C. Ozcanli
+// \author Yi Dong
 // \date May 29, 2013
 //
 // \verbatim
