@@ -294,7 +294,10 @@ double vsol_conic_2d::ellipse_angular_position(vsol_point_2d_sptr const& pt) con
 
   // Find the closest point to pt on the ellipse
   vsol_point_2d_sptr closest = this->closest_point_on_curve(pt);
-  assert(closest);
+  //assert(closest);
+  if (!closest) {
+    return 0.0;
+  }
   double x = closest->x(), y = closest->y();
 
   // Extract the ellipse parameters

@@ -80,7 +80,7 @@ bool sdet_fit_conics::fit_conics()
          sit != segs.end(); sit++)
     {
       vsol_conic_2d_sptr conic = new vsol_conic_2d(*sit);
-      vcl_cout << "Fitted a conic of type " << conic->real_conic_type() << '\n';
+      //vcl_cout << "Fitted a conic of type " << conic->real_conic_type() << '\n';
       //adding a condition on aspect ratio
       if (conic->real_type() != vsol_conic_2d::real_ellipse)
       {
