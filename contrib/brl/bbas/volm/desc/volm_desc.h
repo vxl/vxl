@@ -41,7 +41,7 @@ public:
   unsigned int get_area();
 
   //: pretty print (prevent creation of base class by setting = 0)
-  virtual void print() const = 0;
+  virtual void print();
 
   //: general similarity metric for histogram
   virtual float similarity(volm_desc_sptr other);
