@@ -65,7 +65,7 @@ public:
                vcl_vector<double> depth_interval,
                vcl_vector<double> const& radius,
                unsigned const& norients = 3,
-               unsigned const& nlands = volm_label_table::land_id.size(),
+               unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                unsigned char const& initial_mag = 0);
 
   //: destructor
@@ -88,6 +88,7 @@ public:
 
   //: get the bin index from object distance, height, orientation type and land type (return idx larger than nbins if invalid)
   unsigned bin_index(double const& dist, depth_map_region::orientation const& orient, unsigned const& land) const;
+  unsigned bin_index(double const& dist, unsigned const& orient, unsigned const& land) const;
 
   //: get the bin index from distance index, height index, orientation index and land index (return idx larger than nbins if invalid)
   unsigned bin_index(unsigned const& dist_idx, unsigned const& orient_idx, unsigned const& land_idx) const;
@@ -117,7 +118,7 @@ public:
   //: screen print
   void print() const;
 
-  //: similarity method
+  //: similarity method -- calculate the intersection of two histogram, normalized by current histogram
   float similarity(volm_desc_sptr other);
 
   // ===========  binary I/O ================

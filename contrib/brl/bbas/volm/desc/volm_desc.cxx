@@ -9,6 +9,14 @@ float volm_desc::similarity(volm_desc_sptr other)
   return 0.0f;
 }
 
+unsigned int volm_desc::get_area()
+{
+  unsigned area = 0;
+  for (unsigned int i=0; i<nbins_; i++)
+  { area = area + h_[i]; }
+  return area;
+}
+
 void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
 {
   // use bsvg_plot to visualize the bin

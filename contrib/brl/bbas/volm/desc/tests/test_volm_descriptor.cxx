@@ -1,54 +1,87 @@
-// This is contrib/brl/bbas/volm/desc/tests/test_volm_descriptor.cxx
-//:
-// \file
-// \brief Tests for volumetric descriptor
-// \author Yi Dong
-// \date   May 28, 2013
-//
 #include <testlib/testlib_test.h>
 #include <volm/desc/volm_desc_ex.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_container_sptr.h>
 #include <vnl/vnl_random.h>
+#include <vul/vul_timer.h>
+#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_polygon_2d.h>
+
+static void test_weight()
+{
+
+}
 
 static void test_volm_desc_ex()
 {
+#if 0
   // create a existance histogram from depth_map_scene
   vcl_string dm_file = "z:/projects/FINDER/test1/p1a_test1_20/p1a_test1_20.vsl";
   depth_map_scene_sptr dm = new depth_map_scene;
   vsl_b_ifstream dis(dm_file.c_str());
   dm->b_read(dis);
   dis.close();
+#endif
+  // create a depth_map_scene
+  depth_map_scene_sptr depth_scene = new depth_map_scene;
+  unsigned ni = 1280;
+  unsigned nj = 720;
+  depth_scene->set_image_size(ni, nj);
+  // add a sky object
+  vsol_point_2d_sptr ps0 = new vsol_point_2d(0.0, 200.0);
+  vsol_point_2d_sptr ps1 = new vsol_point_2d(1280.0, 200.0);
+  vsol_point_2d_sptr ps2 = new vsol_point_2d(1280.0, 0.0);
+  vsol_point_2d_sptr ps3 = new vsol_point_2d(0.0, 0.0);
+  vcl_vector<vsol_point_2d_sptr> verts_sky;
+  verts_sky.push_back(ps0);  verts_sky.push_back(ps1);
+  verts_sky.push_back(ps2);  verts_sky.push_back(ps3);
+  vsol_polygon_2d_sptr sp = new vsol_polygon_2d(verts_sky);
+  depth_scene->add_sky(sp, 255, "sky");
+  // add a ground plane object
+  vsol_point_2d_sptr p0= new vsol_point_2d(0.0, 720.0);
+  vsol_point_2d_sptr p1= new vsol_point_2d(1280.0, 720.0);
+  vsol_point_2d_sptr p2= new vsol_point_2d(1280.0, 500.0);
+  vsol_point_2d_sptr p3= new vsol_point_2d(0.0, 500.0);
+  vcl_vector<vsol_point_2d_sptr> verts;
+  verts.push_back(p0);   verts.push_back(p1);
+  verts.push_back(p2);   verts.push_back(p3);
+  vsol_polygon_2d_sptr gp = new vsol_polygon_2d(verts);
+  depth_scene->add_ground(gp, 0.0, 0.0, 0, "beach", 6);
+  // add an object
+  vsol_point_2d_sptr pb0 = new vsol_point_2d(640.0, 400.0);
+  vsol_point_2d_sptr pb1 = new vsol_point_2d(940.0, 600.0);
+  vsol_point_2d_sptr pb2 = new vsol_point_2d(340.0, 200.0);
+  vcl_vector<vsol_point_2d_sptr> verts_bd;
+  verts_bd.push_back(pb0);  verts_bd.push_back(pb1);  verts_bd.push_back(pb2);
+  vsol_polygon_2d_sptr bp = new vsol_polygon_2d(verts_bd);
+  vgl_vector_3d<double> np(1.0, 1.0, 0.0);
+  depth_scene->add_region(bp, np, 100.0, 1000.0, "hotel", depth_map_region::FRONT_PARALLEL, 1, 15);
+  vcl_string dms_bin_file = "./depth_map_scene.bin";
+  vsl_b_ofstream ofs_dms(dms_bin_file);
+  depth_scene->b_write(ofs_dms);
+  ofs_dms.close();
 
   // define the radius
   vcl_vector<double> radius;
   radius.push_back(100);  radius.push_back(50);  radius.push_back(200);
-  volm_desc_sptr desc = new volm_desc_ex(dm, radius);
+  volm_desc_sptr desc = new volm_desc_ex(depth_scene, radius);
   desc->print();
 
   // create a existance histogram from index
-  float solid_angle = 2.0f, vmin = 2.0, dmax = 3000;
+  vcl_vector<unsigned char> values_dst(1176);
+  vcl_vector<unsigned char> values_combine(1176);
+  float solid_angle = 2.0f, vmin = 1.0f, dmax = 3000.0f;
   volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle, vmin, dmax);
-  // construct depth_interval table for pass 1 matcher
   vcl_map<double, unsigned char>& depth_interval_map = sph->get_depth_interval_map();
   vcl_vector<double> depth_interval;
   vcl_map<double, unsigned char>::iterator iter = depth_interval_map.begin();
   for (; iter != depth_interval_map.end(); ++iter)
     depth_interval.push_back(iter->first);
-
-  vcl_string index_dst_file = "D:/work/Dropbox/FINDER/index/geoindex_beachgrass_combined_pa_5/geo_index_tile_3_node_-79.949219_32.650391_-79.948242_32.651367_index.bin";
-  vcl_string index_combine_file = "D:/work/Dropbox/FINDER/index/geoindex_beachgrass_combined_pa_5/geo_index_tile_3_node_-79.949219_32.650391_-79.948242_32.651367_index_label_combined.bin";
-
-  
-  //vnl_random rand(9667566);
-  //for (unsigned i = 0; i < 1024; i += 10) {
-  //  index_dst[i] = (unsigned char)rand.lrand32(depth_interval.size());
-  //  index_combined[i] = (unsigned char)rand.lrand32(254);
-  //}
-
-  //volm_desc_sptr desc_index = new volm_desc_ex(index_dst, index_combined, depth_interval, radius);
-  //desc_index->print();
-  //desc_index->visualize("./test_desc_ex_index.svg", 2);
+  vnl_random rand(9667566);
+  for (unsigned i = 0; i < 1176; i++) {
+    values_dst.push_back((unsigned char)rand.lrand32(254));
+    values_combine.push_back((unsigned char)rand.lrand32(254));
+  }
 
   // binary IO test
   desc->visualize("./test_desc_ex_dms.svg", 2);
@@ -65,12 +98,29 @@ static void test_volm_desc_ex()
 
   bool is_same = desc_in->name() == desc->name();
   is_same = is_same && desc_in->nbins() == desc->nbins();
+  float score = desc->similarity(desc_in);
+  vcl_cout << " for two same histogram, similarity score is " << score << vcl_endl;
+  
 
   TEST ("sky bin should exist", desc->count(385), 1);
-  TEST ("water bin should exist", desc->count(1), 1);
-  TEST ("building 2 should exist", desc->count(279), 1);
+  TEST ("beach bin should exist", desc->count(6), 1);
+  TEST ("building 2 should exist", desc->count(260), 1);
   TEST ("binary io is correct", is_same, true);
+  TEST ("total are of the histogram", desc->get_area(), 3);
+  TEST ("similarity of the histogram", score, 1.0f);
 
+  vul_timer time;
+  unsigned N = 1000;
+  for (unsigned i = 0; i < N; i++) {
+    volm_desc_sptr desc_index = new volm_desc_ex(values_dst, values_combine, depth_interval, radius);
+    /*desc_index->print();
+    desc_index->visualize("./test_desc_ex_index.svg", 2);*/
+    float score_index = desc->similarity(desc_index);
+    /*if (i % 1000 == 0) {
+      vcl_cout << " i = " << i << " similarity score is " << score_index << vcl_endl;
+    }*/
+  }
+  vcl_cout << N << " location, visibility intersection takes " << time.all()/1000.0 << " seconds. " << vcl_endl;
 
 }
 

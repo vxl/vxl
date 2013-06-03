@@ -17,6 +17,11 @@
 
 class volm_desc_ex_indexer : public volm_desc_indexer
 {
+  // Default constructor
+  volm_desc_ex_indexer() {}
+
+  // Destructor
+  ~volm_desc_ex_indexer();
 };
 
 #endif  //_VOLM_DESC_EX_INDEXER_H

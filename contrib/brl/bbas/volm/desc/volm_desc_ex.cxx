@@ -107,8 +107,13 @@ volm_desc_ex::volm_desc_ex(vcl_vector<unsigned char> const& index_dst,
     else {
       unsigned char orientation_value, label_value;
       volm_io_extract_values(index_combined[r_idx], orientation_value, label_value);
-      double dist = depth_interval[index_dst[r_idx]];
-      this->set_count(dist, (unsigned)orientation_value, (unsigned)label_value, (unsigned char)1);
+      double dist;
+      if (index_dst[r_idx] < depth_interval.size()) 
+        dist = depth_interval[index_dst[r_idx]];
+      else
+        dist = depth_interval[depth_interval.size()-1];
+      if (label_value < nlands_)
+        this->set_count(dist, (unsigned)orientation_value, (unsigned)label_value, (unsigned char)1);
     }
 
   }
@@ -119,6 +124,7 @@ void volm_desc_ex::initialize_bin(unsigned char const& mag)
   for (unsigned bin_id = 0; bin_id < nbins_; bin_id++)
     h_[bin_id] = (unsigned char)0;
 }
+
 
 unsigned volm_desc_ex::bin_index(unsigned const& dist_idx, unsigned const& orient_idx, unsigned const& land_idx) const
 {
@@ -146,6 +152,12 @@ unsigned volm_desc_ex::bin_index(double const& dist, depth_map_region::orientati
   assert(land < nlands_ && "land type is beyond defined land type in volm_descriptor");
   unsigned dist_idx = locate_idx(dist, radius_);
   return this->bin_index(dist_idx, (unsigned)orient, land);
+}
+
+unsigned volm_desc_ex::bin_index(double const& dist, unsigned const& orient, unsigned const& land) const
+{
+  unsigned dist_idx = locate_idx(dist, radius_);
+  return this->bin_index(dist_idx, orient, land);
 }
 
 void volm_desc_ex::set_count(unsigned const& bin, unsigned char const& count)
@@ -194,10 +206,16 @@ void volm_desc_ex::print() const
 
 float volm_desc_ex::similarity(volm_desc_sptr other)
 {
-  vcl_cout << " similarity from volm_desc_ex" << vcl_endl;
-  return 0.0f;
+  if (nbins_ != other->nbins())
+    return 0.0f;
+  // calcualte the intersection
+  float intersec = 0.0f;
+  for (unsigned idx = 0; idx < nbins_; idx++) {
+    intersec += (float)vcl_min(this->count(idx), other->count(idx));
+  }
+  // normalize by current histogram area
+  return intersec/this->get_area();
 }
-
 
 void volm_desc_ex::b_write(vsl_b_ostream& os)
 {
