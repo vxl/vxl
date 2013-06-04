@@ -45,14 +45,15 @@ bool volm_desc_indexer::index(float buffer_capacity)
     return false;
   }
   
-  for (unsigned i = 0; i < leaves_.size(); i++) {
-    if (!leaves_[i]->hyps_)
-      continue;
+  for (current_leaf_id_ = 0; current_leaf_id_ < leaves_.size(); current_leaf_id_++) {
+
+    if (!this->get_next())
+      return false;
  
     // create a binary index file for each hypo set in a leaf
     volm_buffered_index_sptr ind = new volm_buffered_index(params.layer_size, buffer_capacity);
     
-    vcl_string out_file_name = out_file_name_.str() + "_" + leaves_[i]->get_string() + "_" + this->get_index_type_str() + ".bin";
+    vcl_string out_file_name = out_file_name_.str() + "_" + leaves_[current_leaf_id_]->get_string() + "_" + this->get_index_type_str() + ".bin";
 
     if (!ind->initialize_write(out_file_name)) {
       vcl_cerr << "Cannot initialize " << out_file_name << " for write!\n";
@@ -62,7 +63,7 @@ bool volm_desc_indexer::index(float buffer_capacity)
     unsigned indexed_cnt = 0;
 
     vgl_point_3d<double> h_pt;
-    while ((leaves_[i])->hyps_->get_next(0,1,h_pt)) {
+    while ((leaves_[current_leaf_id_])->hyps_->get_next(0,1,h_pt)) {
       vcl_vector<unsigned char> values;
       this->extract(h_pt.y(), h_pt.x(), h_pt.z(), values);
       ind->add_to_index(values);

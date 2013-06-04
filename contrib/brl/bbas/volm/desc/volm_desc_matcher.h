@@ -5,7 +5,7 @@
 // \file
 // \brief  A base class for matchers using volumetric descriptors
 //
-// \author Ozge C. Ozcanli
+// \author Yi Dong
 // \date May 29, 2013
 //
 // \verbatim
@@ -20,6 +20,9 @@
 #include <vcl_string.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
+#include <volm/volm_io.h>
+#include <volm/volm_loc_hyp.h>
+#include <volm/volm_loc_hyp_sptr.h>
 
 class volm_desc_matcher;
 typedef vbl_smart_ptr<volm_desc_matcher> volm_desc_matcher_sptr;
@@ -42,8 +45,8 @@ public:
   //: Execute match algorithm implemented
   virtual bool matcher(volm_desc_sptr const& query,
                        vcl_string const& geo_hypo_folder,
-                       vcl_string const& geo_index_folder,
-                       unsigned const& tile_id) { return true; }
+                       vcl_string const& desc_index_folder,
+                       unsigned const& tile_id);
 
   //: write the matcher scores
   virtual bool write_out(vcl_string const& out_folder, unsigned const& tile_id) { return true; }
@@ -53,6 +56,9 @@ public:
 
 protected:
   vcl_string name_;
+
+  // output scores (score per location, the vector contains scores for locations in a tile)
+  vcl_vector<volm_score_sptr> score_all_;
 };
 
 #endif  // volm_desc_matcher_h_

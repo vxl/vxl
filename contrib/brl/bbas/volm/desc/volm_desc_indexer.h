@@ -28,6 +28,9 @@ public:
 
   bool load_tile_hypos(vcl_string const& geo_hypo_folder, int tile_id);
 
+  // handles any necessary loading during indexing when it switches processing from one leaf to the next leaf
+  virtual bool get_next() { return true; }
+
   //: go over each hypo in each leaf and run 'extract' at each location
   bool index(float buffer_capacity);
 
@@ -44,6 +47,7 @@ public:
   vcl_stringstream out_file_name_;
   volm_geo_index_node_sptr root_;
   vcl_vector<volm_geo_index_node_sptr> leaves_;
+  unsigned current_leaf_id_;
 
 
 };

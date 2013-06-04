@@ -19,9 +19,6 @@
 #include <vcl_vector.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
 #include <bpgl/depth_map/depth_map_scene.h>
-#include <volm/volm_io.h>
-#include <volm/volm_loc_hyp.h>
-#include <volm/volm_loc_hyp_sptr.h>
 
 class volm_desc_ex_matcher : public volm_desc_matcher
 {
@@ -48,7 +45,7 @@ public:
   //: ececute the matcher 
   bool matcher(volm_desc_sptr const& query,
                vcl_string const& geo_hypo_folder,
-               vcl_string const& geo_index_folder,
+               vcl_string const& desc_index_folder,
                unsigned const& tile_id);
 
   //: write out the result
@@ -67,8 +64,6 @@ private:
   unsigned           nlands_;
   unsigned char initial_mag_;
 
-  //: output scores (score per location, the vector contains scores for locations in a tile)
-  vcl_vector<volm_score_sptr> score_all_;
 };
 
 #endif  //_VOLM_DESC_EX_MATCHER_H
