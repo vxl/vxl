@@ -1,15 +1,28 @@
 #include <testlib/testlib_test.h>
 #include <volm/desc/volm_desc_ex.h>
+#include <volm/desc/volm_desc_land.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_container_sptr.h>
+#include <volm/volm_buffered_index.h>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 
-static void test_weight()
+static void test_volm_desc_land()
 {
-
+  volm_desc_sptr land = new volm_desc_land(21);
+  land->print();
+  land->visualize("test_volm_desc_land.svg", 2);
+  // load from a file
+  vcl_string filename = "./location_category.txt";
+  vcl_ofstream ofs(filename.c_str());
+  ofs << "Shrub/Scrub";
+  ofs.close();
+  volm_desc_sptr land_cat = new volm_desc_land(filename);
+  land_cat->print();
+  TEST("NLCD land type Shrub/Scrub is located in bin 09", (*land_cat)[9], 1);
+  TEST("NLCD land type 21 is located in correct bin", (*land)[2], 1);
 }
 
 static void test_volm_desc_ex()
@@ -124,12 +137,41 @@ static void test_volm_desc_ex()
 
 }
 
+static void params_io()
+{
+  vcl_string filename = "./ex_params.params";
+  volm_buffered_index_params params;
+  vcl_vector<double> radius;  radius.push_back(2.30);  radius.push_back(2.318);  radius.push_back(421.342);  radius.push_back(89342.1);
+  unsigned nlands = 31;
+  unsigned norients = 3;
+  params.layer_size = 321;
+  params.radius = radius;
+  params.nlands = nlands;
+  params.norients = norients;
+  params.write_ex_param_file(filename);
+  volm_buffered_index_params params_in;
+  params_in.read_ex_param_file(filename);
+  vcl_cout << " layer_size = " << params_in.layer_size << vcl_endl;
+  vcl_cout << " nlands = " << params_in.nlands << vcl_endl;
+  vcl_cout << " norient = " << params_in.norients << vcl_endl;
+  vcl_cout << " radius = ";
+  for (vcl_vector<double>::iterator vit = params_in.radius.begin(); vit != params_in.radius.end(); ++vit)
+    vcl_cout << *vit << ' ';
+  vcl_cout << vcl_endl;
+
+}
+
 static void test_volm_descriptor()
 {
+  vcl_cout << "======================== test the land category histogram ================== " << vcl_endl;
+  test_volm_desc_land();
+  vcl_cout << "============================================================================ " << vcl_endl;
+
   vcl_cout << "======================== test the existance histogram ====================== " << vcl_endl;
   test_volm_desc_ex();
   vcl_cout << "============================================================================ " << vcl_endl;
 
+  params_io();
 }
 
 TESTMAIN( test_volm_descriptor );

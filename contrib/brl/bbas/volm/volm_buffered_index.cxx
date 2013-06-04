@@ -5,6 +5,7 @@
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <vgl/vgl_box_3d.h>
 #include <vcl_algorithm.h>
+#include <vcl_iterator.h>
 
 bool volm_buffered_index_params::write_params_file(vcl_string index_file_name)
 {
@@ -26,6 +27,45 @@ bool volm_buffered_index_params::read_params_file(vcl_string index_file_name)
   vcl_string tmp;
   ifs >> tmp >> layer_size;
   ifs.close();
+  return true;
+}
+
+bool volm_buffered_index_params::write_ex_param_file(vcl_string index_file_name)
+{
+  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  vcl_ofstream ofs(index_params_file.c_str());
+  if (ofs.fail())
+    return false;
+  ofs << "radius_type " << radius.size() << vcl_endl;
+  ofs << "orientation_type " << norients << vcl_endl;
+  ofs << "land_type " << nlands << vcl_endl;
+  ofs << "layer_size " << layer_size << vcl_endl;
+  ofs << "radius: ";
+  for (unsigned i = 0; i < radius.size(); i++)
+    ofs << radius[i] << ' ';
+  ofs << vcl_endl;
+  ofs.close();
+  return true;
+}
+
+bool volm_buffered_index_params::read_ex_param_file(vcl_string index_file_name)
+{
+  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  vcl_ifstream ifs(index_params_file.c_str());
+  if (!ifs.is_open())
+    return false;
+  vcl_string tmp;
+  unsigned nradius;
+  ifs >> tmp >> nradius;
+  ifs >> tmp >> norients;
+  ifs >> tmp >> nlands;
+  ifs >> tmp >> layer_size;
+  ifs >> tmp;
+  for (unsigned i = 0; i < nradius; i++) {
+    double r;
+    ifs >> r;
+    radius.push_back(r);
+  }
   return true;
 }
 

@@ -26,7 +26,11 @@ public:
   // constructor
   volm_desc_indexer(vcl_string const& out_index_folder) : out_index_folder_(out_index_folder) {}
 
-  bool load_tile_hypos(vcl_string const& geo_hypo_folder, int tile_id);
+  //: load the volm_geo_index for given tile
+  virtual bool load_tile_hypos(vcl_string const& geo_hypo_folder, int tile_id);
+
+  //: generate parameter files for different indexer
+  virtual bool write_params_file();
 
   // handles any necessary loading during indexing when it switches processing from one leaf to the next leaf
   virtual bool get_next() { return true; }
@@ -44,11 +48,10 @@ public:
 
 public:
   vcl_string out_index_folder_;
-  vcl_stringstream out_file_name_;
+  vcl_stringstream out_file_name_pre_;
   volm_geo_index_node_sptr root_;
   vcl_vector<volm_geo_index_node_sptr> leaves_;
   unsigned current_leaf_id_;
-
 
 };
 

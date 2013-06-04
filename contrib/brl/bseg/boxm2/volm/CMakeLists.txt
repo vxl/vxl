@@ -50,3 +50,6 @@ SUBDIRS(exe)
 #pro
 SUBDIRS(pro)
 
+#desc
+SUBDIRS(desc)
+

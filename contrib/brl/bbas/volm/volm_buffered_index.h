@@ -35,11 +35,19 @@ class volm_buffered_index_params
     // text i/o
     static bool write_size_file(vcl_string index_file_name, unsigned long size);
     static bool read_size_file(vcl_string index_file_name, unsigned long& size);
+
+    //: text i/o for existance histogram parameters
+    bool write_ex_param_file(vcl_string index_file_name);
+    bool read_ex_param_file(vcl_string index_file_name);
     
   public:
     unsigned layer_size;
-
+    //: existance histogram parameters
+    vcl_vector<double> radius;
+    unsigned norients;
+    unsigned nlands;
 };
+
 
 class volm_buffered_index : public vbl_ref_count
 {

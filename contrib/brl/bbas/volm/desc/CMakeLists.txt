@@ -14,7 +14,6 @@ SET(volm_desc_sources
   volm_desc_indexer.h					  volm_desc_indexer.cxx
   volm_desc_land_matcher.h				  volm_desc_land_matcher.cxx
   volm_desc_land_indexer.h                volm_desc_land_indexer.cxx
-  volm_desc_ex_indexer.h                  
   volm_desc_ex_matcher.h                  volm_desc_ex_matcher.cxx
 )
 

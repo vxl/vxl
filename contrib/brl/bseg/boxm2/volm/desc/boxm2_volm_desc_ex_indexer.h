@@ -1,6 +1,6 @@
-// This is brl/bbas/volm/desc/volm_desc_ex_indexer.h
-#ifndef volm_desc_ex_indexer_h_
-#define volm_desc_ex_indexer_h_
+// This is brl/bbas/volm/desc/boxm2_volm_desc_ex_indexer.h
+#ifndef boxm2_volm_desc_ex_indexer_h_
+#define boxm2_volm_desc_ex_indexer_h_
 // \file
 // \brief  A class to contain the observable scene from each hypothesized location, each location has a volm_ex_descriptor
 //
@@ -11,11 +11,12 @@
 //   <none yet>
 // \endverbatim
 //
-
-#include "volm_desc_indexer.h"
-#include "volm_desc_ex.h"
+#include <volm/desc/volm_desc_indexer.h>
+#include <volm/desc/volm_desc_ex.h>
 #include <volm/volm_io_tools.h>
 #include <volm/volm_buffered_index.h>
+#include <boxm2/volm/boxm2_volm_wr3db_index.h>
+#include <boxm2/volm/boxm2_volm_wr3db_index_sptr.h>
 
 
 class volm_desc_ex_indexer : public volm_desc_indexer
@@ -26,6 +27,7 @@ public:
   volm_desc_ex_indexer(vcl_string const& index_folder,
                        vcl_string const& out_index_folder,
                        vcl_vector<double> const& radius,
+                       float ind_buffer,
                        unsigned const& norients = 3,
                        unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                        unsigned char const& initial_mag = 0);
@@ -41,6 +43,9 @@ public:
 
   //: get the name of the indexer
   virtual vcl_string get_index_type_str() { return "existance"; }
+
+  //: generate parameter files
+  virtual bool write_params_file();
 
   //: return the size of the histogram
   virtual unsigned layer_size() { return layer_size_; }
@@ -58,7 +63,10 @@ private:
   //: directory where the previous created indices is stored
   vcl_string index_folder_;
 
-  //: index
+  //: indices
+  float  ind_buffer_;
+  boxm2_volm_wr3db_index_sptr ind_dist_;
+  boxm2_volm_wr3db_index_sptr ind_comb_;
 
 
 };

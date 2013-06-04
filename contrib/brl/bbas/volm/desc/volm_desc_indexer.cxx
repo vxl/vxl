@@ -31,29 +31,45 @@ bool volm_desc_indexer::load_tile_hypos(vcl_string const& geo_hypo_folder, int t
     vcl_cout << "In volm_desc_indexer::load_tile_hypos() -- geo index has 0 leaves with a hyps!\n";
     return false;
   }
-  out_file_name_ << out_index_folder_ << "desc_index_tile_" << tile_id;
+  out_file_name_pre_ << out_index_folder_ << "desc_index_tile_" << tile_id;
+  return true;
+}
+
+bool volm_desc_indexer::write_params_file()
+{
+  volm_buffered_index_params params;
+  params.layer_size = this->layer_size();
+
+  if (!params.write_params_file(out_file_name_pre_.str()))
+    return false;
   return true;
 }
 
 bool volm_desc_indexer::index(float buffer_capacity) 
 {
+  if (this->write_params_file()) {
+    vcl_cerr << "Cannot write params file to " << out_file_name_pre_.str() + ".params!\n";
+    return false;
+  }
+#if 0
   volm_buffered_index_params params;
   params.layer_size = this->layer_size(); 
 
-  if (!params.write_params_file(out_file_name_.str())) { 
-    vcl_cerr << "Cannot write params file to " << out_file_name_.str() + ".params!\n";
+  if (!params.write_params_file(out_file_name_pre_.str())) { 
+    vcl_cerr << "cannot write params file to " << out_file_name_pre_.str() + ".params!\n";
     return false;
   }
+#endif
   
   for (current_leaf_id_ = 0; current_leaf_id_ < leaves_.size(); current_leaf_id_++) {
 
     if (!this->get_next())
       return false;
- 
+
     // create a binary index file for each hypo set in a leaf
-    volm_buffered_index_sptr ind = new volm_buffered_index(params.layer_size, buffer_capacity);
+    volm_buffered_index_sptr ind = new volm_buffered_index(this->layer_size(), buffer_capacity);
     
-    vcl_string out_file_name = out_file_name_.str() + "_" + leaves_[current_leaf_id_]->get_string() + "_" + this->get_index_type_str() + ".bin";
+    vcl_string out_file_name = out_file_name_pre_.str() + "_" + leaves_[current_leaf_id_]->get_string() + "_" + this->get_index_type_str() + ".bin";
 
     if (!ind->initialize_write(out_file_name)) {
       vcl_cerr << "Cannot initialize " << out_file_name << " for write!\n";
