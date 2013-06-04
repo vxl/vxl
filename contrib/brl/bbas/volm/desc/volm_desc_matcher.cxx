@@ -18,10 +18,12 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
   vcl_vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
 
+  index_file_name_ << desc_index_folder << "desc_index_tile_" << tile_id;
+
   unsigned nleaves = leaves.size();
   // loop over all leaves to match each location with the query
   for (unsigned l_idx = 0; l_idx < nleaves; l_idx++) {
-    vcl_string index_file = leaves[l_idx]->get_label_index_name(file_name_pre.str(), "desc_ex");
+    vcl_string index_file = index_file_name_.str() + "_" + leaves[l_idx]->get_string() + "_" + this->get_index_type_str() + ".bin";
     if (!vul_file::exists(index_file)) {
       vcl_cout << " ERROR: can not find index file: " << index_file << vcl_endl;
       return false;

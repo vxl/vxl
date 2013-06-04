@@ -51,6 +51,8 @@ public:
   //: write the matcher scores
   virtual bool write_out(vcl_string const& out_folder, unsigned const& tile_id) { return true; }
 
+  virtual vcl_string get_index_type_str() = 0;
+
   //: get the name of the matcher
   vcl_string name() const { return name_; }
 
@@ -59,6 +61,8 @@ protected:
 
   // output scores (score per location, the vector contains scores for locations in a tile)
   vcl_vector<volm_score_sptr> score_all_;
+
+  vcl_stringstream index_file_name_;
 };
 
 #endif  // volm_desc_matcher_h_

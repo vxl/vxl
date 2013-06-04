@@ -14,9 +14,12 @@
 #define _VOLM_DESC_LAND_MATCHER_H
 
 #include "volm_desc_matcher.h"
+#include "volm_desc_land_indexer.h"
 
 class volm_desc_land_matcher : public volm_desc_matcher
 {
+
+  virtual vcl_string get_index_type_str() { return volm_desc_land_indexer::name_; }
 };
 
 #endif  //_VOLM_DESC_LAND_MATCHER_H
