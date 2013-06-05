@@ -3,19 +3,17 @@
 
 unsigned volm_desc_land::n_bins = 14;
 
-// Constructor
+// Constructor - returns a descriptor with a histogram of all bins 0 if it cannot find the land type, e.g. pass -1 to get such a histogram
 volm_desc_land::volm_desc_land(int land_type_id) 
 {
   name_ = "volm_desc_land";
   nbins_ = volm_desc_land::n_bins;
-  h_.resize(nbins_);
+  h_.resize(nbins_, (unsigned char)0);
 
-  vcl_map<int, volm_attributes >::iterator it = volm_label_table::land_id.find(land_type_id);
-  if (it != volm_label_table::land_id.end())
-    h_[it->second.id_ - 1] = 1;
-  else {
-    vcl_cerr << " cannot find NLCD id: " << land_type_id << " in volm_land_table::land_id!!\n";
-    throw 0;
+  if (land_type_id > 0) { // we don't want to consider invalid = 0 as one of the land types and leave the histogram as all zeros 
+    vcl_map<int, volm_attributes >::iterator it = volm_label_table::land_id.find(land_type_id);
+    if (it != volm_label_table::land_id.end())
+      h_[it->second.id_ - 1] = 1;
   }
 }
 

@@ -20,6 +20,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
+#include <vil/vil_image_view_base.h>
 
 class volm_img_info 
 {
@@ -34,6 +35,7 @@ public:
   vgl_box_2d<double> bbox;   // in lon (x), lat (y).  lower left corner is (0,nj), upper right corner is (ni, 0)
   vcl_string name;
   vcl_string img_name;
+  vil_image_view_base_sptr img_r;
 };
 
 class volm_io_tools 
@@ -46,7 +48,7 @@ public:
 
   static bool load_naip_imgs(vcl_string const& img_folder, vcl_vector<volm_img_info>& imgs, bool load_resource = false);
 
-  static int load_lidar_img(vcl_string img_file, volm_img_info& info);
+  static int load_lidar_img(vcl_string img_file, volm_img_info& info, bool load_resource = false);
 
   static void load_lidar_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
 

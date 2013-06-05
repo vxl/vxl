@@ -1,6 +1,6 @@
 //:
 // \file
-// \brief  A class to represent 
+// \brief  A class to create a descriptor index to store land type of each location
 //
 // \author
 // \date May 29, 2013

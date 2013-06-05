@@ -112,11 +112,17 @@ bool volm_io_tools::load_naip_imgs(vcl_string const& img_folder, vcl_vector<volm
   return true;
 }
 
-int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info) {
+int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool load_image_resource) {
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs; // just the default, no concept of local coordinate system here, so won't be used
   
-  vil_image_view_base_sptr img_sptr = vil_load(img_file.c_str());
-  info.ni = img_sptr->ni(); info.nj = img_sptr->nj(); 
+  if (load_image_resource) {
+    info.img_r = vil_load(img_file.c_str());
+    info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
+  } else {
+    vil_image_view_base_sptr img_sptr = vil_load(img_file.c_str());
+    info.ni = img_sptr->ni(); info.nj = img_sptr->nj(); 
+  }
+
   info.name = vul_file::strip_directory(vul_file::strip_extension(img_file)); 
   info.img_name = img_file;
 
@@ -157,7 +163,7 @@ void volm_io_tools::load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string filename = fn();
     volm_img_info info;
-    load_lidar_img(filename, info);
+    load_lidar_img(filename, info, true);
     infos.push_back(info);
   }
 }
