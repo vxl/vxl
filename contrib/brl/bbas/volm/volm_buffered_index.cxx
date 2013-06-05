@@ -7,9 +7,10 @@
 #include <vcl_algorithm.h>
 #include <vcl_iterator.h>
 
-bool volm_buffered_index_params::write_params_file(vcl_string index_file_name)
+bool volm_buffered_index_params::write_params_file(vcl_string index_file_name_pre)
 {
-  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  //vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  vcl_string index_params_file = index_file_name_pre + ".params";
   vcl_ofstream ofs(index_params_file.c_str());
   if (!ofs.is_open())
     return false;
@@ -18,9 +19,10 @@ bool volm_buffered_index_params::write_params_file(vcl_string index_file_name)
   return true;
 }
 
-bool volm_buffered_index_params::read_params_file(vcl_string index_file_name)
+bool volm_buffered_index_params::read_params_file(vcl_string index_file_name_pre)
 {
-  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  //vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  vcl_string index_params_file = index_file_name_pre + ".params";
   vcl_ifstream ifs(index_params_file.c_str());
   if (!ifs.is_open())
     return false;
@@ -30,16 +32,17 @@ bool volm_buffered_index_params::read_params_file(vcl_string index_file_name)
   return true;
 }
 
-bool volm_buffered_index_params::write_ex_param_file(vcl_string index_file_name)
+bool volm_buffered_index_params::write_ex_param_file(vcl_string index_file_name_pre)
 {
-  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  //vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  vcl_string index_params_file = index_file_name_pre + ".params";
   vcl_ofstream ofs(index_params_file.c_str());
   if (ofs.fail())
     return false;
+  ofs << "layer_size " << layer_size << vcl_endl;
   ofs << "radius_type " << radius.size() << vcl_endl;
   ofs << "orientation_type " << norients << vcl_endl;
   ofs << "land_type " << nlands << vcl_endl;
-  ofs << "layer_size " << layer_size << vcl_endl;
   ofs << "radius: ";
   for (unsigned i = 0; i < radius.size(); i++)
     ofs << radius[i] << ' ';
@@ -48,9 +51,10 @@ bool volm_buffered_index_params::write_ex_param_file(vcl_string index_file_name)
   return true;
 }
 
-bool volm_buffered_index_params::read_ex_param_file(vcl_string index_file_name)
+bool volm_buffered_index_params::read_ex_param_file(vcl_string index_file_name_pre)
 {
-  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  //vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  vcl_string index_params_file = index_file_name_pre + ".params";
   vcl_ifstream ifs(index_params_file.c_str());
   if (!ifs.is_open())
     return false;

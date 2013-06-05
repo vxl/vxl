@@ -27,7 +27,7 @@ public:
   volm_desc_indexer(vcl_string const& out_index_folder) : out_index_folder_(out_index_folder) {}
 
   //: load the volm_geo_index for given tile
-  virtual bool load_tile_hypos(vcl_string const& geo_hypo_folder, int tile_id);
+  bool load_tile_hypos(vcl_string const& geo_hypo_folder, int tile_id);
 
   //: generate parameter files for different indexer
   virtual bool write_params_file();
@@ -52,7 +52,7 @@ public:
   volm_geo_index_node_sptr root_;
   vcl_vector<volm_geo_index_node_sptr> leaves_;
   unsigned current_leaf_id_;
-
+  unsigned tile_id_;
 };
 
 #include <vbl/vbl_smart_ptr.h>

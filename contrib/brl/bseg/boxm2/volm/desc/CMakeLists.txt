@@ -15,3 +15,5 @@ TARGET_LINK_LIBRARIES(boxm2_volm_desc boxm2_volm boxm2 boxm2_io brip baio vpgl v
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
+
+SUBDIRS(exe)

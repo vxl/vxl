@@ -22,34 +22,35 @@
 class volm_desc_ex_indexer : public volm_desc_indexer
 {
 public:
-
+  static vcl_string name_;
   //: constructor 
   volm_desc_ex_indexer(vcl_string const& index_folder,
                        vcl_string const& out_index_folder,
                        vcl_vector<double> const& radius,
+                       vcl_vector<double> const& depth_interval,
+                       unsigned index_layer_size,
                        float ind_buffer,
                        unsigned const& norients = 3,
                        unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                        unsigned char const& initial_mag = 0);
 
   //: Destructor
-  ~volm_desc_ex_indexer();
+  ~volm_desc_ex_indexer() {}
 
-  //: load the volm_geo_index and initialize associated indices
-  virtual bool load_tile_hypos(vcl_string const& geo_hypo_folder, int tile_id);
+  //: load the volm_geo_index for given tile
+  virtual bool get_next();
 
   //: extract histogram for a location
   virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values);
 
   //: get the name of the indexer
-  virtual vcl_string get_index_type_str() { return "existance"; }
+  virtual vcl_string get_index_type_str() { return volm_desc_ex_indexer::name_; }
 
   //: generate parameter files
   virtual bool write_params_file();
 
   //: return the size of the histogram
   virtual unsigned layer_size() { return layer_size_; }
-
 
 private:
   //: histogram parameters
@@ -65,9 +66,12 @@ private:
 
   //: indices
   float  ind_buffer_;
+  unsigned index_layer_size_;
   boxm2_volm_wr3db_index_sptr ind_dist_;
   boxm2_volm_wr3db_index_sptr ind_comb_;
 
+  //: depth interval table
+  vcl_vector<double> depth_interval_;
 
 };
 

@@ -28,6 +28,11 @@ public:
   // Default constructor
   volm_desc() {}
 
+  //: construct the histogram from a vector
+  volm_desc(vcl_vector<unsigned char> values)
+    : h_(values)
+  { name_ = "descriptor";  nbins_ = (unsigned)values.size(); }
+
   // Destructor
   virtual ~volm_desc() {};
 

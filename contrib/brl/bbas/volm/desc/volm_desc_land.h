@@ -1,4 +1,6 @@
-//:
+// This is brl/bbas/volm/desc/volm_desc_land.h
+#ifndef volm_desc_land_h_
+#define volm_desc_land_h_
 // \file
 // \brief  A class to represent land type of a location, the descriptor uses classes 1-14 of volm_label_table::land_id
 //
@@ -10,9 +12,6 @@
 // \endverbatim
 //
 
-#if !defined(_VOLM_DESC_LAND_H)
-#define _VOLM_DESC_LAND_H
-
 #include "volm_desc.h"
 
 class volm_desc_land : public volm_desc
@@ -23,6 +22,9 @@ public:
 
   // Constructor for the query
   volm_desc_land(vcl_string& filename);
+
+  //: genera similarity metric for two land descriptor
+  virtual float similarity(volm_desc_sptr other);
 
   static unsigned n_bins;
 

@@ -4,16 +4,22 @@
 #include <vcl_algorithm.h>
 #include <vul/vul_file.h>
 
+vcl_string volm_desc_ex_indexer::name_ = "existance";
+
 volm_desc_ex_indexer::volm_desc_ex_indexer(vcl_string const& index_folder,
                                            vcl_string const& out_index_folder,
                                            vcl_vector<double> const& radius,
+                                           vcl_vector<double> const& depth_interval,
+                                           unsigned index_layer_size,
                                            float ind_buffer,
                                            unsigned const& norients,
                                            unsigned const& nlands,
                                            unsigned char const& initial_mag)
  : volm_desc_indexer(out_index_folder)
 {
+  depth_interval_ = depth_interval;
   ind_buffer_ = ind_buffer;
+  index_layer_size_ = index_layer_size;
   index_folder_ = index_folder;
   norients_ = norients;
   nlands_ = nlands;
@@ -26,49 +32,10 @@ volm_desc_ex_indexer::volm_desc_ex_indexer(vcl_string const& index_folder,
   vcl_sort(radius_.begin(), radius_.end());
   unsigned ndists = (unsigned)radius.size() + 1;
   layer_size_ = ndists * norients_ * nlands_;
-}
 
-bool volm_desc_ex_indexer::load_tile_hypos(vcl_string const& geo_hypo_folder, int tile_id)
-{
-  // given the tile id and geo_hypo_folder, load the volm_geo_index and initialize associated indice for the tile
-  vcl_stringstream file_name_pre_hypo;
-  file_name_pre_hypo << geo_hypo_folder << "/geo_index_tile_" << tile_id << ".txt";
-  vcl_stringstream file_name_pre_indx;
-
-  if (!vul_file::exists(file_name_pre_hypo.str())) {
-    vcl_cout << "ERROR: in volm_desc_ex_indexer -- file does not exist: "
-             << file_name_pre_hypo.str() << vcl_endl;
-    return false;
-  }
-  // load the volm_geo_index
-  vcl_stringstream file_name_pre;
-  file_name_pre << geo_hypo_folder << "/geo_index_tile_" << tile_id;
-  float min_size;
-  root_ = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
-  volm_geo_index::read_hyps(root_, file_name_pre.str());
-  vcl_cout << " read hyps!\n";
-  volm_geo_index::get_leaves_with_hyps(root_, leaves_);
-
-  if (leaves_.empty()) {
-    vcl_cout << "ERROR: in volm_desc_ex_indexer -- geo index has 0 leaves with a hyps for tile " << tile_id << vcl_endl;
-    return false;
-  }
-  
-  // initialize the indices
-  boxm2_volm_wr3db_index_params params;
-  vcl_stringstream params_file;
-  params_file << index_folder_ << "geo_index_tile_" << tile_id << "_index.params";
-  if (!params.read_params_file(params_file.str())) {
-    vcl_cout << "ERROR: in volm_desc_ex_indexer -- param file does not exist: " << params_file.str() << vcl_endl;
-    return false;
-  }
-  ind_dist_ = new boxm2_volm_wr3db_index(params.layer_size, ind_buffer_);
-  ind_comb_ = new boxm2_volm_wr3db_index(params.layer_size, ind_buffer_);
-
-  // defined the out put file name pre
-  out_file_name_pre_ << out_index_folder_ << "desc_index_tile_" << tile_id;
-
-  return true;
+  // create wr3db indice
+  ind_dist_ = new boxm2_volm_wr3db_index(index_layer_size, ind_buffer_);
+  ind_comb_ = new boxm2_volm_wr3db_index(index_layer_size, ind_buffer_);
 }
 
 bool volm_desc_ex_indexer::write_params_file()
@@ -83,8 +50,41 @@ bool volm_desc_ex_indexer::write_params_file()
   return true;
 }
 
+bool volm_desc_ex_indexer::get_next()
+{
+  if (current_leaf_id_ != 0) {
+    // clear previous initalization
+    ind_dist_->finalize();
+    ind_comb_->finalize();
+  }
+
+  // initialize index given new leaf
+  vcl_stringstream file_name_pre;
+  file_name_pre << index_folder_ << "geo_index_tile_" << tile_id_;
+  vcl_string index_dist_file = leaves_[current_leaf_id_]->get_index_name(file_name_pre.str());
+  vcl_string index_comb_file = leaves_[current_leaf_id_]->get_label_index_name(file_name_pre.str(), "combined");
+  if (!vul_file::exists(index_dist_file) || !vul_file::exists(index_comb_file)) {
+    vcl_cerr << " In volm_desc_ex_indexer::get_next -- can not find index file: " << index_dist_file << " or "
+              << index_comb_file << '\n';
+    return false;
+  }
+  ind_dist_->initialize_read(index_dist_file);
+  ind_comb_->initialize_read(index_comb_file);
+
+  return true;
+  
+}
+
 bool volm_desc_ex_indexer::extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values)
 {
-  
+  // fetch previous wr3db index for current location
+  vcl_vector<unsigned char> values_dist(index_layer_size_);
+  vcl_vector<unsigned char> values_comb(index_layer_size_);
+  ind_dist_->get_next(values_dist);
+  ind_comb_->get_next(values_comb);
+
+  // construct existance histogram from wr3db index
+  volm_desc_sptr desc = new volm_desc_ex(values_dist, values_comb, depth_interval_, radius_, norients_, nlands_, (unsigned char)0);
+  desc->get_char_array(values);
   return true;
 }

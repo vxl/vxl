@@ -96,7 +96,7 @@ volm_desc_ex::volm_desc_ex(vcl_vector<unsigned char> const& index_dst,
   this->initialize_bin(initial_mag);
 
   // ingest index to histogram
-  unsigned nrays = index_dst.size();
+  unsigned nrays = (unsigned)index_dst.size();
   assert( nrays == index_combined.size() && " in volm_desx_ex, dist/land/orient indice has different number of rays");
   for (unsigned r_idx = 0; r_idx < nrays; r_idx++) {
     if (index_dst[r_idx] == 253 || index_combined[r_idx] == 253)         // invalid
@@ -115,7 +115,6 @@ volm_desc_ex::volm_desc_ex(vcl_vector<unsigned char> const& index_dst,
       if (label_value < nlands_)
         this->set_count(dist, (unsigned)orientation_value, (unsigned)label_value, (unsigned char)1);
     }
-
   }
 }
 

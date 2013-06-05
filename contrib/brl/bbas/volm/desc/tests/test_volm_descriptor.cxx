@@ -137,6 +137,7 @@ static void test_volm_desc_ex()
 
 }
 
+#if 0
 static void params_io()
 {
   vcl_string filename = "./ex_params.params";
@@ -158,11 +159,13 @@ static void params_io()
   for (vcl_vector<double>::iterator vit = params_in.radius.begin(); vit != params_in.radius.end(); ++vit)
     vcl_cout << *vit << ' ';
   vcl_cout << vcl_endl;
-
 }
+#endif
 
 static void test_volm_descriptor()
 {
+  
+
   vcl_cout << "======================== test the land category histogram ================== " << vcl_endl;
   test_volm_desc_land();
   vcl_cout << "============================================================================ " << vcl_endl;
@@ -171,7 +174,13 @@ static void test_volm_descriptor()
   test_volm_desc_ex();
   vcl_cout << "============================================================================ " << vcl_endl;
 
-  params_io();
+#if 0
+  vcl_vector<unsigned char> values;
+  for (unsigned i = 0; i < 14; i++)
+    values.push_back(i);
+  volm_desc_sptr desc_base = new volm_desc(values);
+  desc_base->print();
+#endif
 }
 
 TESTMAIN( test_volm_descriptor );

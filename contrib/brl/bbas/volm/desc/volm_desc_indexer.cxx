@@ -10,8 +10,9 @@
 
 bool volm_desc_indexer::load_tile_hypos(vcl_string const& geo_hypo_folder, int tile_id)
 {
+  tile_id_ = tile_id;
   vcl_stringstream file_name_pre_hypo;
-  file_name_pre_hypo << geo_hypo_folder << "/geo_index_tile_" << tile_id <<".txt";
+  file_name_pre_hypo << geo_hypo_folder << "/geo_index_tile_" << tile_id_ <<".txt";
   vcl_stringstream file_name_pre_indx;
   
   if (!vul_file::exists(file_name_pre_hypo.str())) {
@@ -19,19 +20,23 @@ bool volm_desc_indexer::load_tile_hypos(vcl_string const& geo_hypo_folder, int t
     return false;
   }
 
-  vcl_stringstream file_name; file_name << geo_hypo_folder << "/geo_index_tile_" << tile_id;
+  vcl_stringstream file_name; file_name << geo_hypo_folder << "/geo_index_tile_" << tile_id_;
   float min_size;
   root_ = volm_geo_index::read_and_construct(file_name.str() + ".txt", min_size);
   
   volm_geo_index::read_hyps(root_, file_name.str());
   vcl_cout << " read hyps!\n";
+  leaves_.clear();
   volm_geo_index::get_leaves_with_hyps(root_, leaves_);
   
   if (!leaves_.size()) {
     vcl_cout << "In volm_desc_indexer::load_tile_hypos() -- geo index has 0 leaves with a hyps!\n";
     return false;
   }
-  out_file_name_pre_ << out_index_folder_ << "desc_index_tile_" << tile_id;
+  // clear previous out_file_name_pre_
+  out_file_name_pre_.str("");
+  // refill out_file_name_pre_
+  out_file_name_pre_ << out_index_folder_ << "desc_index_tile_" << tile_id_;
   return true;
 }
 
@@ -47,7 +52,7 @@ bool volm_desc_indexer::write_params_file()
 
 bool volm_desc_indexer::index(float buffer_capacity) 
 {
-  if (this->write_params_file()) {
+  if (!this->write_params_file()) {
     vcl_cerr << "Cannot write params file to " << out_file_name_pre_.str() + ".params!\n";
     return false;
   }
@@ -84,9 +89,9 @@ bool volm_desc_indexer::index(float buffer_capacity)
       this->extract(h_pt.y(), h_pt.x(), h_pt.z(), values);
       ind->add_to_index(values);
       ++indexed_cnt;
-      if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << '.';
+      if (indexed_cnt%1000 == 0) vcl_cerr << indexed_cnt << '.';
     }
-
+    
     // write all and close the binary file
     ind->finalize(); 
 

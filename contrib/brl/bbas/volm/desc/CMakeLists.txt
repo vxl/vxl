@@ -21,7 +21,7 @@ AUX_SOURCE_DIRECTORY(Templates volm_desc_sources)
 
 ADD_LIBRARY(volm_desc ${volm_desc_sources})
 
-TARGET_LINK_LIBRARIES(volm_desc volm bsta bsta_algo bsta_vis bsvg bvgl vsl vbl vbl_io vul depth_map)
+TARGET_LINK_LIBRARIES(volm_desc volm bsta bsta_algo bsta_vis bsvg bvgl vsl vbl vbl_io vul depth_map boxm2_volm_desc)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

@@ -3,6 +3,7 @@
 
 static void test_ex_matcher()
 {
+#if 0
   vcl_string dm_file = "z:/projects/FINDER/test1/p1a_test1_20/p1a_test1_20.vsl";
   depth_map_scene_sptr dm = new depth_map_scene;
   vsl_b_ifstream dis(dm_file.c_str());
@@ -25,7 +26,7 @@ static void test_ex_matcher()
   volm_desc_sptr desc_in = new volm_desc_ex();
   desc_in->b_read(is);
   is.close();
-
+#endif
 }
 
 TESTMAIN( test_ex_matcher );

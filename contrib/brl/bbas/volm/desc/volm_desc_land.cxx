@@ -1,5 +1,6 @@
 #include "volm_desc_land.h"
 #include <volm/volm_io.h>
+#include <vcl_algorithm.h>
 
 unsigned volm_desc_land::n_bins = 14;
 
@@ -42,6 +43,14 @@ volm_desc_land::volm_desc_land(vcl_string& filename)
   h_[cat_id-1] = 1;
 }
 
-
-
-
+float volm_desc_land::similarity(volm_desc_sptr other)
+{
+  if (nbins_ != other->nbins())
+    return 0.0f;
+  // calcualte the inersection
+  float intersec = 0.0f;
+  for (unsigned idx = 0; idx < nbins_; idx++) {
+    intersec += (float)vcl_min(this->count(idx), other->count(idx));
+  }
+  return intersec/1.0f;
+}

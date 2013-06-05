@@ -1,8 +1,11 @@
+// This is brl/bbas/volm/desc/volm_desc_land_matcher.h
+#ifndef volm_desc_land_matcher_h_
+#define volm_desc_land_matcher_h_
 //:
 // \file
-// \brief  A class to represent 
+// \brief  A class to match query land descriptor to existance indices
 //
-// \author
+// \author Yi Dong
 // \date May 29, 2013
 // \verbatim
 //  Modifications
@@ -10,16 +13,34 @@
 // \endverbatim
 //
 
-#if !defined(_VOLM_DESC_LAND_MATCHER_H)
-#define _VOLM_DESC_LAND_MATCHER_H
-
 #include "volm_desc_matcher.h"
 #include "volm_desc_land_indexer.h"
+#include "volm_desc_land.h"
 
 class volm_desc_land_matcher : public volm_desc_matcher
 {
+public:
+  // Default constructor
+  volm_desc_land_matcher() {}
+
+  //: Constructor
+  volm_desc_land_matcher(vcl_string const& category_file)
+    : query_category_file_(category_file) {}
+
+  //: Destrcutor
+  ~volm_desc_land_matcher() {}
+
+  //: Create a volumetric land descriptor for the query image
+  virtual volm_desc_sptr create_query_desc();
+
+  //: Compare two descriptor a and b and return a score to quantifies the similarity
+  virtual float score(volm_desc_sptr const& query, volm_desc_sptr const& index);
 
   virtual vcl_string get_index_type_str() { return volm_desc_land_indexer::name_; }
+
+private:
+  vcl_string query_category_file_;
+
 };
 
-#endif  //_VOLM_DESC_LAND_MATCHER_H
+#endif  // volm_desc_land_matcher_h_
