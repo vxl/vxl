@@ -60,7 +60,7 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
       
       // calcualte score which measures the similarity of the query and index at current location
       float max_score = 0;
-      this->score(query, index_desc);
+      max_score = this->score(query, index_desc);
       // save the score 
       vcl_vector<unsigned> cam_ids;
       cam_ids.push_back(0);
@@ -76,8 +76,6 @@ bool volm_desc_matcher::write_out(vcl_string const& out_folder, unsigned const& 
 {
   vcl_stringstream filename;
   filename << out_folder << "/" << this->get_index_type_str() << "_score_tile_" << tile_id << ".bin";
-  if (!vul_file::exists(filename.str()))
-    return false;
   volm_score::write_scores(score_all_, filename.str());
   return true;
 }
@@ -104,6 +102,23 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
   vcl_vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
 
+#if 0
+  // get the closest geolocation from the gt location
+  double gt_lon, gt_lat;
+  gt_lon = gt_loc.x();  gt_lat = gt_loc.y();
+  unsigned hyp_gt = 0;
+  volm_geo_index_node_sptr leaf_gt = volm_geo_index::get_closest(root, gt_lat, gt_lon, hyp_gt);
+  // check the distance from ground trugh location to the closest in geo_index
+  vgl_point_3d<double> gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
+  double deg_to_meter = 30.0/3600.0;  // 1 arcsec ~ 30 meter ~ 1/3600 degree
+  double x_dist = (gt_loc.x()-gt_closest.x())*deg_to_meter;
+  double y_dist = (gt_loc.y()-gt_closest.y())*deg_to_meter;
+  vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
+  double gt_dist = gt_dist_vec.sqr_length();
+#endif
+  // Need fix here
+  vgl_point_3d<double> gt_closest = gt_loc;
+  double gt_dist = 0.0;
   // load the score binary from output folder if exists
   vcl_stringstream score_file;
   score_file << out_folder << "/" << this->get_index_type_str() << "_score_tile_" << tile_id << ".bin";
@@ -118,7 +133,7 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
   unsigned total_ind = (unsigned)scores.size();
   for (unsigned ii = 0; ii < total_ind; ii++) {
     vgl_point_3d<double> h_pt = leaves[scores[ii]->leaf_id_]->hyps_->locs_[scores[ii]->hypo_id_];
-    if (gt_loc == h_pt)
+    if (gt_closest == h_pt && gt_dist < 30)
       gt_score = scores[ii]->max_score_;
     unsigned u, v;
     if (tile.global_to_img(h_pt.x(), h_pt.y(), u, v))

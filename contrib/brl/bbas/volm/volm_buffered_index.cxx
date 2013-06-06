@@ -60,10 +60,10 @@ bool volm_buffered_index_params::read_ex_param_file(vcl_string index_file_name_p
     return false;
   vcl_string tmp;
   unsigned nradius;
+  ifs >> tmp >> layer_size;
   ifs >> tmp >> nradius;
   ifs >> tmp >> norients;
   ifs >> tmp >> nlands;
-  ifs >> tmp >> layer_size;
   ifs >> tmp;
   for (unsigned i = 0; i < nradius; i++) {
     double r;

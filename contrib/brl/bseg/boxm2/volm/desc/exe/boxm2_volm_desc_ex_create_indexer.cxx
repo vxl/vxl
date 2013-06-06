@@ -33,6 +33,7 @@ int main(int argc, char** argv)
       tile_id() == 100) {
     log << " ERROR: input or output folders can not be empty / tile_id or radius is not defined\n";
     vcl_cerr << log.str();
+    vul_arg_display_usage_and_exit();
     if (is_log()) volm_io::write_post_processing_log(log_file.str(), log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
