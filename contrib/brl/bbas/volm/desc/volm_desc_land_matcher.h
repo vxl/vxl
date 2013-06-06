@@ -24,8 +24,7 @@ public:
   volm_desc_land_matcher() {}
 
   //: Constructor
-  volm_desc_land_matcher(vcl_string const& category_file)
-    : query_category_file_(category_file) {}
+  volm_desc_land_matcher(vcl_string const& NLCD_folder, vgl_point_3d<double>& query_gt_loc);
 
   //: Destrcutor
   ~volm_desc_land_matcher() {}
@@ -39,7 +38,9 @@ public:
   virtual vcl_string get_index_type_str() { return volm_desc_land_indexer::name_; }
 
 private:
-  vcl_string query_category_file_;
+  //vcl_string query_category_file_;
+  vcl_vector<volm_img_info> NLCD_imgs_;
+  vgl_point_3d<double> query_gt_loc_;
 
 };
 

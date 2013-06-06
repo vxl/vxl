@@ -8,6 +8,7 @@
 #include <vpgl/vpgl_utm.h>
 #include <bkml/bkml_write.h>
 #include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
 
 
 unsigned int volm_io_tools::northing = 0;  // WARNING: north hard-coded
@@ -166,4 +167,26 @@ void volm_io_tools::load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img
     load_lidar_img(filename, info, true);
     infos.push_back(info);
   }
+}
+
+bool volm_io_tools::get_location_nlcd(vcl_vector<volm_img_info>& NLCD_imgs, double lat, double lon, double elev, unsigned char& label)
+{
+  bool found_it = false;
+  for (unsigned i = 0; i < NLCD_imgs.size(); i++) {
+    if (NLCD_imgs[i].bbox.contains(lon, lat)) {
+      vil_image_view<vxl_byte> img(NLCD_imgs[i].img_r);
+
+      // get the land type of the location
+      double u, v;
+      NLCD_imgs[i].cam->global_to_img(-lon, lat, elev, u, v);
+      unsigned uu = (unsigned)vcl_floor(u + 0.5);
+      unsigned vv = (unsigned)vcl_floor(v + 0.5);
+      if (uu > 0 && vv > 0 && uu < NLCD_imgs[i].ni && vv < NLCD_imgs[i].nj) {
+        label = img(uu, vv);
+        found_it = true;
+        break;
+      }
+    }   
+  }
+  return found_it;
 }
