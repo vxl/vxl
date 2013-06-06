@@ -18,6 +18,14 @@ volm_desc_land::volm_desc_land(int land_type_id)
   }
 }
 
+vcl_string trim(const vcl_string & s)
+{
+  vcl_size_t start = s.find_first_not_of(" ");
+  if (start == vcl_string::npos) return "";
+  unsigned end = s.find_last_not_of(" ");
+  return s.substr(start, 1+end-start);
+}
+
 // Constructor for the query
 volm_desc_land::volm_desc_land(vcl_string& filename)
 {
@@ -27,7 +35,9 @@ volm_desc_land::volm_desc_land(vcl_string& filename)
 
   // read the file and determine the land type of the camera location of the query
   vcl_ifstream ifs(filename.c_str());
-  vcl_string cat_name; ifs >> cat_name;
+  char buffer[1000];
+  ifs.getline(buffer, 1000);
+  vcl_string cat_name(buffer); // ifs >> cat_name;
 
   // now search in the land_type table in volm_io
   int NLCD_id, cat_id;
