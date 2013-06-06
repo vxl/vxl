@@ -6,6 +6,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <boxm2/volm/boxm2_volm_candidate_list.h>
+#include <vnl/vnl_math.h>
 
 
 bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
@@ -102,23 +103,28 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
   vcl_vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
 
-#if 0
+#if 1
   // get the closest geolocation from the gt location
+  double sec_to_meter = 21.0/0.000202;
   double gt_lon, gt_lat;
   gt_lon = gt_loc.x();  gt_lat = gt_loc.y();
   unsigned hyp_gt = 0;
+  vgl_point_3d<double> gt_closest;
   volm_geo_index_node_sptr leaf_gt = volm_geo_index::get_closest(root, gt_lat, gt_lon, hyp_gt);
   // check the distance from ground trugh location to the closest in geo_index
-  vgl_point_3d<double> gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
-  double deg_to_meter = 30.0/3600.0;  // 1 arcsec ~ 30 meter ~ 1/3600 degree
-  double x_dist = (gt_loc.x()-gt_closest.x())*deg_to_meter;
-  double y_dist = (gt_loc.y()-gt_closest.y())*deg_to_meter;
-  vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
-  double gt_dist = gt_dist_vec.sqr_length();
+  if (leaf_gt) {
+    gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
+    double x_dist = abs(gt_loc.x()-gt_closest.x())*sec_to_meter;
+    double y_dist = abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
+    vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
+    double gt_dist = sqrt(gt_dist_vec.sqr_length());
+  } 
+  else {
+    gt_closest = gt_loc;
+  }
+  
 #endif
-  // Need fix here
-  vgl_point_3d<double> gt_closest = gt_loc;
-  double gt_dist = 0.0;
+
   // load the score binary from output folder if exists
   vcl_stringstream score_file;
   score_file << out_folder << "/" << this->get_index_type_str() << "_score_tile_" << tile_id << ".bin";
@@ -133,7 +139,7 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
   unsigned total_ind = (unsigned)scores.size();
   for (unsigned ii = 0; ii < total_ind; ii++) {
     vgl_point_3d<double> h_pt = leaves[scores[ii]->leaf_id_]->hyps_->locs_[scores[ii]->hypo_id_];
-    if (gt_closest == h_pt && gt_dist < 30)
+    if (gt_closest == h_pt)
       gt_score = scores[ii]->max_score_;
     unsigned u, v;
     if (tile.global_to_img(h_pt.x(), h_pt.y(), u, v))
@@ -153,14 +159,14 @@ bool volm_desc_matcher::create_scaled_prob_map(vcl_string const& out_folder,
                                                float const& ku,
                                                float const& kl,
                                                unsigned const& num_valid_bins,
-                                               double const& thres_ratio)
+                                               float const& thres_ratio)
 {
   // calcualte the threshold based on the numbe of distinguishable objects in the histogram and the ratio 
   // that how many objects are treated to be valid
-  double threshold = thres_ratio * num_valid_bins;
+  float threshold = thres_ratio;
   // ensure at least one bin is valid
   if (threshold < 1.0/num_valid_bins)
-    threshold = 1.0/num_valid_bins;
+    threshold = 1.0f/num_valid_bins;
   vcl_string img_name = out_folder + "/ProbMap_float_" + tile.get_string() + ".tif";
   if (!vul_file::exists(img_name))
     return false;
@@ -170,7 +176,7 @@ bool volm_desc_matcher::create_scaled_prob_map(vcl_string const& out_folder,
   for (unsigned i = 0; i < tile_img.ni(); i++)
     for (unsigned j = 0; j < tile_img.nj(); j++)
       if (tile_img(i, j) > 0)
-        out_png(i,j) = volm_io::scale_score_to_1_255_sig(kl, ku, (float)threshold, tile_img(i,j));
+        out_png(i,j) = volm_io::scale_score_to_1_255_sig(kl, ku, threshold, tile_img(i,j));
   
   // save the image to specific folder
   vcl_stringstream prob_map_folder;
@@ -201,10 +207,22 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& map_root,
   tiles = volm_tile::generate_p1_wr2_tiles();
   unsigned n_tile = (unsigned)tiles.size();
 
+  float thres_scale = thres_ratio;
+  // ensure at least one bin is valid
+  if (thres_scale < 1.0f/num_valid_bins)
+    thres_scale = 1.0f/num_valid_bins;
+  double thres_value = volm_io::scale_score_to_0_1_sig(kl, ku, (float)thres_scale, threshold);
+  vcl_stringstream prob_map_folder;
+  prob_map_folder << map_root << "/ProbMap_scaled_" << threshold;
+  if( !vul_file::is_directory(prob_map_folder.str())) {
+    vcl_cerr << " can not find scaled probability map folder: " << prob_map_folder.str() << vcl_endl;
+    return false;
+  }
+
   // create candidate list for each tile
   vcl_vector<boxm2_volm_candidate_list> cand_lists;
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
-    vcl_string img_name = map_root + "/ProbMap_" + tiles[t_idx].get_string() + ".tif";
+    vcl_string img_name = prob_map_folder.str() + "/ProbMap_" + tiles[t_idx].get_string() + ".tif";
     if (!vul_file::exists(img_name)) {
       vcl_cerr << " ERROR: can not find prob_map: " << img_name << '\n';
       return false;
@@ -247,12 +265,6 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& map_root,
     kml_name << "p1a_test" << test_id << "_" << img_id;
   vcl_string cam_kml = cand_root + "/" + kml_name.str() + "-CANDIDATE.kml";
   vcl_ofstream ofs_kml(cam_kml.c_str());
-
-  double thres_scale = thres_ratio * num_valid_bins;
-  // ensure at least one bin is valid
-  if (thres_scale < 1.0/num_valid_bins)
-    thres_scale = 1.0/num_valid_bins;
-  double thres_value = volm_io::scale_score_to_0_1_sig(kl, ku, (float)thres_scale, threshold);
 
   vcl_cout << " there are " << cand_map.size() << " candidate regions given threshold = " << threshold << " (likelihood = " << thres_value << ")\n";
   boxm2_volm_candidate_list::open_kml_document(ofs_kml,kml_name.str(),(float)thres_value);

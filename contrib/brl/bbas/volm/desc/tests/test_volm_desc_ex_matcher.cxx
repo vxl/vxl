@@ -15,7 +15,7 @@ static void test_ex_matcher()
   vcl_string gt_file = "z:/projects/FINDER/test1/p1a_test1_gt_locs.txt";
   float kl = 200.0f;
   float ku = 10.0f;
-  double thres_ratio = 0.5;
+  float thres_ratio = 0.5;
   unsigned test_id = 1;
   unsigned id = 20;
   unsigned thresc = 130;
@@ -36,6 +36,7 @@ static void test_ex_matcher()
 
   // Start the matcher
   float gt_score = 0;
+  unsigned num_valid_bin = 0;
   vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
   for (unsigned tile_id = 0; tile_id < tiles.size(); tile_id++) {
     if (tile_id != 1 && tile_id != 6)
@@ -57,6 +58,7 @@ static void test_ex_matcher()
     // create query
     volm_desc_sptr query = new volm_desc_ex();
     query = ex_matcher->create_query_desc();
+    num_valid_bin = query->get_area();
 
     if (!ex_matcher->matcher(query, geo_hypo_folder, desc_index_folder, buffer_capacity, tile_id))
       vcl_cerr << " matcher for tile " << tile_id << " failed" << vcl_endl;
@@ -67,14 +69,21 @@ static void test_ex_matcher()
 
     // generate probability map for this tile
     ex_matcher->create_prob_map(geo_hypo_folder, out_folder, tile_id, tiles[tile_id], gt_loc, gt_score);
-    vcl_cout << "gt_score = " << vcl_endl;
+    vcl_cout << "in tile " << tile_id << ", gt_score = " << gt_score << vcl_endl;\
+
+    // generate scaled probability map
+    volm_desc_matcher::create_scaled_prob_map(out_folder, tiles[tile_id], tile_id, ku, kl, query->get_area(), thres_ratio);
   }
 
-  
-
   // generate scaled probability map
+#if 0
+  for (unsigned tile_id = 0; tile_id < tiles.size(); tile_id++) {
+    volm_desc_matcher::create_scaled_prob_map(out_folder, tiles[tile_id], tile_id, ku, kl, num_valid_bin, thres_ratio);
+  }
+#endif
 
   // generate candidate lists
+  int temp = 1;
 }
 
 TESTMAIN( test_ex_matcher );

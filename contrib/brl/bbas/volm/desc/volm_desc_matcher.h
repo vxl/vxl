@@ -68,7 +68,7 @@ public:
                                      float const& ku,
                                      float const& kl,
                                      unsigned const& num_valid_bins,
-                                     double const& thres_ratio);
+                                     float const& thres_ratio);
 
   //: generate candidate list
   static bool create_candidate_list(vcl_string const& map_root,
