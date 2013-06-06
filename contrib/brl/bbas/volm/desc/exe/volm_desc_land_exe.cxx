@@ -35,7 +35,7 @@ int main(int argc,  char** argv)
   vcl_cout << "argc: " << argc << vcl_endl;
 
   if (match()) {  // run the matcher
-    if (category_gt_file().compare("") == 0 || out_folder().compare("") == 0 || geo_hypo_folder().compare("") == 0 || tile_id() < 0 || img_id() < 0 || desc_index_folder().compare("") == 0) {
+    if (category_gt_file().compare("") == 0 || out_folder().compare("") == 0 || geo_hypo_folder().compare("") == 0 || tile_id() < 0 || img_id() < 0 || desc_index_folder().compare("") == 0 || NLCD_folder().compare("") == 0) {
       vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
       vul_arg_display_usage_and_exit();
@@ -71,8 +71,8 @@ int main(int argc,  char** argv)
     m->matcher(query, geo_hypo_folder(), desc_index_folder(), 1.0, tile_id());
     m->write_out(out_folder(), tile_id());
     
-    vgl_point_3d<double> gt_pt(0.0,0.0,0.0); float gt_score;
-    m->create_prob_map(geo_hypo_folder(), out_folder(), tile_id(), tiles[tile_id()], gt_pt, gt_score);
+    float gt_score;
+    m->create_prob_map(geo_hypo_folder(), out_folder(), tile_id(), tiles[tile_id()], query_img_info[img_id()].first, gt_score);
     m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, 5, thres); 
 
     volm_io::write_status(out_folder(), volm_io::SUCCESS);

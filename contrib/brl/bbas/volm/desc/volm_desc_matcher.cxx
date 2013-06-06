@@ -186,7 +186,7 @@ bool volm_desc_matcher::create_scaled_prob_map(vcl_string const& out_folder,
   out_png.fill(volm_io::UNKNOWN);
   for (unsigned i = 0; i < tile_img.ni(); i++)
     for (unsigned j = 0; j < tile_img.nj(); j++)
-      if (tile_img(i, j) > 0)
+      if (tile_img(i, j) >= 0)
         out_png(i,j) = volm_io::scale_score_to_1_255_sig(kl, ku, threshold, tile_img(i,j));
   
   // save the image to specific folder
