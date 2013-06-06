@@ -52,5 +52,5 @@ float volm_desc_land::similarity(volm_desc_sptr other)
   for (unsigned idx = 0; idx < nbins_; idx++) {
     intersec += (float)vcl_min(this->count(idx), other->count(idx));
   }
-  return intersec/1.0f;
+  return intersec;  // intersec is 0 or 1
 }

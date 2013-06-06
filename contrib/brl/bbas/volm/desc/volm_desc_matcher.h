@@ -61,6 +61,8 @@ public:
                        vgl_point_3d<double> const& gt_loc,
                        float& gt_score);
 
+  bool create_empty_prob_map(vcl_string const& out_folder, unsigned tile_id, volm_tile& tile);
+
   //: generate scaled probability map
   static bool create_scaled_prob_map(vcl_string const& out_folder,
                                      volm_tile tile,

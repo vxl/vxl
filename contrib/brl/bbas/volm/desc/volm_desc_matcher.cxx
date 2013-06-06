@@ -153,6 +153,17 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
   return true;
 }
 
+bool volm_desc_matcher::create_empty_prob_map(vcl_string const& out_folder, unsigned tile_id, volm_tile& tile)
+{
+  // initialize the probability map image
+  vil_image_view<float> tile_img(3601, 3601);
+  tile_img.fill(-1.0f);
+  // save the image
+  vcl_string img_name = out_folder + "/ProbMap_float_" + tile.get_string() + ".tif";
+  vil_save(tile_img, img_name.c_str());
+  return true;
+}
+
 bool volm_desc_matcher::create_scaled_prob_map(vcl_string const& out_folder,
                                                volm_tile tile,
                                                unsigned const& tile_id,
