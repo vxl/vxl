@@ -35,6 +35,10 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
   
   volm_buffered_index_sptr ind = new volm_buffered_index(params.layer_size, buffer_capacity);
 
+  // clear score_all_ to ensure the score_all_ only stores information for current tile
+  if (!score_all_.empty())
+    score_all_.clear();
+
   // check the consistency of query size and loaded index size
   if (query->nbins() != params.layer_size) {
     vcl_cerr << " ERROR: created query and loaded index have different descriptor\n";
@@ -92,6 +96,13 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
   vil_image_view<float> tile_img(3601, 3601);
   tile_img.fill(-1.0f);
 
+  // create an empty image for tile 10
+  if (tile_id == 10) {
+    vcl_string img_name = out_folder + "/ProbMap_float_" + tile.get_string() + ".tif";
+    vil_save(tile_img, img_name.c_str());
+    return true;
+  }
+
   // load the geo_index for current tile
   vcl_stringstream file_name_pre;
   file_name_pre << geo_hypo_folder << "geo_index_tile_" << tile_id;
@@ -103,7 +114,6 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
   vcl_vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
 
-#if 1
   // get the closest geolocation from the gt location
   double sec_to_meter = 21.0/0.000202;
   double gt_lon, gt_lat;
@@ -122,8 +132,6 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
   else {
     gt_closest = gt_loc;
   }
-  
-#endif
 
   // load the score binary from output folder if exists
   vcl_stringstream score_file;
@@ -169,15 +177,8 @@ bool volm_desc_matcher::create_scaled_prob_map(vcl_string const& out_folder,
                                                unsigned const& tile_id,
                                                float const& ku,
                                                float const& kl,
-                                               unsigned const& num_valid_bins,
-                                               float const& thres_ratio)
+                                               float const& threshold)
 {
-  // calcualte the threshold based on the numbe of distinguishable objects in the histogram and the ratio 
-  // that how many objects are treated to be valid
-  float threshold = thres_ratio;
-  // ensure at least one bin is valid
-  if (threshold < 1.0/num_valid_bins)
-    threshold = 1.0f/num_valid_bins;
   vcl_string img_name = out_folder + "/ProbMap_float_" + tile.get_string() + ".tif";
   if (!vul_file::exists(img_name))
     return false;
@@ -200,15 +201,12 @@ bool volm_desc_matcher::create_scaled_prob_map(vcl_string const& out_folder,
   return true;
 }
 
-bool volm_desc_matcher::create_candidate_list(vcl_string const& map_root,
+bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
                                               vcl_string const& cand_root,
-                                              vcl_string const& geo_hypo_folder_a,
-                                              vcl_string const& geo_hypo_folder_b,
                                               unsigned const& threshold,
                                               unsigned const& top_size,
                                               float const& ku,
                                               float const& kl,
-                                              unsigned const& num_valid_bins,
                                               float const& thres_ratio,
                                               unsigned const& test_id,
                                               unsigned const& img_id)
@@ -219,21 +217,16 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& map_root,
   unsigned n_tile = (unsigned)tiles.size();
 
   float thres_scale = thres_ratio;
-  // ensure at least one bin is valid
-  if (thres_scale < 1.0f/num_valid_bins)
-    thres_scale = 1.0f/num_valid_bins;
   double thres_value = volm_io::scale_score_to_0_1_sig(kl, ku, (float)thres_scale, threshold);
-  vcl_stringstream prob_map_folder;
-  prob_map_folder << map_root << "/ProbMap_scaled_" << threshold;
-  if( !vul_file::is_directory(prob_map_folder.str())) {
-    vcl_cerr << " can not find scaled probability map folder: " << prob_map_folder.str() << vcl_endl;
+  if( !vul_file::is_directory(prob_map_folder)) {
+    vcl_cerr << " ERROR: can not find scaled probability map folder: " << prob_map_folder << vcl_endl;
     return false;
   }
 
   // create candidate list for each tile
   vcl_vector<boxm2_volm_candidate_list> cand_lists;
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
-    vcl_string img_name = prob_map_folder.str() + "/ProbMap_" + tiles[t_idx].get_string() + ".tif";
+    vcl_string img_name = prob_map_folder + "/ProbMap_" + tiles[t_idx].get_string() + ".tif";
     if (!vul_file::exists(img_name)) {
       vcl_cerr << " ERROR: can not find prob_map: " << img_name << '\n';
       return false;
@@ -246,7 +239,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& map_root,
   // visualize the candidate list
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
     vil_image_view<vxl_byte> cand_img;
-    vcl_string img_name = map_root + "/Candidate_list_" + tiles[t_idx].get_string() + ".tif";
+    vcl_string img_name = cand_root + "/Candidate_list_" + tiles[t_idx].get_string() + ".tif";
     cand_lists[t_idx].candidate_list_image(cand_img);
     vil_save(cand_img, img_name.c_str());
   }
@@ -285,11 +278,11 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& map_root,
   for (; mit != cand_map.end(); ++mit) {
     unsigned tile_idx = mit->second.first;
     unsigned sh_idx = mit->second.second;
-    vcl_string geo_hypo_folder;
-    if (tile_idx < 8 && tile_idx != 5)
-      geo_hypo_folder = geo_hypo_folder_a;
-    else
-      geo_hypo_folder = geo_hypo_folder_b;
+    //vcl_string geo_hypo_folder;
+    //if (tile_idx < 8 && tile_idx != 5)
+    //  geo_hypo_folder = geo_hypo_folder_a;
+    //else
+    //  geo_hypo_folder = geo_hypo_folder_b;
     // transfer loc_image to loc_global
     vcl_vector<vgl_point_2d<double> > region_loc_global;
     cand_lists[tile_idx].img_to_golbal(sh_idx, tiles[tile_idx], region_loc_global);
@@ -309,7 +302,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& map_root,
     // write the region polygon and top locations
     boxm2_volm_candidate_list::write_kml_regions(ofs_kml, region_loc_global, top_locs, top_cameras, right_fov, likelihood, rank++);
     for (unsigned i = 0 ; i < top_locs.size(); i++) {
-      if (rank%500 == 0)
+      if (rank%100 == 0)
         vcl_cerr << " size = " << cand_map.size() << ", cnt = " << rank-1 << " score = " << mit->first << " --> tile = " << tile_idx << " sh_id = " << sh_idx
                  << " --> top_locs = " << vcl_setprecision(10) << top_locs[i].x() << ", " << top_locs[i].y() << " top_score = " << top_loc_scores[i] << vcl_endl; 
     }

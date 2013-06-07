@@ -15,6 +15,13 @@ volm_desc_sptr volm_desc_ex_matcher::create_query_desc()
   return query_ex;
 }
 
+bool volm_desc_ex_matcher::check_threshold(volm_desc_sptr const& query, float& thres_value)
+{
+  unsigned num_valid_bin = query->get_area();
+  if (thres_value < 1.0f/num_valid_bin)
+    thres_value = 1.0f/num_valid_bin;
+  return true;
+}
 #if 0
 bool volm_desc_ex_matcher::write_out(vcl_string const& out_folder, unsigned const& tile_id)
 {

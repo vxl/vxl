@@ -43,6 +43,9 @@ public:
   //: Create volumetric descriptor for the query image
   virtual volm_desc_sptr create_query_desc() = 0;
 
+  //: check given threshold is valid or not for generate scaled probability map
+  virtual bool check_threshold(volm_desc_sptr const& query, float& thres_value) { return true; }
+
   //: Execute match algorithm implemented
   bool matcher(volm_desc_sptr const& query,
                vcl_string const& geo_hypo_folder,
@@ -69,19 +72,15 @@ public:
                                      unsigned const& tile_id,
                                      float const& ku,
                                      float const& kl,
-                                     unsigned const& num_valid_bins,
-                                     float const& thres_ratio);
+                                     float const& thres_value);
 
   //: generate candidate list
   static bool create_candidate_list(vcl_string const& map_root,
                                     vcl_string const& cand_root,
-                                    vcl_string const& geo_hypo_folder_a,
-                                    vcl_string const& geo_hypo_folder_b,
                                     unsigned const& threshold,
                                     unsigned const& top_size,
                                     float const& ku,
                                     float const& kl,
-                                    unsigned const& num_valid_bins,
                                     float const& thres_value,
                                     unsigned const& test_id,
                                     unsigned const& img_id);
