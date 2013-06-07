@@ -62,7 +62,7 @@ int main(int argc,  char** argv)
 
     if (tile_id() == 10) { // we know this one is empty : TODO: remove hard code
       m->create_empty_prob_map(out_folder(), tile_id(), tiles[tile_id()]);
-      m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, 5, thres); 
+      m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, thres); 
       volm_io::write_status(out_folder(), volm_io::SUCCESS);
       vcl_cout << "returning SUCCESS!\n";
       return volm_io::SUCCESS;
@@ -73,7 +73,7 @@ int main(int argc,  char** argv)
     
     float gt_score;
     m->create_prob_map(geo_hypo_folder(), out_folder(), tile_id(), tiles[tile_id()], query_img_info[img_id()].first, gt_score);
-    m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, 5, thres); 
+    m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, thres); 
 
     volm_io::write_status(out_folder(), volm_io::SUCCESS);
     vcl_cout << "returning SUCCESS!\n";
