@@ -9,6 +9,7 @@ boxm2_volm_candidate_list::boxm2_volm_candidate_list(vil_image_view<vxl_byte> co
                                                      unsigned threshold)
   : thres_(threshold), image_(image)
 {
+  hull_poly_.clear();
   // search for the sorted pixels that are larger than threshold
   //mymap::iterator mit = pt_map_.begin();
   mymap::iterator mit;
@@ -20,8 +21,8 @@ boxm2_volm_candidate_list::boxm2_volm_candidate_list(vil_image_view<vxl_byte> co
   // create candidate polygons based on searched pixels
   for (mit = pt_map_.begin(); mit != pt_map_.end(); ++mit) {
     bool is_contain = false;;
-    for (unsigned i = 0; (!is_contain && i < poly_.num_sheets()); i++) {
-      is_contain = this->contains(poly_[i], mit->second.x(), mit->second.y());
+    for (unsigned sh_idx = 0; (!is_contain && sh_idx < poly_.num_sheets()); sh_idx++) {
+      is_contain = this->contains(sh_idx, mit->second.x(), mit->second.y());
     }
     if (is_contain)
       continue;
@@ -37,6 +38,8 @@ boxm2_volm_candidate_list::boxm2_volm_candidate_list(vil_image_view<vxl_byte> co
     }
     if(sheet.size() == 0) sheet.push_back(mit->second);
     poly_.push_back(sheet);
+    // create a hull polygon associated with current sheet
+    this->create_expand_polygon(sheet);
   }
   n_sheet_ = poly_.num_sheets();
 #if 0
@@ -48,6 +51,22 @@ boxm2_volm_candidate_list::boxm2_volm_candidate_list(vil_image_view<vxl_byte> co
   //  vcl_cout << " region " << sh_idx << " --> area = " << vgl_area(poly) << vcl_endl;
   //}
 #endif
+}
+
+bool boxm2_volm_candidate_list::create_expand_polygon(vcl_vector<vgl_point_2d<int> > const& sheet)
+{
+  unsigned n_points = sheet.size();
+  vcl_vector<vgl_point_2d<double> > points;
+  for (unsigned i = 0; i < n_points; i++) {
+    points.push_back(vgl_point_2d<double>(sheet[i].x()+0.5, sheet[i].y()+0.5));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()+0.5));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()-0.5));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()-0.5));
+  }
+  vgl_convex_hull_2d<double> ch(points);
+  vgl_polygon<double> poly = ch.hull();
+  hull_poly_.push_back(poly);
+  return true;
 }
 
 // this function is for speed-up purpose
@@ -111,7 +130,7 @@ bool boxm2_volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d
         //assert(u > 0);  assert(v > 0);  assert((unsigned)u < image_.ni());  assert((unsigned)v < image_.nj());
         if (u < 0 || v < 0 || u > image_.ni() || v > image_.nj())
           continue;
-        if (this->contains(poly_[sh_idx], u, v) && image_(u,v) > thres_ )
+        if (this->contains(sh_idx, u, v) && image_(u,v) > thres_ )
           points.insert(vcl_pair<unsigned, vgl_point_2d<int> >(image_(u,v), vgl_point_2d<int>(u,v)));
       }
     }
@@ -217,7 +236,7 @@ bool boxm2_volm_candidate_list::find(unsigned const& i, unsigned const& j, unsig
     return false;
   }
   for (unsigned sh_id = 0; sh_id < n_sheet_; sh_id++) {
-    if (this->contains(poly_[sh_id], i, j)) {
+    if (this->contains(sh_id, i, j)) {
       sh_idx = sh_id;
       loc_score = image_(i,j);
       return true;
@@ -228,8 +247,11 @@ bool boxm2_volm_candidate_list::find(unsigned const& i, unsigned const& j, unsig
   return false;
 }
 
-bool boxm2_volm_candidate_list::contains(vcl_vector<vgl_point_2d<int> > const& sheet, unsigned const& u, unsigned const& v)
+bool boxm2_volm_candidate_list::contains(unsigned const& sheet_id, unsigned const& u, unsigned const& v)
 {
+  assert( sheet_id >= hull_poly_.size() && " in candidate list, the polygon sheet id is larger than the size of created polygon ");
+  return hull_poly_[sheet_id].contains(u, v);
+#if 0
   // for each sheet, create a covex hull and check wehter the pixel is inside the polygon
   unsigned n_points = sheet.size();
   vcl_vector<vgl_point_2d<double> > points;
@@ -242,6 +264,7 @@ bool boxm2_volm_candidate_list::contains(vcl_vector<vgl_point_2d<int> > const& s
   vgl_convex_hull_2d<double> ch(points);
   vgl_polygon<double> poly = ch.hull();
   return poly.contains(u, v);
+#endif
 #if 0
   // first check whether the point is on the boundary sicen the sheel can be a single long line (not polygon)
   unsigned n_verts = sheet.size();

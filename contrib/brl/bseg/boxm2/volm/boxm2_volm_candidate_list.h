@@ -93,8 +93,13 @@ class boxm2_volm_candidate_list
     mymap pt_map_;
     //: candidate list polygon for current image
     vgl_polygon<int> poly_;
+    //: a expanded sheet vector used to check whether a given points is inside these sheets
+    vcl_vector<vgl_polygon<double> > hull_poly_;
+    //: create a expand polygon sheet given a sheet inside the polygon
+    bool create_expand_polygon(vcl_vector<vgl_point_2d<int> > const& sheet);
     //: check whether the pixel is inside the candidate poly
-    bool contains(vcl_vector<vgl_point_2d<int> > const& sheet, unsigned const& i, unsigned const& j);
+    bool contains(unsigned const& sheet_id, unsigned const& i, unsigned const& j);
+    
 };
 
 #endif
