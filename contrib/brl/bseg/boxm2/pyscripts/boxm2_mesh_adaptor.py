@@ -27,11 +27,12 @@ def gen_tex_mesh(mesh,in_img_dir, in_cam_dir,out_dir):
   boxm2_batch.set_input_string(3,out_dir);
   boxm2_batch.run_process();
 
-def gen_point_cloud(scene,cache,filename):
+def gen_point_cloud(scene,cache,filename,thresh = 0.3,depth=3):
   boxm2_batch.init_process("boxm2ExtractPointCloudProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_from_db(1,cache);
-  boxm2_batch.set_input_float(2,0.3); #prob threshold
+  boxm2_batch.set_input_float(2,thresh); #prob threshold
+  boxm2_batch.set_input_unsigned(3,depth); #prob threshold
   boxm2_batch.run_process();
 
   boxm2_batch.init_process("boxm2ExportOrientedPointCloudProcess");
