@@ -44,7 +44,10 @@ class boct_bit_tree
 
   //: traverse tree to get leaf index that contains point
   int traverse(const vgl_point_3d<double> p, int deepest=4);
+  
+  //: traverse tree to get leaf index that contains point
 
+  int traverse_to_level(const vgl_point_3d<double> p, int deepest=4);
   //: gets the cell center (octree is assumed to be [0,1]x[0,1]x[0,1]
   vgl_point_3d<double> cell_center(int bit_index);
 
@@ -94,7 +97,7 @@ class boct_bit_tree
 
   //: returns bit indices of leaf nodes under rootBit
   vcl_vector<int> get_leaf_bits(int rootBit=0);
-
+  vcl_vector<int> get_leaf_bits(int rootBit ,int depth);
   //: returns parent index (invalid for bit_index = 0)
   int parent_index(int bit_index) { return (bit_index-1)>>3; }
 

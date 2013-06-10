@@ -77,6 +77,44 @@ int boct_bit_tree::traverse(const vgl_point_3d<double> p, int deepest)
   return bit_index;
 }
 
+int boct_bit_tree::traverse_to_level(const vgl_point_3d<double> p, int deepest)
+{
+  //deepest level to traverse is either
+  deepest = vcl_min(deepest-1, num_levels_-1);
+
+  //force 1 register: curr = (bit, child_offset, depth, c_offset)
+  int curr_bit = (int)(bits_[0]);
+  int child_offset = 0;
+  int depth = 0;
+
+  //bit index to be returned
+  int bit_index = 0;
+
+  //clamp point
+  double pointx = p.x();//clamp(p.x(), 0.0001f, 0.9999f);
+  double pointy = p.y();//clamp(p.y(), 0.0001f, 0.9999f);
+  double pointz = p.z();//clamp(p.z(), 0.0001f, 0.9999f);
+
+  // while the curr node has children
+  while (curr_bit && depth < deepest ) {
+    //determine child offset and bit index for given point
+    pointx += pointx;                                             //point = point*2
+    pointy += pointy;
+    pointz += pointz;
+    int codex=((int)vcl_floor(pointx)) & 1;
+    int codey=((int)vcl_floor(pointy)) & 1;
+    int codez=((int)vcl_floor(pointz)) & 1;
+
+    int c_index = codex + (codey<<1) + (codez<<2);             //c_index = binary(zyx)
+    bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
+
+    //update value of curr_bit and level
+    curr_bit = (1<<c_index) & bits_[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y;
+    child_offset = c_index;
+    depth++;
+  }
+  return bit_index;
+}
 vgl_point_3d<double> boct_bit_tree::cell_center(int bit_index)
 {
   //Indexes into precomputed cell_center matrix
@@ -150,7 +188,39 @@ vcl_vector<int> boct_bit_tree::get_leaf_bits(int rootBit)
   }
   return subTree;
 }
+//returns bit indices of leaf nodes or nodes at the depth mentioned whichever comes first under rootBit
+vcl_vector<int> boct_bit_tree::get_leaf_bits(int rootBit, int depth)
+{
+  //use num cells to accelerate (cut off for loop)
+  vcl_vector<int> leafBits;
+  int curr_depth = 0;
+  //special root case
+  if ( bits_[0] == 0 && rootBit == 0 ) {
+    leafBits.push_back(0);
+    return leafBits;
+  }
 
+  //otherwise calc list of bit indices in the subtree of rootBIT, and then verify leaves
+  vcl_vector<int> subTree;
+  vcl_list<unsigned> toVisit;
+  toVisit.push_back(rootBit);
+  while (!toVisit.empty() ) {
+    int currBitIndex = toVisit.front();
+    toVisit.pop_front();
+    if ((this->depth_at(currBitIndex)<depth && this->is_leaf(currBitIndex) ) || this->depth_at(currBitIndex)==depth) {
+      subTree.push_back(currBitIndex);
+    }
+    else { //add children to the visit list
+      curr_depth ++;
+      unsigned firstChild = 8 * currBitIndex + 1;
+      for (int ci = 0; ci < 8; ++ci)
+        toVisit.push_back( firstChild + ci );
+    }
+  }
+
+  vcl_cout<<vcl_endl;
+  return subTree;
+}
 //: Return cell with a particular locational code
 int boct_bit_tree::get_data_index(int bit_index, bool is_random) const
 {
