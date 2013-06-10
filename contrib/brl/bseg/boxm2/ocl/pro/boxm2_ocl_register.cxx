@@ -100,6 +100,7 @@ void boxm2_ocl_register::register_process()
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_make_inside_voxels_empty_process, "boxm2OclMakeInsideVoxelsEmptyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_parents_alpha_process, "boxm2OclUpdateParentsAlphaProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_create_coarser_scene_process, "boxm2OclCreateCoarserSceneProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_ingest_label_process, "boxm2OclIngestLabelProcess"); 
 
