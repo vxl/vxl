@@ -15,10 +15,12 @@ __kernel void update_parents_alpha( __constant RenderSceneInfo  * linfo,
                                     __local    uchar16         * tree,
                                     __local    uchar           * all_cumsum)
 {
-  unsigned gid = get_group_id(0);
+  unsigned gid = get_global_id(0);
   unsigned lid = get_local_id(0);
 
 
+  if(gid < linfo->dims.x*linfo->dims.y*linfo->dims.z)
+  {
   tree[lid] = as_uchar16(tree_array[gid]);
   __local uchar* local_tree = &tree[lid];
   __local uchar*   cumsum   = &all_cumsum[10*lid];
@@ -32,12 +34,8 @@ __kernel void update_parents_alpha( __constant RenderSceneInfo  * linfo,
   //if there are no children
   if (tree_bit_at(local_tree,0)==0)
     return 0;
-
-
-
   //: traversing the tree bottom-up
   for (int i=584; i> 0; ) {
-      //printf("%d ",i);
       int pi = (i-1)>>3;           //Bit_index of parent bit
       bool validParent = tree_bit_at(local_tree, pi) ; 
       if (validParent ) {
@@ -50,14 +48,11 @@ __kernel void update_parents_alpha( __constant RenderSceneInfo  * linfo,
               maxalpha = alpha > maxalpha? alpha : maxalpha;
               count++; i--;
           }
-              
           int parentdataIndex = data_index_cached(local_tree, pi, bit_lookup, cumsum, &cumIndex) + data_index_root(local_tree); //gets absolute position
-          //printf("%d %d %f,%f\n",i,pi,alpha_array[parentdataIndex] , maxalpha*2.0);
-          alpha_array[parentdataIndex] = maxalpha*2.0;
+          alpha_array[parentdataIndex] = maxalpha/2.0;
       }
       else
           i-=8;
-
-      
+  }
   }
 }
