@@ -34,6 +34,25 @@ struct ltstr
   }
 };
 
+//: function to convert params to Xform Matrix.
+void convert_params_to_xform(vnl_vector<double>  x, double scale, vnl_matrix<double> & xform)
+{
+    xform.set_size(4,4);
+    xform.fill(0.0);
+    vgl_rotation_3d<double> r(vnl_vector_fixed<double,3>(x[3],x[4],x[5]));
+
+    xform[0][0] = r.as_matrix()[0][0];  xform[0][1] = r.as_matrix()[0][1]; xform[0][2] = r.as_matrix()[0][2];
+    xform[1][0] = r.as_matrix()[1][0];  xform[1][1] = r.as_matrix()[1][1]; xform[1][2] = r.as_matrix()[1][2];
+    xform[2][0] = r.as_matrix()[2][0];  xform[2][1] = r.as_matrix()[2][1]; xform[2][2] = r.as_matrix()[2][2];
+
+    xform[0][3] = x[0] ; 
+    xform[1][3] = x[1] ;
+    xform[2][3] = x[2] ;
+
+    xform = xform * scale ;
+
+    xform[3][3]  = 1;
+}
 int main(int argc,  char** argv)
 {
   //init vgui (should choose/determine toolkit)
@@ -60,14 +79,14 @@ int main(int argc,  char** argv)
   vnl_vector<double> x(6,0.0);      vnl_vector<double> var(6,0.0);
   double q0=0,q1=0,q2=0,q3=0;       vgl_rotation_3d<double> r;
   double scale = 1.0;
-  int numsamples = 100;
+  int numsamples = 20;
   if(xformAtoB_file() != "" )
   {
     vcl_ifstream ifile( xformAtoB_file().c_str() ) ;
     if(!ifile)
     {
         vcl_cout<<"Error: Cannot open" <<xformAtoB_file()<<vcl_endl;
-        return -1;
+        return -1;  
     }
     //: scale 
     //ifile>>scale;
@@ -84,25 +103,36 @@ int main(int argc,  char** argv)
     vnl_matrix<double> matr(3,3);     mat.extract(matr);
     vgl_rotation_3d<double> r1(matr);
 
-    x[0] = mat[0][3];               var[0] = 150;            
-    x[1] = mat[1][3];               var[1] = 150;
-    x[2] = mat[2][3];               var[2] = 150;
-    x[3] = r1.as_rodrigues()[0];    var[3] = 0.0;
-    x[4] = r1.as_rodrigues()[1];    var[4] = 0.0;
-    x[5] = r1.as_rodrigues()[2];    var[5] = 0.0;
+    x[0] = mat[0][3];               var[0] = 0.5;            
+    x[1] = mat[1][3];               var[1] = 0.5;
+    x[2] = mat[2][3];               var[2] = 0.5;
+    x[3] = r1.as_rodrigues()[0];    var[3] = 1.0;
+    x[4] = r1.as_rodrigues()[1];    var[4] = 1.0;
+    x[5] = r1.as_rodrigues()[2];    var[5] = 1.0;
     r= r1;  
  
+    vnl_matrix<double> xform;
+    convert_params_to_xform(x+var,scale,xform);
+    vcl_cout<<xform<<vcl_endl;
   }
  
   vcl_cout<<"R "<< r <<vcl_endl;
   boxm2_ocl_monte_carlo_reg func(opencl_cacheA,cacheB,device,5,scale,numsamples);
-  vcl_cout<<"Coimputing Minfo for the Original Position"<<vcl_endl;
-  vcl_cout<<"M-INFO is " <<func.mutual_info(x)<<vcl_endl;
+  //vcl_cout<<"Coimputing Minfo for the Original Position"<<vcl_endl;
+  //vcl_cout<<"M-INFO is " <<func.mutual_info(x)<<vcl_endl;
 
   func.init(x, var);
   vul_timer t;
-  //func.likelihood(1);
-  func.run_annealing();
+  func.exhaustive(0);
+  //func.run_annealing();
+  
+  vnl_vector<double> xfinal = func.max_sample();
+  vnl_matrix<double> xform;
+  convert_params_to_xform(xfinal,scale,xform);
+
+  vcl_cout<<"Final Xform is "<<vcl_endl;
+  vcl_cout<<xform<<vcl_endl;
+
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
 #if 0
   vnl_powell powell(&func);
@@ -178,5 +208,13 @@ int main(int argc,  char** argv)
   }
   vil_save(mi,"e:/data/xy.tiff");
 #endif
+
+  //double data1[6]={121.801, 0, 0, 0.329284, -0.150984, -0.0498129};
+  //double data2[6]={21.915, -22.7307, 9.78759, 0.112995, -0.0382432, 0.28422};
+  //vnl_vector<double> x1(data1,6);
+  //vnl_vector<double> x2(data2,6);
+  //vcl_cout<<"Mutual Infor for x1"<<func.mutual_info(x1,2)<<vcl_endl;
+  //vcl_cout<<"Mutual Infor for x2"<<func.mutual_info(x2,2)<<vcl_endl;
+  //21.915 -22.7307 9.78759 0.112995 -0.0382432 0.28422
   return 0;
 }

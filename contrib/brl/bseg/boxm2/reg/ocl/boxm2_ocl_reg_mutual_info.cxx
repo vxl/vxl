@@ -141,7 +141,7 @@ bool boxm2_ocl_reg_mutual_info::init_ocl_minfo()
 
     // output buffer for debugging
     output = new bocl_mem(device_->context(), output_buff, sizeof(float)*1000, "output" );
-    output->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+    output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 
     // bit lookup buffer
     cl_uchar lookup_arr[256];
@@ -161,9 +161,8 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     int * joint_histogram_buff= new int[nbins*nbins];
     for (int k = 0; k<nbins*nbins; k++) joint_histogram_buff[k] = 0;
 
-    bocl_mem_sptr joint_histogram = new bocl_mem(device_->context(), joint_histogram_buff, sizeof(int)*nbins*nbins, "joint histogram" );
-
-    joint_histogram->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+    bocl_mem * joint_histogram = new bocl_mem(device_->context(), joint_histogram_buff, sizeof(int)*nbins*nbins, "joint histogram" );
+    joint_histogram->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 
     float translation_buff[4];
     translation_buff[0] = tx.x();        
@@ -183,13 +182,12 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     float rotation_buff[9];
     vnl_matrix_fixed<double, 3, 3> R = rot.as_matrix();
 
-    rotation_buff[0] = R(0,0);rotation_buff[3] = R(1,0);rotation_buff[6] = R(2,0);
-    rotation_buff[1] = R(0,1);rotation_buff[4] = R(1,1);rotation_buff[7] = R(2,1);
-    rotation_buff[2] = R(0,2);rotation_buff[5] = R(1,2);rotation_buff[8] = R(2,2);
+    rotation_buff[0] = R(0,0);  rotation_buff[3] = R(1,0);  rotation_buff[6] = R(2,0);
+    rotation_buff[1] = R(0,1);  rotation_buff[4] = R(1,1);  rotation_buff[7] = R(2,1);
+    rotation_buff[2] = R(0,2);  rotation_buff[5] = R(1,2);  rotation_buff[8] = R(2,2);
 
     bocl_mem_sptr rotation = new bocl_mem(device_->context(), rotation_buff, sizeof(float)*9, " rotation " );
     rotation->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-
     bocl_mem_sptr ocl_nbins = new bocl_mem(device_->context(), &(nbins), sizeof(int), "  #of bins" );
     ocl_nbins->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
     bocl_mem_sptr ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
@@ -197,18 +195,19 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
 
     // iterate over scene A on the GPU.
     boxm2_scene_sptr sceneA = cacheA_->get_cpu_cache()->get_scene();
-    vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks_A = sceneA->blocks();
+    vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks_A = sceneA->blocks() ;
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter_A;
-    vcl_size_t local_threads[1]={64};
+    vcl_size_t local_threads[1]={8};
     vcl_size_t global_threads[1]={1};
     int status=0;
-    cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),
-        CL_QUEUE_PROFILING_ENABLE,&status);
+    cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
+
 
     float gpu_time = 0.0;
-    for (blk_iter_A= blocks_A.begin(); blk_iter_A!=blocks_A.end(); blk_iter_A++)
+    for (blk_iter_A = blocks_A.begin(); blk_iter_A!=blocks_A.end(); blk_iter_A++)
     {
         boxm2_block_metadata mdata = sceneA->get_block_metadata(blk_iter_A->first);
+
         //write the image values to the buffer
         bocl_mem* blk       = cacheA_->get_block(blk_iter_A->first);
         bocl_mem* blk_info  = cacheA_->loaded_block_info();
@@ -218,12 +217,10 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
         global_threads[0] = (unsigned) RoundUp(mdata.sub_block_num_.x()*mdata.sub_block_num_.y()*mdata.sub_block_num_.z(),(int)local_threads[0]);
-
         // Kernel ( blk_info , trees, alpha,  transformation, sceneB_bbox,sceneB_bbox_id, blkoffsets, alphaoffsets )
         kern->set_arg(blk_info);
         kern->set_arg(centerX.ptr());
         kern->set_arg(centerY.ptr());
-
         kern->set_arg(centerZ.ptr());
         kern->set_arg(lookup.ptr());
         kern->set_arg(blk);
@@ -241,28 +238,32 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
         kern->set_arg(scale.ptr());
         kern->set_arg(ocl_nbins.ptr());
         kern->set_arg(ocl_depth.ptr());
-        kern->set_arg(joint_histogram.ptr());
+        kern->set_arg(joint_histogram);
         kern->set_arg(output.ptr());
         kern->set_local_arg(nbins*nbins*sizeof(int));
         kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees
-        kern->set_local_arg( local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
+        kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
         kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees
-
-        kern->execute(queue, 1, local_threads, global_threads);
-
+        if(!kern->execute(queue, 1, local_threads, global_threads))
+        {
+            vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+            return false;
+        }
         int status = clFinish(queue);
+        
         check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
         gpu_time += kern->exec_time();
-
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
-
         //output->read_to_buffer(queue);
+        joint_histogram->read_to_buffer(queue);
+        clFinish(queue);
     }
-    joint_histogram->read_to_buffer(queue);
-    clFinish(queue);
+
+
 
     float * joint_histogram_float = reinterpret_cast<float * > (joint_histogram_buff);
+
     float * histA = new float[nbins];
     float * histB = new float[nbins];
     for (int k = 0; k<nbins; k++)
@@ -272,46 +273,42 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     }
     float sum  = 0.0;
     // normalize joint histogram
-    for (int k = 1; k < nbins; k++) 
-        for (int l = 1; l < nbins; l++)
+    for (int k = 0; k < nbins; k++) 
+        for (int l = 0; l < nbins; l++)
             sum+=joint_histogram_buff[k*nbins+l];
 
     if(sum <= 0.0 )
         mi = 0.0; 
     else
     {
-        for (int k = 1; k < nbins; k++) {
-            for (int l = 1; l < nbins; l++) {
+        for (int k = 0; k < nbins; k++) {
+            for (int l = 0; l < nbins; l++) {
                 joint_histogram_float[k*nbins+l] = (float)joint_histogram_buff[k*nbins+l] / sum;
-                //vcl_cout<<joint_histogram_float[k*nbins+l]<<" ";
             }
-            //vcl_cout<<vcl_endl;
         }
-        for (int k = 1; k < nbins; k++) {
-            for (int l = 1; l < nbins; l++) {
+        for (int k = 0; k < nbins; k++) {
+            for (int l = 0; l < nbins; l++) {
                 histA[k]+=joint_histogram_float[k*nbins+l];
             }
         }
-        for (int k = 1; k < nbins; k++) {
-            for (int l = 1; l < nbins; l++) {
+        for (int k = 0; k < nbins; k++) {
+            for (int l = 0; l < nbins; l++) {
                 histB[k]+=joint_histogram_float[l*nbins+k];
             }
         }
 
         float entropyA = 0;
-        for (int k = 1; k < nbins; k++) 
+        for (int k = 0; k < nbins; k++) 
             entropyA += -(histA[k]>0?histA[k]*vcl_log(histA[k]):0); // if prob=0 this value is defined as 0
 
         float entropyB = 0;
-        for (int l = 1; l < nbins; l++) 
+        for (int l = 0; l < nbins; l++) 
             entropyB += -(histB[l]>0?histB[l]*vcl_log(histB[l]):0); // if prob=0 this value is defined as 0
 
         float entropyAB =  0.0; ;
-        for (int k = 1; k < nbins; k++)
-            for (int l = 1; l < nbins; l++)
+        for (int k = 0; k < nbins; k++)
+            for (int l = 0; l < nbins; l++)
                 entropyAB += -(joint_histogram_float[k*nbins+l]>0?joint_histogram_float[k*nbins+l]*vcl_log(joint_histogram_float[k*nbins+l]):0);
-
-
         mi = (entropyA +entropyB - entropyAB)/vnl_math::ln2;
     }
     clReleaseCommandQueue(queue);
@@ -319,6 +316,10 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     delete [] joint_histogram_float;
     delete [] histA;
     delete [] histB;
-    return true;
+    //delete joint_histogram;
+
+ return true;
+
+ 
 }
 

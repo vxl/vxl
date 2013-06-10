@@ -31,21 +31,22 @@ class boxm2_ocl_monte_carlo_reg : public boxm2_ocl_reg_mutual_info
   //: initialize the monte carlo reg function
   bool init(vnl_vector<double> const& mu, vnl_vector<double> const & cov);
   bool likelihood(int num_iter,int depth = 3);
-  bool sample_from_cdf();
+  bool sample_from_cdf(int depth );
   bool update();
+  bool exhaustive(int depth =3 );
   ////: run simulated annealing
   bool run_annealing(); 
   vnl_vector<double> expected_sample();
-  ////: 
-
-  ////: Mutual information between the destination and mapped source image
-  //double mutual_info(vgl_rotation_3d<double> rot,vgl_vector_3d<double> trans);
- protected:
+  vnl_vector<double> max_sample();
+ 
+protected:
   bool generate_samples(int samplenum = 100);
   int numsamples_;
   vnl_vector<double> mu_;
   vnl_vector<double> cov_;
   vcl_vector< vnl_vector<double> > samples_;
+  vcl_vector< vnl_vector<double> > parent_samples_;
+  vcl_vector< double > mis;
   vcl_vector<vcl_pair<int, double> > pdf_;
   vcl_vector<vcl_pair<int, double> > cdf_;
 
