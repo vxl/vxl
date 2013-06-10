@@ -306,7 +306,7 @@ ushort traverse_deepest(__local uchar* tree,
   pointz = clamp(pointz, 0.0001f, 0.9999f);
 
   // while the curr node has children
-  while (curr_bit && depth < deepest  ) {
+  while (curr_bit && depth <= deepest  ) {
     //determine child offset and bit index for given point
     pointx += pointx;                                             //point = point*2
     pointy += pointy;
