@@ -92,7 +92,7 @@ def make_inside_empty(scene, cache, device, use_sum=False) :
     print "ERROR: Cache type not recognized: ", cache.type; 
     return False;	
 	
-def update_parents_alpha(scene, cache, device, use_sum=False) :  
+def update_parents_alpha(scene, cache, device) :
   if cache.type == "boxm2_opencl_cache_sptr": 
     print("Update Parents Alpha");
     boxm2_batch.init_process("boxm2OclUpdateParentsAlphaProcess");
@@ -103,3 +103,15 @@ def update_parents_alpha(scene, cache, device, use_sum=False) :
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
     return False;		
+def create_coarse_model(scene, cache, device, model_dir) :
+  if cache.type == "boxm2_opencl_cache_sptr":
+    print("Create a Coarser Scene");
+    boxm2_batch.init_process("boxm2OclCreateCoarserSceneProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_string(3,model_dir);
+    return boxm2_batch.run_process();
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+    return False;
