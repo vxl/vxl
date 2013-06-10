@@ -128,7 +128,7 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         transfer_time += (float) transfer.all();
-        vcl_size_t lThreads[] = {64, 1};
+        vcl_size_t lThreads[] = {16, 1};
         vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
         //set first kernel args
@@ -149,6 +149,7 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
         kern->clear_args();
         alpha->read_to_buffer(queue);
         clFinish(queue);
+
     }
 
     vcl_cout<<"Update Parents Alpha: "<<gpu_time<<vcl_endl;
