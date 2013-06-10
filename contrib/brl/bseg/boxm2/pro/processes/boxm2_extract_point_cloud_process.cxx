@@ -18,7 +18,7 @@
 
 namespace boxm2_extract_point_cloud_process_globals
 {
-  const unsigned n_inputs_ = 3;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 0;
 
   typedef unsigned char uchar;
@@ -35,9 +35,13 @@ bool boxm2_extract_point_cloud_process_cons (bprb_func_process& pro)
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "float"; //prob. threshold
+  input_types_[3] = "unsigned"; //deptht of the tree ( 0,1,2,3)
+
 
   brdb_value_sptr prob_t = new brdb_value_t<float>(0.0);
   pro.set_input(2, prob_t);
+  brdb_value_sptr default_depth = new brdb_value_t<unsigned int>(3);
+  pro.set_input(3, default_depth);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -57,6 +61,7 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   float prob_t = pro.get_input<float>(i++);
+  unsigned int depth = pro.get_input<unsigned>(i++);
 
 
   //zip through each block
@@ -95,7 +100,7 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
          boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
 
          //iterate through leaves of the tree
-         vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
+         vcl_vector<int> leafBits = bit_tree.get_leaf_bits(0,depth);
          vcl_vector<int>::iterator iter;
          for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
            int currBitIndex = (*iter);
@@ -105,25 +110,25 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
            int curr_depth = bit_tree.depth_at(currBitIndex);
            double side_len = 1.0 / (double) (1<<curr_depth);
            float prob = 1.0f - (float)vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
-
            if (prob < prob_t)
            {
              points_data[currIdx][3] = -1.0f;
              continue;
            }
            vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
-           vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y()+ y, localCenter.z() + z);
-
+           vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y()+ y, localCenter.z() + z);         
            points_data[currIdx][0] = float(cellCenter.x()*data.sub_block_dim_.x() + data.local_origin_.x());
            points_data[currIdx][1] = float(cellCenter.y()*data.sub_block_dim_.y() + data.local_origin_.y());
            points_data[currIdx][2] = float(cellCenter.z()*data.sub_block_dim_.z() + data.local_origin_.z());
            points_data[currIdx][3] = 0.0f;
          }
+
        }
       }
     }
+   
   }
-
+  
   return true;
 }
 
