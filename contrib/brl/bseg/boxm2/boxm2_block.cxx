@@ -211,7 +211,7 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
     }
     else if (init_level_ == 4) {
       treeBlk[0] = 1;
-      for (int i=1; i<1+8; ++i)
+      for (int i=1; i<1+9; ++i)
         treeBlk[i] = 0xff;
       tree_index += 1 + 8 + 64 + 512; // root + 1st + 2nd + 3rd...
     }
