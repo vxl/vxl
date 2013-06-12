@@ -100,19 +100,25 @@ int main(int argc, char** argv)
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
+
     volm_desc_matcher_sptr ex_matcher;
     if (is_land_only()) {
-      volm_desc_matcher_sptr ex_matcher = new volm_desc_ex_land_only_matcher(dms, params.radius, params.nlands, 0);
+      ex_matcher = new volm_desc_ex_land_only_matcher(dms, params.radius, params.nlands, 0);
     }
     else {
-      volm_desc_matcher_sptr ex_matcher = new volm_desc_ex_matcher(dms, params.radius, params.norients, params.nlands, 0);
+      ex_matcher = new volm_desc_ex_matcher(dms, params.radius, params.norients, params.nlands, 0);
     }
     
+    vcl_cout << " ex_matcher is " << ex_matcher->get_index_type_str() << vcl_endl;
 
     // create query
     volm_desc_sptr query = ex_matcher->create_query_desc();
     vcl_string query_file = out_folder() + "/" + image_name.str() + "_query.svg";
     query->visualize(query_file, 2);
+
+    vcl_cout << " query = ";
+    query->print();
+    vcl_cout << vcl_endl;
 
     // start the matcher
     vcl_cout << " =========== Start to execute existance matcher on tile " << tile_id() << " for image: " << image_name.str() << " ===============" << vcl_endl;
