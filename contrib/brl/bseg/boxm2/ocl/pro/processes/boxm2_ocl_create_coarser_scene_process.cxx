@@ -177,9 +177,9 @@ bool boxm2_ocl_create_coarser_scene_process(bprb_func_process& pro)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata_const(*iter);
         //: fix the parameteres of the mdata;
-        vgl_vector_3d<unsigned> coarse_blk_num (vcl_ceil(mdata.sub_block_num_.x()/8),
-                                                vcl_ceil(mdata.sub_block_num_.y()/8),
-                                                vcl_ceil(mdata.sub_block_num_.z()/8));
+        vgl_vector_3d<unsigned> coarse_blk_num (vcl_ceil(mdata.sub_block_num_.x()/8.0f),
+                                                vcl_ceil(mdata.sub_block_num_.y()/8.0f),
+                                                vcl_ceil(mdata.sub_block_num_.z()/8.0f));
         vgl_vector_3d<double> coarse_blk_dim(mdata.sub_block_dim_.x()*(double) mdata.sub_block_num_.x() / (double) coarse_blk_num.x(),
                                              mdata.sub_block_dim_.y()*(double) mdata.sub_block_num_.y() / (double) coarse_blk_num.y(),
                                              mdata.sub_block_dim_.z()*(double) mdata.sub_block_num_.z() / (double) coarse_blk_num.z() ); 
