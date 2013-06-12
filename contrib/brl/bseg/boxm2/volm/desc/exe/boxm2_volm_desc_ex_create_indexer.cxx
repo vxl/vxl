@@ -6,6 +6,7 @@
 
 #include <volm/desc/volm_desc_ex.h>
 #include <boxm2/volm/desc/boxm2_volm_desc_ex_indexer.h>
+#include <boxm2/volm/desc/boxm2_volm_desc_ex_land_only_indexer.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <vul/vul_arg.h>
@@ -21,6 +22,7 @@ int main(int argc, char** argv)
   vul_arg<unsigned> norients("-nori", "number of orientation type considered, default are horizontal, vertial and infinite", 0);
   vul_arg<unsigned> nlands("-nlands", "number of land types considered, default are 35 land types", 0);
   vul_arg<float> buffer_capacity("-buffer", "buffer size used for indices, ensure the system has 2*buffer_capacity memory, unit as GB (default 2.0G)", 2.0f);
+  vul_arg<bool> is_land_only("-land", "option to choose land only existance descriptor", false);
   vul_arg<bool> is_log("-log", "option to save log files", false);
   vul_arg_parse(argc, argv);
   vcl_cout << " number or arguments = " << argc << vcl_endl;
@@ -74,19 +76,32 @@ int main(int argc, char** argv)
   // create the existance indices for given tile
   vcl_cout << " ============================= Start to create existance indices for tile " << tile_id() << " ===================== " << vcl_endl;
   volm_desc_indexer_sptr ex_indexer;
-  if (norients() == 0 && nlands() == 0)
-    ex_indexer = new volm_desc_ex_indexer(index_folder(), out_index_folder(), radius(), depth_interval, index_layer_size, buffer_capacity());
-  else
-    ex_indexer = new volm_desc_ex_indexer(index_folder(), out_index_folder(), radius(), depth_interval, index_layer_size, buffer_capacity(),
-                                          norients(), nlands(), (unsigned char)0);
+  if (is_land_only()) {
+    if (norients() == 0 && nlands() == 0)
+      ex_indexer = new volm_desc_ex_land_only_indexer(index_folder(), out_index_folder(), radius(), depth_interval, index_layer_size, buffer_capacity());
+    else
+      ex_indexer = new volm_desc_ex_land_only_indexer(index_folder(), out_index_folder(), radius(), depth_interval, index_layer_size, buffer_capacity(),
+                                                      nlands(), (unsigned char)0);
+  }
+  else {
+    if (norients() == 0 && nlands() == 0)
+      ex_indexer = new volm_desc_ex_indexer(index_folder(), out_index_folder(), radius(), depth_interval, index_layer_size, buffer_capacity());
+    else
+      ex_indexer = new volm_desc_ex_indexer(index_folder(), out_index_folder(), radius(), depth_interval, index_layer_size, buffer_capacity(),
+                                            norients(), nlands(), (unsigned char)0);
+  }
   
+  vcl_cout << " \t Descriptor used: " << ex_indexer->get_index_type_str() << vcl_endl;
   vcl_cout << " \t Following parameters are used" << vcl_endl;
   vcl_cout << " \t\t radius = ";
   for (vcl_vector<double>::iterator vit = radius().begin(); vit != radius().end(); ++vit)
     vcl_cout << *vit << ' ';
   vcl_cout << '\n';
   if (norients() == 0)
-    vcl_cout << " \t\t number of orientation types: 3" << vcl_endl;
+    if (is_land_only())
+      vcl_cout << " \t\t Orientation is not considered, only use land type and distance " << vcl_endl;
+    else
+      vcl_cout << " \t\t number of orientation types: 3" << vcl_endl;
   else
     vcl_cout << " \t\t number of orientation types: " << norients() << vcl_endl;
   if (nlands() == 0)

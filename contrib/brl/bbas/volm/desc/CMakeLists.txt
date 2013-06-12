@@ -9,12 +9,14 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
 SET(volm_desc_sources
   volm_desc.h                             volm_desc.cxx
   volm_desc_ex.h                          volm_desc_ex.cxx
+  volm_desc_ex_land_only.h                volm_desc_ex_land_only.cxx
   volm_desc_land.h                        volm_desc_land.cxx
   volm_desc_matcher.h                     volm_desc_matcher.cxx
   volm_desc_indexer.h					  volm_desc_indexer.cxx
   volm_desc_land_matcher.h				  volm_desc_land_matcher.cxx
   volm_desc_land_indexer.h                volm_desc_land_indexer.cxx
   volm_desc_ex_matcher.h                  volm_desc_ex_matcher.cxx
+  volm_desc_ex_land_only_matcher.h        volm_desc_ex_land_only_matcher.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_desc_sources)

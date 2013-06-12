@@ -5,6 +5,7 @@
 // \date June 04, 2013
 
 #include <volm/desc/volm_desc_ex_matcher.h>
+#include <volm/desc/volm_desc_ex_land_only_matcher.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_buffered_index.h>
@@ -26,6 +27,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> desc_index_folder("-index", "directory that contains the created wr3db indices", "");
   vul_arg<vcl_string> out_folder("-out", "output folder for the query image", "");
   vul_arg<float> buffer_capacity("-buff", "buffer size used for loading indices", 2.0f);
+  vul_arg<bool> is_land_only("-land", "option to execute matcher using ex_land_only descriptor", false);
   // post processing related
   vul_arg<vcl_string> gt_file("-gt", "ground truth files", "");
   vul_arg<float> kl("-kl", "parameter for nonlinear score scaling", 200.0f);
@@ -98,7 +100,14 @@ int main(int argc, char** argv)
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    volm_desc_matcher_sptr ex_matcher = new volm_desc_ex_matcher(dms, params.radius, params.norients, params.nlands, 0);
+    volm_desc_matcher_sptr ex_matcher;
+    if (is_land_only()) {
+      volm_desc_matcher_sptr ex_matcher = new volm_desc_ex_land_only_matcher(dms, params.radius, params.nlands, 0);
+    }
+    else {
+      volm_desc_matcher_sptr ex_matcher = new volm_desc_ex_matcher(dms, params.radius, params.norients, params.nlands, 0);
+    }
+    
 
     // create query
     volm_desc_sptr query = ex_matcher->create_query_desc();
@@ -107,6 +116,7 @@ int main(int argc, char** argv)
 
     // start the matcher
     vcl_cout << " =========== Start to execute existance matcher on tile " << tile_id() << " for image: " << image_name.str() << " ===============" << vcl_endl;
+    vcl_cout << " \t Descriptor type : " << ex_matcher->get_index_type_str() << vcl_endl;
     if (tile_id() != 10) {
       if (!ex_matcher->matcher(query, geo_hypo_folder(), desc_index_folder(), buffer_capacity(), tile_id())) {
         err_log << " ERROR: matcher for tile " << tile_id() << " failed\n";

@@ -5,7 +5,8 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/volm )
 
 SET(boxm2_volm_desc_sources
-  boxm2_volm_desc_ex_indexer.h        boxm2_volm_desc_ex_indexer.cxx
+  boxm2_volm_desc_ex_indexer.h               boxm2_volm_desc_ex_indexer.cxx
+  boxm2_volm_desc_ex_land_only_indexer.h     boxm2_volm_desc_ex_land_only_indexer.cxx
 )
 
 ADD_LIBRARY(boxm2_volm_desc ${boxm2_volm_desc_sources})
