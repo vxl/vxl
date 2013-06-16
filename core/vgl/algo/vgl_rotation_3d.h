@@ -176,7 +176,7 @@ class vgl_rotation_3d
   //: Returns the axis of rotation (unit vector)
   vnl_vector_fixed<T,3> axis() const { return q_.axis(); }
 
-  //: Returns the magnitude of the angle of rotation
+  //: Returns the angle of rotation on the range [ 0  360 ]
   double angle() const { return q_.angle(); }
 
   // Operations:----------------------------------------
