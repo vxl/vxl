@@ -7,7 +7,7 @@
 #include <vil/vil_load.h>
 #include <boxm2/volm/boxm2_volm_candidate_list.h>
 #include <vnl/vnl_math.h>
-
+#include <vgl/vgl_intersection.h>
 
 bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
                                 vcl_string const& geo_hypo_folder,
@@ -172,6 +172,42 @@ bool volm_desc_matcher::create_empty_prob_map(vcl_string const& out_folder, unsi
   return true;
 }
 
+//: need a specialized prob map generator for a random matcher, cause random matcher do not need to create a desc_index nor save binary score files
+bool volm_desc_matcher::create_random_prob_map(vnl_random& rng, vcl_string const& geo_hypo_folder, vcl_string const& out_folder, unsigned tile_id, volm_tile& tile)
+{
+
+  // load the volm_geo_index for this tile
+  vcl_stringstream file_name_pre;
+  file_name_pre << geo_hypo_folder << "/geo_index_tile_" << tile_id;
+  float min_size;
+  volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
+  volm_geo_index::read_hyps(root, file_name_pre.str());
+  vcl_vector<volm_geo_index_node_sptr> leaves;
+  volm_geo_index::get_leaves_with_hyps(root, leaves);
+
+  // initialize the probability map image
+  vil_image_view<float> tile_img(3601, 3601);
+  tile_img.fill(-1.0f);
+
+  // generate a random score for only the pixels where there is a hyp
+  for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+      vgl_point_3d<double> h_pt;
+      // loop over all locations in current leaf
+      while (leaves[l_idx]->hyps_->get_next(0,1,h_pt)) {
+        unsigned h_idx = leaves[l_idx]->hyps_->current_-1;
+        unsigned u, v;
+        if (tile.global_to_img(h_pt.x(), h_pt.y(), u, v) && tile_img(u,v) < 0) // this method checks the image boundaries
+          tile_img(u,v) = (float)rng.drand32();
+      }
+  }
+
+  // save the image
+  vcl_string img_name = out_folder + "/ProbMap_float_" + tile.get_string() + ".tif";
+  vil_save(tile_img, img_name.c_str());
+  return true;
+}
+
+
 bool volm_desc_matcher::create_scaled_prob_map(vcl_string const& out_folder,
                                                volm_tile tile,
                                                unsigned const& tile_id,
@@ -310,3 +346,4 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
   boxm2_volm_candidate_list::close_kml_document(ofs_kml);
   return true;
 }
+

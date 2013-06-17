@@ -18,6 +18,7 @@
 int main(int argc,  char** argv)
 {
   vul_arg<bool> match("-match", "if exists run the matcher, otherwise run the indexer");
+  vul_arg<bool> random("-random", "if exists create output prob maps randomly, otherwise run the land type matcher");
   vul_arg<vcl_string> category_file("-cat", "category file that contains one line for the land type of the camera for the query ", "");
   vul_arg<vcl_string> category_gt_file("-cat_gt", "category gt file of multiple images, use image id to get gt loc of this one ", "");
   vul_arg<int> img_id("-id", "query image id in the category gt file, starts from 0", -1);
@@ -35,6 +36,28 @@ int main(int argc,  char** argv)
   vcl_cout << "argc: " << argc << vcl_endl;
 
   if (match()) {  // run the matcher
+    
+    vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
+
+    if (random()) {
+        if (geo_hypo_folder().compare("") == 0 || out_folder().compare("") == 0 || tile_id() < 0 || img_id() < 0) {
+          vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
+          volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+          vul_arg_display_usage_and_exit();
+          return volm_io::EXE_ARGUMENT_ERROR;
+        }
+
+        volm_desc_matcher_sptr m = new volm_desc_land_matcher(); // need a deriving class just to call a base method
+        vnl_random rng;
+        m->create_random_prob_map(rng, geo_hypo_folder(), out_folder(), tile_id(), tiles[tile_id()]);
+        double thres = 0.5;
+        m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 127, thres); 
+
+        volm_io::write_status(out_folder(), volm_io::SUCCESS);
+        vcl_cout << "returning SUCCESS!\n";
+        return volm_io::SUCCESS;
+    }
+
     if (category_gt_file().compare("") == 0 || out_folder().compare("") == 0 || geo_hypo_folder().compare("") == 0 || tile_id() < 0 || img_id() < 0 || desc_index_folder().compare("") == 0 || NLCD_folder().compare("") == 0) {
       vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
@@ -58,7 +81,7 @@ int main(int argc,  char** argv)
     query->print();
 
     double thres = 0.5;
-    vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
+    
 
     if (tile_id() == 10) { // we know this one is empty : TODO: remove hard code
       m->create_empty_prob_map(out_folder(), tile_id(), tiles[tile_id()]);

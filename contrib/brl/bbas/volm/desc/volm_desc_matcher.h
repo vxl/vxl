@@ -24,6 +24,7 @@
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <volm/volm_buffered_index.h>
+#include <vnl/vnl_random.h>
 
 class volm_desc_matcher;
 typedef vbl_smart_ptr<volm_desc_matcher> volm_desc_matcher_sptr;
@@ -66,6 +67,9 @@ public:
 
   bool create_empty_prob_map(vcl_string const& out_folder, unsigned tile_id, volm_tile& tile);
 
+  //: need a specialized prob map generator for a random matcher, cause random matcher do not need to create a desc_index nor save binary score files
+  bool create_random_prob_map(vnl_random& rng, vcl_string const& geo_hypo_folder, vcl_string const& out_folder, unsigned tile_id, volm_tile& tile);
+
   //: generate scaled probability map
   static bool create_scaled_prob_map(vcl_string const& out_folder,
                                      volm_tile tile,
@@ -92,5 +96,6 @@ protected:
   vcl_vector<volm_score_sptr> score_all_;
 
 };
+
 
 #endif  // volm_desc_matcher_h_
