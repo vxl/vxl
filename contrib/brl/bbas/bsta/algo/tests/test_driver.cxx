@@ -7,8 +7,9 @@ DECLARE( test_fit_gaussian );
 DECLARE( test_von_mises_update );
 DECLARE( test_beta_updater );
 DECLARE( test_rand_sampling );
+DECLARE( test_display_vrml );
 
-void
+void 
 register_tests()
 {
   REGISTER( test_fit_weibull );
@@ -17,6 +18,7 @@ register_tests()
   REGISTER( test_fit_gaussian );
   REGISTER( test_von_mises_update );
   REGISTER( test_rand_sampling );
+  REGISTER( test_display_vrml );
 
 }
 
