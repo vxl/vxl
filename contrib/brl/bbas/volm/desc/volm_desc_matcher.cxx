@@ -272,6 +272,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
     cand_lists.push_back(cand_list);
   }
 
+#if 0
   // visualize the candidate list
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
     vil_image_view<vxl_byte> cand_img;
@@ -279,7 +280,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
     cand_lists[t_idx].candidate_list_image(cand_img);
     vil_save(cand_img, img_name.c_str());
   }
-  
+#endif
   // create the map for all regions
   vcl_multimap<unsigned, vcl_pair<unsigned, unsigned>, vcl_greater<unsigned> > cand_map;
   for (unsigned tile_idx = 0; tile_idx < tiles.size(); tile_idx++) {
