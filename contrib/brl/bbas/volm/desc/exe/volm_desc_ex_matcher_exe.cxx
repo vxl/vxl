@@ -84,10 +84,24 @@ int main(int argc, char** argv)
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
+    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
     unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
+
+    int img_info_id = -1;
+    for (unsigned kk = 0; kk < samples.size(); kk++) {
+      if (samples[kk].second.first.second == id()) {
+        img_info_id = kk;
+        break;
+      }
+    }
+    //if (query_img_info.size() <= img_id()) {
+    if (img_info_id < 0) {
+      vcl_cerr << "query image id: " << id() << " cannot be found in the gt loc file: " << gt_file() << "!\n";
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+
     vgl_point_3d<double> gt_loc;
-    gt_loc = samples[id()].first;
+    gt_loc = samples[img_info_id].first;
 
     // create coast tiles
     vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
