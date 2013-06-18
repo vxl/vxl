@@ -67,7 +67,7 @@ class vidl_ffmpeg_istream
 
   //: Return the frame rate (FPS, 0.0 if unspecified)
   virtual double frame_rate() const;
-  
+
   //: Return the duration in seconds (0.0 if unknown)
   virtual double duration() const;
 
@@ -79,6 +79,18 @@ class vidl_ffmpeg_istream
 
   //: Return the current frame in the stream
   virtual vidl_frame_sptr current_frame();
+
+  //: Return the current presentation time stamp
+  virtual double pts() const;
+
+  //: Return the raw metadata bytes obtained while reading the current frame.
+  //  This deque will be empty if there is no metadata stream
+  //  Metadata is often encoded as KLV,
+  //  but no attempt to decode KLV is made here
+  vcl_deque<vxl_byte> current_metadata();
+
+  //: Return true if the video also has a metadata stream
+  bool has_metadata() const;
 
   //: Seek to the given frame number
   // \returns true if successful

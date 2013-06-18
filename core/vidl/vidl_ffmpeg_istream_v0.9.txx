@@ -46,7 +46,9 @@ struct vidl_ffmpeg_istream::pimpl
     sws_context_( NULL ),
     cur_frame_( NULL ),
     deinterlace_( false ),
-    frame_number_offset_( 0 )
+    pts_( 0 ),
+    frame_number_offset_( 0 ),
+    video_enc_( 0 )
   {
     packet_.data = NULL;
   }
@@ -54,6 +56,8 @@ struct vidl_ffmpeg_istream::pimpl
   AVFormatContext* fmt_cxt_;
   int vid_index_;
   AVStream* vid_str_;
+
+  AVCodecContext *video_enc_;
 
   //: Decode time of last frame.
   int64_t last_dts;
@@ -96,6 +100,9 @@ struct vidl_ffmpeg_istream::pimpl
   //: Some codec/file format combinations need a frame number offset.
   // These codecs have a delay between reading packets and generating frames.
   unsigned frame_number_offset_;
+
+  //: Presentation timestamp
+  double pts_;
 };
 
 
@@ -126,6 +133,25 @@ vidl_ffmpeg_istream::
 {
   close();
   delete is_;
+}
+
+/* These are called whenever we allocate a frame
+ * buffer. We use this to store the global_pts in
+ * a frame at the time it is allocated.
+ */
+int get_buffer(struct AVCodecContext *c, AVFrame *pic)
+{
+  int ret = avcodec_default_get_buffer(c, pic);
+  uint64_t *pts = (uint64_t *)av_malloc(sizeof(uint64_t));
+  *pts = *((uint64_t *)c->opaque);
+  pic->opaque = pts;
+  return ret;
+}
+
+void release_buffer(struct AVCodecContext *c, AVFrame *pic)
+{
+  if(pic) av_freep(&pic->opaque);
+  avcodec_default_release_buffer(c, pic);
 }
 
 //: Open a new stream using a filename
@@ -161,11 +187,19 @@ open(const vcl_string& filename)
   }
 
   av_dump_format( is_->fmt_cxt_, 0, filename.c_str(), 0 );
-  AVCodecContext *enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+  is_->video_enc_ = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+
+  //Tell ffmpeg to use our get/release buffers for pts management
+  is_->video_enc_->get_buffer = get_buffer;
+  is_->video_enc_->release_buffer = release_buffer;
+
+  uint64_t *video_pkt_pts = (uint64_t *)av_malloc(sizeof(uint64_t));
+  *video_pkt_pts = AV_NOPTS_VALUE;
+  is_->video_enc_->opaque = video_pkt_pts;
 
   // Open the stream
-  AVCodec* codec = avcodec_find_decoder(enc->codec_id);
-  if ( !codec || avcodec_open2( enc, codec, NULL ) < 0 ) {
+  AVCodec* codec = avcodec_find_decoder(is_->video_enc_->codec_id);
+  if ( !codec || avcodec_open2( is_->video_enc_, codec, NULL ) < 0 ) {
     return false;
   }
 
@@ -201,11 +235,16 @@ void
 vidl_ffmpeg_istream::
 close()
 {
-  if( is_->packet_.data )
+  if( is_->packet_.data ) {
     av_free_packet( &is_->packet_ );  // free last packet
+  }
 
   if ( is_->frame_ ) {
     av_freep( &is_->frame_ );
+  }
+
+  if (is_->video_enc_ && is_->video_enc_->opaque) {
+    av_freep( &is_->video_enc_->opaque );
   }
 
   is_->num_frames_ = -2;
@@ -219,6 +258,8 @@ close()
     avformat_close_input( &is_->fmt_cxt_ );
     is_->fmt_cxt_ = 0;
   }
+
+  is_->video_enc_ = 0;
 }
 
 
@@ -390,26 +431,55 @@ advance()
     av_free_packet( &is_->packet_ );  // free previous packet
 
   int got_picture = 0;
+  uint64_t pts;
 
-  while ( got_picture == 0 ) {
-    if ( av_read_frame( is_->fmt_cxt_, &is_->packet_ ) < 0 ) {
-      break;
-    }
+  // clear the metadata from the previous frame
+  is_->metadata_.clear();
+
+  while ( av_read_frame( is_->fmt_cxt_, &is_->packet_ ) >= 0 && got_picture == 0 )
+  {
     is_->last_dts = is_->packet_.dts;
+
+    pts = 0;
 
     // Make sure that the packet is from the actual video stream.
     if (is_->packet_.stream_index==is_->vid_index_)
     {
+
+      *(uint64_t *)is_->video_enc_->opaque = is_->packet_.pts;
       if ( avcodec_decode_video2( codec,
                                   is_->frame_, &got_picture,
                                   &is_->packet_ ) < 0 ) {
         vcl_cerr << "vidl_ffmpeg_istream: Error decoding packet!\n";
+        av_free_packet( &is_->packet_ );
         return false;
       }
-      else
-        break; // without freeing the packet
+
+      if (is_->packet_.dts == AV_NOPTS_VALUE &&
+               is_->frame_->opaque &&
+               *(uint64_t *)is_->frame_->opaque != AV_NOPTS_VALUE) {
+        pts = *(uint64_t *)is_->frame_->opaque;
+      }
+      else if (is_->packet_.dts != AV_NOPTS_VALUE) {
+        pts = is_->packet_.dts;
+      }
+      else {
+        pts = 0;
+      }
+
+      is_->pts_ = pts * av_q2d(is_->vid_str_->time_base);
+      break; // without freeing the packet
     }
-    av_free_packet( &is_->packet_ );
+    // grab the metadata from this packet if from the metadata stream
+    if (is_->packet_.stream_index==is_->data_index_)
+    {
+      is_->metadata_.insert( is_->metadata_.end(), is_->packet_.data,
+                             is_->packet_.data+is_->packet_.size);
+      av_free_packet( &is_->packet_ );
+    }
+    else {
+      av_free_packet( &is_->packet_ );
+    }
   }
 
   // From ffmpeg apiexample.c: some codecs, such as MPEG, transmit the
@@ -582,6 +652,33 @@ seek_frame(unsigned int frame)
       return true;
     }
   }
+}
+
+//: Return the raw metadata bytes obtained while reading the current frame.
+//  This deque will be empty if there is no metadata stream
+//  Metadata is often encoded as KLV,
+//  but no attempt to decode KLV is made here
+vcl_deque<vxl_byte>
+vidl_ffmpeg_istream::
+current_metadata()
+{
+  return is_->metadata_;
+}
+
+
+//: Return true if the video also has a metadata stream
+bool
+vidl_ffmpeg_istream::
+has_metadata() const
+{
+  return is_open() && is_->data_index_ >= 0;
+}
+
+double
+vidl_ffmpeg_istream::
+pts() const
+{
+  return is_->pts_;
 }
 
 #endif // vidl_ffmpeg_istream_v0_9_txx_
