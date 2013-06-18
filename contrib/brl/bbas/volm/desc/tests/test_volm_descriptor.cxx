@@ -27,14 +27,6 @@ static void test_volm_desc_land()
 
 static void test_volm_desc_ex()
 {
-#if 0
-  // create a existance histogram from depth_map_scene
-  vcl_string dm_file = "z:/projects/FINDER/test1/p1a_test1_20/p1a_test1_20.vsl";
-  depth_map_scene_sptr dm = new depth_map_scene;
-  vsl_b_ifstream dis(dm_file.c_str());
-  dm->b_read(dis);
-  dis.close();
-#endif
   // create a depth_map_scene
   depth_map_scene_sptr depth_scene = new depth_map_scene;
   unsigned ni = 1280;
