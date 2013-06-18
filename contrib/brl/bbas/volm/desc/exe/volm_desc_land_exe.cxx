@@ -65,18 +65,26 @@ int main(int argc,  char** argv)
       return volm_io::EXE_ARGUMENT_ERROR;
     }
 
-    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > query_img_info;
+    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > query_img_info;
     volm_io::read_gt_file(category_gt_file(), query_img_info);
 
-    if (query_img_info.size() <= img_id()) {
+    int img_info_id = -1;
+    for (unsigned kk = 0; kk < query_img_info.size(); kk++) {
+      if (query_img_info[kk].second.first.second == img_id()) {
+        img_info_id = kk;
+        break;
+      }
+    }
+    //if (query_img_info.size() <= img_id()) {
+    if (img_info_id < 0) {
       vcl_cerr << "query image id: " << img_id() << " cannot be found in the gt loc file: " << category_gt_file() << "!\n";
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    vcl_cout << "will use the gt loc of the image " << img_id() << " which is: " << query_img_info[img_id()].first.x() << " " << query_img_info[img_id()].first.y() << " " << query_img_info[img_id()].first.z() << "\n";
+    vcl_cout << "will use the gt loc of the image " << img_id() << " which is: " << query_img_info[img_info_id].first.x() << " " << query_img_info[img_info_id].first.y() << " " << query_img_info[img_info_id].first.z() << "\n";
   
     
     // create the query descriptor    
-    volm_desc_matcher_sptr m = new volm_desc_land_matcher(NLCD_folder(), query_img_info[img_id()].first);
+    volm_desc_matcher_sptr m = new volm_desc_land_matcher(NLCD_folder(), query_img_info[img_info_id].first);
     volm_desc_sptr query = m->create_query_desc();  // land matcher overwrites this method and uses the gt location to fetch the land type from NLCD images
     query->print();
 
@@ -95,7 +103,7 @@ int main(int argc,  char** argv)
     m->write_out(out_folder(), tile_id());
     
     float gt_score;
-    m->create_prob_map(geo_hypo_folder(), out_folder(), tile_id(), tiles[tile_id()], query_img_info[img_id()].first, gt_score);
+    m->create_prob_map(geo_hypo_folder(), out_folder(), tile_id(), tiles[tile_id()], query_img_info[img_info_id].first, gt_score);
     m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, thres); 
 
     volm_io::write_status(out_folder(), volm_io::SUCCESS);

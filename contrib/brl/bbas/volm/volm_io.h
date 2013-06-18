@@ -148,7 +148,7 @@ class volm_io
   static void read_polygons(vcl_string poly_file, vgl_polygon<double>& out);
   static void convert_polygons(vgl_polygon<double> const& in, vgl_polygon<float>& out);
 
-  static int read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > >& samples);
+  static int read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > >& samples);
   static bool read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data);
 
   //: read the building footpring file

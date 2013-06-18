@@ -718,18 +718,31 @@ void volm_score::b_read(vsl_b_istream& is)
   }
 }
 
-int volm_io::read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > >& samples)
+int volm_io::read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > >& samples)
 {
   vcl_ifstream ifs(gt_file.c_str());
   int cnt; ifs >> cnt;
   for (int j = 0; j < cnt; j++) {
     vcl_string name; ifs >> name; vcl_string type;
+    char name_buf[1000];
+    for (unsigned kk = 0; kk < name.size(); kk++)
+      name_buf[kk] = name[kk];
+
+    char *tok = vcl_strtok(name_buf, "-");
+    char *tok2 = vcl_strtok(tok, "_");
+    tok2 = vcl_strtok(NULL, "_"); // tokenize the remaining string
+    tok2 = vcl_strtok(NULL, "_"); // tokenize the remaining string
+    int img_id;
+    vcl_stringstream tv(tok2); tv >> img_id;
+
     double lat, lon, elev;
     ifs >> lat; ifs >> lon; ifs >> elev;
     ifs >> type;
     vgl_point_3d<double> pt(lon, lat, elev);
+    vcl_pair<vcl_string, int> np(name, img_id);
+    vcl_pair<vcl_pair<vcl_string, int>, vcl_string> p(np, type);
     samples.push_back(vcl_pair<vgl_point_3d<double>,
-                      vcl_pair<vcl_string, vcl_string> >(pt, vcl_pair<vcl_string, vcl_string>(name, type) ) );
+                      vcl_pair<vcl_pair<vcl_string, int>, vcl_string> >(pt,  p) );
   }
   ifs.close();
   return cnt;
