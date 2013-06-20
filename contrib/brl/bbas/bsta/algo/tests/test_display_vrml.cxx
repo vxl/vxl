@@ -35,9 +35,9 @@ static void test_display_vrml()
 #ifdef VRML_DEBUG
   vcl_cout << str2 << '\n';
 #endif
-  vcl_string test2("scale 5 3 1");
-  pos = str.find(test);
-  good = good && pos == 84;
+  vcl_string test2("2.23607 1.73205 1");
+  pos = str2.find(test2);
+  good = good && pos == 491;
   TEST("gaussian full mixture display", good, true);
 
 }

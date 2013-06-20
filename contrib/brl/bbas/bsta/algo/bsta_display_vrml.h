@@ -27,7 +27,7 @@ void bsta_vrml_header(vcl_ostream& os){
 // then a vmrl header is written to form a complete display string.
 template<class T>
 bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
-                       bool single = true){
+                       bool single = true, T r = T(0), T g = T(1), T b = T(0)){
   if(!os)
     {
       vcl_cout << "out stream is not open\n";
@@ -68,12 +68,13 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
      << axis[2] << ' ' << ang << '\n';
   os << "   children [\n";
   os << "    Transform{\n";
-  os << "     scale " << D[0] << ' ' << D[1] << ' '
-     << D[2] << '\n';
+  os << "     scale " << vcl_sqrt(D[0]) << ' ' << vcl_sqrt(D[1]) << ' '
+     << vcl_sqrt(D[2]) << '\n';
   os << "     children [ \n";
   os << "      Shape {\n";
   os << "       appearance Appearance {\n";
-  os << "        material Material {diffuseColor 0 1 0}\n";
+  os << "        material Material {diffuseColor "<< r << ' ' << g << ' ' 
+     << b << " }\n";
   os << "      }\n";
   os << "       geometry Sphere {\n";
   os << "       radius 1.0\n";
@@ -89,7 +90,7 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
 }
 
 template<class T>
-bool bsta_display_vrml(vcl_ostream& os, bsta_mixture< bsta_gaussian_full<T, 3> > const& mix){
+bool bsta_display_vrml(vcl_ostream& os, bsta_mixture< bsta_gaussian_full<T, 3> > const& mix, T r = T(0), T g = T(1), T b = T(0)){
   if(!os)
     {
       vcl_cout << "out stream is not open\n";
@@ -99,11 +100,13 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_mixture< bsta_gaussian_full<T, 3> >
   unsigned n_comp = mix.num_components();
   for(unsigned i = 0; i<n_comp; ++i){
     const bsta_gaussian_full<T, 3>& comp = mix.distribution(i);
-    bool good = bsta_display_vrml(os, comp, false);
+    T w = mix.weight(i);
+    bool good = bsta_display_vrml(os, comp, false, w*r, w*g, w*b);
     if(!good){
       vcl_cout << "display component failed\n";
       return false;
     }
   }
+  return true;
 }
 #endif //bsta_display_vrml_h_

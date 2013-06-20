@@ -2,7 +2,7 @@
 //
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_filter_bank.h>
-#include <sdet/sdet_k_means.h>
+#include <bsta/bsta_k_means.h>
 #include <vsl/vsl_map_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_io.h>
@@ -565,7 +565,7 @@ bool sdet_texture_classifier::compute_textons(vcl_string const& category)
 
   unsigned converged_k = k_;
   t.mark();
-  unsigned n_iter = sdet_k_means(train_data, converged_k, &centers);
+  unsigned n_iter = bsta_k_means(train_data, converged_k, &centers);
   vcl_cout << "After " << n_iter << " iterations found " << converged_k
            << " cluster centers\n";
   texton_dictionary_[category]=centers;
