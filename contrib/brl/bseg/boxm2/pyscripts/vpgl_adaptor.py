@@ -146,7 +146,13 @@ def load_local_rational_camera(file_path) :
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam;
-
+def convert_local_rational_perspective_camera(local_cam) :
+  boxm2_batch.init_process("vpglConvertLocalRationalToPerspectiveProcess");
+  boxm2_batch.set_input_from_db(0, local_cam);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cam = dbvalue(id,type);
+  return cam;
 def create_local_rational_camera(rational_cam_fname, lvcs_fname):
     boxm2_batch.init_process('vpglCreateLocalRationalCameraProcess');
     boxm2_batch.set_input_string(0,rational_cam_fname);

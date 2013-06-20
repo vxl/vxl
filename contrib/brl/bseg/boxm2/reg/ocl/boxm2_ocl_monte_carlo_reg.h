@@ -10,9 +10,9 @@
 #include <vnl/vnl_cost_function.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <bocl/bocl_device.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache2.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/io/boxm2_lru_cache.h>
+#include <boxm2/io/boxm2_lru_cache2.h>
 #include <boxm2/io/boxm2_stream_scene_cache.h>
 #include <boxm2/reg/ocl/boxm2_ocl_reg_mutual_info.h>
 
@@ -22,7 +22,7 @@ class boxm2_ocl_monte_carlo_reg : public boxm2_ocl_reg_mutual_info
 {
  public:
   //: Constructor. The source image is mapped to the destination frame by dt. nbins is the number of histogram bins used to compute entropies.
-  boxm2_ocl_monte_carlo_reg( boxm2_opencl_cache_sptr  & cacheA,
+  boxm2_ocl_monte_carlo_reg( boxm2_opencl_cache2_sptr  & cacheA,
                              boxm2_stream_scene_cache & cacheB,
                              bocl_device_sptr device, int nbins,
                              double scale = 1.0, 

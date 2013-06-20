@@ -20,7 +20,7 @@ typedef vnl_vector_fixed<unsigned char,16> uchar16;
 
 
 
-boxm2_ocl_reg_mutual_info::boxm2_ocl_reg_mutual_info( boxm2_opencl_cache_sptr& cacheA,
+boxm2_ocl_reg_mutual_info::boxm2_ocl_reg_mutual_info( boxm2_opencl_cache2_sptr& cacheA,
                                                      boxm2_stream_scene_cache& cacheB,
                                                      bocl_device_sptr device,
                                                      int nbins,
@@ -194,7 +194,7 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
     // iterate over scene A on the GPU.
-    boxm2_scene_sptr sceneA = cacheA_->get_cpu_cache()->get_scene();
+    boxm2_scene_sptr sceneA = cacheA_->get_cpu_cache()->get_scenes()[0];
     vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks_A = sceneA->blocks() ;
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter_A;
     vcl_size_t local_threads[1]={8};
@@ -209,9 +209,9 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
         boxm2_block_metadata mdata = sceneA->get_block_metadata(blk_iter_A->first);
 
         //write the image values to the buffer
-        bocl_mem* blk       = cacheA_->get_block(blk_iter_A->first);
+        bocl_mem* blk       = cacheA_->get_block(sceneA, blk_iter_A->first);
         bocl_mem* blk_info  = cacheA_->loaded_block_info();
-        bocl_mem* alpha     = cacheA_->get_data<BOXM2_ALPHA>(blk_iter_A->first,0,false);
+        bocl_mem* alpha     = cacheA_->get_data<BOXM2_ALPHA>(sceneA, blk_iter_A->first,0,false);
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);

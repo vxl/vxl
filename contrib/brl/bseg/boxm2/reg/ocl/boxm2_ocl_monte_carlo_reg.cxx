@@ -5,7 +5,7 @@
 #include <vnl/vnl_random.h>
 #include <vcl_algorithm.h>
 
-boxm2_ocl_monte_carlo_reg::boxm2_ocl_monte_carlo_reg( boxm2_opencl_cache_sptr& cacheA,
+boxm2_ocl_monte_carlo_reg::boxm2_ocl_monte_carlo_reg( boxm2_opencl_cache2_sptr& cacheA,
                                                     boxm2_stream_scene_cache& cacheB,
                                                     bocl_device_sptr device,
                                                     int nbins,double scale, int numsamples):  boxm2_ocl_reg_mutual_info(cacheA,cacheB,device,nbins, scale)

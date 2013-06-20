@@ -21,9 +21,7 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
 
     //write size, init_level, max_level, max_mb
     int numTrees = nums[0]*nums[1]*nums[2];
-    long size = numTrees*(sizeof(int) + sizeof(uchar16)) +
-                //numBuffers*(sizeof(ushort) + sizeof(ushort2)) +
-                sizeof(long) + 3*sizeof(int) + 4*sizeof(double) + 4*sizeof(int);
+    long size = numTrees*(sizeof(uchar16));
 
     //1. construct a dummy block byte stream manually
     char* bsize = new char[size];
@@ -31,20 +29,20 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
     int curr_byte = 0;
 
     //2.a write size, init_level, max_level, max_mb
-    vcl_memcpy(bsize,   &size, sizeof(long));
-    curr_byte += sizeof(long);
-    vcl_memcpy(bsize+curr_byte, &init_level, sizeof(int));
-    curr_byte += sizeof(int);
-    vcl_memcpy(bsize+curr_byte, &max_level, sizeof(int));
-    curr_byte += sizeof(int);
-    vcl_memcpy(bsize+curr_byte, &max_mb, sizeof(int));
-    curr_byte += sizeof(int);
+    //vcl_memcpy(bsize,   &size, sizeof(long));
+    //curr_byte += sizeof(long);
+    //vcl_memcpy(bsize+curr_byte, &init_level, sizeof(int));
+    //curr_byte += sizeof(int);
+    //vcl_memcpy(bsize+curr_byte, &max_level, sizeof(int));
+    //curr_byte += sizeof(int);
+    //vcl_memcpy(bsize+curr_byte, &max_mb, sizeof(int));
+    //curr_byte += sizeof(int);
 
     //2.b write dimension and buffer shape
-    vcl_memcpy(bsize+curr_byte, dims, 4 * sizeof(double));
+ /*   vcl_memcpy(bsize+curr_byte, dims, 4 * sizeof(double));
     curr_byte += 4 * sizeof(double);
     vcl_memcpy(bsize+curr_byte, nums, 4 * sizeof(int));
-    curr_byte += 4 * sizeof(int);
+    curr_byte += 4 * sizeof(int);*/
 
     //4. put some tree values in there
     //write in the buffer some values for the trees (each tree gets a 1 as the root)
@@ -234,10 +232,10 @@ vcl_string boxm2_test_utils::save_test_empty_scene()
 }
 
 
-vcl_string boxm2_test_utils::save_test_simple_scene()
+vcl_string boxm2_test_utils::save_test_simple_scene(vcl_string filename )
 {
     vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
-    vcl_string test_file = test_dir + "test.xml";
+    vcl_string test_file = test_dir + filename;
 
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
     for (int i=0; i<1; i++) {
@@ -253,7 +251,6 @@ vcl_string boxm2_test_utils::save_test_simple_scene()
             data.max_level_ = 4;
             data.max_mb_ = 400;
             data.p_init_ = .001;
-            data.version_ = 1;
 
             //push it into the map
             blocks[id] = data;
@@ -269,14 +266,15 @@ vcl_string boxm2_test_utils::save_test_simple_scene()
   scene.set_xml_path(test_file);
   scene.set_data_path(test_dir);
   scene.set_blocks(blocks);
+  scene.set_version(2);
   scene.save_scene();
 
   // ensure 8 test blocks and 8 data blocks are saved to disk
   vnl_random rand;
-  int nums[4] = { 2, 2, 2, 0 };
+  int nums[4] = { 2, 2, 1, 0 };
   double dims[4] = { 0.5, 0.5, 0.5, 0.0 };
-  int numBuffers = 2;
-  int treeLen    = 2*2;
+  int numBuffers = 1;
+  int treeLen    = 2*2*1;
   int init_level = 1;
   int max_level  = 4;
   int max_mb     = 400;
@@ -301,7 +299,7 @@ vcl_string boxm2_test_utils::save_test_simple_scene()
 
   // save the same random data block 8 times
   typedef vnl_vector_fixed<unsigned char, 8> uchar8;
-  const unsigned int array_size = 8; //roughly 20 megs for alpha
+  const unsigned int array_size = 4; //roughly 20 megs for alpha
   float * farray = new float[array_size];
   uchar8* carray = new uchar8[array_size];
   for (unsigned c=0; c<array_size; ++c) {

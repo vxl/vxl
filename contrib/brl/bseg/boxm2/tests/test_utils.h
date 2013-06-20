@@ -24,7 +24,7 @@ class boxm2_test_utils
     static void   save_test_scene_to_disk();
     static void   delete_test_scene_from_disk(vcl_string dir="");
 
-    static vcl_string   save_test_simple_scene();
+    static vcl_string   save_test_simple_scene(vcl_string filename= "test.xml");
     static vcl_string   save_test_empty_scene();
 
     static void  test_block_equivalence(boxm2_block& a, boxm2_block& b);

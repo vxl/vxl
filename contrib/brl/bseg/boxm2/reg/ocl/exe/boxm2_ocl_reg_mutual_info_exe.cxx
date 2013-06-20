@@ -6,7 +6,7 @@
 #include <boxm2/reg/ocl/boxm2_ocl_reg_mutual_info.h>
 #include <boxm2/reg/ocl/boxm2_ocl_monte_carlo_reg.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/io/boxm2_lru_cache.h>
+#include <boxm2/io/boxm2_lru_cache2.h>
 #include <boxm2/io/boxm2_stream_scene_cache.h>
 
 #include <vgl/vgl_vector_3d.h>
@@ -15,7 +15,7 @@
 #include <vcl_algorithm.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_device.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache2.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_powell.h>
@@ -63,8 +63,8 @@ int main(int argc,  char** argv)
   //create scene
   boxm2_scene_sptr sceneA = new boxm2_scene(sceneA_file());
   boxm2_scene_sptr sceneB = new boxm2_scene(sceneB_file());
-  boxm2_lru_cache::create(sceneA);
-  boxm2_cache_sptr cacheA =boxm2_cache::instance();
+  boxm2_lru_cache2::create(sceneA);
+  boxm2_cache2_sptr cacheA =boxm2_cache2::instance();
   bocl_manager_child_sptr mgr =bocl_manager_child::instance();
   if (mgr->gpus_.size()==0)
     return false;
@@ -74,7 +74,7 @@ int main(int argc,  char** argv)
   data_types.push_back("alpha");
   identifiers.push_back("");
   boxm2_stream_scene_cache cacheB( sceneB, data_types,identifiers);
-  boxm2_opencl_cache_sptr opencl_cacheA = new boxm2_opencl_cache(sceneA,device);
+  boxm2_opencl_cache2_sptr opencl_cacheA = new boxm2_opencl_cache2(device);
 
   vnl_vector<double> x(6,0.0);      vnl_vector<double> var(6,0.0);
   double q0=0,q1=0,q2=0,q3=0;       vgl_rotation_3d<double> r;
@@ -118,8 +118,6 @@ int main(int argc,  char** argv)
  
   vcl_cout<<"R "<< r <<vcl_endl;
   boxm2_ocl_monte_carlo_reg func(opencl_cacheA,cacheB,device,5,scale,numsamples);
-  //vcl_cout<<"Coimputing Minfo for the Original Position"<<vcl_endl;
-  //vcl_cout<<"M-INFO is " <<func.mutual_info(x)<<vcl_endl;
 
   func.init(x, var);
   vul_timer t;
@@ -209,12 +207,6 @@ int main(int argc,  char** argv)
   vil_save(mi,"e:/data/xy.tiff");
 #endif
 
-  //double data1[6]={121.801, 0, 0, 0.329284, -0.150984, -0.0498129};
-  //double data2[6]={21.915, -22.7307, 9.78759, 0.112995, -0.0382432, 0.28422};
-  //vnl_vector<double> x1(data1,6);
-  //vnl_vector<double> x2(data2,6);
-  //vcl_cout<<"Mutual Infor for x1"<<func.mutual_info(x1,2)<<vcl_endl;
-  //vcl_cout<<"Mutual Infor for x2"<<func.mutual_info(x2,2)<<vcl_endl;
-  //21.915 -22.7307 9.78759 0.112995 -0.0382432 0.28422
+
   return 0;
 }

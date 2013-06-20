@@ -2,6 +2,7 @@ ADD_EXECUTABLE( boxm2_test_all
   test_driver.cxx
   test_scene.cxx
   test_cache.cxx
+  test_cache2.cxx
   test_io.cxx
   test_wrappers.cxx
   test_data.cxx
@@ -13,6 +14,7 @@ TARGET_LINK_LIBRARIES( boxm2_test_all testlib boxm2_cpp_pro brdb vpgl_algo vpgl_
 
 ADD_TEST( boxm2_test_scene               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_scene  )
 ADD_TEST( boxm2_test_cache               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_cache  )
+ADD_TEST( boxm2_test_cache2               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_cache2  )
 ADD_TEST( boxm2_test_io                  ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_io  )
 ADD_TEST( boxm2_test_wrappers            ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_wrappers  )
 ADD_TEST( boxm2_test_data                ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_data  )

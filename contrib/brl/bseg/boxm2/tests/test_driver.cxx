@@ -2,6 +2,7 @@
 
 DECLARE( test_scene );
 DECLARE( test_cache );
+DECLARE( test_cache2 );
 DECLARE( test_io );
 DECLARE( test_wrappers );
 DECLARE( test_data );
@@ -13,6 +14,7 @@ void register_tests()
 {
   REGISTER( test_scene );
   REGISTER( test_cache );
+  REGISTER( test_cache2 );
   REGISTER( test_io );
   REGISTER( test_wrappers );
   REGISTER( test_data );

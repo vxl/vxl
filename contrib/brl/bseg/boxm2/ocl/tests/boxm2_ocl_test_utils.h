@@ -18,6 +18,14 @@ class boxm2_ocl_test_utils
 {
   
 public:
+    static char* construct_block_test_stream( int numBuffers,
+                                              int treeLen,
+                                              int* nums,
+                                              double* dims,
+                                              int init_level,
+                                              int max_level,
+                                              int max_mb );
+  static vcl_string   save_test_simple_scene(vcl_string filename= "test.xml");
   static void create_edge_scene(boxm2_scene* scene, float val1, float val2);
   static void print_alpha_scene(boxm2_scene* scene);
   template<class T> static void  fill_random(T *b, T *e, vnl_random &rng) ; 
