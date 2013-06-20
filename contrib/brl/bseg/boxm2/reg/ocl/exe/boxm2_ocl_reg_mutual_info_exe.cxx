@@ -111,7 +111,10 @@ int main(int argc,  char** argv)
     vcl_cout<<xform<<vcl_endl;
   }
 
+
   boxm2_ocl_hierarchical_reg func(opencl_cacheA,cacheB,device,5,scale,numsamples);
+
+
 
   func.init(x, var);
   vul_timer t;
