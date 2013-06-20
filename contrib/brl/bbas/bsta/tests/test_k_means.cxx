@@ -1,10 +1,10 @@
-// This is brl/bseg/sdet/tests/test_k_means.cxx
+// This is brl/bbas/bsta/tests/test_k_means.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
-#include <sdet/sdet_k_means.h>
+#include <bsta/bsta_k_means.h>
 void test_k_means()
 {
   vcl_vector<vnl_vector<double> > pts(8, vnl_vector<double>(2,0.0));
@@ -20,7 +20,7 @@ void test_k_means()
   unsigned k = 2;
   vcl_vector<vnl_vector<double> > centers;
   vcl_vector<unsigned> partition;
-  unsigned n_iter = sdet_k_means(pts, k, &centers, &partition);
+  unsigned n_iter = bsta_k_means(pts, k, &centers, &partition);
   vcl_cout << "After " << n_iter << " iterations the cluster centers are:\n";
   for(unsigned i = 0; i<centers.size(); ++i)
     vcl_cout << "c[" << i << "]:(" << centers[i][0] << ' ' 
@@ -40,7 +40,7 @@ void test_k_means()
   centers.clear();
   partition.clear();
   vcl_vector<double> weights(8, 1.0);
-  n_iter = sdet_k_means_weighted(pts, k, weights, &centers, &partition);
+  n_iter = bsta_k_means_weighted(pts, k, weights, &centers, &partition);
   vcl_cout << "\nweighted k_means\n";
   vcl_cout << "After " << n_iter << " iterations the cluster centers are:\n";
   for(unsigned i = 0; i<centers.size(); ++i)

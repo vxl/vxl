@@ -1,5 +1,5 @@
-// This is brl/bseg/sdet/sdet_k_means.cxx
-#include "sdet_k_means.h"
+// This is bsta/bsta_k_means.cxx
+#include "bsta_k_means.h"
 //:
 //  \file
 
@@ -27,14 +27,14 @@
 // if some of the centres start off outside the convex hull of the data set.
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
-unsigned sdet_k_means(vcl_vector<vnl_vector<double> > &data, unsigned& k,
+unsigned bsta_k_means(vcl_vector<vnl_vector<double> > &data, unsigned& k,
                      vcl_vector<vnl_vector<double> >* cluster_centres,
                      vcl_vector<unsigned> * partition //=0
                     )
 {
   unsigned n_data = data.size();
   if(n_data==0){
-    vcl_cout << "no data to process in sdet_k_means\n";
+    vcl_cout << "no data to process in bsta_k_means\n";
     return 0;
   }
   vcl_vector<vnl_vector<double> > & centres = *cluster_centres;
@@ -197,7 +197,7 @@ static inline void incXbyYv(vnl_vector<double> *X, const vnl_vector<double> &Y, 
 //
 // \par
 // The algorithm has been optimised
-unsigned sdet_k_means_weighted(vcl_vector<vnl_vector<double> > &data,
+unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<double> > &data,
                                unsigned& k,
                                const vcl_vector<double>& wts,
                                vcl_vector<vnl_vector<double> >* cluster_centres,
@@ -206,7 +206,7 @@ unsigned sdet_k_means_weighted(vcl_vector<vnl_vector<double> > &data,
 {
   unsigned n_data = data.size();
   if(n_data==0){
-    vcl_cout << "no data to process in sdet_k_means\n";
+    vcl_cout << "no data to process in bsta_k_means\n";
     return 0;
   }
   vcl_vector<vnl_vector<double> > & centres = *cluster_centres;
@@ -255,7 +255,7 @@ unsigned sdet_k_means_weighted(vcl_vector<vnl_vector<double> > &data,
 #else
         if (++didx<n_data)
         {
-          vcl_cerr << "ERROR: sdet_k_means_weighted, while initialising centres from data\n"
+          vcl_cerr << "ERROR: bsta_k_means_weighted, while initialising centres from data\n"
                    << "Not enough non-zero-weighted data\n";
           vcl_abort();
         }

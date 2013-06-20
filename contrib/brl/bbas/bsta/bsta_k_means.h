@@ -1,13 +1,13 @@
-// This is brl/bseg/sdet/sdet_k_means.h
-#ifndef sdet_k_means_h
-#define sdet_k_means_h
+// This is brl/bbas/bsta/bsta_k_means.h
+#ifndef bsta_k_means_h
+#define bsta_k_means_h
 //:
 // \file
 // \author Ian Scott
 // \date 18-May-2001
 // \brief K Means clustering functions
 // \verbatim
-// Copied to sdet to avoid cross linking, J.L. Mundy December 13, 2011
+// Copied to bsta to avoid cross linking, J.L. Mundy June 4, 2013
 // \endverbatim
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -31,7 +31,7 @@
 // if some of the centres start off outside the convex hull of the data set.
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
-unsigned sdet_k_means(vcl_vector<vnl_vector<double> > &data, unsigned& k,
+unsigned bsta_k_means(vcl_vector<vnl_vector<double> > &data, unsigned& k,
                      vcl_vector<vnl_vector<double> >* cluster_centres,
                      vcl_vector<unsigned> * partition =0 );
 
@@ -55,9 +55,9 @@ unsigned sdet_k_means(vcl_vector<vnl_vector<double> > &data, unsigned& k,
 // if some of the centres start off outside the convex hull of the data set.
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
-unsigned sdet_k_means_weighted(vcl_vector<vnl_vector<double> > &data,
+unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<double> > &data,
                                unsigned& k,
                               const vcl_vector<double>& wts,
                               vcl_vector<vnl_vector<double> >* cluster_centres,
                               vcl_vector<unsigned> * partition =0);
-#endif // sdet_k_means_h
+#endif // bsta_k_means_h
