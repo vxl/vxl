@@ -73,6 +73,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_export_cameras_to_nvm_process, "vpglExportCamerasToNvmProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_lvcs_process, "vpglCreateLVCSProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_local_to_global_coordinates_process, "vpglConvertLocalToGlobalCoordinatesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_local_rational_to_perspective_process, "vpglConvertLocalRationalToPerspectiveProcess");
   
 }
 
