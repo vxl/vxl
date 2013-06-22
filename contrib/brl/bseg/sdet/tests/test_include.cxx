@@ -26,7 +26,6 @@
 #include <sdet/sdet_image_mesh.h>
 #include <sdet/sdet_image_mesh_params.h>
 #include <sdet/sdet_img_edge.h>
-#include <sdet/sdet_k_means.h>
 #include <sdet/sdet_mrf_bp.h>
 #include <sdet/sdet_mrf_site_bp.h>
 #include <sdet/sdet_nms.h>
