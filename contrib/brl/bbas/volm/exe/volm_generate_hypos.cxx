@@ -405,7 +405,7 @@ int main(int argc,  char** argv)
       vpgl_utm u; int zone;  double x, y;
       u.transform(samples[j].first.y(), samples[j].first.x(), x, y, zone);
       if (zone != (int)utm_zone()) {
-        vcl_cout << samples[j].second.first << " is in zone: " << zone <<" not in " << utm_zone() << " skipping!\n";
+        vcl_cout << samples[j].second.first.first << " is in zone: " << zone <<" not in " << utm_zone() << " skipping!\n";
         continue;
       }
       vcl_cout << samples[j].second.first.first << " adding.. " << samples[j].first.y() << ", " << samples[j].first.x() << ' ';
