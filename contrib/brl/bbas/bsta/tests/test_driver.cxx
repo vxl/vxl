@@ -9,6 +9,7 @@ DECLARE( test_von_mises );
 DECLARE( test_mixture );
 DECLARE( test_bsta_histogram );
 DECLARE( test_k_medoid );
+DECLARE( test_k_means );
 DECLARE( test_otsu_threshold );
 DECLARE( test_sampler );
 DECLARE( test_beta );
@@ -26,6 +27,7 @@ register_tests()
   REGISTER( test_mixture );
   REGISTER( test_bsta_histogram );
   REGISTER( test_k_medoid );
+  REGISTER( test_k_means );
   REGISTER( test_otsu_threshold );
   REGISTER( test_sampler );
   REGISTER( test_beta );

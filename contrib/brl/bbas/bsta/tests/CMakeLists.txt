@@ -9,6 +9,7 @@ ADD_EXECUTABLE( bsta_test_all
   test_mixture.cxx
   test_bsta_histogram.cxx
   test_k_medoid.cxx
+  test_k_means.cxx
   test_otsu_threshold.cxx
   test_parzen_sphere.cxx
   test_weibull.cxx
@@ -32,6 +33,7 @@ ADD_TEST( bsta_test_von_mises               ${EXECUTABLE_OUTPUT_PATH}/bsta_test_
 ADD_TEST( bsta_test_mixture                 ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_mixture )
 ADD_TEST( bsta_test_histogram               ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_bsta_histogram )
 ADD_TEST( bsta_test_k_medoid                ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_k_medoid )
+ADD_TEST( bsta_test_k_means                ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_k_means )
 ADD_TEST( bsta_test_otsu_threshold          ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_otsu_threshold )
 ADD_TEST( bsta_test_sampler                 ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_sampler )
 ADD_TEST( bsta_test_beta                    ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_beta )
