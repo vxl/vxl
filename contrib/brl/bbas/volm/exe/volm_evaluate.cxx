@@ -49,14 +49,14 @@ int main(int argc,  char** argv)
   ifs.close();
   vcl_cout << " READ camera space, number of cams: " << camera_space->valid_indices().size() << vcl_endl;
 
-  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
+  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
   unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
   if (id() >= cnt) {
     vcl_cerr << "the file: " << gt_file() << " does not contain test id: " << id() << "!\n";
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   else
-    vcl_cout << "evaluating using gt id: " << id() << " with name: " << samples[id()].second.first << " type: " << samples[id()].second.second << " lat: " << samples[id()].first.y() << " lon: " << samples[id()].first.x() << " elev: " << samples[id()].first.z() << '\n';
+    vcl_cout << "evaluating using gt id: " << id() << " with name: " << samples[id()].second.first.first << " type: " << samples[id()].second.second << " lat: " << samples[id()].first.y() << " lon: " << samples[id()].first.x() << " elev: " << samples[id()].first.z() << '\n';
 
   vcl_cout << "\n==================================================================================================\n"
            << "\t\t  Evaluate output prob maps using pixel value threshold: " << threshold << '\n'

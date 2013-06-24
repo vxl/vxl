@@ -160,11 +160,21 @@ void volm_io_tools::load_lidar_imgs(vcl_string const& folder, vcl_vector<volm_im
 
 void volm_io_tools::load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)
 {
-  vcl_string in_dir = folder + "*.tif";
+  vcl_string in_dir = folder + "*.tif*";  // sometimes .tif is written .tiff 
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string filename = fn();
     volm_img_info info;
     load_lidar_img(filename, info, true);
+    infos.push_back(info);
+  }
+}
+void volm_io_tools::load_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool load_image_resource)
+{
+  vcl_string in_dir = folder + "*.tif*";  // sometimes .tif is written .tiff 
+  for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
+    vcl_string filename = fn();
+    volm_img_info info;
+    load_lidar_img(filename, info, load_image_resource);
     infos.push_back(info);
   }
 }

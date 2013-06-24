@@ -6,6 +6,7 @@
 
 #include <volm/desc/volm_desc_land.h>
 #include <volm/desc/volm_desc_land_indexer.h>
+#include <volm/desc/volm_desc_ex_2d_indexer.h>
 #include <volm/desc/volm_desc_matcher.h>
 #include <volm/desc/volm_desc_land_matcher.h>
 #include <volm/volm_tile.h>
@@ -31,6 +32,9 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> NLCD_folder("-nlcd", "NLCD folder to use for indexing", "");
   vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses", "");                      // index -- folder to read the hypos for each leaf
   vul_arg<int> tile_id("-tile", "id of the tile to be indexed", -1);
+  vul_arg<bool> index_2d("-ex_2d", "if exists index ex_2d using the classification maps that are passed", "");
+  vul_arg<vcl_string> maps_folder("-maps", "the classification map images where each pixel has the land id (type is unsigned char)", "");
+  vul_arg<vcl_string> radii_string("-rad", "e.g. pass 100_500_1000 for radii of 100, 500 and 1000 meter to construct descriptors at each location", "");
   
   vul_arg_parse(argc, argv);
   vcl_cout << "argc: " << argc << vcl_endl;
@@ -111,11 +115,42 @@ int main(int argc,  char** argv)
     return volm_io::SUCCESS;
 
   } else {  // run the indexer 
+    volm_desc_indexer_sptr indexer;
 
-    volm_desc_indexer_sptr indexer = new volm_desc_land_indexer(NLCD_folder(), out_folder());
+    if (index_2d()) {
+      if (radii_string().compare("") == 0 || maps_folder().compare("") == 0 || out_folder().compare("") == 0) {
+        vcl_cerr << "EXE_ARGUMENT_ERROR for -index_2d, need a radii_string, maps_folder and out_folder!\n";
+        vul_arg_display_usage_and_exit();
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+
+      vcl_vector<double> radii;
+      
+      char buf[1000];
+      for (unsigned kk = 0; kk < radii_string().size(); kk++)
+        buf[kk] = radii_string()[kk];
+
+      char *tok = vcl_strtok(buf, "_");;
+      while (tok != 0) {
+        vcl_stringstream tokstr(tok);
+        double radius;
+        tokstr >> radius;
+        radii.push_back(radius);
+        tok = vcl_strtok(NULL, "_"); // tokenize the remaining string
+      }
+      vcl_cout << " will index 2d maps using radii: ";
+      for (unsigned i = 0; i < radii.size(); i++) {
+        vcl_cout << radii[i] << " ";
+      }
+      vcl_cout << '\n';
+
+      indexer = new volm_desc_ex_2d_indexer(maps_folder(), out_folder(), radii);  
+    } else {
+      indexer = new volm_desc_land_indexer(NLCD_folder(), out_folder());
+    }
+
     if (!indexer->load_tile_hypos(geo_hypo_folder(), tile_id()))
       return volm_io::EXE_ARGUMENT_ERROR;
-
     indexer->index(1.0f); // buffer capacity is 1 gigabyte // saves the leaves of the tile at the end
   
     return volm_io::SUCCESS;

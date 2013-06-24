@@ -31,6 +31,11 @@ public:
   //: Default constructor
   volm_desc_ex_land_only() {}
 
+  //: simple constructor that only sets the number of bins
+  volm_desc_ex_land_only(unsigned ndists, unsigned nlands, vcl_vector<double>& radius) : 
+    ndists_(ndists), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); }
+
+
   //: Constructor from depth map scene
   volm_desc_ex_land_only(depth_map_scene_sptr const& dms,
                          vcl_vector<double> const& radius,

@@ -68,6 +68,10 @@ public:
                unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                unsigned char const& initial_mag = 0);
 
+  //: simple constructor that only sets the number of bins
+  volm_desc_ex(unsigned ndists, unsigned norients, unsigned nlands, vcl_vector<double>& radius) : 
+    ndists_(ndists), norients_(norients), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); }
+
   //: destructor
   ~volm_desc_ex() {}
 

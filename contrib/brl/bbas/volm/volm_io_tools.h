@@ -53,6 +53,7 @@ public:
   static void load_lidar_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
 
   static void load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
+  static void load_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool load_resource = false);
 
   static bool get_location_nlcd(vcl_vector<volm_img_info>& infos, double lat, double lon, double elev, unsigned char& label);
 
