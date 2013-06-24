@@ -29,7 +29,7 @@ static void test_ex_matcher()
   dis.close();
 
   // fetch the ground truth location
-  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
+  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
   unsigned int cnt = volm_io::read_gt_file(gt_file, samples);
   vgl_point_3d<double> gt_loc;
   gt_loc = samples[id].first;

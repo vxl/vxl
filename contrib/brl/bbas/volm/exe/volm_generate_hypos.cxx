@@ -398,7 +398,7 @@ int main(int argc,  char** argv)
       vcl_cout << " added p1a_test1_34-GROUNDTRUTH\n";
 #endif
 
-    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
+    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
     int cnt = volm_io::read_gt_file(add_gt(), samples);
     vcl_cout << " adding " << cnt <<" gt locs!\n";
     for (int j = 0; j < cnt; ++j) {
@@ -408,7 +408,7 @@ int main(int argc,  char** argv)
         vcl_cout << samples[j].second.first << " is in zone: " << zone <<" not in " << utm_zone() << " skipping!\n";
         continue;
       }
-      vcl_cout << samples[j].second.first << " adding.. " << samples[j].first.y() << ", " << samples[j].first.x() << ' ';
+      vcl_cout << samples[j].second.first.first << " adding.. " << samples[j].first.y() << ", " << samples[j].first.x() << ' ';
 
       // find which box contains it
       bool added = false;
