@@ -9,7 +9,7 @@
 
 //UNIX specific includes
 #include <aio.h>     //for aio_read
-//#include <fcntl.h>   // for open (not really necessary
+#include <fcntl.h>   // needed for O_RDONLY flag
 #include <unistd.h> // for close
 #include <strings.h> //includes bzero
 
