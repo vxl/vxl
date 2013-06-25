@@ -38,7 +38,7 @@ class vidl_v4l2_control
     static vidl_v4l2_control * new_control(const v4l2_queryctrl& ctr, int f);
     //: Type of control
     // \return type as indicated in v4l2 specification
-    v4l2_ctrl_type type() const { return ctrl_.type; }
+    v4l2_ctrl_type type() const { return (v4l2_ctrl_type)ctrl_.type; }
     //: Name of control
     // \return name the driver assign to the control
     vcl_string name() const { return  (const char *) ctrl_.name; }
