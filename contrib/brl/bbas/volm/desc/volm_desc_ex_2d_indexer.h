@@ -54,7 +54,9 @@ public:
   vcl_vector<unsigned> current_leaf_maps_;  // cash the maps of the current leaf
   double largest_rad_;
   double largest_rad_seconds_;
-  
+
+  vcl_map<unsigned, vil_image_view_base_sptr > lon_imgs;  // compute these for the classification maps faster access
+  vcl_map<unsigned, vil_image_view_base_sptr > lat_imgs;
 };
 
 #endif  //_VOLM_DESC_EX_2D_INDEXER_H

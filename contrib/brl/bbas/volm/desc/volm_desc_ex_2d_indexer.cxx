@@ -43,9 +43,27 @@ bool volm_desc_ex_2d_indexer::get_next()
         classification_maps_[i].img_r = vil_load(classification_maps_[i].img_name.c_str());
         classification_maps_[i].ni = classification_maps_[i].img_r->ni(); classification_maps_[i].nj = classification_maps_[i].img_r->nj(); 
       }
+      // compute the lon and lat images (if not already computed!)
+      vcl_map<unsigned, vil_image_view_base_sptr >::iterator lon_it = lon_imgs.find(i);
+      if (lon_it == lon_imgs.end()) {
+        vil_image_view<double> lon_img(classification_maps_[i].ni, classification_maps_[i].nj);
+        vil_image_view<double> lat_img(classification_maps_[i].ni, classification_maps_[i].nj);
+        for (unsigned ii = 0; ii < lon_img.ni(); ii++)
+          for (unsigned jj = 0; jj < lon_img.nj(); jj++) {
+            double llon, llat;
+            classification_maps_[i].cam->img_to_global(ii, jj, llon, llat);  // WARNING: W is hard coded in vpgl_geo_camera so use -lon in the following lvcs method!!!!! 
+            lon_img(ii, jj) = -llon;
+            lat_img(ii, jj) = llat;
+          }
+        vil_image_view_base_sptr lon_img_sptr = new vil_image_view<double>(lon_img);
+        vil_image_view_base_sptr lat_img_sptr = new vil_image_view<double>(lat_img);
+        lon_imgs[i] = lon_img_sptr;
+        lat_imgs[i] = lat_img_sptr;
+      }
     }
   }
   vcl_cout << "!!!!!!! there are: " << current_leaf_maps_.size() << " classification maps that intersect the current leaf!\n";
+  vcl_cout.flush();
   return true;
 }
 
@@ -71,7 +89,6 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
     vpgl_geo_camera* cam = classification_maps_[current_leaf_maps_[k]].cam;
     int ni = (int)classification_maps_[current_leaf_maps_[k]].ni;
     int nj = (int)classification_maps_[current_leaf_maps_[k]].nj;
-    vcl_vector<vcl_pair<int, int> > img_corners;
     bool at_least_one = false;
     int min_i = ni-1, min_j = nj-1, max_i = 0, max_j = 0;
     for (unsigned m = 0; m < corners.size(); m++) {
@@ -80,6 +97,8 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
       int j = (int)vcl_floor(v + 0.5);
       if (i >= 0 && j >= 0 && i < ni && j < nj)
         at_least_one = true;
+      if (i < 0) i = 0; if (j < 0) j = 0; 
+      if (i >= ni) i = ni-1; if (j >= nj) j = nj-1;
       min_i = min_i > i ? i : min_i; 
       max_i = max_i < i ? i : max_i;
       min_j = min_j > j ? j : min_j;
@@ -100,14 +119,17 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
     int min_j = it->second[0].second;
     int max_i = it->second[1].first;
     int max_j = it->second[1].second;
+
+    vil_image_view<double> lon_img(lon_imgs[it->first]);
+    vil_image_view<double> lat_img(lat_imgs[it->first]);
     
-    // this is stupid to go over all the image, but for now it makes sure we update the histogram with every pixel within largest_radius to lat, lon
     for (unsigned i = min_i; i <= max_i; i++)
       for (unsigned j = min_j; j <= max_j; j++) {
-        double llon, llat;
-        cam->img_to_global(i, j, llon, llat);  // WARNING: W is hard coded in vpgl_geo_camera so use -lon in the following lvcs method!!!!! 
+        //double llon, llat;
+        //cam->img_to_global(i, j, llon, llat);  // WARNING: W is hard coded in vpgl_geo_camera so use -lon in the following lvcs method!!!!! 
         double lx, ly, lz;
-        lvcs->global_to_local(-llon, llat, elev, vpgl_lvcs::wgs84, lx, ly, lz);
+        //lvcs->global_to_local(-llon, llat, elev, vpgl_lvcs::wgs84, lx, ly, lz);
+        lvcs->global_to_local(lon_img(i,j), lat_img(i,j), elev, vpgl_lvcs::wgs84, lx, ly, lz); 
         double dist = vcl_sqrt(lx*lx + ly*ly); // local coords are in meters so get the dist in meters directly
         
         if (dist > largest_rad_)  // ignore everything outside
@@ -118,6 +140,8 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
   }
   
   desc->get_char_array(values);
+  vcl_cout << '.';
+  vcl_cout.flush();
   return true;
 }
 
