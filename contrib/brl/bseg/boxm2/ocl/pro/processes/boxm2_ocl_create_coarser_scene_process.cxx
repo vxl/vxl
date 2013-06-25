@@ -50,7 +50,7 @@ namespace boxm2_ocl_create_coarser_scene_process_globals
 bool copy_fine_to_coarse(boxm2_block & blk,
                          boxm2_block_metadata & mdata,
                          boxm2_data_base * alpha_base ,
-                         boxm2_cache_sptr& cache)
+                         boxm2_cache_sptr cache)
 {
     boxm2_scene_sptr scene = cache->get_scene();
     vgl_box_3d<int> bbox = scene->bounding_box_blk_ids();
