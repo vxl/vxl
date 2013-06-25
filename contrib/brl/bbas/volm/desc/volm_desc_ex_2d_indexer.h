@@ -53,6 +53,7 @@ public:
   unsigned layer_size_;
   vcl_vector<unsigned> current_leaf_maps_;  // cash the maps of the current leaf
   double largest_rad_;
+  double largest_rad_seconds_;
   
 };
 

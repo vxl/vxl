@@ -21,7 +21,7 @@ volm_desc_ex_2d_indexer(vcl_string const& input_folder,
   ndists_ = (unsigned)radius.size() + 1;
   layer_size_ = ndists_ * nlands_;
   largest_rad_ = radius_[radius_.size()-1];
-
+  largest_rad_seconds_ = ((largest_rad_ / 30.0) + 1.0) * (1.0 / 3600.0);  // 1 arcseconds is ~ 30 meter, 1 arcseconds is 1/3600 seconds
 }
 
 // 
@@ -33,8 +33,7 @@ bool volm_desc_ex_2d_indexer::get_next()
                             leaves_[current_leaf_id_]->extent_.min_y(), leaves_[current_leaf_id_]->extent_.max_y());
 
   // enlarge this box with largest_rad_ to make sure we get all possible images that would be within that distance from any hypo in this leaf
-  double seconds = ((largest_rad_ / 30.0) + 1.0) * (1.0 / 3600.0);  // 1 arcseconds is ~ 30 meter, 1 arcseconds is 1/3600 seconds
-  extent.expand_about_centroid(seconds);
+  extent.expand_about_centroid(largest_rad_seconds_);
 
   for (unsigned i = 0; i < classification_maps_.size(); i++) {
     if (vgl_intersection(classification_maps_[i].bbox, extent).area() > 0) {
@@ -58,13 +57,53 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
   // use location to create a local vertical coordinate system, to get distances in meters
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
+  // find the four corners
+  vcl_vector<vcl_pair<double, double> > corners;
+  corners.push_back(vcl_pair<double, double>(lon-largest_rad_seconds_, lat-largest_rad_seconds_));
+  corners.push_back(vcl_pair<double, double>(lon+largest_rad_seconds_, lat-largest_rad_seconds_));
+  corners.push_back(vcl_pair<double, double>(lon+largest_rad_seconds_, lat+largest_rad_seconds_));
+  corners.push_back(vcl_pair<double, double>(lon-largest_rad_seconds_, lat+largest_rad_seconds_));
+
+  // find out which images need to be considered and the corners in pixels in each image
+  vcl_map<unsigned, vcl_vector<vcl_pair<int, int> > > imgs_and_corners;
+  double u,v;
   for (unsigned k = 0; k < current_leaf_maps_.size(); k++) {
-    vil_image_view<unsigned char> map(classification_maps_[current_leaf_maps_[k]].img_r);
     vpgl_geo_camera* cam = classification_maps_[current_leaf_maps_[k]].cam;
+    int ni = (int)classification_maps_[current_leaf_maps_[k]].ni;
+    int nj = (int)classification_maps_[current_leaf_maps_[k]].nj;
+    vcl_vector<vcl_pair<int, int> > img_corners;
+    bool at_least_one = false;
+    int min_i = ni-1, min_j = nj-1, max_i = 0, max_j = 0;
+    for (unsigned m = 0; m < corners.size(); m++) {
+      cam->global_to_img(-corners[m].first, corners[m].second, 0.0, u, v); // WARNING: W is hard coded in vpgl_geo_camera so use -lon!!!!
+      int i = (int)vcl_floor(u + 0.5);
+      int j = (int)vcl_floor(v + 0.5);
+      if (i >= 0 && j >= 0 && i < ni && j < nj)
+        at_least_one = true;
+      min_i = min_i > i ? i : min_i; 
+      max_i = max_i < i ? i : max_i;
+      min_j = min_j > j ? j : min_j;
+      max_j = max_j < j ? j : max_j;
+    }
+    if (at_least_one) {
+      vcl_vector<vcl_pair<int, int> > tmp;
+      tmp.push_back(vcl_pair<int, int>(min_i, min_j));
+      tmp.push_back(vcl_pair<int, int>(max_i, max_j));
+      imgs_and_corners[current_leaf_maps_[k]] = tmp;
+    }
+  }
+
+  for (vcl_map<unsigned, vcl_vector<vcl_pair<int, int> > >::iterator it = imgs_and_corners.begin(); it != imgs_and_corners.end(); it++) {
+    vil_image_view<unsigned char> map(classification_maps_[it->first].img_r);
+    vpgl_geo_camera* cam = classification_maps_[it->first].cam;
+    int min_i = it->second[0].first;
+    int min_j = it->second[0].second;
+    int max_i = it->second[1].first;
+    int max_j = it->second[1].second;
     
     // this is stupid to go over all the image, but for now it makes sure we update the histogram with every pixel within largest_radius to lat, lon
-    for (unsigned i = 0; i < map.ni(); i++)
-      for (unsigned j = 0; j < map.nj(); j++) {
+    for (unsigned i = min_i; i <= max_i; i++)
+      for (unsigned j = min_j; j <= max_j; j++) {
         double llon, llat;
         cam->img_to_global(i, j, llon, llat);  // WARNING: W is hard coded in vpgl_geo_camera so use -lon in the following lvcs method!!!!! 
         double lx, ly, lz;
