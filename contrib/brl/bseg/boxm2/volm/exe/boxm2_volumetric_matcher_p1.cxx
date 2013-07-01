@@ -349,7 +349,8 @@ int main(int argc, char** argv)
 
   // output the ground truth score for all cameras
   if (gt_id() != 0 && gt_id() < 100) {
-    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
+    //vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
+    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
     unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
     // obtain the zone_id and tile_id from gt_locs
     int gt_utm_id;
