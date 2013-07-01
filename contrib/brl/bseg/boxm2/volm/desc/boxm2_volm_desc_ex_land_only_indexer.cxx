@@ -38,7 +38,7 @@ volm_desc_ex_land_only_indexer::volm_desc_ex_land_only_indexer(vcl_string const&
 
 bool volm_desc_ex_land_only_indexer::write_params_file()
 {
-    volm_buffered_index_params params;
+  volm_buffered_index_params params;
   params.radius = radius_;
   params.layer_size = layer_size_;
   params.nlands = nlands_;

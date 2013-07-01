@@ -145,3 +145,15 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
   return true;
 }
 
+bool volm_desc_ex_2d_indexer::write_params_file()
+{
+  volm_buffered_index_params params;
+  params.radius = radius_;
+  params.layer_size = layer_size_;
+  params.nlands = nlands_;
+  params.norients = 0;
+  if (!params.write_ex_param_file(out_file_name_pre_.str()))
+    return false;
+  return true;
+}
+

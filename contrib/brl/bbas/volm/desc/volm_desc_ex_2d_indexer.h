@@ -20,6 +20,7 @@
 
 #include "volm_desc_indexer.h"
 #include "volm_desc_ex_land_only.h"
+#include <volm/volm_buffered_index.h>
 
 #include <volm/volm_io_tools.h>
 
@@ -43,6 +44,9 @@ public:
   virtual unsigned layer_size() { return layer_size_; }
 
   virtual vcl_string get_index_type_str() { return volm_desc_ex_2d_indexer::name_; }
+
+  //: generate parameter files
+  virtual bool write_params_file();
 
 public:
   vcl_vector<volm_img_info> classification_maps_;  // unsigned char images with id of the land types, the id in the value of entries in volm_label_table
