@@ -20,9 +20,6 @@
 #include <vnl/algo/vnl_svd_fixed.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 //#define VRML_DEBUG
-void bsta_vrml_header(vcl_ostream& os){
-  os << "#VRML V2.0 utf8\n";
-}
 //: display bsta_gaussian_full to the stream as vrml. If single = true
 // then a vmrl header is written to form a complete display string.
 template<class T>
@@ -59,7 +56,8 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
   vcl_cout << "recon rot \n" << rot_temp.as_matrix() << '\n';
   vcl_cout << "Axis, angle " << axis << ' ' << ang << '\n';
 #endif
-  if(single) bsta_vrml_header(os);
+  if(single) 
+      os << "#VRML V2.0 utf8\n";
   os << "Transform {\n";
   os << " translation " << mean[0] << ' ' << mean[1] << ' ' << mean[2] << '\n';
   os << " children [\n";
@@ -96,7 +94,7 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_mixture< bsta_gaussian_full<T, 3> >
       vcl_cout << "out stream is not open\n";
       return false;
     }
-  bsta_vrml_header(os);
+  os << "#VRML V2.0 utf8\n";
   unsigned n_comp = mix.num_components();
   for(unsigned i = 0; i<n_comp; ++i){
     const bsta_gaussian_full<T, 3>& comp = mix.distribution(i);
