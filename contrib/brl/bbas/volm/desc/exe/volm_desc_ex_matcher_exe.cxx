@@ -6,6 +6,7 @@
 
 #include <volm/desc/volm_desc_ex_matcher.h>
 #include <volm/desc/volm_desc_ex_land_only_matcher.h>
+#include <volm/desc/volm_desc_ex_2d_matcher.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_buffered_index.h>
@@ -28,6 +29,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> out_folder("-out", "output folder for the query image", "");
   vul_arg<float> buffer_capacity("-buff", "buffer size used for loading indices", 2.0f);
   vul_arg<bool> is_land_only("-land", "option to execute matcher using ex_land_only descriptor", false);
+  vul_arg<bool> is_ex_2d("-ex2d", "option to execute 2D existance matcher", false);
   // post processing related
   vul_arg<vcl_string> gt_file("-gt", "ground truth files", "");
   vul_arg<float> kl("-kl", "parameter for nonlinear score scaling", 200.0f);
@@ -118,6 +120,9 @@ int main(int argc, char** argv)
     volm_desc_matcher_sptr ex_matcher;
     if (is_land_only()) {
       ex_matcher = new volm_desc_ex_land_only_matcher(dms, params.radius, params.nlands, 0);
+    }
+    else if (is_ex_2d()) {
+      ex_matcher = new volm_desc_ex_2d_matcher(dms, params.radius, params.nlands, 0);
     }
     else {
       ex_matcher = new volm_desc_ex_matcher(dms, params.radius, params.norients, params.nlands, 0);

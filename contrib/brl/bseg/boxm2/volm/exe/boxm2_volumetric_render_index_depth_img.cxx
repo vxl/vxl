@@ -136,11 +136,11 @@ int main(int argc,  char** argv)
            << zone_id << " and the utm coord = " << x << ", " << y << '\n';
 
   vcl_stringstream geo_hypo_ss;
-  geo_hypo_ss << geo_hypo_folder_pre() << zone_id << "_inc_0.99_nh_1000/";
+  geo_hypo_ss << geo_hypo_folder_pre() << zone_id << "_inc_0.99_nh_200/";
   vcl_string geo_hypo_folder = geo_hypo_ss.str();
 
   vcl_stringstream geo_index_ss;
-  geo_index_ss << geo_index_folder_pre() << zone_id << "_inc_0.99_nh_1000_pa_" << point_angle() << '/';
+  geo_index_ss << geo_index_folder_pre() << zone_id << "_inc_0.99_nh_200_pa_" << point_angle() << '/';
   vcl_string geo_index_folder = geo_index_ss.str();
 
   vcl_cerr << " geo_hypo_folder = " << geo_hypo_folder << '\n'

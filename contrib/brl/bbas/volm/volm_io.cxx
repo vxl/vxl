@@ -554,6 +554,8 @@ unsigned char volm_io::scale_score_to_1_255(float threshold, float score)
 {
   if (score < threshold)
     return (unsigned char) ((score/threshold)*127);
+  else if ( (score-1)*(score-1)<1E-8 )
+    return (unsigned char) 255;
   else
     return (unsigned char) (((score-threshold)/(1-threshold))*128 + 127);
 }

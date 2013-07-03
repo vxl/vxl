@@ -18,6 +18,7 @@ SET(volm_desc_sources
   volm_desc_ex_matcher.h                  volm_desc_ex_matcher.cxx
   volm_desc_ex_land_only_matcher.h        volm_desc_ex_land_only_matcher.cxx
   volm_desc_ex_2d_indexer.h               volm_desc_ex_2d_indexer.cxx
+  volm_desc_ex_2d_matcher.h               volm_desc_ex_2d_matcher.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_desc_sources)
