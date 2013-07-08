@@ -17,6 +17,7 @@
 #include <vnl/vnl_math.h>
 
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 
 int main(int argc,  char** argv)
 {
