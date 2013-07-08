@@ -5,6 +5,7 @@
 #include <vnl/vnl_random.h>
 #include <vcl_algorithm.h>
 
+//#define COARSE 
 boxm2_ocl_monte_carlo_reg::boxm2_ocl_monte_carlo_reg( boxm2_opencl_cache2_sptr& cacheA,
                                                     boxm2_stream_scene_cache& cacheB,
                                                     bocl_device_sptr device,
@@ -51,7 +52,6 @@ bool boxm2_ocl_monte_carlo_reg::init(vnl_vector<double> const& mu, vnl_vector<do
     vnl_random rand;
     for(unsigned i = 0 ; i < numsamples_; i++)
     {
-        
         vnl_vector<double> sample( mu_.size() ) ;
         for(unsigned j = 0 ; j < sample.size(); j++)
             sample[j] = mu_[j] + (2*rand.drand32()-1)*cov_[j]; 
@@ -84,7 +84,6 @@ bool boxm2_ocl_monte_carlo_reg::sample_from_cdf(int depth)
             continue;
         }
         vcl_cout<<"Particle #"<<i<<" "<<mis[i]<<" "<<pdf_[i].second<<" "<<cdf_[i].second<<" ";
-
         for(unsigned j = 0; j<cdf_.size(); j++)
         {
             if(cdf_[j].second > particle )
@@ -97,7 +96,6 @@ bool boxm2_ocl_monte_carlo_reg::sample_from_cdf(int depth)
                     k++;
                 }
                 double minfo = this->mutual_info(sample, depth) ;
-
                 vcl_cout<<particle<<" "<<mis[j]<<" "<<minfo<<" "<<sample-mu_;
                 if(minfo > mis_new[j])
                 {
@@ -110,17 +108,13 @@ bool boxm2_ocl_monte_carlo_reg::sample_from_cdf(int depth)
                     {
                         samples_[i] = samples_[j] ;
                         mis_new[i] = mis[j] ;
-                        
-                        // vcl_cout<<"+";
                     }
                 }
                 vcl_cout<<" "<<mis_new[i]<<vcl_endl;
-
                 break;
             }
         }
     }
-
     mis = mis_new;
     return true;
 }
@@ -128,8 +122,8 @@ bool boxm2_ocl_monte_carlo_reg::exhaustive(int depth )
 {
     samples_.clear();
 
-    //unsigned int numsamples = 64; //4096
-    unsigned int numsamples = 4096;
+    unsigned int numsamples = 64; //4096
+    //unsigned int numsamples = 4096;
     mis.clear();
     vcl_map<double,vnl_vector<double> > samples_sorted;
     for(unsigned i = 0 ; i < numsamples; i++)
@@ -137,12 +131,16 @@ bool boxm2_ocl_monte_carlo_reg::exhaustive(int depth )
         vnl_vector<double> sample( mu_.size() ) ;
         for(unsigned k = 0 ; k < sample.size(); k++)
         {
+#ifdef COARSE
             unsigned int var = i >> (2*k);
             var = var & 3;
             double offset = (0.5*(double)var-0.75)*cov_[k];
-            //unsigned int var = i >> (k);
-            //var = var & 1;
-            //double offset = ((double)var-0.5)*cov_[k];
+
+#else 
+            unsigned int var = i >> (k);
+            var = var & 1;
+            double offset = ((double)var-0.5)*cov_[k];
+#endif
             sample[k] = mu_[k] + offset; 
         }
         vcl_cout<<sample-mu_<<" "<<i<<vcl_endl;
@@ -156,7 +154,8 @@ bool boxm2_ocl_monte_carlo_reg::exhaustive(int depth )
 
     //: Pick n1 best samples ( 16 in this case )
     int count =0;
-    int n1 = 16;
+    //int n1 = 16;
+    int n1 = 4;
     numsamples = 64;
     mis.clear();
     samples_.clear();
@@ -177,7 +176,6 @@ bool boxm2_ocl_monte_carlo_reg::exhaustive(int depth )
             vcl_cout<<"\nIteration 2 "<<sample-mu_<<" "<<minfo<<" "<<i+count*numsamples<<" "<<iter->first<<" "<<iter->second-mu_<<vcl_endl;
             mis.push_back(minfo);
             samples_.push_back(sample);
-            //samples_sorted[minfo] = sample;
         }
 
     }

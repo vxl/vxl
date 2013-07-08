@@ -13,6 +13,7 @@ SET(boxm2_ocl_reg_sources
     boxm2_ocl_reg_depth_map_to_vol.h  boxm2_ocl_reg_depth_map_to_vol.cxx
     boxm2_ocl_reg_depth_map_to_vol2.h boxm2_ocl_reg_depth_map_to_vol2.cxx
 	boxm2_ocl_monte_carlo_reg.h		  boxm2_ocl_monte_carlo_reg.cxx
+    boxm2_ocl_hierarchical_reg.h      boxm2_ocl_hierarchical_reg.cxx   
    )
 
 ADD_LIBRARY(boxm2_ocl_reg  ${boxm2_ocl_reg_sources})

@@ -33,7 +33,7 @@ __kernel void update_parents_alpha( __constant RenderSceneInfo  * linfo,
 
   //if there are no children
   if (tree_bit_at(local_tree,0)==0)
-    return 0;
+    return ;
   //: traversing the tree bottom-up
   for (int i=584; i> 0; ) {
       int pi = (i-1)>>3;           //Bit_index of parent bit

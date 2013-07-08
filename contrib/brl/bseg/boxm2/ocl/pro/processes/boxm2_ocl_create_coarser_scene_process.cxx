@@ -61,6 +61,8 @@ bool copy_fine_to_coarse(boxm2_block & blk,
                                                                     alpha_base->buffer_length(),
                                                                     alpha_base->block_id());
 
+
+
     boxm2_block * blksB = cache->get_block(mdata.id_);
     boxm2_data_base * alpha_buffer_B = cache->get_data_base(mdata.id_,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data_B=new boxm2_data<BOXM2_ALPHA>(alpha_buffer_B->data_buffer(),

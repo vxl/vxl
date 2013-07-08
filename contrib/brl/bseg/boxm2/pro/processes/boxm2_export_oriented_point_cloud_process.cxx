@@ -149,11 +149,14 @@ bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
     boxm2_data_base * exp = cache->get_data_base(id,boxm2_data_traits<BOXM2_EXPECTATION>::prefix(), data_buff_length * expTypeSize);
     boxm2_data_base * nobs = cache->get_data_base(id,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(), data_buff_length * nobsTypeSize);
     boxm2_data_base * ray_dir_sum = cache->get_data_base(id,boxm2_data_traits<BOXM2_RAY_DIR>::prefix(), data_buff_length * raydirTypeSize);
+    boxm2_data_base * ray_dir_weighted_sum = cache->get_data_base(id,boxm2_data_traits<BOXM2_RAY_DIR>::prefix(), data_buff_length * raydirTypeSize);
 
     
     boxm2_block_metadata data = blk_iter->second;
     if (output_filename.substr(output_filename.find_last_of(".") + 1) == "xyz")
       boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(scene, data, blk, alpha, vis, vis_sum, exp, nobs, points,normals, ray_dir_sum, myfile, output_aux, vis_t, nmag_t, prob_t, exp_t, bb_expanded);
+ /*   else if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
+      boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(scene, data, blk, alpha, mog, vis,  exp, nobs, points,normals, ray_dir_sum , ray_dir_weighted_sum, myfile, output_aux, vis_t, nmag_t, prob_t, exp_t, bb_expanded, num_vertices);*/
     else if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
       boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(scene, data, blk, alpha, vis, points,normals, myfile, output_aux, vis_t, nmag_t, prob_t,  bb_expanded, num_vertices);
     else

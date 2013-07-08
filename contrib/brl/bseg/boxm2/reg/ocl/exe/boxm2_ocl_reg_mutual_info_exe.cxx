@@ -4,7 +4,7 @@
 // \author Andy Miller
 // \date 13-Oct-2011
 #include <boxm2/reg/ocl/boxm2_ocl_reg_mutual_info.h>
-#include <boxm2/reg/ocl/boxm2_ocl_monte_carlo_reg.h>
+#include <boxm2/reg/ocl/boxm2_ocl_hierarchical_reg.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_lru_cache2.h>
 #include <boxm2/io/boxm2_stream_scene_cache.h>
@@ -68,6 +68,7 @@ int main(int argc,  char** argv)
   bocl_manager_child_sptr mgr =bocl_manager_child::instance();
   if (mgr->gpus_.size()==0)
     return false;
+
   bocl_device_sptr  device = mgr->cpus_[0];
   vcl_vector<vcl_string> data_types;
   vcl_vector<vcl_string> identifiers;
@@ -78,8 +79,8 @@ int main(int argc,  char** argv)
 
   vnl_vector<double> x(6,0.0);      vnl_vector<double> var(6,0.0);
   double q0=0,q1=0,q2=0,q3=0;       vgl_rotation_3d<double> r;
-  double scale = 1.0;
-  int numsamples = 20;
+  double scale = 1.0;               int numsamples = 20;
+  
   if(xformAtoB_file() != "" )
   {
     vcl_ifstream ifile( xformAtoB_file().c_str() ) ;
@@ -88,50 +89,42 @@ int main(int argc,  char** argv)
         vcl_cout<<"Error: Cannot open" <<xformAtoB_file()<<vcl_endl;
         return -1;  
     }
-    //: scale 
-    //ifile>>scale;
-    //ifile>>q0>>q1>>q2>>q3;
-    //ifile>>x[0]>>x[1]>>x[2];
-    //vgl_rotation_3d<double> r1(vnl_quaternion<double>(q0,q1,q2,q3));
-
     ifile >> scale ;
     vnl_matrix<double> mat(4,4);
     ifile >> mat;
-
     mat = mat/scale;
     
     vnl_matrix<double> matr(3,3);     mat.extract(matr);
     vgl_rotation_3d<double> r1(matr);
 
-    x[0] = mat[0][3];               var[0] = 0.5;            
-    x[1] = mat[1][3];               var[1] = 0.5;
-    x[2] = mat[2][3];               var[2] = 0.5;
-    x[3] = r1.as_rodrigues()[0];    var[3] = 1.0;
-    x[4] = r1.as_rodrigues()[1];    var[4] = 1.0;
-    x[5] = r1.as_rodrigues()[2];    var[5] = 1.0;
+    x[0] = mat[0][3];              var[0] = 1.0/8;  // var[0] = 1.0/8;     //   BH    
+    x[1] = mat[1][3];              var[1] = 1.0/8;  // var[1] = 1.0/8;     //   BH
+    x[2] = mat[2][3];              var[2] = 1.0/8;  // var[2] = 1.0/8;     //   BH
+    x[3] = r1.as_rodrigues()[0];   var[3] = 0.3/8;  // var[3] = 0.3/8;     //   BH
+    x[4] = r1.as_rodrigues()[1];   var[4] = 0.3/8;  // var[4] = 0.3/8;     //   BH
+    x[5] = r1.as_rodrigues()[2];   var[5] = 0.3/8;  // var[5] = 0.3/8;     //   BH
+
     r= r1;  
  
     vnl_matrix<double> xform;
     convert_params_to_xform(x+var,scale,xform);
     vcl_cout<<xform<<vcl_endl;
   }
- 
-  vcl_cout<<"R "<< r <<vcl_endl;
-  boxm2_ocl_monte_carlo_reg func(opencl_cacheA,cacheB,device,5,scale,numsamples);
+
+  boxm2_ocl_hierarchical_reg func(opencl_cacheA,cacheB,device,5,scale,numsamples);
 
   func.init(x, var);
   vul_timer t;
   func.exhaustive(0);
-  //func.run_annealing();
   
   vnl_vector<double> xfinal = func.max_sample();
   vnl_matrix<double> xform;
   convert_params_to_xform(xfinal,scale,xform);
-
+  
   vcl_cout<<"Final Xform is "<<vcl_endl;
   vcl_cout<<xform<<vcl_endl;
-
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+
 #if 0
   vnl_powell powell(&func);
   powell.set_linmin_xtol(0.1);
