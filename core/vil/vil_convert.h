@@ -1162,12 +1162,14 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
 // \code
 // vil_image_view<vil_rgb<float> > =
 //   vil_convert_cast(
+//     float(), 
 //     vil_convert_to_component_order(
 //       vil_convert_to_n_planes(
+//         3, 
 //         vil_load(filename),
-//       3),
-//     ),
-//   float());
+//       )
+//     )
+//   );
 // \endcode
 inline vil_image_view_base_sptr vil_convert_to_n_planes(
   unsigned n_planes, const vil_image_view_base_sptr &src)
