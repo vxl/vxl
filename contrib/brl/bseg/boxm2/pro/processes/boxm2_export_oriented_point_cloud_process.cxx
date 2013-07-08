@@ -159,6 +159,7 @@ bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
       boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(scene, data, blk, alpha, mog, vis,  exp, nobs, points,normals, ray_dir_sum , ray_dir_weighted_sum, myfile, output_aux, vis_t, nmag_t, prob_t, exp_t, bb_expanded, num_vertices);*/
     else if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
       boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(scene, data, blk, alpha, vis, points,normals, myfile, output_aux, vis_t, nmag_t, prob_t,  bb_expanded, num_vertices);
+
     else
       vcl_cout << "UNKNOWN FILE FORMAT..." << vcl_endl;
   }

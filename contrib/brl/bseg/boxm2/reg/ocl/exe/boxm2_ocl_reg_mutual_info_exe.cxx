@@ -112,8 +112,8 @@ int main(int argc,  char** argv)
   }
 
 
-  boxm2_ocl_hierarchical_reg func(opencl_cacheA,cacheB,device,5,scale,numsamples);
 
+  boxm2_ocl_hierarchical_reg func(opencl_cacheA,cacheB,device,5,scale,numsamples);
 
 
   func.init(x, var);
