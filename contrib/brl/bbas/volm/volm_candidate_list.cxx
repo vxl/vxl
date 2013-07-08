@@ -1,12 +1,12 @@
-#include "boxm2_volm_candidate_list.h"
+#include "volm_candidate_list.h"
 //:
 // \file
 #include <vcl_cassert.h>
 #include <vgl/vgl_area.h>
 #include <vgl/vgl_area.txx>
 
-boxm2_volm_candidate_list::boxm2_volm_candidate_list(vil_image_view<vxl_byte> const& image,
-                                                     unsigned threshold)
+volm_candidate_list::volm_candidate_list(vil_image_view<vxl_byte> const& image,
+                                         unsigned threshold)
   : thres_(threshold), image_(image)
 {
   hull_poly_.clear();
@@ -26,8 +26,6 @@ boxm2_volm_candidate_list::boxm2_volm_candidate_list(vil_image_view<vxl_byte> co
     }
     if (is_contain)
       continue;
-    //if (poly_.contains(mit->second))
-    //  continue;
     vcl_vector<vgl_point_2d<int> > sheet;
     //sheet.push_back(mit->second);
     vcl_vector<int> bi,bj;
@@ -42,18 +40,10 @@ boxm2_volm_candidate_list::boxm2_volm_candidate_list(vil_image_view<vxl_byte> co
     this->create_expand_polygon(sheet);
   }
   n_sheet_ = poly_.num_sheets();
-#if 0
-  //for(mit = pt_map_.begin(); mit != pt_map_.end(); ++mit)
-  //  vcl_cout << " score = " << mit->first << " , pixel = " << mit->second << vcl_endl;
-  //poly_.print(vcl_cout);
-  //for (unsigned sh_idx = 0; sh_idx < n_sheet_; sh_idx++) {
-  //  vgl_polygon<int> poly(poly_[sh_idx]);
-  //  vcl_cout << " region " << sh_idx << " --> area = " << vgl_area(poly) << vcl_endl;
-  //}
-#endif
+
 }
 
-bool boxm2_volm_candidate_list::create_expand_polygon(vcl_vector<vgl_point_2d<int> > const& sheet)
+bool volm_candidate_list::create_expand_polygon(vcl_vector<vgl_point_2d<int> > const& sheet)
 {
   unsigned n_points = sheet.size();
   vcl_vector<vgl_point_2d<double> > points;
@@ -70,8 +60,8 @@ bool boxm2_volm_candidate_list::create_expand_polygon(vcl_vector<vgl_point_2d<in
 }
 
 // this function is for speed-up purpose
-bool boxm2_volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> > >& top_locs,
-                                              vcl_vector<vcl_vector<unsigned> >& top_loc_scores)
+bool volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> > >& top_locs,
+                                        vcl_vector<vcl_vector<unsigned> >& top_loc_scores)
 {
   if (top_locs.size() != n_sheet_)
     return false;
@@ -102,10 +92,9 @@ bool boxm2_volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d
   return true;
 }
 
-
-bool boxm2_volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> > >& top_locs,
-                                              vcl_vector<vcl_vector<unsigned> >& top_loc_scores,
-                                              unsigned const& size)
+bool volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> > >& top_locs,
+                                        vcl_vector<vcl_vector<unsigned> >& top_loc_scores,
+                                        unsigned const& size)
 {
   if (size == 1)
     return this->top_locations(top_locs, top_loc_scores);
@@ -154,11 +143,10 @@ bool boxm2_volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d
       }
     }
   }
-  /*vcl_cout << "\n";*/
   return true;
 }
 
-bool boxm2_volm_candidate_list::top_locations(vcl_vector<vgl_point_2d<int> >& top_locs, vcl_vector<unsigned>& top_loc_scores, unsigned const& size, unsigned const& sh_idx)
+bool volm_candidate_list::top_locations(vcl_vector<vgl_point_2d<int> >& top_locs, vcl_vector<unsigned>& top_loc_scores, unsigned const& size, unsigned const& sh_idx)
 {
   if (sh_idx > n_sheet_)
     return false;
@@ -173,7 +161,7 @@ bool boxm2_volm_candidate_list::top_locations(vcl_vector<vgl_point_2d<int> >& to
   return true;
 }
 
-bool boxm2_volm_candidate_list::top_locations(vcl_vector<vgl_point_2d<double> >& top_locs, vcl_vector<unsigned>& top_loc_scores, volm_tile& tile, unsigned const& size, unsigned const& sh_idx)
+bool volm_candidate_list::top_locations(vcl_vector<vgl_point_2d<double> >& top_locs, vcl_vector<unsigned>& top_loc_scores, volm_tile& tile, unsigned const& size, unsigned const& sh_idx)
 {
   vcl_vector<vgl_point_2d<int> > top_locs_pixel;
   if( !this->top_locations(top_locs_pixel, top_loc_scores, size, sh_idx) )
@@ -190,7 +178,7 @@ bool boxm2_volm_candidate_list::top_locations(vcl_vector<vgl_point_2d<double> >&
   return true;
 }
 
-bool boxm2_volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile& tile, vcl_vector<vgl_point_2d<double> >& region_global)
+bool volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile& tile, vcl_vector<vgl_point_2d<double> >& region_global)
 {
   if (sh_idx > n_sheet_)
     return false;
@@ -216,7 +204,7 @@ bool boxm2_volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile&
   return true;
 }
 
-bool boxm2_volm_candidate_list::region_score(vcl_vector<unsigned>& scores)
+bool volm_candidate_list::region_score(vcl_vector<unsigned>& scores)
 {
   vcl_vector<vcl_vector<vgl_point_2d<int> > > best_locs(n_sheet_);
   vcl_vector<vcl_vector<unsigned> > best_scores(n_sheet_);
@@ -228,7 +216,7 @@ bool boxm2_volm_candidate_list::region_score(vcl_vector<unsigned>& scores)
   return true;
 }
 
-bool boxm2_volm_candidate_list::find(unsigned const& i, unsigned const& j, unsigned& sh_idx, unsigned& loc_score)
+bool volm_candidate_list::find(unsigned const& i, unsigned const& j, unsigned& sh_idx, unsigned& loc_score)
 {
   if ( i > image_.ni() || j > image_.nj()) {
     sh_idx = n_sheet_;
@@ -247,37 +235,13 @@ bool boxm2_volm_candidate_list::find(unsigned const& i, unsigned const& j, unsig
   return false;
 }
 
-bool boxm2_volm_candidate_list::contains(unsigned const& sheet_id, unsigned const& u, unsigned const& v)
+bool volm_candidate_list::contains(unsigned const& sheet_id, unsigned const& u, unsigned const& v)
 {
-  assert( sheet_id >= hull_poly_.size() && " in candidate list, the polygon sheet id is larger than the size of created polygon ");
+  assert( sheet_id <= hull_poly_.size() && " in candidate list, the polygon sheet id is larger than the size of created polygon ");
   return hull_poly_[sheet_id].contains(u, v);
-#if 0
-  // for each sheet, create a covex hull and check wehter the pixel is inside the polygon
-  unsigned n_points = sheet.size();
-  vcl_vector<vgl_point_2d<double> > points;
-  for (unsigned i = 0; i < n_points; i++) {
-    points.push_back(vgl_point_2d<double>(sheet[i].x()+0.5, sheet[i].y()+0.5));
-    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()+0.5));
-    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()-0.5));
-    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()-0.5));
-  }
-  vgl_convex_hull_2d<double> ch(points);
-  vgl_polygon<double> poly = ch.hull();
-  return poly.contains(u, v);
-#endif
-#if 0
-  // first check whether the point is on the boundary sicen the sheel can be a single long line (not polygon)
-  unsigned n_verts = sheet.size();
-  for (unsigned i = 0; i < n_verts; i++)
-    if (u == sheet[i].x() && v == sheet[i].y())
-      return true;
-  // check wether the point is inside the sheet
-  vgl_polygon<int> poly(sheet);
-  return poly.contains(u, v);
-#endif
 }
 
-bool boxm2_volm_candidate_list::candidate_list_image(vil_image_view<vxl_byte>& image)
+bool volm_candidate_list::candidate_list_image(vil_image_view<vxl_byte>& image)
 {
   if (image.ni() != image_.ni() || image.nj() != image_.nj())
     image.set_size(image_.ni(), image_.nj());
@@ -290,7 +254,7 @@ bool boxm2_volm_candidate_list::candidate_list_image(vil_image_view<vxl_byte>& i
   return true;
 }
 
-void boxm2_volm_candidate_list::open_kml_document(vcl_ofstream& str, vcl_string const& name, float const& threshold)
+void volm_candidate_list::open_kml_document(vcl_ofstream& str, vcl_string const& name, float const& threshold)
 {
   str << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       << "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
@@ -329,14 +293,14 @@ void boxm2_volm_candidate_list::open_kml_document(vcl_ofstream& str, vcl_string 
       << "      </ExtendedData>\n";
 }
 
-void boxm2_volm_candidate_list::close_kml_document(vcl_ofstream& str)
+void volm_candidate_list::close_kml_document(vcl_ofstream& str)
 {
   str << "    <!-- Here ends the first Candidate list -->\n";
   str << "    </Folder>\n";
   str << "  </Document>\n</kml>\n";
 }
 
-void boxm2_volm_candidate_list::write_kml_regions(vcl_ofstream& str,
+void volm_candidate_list::write_kml_regions(vcl_ofstream& str,
                                                   vcl_vector<vgl_point_2d<double> >& region,
                                                   vcl_vector<vgl_point_2d<double> >& top_locs,
                                                   vcl_vector<cam_angles>& top_cameras,
@@ -373,11 +337,6 @@ void boxm2_volm_candidate_list::write_kml_regions(vcl_ofstream& str,
         << "          </Polygon>\n"
         << "        </Placemark>\n";
 
-    // set up an test camera temporary
-    //for (unsigned idx = 0; idx < top_locs.size(); idx++) {
-    //  top_cameras.push_back(cam_angles(2.64, 15, 334.0, 91.34));
-    //  right_fov.push_back(20.0);
-    //}
     // write the top locations for this region and associate camera associates
     for (unsigned idx = 0; idx < top_locs.size(); idx++) {
     

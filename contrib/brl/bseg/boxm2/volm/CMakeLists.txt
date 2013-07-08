@@ -17,7 +17,6 @@ SET(boxm2_volm_sources
     boxm2_volm_locations_sptr.h
     boxm2_volm_wr3db_index.h        boxm2_volm_wr3db_index.cxx
     boxm2_volm_wr3db_index_sptr.h
-    boxm2_volm_candidate_list.h     boxm2_volm_candidate_list.cxx
     boxm2_volm_matcher_p0.h         boxm2_volm_matcher_p0.cxx
    )
 

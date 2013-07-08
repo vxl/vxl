@@ -10,7 +10,7 @@
 #include <volm/volm_tile.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
-#include <boxm2/volm/boxm2_volm_candidate_list.h>
+#include <volm/volm_candidate_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vil/vil_save.h>
@@ -204,7 +204,7 @@ int main(int argc,  char** argv)
 
 
   // create candidate list for each tile
-  vcl_vector<boxm2_volm_candidate_list> cand_lists;
+  vcl_vector<volm_candidate_list> cand_lists;
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
     vcl_string img_name = out() + "/" + "ProbMap_" + tiles[t_idx].get_string() + ".tif";
     if (!vul_file::exists(img_name)) {
@@ -214,7 +214,7 @@ int main(int argc,  char** argv)
       return volm_io::EXE_ARGUMENT_ERROR;
     }
     vil_image_view<vxl_byte> tile_img = vil_load(img_name.c_str());
-    boxm2_volm_candidate_list cand_list(tile_img, threshold());
+    volm_candidate_list cand_list(tile_img, threshold());
     cand_lists.push_back(cand_list);
   }
 
@@ -274,7 +274,7 @@ int main(int argc,  char** argv)
   log << " there are " << cand_map.size() << " candidate regions given threshold = " << threshold() << " (likelihood = " << thres_value << ")\n";
   vcl_cerr << log.str();
   volm_io::write_post_processing_log(log_file, log.str());
-  boxm2_volm_candidate_list::open_kml_document(ofs_kml,kml_name.str(),thres_value);
+  volm_candidate_list::open_kml_document(ofs_kml,kml_name.str(),thres_value);
   vcl_multimap<unsigned, vcl_pair<unsigned, unsigned>, vcl_greater<unsigned> >::iterator mit = cand_map.begin();
   unsigned rank = 0;
   for (; mit != cand_map.end(); ++mit) {
@@ -313,7 +313,7 @@ int main(int argc,  char** argv)
     // calculate the likelihood based on the top scores
     float likelihood = volm_io::scale_score_to_0_1_sig(kl(), ku(), thres_scale(), (unsigned char)mit->first);
     // write the region polygon and top locations
-    boxm2_volm_candidate_list::write_kml_regions(ofs_kml, region_loc_global, top_locs, top_cameras, right_fov, likelihood, rank++);
+    volm_candidate_list::write_kml_regions(ofs_kml, region_loc_global, top_locs, top_cameras, right_fov, likelihood, rank++);
 
 #if 1
     //if (top_locs.size() != top_loc_scores.size()) {
@@ -326,7 +326,7 @@ int main(int argc,  char** argv)
     }
 #endif
   }
-  boxm2_volm_candidate_list::close_kml_document(ofs_kml);
+  volm_candidate_list::close_kml_document(ofs_kml);
   
 #if 0
   // screen output

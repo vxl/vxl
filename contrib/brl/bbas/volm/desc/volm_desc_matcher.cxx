@@ -5,7 +5,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
-#include <boxm2/volm/boxm2_volm_candidate_list.h>
+#include <volm/volm_candidate_list.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_intersection.h>
 
@@ -260,7 +260,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
   }
 
   // create candidate list for each tile
-  vcl_vector<boxm2_volm_candidate_list> cand_lists;
+  vcl_vector<volm_candidate_list> cand_lists;
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
     vcl_string img_name = prob_map_folder + "/ProbMap_" + tiles[t_idx].get_string() + ".tif";
     if (!vul_file::exists(img_name)) {
@@ -268,7 +268,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
       return false;
     }
     vil_image_view<vxl_byte> tile_img = vil_load(img_name.c_str());
-    boxm2_volm_candidate_list cand_list(tile_img, threshold);
+    volm_candidate_list cand_list(tile_img, threshold);
     cand_lists.push_back(cand_list);
   }
 
@@ -308,7 +308,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
   vcl_ofstream ofs_kml(cam_kml.c_str());
 
   vcl_cout << " there are " << cand_map.size() << " candidate regions given threshold = " << threshold << " (likelihood = " << thres_value << ")\n";
-  boxm2_volm_candidate_list::open_kml_document(ofs_kml,kml_name.str(),(float)thres_value);
+  volm_candidate_list::open_kml_document(ofs_kml,kml_name.str(),(float)thres_value);
 
   vcl_multimap<unsigned, vcl_pair<unsigned, unsigned>, vcl_greater<unsigned> >::iterator mit = cand_map.begin();
   unsigned rank = 0;
@@ -337,14 +337,14 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
     // calculate the likelihood based on the top scores
     float likelihood = volm_io::scale_score_to_0_1_sig(kl, ku, (float)thres_scale, (unsigned char)mit->first);
     // write the region polygon and top locations
-    boxm2_volm_candidate_list::write_kml_regions(ofs_kml, region_loc_global, top_locs, top_cameras, right_fov, likelihood, rank++);
+    volm_candidate_list::write_kml_regions(ofs_kml, region_loc_global, top_locs, top_cameras, right_fov, likelihood, rank++);
     for (unsigned i = 0 ; i < top_locs.size(); i++) {
       if (rank%100 == 0)
         vcl_cerr << " size = " << cand_map.size() << ", cnt = " << rank-1 << " score = " << mit->first << " --> tile = " << tile_idx << " sh_id = " << sh_idx
                  << " --> top_locs = " << vcl_setprecision(10) << top_locs[i].x() << ", " << top_locs[i].y() << " top_score = " << top_loc_scores[i] << vcl_endl; 
     }
   }
-  boxm2_volm_candidate_list::close_kml_document(ofs_kml);
+  volm_candidate_list::close_kml_document(ofs_kml);
   return true;
 }
 

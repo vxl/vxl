@@ -46,6 +46,7 @@ SET(volm_sources
  volm_spherical_region.h                volm_spherical_region.cxx
  volm_vrml_io.h                         volm_vrml_io.cxx
  volm_buffered_index.h					volm_buffered_index.cxx
+ volm_candidate_list.h                  volm_candidate_list.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_sources)

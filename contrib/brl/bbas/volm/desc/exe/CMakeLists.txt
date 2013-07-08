@@ -7,8 +7,3 @@ ADD_EXECUTABLE( volm_desc_land_exe
               )
               
 TARGET_LINK_LIBRARIES( volm_desc_land_exe volm_desc )
-
-ADD_EXECUTABLE( volm_desc_ex_matcher_exe
-                volm_desc_ex_matcher_exe.cxx
-              )
-TARGET_LINK_LIBRARIES( volm_desc_ex_matcher_exe volm_desc )

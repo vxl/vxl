@@ -1,6 +1,6 @@
-// This is brl/bbas/volm/desc/volm_desc_ex_land_only_matcher.h
-#ifndef volm_desc_ex_land_only_matcher_h_
-#define volm_desc_ex_land_only_matcher_h_
+// This is brl/bseg/boxm2/volm/desc/boxm2_volm_desc_ex_land_only_matcher.h
+#ifndef boxm2_volm_desc_ex_land_only_matcher_h_
+#define boxm2_volm_desc_ex_land_only_matcher_h_
 //:
 // \file
 // \brief  A class to match query existance land only descriptor to existance land only indices
@@ -13,27 +13,27 @@
 // \endverbatim
 //
 
-#include "volm_desc_matcher.h"
-#include "volm_desc_ex_land_only.h"
-#include "volm_desc_indexer.h"
-#include <boxm2/volm/desc/boxm2_volm_desc_ex_land_only_indexer.h>
+#include <volm/desc/volm_desc_matcher.h>
+#include <volm/desc/volm_desc_ex_land_only.h>
+#include <volm/desc/volm_desc_indexer.h>
+#include "boxm2_volm_desc_ex_land_only_indexer.h"
 
-class volm_desc_ex_land_only_matcher : public volm_desc_matcher
+class boxm2_volm_desc_ex_land_only_matcher : public volm_desc_matcher
 {
 public:
   //: Default constructor
-  volm_desc_ex_land_only_matcher() {}
+  boxm2_volm_desc_ex_land_only_matcher() {}
 
   //: Constructor
-  volm_desc_ex_land_only_matcher(depth_map_scene_sptr const& dms,
-                                 vcl_vector<double> const& radius,
-                                 unsigned const& nlands = volm_label_table::compute_number_of_labels(),
-                                 unsigned char const& initial_mag = 0)
+  boxm2_volm_desc_ex_land_only_matcher(depth_map_scene_sptr const& dms,
+                                       vcl_vector<double> const& radius,
+                                       unsigned const& nlands = volm_label_table::compute_number_of_labels(),
+                                       unsigned char const& initial_mag = 0)
   : dms_(dms), radius_(radius), nlands_(nlands), initial_mag_(initial_mag)
   {}
 
   //: Destructor
-  ~volm_desc_ex_land_only_matcher() {}
+  ~boxm2_volm_desc_ex_land_only_matcher() {}
 
   //: check given threshold is valid or not for generate scaled probability map
   virtual bool check_threshold(volm_desc_sptr const& query, float& thres_value);
@@ -49,12 +49,10 @@ public:
 private:
     //: query depth_map_scene
   depth_map_scene_sptr  dms_;
-  //volm_desc_sptr      query_;
-  
   //: parameters related to volumetric existance descriptor
   vcl_vector<double> radius_;
   unsigned           nlands_;
   unsigned char initial_mag_;
 };
 
-#endif // volm_desc_ex_land_only_matcher_h_
+#endif // boxm2_volm_desc_ex_land_only_matcher_h_

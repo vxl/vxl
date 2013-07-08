@@ -4,8 +4,8 @@
 // \author Yi Dong
 // \date June 04, 2013
 
-#include <volm/desc/volm_desc_ex_matcher.h>
-#include <volm/desc/volm_desc_ex_land_only_matcher.h>
+#include <boxm2/volm/desc/boxm2_volm_desc_ex_matcher.h>
+#include <boxm2/volm/desc/boxm2_volm_desc_ex_land_only_matcher.h>
 #include <volm/desc/volm_desc_ex_2d_matcher.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
@@ -119,13 +119,13 @@ int main(int argc, char** argv)
 
     volm_desc_matcher_sptr ex_matcher;
     if (is_land_only()) {
-      ex_matcher = new volm_desc_ex_land_only_matcher(dms, params.radius, params.nlands, 0);
+      ex_matcher = new boxm2_volm_desc_ex_land_only_matcher(dms, params.radius, params.nlands, 0);
     }
     else if (is_ex_2d()) {
       ex_matcher = new volm_desc_ex_2d_matcher(dms, params.radius, params.nlands, 0);
     }
     else {
-      ex_matcher = new volm_desc_ex_matcher(dms, params.radius, params.norients, params.nlands, 0);
+      ex_matcher = new boxm2_volm_desc_ex_matcher(dms, params.radius, params.norients, params.nlands, 0);
     }
     
     vcl_cout << " ex_matcher is " << ex_matcher->get_index_type_str() << vcl_endl;

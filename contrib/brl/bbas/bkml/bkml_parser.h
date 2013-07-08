@@ -21,6 +21,7 @@
 #define KML_TFOV_TAG "topFov"
 #define KML_NEAR_TAG "near"
 #define KML_POLY_TAG "Polygon"
+#define KML_POINT_TAG "Point"
 #define KML_POLYOB_TAG "outerBoundaryIs"
 #define KML_POLYIB_TAG "innerBoundaryIs"
 #define KML_CORD_TAG "coordinates"
@@ -52,10 +53,13 @@ class bkml_parser : public expatpp
   // parser should not delete the site, it is used afterwards
   ~bkml_parser(void) {}
 
-  //:
-  // the first sheet contains the outer polygon, and the second sheet contains the inner polygon if any, saves 2d points, only lat, lon
-  // in this poly lon is x, lat is y
+  //: parser to load the outer boundary of all defined polygons in the kml file (only parse the lat(y) and lon(x), elev ignored)
   static vgl_polygon<double> parse_polygon(vcl_string poly_kml_file);
+
+  //: parser to load the outer and inner boundary, the first n_out sheets are the outer boundary 
+  //  and the following n_in sheets are the inner boundary
+  static vgl_polygon<double> parse_polygon_with_inner(vcl_string poly_kml_file, unsigned& n_out, unsigned& n_in);
+
   static bool parse_location_from_kml(vcl_string kml_file, double& lat, double& lon);
 
   static void trim_string(vcl_string& s);
@@ -75,9 +79,10 @@ class bkml_parser : public expatpp
   double roll_dev_;
   double right_fov_dev_;
   double top_fov_dev_;
-  vcl_vector<vgl_point_3d<double> > polyouter_;
-  vcl_vector<vgl_point_3d<double> > polyinner_;
-  vcl_vector<vgl_point_3d<double> > linecord_;
+  vcl_vector<vcl_vector<vgl_point_3d<double> > > polyouter_;
+  vcl_vector<vcl_vector<vgl_point_3d<double> > > polyinner_;
+  vcl_vector<vcl_vector<vgl_point_3d<double> > > linecord_;
+  vcl_vector<vgl_point_3d<double> > points_;
   
   vcl_string current_name_;
  private:

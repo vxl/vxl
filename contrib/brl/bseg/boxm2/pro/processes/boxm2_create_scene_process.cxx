@@ -336,6 +336,59 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
            << "block_len = ["  << block_len << ", " << block_len << ", " << block_lenz << "],\t"
            << "# of bins = " << num_bins << ",\t" << "cs_name = " << cs_name << vcl_endl;
 
+  // read the polygons from kml
+  vgl_polygon<double> poly_deg = bkml_parser::parse_polygon(poly_kml_name);
+  unsigned n_sheets = poly_deg.num_sheets();
+  // set up the local coordinates system using lvcs(lat, long, altit) and create polygon
+  vpgl_lvcs::cs_names cs_id;
+  if (cs_name == "wgs84")
+    cs_id = vpgl_lvcs::wgs84;
+  else if (cs_name == "utm")
+    cs_id = vpgl_lvcs::utm;
+  else if (cs_name == "nad27n")
+    cs_id = vpgl_lvcs::nad27n;
+  else if (cs_name == "wgs72")
+    cs_id = vpgl_lvcs::wgs72;
+  else {
+    vcl_cerr << "\nERROR: Unrecognized geo coordnite system, check the input cs_name\n\n";
+    return false;
+  }
+  vpgl_lvcs lv(origin_lat, origin_lon, origin_elev, cs_id, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  vpgl_utm utm;
+  double x, y; int orig_zone;
+  utm.transform(origin_lat, origin_lon, x, y, orig_zone);
+  vgl_polygon<double> poly;
+  for (unsigned sh_idx = 0; sh_idx < n_sheets; sh_idx++) {
+    poly.new_sheet();
+    unsigned n_verts = poly_deg[sh_idx].size();
+    for (unsigned vt_idx = 0; vt_idx < n_verts; vt_idx++) {
+      int zone;
+      utm.transform(poly_deg[sh_idx][vt_idx].y(), poly_deg[sh_idx][vt_idx].x(), x, y, zone);
+      if (zone != orig_zone)
+        continue;
+      double local_x = vcl_numeric_limits<double>::max(), local_y, local_z;
+      lv.global_to_local(poly_deg[sh_idx][vt_idx].x(), poly_deg[sh_idx][vt_idx].y(), 1.6, vpgl_lvcs::wgs84, local_x, local_y, local_z);
+      if (local_x != vcl_numeric_limits<double>::max())
+        poly.push_back(local_x, local_y);
+      else
+        vcl_cout << "skip point " << poly_deg[sh_idx][vt_idx] << " in the polygon!\n";
+    }
+  }
+  // create the boundary of the polygon on the ground
+  double lower = poly[0][0].y();
+  double upper = poly[0][0].y();
+  double left = poly[0][0].x();
+  double right = poly[0][0].x();
+  for (unsigned sh_idx = 0 ; sh_idx < poly.num_sheets(); sh_idx++) {
+    unsigned n_verts = poly[sh_idx].size();
+    for (unsigned vt_idx = 0; vt_idx < n_verts; vt_idx++) {
+      if (lower > poly[sh_idx][vt_idx].y())  lower = poly[sh_idx][vt_idx].y();
+      if (upper < poly[sh_idx][vt_idx].y())  upper = poly[sh_idx][vt_idx].y();
+      if (left  > poly[sh_idx][vt_idx].x())  left =  poly[sh_idx][vt_idx].x();
+      if (right < poly[sh_idx][vt_idx].x())  right = poly[sh_idx][vt_idx].x();
+    }
+  }
+#if 0
   // read the coordinates info. from kml using the bkml
   bkml_parser* parser = new bkml_parser();
   vcl_FILE* xmlFile = vcl_fopen(poly_kml_name.c_str(), "r");
@@ -429,6 +482,8 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
     delete parser;
     return false;
   }
+#endif
+
   vcl_cout << "in local coords, lower: " << lower << " left: " << left << vcl_endl;
   double local_origin_x, local_origin_y, local_origin_z;
   local_origin_x = left;
@@ -448,7 +503,6 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   lz = scene_height;
   if (lz < 0) { // need to redefine the height later ...
     vcl_cout << "\nERROR: negative height: check input origin_height value" << vcl_endl;
-    delete parser;
     return false;
   }
   unsigned int num_xy = (int)vcl_ceil(block_len/sb_length);
@@ -483,8 +537,8 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
       // if the four endpoins are all out, check whether block intersects with polygon
       if (!block_contains) {
         vgl_polygon<double> p_check;
-        p_check.push_back(poly[0]);
-        p_check.push_back(poly[1]);
+        for (unsigned sh_idx = 0; sh_idx < poly.num_sheets(); sh_idx++)
+          p_check.push_back(poly[sh_idx]);
         p_check.push_back(vblock);
         vcl_vector<vcl_pair<unsigned,unsigned> > e1, e2;
         vcl_vector<vgl_point_2d<double> > ip;
@@ -498,7 +552,6 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
           vcl_map<boxm2_block_id, boxm2_block_metadata>& blks=scene->blocks();
           if (blks.find(id)!=blks.end()) {
             vcl_cout<<"Problems in adding block: " << i << ' ' << j << ' ' << k << " block already exists"<<vcl_endl;
-            delete parser;
             return false;
           }
           boxm2_block_metadata mdata(id,vgl_point_3d<double>(local_x,local_y,local_z),
@@ -517,7 +570,6 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   } // end of for loop along x
   i=0;  // store scene smart pointer
   pro.set_output_val<boxm2_scene_sptr>(i++, scene);
-  delete parser;
   return true;
 }
 

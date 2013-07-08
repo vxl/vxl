@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/volm/boxm2_volm_candidate_list.h
+// This is brl/bbas/volm/volm_candidate_list.h
 #ifndef boxm2_volm_candidate_list_h_
 #define boxm2_volm_candidate_list_h_
 //:
@@ -11,7 +11,6 @@
 // Modifications
 //  <none yet>
 // \endverbatim
-
 
 #include <vgl/vgl_polygon.h>
 #include <vil/algo/vil_find_4con_boundary.h>
@@ -26,16 +25,16 @@
 
 typedef vcl_multimap<unsigned, vgl_point_2d<int>, vcl_greater<unsigned> > mymap;
 
-class boxm2_volm_candidate_list
+class volm_candidate_list
 {
   public:
     //: default consturctor
-    boxm2_volm_candidate_list() {}
+    volm_candidate_list() {}
     //: constructor
-    boxm2_volm_candidate_list(vil_image_view<vxl_byte> const& image,
-                              unsigned threshold);
+    volm_candidate_list(vil_image_view<vxl_byte> const& image,
+                        unsigned threshold);
     //: destructor
-    ~boxm2_volm_candidate_list() {}
+    ~volm_candidate_list() {}
     
     //: accessors
     vgl_polygon<int> cand_poly() { return poly_; }
@@ -43,20 +42,28 @@ class boxm2_volm_candidate_list
     
     //: number of sheets in candidate list
     unsigned num_of_regions() { return n_sheet_; }
+
     //: best score for each sheet
     bool region_score(vcl_vector<unsigned>& scores);
+
     //: return the top pixel which has highest scores
     bool top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> > >& top_locs, vcl_vector<vcl_vector<unsigned> >& top_loc_scores);
+
     //: for each sheet, return top number of pixels which have high scores
     bool top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> > >& top_locs, vcl_vector<vcl_vector<unsigned> >& top_loc_scores, unsigned const& size);
+
     //: return the top number of pixels which have highest scores, for sheet sh_idx
     bool top_locations(vcl_vector<vgl_point_2d<int> >& top_locs, vcl_vector<unsigned>& top_loc_scores, unsigned const& size, unsigned const& sh_idx);
+
     //: return the top number of locs which have highest scores, for sheet sh_idx
     bool top_locations(vcl_vector<vgl_point_2d<double> >& top_locs, vcl_vector<unsigned>& top_loc_scores, volm_tile& tile, unsigned const& size, unsigned const& sh_idx);
+
     //: create an image with candidate region highlighted
     bool candidate_list_image(vil_image_view<vxl_byte>& image);
+
     //: transfer the region coordinates from image to global, returned points vector are the polygon for kml
     bool img_to_golbal(unsigned const& sh_idx, volm_tile& tile, vcl_vector<vgl_point_2d<double> >& region_global);
+
     //: find the region where the given location is in
     bool find(unsigned const& i, unsigned const& j, unsigned& sh_idx, unsigned& loc_score);
     bool find(vgl_point_2d<unsigned> const& loc, unsigned& sh_idx, unsigned& loc_score)
@@ -82,9 +89,7 @@ class boxm2_volm_candidate_list
                                   vcl_vector<double>& right_fov,
                                   float const& likelihood,
                                   unsigned const& rank);
-    
-    
-  
+
   private:
     unsigned thres_;
     unsigned n_sheet_;
@@ -99,7 +104,8 @@ class boxm2_volm_candidate_list
     bool create_expand_polygon(vcl_vector<vgl_point_2d<int> > const& sheet);
     //: check whether the pixel is inside the candidate poly
     bool contains(unsigned const& sheet_id, unsigned const& i, unsigned const& j);
-    
+
 };
 
-#endif
+
+#endif //volm_candidate_list_h_

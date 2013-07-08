@@ -112,6 +112,9 @@ bkml_parser::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, KML_LINE_TAG) == 0) {
     cord_tag_ = KML_LINE_TAG;
   }
+  else if (vcl_strcmp(name, KML_POINT_TAG) == 0) {
+    cord_tag_ = KML_POINT_TAG;
+  }
   /*else if (vcl_strcmp(name, KML_COORDS_TAG) == 0) {
   last_tag = KML_COORDS_TAG;
   }
@@ -263,6 +266,7 @@ void bkml_parser::charData(const XML_Char* s, int len)
       len = (int)cord_end;
     for (unsigned int i=0; i<cord_end; ++i)
       str << s[i];
+    vcl_vector<vgl_point_3d<double> > poly_verts;
     while (!str.eof()) {
       str >> x;
       str.ignore();
@@ -272,17 +276,29 @@ void bkml_parser::charData(const XML_Char* s, int len)
       if (str.str() == " ")
         str.ignore();
       vgl_point_3d<double> vpt(x,y,z);
-      if (cord_tag_ == KML_POLYOB_TAG)
-        polyouter_.push_back(vpt);
-      else if (cord_tag_ == KML_POLYIB_TAG)
-        polyinner_.push_back(vpt);
-      else if (cord_tag_ == KML_LINE_TAG)
-        linecord_.push_back(vpt);
-      else {
-        vcl_cout << "WARNING: shape tag can not be recognized (not LineString or Polygon)" << vcl_endl;
-      }
+      poly_verts.push_back(vpt);
+      //if (cord_tag_ == KML_POLYOB_TAG)
+      //  poly_verts.push_back(vpt);
+      //else if (cord_tag_ == KML_POLYIB_TAG)
+      //  poly_verts.push_back(vpt);
+      //else if (cord_tag_ == KML_LINE_TAG)
+      //  poly_verts.push_back(vpt);
+      //else {
+      //  vcl_cout << "WARNING: shape tag can not be recognized (not LineString or Polygon)" << vcl_endl;
+      //}
     }
+    if (cord_tag_ == KML_POLYOB_TAG)
+      polyouter_.push_back(poly_verts);
+    else if (cord_tag_ == KML_POLYOB_TAG)
+      polyinner_.push_back(poly_verts);
+    else if (cord_tag_ == KML_LINE_TAG)
+      linecord_.push_back(poly_verts);
+    else if (cord_tag_ == KML_POINT_TAG)
+      points_.push_back(poly_verts[0]);
+    else
+      vcl_cout << "WARNING: shape tag can not be recognized (not LineString, Point or Polygon, nothing will be parserd)" << vcl_endl;
     last_tag = "";
+    cord_tag_ = "";
   }
 }
 
@@ -298,7 +314,7 @@ void bkml_parser::trim_string(vcl_string& s)
 vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
 {
   bkml_parser* parser = new bkml_parser();
-  vgl_polygon<double> out(2);
+  vgl_polygon<double> out;
   vcl_FILE* xmlFile = vcl_fopen(poly_kml_file.c_str(), "r");
   if (!xmlFile) {
     vcl_cerr << poly_kml_file.c_str() << " error on opening the input kml file\n";
@@ -311,29 +327,54 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
     delete parser;
     return out;
   }
-  if (parser->polyouter_.size()<2) {
-    vcl_cerr << "input polygon has no outerboundary" << '\n';
+  // create polygon from parser
+  if (parser->polyouter_.empty()) {
+    vcl_cerr << "input kml has no polygon outerboundary, retrun an empty polygon" << '\n';
     delete parser;
     vgl_polygon<double> out2;
     return out2;
   }
-  unsigned int n_out = (unsigned int)parser->polyouter_.size();
-  n_out--;   // note that the last point in kml is same as the first point
-  for (unsigned i = 0; i < n_out; i++) {
-    vgl_point_2d<double> pt(parser->polyouter_[i].x(), parser->polyouter_[i].y());
-    out[0].push_back(pt);
+  for (unsigned sh_idx = 0; sh_idx < parser->polyouter_.size(); sh_idx++) {
+    out.new_sheet();
+    unsigned n_points = (unsigned)parser->polyouter_[sh_idx].size()-1;
+    for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++)
+      out.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
   }
-  if (parser->polyinner_.size()<2) {
-    vcl_cerr << "input polygon has no innerboundary, skipping" << '\n';
-    vgl_polygon<double> out2(1);
-    out2[0] = out[0];
-    return out2;
+  return out;
+}
+
+vgl_polygon<double> bkml_parser::parse_polygon_with_inner(vcl_string poly_kml_file, unsigned& n_out, unsigned& n_in)
+{
+  bkml_parser* parser = new bkml_parser();
+  vgl_polygon<double> out;
+  vcl_FILE* xmlFile = vcl_fopen(poly_kml_file.c_str(), "r");
+  if (!xmlFile) {
+    vcl_cerr << poly_kml_file.c_str() << " error on opening the input kml file\n";
+    delete parser;
+    return out;
   }
-  unsigned int n_in = (unsigned int)parser->polyinner_.size();
-  n_in--;   // note that the last point in kml is same as the first point
-  for (unsigned i = 0; i < n_in; i++) {
-    vgl_point_2d<double> pt(parser->polyinner_[i].x(), parser->polyinner_[i].y());
-    out[1].push_back(pt);
+  if (!parser->parseFile(xmlFile)) {
+    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+             << parser->XML_GetCurrentLineNumber() << '\n';
+    delete parser;
+    return out;
+  }
+  // create polygon from parser
+  n_out = (unsigned)parser->polyouter_.size();
+  n_in = (unsigned)parser->polyinner_.size();
+  // load the outer boundary
+  for (unsigned sh_idx = 0; sh_idx < n_out; sh_idx++) {
+    out.new_sheet();
+    unsigned n_points = parser->polyouter_[sh_idx].size() - 1;
+    for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++)
+      out.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
+  }
+  // load the inner boundary
+  for (unsigned sh_idx = 0; sh_idx < n_in; sh_idx++) {
+    out.new_sheet();
+    unsigned n_points = parser->polyinner_[sh_idx].size() - 1;
+    for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++)
+      out.push_back(parser->polyinner_[sh_idx][pt_idx].x(), parser->polyinner_[sh_idx][pt_idx].y());
   }
   return out;
 }
