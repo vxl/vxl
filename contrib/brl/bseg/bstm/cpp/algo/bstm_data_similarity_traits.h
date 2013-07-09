@@ -150,7 +150,7 @@ class bstm_similarity_traits<BSTM_GAUSS_RGB_VIEW_COMPACT, BOXM2_GAUSS_RGB_VIEW_C
       vnl_vector_fixed<unsigned char,4> rgb = (vnl_vector_fixed<unsigned char,4>) app[i];
       vnl_vector_fixed<unsigned char,4> boxm2_rgb = (vnl_vector_fixed<unsigned char,4>) boxm2_app[i];
 
-      rms += vcl_sqrt( (square_of(rgb[0] - boxm2_rgb[0]) + square_of(rgb[1] - boxm2_rgb[1]) + square_of(rgb[2] - boxm2_rgb[2])) / 3);
+      rms += vcl_sqrt( (square_of(rgb[0] - boxm2_rgb[0]) + square_of(rgb[1] - boxm2_rgb[1]) + square_of(rgb[2] - boxm2_rgb[2])) / 3.0);
     }
 
     return rms / 8;

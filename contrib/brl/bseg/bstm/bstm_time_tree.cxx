@@ -44,7 +44,7 @@ int bstm_time_tree::max_num_inner_cells() const
 
 int bstm_time_tree::depth_at(const int index) const
 {
-  return (int)(vcl_log(index+1)/vcl_log(2));
+  return (int)(vcl_log((double)index+1)/vcl_log(2.0));
 }
 
 unsigned char bstm_time_tree::bit_at(int index) const
