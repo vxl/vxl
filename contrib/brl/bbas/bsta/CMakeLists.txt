@@ -17,6 +17,7 @@ SET(bsta_sources
  bsta_joint_histogram_base.h
  bsta_joint_histogram.txx  bsta_joint_histogram.h bsta_joint_histogram_sptr.h
  bsta_joint_histogram_3d.txx      bsta_joint_histogram_3d.h 
+ bsta_joint_histogram_3d_base.h
  bsta_joint_histogram_3d_sptr.h  
  bsta_k_medoid.cxx         bsta_k_medoid.h
  bsta_k_means.cxx         bsta_k_means.h    bsta_k_means.txx
