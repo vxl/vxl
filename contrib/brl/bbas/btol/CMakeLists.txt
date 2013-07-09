@@ -20,7 +20,7 @@ SET(btol_sources
 
 ADD_LIBRARY(btol ${btol_sources})
 INSTALL_TARGETS(/lib btol)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/btol ${btol_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/btol ${btol_sources})
 
 TARGET_LINK_LIBRARIES(btol bsol vtol vdgl vsol vgl vnl)
 
