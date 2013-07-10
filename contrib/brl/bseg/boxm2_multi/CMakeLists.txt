@@ -19,7 +19,7 @@ SET(boxm2_multi_sources
    )
 
 ADD_LIBRARY(boxm2_multi  ${boxm2_multi_sources})
-TARGET_LINK_LIBRARIES(boxm2_multi boxm2)
+TARGET_LINK_LIBRARIES(boxm2_multi boxm2 boxm2_ocl)
 
 #multi gpu implementations
 SUBDIRS(algo)

@@ -17,7 +17,7 @@ SET(boxm2_ocl_algo_sources
    )
 
 ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul)
+TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul brad)
 
 #tests
 IF( BUILD_TESTING )
