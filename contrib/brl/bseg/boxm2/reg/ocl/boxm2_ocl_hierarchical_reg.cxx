@@ -4,16 +4,12 @@
 #include <vcl_where_root_dir.h>
 #include <vnl/vnl_random.h>
 #include <vcl_algorithm.h>
-
-//#define COARSE 
 boxm2_ocl_hierarchical_reg::boxm2_ocl_hierarchical_reg( boxm2_opencl_cache2_sptr& cacheA,
                                                     boxm2_stream_scene_cache& cacheB,
                                                     bocl_device_sptr device,
-                                                    int nbins,double scale, int numsamples):  boxm2_ocl_reg_mutual_info(cacheA,cacheB,device,nbins, scale)
+                                                    int nbins,bool iscoarse, double scale, int numsamples):  boxm2_ocl_reg_mutual_info(cacheA,cacheB,device,nbins, scale), iscoarse_(iscoarse)
 {
     numsamples_ = numsamples;
-    
-
 }
 
 bool boxm2_ocl_hierarchical_reg::init(vnl_vector<double> const& mu, vnl_vector<double> const & cov)
@@ -28,26 +24,22 @@ bool boxm2_ocl_hierarchical_reg::init(vnl_vector<double> const& mu, vnl_vector<d
     {
         vnl_vector<double> sample( mu_.size() ) ;
         for(unsigned j = 0 ; j < sample.size(); j++)
-            sample[j] = mu_[j] + (2*rand.drand32()-1)*cov_[j]; 
+            sample[j] = mu_[j] + (2*rand.drand32()-1)*cov_[j];
         samples_.push_back(sample) ; 
-    }
-
-    //cov_[0] = 25;
-    //cov_[1] = 25;
-    //cov_[2] = 25;
-    //cov_[3] = 0.15;
-    //cov_[4] = 0.15;
-    //cov_[5] = 0.15;
-    
+    }   
     return true;
 }
 
 bool boxm2_ocl_hierarchical_reg::exhaustive(int depth )
 {
     samples_.clear();
-
-    unsigned int numsamples = 64; //4096
-    //unsigned int numsamples = 4096;
+    unsigned int numsamples = 4096;
+    int n1 = 16;
+    if( !iscoarse_)
+    {
+        numsamples = 64;
+        n1 = 4;
+    }
     mis.clear();
     vcl_map<double,vnl_vector<double> > samples_sorted;
     for(unsigned i = 0 ; i < numsamples; i++)
@@ -55,31 +47,27 @@ bool boxm2_ocl_hierarchical_reg::exhaustive(int depth )
         vnl_vector<double> sample( mu_.size() ) ;
         for(unsigned k = 0 ; k < sample.size(); k++)
         {
-#ifdef COARSE
             unsigned int var = i >> (2*k);
             var = var & 3;
             double offset = (0.5*(double)var-0.75)*cov_[k];
-
-#else 
-            unsigned int var = i >> (k);
-            var = var & 1;
-            double offset = ((double)var-0.5)*cov_[k];
-#endif
+            if(!iscoarse_)
+            {
+                var = i >> (k);
+                var = var & 1;
+                offset = ((double)var-0.5)*cov_[k];
+            }
             sample[k] = mu_[k] + offset; 
         }
-        vcl_cout<<sample-mu_<<" "<<i<<vcl_endl;
         double minfo = this->mutual_info(sample, 1) ;
+        vcl_cout<<sample-mu_<<" "<<i<<vcl_endl;
         vcl_cout<<minfo<<vcl_endl;
         mis.push_back(minfo);
         samples_.push_back(sample);
         samples_sorted[minfo] = sample;
     }
     vcl_cout<<"Mutual Infor for Max Sample"<<this->max_sample()-mu_<<" is "<<this->mutual_info(this->max_sample(),1)<<vcl_endl;
-
     //: Pick n1 best samples ( 16 in this case )
     int count =0;
-    //int n1 = 16;
-    int n1 = 4;
     numsamples = 64;
     mis.clear();
     samples_.clear();
@@ -104,7 +92,6 @@ bool boxm2_ocl_hierarchical_reg::exhaustive(int depth )
     samples_sorted.clear();
     for(unsigned i = 0 ; i <mis.size(); i++)
         samples_sorted[mis[i]]=samples_[i];
-
     count =0;
     numsamples = 64;
     mis.clear();
@@ -121,7 +108,6 @@ bool boxm2_ocl_hierarchical_reg::exhaustive(int depth )
                 double offset = ((double)var-0.5)*cov_[k]/8;
                 sample[k] = iter->second[k] + offset; 
             }
-           
             double minfo = this->mutual_info(sample, 3) ;
             vcl_cout<<"\nIteration 3 "<<sample-mu_<<" "<<minfo<<" "<<i+count*numsamples<<" "<<iter->first<<" "<<iter->second-mu_<<vcl_endl;
             mis.push_back(minfo);
@@ -131,10 +117,6 @@ bool boxm2_ocl_hierarchical_reg::exhaustive(int depth )
     vcl_cout<<"Mutual Infor for Max Sample"<<this->max_sample()-mu_<<" is "<<this->mutual_info(this->max_sample(),3)<<vcl_endl;
     return true;
 }
-
-
-
-
 vnl_vector<double> boxm2_ocl_hierarchical_reg::max_sample()
 {
     vnl_vector<double> max_sample( mu_.size(),0.0);

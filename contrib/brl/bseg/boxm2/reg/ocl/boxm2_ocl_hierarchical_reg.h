@@ -25,6 +25,7 @@ class boxm2_ocl_hierarchical_reg : public boxm2_ocl_reg_mutual_info
   boxm2_ocl_hierarchical_reg( boxm2_opencl_cache2_sptr  & cacheA,
                               boxm2_stream_scene_cache & cacheB,
                               bocl_device_sptr device, int nbins,
+                              bool iscoarse = true,
                               double scale = 1.0, 
                               int numsamples = 100);
 
@@ -47,6 +48,7 @@ protected:
   vcl_vector<vcl_pair<int, double> > pdf_;
   vcl_vector<vcl_pair<int, double> > cdf_;
 
+  bool iscoarse_;
 
   double mu_cost_;
 };

@@ -10,6 +10,7 @@
 #include <boxm2/io/boxm2_stream_scene_cache.h>
 
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_timer.h>
 #include <vcl_algorithm.h>
@@ -59,7 +60,13 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> sceneA_file("-sceneA", "sceneA filename", "");
   vul_arg<vcl_string> sceneB_file("-sceneB", "sceneB filename", "");
   vul_arg<vcl_string> xformAtoB_file("-xform", "xfrom filename", "");
+  vul_arg<double> rotationangle("-rot", "rotation angle ( in radians )", 0.5);
+  vul_arg<bool> coarse("-coarse", "Registration USing coarser model", 0);
+
   vul_arg_parse(argc, argv);
+  
+  vcl_cout<<"Is Coarse "<<coarse()<<vcl_endl;
+  int a ; vcl_cin>>a;
   //create scene
   boxm2_scene_sptr sceneA = new boxm2_scene(sceneA_file());
   boxm2_scene_sptr sceneB = new boxm2_scene(sceneB_file());
@@ -81,6 +88,16 @@ int main(int argc,  char** argv)
   double q0=0,q1=0,q2=0,q3=0;       vgl_rotation_3d<double> r;
   double scale = 1.0;               int numsamples = 20;
   
+
+  vcl_cout<<"Covariance in X direction can be "<<2*sceneB->blocks().begin()->second.sub_block_dim_.x()<<vcl_endl;
+  vcl_cout<<"Origin of Scene A is "<<sceneA->local_origin()<<vcl_endl;
+  vnl_vector<double> sceneA_origin(4);
+  sceneA_origin[0] = sceneA->local_origin().x();
+  sceneA_origin[1] = sceneA->local_origin().y();
+  sceneA_origin[2] = sceneA->local_origin().z();
+  sceneA_origin[3] = 1.0;
+
+
   if(xformAtoB_file() != "" )
   {
     vcl_ifstream ifile( xformAtoB_file().c_str() ) ;
@@ -92,30 +109,49 @@ int main(int argc,  char** argv)
     ifile >> scale ;
     vnl_matrix<double> mat(4,4);
     ifile >> mat;
+
+    vnl_vector<double> sceneA_xformed_center =  mat*sceneA_origin;
+    vgl_box_3d<double> scene_box = sceneB->bounding_box();
+
+    double xfurthest = vcl_fabs(scene_box.min_x()-sceneA_xformed_center[0]) > vcl_fabs(scene_box.max_x()-sceneA_xformed_center[0])? scene_box.min_x():scene_box.max_x();
+    double yfurthest = vcl_fabs(scene_box.min_y()-sceneA_xformed_center[1]) > vcl_fabs(scene_box.max_y()-sceneA_xformed_center[1])? scene_box.min_y():scene_box.max_y();
+    double zfurthest = vcl_fabs(scene_box.min_z()-sceneA_xformed_center[2]) > vcl_fabs(scene_box.max_z()-sceneA_xformed_center[2])? scene_box.min_z():scene_box.max_z();
+
+    vgl_point_3d<double> ptfurthest(xfurthest,yfurthest,zfurthest);
+    vgl_point_3d<double> pt_sceneA_xformed_center(sceneA->local_origin().x(), sceneA->local_origin().y(), sceneA->local_origin().z());
+    double dist = (ptfurthest -  pt_sceneA_xformed_center).length();
+    // compute furthest point
+
+    double thetafurthest = 2*  vcl_asin(sceneB->blocks().begin()->second.sub_block_dim_.x()/2/dist);
+
+    vcl_cout<<"Angle is "<<thetafurthest<<vcl_endl;
+  
     mat = mat/scale;
     
     vnl_matrix<double> matr(3,3);     mat.extract(matr);
     vgl_rotation_3d<double> r1(matr);
 
-    x[0] = mat[0][3];              var[0] = 1.0/8;  // var[0] = 1.0/8;     //   BH    
-    x[1] = mat[1][3];              var[1] = 1.0/8;  // var[1] = 1.0/8;     //   BH
-    x[2] = mat[2][3];              var[2] = 1.0/8;  // var[2] = 1.0/8;     //   BH
-    x[3] = r1.as_rodrigues()[0];   var[3] = 0.3/8;  // var[3] = 0.3/8;     //   BH
-    x[4] = r1.as_rodrigues()[1];   var[4] = 0.3/8;  // var[4] = 0.3/8;     //   BH
-    x[5] = r1.as_rodrigues()[2];   var[5] = 0.3/8;  // var[5] = 0.3/8;     //   BH
+    vcl_cout<<"Sub Block Dim "<<sceneB->blocks().begin()->second.sub_block_dim_.x()<<vcl_endl;
+
+    // use 2 to multiple if 4096 samples are asked but use 1 as factor if 64 samples. 
+
+    x[0] = mat[0][3];              var[0] = 2*sceneB->blocks().begin()->second.sub_block_dim_.x()/scale;  // var[0] = 1.0/8;     //   BH    
+    x[1] = mat[1][3];              var[1] = 2*sceneB->blocks().begin()->second.sub_block_dim_.y()/scale;  // var[1] = 1.0/8;     //   BH
+    x[2] = mat[2][3];              var[2] = 2*sceneB->blocks().begin()->second.sub_block_dim_.z()/scale;  // var[2] = 1.0/8;     //   BH
+    x[3] = r1.as_rodrigues()[0];   var[3] = rotationangle();  // var[3] = 0.3/8;     //   BH
+    x[4] = r1.as_rodrigues()[1];   var[4] = rotationangle();  // var[4] = 0.3/8;     //   BH
+    x[5] = r1.as_rodrigues()[2];   var[5] = rotationangle();  // var[5] = 0.3/8;     //   BH
 
     r= r1;  
  
     vnl_matrix<double> xform;
     convert_params_to_xform(x+var,scale,xform);
     vcl_cout<<xform<<vcl_endl;
+
+
   }
 
-
-
-  boxm2_ocl_hierarchical_reg func(opencl_cacheA,cacheB,device,5,scale,numsamples);
-
-
+  boxm2_ocl_hierarchical_reg func(opencl_cacheA,cacheB,device,5,coarse(),scale,numsamples );
   func.init(x, var);
   vul_timer t;
   func.exhaustive(0);
