@@ -44,7 +44,7 @@ bil_arf_image_istream::
 bil_arf_image_istream()
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
-    format_(VIDL_PIXEL_FORMAT_UNKNOWN),
+    format_(VIL_PIXEL_FORMAT_UNKNOWN ),
     current_frame_(NULL),
     time_stamp_(-1) {}
 
@@ -54,7 +54,7 @@ bil_arf_image_istream::
 bil_arf_image_istream(const vcl_string& glob)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
-    format_(VIDL_PIXEL_FORMAT_UNKNOWN),
+    format_(VIL_PIXEL_FORMAT_UNKNOWN),
     current_frame_(NULL),
     time_stamp_(-1)
 {
@@ -109,7 +109,7 @@ open(const vcl_string& rawFile)
 
   if (arf_image_type==5)
   {
-    format_ = VIDL_PIXEL_FORMAT_MONO_16;
+    format_ = VIL_PIXEL_FORMAT_UINT_16;
     pixel_size_ = 16;
   }
   image_offset_ = image_offset;
@@ -130,7 +130,7 @@ close()
   current_frame_ = NULL;
   ni_ = 0;
   nj_ = 0;
-  format_ = VIDL_PIXEL_FORMAT_UNKNOWN;
+  format_ = VIL_PIXEL_FORMAT_UNKNOWN;
   raw_.close();
   vcl_cout<<"bil_arf_image_istream closed"<<vcl_endl;
 }

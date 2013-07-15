@@ -29,7 +29,7 @@ bil_raw_image_istream::
 bil_raw_image_istream()
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
-    format_(VIDL_PIXEL_FORMAT_UNKNOWN),
+    format_(VIL_PIXEL_FORMAT_UNKNOWN),
     current_frame_(NULL),
     time_stamp_(-1) {}
 
@@ -39,7 +39,7 @@ bil_raw_image_istream::
 bil_raw_image_istream(const vcl_string& glob)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
-    format_(VIDL_PIXEL_FORMAT_UNKNOWN),
+    format_(VIL_PIXEL_FORMAT_UNKNOWN),
     current_frame_(NULL),
     time_stamp_(-1)
 {
@@ -79,13 +79,13 @@ open(const vcl_string& rawFile)
   num_frames_ = (unsigned int)numFrames; // possible overflow...
   pixel_size_ = pixelSize;
   if (pixelSize==24)
-    format_ = VIDL_PIXEL_FORMAT_RGB_24;
+    format_ = VIL_PIXEL_FORMAT_RGB_BYTE;
   else if (pixelSize==8)
-    format_ = VIDL_PIXEL_FORMAT_MONO_8;
+    format_ = VIL_PIXEL_FORMAT_BYTE;
   else if (pixelSize<=16 && pixelSize > 8)
   {
       pixel_size_ =16;
-    format_ = VIDL_PIXEL_FORMAT_MONO_16;
+    format_ = VIL_PIXEL_FORMAT_UINT_16;
   }
 
   //index is invalid until advance is called
@@ -104,7 +104,7 @@ close()
   current_frame_ = NULL;
   ni_ = 0;
   nj_ = 0;
-  format_ = VIDL_PIXEL_FORMAT_UNKNOWN;
+  format_ = VIL_PIXEL_FORMAT_UNKNOWN;
   raw_.close();
   vcl_cout<<"bil_raw_image_istream closed"<<vcl_endl;
 }

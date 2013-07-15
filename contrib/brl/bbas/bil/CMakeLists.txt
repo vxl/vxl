@@ -13,7 +13,7 @@ AUX_SOURCE_DIRECTORY(Templates bil_sources)
 
 ADD_LIBRARY(bil  ${bil_sources})
 
-TARGET_LINK_LIBRARIES(bil vil vil_io vsl vidl)
+TARGET_LINK_LIBRARIES(bil vil vil_io vsl)
 
 SUBDIRS( algo )
 

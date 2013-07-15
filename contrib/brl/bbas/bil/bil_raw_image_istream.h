@@ -11,7 +11,7 @@
 // \author Andrew Miller
 // \date 19 Dec 2011
 
-#include <vidl/vidl_pixel_format.h>
+#include <vil/vil_pixel_format.h>
 #include <vil/vil_image_view_base.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -72,7 +72,7 @@ class bil_raw_image_istream : public vbl_ref_count
   virtual unsigned int height() const { return nj_; }
 
   //: Return the pixel format
-  virtual vidl_pixel_format format() const { return format_; }
+  virtual vil_pixel_format format() const { return format_; }
 
   //: Return the frame rate (0.0 if unspecified)
   virtual double frame_rate() const { return 0.0; }
@@ -118,7 +118,7 @@ class bil_raw_image_istream : public vbl_ref_count
   unsigned int num_frames_;
 
   //: The pixel format
-  vidl_pixel_format format_;
+  vil_pixel_format format_;
   unsigned int pixel_size_;
 
   //: The current frame (cached)
