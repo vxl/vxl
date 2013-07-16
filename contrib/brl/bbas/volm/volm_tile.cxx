@@ -147,6 +147,111 @@ vcl_vector<volm_tile> volm_tile::generate_p1_wr2_tiles()
   return p1_tiles;
 }
 
+vcl_vector<volm_tile> volm_tile::generate_p1b_wr1_tiles()
+{
+  vcl_vector<volm_tile> p1b_tiles;
+  unsigned ni = 3601;
+  unsigned nj = 3601;
+  float scale_i = 1;
+  float scale_j = 1;
+  //p1b_tiles.push_back(volm_tile(33, 71, 'S', 'W', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(33, 72, 'S', 'W', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(34, 71, 'S', 'W', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(34, 72, 'S', 'W', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(35, 71, 'S', 'W', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(35, 72, 'S', 'W', scale_i, scale_j, ni, nj));
+  return p1b_tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p1b_wr2_tiles()
+{
+  vcl_vector<volm_tile> p1b_tiles;
+  unsigned ni = 3601;
+  unsigned nj = 3601;
+  float scale_i = 1;
+  float scale_j = 1;
+  //p1b_tiles.push_back(volm_tile(11, 71, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(12, 76, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(12, 77, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(12, 78, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(13, 76, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(13, 77, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(13, 78, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(18, 72, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(18, 73, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(18, 74, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(19, 72, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(19, 73, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(19, 74, 'N', 'E', scale_i, scale_j, ni, nj));
+  return p1b_tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p1b_wr3_tiles()
+{
+  vcl_vector<volm_tile> p1b_tiles;
+  unsigned ni = 3601;
+  unsigned nj = 3601;
+  float scale_i = 1;
+  float scale_j = 1;
+  //p1b_tiles.push_back(volm_tile(30, 34, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(30, 35, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(30, 36, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(30, 37, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(31, 34, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(31, 35, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(31, 36, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(31, 37, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(32, 34, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(32, 35, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(32, 36, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(32, 37, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(33, 35, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(33, 36, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(33, 37, 'N', 'E', scale_i, scale_j, ni, nj));
+  return p1b_tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p1b_wr4_tiles()
+{
+  vcl_vector<volm_tile> p1b_tiles;
+  unsigned ni = 3601;
+  unsigned nj = 3601;
+  float scale_i = 1;
+  float scale_j = 1;
+  p1b_tiles.push_back(volm_tile(5, 124, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(5, 125, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(6, 123, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(6, 124, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(6, 125, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(6, 126, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(7, 123, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(7, 124, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(7, 125, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(7, 126, 'N', 'E', scale_i, scale_j, ni, nj));
+  return p1b_tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p1b_wr5_tiles()
+{
+  vcl_vector<volm_tile> p1b_tiles;
+  unsigned ni = 3601;
+  unsigned nj = 3601;
+  float scale_i = 1;
+  float scale_j = 1;
+  //p1b_tiles.push_back(volm_tile(21, 120, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(22, 120, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(22, 121, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(23, 120, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(23, 121, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(24, 120, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(24, 121, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(24, 122, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(25, 120, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.push_back(volm_tile(25, 121, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(25, 122, 'N', 'E', scale_i, scale_j, ni, nj));
+  return p1b_tiles;
+}
+
 vcl_string volm_tile::get_string()
 {
   vcl_stringstream str;

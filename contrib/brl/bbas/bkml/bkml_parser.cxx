@@ -310,6 +310,26 @@ void bkml_parser::trim_string(vcl_string& s)
   s = t;
 }
 
+vcl_vector<vgl_point_3d<double> > bkml_parser::parse_points(vcl_string kml_file)
+{
+  bkml_parser* parser = new bkml_parser();
+  vcl_vector<vgl_point_3d<double> > out;
+  vcl_FILE* xmlFile = vcl_fopen(kml_file.c_str(), "r");
+  if (!xmlFile) {
+    vcl_cerr << kml_file.c_str() << " error on opening the input kml file\n";
+    delete parser;
+    return out;
+  }
+  if (!parser->parseFile(xmlFile)) {
+    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+             << parser->XML_GetCurrentLineNumber() << '\n';
+    delete parser;
+    return out;
+  }
+  // return the points retrieved from kml
+  return parser->points_;
+}
+
 //: the first sheet contains the outer polygon, and the second sheet contains the inner polygon if any, saves 2d points, only lat, lon
 vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
 {
@@ -365,14 +385,14 @@ vgl_polygon<double> bkml_parser::parse_polygon_with_inner(vcl_string poly_kml_fi
   // load the outer boundary
   for (unsigned sh_idx = 0; sh_idx < n_out; sh_idx++) {
     out.new_sheet();
-    unsigned n_points = parser->polyouter_[sh_idx].size() - 1;
+    unsigned n_points = (unsigned)parser->polyouter_[sh_idx].size() - 1;
     for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++)
       out.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
   }
   // load the inner boundary
   for (unsigned sh_idx = 0; sh_idx < n_in; sh_idx++) {
     out.new_sheet();
-    unsigned n_points = parser->polyinner_[sh_idx].size() - 1;
+    unsigned n_points = (unsigned)parser->polyinner_[sh_idx].size() - 1;
     for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++)
       out.push_back(parser->polyinner_[sh_idx][pt_idx].x(), parser->polyinner_[sh_idx][pt_idx].y());
   }

@@ -8,6 +8,8 @@
 
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
+#include <volm/volm_loc_hyp.h>
+#include <volm/volm_loc_hyp_sptr.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_candidate_list.h>
@@ -22,6 +24,10 @@
 #include <vcl_ios.h>
 #include <bvrml/bvrml_write.h>
 #include <vil/vil_crop.h>
+#include <bkml/bkml_parser.h>
+#include <bkml/bkml_write.h>
+#include <vpgl/vpgl_utm.h>
+
 
 bool get_top_cameras(unsigned const& zone_idx, unsigned const& tile_idx, vcl_string const& cam_bin,
                      unsigned const& ni, unsigned const& nj, vcl_string const& score_folder,
@@ -94,6 +100,54 @@ bool get_top_cameras(unsigned const& zone_idx, unsigned const& tile_idx, vcl_str
   return true;
 }
 
+bool create_camera_kml(unsigned const& top_id, double const& lon, double const& lat,
+                       vcl_vector<volm_geo_index_node_sptr> const& leaves,
+                       volm_geo_index_node_sptr const& leaf, unsigned const& hypo_id, 
+                       vcl_string const& score_file, vcl_string const& out_dir,
+                       volm_camera_space_sptr const& cam_space, unsigned ni, unsigned nj, double max_depth)
+{
+  // load the score
+  vcl_vector<volm_score_sptr> scores;
+  volm_score::read_scores(scores, score_file);
+  // obtain top camera for location (lon, lat)
+  unsigned cam_id;
+  vcl_vector<volm_score_sptr>::iterator vit = scores.begin();
+  bool found = false;
+  while (!found) {
+    unsigned li = (*vit)->leaf_id_, hi = (*vit)->hypo_id_;
+    if (leaf->get_string() == leaves[li]->get_string() && hypo_id == hi) {
+      found = true;  cam_id = (*vit)->max_cam_id_;
+    }
+    ++vit;
+  }
+
+  cam_angles best_cam = cam_space->camera_angles(cam_id);
+
+  vcl_cerr << " top " << top_id << " location " << lon << "," << lat << " has best camera :";
+  best_cam.print();
+  // write out the best camera kml
+  vcl_stringstream cam_kml;
+  cam_kml << out_dir << "/BestCamera_top_" << top_id << ".kml";
+  vcl_stringstream kml_name;
+  kml_name << "BestCamera_top_" << top_id;
+
+  vcl_ofstream ofs_kml(cam_kml.str().c_str());
+  bkml_write::open_document(ofs_kml);
+
+  double head = (best_cam.heading_ < 0) ? best_cam.heading_+360.0 : best_cam.heading_;
+  double tilt = (best_cam.tilt_ < 0) ? best_cam.tilt_+360.0 : best_cam.tilt_;
+  double roll = (best_cam.roll_ * best_cam.roll_ < 1E-10) ? 0 : best_cam.roll_;
+  double tfov = best_cam.top_fov_;
+  double tv_rad = tfov / vnl_math::deg_per_rad;
+  double ttr = vcl_tan(tv_rad);
+  double rfov = vcl_atan( ni * ttr / nj) * vnl_math::deg_per_rad;
+
+  bkml_write::write_photo_overlay(ofs_kml, kml_name.str(), lon, lat, cam_space->altitude(), head, tilt, roll, tfov, rfov, max_depth);
+  bkml_write::close_document(ofs_kml);
+  ofs_kml.close();
+  return true;
+}
+
 int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> out("-out", "folder where probability map stores", "");
@@ -113,8 +167,167 @@ int main(int argc,  char** argv)
   vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg<float> gt_score ("-gts", "ground truth score if exist", 0.0f);
   vul_arg<bool> is_camera ("-is_cam", "option to choose whether we write best cameras as photo overlay", false);
+  vul_arg<bool> is_generate_top_cam_kml ("-is_top_cam", "option to choose whether we retrive top cameras from generated candidate list", false);
+  vul_arg<unsigned> top_cam_num("-top_cam_num", "number of top camera kml we want to generate",10);
+  vul_arg<vcl_string> candlist_kml("-cand_file", "generate candidate list file", "");
+  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary to get the depth value for all objects", "");
   vul_arg_parse(argc, argv);
   vcl_cout << "argc: " << argc << vcl_endl;
+
+  // given a generate candidate list kml with top locations/regions, retrive camera for the top location and store the camera for
+  // rendering purpose
+  if (is_generate_top_cam_kml()) {
+    vcl_cout << " retrive the best cameras for top locations stored in the input candidate list file :" << vcl_endl;
+    if (candlist_kml().compare("") == 0 || !vul_file::exists(candlist_kml())) {
+      vul_arg_display_usage_and_exit();
+      vcl_cerr << " input candidate list file does NOT exist\n";
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    vcl_string out_dir = vul_file::dirname(candlist_kml()) + '/';
+    vcl_stringstream log;
+    vcl_string log_file = out_dir + "/candidate_list_top_camera_log.xml";
+    vcl_string rational_folder = out_dir + "/rationale/";
+    vul_file::make_directory(rational_folder);
+    // check the input parameter
+    if (cam_bin().compare("") == 0 || query_img().compare("") == 0 || score_folder().compare("") == 0 || dms_bin().compare("") == 0 ||
+        geo_hypo_a().compare("") == 0 || geo_hypo_b().compare("") == 0)
+    {
+      log << " ERROR: input files/folder can not be empty\n";
+      vul_arg_display_usage_and_exit();
+      volm_io::write_post_processing_log(log_file, log.str());
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    // load camera space
+    if (!vul_file::exists(cam_bin())) {
+      log << "ERROR: can not find camera_space binary: " << cam_bin() << '\n';
+      volm_io::write_post_processing_log(log_file, log.str());
+      vcl_cerr << log.str();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    vsl_b_ifstream cam_ifs(cam_bin());
+    volm_camera_space_sptr cam_space = new volm_camera_space();
+    cam_space->b_read(cam_ifs);
+    cam_ifs.close();
+    // load the depth_map_scene
+    if (!vul_file::exists(dms_bin())) {
+      log << "ERROR: can not find the depth map scene binary file: " << dms_bin() << '\n';
+      volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    depth_map_scene_sptr dms = new depth_map_scene;
+    vsl_b_ifstream dms_ifs(dms_bin().c_str());
+    dms->b_read(dms_ifs);
+    dms_ifs.close();
+    double max_depth = -10.0;
+    for (unsigned o_idx = 0; o_idx < dms->scene_regions().size(); o_idx++)
+      if (max_depth < dms->scene_regions()[o_idx]->min_depth())
+        max_depth = dms->scene_regions()[o_idx]->min_depth();
+
+    // obtain query image size
+    if (!vul_file::exists(query_img())) {
+      log << "ERROR: can not find the test query image: " << query_img() << '\n';
+      volm_io::write_post_processing_log(log_file, log.str());
+      vcl_cerr << log.str();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    vil_image_view<vxl_byte> query_image = vil_load(query_img().c_str());
+    unsigned ni, nj;
+    ni = query_image.ni();
+    nj = query_image.nj();
+
+    // retrieve top locations from candidate list file
+    vcl_vector<vgl_point_3d<double> > top_locs = bkml_parser::parse_points(candlist_kml());
+
+    // get the closest location from geolocations
+    unsigned top_cams;
+    if (top_cam_num() > top_locs.size())
+      top_cams = top_locs.size();
+    else
+      top_cams = top_cam_num();
+    // create tiles
+    vcl_vector<volm_tile> tiles;
+    tiles = volm_tile::generate_p1_wr2_tiles();
+
+    for (unsigned i = 0; i < top_cams; i++) {
+      double lon = top_locs[i].x(), lat = top_locs[i].y();
+      // locate tile
+      unsigned tile_id = tiles.size();
+      for (unsigned t_idx = 0; t_idx < tiles.size(); t_idx++) {
+        unsigned u, v;
+        if (tiles[t_idx].global_to_img(lon, lat, u, v))
+          if (u<tiles[t_idx].ni() && v<tiles[t_idx].nj())
+            tile_id = t_idx;
+      }
+      // locate zone
+      vpgl_utm utm;
+      int zone_id;
+      double x, y;
+      utm.transform(lat, lon, x, y, zone_id);
+      vcl_cerr << " Top " << i << " locations " << lon << ',' << lat << " is in utm zone " << zone_id << " and tile " << tile_id << vcl_endl;
+      
+      // construct the volm_geo_index
+      vcl_string geo_hypo_folder;
+      if (zone_id == 17)
+        geo_hypo_folder = geo_hypo_a();
+      else if (zone_id == 18)
+        geo_hypo_folder = geo_hypo_b();
+      else {
+        log << " ERROR: location " << lon << ',' << lat << " is outside ROI with utm zone " << zone_id << '\n';
+        volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+        volm_io::EXE_ARGUMENT_ERROR;
+      }
+      vcl_stringstream file_name_pre;
+      file_name_pre << geo_hypo_folder << "geo_index_tile_" << tile_id;
+      if (!vul_file::exists(file_name_pre.str() + ".txt")) {
+        log << " ERROR: location " << lon << ',' << lat << " is in tile " << tile_id << " but no geolocations for this tile, stop\n";
+        volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+        return volm_io::POST_PROCESS_FAILED;
+      }
+      float min_size;
+      volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
+      volm_geo_index::read_hyps(root, file_name_pre.str());
+      vcl_vector<volm_geo_index_node_sptr> leaves;
+      volm_geo_index::get_leaves_with_hyps(root, leaves);
+      // obtain leaf_id and hypo_id for current location
+      unsigned hypo_id = 0;
+      volm_geo_index_node_sptr leaf = volm_geo_index::get_closest(root, lat, lon, hypo_id);
+      vgl_point_3d<double> loc_closest;
+      if (leaf) {
+        loc_closest = leaf->hyps_->locs_[hypo_id];
+        double sec_to_meter = 21.0/0.000202;
+        double x_dist = abs(lon - loc_closest.x())*sec_to_meter;
+        double y_dist = abs(lat - loc_closest.y())*sec_to_meter;
+        vgl_vector_2d<double> gt_dist_vect(x_dist, y_dist);
+        double gt_dist = sqrt(gt_dist_vect.sqr_length());
+        if (gt_dist > 0)
+          log << " NOTE: distance from the closest location " << loc_closest << " in geolocation to location " << top_locs[i]
+              << " is " << gt_dist << " meters\n";
+      }
+      else {
+        log << " ERROR: location " << lon << ',' << lat << " does not exist in any leaf in tile " << tile_id << '\n';
+        volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+        return volm_io::POST_PROCESS_FAILED;
+      }
+      // create camera kml for current location
+      // get the score folder
+      vcl_stringstream score_file;
+      score_file << score_folder() + "/ps_1_scores_zone_" << zone_id << "_tile_" << tile_id << ".bin";
+      if (!vul_file::exists(score_file.str())) {
+        log << " ERROR: can not find the score file " << score_file.str() << "\n";
+        volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+        return volm_io::POST_PROCESS_FAILED;
+      }
+      if (!create_camera_kml(i, loc_closest.x(), loc_closest.y(), leaves, leaf, hypo_id, score_file.str(), rational_folder, cam_space, ni, nj, max_depth)){
+        log << "  ERROR: retrieve best camera for location " << loc_closest << " failed\n";
+        volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+        return volm_io::POST_PROCESS_FAILED;
+      }
+    } // end of loop over all top_locs
+    
+    volm_io::write_composer_log(log_file, log.str());
+    vcl_cerr << log.str() << vcl_endl;
+    return volm_io::SUCCESS;
+  } // end of generate best camera kml files for top locations
 
   vcl_stringstream log;
   vcl_string log_file = out_kml() + "/candidate_list_log.xml";

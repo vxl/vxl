@@ -42,7 +42,8 @@ class bkml_write
   static void write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
                                   double lon, double lat, double alt,
                                   double head, double tilt, double roll,
-                                  double t_fov, double r_fov);
+                                  double t_fov, double r_fov,
+                                  double value = 0.0);
 };
 
 #endif

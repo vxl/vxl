@@ -116,7 +116,7 @@ expatpp::parseFile(FILE* inFile)
   // hack here
   // Sep, 2012, Yi Dong: hack to not use BUFSIZ for large file
   //char buf[BUFSIZ];
-  long lSize = 1024*1024*10;
+  long lSize = 1024*1024*50;
   char* buf = new char[lSize];
   int done;
   if (!inFile)

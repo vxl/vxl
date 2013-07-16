@@ -115,8 +115,11 @@ void bkml_write::write_location(vcl_ofstream &ofs, vcl_string name, vcl_string d
 void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
                                      double lon, double lat, double alt,
                                      double head, double tilt, double roll,
-                                     double t_fov, double r_fov)
+                                     double t_fov, double r_fov, double value)
 {
+  if (value != 0.0) {
+    ofs << "<value>" << value << "</value>\n";
+  }
   ofs << "<PhotoOverlay>\n"
       << "  <name>" << name << "</name>\n"
       << "  <Camera>\n"

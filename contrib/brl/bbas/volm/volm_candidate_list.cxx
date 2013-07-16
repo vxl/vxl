@@ -45,7 +45,7 @@ volm_candidate_list::volm_candidate_list(vil_image_view<vxl_byte> const& image,
 
 bool volm_candidate_list::create_expand_polygon(vcl_vector<vgl_point_2d<int> > const& sheet)
 {
-  unsigned n_points = sheet.size();
+  unsigned n_points = (unsigned)sheet.size();
   vcl_vector<vgl_point_2d<double> > points;
   for (unsigned i = 0; i < n_points; i++) {
     points.push_back(vgl_point_2d<double>(sheet[i].x()+0.5, sheet[i].y()+0.5));
@@ -117,7 +117,7 @@ bool volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> 
     for (int u = bbox.min_x(); u <= bbox.max_x(); u++) {
       for (int v = bbox.min_y(); v <= bbox.max_y(); v++) {
         //assert(u > 0);  assert(v > 0);  assert((unsigned)u < image_.ni());  assert((unsigned)v < image_.nj());
-        if (u < 0 || v < 0 || u > image_.ni() || v > image_.nj())
+        if (u < 0 || v < 0 || u > (int)image_.ni() || v > (int)image_.nj())
           continue;
         if (this->contains(sh_idx, u, v) && image_(u,v) > thres_ )
           points.insert(vcl_pair<unsigned, vgl_point_2d<int> >(image_(u,v), vgl_point_2d<int>(u,v)));
@@ -182,7 +182,7 @@ bool volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile& tile,
 {
   if (sh_idx > n_sheet_)
     return false;
-  unsigned n_point = poly_[sh_idx].size();
+  unsigned n_point = (unsigned)poly_[sh_idx].size();
   double deg_per_half_pixel_i = 0.5 * tile.scale_i()/(tile.ni() - 1);
   double deg_per_half_pixel_j = 0.5 * tile.scale_j()/(tile.nj() - 1);
   vcl_vector<vgl_point_2d<double> > points;
@@ -247,7 +247,7 @@ bool volm_candidate_list::candidate_list_image(vil_image_view<vxl_byte>& image)
     image.set_size(image_.ni(), image_.nj());
   image.fill((vxl_byte)127);
   for (unsigned sh_idx = 0; sh_idx < n_sheet_; sh_idx++) {
-    unsigned n_verts = poly_[sh_idx].size();
+    unsigned n_verts = (unsigned)poly_[sh_idx].size();
     for (unsigned v_idx = 0; v_idx < n_verts; v_idx++)
       image(poly_[sh_idx][v_idx].x(), poly_[sh_idx][v_idx].y()) = (vxl_byte)255;
   }

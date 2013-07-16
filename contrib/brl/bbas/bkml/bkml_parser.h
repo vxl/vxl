@@ -53,6 +53,10 @@ class bkml_parser : public expatpp
   // parser should not delete the site, it is used afterwards
   ~bkml_parser(void) {}
 
+
+  //: parser to load the points defined in kml file
+  static vcl_vector<vgl_point_3d<double> > parse_points(vcl_string kml_file);
+
   //: parser to load the outer boundary of all defined polygons in the kml file (only parse the lat(y) and lon(x), elev ignored)
   static vgl_polygon<double> parse_polygon(vcl_string poly_kml_file);
 

@@ -8,6 +8,7 @@
 #include <volm/volm_camera_space.h>
 #include <volm/volm_char_codes.h>
 #include <volm/volm_geo_index.h>
+#include <volm/volm_geo_index2.h>
 #include <volm/volm_io.h>
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_query.h>

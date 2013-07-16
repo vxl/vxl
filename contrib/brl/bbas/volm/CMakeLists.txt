@@ -47,6 +47,9 @@ SET(volm_sources
  volm_vrml_io.h                         volm_vrml_io.cxx
  volm_buffered_index.h					volm_buffered_index.cxx
  volm_candidate_list.h                  volm_candidate_list.cxx
+ volm_geo_index2_node_base.h            volm_geo_index2_node_base.cxx
+ volm_geo_index2_sptr.h
+ volm_geo_index2.h                      volm_geo_index2.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_sources)
