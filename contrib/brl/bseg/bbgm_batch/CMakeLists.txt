@@ -30,34 +30,33 @@ IF( PYTHON_FOUND )
             reg_bbgm.cxx          reg_bbgm.h
            )
 
-        ADD_LIBRARY(bbgm_batch SHARED ${bbgm_batch_sources})
+        IF(NOT BUILD_POSITION_DEPENDENT_CODE)
+          ADD_LIBRARY(bbgm_batch SHARED ${bbgm_batch_sources})
 
-        IF(WIN32)
-          #library has to have different name depending on debug or release version.
-          SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES OUTPUT_NAME bbgm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
-        ENDIF(WIN32)
+          IF(WIN32)
+            #library has to have different name depending on debug or release version.
+            SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES OUTPUT_NAME bbgm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+          ENDIF(WIN32)
 
-        SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES PREFIX "")
-        IF(NOT WIN32)
-          SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
-        ENDIF(NOT WIN32)
-        TARGET_LINK_LIBRARIES(bbgm_batch
-                              bprb brdb bpro_batch bbgm_pro
-                              vidl_pro vil_pro
-                              vbl vil_io vil_io expat expatpp)
+          SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES PREFIX "")
 
-        IF (PYTHON_DEBUG_LIBRARIES)
-          TARGET_LINK_LIBRARIES( bbgm_batch debug ${PYTHON_DEBUG_LIBRARY})
-        ENDIF(PYTHON_DEBUG_LIBRARIES )
+          TARGET_LINK_LIBRARIES(bbgm_batch
+            bprb brdb bpro_batch bbgm_pro
+            vidl_pro vil_pro
+            vbl vil_io vil_io expat expatpp)
 
-        IF(PYTHON_LIBRARIES)
-          TARGET_LINK_LIBRARIES( bbgm_batch optimized ${PYTHON_LIBRARY})
-        ENDIF(PYTHON_LIBRARIES)
+          IF (PYTHON_DEBUG_LIBRARIES)
+            TARGET_LINK_LIBRARIES( bbgm_batch debug ${PYTHON_DEBUG_LIBRARY})
+          ENDIF(PYTHON_DEBUG_LIBRARIES )
 
-        IF( BUILD_TESTING )
-          SUBDIRS(tests)
-        ENDIF( BUILD_TESTING )
+          IF(PYTHON_LIBRARIES)
+            TARGET_LINK_LIBRARIES( bbgm_batch optimized ${PYTHON_LIBRARY})
+          ENDIF(PYTHON_LIBRARIES)
 
+          IF( BUILD_TESTING )
+            SUBDIRS(tests)
+          ENDIF( BUILD_TESTING )
+        ENDIF(NOT BUILD_POSITION_DEPENDENT_CODE)
       ENDIF(GEOTIFF_FOUND )
     ENDIF(TIFF_FOUND )
    ENDIF( EXPATPP_FOUND )

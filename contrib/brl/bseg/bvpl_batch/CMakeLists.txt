@@ -18,32 +18,30 @@ IF( PYTHON_FOUND )
      SET(bvpl_batch_sources
          reg_bvpl.h   reg_bvpl.cxx
         )
+    IF (NOT BUILD_POSITION_DEPENDENT_CODE)
+      ADD_LIBRARY(bvpl_batch SHARED ${bvpl_batch_sources})
 
-    ADD_LIBRARY(bvpl_batch SHARED ${bvpl_batch_sources})
+      #library has to have different name depending on debug or release version.
+      IF(WIN32)
+        SET_TARGET_PROPERTIES(bvpl_batch PROPERTIES OUTPUT_NAME bvpl_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+      ENDIF(WIN32)
+      SET_TARGET_PROPERTIES(bvpl_batch PROPERTIES PREFIX "")
 
-    #library has to have different name depending on debug or release version.
-    IF(WIN32)
-      SET_TARGET_PROPERTIES(bvpl_batch PROPERTIES OUTPUT_NAME bvpl_batch DEBUG_POSTFIX _d SUFFIX .pyd)
-    ENDIF(WIN32)
-    SET_TARGET_PROPERTIES(bvpl_batch PROPERTIES PREFIX "")
-    IF(NOT WIN32)
-      SET_TARGET_PROPERTIES(bvpl_batch PROPERTIES COMPILE_FLAGS "-fPIC")
-    ENDIF(NOT WIN32)
+      TARGET_LINK_LIBRARIES(bvpl_batch bprb brdb bpro_batch vbl bvpl bvpl_pro bvpl_kernels_pro bvxm_grid_pro bvxm_grid_io bvxm_algo_pro)
 
-    TARGET_LINK_LIBRARIES(bvpl_batch bprb brdb bpro_batch vbl bvpl bvpl_pro bvpl_kernels_pro bvxm_grid_pro bvxm_grid_io bvxm_algo_pro)
+      IF (PYTHON_DEBUG_LIBRARIES)
+        TARGET_LINK_LIBRARIES( bvpl_batch debug ${PYTHON_DEBUG_LIBRARY})
+      ENDIF(PYTHON_DEBUG_LIBRARIES )
 
-    IF (PYTHON_DEBUG_LIBRARIES)
-      TARGET_LINK_LIBRARIES( bvpl_batch debug ${PYTHON_DEBUG_LIBRARY})
-    ENDIF(PYTHON_DEBUG_LIBRARIES )
+      IF(PYTHON_LIBRARIES)
+        TARGET_LINK_LIBRARIES( bvpl_batch optimized ${PYTHON_LIBRARY})
+      ENDIF(PYTHON_LIBRARIES)
 
-    IF(PYTHON_LIBRARIES)
-      TARGET_LINK_LIBRARIES( bvpl_batch optimized ${PYTHON_LIBRARY})
-    ENDIF(PYTHON_LIBRARIES)
+      IF( BUILD_TESTING )
+        SUBDIRS(tests)
+      ENDIF( BUILD_TESTING )
 
-    IF( BUILD_TESTING )
-      SUBDIRS(tests)
-    ENDIF( BUILD_TESTING )
-
+    ENDIF(NOT BUILD_POSITION_DEPENDENT_CODE)
   ENDIF( EXPAT_FOUND )
 ENDIF( PYTHON_FOUND )
 

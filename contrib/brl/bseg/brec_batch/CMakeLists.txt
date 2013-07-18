@@ -16,31 +16,29 @@ IF( PYTHON_FOUND )
     SET(brec_batch_sources
         reg_brec.cxx          reg_brec.h
        )
+    IF(NOT BUILD_POSITION_DEPENDENT_CODE)
+      ADD_LIBRARY(brec_batch SHARED ${brec_batch_sources})
 
-    ADD_LIBRARY(brec_batch SHARED ${brec_batch_sources})
+      IF(WIN32)
+        #library has to have different name depending on debug or release version.
+        SET_TARGET_PROPERTIES(brec_batch PROPERTIES OUTPUT_NAME brec_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+      ENDIF(WIN32)
+      SET_TARGET_PROPERTIES(brec_batch PROPERTIES PREFIX "")
 
-    IF(WIN32)
-      #library has to have different name depending on debug or release version.
-      SET_TARGET_PROPERTIES(brec_batch PROPERTIES OUTPUT_NAME brec_batch DEBUG_POSTFIX _d SUFFIX .pyd)
-    ENDIF(WIN32)
-    SET_TARGET_PROPERTIES(brec_batch PROPERTIES PREFIX "")
-    IF(NOT WIN32)
-      SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
-    ENDIF(NOT WIN32)
+      TARGET_LINK_LIBRARIES(brec_batch bprb brdb bpro_batch bmdl_pro bvxm_pro bvxm_io bvxm_grid_io brec_pro bbgm_pro bvgl_pro brip_pro bsvg_pro vbl vpgl_io vidl_pro vpgl_pro vil_io vil_pro)
 
-    TARGET_LINK_LIBRARIES(brec_batch bprb brdb bpro_batch bmdl_pro bvxm_pro bvxm_io bvxm_grid_io brec_pro bbgm_pro bvgl_pro brip_pro bsvg_pro vbl vpgl_io vidl_pro vpgl_pro vil_io vil_pro)
+      IF (PYTHON_DEBUG_LIBRARIES)
+        TARGET_LINK_LIBRARIES( brec_batch debug ${PYTHON_DEBUG_LIBRARY})
+      ENDIF(PYTHON_DEBUG_LIBRARIES )
 
-    IF (PYTHON_DEBUG_LIBRARIES)
-      TARGET_LINK_LIBRARIES( brec_batch debug ${PYTHON_DEBUG_LIBRARY})
-    ENDIF(PYTHON_DEBUG_LIBRARIES )
+      IF(PYTHON_LIBRARIES)
+        TARGET_LINK_LIBRARIES( brec_batch optimized ${PYTHON_LIBRARY})
+      ENDIF(PYTHON_LIBRARIES)
 
-    IF(PYTHON_LIBRARIES)
-      TARGET_LINK_LIBRARIES( brec_batch optimized ${PYTHON_LIBRARY})
-    ENDIF(PYTHON_LIBRARIES)
-
-    IF( BUILD_TESTING )
-      SUBDIRS(tests)
-    ENDIF( BUILD_TESTING )
+      IF( BUILD_TESTING )
+        SUBDIRS(tests)
+      ENDIF( BUILD_TESTING )
+    ENDIF(NOT BUILD_POSITION_DEPENDENT_CODE)
 
   ENDIF( EXPAT_FOUND )
 ENDIF( PYTHON_FOUND )
