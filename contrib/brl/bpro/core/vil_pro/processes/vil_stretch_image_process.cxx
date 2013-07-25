@@ -106,11 +106,8 @@ bool vil_stretch_image_process(bprb_func_process& pro)
   else{
     vcl_cerr << "vil_stretch_image_process: unknown output type\n";
       return false;
-  }
-return true;
-  
+  }  
 
- 
   return true;
 }
 
