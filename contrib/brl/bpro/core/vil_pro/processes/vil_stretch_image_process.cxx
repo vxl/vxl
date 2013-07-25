@@ -53,7 +53,19 @@ bool vil_stretch_image_process(bprb_func_process& pro)
     
   vcl_string out_type = pro.get_input<vcl_string>(3);
   // retrieve float image
-  vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
+  vil_image_view_base_sptr fimage;
+  // if the src imagery is of type float then vil_convert_cast simply does a 
+  // shallow copy. so as not to modify the original imagery, make a deep copy
+  if( vil_pixel_format_component_format(image->pixel_format()) ==
+      VIL_PIXEL_FORMAT_FLOAT) {
+    fimage = new vil_image_view<float>;
+    vil_image_view<float> & fimage_ref =
+        static_cast<vil_image_view<float> &>(*fimage);
+    fimage_ref.deep_copy(image);
+  }
+  else {
+    fimage = vil_convert_cast(float(), image);
+  }
   vil_image_view<float> fimg = *fimage;
   unsigned ni = fimg.ni(), nj = fimg.nj(), np = fimg.nplanes();
   if(out_type=="byte"){
