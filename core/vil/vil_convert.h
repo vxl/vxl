@@ -1166,7 +1166,7 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
 //     vil_convert_to_component_order(
 //       vil_convert_to_n_planes(
 //         3, 
-//         vil_load(filename),
+//         vil_load(filename)
 //       )
 //     )
 //   );
