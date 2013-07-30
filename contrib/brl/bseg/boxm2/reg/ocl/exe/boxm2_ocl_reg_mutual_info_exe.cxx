@@ -66,7 +66,7 @@ int main(int argc,  char** argv)
   vul_arg_parse(argc, argv);
   
   vcl_cout<<"Is Coarse "<<coarse()<<vcl_endl;
-  int a ; vcl_cin>>a;
+
   //create scene
   boxm2_scene_sptr sceneA = new boxm2_scene(sceneA_file());
   boxm2_scene_sptr sceneB = new boxm2_scene(sceneB_file());
@@ -164,80 +164,6 @@ int main(int argc,  char** argv)
   vcl_cout<<xform<<vcl_endl;
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
 
-#if 0
-  vnl_powell powell(&func);
-  powell.set_linmin_xtol(0.1);
-  //powell.set_x_tolerance(1);
-  //powell.set_max_function_evals(10);
-  vul_timer t ;
-  t.mark();
-  powell.minimize(x);
-
-  vcl_cout<<"Time Taken is "<<t.all()<<vcl_endl;
-  vgl_rotation_3d<double> rf(x[3],x[4],x[5]);
-
-  vcl_ofstream ofile("outxform.txt");
-  for(unsigned k = 0; k < 3; k++)
-  {
-      for(unsigned m = 0; m < 3; m++)
-      {
-          ofile << scale*rf.as_matrix()[k][m]<<" ";
-      }
-      ofile<<scale * x[k]<<vcl_endl;
-  }
-  ofile<<0<<" "<<0<<" "<<0<<" "<<1<<vcl_endl;
-
-  vcl_cout<<" B to A\n"
-          <<"Translation is ("<<x[0]<<','<<x[1]<<','<<x[2]<<")\n"
-          <<"Rotation is "<<x[3]<<","<<x[4]<<","<<x[5]<<'\n'
-          <<"Initial Mutual Info "<<func.mutual_info(vgl_rotation_3d<double>(),vgl_vector_3d<double>())<<'\n'
-          <<"Final Mutual Info "<<func.mutual_info(rf,vgl_vector_3d<double>(x[0],x[1],x[2]))<<vcl_endl;
-#endif
-
-#if 0
-  int numsamples  = 10;
-  float var1_range  = 0.5;
-  float var2_range  = 0.5;
-
-  vil_image_view<float> mi(numsamples+1,numsamples+1);
-  mi.fill(0.0);
-  //vnl_vector<double> x(6,0.0);
-
-  float var1_inc = 2* var1_range / ( (float) numsamples );
-  float var2_inc = 2* var2_range / ( (float) numsamples );
-  for (unsigned i = 0 ; i <=numsamples; i++)
-  {
-    for (unsigned j = 0 ; j <=numsamples; j++)
-    {
-      if(i == 0 && j == 0)
-      {
-          double tx =  x[0] + (-0.05+(double)i * 0.01);
-          double ty =  x[1] + (-0.05+(double)j * 0.01);
-          double tz = x[2];//+ (-50+(double)i * 10);
-          //x[1] = -var2_range + (float)j * var2_inc;
-
-          mi(i,j) = func.mutual_info(r,vgl_vector_3d<double>(tx,ty,tz));
-          vcl_cout<<mi(i,j)<<" ";
-          vcl_ofstream ofile("outxform.txt");
-
-          for(unsigned k = 0; k < 3; k++)
-          {
-              for(unsigned m = 0; m < 3; m++)
-                  ofile << scale*r.as_matrix()[k][m]<<" ";
-
-              if(k == 0 )  ofile<<scale * tx<<vcl_endl;
-              if(k == 1 )  ofile<<scale * ty<<vcl_endl;
-              if(k == 2 )  ofile<<scale * tz<<vcl_endl;
-          }
-
-          ofile<<0<<" "<<0<<" "<<0<<" "<<1<<vcl_endl;
-          ofile.close();
-      }
-    }
-    vcl_cout<<vcl_endl;
-  }
-  vil_save(mi,"e:/data/xy.tiff");
-#endif
 
 
   return 0;
