@@ -24,8 +24,9 @@ typedef vpgl_perspective_camera<double> CamType;
 void boxm2_util_convert_nvm (vcl_string nvm_file,
                              vcl_string img_dir,
                              vcl_map<vcl_string, CamType*>& cams,
+                             vcl_vector<vgl_point_3d<double> > &  pts,
                              vgl_box_3d<double>& bbox,
-                             double& resolution,bool axis_align = true);
+                             double& resolution,bool axis_align = true  );
 
 //: Utility class with static methods
 class boxm2_convert_nvm
@@ -35,6 +36,7 @@ class boxm2_convert_nvm
     vcl_map<vcl_string, CamType*>&       get_cams() { return final_cams_; }
     vgl_box_3d<double>                   get_bbox() const { return bbox_; }
     double                               get_resolution() const { return resolution_; }
+    vcl_vector<vgl_point_3d<double> >   get_points() const { return pts_3d_;}
    private:
 
     //final cams (map from image file name to camera
@@ -51,7 +53,7 @@ class boxm2_convert_nvm
     vcl_string                                    img_dir_;
     vcl_string                                    nvm_file_;
     double                                        resolution_;
-
+    vcl_vector<vgl_point_3d<double> > pts_3d_;
     //-------------------------------------------------------------------------
     // Helpers
     //-------------------------------------------------------------------------

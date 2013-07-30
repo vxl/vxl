@@ -17,7 +17,7 @@
 //  Takes in bundle.out file and image directory that created img_dir
 void boxm2_util_convert_nvm(vcl_string nvm_file,
                             vcl_string img_dir,
-                            vcl_map<vcl_string, vpgl_perspective_camera<double>* >& cams,
+                            vcl_map<vcl_string, vpgl_perspective_camera<double>* >& cams,vcl_vector<vgl_point_3d<double> >  & pts,
                             vgl_box_3d<double>& bbox,
                             double& resolution,bool axis_align)
 {
@@ -25,6 +25,12 @@ void boxm2_util_convert_nvm(vcl_string nvm_file,
   cams        = b2s.get_cams();
   bbox        = b2s.get_bbox();
   resolution  = b2s.get_resolution();
+
+  pts = b2s.get_points();
+
+  vcl_cout<<"# of pts "<<pts.size()<<vcl_endl;
+
+
 }
 
 // reads bundler file and populates list of cameras, and a scene bounding box
@@ -70,9 +76,16 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
   // make sure the scene is axis aligned
   ////--------------------------------------------------------------------------
   if(axis_align)
+  {
   if (!boxm2_point_util::axis_align_scene(corrs_,cams_))
     return;
+    pts_3d_.clear() ; 
+  for (unsigned i=0; i<corrs_.size(); ++i)
+  {
+    pts_3d_.push_back(corrs_[i]->world_pt());
+  }
 
+  }
   //------------------------------------------------------------------------
   // Filter out the cams with very high error
   //------------------------------------------------------------------------
@@ -97,19 +110,20 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
   //------------------------------------------------------------------------
   // Save calc bounding box
   //------------------------------------------------------------------------
-  vcl_vector<vgl_point_3d<double> > pts_3d;
+  
   vgl_box_3d<double> bounding_box;
+  pts_3d_.clear() ; 
   for (unsigned i=0; i<corrs_.size(); ++i)
   {
     bounding_box.add(corrs_[i]->world_pt());
-    pts_3d.push_back(corrs_[i]->world_pt());
+    pts_3d_.push_back(corrs_[i]->world_pt());
   }
 
   // Dimensions of the World
   vcl_cout<<"Full Point Bounding Box "<<bounding_box<<vcl_endl;
-  vgl_point_3d<double> c = centre(pts_3d);
+  vgl_point_3d<double> c = centre(pts_3d_);
   vcl_cout<<"Center of Gravity "<< c <<vcl_endl;
-  vnl_double_3 sigma = boxm2_point_util::stddev(pts_3d);
+  vnl_double_3 sigma = boxm2_point_util::stddev(pts_3d_);
   vcl_cout<<"Point stddev "<< sigma <<vcl_endl;
 
   //--------------------------------------------------------------------------
@@ -117,8 +131,8 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
   // Note: x-y dimensions are kind of a good approximation
   // the z-dimension however suffers because most points tend to be on the ground and the average miss represents points off the gound
   //--------------------------------------------------------------------------
-  double minx=c.x()-3.0f*sigma[0], miny=c.y()-3.0f*sigma[1], minz=c.z()-3.0f*sigma[2];
-  double maxx=c.x()+ 3.0f*sigma[0], maxy= c.y()+3.0f*sigma[1], maxz=c.z()+3.0f*sigma[2];
+  double minx=c.x()-2.0f*sigma[0], miny=c.y()-2.0f*sigma[1], minz=c.z()-2.0f*sigma[2];
+  double maxx=c.x()+ 2.0f*sigma[0], maxy= c.y()+2.0f*sigma[1], maxz=c.z()+2.0f*sigma[2];
   bbox_ = vgl_box_3d<double>(minx, miny, minz, maxx, maxy,maxz);
 
   //--------------------------------------------------------------------------
@@ -134,7 +148,7 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
   double cone_half_angle, solid_angle;
   vsph_camera_bounds::pixel_solid_angle(cams_[good_cam], ni/4, nj/4,cone_axis,cone_half_angle,solid_angle);
   vgl_point_3d<double> cc = cams_[good_cam].camera_center();
-  resolution_ = 2*(cc-centre(pts_3d)).length()*cone_half_angle;
+  resolution_ = 2*(cc-centre(pts_3d_)).length()*cone_half_angle;
 #ifdef DEBUG
   vcl_cout<<"Resolution     "<<resolution_<<vcl_endl;
 #endif
