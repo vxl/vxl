@@ -21,6 +21,7 @@ IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
 
+SUBDIRS( exe )
 
 INSTALL_TARGETS(/lib bil)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bil ${bil_sources})
