@@ -412,6 +412,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global int              * aux_array3,
                       __global int              * update_alpha,     //update if not zero
                       __global float            * mog_var,          //if 0 or less, variable var, otherwise use as fixed var
+                      __global int              * update_app,     //update if not zero
                       __global float            * output)
 {
   int gid=get_global_id(0);
@@ -450,7 +451,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
       //use aux data to update cells
       update_cell(&data, aux_data, 2.5f, 0.06f, 0.02f);
-
+      if ( *update_app != 0 )
+      {
       //set appearance model (figure out if var is fixed or not)
       float8 post_mix       = (float8) (data.s1, data.s2, data.s3,
                                         data.s5, data.s6, data.s7,
@@ -463,14 +465,15 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
         post_mix.s4 = (*mog_var) * (float) NORM;
         post_mix.s7 = (*mog_var) * (float) NORM;
       }
-
+            //reset the cells in memory
+      CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
+      nobs_array[gid] = convert_ushort4_sat_rte(post_nobs);
+      }
       //write alpha if update alpha is 0
       if ( *update_alpha != 0 )
         alpha_array[gid] = max(alphamin,data.s0);
 
-      //reset the cells in memory
-      CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
-      nobs_array[gid] = convert_ushort4_sat_rte(post_nobs);
+
     }
 
     //clear out aux data

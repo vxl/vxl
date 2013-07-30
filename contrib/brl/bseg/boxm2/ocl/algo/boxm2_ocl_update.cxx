@@ -37,6 +37,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
                               vil_image_view_base_sptr mask_sptr,
                               bool                     update_alpha,
                               float                    mog_var,
+                              bool                     update_app,
                               vcl_size_t               startI,
                               vcl_size_t               startJ)
 {
@@ -375,6 +376,11 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
         bocl_mem_sptr up_alpha_mem = new bocl_mem(device->context(), up_alpha, sizeof(up_alpha), "update alpha bool buffer");
         up_alpha_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
+        // update_app boolean buffer
+        cl_int up_app[1];
+        up_app[0] = up_app ? 1 : 0;
+        bocl_mem_sptr up_app_mem = new bocl_mem(device->context(), up_app, sizeof(up_app), "update app bool buffer");
+        up_app_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
         //mog variance, if 0.0f or less, then var will be learned
         bocl_mem_sptr mog_var_mem = new bocl_mem(device->context(), &mog_var, sizeof(mog_var), "update gauss variance");
         mog_var_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -394,6 +400,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
         kern->set_arg( aux3 );
         kern->set_arg( up_alpha_mem.ptr() );
         kern->set_arg( mog_var_mem.ptr() );
+        kern->set_arg( up_app_mem.ptr() );
         kern->set_arg( cl_output.ptr() );
 
         //execute kernel

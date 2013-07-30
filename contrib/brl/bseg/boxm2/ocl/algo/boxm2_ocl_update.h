@@ -26,6 +26,7 @@ class boxm2_ocl_update
                         vil_image_view_base_sptr mask=NULL,  
                         bool                     update_alpha = true, 
                         float                    mog_var = -1.0f,
+                        bool                     update_app = true,
                         vcl_size_t               startI=0,
                         vcl_size_t               startJ=0);
   
