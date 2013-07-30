@@ -85,7 +85,7 @@ int main(int argc, char** argv)
   //Get Inputs
   vul_arg<vcl_string> corrs_path   ("-corrs", "corr input file",  "");
   vul_arg<vcl_string> gps_file ("-gps", "gps text file (x y z in local coords per line)", "");
-
+  vul_arg<vcl_string> xform_file("-xform","xform file sRT ( 3x4) file ","");
   vul_arg<vcl_string> input_cam_dir ("-in_cam_dir","directory to get cams","");
   vul_arg<vcl_string> output_cam_dir ("-out_cam_dir","directory to store cams", "");
 
@@ -112,7 +112,9 @@ int main(int argc, char** argv)
   }
   
   vnl_matrix<double> pts0, pts1;
-
+  vgl_rotation_3d<double> R;
+  vnl_vector_fixed<double, 3> t;
+  double scale;
   if (corrs_path() != "") {
     vcl_vector<bwm_3d_corr_sptr> corrs;
     bwm_observer_mgr::load_3d_corrs(corrs_path(), corrs);
@@ -127,13 +129,16 @@ int main(int argc, char** argv)
       pts0[1][i] = match_pts[0].y();  pts1[1][i] = match_pts[1].y();
       pts0[2][i] = match_pts[0].z();  pts1[2][i] = match_pts[1].z();
     }
+    if (!compute_similarity(pts0, pts1, R, t, scale)) {
+        vcl_cout << "similarity computation failed\n";
+        return -1;
+    }
   }
-  else {
+  else if(gps_file() != "") {
     vcl_cout << "Using GPS file to register cameras." << vcl_endl;
     // create list of camera centers
     vcl_vector<vgl_point_3d<double> > cam_centers_bundler;
     vcl_vector<vgl_point_3d<double> > cam_centers_gps;
-    
     // get directory listing and sort
     vcl_vector<vcl_string> filenames;
     vcl_string in_dir = input_cam_dir() + "/*.txt";
@@ -171,15 +176,42 @@ int main(int argc, char** argv)
       pts0[1][i] = cam_centers_bundler[i].y();  pts1[1][i] = cam_centers_gps[i].y();
       pts0[2][i] = cam_centers_bundler[i].z();  pts1[2][i] = cam_centers_gps[i].z();
     }
+    if (!compute_similarity(pts0, pts1, R, t, scale)) {
+        vcl_cout << "similarity computation failed\n";
+        return -1;
+    }
+  }
+  else if(xform_file() != "")
+  {
+      vcl_ifstream ifile( xform_file().c_str() ) ;
+      if(!ifile)
+      {
+          vcl_cout<<"Error: Cannot open" <<xform_file()<<vcl_endl;
+          return -1;  
+      }
+      ifile >> scale ;
+      vnl_matrix<double> mat(4,4);
+      ifile >> mat;
+
+      vnl_matrix<double> matr(3,3);  
+      mat.extract(matr);
+      matr = matr/scale;
+
+      matr = (matr.transpose());
+      vgl_rotation_3d<double> r1(matr);R =r1;
+
+      t[0] = mat(0,3);t[1] = mat(1,3);t[2] = mat(2,3);
+      t = - matr*t ;
+
+      scale = 1/scale;
+  }
+  else
+  {
+      vcl_cout<<"No Way to transform the cameras found "<<vcl_endl;
+      return -1;
   }
 
-  vgl_rotation_3d<double> R;
-  vnl_vector_fixed<double, 3> t;
-  double scale;
-  if (!compute_similarity(pts0, pts1, R, t, scale)) {
-    vcl_cout << "similarity computation failed\n";
-    return -1;
-  }
+
   vcl_cout << "scale = " << scale << "\nR = " << R << "\nt = " << t << '\n';
   //transform the cameras
   vcl_string in_dir = input_cam_dir() + "/*.txt";
@@ -193,6 +225,7 @@ int main(int argc, char** argv)
     vcl_cout << fname << '\n';
     vpgl_perspective_camera<double> tcam =
       transform_camera(cam, R, t, scale);
+    vcl_cout<<"CC : "<<tcam.camera_center()<<vcl_endl;
     vcl_string out_dir = output_cam_dir() + "/";
     vcl_string out_file = out_dir + fname;
     vcl_ofstream os(out_file.c_str());
