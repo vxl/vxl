@@ -1,22 +1,22 @@
 #include "bkml_write.h"
 //:
 // \file
-
+#include <vcl_cstdio.h>
 
 vcl_string rgb_color_to_hex_color(int alpha, int rNum, int gNum, int bNum)
 {
   vcl_string result;
   char a[255];
-  sprintf_s(a, "%.2x", alpha);
+  vcl_snprintf(a, 255, "%.2x", alpha);
   result.append(a );
   char b[255];
-  sprintf_s(b, "%.2x", bNum);
+  vcl_snprintf(b, 255, "%.2x", bNum);
   result.append(b );
   char g[255];
-  sprintf_s(g, "%.2x", gNum);
+  vcl_snprintf(g, 255, "%.2x", gNum);
   result.append(g );
   char r[255];
-  sprintf_s(r, "%.2x", rNum);
+  vcl_snprintf(r, 255, "%.2x", rNum);
   result.append(r );
   return result;
 }
