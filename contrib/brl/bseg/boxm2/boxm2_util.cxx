@@ -433,7 +433,8 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
             unsigned short max = vcl_numeric_limits<unsigned short>::max();
             vcl_cout << "casting vxl_uint_16 image, max is " << max << vcl_endl;
             vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)0,max, 0.0f, 1.0f);
-            vil_save(*floatimg, "floatimg.tiff");
+            return vil_image_view_base_sptr(floatimg);
+            //vil_save(*floatimg, "floatimg.tiff");
         }
         else if (vil_image_view<float> *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
         {
