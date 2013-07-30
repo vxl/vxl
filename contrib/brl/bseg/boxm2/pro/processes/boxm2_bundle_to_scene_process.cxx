@@ -20,7 +20,7 @@
 
 namespace boxm2_bundle_to_scene_process_globals
 {
-  const unsigned n_inputs_ = 10;
+  const unsigned n_inputs_ = 11;
   const unsigned n_outputs_ = 2;
 }
 
@@ -35,11 +35,12 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   input_types_[2] = "vcl_string"; // appearnce model
   input_types_[3] = "vcl_string"; // num_obs model
   input_types_[4] = "int";
-  input_types_[5] = "bool";
+  input_types_[5] = "bool";       // to align the model with z-plane ( good for aerial models )
   input_types_[6] = "vcl_string"; // optional arg - output dir to save cams/imgs
-  input_types_[7] = "float";
-  input_types_[8] = "float";
-  input_types_[9] = "float";
+  input_types_[7] = "vcl_string";      // file to stor point cloud ( sfm )
+  input_types_[8] = "float";      // lvcs x
+  input_types_[9] = "float";      // lvcs y
+  input_types_[10] = "float";      // lvcs z
   // process has 2 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_scene_sptr";  //update scene
@@ -53,13 +54,14 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   pro.set_input(5, do_axis_align);
   brdb_value_sptr dir_name = new brdb_value_t<vcl_string>("");
   pro.set_input(6, dir_name);
-
+  brdb_value_sptr ply_name = new brdb_value_t<vcl_string>("");
+  pro.set_input(7, ply_name);
   brdb_value_sptr x = new brdb_value_t<float>(0.0);
-  pro.set_input(7, x);
+  pro.set_input(8, x);
   brdb_value_sptr y = new brdb_value_t<float>(0.0);
-  pro.set_input(8, y);
+  pro.set_input(9, y);
   brdb_value_sptr z = new brdb_value_t<float>(0.0);
-  pro.set_input(9, z);
+  pro.set_input(10, z);
 
   return good;
 }
@@ -85,6 +87,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   int nblks              = pro.get_input<int>(i++);        // TODO: unused!!!
   bool axis_align        = pro.get_input<bool>(i++);
   vcl_string out_dir     = pro.get_input<vcl_string>(i++); //output dir for imgs/files
+  vcl_string ply_file     = pro.get_input<vcl_string>(i++); //output dir for imgs/files
 
   float x = pro.get_input<float>(i++);
   float y = pro.get_input<float>(i++);
@@ -97,10 +100,11 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   vcl_map<vcl_string, CamType*> cams;
   vgl_box_3d<double>            bbox;
   double                        resolution;
+  vcl_vector<vgl_point_3d<double>  > pts3d;
   if (vul_file::extension(bundler_out) == ".out")
     boxm2_util_convert_bundle(bundler_out, in_img_dir, cams, bbox, resolution);
   else if (vul_file::extension(bundler_out) == ".nvm")
-    boxm2_util_convert_nvm(bundler_out, in_img_dir, cams, bbox, resolution,axis_align);
+    boxm2_util_convert_nvm(bundler_out, in_img_dir, cams,pts3d, bbox, resolution,axis_align);
 
   //create vector of camera objects
   vcl_vector<vpgl_perspective_camera<double> > cs;
@@ -197,6 +201,23 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
     }
   }
 
+  if(ply_file != "")
+  {
+      vcl_ofstream ofile(ply_file.c_str() ) ;
+      if(! ofile ) 
+      {
+          vcl_cout<<"Could not open the output ply file "<<ply_file<<vcl_endl;
+          return false;
+      }
+      ofile << "ply\nformat ascii 1.0\nelement vertex " << pts3d.size();
+      ofile << "\nproperty float32 x\nproperty float32 y\nproperty float32 z";
+      ofile << "\nend_header\n";
+      ofile << vcl_fixed;
+      for (unsigned k = 0 ; k < pts3d.size(); k++) 
+          ofile <<pts3d[k].x() << ' ' << pts3d[k].y() << ' ' << pts3d[k].z()<<vcl_endl;
+
+      ofile.close() ;
+  }
   //----------------------------------------------------------------------------
   // set output and return
   //----------------------------------------------------------------------------
