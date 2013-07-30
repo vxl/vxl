@@ -202,7 +202,6 @@ int main(int argc,  char** argv)
             fstr<<imgname()<<'_'<<uid<<".jpg";
             img_grid(el_i, az_i) = fstr.str();
             idstream<<imgdir<<imgname()<<'_'<<uid<<".jpg";
-            //if ( saved_imgs.find(uid) == saved_imgs.end() )
             {
                 vpgl_camera_double_sptr cam_sptr = view.camera();
 
@@ -210,8 +209,6 @@ int main(int argc,  char** argv)
                 vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
                 vpgl_calibration_matrix<double> mat = cam->get_calibration();
                 vgl_vector_3d<double> pp = normalized(cam->principal_axis());
-                // vgl_vector_3d<double> ppnew = normalized(scene->bounding_box().centroid() - cart_point);
-
                 vgl_vector_3d<double> vdir(cam->get_rotation().as_matrix()(1,0),
                                            cam->get_rotation().as_matrix()(1,1),
                                            cam->get_rotation().as_matrix()(1,2));
