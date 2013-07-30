@@ -136,11 +136,9 @@ void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index2_node_sptr n, unsigned 
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, float const& min_size)
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<float> bbox, float const& min_size)
 {
-  // create the bbox for the root
-  vgl_box_2d<float> bbox = t.bbox();
-  vcl_cout << "bounding box for root: " << bbox << vcl_endl;
+  vcl_cout << "bounding box for geo_index root: " << bbox << vcl_endl;
   volm_geo_index2_node_sptr root = new volm_geo_index2_node<Type>(bbox);
   // recursively add children
   construct_sub_tree<Type>(root, min_size);
@@ -148,9 +146,17 @@ volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, float con
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, float const& min_size, vgl_polygon<float> const& poly)
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, float const& min_size)
 {
+  // create the bbox for the root
   vgl_box_2d<float> bbox = t.bbox();
+  vcl_cout << "bounding box for root: " << bbox << vcl_endl;
+  return volm_geo_index2::construct_tree<Type>(bbox, min_size);
+}
+
+template <class Type>
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<float> bbox, float const& min_size, vgl_polygon<float> const& poly)
+{
   vcl_cout << "bounding box for root: " << bbox << vcl_endl;
   volm_geo_index2_node_sptr root;
   if (vgl_intersection(bbox, poly)) {
@@ -159,6 +165,21 @@ volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, float con
     construct_sub_tree_poly<Type>(root, min_size, poly);
   }
   return root;
+}
+
+template <class Type>
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<float> bbox, float const& min_size, vgl_polygon<double> const& poly)
+{
+  vgl_polygon<float> poly_float;
+  volm_io::convert_polygons(poly, poly_float);
+  return volm_geo_index2::construct_tree<Type>(bbox, min_size, poly_folat);
+}
+
+template <class Type>
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, float const& min_size, vgl_polygon<float> const& poly)
+{
+  vgl_box_2d<float> bbox = t.bbox();
+  return volm_geo_index2::construct_tree<Type>(bbox, min_size, poly);
 }
 
 template <class Type>

@@ -2,6 +2,25 @@
 //:
 // \file
 
+
+vcl_string rgb_color_to_hex_color(int alpha, int rNum, int gNum, int bNum)
+{
+  vcl_string result;
+  char a[255];
+  sprintf_s(a, "%.2x", alpha);
+  result.append(a );
+  char b[255];
+  sprintf_s(b, "%.2x", bNum);
+  result.append(b );
+  char g[255];
+  sprintf_s(g, "%.2x", gNum);
+  result.append(g );
+  char r[255];
+  sprintf_s(r, "%.2x", rNum);
+  result.append(r );
+  return result;
+}
+
 //: Write KML header and open document tag
 void bkml_write::open_document(vcl_ofstream& str)
 {
@@ -99,6 +118,86 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
       << "</Placemark>\n" << vcl_endl;
 }
 
+// write a polygon with color (only outerBoundary)
+void bkml_write::write_polygon(vcl_ofstream& ofs, vgl_polygon<double> const& poly, 
+                               vcl_string const& name,
+                               vcl_string const& description,
+                               double const& scale,  double const& line_width, double const& alpha,
+                               unsigned char const& r, unsigned char const& g, unsigned char const& b)
+{
+  // obtain line color
+  vcl_string line_color = rgb_color_to_hex_color(1, (int)r, (int)g, (int)b);
+
+  // obtain polygon color
+  int alpha_int = (int)(alpha*255);
+  vcl_string poly_color = rgb_color_to_hex_color(alpha_int, (int)r, (int)g, (int)b);
+
+  unsigned num_sheet = poly.num_sheets();
+  for (unsigned s_idx = 0; s_idx < num_sheet; s_idx++) {
+    vcl_vector<vgl_point_2d<double> > verts = poly[s_idx];
+    if (verts.empty())
+      continue;
+    ofs << "<Placemark>\n"
+        << "  <name>" << name << "</name>\n";
+    if (description.compare("") != 0)
+      ofs << "  <description>" << description << "</description>\n";
+    ofs << "  <Style>\n"
+        << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
+        << "    <LineStyle> <color>" << line_color << "</color> <width>" << line_width << "</width> </LineStyle>\n"
+        << "    <PolyStyle>\n"
+        << "      <color>" << poly_color << "</color>\n"
+        << "      <fill>1</fill>\n"
+        << "      <outline>0</outline>\n"
+        << "    </PolyStyle>\n"
+        << "  </Style>\n";
+    ofs << "  <Polygon>\n"
+        << "    <tessellate>1</tessellate>\n"
+        << "    <outerBoundaryIs>\n"
+        << "      <LinearRing>\n"
+        << "        <coordinates>\n";
+    for (vcl_vector<vgl_point_2d<double> >::iterator vit = verts.begin(); vit != verts.end(); ++vit)
+      ofs << "          " << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0\n";
+    ofs << "          " << verts[0].x() << ',' << verts[0].y() << ",0\n";
+    ofs << "        </coordinates>\n"
+        << "      </LinearRing>\n"
+        << "    </outerBoundaryIs>\n"
+        << "  </Polygon>\n"
+        << "</Placemark>\n";
+  }
+}
+
+//: write a path with color and line width
+void bkml_write::write_path(vcl_ofstream& ofs, vcl_vector<vgl_point_2d<double> > path,
+                         vcl_string const& name,
+                         vcl_string const& description,
+                         double const& scale,
+                         double const& line_width,
+                         unsigned char const& r,
+                         unsigned char const& g,
+                         unsigned char const& b)
+{
+  // obtain line color
+  vcl_string line_color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
+  if (path.empty())
+    return;
+  ofs << "<Placemark>\n"
+      << "  <name>" << name << "</name>\n";
+  if (description.compare("") != 0)
+    ofs << "  <description>" << description << "</description>\n";
+  ofs << "  <Style>\n"
+      << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
+      << "    <LineStyle> <color>" << line_color << "</color> <width>" << line_width << "</width> </LineStyle>\n"
+      << "  </Style>\n";
+  ofs << "  <LineString>\n"
+      << "    <tessellate>1</tessellate>\n"
+      << "      <coordinates>\n        ";
+  for (vcl_vector<vgl_point_2d<double> >::iterator vit = path.begin(); vit != path.end(); ++vit)
+    ofs << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0 ";
+  ofs << "      </coordinates>\n"
+      << "  </LineString>\n"
+      << "</Placemark>\n";
+}
+
 //: put a pin at the given location
 void bkml_write::write_location(vcl_ofstream &ofs, vcl_string name, vcl_string description, double lat, double lon, double elev)
 {
@@ -110,6 +209,55 @@ void bkml_write::write_location(vcl_ofstream &ofs, vcl_string name, vcl_string d
       << "    <coordinates>" << lon << ", " << lat << ", " << elev << "</coordinates>\n"
       << "  </Point>\n"
       << "</Placemark>\n" << vcl_endl;
+}
+
+void bkml_write::write_location(vcl_ofstream& ofs, vgl_point_2d<double> const& loc,
+                                vcl_string const& name,
+                                vcl_string const& description,
+                                double const& scale,
+                                unsigned char const& r,
+                                unsigned char const& g,
+                                unsigned char const& b)
+{
+  vcl_string color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
+  ofs << "<Placemark>\n"
+      << "  <name>" << name << "</name>\n";
+  if (description.compare("") != 0)
+    ofs << "  <description>" << description << "</description>\n";
+  ofs << "  <Style>\n"
+      << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
+      << "    <IconStyle> <scale>" << scale << "</scale> <color>" << color << "</color>\n"
+      << "      <Icon><href>http://maps.google.com/mapfiles/kml/paddle/pink-blank.png</href></Icon>"
+      << "    </IconStyle>\n"
+      << "  </Style>\n"
+      << "  <Point>\n"
+      << "    <coordinates>" << vcl_setprecision(12) << loc.x() << ',' << vcl_setprecision(12) << loc.y() << ",0</coordinates>\n";
+  ofs << "  </Point>\n"
+      << "</Placemark>\n";
+}
+
+void bkml_write::write_location(vcl_ofstream& ofs, double lat, double lon, double elev,
+                                vcl_string const& name, vcl_string const& description, double const& scale,
+                                unsigned char const& r, unsigned char const& g, unsigned char const& b)
+{
+  vcl_string color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
+  ofs << "<Placemark>\n"
+      << "  <name>" << name << "</name>\n";
+  if (description.compare("") != 0)
+    ofs << "  <description>" << description << "</description>\n";
+  ofs << "  <Style>\n"
+      << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
+      << "    <IconStyle> <scale>" << scale << "</scale> <color>" << color << "</color>\n"
+      << "      <Icon><href>http://maps.google.com/mapfiles/kml/shapes/shaded_dot.png</href></Icon>"
+      << "    </IconStyle>\n"
+      << "  </Style>\n"
+      << "  <Point>\n"
+      << "    <coordinates>" << vcl_setprecision(12) << lon << ','
+                             << vcl_setprecision(12) << lat << ','
+                             << vcl_setprecision(12) << elev
+      << "</coordinates>\n";
+  ofs << "  </Point>\n"
+      << "</Placemark>\n";
 }
 
 void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
@@ -141,3 +289,29 @@ void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
       << "</PhotoOverlay>\n" << vcl_endl;
 }
 
+void bkml_write::write_kml_style(vcl_ofstream& ofs, 
+                                 vcl_string style_name,
+                                 double const& scale,
+                                 double const& line_width,
+                                 double const& alpha,
+                                 unsigned char const& r,
+                                 unsigned char const& g,
+                                 unsigned char const& b)
+{
+  // obtain line color
+  vcl_string line_color = rgb_color_to_hex_color(1, (int)b, (int)r, (int)g);
+
+  // obtain polygon color
+  int alpha_int = (int)(alpha*255);
+  vcl_string poly_color = rgb_color_to_hex_color(alpha_int, (int)b, (int)g, (int)r);
+
+  ofs << "<Style id=\"" << style_name << "\">\n"
+      << "  <LableStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
+      << "  <LineStyle> <color>" << line_color << "</color> <width>" << line_width << "</width> </LineStyle>\n"
+      << "  <PolyStyle>\n"
+      << "    <color>" << poly_color << "</color>\n"
+      << "    <fill>1</fill>\n"
+      << "    <outline>0</outline>\n"
+      << "  </PolyStyle>\n"
+      << "</Style>\n";
+}

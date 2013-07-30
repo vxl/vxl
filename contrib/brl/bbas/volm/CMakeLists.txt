@@ -50,6 +50,8 @@ SET(volm_sources
  volm_geo_index2_node_base.h            volm_geo_index2_node_base.cxx
  volm_geo_index2_sptr.h
  volm_geo_index2.h                      volm_geo_index2.txx
+ volm_osm_parser.h                      volm_osm_parser.cxx
+ volm_category_io.h                     volm_category_io.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_sources)

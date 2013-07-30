@@ -8,6 +8,7 @@
 #include <volm/volm_tile.h>
 #include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_utm.h>
+#include <bkml/bkml_parser.h>
 
 static void test_geo_index2()
 {
@@ -71,12 +72,19 @@ static void test_geo_index2()
   }
 
   // wr5
+  min_size = 0.05;
   tiles.clear();
   tiles = volm_tile::generate_p1b_wr5_tiles();
+  vcl_string kml_roi_file = "D:/work/find/phase_1b/ROI/taiwan-WR.kml";
+  vgl_polygon<double> roi_poly = bkml_parser::parse_polygon(kml_roi_file);
   for (unsigned i = 0; i < tiles.size(); i++) {
-    volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(tiles[i], min_size);
-    vcl_stringstream kml_file;  kml_file << dir << "p1b_wr5_tile_" << i << "_depth_0.kml";
-    volm_geo_index2::write_to_kml(root, 0, kml_file.str());
+    volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(tiles[i], min_size, roi_poly);
+    // output the generated geo_index
+    unsigned tree_depth = volm_geo_index2::depth(root);
+    for (unsigned d_idx = 0; d_idx < tree_depth; d_idx++) {
+      vcl_stringstream kml_file;  kml_file << dir << "p1b_wr5_tile_" << i << "_depth_" << d_idx << ".kml";
+      volm_geo_index2::write_to_kml(root, d_idx, kml_file.str());
+    }
     double x, y;
     int zone_id, zone_id2;
     u.transform(tiles[i].bbox_double().min_point().y(), tiles[i].bbox_double().min_point().x(), x, y, zone_id);

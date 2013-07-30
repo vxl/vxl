@@ -60,12 +60,18 @@ public:
   //: construct a tree such that the give tile is the root, and the hierarchy of its children form a quadtree space partition
   template <class Type>
   static volm_geo_index2_node_sptr construct_tree(volm_tile t, float const& min_size);
+  template <class Type>
+  static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<float> bbox, float const& min_size);
 
   //: construct with a polygon with possibily multiple sheets, only keep the children who intersect one of the sheets of the polygon
   template <class Type>
   static volm_geo_index2_node_sptr construct_tree(volm_tile t, float const& min_size, vgl_polygon<double> const& poly);
   template <class Type>
+  static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<float> bbox, float const& min_size, vgl_polygon<double> const& poly);
+  template <class Type>
   static volm_geo_index2_node_sptr construct_tree(volm_tile t, float const& min_size, vgl_polygon<float> const& poly);
+  template <class Type>
+  static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<float> bbox, float const& min_size, vgl_polygon<float> const& poly);
 
   //: create the quadtree from text file.  Note even if a child has zero pointer, it's order in the children array remains same such that
   //  the children have consistent clockwise geographic sequence
