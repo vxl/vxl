@@ -22,7 +22,7 @@ persp_to_generic( __global    float16            * persp_camera,         // came
   
   if( i < i_size && j < j_size )
   {
-    float4 ray_o = (float4) persp_camera[2].s4567; ray_o.w = 1.0f;
+    float4 ray_o = convert_float4(persp_camera[2].s4567); ray_o.w = 1.0f;
     float4 ray_d = backproject(i+i_min, j+j_min, persp_camera[0], persp_camera[1], persp_camera[2], ray_o);
     ray_d.w = 0.0f; 
     

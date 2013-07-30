@@ -69,7 +69,7 @@ bool calc_scene_ray(__constant RenderSceneInfo * linfo,
                     float* ray_dx, float* ray_dy, float* ray_dz)
 {
   
-  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
+  float4 ray_o = convert_float4( camera[2].s4567); ray_o.w = 1.0f;
   float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
   ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
   ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
