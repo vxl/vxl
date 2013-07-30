@@ -36,7 +36,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
     vgl_ray_3d<double> cone_axis;
     double cone_half_angle, solid_angle;
-    vsph_camera_bounds::pixel_solid_angle(cam, int(pp.x()/4), int(pp.y()/4), cone_axis, cone_half_angle, solid_angle);
+    vsph_camera_bounds::pixel_solid_angle(cam, int(pp.x()), int(pp.y()), cone_axis, cone_half_angle, solid_angle);
     vgl_point_3d<double> cc = cam.camera_center();
     vgl_point_3d<double> zc( b2box.centroid().x(), b2box.centroid().y(), zplane);
     double res = 2.0*(cc-zc).length()*cone_half_angle;
@@ -59,7 +59,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     vgl_vector_3d<double> subBlockDim ( nblks*res, nblks*res, nblks*res );
 
     //number of blocks in scene (nblks,nblks,1)
-    vgl_vector_3d<unsigned> numBlocks(nblks, nblks, 1);
+    vgl_vector_3d<unsigned> numBlocks(nblks, nblks, 2);
 
     vcl_cout<<"totSubBlocks "<<totSubBlocks<<vcl_endl;
     //number of subblocks per block
