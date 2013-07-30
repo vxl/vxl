@@ -82,7 +82,7 @@ class boxm2_scene_adaptor(object):
     update_grey_with_alt(self.scene, cache, cam, img, dev, "", mask, update_alpha, var, alt_prior, alt_density)
 
   #update wrapper, can pass in a Null device to use
-  def update(self, cam, img, update_alpha=True, mask=None, device_string="", var=-1.0, ident_string="") :
+  def update(self, cam, img, update_alpha=True,update_app=True, mask=None, device_string="", var=-1.0, ident_string="") :
     cache = self.active_cache;
     dev = self.device;
 
