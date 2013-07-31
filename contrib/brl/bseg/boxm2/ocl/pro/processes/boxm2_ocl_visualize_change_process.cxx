@@ -19,7 +19,7 @@
 
 namespace boxm2_ocl_visualize_change_process_globals
 {
-  const unsigned n_inputs_     = 3;
+  const unsigned n_inputs_     = 4;
   const unsigned n_outputs_    = 1;
 }
 
@@ -32,6 +32,7 @@ bool boxm2_ocl_visualize_change_process_cons(bprb_func_process& pro)
   input_types_[0] = "vil_image_view_base_sptr";   //change image
   input_types_[1] = "vil_image_view_base_sptr";   //original image
   input_types_[2] = "float";                      //threshold value
+  input_types_[3] = "bool";                       // "true" if low value indicates change (default false)
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -42,6 +43,8 @@ bool boxm2_ocl_visualize_change_process_cons(bprb_func_process& pro)
   //default is .5 thresh val
   brdb_value_sptr thresh  = new brdb_value_t<float>(.5);
   pro.set_input(2, thresh);
+  brdb_value_sptr low_is_change_default = new brdb_value_t<bool>(false);
+  pro.set_input(3, low_is_change_default);
   return good;
 }
 
@@ -58,6 +61,7 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
   vil_image_view_base_sptr  change_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr  in_sptr        = pro.get_input<vil_image_view_base_sptr>(i++);
   float                     thresh         = pro.get_input<float>(i++);                 //nxn
+  bool                      low_is_change  = pro.get_input<bool>(i++);
 
   //prep in image, cast to grey float
   vil_image_view_base_sptr  f_in       = boxm2_util::prepare_input_image(in_sptr, true); //true for force gray scale
@@ -74,15 +78,29 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
   vil_image_view<vxl_byte>* change_b = dynamic_cast<vil_image_view<vxl_byte>* >(change_sptr.ptr());
   if (change_b)
   {
-    for (unsigned int i=0; i<ni; ++i)
-      for (unsigned int j=0; j<nj; ++j)
-        mask(i,j) = (*change_b)(i,j)==0 ? false : true;
+    if (low_is_change) {
+      for (unsigned int i=0; i<ni; ++i)
+        for (unsigned int j=0; j<nj; ++j)
+          mask(i,j) = (*change_b)(i,j)==0 ? true : false;
+    }
+    else {
+      for (unsigned int i=0; i<ni; ++i)
+        for (unsigned int j=0; j<nj; ++j)
+          mask(i,j) = (*change_b)(i,j)==0 ? false : true;
+    }
   }
   else if (vil_image_view<float>* change_f = dynamic_cast<vil_image_view<float>* >(change_sptr.ptr()))
   {
-    for (unsigned int i=0; i<ni; ++i)
-      for (unsigned int j=0; j<nj; ++j)
-        mask(i,j) = (*change_f)(i,j)>thresh ? true : false;
+    if (low_is_change) {
+      for (unsigned int i=0; i<ni; ++i)
+        for (unsigned int j=0; j<nj; ++j)
+          mask(i,j) = ( (*change_f)(i,j) < thresh );
+    }
+    else {
+      for (unsigned int i=0; i<ni; ++i)
+        for (unsigned int j=0; j<nj; ++j)
+          mask(i,j) =  ( (*change_f)(i,j) > thresh );
+    }
   }
 
   //prepare output RGB image
@@ -90,7 +108,7 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
   for (unsigned int i=0; i<ni; ++i) {
     for (unsigned int j=0; j<nj; ++j) {
       //if it's change, mark it as change
-      if ( mask(i,j) > thresh) {
+      if ( mask(i,j) )  {
         (*out_img)(i,j,0) = (vxl_byte) 255;
         (*out_img)(i,j,1) = (vxl_byte) 0;
         (*out_img)(i,j,2) = (vxl_byte) 0;

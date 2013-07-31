@@ -677,11 +677,12 @@ def change_detect2(scene, cache, cam, img, maxmode = False,  device=None) :
 ####################################################################
 # Visualize Change Wrapper
 ####################################################################
-def visualize_change(change_img, in_img, thresh=.5) :
+def visualize_change(change_img, in_img, thresh=.5, low_is_change=False) :
   boxm2_batch.init_process("boxm2OclVisualizeChangeProcess");
   boxm2_batch.set_input_from_db(0,change_img);
   boxm2_batch.set_input_from_db(1,in_img);
   boxm2_batch.set_input_float(2,thresh);
+  boxm2_batch.set_input_bool(3,low_is_change);
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   vis_img = dbvalue(id,type);
