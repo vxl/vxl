@@ -313,6 +313,12 @@ vcl_string boxm2_ocl_util::mog_options(vcl_string data_type)
     return "-D SHORT ";
   else if ( data_type == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() )
     return "-D MOG_VIEW_DEP ";
+  else if ( data_type == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() )
+    return "-D MOG_VIEW_DEP_COMPACT ";
+  else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix() )
+     return "-D MOG_VIEW_DEP_COLOR ";
+  else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix() )
+     return "-D MOG_VIEW_DEP_COLOR_COMPACT ";
   else
     return "";
 }

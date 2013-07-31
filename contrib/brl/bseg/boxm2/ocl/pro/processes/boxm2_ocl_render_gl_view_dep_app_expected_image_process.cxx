@@ -139,8 +139,9 @@ bool boxm2_ocl_render_gl_view_dep_app_expected_image_process(bprb_func_process& 
   int apptypesize;
   vcl_vector<vcl_string> valid_types;
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
+  valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix());
   if ( !boxm2_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-    vcl_cout<<"boxm2_ocl_render_gl_view_dep_app_expected_image_process ERROR: scene doesn't have BOXM2_MOG6_VIEW data type"<<vcl_endl;
+    vcl_cout<<"boxm2_ocl_render_gl_view_dep_app_expected_image_process ERROR: scene doesn't have BOXM2_MOG6_VIEW or BOXM2_MOG6_VIEW_COMPACT data type"<<vcl_endl;
     return false;
   }
 

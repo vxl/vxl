@@ -31,7 +31,7 @@
 namespace boxm2_ocl_render_view_dep_expected_image_process_globals
 {
   const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 2;
+  const unsigned n_outputs_ = 4;
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -105,6 +105,8 @@ bool boxm2_ocl_render_view_dep_expected_image_process_cons(bprb_func_process& pr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
+  output_types_[2] = "float";
+  output_types_[3] = "float";
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the 7th input is not set
@@ -137,8 +139,10 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   int apptypesize;
   vcl_vector<vcl_string> valid_types;
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
+  valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix());
+
   if ( !boxm2_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-    vcl_cout<<"boxm2_ocl_render_gl_view_dep_app_expected_image_process ERROR: scene doesn't have BOXM2_MOG6_VIEW data type"<<vcl_endl;
+     vcl_cout<<"boxm2_ocl_render_gl_view_dep_app_expected_image_process ERROR: scene doesn't have BOXM2_MOG6_VIEW data type"<<vcl_endl;
     return false;
   }
 
@@ -189,7 +193,7 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // run expected image function
-  render_expected_image(scene, device, opencl_cache, queue,
+  float t = render_expected_image(scene, device, opencl_cache, queue,
                         cam, exp_image, vis_image, max_omega_image,exp_img_dim,
                         data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
   // normalize
@@ -234,8 +238,8 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
       (*vis_img_out)(r,c) = (vxl_byte) (vis_buff[c*cl_ni+r] * 255.0f);
 #endif
 
-
-  vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
+  float all_time = rtime.all();
+  vcl_cout<<"Total Render time: "<< all_time <<" ms"<<vcl_endl;
   delete [] vis_buff;
   delete [] buff;
   delete [] max_omega_buff;
@@ -247,5 +251,8 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
   pro.set_output_val<vil_image_view_base_sptr>(i++, vis_img_out);
+  pro.set_output_val<float>(i++, t);
+  pro.set_output_val<float>(i++, all_time );
+
   return true;
 }

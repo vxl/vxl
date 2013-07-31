@@ -39,6 +39,7 @@ enum boxm2_data_type
   BOXM2_NUM_OBS_SINGLE,
   BOXM2_NUM_OBS_SINGLE_INT,
   BOXM2_NUM_OBS_VIEW,
+  BOXM2_NUM_OBS_VIEW_COMPACT,
   BOXM2_LABEL_SHORT,
   BOXM2_AUX,
   BOXM2_INTENSITY,
@@ -266,6 +267,17 @@ class boxm2_data_traits<BOXM2_NUM_OBS_VIEW>
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "boxm2_num_obs_view"; else return "boxm2_num_obs_view"+identifier; }
 };
+
+template<>
+class boxm2_data_traits<BOXM2_NUM_OBS_VIEW_COMPACT>
+{
+ public:
+  typedef vnl_vector_fixed<unsigned short, 8> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_num_obs_view_compact"; else return "boxm2_num_obs_view_compact"+identifier; }
+};
+
 
 template<>
 class boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>
@@ -523,6 +535,9 @@ class boxm2_data_info
 
     if (prefix.find(boxm2_data_traits<BOXM2_MOG2_RGB>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_MOG2_RGB>::datasize();
+
+    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_VIEW_COMPACT>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_NUM_OBS_VIEW_COMPACT>::datasize();
 
     if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::datasize();

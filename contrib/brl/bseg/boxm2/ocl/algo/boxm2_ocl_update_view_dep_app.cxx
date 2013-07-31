@@ -246,7 +246,7 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
       blk_info->write_to_buffer((queue));
 
 
-      int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix());
+      int nobsTypeSize = (int)boxm2_data_info::datasize(num_obs_type);
       // data type string may contain an identifier so determine the buffer size
       bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
       bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
@@ -275,14 +275,10 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
         // kern->set_arg( persp_cam.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( in_image.ptr() );
         kern->set_arg( cl_output.ptr() );
         kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );//local tree,
-        kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar4) ); //ray bundle,
-        kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );    //cell pointers,
-        kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_float4) ); //cached aux,
         kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
 
         //execute kernel
@@ -294,8 +290,6 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
 
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
-        aux0->read_to_buffer(queue);
-        aux1->read_to_buffer(queue);
       }
       else if (i==UPDATE_PREINF)
       {
@@ -371,8 +365,6 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
 
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
-        aux2->read_to_buffer(queue);
-        aux3->read_to_buffer(queue);
       }
       else if (i==UPDATE_CELL)
       {
@@ -552,9 +544,22 @@ bool boxm2_ocl_update_view_dep_app::validate_appearances(boxm2_scene_sptr scene,
       options=" -D MOG_VIEW_DEP ";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
     }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      options=" -D MOG_VIEW_DEP_COMPACT ";
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix());
+    }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix() )
     {
       num_obs_type = apps[i];
+      foundNumObsType = true;
+    }
+    else if( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS_VIEW_COMPACT>::prefix())
+    {
+      num_obs_type = apps[i];
+      options+= " -D NUM_OBS_VIEW_COMPACT ";
       foundNumObsType = true;
     }
   }

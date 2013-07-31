@@ -12,12 +12,7 @@ typedef struct
 {
   __global int* seg_len;
   __global int* mean_obs;
-
-  __local  short2* ray_bundle_array;
-  __local  int*    cell_ptrs;
-  __local  float4* cached_aux;
            float   obs;
-  __global float * output;
            float * ray_len;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
@@ -39,17 +34,10 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __global    float              * in_image,         // the input image
              __global    float              * output,
              __local     uchar16            * local_tree,       // cache current tree into local memory
-             __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
-             __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-             __local     float4             * cached_aux_data,  // seg len cached aux data is only a float2
              __local     uchar              * cumsum )          // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-
-  //initialize pre-broken ray information (non broken rays will be re initialized)
-  ray_bundle_array[llid] = (short2) (-1, 0);
-  cell_ptrs[llid] = -1;
 
   //----------------------------------------------------------------------------
   // get image coordinates and camera,
@@ -86,16 +74,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.linfo    = linfo;
   aux_args.seg_len  = aux_array0;
   aux_args.mean_obs = aux_array1;
-  aux_args.ray_bundle_array = ray_bundle_array;
-  aux_args.cell_ptrs  = cell_ptrs;
-  aux_args.cached_aux = cached_aux_data;
   aux_args.obs = obs;
-
-#ifdef DEBUG
-  aux_args.output = output;
-  float rlen = output[imIndex];
-  aux_args.ray_len = &rlen;
-#endif
 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
@@ -103,9 +82,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
 
-#ifdef DEBUG
-  output[imIndex] = rlen;
-#endif
 }
 #endif // SEGLEN
 
@@ -409,13 +385,7 @@ proc_norm_image (  __global float* norm_image,
   j=get_global_id(1);
   float vis;
 
-  //CORRECT HERE!!!!!!!!!!!!!!!!!!!!!!!!!
-  /*
-  if (app_density[0].x == 0.0f)
-    vis = vis_image[j*get_global_size(0) + i] * gauss_prob_density(in_image[j*get_global_size(0) + i] , app_density[0].y,app_density[0].z);
-  else
-  */
-    vis = vis_image[j*get_global_size(0) + i];
+  vis = vis_image[j*get_global_size(0) + i];
 
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y || vis < 0.0f)
     return;
@@ -439,7 +409,7 @@ void
 update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * alpha_array,
                       __global MOG_TYPE         * mixture_array,
-                      __global float8          * nobs_array,
+                      __global NOBS_TYPE        * nobs_array,
                       __global float4           * ray_dir,
                       __global int              * aux_array0,
                       __global int              * aux_array1,
@@ -484,8 +454,17 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
         alpha_array[gid] = max(alphamin,alpha);
 
       //second, update app model
+#ifdef NUM_OBS_VIEW_COMPACT
+      CONVERT_FUNC_FLOAT8(nobs,nobs_array[gid]);
+#else
       float8 nobs     = nobs_array[gid];
+#endif
+
+#ifdef MOG_VIEW_DEP_COMPACT
+      CONVERT_FUNC_FLOAT16(mixture,mixture_array[gid]);
+#else
       float16 mixture = mixture_array[gid];
+#endif
 
       //select view dependent mixture and nobs
       float app_model_weights[8] = {0};
@@ -493,9 +472,19 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       compute_app_model_weights(app_model_weights, viewdir, &app_model_view_directions);
       update_view_dep_app(mean_obs,cell_vis, app_model_weights, (float*)(&mixture), (float*)(&nobs),* mog_fixed_std );
 
-
+#ifdef NUM_OBS_VIEW_COMPACT
+      CONVERT_FUNC_USHORT8(nobs_array[gid], nobs);
+#else
       nobs_array[gid] = nobs;
+#endif
+
+
+#ifdef MOG_VIEW_DEP_COMPACT
+      CONVERT_FUNC_UCHAR16(mixture_array[gid], mixture);
+#else
       mixture_array[gid] = mixture;
+#endif
+
     }
     else if (*use_mask)
       alpha_array[gid] = 0;

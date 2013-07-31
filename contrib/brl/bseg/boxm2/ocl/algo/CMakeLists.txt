@@ -14,10 +14,11 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_render_scene_uncertainty_map.h    boxm2_ocl_render_scene_uncertainty_map.cxx
     boxm2_ocl_update.h                          boxm2_ocl_update.cxx
     boxm2_ocl_update_view_dep_app.h             boxm2_ocl_update_view_dep_app.cxx
+    boxm2_ocl_update_view_dep_app_color.h       boxm2_ocl_update_view_dep_app_color.cxx
    )
 
 ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul brad)
+TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul vnl_algo)
 
 #tests
 IF( BUILD_TESTING )

@@ -157,7 +157,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
     data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     for (unsigned int i=0; i<data_types.size(); ++i)
     {
-      //vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
+      vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
       bocl_kernel* kern = get_refine_data_kernel(device, data_types[i]);
 
       //get bocl_mem data independent of CPU pointer
@@ -183,7 +183,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       *copy_parent_buffer = (data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ||
                              data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ||
                              data_types[i] == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() ||
-                             data_types[i] == boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix() ||
+                             data_types[i] == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() ||
                              data_types[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() );
       bocl_mem copy_parent(device->context(), copy_parent_buffer, sizeof(cl_bool), "copy_parent buffer");
       copy_parent.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);

@@ -43,12 +43,14 @@ void step_cell_render(__global MOG_TYPE * cell_data,
   float diff_omega=exp(-alpha*d);
   float expected_int_cell=0.0f;
   // for rendering only
-    
+
   if (diff_omega<0.995f)
   {
-      
-    //CONVERT_FUNC_FLOAT16(mixture_float,cell_data[data_ptr])/NORM;
+#ifdef MOG_VIEW_DEP_COMPACT
+    CONVERT_FUNC_FLOAT16(mixture,cell_data[data_ptr]);
+#else
     float16 mixture = cell_data[data_ptr];
+#endif
     float* mixture_array = (float*)(&mixture);
     
     float sum_weights = 0;
@@ -56,9 +58,7 @@ void step_cell_render(__global MOG_TYPE * cell_data,
     {
         if(app_model_weights[i] > 0.01f)
             expected_int_cell += app_model_weights[i] * mixture_array[2*i];
-        
     }
-    
   }  
 
   float omega=(*vis) * (1.0f - diff_omega);

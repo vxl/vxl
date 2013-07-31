@@ -3,46 +3,11 @@
 //Update step cell functor::seg_len
 void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
-#ifdef ATOMIC_OPT
-    // --------- faster and less accurate method... --------------------------
-    //keep track of cells being hit
-    aux_args.cell_ptrs[llid] = data_ptr;
-    aux_args.cached_aux[llid] = (float4) 0.0f;  //leaders retain the mean obs and the cell length
-    barrier(CLK_LOCAL_MEM_FENCE);
-
-    //segment workgroup
-    load_data_mutable_opt(aux_args.ray_bundle_array,aux_args.cell_ptrs);
-
-    //back to normal mean of mean obs...
-    seg_len_obs_functor(d, aux_args.obs, aux_args.ray_bundle_array, aux_args.cached_aux);
-    barrier(CLK_LOCAL_MEM_FENCE);
-
-    //set aux data here (for each leader.. )
-    if (aux_args.ray_bundle_array[llid].y==1)
-    {
-        //scale!
-        int seg_int = convert_int_rte(aux_args.cached_aux[llid].x * SEGLEN_FACTOR);
-        int cum_obs = convert_int_rte(aux_args.cached_aux[llid].y * SEGLEN_FACTOR);
-
-        //atomically update the cells
-        atom_add(&aux_args.seg_len[data_ptr], seg_int);
-        atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
-    }
-    //reset cell_ptrs to negative one every time (prevents invisible layer bug)
-    aux_args.cell_ptrs[llid] = -1;
-    //------------------------------------------------------------------------
-#else
     //SLOW and accurate method
     int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
     atom_add(&aux_args.seg_len[data_ptr], seg_int);
     int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
     atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
-
-#ifdef DEBUG
-    (*aux_args.ray_len) += d;
-#endif
-
-#endif
 }
 #endif // SEGLEN
 
@@ -62,8 +27,13 @@ void pre_infinity_opt_view_based(  float    seg_len,
     float PI = 0.0f;
     if (cum_len>1.0e-10f)
     {
-        PI = view_dep_mixture_model(mean_obs, mixture, app_model_weights);
 
+#ifdef MOG_VIEW_DEP_COMPACT
+        CONVERT_FUNC_FLOAT16(mixture_float,mixture);
+        PI = view_dep_mixture_model(mean_obs, mixture_float, app_model_weights);
+#else
+        PI = view_dep_mixture_model(mean_obs, mixture, app_model_weights);
+#endif
         /* Calculate pre and vis infinity */
         float diff_omega = exp(-alpha * seg_len);
         float vis_prob_end = (*vis_inf) * diff_omega;
@@ -126,8 +96,13 @@ void bayes_ratio_ind_view_based( float  seg_len,
 
     /* Compute PI for all threads */
     if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
-        PI = view_dep_mixture_model(mean_obs, mixture, app_model_weights);
 
+#ifdef MOG_VIEW_DEP_COMPACT
+        CONVERT_FUNC_FLOAT16(mixture_float,mixture);
+        PI = view_dep_mixture_model(mean_obs, mixture_float, app_model_weights);
+#else
+        PI = view_dep_mixture_model(mean_obs, mixture, app_model_weights);
+#endif
 
         //calculate this ray's contribution to beta
         (*ray_beta) = ((*ray_pre) + PI*(*ray_vis))*seg_len/norm;

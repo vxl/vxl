@@ -8,6 +8,7 @@
 
 //DECLARE app_model_view_directions
 
+
 #if 0
 //used for aerial scenes.
 __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
@@ -18,9 +19,21 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
                                                       (float4)(-0.354,   -0.612, 0.707,0),
                                                       (float4)(0.354,    -0.612, 0.707,0),
                                                       (float4)(0,         0,     0,0)};
+#endif
 
-#endif // 0
+#if 1
+//used for aerial scenes.
+__constant  float4  app_model_view_directions[8] = {  (float4)(0.81654 ,  0.00000 ,  0.57729 ,0),
+                                                       (float4)(0.00000 ,  0.81654 ,  0.57729,0),
+                                                      (float4)(-0.81654 ,  0.00000 ,  0.57729,0),
+                                                       (float4)(0.00000 , -0.81654 ,  0.57729,0),
+                                                       (float4)(0.57735 ,  0.57735 ,  0.57735,0),
+                                                       (float4)(0.57735 , -0.57735 ,  0.57735,0),
+                                                      (float4)(-0.57735 ,  0.57735 ,  0.57735,0),
+                                                      (float4)(-0.57735 , -0.57735 ,  0.57735,0) };
+#endif
 
+#if 0
 //used for motion capture scenes
 __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
                                                       (float4)(1,    0,      0,0),
@@ -30,6 +43,7 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
                                                       (float4)(-0.5,   -0.866, 0,0),
                                                       (float4)(0.5,   -0.866, 0,0),
                                                       (float4)(0,         0,     0,0)};
+#endif
 
 void compute_app_model_weights(float* app_model_weights, float4 viewdir,__constant float4* app_model_view_directions)
 {
@@ -38,7 +52,7 @@ void compute_app_model_weights(float* app_model_weights, float4 viewdir,__consta
     float sum_weights = 0.0f;
     for (short i = 0; i < 8; i++) {
         float cos_angle = -dot(viewdir,app_model_view_directions[i]);
-        app_model_weights[i] = (cos_angle > 0.01f) ? cos_angle : 0.0f; //if negative, set to 0
+        app_model_weights[i] = (cos_angle > 0.01f) ? (cos_angle) : 0.0f; //if negative, set to 0
         sum_weights += app_model_weights[i];
     }
 
@@ -94,7 +108,7 @@ void update_view_dep_app(float x, float w, float* view_dep_w, float* mixture, fl
             mixture[2*i] = mean;
             //if nobs < 10, variance is not to be trusted, keep it fixed at  mog_fixed_std.
             if (n > 10.0f &&  mog_fixed_std > 0)
-              mixture[2*i+1] = clamp(sqrt(sk / n) , 0.02f,0.2f); //clamp sigma
+              mixture[2*i+1] = clamp(sqrt(sk / n) , 0.02f,0.20f); //clamp sigma
             else
               mixture[2*i+1] =  mog_fixed_std;
             nobs[i] = n; //clamp(n,0.0f, 16.0f);

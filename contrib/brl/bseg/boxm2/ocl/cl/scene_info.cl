@@ -36,10 +36,36 @@
     #define NORM 65535
 #endif
 #ifdef MOG_VIEW_DEP
+    #define VIEW_NUM 8
     #define MOG_TYPE float16
     #define CONVERT_FUNC_FLOAT16(lhs,data) float16 lhs = convert_float16( as_uchar16(data) )
     #define NORM 255
 #endif
+#ifdef MOG_VIEW_DEP_COMPACT
+    #define VIEW_NUM 8
+    #define MOG_TYPE uchar16
+    #define NORM 255
+    #define CONVERT_FUNC_FLOAT16(lhs,data) float16 lhs = convert_float16( data ) / NORM
+    #define CONVERT_FUNC_UCHAR16(lhs,data) lhs = convert_uchar16_sat_rte( data * NORM )
+#endif
+#ifdef MOG_VIEW_DEP_COLOR
+    #define MOG_TYPE int16
+    #define NORM 255
+#endif
+#ifdef MOG_VIEW_DEP_COLOR_COMPACT
+    #define MOG_TYPE int8
+    #define NORM 255
+#endif
+
+#ifdef NUM_OBS_VIEW_COMPACT
+    #define NOBS_TYPE ushort8
+    #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( data ) / 100.0f
+    #define CONVERT_FUNC_USHORT8(lhs,data) lhs = convert_ushort8_sat_rte( data * 100.0f )
+#endif
+#ifndef NOBS_TYPE
+    #define NOBS_TYPE float8
+#endif
+
 #ifdef FLOAT8
     #define MOG_TYPE float8
     #define CONVERT_FUNC(lhs,data) float8 lhs = data
