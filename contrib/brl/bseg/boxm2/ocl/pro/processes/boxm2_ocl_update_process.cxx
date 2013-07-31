@@ -68,7 +68,7 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   pro.set_input(6, empty_mask);
   pro.set_input(7, up_alpha);
   pro.set_input(8, def_var);
-  pro.set_input(8, up_app);
+  pro.set_input(9, up_app);
   return good;
 }
 
