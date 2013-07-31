@@ -11,7 +11,7 @@
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
-#include <boxm2/ocl/algobo/boxm2_ocl_camera_converter.h>
+#include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_image_view.h>
 
 //directory utility
