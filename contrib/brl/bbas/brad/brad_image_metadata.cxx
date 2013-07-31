@@ -173,7 +173,10 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
   number_of_bits_ = hdr->get_number_of_bits_per_pixel();
 
-  double solar_irrad = 1.0;
+  // set solar irradiance to a reasonable default in case we don't have the information
+  // "reasonable" is defined here as roughly in the range of the examples we know.
+  double solar_irrad = 1500.0; 
+  // solar irradiance is dependent on sensor because each has a different range of wavelengths they are sensitive to.
   vcl_string img_info = hdr->get_image_source();
   if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos)
     solar_irrad = 1375.8;
@@ -184,9 +187,9 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos)
     solar_irrad = 1580.814;
   else
-    vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: " << nitf_filename;
+    vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: Guessing band-averaged solar irradiance value = " << solar_irrad << "." << nitf_filename;
   vcl_cout << "solar_irrad: " << solar_irrad << vcl_endl;
-  // set sun irradiance using Eart-Sun distance
+  // scale sun irradiance using Earth-Sun distance
   double d = brad_sun_distance(year, month, day, hour, min);
   sun_irradiance_ = solar_irrad/(d*d);
 

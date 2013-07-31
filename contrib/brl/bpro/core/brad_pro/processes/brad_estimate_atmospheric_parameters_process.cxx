@@ -19,11 +19,13 @@ bool brad_estimate_atmospheric_parameters_process_cons(bprb_func_process& pro)
   //0: The normalized image (pixel values are band-averaged radiance with units W m^-2 sr^-1 um-1
   //1: image metadata
   //2: (optional) mean scene reflectance
+  //3: (optional) constrain atmospheric parameters to physically meaningful values? (boolean)
 
-  vcl_vector<vcl_string> input_types_(3);
+  vcl_vector<vcl_string> input_types_(4);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "brad_image_metadata_sptr";
   input_types_[2] = "float";
+  input_types_[3] = "bool";
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -37,6 +39,9 @@ bool brad_estimate_atmospheric_parameters_process_cons(bprb_func_process& pro)
 
   // set default value for mean radiance
   pro.set_input(2, new brdb_value_t<float>(0.0f));
+  // set default value for meaningful atmospheric parameters option
+  pro.set_input(3, new brdb_value_t<bool>(true));
+
   return true;
 }
 
@@ -52,6 +57,7 @@ bool brad_estimate_atmospheric_parameters_process(bprb_func_process& pro)
   vil_image_view_base_sptr radiance_img_base = pro.get_input<vil_image_view_base_sptr>(0);
   brad_image_metadata_sptr mdata = pro.get_input<brad_image_metadata_sptr>(1);
   float mean_reflectance = pro.get_input<float>(2);
+  bool constrain_atmospheric_params = pro.get_input<bool>(3);
 
   //check inputs validity
   if (!radiance_img_base) {
@@ -71,7 +77,7 @@ bool brad_estimate_atmospheric_parameters_process(bprb_func_process& pro)
   brad_atmospheric_parameters_sptr atm_params = new brad_atmospheric_parameters();
 
   if (mean_reflectance > 0) {
-     brad_estimate_atmospheric_parameters(*radiance_img, *mdata, mean_reflectance, *atm_params);
+     brad_estimate_atmospheric_parameters(*radiance_img, *mdata, mean_reflectance, *atm_params, constrain_atmospheric_params);
   }
   else {
      brad_estimate_atmospheric_parameters(*radiance_img, *mdata, *atm_params);

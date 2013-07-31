@@ -35,7 +35,7 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
   return true;
 }
 
-bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, float mean_reflectance, brad_atmospheric_parameters &params)
+bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, float mean_reflectance, brad_atmospheric_parameters &params, bool constrain_atmospheric_params)
 {
   unsigned int ni = radiance.ni();
   unsigned int nj = radiance.nj();
@@ -65,9 +65,18 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
   double optical_depth = -vcl_log(vnl_math::pi / (mean_reflectance * mdata.sun_irradiance_ * vcl_sin(deg2rad*mdata.sun_elevation_)) * (radiance_mean - airlight));
   optical_depth /= (1.0/vcl_sin(deg2rad*mdata.view_elevation_) + 1.0/vcl_sin(deg2rad*mdata.sun_elevation_));
 
+  if (constrain_atmospheric_params) {
+    // Optical depth cannot be less than 0.
+    // in practice, we may not have reliable metadata, in which case the best we can hope for is
+    // a reasonable normalization of image intensities - optical depth may need to be < 0 in this case.
+    optical_depth = vcl_max(0.0, optical_depth);
+  }
+
   params.airlight_ = airlight;
-  params.optical_depth_ = vcl_max(0.0, optical_depth);
+  params.optical_depth_ = optical_depth;
   params.skylight_ = skylight;
+
+  vcl_cout << "airlight = " << airlight << " optical_depth = " << optical_depth << " skylight = " << skylight << vcl_endl;
 
   return true;
 }

@@ -27,12 +27,14 @@ def radiometrically_calibrate(cropped_image, meta):
   return cropped_img_cal
 
 # estimate atmospheric parameters
-def estimate_atmospheric_parameters(image, metadata, mean_reflectance = None):
+def estimate_atmospheric_parameters(image, metadata, mean_reflectance = None, constrain_parameters=None):
   boxm2_batch.init_process("bradEstimateAtmosphericParametersProcess")
   boxm2_batch.set_input_from_db(0,image)
   boxm2_batch.set_input_from_db(1,metadata)
   if mean_reflectance != None:
      boxm2_batch.set_input_float(2,mean_reflectance)
+  if constrain_parameters != None:
+      boxm2_batch.set_input_bool(3, constrain_parameters)
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   atm_params = dbvalue(id,type)
