@@ -45,7 +45,7 @@ class bstm_time_block : public vbl_ref_count
   //: returns a cell's the time tree containing the specified local time t.
   uchar8&                   get_cell_tt(int cell_data_offset, double local_t);
 
-  //: returns all time trees corresponding to a cell
+  //: returns all time trees corresponding to a cell (returns a reference, does not duplicate data.)
   boxm2_array_1d<uchar8>    get_cell_all_tt(int cell_data_offset);
 
   //: sets all time trees corresponding to a cell
@@ -55,7 +55,7 @@ class bstm_time_block : public vbl_ref_count
   void                      set_cell_tt(int cell_data_offset, const uchar8& input, double local_t);
 
   //: returns the index of the time tree that contains the given local time [0,sub_block_num_t_)
-  unsigned int              tree_index(double local_time);
+  unsigned int             tree_index(double local_time);
 
   //: all IO manipulates char buffers
   bool                      b_read(char* buffer);
@@ -68,11 +68,13 @@ class bstm_time_block : public vbl_ref_count
   bstm_block_id&            block_id()          { return block_id_; }         //somehow make this a const return..
   char*                     buffer()            { return buffer_; }
   boxm2_array_1d<uchar8>&   time_trees()        { return time_trees_; }
-  unsigned                  sub_block_num()     const { return sub_block_num_t_; }
+  unsigned                 sub_block_num()     const { return sub_block_num_t_; }
   int                       tree_buff_length()  const { return (int)time_trees_.size(); }
   int                       init_level()        const { return init_level_t_; }
   int                       max_level()         const { return max_level_t_; }
   long                      byte_count()        const { return byte_count_; }
+
+
 
   //: mutators
   void set_block_id(bstm_block_id id)   { block_id_ = id; }

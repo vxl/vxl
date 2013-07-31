@@ -71,6 +71,9 @@ class bstm_opencl_cache: public vbl_ref_count
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
 
+    //: returns num bytes in mem pool only
+    vcl_size_t bytes_in_mem_pool();
+
     //: returns num bytes in cache
     vcl_size_t bytes_in_cache();
 

@@ -10,7 +10,6 @@ typedef struct
   __global int* seg_len;
   __global int* mean_obs;
            float obs;
-           float*       app_model_weights;
 } AuxArgs;
 
 
@@ -66,10 +65,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
-  float app_model_weights[8] = {0};
-  float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
-  compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
-
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
@@ -86,13 +81,13 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             local_tree, local_time_tree, bit_lookup, cumsum, &vis, aux_args);
 }
 //Update step cell functor::seg_len
-void step_cell_seglen(AuxArgs aux_args, int data_ptr_tt,float d)
+void step_cell_seglen(AuxArgs aux_args, int data_ptr, int data_ptr_tt,float d)
 {
     //SLOW and accurate method
     int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
-    atom_add(&aux_args.seg_len[data_ptr_tt], seg_int);
+    atom_add(&aux_args.seg_len[data_ptr], seg_int);
     int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
-    atom_add(&aux_args.mean_obs[data_ptr_tt], cum_obs);
+    atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
 }
 #endif
 
@@ -121,27 +116,28 @@ void cast_ray(int,int,float,float,float,float,float,float,float,__constant Rende
 //------------------------------------------------------------------------------
 // 1x1 change detection (simple, single ray independent CD).
 //------------------------------------------------------------------------------
+
 __kernel
 void
-aux_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
-                            __global    int4               * tree_array,
-                            __global    int2               * time_tree_array,
-                            __global    float              * alpha_array,
-                            __global    MOG_TYPE           * mixture_array,
-                            __global    int                * aux_seg_len,
-                            __global    int                * aux_mean_obs,
-                            __global    float4             * ray_origins,
-                            __global    float4             * ray_directions,
-                            __global    float              * change_image,      // input image and store vis_inf and pre_inf
-                            __global    uint4              * exp_image_dims,
-                            __global    float              * time,
-                            __global    float              * output,
-                            __constant  uchar              * bit_lookup,
-                            __global    float              * vis_image,
-                            __local     uchar16            * local_tree,
-                            __local     uchar8             * local_time_tree,
-                            __local     uchar              * cumsum,        //cumulative sum helper for data pointer
-                            __local     int                * imIndex)
+change_kernel    ( __constant  RenderSceneInfo     * linfo,
+                    __global    int4               * tree_array,
+                    __global    int2               * time_tree_array,
+                    __global    float              * alpha_array,
+                    __global    MOG_TYPE           * mixture_array,
+                    __global    int                * aux_seg_len,
+                    __global    int                * aux_mean_obs,
+                    __global    float4             * ray_origins,
+                    __global    float4             * ray_directions,
+                    __global    float              * change_image,      // input image and store vis_inf and pre_inf
+                    __global    uint4              * exp_image_dims,
+                    __global    float              * time,
+                    __global    float              * output,
+                    __constant  uchar              * bit_lookup,
+                    __global    float              * vis_image,
+                    __local     uchar16            * local_tree,
+                    __local     uchar8             * local_time_tree,
+                    __local     uchar              * cumsum,        //cumulative sum helper for data pointer
+                    __local     int                * imIndex)
 {
   //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -194,20 +190,26 @@ aux_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
 
 
 // Change detection step cell functor
-void step_cell_change2(AuxArgs aux_args, int data_ptr_tt, float d)
+void step_cell_change2(AuxArgs aux_args, int data_ptr, int data_ptr_tt,float d)
 {
   //d-normalize the ray seg len
   d *= aux_args.linfo->block_len;
 
   //get cell cumulative length and make sure it isn't 0
-  int len_int = aux_args.seg_len[data_ptr_tt];
+  int len_int = aux_args.seg_len[data_ptr];
   float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
 
-  int obs_int = aux_args.mean_obs[data_ptr_tt];
+  int obs_int = aux_args.mean_obs[data_ptr];
   float mean_obs = convert_float(obs_int) / convert_float(len_int);
 
-  CONVERT_FUNC_FLOAT16(mixture, aux_args.mog[data_ptr_tt])/NORM;
+#ifdef  MOG_TYPE_8
+  CONVERT_FUNC_FLOAT8(mixture, aux_args.mog[data_ptr_tt])/NORM;
+  float prob_den= gauss_prob_density(mean_obs, mixture.s0,mixture.s1);
+#else
+  CONVERT_FUNC_FLOAT16(mixture, aux_args.mog[data_ptr_tt]);
   float prob_den = view_dep_mixture_model(mean_obs, mixture, aux_args.app_model_weights);
+#endif
+
 
   //calculate prob density of expected image
   float alpha = aux_args.alpha[data_ptr_tt];
@@ -217,33 +219,4 @@ void step_cell_change2(AuxArgs aux_args, int data_ptr_tt, float d)
   (*aux_args.change) += prob_den*omega;
 }
 
-// Change detection step cell functor
-void step_cell_change2_maxdensity(AuxArgs aux_args, int data_ptr_tt, float d)
-{
-  /*
-  //d-normalize the ray seg len
-  d *= aux_args.linfo->block_len;
-
-  //get cell cumulative length and make sure it isn't 0
-  int len_int = aux_args.seg_len[data_ptr_tt];
-  float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
-
-  int obs_int = aux_args.mean_obs[data_ptr_tt];
-  float mean_obs = convert_float(obs_int) / convert_float(len_int);
-
-  //uchar8 uchar_data = cell_data[data_ptr];
-  CONVERT_FUNC(uchar_data, aux_args.mog[data_ptr_tt]);
-  float8 data = convert_float8(uchar_data)/NORM;
-
-  //choose value based on cell depth
-  float prob_den=gauss_3_mixture_prob_density(mean_obs,
-                                              data.s0,data.s1,data.s2,
-                                              data.s3,data.s4,data.s5,
-                                              data.s6,data.s7,1-data.s2-data.s5);
-
-
-  if ( (*aux_args.change)  < prob_den )
-    (*aux_args.change)  = prob_den;
-  */
-}
 #endif

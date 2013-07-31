@@ -22,7 +22,6 @@ static bstm_scene_info* populate_scene_info(bstm_block_metadata data)
 {
   bstm_scene_info* info = new bstm_scene_info();
 
-
   info->scene_origin[0] = (float) data.local_origin_.x();
   info->scene_origin[1] = (float) data.local_origin_.y();
   info->scene_origin[2] = (float) data.local_origin_.z();

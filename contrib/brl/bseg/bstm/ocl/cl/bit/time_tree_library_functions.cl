@@ -1,9 +1,9 @@
 //Misc. time tree functions
-//Taken directly from bstm_time_tree implementation in c++. 
+//Taken directly from bstm_time_tree implementation in c++.
 
 #define TT_NUM_LVLS 6
 
-float cell_len_tt(int bit_index) 
+float cell_len_tt(int bit_index)
 {
   if (bit_index==0)
     return 1;
@@ -19,7 +19,7 @@ float cell_len_tt(int bit_index)
     return 0.03125;
 }
 
-uchar bit_at_tt(__local uchar* tree, int index) 
+uchar bit_at_tt(__local uchar* tree, int index)
 {
   //make sure it's in bounds - all higher cells are leaves and thus 0
   if (index > 30)
@@ -32,15 +32,15 @@ uchar bit_at_tt(__local uchar* tree, int index)
 }
 
 
-int parent_index_tt( int bit_index ) 
+int parent_index_tt( int bit_index )
 {
   return (bit_index-1)>>1;
 }
-bool valid_cell_tt(__local uchar* tree, int bit_index) 
+bool valid_cell_tt(__local uchar* tree, int bit_index)
 {
   return (bit_index==0) || bit_at_tt(tree, parent_index_tt(bit_index));
 }
-bool is_leaf_tt(__local uchar* tree,int bit_index) 
+bool is_leaf_tt(__local uchar* tree,int bit_index)
 {
   return valid_cell_tt(tree, bit_index) && (bit_at_tt(tree, bit_index)==0);
 }
@@ -52,21 +52,21 @@ int data_index_root_tt(__local uchar* tree)
 
 
 // returns data index assuming root data is located at 0
-char get_relative_index_tt(__local uchar* time_tree, int bit_index, __constant uchar* bit_lookup) 
+char get_relative_index_tt(__local uchar* time_tree, int bit_index)
 {
   //if(!is_leaf_tt(time_tree, bit_index))
   //    return -1;
-    
+
   //if looking for root
   if(bit_index == 0)
     return 0;
-    
+
   //initialize stack with the root node
   unsigned char stack[TT_NUM_LVLS];
   stack[0] = 0;
   char ptr = 0;
-  
-  
+
+
   char curr_bit;
   char count = 0;
 
@@ -91,7 +91,7 @@ char get_relative_index_tt(__local uchar* time_tree, int bit_index, __constant u
 //OLD DEPRECATED CODE
 #if 0
 // returns data index assuming root data is located at 0
-int get_relative_index_tt(__local uchar* time_tree, int bit_index, __constant uchar* bit_lookup) 
+int get_relative_index_tt(__local uchar* time_tree, int bit_index, __constant uchar* bit_lookup)
 {
   if (bit_index < 3)
     return bit_index;
@@ -122,7 +122,7 @@ int get_relative_index_tt(__local uchar* time_tree, int bit_index, __constant uc
 int traverse_tt(__local uchar* time_tree, float t)
 {
   ushort deepest = TT_NUM_LVLS; //HARDCODED FOR NOW
-  
+
   ushort depth = 0;
 
   //bit index to be returned

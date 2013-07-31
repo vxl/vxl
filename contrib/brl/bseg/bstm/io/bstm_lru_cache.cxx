@@ -159,11 +159,16 @@ bstm_data_base* bstm_lru_cache::get_data_base(bstm_block_id id, vcl_string type,
   vcl_map<bstm_block_id, bstm_data_base*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() )
   {
-    // congrats you've found the data block in cache, update cache and return block
     if (!read_only)  // write-enable is enforced
       iter->second->enable_write();
 
-    return iter->second;
+    if(num_bytes == 0 || iter->second->buffer_length() == num_bytes ) // congrats you've found the data block in cache, update cache and return block
+      return iter->second;
+    else                                                              // congrats you've found the data block in cache, but it isn't the size you wanted, so delete it.
+    {
+      delete iter->second;
+      data_map.erase(iter);
+    }
   }
 
   // grab from disk
@@ -287,6 +292,8 @@ void bstm_lru_cache::replace_data_base(bstm_block_id id, vcl_string type, bstm_d
     delete litter;
     data_map.erase(rem);
   }
+  else
+    vcl_cout << "Couldn't find " << type << " buffer in cache..." << vcl_endl;
 
   // this->remove_data_base(id, type);
   // put the new one in there

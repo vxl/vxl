@@ -27,6 +27,14 @@ void helper(bstm_block_metadata& data, long& num_cells, double& side_len)
   else
     init_cells_per_tree = 0; // dummy setting, to avoid compiler warning
 
+  if(data.init_level_t_ == 1)
+    init_cells_per_tree *= 1;
+  else if(data.init_level_t_ == 6)
+    init_cells_per_tree *= 32;
+  else {
+    vcl_cerr << "Init lvl " << data.init_level_t_ << " not supported. Only init level 1 or 6 is supported for time trees currently...\n";
+    init_cells_per_tree = 0;
+  }
   //total number of cells = numTrees * init_cells_per_tree
   num_cells = data.sub_block_num_.x() *
               data.sub_block_num_.y() *
@@ -71,8 +79,15 @@ void bstm_data_base::set_default_value(vcl_string data_type, bstm_block_metadata
     float* alphas = (float*) data_buffer_;
     vcl_fill(alphas, alphas+num_cells, ALPHA_INIT);
   }
-  else if (data_type.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != vcl_string::npos) {
-    vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
+//  else if (data_type.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != vcl_string::npos) {
+//    vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
+//  }
+  else if (data_type.find(bstm_data_traits<BSTM_CHANGE>::prefix()) != vcl_string::npos) {
+    const float CHANGE_P_INIT = data.p_init_;
+    float* change_p = (float*) data_buffer_;
+
+    int buffer_length = (int)(buffer_length_/ bstm_data_traits<BSTM_CHANGE>::datasize() );
+    for (int i=0; i<buffer_length; ++i) change_p[i] = CHANGE_P_INIT;
   }
   else {
     vcl_memset(data_buffer_, 0, buffer_length_);

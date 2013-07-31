@@ -41,13 +41,30 @@ class bstm_ocl_change_detection
                               vil_image_view_base_sptr  img,
                               vil_image_view_base_sptr  mask_img,
                               vcl_string                norm_type,
-                              bool                      pmax,
                               float                     time);
 
   private:
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
     static void full_pyramid(vil_image_view_base_sptr in_img, float* img_buff, unsigned cl_ni, unsigned cl_nj);
+};
+
+//Older, single pass, multi-res change detection
+class bstm_ocl_update_change
+{
+  public:
+    static bool update_change( vil_image_view<float>&    change_img,
+                                  bocl_device_sptr          device,
+                                  bstm_scene_sptr          scene,
+                                  bstm_opencl_cache_sptr   opencl_cache,
+                                  vpgl_camera_double_sptr   cam,
+                                  vil_image_view_base_sptr  img,
+                                  vil_image_view_base_sptr  mask_img,
+                                  float                     time );
+
+  private:
+    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts, bool isColor);
+    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
 };
 
 class bstm_ocl_aux_pass_change
@@ -60,11 +77,10 @@ class bstm_ocl_aux_pass_change
                                 vpgl_camera_double_sptr   cam,
                                 vil_image_view_base_sptr  img,
                                 vil_image_view_base_sptr  mask_img,
-                                float                     time,
-                                bool max_density=false);
+                                float                     time);
 
   private:
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts, bool maxdensity =false);
+    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
 };
 

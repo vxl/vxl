@@ -51,7 +51,7 @@ namespace bstm_ocl_render_gl_expected_image_process_globals
     //set kernel options
     vcl_string options = opts;
     if(!isViewDep)
-      options += " -D RENDER ";
+      options += " -D RENDER_LAMBERT -D RENDER_MOG ";
     else
       options += " -D RENDER_VIEW_DEP ";
 
@@ -138,6 +138,7 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   vcl_string data_type,label_data_type;
   int apptypesize,label_apptypesize;
   vcl_vector<vcl_string> valid_types;
+  valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
@@ -147,7 +148,9 @@ bool bstm_ocl_render_gl_expected_image_process(bprb_func_process& pro)
     return false;
   }
 
-  bool isViewDep = (data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()) || (data_type == bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
+  bool isViewDep = (data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()) ||
+                    (data_type == bstm_data_traits<BSTM_MOG6_VIEW>::prefix()) ||
+                    (data_type == bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
 
   //get initial options (MOG TYPE)
   vcl_string options = bstm_ocl_util::mog_options(data_type);

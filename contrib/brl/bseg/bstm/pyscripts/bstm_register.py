@@ -16,8 +16,8 @@ class dbvalue:
     self.id = index    # unsigned integer
     self.type = type   # string
 
-def remove_data(id):
-  bstm_batch.remove_data(id)
+def remove_data(data):
+  bstm_batch.remove_data(data.id)
 
 def get_output_float(id):
   fval = bstm_batch.get_output_float(id)

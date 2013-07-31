@@ -17,10 +17,11 @@ __kernel void normalize_render_kernel(__global float4* exp_img,
     if (i<(*imgdims).x || j<(*imgdims).y|| i>=(*imgdims).z || j>=(*imgdims).w)
         return;
 
-    exp_img[imindex]= exp_img[imindex] + (vis_img[imindex]*0.5f); //0.5f is the expected appearance of the background
+    exp_img[imindex] = exp_img[imindex] + (vis_img[imindex]*0.5f); //0.5f is the expected appearance of the background
+    exp_img[imindex] .w = 1.0f;
+
 }
 #endif //NORMALIZE_RENDER
-
 
 #ifdef NORMALIZE_RENDER_GL
 __kernel void normalize_render_kernel_gl(__global uint * exp_img,
@@ -67,10 +68,11 @@ __kernel void normalize_render_kernel_rgb_gl( __global float4* exp_img,
 #endif //NORMALIZE_RENDER_GL
 
 #ifdef NORMALIZE_CHANGE
-__kernel void normalize_change_kernel(__global float* exp_img /* background probability density*/ ,
+__kernel void normalize_change_kernel(__global float* change_img /* background probability density*/ ,
                                       __global float* vis_img,
                                       __global unsigned char* mask_img,
-                                      __global uint4* imgdims)
+                                      __global uint4* imgdims,
+                                      __global int* use_mask)
 {
 
     int i=0,j=0;
@@ -83,16 +85,32 @@ __kernel void normalize_change_kernel(__global float* exp_img /* background prob
 
     //get vis, if it's greater than some threshold, we don't have enough information
     float vis  = vis_img[imindex];
-    float mask = mask_img[imindex];
-    if (vis > .2f && mask == 0) {
-      exp_img[imindex] = 0.0f;
-      return;
+
+    vis_img[imindex] = 1.0f; //re-init vis
+
+    if(*use_mask)
+    {
+        float mask = mask_img[imindex];
+        if (vis > .5f && mask == 0) {
+          change_img[imindex] = 0.0f;
+          return;
+        }
+        if (vis < .5f && mask == 0) {
+          change_img[imindex] = 1.0f;
+          return;
+        }
     }
+    else
+        if (vis > .5f) {
+            change_img[imindex] = 0.5f;
+            return;
+        }
+
+
 
     //compute foreground belief
-    float fgbelief   = 1.0f/(1.0f+exp_img[imindex]);
-    exp_img[imindex] = fgbelief;
-
+    float fgbelief   = 1.0f/(1.0f+change_img[imindex]);
+    change_img[imindex] = fgbelief;
 }
 
 #endif //NORMALIZE_CHANGE

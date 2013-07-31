@@ -18,10 +18,15 @@ class bstm_ocl_update
 {
   public:
     static bool update( bstm_scene_sptr         scene,
-                        bocl_device_sptr         device,
-                        bstm_opencl_cache_sptr  opencl_cache,
-                        vpgl_camera_double_sptr  cam,
-                        vil_image_view_base_sptr img);
+                          bocl_device_sptr         device,
+                          bstm_opencl_cache_sptr  opencl_cache,
+                          vpgl_camera_double_sptr  cam,
+                          vil_image_view_base_sptr img,
+                          float                   time,
+                          float                    mog_var,
+                          bool                     update_alpha,
+                          bool                    update_changes_only,
+                          vil_image_view_base_sptr mask_img);
 
   private:
     //compile kernels and place in static map
@@ -35,11 +40,10 @@ class bstm_ocl_update
 
     //helper method to validate appearances
     static bool validate_appearances(bstm_scene_sptr scene,
-                                     vcl_string& data_type,
-                                     int& appTypeSize,
-                                     vcl_string& nobs_type,
-                                     vcl_string& options,
-                                     bool& isRGB);
+                                         vcl_string& data_type,
+                                         int& appTypeSize,
+                                         vcl_string& nobs_type,
+                                         vcl_string& options);
 };
 
 #endif // bstm_ocl_update_h_

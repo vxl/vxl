@@ -32,7 +32,7 @@ def close_image(img, disk_radius) :
   (id,type) = bstm_batch.commit_output(0);
   cimg = dbvalue(id,type);
   return cimg;
-  
+
 def convert_image(img, type="byte") :
   bstm_batch.init_process("vilConvertPixelTypeProcess");
   bstm_batch.set_input_from_db(0, img);
@@ -50,7 +50,7 @@ def rgb2gray(img):
   (id, type) = bstm_batch.commit_output(0);
   outimg = dbvalue(id,type);
   return outimg;
-  
+
 
 #pixel wise roc process for change detection images
 def pixel_wise_roc(cd_img, gt_img, mask_img=None) :
@@ -151,8 +151,6 @@ def threshold_image(img, value, threshold_above=True):
     (id,type) = bstm_batch.commit_output(0)
     mask = dbvalue(id,type)
     return mask
-
-
 
 def image_mean(img):
   bstm_batch.init_process("vilImageMeanProcess")

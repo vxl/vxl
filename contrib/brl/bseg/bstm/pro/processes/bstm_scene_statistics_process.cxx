@@ -106,6 +106,10 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
     bstm_block_id bstm_id = bstm_iter->first;
     bstm_block_metadata bstm_metadata = bstm_iter->second;
 
+    double local_time;
+    if(!bstm_metadata.contains_t(0,local_time))
+      continue;
+
     if(!vgl_intersection<double>( bstm_metadata.bbox(), box).is_empty() ) //if the two boxes intersect
     {
       bstm_block* blk = cache->get_block(bstm_id);
@@ -160,7 +164,6 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
                  }
                }
             }
-
            }
          }
         }

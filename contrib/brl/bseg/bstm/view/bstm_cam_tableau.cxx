@@ -106,7 +106,6 @@ bool bstm_cam_tableau::handle(vgui_event const &e)
   event = e;
   if (vgui_drag_mixin::handle(e))
   {
-    vcl_cout << "HERE HERE" << vcl_endl;
       render_trajectory_ = false;
       return true;
   }

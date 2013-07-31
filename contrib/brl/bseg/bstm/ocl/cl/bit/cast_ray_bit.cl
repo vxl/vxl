@@ -194,7 +194,7 @@ void cast_ray(
     //load the time tree
     local_time_tree[llid] = as_uchar8( time_tree_array[data_ptr * linfo->dims.w + time_tree_index ]);
     int bit_index_t = traverse_tt(&local_time_tree[llid], time - time_tree_index);
-    int data_ptr_tt = data_index_root_tt(&local_time_tree[llid])+ get_relative_index_tt(&local_time_tree[llid],bit_index_t,bit_lookup);
+    int data_ptr_tt = data_index_root_tt(&local_time_tree[llid])+ get_relative_index_tt(&local_time_tree[llid],bit_index_t);
     //check here is the relative index is -1 ?
 
     //TIME TREE CODE END
@@ -207,6 +207,4 @@ void cast_ray(
     // END Step Cell Functor
     ////////////////////////////////////////////////////////////////////////////////
   }
-
 }
-

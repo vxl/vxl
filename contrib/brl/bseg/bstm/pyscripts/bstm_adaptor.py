@@ -95,6 +95,29 @@ def render(scene, device, cache, cam, time=0, ni=1624, nj=1224, render_label=Fal
     print "ERROR: Cache type not recognized: ", cache.type;
 
 
+
+def render_change(scene, device, cache, cam, time=0, ni=1624, nj=1224) :
+  if cache.type == "bstm_cache_sptr" :
+    print "bstm_batch CPU render grey and vis not yet implemented";
+    return;
+  elif cache.type == "bstm_opencl_cache_sptr" and device :
+    bstm_batch.init_process("bstmOclRenderExpectedChangeProcess");
+    bstm_batch.set_input_from_db(0,device);
+    bstm_batch.set_input_from_db(1,scene);
+    bstm_batch.set_input_from_db(2,cache);
+    bstm_batch.set_input_from_db(3,cam);
+    bstm_batch.set_input_unsigned(4,ni);
+    bstm_batch.set_input_unsigned(5,nj);
+    bstm_batch.set_input_float(6, time );
+    bstm_batch.run_process();
+    (id,type) = bstm_batch.commit_output(0);
+    exp_image = dbvalue(id,type);
+    return exp_image;
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+
+
+
 ######################################################################
 # cache methods
 #####################################################################
@@ -157,14 +180,14 @@ def trajectory_size(trajectory):
 
 
 # detect change wrapper,
-def change_detect(scene, device, cache, cam, img, exp_img, time, raybelief="", max_mode=False, rgb=False, device_string="") :
+def change_detect(scene, device, cache, cam, img, time, mask_img=None, raybelief="", max_mode=False) :
     bstm_batch.init_process("bstmOclChangeDetectionProcess");
     bstm_batch.set_input_from_db(0,device);
     bstm_batch.set_input_from_db(1,scene);
     bstm_batch.set_input_from_db(2,cache);
     bstm_batch.set_input_from_db(3,cam);
     bstm_batch.set_input_from_db(4,img);
-    bstm_batch.set_input_from_db(5,exp_img);
+    bstm_batch.set_input_from_db(5,mask_img);
     bstm_batch.set_input_string(6, raybelief);
     bstm_batch.set_input_bool(7, max_mode);
     bstm_batch.set_input_float(8, time);
@@ -173,3 +196,134 @@ def change_detect(scene, device, cache, cam, img, exp_img, time, raybelief="", m
     (id,type) = bstm_batch.commit_output(0);
     cd_img = dbvalue(id,type);
     return cd_img;
+
+
+def label_change(scene, device, cache, cam, change_img, change_t, label, time) :
+    bstm_batch.init_process("bstmOclLabelRayProcess");
+    bstm_batch.set_input_from_db(0,device);
+    bstm_batch.set_input_from_db(1,scene);
+    bstm_batch.set_input_from_db(2,cache);
+    bstm_batch.set_input_from_db(3,cam);
+    bstm_batch.set_input_from_db(4,change_img);
+    bstm_batch.set_input_float(5, change_t);
+    bstm_batch.set_input_float(6, time);
+    bstm_batch.set_input_int(7, label);
+    bstm_batch.run_process();
+
+# detect change wrapper,
+def update(scene, device, cache, cam, img, time, mog_var = -1, mask_img = None, update_alpha = True, update_changes_only = False):
+    bstm_batch.init_process("bstmOclUpdateProcess");
+    bstm_batch.set_input_from_db(0,device);
+    bstm_batch.set_input_from_db(1,scene);
+    bstm_batch.set_input_from_db(2,cache);
+    bstm_batch.set_input_from_db(3,cam);
+    bstm_batch.set_input_from_db(4,img);
+    bstm_batch.set_input_float(5,time);
+    bstm_batch.set_input_float(6,mog_var);
+    bstm_batch.set_input_from_db(7,mask_img);
+    bstm_batch.set_input_bool(8,update_alpha);
+    bstm_batch.set_input_bool(9,update_changes_only);
+
+    bstm_batch.run_process();
+
+# detect change wrapper,
+def update_color(scene, device, cache, cam, img, time, mog_var = -1, mask_img = None, update_alpha = True):
+    bstm_batch.init_process("bstmOclUpdateColorProcess");
+    bstm_batch.set_input_from_db(0,device);
+    bstm_batch.set_input_from_db(1,scene);
+    bstm_batch.set_input_from_db(2,cache);
+    bstm_batch.set_input_from_db(3,cam);
+    bstm_batch.set_input_from_db(4,img);
+    bstm_batch.set_input_float(5,time);
+    bstm_batch.set_input_float(6,mog_var);
+    bstm_batch.set_input_from_db(7,mask_img);
+    bstm_batch.set_input_bool(8,update_alpha);
+    bstm_batch.run_process();
+
+# update change wrapper,
+def update_change(scene, device, cache, cam, img, time, mask_img = None):
+    bstm_batch.init_process("bstmOclUpdateChangeProcess");
+    bstm_batch.set_input_from_db(0,device);
+    bstm_batch.set_input_from_db(1,scene);
+    bstm_batch.set_input_from_db(2,cache);
+    bstm_batch.set_input_from_db(3,cam);
+    bstm_batch.set_input_from_db(4,img);
+    bstm_batch.set_input_from_db(5,mask_img);
+    bstm_batch.set_input_float(6,time);
+    bstm_batch.run_process();
+    (id,type) = bstm_batch.commit_output(0);
+    cd_img = dbvalue(id,type);
+    return cd_img;
+
+    # return
+
+def refine(scene, cpu_cache, p_threshold, time):
+    bstm_batch.init_process("bstmCppRefineSpacetimeProcess");
+    bstm_batch.set_input_from_db(0,scene);
+    bstm_batch.set_input_from_db(1,cpu_cache);
+    bstm_batch.set_input_float(2,p_threshold);
+    bstm_batch.set_input_float(3,time);
+    bstm_batch.run_process();
+
+
+def refine_space(scene, cpu_cache, change_prob_t, time):
+    bstm_batch.init_process("bstmCppRefineSpaceProcess");
+    bstm_batch.set_input_from_db(0,scene);
+    bstm_batch.set_input_from_db(1,cpu_cache);
+    bstm_batch.set_input_float(2,change_prob_t);
+    bstm_batch.set_input_float(3,time);
+    bstm_batch.run_process();
+
+def refine_time(scene, cpu_cache, change_prob_t, time):
+    bstm_batch.init_process("bstmCppRefineTTProcess");
+    bstm_batch.set_input_from_db(0,scene);
+    bstm_batch.set_input_from_db(1,cpu_cache);
+    bstm_batch.set_input_float(2,change_prob_t);
+    bstm_batch.set_input_float(3,time);
+    bstm_batch.run_process();
+
+
+def merge(scene, cpu_cache, p_threshold, time):
+    bstm_batch.init_process("bstmCppMergeTTProcess");
+    bstm_batch.set_input_from_db(0,scene);
+    bstm_batch.set_input_from_db(1,cpu_cache);
+    bstm_batch.set_input_float(2,p_threshold);
+    bstm_batch.set_input_float(3,time);
+    bstm_batch.run_process();
+
+def scene_statistics(scene, cache):
+    bstm_batch.init_process("bstmSceneStatisticsProcess");
+    bstm_batch.set_input_from_db(0, scene );
+    bstm_batch.set_input_from_db(1, cache );
+    bstm_batch.run_process();
+    (s1_id, s1_type) = bstm_batch.commit_output(0);
+    (s2_id, s2_type) = bstm_batch.commit_output(1);
+    (s3_id, s3_type) = bstm_batch.commit_output(2);
+    s1 = bstm_batch.get_output_float(s1_id);
+    s2 = bstm_batch.get_output_float(s2_id);
+    s3 = bstm_batch.get_output_unsigned(s3_id);
+    return [s1,s2,s3]
+
+def label_tt_depth(scene, cache):
+    bstm_batch.init_process("bstmCppLabelTTDepthProcess");
+    bstm_batch.set_input_from_db(0, scene );
+    bstm_batch.set_input_from_db(1, cache );
+    bstm_batch.run_process();
+
+def export_pt_cloud(scene, cache, output_filename, prob_t, time, output_aux=True):
+    bstm_batch.init_process("bstmCppExtractPointCloudProcess");
+    bstm_batch.set_input_from_db(0,scene);
+    bstm_batch.set_input_from_db(1,cache);
+    bstm_batch.set_input_float(2, prob_t);
+    bstm_batch.set_input_float(3, time);
+    bstm_batch.run_process();
+
+    bstm_batch.init_process("bstmCppExportPointCloudProcess");
+    bstm_batch.set_input_from_db(0,scene);
+    bstm_batch.set_input_from_db(1,cache);
+    bstm_batch.set_input_string(2, output_filename);
+    bstm_batch.set_input_bool(3, output_aux);
+    bstm_batch.set_input_float(4, time);
+
+    bstm_batch.run_process();
+    return;

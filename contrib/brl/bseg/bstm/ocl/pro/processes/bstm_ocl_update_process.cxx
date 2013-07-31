@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for updating the scene.
+// \brief  A process for updating the 4-d scene.
 //
 // \author Ali Osman Ulusoy
 // \date May 10, 2013
@@ -22,6 +22,7 @@
 
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <bstm/ocl/algo/bstm_ocl_update.h>
+#include <bstm/ocl/algo/bstm_ocl_update_viewdep.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -33,7 +34,7 @@
 
 namespace bstm_ocl_update_process_globals
 {
-  const unsigned int n_inputs_  = 5;
+  const unsigned int n_inputs_  = 10;
   const unsigned int n_outputs_ = 0;
 }
 
@@ -48,11 +49,26 @@ bool bstm_ocl_update_process_cons(bprb_func_process& pro)
   input_types_[2] = "bstm_opencl_cache_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";      //input camera
   input_types_[4] = "vil_image_view_base_sptr";     //input image
+  input_types_[5] = "float";                        //time
+  input_types_[6] = "float";                        //mog var
+  input_types_[7] = "vil_image_view_base_sptr";     //mask image view
+  input_types_[8] = "bool";                          //update alpha
+  input_types_[9] = "bool";                          //update changed voxels only
+
+  //initialize empty mask if no input is given
+  brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
+  brdb_value_sptr def_var    = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_update_alpha    = new brdb_value_t<bool>(true);
+  brdb_value_sptr def_update_changes_only    = new brdb_value_t<bool>(false);
 
   // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
+  pro.set_input(6, def_var);
+  pro.set_input(7, empty_mask);
+  pro.set_input(8, def_update_alpha);
+  pro.set_input(9, def_update_changes_only);
 
   return good;
 }
@@ -69,10 +85,19 @@ bool bstm_ocl_update_process(bprb_func_process& pro)
   //get the inputs
   unsigned int i = 0;
   bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
-  bstm_scene_sptr         scene        = pro.get_input<bstm_scene_sptr>(i++);
-  bstm_opencl_cache_sptr  opencl_cache = pro.get_input<bstm_opencl_cache_sptr>(i++);
+  bstm_scene_sptr         scene         = pro.get_input<bstm_scene_sptr>(i++);
+  bstm_opencl_cache_sptr  opencl_cache  = pro.get_input<bstm_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
+  float time                           = pro.get_input<float>(i++);
+  float mog_var                        = pro.get_input<float>(i++);
+  vil_image_view_base_sptr mask_img     = pro.get_input<vil_image_view_base_sptr>(i++);
+  bool                     update_alpha = pro.get_input<bool>(i++);
+  bool                     update_changes_ony = pro.get_input<bool>(i++);
 
-  return bstm_ocl_update::update(scene, device, opencl_cache, cam, img);
+  vcl_cout << "Updating scene at time " << time << vcl_endl;
+  if(scene->has_data_type(bstm_data_traits<BSTM_MOG6_VIEW>::prefix()) || scene->has_data_type(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()))
+    return bstm_ocl_update_viewdep::update(scene, device, opencl_cache, cam, img, time, mog_var, mask_img,  update_alpha, update_changes_ony);
+  else
+   return bstm_ocl_update::update(scene, device, opencl_cache, cam, img, time, mog_var,  update_alpha, update_changes_ony, mask_img);
 }

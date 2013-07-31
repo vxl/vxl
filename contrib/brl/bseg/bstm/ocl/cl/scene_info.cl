@@ -8,6 +8,7 @@
 
 #ifdef MOG_TYPE_8
     #define MOG_TYPE int2
+    #define NOBS_TYPE ushort4
     #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data)
     #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( as_uchar8(data) )
     #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int2( convert_uchar8_sat_rte(data) )
@@ -15,16 +16,37 @@
     #define NORM 255
 #endif
 
+#ifdef APP_CHANGE
+    #define MOG_TYPE float
+#endif
+
 #ifdef MOG_VIEW_DEP
-    #define MOG_TYPE uchar16
-    #define CONVERT_FUNC_FLOAT16(lhs,data) float16 lhs = convert_float16( data )
+    #define MOG_TYPE float16
     #define NORM 255
+#endif
+
+#ifdef MOG_VIEW_DEP_COMPACT
+    #define MOG_TYPE uchar16
+    #define NORM 255
+    #define CONVERT_FUNC_FLOAT16(lhs,data) float16 lhs = convert_float16( data ) / NORM
+    #define CONVERT_FUNC_UCHAR16(lhs,data) lhs = convert_uchar16_sat_rte( data * NORM )
 #endif
 
 #ifdef MOG_VIEW_DEP_COLOR_COMPACT
     #define MOG_TYPE float8
     #define NORM 255
 #endif
+
+#ifdef NUM_OBS_VIEW_COMPACT
+    #define NOBS_TYPE ushort8
+    #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( data ) / 100.0f
+    #define CONVERT_FUNC_USHORT8(lhs,data) lhs = convert_ushort8_sat_rte( data * 100.0f )
+#endif
+
+#ifndef NOBS_TYPE
+    #define NOBS_TYPE float8
+#endif
+
 
 #ifdef LABEL_UCHAR
     #define LABEL_TYPE uchar
@@ -42,6 +64,7 @@
 #ifdef PIXEL_RGB
     #define PIXEL_TYPE float4
 #endif
+
 
 //SEG_LEN FACTOR used for at
 #define SEGLEN_FACTOR 100000.0f   //Hack representation of int32.maxvalue/(root(3)*ni*nj)

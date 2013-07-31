@@ -154,8 +154,6 @@ float bstm_ocl_render_tableau::render_frame()
     else
       good = bprb_batch_process_manager::instance()->init_process("bstmOclRenderGlExpectedImageProcess");
 
-    vcl_cout << "trying to render frame..." << vcl_endl;
-
     //set process args
     good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
     good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
@@ -169,8 +167,6 @@ float bstm_ocl_render_tableau::render_frame()
     good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_render_label);   // render_label?
     good = good && bprb_batch_process_manager::instance()->run_process();
     
-
-    vcl_cout << "reached here..." << vcl_endl;
 
     //grab float output from render gl process
     unsigned int time_id = 0;

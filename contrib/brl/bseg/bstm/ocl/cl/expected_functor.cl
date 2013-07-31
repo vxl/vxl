@@ -13,21 +13,21 @@ float4 label_color(uchar label)
 
 float4 jet_color(uchar label)
 {
-  if(label == 0)
+  if(label == 1)
     return (float4)(0,0,1.0f,1.0f); //blue
-  else if(label == 1)
-    return (float4)( 0.0f ,   0.5000f,    1.00f,1.0f);
   else if(label == 2)
-    return (float4)( 0, 1.0000 ,1.0000,1.0f);
+    return (float4)( 0.0f ,   0.5000f,    1.00f,1.0f);
   else if(label == 3)
-    return (float4)(0.50f,1.00f ,0.50f,1.0f);
+    return (float4)( 0, 1.0000 ,1.0000,1.0f);
   else if(label == 4)
-    return (float4)(1.0f,1.00f ,0.0f,1.0f);
+    return (float4)(1.0f,0.5f ,0.50f,1.0f); // orange
   else if(label == 5)
-    return (float4)(1.0f,0.50f ,0.0f,1.0f); //
+    return (float4)(1.0f,1.00f ,0.0f,1.0f); //yellow
+  else if(label == 6)
+    return (float4)(1.0f,0.0f ,0.0f,1.0f); //red
 }
 
-#ifdef RENDER
+#ifdef RENDER_MOG
 void step_cell_render(AuxArgs aux_args, int data_ptr_tt, float d)
 {
   float alpha = aux_args.alpha[data_ptr_tt];
@@ -60,8 +60,10 @@ void step_cell_render(AuxArgs aux_args, int data_ptr_tt, float d)
 
 #ifdef MOG_VIEW_DEP_COLOR_COMPACT
       float8 mixture_float = aux_args.mog[data_ptr_tt];
+#elif MOG_VIEW_DEP_COMPACT
+      CONVERT_FUNC_FLOAT16(mixture_float,aux_args.mog[data_ptr_tt]);
 #else
-      CONVERT_FUNC_FLOAT16(mixture_float,aux_args.mog[data_ptr_tt])/NORM;
+      float16 mixture_float = aux_args.mog[data_ptr_tt];
 #endif
       float* mixture_array = (float*)(&mixture_float);
 
@@ -80,13 +82,27 @@ void step_cell_render(AuxArgs aux_args, int data_ptr_tt, float d)
       }
     }
     else
-      expected_int_cell = label_color(aux_args.label[data_ptr_tt] );
-
-
+      expected_int_cell = jet_color(aux_args.label[data_ptr_tt] );
   }
 
   float omega=(*aux_args.vis) * (1.0f - diff_omega);
   (*aux_args.vis) *= diff_omega;
   (*aux_args.expint) += expected_int_cell*omega;
+}
+#endif
+
+
+#ifdef RENDER_CHANGE
+void step_cell_render_change(AuxArgs aux_args, int data_ptr_tt, float d)
+{
+  float alpha = aux_args.alpha[data_ptr_tt];
+  float diff_omega=exp(-alpha*d);
+
+  if ( (*aux_args.expint).s0 < 1.0f && (*aux_args.vis) > 0.8f )
+  {
+    if(aux_args.mog[data_ptr_tt] > 0.5f)
+      (*aux_args.expint) = 1.0f;
+  }
+  (*aux_args.vis)  *= diff_omega;
 }
 #endif

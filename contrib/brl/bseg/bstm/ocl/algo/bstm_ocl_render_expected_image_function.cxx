@@ -36,6 +36,7 @@ float render_expected_image(  bstm_scene_sptr & scene,
       return 0.0f;
     }
 
+    vcl_cout << "TIME: " << time << vcl_endl;
     // create all buffers
     cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
     cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];

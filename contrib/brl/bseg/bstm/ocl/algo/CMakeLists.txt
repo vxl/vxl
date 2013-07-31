@@ -8,6 +8,8 @@ SET(bstm_ocl_algo_sources
     bstm_ocl_particle_filter.h bstm_ocl_particle_filter.cxx
     bstm_ocl_annealed_particle_filter.h bstm_ocl_annealed_particle_filter.cxx
     bstm_ocl_update.h bstm_ocl_update.cxx
+    bstm_ocl_update_color.h bstm_ocl_update_color.cxx
+    bstm_ocl_update_viewdep.h bstm_ocl_update_viewdep.cxx
     bstm_ocl_change_detection.h bstm_ocl_change_detection.cxx
    )
 

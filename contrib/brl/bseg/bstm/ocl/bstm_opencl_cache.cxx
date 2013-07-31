@@ -1,7 +1,7 @@
 #include "bstm_opencl_cache.h"
 //:
 // \file
-#define DEBUG
+//#define DEBUG
 
 //: scene/device constructor
 bstm_opencl_cache::bstm_opencl_cache(bstm_scene_sptr scene,
@@ -13,7 +13,7 @@ bstm_opencl_cache::bstm_opencl_cache(bstm_scene_sptr scene,
   if(device->info().addr_bits_ == 32 && total_global_mem > (cl_ulong)4096000000)
     total_global_mem =   (cl_ulong)4096000000;
 
-  maxBytesInCache_ = (unsigned long) (total_global_mem * .85);
+  maxBytesInCache_ = (unsigned long) (total_global_mem * .9);
 
   vcl_cout << "Opencl cache max bytes in cache: " << maxBytesInCache_ << vcl_endl;
   // by default try to create an LRU cache
@@ -162,6 +162,21 @@ vcl_size_t bstm_opencl_cache::bytes_in_cache()
       count += curr->num_bytes();
     }
   }
+
+  //count mem pool sizes
+  vcl_map<bocl_mem*, vcl_size_t>::iterator mems;
+  for (mems=mem_pool_.begin(); mems!=mem_pool_.end(); ++mems)
+  {
+    bocl_mem* curr = mems->first;
+    count += curr->num_bytes();
+  }
+  return count;
+}
+
+vcl_size_t bstm_opencl_cache::bytes_in_mem_pool()
+{
+  // count up bytes in cache (like clearing, but no deleting...
+  vcl_size_t count = 0;
 
   //count mem pool sizes
   vcl_map<bocl_mem*, vcl_size_t>::iterator mems;
@@ -352,7 +367,13 @@ bocl_mem* bstm_opencl_cache::get_data(bstm_block_id id, vcl_string type, vcl_siz
   // then look for the block you're requesting
   vcl_map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() ) {
-    return iter->second;
+    if(num_bytes == 0 || iter->second->num_bytes() == num_bytes) // congrats you've found the data block in cache, update cache and return block
+      return iter->second;
+    else                                                        // congrats you've found the data block in cache, but it isn't the size you wanted, so delete it.
+    {
+      delete iter->second;
+      data_map.erase(iter);
+    }
   }
 
   // load data into CPU cache and check size to see if GPU cache needs cleaning

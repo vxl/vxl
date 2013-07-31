@@ -25,8 +25,8 @@ class bstm_similarity_traits<BSTM_MOG3_GREY, BOXM2_MOG3_GREY>
     double isabel_measure = (bstm_data_traits<BSTM_MOG3_GREY>::processor::expected_color(app) + 1) * p;
     double isabel_measure_boxm2 = (boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(boxm2_app) + 1) * boxm2_p;
 
-    vcl_cout << "Curr measure: " << isabel_measure << " and next measure: " << isabel_measure_boxm2
-             << " verdict: " <<  ( vcl_fabs( isabel_measure - isabel_measure_boxm2) < SIMILARITY_T && (boxm2_p > 0 || p == 0) ) << vcl_endl;
+//    vcl_cout << "Curr measure: " << isabel_measure << " and next measure: " << isabel_measure_boxm2
+//             << " verdict: " <<  ( vcl_fabs( isabel_measure - isabel_measure_boxm2) < SIMILARITY_T && (boxm2_p > 0 || p == 0) ) << vcl_endl;
 
     //boxm2_p > 0 to make sure empty voxels always lead to time division
     //otherwise it leads to motion artefacts.

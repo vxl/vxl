@@ -31,7 +31,7 @@ namespace bstm_ocl_render_expected_image_process_globals
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts, bool isViewDep)
+  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts, bool isViewDep,bool isColor)
   {
     //gather all render sources... seems like a lot for rendering...
     vcl_vector<vcl_string> src_paths;
@@ -44,14 +44,19 @@ namespace bstm_ocl_render_expected_image_process_globals
     src_paths.push_back(source_dir + "view_dep_app_helper_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
-    src_paths.push_back(source_dir + "expected_functor.cl");
+    if(!isColor) {
+      src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
+      src_paths.push_back(source_dir + "expected_functor.cl");
+    }
+    else {
+      src_paths.push_back(source_dir + "bit/render_rgb.cl");
+    }
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
     vcl_string options = opts;
     if(!isViewDep)
-      options += " -D RENDER ";
+      options += " -D RENDER_LAMBERT -D RENDER_MOG ";
     else
       options += " -D RENDER_VIEW_DEP ";
 
@@ -74,13 +79,21 @@ namespace bstm_ocl_render_expected_image_process_globals
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
 
-    normalize_render_kernel->create_kernel( &device->context(),
-                                            device->device_id(),
-                                            norm_src_paths,
-                                            "normalize_render_kernel",   //kernel name
-                                            "-D NORMALIZE_RENDER ",       //options
-                                            "normalize_render_kernel"); //kernel identifier (for error checking)
-
+    if(!isColor) {
+      normalize_render_kernel->create_kernel( &device->context(),
+                                              device->device_id(),
+                                              norm_src_paths,
+                                              "normalize_render_kernel",   //kernel name
+                                              "-D NORMALIZE_RENDER ",       //options
+                                              "normalize_render_kernel"); //kernel identifier (for error checking)
+    }
+    else
+      normalize_render_kernel->create_kernel( &device->context(),
+                                              device->device_id(),
+                                              norm_src_paths,
+                                              "normalize_render_kernel",   //kernel name
+                                              "-D NORMALIZE_RENDER ",       //options
+                                              "normalize_render_kernel"); //kernel identifier (for error checking)
     vec_kernels.push_back(normalize_render_kernel);
   }
 }
@@ -137,16 +150,22 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
   vcl_string data_type,label_data_type;
   int apptypesize,label_apptypesize;
   vcl_vector<vcl_string> valid_types;
+  valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
   if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-    vcl_cout<<"bstm_ocl_render_gl_expected_image_process ERROR: scene doesn't have correct appearance model data type"<<vcl_endl;
+    vcl_cout<<"bstm_ocl_render_expected_image_process ERROR: scene doesn't have correct appearance model data type"<<vcl_endl;
     return false;
   }
 
-  bool isViewDep = (data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()) || (data_type == bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
+
+  bool isViewDep = (data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()) ||
+                   (data_type == bstm_data_traits<BSTM_MOG6_VIEW>::prefix()) ||
+                   (data_type == bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix() );
+
+  bool isColor = ( data_type == bstm_data_traits<BSTM_GAUSS_RGB>::prefix() );
 
   //get initial options (MOG TYPE)
   vcl_string options = bstm_ocl_util::mog_options(data_type);
@@ -178,7 +197,7 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
-    compile_kernel(device,ks,options, isViewDep);
+    compile_kernel(device,ks,options, isViewDep,isColor);
     kernels[identifier]=ks;
   }
 
@@ -205,7 +224,7 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
 
   // run expected image function
   float render_time;
-  vcl_cout << "Render label:" << render_label << " found label data type: " << foundLabelDataType << vcl_endl;
+  //vcl_cout << "Render label:" << render_label << " found label data type: " << foundLabelDataType << vcl_endl;
   if(!foundLabelDataType || !render_label)
     render_time = render_expected_image( scene, device, opencl_cache, queue,
                                       cam, exp_image, vis_image, exp_img_dim,
@@ -256,7 +275,6 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
       (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];
-
 
 
   delete [] vis_buff;

@@ -2,7 +2,7 @@
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
 
-#ifdef RENDER
+#ifdef RENDER_LAMBERT
 //need to define a struct of type AuxArgs with auxiliary arguments
 // to supplement cast ray args
 // NOTE THAT RGB MOG is stored as follows:
@@ -25,14 +25,16 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int2               * time_tree_array,
                   __global    float              * alpha_array,
                   __global    int2               * mixture_array,
+                  __global    LABEL_TYPE         * label_array,
+                  __global    bool               * render_label,
                   __global    float4             * ray_origins,
                   __global    float4             * ray_directions,
                   __global    float4              * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4               * exp_image_dims,
-                  __global    float              * output,
+                  __global    float               * output,
                   __constant  uchar               * bit_lookup,
-                  __global    float              * vis_image,
-                  __global    float              * time,
+                  __global    float               * vis_image,
+                  __global    float               * time,
                   __local     uchar16             * local_tree,
                   __local     uchar8              * local_time_tree,
                   __local     uchar               * cumsum,        //cumulative sum helper for data pointer
@@ -72,9 +74,11 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //----------------------------------------------------------------------------
 
   float4  expint = exp_image[imIndex[llid]];
+
 #ifdef YUV
   expint = rgb2yuv(expint);
 #endif
+
   float  vis     = vis_image[imIndex[llid]];
   AuxArgs aux_args;
   aux_args.alpha  = alpha_array;
@@ -89,17 +93,17 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             local_tree, local_time_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
 
   //store the expected intensity (as UINT)
-  //YUV edit
 #ifdef YUV
   expint = yuv2rgb(expint);
 #endif
+
   exp_image[imIndex[llid]] = expint;
 
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;
 }
 
-void step_cell_render(AuxArgs aux_args, int data_ptr_tt, uchar llid, float d)
+void step_cell_render(AuxArgs aux_args, int data_ptr_tt, float d)
 {
   float alpha = aux_args.alpha[data_ptr_tt];
   float diff_omega = exp(-alpha*d);
@@ -114,9 +118,9 @@ void step_cell_render(AuxArgs aux_args, int data_ptr_tt, uchar llid, float d)
     //expected cell is just the means
     expected_int_cell = (float4)data.s0123;
 
+#ifdef YUV
     //undo the step taken in compress RGB U/V is in [0,1],
     // put them back in ranges U in [-.436, .436] and V in [-.615, .615]
-#ifdef YUV
     expected_int_cell.y = expected_int_cell.y*U_RANGE - U_MAX;
     expected_int_cell.z = expected_int_cell.z*V_RANGE - V_MAX;
 #endif
@@ -128,4 +132,4 @@ void step_cell_render(AuxArgs aux_args, int data_ptr_tt, uchar llid, float d)
   (*aux_args.expint) += expected_int_cell*omega;
 }
 
-#endif // RENDER
+#endif // RENDER_LAMBERT

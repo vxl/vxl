@@ -73,7 +73,7 @@ class bstm_time_tree
   int parent_index(int bit_index) const { return (bit_index-1)>>1; }
 
   //: returns bit index of first child
-  int child_index(int bit_index) { return (bit_index<<1) + 1; }
+  int child_index(int bit_index) const { return (bit_index<<1) + 1; }
 
   //: Returns index of data for given bit
   int get_data_index(int bit_index) const;
@@ -107,6 +107,9 @@ class bstm_time_tree
 
   //: return max depth of its leaves
   int max_depth(int rootBit) const;
+
+  //: returns the leaves residing at the maximum depth
+  vcl_vector<int> max_depth_leaves() const;
 
  private:
   //: Tree structure stored as "bits" = really a char array

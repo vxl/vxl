@@ -82,8 +82,13 @@ bool bstm_time_block::init_empty_block()
       treeBlk[0] = 0;
       ++tree_index;
     }
+    else if (init_level_t_== 6) {
+      for (int i=0; i<4; ++i)
+        treeBlk[i] = 0xff;
+      tree_index += 32;
+    }
     else
-      vcl_cerr << "Only init level 1 is supported for time trees currently...\n";
+      vcl_cerr << "Init lvl " << init_level_t_ << " not supported. Only init level 1 or 6 is supported for time trees currently...\n";
 
     //store this tree in the buffer
     for (int i=0; i<TT_NUM_BYTES; i++)
@@ -105,8 +110,6 @@ void  bstm_time_block::set_cell_tt(int cell_data_offset, const uchar8& input, do
   time_trees_[cell_data_offset*sub_block_num_t_ + index] = input;
 }
 
-
-//:
 boxm2_array_1d<vnl_vector_fixed<unsigned char, 8> >  bstm_time_block::get_cell_all_tt(int cell_data_offset)
 {
   return boxm2_array_1d<vnl_vector_fixed<unsigned char, 8> > (sub_block_num_t_, &(time_trees_[cell_data_offset*sub_block_num_t_ ]));

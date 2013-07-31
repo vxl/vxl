@@ -27,6 +27,7 @@
 #include <vcl_sstream.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
+#include <boxm2/util/boxm2_detect_change_blobs.h>
 
 namespace bstm_ocl_change_detection_process_globals
 {
@@ -55,12 +56,10 @@ bool bstm_ocl_change_detection_process_cons(bprb_func_process& pro)
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // default is 1x1, with no ray belief
-  brdb_value_sptr nxn  = new brdb_value_t<int>(1);
-  brdb_value_sptr rayb = new brdb_value_t<vcl_string>(""); // use ray belief?
+  brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
   brdb_value_sptr pmax = new brdb_value_t<bool>(false);    // use max-mode probability instead of mixture?
-  pro.set_input(6, nxn);
-  pro.set_input(7, rayb);
-  pro.set_input(8, pmax);
+  pro.set_input(5, empty_mask);
+  pro.set_input(7, pmax);
   return good;
 }
 
@@ -79,7 +78,7 @@ bool bstm_ocl_change_detection_process(bprb_func_process& pro)
   bstm_opencl_cache_sptr   opencl_cache  = pro.get_input<bstm_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr  cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img           = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr mask_img       = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr mask_img      = pro.get_input<vil_image_view_base_sptr>(i++);
   vcl_string               norm_type     = pro.get_input<vcl_string>(i++);
   bool                     pmax         = pro.get_input<bool>(i++);
   float                    time         = pro.get_input<float>(i++);
@@ -101,8 +100,7 @@ bool bstm_ocl_change_detection_process(bprb_func_process& pro)
                                                cam,
                                                img,
                                                mask_img,
-                                               time,
-                                               pmax);
+                                               time);
   }
   else {
     // store scene smaprt pointer
@@ -114,10 +112,29 @@ bool bstm_ocl_change_detection_process(bprb_func_process& pro)
                                                img,
                                                mask_img,
                                                norm_type,
-                                               pmax,
                                                time);
   }
   vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
+
+//  float thresh = 0.3;
+//  //detect change blobs
+//  vcl_vector<boxm2_change_blob> blobs;
+//  boxm2_util_detect_change_blobs( *change_img,thresh,blobs );
+//
+//  //create a blob image
+//  vil_image_view<float>* blobImg = new vil_image_view<float>(change_img->ni(), change_img->nj());
+//  blobImg->fill(0.0f);
+//  vcl_vector<boxm2_change_blob>::iterator iter;
+//  for (iter=blobs.begin(); iter!=blobs.end(); ++iter)
+//  {
+//    //paint each blob pixel white
+//    for (unsigned int p=0; p<iter->blob_size(); ++p) {
+//      PairType pair = iter->get_pixel(p);
+//      (*blobImg)( pair.x(), pair.y() ) = 255.0f;
+//    }
+//  }
+
+
 
   // set outputs
   i=0;
