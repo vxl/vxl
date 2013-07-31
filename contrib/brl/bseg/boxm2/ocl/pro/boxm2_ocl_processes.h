@@ -78,6 +78,11 @@ DECLARE_FUNC_CONS(boxm2_ocl_ingest_dem_space_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_view_dep_app_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_view_dep_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_gl_view_dep_app_expected_image_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_view_dep_app_color_process);
+DECLARE_FUNC_CONS(boxm2_ocl_render_view_dep_expected_color_process);
+DECLARE_FUNC_CONS(boxm2_ocl_render_gl_view_dep_app_expected_color_process);
+
+
 DECLARE_FUNC_CONS(boxm2_ocl_update_parents_alpha_process);
 DECLARE_FUNC_CONS(boxm2_ocl_create_coarser_scene_process);
 
