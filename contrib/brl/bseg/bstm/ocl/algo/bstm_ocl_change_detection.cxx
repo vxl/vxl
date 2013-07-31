@@ -19,9 +19,6 @@
 #include <bstm/bstm_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
-#include <vil/vil_pyramid_image_view.h>
-#include <vil/vil_resample_bilin.h>
 
 //directory utility
 #include <vul/vul_timer.h>
@@ -296,42 +293,6 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
 
     clReleaseCommandQueue(queue);
     return true;
-}
-
-
-
-//-------------------------------------------------
-// Creates full in image (float4 pixels, each along one level of the pyramid
-//-------------------------------------------------
-void bstm_ocl_change_detection::full_pyramid(vil_image_view_base_sptr in_img, float* img_buff, unsigned cl_ni, unsigned cl_nj)
-{
-    // half the size of the previous image
-    vil_pyramid_image_view<float> pyramid(in_img, 4);
-
-    // resized images
-    unsigned ni = in_img->ni(), nj = in_img->nj();
-    vil_image_view<float> half(ni,nj), quarter(ni,nj), eighth(ni,nj);
-    vil_resample_bilin(pyramid(1), half, ni, nj);
-    vil_resample_bilin(pyramid(2), quarter, ni, nj);
-    vil_resample_bilin(pyramid(3), eighth, ni, nj);
-#if 0
-    vil_save(half, "half.tiff");
-    vil_save(quarter, "quarter.tiff");
-    vil_save(eighth, "eighth.tiff");
-#endif
-    //load up each level of pixels
-    int idx=0;
-    for (unsigned c=0; c<cl_nj; ++c) {
-        for (unsigned r=0; r<cl_ni; ++r) {
-            if (c<nj && r<ni) {
-                img_buff[idx] = pyramid(0)(r,c);
-                img_buff[idx+1] = half(r,c);
-                img_buff[idx+2] = quarter(r,c);
-                img_buff[idx+3] = eighth(r,c);
-            }
-            idx += 4;
-        }
-    }
 }
 
 
@@ -1148,62 +1109,62 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
         kern->clear_args();
     }
 
+#if 0
+    //----------------------------------------------------------------------------
+    // STEP FOUR: Final data-pass
+    //----------------------------------------------------------------------------
+    for (id = vis_order.begin(); id != vis_order.end(); ++id)
+    {
+        //choose correct render kernel
+        bstm_block_metadata mdata = scene->get_block_metadata(*id);
+        bocl_kernel* kern =  kerns[3];
 
-//    //----------------------------------------------------------------------------
-//    // STEP FOUR: Final data-pass
-//    //----------------------------------------------------------------------------
-//    for (id = vis_order.begin(); id != vis_order.end(); ++id)
-//    {
-//        //choose correct render kernel
-//        bstm_block_metadata mdata = scene->get_block_metadata(*id);
-//        bocl_kernel* kern =  kerns[3];
-//
-//        //if the current blk does not contain the queried time, no need to ray cast
-//        double local_time;
-//        if(!mdata.contains_t(time,local_time))
-//          continue;
-//        //write cl_time
-//        cl_time = (cl_float)local_time;
-//        time_mem->write_to_buffer(queue);
-//
-//        bocl_mem* blk       = opencl_cache->get_block(*id);
-//        bocl_mem* blk_t     = opencl_cache->get_time_block(*id);
-//        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-//        bocl_mem* blk_t_info= opencl_cache->loaded_time_block_info();
-//        bstm_scene_info* info_buffer_t = (bstm_scene_info*) blk_t_info->cpu_buffer();
-//
-//        bocl_mem *cum_seglen= opencl_cache->get_data<BSTM_AUX0>(*id);
-//        bocl_mem *cum_vis   = opencl_cache->get_data<BSTM_AUX1>(*id);
-//        bocl_mem *cum_change= opencl_cache->get_data<BSTM_AUX2>(*id);
-//        bocl_mem *change_prob   = opencl_cache->get_data<BSTM_CHANGE>(*id, info_buffer_t->tree_buffer_length * bstm_data_traits<BSTM_CHANGE>::datasize() ,false);
-//
-//        local_threads[0] = 64;
-//        local_threads[1] = 1 ;
-//        global_threads[0]= RoundUp(info_buffer_t->tree_buffer_length ,local_threads[0]);
-//        global_threads[1]=1;
-//
-//        kern->set_arg( blk_t_info );
-//        kern->set_arg( cum_seglen );
-//        kern->set_arg( cum_vis );
-//        kern->set_arg( cum_change );
-//        kern->set_arg( change_prob );
-//        kern->set_arg( cl_output.ptr() );
-//
-//        //execute kernel
-//        kern->execute(queue, 2, local_threads, global_threads);
-//        int status = clFinish(queue);
-//        if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)))
-//          return false;
-//        gpu_time += kern->exec_time();
-//
-//        //clear render kernel args so it can reset em on next execution
-//        kern->clear_args();
-//        kern->release_current_event();
-//
-//        //write info to disk
-//        change_prob->read_to_buffer(queue);
-//    }
+        //if the current blk does not contain the queried time, no need to ray cast
+        double local_time;
+        if(!mdata.contains_t(time,local_time))
+          continue;
+        //write cl_time
+        cl_time = (cl_float)local_time;
+        time_mem->write_to_buffer(queue);
 
+        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk_t     = opencl_cache->get_time_block(*id);
+        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+        bocl_mem* blk_t_info= opencl_cache->loaded_time_block_info();
+        bstm_scene_info* info_buffer_t = (bstm_scene_info*) blk_t_info->cpu_buffer();
+
+        bocl_mem *cum_seglen= opencl_cache->get_data<BSTM_AUX0>(*id);
+        bocl_mem *cum_vis   = opencl_cache->get_data<BSTM_AUX1>(*id);
+        bocl_mem *cum_change= opencl_cache->get_data<BSTM_AUX2>(*id);
+        bocl_mem *change_prob   = opencl_cache->get_data<BSTM_CHANGE>(*id, info_buffer_t->tree_buffer_length * bstm_data_traits<BSTM_CHANGE>::datasize() ,false);
+
+        local_threads[0] = 64;
+        local_threads[1] = 1 ;
+        global_threads[0]= RoundUp(info_buffer_t->tree_buffer_length ,local_threads[0]);
+        global_threads[1]=1;
+
+        kern->set_arg( blk_t_info );
+        kern->set_arg( cum_seglen );
+        kern->set_arg( cum_vis );
+        kern->set_arg( cum_change );
+        kern->set_arg( change_prob );
+        kern->set_arg( cl_output.ptr() );
+
+        //execute kernel
+        kern->execute(queue, 2, local_threads, global_threads);
+        int status = clFinish(queue);
+        if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)))
+          return false;
+        gpu_time += kern->exec_time();
+
+        //clear render kernel args so it can reset em on next execution
+        kern->clear_args();
+        kern->release_current_event();
+
+        //write info to disk
+        change_prob->read_to_buffer(queue);
+    }
+#endif
 
 
     //----------------------------------------------------------------------------

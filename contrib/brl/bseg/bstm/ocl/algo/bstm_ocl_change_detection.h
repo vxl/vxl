@@ -46,7 +46,6 @@ class bstm_ocl_change_detection
   private:
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
-    static void full_pyramid(vil_image_view_base_sptr in_img, float* img_buff, unsigned cl_ni, unsigned cl_nj);
 };
 
 //Older, single pass, multi-res change detection
