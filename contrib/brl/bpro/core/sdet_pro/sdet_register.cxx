@@ -27,4 +27,7 @@ void sdet_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_create_texture_classifier_process, "sdetCreateTextureClassifierProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_print_texton_dict_process, "sdetPrintTextonDictProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_exp_img_classifier_process, "sdetExpImgClassifierProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_save_texture_classifier_process, "sdetSaveTextureClassifierProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_load_texture_classifier_process, "sdetLoadTextureClassifierProcess");
+  
 }

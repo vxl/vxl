@@ -18,4 +18,7 @@ DECLARE_FUNC_CONS_FIN(sdet_texture_training_process);
 DECLARE_FUNC_CONS(sdet_create_texture_classifier_process);
 DECLARE_FUNC_CONS(sdet_print_texton_dict_process);
 DECLARE_FUNC_CONS(sdet_exp_img_classifier_process);
+DECLARE_FUNC_CONS(sdet_save_texture_classifier_process);
+DECLARE_FUNC_CONS(sdet_load_texture_classifier_process);
+
 #endif

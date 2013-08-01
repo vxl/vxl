@@ -78,4 +78,79 @@ bool sdet_create_texture_classifier_process(bprb_func_process& pro)
   return true;
 }
 
+//: PROCESS to save the current training data if any (saves the parameter block as well)
+bool sdet_save_texture_classifier_process_cons(bprb_func_process& pro)
+{
+  // process takes 2 inputs:
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("sdet_texture_classifier_sptr"); //texture classifier
+  input_types.push_back("vcl_string"); // output filename
+
+  if (!pro.set_input_types(input_types))
+    return false;
+
+  vcl_vector<vcl_string> output_types;
+  return pro.set_output_types(output_types);
+}
+
+bool sdet_save_texture_classifier_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
+    return false;
+  }
+
+  sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
+  if (!tc_ptr){
+    vcl_cout << "In finishing texture training - null texture_classifier\n";
+    return false;
+  }
+  vcl_string name = pro.get_input<vcl_string>(1);
+  if (name == "")
+    return false;
+  // saves the parameters and the current training data
+  tc_ptr->save_data(name);
+  return true;
+}
+
+
+//: PROCESS to load the current training data if any (loads the parameter block as well)
+bool sdet_load_texture_classifier_process_cons(bprb_func_process& pro)
+{
+  // process takes 1 inputs:
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vcl_string"); // input filename to read data for the instance of texture classifier
+  if (!pro.set_input_types(input_types))
+    return false;
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("sdet_texture_classifier_sptr"); //texture classifier
+  return pro.set_output_types(output_types);
+}
+
+bool sdet_load_texture_classifier_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
+    return false;
+  }
+
+  vcl_string input_ins_path = pro.get_input<vcl_string>(0);
+
+  sdet_texture_classifier_params dummy;
+  sdet_texture_classifier tc(dummy);
+  tc.load_data(input_ins_path);  
+  vcl_cout << " loaded classifier with params: " << tc << vcl_endl;
+  //vcl_cout << " current # of training data in class " << class_name() << " is: " << tc.data_size(class_name()) << '\n';
+
+  sdet_texture_classifier_sptr tc_ptr = new sdet_texture_classifier(tc);
+
+  // pass the texture classifier into the database
+  // to enable subsequent processing
+  pro.set_output_val<sdet_texture_classifier_sptr>(0, tc_ptr);
+  return true;
+}
+
 

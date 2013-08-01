@@ -69,7 +69,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_read_CLIF07_data_process, "bilReadCLIF07DataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_fill_holes_in_regions_process, "vilFillHolesInRegionsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_EO_IR_combine_process, "vilEOIRCombineProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_truncate_image_process, "vilTruncateImageProcess");
   
 }
 

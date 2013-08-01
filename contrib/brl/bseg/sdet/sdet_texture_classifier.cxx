@@ -205,6 +205,7 @@ bool sdet_texture_classifier::compute_filter_bank_color_img(vcl_string const& fi
 //: check the folder if already computed using the image name, otherwise compute and save
 bool sdet_texture_classifier::compute_filter_bank_float_img(vcl_string const& filter_folder, vcl_string const& img_name, float max_val)
 {
+  unsigned size = this->max_filter_radius();
   vcl_cout << "computing filter bank on: " << img_name << vcl_endl;
   vcl_string name = vul_file::strip_directory(img_name);
   name = vul_file::strip_extension(name);
@@ -218,13 +219,19 @@ bool sdet_texture_classifier::compute_filter_bank_float_img(vcl_string const& fi
   bool exists = vul_file::exists(img_out_dir);
   if (!exists || !this->load_filter_responses(img_out_dir))
   {
-    vil_image_view<float> lidar_img_orig = vil_load(img_name.c_str());
-    vil_math_truncate_range(lidar_img_orig, 0.0f, max_val);
-    // stretch the lidar as classification requires an image in [0,1]
-    vil_image_view<float> lidar_img(lidar_img_orig.ni(),lidar_img_orig.nj());
-    vil_convert_stretch_range_limited(lidar_img_orig, lidar_img, 0.0f, max_val, 0.0f, 1.0f);
+    vil_image_view<float> img_orig = vil_load(img_name.c_str());
 
-    if (!this->compute_filter_bank(lidar_img))
+    if (img_orig.ni() <= size || img_orig.nj() <= size) {
+      vcl_cerr << " the image does not have sufficient size to extract this filter bank, skipping!\n";
+      return false;
+    }
+
+    vil_math_truncate_range(img_orig, 0.0f, max_val);
+    // stretch the lidar as classification requires an image in [0,1]
+    vil_image_view<float> img(img_orig.ni(),img_orig.nj());
+    vil_convert_stretch_range_limited(img_orig, img, 0.0f, max_val, 0.0f, 1.0f);
+
+    if (!this->compute_filter_bank(img))
       return false;
     if (!exists)
       if (!vul_file::make_directory(img_out_dir)) {
@@ -1084,6 +1091,27 @@ texture_probabilities(vcl_vector<float> const& hist)
   }
   return probs;
 }
+
+//: return the similarity value for two histograms, this method assumes the texton dictionary is computed, there is a weight for each texton
+//  the two input histograms are of the same size with the dictionary
+float sdet_texture_classifier::prob_hist_intersection(vcl_vector<float> const& hist, vcl_vector<float> const& hc)
+{
+  unsigned nt = texton_index_.size();
+  float prob_sum = 0.0f;
+  float np = 0.0f;
+  for (unsigned i = 0; i<nt; ++i) {
+    /*float w = texton_weights_[i];
+    np += w;
+    float vc = hc[i]*w, vh = hist[i]*w;
+    prob_sum += (vc<=vh)?vc:vh;*/
+    float vc = hc[i], vh = hist[i];
+    prob_sum += (vc<=vh)?vc:vh;
+  }
+  //prob_sum /= np;  
+  return prob_sum;
+}
+
+
 //: get the class name and prob value with the highest probability for the given histogram
 vcl_pair<vcl_string, float> sdet_texture_classifier::highest_prob_class(vcl_vector<float> const& hist)
 {

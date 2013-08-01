@@ -117,7 +117,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
                              vcl_vector<vgl_polygon<double> >const& texture_regions);
   //: randomly select training samples from within a region loaded from file
   bool compute_training_data(vcl_string const& category,
-                             vcl_string const& poly_path = "");
+                             vcl_string const& poly_path);
 
   //: extract trainig data for the pixels in the array
   bool compute_training_data(vcl_string const& category, vcl_vector<vcl_pair<int, int> >const& pixels);
@@ -129,7 +129,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   //: compute textons with k_means for all the categories with training data
   void compute_textons_all();
 
-  unsigned get_number_of_textons() { return texton_index_.size(); }
+  unsigned get_number_of_textons() { return (unsigned)texton_index_.size(); }
 
   //: compute textons from set of images (and polygons).
   //  If polygon_paths is empty or some element contains a null string
@@ -186,8 +186,21 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   //: update the texton histogram with a vector of filter outputs, use the same weight for all the samples
   void update_hist(vcl_vector<vnl_vector<double> > const& f, float weight, vcl_vector<float>& hist);
 
+  //: update the texton histogram with a filter vector
+  void update_hist(vnl_vector<double> const& f, float weight, vcl_vector<float>& hist);
+
   //: get the class name and prob value with the highest probability for the given histogram
   vcl_pair<vcl_string, float> highest_prob_class(vcl_vector<float> const& hist);
+
+  //: return the similarity value for two histograms, this method assumes the texton dictionary is computed, there is a weight for each texton
+  //  the two input histograms are of the same size with the dictionary
+  float prob_hist_intersection(vcl_vector<float> const& hist1, vcl_vector<float> const& hist2);
+
+  //: concatanates the texton dictionaries of all the categories, so we can read the total number of textons in the dictionary
+  void compute_texton_index();
+
+  float laplace_response(unsigned i, unsigned j) { return laplace_(i,j); }
+  float gauss_response(unsigned i, unsigned j) { return gauss_(i,j); }
 
   // ===  debug utilities ===
 
@@ -203,13 +216,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   void init_color_map();
 
-  void compute_texton_index();
-
   unsigned nearest_texton_index(vnl_vector<double> const& query);
-
-  //: update the texton histogram with a filter vector
-  void update_hist(vnl_vector<double> const& f, float weight,
-                   vcl_vector<float>& hist);
 
   //: compute the vector of texture probabilities
   vcl_map<vcl_string, float> texture_probabilities(vcl_vector<float> const& hist);

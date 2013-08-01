@@ -184,9 +184,11 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     solar_irrad = 1617;
   else if (img_info.find("QuickBird") != vcl_string::npos || nitf_filename.find("QB") != vcl_string::npos)
     solar_irrad = 1381.7;
-  else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos)
+  else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos ||
+             img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos ||
+             img_info.find("DigitalGlobe") != vcl_string::npos) {
     solar_irrad = 1580.814;
-  else
+  } else
     vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: Guessing band-averaged solar irradiance value = " << solar_irrad << "." << nitf_filename;
   vcl_cout << "solar_irrad: " << solar_irrad << vcl_endl;
   // scale sun irradiance using Earth-Sun distance

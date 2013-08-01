@@ -38,7 +38,7 @@ SET( vbl_sources
   vbl_local_minima.txx        vbl_local_minima.h
   vbl_attributes.txx          vbl_attributes.h
   vbl_disjoint_sets.cxx       vbl_disjoint_sets.h
-  vbl_graph_partition.h
+  vbl_graph_partition.cxx     vbl_graph_partition.h
   vbl_edge.h                  vbl_edge.cxx
 )
 
