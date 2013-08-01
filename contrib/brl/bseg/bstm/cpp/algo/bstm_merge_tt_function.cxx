@@ -124,8 +124,8 @@ bool bstm_merge_tt_function::merge(vcl_vector<bstm_data_base*>& datas)
   bstm_data_base* newN = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize() ],
                                                       dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize(), id);
   bstm_data_traits<BSTM_ALPHA>::datatype *   alpha_cpy = (bstm_data_traits<BSTM_ALPHA>::datatype *) newA->data_buffer();
-  bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *  mog_cpy = (typename bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *) newM->data_buffer();
-  bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *  numobs_cpy = (typename bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *) newN->data_buffer();
+  bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *  mog_cpy = (bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *) newM->data_buffer();
+  bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *  numobs_cpy = (bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *) newN->data_buffer();
 
 
 
