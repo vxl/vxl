@@ -7,6 +7,7 @@
 #include <vnl/vnl_math.h>
 #include <vbl/vbl_graph_partition.h>
 #include <vbl/vbl_edge.h>
+#include <vcl_algorithm.h>
 
 static void random_rgb(float& r, float&g, float& b)
 {
