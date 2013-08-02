@@ -8,6 +8,7 @@ py_funcs("process_print_default_params",process_print_default_params,METH_VARARG
 py_funcs("set_params_process",set_params_process,METH_VARARGS,"set_params_process(s) set the parameter values of the current process from the XML file"),
 py_funcs("set_input_bool",set_input_bool,METH_VARARGS,"set_input_(i,b) set input i on current process to a bool value"),
 py_funcs("set_input_string",set_input_string,METH_VARARGS,"set_input_(i,s) set input i on current process to a string value"),
+py_funcs("set_input_string_array",set_input_string_array,METH_VARARGS,"set_input_(i,s) set input i on current process to a string value"),
 py_funcs("set_input_int",set_input_int,METH_VARARGS,"set_input_(i,i) set input i on current process to an int value"),
 py_funcs("set_input_int_array",set_input_int_array,METH_VARARGS,"set_input_(i,f)_array set input i on current process to a int value"),
 py_funcs("set_input_unsigned",set_input_unsigned,METH_VARARGS,"set_input_(i,i) set input i on current process to an unsigned value"),
