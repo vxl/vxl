@@ -291,6 +291,13 @@ def merge(scene, cpu_cache, p_threshold, time):
     bstm_batch.set_input_float(3,time);
     bstm_batch.run_process();
 
+def filter_changes(scene, cpu_cache, time):
+    bstm_batch.init_process("bstmCppMajorityFilterProcess");
+    bstm_batch.set_input_from_db(0,scene);
+    bstm_batch.set_input_from_db(1,cpu_cache);
+    bstm_batch.set_input_float(2,time);
+    bstm_batch.run_process();
+
 def scene_statistics(scene, cache):
     bstm_batch.init_process("bstmSceneStatisticsProcess");
     bstm_batch.set_input_from_db(0, scene );

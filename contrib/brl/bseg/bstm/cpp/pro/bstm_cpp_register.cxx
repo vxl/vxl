@@ -20,6 +20,7 @@ void bstm_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_cpp_label_bb_process, "bstmCppLabelBBProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_cpp_extract_point_cloud_process, "bstmCppExtractPointCloudProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_cpp_export_point_cloud_process, "bstmCppExportPointCloudProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_cpp_majority_filter_process, "bstmCppMajorityFilterProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_cpp_label_tt_depth_process, "bstmCppLabelTTDepthProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_cpp_analyze_coherency_process, "bstmCppAnalyzeCoherencyProcess");

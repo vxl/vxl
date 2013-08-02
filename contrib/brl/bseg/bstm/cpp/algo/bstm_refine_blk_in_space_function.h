@@ -12,6 +12,7 @@
 #include <vcl_iostream.h>
 #include <bstm/io/bstm_cache.h>
 
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
 class bstm_refine_blk_in_space_function
 {
  public:
@@ -22,7 +23,8 @@ class bstm_refine_blk_in_space_function
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
-  bstm_refine_blk_in_space_function() {}
+  bstm_refine_blk_in_space_function(bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t);
+
 
   //: initialize generic data base pointers as their data type
   bool init_data(bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t);
@@ -39,16 +41,15 @@ class bstm_refine_blk_in_space_function
 
   //: moves data from old time trees to new tree
   void move_data(bstm_time_tree& old_time_tree, bstm_time_tree& time_tree, bstm_data_traits<BSTM_ALPHA>::datatype* alpha_cpy,
-                   bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype * mog_cpy,
-                   bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype * numobs_cpy);
+                  typename bstm_data_traits<APM_DATA_TYPE>::datatype * mog_cpy,
+                  typename bstm_data_traits<NOBS_DATA_TYPE>::datatype * numobs_cpy);
 
   bstm_time_block* blk_t_;
   bstm_block* blk_;
 
-  //TODO: data types are hardcoded for now
   float*       alpha_;
-  bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype*    mog_;
-  bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype*     num_obs_;
+  typename bstm_data_traits<APM_DATA_TYPE>::datatype*    mog_;
+  typename bstm_data_traits<NOBS_DATA_TYPE>::datatype*     num_obs_;
   bstm_data_traits<BSTM_CHANGE>::datatype*     change_;
 
   //block max level
@@ -70,11 +71,5 @@ class bstm_refine_blk_in_space_function
   float change_prob_t_;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//MAIN REFINE FUNCTION
-////////////////////////////////////////////////////////////////////////////////
-void bstm_refine_block_space( bstm_time_block* t_blk, bstm_block* blk,
-                         vcl_vector<bstm_data_base*> & datas,
-                         float change_prob_t);
 
 #endif //bstm_refine_blk_in_space_function_h

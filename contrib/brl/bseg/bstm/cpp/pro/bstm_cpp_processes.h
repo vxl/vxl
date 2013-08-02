@@ -15,6 +15,8 @@ DECLARE_FUNC_CONS(bstm_cpp_merge_tt_process);
 DECLARE_FUNC_CONS(bstm_cpp_extract_point_cloud_process);
 DECLARE_FUNC_CONS(bstm_cpp_export_point_cloud_process);
 DECLARE_FUNC_CONS(bstm_cpp_refine_tt_process);
+DECLARE_FUNC_CONS(bstm_cpp_majority_filter_process);
+
 
 
 #endif

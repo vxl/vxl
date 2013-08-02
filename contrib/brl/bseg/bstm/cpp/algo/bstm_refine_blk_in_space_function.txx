@@ -1,9 +1,19 @@
+#ifndef bstm_refine_blk_in_space_function_txx
+#define bstm_refine_blk_in_space_function_txx
+
 #include "bstm_refine_blk_in_space_function.h"
 #include <bstm/io/bstm_lru_cache.h>
 #include <vcl_algorithm.h>
 
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::bstm_refine_blk_in_space_function(bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t)
+{
+  init_data(t_blk, blk, datas, change_prob_t);
+  refine(datas);
+}
 
-bool bstm_refine_blk_in_space_function::init_data(bstm_time_block* blk_t, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t)
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(bstm_time_block* blk_t, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t)
 {
   //store block and pointer to uchar16 3d block
    blk_   = blk;
@@ -12,8 +22,8 @@ bool bstm_refine_blk_in_space_function::init_data(bstm_time_block* blk_t, bstm_b
    //store data buffers
    int i=0;
    alpha_   = (float*)   datas[i++]->data_buffer();
-   mog_     = (bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype*)   datas[i++]->data_buffer();
-   num_obs_     = (bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype*)   datas[i++]->data_buffer();
+   mog_     = (typename bstm_data_traits<APM_DATA_TYPE>::datatype*)   datas[i++]->data_buffer();
+   num_obs_     = (typename bstm_data_traits<NOBS_DATA_TYPE>::datatype*)   datas[i++]->data_buffer();
    change_     = (bstm_data_traits<BSTM_CHANGE>::datatype*)   datas[i++]->data_buffer();
 
    //block max level
@@ -69,7 +79,8 @@ bool bstm_refine_blk_in_space_function::init_data(bstm_time_block* blk_t, bstm_b
    return true;
 }
 
-bool bstm_refine_blk_in_space_function::refine(vcl_vector<bstm_data_base*>& datas)
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vcl_vector<bstm_data_base*>& datas)
 {
 
   //1. loop over each tree, refine it in place
@@ -159,13 +170,13 @@ bool bstm_refine_blk_in_space_function::refine(vcl_vector<bstm_data_base*>& data
   //alloc new buffers
   bstm_data_base* newA = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_ALPHA>::datasize() ],
                                                       dataSize * bstm_data_traits<BSTM_ALPHA>::datasize(), id);
-  bstm_data_base* newM = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() ],
-                                                      dataSize * bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() , id);
-  bstm_data_base* newN = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize() ],
-                                                      dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize(), id);
+  bstm_data_base* newM = new bstm_data_base(new char[dataSize * bstm_data_traits<APM_DATA_TYPE>::datasize()],
+                                                      dataSize * bstm_data_traits<APM_DATA_TYPE>::datasize() , id);
+  bstm_data_base* newN = new bstm_data_base(new char[dataSize * bstm_data_traits<NOBS_DATA_TYPE>::datasize()],
+                                                      dataSize * bstm_data_traits<NOBS_DATA_TYPE>::datasize(), id);
   bstm_data_traits<BSTM_ALPHA>::datatype *   alpha_cpy = (bstm_data_traits<BSTM_ALPHA>::datatype *) newA->data_buffer();
-  bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *  mog_cpy = (bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *) newM->data_buffer();
-  bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *  numobs_cpy = (bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *) newN->data_buffer();
+  typename bstm_data_traits<APM_DATA_TYPE>::datatype *  mog_cpy = (typename bstm_data_traits<APM_DATA_TYPE>::datatype *) newM->data_buffer();
+  typename bstm_data_traits<NOBS_DATA_TYPE>::datatype *  numobs_cpy = (typename bstm_data_traits<NOBS_DATA_TYPE>::datatype *) newN->data_buffer();
 
 
   //5. move data from old data buffers to new data buffers
@@ -189,8 +200,8 @@ bool bstm_refine_blk_in_space_function::refine(vcl_vector<bstm_data_base*>& data
   bstm_cache_sptr cache = bstm_cache::instance();
   cache->replace_time_block(id, newTimeBlk);
   cache->replace_data_base(id, bstm_data_traits<BSTM_ALPHA>::prefix(), newA);
-  cache->replace_data_base(id, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix(), newM);
-  cache->replace_data_base(id, bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix(), newN);
+  cache->replace_data_base(id, bstm_data_traits<APM_DATA_TYPE>::prefix(), newM);
+  cache->replace_data_base(id, bstm_data_traits<NOBS_DATA_TYPE>::prefix(), newN);
   cache->replace_data_base(id, bstm_data_traits<BSTM_CHANGE>::prefix(), newC);
 
   delete[] dataIndex;
@@ -198,10 +209,11 @@ bool bstm_refine_blk_in_space_function::refine(vcl_vector<bstm_data_base*>& data
   return true;
 }
 
-void bstm_refine_blk_in_space_function::move_data(bstm_time_tree& old_time_tree, bstm_time_tree& time_tree,
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+void bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data(bstm_time_tree& old_time_tree, bstm_time_tree& time_tree,
                                                          bstm_data_traits<BSTM_ALPHA>::datatype* alpha_cpy,
-                                                         bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype * mog_cpy,
-                                                         bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype * numobs_cpy)
+                                                         typename bstm_data_traits<APM_DATA_TYPE>::datatype * mog_cpy,
+                                                         typename bstm_data_traits<NOBS_DATA_TYPE>::datatype * numobs_cpy)
 {
   vcl_vector<int> new_leaves = time_tree.get_leaf_bits();
 
@@ -218,7 +230,8 @@ void bstm_refine_blk_in_space_function::move_data(bstm_time_tree& old_time_tree,
   }
 }
 
-int bstm_refine_blk_in_space_function::move_time_trees(boct_bit_tree& unrefined_tree, boct_bit_tree& refined_tree, bstm_time_block* newTimeBlk, bstm_data_traits<BSTM_CHANGE>::datatype *  newC )
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+int bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_time_trees(boct_bit_tree& unrefined_tree, boct_bit_tree& refined_tree, bstm_time_block* newTimeBlk, bstm_data_traits<BSTM_CHANGE>::datatype *  newC )
 {
   int newSize = refined_tree.num_cells();
 
@@ -287,8 +300,8 @@ int bstm_refine_blk_in_space_function::move_time_trees(boct_bit_tree& unrefined_
 }
 
 
-
-boct_bit_tree bstm_refine_blk_in_space_function::refine_bit_tree(const boct_bit_tree& unrefined_tree)
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+boct_bit_tree bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine_bit_tree(const boct_bit_tree& unrefined_tree)
 {
   //initialize tree to return
   boct_bit_tree refined_tree(unrefined_tree.get_bits(), max_level_);
@@ -330,15 +343,5 @@ boct_bit_tree bstm_refine_blk_in_space_function::refine_bit_tree(const boct_bit_
   return refined_tree;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//MAIN REFINE FUNCTION
-////////////////////////////////////////////////////////////////////////////////
-void bstm_refine_block_space(bstm_time_block* t_blk, bstm_block* blk,
-                        vcl_vector<bstm_data_base*> & datas,
-                        float change_prob_t)
-{
-  bstm_refine_blk_in_space_function refine_block;
-  refine_block.init_data(t_blk, blk, datas, change_prob_t);
 
-  refine_block.refine(datas);
-}
+#endif //bstm_refine_blk_in_space_function_txx

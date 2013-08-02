@@ -17,7 +17,7 @@
 #include <brdb/brdb_value.h>
 #include <bstm/cpp/algo/bstm_refine_blk_in_space_function.h>
 
-#include <boxm2/basic/boxm2_array_1d.h>
+#include <bstm/bstm_util.h>
 
 namespace bstm_cpp_refine_space_process_globals
 {
@@ -64,23 +64,27 @@ bool bstm_cpp_refine_space_process(bprb_func_process& pro)
   float time =pro.get_input<float>(i++);
 
 
-  bool foundAppDataType = false, foundNumobsDataType = false;
-
-  vcl_vector<vcl_string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix() )
-    {
-      foundAppDataType = true;
-    }
-    else if ( apps[i] == bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix() )
-    {
-      foundNumobsDataType = true;
-    }
-  }
-  if (!foundAppDataType || !foundNumobsDataType ) {
-    vcl_cout<<"BSTM_CPP_REFINE_SPACE_PROCESS_ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT or BSTM_NUM_OBS_VIEW_COMPACT data type"<<vcl_endl;
+  //bstm app query
+  vcl_string app_data_type;
+  int apptypesize;
+  vcl_vector<vcl_string> valid_types;
+  valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
+  valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
+  if ( !bstm_util::verify_appearance( *scene, valid_types, app_data_type, apptypesize ) ) {
+    vcl_cout<<"bstm_cpp_refine_space_process ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT or BSTM_MOG3_GREY data type"<<vcl_endl;
     return false;
   }
+
+  vcl_string nobs_data_type;
+  int nobstypesize;
+  valid_types.empty();
+  valid_types.push_back(bstm_data_traits<BSTM_NUM_OBS>::prefix());
+  valid_types.push_back(bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix());
+  if ( !bstm_util::verify_appearance( *scene, valid_types, nobs_data_type, nobstypesize ) ) {
+    vcl_cout<<"bstm_cpp_refine_space_process ERROR: scene doesn't have BSTM_NUM_OBS or BSTM_NUM_OBS_VIEW_COMPACT data type"<<vcl_endl;
+    return false;
+  }
+
 
   vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
   vcl_map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
@@ -100,8 +104,8 @@ bool bstm_cpp_refine_space_process(bprb_func_process& pro)
     bstm_data_base * alph    = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
     int num_el = alph->buffer_length() / bstm_data_traits<BSTM_ALPHA>::datasize();
     int tree_buffer_len = blk_t->tree_buff_length();
-    bstm_data_base * mog     = cache->get_data_base(id,bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix(), bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() * num_el);
-    bstm_data_base * num_obs = cache->get_data_base(id,bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix(),bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize() * num_el );
+    bstm_data_base * mog     = cache->get_data_base(id, app_data_type, apptypesize * num_el);
+    bstm_data_base * num_obs = cache->get_data_base(id, nobs_data_type,nobstypesize * num_el );
     bstm_data_base * change = cache->get_data_base(id,bstm_data_traits<BSTM_CHANGE>::prefix(), bstm_data_traits<BSTM_CHANGE>::datasize() *tree_buffer_len );
 
     vcl_vector<bstm_data_base*> datas;
@@ -111,7 +115,12 @@ bool bstm_cpp_refine_space_process(bprb_func_process& pro)
     datas.push_back(change);
 
     //refine block and datas
-    bstm_refine_block_space( blk_t, blk, datas, change_prob_t);
+    if(app_data_type == bstm_data_traits<BSTM_MOG3_GREY>::prefix() &&  nobs_data_type == bstm_data_traits<BSTM_NUM_OBS>::prefix()  )
+      bstm_refine_blk_in_space_function<BSTM_MOG3_GREY, BSTM_NUM_OBS> ( blk_t, blk, datas, change_prob_t);
+    else if (app_data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix() &&  nobs_data_type == bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix()  )
+      bstm_refine_blk_in_space_function<BSTM_MOG6_VIEW_COMPACT, BSTM_NUM_OBS_VIEW_COMPACT> ( blk_t, blk, datas, change_prob_t);
+    else
+      vcl_cout << "bstm_refine_block_space ERROR! Types don't match...." << vcl_endl;
   }
 
   vcl_cout << "Finished refining scene..." << vcl_endl;
