@@ -19,7 +19,8 @@
 //  Modifications
 //   K.Y.McGaul - 23-MAR-2001 - Initial version.
 //   J. Mundy - Jan 9, 2005 - Added anchored pick point
-//   K. Kang - May 9, 2005 - Added pick box
+//   K. Kang - May 9, 2005  - Added pick box
+//   J. Mundy - Aug 4, 2013 - Fixed problem with handling ENTER/LEAVE events.
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>
