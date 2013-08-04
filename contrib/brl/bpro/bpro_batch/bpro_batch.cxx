@@ -321,7 +321,9 @@ PyObject *get_output_string(PyObject * /*self*/, PyObject *args)
   brdb_value_t<vcl_string>* result_out = static_cast<brdb_value_t<vcl_string>* >(brdb_value.ptr());
   value = result_out->value();
 
-  vcl_cout << " In get_output_string, the output string is: "<< value << vcl_endl;
+  if( verbose_state )
+    vcl_cout << " In get_output_string, the output string is: "
+             << value << vcl_endl;
 
   return Py_BuildValue("s", value.c_str());
 }
