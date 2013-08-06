@@ -72,10 +72,12 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   vcl_cout << "Number of observations in curren edge world: " << num_observations << '\n';
 
   float n_normal = vox_world->get_params()->edges_n_normal();
+  vcl_cout << "n_normal: " << n_normal << '\n';
 
   // render the expected edge image
   vil_image_view_base_sptr dummy_img;
   bvxm_image_metadata camera_metadata_inp(dummy_img,camera_inp);
+  vcl_cout << *(camera_metadata_inp.camera.ptr());
   vil_image_view<float> *img_eei_f = new vil_image_view<float>(ni,nj,1);
   vil_image_view_base_sptr img_eei_f_sptr = img_eei_f;
 

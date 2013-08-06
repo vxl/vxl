@@ -246,6 +246,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
     cam_out_local.image_offset(offset_u,offset_v);
     offset_u += (best_offset_u*(1.0-motion_mult));
     offset_v += (best_offset_v*(1.0-motion_mult));
+    vcl_cout << "Estimated changes with motion_mult in offsets (u,v)=(" << best_offset_u*(1.0-motion_mult) << ',' << best_offset_v*(1.0-motion_mult) << ')' << vcl_endl;
     cam_out_local.set_image_offset(offset_u,offset_v);
     camera_out = new vpgl_local_rational_camera<double>(cam_out_local);
   }

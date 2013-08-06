@@ -283,6 +283,9 @@ void bwm_tableau_mgr::zoom_to_fit()
 void bwm_tableau_mgr::scroll_to_point()
 {
   double lx,ly,lz;
+  ly = 12.952359;
+  lx = 77.589078;
+  lz = 850.0;
   vgui_dialog dialog("Point");
   dialog.message("3D World Point: ");
   dialog.field("lon:", lx);
