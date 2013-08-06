@@ -150,29 +150,22 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
         for(unsigned j = 0;  j<=1 ; j++)
             for(unsigned k = 0;  k<=1 ; k++)
             {
-            vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x() * (double)i,
-                                    blk_dim.y()*blk_num.y()* (double)j,
-                                    blk_dim.z()*blk_num.z()* (double)k);
+                vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x()*(double)i,
+                                                blk_dim.y()*blk_num.y()*(double)j,
+                                                blk_dim.z()*blk_num.z()*(double)k);
                 vgl_point_3d<double> pt = blk_o + length;
-
                 double u,v;
                 cam->project(pt.x(),pt.y(),pt.z(),u,v);
-
                 if ( u >= 0 && v >=0 && u < cam->cols() && v <cam->rows() )
                 {
                     vgl_point_3d<double> ro =  cam->ray(u,v).origin();
-
                     double depth = (ro-pt).length();
-
                     if(depth <  min_depth)
                         min_depth = depth ;
                 }
             }
-
-
-
-      if (min_depth <1e10)
-        distances.push_back( boxm2_dist_id_pair(min_depth, iter->first) );
+            if (min_depth <1e10)
+                distances.push_back( boxm2_dist_id_pair(min_depth, iter->first) );
 
   }
 
@@ -234,7 +227,7 @@ boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
     vgl_box_2d<double> blkBox(blk_o.x(), blk_o.x()+length.x(),
                               blk_o.y(), blk_o.y()+length.y());
     vgl_box_2d<double> intersect = vgl_intersection(camBox, blkBox);
-    if (!intersect.is_empty() || camBox.is_empty()) {
+
       vgl_point_3d<double> blk_center = blk_o + length/2.0;
 
       double dist = vgl_distance( blk_center, pt);
@@ -243,7 +236,7 @@ boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
         distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
       else
         distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
-    }
+
   }
 
   //sort distances

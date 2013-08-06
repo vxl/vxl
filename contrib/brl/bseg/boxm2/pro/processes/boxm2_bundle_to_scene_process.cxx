@@ -133,7 +133,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   rscene->save_scene();
 
   //build the two scenes
-  boxm2_util_cams_and_box_to_scene(cs, bbox, *uscene, *rscene);
+  boxm2_util_cams_and_box_to_scene(cs, bbox, *uscene, *rscene,nblks);
   uscene->set_xml_path(scene_dir+"/uscene.xml");
   uscene->save_scene();
   rscene->set_xml_path(scene_dir+"/rscene.xml");

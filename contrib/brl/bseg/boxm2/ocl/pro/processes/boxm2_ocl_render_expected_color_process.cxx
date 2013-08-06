@@ -207,6 +207,10 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   int count = 0;
   for (unsigned c=0;c<nj;++c) {
     for (unsigned r=0;r<ni;++r,count+=numFloats) {
+      buff[count] = buff[count] > 1.0 ? 1.0 : buff[count] ;
+      buff[count+1] = buff[count+1] > 1.0 ? 1.0 : buff[count+1] ;
+      buff[count+2] = buff[count+2] > 1.0 ? 1.0 : buff[count+2] ;
+
       (*exp_img_out)(r,c) =
       vil_rgba<vxl_byte> ( (vxl_byte) (buff[count]*255.0f),
                            (vxl_byte) (buff[count+1]*255.0f),

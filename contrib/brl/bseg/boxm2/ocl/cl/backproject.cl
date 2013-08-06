@@ -108,6 +108,7 @@ bool calc_scene_ray_generic_cam(__constant RenderSceneInfo * linfo,
   ray_d.w = 0.0f; ray_d = normalize(ray_d);
 
   //store float 3's
+  //*ray_ox = ray_o.x+ray_d.x*30;     *ray_oy = ray_o.y+ray_d.y*30;     *ray_oz = ray_o.z+ray_d.z*30;
   *ray_ox = ray_o.x;     *ray_oy = ray_o.y;     *ray_oz = ray_o.z;
   *ray_dx = ray_d.x;     *ray_dy = ray_d.y;     *ray_dz = ray_d.z;
   

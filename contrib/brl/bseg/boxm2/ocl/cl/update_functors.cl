@@ -149,17 +149,11 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
                      aux_args.ray_vis,
                      &ray_beta,
                      &vis_cont);
-
     //discretize and store beta and vis contribution
     int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
     atom_add(&aux_args.beta_array[data_ptr], beta_int);
-    int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
+    int vis_int  = convert_int_rte((vis_cont/aux_args.linfo->block_len) * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
-
-#if 0
-    //debug expected int along ray
-    *(aux_args.outInt) += mean_obs*vis_cont;
-#endif
     //-------------------------------------------------------------------------- */
 #endif
 

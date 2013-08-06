@@ -103,5 +103,5 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_create_coarser_scene_process, "boxm2OclCreateCoarserSceneProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_ingest_label_process, "boxm2OclIngestLabelProcess"); 
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_auxQ_per_view_process, "boxm2OclUpdateAuxQPerViewProcess");
 }

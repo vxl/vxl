@@ -1292,6 +1292,8 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
 
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
+        aux0->read_to_buffer(queue);
+        aux1->read_to_buffer(queue);
     }
     kern =  kerns[1];
     //----- STEP TWO: prob background pas --------
@@ -1300,8 +1302,6 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     {
         //choose correct render kernel
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-
-
         //-----write the image values to the buffer
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);

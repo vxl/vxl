@@ -454,7 +454,7 @@ convert_aux_int_to_float(__constant  RenderSceneInfo    * linfo,
                          __global float* aux_array3)
 {
   int gid=get_global_id(0);
-  int datasize = linfo->data_len ;//* info->num_buffer;
+  int datasize = linfo->data_len ;
   if (gid<datasize)
   {
     int obs0= as_int(aux_array0[gid]);

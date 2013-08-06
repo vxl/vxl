@@ -30,6 +30,7 @@
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
+#include <vul/vul_timer.h>
 
 namespace boxm2_ocl_update_process_globals
 {
@@ -96,6 +97,9 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   bool                     update_alpha = pro.get_input<bool>(i++);
   float                    mog_var      = pro.get_input<float>(i++);
   bool                     update_app = pro.get_input<bool>(i++);
+  vul_timer t;
+
+  t.mark();
   //TODO Factor this out to a utility function
   //make sure this image small enough (or else carve it into image pieces)
   const vcl_size_t MAX_PIXELS = 16777216;
@@ -136,4 +140,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   }
   else //otherwise just run a normal update with one image
     return boxm2_ocl_update::update(scene, device, opencl_cache, cam, img, ident, mask_sptr, update_alpha, mog_var,update_app);
+
+
+  vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
 }
