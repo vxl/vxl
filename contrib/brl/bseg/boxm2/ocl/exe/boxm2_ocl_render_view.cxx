@@ -65,6 +65,11 @@ int main(int argc, char ** argv)
 
     // need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
+    if ( scene_file().compare("") == 0 ) {
+      vul_arg_display_usage_and_exit();
+      vcl_cerr << "EXE_ARGUMENT_ERROR!" << vcl_endl;
+      return -1;
+    }
 
     //make bocl manager
     bocl_manager_child_sptr mgr =bocl_manager_child::instance();
