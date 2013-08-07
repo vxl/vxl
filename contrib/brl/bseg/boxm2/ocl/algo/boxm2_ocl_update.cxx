@@ -464,6 +464,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device,
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "backproject.cl");
+  src_paths.push_back(source_dir + "atomics_util.cl");
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   if (isRGB)
@@ -480,7 +481,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device,
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = " -D INTENSITY -D DETERMINISTIC" + opts;
+  vcl_string options = "-D INTENSITY -D DETERMINISTIC" + opts;
 
   //populate vector of kernels
   vcl_vector<bocl_kernel*> vec_kernels;

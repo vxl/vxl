@@ -423,9 +423,13 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     float  alpha    = alpha_array[gid];
     float  cell_min = info->block_len/(float)(1<<info->root_level);
 
+#ifdef ATOMIC_FLOAT
+    float cum_len = as_float(aux_array0[gid]);
+#else
     //get cell cumulative length and make sure it isn't 0
     int len_int = aux_array0[gid];
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
+#endif
 
     //minimum alpha value, don't let blocks get below this
     float  alphamin = -log(1.0f-0.0001f)/cell_min;
@@ -433,13 +437,19 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     //update cell if alpha and cum_len are greater than 0
     if (alpha > 0.0f && cum_len > 1e-10f)
     {
+#ifdef ATOMIC_FLOAT
+      float mean_obs = as_float(aux_array1[gid]) / cum_len;
+      float cell_vis  = as_float(aux_array2[gid]) / (cum_len*info->block_len);
+      float cell_beta = as_float(aux_array3[gid])/ (cum_len* info->block_len);
+#else
       int obs_int = aux_array1[gid];
       int vis_int = aux_array2[gid];
       int beta_int= aux_array3[gid];
-
       float mean_obs = convert_float(obs_int) / convert_float(len_int);
       float cell_vis  = convert_float(vis_int) / (convert_float(len_int)*info->block_len);
       float cell_beta = convert_float(beta_int) / (convert_float(len_int)* info->block_len);
+#endif
+
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis);
       float4 nobs     = convert_float4(nobs_array[gid]);
       CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
