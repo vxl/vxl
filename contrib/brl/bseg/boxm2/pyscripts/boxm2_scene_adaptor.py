@@ -286,6 +286,18 @@ class boxm2_scene_adaptor(object):
     cd_img = change_detect(self.scene,cache,cam,img,exp_img,dev,rgb,n,raybelief,max_mode);
     return cd_img;
 
+  # detect change wrapper,
+  def change_detect2(self, cam, img, max_mode=False, device_string="") :
+    cache = self.active_cache;
+    dev = self.device;
+    if device_string=="gpu" :
+      cache = self.opencl_cache;
+    elif device_string=="cpp" :
+      cache = self.cpu_cache;
+      dev = None;
+    cd_img = change_detect2(self.scene,cache,cam,img,max_mode,dev);
+    return cd_img;
+
   def refine(self, thresh=0.3, device_string="") :
     if device_string=="":
       nCells = refine(self.scene, self.active_cache, thresh, self.device);
