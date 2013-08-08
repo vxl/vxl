@@ -439,14 +439,14 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     {
 #ifdef ATOMIC_FLOAT
       float mean_obs = as_float(aux_array1[gid]) / cum_len;
-      float cell_vis  = as_float(aux_array2[gid]) / (cum_len*info->block_len);
+      float cell_vis  = as_float(aux_array2[gid]) / cum_len;
       float cell_beta = as_float(aux_array3[gid])/ (cum_len* info->block_len);
 #else
       int obs_int = aux_array1[gid];
       int vis_int = aux_array2[gid];
       int beta_int= aux_array3[gid];
       float mean_obs = convert_float(obs_int) / convert_float(len_int);
-      float cell_vis  = convert_float(vis_int) / (convert_float(len_int)*info->block_len);
+      float cell_vis  = convert_float(vis_int) / convert_float(len_int);
       float cell_beta = convert_float(beta_int) / (convert_float(len_int)* info->block_len);
 #endif
 
