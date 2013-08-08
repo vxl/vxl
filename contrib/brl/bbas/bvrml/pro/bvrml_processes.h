@@ -12,5 +12,6 @@ DECLARE_FUNC_CONS(bvrml_write_origin_and_axes_process);
 DECLARE_FUNC_CONS(bvrml_write_point_process);
 DECLARE_FUNC_CONS(bvrml_write_line_process);
 DECLARE_FUNC_CONS(bvrml_filtered_ply_process);
+DECLARE_FUNC_CONS(bvrml_image_to_points_process);
 
 #endif

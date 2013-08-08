@@ -35,7 +35,7 @@ bool vpgl_load_rational_camera_process(bprb_func_process& pro)
     vcl_cout << "lvpgl_load_rational_camera_process: The input number should be 1" << vcl_endl;
     return false;
   }
-
+  
   // get the inputs
   vcl_string camera_filename = pro.get_input<vcl_string>(0);
 
@@ -46,7 +46,7 @@ bool vpgl_load_rational_camera_process(bprb_func_process& pro)
     ratcam = read_rational_camera<double>(camera_filename);
 
   }
-
+  
   if ( !ratcam.as_pointer() ) {
     vcl_cerr << "Failed to load rational camera from file" << camera_filename << vcl_endl;
     return false;

@@ -9,6 +9,7 @@
 #include <bvxm/grid/pro/bvxm_grid_register.h>
 #include <sdet_pro/sdet_register.h>
 #include <brad_pro/brad_register.h>
+#include <bvrml/pro/bvrml_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -19,6 +20,7 @@ register_processes(PyObject *self, PyObject *args)
   bvxm_grid_register::register_process();
   sdet_register::register_process();
   brad_register::register_process();
+  bvrml_register::register_process();
   
   Py_INCREF(Py_None);
   return Py_None;
@@ -34,6 +36,7 @@ register_datatypes(PyObject *self, PyObject *args)
   bvxm_grid_register::register_datatype();
   sdet_register::register_datatype();
   brad_register::register_datatype();
+  bvrml_register::register_datatype();
 
   Py_INCREF(Py_None);
   return Py_None;

@@ -266,6 +266,87 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
   return true;
 }
 
+//: generate the expected edge image from the specified viewpoint. the expected image should be allocated by the caller.
+//  return the height of the voxel where the expected edge image probability is greatest
+bool bvxm_edge_ray_processor::expected_edge_image_and_heights(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, vil_image_view_base_sptr &height_img, float n_normal, unsigned scale)
+{
+    // datatype for current appearance model
+  typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
+
+  // extract global parameters
+  bvxm_world_params_sptr params = world_->get_params();
+  vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale);
+
+  // compute homographies from voxel planes to image coordinates and vise-versa.
+  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    world_->compute_plane_image_H(camera.camera,z,Hp2i,Hi2p, scale);
+    H_plane_to_img.push_back(Hp2i);
+    H_img_to_plane.push_back(Hi2p);
+  }
+
+  // allocate some images
+  bvxm_voxel_slab<edges_datatype> edges_image(expected->ni(),expected->nj(),1);
+
+  bvxm_voxel_slab<edges_datatype> expected_edge_image(expected->ni(),expected->nj(),1);
+  expected_edge_image.fill(0.0f);
+
+  bvxm_voxel_slab<float> z_image(expected->ni(), expected->nj(),1);
+  z_image.fill(0.0f);
+
+  // get edges probability grid
+  bvxm_voxel_grid_base_sptr edges_voxel_base = world_->get_grid<EDGES>(0, scale);
+  bvxm_voxel_grid<edges_datatype> *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
+
+  bvxm_voxel_grid<edges_datatype>::iterator edges_voxel_it(edges_voxel->begin());
+
+  vcl_cout << "Generating Expected Edge Image:" << vcl_endl;
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_voxel_it) {
+    vcl_cout << '.';
+
+    bvxm_util::warp_slab_bilinear((*edges_voxel_it), H_img_to_plane[z], edges_image);
+
+    bvxm_voxel_slab<edges_datatype>::iterator edges_image_it = edges_image.begin();
+    bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
+    bvxm_voxel_slab<float>::iterator z_image_it = z_image.begin();
+
+    for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it, ++edges_image_it, ++z_image_it) {
+      //(*expected_edge_image_it) = vnl_math::max((*expected_edge_image_it),(*edges_image_it));
+      if ((*expected_edge_image_it) < (*edges_image_it)) {
+        (*expected_edge_image_it) = (*edges_image_it); 
+        (*z_image_it) = (float)z;
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
+
+  int dof = (int)world_->num_observations<EDGES>(0,scale)-1;
+  bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
+  float eei_min = vcl_numeric_limits<float>::max();
+  float eei_max = vcl_numeric_limits<float>::min();
+  for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
+    (*expected_edge_image_it) = sdet_img_edge::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
+    eei_min = vnl_math::min(eei_min,*expected_edge_image_it);
+    eei_max = vnl_math::max(eei_max,*expected_edge_image_it);
+  }
+
+  if (eei_min<eei_max) {
+    for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
+      *expected_edge_image_it = (*expected_edge_image_it-eei_min)/(eei_max/eei_min);
+    }
+  }
+
+  // convert back to vil_image_view
+  bvxm_util::slab_to_img(expected_edge_image, expected);
+  bvxm_util::slab_to_img(z_image, height_img);
+
+  return true;
+}
+
+
 //: save the edge probability grid as an 8-bit 3-d vff image
 bool bvxm_edge_ray_processor::save_edges_vff(vcl_string filename,unsigned scale)
 {

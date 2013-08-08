@@ -54,6 +54,6 @@ DECLARE_FUNC_CONS(bvxm_display_edge_tangent_world_vrml_process);
 DECLARE_FUNC_CONS(bvxm_report_statistics_point_cloud_process);
 DECLARE_FUNC_CONS(bvxm_estimate_camera_process);
 DECLARE_FUNC_CONS(bvxm_detect_edges_process);
-
+DECLARE_FUNC_CONS(bvxm_edgemap_ortho_process);
 
 #endif

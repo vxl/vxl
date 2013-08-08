@@ -76,6 +76,7 @@ IF(EXPAT_FOUND)
     processes/bvxm_expected_edge_functor.h            processes/bvxm_expected_edge_functor.cxx
     processes/bvxm_estimate_camera_utils.h            processes/bvxm_estimate_camera_utils.cxx
     processes/bvxm_atmospheric_corr_process.h         processes/bvxm_atmospheric_corr_process.cxx
+    processes/bvxm_edgemap_ortho_process.h            processes/bvxm_edgemap_ortho_process.cxx
    )
 
   ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})

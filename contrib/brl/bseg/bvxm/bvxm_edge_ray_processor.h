@@ -42,6 +42,10 @@ class  bvxm_edge_ray_processor
   //: generate the expected edge image from the specified viewpoint. the expected image should be allocated by the caller.
   bool expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, float n_normal, unsigned scale_idx=0);
 
+  //: generate the expected edge image from the specified viewpoint. the expected image should be allocated by the caller.
+  //  return the height of the voxel where the expected edge image probability is greatest
+  bool expected_edge_image_and_heights(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, vil_image_view_base_sptr &height_img, float n_normal, unsigned scale_idx=0);
+
   //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
   bool save_edges_raw(vcl_string filename, float n_normal, unsigned scale_idx=0);
 

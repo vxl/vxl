@@ -43,7 +43,7 @@ bool vpgl_save_rational_camera_process(bprb_func_process& pro)
       vcl_cerr << "error: could not convert camera input to a vpgl_rational_camera or local rational camera\n";
       return false;
     }
-
+    
     if (!cam2->save(camera_filename)) {
       vcl_cerr << "Failed to save file " << camera_filename << vcl_endl;
       return false;
