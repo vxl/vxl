@@ -657,3 +657,132 @@ update_bit_scene_main_alpha_only(__global RenderSceneInfo  * info,
 }
 
 #endif // UPDATE_ALPHA_ONLY
+
+int calc_blkunisgned(unsigned cell_minx, unsigned cell_miny, unsigned cell_minz, int4 dims)
+{
+  return cell_minz + (cell_miny + cell_minx*dims.y)*dims.z;
+}
+inline void get_max_inner_outer(int* MAX_INNER_CELLS, int* MAX_CELLS, int root_level)
+{
+  //USE rootlevel to determine MAX_INNER and MAX_CELLS
+  if(root_level == 1)
+    *MAX_INNER_CELLS=1, *MAX_CELLS=9;
+  else if (root_level == 2)
+    *MAX_INNER_CELLS=9, *MAX_CELLS=73;
+  else if (root_level == 3)
+    *MAX_INNER_CELLS=73, *MAX_CELLS=585;
+}
+// operate only on leaves
+#ifdef EXTRACTQ
+
+
+//: Median filter for a block
+__kernel void extractQ_from_beta(__constant RenderSceneInfo * linfo,
+                                 __global   uchar16         * trees,
+                                 __global   float           * alphas,
+                                 __global   float           * aux0,
+                                 __global   float           * aux3,
+                                 __constant uchar           * lookup,
+                                 __local    uchar           * cumsum,
+                                 __local    uchar16         * all_local_tree)
+{
+  //make sure local_tree points to the right one in shared memory
+  uchar llid = (uchar)(get_local_id(0) + (get_local_id(1) + get_local_id(2)*get_local_size(1))*get_local_size(0));
+  __local uchar16* local_tree    = &all_local_tree[llid];
+  __local uchar*   csum          = &cumsum[llid*10];
+
+  //global id should be the same as treeIndex
+  unsigned gidX = get_global_id(0);
+  unsigned gidY = get_global_id(1);
+  unsigned gidZ = get_global_id(2);
+
+  //tree Index is global id
+  unsigned treeIndex = calc_blkunisgned(gidX, gidY, gidZ, linfo->dims);
+  if (gidX < linfo->dims.x && gidY < linfo->dims.y && gidZ <linfo->dims.z) {
+    int MAX_INNER_CELLS, MAX_CELLS;
+    get_max_inner_outer(&MAX_INNER_CELLS, &MAX_CELLS, linfo->root_level);
+    //1. get current tree information
+    (*local_tree)    = trees[treeIndex];
+    //FOR ALL LEAVES IN CURRENT TREE
+    for (int i = 0; i < MAX_CELLS; ++i) {
+      if ( is_leaf(local_tree, i) ) {
+        ///////////////////////////////////////
+        //LEAF CODE
+        int currDepth = get_depth(i);
+        float side_len = 1.0f/(float) (1<<currDepth);
+        //if you've collected a nonzero amount of probs, update it
+        int currIdx = data_index_relative(local_tree, i, lookup) + data_index_root(local_tree);
+        float curr_prob = 1.0f-exp(-alphas[currIdx] * side_len * linfo->block_len );
+        float beta  = aux3[currIdx]/(aux0[currIdx]* linfo->block_len) ;
+        float Q = beta ; //(1-beta*curr_prob)/(beta*(1-curr_prob)) ;
+        aux3[currIdx] = Q;
+        //END LEAF CODE
+        ///////////////////////////////////////
+      } //end leaf IF
+    } //end leaf for
+  } //end global id IF
+}
+
+#endif
+
+#ifdef PRODUCTQ
+// Update each cell using its aux data
+//
+__kernel
+void
+compute_product_Q(__global RenderSceneInfo  * info,
+                  __global float              * aux_array3,
+                  __global float              * aux_array_product3)
+{
+  int gid=get_global_id(0);
+  int datasize = info->data_len ;//* info->num_buffer;
+  if (gid<datasize)
+  {
+      if(aux_array3[gid] > 0.0)
+        aux_array_product3[gid] = aux_array_product3[gid] *aux_array3[gid];
+  }
+}
+
+#endif // PRODUCTQ
+
+#ifdef UPDATEP
+__kernel void update_P_using_Q(__constant RenderSceneInfo * linfo,__global uchar16 * trees,__global float* alphas,__global float * aux3_product,__global float * pinit,__constant uchar * lookup,__local uchar * cumsum,__local uchar16 * all_local_tree)
+{
+     //make sure local_tree points to the right one in shared memory
+  uchar llid = (uchar)(get_local_id(0) + (get_local_id(1) + get_local_id(2)*get_local_size(1))*get_local_size(0));
+  __local uchar16* local_tree    = &all_local_tree[llid];
+  __local uchar*   csum          = &cumsum[llid*10];
+
+  //global id should be the same as treeIndex
+  unsigned gidX = get_global_id(0);
+  unsigned gidY = get_global_id(1);
+  unsigned gidZ = get_global_id(2);
+
+  //tree Index is global id
+  unsigned treeIndex = calc_blkunisgned(gidX, gidY, gidZ, linfo->dims);
+  if (gidX < linfo->dims.x && gidY < linfo->dims.y && gidZ <linfo->dims.z) {
+    int MAX_INNER_CELLS, MAX_CELLS;
+    get_max_inner_outer(&MAX_INNER_CELLS, &MAX_CELLS, linfo->root_level);
+    //1. get current tree information
+    (*local_tree)    = trees[treeIndex];
+    //FOR ALL LEAVES IN CURRENT TREE
+    for (int i = 0; i < MAX_CELLS; ++i) {
+      if ( is_leaf(local_tree, i) ) {
+        ///////////////////////////////////////
+        //LEAF CODE
+        int currDepth = get_depth(i);
+        float side_len = 1.0f/(float) (1<<currDepth);
+        //if you've collected a nonzero amount of probs, update it
+        int currIdx = data_index_relative(local_tree, i, lookup) + data_index_root(local_tree);
+        //float curr_prob = 1.0f-exp(-alphas[currIdx] * side_len * linfo->block_len );
+        float post_prob = pinit[0]/(pinit[0]+aux3_product[currIdx]*(1-pinit[0]));
+        alphas[currIdx] = -(log(1 - post_prob)) / (side_len * linfo->block_len) ;
+
+        //END LEAF CODE
+        ///////////////////////////////////////
+      } //end leaf IF
+    } //end leaf for
+	} //end global id IF
+}
+
+#endif

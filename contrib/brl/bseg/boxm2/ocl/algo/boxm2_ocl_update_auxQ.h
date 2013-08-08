@@ -44,4 +44,27 @@ class boxm2_ocl_update_auxQ
                                      bool& isRGB);
 };
 
+class boxm2_ocl_update_PusingQ
+{
+public:
+    static bool init_product(boxm2_scene_sptr scene, boxm2_cache_sptr ocl_cache); 
+
+    
+    static bool accumulate_product(boxm2_scene_sptr         scene,
+                                   bocl_device_sptr         device,
+                                   boxm2_opencl_cache_sptr  opencl_cache,
+                                   vcl_string identifier); 
+
+    static bool compute_probability(boxm2_scene_sptr         scene,
+                                  bocl_device_sptr         device,
+                                  boxm2_opencl_cache_sptr  opencl_cache);
+
+private:
+    //compile kernels and place in static map
+    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="");
+
+    //map of paint kernel by device
+    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+
+};
 #endif // boxm2_ocl_update_auxQ_h_

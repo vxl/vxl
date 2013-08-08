@@ -41,7 +41,8 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
     UPDATE_PREINF = 1,
     UPDATE_PROC   = 2,
     UPDATE_BAYES  = 3,
-    CONVERT_AUX_INT_FLOAT = 4
+    CONVERT_AUX_INT_FLOAT = 4,
+    EXTRACTQ = 5
   };
   float transfer_time=0.0f;
   float gpu_time=0.0f;
@@ -325,6 +326,32 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
           //clear render kernel args so it can reset em on next execution
           kern->clear_args();
 
+      }
+      else if (i==EXTRACTQ)
+      {
+          //set workspace
+          vcl_size_t ltr[] = {4, 4, 4};
+          vcl_size_t gtr[] = { RoundUp(mdata.sub_block_num_.x(), ltr[0]),
+                               RoundUp(mdata.sub_block_num_.y(), ltr[1]),
+                               RoundUp(mdata.sub_block_num_.z(), ltr[2])};
+
+          kern->set_arg( blk_info );
+          kern->set_arg( blk );
+          kern->set_arg( alpha );
+          kern->set_arg( aux0 );
+          kern->set_arg( aux3 );
+          kern->set_arg( lookup.ptr() );
+          kern->set_local_arg( ltr[0]*ltr[1]*ltr[2]*10*sizeof(cl_uchar) );
+          kern->set_local_arg( ltr[0]*ltr[1]*ltr[2]*sizeof(cl_uchar16) );
+          //execute kernel
+          kern->execute(queue, 3, ltr, gtr);
+          int status = clFinish(queue);
+          check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+          gpu_time += kern->exec_time();
+
+          //clear render kernel args so it can reset em on next execution
+          kern->clear_args();
+
           //write info to disk
           aux0->read_to_buffer(queue);
           aux1->read_to_buffer(queue);
@@ -425,6 +452,12 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_auxQ::get_kernels(bocl_device_sptr de
   convert_aux_int_float->create_kernel(&device->context(),device->device_id(), src_paths_4, "convert_aux_int_to_float", opts+" -D CONVERT_AUX ", "batch_update::convert_aux_int_to_float");
   vec_kernels.push_back(convert_aux_int_float);
 
+  //push back cast_ray_bit
+  bocl_kernel* extractQ_from_beta = new bocl_kernel();
+  vcl_string extractq_opt = options + " -D EXTRACTQ";
+  extractQ_from_beta->create_kernel(&device->context(), device->device_id(), non_ray_src, "extractQ_from_beta", extractq_opt, "update::extractQ_from_beta");
+  vec_kernels.push_back(extractQ_from_beta);
+
   //store and return
   kernels_[identifier] = vec_kernels;
   return kernels_[identifier];
@@ -471,4 +504,211 @@ bool boxm2_ocl_update_auxQ::validate_appearances(boxm2_scene_sptr scene,
     return false;
   }
   return true;
+}
+
+
+vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_update_PusingQ::kernels_;
+
+bool boxm2_ocl_update_PusingQ::init_product(boxm2_scene_sptr scene, boxm2_cache_sptr cache)
+{
+    vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
+    vcl_vector<boxm2_block_id>::iterator id;
+    for (id = vis_order.begin(); id != vis_order.end(); ++id)
+    {
+        boxm2_data_base *  aux3 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(),0,false);
+        boxm2_data_traits<BOXM2_AUX3>::datatype *   aux3_data = reinterpret_cast<boxm2_data_traits<BOXM2_AUX3>::datatype*> ( aux3->data_buffer());
+        vcl_fill_n(aux3_data,aux3->buffer_length()/boxm2_data_traits<BOXM2_AUX3>::datasize(),1);
+        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX3>::prefix());
+    }
+    return true;
+}
+
+bool boxm2_ocl_update_PusingQ::accumulate_product(boxm2_scene_sptr         scene,
+                                                  bocl_device_sptr         device,
+                                                  boxm2_opencl_cache_sptr  opencl_cache,
+                                                  vcl_string identifier)
+{
+  float transfer_time=0.0f;
+  float gpu_time=0.0f;
+  //cache size sanity check
+  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  // create a command queue.
+  int status=0;
+  cl_command_queue queue = clCreateCommandQueue( device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
+  if (status!=0)
+      return false;
+
+  // compile the kernel if not already compiled
+  vcl_vector<bocl_kernel*>& kernels = get_kernels(device,"");
+  // bit lookup buffer
+  cl_uchar lookup_arr[256];
+  boxm2_ocl_util::set_bit_lookup(lookup_arr);
+  bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+  lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  // set arguments
+  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
+  vcl_vector<boxm2_block_id>::iterator id;
+  bocl_kernel * kern=kernels[0];
+  for (id = vis_order.begin(); id != vis_order.end(); ++id)
+  {
+      //choose correct render kernel
+      boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+      //write the image values to the buffer
+      vul_timer transfer;
+      bocl_mem* blk       = opencl_cache->get_block(*id);
+      bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
+      blk_info->write_to_buffer((queue));
+      //grab an appropriately sized AUX data buffer
+      int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
+      bocl_mem *aux3   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(identifier),info_buffer->data_buffer_length*auxTypeSize,false);
+      bocl_mem *aux3_product   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(),info_buffer->data_buffer_length*auxTypeSize,false);
+      transfer_time += (float) transfer.all();
+      //set workspace
+      vcl_size_t ltr[] = {64};
+      vcl_size_t gtr[] = { RoundUp(info_buffer->data_buffer_length, ltr[0]) };
+      kern->set_arg( blk_info );
+      kern->set_arg( aux3 );
+      kern->set_arg( aux3_product );
+      //execute kernel
+      kern->execute(queue, 1, ltr, gtr);
+      int status = clFinish(queue);
+      check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+      gpu_time += kern->exec_time();
+      //clear render kernel args so it can reset em on next execution
+      kern->clear_args();
+      aux3_product->read_to_buffer(queue);
+      opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(),true);
+  }
+  //read image out to buffer (from gpu)
+  clFinish(queue);
+  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  clReleaseCommandQueue(queue);
+  return true;
+}
+bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scene,
+                                                   bocl_device_sptr         device,
+                                                   boxm2_opencl_cache_sptr  opencl_cache)
+
+{
+  float transfer_time=0.0f;
+  float gpu_time=0.0f;
+  //cache size sanity check
+  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  // create a command queue.
+  int status=0;
+  cl_command_queue queue = clCreateCommandQueue( device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
+  if (status!=0)
+      return false;
+
+
+  
+  // compile the kernel if not already compiled
+  vcl_vector<bocl_kernel*>& kernels = get_kernels(device,"");
+  // bit lookup buffer
+  cl_uchar lookup_arr[256];
+  boxm2_ocl_util::set_bit_lookup(lookup_arr);
+  bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+  lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  // set arguments
+  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
+  vcl_vector<boxm2_block_id>::iterator id;
+  bocl_kernel * kern=kernels[1];
+  for (id = vis_order.begin(); id != vis_order.end(); ++id)
+  {
+      //choose correct render kernel
+      boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+      float pinit_buf[1] = {mdata.p_init_};
+      bocl_mem * pinit=new bocl_mem(device->context(), pinit_buf, sizeof(float), "pinit");
+      pinit->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+      //write the image values to the buffer
+      vul_timer transfer;
+      bocl_mem* blk       = opencl_cache->get_block(*id);
+      bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
+      blk_info->write_to_buffer((queue));
+      //grab an appropriately sized AUX data buffer
+      int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
+      bocl_mem *aux3_product   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(),info_buffer->data_buffer_length*auxTypeSize,true);
+      transfer_time += (float) transfer.all();
+
+      //set workspace
+      vcl_size_t ltr[] = {4, 4, 4};
+      vcl_size_t gtr[] = { RoundUp(mdata.sub_block_num_.x(), ltr[0]),
+                           RoundUp(mdata.sub_block_num_.y(), ltr[1]),
+                           RoundUp(mdata.sub_block_num_.z(), ltr[2])};
+
+      kern->set_arg( blk_info );
+      kern->set_arg( blk );
+      kern->set_arg( alpha );
+      kern->set_arg( aux3_product );
+      kern->set_arg( pinit );
+      kern->set_arg( lookup.ptr() );
+      kern->set_local_arg( ltr[0]*ltr[1]*ltr[2]*10*sizeof(cl_uchar) );
+      kern->set_local_arg( ltr[0]*ltr[1]*ltr[2]*sizeof(cl_uchar16) );
+      //execute kernel
+      kern->execute(queue, 3, ltr, gtr);
+      int status = clFinish(queue);
+      check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+      gpu_time += kern->exec_time();
+
+      //clear render kernel args so it can reset em on next execution
+      kern->clear_args();
+
+      alpha->read_to_buffer(queue);
+      clFinish(queue);
+      //pinit->release_memory();
+
+      //delete pinit;
+      //opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),true);
+  }
+  //read image out to buffer (from gpu)
+  clFinish(queue);
+  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  clReleaseCommandQueue(queue);
+
+  return true;
+}
+
+vcl_vector<bocl_kernel*>& boxm2_ocl_update_PusingQ::get_kernels(bocl_device_sptr device, vcl_string opts)
+{
+  // compile kernels if not already compiled
+  vcl_string identifier = device->device_identifier() + opts;
+  if (kernels_.find(identifier) != kernels_.end())
+    return kernels_[identifier];
+
+  //otherwise compile the kernels
+  vcl_cout<<"=== boxm2_ocl_update_auxQ_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  vcl_vector<vcl_string> src_paths;
+  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  src_paths.push_back(source_dir + "scene_info.cl");
+  src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+  src_paths.push_back(source_dir + "bit/update_kernels.cl");
+  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+
+  //populate vector of kernels
+  vcl_vector<bocl_kernel*> vec_kernels;
+
+
+  //push back cast_ray_bit
+  bocl_kernel* compute_product_Q = new bocl_kernel();
+  vcl_string product_q = opts + " -D PRODUCTQ";
+  compute_product_Q->create_kernel(&device->context(), device->device_id(), non_ray_src, "compute_product_Q", product_q, "update::compute_product_Q");
+  vec_kernels.push_back(compute_product_Q);
+  bocl_kernel* update_P = new bocl_kernel();
+  vcl_string update_q_opts = opts + " -D UPDATEP";
+  update_P->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_P_using_Q", update_q_opts, "update::update_P_using_Q");
+  vec_kernels.push_back(update_P);
+
+  //store and return
+  kernels_[identifier] = vec_kernels;
+  return kernels_[identifier];
 }

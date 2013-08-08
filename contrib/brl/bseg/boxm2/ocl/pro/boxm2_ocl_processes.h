@@ -88,4 +88,7 @@ DECLARE_FUNC_CONS(boxm2_ocl_create_coarser_scene_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_ingest_label_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_auxQ_per_view_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_usingQ_process);
+
+
 #endif
