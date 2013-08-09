@@ -37,8 +37,16 @@ ADD_EXECUTABLE( volm_land_class_lidar
 ADD_EXECUTABLE( volm_prepare_landclass_images
                 volm_prepare_landclass_images.cxx
               )
+              
+ADD_EXECUTABLE( volm_create_osm_objects
+                volm_create_osm_objects.cxx
+              )
 
-
+ADD_EXECUTABLE( volm_generate_osm
+                volm_generate_osm.cxx
+              )
+              
+              
 TARGET_LINK_LIBRARIES( volm_dummy_matcher volm depth_map )
 TARGET_LINK_LIBRARIES( volm_query_creation volm depth_map bvrml )
 TARGET_LINK_LIBRARIES( volm_generate_hypos volm depth_map bvrml )
@@ -48,3 +56,5 @@ TARGET_LINK_LIBRARIES( volm_evaluate volm depth_map bvrml )
 TARGET_LINK_LIBRARIES( volm_land_class volm depth_map sdet bvrml bkml )
 TARGET_LINK_LIBRARIES( volm_land_class_lidar volm depth_map sdet bvrml bkml )
 TARGET_LINK_LIBRARIES( volm_prepare_landclass_images volm depth_map sdet bvrml bkml )
+TARGET_LINK_LIBRARIES( volm_create_osm_objects volm vbl vgl bkml )
+TARGET_LINK_LIBRARIES( volm_generate_osm volm vul vgl )

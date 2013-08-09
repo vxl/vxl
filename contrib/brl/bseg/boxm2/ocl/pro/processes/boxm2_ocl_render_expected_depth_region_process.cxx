@@ -259,9 +259,12 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   // get the block that are within radius dmax centered from curr_block
   vcl_vector<boxm2_block_id> vis_order = boxm2_util::order_about_a_block(scene, curr_block, radius);
 
+  unsigned temp_cnt = 0;
+
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
+    vcl_cout << "cnt = " << temp_cnt++ << " vis_order = " << (*id) << vcl_endl;
     //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     bocl_kernel* kern =  kernels[identifier][0];

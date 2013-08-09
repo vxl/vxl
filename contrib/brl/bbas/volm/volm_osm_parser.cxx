@@ -26,7 +26,6 @@ volm_osm_parser::volm_osm_parser()
 
 void volm_osm_parser::init_params()
 {
-  vcl_cout << "I am volm_osm_parser::init_params()" << vcl_endl;
 }
 
 void volm_osm_parser::startElement(const XML_Char* name, const XML_Char** atts)
@@ -182,10 +181,12 @@ void volm_osm_parser::parse_points(vcl_vector<vgl_point_2d<double> >& points,
     vcl_cerr << " can not find osm file to parse: " << osm_file << '\n';
     delete parser;
   }
+  vcl_cout << " start ";
   if (!parser->parseFile(xmlFile)) {
     vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line " << parser->XML_GetCurrentColumnNumber() << '\n';
     delete parser;
   }
+  vcl_cout << " end ";
   // fetch points that have tags
   vcl_map<unsigned long long, vcl_vector<vcl_pair<vcl_string, vcl_string> > >::iterator mit = parser->node_keys_.begin();
   for (; mit != parser->node_keys_.end(); ++mit) {
@@ -247,6 +248,8 @@ void volm_osm_parser::parse_lines(vcl_vector<vcl_vector<vgl_point_2d<double> > >
       vcl_vector<vgl_point_2d<double> > line;
       for (vcl_vector<unsigned long long>::iterator vit = node_ids.begin(); vit != node_ids.end(); ++vit) {
 //        assert(parser->bbox_.contains(nodes[*vit]) && "the node in osm in outside bounding box");
+        if (nodes.find(*vit) == nodes.end())
+          continue;
         line.push_back(nodes[*vit]);
       }
       lines.push_back(line);
@@ -371,7 +374,7 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const& osm_bbox,
           }
         }
         finish = (start==end);
-      } while( vit != way_ids.end() && !finish);
+      } while( vit != (way_ids.end()-1) && !finish);
       // has to be finished otherwise there is a boundary defined in the relation is not enclosed
       if (!finish)
         return false;
@@ -380,6 +383,8 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const& osm_bbox,
     poly.new_sheet();
     for (unsigned n_idx = 0; n_idx < sheet.size(); n_idx++) {
       //assert(osm_bbox.contains(nodes[sheet[n_idx]]) && "the node in osm in outside bounding box");
+      if (nodes.find(sheet[n_idx]) == nodes.end())
+        return false;
       poly.push_back(nodes[sheet[n_idx]]);
     }
     // update to the next line segment
@@ -420,10 +425,16 @@ void volm_osm_parser::parse_polygons(vcl_vector<vgl_polygon<double> >& polys,
     if (!is_line(node_ids) && node_ids.size() > 2) {
       vgl_polygon<double> poly;
       poly.new_sheet();
-      for (unsigned n_idx = 0; n_idx < node_ids.size()-1; n_idx++)
-        poly.push_back(nodes[node_ids[n_idx]]);
-      polys.push_back(poly);
-      keys.push_back(mit->second);
+      bool outside = false;
+      for (unsigned n_idx = 0; (n_idx < node_ids.size()-1 && !outside); n_idx++) {
+        if (nodes.find(node_ids[n_idx]) == nodes.end())
+          outside = true;
+        else poly.push_back(nodes[node_ids[n_idx]]);
+      }
+      if (!outside) {
+        polys.push_back(poly);
+        keys.push_back(mit->second);
+      }
     }
   }
 
@@ -454,9 +465,11 @@ void volm_osm_parser::parse_polygons(vcl_vector<vgl_polygon<double> >& polys,
       ways.insert(vcl_pair<unsigned long long, vcl_vector<unsigned long long> >(way_ids[w_idx], parser->ways_[way_ids[w_idx]]));*/
     vgl_polygon<double> poly;
     bool good_relation = compose_polygon_from_relation(parser->bbox_, nodes, ways, way_ids, poly);
-    assert( good_relation && "creating polygon from relation failed");
-    polys.push_back(poly);
-    keys.push_back(parser->relation_keys_[rel_id]);
+    /*assert( good_relation && "creating polygon from relation failed");*/
+    if (good_relation) {
+      polys.push_back(poly);
+      keys.push_back(parser->relation_keys_[rel_id]);
+    }
   }
 
 #if 0

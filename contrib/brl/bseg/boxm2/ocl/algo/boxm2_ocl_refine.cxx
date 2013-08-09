@@ -232,6 +232,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
     opencl_cache->unref_mem(blk_copy.ptr());
     opencl_cache->unref_mem(tree_sizes.ptr());
   }
+  clFinish(queue);
   vcl_cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
   vcl_cout<<" Number of cells in scene (after refine): "<<num_cells<<vcl_endl;
   clReleaseCommandQueue(queue);

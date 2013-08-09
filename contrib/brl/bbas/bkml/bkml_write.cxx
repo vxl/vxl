@@ -172,12 +172,14 @@ void bkml_write::write_path(vcl_ofstream& ofs, vcl_vector<vgl_point_2d<double> >
                          vcl_string const& description,
                          double const& scale,
                          double const& line_width,
+                         double const& alpha,
                          unsigned char const& r,
                          unsigned char const& g,
                          unsigned char const& b)
 {
   // obtain line color
-  vcl_string line_color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
+  int alpha_int = (int)(alpha*255);
+  vcl_string line_color = rgb_color_to_hex_color(alpha_int, (int)r, (int)g, (int)b);
   if (path.empty())
     return;
   ofs << "<Placemark>\n"

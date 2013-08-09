@@ -100,6 +100,14 @@ public:
   //: return all leaves that intersect with a given polygon
   static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<float>  const& poly);
   static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<double> const& poly);
+
+  //: return all leaves that intersect with a line (this line is a list of points)
+  static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<float> > const& line);
+  static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<double> > const& line);
+
+  //: return the leave that contains the given loc point
+  static void get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<float> const& point);
+  static void get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<double> const& point);
   
   //: return the depth of quadtree at level node
   static unsigned depth(volm_geo_index2_node_sptr node);

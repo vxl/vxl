@@ -734,7 +734,6 @@ bool boxm2_prune_scene_blocks_process_cons(bprb_func_process& pro)
 
   // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -800,4 +799,162 @@ bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
   vcl_ofstream ofile(filename_full.c_str());
   x_write(ofile,(*pruned_scene.ptr()), "scene");
   return true;
+}
+
+
+//: A process to prune the blcoks which are below the ground surface defined by ASTER DEM
+namespace boxm2_prune_scene_blocks_by_dem_process_globals
+{
+  const unsigned n_inputs_ = 9;
+  const unsigned n_outputs_ = 1;
+}
+
+bool boxm2_prune_scene_blocks_by_dem_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_prune_scene_blocks_by_dem_process_globals;
+  // process takes 8 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr";            // boxm2_scene
+  input_types_[1] = "vil_image_view_base_sptr";    // dem image
+  input_types_[2] = "float";                       // tile lat
+  input_types_[3] = "float";                       // tile lon
+  input_types_[4] = "vcl_string";                        // tile hemisphere
+  input_types_[5] = "vcl_string";                        // tile direction
+  input_types_[6] = "float";                       // tile scale_i
+  input_types_[7] = "float";                       // tile scale_j
+  input_types_[8] = "float";                       // height tolrance above the surface
+  
+  // process takes 1 output
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "boxm2_scene_sptr";
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+#include <volm/volm_tile.h>
+#include <vcl_algorithm.h>
+#include <vgl/vgl_intersection.h>
+bool boxm2_prune_scene_blocks_by_dem_process(bprb_func_process& pro)
+{
+  using namespace boxm2_prune_scene_blocks_by_dem_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_) {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
+    return false;
+  }
+  // get the inputs
+  unsigned i = 0;
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
+  vil_image_view_base_sptr dem_img = pro.get_input<vil_image_view_base_sptr>(i++);
+  float tile_lat = pro.get_input<float>(i++);
+  float tile_lon = pro.get_input<float>(i++);
+  vcl_string hemisphere = pro.get_input<vcl_string>(i++);
+  vcl_string direction = pro.get_input<vcl_string>(i++);
+  float scale_i = pro.get_input<float>(i++);
+  float scale_j = pro.get_input<float>(i++);
+  float elev_cut_off = pro.get_input<float>(i++);
+
+  vpgl_lvcs lv = scene->lvcs();
+
+  // create a tile to transfer pixel to lon, lat
+  volm_tile tile(tile_lat, tile_lon, hemisphere[0], direction[0], scale_i, scale_j, dem_img->ni(), dem_img->nj());
+  vgl_box_2d<float> tile_box = tile.bbox();
+  vcl_cout << tile_box << vcl_endl;
+
+  // cast the dem image
+  vil_image_view<short> * dem_img_double = dynamic_cast<vil_image_view<short> * > (dem_img.ptr());
+
+  // copy necessary infomation from previous scene
+  boxm2_scene_sptr pruned_scene = new boxm2_scene(scene->data_path(), scene->local_origin());
+  pruned_scene->set_appearances(scene->appearances());
+  pruned_scene->set_lvcs(lv);
+  pruned_scene->set_num_illumination_bins(scene->num_illumination_bins());
+  vcl_map<boxm2_block_id, boxm2_block_metadata>& pruned_scene_blks = pruned_scene->blocks();
+
+  // a map to store the minimum elevation for current column of blocks
+  vcl_map<unsigned, double> blk_min_elev;
+  vcl_map<unsigned, double> blk_max_elev;
+
+  // loop over the scene blocks
+  vcl_map<boxm2_block_id, boxm2_block_metadata>& blks=scene->blocks();
+  
+  // get a block height from one of the blocks
+  vgl_box_3d<double> box = (blks.begin()->second).bbox();
+  double blk_len_z = box.max_z() - box.min_z();
+
+  vcl_cout << "!!! NUMBER OF BLOCKS to be pruned: " << blks.size() << vcl_endl;
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit)
+  {
+    boxm2_block_id blk_id = mit->first;
+    boxm2_block_metadata md = mit->second;
+    vgl_box_3d<double> blk_box = md.bbox();
+    double min_lon, min_lat, min_alt;
+    double max_lon, max_lat, max_alt;
+    lv.local_to_global(blk_box.min_x(), blk_box.min_y(), blk_box.min_z(), vpgl_lvcs::wgs84, min_lon, min_lat, min_alt);
+    lv.local_to_global(blk_box.max_x(), blk_box.max_y(), blk_box.max_z(), vpgl_lvcs::wgs84, max_lon, max_lat, max_alt);
+
+    // if current block is out of current tile dem image, put it directly
+    vgl_box_2d<float> blk_box_2d(vgl_point_2d<float>((float)min_lon, (float)min_lat),
+                                 vgl_point_2d<float>((float)max_lon, (float)max_lat));
+
+    // check the existence of min elevation for current block
+    vgl_box_2d<float> intersect_box = vgl_intersection(tile_box, blk_box_2d);
+    if (intersect_box.is_empty())
+    {
+      pruned_scene_blks[blk_id] = md;
+      continue;
+    }
+    
+    // inside the range of dem image, check the surface elevation
+    unsigned key = (blk_id.i() + blk_id.j())*(blk_id.i() + blk_id.j() + 1)/2 + blk_id.j();
+    double min_elev = 1E6;
+    double max_elev = -1E6;
+    if (blk_min_elev.find(key) == blk_min_elev.end())
+    {
+      // obtain the pixels from intersect box
+      unsigned min_ni, min_nj, max_ni, max_nj;
+      tile.global_to_img(intersect_box.min_x(), intersect_box.min_y(), min_ni, min_nj);
+      tile.global_to_img(intersect_box.max_x(), intersect_box.max_y(), max_ni, max_nj);
+      unsigned bd_min_ni = min_ni;
+      unsigned bd_min_nj = min_nj;
+      unsigned bd_max_ni = max_ni;
+      unsigned bd_max_nj = max_nj;
+      if (min_ni > max_ni) {
+        bd_min_ni = max_ni;  bd_max_ni = min_ni;
+      }
+      if (min_nj > max_nj) {
+        bd_min_nj = max_nj;  bd_max_nj = min_nj;
+      }
+      for (unsigned i = bd_min_ni; i <= bd_max_ni; i++)
+        for (unsigned j = bd_min_nj; j <= bd_max_nj; j++) {
+          double depth = (*dem_img_double)(i, j);
+          if (depth < min_elev)
+            min_elev = depth;
+          if (depth > max_elev)
+            max_elev = depth;
+        }
+      blk_min_elev.insert(vcl_pair<unsigned, double>(key, min_elev));
+      blk_max_elev.insert(vcl_pair<unsigned, double>(key, max_elev));
+    }
+    else // we have the minimum elev
+    {
+      min_elev = blk_min_elev.find(key)->second;
+      max_elev = blk_max_elev.find(key)->second;
+    }
+      
+    
+    // if block max height is smaller than the minimum elevation - 100, drop the block
+    if (max_alt < (min_elev - blk_len_z))
+      continue;
+    // if block min height is larger than the maximum elevation on the groud 
+    if (min_alt > (max_elev + elev_cut_off))
+      continue;
+    pruned_scene_blks[blk_id] = md;
+  }
+  vcl_cout << "original scene had " << blks.size() << " blocks!\n"
+           << " after pruning, the scene has " << pruned_scene_blks.size() << " blocks!\n";
+  // output
+  i=0;  // store scene smart pointer
+  pro.set_output_val<boxm2_scene_sptr>(i++, pruned_scene);
+  return true;
+  
 }

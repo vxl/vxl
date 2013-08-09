@@ -258,12 +258,17 @@ void bkml_parser::charData(const XML_Char* s, int len)
     vcl_string str_s;
     str_s = s;
     vcl_size_t cord_end = str_s.find(KML_POLYCORE_END_TAG);
-    while (str_s[cord_end] != '\n')
-      cord_end--;
-    while (str_s[cord_end-1] == ' ')
-      cord_end--;
-    if ((int)cord_end > len)
-      len = (int)cord_end;
+    if (str_s[len] == '<')
+      cord_end = len;
+    else {
+      while (str_s[cord_end] != '\n')
+        cord_end--;
+      while (str_s[cord_end-1] == ' ')
+        cord_end--;
+      if ((int)cord_end > len)
+        len = (int)cord_end;
+    }
+    
     for (unsigned int i=0; i<cord_end; ++i)
       str << s[i];
     vcl_vector<vgl_point_3d<double> > poly_verts;

@@ -21,10 +21,15 @@ bool volm_osm_category_io::load_category_table(vcl_string const& filename,
   vcl_getline(ifs, header);
   vcl_string tag, value, name;
   unsigned id, level;
+  double width;
   while ( !ifs.eof()) {
-    ifs >> tag;  ifs >> value;  ifs >> id;  ifs >> name;  ifs >> level;
-    vil_rgb<vxl_byte> color(bvrml_color::heatmap_classic[id][0], bvrml_color::heatmap_classic[id][1], bvrml_color::heatmap_classic[id][2]);
-    land_category_table[vcl_pair<vcl_string, vcl_string>(tag, value)] = volm_land_layer((unsigned char)id, name, (unsigned char)level, color);
+    ifs >> tag;  ifs >> value;  ifs >> id;  ifs >> name;  ifs >> level;  ifs >> width;
+    vil_rgb<vxl_byte> color;
+    if (name == "invalid")
+      color = vil_rgb<vxl_byte>(0,0,0);
+    else
+      color = bvrml_color::heatmap_classic[id][0], bvrml_color::heatmap_classic[id][1], bvrml_color::heatmap_classic[id][2];
+    land_category_table[vcl_pair<vcl_string, vcl_string>(tag, value)] = volm_land_layer((unsigned char)id, name, (unsigned char)level, width, color);
   }
   return true;
 }
@@ -45,3 +50,60 @@ bool volm_osm_category_io::load_road_width_table(vcl_string const& filename, vcl
   }
   return true;
 }
+
+vil_rgb<vxl_byte> color(unsigned char id)
+{
+  return vil_rgb<vxl_byte>(bvrml_color::heatmap_classic[id][0],
+                                        bvrml_color::heatmap_classic[id][1],
+                                        bvrml_color::heatmap_classic[id][2]);
+}
+
+// create table to transfer nlcd label to volm_land_layer
+vcl_map<int, volm_land_layer> create_nlcd_to_volm_table()
+{
+  vcl_map<int, volm_land_layer> m;
+  m[volm_osm_category_io::NLCD_WATER] = volm_land_layer(1, "Open_Water", 0, 0.0, color(1));
+  m[volm_osm_category_io::NLCD_ICE_SNOW]         = volm_land_layer(2, "Perennial_Ice/Snow", 0, 0.0, color(2));
+  m[volm_osm_category_io::NLCD_DEVELOPED_OPEN]   = volm_land_layer(3, "Developed/Open_Space", 0, 0.0, color(3));
+  m[volm_osm_category_io::NLCD_DEVELOPED_LOW]    = volm_land_layer(4, "Developed/Low_Intensity", 0, 0.0, color(4));
+  m[volm_osm_category_io::NLCD_DEVELOPED_MED]    = volm_land_layer(4, "Developed/Medium_Intensity", 0, 0.0, color(4));
+  m[volm_osm_category_io::NLCD_DEVELOPED_HIGH]   = volm_land_layer(5, "Developed/High_Intensity", 0, 0.0, color(5));
+  m[volm_osm_category_io::NLCD_SAND]             = volm_land_layer(6, "Barren_Land/Beach", 0, 0.0, color(6));
+  m[volm_osm_category_io::NLCD_DECIDUOUS_FOREST] = volm_land_layer(7, "Deciduous_Forest", 0, 0.0, color(7));
+  m[volm_osm_category_io::NLCD_EVERGREEN_FOREST] = volm_land_layer(8, "Evergreen_Forest", 0, 0.0, color(8));
+  m[volm_osm_category_io::NLCD_MIXED_FOREST]     = volm_land_layer(9, "Mixed_Forest", 0, 0.0, color(9));
+  m[volm_osm_category_io::NLCD_DWARF_SCRUB]      = volm_land_layer(10, "Dwarf_Scrub", 0, 0.0, color(10));
+  m[volm_osm_category_io::NLCD_SHRUB]            = volm_land_layer(10, "Shrub/Scrub", 0, 0.0, color(10));
+  m[volm_osm_category_io::NLCD_GRASSLAND]        = volm_land_layer(11, "Grassland/Herbaceous", 0, 0.0, color(11));
+  m[volm_osm_category_io::NLCD_SEDGE]            = volm_land_layer(11, "Sedge/Herbaceous", 0, 0.0, color(11));
+  m[volm_osm_category_io::NLCD_LICHENS]          = volm_land_layer(11, "lichens", 0, 0.0, color(11));
+  m[volm_osm_category_io::NLCD_MOSS]             = volm_land_layer(11, "Moss(Alaska_only)", 0, 0.0, color(11));
+  m[volm_osm_category_io::NLCD_PASTURE]          = volm_land_layer(12, "Pasture_Hay", 0, 0.0, color(12));
+  m[volm_osm_category_io::NLCD_CROPS]            = volm_land_layer(13, "Cultivated_Crops", 0, 0.0, color(13));
+  m[volm_osm_category_io::NLCD_WOODY_WETLAND]    = volm_land_layer(14, "Woody_Wetlands/Marina", 0, 0.0, color(14));
+  m[volm_osm_category_io::NLCD_EMERGENT_WETLAND] = volm_land_layer(14, "Emergent_Herbaceous_Wetlands", 0, 0.0, color(14));
+  return m;
+}
+
+// create table to transfer geo cover data to volm_land_layer
+vcl_map<int, volm_land_layer> create_geo_cover_to_volm_table()
+{
+  vcl_map<int, volm_land_layer> m;
+  m[volm_osm_category_io::GEO_DECIDUOUS_FOREST]    = volm_land_layer(7, "Deciduous_Forest", 0, 0.0, color(7));
+  m[volm_osm_category_io::GEO_EVERGREEN_FOREST]    = volm_land_layer(8, "Evergreen_Forest", 0, 0.0, color(8));
+  m[volm_osm_category_io::GEO_SHRUB]               = volm_land_layer(10, "Dwarf_Scrub", 0, 0.0, color(10));
+  m[volm_osm_category_io::GEO_GRASSLAND]           = volm_land_layer(11, "Grassland/Herbaceous", 0, 0.0, color(11));
+  m[volm_osm_category_io::GEO_BARREN]              = volm_land_layer(6, "Barren_Land/Beach", 0, 0.0, color(6));
+  m[volm_osm_category_io::GEO_URBAN]               = volm_land_layer(4, "Developed/Medium_Intensity", 0, 0.0, color(4));
+  m[volm_osm_category_io::GEO_AGRICULTURE_GENERAL] = volm_land_layer(13, "Cultivated_Crops", 0, 0.0, color(13));
+  m[volm_osm_category_io::GEO_AGRICULTURE_RICE]    = volm_land_layer(35, "Cultivated_Rice/Paddy", 0, 0.0, color(35));
+  m[volm_osm_category_io::GEO_WETLAND]             = volm_land_layer(14, "Woody_Wetlands/Marina", 0, 0.0, color(14));
+  m[volm_osm_category_io::GEO_MANGROVE]            = volm_land_layer(14, "Woody_Wetlands/Marina", 0, 0.0, color(14));
+  m[volm_osm_category_io::GEO_WATER]               = volm_land_layer(1, "Open_Water", 0, 0.0, color(1));
+  m[volm_osm_category_io::GEO_ICE]                 = volm_land_layer(2, "Perennial_Ice/Snow", 0, 0.0, color(2));
+  m[volm_osm_category_io::GEO_CLOUD]               = volm_land_layer(0, "invalid", 0, 0.0, vil_rgb<vxl_byte>(0,0,0));
+  return m;
+}
+
+vcl_map<int, volm_land_layer> volm_osm_category_io::nlcd_land_table = create_nlcd_to_volm_table();
+vcl_map<int, volm_land_layer> volm_osm_category_io::geo_land_table  = create_geo_cover_to_volm_table();

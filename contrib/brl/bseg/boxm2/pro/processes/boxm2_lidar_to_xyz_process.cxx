@@ -195,8 +195,15 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   vcl_cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ingesting: " << fname << vcl_endl;
 
   vil_image_view_base_sptr img_sptr = vil_load(fname.c_str()); 
-  vil_image_view<float> img(img_sptr);
-  unsigned nii = img.ni(); unsigned nji = img.nj();
+
+  // the image can be float or short
+  unsigned nii, nji;
+  if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float> * > (img_sptr.ptr())) {
+    nii = img->ni();  nji = img->nj();
+  }
+  else if (vil_image_view<short>* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr())) {
+    nii = img->ni();  nji = img->nj();
+  }
   vcl_cout << " image size: "<< nii << " x " << nji << vcl_endl;
 
   vpgl_geo_camera *cam;
@@ -204,8 +211,8 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   double lon2, lat2;
   cam->img_to_global(nii, nji, lon2, lat2);
   vpgl_utm utm; double x, y; int zone; utm.transform(lat2, -lon2, x, y, zone);
-  vcl_cout << "lower right corner in the image given by geocam is: " << lat2 << " N " << lon2 << " W " << " zone: " << zone << vcl_endl;
-  
+  vcl_cout << "lower right corner in the image given by geocam is: " << lat2 << " " << lon2 <<  " zone: " << zone << vcl_endl;
+
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
   float sb_length = info->block_len;
@@ -239,11 +246,21 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
 
       // find pixel in image
       double u, v;
-      cam->global_to_img(-lon, lat, gz, u, v);  // minus lon because it is WEST, WARNING, directions are hard-coded!
+      // transfer all wgs84 to positive value since geo_cam handles the hemipshere and direction already
+      if (lon < 0)  lon = -lon;
+      if (lat < 0)  lat = -lat;
+      cam->global_to_img(lon, lat, gz, u, v);
       unsigned uu = (unsigned)vcl_floor(u + 0.5);
       unsigned vv = (unsigned)vcl_floor(v + 0.5);
-      if (uu > 0 && vv > 0 && uu < img.ni() && vv < img.nj())
-        (*out_img_z)(i,j) = img(uu, vv)-orig_elev;
+      if (uu > 0 && vv > 0 && uu < nii && vv < nji)
+      {
+        // dynamically cast the image and obtain the pixel value
+        if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float> * > (img_sptr.ptr()))
+          (*out_img_z)(i,j) = (*img)(uu,vv)-orig_elev;
+        else if (vil_image_view<short>* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr())) {
+          (*out_img_z)(i,j) = (*img)(uu,vv)-orig_elev;
+        }
+      }
     }
   
 

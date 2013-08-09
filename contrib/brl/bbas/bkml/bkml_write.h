@@ -83,6 +83,7 @@ class bkml_write
                          vcl_string const& description = "",
                          double const& scale = 1.0,
                          double const& line_width = 3.0,
+                         double const& alpha = 0.35,
                          unsigned char const& r = 255,
                          unsigned char const& g = 0,
                          unsigned char const& b = 0);

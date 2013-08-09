@@ -10,7 +10,9 @@
 // \date September 18, 2012
 // \verbatim
 // Modifications
-//  Yi Dong - May 08 2012 - add assessors
+//  Yi Dong - May 08 2012 - add accessors
+//  Yi Dong - July 31 2013 - modify the transfer matrix to handle southern hemisphere case
+//  Yi Dong - Aug 04 2013 - add accessors
 // \endverbatim
 
 #include <vcl_string.h>
@@ -39,6 +41,8 @@ class volm_tile
    unsigned nj() { return nj_; }
    float scale_i() { return scale_i_; }
    float scale_j() { return scale_j_; }
+   char hemisphere() const { return hemisphere_; }
+   char direction() const { return direction_; }
 
    //: do the conversions in reporting lon,lat
    double lower_left_lon();

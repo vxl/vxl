@@ -127,6 +127,12 @@ def write_scene_to_kml(scene, kml_filename):
   boxm2_batch.set_input_string(1,kml_filename);
   boxm2_batch.run_process();
 
+def write_scene_to_vrml(scene, vrml_filename):
+  boxm2_batch.init_process("boxm2SceneVrmlProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1,vrml_filename);
+  boxm2_batch.run_process();
+
 
 ###############################################
 # Model building stuff
@@ -999,6 +1005,24 @@ def prune_scene_blocks(scene, cache, xml_output_path, xml_name_prefix):
   boxm2_batch.set_input_string(2,xml_output_path);
   boxm2_batch.set_input_string(3,xml_name_prefix);
   boxm2_batch.run_process();
+
+# prune the scene blocks by dem image
+def prune_scene_blocks_by_dem(scene, dem_img, tile_lat, tile_lon, hemisphere, direction, scale_i, scale_j, elev_cutoff):
+  boxm2_batch.init_process("boxm2PruneSceneBlocksByDemProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_from_db(1, dem_img);
+  boxm2_batch.set_input_float(2, tile_lat);
+  boxm2_batch.set_input_float(3, tile_lon);
+  boxm2_batch.set_input_string(4, hemisphere);
+  boxm2_batch.set_input_string(5, direction);
+  boxm2_batch.set_input_float(6, scale_i);
+  boxm2_batch.set_input_float(7, scale_j);
+  boxm2_batch.set_input_float(8, elev_cutoff);
+  boxm2_batch.run_process();
+  # return scene
+  (scene_id, scene_type) = boxm2_batch.commit_output(0);
+  prune_scene = dbvalue(scene_id, scene_type);
+  return prune_scene;
 
 # Create multi block scene - params is a hash of scene parameters
 def save_multi_block_scene(params) :

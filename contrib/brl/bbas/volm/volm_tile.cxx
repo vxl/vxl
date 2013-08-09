@@ -17,8 +17,19 @@ volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, floa
 {
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
-  trans_matrix[0][0] = -scale_i_/(ni-1.0); trans_matrix[1][1] = -scale_j_/(nj-1.0);
-  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+  trans_matrix[0][3] = lon_;
+  if (direction_ == 'E')
+    trans_matrix[0][0] = scale_i_/(ni-1.0);
+  else
+    trans_matrix[0][0] = -scale_i_/(ni-1.0);
+  if (hemisphere_ == 'N') {
+    trans_matrix[1][1] = -scale_j_/(nj-1.0);
+    trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+  }
+  else {
+    trans_matrix[1][1] = scale_j_/(nj-1.0);
+    trans_matrix[1][3] = lat_-scale_j_-1/3600.0;
+  }
   // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
   vpgl_lvcs_sptr lv = new vpgl_lvcs;
   vpgl_geo_camera cam(trans_matrix, lv); cam.set_scale_format(true);
@@ -30,6 +41,54 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
 {
   vcl_string name = vul_file::strip_directory(file_name);
   name = name.substr(name.find_first_of('_')+1, name.size());
+  
+  vcl_string n_coords = name.substr(0, name.find_first_of('_'));
+  vcl_string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
+
+  // determine the lat, lon, hemisphere (North or South) and direction (East or West)
+  vcl_size_t n = n_coords.find("N");
+  if (n < n_coords.size())  hemisphere_ = 'N';
+  else                      hemisphere_ = 'S';
+  n = n_coords.find("E");
+  if (n < n_coords.size())  direction_ = 'E';
+  else                      direction_ = 'W';
+
+  vcl_string n_str = n_coords.substr(n_coords.find_first_of(hemisphere_)+1,
+                                     n_coords.find_first_of(direction_)-n_coords.find_first_of(hemisphere_)-1);
+  vcl_stringstream str(n_str);  str >> lat_;
+
+  n_str = n_coords.substr(n_coords.find_first_of(direction_)+1, n_coords.size());
+  vcl_stringstream str2(n_str);  str2 >> lon_;
+
+  n_str = n_scale.substr(n_scale.find_first_of('S')+1, n_scale.find_first_of('x')-n_scale.find_first_of('S')-1);
+  vcl_stringstream str3(n_str);  str3 >> scale_i_;  scale_j_ = scale_i_;
+
+#if 1
+  if (hemisphere_ == 'N')  vcl_cout << " upper left corner in the image is: " << hemisphere_ << lat_+scale_i_ << direction_ << lon_ << vcl_endl;
+  else                    vcl_cout << " upper left corner in the image is: " << hemisphere_ << lat_-scale_i_ << direction_ << lon_ << vcl_endl;
+  if (direction_ == 'W')   vcl_cout << " lower right corner in the image is: " << hemisphere_ << lat_ << direction_ << lon_-scale_j_ << vcl_endl;
+  else                    vcl_cout << " lower right corner in the image is: " << hemisphere_ << lat_ << direction_ << lon_+scale_j_ << vcl_endl;
+#endif
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  //divide by ni-1 to account for 1 pixel overlap with the next tile
+  trans_matrix[0][3] = lon_;
+  if (direction_ == 'E')
+    trans_matrix[0][0] = scale_i_/(ni-1.0);
+  else
+    trans_matrix[0][0] = -scale_i_/(ni-1.0);
+  if (hemisphere_ == 'N') {
+    trans_matrix[1][1] = -scale_j_/(nj-1.0);
+    trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+  }
+  else {
+    trans_matrix[1][1] = scale_j_/(nj-1.0);
+    trans_matrix[1][3] = lat_-scale_j_-1/3600.0;
+  }
+  vpgl_lvcs_sptr dummy_lvcs = new vpgl_lvcs;
+  cam_ = vpgl_geo_camera(trans_matrix, dummy_lvcs);
+  cam_.set_scale_format(true);
+
+#if 0
 #ifdef DEBUG
   vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
 #endif
@@ -56,11 +115,23 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
 #endif
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
-  trans_matrix[0][0] = -scale_i_/(ni-1.0); trans_matrix[1][1] = -scale_j_/(nj-1.0);
-  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+  trans_matrix[0][3] = lon_;
+  if (direction_ == 'E')
+    trans_matrix[0][0] = scale_i_/(ni-1.0);
+  else
+    trans_matrix[0][0] = -scale_i_/(ni-1.0);
+  if (hemisphere_ == 'N') {
+    trans_matrix[1][1] = -scale_j_/(nj-1.0);
+    trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+  }
+  else {
+    trans_matrix[1][1] = scale_j_/(nj-1.0);
+    trans_matrix[1][3] = lat_-scale_j_-1/3600.0;
+  }
   vpgl_lvcs_sptr dummy_lvcs = new vpgl_lvcs;
   cam_ = vpgl_geo_camera(trans_matrix, dummy_lvcs);
   cam_.set_scale_format(true);
+#endif
 }
 
 
@@ -73,8 +144,19 @@ volm_tile::volm_tile(float lat, float lon, float scale_i, float scale_j, unsigne
 
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
-  trans_matrix[0][0] = -scale_i_/(ni-1.0); trans_matrix[1][1] = -scale_j_/(nj-1.0);
-  trans_matrix[0][3] = lon_; trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+  trans_matrix[0][3] = lon_;
+  if (direction_ == 'E')
+    trans_matrix[0][0] = scale_i_/(ni-1.0);
+  else
+    trans_matrix[0][0] = -scale_i_/(ni-1.0);
+  if (hemisphere_ == 'N') {
+    trans_matrix[1][1] = -scale_j_/(nj-1.0);
+    trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+  }
+  else {
+    trans_matrix[1][1] = scale_j_/(nj-1.0);
+    trans_matrix[1][3] = lat_-scale_j_-1/3600.0;
+  }
   // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
   vpgl_lvcs_sptr lv = new vpgl_lvcs;
   vpgl_geo_camera cam(trans_matrix, lv); cam.set_scale_format(true);

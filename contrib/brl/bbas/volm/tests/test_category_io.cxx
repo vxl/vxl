@@ -11,11 +11,12 @@ static void write_osm_samples()
   // header
   ofs_land << "Key Value id name level\n";
   // contents
-  ofs_land << "landuse reservoir 1 Open_Water 0\n";
-  ofs_land << "landuse greenhouse_horticulture 13 Cultivated_Crops 0\n";
-  ofs_land << "man_made monitoring_station 15 building 4\n";
-  ofs_land << "emergency ambulance_station 48 hostptial 2\n";
-  ofs_land << "tourism viewpoint 141 tourism_viewpoint 4\n";
+  ofs_land << "landuse reservoir 1 Open_Water 0 0\n";
+  ofs_land << "landuse greenhouse_horticulture 13 Cultivated_Crops 0 0\n";
+  ofs_land << "man_made monitoring_station 15 building 4 1.5\n";
+  ofs_land << "emergency ambulance_station 48 hostptial 2 2\n";
+  ofs_land << "tourism viewpoint 141 tourism_viewpoint 4 3.5\n";
+  ofs_land << "natural shadow 0 invalid 0 1.2\n";
   ofs_land.close();
 
   // road width file
@@ -36,11 +37,11 @@ static void test_category_io_read_land_category(vcl_string filename)
   vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
   TEST("land_category_io", volm_osm_category_io::load_category_table(filename, osm_land_table), true);
   vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>::iterator mit = osm_land_table.begin();
-  for (; mit != osm_land_table.end(); ++mit)
-    vcl_cout << " tag = " << mit->first.first << ", value = " << mit->first.second << ", ---> id = "
-             << (int)(osm_land_table[vcl_pair<vcl_string,vcl_string>(mit->first.first, mit->first.second)].id_) << ", "
-             << osm_land_table[vcl_pair<vcl_string,vcl_string>(mit->first.first, mit->first.second)].name_ << ", "
-             << (int)(osm_land_table[vcl_pair<vcl_string,vcl_string>(mit->first.first, mit->first.second)].level_) << vcl_endl;
+  for (; mit != osm_land_table.end(); ++mit) {
+    vcl_cout << " tag = " << mit->first.first << ", value = " << mit->first.second << ", ---> id = ";
+    mit->second.print();
+    vcl_cout << vcl_endl;
+  }
 }
 
 static void test_category_io_load_road_width(vcl_string const& filename)
@@ -60,12 +61,24 @@ static void test_category_io()
 
   // test the method of loading land category
   vcl_string osm_to_volm_file = "./osm_to_volm_land.txt";
+  vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
   test_category_io_read_land_category(osm_to_volm_file);
 
   // test the method of loading road width
   vcl_string road_width_file = "./osm_road_width.txt";
- 
   test_category_io_load_road_width(road_width_file);
+
+  // output the hard coded ncld table
+  for (vcl_map<int, volm_land_layer>::iterator mit = volm_osm_category_io::nlcd_land_table.begin();
+       mit != volm_osm_category_io::nlcd_land_table.end(); ++mit) {
+    vcl_cout << " nlcd id = " << mit->first << " ----> ";  mit->second.print();  vcl_cout << '\n';
+  }
+
+  // output the hard coded geo_cover table
+  for (vcl_map<int, volm_land_layer>::iterator mit = volm_osm_category_io::geo_land_table.begin();
+       mit != volm_osm_category_io::geo_land_table.end(); ++mit) {
+    vcl_cout << " geo_cover id = " << mit->first << " ----> ";  mit->second.print();  vcl_cout << '\n';
+  }
 }
 
 TESTMAIN(test_category_io);

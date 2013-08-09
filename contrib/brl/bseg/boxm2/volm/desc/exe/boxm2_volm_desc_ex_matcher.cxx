@@ -65,7 +65,7 @@ int main(int argc, char** argv)
     // error log
     vcl_stringstream err_log;
     vcl_stringstream err_log_file;
-    err_log_file << out_folder() << "/err_log_tile_" << tile_id() << ".xml" << vcl_endl;
+    err_log_file << out_folder() << "/err_log_tile_" << tile_id() << ".xml";
     
     
     // load the depth map scene

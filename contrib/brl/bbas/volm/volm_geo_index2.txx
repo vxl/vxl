@@ -367,11 +367,14 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   if (!root) // the node is empty
     return;
   
+  // check whether the polygon 
+  
+
   if (!vgl_intersection(root->extent_, poly)) // the node does not intersect with given polygon
     return;
   
   // the node intersects with the polyon
-  if (!root->children_.size()) {  // the node intersects with the polygon and has no children
+  if (!root->children_.size()) {  // the node intersects with the polygon and has no child
     leaves.push_back(root);
   }
   else {                          // the node has children, go inside to its children
@@ -396,42 +399,72 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   get_leaves(root, leaves, poly_float);
 }
 
-
-#if 0
-// return vector of leaves which have content.  return nothing if tree is empty
-template <class Type>
-void volm_geo_index2::get_leaves_with_content(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<float> > const& line)
 {
-  if (!root)  // node is empty
+  if (!root) // the tree is empy
+    return;
+  if (vgl_intersection(root->extent_, line).empty())  // the root does not intersect with the line
     return;
 
-  if (root->children_.empty()) {  // node has no child and check whether it has content.  Note it requires the content has methond size()
-    volm_geo_index2_node<Type>* ptr = dynamic_cast<volm_geo_index2_node<Type>* >(root.ptr());
-//    vbl_smart_ptr<Type> c_ptr = sptr_ref<Type>(ptr->contents_);
-    if (sptr_ref(ptr->contents_))
-      if (deref(ptr->contents_).size())
-        leaves.push_back(root);
-    return;
+  // the node intersects with the line
+  if (!root->children_.size()) {  // the node intersects with the line and has no child
+    leaves.push_back(root);
   }
-  // check the children of current node
-  bool at_least_one_child = false;
-  for (unsigned i = 0; i < root->children_.size(); i++) {
-    if (!root->children_[i])
-      continue;
-    else {
-      get_leaves_with_content<Type>(root->children_[i], leaves);
-      at_least_one_child = true;
+  else {                          // the node has children and check the intersection recursively
+    bool at_least_one_child = false;
+    for (unsigned i = 0; i < root->children_.size(); i++) {
+      if (!root->children_[i])   // the node has children but child i is empty
+        continue;
+      else {
+        get_leaves(root->children_[i], leaves, line);  // check the intersection of child i and its following children
+        at_least_one_child = true;
+      }
     }
+    if (!at_least_one_child) // the node has children but all children are empty
+      leaves.push_back(root);
   }
-  if (!at_least_one_child) {  // current node has children but all children are empty
-    volm_geo_index2_node<Type>* ptr = dynamic_cast<volm_geo_index2_node<Type>* >(root.ptr());
-    if (sptr_ref(ptr->contents_))
-      if (deref(ptr->contents_).size())
-        leaves.push_back(root);
-  } 
 }
-#endif
 
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<double> > const& line)
+{
+  // transfer double to float since our tree bounding box is float
+  vcl_vector<vgl_point_2d<float> > line_float;
+  unsigned num_pts = (unsigned)line.size();
+  for (unsigned i = 0; i < num_pts; i++)
+    line_float.push_back(vgl_point_2d<float>((float)line[i].x(), (float)line[i].y()));
+  get_leaves(root, leaves, line_float);
+}
+
+void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<float> const& point)
+{
+  if (!root)
+    return;
+  if (!root->extent_.contains(point))
+    return;
+
+  if (!root->children_.size()) {
+    leaf = root;
+  }
+  else {
+    bool at_least_one_child = false;
+    for (unsigned i = 0; i < root->children_.size(); i++) {
+      if (!root->children_[i])
+        continue;
+      else {
+        get_leaf(root->children_[i], leaf, point);
+        at_least_one_child = true;
+      }
+    }
+    if (!at_least_one_child)
+      leaf = root;
+  }
+}
+
+void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<double> const& point)
+{
+  vgl_point_2d<float> pt_float((float)point.x(), (float)point.y());
+  get_leaf(root, leaf, pt_float);
+}
 
 #undef VOLM_GEO_INDEX2_INSTANTIATE
 #define VOLM_GEO_INDEX2_INSTANTIATE(T) \

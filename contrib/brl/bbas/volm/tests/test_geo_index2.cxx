@@ -13,7 +13,7 @@
 static void test_geo_index2()
 {
   float min_size = 1.0;
-  vcl_string dir = "D:/work/find/phase_1b/ROI/tiles/";
+  vcl_string dir = "./";
   vpgl_utm u;
   // wr1
   vcl_vector<volm_tile> tiles;

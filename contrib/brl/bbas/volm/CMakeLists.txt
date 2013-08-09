@@ -52,6 +52,10 @@ SET(volm_sources
  volm_geo_index2.h                      volm_geo_index2.txx
  volm_osm_parser.h                      volm_osm_parser.cxx
  volm_category_io.h                     volm_category_io.cxx
+ volm_osm_objects.h                     volm_osm_objects.cxx
+ volm_osm_object_point.h                volm_osm_object_point.cxx
+ volm_osm_object_line.h                 volm_osm_object_line.cxx
+ volm_osm_object_polygon.h              volm_osm_object_polygon.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_sources)

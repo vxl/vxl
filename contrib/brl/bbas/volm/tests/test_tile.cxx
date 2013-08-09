@@ -42,7 +42,23 @@ static void test_tile()
   vcl_cout << "height is: " << ttt.calculate_height() << " meters = " << ttt.calculate_height()/1000.0 << " Km..\n";
   vcl_cout << "one pixel is: " << ttt.calculate_width()/ttt.ni_ << " meters..\n";
   ttt.write_kml("./t0.kml", 1000);
-  
+
+  // test the transformation as tile is in southern hemisphere
+  volm_tile tile_south(34, 72, 'S', 'W', 1.0, 1.0, 3601, 3601);
+  TEST("tile_south global to image", tile_south.global_to_img(-72, -34, i, j), true);
+  TEST("tile_south global to image", i, 0);
+  TEST("tile_south global to image", j, 3600);
+  TEST("tile_south global to image", tile_south.global_to_img(-71.5, -33.5, i, j), true);
+  TEST("tile_south global to image", i, 1800);
+  TEST("tile_south global to image", j, 1800);
+  double lat_south, lon_south;
+  tile_south.img_to_global(1800, 1800, lon_south, lat_south);
+  TEST_NEAR("tile_south image to global", lon_south, -71.5, 0.01);
+  TEST_NEAR("tile_south image to global", lat_south, -33.5, 0.01);
+  tile_south.img_to_global(3600, 3600, lon_south, lat_south);
+  TEST_NEAR("tile_south image to global", lon_south, -71, 0.01);
+  TEST_NEAR("tile_south image to global", lat_south, -34, 0.01);
+
   vsl_b_ofstream ofs("test_tile.bin");
   tiles[0].b_write(ofs);
   ofs.close();

@@ -65,6 +65,7 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_poly_scene_and_blocks_process, "boxm2CreatePolySceneAndBlocksProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_distribute_scene_blocks_process, "boxm2DistributeSceneBlocksProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_kml_process, "boxm2SceneKmlProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_vrml_process, "boxm2SceneVrmlProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ingest_convex_mesh_process, "boxm2IngestConvexMeshProcess");
   REG_PROCESS_FUNC_CONS2(boxm2_add_aux_info_to_ply_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_lidar_to_xyz_process, "boxm2LidarToXYZProcess");
@@ -72,6 +73,7 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_initialize_ground_xyz_process, "boxm2InitializeGroundXYZProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_label_to_xyz_process, "boxm2LabelImgToXYZProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_prune_scene_blocks_process, "boxm2PruneSceneBlocksProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_prune_scene_blocks_by_dem_process, "boxm2PruneSceneBlocksByDemProcess");
 
   //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_fetch_alpha_process, "boxm2SceneReadingAlphaProcess");
   //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_crop_img_process, "boxm2CreateCropImgProcess");

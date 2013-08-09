@@ -130,12 +130,12 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
     }
   }
 
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(),
+  bocl_mem* ray_o_buff = new bocl_mem(device->context(),
                                           ray_origins,
                                           cl_ni*cl_nj * sizeof(cl_float4),
                                           "ray_origins buffer");
   ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  bocl_mem_sptr out_buff = new bocl_mem(device->context(),
+  bocl_mem* out_buff = new bocl_mem(device->context(),
                                         outimg,
                                         cl_ni*cl_nj * sizeof(cl_float),
                                         "out image buffer");
@@ -205,8 +205,8 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
     ////3. SET args
     kern->set_arg(blk_info );
     kern->set_arg(exp_img_dim.ptr() );
-    kern->set_arg(ray_o_buff.ptr() );
-    kern->set_arg(out_buff.ptr() );
+    kern->set_arg(ray_o_buff );
+    kern->set_arg(out_buff );
     kern->set_arg(blk );
     kern->set_arg(alpha );
     kern->set_arg(lookup.ptr() );
@@ -242,7 +242,13 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
   }
   vil_save(test,"f:/test.tiff");
 #endif
+
   clReleaseCommandQueue(queue);
+
+  delete ray_o_buff;
+  delete out_buff;
+  delete [] ray_origins;
+  delete [] outimg;
   return true;
 }
 

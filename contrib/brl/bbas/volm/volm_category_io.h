@@ -27,16 +27,26 @@ class volm_land_layer
 {
 public:
   //: default constructor creates an invalid land category
-  volm_land_layer() : id_(0), name_("invalid"), level_(0), color_(vil_rgb<vxl_byte>(0,0,0)) {}
+  volm_land_layer() : id_(0), name_("invalid"), level_(0), width_(0.0), color_(vil_rgb<vxl_byte>(0,0,0)) {}
   //: constructor
   volm_land_layer(unsigned char const& id, vcl_string const& name,
-                  unsigned char const& level, vil_rgb<vxl_byte> const& color)
-                  : id_(id), name_(name), level_(level), color_(color) {}
+                  unsigned char const& level, double const& width, vil_rgb<vxl_byte> const& color)
+                  : id_(id), name_(name), level_(level), width_(width), color_(color) {}
+  volm_land_layer(unsigned char const& id, vcl_string const& name, unsigned char const& level, double const& width)
+    : id_(id), name_(name), level_(level), width_(width),
+      color_(bvrml_color::heatmap_classic[id][0], bvrml_color::heatmap_classic[id][1], bvrml_color::heatmap_classic[id][2]) {}
+                  
   //: destructor
   ~volm_land_layer() {}
 
   //: check the existence of certain land layer
   bool contains(vcl_string name);
+  //: screen print
+  void print() const
+  {
+    vcl_cout << " (id: " << (int)id_ << ", name: " << name_ 
+             << ", level: " << (int)level_ <<  ", width: " << width_ << ')';
+  }
   //: land id
   unsigned char id_;
   //: land name
@@ -45,25 +55,39 @@ public:
   unsigned char level_;
   //: assigned color for this land
   vil_rgb<vxl_byte> color_;
+  //: width (non zero for road and zero for all others)
+  double width_;
+
 };
 
 class volm_osm_category_io
 {
 public:
-  enum nlcd_values {WATER = 11, ICE_SNOW = 12, SAND = 31,
-                    DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 2,
-                    DECIDUOUS_FOREST = 41, EVERGREEN_FOREST = 42, MIXED_FOREST = 43,
-                    DWARF_SCRUB = 51, SHRUB = 52,
-                    GRASSLAND = 71, SEDGE = 72, LICHENS = 73, MOSS = 74,
-                    PASTURE = 81, CROPS = 82,
-                    WOODY_WETLAND = 90, WETLAND = 95};
-  
+  enum nlcd_values {NLCD_WATER = 11, NLCD_ICE_SNOW = 12, NLCD_SAND = 31,
+                    NLCD_DEVELOPED_LOW = 22, NLCD_DEVELOPED_MED = 23, NLCD_DEVELOPED_HIGH = 24, NLCD_DEVELOPED_OPEN = 21,
+                    NLCD_DECIDUOUS_FOREST = 41, NLCD_EVERGREEN_FOREST = 42, NLCD_MIXED_FOREST = 43,
+                    NLCD_DWARF_SCRUB = 51, NLCD_SHRUB = 52,
+                    NLCD_GRASSLAND = 71, NLCD_SEDGE = 72, NLCD_LICHENS = 73, NLCD_MOSS = 74,
+                    NLCD_PASTURE = 81, NLCD_CROPS = 82,
+                    NLCD_WOODY_WETLAND = 90, NLCD_EMERGENT_WETLAND = 95};
+
+  enum geo_cover_values {GEO_DECIDUOUS_FOREST = 1, GEO_EVERGREEN_FOREST = 2, GEO_SHRUB = 3,
+                         GEO_GRASSLAND = 4,  GEO_BARREN = 5,  GEO_URBAN = 6,
+                         GEO_AGRICULTURE_GENERAL = 7, GEO_AGRICULTURE_RICE = 8,
+                         GEO_WETLAND = 9, GEO_MANGROVE = 10,
+                         GEO_WATER = 11, GEO_ICE = 12, GEO_CLOUD = 13};
   
   //: table to transfer open street map (osm) to volm available land table
   static bool load_category_table(vcl_string const& filename, vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>& land_category_table);
 
   //: table to define default width of road loaded from open street map
   static bool load_road_width_table(vcl_string const& filename, vcl_map<vcl_pair<vcl_string, vcl_string>, float>& road_width_table);
+
+  //: table to transfer nlcd label to volm label
+  static vcl_map<int, volm_land_layer> nlcd_land_table;
+
+  //: table to transfer geo_cover
+  static vcl_map<int, volm_land_layer> geo_land_table;
 
 };
 
