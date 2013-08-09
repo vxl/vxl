@@ -104,14 +104,74 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
   }
 }
 
-//: warning specific to 'N' and 'W' cameras, TODO: generalize
+//: define a geo_camera by the image file name (filename should have format such as xxx_N35W73_S0.6x0.6_xxx.tif)
 bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
 {
   // determine the translation matrix from the image file name and construct a geo camera
   vcl_string name = vul_file::strip_directory(img_name);
   name = name.substr(name.find_first_of('_')+1, name.size());
+  
+  vcl_string n_coords = name.substr(0, name.find_first_of('_'));
+  vcl_string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
   vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
-  vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
+
+  // determine the lat, lon, hemisphere (North or South) and direction (East or West)
+  vcl_string hemisphere, direction;
+  float lon, lat, scale;
+  vcl_size_t n = n_coords.find("N");
+  if (n < n_coords.size())
+    hemisphere = "N";
+  else
+    hemisphere = "S";
+  n = n_coords.find("E");
+  if (n < n_coords.size())
+    direction = "E";
+  else
+    direction = "W";
+  
+  vcl_string n_str = n_coords.substr(n_coords.find_first_of(hemisphere)+1, n_coords.find_first_of(direction)-n_coords.find_first_of(hemisphere)-1);
+  vcl_stringstream str(n_str);  str >> lat;
+  
+  n_str = n_coords.substr(n_coords.find_first_of(direction)+1, n_coords.size());
+  vcl_stringstream str2(n_str);  str2 >> lon;
+
+  n_str = n_scale.substr(n_scale.find_first_of('S')+1, n_scale.find_first_of('x')-n_scale.find_first_of('S')-1);
+  vcl_stringstream str3(n_str);  str3 >> scale;
+
+  vcl_cout << " hemisphere: " << hemisphere << " direction: " << direction
+           << "\n lat: " << lat << " lon: " << lon
+           << "\n WARNING: using same scale for both ni and nj: " << scale << vcl_endl;
+
+  // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
+  if (hemisphere == "N")
+    vcl_cout << " upper left corner in the image is: " << hemisphere << lat+scale << direction << lon << vcl_endl;
+  else
+    vcl_cout << " upper left corner in the image is: " << hemisphere << lat-scale << direction << lon << vcl_endl;
+  if (direction == "W")
+    vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon-scale << vcl_endl;
+  else
+    vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale << vcl_endl;
+  vnl_matrix<double> trans_matrix(4,4,0,0);
+  //divide by ni-1 to account for 1 pixel overlap with the next tile
+  trans_matrix[0][3] = lon;
+  if (direction == "E")
+    trans_matrix[0][0] = scale/(ni-1.0);
+  else
+    trans_matrix[0][0] = -scale/(ni-1.0);
+  if (hemisphere == "N") {
+    trans_matrix[1][1] = -scale/(nj-1.0);
+    trans_matrix[1][3] = lat+scale+1/3600.0;
+  }
+  else {
+    trans_matrix[1][1] = scale/(nj-1.0);
+    trans_matrix[1][3] = lat-scale-1/3600.0;
+  }
+  camera = new vpgl_geo_camera(trans_matrix, lvcs);
+  camera->set_scale_format(true);
+  return true;
+
+#if 0
+    vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
   float lon, lat, scale;
   vcl_stringstream str(n); str >> lat;
   n = name.substr(name.find_first_of('W')+1, name.find_first_of('_'));
@@ -129,6 +189,7 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(true);
   return true;
+#endif
 }
 
 //: init using a tfw file, reads the transformation matrix from the tfw

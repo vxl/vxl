@@ -172,7 +172,7 @@ volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<float> bbox
 {
   vgl_polygon<float> poly_float;
   volm_io::convert_polygons(poly, poly_float);
-  return volm_geo_index2::construct_tree<Type>(bbox, min_size, poly_folat);
+  return volm_geo_index2::construct_tree<Type>(bbox, min_size, poly_float);
 }
 
 template <class Type>

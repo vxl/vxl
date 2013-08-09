@@ -343,6 +343,7 @@ void vpgl_lvcs::compute_scale()
 //  pointout is written out in [angle, angle, length], as specified by
 //  the specified units
 //  If global_cs_name == UTM, pointout_lon is X_East, pointout_lat is Y_North
+//  If global_cs_name == WGS84, the pointin needs to be at same hemisphere (north or south) as the lvcs origin
 void vpgl_lvcs::local_to_global(const double pointin_x,
                                 const double pointin_y,
                                 const double pointin_z,
@@ -367,6 +368,11 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
   double aligned_y = pointin_y;
   local_transform(aligned_x, aligned_y);
 
+  // Check current system is in south hemisphere or north hemisphere
+  bool south_flag = false;
+  if (localCSOriginLat_ < 0)
+    south_flag = true;
+
   if (local_cs_name_ == vpgl_lvcs::utm) {
 
 
@@ -388,7 +394,7 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
     u.transform(localUTMOrigin_Zone_, pointin_x*local_to_meters + localUTMOrigin_X_East_,
                                       pointin_y*local_to_meters + localUTMOrigin_Y_North_,
                                       pointin_z*local_to_meters + localCSOriginElev_*local_to_meters,
-                local_lat, local_lon, local_elev);
+                local_lat, local_lon, local_elev, south_flag);
 
     if (global_cs_name == vpgl_lvcs::wgs84) {  // global values will be in degrees and in meters
       global_lat = local_lat;

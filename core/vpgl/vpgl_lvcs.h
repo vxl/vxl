@@ -30,6 +30,9 @@
 //                                  but it is converted to utm origin during local to global transformations and vice versa
 //                                  all the global coords are still either in wgs84, nad27n or wgs72
 //                                  if a utm zone is crossed 
+//   Yi Dong  July 31, 2013: fix the local_to_global method to correctly transfer the local cooridinates to global wgs84 coords 
+//                           for points located in southern hemisphere.  Note that the input point needs to be at the same hemisphere
+//                           as the lvcs origin
 //
 // \endverbatim
 /////////////////////////////////////////////////////////////////////////////
