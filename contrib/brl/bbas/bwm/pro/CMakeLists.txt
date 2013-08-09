@@ -17,6 +17,7 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
   SET(bwm_pro_sources ${bwm_pro_sources}
       processes/bwm_create_corr_file_process.cxx
+      processes/bwm_create_satellite_site_process.cxx
      )
  ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)

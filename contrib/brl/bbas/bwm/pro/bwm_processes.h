@@ -5,5 +5,6 @@
 #include <bprb/bprb_macros.h>
 
 DECLARE_FUNC_CONS(bwm_create_corr_file_process);
+DECLARE_FUNC_CONS(bwm_create_satellite_resources_process);
 
 #endif

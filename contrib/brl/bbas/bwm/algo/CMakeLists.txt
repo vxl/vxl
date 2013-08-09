@@ -12,7 +12,10 @@ SET(bwm_algo_sources
                                    bwm_soview2D_vertex.h
     bwm_image_processor.cxx        bwm_image_processor.h
     bwm_delaunay_tri.cxx           bwm_delaunay_tri.h
+    bwm_satellite_resources.cxx    bwm_satellite_resources.h  bwm_satellite_resources_sptr.h
    )
+
+AUX_SOURCE_DIRECTORY(Templates bwm_algo_sources)
 
 IF(SHAPELIB_FOUND)
 
