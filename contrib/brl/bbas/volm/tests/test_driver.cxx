@@ -14,7 +14,7 @@ DECLARE( test_region_index );
 DECLARE( test_index_query_matcher );
 DECLARE( test_spherical_region );
 DECLARE( test_geo_index2 );
-//DECLARE( test_osm_parser );
+DECLARE( test_osm_parser );
 DECLARE( test_category_io );
 DECLARE( test_osm_object );
 
@@ -34,7 +34,7 @@ register_tests()
   REGISTER( test_index_query_matcher );
   REGISTER( test_spherical_region );
   REGISTER( test_geo_index2 );
-  //REGISTER( test_osm_parser );
+  REGISTER( test_osm_parser );
   REGISTER( test_category_io );
   REGISTER( test_osm_object );
 }

@@ -17,6 +17,7 @@
 #include <volm/volm_io.h>
 #include <vul/vul_file.h>
 #include <vul/vul_arg.h>
+#include <vcl_where_root_dir.h>
 
 void error_report(vcl_string error_file, vcl_string error_msg)
 {
@@ -29,7 +30,6 @@ int main(int argc, char** argv)
 {
   // input
   vul_arg<vcl_string> osm_file("-osm", "open street map xml file","");       // open street map xml file
-  vul_arg<vcl_string> osm_to_volm_txt("-osm-volm", "txt file stores transfermation from osm labels to volm labels","");
   vul_arg<vcl_string> osm_out("-out", "output folder", "");                  // output folder to store the create binary file
   vul_arg<bool> is_create_osm_kml("-k", "option to create kml file from parsed osm file", false);
   vul_arg<unsigned> world_id("-w", "world id for different region of interests", 0);
@@ -37,8 +37,7 @@ int main(int argc, char** argv)
   vul_arg_parse(argc, argv);
 
   // check input
-  if (osm_file().compare("") == 0 || osm_out().compare("") == 0 || osm_to_volm_txt().compare("") == 0 ||
-      world_id() == 0 || tile_id() == 100) {
+  if (osm_file().compare("") == 0 || osm_out().compare("") == 0 || world_id() == 0 || tile_id() == 100) {
     vcl_cerr << " ERROR: input is missing!\n";
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
@@ -55,8 +54,9 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   // check the osm_to_volm file
-  if (!vul_file::exists(osm_to_volm_txt())) {
-    log << "ERROR: can not find osm_to_volm txt file: " << osm_to_volm_txt() << '\n';
+  vcl_string osm_to_volm_txt = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
+  if (!vul_file::exists(osm_to_volm_txt)) {
+    log << "ERROR: can not find osm_to_volm txt file: " << osm_to_volm_txt << '\n';
     error_report(err_log_file.str(), log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
   // create volm_osm_binary and associate kml files
   vcl_cout << " =========== Start to create volm_osm date for world " << world_id() << " on tile " << tile_id()
             << " ===============" << vcl_endl;
-  volm_osm_objects objs(osm_file(), osm_to_volm_txt());
+  volm_osm_objects objs(osm_file(), osm_to_volm_txt);
   vcl_cout << " \t number of location points parsed from osm: " << objs.num_locs() << vcl_endl;
   vcl_cout << " \t number of line roads parsed from osm: " << objs.num_roads() << vcl_endl;
   vcl_cout << " \t number of regions parsed from osm: " << objs.num_regions() << vcl_endl;

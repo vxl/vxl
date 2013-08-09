@@ -181,12 +181,10 @@ void volm_osm_parser::parse_points(vcl_vector<vgl_point_2d<double> >& points,
     vcl_cerr << " can not find osm file to parse: " << osm_file << '\n';
     delete parser;
   }
-  vcl_cout << " start ";
   if (!parser->parseFile(xmlFile)) {
     vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line " << parser->XML_GetCurrentColumnNumber() << '\n';
     delete parser;
   }
-  vcl_cout << " end ";
   // fetch points that have tags
   vcl_map<unsigned long long, vcl_vector<vcl_pair<vcl_string, vcl_string> > >::iterator mit = parser->node_keys_.begin();
   for (; mit != parser->node_keys_.end(); ++mit) {

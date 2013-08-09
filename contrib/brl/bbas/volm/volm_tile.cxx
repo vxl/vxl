@@ -277,7 +277,7 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr3_tiles()
   float scale_j = 1;
   //p1b_tiles.push_back(volm_tile(30, 34, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(30, 35, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(30, 36, 'N', 'E', scale_i, scale_j, ni, nj));
+  //p1b_tiles.push_back(volm_tile(30, 36, 'N', 'E', scale_i, scale_j, ni, nj));
   //p1b_tiles.push_back(volm_tile(30, 37, 'N', 'E', scale_i, scale_j, ni, nj));
   //p1b_tiles.push_back(volm_tile(31, 34, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(31, 35, 'N', 'E', scale_i, scale_j, ni, nj));

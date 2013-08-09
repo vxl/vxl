@@ -12,16 +12,20 @@
 
 static void test_geo_index2()
 {
-  float min_size = 1.0;
-  vcl_string dir = "./";
+  float min_size = 0.05;
+  //vcl_string dir = "./";
+  vcl_string dir = "D:/work/find/phase_1b/ROI/tiles/";
   vpgl_utm u;
   // wr1
   vcl_vector<volm_tile> tiles;
   tiles = volm_tile::generate_p1b_wr1_tiles();
   for (unsigned i = 0; i < tiles.size(); i++) {
     volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(tiles[i], min_size);
-    vcl_stringstream kml_file;  kml_file << dir << "/p1b_wr1_tile_" << i << "_depth_0.kml";
-    volm_geo_index2::write_to_kml(root, 0, kml_file.str());
+    unsigned tree_depth = volm_geo_index2::depth(root);
+    for (unsigned d_idx = 0; d_idx <= tree_depth; d_idx++) {
+      vcl_stringstream kml_file;  kml_file << dir << "p1b_wr1_tile_" << i << "_depth_" << d_idx << ".kml";
+      volm_geo_index2::write_to_kml(root, d_idx, kml_file.str());
+    }
     double x, y;
     int zone_id, zone_id2;
     u.transform(tiles[i].bbox_double().min_point().y(), tiles[i].bbox_double().min_point().x(), x, y, zone_id);
@@ -34,8 +38,11 @@ static void test_geo_index2()
   tiles = volm_tile::generate_p1b_wr2_tiles();
   for (unsigned i = 0; i < tiles.size(); i++) {
     volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(tiles[i], min_size);
-    vcl_stringstream kml_file;  kml_file << dir << "p1b_wr2_tile_" << i << "_depth_0.kml";
-    volm_geo_index2::write_to_kml(root, 0, kml_file.str());
+    unsigned tree_depth = volm_geo_index2::depth(root);
+    for (unsigned d_idx = 0; d_idx <= tree_depth; d_idx++) {
+      vcl_stringstream kml_file;  kml_file << dir << "p1b_wr2_tile_" << i << "_depth_" << d_idx << ".kml";
+      volm_geo_index2::write_to_kml(root, d_idx, kml_file.str());
+    }
     double x, y;
     int zone_id, zone_id2;
     u.transform(tiles[i].bbox_double().min_point().y(), tiles[i].bbox_double().min_point().x(), x, y, zone_id);
@@ -48,8 +55,11 @@ static void test_geo_index2()
   tiles = volm_tile::generate_p1b_wr3_tiles();
   for (unsigned i = 0; i < tiles.size(); i++) {
     volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(tiles[i], min_size);
-    vcl_stringstream kml_file;  kml_file << dir << "p1b_wr3_tile_" << i << "_depth_0.kml";
-    volm_geo_index2::write_to_kml(root, 0, kml_file.str());
+    unsigned tree_depth = volm_geo_index2::depth(root);
+    for (unsigned d_idx = 0; d_idx <= tree_depth; d_idx++) {
+      vcl_stringstream kml_file;  kml_file << dir << "p1b_wr3_tile_" << i << "_depth_" << d_idx << ".kml";
+      volm_geo_index2::write_to_kml(root, d_idx, kml_file.str());
+    }
     double x, y;
     int zone_id, zone_id2;
     u.transform(tiles[i].bbox_double().min_point().y(), tiles[i].bbox_double().min_point().x(), x, y, zone_id);
@@ -62,8 +72,11 @@ static void test_geo_index2()
   tiles = volm_tile::generate_p1b_wr4_tiles();
   for (unsigned i = 0; i < tiles.size(); i++) {
     volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(tiles[i], min_size);
-    vcl_stringstream kml_file;  kml_file << dir << "p1b_wr4_tile_" << i << "_depth_0.kml";
-    volm_geo_index2::write_to_kml(root, 0, kml_file.str());
+    unsigned tree_depth = volm_geo_index2::depth(root);
+    for (unsigned d_idx = 0; d_idx <= tree_depth; d_idx++) {
+      vcl_stringstream kml_file;  kml_file << dir << "p1b_wr4_tile_" << i << "_depth_" << d_idx << ".kml";
+      volm_geo_index2::write_to_kml(root, d_idx, kml_file.str());
+    }
     double x, y;
     int zone_id, zone_id2;
     u.transform(tiles[i].bbox_double().min_point().y(), tiles[i].bbox_double().min_point().x(), x, y, zone_id);
@@ -79,9 +92,8 @@ static void test_geo_index2()
   vgl_polygon<double> roi_poly = bkml_parser::parse_polygon(kml_roi_file);
   for (unsigned i = 0; i < tiles.size(); i++) {
     volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(tiles[i], min_size, roi_poly);
-    // output the generated geo_index
     unsigned tree_depth = volm_geo_index2::depth(root);
-    for (unsigned d_idx = 0; d_idx < tree_depth; d_idx++) {
+    for (unsigned d_idx = 0; d_idx <= tree_depth; d_idx++) {
       vcl_stringstream kml_file;  kml_file << dir << "p1b_wr5_tile_" << i << "_depth_" << d_idx << ".kml";
       volm_geo_index2::write_to_kml(root, d_idx, kml_file.str());
     }

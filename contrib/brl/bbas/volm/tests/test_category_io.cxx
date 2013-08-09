@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <volm/volm_category_io.h>
+#include <vcl_where_root_dir.h>
 
 
 static void write_osm_samples()
@@ -60,7 +61,8 @@ static void test_category_io()
   write_osm_samples();
 
   // test the method of loading land category
-  vcl_string osm_to_volm_file = "./osm_to_volm_land.txt";
+  vcl_string osm_to_volm_file;
+  osm_to_volm_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
   vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
   test_category_io_read_land_category(osm_to_volm_file);
 
