@@ -35,6 +35,7 @@ DECLARE_FUNC_CONS(boxm2_extract_point_cloud_process);
 DECLARE_FUNC_CONS(boxm2_dem_to_xyz_process);
 DECLARE_FUNC_CONS(boxm2_combine_expected_images_process);
 DECLARE_FUNC_CONS(boxm2_scene_from_box_cams_process);
+DECLARE_FUNC_CONS(boxm2_scene_from_nvm_txt_process);
 DECLARE_FUNC_CONS(boxm2_compactify_mog6_view_process);
 DECLARE_FUNC_CONS(boxm2_scene_statistics_process);
 

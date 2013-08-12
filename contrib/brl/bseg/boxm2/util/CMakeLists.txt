@@ -11,6 +11,7 @@ SET(boxm2_util_sources
     boxm2_convert_nvm.h             boxm2_convert_nvm.cxx
     boxm2_point_util.h              boxm2_point_util.cxx
     boxm2_detect_change_blobs.h     boxm2_detect_change_blobs.cxx
+    boxm2_convert_nvm_txt.h         boxm2_convert_nvm_txt.cxx
    )
   
 #no templates yet

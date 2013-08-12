@@ -52,6 +52,8 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_dem_to_xyz_process, "boxm2DemToXYZProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_combine_expected_images_process, "boxm2CombineExpectedImagesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_from_box_cams_process, "boxm2SceneFromBoxCamsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_from_nvm_txt_process, "boxm2SceneFromNVMtxtProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_load_mesh_process, "boxm2LoadMeshProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_compactify_mog6_view_process, "boxm2CompactifyMog6ViewProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_statistics_process, "boxm2SceneStatisticsProcess");
