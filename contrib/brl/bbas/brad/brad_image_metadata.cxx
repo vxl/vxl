@@ -114,17 +114,43 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
       linestr >> effectiveBand;
       continue;
     }
+    if (tag.compare("cloudCover") == 0) {
+      linestr >> tag;
+      linestr >> cloud_coverage_percentage_;
+      continue;
+    }
   }
-  vcl_cout << "abs: " << absCalfact << " eff: " << effectiveBand << vcl_endl;
+  vcl_cout << "abs: " << absCalfact << " eff: " << effectiveBand << "  cloud coverage percentage : " << cloud_coverage_percentage_ << vcl_endl;
   gain_ = absCalfact/effectiveBand;
   offset_ = 0.0;
   return true;
 }
 
+// only parse the cloud coverage for now
 bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
 {
-  vcl_cout << "Parse from PVL file is not implemented yet!\n";
-  return false;
+  //vcl_cout << "Parse from PVL file is not implemented yet!\n";
+  vcl_ifstream ifs( filename.c_str() );
+  if (!ifs.good()){
+    vcl_cerr << "Error opening file " << filename << vcl_endl;
+    return false;
+  }
+  // now parse the IMD file
+  vul_awk awk(ifs);
+  for (; awk; ++awk)
+  {
+    vcl_stringstream linestr(awk.line());
+    vcl_string tag;
+    linestr >> tag;
+
+    if (tag.compare("productCloudCoverPercentage") == 0) {
+      linestr >> tag;
+      linestr >> cloud_coverage_percentage_;
+      continue;
+    }
+  }
+  vcl_cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << vcl_endl;
+  return true;
 }
 
 //: parse header in nitf image, assumes that metadata files are in the same folder with the image
@@ -149,6 +175,13 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
   //cast to an nitf2_image
   vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+
+  vpgl_nitf_rational_camera nitf_cam(nitf_image, false);
+
+  upper_left_ = nitf_cam.upper_left();
+  upper_right_ = nitf_cam.upper_right();
+  lower_left_ = nitf_cam.lower_left();
+  lower_right_ = nitf_cam.lower_right();
 
   //get NITF information
   vcl_vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
@@ -178,25 +211,34 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   double solar_irrad = 1500.0; 
   // solar irradiance is dependent on sensor because each has a different range of wavelengths they are sensitive to.
   vcl_string img_info = hdr->get_image_source();
-  if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos)
+  if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos) {
     solar_irrad = 1375.8;
-  else if (img_info.find("GeoEye-1") != vcl_string::npos)  // OZGE TODO: check this one
+    satellite_name_ = "IKONOS";
+  } else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos) { // OZGE TODO: check this one
     solar_irrad = 1617;
-  else if (img_info.find("QuickBird") != vcl_string::npos || nitf_filename.find("QB") != vcl_string::npos)
+    satellite_name_ = "GeoEye-1";
+  } else if (img_info.find("QuickBird") != vcl_string::npos || nitf_filename.find("QB") != vcl_string::npos) {
     solar_irrad = 1381.7;
-  else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos ||
-             img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos ||
-             img_info.find("DigitalGlobe") != vcl_string::npos) {
+    satellite_name_ = "QuickBird";
+  } else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos) {
     solar_irrad = 1580.814;
+    satellite_name_ = "WorldView";
+  } else if (img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos) {
+    solar_irrad = 1580.814;
+    satellite_name_ = "WorldView2";
+  } else if (img_info.find("DigitalGlobe") != vcl_string::npos) {
+    solar_irrad = 1580.814;
+    satellite_name_ = "DigitalGlobe";  // which satellite when the name is DigitalGlobe??
   } else
     vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: Guessing band-averaged solar irradiance value = " << solar_irrad << "." << nitf_filename;
   vcl_cout << "solar_irrad: " << solar_irrad << vcl_endl;
+
   // scale sun irradiance using Earth-Sun distance
   double d = brad_sun_distance(year, month, day, hour, min);
   sun_irradiance_ = solar_irrad/(d*d);
 
   // compute satellite az,el values for center of image
-  vpgl_nitf_rational_camera nitf_cam(nitf_image, false);
+  
   double off_u, off_v;
   nitf_cam.image_offset(off_u, off_v);
   // get lat,lon offsets for local euclidean coord. system origin

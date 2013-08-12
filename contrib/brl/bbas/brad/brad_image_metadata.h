@@ -14,6 +14,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#include <vnl/vnl_double_2.h>
 
 struct image_time {
   int year, month, day, hour, min;
@@ -44,6 +45,14 @@ class brad_image_metadata : public vbl_ref_count
 
   image_time t_;
   unsigned number_of_bits_;
+
+  vcl_string satellite_name_;
+  double cloud_coverage_percentage_;
+  vnl_double_2 upper_left_;  // warning: upper_left_[0] is latitude, upper_left_[1] is longitude, similarly for the other corners
+  vnl_double_2 upper_right_;
+  vnl_double_2 lower_left_;
+  vnl_double_2 lower_right_;
+
   //: parse header in nitf image, assumes that metadata files are in the same folder with the image
   //  If meta_folder is not empty, they are searched in that folder as well
   bool parse(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
