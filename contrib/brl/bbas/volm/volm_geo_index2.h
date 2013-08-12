@@ -34,13 +34,13 @@ public:
   volm_geo_index2_node() {}
   
   //: Constructor
-  volm_geo_index2_node(vgl_box_2d<float> const& extent, volm_geo_index2_node_sptr& parent)
+  volm_geo_index2_node(vgl_box_2d<double> const& extent, volm_geo_index2_node_sptr& parent)
   {
     extent_ = extent; 
     parent_ = parent;
   }
   
-  volm_geo_index2_node(vgl_box_2d<float> const& extent)
+  volm_geo_index2_node(vgl_box_2d<double> const& extent)
   {
     extent_ = extent;
     parent_ = 0;
@@ -59,24 +59,24 @@ class volm_geo_index2
 public:
   //: construct a tree such that the give tile is the root, and the hierarchy of its children form a quadtree space partition
   template <class Type>
-  static volm_geo_index2_node_sptr construct_tree(volm_tile t, float const& min_size);
+  static volm_geo_index2_node_sptr construct_tree(volm_tile t, double const& min_size);
   template <class Type>
-  static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<float> bbox, float const& min_size);
+  static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<double> bbox, double const& min_size);
 
   //: construct with a polygon with possibily multiple sheets, only keep the children who intersect one of the sheets of the polygon
   template <class Type>
-  static volm_geo_index2_node_sptr construct_tree(volm_tile t, float const& min_size, vgl_polygon<double> const& poly);
+  static volm_geo_index2_node_sptr construct_tree(volm_tile t, double const& min_size, vgl_polygon<double> const& poly);
   template <class Type>
-  static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<float> bbox, float const& min_size, vgl_polygon<double> const& poly);
+  static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<double> bbox, double const& min_size, vgl_polygon<double> const& poly);
   template <class Type>
-  static volm_geo_index2_node_sptr construct_tree(volm_tile t, float const& min_size, vgl_polygon<float> const& poly);
+  static volm_geo_index2_node_sptr construct_tree(volm_tile t, double const& min_size, vgl_polygon<float> const& poly);
   template <class Type>
-  static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<float> bbox, float const& min_size, vgl_polygon<float> const& poly);
+  static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<double> bbox, double const& min_size, vgl_polygon<float> const& poly);
 
   //: create the quadtree from text file.  Note even if a child has zero pointer, it's order in the children array remains same such that
   //  the children have consistent clockwise geographic sequence
   template <class Type>
-  static volm_geo_index2_node_sptr read_and_construct(vcl_string const& file_name, float& min_size);
+  static volm_geo_index2_node_sptr read_and_construct(vcl_string const& file_name, double& min_size);
 
   //: prune the children which do not intersect with given polygon
   static bool prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<float>  const& poly);
@@ -88,7 +88,7 @@ public:
   static void write_to_kml(volm_geo_index2_node_sptr root, unsigned depth, vcl_string const& file_name);
 
   //: write the quadtree structure into a text file, only the tree structure and not the content on the leaf
-  static void write(volm_geo_index2_node_sptr root, vcl_string const& file_name, float const& min_size);
+  static void write(volm_geo_index2_node_sptr root, vcl_string const& file_name, double const& min_size);
 
   //: return all leaves of the quadtree
   static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves);

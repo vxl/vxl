@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 {
   vul_arg<vcl_string> osm_in("-osm", "osm binary file contains all volm_osm objects", "");
   vul_arg<vcl_string> in_poly("-poly", "region polygon as kml, only the hypos inside this will be added", "");
-  vul_arg<float> min_size("-min-size", "minimum leaf size (in degree), note the root corresponds to a tile with 1 degree in size", 0.5);
+  vul_arg<double> min_size("-min-size", "minimum leaf size (in degree), note the root corresponds to a tile with 1 degree in size", 0.5);
   vul_arg<unsigned> world_id("-world", "id of the region of interests(1-5)", 100);
   vul_arg<unsigned> tile_id("-tile", "id of the tile", 100);
   vul_arg<vcl_string> out_pre("-out_pre", "output file folder with file separator at the end", "");
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
       vcl_cout << "ERROR: can not find geo_index2 txt: " << file_name.str() << vcl_endl;
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    float min_size;
+    double min_size;
     volm_geo_index2_node_sptr root = volm_geo_index2::read_and_construct<volm_osm_object_ids_sptr>(file_name.str(), min_size);
     // obtain all leaves
     vcl_vector<volm_geo_index2_node_sptr> leaves;

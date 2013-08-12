@@ -3,6 +3,7 @@
 #include <volm/volm_osm_object_line.h>
 #include <volm/volm_osm_object_polygon.h>
 #include <volm/volm_osm_objects.h>
+#include <vcl_where_root_dir.h>
 
 static void test_osm_object_point()
 {
@@ -73,8 +74,8 @@ static void test_osm_object_polygon()
 
 static void test_load_osm()
 {
-  vcl_string osm_file = "d:/work/find/phase_1b/OSM/wr1//p1b_wr1_tile_2_osm.osm";
-  vcl_string osm_to_volm_file = "d:/work/Dropbox/FINDER/data/OSM/osm_to_volm_labels.txt";
+  vcl_string osm_file = "d:/work/find/phase_1b/OSM/wr5//p1b_wr5_tile_3_osm.osm";
+  vcl_string osm_to_volm_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
   // create a volm_osm_objects
   volm_osm_objects objs(osm_file, osm_to_volm_file);
   vcl_cout << " number of location points parsed from osm: " << objs.num_locs() << vcl_endl;
@@ -197,7 +198,7 @@ static void test_osm_object()
 
   // test volm_osm_object_ids
   test_osm_object_ids();
-#if 0
+#if 1
   // test load objects from open street map file
   test_load_osm();
 #endif

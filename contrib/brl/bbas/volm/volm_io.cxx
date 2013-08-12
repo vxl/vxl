@@ -688,6 +688,20 @@ void volm_io::convert_polygons(vgl_polygon<double> const& in, vgl_polygon<float>
   }
 }
 
+void volm_io::convert_polygons(vgl_polygon<float> const& in, vgl_polygon<double>& out)
+{
+  // convert polygon from type float to type double
+  for (unsigned i = 0; i < in.num_sheets(); i++)
+    out.new_sheet();
+
+  for (unsigned i = 0; i < in.num_sheets(); i++) {
+    for (unsigned j = 0; j < in[i].size(); j++) {
+      vgl_point_2d<double> pt((double)in[i][j].x(), (double)in[i][j].y());
+      out[i].push_back(pt);
+    }
+  }
+}
+
 //: binary IO write
 void volm_score::b_write(vsl_b_ostream& os)
 {

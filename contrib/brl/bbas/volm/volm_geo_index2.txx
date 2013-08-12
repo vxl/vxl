@@ -9,7 +9,7 @@
 #include <vgl/vgl_intersection.h>
 #include <vpgl/vpgl_utm.h>
 
-#if 1
+#if 0
 // simple deref functions
 template <class Type>
 Type& deref(Type* ptr) { return *ptr; }
@@ -31,7 +31,7 @@ Type* ref(vbl_smart_ptr<Type> sptr) {return sptr.ptr(); }
 //construct a tree such that the given tile is the root, and the hierarchy of its children form a quadtree space partition
 //the stopping criterion is when a child's bounding box size is less or eqaul to the min_size in arcseconds
 template <class Type>
-void construct_sub_tree(volm_geo_index2_node_sptr parent, float const& min_size)
+void construct_sub_tree(volm_geo_index2_node_sptr parent, double const& min_size)
 {
   float w = parent->extent_.width();
   float h = parent->extent_.height();
@@ -39,27 +39,27 @@ void construct_sub_tree(volm_geo_index2_node_sptr parent, float const& min_size)
     return;
   // create 4 children (the arrangement follows clock wise direction, started from lower_left)
   // lower left child
-  vgl_point_2d<float> p1 = parent->extent_.min_point();
-  vgl_point_2d<float> p2( p1.x()+w/2.0f, p1.y()+h/2.0f);
-  vgl_box_2d<float> bbox1(p1,p2);
+  vgl_point_2d<double> p1 = parent->extent_.min_point();
+  vgl_point_2d<double> p2( p1.x()+w/2.0, p1.y()+h/2.0);
+  vgl_box_2d<double> bbox1(p1,p2);
   volm_geo_index2_node_sptr c1 = new volm_geo_index2_node<Type>(bbox1, parent);
   construct_sub_tree<Type>(c1, min_size);
   // upper left child
-  p1 = vgl_point_2d<float>(parent->extent_.min_point().x(), parent->extent_.min_point().y()+h/2.0f);
-  p2 = vgl_point_2d<float>(parent->extent_.min_point().x()+w/2.0f, parent->extent_.max_point().y());
-  vgl_box_2d<float> bbox2(p1,p2);
+  p1 = vgl_point_2d<double>(parent->extent_.min_point().x(), parent->extent_.min_point().y()+h/2.0);
+  p2 = vgl_point_2d<double>(parent->extent_.min_point().x()+w/2.0, parent->extent_.max_point().y());
+  vgl_box_2d<double> bbox2(p1,p2);
   volm_geo_index2_node_sptr c2 = new volm_geo_index2_node<Type>(bbox2, parent);
   construct_sub_tree<Type>(c2, min_size);
   // upper right child
-  p1 = vgl_point_2d<float>(parent->extent_.min_point().x()+w/2, parent->extent_.min_point().y()+h/2);
-  p2 = vgl_point_2d<float>(parent->extent_.max_point().x(), parent->extent_.max_point().y());
-  vgl_box_2d<float> bbox3(p1, p2);
+  p1 = vgl_point_2d<double>(parent->extent_.min_point().x()+w/2.0, parent->extent_.min_point().y()+h/2.0);
+  p2 = vgl_point_2d<double>(parent->extent_.max_point().x(), parent->extent_.max_point().y());
+  vgl_box_2d<double> bbox3(p1, p2);
   volm_geo_index2_node_sptr c3 = new volm_geo_index2_node<Type>(bbox3, parent);
   construct_sub_tree<Type>(c3, min_size);
   // lower right child
-  p1 = vgl_point_2d<float>(parent->extent_.min_point().x()+w/2, parent->extent_.min_point().y());
-  p2 = vgl_point_2d<float>(parent->extent_.max_point().x(), parent->extent_.min_point().y()+h/2); 
-  vgl_box_2d<float> bbox4(p1, p2);
+  p1 = vgl_point_2d<double>(parent->extent_.min_point().x()+w/2.0, parent->extent_.min_point().y());
+  p2 = vgl_point_2d<double>(parent->extent_.max_point().x(), parent->extent_.min_point().y()+h/2.0); 
+  vgl_box_2d<double> bbox4(p1, p2);
   volm_geo_index2_node_sptr c4 = new volm_geo_index2_node<Type>(bbox4, parent);
   construct_sub_tree<Type>(c4, min_size);
 
@@ -70,7 +70,7 @@ void construct_sub_tree(volm_geo_index2_node_sptr parent, float const& min_size)
 }
 
 template <class Type>
-void construct_sub_tree_poly(volm_geo_index2_node_sptr parent, float const& min_size, vgl_polygon<float> const& poly)
+void construct_sub_tree_poly(volm_geo_index2_node_sptr parent, double const& min_size, vgl_polygon<double> const& poly)
 {
   float w = parent->extent_.width();
   float h = parent->extent_.height();
@@ -78,36 +78,36 @@ void construct_sub_tree_poly(volm_geo_index2_node_sptr parent, float const& min_
     return;
   // create 4 children (the arrangement follows clock wise direction, started from lower_left)
   // lower left child
-  vgl_point_2d<float> p1 = parent->extent_.min_point();
-  vgl_point_2d<float> p2( p1.x()+w/2.0f, p1.y()+h/2.0f);
-  vgl_box_2d<float> bbox1(p1, p2);
+  vgl_point_2d<double> p1 = parent->extent_.min_point();
+  vgl_point_2d<double> p2( p1.x()+w/2.0f, p1.y()+h/2.0f);
+  vgl_box_2d<double> bbox1(p1, p2);
   if (vgl_intersection(bbox1, poly)) {
     volm_geo_index2_node_sptr c1 = new volm_geo_index2_node<Type>(bbox1, parent);
     construct_sub_tree_poly<Type>(c1, min_size, poly);
     parent->children_.push_back(c1);
   }
   // upper left child
-  p1 = vgl_point_2d<float>(parent->extent_.min_point().x(), parent->extent_.min_point().y()+h/2.0f);
-  p2 = vgl_point_2d<float>(parent->extent_.min_point().x()+w/2.0f, parent->extent_.max_point().y());
-  vgl_box_2d<float> bbox2(p1, p2);
+  p1 = vgl_point_2d<double>(parent->extent_.min_point().x(), parent->extent_.min_point().y()+h/2.0f);
+  p2 = vgl_point_2d<double>(parent->extent_.min_point().x()+w/2.0f, parent->extent_.max_point().y());
+  vgl_box_2d<double> bbox2(p1, p2);
   if (vgl_intersection(bbox2, poly)) {
     volm_geo_index2_node_sptr c2 = new volm_geo_index2_node<Type>(bbox2, parent);
     construct_sub_tree_poly<Type>(c2, min_size, poly);
     parent->children_.push_back(c2);
   }
   // upper right child
-  p1 = vgl_point_2d<float>(parent->extent_.min_point().x()+w/2, parent->extent_.min_point().y()+h/2);
-  p2 = vgl_point_2d<float>(parent->extent_.max_point().x(), parent->extent_.max_point().y());
-  vgl_box_2d<float> bbox3(p1, p2);
+  p1 = vgl_point_2d<double>(parent->extent_.min_point().x()+w/2, parent->extent_.min_point().y()+h/2);
+  p2 = vgl_point_2d<double>(parent->extent_.max_point().x(), parent->extent_.max_point().y());
+  vgl_box_2d<double> bbox3(p1, p2);
   if (vgl_intersection(bbox3, poly)) {
     volm_geo_index2_node_sptr c3 = new volm_geo_index2_node<Type>(bbox3, parent);
     construct_sub_tree_poly<Type>(c3, min_size, poly);
     parent->children_.push_back(c3);
   }
   // lower right child
-  p1 = vgl_point_2d<float>(parent->extent_.min_point().x()+w/2, parent->extent_.min_point().y());
-  p2 = vgl_point_2d<float>(parent->extent_.max_point().x(), parent->extent_.min_point().y()+h/2); 
-  vgl_box_2d<float> bbox4(p1, p2);
+  p1 = vgl_point_2d<double>(parent->extent_.min_point().x()+w/2, parent->extent_.min_point().y());
+  p2 = vgl_point_2d<double>(parent->extent_.max_point().x(), parent->extent_.min_point().y()+h/2); 
+  vgl_box_2d<double> bbox4(p1, p2);
   if (vgl_intersection(bbox4, poly)) {
     volm_geo_index2_node_sptr c4 = new volm_geo_index2_node<Type>(bbox4, parent);
     construct_sub_tree_poly<Type>(c4, min_size, poly);
@@ -136,7 +136,7 @@ void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index2_node_sptr n, unsigned 
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<float> bbox, float const& min_size)
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<double> bbox, double const& min_size)
 {
   vcl_cout << "bounding box for geo_index root: " << bbox << vcl_endl;
   volm_geo_index2_node_sptr root = new volm_geo_index2_node<Type>(bbox);
@@ -146,16 +146,16 @@ volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<float> bbox
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, float const& min_size)
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, double const& min_size)
 {
   // create the bbox for the root
-  vgl_box_2d<float> bbox = t.bbox();
+  vgl_box_2d<double> bbox = t.bbox_double();
   vcl_cout << "bounding box for root: " << bbox << vcl_endl;
   return volm_geo_index2::construct_tree<Type>(bbox, min_size);
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<float> bbox, float const& min_size, vgl_polygon<float> const& poly)
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<double> bbox, double const& min_size, vgl_polygon<double> const& poly)
 {
   vcl_cout << "bounding box for root: " << bbox << vcl_endl;
   volm_geo_index2_node_sptr root;
@@ -168,35 +168,34 @@ volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<float> bbox
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<float> bbox, float const& min_size, vgl_polygon<double> const& poly)
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<double> bbox, double const& min_size, vgl_polygon<float> const& poly)
 {
-  vgl_polygon<float> poly_float;
-  volm_io::convert_polygons(poly, poly_float);
-  return volm_geo_index2::construct_tree<Type>(bbox, min_size, poly_float);
+  vgl_polygon<double> poly_double;
+  volm_io::convert_polygons(poly, poly_double);
+  return volm_geo_index2::construct_tree<Type>(bbox, min_size, poly_double);
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, float const& min_size, vgl_polygon<float> const& poly)
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, double const& min_size, vgl_polygon<float> const& poly)
 {
-  vgl_box_2d<float> bbox = t.bbox();
+  vgl_box_2d<double> bbox = t.bbox_double();
   return volm_geo_index2::construct_tree<Type>(bbox, min_size, poly);
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, float const& min_size, vgl_polygon<double> const& poly)
+volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, double const& min_size, vgl_polygon<double> const& poly)
 {
-  vgl_polygon<float> poly_float;
-  volm_io::convert_polygons(poly, poly_float);
-  return volm_geo_index2::construct_tree<Type>(t, min_size, poly_float);
+  vgl_box_2d<double> bbox = t.bbox_double();
+  return volm_geo_index2::construct_tree<Type>(bbox, min_size, poly);
 }
 
 template <class Type>
 volm_geo_index2_node_sptr read_and_construct_node(vcl_ifstream& ifs, volm_geo_index2_node_sptr parent)
 {
-  float x, y;
-  ifs >> x;  ifs >> y;  vgl_point_2d<float> min_pt(x, y);
-  ifs >> x;  ifs >> y;  vgl_point_2d<float> max_pt(x, y);
-  vgl_box_2d<float> bbox(min_pt, max_pt);
+  double x, y;
+  ifs >> x;  ifs >> y;  vgl_point_2d<double> min_pt(x, y);
+  ifs >> x;  ifs >> y;  vgl_point_2d<double> max_pt(x, y);
+  vgl_box_2d<double> bbox(min_pt, max_pt);
   volm_geo_index2_node_sptr node = new volm_geo_index2_node<Type>(bbox, parent);
   unsigned nc;
   ifs >> nc;
@@ -213,7 +212,7 @@ volm_geo_index2_node_sptr read_and_construct_node(vcl_ifstream& ifs, volm_geo_in
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::read_and_construct(vcl_string const& file_name, float& min_size)
+volm_geo_index2_node_sptr volm_geo_index2::read_and_construct(vcl_string const& file_name, double& min_size)
 {
   vcl_ifstream ifs(file_name.c_str());
   ifs >> min_size;
@@ -222,7 +221,7 @@ volm_geo_index2_node_sptr volm_geo_index2::read_and_construct(vcl_string const& 
   return root;
 }
 
-bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<float> const& poly)
+bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<double> const& poly)
 {
   // note that the tree will not be pruned if the root bounding box does not intersect with the polygon
   if (!vgl_intersection(root->extent_, poly))
@@ -237,11 +236,11 @@ bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<flo
   return true;
 }
 
-bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<double> const& poly)
+bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<float> const& poly)
 {
-  vgl_polygon<float> poly_float;
-  volm_io::convert_polygons(poly, poly_float);
-  return volm_geo_index2::prune_tree(root, poly_float);
+  vgl_polygon<double> poly_double;
+  volm_io::convert_polygons(poly, poly_double);
+  return volm_geo_index2::prune_tree(root, poly_double);
 }
 
 bool volm_geo_index2::prune_by_zone(volm_geo_index2_node_sptr root, unsigned utm_zone)
@@ -304,7 +303,7 @@ void write_to_text(vcl_ofstream& ofs, volm_geo_index2_node_sptr n)
   }
 }
 
-void volm_geo_index2::write(volm_geo_index2_node_sptr root, vcl_string const& file_name, float const& min_size)
+void volm_geo_index2::write(volm_geo_index2_node_sptr root, vcl_string const& file_name, double const& min_size)
 {
   vcl_ofstream ofs(file_name.c_str());
   ofs << min_size << '\n';
@@ -332,7 +331,7 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<float> const& area)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<double> const& area)
 {
   if (!root) // the node is empty
     return;
@@ -356,20 +355,19 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<double> const& area)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<float> const& area)
 {
-  vgl_box_2d<float> area_float( (float)(area.min_point().x()), (float)(area.max_point().x()), (float)(area.min_point().y()), (float)(area.max_point().y()));
-  get_leaves(root, leaves, area_float);
+  vgl_box_2d<double> area_double( (double)(area.min_point().x()), (double)(area.max_point().x()),
+                                  (double)(area.min_point().y()), (double)(area.max_point().y()) );
+  get_leaves(root, leaves, area_double);
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<float> const& poly)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<double> const& poly)
 {
   if (!root) // the node is empty
     return;
   
-  // check whether the polygon 
-  
-
+  // check whether the polygon intersects with current root
   if (!vgl_intersection(root->extent_, poly)) // the node does not intersect with given polygon
     return;
   
@@ -392,14 +390,14 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<double> const& poly)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<float> const& poly)
 {
-  vgl_polygon<float> poly_float;
-  volm_io::convert_polygons(poly, poly_float);
-  get_leaves(root, leaves, poly_float);
+  vgl_polygon<double> poly_double;
+  volm_io::convert_polygons(poly, poly_double);
+  get_leaves(root, leaves, poly_double);
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<float> > const& line)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<double> > const& line)
 {
   if (!root) // the tree is empy
     return;
@@ -425,17 +423,17 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<double> > const& line)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<float> > const& line)
 {
   // transfer double to float since our tree bounding box is float
-  vcl_vector<vgl_point_2d<float> > line_float;
+  vcl_vector<vgl_point_2d<double> > line_double;
   unsigned num_pts = (unsigned)line.size();
   for (unsigned i = 0; i < num_pts; i++)
-    line_float.push_back(vgl_point_2d<float>((float)line[i].x(), (float)line[i].y()));
-  get_leaves(root, leaves, line_float);
+    line_double.push_back(vgl_point_2d<double>((double)line[i].x(), (double)line[i].y()));
+  get_leaves(root, leaves, line_double);
 }
 
-void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<float> const& point)
+void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<double> const& point)
 {
   if (!root)
     return;
@@ -460,18 +458,21 @@ void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_n
   }
 }
 
-void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<double> const& point)
+void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<float> const& point)
 {
-  vgl_point_2d<float> pt_float((float)point.x(), (float)point.y());
-  get_leaf(root, leaf, pt_float);
+  vgl_point_2d<double> pt_double((double)point.x(), (double)point.y());
+  get_leaf(root, leaf, pt_double);
 }
 
 #undef VOLM_GEO_INDEX2_INSTANTIATE
 #define VOLM_GEO_INDEX2_INSTANTIATE(T) \
-template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const float& min_size);\
-template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const float& min_size, vgl_polygon<double> const& poly);\
-template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const float& min_size, vgl_polygon<float> const& poly);\
-template volm_geo_index2_node_sptr volm_geo_index2::read_and_construct<T>(vcl_string const& flie_name, float& min_size);
+template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const double& min_size);\
+template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(vgl_box_2d<double> bbox, double const& min_size);\
+template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(vgl_box_2d<double> bbox, double const& min_size, vgl_polygon<double> const& poly);\
+template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(vgl_box_2d<double> bbox, double const& min_size, vgl_polygon<float> const& poly);\
+template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const double& min_size, vgl_polygon<double> const& poly);\
+template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const double& min_size, vgl_polygon<float> const& poly);\
+template volm_geo_index2_node_sptr volm_geo_index2::read_and_construct<T>(vcl_string const& flie_name, double& min_size);
 
 
 #endif // volm_geo_index2_txx_

@@ -44,7 +44,7 @@ public:
   //: 4 children
   vcl_vector<volm_geo_index2_node_sptr> children_;
   //: mini tile ( min point of this bbox is lower left corner of the mini tile and max point of this bbox is upper bound )
-  vgl_box_2d<float> extent_;
+  vgl_box_2d<double> extent_;
 
 };
 
