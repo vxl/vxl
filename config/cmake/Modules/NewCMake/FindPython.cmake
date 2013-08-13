@@ -24,6 +24,7 @@ IF(PYTHON_INCLUDE_DIR)
       PATHS
       ${PYTHON_INCLUDE_DIRS}
       ${PYTHON_FRAMEWORK_INCLUDES}
+      [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\2.7\\InstallPath]/PC
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\2.6\\InstallPath]/PC
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\2.5\\InstallPath]/PC
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\2.4\\InstallPath]/PC
@@ -35,6 +36,7 @@ IF(PYTHON_INCLUDE_DIR)
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\1.5\\InstallPath]/PC
     
       PATH_SUFFIXES
+       python2.7
        python2.6
        python2.5
        python2.4
