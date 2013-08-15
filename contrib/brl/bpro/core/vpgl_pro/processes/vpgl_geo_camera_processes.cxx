@@ -273,3 +273,41 @@ bool vpgl_load_geo_camera_process2(bprb_func_process& pro)
   return true;
 }
 
+//: construct the camera from the header of the geoiff file
+bool vpgl_load_geo_camera_process3_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vcl_string"); // image name. will load resource from this file
+  input_types.push_back("vpgl_lvcs_sptr"); // creates an empty one as a default if not available so do not set if not available
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vpgl_camera_double_sptr");  //camera output
+  bool good = pro.set_input_types(input_types)
+           && pro.set_output_types(output_types);
+
+  //input default args
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
+  brdb_value_sptr vpgl_val = new brdb_value_t<vpgl_lvcs_sptr>(lvcs);
+  pro.set_input(1, vpgl_val);
+
+  return good;
+}
+
+//: Execute the process
+bool vpgl_load_geo_camera_process3(bprb_func_process& pro)
+{
+  if (pro.n_inputs()!= 2) {
+    vcl_cout << "vpgl_load_geo_camera_process3: The number of inputs should be 2" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vcl_string filename = pro.get_input<vcl_string>(0);
+  vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(1);
+  vil_image_resource_sptr img = vil_load_image_resource(filename.c_str());
+
+  vpgl_geo_camera *cam;
+  vpgl_geo_camera::init_geo_camera(img, lvcs, cam);
+  pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
+  return true;
+}
+
