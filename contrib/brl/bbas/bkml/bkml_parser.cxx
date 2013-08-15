@@ -278,8 +278,7 @@ void bkml_parser::charData(const XML_Char* s, int len)
       str >> y;
       str.ignore();
       str >> z;
-      if (str.str() == " ")
-        str.ignore();
+      str.ignore(128, ' ');
       vgl_point_3d<double> vpt(x,y,z);
       poly_verts.push_back(vpt);
       //if (cord_tag_ == KML_POLYOB_TAG)
@@ -362,8 +361,9 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
   for (unsigned sh_idx = 0; sh_idx < parser->polyouter_.size(); sh_idx++) {
     out.new_sheet();
     unsigned n_points = (unsigned)parser->polyouter_[sh_idx].size()-1;
-    for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++)
+    for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++) {
       out.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
+    }
   }
   return out;
 }

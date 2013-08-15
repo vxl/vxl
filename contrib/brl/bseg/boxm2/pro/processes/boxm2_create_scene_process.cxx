@@ -297,6 +297,9 @@ bool boxm2_create_poly_scene_and_blocks_process_cons(bprb_func_process& pro)
 #include <bkml/bkml_parser.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vgl/vgl_polygon.h>
+#include <vgl/vgl_intersection.h>
+#include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 
 bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
 {
@@ -357,6 +360,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   vpgl_utm utm;
   double x, y; int orig_zone;
   utm.transform(origin_lat, origin_lon, x, y, orig_zone);
+  vcl_cout << "number of points in polygon " << poly_deg[0].size() << vcl_endl;
   vgl_polygon<double> poly;
   for (unsigned sh_idx = 0; sh_idx < n_sheets; sh_idx++) {
     poly.new_sheet();
@@ -364,8 +368,11 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
     for (unsigned vt_idx = 0; vt_idx < n_verts; vt_idx++) {
       int zone;
       utm.transform(poly_deg[sh_idx][vt_idx].y(), poly_deg[sh_idx][vt_idx].x(), x, y, zone);
-      if (zone != orig_zone)
+      if (zone != orig_zone) {
+        vcl_cout << "WARNING: point " << poly_deg[sh_idx][vt_idx] 
+                 << " is in different utm zone " << zone << " compared to origin " << orig_zone << vcl_endl;
         continue;
+      }
       double local_x = vcl_numeric_limits<double>::max(), local_y, local_z;
       lv.global_to_local(poly_deg[sh_idx][vt_idx].x(), poly_deg[sh_idx][vt_idx].y(), 1.6, vpgl_lvcs::wgs84, local_x, local_y, local_z);
       if (local_x != vcl_numeric_limits<double>::max())
@@ -524,6 +531,29 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
     for (unsigned int j=0; j<n_y; ++j) {
       double local_x = i*bxy + local_origin_x;
       double local_y = j*bxy + local_origin_y;
+      vgl_box_2d<double> block_bbox(local_x, local_x+bxy, local_y, local_y+bxy);
+      if (vgl_intersection(block_bbox, poly)) {
+        for (unsigned int k=0; k<n_z; ++k) {
+          double local_z = k*bz + local_origin_z;
+          boxm2_block_id id(i,j,k);
+          vcl_map<boxm2_block_id, boxm2_block_metadata>& blks=scene->blocks();
+          if (blks.find(id)!=blks.end()) {
+            vcl_cout<<"Problems in adding block: " << i << ' ' << j << ' ' << k << " block already exists"<<vcl_endl;
+            return false;
+          }
+          boxm2_block_metadata mdata(id,vgl_point_3d<double>(local_x,local_y,local_z),
+                                     vgl_vector_3d<double>(sb_length,sb_length,sb_length),
+                                     vgl_vector_3d<unsigned>(num_xy,num_xy,num_z),
+                                     init_level,max_level,max_data_mb,p_init);
+          blks[id] = mdata;
+        } // end of for loop along z
+        ++index_j;
+        if (j == (n_y-1)) {
+          ++index_i;
+          index_j = 0;
+        }
+      }
+#if 0
       vcl_vector<vgl_point_2d<double> > vblock;
       vblock.push_back(vgl_point_2d<double>(local_x, local_y));
       vblock.push_back(vgl_point_2d<double>(local_x + bxy, local_y));
@@ -566,6 +596,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
           index_j = 0;
         }
       } // end of block adding
+#endif
     } // end of for loop along y
   } // end of for loop along x
   i=0;  // store scene smart pointer
@@ -903,7 +934,8 @@ bool boxm2_prune_scene_blocks_by_dem_process(bprb_func_process& pro)
       pruned_scene_blks[blk_id] = md;
       continue;
     }
-    
+    if (blk_id.i() == 38 && blk_id.j() ==10)
+      int i = 1;
     // inside the range of dem image, check the surface elevation
     unsigned key = (blk_id.i() + blk_id.j())*(blk_id.i() + blk_id.j() + 1)/2 + blk_id.j();
     double min_elev = 1E6;

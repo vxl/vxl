@@ -26,6 +26,7 @@
 #include <boxm2/volm/boxm2_volm_matcher_p1.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
+#include <bkml/bkml_parser.h>
 
 int main(int argc, char** argv)
 {
@@ -122,16 +123,19 @@ int main(int argc, char** argv)
   vgl_polygon<double> cand_poly;
   vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
   if ( candidate_list().compare("") != 0) {
-    if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
-      is_candidate = true;
-      volm_io::read_polygons(candidate_list(), cand_poly);
-    }
-    else {
-      log << " ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
+    if (!vul_file::exists(candidate_list())) {
+      log << " ERROR: can not fine candidate list file: " << candidate_list() << '\n';
       if (do_log)  volm_io::write_composer_log(out_folder(), log.str());
       vcl_cerr << log.str();
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
       return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    else {
+      // parse polygon from kml
+      is_candidate = true;
+      cand_poly = bkml_parser::parse_polygon(candidate_list());
+      vcl_cout << " candidate list is parsed from file: " << candidate_list() << vcl_endl;
+      vcl_cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << vcl_endl;
     }
   }
   else {

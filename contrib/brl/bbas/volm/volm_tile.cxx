@@ -17,18 +17,21 @@ volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, floa
 {
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
-  trans_matrix[0][3] = lon_;
-  if (direction_ == 'E')
+  if (direction_ == 'E') {
+    trans_matrix[0][3] = lon_ - 0.5/(ni-1.0);
     trans_matrix[0][0] = scale_i_/(ni-1.0);
-  else
+  }
+  else {
+    trans_matrix[0][3] = lon_ + 0.5/(ni-1.0);
     trans_matrix[0][0] = -scale_i_/(ni-1.0);
+  }
   if (hemisphere_ == 'N') {
     trans_matrix[1][1] = -scale_j_/(nj-1.0);
-    trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+    trans_matrix[1][3] = lat_+scale_j_+0.5/(nj-1.0);
   }
   else {
     trans_matrix[1][1] = scale_j_/(nj-1.0);
-    trans_matrix[1][3] = lat_-scale_j_-1/3600.0;
+    trans_matrix[1][3] = lat_-scale_j_-0.5/(nj-1.0);
   }
   // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
   vpgl_lvcs_sptr lv = new vpgl_lvcs;
@@ -71,18 +74,21 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
 #endif
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
-  trans_matrix[0][3] = lon_;
-  if (direction_ == 'E')
+  if (direction_ == 'E') {
+    trans_matrix[0][3] = lon_ - 0.5/(ni-1.0);
     trans_matrix[0][0] = scale_i_/(ni-1.0);
-  else
+  }
+  else {
+    trans_matrix[0][3] = lon_ + 0.5/(ni-1.0);
     trans_matrix[0][0] = -scale_i_/(ni-1.0);
+  }
   if (hemisphere_ == 'N') {
     trans_matrix[1][1] = -scale_j_/(nj-1.0);
-    trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+    trans_matrix[1][3] = lat_+scale_j_+0.5/(nj-1.0);
   }
   else {
     trans_matrix[1][1] = scale_j_/(nj-1.0);
-    trans_matrix[1][3] = lat_-scale_j_-1/3600.0;
+    trans_matrix[1][3] = lat_-scale_j_-0.5/(nj-1.0);
   }
   vpgl_lvcs_sptr dummy_lvcs = new vpgl_lvcs;
   cam_ = vpgl_geo_camera(trans_matrix, dummy_lvcs);
@@ -144,18 +150,21 @@ volm_tile::volm_tile(float lat, float lon, float scale_i, float scale_j, unsigne
 
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
-  trans_matrix[0][3] = lon_;
-  if (direction_ == 'E')
+  if (direction_ == 'E') {
+    trans_matrix[0][3] = lon_ - 0.5/(ni-1.0);
     trans_matrix[0][0] = scale_i_/(ni-1.0);
-  else
+  }
+  else {
+    trans_matrix[0][3] = lon_ + 0.5/(ni-1.0);
     trans_matrix[0][0] = -scale_i_/(ni-1.0);
+  }
   if (hemisphere_ == 'N') {
     trans_matrix[1][1] = -scale_j_/(nj-1.0);
-    trans_matrix[1][3] = lat_+scale_j_+1/3600.0;
+    trans_matrix[1][3] = lat_+scale_j_+0.5/(nj-1.0);
   }
   else {
     trans_matrix[1][1] = scale_j_/(nj-1.0);
-    trans_matrix[1][3] = lat_-scale_j_-1/3600.0;
+    trans_matrix[1][3] = lat_-scale_j_-0.5/(nj-1.0);
   }
   // just pass an empty lvcs, this geo cam will only be used to compute image pixels to global coords mappings
   vpgl_lvcs_sptr lv = new vpgl_lvcs;
@@ -377,12 +386,12 @@ bool volm_tile::global_to_img(double lon, double lat, unsigned& i, unsigned& j)
     lon = -lon;
   if (hemisphere_ == 'S')
     lat = -lat;
-
   cam_.global_to_img(lon, lat, dummy_elev, u, v);
   if (u < 0 || v < 0 || u >= this->ni_ || v >= this->nj_)
     return false;
-  i = (unsigned)vcl_floor(u);
-  j = (unsigned)vcl_floor(v);  // this may be ceil cause image direction is in reverse in latitude
+  i = (unsigned)vcl_floor( (int)(u*100+0.5)/100+0.5);  // truncation up to 0.01 floating precion 
+  j = (unsigned)vcl_floor( (int)(v*100+0.5)/100+0.5);  // this may be ceil cause image direction is in reverse in latitude
+  if (j == this->nj_) j--;         // v may be larger than nj+0.5 due to the floating point precision
   return true;
 }
 

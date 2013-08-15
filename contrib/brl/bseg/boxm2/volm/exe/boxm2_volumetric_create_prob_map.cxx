@@ -20,7 +20,8 @@
 #include <vil/vil_load.h>
 #include <vcl_set.h>
 #include <vcl_iomanip.h>
-#include <bkml_write.h>
+#include <bkml/bkml_write.h>
+#include <bkml/bkml_parser.h>
 
 // generate gt hypos
 int main(int argc,  char** argv)
@@ -30,7 +31,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
   vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses","");
   vul_arg<unsigned> zone_id("-zone", "zone_id", 0);
-  vul_arg<vcl_string> candidate_list("-cand", "candidate list if exist", "");
+  vul_arg<vcl_string> candidate_list("-cand", "candidate list for given query (txt file)", "");  // index -- candidate list file containing polygons
   vul_arg<vcl_string> out("-out", "job output folder", "");
   vul_arg<unsigned> id("-id", "id of the test image", 6);
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
@@ -74,18 +75,25 @@ int main(int argc,  char** argv)
   // check whether we have candidate list for this query
   bool is_candidate = false;
   vgl_polygon<double> cand_poly;
+  vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
   if ( candidate_list().compare("") != 0) {
-    vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
-    if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
-      is_candidate = true;
-      volm_io::read_polygons(candidate_list(), cand_poly);
-    }
-    else {
-      log << " ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
+    if (!vul_file::exists(candidate_list())) {
+      log << " ERROR: can not fine candidate list file: " << candidate_list() << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
       vcl_cerr << log.str();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
+    else {
+      // parse polygon from kml
+      is_candidate = true;
+      cand_poly = bkml_parser::parse_polygon(candidate_list());
+      vcl_cout << " candidate list is parsed from file: " << candidate_list() << vcl_endl;
+      vcl_cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << vcl_endl;
+    }
+  }
+  else {
+    vcl_cout << " NO candidate list for this query image, full index space is considered" << vcl_endl;
+    is_candidate = false;
   }
 
   // create tiles

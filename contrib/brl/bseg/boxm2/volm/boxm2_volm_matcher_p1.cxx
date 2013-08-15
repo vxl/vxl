@@ -587,7 +587,7 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
             ind_->get_next(values, layer_size);
             ind_combine_->get_next(values_combine, layer_size);
             cnt++;
-#ifdef DEBUG
+#if 0
             vcl_cout << "=> leaf_id = " << li
                      << ", hypo_id = " << leaves_[li]->hyps_->current_-1
                      << ", h_pt = " << h_pt << vcl_endl;

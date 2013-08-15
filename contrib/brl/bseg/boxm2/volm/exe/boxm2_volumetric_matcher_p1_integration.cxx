@@ -28,6 +28,7 @@
 #include <boxm2/volm/boxm2_volm_matcher_p1.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
+#include <bkml/bkml_parser.h>
 
 int main(int argc, char** argv)
 {
@@ -37,6 +38,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> weight_file("-wgt", "weight parameters for query", "");                                 // query -- weight parameter file
   vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses", "");                      // index -- folder to read the hypos for each leaf
   vul_arg<vcl_string> geo_index_folder("-geo", "folder to read the geo index", "");                           // index -- folder to read the index for each location
+  vul_arg<vcl_string> candidate_list("-cand", "candidate list in kml format","");                             // query -- candidate list polygon
   vul_arg<unsigned>   tile_id("-tile", "tile id", 0);                                                         // index -- tile_id
   vul_arg<unsigned>   zone_id("-zone", "zone id", 17);                                                        // index -- zone_id
   vul_arg<float>      buffer_capacity("-buff", "index buffer capacity (GB)", 1.0f);                           // index -- buffer capacity
@@ -256,6 +258,33 @@ int main(int argc, char** argv)
   float min_size;
   volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
   volm_geo_index::read_hyps(root, file_name_pre.str());
+
+  vgl_polygon<double> cand_poly;
+  bool is_candidate = false;
+
+  // parse the candidate list if it exists
+  if ( candidate_list().compare("") != 0) {
+    if (!vul_file::exists(candidate_list())) {
+      log << " ERROR: can not fine candidate list file: " << candidate_list() << '\n';
+      if (do_log)  volm_io::write_composer_log(out_folder(), log.str());
+      vcl_cerr << log.str();
+      volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    else {
+      // parse polygon from kml
+      is_candidate = true;
+      cand_poly = bkml_parser::parse_polygon(candidate_list());
+      vcl_cout << " candidate list is parsed from file: " << candidate_list() << vcl_endl;
+      vcl_cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << vcl_endl;
+    }
+  }
+  else {
+    vcl_cout << " NO candidate list for this query image, full index space is considered" << vcl_endl;
+    is_candidate = false;
+  }
+  if (is_candidate)
+    volm_geo_index::prune_tree(root, cand_poly);
   vcl_vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
 
@@ -264,8 +293,6 @@ int main(int argc, char** argv)
              << "==================================================================================================\n" << vcl_endl;
 
   // start the volm_matcher
-  vgl_polygon<double> cand_poly;
-  bool is_candidate = false;
   bool is_last_pass = false;
   boxm2_volm_matcher_p1 obj_ps1_matcher(cam_space, query, leaves, buffer_capacity(), geo_index_folder(), tile_id(),
                                         depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),

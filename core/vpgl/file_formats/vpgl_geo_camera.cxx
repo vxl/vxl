@@ -153,18 +153,21 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
     vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale << vcl_endl;
   vnl_matrix<double> trans_matrix(4,4,0,0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
-  trans_matrix[0][3] = lon;
-  if (direction == "E")
+  if (direction == "E") {
+    trans_matrix[0][3] = lon - 0.5/(ni-1.0);
     trans_matrix[0][0] = scale/(ni-1.0);
-  else
-    trans_matrix[0][0] = -scale/(ni-1.0);
+  }
+  else {
+    trans_matrix[0][3] = lon + 0.5/(ni-1.0);
+    trans_matrix[0][0] = -scale /(ni-1.0);
+  }
   if (hemisphere == "N") {
     trans_matrix[1][1] = -scale/(nj-1.0);
-    trans_matrix[1][3] = lat+scale+1/3600.0;
+    trans_matrix[1][3] = lat + scale + 0.5/(nj-1.0);
   }
   else {
     trans_matrix[1][1] = scale/(nj-1.0);
-    trans_matrix[1][3] = lat-scale-1/3600.0;
+    trans_matrix[1][3] = lat-scale-0.5/(nj-1.0);
   }
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(true);

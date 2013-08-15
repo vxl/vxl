@@ -111,19 +111,39 @@ bool create_camera_kml(unsigned const& top_id, double const& lon, double const& 
   volm_score::read_scores(scores, score_file);
   // obtain top camera for location (lon, lat)
   unsigned cam_id;
+  double longitude, latitude;
   vcl_vector<volm_score_sptr>::iterator vit = scores.begin();
   bool found = false;
-  while (!found) {
+  while (!found && vit != scores.end()) {
     unsigned li = (*vit)->leaf_id_, hi = (*vit)->hypo_id_;
     if (leaf->get_string() == leaves[li]->get_string() && hypo_id == hi) {
       found = true;  cam_id = (*vit)->max_cam_id_;
+      longitude = leaves[li]->hyps_->locs_[hi].x();
+      latitude = leaves[li]->hyps_->locs_[hi].y();
     }
     ++vit;
   }
-
+  // if the location is not found in score binary, found the closest instead
+  if (!found) {
+    unsigned min_dist = 1E6;
+    vgl_point_3d<double> loc = leaf->hyps_->locs_[hypo_id];
+    for (vit = scores.begin(); vit != scores.end(); ++vit) {
+      unsigned li = (*vit)->leaf_id_, hi = (*vit)->hypo_id_;
+      vgl_point_3d<double> loc_closest = leaves[li]->hyps_->locs_[hi];
+      double x_dist = abs(loc.x() - loc_closest.x());
+      double y_dist = abs(loc.y() - loc_closest.y());
+      vgl_vector_2d<double> gt_dist_vect(x_dist, y_dist);
+      double dist = sqrt(gt_dist_vect.sqr_length());
+      if (dist < min_dist) {
+        cam_id = (*vit)->max_cam_id_;  
+        longitude = leaves[li]->hyps_->locs_[hi].x();
+        latitude = leaves[li]->hyps_->locs_[hi].y();
+      }
+    }
+  }
   cam_angles best_cam = cam_space->camera_angles(cam_id);
 
-  vcl_cerr << " top " << top_id << " location " << lon << "," << lat << " has best camera :";
+  vcl_cerr << " top " << top_id << " location " << longitude << "," << latitude << " has best camera :";
   best_cam.print();
   // write out the best camera kml
   vcl_stringstream cam_kml;
@@ -171,6 +191,7 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> top_cam_num("-top_cam_num", "number of top camera kml we want to generate",10);
   vul_arg<vcl_string> candlist_kml("-cand_file", "generate candidate list file", "");
   vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary to get the depth value for all objects", "");
+  vul_arg<vcl_string> candidate_list("-cand", " pre defined candidate list for given query", "");  // index -- candidate list file containing polygons
   vul_arg_parse(argc, argv);
   vcl_cout << "argc: " << argc << vcl_endl;
 
@@ -286,6 +307,35 @@ int main(int argc,  char** argv)
       float min_size;
       volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
       volm_geo_index::read_hyps(root, file_name_pre.str());
+
+
+      // use the candidate list same as that being used in matcher to prune the tree
+      // check whether we have candidate list for this query
+      bool is_candidate = false;
+      vgl_polygon<double> cand_poly;
+      vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
+      if ( candidate_list().compare("") != 0) {
+        if (!vul_file::exists(candidate_list())) {
+          log << " ERROR: can not fine candidate list file: " << candidate_list() << '\n';
+          vcl_cerr << log.str();
+          volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+          return volm_io::POST_PROCESS_FAILED;
+        }
+        else {
+          // parse polygon from kml
+          is_candidate = true;
+          cand_poly = bkml_parser::parse_polygon(candidate_list());
+          vcl_cout << " candidate list is parsed from file: " << candidate_list() << vcl_endl;
+          vcl_cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << vcl_endl;
+        }
+      }
+      else {
+        vcl_cout << " NO candidate list for this query image, full index space is considered" << vcl_endl;
+        is_candidate = false;
+      }
+      if (is_candidate) {
+        volm_geo_index::prune_tree(root, cand_poly);
+      }
       vcl_vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(root, leaves);
       // obtain leaf_id and hypo_id for current location
@@ -299,6 +349,7 @@ int main(int argc,  char** argv)
         double y_dist = abs(lat - loc_closest.y())*sec_to_meter;
         vgl_vector_2d<double> gt_dist_vect(x_dist, y_dist);
         double gt_dist = sqrt(gt_dist_vect.sqr_length());
+        vcl_cout << " loc_closest = " << loc_closest << " with leaf id = " << leaf->get_string() << " and hypo_id = " << hypo_id << vcl_endl;
         if (gt_dist > 0)
           log << " NOTE: distance from the closest location " << loc_closest << " in geolocation to location " << top_locs[i]
               << " is " << gt_dist << " meters\n";

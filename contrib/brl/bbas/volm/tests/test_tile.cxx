@@ -12,28 +12,42 @@
 static void test_tile()
 {
   vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles(); 
+  // test the lower left corner
   TEST("tile 1", tiles[0].lat_, 37);
+  TEST("tile 1", tiles[0].lon_, 118);
   
   double lat, lon, elev;
   tiles[0].cam_.lvcs()->get_origin(lat, lon, elev);
   
+  // test img to global for tile at North hemisphere and West direction
+  // Note that the tile boundary corresponds to pixel (1,1) to (3600,3600)
+  // pixels from (0,0) to (0,3600) and pixels from (0,0) to (3600,0) are defined as overlaped region
+  // pixel (0,0) correspond to (lon-0.5/nj, lat+1+0.5/ni)
   double lat2, lon2;
-  tiles[0].img_to_global(0, tiles[0].nj_, lon2, lat2);
-  TEST_NEAR("tile 1 img to global", lat2, 37, 0.01);
-  
-  unsigned i, j;
   tiles[0].img_to_global(0, tiles[0].nj_-1, lon2, lat2);
+  TEST_NEAR("tile 1 img to global", lat2,   37+tiles[0].scale_j()*0.5/tiles[0].nj(), 0.99*tiles[0].scale_j()*0.5/tiles[0].nj());
+  TEST_NEAR("tile 1 img to global", lon2, -118-tiles[0].scale_i()*0.5/tiles[0].ni(), 0.99*tiles[0].scale_i()*0.5/tiles[0].ni());
+  tiles[0].img_to_global(tiles[0].ni_-1, 0, lon2, lat2);
+  TEST_NEAR("tile 1 img to global", lat2,   38+tiles[0].scale_j()*0.5/tiles[0].nj(), 0.99*tiles[0].scale_j()*0.5/tiles[0].nj());
+  TEST_NEAR("tile 1 img to global", lon2, -117-tiles[0].scale_i()*0.5/tiles[0].ni(), 0.99*tiles[0].scale_i()*0.5/tiles[0].ni());
+  unsigned i_bdry, j_bdry;
+  tiles[0].global_to_img(-tiles[0].lon_, tiles[0].lat_, i_bdry, j_bdry);
+  TEST("tile1 global to img(boundary)", i_bdry, 0);
+  TEST("tile1 global to img(boundary)", j_bdry, 3600);
+
+  unsigned i, j;
   TEST("tile1 global to img", tiles[0].global_to_img(lon2, lat2, i, j), true);
-  TEST("tile1 global to img", i, 0);
-  vcl_cout << "j=" << j << ", tiles[0].nj_ = " <<  tiles[0].nj_ << '\n';
-  TEST("tile1 global to img", j+1, tiles[0].nj_);
-  
+  vcl_cout << " i = " << i << ", tiles[0].ni_ = " << tiles[0].ni() << '\n';
+  vcl_cout << " j = " << j << ", tiles[0].nj_ = " << tiles[0].nj() << '\n';
+  TEST("tile1 global to img", j, 0);
+  TEST("tile1 global to img", i+1, tiles[0].nj_);
+  // for location out of current tile, it will return nothing
   TEST("tile1 global to img", tiles[0].global_to_img(lon2+5, lat2, i, j), false);
   
-  volm_tile tt(37, -118, tiles[0].scale_i_, tiles[0].scale_j_, tiles[0].ni_, tiles[0].nj_);
+  volm_tile tt(38, -117, tiles[0].scale_i_, tiles[0].scale_j_, tiles[0].ni_, tiles[0].nj_);
   TEST("tt global to img", tt.global_to_img(lon2, lat2, i, j), true);
   TEST("tt global to img", i, 0);
-  vcl_cout << "j=" << j << ", tt.nj_ = " <<  tt.nj_ << '\n';
+  vcl_cout << " j = " << j << ", tt.nj_ = " <<  tt.nj_ << '\n';
   TEST("tt global to img", j+1, tt.nj_);
 
   //volm_tile ttt(37.622991f, 118.209999f, 'N', 'W', 1.108007f, 0.930012f, (unsigned)10000, (unsigned)10000);
@@ -59,6 +73,25 @@ static void test_tile()
   TEST_NEAR("tile_south image to global", lon_south, -71, 0.01);
   TEST_NEAR("tile_south image to global", lat_south, -34, 0.01);
 
+  // test tile at North hemisphere and East direction
+  volm_tile tile_east(12, 77, 'N', 'E', 1.0, 1.0, 3601, 3601);
+  TEST("tile_east global to image", tile_east.global_to_img(77, 13, i, j), true);
+  TEST("tile_east global to image", i, 0);
+  TEST("tile_east global to image", j, 0);
+  TEST("tile_east global to image", tile_east.global_to_img(78, 12, i, j), true);
+  TEST("tile_east global to image", i, 3600);
+  TEST("tile_east global to image", j, 3600);
+  double lat_east, lon_east;
+  tile_east.img_to_global(1800, 1800, lon_east, lat_east);
+  TEST_NEAR("tile_east global to image", lon_east, 77.5, 0.01);
+  TEST_NEAR("tile_east global to image", lat_east, 12.5, 0.01);
+  tile_east.img_to_global(3600,3600, lon_east, lat_east);
+  TEST_NEAR("tile_east image to global", lon_east, 78, 0.01);
+  TEST_NEAR("tile_east image to global", lat_east, 12, 0.01);
+  tile_east.img_to_global(0,0, lon_east, lat_east);
+  TEST_NEAR("tile_east image to global", lon_east, 77, 0.01);
+  TEST_NEAR("tile_east image to global", lat_east, 13, 0.01);
+
   vsl_b_ofstream ofs("test_tile.bin");
   tiles[0].b_write(ofs);
   ofs.close();
@@ -68,7 +101,7 @@ static void test_tile()
   t.b_read(ifs);
   TEST("tile 2", t.lat_, 37);
   double lat3, lon3;
-  t.img_to_global(0, t.nj_, lon3, lat3);
+  t.img_to_global(t.ni()-1, 0, lon3, lat3);
   TEST_NEAR("tile 2 img to global lat", lat3, lat2, 0.01);
   TEST_NEAR("tile 2 img to global lon", lon3, lon2, 0.01);
 
