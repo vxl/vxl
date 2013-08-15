@@ -54,7 +54,7 @@ bool bwm_create_satellite_resources_process(bprb_func_process& pro)
   bwm_satellite_resources_sptr res = new bwm_satellite_resources(folder, lower_left_lat, lower_left_lon, 
                                                                          upper_right_lat, upper_right_lon);
 
-
+  pro.set_output_val<bwm_satellite_resources_sptr>(0, res);
 
   return true;
 }

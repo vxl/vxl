@@ -77,6 +77,7 @@ class volm_tile
    static vcl_vector<volm_tile> generate_p1b_wr3_tiles();
    static vcl_vector<volm_tile> generate_p1b_wr4_tiles();
    static vcl_vector<volm_tile> generate_p1b_wr5_tiles();
+   static vcl_vector<volm_tile> generate_p1b_wr_tiles(int world_id);
    //: calculate width of the tile
    double calculate_width();
    double calculate_height();

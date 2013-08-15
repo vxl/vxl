@@ -343,6 +343,21 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr5_tiles()
   return p1b_tiles;
 }
 
+vcl_vector<volm_tile> volm_tile::generate_p1b_wr_tiles(int world_id)
+{
+  vcl_vector<volm_tile> tiles;
+  switch (world_id) {
+  case 1: { tiles = volm_tile::generate_p1b_wr1_tiles(); break; }
+  case 2: { tiles = volm_tile::generate_p1b_wr2_tiles(); break; }
+  case 3: { tiles = volm_tile::generate_p1b_wr3_tiles(); break; }
+  case 4: { tiles = volm_tile::generate_p1b_wr4_tiles(); break; }
+  case 5: { tiles = volm_tile::generate_p1b_wr5_tiles(); break; }
+  default: {
+    vcl_cerr << "Unknown world id: " << world_id << vcl_endl;
+           } }
+  return tiles;
+}
+
 vcl_string volm_tile::get_string()
 {
   vcl_stringstream str;

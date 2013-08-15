@@ -200,3 +200,96 @@ bool volm_io_tools::get_location_nlcd(vcl_vector<volm_img_info>& NLCD_imgs, doub
   }
   return found_it;
 }
+
+
+#include <volm/volm_geo_index2.h>
+#include <volm/volm_osm_objects.h>
+
+// a method to read the binary osm object file and also contstruct the volm_geo_index2, the method returns the root of the tree
+volm_geo_index2_node_sptr volm_io_tools::read_osm_data_and_tree(vcl_string geoindex_filename_pre, vcl_string osm_bin_filename, volm_osm_objects& osm_objs, double& min_size)
+{
+  vcl_string filename = geoindex_filename_pre + ".txt";
+  volm_geo_index2_node_sptr root = volm_geo_index2::read_and_construct<volm_osm_object_ids_sptr>(filename, min_size);
+  // obtain all leaves
+  vcl_vector<volm_geo_index2_node_sptr> leaves;
+  volm_geo_index2::get_leaves(root, leaves);
+  // load the content for valid leaves
+  for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+    vcl_string bin_file = leaves[l_idx]->get_label_name(geoindex_filename_pre, "osm");
+    if (!vul_file::exists(bin_file))
+      continue;
+    volm_geo_index2_node<volm_osm_object_ids_sptr>* ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
+    ptr->contents_ = new volm_osm_object_ids(bin_file);
+  }
+
+  // load the osm bin file to get real location date with unit of lon and lat, associated with ids stored in geo_index2
+  if (!vul_file::exists(osm_bin_filename)) {
+    vcl_cout << "ERROR: can not find osm binary: " << osm_bin_filename << vcl_endl;
+    return 0;
+  }
+
+  vsl_b_ifstream is(osm_bin_filename.c_str());
+  if (!is) {
+    vcl_cerr << "In volm_osm_object::volm_osm_object() -- cannot open: " << osm_bin_filename << vcl_endl;
+    return 0;
+  }
+  osm_objs.b_read(is);
+  is.close();
+
+#if 0
+  if (is_kml()) {
+      vcl_stringstream kml_pts, kml_roads, kml_regions;
+      kml_pts << out_pre() << "/p1b_wr" << world_id() << "_tile_" << tile_id() << "_osm_pts.kml";
+      kml_roads << out_pre() << "/p1b_wr" << world_id() << "_tile_" << tile_id() << "_osm_roads.kml";
+      kml_regions << out_pre() << "/p1b_wr" << world_id() << "_tile_" << tile_id() << "_osm_regions.kml";
+      osm_objs.write_pts_to_kml(kml_pts.str());
+      osm_objs.write_lines_to_kml(kml_roads.str());
+      osm_objs.write_polys_to_kml(kml_regions.str());
+  }
+#endif
+
+  return root;
+}
+
+
+void volm_io_tools::load_aster_dem_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)
+{
+  vcl_string file_glob = folder + "//ASTGTM2_*";
+  for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
+    volm_img_info info;
+
+    vcl_string folder = fn();
+    info.name = vul_file::strip_directory(folder);
+
+    info.img_name = folder + "//" + info.name + "_dem.tif";
+    
+
+    info.img_r = vil_load(info.img_name.c_str());
+    info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
+    vcl_cout << "ASTER DEM ni: " << info.ni << " nj: " << info.nj << vcl_endl;
+  
+    vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
+    vpgl_geo_camera *cam;
+    vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
+    vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
+
+    info.cam = cam; 
+    
+    double lat, lon;
+    cam->img_to_global(0.0, info.nj-1, lon, lat);
+    vgl_point_2d<double> lower_left(lon, lat);
+
+    vpgl_utm utm; int utm_zone; double x,y;
+    utm.transform(lat, lon, x, y, utm_zone);
+    vcl_cout << " zone of ASTER DEM img: " << info.name << ": " << utm_zone << " from lower left corner!\n";
+
+    cam->img_to_global(info.ni-1, 0.0, lon, lat);
+    vgl_point_2d<double> upper_right(lon, lat);
+    vgl_box_2d<double> bbox(lower_left, upper_right);
+    vcl_cout << "bbox: " << bbox << vcl_endl;
+    info.bbox = bbox;
+
+    infos.push_back(info);
+  }
+}
+ 

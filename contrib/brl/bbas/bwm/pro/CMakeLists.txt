@@ -25,7 +25,7 @@ ENDIF(EXPAT_FOUND)
 AUX_SOURCE_DIRECTORY(Templates bwm_pro_sources)
 
 ADD_LIBRARY(bwm_pro ${bwm_pro_sources})
-TARGET_LINK_LIBRARIES( bwm_pro bprb brip bwm_io vul)
+TARGET_LINK_LIBRARIES( bwm_pro bprb brip bwm_io vul bwm_algo)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

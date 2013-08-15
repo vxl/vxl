@@ -16,6 +16,8 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <bkml/bkml_parser.h>
 #include <vul/vul_timer.h>
+#include <volm/volm_io_tools.h>
+
 
 inline float next_mult_2(float val)
 {
@@ -218,6 +220,37 @@ int main(int argc,  char** argv)
 
 #include <volm/volm_geo_index.h>
 
+// find the elevation of the point and add it to the geo index if found
+void add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info>& infos, vgl_point_2d<double>& pt, double inc_in_sec_radius, bool search)
+{
+  // find the elevation of the hypotheses
+  float z = 0;
+  bool found_it = false;
+  for (unsigned mm = 0; mm < infos.size(); mm++) {
+    if (infos[mm].contains(pt)) {
+      double u,v;
+      infos[mm].cam->global_to_img(pt.x(), pt.y(), 0, u, v); 
+      int uu = (int)vcl_floor(u+0.5);
+      int vv = (int)vcl_floor(v+0.5);
+      if (infos[mm].valid_pixel(uu,vv)) {
+        vil_image_view<vxl_int_16> img(infos[mm].img_r);
+        z = img(uu,vv);
+        found_it = true;
+        break;
+      }
+    }
+  }
+  if (found_it) { // add the hypo
+    if (search) {
+      if (!volm_geo_index::exists(hyp_root, pt.y(), pt.x(), inc_in_sec_radius))
+        volm_geo_index::add_hypothesis(hyp_root, pt.x(), pt.y(), z);
+    } else
+      volm_geo_index::add_hypothesis(hyp_root, pt.x(), pt.y(), z);
+
+  }
+
+}
+
 // read the tiles of the region, create a geo index and write the hyps
 int main(int argc,  char** argv)
 {
@@ -234,9 +267,95 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> tile_id("-tile", "id of the tile", 0);
   vul_arg<unsigned> utm_zone("-zone", "utm zone to fill", 17);
   vul_arg<bool> read("-read", "if passed only read the index in the out_pre() folder and report some statistics", false);
+  vul_arg<bool> use_osm_roads("-osm_roads", "if passed, use the osm binary file to read the roads and generate location hypotheses along them", false);
+  vul_arg<vcl_string> osm_bin_file("-osm_bin", "the binary file that has all the objects", "");
+  vul_arg<vcl_string> osm_tree_folder("-osm_tree", "the geoindex tree folder that has the tree structure with the ids of osm objects at its leaves", "");
+  vul_arg<int> world_id("-world", "the id of the world", -1);
+
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
+  double arcsec_to_sec = 1.0f/3600.0f;
+  double inc_in_sec = inc()*arcsec_to_sec;
+  double inc_in_sec_rad = 3.0*inc_in_sec/4.0; // radius to search for existence of before adding a new one
+
+  if (use_osm_roads()) {  // if an osm binary file is specified
+    if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || osm_bin_file().compare("") == 0 || osm_tree_folder().compare("") == 0 || world_id() < 0) {
+      vul_arg_display_usage_and_exit();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+
+    volm_osm_objects osm_objs; 
+    double min_size;
+    vcl_stringstream file_name_pre;
+    file_name_pre << osm_tree_folder() << "geo_index2_wr" << world_id() << "_tile_" << tile_id();
+    volm_geo_index2_node_sptr root = volm_io_tools::read_osm_data_and_tree(file_name_pre.str(), osm_bin_file(), osm_objs, min_size);
+    if (!root) {
+      vcl_cerr << "Errors in reading " << file_name_pre.str() << " and/or " << osm_bin_file() << vcl_endl;
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    vcl_stringstream kml_roads;
+    kml_roads << out_pre() << "/p1b_wr" << world_id() << "_tile_" << tile_id() << "_osm_roads.kml";
+    osm_objs.write_lines_to_kml(kml_roads.str());
+
+    // load the DEM tiles
+    vcl_vector<volm_img_info> infos;
+    volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
+
+    vcl_vector<volm_tile> tiles = volm_tile::generate_p1b_wr_tiles(world_id());
+    if (!tiles.size()) {  
+      vcl_cerr << "Unknown world id: " << world_id() << vcl_endl;
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+     
+    vcl_cout << " number of tiles: " << tiles.size() << vcl_endl;
+    unsigned i = tile_id();
+    if (i >= tiles.size() || i < 0) {
+      vcl_cerr << "Unknown tile id: " << i << vcl_endl;
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    float size = 0.1;  // in seconds, set a fixed size for the leaves
+    volm_geo_index_node_sptr hyp_root = volm_geo_index::construct_tree(tiles[i], (float)size);
+    // write the geo index and the hyps
+    vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << i << ".txt";
+    volm_geo_index::write(hyp_root, file_name.str(), (float)size);
+    unsigned depth = volm_geo_index::depth(hyp_root);
+    vcl_stringstream file_name2; file_name2 << out_pre() << "geo_index_tile_" << i << ".kml";
+    volm_geo_index::write_to_kml(hyp_root, 0, file_name2.str());
+    vcl_stringstream file_name3; file_name3 << out_pre() << "geo_index_tile_" << i << "_depth_" << depth << ".kml";
+    volm_geo_index::write_to_kml(hyp_root, depth, file_name3.str());
+
+    // now go over each road in the osm file and insert into the tree of loc hyps
+    vcl_vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
+    for (unsigned k = 0; k < roads.size(); k++) {
+      volm_osm_object_line_sptr r = roads[k];
+      vcl_string name = r->prop().name_;
+      vcl_vector<vgl_point_2d<double> > points = r->line();
+      for (unsigned kk = 1; kk < points.size(); kk++) {
+        add_hypo(hyp_root, infos, points[kk-1], inc_in_sec_rad, true);
+        // now interpolate along a straight line, assume locally planar
+        double dif_dy = points[kk].y() - points[kk-1].y();
+        double dif_dx = points[kk].x() - points[kk-1].x();
+        double ds = vcl_sqrt(dif_dy*dif_dy + dif_dx*dif_dx);
+        double inc_dy = inc_in_sec*(dif_dy/ds);
+        double inc_dx = inc_in_sec*(dif_dx/ds);
+        int cnt = 0;
+        while (ds > inc_in_sec) {
+          ds = ds-inc_in_sec;
+          cnt++;
+          double x = points[kk-1].x()+inc_dx*cnt;
+          double y = points[kk-1].y()+inc_dy*cnt;
+          add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
+        }
+      }
+    }
+    
+    unsigned r_cnt = volm_geo_index::hypo_size(hyp_root) ;
+    vcl_cout << " root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
+    return volm_io::SUCCESS;
+  }
+
+  // for P1A regions
 
   // change to wr1 tiles for desert
   vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
@@ -270,6 +389,7 @@ int main(int argc,  char** argv)
     return volm_io::SUCCESS;
   }
 
+
   if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || in_poly().compare("") == 0) {
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
@@ -280,9 +400,6 @@ int main(int argc,  char** argv)
   vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
 
   // determine depth of the geo index depending on inc, if we want to have 100x100 = 10K hyps in each leaf
-  double arcsec_to_sec = 1.0f/3600.0f;
-  double inc_in_sec = inc()*arcsec_to_sec;
-  double inc_in_sec_rad = 3.0*inc_in_sec/4.0; // radius to search for existence of before adding a new one
   double size = nh()*inc_in_sec; // inc() is given in arcseconds, convert it to seconds;
   vcl_cout << " each leaf has size: " << size << " seconds in geographic coords..\n"
            << " increments in seconds: " << inc_in_sec << '\n'
@@ -320,7 +437,7 @@ int main(int argc,  char** argv)
 
     // write the geo index and the hyps
     vcl_vector<volm_geo_index_node_sptr> leaves;
-    vgl_box_2d<float> leaf_box = t.bbox();
+    vgl_box_2d<double> leaf_box = t.bbox_double();
     volm_geo_index::get_leaves(root, leaves, leaf_box);
     if (!leaves.size())
       continue;
