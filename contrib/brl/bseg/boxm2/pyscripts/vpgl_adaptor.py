@@ -483,22 +483,39 @@ def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename,init_finish=
     boxm2_batch.set_input_bool(3,init_finish);
     boxm2_batch.run_process();
 
-def load_geotiff_cam(tfw_filename, lvcs, utm_zone, utm_hemisphere):
-    boxm2_batch.init_process("vpglLoadGeoCameraProcess");
-    boxm2_batch.set_input_string(0, tfw_filename);
-    boxm2_batch.set_input_from_db(1, lvcs);
-    boxm2_batch.set_input_int(2, utm_zone);
-    boxm2_batch.set_input_unsigned(3, utm_hemisphere);
-    boxm2_batch.run_process();
-    (c_id,c_type) = boxm2_batch.commit_output(0);
+def load_geotiff_cam(tfw_filename, lvcs=0, utm_zone=0, utm_hemisphere=0):
+    bvxm_batch.init_process("vpglLoadGeoCameraProcess");
+    bvxm_batch.set_input_string(0, tfw_filename);
+    if lvcs != 0:
+      bvxm_batch.set_input_from_db(1, lvcs);
+    bvxm_batch.set_input_int(2, utm_zone);
+    bvxm_batch.set_input_unsigned(3, utm_hemisphere);
+    bvxm_batch.run_process();
+    (c_id,c_type) = bvxm_batch.commit_output(0);
     cam = dbvalue(c_id,c_type);
     return cam;
+
+def save_geocam_to_tfw(cam, tfw_filename):
+    bvxm_batch.init_process("vpglSaveGeoCameraTFWProcess");
+    bvxm_batch.set_input_from_db(0, cam);
+    bvxm_batch.set_input_string(1, tfw_filename);
+    bvxm_batch.run_process();
 
 def load_geotiff_cam2(filename, ni, nj):
     boxm2_batch.init_process("vpglLoadGeoCameraProcess2");
     boxm2_batch.set_input_string(0, filename);
     boxm2_batch.set_input_unsigned(1, ni);
     boxm2_batch.set_input_unsigned(2, nj);
+    boxm2_batch.run_process();
+    (c_id,c_type) = boxm2_batch.commit_output(0);
+    cam = dbvalue(c_id,c_type);
+    return cam;
+
+def load_geotiff_from_header(filename, lvcs=0):
+    boxm2_batch.init_process("vpglLoadGeotiffCamFromHeaderProcess");
+    boxm2_batch.set_input_string(0, filename);
+    if lvcs != 0:
+      boxm2_batch.set_input_from_db(1, lvcs);
     boxm2_batch.run_process();
     (c_id,c_type) = boxm2_batch.commit_output(0);
     cam = dbvalue(c_id,c_type);

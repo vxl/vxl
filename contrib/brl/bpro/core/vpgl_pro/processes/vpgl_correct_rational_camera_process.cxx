@@ -44,7 +44,7 @@ bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
       return false;
     }
     else {
-      vcl_cout << "In vpgl_correct_rational_camera_process() - correcting rational camera..\n";
+      vcl_cout << "In vpgl_correct_rational_camera_process() - correcting rational camera.. with off_u: " << gt_offset_u << " off_v: " << gt_offset_v << "\n";
       vpgl_rational_camera<double> cam_out_rational(*cam_rational);
       double offset_u, offset_v;
       cam_out_rational.image_offset(offset_u,offset_v);

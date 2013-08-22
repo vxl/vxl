@@ -24,8 +24,14 @@ bool vpgl_load_geo_camera_process_cons(bprb_func_process& pro)
   input_types.push_back("unsigned");  // UTM hemisphere, pass 0 for north, 1 for south
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  //camera output
-  return pro.set_input_types(input_types)
+
+  bool good = pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
+  
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs;  // initialize lvcs to empty
+  pro.set_input(1, new brdb_value_t<vpgl_lvcs_sptr>(lvcs));
+
+  return good;
 }
 
 //: Execute the process
@@ -292,6 +298,7 @@ bool vpgl_load_geo_camera_process3_cons(bprb_func_process& pro)
   return good;
 }
 
+
 //: Execute the process
 bool vpgl_load_geo_camera_process3(bprb_func_process& pro)
 {
@@ -311,3 +318,47 @@ bool vpgl_load_geo_camera_process3(bprb_func_process& pro)
   return true;
 }
 
+
+
+//: construct the camera reading from a tfw file 
+bool vpgl_save_geo_camera_tfw_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr"); 
+  input_types.push_back("vcl_string"); 
+  vcl_vector<vcl_string> output_types;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+//: Execute the process
+bool vpgl_save_geo_camera_tfw_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs()!= 2) {
+    vcl_cout << "vpgl_save_geo_camera_tfw_process: The number of inputs should be 2" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
+  vcl_string filename = pro.get_input<vcl_string>(1);
+  
+  vpgl_geo_camera *geo_cam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  if (!geo_cam) {
+    vcl_cerr << "vpgl_save_geo_camera_tfw_process: Cannot cast camera to a geo cam! Exiting!\n";
+    return false;
+  }
+
+  vcl_ofstream ofs(filename);
+  vnl_matrix<double> trans_matrix = geo_cam->trans_matrix();
+  ofs.precision(12);
+  ofs << trans_matrix[0][0] << '\n';
+  ofs << trans_matrix[0][1] << '\n';
+  ofs << trans_matrix[1][0] << '\n';
+  ofs << trans_matrix[1][1] << '\n';
+  ofs << trans_matrix[0][3] << '\n';
+  ofs << trans_matrix[1][3] << '\n';
+  ofs.close();
+  
+  return true;
+}

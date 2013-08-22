@@ -388,6 +388,7 @@ bool volm_geo_index::add_hypothesis(volm_geo_index_node_sptr root, double lon, d
     if (root->extent_.contains(lon, lat)) { 
       root->hyps_ = new volm_loc_hyp;
       root->hyps_->add(lat, lon, elev);
+      return true;
     }
   }
 

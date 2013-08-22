@@ -22,6 +22,7 @@ bool bvxm_edgemap_ortho_process_cons(bprb_func_process& pro)
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
   output_types_[2] = "vil_image_view_base_sptr";  // also return a z image - the z value of the largest prob edge along the ortho ray
+  output_types_[3] = "vpgl_camera_double_sptr";  // return the ortho camera of the scene, as it may be needed for other processes
   return pro.set_output_types(output_types_);
 }
 
@@ -102,6 +103,7 @@ bool bvxm_edgemap_ortho_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, img_eei_f);
   pro.set_output_val<vil_image_view_base_sptr>(1, img_eei_vb);
   pro.set_output_val<vil_image_view_base_sptr>(2, img_height);
+  pro.set_output_val<vpgl_camera_double_sptr>(3, camera);
   
   return true;
 }

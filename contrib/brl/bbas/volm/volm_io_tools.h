@@ -66,6 +66,7 @@ public:
   static volm_geo_index2_node_sptr read_osm_data_and_tree(vcl_string geoindex_filename_pre, vcl_string osm_bin_filename, volm_osm_objects& osm_objs, double& min_size);
 
   static void load_aster_dem_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
+  static bool find_min_max_height(vgl_point_2d<double>& lower_left, vgl_point_2d<double>& upper_right, vcl_vector<volm_img_info>& infos, double& min, double& max);
 
 };
 

@@ -56,6 +56,8 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
   unsigned j = 0;
   output_types_[j++] = "vpgl_camera_double_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
+  output_types_[j++] = "double";
+  output_types_[j++] = "double";
   return pro.set_output_types(output_types_);
 }
 
@@ -270,6 +272,8 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   pro.set_output_val<vpgl_camera_double_sptr>(j++, camera_out);
   // update the edge image and store
   pro.set_output_val<vil_image_view_base_sptr>(j++, new vil_image_view<vxl_byte>(expected_edge_image_output));
+  pro.set_output_val<double>(j++, best_offset_u);
+  pro.set_output_val<double>(j++, best_offset_v);
 
   return true;
 }

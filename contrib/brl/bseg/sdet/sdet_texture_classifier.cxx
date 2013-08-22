@@ -785,6 +785,13 @@ vcl_vector<vcl_string> sdet_texture_classifier::get_training_categories()
     cats.push_back(iter->first);
   return cats;
 }
+vcl_vector<vcl_string> sdet_texture_classifier::get_dictionary_categories()
+{
+  vcl_vector<vcl_string> cats;
+  for (vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::iterator iter = texton_dictionary_.begin(); iter != texton_dictionary_.end(); iter++)
+    cats.push_back(iter->first);
+  return cats;
+}
 
 
 void sdet_texture_classifier::print_dictionary() const

@@ -64,7 +64,11 @@ def rpc_registration(world, cropped_cam, cropped_edge_image, uncertainty, shift_
   cam = dbvalue(cam_id,cam_type);
   (expected_edge_image_id,expected_edge_image_type) = bvxm_batch.commit_output(1);
   expected_edge_image=dbvalue(expected_edge_image_id,expected_edge_image_type);
-  return cam, expected_edge_image
+  (offset_u_id,offset_u_type) = bvxm_batch.commit_output(2);
+  offset_u = bvxm_batch.get_output_double(offset_u_id);
+  (offset_v_id,offset_v_type) = bvxm_batch.commit_output(3);
+  offset_v = bvxm_batch.get_output_double(offset_v_id);
+  return cam, expected_edge_image, offset_u, offset_v
 
 def render_height_map(world):
   print("Rendering height map");
@@ -87,7 +91,9 @@ def render_ortho_edgemap(world, scale=0):
   out_e_img_byte = dbvalue(id, type);
   (id, type) = bvxm_batch.commit_output(2);
   out_h_img = dbvalue(id, type);
-  return out_e_img, out_e_img_byte, out_h_img
+  (id, type) = bvxm_batch.commit_output(3);
+  ortho_cam = dbvalue(id, type);
+  return out_e_img, out_e_img_byte, out_h_img, ortho_cam
 
 ############## some utilities, put here for now ##########
 def image_to_vrml_points(out_e_img, out_h_img, output_filename, prob_thres):

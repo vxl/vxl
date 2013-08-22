@@ -19,7 +19,7 @@
 namespace bvxm_rpc_registration_process_globals
 {
   const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 2;
+  const unsigned n_outputs_ = 4;
 }
 
 //: set input and output types

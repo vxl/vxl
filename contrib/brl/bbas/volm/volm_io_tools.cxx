@@ -9,6 +9,7 @@
 #include <bkml/bkml_write.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_crop.h>
 
 
 unsigned int volm_io_tools::northing = 0;  // WARNING: north hard-coded
@@ -259,37 +260,159 @@ void volm_io_tools::load_aster_dem_imgs(vcl_string const& folder, vcl_vector<vol
     volm_img_info info;
 
     vcl_string folder = fn();
-    info.name = vul_file::strip_directory(folder);
 
-    info.img_name = folder + "//" + info.name + "_dem.tif";
-    
+    vcl_string file_glob2 = folder + "//" + "*_dem.tif";
+    for (vul_file_iterator fn2 = file_glob2.c_str(); fn2; ++fn2) {
 
-    info.img_r = vil_load(info.img_name.c_str());
-    info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
-    vcl_cout << "ASTER DEM ni: " << info.ni << " nj: " << info.nj << vcl_endl;
+      //info.name = vul_file::strip_directory(folder);
+      //info.img_name = folder + "//" + info.name + "_dem.tif";
+      info.img_name = fn2();
+      info.name = vul_file::strip_directory(info.img_name);
+      info.name = vul_file::strip_extension(info.name);
+
+      info.img_r = vil_load(info.img_name.c_str());
+      info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
+      vcl_cout << "ASTER DEM ni: " << info.ni << " nj: " << info.nj << vcl_endl;
   
-    vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
-    vpgl_geo_camera *cam;
-    vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
-    vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
+      vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
+      vpgl_geo_camera *cam;
+      vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
+      vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
 
-    info.cam = cam; 
+      info.cam = cam; 
     
-    double lat, lon;
-    cam->img_to_global(0.0, info.nj-1, lon, lat);
-    vgl_point_2d<double> lower_left(lon, lat);
+      double lat, lon;
+      cam->img_to_global(0.0, info.nj-1, lon, lat);
+      vgl_point_2d<double> lower_left(lon, lat);
 
-    vpgl_utm utm; int utm_zone; double x,y;
-    utm.transform(lat, lon, x, y, utm_zone);
-    vcl_cout << " zone of ASTER DEM img: " << info.name << ": " << utm_zone << " from lower left corner!\n";
+      vpgl_utm utm; int utm_zone; double x,y;
+      utm.transform(lat, lon, x, y, utm_zone);
+      vcl_cout << " zone of ASTER DEM img: " << info.name << ": " << utm_zone << " from lower left corner!\n";
 
-    cam->img_to_global(info.ni-1, 0.0, lon, lat);
-    vgl_point_2d<double> upper_right(lon, lat);
-    vgl_box_2d<double> bbox(lower_left, upper_right);
-    vcl_cout << "bbox: " << bbox << vcl_endl;
-    info.bbox = bbox;
+      cam->img_to_global(info.ni-1, 0.0, lon, lat);
+      vgl_point_2d<double> upper_right(lon, lat);
+      vgl_box_2d<double> bbox(lower_left, upper_right);
+      vcl_cout << "bbox: " << bbox << vcl_endl;
+      info.bbox = bbox;
 
-    infos.push_back(info);
+      infos.push_back(info);
+    }
   }
 }
+
+void crop_and_find_min_max(vcl_vector<volm_img_info>& infos, unsigned img_id, int i0, int j0, int crop_ni, int crop_nj, double& min, double& max)
+{
+  vil_image_view<vxl_int_16> img(infos[img_id].img_r);
+  vil_image_view<vxl_int_16> img_crop = vil_crop(img, i0, crop_ni, j0, crop_nj); 
+  for (unsigned ii = 0; ii < img_crop.ni(); ii++)
+    for (unsigned jj = 0; jj < img_crop.nj(); jj++) {
+      if (min > img_crop(ii, jj)) min = img_crop(ii, jj);
+      if (max < img_crop(ii, jj)) max = img_crop(ii, jj);
+    }
+}
+
+bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_point_2d<double>& upper_right, vcl_vector<volm_img_info>& infos, double& min, double& max)
+{
+  // find the image of all four corners
+  vcl_vector<vcl_pair<unsigned, vcl_pair<int, int> > > corners;
+  vcl_vector<vgl_point_2d<double> > pts;
+  pts.push_back(vgl_point_2d<double>(lower_left.x(), upper_right.y()));
+  pts.push_back(vgl_point_2d<double>(upper_right.x(), lower_left.y()));
+  pts.push_back(lower_left); 
+  pts.push_back(upper_right); 
+
+  for (unsigned k = 0; k < pts.size(); k++) {
+    // find the image
+    for (unsigned j = 0; j < infos.size(); j++) {
+      double u, v;
+      infos[j].cam->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
+      int uu = (int)vcl_floor(u+0.5);
+      int vv = (int)vcl_floor(v+0.5);
+      if (uu < 0 || vv < 0 || uu >= infos[j].ni || vv >= infos[j].nj)
+        continue;
+      vcl_pair<unsigned, vcl_pair<int, int> > pp(j, vcl_pair<int, int>(uu, vv));
+      corners.push_back(pp);
+      break;
+    }
+  }
+  if (corners.size() != 4) {
+    vcl_cerr << "Cannot locate all 4 corners among these DEM tiles!\n";
+    return false;
+  }
+  // case 1: all corners are in the same image
+  if (corners[0].first == corners[1].first) {
+    // crop the image
+    int i0 = corners[0].second.first;
+    int j0 = corners[0].second.second;
+    int crop_ni = corners[1].second.first-corners[0].second.first+1;
+    int crop_nj = corners[1].second.second-corners[0].second.second+1;
+    crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
+    return true;
+  }
+  // case 2: two corners are in the same image
+  if (corners[0].first == corners[2].first && corners[1].first == corners[3].first) {
+    // crop the first image
+    int i0 = corners[0].second.first;
+    int j0 = corners[0].second.second;
+    int crop_ni = infos[corners[0].first].ni - corners[0].second.first;
+    int crop_nj = corners[2].second.second-corners[0].second.second+1;
+    crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
+    
+    // crop the second image
+    i0 = 0;
+    j0 = corners[3].second.second;
+    crop_ni = corners[3].second.first + 1;
+    crop_nj = corners[1].second.second-corners[3].second.second+1;
+    crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
+    return true;
+  }
+  // case 3: two corners are in the same image
+  if (corners[0].first == corners[3].first && corners[1].first == corners[2].first) {
+    // crop the first image
+    int i0 = corners[0].second.first;
+    int j0 = corners[0].second.second;
+    int crop_ni = corners[3].second.first - corners[0].second.first + 1;
+    int crop_nj = infos[corners[0].first].nj - corners[0].second.second; 
+    crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
+    
+    // crop the second image
+    i0 = corners[2].second.first;
+    j0 = 0; 
+    crop_ni = corners[1].second.first - corners[2].second.first + 1;
+    crop_nj = corners[2].second.second + 1;
+    crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
+    return true;
+  }
+  // case 4: all corners are in a different image
+  // crop the first image, image of corner 0
+  int i0 = corners[0].second.first;
+  int j0 = corners[0].second.second;
+  int crop_ni = infos[corners[0].first].ni - corners[0].second.first;
+  int crop_nj = infos[corners[0].first].nj - corners[0].second.second;
+  crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
+  
+  // crop the second image, image of corner 1
+  i0 = 0;
+  j0 = 0;
+  crop_ni = corners[1].second.first + 1;
+  crop_nj = corners[1].second.second + 1;
+  crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
+  
+  // crop the third image, image of corner 2
+  i0 = corners[2].second.first;
+  j0 = 0;
+  crop_ni = infos[corners[2].first].ni - corners[2].second.first;
+  crop_nj = corners[2].second.second + 1;
+  crop_and_find_min_max(infos, corners[2].first, i0, j0, crop_ni, crop_nj, min, max);
+  
+  // crop the fourth image, image of corner 3
+  i0 = 0;
+  j0 = corners[3].second.second;
+  crop_ni = corners[3].second.first + 1;
+  crop_nj = infos[corners[3].first].nj - corners[3].second.second;
+  crop_and_find_min_max(infos, corners[3].first, i0, j0, crop_ni, crop_nj, min, max);
+  
+  return true;
+}
+
  

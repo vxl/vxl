@@ -166,6 +166,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   //: return a list of category names for which training data is available
   vcl_vector<vcl_string> get_training_categories();
+  vcl_vector<vcl_string> get_dictionary_categories();
 
   //: set category colors
   void set_category_colors(vcl_map< vcl_string, vnl_vector_fixed<float, 3> > const& color_map)

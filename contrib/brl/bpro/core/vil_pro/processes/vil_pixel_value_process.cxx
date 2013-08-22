@@ -69,6 +69,14 @@ bool vil_pixel_value_process(bprb_func_process& pro)
     pro.set_output_val<float>(0, pixVal);
     return true;
   }
+  else if (img->pixel_format() == VIL_PIXEL_FORMAT_INT_16)
+  {
+    vil_image_view<vxl_int_16>& inimg = *dynamic_cast<vil_image_view<vxl_int_16>* >(img.ptr());
+    //float pixVal = inimg(i,j) / 65535.0f;
+    float pixVal = inimg(i,j);  // we want the value as is, why scaling??
+    pro.set_output_val<float>(0, pixVal);
+    return true;
+  }
   else if (img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
   {
     vil_image_view<float>& inimg = *dynamic_cast<vil_image_view<float>* >(img.ptr());
