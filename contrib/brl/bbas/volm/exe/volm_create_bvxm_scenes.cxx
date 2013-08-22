@@ -82,7 +82,7 @@ int main(int argc, char** argv)
     //vcl_cout << "min: " << min << " " << max << "\n";
 
     //construct lvcs
-    vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lower_left.y(), lower_left.x(), min, vpgl_lvcs::wgs84);
+    vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lower_left.y(), lower_left.x(), min, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
 
   }
