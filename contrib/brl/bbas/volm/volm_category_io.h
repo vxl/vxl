@@ -69,7 +69,8 @@ public:
                     NLCD_DWARF_SCRUB = 51, NLCD_SHRUB = 52,
                     NLCD_GRASSLAND = 71, NLCD_SEDGE = 72, NLCD_LICHENS = 73, NLCD_MOSS = 74,
                     NLCD_PASTURE = 81, NLCD_CROPS = 82,
-                    NLCD_WOODY_WETLAND = 90, NLCD_EMERGENT_WETLAND = 95};
+                    NLCD_WOODY_WETLAND = 90, NLCD_EMERGENT_WETLAND = 95,
+                    BUILDING_TALL = 119};
 
   enum geo_cover_values {GEO_DECIDUOUS_FOREST = 1, GEO_EVERGREEN_FOREST = 2, GEO_SHRUB = 3,
                          GEO_GRASSLAND = 4,  GEO_BARREN = 5,  GEO_URBAN = 6,
@@ -88,6 +89,12 @@ public:
 
   //: table to transfer geo_cover
   static vcl_map<int, volm_land_layer> geo_land_table;
+
+  //: table of all possible volm_object
+  static vcl_vector<vcl_string> volm_category_name_table;
+
+  //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (id should be same as volm_land_layer id)
+  static vcl_map<unsigned, volm_land_layer> volm_land_table;
 
 };
 

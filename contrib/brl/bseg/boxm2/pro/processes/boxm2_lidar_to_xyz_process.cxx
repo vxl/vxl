@@ -204,6 +204,9 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   else if (vil_image_view<short>* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr())) {
     nii = img->ni();  nji = img->nj();
   }
+  else if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
+    nii = img->ni();  nji = img->nj();
+  }
   vcl_cout << " image size: "<< nii << " x " << nji << vcl_endl;
 
   vpgl_geo_camera *cam;
@@ -257,9 +260,10 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
         // dynamically cast the image and obtain the pixel value
         if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float> * > (img_sptr.ptr()))
           (*out_img_z)(i,j) = (*img)(uu,vv)-orig_elev;
-        else if (vil_image_view<short>* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr())) {
+        else if (vil_image_view<short>* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr()))
           (*out_img_z)(i,j) = (*img)(uu,vv)-orig_elev;
-        }
+        else if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * > (img_sptr.ptr()))
+          (*out_img_z)(i,j) = (*img)(uu,vv);
       }
     }
   

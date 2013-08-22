@@ -242,7 +242,7 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
 
   if (!scene->block_contains(local_h_pt_d, curr_block, local)) {
     if (!scene->contains(local_h_pt_d, curr_block, local)) {
-      vcl_cerr << " Scene does not location -- lon: " << lon << " lat: " << lat << " elev: " << elev
+      vcl_cerr << " Scene does not contain location -- lon: " << lon << " lat: " << lat << " elev: " << elev
                << " ( " << local_h_pt_d << "), writing empty array for it!\n";
       vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
       vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);

@@ -62,6 +62,9 @@ public:
 
   static bool get_location_nlcd(vcl_vector<volm_img_info>& infos, double lat, double lon, double elev, unsigned char& label);
 
+  //: expend a list of line segment to a polygon given a width
+  static bool expend_line(vcl_vector<vgl_point_2d<double> > line, double const& width, vgl_polygon<double>& poly);
+
   // a method to read the binary osm object file and also contstruct the volm_geo_index2, the method returns the root and the min_size of the tree 
   static volm_geo_index2_node_sptr read_osm_data_and_tree(vcl_string geoindex_filename_pre, vcl_string osm_bin_filename, volm_osm_objects& osm_objs, double& min_size);
 

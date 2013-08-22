@@ -26,6 +26,7 @@
 #include <vcl_sstream.h>
 
 #include <volm/volm_io.h>
+#include <volm/volm_category_io.h>
 
 #define NUM_CIRCL_SEC 12
 
@@ -598,6 +599,34 @@ void bwm_tableau_cam::save_depth_map_scene()
 
 vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()
 {
+#if 1
+  return volm_osm_category_io::volm_category_name_table;
+#endif
+#if 0
+  vcl_map<unsigned, volm_land_layer> m;
+  vcl_map<int, volm_land_layer> nlcd_table = volm_osm_category_io::nlcd_land_table;
+  vcl_map<int, volm_land_layer> geo_table = volm_osm_category_io::geo_land_table;
+  vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
+  vcl_string osm_to_volm_txt = "./osm_to_volm_labels.txt";
+  volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
+  
+  for (vcl_map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
+    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+
+  for (vcl_map<int, volm_land_layer>::iterator mit = geo_table.begin(); mit != geo_table.end(); mit++)
+    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+
+  for (vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>::iterator mit = osm_land_table.begin();
+       mit != osm_land_table.end(); ++mit)
+    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+
+  vcl_vector<vcl_string> out;
+  for (vcl_map<unsigned, volm_land_layer>::iterator mit = m.begin(); mit != m.end(); ++mit)
+    out.push_back(mit->second.name_);
+  return out;
+#endif
+
+#if 0
   vcl_vector<vcl_string> land_types;
   vcl_map<unsigned char, vcl_vector<vcl_string> > temp;
   vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
@@ -615,6 +644,7 @@ vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()
     land_types.push_back(land_name);
   }
   return land_types;
+#endif
 }
 
 vcl_vector<vcl_string> bwm_tableau_cam::set_orient_types()

@@ -81,6 +81,17 @@ static void test_category_io()
        mit != volm_osm_category_io::geo_land_table.end(); ++mit) {
     vcl_cout << " geo_cover id = " << mit->first << " ----> ";  mit->second.print();  vcl_cout << '\n';
   }
+
+  // output the volm_land_table
+  for (vcl_map<unsigned, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table.begin();
+       mit != volm_osm_category_io::volm_land_table.end(); ++mit) {
+    vcl_cout << " id = " << mit->first << " --> ";  mit->second.print(); vcl_cout << '\n';
+  }
+  
+  unsigned cnt = 0;
+  for (vcl_vector<vcl_string>::iterator vit = volm_osm_category_io::volm_category_name_table.begin();
+       vit != volm_osm_category_io::volm_category_name_table.end(); ++vit)
+    vcl_cout << " id = " << cnt++ << " ---> name = " << *vit << vcl_endl;
 }
 
 TESTMAIN(test_category_io);

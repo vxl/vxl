@@ -391,6 +391,7 @@ def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickne
 
   # to save space by not refining empty voxels below surface voxels
   if ingest_space:
+    print "crust_thickness = ", crust_thickness
     scene.ingest_height_map_space(x_img, y_img, z_img, crust_thickness);
   #scene.write_cache()
 
@@ -1024,6 +1025,21 @@ def prune_scene_blocks_by_dem(scene, dem_img, tile_lat, tile_lon, hemisphere, di
   prune_scene = dbvalue(scene_id, scene_type);
   return prune_scene;
 
+# change the scene resolution by geo cover
+def change_scene_res_by_geo_cover(scene, img_fname, refine_coefficient = 1):
+  boxm2_batch.init_process("boxm2ChangeSceneResByGeoCover");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_string(1, img_fname);
+  boxm2_batch.set_input_int(2, refine_coefficient);
+  result = boxm2_batch.run_process();
+  # return scene
+  if result:
+    (scene_id, scene_type) = boxm2_batch.commit_output(0);
+    changed_scene = dbvalue(scene_id, scene_type);
+  else:
+    changed_scene = 0;
+  return changed_scene;
+
 # Create multi block scene - params is a hash of scene parameters
 def save_multi_block_scene(params) :
 
@@ -1410,6 +1426,32 @@ def generate_xyz_from_lidar(scene, tiff_lidar):
     y_img = 0;
     z_img = 0;
   return x_img, y_img, z_img
+
+# Create x y z images from geo cover images and open street map objects
+def genearate_xyz_from_osm(scene, tiff_geo_cover, osm_bin):
+  boxm2_batch.init_process("boxm2OSMToXYZProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_string(1, tiff_geo_cover);
+  boxm2_batch.set_input_string(2, osm_bin);
+  result = boxm2_batch.run_process();
+  if result:
+    (xi_id, xi_type) = boxm2_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = boxm2_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = boxm2_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+    (label_img_id, label_img_id_type) = boxm2_batch.commit_output(3);
+    label_img = dbvalue(label_img_id, label_img_id_type);
+    (label_color_id, label_color_type) = boxm2_batch.commit_output(4);
+    label_color_img = dbvalue(label_color_id, label_color_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
+    label_img = 0
+    label_color_img = 0;
+  return x_img, y_img, z_img, label_img, label_color_img;
 
 # Create x y z images from a class image at the resolution of the scene, reads image geo cam from the image file name
 def generate_xyz_from_label_img(scene, label_tiff):

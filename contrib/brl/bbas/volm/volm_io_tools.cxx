@@ -202,6 +202,34 @@ bool volm_io_tools::get_location_nlcd(vcl_vector<volm_img_info>& NLCD_imgs, doub
   return found_it;
 }
 
+bool volm_io_tools::expend_line(vcl_vector<vgl_point_2d<double> > line, double const& w, vgl_polygon<double>& poly)
+{
+  vcl_vector<vgl_point_2d<double> > sheet;
+  vcl_vector<vgl_point_2d<double> > pts_u;
+  vcl_vector<vgl_point_2d<double> > pts_d;
+  unsigned n_pts = line.size();
+  for (unsigned i = 0; i < n_pts-1; i++) {
+    vgl_point_2d<double> s, e;
+    s = line[i];  e = line[i+1];
+    vgl_line_2d<double> seg(s, e);
+    vgl_vector_2d<double> n = seg.normal();
+    vgl_point_2d<double> su, sd, eu, ed;
+    su = s + 0.5*w*n;  sd = s - 0.5*w*n;
+    pts_u.push_back(su);  pts_d.push_back(sd);
+    if (i == n_pts-2) {
+      eu = e + 0.5*w*n;  ed = e - 0.5*w*n;
+      pts_u.push_back(eu);  pts_d.push_back(ed);
+    }
+  }
+  // rearrange the point list
+  for (unsigned i = 0; i < pts_u.size(); i++)
+    sheet.push_back(pts_u[i]);
+  for (int i = pts_d.size()-1; i >=0; i--)
+    sheet.push_back(pts_d[i]);
+  poly.push_back(sheet);
+  return true;
+}
+
 
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_osm_objects.h>

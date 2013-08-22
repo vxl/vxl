@@ -2,6 +2,7 @@
 //:
 // \file
 #include <vul/vul_file.h>
+#include <vcl_where_root_dir.h>
 
 bool volm_land_layer::contains(vcl_string name)
 {
@@ -82,6 +83,12 @@ vcl_map<int, volm_land_layer> create_nlcd_to_volm_table()
   m[volm_osm_category_io::NLCD_CROPS]            = volm_land_layer(13, "Cultivated_Crops", 0, 0.0, color(13));
   m[volm_osm_category_io::NLCD_WOODY_WETLAND]    = volm_land_layer(14, "Woody_Wetlands/Marina", 0, 0.0, color(14));
   m[volm_osm_category_io::NLCD_EMERGENT_WETLAND] = volm_land_layer(14, "Emergent_Herbaceous_Wetlands", 0, 0.0, color(14));
+  m[102]                                         = volm_land_layer(17, "beaches", 0, 0.0, color(17));
+  m[112]                                         = volm_land_layer(27, "mines", 0, 0.0, color(27));
+  m[115]                                         = volm_land_layer(30, "wharves", 3, 0.0, color(30));
+  m[118]                                         = volm_land_layer(33, "beach_walkway", 0, 1.0, color(33));
+  m[volm_osm_category_io::BUILDING_TALL]         = volm_land_layer(34, "tall_building", 4, 0.0, color(34));
+
   return m;
 }
 
@@ -105,5 +112,40 @@ vcl_map<int, volm_land_layer> create_geo_cover_to_volm_table()
   return m;
 }
 
+vcl_map<unsigned, volm_land_layer> create_volm_land_table()
+{
+  vcl_map<unsigned, volm_land_layer> m;
+
+  vcl_map<int, volm_land_layer> nlcd_table = create_nlcd_to_volm_table();
+  vcl_map<int, volm_land_layer> geo_table = create_geo_cover_to_volm_table();
+  vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
+  vcl_string osm_to_volm_txt = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
+  volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
+  
+  for (vcl_map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
+    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+
+  for (vcl_map<int, volm_land_layer>::iterator mit = geo_table.begin(); mit != geo_table.end(); mit++)
+    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+
+  for (vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>::iterator mit = osm_land_table.begin();
+       mit != osm_land_table.end(); ++mit)
+    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+
+  return m;
+}
+
+// create a string table containing all defined volm_land_layer name, the order follows the volm_land_layer id
+vcl_vector<vcl_string> create_volm_land_layer_name_table()
+{
+  vcl_vector<vcl_string> out;
+  vcl_map<unsigned, volm_land_layer> m = create_volm_land_table();
+  for (vcl_map<unsigned, volm_land_layer>::iterator mit = m.begin(); mit != m.end(); ++mit)
+    out.push_back(mit->second.name_);
+  return out;
+}
+
 vcl_map<int, volm_land_layer> volm_osm_category_io::nlcd_land_table = create_nlcd_to_volm_table();
 vcl_map<int, volm_land_layer> volm_osm_category_io::geo_land_table  = create_geo_cover_to_volm_table();
+vcl_map<unsigned, volm_land_layer> volm_osm_category_io::volm_land_table = create_volm_land_table();
+vcl_vector<vcl_string> volm_osm_category_io::volm_category_name_table = create_volm_land_layer_name_table();

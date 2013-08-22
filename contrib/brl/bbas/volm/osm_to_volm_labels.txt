@@ -427,7 +427,7 @@ shop religion 120 store 4 0
 shop curtain 120 store 4 0
 shop craft 120 store 4 0
 shop pet 50 pet 4 0
-shop alcohol 118 store 4 0
+shop alcohol 118 store_alcohol 4 0
 shop pawnbroker 120 store 4 0
 shop department_store 124 mall 4 0
 shop paint 120 store 4 0
@@ -486,7 +486,7 @@ shop fabric 120 store 4 0
 shop stationery 120 store 4 0
 shop car_parts 120 store 4 0
 shop glaziery 120 store 4 0
-shop sports 120 store 4 0
+shop sports 119 store_sports 4 0
 shop general 120 store 4 0
 shop gas 120 store 4 0
 shop drugstore 49 pharmacy 4 0

@@ -76,7 +76,7 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_label_to_xyz_process, "boxm2LabelImgToXYZProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_prune_scene_blocks_process, "boxm2PruneSceneBlocksProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_prune_scene_blocks_by_dem_process, "boxm2PruneSceneBlocksByDemProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_change_scene_res_by_geo_cover_process, "boxm2ChangeSceneResByGeoCover");
   //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_fetch_alpha_process, "boxm2SceneReadingAlphaProcess");
   //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_crop_img_process, "boxm2CreateCropImgProcess");
 }

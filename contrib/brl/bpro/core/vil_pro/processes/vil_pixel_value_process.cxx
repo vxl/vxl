@@ -90,9 +90,16 @@ bool vil_pixel_value_process(bprb_func_process& pro)
     pro.set_output_val<float>(0, pixVal);
     return true;
   }
-
+  else if (img->pixel_format() == VIL_PIXEL_FORMAT_INT_16)
+  {
+    vil_image_view<vxl_int_16>& inimg = *dynamic_cast<vil_image_view<vxl_int_16>* >(img.ptr());
+    float pixVal = inimg(i,j);
+    pro.set_output_val<float>(0, pixVal);
+    return true;
+  }
   //otherwise it's messed up, return a null pointer
   vcl_cerr<<"Failed to recognize input image type\n";
+  
   pro.set_output_val<float>(0, -1.0f);
   return true;
 }

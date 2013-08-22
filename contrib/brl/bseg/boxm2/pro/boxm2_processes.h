@@ -56,6 +56,7 @@ DECLARE_FUNC_CONS(boxm2_initialize_ground_xyz_process);
 DECLARE_FUNC_CONS(boxm2_label_to_xyz_process);
 DECLARE_FUNC_CONS(boxm2_prune_scene_blocks_process);
 DECLARE_FUNC_CONS(boxm2_prune_scene_blocks_by_dem_process);
+DECLARE_FUNC_CONS(boxm2_change_scene_res_by_geo_cover_process);
 DECLARE_FUNC_CONS(boxm2_load_mesh_process);
 
 //DECLARE_FUNC_CONS(boxm2_scene_fetch_alpha_process);
