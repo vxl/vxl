@@ -218,8 +218,13 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
 
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
-  float sb_length = info->block_len;
-  float vox_length = sb_length/8.0f;
+  float vox_length = 1E6;
+  for (unsigned i = 0; i < blks.size(); i++) {
+    boxm2_scene_info* info = scene->get_blk_metadata(blks[i]);
+    float sb_length = info->block_len;
+    if (sb_length/8.0f < vox_length)  vox_length = sb_length/8.0f;
+  }
+  vcl_cout << "scene voxel length: " << vox_length << vcl_endl;
   
   double orig_lat, orig_lon, orig_elev; scene->lvcs().get_origin(orig_lat, orig_lon, orig_elev);
 
@@ -348,9 +353,14 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   vcl_cout << "lower right corner in the image given by geocam is: " << lat2 << " N " << lon2 << " W " << " zone: " << zone << vcl_endl;
   
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
-  boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
-  float sb_length = info->block_len;
-  float vox_length = sb_length/8.0f;
+  // fetch the minimum voxel length
+  float vox_length = 1E6;
+  for (unsigned i = 0; i < blks.size(); i++) {
+    boxm2_scene_info* info = scene->get_blk_metadata(blks[i]);
+    float sb_length = info->block_len;
+    if (sb_length/8.0f < vox_length)  vox_length = sb_length/8.0f;
+  }
+  vcl_cout << "scene voxel length: " << vox_length << vcl_endl;
 
   // prepare an image for the finest resolution
   int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x())/vox_length);

@@ -68,9 +68,13 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   // find the bbox of scene and resolution of scene
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
-  boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
-  float sb_length = info->block_len;
-  float vox_length = sb_length/8.0f;
+  // fetch the minimum voxel length
+  float vox_length = 1E6;
+  for (unsigned i = 0; i < blks.size(); i++) {
+    boxm2_scene_info* info = scene->get_blk_metadata(blks[i]);
+    float sb_length = info->block_len;
+    if (sb_length/8.0f < vox_length)  vox_length = sb_length/8.0f;
+  }
   vcl_cout << "scene voxel length: " << vox_length << vcl_endl;
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   double min_lon, min_lat, gz, max_lon, max_lat;
