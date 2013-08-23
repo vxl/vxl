@@ -1,3 +1,4 @@
+#pragma once
 // This is brl/bbas/volm/desc/volm_desc_matcher.h
 #ifndef volm_desc_matcher_h_
 #define volm_desc_matcher_h_
@@ -96,6 +97,5 @@ protected:
   vcl_vector<volm_score_sptr> score_all_;
 
 };
-
 
 #endif  // volm_desc_matcher_h_

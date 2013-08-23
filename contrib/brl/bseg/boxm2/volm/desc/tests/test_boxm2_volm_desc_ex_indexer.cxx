@@ -1,6 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <boxm2/volm/desc/boxm2_volm_desc_ex_indexer.h>
 #include <volm/desc/volm_desc_indexer.h>
+#include <bvrml/bvrml_write.h>
 
 static void test_ex_indexer()
 {

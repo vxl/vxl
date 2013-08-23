@@ -79,7 +79,7 @@ class bvrml_write
                                   const unsigned side = 0);
 };
 
-#endif
+
 
 template <class T>
 void bvrml_write::write_vrml_box(vcl_ofstream& str, vgl_box_3d<T> const& box,
@@ -164,3 +164,4 @@ void bvrml_write::write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segm
       << "   coordIndex [\n"
       << "0,1   ]\n  }\n}";
 }
+#endif

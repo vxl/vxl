@@ -1,3 +1,4 @@
+#pragma once
 // This is brl/bseg/volm/desc/boxm2_volm_desc_ex_land_only_indexer.h
 #ifndef boxm2_volm_desc_ex_land_only_indexer_h_
 #define boxm2_volm_desc_ex_land_only_indexer_h_

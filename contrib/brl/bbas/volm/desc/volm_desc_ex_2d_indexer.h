@@ -1,3 +1,6 @@
+// This is brl/bbas/volm/desc/volm_desc_ex_2d_indexer.h
+#ifndef volm_desc_ex_2d_indexer_h_
+#define volm_desc_ex_2d_indexer_h_
 //:
 // \file
 // \brief  A class to create a volm_desc_ex_land_only (existence) descriptor index using 2D classification maps of reference worlds at each location  
@@ -15,8 +18,6 @@
 // \endverbatim
 //
 
-#if !defined(_VOLM_DESC_EX_2D_INDEXER_H)
-#define _VOLM_DESC_EX_2D_INDEXER_H
 
 #include "volm_desc_indexer.h"
 #include "volm_desc_ex_land_only.h"
@@ -63,4 +64,4 @@ public:
   vcl_map<unsigned, vil_image_view_base_sptr > lat_imgs;
 };
 
-#endif  //_VOLM_DESC_EX_2D_INDEXER_H
+#endif  //volm_desc_ex_2d_indexer_h_

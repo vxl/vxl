@@ -1,3 +1,7 @@
+#pragma once
+// This is brl/bbas/volm/desc/volm_desc_land_indexer.h
+#ifndef volm_desc_land_indexer_h_
+#define volm_desc_land_indexer_h_
 //:
 // \file
 // \brief  A class to create a descriptor index to store land type of each location
@@ -9,9 +13,6 @@
 //   <none yet>
 // \endverbatim
 //
-
-#if !defined(_VOLM_DESC_LAND_INDEXER_H)
-#define _VOLM_DESC_LAND_INDEXER_H
 
 #include "volm_desc_indexer.h"
 #include "volm_desc_land.h"

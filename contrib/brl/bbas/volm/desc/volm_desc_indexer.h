@@ -1,3 +1,7 @@
+#pragma once
+// This is brl/bbas/volm/desc/volm_desc_indexer.h
+#ifndef volm_desc_indexer_h_
+#define volm_desc_indexer_h_
 //:
 // \file
 // \brief  A class to extract descriptors from an ROI using its geoindex
@@ -9,9 +13,6 @@
 //   <none yet>
 // \endverbatim
 //
-
-#if !defined(_VOLM_DESC_INDEXER_H)
-#define _VOLM_DESC_INDEXER_H
 
 #include <vbl/vbl_ref_count.h>
 #include <vcl_string.h>

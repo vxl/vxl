@@ -1,3 +1,4 @@
+#pragma once
 // This is brl/bbas/volm/desc/boxm2_volm_desc_ex_indexer.h
 #ifndef boxm2_volm_desc_ex_indexer_h_
 #define boxm2_volm_desc_ex_indexer_h_

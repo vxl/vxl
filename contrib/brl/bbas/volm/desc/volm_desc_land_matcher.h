@@ -1,3 +1,4 @@
+#pragma once
 // This is brl/bbas/volm/desc/volm_desc_land_matcher.h
 #ifndef volm_desc_land_matcher_h_
 #define volm_desc_land_matcher_h_

@@ -1,3 +1,4 @@
+#pragma once
 // This is brl/bbas/volm/desc/volm_desc_ex.h
 #ifndef volm_desc_ex_h_
 #define volm_desc_ex_h_

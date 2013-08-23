@@ -376,7 +376,8 @@ int main(int argc,  char** argv)
             cnt++;
             double x = points[kk-1].x()+inc_dx*cnt;
             double y = points[kk-1].y()+inc_dy*cnt;
-            add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
+            vgl_point_2d<double> pt(x, y);
+            add_hypo(hyp_root, infos, pt, inc_in_sec_rad, false);
           }
         }
       }

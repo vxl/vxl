@@ -1,4 +1,5 @@
-// This is brl/bbas/volm/desc/volm_ex_land_only.h
+#pragma once
+// This is brl/bbas/volm/desc/volm_desc_ex_land_only.h
 #ifndef volm_desc_ex_land_only_h_
 #define volm_desc_ex_land_only_h_
 //:

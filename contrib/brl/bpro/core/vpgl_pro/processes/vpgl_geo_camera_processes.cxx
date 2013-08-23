@@ -349,7 +349,7 @@ bool vpgl_save_geo_camera_tfw_process(bprb_func_process& pro)
     return false;
   }
 
-  vcl_ofstream ofs(filename);
+  vcl_ofstream ofs(filename.c_str());
   vnl_matrix<double> trans_matrix = geo_cam->trans_matrix();
   ofs.precision(12);
   ofs << trans_matrix[0][0] << '\n';
