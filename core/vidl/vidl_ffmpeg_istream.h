@@ -81,7 +81,10 @@ class vidl_ffmpeg_istream
   virtual vidl_frame_sptr current_frame();
 
   //: Return the current presentation time stamp
-  virtual double pts() const;
+  virtual double current_pts() const;
+
+   //: Return the current packet's data
+ virtual vcl_string packet_data() const;
 
   //: Return the raw metadata bytes obtained while reading the current frame.
   //  This deque will be empty if there is no metadata stream

@@ -614,4 +614,38 @@ seek_frame(unsigned int frame)
   }
 }
 
+//: Return the raw metadata bytes obtained while reading the current frame.
+//  This deque will be empty if there is no metadata stream
+//  Metadata is often encoded as KLV,
+//  but no attempt to decode KLV is made here
+vcl_deque<vxl_byte>
+vidl_ffmpeg_istream::
+current_metadata()
+{
+  return is_->metadata_;
+}
+
+
+//: Return true if the video also has a metadata stream
+bool
+vidl_ffmpeg_istream::
+has_metadata() const
+{
+  return is_open() && is_->data_index_ >= 0;
+}
+
+double
+vidl_ffmpeg_istream::
+current_pts() const
+{
+  return 0.0;
+}
+
+vcl_string
+vidl_ffmpeg_istream::
+packet_data() const
+{
+  return vcl_string("");
+}
+
 #endif // vidl_ffmpeg_istream_v1_txx_
