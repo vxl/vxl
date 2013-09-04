@@ -30,7 +30,7 @@
 namespace boxm2_geo_cover_with_osm_to_xyz_process_globals
 {
   const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 6; // temporary set 6 output for debuging purpose
+  const unsigned n_outputs_ = 5; // temporary set 6 output for debuging purpose
 }
 
 bool boxm2_geo_cover_with_osm_to_xyz_process_cons(bprb_func_process& pro)
@@ -38,7 +38,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process_cons(bprb_func_process& pro)
   using namespace boxm2_geo_cover_with_osm_to_xyz_process_globals;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "boxm2_scene_sptr";   // 
+  input_types_[0] = "boxm2_scene_sptr";   // boxm2 scene
   input_types_[1] = "vcl_string";         // tiff geo cover image name
   input_types_[2] = "vcl_string";         // open street map road binary
   
@@ -75,6 +75,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     float sb_length = info->block_len;
     if (sb_length/8.0f < vox_length)  vox_length = sb_length/8.0f;
   }
+  double orig_lat, orig_lon, orig_elev; scene->lvcs().get_origin(orig_lat, orig_lon, orig_elev);
   vcl_cout << "scene voxel length: " << vox_length << vcl_endl;
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   double min_lon, min_lat, gz, max_lon, max_lat;
@@ -96,11 +97,11 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   
   // load the geo_cover image
   if (!vul_file::exists(img_fname)) {
-    vcl_cout << " can not find the image: " << img_fname << vcl_endl;
+    vcl_cout << pro.name() << " can not find the image: " << img_fname << vcl_endl;
     return false;
   }
   if (!vul_file::exists(osm_bin)) {
-    vcl_cout << " can not find the osm binary: " << osm_bin << vcl_endl;
+    vcl_cout << pro.name() << " can not find the osm binary: " << osm_bin << vcl_endl;
     return false;
   }
   vil_image_view_base_sptr img_sptr = vil_load(img_fname.c_str());
@@ -108,6 +109,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
     nii = img->ni();  nji = img->nj();
   }
+
   // get the camera from image name
   vpgl_geo_camera *cam;
   vpgl_geo_camera::init_geo_camera(img_fname, nii, nji, lvcs, cam);
@@ -130,8 +132,8 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   vil_image_view<vxl_byte>* level_img = new vil_image_view<vxl_byte>(ni, nj, 1);
   // initialize the image
   out_img_x->fill(0.0f); out_img_y->fill(0.0f);
-  // for z image, give a height which is higher than all voxel, to define a ray shoot downwards
-  out_img_z->fill((float)(scene_bbox.max_z()+100.0f));
+  // for z image, give a height below the scene to avoid rays that is outside of current geo_cover image
+  out_img_z->fill((float)(scene_bbox.min_z()-100.0f));
   out_img_label->fill((vxl_byte)0);
   out_class_img->fill(volm_osm_category_io::volm_land_table[0].color_);
   level_img->fill(0);
@@ -156,6 +158,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       unsigned vv = (unsigned)vcl_floor(v + 0.5);
       if (uu > 0 && vv > 0 && uu < nii && vv < nji) {
         if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
+          (*out_img_z)(i,j) = (float)(scene_bbox.max_z()+100.0f);  // make the ray origin above all surface if the pixel is valid
           (*out_class_img)(i,j) = volm_osm_category_io::geo_land_table[(*img)(uu,vv)].color_;
           (*out_img_label)(i,j) = volm_osm_category_io::geo_land_table[(*img)(uu,vv)].id_;
         }

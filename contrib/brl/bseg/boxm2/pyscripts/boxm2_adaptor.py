@@ -254,7 +254,7 @@ def update_cpp(scene, cache, cam, img, ident="") :
   boxm2_batch.set_input_string(4,ident);
   boxm2_batch.run_process();
 
- # Generic render, returns a dbvalue expected image
+# Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 def render_height_map(scene, cache, device=None) :
   if cache.type == "boxm2_cache_sptr" :
@@ -334,6 +334,23 @@ def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, ident, device
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
+def ingest_osm_label_map(scene, cache, x_img, y_img, z_img, label_img, ident, device=None):
+  if cache.type == "boxm2_cache_sptr":
+    print "boxm2_adaptor, ingest osm label map cpp process not implemented";
+  elif cache.type == "boxm2_opencl_cache_sptr" and device:
+    boxm2_batch.init_process("boxm2OclIngestOsmLabelProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,x_img);
+    boxm2_batch.set_input_from_db(4,y_img);
+    boxm2_batch.set_input_from_db(5,z_img);
+    boxm2_batch.set_input_from_db(6,label_img);
+    boxm2_batch.set_input_string(7,ident);
+    boxm2_batch.run_process();
+    return;
+  else:
+    print "ERROR: Cache type not recognized: ", cache_type;
 
 def ingest_mesh(scene,cache,plyfile,label_id,category):
   boxm2_batch.init_process("boxm2IngestConvexMeshProcess");

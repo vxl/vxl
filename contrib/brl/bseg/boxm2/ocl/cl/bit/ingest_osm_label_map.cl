@@ -1,10 +1,10 @@
-// Ingest label map kernel,
+// Ingest osm (open street map) kernel
 // MOG type: boxm2_label_short
-// assign the label of the ray to all voxels along the ray, when rendering boxm2_label_short, low prob ones aren't displayed anyways
+// assign the lable of the ray to all voxels along the ray, when rendering boxm2_lable_short, low prob ones aren't displayed anyways
 
-#ifdef INGEST_LABEL_MAP
+#ifdef INGEST_OSM_LABEL_MAP
 
-//need to define a struct of type AuxArgs with auxiliary arguments
+// need to define a struct of type AuxArgs with auxiliary arguments
 // to supplement cast ray args
 typedef struct
 {
@@ -12,45 +12,27 @@ typedef struct
   __global uchar label;
 } AuxArgs;
 
-/* previous when label is directly put to the voxel
-void step_cell_ingest_label_map(AuxArgs aux_args, int data_ptr)
+void step_cell_ingest_osm_label_map(AuxArgs aux_args, int data_ptr)
 {
   aux_args.label_data[data_ptr] = (MOG_TYPE)aux_args.label;
-}*/
-
-
-/* NEW ingest label step cell, keep the previous value in the upper two bits (bit 7 and bit 6) */
-void step_cell_ingest_label_map(AuxArgs aux_args, int data_ptr)
-{
-  MOG_TYPE current = aux_args.label_data[data_ptr];
-  MOG_TYPE invalid = 100;
-  if (current == invalid) // invalid
-    current = 0;
-  else if (current >= 2)  // 0 is invalid, 1 is horizontal, 2 and up are vertical
-    current = 2;     // make all types of vertical 2, so we have 3 values as orientation
-  //current << 6;      // shift 6 bits to the left, so upper 2 bits are orientation bits
-  current *= 64;
-  current += (MOG_TYPE)aux_args.label;   // add the land type, so the lower 6 bits will represent the land type
-
-  aux_args.label_data[data_ptr] = current;
 }
 
-//forward declare cast ray (so you can use it)
+// forward declare cast ray
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
               float*, AuxArgs);
 __kernel
-void ingest_label_map(__constant  RenderSceneInfo    * linfo,
-                       __global    uint4              * image_dims,
-                       __global    float4             * ray_origin_buff,
-                       __global    int4               * tree_array,
-                       __global    ushort             * data_array,
-                       __global    uchar              * data_buff,
-                       __constant  uchar              * bit_lookup,
-                       __local     uchar16            * local_tree,
-                       __local     uchar              * cumsum,        // cumulative sum helper for data pointer
-                       __local     int                * imIndex)
+void ingest_osm_label_map(__constant  RenderSceneInfo    * linfo,
+                          __global    uint4              * image_dims,
+                          __global    float4             * ray_origin_buff,
+                          __global    int4               * tree_array,
+                          __global    ushort             * data_array,
+                          __global    uchar              * data_buff,
+                          __constant  uchar              * bit_lookup,
+                          __local     uchar16            * local_tree,
+                          __local     uchar              * cumsum,        // cumulative sum helper for data pointer
+                          __local     int                * imIndex)
 {
   //----------------------------------------------------------------------------
   //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
@@ -101,4 +83,4 @@ void ingest_label_map(__constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
 
 }
-#endif // INGEST_LABEL_MAP
+#endif // INGEST_OSM_LABEL_MAP

@@ -301,7 +301,7 @@ void volm_io_tools::load_aster_dem_imgs(vcl_string const& folder, vcl_vector<vol
       info.img_r = vil_load(info.img_name.c_str());
       info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
       vcl_cout << "ASTER DEM ni: " << info.ni << " nj: " << info.nj << vcl_endl;
-  
+
       vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
       vpgl_geo_camera *cam;
       vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
@@ -330,6 +330,7 @@ void volm_io_tools::load_aster_dem_imgs(vcl_string const& folder, vcl_vector<vol
 
 void crop_and_find_min_max(vcl_vector<volm_img_info>& infos, unsigned img_id, int i0, int j0, int crop_ni, int crop_nj, double& min, double& max)
 {
+#if 0
   vil_image_view<vxl_int_16> img(infos[img_id].img_r);
   vil_image_view<vxl_int_16> img_crop = vil_crop(img, i0, crop_ni, j0, crop_nj); 
   for (unsigned ii = 0; ii < img_crop.ni(); ii++)
@@ -337,6 +338,25 @@ void crop_and_find_min_max(vcl_vector<volm_img_info>& infos, unsigned img_id, in
       if (min > img_crop(ii, jj)) min = img_crop(ii, jj);
       if (max < img_crop(ii, jj)) max = img_crop(ii, jj);
     }
+#endif
+  if (vil_image_view<vxl_int_16>* img = dynamic_cast<vil_image_view<vxl_int_16>*>(infos[img_id].img_r.ptr())) {
+    vil_image_view<vxl_int_16> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj); 
+    for (unsigned ii = 0; ii < img_crop.ni(); ii++)
+      for (unsigned jj = 0; jj < img_crop.nj(); jj++) {
+        if (min > img_crop(ii, jj)) min = img_crop(ii, jj);
+        if (max < img_crop(ii, jj)) max = img_crop(ii, jj);
+      }
+  }
+  else if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float>*>(infos[img_id].img_r.ptr()) ) {
+    vil_image_view<float> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
+    for (unsigned ii = 0; ii < img_crop.ni(); ii++)
+      for (unsigned jj = 0; jj < img_crop.nj(); jj++) {
+        if (min > img_crop(ii, jj)) min = img_crop(ii, jj);
+        if (max < img_crop(ii, jj)) max = img_crop(ii, jj);
+      }
+  }
+  
+
 }
 
 bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_point_2d<double>& upper_right, vcl_vector<volm_img_info>& infos, double& min, double& max)

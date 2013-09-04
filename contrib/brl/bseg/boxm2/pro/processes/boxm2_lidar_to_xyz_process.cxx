@@ -268,7 +268,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
         else if (vil_image_view<short>* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr()))
           (*out_img_z)(i,j) = (*img)(uu,vv)-orig_elev;
         else if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * > (img_sptr.ptr()))
-          (*out_img_z)(i,j) = (*img)(uu,vv);
+          (*out_img_z)(i,j) = (*img)(uu,vv)-orig_elev;
       }
     }
   

@@ -248,7 +248,19 @@ class boxm2_scene_adaptor(object):
       dev = None;
     #ingest_label_map(self.scene, cache, x_img, y_img, z_img, label_img, dev);
     ingest_label_map(self.scene, cache, x_img, y_img, z_img, label_img, ident, dev);
-    return ;
+    return;
+
+  #ingest label map
+  def ingest_osm_label_map(self,x_img,y_img,z_img, label_img, ident="land", device_string="") :
+    cache = self.active_cache;
+    dev = self.device;
+    if device_string == "gpu":
+      cache = self.opencl_cache;
+    elif device_string == "cpp":
+      cache = self.cpu_cache;
+      dev = None;
+    ingest_osm_label_map(self.scene, cache, x_img, y_img, z_img, label_img, ident, dev);
+    return;
 
   #ingest buckeye-style dem
   def ingest_buckeye_dem(self, first_ret_fname, last_ret_fname, geoid_height,geocam, device_string="") :
