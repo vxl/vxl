@@ -18,6 +18,8 @@
 
 #include "vidl_istream.h"
 #include <vcl_string.h>
+#include <vcl_deque.h>
+#include <vcl_vector.h>
 
 
 //: A video input stream using FFMPEG to decoded files
@@ -83,8 +85,9 @@ class vidl_ffmpeg_istream
   //: Return the current presentation time stamp
   virtual double current_pts() const;
 
-   //: Return the current packet's data
- virtual vcl_string packet_data() const;
+  //: Return the current video packet's data, is used to get
+  //  video stream embeded metadata.
+  virtual vcl_vector<unsigned char> current_packet_data() const;
 
   //: Return the raw metadata bytes obtained while reading the current frame.
   //  This deque will be empty if there is no metadata stream

@@ -471,7 +471,7 @@ advance()
       break; // without freeing the packet
     }
     // grab the metadata from this packet if from the metadata stream
-    if (is_->packet_.stream_index==is_->data_index_)
+    else if (is_->packet_.stream_index==is_->data_index_)
     {
       is_->metadata_.insert( is_->metadata_.end(), is_->packet_.data,
                              is_->packet_.data+is_->packet_.size);
@@ -679,13 +679,13 @@ current_pts() const
   return is_->pts_;
 }
 
-//: Return the current packet's data
-vcl_string
+//: Return the current video packet's data, is used to get
+//  video stream embeded metadata.
+vcl_vector<unsigned char>
 vidl_ffmpeg_istream::
-packet_data() const
+current_packet_data() const
 {
-  char* buf = reinterpret_cast<char*>(is_->packet_.data);
-  return vcl_string(buf, is_->packet_.size);
+  return vcl_vector<unsigned char>(is_->packet_.data, is_->packet_.data + is_->packet_.size);
 }
 
 #endif // vidl_ffmpeg_istream_v0_9_txx_
