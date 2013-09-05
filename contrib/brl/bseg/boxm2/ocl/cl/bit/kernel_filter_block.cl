@@ -77,7 +77,7 @@ __kernel void kernel_filter_block(  __constant RenderSceneInfo * linfo,
 //        if(currDepth != linfo->root_level)
 //          continue;
         
-        //float side_len = 1.0f/(float) (1<<currDepth);
+        float side_len = 1.0f/(float) (1<<currDepth);
         float4 localCenter = (float4) (centerX[i], centerY[i], centerZ[i], 0.0f);  //local center within block
         float4 cellCenter = (float4) ( (float) gidX + centerX[i],                  //abs center within block
                                       (float) gidY + centerY[i], 

@@ -4,6 +4,14 @@
 #include <vul/vul_file.h>
 #include <vcl_where_root_dir.h>
 
+
+vil_rgb<vxl_byte> color(unsigned char id)
+{
+  return vil_rgb<vxl_byte>(bvrml_color::heatmap_classic[id][0],
+                                        bvrml_color::heatmap_classic[id][1],
+                                        bvrml_color::heatmap_classic[id][2]);
+}
+
 bool volm_land_layer::contains(vcl_string name)
 {
   return name_.find(name) != vcl_string::npos ||
@@ -25,12 +33,12 @@ bool volm_osm_category_io::load_category_table(vcl_string const& filename,
   double width;
   while ( !ifs.eof()) {
     ifs >> tag;  ifs >> value;  ifs >> id;  ifs >> name;  ifs >> level;  ifs >> width;
-    vil_rgb<vxl_byte> color;
+    vil_rgb<vxl_byte> id_color;
     if (name == "invalid")
-      color = vil_rgb<vxl_byte>(0,0,0);
+      id_color = vil_rgb<vxl_byte>(0,0,0);
     else
-      color = bvrml_color::heatmap_classic[id][0], bvrml_color::heatmap_classic[id][1], bvrml_color::heatmap_classic[id][2];
-    land_category_table[vcl_pair<vcl_string, vcl_string>(tag, value)] = volm_land_layer((unsigned char)id, name, (unsigned char)level, width, color);
+      id_color = color(id);
+    land_category_table[vcl_pair<vcl_string, vcl_string>(tag, value)] = volm_land_layer((unsigned char)id, name, (unsigned char)level, width, id_color);
   }
   return true;
 }
@@ -50,13 +58,6 @@ bool volm_osm_category_io::load_road_width_table(vcl_string const& filename, vcl
     osm_road_width[vcl_pair<vcl_string, vcl_string>(tag, value)] = width;
   }
   return true;
-}
-
-vil_rgb<vxl_byte> color(unsigned char id)
-{
-  return vil_rgb<vxl_byte>(bvrml_color::heatmap_classic[id][0],
-                                        bvrml_color::heatmap_classic[id][1],
-                                        bvrml_color::heatmap_classic[id][2]);
 }
 
 // create table to transfer nlcd label to volm_land_layer

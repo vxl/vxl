@@ -381,3 +381,15 @@ def fill_holes(img):
   (id,type) = boxm2_batch.commit_output(0)
   outimg = dbvalue(id, type);
   return outimg
+
+def grey_to_rgb(img, color_txt):
+  boxm2_batch.init_process("vilGreyToRGBProcess")
+  boxm2_batch.set_input_from_db(0,img)
+  boxm2_batch.set_input_string(1,color_txt)
+  result = boxm2_batch.run_process()
+  if result:
+    (id, type) = boxm2_batch.commit_output(0)
+    outimg = dbvalue(id, type);
+  else:
+    outimg = 0
+  return outimg
