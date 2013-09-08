@@ -90,6 +90,6 @@ DECLARE_FUNC_CONS(boxm2_ocl_ingest_label_process);
 DECLARE_FUNC_CONS(boxm2_ocl_ingest_osm_label_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_auxQ_per_view_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_usingQ_process);
-
+DECLARE_FUNC_CONS(boxm2_ocl_init_alpha_process);
 
 #endif
