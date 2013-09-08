@@ -34,7 +34,7 @@
 
 namespace boxm2_ocl_update_process_globals
 {
-  const unsigned int n_inputs_  = 10;
+  const unsigned int n_inputs_  = 12;
   const unsigned int n_outputs_ = 0;
 }
 
@@ -54,6 +54,8 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   input_types_[7] = "bool";                         //do_update_alpha/don't update alpha
   input_types_[8] = "float";                        //variance value? if 0.0 or less, then use variable variance
   input_types_[9] = "bool";                         //do_update_app/don't update alpha
+  input_types_[10] = "float";                        // near factor ( maximum # of pixels should map to a voxel )
+  input_types_[11] = "float";                        // near factor ( minimum # of pixels should map to a voxel )
 
   // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -65,21 +67,22 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   brdb_value_sptr up_alpha   = new brdb_value_t<bool>(true);  //by default update alpha
   brdb_value_sptr def_var    = new brdb_value_t<float>(-1.0f);
   brdb_value_sptr up_app   = new brdb_value_t<bool>(true);  //by default update alpha
+  brdb_value_sptr tnearfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
+  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
   pro.set_input(5, idx);
   pro.set_input(6, empty_mask);
   pro.set_input(7, up_alpha);
   pro.set_input(8, def_var);
   pro.set_input(9, up_app);
+  pro.set_input(10, tnearfactor);
+  pro.set_input(11, tfarfactor);
   return good;
 }
 
 bool boxm2_ocl_update_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_process_globals;
-#if 0 // unused!
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
-#endif
+
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
@@ -96,7 +99,9 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++);
   float                    mog_var      = pro.get_input<float>(i++);
-  bool                     update_app = pro.get_input<bool>(i++);
+  bool                     update_app   = pro.get_input<bool>(i++);
+  float                    nearfactor   = pro.get_input<float>(i++);
+  float                    farfactor    = pro.get_input<float>(i++);
   vul_timer t;
 
   t.mark();
@@ -132,14 +137,14 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         vil_image_view_base_sptr view = ir->get_copy_view(startI, endI-startI, startJ, endJ-startJ);
         //run update
         boxm2_ocl_update::update(scene, device, opencl_cache, cam, view,
-                                 ident, mask_sptr, update_alpha, mog_var,update_app,
+                                 ident, mask_sptr, update_alpha, mog_var,update_app,nearfactor,farfactor,
                                  startI, startJ);
       }
     }
     return true;
   }
   else //otherwise just run a normal update with one image
-    return boxm2_ocl_update::update(scene, device, opencl_cache, cam, img, ident, mask_sptr, update_alpha, mog_var,update_app);
+    return boxm2_ocl_update::update(scene, device, opencl_cache, cam, img, ident, mask_sptr, update_alpha, mog_var,update_app,nearfactor,farfactor);
 
 
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
