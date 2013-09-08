@@ -52,6 +52,7 @@ __kernel void kernel_filter_block(  __constant RenderSceneInfo * linfo,
   unsigned gidZ = get_global_id(2); 
 
   //The resolution of the kernels is fixed at the highest res cell
+
   float side_len = 1.0f/(float) (1<<3); 
   
   //tree Index is global id 

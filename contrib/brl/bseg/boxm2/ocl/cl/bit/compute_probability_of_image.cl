@@ -23,7 +23,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneInfo*,
-              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
+              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs, float tnearf, float tfarf);
 
 __kernel
 void
@@ -90,7 +90,7 @@ compute_probability_of_image( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis,
 
             //RENDER SPECIFIC ARGS
-            aux_args);
+            aux_args,0, MAXFLOAT);
 
   //expected image gets rendered
   prob_image[imIndex[llid]]       = prob; //expected_int;
@@ -115,7 +115,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneInfo*,
-              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
+              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs,float tnear, float tfar);
 
 __kernel
 void

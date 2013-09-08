@@ -1,4 +1,4 @@
-//Render height map kernel, step cell fucntor is in "expected_functor"
+    //Render height map kernel, step cell fucntor is in "expected_functor"
 //choose the correct MOG type/size
 #ifdef RENDER_HEIGHT_MAP
 //need to define a struct of type AuxArgs with auxiliary arguments
@@ -18,7 +18,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs, float tnear, float tfar);
 __kernel
 void
 render_height_map(__constant  RenderSceneInfo    * linfo,
@@ -102,7 +102,7 @@ render_height_map(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args, 0, MAXFLOAT);      //utility info
 
   //store the expected intensity
   height_map[imIndex[llid]] =height_map[imIndex[llid]]+ (* aux_args.expdepth)*linfo->block_len;
@@ -123,13 +123,14 @@ typedef struct
 {
   __global float * alpha;
   __global float  outimg;
+  float resolution ;
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs,float tnear, float tfar);
 __kernel
 void ingest_height_map(__constant  RenderSceneInfo    * linfo,
                        __global    uint4              * image_dims,
@@ -181,12 +182,12 @@ void ingest_height_map(__constant  RenderSceneInfo    * linfo,
   aux_args.alpha  = alpha_array;
   aux_args.outimg = out1;
   float vis =1.0;
-
+  aux_args.resolution = res;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
 }
 #endif // INGEST_HEIGHT_MAP
@@ -208,7 +209,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs, float tnear, float tfar);
 __kernel
 void ingest_buckeye_dem(__constant  RenderSceneInfo    * linfo,
                        __global    uint4              * image_dims,
@@ -279,7 +280,7 @@ void ingest_buckeye_dem(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
 }
 #endif // INGEST_BUCKEYE_DEM

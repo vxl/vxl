@@ -17,7 +17,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs, float tnear, float tfar);
 __kernel
 void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
@@ -79,11 +79,12 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   aux_args.mog    = mixture_array;
   aux_args.expint = &expint;
   aux_args.maxomega = &max_omega;
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
   //store the expected intensity (as UINT)
   exp_image[imIndex[llid]] =  expint;
@@ -110,7 +111,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs,float tnear, float tfar);
 __kernel
 void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
@@ -184,7 +185,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
   
    
    
@@ -214,7 +215,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs,float tnear, float tfar);
 __kernel
 void
 render_depth( __constant  RenderSceneInfo    * linfo,
@@ -285,7 +286,7 @@ render_depth( __constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
   //store the expected intensity
   exp_image[imIndex[llid]] += (* aux_args.expdepth)*linfo->block_len;
@@ -311,7 +312,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneInfo*,
-              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
+              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs,float tnear, float tfar);
 
 __kernel
 void
@@ -395,7 +396,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis,
 
             //RENDER SPECIFIC ARGS
-            aux_args);
+            aux_args,0,MAXFLOAT);
 
   //expected image gets rendered
   exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) 1.0f/(1.0f+expected_int)); //expected_int;
@@ -457,7 +458,7 @@ void step_cell_render_phongs(AuxArgs   args,
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs,float tnear, float tfar);
 __kernel
 void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
@@ -523,7 +524,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
   //store the expected intensity (as UINT)
   exp_image[imIndex[llid]] =  expint;
@@ -548,7 +549,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs, float tnear, float tfar);
 __kernel
 void
 render_z_image( __constant  RenderSceneInfo    * linfo,
@@ -612,7 +613,7 @@ render_z_image( __constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args, 0 , MAXFLOAT);      //utility info
 
   //store the expected intensity
   exp_image[imIndex[llid]] += *aux_args.exp_z;
@@ -639,7 +640,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs,float tnear, float tfar);
 __kernel
 void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
@@ -705,7 +706,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
   //store the expected intensity (as UINT)
   exp_image[imIndex[llid]] =  expint;
@@ -732,7 +733,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs,float tnear, float tfar);
 __kernel
 void
 render_albedo_normal( __constant  RenderSceneInfo    * linfo,
@@ -800,7 +801,7 @@ render_albedo_normal( __constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
   //store the expected albedo and normal
   exp_image[imIndex[llid]] =  exp_albedo_normal;

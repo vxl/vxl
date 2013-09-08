@@ -19,11 +19,14 @@ typedef struct
   __global float * output;
            float * ray_len;
   __constant RenderSceneInfo * linfo;
+  float * nearplane;
+  float * farplane;
+
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnear, float tfar);
 __kernel
 void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
@@ -34,6 +37,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float4             * ray_origins,
              __global    float4             * ray_directions,
+             __global    float              * nearfarplanes,
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float              * in_image,         // the input image
              __global    float              * output,
@@ -89,6 +93,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.cell_ptrs  = cell_ptrs;
   aux_args.cached_aux = cached_aux_data;
   aux_args.obs = obs;
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
 
 #ifdef DEBUG
   aux_args.output = output;
@@ -100,7 +106,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,nearplane,farplane);    //utility info
 
 #ifdef DEBUG
   output[imIndex] = rlen;
@@ -120,11 +126,12 @@ typedef struct
            float phi;
            float4 viewdir;
    __constant RenderSceneInfo * linfo;
+
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnear, float tfar);
 
 __kernel
 void
@@ -138,6 +145,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float4             * ray_origins,
              __global    float4             * ray_directions,
+              __global    float             * nearfarplanes,
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float              * vis_image,        // visibility image
              __global    float              * pre_image,        // preinf image
@@ -194,11 +202,14 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   aux_args.pre_inf = &pre_inf;
   aux_args.phi     = atan2(ray_d.y,ray_d.x);
   aux_args.viewdir = viewdir;
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,nearplane,farplane);    //utility info
 
   //store the vis_inf/pre_inf in the image
   vis_image[j*get_global_size(0)+i] = vis_inf;
@@ -260,7 +271,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnear, float tfar);
 
 __kernel
 void
@@ -276,6 +287,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __constant  uchar              * bit_lookup,        // used to get data_index
            __global    float4             * ray_origins,
            __global    float4             * ray_directions,
+           __global    float              * nearfarplanes,
            __global    uint4              * imgdims,           // dimensions of the input image
            __global    float              * vis_image,         // visibility image (for keeping vis across blocks)
            __global    float              * pre_image,         // preinf image (for keeping pre across blocks)
@@ -344,17 +356,14 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.norm = norm;
   aux_args.ray_vis = &vis;
   aux_args.ray_pre = &pre;
-
-  //---debug
-  //float outInt = output[j*get_global_size(0) + i];
-  //aux_args.outInt = &outInt;
-  //---------
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis0, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis0, aux_args,nearplane,farplane);    //utility info
 
   //write out vis and pre
   vis_image[j*get_global_size(0)+i] = vis;
@@ -428,7 +437,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 #else
     //get cell cumulative length and make sure it isn't 0
     int len_int = aux_array0[gid];
-    float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
+    float cum_len  = convert_float(len_int);//SEGLEN_FACTOR;
 #endif
 
     //minimum alpha value, don't let blocks get below this
@@ -439,8 +448,10 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     {
 #ifdef ATOMIC_FLOAT
       float mean_obs = as_float(aux_array1[gid]) / cum_len;
+
       float cell_vis  = as_float(aux_array2[gid]) / cum_len;
       float cell_beta = as_float(aux_array3[gid])/ (cum_len* info->block_len);
+
 #else
       int obs_int = aux_array1[gid];
       int vis_int = aux_array2[gid];
@@ -448,7 +459,9 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float mean_obs = convert_float(obs_int) / convert_float(len_int);
       float cell_vis  = convert_float(vis_int) / convert_float(len_int);
       float cell_beta = convert_float(beta_int) / (convert_float(len_int)* info->block_len);
+
 #endif
+
 
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis);
       float4 nobs     = convert_float4(nobs_array[gid]);
@@ -479,10 +492,11 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
       nobs_array[gid] = convert_ushort4_sat_rte(post_nobs);
       }
+
       //write alpha if update alpha is 0
       if ( *update_alpha != 0 )
         alpha_array[gid] = max(alphamin,data.s0);
-
+        //alpha_array[gid] = 0.0000001;
 
     }
 
@@ -587,7 +601,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     {
       int beta_int= aux_array3[gid];
       float cell_beta = convert_float(beta_int) / (convert_float(len_int));
-      cell_beta = clamp(cell_beta, 0.5,2.0);
+      cell_beta = clamp(cell_beta, 0.25,16.0);
       alpha = alpha * cell_beta;
       alpha_array[gid]      = max(alpha,alphamin);
     }

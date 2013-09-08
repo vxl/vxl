@@ -17,7 +17,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,__local uchar16*,__constant uchar*,__local uchar*,float*,AuxArgs);
+              __global int4*,__local uchar16*,__constant uchar*,__local uchar*,float*,AuxArgs, float tnear, float tfar);
 __kernel
 void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
@@ -82,7 +82,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
   //store the expected intensity (as UINT)
   //YUV edit

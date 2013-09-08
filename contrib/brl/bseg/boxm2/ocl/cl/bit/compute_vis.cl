@@ -39,7 +39,7 @@ void create_aux_rays(float4 d, float4* u)
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs,float tnear, float tfar);
 __kernel
 void
 compute_vis(__constant  uint               * datasize_points,
@@ -117,7 +117,7 @@ compute_vis(__constant  uint               * datasize_points,
                       ray_ox, ray_oy, ray_oz,
                       ray_dx, ray_dy, ray_dz,
                       linfo, tree_array,                               //scene info
-                      local_tree, bit_lookup, cumsum, &vis, aux_args);   //utility info
+                      local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);   //utility info
                       
             
             //zip thru aux rays    
@@ -137,7 +137,7 @@ compute_vis(__constant  uint               * datasize_points,
                       ray_ox, ray_oy, ray_oz,
                       ray_dx, ray_dy, ray_dz,
                       linfo, tree_array,                                 //scene info
-                      local_tree, bit_lookup, cumsum, &vis, aux_args);   //utility info
+                      local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);   //utility info
             }
             //pick the median of sorted rays
             vis_of_aux_rays[4] = private_vis[i];

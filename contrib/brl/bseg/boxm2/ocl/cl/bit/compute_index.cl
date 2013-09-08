@@ -108,7 +108,7 @@ compute_loc_index(
                          ray_ox, ray_oy, ray_oz,
                          ray_dx, ray_dy, ray_dz,
                          linfo, tree_array,                                    //scene info
-                         local_tree, bit_lookup, cumsum, &tfar_max, aux_args); //utility info
+                         local_tree, bit_lookup, cumsum, &tfar_max, aux_args,0,MAXFLOAT); //utility info
 
     //store values at the end of this block
     exp_depth_buf[ gid ] += (* aux_args.expdepth)*linfo->block_len;

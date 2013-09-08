@@ -85,7 +85,9 @@ void cast_ray(
                       float              * vis,             //passed in as starting visibility
 
           //----aux arguments defined by host at compile time-------------------
-          AuxArgs aux_args )
+          AuxArgs aux_args,
+          float tnearf,
+          float tfarf)
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -99,7 +101,12 @@ void cast_ray(
   float min_facey = (ray_dy < 0.0f) ? (linfo->dims.y) : 0.0f;
   float min_facez = (ray_dz < 0.0f) ? (linfo->dims.z) : 0.0f;
   float tblock = calc_tnear(ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, min_facex, min_facey, min_facez);
-  tblock = (tblock > 0.0f) ? tblock : 0.0f;    //make sure tnear is at least 0...
+
+  //tblock = (tblock > 0) ? tblock :0;    //make sure tnear is at least 0...
+
+  tblock = (tblock > tnearf) ? tblock :tnearf;    //make sure tnear is at least 0...
+  tfar = (tfar <  tfarf ) ? tfar : tfarf;
+
   tfar -= BLOCK_EPSILON;   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
 
   if (tfar <= tblock)

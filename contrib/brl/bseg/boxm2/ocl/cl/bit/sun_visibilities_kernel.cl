@@ -51,7 +51,7 @@ void step_cell_seglen_vis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 }
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs,float tnear, float tfar);
 
 __kernel
 void
@@ -126,7 +126,7 @@ seg_len_and_vis_main(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis0, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis0, aux_args,0,MAXFLOAT);    //utility info
 
   //write out vis and pre
   vis_image[j*get_global_size(0)+i] = vis;

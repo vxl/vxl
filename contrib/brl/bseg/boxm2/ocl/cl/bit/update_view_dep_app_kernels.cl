@@ -19,7 +19,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs,float tnear, float tfar);
 __kernel
 void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
@@ -80,7 +80,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);    //utility info
 
 }
 #endif // SEGLEN
@@ -104,7 +104,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs,float tnear, float tfar);
 
 __kernel
 void
@@ -188,7 +188,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);    //utility info
 
   //store the vis_inf/pre_inf in the image
   vis_image[j*get_global_size(0)+i] = vis_inf;
@@ -251,7 +251,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs,float tnear, float tfar);
 
 __kernel
 void
@@ -352,7 +352,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                   //scene info
-            local_tree, bit_lookup, cumsum, &vis0, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis0, aux_args,0,MAXFLOAT);    //utility info
 
   //write out vis and pre
   vis_image[j*get_global_size(0)+i] = vis;

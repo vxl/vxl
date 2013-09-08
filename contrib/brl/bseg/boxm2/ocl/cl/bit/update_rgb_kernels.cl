@@ -23,7 +23,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnear, float tfar);
 __kernel
 void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
@@ -36,6 +36,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float4             * ray_origins,
              __global    float4             * ray_directions,
+             __global    float              * nearfarplanes,
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float4             * in_image,         // the input image
              __global    float              * output,
@@ -95,6 +96,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.cell_ptrs  = cell_ptrs;
   aux_args.cached_aux = cached_aux_data;
   aux_args.obs = obs;
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
 
   //-----YUV edit ----///
 #ifdef YUV
@@ -105,7 +108,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,nearplane,farplane);    //utility info
 }
 #endif
 
@@ -165,11 +168,12 @@ typedef struct
            float* vis_inf;
            float* pre_inf;
   __constant  RenderSceneInfo    * linfo;
+
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnear, float tfar);
 
 __kernel
 void
@@ -183,6 +187,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float4             * ray_origins,
              __global    float4             * ray_directions,
+             __global    float              * nearfarplanes,
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float              * vis_image,        // visibility image
              __global    float              * pre_image,        // preinf image
@@ -236,11 +241,14 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   aux_args.mean_obs  = aux_mean_obs; //&aux_array[linfo->num_buffer * linfo->data_len];
   aux_args.vis_inf = &vis_inf;
   aux_args.pre_inf = &pre_inf;
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,nearplane,farplane);    //utility info
 
   //store the vis_inf/pre_inf in the image
   vis_image[j*get_global_size(0)+i] = vis_inf;
@@ -269,7 +277,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnear, float tfar);
 
 __kernel
 void
@@ -285,6 +293,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __constant  uchar              * bit_lookup,       // used to get data_index
            __global    float4             * ray_origins,
            __global    float4             * ray_directions,
+             __global    float              * nearfarplanes,
            __global    uint4              * imgdims,          // dimensions of the input image
            __global    float              * vis_image,        // visibility image (for keeping vis across blocks)
            __global    float              * pre_image,        // preinf image (for keeping pre across blocks)
@@ -352,11 +361,14 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.norm = norm;
   aux_args.ray_vis = &vis;
   aux_args.ray_pre = &pre;
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis0, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis0, aux_args,nearplane,farplane);    //utility info
 
   //write out vis and pre
   vis_image[j*get_global_size(0)+i] = vis;

@@ -15,7 +15,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs,float tnear, float tfar);
 __kernel
 void
 render_alpha_integral( __constant  RenderSceneInfo * linfo,
@@ -78,7 +78,7 @@ render_alpha_integral( __constant  RenderSceneInfo * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
   //store the expected intensity (as UINT)
   alpha_int_image[imIndex[llid]] =  alpha_int;
 }
@@ -100,7 +100,7 @@ typedef struct
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs,float tnear, float tfar);
 __kernel
 void
 render_using_alpha_integral( __constant  RenderSceneInfo    * linfo,
@@ -172,7 +172,7 @@ render_using_alpha_integral( __constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
   //store the expected intensity (as UINT)
   exp_image[imIndex[llid]] =  expint;

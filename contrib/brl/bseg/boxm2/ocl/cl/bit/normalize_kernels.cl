@@ -110,7 +110,7 @@ __kernel void normalize_render_kernel_gl(__global uint * exp_img,
 
     float intensity  = as_float(exp_img[imindex]);
     float vis = vis_img[imindex];
-    intensity += vis*.5f;
+    intensity += vis*1.0f;
     exp_img[imindex] =(rgbaFloatToInt((float4) intensity));//(intensity-*min_i)/range) ;
 }
 
@@ -131,7 +131,7 @@ __kernel void normalize_render_kernel_rgb_gl( __global float4* exp_img,
         return;
 
     float vis = vis_img[imindex];
-    float4 intensity = exp_img[imindex] + (vis*0.5f);
+    float4 intensity = exp_img[imindex] + (vis*0.0f);
 
     if ( *is_bw )
       gl_im[imindex]   = rgbaFloatToInt(intensity);//(intensity-*min_i)/range) ;
@@ -189,7 +189,7 @@ __kernel void render_kernel_rgb_gl(__constant float *min_i,
     float4 intensity  = exp_img[imindex];
 
     //normalize
-    intensity = intensity + vis_img[imindex] * 0.5f;
+    intensity = intensity + vis_img[imindex] * 0.0f;
 
     //write to gl image
     out_img[imindex] = rgbaFloatToInt(intensity);
