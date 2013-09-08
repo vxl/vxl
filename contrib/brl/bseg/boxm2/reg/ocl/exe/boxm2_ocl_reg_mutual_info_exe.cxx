@@ -97,7 +97,13 @@ int main(int argc,  char** argv)
   sceneA_origin[2] = sceneA->local_origin().z();
   sceneA_origin[3] = 1.0;
 
-
+  var[0] = 2*sceneB->blocks().begin()->second.sub_block_dim_.x()/scale;  // var[0] = 1.0/8;     //   BH  
+  var[1] = 2*sceneB->blocks().begin()->second.sub_block_dim_.y()/scale;  // var[1] = 1.0/8;     //   BH
+  var[2] = 2*sceneB->blocks().begin()->second.sub_block_dim_.z()/scale;  // var[2] = 1.0/8;     //   BH
+  var[3] = rotationangle();  // var[3] = 0.3/8;     //   BH
+  var[4] = rotationangle();  // var[4] = 0.3/8;     //   BH
+  var[5] = rotationangle();  // var[5] = 0.3/8;     //   BH
+  
   if(xformAtoB_file() != "" )
   {
     vcl_ifstream ifile( xformAtoB_file().c_str() ) ;
@@ -135,12 +141,12 @@ int main(int argc,  char** argv)
 
     // use 2 to multiple if 4096 samples are asked but use 1 as factor if 64 samples. 
 
-    x[0] = mat[0][3];              var[0] = 2*sceneB->blocks().begin()->second.sub_block_dim_.x()/scale;  // var[0] = 1.0/8;     //   BH    
-    x[1] = mat[1][3];              var[1] = 2*sceneB->blocks().begin()->second.sub_block_dim_.y()/scale;  // var[1] = 1.0/8;     //   BH
+    x[0] = mat[0][3];              var[0] = 0.0;//2*sceneB->blocks().begin()->second.sub_block_dim_.x()/scale;  // var[0] = 1.0/8;     //   BH    
+    x[1] = mat[1][3];              var[1] = 0.0;//2*sceneB->blocks().begin()->second.sub_block_dim_.y()/scale;  // var[1] = 1.0/8;     //   BH
     x[2] = mat[2][3];              var[2] = 2*sceneB->blocks().begin()->second.sub_block_dim_.z()/scale;  // var[2] = 1.0/8;     //   BH
     x[3] = r1.as_rodrigues()[0];   var[3] = rotationangle();  // var[3] = 0.3/8;     //   BH
     x[4] = r1.as_rodrigues()[1];   var[4] = rotationangle();  // var[4] = 0.3/8;     //   BH
-    x[5] = r1.as_rodrigues()[2];   var[5] = rotationangle();  // var[5] = 0.3/8;     //   BH
+    x[5] = r1.as_rodrigues()[2];   var[5] = 0.0//rotationangle();  // var[5] = 0.3/8;     //   BH
 
     r= r1;  
  
