@@ -199,7 +199,6 @@ void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
   vgl_vector_3d<T> u = normalized(up);
   vgl_vector_3d<T> look = point - camera_center();
   normalize(look);
-  vcl_cout << "look at vector: " << look << vcl_endl;
 
 #if 0
   T dp = dot_product(look, up);
