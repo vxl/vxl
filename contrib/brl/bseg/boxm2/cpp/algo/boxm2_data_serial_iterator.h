@@ -28,7 +28,7 @@ void boxm2_data_leaves_serial_iterator(boxm2_block * blk,
 {
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
-    boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
+    boxm2_array_3d<uchar16>&  trees = blk->trees();  
     int counter_length = trees.size()/10;
     int currIndex = 0;                                //curr tree being looked at
     boxm2_array_3d<uchar16>::iterator blk_iter;
