@@ -731,7 +731,7 @@ bool boxm2_util::get_raydirs_tfinal(vcl_string depthdir, vcl_string camsfile,
         vgl_vector_3d<double> vdir(tempx,tempy,tempz);
         ifile >> mind >> maxd;
         char filename[1000];
-        vcl_sprintf(filename,"depth_%d.png",uid);
+        vcl_sprintf(filename,"depth_%d.jpg",uid);
         vcl_string depthfilename = depthdir +"/" +filename ;
         vil_image_view_base_sptr im = vil_load(depthfilename.c_str());
         if (vil_image_view<unsigned char> * depthimg = dynamic_cast<vil_image_view<unsigned char> *> (im.ptr()))

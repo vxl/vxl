@@ -90,7 +90,7 @@ class boxm2_scene : public vbl_ref_count
     vcl_vector<boxm2_block_id>
     get_vis_order_from_pt(vgl_point_3d<double> const& pt,
                           vgl_box_2d<double> camBox = vgl_box_2d<double>(), double distance=-1.0);
-
+    vcl_vector<boxm2_block_id> get_vis_blocks_opt(vpgl_perspective_camera<double>* cam, unsigned int ni, unsigned int nj);
     //: visibility order using a ray given by origin and direction vector, the block needs to be in the front direction as given by this ray
     vcl_vector<boxm2_block_id>
     get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vector_3d<double> const& dir, double distance);
@@ -110,6 +110,7 @@ class boxm2_scene : public vbl_ref_count
     vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks() { return blocks_; }
     unsigned num_blocks() const { return (unsigned) blocks_.size(); }
 
+    float finest_resolution();
     //: mutable reference
     boxm2_block_metadata& get_block_metadata(boxm2_block_id id)
       { return blocks_[id]; }
@@ -194,6 +195,8 @@ class boxm2_scene : public vbl_ref_count
     vcl_vector<vcl_string> appearances_;
     int num_illumination_bins_;
     int version_;
+
+    bool is_block_visible(boxm2_block_metadata & data, vpgl_camera_double_sptr & cam, unsigned ni, unsigned nj );
 };
 
 

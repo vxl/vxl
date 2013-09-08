@@ -17,6 +17,10 @@
 //vgl includes
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_point_3d.h>
+
 #include <vgl/vgl_intersection.h>
 
 //vsph include
@@ -211,9 +215,53 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
 
   //grab visibility order from camera center
   vgl_point_3d<double> cam_center = cam->camera_center();
+
+
   return get_vis_order_from_pt(cam_center, camBox, dist);
 }
+vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks_opt(vpgl_perspective_camera<double>* cam,  unsigned int ni, unsigned int nj)
+{
+    vcl_vector<boxm2_block_id> vis_order;
+    if (!cam) {
+        vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
+        return vis_order;
+    }
+    //grab visibility order from camera center
+    vgl_point_3d<double> cam_center = cam->camera_center();
+    //Map of distance, id
+    vcl_vector<boxm2_dist_id_pair> distances;
+    //get camera center and order blocks distance from the cam center
+    //for non-projective cameras there may not be a single center of projection
+    //so instead get the ray origin farthest from the scene origin.
+    vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+    for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) 
+    {
+        if(!this->is_block_visible(iter->second,vpgl_camera_double_sptr(cam),ni,nj))
+            continue;
+        vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
+        vgl_vector_3d<double>&   blk_dim = (iter->second).sub_block_dim_;
+        vgl_vector_3d<unsigned>& blk_num = (iter->second).sub_block_num_;
+        vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x(),
+                                        blk_dim.y()*blk_num.y(),
+                                        blk_dim.z()*blk_num.z());
 
+        //make sure there is a non empty intersection here
+        vgl_box_2d<double> blkBox(blk_o.x(), blk_o.x()+length.x(),blk_o.y(), blk_o.y()+length.y());
+        vgl_point_3d<double> blk_center = blk_o + length/2.0;
+
+        double dist = vgl_distance( blk_center, cam_center);
+        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+
+    }
+
+    //sort distances
+    vcl_sort(distances.begin(), distances.end());
+    //put blocks in "vis_order"
+    vcl_vector<boxm2_dist_id_pair>::iterator di;
+    for (di = distances.begin(); di != distances.end(); ++di)
+        vis_order.push_back(di->id_);
+    return vis_order;
+}
 vcl_vector<boxm2_block_id>
 boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
                                    vgl_box_2d<double> camBox, double distance)
@@ -517,7 +565,16 @@ void boxm2_scene::min_block_index (vgl_point_3d<int> &idx,
   idx.set(min_i,min_j,min_k);
   local_origin.set(min_x, min_y, min_z);
 }
+float boxm2_scene::finest_resolution()
+{
+    vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter= blocks_.begin();
+    boxm2_block_metadata data = iter->second;
 
+    float final_level = data.max_level_;
+    float block_dim = data.sub_block_dim_.x() ;
+
+    return block_dim / vcl_pow(2.0f,final_level-1) ;
+}
 //: gets the smallest block index
 void boxm2_scene::max_block_index (vgl_point_3d<int> &idx,
                                    vgl_point_3d<double> &local_origin) const
@@ -562,6 +619,21 @@ bool boxm2_scene::has_data_type(vcl_string data_type)
   return false;
 }
 
+bool boxm2_scene::is_block_visible(boxm2_block_metadata & data, vpgl_camera_double_sptr & cam, unsigned int ni, unsigned int nj )
+{
+    vgl_box_3d<double> bbox = data.bbox();
+    vcl_vector<vgl_point_3d<double> > vertices =  bbox.vertices() ;
+    vgl_box_2d<double> projectionbox;
+    for(unsigned int i = 0 ; i < vertices.size(); i++)
+    {
+        double u,v;
+        cam->project(vertices[i].x(),vertices[i].y(),vertices[i].z(),u,v);
+        projectionbox.add(vgl_point_2d<double>(u,v) );
+    }
+    vgl_box_2d<double> imagebbox(0,ni,0,nj);
+    vgl_box_2d<double> ibox = vgl_intersection<double>(imagebbox,projectionbox);
+    return !(ibox.is_empty());
+}
 //---------------------------------------------------------------------
 // NON CLASS FUNCTIONS
 //---------------------------------------------------------------------
