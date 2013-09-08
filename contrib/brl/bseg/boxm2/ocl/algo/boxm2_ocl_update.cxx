@@ -23,6 +23,7 @@
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
+#include <vnl/vnl_numeric_traits.h>
 
 //: Map of kernels should persist between process executions
 vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update::kernels_;
@@ -38,8 +39,12 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
                               bool                     update_alpha,
                               float                    mog_var,
                               bool                     update_app,
+                              float resnearfactor,
+                              float resfarfactor,
                               vcl_size_t               startI,
-                              vcl_size_t               startJ)
+                              vcl_size_t               startJ
+
+                              )
 {
   enum {
     UPDATE_SEGLEN = 0,
@@ -111,6 +116,18 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff, startI, startJ);
 
+  float tnearfar[2] = { 0.0f, 1000000} ;
+
+  if(cam->type_name() == "vpgl_perspective_camera")
+  {
+      float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
+      tnearfar[0] = f* scene->finest_resolution()/resnearfactor ;
+      tnearfar[1] = f* scene->finest_resolution()*resfarfactor ;
+
+      vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+  }
+  bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
+  tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   //Visibility, Preinf, Norm, and input image buffers
   float* vis_buff = new float[cl_ni*cl_nj];
   float* pre_buff = new float[cl_ni*cl_nj];
@@ -133,6 +150,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
       ++count;
     }
   }
+
 
   //bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff,cl_ni*cl_nj*sizeof(float),"input image buffer");
   bocl_mem_sptr in_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), input_buff, "input image buffer");
@@ -178,7 +196,11 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  vcl_vector<boxm2_block_id> vis_order;
+  if(cam->type_name() == "vpgl_perspective_camera")
+      vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),img_view->ni(),img_view->nj());
+  else
+      vis_order= scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
@@ -264,7 +286,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
         // kern->set_arg( persp_cam.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-
+        kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( in_image.ptr() );
         kern->set_arg( cl_output.ptr() );
@@ -299,7 +321,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
         kern->set_arg( lookup.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-
+        kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( vis_image.ptr() );
         kern->set_arg( pre_image.ptr() );
@@ -339,7 +361,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
         kern->set_arg( lookup.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-
+        kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( vis_image.ptr() );
         kern->set_arg( pre_image.ptr() );
@@ -440,7 +462,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   opencl_cache->unref_mem(norm_image.ptr());
   opencl_cache->unref_mem(ray_o_buff.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());
-
+  opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
   return true;
@@ -481,7 +503,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device,
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = "-D INTENSITY -D DETERMINISTIC" + opts;
+  vcl_string options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
   vcl_vector<bocl_kernel*> vec_kernels;

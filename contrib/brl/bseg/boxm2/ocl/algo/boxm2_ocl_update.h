@@ -27,9 +27,11 @@ class boxm2_ocl_update
                         bool                     update_alpha = true, 
                         float                    mog_var = -1.0f,
                         bool                     update_app = true,
+                        float resnearfactor = 100000.0,
+                        float resfarfactor = 100000.0,
                         vcl_size_t               startI=0,
                         vcl_size_t               startJ=0);
-  
+
   private:
     //compile kernels and place in static map
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="", bool isRGB = false);

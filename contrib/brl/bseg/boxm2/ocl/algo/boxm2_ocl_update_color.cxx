@@ -115,6 +115,9 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   vcl_fill(pre_buff, pre_buff+cl_ni*cl_nj, 0.0f);
   vcl_fill(norm_buff, norm_buff+cl_ni*cl_nj, 0.0f);
 
+  float tnearfar[2] = { 0.0f, 1000000.0f} ;
+  bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
+  tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   //initialize input image buffer
   int numFloats = 4;
   float* input_buff = new float[numFloats*cl_ni*cl_nj];  //need to store RGB (or YUV values)
@@ -181,7 +184,12 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  vcl_vector<boxm2_block_id> vis_order;
+  if(cam->type_name() == "vpgl_perspective_camera")
+      vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),img_view->ni(),img_view->nj());
+  else
+      vis_order= scene->get_vis_blocks(cam);
+
   vcl_vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
@@ -280,7 +288,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
         kern->set_arg( lookup.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-
+                kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( in_image.ptr() );
         kern->set_arg( cl_output.ptr() );
@@ -317,7 +325,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
 
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-
+        kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( vis_image.ptr() );
         kern->set_arg( pre_image.ptr() );
@@ -342,7 +350,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
 
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-
+        kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( vis_image.ptr() );
         kern->set_arg( pre_image.ptr() );
@@ -414,7 +422,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   opencl_cache->unref_mem(norm_image.ptr());
   opencl_cache->unref_mem(ray_o_buff.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());
-
+    opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
   //reset local threads to 8/8 (default);
   local_threads[0] = 8;
   local_threads[1] = 8;

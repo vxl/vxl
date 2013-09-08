@@ -60,10 +60,10 @@ float render_expected_image(  boxm2_scene_sptr & scene,
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_cout<<"Scene : "<<scene->data_path()<<' '<<scene->num_blocks()<<vcl_endl;
+    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),cl_ni,cl_nj);
+    vcl_cout<<"Scene : "<<scene->data_path()<<' '<<vis_order.size()<<" cache size "<<opencl_cache->bytes_in_cache()<< vcl_endl;
     vcl_vector<boxm2_block_id>::iterator id;
-    for (id = vis_order.begin(); id != vis_order.end(); ++id)
+    for (id = vis_order.begin(); id !=  vis_order.end(); ++id)
     {
         //choose correct render kernel
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);

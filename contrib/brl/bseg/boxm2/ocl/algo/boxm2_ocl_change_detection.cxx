@@ -1232,7 +1232,11 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
+ float tnearfar[2] = { 0.0f, 10000.0f} ;
+ 
 
+   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
+  tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     //----- STEP ONE: per cell mean obs pass ---------
     //For each ID in the visibility order, grab that block
     vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_perspective_camera<double>*) cam.ptr() );
@@ -1266,6 +1270,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         //3. SET args
         aux0->zero_gpu_buffer(queue,true);
         aux1->zero_gpu_buffer(queue,true);
+
         kern->set_arg( blk_info );
         kern->set_arg( blk );
         kern->set_arg( alpha );
@@ -1276,7 +1281,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         // kern->set_arg( persp_cam.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-
+                kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( in_image.ptr() );
         kern->set_arg( cl_output.ptr() );
@@ -1403,7 +1408,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     opencl_cache->unref_mem(change_image.ptr());
     opencl_cache->unref_mem(ray_o_buff.ptr());
     opencl_cache->unref_mem(ray_d_buff.ptr());
-
+      opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
     clReleaseCommandQueue(queue);
     return true;
 }
@@ -1430,7 +1435,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_spt
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/update_kernels.cl");
     src_paths.push_back(source_dir + "change/two_pass_change.cl");
-    src_paths.push_back(source_dir + "expected_functor.cl");
+    //src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "update_functors.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
