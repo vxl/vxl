@@ -52,25 +52,29 @@ class alpha_update_from_opinion_functor
      if (!is_leaf) {
        return true;
      }
+
      boxm2_data<BOXM2_ALPHA>::datatype &alpha = alpha_data_->data()[index];
      float belief = aux0_data_->data()[index];
      float uncertainty = aux1_data_->data()[index];
 #ifdef DEBUG
      vcl_cout << "index " << index << ": belief = " << belief << ", uncertainty = " << uncertainty << ", alpha = " << alpha << vcl_endl;
 #endif
+     //if(belief< 0)
+     {
+
      float ray_len = side_len;
 
      float PQ_prior = 1.0f - float(vcl_exp(-alpha*ray_len));
      float PQ = belief + uncertainty*PQ_prior;
 
-     alpha = float(-vcl_log(1.0 - PQ)/ray_len);
+     alpha =  float(-vcl_log(1.0 - PQ)/ray_len);
 
      if (alpha < 0) {
        vcl_cerr << "ERROR: alpha = " << alpha << ",  PQ = " << PQ << " ray_len = " << ray_len << '\n'
                 << "    belief = " << belief << " uncertainty = " << uncertainty << "  PQ_prior = " << PQ_prior << '\n';
        alpha = 0.0f;
      }
-
+     }
      return true;
   }
 
@@ -184,11 +188,13 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   vgl_box_2d<double> proj_bbox;
   double u,v;
+  vcl_cout<<"Scene BBox "<<scene_bbox<<vcl_endl;
   geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z() + geoid_height, u, v);
   proj_bbox.add(vgl_point_2d<double>(u,v));
   geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z() + geoid_height, u, v);
   proj_bbox.add(vgl_point_2d<double>(u,v));
 
+  vcl_cout<<"Proj Box "<<proj_bbox<<vcl_endl;
   int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
   int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
   int max_i = int(vcl_min(a1_res->ni()-1.0, vcl_ceil(proj_bbox.max_x())));
@@ -231,8 +237,8 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     for (unsigned int i=0;i<cl_ni;++i) {
       if ( i < ni && j < nj ) {
         int count4 = count*4;
-        double full_i = min_i + i + 0.5;
-        double full_j = min_j + j + 0.5;
+        double full_i = min_i + i + 0.25;
+        double full_j = min_j + j + 0.25;
         double lat,lon, x, y, z_first, z_last;
         double el_first = (*a1_view)(i,j) + geoid_height;
         double el_last = (*a2_view)(i,j) + geoid_height;
@@ -341,10 +347,10 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     // aux1 for occupancy "uncertainty"
     auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
     //bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize, false);
-    bocl_mem *aux1 = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(), info_buffer->data_buffer_length*auxTypeSize, false);
+    bocl_mem *aux1 = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(),info_buffer->data_buffer_length*auxTypeSize, false);
 
     // initialize belief values to 0.0
-    aux0->zero_gpu_buffer(queue);
+    //aux0->zero_gpu_buffer(queue);
     // initialize uncertainty values to 1.0
     cl_float aux1_init_val = 1.0f;
     aux1->init_gpu_buffer(&aux1_init_val, sizeof(cl_float), queue);
@@ -396,8 +402,8 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
 
     boxm2_cache_sptr cpu_cache = opencl_cache->get_cpu_cache();
     boxm2_data_base *alpha_data = cpu_cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    boxm2_data_base *aux0_data = cpu_cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(),0,true);
-    boxm2_data_base *aux1_data = cpu_cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(),0,true);
+    boxm2_data_base *aux0_data = cpu_cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(),0,false);
+    boxm2_data_base *aux1_data = cpu_cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(),0,false);
 
     boxm2_block* block = cpu_cache->get_block(*id);
 
