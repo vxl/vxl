@@ -59,7 +59,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     vgl_vector_3d<double> subBlockDim ( nblks*res, nblks*res, nblks*res );
 
     //number of blocks in scene (nblks,nblks,1)
-    vgl_vector_3d<unsigned> numBlocks(nblks, nblks, 2);
+    vgl_vector_3d<unsigned> numBlocks(nblks, nblks, 1);
 
     vcl_cout<<"totSubBlocks "<<totSubBlocks<<vcl_endl;
     //number of subblocks per block
