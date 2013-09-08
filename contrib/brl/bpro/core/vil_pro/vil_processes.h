@@ -59,6 +59,6 @@ DECLARE_FUNC_CONS(vil_fill_holes_in_regions_process);
 DECLARE_FUNC_CONS(vil_EO_IR_combine_process);
 DECLARE_FUNC_CONS(vil_truncate_image_process);
 DECLARE_FUNC_CONS(vil_grey_to_rgb_process);
-
+DECLARE_FUNC_CONS(vil_threshold_max_image_process);
 
 #endif
