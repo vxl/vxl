@@ -75,6 +75,11 @@ class boxm2_scene_adaptor(object):
   def cache() :
     return self.cache;
 
+  def init_alpha(self, pinit=0.01, thresh = 1.0):
+    cache = self.opencl_cache
+    dev = self.device
+    init_alpha(self.scene, cache, dev,pinit,thresh);
+
   #update with alternate explaination prior and appearance density
   def update_with_alt(self, cam, img, update_alpha=True, mask=None, var=-1.0, alt_prior=None, alt_density=None):
     cache = self.opencl_cache

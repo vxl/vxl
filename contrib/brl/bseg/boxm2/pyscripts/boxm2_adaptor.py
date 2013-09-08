@@ -128,13 +128,24 @@ def write_scene_to_kml(scene, kml_filename):
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1,kml_filename);
   boxm2_batch.run_process();
-
 def write_scene_to_vrml(scene, vrml_filename):
   boxm2_batch.init_process("boxm2SceneVrmlProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1,vrml_filename);
   boxm2_batch.run_process();
-
+def init_alpha(scene, cache, device,pinit = 0.01, thresh = 1.0) :
+  if cache.type == "boxm2_opencl_cache_sptr":
+    print("Update Parents Alpha");
+    boxm2_batch.init_process("boxm2OclInitAlphaProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_float(3,pinit);
+    boxm2_batch.set_input_float(4,thresh);
+    return boxm2_batch.run_process();
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+    return False;
 
 ###############################################
 # Model building stuff
@@ -771,8 +782,8 @@ def median_filter(scene, cache, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU median filter";
     boxm2_batch.init_process("boxm2CppFilterProcess");
-    boxm2_batch.set_input_from_db(1, scene);
-    boxm2_batch.set_input_from_db(2, cache);
+    boxm2_batch.set_input_from_db(0, scene);
+    boxm2_batch.set_input_from_db(1, cache);
     boxm2_batch.run_process();
   elif cache.type == "boxm2_opencl_cache_sptr" and device :
     print "boxm2_batch GPU median filter";
