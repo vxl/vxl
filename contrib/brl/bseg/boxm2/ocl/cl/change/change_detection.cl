@@ -18,7 +18,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneInfo*,
-              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
+              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs,float tnear, float tfar);
 
 //------------------------------------------------------------------------------
 // 1x1 change detection (simple, single ray independent CD).
@@ -100,7 +100,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis,
 
             //RENDER SPECIFIC ARGS
-            aux_args);
+            aux_args,0,MAXFLOAT);
 
   //expected image gets rendered
   change_image[imIndex[llid]]     = change;  //expected_int;
@@ -255,7 +255,7 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
               local_tree, bit_lookup, cumsum, &vis,
 
               //RENDER SPECIFIC ARGS
-              aux_args);
+              aux_args,0,MAXFLOAT);
 
     //expected image gets rendered
     change_image    [imIndex[llid]] = change;  //expected_int;

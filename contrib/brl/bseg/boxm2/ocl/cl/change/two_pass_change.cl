@@ -18,7 +18,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnearf, float tfarf);
 __kernel
 void
 change_seg_len(__constant  RenderSceneInfo    * linfo,
@@ -70,7 +70,7 @@ change_seg_len(__constant  RenderSceneInfo    * linfo,
   float4 ray_o = ray_origins[ nIdx ];
   float4 ray_d = ray_directions[ nIdx ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz,0, MAXFLOAT);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -87,7 +87,7 @@ change_seg_len(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0, MAXFLOAT);    //utility info
 }
 
 //seg_len step cell functor. does two atomic sums
@@ -123,7 +123,7 @@ typedef struct
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneInfo*,
-              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
+              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs, float tnearf, float tfarf);
 
 //------------------------------------------------------------------------------
 // 1x1 change detection (simple, single ray independent CD).
@@ -206,7 +206,7 @@ two_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis,
 
             //RENDER SPECIFIC ARGS
-            aux_args);
+            aux_args,0,MAXFLOAT);
 
   //expected image gets rendered
   change_image[imIndex[llid]]     = change;  //expected_int;
@@ -272,7 +272,7 @@ float*       ray_vis;
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneInfo*,
-              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
+              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs,float tnearf,float tfarf);
 
 //------------------------------------------------------------------------------
 // 1x1 change detection (simple, single ray independent CD).
@@ -339,11 +339,12 @@ aux_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis,
 
             //RENDER SPECIFIC ARGS
-            aux_args);
+            aux_args,0, MAXFLOAT);
 
   //expected image gets rendered
   change_image[imIndex[llid]]     = change;  //expected_int;
   vis_image[imIndex[llid]]        = vis;
+
 }
 
 
