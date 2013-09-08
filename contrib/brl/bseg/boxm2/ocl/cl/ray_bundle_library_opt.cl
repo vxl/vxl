@@ -260,11 +260,11 @@ void bayes_ratio_functor(         float   seg_len,          // segment length fo
 }
 
 /* bayes ratio independent functor (for independent rays) */
-void bayes_ratio_ind( float  seg_len,
+void bayes_ratio_ind( float  d,
                       float  alpha,
                       float8 mixture,
                       float  weight3,
-                      float  cum_len,
+                      float  block_len,
                       float  mean_obs,
                       float  norm,
                       float* ray_pre,
@@ -275,7 +275,7 @@ void bayes_ratio_ind( float  seg_len,
     float PI = 0.0;
 
     /* Compute PI for all threads */
-    if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
+    if (d > 1.0e-10f) {    /* if  too small, do nothing */
         PI = gauss_3_mixture_prob_density(mean_obs,
                                           mixture.s0,
                                           mixture.s1,
@@ -289,11 +289,11 @@ void bayes_ratio_ind( float  seg_len,
     }
 
     //calculate this ray's contribution to beta
-    (*ray_beta) = ((*ray_pre) + PI*(*ray_vis))*seg_len/norm;
-    (*vis_cont) = (*ray_vis) * seg_len;
+    (*ray_beta) = ((*ray_pre) + PI*(*ray_vis))*d/norm;
+    (*vis_cont) = (*ray_vis) * d;
 
     //update ray_pre and ray_vis
-    float temp  = exp(-alpha * seg_len);
+    float temp  = exp(-alpha * d*block_len);
 
     /* updated pre                      Omega         *  PI         */
     (*ray_pre) += (*ray_vis)*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
@@ -363,7 +363,7 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
                            &Nobs_mix);
 
     float beta = aux_data.z; //aux_data.z/aux_data.x;
-    clamp(beta,0.5f,2.0f);
+    clamp(beta,0.25f,16.0f);
     (*data).s0 *= beta;
     (*data).s1=mu0; (*data).s2=sigma0, (*data).s3=w0;(*data).s4=(float)Nobs0;
     (*data).s5=mu1; (*data).s6=sigma1, (*data).s7=w1;(*data).s8=(float)Nobs1;

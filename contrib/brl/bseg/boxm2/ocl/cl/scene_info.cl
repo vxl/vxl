@@ -94,7 +94,7 @@
 #endif
 
 //SEG_LEN FACTOR used for at
-#define SEGLEN_FACTOR 100000.0f   //Hack representation of int32.maxvalue/(root(3)*ni*nj)
+#define SEGLEN_FACTOR 10000.0f   //Hack representation of int32.maxvalue/(root(3)*ni*nj)
 
 typedef struct
 {

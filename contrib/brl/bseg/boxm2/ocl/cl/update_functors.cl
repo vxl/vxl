@@ -100,19 +100,16 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float weight3   = (1.0f-mixture.s2-mixture.s5);
 
     //load aux data
-    float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
-    float mean_obs = convert_float(aux_args.mean_obs[data_ptr])/SEGLEN_FACTOR;
+    float cum_len  = convert_float(aux_args.seg_len[data_ptr]);//SEGLEN_FACTOR;
+    float mean_obs = convert_float(aux_args.mean_obs[data_ptr]);//SEGLEN_FACTOR;
     mean_obs = mean_obs/cum_len;
-    aux_args.linfo->block_len;
+    //aux_args.linfo->block_len;
     float cell_beta = 0.0f;
     float cell_vis  = 0.0f;
     barrier(CLK_LOCAL_MEM_FENCE);
 
     //calculate bayes ratio
-    bayes_ratio_functor(d,
-#if 0
-                        *aux_args.linfo->block_len,
-#endif
+    bayes_ratio_functor(d,aux_args.linfo->block_len,
                         mean_obs,
                         aux_args.ray_pre,
                         aux_args.ray_vis,
@@ -151,11 +148,11 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 #endif
 
     float ray_beta, vis_cont;
-    bayes_ratio_ind( d*aux_args.linfo->block_len,
+    bayes_ratio_ind( d,
                      alpha,
                      mixture,
                      weight3,
-                     cum_len*aux_args.linfo->block_len,
+                     aux_args.linfo->block_len,
                      mean_obs,
                      aux_args.norm,
                      aux_args.ray_pre,
@@ -170,7 +167,7 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     //discretize and store beta and vis contribution
     int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
     atom_add(&aux_args.beta_array[data_ptr], beta_int);
-    int vis_int  = convert_int_rte((vis_cont/aux_args.linfo->block_len) * SEGLEN_FACTOR);
+    int vis_int  = convert_int_rte((vis_cont) * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
 #endif
 
@@ -279,7 +276,8 @@ void step_cell_post(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
 void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, float d1)
 {
-    float b = aux_args.belief[data_ptr];
+
+ /*   float b = aux_args.belief[data_ptr];
     float u = aux_args.uncertainty[data_ptr];
 
     // probability first return lies within cell
@@ -313,6 +311,27 @@ void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, floa
     }
     aux_args.belief[data_ptr] = b;
     aux_args.uncertainty[data_ptr] = u;
+   if( d0 < aux_args.first_depth -2  )
+    {
+        aux_args.belief[data_ptr] = -2.0;
+        aux_args.uncertainty[data_ptr] = 0.01;
+    }
+    else
+    {
+
+    }
+    */
+    if( d1 >  aux_args.first_depth  && d0 < aux_args.first_depth)
+    {
+        aux_args.belief[data_ptr] = 0.99;
+        aux_args.uncertainty[data_ptr] = 0.01;
+    }
+    else
+    {
+        aux_args.belief[data_ptr] = 0.01;
+        aux_args.uncertainty[data_ptr] = 0.01;
+    }
+
     //aux_args.belief[data_ptr] = aux_args.first_depth;
     //aux_args.uncertainty[data_ptr] = aux_args.last_depth;
 }
