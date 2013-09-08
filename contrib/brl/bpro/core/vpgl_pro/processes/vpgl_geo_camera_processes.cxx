@@ -49,6 +49,11 @@ bool vpgl_load_geo_camera_process(bprb_func_process& pro)
   unsigned northing = pro.get_input<unsigned>(3);
 
   vcl_ifstream ifs(tfw_filename.c_str());
+  if(!ifs)
+  {
+      vcl_cout<<"Could not open file "<<vcl_endl;
+      return false;
+  }
   vnl_matrix<double> trans_matrix(4,4,0.0);
   ifs >> trans_matrix[0][0];
   ifs >> trans_matrix[0][1];
@@ -59,7 +64,7 @@ bool vpgl_load_geo_camera_process(bprb_func_process& pro)
   trans_matrix[3][3] = 1.0;
   ifs.close();
 
-  //vcl_cout << "trans matrix: " << trans_matrix << vcl_endl;
+  vcl_cout << "trans matrix: " << trans_matrix << vcl_endl;
 
   vpgl_geo_camera *cam = new vpgl_geo_camera(trans_matrix, lvcs);
   if (utm_zone != 0)
