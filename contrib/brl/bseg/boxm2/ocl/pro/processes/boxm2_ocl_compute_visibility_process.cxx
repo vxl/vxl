@@ -305,6 +305,7 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
        char filename[1000];
        vcl_sprintf(filename,"vis_%d.jpg",count);
        vcl_string outfile = outdir +"/" + filename;
+       vcl_cout<<"filename"<<outfile<<vcl_endl;
        vil_save(visout_rescaled,outfile.c_str());
     }
     vcl_cout<<"it took "<<t.all()<<vcl_endl;
