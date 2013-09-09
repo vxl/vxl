@@ -190,6 +190,42 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     // check whether this region intersects with scene bbox
     if (!vgl_intersection(sbbox, poly))
       continue;
+
+    unsigned char curr_level = osm_obj.loc_polys()[r_idx]->prop().level_;
+    // geo cover is already level 0 and therefore anything in osm with level 0 is ignored
+    if (curr_level == 0)
+      continue;
+    // go from geo coord wgs84 to local
+    vgl_polygon<double> img_poly(1);
+    unsigned char curr_id = osm_obj.loc_polys()[r_idx]->prop().id_;
+    vil_rgb<vxl_byte> curr_color = osm_obj.loc_polys()[r_idx]->prop().color_;
+    for (unsigned pt_idx = 0; pt_idx < poly[0].size(); pt_idx++) {
+      double lx, ly, lz;
+      lvcs->global_to_local(poly[0][pt_idx].x(), poly[0][pt_idx].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
+      double i = (lx - scene_bbox.min_x())/vox_length;
+      double j = (scene_bbox.max_y() - ly)/vox_length;
+      img_poly[0].push_back(vgl_point_2d<double>(i,j));
+    }
+
+    // using poly iterator to loop over all points inside the polygon and intersect with the scene cropped image
+    cnt++;
+    vgl_polygon_scan_iterator<double> it(img_poly, true);
+    for (it.reset(); it.next();  )
+    {
+      int y = it.scany();
+      for (int x = it.startx(); x <= it.endx(); ++x) {
+        if ( x >= 0 && y >= 0 && x < out_img_label->ni() && y < out_img_label->nj()) {
+          if (curr_level > (*level_img)(x, y)) {
+            (*level_img)(x,y) = curr_level; 
+            (*out_img_label)(x,y) = curr_id;
+            (*out_class_img)(x,y) = curr_color;
+          }
+        }
+      }
+    }
+  }
+  vcl_cout << " number of osm regions ingested into geo cover: " << cnt << vcl_endl;
+#if 0
     // go from geo coord wgs84 to local
     vgl_polygon<double> img_poly(1);
     unsigned char curr_level = osm_obj.loc_polys()[r_idx]->prop().level_;
@@ -220,7 +256,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     }
   }
   vcl_cout << " number of osm regions ingested into geo cover: " << cnt << vcl_endl;
-
+#endif
   // ingest roads
   cnt = 0;
   unsigned num_roads = osm_obj.num_roads();
