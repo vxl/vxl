@@ -85,9 +85,8 @@ class boxm2_scene_adaptor(object):
     cache = self.opencl_cache
     dev = self.device
     update_grey_with_alt(self.scene, cache, cam, img, dev, "", mask, update_alpha, var, alt_prior, alt_density)
-
   #update wrapper, can pass in a Null device to use
-  def update(self, cam, img, update_alpha=True,update_app=True, mask=None, device_string="", var=-1.0, ident_string="") :
+  def update(self, cam, img, update_alpha=True,update_app=True, mask=None, device_string="", var=-1.0, ident_string="", tnear = 1000.0, tfar = 1000.0) :
     cache = self.active_cache;
     dev = self.device;
 
@@ -102,7 +101,7 @@ class boxm2_scene_adaptor(object):
     if self.rgb :
       return update_rgb(self.scene, cache, cam, img, dev);
     else :
-      return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var);
+      return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var, update_app, tnear, tfar);
 
   #update wrapper, can pass in a Null device to use
   def update_app(self, cam, img, device_string="") :
@@ -119,9 +118,20 @@ class boxm2_scene_adaptor(object):
       update_rgb(self.scene, cache, cam, img, dev, "", False);
     else :
       update_app_grey(self.scene, cache, cam, img, dev);
+  #update skky wrapper, can pass in a Null device to use
+  def update_sky(self, cam, img, device_string="") :
+    cache = self.active_cache;
+    dev = self.device;
+    #check if force gpu or cpu
+    if device_string=="gpu" :
+      cache = self.opencl_cache;
+    elif device_string=="cpp" :
+      print " Not  implemented in C++ yet ";
+      return;
+    update_sky(self.scene, cache, cam, img, dev);
 
   #render wrapper, same as above
-  def render(self, cam, ni=1280, nj=720, device_string="", ident_string="") :
+  def render(self, cam, ni=1280, nj=720, device_string="", ident_string="", tnear = 1000000.0,tfar = 1000000.0, ) :
     cache = self.active_cache;
     dev = self.device;
     #check if force gpu or cpu
@@ -131,10 +141,10 @@ class boxm2_scene_adaptor(object):
       cache = self.cpu_cache;
       dev = None;
     if self.rgb :
-      expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev);
+      expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev,tnear,tfar);
       boxm2_batch.remove_data(vis_image.id)
     else :
-      expimg = render_grey(self.scene, cache, cam, ni, nj, dev, ident_string);
+      expimg = render_grey(self.scene, cache, cam, ni, nj, dev, ident_string,tnear,tfar);
     return expimg;
 
   #render wrapper, same as above

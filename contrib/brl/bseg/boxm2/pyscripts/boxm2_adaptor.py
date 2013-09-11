@@ -151,7 +151,7 @@ def init_alpha(scene, cache, device,pinit = 0.01, thresh = 1.0) :
 # Model building stuff
 ###############################################
 # Generic update - will use GPU if device/openclcache are passed in
-def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0,update_app=True) :
+def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0,update_app=True,tnear = 1000.0 , tfar = 1000.0 ) :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update";
@@ -175,6 +175,8 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
     boxm2_batch.set_input_bool(7, update_alpha);
     boxm2_batch.set_input_float(8, var);
     boxm2_batch.set_input_bool(9, update_app);
+    boxm2_batch.set_input_float(10, tnear);
+    boxm2_batch.set_input_float(11, tfar);
     return boxm2_batch.run_process();
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
@@ -266,7 +268,15 @@ def update_cpp(scene, cache, cam, img, ident="") :
   boxm2_batch.set_input_from_db(3,img);
   boxm2_batch.set_input_string(4,ident);
   boxm2_batch.run_process();
-
+# Generic update - will use GPU if device/openclcache are passed in
+def update_sky(scene, cache, cam, img, device) :
+  boxm2_batch.init_process("boxm2OclUpdateSkyProcess");
+  boxm2_batch.set_input_from_db(0,device);
+  boxm2_batch.set_input_from_db(1,scene);
+  boxm2_batch.set_input_from_db(2,cache);
+  boxm2_batch.set_input_from_db(3,cam);
+  boxm2_batch.set_input_from_db(4,img);
+  boxm2_batch.run_process();
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 def render_height_map(scene, cache, device=None) :
@@ -489,7 +499,7 @@ def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoi
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 #####################################################################
-def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string="") :
+def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string="",tnear=100000.0,tfar=100000.0) :
   if cache.type == "boxm2_cache_sptr" :
     boxm2_batch.init_process("boxm2CppRenderExpectedImageProcess");
     boxm2_batch.set_input_from_db(0,scene);
@@ -511,6 +521,8 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string=""
     boxm2_batch.set_input_unsigned(4,ni);
     boxm2_batch.set_input_unsigned(5,nj);
     boxm2_batch.set_input_string(6,ident_string);
+    boxm2_batch.set_input_float(7,tnear);
+    boxm2_batch.set_input_float(8,tfar);
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
@@ -561,7 +573,7 @@ def render_grey_and_vis(scene, cache, cam, ni=1280, nj=720, device=None,ident=""
 #####################################################################
 # Generic render, returns a dbvalue expected image
 #####################################################################
-def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
+def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None,tnear=100000.0,tfar=100000.0) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU render rgb not yet implemented";
   elif cache.type == "boxm2_opencl_cache_sptr" and device :
@@ -572,6 +584,8 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.set_input_from_db(3,cam);
     boxm2_batch.set_input_unsigned(4,ni);
     boxm2_batch.set_input_unsigned(5,nj);
+    boxm2_batch.set_input_float(6,tnear);
+    boxm2_batch.set_input_float(7,tfar);
     status = boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);

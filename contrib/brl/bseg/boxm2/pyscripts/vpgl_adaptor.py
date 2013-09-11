@@ -484,22 +484,22 @@ def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename,init_finish=
     boxm2_batch.run_process();
 
 def load_geotiff_cam(tfw_filename, lvcs=0, utm_zone=0, utm_hemisphere=0):
-    bvxm_batch.init_process("vpglLoadGeoCameraProcess");
-    bvxm_batch.set_input_string(0, tfw_filename);
+    boxm2_batch.init_process("vpglLoadGeoCameraProcess");
+    boxm2_batch.set_input_string(0, tfw_filename);
     if lvcs != 0:
-      bvxm_batch.set_input_from_db(1, lvcs);
-    bvxm_batch.set_input_int(2, utm_zone);
-    bvxm_batch.set_input_unsigned(3, utm_hemisphere);
-    bvxm_batch.run_process();
-    (c_id,c_type) = bvxm_batch.commit_output(0);
+      boxm2_batch.set_input_from_db(1, lvcs);
+    boxm2_batch.set_input_int(2, utm_zone);
+    boxm2_batch.set_input_unsigned(3, utm_hemisphere);
+    boxm2_batch.run_process();
+    (c_id,c_type) = boxm2_batch.commit_output(0);
     cam = dbvalue(c_id,c_type);
     return cam;
 
 def save_geocam_to_tfw(cam, tfw_filename):
-    bvxm_batch.init_process("vpglSaveGeoCameraTFWProcess");
-    bvxm_batch.set_input_from_db(0, cam);
-    bvxm_batch.set_input_string(1, tfw_filename);
-    bvxm_batch.run_process();
+    boxm2_batch.init_process("vpglSaveGeoCameraTFWProcess");
+    boxm2_batch.set_input_from_db(0, cam);
+    boxm2_batch.set_input_string(1, tfw_filename);
+    boxm2_batch.run_process();
 
 def load_geotiff_cam2(filename, ni, nj):
     boxm2_batch.init_process("vpglLoadGeoCameraProcess2");
@@ -569,5 +569,12 @@ def convert_perspective_to_nvm(cams_dir,imgs_dir, output_nvm):
     boxm2_batch.set_input_string(0, cams_dir);
     boxm2_batch.set_input_string(1, imgs_dir);
     boxm2_batch.set_input_string(2, output_nvm);
+    return boxm2_batch.run_process();
+def interpolate_perspective_cameras(cam0,cam1,ncams,outdir):
+    boxm2_batch.init_process("vpglInterpolatePerspectiveCamerasProcess");
+    boxm2_batch.set_input_from_db(0, cam0);
+    boxm2_batch.set_input_from_db(1, cam1);
+    boxm2_batch.set_input_unsigned(2, ncams);
+    boxm2_batch.set_input_string(3, outdir);
     return boxm2_batch.run_process();
 
