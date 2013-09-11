@@ -307,6 +307,37 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   }
   vcl_cout << " number of osm regions ingested into geo cover: " << cnt << vcl_endl; 
 
+#if 0 // use this when we have satellite data
+  // ingest points (will occupy a single pixel)
+  cnt = 0;
+  unsigned n_pts = osm_obj.num_locs();
+  vcl_vector<volm_osm_object_point_sptr> loc_pts = osm_obj.loc_pts();
+  for (unsigned p_idx = 0; p_idx < n_pts; p_idx++) {
+    vgl_point_2d<double> pt = loc_pts[p_idx]->loc();
+    if (!sbbox.contains(pt))
+      continue;
+    // transfer from geo coord to img pixel
+    unsigned char curr_level = loc_pts[p_idx]->prop().level_;
+    unsigned char curr_id = loc_pts[p_idx]->prop().id_;
+    vil_rgb<vxl_byte> curr_color = loc_pts[p_idx]->prop().color_;
+    double lx, ly, lz;
+    lvcs->global_to_local(pt.x(), pt.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
+    double i = (lx - scene_bbox.min_x())/vox_length;
+    double j = (scene_bbox.max_y() - ly)/vox_length;
+    int x = (int)i;
+    int y = (int)j;
+    if (x >= 0 && y >= 0 && x < out_img_label->ni() && y < out_img_label->nj()) {
+      if (curr_level > (*level_img)(x, y)) {
+        cnt++;
+        (*level_img)(x,y) = curr_level; 
+        (*out_img_label)(x,y) = curr_id;
+        (*out_class_img)(x,y) = curr_color;
+      }
+    }
+  }
+  vcl_cout << " number of osm points ingested into geo cover: " << cnt << vcl_endl; 
+#endif
+
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
   pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);

@@ -15,6 +15,7 @@
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
+#include <vcl_where_root_dir.h>
 
 vcl_map<vcl_string, depth_map_region::orientation> create_orient_map()
 {
@@ -134,6 +135,30 @@ void volm_category_attribute::read_category(vcl_map<vcl_string, volm_category_at
 
 vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
 {
+  // read the pre-defined fallback category table from text file
+  // NOTE: this function needs modification if more fallback categroy is added
+  vcl_map<unsigned char, vcl_vector<unsigned char> > m;
+  vcl_vector<unsigned char> f(4,0);
+  // load the text file
+  vcl_string txt_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/fallback_category.txt";
+  vcl_ifstream ifs(txt_file.c_str());
+  vcl_string header;
+  vcl_getline(ifs, header);
+  vcl_string name;
+  unsigned level;
+  float width;
+  unsigned id, f1, f2, f3, f4;
+  float w1, w2, w3, w4;
+  while( !ifs.eof()) {
+    ifs >> id;  ifs >> name;  ifs >> level;  ifs >> width;
+    ifs >> f1;  ifs >> f2;  ifs >> f3;  ifs >> f4;
+    ifs >> w1;  ifs >> w2;  ifs >> w3;  ifs >> w4;
+    f.clear();
+    f.push_back(f1);  f.push_back(f2);  f.push_back(f3);  f.push_back(f4);
+    m[id] = f;
+  }
+  return m;
+#if 0
   vcl_map<unsigned char, vcl_vector<unsigned char> > m;
   vcl_vector<unsigned char> f(4,0);
   f.clear();  f.push_back(0);  f.push_back(0);  f.push_back(0);  f.push_back(0);  m[0] = f;   // invalid    ----------> [invalid, invalid, invalid, invalid]
@@ -172,10 +197,33 @@ vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
   f.clear();  f.push_back(33); f.push_back(6);  f.push_back(15); f.push_back(1);  m[33] = f;  //
   f.clear();  f.push_back(34); f.push_back(15); f.push_back(4);  f.push_back(5);  m[34] = f;  // tall_building --> high_building, building, developed low, developed high
   return m;
+#endif
 }
 
 vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
 {
+  vcl_map<unsigned char, vcl_vector<float> > m;
+  vcl_vector<float> w(4,0.0f);
+  vcl_string txt_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/fallback_category.txt";
+  vcl_ifstream ifs(txt_file.c_str());
+  vcl_string header;
+  vcl_getline(ifs, header);
+  vcl_string name;
+  unsigned level;
+  float width;
+  unsigned id, f1, f2, f3, f4;
+  float w1, w2, w3, w4;
+  while( !ifs.eof()) {
+    ifs >> id;  ifs >> name;  ifs >> level;  ifs >> width;
+    ifs >> f1;  ifs >> f2;  ifs >> f3;  ifs >> f4;
+    ifs >> w1;  ifs >> w2;  ifs >> w3;  ifs >> w4;
+    w.clear();
+    w.push_back(w1);  w.push_back(w2);  w.push_back(w3);  w.push_back(w4);
+    m[id] = w;
+  }
+  return m;
+
+#if 0
   vcl_map<unsigned char, vcl_vector<float> > m;
   vcl_vector<float> f(4, 0.0f);
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(1.0f);  m[0] = f; //
@@ -214,6 +262,7 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   f.clear();  f.push_back(1.0f);  f.push_back(0.8f);  f.push_back(0.7f);  f.push_back(0.7f);  m[33] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.4f);  f.push_back(0.8f);  f.push_back(0.8f);  m[34] = f; // tall_building --> high_building, building, developed low, developed high
   return m;
+#endif
 }
 
 vcl_map<unsigned char, vcl_vector<unsigned char> > volm_fallback_label::fallback_id = create_fallback_label();

@@ -19,6 +19,7 @@
 #include <vcl_utility.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
+#include "volm_category_io.h"
 
 //: A class to hold xml file io methods for volumetric matchers
 // Units are in meters
@@ -80,7 +81,8 @@ class volm_fallback_label
   {
     vcl_cout << '[';
     for (vcl_vector<unsigned char>::iterator vit = volm_fallback_label::fallback_id[id].begin(); vit != volm_fallback_label::fallback_id[id].end(); ++vit)
-      vcl_cout << volm_label_table::land_string(*vit) << ", ";
+      //vcl_cout << volm_label_table::land_string(*vit) << ", ";
+      vcl_cout << volm_osm_category_io::volm_land_table[*vit].name_ << ", ";
     vcl_cout << ']';
   }
   static void print_wgt(unsigned char id)

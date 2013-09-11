@@ -454,7 +454,7 @@ shop mobile_phone 120 store 4 0
 shop massage 120 store 4 0
 shop mall 124 mall 4 0
 shop garden_centre 120 store 4 0
-shop laundry 131 store_laundry 4 0
+shop laundry 149 store_laundry 4 0
 shop bakery 121 shop_bakery 4 0
 shop kitchen 120 store 4 0
 shop kiosk 120 store 4 0
@@ -479,7 +479,7 @@ shop clothes 126 shop_clothes 4 0
 shop books 130 store_books 4 0
 shop chemist 120 store 4 0
 shop boutique 120 store 4 0
-shop dry_cleaning 131 store_laundry 4 0
+shop dry_cleaning 149 store_laundry 4 0
 shop charity 120 store 4 0
 shop carpet 120 store 4 0
 shop fabric 120 store 4 0

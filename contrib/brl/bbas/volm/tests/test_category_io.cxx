@@ -66,10 +66,6 @@ static void test_category_io()
   vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
   test_category_io_read_land_category(osm_to_volm_file);
 
-  // test the method of loading road width
-  vcl_string road_width_file = "./osm_road_width.txt";
-  test_category_io_load_road_width(road_width_file);
-
   // output the hard coded ncld table
   for (vcl_map<int, volm_land_layer>::iterator mit = volm_osm_category_io::nlcd_land_table.begin();
        mit != volm_osm_category_io::nlcd_land_table.end(); ++mit) {
