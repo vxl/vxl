@@ -86,7 +86,7 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
         {
             vil_image_view<unsigned char> img = vil3d_slice_ji(img3d,k);
             vcl_stringstream ss;
-            ss<<outdir<<"/img_"<<vcl_setw(5) << vcl_setfill('0') << k<<".dcm";
+            ss<<outdir<<"/img_"<<vcl_setw(5) << vcl_setfill('0') << k<<".bmp";
             vcl_cout<<"Filename : "<<ss.str()<<vcl_endl;
             vil_save(img,ss.str().c_str());
         }
