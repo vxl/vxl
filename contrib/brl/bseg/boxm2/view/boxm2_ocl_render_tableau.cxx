@@ -144,13 +144,13 @@ float boxm2_ocl_render_tableau::render_frame()
     
     //if scene has RGB data type, use color render process
     bool good = true; 
-    if(scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix()))
+  if(scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix()))
       good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlViewDepExpectedImageProcess");
-    else if(scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix()) )
+  else if(scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix()) )
     good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlViewDepExpectedColorProcess");
-    else if(scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+  else if(scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
       good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedColorProcess");
-    else
+  else
       good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedImageProcess");
       
     //set process args
