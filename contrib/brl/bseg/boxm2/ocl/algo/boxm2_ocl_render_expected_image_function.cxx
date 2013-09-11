@@ -25,7 +25,8 @@ float render_expected_image(  boxm2_scene_sptr & scene,
                               vcl_size_t * lthreads,
                               unsigned cl_ni,
                               unsigned cl_nj,
-                              int apptypesize )
+                              int apptypesize,
+                            bocl_mem_sptr & tnearfar_mem_ptr )
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -85,6 +86,7 @@ float render_expected_image(  boxm2_scene_sptr & scene,
         kern->set_arg( mog );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
+        kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( exp_image.ptr() );
         kern->set_arg( exp_img_dim.ptr());
         kern->set_arg( cl_output.ptr() );

@@ -54,8 +54,8 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   input_types_[7] = "bool";                         //do_update_alpha/don't update alpha
   input_types_[8] = "float";                        //variance value? if 0.0 or less, then use variable variance
   input_types_[9] = "bool";                         //do_update_app/don't update alpha
-  input_types_[10] = "float";                        // near factor ( maximum # of pixels should map to a voxel )
-  input_types_[11] = "float";                        // near factor ( minimum # of pixels should map to a voxel )
+  input_types_[10] = "float";                        // near factor ( maximum # of pixels should map to the finest voxel )
+  input_types_[11] = "float";                        // far factor ( minimum # of pixels should map to the finest voxel )
 
   // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);

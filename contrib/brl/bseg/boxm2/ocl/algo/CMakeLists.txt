@@ -16,6 +16,7 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_update_view_dep_app.h             boxm2_ocl_update_view_dep_app.cxx
     boxm2_ocl_update_view_dep_app_color.h       boxm2_ocl_update_view_dep_app_color.cxx
     boxm2_ocl_update_auxQ.h						boxm2_ocl_update_auxQ.cxx
+    boxm2_ocl_update_sky.h                      boxm2_ocl_update_sky.cxx
    )
 
 ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})

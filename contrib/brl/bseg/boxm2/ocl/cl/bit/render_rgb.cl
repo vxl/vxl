@@ -26,6 +26,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int2               * mixture_array,
                   __global    float4             * ray_origins,
                   __global    float4             * ray_directions,
+                  __global    float              * nearfarplanes,
                   __global    float4             * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,
                   __global    float              * output,
@@ -78,11 +79,13 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   aux_args.mog    = mixture_array;
   aux_args.expint = &expint;
   aux_args.vis    = &vis;
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,nearplane,farplane);      //utility info
 
   //store the expected intensity (as UINT)
   //YUV edit

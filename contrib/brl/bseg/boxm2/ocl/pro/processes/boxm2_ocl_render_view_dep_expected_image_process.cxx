@@ -191,11 +191,15 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"vis image buffer");
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  float tnearfar[2] = { 0.0f, 1000000} ;
 
+
+  bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
+  tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   // run expected image function
   float t = render_expected_image(scene, device, opencl_cache, queue,
                         cam, exp_image, vis_image, max_omega_image,exp_img_dim,
-                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
+                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize,tnearfar_mem_ptr);
   // normalize
   if (kernels[identifier].size()>1)
   {
@@ -246,6 +250,8 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(exp_image.ptr());
   opencl_cache->unref_mem(max_omega_image.ptr());
+  opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
+  
   clReleaseCommandQueue(queue);
   i=0;
   // store scene smaprt pointer

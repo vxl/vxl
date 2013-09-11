@@ -23,7 +23,8 @@ float render_expected_image( boxm2_scene_sptr & scene,
                             vcl_size_t * lthreads,
                             unsigned cl_ni,
                             unsigned cl_nj,
-                            int apptypesize);
+                            int apptypesize,
+                            bocl_mem_sptr & tnearfar_mem_ptr);
 
 float render_cone_expected_image( boxm2_scene_sptr & scene,
                                   bocl_device_sptr & device,

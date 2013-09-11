@@ -178,10 +178,13 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
   bocl_mem_sptr max_omega_image = new bocl_mem(device->context(), max_omega_buff, cl_ni*cl_nj*sizeof(float), "max_omega_image image (single float) buffer");
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
+  float tnearfar[2] = { 0.0f, 1000000} ;
+  bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
+  tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   // run expected image function
   float time = render_expected_image(scene, device, opencl_cache, queue,
                                      cam, exp_color, vis_image, max_omega_image, exp_img_dim,
-                                     data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
+                                     data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize,tnearfar_mem_ptr);
 
   // normalize and write image to GL buffer
   {

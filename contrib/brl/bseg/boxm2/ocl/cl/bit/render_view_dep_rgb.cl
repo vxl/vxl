@@ -25,6 +25,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    MOG_TYPE           * mixture_array,
                   __global    float4             * ray_origins,
                   __global    float4             * ray_directions,
+                  __global    float              * nearfarplanes,
                   __global    float4             * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,
                   __global    float              * output,

@@ -269,7 +269,20 @@ void step_cell_post(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
 }
 #endif // POST
+#ifdef UPDATE_SKY
+//bayes step cell functor
+void step_cell_update_sky(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+    //slow beta calculation ----------------------------------------------------
+    float  alpha    = aux_args.alpha[data_ptr];
 
+    if(aux_args.obs > 0.5 )
+    {
+        aux_args.alpha[data_ptr] = 1e-20f;
+    }
+
+}
+#endif // POST
 #ifdef INGEST_BUCKEYE_DEM
 #define Z_SIGMA 1.0
 #define NEAR_ZERO 1e-5
@@ -277,7 +290,7 @@ void step_cell_post(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, float d1)
 {
 
- /*   float b = aux_args.belief[data_ptr];
+   float b = aux_args.belief[data_ptr];
     float u = aux_args.uncertainty[data_ptr];
 
     // probability first return lies within cell
@@ -311,7 +324,7 @@ void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, floa
     }
     aux_args.belief[data_ptr] = b;
     aux_args.uncertainty[data_ptr] = u;
-   if( d0 < aux_args.first_depth -2  )
+    if( d0 < aux_args.first_depth -2  )
     {
         aux_args.belief[data_ptr] = -2.0;
         aux_args.uncertainty[data_ptr] = 0.01;
@@ -320,18 +333,18 @@ void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, floa
     {
 
     }
-    */
+   /*
     if( d1 >  aux_args.first_depth  && d0 < aux_args.first_depth)
     {
-        aux_args.belief[data_ptr] = 0.99;
-        aux_args.uncertainty[data_ptr] = 0.01;
+        aux_args.belief[data_ptr] = 0.999;
+        aux_args.uncertainty[data_ptr] = 0.001;
     }
-    else
+    else if ( d0 < aux_args.first_depth )
     {
-        aux_args.belief[data_ptr] = 0.01;
-        aux_args.uncertainty[data_ptr] = 0.01;
+        aux_args.belief[data_ptr] = 0.0;
+        aux_args.uncertainty[data_ptr] = 0.001;
     }
-
+   */
     //aux_args.belief[data_ptr] = aux_args.first_depth;
     //aux_args.uncertainty[data_ptr] = aux_args.last_depth;
 }

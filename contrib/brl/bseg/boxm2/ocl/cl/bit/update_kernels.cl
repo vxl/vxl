@@ -458,7 +458,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       int beta_int= aux_array3[gid];
       float mean_obs = convert_float(obs_int) / convert_float(len_int);
       float cell_vis  = convert_float(vis_int) / convert_float(len_int);
-      float cell_beta = convert_float(beta_int) / (convert_float(len_int)* info->block_len);
+      float cell_beta = convert_float(beta_int) / (convert_float(len_int));
 
 #endif
 
@@ -800,3 +800,88 @@ __kernel void update_P_using_Q(__constant RenderSceneInfo * linfo,__global uchar
 }
 
 #endif
+
+
+#ifdef UPDATE_SKY
+typedef struct
+{
+  __constant RenderSceneInfo * linfo;
+    __global float*   alpha;
+  float   obs;
+} AuxArgs;
+
+//forward declare cast ray (so you can use it)
+void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnear, float tfar);
+__kernel
+void
+update_sky_main(__constant  RenderSceneInfo    * linfo,
+             __global    int4               * tree_array,       // tree structure for each block
+             __global    float              * alpha_array,      // alpha for each block
+             __constant  uchar              * bit_lookup,       // used to get data_index
+             __global    float4             * ray_origins,
+             __global    float4             * ray_directions,
+             __global    float              * nearfarplanes,
+             __global    uint4              * imgdims,          // dimensions of the input image
+             __global    float              * in_image,         // the input image
+             __global    float              * output,
+             __local     uchar16            * local_tree,       // cache current tree into local memory
+             __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
+             __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
+             __local     float4             * cached_aux_data,  // seg len cached aux data is only a float2
+             __local     uchar              * cumsum )          // cumulative sum for calculating data pointer
+{
+  //get local id (0-63 for an 8x8) of this patch
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+
+  //initialize pre-broken ray information (non broken rays will be re initialized)
+  ray_bundle_array[llid] = (short2) (-1, 0);
+  cell_ptrs[llid] = -1;
+
+  //----------------------------------------------------------------------------
+  // get image coordinates and camera,
+  // check for validity before proceeding
+  //----------------------------------------------------------------------------
+  int i=0,j=0;
+  i=get_global_id(0);
+  j=get_global_id(1);
+  int imIndex = j*get_global_size(0) + i;
+
+  //grab input image value (also holds vis)
+  float obs = in_image[imIndex];
+  float vis = 1.0f;  //no visibility in this pass
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  // cases #of threads will be more than the pixels.
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y || obs < 0.0f)
+    return;
+
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image,
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ imIndex ];
+  float4 ray_d = ray_directions[ imIndex ];
+  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image, have calculated ray
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  AuxArgs aux_args;
+  aux_args.linfo    = linfo;
+  aux_args.obs    = obs;
+  aux_args.alpha = alpha_array;
+
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
+            linfo, tree_array,                                  //scene info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,nearplane,farplane);    //utility info
+
+
+}
+#endif // UPDATE_SKY

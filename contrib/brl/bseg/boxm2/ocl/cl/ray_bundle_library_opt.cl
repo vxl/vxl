@@ -363,7 +363,7 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
                            &Nobs_mix);
 
     float beta = aux_data.z; //aux_data.z/aux_data.x;
-    clamp(beta,0.25f,16.0f);
+    clamp(beta,0.5f,2.0f);
     (*data).s0 *= beta;
     (*data).s1=mu0; (*data).s2=sigma0, (*data).s3=w0;(*data).s4=(float)Nobs0;
     (*data).s5=mu1; (*data).s6=sigma1, (*data).s7=w1;(*data).s8=(float)Nobs1;
