@@ -46,7 +46,7 @@ void convert_params_to_xform(vnl_vector<double>  x, double scale, vnl_matrix<dou
     xform[1][0] = r.as_matrix()[1][0];  xform[1][1] = r.as_matrix()[1][1]; xform[1][2] = r.as_matrix()[1][2];
     xform[2][0] = r.as_matrix()[2][0];  xform[2][1] = r.as_matrix()[2][1]; xform[2][2] = r.as_matrix()[2][2];
 
-    xform[0][3] = x[0] ;
+    xform[0][3] = x[0] ; 
     xform[1][3] = x[1] ;
     xform[2][3] = x[2] ;
 
@@ -64,7 +64,7 @@ int main(int argc,  char** argv)
   vul_arg<bool> coarse("-coarse", "Registration USing coarser model", 0);
 
   vul_arg_parse(argc, argv);
-
+  
   vcl_cout<<"Is Coarse "<<coarse()<<vcl_endl;
 
   //create scene
@@ -87,7 +87,7 @@ int main(int argc,  char** argv)
   vnl_vector<double> x(6,0.0);      vnl_vector<double> var(6,0.0);
   double q0=0,q1=0,q2=0,q3=0;       vgl_rotation_3d<double> r;
   double scale = 1.0;               int numsamples = 20;
-
+  
 
   vcl_cout<<"Covariance in X direction can be "<<2*sceneB->blocks().begin()->second.sub_block_dim_.x()<<vcl_endl;
   vcl_cout<<"Origin of Scene A is "<<sceneA->local_origin()<<vcl_endl;
@@ -97,20 +97,20 @@ int main(int argc,  char** argv)
   sceneA_origin[2] = sceneA->local_origin().z();
   sceneA_origin[3] = 1.0;
 
-  var[0] = 2*sceneB->blocks().begin()->second.sub_block_dim_.x()/scale;  // var[0] = 1.0/8;     //   BH
+  var[0] = 2*sceneB->blocks().begin()->second.sub_block_dim_.x()/scale;  // var[0] = 1.0/8;     //   BH  
   var[1] = 2*sceneB->blocks().begin()->second.sub_block_dim_.y()/scale;  // var[1] = 1.0/8;     //   BH
   var[2] = 2*sceneB->blocks().begin()->second.sub_block_dim_.z()/scale;  // var[2] = 1.0/8;     //   BH
   var[3] = rotationangle();  // var[3] = 0.3/8;     //   BH
   var[4] = rotationangle();  // var[4] = 0.3/8;     //   BH
   var[5] = rotationangle();  // var[5] = 0.3/8;     //   BH
-
+  
   if(xformAtoB_file() != "" )
   {
     vcl_ifstream ifile( xformAtoB_file().c_str() ) ;
     if(!ifile)
     {
         vcl_cout<<"Error: Cannot open" <<xformAtoB_file()<<vcl_endl;
-        return -1;
+        return -1;  
     }
     ifile >> scale ;
     vnl_matrix<double> mat(4,4);
@@ -131,25 +131,25 @@ int main(int argc,  char** argv)
     double thetafurthest = 2*  vcl_asin(sceneB->blocks().begin()->second.sub_block_dim_.x()/2/dist);
 
     vcl_cout<<"Angle is "<<thetafurthest<<vcl_endl;
-
+  
     mat = mat/scale;
-
+    
     vnl_matrix<double> matr(3,3);     mat.extract(matr);
     vgl_rotation_3d<double> r1(matr);
 
     vcl_cout<<"Sub Block Dim "<<sceneB->blocks().begin()->second.sub_block_dim_.x()<<vcl_endl;
 
-    // use 2 to multiple if 4096 samples are asked but use 1 as factor if 64 samples.
+    // use 2 to multiple if 4096 samples are asked but use 1 as factor if 64 samples. 
 
-    x[0] = mat[0][3];              var[0] = 0.0;//2*sceneB->blocks().begin()->second.sub_block_dim_.x()/scale;  // var[0] = 1.0/8;     //   BH
+    x[0] = mat[0][3];              var[0] = 0.0;//2*sceneB->blocks().begin()->second.sub_block_dim_.x()/scale;  // var[0] = 1.0/8;     //   BH    
     x[1] = mat[1][3];              var[1] = 0.0;//2*sceneB->blocks().begin()->second.sub_block_dim_.y()/scale;  // var[1] = 1.0/8;     //   BH
     x[2] = mat[2][3];              var[2] = 2*sceneB->blocks().begin()->second.sub_block_dim_.z()/scale;  // var[2] = 1.0/8;     //   BH
     x[3] = r1.as_rodrigues()[0];   var[3] = rotationangle();  // var[3] = 0.3/8;     //   BH
     x[4] = r1.as_rodrigues()[1];   var[4] = rotationangle();  // var[4] = 0.3/8;     //   BH
     x[5] = r1.as_rodrigues()[2];   var[5] = 0.0//rotationangle();  // var[5] = 0.3/8;     //   BH
 
-    r= r1;
-
+    r= r1;  
+ 
     vnl_matrix<double> xform;
     convert_params_to_xform(x+var,scale,xform);
     vcl_cout<<xform<<vcl_endl;
@@ -161,11 +161,11 @@ int main(int argc,  char** argv)
   func.init(x, var);
   vul_timer t;
   func.exhaustive(0);
-
+  
   vnl_vector<double> xfinal = func.max_sample();
   vnl_matrix<double> xform;
   convert_params_to_xform(xfinal,scale,xform);
-
+  
   vcl_cout<<"Final Xform is "<<vcl_endl;
   vcl_cout<<xform<<vcl_endl;
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
