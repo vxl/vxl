@@ -356,7 +356,7 @@ class vpdt_mog_lm_updater : public vpdt_mog_updater<mog_type>
 
     T alpha = 1/tw;
     T sqr_dist;
-    unsigned int i = match(mix,sample,gt2_,sqr_dist);
+    unsigned int i = this->match(mix,sample,gt2_,sqr_dist);
     if (i<mix.num_components())
     {
       gaussian_type& g = mix.distribution(i);
@@ -371,7 +371,7 @@ class vpdt_mog_lm_updater : public vpdt_mog_updater<mog_type>
     }
     else
     {
-      insert(mix,sample,alpha);
+      this->insert(mix,sample,alpha);
     }
     // scale down weights for a moving window effect
     if (tw > window_size_) {
