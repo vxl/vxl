@@ -113,6 +113,51 @@ vcl_map<int, volm_land_layer> create_geo_cover_to_volm_table()
   return m;
 }
 
+bool volm_osm_category_io::load_road_junction_table(vcl_string const& filename, vcl_map<vcl_pair<int, int>, volm_land_layer>& road_junction_table)
+{
+  if (!vul_file::exists(filename))
+    return false;
+  vcl_ifstream ifs(filename.c_str());
+  vcl_string header;
+  vcl_getline(ifs, header);
+  int id1, id2;  vcl_string n1, n2;  float w1, w2;
+  vcl_string name;  unsigned id, level;  double width;
+  vil_rgb<vxl_byte> id_color;
+  while ( !ifs.eof()) {
+    ifs >> id1;  ifs >> n1;    ifs >> w1;
+    ifs >> id2;  ifs >> n2;    ifs >> w2;
+    ifs >> id;   ifs >> name;  ifs >> level;  ifs >> width;
+    id_color = color(id);
+    road_junction_table[vcl_pair<int, int>(id1, id2)] = volm_land_layer((unsigned char)id, name, (unsigned char)level, width, id_color);
+    if (id1 != id2)
+      road_junction_table[vcl_pair<int, int>(id2, id1)] = volm_land_layer((unsigned char)id, name, (unsigned char)level, width, id_color);
+  }
+  return true;
+}
+
+
+vcl_map<vcl_pair<int, int>, volm_land_layer> load_osm_road_junction_table()
+{
+  vcl_map<vcl_pair<int, int>, volm_land_layer> m;
+  vcl_string txt_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/road_junction_category.txt";
+  vcl_ifstream ifs(txt_file.c_str());
+  vcl_string header;
+  vcl_getline(ifs, header);
+  int id1, id2;  vcl_string n1, n2;  float w1, w2;
+  vcl_string name;  unsigned id, level;  double width;
+  vil_rgb<vxl_byte> id_color;
+  while ( !ifs.eof()) {
+    ifs >> id1;  ifs >> n1;    ifs >> w1;
+    ifs >> id2;  ifs >> n2;    ifs >> w2;
+    ifs >> id;   ifs >> name;  ifs >> level;  ifs >> width;
+    id_color = color(id);
+    m[vcl_pair<int, int>(id1, id2)] = volm_land_layer((unsigned char)id, name, (unsigned char)level, width, id_color);
+    if (id1 != id2)
+      m[vcl_pair<int, int>(id2, id1)] = volm_land_layer((unsigned char)id, name, (unsigned char)level, width, id_color);
+  }
+  return m;
+}
+
 vcl_map<unsigned, volm_land_layer> create_volm_land_table()
 {
   vcl_map<unsigned, volm_land_layer> m;
@@ -120,9 +165,11 @@ vcl_map<unsigned, volm_land_layer> create_volm_land_table()
   vcl_map<int, volm_land_layer> nlcd_table = create_nlcd_to_volm_table();
   vcl_map<int, volm_land_layer> geo_table = create_geo_cover_to_volm_table();
   vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
+  vcl_map<vcl_pair<int, int>, volm_land_layer> road_junction_table = load_osm_road_junction_table();
+
   vcl_string osm_to_volm_txt = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
   volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
-  
+
   for (vcl_map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
     m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
 
@@ -133,6 +180,9 @@ vcl_map<unsigned, volm_land_layer> create_volm_land_table()
        mit != osm_land_table.end(); ++mit)
     m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
 
+  for (vcl_map<vcl_pair<int, int>, volm_land_layer>::iterator mit = road_junction_table.begin();
+       mit != road_junction_table.end(); ++mit)
+    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
   return m;
 }
 
@@ -146,6 +196,7 @@ vcl_vector<vcl_string> create_volm_land_layer_name_table()
   return out;
 }
 
+vcl_map<vcl_pair<int, int>, volm_land_layer> volm_osm_category_io::road_junction_table = load_osm_road_junction_table();
 vcl_map<int, volm_land_layer> volm_osm_category_io::nlcd_land_table = create_nlcd_to_volm_table();
 vcl_map<int, volm_land_layer> volm_osm_category_io::geo_land_table  = create_geo_cover_to_volm_table();
 vcl_map<unsigned, volm_land_layer> volm_osm_category_io::volm_land_table = create_volm_land_table();

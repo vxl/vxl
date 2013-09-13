@@ -81,6 +81,12 @@ public:
   //: table to transfer open street map (osm) to volm available land table
   static bool load_category_table(vcl_string const& filename, vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>& land_category_table);
 
+  //: table of all defined road junctions loaded from text file
+  static vcl_map<vcl_pair<int, int>, volm_land_layer> road_junction_table;
+
+  //: function to load road junction file
+  static bool load_road_junction_table(vcl_string const& filename, vcl_map<vcl_pair<int, int>, volm_land_layer>& road_junction_table);
+
   //: table to define default width of road loaded from open street map
   static bool load_road_width_table(vcl_string const& filename, vcl_map<vcl_pair<vcl_string, vcl_string>, float>& road_width_table);
 
@@ -95,6 +101,8 @@ public:
 
   //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (id should be same as volm_land_layer id)
   static vcl_map<unsigned, volm_land_layer> volm_land_table;
+
+  
 
 };
 

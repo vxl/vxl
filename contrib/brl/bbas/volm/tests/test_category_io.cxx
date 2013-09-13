@@ -2,7 +2,6 @@
 #include <volm/volm_category_io.h>
 #include <vcl_where_root_dir.h>
 
-
 static void write_osm_samples()
 {
   // input file sample
@@ -78,12 +77,25 @@ static void test_category_io()
     vcl_cout << " geo_cover id = " << mit->first << " ----> ";  mit->second.print();  vcl_cout << '\n';
   }
 
+  // print out the road junction table
+  for (vcl_map<vcl_pair<int,int>, volm_land_layer>::iterator mit = volm_osm_category_io::road_junction_table.begin();
+       mit != volm_osm_category_io::road_junction_table.end(); ++mit) {
+    vcl_cout << " id1 = " << mit->first.first  << " n1 = " << volm_osm_category_io::volm_category_name_table[mit->first.first]
+             << " id2 = " << mit->first.second << " n2 = " << volm_osm_category_io::volm_category_name_table[mit->first.second]
+             << " ---> id = " << (unsigned)mit->second.id_
+             << " name = " << mit->second.name_
+             << " level = " << mit->second.level_
+             << " width = " << mit->second.width_
+             << " color = " << mit->second.color_
+             << vcl_endl;
+  }
+
   // output the volm_land_table
   for (vcl_map<unsigned, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table.begin();
        mit != volm_osm_category_io::volm_land_table.end(); ++mit) {
     vcl_cout << " id = " << mit->first << " --> ";  mit->second.print(); vcl_cout << '\n';
   }
-  
+
   unsigned cnt = 0;
   for (vcl_vector<vcl_string>::iterator vit = volm_osm_category_io::volm_category_name_table.begin();
        vit != volm_osm_category_io::volm_category_name_table.end(); ++vit)
