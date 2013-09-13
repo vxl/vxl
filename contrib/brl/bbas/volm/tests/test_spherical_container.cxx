@@ -6,9 +6,9 @@
 
 static void test_spherical_container()
 {
-  float vmin = 10.0f;
-  float dmax = 60000.0f;
-  float angle = 4.0f;
+  float vmin = 1.0f;
+  float dmax = 10000.0f;
+  float angle = 2.3f;
 #if 0
   float vmin = 3.0f;
   float dmax = 2000.0f;
@@ -53,7 +53,8 @@ static void test_spherical_container()
     iter--;
     vcl_cout << "depth: " << iter->first << " interval: " << (int)iter->second << vcl_endl;
   }
-
+#if 0
+  // test for vmin = 10, solid_angle = 4 and dmax = 60000;
   TEST("depth interval for -1..", sph.get_depth_interval(-1), 1);
   TEST("depth interval for 0..", sph.get_depth_interval(0), 1);
   TEST("depth interval for 1..", sph.get_depth_interval(1), 1);
@@ -64,6 +65,24 @@ static void test_spherical_container()
   TEST("depth interval for 58879..", sph.get_depth_interval(58879), 143);
   TEST("depth interval for 58880..", sph.get_depth_interval(58880), 144);
   TEST("depth interval for dmax..", sph.get_depth_interval(dmax), 144);
+#endif
+#if 1
+  // test for vmin = 1, solid_angle = 2.3, and dmax = 10000;
+  TEST("depth interval for -1..",     sph.get_depth_interval(-1),1);
+  TEST("depth interval for 0..",      sph.get_depth_interval(0), 1);
+  TEST("depth interval for 1..",      sph.get_depth_interval(1), 2);
+  TEST("depth interval for 5..",      sph.get_depth_interval(5), 6);
+  TEST("depth interval for 10..",     sph.get_depth_interval(10), 11);
+  TEST("depth interval for 20..",     sph.get_depth_interval(20), 21);
+  TEST("depth interval for 50..",     sph.get_depth_interval(50), 51);
+  TEST("depth interval for 121..",    sph.get_depth_interval(121), 81);
+  TEST("depth interval for 1231..",   sph.get_depth_interval(1231), 164);
+  TEST("depth interval for 2315..",   sph.get_depth_interval(2315), 187);
+  TEST("depth interval for 5894..",   sph.get_depth_interval(5894), 222);
+  TEST("depth interval for 7904..",   sph.get_depth_interval(7904), 231);
+  TEST("depth interval for dmax..",   sph.get_depth_interval(10000), 240);
+#endif
+
 }
 
 
