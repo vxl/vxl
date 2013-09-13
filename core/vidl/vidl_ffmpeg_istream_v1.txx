@@ -641,11 +641,14 @@ current_pts() const
   return 0.0;
 }
 
-vcl_string
+//: Return the current video packet's data, is used to get
+//  video stream embeded metadata.
+//  Not implemented for this version.
+vcl_vector<vxl_byte>
 vidl_ffmpeg_istream::
-packet_data() const
+current_packet_data() const
 {
-  return vcl_string("");
+  return vcl_vector<vxl_byte>();
 }
 
 #endif // vidl_ffmpeg_istream_v1_txx_

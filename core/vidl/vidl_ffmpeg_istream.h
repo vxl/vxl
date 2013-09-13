@@ -87,7 +87,7 @@ class vidl_ffmpeg_istream
 
   //: Return the current video packet's data, is used to get
   //  video stream embeded metadata.
-  virtual vcl_vector<unsigned char> current_packet_data() const;
+  virtual vcl_vector<vxl_byte> current_packet_data() const;
 
   //: Return the raw metadata bytes obtained while reading the current frame.
   //  This deque will be empty if there is no metadata stream

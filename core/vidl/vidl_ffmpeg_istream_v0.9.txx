@@ -681,11 +681,11 @@ current_pts() const
 
 //: Return the current video packet's data, is used to get
 //  video stream embeded metadata.
-vcl_vector<unsigned char>
+vcl_vector<vxl_byte>
 vidl_ffmpeg_istream::
 current_packet_data() const
 {
-  return vcl_vector<unsigned char>(is_->packet_.data, is_->packet_.data + is_->packet_.size);
+  return vcl_vector<vxl_byte>(is_->packet_.data, is_->packet_.data + is_->packet_.size);
 }
 
 #endif // vidl_ffmpeg_istream_v0_9_txx_
