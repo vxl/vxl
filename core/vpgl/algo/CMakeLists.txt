@@ -4,6 +4,7 @@
 
 set( vpgl_algo_sources
   vpgl_optimize_camera.h           vpgl_optimize_camera.cxx
+  vpgl_calibration_matrix_compute.h vpgl_calibration_matrix_compute.cxx
   vpgl_camera_compute.h            vpgl_camera_compute.cxx
   vpgl_camera_convert.h             vpgl_camera_convert.cxx
   vpgl_camera_homographies.h        vpgl_camera_homographies.cxx
