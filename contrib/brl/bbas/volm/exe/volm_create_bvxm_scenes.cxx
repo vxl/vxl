@@ -22,6 +22,8 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <bkml/bkml_parser.h>
 #include <volm/volm_loc_hyp_sptr.h>
+#include <bvxm/bvxm_world_params.h>
+#include <bkml/bkml_write.h>
 
 
 int main(int argc, char** argv)
@@ -62,14 +64,25 @@ int main(int argc, char** argv)
   volm_geo_index2::get_leaves(root, leaves);
   unsigned tree_depth = volm_geo_index2::depth(root);
   vcl_cout << "the scene has " << leaves.size() << " leaves and depth is " << tree_depth << vcl_endl;
-  volm_geo_index2::write_to_kml(root, tree_depth, out_folder() + "scenes.kml");
-
+  //volm_geo_index2::write_to_kml(root, tree_depth, out_folder() + "scenes.kml");
+  vcl_ofstream ofs(out_folder() + "scenes.kml");
+  bkml_write::open_document(ofs);
+  for (unsigned i = 0; i < leaves.size(); i++) {
+    vcl_stringstream str; str << "scene" << i;
+    volm_geo_index2::write_to_kml_node(ofs, leaves[i], 0, 0, str.str());
+  }
+  bkml_write::close_document(ofs);
+  ofs.close();
+  
   vcl_vector<volm_img_info> infos;
   volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
   vcl_cout << " loaded " << infos.size() << " DEM tiles!\n";
 
   double largest_dif = 0;
   for (unsigned i = 0; i < leaves.size(); i++) {
+    vcl_stringstream name; name << out_folder() << "scene_" << i ;
+    //vcl_cout << name.str() << vcl_endl;
+    //vul_file::make_directory(dir);
     vgl_point_2d<double> lower_left = leaves[i]->extent_.min_point();
     vgl_point_2d<double> upper_right = leaves[i]->extent_.max_point();
 
@@ -78,15 +91,34 @@ int main(int argc, char** argv)
       vcl_cerr << " problems in the leaf: " << lower_left << " " << upper_right << " - cannot find height!\n";
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    if (max-min > largest_dif) largest_dif = max-min;
+    double dif = max-min;
+    if (dif > largest_dif) largest_dif = dif;
     //vcl_cout << "min: " << min << " " << max << "\n";
 
     //construct lvcs
     vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lower_left.y(), lower_left.x(), min, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+    vcl_string lvcs_name = name.str() + ".lvcs";
+    vcl_ofstream ofs(lvcs_name);
+    if (!ofs) {
+      vcl_cerr << "Cannot open file: " << lvcs_name << "!\n";
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    lvcs->write(ofs);
+    ofs.close();
 
+    vgl_point_3d<float> corner(0,0,0);
+    unsigned dim_xy = (unsigned)vcl_ceil(world_size()/voxel_size());
+    unsigned dim_z = (unsigned)vcl_ceil(dif+height());
+    vgl_vector_3d<unsigned int> num_voxels(dim_xy, dim_xy, dim_z);
+    bvxm_world_params params;
+    //params.set_params(name.str(), corner, num_voxels, voxel_size(), lvcs); 
+    params.set_params(out_folder().substr(0, out_folder().size()-1), corner, num_voxels, voxel_size(), lvcs);  // for now set model dir as out_folder
+    vcl_string xml_name = name.str() + ".xml";
+    params.write_xml(xml_name, lvcs_name);
 
   }
 
   vcl_cout << "largest height difference in the whole ROI is: " << largest_dif << '\n';
+  
   return volm_io::SUCCESS;
 }

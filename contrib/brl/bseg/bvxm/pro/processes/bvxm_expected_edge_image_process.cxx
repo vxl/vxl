@@ -22,14 +22,16 @@ bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
   // process takes 4 inputs:
   //input[0]: The voxel world
   //input[1]: The current camera
-  //input[2]: The edge image
-  //input[3]: Scale of the image
+  //input[2]: ni
+  //input[3]: nj
+  //input[4]: Scale of the image
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
-  input_types_[2] = "vil_image_view_base_sptr";
+  input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
+  input_types_[4] = "unsigned";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -60,13 +62,15 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(1);
   bvxm_edge_ray_processor edge_proc(vox_world);
 
-  vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(2);
-  unsigned ni = edge_image_sptr->ni();
-  unsigned nj = edge_image_sptr->nj();
-  vil_image_view<vxl_byte> edge_image(edge_image_sptr);
+  //vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(2);
+  //unsigned ni = edge_image_sptr->ni();
+  //unsigned nj = edge_image_sptr->nj();
+  //vil_image_view<vxl_byte> edge_image(edge_image_sptr);
+  unsigned ni = pro.get_input<unsigned>(2);
+  unsigned nj = pro.get_input<unsigned>(3);
 
   // scale of image
-  unsigned scale = pro.get_input<unsigned>(3);
+  unsigned scale = pro.get_input<unsigned>(4);
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
   vcl_cout << "Number of observations in curren edge world: " << num_observations << '\n';

@@ -70,6 +70,7 @@ class volm_geo_index
 
   //: write the bboxes of the nodes at the given depth to kml file
   static void write_to_kml(volm_geo_index_node_sptr root, unsigned depth, vcl_string const& file_name);
+  static void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index_node_sptr n, unsigned current_depth, unsigned depth, vcl_string explanation = "location");
 
   //: write index quadtree in a text file, only the tree structure and not the leaf data
   static void write(volm_geo_index_node_sptr root, vcl_string const& file_name, float min_size);

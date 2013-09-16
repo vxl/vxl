@@ -117,25 +117,20 @@ void construct_sub_tree_poly(volm_geo_index_node_sptr parent, float min_size, vg
     parent->children_.push_back(c4);
   }
 }
-/*
+
 // construct with a polygon with possibly multiple sheets, only keep the children who intersect one of the sheets of the polygon
-volm_geo_index_node_sptr volm_geo_index::construct_tree(volm_tile t, float min_size, vgl_polygon<float> const& poly)
+volm_geo_index_node_sptr volm_geo_index::construct_tree(volm_tile t, float min_size, vgl_polygon<double> const& poly)
 {
   vgl_box_2d<float> box = t.bbox();
   vgl_box_2d<double> box_d = t.bbox_double();
   vcl_cout << "box: " << box << vcl_endl;
   volm_geo_index_node_sptr root;
-  if (vgl_intersection(box, poly)) {
+  if (vgl_intersection(box_d, poly)) {
     root = new volm_geo_index_node(box_d);
     // recursively add children
     construct_sub_tree_poly(root, min_size, poly);
   }
   return root;
-}
-*/
-volm_geo_index_node_sptr volm_geo_index::construct_tree(volm_tile t, float min_size, vgl_polygon<double> const& poly)
-{
-  return volm_geo_index::construct_tree(t, min_size, poly);
 }
 
 //: prune the children which do not intersect the poly
@@ -195,7 +190,7 @@ unsigned volm_geo_index::depth(volm_geo_index_node_sptr node)
 }
 
 //: kml requires first lat, then lon
-void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index_node_sptr n, unsigned current_depth, unsigned depth)
+void volm_geo_index::write_to_kml_node(vcl_ofstream& ofs, volm_geo_index_node_sptr n, unsigned current_depth, unsigned depth, vcl_string explanation)
 {
   if (!n)
     return;
@@ -206,7 +201,7 @@ void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index_node_sptr n, unsigned c
     ul[0] = n->extent_.max_point().y(); ul[1] = n->extent_.min_point().x();
     lr[0] = n->extent_.min_point().y(); lr[1] = n->extent_.max_point().x();
     ur[0] = n->extent_.max_point().y(); ur[1] = n->extent_.max_point().x();
-    bkml_write::write_box(ofs, " ", "location", ul, ur,ll,lr);
+    bkml_write::write_box(ofs, " ", explanation, ul, ur,ll,lr);
   }
   else {
     for (unsigned i = 0; i < n->children_.size(); i++)

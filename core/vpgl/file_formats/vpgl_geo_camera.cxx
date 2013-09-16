@@ -195,6 +195,66 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
 #endif
 }
 
+// loads a geo_camera from the file and uses global WGS84 coordinates, so no need to convert negative values to positives in the global_to_img method as in the previous method
+bool vpgl_geo_camera::init_geo_camera_from_filename(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
+{
+  // determine the translation matrix from the image file name and construct a geo camera
+  vcl_string name = vul_file::strip_directory(img_name);
+  name = name.substr(name.find_first_of('_')+1, name.size());
+  
+  vcl_string n_coords = name.substr(0, name.find_first_of('_'));
+  vcl_string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
+  vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
+
+  // determine the lat, lon, hemisphere (North or South) and direction (East or West)
+  vcl_string hemisphere, direction;
+  float lon, lat, scale;
+  vcl_size_t n = n_coords.find("N");
+  if (n < n_coords.size())
+    hemisphere = "N";
+  else
+    hemisphere = "S";
+  n = n_coords.find("E");
+  if (n < n_coords.size())
+    direction = "E";
+  else
+    direction = "W";
+  
+  vcl_string n_str = n_coords.substr(n_coords.find_first_of(hemisphere)+1, n_coords.find_first_of(direction)-n_coords.find_first_of(hemisphere)-1);
+  vcl_stringstream str(n_str);  str >> lat;
+  
+  n_str = n_coords.substr(n_coords.find_first_of(direction)+1, n_coords.size());
+  vcl_stringstream str2(n_str);  str2 >> lon;
+
+  n_str = n_scale.substr(n_scale.find_first_of('S')+1, n_scale.find_first_of('x')-n_scale.find_first_of('S')-1);
+  vcl_stringstream str3(n_str);  str3 >> scale;
+
+  vcl_cout << " hemisphere: " << hemisphere << " direction: " << direction
+           << "\n lat: " << lat << " lon: " << lon
+           << "\n WARNING: using same scale for both ni and nj: " << scale << vcl_endl;
+
+  // simply convert to global coords (i.e. lats for S are negative)
+  if (hemisphere == "S") 
+    lat = -lat;
+  if (direction == "W")
+    lon = -lon;
+
+  // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
+  vcl_cout << " upper left corner in the image is: " << hemisphere << lat+scale << direction << lon << vcl_endl;
+  vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale << vcl_endl;
+  
+  vnl_matrix<double> trans_matrix(4,4,0,0);
+  //divide by ni-1 to account for 1 pixel overlap with the next tile
+  trans_matrix[0][3] = lon - 0.5/(ni-1.0);
+  trans_matrix[0][0] = scale/(ni-1.0);
+  trans_matrix[1][1] = -scale/(nj-1.0);
+  trans_matrix[1][3] = lat + scale + 0.5/(nj-1.0);
+  camera = new vpgl_geo_camera(trans_matrix, lvcs);
+  camera->set_scale_format(true);
+  return true;
+}
+  
+
 //: init using a tfw file, reads the transformation matrix from the tfw
 bool vpgl_geo_camera::init_geo_camera(vcl_string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera)
 {

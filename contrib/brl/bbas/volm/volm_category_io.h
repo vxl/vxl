@@ -102,7 +102,9 @@ public:
   //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (id should be same as volm_land_layer id)
   static vcl_map<unsigned, volm_land_layer> volm_land_table;
 
-  
+  //: use the corresponding increment during hypotheses generation, 
+  //  the unit of the increments is in meters (user of this table shall convert to degrees if necessary depending on lat, lon of the area)
+  static vcl_map<int, double> geo_land_hyp_increments;  
 
 };
 

@@ -24,14 +24,16 @@
 bool bvrml_image_to_points_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(4);
+  vcl_vector<vcl_string> input_types_(5);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vil_image_view_base_sptr";
   input_types_[2] = "vcl_string";  // name of the output file
   input_types_[3] = "float";
+  input_types_[4] = "float";  // max height
   
   //output
-  vcl_vector<vcl_string> output_types_(0);
+  vcl_vector<vcl_string> output_types_(1);
+  output_types_[0] = "vil_image_view_base_sptr";
 
   bool good = pro.set_input_types(input_types_) &&
               pro.set_output_types(output_types_);
@@ -55,6 +57,7 @@ bool bvrml_image_to_points_process(bprb_func_process& pro)
   vil_image_view_base_sptr z_img_sptr = pro.get_input<vil_image_view_base_sptr>(1);
   vcl_string fname = pro.get_input<vcl_string>(2);
   float thres = pro.get_input<float>(3);
+  float max_height = pro.get_input<float>(4);
   
   vcl_ofstream ofs(fname.c_str());
 
@@ -62,15 +65,24 @@ bool bvrml_image_to_points_process(bprb_func_process& pro)
 
   vil_image_view<float> xy_img(xy_img_sptr);
   vil_image_view<float> z_img(z_img_sptr);
+
+  vil_image_view<vxl_byte> out_img(z_img_sptr->ni(), z_img_sptr->nj());
+  out_img.fill(0);
+
   for (unsigned i = 0; i < xy_img.ni(); i++)
     for (unsigned j = 0; j < xy_img.nj(); j++) {
       if (xy_img(i,j) > thres) {
         vgl_sphere_3d<float> point(i, j, z_img(i,j), 0.8f);
         bvrml_write::write_vrml_sphere(ofs, point, 0.0f, 0.0f, 1.0f);
+        float height = z_img(i,j) > max_height ? max_height : max_height-z_img(i,j);
+        out_img(i,j) = (vxl_byte)height;
       }
     }
   
   ofs.close();
+
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(out_img));
+
   return true;
 }
 

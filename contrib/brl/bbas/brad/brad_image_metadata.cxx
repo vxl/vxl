@@ -27,6 +27,9 @@ brad_image_metadata::brad_image_metadata(vcl_string const& nitf_filename, vcl_st
   if (!parse(nitf_filename, meta_folder)) {
     vcl_cerr << "ERROR parsing image metadata\n";
   }
+  vcl_cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
+  vcl_cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
+
 }
 
 // Write brad_image_metadata to stream
@@ -94,10 +97,13 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
     vcl_cerr << "Error opening file " << filename << vcl_endl;
     return false;
   }
+  n_bands_ = 0;
   // now parse the IMD file
   vul_awk awk(ifs);
   double absCalfact = 1.0;
   double effectiveBand = 1.0;
+  lower_left_.set(181, 91, 10000);
+  upper_right_.set(-181,-91, -10000); 
   for (; awk; ++awk)
   {
     vcl_stringstream linestr(awk.line());
@@ -119,8 +125,53 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
       linestr >> cloud_coverage_percentage_;
       continue;
     }
+    if (tag.compare("satId") == 0) {
+      linestr >> tag;
+      linestr >> satellite_name_;
+      satellite_name_ = satellite_name_.substr(satellite_name_.find_first_of("\"")+1, satellite_name_.find_last_of("\"")-1);
+      continue;
+    }
+    if (tag.compare("LLLon") == 0 || tag.compare("URLon") == 0 || tag.compare("ULLon") == 0 || tag.compare("LRLon") == 0) {
+      linestr >> tag;
+      double x;
+      linestr >> x;
+      if (lower_left_.x() > x) lower_left_.set(x, lower_left_.y(), lower_left_.z());
+      if (upper_right_.x() < x) upper_right_.set(x, upper_right_.y(), upper_right_.z());
+      continue;
+    }
+    if (tag.compare("LLLat") == 0 || tag.compare("URLat") == 0 || tag.compare("ULLat") == 0 || tag.compare("LRLat") == 0) {
+      linestr >> tag;
+      double y;
+      linestr >> y;
+      if (lower_left_.y() > y) lower_left_.set(lower_left_.x(), y, lower_left_.z());
+      if (upper_right_.y() < y) upper_right_.set(upper_right_.x(), y, upper_right_.z());
+      continue;
+    }
+    if (tag.compare("LLHAE") == 0 || tag.compare("URHAE") == 0 || tag.compare("ULHAE") == 0 || tag.compare("LRHAE") == 0) {  //CAUTION: height above ELLIPSOID (not mean sea level/ geoid)
+      linestr >> tag;
+      double z;
+      linestr >> z;
+      if (lower_left_.z() > z) lower_left_.set(lower_left_.x(), lower_left_.y(), z);
+      if (upper_right_.z() < z) upper_right_.set(upper_right_.x(), upper_right_.y(), z);
+      continue;
+    }
+    if (tag.compare("bandId") == 0) {
+      linestr >> tag;
+      vcl_string band_str;
+      linestr >> band_str;
+      if (band_str.find("P") != vcl_string::npos) {
+        band_ = "PAN";
+      } else
+        band_ = "MULTI";
+      continue;
+    }
+    if (tag.compare("BEGIN_GROUP") == 0) {
+      n_bands_++;
+      continue;
+    }
   }
-  vcl_cout << "abs: " << absCalfact << " eff: " << effectiveBand << "  cloud coverage percentage : " << cloud_coverage_percentage_ << vcl_endl;
+  n_bands_--; // there is an extra BEGIN_GROUP for some other image info not related to individual bands 
+  vcl_cout << "abs: " << absCalfact << " eff: " << effectiveBand << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << vcl_endl;
   gain_ = absCalfact/effectiveBand;
   offset_ = 0.0;
   return true;
@@ -135,6 +186,9 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
     vcl_cerr << "Error opening file " << filename << vcl_endl;
     return false;
   }
+  n_bands_ = 0;
+  lower_left_.set(181, 91, 10000);
+  upper_right_.set(-181,-91, -10000);
   // now parse the IMD file
   vul_awk awk(ifs);
   for (; awk; ++awk)
@@ -147,9 +201,57 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
       linestr >> tag;
       linestr >> cloud_coverage_percentage_;
       continue;
+    } 
+    if ((linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("upperRightCorner") != vcl_string::npos) || 
+        (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("upperLeftCorner") != vcl_string::npos) ||
+        (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("lowerRightCorner") != vcl_string::npos) ||
+        (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("lowerLeftCorner") != vcl_string::npos) )
+    {
+      vcl_stringstream linestr(awk.line());
+      while (linestr.str().find("latitude") == vcl_string::npos) {
+         ++awk;
+         linestr = vcl_stringstream(awk.line());
+      }
+      vcl_string dummy; linestr >> dummy; linestr >> dummy;
+      double y; linestr >> y; 
+      while (linestr.str().find("longitude") == vcl_string::npos) {
+         ++awk;
+         linestr = vcl_stringstream(awk.line());
+      }
+      linestr >> dummy; linestr >> dummy;
+      double x; linestr >> x; 
+      while (linestr.str().find("height") == vcl_string::npos) {
+         ++awk;
+         linestr = vcl_stringstream(awk.line());
+      }
+      linestr >> dummy; linestr >> dummy;
+      double z; linestr >> z; 
+      if (lower_left_.x() > x) lower_left_.set(x, lower_left_.y(), lower_left_.z());
+      if (lower_left_.y() > y) lower_left_.set(lower_left_.x(), y, lower_left_.z());
+      if (lower_left_.z() > z) lower_left_.set(lower_left_.x(), lower_left_.y(), z);
+      
+      if (upper_right_.x() < x) upper_right_.set(x, upper_right_.y(), upper_right_.z());
+      if (upper_right_.y() < y) upper_right_.set(upper_right_.x(), y, upper_right_.z());
+      if (upper_right_.z() < z) upper_right_.set(upper_right_.x(), upper_right_.y(), z);
+      continue;
+    }
+    if (tag.compare("productSpectralType") == 0) {
+      linestr >> tag;
+      vcl_string band_str;
+      linestr >> band_str;
+      if (band_str.find("PAN") != vcl_string::npos) 
+        band_ = "PAN";
+      else
+        band_ = "MULTI";
+      continue;
+    }
+    if (tag.compare("numberOfSpectralBands") == 0) {
+      linestr >> tag;
+      linestr >> n_bands_;
+      continue;
     }
   }
-  vcl_cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << vcl_endl;
+  vcl_cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << vcl_endl;
   return true;
 }
 
@@ -178,10 +280,12 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
   vpgl_nitf_rational_camera nitf_cam(nitf_image, false);
 
-  upper_left_ = nitf_cam.upper_left();
-  upper_right_ = nitf_cam.upper_right();
-  lower_left_ = nitf_cam.lower_left();
-  lower_right_ = nitf_cam.lower_right();
+  //upper_left_ = nitf_cam.upper_left(); // caution, lat is x and lon is y when read from nitf camera with this method
+  upper_right_.set(nitf_cam.upper_right()[1], nitf_cam.upper_right()[0], 0);
+  lower_left_.set(nitf_cam.lower_left()[1], nitf_cam.lower_left()[0], 0);
+  //lower_right_ = nitf_cam.lower_right();
+  vcl_cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
+  vcl_cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
 
   //get NITF information
   vcl_vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
@@ -330,8 +434,87 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   else
     vcl_cout << "unknown meta file format: " << ext << " in name: " << meta_filename << "!\n";
 
+  vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << vcl_endl;
   vcl_cout << *this;
 
   return true;
 }
 
+bool brad_image_metadata::same_time(brad_image_metadata& other)
+{
+  if (this->t_.min == other.t_.min && this->t_.hour == other.t_.hour && 
+    this->t_.day == other.t_.day && this->t_.month == other.t_.month)
+    return true;
+  else
+    return false;
+}
+
+
+//: binary save self to stream
+void brad_image_metadata::b_write(vsl_b_ostream& os) const
+{
+  vsl_b_write(os, version());
+  vsl_b_write(os, sun_elevation_);
+  vsl_b_write(os, sun_azimuth_);
+  vsl_b_write(os, view_elevation_);
+  vsl_b_write(os, view_azimuth_);
+  vsl_b_write(os, gain_);
+  vsl_b_write(os, offset_);
+  vsl_b_write(os, sun_irradiance_);
+  vsl_b_write(os, t_.day);
+  vsl_b_write(os, t_.hour);
+  vsl_b_write(os, t_.min);
+  vsl_b_write(os, t_.month);
+  vsl_b_write(os, t_.year);
+  vsl_b_write(os, number_of_bits_);
+  vsl_b_write(os, satellite_name_);
+  vsl_b_write(os, cloud_coverage_percentage_);
+  vsl_b_write(os, upper_right_.x());
+  vsl_b_write(os, upper_right_.y());
+  vsl_b_write(os, upper_right_.z());
+  vsl_b_write(os, lower_left_.x());
+  vsl_b_write(os, lower_left_.y());
+  vsl_b_write(os, lower_left_.z());
+  vsl_b_write(os, band_);
+  vsl_b_write(os, n_bands_);
+}
+
+//: binary load self from stream
+void brad_image_metadata::b_read(vsl_b_istream& is)
+{
+  if (!is) return;
+  short ver;
+  vsl_b_read(is, ver);
+  if (ver == 0) {
+    vsl_b_read(is, sun_elevation_);
+    vsl_b_read(is, sun_azimuth_);
+    vsl_b_read(is, view_elevation_);
+    vsl_b_read(is, view_azimuth_);
+    vsl_b_read(is, gain_);
+    vsl_b_read(is, offset_);
+    vsl_b_read(is, sun_irradiance_);
+    vsl_b_read(is, t_.day);
+    vsl_b_read(is, t_.hour);
+    vsl_b_read(is, t_.min);
+    vsl_b_read(is, t_.month);
+    vsl_b_read(is, t_.year);
+    vsl_b_read(is, number_of_bits_);
+    vsl_b_read(is, satellite_name_);
+    vsl_b_read(is, cloud_coverage_percentage_);
+    double x,y,z;
+    vsl_b_read(is, x);
+    vsl_b_read(is, y);
+    vsl_b_read(is, z);
+    upper_right_.set(x,y,z);
+    vsl_b_read(is, x);
+    vsl_b_read(is, y);
+    vsl_b_read(is, z);
+    lower_left_.set(x,y,z);
+    vsl_b_read(is, band_);
+    vsl_b_read(is, n_bands_);
+  }
+  else {
+    vcl_cout << "brad_image_metadata -- unknown binary io version " << ver << '\n';
+    return;
+  }
+}

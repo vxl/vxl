@@ -116,7 +116,7 @@ void construct_sub_tree_poly(volm_geo_index2_node_sptr parent, double const& min
 }
 
 // write node to kml
-void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index2_node_sptr n, unsigned current_depth, unsigned depth)
+void volm_geo_index2::write_to_kml_node(vcl_ofstream& ofs, volm_geo_index2_node_sptr n, unsigned current_depth, unsigned depth, vcl_string explanation)
 {
   if (!n)
     return;
@@ -127,7 +127,7 @@ void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index2_node_sptr n, unsigned 
     ul[0] = n->extent_.max_point().y(); ul[1] = n->extent_.min_point().x();
     lr[0] = n->extent_.min_point().y(); lr[1] = n->extent_.max_point().x();
     ur[0] = n->extent_.max_point().y(); ur[1] = n->extent_.max_point().x();
-    bkml_write::write_box(ofs, " ", "location", ul, ur,ll,lr);
+    bkml_write::write_box(ofs, " ", explanation, ul, ur,ll,lr);
   }
   else {
     for (unsigned c_idx = 0; c_idx < n->children_.size(); c_idx++)

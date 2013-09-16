@@ -12,7 +12,6 @@ SET(bwm_algo_sources
                                    bwm_soview2D_vertex.h
     bwm_image_processor.cxx        bwm_image_processor.h
     bwm_delaunay_tri.cxx           bwm_delaunay_tri.h
-    bwm_satellite_resources.cxx    bwm_satellite_resources.h  bwm_satellite_resources_sptr.h
    )
 
 AUX_SOURCE_DIRECTORY(Templates bwm_algo_sources)
@@ -35,7 +34,7 @@ ENDIF(ECW_FOUND)
 
 ADD_LIBRARY(bwm_algo ${bwm_algo_sources})
 
-TARGET_LINK_LIBRARIES( bwm_algo sdet vtol vil vil_algo vgl vgl_algo vnl vnl_algo vsol vpgl vpgl_algo vpgl_file_formats bgui brip vdgl bsta vgui vul vcl shapelib volm)
+TARGET_LINK_LIBRARIES( bwm_algo sdet vtol vil vil_algo vgl vgl_algo vnl vnl_algo vsol vpgl vpgl_algo vpgl_file_formats bgui brip vdgl bsta vgui vul vcl shapelib brad)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

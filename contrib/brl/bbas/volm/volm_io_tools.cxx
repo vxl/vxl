@@ -10,6 +10,8 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>
+#include <vpgl/vpgl_lvcs.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 
 
 unsigned int volm_io_tools::northing = 0;  // WARNING: north hard-coded
@@ -280,6 +282,45 @@ volm_geo_index2_node_sptr volm_io_tools::read_osm_data_and_tree(vcl_string geoin
   return root;
 }
 
+//: load a geotiff file with .tif file and read its ortho camera info from its header, puts a dummy lvcs to vpgl_geo_cam object so lvcs is not valid
+//  even though it reads the camera from filename with N/S and W/E distinction, it constructs a camera in global WGS84 coordinates, so the global coordinates should be used to fetch pixels, (i.e. no need to make them always positive)
+void volm_io_tools::load_geotiff_image(vcl_string filename, volm_img_info& info, bool load_cam_from_name)
+{
+  info.img_name = filename;
+  info.name = vul_file::strip_directory(info.img_name);
+  info.name = vul_file::strip_extension(info.name);
+
+  info.img_r = vil_load(info.img_name.c_str());
+  info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
+  vcl_cout << "image ni: " << info.ni << " nj: " << info.nj << vcl_endl;
+  
+  vpgl_geo_camera *cam;
+  vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
+  if (load_cam_from_name) {
+    vpgl_geo_camera::init_geo_camera_from_filename(filename, info.ni, info.nj, lvcs_dummy, cam); // constructs in global WGS84 (no distinction of N/S or W/E)
+    vcl_cout << cam->trans_matrix() << vcl_endl;
+  } else {
+    vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());  
+    vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
+    vcl_cout << cam->trans_matrix() << vcl_endl;
+  }
+
+  info.cam = cam; 
+    
+  double lat, lon;
+  cam->img_to_global(0.0, info.nj-1, lon, lat);
+  vgl_point_2d<double> lower_left(lon, lat);
+
+  vpgl_utm utm; int utm_zone; double x,y;
+  utm.transform(lat, lon, x, y, utm_zone);
+  vcl_cout << " zone of ASTER DEM img: " << info.name << ": " << utm_zone << " from lower left corner!\n";
+
+  cam->img_to_global(info.ni-1, 0.0, lon, lat);
+  vgl_point_2d<double> upper_right(lon, lat);
+  vgl_box_2d<double> bbox(lower_left, upper_right);
+  vcl_cout << "bbox: " << bbox << vcl_endl;
+  info.bbox = bbox;
+}
 
 void volm_io_tools::load_aster_dem_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)
 {
@@ -291,40 +332,19 @@ void volm_io_tools::load_aster_dem_imgs(vcl_string const& folder, vcl_vector<vol
 
     vcl_string file_glob2 = folder + "//" + "*_dem.tif";
     for (vul_file_iterator fn2 = file_glob2.c_str(); fn2; ++fn2) {
-
-      //info.name = vul_file::strip_directory(folder);
-      //info.img_name = folder + "//" + info.name + "_dem.tif";
-      info.img_name = fn2();
-      info.name = vul_file::strip_directory(info.img_name);
-      info.name = vul_file::strip_extension(info.name);
-
-      info.img_r = vil_load(info.img_name.c_str());
-      info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
-      vcl_cout << "ASTER DEM ni: " << info.ni << " nj: " << info.nj << vcl_endl;
-
-      vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
-      vpgl_geo_camera *cam;
-      vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
-      vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
-
-      info.cam = cam; 
-    
-      double lat, lon;
-      cam->img_to_global(0.0, info.nj-1, lon, lat);
-      vgl_point_2d<double> lower_left(lon, lat);
-
-      vpgl_utm utm; int utm_zone; double x,y;
-      utm.transform(lat, lon, x, y, utm_zone);
-      vcl_cout << " zone of ASTER DEM img: " << info.name << ": " << utm_zone << " from lower left corner!\n";
-
-      cam->img_to_global(info.ni-1, 0.0, lon, lat);
-      vgl_point_2d<double> upper_right(lon, lat);
-      vgl_box_2d<double> bbox(lower_left, upper_right);
-      vcl_cout << "bbox: " << bbox << vcl_endl;
-      info.bbox = bbox;
-
+      volm_io_tools::load_geotiff_image(fn2(), info);
       infos.push_back(info);
     }
+  }
+}
+
+void volm_io_tools::load_geocover_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)
+{
+  vcl_string file_glob = folder + "//Geocover_*.tif";
+  for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
+    volm_img_info info;
+    volm_io_tools::load_geotiff_image(fn(), info, true);  // last argument true so load camera from the file name
+    infos.push_back(info);
   }
 }
 
@@ -461,6 +481,19 @@ bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_po
   crop_and_find_min_max(infos, corners[3].first, i0, j0, crop_ni, crop_nj, min, max);
   
   return true;
+}
+
+//: use the following method to get the multiplier for conversion of meters to degrees, uses vpgl_lvcs internally
+double volm_io_tools::meter_to_seconds(double lat, double lon)
+{
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lat, lon, 0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  double lon1, lat1, lon2, lat2, gz;
+  lvcs->local_to_global(0, 0, 0, vpgl_lvcs::wgs84, lon1, lat1, gz);
+  lvcs->local_to_global(1, 0, 0, vpgl_lvcs::wgs84, lon2, lat2, gz);
+  double dif_lon = lon2-lon1;
+  double dif_lat = lat2-lat1;
+  double dif = vcl_sqrt(dif_lon*dif_lon + dif_lat*dif_lat);  // 1 meter is this many degrees in this area
+  return dif;
 }
 
  

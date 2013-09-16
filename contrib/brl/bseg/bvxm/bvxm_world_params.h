@@ -110,6 +110,9 @@ class bvxm_world_params : public vbl_ref_count
   //: Binary load parameters from stream.
   void b_read(vsl_b_istream & is);
 
+  //: write as xml file to be passed to bvxm_create_world process
+  void write_xml(vcl_string const& filename, vcl_string const& lvcs_filename);
+
  protected:
 
   vcl_string model_dir_;

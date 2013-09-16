@@ -38,6 +38,7 @@ class sdet_graph_img_seg : public vbl_ref_count
    vcl_vector<vbl_edge>& get_edges() { return edges_; }
    unsigned node_cnt() { return node_cnt_; }
       
+   static void create_colors(vcl_vector<vil_rgb<vxl_byte> >& colors, int n_segments);
  protected:
    vil_image_view<int> pixel_ids_;
    vcl_map<int, vcl_pair<unsigned, unsigned> > id_to_pix_;
@@ -92,19 +93,15 @@ void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, 
       if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
           ds.set_union(v0, v1);
   }
-  vcl_cout << " segmentation resulted in " << ds.num_sets() << " segments!n";
+  vcl_cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
 
   out_img.set_size(img.ni(), img.nj());
   out_img.fill(vil_rgb<vxl_sbyte>(0,0,0));
 
   int n_segments = ds.num_elements();  // the number of colors need to be in the number of initial number of nodes, cause the final segment ids are the ids of the nodes
   vcl_vector<vil_rgb<vxl_byte> > colors;
-  // create random colors for each set
-  vnl_random rng;
-  for (int i = 0; i < n_segments; i++) {
-    vil_rgb<vxl_byte> c((vxl_byte)(rng.drand32()*255), (vxl_byte)(rng.drand32()*255), (vxl_byte)(rng.drand32()*255));
-    colors.push_back(c);
-  }
+  // create unique colors for each set
+  sdet_graph_img_seg::create_colors(colors, n_segments);
 
   for (unsigned i = 0; i<ss->node_cnt(); i++) {
     int comp = ds.find_set(i);
@@ -116,10 +113,16 @@ void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, 
 }
 
 
-// segment a multi-plane image. smooth and segment each plane separately, combine the segments to generate a single output image
+// segment an image using an edge image as a helper, try to respect edges in forming the regions
 template <class T> 
-void sdet_segment_img_multi(vil_image_view<T> const& img, unsigned margin, int neigh, T weight_thres, float sigma, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img)
+void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<float> const& edge_img, unsigned margin, int neigh, T weight_thres, float sigma, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img)
 {
+  // check if the input images are of the same size
+  if (edge_img.ni() != img.ni() || edge_img.nj() != img.nj()) {
+    vcl_cerr << "Input edge image does not have the same size as the input image to be segmented!\n";
+    return;
+  }
+
   sdet_graph_img_seg* ss = new sdet_graph_img_seg(img.ni(), img.nj(), margin, neigh);
 
   // smooth the image
@@ -133,7 +136,7 @@ void sdet_segment_img_multi(vil_image_view<T> const& img, unsigned margin, int n
     vil_gauss_filter_5tap<T, T>(img, smoothed, gauss_params);
   }
 
-  // set up the edge costs as color differences
+  // set up the edge costs as color differences and with high weights across the edges
   vcl_vector<vbl_edge>& edges = ss->get_edges();
   for (unsigned i = 0; i < edges.size(); i++) {
     vcl_pair<unsigned, unsigned> pix0 = ss->get_pixel(edges[i].v0_);
@@ -142,6 +145,12 @@ void sdet_segment_img_multi(vil_image_view<T> const& img, unsigned margin, int n
     double c1 = (double)smoothed(pix1.first, pix1.second);
     double dif = c1-c0;
     edges[i].w_ = (float)vcl_sqrt(dif*dif);
+
+    double e0 = (double)edge_img(pix0.first, pix0.second);
+    double e1 = (double)edge_img(pix1.first, pix1.second);
+    //dif = e0-e1;
+    //edges[i].w_ += (float)vcl_sqrt(dif*dif); 
+    edges[i].w_ += ( e0 > e1 ? e0 : e1); 
   }
     
   vbl_disjoint_sets ds; 
@@ -158,19 +167,15 @@ void sdet_segment_img_multi(vil_image_view<T> const& img, unsigned margin, int n
       if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
           ds.set_union(v0, v1);
   }
-  vcl_cout << " segmentation resulted in " << ds.num_sets() << " segments!n";
+  vcl_cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
 
   out_img.set_size(img.ni(), img.nj());
   out_img.fill(vil_rgb<vxl_sbyte>(0,0,0));
 
   int n_segments = ds.num_elements();  // the number of colors need to be in the number of initial number of nodes, cause the final segment ids are the ids of the nodes
   vcl_vector<vil_rgb<vxl_byte> > colors;
-  // create random colors for each set
-  vnl_random rng;
-  for (int i = 0; i < n_segments; i++) {
-    vil_rgb<vxl_byte> c((vxl_byte)(rng.drand32()*255), (vxl_byte)(rng.drand32()*255), (vxl_byte)(rng.drand32()*255));
-    colors.push_back(c);
-  }
+  // create unique colors for each set
+  sdet_graph_img_seg::create_colors(colors, n_segments);
 
   for (unsigned i = 0; i<ss->node_cnt(); i++) {
     int comp = ds.find_set(i);
@@ -181,6 +186,13 @@ void sdet_segment_img_multi(vil_image_view<T> const& img, unsigned margin, int n
   delete ss;
 }
 
+// segment an image using two features, takes two normalized feature images as dimension 1 and dimension 2, calculates Euclidean distance 
+// only works for float images in [0,1]
+// use sigma1 to smooth the first image and sigma2 to smooth the second image if needed, pass 0 if smoothing is not necessary
+void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> const& img2, unsigned margin, int neigh, float weight_thres, float sigma1, float sigma2, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img);
+
+//: segment using two features and also respect the edges in the edge image
+void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_view<float> const& img2, vil_image_view<float> const& edge_img, unsigned margin, int neigh, float weight_thres, float sigma1, float sigma2, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img);
 
 
 #endif // sdet_graph_img_seg_h_

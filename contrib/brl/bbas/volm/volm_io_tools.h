@@ -68,8 +68,19 @@ public:
   // a method to read the binary osm object file and also contstruct the volm_geo_index2, the method returns the root and the min_size of the tree 
   static volm_geo_index2_node_sptr read_osm_data_and_tree(vcl_string geoindex_filename_pre, vcl_string osm_bin_filename, volm_osm_objects& osm_objs, double& min_size);
 
+  //: load a geotiff file (usually .tif) and read its ortho camera info from its header, puts a dummy lvcs to vpgl_geo_cam object so lvcs is not valid
+  static void load_geotiff_image(vcl_string filename, volm_img_info& info, bool load_cam_from_name = false);
+
+  //: uses glob: folder//ASTGTM2_*/*_dem.tif
   static void load_aster_dem_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
+
+  //: uses glob: folder//Geocover*.tif
+  static void load_geocover_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
+  
   static bool find_min_max_height(vgl_point_2d<double>& lower_left, vgl_point_2d<double>& upper_right, vcl_vector<volm_img_info>& infos, double& min, double& max);
+
+  //: use the following method to get the multiplier for conversion of meters to degrees, uses vpgl_lvcs internally
+  static double meter_to_seconds(double lat, double lon);
 
 };
 

@@ -17,6 +17,7 @@
 #include <bkml/bkml_parser.h>
 #include <vul/vul_timer.h>
 #include <volm/volm_io_tools.h>
+#include <volm/volm_category_io.h>
 
 
 inline float next_mult_2(float val)
@@ -251,6 +252,25 @@ void add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info>& info
 
 }
 
+int find_land_type(vcl_vector<volm_img_info>& geo_infos, vgl_point_2d<double>& pt) 
+{
+  int type = -1;
+  for (unsigned mm = 0; mm < geo_infos.size(); mm++) {
+     if (geo_infos[mm].contains(pt)) {
+      double u,v;
+      geo_infos[mm].cam->global_to_img(pt.x(), pt.y(), 0, u, v); 
+      int uu = (int)vcl_floor(u+0.5);
+      int vv = (int)vcl_floor(v+0.5);
+      if (geo_infos[mm].valid_pixel(uu,vv)) {
+        vil_image_view<vxl_byte> img(geo_infos[mm].img_r);
+        type = img(uu,vv);
+        break;
+      }
+    }
+  }
+  return type;
+}
+
 // read the tiles of the region, create a geo index and write the hyps
 int main(int argc,  char** argv)
 {
@@ -272,15 +292,27 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> osm_tree_folder("-osm_tree", "the geoindex tree folder that has the tree structure with the ids of osm objects at its leaves", "");
   vul_arg<int> world_id("-world", "the id of the world", -1);
   vul_arg<bool> p1b("-p1b", "use the p1b tiles", false);
+  vul_arg<vcl_string> land("-land", "the input folder of the land type .tif files", "");
 
   vul_arg_parse(argc, argv);
 
   vcl_cout << "argc: " << argc << vcl_endl;
   double arcsec_to_sec = 1.0f/3600.0f;
   double inc_in_sec = inc()*arcsec_to_sec;
-  double inc_in_sec_rad = 3.0*inc_in_sec/4.0; // radius to search for existence of before adding a new one
+  double inc_in_sec_radius_ratio = 3.0/4.0;
+  double inc_in_sec_rad = inc_in_sec*inc_in_sec_radius_ratio; // radius to search for existence of before adding a new one
 
   if (p1b()) {
+
+    if (out_pre().compare("") == 0 || in_poly().compare("") == 0) {
+      vul_arg_display_usage_and_exit();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    vcl_cout << "will use increments " << inc() << " arcseconds along north and east directions!\n";
+
+    vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
+    vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
+
     vcl_vector<volm_tile> tiles = volm_tile::generate_p1b_wr_tiles(world_id());
     if (!tiles.size()) {  
       vcl_cerr << "Unknown world id: " << world_id() << vcl_endl;
@@ -294,8 +326,10 @@ int main(int argc,  char** argv)
       return volm_io::EXE_ARGUMENT_ERROR;
     }
 
+    double meter_to_sec = volm_io_tools::meter_to_seconds(tiles[i].lat_, tiles[i].lon_);
+
     float size = 0.1;  // in seconds, set a fixed size for the leaves
-    volm_geo_index_node_sptr hyp_root = volm_geo_index::construct_tree(tiles[i], (float)size);
+    volm_geo_index_node_sptr hyp_root = volm_geo_index::construct_tree(tiles[i], (float)size, poly);
     // write the geo index and the hyps
     vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << i << ".txt";
     volm_geo_index::write(hyp_root, file_name.str(), (float)size);
@@ -356,34 +390,130 @@ int main(int argc,  char** argv)
       vcl_vector<volm_img_info> infos;
       volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
 
-      // now go over each road in the osm file and insert into the tree of loc hyps
-      vcl_vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
-      for (unsigned k = 0; k < roads.size(); k++) {
-        volm_osm_object_line_sptr r = roads[k];
-        vcl_string name = r->prop().name_;
-        vcl_vector<vgl_point_2d<double> > points = r->line();
-        for (unsigned kk = 1; kk < points.size(); kk++) {
-          add_hypo(hyp_root, infos, points[kk-1], inc_in_sec_rad, true);
-          // now interpolate along a straight line, assume locally planar
-          double dif_dy = points[kk].y() - points[kk-1].y();
-          double dif_dx = points[kk].x() - points[kk-1].x();
-          double ds = vcl_sqrt(dif_dy*dif_dy + dif_dx*dif_dx);
-          double inc_dy = inc_in_sec*(dif_dy/ds);
-          double inc_dx = inc_in_sec*(dif_dx/ds);
-          int cnt = 0;
-          while (ds > inc_in_sec) {
-            ds = ds-inc_in_sec;
-            cnt++;
-            double x = points[kk-1].x()+inc_dx*cnt;
-            double y = points[kk-1].y()+inc_dy*cnt;
-            vgl_point_2d<double> pt(x, y);
-            add_hypo(hyp_root, infos, pt, inc_in_sec_rad, false);
+      if (land().compare("") == 0) {  // if not using land types
+
+        // now go over each road in the osm file and insert into the tree of loc hyps
+        vcl_vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
+        for (unsigned k = 0; k < roads.size(); k++) {
+          volm_osm_object_line_sptr r = roads[k];
+          vcl_string name = r->prop().name_;
+          vcl_vector<vgl_point_2d<double> > points = r->line();
+          for (unsigned kk = 1; kk < points.size(); kk++) {
+            if (poly.contains(points[kk-1].x(), points[kk-1].y())) 
+              add_hypo(hyp_root, infos, points[kk-1], inc_in_sec_rad, true);
+            // now interpolate along a straight line, assume locally planar
+            double dif_dy = points[kk].y() - points[kk-1].y();
+            double dif_dx = points[kk].x() - points[kk-1].x();
+            double ds = vcl_sqrt(dif_dy*dif_dy + dif_dx*dif_dx);
+            double inc_dy = inc_in_sec*(dif_dy/ds);
+            double inc_dx = inc_in_sec*(dif_dx/ds);
+            int cnt = 0;
+            while (ds > inc_in_sec) {
+              ds = ds-inc_in_sec;
+              cnt++;
+              double x = points[kk-1].x()+inc_dx*cnt;
+              double y = points[kk-1].y()+inc_dy*cnt;
+              if (poly.contains(x, y)) 
+                add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
+            }
+
           }
         }
+      } else {
+        vcl_cout << "Generating hyps along the OSM roads and with increments depending on the Geocover land type!\n";
+        vcl_vector<volm_img_info> geo_infos;
+        volm_io_tools::load_geocover_imgs(land(), geo_infos);
+
+        // now go over each road in the osm file and insert into the tree of loc hyps
+        vcl_vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
+        vcl_cout << "will process " << roads.size() << " roads...\n"; vcl_cout.flush();
+#if 0
+        double y = 12.587963; double x = 76.822019;
+        vcl_cout << "testing a location's type: x: " << x << " y: " << y << " (first roads first x: " << roads[0]->line()[0].x() << ")\n";
+        int type_prev = find_land_type(geo_infos, vgl_point_2d<double>(x,y));
+        vcl_cout << "\t\t type is: " << type_prev << "\n";
+
+        y = 12.575318; x = 76.835210;
+        vcl_cout << "testing a location's type: x: " << x << " y: " << y << " (first roads first x: " << roads[0]->line()[0].x() << ")\n";
+        type_prev = find_land_type(geo_infos, vgl_point_2d<double>(x,y));
+        vcl_cout << "\t\t type is: " << type_prev << "\n";
+#endif
+
+        for (unsigned k = 0; k < roads.size(); k++) {
+          if (k%1000 == 0) vcl_cout << k << "."; vcl_cout.flush();
+          volm_osm_object_line_sptr r = roads[k];
+          vcl_string name = r->prop().name_;
+          vcl_vector<vgl_point_2d<double> > points = r->line();
+          if (!points.size())
+            continue;
+          int type_prev = find_land_type(geo_infos, points[0]);
+          if (type_prev < 0)
+            inc_in_sec = 4 * meter_to_sec;  // if unknown type, use the smallest possible interval to be safe
+          else 
+            inc_in_sec = volm_osm_category_io::geo_land_hyp_increments[type_prev] * meter_to_sec;
+          inc_in_sec_rad = inc_in_sec*inc_in_sec_radius_ratio;
+          double remainder = 0.0;
+          if (poly.contains(points[0].x(), points[0].y())) 
+            add_hypo(hyp_root, infos, points[0], inc_in_sec_rad, true);
+          for (unsigned kk = 1; kk < points.size(); kk++) {  
+            double prev_x = points[kk-1].x();
+            double prev_y = points[kk-1].y();
+            int type = find_land_type(geo_infos, points[kk]);
+            if (type > 0 && type != type_prev) {
+              double inc_now = volm_osm_category_io::geo_land_hyp_increments[type] * meter_to_sec;
+              inc_in_sec = inc_in_sec < inc_now ? inc_in_sec : inc_now;  // pick the smaller of the increments if different types
+              inc_in_sec_rad = inc_in_sec*inc_in_sec_radius_ratio;
+            }
+
+            // interpolate along a straight line, assume locally planar
+            double dif_dy = points[kk].y() - points[kk-1].y();
+            double dif_dx = points[kk].x() - points[kk-1].x();
+            double ds = vcl_sqrt(dif_dy*dif_dy + dif_dx*dif_dx);
+
+            if (inc_in_sec > ds) {
+              remainder += ds;
+              type_prev = type;
+              continue;
+            }
+
+            double cos = dif_dx/ds;
+            double sin = dif_dy/ds;
+
+            double inc_dy = inc_in_sec*sin;
+            double inc_dx = inc_in_sec*cos;
+            
+            // get rid of remainder first
+            if (remainder < inc_in_sec) {
+              double rem = inc_in_sec-remainder;
+              double inc_dy_rem = rem*sin;
+              double inc_dx_rem = rem*cos;
+              double x = prev_x+inc_dx_rem;
+              double y = prev_y+inc_dy_rem;
+              if (poly.contains(x, y)) 
+                add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, true);
+              prev_x = x; 
+              prev_y = y;
+              ds -= rem;
+            } 
+
+            while (ds > inc_in_sec) {
+              ds -= inc_in_sec;
+              double x = prev_x+inc_dx;
+              double y = prev_y+inc_dy;
+              if (poly.contains(x, y)) 
+                add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
+              prev_x = x; 
+              prev_y = y;
+            }
+            type_prev = type;
+            remainder = ds;
+          }
+        }
+
       }
     
       unsigned r_cnt = volm_geo_index::hypo_size(hyp_root) ;
-      vcl_cout << " root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
+      vcl_cout << "\n root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
 
       // write the hypos
       vcl_stringstream file_name4; file_name4 << out_pre() << "geo_index_tile_" << i;

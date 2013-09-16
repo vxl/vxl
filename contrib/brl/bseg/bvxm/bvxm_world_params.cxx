@@ -161,3 +161,30 @@ vcl_istream& operator >> (vcl_istream& is, bvxm_world_params &params)
   return is;
 }
 
+//: write as xml file to be passed to bvxm_create_world process
+void bvxm_world_params::write_xml(vcl_string const& filename, vcl_string const& lvcs_filename)
+{
+  vcl_ofstream ofs(filename);
+  if (!ofs) {
+    vcl_cerr << "In bvxm_world_params::write_xml() -- cannot open file:" << filename << '\n';
+    return;
+  }
+  ofs << "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
+      << "<bvxmCreateVoxelWorldProcess>\n"
+      << "  <input_directory type=\"string\" value=\"" << this->model_dir() << "\"></input_directory>\n"
+      << "  <corner_x type=\"float\" value=\"" << this->corner().x() << "\"></corner_x>\n"
+      << "  <corner_y type=\"float\" value=\"" << this->corner().y() << "\"></corner_y>\n"
+      << "  <corner_z type=\"float\" value=\"" << this->corner().z() << "\"></corner_z>\n"
+      << "  <voxel_dim_x type=\"unsigned\" value=\"" << this->num_voxels().x() << "\"></voxel_dim_x>\n"
+      << "  <voxel_dim_y type=\"unsigned\" value=\"" << this->num_voxels().y() << "\"></voxel_dim_y>\n"
+      << "  <voxel_dim_z type=\"unsigned\" value=\"" << this->num_voxels().z() << "\"></voxel_dim_z>\n"
+      << "  <voxel_length type=\"float\" value=\"" << this->voxel_length() << "\"></voxel_length>\n"
+      << "  <lvcs type=\"string\" value=\"" << lvcs_filename << "\"></lvcs>\n"
+      << "  <apm_type type=\"unsigned\" value=\"1\"></apm_type>\n"
+      << "  <min_ocp_prob type=\"float\" value=\"" << this->min_occupancy_prob() << "\"></min_ocp_prob>\n"
+      << "  <max_ocp_prob type=\"float\" value=\"" << this->max_occupancy_prob() << "\"></max_ocp_prob>\n"
+      << "  <max_scale type=\"unsigned\" value=\"" << this->max_scale() << "\"></max_scale>\n"
+      << "</bvxmCreateVoxelWorldProcess>\n";
+  ofs.close();
+}
+

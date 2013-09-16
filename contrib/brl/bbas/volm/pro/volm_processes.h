@@ -1,0 +1,17 @@
+#ifndef volm_processes_h_
+#define volm_processes_h_
+
+#include <bprb/bprb_func_process.h>
+#include <bprb/bprb_macros.h>
+
+DECLARE_FUNC_CONS(volm_create_satellite_resources_process);
+DECLARE_FUNC_CONS(volm_save_satellite_resources_process);
+DECLARE_FUNC_CONS(volm_load_satellite_resources_process);
+DECLARE_FUNC_CONS(volm_add_satellite_resources_process);
+DECLARE_FUNC_CONS(volm_query_satellite_resources_process);
+DECLARE_FUNC_CONS(volm_correct_rational_cameras_ransac_process);
+DECLARE_FUNC_CONS(volm_pick_nadir_resource_process);
+DECLARE_FUNC_CONS(volm_map_osm_process);
+DECLARE_FUNC_CONS(volm_map_segments_process);
+
+#endif

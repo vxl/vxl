@@ -15,6 +15,8 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_double_2.h>
+#include <vsl/vsl_binary_io.h>
+#include <vgl/vgl_point_3d.h>
 
 struct image_time {
   int year, month, day, hour, min;
@@ -48,14 +50,26 @@ class brad_image_metadata : public vbl_ref_count
 
   vcl_string satellite_name_;
   double cloud_coverage_percentage_;
-  vnl_double_2 upper_left_;  // warning: upper_left_[0] is latitude, upper_left_[1] is longitude, similarly for the other corners
-  vnl_double_2 upper_right_;
-  vnl_double_2 lower_left_;
-  vnl_double_2 lower_right_;
+  //vnl_double_2 upper_left_;  // warning: upper_left_[0] is latitude, upper_left_[1] is longitude, similarly for the other corners
+  //vnl_double_2 upper_right_;
+  //vnl_double_2 lower_left_;
+  //vnl_double_2 lower_right_;
+  vgl_point_3d<double> lower_left_;  // x is lon, y is lat
+  vgl_point_3d<double> upper_right_; 
+  vcl_string band_;  // PAN or MULTI
+  unsigned n_bands_;  // 1 for PAN, 4 or 8 for MULTI
 
   //: parse header in nitf image, assumes that metadata files are in the same folder with the image
   //  If meta_folder is not empty, they are searched in that folder as well
   bool parse(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
+
+  bool same_time(brad_image_metadata& other);
+
+  // ===========  binary I/O ================
+  short version() const { return 0; }
+  void b_write(vsl_b_ostream& os) const;
+  void b_read(vsl_b_istream& is);
+
  protected:
   //: Parse Quickbird IMD file
   bool parse_from_imd(vcl_string const& filename);

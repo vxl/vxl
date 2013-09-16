@@ -19,7 +19,8 @@ bool bvxm_heightmap_ortho_process_cons(bprb_func_process& pro)
 
   //output
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  output_types_[0] = "vil_image_view_base_sptr";
+  output_types_[0] = "vil_image_view_base_sptr";  // this one is the depth map from top
+  output_types_[1] = "vil_image_view_base_sptr";  // this one is negated depth map, so height map from scene floor 
   return pro.set_output_types(output_types_);
 }
 
@@ -73,10 +74,21 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   cam->set_scale_format(true);
   vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);  
   
-  vil_image_view<unsigned> *hmap = new vil_image_view<unsigned>(ni, nj, 1);
-  world->heightmap(camera,*hmap);
+  vil_image_view<unsigned> *dmap = new vil_image_view<unsigned>(ni, nj, 1);
+  world->heightmap(camera,*dmap);  // this method actually generates a depth not a height map
+
+  // subtract from the scene height to get the height from scene floor
+  float h = box.depth();
+  vcl_cout << "Using scene height: " << h << " to negate the depth map!\n";
+  vil_image_view<float> *hmap = new vil_image_view<float>(ni, nj, 1);
+  hmap->fill(0.0f);
+  for (unsigned i = 0; i < ni; i++) 
+    for (unsigned j = 0; j < nj; j++) 
+      (*hmap)(i,j) = h-(*dmap)(i,j);
+    
   //store output
-  pro.set_output_val<vil_image_view_base_sptr>(0, hmap);
+  pro.set_output_val<vil_image_view_base_sptr>(0, dmap);
+  pro.set_output_val<vil_image_view_base_sptr>(1, hmap);
   
   return true;
 }

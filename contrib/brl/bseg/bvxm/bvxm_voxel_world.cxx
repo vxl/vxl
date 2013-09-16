@@ -655,7 +655,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   vil_image_view<float>* heightmap_rough_img = new vil_image_view<float>(heightmap.ni(),heightmap.nj());
   vil_image_view_base_sptr heightmap_rough_img_sptr = heightmap_rough_img;
   bvxm_util::slab_to_img(heightmap_rough,heightmap_rough_img_sptr);
-
+  /*
   // first, median filter heightmap
   vil_image_view<float> heightmap_med_img(heightmap.ni(),heightmap.nj());
   vcl_vector<int> strel_vec;
@@ -718,7 +718,14 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   for (; hmap_it != heightmap.end(); ++hmap_filt_it, ++hmap_it) {
     *hmap_it = (unsigned)(*hmap_filt_it); // should we do some rounding here?
   }
+  */
 
+  // convert back to unsigned
+  vil_image_view<float>::const_iterator hmap_rough_it = heightmap_rough_img->begin();
+  vil_image_view<unsigned>::iterator hmap_it = heightmap.begin();
+  for (; hmap_rough_it != heightmap_rough_img->end(); ++hmap_it, ++hmap_rough_it) {
+    *hmap_it = (unsigned)(*hmap_rough_it);
+  }
   return true;
 }
 

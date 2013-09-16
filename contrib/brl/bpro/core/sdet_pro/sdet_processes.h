@@ -20,5 +20,9 @@ DECLARE_FUNC_CONS(sdet_print_texton_dict_process);
 DECLARE_FUNC_CONS(sdet_exp_img_classifier_process);
 DECLARE_FUNC_CONS(sdet_save_texture_classifier_process);
 DECLARE_FUNC_CONS(sdet_load_texture_classifier_process);
+DECLARE_FUNC_CONS(sdet_segment_image_process);
+DECLARE_FUNC_CONS(sdet_segment_image_using_edge_map_process);
+DECLARE_FUNC_CONS(sdet_segment_image_using_height_map_process);
+DECLARE_FUNC_CONS(sdet_segment_image_using_height_map_process2);
 
 #endif

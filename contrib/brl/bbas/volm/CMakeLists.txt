@@ -56,6 +56,8 @@ SET(volm_sources
  volm_osm_object_point.h                volm_osm_object_point.cxx
  volm_osm_object_line.h                 volm_osm_object_line.cxx
  volm_osm_object_polygon.h              volm_osm_object_polygon.cxx
+ volm_satellite_resources.h             volm_satellite_resources.cxx
+ volm_satellite_resources_sptr.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates volm_sources)
@@ -72,3 +74,5 @@ IF(BUILD_TESTING)
 ENDIF(BUILD_TESTING)
 
 SUBDIRS(exe)
+
+SUBDIRS(pro)

@@ -196,8 +196,30 @@ vcl_vector<vcl_string> create_volm_land_layer_name_table()
   return out;
 }
 
+// create table with the increments to use during hypotheses generation according to each land type, the unit is in meters
+vcl_map<int, double> create_geo_cover_hyp_increments_for_roads()
+{
+  vcl_map<int, double> m;
+  m[volm_osm_category_io::GEO_DECIDUOUS_FOREST]    = 500;  // almost no hyps on the forest areas
+  m[volm_osm_category_io::GEO_EVERGREEN_FOREST]    = 500;
+  m[volm_osm_category_io::GEO_SHRUB]               = 60;
+  m[volm_osm_category_io::GEO_GRASSLAND]           = 4;
+  m[volm_osm_category_io::GEO_BARREN]              = 30;
+  m[volm_osm_category_io::GEO_URBAN]               = 4;  // 4 meter increments in the urban region
+  m[volm_osm_category_io::GEO_AGRICULTURE_GENERAL] = 4;
+  m[volm_osm_category_io::GEO_AGRICULTURE_RICE]    = 4;
+  m[volm_osm_category_io::GEO_WETLAND]             = 30;
+  m[volm_osm_category_io::GEO_MANGROVE]            = 500;  // almost no hyps
+  m[volm_osm_category_io::GEO_WATER]               = 1000;  // almost no hyps on water (for now)
+  m[volm_osm_category_io::GEO_ICE]                 = 1000; // almost no hyps on ice (for now)
+  m[volm_osm_category_io::GEO_CLOUD]               = 4;  // use the most common -- CAUTION: some cloud coverage may prevent good density on urban areas
+  return m;
+}
+
 vcl_map<vcl_pair<int, int>, volm_land_layer> volm_osm_category_io::road_junction_table = load_osm_road_junction_table();
 vcl_map<int, volm_land_layer> volm_osm_category_io::nlcd_land_table = create_nlcd_to_volm_table();
 vcl_map<int, volm_land_layer> volm_osm_category_io::geo_land_table  = create_geo_cover_to_volm_table();
 vcl_map<unsigned, volm_land_layer> volm_osm_category_io::volm_land_table = create_volm_land_table();
 vcl_vector<vcl_string> volm_osm_category_io::volm_category_name_table = create_volm_land_layer_name_table();
+vcl_map<int, double> volm_osm_category_io::geo_land_hyp_increments  = create_geo_cover_hyp_increments_for_roads();
+

@@ -110,6 +110,7 @@ class vpgl_lvcs : public vbl_ref_count
   void print(vcl_ostream&) const;
   bool save(vcl_string fname) { vcl_ofstream of(fname.c_str()); if (of) { print(of); return true; } return false; }
   void read(vcl_istream& strm);
+  void write(vcl_ostream& strm);  // write just "read" would read
   friend vcl_ostream& operator << (vcl_ostream& os, const vpgl_lvcs& local_coord_sys);
   friend vcl_istream& operator >> (vcl_istream& os, vpgl_lvcs& local_coord_sys);
   bool operator==(vpgl_lvcs const& r) const;

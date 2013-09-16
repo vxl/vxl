@@ -48,6 +48,9 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //  TODO: generalize geo_camera so that img_to_global method makes this adjustment internally if camera is created using this method
   static bool init_geo_camera(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
 
+  // loads a geo_camera from the file and uses global WGS84 coordinates, so no need to convert negative values to positives in the global_to_img method as in the previous method
+  static bool init_geo_camera_from_filename(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
+  
   //: init using a tfw file, reads the transformation matrix from the tfw
   static bool init_geo_camera(vcl_string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera);
 

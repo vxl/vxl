@@ -852,6 +852,36 @@ void vpgl_lvcs::read(vcl_istream& strm)
   }
 }
 
+void vpgl_lvcs::write(vcl_ostream& strm)  // write just "read" would read
+{
+  strm.precision(12);
+
+  if (local_cs_name_ == wgs84)
+    strm << "wgs84" << '\n';
+  else if (local_cs_name_ == nad27n)
+    strm << "nad27n" << '\n';
+  else if (local_cs_name_ == wgs72)
+    strm << "wgs72" << '\n';
+  else if (local_cs_name_ == utm)
+    strm << "utm" << '\n';
+  else
+    vcl_cerr << "undefined local_cs_name\n";
+
+  if (localXYZUnit_ == FEET)
+    strm << "feet ";
+  else if (localXYZUnit_ == METERS)
+    strm << "meters ";
+  
+  if (geo_angle_unit_ == DEG)
+    strm << "degrees\n";
+  else if (geo_angle_unit_ == RADIANS)
+    strm << "radians\n";
+  
+  strm << localCSOriginLat_ << ' ' << localCSOriginLon_ << ' '  << localCSOriginElev_ << '\n';
+  strm << "0.0 0.0\n";
+  strm << lox_ << ' ' << loy_ << ' ' << theta_ << '\n';
+}
+
 //------------------------------------------------------------
 //: Transform from local co-ordinates to north=y,east=x.
 void vpgl_lvcs::local_transform(double& x, double& y)
