@@ -425,7 +425,7 @@ advance()
         break; // without freeing the packet
     }
     // grab the metadata from this packet if from the metadata stream
-    else if (pkt.stream_index==is_->data_index_)
+    else if (is_->packet_.stream_index==is_->data_index_)
     {
       is_->metadata_.insert( is_->metadata_.end(), pkt.data, pkt.data+pkt.size);
     }
