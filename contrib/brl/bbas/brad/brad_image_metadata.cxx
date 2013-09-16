@@ -210,19 +210,25 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
       vcl_stringstream linestr(awk.line());
       while (linestr.str().find("latitude") == vcl_string::npos) {
          ++awk;
-         linestr = vcl_stringstream(awk.line());
+         //linestr = vcl_stringstream(awk.line());
+         linestr.clear();
+         linestr.str(awk.line());
       }
       vcl_string dummy; linestr >> dummy; linestr >> dummy;
       double y; linestr >> y; 
       while (linestr.str().find("longitude") == vcl_string::npos) {
          ++awk;
-         linestr = vcl_stringstream(awk.line());
+         //linestr = vcl_stringstream(awk.line());
+         linestr.clear();
+         linestr.str(awk.line());
       }
       linestr >> dummy; linestr >> dummy;
       double x; linestr >> x; 
       while (linestr.str().find("height") == vcl_string::npos) {
          ++awk;
-         linestr = vcl_stringstream(awk.line());
+         //linestr = vcl_stringstream(awk.line());
+         linestr.clear();
+         linestr.str(awk.line());
       }
       linestr >> dummy; linestr >> dummy;
       double z; linestr >> z; 

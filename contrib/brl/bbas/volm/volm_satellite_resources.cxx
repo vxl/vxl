@@ -105,7 +105,7 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
   vcl_vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root_, leaves, area);
   for (unsigned i = 0; i < leaves.size(); i++) {
-    volm_geo_index2_node<vcl_vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<vcl_vector<unsigned>>* >(leaves[i].ptr());
+    volm_geo_index2_node<vcl_vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<vcl_vector<unsigned> >* >(leaves[i].ptr());
     // check which images overlap with the given bbox
     for (unsigned k = 0; k < leaf_ptr->contents_.size(); k++) {
       unsigned res_id = leaf_ptr->contents_[k];
@@ -124,7 +124,7 @@ bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double
   vcl_vector<unsigned> ids;
   query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, ids);
   cnt = ids.size();
-  vcl_ofstream ofs(out_file);
+  vcl_ofstream ofs(out_file.c_str());
   if (!ofs) {
     vcl_cerr << "In volm_satellite_resources::query_print_to_file() -- cannot open file: " << out_file << vcl_endl;
     return false;
@@ -174,7 +174,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
     }
   }
 #endif
-  vcl_ofstream ofs(out_file);
+  vcl_ofstream ofs(out_file.c_str());
   if (!ofs) {
     vcl_cerr << "In volm_satellite_resources::query_print_to_file() -- cannot open file: " << out_file << vcl_endl;
     return false;

@@ -164,7 +164,7 @@ vcl_istream& operator >> (vcl_istream& is, bvxm_world_params &params)
 //: write as xml file to be passed to bvxm_create_world process
 void bvxm_world_params::write_xml(vcl_string const& filename, vcl_string const& lvcs_filename)
 {
-  vcl_ofstream ofs(filename);
+  vcl_ofstream ofs(filename.c_str());
   if (!ofs) {
     vcl_cerr << "In bvxm_world_params::write_xml() -- cannot open file:" << filename << '\n';
     return;

@@ -65,7 +65,8 @@ int main(int argc, char** argv)
   unsigned tree_depth = volm_geo_index2::depth(root);
   vcl_cout << "the scene has " << leaves.size() << " leaves and depth is " << tree_depth << vcl_endl;
   //volm_geo_index2::write_to_kml(root, tree_depth, out_folder() + "scenes.kml");
-  vcl_ofstream ofs(out_folder() + "scenes.kml");
+  vcl_string temp_name = out_folder() + "scenes.kml";
+  vcl_ofstream ofs(temp_name.c_str());
   bkml_write::open_document(ofs);
   for (unsigned i = 0; i < leaves.size(); i++) {
     vcl_stringstream str; str << "scene" << i;
@@ -98,7 +99,7 @@ int main(int argc, char** argv)
     //construct lvcs
     vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lower_left.y(), lower_left.x(), min, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
     vcl_string lvcs_name = name.str() + ".lvcs";
-    vcl_ofstream ofs(lvcs_name);
+    vcl_ofstream ofs(lvcs_name.c_str());
     if (!ofs) {
       vcl_cerr << "Cannot open file: " << lvcs_name << "!\n";
       return volm_io::EXE_ARGUMENT_ERROR;

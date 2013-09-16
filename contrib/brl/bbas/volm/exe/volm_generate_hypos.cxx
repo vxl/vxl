@@ -222,7 +222,7 @@ int main(int argc,  char** argv)
 #include <volm/volm_geo_index.h>
 
 // find the elevation of the point and add it to the geo index if found
-void add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info>& infos, vgl_point_2d<double>& pt, double inc_in_sec_radius, bool search)
+void add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info> const& infos, vgl_point_2d<double> const& pt, double inc_in_sec_radius, bool search)
 {
   // find the elevation of the hypotheses
   float z = 0;
@@ -321,7 +321,7 @@ int main(int argc,  char** argv)
      
     vcl_cout << " number of tiles: " << tiles.size() << vcl_endl;
     unsigned i = tile_id();
-    if (i >= tiles.size() || i < 0) {
+    if (i >= tiles.size()) {
       vcl_cerr << "Unknown tile id: " << i << vcl_endl;
       return volm_io::EXE_ARGUMENT_ERROR;
     }

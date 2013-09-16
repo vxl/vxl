@@ -212,6 +212,8 @@ bool volm_map_segments_process(bprb_func_process& pro)
   }
   vcl_cout << "number of img lines: " << img_lines.size() << vcl_endl;
   if (hit) {
+    vcl_vector<float> road_heights;
+
     for (unsigned i = 0; i < img_lines.size(); i++) {
       vcl_cout << "img line: " << i << " number of pts: " << img_lines[i].size() << " ";
       // find the segment color of this pixel
@@ -219,6 +221,7 @@ bool volm_map_segments_process(bprb_func_process& pro)
       // make the output color of this group, the road color: red
       vcl_pair<unsigned char, vcl_pair<unsigned char, unsigned char> > seg_color(segment_color.r, vcl_pair<unsigned char, unsigned char>(segment_color.g, segment_color.b));
       segment_map[seg_color].second = road_color;
+      road_heights.push_back(height_image(img_lines[i][0].first, img_lines[i][0].second));
       for (unsigned j = 1; j < img_lines[i].size(); j++) {
         double prev_u = img_lines[i][j-1].first;
         double prev_v = img_lines[i][j-1].second;
@@ -235,6 +238,7 @@ bool volm_map_segments_process(bprb_func_process& pro)
             vil_rgb<vxl_byte> segment_color = img(uu, vv);
             vcl_pair<unsigned char, vcl_pair<unsigned char, unsigned char> > seg_color(segment_color.r, vcl_pair<unsigned char, unsigned char>(segment_color.g, segment_color.b));
             segment_map[seg_color].second = road_color;
+            road_heights.push_back(height_image(uu,vv));
           }
           cnt++;
           ds -= 1;
@@ -246,10 +250,10 @@ bool volm_map_segments_process(bprb_func_process& pro)
     // find the height of each segment
     vcl_map<vcl_pair<unsigned char, vcl_pair<unsigned char, unsigned char> >, float > segment_height_map;
     vcl_map<vcl_pair<unsigned char, vcl_pair<unsigned char, unsigned char> >, float >::iterator height_iter;
-    vcl_vector<float> road_heights;
+    
     for (iter = segment_map.begin(); iter != segment_map.end(); iter++) {
       vcl_vector<vcl_pair<int, int> >& tmp = iter->second.first;
-      if (tmp.size() < 10) {
+      if (tmp.size() < 1) {
         segment_height_map[iter->first] = -1;
         continue;
       }
@@ -261,9 +265,9 @@ bool volm_map_segments_process(bprb_func_process& pro)
       int med = (int)vcl_floor(heights.size()/2.0);
       float median_height = heights[med];
       segment_height_map[iter->first] = median_height;
-      if (iter->second.second == road_color) {
+      /*if (iter->second.second == road_color) {
         road_heights.push_back(median_height);
-      }
+      }*/
     }
     vcl_sort(road_heights.begin(), road_heights.end());
     vcl_cout << "road heights: " << vcl_endl;
