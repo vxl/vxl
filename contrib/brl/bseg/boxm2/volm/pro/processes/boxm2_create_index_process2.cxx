@@ -403,7 +403,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
         kern->clear_args();
 
         //remove from device memory unnecessary items
-        //opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         //opencl_cache->clear_cache();
       }
       if (vis_blocks.size() != 0)  // normalize

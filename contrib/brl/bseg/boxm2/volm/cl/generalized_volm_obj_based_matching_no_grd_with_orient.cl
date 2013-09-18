@@ -17,7 +17,8 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
                                                                      __global unsigned*            layer_size,         // index -- size of spherical shell container (single unsigned)
                                                                      __global unsigned char*    fallback_size,         // index -- number of the possible land type store in fallback land category
                                                                      __global unsigned char*            index,         // index -- index depth array
-                                                                     __global unsigned char*    index_combine,         // index -- index orientation and land array (ori -> 0:invalid, 1:horizontal, 2:vertical;)
+                                                                     __global unsigned char*     index_orient,         // index -- index orientation array
+                                                                     __global unsigned char*       index_land,         // index -- index land array
                                                                      __global float*                    score,         // score array (score per index per camera)
                                                                      __global float*                       mu,         // average depth array for index
                                                                      __global float*           depth_interval,         // depth_interval
@@ -154,19 +155,15 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
         }
 
         // calcualte score for orientation and land type
-        unsigned char ind_combine = index_combine[id];
-        if (ind_combine < 253) {
-          unsigned char ind_ori = ind_combine / (unsigned char)64;
-          unsigned char ind_lnd = ind_combine - (ind_ori * 64);
-          // the score of orientation for object k and ray i
+        unsigned char ind_ori = index_orient[id];
+        unsigned char ind_lnd = index_land[id];
+        if (ind_ori < 253)
           s_vox_ori = (ind_ori != 0 && ind_ori == local_obj_orient[k]) ? 1 : 0;
-          // the score for land type
-          if (ind_lnd != 0) {
-            for (unsigned ii = lnd_start; ii < lnd_end; ii++) {
-              if (ind_lnd == local_obj_land[ii]) {
-                score_k_lnd += local_obj_land_wgt[ii];
-                break;
-              }
+        if (ind_lnd != 0) {
+          for (unsigned ii = lnd_start; ii < lnd_end; ii++) {
+            if (ind_lnd == local_obj_land[ii]) {
+              score_k_lnd += local_obj_land_wgt[ii];
+              break;
             }
           }
         }

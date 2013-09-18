@@ -42,7 +42,9 @@ boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_camera_space_sptr const& cam_s
   volm_fallback_label::size(fallback_size_);
 
   ind_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
-  ind_combine_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
+  ind_orient_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
+  ind_label_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
+  //ind_combine_ = new boxm2_volm_wr3db_index(layer_size_, ind_buffer_);
   file_name_pre_ << geo_index_folder << "geo_index_tile_" << tile_id;
 
   if (!query_->depth_scene()->ground_plane().size())
@@ -243,19 +245,21 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
 
   // initialize the indices
   vcl_string index_dst_file = leaves_[leaf_id]->get_index_name(file_name_pre_.str());
-  vcl_string index_combine_file = leaves_[leaf_id]->get_label_index_name(file_name_pre_.str(), "combined");
+  vcl_string index_ori_file = leaves_[leaf_id]->get_label_index_name(file_name_pre_.str(), "orientation");
+  vcl_string index_lnd_file = leaves_[leaf_id]->get_label_index_name(file_name_pre_.str(), "land");
 #if 0
   vcl_cerr << " index_combine_file = " << index_combine_file << '\n';
 #endif
   ind_->initialize_read(index_dst_file);
-  ind_combine_->initialize_read(index_combine_file);
+  ind_orient_->initialize_read(index_ori_file);
+  ind_label_->initialize_read(index_lnd_file);
 
   while (leaf_id < leaves_.size())
   {
     unsigned char* index_buff_ = new unsigned char[ni*layer_size_];
-    unsigned char* index_combine_buff_ = new unsigned char[ni*layer_size_];
-    //unsigned char* index_orient_buff_ = new unsigned char[ni*layer_size_];
-    //unsigned char* index_land_buff_ = new unsigned char[ni*layer_size_];
+    //unsigned char* index_combine_buff_ = new unsigned char[ni*layer_size_];
+    unsigned char* index_orient_buff_ = new unsigned char[ni*layer_size_];
+    unsigned char* index_land_buff_ = new unsigned char[ni*layer_size_];
 
     // fill the index buffer
     vcl_vector<unsigned> l_id;  // leaf_id for indices filled into buffer
@@ -263,13 +267,13 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     unsigned actual_n_ind = ni; // handling the last round where the number of loaded indices is smaller than pre-computed ni
 
 
-    if (!this->fill_index(ni, layer_size_, leaf_id, index_buff_, index_combine_buff_, l_id, h_id, actual_n_ind) ) {
+    if (!this->fill_index(ni, layer_size_, leaf_id, index_buff_, index_orient_buff_, index_land_buff_, l_id, h_id, actual_n_ind) ) {
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
       delete fallback_size_cl_mem_;
-      delete [] index_buff_;
-      delete [] index_combine_buff_;
+      delete [] index_buff_;  delete [] index_orient_buff_;  delete [] index_land_buff_;
+      //delete [] index_combine_buff_;
       return false;
     }
 
@@ -294,7 +298,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       delete fallback_size_cl_mem_;
       delete n_ind_cl_mem_;     delete [] n_ind_;
       delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-      delete [] index_combine_buff_;
+      delete [] index_orient_buff_;  delete [] index_land_buff_;
+      //delete [] index_combine_buff_;
       return false;
     }
 
@@ -347,10 +352,11 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       delete n_ind_cl_mem_;     delete [] n_ind_;
       delete index_cl_mem_;
       delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-      delete [] index_combine_buff_;
+      delete [] index_orient_buff_;  delete [] index_land_buff_;
       return false;
     }
 
+#if 0
     // create combined index (both orientation and land type, decouple them inside kernel)
     bocl_mem* index_combine_cl_mem_ = new bocl_mem(gpu_->context(), index_combine_buff_, sizeof(unsigned char)*ni*layer_size_, " index_combine ");
     if (!index_combine_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
@@ -364,7 +370,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
       delete [] index_combine_buff_;
     }
-#if 0
+#endif
+#if 1
     // create index orientation
     bocl_mem* index_orient_cl_mem_ = new bocl_mem(gpu_->context(), index_orient_buff_, sizeof(unsigned char)*ni*layer_size_, " index_orient ");
     if (!index_orient_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
@@ -407,7 +414,9 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       delete fallback_size_cl_mem_;
       delete n_ind_cl_mem_;          delete [] n_ind_;
       delete index_cl_mem_;          delete [] index_buff_;
-      delete index_combine_cl_mem_;  delete [] index_combine_buff_;
+      /*delete index_combine_cl_mem_;  delete [] index_combine_buff_;*/
+      delete index_orient_cl_mem_;   delete [] index_orient_buff_;
+      delete index_land_cl_mem_;     delete [] index_land_buff_;
       delete score_cl_mem_;          delete [] score_buff_;
       delete [] mu_buff_;
       return false;
@@ -423,7 +432,9 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       delete fallback_size_cl_mem_;
       delete n_ind_cl_mem_;          delete [] n_ind_;
       delete index_cl_mem_;          delete [] index_buff_;
-      delete index_combine_cl_mem_;  delete [] index_combine_buff_;
+      /*delete index_combine_cl_mem_;  delete [] index_combine_buff_;*/
+      delete index_orient_cl_mem_;   delete [] index_orient_buff_;
+      delete index_land_cl_mem_;     delete [] index_land_buff_;
       delete score_cl_mem_;          delete [] score_buff_;
       delete mu_cl_mem_;             delete [] mu_buff_;
       return false;
@@ -433,7 +444,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     vcl_string identifier = gpu_->device_identifier();
     if (!this->execute_matcher_kernel_orient(gpu_, queue_, kernels_[identifier], n_ind_cl_mem_,
                                              index_cl_mem_,
-                                             index_combine_cl_mem_,
+                                             index_orient_cl_mem_,
+                                             index_land_cl_mem_,
                                              score_cl_mem_,
                                              mu_cl_mem_))
     {
@@ -444,7 +456,9 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
       delete fallback_size_cl_mem_;
       delete n_ind_cl_mem_;          delete [] n_ind_;
       delete index_cl_mem_;          delete [] index_buff_;
-      delete index_combine_cl_mem_;  delete [] index_combine_buff_;
+      //delete index_combine_cl_mem_;  delete [] index_combine_buff_;
+      delete index_orient_cl_mem_;   delete [] index_orient_buff_;
+      delete index_land_cl_mem_;     delete [] index_land_buff_;
       delete score_cl_mem_;          delete [] score_buff_;
       delete mu_cl_mem_;             delete [] mu_buff_;
       return false;
@@ -522,9 +536,15 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     delete mu_cl_mem_;
     status = clFinish(queue_);
     check_val(status, MEM_FAILURE, " release MU(average depth value) failed on device " + gpu_->device_identifier() + error_to_string(status));
-    delete index_combine_cl_mem_;
+    //delete index_combine_cl_mem_;
+    //status = clFinish(queue_);
+    //check_val(status, MEM_FAILURE, " release INDEX_COMBINE failed on device " + gpu_->device_identifier() + error_to_string(status));
+    delete index_orient_cl_mem_;
     status = clFinish(queue_);
-    check_val(status, MEM_FAILURE, " release INDEX_COMBINE failed on device " + gpu_->device_identifier() + error_to_string(status));
+    check_val(status, MEM_FAILURE, " release INDEX_ORIENT failed on device " + gpu_->device_identifier() + error_to_string(status));
+    delete index_land_cl_mem_;
+    status = clFinish(queue_);
+    check_val(status, MEM_FAILURE, " release INDEX_LAND failed on device " + gpu_->device_identifier() + error_to_string(status));
 
     // do the test
 #if 0
@@ -535,7 +555,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     // finish current round, clean host memory
     delete n_ind_;
     delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
-    delete [] index_combine_buff_;
+    delete [] index_orient_buff_;  delete [] index_land_buff_;
+    //delete [] index_combine_buff_;
   } // end of loop over all leaves
 
   // time evaluation
@@ -553,7 +574,9 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   delete fallback_size_cl_mem_;
   // finalize the index
   ind_->finalize();
-  ind_combine_->finalize();
+  ind_orient_->finalize();
+  ind_label_->finalize();
+  //ind_combine_->finalize();
   return true;
 }
 
@@ -561,6 +584,7 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
                                        unsigned const& layer_size,
                                        unsigned& leaf_id,
                                        unsigned char* index_buff,
+                                       unsigned char* index_orient_buff,
                                        unsigned char* index_combine_buff,
                                        vcl_vector<unsigned>& l_id,
                                        vcl_vector<unsigned>& h_id,
@@ -583,9 +607,13 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
         if (is_candidate_) {
           if (cand_poly_.contains(h_pt.x(), h_pt.y())) {  // having candiate list and current hypo is inside it --> accept
             unsigned char* values = index_buff + cnt * layer_size;
-            unsigned char* values_combine = index_combine_buff + cnt * layer_size;
+            unsigned char* values_ori = index_buff + cnt * layer_size;
+            unsigned char* values_lnd = index_buff + cnt * layer_size;
+            //unsigned char* values_combine = index_combine_buff + cnt * layer_size;
             ind_->get_next(values, layer_size);
-            ind_combine_->get_next(values_combine, layer_size);
+            ind_orient_->get_next(values_ori, layer_size);
+            ind_label_->get_next(values_lnd, layer_size);
+            //ind_combine_->get_next(values_combine, layer_size);
             cnt++;
 #if 0
             vcl_cout << "=> leaf_id = " << li
@@ -596,16 +624,24 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
           }
           else {                                       // having candidate list but current hypo is outside candidate list --> ignore
             vcl_vector<unsigned char> values(layer_size);
+            vcl_vector<unsigned char> values_ori(layer_size);
+            vcl_vector<unsigned char> values_lnd(layer_size);
             ind_->get_next(values);
-            vcl_vector<unsigned char> values_combine(layer_size);
-            ind_combine_->get_next(values_combine);
+            ind_orient_->get_next(values_ori);
+            ind_label_->get_next(values_lnd);
+            //vcl_vector<unsigned char> values_combine(layer_size);
+            //ind_combine_->get_next(values_combine);
           }
         }
         else {                                         // no candidate list, put all indices into buffer
           unsigned char* values = index_buff + cnt * layer_size;
-          unsigned char* values_combine = index_combine_buff + cnt * layer_size;
+          unsigned char* values_ori = index_buff + cnt * layer_size;
+          unsigned char* values_lnd = index_buff + cnt * layer_size;
           ind_->get_next(values, layer_size);
-          ind_combine_->get_next(values_combine, layer_size);
+          ind_orient_->get_next(values_ori, layer_size);
+          ind_label_->get_next(values_lnd, layer_size);
+          //unsigned char* values_combine = index_combine_buff + cnt * layer_size;
+          //ind_combine_->get_next(values_combine, layer_size);
           cnt++;
           l_id.push_back(li);  h_id.push_back(leaves_[li]->hyps_->current_-1);
         }
@@ -617,10 +653,14 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
       else {
         if (is_leaf_finish(li)) {
           ind_->finalize();
-          ind_combine_->finalize();
+          ind_orient_->finalize();
+          ind_label_->finalize();
+          //ind_combine_->finalize();
           if (li < leaves_.size()-1) {
             ind_->initialize_read(leaves_[li+1]->get_index_name(file_name_pre_.str()));
-            ind_combine_->initialize_read(leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "combined"));
+            ind_orient_->finalize();
+            ind_label_->finalize();
+            //ind_combine_->initialize_read(leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "combined"));
 #if 0
             vcl_cerr << " leaf = " << li+1 << ", combine_file = " << leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "combined") << '\n';
 #endif
@@ -648,7 +688,8 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
                                                           vcl_vector<bocl_kernel*>        kern_vec,
                                                           bocl_mem*                  n_ind_cl_mem_,
                                                           bocl_mem*                  index_cl_mem_,
-                                                          bocl_mem*          index_combine_cl_mem_,
+                                                          bocl_mem*           index_orient_cl_mem_,
+                                                          bocl_mem*             index_land_cl_mem_,
                                                           bocl_mem*                  score_cl_mem_,
                                                           bocl_mem*                     mu_cl_mem_)
 {
@@ -714,7 +755,9 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
     kern->set_arg(grd_weight_cl_mem_);    kern->set_arg(grd_wgt_attri_cl_mem_);
   }
   else {                                       // neither sky nor ground
+#ifdef DEBUG
     vcl_cout << "\t using NO grd NOR sky kernel" << vcl_endl;
+#endif
     kern = kern_vec[3];
     kern->set_arg(n_cam_cl_mem_);
     kern->set_arg(n_obj_cl_mem_);
@@ -733,7 +776,8 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   kern->set_arg(layer_size_cl_mem_);
   kern->set_arg(fallback_size_cl_mem_);
   kern->set_arg(index_cl_mem_);
-  kern->set_arg(index_combine_cl_mem_);
+  kern->set_arg(index_orient_cl_mem_);
+  kern->set_arg(index_land_cl_mem_);
   kern->set_arg(score_cl_mem_);
   kern->set_arg(mu_cl_mem_);
   kern->set_arg(depth_interval_cl_mem_);

@@ -607,8 +607,11 @@ vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()
   vcl_map<int, volm_land_layer> nlcd_table = volm_osm_category_io::nlcd_land_table;
   vcl_map<int, volm_land_layer> geo_table = volm_osm_category_io::geo_land_table;
   vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
+  vcl_map<vcl_pair<int, int>, volm_land_layer> road_junction_table;
   vcl_string osm_to_volm_txt = "./osm_to_volm_labels.txt";
   volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
+  vcl_string road_junction_txt = "./road_junction_category.txt";
+  volm_osm_category_io::load_road_junction_table(road_junction_txt, road_junction_table);
   
   for (vcl_map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
     m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
@@ -618,6 +621,10 @@ vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()
 
   for (vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>::iterator mit = osm_land_table.begin();
        mit != osm_land_table.end(); ++mit)
+    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+
+  for (vcl_map<vcl_pair<int, int>, volm_land_layer>::iterator mit = road_junction_table.begin();
+       mit != road_junction_table.end(); ++mit)
     m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
 
   vcl_vector<vcl_string> out;
