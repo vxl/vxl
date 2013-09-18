@@ -244,6 +244,20 @@ def truncate_image(img,min_value,max_value):
     img_out = dbvalue(id,type)
     return img_out
 
+def normalize_image(img):
+    bvxm_batch.init_process("vilImageNormaliseProcess")
+    bvxm_batch.set_input_from_db(0,img)
+    bvxm_batch.run_process()
+
+def median_filter(img, operator_half_size):
+    bvxm_batch.init_process("vilMedianFilterProcess")
+    bvxm_batch.set_input_from_db(0,img)
+    bvxm_batch.set_input_int(1, operator_half_size)
+    bvxm_batch.run_process()
+    (id,type) = bvxm_batch.commit_output(0)
+    img_out = dbvalue(id,type)
+    return img_out
+
 def image_mean(img):
   bvxm_batch.init_process("vilImageMeanProcess")
   bvxm_batch.set_input_from_db(0,img)

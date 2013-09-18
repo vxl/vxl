@@ -130,14 +130,17 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
     double c0 = (double)smoothed1(pix0.first, pix0.second);
     vcl_pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
     double c1 = (double)smoothed1(pix1.first, pix1.second);
-    double dif = c1-c0;
+    double dif = vcl_abs(c1-c0);
     
     double h0 = (double)smoothed2(pix0.first, pix0.second);
     double h1 = (double)smoothed2(pix1.first, pix1.second);
-    double dif2 = h0-h1;
+    double dif2 = vcl_abs(h0-h1);
     
     edges[i].w_ = (float)vcl_sqrt(dif*dif + dif2*dif2);
-    
+    /*if (dif < dif2)
+      edges[i].w_ = (float)vcl_sqrt(dif*dif);
+    else 
+      edges[i].w_ = (float)vcl_sqrt(dif2*dif2);*/
   }
     
   vbl_disjoint_sets ds; 

@@ -221,7 +221,8 @@ bool volm_map_segments_process(bprb_func_process& pro)
       // make the output color of this group, the road color: red
       vcl_pair<unsigned char, vcl_pair<unsigned char, unsigned char> > seg_color(segment_color.r, vcl_pair<unsigned char, unsigned char>(segment_color.g, segment_color.b));
       segment_map[seg_color].second = road_color;
-      road_heights.push_back(height_image(img_lines[i][0].first, img_lines[i][0].second));
+      if (height_image(img_lines[i][0].first, img_lines[i][0].second) > 0)
+        road_heights.push_back(height_image(img_lines[i][0].first, img_lines[i][0].second));
       for (unsigned j = 1; j < img_lines[i].size(); j++) {
         double prev_u = img_lines[i][j-1].first;
         double prev_v = img_lines[i][j-1].second;
@@ -238,7 +239,8 @@ bool volm_map_segments_process(bprb_func_process& pro)
             vil_rgb<vxl_byte> segment_color = img(uu, vv);
             vcl_pair<unsigned char, vcl_pair<unsigned char, unsigned char> > seg_color(segment_color.r, vcl_pair<unsigned char, unsigned char>(segment_color.g, segment_color.b));
             segment_map[seg_color].second = road_color;
-            road_heights.push_back(height_image(uu,vv));
+            if (height_image(uu,vv) > 0)
+              road_heights.push_back(height_image(uu,vv));
           }
           cnt++;
           ds -= 1;
@@ -259,8 +261,12 @@ bool volm_map_segments_process(bprb_func_process& pro)
       }
       // find the median height of its pixels
       vcl_vector<float> heights;
-      for (unsigned i = 0; i < tmp.size(); i++) 
-        heights.push_back(height_image(tmp[i].first, tmp[i].second));
+      for (unsigned i = 0; i < tmp.size(); i++) {
+        if (height_image(tmp[i].first, tmp[i].second) > 0)
+          heights.push_back(height_image(tmp[i].first, tmp[i].second));
+      }
+      if (heights.size() <= 0)
+        continue;
       vcl_sort(heights.begin(), heights.end());
       int med = (int)vcl_floor(heights.size()/2.0);
       float median_height = heights[med];

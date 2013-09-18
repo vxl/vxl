@@ -5,8 +5,11 @@
 #include <bprb/bprb_func_process.h>
 #include "bwm_processes.h"
 
+
 void bwm_register::register_datatype()
-{}
+{
+
+}
 
 void bwm_register::register_process()
 {
