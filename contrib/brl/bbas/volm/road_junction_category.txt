@@ -135,4 +135,4 @@ road_id road_name road_width road_id road_name road_width id name level radius
 145 water_stream 3 145 water_stream 3 240 water_water 5 10.0
 145 water_stream 3 146 water_canal 10 240 water_water 5 10.0
 146 water_canal 10 146 water_canal 10 240 water_water 5 10.0
-253 roads 2.5 253 roads 2.5 241 T_section 5.0
+253 roads 2.5 253 roads 2.5 241 T_section 5 5.0

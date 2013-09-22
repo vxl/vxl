@@ -117,7 +117,7 @@ int main(int argc, char** argv)
                  << ", depth = " << dm->ground_plane()[i]->min_depth()
                  << ", orient = " << dm->ground_plane()[i]->orient_type()
                  << ", land_id = " << dm->ground_plane()[i]->land_id() 
-                 << ", land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
+                 << ", land_name = " << volm_osm_category_io::volm_land_table[dm->ground_plane()[i]->land_id()].name_
                  << ", land_fallback = ";
         volm_fallback_label::print_id(dm->ground_plane()[i]->land_id());
         vcl_cout << ", land_fallback_wgt = ";
@@ -135,7 +135,7 @@ int main(int argc, char** argv)
                << ",\t order = " << drs[i]->order()
                << ",\t orient = " << drs[i]->orient_type()
                << ",\t land_id = " << drs[i]->land_id()
-               << ",\t land_name = " << volm_label_table::land_string( drs[i]->land_id() )
+               << ",\t land_name = " << volm_osm_category_io::volm_land_table[drs[i]->land_id()].name_
                << ",\t fallback_category = ";
       volm_fallback_label::print_id(drs[i]->land_id());
       vcl_cout << ",\t fallback_wgt = ";
@@ -146,8 +146,12 @@ int main(int argc, char** argv)
 
   // save the volm_query
   vcl_stringstream out_name;
-  if (id() < 10)  out_name << out_folder() << "/" << "p1a_test1_0" << id() << "_query_pa_" << (int)sph_shell->point_angle() << ".bin";
-  else            out_name << out_folder() << "/" << "p1a_test1_"  << id() << "_query_pa_" << (int)sph_shell->point_angle() << ".bin";
+  if (id() < 10)
+    out_name << out_folder() << "/" << "p1b_test1_00" << id() << "_query_pa_" << (int)sph_shell->point_angle() << ".bin";
+  else if(id() >= 10 && id() < 100)
+    out_name << out_folder() << "/" << "p1b_test1_0"  << id() << "_query_pa_" << (int)sph_shell->point_angle() << ".bin";
+  else
+    out_name << out_folder() << "/" << "p1b_tset1_" << id() << "_query_pa_" << (int)sph_shell->point_angle() << ".bin";
 
   vsl_b_ofstream ofs(out_name.str());
   query->write_data(ofs);
@@ -155,7 +159,7 @@ int main(int argc, char** argv)
 
   // visualize query
   if (save_images()) {
-    vcl_string prefix = out_folder();
+    vcl_string prefix = out_folder() + "/";
     vcl_cout << " save the images in " << prefix << vcl_endl;
     query->draw_query_images(out_folder());
   }

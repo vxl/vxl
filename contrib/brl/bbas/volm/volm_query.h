@@ -35,6 +35,7 @@
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_camera_space.h>
 #include <vsl/vsl_binary_io.h>
+#include <volm/volm_category_io.h>
 
 class volm_query : public vbl_ref_count
 {

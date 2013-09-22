@@ -6,6 +6,7 @@
 #include <vgl/vgl_sphere_3d.h>
 #include <bvrml/bvrml_write.h>
 #include <volm/volm_io.h>
+#include <volm/volm_category_io.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
 
@@ -187,7 +188,8 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
       img(ii,jj) = volm_label_table::land_id[(int)values[i]].color_;
 #endif // 0
     else
-      img(ii,jj) = volm_label_table::get_color(values[i]); // returns invalid color if it cannot find this id
+      img(ii,jj) = volm_osm_category_io::volm_land_table[values[i]].color_;
+      //img(ii,jj) = volm_label_table::get_color(values[i]); // returns invalid color if it cannot find this id
   }
 }
 
@@ -266,7 +268,8 @@ void volm_spherical_shell_container::panaroma_images_from_combined(vil_image_vie
       else
         img_orientation(ii,jj) = volm_orient_table::ori_index_colors[(int)orientation_value];
 
-      img(ii,jj) = volm_label_table::get_color(label_value); // returns invalid color if it cannot find this id
+      //img(ii,jj) = volm_label_table::get_color(label_value); // returns invalid color if it cannot find this id
+      img(ii,jj) = volm_osm_category_io::volm_land_table[label_value].color_;
     }
   }
 }

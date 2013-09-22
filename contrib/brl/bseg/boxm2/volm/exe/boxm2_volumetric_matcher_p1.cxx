@@ -92,16 +92,16 @@ int main(int argc, char** argv)
   // check the consistency of tile_id and zone_id
   // for coast --- zone 18 contains only tile 8 to tile 14 and zone 17 contains only tile 0 to tile 8
   // for desert --- all tiles (4 tiles) are in zone 11
-  if (tile_id() > 8 && zone_id() == 17 ||
-      tile_id() < 8 && tile_id() != 5 && zone_id() == 18 ||
-      tile_id() > 3 && zone_id() == 11 )
-  {
-    log << " ERROR: inconsistency between tile_id and utm zone_id, tile_id = " << tile_id() << ", zone_id = " << zone_id() << '\n';
-    if (do_log) { volm_io::write_log(out_folder(), log.str()); }
-    vcl_cerr << log.str();
-    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
+  //if (tile_id() > 8 && zone_id() == 17 ||
+  //    tile_id() < 8 && tile_id() != 5 && zone_id() == 18 ||
+  //    tile_id() > 3 && zone_id() == 11 )
+  //{
+  //  log << " ERROR: inconsistency between tile_id and utm zone_id, tile_id = " << tile_id() << ", zone_id = " << zone_id() << '\n';
+  //  if (do_log) { volm_io::write_log(out_folder(), log.str()); }
+  //  vcl_cerr << log.str();
+  //  volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+  //  return volm_io::EXE_ARGUMENT_ERROR;
+  //}
 
 
   // load geo_index
@@ -254,7 +254,7 @@ int main(int argc, char** argv)
                << ",\t depth = " << dm->ground_plane()[i]->min_depth()
                << ",\t orient = " << dm->ground_plane()[i]->orient_type()
                << ",\t land_id = " << dm->ground_plane()[i]->land_id()
-               << ",\t land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
+               << ",\t land_name = " << volm_osm_category_io::volm_land_table[dm->ground_plane()[i]->land_id()].name_
                << vcl_endl;
   }
   vcl_vector<depth_map_region_sptr> dmr = query->depth_regions();
@@ -268,7 +268,7 @@ int main(int argc, char** argv)
                << ",\t\t order = " << dmr[i]->order()
                << ",\t\t orient = " << dmr[i]->orient_type()
                << ",\t\t NLCD_id = " << dmr[i]->land_id()
-               << ",\t\t land_name = " << volm_label_table::land_string(dmr[i]->land_id())
+               << ",\t\t land_name = " << volm_osm_category_io::volm_land_table[dmr[i]->land_id()].name_
                << vcl_endl;
     }
   }
@@ -338,10 +338,10 @@ int main(int argc, char** argv)
            << "\t\t     " << out_folder() << '\n'
            << "==================================================================================================\n" << vcl_endl;
   vcl_stringstream out_fname_bin;
-  out_fname_bin << out_folder() << "ps_1_scores_zone_" << zone_id() << "_tile_" << tile_id() << ".bin";
+  out_fname_bin << out_folder() << "ps_1_scores_tile_" << tile_id() << ".bin";
 #if 0
   vcl_stringstream out_fname_txt;
-  out_fname_txt << out_folder() << "ps_1_scores_zone_" << zone_id() << "_tile_" << tile_id() << ".txt";
+  out_fname_txt << out_folder() << "ps_1_scores_tile_" << tile_id() << ".txt";
 #endif
   if (!obj_ps1_matcher.write_matcher_result(out_fname_bin.str())) {
     log << " ERROR: writing output failed for pass 1 ray_based matcher\n";

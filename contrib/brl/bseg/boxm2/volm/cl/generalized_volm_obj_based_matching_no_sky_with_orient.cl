@@ -121,7 +121,7 @@ __kernel void generalized_volm_obj_based_matching_no_sky_with_orient(
         score_grd_ori += 1;
       if (ind_lnd != 0) {
         unsigned lnd_start = k * l_fs;
-        for (unsigned ii = 0; ii < l_fs, ii++) {
+        for (unsigned ii = 0; ii < l_fs; ii++) {
           unsigned l_id = lnd_start + ii;
           if (ind_lnd == grd_land[l_id]) {
             score_grd_lnd += grd_land_wgt[l_id];

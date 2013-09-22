@@ -52,12 +52,26 @@ int main(int argc,  char** argv)
   }
   vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
   volm_io::read_gt_file(gt_file(), samples);
-  // create tile based on current image category
+  // create tiles based on image id and associate ROI
   vcl_vector<volm_tile> tiles;
   if (samples[id()].second.second == "desert")
     tiles = volm_tile::generate_p1_wr1_tiles();
-  else
+  else if (samples[id()].second.second == "coast")
     tiles = volm_tile::generate_p1_wr2_tiles();
+  else if (samples[id()].second.second == "Chile")
+    tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (samples[id()].second.second == "India")
+    tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (samples[id()].second.second == "Jordan")
+    tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (samples[id()].second.second == "Phillippines")
+    tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (samples[id()].second.second == "Taiwan")
+    tiles = volm_tile::generate_p1b_wr5_tiles();
+  else {
+    log << "ERROR: cannot find ROI for image id " << id() << "\n";
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
 
   // start to calculate roi
   vcl_vector<double> test_img_roi;

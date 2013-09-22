@@ -314,7 +314,7 @@ int main(int argc, char** argv)
           << "\t\t     " << out_folder() << '\n'
           << "==================================================================================================\n" << vcl_endl;
   vcl_stringstream out_fname_bin;
-  out_fname_bin << out_folder() << "/ps_1_scores_zone_" << zone_id() << "_tile_" << tile_id() << ".bin";
+  out_fname_bin << out_folder() << "/ps_1_scores_tile_" << tile_id() << ".bin";
   if (!obj_ps1_matcher.write_matcher_result(out_fname_bin.str())) {
     log << " ERROR: write output failed for pass 1 matcher for zone " << zone_id() << ", tile " << tile_id() << '\n';
     if (do_log) {

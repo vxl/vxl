@@ -184,6 +184,15 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   vcl_stringstream out_sph_namet; out_sph_namet << out_index_folder << "geo_index_tile_" << tile_id << "_index_sph_shell.vrml";
   sph_shell->draw_template(out_sph_namet.str());
 
+  // write the params file once to the folder for each tile
+  vcl_stringstream out_params_file;  out_params_file << out_index_folder << "geo_index_tile_" << tile_id << "_index";
+  vcl_cout << "writing params to: " << out_params_file.str() + ".params";
+  if (!params.write_params_file(out_params_file.str())) {
+    vcl_cerr << "Cannot write params file to " << out_params_file.str() + ".params!\n";
+    return false;
+  }
+
+
   // adjust dmax if scene has very few blocks
   float dmax = params.dmax;
   if (scene->get_block_ids().size() < 5)
@@ -269,10 +278,6 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
     vcl_string index_file = leaves2[li]->get_index_name(out_file_name_pre.str());
     if (!ind->initialize_write(index_file)) {
       vcl_cerr << "Cannot initialize " << index_file << " for write!\n";
-      return false;
-    }
-    if (!params.write_params_file(index_file)) {
-      vcl_cerr << "Cannot write params file for " << index_file << "!\n";
       return false;
     }
 
@@ -403,6 +408,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
         kern->clear_args();
 
         //remove from device memory unnecessary items
+        opencl_cache->shallow_remove_block(id_inner);
         opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         //opencl_cache->clear_cache();
       }

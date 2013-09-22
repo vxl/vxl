@@ -38,7 +38,7 @@ bool get_top_cameras(unsigned const& zone_idx, unsigned const& tile_idx, vcl_str
   
   // load the score
   vcl_stringstream score_file;
-  score_file << score_folder + "/ps_1_scores_zone_" << zone_idx << "_tile_" << tile_idx << ".bin";
+  score_file << score_folder + "/ps_1_scores_tile_" << tile_idx << ".bin";
   if (!vul_file::exists(score_file.str()))
     return false;
   vcl_vector<volm_score_sptr> scores;
@@ -362,7 +362,7 @@ int main(int argc,  char** argv)
       // create camera kml for current location
       // get the score folder
       vcl_stringstream score_file;
-      score_file << score_folder() + "/ps_1_scores_zone_" << zone_id << "_tile_" << tile_id << ".bin";
+      score_file << score_folder() + "/ps_1_scores_tile_" << tile_id << ".bin";
       if (!vul_file::exists(score_file.str())) {
         log << " ERROR: can not find the score file " << score_file.str() << "\n";
         volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
@@ -439,7 +439,7 @@ int main(int argc,  char** argv)
     if (t_idx < 8 && t_idx != 5) {
       zone_id = 17;
       vcl_stringstream score_file;
-      score_file << score_folder() + "/ps_1_scores_zone_" << zone_id << "_tile_" << t_idx << ".bin";
+      score_file << score_folder() + "/ps_1_scores_tile_" << t_idx << ".bin";
       vcl_stringstream file_name_pre;
       file_name_pre << geo_hypo_a() << "/geo_index_tile_" << t_idx;
       if (!vul_file::exists(file_name_pre.str() + ".txt") || !vul_file::exists(score_file.str())) {

@@ -644,7 +644,7 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   if (data_type == 0)
     index_file = leaf->get_index_name(file_name_pre2.str());
   else if (data_type == 1)
-    index_file = leaf->get_label_index_name(file_name_pre2.str(), "");
+    index_file = leaf->get_label_index_name(file_name_pre2.str(), "land");
   else if (data_type == 2)
     index_file = leaf->get_label_index_name(file_name_pre2.str(), "orientation");
   else
@@ -664,10 +664,22 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   ////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// visualize depth interval index //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////
-
   vcl_string param_file;
-  if (data_type < 3)
+  vcl_string in_dir = visibility_index_folder + "/*.params";
+  for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
+    param_file = fn();
+    break;
+  }
+  boxm2_volm_wr3db_index_params params;
+  if (!params.read_params_file(param_file)) {
+    vcl_cerr << "cannot read: " << param_file << '\n';
+    return false;
+  }
+#if 0
+  vcl_string param_file;
+  if (data_type < 3) {
     param_file = vul_file::strip_extension(index_file) + ".params";
+  }
   else {
     vcl_string dir_name = vul_file::dirname(index_file);
     vcl_string in_dir = dir_name + "/*.params";
@@ -682,6 +694,7 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
     vcl_cerr << "cannot read: " << param_file << '\n';
     return false;
   }
+#endif
 #if 0
   vcl_string size_file = vul_file::strip_extension(index_file) + ".txt";
   unsigned long eis;
@@ -737,8 +750,13 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
    vcl_cout << "saving image to: " << img_name << vcl_endl;
    vil_save(img_orientation, img_name.c_str());
   }
-
-  vcl_string img_name = str.str() + ".png";
+  vcl_string img_name;
+  if (data_type == 0)
+    img_name = str.str() + "_depth.png";
+  else if (data_type == 1)
+    img_name = str.str() + "_land.png";
+  else if (data_type == 2)
+    img_name = str.str() + "_orientation.png";
   vcl_cout << "saving image to: " << img_name << vcl_endl;
   vil_save(img, img_name.c_str());
 

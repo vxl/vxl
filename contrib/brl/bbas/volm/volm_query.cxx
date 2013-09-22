@@ -936,7 +936,8 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
       else if (values[pidx] == 254)            // sky --> blue
         color_id = vil_rgb<vxl_byte>(51,102,255);
       else 
-        color_id = volm_label_table::get_color(values[pidx]);
+        color_id = volm_osm_category_io::volm_land_table[values[pidx]].color_;
+        //color_id = volm_label_table::get_color(values[pidx]);
       this->draw_dot(out_img, query_points_[pidx], color_id, cam);
     }
   }

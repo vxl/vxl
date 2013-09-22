@@ -585,7 +585,7 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
                                        unsigned& leaf_id,
                                        unsigned char* index_buff,
                                        unsigned char* index_orient_buff,
-                                       unsigned char* index_combine_buff,
+                                       unsigned char* index_land_buff,
                                        vcl_vector<unsigned>& l_id,
                                        vcl_vector<unsigned>& h_id,
                                        unsigned& actual_n_ind)
@@ -607,15 +607,15 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
         if (is_candidate_) {
           if (cand_poly_.contains(h_pt.x(), h_pt.y())) {  // having candiate list and current hypo is inside it --> accept
             unsigned char* values = index_buff + cnt * layer_size;
-            unsigned char* values_ori = index_buff + cnt * layer_size;
-            unsigned char* values_lnd = index_buff + cnt * layer_size;
+            unsigned char* values_ori = index_orient_buff + cnt * layer_size;
+            unsigned char* values_lnd = index_land_buff + cnt * layer_size;
             //unsigned char* values_combine = index_combine_buff + cnt * layer_size;
             ind_->get_next(values, layer_size);
             ind_orient_->get_next(values_ori, layer_size);
             ind_label_->get_next(values_lnd, layer_size);
             //ind_combine_->get_next(values_combine, layer_size);
             cnt++;
-#if 0
+#if 1
             vcl_cout << "=> leaf_id = " << li
                      << ", hypo_id = " << leaves_[li]->hyps_->current_-1
                      << ", h_pt = " << h_pt << vcl_endl;
@@ -635,8 +635,8 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
         }
         else {                                         // no candidate list, put all indices into buffer
           unsigned char* values = index_buff + cnt * layer_size;
-          unsigned char* values_ori = index_buff + cnt * layer_size;
-          unsigned char* values_lnd = index_buff + cnt * layer_size;
+          unsigned char* values_ori = index_orient_buff + cnt * layer_size;
+          unsigned char* values_lnd = index_land_buff + cnt * layer_size;
           ind_->get_next(values, layer_size);
           ind_orient_->get_next(values_ori, layer_size);
           ind_label_->get_next(values_lnd, layer_size);

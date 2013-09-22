@@ -360,6 +360,7 @@ bool volm_io::read_camera(vcl_string kml_file,
   }
 
   lat = 0; lon = 0;
+  roll = 0.0;
   if (parser->heading_)       heading = parser->heading_;
   if (parser->heading_dev_)   heading_dev = parser->heading_dev_;
   if (parser->tilt_)          tilt = parser->tilt_;

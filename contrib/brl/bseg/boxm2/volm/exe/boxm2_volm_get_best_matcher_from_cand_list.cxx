@@ -78,14 +78,14 @@ int main(int argc, char** argv)
 {
   vul_arg<unsigned> test_id("-testid", "test ids", 1);
   vul_arg<unsigned> img_id("-imgid", "query image id", 20);
-  vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "D:/work/find/volm_matcher/test1_result/p1a_test1_20/p1a_test1_20-VolumetricRUN/camera_space.bin");
-  vul_arg<vcl_string> query_img("-img", "query image", "D:/work/find/volm_matcher/test1_result/p1a_test1_20/p1a_test1_20-VolumetricRUN/p1a_test1_20.jpg");
-  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary to get the depth value for all objects", "D:/work/find/volm_matcher/test1_result/p1a_test1_20/p1a_test1_20-VolumetricRUN/p1a_test1_20.vsl");
-  vul_arg<vcl_string> geo_hypo_a("-geoa", "folder where geo hypotheses for utm zone 17 are","z:/projects/FINDER/index/geoindex_zone_17_inc_0.99_nh_200/");
-  vul_arg<vcl_string> geo_hypo_b("-geob", "folder where geo hypotheses for utm zone 18 are","z:/projects/FINDER/index/geoindex_zone_18_inc_0.99_nh_200/");
-  vul_arg<vcl_string> score_folder("-score", "folder where the score binaries are","D:/work/find/volm_matcher/test1_result/p1a_test1_20/p1a_test1_20-VolumetricRUN/");
-  vul_arg<vcl_string> candlist_kml("-cand_file", "generate candidate list file", "D:/work/find/volm_matcher/test1_result/p1a_test1_20/p1a_test1_20-VolumetricRUN/T_250/p1a_test1_20-CANDIDATE.kml");
-  vul_arg<vcl_string> candidate_list("-cand", " pre defined candidate list for given query", "D:/work/Dropbox/FINDER/integration/candidate_lists/p1a_test1_20/p1a_test1_20-CANDIDATES.kml");  // index -- candidate list file containing polygons
+  vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");
+  vul_arg<vcl_string> query_img("-img", "query image", "");
+  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary to get the depth value for all objects", "");
+  vul_arg<vcl_string> geo_hypo_a("-geoa", "folder where geo hypotheses for utm zone 17 are","");
+  vul_arg<vcl_string> geo_hypo_b("-geob", "folder where geo hypotheses for utm zone 18 are","");
+  vul_arg<vcl_string> score_folder("-score", "folder where the score binaries are","");
+  vul_arg<vcl_string> candlist_kml("-cand_file", "generate candidate list file", "");
+  vul_arg<vcl_string> candidate_list("-cand", " pre defined candidate list for given query", "");  // index -- candidate list file containing polygons
   vul_arg<unsigned> top_cam_num("-top_cam_num", "number of top camera kml we want to generate",10);
 
   vul_arg_parse(argc, argv);
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
     if (t_idx == 10) continue;
     unsigned zone_idx = zone_id(t_idx);
     vcl_stringstream score_file;
-    score_file << score_folder() << "/ps_1_scores_zone_" << zone_idx << "_tile_" << t_idx << ".bin";
+    score_file << score_folder() << "/ps_1_scores_tile_" << t_idx << ".bin";
     if (!vul_file::exists(score_file.str())) {
       log << " can not find score file: " << score_file.str() << '\n';
       error_report(log_file, log.str());
@@ -189,7 +189,7 @@ int main(int argc, char** argv)
   unsigned num_regions = top_cam_num();
   if (top_cam_num() > cand_regions.num_sheets()) num_regions = cand_regions.num_sheets();
   vcl_cout << " \t candidate file contains " <<  num_regions << " regions" << vcl_endl;
-  for (unsigned r_idx = 0; r_idx < num_regions; r_idx++) {
+  for (unsigned r_idx = 0; r_idx < num_regions; r_idx += 2) {
     vgl_polygon<double> poly(cand_regions[r_idx]);
     // check the intersected tile
     vcl_vector<unsigned> tile_ids;
@@ -234,7 +234,7 @@ int main(int argc, char** argv)
       volm_geo_index::get_leaves_with_hyps(root, leaves);
 
       vcl_stringstream score_file;
-      score_file << score_folder() << "/ps_1_scores_zone_" << zone_ids[i] << "_tile_" << tile_ids[i] << ".bin";
+      score_file << score_folder() << "/ps_1_scores_tile_" << tile_ids[i] << ".bin";
 
       // search for the best match for current tile
       if (!best_match(poly, leaves, score_file.str(), max_score, best_location, best_cam_id)) {
@@ -256,7 +256,10 @@ int main(int argc, char** argv)
     double rfov = vcl_atan( ni * ttr / nj) * vnl_math::deg_per_rad;
 
     vcl_stringstream cam_kml;
-    cam_kml << rationale_folder << "/BestCamera_top_" << r_idx << ".kml";
+    if (r_idx == 0)
+      cam_kml << rationale_folder << "/BestCamera_top_" << r_idx << ".kml";
+    else
+      cam_kml << rationale_folder << "/BestCamera_top_" << r_idx-1 << ".kml";
     vcl_stringstream kml_name;
     kml_name << "BestCamera_top_" << r_idx;
 

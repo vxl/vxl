@@ -240,7 +240,7 @@ int main(int argc,  char** argv)
 
   // load associate score binary file
   vcl_stringstream score_file;
-  score_file << out() << "ps_1_scores_zone_" << zone_id << "_tile_" << tile_id << ".bin";
+  score_file << out() << "ps_1_scores_tile_" << tile_id << ".bin";
   if (!vul_file::exists(score_file.str())) {
     log << "ERROR: can not find score file " << score_file.str() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());

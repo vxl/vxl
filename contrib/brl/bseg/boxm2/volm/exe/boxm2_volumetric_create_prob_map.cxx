@@ -100,8 +100,24 @@ int main(int argc,  char** argv)
   vcl_vector<volm_tile> tiles;
   if (samples[id()].second.second == "desert")
     tiles = volm_tile::generate_p1_wr1_tiles();
-  else
+  else if (samples[id()].second.second == "coast")
     tiles = volm_tile::generate_p1_wr2_tiles();
+  else if (samples[id()].second.second == "Chile")
+    tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (samples[id()].second.second == "India")
+    tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (samples[id()].second.second == "Jordan")
+    tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (samples[id()].second.second == "Phillippines")
+    tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (samples[id()].second.second == "Taiwan")
+    tiles = volm_tile::generate_p1b_wr5_tiles();
+  else {
+    log << "ERROR: cannot find ROI for image id " << id() << "\n";
+    volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+
 
   // initialize the Prob_map image if the prob_map doesn't exist
   // if the image exists, load the image instead
@@ -131,17 +147,10 @@ int main(int argc,  char** argv)
     // read in the volm_geo_index for tile i
     vcl_stringstream file_name_pre;
     file_name_pre << geo_hypo_folder() << "geo_index_tile_" << i;
-    // no index for tile i exists, continue
+    // no geolocation for tile i exists, continue
     if (!vul_file::exists(file_name_pre.str() + ".txt")) {
       continue;
     }
-    // check the zone and tile_id
-    if (zone_id() == 17 && i > 8)
-      continue;
-    else if (zone_id() == 18 && i < 8 && i != 5)
-      continue;
-    else if (zone_id()  == 11 && i > 4)
-      continue;
 
     float min_size;
     volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
@@ -154,7 +163,7 @@ int main(int argc,  char** argv)
 
     // load score binary from output folder if exists
     vcl_stringstream score_file;
-    score_file << out() << "ps_1_scores_zone_" << zone_id() << "_tile_" << i << ".bin";
+    score_file << out() << "ps_1_scores_tile_" << i << ".bin";
     // continue if no score binary exists for this tile
     if (!vul_file::exists(score_file.str()))
       continue;
@@ -171,12 +180,13 @@ int main(int argc,  char** argv)
         max_score_cam_id = scores[ii]->max_cam_id_;
         max_score_loc = h_pt;
       }
-#if 0
-      vcl_cout << " total_ind = " << total_ind << " ii = " << ii << " leaf_id = " << scores[ii]->leaf_id_ << ", hypo_id = " << scores[ii]->hypo_id_
-               << vcl_setprecision(10) << " lon = " << h_pt.x() << " , lat = " << h_pt.y() << ", score = " << scores[ii]->max_score_ << vcl_endl;
-#endif
       unsigned u, v;
       if (tile.global_to_img(h_pt.x(), h_pt.y(), u, v)) {
+#if 1
+      vcl_cout << " total_ind = " << total_ind << " ii = " << ii << " leaf_id = " << scores[ii]->leaf_id_ << ", hypo_id = " << scores[ii]->hypo_id_
+               << vcl_setprecision(10) << " lon = " << h_pt.x() << " , lat = " << h_pt.y() << ", pixel = (" << u << "," << v << ")"
+               << ", score = " << scores[ii]->max_score_ << vcl_endl;
+#endif
         if (u < tile.ni() && v < tile.nj()) {
           // check if this is the highest values for this pixel
           if (scores[ii]->max_score_ > tile_imgs[i](u,v))

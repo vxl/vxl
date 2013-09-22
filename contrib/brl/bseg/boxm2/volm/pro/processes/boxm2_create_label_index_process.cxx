@@ -189,6 +189,14 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
   vcl_stringstream out_sph_namet; out_sph_namet << out_index_folder << "geo_index_tile_" << tile_id << "_index_label_sph_shell.vrml";
   sph_shell->draw_template(out_sph_namet.str());
 
+  // write the params file once to the folder
+  vcl_stringstream out_params_file; out_params_file << out_index_folder << "geo_index_tile_" << tile_id << "_index";
+  vcl_cout << "writing params to: " << out_params_file.str() + ".params";
+  if (!params.write_params_file(out_params_file.str())) { // the other index has the same params so don't write it
+    vcl_cerr << "Cannot write params file to " << out_params_file.str() + ".params!\n";
+    return false;
+  }
+
   // adjust dmax if scene has very few blocks
   float dmax = params.dmax;
   if (scene->get_block_ids().size() < 5)
@@ -276,10 +284,7 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
       vcl_cerr << "Cannot initialize " << index_file << " for write!\n";
       return false;
     }
-    if (!params.write_params_file(index_file)) {
-      vcl_cerr << "Cannot write params file for " << index_file << "!\n";
-      return false;
-    }
+
     unsigned indexed_cnt = 0;
 
     vgl_point_3d<double> h_pt;
@@ -408,8 +413,11 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
 
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
+        opencl_cache->shallow_remove_data(id_inner, boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        opencl_cache->shallow_remove_data(id_inner, data_type);
+        opencl_cache->shallow_remove_block(id_inner);
+
 #if 0
-        opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         opencl_cache->shallow_remove_data(id_inner,data_type);
 #endif
       }
