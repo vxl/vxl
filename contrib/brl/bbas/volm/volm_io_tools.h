@@ -82,6 +82,14 @@ public:
   //: use the following method to get the multiplier for conversion of meters to degrees, uses vpgl_lvcs internally
   static double meter_to_seconds(double lat, double lon);
 
+  //: returns the points from the list that lie inside the box and also containes the intersection points
+  static bool line_inside_the_box(vgl_box_2d<double> const& bbox, vcl_vector<vgl_point_2d<double> >& line, vcl_vector<vgl_point_2d<double> >& line_in);
+
+  //: find junctions on a road from a road network
+  static bool search_junctions(vcl_vector<vgl_point_2d<double> > const& road, volm_land_layer const& road_prop,
+                               vcl_vector<vcl_vector<vgl_point_2d<double> > > net, vcl_vector<volm_land_layer> net_props,
+                               vcl_vector<vgl_point_2d<double> >& cross_pts, vcl_vector<volm_land_layer>& cross_props);
+
 };
 
 #endif // volm_io_tools_h_

@@ -597,3 +597,5 @@ waterway water_point 1 Open_Water 0 0
 waterway canal 146 water_canal 1 10
 waterway lock_gate 1 Open_Water 0 0
 waterway dock 23 harbors 2 0
+tree palm_tree 242 palm_tree 5 0
+tree tree 243 tree 5 0 

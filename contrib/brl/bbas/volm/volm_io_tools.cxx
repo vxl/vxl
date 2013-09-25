@@ -12,6 +12,10 @@
 #include <vil/vil_crop.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
+#include <vcl_algorithm.h>
+#include <vgl/algo/vgl_fit_lines_2d.h>
+#include <vgl/vgl_intersection.h>
+#include <vgl/vgl_line_segment_3d.h>
 
 
 unsigned int volm_io_tools::northing = 0;  // WARNING: north hard-coded
@@ -496,4 +500,246 @@ double volm_io_tools::meter_to_seconds(double lat, double lon)
   return dif;
 }
 
- 
+bool find_intersect(vgl_box_2d<double> const& bbox, vgl_point_2d<double> const& s, vgl_point_2d<double> e, vgl_point_2d<double>& pt)
+{
+  vgl_line_2d<double> line(s, e);
+  vgl_point_2d<double> pi0, pi1;
+  if (!vgl_intersection(bbox, line, pi0, pi1))
+    return false;
+  double x1 = s.x(),   y1 = s.y();
+  double x2 = e.x(),   y2 = e.y();
+  double xp = pi0.x(), yp = pi0.y();
+  double d1p = (xp-x1)*(xp-x1) + (yp-y1)*(yp-y1);
+  double d2p = (xp-x2)*(xp-x2) + (yp-y2)*(yp-y2);
+  double d12 = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+  double diff = vcl_sqrt(d1p) + vcl_sqrt(d2p) - vcl_sqrt(d12);
+  if (diff < 1E-5) {
+    pt = pi0;
+    return true;
+  }
+  xp = pi1.x();  yp = pi1.y();
+  d1p = (xp-x1)*(xp-x1) + (yp-y1)*(yp-y1);
+  d2p = (xp-x2)*(xp-x2) + (yp-y2)*(yp-y2);
+  d12 = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+  diff = vcl_sqrt(d1p) + vcl_sqrt(d2p) - vcl_sqrt(d12);
+  if (diff < 1E-5) {
+    pt = pi1;
+    return true;
+  }
+  return false;
+}
+
+bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, vcl_vector<vgl_point_2d<double> >& line, vcl_vector<vgl_point_2d<double> >& road)
+{
+  // obtain points that lie inside the bounding box
+  vcl_vector<vgl_point_2d<double> > line_in = vgl_intersection(line, bbox);
+  if (line_in.empty())
+    return false;
+  for (unsigned i = 0; i < line_in.size(); i++)
+    road.push_back(line_in[i]);
+  
+  // find the intersection points
+  for (unsigned i = 0; i < line_in.size(); i++) {
+    vgl_point_2d<double> curr_pt = line_in[i];
+    vcl_vector<vgl_point_2d<double> >::iterator vit = vcl_find(line.begin(), line.end(), curr_pt);
+    if (vit == line.begin() ) {
+      vgl_point_2d<double> next = *(vit+1);
+      if (bbox.contains(next))
+        continue;
+      else {
+        vgl_point_2d<double> intersect_pt;
+        if (!find_intersect(bbox, curr_pt, next, intersect_pt))
+          return false;
+        // insert the intersect after current point
+        vcl_vector<vgl_point_2d<double> >::iterator it = vcl_find(road.begin(), road.end(), curr_pt);
+        road.insert(it+1, intersect_pt);
+      }
+    }
+    else if (vit == line.end()-1) {
+      vgl_point_2d<double> prev = *(vit-1);
+      if (bbox.contains(prev))
+        continue;
+      else {
+        vgl_point_2d<double> intersect_pt;
+        if (!find_intersect(bbox, prev, curr_pt,intersect_pt))
+          return false;
+        // insert the intersect point before current point
+        vcl_vector<vgl_point_2d<double> >::iterator it = vcl_find(road.begin(), road.end(), curr_pt);
+        road.insert(it, intersect_pt);
+      }
+    }
+    else if (vit != line.end()) {
+      vgl_point_2d<double> prev = *(vit-1);
+      vgl_point_2d<double> next = *(vit+1);
+      if (bbox.contains(next) && bbox.contains(prev))
+        continue;
+      else if (bbox.contains(next)) {
+        vgl_point_2d<double> intersect_pt;
+        if (!find_intersect(bbox, prev, curr_pt, intersect_pt))
+          return false;
+        vcl_vector<vgl_point_2d<double> >::iterator it = vcl_find(road.begin(), road.end(), curr_pt);
+        road.insert(it, intersect_pt);
+      }
+      else if (bbox.contains(prev)) {
+        vgl_point_2d<double> intersect_pt;
+        if (!find_intersect(bbox, curr_pt, next, intersect_pt))
+          return false;
+        // insert the intersect after current point
+        vcl_vector<vgl_point_2d<double> >::iterator it = vcl_find(road.begin(), road.end(), curr_pt);
+        road.insert(it+1, intersect_pt);
+      }
+      else {
+        vgl_point_2d<double> intersect_pt;
+        if (!find_intersect(bbox, curr_pt, next, intersect_pt))
+          return false;
+        // find and insert the intersection after current point
+        vcl_vector<vgl_point_2d<double> >::iterator it = vcl_find(road.begin(), road.end(), curr_pt);
+        road.insert(it+1, intersect_pt);
+        // find and insert the intersection before current point
+        if (!find_intersect(bbox, prev, curr_pt,intersect_pt))
+          return false;
+        it = vcl_find(road.begin(), road.end(), curr_pt);
+        road.insert(it, intersect_pt);
+      }
+    }
+    else
+      return false;
+  }
+  return true;
+}
+
+void form_line_segment_from_pts(vcl_vector<vgl_point_2d<double> > const& road, vcl_vector<vgl_line_segment_2d<double> >& road_seg)
+{
+  unsigned num_pts  = road.size();
+  unsigned num_segs = num_pts - 1;
+  for (unsigned i = 0; i < num_segs; i++) {
+    vgl_point_2d<double> s = road[i];  vgl_point_2d<double> e = road[i+1];
+    road_seg.push_back(vgl_line_segment_2d<double>(s, e));
+  }
+#if 0
+  // define a 2d line fit
+  unsigned min_pts = 3;
+  double tol = 5.0;  // in pixel unit
+  vgl_fit_lines_2d<double> fitter(min_pts, tol);
+
+  unsigned num_pts  = road.size();
+  unsigned num_segs = num_pts - 1;
+  if (num_pts <= min_pts) {
+    for (unsigned i = 0; i < num_segs; i++) {
+      vgl_point_2d<double> s = road[i];  vgl_point_2d<double> e = road[i+1];
+      road_seg.push_back(vgl_line_segment_2d<double>(s, e));
+    }
+  }
+  else {
+    fitter.add_curve(road);
+    fitter.fit();
+    road_seg = fitter.get_line_segs();
+    if (road_seg.empty()) {
+      // fitting failed form the segment directly
+      road_seg.clear();
+      for (unsigned i = 0; i < num_segs; i++) {
+        vgl_point_2d<double> s = road[i];  vgl_point_2d<double> e = road[i+1];
+        road_seg.push_back(vgl_line_segment_2d<double>(s, e));
+      }
+    }
+  }
+  fitter.clear();
+#endif
+}
+
+void find_junctions(vgl_line_segment_2d<double> const& seg,
+                    volm_land_layer const& seg_prop,
+                    vcl_vector<vgl_line_segment_2d<double> > const& lines,
+                    volm_land_layer const& line_prop,
+                    vcl_vector<vgl_point_2d<double> >& cross_pts,
+                    vcl_vector<volm_land_layer>& cross_prop)
+{
+  vgl_line_segment_3d<double> l1(vgl_point_3d<double>(seg.point1().x(), seg.point1().y(), 0.0), vgl_point_3d<double>(seg.point2().x(), seg.point2().y(), 0.0));
+
+  unsigned n_seg = lines.size();
+  for (unsigned i = 0; i < n_seg; i++) {
+    vgl_line_segment_3d<double> l2(vgl_point_3d<double>(lines[i].point1().x(), lines[i].point1().y(), 0.0),
+                                   vgl_point_3d<double>(lines[i].point2().x(), lines[i].point2().y(), 0.0));
+    vgl_point_3d<double> pt;
+    if (!vgl_intersection(l1, l2, pt))
+      continue;
+    cross_pts.push_back(vgl_point_2d<double>(pt.x(), pt.y()));
+    vcl_pair<int,int> key(seg_prop.id_, line_prop.id_);
+    cross_prop.push_back(volm_osm_category_io::road_junction_table[key]);
+  }
+}
+
+static double eps = 1.0e-5;
+inline bool near_zero(double x) { return x < eps && x > -eps; }
+inline bool near_equal(double x, double y) { return near_zero(x-y); }
+bool near_eq_pt(vgl_point_2d<double> a, vgl_point_2d<double> b)
+{
+  return (near_equal(a.x(),b.x()) && near_equal(a.y(), b.y()));
+}
+
+unsigned count_line_start_from_cross(vgl_point_2d<double> const& cross_pt, 
+                                     vcl_vector<vgl_point_2d<double> > const& rd,
+                                     vcl_vector<vcl_vector<vgl_point_2d<double> > > const& net)
+{
+  unsigned cnt = 0;
+  // check current road first
+  vgl_point_2d<double> s = *(rd.begin());  vgl_point_2d<double> e = *(rd.end()-1);
+  if ( near_eq_pt(cross_pt, s) || near_eq_pt(cross_pt, e))
+    cnt++;
+  for (unsigned i = 0; i < net.size(); i++) {
+    s = *(net[i].begin());  e = *(net[i].end()-1);
+    if ( near_eq_pt(cross_pt, s) || near_eq_pt(cross_pt, e))
+      cnt++;
+  }
+  return cnt;
+}
+
+bool volm_io_tools::search_junctions(vcl_vector<vgl_point_2d<double> > const& road, volm_land_layer const& road_prop,
+                                     vcl_vector<vcl_vector<vgl_point_2d<double> > > net, vcl_vector<volm_land_layer> net_props,
+                                     vcl_vector<vgl_point_2d<double> >& cross_pts, vcl_vector<volm_land_layer>& cross_props)
+{
+  unsigned n_rds = net.size();
+
+  // form the line segment for each road in the network
+  vcl_vector<vgl_line_segment_2d<double> > road_seg;
+  form_line_segment_from_pts(road, road_seg);
+
+  vcl_vector<vcl_vector<vgl_line_segment_2d<double> > > net_segs;
+  for (unsigned r_idx = 0; r_idx < n_rds; r_idx++) {
+    vcl_vector<vgl_line_segment_2d<double> > seg;
+    form_line_segment_from_pts(net[r_idx], seg);
+    net_segs.push_back(seg);
+  }
+
+  // find the cross for each segment
+  unsigned n_seg = road_seg.size();
+  for (unsigned s_idx = 0; s_idx < n_seg; s_idx++) {
+    vgl_line_segment_2d<double> curr_seg = road_seg[s_idx];
+    for (unsigned r_idx = 0; r_idx < n_rds; r_idx++) {
+      vcl_vector<vgl_line_segment_2d<double> > curr_net_seg = net_segs[r_idx];
+      vcl_vector<vgl_point_2d<double> > pt;
+      vcl_vector<volm_land_layer> prop;
+      find_junctions(curr_seg, road_prop, curr_net_seg, net_props[r_idx], pt, prop);
+      if (pt.empty())
+        continue;
+      if (prop.size() != pt.size())
+        return false;
+      for (unsigned p_idx = 0; p_idx < pt.size(); p_idx++)
+        if (vcl_find(cross_pts.begin(), cross_pts.end(), pt[p_idx]) == cross_pts.end()) {
+          cross_pts.push_back(pt[p_idx]);  cross_props.push_back(prop[p_idx]);
+        }
+    }
+  }
+
+   //check whether the cross pt are T_section
+   //principle, count the number of roads whose end points are on the cross_pt
+   //if there is 1 or 3 lines start from this cross pt, the cross is a T_section
+  for (unsigned c_idx = 0; c_idx < cross_pts.size(); c_idx++) {
+    unsigned num_lines = count_line_start_from_cross(cross_pts[c_idx], road, net);
+    if (num_lines == 1 || num_lines == 3) {
+      cross_props[c_idx] = volm_osm_category_io::volm_land_table[241];
+    }
+  }
+
+  return true;
+}

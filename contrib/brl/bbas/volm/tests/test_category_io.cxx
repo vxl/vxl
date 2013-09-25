@@ -80,8 +80,8 @@ static void test_category_io()
   // print out the road junction table
   for (vcl_map<vcl_pair<int,int>, volm_land_layer>::iterator mit = volm_osm_category_io::road_junction_table.begin();
        mit != volm_osm_category_io::road_junction_table.end(); ++mit) {
-    vcl_cout << " id1 = " << mit->first.first  << " n1 = " << volm_osm_category_io::volm_category_name_table[mit->first.first]
-             << " id2 = " << mit->first.second << " n2 = " << volm_osm_category_io::volm_category_name_table[mit->first.second]
+    vcl_cout << " id1 = " << mit->first.first  
+             << " id2 = " << mit->first.second 
              << " ---> id = " << (unsigned)mit->second.id_
              << " name = " << mit->second.name_
              << " level = " << mit->second.level_

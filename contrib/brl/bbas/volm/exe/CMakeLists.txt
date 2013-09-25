@@ -49,6 +49,10 @@ ADD_EXECUTABLE( volm_generate_osm
 ADD_EXECUTABLE( volm_create_bvxm_scenes
                 volm_create_bvxm_scenes.cxx
               )
+
+ADD_EXECUTABLE( volm_create_osm_2d_map
+                volm_create_osm_2d_map.cxx
+              )
               
 TARGET_LINK_LIBRARIES( volm_dummy_matcher volm depth_map )
 TARGET_LINK_LIBRARIES( volm_query_creation volm depth_map bvrml )
@@ -61,4 +65,5 @@ TARGET_LINK_LIBRARIES( volm_land_class_lidar volm depth_map sdet bvrml bkml )
 TARGET_LINK_LIBRARIES( volm_prepare_landclass_images volm depth_map sdet bvrml bkml )
 TARGET_LINK_LIBRARIES( volm_create_osm_objects volm vbl vgl bkml )
 TARGET_LINK_LIBRARIES( volm_generate_osm volm vul vgl )
+TARGET_LINK_LIBRARIES( volm_create_osm_2d_map vul vgl volm )
 TARGET_LINK_LIBRARIES( volm_create_bvxm_scenes volm vbl vgl bkml vpgl bvxm )

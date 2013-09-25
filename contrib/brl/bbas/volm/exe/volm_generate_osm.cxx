@@ -85,7 +85,7 @@ int main(int argc, char** argv)
         osm_objs.write_lines_to_kml(kml_roads.str());
         osm_objs.write_polys_to_kml(kml_regions.str());
     }
-    // stats
+    // start
     for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++)
     {
       volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
