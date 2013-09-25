@@ -159,4 +159,35 @@ vidl_ffmpeg_istream
   return false;
 }
 
+vcl_deque<vxl_byte>
+vidl_ffmpeg_istream
+::current_metadata()
+{
+  return vcl_deque<vxl_byte>();
+}
+
+
+bool
+vidl_ffmpeg_istream
+::has_metadata() const
+{
+  return false;
+}
+
+
+double
+vidl_ffmpeg_istream::
+current_pts() const
+{
+  return 0.0;
+}
+
+
+vcl_vector<vxl_byte>
+vidl_ffmpeg_istream::
+current_packet_data() const
+{
+  return vcl_vector<vxl_byte>();
+}
+
 #endif // vidl_ffmpeg_istream_stub_txx_
