@@ -31,6 +31,8 @@
 #include <vcl_cstring.h> // memcpy()
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
+#include <vcl_exception.h>
+#include <vcl_stdexcept.h>
 #include "vnl_vector.h"
 #include "vnl_vector_ref.h"
 #include <vnl/vnl_c_vector.h>
@@ -131,14 +133,7 @@ class vnl_vector_fixed
   // vnl_double_2 or vnl_float_2 instead.
   vnl_vector_fixed( const T& x0, const T& x1 )
   {
-    if ( n != 2 )
-    {
-      #ifndef NDEBUG
-      vnl_error_vector_dimension("vnl_vector_fixed()", 2, n);
-      #endif
-      return;
-    }
-
+    if ( n != 2 ) vcl_throw( vcl_invalid_argument( "not a 2-vector" ) );
     data_[0] = x0; data_[1] = x1;
   }
 
@@ -147,26 +142,14 @@ class vnl_vector_fixed
   // vnl_double_3 or vnl_float_3 instead.
   vnl_vector_fixed( const T& x0, const T& x1, const T& x2 )
   {
-    if ( n != 3 )
-    {
-      #ifndef NDEBUG
-      vnl_error_vector_dimension("vnl_vector_fixed()", 3, n);
-      #endif
-      return;
-    }
+    if ( n != 3 ) vcl_throw( vcl_invalid_argument( "not a 3-vector" ) );
     data_[0] = x0; data_[1] = x1; data_[2] = x2;
   }
 
   //: Convenience constructor for 4-D vectors
   vnl_vector_fixed( const T& x0, const T& x1, const T& x2, const T& x3 )
   {
-    if ( n != 4 )
-    {
-      #ifndef NDEBUG
-      vnl_error_vector_dimension("vnl_vector_fixed()", 4, n);
-      #endif
-      return;
-    }
+    if ( n != 4 ) vcl_throw( vcl_invalid_argument( "not a 4-vector" ) );
     data_[0] = x0; data_[1] = x1; data_[2] = x2; data_[3] = x3;
   }
 
