@@ -20,6 +20,15 @@
 
 unsigned int volm_io_tools::northing = 0;  // WARNING: north hard-coded
 
+static double eps = 1.0e-5;
+inline bool near_zero(double x) { return x < eps && x > -eps; }
+inline bool near_equal(double x, double y) { return near_zero(x-y); }
+bool near_eq_pt(vgl_point_2d<double> a, vgl_point_2d<double> b)
+{
+  return (near_equal(a.x(),b.x()) && near_equal(a.y(), b.y()));
+}
+
+
 void volm_img_info::save_box_kml(vcl_string out_name) { 
     vcl_ofstream ofs(out_name.c_str());
     bkml_write::open_document(ofs);
@@ -137,17 +146,42 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   vpgl_geo_camera *cam;
   vpgl_geo_camera::init_geo_camera(img_file, info.ni, info.nj, lvcs, cam);
   info.cam = cam; 
-    
+  
+  // obtain the bounding box of current image
+  vcl_string name = vul_file::strip_directory(img_file);
+  name = name.substr(name.find_first_of('_')+1, name.size());
+  
+  vcl_string n_coords = name.substr(0, name.find_first_of('_'));
+  vcl_string hemisphere, direction;
+  vcl_size_t n = n_coords.find("N");
+  if (n < n_coords.size())
+    hemisphere = "N";
+  else
+    hemisphere = "S";
+  n = n_coords.find("E");
+  if (n < n_coords.size())
+    direction = "E";
+  else
+    direction = "W";
+
   double lat, lon;
   cam->img_to_global(0.0, info.nj-1, lon, lat);
-  vgl_point_2d<double> lower_left(-lon, lat);
+  if (direction == "W")
+    lon = -lon;
+  if (hemisphere == "S")
+    lat = -lat;
+  vgl_point_2d<double> lower_left(lon, lat);
 
   vpgl_utm utm; int utm_zone; double x,y;
-  utm.transform(lat, -lon, x, y, utm_zone);
+  utm.transform(lat, lon, x, y, utm_zone);
   vcl_cout << " zone of lidar img: " << img_file << ": " << utm_zone << " from lower left corner!\n";
 
   cam->img_to_global(info.ni-1, 0.0, lon, lat);
-  vgl_point_2d<double> upper_right(-lon, lat);
+  if (direction == "W")
+    lon = -lon;
+  if (hemisphere == "S")
+    lat = -lat;
+  vgl_point_2d<double> upper_right(lon, lat);
   vgl_box_2d<double> bbox(lower_left, upper_right);
   //vcl_cout << "bbox: " << bbox << vcl_endl;
   info.bbox = bbox;
@@ -217,6 +251,8 @@ bool volm_io_tools::expend_line(vcl_vector<vgl_point_2d<double> > line, double c
   for (unsigned i = 0; i < n_pts-1; i++) {
     vgl_point_2d<double> s, e;
     s = line[i];  e = line[i+1];
+    if (near_eq_pt(s,e))
+      continue;
     vgl_line_2d<double> seg(s, e);
     vgl_vector_2d<double> n = seg.normal();
     vgl_point_2d<double> su, sd, eu, ed;
@@ -614,6 +650,8 @@ void form_line_segment_from_pts(vcl_vector<vgl_point_2d<double> > const& road, v
   unsigned num_segs = num_pts - 1;
   for (unsigned i = 0; i < num_segs; i++) {
     vgl_point_2d<double> s = road[i];  vgl_point_2d<double> e = road[i+1];
+    if (near_eq_pt(s,e))
+      continue;
     road_seg.push_back(vgl_line_segment_2d<double>(s, e));
   }
 #if 0
@@ -667,14 +705,6 @@ void find_junctions(vgl_line_segment_2d<double> const& seg,
     vcl_pair<int,int> key(seg_prop.id_, line_prop.id_);
     cross_prop.push_back(volm_osm_category_io::road_junction_table[key]);
   }
-}
-
-static double eps = 1.0e-5;
-inline bool near_zero(double x) { return x < eps && x > -eps; }
-inline bool near_equal(double x, double y) { return near_zero(x-y); }
-bool near_eq_pt(vgl_point_2d<double> a, vgl_point_2d<double> b)
-{
-  return (near_equal(a.x(),b.x()) && near_equal(a.y(), b.y()));
 }
 
 unsigned count_line_start_from_cross(vgl_point_2d<double> const& cross_pt, 

@@ -32,6 +32,13 @@ bool volm_desc_ex_2d_indexer::get_next()
   vgl_box_2d<double> extent(leaves_[current_leaf_id_]->extent_.min_x(), leaves_[current_leaf_id_]->extent_.max_x(),
                             leaves_[current_leaf_id_]->extent_.min_y(), leaves_[current_leaf_id_]->extent_.max_y());
 
+  // obtain the hemisphere and direction fro current leaf (assuming no leaf will cross Equator or Prime meridian)
+  vcl_string hemisphere, direction;
+  if (extent.centroid_x() <= 0)  direction = "W";
+  else                           direction = "E";
+  if (extent.centroid_y() <= 0)  hemisphere = "S";
+  else                           hemisphere = "N";
+
   // enlarge this box with largest_rad_ to make sure we get all possible images that would be within that distance from any hypo in this leaf
   extent.expand_about_centroid(largest_rad_seconds_);
 
@@ -52,8 +59,10 @@ bool volm_desc_ex_2d_indexer::get_next()
           for (unsigned jj = 0; jj < lon_img.nj(); jj++) {
             double llon, llat;
             classification_maps_[i].cam->img_to_global(ii, jj, llon, llat);  // WARNING: W is hard coded in vpgl_geo_camera so use -lon in the following lvcs method!!!!! 
-            lon_img(ii, jj) = -llon;
-            lat_img(ii, jj) = llat;
+            if (direction == "W") lon_img(ii,jj) = -llon;
+            else                  lon_img(ii,jj) = llon;
+            if (hemisphere == "S") lat_img(ii,jj) = -llat;
+            else                   lat_img(ii,jj) = llat;
           }
         vil_image_view_base_sptr lon_img_sptr = new vil_image_view<double>(lon_img);
         vil_image_view_base_sptr lat_img_sptr = new vil_image_view<double>(lat_img);
@@ -92,7 +101,11 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
     bool at_least_one = false;
     int min_i = ni-1, min_j = nj-1, max_i = 0, max_j = 0;
     for (unsigned m = 0; m < corners.size(); m++) {
-      cam->global_to_img(-corners[m].first, corners[m].second, 0.0, u, v); // WARNING: W is hard coded in vpgl_geo_camera so use -lon!!!!
+      double lon_abs, lat_abs;
+      lon_abs = corners[m].first;  lat_abs = corners[m].second;
+      if (lon_abs < 0) lon_abs = -lon_abs;
+      if (lat_abs < 0) lat_abs = -lat_abs;
+      cam->global_to_img(lon_abs, lat_abs, 0.0, u, v);
       int i = (int)vcl_floor(u + 0.5);
       int j = (int)vcl_floor(v + 0.5);
       if (i >= 0 && j >= 0 && i < ni && j < nj)

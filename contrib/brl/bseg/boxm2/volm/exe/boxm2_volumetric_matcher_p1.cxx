@@ -157,7 +157,7 @@ int main(int argc, char** argv)
     log << " ERROR: cannot read params file from " << params_file.str() << '\n';
     if (do_log)  volm_io::write_log(out_folder(), log.str());
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
-    vcl_cerr << log.str();
+    vcl_cout << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   volm_spherical_container_sptr sph = new volm_spherical_container(params.solid_angle, params.vmin, params.dmax);

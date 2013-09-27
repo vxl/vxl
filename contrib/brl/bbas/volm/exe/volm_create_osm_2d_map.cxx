@@ -22,6 +22,8 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_box_2d.h>
 #include <vil/vil_save.h>
+#include <vil/vil_load.h>
+#include <vpgl/vpgl_utm.h>
 
 void error(vcl_string log_file, vcl_string msg)
 {
@@ -30,12 +32,14 @@ void error(vcl_string log_file, vcl_string msg)
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> geo_folder("-geo", "folder where geo_cover tif images stores", "");
-  vul_arg<vcl_string> osm_folder("-osm", "folder where osm binary stores", "");
-  vul_arg<vcl_string> out_folder("-out", "output folder","");
+  vul_arg<vcl_string> geo_folder("-geo", "folder where geo_cover tif images stores", "z:/projects/FINDER/data/IN/geocover_landcover/");
+  vul_arg<vcl_string> osm_folder("-osm", "folder where osm binary stores", "z:/projects/FINDER/P-1B/osm/wr2/");
+  vul_arg<vcl_string> out_folder("-out", "output folder","d:/work/find/phase_1b/ROI/2d_map/wr2/");
   vul_arg<float> min_size ("-min", "minimum size of image size (in wgs84 degree)",0.03125);
-  vul_arg<unsigned> world_id("-world", "world id for ROI (from 1 to 5", 0);
-  vul_arg<unsigned> tile_id("-tile", "tile id for ROI", 0);
+  vul_arg<unsigned> world_id("-world", "world id for ROI (from 1 to 5", 2);
+  vul_arg<unsigned> tile_id("-tile", "tile id for ROI", 1);
+  vul_arg<vcl_string> class_img("-class", "classification image from satellite modeling",
+                                "D:/work/Dropbox/FINDER/satellite_modeling/classification/img_N12.9534435272E77.5890808105_S0.00497150421143x0.00460815429688_volm.tif");
   vul_arg_parse(argc, argv);
 
   // check the input
@@ -101,6 +105,17 @@ int main(int argc, char** argv)
     osm_objs.push_back(volm_osm_objects(osm_file.str()));
   }
 
+#if 0
+  // load the satellite image
+  if (!vul_file::exists(class_img())) {
+    log << "ERROR: can not find classification image " << class_img() << '\n';  error(log_file.str(), log.str());
+    return false;
+  }
+  volm_img_info sat_info;
+  volm_io_tools::load_geotiff_image(class_img(), sat_info, true);
+  vil_image_view<vxl_uint_16>* sat_img = dynamic_cast<vil_image_view<vxl_uint_16> * >(sat_info.img_r.ptr());
+#endif
+
   vcl_cout << " --------------- START -----------------" << vcl_endl;
   vcl_cout << " there are " << tiles.size() << " tiles, "
            << geo_infos.size() << " geo_cover images and "
@@ -121,7 +136,7 @@ int main(int argc, char** argv)
     volm_img_info geo_cover = geo_infos[t_idx];
     vil_image_view<vxl_byte>* geo_img = dynamic_cast<vil_image_view<vxl_byte> * >(geo_cover.img_r.ptr());
     // create a 2d image for each leaf at desired size
-    for (unsigned l_idx = 0; l_idx < 10/*leaves.size()*/; l_idx++) {
+    for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
       // calcualte desired resolutoin
       volm_geo_index2_node_sptr leaf = leaves[l_idx];
       double lon_min, lat_min, lon_max, lat_max;
@@ -139,18 +154,19 @@ int main(int argc, char** argv)
       
       
       // create 2d image for current leaf
-      vil_image_view<float> out_img(ni, nj, 1);
+      vil_image_view<vxl_byte> out_img(ni, nj, 1);
       vil_image_view<vxl_byte> level_img(ni, nj, 1);
       
       vcl_stringstream img_name;
       img_name << out_folder() << "/osm_" << tiles[t_idx].hemisphere() << vcl_setprecision(6) << lat_min
                                << tiles[t_idx].direction() << vcl_setprecision(6) << lon_min
                                << "_S" << scale << 'x' << scale << ".tif";
-      out_img.fill(0.0f);
+      out_img.fill(0);
       level_img.fill(0);
       
       vcl_cout << " tile " << t_idx << " leaf " << l_idx << " has geo boundary " << leaf_bbox_geo 
                << " corresponding to image size " << out_img.ni() << 'x' << out_img.nj() << vcl_endl;
+
       // ingest geo_cover for the image
       for (int i = 0; i < ni; i++) {
         for (int j = 0; j < nj; j++) {
@@ -166,9 +182,37 @@ int main(int argc, char** argv)
           unsigned uu = (unsigned)vcl_floor(u+0.5);
           unsigned vv = (unsigned)vcl_floor(v+0.5);
           if (uu > 0 && vv > 0 && uu < geo_cover.ni && vv < geo_cover.nj)
-            out_img(i,j) = (float)volm_osm_category_io::geo_land_table[(*geo_img)(uu,vv)].id_;
+            out_img(i,j) = volm_osm_category_io::geo_land_table[(*geo_img)(uu,vv)].id_;
         }
       }
+#if 0
+      // ingest satellite image 
+      if (!vgl_intersection(leaf_bbox_geo, sat_info.bbox).is_empty()) {
+        vcl_cout << " tile " << t_idx << " leaf " << l_idx << " has bbox " << leaf_bbox_geo 
+                 << " and intersects with satellite image " << sat_info.bbox << vcl_endl;
+        for (int i = 0; i < ni; i++) {
+          for (int j = 0; j < nj; j++) {
+            double lon, lat, gz;
+            float local_x = (float)(i+0+0.5);
+            float local_y = (float)(box_ly-j+0.5);
+            lvcs->local_to_global(local_x, local_y, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
+            double u, v;
+            if (lon < 0) lon = -lon;
+            if (lat < 0) lat = -lat;
+            sat_info.cam->global_to_img(lon, lat, gz, u, v);
+            unsigned uu = (unsigned)vcl_floor(u+0.5);
+            unsigned vv = (unsigned)vcl_floor(v+0.5);
+            if (uu > 0 && vv > 0 && uu < sat_info.ni && vv < sat_info.nj) {
+              unsigned char curr_level = volm_osm_category_io::volm_land_table[(*sat_img)(uu, vv)].level_;
+              unsigned char curr_id = (*sat_img)(uu,vv);
+              if (curr_level >= level_img(i,j)) {
+                out_img(i,j) = curr_id;  level_img(i,j) = curr_level;
+              }
+            }
+          }
+        }
+      }
+#endif
 
       // ingest osm regions
       unsigned cnt = 0;
@@ -207,7 +251,9 @@ int main(int argc, char** argv)
           int y = it.scany();
           for (int x = it.startx(); x <= it.endx(); ++x) {
             if (x >=0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
-              out_img(x,y) = curr_id;
+              if (curr_level >= level_img(x,y)) {
+                out_img(x,y) = curr_id;  level_img(x,y) = curr_level;
+              }
             }
           }
         }
@@ -325,11 +371,9 @@ int main(int argc, char** argv)
         }
       }
 
-
-
       // save the images
       vil_save(out_img, img_name.str().c_str());
-#if 1
+#if 0
       // save a color image for debug purpose
       vil_image_view<vil_rgb<vxl_byte> > out_class_img(ni, nj, 1);
       out_class_img.fill(volm_osm_category_io::volm_land_table[0].color_);

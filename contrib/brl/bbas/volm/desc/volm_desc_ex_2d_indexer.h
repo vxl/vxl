@@ -24,6 +24,7 @@
 #include <volm/volm_buffered_index.h>
 
 #include <volm/volm_io_tools.h>
+#include <volm/volm_category_io.h>
 
 class volm_desc_ex_2d_indexer : public volm_desc_indexer
 {
@@ -33,7 +34,7 @@ public:
   volm_desc_ex_2d_indexer(vcl_string const& input_folder,
                           vcl_string const& out_index_folder, 
                           vcl_vector<double> const& radius,
-                          unsigned const& nlands = volm_label_table::compute_number_of_labels());
+                          unsigned const& nlands = volm_osm_category_io::volm_land_table.size());
 
   // handles any necessary loading during indexing when it switches processing from one leaf to the next leaf
   //  for the case of this class, find the set of volm_img_info that intersects the current leaf

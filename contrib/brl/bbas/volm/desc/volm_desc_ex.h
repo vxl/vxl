@@ -19,6 +19,7 @@
 #include "volm_desc.h"
 #include <vcl_iostream.h>
 #include <volm_io.h>
+#include <volm_category_io.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <bpgl/depth_map/depth_map_region.h>
@@ -38,7 +39,7 @@ public:
   void print() const {
     vcl_cout << "[dist: " << dist_ << " height: " << height_
              << " orient: " << orient_ << " land: " << land_
-             << "(" << volm_label_table::land_string((unsigned char)land_) << ")]\n";
+             << "(" << volm_osm_category_io::volm_category_name_table[land_] << ")]\n";
   }
 
   double dist_;
@@ -57,7 +58,7 @@ public:
   volm_desc_ex(depth_map_scene_sptr const& dms,
                vcl_vector<double> const& radius,
                unsigned const& norients = 3,
-               unsigned const& nlands = volm_label_table::compute_number_of_labels(),
+               unsigned const& nlands = volm_osm_category_io::volm_land_table.size(),
                unsigned char const& initial_mag = 0);
   
   //: constrcutor from created index
@@ -66,7 +67,7 @@ public:
                vcl_vector<double> depth_interval,
                vcl_vector<double> const& radius,
                unsigned const& norients = 3,
-               unsigned const& nlands = volm_label_table::compute_number_of_labels(),
+               unsigned const& nlands = volm_osm_category_io::volm_land_table.size(),
                unsigned char const& initial_mag = 0);
 
   //: simple constructor that only sets the number of bins

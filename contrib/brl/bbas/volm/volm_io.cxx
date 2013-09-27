@@ -104,12 +104,15 @@ vcl_map<int, vil_rgb<vxl_byte> > volm_orient_table::ori_index_colors = create_or
 // assume that ids are ordered from 0 to n so the number of labels is n+1
 unsigned volm_label_table::compute_number_of_labels()
 {
+  return volm_osm_category_io::volm_land_table.size();
+#if 0
   unsigned max = 0;
   for (vcl_map<int, volm_attributes >::iterator it = land_id.begin(); it != land_id.end(); it++) {
     if (it->second.id_ > max)
       max = it->second.id_;
   }
   return max+1;
+#endif
 }
 
 unsigned volm_label_table::number_of_labels_ = compute_number_of_labels();

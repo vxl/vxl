@@ -76,8 +76,9 @@ bool best_match(vgl_polygon<double> const& poly, vcl_vector<volm_geo_index_node_
 
 int main(int argc, char** argv)
 {
-  vul_arg<unsigned> test_id("-testid", "test ids", 1);
-  vul_arg<unsigned> img_id("-imgid", "query image id", 20);
+  vul_arg<unsigned> world_id("-world", "world id of ROI", 100);
+  vul_arg<unsigned> test_id("-testid", "test ids", 0);
+  vul_arg<unsigned> img_id("-imgid", "query image id", 1000);
   vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");
   vul_arg<vcl_string> query_img("-img", "query image", "");
   vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary to get the depth value for all objects", "");
@@ -94,7 +95,7 @@ int main(int argc, char** argv)
   vcl_cout << " start " << vcl_endl;
   int jj = 1;
 
-  if (candlist_kml().compare("")==0 || score_folder().compare("") == 0 ||
+  if (candlist_kml().compare("")==0 || score_folder().compare("") == 0 || world_id() == 100 ||
       cam_bin().compare("")==0 || query_img().compare("")==0 || dms_bin().compare("") == 0 ||
       geo_hypo_a().compare("") == 0|| geo_hypo_b().compare("") == 0 || score_folder().compare("") == 0 ||
       test_id() == 0 || img_id() == 1000)
@@ -143,7 +144,17 @@ int main(int argc, char** argv)
   nj = query_image.nj();
 
   // create volm_tile
-  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
+  vcl_vector<volm_tile> tiles;/* = volm_tile::generate_p1_wr2_tiles();*/
+  if (world_id() == 1)      tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (world_id() == 2) tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (world_id() == 3) tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (world_id() == 4) tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (world_id() == 5) tiles = volm_tile::generate_p1b_wr5_tiles();
+  else {
+    log << " ERROR: unknown world id " << world_id() << " only 1 to 5 is allowed\n";
+    error_report(log_file, log.str());
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
   // check the score binary files in advance
   for (unsigned t_idx = 0; t_idx < tiles.size(); t_idx++) {
     if (t_idx == 10) continue;
@@ -151,9 +162,9 @@ int main(int argc, char** argv)
     vcl_stringstream score_file;
     score_file << score_folder() << "/ps_1_scores_tile_" << t_idx << ".bin";
     if (!vul_file::exists(score_file.str())) {
-      log << " can not find score file: " << score_file.str() << '\n';
+      log << " WARNING: can not find score file: " << score_file.str() << '\n';
       error_report(log_file, log.str());
-      return volm_io::EXE_ARGUMENT_ERROR;
+      //return volm_io::EXE_ARGUMENT_ERROR;
     }
   }
 
@@ -235,7 +246,8 @@ int main(int argc, char** argv)
 
       vcl_stringstream score_file;
       score_file << score_folder() << "/ps_1_scores_tile_" << tile_ids[i] << ".bin";
-
+      if (!vul_file::exists(score_file.str()))
+        continue;
       // search for the best match for current tile
       if (!best_match(poly, leaves, score_file.str(), max_score, best_location, best_cam_id)) {
         log << "ERROR: searching of the best match for region " << r_idx << " in tile " << tile_ids[i] << '\n';

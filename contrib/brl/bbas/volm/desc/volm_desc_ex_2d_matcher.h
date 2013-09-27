@@ -19,6 +19,7 @@
 #include "volm_desc_ex_land_only.h"
 #include "volm_desc_indexer.h"
 #include "volm_desc_ex_2d_indexer.h"
+#include <volm/volm_category_io.h>
 
 class volm_desc_ex_2d_matcher : public volm_desc_matcher
 {
@@ -29,7 +30,7 @@ public:
   //: Constructor
   volm_desc_ex_2d_matcher(depth_map_scene_sptr const& dms,
                           vcl_vector<double> const& radius,
-                          unsigned const& nlands = volm_label_table::compute_number_of_labels(),
+                          unsigned const& nlands = volm_osm_category_io::volm_land_table.size(),
                           unsigned char const& initial_mag = 0)
                           : dms_(dms), radius_(radius), nlands_(nlands), initial_mag_(initial_mag) {}
 

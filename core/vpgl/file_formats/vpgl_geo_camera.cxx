@@ -117,7 +117,7 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
   vcl_string hemisphere, direction;
-  float lon, lat, scale;
+  float lon, lat, scale_lat, scale_lon;
   vcl_size_t n = n_coords.find("N");
   if (n < n_coords.size())
     hemisphere = "N";
@@ -136,38 +136,41 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
   vcl_stringstream str2(n_str);  str2 >> lon;
 
   n_str = n_scale.substr(n_scale.find_first_of('S')+1, n_scale.find_first_of('x')-n_scale.find_first_of('S')-1);
-  vcl_stringstream str3(n_str);  str3 >> scale;
+  vcl_stringstream str3(n_str);  str3 >> scale_lat;
+
+  n_str = n_scale.substr(n_scale.find_first_of('x')+1, n_scale.size());
+  vcl_stringstream str4(n_str);  str4 >> scale_lon;
 
   vcl_cout << " hemisphere: " << hemisphere << " direction: " << direction
            << "\n lat: " << lat << " lon: " << lon
-           << "\n WARNING: using same scale for both ni and nj: " << scale << vcl_endl;
+           << "\n scale_lat: " << scale_lat << " scale_lon: " << scale_lon << vcl_endl;
 
   // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
   if (hemisphere == "N")
-    vcl_cout << " upper left corner in the image is: " << hemisphere << lat+scale << direction << lon << vcl_endl;
+    vcl_cout << " upper left corner in the image is: " << hemisphere << lat+scale_lat << direction << lon << vcl_endl;
   else
-    vcl_cout << " upper left corner in the image is: " << hemisphere << lat-scale << direction << lon << vcl_endl;
+    vcl_cout << " upper left corner in the image is: " << hemisphere << lat-scale_lat << direction << lon << vcl_endl;
   if (direction == "W")
-    vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon-scale << vcl_endl;
+    vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon-scale_lon << vcl_endl;
   else
-    vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale << vcl_endl;
+    vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale_lon << vcl_endl;
   vnl_matrix<double> trans_matrix(4,4,0,0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
   if (direction == "E") {
     trans_matrix[0][3] = lon - 0.5/(ni-1.0);
-    trans_matrix[0][0] = scale/(ni-1.0);
+    trans_matrix[0][0] = scale_lon/(ni-1.0);
   }
   else {
     trans_matrix[0][3] = lon + 0.5/(ni-1.0);
-    trans_matrix[0][0] = -scale /(ni-1.0);
+    trans_matrix[0][0] = -scale_lon /(ni-1.0);
   }
   if (hemisphere == "N") {
-    trans_matrix[1][1] = -scale/(nj-1.0);
-    trans_matrix[1][3] = lat + scale + 0.5/(nj-1.0);
+    trans_matrix[1][1] = -scale_lat/(nj-1.0);
+    trans_matrix[1][3] = lat + scale_lat + 0.5/(nj-1.0);
   }
   else {
-    trans_matrix[1][1] = scale/(nj-1.0);
-    trans_matrix[1][3] = lat-scale-0.5/(nj-1.0);
+    trans_matrix[1][1] = scale_lat/(nj-1.0);
+    trans_matrix[1][3] = lat-scale_lat-0.5/(nj-1.0);
   }
   camera = new vpgl_geo_camera(trans_matrix, lvcs);
   camera->set_scale_format(true);
