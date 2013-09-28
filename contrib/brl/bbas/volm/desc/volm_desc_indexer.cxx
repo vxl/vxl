@@ -50,7 +50,7 @@ bool volm_desc_indexer::write_params_file()
   return true;
 }
 
-bool volm_desc_indexer::index(float buffer_capacity) 
+bool volm_desc_indexer::index(float buffer_capacity, int min_leaf_id, int max_leaf_id) 
 {
   if (!this->write_params_file()) {
     vcl_cerr << "Cannot write params file to " << out_file_name_pre_.str() + ".params!\n";
@@ -67,7 +67,8 @@ bool volm_desc_indexer::index(float buffer_capacity)
 #endif
   
   for (current_leaf_id_ = 0; current_leaf_id_ < leaves_.size(); current_leaf_id_++) {
-
+    if (current_leaf_id_ < min_leaf_id || current_leaf_id_ >= max_leaf_id)
+      continue;
     if (!this->get_next())
       return false;
 

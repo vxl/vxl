@@ -35,6 +35,8 @@ int main(int argc,  char** argv)
   vul_arg<bool> index_2d("-ex_2d", "if exists index ex_2d using the classification maps that are passed", "");
   vul_arg<vcl_string> maps_folder("-maps", "the classification map images where each pixel has the land id (type is unsigned char)", "");
   vul_arg<vcl_string> radii_string("-rad", "e.g. pass 100_500_1000 for radii of 100, 500 and 1000 meter to construct descriptors at each location", "");
+  vul_arg<int> max_leaf_id ("-max", "maximum leaf id considered", 1000);
+  vul_arg<int> min_leaf_id ("-min", "minimum leaf id considered", -1);
   
   vul_arg_parse(argc, argv);
   vcl_cout << "argc: " << argc << vcl_endl;
@@ -151,7 +153,7 @@ int main(int argc,  char** argv)
 
     if (!indexer->load_tile_hypos(geo_hypo_folder(), tile_id()))
       return volm_io::EXE_ARGUMENT_ERROR;
-    indexer->index(1.0f); // buffer capacity is 1 gigabyte // saves the leaves of the tile at the end
+    indexer->index(1.0f, min_leaf_id(), max_leaf_id()); // buffer capacity is 1 gigabyte // saves the leaves of the tile at the end
   
     return volm_io::SUCCESS;
   }

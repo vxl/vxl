@@ -30,7 +30,7 @@ static void test_ex_indexer()
   tile_ids.push_back(0), tile_ids.push_back(3);
   for (unsigned i = 0; i < tile_ids.size(); i++) {
     ex_indexer->load_tile_hypos(geo_hypo_folder, tile_ids[i]);
-    ex_indexer->index(1.0f);
+    ex_indexer->index(1.0f, -1, 1000);
     vcl_cout << " tile " << tile_ids[i] << " finished" << vcl_endl;
   }
 

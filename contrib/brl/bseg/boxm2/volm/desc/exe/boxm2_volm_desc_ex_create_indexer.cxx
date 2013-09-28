@@ -24,6 +24,8 @@ int main(int argc, char** argv)
   vul_arg<float> buffer_capacity("-buffer", "buffer size used for indices, ensure the system has 2*buffer_capacity memory, unit as GB (default 2.0G)", 2.0f);
   vul_arg<bool> is_land_only("-land", "option to choose land only existance descriptor", false);
   vul_arg<bool> is_log("-log", "option to save log files", false);
+  vul_arg<int> max_leaf_id ("-max", "maximum leaf id considered", 1000);
+  vul_arg<int> min_leaf_id ("-min", "minimum leaf id considered", -1);
   vul_arg_parse(argc, argv);
   vcl_cout << " number or arguments = " << argc << vcl_endl;
 
@@ -120,7 +122,7 @@ int main(int argc, char** argv)
   }
 
   vcl_cout << " \t Create existance indices for tile " << tile_id() << "..." << vcl_endl;
-  if (!ex_indexer->index(buffer_capacity())) {
+  if (!ex_indexer->index(buffer_capacity(), min_leaf_id(), max_leaf_id())) {
     log << " ERROR: creating existance indices for tile " << tile_id() << " failed.\n";
     vcl_cerr << log.str();
     if (is_log()) volm_io::write_post_processing_log(log_file.str(), log.str());

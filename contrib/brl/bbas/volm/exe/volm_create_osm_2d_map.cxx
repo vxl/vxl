@@ -363,7 +363,7 @@ int main(int argc, char** argv)
           int cy = (int)vcl_floor(cross_pts[c_idx].y() + 0.5);
           for (int ii = cx-radius; ii < cx+radius; ii++)
             for (int jj = cy-radius; jj <cy+radius; jj++)
-              if (ii >=0 && jj>=0 && ii <out_img.ni() & jj < out_img.nj())
+              if (ii >=0 && jj>=0 && ii <out_img.ni() && jj < out_img.nj())
                 if (curr_level >= level_img(ii,jj)) {
                   out_img(ii,jj)   = curr_id;
                   level_img(ii,jj) = curr_level;

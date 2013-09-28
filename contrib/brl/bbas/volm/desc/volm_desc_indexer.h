@@ -37,7 +37,7 @@ public:
   virtual bool get_next() { return true; }
 
   //: go over each hypo in each leaf and run 'extract' at each location
-  bool index(float buffer_capacity);
+  bool index(float buffer_capacity, int min_leaf_id, int max_leaf_id);
 
   virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values) = 0;
 
