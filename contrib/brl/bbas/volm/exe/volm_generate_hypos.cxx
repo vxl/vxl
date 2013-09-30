@@ -530,10 +530,17 @@ int main(int argc,  char** argv)
       return volm_io::SUCCESS;
     }
   }
-  // for P1A regions
+  // for P1A and P1B regions reading (world_id 6 and 7 becomes desert and coast)
 
   // change to wr1 tiles for desert
-  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
+  vcl_vector<volm_tile> tiles;
+  if (world_id() == 1)      tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (world_id() == 2) tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (world_id() == 3) tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (world_id() == 4) tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (world_id() == 5) tiles = volm_tile::generate_p1b_wr5_tiles();
+  else if (world_id() == 6) tiles = volm_tile::generate_p1_wr1_tiles();
+  else if (world_id() == 7) tiles = volm_tile::generate_p1_wr2_tiles();
   vcl_cout << " number of tiles: " << tiles.size() << vcl_endl;
   unsigned i = tile_id();
   if (i >= tiles.size()) {
@@ -561,6 +568,9 @@ int main(int argc,  char** argv)
              << "\t number of leaves with hyps: " << leaves.size() << vcl_endl;
     unsigned size = volm_geo_index::hypo_size(root);
     vcl_cout << "\t total number of hypos: " << size << vcl_endl;
+    for (unsigned l = 0; l < leaves.size(); l++) {
+      vcl_cout << " leaf_id = " << l << " leaf bbox = " << leaves[l]->extent_ << vcl_endl;
+    }
     return volm_io::SUCCESS;
   }
 
