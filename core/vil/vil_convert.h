@@ -528,18 +528,18 @@ inline void vil_convert_stretch_range(const vil_image_view<T>& src,
 // to provide both the range and precision. You may as well
 // leave the image in double, and convert it again later.
 
-//: Convert src to double image dest by stretching to range [lo,hi]
+//: Convert src to double image dest by stretching to range [dest_lo,dest_hi]
 template <class inP>
 inline void vil_convert_stretch_range(const vil_image_view<inP>& src,
                                       vil_image_view<double>& dest,
-                                      double lo, double hi)
+                                      double dest_lo, double dest_hi)
 {
   inP min_b=0, max_b=0;
   vil_math_value_range(src,min_b,max_b);
   double b = 0.0;
   if (max_b-min_b >0)
-    b = static_cast<double>(hi-lo)/static_cast<double>(max_b-min_b);
-  double a = -1.0*min_b*b + lo;
+    b = static_cast<double>(dest_hi-dest_lo)/static_cast<double>(max_b-min_b);
+  double a = -1.0*min_b*b + dest_lo;
   dest.set_size(src.ni(), src.nj(), src.nplanes());
   for (unsigned p = 0; p < src.nplanes(); ++p)
     for (unsigned j = 0; j < src.nj(); ++j)
@@ -547,18 +547,18 @@ inline void vil_convert_stretch_range(const vil_image_view<inP>& src,
         dest(i,j,p) =  b*src(i,j,p) + a;
 }
 
-//: Convert src to float image dest by stretching to range [lo,hi]
+//: Convert src to float image dest by stretching to range [dest_lo,dest_hi]
 template <class inP>
 inline void vil_convert_stretch_range(const vil_image_view<inP>& src,
                                       vil_image_view<float>& dest,
-                                      float lo, float hi)
+                                      float dest_lo, float dest_hi)
 {
   inP min_b=0, max_b=0;
   vil_math_value_range(src,min_b,max_b);
   float b = 0.0;
   if (max_b-min_b >0)
-    b = (hi-lo)/static_cast<float>(max_b-min_b);
-  float a = -1.0f*min_b*b + lo;
+    b = (dest_hi-dest_lo)/static_cast<float>(max_b-min_b);
+  float a = -1.0f*min_b*b + dest_lo;
   dest.set_size(src.ni(), src.nj(), src.nplanes());
   for (unsigned p = 0; p < src.nplanes(); ++p)
     for (unsigned j = 0; j < src.nj(); ++j)

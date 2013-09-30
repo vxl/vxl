@@ -65,7 +65,7 @@ class vil_image_view : public vil_image_view_base
   //: Create an image of ni x nj pixels in (n_planes * n_interleaved_planes) planes
   //  If n_interleaved_planes > 1, the planes are interleaved.
   //  If n_planes > 1, each plane of pixels is stored contiguously.
-  //  n_planes and n_components should not be both different from 1.
+  //  n_planes and n_interleaved_planes should not be both different from 1.
   //  n_planes * n_interleaved_planes should be 1 unless T is scalar.
   vil_image_view(unsigned ni, unsigned nj, unsigned n_planes=1, unsigned n_interleaved_planes=1);
 

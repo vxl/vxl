@@ -4,7 +4,7 @@
 // \file
 // \brief Finds connected regions in a boolean image.
 // \author Ian Scott
-// Thes functions can be combined to get blobs as images, chorded regions, edge pixels lists, etc.
+// These functions can be combined to get blobs as images, chorded regions, edge pixels lists, etc.
 // For example to get an edge pixel list of im_binary
 // \code
 // vil_blob_labels(im_binary, vil_blob_4_conn, im_labels);
@@ -14,7 +14,7 @@
 // To get the area of a blob efficiently
 // \code
 // vil_blob_labels(im_binary, vil_blob_4_conn, im_labels);
-// vil_blob_labels_to_regions(im_edges, regions);
+// vil_blob_labels_to_regions(im_labels, regions);
 // unsigned area_of_first_blob = vil_area(regions[0]);
 // \endcode
 

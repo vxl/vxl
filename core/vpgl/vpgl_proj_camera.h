@@ -160,7 +160,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
   // In subclasses these should be redefined so that they won't allow setting of
   // matrices with improper form.
   virtual bool set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix );
-  virtual bool set_matrix( const T* new_camera_matrix );
+  virtual bool set_matrix( const T* new_camera_matrix ); // i.e., T new_camera_matrix[12]
 
   // --------------------- I/O :---------------------
 
