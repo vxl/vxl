@@ -167,26 +167,26 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   float* t_infinity_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) t_infinity_buff[i]=0.0f;
 
-  bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
+  bocl_mem_sptr exp_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),buff,"exp image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr var_image=new bocl_mem(device->context(),var_buff,cl_ni*cl_nj*sizeof(float),"var image buffer");
+  bocl_mem_sptr var_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),var_buff,"var image buffer");
   var_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
+  bocl_mem_sptr prob_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),prob_buff,"vis x omega image buffer");
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr t_infinity=new bocl_mem(device->context(),t_infinity_buff,cl_ni*cl_nj*sizeof(float),"t infinity buffer");
+  bocl_mem_sptr t_infinity=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),t_infinity_buff,"t infinity buffer");
   t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set generic cam
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
-  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_origins, "ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   // Image Dimensions
@@ -287,20 +287,40 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
 
 
   clReleaseCommandQueue(queue);
-  i=0;
 
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* vis_out=new vil_image_view<float>(ni,nj);
 
   for (unsigned c=0;c<nj;c++)
+  {
     for (unsigned r=0;r<ni;r++)
     {
       (*exp_img_out)(r,c)=buff[c*cl_ni+r];
       (*exp_var_out)(r,c)=var_buff[c*cl_ni+r];
       (*vis_out)(r,c)=vis_buff[c*cl_ni+r];
     }
+  }
+
+  delete[] buff;
+  delete[] var_buff;
+  delete[] vis_buff;
+  delete[] prob_buff;
+  delete[] t_infinity_buff;
+  delete[] ray_origins;
+  delete[] ray_directions;
+
+  opencl_cache->unref_mem(exp_image.ptr());
+  opencl_cache->unref_mem(var_image.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(prob_image.ptr());
+  opencl_cache->unref_mem(t_infinity.ptr());
+  opencl_cache->unref_mem(ray_o_buff.ptr());
+  opencl_cache->unref_mem(ray_d_buff.ptr());
+  clReleaseCommandQueue(queue);
+
   // store scene smaprt pointer
+  i=0;
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_var_out);
   pro.set_output_val<vil_image_view_base_sptr>(i++, vis_out);
