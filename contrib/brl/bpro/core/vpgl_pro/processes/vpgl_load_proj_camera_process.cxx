@@ -6,6 +6,7 @@
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include <vcl_iomanip.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/io/vpgl_io_proj_camera.h>
@@ -55,6 +56,10 @@ bool vpgl_load_proj_camera_process(bprb_func_process& pro)
   }
   vnl_matrix_fixed<double,3,4> projection_matrix;
   ifs >> projection_matrix;
+
+  ifs >> vcl_skipws;
+  if(!ifs.eof())
+    vcl_cout << "Warning: More text left to parse.\n";
 
   vpgl_camera_double_sptr procam = new vpgl_proj_camera<double>(projection_matrix);
 
