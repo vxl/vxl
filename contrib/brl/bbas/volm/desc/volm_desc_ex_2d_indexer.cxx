@@ -28,7 +28,8 @@ volm_desc_ex_2d_indexer(vcl_string const& input_folder,
 bool volm_desc_ex_2d_indexer::get_next()
 {
   current_leaf_maps_.clear();
-
+  lon_imgs.clear();
+  lat_imgs.clear();
   vgl_box_2d<double> extent(leaves_[current_leaf_id_]->extent_.min_x(), leaves_[current_leaf_id_]->extent_.max_x(),
                             leaves_[current_leaf_id_]->extent_.min_y(), leaves_[current_leaf_id_]->extent_.max_y());
 
