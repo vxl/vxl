@@ -140,17 +140,54 @@ bool sdet_load_texture_classifier_process(bprb_func_process& pro)
   vcl_string input_ins_path = pro.get_input<vcl_string>(0);
 
   sdet_texture_classifier_params dummy;
-  sdet_texture_classifier tc(dummy);
-  tc.load_data(input_ins_path);  
-  vcl_cout << " loaded classifier with params: " << tc << vcl_endl;
-  //vcl_cout << " current # of training data in class " << class_name() << " is: " << tc.data_size(class_name()) << '\n';
-
-  sdet_texture_classifier_sptr tc_ptr = new sdet_texture_classifier(tc);
-
+  sdet_texture_classifier_sptr tc_ptr = new sdet_texture_classifier(dummy);
+  tc_ptr->load_data(input_ins_path);  
+  vcl_cout << " loaded classifier with params: " << *tc_ptr << vcl_endl;
+  tc_ptr->filter_responses().set_params(tc_ptr->n_scales_,tc_ptr->scale_interval_,tc_ptr->lambda0_,tc_ptr->lambda1_,tc_ptr->angle_interval_,tc_ptr->cutoff_per_);
+ 
+  vcl_cout << " in the loaded classifier max filter radius: " << tc_ptr->max_filter_radius() << vcl_endl;
+   
   // pass the texture classifier into the database
   // to enable subsequent processing
   pro.set_output_val<sdet_texture_classifier_sptr>(0, tc_ptr);
   return true;
 }
 
+
+//: PROCESS to load the current dictionary (loads the parameter block as well)
+bool sdet_load_texture_dictionary_process_cons(bprb_func_process& pro)
+{
+  // process takes 1 inputs:
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vcl_string"); // input filename 
+  if (!pro.set_input_types(input_types))
+    return false;
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("sdet_texture_classifier_sptr"); //texture classifier
+  return pro.set_output_types(output_types);
+}
+
+bool sdet_load_texture_dictionary_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
+    return false;
+  }
+
+  vcl_string input_ins_path = pro.get_input<vcl_string>(0);
+
+  sdet_texture_classifier_params dummy;
+  sdet_texture_classifier_sptr tc_ptr = new sdet_texture_classifier(dummy);
+  tc_ptr->load_dictionary(input_ins_path);  
+  vcl_cout << " loaded classifier with params: " << *tc_ptr << vcl_endl;
+  tc_ptr->filter_responses().set_params(tc_ptr->n_scales_,tc_ptr->scale_interval_,tc_ptr->lambda0_,tc_ptr->lambda1_,tc_ptr->angle_interval_,tc_ptr->cutoff_per_);
+ 
+  vcl_cout << " in the loaded classifier max filter radius: " << tc_ptr->max_filter_radius() << vcl_endl;
+  // pass the texture classifier into the database
+  // to enable subsequent processing
+  pro.set_output_val<sdet_texture_classifier_sptr>(0, tc_ptr);
+  return true;
+}
 

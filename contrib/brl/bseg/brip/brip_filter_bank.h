@@ -66,6 +66,9 @@ class brip_filter_bank
   //: save filter responses as individual images  
   bool save_filter_responses(vcl_string const& dir) const;
   bool load_filter_responses(vcl_string const& dir, unsigned n_levels);
+
+  void set_params(unsigned n_levels, double scale_range, float lambda0, float lambda1, float theta_interval, float cuttoff_ratio);
+
  protected:
   //: internal methods
   void construct_scale_pyramid();

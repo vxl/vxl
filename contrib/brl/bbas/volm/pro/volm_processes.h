@@ -13,5 +13,6 @@ DECLARE_FUNC_CONS(volm_correct_rational_cameras_ransac_process);
 DECLARE_FUNC_CONS(volm_pick_nadir_resource_process);
 DECLARE_FUNC_CONS(volm_map_osm_process);
 DECLARE_FUNC_CONS(volm_map_segments_process);
+DECLARE_FUNC_CONS(volm_generate_class_map_process);
 
 #endif

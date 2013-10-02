@@ -24,5 +24,11 @@ DECLARE_FUNC_CONS(sdet_segment_image_process);
 DECLARE_FUNC_CONS(sdet_segment_image_using_edge_map_process);
 DECLARE_FUNC_CONS(sdet_segment_image_using_height_map_process);
 DECLARE_FUNC_CONS(sdet_segment_image_using_height_map_process2);
+DECLARE_FUNC_CONS(sdet_texture_classifier_process2);
+DECLARE_FUNC_CONS(sdet_extract_filter_bank_process);
+DECLARE_FUNC_CONS_FIN(sdet_texture_training_process2);
+DECLARE_FUNC_CONS(sdet_load_texture_dictionary_process);
+DECLARE_FUNC_CONS(sdet_add_to_filter_bank_process);
+DECLARE_FUNC_CONS(sdet_texture_classifier_roc_process);
 
 #endif

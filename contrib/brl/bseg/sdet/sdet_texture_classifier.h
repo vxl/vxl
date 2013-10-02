@@ -96,15 +96,22 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   bool compute_filter_bank_color_img(vcl_string const& filter_folder, vcl_string const& img_name);
 
   //: check the folder if already computed using the image name, otherwise compute and save
-  bool compute_filter_bank_float_img(vcl_string const& filter_folder, vcl_string const& img_name, float max_val);
+  bool compute_filter_bank_float_img(vcl_string const& filter_folder, vcl_string const& img_name, float max_val = -1.0f);
 
+  //: helper function to compute gauss response of an image using params of the instance, assumes the output image is properly initialized
+  void compute_gauss_response(vil_image_view<float> const& img, vil_image_view<float>& out_gauss);
 
-  //: the max image border width eaten up by filter kernels
-  unsigned max_filter_radius() const;
+  //: the max image border width eaten up by filter kernels, also updates maxr_
+  unsigned max_filter_radius();
 
   //: retrieve the filter responses
   brip_filter_bank& filter_responses()
     {return filter_responses_;}
+
+  //: append to the vector of other_responses_
+  //  it may be necessary to increase the dimensionality using another source of info than the original image
+  // this method checks whether an other response with this name is already computed and saved
+  void add_gauss_response(vil_image_view<float>& img_f, vcl_string const& filter_folder, vcl_string const& img_name, vcl_string const& response_name);
 
   //: append to training data (current filter responses).
   //  randomly select training samples from full training image for category
@@ -157,6 +164,9 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   bool save_filter_responses(vcl_string const& dir);
   bool load_filter_responses(vcl_string const& dir);
 
+  bool save_other_filter_responses(vcl_string const& dir);
+  bool load_other_filter_responses(vcl_string const& dir);
+
   int data_size(vcl_string const& cat);
   void add_training_data(vcl_string const& cat, vcl_vector<vnl_vector<double> >& data);
   bool get_training_data(vcl_string const& cat, vcl_vector<vnl_vector<double> >& data);
@@ -202,6 +212,8 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   float laplace_response(unsigned i, unsigned j) { return laplace_(i,j); }
   float gauss_response(unsigned i, unsigned j) { return gauss_(i,j); }
+
+  static vcl_vector<vgl_polygon<double> > load_polys(vcl_string const& poly_path);
 
   // ===  debug utilities ===
 
@@ -251,6 +263,9 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   vcl_vector<float> texton_weights_;
   bool texton_weights_valid_;
   unsigned maxr_;
+
+  vcl_vector<vil_image_view<float> > other_responses_;
+  vcl_vector<vcl_string > other_responses_names_;
 };
 #include <sdet/sdet_texture_classifier_sptr.h>
 //: Binary save parameters to stream.

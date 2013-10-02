@@ -11,7 +11,7 @@ class dbvalue:
 ###################################################
 # Vil loading and saving
 ###################################################
-def load_image(file_path) :
+def bvxm_load_image(file_path) :
   bvxm_batch.init_process("vilLoadImageViewProcess");
   bvxm_batch.set_input_string(0, file_path);
   bvxm_batch.run_process();
@@ -25,7 +25,7 @@ def load_image(file_path) :
   bvxm_batch.remove_data(nj_id)
   return img, ni, nj;
 
-def save_image(img, file_path) :
+def bvxm_save_image(img, file_path) :
   assert not isinstance(list, tuple)
   bvxm_batch.init_process("vilSaveImageViewProcess");
   bvxm_batch.set_input_from_db(0,img);
@@ -156,7 +156,7 @@ def pixel(img, point):
 
 
 #resize image (default returns float image
-def resize(img, ni, nj, pixel="float"):
+def bvxm_resize(img, ni, nj, pixel="float"):
     bvxm_batch.init_process("vilResampleProcess")
     bvxm_batch.set_input_from_db(0,img)
     bvxm_batch.set_input_int(1, ni)
@@ -223,7 +223,7 @@ def threshold_image(img, value, threshold_above=True):
     mask = dbvalue(id,type)
     return mask
 
-def stretch_image(img, min_value, max_value, output_type_str='float'):
+def bvxm_stretch_image(img, min_value, max_value, output_type_str='float'):
     bvxm_batch.init_process("vilStretchImageProcess")
     bvxm_batch.set_input_from_db(0,img)
     bvxm_batch.set_input_float(1,min_value)
@@ -234,7 +234,7 @@ def stretch_image(img, min_value, max_value, output_type_str='float'):
     img_out = dbvalue(id,type)
     return img_out
 
-def truncate_image(img,min_value,max_value):
+def bvxm_truncate_image(img,min_value,max_value):
     bvxm_batch.init_process("vilTruncateImageProcess")
     bvxm_batch.set_input_from_db(0,img)
     bvxm_batch.set_input_float(1,min_value)

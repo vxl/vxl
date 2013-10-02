@@ -25,9 +25,9 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
+#include <vul/vul_file_iterator.h>
 
-static
-vcl_vector<vgl_polygon<double> > load_polys(vcl_string const& poly_path)
+vcl_vector<vgl_polygon<double> > sdet_texture_classifier::load_polys(vcl_string const& poly_path)
 {
   vcl_vector<vsol_spatial_object_2d_sptr> sos;
   vsl_b_ifstream istr(poly_path);
@@ -126,6 +126,16 @@ sdet_texture_classifier(sdet_texture_classifier_params const& params)
 }
 
 
+//: helper function to compute gauss response of an image using params of the instance, assumes the output image is properly initialized
+void sdet_texture_classifier::compute_gauss_response(vil_image_view<float> const& img, vil_image_view<float>& out_gauss)
+{
+  out_gauss = brip_vil_float_ops::gaussian(img, gauss_radius_);
+  for (unsigned j = 0; j<out_gauss.nj(); ++j)
+    for (unsigned i = 0; i<out_gauss.ni(); ++i)
+      out_gauss(i,j) =out_gauss(i,j)*0.03f;//HACK!! Need principled way to scale
+}
+
+
 bool sdet_texture_classifier::
 compute_filter_bank(vil_image_view<float> const& img)
 {
@@ -145,10 +155,9 @@ compute_filter_bank(vil_image_view<float> const& img)
 
   vcl_cout<< "s = ("<< gauss_radius_<< ' ' << gauss_radius_ << ")\n"
           << vcl_flush;
-  gauss_ = brip_vil_float_ops::gaussian(img, gauss_radius_);
-  for (unsigned j = 0; j<gauss_.nj(); ++j)
-    for (unsigned i = 0; i<gauss_.ni(); ++i)
-      gauss_(i,j) =gauss_(i,j)*0.03f;//HACK!! Need principled way to scale
+  
+  this->compute_gauss_response(img, gauss_);
+
   //filter responses
   vcl_cout << "Computed filter bank in " << t.real()/1000.0 << " secs.\n";
 #if 0
@@ -206,7 +215,7 @@ bool sdet_texture_classifier::compute_filter_bank_color_img(vcl_string const& fi
 bool sdet_texture_classifier::compute_filter_bank_float_img(vcl_string const& filter_folder, vcl_string const& img_name, float max_val)
 {
   unsigned size = this->max_filter_radius();
-  vcl_cout << "computing filter bank on: " << img_name << vcl_endl;
+  vcl_cout << "computing filter bank on: " << img_name << " max filter radius: " << size << vcl_endl;
   vcl_string name = vul_file::strip_directory(img_name);
   name = vul_file::strip_extension(name);
   
@@ -226,10 +235,14 @@ bool sdet_texture_classifier::compute_filter_bank_float_img(vcl_string const& fi
       return false;
     }
 
-    vil_math_truncate_range(img_orig, 0.0f, max_val);
-    // stretch the lidar as classification requires an image in [0,1]
     vil_image_view<float> img(img_orig.ni(),img_orig.nj());
-    vil_convert_stretch_range_limited(img_orig, img, 0.0f, max_val, 0.0f, 1.0f);
+    
+    if (max_val > 0) { // stretch if max_val is passed
+      vil_math_truncate_range(img_orig, 0.0f, max_val);
+      // stretch as classification requires an image in [0,1]
+      vil_convert_stretch_range_limited(img_orig, img, 0.0f, max_val, 0.0f, 1.0f);
+    } else
+      img.deep_copy(img_orig);
 
     if (!this->compute_filter_bank(img))
       return false;
@@ -242,6 +255,40 @@ bool sdet_texture_classifier::compute_filter_bank_float_img(vcl_string const& fi
   }
   return true;
 }
+
+//: append to the vector of other_responses_
+//  it may be necessary to increase the dimensionality using another source of info than the original image
+// this method checks whether an other response with this name is already computed and saved
+void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, vcl_string const& filter_folder, vcl_string const& img_name, vcl_string const& response_name)
+{
+  // check whether it already exists
+  bool found_it = false;
+  for (unsigned i = 0; i < other_responses_names_.size(); i++) {
+    if (other_responses_names_[i].compare(response_name) == 0) {
+      found_it = true; break;
+    }
+  }
+  vil_image_view<float> out_gauss(img_f.ni(), img_f.nj());
+  this->compute_gauss_response(img_f, out_gauss); 
+
+  other_responses_.push_back(out_gauss);
+  other_responses_names_.push_back(response_name);
+
+  vcl_string filterbank_dir = filter_folder + this->filter_dir_name();
+  if (!vul_file::exists(filterbank_dir))
+    vul_file::make_directory(filterbank_dir);
+
+  vcl_string name = vul_file::strip_directory(img_name);
+  name = vul_file::strip_extension(name);
+  
+  // first check filter folder if already computed
+  vcl_string img_out_dir = filterbank_dir + "/" + name + "/";
+  if (!vul_file::exists(img_out_dir))
+    vul_file::make_directory(img_out_dir);
+  
+  this->save_other_filter_responses(img_out_dir);
+}
+
 
 
 // Used to define the initial k means cluster centers
@@ -279,13 +326,18 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category)
     vcl_cout << "training image too small ni or nj <= " << maxr << '\n';
     return false;
   }
-  vcl_cout << " texton dimension: " << dim + 2 << '\n' << vcl_flush;
+  //vcl_cout << " texton dimension: " << dim + 2 << '\n' << vcl_flush;
+  unsigned dim_total = dim + 2 + other_responses_.size(); 
+  vcl_cout << " texton dimension: " << dim_total << '\n' << vcl_flush;
   for (int j = maxr; j<nj; ++j)
     for (int i = maxr; i<ni; ++i) {
-      vnl_vector<double> tx(dim+2);
+      //vnl_vector<double> tx(dim+2);
+      vnl_vector<double> tx(dim_total);
       for (unsigned f = 0; f<dim; ++f)
         tx[f]=filter_responses_.response(f)(i,j);
       tx[dim]=laplace_(i,j); tx[dim+1]=gauss_(i,j);
+      for (unsigned f = 0; f<other_responses_.size(); ++f)
+        tx[dim+2+f]=(other_responses_[f])(i,j);
       training_data.push_back(tx);
     }
   // reduce the number of samples to specified size
@@ -334,6 +386,29 @@ bool sdet_texture_classifier::load_filter_responses(vcl_string const& dir)
   return true;
 }
 
+//: save filter responses
+bool sdet_texture_classifier::save_other_filter_responses(vcl_string const& dir) 
+{
+  for (unsigned i = 0; i < other_responses_names_.size(); i++) {
+    vcl_stringstream path; path << dir << "/other_response_" << other_responses_names_[i] << ".tif";
+    vil_save(other_responses_[i], path.str().c_str());
+  }
+  return true;
+}
+bool sdet_texture_classifier::load_other_filter_responses(vcl_string const& dir) 
+{
+  vcl_string glob = dir + "/other_response_*.tif";
+  for (vul_file_iterator fit = glob; fit; ++fit) {
+    vcl_string name = fit();
+    vil_image_view<float> img = vil_load(name.c_str());
+    other_responses_.push_back(img);
+    name = vul_file::strip_directory(name);
+    name = vul_file::strip_extension(name);
+    name = name.substr(15, name.size());
+    other_responses_names_.push_back(name);
+  }
+  return true;
+}
 
 // compute a vector of filter responses, which are sampled from the
 // response pixels for the input image. Only responses within the
@@ -358,15 +433,20 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
     vcl_cout << "training image too small ni or nj <= " << maxr << '\n';
     return false;
   }
-  vcl_cout << " texton dimension: " << dim + 2  << '\n' << vcl_flush;
+  //vcl_cout << " texton dimension: " << dim + 2  << '\n' << vcl_flush;
+  unsigned dim_total = other_responses_.size() + dim + 2;
+  vcl_cout << " texton dimension: " << dim_total  << '\n' << vcl_flush;
   vgl_polygon_scan_iterator<double> psi(texture_region);
   for (psi.reset(); psi.next(); ) {
     int j = psi.scany();
     for (int i  = psi.startx(); i <= psi.endx(); ++i) {
-      vnl_vector<double> tx(dim+2);
+      //vnl_vector<double> tx(dim+2);
+      vnl_vector<double> tx(dim_total);
       for (unsigned f = 0; f<dim; ++f)
         tx[f]=filter_responses_.response(f)(i,j);
       tx[dim]=laplace_(i,j); tx[dim+1]=gauss_(i,j);
+      for (unsigned f = 0; f<other_responses_.size(); ++f)
+        tx[dim+2+f]=(other_responses_[f])(i,j);
       training_data.push_back(tx);
     }
   }
@@ -407,7 +487,7 @@ compute_training_data(vcl_string const& category,
     return false;
   }
   vul_timer t;
-  vcl_cout << " texton dimension: " << dim + 2 << '\n' << vcl_flush;
+  //vcl_cout << " texton dimension: " << dim + 2 << '\n' << vcl_flush;
 
   // collect set of points
   unsigned maxr = this->max_filter_radius();
@@ -419,17 +499,24 @@ compute_training_data(vcl_string const& category,
     vcl_cout << "training image too small ni or nj <= " << maxr << '\n';
     return false;
   }
+  unsigned dim_total = dim + 2 + other_responses_.size();
+  vcl_cout << " texton dimension: " << dim_total << '\n' << vcl_flush;
   vcl_vector<vgl_polygon<double> >::const_iterator pit = texture_regions.begin();
   for (; pit != texture_regions.end(); ++pit) {
     vgl_polygon_scan_iterator<double> psi(*pit, false);
     for (psi.reset(); psi.next(); ) {
       int j = psi.scany();
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
-        vnl_vector<double> tx(dim+2);
+        if (i >= ni || j >= nj || i < maxr || j < maxr)
+          continue;
+        //vnl_vector<double> tx(dim+2);
+        vnl_vector<double> tx(dim_total);
         for (unsigned f = 0; f<dim; ++f)
           tx[f]=filter_responses_.response(f)(i,j);
         double g = gauss_(i,j);
         tx[dim]=laplace_(i,j); tx[dim+1]=g;
+        for (unsigned f = 0; f<other_responses_.size(); ++f)
+          tx[dim+2+f]=(other_responses_[f])(i,j);
         training_data.push_back(tx);
       }
     }
@@ -476,6 +563,8 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category, 
   }
   vul_timer t;
   //vcl_cout << " texton dimension: " << dim + 2 << '\n' << vcl_flush;
+  unsigned dim_total = dim + 2 + other_responses_.size();
+  vcl_cout << " texton dimension: " << dim_total << '\n' << vcl_flush;
 
   // collect set of points
   //unsigned maxr = this->max_filter_radius();
@@ -491,11 +580,15 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category, 
     int ii = pixels[kk].first;
     int jj = pixels[kk].second;
     if (ii < 0 || jj < 0 || ii >= ni || jj >= nj) continue;  // invalid pixels are marked -1, -1 in the input
-    vnl_vector<double> tx(dim+2);
+    //vnl_vector<double> tx(dim+2);
+    vnl_vector<double> tx(dim_total);
     for (unsigned f = 0; f<dim; ++f)
       tx[f]=filter_responses_.response(f)(ii,jj);
     double g = gauss_(ii,jj);
     tx[dim]=laplace_(ii,jj); tx[dim+1]=g;
+    for (unsigned f = 0; f<other_responses_.size(); ++f)
+      tx[dim+2+f]=(other_responses_[f])(ii,jj);
+    
     training_data.push_back(tx);
   }
   // reduce the number of samples to specified size
@@ -526,15 +619,19 @@ bool sdet_texture_classifier::compute_data(vcl_vector<vcl_pair<int, int> >const&
     vcl_cout << "training image too small ni or nj <= " << maxr_ << '\n';
     return false;
   }
+  unsigned dim_total = dim + 2 + other_responses_.size();
   for (unsigned kk = 0; kk < pixels.size(); kk++) {
     int ii = pixels[kk].first;
     int jj = pixels[kk].second;
     if (ii < 0 || jj < 0 || ii >= ni || jj >= nj) continue;  // invalid pixels are marked -1, -1 in the input
-    vnl_vector<double> tx(dim+2);
+    //vnl_vector<double> tx(dim+2);
+    vnl_vector<double> tx(dim_total);
     for (unsigned f = 0; f<dim; ++f)
       tx[f]=filter_responses_.response(f)(ii,jj);
     double g = gauss_(ii,jj);
     tx[dim]=laplace_(ii,jj); tx[dim+1]=g;
+    for (unsigned f = 0; f<other_responses_.size(); ++f)
+      tx[dim+2+f]=(other_responses_[f])(ii,jj);
     data.push_back(tx);
   }
 }
@@ -749,6 +846,10 @@ bool sdet_texture_classifier::load_data(vcl_string const& path)
   vsl_b_read(is, *tcp_ptr);
   vsl_b_read(is, training_data_);
   is.close();
+
+  // change the filterbank params
+  filter_responses_ = brip_filter_bank(tcp_ptr->n_scales_,tcp_ptr->scale_interval_,tcp_ptr->lambda0_,tcp_ptr->lambda1_,tcp_ptr->angle_interval_,tcp_ptr->cutoff_per_);
+  maxr_ = this->max_filter_radius(); 
   return true;
 }
 
@@ -1176,7 +1277,8 @@ classify_image_blocks(vcl_string const& img_path)
     this->compute_texton_index();
   this->compute_filter_bank(img);
   unsigned dim = filter_responses_.n_levels();
-  vcl_cout << "texton dimension " << dim +2<< '\n';
+  //vcl_cout << "texton dimension " << dim +2<< '\n';
+  unsigned dim_total = dim + 2 + other_responses_.size();
 
   int margin = static_cast<int>(this->max_filter_radius());
   vcl_cout << "filter kernel margin " << margin << '\n';
@@ -1198,10 +1300,13 @@ classify_image_blocks(vcl_string const& img_path)
       vcl_vector<float> h(nh, 0.0f);
       for (unsigned r = 0; r<block_size_; ++r)
         for (unsigned c = 0; c<block_size_; ++c) {
-          vnl_vector<double> temp(dim+2);
+          //vnl_vector<double> temp(dim+2);
+          vnl_vector<double> temp(dim_total);
           for (unsigned f = 0; f<dim; ++f)
             temp[f]=filter_responses_.response(f)(i+c,j+r);
           temp[dim]=laplace_(i+c,j+r); temp[dim+1]=gauss_(i+c,j+r);
+          for (unsigned f = 0; f<other_responses_.size(); ++f)
+            temp[dim+2+f]=(other_responses_[f])(i+c,j+r);
           //hist bins are probabilities
           //i.e., sum h[i] = 1.0
           this->update_hist(temp, weight, h);
@@ -1242,13 +1347,14 @@ classify_image_blocks(vcl_string const& img_path)
   return prob;
 }
 
-unsigned sdet_texture_classifier::max_filter_radius() const
+unsigned sdet_texture_classifier::max_filter_radius()
 {
   unsigned maxr = filter_responses_.invalid_border();
   unsigned lapr = gauss_radius(laplace_radius_, cutoff_per_);
   unsigned gr = gauss_radius(gauss_radius_, cutoff_per_);
   if (lapr>maxr) maxr = lapr;
   if (gr>maxr) maxr = gr;
+  maxr_ = maxr;
   return maxr;
 }
 

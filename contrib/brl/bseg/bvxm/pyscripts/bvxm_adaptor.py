@@ -177,58 +177,22 @@ def image_to_vrml_points(out_e_img, out_h_img, output_filename, prob_thres, max_
   out_img = dbvalue(id, type);
   return out_img
 
-def segment_image(img, weight_thres, margin=0, min_size=50, sigma=1,neigh=8):
-  bvxm_batch.init_process("sdetSegmentImageProcess");
-  bvxm_batch.set_input_from_db(0,img);
-  bvxm_batch.set_input_int(1,margin);
-  bvxm_batch.set_input_int(2,neigh);
-  bvxm_batch.set_input_float(3,weight_thres);
-  bvxm_batch.set_input_float(4,sigma);
-  bvxm_batch.set_input_int(5,min_size);
+def map_sdet_to_volm_ids(sdet_color_class_img):
+  bvxm_batch.init_process("volmGenerateClassMapProcess");
+  bvxm_batch.set_input_from_db(0,sdet_color_class_img);
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
-  seg_img = dbvalue(id, type);
-  return seg_img
+  out_img = dbvalue(id, type);
+  return out_img
 
-def segment_image_using_edges(img, edge_img, weight_thres, margin=0, min_size=50, sigma=1,neigh=8):
-  bvxm_batch.init_process("sdetSegmentUsingEdgesProcess");
-  bvxm_batch.set_input_from_db(0,img);
-  bvxm_batch.set_input_from_db(1,edge_img);
-  bvxm_batch.set_input_int(2,margin);
-  bvxm_batch.set_input_int(3,neigh);
-  bvxm_batch.set_input_float(4,weight_thres);
-  bvxm_batch.set_input_float(5,sigma);
-  bvxm_batch.set_input_int(6,min_size);
-  bvxm_batch.run_process();
-  (id, type) = bvxm_batch.commit_output(0);
-  seg_img = dbvalue(id, type);
-  return seg_img
-
-def segment_image_using_height(img, height_img, weight_thres, margin=0, min_size=50, sigma=1,neigh=8):
-  bvxm_batch.init_process("sdetSegmentUsingHeightMapProcess");
-  bvxm_batch.set_input_from_db(0,img);
-  bvxm_batch.set_input_from_db(1,height_img);
-  bvxm_batch.set_input_int(2,margin);
-  bvxm_batch.set_input_int(3,neigh);
-  bvxm_batch.set_input_float(4,weight_thres);
-  bvxm_batch.set_input_float(5,sigma);
-  bvxm_batch.set_input_int(6,min_size);
-  bvxm_batch.run_process();
-  (id, type) = bvxm_batch.commit_output(0);
-  seg_img = dbvalue(id, type);
-  return seg_img
-
-def segment_image_using_height2(img, height_img, edge_img, weight_thres, margin=0, min_size=50, sigma=1,neigh=8):
-  bvxm_batch.init_process("sdetSegmentUsingHeightMapProcess2");
-  bvxm_batch.set_input_from_db(0,img);
-  bvxm_batch.set_input_from_db(1,height_img);
-  bvxm_batch.set_input_from_db(2,edge_img);
-  bvxm_batch.set_input_int(3,margin);
-  bvxm_batch.set_input_int(4,neigh);
-  bvxm_batch.set_input_float(5,weight_thres);
-  bvxm_batch.set_input_float(6,sigma);
-  bvxm_batch.set_input_int(7,min_size);
-  bvxm_batch.run_process();
-  (id, type) = bvxm_batch.commit_output(0);
-  seg_img = dbvalue(id, type);
-  return seg_img
+def name_suffix_for_camera(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat):
+  if (lower_left_lat < 0):
+    name = "S" + str(abs(lower_left_lat));
+  else:
+    name = "N" + str(lower_left_lat);
+  if (lower_left_lon < 0):
+    name = name + "W" + str(abs(lower_left_lon));
+  else:
+    name = name + "E" + str(lower_left_lon);
+  name = name + "_S" + str(abs(upper_right_lat-lower_left_lat)) + "x" + str(abs(upper_right_lon-lower_left_lon));
+  return name;

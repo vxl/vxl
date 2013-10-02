@@ -34,6 +34,21 @@ brip_filter_bank::brip_filter_bank(unsigned n_levels,
   }
 }
 
+void brip_filter_bank::set_params(unsigned n_levels, double scale_range, float lambda0, float lambda1, float theta_interval, float cutoff_ratio)
+{
+  n_levels_ = n_levels;
+  lambda0_ = lambda0; lambda1_ = lambda1;
+  theta_interval_ = theta_interval; cutoff_ratio_ = cutoff_ratio;
+  assert(n_levels_);
+  if (n_levels == 1) {// only one level in the pyramid
+    scale_ratio_ = 1.0;//actually meaningless
+  }
+  else {
+    double ninv = 1.0/(n_levels-1);
+    scale_ratio_ = vcl_pow(scale_range, ninv);
+  }
+}
+
 brip_filter_bank::brip_filter_bank(unsigned n_levels,
                                    double scale_range, float lambda0,
                                    float lambda1, float theta_interval,
