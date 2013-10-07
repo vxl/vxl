@@ -18,7 +18,7 @@ class vpgl_ray_intersect_lsqr : public vnl_least_squares_function
 {
 public:
     //: Constructor
-    vpgl_ray_intersect_lsqr(vcl_vector<vpgl_camera<T>* > const& cams,
+    vpgl_ray_intersect_lsqr(vcl_vector<const vpgl_camera<T>* > const& cams,
                             vcl_vector<vgl_point_2d<T> > const& image_pts,
                             unsigned num_residuals);
     
@@ -38,13 +38,13 @@ public:
     
 protected:
     vpgl_ray_intersect_lsqr();//not valid
-    vcl_vector<vpgl_camera<T>* > f_cameras_; //cameras
+    vcl_vector<const vpgl_camera<T>* > f_cameras_; //cameras
     vcl_vector<vgl_point_2d<T> > f_image_pts_; //image points
 };
 
 template<typename T>
 vpgl_ray_intersect_lsqr<T>::
-vpgl_ray_intersect_lsqr(vcl_vector<vpgl_camera<T>* > const& cams,
+vpgl_ray_intersect_lsqr(vcl_vector<const vpgl_camera<T>* > const& cams,
                         vcl_vector<vgl_point_2d<T> > const& image_pts,
                         unsigned num_residuals) :
 vnl_least_squares_function(3, num_residuals,
@@ -82,7 +82,7 @@ void vpgl_ray_intersect_lsqr<T>::f(vnl_vector<double> const& intersection_point,
     for (unsigned image_no = 0; image_no < dim; image_no++)
     {
         // Get this camera and corresponding image point
-        vpgl_camera<T>* cam = f_cameras_[image_no];
+        const vpgl_camera<T>* cam = f_cameras_[image_no];
         double image_u = f_image_pts_[image_no].x(),
         image_v = f_image_pts_[image_no].y();
         // Compute the image of the intersection vert through this camera
@@ -122,7 +122,7 @@ vpgl_ray_intersect<T>::vpgl_ray_intersect(unsigned dim): dim_(dim)
 // Returns true if successful, else false
 template<typename T>
 bool vpgl_ray_intersect<T>::
-intersect(vcl_vector<vpgl_camera<T>* > const& cams,
+intersect(vcl_vector<const vpgl_camera<T>* > const& cams,
           vcl_vector<vgl_point_2d<T> > const& image_pts,
           vgl_point_3d<T> const& initial_intersection,
           vgl_point_3d<T>& intersection)
