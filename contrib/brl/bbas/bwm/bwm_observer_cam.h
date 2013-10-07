@@ -24,6 +24,7 @@
 
 #include <vpgl/vpgl_camera.h>
 #include <depth_map/depth_map_scene.h>
+#include <volm/volm_io.h>
 
 void bwm_project_meshes(vcl_vector<vcl_string> paths,
                         vpgl_camera<double>* cam,
@@ -218,10 +219,13 @@ class bwm_observer_cam : public bwm_observer_vgui
   void add_region(vcl_string name, double min_depth, double max_depth, unsigned order, unsigned orient, unsigned land_id);
   void add_vertical_depth_region(double min_depth, double max_depth,
                                  vcl_string name);
+  void set_weights(vcl_vector<volm_weight> weights) { weights_ = weights; }
   void set_image_path(vcl_string const& ipath);
   void save_depth_map_scene(vcl_string const& path);
+  void save_weight_params(vcl_string const& path);
   void display_depth_map_scene();
   vcl_vector<depth_map_region_sptr> scene_regions();
+  depth_map_scene scene() {return scene_;}
   void set_ground_plane_max_depth();
  protected:
 
@@ -292,6 +296,8 @@ class bwm_observer_cam : public bwm_observer_vgui
   vgui_soview* horizon_soview_;//computed from camera
   //: objects for depth map
   depth_map_scene scene_;
+  //: weight parameter for depth_map_scene
+  vcl_vector<volm_weight> weights_;
 };
 
 #endif

@@ -331,6 +331,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     //cal_submenu.add("Add Vertical Region", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::add_vertical_depth_region));
     cal_submenu.add("Add Region", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::add_region));
     cal_submenu.add("Edit Region Properties", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::edit_region_props));
+    cal_submenu.add("Edit Region Weights", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::edit_region_weights));
     cal_submenu.add("Save Depth Map Scene", new vgui_command_simple<bwm_tableau_cam>(cam_tab, &bwm_tableau_cam::save_depth_map_scene));
     menu.add("Camera Calibration", cal_submenu);
   // Registration menu

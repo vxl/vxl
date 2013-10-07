@@ -13,6 +13,7 @@
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_world.h>
 
+#include <vcl_ios.h>
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
@@ -2178,4 +2179,29 @@ void bwm_observer_cam::display_depth_map_scene()
     }
     post_redraw();
   }
+}
+
+void bwm_observer_cam::save_weight_params(vcl_string const& path)
+{
+  vcl_ofstream ofs(path.c_str());
+  ofs << "Note: 1. for all objects, the summation of weight in the last column should be equal to 1"
+      << " (average = " << 1/float(!scene_.sky().empty() + !scene_.ground_plane().empty() + scene_.scene_regions().size()) << ")\n"
+      << "      2. for any object, the summation of all weights from different attributes should be equal to 1\n\n"
+      << "name                      type      orientation      land_class      min_distance      relative_order       obj_weight\n";
+  ofs.setf(vcl_ios_left);
+  for (vcl_vector<volm_weight>::iterator vit = weights_.begin();  vit != weights_.end(); ++vit) {
+    ofs << vit->w_typ_ << "   ";
+    if (vit->w_typ_ == "sky")
+      ofs << "sky" << "   ";
+    else if (vit->w_typ_ == "ground")
+      ofs << "ground" << "   ";
+    else
+      ofs << "object" << "   ";
+    ofs << vit->w_ori_ << "   "
+        << vit->w_lnd_ << "   "
+        << vit->w_dst_ << "   "
+        << vit->w_ord_ << "   "
+        << vit->w_obj_ << vcl_endl;
+  }
+  ofs.close();
 }

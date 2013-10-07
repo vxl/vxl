@@ -23,10 +23,11 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
-#include <vcl_sstream.h>
 
-#include <volm/volm_io.h>
 #include <volm/volm_category_io.h>
+#include <vcl_algorithm.h>
+#include <vul/vul_file.h>
+#include <vcl_sstream.h>
 
 #define NUM_CIRCL_SEC 12
 
@@ -588,6 +589,99 @@ void bwm_tableau_cam::edit_region_props()
   //my_observer_->set_ground_plane_max_depth();
 }
 
+void bwm_tableau_cam::edit_region_weights()
+{
+  vcl_vector<volm_weight> weights;
+  // get the depth_map_scene
+  depth_map_scene dms = my_observer_->scene();
+
+  // weight vector follows the order defined in depth_map_scene
+  vcl_vector<depth_map_region_sptr> objs = dms.scene_regions();
+  unsigned n_obj = (unsigned)objs.size();
+  vcl_sort(objs.begin(), objs.end(), compare_order());
+
+
+  // calcualte average weight as default
+  float w_avg, w_obj;
+  if (!dms.sky().empty() && !dms.ground_plane().empty()) {
+    w_avg = 1.0f / (2.0f + dms.scene_regions().size());
+    float w_sky = w_avg * 1.5f;
+    float w_grd = w_avg * 1.0f;
+    w_obj = (1.0f - w_sky - w_grd) / dms.scene_regions().size();
+    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
+    weights.push_back(volm_weight("ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+  }
+  else if (!dms.sky().empty()) {
+    w_avg = 1.0f / (1 + dms.scene_regions().size());
+    float w_sky = w_avg * 1.5f;
+    w_obj = (1.0f - w_sky) / dms.scene_regions().size();
+    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
+  }
+  else if (!dms.ground_plane().empty()) {
+    w_avg = 1.0f / (1 + dms.scene_regions().size());
+    float w_grd = w_avg * 1.0f;
+    w_obj = (1.0f - w_grd) / dms.scene_regions().size();
+    weights.push_back(volm_weight("ground", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+  }
+  else {
+    w_avg = 1.0f / dms.scene_regions().size();
+    w_obj = w_avg;
+  }
+  for (unsigned i = 0; i < objs.size(); i++)
+    weights.push_back(volm_weight(objs[i]->name(), 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
+
+  // arrange the menu by order
+  vcl_vector<depth_map_region_sptr> regions;
+  if (!dms.sky().empty())
+    regions.push_back(dms.sky()[0]);
+  if (!dms.ground_plane().empty())
+    regions.push_back(dms.ground_plane()[0]);
+  for (unsigned i = 0; i < objs.size(); i++)
+    regions.push_back(objs[i]);
+  
+  // for padding to align fields
+  unsigned max_string_size = 0;
+  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
+    vcl_string tmp;
+    if ( ((*rit)->name()).find("sky") != vcl_string::npos)
+      tmp = "sky";
+    else if ( ((*rit)->name()).find("ground_plane") != vcl_string::npos)
+      tmp = "ground";
+    else
+      tmp = (*rit)->name();
+    if (tmp.size()> max_string_size)
+      max_string_size = tmp.size();
+  }
+
+  vgui_dialog_extensions reg_dialog("Scene Region Weight Editor");
+  for (unsigned i = 0; i < regions.size(); i++) {
+    vcl_string tmp;
+    if (regions[i]->name().find("sky") != vcl_string::npos)
+      tmp = "sky";
+    else if (regions[i]->name().find("ground_plane") != vcl_string::npos)
+      tmp = "ground";
+    else
+      tmp = regions[i]->name();
+    // compute padding
+    int pad_cnt = max_string_size - tmp.size();
+    for (int k = 0; k < pad_cnt; k++)  tmp += ' ';
+    reg_dialog.message(tmp.c_str());
+
+    reg_dialog.field("Orientation", weights[i].w_ori_);
+    reg_dialog.field("Land_Class",  weights[i].w_lnd_);
+    reg_dialog.field("MinDepth",    weights[i].w_dst_);
+    reg_dialog.field("Order",       weights[i].w_ord_);
+    reg_dialog.field("Object",      weights[i].w_obj_);
+    reg_dialog.line_break();
+  }
+
+  if (!reg_dialog.ask())
+    return;
+
+  // update weight
+  my_observer_->set_weights(weights);
+}
+
 void bwm_tableau_cam::save_depth_map_scene()
 {
   // before save, put the image path into depth_map_scene
@@ -595,6 +689,11 @@ void bwm_tableau_cam::save_depth_map_scene()
   // save depth_map_scene
   vcl_string path = bwm_utils::select_file();
   my_observer_->save_depth_map_scene(path);
+  
+  // save associated weight parameters
+  vcl_string dir = vul_file::dirname(path);
+  vcl_string weight_file = dir + "/weight_param.txt";
+  my_observer_->save_weight_params(weight_file);
 }
 
 vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()

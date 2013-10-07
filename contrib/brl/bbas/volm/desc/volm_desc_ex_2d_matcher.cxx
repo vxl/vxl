@@ -23,7 +23,8 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
   volm_desc_ex_land_only* desc = new volm_desc_ex_land_only(ndists, nlands_, radius_);
 
   // loop over the depth map scene, note the sky is completely ignored
-  // ground
+  // ground (expend it to all rings)
+  vcl_vector<double> radius = desc->radius();
   if (!dms_->ground_plane().empty()) {
     vcl_vector<depth_map_region_sptr> grd = dms_->ground_plane();
     for (unsigned g_idx = 0; g_idx < grd.size(); g_idx++) {
@@ -32,6 +33,11 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
       if (grd[g_idx]->min_depth() > largest_rad)
         continue;
       desc->set_count(grd[g_idx]->min_depth(), grd[g_idx]->land_id(), (unsigned char)1);
+      for (unsigned i = 0; i < radius.size(); i++) {
+        double grd_dst = grd[g_idx]->min_depth()+radius[i]+1;
+        if (grd_dst < largest_rad)
+          desc->set_count(grd_dst, grd[g_idx]->land_id(), (unsigned char)1);;
+      }
     }
   }
   // other objects

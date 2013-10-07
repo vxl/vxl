@@ -17,6 +17,7 @@
 
 #include <vcl_string.h>
 
+
 class bwm_tableau_cam : public bwm_tableau_img
 {
  public:
@@ -153,6 +154,7 @@ class bwm_tableau_cam : public bwm_tableau_img
   void add_sky();
   void add_region();
   void edit_region_props();
+  void edit_region_weights();
   void save_depth_map_scene();
  protected:
   bwm_observer_cam* my_observer_;
