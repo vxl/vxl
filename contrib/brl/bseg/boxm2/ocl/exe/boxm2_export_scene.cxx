@@ -113,6 +113,7 @@ int main(int argc,  char** argv)
     vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0);
     vul_arg<bool> stitch("-stitch", "also save a large, stitched image", false);
     vul_arg<double> gsd("-gsd", "GSD of the central pixel", 0.3);
+    vul_arg<unsigned> gpu_idx("-gpu", "Device number", 0);
     vul_arg_parse(argc, argv);
 
     //////////////////////////////////////////////////////////////////////////////
@@ -150,8 +151,14 @@ int main(int argc,  char** argv)
     //create scene
     boxm2_scene_sptr scene = new boxm2_scene(scene_file());
 
+    //make bocl manager
     bocl_manager_child_sptr mgr =bocl_manager_child::instance();
-    bocl_device_sptr device = mgr->gpus_[0];
+    if (gpu_idx() >= mgr->gpus_.size()){
+      vcl_cout << "GPU index out of bounds" << vcl_endl;
+      return -1;
+    }
+    bocl_device_sptr device = mgr->gpus_[gpu_idx()];
+    vcl_cout << "Using: " << *device;
 
     double gsdofcentralpixel = gsd();
     //create cache, grab singleton instance
