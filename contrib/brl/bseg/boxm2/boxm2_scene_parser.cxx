@@ -8,6 +8,7 @@
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
+#include <vcl_iomanip.h>
 
 // --------------
 // --- PARSER ---
@@ -17,6 +18,13 @@ void convert(const char* t, T& d)
 {
   vcl_stringstream strm(t);
   strm >> d;
+}
+
+template <>
+void convert(const char* t, bool& d)
+{
+  vcl_stringstream strm(t);
+  strm >> vcl_boolalpha >> d;
 }
 
 boxm2_scene_parser::boxm2_scene_parser()
@@ -70,6 +78,7 @@ void boxm2_scene_parser::init_params()
   // world origin
   origin_ = vgl_point_3d<double>(0,0,0);
   path_="";
+  is_data_rel_to_scene_path_=false;
   name_="";
   version_ = 1;
 }
@@ -80,7 +89,7 @@ void boxm2_scene_parser::init_params()
 // - scene level metadata
 //   * LVCS_TAG "lvcs"
 //   * LOCAL_ORIGIN_TAG "local_origin"
-//   * SCENE_PATHS_TAG "scene_paths"
+//   * SCENE_PATHS_TAG "scene_paths" 
 // - block level metadata
 //   * BLOCK_TAG "block"
 //   * BLOCK_ID_TAG "block_id"
@@ -145,6 +154,9 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
     for (int i=0; atts[i]; i+=2) {
       if (vcl_strcmp(atts[i], "path") == 0)
         convert(atts[i+1], path_);
+      else if (vcl_strcmp(atts[i], "is_data_rel") == 0) {
+        convert(atts[i+1], is_data_rel_to_scene_path_);
+      }
     }
   }
 

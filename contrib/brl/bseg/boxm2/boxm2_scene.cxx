@@ -20,6 +20,9 @@
 //vsph include
 #include <vsph/vsph_camera_bounds.h>
 
+//vul include
+#include <vul/vul_file.h>
+
 
 boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version)
 {
@@ -64,22 +67,33 @@ boxm2_scene::boxm2_scene(vcl_string filename)
   xml_path_ = filename;
   boxm2_scene_parser parser;
   if (filename.size() > 0) {
-    vcl_FILE* xmlFile = vcl_fopen(filename.c_str(), "r");
+    vcl_FILE* xmlFile = vcl_fopen(filename.c_str(), "r"); // an ifstream would be safer
     if (!xmlFile) {
       vcl_cerr << filename.c_str() << " error on opening\n";
-      return;
+      return; // FIXME should really throw an exception
     }
     if (!parser.parseFile(xmlFile)) {
       vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
                << parser.XML_GetCurrentLineNumber() << '\n';
-      return;
+      vcl_fclose(xmlFile);
+      return; // FIXME should really throw an exception
     }
 
     vcl_fclose(xmlFile);
   }
 
   //store data path
-  data_path_ = parser.path();
+  if(parser.is_data_rel_to_scene_path()) {
+    // to make the data (model) path relative to the scene file, 
+    // set the 'is_data_rel' bool attribute of the <scene_paths> tag
+    vcl_string basepath = vul_file::dirname(filename); // cant return an empty string
+    // TODO does this work on windows? 
+    data_path_ = basepath + "/" + parser.path(); // not normalized, but thats ok
+  }
+  else {
+    // the data path is relative to the current working directory of the process
+    data_path_ = parser.path();
+  }
 
   //lvcs, origin, block dimension
   parser.lvcs(lvcs_);
@@ -93,8 +107,6 @@ boxm2_scene::boxm2_scene(vcl_string filename)
   appearances_ = parser.appearances();
   num_illumination_bins_ = parser.num_illumination_bins();
   version_ = parser.version();
-
-
 }
 
 
