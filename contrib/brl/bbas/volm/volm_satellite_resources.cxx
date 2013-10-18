@@ -296,11 +296,30 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
 
 
 //: return the full path of a satellite image given its name, if not found returns empty string
-vcl_string volm_satellite_resources::full_path(vcl_string name)
+vcl_pair<vcl_string, vcl_string> volm_satellite_resources::full_path(vcl_string name)
+{
+  for (unsigned i = 0; i < resources_.size(); i++) {
+    if (name.compare(resources_[i].name_) == 0) {
+      /*float rel = 0.0f;
+      vcl_map<vcl_string, float>::iterator iter = satellite_geo_reliability.find(resources_[i].meta_->satellite_name_);
+      if (iter == satellite_geo_reliability.end()) {
+        vcl_cerr << "cannot find a reliability value for " << resources_[i].meta_->satellite_name_ << " WARNING: returning rel: 0.0!\n";
+      } else
+        rel = iter->second;
+      vcl_pair<vcl_string, float> p(resources_[i].full_path_, rel);*/
+      vcl_pair<vcl_string, vcl_string> p(resources_[i].full_path_, resources_[i].meta_->satellite_name_);
+      return p;
+    }
+  }
+  //return vcl_pair<vcl_string, float>("", 0.0f);
+  return vcl_pair<vcl_string, vcl_string>("", "");
+}
+
+vcl_string volm_satellite_resources::find_pair(vcl_string const& name)
 {
   for (unsigned i = 0; i < resources_.size(); i++) {
     if (name.compare(resources_[i].name_) == 0) 
-      return resources_[i].full_path_;
+      return resources_[i].pair_;
   }
   return "";
 }
@@ -356,7 +375,7 @@ void volm_satellite_resource::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, version());
   vsl_b_write(os, full_path_);
   vsl_b_write(os, name_);
-  vsl_b_write(os, full_path_mul_pair_);
+  vsl_b_write(os, pair_);
   meta_->b_write(os);
 }
 
@@ -369,7 +388,7 @@ void volm_satellite_resource::b_read(vsl_b_istream& is)
   if (ver == 0) {
     vsl_b_read(is, full_path_);
     vsl_b_read(is, name_);
-    vsl_b_read(is, full_path_mul_pair_);
+    vsl_b_read(is, pair_);
     brad_image_metadata meta;
     meta.b_read(is);
     meta_ = new brad_image_metadata(meta);
@@ -401,4 +420,23 @@ void vsl_b_write(vsl_b_ostream& os, const volm_satellite_resources_sptr &tc)
 { /* do nothing */ }
 void vsl_print_summary(vcl_ostream& os, const volm_satellite_resources_sptr &tc)
 { /* do nothing */ }
+
+
+// create table with the increments to use during hypotheses generation according to each land type, the unit is in meters
+vcl_map<vcl_string, float> create_satellite_reliability()
+{
+  vcl_map<vcl_string, float> m;
+  m["GeoEye-1"]    = 0.7f;  // CE90 is 2 meter
+  m["WV01"]    = 0.125f;  // CE90 is up to 12 meter
+  m["WV02"]    = 0.125f;  // CE90 is up to 12 meter
+  m["QB1"]    = 0.05f;  // CE90 is up to 23 meter
+  /*m["GeoEye-1"]    = 0.9f;  // CE90 is 2 meter
+  m["WV01"]    = 0.04f;  // CE90 is up to 12 meter
+  m["WV02"]    = 0.05f;  // CE90 is up to 12 meter
+  m["QB1"]    = 0.01f;  // CE90 is up to 23 meter*/
+  return m;
+}
+
+//: use the corresponding global reliability for each satellite when setting weights for camera correction
+vcl_map<vcl_string, float> volm_satellite_resources::satellite_geo_reliability = create_satellite_reliability();
 

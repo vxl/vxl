@@ -36,6 +36,7 @@ double error_corr(vpgl_rational_camera<double> const& cam, vgl_point_2d<double> 
 
 //: assumes an initial estimate for intersection values, only refines the intersection and computes a re-projection error
 double re_projection_error(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                           vcl_vector<float> const& cam_weights,
                            vcl_vector<vcl_vector<vgl_point_2d<double> > > const& corrs, // for each 3d corr (outer vector), 2d locations for each cam (inner vector)
                            vcl_vector<vgl_point_3d<double> > const& intersections,
                            vcl_vector<vgl_point_3d<double> >& finals)
@@ -45,7 +46,7 @@ double re_projection_error(vcl_vector<vpgl_rational_camera<double> > const& cams
   finals.clear();
   for (unsigned int i = 0; i < corrs.size(); ++i) {
     vgl_point_3d<double> final;
-    if (!vpgl_rational_adjust_onept::refine_intersection_pt(cams, corrs[i],intersections[i], final))
+    if (!vpgl_rational_adjust_onept::refine_intersection_pt(cams, cam_weights, corrs[i],intersections[i], final))
       return error;
     finals.push_back(final);
   }
@@ -59,6 +60,7 @@ double re_projection_error(vcl_vector<vpgl_rational_camera<double> > const& cams
 
 //: assumes an initial estimate for intersection values, only refines the intersection and computes a re-projection error for each corr separately
 void re_projection_error(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                         vcl_vector<float> const& cam_weights,
                          vcl_vector<vcl_vector<vgl_point_2d<double> > > const& corrs, // for each 3d corr (outer vector), 2d locations for each cam (inner vector)
                          vcl_vector<vgl_point_3d<double> > const& intersections,
                          vcl_vector<vgl_point_3d<double> >& finals,
@@ -70,7 +72,7 @@ void re_projection_error(vcl_vector<vpgl_rational_camera<double> > const& cams,
   finals.clear();
   for (unsigned int i = 0; i < corrs.size(); ++i) {
     vgl_point_3d<double> final;
-    if (!vpgl_rational_adjust_onept::refine_intersection_pt(cams, corrs[i],intersections[i], final))
+    if (!vpgl_rational_adjust_onept::refine_intersection_pt(cams, cam_weights, corrs[i],intersections[i], final))
       return;
     finals.push_back(final);
   }
@@ -123,6 +125,7 @@ bool increment_perm(vcl_vector<unsigned>& params_indices, unsigned size)
 //: performs an exhaustive search in the parameter space of the cameras.
 bool vpgl_rational_adjust_multiple_pts::
 adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
+       vcl_vector<float> const& cam_weights,
        vcl_vector<vcl_vector< vgl_point_2d<double> > > const& corrs,  // a vector of correspondences for each cam
        double radius, int n,       // divide radius into n intervals to generate camera translation space
        vcl_vector<vgl_vector_2d<double> >& cam_translations,          // output translations for each cam
@@ -152,7 +155,7 @@ adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
   vcl_vector<vgl_point_3d<double> > intersections_initial;
   for (unsigned int i = 0; i < corrs_reformatted.size(); ++i) {
     vgl_point_3d<double> pt;
-    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, corrs_reformatted[i], pt))
+    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, cam_weights, corrs_reformatted[i], pt))
       return false;
     intersections_initial.push_back(pt);
   }
@@ -192,7 +195,7 @@ adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
 
     // use the initial estimates to compute re-projection errors
     vcl_vector<vgl_point_3d<double> > finals;
-    double err = re_projection_error(current_cams, corrs_reformatted, intersections_initial, finals);
+    double err = re_projection_error(current_cams, cam_weights, corrs_reformatted, intersections_initial, finals);
 
     if (err < min_error) {
       min_error = err;
@@ -224,11 +227,13 @@ adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
 
 vpgl_cam_trans_search_lsqr::
 vpgl_cam_trans_search_lsqr(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                           vcl_vector<float> const& cam_weights,
                            vcl_vector< vcl_vector<vgl_point_2d<double> > > const& image_pts,  // for each 3D corr, an array of 2D corrs for each camera
                            vcl_vector< vgl_point_3d<double> > const& initial_pts)
   :  vnl_least_squares_function(2*(unsigned)cams.size(), (unsigned)(cams.size()*image_pts.size()), vnl_least_squares_function::no_gradient),
      initial_pts_(initial_pts),
      cameras_(cams),
+     cam_weights_(cam_weights),
      corrs_(image_pts)
 {}
 
@@ -245,7 +250,7 @@ void vpgl_cam_trans_search_lsqr::f(vnl_vector<double> const& translation,   // s
   }
   // compute the projection error for each cam for each corr
   // use the initial estimates to compute re-projection errors
-  re_projection_error(current_cams, corrs_, initial_pts_, finals_, projection_errors);
+  re_projection_error(current_cams, cam_weights_, corrs_, initial_pts_, finals_, projection_errors);
 }
 
 void vpgl_cam_trans_search_lsqr::get_finals(vcl_vector<vgl_point_3d<double> >& finals)
@@ -256,6 +261,7 @@ void vpgl_cam_trans_search_lsqr::get_finals(vcl_vector<vgl_point_3d<double> >& f
 //: run Lev-Marq optimization to search the param space to find the best parameter setting
 bool vpgl_rational_adjust_multiple_pts::
   adjust_lev_marq(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                  vcl_vector<float> const& cam_weights,
                   vcl_vector<vcl_vector< vgl_point_2d<double> > > const& corrs, // a vector of correspondences for each cam
                   vcl_vector<vgl_vector_2d<double> >& cam_translations,         // output translations for each cam
                   vcl_vector<vgl_point_3d<double> >& intersections)             // output 3d locations for each correspondence
@@ -284,14 +290,14 @@ bool vpgl_rational_adjust_multiple_pts::
   vcl_vector<vgl_point_3d<double> > intersections_initial;
   for (unsigned int i = 0; i < corrs_reformatted.size(); ++i) {
     vgl_point_3d<double> pt;
-    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, corrs_reformatted[i], pt))
+    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, cam_weights, corrs_reformatted[i], pt))
       return false;
     intersections_initial.push_back(pt);
   }
-  // now refine those using Lev_Marq
+  // now refine those using Lev_Marqs
   for (unsigned int i = 0; i < corrs_reformatted.size(); ++i) {
     vgl_point_3d<double> final;
-    if (!vpgl_rational_adjust_onept::refine_intersection_pt(cams, corrs_reformatted[i],intersections_initial[i], final))
+    if (!vpgl_rational_adjust_onept::refine_intersection_pt(cams, cam_weights, corrs_reformatted[i],intersections_initial[i], final))
       return false;
     intersections_initial[i] = final;
   }
@@ -299,7 +305,7 @@ bool vpgl_rational_adjust_multiple_pts::
     vcl_cout << "before adjustment initial 3D intersection point: " << intersections_initial[i] << vcl_endl;
 
   // search the camera translation space using Lev-Marq
-  vpgl_cam_trans_search_lsqr transsf(cams, corrs_reformatted, intersections_initial);
+  vpgl_cam_trans_search_lsqr transsf(cams, cam_weights, corrs_reformatted, intersections_initial);
   vnl_levenberg_marquardt levmarq(transsf);
   levmarq.set_verbose(true);
   // Set the x-tolerance.  When the length of the steps taken in X (variables)
@@ -321,8 +327,14 @@ bool vpgl_rational_adjust_multiple_pts::
   transsf.get_finals(intersections);
   vcl_cout << "final translations:" << vcl_endl;
   for (unsigned int i = 0; i < cams.size(); ++i) {
-    vgl_vector_2d<double> trans(translations[2*i], translations[2*i+1]);
-    cam_translations.push_back(trans);
+    // if cam weight is 1 for one of them, it is a special case, then pass 0 as translation for that one, cause projections still cause a tiny translation, ignore that
+    vgl_vector_2d<double> trans(0.0, 0.0);
+    if (cam_weights[i] == 1.0f) {
+      cam_translations.push_back(trans);
+    } else {
+      trans.set(translations[2*i], translations[2*i+1]);
+      cam_translations.push_back(trans);
+    }
     vcl_cout << trans << '\n';
   }
   return true;

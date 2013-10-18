@@ -29,6 +29,7 @@ class vpgl_cam_trans_search_lsqr : public vnl_least_squares_function
  public:
   //: Constructor
   vpgl_cam_trans_search_lsqr(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                             vcl_vector<float> const& cam_weights,
                              vcl_vector< vcl_vector<vgl_point_2d<double> > > const& image_pts,  // for each 3D corr, an array of 2D corrs for each camera
                              vcl_vector< vgl_point_3d<double> > const& initial_pts);
   //: Destructor
@@ -46,6 +47,7 @@ class vpgl_cam_trans_search_lsqr : public vnl_least_squares_function
   vpgl_cam_trans_search_lsqr();//not valid
   vcl_vector<vgl_point_3d<double> > initial_pts_;
   vcl_vector<vpgl_rational_camera<double> > cameras_; //cameras
+  vcl_vector<float> cam_weights_; // should sum up to 1
   vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs_;
   vcl_vector<vgl_point_3d<double> > finals_;
 };
@@ -57,6 +59,7 @@ class vpgl_rational_adjust_multiple_pts
 
   //: exhaustively searches the parameter space to find the best parameter setting
   static bool adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                     vcl_vector<float> const& cam_weights,
                      vcl_vector<vcl_vector< vgl_point_2d<double> > > const& corrs,  // a vector of correspondences for each cam
                      double radius, int n,       // divide radius into n intervals to generate camera translation space
                      vcl_vector<vgl_vector_2d<double> >& cam_translations,          // output translations for each cam
@@ -64,6 +67,7 @@ class vpgl_rational_adjust_multiple_pts
 
   //: run Lev-Marq optimization to search the param space to find the best parameter setting
   static bool adjust_lev_marq(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                              vcl_vector<float> const& cam_weights,
                               vcl_vector<vcl_vector< vgl_point_2d<double> > > const& corrs, // a vector of correspondences for each cam
                               vcl_vector<vgl_vector_2d<double> >& cam_translations, // output translations for each cam
                               vcl_vector<vgl_point_3d<double> >& intersections);    // output 3d locations for each correspondence

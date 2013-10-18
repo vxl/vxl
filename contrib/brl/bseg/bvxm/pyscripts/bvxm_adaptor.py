@@ -177,14 +177,6 @@ def image_to_vrml_points(out_e_img, out_h_img, output_filename, prob_thres, max_
   out_img = dbvalue(id, type);
   return out_img
 
-def map_sdet_to_volm_ids(sdet_color_class_img):
-  bvxm_batch.init_process("volmGenerateClassMapProcess");
-  bvxm_batch.set_input_from_db(0,sdet_color_class_img);
-  bvxm_batch.run_process();
-  (id, type) = bvxm_batch.commit_output(0);
-  out_img = dbvalue(id, type);
-  return out_img
-
 def name_suffix_for_camera(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat):
   if (lower_left_lat < 0):
     name = "S" + str(abs(lower_left_lat));

@@ -5,14 +5,5 @@
 #include <bprb/bprb_macros.h>
 
 DECLARE_FUNC_CONS(bwm_create_corr_file_process);
-DECLARE_FUNC_CONS(bwm_create_satellite_resources_process);
-DECLARE_FUNC_CONS(bwm_save_satellite_resources_process);
-DECLARE_FUNC_CONS(bwm_load_satellite_resources_process);
-DECLARE_FUNC_CONS(bwm_add_satellite_resources_process);
-DECLARE_FUNC_CONS(bwm_query_satellite_resources_process);
-DECLARE_FUNC_CONS(bwm_correct_rational_cameras_ransac_process);
-DECLARE_FUNC_CONS(bwm_pick_nadir_resource_process);
-DECLARE_FUNC_CONS(bwm_map_osm_process);
-DECLARE_FUNC_CONS(bwm_map_segments_process);
 
 #endif

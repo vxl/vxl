@@ -1358,6 +1358,34 @@ unsigned sdet_texture_classifier::max_filter_radius()
   return maxr;
 }
 
+//: compute the texton of each pixel using the filter bank and/or other responses
+void sdet_texture_classifier::compute_textons_of_pixels(vil_image_view<int>& texton_img)
+{
+  unsigned ni = this->filter_responses().ni();
+  unsigned nj = this->filter_responses().nj();
+  assert(ni != 0 && nj != 0);
+
+  unsigned border = maxr_;
+  vcl_cout << " sdet_texture_classifier::compute_textons_of_pixels() -- using border: " << border << " for an " << ni << " by " << nj << " image to compute a texton per pixel!\n";
+
+  unsigned dim = filter_responses_.n_levels();
+  assert(dim != 0);
+  unsigned dim_total = dim + 2 + other_responses_.size();
+  
+  for (int i = border; i < ni-border; i++)
+    for (int j = border; j < nj-border; j++) {
+      vnl_vector<double> tx(dim_total);
+      for (unsigned f = 0; f<dim; ++f)
+        tx[f]=filter_responses_.response(f)(i,j);
+      double g = gauss_(i,j);
+      tx[dim]=laplace_(i,j); tx[dim+1]=g;
+      for (unsigned f = 0; f<other_responses_.size(); ++f)
+        tx[dim+2+f]=(other_responses_[f])(i,j);
+      unsigned indx = this->nearest_texton_index(tx);
+      texton_img(i,j) = indx;
+    }
+}
+
 // === Binary I/O ===
 
 //dummy vsl io functions to allow sdet_texture_classifier to be inserted into

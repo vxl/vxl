@@ -29,6 +29,7 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
  public:
   //: Constructor
   vpgl_z_search_lsqr(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                     vcl_vector<float> const& cam_weights,
                      vcl_vector<vgl_point_2d<double> > const& image_pts,
                      vgl_point_3d<double> const& initial_pt);
   //: Destructor
@@ -45,6 +46,7 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
   vpgl_z_search_lsqr();//not valid
   vgl_point_3d<double> initial_pt_;
   vcl_vector<vpgl_rational_camera<double> > cameras_; //cameras
+  vcl_vector<float> cam_weights_;
   vcl_vector<vgl_point_2d<double> > image_pts_; //image points
   double xm_, ym_;
 };
@@ -57,16 +59,24 @@ class vpgl_rational_adjust_onept
 
   static bool
   find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                          vcl_vector<float> const& cam_weights,
                           vcl_vector<vgl_point_2d<double> > const& corrs,
                           vgl_point_3d<double>& p_3d);
 
   static bool
   refine_intersection_pt(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                         vcl_vector<float> const& cam_weights,
                          vcl_vector<vgl_point_2d<double> > const& image_pts,
                          vgl_point_3d<double> const& initial_pt,
                          vgl_point_3d<double>& final_pt);
 
   static bool adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                     vcl_vector<vgl_point_2d<double> > const& corrs,
+                     vcl_vector<vgl_vector_2d<double> >& cam_translations,
+                     vgl_point_3d<double>& intersection);
+
+  // pass a weight for each camera, the weights should add up to 1.0
+  static bool adjust_with_weights(vcl_vector<vpgl_rational_camera<double> > const& cams, vcl_vector<float> weights,
                      vcl_vector<vgl_point_2d<double> > const& corrs,
                      vcl_vector<vgl_vector_2d<double> >& cam_translations,
                      vgl_point_3d<double>& intersection);

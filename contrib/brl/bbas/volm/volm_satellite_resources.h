@@ -22,7 +22,7 @@
 class volm_satellite_resource
 {
   public:
-    volm_satellite_resource() : full_path_(""), name_(""), full_path_mul_pair_(""), meta_(0) {}
+    volm_satellite_resource() : full_path_(""), name_(""), pair_(""), meta_(0) {}
 
   // ===========  binary I/O ================
   short version() const { return 0; }
@@ -32,7 +32,7 @@ class volm_satellite_resource
   public:
     vcl_string full_path_;
     vcl_string name_;
-    vcl_string full_path_mul_pair_;
+    vcl_string pair_;   // if this is a PAN img, save its MULTI pair if available, save only the name
     brad_image_metadata_sptr meta_;
 };
 
@@ -61,12 +61,17 @@ class volm_satellite_resources : public vbl_ref_count
     bool query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, vcl_string& out_file, vcl_string& band_str);
 
     //: return the full path of a satellite image given its name, if not found returns empty string
-    vcl_string full_path(vcl_string name);
+    vcl_pair<vcl_string, vcl_string> full_path(vcl_string name);
+
+    vcl_string find_pair(vcl_string const& name);
 
     // ===========  binary I/O ================
     short version() const { return 0; }
     void b_write(vsl_b_ostream& os) const;
     void b_read(vsl_b_istream& is);
+
+    //: use the corresponding global reliability for each satellite when setting weights for camera correction
+    static vcl_map<vcl_string, float> satellite_geo_reliability;  
 
 protected:
     void add_resource(vcl_string name);

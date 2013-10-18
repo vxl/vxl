@@ -215,6 +215,9 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   static vcl_vector<vgl_polygon<double> > load_polys(vcl_string const& poly_path);
 
+  //: compute the texton of each pixel using the filter bank and/or other responses
+  void compute_textons_of_pixels(vil_image_view<int>& texton_img);
+
   // ===  debug utilities ===
 
  protected:

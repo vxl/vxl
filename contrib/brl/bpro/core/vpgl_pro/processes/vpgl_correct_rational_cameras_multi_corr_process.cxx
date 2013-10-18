@@ -99,7 +99,8 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
   vcl_cout << "Executing adjust image offsets\n";
   vcl_vector<vgl_vector_2d<double> > cam_trans;
   vcl_vector<vgl_point_3d<double> > intersections;
-  if (!vpgl_rational_adjust_multiple_pts::adjust(cams, corrs, radius, interval_n, cam_trans, intersections))
+  vcl_vector<float> cam_weights(cams.size(), 1.0f/cams.size());
+  if (!vpgl_rational_adjust_multiple_pts::adjust(cams, cam_weights, corrs, radius, interval_n, cam_trans, intersections))
   {
     vcl_cerr << "In vpgl_correct_rational_cameras_process - adjustment failed\n";
     return false;
@@ -201,7 +202,8 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
   vcl_cout << "Executing adjust image offsets\n";
   vcl_vector<vgl_vector_2d<double> > cam_trans;
   vcl_vector<vgl_point_3d<double> > intersections;
-  if (!vpgl_rational_adjust_multiple_pts::adjust_lev_marq(cams, corrs, cam_trans, intersections))
+  vcl_vector<float> cam_weights(cams.size(), 1.0f/cams.size());
+  if (!vpgl_rational_adjust_multiple_pts::adjust_lev_marq(cams, cam_weights, corrs, cam_trans, intersections))
   {
     vcl_cerr << "In vpgl_correct_rational_cameras_process - adjustment failed\n";
     return false;

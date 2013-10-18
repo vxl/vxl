@@ -279,3 +279,49 @@ bool volm_pick_nadir_resource_process(bprb_func_process& pro)
   return true;
 }
 
+// find the PAN counterpart if given a multi band image, and vice versa
+bool volm_find_res_pair_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  vcl_vector<vcl_string> input_types_(2);
+  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[1] = "vcl_string";      // satelllite img name  // only the name, don't need the full path
+  
+  if (!pro.set_input_types(input_types_))
+    return false;
+  //output
+  vcl_vector<vcl_string> output_types_(3);
+  output_types_[0] = "vcl_string";  // full path of the satellite whose name is passed
+  output_types_[1] = "vcl_string";  // name of the pair satellite image, process returns false if not found
+  output_types_[2] = "vcl_string";  // full path of the pair satellite image, process returns false if not found
+  return pro.set_output_types(output_types_);
+}
+
+bool volm_find_res_pair_process(bprb_func_process& pro)
+{
+  //check number of inputs
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << " invalid inputs" << vcl_endl;
+    return false;
+  }
+
+  //get the inputs
+  volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
+  vcl_string name = pro.get_input<vcl_string>(1);
+  vcl_pair<vcl_string, vcl_string> full = res->full_path(name);
+  vcl_string pair_name = res->find_pair(name);
+  if (pair_name.compare("") == 0) {
+    pro.set_output_val<vcl_string>(0, "");
+    pro.set_output_val<vcl_string>(1, "");
+    pro.set_output_val<vcl_string>(2, "");
+    return false;
+  } 
+  vcl_pair<vcl_string, vcl_string> pp = res->full_path(pair_name);
+  pro.set_output_val<vcl_string>(0, full.first);
+  pro.set_output_val<vcl_string>(1, pair_name);
+  pro.set_output_val<vcl_string>(2, pp.first);
+  return true;
+}
+
+
