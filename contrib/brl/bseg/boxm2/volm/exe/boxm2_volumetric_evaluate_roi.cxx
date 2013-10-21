@@ -18,11 +18,11 @@
 
 int main(int argc,  char** argv)
 {
-  vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
-  vul_arg<vcl_string> out("-out", "experiment output root", "");
+  vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "z:/projects/FINDER/P-1B/P1b_Test1/p1b_test1_gt_locs.txt");
+  vul_arg<vcl_string> out("-out", "experiment output root", "D:/work/find/phase_1b/Result_P1b_Test1/p1b_test1_068/p1b_test1_068-2DexistenceRUN/");
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg<unsigned> test_id("-test", "test1 or 2 or 3", 1);
-  vul_arg<unsigned> id("-id", "test image id",100); 
+  vul_arg<unsigned> id("-id", "test image id",68); 
   vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
   vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg_parse(argc, argv);
@@ -65,7 +65,7 @@ int main(int argc,  char** argv)
     tiles = volm_tile::generate_p1b_wr2_tiles();
   else if (samples[id()].second.second == "Jordan")
     tiles = volm_tile::generate_p1b_wr3_tiles();
-  else if (samples[id()].second.second == "Phillippines")
+  else if (samples[id()].second.second == "Philippines")
     tiles = volm_tile::generate_p1b_wr4_tiles();
   else if (samples[id()].second.second == "Taiwan")
     tiles = volm_tile::generate_p1b_wr5_tiles();
