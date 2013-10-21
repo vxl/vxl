@@ -22,11 +22,13 @@ def load_scene(scene_str):
   #print("Loading a Scene from file: ", scene_str);
   boxm2_batch.init_process("boxm2LoadSceneProcess");
   boxm2_batch.set_input_string(0, scene_str);
-  boxm2_batch.run_process();
-  (scene_id, scene_type) = boxm2_batch.commit_output(0);
-  scene = dbvalue(scene_id, scene_type);
-  return scene;
-
+  status = boxm2_batch.run_process();
+  if status:
+    (scene_id, scene_type) = boxm2_batch.commit_output(0);
+    scene = dbvalue(scene_id, scene_type);
+    return scene;
+  else:
+    raise Exception('Could not load scene file');
 
 #does the opencl prep work on an input scene
 def load_opencl(scene_str, device_string="gpu"):

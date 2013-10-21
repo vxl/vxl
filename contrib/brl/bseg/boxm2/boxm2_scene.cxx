@@ -4,6 +4,8 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
+#include <vcl_fstream.h>
+#include <vcl_sstream.h>
 
 /* xml includes */
 #include <vsl/vsl_basic_xml_element.h>
@@ -63,23 +65,21 @@ boxm2_scene::boxm2_scene(const char* buffer)
 //: initializes Scene from XML file
 boxm2_scene::boxm2_scene(vcl_string filename)
 {
+  vcl_ifstream ifs;
+  // we must throw an exception on failure in a constructor
+  ifs.exceptions(vcl_ifstream::failbit | vcl_ifstream::badbit);
+  ifs.open(filename.c_str()); 
+  vcl_stringstream buffer;
+  buffer << ifs.rdbuf();
+
   //xml parser
   xml_path_ = filename;
   boxm2_scene_parser parser;
-  if (filename.size() > 0) {
-    vcl_FILE* xmlFile = vcl_fopen(filename.c_str(), "r"); // an ifstream would be safer
-    if (!xmlFile) {
-      vcl_cerr << filename.c_str() << " error on opening\n";
-      return; // FIXME should really throw an exception
-    }
-    if (!parser.parseFile(xmlFile)) {
-      vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
-               << parser.XML_GetCurrentLineNumber() << '\n';
-      vcl_fclose(xmlFile);
-      return; // FIXME should really throw an exception
-    }
 
-    vcl_fclose(xmlFile);
+  if (!parser.parseString(buffer.str().c_str())) {
+    vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
+             << parser.XML_GetCurrentLineNumber() << '\n';
+    throw vcl_ifstream::failure("Error parsing file.");
   }
 
   //store data path

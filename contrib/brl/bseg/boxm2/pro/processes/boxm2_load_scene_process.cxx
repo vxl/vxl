@@ -8,7 +8,6 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
 #include <boxm2/boxm2_scene.h>
 
 namespace boxm2_load_scene_process_globals
@@ -43,7 +42,13 @@ bool boxm2_load_scene_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   vcl_string scene_file = pro.get_input<vcl_string>(i++);
-  boxm2_scene_sptr scene= new boxm2_scene(scene_file);
+  boxm2_scene_sptr scene;
+  try {
+    scene = new boxm2_scene(scene_file);
+  }
+  catch(const vcl_ifstream::failure &e) {
+    return false;
+  }
 
   i=0;
   // store scene smaprt pointer
