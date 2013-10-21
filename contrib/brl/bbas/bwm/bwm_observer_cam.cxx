@@ -2190,18 +2190,19 @@ void bwm_observer_cam::save_weight_params(vcl_string const& path)
       << "name                      type      orientation      land_class      min_distance      relative_order       obj_weight\n";
   ofs.setf(vcl_ios_left);
   for (vcl_vector<volm_weight>::iterator vit = weights_.begin();  vit != weights_.end(); ++vit) {
-    ofs << vit->w_typ_ << "   ";
+    ofs << vit->w_name_ << "   ";
     if (vit->w_typ_ == "sky")
       ofs << "sky" << "   ";
-    else if (vit->w_typ_ == "ground")
-      ofs << "ground" << "   ";
+    else if (vit->w_typ_ == "ground_plane")
+      ofs << "ground_plane" << "   ";
     else
       ofs << "object" << "   ";
     ofs << vit->w_ori_ << "   "
         << vit->w_lnd_ << "   "
         << vit->w_dst_ << "   "
         << vit->w_ord_ << "   "
-        << vit->w_obj_ << vcl_endl;
+        << vit->w_obj_;
+    if (vit != (weights_.end()-1))  ofs << '\n';
   }
   ofs.close();
 }

@@ -600,36 +600,39 @@ void bwm_tableau_cam::edit_region_weights()
   unsigned n_obj = (unsigned)objs.size();
   vcl_sort(objs.begin(), objs.end(), compare_order());
 
-
-  // calcualte average weight as default
-  float w_avg, w_obj;
-  if (!dms.sky().empty() && !dms.ground_plane().empty()) {
-    w_avg = 1.0f / (2.0f + dms.scene_regions().size());
-    float w_sky = w_avg * 1.5f;
-    float w_grd = w_avg * 1.0f;
-    w_obj = (1.0f - w_sky - w_grd) / dms.scene_regions().size();
-    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
-    weights.push_back(volm_weight("ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
-  }
-  else if (!dms.sky().empty()) {
-    w_avg = 1.0f / (1 + dms.scene_regions().size());
-    float w_sky = w_avg * 1.5f;
-    w_obj = (1.0f - w_sky) / dms.scene_regions().size();
-    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
-  }
-  else if (!dms.ground_plane().empty()) {
-    w_avg = 1.0f / (1 + dms.scene_regions().size());
-    float w_grd = w_avg * 1.0f;
-    w_obj = (1.0f - w_grd) / dms.scene_regions().size();
-    weights.push_back(volm_weight("ground", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+  if (my_observer_->weights().empty()) {
+    // calcualte average weight as default
+    float w_avg, w_obj;
+    if (!dms.sky().empty() && !dms.ground_plane().empty()) {
+      w_avg = 1.0f / (2.0f + dms.scene_regions().size());
+      float w_sky = w_avg * 1.5f;
+      float w_grd = w_avg * 1.0f;
+      w_obj = (1.0f - w_sky - w_grd) / dms.scene_regions().size();
+      weights.push_back(volm_weight("sky", "sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
+      weights.push_back(volm_weight("ground_plane", "ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+    }
+    else if (!dms.sky().empty()) {
+      w_avg = 1.0f / (1 + dms.scene_regions().size());
+      float w_sky = w_avg * 1.5f;
+      w_obj = (1.0f - w_sky) / dms.scene_regions().size();
+      weights.push_back(volm_weight("sky", "sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
+    }
+    else if (!dms.ground_plane().empty()) {
+      w_avg = 1.0f / (1 + dms.scene_regions().size());
+      float w_grd = w_avg * 1.0f;
+      w_obj = (1.0f - w_grd) / dms.scene_regions().size();
+      weights.push_back(volm_weight("ground_plane", "ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+    }
+    else {
+      w_avg = 1.0f / dms.scene_regions().size();
+      w_obj = w_avg;
+    }
+    for (unsigned i = 0; i < objs.size(); i++)
+      weights.push_back(volm_weight(objs[i]->name(), objs[i]->name(), 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
   }
   else {
-    w_avg = 1.0f / dms.scene_regions().size();
-    w_obj = w_avg;
+    weights = my_observer_->weights();
   }
-  for (unsigned i = 0; i < objs.size(); i++)
-    weights.push_back(volm_weight(objs[i]->name(), 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
-
   // arrange the menu by order
   vcl_vector<depth_map_region_sptr> regions;
   if (!dms.sky().empty())
@@ -646,7 +649,7 @@ void bwm_tableau_cam::edit_region_weights()
     if ( ((*rit)->name()).find("sky") != vcl_string::npos)
       tmp = "sky";
     else if ( ((*rit)->name()).find("ground_plane") != vcl_string::npos)
-      tmp = "ground";
+      tmp = "ground_plane";
     else
       tmp = (*rit)->name();
     if (tmp.size()> max_string_size)
@@ -659,7 +662,7 @@ void bwm_tableau_cam::edit_region_weights()
     if (regions[i]->name().find("sky") != vcl_string::npos)
       tmp = "sky";
     else if (regions[i]->name().find("ground_plane") != vcl_string::npos)
-      tmp = "ground";
+      tmp = "ground_plane";
     else
       tmp = regions[i]->name();
     // compute padding

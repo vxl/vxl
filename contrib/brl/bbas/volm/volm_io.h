@@ -220,10 +220,11 @@ class volm_weight
 {
  public:
   volm_weight () {}
-  volm_weight (vcl_string const& w_typ, float const& w_ori, float const& w_lnd, float const& w_ord, float const& w_dst, float const w_obj)
-    : w_typ_(w_typ), w_ori_(w_ori), w_lnd_(w_lnd), w_ord_(w_ord), w_dst_(w_dst), w_obj_(w_obj) {}
+  volm_weight (vcl_string const& w_name, vcl_string const& w_typ, float const& w_ori, float const& w_lnd, float const& w_ord, float const& w_dst, float const w_obj)
+    : w_name_(w_name), w_typ_(w_typ), w_ori_(w_ori), w_lnd_(w_lnd), w_ord_(w_ord), w_dst_(w_dst), w_obj_(w_obj) {}
   ~volm_weight() {}
-
+  //: name of the depth_map_region
+  vcl_string w_name_;
   //: type of the depth_map_region, i.e.: ground, sky or others
   vcl_string w_typ_;
   //: weight parameter for orientation attributes

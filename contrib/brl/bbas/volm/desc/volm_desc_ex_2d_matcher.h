@@ -11,7 +11,7 @@
 // \date July 01, 2013
 // \verbatim
 //  Modifications
-//   <none yet>
+//   October 08, 2013  Yi Dong -- add a float formatted histogram to store weight parameters
 // \endverbatim
 //
 
@@ -29,10 +29,11 @@ public:
 
   //: Constructor
   volm_desc_ex_2d_matcher(depth_map_scene_sptr const& dms,
+                          vcl_vector<volm_weight> const& weights,
                           vcl_vector<double> const& radius,
                           unsigned const& nlands = volm_osm_category_io::volm_land_table.size(),
                           unsigned char const& initial_mag = 0)
-                          : dms_(dms), radius_(radius), nlands_(nlands), initial_mag_(initial_mag) {}
+                          : dms_(dms), weights_(weights), radius_(radius), nlands_(nlands), initial_mag_(initial_mag) {}
 
   // Destructor
   ~volm_desc_ex_2d_matcher() {}
@@ -57,7 +58,13 @@ private:
   vcl_vector<double> radius_;
   unsigned           nlands_;
   unsigned char initial_mag_;
+  
+  //: weight parameters
+  vcl_vector<volm_weight> weights_;
+  vcl_vector<float> weights_hist_;
 
+  //: function to find weight value given the name of the region
+  float find_wgt_value(vcl_string const& name);
 };
 
 #endif // volm_desc_ex_2d_matcher_h_

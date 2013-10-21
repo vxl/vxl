@@ -847,13 +847,14 @@ void volm_weight::read_weight(vcl_vector<volm_weight>& weights, vcl_string const
   vcl_getline(ifs, dummy); vcl_getline(ifs, dummy); vcl_getline(ifs, dummy); vcl_getline(ifs, dummy);
 
   vcl_string w_typ;
+  vcl_string w_name;
   float w_ori, w_lnd, w_dst, w_ord, w_obj;
   while ( !ifs.eof()) {
-    ifs >> dummy; ifs >> w_typ, ifs >> w_ori; ifs >> w_lnd; ifs >> w_dst; ifs >> w_ord; ifs >> w_obj;
+    ifs >> w_name; ifs >> w_typ, ifs >> w_ori; ifs >> w_lnd; ifs >> w_dst; ifs >> w_ord; ifs >> w_obj;
 #ifdef DEBUG
     vcl_cout << ' ' << w_typ << ' ' << w_ori << ' ' << w_lnd << ' ' << w_dst << ' ' << w_ord << ' ' << w_obj << vcl_endl;
 #endif
-    weights.push_back(volm_weight(w_typ, w_ori, w_lnd, w_ord, w_dst, w_obj));
+    weights.push_back(volm_weight(w_name, w_typ, w_ori, w_lnd, w_ord, w_dst, w_obj));
   }
   ifs.close();
 }
@@ -872,27 +873,27 @@ void volm_weight::equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene
     float w_sky = w_avg * 1.5f;
     float w_grd = w_avg * 1.0f;
     w_obj = (1.0f - w_sky - w_grd) / dms->scene_regions().size();
-    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
-    weights.push_back(volm_weight("ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+    weights.push_back(volm_weight("sky", "sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
+    weights.push_back(volm_weight("ground_plane", "ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
   }
   else if (!dms->sky().empty()) {
     w_avg = 1.0f / (1 + dms->scene_regions().size());
     float w_sky = w_avg * 1.5f;
     w_obj = (1.0f - w_sky) / dms->scene_regions().size();
-    weights.push_back(volm_weight("sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
+    weights.push_back(volm_weight("sky", "sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
   }
   else if (!dms->ground_plane().empty()) {
     w_avg = 1.0f / (1 + dms->scene_regions().size());
     float w_grd = w_avg * 1.0f;
     w_obj = (1.0f - w_grd) / dms->scene_regions().size();
-    weights.push_back(volm_weight("ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+    weights.push_back(volm_weight("ground_plane", "ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
   }
   else {
     w_avg = 1.0f / dms->scene_regions().size();
     w_obj = w_avg;
   }
   for (unsigned i = 0; i < dms->scene_regions().size(); i++) {
-      weights.push_back(volm_weight(dms->scene_regions()[i]->name(), 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
+      weights.push_back(volm_weight(dms->scene_regions()[i]->name(), dms->scene_regions()[i]->name(), 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
   }
 
 #if 0

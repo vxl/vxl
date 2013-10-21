@@ -366,7 +366,7 @@ power station 108 power_plant 2 0
 power generator 109 power_generator 4 0
 power plant 108 power_plant 2 0
 power sub_station 108 power_plant 2 0
-power tower 20 towers 4 0
+power tower 244 hv_towers 4 0
 public_transport station 109 land_transfer_station 4 0
 public_transport stop_position 109 land_transfer_station 4 0
 public_transport platform 109 land_transfer_station 4 0
