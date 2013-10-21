@@ -48,6 +48,7 @@ class boxm2_opencl_cache2: public vbl_ref_count
 
     //: get scene info in bocl_mem*
     bocl_mem* get_block_info(boxm2_scene_sptr scene, boxm2_block_id id);
+    bocl_mem* get_copy_of_block_info(boxm2_scene_sptr scene, boxm2_block_id id);
     bocl_mem* loaded_block_info() { return block_info_; }
 
     //: returns data pointer to data block specified by ID
@@ -114,10 +115,10 @@ class boxm2_opencl_cache2: public vbl_ref_count
     bocl_mem* block_info_;
 
     //: dumb cache keeps one cached block, the last one used.
-    vcl_map<boxm2_scene_sptr, vcl_map<boxm2_block_id, bocl_mem*> > cached_blocks_;
+    vcl_map<boxm2_scene_sptr, vcl_map<boxm2_block_id, bocl_mem*>,ltstr1 > cached_blocks_;
 
     //: keeps one copy of each type of cached data
-    vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> > > cached_data_;
+    vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >,ltstr1 > cached_data_;
 
     //: helper method for finding the right data map
     vcl_map<boxm2_block_id, bocl_mem*>& cached_data_map(boxm2_scene_sptr scene, vcl_string prefix);

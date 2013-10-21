@@ -182,21 +182,21 @@ bocl_mem* boxm2_opencl_cache2::get_block(boxm2_scene_sptr scene, boxm2_block_id 
 {
   //requesting block pushes it to the front of the list
   this->lru_push_front(vcl_pair<boxm2_scene_sptr,boxm2_block_id>(scene,id));
-  if(cached_blocks_.find(scene)!=cached_blocks_.end())
+  if(cached_blocks_.find(scene)==cached_blocks_.end())
       cached_blocks_[scene] =  vcl_map<boxm2_block_id, bocl_mem*>();
   // then look for the block you're requesting
   if ( cached_blocks_[scene].find(id) != cached_blocks_[scene].end() ) {
     // load block info
-    boxm2_block* loaded = cpu_cache_->get_block(scene, id);
+    //boxm2_block* loaded = cpu_cache_->get_block(scene, id);
     if (block_info_) {
        boxm2_scene_info* buff = (boxm2_scene_info*) block_info_->cpu_buffer();
        delete buff;
        delete block_info_;
     }
     boxm2_scene_info* info_buffer = scene->get_blk_metadata(id);
-    info_buffer->num_buffer = loaded->num_buffers();
-    info_buffer->tree_buffer_length = loaded->tree_buff_length();
-    info_buffer->data_buffer_length = 65536;
+    //info_buffer->num_buffer = loaded->num_buffers();
+    //info_buffer->tree_buffer_length = loaded->tree_buff_length();
+    //info_buffer->data_buffer_length = 65536;
     block_info_ = new bocl_mem(*context_, info_buffer, sizeof(boxm2_scene_info), "scene info buffer");
     block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
     return cached_blocks_[scene][id];
@@ -204,8 +204,8 @@ bocl_mem* boxm2_opencl_cache2::get_block(boxm2_scene_sptr scene, boxm2_block_id 
 
   // check to see which block to kick out
   // grab block from CPU cache and see if the GPU cache needs some cleaning
-  boxm2_block* loaded = cpu_cache_->get_block(scene, id);
-  boxm2_array_3d<uchar16>& trees = loaded->trees();
+  //boxm2_block* loaded = cpu_cache_->get_block(scene, id);
+  boxm2_array_3d<uchar16>& trees = cpu_cache_->get_block(scene, id)->trees();
   vcl_size_t toLoadSize = trees.size()*sizeof(uchar16);
   unsigned long totalBytes = this->bytes_in_cache() + toLoadSize;
   if (totalBytes > maxBytesInCache_) {
@@ -248,9 +248,9 @@ bocl_mem* boxm2_opencl_cache2::get_block(boxm2_scene_sptr scene, boxm2_block_id 
     delete block_info_;
   }
   boxm2_scene_info* info_buffer = scene->get_blk_metadata(id);
-  info_buffer->num_buffer = loaded->num_buffers();
-  info_buffer->tree_buffer_length = loaded->tree_buff_length();
-  info_buffer->data_buffer_length = 65536;
+  //info_buffer->num_buffer = loaded->num_buffers();
+  //info_buffer->tree_buffer_length = loaded->tree_buff_length();
+  //info_buffer->data_buffer_length = 65536;
   block_info_ = new bocl_mem(*context_, info_buffer, sizeof(boxm2_scene_info), "scene info buffer");
   block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   //////////////////////////////////////////////////////
@@ -277,7 +277,14 @@ bocl_mem* boxm2_opencl_cache2::get_block_info(boxm2_scene_sptr scene, boxm2_bloc
   block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   return block_info_;
 }
-
+bocl_mem* boxm2_opencl_cache2::get_copy_of_block_info(boxm2_scene_sptr scene, boxm2_block_id id)
+{
+  // get block info from scene/block
+  boxm2_scene_info* info_buffer = scene->get_blk_metadata(id);
+  bocl_mem * block_info = new bocl_mem(*context_, info_buffer, sizeof(boxm2_scene_info), "scene info buffer");
+  block_info->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+  return block_info;
+}
 //: Get data generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
 bocl_mem* boxm2_opencl_cache2::get_data(boxm2_scene_sptr scene, boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
