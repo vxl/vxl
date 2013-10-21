@@ -8,7 +8,7 @@
 // \date June 3, 2011
 
 #include <vcl_fstream.h>
-#include <boxm2/io/boxm2_cache.h>
+#include <boxm2/io/boxm2_cache2.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
@@ -34,7 +34,7 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     //process takes 7 inputs:
     vcl_vector<vcl_string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
-    input_types_[1] = "boxm2_cache_sptr";
+    input_types_[1] = "boxm2_cache2_sptr";
     input_types_[2] = "vpgl_camera_double_sptr";
     input_types_[3] = "unsigned";
     input_types_[4] = "unsigned";
@@ -70,7 +70,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     //get the inputs
     unsigned k = 0;
     boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(k++);
-    boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(k++);
+    boxm2_cache2_sptr cache = pro.get_input<boxm2_cache2_sptr>(k++);
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(k++);
     unsigned pi=pro.get_input<unsigned>(k++);
     unsigned pj=pro.get_input<unsigned>(k++);
@@ -104,8 +104,8 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     int nelems = 0; // initialise here, in case the "for" loop is empty
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        boxm2_block *     blk  =  cache->get_block(*id);
-        boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        boxm2_block *     blk  =  cache->get_block(scene,*id);
+        boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(alph);
         if (prefix!="")
@@ -113,12 +113,11 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
             vcl_string name = prefix;
             if (identifier!="")
                 name+= ("_"+identifier);
-            boxm2_data_base *  data_of_interest  = cache->get_data_base(*id,name);
+            boxm2_data_base *  data_of_interest  = cache->get_data_base(scene,*id,name);
             datas.push_back(data_of_interest);
         }
         boxm2_ray_probe_functor ray_probe_functor;
         ray_probe_functor.init_data(datas,seg_lengths,abs_depth,alphas,data_to_return, prefix, nelems);
-
         boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
