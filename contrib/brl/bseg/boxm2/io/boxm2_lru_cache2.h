@@ -8,7 +8,13 @@
 #include <vcl_iostream.h>
 
 #define MAX_BYTES 1024*1024*1024*4 // 4 gigs of memory is max...
-
+struct ltstr1
+{
+  bool operator()(const boxm2_scene_sptr  s1, const boxm2_scene_sptr  s2) const
+  {
+      return vcl_strcmp(s1->xml_path().c_str(),s2->xml_path().c_str()) < 0;
+  }
+};
 //: A cache that keeps the most recently used blocks and data, while kicking out the least recently used blocks and data to make more room.
 //  Currently just stores blocks in a map, not caring about space
 //  \todo implement with timestamped maps.
@@ -59,10 +65,10 @@ class boxm2_lru_cache2 : public boxm2_cache2
     ~boxm2_lru_cache2();
 
     //: keep a map of boxm2_block pointers (size will be limited to 9 blocks
-    vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*> > cached_blocks_;
+    vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 > cached_blocks_;
 
     //: keeps one copy of each type of cached data
-    vcl_map< boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > > cached_data_;
+    vcl_map< boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >,ltstr1 > cached_data_;
 
     // ---------Helper Methods --------------------------------------------------
 
