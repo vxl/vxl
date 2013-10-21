@@ -116,6 +116,11 @@ int main(int argc, char** argv)
       }
     }
     if (weights.size() != (!dms->sky().empty() + !dms->ground_plane().empty() + dms->scene_regions().size())) {
+      vcl_cout << " weights_size = " << weights.size() << vcl_endl;
+      vcl_cout << " depth map scene size = " << !dms->sky().empty() + !dms->ground_plane().empty() + dms->scene_regions().size() << vcl_endl;
+      for (unsigned i = 0; i < weights.size(); i++) {
+        vcl_cout << " \t\t" << weights[i].w_name_ << " " << weights[i].w_obj_ << vcl_endl;
+      }
       err_log << " ERROR: number of weight parameters is different from labelled depth_map_region objects\n";
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
@@ -194,6 +199,10 @@ int main(int argc, char** argv)
     // start the matcher
     vcl_cout << " =========== Start to execute existence matcher on tile " << tile_id() << " for image: " << image_name.str() << " ===============" << vcl_endl;
     vcl_cout << " \t Descriptor type : " << ex_matcher->get_index_type_str() << vcl_endl;
+    vcl_cout << " \t weight parameters: " << vcl_endl;
+    for (unsigned i = 0; i < weights.size(); i++) {
+      vcl_cout << " \t\t" << weights[i].w_name_ << " " << weights[i].w_obj_ << vcl_endl;
+    }
     if (tile_id() != 10) {
       if (!ex_matcher->matcher(query, geo_hypo_folder(), desc_index_folder(), buffer_capacity(), tile_id())) {
         err_log << " ERROR: matcher for tile " << tile_id() << " failed\n";

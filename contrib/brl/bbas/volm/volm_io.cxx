@@ -849,11 +849,9 @@ void volm_weight::read_weight(vcl_vector<volm_weight>& weights, vcl_string const
   vcl_string w_typ;
   vcl_string w_name;
   float w_ori, w_lnd, w_dst, w_ord, w_obj;
-  while ( !ifs.eof()) {
+  while (true) {
     ifs >> w_name; ifs >> w_typ, ifs >> w_ori; ifs >> w_lnd; ifs >> w_dst; ifs >> w_ord; ifs >> w_obj;
-#ifdef DEBUG
-    vcl_cout << ' ' << w_typ << ' ' << w_ori << ' ' << w_lnd << ' ' << w_dst << ' ' << w_ord << ' ' << w_obj << vcl_endl;
-#endif
+    if (ifs.eof()) break;
     weights.push_back(volm_weight(w_name, w_typ, w_ori, w_lnd, w_ord, w_dst, w_obj));
   }
   ifs.close();

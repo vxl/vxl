@@ -2189,19 +2189,26 @@ void bwm_observer_cam::save_weight_params(vcl_string const& path)
       << "      2. for any object, the summation of all weights from different attributes should be equal to 1\n\n"
       << "name                      type      orientation      land_class      min_distance      relative_order       obj_weight\n";
   ofs.setf(vcl_ios_left);
+  ofs.precision(4);
+  ofs.setf(vcl_ios::showpoint);
   for (vcl_vector<volm_weight>::iterator vit = weights_.begin();  vit != weights_.end(); ++vit) {
     ofs << vit->w_name_ << "   ";
     if (vit->w_typ_ == "sky")
-      ofs << "sky" << "   ";
+      ofs << "sky" << "   0.000   0.0000   1.0000   0.0000   " << vit->w_obj_;
     else if (vit->w_typ_ == "ground_plane")
-      ofs << "ground_plane" << "   ";
+      ofs << "ground_plane" << "   "
+          << vit->w_ori_ << "   "
+          << vit->w_lnd_ << "   "
+          << vit->w_dst_ << "   "
+          << "0.0   "
+          << vit->w_obj_;
     else
-      ofs << "object" << "   ";
-    ofs << vit->w_ori_ << "   "
-        << vit->w_lnd_ << "   "
-        << vit->w_dst_ << "   "
-        << vit->w_ord_ << "   "
-        << vit->w_obj_;
+      ofs << "object" << "   "
+          << vit->w_ori_ << "   "
+          << vit->w_lnd_ << "   "
+          << vit->w_dst_ << "   "
+          << vit->w_ord_ << "   "
+          << vit->w_obj_;
     if (vit != (weights_.end()-1))  ofs << '\n';
   }
   ofs.close();
