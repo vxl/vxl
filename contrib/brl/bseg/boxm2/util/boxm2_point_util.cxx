@@ -121,6 +121,7 @@ bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     vgl_vector_3d<double> translation_vec(newtranslation[0],newtranslation[1],newtranslation[2]);
     vgl_vector_3d<double> tr_cami=cams[i].get_translation()+translation_vec;
 
+
     new_cams.push_back(vpgl_perspective_camera<double>(cams[i].get_calibration(),rot_cami,tr_cami));
     if (new_cams[i].get_camera_center().z()>0)
       ++up;
@@ -255,15 +256,15 @@ void boxm2_point_util::report_error(vcl_map<unsigned,double>&   view_error_map,
   vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(),
                                      ve_end = view_error_map.end();
   for (;ve_itr!=ve_end;++ve_itr) {
-#ifdef DEBUG
+//#ifdef DEBUG
     unsigned cam=ve_itr->first;
     double   err=ve_itr->second;
     unsigned cnt=view_count_map[cam];
     vcl_cout<<"   error for camera_"<<cam<<": "<<err/cnt<<vcl_endl;
-#endif
-    double error = ve_itr->second/view_count_map[ve_itr->first];
-    if (error > filter_thresh) {
-      vcl_cout<<"Bad camera "<<ve_itr->first<<" has error "<<error<<vcl_endl;
+//#endif
+    double terror = ve_itr->second/view_count_map[ve_itr->first];
+    if (terror > filter_thresh) {
+      vcl_cout<<"Bad camera "<<ve_itr->first<<" has error "<<terror<<vcl_endl;
       bad_cams.insert(ve_itr->first);
     }
     else {
@@ -271,5 +272,5 @@ void boxm2_point_util::report_error(vcl_map<unsigned,double>&   view_error_map,
       counts += view_count_map[ve_itr->first];
     }
   }
-  vcl_cout<<"Filtered Avg Projection Error "<<error/counts<<vcl_endl;
+  vcl_cout<<"Filtered Avg Projection Error "<<error/(float)counts<<vcl_endl;
 }
