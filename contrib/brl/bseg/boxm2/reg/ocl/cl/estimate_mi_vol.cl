@@ -47,21 +47,22 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
         int index_y = rem_x/linfo->dims.z;
         int rem_y =  rem_x - index_y*linfo->dims.z;
         int index_z =rem_y;
-        if((index_x == 0 ||  index_x == linfo->dims.x -1 ||
-            index_y == 0 ||  index_y == linfo->dims.y -1 ||
-            index_z == 0 ||  index_y == linfo->dims.z -1  ))
+        //if((index_x == 0 ||  index_x == linfo->dims.x -1 ||
+        //    index_y == 0 ||  index_y == linfo->dims.y -1 ||
+        //    index_z == 0 ||  index_y == linfo->dims.z -1  ))
+        //{
+        //}
+        //else
         {
-        }
-        else
-        {
-            float x = index_x* linfo->block_len;
-            float y = index_y* linfo->block_len;
-            float z = index_z* linfo->block_len;
+            //float x = index_x* linfo->block_len;
+            //float y = index_y* linfo->block_len;
+            //float z = index_z* linfo->block_len;
             __local uchar16* local_tree = &local_trees[lid];
             __local uchar * cumsum = &cumsum_wkgp[lid*10];
             // iterate through leaves
             cumsum[0] = (*local_tree).s0;
             int cumIndex = 1;
+
             for (int i=0; i<585; i++) {
 
                 //if current bit is 0 and parent bit is 1, you're at a leaf
@@ -95,6 +96,7 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
                         blk_index_y >= sceneB_bbox_ids[1] && blk_index_y<=sceneB_bbox_ids[4] &&
                         blk_index_z >= sceneB_bbox_ids[2] && blk_index_z<=sceneB_bbox_ids[5])
                     {
+
                         int blk_offset_index = blk_index_x * ( sceneB_bbox_ids[5] - sceneB_bbox_ids[2] + 1 )* ( sceneB_bbox_ids[4] - sceneB_bbox_ids[1]+1 )
                                              + blk_index_y * ( sceneB_bbox_ids[5] - sceneB_bbox_ids[2] + 1 )
                                              + blk_index_z;
@@ -123,14 +125,20 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
                                                              &cell_len, depth[0] );
                         if(bit_index >=0 && bit_index < 585 )
                         {
-                        unsigned int alpha_blk_offset =data_index_root(curr_tree_ptr)+data_index_relative(curr_tree_ptr,bit_index,bit_lookup);
-                        unsigned int alpha_offset = sceneB_alpha_offsets[blk_offset_index]+ alpha_blk_offset;
-                        float alphaB = sceneB_alphas[alpha_offset];
-                        float probB = 1 - exp(-alphaB*cell_len*(*sub_block_len));
-                        int hist_index_B =(int)(0.5+((*nbins)-1)*probB); // (int)clamp((int)floor(probB*(*nbins)),0,(*nbins)-1);
-                        int hist_index_A =(int)(0.5+((*nbins)-1)*prob) ; // (int)clamp((int)floor(prob*(*nbins)),0,(*nbins)-1);
-                        int index = hist_index_A*(*nbins)+hist_index_B;
-                        atomic_inc(&global_joint_histogram[index]);// = global_joint_histogram[0] +1;
+                            // atomic_inc(&global_joint_histogram[0]);
+                            unsigned int alpha_blk_offset =data_index_root(curr_tree_ptr)+data_index_relative(curr_tree_ptr,bit_index,bit_lookup);
+                            unsigned int alpha_offset = sceneB_alpha_offsets[blk_offset_index]+ alpha_blk_offset;
+                            float alphaB = sceneB_alphas[alpha_offset];
+
+                            float probB = 1 - exp(-alphaB*cell_len*(*sub_block_len));
+            /*                if(prob != probB )
+                                printf("prob A, B %f ,%f\n",prob,probB);*/
+                            int hist_index_B =(int)(0.5+((*nbins)-1)*probB); // (int)clamp((int)floor(probB*(*nbins)),0,(*nbins)-1);
+                            int hist_index_A =(int)(0.5+((*nbins)-1)*prob) ; // (int)clamp((int)floor(prob*(*nbins)),0,(*nbins)-1);
+                            int index = hist_index_A*(*nbins)+hist_index_B;
+ //                                                       if(index > 24 )
+ //                               printf("prob A, B %f ,%f, %d\n",prob,probB,index);
+                            atomic_inc(&global_joint_histogram[index]);// = global_joint_histogram[0] +1;
                         }
                     }
                     ////////////////////////////////////////////

@@ -149,6 +149,7 @@ bool boxm2_ocl_reg_mutual_info::init_ocl_minfo()
     lookup=new bocl_mem(device_->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
+    
     return true;
 }
 
@@ -200,7 +201,7 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     vcl_size_t local_threads[1]={8};
     vcl_size_t global_threads[1]={1};
     int status=0;
-    cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
+      cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
 
 
     float gpu_time = 0.0;
@@ -263,7 +264,7 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
 
 
     float * joint_histogram_float = reinterpret_cast<float * > (joint_histogram_buff);
-
+    vcl_cout<<"Zeroth eleemtn "<<joint_histogram_buff[0]<<vcl_endl;
     float * histA = new float[nbins];
     float * histB = new float[nbins];
     for (int k = 0; k<nbins; k++)
@@ -311,7 +312,7 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
                 entropyAB += -(joint_histogram_float[k*nbins+l]>0?joint_histogram_float[k*nbins+l]*vcl_log(joint_histogram_float[k*nbins+l]):0);
         mi = (entropyA +entropyB - entropyAB)/vnl_math::ln2;
     }
-    clReleaseCommandQueue(queue);
+    //clReleaseCommandQueue(queue);
 
     delete [] joint_histogram_float;
     delete [] histA;

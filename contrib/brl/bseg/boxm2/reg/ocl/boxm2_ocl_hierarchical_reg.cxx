@@ -18,6 +18,7 @@ bool boxm2_ocl_hierarchical_reg::init(vnl_vector<double> const& mu, vnl_vector<d
     cov_= cov;
     mu_cost_ = this->mutual_info(mu_);
     mis.resize(numsamples_,0.0);
+    vcl_cout<<"Cost of current poistion ois "<<mu_cost_<<vcl_endl;
     vcl_cout<<"# of Samples generated "<<numsamples_<<vcl_endl;
     vnl_random rand;
     for(unsigned i = 0 ; i < numsamples_; i++)
