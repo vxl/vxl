@@ -83,6 +83,6 @@ bool boxm2_ocl_update_auxQ_per_view_process(bprb_func_process& pro)
   t.mark();
   //TODO Factor this out to a utility function
   //make sure this image small enough (or else carve it into image pieces)
-  boxm2_ocl_update_auxQ::update_auxQ(scene, device, opencl_cache, cam, img, ident,view_ident);
+  boxm2_ocl_update_auxQ::update_auxQ(scene, device, opencl_cache, cam, img, ident,view_ident,8.0,8.0);
   return true;
 }
