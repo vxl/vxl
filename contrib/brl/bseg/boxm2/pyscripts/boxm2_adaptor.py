@@ -85,7 +85,21 @@ def load_cpp(scene_str) :
   (id,type) = boxm2_batch.commit_output(0);
   cache = dbvalue(id, type);
   return scene, cache;
+#Just loads up CPP cache2
+def load_cpp2(scene_str) :
+  scene = load_scene(scene_str);
 
+  ###############################################################
+  # Create cache, opencl manager, device, and gpu cache
+  ###############################################################
+  #print("Create Main Cache");
+  boxm2_batch.init_process("boxm2CreateCache2Process");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1,"lru");
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cache = dbvalue(id, type);
+  return scene, cache;
 # describe scene process, returns the path containing scene data
 def describe_scene(scene):
   boxm2_batch.init_process("boxm2DescribeSceneProcess");
