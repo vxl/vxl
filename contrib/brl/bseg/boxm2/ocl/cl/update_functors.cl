@@ -276,7 +276,7 @@ void step_cell_update_sky(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     //slow beta calculation ----------------------------------------------------
     float  alpha    = aux_args.alpha[data_ptr];
 
-    if(aux_args.obs > 0.5 )
+    if(aux_args.obs < 0.1 )
     {
         aux_args.alpha[data_ptr] = 1e-20f;
     }
@@ -324,7 +324,7 @@ void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, floa
     }
     aux_args.belief[data_ptr] = b;
     aux_args.uncertainty[data_ptr] = u;
-    if( d0 < aux_args.first_depth -2  )
+ /*    if( d0 < aux_args.first_depth -2  )
     {
         aux_args.belief[data_ptr] = -2.0;
         aux_args.uncertainty[data_ptr] = 0.01;
@@ -333,8 +333,7 @@ void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, floa
     {
 
     }
-   /*
-    if( d1 >  aux_args.first_depth  && d0 < aux_args.first_depth)
+ if( d1 >  aux_args.first_depth  && d0 < aux_args.first_depth)
     {
         aux_args.belief[data_ptr] = 0.999;
         aux_args.uncertainty[data_ptr] = 0.001;
@@ -344,7 +343,7 @@ void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, floa
         aux_args.belief[data_ptr] = 0.0;
         aux_args.uncertainty[data_ptr] = 0.001;
     }
-   */
+  */
     //aux_args.belief[data_ptr] = aux_args.first_depth;
     //aux_args.uncertainty[data_ptr] = aux_args.last_depth;
 }
