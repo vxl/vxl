@@ -23,7 +23,9 @@ class boxm2_ocl_update_auxQ
                              vpgl_camera_double_sptr  cam,
                              vil_image_view_base_sptr img,
                              vcl_string               in_identifier="",
-                             vcl_string               view_ident="");
+                             vcl_string               view_ident="",
+                             float resnearfactor = 100000.0,
+                             float resfarfactor = 100000.0);
   
   private:
     //compile kernels and place in static map
