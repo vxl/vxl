@@ -13,23 +13,25 @@ IF( WIN32 )
     NAMES windows.h winresrc.h
     PATHS
       "c:/Program Files/Microsoft SDKs/Windows"
-	  "c:/Program Files (x86)/Microsoft SDKs/Windows"
+  "c:/Program Files (x86)/Microsoft SDKs/Windows"
     PATH_SUFFIXES
       "v6.0a/include"
       "v6.1/include"
-	  "v7.0A/include"
-  )
+  "v7.0A/include"
+       "v7.1A/include"
+)
 
   FIND_LIBRARY(WIN32SDK_LIBRARIES 
     NAMES kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
     PATHS
       "c:/Program Files/Microsoft SDKs/Windows"
-	  "c:/Program Files (x86)/Microsoft SDKs/Windows"
+  "c:/Program Files (x86)/Microsoft SDKs/Windows"
     PATH_SUFFIXES
       "v6.0a/lib"
       "v6.1/lib"
-	  "v7.0A/lib"
-  )
+  "v7.0A/lib"
+        "v7.1A/Lib"
+)
   
   IF( WIN32SDK_INCLUDE_DIR )
     IF(WIN32SDK_LIBRARIES)
