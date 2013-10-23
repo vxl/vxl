@@ -421,13 +421,15 @@ void vil_nitf2_enum_string_formatter::validate_value_map()
        entry != value_map.end(); ++entry)
   {
     vcl_string token = entry->first;
+#if 0  // disable the err message
     if (int(token.length()) > field_width) {
-      vcl_cerr << "vil_nitf2_enum_values: WARNING: Ignoring token "
-               << token << "; length exceeds declared field width.\n";
+      //vcl_cerr << "vil_nitf2_enum_values: WARNING: Ignoring token "
+      //         << token << "; length exceeds declared field width.\n";
       // Should probably remove it so that is_valid() doesn't match it.
       // On the other hand, this class will never read a token of this
       // length, so don't worry about it.
     }
+#endif
   }
 }
 
