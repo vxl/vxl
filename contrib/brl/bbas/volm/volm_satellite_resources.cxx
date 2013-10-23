@@ -125,11 +125,11 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
       ids.push_back(temp_ids[i]);
   }
   for (unsigned i = 0; i < temp_ids.size(); i++) {
-    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV1") == 0)
+    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV01") == 0)
       ids.push_back(temp_ids[i]);
   }
   for (unsigned i = 0; i < temp_ids.size(); i++) {
-    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV2") == 0)
+    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV02") == 0)
       ids.push_back(temp_ids[i]);
   }
   vcl_vector<unsigned> temp_ids2;
