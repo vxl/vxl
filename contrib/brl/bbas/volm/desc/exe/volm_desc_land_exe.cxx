@@ -18,11 +18,12 @@
 
 int main(int argc,  char** argv)
 {
-  vul_arg<bool> match("-match", "if exists run the matcher, otherwise run the indexer");
+  vul_arg<bool> match("-match", "if exists run the matcher, otherwise run the indexer", false);
   vul_arg<bool> random("-random", "if exists create output prob maps randomly, otherwise run the land type matcher");
   vul_arg<vcl_string> category_file("-cat", "category file that contains one line for the land type of the camera for the query ", "");
   vul_arg<vcl_string> category_gt_file("-cat_gt", "category gt file of multiple images, use image id to get gt loc of this one ", "");
-  vul_arg<int> img_id("-id", "query image id in the category gt file, starts from 0", -1);
+  vul_arg<int> img_id("-id", "query image id in the category gt file, starts from 0", 1000);
+  vul_arg<unsigned> world_id("-world", "world id of different ROI",100);
   vul_arg<vcl_string> out_folder("-out", "output folder to save index or if matching results", "");
   vul_arg<vcl_string> desc_index_folder("-desc", "folder to read the descriptor index of the tile", "");
   vul_arg<bool> save_images("-save", "save out images or not", false);
@@ -32,18 +33,26 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> NLCD_folder("-nlcd", "NLCD folder to use for indexing", "");
   vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses", "");                      // index -- folder to read the hypos for each leaf
   vul_arg<int> tile_id("-tile", "id of the tile to be indexed", -1);
-  vul_arg<bool> index_2d("-ex_2d", "if exists index ex_2d using the classification maps that are passed", "");
+  vul_arg<bool> index_2d("-ex_2d", "if exists index ex_2d using the classification maps that are passed", false);
   vul_arg<vcl_string> maps_folder("-maps", "the classification map images where each pixel has the land id (type is unsigned char)", "");
   vul_arg<vcl_string> radii_string("-rad", "e.g. pass 100_500_1000 for radii of 100, 500 and 1000 meter to construct descriptors at each location", "");
   vul_arg<int> max_leaf_id ("-max", "maximum leaf id considered", 1000);
-  vul_arg<int> min_leaf_id ("-min", "minimum leaf id considered", -1);
+  vul_arg<int> min_leaf_id ("-min", "minimum leaf id considered", 0);
   
   vul_arg_parse(argc, argv);
   vcl_cout << "argc: " << argc << vcl_endl;
 
   if (match()) {  // run the matcher
     
-    vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
+    vcl_vector<volm_tile> tiles;
+    if (world_id() == 1)      tiles = volm_tile::generate_p1b_wr1_tiles();
+    else if (world_id() == 2) tiles = volm_tile::generate_p1b_wr2_tiles();
+    else if (world_id() == 3) tiles = volm_tile::generate_p1b_wr3_tiles();
+    else if (world_id() == 4) tiles = volm_tile::generate_p1b_wr4_tiles();
+    else if (world_id() == 5) tiles = volm_tile::generate_p1b_wr5_tiles();
+    else {
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
 
     if (random()) {
         if (geo_hypo_folder().compare("") == 0 || out_folder().compare("") == 0 || tile_id() < 0 || img_id() < 0) {

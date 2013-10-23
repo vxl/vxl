@@ -22,7 +22,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> out("-out", "experiment output root", "D:/work/find/phase_1b/Result_P1b_Test1/p1b_test1_068/p1b_test1_068-2DexistenceRUN/");
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg<unsigned> test_id("-test", "test1 or 2 or 3", 1);
-  vul_arg<unsigned> id("-id", "test image id",68); 
+  vul_arg<unsigned> id("-id", "test image id",1000); 
   vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
   vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg_parse(argc, argv);
@@ -32,7 +32,7 @@ int main(int argc,  char** argv)
       gt_file().compare("") == 0 ||
       pass_id() > 2 ||
       test_id() > 3 ||
-      test_id() < 1 || id() >= 100)
+      test_id() < 1 || id() >= 1000)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();

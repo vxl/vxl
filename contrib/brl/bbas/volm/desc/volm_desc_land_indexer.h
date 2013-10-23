@@ -18,6 +18,7 @@
 #include "volm_desc_land.h"
 
 #include <volm/volm_io_tools.h>
+#include <volm/volm_category_io.h>
 
 class volm_desc_land_indexer : public volm_desc_indexer
 {
@@ -29,7 +30,7 @@ public:
   virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values);
 
   //: each driving indexer should overwrite with the size of the descriptor
-  virtual unsigned layer_size() { return volm_desc_land::n_bins; }
+  virtual unsigned layer_size() {  return volm_osm_category_io::volm_land_table.size();  }
 
   virtual vcl_string get_index_type_str() { return volm_desc_land_indexer::name_; }
 

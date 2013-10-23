@@ -22,7 +22,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> out("-out", "experiment output root", "");
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg<unsigned> test_id("-test", "test1 or 2 or 3", 1);
-  vul_arg<unsigned> id("-id", "test image id",100); 
+  vul_arg<unsigned> id("-id", "test image id",1000); 
   vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
   vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg_parse(argc, argv);
@@ -32,7 +32,7 @@ int main(int argc,  char** argv)
       gt_file().compare("") == 0 ||
       pass_id() > 2 ||
       test_id() > 3 ||
-      test_id() < 1 || id() >= 100)
+      test_id() < 1 || id() >= 1000)
   {
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
@@ -64,7 +64,7 @@ int main(int argc,  char** argv)
     tiles = volm_tile::generate_p1b_wr2_tiles();
   else if (samples[id()].second.second == "Jordan")
     tiles = volm_tile::generate_p1b_wr3_tiles();
-  else if (samples[id()].second.second == "Phillippines")
+  else if (samples[id()].second.second == "Philippines")
     tiles = volm_tile::generate_p1b_wr4_tiles();
   else if (samples[id()].second.second == "Taiwan")
     tiles = volm_tile::generate_p1b_wr5_tiles();

@@ -27,7 +27,7 @@ public:
   //: genera similarity metric for two land descriptor
   virtual float similarity(volm_desc_sptr other);
 
-  static unsigned n_bins;
+  //static unsigned n_bins;
 
 };
 

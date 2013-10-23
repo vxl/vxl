@@ -43,7 +43,7 @@ int main(int argc, char** argv)
   vul_arg<unsigned> thresc("-thresc", "threshold that used to create candidate list", 0);
   vul_arg<unsigned> top_size("-top", "desired top list for each candidate list", 1);
   // options
-  vul_arg<bool> is_matcher("-match", "option to execute the matcher", true);
+  vul_arg<bool> is_matcher("-match", "option to execute the matcher", false);
   vul_arg<bool> is_cand("-cand", "option to execute the candidate list generation", false);
 
   vul_arg_parse(argc, argv);
@@ -281,7 +281,7 @@ int main(int argc, char** argv)
     vcl_cout << "\t threshold used for the probability maps: " << threshold() << vcl_endl;
     vcl_cout << "\t probability maps are stored in: " << prob_map_folder.str() << vcl_endl;
     vcl_cout << "\t result stored in: " << cand_folder.str() << vcl_endl;
-    if (!volm_desc_matcher::create_candidate_list(prob_map_folder.str(), cand_folder.str(), thresc(), top_size(), ku(), kl(), threshold(), test_id(), id())) {
+    if (!volm_desc_matcher::create_candidate_list(prob_map_folder.str(), cand_folder.str(), thresc(), top_size(), ku(), kl(), threshold(), test_id(), id(), world_id())) {
       log << " creating candidate list failed for image " << id() << " at threshold " << thresc() << '\n';
       error_report(log_file.str(), log.str());
       vcl_cout << " ========================================== Failed ========================================" << vcl_endl;

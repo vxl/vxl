@@ -245,11 +245,19 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
                                               float const& kl,
                                               float const& thres_ratio,
                                               unsigned const& test_id,
-                                              unsigned const& img_id)
+                                              unsigned const& img_id,
+                                              unsigned const& world_id)
 {
   // create volm_tiles (coast only)
   vcl_vector<volm_tile> tiles;
-  tiles = volm_tile::generate_p1_wr2_tiles();
+  if (world_id == 1)     tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (world_id == 2) tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (world_id == 3) tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (world_id == 4) tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (world_id == 5) tiles = volm_tile::generate_p1b_wr5_tiles();
+  else {
+    return false;
+  }
   unsigned n_tile = (unsigned)tiles.size();
 
   float thres_scale = thres_ratio;

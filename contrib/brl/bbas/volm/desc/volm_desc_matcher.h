@@ -88,7 +88,8 @@ public:
                                     float const& kl,
                                     float const& thres_value,
                                     unsigned const& test_id,
-                                    unsigned const& img_id);
+                                    unsigned const& img_id,
+                                    unsigned const& world_id);
 
   virtual vcl_string get_index_type_str() = 0;
 
