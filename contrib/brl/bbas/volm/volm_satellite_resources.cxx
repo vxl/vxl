@@ -104,6 +104,7 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
   vgl_box_2d<double> area(lower_left_lon, upper_right_lon, lower_left_lat, upper_right_lat);
   vcl_vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root_, leaves, area);
+  vcl_vector<unsigned> temp_ids;
   for (unsigned i = 0; i < leaves.size(); i++) {
     volm_geo_index2_node<vcl_vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<vcl_vector<unsigned> >* >(leaves[i].ptr());
     // check which images overlap with the given bbox
@@ -114,9 +115,39 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
       sat_box.add(vgl_point_2d<double>(resources_[res_id].meta_->lower_left_.x(), resources_[res_id].meta_->lower_left_.y()));
       sat_box.add(vgl_point_2d<double>(resources_[res_id].meta_->upper_right_.x(), resources_[res_id].meta_->upper_right_.y()));
       if (resources_[res_id].meta_->band_.compare(band_str) == 0 && vgl_intersection(sat_box, area).area() > 0)
-        ids.push_back(res_id);
+        temp_ids.push_back(res_id);
     }
   }
+
+  // order the resources in the order of GeoEye1, WV2, WV1, QB/others
+  for (unsigned i = 0; i < temp_ids.size(); i++) {
+    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("GeoEye-1") == 0)
+      ids.push_back(temp_ids[i]);
+  }
+  for (unsigned i = 0; i < temp_ids.size(); i++) {
+    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV1") == 0)
+      ids.push_back(temp_ids[i]);
+  }
+  for (unsigned i = 0; i < temp_ids.size(); i++) {
+    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV2") == 0)
+      ids.push_back(temp_ids[i]);
+  }
+  vcl_vector<unsigned> temp_ids2;
+  // find the ones that are not already in ids
+  for (unsigned i = 0; i < temp_ids.size(); i++) {
+    bool contains = false;
+    for (unsigned j = 0; j < ids.size(); j++) {
+      if (temp_ids[i] == ids[j]) {
+        contains = true;
+        break;
+      }
+    }
+    if (!contains)
+      temp_ids2.push_back(temp_ids[i]);
+  }
+  for (unsigned i = 0; i < temp_ids2.size(); i++)
+    ids.push_back(temp_ids2[i]);
+
 }
 //: query the resources in the given box and output the full paths to the given file
 bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& band_str)

@@ -324,7 +324,6 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   unsigned int n; ifs >> n;
   vcl_cout << "will read: " << n << " correspondences for each frame from "<< input_cams << vcl_endl;
 
-  
   vcl_vector<vcl_string> cam_names;
   vcl_vector<vcl_string> cam_sat_names;
   vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs;
@@ -363,6 +362,11 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     corrs.push_back(corrs_frame);
   }
   ifs.close();
+  
+  if (!n) {
+    vcl_cerr << "In vpgl_correct_rational_cameras_process2 - 0 correspondences in file: " << input_cams << "! returning without correcting any cams!\n";
+    return false;
+  }
 
   bool first = true;
   bool already_exists = false;
