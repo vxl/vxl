@@ -159,7 +159,7 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
                         (unsigned int)bb->get_min_y(),
                         (unsigned int)bb->height());
   if (!roi) {
-    vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
+    vcl_cerr << "bvxm_roi_init_process::roi_init()-- cannot get copy view from image!\n";
     return false;
   }
 
