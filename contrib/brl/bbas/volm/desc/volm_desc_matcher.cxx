@@ -309,9 +309,11 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
   vcl_stringstream kml_name;
 
   if (img_id < 10)
-    kml_name << "p1a_test" << test_id << "_0" << img_id;
+    kml_name << "p1b_test" << test_id << "_00" << img_id;
+  else if (img_id >= 10 && img_id < 100)
+    kml_name << "p1b_test" << test_id << "_0" << img_id;
   else
-    kml_name << "p1a_test" << test_id << "_" << img_id;
+    kml_name << "p1b_test" << test_id << "_" << img_id;
   vcl_string cam_kml = cand_root + "/" + kml_name.str() + "-CANDIDATE.kml";
   vcl_ofstream ofs_kml(cam_kml.c_str());
 
