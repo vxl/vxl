@@ -83,11 +83,10 @@ boxm2_scene::boxm2_scene(vcl_string filename)
   }
 
   //store data path
-  if(parser.is_data_rel_to_scene_path()) {
-    // to make the data (model) path relative to the scene file, 
-    // set the 'is_data_rel' bool attribute of the <scene_paths> tag
+  if(parser.is_model_local_to_scene_path()) {
+    // to make the model (data) path relative to the scene file, 
+    // set the 'is_model_local' bool attribute of the <scene_paths> tag
     vcl_string basepath = vul_file::dirname(filename); // cant return an empty string
-    // TODO does this work on windows? 
     data_path_ = basepath + "/" + parser.path(); // not normalized, but thats ok
   }
   else {

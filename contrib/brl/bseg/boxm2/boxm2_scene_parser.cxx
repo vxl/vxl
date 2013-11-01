@@ -78,7 +78,7 @@ void boxm2_scene_parser::init_params()
   // world origin
   origin_ = vgl_point_3d<double>(0,0,0);
   path_="";
-  is_data_rel_to_scene_path_=false;
+  is_model_local_to_scene_path_= false;
   name_="";
   version_ = 1;
 }
@@ -154,8 +154,8 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
     for (int i=0; atts[i]; i+=2) {
       if (vcl_strcmp(atts[i], "path") == 0)
         convert(atts[i+1], path_);
-      else if (vcl_strcmp(atts[i], "is_data_rel") == 0) {
-        convert(atts[i+1], is_data_rel_to_scene_path_);
+      else if (vcl_strcmp(atts[i], "is_model_local") == 0) {
+        convert(atts[i+1], is_model_local_to_scene_path_);
       }
     }
   }

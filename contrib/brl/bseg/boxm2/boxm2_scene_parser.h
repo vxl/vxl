@@ -39,7 +39,7 @@ class boxm2_scene_parser : public expatpp
    bool lvcs(vpgl_lvcs& lvcs);
    vgl_point_3d<double> origin() const { return origin_; }
    vcl_string path() const { return path_; }
-   bool is_data_rel_to_scene_path() const { return is_data_rel_to_scene_path_; }
+   bool is_model_local_to_scene_path() const { return is_model_local_to_scene_path_; }
    vcl_string name() const { return name_; }
    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
    vcl_vector<vcl_string> appearances() const { return appearances_; }
@@ -71,8 +71,8 @@ class boxm2_scene_parser : public expatpp
   // scene directory (path)
   vcl_string path_;
 
-  // is data relative to scene directory (path)
-  bool is_data_rel_to_scene_path_;
+  // are model files relative to scene directory (path_)
+  bool is_model_local_to_scene_path_;
 
   // scene name (string)
   vcl_string name_;
