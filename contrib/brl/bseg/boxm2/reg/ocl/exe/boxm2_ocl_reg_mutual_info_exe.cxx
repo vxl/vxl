@@ -97,7 +97,6 @@ int main(int argc,  char** argv)
   sceneA_origin[2] = sceneA->local_origin().z();
   sceneA_origin[3] = 1.0;
 
-
   var[0] = 2*sceneB->blocks().begin()->second.sub_block_dim_.x()/scale;  // var[0] = 1.0/8;     //   BH  
   var[1] = 2*sceneB->blocks().begin()->second.sub_block_dim_.y()/scale;  // var[1] = 1.0/8;     //   BH
   var[2] = 2*sceneB->blocks().begin()->second.sub_block_dim_.z()/scale;  // var[2] = 1.0/8;     //   BH
