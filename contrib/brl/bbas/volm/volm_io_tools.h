@@ -76,6 +76,9 @@ public:
 
   //: uses glob: folder//Geocover*.tif
   static void load_geocover_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
+
+  //: uses glob: folder//Urextent*.tif
+  static void load_urban_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
   
   static bool find_min_max_height(vgl_point_2d<double>& lower_left, vgl_point_2d<double>& upper_right, vcl_vector<volm_img_info>& infos, double& min, double& max);
 

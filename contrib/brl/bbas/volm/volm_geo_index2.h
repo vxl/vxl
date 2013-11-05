@@ -63,7 +63,7 @@ public:
   template <class Type>
   static volm_geo_index2_node_sptr construct_tree(vgl_box_2d<double> bbox, double const& min_size);
 
-  //: construct with a polygon with possibily multiple sheets, only keep the children who intersect one of the sheets of the polygon
+  //: construct with a polygon with possible multiple sheets, only keep the children who intersect one of the sheets of the polygon
   template <class Type>
   static volm_geo_index2_node_sptr construct_tree(volm_tile t, double const& min_size, vgl_polygon<double> const& poly);
   template <class Type>

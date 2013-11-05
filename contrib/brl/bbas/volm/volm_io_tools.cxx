@@ -396,6 +396,16 @@ void volm_io_tools::load_geocover_imgs(vcl_string const& folder, vcl_vector<volm
   }
 }
 
+void volm_io_tools::load_urban_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)
+{
+  vcl_string file_glob = folder + "//Urextent_*.tif";
+  for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
+    volm_img_info info;
+    volm_io_tools::load_geotiff_image(fn(), info, true);
+    infos.push_back(info);
+  }
+}
+
 void crop_and_find_min_max(vcl_vector<volm_img_info>& infos, unsigned img_id, int i0, int j0, int crop_ni, int crop_nj, double& min, double& max)
 {
 #if 0

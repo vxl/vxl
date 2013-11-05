@@ -2,7 +2,6 @@
 #include <vcl_iostream.h>
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_geo_index2_sptr.h>
-//#include <volm/volm_geo_index2.txx>
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <volm/volm_tile.h>

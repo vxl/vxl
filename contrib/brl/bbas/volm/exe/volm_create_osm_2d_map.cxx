@@ -250,12 +250,146 @@ int main(int argc, char** argv)
 }
 #endif
 
+#if 0
+// combine geo_cover image with urban_region images
+int main(int argc, char** argv)
+{
+  vul_arg<vcl_string> geo_folder("-geo", "folder where geo_cover tif images stores", "");
+  vul_arg<vcl_string> urban_folder("-urban", "folder where urban tif image stores", "");
+  vul_arg<vcl_string> out_folder("-out", "output folder","");
+  vul_arg<unsigned> world_id("-world", "world id for ROI (from 1 to 5",100);
+  vul_arg_parse(argc, argv);
+
+  if (geo_folder().compare("") == 0 || out_folder().compare("") == 0 || world_id() == 0 || urban_folder().compare("") == 0)
+  {
+    vul_arg_display_usage_and_exit();
+    return false;
+  }
+  vcl_stringstream log_file;
+  vcl_stringstream log;
+  
+  log_file << out_folder() << "/log_osm_2d_map_wr" << world_id() << ".xml";
+
+  // create volm_geo_index2 from tile
+  vcl_vector<volm_tile> tiles;
+  if (world_id() == 1)       tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (world_id() == 2)  tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (world_id() == 3)  tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (world_id() == 4)  tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (world_id() == 5)  tiles = volm_tile::generate_p1b_wr5_tiles();
+  else {
+    log << "ERROR: unknown world id " << world_id() << " only 1 to 5 are allowed\n";  error(log_file.str(), log.str());
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  unsigned tile_size = tiles.size();
+  vcl_vector<volm_geo_index2_node_sptr> roots;
+  for (unsigned i = 0; i < tile_size; i++)
+    roots.push_back(volm_geo_index2::construct_tree<volm_osm_object_ids_sptr>(tiles[i], 1.0));
+
+  for (unsigned i = 0; i < tile_size; i++) {
+    vcl_cout << " tile " << i << " has tree root " << roots[i]->extent_ << vcl_endl;
+    unsigned tree_depth = volm_geo_index2::depth(roots[i]);
+    vcl_stringstream kml;  kml << out_folder() << "/p1b_wr" << world_id() << "_tile_" << i << "_depth_" << tree_depth << ".kml";
+    volm_geo_index2::write_to_kml(roots[i], tree_depth, kml.str());
+  }
+
+
+  // load geo_cover images and sort them based on tile order
+  vcl_vector<volm_img_info> info_tmp;
+  volm_io_tools::load_geocover_imgs(geo_folder(), info_tmp);
+  if (info_tmp.size() != tile_size) {
+    log << "ERROR: mismatch in created tile and loaded geo cover image, check input world id and geo_folder\n";  error(log_file.str(), log.str());
+    return false;
+  }
+  vcl_vector<volm_img_info> geo_infos;
+  for(unsigned i = 0; i < tile_size; i++) {
+    for (unsigned j = 0; j < tile_size; j++) {
+      double diff_lon = tiles[i].bbox_double().min_x() - info_tmp[j].bbox.min_x();
+      double diff_lat = tiles[i].bbox_double().min_y() - info_tmp[j].bbox.min_y();
+      double diff = vcl_sqrt(diff_lon*diff_lon + diff_lat*diff_lat);
+      if (diff < 0.25) {
+        geo_infos.push_back(info_tmp[j]);
+        break;
+      }
+    }
+  }
+
+  // load urban tif image and sort them based on tile order
+  vcl_vector<volm_img_info> urban_tmp;
+  volm_io_tools::load_urban_imgs(urban_folder(), urban_tmp);
+  if (urban_tmp.size() != tile_size) {
+    log << "ERROR: mismatch in created tile and loaded geo cover image, check input world id and urban_folder\n";  error(log_file.str(), log.str());
+    return false;
+  }
+  vcl_vector<volm_img_info> urban_infos;
+  for (unsigned i = 0; i < tile_size; i++) {
+    for (unsigned j = 0; j < tile_size; j++) {
+      double diff_lon = tiles[i].bbox_double().min_x() - urban_tmp[j].bbox.min_x();
+      double diff_lat = tiles[i].bbox_double().min_y() - urban_tmp[j].bbox.min_y();
+      double diff = vcl_sqrt(diff_lon*diff_lon + diff_lat*diff_lat);
+      if (diff < 0.25) {
+        urban_infos.push_back(urban_tmp[j]);
+        break;
+      }
+    }
+  }
+  for (unsigned t_idx = 0; t_idx < tile_size; t_idx++)
+  {
+    // get geo cover image and urban image
+    volm_img_info geo_cover = geo_infos[t_idx];
+    volm_img_info urban_info = urban_infos[t_idx];
+    vil_image_view<vxl_byte>* geo_img = dynamic_cast<vil_image_view<vxl_byte> * >(geo_cover.img_r.ptr());
+    vil_image_view<vxl_byte>* urban_img = dynamic_cast<vil_image_view<vxl_byte> * >(urban_info.img_r.ptr());
+
+    // create an image having same resolution with geo_cover image
+    unsigned ni = (unsigned)geo_img->ni();
+    unsigned nj = (unsigned)geo_img->nj();
+    vil_image_view<vxl_byte> out_img(ni, nj, 1);
+    out_img.fill(0);
+    
+    // copy geo_cover images
+    for (unsigned i = 0; i < ni; i++) {
+      for (unsigned j = 0; j < nj; j++) {
+        out_img(i,j) = volm_osm_category_io::geo_land_table[(*geo_img)(i,j)].id_;
+      }
+    }
+
+    // ingest the urban image
+    for (unsigned i = 0; i < ni; i++) {
+      for (unsigned j = 0; j < nj; j++) {
+        // transfer to lon and lat
+        double lon, lat;
+        geo_cover.cam->img_to_global(i, j, lon, lat);
+        // obtain the pixel in urban image
+        double u, v;
+        urban_info.cam->global_to_img(lon, lat, 0.0, u, v);
+        unsigned uu = (unsigned)vcl_floor(u+0.5);
+        unsigned vv = (unsigned)vcl_floor(v+0.5);
+        if (uu > 0 && vv > 0 && uu < urban_info.ni && vv < urban_info.nj) {
+          if ( (*urban_img)(uu,vv) == 255) {
+            out_img(i,j) = volm_osm_category_io::geo_land_table[volm_osm_category_io::GEO_URBAN].id_;
+          }
+        }
+      }
+    }
+
+    vcl_string img_name = out_folder() + "/" + geo_cover.name + "_urban.tif";
+    vcl_cout << " image_name = " << vcl_endl;
+    // save the images
+    vil_save(out_img, img_name.c_str());
+  }
+  return true;
+
+}
+#endif
+
 // generate osm 2d_map based on tile for phase1B
 #if 1
 int main(int argc, char** argv)
 {
   vul_arg<vcl_string> geo_folder("-geo", "folder where geo_cover tif images stores", "");
   vul_arg<vcl_string> osm_folder("-osm", "folder where osm binary stores", "");
+  vul_arg<vcl_string> urban_folder("-urban", "folder where urban tif image stores", "");
   vul_arg<vcl_string> out_folder("-out", "output folder","");
   vul_arg<float> min_size ("-min", "minimum size of image size (in wgs84 degree)",0.0625);
   vul_arg<unsigned> world_id("-world", "world id for ROI (from 1 to 5",100);
@@ -264,7 +398,8 @@ int main(int argc, char** argv)
   vul_arg_parse(argc, argv);
 
   // check the input
-  if (geo_folder().compare("") == 0 || osm_folder().compare("") == 0 || out_folder().compare("") == 0 || world_id() == 0) {
+  if (geo_folder().compare("") == 0 || osm_folder().compare("") == 0 || out_folder().compare("") == 0 || world_id() == 0 || urban_folder().compare("") == 0)
+  {
     vul_arg_display_usage_and_exit();
     return false;
   }
@@ -315,6 +450,27 @@ int main(int argc, char** argv)
       }
     }
   }
+
+  // load urban tif image and sort them based on tile order
+  vcl_vector<volm_img_info> urban_tmp;
+  volm_io_tools::load_urban_imgs(urban_folder(), urban_tmp);
+  if (urban_tmp.size() != tile_size) {
+    log << "ERROR: mismatch in created tile and loaded geo cover image, check input world id and urban_folder\n";  error(log_file.str(), log.str());
+    return false;
+  }
+  vcl_vector<volm_img_info> urban_infos;
+  for (unsigned i = 0; i < tile_size; i++) {
+    for (unsigned j = 0; j < tile_size; j++) {
+      double diff_lon = tiles[i].bbox_double().min_x() - urban_tmp[j].bbox.min_x();
+      double diff_lat = tiles[i].bbox_double().min_y() - urban_tmp[j].bbox.min_y();
+      double diff = vcl_sqrt(diff_lon*diff_lon + diff_lat*diff_lat);
+      if (diff < 0.25) {
+        urban_infos.push_back(urban_tmp[j]);
+        break;
+      }
+    }
+  }
+
   // load open street map binary
   vcl_vector<volm_osm_objects> osm_objs;
   for (unsigned i = 0; i < tile_size; i++) {
@@ -355,7 +511,16 @@ int main(int argc, char** argv)
     volm_geo_index2::get_leaves(roots[t_idx], leaves);
     volm_osm_objects osm = osm_objs[t_idx];
     volm_img_info geo_cover = geo_infos[t_idx];
+    volm_img_info urban_info = urban_infos[t_idx];
     vil_image_view<vxl_byte>* geo_img = dynamic_cast<vil_image_view<vxl_byte> * >(geo_cover.img_r.ptr());
+    vil_image_view<vxl_byte>* urban_img = dynamic_cast<vil_image_view<vxl_byte> * >(urban_info.img_r.ptr());
+
+    vcl_cout << " geo_cover img_name: " << geo_cover.img_name << " geo_cover name: " << geo_cover.name << vcl_endl;
+    vcl_cout << " geo_cover bounding box " << geo_cover.bbox << vcl_endl;
+    vcl_cout << " urban img_name: " << urban_info.img_name << " urban name: " << urban_info.name << vcl_endl;
+    vcl_cout << " urban bounding box: " << urban_info.bbox << vcl_endl;
+    vcl_cout << " urban image size: " << urban_info.ni << "x" << urban_info.nj << vcl_endl;
+
     // create a 2d image for each leaf at desired size
     for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
       // calculate desired resolution
@@ -406,6 +571,29 @@ int main(int argc, char** argv)
             out_img(i,j) = volm_osm_category_io::geo_land_table[(*geo_img)(uu,vv)].id_;
         }
       }
+
+      // ingest urban image to add extra urban region
+      // Note that in urban image, three pixel values exist, 0, 1 and 255.  255 refers to urban region
+
+      for (int i = 0; i < ni; i++) {
+        for (int j = 0; j < nj; j++) {
+          // transfer coords to get pixel in urban image
+          double lon, lat, gz;
+          float local_x = (float)(i+0+0.5);
+          float local_y = (float)(box_ly-j+0.5);
+          lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
+          double u, v;
+          urban_info.cam->global_to_img(lon, lat, gz, u, v);
+          unsigned uu = (unsigned)vcl_floor(u+0.5);
+          unsigned vv = (unsigned)vcl_floor(v+0.5);
+          if (uu > 0 && vv > 0 && uu < urban_info.ni && vv < urban_info.nj) {
+            if ( (*urban_img)(uu,vv) == 255) {
+              out_img(i,j) = volm_osm_category_io::geo_land_table[volm_osm_category_io::GEO_URBAN].id_;
+            }
+          }
+        }
+      }
+
 #if 0
       // ingest satellite image 
       if (!vgl_intersection(leaf_bbox_geo, sat_info.bbox).is_empty()) {

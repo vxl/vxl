@@ -49,7 +49,8 @@ SET(volm_sources
  volm_candidate_list.h                  volm_candidate_list.cxx
  volm_geo_index2_node_base.h            volm_geo_index2_node_base.cxx
  volm_geo_index2_sptr.h
- volm_geo_index2.h                      volm_geo_index2.txx
+ volm_geo_index2.h                      volm_geo_index2.cxx
+ volm_geo_index2.txx
  volm_osm_parser.h                      volm_osm_parser.cxx
  volm_category_io.h                     volm_category_io.cxx
  volm_osm_objects.h                     volm_osm_objects.cxx

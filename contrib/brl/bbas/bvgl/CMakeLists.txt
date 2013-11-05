@@ -48,3 +48,6 @@ ENDIF(EXPAT_FOUND)
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
+
+# geometric algorithm related
+SUBDIRS( algo )
