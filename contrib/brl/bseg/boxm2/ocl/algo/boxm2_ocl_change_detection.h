@@ -86,12 +86,13 @@ class boxm2_ocl_aux_pass_change
 {
   public:
     static bool change_detect(  vil_image_view<float>&    change_img,
+                                vil_image_view<float>&    vis_img,
                                 bocl_device_sptr          device,
                                 boxm2_scene_sptr          scene,
                                 boxm2_opencl_cache_sptr   opencl_cache,
                                 vpgl_camera_double_sptr   cam,
                                 vil_image_view_base_sptr  img,
-                                bool max_density=false);
+                                bool max_density=false,float nearfactor = 100000.0f, float farfactor= 0.000001f);
 
   private:
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts, bool maxdensity =false);

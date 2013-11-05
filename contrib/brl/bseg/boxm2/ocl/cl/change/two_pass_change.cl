@@ -287,6 +287,7 @@ aux_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
                             __global    int                * aux_mean_obs,
                             __global    float4             * ray_origins,
                             __global    float4             * ray_directions,
+                            __global    float              * nearfarplanes,
                             __global    float              * change_image,      // input image and store vis_inf and pre_inf
                             __global    uint4              * exp_image_dims,
                             __global    float              * output,
@@ -317,7 +318,8 @@ aux_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
   float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
   //------- Set Aux Args -------------
   AuxArgs aux_args;
   aux_args.linfo        = linfo;
@@ -339,7 +341,7 @@ aux_pass_change_kernel    ( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis,
 
             //RENDER SPECIFIC ARGS
-            aux_args,0, MAXFLOAT);
+            aux_args,nearplane,farplane);
 
   //expected image gets rendered
   change_image[imIndex[llid]]     = change;  //expected_int;

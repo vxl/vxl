@@ -18,13 +18,15 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 
+#include <vsph/vsph_camera_bounds.h>
+
 //directory utility
 #include <vcl_where_root_dir.h>
 
 namespace boxm2_cpp_ray_probe_process_globals
 {
     const unsigned n_inputs_ = 7;
-    const unsigned n_outputs_ = 6;
+    const unsigned n_outputs_ = 7;
 }
 
 bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
@@ -47,8 +49,9 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     output_types_[1] = "bbas_1d_array_float_sptr"; //alpha
     output_types_[2] = "bbas_1d_array_float_sptr"; //vis
     output_types_[3] = "bbas_1d_array_float_sptr"; //depth
-    output_types_[4] = "bbas_1d_array_float_sptr"; //data type asked for
-    output_types_[5] = "int"; //n elems
+    output_types_[4] = "bbas_1d_array_float_sptr"; //res
+    output_types_[5] = "bbas_1d_array_float_sptr"; //data type asked for
+    output_types_[6] = "int"; //n elems
 
     bool good = pro.set_input_types(input_types_) &&
                 pro.set_output_types(output_types_);
@@ -81,13 +84,9 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     vcl_vector<vcl_string> apps = scene->appearances();
     for (unsigned int i=0; i<apps.size(); ++i) {
         if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
-        {
             data_type = apps[i];
-        }
         else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
-        {
             data_type = apps[i];
-        }
     }
 
     if (identifier.size() > 0) {
@@ -95,6 +94,9 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     }
 
     vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_perspective_camera<double>*)(cam.ptr()));
+    double cone_half_angle, solid_angle;vgl_ray_3d<double> ray_ij;
+    vsph_camera_bounds::pixel_solid_angle(*(vpgl_perspective_camera<double>*)(cam.ptr()), pi, pj, ray_ij, cone_half_angle, solid_angle);
+
     vcl_vector<boxm2_block_id>::iterator id;
 
     vcl_vector<float> seg_lengths;
@@ -128,6 +130,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     bbas_1d_array_float_sptr vis_array  =new bbas_1d_array_float(seg_lengths.size());
     bbas_1d_array_float_sptr alpha_array=new bbas_1d_array_float(alphas.size());
     bbas_1d_array_float_sptr abs_depth_array=new bbas_1d_array_float(abs_depth.size());
+    bbas_1d_array_float_sptr res_depth_array=new bbas_1d_array_float(abs_depth.size());
     bbas_1d_array_float_sptr data_to_return_array=new bbas_1d_array_float(data_to_return.size());
     float vis=1.0f;
     for (unsigned i=0; i<seg_lengths.size(); ++i)
@@ -139,8 +142,11 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
 
         vis_array->data_array[i]=vis;
         vis*=vcl_exp(-seg_lengths[i]*alphas[i]);
+        
+        res_depth_array->data_array[i] = abs_depth[i]*vcl_tan(cone_half_angle)*2;
         for (int j=0 ; j<nelems; ++j)
             data_to_return_array->data_array[i*nelems+j] = data_to_return[i*nelems+j];
+
     }
 
     // store scene smaprt pointer
@@ -148,7 +154,8 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     pro.set_output_val<bbas_1d_array_float_sptr>(1, alpha_array);
     pro.set_output_val<bbas_1d_array_float_sptr>(2, vis_array);
     pro.set_output_val<bbas_1d_array_float_sptr>(3, abs_depth_array);
-    pro.set_output_val<bbas_1d_array_float_sptr>(4, data_to_return_array);
-    pro.set_output_val<int>(5, nelems);
+    pro.set_output_val<bbas_1d_array_float_sptr>(4, res_depth_array);
+    pro.set_output_val<bbas_1d_array_float_sptr>(5, data_to_return_array);
+    pro.set_output_val<int>(6, nelems);
     return true;
 }

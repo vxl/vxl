@@ -24,14 +24,16 @@ def get_info_along_ray(scene,cache,cam,u,v,prefix,identifier="") :
   vis_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
   (id, type) = boxm2_batch.commit_output(3);
   tabs_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
+  (id, type) = boxm2_batch.commit_output(4);
+  res_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
   if (prefix != "") :
-    (id, type) = boxm2_batch.commit_output(4);
-    data_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
     (id, type) = boxm2_batch.commit_output(5);
+    data_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
+    (id, type) = boxm2_batch.commit_output(6);
     nelems = boxm2_batch.get_output_int(id);
-    return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d, data_array_1d, nelems;
+    return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d,res_array_1d, data_array_1d, nelems;
   else :
-    return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d;
+    return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d,res_array_1d;
     
 def query_cell_brdf(scene,cache,point,model_type): 
   boxm2_batch.init_process("boxm2CppQueryCellBrdfProcess");

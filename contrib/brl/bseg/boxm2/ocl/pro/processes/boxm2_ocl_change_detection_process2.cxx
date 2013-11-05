@@ -30,8 +30,8 @@
 
 namespace boxm2_ocl_change_detection_process2_globals
 {
-  const unsigned n_inputs_     = 6;
-  const unsigned n_outputs_    = 1;
+  const unsigned n_inputs_     = 8;
+  const unsigned n_outputs_    = 2;
 }
 
 bool boxm2_ocl_change_detection_process2_cons(bprb_func_process& pro)
@@ -46,13 +46,20 @@ bool boxm2_ocl_change_detection_process2_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
   input_types_[5] = "bool";   // is max mode on ?
+  input_types_[6] = "float";                        // near factor ( # of pixels should map to the finest voxel )
+  input_types_[7] = "float";                        // far factor (  # of pixels should map to the finest voxel )
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
+  output_types_[1] = "vil_image_view_base_sptr";  // vis image
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   brdb_value_sptr idx        = new brdb_value_t<bool>(false);
   pro.set_input(5, idx);
+  brdb_value_sptr tnearfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
+  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(0.0001f);  //by default update alpha
 
+  pro.set_input(6, tnearfactor);
+  pro.set_input(7, tfarfactor);  
   return good;
 }
 
@@ -72,26 +79,32 @@ bool boxm2_ocl_change_detection_process2(bprb_func_process& pro)
   vpgl_camera_double_sptr   cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr  img           = pro.get_input<vil_image_view_base_sptr>(i++);
    bool  max_density           = pro.get_input<bool>(i++);
+  float                    nearfactor   = pro.get_input<float>(i++);
+  float                    farfactor    = pro.get_input<float>(i++);
+
   // img dims
   unsigned ni=img->ni();
   unsigned nj=img->nj();
 
   // allocate two output images
   vil_image_view<float>*    change_img     = new vil_image_view<float>(ni, nj);
+  vil_image_view<float>*    vis_img     = new vil_image_view<float>(ni, nj);
 
   // check to see which type of change detection to do, either two pass, or regular
   vul_timer t;
   //
   boxm2_ocl_aux_pass_change::change_detect( *change_img,
+      *vis_img,
                                               device,
                                               scene,
                                               opencl_cache,
                                               cam,
                                               img,
-                                              max_density);
+                                              max_density, nearfactor,  farfactor );
   vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
   // set outputs
   i=0;
   pro.set_output_val<vil_image_view_base_sptr>(i++, change_img);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, vis_img);
   return true;
 }

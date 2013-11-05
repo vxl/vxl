@@ -29,7 +29,7 @@
 
 namespace boxm2_ocl_probability_of_image_process_globals
 {
-  const unsigned n_inputs_ = 6;
+  const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 
@@ -96,6 +96,8 @@ bool boxm2_ocl_probability_of_image_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
   input_types_[5] = "vcl_string";  //identifier
+  input_types_[6] = "float";                        // near factor ( # of pixels should map to the finest voxel )
+  input_types_[7] = "float";                        // far factor (  # of pixels should map to the finest voxel )
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -104,7 +106,13 @@ bool boxm2_ocl_probability_of_image_process_cons(bprb_func_process& pro)
 
   brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
   pro.set_input(5, idx);
+  brdb_value_sptr tnearfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
+  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(0.0001f);  //by default update alpha
+
+  pro.set_input(6, tnearfactor);
+  pro.set_input(7, tfarfactor);  
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
 }
 
 bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
@@ -127,6 +135,8 @@ bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
   vcl_string data_identifier =pro.get_input<vcl_string>(i++);
+  float                    nearfactor   = pro.get_input<float>(i++);
+  float                    farfactor    = pro.get_input<float>(i++);
   unsigned ni=img->ni();
   unsigned nj=img->nj();
   bool foundDataType = false;

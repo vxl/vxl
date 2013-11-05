@@ -165,7 +165,7 @@ def init_alpha(scene, cache, device,pinit = 0.01, thresh = 1.0) :
 # Model building stuff
 ###############################################
 # Generic update - will use GPU if device/openclcache are passed in
-def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0,update_app=True,tnear = 1000.0 , tfar = 1000.0 ) :
+def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0,update_app=True,tnear = 100000.0 , tfar = 0.000001 ) :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update";
@@ -725,7 +725,7 @@ def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, 
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
-def change_detect2(scene, cache, cam, img, maxmode = False,  device=None) :
+def change_detect2(scene, cache, cam, img, maxmode = False,tnear = 100000, tfar = 0.00001,  device=None) :
     print "boxm2_batch GPU change detection";
     boxm2_batch.init_process("boxm2OclChangeDetectionProcess2");
     boxm2_batch.set_input_from_db(0,device);
@@ -734,10 +734,14 @@ def change_detect2(scene, cache, cam, img, maxmode = False,  device=None) :
     boxm2_batch.set_input_from_db(3,cam);
     boxm2_batch.set_input_from_db(4,img);
     boxm2_batch.set_input_bool(5,maxmode);
+    boxm2_batch.set_input_float(6,tnear);
+    boxm2_batch.set_input_float(7,tfar);
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     cd_img = dbvalue(id,type);
-    return cd_img;
+    (id,type) = boxm2_batch.commit_output(1);
+    vis_img = dbvalue(id,type);
+    return cd_img, vis_img;
 
 ####################################################################
 # Visualize Change Wrapper
@@ -1624,7 +1628,7 @@ def compute_derivatives_process(scene, cache, prob_threshold, normal_threshold, 
   boxm2_batch.set_input_int(8, j)
   boxm2_batch.set_input_int(9, k)
   boxm2_batch.run_process();
-def compute_probabiltiy_of_image(device,scene,cache,cam,img):
+def compute_probability_of_image(device,scene,cache,cam,img):
   boxm2_batch.init_process("boxm2OclProbabilityOfImageProcess");
   boxm2_batch.set_input_from_db(0,device);
   boxm2_batch.set_input_from_db(1,scene);

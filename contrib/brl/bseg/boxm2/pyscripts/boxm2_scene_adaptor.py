@@ -86,7 +86,7 @@ class boxm2_scene_adaptor(object):
     dev = self.device
     update_grey_with_alt(self.scene, cache, cam, img, dev, "", mask, update_alpha, var, alt_prior, alt_density)
   #update wrapper, can pass in a Null device to use
-  def update(self, cam, img, update_alpha=True,update_app=True, mask=None, device_string="", var=-1.0, ident_string="", tnear = 1000.0, tfar = 1000.0) :
+  def update(self, cam, img, update_alpha=True,update_app=True, mask=None, device_string="", var=-1.0, ident_string="", tnear = 100000.0, tfar = 0.0000001) :
     cache = self.active_cache;
     dev = self.device;
 
@@ -314,7 +314,7 @@ class boxm2_scene_adaptor(object):
     return cd_img;
 
   # detect change wrapper,
-  def change_detect2(self, cam, img, max_mode=False, device_string="") :
+  def change_detect2(self, cam, img, max_mode=False,tnear = 100000, tfar = 0.00001, device_string="") :
     cache = self.active_cache;
     dev = self.device;
     if device_string=="gpu" :
@@ -322,8 +322,8 @@ class boxm2_scene_adaptor(object):
     elif device_string=="cpp" :
       cache = self.cpu_cache;
       dev = None;
-    cd_img = change_detect2(self.scene,cache,cam,img,max_mode,dev);
-    return cd_img;
+    cd_img,vis_img = change_detect2(self.scene,cache,cam,img,max_mode,tnear,tfar,dev);
+    return cd_img,vis_img;
 
   def refine(self, thresh=0.3, device_string="") :
     if device_string=="":

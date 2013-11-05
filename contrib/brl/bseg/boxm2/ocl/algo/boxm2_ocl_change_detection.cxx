@@ -1139,12 +1139,15 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
 vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_aux_pass_change::kernels_;
 
 bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_img,
+                                              vil_image_view<float>&    vis_img,
                                               bocl_device_sptr          device,
                                               boxm2_scene_sptr          scene,
                                               boxm2_opencl_cache_sptr   opencl_cache,
                                               vpgl_camera_double_sptr   cam,
                                               vil_image_view_base_sptr  img,
-                                              bool max_density)
+                                              bool max_density,
+                                              float nearfactor, 
+                                              float farfactor )
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -1232,11 +1235,20 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
- float tnearfar[2] = { 0.0f, 10000.0f} ;
- 
+     float tnearfar[2] = { 0.0f, 1000000} ;
 
-   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
-  tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+     if(cam->type_name() == "vpgl_perspective_camera")
+     {
+
+         float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
+         tnearfar[0] = f* scene->finest_resolution()/nearfactor ;
+         tnearfar[1] = f* scene->finest_resolution()/farfactor ;
+
+         vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+     }
+
+     bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
+     tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     //----- STEP ONE: per cell mean obs pass ---------
     //For each ID in the visibility order, grab that block
     vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_perspective_camera<double>*) cam.ptr() );
@@ -1281,7 +1293,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         // kern->set_arg( persp_cam.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-                kern->set_arg( tnearfar_mem_ptr.ptr() );
+        kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( in_image.ptr() );
         kern->set_arg( cl_output.ptr() );
@@ -1334,6 +1346,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         kern->set_arg( aux1 );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
+        kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( change_image.ptr() );
         kern->set_arg( img_dim.ptr());
         kern->set_arg( cl_output.ptr() );
@@ -1394,8 +1407,12 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     //store change image
     for (unsigned c=0;c<nj;c++)
         for (unsigned r=0;r<ni;r++)
-            change_img(r,c) = 1/(1+change_image_buff[c*cl_ni+r]+vis_buff[c*cl_ni+r]);
+         {
+             
+             change_img(r,c) = change_image_buff[c*cl_ni+r] ; //1/(1+change_image_buff[c*cl_ni+r]+vis_buff[c*cl_ni+r]);
+             vis_img(r,c) = vis_buff[c*cl_ni+r];
 
+        }
     //cleanup the image buffers
     delete [] vis_buff;
     delete [] input_buff;
