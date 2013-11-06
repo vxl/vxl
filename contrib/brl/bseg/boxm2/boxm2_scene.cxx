@@ -226,6 +226,10 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks_opt(vpgl_perspective_came
         vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
         return vis_order;
     }
+    // create a copy of cam to pass to is_block_visible.  
+    // Maybe we should overload is_block_visible to directly accept a vpgl_perspective_camera* ?
+    vpgl_camera_double_sptr cam_sptr(new vpgl_perspective_camera<double>(*cam));
+
     //grab visibility order from camera center
     vgl_point_3d<double> cam_center = cam->camera_center();
     //Map of distance, id
@@ -236,7 +240,7 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks_opt(vpgl_perspective_came
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
     for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) 
     {
-        if(!this->is_block_visible(iter->second,vpgl_camera_double_sptr(cam),ni,nj))
+        if(!this->is_block_visible(iter->second,cam_sptr,ni,nj))
             continue;
         vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
         vgl_vector_3d<double>&   blk_dim = (iter->second).sub_block_dim_;

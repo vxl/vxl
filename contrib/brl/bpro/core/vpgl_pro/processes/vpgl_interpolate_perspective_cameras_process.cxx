@@ -69,7 +69,7 @@ bool vpgl_interpolate_perspective_cameras_process(bprb_func_process& pro)
           vcl_ostringstream ss;
           ss << vcl_setw( 5 ) << vcl_setfill( '0' ) << k<<".txt";
           vcl_string filename = ss.str();
-          vcl_ofstream ofile(outdir + "/" + filename);
+          vcl_ofstream ofile((outdir + "/" + filename).c_str());
           ofile<<cams[k];
           ofile.close();
       }
