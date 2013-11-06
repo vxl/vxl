@@ -14,14 +14,14 @@
 // --- PARSER ---
 // --------------
 template <typename T>
-void convert(const char* t, T& d)
+void convert_xml_string(const char* t, T& d)
 {
   vcl_stringstream strm(t);
   strm >> d;
 }
 
 template <>
-void convert(const char* t, bool& d)
+void convert_xml_string<bool>(const char* t, bool& d)
 {
   vcl_stringstream strm(t);
   strm >> vcl_boolalpha >> d;
@@ -111,27 +111,27 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
   if (vcl_strcmp(name, LVCS_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
       if (vcl_strcmp(atts[i], "cs_name") == 0)
-        convert(atts[i+1], lvcs_cs_name_);
+        convert_xml_string(atts[i+1], lvcs_cs_name_);
       else if (vcl_strcmp(atts[i], "origin_lon") == 0)
-        convert(atts[i+1], lvcs_origin_lon_);
+        convert_xml_string(atts[i+1], lvcs_origin_lon_);
       else if (vcl_strcmp(atts[i], "origin_lat") == 0)
-        convert(atts[i+1], lvcs_origin_lat_);
+        convert_xml_string(atts[i+1], lvcs_origin_lat_);
       else if (vcl_strcmp(atts[i], "origin_elev") == 0)
-        convert(atts[i+1], lvcs_origin_elev_);
+        convert_xml_string(atts[i+1], lvcs_origin_elev_);
       else if (vcl_strcmp(atts[i], "lon_scale") == 0)
-        convert(atts[i+1], lvcs_lon_scale_);
+        convert_xml_string(atts[i+1], lvcs_lon_scale_);
       else if (vcl_strcmp(atts[i], "lat_scale") == 0)
-        convert(atts[i+1], lvcs_lat_scale_);
+        convert_xml_string(atts[i+1], lvcs_lat_scale_);
       else if (vcl_strcmp(atts[i], "local_XYZ_unit") == 0)
-        convert(atts[i+1], lvcs_XYZ_unit_);
+        convert_xml_string(atts[i+1], lvcs_XYZ_unit_);
       else if (vcl_strcmp(atts[i], "geo_angle_unit") == 0)
-        convert(atts[i+1], lvcs_geo_angle_unit_);
+        convert_xml_string(atts[i+1], lvcs_geo_angle_unit_);
       else if (vcl_strcmp(atts[i], "local_origin_x") == 0)
-        convert(atts[i+1], lvcs_local_origin_x_);
+        convert_xml_string(atts[i+1], lvcs_local_origin_x_);
       else if (vcl_strcmp(atts[i], "local_origin_y") == 0)
-        convert(atts[i+1], lvcs_local_origin_y_);
+        convert_xml_string(atts[i+1], lvcs_local_origin_y_);
       else if (vcl_strcmp(atts[i], "theta_") == 0)
-        convert(atts[i+1], lvcs_theta_);
+        convert_xml_string(atts[i+1], lvcs_theta_);
     }
   }
 
@@ -140,11 +140,11 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
     double x,y,z;
     for (int i=0; atts[i]; i+=2) {
       if (vcl_strcmp(atts[i], "x") == 0)
-        convert(atts[i+1], x);
+        convert_xml_string(atts[i+1], x);
       else if (vcl_strcmp(atts[i], "y") == 0)
-        convert(atts[i+1], y);
+        convert_xml_string(atts[i+1], y);
       else if (vcl_strcmp(atts[i], "z") == 0)
-        convert(atts[i+1], z);
+        convert_xml_string(atts[i+1], z);
     }
     origin_ = vgl_point_3d<double>(x,y,z);
   }
@@ -153,9 +153,9 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name,SCENE_PATHS_TAG)== 0) {
     for (int i=0; atts[i]; i+=2) {
       if (vcl_strcmp(atts[i], "path") == 0)
-        convert(atts[i+1], path_);
+        convert_xml_string(atts[i+1], path_);
       else if (vcl_strcmp(atts[i], "is_model_local") == 0) {
-        convert(atts[i+1], is_model_local_to_scene_path_);
+        convert_xml_string(atts[i+1], is_model_local_to_scene_path_);
       }
     }
   }
@@ -165,18 +165,18 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
     for (int i=0; atts[i]; i+=2) {
       vcl_string buff;
       if (vcl_strcmp(atts[i], "apm") == 0) {
-        convert(atts[i+1], buff);
+        convert_xml_string(atts[i+1], buff);
         appearances_.push_back(buff);
       }
       if (vcl_strcmp(atts[i], "num_illumination_bins") == 0) {
-        convert(atts[i+1], num_illum_bins_);
+        convert_xml_string(atts[i+1], num_illum_bins_);
       }
     }
   }
   else if (vcl_strcmp(name,VERSION_TAG) == 0){
     for (int i=0; atts[i]; i+=2) {
       if (vcl_strcmp(atts[i], "number") == 0)
-        convert(atts[i+1], version_);
+        convert_xml_string(atts[i+1], version_);
     }
   }
   //---------- BLOCK TAG -------------------------------------------------------
@@ -191,37 +191,37 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
     for (int i=0; atts[i]; i+=2) {
 
       if (vcl_strcmp(atts[i], "id_i") == 0)
-        convert(atts[i+1], idi);
+        convert_xml_string(atts[i+1], idi);
       else if (vcl_strcmp(atts[i], "id_j") == 0)
-        convert(atts[i+1], idj);
+        convert_xml_string(atts[i+1], idj);
       else if (vcl_strcmp(atts[i], "id_k") == 0)
-        convert(atts[i+1], idk);
+        convert_xml_string(atts[i+1], idk);
       else if (vcl_strcmp(atts[i], "origin_x") == 0)
-        convert(atts[i+1], ox);
+        convert_xml_string(atts[i+1], ox);
       else if (vcl_strcmp(atts[i], "origin_y") == 0)
-        convert(atts[i+1], oy);
+        convert_xml_string(atts[i+1], oy);
       else if (vcl_strcmp(atts[i], "origin_z") == 0)
-        convert(atts[i+1], oz);
+        convert_xml_string(atts[i+1], oz);
       else if (vcl_strcmp(atts[i], "dim_x") == 0)
-        convert(atts[i+1], dim_x);
+        convert_xml_string(atts[i+1], dim_x);
       else if (vcl_strcmp(atts[i], "dim_y") == 0)
-        convert(atts[i+1], dim_y);
+        convert_xml_string(atts[i+1], dim_y);
       else if (vcl_strcmp(atts[i], "dim_z") == 0)
-        convert(atts[i+1], dim_z);
+        convert_xml_string(atts[i+1], dim_z);
       else if (vcl_strcmp(atts[i], "num_x") == 0)
-        convert(atts[i+1], num_x);
+        convert_xml_string(atts[i+1], num_x);
       else if (vcl_strcmp(atts[i], "num_y") == 0)
-        convert(atts[i+1], num_y);
+        convert_xml_string(atts[i+1], num_y);
       else if (vcl_strcmp(atts[i], "num_z") == 0)
-        convert(atts[i+1], num_z);
+        convert_xml_string(atts[i+1], num_z);
       else if (vcl_strcmp(atts[i], "init_level")==0)
-        convert(atts[i+1], metadata.init_level_);
+        convert_xml_string(atts[i+1], metadata.init_level_);
       else if (vcl_strcmp(atts[i], "max_level")==0)
-        convert(atts[i+1], metadata.max_level_);
+        convert_xml_string(atts[i+1], metadata.max_level_);
       else if (vcl_strcmp(atts[i], "max_mb")==0)
-        convert(atts[i+1], metadata.max_mb_);
+        convert_xml_string(atts[i+1], metadata.max_mb_);
       else if (vcl_strcmp(atts[i], "p_init")==0)
-        convert(atts[i+1], metadata.p_init_);
+        convert_xml_string(atts[i+1], metadata.p_init_);
     }
     metadata.id_ = boxm2_block_id(idi, idj, idk);
     metadata.local_origin_ = vgl_point_3d<double>(ox, oy, oz);
