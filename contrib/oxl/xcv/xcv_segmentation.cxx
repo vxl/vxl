@@ -8,6 +8,7 @@
 
 #include <vil1/vil1_image.h>
 #include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 #include <osl/osl_harris_params.h>
 #include <osl/osl_harris.h>
@@ -215,13 +216,21 @@ void xcv_segmentation::canny_ox()
   if (!image_ok)
     return;
 
-  osl_canny_ox_params params;
+  static osl_canny_ox_params params;
   if (!get_canny_ox_params(&params))
     return;
   osl_canny_ox cox(params);
   cox.detect_edges(img, &detected_edges);
 
   draw_edges(detected_edges, col, row);
+  
+  // Save the edges 
+  vcl_ofstream ofs("c:/temp/1.txt");
+  for(vcl_list<osl_edge*>::const_iterator i=detected_edges.begin(); i!=detected_edges.end(); ++i)
+  	{
+  		(*i)->write_ascii(ofs); 
+  		ofs << "\n";
+  	}
 }
 
 //-----------------------------------------------------------------------------

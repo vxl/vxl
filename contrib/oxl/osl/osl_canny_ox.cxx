@@ -92,7 +92,10 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
              << "Lower threshold     = " << low_ << '\n'
              << "Min edgel intensity = " << edge_min_OX_ << '\n'
              << "Min edge length     = " << min_length_OX_ << '\n'
-             << "Image border size   = " << border_size_OX_ << "\n\n";
+             << "Image border size   = " << border_size_OX_ << '\n'
+             << "Follow strategy     = " << follow_strategy_OX_ << '\n'
+             << "Junction option     = " << junction_option_OX_ << '\n'
+             << "\n\n";
 
   // Allocate internal bitmaps ..
   smooth_ = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
