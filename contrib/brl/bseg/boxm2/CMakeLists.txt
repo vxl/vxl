@@ -35,7 +35,7 @@ ENDIF(EXPAT_FOUND)
 AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
 ADD_LIBRARY(boxm2  ${boxm2_sources})
-TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boct brdb bsta vsph vbl_io vpgl vpgl_io vpgl_xio vpgl_algo vgl_xio vgl vnl_algo vnl vbl vil vul vsl vcl mcal bkml)
+TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boct brdb bsta vsph vbl_io vpgl vpgl_io vpgl_xio vpgl_algo vgl_xio vgl vnl_algo vnl vbl vil vul vsl vcl mcal bkml bvgl_algo)
 IF(EXPAT_FOUND)
 TARGET_LINK_LIBRARIES(boxm2 expatpp)
 ENDIF(EXPAT_FOUND)

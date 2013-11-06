@@ -25,6 +25,7 @@
 #include <boxm2/boxm2_util.h>
 
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
+#include <bvgl/algo/bvgl_2d_geo_index.h>
 
 namespace boxm2_ocl_render_expected_depth_region_process_globals
 {
@@ -230,12 +231,88 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   float subblk_dim = 0.0;
   // set arguments
 
-  // locate the block where current location is in
+  // locate the block where current location is in using bvgl quadtree index
+  vgl_box_3d<double> scene_bbox = scene->bounding_box();
+  vcl_cout << " scene bounding box = " << scene_bbox << vcl_endl;
+  // set the leaf size 4 times larger than the block size
+  vgl_box_3d<double> blk_bbox = scene->blocks().begin()->second.bbox();
+  float min_size = 4*(blk_bbox.max_x() - blk_bbox.min_x());
+  vgl_box_2d<double> scene_bbox_2d(scene_bbox.min_x(), scene_bbox.max_x(), scene_bbox.min_y(), scene_bbox.max_y());
+  bvgl_2d_geo_index_node_sptr blk_id_tree_2d = bvgl_2d_geo_index::construct_tree<vcl_vector<boxm2_block_id> >(scene_bbox_2d, min_size);
+
+  // clear the contents
+  vcl_vector<bvgl_2d_geo_index_node_sptr> leaves_all;
+  bvgl_2d_geo_index::get_leaves(blk_id_tree_2d, leaves_all);
+  for (unsigned i = 0; i < leaves_all.size(); i++) {
+    bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr = 
+      dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(leaves_all[i].ptr());
+    leaf_ptr->contents_.clear();
+  }
+  vcl_cout << " 2D geo_index has root bounding box: " << blk_id_tree_2d->extent_
+           << " and its leaf has size: " << leaves_all[0]->extent_
+           << vcl_endl;
+  // fill in the contents
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit) {
+    boxm2_block_id curr_blk_id = mit->first;
+    vgl_box_2d<double> curr_blk_bbox_2d(mit->second.bbox().min_x(), mit->second.bbox().max_x(), mit->second.bbox().min_y(), mit->second.bbox().max_y());
+    vcl_vector<bvgl_2d_geo_index_node_sptr> leaves;
+    bvgl_2d_geo_index::get_leaves(blk_id_tree_2d, leaves, curr_blk_bbox_2d);
+    if (leaves.empty())
+      continue;
+    for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+      bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr = 
+        dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(leaves[l_idx].ptr());
+      leaf_ptr->contents_.push_back(curr_blk_id);
+    }
+  }
+
+  // locate the block for current location
   vpgl_lvcs lvcs = scene->lvcs();
   double lx, ly, lz;
   lvcs.global_to_local(lon, lat, elev, vpgl_lvcs::wgs84, lx, ly, lz);
   vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
+  bvgl_2d_geo_index_node_sptr curr_leaf = 0;
+  boxm2_block_id curr_block;
+  bvgl_2d_geo_index::get_leaf(blk_id_tree_2d, curr_leaf, vgl_point_2d<double>(local_h_pt_d.x(), local_h_pt_d.y()));
+  if (curr_leaf) {
+    vcl_cout << " leaf " << curr_leaf->extent_ << " contains location: " << lon << " lat: " << lat << " elev: " << elev << " ( " << local_h_pt_d << vcl_endl;
+    bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* curr_leaf_ptr =
+      dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(curr_leaf.ptr());
+    bool found_blk = false;
+    for (vcl_vector<boxm2_block_id>::iterator vit = curr_leaf_ptr->contents_.begin(); vit != curr_leaf_ptr->contents_.end(); ++vit) {
+      vgl_box_3d<double> curr_blk_bbox = scene->blocks()[*vit].bbox();
+      if (curr_blk_bbox.contains(local_h_pt_d)) {
+        curr_block = *vit;
+        found_blk = true;
+        break;
+      }
+    }
+    if (!found_blk) {
+      vcl_cout << pro.name() << ": Scene does not contain location -- lon: " << lon << " lat: " << lat << " elev: " << elev
+               << " ( " << local_h_pt_d << "), writing empty array for it!\n";
+      vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
+      vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
+      vil_image_view<float>* vis_out=new vil_image_view<float>(ni,nj);
 
+      exp_img_out->fill(0.5);
+      exp_var_out->fill(0.5);
+      vis_out->fill(0.5);
+      return false;
+    }
+  }
+  else {
+    vcl_cout << pro.name() << ": Scene does not contain location -- lon: " << lon << " lat: " << lat << " elev: " << elev
+               << " ( " << local_h_pt_d << "), writing empty array for it!\n";
+    vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
+    vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
+    vil_image_view<float>* vis_out=new vil_image_view<float>(ni,nj);
+    exp_img_out->fill(0.5);
+    exp_var_out->fill(0.5);
+    vis_out->fill(0.5);
+    return false;
+  }
+#if 0
   //vgl_point_3d<double> local_h_pt_d(cent_x, cent_y, cent_z);
   vgl_point_3d<double> local;
   boxm2_block_id curr_block;
@@ -254,13 +331,13 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
       return false;
     }
   }
-  vcl_cout << " Scene has location -- lon: " << lon << " lat: " << lat << " elev: " << elev << " in box " << curr_block 
-           << " (" << local << ")" << vcl_endl;
+#endif
+
+  vcl_cout << " Scene has location -- lon: " << lon << " lat: " << lat << " elev: " << elev << " in box " << curr_block << vcl_endl;
   // get the block that are within radius dmax centered from curr_block
   vcl_vector<boxm2_block_id> vis_order = boxm2_util::order_about_a_block(scene, curr_block, radius);
-
   unsigned temp_cnt = 0;
-
+  vcl_cout << vis_order.size() << " are loaded for the rendering... " << vcl_endl;
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {

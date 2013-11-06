@@ -8,7 +8,7 @@
 #include <vgl/vgl_line_segment_2d.h>
 
 // function to check whether the given box intersect with a line defined by a vector of points
-bool is_intersect(vgl_box_2d<double> const& box, vcl_vector<vgl_point_2d<double> > const& line)
+static bool is_intersect(vgl_box_2d<double> const& box, vcl_vector<vgl_point_2d<double> > const& line)
 {
   if (box.min_x() == 0.375 && box.min_y() == 0.5)
     unsigned i = 1;

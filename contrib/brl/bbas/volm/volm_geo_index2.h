@@ -113,10 +113,7 @@ public:
   //: return the depth of quadtree at level node
   static unsigned depth(volm_geo_index2_node_sptr node);
 
-  ////: read and write the contents from/to binary file for leaves which contain conentes
-  //static void write_content(vcl_vector<volm_geo_index2_node_sptr> const& leaves, vcl_string const& file_name_pre);
-  //template <class Type>
-  //static void  read_content(vcl_vector<volm_geo_index2_node_sptr> const& leaves);
+  
 
 };
 
