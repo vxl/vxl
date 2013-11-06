@@ -57,7 +57,7 @@ bool boxm2_opencl_cache2::clear_cache()
   }
 
   // delete blocks in cache
-  vcl_map<boxm2_scene_sptr, vcl_map<boxm2_block_id, bocl_mem*> >::iterator scene_iter ;
+  vcl_map<boxm2_scene_sptr, vcl_map<boxm2_block_id, bocl_mem*>,ltstr1 >::iterator scene_iter ;
   for(scene_iter = cached_blocks_.begin(); scene_iter!=cached_blocks_.end(); scene_iter++)
   {
       vcl_map<boxm2_block_id, bocl_mem*>::iterator blks;
@@ -74,7 +74,7 @@ bool boxm2_opencl_cache2::clear_cache()
   }
   cached_blocks_.clear();
 
-  vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> > >::iterator scene_data_iter ;
+  vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >,ltstr1 >::iterator scene_data_iter ;
   for (scene_data_iter=cached_data_.begin(); scene_data_iter!=cached_data_.end(); ++scene_data_iter)
   {
       // delete data from each cache
@@ -141,7 +141,7 @@ vcl_size_t boxm2_opencl_cache2::bytes_in_cache()
 {
   // count up bytes in cache (like clearing, but no deleting...
   vcl_size_t count = 0;
-  vcl_map<boxm2_scene_sptr, vcl_map<boxm2_block_id, bocl_mem*> >::iterator scene_iter ;
+  vcl_map<boxm2_scene_sptr, vcl_map<boxm2_block_id, bocl_mem*>,ltstr1 >::iterator scene_iter ;
   for(scene_iter = cached_blocks_.begin(); scene_iter!=cached_blocks_.end(); scene_iter++)
   {
       vcl_map<boxm2_block_id, bocl_mem*>::iterator blks;
@@ -152,7 +152,7 @@ vcl_size_t boxm2_opencl_cache2::bytes_in_cache()
       }
   }
   // count boxm2_data mem sizes
-  vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> > >::iterator scene_data_iter ;
+  vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >,ltstr1 >::iterator scene_data_iter ;
   for (scene_data_iter=cached_data_.begin(); scene_data_iter!=cached_data_.end(); ++scene_data_iter)
   {
       vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >::iterator datas;
@@ -567,7 +567,7 @@ vcl_map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache2::cached_data_map(boxm2_s
 //: helper method to insert into LRU list
 void boxm2_opencl_cache2::lru_push_front( vcl_pair<boxm2_scene_sptr, boxm2_block_id>  scene_id_pair )
 {
-    //serach for it in the list, if it's there, delete it
+    //search for it in the list, if it's there, delete it
     vcl_list<vcl_pair<boxm2_scene_sptr, boxm2_block_id> >::iterator iter=lru_order_.begin(); 
     for (; iter!=lru_order_.end(); ++iter) {
         if ( (scene_id_pair.second  ==  (*iter).second )&& ( (*iter).first = scene_id_pair.first ) ) {

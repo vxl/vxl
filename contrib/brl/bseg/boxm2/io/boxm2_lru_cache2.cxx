@@ -31,7 +31,7 @@ boxm2_lru_cache2::~boxm2_lru_cache2()
 //  Caution: make sure to call write to disk methods not to loose writable data
 void boxm2_lru_cache2::clear_cache()
 {
-  vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > >::iterator scene_iter =cached_data_.begin();
+  vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >,ltstr1 >::iterator scene_iter = cached_data_.begin();
   for(;scene_iter!=cached_data_.end(); scene_iter++)
   {
       vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > &dmap = scene_iter->second;
@@ -46,7 +46,7 @@ void boxm2_lru_cache2::clear_cache()
       scene_iter->second.clear();
   }
   cached_data_.clear();
-  vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*> >::iterator scene_block_iter =cached_blocks_.begin();
+  vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 >::iterator scene_block_iter =cached_blocks_.begin();
   for(;scene_block_iter!=cached_blocks_.end(); scene_block_iter++)
   {
       
@@ -269,8 +269,8 @@ vcl_string boxm2_lru_cache2::to_string()
 {
       
     vcl_stringstream stream;
-    vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*> >::iterator scene_block_iter =cached_blocks_.begin();
-    vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > >::iterator scene_data_iter =cached_data_.begin();
+    vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 >::iterator scene_block_iter =cached_blocks_.begin();
+    vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >,ltstr1 >::iterator scene_data_iter =cached_data_.begin();
 
   for(;scene_block_iter!=cached_blocks_.end(); scene_block_iter++,scene_data_iter++)
   {  
@@ -304,7 +304,7 @@ vcl_string boxm2_lru_cache2::to_string()
 void boxm2_lru_cache2::write_to_disk(boxm2_scene_sptr & scene)
 {
    // save the data and delete
-  vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > >::iterator scene_iter =cached_data_.begin();
+  vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >,ltstr1 >::iterator scene_iter =cached_data_.begin();
   for(;scene_iter!=cached_data_.end(); scene_iter++)
   {
       vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > &dmap = scene_iter->second;
@@ -317,7 +317,7 @@ void boxm2_lru_cache2::write_to_disk(boxm2_scene_sptr & scene)
           }
       }
   }
-  vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*> >::iterator scene_block_iter =cached_blocks_.begin();
+  vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 >::iterator scene_block_iter =cached_blocks_.begin();
   for(;scene_block_iter!=cached_blocks_.end(); scene_block_iter++)
   {
       
