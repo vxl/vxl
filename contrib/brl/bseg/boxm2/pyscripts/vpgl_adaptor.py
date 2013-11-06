@@ -102,19 +102,7 @@ def get_perspective_camera_center( cam):
   (id, type) = boxm2_batch.commit_output(2);
   z=boxm2_batch.get_output_float(id);
   return x,y,z;
-def backprojectray(camera,u,v):
-    boxm2_batch.init_process('vpglGetBackprojectRayProcess');
-    boxm2_batch.set_input_from_db(0,camera);
-    boxm2_batch.set_input_float(1,u);
-    boxm2_batch.set_input_float(2,v);
-    boxm2_batch.run_process();
-    (id,type) = boxm2_batch.commit_output(0);
-    dx = boxm2_batch.get_output_float(id);
-    (id,type) = boxm2_batch.commit_output(1);
-    dy = boxm2_batch.get_output_float(id);
-    (id,type) = boxm2_batch.commit_output(2);
-    dz = boxm2_batch.get_output_float(id);
-    return [dx,dy,dz];
+
 def get_backprojected_ray( cam,u,v):
   boxm2_batch.init_process("vpglGetBackprojectRayProcess");
   boxm2_batch.set_input_from_db(0, cam);

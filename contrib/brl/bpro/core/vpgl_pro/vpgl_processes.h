@@ -63,6 +63,7 @@ DECLARE_FUNC_CONS(vpgl_convert_local_rational_to_perspective_process);
 DECLARE_FUNC_CONS(vpgl_load_geo_camera_process3);
 DECLARE_FUNC_CONS(vpgl_save_geo_camera_tfw_process);
 DECLARE_FUNC_CONS(vpgl_interpolate_perspective_cameras_process);
+
 DECLARE_FUNC_CONS(vpgl_load_lvcs_process);
 DECLARE_FUNC_CONS(vpgl_get_rational_camera_offsets_process);
 DECLARE_FUNC_CONS(vpgl_write_generic_camera_process);
@@ -72,4 +73,5 @@ DECLARE_FUNC_CONS(vpgl_save_projective_camera_process);
 DECLARE_FUNC_CONS(vpgl_affine_rectify_images_process2);
 DECLARE_FUNC_CONS(vpgl_crop_img_using_3d_box_process);
 DECLARE_FUNC_CONS(vpgl_compute_utm_zone_process);
+DECLARE_FUNC_CONS(vpgl_get_backproject_ray_processs);
 #endif
