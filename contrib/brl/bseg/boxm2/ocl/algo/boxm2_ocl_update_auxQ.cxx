@@ -634,7 +634,8 @@ bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scen
   {
       //choose correct render kernel
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-      float pinit_buf[1] = {mdata.p_init_};
+      float pinit_buf[1];    
+      pinit_buf[0] = mdata.p_init_;
       bocl_mem * pinit=new bocl_mem(device->context(), pinit_buf, sizeof(float), "pinit");
       pinit->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
       //write the image values to the buffer
