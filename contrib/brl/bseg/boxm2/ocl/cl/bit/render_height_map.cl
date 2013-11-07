@@ -182,7 +182,7 @@ void ingest_height_map(__constant  RenderSceneInfo    * linfo,
   aux_args.alpha  = alpha_array;
   aux_args.outimg = out1;
   float vis =1.0;
-  aux_args.resolution = res;
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
