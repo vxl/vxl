@@ -30,6 +30,7 @@
 //directory utility
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
+#include <bvgl/algo/bvgl_2d_geo_index.h>
 
 namespace boxm2_create_index_process2_globals
 {
@@ -76,6 +77,18 @@ namespace boxm2_create_index_process2_globals
     return ;
   }
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+
+  // function to construct 2d_geo_index quad-tree for scene blocks
+  bvgl_2d_geo_index_node_sptr construct_2d_geo_index_for_blks(boxm2_scene_sptr scene)
+  {
+    vgl_box_3d<double> scene_bbox = scene->bounding_box();
+    // set the leaf size 4 times larger than the block size
+    vgl_box_3d<double> blk_bbox = scene->blocks().begin()->second.bbox();
+    float min_size = 4*(blk_bbox.max_x() - blk_bbox.min_x());
+    vgl_box_2d<double> scene_bbox_2d(scene_bbox.min_x(), scene_bbox.max_x(), scene_bbox.min_y(), scene_bbox.max_y());
+    bvgl_2d_geo_index_node_sptr root = bvgl_2d_geo_index::construct_tree<vcl_vector<boxm2_block_id> >(scene_bbox_2d, min_size);
+    return root;
+  }
 }
 
 bool boxm2_create_index_process2_cons(bprb_func_process& pro)
@@ -263,6 +276,32 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
 
   boxm2_block_id curr_block;
 
+  // create 2d_geo_index for scene blocks for quick location block where the given location resides
+  // the quad tree is in scene local coordinate system
+  bvgl_2d_geo_index_node_sptr blk_2d_tree = construct_2d_geo_index_for_blks(scene);
+  // fill in the block ids into leaves
+  vcl_vector<bvgl_2d_geo_index_node_sptr> blk_leaves_all;
+  bvgl_2d_geo_index::get_leaves(blk_2d_tree, blk_leaves_all);
+  for (unsigned l_idx = 0; l_idx < blk_leaves_all.size(); l_idx++) {
+    bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr = 
+      dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(blk_leaves_all[i].ptr());
+    leaf_ptr->contents_.clear();
+  }
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit) {
+    boxm2_block_id curr_blk_id = mit->first;
+    vgl_box_2d<double> curr_blk_bbox_2d(mit->second.bbox().min_x(), mit->second.bbox().max_x(), mit->second.bbox().min_y(), mit->second.bbox().max_y());
+    vcl_vector<bvgl_2d_geo_index_node_sptr> leaves;
+    bvgl_2d_geo_index::get_leaves(blk_2d_tree, leaves, curr_blk_bbox_2d);
+    if (leaves.empty())
+      continue;
+    for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+      bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr = 
+        dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(leaves[l_idx].ptr());
+      leaf_ptr->contents_.push_back(curr_blk_id);
+    }
+  }
+
   //zip through each location hypothesis
   vcl_vector<volm_geo_index_node_sptr> leaves2;
   if (leaf_id < 0) leaves2 = leaves;
@@ -322,7 +361,66 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
       bocl_mem* t_infinity=new bocl_mem(device->context(),t_infinity_buff,layer_size*sizeof(float),"t infinity buffer");
       t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      // find its block
+      // find its block for local_h_pt
+      bvgl_2d_geo_index_node_sptr curr_leaf = 0;
+      bvgl_2d_geo_index::get_leaf(blk_2d_tree, curr_leaf, vgl_point_2d<double>(local_h_pt_d.x(), local_h_pt_d.y()));
+      if (curr_leaf) {
+        bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* curr_leaf_ptr =
+          dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(curr_leaf.ptr());
+        bool found_blk = false;
+        for (vcl_vector<boxm2_block_id>::iterator vit = curr_leaf_ptr->contents_.begin(); vit != curr_leaf_ptr->contents_.end(); ++vit) {
+          vgl_box_3d<double> curr_blk_bbox = scene->blocks()[*vit].bbox();
+          if (curr_blk_bbox.contains(local_h_pt_d)) {
+            curr_block = *vit;
+            found_blk = true;
+          }
+        }
+        if (!found_blk) {
+          vcl_cerr << " Scene does not contain hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << ' ' << local_h_pt_d << " writing empty array for it!\n";
+          vcl_vector<unsigned char> values(layer_size, 0);
+          ind->add_to_index(values);
+          ++indexed_cnt;
+          // release the device and host memories
+          delete exp_depth;  // calls release_memory() which enqueues a mem delete event, call clFinish to make sure it is executed
+          delete vis;
+          delete probs;
+          delete t_infinity;
+          delete hypo_location;
+          status = clFinish(queue);
+          check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
+          if (!buff)
+            vcl_cout << "buff is zero after release mem!\n"; vcl_cout.flush();
+          delete [] buff;
+          delete [] vis_buff;
+          delete [] prob_buff;
+          delete [] t_infinity_buff;
+          continue;
+        }
+      }
+      else {
+        vcl_cerr << " Scene does not contain hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << ' ' << local_h_pt_d << " writing empty array for it!\n";
+        vcl_vector<unsigned char> values(layer_size, 0);
+        ind->add_to_index(values);
+        ++indexed_cnt;
+        // release the device and host memories
+        delete exp_depth;  // calls release_memory() which enqueues a mem delete event, call clFinish to make sure it is executed
+        delete vis;
+        delete probs;
+        delete t_infinity;
+        delete hypo_location;
+        status = clFinish(queue);
+        check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
+        if (!buff)
+          vcl_cout << "buff is zero after release mem!\n"; vcl_cout.flush();
+        delete [] buff;
+        delete [] vis_buff;
+        delete [] prob_buff;
+        delete [] t_infinity_buff;
+        continue;
+      }
+
+
+#if 0
       vgl_point_3d<double> local;
       if (!scene->block_contains(local_h_pt_d, curr_block, local))
       {
@@ -348,6 +446,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
           continue;
         }
       }
+#endif
 
       vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
       if (!(ord_iter != order_cache.end())) {
