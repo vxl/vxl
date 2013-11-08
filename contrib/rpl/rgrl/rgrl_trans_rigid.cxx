@@ -8,6 +8,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 #include <rgrl/rgrl_util.h>
+#include <rgrl/rgrl_rotation.h>
 
 rgrl_trans_rigid::
 rgrl_trans_rigid( unsigned int dimension )
@@ -63,52 +64,26 @@ void rgrl_trans_rigid::set_translation(double tx, double ty)
 void rgrl_trans_rigid::set_rotation(double theta, double alpha, double phi)
 {
   assert ( trans_.size() == 3);
-
-  double cos_a = vcl_cos(alpha), sin_a = vcl_sin(alpha),
-         cos_t = vcl_cos(theta), sin_t = vcl_sin(theta),
-         cos_p = vcl_cos(phi),   sin_p = vcl_sin(phi);
-  R_(0,0) =cos_a*cos_t ;                   R_(0,1) = -cos_a*sin_t;                   R_(0,2)=sin_a;
-  R_(1,0) =cos_t*sin_a*sin_p+cos_p*sin_t;  R_(1,1) = -sin_a*sin_p*sin_t+cos_p*cos_t; R_(1,2)=-cos_a*sin_p;
-  R_(2,0)=-cos_p*cos_t*sin_a+sin_p*sin_t;  R_(2,1) = cos_p*sin_a*sin_t+cos_t*sin_p;  R_(2,2)=cos_a*cos_p;
+	rgrl_rotation_3d_to_matrix(phi, alpha, theta, R_);
 }
 
 void rgrl_trans_rigid::set_rotation(double theta)
 {
   assert ( trans_.size() == 2);
 
-  R_(0,0) = vcl_cos(theta);    R_(0,1) = vcl_sin(theta);
-  R_(1,0) = -vcl_sin(theta);   R_(1,1) = vcl_cos(theta);
+  rgrl_rotation_2d_to_matrix(theta, R_);
 }
 
 void rgrl_trans_rigid::determine_angles(double& phi, double& alpha, double& theta) const
 {
   assert (trans_.size() == 3);
-
-  alpha = vcl_asin( R_(0,2) );
-
-  if (R_(0,0) * vcl_cos(alpha) > 0)
-  {
-    theta = vcl_atan( -1 * R_(0,1)/R_(0,0) );
-  }
-  else
-  {
-    theta = vcl_atan( -1 * R_(0,1)/R_(0,0) ) + vnl_math::pi;
-  }
-
-  if (R_(2,2) * vcl_cos(alpha) > 0 )
-  {
-    phi = vcl_atan( -1 * R_(1,2) / R_(2,2) );
-  }
-  else
-  {
-    phi = vcl_atan( -1 * R_(1,2) / R_(2,2) ) + vnl_math::pi;
-  }
+	rgrl_rotation_3d_from_matrix(R_, phi, alpha, theta);
 }
 
 void rgrl_trans_rigid::determine_angles( double& theta ) const
 {
   assert (trans_.size() == 2);
-  theta = vcl_asin( R_(0,1) );
+  rgrl_rotation_2d_from_matrix(R_, theta);
 }
 
 void

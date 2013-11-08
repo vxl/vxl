@@ -22,6 +22,7 @@ SET( rgrl_sources
 
   rgrl_cast.h
   rgrl_set_of.h                        rgrl_set_of.txx
+  rgrl_rotation.h                      rgrl_rotation.cxx
 
   rgrl_feature.h                       rgrl_feature.cxx
   rgrl_feature_sptr.h
