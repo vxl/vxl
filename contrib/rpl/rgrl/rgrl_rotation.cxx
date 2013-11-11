@@ -17,7 +17,7 @@ void rgrl_rotation_3d_to_matrix(double const theta, double const alpha, double c
 }
 
 void rgrl_rotation_3d_from_matrix(vnl_matrix<double> const& R, 
-                                  double &theta, double &alpha, double &phi)
+                                  double& phi, double& alpha, double& theta)
 {
   assert( R.rows()==3 && R.cols()==3 );
   alpha = vcl_asin( R(0,2) );

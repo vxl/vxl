@@ -20,7 +20,7 @@ inline void rgrl_rotation_3d_to_matrix(double const theta, double const alpha, d
 }
 
 void rgrl_rotation_3d_from_matrix(vnl_matrix<double> const& R, 
-                                  double &theta, double &alpha, double &phi);
+                                  double& phi, double& alpha, double& theta);
 
 void rgrl_rotation_2d_to_matrix(double const theta, vnl_matrix<double> & R);
 

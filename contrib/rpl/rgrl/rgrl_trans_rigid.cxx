@@ -64,7 +64,7 @@ void rgrl_trans_rigid::set_translation(double tx, double ty)
 void rgrl_trans_rigid::set_rotation(double theta, double alpha, double phi)
 {
   assert ( trans_.size() == 3);
-	rgrl_rotation_3d_to_matrix(phi, alpha, theta, R_);
+	rgrl_rotation_3d_to_matrix(theta, alpha, phi, R_);
 }
 
 void rgrl_trans_rigid::set_rotation(double theta)
