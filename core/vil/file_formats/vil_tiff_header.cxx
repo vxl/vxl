@@ -359,8 +359,8 @@ bool vil_tiff_header::compute_pixel_format()
     return false;
   }
 
-  vxl_uint_16 b = bits_per_sample.val;
-  vxl_uint_16 bbs = bytes_per_sample();
+  vxl_uint_16 const b = bits_per_sample.val;
+  vxl_uint_16 const bbs = bytes_per_sample();
   nplanes = 1;
   //Let's do the easy case first -- scalar pixels but various types
   if (samples_per_pixel.val==1)
@@ -400,6 +400,26 @@ bool vil_tiff_header::compute_pixel_format()
       case 4: //undefined format
       case 1: //unsigned values
       default:
+        // One special case is palette images
+        // vil doesn't currently support color maps so need to convert to
+        // regular three component RGB image (LATER)
+        if (photometric.val==PHOTOMETRIC_RGB /*&& samples_per_pixel.val==1 && 
+            sample_format.val == 1*/) //only support unsigned
+          switch (bbs)
+          {
+            case 1:
+              pix_fmt = VIL_PIXEL_FORMAT_BYTE;
+              nplanes = 3;
+              return false;
+            case 2:
+              pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
+              nplanes = 4;
+              return false;
+            default://other palette dynamic ranges don't make sense
+              pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+              return false;
+          }
+
         if (b==1){
           pix_fmt = VIL_PIXEL_FORMAT_BOOL;
           return true;}
@@ -423,34 +443,42 @@ bool vil_tiff_header::compute_pixel_format()
     }
   }
 
-  // The next easiest case is palette images
-  // vil doesn't currently support color maps so need to convert to
-  // regular three component RGB image (LATER)
-  if (samples_per_pixel.val==1 && photometric.val==PHOTOMETRIC_RGB &&
-      sample_format.val == 1) //only support unsigned
-    switch (bbs)
+  // Two-channel case --- greyscale+alpha
+  else if (samples_per_pixel.val==2)
+  {
+    nplanes = 2;
+    switch (sample_format.val)
     {
-      case 1:
-        pix_fmt = VIL_PIXEL_FORMAT_BYTE;
-        nplanes = 3;
-        return false;
-      case 2:
-        pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
-        nplanes = 4;
-        return false;
-      default://other palette dynamic ranges don't make sense
-        pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+      case 1: //unsigned values
+        switch (b)
+        {
+          case 8:
+            pix_fmt = VIL_PIXEL_FORMAT_BYTE;
+            return true;
+          case 16:
+            pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
+            return true;
+          case 32:
+            pix_fmt = VIL_PIXEL_FORMAT_UINT_32;
+            return true;
+          default: //other dynamic ranges, e.g. 12 bits/sample
+            pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+            return false;
+        }
+      default:
+        // Need to handle other signed values??
         return false;
     }
+  }
   // Now for regular color images
   // handle sample formats (unsigned, signed, float, double)
   // vil normally doesn't directly express these interleaved formats but
   // pretends the samples are in different planes.
   // The current implementation can't handle planar_config ==2, which is
   // separate color bands.
-  vxl_uint_16 s = samples_per_pixel.val;
-  if (samples_per_pixel.val>1 && photometric.val==2 && planar_config.val == 1 )
+  else if (/*samples_per_pixel.val>1 &&*/ photometric.val==PHOTOMETRIC_RGB && planar_config.val == 1 )
   {
+    vxl_uint_16 const s = samples_per_pixel.val;
     switch (sample_format.val)
     {
       case 1: //unsigned values
