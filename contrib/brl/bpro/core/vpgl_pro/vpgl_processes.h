@@ -63,6 +63,7 @@ DECLARE_FUNC_CONS(vpgl_convert_local_rational_to_perspective_process);
 DECLARE_FUNC_CONS(vpgl_load_geo_camera_process3);
 DECLARE_FUNC_CONS(vpgl_save_geo_camera_tfw_process);
 DECLARE_FUNC_CONS(vpgl_interpolate_perspective_cameras_process);
+DECLARE_FUNC_CONS(vpgl_load_lvcs_process);
 DECLARE_FUNC_CONS(vpgl_get_rational_camera_offsets_process);
 
 #endif

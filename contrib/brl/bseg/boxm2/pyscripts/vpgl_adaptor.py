@@ -552,6 +552,14 @@ def save_lvcs(lat,lon,hae,lvcs_filename):
     boxm2_batch.run_process();
     return;
 
+def load_lvcs(lvcs_filename):
+    boxm2_batch.init_process("vpglLoadLVCSProcess");
+    boxm2_batch.set_input_string(0, lvcs_filename);
+    boxm2_batch.run_process();
+    (lvcs_id, lvcs_type) = boxm2_batch.commit_output(0);
+    lvcs = dbvalue(lvcs_id, lvcs_type);
+    return lvcs;
+
 def geo_cam_global_to_img(geocam, lon, lat):
     boxm2_batch.init_process("vpglGeoGlobalToImgProcess");
     boxm2_batch.set_input_from_db(0, geocam);

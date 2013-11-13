@@ -170,9 +170,14 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
-  out_img_x->fill((float)(scene_bbox.min_x())-10.0f); // local coord system min z
-  out_img_y->fill((float)(scene_bbox.min_y())-10.0f); // local coord system min z
-  out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
+  // initialize the image by scene origin
+  double orig_lat, orig_lon, orig_elev; 
+  out_img_x->fill(-10.0f);
+  out_img_y->fill(-10.0f);
+  out_img_z->fill(-1.0f);
+  //out_img_x->fill((float)(scene_bbox.min_x())-10.0f); // local coord system min z
+  //out_img_y->fill((float)(scene_bbox.min_y())-10.0f); // local coord system min z
+  //out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
   vcl_cout <<   "out img x(0,0): " << ((*out_img_x)(0,0))
            << "\nout img y(0,0): " << ((*out_img_y)(0,0))
            << "\nout img z(0,0): " << ((*out_img_z)(0,0)) << vcl_endl;
@@ -181,7 +186,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84,lon, lat, gz);
   vcl_cout << "lvcs origin height: " << gz << vcl_endl;
   gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
-  gz += scene_bbox.min_z();
+  //gz += scene_bbox.min_z();
 
   vcl_cout << " scene min z: " << scene_bbox.min_z() << " gz: " << gz << vcl_endl;
   if (fill_in_value <= 0)
