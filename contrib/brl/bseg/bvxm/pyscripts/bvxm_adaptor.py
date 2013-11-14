@@ -28,6 +28,15 @@ def scene_box(scene):
   upper_right_lat = bvxm_batch.get_output_double(id);
   return lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat;
 
+# return the scene world directory
+def model_dir(scene):
+  bvxm_batch.init_process("bvxmSceneModelDirProcess");
+  bvxm_batch.set_input_from_db(0, scene);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  model_dir = bvxm_batch.get_output_string(id);
+  return model_dir;
+
 def roi_init(image_filename, cam, world, roi_init_params_xml):
   bvxm_batch.init_process("bvxmRoiInitProcess");
   bvxm_batch.set_input_string(0,image_filename);

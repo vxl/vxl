@@ -58,4 +58,7 @@ DECLARE_FUNC_CONS(bvxm_edgemap_ortho_process);
 DECLARE_FUNC_CONS(bvxm_scene_box_process);
 DECLARE_FUNC_CONS(bvxm_create_ortho_camera_process);
 
+//Basic operation
+DECLARE_FUNC_CONS(bvxm_scene_model_dir_process);
+
 #endif
