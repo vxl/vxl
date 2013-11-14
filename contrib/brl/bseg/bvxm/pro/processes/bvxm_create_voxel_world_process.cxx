@@ -42,7 +42,7 @@ bool bvxm_create_voxel_world_process(bprb_func_process& pro)
     return false;
   }
 
-  vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: "  << vox_dir << vcl_endl;
+  //vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: "  << vox_dir << vcl_endl;
 
 
 

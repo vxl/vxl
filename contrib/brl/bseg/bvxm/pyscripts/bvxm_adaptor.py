@@ -7,7 +7,6 @@ import os
 
 ## loads/creates scene
 def create_scene(scene_params_xml):
-  print("Creating Voxel World");
   bvxm_batch.init_process("bvxmCreateVoxelWorldProcess");
   bvxm_batch.set_params_process(scene_params_xml);  ## "./bvxmCreateVoxelWorldProcess.xml"
   bvxm_batch.run_process();
@@ -110,6 +109,14 @@ def render_ortho_edgemap(world, scale=0):
   (id, type) = bvxm_batch.commit_output(3);
   ortho_cam = dbvalue(id, type);
   return out_e_img, out_e_img_byte, out_h_img, ortho_cam
+
+def create_ortho_camera(world):
+  bvxm_batch.init_process("bvxmCreateOrthoCameraProcess");
+  bvxm_batch.set_input_from_db(0,world);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  ortho_cam = dbvalue(id, type);
+  return ortho_cam
 
 def render_exp_image(cam, ni, nj, world, app_model, bin_index=0, scale_index=0):
   bvxm_batch.init_process("bvxmRenderExpectedImageProcess");

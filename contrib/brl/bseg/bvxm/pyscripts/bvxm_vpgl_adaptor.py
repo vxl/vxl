@@ -329,6 +329,18 @@ def correct_rational_camera(cam_in, offset_x, offset_y):
     corrected_cam = dbvalue(id,type);
     return corrected_cam;
 
+def get_rational_camera_offsets(cam_in):
+    bvxm_batch.init_process('vpglGetRationalCameraOffsetsProcess');
+    bvxm_batch.set_input_from_db(0,cam_in);
+    bvxm_batch.run_process();
+    (id,type) = bvxm_batch.commit_output(0);
+    offset_u = bvxm_batch.get_output_double(id);
+    bvxm_batch.remove_data(id);
+    (id,type) = bvxm_batch.commit_output(1);
+    offset_v = bvxm_batch.get_output_float(id);
+    bvxm_batch.remove_data(id);
+    return (offset_u,offset_v);
+
 # convert lat,lon,el to local coordinates;
 def convert_to_local_coordinates(lvcs_filename,lat,lon,el):
     bvxm_batch.init_process('vpglConvertToLocalCoordinatesProcess');

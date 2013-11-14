@@ -40,6 +40,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   virtual void create_pointset();
   virtual void copy();
   virtual void paste();
+  virtual void create_vsol_spatial_object(vsol_spatial_object_2d_sptr obj);
   //************* IMAGE Processing Methods
 
   //: Draws the histogram on a graph (if the image is greyscale)

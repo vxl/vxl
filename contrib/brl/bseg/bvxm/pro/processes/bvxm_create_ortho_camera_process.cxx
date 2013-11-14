@@ -1,33 +1,31 @@
-// This is brl/bseg/bvxm/pro/processes/bvxm_heightmap_ortho_process.cxx
-#include "bvxm_heightmap_ortho_process.h"
+// This is brl/bseg/bvxm/pro/processes/bvxm_create_ortho_camera_process.cxx
+#include "bvxm_create_ortho_camera_process.h"
 //:
 // \file
 #include <bprb/bprb_func_process.h>
 #include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/bvxm_image_metadata.h>
+#include <bvxm/bvxm_edge_ray_processor.h>
+#include <brip/brip_vil_float_ops.h>
 #include <vil/vil_image_view.h>
 
-bool bvxm_heightmap_ortho_process_cons(bprb_func_process& pro)
+bool bvxm_create_ortho_camera_process_cons(bprb_func_process& pro)
 {
-  using namespace bvxm_heightmap_ortho_process_globals;
-  // This process has 4 inputs:
-  //input[0]: The voxel world
+  using namespace bvxm_create_ortho_camera_process_globals;
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  int i=0;
-  input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world
+  input_types_[0] = "bvxm_voxel_world_sptr";
   if (!pro.set_input_types(input_types_))
     return false;
 
-  //output
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  output_types_[0] = "vil_image_view_base_sptr";  // this one is the depth map from top
-  output_types_[1] = "vil_image_view_base_sptr";  // this one is negated depth map, so height map from scene floor + scene floor height --> eventual output is an absolute height map
+  output_types_[0] = "vpgl_camera_double_sptr";  // return the ortho camera of the scene, as it may be needed for other processes
   return pro.set_output_types(output_types_);
 }
 
-// generates a height map from a given camera viewpoint
-bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
+// generates an ortho camera from the scene bounding box, GSD of the image is 1 meter
+bool bvxm_create_ortho_camera_process(bprb_func_process& pro)
 {
-  using namespace bvxm_heightmap_ortho_process_globals;
+  using namespace bvxm_create_ortho_camera_process_globals;
 
   if (pro.n_inputs()<n_inputs_)
   {
@@ -35,11 +33,10 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
     return false;
   }
 
-  unsigned i = 0;
   //voxel_world
-  bvxm_voxel_world_sptr world =  pro.get_input<bvxm_voxel_world_sptr>(i++);
+  bvxm_voxel_world_sptr world =  pro.get_input<bvxm_voxel_world_sptr>(0);
   if (!world) {
-    vcl_cout << pro.name() <<" :--  Input 3  is not valid!\n";
+    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
 
@@ -53,7 +50,6 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   double lat, lon, elev;
   lvcs->get_origin(lat, lon, elev);
   vcl_cout << " lvcs origin: " << lat << " " << lon << " " << elev << vcl_endl;
-  float base_elev = (float)elev;
 
   // determine the upper left corner to use a vpgl_geo_cam, WARNING: assumes that the world is compass-alinged
   double upper_left_lon, upper_left_lat, upper_left_elev;
@@ -74,23 +70,7 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs); 
   cam->set_scale_format(true);
   vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);  
-  
-  vil_image_view<unsigned> *dmap = new vil_image_view<unsigned>(ni, nj, 1);
-  world->heightmap(camera,*dmap);  // this method actually generates a depth not a height map
 
-  // subtract from the scene height to get the height from scene floor
-  float h = box.depth();
-  
-  vcl_cout << "Using scene height: " << h << " to negate the depth map!\n";
-  vil_image_view<float> *hmap = new vil_image_view<float>(ni, nj, 1);
-  hmap->fill(0.0f);
-  for (unsigned i = 0; i < ni; i++) 
-    for (unsigned j = 0; j < nj; j++) 
-      (*hmap)(i,j) = h-(*dmap)(i,j)+base_elev;
-    
-  //store output
-  pro.set_output_val<vil_image_view_base_sptr>(0, dmap);
-  pro.set_output_val<vil_image_view_base_sptr>(1, hmap);
-  
+  pro.set_output_val<vpgl_camera_double_sptr>(0, camera);
   return true;
 }

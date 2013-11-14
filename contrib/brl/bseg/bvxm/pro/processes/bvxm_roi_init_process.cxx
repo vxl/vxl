@@ -158,6 +158,7 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
                         (unsigned int)bb->width(),
                         (unsigned int)bb->get_min_y(),
                         (unsigned int)bb->height());
+  
   if (!roi) {
     vcl_cerr << "bvxm_roi_init_process::roi_init()-- cannot get copy view from image!\n";
     return false;
@@ -228,8 +229,9 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
   camera->image_offset(u, v);
   double tu =  u - roi_box->min_x();
   double tv =  v - roi_box->min_y();
-  camera->set_image_offset(tu, tv);
+  //camera->set_image_offset(tu, tv);  // DO NOT MODIFY THE ORIGINAL CAMERA!! It may be used outside of this process in the python process pipeline
   local_camera = vpgl_local_rational_camera<double> (*lvcs, *camera);
+  local_camera.set_image_offset(tu, tv);
   delete roi_box;
   return true;
 }

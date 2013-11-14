@@ -152,9 +152,25 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
 //: query the resources in the given box and output the full paths to the given file
 bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& band_str)
 {
-  vcl_vector<unsigned> ids;
-  query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, ids);
+  vcl_vector<unsigned> ids, ids_all;
+  query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, ids_all);
+
+  // eliminate the repeating ids, more than one leaf may contain the same resource
+  for (unsigned i = 0; i < ids_all.size(); i++) {
+    bool contains = false;
+    for (unsigned j = i+1; j < ids_all.size(); j++) {
+      if (ids_all[i] == ids_all[j]) {
+        contains = true;
+        break;
+      }
+    }
+    if (!contains)
+      ids.push_back(ids_all[i]);
+  }
+
   cnt = ids.size();
+  if (out_file.compare("") == 0)
+    return true;
   vcl_ofstream ofs(out_file.c_str());
   if (!ofs) {
     vcl_cerr << "In volm_satellite_resources::query_print_to_file() -- cannot open file: " << out_file << vcl_endl;
@@ -205,15 +221,11 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
     }
   }
 #endif
-  vcl_ofstream ofs(out_file.c_str());
-  if (!ofs) {
-    vcl_cerr << "In volm_satellite_resources::query_print_to_file() -- cannot open file: " << out_file << vcl_endl;
-    return false;
-  }
+  
   vcl_vector<brad_image_metadata_sptr> selected_names;
+#if 0
   vcl_vector<vcl_string> names;
   names.push_back("GeoEye-1"); names.push_back("WV02"); names.push_back("WV01"); names.push_back("other");
-#if 0
   for (unsigned ii = 0; ii < names.size(); ii++) {
     vcl_string name = names[ii];
     for (unsigned i = 0; i < possible_seeds[name].size(); i++) {
@@ -227,6 +239,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
     }
   }
 #endif
+
+  vcl_vector<vcl_string> seed_paths;
 
   cnt = 0;
   bool done = false;
@@ -242,7 +256,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
     if (exists) continue;
     selected_names.push_back(resources_[possible_seeds["GeoEye-1"][i]].meta_);
 
-    ofs << resources_[possible_seeds["GeoEye-1"][i]].name_ << '\n';
+    //ofs << resources_[possible_seeds["GeoEye-1"][i]].name_ << '\n';
+    seed_paths.push_back(resources_[possible_seeds["GeoEye-1"][i]].name_);
     //vcl_cout << resources_[possible_seeds["GeoEye-1"][i]].name_ << '\n';
     cnt++;
 
@@ -265,7 +280,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
      if (exists) continue;
      selected_names.push_back(resources_[possible_seeds["WV02"][i]].meta_);
       
-     ofs << resources_[possible_seeds["WV02"][i]].name_ << '\n';
+     //ofs << resources_[possible_seeds["WV02"][i]].name_ << '\n';
+     seed_paths.push_back(resources_[possible_seeds["WV02"][i]].name_);
      //vcl_cout << resources_[possible_seeds["WV02"][i]].name_ << '\n';
      cnt++;
      if (cnt == n_seeds) {
@@ -288,7 +304,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
      if (exists) continue;
      selected_names.push_back(resources_[possible_seeds["WV01"][i]].meta_);
       
-     ofs << resources_[possible_seeds["WV01"][i]].name_ << '\n';
+     //ofs << resources_[possible_seeds["WV01"][i]].name_ << '\n';
+     seed_paths.push_back(resources_[possible_seeds["WV01"][i]].name_);
      //vcl_cout << resources_[possible_seeds["WV01"][i]].name_ << '\n';
      cnt++;
      if (cnt == n_seeds) {
@@ -311,7 +328,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
      if (exists) continue;
      selected_names.push_back(resources_[possible_seeds["other"][i]].meta_);
       
-     ofs << resources_[possible_seeds["other"][i]].name_ << '\n';
+     //ofs << resources_[possible_seeds["other"][i]].name_ << '\n';
+     seed_paths.push_back(resources_[possible_seeds["other"][i]].name_);
      //vcl_cout << resources_[possible_seeds["other"][i]].name_ << '\n';
      cnt++;
      if (cnt == n_seeds) {
@@ -320,6 +338,18 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
      }
     }
   }
+
+  if (out_file.compare("") == 0)
+    return true;
+
+  vcl_ofstream ofs(out_file.c_str());
+  if (!ofs) {
+    vcl_cerr << "In volm_satellite_resources::query_print_to_file() -- cannot open file: " << out_file << vcl_endl;
+    return false;
+  }
+
+  for (unsigned i = 0;i < seed_paths.size(); i++)
+    ofs << seed_paths[i] << '\n';
 
   ofs.close();
   return true;

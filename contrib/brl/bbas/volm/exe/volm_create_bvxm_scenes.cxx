@@ -31,14 +31,16 @@ int main(int argc, char** argv)
   // input
   vul_arg<vcl_string> in_folder("-in", "input folder to read DEM files as .tif", "");
   vul_arg<vcl_string> in_poly("-poly", "region polygon as kml, the scenes that cover this polygon will be created", "");
-  vul_arg<vcl_string> out_folder("-out", "folder to create scene folders and write their files","");   
+  vul_arg<vcl_string> out_folder("-out", "folder to write xml files","");   
+  vul_arg<vcl_string> world_folder("-world_dir", "folder to put as the world dir into xml files","");   
   vul_arg<float> voxel_size("-vox", "size of voxel in meters", 1.0f);
   vul_arg<float> world_size("-size", "the size of the world in meters", 500.0f);
   vul_arg<float> height("-height", "the amount to be added on top of the terrain height to create the scene in meters", 0.0f);
+
   vul_arg_parse(argc, argv);
 
   // check input
-  if (in_folder().compare("") == 0 || in_poly().compare("") == 0 || out_folder().compare("") == 0) {
+  if (in_folder().compare("") == 0 || in_poly().compare("") == 0 || out_folder().compare("") == 0 || world_folder().compare("") == 0) {
     vcl_cerr << " ERROR: input is missing!\n";
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
@@ -113,7 +115,7 @@ int main(int argc, char** argv)
     vgl_vector_3d<unsigned int> num_voxels(dim_xy, dim_xy, dim_z);
     bvxm_world_params params;
     //params.set_params(name.str(), corner, num_voxels, voxel_size(), lvcs); 
-    params.set_params(out_folder().substr(0, out_folder().size()-1), corner, num_voxels, voxel_size(), lvcs);  // for now set model dir as out_folder
+    params.set_params(world_folder().substr(0, world_folder().size()-1), corner, num_voxels, voxel_size(), lvcs);  
     vcl_string xml_name = name.str() + ".xml";
     params.write_xml(xml_name, lvcs_name);
 

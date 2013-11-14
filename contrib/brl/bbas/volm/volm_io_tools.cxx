@@ -378,12 +378,17 @@ void volm_io_tools::load_aster_dem_imgs(vcl_string const& folder, vcl_vector<vol
 
     vcl_string folder = fn();
 
-    vcl_string file_glob2 = folder + "//" + "*_dem.tif";
+    vcl_string file_glob2 = folder + "//" + "*_dem*.tif";
     for (vul_file_iterator fn2 = file_glob2.c_str(); fn2; ++fn2) {
       volm_io_tools::load_geotiff_image(fn2(), info);
       infos.push_back(info);
     }
+    if (folder.find("_dem") != vcl_string::npos && folder.find(".tif") != vcl_string::npos) {
+      volm_io_tools::load_geotiff_image(folder, info);
+      infos.push_back(info);
+    }
   }
+  
 }
 
 void volm_io_tools::load_geocover_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)

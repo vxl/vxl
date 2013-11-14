@@ -73,18 +73,19 @@ def train_classifier(tclsf, poly_file, category_name, dictionary_name, compute_c
   return tclsf
 
 #def test_classifier(tclsf, img, block_size):
-def test_classifier(tclsf, block_size):
+def test_classifier(tclsf, block_size, category_id_file=""):
   bvxm_batch.init_process("sdetTextureClassifierProcess2");
   bvxm_batch.set_input_from_db(0, tclsf);
-  #bvxm_batch.set_input_from_db(1, img);
-  #bvxm_batch.set_input_unsigned(2, block_size);
   bvxm_batch.set_input_unsigned(1, block_size);
+  bvxm_batch.set_input_string(2, category_id_file);
   bvxm_batch.run_process();
   (out_id, out_type)=bvxm_batch.commit_output(0);
   out = dbvalue(out_id, out_type);
   (out_id, out_type)=bvxm_batch.commit_output(1);
   out_color = dbvalue(out_id, out_type);
-  return out, out_color
+  (out_id, out_type)=bvxm_batch.commit_output(2);
+  out_id = dbvalue(out_id, out_type);
+  return out, out_color, out_id
 
 ## pass the color output image of the classifier and the bin file name prefix for vsol_spatial_object_2d polygon files for ground-truth
 def generate_roc(tclsf, class_out_prob_img, class_out_color_img, orig_img, prefix_for_bin_files, positive_category_name):

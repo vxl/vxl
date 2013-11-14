@@ -71,3 +71,51 @@ bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
 }
 
 
+bool vpgl_get_rational_camera_offsets_process_cons(bprb_func_process& pro)
+{
+  //this process takes 1 inputs and has 2 output
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("double");
+  output_types.push_back("double");
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+//: Execute the process
+bool vpgl_get_rational_camera_offsets_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() != 1) {
+    vcl_cout << "vpgl_get_rational_camera_offsets_process: The number of inputs should be 3, not " << pro.n_inputs() << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
+  
+  vpgl_local_rational_camera<double>* cam_local_rat = dynamic_cast<vpgl_local_rational_camera<double>*>(cam.ptr());
+  if (!cam_local_rat) {
+    vpgl_rational_camera<double>* cam_rational = dynamic_cast<vpgl_rational_camera<double>*>(cam.ptr());
+    if (!cam_rational) {
+      vcl_cerr << "In vpgl_get_rational_camera_offsets_process() input is not of type: vpgl_rational_camera<double>\n";
+      return false;
+    }
+    else {
+      double offset_u, offset_v;
+      cam_rational->image_offset(offset_u,offset_v);
+      pro.set_output_val<double>(0, offset_u);
+      pro.set_output_val<double>(0, offset_v);
+      return true;
+    }
+  }
+
+  double offset_u, offset_v;
+  cam_local_rat->image_offset(offset_u,offset_v);
+  pro.set_output_val<double>(0, offset_u);
+  pro.set_output_val<double>(0, offset_v);
+
+  return true;
+}
+
+

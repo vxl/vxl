@@ -65,4 +65,5 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_edges_process, "bvxmDetectEdgesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_edgemap_ortho_process, "bvxmEdgemapOrthoProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_scene_box_process, "bvxmSceneBoxProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_ortho_camera_process, "bvxmCreateOrthoCameraProcess");
 }

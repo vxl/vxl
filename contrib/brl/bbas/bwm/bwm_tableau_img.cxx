@@ -9,6 +9,8 @@
 #include <vil/vil_save.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_box_2d.h>
+#include <vsol/vsol_curve_2d.h>
+#include <vsol/vsol_digital_curve_2d.h>
 
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -111,6 +113,61 @@ void bwm_tableau_img::create_pointset()
        pit != pts.end(); ++pit)
     my_observer_->create_point(*pit);
   this->post_redraw();
+}
+
+void bwm_tableau_img::create_vsol_spatial_object(vsol_spatial_object_2d_sptr sos)
+{
+  if (sos->cast_to_point()) {
+    vsol_point_2d_sptr p = sos->cast_to_point();
+    my_observer_->create_point(p);
+  }
+  else if (sos->cast_to_curve())
+  {
+    if (sos->cast_to_curve()->cast_to_digital_curve())
+    {
+      vcl_cerr << "bwm_observer does not have support to add digital curve!! skipping this object!\n";
+    }
+    else if (sos->cast_to_curve()->cast_to_vdgl_digital_curve())
+    {
+      vcl_cerr << "bwm_observer does not have support to add vdgl digital curve!! skipping this object!\n";
+    }
+    else if (sos->cast_to_curve()->cast_to_line())
+    {
+      //vsol_line_2d_sptr line =
+      //  sos->cast_to_curve()->cast_to_line();
+      vcl_cerr << "bwm_observer does not have support to add vsol_line_2d !! skipping this object!\n";
+    }
+    else if (sos->cast_to_curve()->cast_to_polyline())
+    {
+      vsol_polyline_2d_sptr pline =
+        sos->cast_to_curve()->cast_to_polyline();
+      my_observer_->create_polyline(pline);
+    }
+    else if (sos->cast_to_curve()->cast_to_conic())
+    {
+      //vsol_conic_2d_sptr conic = sos->cast_to_curve()->cast_to_conic();
+      // make sure the endpoints are already defined
+      //assert(conic->p0() && conic->p1());
+      //this->add_vsol_conic_2d(conic, style);
+      vcl_cerr << "bwm_observer does not have support to add vsol_conic_2d_sptr !! skipping this object!\n";
+    }
+    else
+      assert(!"unknown curve type in bgui_vsol2D_tableau::add_spatial_object()");
+  }
+  else if (sos->cast_to_region()) {
+    if (sos->cast_to_region()->cast_to_polygon())
+    {
+      vsol_polygon_2d_sptr pline =
+        sos->cast_to_region()->cast_to_polygon();
+      my_observer_->create_polygon(pline);
+    }
+    else
+      assert(!"unknown region type in bgui_vsol2D_tableau::add_spatial_object()");
+  }
+  else
+    assert(!"unknown spatial object type in bgui_vsol2D_tableau::add_spatial_object()");
+  return;
+
 }
 
 void bwm_tableau_img::copy()
@@ -237,7 +294,9 @@ void bwm_tableau_img::load_spatial_objects_2d(){
   }
   vcl_vector<vsol_spatial_object_2d_sptr> sos;
   vsl_b_read(istr, sos);
-  my_observer_->add_spatial_objects(sos);
+  //my_observer_->add_spatial_objects(sos);
+  for (unsigned i = 0; i < sos.size(); i++)
+    this->create_vsol_spatial_object(sos[i]);
   my_observer_->post_redraw();
 }
 
