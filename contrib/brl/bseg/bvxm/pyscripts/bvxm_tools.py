@@ -3,7 +3,7 @@ from bvxm_adaptor import *
 from bvxm_volm_adaptor import *
 from bvxm_vpgl_adaptor import *
 from bvxm_vil_adaptor import *
-import os, time, glob
+import os, time, glob, sys
 #############################################################################
 # PROVIDES higher level python functions to make bvxm_batch
 # code more readable/refactored
@@ -24,9 +24,10 @@ def get_satellite_uncertainty(sat_name):
 def build_edge_world(scene, scene_id, world_dir, n_seed, cameras, image_fnames, cropped_edge_imgs, cropped_cams, uncertainties, param_file_dir, corrected_global_cams, out_dir, save=0):
 
   ## remove the .vox files if any
-  edge_files = glob.glob(world_dir + "edges_*.vox");
+  edge_files = glob.glob(world_dir + "/edges_*.vox");
   for edge_file_name in edge_files:
     print "removing " + edge_file_name + "...";
+    sys.stdout.flush()
     os.remove(edge_file_name);
 
   t1 = time.time();
@@ -117,9 +118,11 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
   f = open(temp_text_res, 'r')
   lines = f.readlines();
   f.close();
+  os.remove(temp_text_res)
   res_files_tmp = [];
   for line in lines:
     res_files_tmp.append(line.rstrip('\n'));
+
   res_files = [];
   for res_file in res_files_tmp:
     rstr = os.path.abspath(res_file);
@@ -135,6 +138,7 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
       n_seed = n_seed + 1;
 
   print "%d out of %d cameras are already in cam_global2, n_seed: %d" % (n_seed, len(res_files), n_seed)
+  sys.stdout.flush()
   ## if all cameras are already corrected skip this scene
   if n_seed == cnt:
     return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, n_seed, 0;
@@ -187,12 +191,11 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
         cnt = cnt+1
 
   print "%d out of %d images are valid without cloud" % (cnt, len(res_files))
-
+  sys.stdout.flush()
   ##
   ## Second check whether all non-cloud images have refined camera global 2
   ## if so, then no need to update the world since it will not contribute any camera refining process
   ##
-  print cam_cat;
   seed_num = 0;
   for i in range(0,cnt,1):
     if (cam_cat[i]==2):
@@ -221,7 +224,7 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
       cropped_valid_cams.append(cropped_cams[i])
       valid_uncertainties.append(uncertainties[i])
   print "%d out of %d cameras are already in cam_global2, n_seed: %d" % (len(cropped_valid_imgs), cnt, n_seed)
-
+  sys.stdout.flush()
   ## second check how many cameras are in camera global 1 --- when n_seed < n_seed_necessary, these serve as seed images too
   for i in range(0, cnt, 1):
     if (cam_cat[i] == 1):
@@ -233,7 +236,7 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
       if n_seed < n_seed_necessary:
         n_seed = n_seed+1;
   print "%d out of %d cameras are already in cam_global2 and cam_global, n_seed: %d" % (len(cropped_valid_imgs), cnt, n_seed)
-
+  sys.stdout.flush()
   ## append all the other images
   for i in range(0, cnt, 1):
     if (cam_cat[i] == 0):
