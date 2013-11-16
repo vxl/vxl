@@ -337,7 +337,7 @@ def get_rational_camera_offsets(cam_in):
     offset_u = bvxm_batch.get_output_double(id);
     bvxm_batch.remove_data(id);
     (id,type) = bvxm_batch.commit_output(1);
-    offset_v = bvxm_batch.get_output_float(id);
+    offset_v = bvxm_batch.get_output_double(id);
     bvxm_batch.remove_data(id);
     return (offset_u,offset_v);
 

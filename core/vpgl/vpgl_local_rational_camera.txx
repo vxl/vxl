@@ -209,7 +209,7 @@ vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_istream& istr)
   }
   if  (!good)
   {
-    vcl_cout << "error: not a composite rational camera file\n";
+    //vcl_cout << "error: not a composite rational camera file\n";
     return 0;
   }
   return new vpgl_local_rational_camera<T>(lvcs, *rcam);

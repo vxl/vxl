@@ -77,7 +77,7 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
     for (unsigned kk = 0; kk < cats.size(); kk++) 
       cat_id_map[cats[kk]] = kk;
   } else {
-    vcl_ifstream ifs(cat_ids_file);
+    vcl_ifstream ifs(cat_ids_file.c_str());
     vcl_string cat_name; int id;
     ifs >> cat_name;
     while (!ifs.eof()) {

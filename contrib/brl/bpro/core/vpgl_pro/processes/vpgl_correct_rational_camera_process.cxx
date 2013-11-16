@@ -105,7 +105,7 @@ bool vpgl_get_rational_camera_offsets_process(bprb_func_process& pro)
       double offset_u, offset_v;
       cam_rational->image_offset(offset_u,offset_v);
       pro.set_output_val<double>(0, offset_u);
-      pro.set_output_val<double>(0, offset_v);
+      pro.set_output_val<double>(1, offset_v);
       return true;
     }
   }
@@ -113,7 +113,7 @@ bool vpgl_get_rational_camera_offsets_process(bprb_func_process& pro)
   double offset_u, offset_v;
   cam_local_rat->image_offset(offset_u,offset_v);
   pro.set_output_val<double>(0, offset_u);
-  pro.set_output_val<double>(0, offset_v);
+  pro.set_output_val<double>(1, offset_v);
 
   return true;
 }
