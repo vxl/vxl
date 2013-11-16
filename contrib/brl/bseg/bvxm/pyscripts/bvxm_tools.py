@@ -47,6 +47,7 @@ def build_edge_world(scene, scene_id, world_dir, n_seed, cameras, image_fnames, 
     print '-----------------------------';
     print "scene: %d, image: %d out of %d" % (scene_id, i, len(image_fnames));
     print '-----------------------------';
+    sys.stdout.flush();
     if i >= n_seed:
       cam_cor, expected_edge_image, offset_u, offset_v = rpc_registration(scene, cropped_cam, cropped_edge_image, uncertainty, 0, 0);
       if save:
@@ -96,7 +97,8 @@ def get_scene_resource_cnt(scene, res):
 ## process the scenes only when following satisfy:
 ##    1. there are more than 'n_seed_necessary' sources to update the edge world
 ##    2. there are non-cloud images that require refined camera (cam_global2)
-def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param_file_dir, n_seed_necessary=5, edge_threshold = 15):
+def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param_file_dir, n_seed_necessary=5, edge_threshold = 15,
+                    cropped_image_ratio = 0.3):
   n_seed = 0;
   cnt = 0;
   valid_img_names = [];
@@ -104,6 +106,11 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
   cropped_valid_imgs = [];
   cropped_valid_cams = [];
   valid_uncertainties = [];
+
+  # obtain the local scene box
+  scene_min_x, scene_min_y, scene_max_x, scene_max_y, scene_voxel_size = scene_local_box(scene);
+  scene_box_x = scene_max_x - scene_min_x;
+  scene_box_y = scene_max_y - scene_min_y;
 
   lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat = scene_box(scene);
   # check the images that intersect with scene, return the number of the overlapped images
@@ -176,6 +183,17 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
     # cropped the image and get the cloud index
     statuscode, cropped_cam, cropped_image, uncertainty = roi_init(img_file, cam, scene, uncertainty_file);
     if statuscode:
+      # check the size of the cropped image (large enough in size and roughly cubic)
+      # the cropped image should at least overlap ~10% of the image
+      # and the size ratio of the image should be larger than 0.8
+      crop_ni, crop_nj = image_size(cropped_image);
+      if crop_ni > crop_nj:  crop_img_ratio = float(crop_nj)/float(crop_ni);
+      elif crop_ni < crop_nj:  crop_img_ratio = float(crop_ni)/float(crop_nj);
+      else: crop_img_raio = 1;
+      if crop_img_ratio < cropped_image_ratio:
+        print "Cropped image size %d x %d of image %s is not cubic, ignored..." % (crop_ni, crop_nj, name)
+        sys.stdout.flush();
+        continue;
       cropped_edge_image = bvxm_detect_edges(cropped_image, param_file_dir + "bvxmDetectEdgesProcess.xml");
       edge_sum = img_sum(cropped_edge_image);
       ni, nj = image_size(cropped_edge_image);
@@ -201,12 +219,13 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
     if (cam_cat[i]==2):
       seed_num = seed_num + 1;
   if seed_num == cnt:
+    print "%d out of %d valid cameras are already in cam_global2, n_seed: %d" % (seed_num, len(img_names), seed_num)
     return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, n_seed, 0;
 
   ## Second check whether we have enough img/cam as valid seed
   seed_num = 0
   for i in range(0, cnt, 1):
-    if (cam_cat[i] == 1 or cam_cat[2] == 2):
+    if (cam_cat[i] == 1 or cam_cat[i] == 2):
       seed_num = seed_num + 1;
   if seed_num < n_seed_necessary:
     return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, n_seed, 0;

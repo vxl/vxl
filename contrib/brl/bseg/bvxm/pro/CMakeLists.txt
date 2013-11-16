@@ -78,6 +78,7 @@ IF(EXPAT_FOUND)
     processes/bvxm_atmospheric_corr_process.h         processes/bvxm_atmospheric_corr_process.cxx
     processes/bvxm_edgemap_ortho_process.h            processes/bvxm_edgemap_ortho_process.cxx
     processes/bvxm_scene_box_process.h                processes/bvxm_scene_box_process.cxx
+    processes/bvxm_scene_local_box_process.h          processes/bvxm_scene_local_box_process.cxx
     processes/bvxm_create_ortho_camera_process.h      processes/bvxm_create_ortho_camera_process.cxx
     processes/bvxm_scene_model_dir_process.h          processes/bvxm_scene_model_dir_process.cxx
    )

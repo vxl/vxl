@@ -1,0 +1,59 @@
+// This is brl/bseg/bvxm/pro/processes/bvxm_scene_local_box_process.cxx
+#include "bvxm_scene_local_box_process.h"
+//:
+// \file
+#include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/bvxm_world_params.h>
+#include <bvxm/bvxm_util.h>
+#include <vgl/vgl_point_2d.h>
+#include <bprb/bprb_parameters.h>
+
+//: set input and output types
+bool bvxm_scene_local_box_process_cons(bprb_func_process& pro)
+{
+  using namespace bvxm_scene_local_box_process_globals;
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "bvxm_voxel_world_sptr";     // voxel world spec
+  if (!pro.set_input_types(input_types_))
+    return false;
+
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "double"; // lower left x
+  output_types_[1] = "double"; // lower left y
+  output_types_[2] = "double"; // upper right x
+  output_types_[3] = "double"; // upper right y
+  output_types_[4] = "double"; // voxel size
+  return pro.set_output_types(output_types_);
+}
+
+bool bvxm_scene_local_box_process(bprb_func_process& pro)
+{
+  using namespace bvxm_scene_local_box_process_globals;
+  // sanity check input
+  if ( pro.n_inputs() < n_inputs_ ) {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
+    return false;
+  }
+
+  // get the input
+  unsigned i = 0;
+  bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  bvxm_world_params_sptr params = voxel_world->get_params();
+
+  double min_x, min_y, max_x, max_y, voxel_size;
+  min_x = params->corner().x();
+  min_y = params->corner().y();
+  max_x = params->num_voxels().x() * params->voxel_length();
+  max_y = params->num_voxels().y() * params->voxel_length();
+  voxel_size = params->voxel_length();
+
+  // output
+  unsigned j = 0;
+  pro.set_output_val<double>(j++, min_x);
+  pro.set_output_val<double>(j++, min_y);
+  pro.set_output_val<double>(j++, max_x);
+  pro.set_output_val<double>(j++, max_y);
+  pro.set_output_val<double>(j++, voxel_size);
+
+  return true;
+}
