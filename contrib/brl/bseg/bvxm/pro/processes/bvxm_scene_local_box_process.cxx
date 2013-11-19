@@ -23,6 +23,8 @@ bool bvxm_scene_local_box_process_cons(bprb_func_process& pro)
   output_types_[2] = "double"; // upper right x
   output_types_[3] = "double"; // upper right y
   output_types_[4] = "double"; // voxel size
+  output_types_[5] = "double"; // lower left z
+  output_types_[6] = "double"; // upper right z
   return pro.set_output_types(output_types_);
 }
 
@@ -40,11 +42,13 @@ bool bvxm_scene_local_box_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_world_params_sptr params = voxel_world->get_params();
 
-  double min_x, min_y, max_x, max_y, voxel_size;
+  double min_x, min_y, max_x, max_y, voxel_size, min_z, max_z;
   min_x = params->corner().x();
   min_y = params->corner().y();
+  min_z = params->corner().z();
   max_x = params->num_voxels().x() * params->voxel_length();
   max_y = params->num_voxels().y() * params->voxel_length();
+  max_z = params->num_voxels().z() * params->voxel_length();
   voxel_size = params->voxel_length();
 
   // output
@@ -54,6 +58,8 @@ bool bvxm_scene_local_box_process(bprb_func_process& pro)
   pro.set_output_val<double>(j++, max_x);
   pro.set_output_val<double>(j++, max_y);
   pro.set_output_val<double>(j++, voxel_size);
+  pro.set_output_val<double>(j++, min_z);
+  pro.set_output_val<double>(j++, max_z);
 
   return true;
 }

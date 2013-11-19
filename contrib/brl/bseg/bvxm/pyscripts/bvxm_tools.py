@@ -236,7 +236,7 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
   valid_uncertainties = [];
 
   # obtain the local scene box
-  scene_min_x, scene_min_y, scene_max_x, scene_max_y, scene_voxel_size = scene_local_box(scene);
+  scene_min_x, scene_min_y, scene_max_x, scene_max_y, scene_voxel_size, lower_left_z, upper_right_z = scene_local_box(scene);
   scene_box_x = scene_max_x - scene_min_x;
   scene_box_y = scene_max_y - scene_min_y;
 

@@ -61,5 +61,6 @@ DECLARE_FUNC_CONS(bvxm_create_ortho_camera_process);
 
 //Basic operation
 DECLARE_FUNC_CONS(bvxm_scene_model_dir_process);
+DECLARE_FUNC_CONS(bvxm_scene_origin_process);
 
 #endif

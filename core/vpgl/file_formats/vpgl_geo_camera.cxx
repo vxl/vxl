@@ -345,8 +345,8 @@ void vpgl_geo_camera::backproject(const double u, const double v,
     utm.transform(utm_zone_, vec[0], vec[1], vec[2], lat, lon, elev);
   }
   else {
-    lat = vec[0];
-    lon = vec[1];
+    lon = vec[0];
+    lat = vec[1];
     elev = vec[2];
   }
 

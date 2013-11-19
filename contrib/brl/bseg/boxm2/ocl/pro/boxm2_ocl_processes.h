@@ -93,4 +93,6 @@ DECLARE_FUNC_CONS(boxm2_ocl_update_usingQ_process);
 DECLARE_FUNC_CONS(boxm2_ocl_init_alpha_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_sky_process);
 
+DECLARE_FUNC_CONS(boxm2_ocl_ingest_label_with_cam_process);
+
 #endif

@@ -32,7 +32,6 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> in_folder("-in", "input folder to read DEM files as .tif", "");
   vul_arg<vcl_string> in_poly("-poly", "region polygon as kml, the scenes that cover this polygon will be created", "");
   vul_arg<vcl_string> out_folder("-out", "folder to write xml files","");   
-  vul_arg<vcl_string> world_folder("-world_dir", "folder to put as the world dir into xml files","");   
   vul_arg<vcl_string> world_root("-world_dir", "the world folder where bvxm vox binary will be stored","");
   vul_arg<float> voxel_size("-vox", "size of voxel in meters", 1.0f);
   vul_arg<float> world_size("-size", "the size of the world in meters", 500.0f);
@@ -41,7 +40,7 @@ int main(int argc, char** argv)
   vul_arg_parse(argc, argv);
 
   // check input
-  if (in_folder().compare("") == 0 || in_poly().compare("") == 0 || out_folder().compare("") == 0 || world_folder().compare("") == 0) {
+  if (in_folder().compare("") == 0 || in_poly().compare("") == 0 || out_folder().compare("") == 0 || world_root().compare("") == 0) {
     vcl_cerr << " ERROR: input is missing!\n";
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;

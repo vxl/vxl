@@ -59,3 +59,48 @@ bool bvxm_scene_box_process(bprb_func_process& pro)
 
   return true;
 }
+
+
+//: set input and output types
+bool bvxm_scene_origin_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types_(1);
+  input_types_[0] = "bvxm_voxel_world_sptr";     // voxel world spec
+  if (!pro.set_input_types(input_types_))
+    return false;
+
+  vcl_vector<vcl_string> output_types_(3);
+  output_types_[0] = "double"; // lower left lon
+  output_types_[1] = "double"; // lower left lat
+  output_types_[2] = "double"; // origin elev
+  return pro.set_output_types(output_types_);
+}
+
+bool bvxm_scene_origin_process(bprb_func_process& pro)
+{
+  //static const parameters
+  static const vcl_string error = "error";
+
+  if ( pro.n_inputs() < 1 ) {
+    vcl_cout << pro.name() << " The input number should be " << 1 << vcl_endl;
+    return false;
+  }
+
+  // get the inputs:
+  unsigned i = 0;
+  bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  bvxm_world_params_sptr params = voxel_world->get_params();
+
+  vpgl_lvcs_sptr lvcs = params->lvcs();
+  
+  double lower_left_lon, lower_left_lat, gz, upper_right_lon, upper_right_lat;
+  lvcs->local_to_global(params->corner().x(), params->corner().y(), params->corner().z(), vpgl_lvcs::wgs84, lower_left_lon, lower_left_lat, gz);
+  
+  //Store outputs
+  unsigned j = 0;
+  pro.set_output_val<double>(j++, lower_left_lon);
+  pro.set_output_val<double>(j++, lower_left_lat);
+  pro.set_output_val<double>(j++, gz);
+
+  return true;
+}

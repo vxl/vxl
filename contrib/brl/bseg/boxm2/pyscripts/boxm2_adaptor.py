@@ -371,6 +371,25 @@ def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, ident, device
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
+## use this process to ingest e.g. a satellite classification map. pass the satellite cam to compute ray origins and directions
+def ingest_label_map_with_cam(scene, cache, cam, label_img, ident, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_adaptor, ingest label map cpp process not implemented";
+
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    boxm2_batch.init_process("boxm2OclIngestLabelwithCAMProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_from_db(4,label_img);
+    boxm2_batch.set_input_string(5,ident);
+    boxm2_batch.run_process();
+    return ;
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+
+
 def ingest_osm_label_map(scene, cache, x_img, y_img, z_img, label_img, ident, device=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_adaptor, ingest osm label map cpp process not implemented";

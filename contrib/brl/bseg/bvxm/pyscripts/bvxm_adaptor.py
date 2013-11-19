@@ -28,6 +28,18 @@ def scene_box(scene):
   upper_right_lat = bvxm_batch.get_output_double(id);
   return lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat;
 
+def scene_origin(scene):
+  bvxm_batch.init_process("bvxmSceneOriginProcess");
+  bvxm_batch.set_input_from_db(0, scene);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  lower_left_lon = bvxm_batch.get_output_double(id);
+  (id, type) = bvxm_batch.commit_output(1);
+  lower_left_lat = bvxm_batch.get_output_double(id);
+  (id, type) = bvxm_batch.commit_output(2);
+  lower_left_z = bvxm_batch.get_output_double(id);
+  return lower_left_lon, lower_left_lat, lower_left_z;
+
 ## return the scene bbox and voxel size in local coordinates
 def scene_local_box(scene):
   bvxm_batch.init_process("bvxmSceneLocalBoxProcess");
@@ -43,7 +55,11 @@ def scene_local_box(scene):
   upper_right_y = bvxm_batch.get_output_double(id);
   (id, type) = bvxm_batch.commit_output(4);
   voxel_size = bvxm_batch.get_output_double(id)
-  return lower_left_x, lower_left_y, upper_right_x, upper_right_y, voxel_size;
+  (id, type) = bvxm_batch.commit_output(5);
+  lower_left_z = bvxm_batch.get_output_double(id);  ## min z
+  (id, type) = bvxm_batch.commit_output(6);
+  upper_right_z = bvxm_batch.get_output_double(id);  ## max z
+  return lower_left_x, lower_left_y, upper_right_x, upper_right_y, voxel_size, lower_left_z, upper_right_z;
 
 # return the scene world directory
 def model_dir(scene):
