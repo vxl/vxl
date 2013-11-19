@@ -92,6 +92,134 @@ def get_scene_resource_cnt(scene, res):
   cnt = scene_resources(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, temp_text_res, "PAN");
   return cnt;
 
+## generate valid cropped images, cameras and uncertainty files that intersect with current scene
+## will also check whether there are enough seed images/cams for current scene
+def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file_dir, n_seed_necessary=5, edge_threshold = 15,
+                            cropped_image_ratio = 0.3):
+  cnt = 0;
+  n_seed = 0;
+  valid_img_names = [];
+  valid_cameras = [];
+  cropped_valid_imgs = [];
+  cropped_valid_cams = [];
+  valid_uncertainties = [];
+
+  lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat = scene_box(scene);
+  # obtain all images that intersect with current scene, if less than the necessary seed number, skip the scene
+  temp_text_res = "./scene_res.txt";
+  cnt = scene_resources(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, temp_text_res, "PAN");
+
+  ## not enough satellite images overlap with current scene, skip this scene
+  if cnt > max_cnt or cnt < min_cnt:
+    return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, 0;
+  ## correct the filename to ensure it works for multiple platform
+  f = open(temp_text_res, 'r')
+  lines = f.readlines();
+  f.close();
+  os.remove(temp_text_res)
+  res_files_tmp = [];
+  for line in lines:
+    res_files_tmp.append(line.rstrip('\n'));
+
+  res_files = [];
+  for res_file in res_files_tmp:
+    rstr = os.path.abspath(res_file);
+    res_file = rstr.replace('\\','/');
+    res_files.append(res_file);
+
+  ## first check how many cameras are in global 1 if less than required seed number, skip
+  for i in range(0, len(res_files), 1):
+    head, tail = os.path.split(res_files[i]);
+    name, ext = os.path.splitext(tail);
+    cam_name = cam_global + "%s_corrected.rpb" % name;
+    if os.path.exists(cam_name):
+      n_seed = n_seed + 1;
+
+  if n_seed < n_seed_necessary:
+    print "only %d refined cameras, less than the required seed number %d, skip" % (n_seed, n_seed_necessary)
+    sys.stdout.flush()
+    return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, 0;
+
+  ## get rid of colud images
+  cnt = 0;            # number of non-cloud images
+  img_names = []      # valid non-cloud image name
+  cam_names = []      # valid cameras associated with non-cloud images
+  cam_cat = []        # stores the category of the cameras (cam_global2 (2), cam_global1 (1) or original camera (0) )
+  cropped_imgs = []   # all cropped images
+  cropped_cams = []   # all cropped cameras
+  uncertainties = []  # all uncertainties
+  for img_file in res_files:
+    head, tail = os.path.split(img_file);
+    name, ext = os.path.splitext(tail);
+    cam_name1 = cam_global  + "%s_corrected.rpb" % name;
+    if os.path.isfile(cam_name1):
+      curr_cam_cat = 1;
+      curr_cam_res = cam_name1
+      cam = load_rational_camera(cam_name1);
+      uncertainty_file = param_file_dir + "uncertainty_5m.xml";
+    else:
+      curr_cam_cat = 0;
+      curr_cam_res = img_file;
+      cam = load_rational_camera_nitf(img_file);
+      uncertainty_file = param_file_dir + "uncertainty_%dm.xml" % get_satellite_uncertainty(img_file);
+    # crop the image using refined camera or original camera
+    statuscode, cropped_cam, cropped_img, uncertainty = roi_init(img_file, cam, scene, uncertainty_file);
+    if statuscode:
+      sys.stdout.flush()
+      # check the cropped image size
+      crop_ni, crop_nj = image_size(cropped_img);
+      if crop_ni > crop_nj:  crop_img_ratio = float(crop_nj)/float(crop_ni);
+      elif crop_ni < crop_nj:  crop_img_ratio = float(crop_ni)/float(crop_nj);
+      else: crop_img_ratio = 1.0
+      if crop_img_ratio < cropped_image_ratio:
+        print "Cropped image size %d x %d of image %s is not cubic, ignored..." % (crop_ni, crop_nj, name)
+        sys.stdout.flush()
+        continue;
+      cropped_edge_image = bvxm_detect_edges(cropped_img, param_file_dir + "bvxmDetectEdgesProcess.xml");
+      edge_sum = img_sum(cropped_edge_image);
+      ni, nj = image_size(cropped_edge_image);
+      percent = edge_sum/(ni*nj);
+      if percent > edge_threshold:
+        # store the non-cloud images and all other resources
+        img_names.append(img_file)
+        cam_names.append(curr_cam_res)
+        cam_cat.append(curr_cam_cat);
+        cropped_imgs.append(cropped_edge_image);
+        cropped_cams.append(cropped_cam);
+        uncertainties.append(uncertainty)
+        cnt = cnt+1
+
+  print "%d out of %d images are valid without cloud" % (cnt, len(res_files))
+  sys.stdout.flush();
+  ## check whether there are enought seed images
+  seed_num = 0;
+  for camera_cat in cam_cat:
+    if camera_cat == 1:  seed_num = seed_num + 1;
+  if seed_num < n_seed_necessary:
+    print "only %d refined cameras, less than the required seed number %d, skip" % (seed_num, n_seed_necessary)
+    sys.stdout.flush()
+    return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, 0;
+
+  ## rearrange the valid images based on camera category such that the first n_seed_necessary images will be chosen as seed during edge_world creation
+  for i in range(0, cnt, 1):
+    if (cam_cat[i]==1):
+      valid_img_names.append(img_names[i]);
+      valid_cameras.append(cam_names[i]);
+      cropped_valid_imgs.append(cropped_imgs[i])
+      cropped_valid_cams.append(cropped_cams[i])
+      valid_uncertainties.append(uncertainties[i])
+  print "%d out of %d cameras are in cam_global1" % (len(valid_cameras), cnt)
+  sys.stdout.flush()
+  ## append all other images
+  for i in range(0, cnt, 1):
+    if (cam_cat[i] == 0):
+      valid_img_names.append(img_names[i]);
+      valid_cameras.append(cam_names[i]);
+      cropped_valid_imgs.append(cropped_imgs[i])
+      cropped_valid_cams.append(cropped_cams[i])
+      valid_uncertainties.append(uncertainties[i])
+  return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, cnt;
+
 
 ## return the valid cropped images/cameras that intersect with current scene, all of which can be used to update the edge world
 ## process the scenes only when following satisfy:
