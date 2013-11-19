@@ -184,7 +184,7 @@ def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file
         img_names.append(img_file)
         cam_names.append(curr_cam_res)
         cam_cat.append(curr_cam_cat);
-        cropped_imgs.append(cropped_edge_image);
+        cropped_imgs.append(cropped_img);
         cropped_cams.append(cropped_cam);
         uncertainties.append(uncertainty)
         cnt = cnt+1
