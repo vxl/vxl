@@ -221,6 +221,10 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type APM_T>
   bool heightmap(bvxm_image_metadata const& virtual_camera, vil_image_view<unsigned> &heightmap, unsigned bin_index = 0, unsigned scale_idx =0);
 
+  //: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho. 
+  template<typename T>
+  bool orthorectify(vil_image_view_base_sptr z_map, vpgl_camera_double_sptr z_map_camera, vil_image_view<T>& input_image, vpgl_camera_double_sptr input_camera, vil_image_view<T>& out_image, unsigned scale_idx=0);
+
   //: return a planar approximation to the world
   vgl_plane_3d<double> fit_plane();
 
@@ -2336,6 +2340,96 @@ bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename,unsigned scale)
   ofs.close();
 
   delete[] ocp_array;
+
+  return true;
+}
+
+//: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho. 
+template <typename T>
+bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map, 
+                                    vpgl_camera_double_sptr z_map_camera, 
+                                    vil_image_view<T>& input_image, 
+                                    vpgl_camera_double_sptr input_camera, 
+                                    vil_image_view<T>& out_image, unsigned scale_idx)
+{
+  // extract global parameters
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
+  
+  // compute homographies from voxel planes to image coordinates and vise-versa.
+  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+
+  for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    compute_plane_image_H(input_camera,z,Hp2i,Hi2p,scale_idx);
+    H_plane_to_img.push_back(Hp2i);
+    H_img_to_plane.push_back(Hi2p);
+  }
+
+  // allocate some images
+  bvxm_voxel_slab<float> z_slab(z_map->ni(),z_map->nj(),1);
+  if (!bvxm_util::img_to_slab(z_map,z_slab)) {
+    vcl_cerr << "error converting image to voxel slab!\n";
+    return false;
+  }
+
+  // compute homography from ortho z slab to voxel grid (note that ortho camera orientation may be different than voxel grid orientation)
+  bvxm_voxel_slab<float> ortho_backproj(grid_size.x(),grid_size.y(),1);
+  vgl_h_matrix_2d<double> Hp2i_ortho, Hi2p_ortho;
+  compute_plane_image_H(z_map_camera,0,Hp2i_ortho,Hi2p_ortho,scale_idx);  // use height 0 only since this height map is already ortho
+  ortho_backproj.fill(0.0f);
+  bvxm_util::warp_slab_nearest_neighbor(z_slab, Hp2i_ortho, ortho_backproj);
+  //bvxm_util::write_slab_as_image(ortho_backproj,"C:/projects/temp/temp_ortho_backproj.tif");
+
+  bvxm_voxel_slab<T> out_slab_temp(grid_size.x(),grid_size.y(),1);
+  out_slab_temp.fill(T(0));
+
+  // convert image to a voxel_slab
+  bvxm_voxel_slab<T> image_slab(input_image.ni(), input_image.nj(), 1);
+  vil_image_view<T>::const_iterator img_it = input_image.begin();
+  typename bvxm_voxel_slab<T>::iterator slab_it = image_slab.begin();
+  for (; img_it != input_image.end(); ++img_it, ++slab_it) {
+    *slab_it = *img_it;
+  }
+
+  bvxm_voxel_slab<T> frame_backproj(grid_size.x(),grid_size.y(),1);
+
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z) {
+    vcl_cout << '.';
+
+    // backproject image onto voxel plane
+    frame_backproj.fill(T(0));
+    bvxm_util::warp_slab_nearest_neighbor(image_slab, H_plane_to_img[z], frame_backproj);
+
+    //vcl_stringstream s_temp; s_temp << "C:/projects/temp/temp_img_" << z << ".tif";
+    //bvxm_util::write_slab_as_image(frame_backproj,s_temp.str());
+    
+    bvxm_voxel_slab<T>::iterator frame_it = frame_backproj.begin();
+    bvxm_voxel_slab<float>::iterator ortho_backproj_it = ortho_backproj.begin();
+    bvxm_voxel_slab<T>::iterator out_slab_it = out_slab_temp.begin();
+
+    for (; frame_it != frame_backproj.end(); ++ortho_backproj_it, ++frame_it, ++out_slab_it) {
+      unsigned val = (unsigned)(vcl_floor(*ortho_backproj_it+0.5f)); // truncate the height to nearest int
+      if (val == z)
+        *out_slab_it = *frame_it;
+    }
+  }
+  vcl_cout << vcl_endl;
+
+  //vil_image_view_base_sptr outfloatimg = new vil_image_view<float>(out_image->ni(), out_image->nj(), 1);
+
+  bvxm_voxel_slab<T> out_slab(z_map->ni(),z_map->nj(),1);
+  out_slab.fill(T(0));
+
+  // warp back to input ortho cam orientation
+  bvxm_util::warp_slab_nearest_neighbor(out_slab_temp, Hi2p_ortho, out_slab);
+
+  vil_image_view<T>::iterator img_it2 = out_image.begin();
+  slab_it = out_slab.begin();
+  for (; img_it2 != out_image.end(); ++img_it2, ++slab_it) {
+    *img_it2 = *slab_it;
+  }
 
   return true;
 }

@@ -79,6 +79,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_interpolate_perspective_cameras_process, "vpglInterpolatePerspectiveCamerasProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_lvcs_process, "vpglLoadLVCSProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_rational_camera_offsets_process, "vpglGetRationalCameraOffsetsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_write_generic_camera_process, "vpglWriteGenericCameraProcess");
 
 }
 

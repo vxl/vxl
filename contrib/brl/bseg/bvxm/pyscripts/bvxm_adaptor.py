@@ -136,6 +136,17 @@ def render_height_map(world):
   out_h_img = dbvalue(id, type);
   return out_h_img, out_d_img
 
+def render_height_map_with_cam(world, input_cam, ni, nj):
+  bvxm_batch.init_process("bvxmHeightmapProcess");
+  bvxm_batch.set_input_from_db(0,input_cam);
+  bvxm_batch.set_input_unsigned(1,ni);
+  bvxm_batch.set_input_unsigned(2,nj);
+  bvxm_batch.set_input_from_db(3,world);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  out_d_img = dbvalue(id, type);
+  return out_d_img
+
 def render_ortho_edgemap(world, scale=0):
   print("Rendering ortho edge map");
   bvxm_batch.init_process("bvxmEdgemapOrthoProcess");
@@ -212,6 +223,18 @@ def save_occupancy_raw(world, filename, app_model, scale=0):
   bvxm_batch.set_input_unsigned(2, scale);
   bvxm_batch.set_input_string(3, app_model);
   bvxm_batch.run_process();
+
+def orthorectify(world, ortho_height_map, ortho_height_map_camera, input_image, input_image_camera):
+  bvxm_batch.init_process("bvxmOrthorectifyProcess");
+  bvxm_batch.set_input_from_db(0,ortho_height_map);
+  bvxm_batch.set_input_from_db(1,ortho_height_map_camera);
+  bvxm_batch.set_input_from_db(2,input_image);
+  bvxm_batch.set_input_from_db(3,input_image_camera);
+  bvxm_batch.set_input_from_db(4,world);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  out_ortho_img = dbvalue(id, type);
+  return out_ortho_img
 
 ############## some utilities, put here for now ##########
 def image_to_vrml_points(out_e_img, out_h_img, output_filename, prob_thres, max_scene_height):

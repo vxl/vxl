@@ -69,4 +69,5 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_ortho_camera_process, "bvxmCreateOrthoCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_scene_model_dir_process, "bvxmSceneModelDirProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_scene_origin_process, "bvxmSceneOriginProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_orthorectify_process, "bvxmOrthorectifyProcess");
 }

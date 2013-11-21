@@ -139,3 +139,45 @@ bool vpgl_convert_to_generic_camera_w_margin_process(bprb_func_process& pro)
   pro.set_output_val<vpgl_camera_double_sptr>(3,ncam);
   return true;
 }
+
+
+//: Init function
+bool vpgl_write_generic_camera_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");
+  input_types.push_back("vcl_string"); // name of output vrml file
+  input_types.push_back("unsigned"); // name of output vrml file
+  bool ok = pro.set_input_types(input_types);
+
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types;
+  return pro.set_output_types(output_types);
+}
+
+//: Execute the process
+bool vpgl_write_generic_camera_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs()!= 3) {
+    vcl_cout << "vpgl_write_generic_camera_process: The number of inputs should be 2" << vcl_endl;
+    return false;
+  }
+  // get the inputs
+  vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
+  if (!camera) {
+    vcl_cout<<"Null camera input\n"<<vcl_endl;
+    return false;
+  }
+  vcl_string out_name = pro.get_input<vcl_string>(1);
+  unsigned level = pro.get_input<unsigned>(2);
+
+  vpgl_generic_camera<double>* gcam = dynamic_cast<vpgl_generic_camera<double>* >(camera.ptr());
+
+  vcl_ofstream ofs(out_name);
+  ofs << "#VRML V2.0 utf8\n";
+  gcam->print_to_vrml(level, ofs);
+  ofs.close();
+
+  return true;
+}

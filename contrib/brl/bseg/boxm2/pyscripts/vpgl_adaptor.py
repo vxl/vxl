@@ -219,6 +219,13 @@ def persp2genWmargin(pcam, ni, nj, margin, level=0) :
   new_pers_cam = dbvalue(id,type);
   return (gcam, ni, nj, new_pers_cam);
 
+def write_generic_to_vrml(cam, out_file_name, level=0):
+  boxm2_batch.init_process("vpglWriteGenericCameraProcess");
+  boxm2_batch.set_input_from_db(0, cam);
+  boxm2_batch.set_input_string(1, out_file_name);
+  boxm2_batch.set_input_unsigned(2, level);
+  boxm2_batch.run_process();
+
 #gets bounding box from a directory of cameras... (incomplete)_;
 def camera_dir_planar_bbox(dir_name) :
   boxm2_batch.init_process("vpglGetBoundingBoxProcess");
