@@ -21,7 +21,7 @@ def get_satellite_uncertainty(sat_name):
   return 40;
 
 ## build edge world using a set of images and camera files, the first n_seed images are used as seed
-def build_edge_world(scene, scene_id, world_dir, n_seed, cameras, image_fnames, cropped_edge_imgs, cropped_cams, uncertainties, param_file_dir, corrected_global_cams, out_dir, save=0):
+def build_edge_world(scene, scene_id, world_dir, n_seed, image_fnames, cropped_imgs, cropped_cams, uncertainties, param_file_dir, corrected_global_cams, out_dir, save=0):
 
   ## remove the .vox files if any
   edge_files = glob.glob(world_dir + "/edges_*.vox");
@@ -31,35 +31,40 @@ def build_edge_world(scene, scene_id, world_dir, n_seed, cameras, image_fnames, 
     os.remove(edge_file_name);
 
   t1 = time.time();
-  out_imgs = out_dir + "img_%d_%s.tif";
+#   out_imgs = out_dir + "img_%d_%s.tif";
   out_edge_imgs = out_dir + "img_%d.tif";
+  out_exp_edge_imgs = out_dir + "exp_img_%d.tif"
   cnt_updates = 0;
+
+  # create cropped_edge_imgs from cropped_img
+  cropped_edge_imgs = []
+  for i in range(0,len(cropped_imgs),1):
+    cropped_edge_image = bvxm_detect_edges(cropped_imgs[i], param_file_dir + "bvxmDetectEdgesProcess.xml");
+    cropped_edge_imgs.append(cropped_edge_image)
 
   for i in range(0, len(cropped_edge_imgs), 1):
     cropped_cam = cropped_cams[i]
     cropped_edge_image = cropped_edge_imgs[i]
     uncertainty = uncertainties[i]
-    image_name = os.path.splitext(os.path.split(image_fnames[i])[1])[0]
-    if "_corrected" in cameras[i]:
-      cam = load_rational_camera(cameras[i]);
-    else:
-      cam = load_rational_camera_nitf(cameras[i]);
+    image_name = image_fnames[i]
     print '-----------------------------';
     print "scene: %d, image: %d out of %d" % (scene_id, i, len(image_fnames));
+    print "n_seed = ", n_seed
+    print "uncertainty = ", uncertainty
     print '-----------------------------';
     sys.stdout.flush();
     if i >= n_seed:
-      cam_cor, expected_edge_image, offset_u, offset_v = rpc_registration(scene, cropped_cam, cropped_edge_image, uncertainty, 0, 0);
+      cam_cor, expected_edge_image, offset_u, offset_v = rpc_registration(scene, cropped_cam, cropped_edge_image, uncertainty, 0, 0, 1);
       if save:
         bvxm_save_image(expected_edge_image, out_exp_edge_imgs % cnt_updates);
       print "-------- will correct with offset_u: " + str(offset_u) + " offset_v: " + str(offset_v);
-      cam_global_cor = correct_rational_camera(cam, offset_u, offset_v);
-      save_rational_camera(cam_global_cor,corrected_global_cams % image_name);
+#       cam_global_cor = correct_rational_camera(cropped_cam, offset_u, offset_v);
+      save_rational_camera(cam_cor,corrected_global_cams % image_name);
       # update edge world using corrected camera
       update_edges(scene, cam_cor, cropped_edge_image, param_file_dir + "bvxmUpdateEdgesProcess.xml");
       # clean data
       bvxm_batch.remove_data(expected_edge_image.id)
-      bvxm_batch.remove_data(cam_global_cor.id);
+#       bvxm_batch.remove_data(cam_global_cor.id);
       bvxm_batch.remove_data(cam_cor.id)
     else:
       # update edge world using seed
@@ -68,7 +73,37 @@ def build_edge_world(scene, scene_id, world_dir, n_seed, cameras, image_fnames, 
     cnt_updates = cnt_updates+1;
     if save:
       bvxm_save_image(cropped_edge_image, out_edge_imgs % cnt_updates);
-    bvxm_batch.remove_data(cam.id)
+
+  # update the seed camera
+  print "update the seed images..."
+  sys.stdout.flush()
+  cnt_updates = 0
+  for i in range(0, len(cropped_edge_imgs), 1):
+    cropped_cam = cropped_cams[i]
+    cropped_edge_image = cropped_edge_imgs[i]
+    uncertainty = uncertainties[i]
+    image_name = image_fnames[i]
+    print '-----------------------------';
+    print "scene: %d, image: %d out of %d" % (scene_id, i, len(image_fnames));
+    print "n_seed = ", n_seed
+    print "uncertainty = ", uncertainty
+    print '-----------------------------';
+    if i >= n_seed:
+      continue;
+    else:
+      # update the seed cameras
+      cam_cor, expected_edge_image, offset_u, offset_v = rpc_registration(scene, cropped_cam, cropped_edge_image, uncertainty, 0, 0, 1);
+      if save:
+        bvxm_save_image(expected_edge_image, out_exp_edge_imgs % cnt_updates);
+        cnt_updates = cnt_updates + 1
+      print "-------- will correct the cropped camera with offset_u: " + str(offset_u) + " offset_v: " + str(offset_v);
+#       cam_global_cor = correct_rational_camera(cropped_cam, offset_u, offset_v);
+      save_rational_camera(cam_cor,corrected_global_cams % image_name);
+      # clean data
+      bvxm_batch.remove_data(expected_edge_image.id)
+#       bvxm_batch.remove_data(cam_global_cor.id);
+      bvxm_batch.remove_data(cam_cor.id)
+
 
   # render the ortho map
   out_e_img, out_e_img_byte, out_h_img, ortho_cam = render_ortho_edgemap(scene);
@@ -140,7 +175,7 @@ def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file
     sys.stdout.flush()
     return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, 0;
 
-  ## get rid of colud images
+  ## get rid of cloud images
   cnt = 0;            # number of non-cloud images
   img_names = []      # valid non-cloud image name
   cam_names = []      # valid cameras associated with non-cloud images

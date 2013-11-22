@@ -106,13 +106,17 @@ def update_edges(world, cropped_cam, cropped_edge_image, update_params_xml, scal
   bvxm_batch.set_params_process(update_params_xml); # "./bvxmUpdateEdgesProcess.xml");
   bvxm_batch.run_process();
 
-def rpc_registration(world, cropped_cam, cropped_edge_image, uncertainty, shift_3d_flag=0, scale=0):
+def rpc_registration(world, cropped_cam, cropped_edge_image, uncertainty, shift_3d_flag=0, scale=0, is_uncertainty_float = 0):
   bvxm_batch.init_process("bvxmRpcRegistrationProcess");
   bvxm_batch.set_input_from_db(0,world);
   bvxm_batch.set_input_from_db(1,cropped_cam);
   bvxm_batch.set_input_from_db(2,cropped_edge_image);
   bvxm_batch.set_input_bool(3,shift_3d_flag);
-  bvxm_batch.set_input_from_db(4,uncertainty);
+  if is_uncertainty_float == 1:
+    print "uncertainty = ", uncertainty
+    bvxm_batch.set_input_float(4, uncertainty)
+  else:
+    bvxm_batch.set_input_from_db(4,uncertainty);
   bvxm_batch.set_input_unsigned(5,scale);
   bvxm_batch.run_process();
   (cam_id,cam_type) = bvxm_batch.commit_output(0);

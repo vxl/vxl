@@ -118,7 +118,7 @@ int main(int argc, char** argv)
     //params.set_params(out_folder().substr(0, out_folder().size()-1), corner, num_voxels, voxel_size(), lvcs);  // for now set model dir as out_folder
     // set bvxm_scene world parameters
     vcl_stringstream world_dir;
-    world_dir << world_root() << "scene_" << i;
+    world_dir << world_root() << "/scene_" << i;
     if (!vul_file::is_directory(world_dir.str())) {
       vul_file::make_directory(world_dir.str());
     }
