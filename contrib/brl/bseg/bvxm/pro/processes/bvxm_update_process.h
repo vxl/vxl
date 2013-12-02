@@ -11,6 +11,7 @@
 //  Modifications
 //   Brandon Mayer  - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
 //   Peter Vanroose - Jul 10, 2009 - split into .h and .cxx
+//   Yi Dong - add option to use cache storage to speed up IO process during multi-thread execution
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -18,7 +19,7 @@
 //: global variables
 namespace bvxm_update_process_globals
 {
-  const unsigned n_inputs_ = 6;
+  const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 2;
 }
 

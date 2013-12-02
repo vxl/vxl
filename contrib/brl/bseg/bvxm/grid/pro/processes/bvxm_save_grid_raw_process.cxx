@@ -72,6 +72,6 @@ bool bvxm_save_grid_raw_process(bprb_func_process& pro)
     return true;
   }
   else
-    vcl_cerr << "Grid type not supportted yet, but you can add one!\n";
+    vcl_cerr << "Grid type not supported yet, but you can add one!\n";
   return false;
 }

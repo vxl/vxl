@@ -205,7 +205,7 @@ def render_exp_edge_img(cam, ni, nj, world, scale=0):
   exp_img_byte = dbvalue(id, type);
   return exp_img, exp_img_byte
 
-def update_appearance(img, cam, world, app_type, bin_index=0, scale_index=0):
+def update_appearance(img, cam, world, app_type, bin_index=0, scale_index=0, use_cache = 0):
   bvxm_batch.init_process("bvxmUpdateProcess");
   bvxm_batch.set_input_from_db(0,img);
   bvxm_batch.set_input_from_db(1,cam);
@@ -213,6 +213,7 @@ def update_appearance(img, cam, world, app_type, bin_index=0, scale_index=0):
   bvxm_batch.set_input_string(3,app_type);
   bvxm_batch.set_input_unsigned(4,bin_index);       ## set bin index to be 0 for all images
   bvxm_batch.set_input_unsigned(5,scale_index);
+  bvxm_batch.set_input_unsigned(6,use_cache);
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   density_img = dbvalue(id, type);

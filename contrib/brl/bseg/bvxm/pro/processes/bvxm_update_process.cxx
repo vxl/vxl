@@ -29,6 +29,7 @@ bool bvxm_update_process_cons(bprb_func_process& pro)
   //          -apm_mog_mc_4_3
   //input[4]: The bin index to be updated
   //input[5]: The scale index  of the voxel world to be updated (default is 0)
+  //input[6]: The option to use memory storage for voxel world data
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
@@ -36,6 +37,7 @@ bool bvxm_update_process_cons(bprb_func_process& pro)
   input_types_[3] = "vcl_string";
   input_types_[4] = "unsigned";
   input_types_[5] = "unsigned";
+  input_types_[6] = "unsigned";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -67,6 +69,7 @@ bool bvxm_update_process(bprb_func_process& pro)
   vcl_string voxel_type = pro.get_input<vcl_string>(i++);
   unsigned bin_index = pro.get_input<unsigned>(i++);
   unsigned curr_scale = pro.get_input<unsigned>(i++);
+  unsigned use_memory = pro.get_input<unsigned>(i++);
 
   //check input's validity
   i = 0;
@@ -111,10 +114,12 @@ bool bvxm_update_process(bprb_func_process& pro)
 
     bool result = true;
 
+    bool is_use_memory = (bool)use_memory;
+
     if (voxel_type == "apm_mog_grey")
-      result = world->update<APM_MOG_GREY>(observation, prob_map, mask, bin_index,scale);
+      result = world->update<APM_MOG_GREY>(observation, prob_map, mask, bin_index, scale, is_use_memory);
     else if (voxel_type == "apm_mog_rgb")
-      result = world->update<APM_MOG_RGB>(observation, prob_map, mask, bin_index,scale);
+      result = world->update<APM_MOG_RGB>(observation, prob_map, mask, bin_index,scale, is_use_memory);
     else if (voxel_type == "apm_mog_mc_2_3")
     {
       if (observation.img->nplanes()!= 2)
@@ -124,10 +129,10 @@ bool bvxm_update_process(bprb_func_process& pro)
         return false;
       }
 
-      result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
+      result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale, is_use_memory);
     }
     else if (voxel_type == "apm_mog_mc_3_3")
-      result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
+      result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale, is_use_memory);
     else if (voxel_type == "apm_mog_mc_4_3")
     {
       if (observation.img->nplanes()!= 4)
@@ -136,7 +141,7 @@ bool bvxm_update_process(bprb_func_process& pro)
                  << " planes\n";
         return false;
       }
-      result = world->update<APM_MOG_MC_4_3>(observation, prob_map, mask, bin_index,scale);
+      result = world->update<APM_MOG_MC_4_3>(observation, prob_map, mask, bin_index,scale, is_use_memory);
     }
     else
       vcl_cerr << "Error in: bvxm_update_processor: Unsuppported appearance model\n";

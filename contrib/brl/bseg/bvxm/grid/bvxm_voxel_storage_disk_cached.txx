@@ -38,7 +38,7 @@ bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string sto
     vcl_cerr << "ERROR allocating cache memory!\n";
   }
 
-  // check if file exsist already or not
+  // check if file exists already or not
   if (vul_file::exists(storage_fname_))  {
     // make sure filename is not a directory
     bool is_dir = vul_file::is_directory(storage_fname_);

@@ -65,6 +65,7 @@
 //
 //   Gamze Tunali - 06/16/2009 - update_lidar and save_occupancy_raw methods are templated and moved from .cxx file to the header
 //
+//   Yi Dong - 11/26/2013 - added the option to use memory-based voxel grid in update method (require sufficient memory if chosen and all previous voxel grid on the disk will be ignored)
 // \endverbatim
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,13 +125,18 @@ class bvxm_voxel_world: public vbl_ref_count
 
   //: update voxel grid with data from image/camera pair. Based on algorithm published in Pollard + Mundy 06.
   template<bvxm_voxel_type APM_T>
-  bool update(bvxm_image_metadata const& observation, unsigned bin_index = 0, unsigned scale_idx=0);
+  bool update(bvxm_image_metadata const& observation, unsigned bin_index = 0, unsigned scale_idx=0, bool use_memory = false);
 
   //: update voxel grid with data from image/camera pair and return pixel probability densities.
   // Based on algorithm published in Pollard and Mundy 06.
   // The probability density of observing each pixel in the observation is returned in pixel_prob_density, which should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
-  bool update(bvxm_image_metadata const& observation, vil_image_view<float> &pixel_prob_density, vil_image_view<bool> &mask, unsigned bin_index = 0, unsigned scale_idx=0);
+  bool update(bvxm_image_metadata const& observation,
+              vil_image_view<float> &pixel_prob_density,
+              vil_image_view<bool> &mask,
+              unsigned bin_index = 0,
+              unsigned scale_idx=0,
+              bool use_memory = false);
 
   //: update voxel grid with data from LIDAR/camera pair
   template<bvxm_voxel_type APM_T>
@@ -244,7 +250,7 @@ class bvxm_voxel_world: public vbl_ref_count
 
   //: get a grid from the map: creates a new one if nothing exists at the specified index.
   template<bvxm_voxel_type VOX_T>
-  bvxm_voxel_grid_base_sptr get_grid(unsigned bin_index, unsigned scale);
+  bvxm_voxel_grid_base_sptr get_grid(unsigned bin_index, unsigned scale, bool use_memory = false);
 
   //: save the occupancy grid as a 3-d tiff image
   bool save_occupancy_vff(vcl_string filename, unsigned scale_idx=0);
@@ -258,15 +264,15 @@ class bvxm_voxel_world: public vbl_ref_count
 
   //: get the observation count of a voxel type at a specific bin
   template<bvxm_voxel_type VOX_T>
-  unsigned int num_observations(unsigned int bin_idx = 0, unsigned scale = 0);
+  unsigned int num_observations(unsigned int bin_idx = 0, unsigned scale = 0, bool use_memory = false);
 
   //: increment the observation count of a voxel type at a specific bin
   template<bvxm_voxel_type VOX_T>
-  void increment_observations( unsigned int bin_idx = 0, unsigned scale = 0);
+  void increment_observations( unsigned int bin_idx = 0, unsigned scale = 0, bool use_memory = false);
 
   //: zero the number of observations at a specific bin
   template<bvxm_voxel_type VOX_T>
-  void zero_observations( unsigned int bin_idx = 0, unsigned scale = 0);
+  void zero_observations( unsigned int bin_idx = 0, unsigned scale = 0, bool use_memory = false);
 
   vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k, unsigned scale=0);
 
@@ -293,7 +299,7 @@ class bvxm_voxel_world: public vbl_ref_count
   template <bvxm_voxel_type APM_T>
   bool update_impl(bvxm_image_metadata const& metadata,
                    bool return_prob, vil_image_view<float> &pix_prob_density,
-                   bool return_mask, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale_idx=0);
+                   bool return_mask, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale_idx=0, bool use_memory = false);
 
   //: Update voxel grid with data from LIDAR image/camera pair and return probability density of pixel values.
   template<bvxm_voxel_type APM_T>
@@ -317,38 +323,38 @@ typedef vbl_smart_ptr<bvxm_voxel_world> bvxm_voxel_world_sptr;
 
 //: get the observation count of a voxel type at a specific bin
 template<bvxm_voxel_type VOX_T>
-unsigned int bvxm_voxel_world::num_observations(unsigned int bin_idx, unsigned int scale_idx)
+unsigned int bvxm_voxel_world::num_observations(unsigned int bin_idx, unsigned int scale_idx, bool use_memory)
 {
   // call get_grid so data will be loaded from disk if necessary.
   typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype vox_datatype;
-  bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx,scale_idx).ptr());
+  bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx,scale_idx,use_memory).ptr());
   return grid->num_observations();
 }
 
 
 //: increment the observation count of a voxel type at a specific bin
 template<bvxm_voxel_type VOX_T>
-void bvxm_voxel_world::increment_observations(unsigned int bin_idx, unsigned int scale_idx)
+void bvxm_voxel_world::increment_observations(unsigned int bin_idx, unsigned int scale_idx, bool use_memory)
 {
   // call get_grid so data will be loaded from disk if necessary.
   typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype vox_datatype;
-  bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx,scale_idx).ptr());
+  bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx,scale_idx,use_memory).ptr());
   grid->increment_observations();
 }
 
 //: zero the observation count at a specific bin
 template<bvxm_voxel_type VOX_T>
-void bvxm_voxel_world::zero_observations(unsigned int bin_idx, unsigned int scale_idx)
+void bvxm_voxel_world::zero_observations(unsigned int bin_idx, unsigned int scale_idx, bool use_memory)
 {
   // call get_grid so data will be loaded from disk if necessary.
   typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype vox_datatype;
-  bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx,scale_idx).ptr());
+  bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx,scale_idx,use_memory).ptr());
   grid->zero_observations();
 }
 
 //: Returns the voxel_grid that corresponds to a given bvxm_voxel_type and a bin number
 template<bvxm_voxel_type VOX_T>
-bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigned scale_idx)
+bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigned scale_idx, bool use_memory)
 {
   assert(scale_idx <= params_->max_scale());
 
@@ -394,9 +400,13 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
       else
       {
         vgl_vector_3d<unsigned int> grid_size_scale = params_->num_voxels(scale);
-        // create voxel grid and insert into map
-        bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<typename bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size_scale);
-
+        // create voxel grid and insert into map (use storage_disk_cache if use_memory is set)
+        bvxm_voxel_grid_base_sptr grid;
+        typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
+        if (use_memory)
+          grid = new bvxm_voxel_grid<voxel_datatype>(grid_size_scale, grid_size_scale.z());
+        else
+          grid = new bvxm_voxel_grid<voxel_datatype>(file_it(), grid_size_scale);
         vcl_map<unsigned, bvxm_voxel_grid_base_sptr > scale_map;
         scale_map.insert(vcl_make_pair((unsigned)scale, grid));
 
@@ -427,8 +437,11 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
     apm_fname << storage_directory << '/' << fname_prefix << "_bin_" << bin_index << "_scale_" << scale_idx  << ".vox";
 
     typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
-    bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
-
+    bvxm_voxel_grid<voxel_datatype> * grid;
+    if (use_memory)
+      grid = new bvxm_voxel_grid<voxel_datatype>(grid_size, grid_size.z());
+    else
+      grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
     // fill grid with default value
     if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())) {
       vcl_cerr << "error initializing voxel grid\n";
@@ -457,7 +470,12 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
     apm_fname << storage_directory << '/' << fname_prefix << "_bin_" << bin_index << "_scale_" << scale_idx  << ".vox";
 
     typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
-    bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
+    bvxm_voxel_grid<voxel_datatype> *grid;
+    if (use_memory) {
+      grid = new bvxm_voxel_grid<voxel_datatype>(grid_size, grid_size.z());
+    }
+    else
+      grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(), grid_size);
 
     // fill grid with default value
     if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())) {
@@ -476,19 +494,19 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
 
 // Update a voxel grid with data from image/camera pair
 template <bvxm_voxel_type APM_T>
-bool bvxm_voxel_world::update(bvxm_image_metadata const& observation, unsigned bin_index, unsigned scale_idx)
+bool bvxm_voxel_world::update(bvxm_image_metadata const& observation, unsigned bin_index, unsigned scale_idx, bool use_momory)
 {
   assert(scale_idx<params_->max_scale());
   vil_image_view<float> dummy;
   vil_image_view<bool> mask;
-  return this->update_impl<APM_T>(observation, false, dummy, false, mask, bin_index,scale_idx);
+  return this->update_impl<APM_T>(observation, false, dummy, false, mask, bin_index,scale_idx, use_momory);
 }
 
 
 // Update a voxel grid with data from image/camera pair and return probability density of pixel values.
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::update(bvxm_image_metadata const& observation,
-                              vil_image_view<float> &pix_prob_density, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale_idx)
+                              vil_image_view<float> &pix_prob_density, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale_idx,  bool use_momory)
 {
   // check image sizes
   if ( (observation.img->ni() != pix_prob_density.ni()) || (observation.img->nj() != pix_prob_density.nj()) ) {
@@ -497,7 +515,7 @@ bool bvxm_voxel_world::update(bvxm_image_metadata const& observation,
   if ( (observation.img->ni() != mask.ni()) || (observation.img->nj() != mask.nj()) ) {
     vcl_cerr << "error: metadata image size does not match mask image size.\n";
   }
-  return this->update_impl<APM_T>(observation, true, pix_prob_density, true, mask, bin_index,  scale_idx);
+  return this->update_impl<APM_T>(observation, true, pix_prob_density, true, mask, bin_index,  scale_idx, use_momory);
 }
 
 
@@ -507,7 +525,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
                                    bool return_prob,
                                    vil_image_view<float> &pix_prob_density,
                                    bool return_mask,
-                                   vil_image_view<bool> &mask, unsigned bin_index, unsigned scale_idx)
+                                   vil_image_view<bool> &mask, unsigned bin_index, unsigned scale_idx, bool use_momory)
 {
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
@@ -567,11 +585,11 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   vcl_cout << "Pass 1:" << vcl_endl;
 
   // get occupancy probability grid
-  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx, use_momory);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
   // get appearance model grid
-  bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
+  bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx, use_momory);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
   typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
@@ -582,6 +600,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it, ++preX_slab_it, ++PIvisX_slab_it)
   {
     vcl_cout << '.';
+    vcl_cout.flush();
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
       vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
@@ -660,7 +679,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   for (unsigned z = 0; z < (unsigned)grid_size.z(); ++z, ++PIvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2)
   {
     vcl_cout << '.';
-
+    vcl_cout.flush();
     // transform preX_sum to current level
     bvxm_util::warp_slab_bilinear(preX_accum, H_plane_to_img[z], preX_accum_vox);
 

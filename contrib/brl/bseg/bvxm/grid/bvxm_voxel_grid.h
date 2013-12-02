@@ -12,6 +12,7 @@
 #include "bvxm_voxel_storage_disk.h"
 #include "bvxm_voxel_storage_disk_cached.h"
 #include "bvxm_voxel_storage_mem.h"
+#include "bvxm_voxel_storage_slab_mem.h"
 #include "bvxm_voxel_slab_iterator.h"
 
 
@@ -48,6 +49,13 @@ class bvxm_voxel_grid : public bvxm_voxel_grid_base
     : bvxm_voxel_grid_base(grid_size)
   {
     storage_ = new bvxm_voxel_storage_mem<T>(grid_size);
+  }
+
+  //: Constructor for memory-based voxel grid (the memory chunk is distributed into slices)
+  bvxm_voxel_grid(vgl_vector_3d<unsigned int> grid_size, unsigned num_slabs)
+    : bvxm_voxel_grid_base(grid_size)
+  {
+    storage_ = new bvxm_voxel_storage_slab_mem<T>(grid_size, num_slabs);
   }
 
   //: Destructor
