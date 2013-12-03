@@ -188,26 +188,22 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
   //vcl_cout << "out affine cam2: \n" << cam2_ptr->get_matrix();
   
   // find output image sizes
-  unsigned oni1, onj1, oni2, onj2;
+  unsigned oni, onj; //, oni2, onj2;
   double mini1, minj1, mini2, minj2, maxi1, maxj1, maxi2, maxj2;
   out_image_size(img1_sptr->ni(), img1_sptr->nj(), H1, mini1, minj1, maxi1, maxj1);
   out_image_size(img2_sptr->ni(), img2_sptr->nj(), H2, mini2, minj2, maxi2, maxj2);
   double mini = mini1 < mini2 ? mini1 : mini2;
   double minj = minj1 < minj2 ? minj1 : minj2;
+  double maxi = maxi1 > maxi2 ? maxi1 : maxi2;
+  double maxj = maxj1 > maxj2 ? maxj1 : maxj2;
 
-  oni1 = (unsigned)vcl_ceil(vcl_abs(maxi1-mini));
-  onj1 = (unsigned)vcl_ceil(vcl_abs(maxj1-minj));
+  oni = (unsigned)vcl_ceil(vcl_abs(maxi-mini));
+  onj = (unsigned)vcl_ceil(vcl_abs(maxj-minj));
   //vcl_cout << "mini: " << mini1 << " minj: " << minj1 << " maxi: " << maxi1 << " maxj: " << maxj1 << " oni1: " << oni1 << " onj1: " << onj1 << vcl_endl;
   
-  oni2 = (unsigned)vcl_ceil(vcl_abs(maxi2-mini));
-  onj2 = (unsigned)vcl_ceil(vcl_abs(maxj2-minj));
-
-  //vcl_cout << "mini: " << mini2 << " minj: " << minj2 << " maxi: " << maxi2 << " maxj: " << maxj2 << " oni2: " << oni2 << " onj2: " << onj2 << vcl_endl;
-  //vcl_cout << "oni1: " << oni1 << " onj1: " << onj1 << " oni2: " << oni2 << " onj2: " << onj2 << vcl_endl;
-  
   // warp the images bilinearly
-  vil_image_view<float> out_img1(oni1, onj1);
-  vil_image_view<float> out_img2(oni2, onj2);
+  vil_image_view<float> out_img1(oni, onj);
+  vil_image_view<float> out_img2(oni, onj);
   warp_bilinear(img1, H1, out_img1, mini, minj);
   warp_bilinear(img2, H2, out_img2, mini, minj);
   

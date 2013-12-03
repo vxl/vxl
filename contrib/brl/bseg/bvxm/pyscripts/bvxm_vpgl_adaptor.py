@@ -12,9 +12,10 @@ def load_perspective_camera(file_path) :
   (id,type) = bvxm_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam;
-def load_affine_camera(file_path) :
+def load_affine_camera(file_path, viewing_dist=1000) :
   bvxm_batch.init_process("vpglLoadAffineCameraProcess");
   bvxm_batch.set_input_string(0, file_path);
+  bvxm_batch.set_input_double(1, viewing_dist);
   bvxm_batch.run_process();
   (id,type) = bvxm_batch.commit_output(0);
   cam = dbvalue(id,type);
