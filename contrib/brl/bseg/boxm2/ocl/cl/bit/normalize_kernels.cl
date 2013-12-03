@@ -84,10 +84,13 @@ __kernel void normalize_render_depth_kernel(__global float * exp_img,
         return;
     //normalize image with respect to visibility
     float prob   = prob_img[imindex];
-    float mean   = exp_img[imindex] + t_infinity[imindex]*prob * (*sub_block_dim);
-    float var    = var_img[imindex]
-                   + (t_infinity[imindex]*(*sub_block_dim)*t_infinity[imindex]*(*sub_block_dim))*prob
-                   - mean*mean;
+    float mean   = exp_img[imindex] + t_infinity[imindex]*prob;
+    float var    = var_img[imindex] + t_infinity[imindex]*t_infinity[imindex]*prob - mean*mean;
+    //float mean   = exp_img[imindex] + t_infinity[imindex]*prob * (*sub_block_dim);
+    //float var    = var_img[imindex]
+    //               + (t_infinity[imindex]*(*sub_block_dim)*t_infinity[imindex]*(*sub_block_dim))*prob
+    //               - mean*mean;
+
     exp_img[imindex]=mean;
     var_img[imindex]=var;
 }

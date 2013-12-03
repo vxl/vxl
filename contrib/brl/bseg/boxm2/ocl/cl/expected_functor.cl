@@ -319,6 +319,7 @@ void step_cell_vis(__global float* cell_data, int data_ptr,
 
 #ifdef RENDER_DEPTH
 void step_cell_render_depth2(float depth,
+                             float block_len,
                              __global float  * alpha_data,
                              int      data_ptr,
                              float    d,
@@ -335,7 +336,8 @@ void step_cell_render_depth2(float depth,
   (*vis)    *= diff_omega;
   (*expected_depth)+=depth*omega;
   (*expected_depth_square)+=depth*depth*omega;
-  (*t)=depth;
+  (*t)=depth*block_len;
+  //(*t) = depth;
 }
 
 #endif

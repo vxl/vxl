@@ -167,9 +167,10 @@ def render_ortho_edgemap(world, scale=0):
   ortho_cam = dbvalue(id, type);
   return out_e_img, out_e_img_byte, out_h_img, ortho_cam
 
-def create_ortho_camera(world):
+def create_ortho_camera(world, is_utm = False):
   bvxm_batch.init_process("bvxmCreateOrthoCameraProcess");
   bvxm_batch.set_input_from_db(0,world);
+  bvxm_batch.set_input_bool(1, is_utm)
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   ortho_cam = dbvalue(id, type);

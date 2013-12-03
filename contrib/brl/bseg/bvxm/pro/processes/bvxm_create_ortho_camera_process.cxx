@@ -8,12 +8,14 @@
 #include <bvxm/bvxm_edge_ray_processor.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vil/vil_image_view.h>
+#include <vpgl/vpgl_utm.h>
 
 bool bvxm_create_ortho_camera_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_create_ortho_camera_process_globals;
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
+  input_types_[1] = "bool";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -40,12 +42,16 @@ bool bvxm_create_ortho_camera_process(bprb_func_process& pro)
     return false;
   }
 
+  bool is_utm = pro.get_input<bool>(1);
+
   // generate vpgl_geo_camera for the scene
   bvxm_world_params_sptr params = world->get_params();
   vgl_box_3d<double> box = params->world_box_local();
   vgl_point_3d<float> corner = params->corner();
   vgl_point_3d<float> upper_left(corner.x(), (float)(corner.y() + box.height()), corner.z());
   vgl_point_3d<float> lower_right((float)(corner.x()+box.width()), corner.y(), corner.z());
+  float voxel_length = params->voxel_length();
+
   vpgl_lvcs_sptr lvcs = params->lvcs();
   double lat, lon, elev;
   lvcs->get_origin(lat, lon, elev);
@@ -60,17 +66,48 @@ bool bvxm_create_ortho_camera_process(bprb_func_process& pro)
   lvcs->local_to_global(lower_right.x(), lower_right.y(), lower_right.z(), vpgl_lvcs::wgs84, lower_right_lon, lower_right_lat, lower_right_elev);
   vcl_cout << "lower right corner in the image is: " << lower_right_lon << " lat: " << lower_right_lat << vcl_endl;
   
-  int ni = box.width();
-  int nj = box.height();
   vnl_matrix<double> trans_matrix(4,4,0.0);
-  //trans_matrix[0][0] = (lower_right_lon-lon)/ni; trans_matrix[1][1] = -(upper_left_lat-lat)/nj;
-  // lvcs origin is not necessarily one of the corners of the scene
-  trans_matrix[0][0] = (lower_right_lon-upper_left_lon)/ni; trans_matrix[1][1] = -(upper_left_lat-lower_right_lat)/nj;
-  trans_matrix[0][3] = upper_left_lon; trans_matrix[1][3] = upper_left_lat;
-  vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs); 
-  cam->set_scale_format(true);
-  vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);  
 
-  pro.set_output_val<vpgl_camera_double_sptr>(0, camera);
-  return true;
+  if (is_utm) {
+    double scale_x = voxel_length;
+    double scale_y = -1*voxel_length;
+    // transfer upper left corner to utm system
+    vpgl_utm utm;
+    double upper_left_x, upper_left_y;
+    int utm_zone;
+    utm.transform(upper_left_lat, upper_left_lon, upper_left_x, upper_left_y, utm_zone);
+    vcl_cout << "upper left in utm = " << upper_left_x << " x " << upper_left_y << vcl_endl;
+    vcl_cout << "scale_x = " << scale_x << " scale_y = " << scale_y << vcl_endl;
+    trans_matrix[0][0] = scale_x;
+    trans_matrix[1][1] = scale_y;
+    trans_matrix[0][3] = upper_left_x;
+    trans_matrix[1][3] = upper_left_y;
+    vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs);
+    unsigned northing = 0;
+    if (upper_left_lat < 0 && lower_right_lat < 0)
+      northing = 1;
+    if (upper_left_lat*lower_right_lat < 0)
+      vcl_cout << "warning: scene world crosses the Equator" << vcl_endl;
+    cam->set_utm(utm_zone,northing);
+    cam->set_scale_format(true);
+    vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);
+    pro.set_output_val<vpgl_camera_double_sptr>(0, camera);
+    return true;
+  }
+  else {
+    int ni = box.width();
+    int nj = box.height();
+    //trans_matrix[0][0] = (lower_right_lon-lon)/ni; trans_matrix[1][1] = -(upper_left_lat-lat)/nj;
+    // lvcs origin is not necessarily one of the corners of the scene
+    trans_matrix[0][0] = (lower_right_lon-upper_left_lon)/ni; trans_matrix[1][1] = -(upper_left_lat-lower_right_lat)/nj;
+    trans_matrix[0][3] = upper_left_lon; trans_matrix[1][3] = upper_left_lat;
+    vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs); 
+    cam->set_scale_format(true);
+    vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);  
+
+    pro.set_output_val<vpgl_camera_double_sptr>(0, camera);
+    return true;
+  }
+
+
 }

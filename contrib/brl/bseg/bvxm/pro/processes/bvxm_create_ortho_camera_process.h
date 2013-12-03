@@ -25,7 +25,7 @@
 //: global variables
 namespace bvxm_create_ortho_camera_process_globals
 {
-  const unsigned n_inputs_ = 1;
+  const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 1;
 }
 
