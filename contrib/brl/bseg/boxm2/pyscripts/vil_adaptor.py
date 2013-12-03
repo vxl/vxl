@@ -400,3 +400,13 @@ def grey_to_rgb(img, color_txt):
   else:
     outimg = 0
   return outimg
+
+def mask_image_using_id(img, id_img, input_id):
+  boxm2_batch.init_process("vilMaskImageUsingIDsProcess");
+  boxm2_batch.set_input_from_db(0, img);
+  boxm2_batch.set_input_from_db(1, id_img);
+  boxm2_batch.set_input_unsigned(2, input_id);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  masked_img = dbvalue(id, type);
+  return masked_img;

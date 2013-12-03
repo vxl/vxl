@@ -64,6 +64,9 @@ class brad_image_metadata : public vbl_ref_count
   bool parse(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
 
   bool same_time(brad_image_metadata& other);
+  
+  //: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes
+  bool same_extent(brad_image_metadata& other);
 
   // ===========  binary I/O ================
   short version() const { return 0; }

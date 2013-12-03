@@ -15,6 +15,7 @@ DECLARE( test_triangulate );
 DECLARE( test_bundle_adjust );
 DECLARE( test_ba_fixed_k_lsqr );
 DECLARE( test_ba_shared_k_lsqr );
+DECLARE( test_affine_rect );
 
 void register_tests()
 {
@@ -33,6 +34,8 @@ REGISTER( test_triangulate );
 REGISTER( test_bundle_adjust );
 REGISTER( test_ba_fixed_k_lsqr );
 REGISTER( test_ba_shared_k_lsqr );
+REGISTER( test_affine_rect );
+
 }
 
 DEFINE_MAIN;

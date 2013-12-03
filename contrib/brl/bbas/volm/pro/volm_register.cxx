@@ -26,5 +26,6 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_class_map_process, "volmGenerateClassMapProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_res_pair_process, "volmFindResourcePairProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_correct_rational_cameras_ransac_process2, "volmCorrectRationalCamerasRANSACProcess2");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_get_full_path_process, "volmGetFullPathProcess");
 
 }

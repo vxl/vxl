@@ -24,9 +24,9 @@ def find_resource_pair(res, name):
   statuscode=bvxm_batch.run_process();
   (f_id, f_type) = bvxm_batch.commit_output(0);
   full_path = bvxm_batch.get_output_string(f_id);
-  (n_id, n_type) = bvxm_batch.commit_output(0);
+  (n_id, n_type) = bvxm_batch.commit_output(1);
   pair_name = bvxm_batch.get_output_string(n_id);
-  (p_id, p_type) = bvxm_batch.commit_output(1);
+  (p_id, p_type) = bvxm_batch.commit_output(2);
   full_path_pair_name = bvxm_batch.get_output_string(p_id);
   return statuscode, full_path, pair_name, full_path_pair_name
 

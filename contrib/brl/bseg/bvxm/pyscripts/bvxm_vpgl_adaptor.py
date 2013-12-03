@@ -187,6 +187,12 @@ def save_perspective_cameras_vrml(camerafolder,path) :
   bvxm_batch.set_input_string(1,path);
   bvxm_batch.set_input_float(2,5.0);
   bvxm_batch.run_process();
+def save_proj_camera(camera, path):
+  bvxm_batch.init_process("vpglSaveProjectiveCameraProcess");
+  bvxm_batch.set_input_from_db(0, camera);
+  bvxm_batch.set_input_string(1, path);
+  bvxm_batch.run_process();
+
 #################################################;
 # perspective go generic conversion;
 #################################################;
@@ -218,6 +224,13 @@ def persp2genWmargin(pcam, ni, nj, margin, level=0) :
   (id,type) = bvxm_batch.commit_output(3);
   new_pers_cam = dbvalue(id,type);
   return (gcam, ni, nj, new_pers_cam);
+
+def write_generic_to_vrml(cam, out_file_name, level=0):
+  bvxm_batch.init_process("vpglWriteGenericCameraProcess");
+  bvxm_batch.set_input_from_db(0, cam);
+  bvxm_batch.set_input_string(1, out_file_name);
+  bvxm_batch.set_input_unsigned(2, level);
+  bvxm_batch.run_process();
 
 #gets bounding box from a directory of cameras... (incomplete)_;
 def camera_dir_planar_bbox(dir_name) :
@@ -531,6 +544,16 @@ def load_geotiff_cam2(filename, ni, nj):
     cam = dbvalue(c_id,c_type);
     return cam;
 
+def load_geotiff_from_header(filename, lvcs=0):
+    bvxm_batch.init_process("vpglLoadGeotiffCamFromHeaderProcess");
+    bvxm_batch.set_input_string(0, filename);
+    if lvcs != 0:
+      bvxm_batch.set_input_from_db(1, lvcs);
+    bvxm_batch.run_process();
+    (c_id,c_type) = bvxm_batch.commit_output(0);
+    cam = dbvalue(c_id,c_type);
+    return cam;
+
 def translate_geo_camera(geocam, x, y):
     bvxm_batch.init_process("vpglTranslateGeoCameraProcess");
     bvxm_batch.set_input_from_db(0, geocam);
@@ -562,6 +585,14 @@ def save_lvcs(lat,lon,hae,lvcs_filename):
     bvxm_batch.run_process();
     return;
 
+def load_lvcs(lvcs_filename):
+    bvxm_batch.init_process("vpglLoadLVCSProcess");
+    bvxm_batch.set_input_string(0, lvcs_filename);
+    bvxm_batch.run_process();
+    (lvcs_id, lvcs_type) = bvxm_batch.commit_output(0);
+    lvcs = dbvalue(lvcs_id, lvcs_type);
+    return lvcs;
+
 def geo_cam_global_to_img(geocam, lon, lat):
     bvxm_batch.init_process("vpglGeoGlobalToImgProcess");
     bvxm_batch.set_input_from_db(0, geocam);
@@ -580,3 +611,51 @@ def convert_perspective_to_nvm(cams_dir,imgs_dir, output_nvm):
     bvxm_batch.set_input_string(1, imgs_dir);
     bvxm_batch.set_input_string(2, output_nvm);
     return bvxm_batch.run_process();
+def interpolate_perspective_cameras(cam0,cam1,ncams,outdir):
+    bvxm_batch.init_process("vpglInterpolatePerspectiveCamerasProcess");
+    bvxm_batch.set_input_from_db(0, cam0);
+    bvxm_batch.set_input_from_db(1, cam1);
+    bvxm_batch.set_input_unsigned(2, ncams);
+    bvxm_batch.set_input_string(3, outdir);
+    return bvxm_batch.run_process();
+
+def compute_affine_from_local_rational(cropped_cam, min_x, min_y, min_z, max_x, max_y, max_z, n_points=100):
+    bvxm_batch.init_process("vpglComputeAffineFromRationalProcess");
+    bvxm_batch.set_input_from_db(0, cropped_cam);
+    bvxm_batch.set_input_double(1, min_x);
+    bvxm_batch.set_input_double(2, min_y);
+    bvxm_batch.set_input_double(3, min_z);
+    bvxm_batch.set_input_double(4, max_x);
+    bvxm_batch.set_input_double(5, max_y);
+    bvxm_batch.set_input_double(6, max_z);
+    bvxm_batch.set_input_unsigned(7, n_points);
+    bvxm_batch.run_process();
+    (id, type) = bvxm_batch.commit_output(0);
+    out_cam = dbvalue(id, type);
+    return out_cam
+
+## use the affine cameras of the images to compute an affine fundamental matrix and rectify them (flatten epipolar lines to scan lines and align them)
+## use the 3-d box that the cameras see to compute correspondences for minimally distortive alignment
+def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, min_z, max_x, max_y, max_z, n_points=100):
+  bvxm_batch.init_process("vpglAffineRectifyImagesProcess");
+  bvxm_batch.set_input_from_db(0, img1);
+  bvxm_batch.set_input_from_db(1, affine_cam1);
+  bvxm_batch.set_input_from_db(2, img2);
+  bvxm_batch.set_input_from_db(3, affine_cam2);
+  bvxm_batch.set_input_double(4, min_x);
+  bvxm_batch.set_input_double(5, min_y);
+  bvxm_batch.set_input_double(6, min_z);
+  bvxm_batch.set_input_double(7, max_x);
+  bvxm_batch.set_input_double(8, max_y);
+  bvxm_batch.set_input_double(9, max_z);
+  bvxm_batch.set_input_unsigned(10, n_points);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  out_img1 = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(1);
+  out_cam1 = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(2);
+  out_img2 = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(3);
+  out_cam2 = dbvalue(id, type);
+  return out_img1, out_cam1, out_img2, out_cam2

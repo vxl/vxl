@@ -43,6 +43,7 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
   //populate vector of cameras
   //: returns a list of cameras from specified directory
   vcl_vector<vpgl_perspective_camera<double> > cams = cameras_from_directory(cam_dir, 0.0);
+  vcl_cout << "found " << cams.size() << " cameras in the directory..\n";
 
   //run planar bounding box
   vgl_box_2d<double> bbox;

@@ -16,5 +16,6 @@ DECLARE_FUNC_CONS(volm_map_segments_process);
 DECLARE_FUNC_CONS(volm_generate_class_map_process);
 DECLARE_FUNC_CONS(volm_find_res_pair_process);
 DECLARE_FUNC_CONS(volm_correct_rational_cameras_ransac_process2);
+DECLARE_FUNC_CONS(volm_get_full_path_process);
 
 #endif

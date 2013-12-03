@@ -1047,6 +1047,7 @@ convert( vpgl_affine_camera<double> const& aff_cam, int ni, int nj,
     for (int i = 0; i<ni; ++i) {
       ipt.set(i*scale, j*scale, 1.0);
       hline = aff_cam.backproject(ipt);
+      
       horg = hline.point_finite();
       org.set(horg.x()/horg.w(), horg.y()/horg.w(), horg.z()/horg.w());
       rays[j][i].set(org, dir);
@@ -1068,14 +1069,14 @@ convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
     return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
   }
 
+  if (vpgl_affine_camera<double>* cam =
+      dynamic_cast<vpgl_affine_camera<double>*>(camera.ptr()))
+    return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
+
   if (vpgl_proj_camera<double>* cam =
       dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr())) {
     return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
   }
-
-  if (vpgl_affine_camera<double>* cam =
-      dynamic_cast<vpgl_affine_camera<double>*>(camera.ptr()))
-    return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
 
   return false;
 }

@@ -80,6 +80,9 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_lvcs_process, "vpglLoadLVCSProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_rational_camera_offsets_process, "vpglGetRationalCameraOffsetsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_write_generic_camera_process, "vpglWriteGenericCameraProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_affine_from_rat_process, "vpglComputeAffineFromRationalProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_affine_rectify_images_process, "vpglAffineRectifyImagesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_save_projective_camera_process, "vpglSaveProjectiveCameraProcess");
 
 }
 

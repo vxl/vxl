@@ -18,6 +18,7 @@ ADD_EXECUTABLE( vpgl_algo_test_all
   test_ba_fixed_k_lsqr.cxx
   test_ba_shared_k_lsqr.cxx
   test_bundle_adjust.cxx
+  test_affine_rectification.cxx
 )
 
 TARGET_LINK_LIBRARIES( vpgl_algo_test_all vpgl_algo vgl_algo vgl vnl_algo vnl vil vul testlib )
@@ -37,6 +38,7 @@ ADD_TEST( vpgl_algo_test_triangulate          ${EXECUTABLE_OUTPUT_PATH}/vpgl_alg
 ADD_TEST( vpgl_algo_test_bundle_adjust          ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_bundle_adjust )
 ADD_TEST( vpgl_algo_test_ba_fixed_k_lsqr             ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ba_fixed_k_lsqr )
 ADD_TEST( vpgl_algo_test_ba_shared_k_lsqr            ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ba_shared_k_lsqr )
+ADD_TEST( vpgl_algo_test_affine_rect            ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_affine_rect )
 
 ADD_EXECUTABLE( vpgl_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vpgl_algo_test_include vpgl_algo )

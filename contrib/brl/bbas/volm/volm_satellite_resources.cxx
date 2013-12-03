@@ -379,8 +379,35 @@ vcl_pair<vcl_string, vcl_string> volm_satellite_resources::full_path(vcl_string 
 vcl_string volm_satellite_resources::find_pair(vcl_string const& name)
 {
   for (unsigned i = 0; i < resources_.size(); i++) {
-    if (name.compare(resources_[i].name_) == 0) 
-      return resources_[i].pair_;
+    if (name.compare(resources_[i].name_) == 0) {
+      if (resources_[i].pair_.compare("") == 0) {  // not yet found
+        // find all the resources that overlaps with this one
+        vcl_string band_str = resources_[i].meta_->band_;
+        vcl_string other_band;
+        if (band_str.compare("PAN") == 0)
+          other_band = "MULTI";
+        else
+          other_band = "PAN";
+        vcl_vector<unsigned> ids;
+        this->query(resources_[i].meta_->lower_left_.x(), 
+                    resources_[i].meta_->lower_left_.y(), 
+                    resources_[i].meta_->upper_right_.x(), 
+                    resources_[i].meta_->upper_right_.y(), other_band, ids);  
+        vcl_cout << " there are " << ids.size() << " resources that cover the image!\n";
+        for (unsigned iii = 0; iii < ids.size(); iii++) {
+          unsigned ii = ids[iii];
+          if (resources_[i].meta_->satellite_name_.compare(resources_[ii].meta_->satellite_name_) == 0 &&  // same satellite good!
+                resources_[i].meta_->same_time(*resources_[ii].meta_) &&
+                resources_[i].meta_->same_extent(*resources_[ii].meta_) ) {
+                  resources_[i].pair_ = resources_[ii].name_;
+                  resources_[ii].pair_ = resources_[i].name_;
+                return resources_[ii].name_; 
+          } 
+        }
+      } else 
+        return resources_[i].pair_;
+     break;
+    }
   }
   return "";
 }

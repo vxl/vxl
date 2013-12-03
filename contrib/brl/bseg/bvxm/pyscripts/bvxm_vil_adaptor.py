@@ -395,3 +395,25 @@ def fill_holes(img):
   (id,type) = bvxm_batch.commit_output(0)
   outimg = dbvalue(id, type);
   return outimg
+
+def grey_to_rgb(img, color_txt):
+  bvxm_batch.init_process("vilGreyToRGBProcess")
+  bvxm_batch.set_input_from_db(0,img)
+  bvxm_batch.set_input_string(1,color_txt)
+  result = bvxm_batch.run_process()
+  if result:
+    (id, type) = bvxm_batch.commit_output(0)
+    outimg = dbvalue(id, type);
+  else:
+    outimg = 0
+  return outimg
+
+def mask_image_using_id(img, id_img, input_id):
+  bvxm_batch.init_process("vilMaskImageUsingIDsProcess");
+  bvxm_batch.set_input_from_db(0, img);
+  bvxm_batch.set_input_from_db(1, id_img);
+  bvxm_batch.set_input_unsigned(2, input_id);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  masked_img = dbvalue(id, type);
+  return masked_img;

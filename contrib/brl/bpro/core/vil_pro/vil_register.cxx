@@ -73,5 +73,6 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_grey_to_rgb_process, "vilGreyToRGBProcess");
   
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_threshold_max_image_process, "vilThresholdMaxImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_mask_image_using_ids_process, "vilMaskImageUsingIDsProcess");
 }
 

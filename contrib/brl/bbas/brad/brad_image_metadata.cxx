@@ -18,6 +18,8 @@
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_intersection.h>
 
 #include <brad/brad_sun_pos.h>
 
@@ -454,6 +456,15 @@ bool brad_image_metadata::same_time(brad_image_metadata& other)
   else
     return false;
 }
+
+ //: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes
+ bool brad_image_metadata::same_extent(brad_image_metadata& other)
+ {
+   vgl_box_2d<double> b1(lower_left_.x(), lower_left_.y(), upper_right_.x(), upper_right_.y());
+   vgl_box_2d<double> b2(other.lower_left_.x(), other.lower_left_.y(), other.upper_right_.x(), other.upper_right_.y());
+   if (vcl_abs(vgl_intersection(b1, b2).area() - b1.area()) < 0.000000001) 
+     return true;
+ }
 
 
 //: binary save self to stream
