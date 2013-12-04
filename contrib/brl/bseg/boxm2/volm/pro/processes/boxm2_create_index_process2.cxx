@@ -56,7 +56,7 @@ namespace boxm2_create_index_process2_globals
     //vcl_string options = " -D RENDER_DEPTH -D COMPINDEX ";
     vcl_string options = " -D COMPINDEX -D DETERMINISTIC";
     options += " -D RENDER_VISIBILITY ";
-    options += " -D STEP_CELL=step_cell_compute_index(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
+    options += " -D STEP_CELL=step_cell_compute_index(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
     bocl_kernel* compute_index = new bocl_kernel();
 
     compute_index->create_kernel(&device->context(),device->device_id(), src_paths, "compute_loc_index", options, "compute_loc_index");

@@ -29,6 +29,7 @@ void cast_ray_render_vis(int,int,float,float,float,float,float,float,
               
       
 void step_cell_compute_index(float depth,
+                             float block_len,
                              __global float  * alpha_data,
                              int      data_ptr,
                              float    d,
@@ -45,7 +46,7 @@ void step_cell_compute_index(float depth,
   (*vis)    *= diff_omega;
   (*expected_depth)+=depth*omega;
   (*expected_depth_square)+=depth*depth*omega;
-  (*t)=depth;
+  (*t)=depth*block_len;
 }
 
 __kernel
@@ -128,7 +129,8 @@ __kernel void normalize_index_depth_kernel(
     
     //normalize 
     float prob   = prob_buf[gid];
-    float mean   =  exp_depth_buf[gid] + t_infinity_buf[gid]*prob * (*sub_block_dim);
+    float mean   = exp_depth_buf[gid] + t_infinity_buf[gid]*prob;
+    //float mean   =  exp_depth_buf[gid] + t_infinity_buf[gid]*prob * (*sub_block_dim);
     exp_depth_buf[gid]=mean;
 }
 
