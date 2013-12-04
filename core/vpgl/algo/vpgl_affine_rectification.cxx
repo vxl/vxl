@@ -4,7 +4,7 @@
 
 
 #include <vcl_iostream.h>
-#include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vcl_limits.h>
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
@@ -47,8 +47,8 @@ bool vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double
   e2M[2][0] = -e2[1]; e2M[2][1] = e2[0]; e2M[2][2] = 0; 
 
   // find pseudo inverse of the first camera
-  vnl_matrix_fixed<double, 3,3> temp = vnl_matrix_inverse<double>(M1*M1.transpose()); 
-  vnl_matrix_fixed<double, 4,3> M1inv = M1.transpose()*temp;
+  vnl_svd<double> temp(M1*M1.transpose()); // use svd to find inverse of M1*M1.transpose()
+  vnl_matrix_fixed<double, 4,3> M1inv = M1.transpose()*temp.inverse();
 
   vnl_matrix_fixed<double,3,3> FAM;
   FAM = e2M*M2*M1inv;

@@ -174,7 +174,7 @@ bool vpgl_write_generic_camera_process(bprb_func_process& pro)
 
   vpgl_generic_camera<double>* gcam = dynamic_cast<vpgl_generic_camera<double>* >(camera.ptr());
 
-  vcl_ofstream ofs(out_name);
+  vcl_ofstream ofs(out_name.c_str());
   ofs << "#VRML V2.0 utf8\n";
   gcam->print_to_vrml(level, ofs);
   ofs.close();

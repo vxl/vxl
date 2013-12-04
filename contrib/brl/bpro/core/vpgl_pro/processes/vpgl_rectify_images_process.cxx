@@ -10,7 +10,7 @@
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/algo/vpgl_affine_rectification.h>
-#include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_random.h>
 #include <vil/vil_convert.h>
 
@@ -70,7 +70,8 @@ void out_image_size(unsigned ni, unsigned nj, vnl_matrix_fixed<double, 3, 3>& H1
 void warp_bilinear(vil_image_view<float>& img, vnl_matrix_fixed<double, 3, 3>& H, vil_image_view<float>& out_img, double mini, double minj)
 {
   // use the inverse to map output pixels to input pixels, so we can sample bilinearly from the input image
-  vnl_matrix_fixed<double, 3, 3> Hinv = vnl_matrix_inverse<double>(H);
+  vnl_svd<double> temp(H);  // use svd to get the inverse
+  vnl_matrix_fixed<double, 3, 3> Hinv = temp.inverse();
   out_img.fill(0.0f);
   for (unsigned i = 0; i < out_img.ni(); i++) 
     for (unsigned j = 0; j < out_img.nj(); j++) {

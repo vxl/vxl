@@ -2406,7 +2406,7 @@ bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map,
 
   // convert image to a voxel_slab
   bvxm_voxel_slab<T> image_slab(input_image.ni(), input_image.nj(), 1);
-  vil_image_view<T>::const_iterator img_it = input_image.begin();
+  typename vil_image_view<T>::const_iterator img_it = input_image.begin();
   typename bvxm_voxel_slab<T>::iterator slab_it = image_slab.begin();
   for (; img_it != input_image.end(); ++img_it, ++slab_it) {
     *slab_it = *img_it;
@@ -2424,9 +2424,9 @@ bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map,
     //vcl_stringstream s_temp; s_temp << "C:/projects/temp/temp_img_" << z << ".tif";
     //bvxm_util::write_slab_as_image(frame_backproj,s_temp.str());
     
-    bvxm_voxel_slab<T>::iterator frame_it = frame_backproj.begin();
+    typename bvxm_voxel_slab<T>::iterator frame_it = frame_backproj.begin();
     bvxm_voxel_slab<float>::iterator ortho_backproj_it = ortho_backproj.begin();
-    bvxm_voxel_slab<T>::iterator out_slab_it = out_slab_temp.begin();
+    typename bvxm_voxel_slab<T>::iterator out_slab_it = out_slab_temp.begin();
 
     for (; frame_it != frame_backproj.end(); ++ortho_backproj_it, ++frame_it, ++out_slab_it) {
       unsigned val = (unsigned)(vcl_floor(*ortho_backproj_it+0.5f)); // truncate the height to nearest int
@@ -2444,7 +2444,7 @@ bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map,
   // warp back to input ortho cam orientation
   bvxm_util::warp_slab_nearest_neighbor(out_slab_temp, Hi2p_ortho, out_slab);
 
-  vil_image_view<T>::iterator img_it2 = out_image.begin();
+  typename vil_image_view<T>::iterator img_it2 = out_image.begin();
   slab_it = out_slab.begin();
   for (; img_it2 != out_image.end(); ++img_it2, ++slab_it) {
     *img_it2 = *slab_it;

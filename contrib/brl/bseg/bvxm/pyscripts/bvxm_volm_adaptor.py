@@ -24,11 +24,24 @@ def find_resource_pair(res, name):
   statuscode=bvxm_batch.run_process();
   (f_id, f_type) = bvxm_batch.commit_output(0);
   full_path = bvxm_batch.get_output_string(f_id);
+  bvxm_batch.remove_data(f_id);
   (n_id, n_type) = bvxm_batch.commit_output(1);
   pair_name = bvxm_batch.get_output_string(n_id);
+  bvxm_batch.remove_data(n_id);
   (p_id, p_type) = bvxm_batch.commit_output(2);
   full_path_pair_name = bvxm_batch.get_output_string(p_id);
+  bvxm_batch.remove_data(p_id);
   return statuscode, full_path, pair_name, full_path_pair_name
+
+def get_full_path(res, name):
+  bvxm_batch.init_process("volmGetFullPathProcess");
+  bvxm_batch.set_input_from_db(0,res);
+  bvxm_batch.set_input_string(1,name);
+  statuscode=bvxm_batch.run_process();
+  (f_id, f_type) = bvxm_batch.commit_output(0);
+  full_path = bvxm_batch.get_output_string(f_id);
+  bvxm_batch.remove_data(f_id);
+  return full_path
 
 ## band_name is PAN or MULTI
 def pick_nadir_resource(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, satellite_name, band_name="PAN"):
