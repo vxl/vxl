@@ -234,7 +234,8 @@ void add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info> const
       int uu = (int)vcl_floor(u+0.5);
       int vv = (int)vcl_floor(v+0.5);
       if (infos[mm].valid_pixel(uu,vv)) {
-        vil_image_view<vxl_int_16> img(infos[mm].img_r);
+        //vil_image_view<vxl_int_16> img(infos[mm].img_r);
+        vil_image_view<float> img(infos[mm].img_r);
         z = img(uu,vv);
         found_it = true;
         break;
@@ -269,6 +270,19 @@ int find_land_type(vcl_vector<volm_img_info>& geo_infos, vgl_point_2d<double>& p
     }
   }
   return type;
+}
+
+bool loc_inside_region(vgl_polygon<double> const& poly, double const& ptx, double const& pty)
+{
+  // when sheets overlap, the poly.contain method will return false for pts located inside the overlapped region
+  // this function will returns true if the given point is inside any single sheet of the polygon
+  unsigned num_sheet = poly.num_sheets();
+  for (unsigned i = 0; i < num_sheet; i++) {
+    vgl_polygon<double> single_sheet_poly(poly[i]);
+    if (single_sheet_poly.contains(ptx, pty))
+      return true;
+  }
+  return false;
 }
 
 // read the tiles of the region, create a geo index and write the hyps
@@ -399,7 +413,7 @@ int main(int argc,  char** argv)
           vcl_string name = r->prop().name_;
           vcl_vector<vgl_point_2d<double> > points = r->line();
           for (unsigned kk = 1; kk < points.size(); kk++) {
-            if (poly.contains(points[kk-1].x(), points[kk-1].y())) 
+            if (loc_inside_region(poly, points[kk-1].x(), points[kk-1].y()))
               add_hypo(hyp_root, infos, points[kk-1], inc_in_sec_rad, true);
             // now interpolate along a straight line, assume locally planar
             double dif_dy = points[kk].y() - points[kk-1].y();
@@ -413,7 +427,7 @@ int main(int argc,  char** argv)
               cnt++;
               double x = points[kk-1].x()+inc_dx*cnt;
               double y = points[kk-1].y()+inc_dy*cnt;
-              if (poly.contains(x, y)) 
+              if (loc_inside_region(poly, x, y))
                 add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
             }
 
@@ -453,7 +467,7 @@ int main(int argc,  char** argv)
             inc_in_sec = volm_osm_category_io::geo_land_hyp_increments[type_prev] * meter_to_sec;
           inc_in_sec_rad = inc_in_sec*inc_in_sec_radius_ratio;
           double remainder = 0.0;
-          if (poly.contains(points[0].x(), points[0].y())) 
+          if ( loc_inside_region(poly, points[0].x(), points[0].y()) )
             add_hypo(hyp_root, infos, points[0], inc_in_sec_rad, true);
           for (unsigned kk = 1; kk < points.size(); kk++) {  
             double prev_x = points[kk-1].x();
@@ -489,7 +503,7 @@ int main(int argc,  char** argv)
               double inc_dx_rem = rem*cos;
               double x = prev_x+inc_dx_rem;
               double y = prev_y+inc_dy_rem;
-              if (poly.contains(x, y)) 
+              if ( loc_inside_region(poly, x, y) )
                 add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, true);
               prev_x = x; 
               prev_y = y;
@@ -500,7 +514,7 @@ int main(int argc,  char** argv)
               ds -= inc_in_sec;
               double x = prev_x+inc_dx;
               double y = prev_y+inc_dy;
-              if (poly.contains(x, y)) 
+              if (loc_inside_region(poly, x, y)) 
                 add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
               prev_x = x; 
               prev_y = y;

@@ -38,6 +38,10 @@ static void test_volm_matcher_p1()
   vcl_string        query_bin = "Z:/projects/find/test1_result/local_output/test_query_binary_gt_pa_5/p1a_test1_36/p1a_test1_36_query_pa_5.bin";
   vcl_string      weight_file = "Z:/projects/find/test1_result/local_output/test_query_binary_gt_pa_5/p1a_test1_36/weight_param.txt";
 
+  if (vul_file::exists(query_bin) || vul_file::exists(weight_file)) {
+    vcl_cout << " input files are missing, test ignored..." << vcl_endl;
+    return;
+  }
   unsigned tile_id = 3;
   float buffer_capacity = 1.0f;
   bool is_candidate = true;
@@ -48,7 +52,7 @@ static void test_volm_matcher_p1()
   unsigned max_cam_per_loc = 30;
 
 
-  // constrcture the tree
+  // contract the tree
   vcl_stringstream file_name_pre;
   file_name_pre << geo_index_folder << "geo_index_tile_" << tile_id;
   vcl_cout << "constructing: " << file_name_pre.str() << vcl_endl;
@@ -66,7 +70,7 @@ static void test_volm_matcher_p1()
     }
   }
   // prune geo_index tree given candidate list
-  // read txt format candidiate list
+  // read txt format candidate list
   vgl_polygon<double> cand_poly;
   volm_io::read_polygons(candidate_file, cand_poly);
   vcl_cout << " num of sheets in the candidate list = " << cand_poly.num_sheets() << vcl_endl;
