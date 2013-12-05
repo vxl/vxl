@@ -37,7 +37,7 @@ static void test_affine_rect()
   
   vnl_matrix_fixed<double, 1, 1> val = P2.transpose()*FAM*P1;
   vcl_cout << val[0][0] << vcl_endl;
-  TEST("check computed f", abs(val[0][0]) < 0.01, true);
+  TEST("check computed f", vcl_abs(val[0][0]) < 0.01, true);
 
   // test computation of rectification matrices
   vcl_vector<vnl_vector_fixed<double, 3> > img_p1, img_p2;
