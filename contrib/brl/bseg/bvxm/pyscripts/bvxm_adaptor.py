@@ -28,6 +28,16 @@ def scene_box(scene):
   upper_right_lat = bvxm_batch.get_output_double(id);
   return lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat;
 
+def write_scene_kml(scene, kml_filename, is_overwrite = True, r = 255, g = 255, b = 255):
+  bvxm_batch.init_process("bvxmSceneKmlProcess");
+  bvxm_batch.set_input_from_db(0, scene);
+  bvxm_batch.set_input_string(1, kml_filename);
+  bvxm_batch.set_input_bool(2, is_overwrite);
+  bvxm_batch.set_input_unsigned(3, r);
+  bvxm_batch.set_input_unsigned(4, g);
+  bvxm_batch.set_input_unsigned(5, b);
+  bvxm_batch.run_process();
+
 def scene_origin(scene):
   bvxm_batch.init_process("bvxmSceneOriginProcess");
   bvxm_batch.set_input_from_db(0, scene);

@@ -353,7 +353,7 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
   }
   // create polygon from parser
   if (parser->polyouter_.empty()) {
-    vcl_cerr << "input kml has no polygon outerboundary, retrun an empty polygon" << '\n';
+    vcl_cerr << "input kml has no polygon outerboundary, return an empty polygon" << '\n';
     delete parser;
     vgl_polygon<double> out2;
     return out2;

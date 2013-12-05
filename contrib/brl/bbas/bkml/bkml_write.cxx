@@ -71,6 +71,7 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
       << "  </Polygon>\n"
       << "</Placemark>\n" << vcl_endl;
 }
+
 //: kml requires lon, lat, elev in polygon definition
 void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vgl_box_2d<double> bbox)
 {
@@ -116,6 +117,14 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
       << "   </outerBoundaryIs>\n"
       << "  </Polygon>\n"
       << "</Placemark>\n" << vcl_endl;
+}
+
+// write a box with color
+void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr,
+                           unsigned char const& r, unsigned char const& g, unsigned char const& b)
+{
+  vcl_string hex_color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
+  bkml_write::write_box(ofs, name, description, ul, ur, ll, lr, hex_color);
 }
 
 // write a polygon with color (only outerBoundary)

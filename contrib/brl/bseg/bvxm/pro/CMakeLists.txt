@@ -18,7 +18,10 @@ IF(EXPAT_FOUND)
       INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
     ENDIF(GEOTIFF_FOUND)
   ENDIF(TIFF_FOUND)
-
+  IF(EXPATPP_FOUND)
+    INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
+    INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
+  ENDIF(EXPATPP_FOUND)
   SET(bvxm_pro_sources
       bvxm_processes.h
       bvxm_register.h    bvxm_register.cxx
@@ -78,6 +81,7 @@ IF(EXPAT_FOUND)
     processes/bvxm_atmospheric_corr_process.h         processes/bvxm_atmospheric_corr_process.cxx
     processes/bvxm_edgemap_ortho_process.h            processes/bvxm_edgemap_ortho_process.cxx
     processes/bvxm_scene_box_process.h                processes/bvxm_scene_box_process.cxx
+    processes/bvxm_scene_kml_process.h                processes/bvxm_scene_kml_process.cxx
     processes/bvxm_scene_local_box_process.h          processes/bvxm_scene_local_box_process.cxx
     processes/bvxm_create_ortho_camera_process.h      processes/bvxm_create_ortho_camera_process.cxx
     processes/bvxm_scene_model_dir_process.h          processes/bvxm_scene_model_dir_process.cxx
@@ -86,7 +90,7 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul brdb vbl_io)
+  TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul brdb vbl_io bkml)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
