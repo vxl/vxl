@@ -9,8 +9,9 @@
 
 //UNIX specific includes
 #include <aio.h>     //for aio_read
-#include <fcntl.h>   // for open (not really necessary
-#include <strings.h> //includes bzero
+#include <fcntl.h>   //for open
+#include <strings.h> //for bzero
+#include <unistd.h>  //for close
 
 
 //: baio_info struct: wrapper for status variables
