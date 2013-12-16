@@ -62,6 +62,9 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   void set_viewing_distance(T dist) {view_distance_ = dist;}
   T viewing_distance() const {return view_distance_;}
 
+  //: flip the ray direction so that dot product with look_dir is positive
+  void orient_ray_direction(vgl_vector_3d<T> const& look_dir);
+
   //: Equality test
   inline bool operator==(vpgl_affine_camera<T> const &that) const
   { return this == &that ||

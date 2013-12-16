@@ -168,6 +168,14 @@ principal_plane() const
   return ret;
 }
 
+//: flip the ray direction so that dot product with look_dir is positive
+template <class T>
+void vpgl_affine_camera<T>::orient_ray_direction(vgl_vector_3d<T> const& look_dir)
+{
+  if (dot_product(look_dir, ray_dir_) < 0 ) {
+    ray_dir_ = -ray_dir_;
+  }
+}
 
 // Code for easy instantiation.
 #undef vpgl_AFFINE_CAMERA_INSTANTIATE
