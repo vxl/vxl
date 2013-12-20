@@ -295,6 +295,12 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   vcl_cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
   vcl_cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
 
+  double xoff, yoff, zoff;
+  xoff = nitf_cam.offset(vpgl_rational_camera<double>::X_INDX);
+  yoff = nitf_cam.offset(vpgl_rational_camera<double>::Y_INDX);
+  zoff = nitf_cam.offset(vpgl_rational_camera<double>::Z_INDX);
+  cam_offset_.set(xoff, yoff, zoff);
+
   //get NITF information
   vcl_vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
   vil_nitf2_image_subheader* hdr = headers[0];
@@ -457,15 +463,29 @@ bool brad_image_metadata::same_time(brad_image_metadata& other)
     return false;
 }
 
- //: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes
- bool brad_image_metadata::same_extent(brad_image_metadata& other)
- {
-   vgl_box_2d<double> b1(lower_left_.x(), lower_left_.y(), upper_right_.x(), upper_right_.y());
-   vgl_box_2d<double> b2(other.lower_left_.x(), other.lower_left_.y(), other.upper_right_.x(), other.upper_right_.y());
-   if (vcl_abs(vgl_intersection(b1, b2).area() - b1.area()) < 0.000000001) 
-     return true;
- }
+// return the time difference in collection times in units of minutes
+unsigned brad_image_metadata::same_day_time_dif(brad_image_metadata& other)
+{
+  if (this->t_.day == other.t_.day && this->t_.month == other.t_.month && this->t_.hour == other.t_.hour)
+    return (unsigned)vcl_abs(this->t_.min - other.t_.min);
+}
 
+//: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes
+bool brad_image_metadata::same_extent(brad_image_metadata& other)
+{
+  // some images are rotated 'in-plane', so even though their bounding boxes overlap very well, the offset in the camera (upper left corner in the image) may be different
+  if (cam_offset_.x() != other.cam_offset_.x() || 
+      cam_offset_.y() != other.cam_offset_.y() || 
+      cam_offset_.z() != other.cam_offset_.z())
+      return false;
+  
+  vgl_box_2d<double> b1(lower_left_.x(), lower_left_.y(), upper_right_.x(), upper_right_.y());
+  vgl_box_2d<double> b2(other.lower_left_.x(), other.lower_left_.y(), other.upper_right_.x(), other.upper_right_.y());
+  if (vcl_abs(vgl_intersection(b1, b2).area() - b1.area()) < 0.000000001) 
+    return true;
+   
+  return false;
+}
 
 //: binary save self to stream
 void brad_image_metadata::b_write(vsl_b_ostream& os) const
@@ -494,6 +514,9 @@ void brad_image_metadata::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, lower_left_.z());
   vsl_b_write(os, band_);
   vsl_b_write(os, n_bands_);
+  vsl_b_write(os, cam_offset_.x());
+  vsl_b_write(os, cam_offset_.y());
+  vsl_b_write(os, cam_offset_.z());
 }
 
 //: binary load self from stream
@@ -502,7 +525,7 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
   if (!is) return;
   short ver;
   vsl_b_read(is, ver);
-  if (ver == 0) {
+  if (ver == 0 || ver == 1) {
     vsl_b_read(is, sun_elevation_);
     vsl_b_read(is, sun_azimuth_);
     vsl_b_read(is, view_elevation_);
@@ -529,6 +552,13 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
     lower_left_.set(x,y,z);
     vsl_b_read(is, band_);
     vsl_b_read(is, n_bands_);
+  } 
+  if (ver == 1) {
+    double x,y,z;
+    vsl_b_read(is, x); 
+    vsl_b_read(is, y);
+    vsl_b_read(is, z);
+    cam_offset_.set(x,y,z);
   }
   else {
     vcl_cout << "brad_image_metadata -- unknown binary io version " << ver << '\n';

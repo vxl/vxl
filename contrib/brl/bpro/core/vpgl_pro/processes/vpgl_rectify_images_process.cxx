@@ -13,6 +13,8 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_random.h>
 #include <vil/vil_convert.h>
+#include <vcl_limits.h>
+#include <vnl/vnl_math.h>
 
 //:
 bool vpgl_affine_rectify_images_process_cons(bprb_func_process& pro)
@@ -72,7 +74,8 @@ void warp_bilinear(vil_image_view<float>& img, vnl_matrix_fixed<double, 3, 3>& H
   // use the inverse to map output pixels to input pixels, so we can sample bilinearly from the input image
   vnl_svd<double> temp(H);  // use svd to get the inverse
   vnl_matrix_fixed<double, 3, 3> Hinv = temp.inverse();
-  out_img.fill(0.0f);
+  //out_img.fill(0.0f);
+  out_img.fill(vcl_numeric_limits<float>::quiet_NaN());
   for (unsigned i = 0; i < out_img.ni(); i++) 
     for (unsigned j = 0; j < out_img.nj(); j++) {
       double ii = i + mini;
@@ -103,6 +106,8 @@ void warp_bilinear(vil_image_view<float>& img, vnl_matrix_fixed<double, 3, 3>& H
         if (xvals[k] < img.ni() &&
             yvals[k] < img.nj()) {
           // pixel is good
+          if (vnl_math::isnan(out_img(i,j)))
+            out_img(i,j) = 0.0f;
           out_img(i,j) += img(xvals[k],yvals[k])*weights[k];
         }
       }

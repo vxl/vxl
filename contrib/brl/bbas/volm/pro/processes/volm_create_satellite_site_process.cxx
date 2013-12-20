@@ -357,4 +357,51 @@ bool volm_find_res_pair_process(bprb_func_process& pro)
   return true;
 }
 
+// a process to return a text file with names of 'pairs' of satellite images that are taken a few minutes apart from each other
+bool volm_find_satellite_pairs_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  vcl_vector<vcl_string> input_types_(9);
+  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[1] = "double";      // lower left lon
+  input_types_[2] = "double";      // lower left lat
+  input_types_[3] = "double";      // upper right lon
+  input_types_[4] = "double";      // upper right lat
+  input_types_[5] = "vcl_string";      // output file to print the list
+  input_types_[6] = "vcl_string";      // satellite name
+  
+  if (!pro.set_input_types(input_types_))
+    return false;
+  //output
+  vcl_vector<vcl_string> output_types_(1);
+  output_types_[0] = "unsigned";  // return number of pairs that intersect this region
+  return pro.set_output_types(output_types_);
+}
+
+bool volm_find_satellite_pairs_process(bprb_func_process& pro)
+{
+  //check number of inputs
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << " invalid inputs" << vcl_endl;
+    return false;
+  }
+
+  //get the inputs
+  volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
+  double lower_left_lon = pro.get_input<double>(1);
+  double lower_left_lat = pro.get_input<double>(2);
+  double upper_right_lon = pro.get_input<double>(3);
+  double upper_right_lat = pro.get_input<double>(4);
+  vcl_string out_file = pro.get_input<vcl_string>(5);
+  vcl_string sat_name = pro.get_input<vcl_string>(6);
+  
+  unsigned cnt; bool out = false;
+  out = res->query_pairs_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, cnt, out_file, sat_name);
+  pro.set_output_val<unsigned>(0, cnt);
+  return out;
+}
+
+
+
 

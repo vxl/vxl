@@ -355,24 +355,60 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
   return true;
 }
 
+//: get a list of ids in the resources_ list that overlap the given rectangular region
+void volm_satellite_resources::query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, vcl_vector<vcl_pair<unsigned, unsigned> >& ids)
+{
+  // first get all the images that intersect the area
+  vcl_vector<unsigned> temp_ids;
+  vcl_string band_str = "PAN";
+  this->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, temp_ids);
+
+  // prune out the ones from the wrong satellite
+  vcl_vector<unsigned> ids2;
+  for (unsigned i = 0; i < temp_ids.size(); i++) {
+    if (resources_[temp_ids[i]].meta_->satellite_name_.compare(sat_name) == 0)
+      ids2.push_back(temp_ids[i]);
+  }
+  // check the time of collection to find pairs
+  for (unsigned i = 0; i < ids2.size(); i++) {
+    for (unsigned j = i+1; j < ids2.size(); j++) {
+      if (resources_[ids2[i]].meta_->same_day_time_dif(*(resources_[ids2[j]].meta_)) < 5) { // if taken less than 5 minute apart
+        ids.push_back(vcl_pair<unsigned, unsigned>(i, j));
+      }
+    }
+  }
+}
+
+//: query the resources in the given box and output the full paths of pairs to the given file
+bool volm_satellite_resources::query_pairs_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& sat_name)
+{
+  vcl_vector<vcl_pair<unsigned, unsigned> > ids;
+  query_pairs(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, sat_name, ids);
+
+  vcl_ofstream ofs(out_file.c_str());
+  if (!ofs) {
+    vcl_cerr << "In volm_satellite_resources::query_pairs_print_to_file() -- cannot open file: " << out_file << vcl_endl;
+    return false;
+  }
+  
+  for (unsigned i = 0; i < ids.size(); i++) {
+    ofs << resources_[ids[i].first].full_path_ << '\n';
+    ofs << resources_[ids[i].second].full_path_ << '\n\n';
+  }
+
+  ofs.close();
+  return true;
+}
 
 //: return the full path of a satellite image given its name, if not found returns empty string
 vcl_pair<vcl_string, vcl_string> volm_satellite_resources::full_path(vcl_string name)
 {
   for (unsigned i = 0; i < resources_.size(); i++) {
     if (name.compare(resources_[i].name_) == 0) {
-      /*float rel = 0.0f;
-      vcl_map<vcl_string, float>::iterator iter = satellite_geo_reliability.find(resources_[i].meta_->satellite_name_);
-      if (iter == satellite_geo_reliability.end()) {
-        vcl_cerr << "cannot find a reliability value for " << resources_[i].meta_->satellite_name_ << " WARNING: returning rel: 0.0!\n";
-      } else
-        rel = iter->second;
-      vcl_pair<vcl_string, float> p(resources_[i].full_path_, rel);*/
       vcl_pair<vcl_string, vcl_string> p(resources_[i].full_path_, resources_[i].meta_->satellite_name_);
       return p;
     }
   }
-  //return vcl_pair<vcl_string, float>("", 0.0f);
   return vcl_pair<vcl_string, vcl_string>("", "");
 }
 
@@ -402,7 +438,7 @@ vcl_string volm_satellite_resources::find_pair(vcl_string const& name)
                   resources_[i].pair_ = resources_[ii].name_;
                   resources_[ii].pair_ = resources_[i].name_;
                 return resources_[ii].name_; 
-          } 
+          }
         }
       } else 
         return resources_[i].pair_;

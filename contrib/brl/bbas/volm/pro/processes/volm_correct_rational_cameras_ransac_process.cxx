@@ -464,6 +464,10 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     cam_trans.push_back(cam_trans_i);
   }
   vcl_cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections!\n";
+  if (!cam_trans.size()) {
+    vcl_cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections! exit without any corrections!\n";
+    return true;
+  }
   
   // find the inliers
   vcl_vector<unsigned> inlier_cnts(cam_trans.size(), 0);

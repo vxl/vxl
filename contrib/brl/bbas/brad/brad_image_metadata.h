@@ -54,8 +54,9 @@ class brad_image_metadata : public vbl_ref_count
   //vnl_double_2 upper_right_;
   //vnl_double_2 lower_left_;
   //vnl_double_2 lower_right_;
-  vgl_point_3d<double> lower_left_;  // x is lon, y is lat
+  vgl_point_3d<double> lower_left_;  // x is lon, y is lat  // lower_left corner of the 'extent' of the satellite image (not necessarily lower left corner of the image, since the image may be rotated in plane)
   vgl_point_3d<double> upper_right_; 
+  vgl_point_3d<double> cam_offset_;  // these are the lat, lon, elev coords of upper left corner of the image read from the RPC camera
   vcl_string band_;  // PAN or MULTI
   unsigned n_bands_;  // 1 for PAN, 4 or 8 for MULTI
 
@@ -64,12 +65,14 @@ class brad_image_metadata : public vbl_ref_count
   bool parse(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
 
   bool same_time(brad_image_metadata& other);
+  // return the time difference in collection times in units of minutes
+  unsigned same_day_time_dif(brad_image_metadata& other);
   
   //: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes
   bool same_extent(brad_image_metadata& other);
 
   // ===========  binary I/O ================
-  short version() const { return 0; }
+  short version() const { return 1; }
   void b_write(vsl_b_ostream& os) const;
   void b_read(vsl_b_istream& is);
 
