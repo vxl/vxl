@@ -146,7 +146,7 @@ def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file
 
   ## not enough satellite images overlap with current scene, skip this scene
   if cnt > max_cnt or cnt < min_cnt:
-    return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, 0;
+    return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, 0, 0;
   ## correct the filename to ensure it works for multiple platform
   f = open(temp_text_res, 'r')
   lines = f.readlines();
@@ -173,7 +173,7 @@ def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file
   if n_seed < n_seed_necessary:
     print "only %d refined cameras, less than the required seed number %d, skip" % (n_seed, n_seed_necessary)
     sys.stdout.flush()
-    return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, 0;
+    return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, 0, 0;
 
   ## get rid of cloud images
   cnt = 0;            # number of non-cloud images
@@ -223,17 +223,17 @@ def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file
         cropped_cams.append(cropped_cam);
         uncertainties.append(uncertainty)
         cnt = cnt+1
-
+  num_cloud_imgs = len(res_files)-cnt
   print "%d out of %d images are valid without cloud" % (cnt, len(res_files))
   sys.stdout.flush();
-  ## check whether there are enought seed images
+  ## check whether there are enough seed images
   seed_num = 0;
   for camera_cat in cam_cat:
     if camera_cat == 1:  seed_num = seed_num + 1;
   if seed_num < n_seed_necessary:
     print "only %d refined cameras, less than the required seed number %d, skip" % (seed_num, n_seed_necessary)
     sys.stdout.flush()
-    return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, 0;
+    return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, num_cloud_imgs, 0;
 
   ## rearrange the valid images based on camera category such that the first n_seed_necessary images will be chosen as seed during edge_world creation
   for i in range(0, cnt, 1):
@@ -253,7 +253,7 @@ def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file
       cropped_valid_imgs.append(cropped_imgs[i])
       cropped_valid_cams.append(cropped_cams[i])
       valid_uncertainties.append(uncertainties[i])
-  return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, cnt;
+  return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, num_cloud_imgs, cnt;
 
 
 ## return the valid cropped images/cameras that intersect with current scene, all of which can be used to update the edge world

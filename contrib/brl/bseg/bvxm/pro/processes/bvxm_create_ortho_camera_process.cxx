@@ -83,9 +83,9 @@ bool bvxm_create_ortho_camera_process(bprb_func_process& pro)
     trans_matrix[0][3] = upper_left_x;
     trans_matrix[1][3] = upper_left_y;
     vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs);
-    unsigned northing = 0;
+    unsigned northing = 1;
     if (upper_left_lat < 0 && lower_right_lat < 0)
-      northing = 1;
+      northing = 0;
     if (upper_left_lat*lower_right_lat < 0)
       vcl_cout << "warning: scene world crosses the Equator" << vcl_endl;
     cam->set_utm(utm_zone,northing);
