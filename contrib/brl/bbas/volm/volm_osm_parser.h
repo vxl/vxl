@@ -48,7 +48,10 @@ public:
                            vcl_vector<vcl_vector<vcl_pair<vcl_string, vcl_string> > >& keys,
                            vcl_string const& osm_file);
 
-  //: parser 3d location points from osm
+  //: parse bounding box of the give osm file
+  static vgl_box_2d<double> parse_bbox(vcl_string const& osm_file);
+
+  //: parse 3d location points from osm
   static void parse_points_3d(vcl_vector<vgl_point_3d<double> >& points,
                               vcl_string const& osm_file);
 

@@ -186,6 +186,16 @@ vcl_map<unsigned, volm_land_layer> create_volm_land_table()
   return m;
 }
 
+vcl_map<vcl_string, volm_land_layer> create_volm_land_table_name()
+{
+  vcl_map<vcl_string, volm_land_layer> m;
+  vcl_map<unsigned, volm_land_layer> id_table = create_volm_land_table();
+  vcl_map<unsigned, volm_land_layer>::iterator mit = id_table.begin();
+  for (; mit != id_table.end(); ++mit)
+    m.insert(vcl_pair<vcl_string, volm_land_layer>(mit->second.name_, mit->second));
+  return m;
+}
+
 // create a string table containing all defined volm_land_layer name, the order follows the volm_land_layer id
 vcl_vector<vcl_string> create_volm_land_layer_name_table()
 {
@@ -220,6 +230,6 @@ vcl_map<vcl_pair<int, int>, volm_land_layer> volm_osm_category_io::road_junction
 vcl_map<int, volm_land_layer> volm_osm_category_io::nlcd_land_table = create_nlcd_to_volm_table();
 vcl_map<int, volm_land_layer> volm_osm_category_io::geo_land_table  = create_geo_cover_to_volm_table();
 vcl_map<unsigned, volm_land_layer> volm_osm_category_io::volm_land_table = create_volm_land_table();
+vcl_map<vcl_string, volm_land_layer> volm_osm_category_io::volm_land_table_name = create_volm_land_table_name();
 vcl_vector<vcl_string> volm_osm_category_io::volm_category_name_table = create_volm_land_layer_name_table();
 vcl_map<int, double> volm_osm_category_io::geo_land_hyp_increments  = create_geo_cover_hyp_increments_for_roads();
-

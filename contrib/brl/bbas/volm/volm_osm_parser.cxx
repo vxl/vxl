@@ -171,6 +171,21 @@ void volm_osm_parser::startElement(const XML_Char* name, const XML_Char** atts)
   }
 }
 
+vgl_box_2d<double> volm_osm_parser::parse_bbox(vcl_string const& osm_file)
+{
+  volm_osm_parser* parser = new volm_osm_parser();
+  vcl_FILE* xmlFile = vcl_fopen(osm_file.c_str(), "r");
+  if (!xmlFile) {
+    vcl_cerr << " can not find osm file to parse: " << osm_file << '\n';
+    delete parser;
+  }
+  if (!parser->parseFile(xmlFile)) {
+    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line " << parser->XML_GetCurrentColumnNumber() << '\n';
+    delete parser;
+  }
+  return parser->bbox_;
+}
+
 void volm_osm_parser::parse_points(vcl_vector<vgl_point_2d<double> >& points,
                                    vcl_vector<vcl_vector<vcl_pair<vcl_string, vcl_string> > >& keys,
                                    vcl_string const& osm_file)

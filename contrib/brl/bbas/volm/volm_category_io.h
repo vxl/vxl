@@ -99,12 +99,16 @@ public:
   //: table of all possible volm_object
   static vcl_vector<vcl_string> volm_category_name_table;
 
-  //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (id should be same as volm_land_layer id)
+  //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (key is the land_layer id)
   static vcl_map<unsigned, volm_land_layer> volm_land_table;
+
+  //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (key is the land_layer name, note that the land name is unique)
+  static vcl_map<vcl_string, volm_land_layer> volm_land_table_name;
 
   //: use the corresponding increment during hypotheses generation, 
   //  the unit of the increments is in meters (user of this table shall convert to degrees if necessary depending on lat, lon of the area)
-  static vcl_map<int, double> geo_land_hyp_increments;  
+  static vcl_map<int, double> geo_land_hyp_increments;
+
 
 };
 
