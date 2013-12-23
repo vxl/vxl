@@ -306,6 +306,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> osm_tree_folder("-osm_tree", "the geoindex tree folder that has the tree structure with the ids of osm objects at its leaves", "");
   vul_arg<int> world_id("-world", "the id of the world", -1);
   vul_arg<bool> p1b("-p1b", "use the p1b tiles", false);
+  vul_arg<bool> use_satellite_img("-sat", "use satellite image resource", false);
   vul_arg<vcl_string> land("-land", "the input folder of the land type .tif files", "");
 
   vul_arg_parse(argc, argv);
@@ -400,9 +401,13 @@ int main(int argc,  char** argv)
       kml_roads << out_pre() << "/p1b_wr" << world_id() << "_tile_" << tile_id() << "_osm_roads.kml";
       osm_objs.write_lines_to_kml(kml_roads.str());
 
-      // load the DEM tiles
       vcl_vector<volm_img_info> infos;
-      volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
+      if (use_satellite_img() )
+        // load the satellite resources
+        volm_io_tools::load_satellite_height_imgs(in_folder(), infos, true);
+      else
+        // load the DEM tiles
+        volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
 
       if (land().compare("") == 0) {  // if not using land types
 
@@ -564,7 +569,7 @@ int main(int argc,  char** argv)
   }
 
   if (read()) {
-    if (in_folder().compare("") == 0) {
+    if (out_pre().compare("") == 0) {
       vul_arg_display_usage_and_exit();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
@@ -584,6 +589,9 @@ int main(int argc,  char** argv)
     vcl_cout << "\t total number of hypos: " << size << vcl_endl;
     for (unsigned l = 0; l < leaves.size(); l++) {
       vcl_cout << " leaf_id = " << l << " leaf bbox = " << leaves[l]->extent_ << vcl_endl;
+      unsigned num_hyps = leaves[l]->hyps_->size();
+      for (unsigned h = 0; h < num_hyps; h++)
+        vcl_cout << " \t hypo " << h << " = " << leaves[l]->hyps_->locs_[h] << vcl_endl;
     }
     return volm_io::SUCCESS;
   }
