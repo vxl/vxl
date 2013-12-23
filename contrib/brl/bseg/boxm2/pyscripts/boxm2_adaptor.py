@@ -1541,11 +1541,13 @@ def genearate_xyz_from_osm(scene, tiff_geo_cover, osm_bin):
     label_color_img = 0;
   return x_img, y_img, z_img, label_img, label_color_img;
 
-# Create x y z images from a class image at the resolution of the scene, reads image geo cam from the image file name
-def generate_xyz_from_label_img(scene, label_tiff):
+# Create x y z images from a class image at the resolution of the scene
+# If camera is not given, reads image geo cam from the image file name or from file header
+def generate_xyz_from_label_img(scene, label_tiff, geocam = 0):
   boxm2_batch.init_process("boxm2LabelImgToXYZProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1,label_tiff);
+  boxm2_batch.set_input_from_db(2,geocam)
   result = boxm2_batch.run_process();
   if result:
     (xi_id, xi_type) = boxm2_batch.commit_output(0);

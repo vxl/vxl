@@ -285,7 +285,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
 // turn an ortho image of unsigned int to xyz and a label (e.g. each pixel has an id of some class) image ready to be ingested
 namespace boxm2_label_to_xyz_process_globals
 {
-  const unsigned n_inputs_ = 2;
+  const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 4;
 }
 
@@ -296,6 +296,7 @@ bool boxm2_label_to_xyz_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vcl_string";  // ortho label image with class ids/labels for each pixel
+  input_types_[2] = "vpgl_camera_double_sptr";  // geocam if available, otherwise pass 0, camera will be constructed using info in geotiff header or image filename
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
@@ -321,6 +322,96 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vcl_string fname = pro.get_input<vcl_string>(1);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(2);
+
+  // check camera for the label image
+  vpgl_geo_camera* geocam = 0;
+  if (cam) {
+    vcl_cout << "Using the loaded camera!\n";
+    geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  }
+  else {
+    vcl_cout << "Using the camera loaded from geotif image header\n";
+    vil_image_resource_sptr label_img = vil_load_image_resource(fname.c_str());
+    vpgl_geo_camera::init_geo_camera(label_img, lvcs, geocam);
+  }
+  vil_image_view_base_sptr img_sptr = vil_load(fname.c_str());
+  if (img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
+    vcl_cerr << "Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
+    return false;
+  }
+  vil_image_view<vxl_byte> img(img_sptr);
+  unsigned nii = img.ni(); unsigned nji = img.nj();
+  vcl_cout << " image size: "<< nii << " x " << nji << vcl_endl;
+
+  if (!geocam) {
+    vcl_cout << "Create geo camera from filename\n";
+    vpgl_geo_camera::init_geo_camera_from_filename(fname, nii, nji, lvcs, geocam);
+  }
+
+  brip_roi broi(nii,nji);
+  vsol_box_2d_sptr bb = new vsol_box_2d();
+  double u, v;
+  geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
+  bb->add_point(u, v);
+  geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
+  bb->add_point(u, v);
+  bb = broi.clip_to_image_bounds(bb);
+  if (bb->width() <= 0 || bb->height() <= 0) {
+    vcl_cout << "In " << pro.name() << " --- " << fname << " does not overlap the scene!\n";
+    return false;
+  }
+
+  // get the resolution for scene
+  float vox_length = 1E6;
+  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  for (unsigned i = 0; i < blks.size(); i++) {
+    boxm2_scene_info* info = scene->get_blk_metadata(blks[i]);
+    float sb_length = info->block_len;
+    if (sb_length/8.0f < vox_length)  vox_length = sb_length/8.0f;
+  }
+  vcl_cout << "scene voxel length: " << vox_length << vcl_endl;
+  // prepare an image for the finest resolution
+  int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x())/vox_length);
+  int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y())/vox_length);
+
+  // create x y z image
+  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<vxl_byte>* out_img_label = new vil_image_view<vxl_byte>(ni, nj, 1);
+  out_img_x->fill(0.0f); out_img_y->fill(0.0f);
+  out_img_z->fill((float)(scene_bbox.max_z()+100.0));  // local coord system min z, initialize to constant
+  out_img_label->fill((vxl_byte)0);
+
+  // iterate over the image and for each pixel, calculate, xyz in the local coordinate system
+  for (int i = 0; i < ni; i++)
+    for (int j = 0; j < nj; j++) {
+      float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
+      (*out_img_x)(i,j) = local_x;
+      (*out_img_y)(i,j) = local_y;
+
+      double lon, lat, gz;
+      lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
+      // find pixel in image
+      double u, v;
+      geocam->global_to_img(lon, lat, gz, u, v);
+      unsigned uu = (unsigned)vcl_floor(u+0.5);
+      unsigned vv = (unsigned)vcl_floor(v+0.5);
+      if (uu >= 0 && vv >= 0 && uu < img.ni() && vv < img.nj())
+        (*out_img_label)(i,j) = img(uu, vv);
+    }
+
+  // output
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
+  pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
+  pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
+  pro.set_output_val<vil_image_view_base_sptr>(3, out_img_label);
+
+  return true;
+
+#if 0
   volm_tile t(fname, 0, 0); // pass ni, nj as 0 cause just need to parse the name string 
   vgl_box_2d<float> bbox = t.bbox();
   
@@ -403,5 +494,6 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(3, out_img_label);
 
   return true;
+#endif
 }
 
