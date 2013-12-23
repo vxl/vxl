@@ -303,14 +303,25 @@ open()
   {
     video_enc->flags |= CODEC_FLAG_QPEL;
   }
+
   if (params_.use_qprd_)
   {
+#if defined CODEC_FLAG_QP_RD
     video_enc->flags |= CODEC_FLAG_QP_RD;
+#else
+        vcl_cerr << "WARNING: global parameter 'use_qprd_' no longer support by FFMPEG" << vcl_endl;
+#endif
   }
+
   if (params_.use_cbprd_)
   {
+#if defined CODEC_FLAG_CBP_RD
     video_enc->flags |= CODEC_FLAG_CBP_RD;
+#else
+    vcl_cerr << "WARNING: global parameter 'use_cbprd__' no longer support by FFMPEG" << vcl_endl;
+#endif
   }
+
   if (params_.b_frames_)
   {
     video_enc->max_b_frames = params_.b_frames_;
