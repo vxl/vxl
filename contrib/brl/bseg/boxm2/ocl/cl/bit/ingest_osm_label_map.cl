@@ -21,7 +21,7 @@ void step_cell_ingest_osm_label_map(AuxArgs aux_args, int data_ptr)
 void cast_ray(int,int,float,float,float,float,float,float,
               __constant RenderSceneInfo*, __global int4*,
               __local uchar16*, __constant uchar *,__local uchar *,
-              float*, AuxArgs);
+              float*, AuxArgs,float tnear, float tfar);
 __kernel
 void ingest_osm_label_map(__constant  RenderSceneInfo    * linfo,
                           __global    uint4              * image_dims,
@@ -80,7 +80,7 @@ void ingest_osm_label_map(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
-            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+            local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
 }
 #endif // INGEST_OSM_LABEL_MAP
