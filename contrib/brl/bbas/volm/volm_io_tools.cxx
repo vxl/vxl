@@ -386,7 +386,72 @@ void volm_io_tools::load_aster_dem_imgs(vcl_string const& folder, vcl_vector<vol
     //  infos.push_back(info);
     //}
   }
+}
+
+bool volm_io_tools::load_satellite_height_map(vcl_string const& filename, volm_img_info& info, bool const& load_cam_from_file)
+{
+  info.img_name = filename;
+  info.name = vul_file::strip_directory(info.img_name);
+  info.name = vul_file::strip_extension(info.name);
   
+  info.img_r = vil_load(info.img_name.c_str());
+  info.ni = info.img_r->ni();  info.nj = info.img_r->nj();
+  vcl_cout << "satellite height image ni: " << info.ni << " nj: " << info.nj << vcl_endl;
+  // load the camera (either from a tfw file or from image header)
+  vpgl_geo_camera *cam;
+  vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
+  if (load_cam_from_file) {
+    vcl_string cam_file = vul_file::dirname(filename) + "/" + info.name + "_geo.tfw";
+    if (!vul_file::exists(cam_file)) {
+      vcl_cerr << " can not find camera file: " << cam_file << "!\n";
+      return false;
+    }
+    vpgl_geo_camera::init_geo_camera(cam_file, lvcs_dummy, 0, 0, cam);
+  }
+  else {
+    vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
+    vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
+  }
+
+  // defined the bbox of the image, use lower_left corner to define utm and northing of camera
+  double lat, lon;
+  cam->img_to_global(0.0, info.nj-1, lon, lat);
+  vgl_point_2d<double> lower_left(lon, lat);
+  vpgl_utm utm;
+  int utm_zone; double x, y;
+  utm.transform(lat, lon, x, y, utm_zone);
+  vcl_cout << " zone of satellite height image " << info.name << ": " << utm_zone << " from lower left corner!\n";
+  cam->img_to_global(info.ni-1,0.0, lon, lat);
+  vgl_point_2d<double> upper_right(lon, lat);
+  int utm_zone_ur;
+  utm.transform(lat, lon, x, y, utm_zone_ur);
+  if (utm_zone_ur != utm_zone)
+    vcl_cout << " warning: satellite height image " << info.name << " crosses two utm zone: " << utm_zone << ", " << utm_zone_ur << vcl_endl;
+  unsigned northing = 1;
+  if (upper_right.x() < 0 && lower_left.x() < 0)
+    northing = 0;
+  if (upper_right.x() * lower_left.x() < 0)
+    vcl_cout << " warning: satellite height image " << info.name << " crosses the Equator (set it to be northing)" << vcl_endl;
+  cam->set_utm(utm_zone, northing);
+  
+  info.cam = cam;
+  vgl_box_2d<double> bbox(lower_left, upper_right);
+  vcl_cout << "bbox: " << bbox << vcl_endl;
+  info.bbox = bbox;
+
+  return true;
+}
+
+bool volm_io_tools::load_satellite_height_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool const& load_cam_from_file)
+{
+  vcl_string file_glob = folder + "//scene_*.tif";
+  for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
+    volm_img_info info;
+    if (!volm_io_tools::load_satellite_height_map(fn(), info, load_cam_from_file))
+      return false;
+    infos.push_back(info);
+  }
+  return true;
 }
 
 void volm_io_tools::load_geocover_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)

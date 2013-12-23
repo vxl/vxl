@@ -71,8 +71,14 @@ public:
   //: load a geotiff file (usually .tif) and read its ortho camera info from its header, puts a dummy lvcs to vpgl_geo_cam object so lvcs is not valid
   static void load_geotiff_image(vcl_string filename, volm_img_info& info, bool load_cam_from_name = false);
 
+  //: load a satellite height map and read its ortho camera from image header, if image header is missing, load associated camera file
+  static bool load_satellite_height_map(vcl_string const& filename, volm_img_info& info, bool const& load_cam_from_file = false);
+
   //: uses glob: folder//ASTGTM2_*/*_dem.tif
   static void load_aster_dem_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
+
+  //: uses glob: folder//scene_*/*.tif and folder//scene_*/*.tfw
+  static bool load_satellite_height_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool const& load_cam_from_file = true);
 
   //: uses glob: folder//Geocover*.tif
   static void load_geocover_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);

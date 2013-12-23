@@ -24,6 +24,8 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vpgl/vpgl_utm.h>
+#include <volm/volm_osm_parser.h>
+#include <vcl_where_root_dir.h>
 
 void error(vcl_string log_file, vcl_string msg)
 {
@@ -33,24 +35,32 @@ void error(vcl_string log_file, vcl_string msg)
 #if 0
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> osm_folder("-osm", "folder where osm binary stores", "");
+  vul_arg<vcl_string> osm_file("-osm", "folder where osm binary stores", "");
   vul_arg<vcl_string> out_folder("-out", "output folder", "");
   vul_arg<unsigned> world_id("-world", "world id for ROI (from 1 to 5", 6);
   vul_arg<unsigned> tile_id("-tile", "tile id for ROI", 0);
-
+  vul_arg_parse(argc, argv);
   // load open street map binary
-  vcl_stringstream osm_file;  osm_file << osm_folder() << "/p1b_wr" << world_id() << "_tile_" << tile_id() << "_osm.bin";
-  if (!vul_file::exists(osm_file.str())) {
+  if (!vul_file::exists(osm_file())) {
+    vcl_cout << "error: can not find osm file: " << osm_file() << "!\n";
     return false;
   }
-  volm_osm_objects osm_obj(osm_file.str());
+  // check the osm_to_volm file
+  vcl_string osm_to_volm_txt = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
+  if (!vul_file::exists(osm_to_volm_txt)) {
+    vcl_cout << "error: can not find osm_to_volm_txt: " << osm_to_volm_txt << "!\n";
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  volm_osm_objects osm_obj(osm_file(),osm_to_volm_txt);
 
   // create 2d map
   vcl_cout << " --------------- START -----------------" << vcl_endl;
   vcl_cout << " world id = " << world_id() << ", tile_id = " << tile_id() << vcl_endl;
+  // obtain the bounding box of current osm
+  vgl_box_2d<double> osm_bbox = volm_osm_parser::parse_bbox(osm_file());
   double lon_min, lat_min, lon_max, lat_max;
-  lon_min = -71.392;  lat_min = 41.828;
-  lon_max = -71.384;  lat_max = 41.832;
+  lon_min = osm_bbox.min_x();  lat_min = osm_bbox.min_y();
+  lon_max = osm_bbox.max_x();  lat_max = osm_bbox.max_y();
   double scale_x = lon_max - lon_min;
   double scale_y = lat_max - lat_min;
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lat_min, lon_min, 0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
