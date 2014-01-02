@@ -298,6 +298,17 @@ def init_float_img(ni,nj,np,val):
   img_out = dbvalue(id,type)
   return img_out
 
+def init_byte_img(ni,nj,np = 1,val = 0):
+  bvxm_batch.init_process("vilInitByteImageProcess")
+  bvxm_batch.set_input_unsigned(0,ni);
+  bvxm_batch.set_input_unsigned(1,nj);
+  bvxm_batch.set_input_unsigned(2,np);
+  bvxm_batch.set_input_unsigned(3,val);
+  bvxm_batch.run_process()
+  (id, type) = bvxm_batch.commit_output(0)
+  img_out = dbvalue(id,type)
+  return img_out
+
 def nitf_date_time(image_filename):
   bvxm_batch.init_process("vilNITFDateTimeProcess");
   bvxm_batch.set_input_string(0,image_filename);
