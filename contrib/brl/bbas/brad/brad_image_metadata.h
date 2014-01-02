@@ -59,6 +59,8 @@ class brad_image_metadata : public vbl_ref_count
   vgl_point_3d<double> cam_offset_;  // these are the lat, lon, elev coords of upper left corner of the image read from the RPC camera
   vcl_string band_;  // PAN or MULTI
   unsigned n_bands_;  // 1 for PAN, 4 or 8 for MULTI
+  vcl_vector<vcl_pair<double, double> > gains_;  // calibrating multispectral imagery requires a different gain, offset for each band
+  double gsd_; // ground sampling distance of the image - parse from imd or pvl file
 
   //: parse header in nitf image, assumes that metadata files are in the same folder with the image
   //  If meta_folder is not empty, they are searched in that folder as well
@@ -72,7 +74,7 @@ class brad_image_metadata : public vbl_ref_count
   bool same_extent(brad_image_metadata& other);
 
   // ===========  binary I/O ================
-  short version() const { return 1; }
+  short version() const { return 2; }
   void b_write(vsl_b_ostream& os) const;
   void b_read(vsl_b_istream& is);
 

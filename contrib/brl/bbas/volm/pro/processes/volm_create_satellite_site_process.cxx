@@ -141,7 +141,7 @@ bool volm_load_satellite_resources_process(bprb_func_process& pro)
 bool volm_query_satellite_resources_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(9);
+  vcl_vector<vcl_string> input_types_(10);
   input_types_[0] = "volm_satellite_resources_sptr"; 
   input_types_[1] = "double";      // lower left lon
   input_types_[2] = "double";      // lower left lat
@@ -151,6 +151,7 @@ bool volm_query_satellite_resources_process_cons(bprb_func_process& pro)
   input_types_[6] = "vcl_string";      // the band: PAN or MULTI 
   input_types_[7] = "bool";      // if TRUE, pick seed images randomly with a certain order of satellites
   input_types_[8] = "int";       // number of seed images to pick, if not enough then creates from all available
+  input_types_[9] = "double";       // GSD threshold in meters, any image with GSD more than this GSD will not be returned, e.g. pass 1 to eliminate images with pixel resolution more than 1 meter
   
   if (!pro.set_input_types(input_types_))
     return false;
@@ -179,13 +180,14 @@ bool volm_query_satellite_resources_process(bprb_func_process& pro)
   vcl_string band = pro.get_input<vcl_string>(6);
   bool pick_seed = pro.get_input<bool>(7);
   int n_seeds = pro.get_input<int>(8);
+  double gsd_thres = pro.get_input<double>(9);
   
   unsigned cnt; bool out = false;
   if (!pick_seed) {
-    out = res->query_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, cnt, out_file, band);
+    out = res->query_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, cnt, out_file, band, gsd_thres);
     pro.set_output_val<unsigned>(0, cnt);
   } else {
-    out = res->query_seeds_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, n_seeds, cnt, out_file, band);
+    out = res->query_seeds_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, n_seeds, cnt, out_file, band, gsd_thres);
     pro.set_output_val<unsigned>(0, cnt);
   }
   return out;
@@ -266,7 +268,7 @@ bool volm_pick_nadir_resource_process(bprb_func_process& pro)
   vcl_string non_cloud_folder = pro.get_input<vcl_string>(7);
   
   vcl_vector<unsigned> ids;
-  res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids);
+  res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids,10.0); // pass gsd_thres very high, only interested in finding all the images that intersect the box
   double largest_view_angle = -100.0;
   unsigned id = 0;  
   for (unsigned i = 0; i < ids.size(); i++) {
@@ -547,7 +549,7 @@ bool volm_find_res_pair_process(bprb_func_process& pro)
 bool volm_find_satellite_pairs_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(9);
+  vcl_vector<vcl_string> input_types_(7);
   input_types_[0] = "volm_satellite_resources_sptr"; 
   input_types_[1] = "double";      // lower left lon
   input_types_[2] = "double";      // lower left lat

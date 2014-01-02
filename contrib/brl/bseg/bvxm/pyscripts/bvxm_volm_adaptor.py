@@ -95,7 +95,8 @@ def pick_nadir_resource_pair(res, lower_left_lon, lower_left_lat, upper_right_lo
   bvxm_batch.remove_data(m_id);
   return statuscode, pan_path, multi_path
 
-def scene_resources(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, scene_res_file, band="PAN", pick_seeds=0, n_seeds=0):
+## GSD: ground sampling distance, e.g. pass 1 to eliminate all the images which have pixel GSD more than 1 meter; the default is 10 meters, so practically returns all the satellite images
+def scene_resources(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, scene_res_file, band="PAN",GSD_threshold=10.0, pick_seeds=0, n_seeds=0):
   bvxm_batch.init_process("volmQuerySatelliteResourcesProcess");
   bvxm_batch.set_input_from_db(0,res);
   bvxm_batch.set_input_double(1, lower_left_lon);
@@ -106,10 +107,22 @@ def scene_resources(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_
   bvxm_batch.set_input_string(6, band);
   bvxm_batch.set_input_bool(7, pick_seeds);  ## of 0, it returns all resources that intersect the box, otherwise, it picks n_seeds among these resources
   bvxm_batch.set_input_int(8, n_seeds);
+  bvxm_batch.set_input_double(9, GSD_threshold);
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   cnt = bvxm_batch.get_output_unsigned(id);
   return cnt;
+
+def find_stereo_pairs(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, scene_res_file, satellite_name):
+  bvxm_batch.init_process("volmFindSatellitePairsProcess");
+  bvxm_batch.set_input_from_db(0,res);
+  bvxm_batch.set_input_double(1, lower_left_lon);
+  bvxm_batch.set_input_double(2, lower_left_lat);
+  bvxm_batch.set_input_double(3, upper_right_lon);
+  bvxm_batch.set_input_double(4, upper_right_lat);
+  bvxm_batch.set_input_string(5, scene_res_file);
+  bvxm_batch.set_input_string(6, satellite_name);
+  bvxm_batch.run_process();
 
 def correct_ransac_process(res, cor_file, output_folder, pixel_radius):
   bvxm_batch.init_process("volmCorrectRationalCamerasRANSACProcess");

@@ -28,6 +28,7 @@ brad_image_metadata::brad_image_metadata(vcl_string const& nitf_filename, vcl_st
 {
   if (!parse(nitf_filename, meta_folder)) {
     vcl_cerr << "ERROR parsing image metadata\n";
+    gsd_ = -1;
   }
   vcl_cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
   vcl_cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
@@ -125,6 +126,17 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
     if (tag.compare("cloudCover") == 0) {
       linestr >> tag;
       linestr >> cloud_coverage_percentage_;
+      continue;
+    }
+    if (tag.compare("productType") == 0) {
+      linestr >> tag;
+      linestr >> tag;
+      if (tag.find("Basic") == vcl_string::npos)
+        return false;
+    }
+    if (tag.compare("meanProductGSD") == 0 || tag.compare("meanCollectedGSD") == 0) {
+      linestr >> tag;
+      linestr >> gsd_;
       continue;
     }
     if (tag.compare("satId") == 0) {
@@ -253,10 +265,31 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
         band_ = "MULTI";
       continue;
     }
+    if (tag.compare("pixelSpacing") == 0) {
+      linestr >> tag;
+      linestr >> gsd_;
+      continue;
+    }
     if (tag.compare("numberOfSpectralBands") == 0) {
       linestr >> tag;
       linestr >> n_bands_;
       continue;
+    }
+    if (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("radiometry") != vcl_string::npos) {
+      ++awk;
+      linestr.clear();
+      linestr.str(awk.line());
+
+      vcl_string dummy; linestr >> dummy; linestr >> dummy;
+      double g; linestr >> g; 
+
+       ++awk;
+      linestr.clear();
+      linestr.str(awk.line());
+      linestr >> dummy; linestr >> dummy;
+      double off; linestr >> off; 
+
+      gains_.push_back(vcl_pair<double, double>(g, off));
     }
   }
   vcl_cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << vcl_endl;
@@ -335,7 +368,10 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   } else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos) { // OZGE TODO: check this one
     solar_irrad = 1617;
     satellite_name_ = "GeoEye-1";
-  } else if (img_info.find("QuickBird") != vcl_string::npos || nitf_filename.find("QB") != vcl_string::npos) {
+  } else if (img_info.find("QuickBird") != vcl_string::npos || 
+             nitf_filename.find("QB") != vcl_string::npos || 
+             nitf_filename.find("QuickBird") != vcl_string::npos || 
+             img_info.find("QB02") != vcl_string::npos) {
     solar_irrad = 1381.7;
     satellite_name_ = "QuickBird";
   } else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos) {
@@ -349,6 +385,7 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     satellite_name_ = "DigitalGlobe";  // which satellite when the name is DigitalGlobe??
   } else
     vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: Guessing band-averaged solar irradiance value = " << solar_irrad << "." << nitf_filename;
+  vcl_cout << "img_info: " << img_info << vcl_endl;
   vcl_cout << "solar_irrad: " << solar_irrad << vcl_endl;
 
   // scale sun irradiance using Earth-Sun distance
@@ -441,14 +478,24 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   }
 
   vcl_string ext = vul_file::extension(meta_filename);
+  bool parsed_fine = false;
   if (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0)
-    parse_from_imd(meta_filename);
-  else if (ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0)
-    parse_from_pvl(meta_filename);
-  else
+    parsed_fine = parse_from_imd(meta_filename);
+  else if (ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0) {
+    parsed_fine = parse_from_pvl(meta_filename);
+    gain_ = gains_[0].first;
+    offset_ = gains_[0].second;
+  } else
     vcl_cout << "unknown meta file format: " << ext << " in name: " << meta_filename << "!\n";
-
-  vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << vcl_endl;
+  for (unsigned i = 0; i < gains_.size(); i++) {
+    vcl_cout << " gain: " << gains_[i].first << " off: " << gains_[i].second << vcl_endl;
+  }
+  if (!parsed_fine) {
+    vcl_cerr << " Problems parsing meta-data files!\n";
+    vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << vcl_endl;
+    return false;
+  }
+  vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << vcl_endl;
   vcl_cout << *this;
 
   return true;
@@ -517,6 +564,7 @@ void brad_image_metadata::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, cam_offset_.x());
   vsl_b_write(os, cam_offset_.y());
   vsl_b_write(os, cam_offset_.z());
+  vsl_b_write(os, gsd_);
 }
 
 //: binary load self from stream
@@ -525,7 +573,7 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
   if (!is) return;
   short ver;
   vsl_b_read(is, ver);
-  if (ver == 0 || ver == 1) {
+  if (ver == 0 || ver == 1 || ver == 2) {
     vsl_b_read(is, sun_elevation_);
     vsl_b_read(is, sun_azimuth_);
     vsl_b_read(is, view_elevation_);
@@ -553,12 +601,14 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
     vsl_b_read(is, band_);
     vsl_b_read(is, n_bands_);
   } 
-  if (ver == 1) {
+  if (ver == 1 || ver == 2) {
     double x,y,z;
     vsl_b_read(is, x); 
     vsl_b_read(is, y);
     vsl_b_read(is, z);
     cam_offset_.set(x,y,z);
+  } if (ver == 2) {
+    vsl_b_read(is, gsd_);
   }
   else {
     vcl_cout << "brad_image_metadata -- unknown binary io version " << ver << '\n';

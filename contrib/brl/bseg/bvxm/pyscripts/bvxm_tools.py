@@ -40,6 +40,8 @@ def build_edge_world(scene, scene_id, world_dir, n_seed, image_fnames, cropped_i
   cropped_edge_imgs = []
   for i in range(0,len(cropped_imgs),1):
     cropped_edge_image = bvxm_detect_edges(cropped_imgs[i], param_file_dir + "bvxmDetectEdgesProcess.xml");
+    if save:
+      bvxm_save_image(cropped_edge_image, out_edge_imgs % i);
     cropped_edge_imgs.append(cropped_edge_image)
 
   for i in range(0, len(cropped_edge_imgs), 1):
@@ -130,7 +132,7 @@ def get_scene_resource_cnt(scene, res):
 ## generate valid cropped images, cameras and uncertainty files that intersect with current scene
 ## will also check whether there are enough seed images/cams for current scene
 def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file_dir, n_seed_necessary=5, edge_threshold = 15,
-                            cropped_image_ratio = 0.3):
+                            cropped_image_ratio = 0.3, gsd_thres = 1.0):
   cnt = 0;
   n_seed = 0;
   valid_img_names = [];
@@ -142,7 +144,8 @@ def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file
   lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat = scene_box(scene);
   # obtain all images that intersect with current scene, if less than the necessary seed number, skip the scene
   temp_text_res = "./scene_res.txt";
-  cnt = scene_resources(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, temp_text_res, "PAN");
+  cnt = scene_resources(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, temp_text_res, "PAN", gsd_thres);
+  print "number of images that overlap the scene: %d with GSD less than: %f" % (cnt, gsd_thres);
 
   ## not enough satellite images overlap with current scene, skip this scene
   if cnt > max_cnt or cnt < min_cnt:

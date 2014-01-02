@@ -141,13 +141,14 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
 
   vpgl_lvcs_sptr lvcs = world_params->lvcs();
   vgl_box_2d<double>* roi_box = project_box(camera, lvcs, box, error);
+  vcl_cout << " roi box: " << *roi_box << vcl_endl;
 
   brip_roi broi(nitf->ni(), nitf->nj());
   vsol_box_2d_sptr bb = new vsol_box_2d();
   bb->add_point(roi_box->min_x(), roi_box->min_y());
   bb->add_point(roi_box->max_x(), roi_box->max_y());
   bb = broi.clip_to_image_bounds(bb);
-
+  
   if (bb->width() <= 0 || bb->height() <= 0) {
     vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
     return false;
@@ -227,8 +228,12 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
 
   double u, v;
   camera->image_offset(u, v);
-  double tu =  u - roi_box->min_x();
-  double tv =  v - roi_box->min_y();
+  //double tu =  u - roi_box->min_x();
+  //double tv =  v - roi_box->min_y();
+  // bug fix: use image bounding box instead of roi_box to modify the local cam offsets
+  double tu =  u - bb->get_min_x();
+  double tv =  v - bb->get_min_y();
+
   //camera->set_image_offset(tu, tv);  // DO NOT MODIFY THE ORIGINAL CAMERA!! It may be used outside of this process in the python process pipeline
   local_camera = vpgl_local_rational_camera<double> (*lvcs, *camera);
   local_camera.set_image_offset(tu, tv);

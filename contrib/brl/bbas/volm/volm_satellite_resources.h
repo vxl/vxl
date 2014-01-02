@@ -52,13 +52,13 @@ class volm_satellite_resources : public vbl_ref_count
     int resources_size() { return resources_.size(); }
 
     //: get a list of ids in the resources_ list that overlap the given rectangular region
-    void query(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& band_str, vcl_vector<unsigned>& ids);
+    void query(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& band_str, vcl_vector<unsigned>& ids, double gsd_thres);
     //: query the resources in the given box and output the full paths to the given file
-    bool query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& band_str);
+    bool query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& band_str, double gsd_thres);
 
     //: query the resources in the given box and output the full paths of randomly selected seeds to the given file, 
     //  the order of satellites to select seeds from: GeoEye1, WorldView2, WorldView1 and then any others
-    bool query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, vcl_string& out_file, vcl_string& band_str);
+    bool query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, vcl_string& out_file, vcl_string& band_str, double gsd_thres);
     
     //: get a list of pairs of ids in the resources_ list that are taken a few minutes apart from each other
     void query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, vcl_vector<vcl_pair<unsigned, unsigned> >& ids);

@@ -32,7 +32,8 @@ void volm_satellite_resources::add_resource(vcl_string name)
   res.name_ = vul_file::strip_directory(name);
   res.name_ = vul_file::strip_extension(res.name_);
   res.meta_ = new brad_image_metadata(name, "");
-  resources_.push_back(res);
+  if (res.meta_->gsd_ > 0)  // if there are parsing problems, gsd is negative
+    resources_.push_back(res);
 }
 
 //: x is lon and y is lat in the bbox, construct bbox with min point to be lower left and max to be upper right and as axis aligned with North-East
@@ -99,12 +100,12 @@ void volm_satellite_resources::add_resources(unsigned start, unsigned end) {
 }
 
 //: get a list of ids in the resources_ list that overlap the given rectangular region
-void volm_satellite_resources::query(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& band_str, vcl_vector<unsigned>& ids)
+void volm_satellite_resources::query(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& band_str, vcl_vector<unsigned>& ids, double gsd_thres)
 {
   vgl_box_2d<double> area(lower_left_lon, upper_right_lon, lower_left_lat, upper_right_lat);
   vcl_vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root_, leaves, area);
-  vcl_vector<unsigned> temp_ids;
+  vcl_vector<unsigned> temp_ids_init;
   for (unsigned i = 0; i < leaves.size(); i++) {
     volm_geo_index2_node<vcl_vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<vcl_vector<unsigned> >* >(leaves[i].ptr());
     // check which images overlap with the given bbox
@@ -115,15 +116,18 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
       sat_box.add(vgl_point_2d<double>(resources_[res_id].meta_->lower_left_.x(), resources_[res_id].meta_->lower_left_.y()));
       sat_box.add(vgl_point_2d<double>(resources_[res_id].meta_->upper_right_.x(), resources_[res_id].meta_->upper_right_.y()));
       if (resources_[res_id].meta_->band_.compare(band_str) == 0 && vgl_intersection(sat_box, area).area() > 0)
-        temp_ids.push_back(res_id);
+        temp_ids_init.push_back(res_id);
     }
   }
 
-  // order the resources in the order of GeoEye1, WV2, WV1, QB/others
-  for (unsigned i = 0; i < temp_ids.size(); i++) {
-    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("GeoEye-1") == 0)
-      ids.push_back(temp_ids[i]);
+  // eliminate the ones which does not satisfy the GSD (ground sampling distance) threshold
+  vcl_vector<unsigned> temp_ids;
+  for (unsigned i = 0; i < temp_ids_init.size(); i++) {
+    if (resources_[temp_ids_init[i]].meta_->gsd_ <= gsd_thres)
+      temp_ids.push_back(temp_ids_init[i]);
   }
+
+  // order the resources in the order of GeoEye1, WV2, WV1, QB/others -- changed the order to WV1, WV2, Geoeye1
   for (unsigned i = 0; i < temp_ids.size(); i++) {
     if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV01") == 0)
       ids.push_back(temp_ids[i]);
@@ -132,6 +136,12 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
     if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV02") == 0)
       ids.push_back(temp_ids[i]);
   }
+
+  for (unsigned i = 0; i < temp_ids.size(); i++) {
+    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("GeoEye-1") == 0)
+      ids.push_back(temp_ids[i]);
+  }
+  
   vcl_vector<unsigned> temp_ids2;
   // find the ones that are not already in ids
   for (unsigned i = 0; i < temp_ids.size(); i++) {
@@ -147,13 +157,14 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
   }
   for (unsigned i = 0; i < temp_ids2.size(); i++)
     ids.push_back(temp_ids2[i]);
+    
 
 }
 //: query the resources in the given box and output the full paths to the given file
-bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& band_str)
+bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& band_str, double gsd_thres)
 {
   vcl_vector<unsigned> ids, ids_all;
-  query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, ids_all);
+  query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, ids_all, gsd_thres);
 
   // eliminate the repeating ids, more than one leaf may contain the same resource
   for (unsigned i = 0; i < ids_all.size(); i++) {
@@ -184,7 +195,7 @@ bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double
 
 //: query the resources in the given box and output the full paths of randomly selected seeds to the given file, 
 //  the order of satellites to select seeds from: GeoEye1, WorldView2, WorldView1 and then any others
-bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, vcl_string& out_file, vcl_string& band_str)
+bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, vcl_string& out_file, vcl_string& band_str, double gsd_thres)
 {
   vcl_vector<unsigned> ids;
   double mid_lon = (lower_left_lon + upper_right_lon) / 2;
@@ -194,7 +205,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
   double upper_lon = (upper_right_lon + mid_lon) / 2;
   double upper_lat = (upper_right_lat + mid_lat) / 2;
   vcl_cout << "using bbox for scene: " << lower_lon << " " << lower_lat << " " << upper_lon << " " << upper_lat << vcl_endl;
-  query(lower_lon, lower_lat, upper_lon, upper_lat, band_str, ids);
+  query(lower_lon, lower_lat, upper_lon, upper_lat, band_str, ids, gsd_thres);
 
   // now select n_seeds among these ones
   vcl_map<vcl_string, vcl_vector<unsigned> > possible_seeds;
@@ -361,7 +372,8 @@ void volm_satellite_resources::query_pairs(double lower_left_lon, double lower_l
   // first get all the images that intersect the area
   vcl_vector<unsigned> temp_ids;
   vcl_string band_str = "PAN";
-  this->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, temp_ids);
+  this->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, temp_ids,10.0); // we're only interested in which images intersect the box, so pass gsd_thres very high
+  vcl_cout << "there are " << temp_ids.size() << " images that intersect the scene!\n";
 
   // prune out the ones from the wrong satellite
   vcl_vector<unsigned> ids2;
@@ -369,14 +381,17 @@ void volm_satellite_resources::query_pairs(double lower_left_lon, double lower_l
     if (resources_[temp_ids[i]].meta_->satellite_name_.compare(sat_name) == 0)
       ids2.push_back(temp_ids[i]);
   }
+
+  vcl_cout << "there are " << ids2.size() << " images that intersect the scene from sat: " << sat_name << "!\n";
   // check the time of collection to find pairs
   for (unsigned i = 0; i < ids2.size(); i++) {
     for (unsigned j = i+1; j < ids2.size(); j++) {
       if (resources_[ids2[i]].meta_->same_day_time_dif(*(resources_[ids2[j]].meta_)) < 5) { // if taken less than 5 minute apart
-        ids.push_back(vcl_pair<unsigned, unsigned>(i, j));
+        ids.push_back(vcl_pair<unsigned, unsigned>(ids2[i], ids2[j]));
       }
     }
   }
+  
 }
 
 //: query the resources in the given box and output the full paths of pairs to the given file
@@ -393,7 +408,7 @@ bool volm_satellite_resources::query_pairs_print_to_file(double lower_left_lon, 
   
   for (unsigned i = 0; i < ids.size(); i++) {
     ofs << resources_[ids[i].first].full_path_ << '\n';
-    ofs << resources_[ids[i].second].full_path_ << '\n\n';
+    ofs << resources_[ids[i].second].full_path_ << "\n\n";
   }
 
   ofs.close();
@@ -428,7 +443,7 @@ vcl_string volm_satellite_resources::find_pair(vcl_string const& name)
         this->query(resources_[i].meta_->lower_left_.x(), 
                     resources_[i].meta_->lower_left_.y(), 
                     resources_[i].meta_->upper_right_.x(), 
-                    resources_[i].meta_->upper_right_.y(), other_band, ids);  
+                    resources_[i].meta_->upper_right_.y(), other_band, ids,10.0);  // pass gsd_thres very high, only interested in finding all the images
         vcl_cout << " there are " << ids.size() << " resources that cover the image!\n";
         for (unsigned iii = 0; iii < ids.size(); iii++) {
           unsigned ii = ids[iii];
