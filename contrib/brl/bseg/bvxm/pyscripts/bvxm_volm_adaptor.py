@@ -9,6 +9,21 @@ def map_sdet_to_volm_ids(sdet_color_class_img):
   out_img = dbvalue(id, type);
   return out_img
 
+def volm_id_color_img(id_img):
+  bvxm_batch.init_process("volmGenerateColorClassMapProcess")
+  bvxm_batch.set_input_from_db(0,id_img);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  out_img = dbvalue(id, type);
+  return out_img;
+
+def update_class_map(class_img, source_img):
+  bvxm_batch.init_process("volmUpdateClassMapProcess");
+  bvxm_batch.set_input_from_db(0, class_img);
+  bvxm_batch.set_input_from_db(1, source_img);
+  status = bvxm_batch.run_process()
+  return status;
+
 def load_sat_resources(res_file_name):
   bvxm_batch.init_process("volmLoadSatResourcesProcess");
   bvxm_batch.set_input_string(0,res_file_name);
@@ -44,7 +59,7 @@ def get_full_path(res, name):
   return full_path
 
 ## band_name is PAN or MULTI
-def pick_nadir_resource(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, satellite_name, band_name="PAN"):
+def pick_nadir_resource(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, satellite_name, band_name="PAN", non_cloud_folder=""):
   bvxm_batch.init_process("volmPickNadirResProcess");
   bvxm_batch.set_input_from_db(0,res);
   bvxm_batch.set_input_double(1, lower_left_lon);
@@ -53,10 +68,32 @@ def pick_nadir_resource(res, lower_left_lon, lower_left_lat, upper_right_lon, up
   bvxm_batch.set_input_double(4, upper_right_lat);
   bvxm_batch.set_input_string(5, band_name);
   bvxm_batch.set_input_string(6, satellite_name);
+  bvxm_batch.set_input_string(7, non_cloud_folder);
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   sat_path = bvxm_batch.get_output_string(id);
   return sat_path;
+
+## find the PAN/MULTI pair for given rectangular region, also output the sorted list of such PAN/MULIT lists
+def pick_nadir_resource_pair(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, satellite_name, out_folder, band_name="PAN", non_cloud_folder=""):
+  bvxm_batch.init_process("volmPickNadirResPairProcess");
+  bvxm_batch.set_input_from_db(0,res);
+  bvxm_batch.set_input_double(1, lower_left_lon);
+  bvxm_batch.set_input_double(2, lower_left_lat);
+  bvxm_batch.set_input_double(3, upper_right_lon);
+  bvxm_batch.set_input_double(4, upper_right_lat);
+  bvxm_batch.set_input_string(5, band_name);
+  bvxm_batch.set_input_string(6, satellite_name);
+  bvxm_batch.set_input_string(7, non_cloud_folder);
+  bvxm_batch.set_input_string(8, out_folder)
+  statuscode = bvxm_batch.run_process();
+  (p_id, p_type) = bvxm_batch.commit_output(0);
+  pan_path = bvxm_batch.get_output_string(p_id);
+  bvxm_batch.remove_data(p_id);
+  (m_id, m_type) = bvxm_batch.commit_output(1);
+  multi_path = bvxm_batch.get_output_string(m_id);
+  bvxm_batch.remove_data(m_id);
+  return statuscode, pan_path, multi_path
 
 def scene_resources(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, scene_res_file, band="PAN", pick_seeds=0, n_seeds=0):
   bvxm_batch.init_process("volmQuerySatelliteResourcesProcess");

@@ -15,6 +15,8 @@
 #include <vgl/vgl_polygon.h>
 #include <bkml/bkml_parser.h>
 
+#include <vul/vul_file.h>
+
 //: sets input and output types
 bool volm_create_satellite_resources_process_cons(bprb_func_process& pro)
 {
@@ -226,14 +228,15 @@ bool volm_add_satellite_resources_process(bprb_func_process& pro)
 bool volm_pick_nadir_resource_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(7);
+  vcl_vector<vcl_string> input_types_(8);
   input_types_[0] = "volm_satellite_resources_sptr"; 
   input_types_[1] = "double";      // lower left lon
   input_types_[2] = "double";      // lower left lat
   input_types_[3] = "double";      // upper right lon
   input_types_[4] = "double";      // upper right lat
   input_types_[5] = "vcl_string";      // the band: PAN or MULTI 
-  input_types_[6] = "vcl_string";      // satelllite name
+  input_types_[6] = "vcl_string";      // satellite name
+  input_types_[7] = "vcl_string";      // a folder where all the non-cloud images saved for current rectangular region
   
   if (!pro.set_input_types(input_types_))
     return false;
@@ -260,17 +263,31 @@ bool volm_pick_nadir_resource_process(bprb_func_process& pro)
   double upper_right_lat = pro.get_input<double>(4);
   vcl_string band = pro.get_input<vcl_string>(5);
   vcl_string sat_name = pro.get_input<vcl_string>(6);
+  vcl_string non_cloud_folder = pro.get_input<vcl_string>(7);
   
   vcl_vector<unsigned> ids;
   res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids);
-  double largest_view_angle = 0.0;
+  double largest_view_angle = -100.0;
   unsigned id = 0;  
   for (unsigned i = 0; i < ids.size(); i++) {
     if (res->resources_[ids[i]].meta_->satellite_name_.compare(sat_name) == 0) {
-      vcl_cout << "res: " << res->resources_[ids[i]].name_ << " view azimuth: " << res->resources_[ids[i]].meta_->view_azimuth_ << " view elev: " << res->resources_[ids[i]].meta_->view_elevation_ << '\n';
+      vcl_cout << "res: " << res->resources_[ids[i]].name_
+               << " view azimuth: " << res->resources_[ids[i]].meta_->view_azimuth_
+               << " view elev: " << res->resources_[ids[i]].meta_->view_elevation_ << '\n';
+      // pick the image with largest view angle and least could coverage if possible
       if (largest_view_angle < res->resources_[ids[i]].meta_->view_elevation_) {
-        largest_view_angle = res->resources_[ids[i]].meta_->view_elevation_;
-        id = ids[i];
+        // check whether this image is non-cloud one or not
+        if (non_cloud_folder.compare("") != 0) {
+          vcl_string non_cloud_img = non_cloud_folder + "/" + res->resources_[ids[i]].name_ + "_cropped.tif";
+          if (vul_file::exists(non_cloud_img)) {
+            largest_view_angle = res->resources_[ids[i]].meta_->view_elevation_;
+            id = ids[i];
+          }
+        }
+        else {  // TO DO -- add edge detection here if non-cloud images folder is not given
+          largest_view_angle = res->resources_[ids[i]].meta_->view_elevation_;
+          id = ids[i];
+        }
       }
     }
   }
@@ -279,13 +296,181 @@ bool volm_pick_nadir_resource_process(bprb_func_process& pro)
   return true;
 }
 
+// find the non-cloud PAN/MULTI pair from satellite resource
+// Note it will output all PAN/MULTI pairs that intersect with current scene, sorted by the view angles
+bool volm_pick_nadir_resource_pair_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  vcl_vector<vcl_string> input_types_(9);
+  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[1] = "double";      // lower left lon
+  input_types_[2] = "double";      // lower left lat
+  input_types_[3] = "double";      // upper right lon
+  input_types_[4] = "double";      // upper right lat
+  input_types_[5] = "vcl_string";      // the band: PAN or MULTI 
+  input_types_[6] = "vcl_string";      // satellite name
+  input_types_[7] = "vcl_string";      // a folder where all the non-cloud images saved for current rectangular region
+  input_types_[8] = "vcl_string";      // folder where the sorted PAN/MULTI pair list file will be stored
+  // output
+  vcl_vector<vcl_string> output_types_(2);
+  output_types_[0] = "vcl_string";  // full path of the PAN image
+  output_types_[1] = "vcl_string";  // full path of the MULTI image
+  return pro.set_output_types(output_types_) && pro.set_input_types(input_types_);
+}
+
+bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
+{
+  // input check
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << " invalid inputs" << vcl_endl;
+    return false;
+  }
+  // get the inputs
+  volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
+  double lower_left_lon = pro.get_input<double>(1);
+  double lower_left_lat = pro.get_input<double>(2);
+  double upper_right_lon = pro.get_input<double>(3);
+  double upper_right_lat = pro.get_input<double>(4);
+  vcl_string band = pro.get_input<vcl_string>(5);
+  vcl_string sat_name = pro.get_input<vcl_string>(6);
+  vcl_string non_cloud_folder = pro.get_input<vcl_string>(7);
+  vcl_string out_folder = pro.get_input<vcl_string>(8);
+  // obtain resources having given band that overlap with current region
+  vcl_vector<unsigned> ids;
+  res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids);
+  // map of resources that have given band and sat_name, sorted by the view angle
+  vcl_map<double, unsigned, std::greater<double> > band_res;
+  for (unsigned i = 0; i < ids.size(); i++)
+    if (res->resources_[ids[i]].meta_->satellite_name_.compare(sat_name) == 0)
+      band_res.insert(vcl_pair<double, unsigned>(res->resources_[ids[i]].meta_->view_elevation_, ids[i]));
+  
+  // text file where the sorted PAN/MULTI pair will be stored
+  vcl_string out_txt = out_folder + "/pan_multi_pair_list.txt";
+  vcl_ofstream ofs(out_txt.c_str());
+  ofs << "view_angle(deg) \t pan_img \t multi_img \t" << vcl_endl;
+
+  // find the PAN/MULTI pair
+  vcl_map<double, vcl_pair<vcl_string, vcl_string> > pairs;
+  for (vcl_map<double, unsigned, std::greater<double> >::iterator mit = band_res.begin(); mit != band_res.end(); ++mit) {
+    vcl_string img_name = res->resources_[mit->second].name_;
+    vcl_string pair_name = res->find_pair(img_name);
+    if (pair_name.compare("") == 0)
+      continue;
+    if (non_cloud_folder.compare("") != 0)
+    {
+      vcl_string non_cloud_img_band = non_cloud_folder + "/" + img_name  + "_cropped.tif";
+      if (vul_file::exists(non_cloud_img_band)) {
+        vcl_pair<vcl_string, vcl_string> name_pair;
+        if (band == "PAN") {
+          name_pair.first  = res->resources_[mit->second].full_path_;
+          name_pair.second = res->full_path(pair_name).first;
+        }
+        else if (band == "MULTI") {
+          name_pair.first  = res->full_path(pair_name).first;
+          name_pair.second = res->resources_[mit->second].full_path_;
+        }
+        else {
+          vcl_cout << pro.name() << ": unknown input band " << band << vcl_endl;
+          return false;
+        }
+        pairs.insert(vcl_pair<double, vcl_pair<vcl_string, vcl_string> >(mit->first, name_pair));
+      }
+    }
+    else {
+      vcl_pair<vcl_string, vcl_string> name_pair;
+      if (band == "PAN") {
+        name_pair.first = res->resources_[mit->second].full_path_;
+        name_pair.second = res->full_path(pair_name).first;
+      } else if (band == "MULTI") {
+        name_pair.first = res->full_path(pair_name).first;
+        name_pair.second = res->resources_[mit->second].full_path_;
+      } else {
+        vcl_cout << pro.name() << ": unknown input band " << band << vcl_endl;
+        return false;
+      }
+      pairs.insert(vcl_pair<double, vcl_pair<vcl_string, vcl_string> >(mit->first, name_pair));
+    }
+  }
+  // output
+  if (pairs.size() == 0) {
+    vcl_cout << pro.name() << ": can not find any PAN/MULTI pair for current scene" << vcl_endl;
+    return false;
+  }
+  
+  for (vcl_map<double, vcl_pair<vcl_string, vcl_string> >::iterator mit = pairs.begin(); mit != pairs.end(); ++mit)
+    ofs << mit->first << " \t " << mit->second.first << " \t " << mit->second.second << vcl_endl;
+  ofs.close();
+
+  pro.set_output_val<vcl_string>(0, pairs.begin()->second.first);
+  pro.set_output_val<vcl_string>(1, pairs.begin()->second.second);
+
+#if 0
+  for (vcl_map<double, unsigned, std::greater<double> >::iterator mit = band_res.begin(); mit != band_res.end(); ++mit) {
+    vcl_string img_name = res->resources_[mit->second].name_;
+    vcl_string pair_name = res->find_pair(img_name);
+    if (pair_name.compare("") == 0)
+      continue;
+    if (non_cloud_folder.compare("") != 0)
+    {
+      vcl_string non_cloud_img_band = non_cloud_folder + "/" + img_name  + "_cropped.tif";
+      if (vul_file::exists(non_cloud_img_band)) {
+        vcl_string pan_path, multi_path;
+        if (band == "PAN") {
+          pan_path = res->resources_[mit->second].full_path_;
+          vcl_pair<vcl_string, vcl_string> pp = res->full_path(pair_name);
+          multi_path = pp.first;
+        }
+        else if (band == "MULTI") {
+          multi_path = res->resources_[mit->second].full_path_;
+          vcl_pair<vcl_string, vcl_string> pp = res->full_path(pair_name);
+          pan_path = pp.first;
+        }
+        else {
+          vcl_cout << pro.name() << ": unknown input band " << band << vcl_endl;
+          return false;
+        }
+        pro.set_output_val<vcl_string>(0, pan_path);
+        pro.set_output_val<vcl_string>(1, multi_path);
+        return true;
+      }
+    }
+    else // TO DO -- add edge detection here if non-cloud images folder is not given
+    {
+      vcl_string pan_path, multi_path;
+      if (band == "PAN") {
+        pan_path = res->resources_[mit->second].full_path_;
+        vcl_pair<vcl_string, vcl_string> pp = res->full_path(pair_name);
+        multi_path = pp.first;
+      }
+      else if (band == "MULTI") {
+        multi_path = res->resources_[mit->second].full_path_;
+        vcl_pair<vcl_string, vcl_string> pp = res->full_path(pair_name);
+        pan_path = pp.first;
+      }
+      else {
+        vcl_cout << pro.name() << ": unknown input band " << band << vcl_endl;
+        return false;
+      }
+      pro.set_output_val<vcl_string>(0, pan_path);
+      pro.set_output_val<vcl_string>(1, multi_path);
+      return true;
+    }
+  }
+
+  return false;
+#endif
+
+  
+}
+
 // find the PAN counterpart if given a multi band image, and vice versa
 bool volm_get_full_path_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(2);
   input_types_[0] = "volm_satellite_resources_sptr"; 
-  input_types_[1] = "vcl_string";      // satelllite img name  
+  input_types_[1] = "vcl_string";      // satellite img name  
   
   if (!pro.set_input_types(input_types_))
     return false;
@@ -318,7 +503,7 @@ bool volm_find_res_pair_process_cons(bprb_func_process& pro)
   //inputs
   vcl_vector<vcl_string> input_types_(2);
   input_types_[0] = "volm_satellite_resources_sptr"; 
-  input_types_[1] = "vcl_string";      // satelllite img name  // only the name, don't need the full path
+  input_types_[1] = "vcl_string";      // satellite img name  // only the name, don't need the full path
   
   if (!pro.set_input_types(input_types_))
     return false;
@@ -344,6 +529,7 @@ bool volm_find_res_pair_process(bprb_func_process& pro)
   vcl_string name = pro.get_input<vcl_string>(1);
   vcl_pair<vcl_string, vcl_string> full = res->full_path(name);
   vcl_string pair_name = res->find_pair(name);
+  vcl_cout << "pair_name = " << pair_name << vcl_endl;
   if (pair_name.compare("") == 0) {
     pro.set_output_val<vcl_string>(0, "");
     pro.set_output_val<vcl_string>(1, "");

@@ -61,3 +61,104 @@ bool volm_generate_class_map_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
   return true;
 }
+
+//:
+// a process generating color class map from volm id class map
+bool volm_generate_color_class_map_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vil_image_view_base_sptr");  // classification image
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr"); // output unsigned short image with volm_land_type ids
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+bool volm_generate_color_class_map_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() < 1) {
+    vcl_cout << "volm_map_osm_process: The number of inputs should be 1" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vil_image_view_base_sptr img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
+  vil_image_view<unsigned char> img(img_sptr);
+  vil_image_view<vil_rgb<vxl_byte> > out_img(img_sptr->ni(), img_sptr->nj(), 1);
+  out_img.fill(vil_rgb<vxl_byte>(0,0,0));
+
+  vcl_map<unsigned char, vil_rgb<vxl_byte> > sdet_color_map;
+  sdet_color_map[0]   = vil_rgb<vxl_byte>(225,36 ,147);
+  sdet_color_map[15]  = vil_rgb<vxl_byte>(52 ,226,127);
+  sdet_color_map[28]  = vil_rgb<vxl_byte>(185,242,86 );
+  sdet_color_map[31]  = vil_rgb<vxl_byte>(191,184,98 );
+  sdet_color_map[32]  = vil_rgb<vxl_byte>(20, 166,41 );
+  sdet_color_map[242] = vil_rgb<vxl_byte>(254,17 ,199);
+  sdet_color_map[243] = vil_rgb<vxl_byte>(41, 234,166);
+  
+  for (unsigned i = 0; i < img.ni(); i++)
+    for (unsigned j = 0; j < img.nj(); j++) {
+      vcl_map<unsigned char, vil_rgb<vxl_byte> >::iterator mit = sdet_color_map.find(img(i,j));
+      if (mit != sdet_color_map.end())
+        out_img(i,j) = mit->second;
+    }
+
+  vil_image_view_base_sptr out_img_sptr = new vil_image_view<vil_rgb<vxl_byte> >(out_img);
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
+  return true;
+}
+
+//:
+// a process that uses a source class map to update current class map.
+// The source class map supposes to have more accurate tree/road land categories yet unclear parks/parking lot/building boundaries.
+// Therefore the new source class map will overwrite current class map in terms of non-building region while keep building pixels which
+// reside on open space
+bool volm_update_class_map_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types_;
+  input_types_.push_back("vil_image_view_base_sptr");  // current classification map
+  input_types_.push_back("vil_image_view_base_sptr");  // source classification map used to update the class map
+  vcl_vector<vcl_string>  output_types_;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool volm_update_class_map_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() < 2) {
+    vcl_cout << pro.name() << ": The number of inputs should be 2" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vil_image_view_base_sptr curr_img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
+  vil_image_view_base_sptr srce_img_sptr = pro.get_input<vil_image_view_base_sptr>(1);
+
+  vil_image_view<unsigned char>* curr_img = dynamic_cast<vil_image_view<unsigned char>* >(curr_img_sptr.ptr());
+  vil_image_view<unsigned char>* srce_img = dynamic_cast<vil_image_view<unsigned char>* >(srce_img_sptr.ptr());
+  unsigned ni = curr_img->ni();
+  unsigned nj = curr_img->nj();
+  if (srce_img->ni() != ni || srce_img->nj() != nj) {
+    vcl_cout << pro.name() << ": The class map and source class map have difference in size (" << ni << 'x' << nj << "), and (" << srce_img->ni() << 'x' << srce_img->nj() << ')' << vcl_endl;
+    return false;
+  }
+  unsigned cnt = 0;
+  for (unsigned i = 0; i < ni; i++) {
+    for (unsigned j = 0; j < nj; j++) {
+      bool is_parks_or_lot = (*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["parks"].id_ ||
+                             (*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["parking"].id_ ||
+                             (*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["invalid"].id_;
+
+      if ( (*curr_img)(i,j) == volm_osm_category_io::volm_land_table_name["building"].id_ && is_parks_or_lot) {  // keep previous building if source is open space, parking lot or invalid
+        //vcl_cout << " pixel (" << i << "," << j << ") has current value " << (unsigned)(*curr_img)(i,j) << " and source value " << (unsigned)(*srce_img)(i,j) << vcl_endl;
+        cnt++;
+        continue;
+      }
+      // overwrite the class map with new source
+      (*curr_img)(i,j) = (*srce_img)(i,j);
+    }
+  }
+  vcl_cout << " there are " << cnt << " building pixels kept during update" << vcl_endl;
+
+  return true;
+}
+

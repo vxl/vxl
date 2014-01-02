@@ -21,9 +21,12 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_query_satellite_resources_process, "volmQuerySatelliteResourcesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_correct_rational_cameras_ransac_process, "volmCorrectRationalCamerasRANSACProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_pick_nadir_resource_process, "volmPickNadirResProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_pick_nadir_resource_pair_process, "volmPickNadirResPairProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_map_osm_process, "volmMapOSMProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_map_segments_process, "volmMapSegmentsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_class_map_process, "volmGenerateClassMapProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_color_class_map_process, "volmGenerateColorClassMapProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_update_class_map_process, "volmUpdateClassMapProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_res_pair_process, "volmFindResourcePairProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_correct_rational_cameras_ransac_process2, "volmCorrectRationalCamerasRANSACProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_get_full_path_process, "volmGetFullPathProcess");
