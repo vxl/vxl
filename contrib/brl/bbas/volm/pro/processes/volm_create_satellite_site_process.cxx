@@ -340,7 +340,7 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
   vcl_string out_folder = pro.get_input<vcl_string>(8);
   // obtain resources having given band that overlap with current region
   vcl_vector<unsigned> ids;
-  res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids);
+  res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids,10.0);
   // map of resources that have given band and sat_name, sorted by the view angle
   vcl_map<double, unsigned, std::greater<double> > band_res;
   for (unsigned i = 0; i < ids.size(); i++)
