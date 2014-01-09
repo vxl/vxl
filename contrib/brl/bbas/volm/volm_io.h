@@ -21,6 +21,7 @@
 #include <vcl_iomanip.h>
 #include "volm_category_io.h"
 
+class volm_weight;
 //: A class to hold xml file io methods for volumetric matchers
 // Units are in meters
 class volm_orient_table
@@ -134,6 +135,15 @@ class volm_io
                           double& altitude, double& lat, double& lon);
 
   static bool read_labelme(vcl_string xml_file, vcl_string category_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category);
+
+  //: parser for reading xml tags to create depth_map_scene
+  static bool read_query_tags(vcl_string xml_file,
+                              depth_map_scene_sptr& depth_scene,
+                              vcl_vector<volm_weight>& weights,
+                              vcl_string& world_region,
+                              unsigned& img_ni,
+                              unsigned& img_nj,
+                              vcl_string& query_name);
 
   //: piecewise linear s.t. [1,127) -> [0,t), [127,255] -> [t,1]
   static float scale_score_to_0_1(unsigned char pix_value, float threshold);

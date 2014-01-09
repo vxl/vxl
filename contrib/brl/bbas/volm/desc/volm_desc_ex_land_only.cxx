@@ -26,7 +26,7 @@ volm_desc_ex_land_only::volm_desc_ex_land_only(depth_map_scene_sptr const& dms,
                                                unsigned const& nlands,
                                                unsigned char const& initial_mag)
 {
-  name_ = "existance land only descriptor";
+  name_ = "existence land only descriptor";
   // create a histogram based on given parameters
   nlands_ = nlands;
   if (radius.empty())

@@ -228,7 +228,8 @@ bool volm_desc_matcher::create_scaled_prob_map(vcl_string const& out_folder,
   
   // save the image to specific folder
   vcl_stringstream prob_map_folder;
-  prob_map_folder << out_folder << "/ProbMap_scaled_" << threshold;
+  //prob_map_folder << out_folder << "/ProbMap_scaled_" << threshold;
+  prob_map_folder << out_folder;
   if( !vul_file::is_directory(prob_map_folder.str()))
     vul_file::make_directory(prob_map_folder.str());
   vcl_string out_img_name = prob_map_folder.str() + "/ProbMap_" + tile.get_string() + ".tif";

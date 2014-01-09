@@ -109,6 +109,8 @@ public:
   //  the unit of the increments is in meters (user of this table shall convert to degrees if necessary depending on lat, lon of the area)
   static vcl_map<int, double> geo_land_hyp_increments;
 
+  //: table to transfer land tags in xml file to volm land category
+  static vcl_map<vcl_string, volm_land_layer> tag_to_volm_land_table;
 
 };
 

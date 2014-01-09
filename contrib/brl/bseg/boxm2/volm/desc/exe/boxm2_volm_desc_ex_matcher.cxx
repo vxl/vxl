@@ -22,6 +22,167 @@ void error_report(vcl_string error_file, vcl_string error_msg)
 int main(int argc, char** argv)
 {
   // query input
+  vul_arg<vcl_string> query_xml("-xml", "tagged xml file for query image", "");
+  // index and geolocation
+  vul_arg<vcl_string> geo_hypo_folder("-geo", "folder where the geolocation for this tile is stored", "");
+  vul_arg<vcl_string> desc_index_folder("-index", "directory that contains the created wr3db indices", "");
+  vul_arg<vcl_string> out_folder("-out", "output folder for the query image", "");
+  vul_arg<float> buffer_capacity("-buff", "buffer size used for loading indices", 2.0f);
+  vul_arg<bool> is_land_only("-land", "option to execute matcher using ex_land_only descriptor", false);
+  vul_arg<bool> is_ex_2d("-ex2d", "option to execute 2D existence matcher", true);
+  // post processing related
+  vul_arg<float> kl("-kl", "parameter for nonlinear score scaling", 200.0f);
+  vul_arg<float> ku("-ku", "parameter for nonlinear score scaling", 10.0f);
+  vul_arg<float> threshold("-thres", "threshold ratio for generating prob map", 0.3);
+  vul_arg<unsigned> thresc("-thresc", "threshold that used to create candidate list", 0);
+  vul_arg<unsigned> top_size("-top", "desired top list for each candidate list", 1);
+  // options
+  vul_arg<bool> is_matcher("-match", "option to execute the matcher", false);
+  vul_arg<bool> is_cand("-cand", "option to execute the candidate list generation", false);
+
+  vul_arg_parse(argc, argv);
+
+  // run the existence matcher and generate probability map
+  if (is_matcher())
+  {
+    // input check
+    if (query_xml().compare("") == 0 || geo_hypo_folder().compare("") == 0 || desc_index_folder().compare("") == 0 || out_folder().compare("") == 0)
+    {
+      vcl_cerr << "ERROR: arguments error, check the input" << vcl_endl;
+      vul_arg_display_usage_and_exit();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    // error log
+    vcl_stringstream err_log;
+    vcl_stringstream err_log_file;
+    err_log_file << out_folder() << "/err_log.xml";
+    // load the query information
+    vcl_string world_region;
+    vcl_string query_name;
+    unsigned ni, nj;
+    vcl_vector<volm_weight> weights;
+    depth_map_scene_sptr dms = new depth_map_scene;
+    if (!vul_file::exists(query_xml())) {
+      err_log << "ERROR: can not find query tag xml file: " << query_xml() << '\n';
+      error_report(err_log_file.str(), err_log.str());
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    volm_io::read_query_tags(query_xml(), dms, weights, world_region, ni, nj, query_name);
+
+    vcl_string image_name = vul_file::strip_extension(query_name);
+
+    // check weight parameter (Note during parser, all labeled object are parsed into scene_regions, i.e., no sky or ground_plane
+    if (weights.size() != dms->scene_regions().size()) {
+      err_log << "ERROR: number of weight parameters (" << weights.size() << ") is inconsistent with labeled object (" << dms->scene_regions().size() << ")\n";
+      error_report(err_log_file.str(), err_log.str());
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+
+    // create tiles based on world_region
+    vcl_vector<volm_tile> tiles;
+    if (world_region.compare("Chile")==0)             tiles = volm_tile::generate_p1b_wr1_tiles();
+    else if (world_region.compare("India")==0)        tiles = volm_tile::generate_p1b_wr2_tiles();
+    else if (world_region.compare("Jordan")==0)       tiles = volm_tile::generate_p1b_wr3_tiles();
+    else if (world_region.compare("Philippines")==0)  tiles = volm_tile::generate_p1b_wr4_tiles();
+    else if (world_region.compare("Taiwan")== 0)      tiles = volm_tile::generate_p1b_wr5_tiles();
+    else if (world_region.compare("Coast")== 0)       tiles = volm_tile::generate_p1_wr2_tiles();
+    else if (world_region.compare("Desert")== 0)      tiles = volm_tile::generate_p1_wr1_tiles();
+    else {
+      err_log << "ERROR: unknown ROI region: " << world_region << ", check tag xml.  Available regions are: Chile, India, Jordan, Philippines, Taiwan\n";
+      error_report(err_log_file.str(), err_log.str());
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+
+    // create ex_matcher
+    vcl_string params_file_pre = desc_index_folder() + "/desc_index_tile_0";
+    volm_buffered_index_params params;
+    if (!params.read_ex_param_file(params_file_pre)) {
+      err_log << " ERROR: fetching parameter failed from file: " << params_file_pre << ".params\n";
+      error_report(err_log_file.str(), err_log.str());
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    volm_desc_matcher_sptr ex_matcher;
+    if (is_land_only()) {
+      ex_matcher = new boxm2_volm_desc_ex_land_only_matcher(dms, params.radius, params.nlands, 0);
+    }
+    else if (is_ex_2d()) {
+      ex_matcher = new volm_desc_ex_2d_matcher(dms, weights, params.radius, params.nlands, 0);
+    }
+    else {
+      ex_matcher = new boxm2_volm_desc_ex_matcher(dms, params.radius, params.norients, params.nlands, 0);
+    }
+
+    // create query
+    volm_desc_sptr query = ex_matcher->create_query_desc();
+    vcl_string query_file = out_folder() + "/" + image_name + "_query.svg";
+    query->visualize(query_file, 2);
+
+    // Screen output
+    vcl_cout << " =========== Start to execute existence matcher for image: " << image_name << " ===============" << vcl_endl;
+    vcl_cout << " \t Descriptor type : " << ex_matcher->get_index_type_str() << vcl_endl;
+    vcl_cout << " \t weight parameters: " << vcl_endl;
+    vcl_cout << " \t world region: " << world_region << vcl_endl;
+    for (unsigned i = 0; i < weights.size(); i++) {
+      vcl_cout << " \t\t" << weights[i].w_name_ << " " << weights[i].w_obj_ << vcl_endl;
+    }
+    vcl_cout << " \t query " << query_name << " has following objects " << vcl_endl;
+    vcl_vector<depth_map_region_sptr> obj = dms->scene_regions();
+    for (unsigned i = 0; i < obj.size(); i++)
+      vcl_cout << " \t\t" << obj[i]->name() << " --- mindist = " << obj[i]->min_depth() << ", maxdist = " << obj[i]->max_depth()
+               << ", land = " << volm_osm_category_io::volm_land_table[obj[i]->land_id()].name_
+               << ", weight = " << weights[i].w_obj_ << vcl_endl;
+    vcl_cout << " \t query descriptor:\n";
+    query->print();
+    vcl_cout << vcl_endl;
+
+    // start the matcher
+    for (unsigned tile_id = 0; tile_id < tiles.size(); tile_id++)
+    {
+      vcl_cout << " matcher on tile " << tile_id << " in " << tiles.size() << " tiles...\n";
+      vcl_cout << vcl_flush;
+      // run matcher
+      if (!ex_matcher->matcher(query, geo_hypo_folder(), desc_index_folder(), buffer_capacity(), tile_id)) {
+        err_log << "ERROR: matcher on tile " << tile_id << " failed\n";
+        error_report(err_log_file.str(), err_log.str());
+        return volm_io::EXE_MATCHER_FAILED;
+      }
+      // save score binary
+      if (!ex_matcher->write_out(out_folder(), tile_id)) {
+        err_log << "ERROR: matcher on tile " << tile_id << " failed (can not save score binary)\n";
+        error_report(err_log_file.str(), err_log.str());
+        return volm_io::EXE_MATCHER_FAILED;
+      }
+      // create probability map
+      float gt_score = -1.0f;
+      vgl_point_3d<double> gt_loc(0.0,0.0,0.0);
+      if (!ex_matcher->create_prob_map(geo_hypo_folder(), out_folder(), tile_id, tiles[tile_id], gt_loc, gt_score)) {
+        err_log << " ERROR: creating probability map for tile " << tile_id << " failed\n";
+        error_report(err_log_file.str(), err_log.str());
+        return volm_io::POST_PROCESS_FAILED;
+      }
+      // create scaled probability map
+      float thres_value = threshold();
+      vcl_cout << " \t threshold used for scaling probability maps: " << thres_value << vcl_endl;
+      if (!volm_desc_matcher::create_scaled_prob_map(out_folder(), tiles[tile_id], tile_id, ku(), kl(), thres_value)) {
+        err_log << "ERROR: create scaled probability map for tile " << tile_id << " failed\n";
+        error_report(err_log_file.str(), err_log.str());
+        return volm_io::POST_PROCESS_FAILED;
+      }
+    }
+    vcl_cout << " ========================================== Finish ===============================================" << vcl_endl;
+  }
+  // generate candidate list once we have the scaled_probability map
+  if (is_cand())
+  {
+    // TO BE IMPLEMENTED
+  }
+
+  return volm_io::SUCCESS;
+}
+#if 0
+int main(int argc, char** argv)
+{
+  // query input
   vul_arg<vcl_string> depth_scene("-dms", "depth map scene file", "");
   vul_arg<vcl_string> weight_file("-weight", "weight parameter file", "");
   // index and geolocation
@@ -293,3 +454,4 @@ int main(int argc, char** argv)
 
   return volm_io::SUCCESS;
 }
+#endif

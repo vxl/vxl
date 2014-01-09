@@ -40,6 +40,8 @@ bvgl_labelme_parser::bvgl_labelme_parser(vcl_string& filename)
 //#define POINT_TAG "pt"
 //#define X_TAG "x"
 //#define Y_TAG "y"
+//#define LAND_TAG "land"
+//#define WEIGHT_TAG "weight"
 void
 bvgl_labelme_parser::startElement(const char* name, const char** atts)
 {
@@ -54,16 +56,29 @@ bvgl_labelme_parser::startElement(const char* name, const char** atts)
     min_dist_ = -1;
     max_dist_ = -1;
     order_ = -1;
+    weight_ = 0;
+    frame_id_ = 0;
   }
 }
 
 //Creates and pushes polygon, creates/pushes point
 void bvgl_labelme_parser::endElement(const XML_Char* name)
 {
+  if (vcl_strcmp(name, FILENAME_TAG)==0)
+    image_name_ = temp_str_;
+
+  if (vcl_strcmp(name, REGION_TAG)==0)
+    region_tag_ = temp_str_;
+
   //Finish up polygon
   if (vcl_strcmp(name, POLYGON_TAG)==0) {
     vgl_polygon<double> poly(pts_);
     polygons_.push_back(poly);
+  }
+
+  if (vcl_strcmp(name, PIXEL_TAG)==0) {
+    vgl_point_2d<double> pt(x_, y_);
+    pixels_.push_back(pt);
   }
 
   //finish up a point
@@ -78,6 +93,8 @@ void bvgl_labelme_parser::endElement(const XML_Char* name)
     obj_max_dists_.push_back(max_dist_);
     obj_depth_orders_.push_back(order_);
     obj_nlcd_ids_.push_back(nlcd_id_);
+    obj_weights_.push_back(weight_);
+    obj_frame_ids_.push_back(frame_id_);
   }
 }
 
@@ -85,6 +102,7 @@ void bvgl_labelme_parser::endElement(const XML_Char* name)
 //Grabs data from points
 void bvgl_labelme_parser::charData(const XML_Char* s, int len)
 {
+#if 0
   if (active_tag_ == X_TAG || active_tag_ == Y_TAG) {
     int val;
     convert(vcl_string(s,len), val);
@@ -93,12 +111,21 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
     if (active_tag_ == Y_TAG)
       y_ = (double) val;
   }
+#endif
+  if (active_tag_ == X_TAG )
+    convert(vcl_string(s,len), x_);
+
+  if (active_tag_ == Y_TAG )
+    convert(vcl_string(s,len), y_);
 
   if (active_tag_ == FILENAME_TAG)
-    image_name_ = vcl_string(s, len);
+    temp_str_ = vcl_string(s, len);
 
   if (active_tag_ == IMG_CAT_TAG)
     image_category_ = vcl_string(s, len);
+
+  if (active_tag_ == REGION_TAG)
+    temp_str_ = vcl_string(s,len);
 
   if (active_tag_ == NAME_TAG) {
     vcl_string name = vcl_string(s,len);
@@ -121,6 +148,13 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
       obj_orientations_.push_back(orientation);
   }
 
+  if (active_tag_ == LAND_TAG) {
+    vcl_string land = vcl_string(s,len);
+    this->trim_string(land);
+    if (land.length() != 0)
+      obj_land_categories_.push_back(land);
+  }
+
   if (active_tag_ == OBJECT_MINDIST_TAG)
     convert(vcl_string(s,len), min_dist_);
 
@@ -130,6 +164,9 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
   if (active_tag_ == OBJECT_ORDER_TAG)
     convert(vcl_string(s,len), order_);
 
+  if (active_tag_ == WEIGHT_TAG)
+    convert(vcl_string(s,len), weight_);
+
   if (active_tag_ == IMG_NI_TAG)
     convert(vcl_string(s,len), image_ni_);
 
@@ -138,6 +175,9 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
 
   if (active_tag_ == NLCD_TAG)
     convert(vcl_string(s,len), nlcd_id_);
+
+  if (active_tag_ == FRAME_TAG)
+    convert(vcl_string(s,len), frame_id_);
 }
 
 void bvgl_labelme_parser::trim_string(vcl_string& s)

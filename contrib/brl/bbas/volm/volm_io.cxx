@@ -440,7 +440,7 @@ bool volm_io::read_labelme(vcl_string xml_file, vcl_string category_file, depth_
       polys.size() != object_maxdist.size() ||
       polys.size() != object_mindist.size() ||
       polys.size() != object_orders.size()     ) {
-    vcl_cerr << " ERROR in labelme xml file: imcomplete object properties defination, check object attributes\n";
+    vcl_cerr << " ERROR in labelme xml file: imcomplete object properties definition, check object attributes\n";
     return false;
   }
   if (!parser.image_ni() || !parser.image_nj()) {
@@ -492,6 +492,77 @@ bool volm_io::read_labelme(vcl_string xml_file, vcl_string category_file, depth_
         depth_scene->add_region(poly, np, min_dist, max_dist, name, volm_orient_table::ori_id[orient], order, land_id);
       }
     }
+  }
+  return true;
+}
+
+bool volm_io::read_query_tags(vcl_string xml_file,
+                              depth_map_scene_sptr& depth_scene,
+                              vcl_vector<volm_weight>& weights,
+                              vcl_string& world_region,
+                              unsigned& ni,
+                              unsigned& nj,
+                              vcl_string& query_name)
+{
+  bvgl_labelme_parser parser(xml_file);
+  vcl_vector<vgl_polygon<double> > polys = parser.polygons();
+  vcl_vector<vgl_point_2d<double> > points = parser.pixels();
+  vcl_vector<vcl_string>& object_names = parser.obj_names();
+  vcl_vector<vcl_string>& object_land_types = parser.obj_land_categories();
+  vcl_vector<float>& object_mindist = parser.obj_mindists();
+  vcl_vector<float>& object_maxdist = parser.obj_maxdists();
+  vcl_vector<float>& object_weight =  parser.obj_weights();
+  vcl_vector<unsigned>& object_frame_ids = parser.obj_frame_ids();
+
+  unsigned num_objs = object_names.size();
+  if (num_objs != object_land_types.size() || num_objs != object_mindist.size() ||
+      num_objs != object_maxdist.size()    || num_objs != object_weight.size())
+  {
+    vcl_cerr << "ERROR parsing tag file " << xml_file << ": incomplete object properties definition, check tags in xml file\n";
+    return false;
+  }
+  if (!parser.image_ni() || !parser.image_nj()) {
+    vcl_cerr << "ERROR parsing tag file " << xml_file  << ": missing image size information, check <nrows> and <ncols>\n";
+    return false;
+  }
+
+  // insert empty polygon if no geometry in tag file
+  if (polys.empty()) {
+    for (unsigned i = 0; i < num_objs; i++) {
+      vgl_polygon<double> poly;
+      poly.new_sheet();
+      poly.push_back(points[i].x(),   points[i].y());
+      poly.push_back(points[i].x()+1, points[i].y());
+      poly.push_back(points[i].x()+1, points[i].y()+1);
+      poly.push_back(points[i].x(),   points[i].y()+1);
+      polys.push_back(poly);
+    }
+  }
+
+  // parse the world region
+  world_region = parser.region();
+  // parse the query name
+  query_name = parser.image_name();
+
+  // load the image dimension
+  ni = parser.image_ni();
+  nj = parser.image_nj();
+  depth_scene->set_image_size(ni,nj);
+
+  weights.clear();
+  // create depth_map scene from loaded tag (here we treat all labeled object as non-sky, non-ground object)
+  for (unsigned i = 0; i < num_objs; i++) {
+    vcl_string land_type = object_land_types[i];
+    if (volm_osm_category_io::tag_to_volm_land_table.find(land_type) == volm_osm_category_io::tag_to_volm_land_table.end())
+      continue;
+    vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
+    vgl_vector_3d<double> np; // surface normal
+    np.set(1.0,1.0,1.0);
+    depth_scene->add_region(poly, np, object_mindist[i], object_maxdist[i], object_names[i],
+                            depth_map_region::FRONT_PARALLEL, 0,
+                            volm_osm_category_io::tag_to_volm_land_table.find(land_type)->second.id_);
+    // add the weight
+    weights.push_back(volm_weight(object_names[i], object_names[i], 0.0, 0.0, 0.0, 0.0, object_weight[i]));
   }
   return true;
 }

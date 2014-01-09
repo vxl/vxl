@@ -34,7 +34,7 @@ public:
 
   //: simple constructor that only sets the number of bins
   volm_desc_ex_land_only(unsigned ndists, unsigned nlands, vcl_vector<double>& radius) : 
-    ndists_(ndists), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); }
+    ndists_(ndists), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); name_ = "existence land only descriptor";}
 
 
   //: Constructor from depth map scene
@@ -43,7 +43,7 @@ public:
                          unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                          unsigned char const& initial_mag = 0);
 
-  //: Constrcutor from created index
+  //: Constructor from created index
   volm_desc_ex_land_only(vcl_vector<unsigned char> const& index_dst,
                          vcl_vector<unsigned char> const& index_combined,
                          vcl_vector<double> depth_interval,
@@ -51,7 +51,7 @@ public:
                          unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                          unsigned char const& initial_mag = 0);
 
-  //: Desctructor
+  //: Destructor
   ~volm_desc_ex_land_only() {}
 
   //: number of depth bins
@@ -63,7 +63,7 @@ public:
   //: the radius that defines the distance interval
   vcl_vector<double>& radius() { return radius_; }
 
-  //: initialize the histrogram with given value
+  //: initialize the histogram with given value
   void initialize_bin(unsigned char const& mag);
 
   //: get the bin index from object distance, height, orientation type and land type (return idx larger than nbins if invalid)

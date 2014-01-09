@@ -158,6 +158,22 @@ vcl_map<vcl_pair<int, int>, volm_land_layer> load_osm_road_junction_table()
   return m;
 }
 
+vcl_map<vcl_string, volm_land_layer> load_tag_to_volm_land_table()
+{
+  vcl_map<vcl_string, volm_land_layer> m;
+  vcl_string txt_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/bae_tag_to_volm_labels.txt";
+  vcl_ifstream ifs(txt_file.c_str());
+  vcl_string header;
+  vcl_getline(ifs,header);
+  vcl_string tag_name, volm_land_name;
+  while ( !ifs.eof()) {
+    ifs >> tag_name;  ifs >> volm_land_name;
+    if (volm_land_name.compare("invalid") != 0)
+      m[tag_name] = volm_osm_category_io::volm_land_table_name[volm_land_name];
+  }
+  return m;
+}
+
 vcl_map<unsigned, volm_land_layer> create_volm_land_table()
 {
   vcl_map<unsigned, volm_land_layer> m;
@@ -233,3 +249,4 @@ vcl_map<unsigned, volm_land_layer> volm_osm_category_io::volm_land_table = creat
 vcl_map<vcl_string, volm_land_layer> volm_osm_category_io::volm_land_table_name = create_volm_land_table_name();
 vcl_vector<vcl_string> volm_osm_category_io::volm_category_name_table = create_volm_land_layer_name_table();
 vcl_map<int, double> volm_osm_category_io::geo_land_hyp_increments  = create_geo_cover_hyp_increments_for_roads();
+vcl_map<vcl_string, volm_land_layer> volm_osm_category_io::tag_to_volm_land_table = load_tag_to_volm_land_table();
