@@ -204,7 +204,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
       // for now just cast to the nearest pixel in DEM, might want to sample bilinearly
       int uu = (int)vcl_floor(u+0.5);
       int vv = (int)vcl_floor(v+0.5);
-      if (uu >= 0 && vv >= 0 && uu < (int)orig_dem_ni && vv < (int)orig_dem_ni) {
+      if (uu >= 0 && vv >= 0 && uu < (int)orig_dem_ni && vv < (int)orig_dem_nj) {
         if ((*dem_view)(uu,vv) < fill_in_value)  // otherwise it remains at local min z
           (*out_img_z)(i,j) = (*dem_view)(uu,vv)-(float)gz;  // we need local height
       }
