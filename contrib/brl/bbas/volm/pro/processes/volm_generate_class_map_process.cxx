@@ -147,7 +147,8 @@ bool volm_update_class_map_process(bprb_func_process& pro)
       bool is_parks_or_lot = (*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["parks"].id_ ||
                              (*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["parking"].id_ ||
                              (*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["invalid"].id_;
-
+      if ((*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["invalid"].id_ )
+        continue;
       if ( (*curr_img)(i,j) == volm_osm_category_io::volm_land_table_name["building"].id_ && is_parks_or_lot) {  // keep previous building if source is open space, parking lot or invalid
         //vcl_cout << " pixel (" << i << "," << j << ") has current value " << (unsigned)(*curr_img)(i,j) << " and source value " << (unsigned)(*srce_img)(i,j) << vcl_endl;
         cnt++;

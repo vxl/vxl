@@ -362,6 +362,10 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
     if (non_cloud_folder.compare("") != 0)
     {
       vcl_string non_cloud_img_band = non_cloud_folder + "/" + img_name  + "_cropped.tif";
+      vcl_cout << " view_angle = " << mit->first << " img_name = " << res->resources_[mit->second].full_path_ 
+             << " pair_name = " << res->full_path(pair_name).first
+             << " non_cloud_img = " << non_cloud_img_band
+             << vcl_endl;
       if (vul_file::exists(non_cloud_img_band)) {
         vcl_pair<vcl_string, vcl_string> name_pair;
         if (band == "PAN") {
