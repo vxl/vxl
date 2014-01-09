@@ -57,8 +57,11 @@ DECLARE_FUNC_CONS(bvxm_detect_edges_process);
 DECLARE_FUNC_CONS(bvxm_edgemap_ortho_process);
 DECLARE_FUNC_CONS(bvxm_scene_box_process);
 DECLARE_FUNC_CONS(bvxm_scene_kml_process);
+DECLARE_FUNC_CONS(bvxm_scene_poly_overlap_process);
 DECLARE_FUNC_CONS(bvxm_scene_local_box_process);
 DECLARE_FUNC_CONS(bvxm_create_ortho_camera_process);
+DECLARE_FUNC_CONS(bvxm_dem_to_xyz_process);
+DECLARE_FUNC_CONS(bvxm_dem_to_xyz_process2);
 
 //Basic operation
 DECLARE_FUNC_CONS(bvxm_scene_model_dir_process);

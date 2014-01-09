@@ -38,6 +38,14 @@ def write_scene_kml(scene, kml_filename, is_overwrite = True, r = 255, g = 255, 
   bvxm_batch.set_input_unsigned(5, b);
   bvxm_batch.run_process();
 
+## check whether the scene is intersects with a given kml polygon
+def check_scene_poly_overlap(scene, kml_file):
+  bvxm_batch.init_process("bvxmScenePolyOverlapProcess");
+  bvxm_batch.set_input_from_db(0,scene);
+  bvxm_batch.set_input_string(1, kml_file);
+  status = bvxm_batch.run_process();
+  return status;
+
 def scene_origin(scene):
   bvxm_batch.init_process("bvxmSceneOriginProcess");
   bvxm_batch.set_input_from_db(0, scene);
@@ -276,3 +284,47 @@ def name_suffix_for_camera(lower_left_lon, lower_left_lat, upper_right_lon, uppe
     name = name + "E" + str(lower_left_lon);
   name = name + "_S" + str(abs(upper_right_lat-lower_left_lat)) + "x" + str(abs(upper_right_lon-lower_left_lon));
   return name;
+
+# Create x y z images for bvxm_scene from dem
+def generate_xyz_from_dem(world, geotiff_dem, geoid_height, geocam=0, fill_in_value=-1.0):
+  bvxm_batch.init_process("bvxmDemToXYZProcess");
+  bvxm_batch.set_input_from_db(0, world);
+  bvxm_batch.set_input_string(1, geotiff_dem);
+  bvxm_batch.set_input_double(2, geoid_height);
+  bvxm_batch.set_input_from_db(3, geocam);
+  bvxm_batch.set_input_float(4, fill_in_value);
+  result = bvxm_batch.run_process();
+  if result:
+    (xi_id, xi_type) = bvxm_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = bvxm_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = bvxm_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
+  return x_img, y_img, z_img;
+
+# Create x y z images for bvxm_scene from multiple dem image in image folder
+# Assuming the camera are loaded from geotiff image header
+def generate_xyz_from_dem_multi(world, img_folder, geoid_height, fill_in_value=-1.0):
+  bvxm_batch.init_process("bvxmDemToXYZProcess2")
+  bvxm_batch.set_input_from_db(0, world);
+  bvxm_batch.set_input_string(1, img_folder);
+  bvxm_batch.set_input_double(2, geoid_height);
+  bvxm_batch.set_input_float(3,fill_in_value);
+  result = bvxm_batch.run_process();
+  if result:
+    (xi_id, xi_type) = bvxm_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = bvxm_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = bvxm_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
+  return x_img, y_img, z_img;

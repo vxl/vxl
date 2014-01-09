@@ -71,4 +71,7 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_scene_origin_process, "bvxmSceneOriginProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_orthorectify_process, "bvxmOrthorectifyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_scene_kml_process, "bvxmSceneKmlProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_scene_poly_overlap_process, "bvxmScenePolyOverlapProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_dem_to_xyz_process, "bvxmDemToXYZProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_dem_to_xyz_process2, "bvxmDemToXYZProcess2");
 }

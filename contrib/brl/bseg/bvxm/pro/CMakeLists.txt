@@ -86,6 +86,7 @@ IF(EXPAT_FOUND)
     processes/bvxm_create_ortho_camera_process.h      processes/bvxm_create_ortho_camera_process.cxx
     processes/bvxm_scene_model_dir_process.h          processes/bvxm_scene_model_dir_process.cxx
     processes/bvxm_orthorectify_process.h             processes/bvxm_orthorectify_process.cxx
+    processes/bvxm_dem_to_xyz_process.h               processes/bvxm_dem_to_xyz_process.cxx
   )
 
   ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})

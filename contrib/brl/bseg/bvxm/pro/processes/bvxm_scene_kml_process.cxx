@@ -4,6 +4,7 @@
 // \file
 #include <vgl/vgl_box_3d.h>
 #include <vul/vul_file.h>
+#include <vgl/vgl_intersection.h>
 
 // set input and output type
 bool bvxm_scene_kml_process_cons(bprb_func_process& pro)
@@ -93,4 +94,60 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
     ofs.close();
   }
   return true;
+}
+
+bool bvxm_scene_poly_overlap_process_cons(bprb_func_process& pro)
+{
+  using namespace bvxm_scene_poly_overlap_process_globals;
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "bvxm_voxel_world_sptr";  // bvxm voxel world spec
+  input_types_[1] = "vcl_string";             // input kml polygon
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool bvxm_scene_poly_overlap_process(bprb_func_process& pro)
+{
+  using namespace bvxm_scene_poly_overlap_process_globals;
+  // sanity check
+  if ( pro.n_inputs() < n_inputs_ ) {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
+    return false;
+  }
+  // get the inputs
+  unsigned i = 0;
+  bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  vcl_string kml_file = pro.get_input<vcl_string>(i++);
+
+  if (!vul_file::exists(kml_file)) {
+    vcl_cout << pro.name() << " can not find input kml file: " << kml_file << vcl_endl;
+    return false;
+  }
+
+  // read the polygon from kml
+  vgl_polygon<double> poly = bkml_parser::parse_polygon(kml_file);
+
+  // obtain the bounding box for the scene region
+  bvxm_world_params_sptr params = voxel_world->get_params();
+  vpgl_lvcs_sptr lvcs = params->lvcs();
+  vgl_point_3d<float> corner = params->corner();
+  vgl_vector_3d<unsigned> num_voxels = params->num_voxels();
+  float voxel_length = params->voxel_length();
+  double low_left_lon, low_left_lat, low_left_alt, upp_rght_lon, upp_rght_lat, upp_rght_alt;
+  lvcs->local_to_global(corner.x(), corner.y(), corner.z(), vpgl_lvcs::wgs84, low_left_lon, low_left_lat, low_left_alt);
+  double dim_x = num_voxels.x()*voxel_length;
+  double dim_y = num_voxels.y()*voxel_length;
+  double dim_z = num_voxels.z()*voxel_length;
+  lvcs->local_to_global(corner.x()+dim_x, corner.y()+dim_y, corner.z()+dim_z, vpgl_lvcs::wgs84, upp_rght_lon, upp_rght_lat, upp_rght_alt);
+
+  //vgl_box_2d<double> bbox(low_left_lon, low_left_lat, upp_rght_lon, upp_rght_lat);
+  vgl_box_2d<double> bbox(low_left_lon, upp_rght_lon, low_left_lat, upp_rght_lat);
+#if 0
+  vcl_cout << " lower_left = " << low_left_lon << "," << low_left_lat << vcl_endl;
+  vcl_cout << " upper_rght = " << upp_rght_lon << "," << upp_rght_lat << vcl_endl;
+  vcl_cout << " bbox = " << bbox << vcl_endl;
+  poly.print(vcl_cout);
+#endif
+
+  return vgl_intersection(bbox, poly);
 }
