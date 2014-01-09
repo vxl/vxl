@@ -28,7 +28,7 @@ class vbl_ref_count
 
   void ref() { ++ref_count_; }
   void unref() { /*assert(ref_count_>0);*/ if (--ref_count_ == 0) delete this; }
-  int get_references() const { return ref_count_; }
+  long get_references() const { return ref_count_; }
   bool is_referenced() const { return ref_count_ > 0; }
 };
 
