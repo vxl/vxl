@@ -2430,7 +2430,7 @@ bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map,
 
     for (; frame_it != frame_backproj.end(); ++ortho_backproj_it, ++frame_it, ++out_slab_it) {
       unsigned val = (unsigned)(vcl_floor(*ortho_backproj_it+0.5f)); // truncate the height to nearest int
-      if (val == z)
+      if (val >= z)
         *out_slab_it = *frame_it;
     }
   }
