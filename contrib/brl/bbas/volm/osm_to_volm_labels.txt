@@ -296,7 +296,7 @@ man_made mineshaft 99 mineshaft 2 0
 man_made tower 20 towers 4 0
 man_made crane 97 crane 4 0
 man_made breakwater 1 Open_Water 0 10
-man_made water_tower 20 towers 4 0
+man_made water_tower 245 water_towers 4 0
 man_made storage_tank 101 storage_tank 4 0
 man_made cutline 87 path 3 5
 man_made pipeline 100 pipeline 4 3
