@@ -12,6 +12,7 @@
 #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
+#include <vcl_vector.h>
 
 class brad_atmospheric_parameters : public vbl_ref_count
 {
@@ -22,6 +23,10 @@ class brad_atmospheric_parameters : public vbl_ref_count
    double skylight_; // units W m^-2 um^-2
    //: optical depth of nadir path through atmosphere to ground
    double optical_depth_;
+
+   vcl_vector<double> airlight_multi_;  // for at least 4 bands
+   vcl_vector<double> skylight_multi_;
+   vcl_vector<double> optical_depth_multi_;
 #if 0
    //: predicted at-sensor radiance value of a horizontal perfect lambertian reflector
    double predicted_lambertian_max_; // units W m^2 sr^-2 um^-2

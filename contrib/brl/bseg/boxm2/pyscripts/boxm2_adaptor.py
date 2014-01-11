@@ -1198,9 +1198,9 @@ def save_multi_block_scene(params) :
      print("Adding block: ", i," ",j," ",k);
      boxm2_batch.init_process("boxm2AddBlockProcess");
      boxm2_batch.set_input_from_db(0,scene);
-     boxm2_batch.set_input_unsigned(1,i);
-     boxm2_batch.set_input_unsigned(2,j);
-     boxm2_batch.set_input_unsigned(3,k);
+     boxm2_batch.set_input_int(1,i);
+     boxm2_batch.set_input_int(2,j);
+     boxm2_batch.set_input_int(3,k);
      boxm2_batch.set_input_unsigned(4,num_x);
      boxm2_batch.set_input_unsigned(5,num_y);
      boxm2_batch.set_input_unsigned(6,num_z);

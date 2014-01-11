@@ -71,12 +71,19 @@ bool brad_estimate_reflectance_process(bprb_func_process& pro)
   unsigned int ni = radiance_img->ni();
   unsigned int nj = radiance_img->nj();
 
-  vil_image_view<float> *reflectance_img = new vil_image_view<float>(ni,nj);
-  vil_image_view_base_sptr output_img(reflectance_img);
+  if (radiance_img->nplanes() == 1) {
+    vil_image_view<float> *reflectance_img = new vil_image_view<float>(ni,nj);
+    brad_estimate_reflectance_image(*radiance_img, *mdata, *atm_params, *reflectance_img);
+    vil_image_view_base_sptr output_img(reflectance_img);
+    pro.set_output_val<vil_image_view_base_sptr>(0, output_img);
+  } else {
+    vil_image_view<float> *reflectance_img = new vil_image_view<float>(ni,nj,radiance_img->nplanes());
+    brad_estimate_reflectance_image_multi(*radiance_img, *mdata, *atm_params, *reflectance_img);
+    vil_image_view_base_sptr output_img(reflectance_img);
+    pro.set_output_val<vil_image_view_base_sptr>(0, output_img);
+  }
 
-  brad_estimate_reflectance_image(*radiance_img, *mdata, *atm_params, *reflectance_img);
-
-  pro.set_output_val<vil_image_view_base_sptr>(0, output_img);
+  
 
   return true;
 }

@@ -44,6 +44,7 @@ class brad_image_metadata : public vbl_ref_count
 
   // band-averaged sun irradiance (includes term accounting for Earth-Sun distance)
   double sun_irradiance_; // units W m^-2
+  vcl_vector<double> sun_irradiance_values_;  // for multi-spectral imagery, there are multiple values
 
   image_time t_;
   unsigned number_of_bits_;

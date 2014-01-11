@@ -410,3 +410,22 @@ def mask_image_using_id(img, id_img, input_id):
   (id, type) = boxm2_batch.commit_output(0);
   masked_img = dbvalue(id, type);
   return masked_img;
+
+def get_plane(img, plane_id):
+  boxm2_batch.init_process("vilGetPlaneProcess");
+  boxm2_batch.set_input_from_db(0, img);
+  boxm2_batch.set_input_unsigned(1, plane_id);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  img_plane = dbvalue(id, type);
+  return img_plane;
+
+def combine_planes(img_red, img_green, img_blue):
+  boxm2_batch.init_process("vilCombinePlanesProcess");
+  boxm2_batch.set_input_from_db(0, img_red);
+  boxm2_batch.set_input_from_db(1, img_green);
+  boxm2_batch.set_input_from_db(2, img_blue);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  img_out = dbvalue(id, type);
+  return img_out;

@@ -127,18 +127,17 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
       temp_ids.push_back(temp_ids_init[i]);
   }
 
-  // order the resources in the order of GeoEye1, WV2, WV1, QB/others -- changed the order to WV1, WV2, Geoeye1
+  // order the resources in the order of GeoEye1, WV2, WV1, QB/others
+  for (unsigned i = 0; i < temp_ids.size(); i++) {
+    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("GeoEye-1") == 0)
+      ids.push_back(temp_ids[i]);
+  }
   for (unsigned i = 0; i < temp_ids.size(); i++) {
     if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV01") == 0)
       ids.push_back(temp_ids[i]);
   }
   for (unsigned i = 0; i < temp_ids.size(); i++) {
     if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WV02") == 0)
-      ids.push_back(temp_ids[i]);
-  }
-
-  for (unsigned i = 0; i < temp_ids.size(); i++) {
-    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("GeoEye-1") == 0)
       ids.push_back(temp_ids[i]);
   }
   

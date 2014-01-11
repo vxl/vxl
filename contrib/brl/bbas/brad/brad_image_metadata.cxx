@@ -360,6 +360,7 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   // set solar irradiance to a reasonable default in case we don't have the information
   // "reasonable" is defined here as roughly in the range of the examples we know.
   double solar_irrad = 1500.0; 
+  vcl_vector<double> solar_irrads(4, 1500.0);  // for multi-spectral imagery there are multiple values
   // solar irradiance is dependent on sensor because each has a different range of wavelengths they are sensitive to.
   vcl_string img_info = hdr->get_image_source();
   if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos) {
@@ -368,6 +369,13 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   } else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos) { // OZGE TODO: check this one
     solar_irrad = 1617;
     satellite_name_ = "GeoEye-1";
+    solar_irrads.push_back(1960); // Blue
+    solar_irrads.push_back(1853); // Green
+    solar_irrads.push_back(1505); // Red
+    solar_irrads.push_back(1039); // near-IR  // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
+                                              // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for geoeye1 plane 0 is blue, plane 1 is green, plane 2 is red and plane 3 is near-IR)
+                                              //          this order may be different for different satellites
+
   } else if (img_info.find("QuickBird") != vcl_string::npos || 
              nitf_filename.find("QB") != vcl_string::npos || 
              nitf_filename.find("QuickBird") != vcl_string::npos || 
@@ -391,6 +399,10 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   // scale sun irradiance using Earth-Sun distance
   double d = brad_sun_distance(year, month, day, hour, min);
   sun_irradiance_ = solar_irrad/(d*d);
+  sun_irradiance_values_.push_back(solar_irrads[0]/(d*d));  // blue
+  sun_irradiance_values_.push_back(solar_irrads[1]/(d*d));  // green
+  sun_irradiance_values_.push_back(solar_irrads[2]/(d*d));  // red
+  sun_irradiance_values_.push_back(solar_irrads[3]/(d*d));  // near-IR
 
   // compute satellite az,el values for center of image
   
