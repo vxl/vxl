@@ -36,6 +36,7 @@
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_matrix.h> // outerproduct
 #include <vnl/vnl_config.h> // for VNL_CONFIG_CHECK_BOUNDS
+#include <vnl/vnl_error.h>
 
 VCL_TEMPLATE_EXPORT template <class T, unsigned int n> class vnl_vector_fixed;
 VCL_TEMPLATE_EXPORT template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
@@ -130,7 +131,14 @@ class vnl_vector_fixed
   // vnl_double_2 or vnl_float_2 instead.
   vnl_vector_fixed( const T& x0, const T& x1 )
   {
-    assert( n == 2 );
+    if ( n != 2 )
+    {
+      #ifndef NDEBUG
+      vnl_error_vector_dimension("vnl_vector_fixed()", 2, n);
+      #endif
+      return;
+    }
+    
     data_[0] = x0; data_[1] = x1;
   }
 
@@ -139,14 +147,26 @@ class vnl_vector_fixed
   // vnl_double_3 or vnl_float_3 instead.
   vnl_vector_fixed( const T& x0, const T& x1, const T& x2 )
   {
-    assert( n == 3 );
+    if ( n != 3 )
+    {
+      #ifndef NDEBUG
+      vnl_error_vector_dimension("vnl_vector_fixed()", 3, n);
+      #endif
+      return;
+    }
     data_[0] = x0; data_[1] = x1; data_[2] = x2;
   }
 
   //: Convenience constructor for 4-D vectors
   vnl_vector_fixed( const T& x0, const T& x1, const T& x2, const T& x3 )
   {
-    assert( n == 4 );
+    if ( n != 4 )
+    {
+      #ifndef NDEBUG
+      vnl_error_vector_dimension("vnl_vector_fixed()", 4, n);
+      #endif
+      return;
+    }
     data_[0] = x0; data_[1] = x1; data_[2] = x2; data_[3] = x3;
   }
 
