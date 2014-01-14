@@ -53,7 +53,7 @@ static bool find_nearest_building(unsigned const& i, unsigned const& j,
   for( ; mit != buildings.end(); ++mit)
   {
     vcl_vector<vcl_pair<int, int> > b_pixels;
-    unsigned num_pixels = mit->second.second.size();
+    unsigned num_pixels = (unsigned)mit->second.second.size();
     for (unsigned p_idx = 0; p_idx < num_pixels; p_idx++)
       b_pixels.push_back(vcl_pair<int,int>(mit->second.first[p_idx], mit->second.second[p_idx]));
 
@@ -119,26 +119,25 @@ static float neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const&
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> height_img_name("-height", "height map about to be refined",
-                                      "V:/satellite_modeling/wr2/satellite_height_map/scene_11278/height_map_ortho_epoc_2.tif");
-  vul_arg<vcl_string> class_img_name("-class", "classification map used to refine", 
-                                     "V:/satellite_modeling/wr2/satellite_height_map/scene_11278/crops/crop_5V121005P0012161044B222005301092M_000977701_class_3_scales_ang_int_15_band_3_2_1_0_neigh_7_ids_ortho.tif");
-  vul_arg<vcl_string> out("-out", "output folder where height map will be stored", "V:/satellite_modeling/wr2/satellite_height_map/scene_11278/");
+  vul_arg<vcl_string> height_img_name("-height", "height map about to be refined", "");
+  vul_arg<vcl_string> class_img_name("-class", "classification map used to refine", "");
+  vul_arg<vcl_string> out_height("-out-height", "output filename of the refined height map", "");
+  vul_arg<vcl_string> out_class("-out-class", "output filename of the refined class map", "");
   vul_arg<unsigned> dx("-x", "refined window size in pixel unit", 60);
   vul_arg<unsigned> dy("-y", "refined window size in pixel unit", 60);
-  vul_arg<unsigned> iteration("-iter","range of the pixel neighbors", 1);
+  vul_arg<unsigned> iteration("-iter","number of refinement iteration", 100);
   vul_arg<float> ratio("-ratio", "shape factor to control morphological operation", 0.5);
   vul_arg<float> height_threshold("-thres", "threshold in height difference", 5);
   vul_arg_parse(argc, argv);
 
   // check input
-  if (height_img_name().compare("") == 0 || class_img_name().compare("") == 0 || out().compare("") == 0) {
+  if (height_img_name().compare("") == 0 || class_img_name().compare("") == 0 || out_height().compare("") == 0 || out_class().compare("") == 0) {
     vul_arg_display_usage_and_exit();
     return false;
   }
   vcl_stringstream log_file;
   vcl_stringstream log;
-  log_file << out() << "/log_refine_height_map.xml";
+  log_file << out_height() << "/log_refine_height_map_scene.xml";
 
   // load height map image (float format)
   if (!vul_file::exists(height_img_name())) {
@@ -171,19 +170,21 @@ int main(int argc, char** argv)
   vcl_cout << "  window num: " << num_w_i << 'x' << num_w_j << vcl_endl;
 
   // start to refine the height map on each window
-  
   // refined height map
   vil_image_view<float> refined_h_img(ni, nj);
-  vcl_stringstream str;
-  str << out() << "/refined_height_img_median_iter_" << iteration() << "_ratio_" << ratio() << ".tif";
-  vcl_string refined_h_img_name = str.str();
   refined_h_img.deep_copy(h_img);
+  vcl_string refined_h_img_name = out_height();
 
+  vil_image_view<vxl_byte> refined_c_img;
+  refined_c_img.deep_copy(c_img);
+  vcl_string refined_c_img_name = out_class();
+
+#if 0
   // save a window image for debugging purpose
-  //vil_image_view<vxl_byte> w_img(ni, nj);
   vil_image_view<vil_rgb<vxl_byte> > w_img(ni, nj, 1);
-  vcl_string w_img_name = out() + "/w_img.tif";
+  vcl_string w_img_name = out_height() + "/w_img.tif";
   w_img.fill(0);
+#endif
 
   // maps to record the ground height of each window (key is its window id)
   vcl_map<vcl_pair<unsigned, unsigned>, float> window_min_height;
@@ -219,8 +220,7 @@ int main(int argc, char** argv)
         return volm_io::EXE_ARGUMENT_ERROR;
       }
 
-# if 0
-      // refine the height map by the median height value in each region
+      // flatten the building height by their median
       // map for storing building_height info for each building (first is median, second is mean, third is standard deviation)
       vcl_map<unsigned, vcl_vector<float> > building_height;
       if (!refine_building_by_median(h_img, buildings, building_height, refined_h_img))
@@ -232,17 +232,16 @@ int main(int argc, char** argv)
       // store the building height for current window
       for (vcl_map<unsigned, vcl_vector<float> >::iterator bh_mit = building_height.begin(); bh_mit != building_height.end(); ++bh_mit)
         all_buidling_heights.push_back(bh_mit->second[0]);
-#endif
 
       vcl_pair<vcl_pair<unsigned, unsigned>, vcl_vector<vcl_pair<unsigned, unsigned> > > tmp_pair(vcl_pair<unsigned, unsigned>(w_idx_i, w_idx_j), non_buildings);
       non_building_regions.insert(tmp_pair);
 
-      // obtain the ground height from flat region
+      // obtain the ground height from flat region -- using the minimum height for current window
       vcl_vector<float> flat_heights;
       for (vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >::iterator mit = flat_regions.begin();
            mit != flat_regions.end(); ++mit)
       {
-        unsigned num_pts = mit->second.first.size();
+        unsigned num_pts = (unsigned)mit->second.first.size();
         for (unsigned ri = 0; ri < num_pts; ri++)
           flat_heights.push_back(h_img(mit->second.first[ri], mit->second.second[ri]));
       }
@@ -287,15 +286,16 @@ int main(int argc, char** argv)
   } // end of loop over each window
 
   // if there is no region can be used to define ground plane height, do not refine ground region
+  // at this stage, only building roof being flattened, class map remain same, building boundary remain as before
   if (window_min_height.empty()) {
     log << "warning: no road/park is available to refine ground plane height, ground refinement ignored\n";
     error(log_file.str(), log.str());
-    vil_save(w_img, w_img_name.c_str());
     vil_save(refined_h_img, refined_h_img_name.c_str());
+    vil_save(refined_c_img, refined_c_img_name.c_str());
     return volm_io::SUCCESS;
   }
 
-  // ingest ground level height using height median retrieved from road and park region
+  // ingest ground level height using height median retrieved from road and park region (class map doesn't change
   unsigned window_size = num_w_i;
   if (window_size > num_w_j) window_size = num_w_j;
   vcl_cout << "\nStart to refine ground elevation";
@@ -319,14 +319,21 @@ int main(int argc, char** argv)
         grd_height = neighbor_height(window_min_height, w_idx_i, w_idx_j, window_size);
       else
         grd_height = mit->second;
-     
       // refine the ground height
-      // only refine the road and parks
+#if 0
       for (unsigned g_idx_i = start_ni; g_idx_i < end_ni; g_idx_i++) {
         for (unsigned g_idx_j = start_nj; g_idx_j < end_nj; g_idx_j++) {
           if (g_idx_i >= 0 && g_idx_i < ni && g_idx_j >= 0 && g_idx_j < nj) {
+
+            if (g_idx_i == 147 && g_idx_j == 73) {
+              vcl_cout << " pixel (" << g_idx_i << "x" << g_idx_j << ") = "
+                << volm_osm_category_io::volm_land_table[c_img(g_idx_i, g_idx_j)].name_ << " "
+                << c_img(g_idx_i, g_idx_j) << " ground height = " << grd_height << vcl_endl;
+            }
+
             if (c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["roads"].id_ ||
                 c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["parks"].id_ ||
+                c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["parking"].id_ ||
                 c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["palm_tree"].id_ ||
                 c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["tree"].id_ ||
                 c_img(g_idx_i, g_idx_j) == 0)
@@ -334,7 +341,8 @@ int main(int argc, char** argv)
           }
         }
       }
-#if 0
+#endif
+#if 1
       vcl_map<vcl_pair<unsigned,unsigned>, vcl_vector<vcl_pair<unsigned, unsigned> > >::iterator r_mit = non_building_regions.find(vcl_pair<unsigned,unsigned>(w_idx_i, w_idx_j));
       if (r_mit != non_building_regions.end()) {
         vcl_vector<vcl_pair<unsigned, unsigned> > region_pixels = r_mit ->second;
@@ -346,10 +354,8 @@ int main(int argc, char** argv)
     }
   }
 
-#if 0
-  // refine the building boundary using morphological operation
-  vil_image_view<vxl_byte> refined_c_img;
-  refined_c_img.deep_copy(c_img);
+  // refine the building boundary using morphological operation (class map will be updated here to accept new building pixels)
+  // height threshold used to divide neighbor buildings having different height
   vcl_cout << "\nStart to refine building boundary";
   for (unsigned i = 0; i < iteration(); i++) {
     vcl_cout << '.';
@@ -361,19 +367,16 @@ int main(int argc, char** argv)
     }
   }
 
-  // refine once again with high ratio and no height threshold
-  if(!refine_building(0.6, 1000, h_img, refined_c_img, refined_h_img)) {
+  // refine once again with high ratio and no height threshold to get rid of white noise (spikes)
+  if(!refine_building(0.6f, 1000, h_img, refined_c_img, refined_h_img)) {
     log << "error: refining building failed at ratio " << ratio() << '\n';
     error(log_file.str(), log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vcl_cout << vcl_endl;
-  vcl_string refined_c_img_name = out() + "/refined_buiding_img.tif";
   vil_save(refined_c_img, refined_c_img_name.c_str());
-#endif
 
   // output the image
-  //vil_save(w_img, w_img_name.c_str());
   vil_save(refined_h_img, refined_h_img_name.c_str());
 
   return volm_io::SUCCESS;
@@ -465,7 +468,7 @@ bool refine_building_by_median(vil_image_view<float> const& h_img,
     if (mit->second.first.size() < 10)
       continue;
     unsigned building_key = mit->first;
-    unsigned num_pts = mit->second.first.size();
+    unsigned num_pts = (unsigned)mit->second.first.size();
     // find the median
     vcl_vector<float> height_values;
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)
@@ -623,11 +626,13 @@ bool refine_building(float const& ratio,
           curr_ratio  = 0.0f;
         }
       }
+#if 0
       if (i == 427 && j == 391) {
         vcl_cout << " --------- " << vcl_endl;
         vcl_cout << "i = " << i << " j = " << j << " height = " << curr_height << " ratio = " << curr_ratio
                  << " origin height = " << h_img(i,j) << vcl_endl;
       }
+#endif
       // update the pixel by checking whether there are enough building neighbor pixels having same height
       if (curr_ratio > ratio) {
         if ( (curr_height-h_img(i,j))*(curr_height-h_img(i,j)) < height_threshold*height_threshold ) {
@@ -635,7 +640,6 @@ bool refine_building(float const& ratio,
           refined_c_img(i,j) = volm_osm_category_io::volm_land_table_name["building"].id_;
         }
       }
-
 
     }
   }

@@ -87,12 +87,16 @@ def pick_nadir_resource_pair(res, lower_left_lon, lower_left_lat, upper_right_lo
   bvxm_batch.set_input_string(7, non_cloud_folder);
   bvxm_batch.set_input_string(8, out_folder)
   statuscode = bvxm_batch.run_process();
-  (p_id, p_type) = bvxm_batch.commit_output(0);
-  pan_path = bvxm_batch.get_output_string(p_id);
-  bvxm_batch.remove_data(p_id);
-  (m_id, m_type) = bvxm_batch.commit_output(1);
-  multi_path = bvxm_batch.get_output_string(m_id);
-  bvxm_batch.remove_data(m_id);
+  if statuscode:
+    (p_id, p_type) = bvxm_batch.commit_output(0);
+    pan_path = bvxm_batch.get_output_string(p_id);
+    bvxm_batch.remove_data(p_id);
+    (m_id, m_type) = bvxm_batch.commit_output(1);
+    multi_path = bvxm_batch.get_output_string(m_id);
+    bvxm_batch.remove_data(m_id);
+  else:
+    pan_path = "";
+    multi_path = "";
   return statuscode, pan_path, multi_path
 
 ## GSD: ground sampling distance, e.g. pass 1 to eliminate all the images which have pixel GSD more than 1 meter; the default is 10 meters, so practically returns all the satellite images
