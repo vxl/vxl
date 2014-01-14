@@ -46,12 +46,13 @@ def extract_filter_bank(tclsf, img_name, filter_folder):
   bvxm_batch.set_input_string(2,filter_folder);
   bvxm_batch.run_process();
 
-def add_to_filter_bank(tclsf, img_name, plane, filter_folder):
+def add_to_filter_bank(tclsf, img_name, plane, filter_folder, is_gauss_smooth = False):
   bvxm_batch.init_process("sdetAddtoFilterBankProcess");
   bvxm_batch.set_input_from_db(0,tclsf);      # classifier instance
   bvxm_batch.set_input_string(1,img_name);
   bvxm_batch.set_input_unsigned(2,plane);  ## pass which plane to extract the gauss response from
   bvxm_batch.set_input_string(3,filter_folder);
+  bvxm_batch.set_input_bool(4,is_gauss_smooth)
   bvxm_batch.run_process();
 
 ## assumes that the training will be on the same image and the filter bank of it is already computed and saved at tclsf, e.g. using extract_filter_bank method

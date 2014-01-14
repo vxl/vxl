@@ -111,7 +111,8 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   //: append to the vector of other_responses_
   //  it may be necessary to increase the dimensionality using another source of info than the original image
   // this method checks whether an other response with this name is already computed and saved
-  void add_gauss_response(vil_image_view<float>& img_f, vcl_string const& filter_folder, vcl_string const& img_name, vcl_string const& response_name);
+  // is_smooth options used to specify whether gauss smooth will apply on the input image
+  void add_gauss_response(vil_image_view<float>& img_f, vcl_string const& filter_folder, vcl_string const& img_name, vcl_string const& response_name, bool const& is_smooth = true);
 
   //: append to training data (current filter responses).
   //  randomly select training samples from full training image for category

@@ -259,7 +259,9 @@ bool sdet_texture_classifier::compute_filter_bank_float_img(vcl_string const& fi
 //: append to the vector of other_responses_
 //  it may be necessary to increase the dimensionality using another source of info than the original image
 // this method checks whether an other response with this name is already computed and saved
-void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, vcl_string const& filter_folder, vcl_string const& img_name, vcl_string const& response_name)
+void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, vcl_string const& filter_folder,
+                                                 vcl_string const& img_name, vcl_string const& response_name,
+                                                 bool const& is_smooth)
 {
   // check whether it already exists
   bool found_it = false;
@@ -269,8 +271,10 @@ void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, v
     }
   }
   vil_image_view<float> out_gauss(img_f.ni(), img_f.nj());
-  this->compute_gauss_response(img_f, out_gauss); 
-
+  if (is_smooth)
+    this->compute_gauss_response(img_f, out_gauss); 
+  else
+    out_gauss.deep_copy(img_f);
   other_responses_.push_back(out_gauss);
   other_responses_names_.push_back(response_name);
 
