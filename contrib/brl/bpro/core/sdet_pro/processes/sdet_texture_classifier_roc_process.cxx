@@ -25,6 +25,7 @@ bool sdet_texture_classifier_roc_process_cons(bprb_func_process& pro)
   input_types.push_back("vil_image_view_base_sptr"); // input original image, to mark some pixels red
   input_types.push_back("vcl_string"); // prefix for ground truth binary vsol spatial object files, <prefix>_<category_name>.bin
   input_types.push_back("vcl_string"); // name of the category to use as positive (the rest of the available categories will be used as negatives)
+  input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -56,6 +57,7 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> input_orig_img(pro.get_input<vil_image_view_base_sptr>(3));
   vcl_string prefix = pro.get_input<vcl_string>(4);
   vcl_string pos_category = pro.get_input<vcl_string>(5);
+  vcl_string cat_ids_file = pro.get_input<vcl_string>(6);
 
    // load the positive pixels
   vcl_string pos_file_name = prefix + "_" + pos_category + ".bin";
@@ -82,6 +84,7 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
 
   vcl_map<vcl_string, vil_rgb<vxl_byte> > cat_color_map;
   vil_rgb<vxl_byte> positive_color;
+  /*
   vnl_random rng(100);  // will always give the same colors  // WARNING, assumes that the input color map is generated with the same dictionary, and same order of categories
   for (unsigned kk = 0; kk < cats.size(); kk++) {
     cat_color_map[cats[kk]] = vil_rgb<vxl_byte>(rng.drand32()*255, rng.drand32()*255, rng.drand32()*255);
@@ -89,7 +92,20 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
     vcl_cout.flush();
     if (cats[kk].compare(pos_category) == 0)
       positive_color = cat_color_map[cats[kk]];
+  }*/
+  vcl_ifstream ifs(cat_ids_file.c_str());
+  vcl_string cat_name; int id; int r, g, b;
+  ifs >> cat_name;
+  while (!ifs.eof()) {
+    ifs >> id; ifs >> r; ifs >> g; ifs >> b;
+    //cat_id_map[cat_name] = (unsigned char)id;
+    cat_color_map[cat_name] = vil_rgb<vxl_byte>(r,g,b);
+    vcl_cout << "\t\t" << cat_name << " color: " << cat_color_map[cat_name] << '\n';
+    if (cat_name.compare(pos_category) == 0)
+      positive_color = cat_color_map[cat_name];
+    ifs >> cat_name;
   }
+  ifs.close();
 
   vil_image_view<vil_rgb<vxl_byte> > out_rgb(ni, nj);
   for (unsigned i = 0; i < ni; i++)

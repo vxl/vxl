@@ -39,5 +39,6 @@ void sdet_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_load_texture_dictionary_process, "sdetLoadTextureDictionaryProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_add_to_filter_bank_process, "sdetAddtoFilterBankProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_texture_classifier_roc_process, "sdetTextureClassifierROCProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_add_to_filter_bank_process2, "sdetAddtoFilterBankProcess2"); 
   
 }

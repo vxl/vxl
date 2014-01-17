@@ -28,7 +28,7 @@ bool sdet_texture_classifier_process2_cons(bprb_func_process& pro)
   input_types.push_back("sdet_texture_classifier_sptr"); //texton dictionary
   //input_types.push_back("vil_image_view_base_sptr"); //input image 
   input_types.push_back("unsigned");   //texture block size
-  input_types.push_back("vcl_string");  // a simple text file with the list of ids for each category, if passed as "" just use 0, 1, 2, .. etc.
+  input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -55,13 +55,15 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
   unsigned ntextons = dict->get_number_of_textons();
   vcl_cout << " testing using the dictionary with the number of textons: " << ntextons << "\n categories:\n";
   vcl_vector<vcl_string> cats = dict->get_dictionary_categories();
+  
   vcl_map<vcl_string, vil_rgb<vxl_byte> > cat_color_map;
+  /*
   vnl_random rng(100);  // will always give the same colors
   for (unsigned kk = 0; kk < cats.size(); kk++) {
     cat_color_map[cats[kk]] = vil_rgb<vxl_byte>(rng.drand32()*255, rng.drand32()*255, rng.drand32()*255);
     vcl_cout << "\t\t" << cats[kk] << " color: " << cat_color_map[cats[kk]] << '\n';
     vcl_cout.flush();
-  }
+  }*/
 
   // assumes the filter bank is computed at the dictionary
   unsigned ni = dict->filter_responses().ni();
@@ -78,11 +80,13 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
       cat_id_map[cats[kk]] = kk;
   } else {
     vcl_ifstream ifs(cat_ids_file.c_str());
-    vcl_string cat_name; int id;
+    vcl_string cat_name; int id; int r, g, b;
     ifs >> cat_name;
     while (!ifs.eof()) {
-      ifs >> id;
+      ifs >> id; ifs >> r; ifs >> g; ifs >> b;
       cat_id_map[cat_name] = (unsigned char)id;
+      cat_color_map[cat_name] = vil_rgb<vxl_byte>(r,g,b);
+      vcl_cout << "\t\t" << cat_name << " color: " << cat_color_map[cat_name] << '\n';
       ifs >> cat_name;
     }
   }

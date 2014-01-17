@@ -46,13 +46,20 @@ def extract_filter_bank(tclsf, img_name, filter_folder):
   bvxm_batch.set_input_string(2,filter_folder);
   bvxm_batch.run_process();
 
-def add_to_filter_bank(tclsf, img_name, plane, filter_folder, is_gauss_smooth = False):
+def add_to_filter_bank(tclsf, img_name, plane, filter_folder, is_gauss_smooth = True):
   bvxm_batch.init_process("sdetAddtoFilterBankProcess");
   bvxm_batch.set_input_from_db(0,tclsf);      # classifier instance
   bvxm_batch.set_input_string(1,img_name);
   bvxm_batch.set_input_unsigned(2,plane);  ## pass which plane to extract the gauss response from
   bvxm_batch.set_input_string(3,filter_folder);
   bvxm_batch.set_input_bool(4,is_gauss_smooth)
+  bvxm_batch.run_process();
+
+def add_to_filter_bank2(tclsf, img_name, filter_folder):
+  bvxm_batch.init_process("sdetAddtoFilterBankProcess2");
+  bvxm_batch.set_input_from_db(0,tclsf);      # classifier instance
+  bvxm_batch.set_input_string(1,img_name);
+  bvxm_batch.set_input_string(2,filter_folder);
   bvxm_batch.run_process();
 
 ## assumes that the training will be on the same image and the filter bank of it is already computed and saved at tclsf, e.g. using extract_filter_bank method
@@ -89,7 +96,7 @@ def test_classifier(tclsf, block_size, category_id_file=""):
   return out, out_color, out_id
 
 ## pass the color output image of the classifier and the bin file name prefix for vsol_spatial_object_2d polygon files for ground-truth
-def generate_roc(tclsf, class_out_prob_img, class_out_color_img, orig_img, prefix_for_bin_files, positive_category_name):
+def generate_roc(tclsf, class_out_prob_img, class_out_color_img, orig_img, prefix_for_bin_files, positive_category_name,category_id_file):
   bvxm_batch.init_process("sdetTextureClassifierROCProcess");
   bvxm_batch.set_input_from_db(0, tclsf);
   bvxm_batch.set_input_from_db(1, class_out_prob_img);
@@ -97,6 +104,7 @@ def generate_roc(tclsf, class_out_prob_img, class_out_color_img, orig_img, prefi
   bvxm_batch.set_input_from_db(3, orig_img);
   bvxm_batch.set_input_string(4, prefix_for_bin_files);
   bvxm_batch.set_input_string(5, positive_category_name);
+  bvxm_batch.set_input_string(6, category_id_file);
   bvxm_batch.run_process();
   (id,type) = bvxm_batch.commit_output(0);
   tp = bvxm_batch.get_bbas_1d_array_float(id);

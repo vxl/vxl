@@ -607,7 +607,7 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category, 
   }
 
   this->add_training_data(category, training_data);
-
+  return true;
 }
 //: extract filter outputs for the specified pixels 
 bool sdet_texture_classifier::compute_data(vcl_vector<vcl_pair<int, int> >const& pixels, vcl_vector<vnl_vector<double> >& data)
@@ -638,6 +638,7 @@ bool sdet_texture_classifier::compute_data(vcl_vector<vcl_pair<int, int> >const&
       tx[dim+2+f]=(other_responses_[f])(ii,jj);
     data.push_back(tx);
   }
+  return true;
 }
 
 bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
