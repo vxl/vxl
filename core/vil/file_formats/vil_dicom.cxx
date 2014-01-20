@@ -809,6 +809,18 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQSAR),                   i.sar_ ); // It's the sar
   try_set< ap_type(CS) >::proc( f, group, ap_el(AQPATIENTPOSITION),       i.patient_pos_ ); // It's the patient position
 
+  typedef vil_dicom_header_type_of<vil_dicom_header_DS>::type DS_type;
+  vcl_vector<DS_type> ps_ips;
+  try_set< ap_type(DS) >::proc( f, group, ap_el(AQIMAGERPIXELSPACING), ps_ips );
+  if ( ps_ips.size() > 0 )
+    i.imager_spacing_x_ = ps_ips[0];
+  else
+    i.imager_spacing_x_ = 0;
+  if ( ps_ips.size() > 1 )
+    i.imager_spacing_y_ = ps_ips[1];
+  else
+    i.imager_spacing_y_ = i.imager_spacing_x_;
+
   group = VIL_DICOM_HEADER_RELATIONSHIPGROUP;
   try_set< ap_type(UI) >::proc( f, group, ap_el(RSSTUDYINSTANCEUID),   i.stud_ins_uid_ ); // It's the study instance id
   try_set< ap_type(UI) >::proc( f, group, ap_el(RSSERIESINSTANCEUID),  i.ser_ins_uid_ ); // It's the series instance id
@@ -842,7 +854,6 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMRESCALEINTERCEPT),   i.res_intercept_ ); // It's the rescale intercept
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMRESCALESLOPE),       i.res_slope_ ); // It's the rescale slope
 
-  typedef vil_dicom_header_type_of<vil_dicom_header_DS>::type DS_type;
   vcl_vector<DS_type> ps;
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMPIXELSPACING), ps );
   if ( ps.size() > 0 )
@@ -853,6 +864,12 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
     i.spacing_y_ = ps[1];
   else
     i.spacing_y_ = i.spacing_x_;
+  // check whether pixelspacing is available if not set to imagerpixelspacing
+  if ((ps.size() <= 0) && (ps_ips.size() > 0)){
+    i.spacing_x_ = i.imager_spacing_x_;
+    i.spacing_y_ = i.imager_spacing_y_;
+    vcl_cout<<"DICOM tag PixelSpacing missing: use PixelSpacing = ImagerPixelSpacing."<<vcl_endl;
+  }
 
   i.header_valid_ = true;
 

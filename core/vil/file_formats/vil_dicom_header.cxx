@@ -126,6 +126,8 @@ vil_dicom_header_info_clear( vil_dicom_header_info& info )
   info.pix_rep_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   info.stored_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   info.allocated_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.imager_spacing_x_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
+  info.imager_spacing_y_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
 }
 
 
@@ -593,6 +595,29 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
    CASE(VIL_DICOM_HEADER_AQFLIPANGLE,             flip_angle_,(float)vcl_atof); // It's the flip angle
    CASE(VIL_DICOM_HEADER_AQSAR,                   sar_,(float)vcl_atof); // It's the sar
    CASE(VIL_DICOM_HEADER_AQPATIENTPOSITION,       patient_pos_, (char *)); // It's the patient position
+   case VIL_DICOM_HEADER_AQIMAGERPIXELSPACING : // It's the sensor pixel spacing
+    data_p = new char[dblock_size+1];
+    if (data_p)
+    {
+      fs.read(data_p,dblock_size);
+      data_p[dblock_size]=0;
+      last_read_.imager_spacing_x_ = (float) vcl_atof(data_p);
+
+      // The y size should come after a '\'
+      // If only a 0 is found, ysize = xsize
+      char gone = 'x';
+      while (gone != 0 && gone != '\\')
+      {
+        gone = data_p[0];
+        for (int i=0; i<dblock_size; i++)
+          data_p[i] = data_p[i+1];
+      }
+      if (gone == '\\')
+        last_read_.imager_spacing_y_ = (float) vcl_atof(data_p);
+      else
+        last_read_.imager_spacing_y_ = (float) last_read_.imager_spacing_x_;
+    }
+    break;
    default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
     break;
@@ -686,7 +711,6 @@ void vil_dicom_header_format::readImageElements(short element,
         last_read_.spacing_y_ = (float) last_read_.spacing_x_;
     }
     break;
-
    default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
     break;
@@ -1242,7 +1266,9 @@ void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
      << " res_slope        The image rescale slope: " << s.res_slope_ << vcl_endl
      << " pix_rep          The pixel representation (+/-): " << s.pix_rep_ << vcl_endl
      << " stored_bits      The bits stored: " << s.stored_bits_ << vcl_endl
-     << " allocated_bits   The bits allocated: " << s.allocated_bits_ << vcl_endl;
+     << " allocated_bits   The bits allocated: " << s.allocated_bits_ << vcl_endl
+     << " imager_spacing_x The sensor pixel spacing in x: " << s.imager_spacing_x_ << vcl_endl
+     << " imager_spacing_y The sensor pixel spacing in y: " << s.imager_spacing_y_ << vcl_endl;
 }
 
 #endif // HAS_DCMTK

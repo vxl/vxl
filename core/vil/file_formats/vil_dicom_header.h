@@ -151,6 +151,7 @@ const vxl_uint_16 VIL_DICOM_HEADER_AQHEARTRATE              =0x1088; // IS
 const vxl_uint_16 VIL_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES  =0x1090; // IS
 const vxl_uint_16 VIL_DICOM_HEADER_AQTRIGGERWINDOW          =0x1094; // IS
 const vxl_uint_16 VIL_DICOM_HEADER_AQRECONTRUCTIONDIAMETER  =0x1100; // DS
+const vxl_uint_16 VIL_DICOM_HEADER_AQIMAGERPIXELSPACING     =0x1164; // DS
 const vxl_uint_16 VIL_DICOM_HEADER_AQRECEIVINGCOIL          =0x1250; // SH
 const vxl_uint_16 VIL_DICOM_HEADER_AQPHASEENCODINGDIRECTION =0x1312; // CS
 const vxl_uint_16 VIL_DICOM_HEADER_AQFLIPANGLE              =0x1314; // DS
@@ -396,6 +397,8 @@ struct vil_dicom_header_info
   vil_dicom_header_type_of<vil_dicom_header_IS>::type card_num_images_;      /*< The cardiac number of images */
   vil_dicom_header_type_of<vil_dicom_header_IS>::type trigger_window_;       /*< The trigger window for this image */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type reconst_diameter_;   /*< The reconstruction diameter */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type imager_spacing_x_;         /*< The sensor pixel spacing in x */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type imager_spacing_y_;         /*< The sensor pixel spacing in y */
   vil_dicom_header_type_of<vil_dicom_header_SH>::type receiving_coil_;/*< Details of the receiving coil */
   vil_dicom_header_type_of<vil_dicom_header_CS>::type phase_enc_dir_; /*< The phase encoding direction */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type flip_angle_;         /*< The flip angle */
