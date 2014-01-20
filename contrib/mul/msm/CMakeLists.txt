@@ -24,6 +24,7 @@ SET(msm_sources
   msm_translation_aligner.h   msm_translation_aligner.cxx
   msm_zoom_aligner.h          msm_zoom_aligner.cxx
   msm_similarity_aligner.h    msm_similarity_aligner.cxx
+  msm_rigid_aligner.h         msm_rigid_aligner.cxx
 
   msm_curve.h                 msm_curve.cxx
 

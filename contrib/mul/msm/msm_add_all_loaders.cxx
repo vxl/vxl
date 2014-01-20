@@ -3,6 +3,7 @@
 // \file
 #include <msm/msm_translation_aligner.h>
 #include <msm/msm_zoom_aligner.h>
+#include <msm/msm_rigid_aligner.h>
 #include <msm/msm_similarity_aligner.h>
 
 #include <msm/msm_no_limiter.h>
@@ -17,10 +18,12 @@ void msm_add_all_loaders()
   // msm_aligner classes:
   mbl_cloneables_factory<msm_aligner>::add(msm_translation_aligner());
   mbl_cloneables_factory<msm_aligner>::add(msm_zoom_aligner());
+  mbl_cloneables_factory<msm_aligner>::add(msm_rigid_aligner());
   mbl_cloneables_factory<msm_aligner>::add(msm_similarity_aligner());
 
   vsl_add_to_binary_loader(msm_translation_aligner());
   vsl_add_to_binary_loader(msm_zoom_aligner());
+  vsl_add_to_binary_loader(msm_rigid_aligner());
   vsl_add_to_binary_loader(msm_similarity_aligner());
 
   // msm_param_limiter classes:

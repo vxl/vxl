@@ -17,8 +17,9 @@
 *
 * Available msm_aligner classes include:
 * - msm_translation_aligner  : Translation (tx,ty)
-* - msm_zoom_aligner : Scale and translation 
-* - msm_similarity_aligner : Scale, rotation and translation
+* - msm_zoom_aligner         : Scale and translation (s,tx,ty)
+* - msm_rigid_aligner        : Rotation and translation (A,tx,ty)
+* - msm_similarity_aligner   : Scale, rotation and translation (a,b,tx,ty)
 *
 * The shape model itself is a linear model of the form
 * - shape = mean + P*b

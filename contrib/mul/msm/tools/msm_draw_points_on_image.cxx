@@ -12,6 +12,8 @@
 #include <vgl/vgl_point_2d.h>
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
+#include <vnl/vnl_math.h>
+#include <vil/vil_crop.h>
 
 // Note: Currently doesn't quite deal with images correctly - need a
 // half pixel offset so (0,0) is the centre of the pixel.
@@ -21,10 +23,28 @@ void print_usage()
   vcl_cout << "msm_draw_points_on_image  -p points.pts -c curves.crvs -i image.jpg -o image+pts.eps\n"
            << "Load in points and curves.\n"
            << "Writes out eps file displaying the curves.\n"
-           << "If image supplied, then includes that too."<<vcl_endl;
+           << "If image supplied, then includes that too."
+           << "By default, displays whole image.  However, if -bwp is defined (eg 0.05)"
+           << "then crops image to bounding box of points + given border width as a proportion."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }
 
+// Crops the image so that it covers region defined by bounding box of points, expanded by border_prop
+void crop_image_to_points(msm_points& points, vil_image_view<vxl_byte>& image, double border_prop)
+{
+  vgl_box_2d<double> bbox = points.bounds();
+  bbox.scale_about_centroid(1.0+border_prop*2);  // Add a border
+
+  int xlo = vcl_max(0,vnl_math::rnd(bbox.min_x()));
+  int xhi = vcl_min(int(image.ni()-1),vnl_math::rnd(bbox.max_x()));
+  int ylo = vcl_max(0,vnl_math::rnd(bbox.min_y()));
+  int yhi = vcl_min(int(image.nj()-1),vnl_math::rnd(bbox.max_y()));
+
+  vil_image_view<vxl_byte> cropped_image = vil_crop(image,xlo,1+xhi-xlo, ylo, 1+yhi-ylo);
+  image = cropped_image;
+
+  points.translate_by(-xlo,-ylo);
+}
 
 int main( int argc, char* argv[] )
 {
@@ -37,6 +57,7 @@ int main( int argc, char* argv[] )
   vul_arg<vcl_string> pt_edge_colour("-pbc","Point border colour","none");
   vul_arg<double> pt_radius("-pr","Point radius",2.0);
   vul_arg<double> scale("-s","Scaling to apply",1.0);
+  vul_arg<double> border_prop("-bwp","Border width (proportion)",-1);
 
   vul_arg_parse(argc,argv);
 
@@ -70,7 +91,10 @@ int main( int argc, char* argv[] )
       return 1;
     }
     vcl_cout<<"Image is "<<image<<vcl_endl;
+
+    if (border_prop()>-0.5) crop_image_to_points(points,image,border_prop());
   }
+
 
   if (scale() > 1.001 || scale() < 0.999)
   {

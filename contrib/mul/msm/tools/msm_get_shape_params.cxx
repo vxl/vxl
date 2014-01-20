@@ -16,6 +16,7 @@
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>
 
+#include <mbl/mbl_stats_1d.h>
 /*
 Parameter file format:
 <START FILE>
@@ -134,6 +135,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> param_path("-p","Parameter filename");
   vul_arg<vcl_string> out_path("-o","Output path (over-riding param file)");
   vul_arg<bool> no_pose("-no_pose","Don't display pose",false);
+  vul_arg<bool> rel_params("-rel_p","Record params[i]/sd[i]",false);
   vul_arg<bool> use_pts_name("-use_pts_name","Include name of points at beginning of the line",false);
   vul_arg_parse(argc,argv);
 
@@ -186,7 +188,11 @@ int main(int argc, char** argv)
     write_bestfitpts = false;
   else
     vcl_cout << "Write best fit points to " << params.out_points_dir << vcl_endl;
-
+  
+  vnl_vector<double> sd = shape_model.mode_var();
+  for (unsigned i=0;i<sd.size();++i) sd[i]=vcl_sqrt(sd[i]);
+  mbl_stats_1d mahal_stats;
+  
   for (unsigned i=0;i<shapes.size();++i)
   {
     sm_instance.fit_to_points(shapes[i]);
@@ -201,9 +207,18 @@ int main(int argc, char** argv)
     }
 
     // Write shape parameters
-    for (unsigned j=0;j<sm_instance.params().size();++j)
-      ofs<<sm_instance.params()[j]<<' ';
-
+    vnl_vector<double> b = sm_instance.params();
+    double M=0.0;  // Mahalanobis distance
+    for (unsigned j=0;j<b.size();++j)
+    {
+      if (rel_params())
+        ofs<<b[j]/sd[j]<<' ';
+      else
+        ofs<<b[j]<<' ';
+      M += b[j]*b[j]/(sd[j]*sd[j]);
+    }
+    mahal_stats.obs(M);
+    
     ofs<<vcl_endl;
 
     // Write best fit points
@@ -225,11 +240,15 @@ int main(int argc, char** argv)
     }
   }
   ofs.close();
+  
+  vcl_cout<<"Statistics of Mahalanobis distance: "<<mahal_stats<<vcl_endl;
 
   vcl_cout<<"Wrote parameters for "<<shapes.size()<<" shapes to "<<params.output_path<<vcl_endl;
   if (use_pts_name()) vcl_cout<<"Each line starts with filename."<<vcl_endl;
   if (!no_pose()) vcl_cout<<"First "<<sm_instance.pose().size()<<" values are pose."<<vcl_endl;
-  vcl_cout<<"Next "<<sm_instance.params().size()<<" values are shape."<<vcl_endl;
+  vcl_cout<<"Next "<<sm_instance.params().size()<<" values are shape params";
+  if (rel_params()) vcl_cout<<" in units of SD.";
+  vcl_cout<<vcl_endl;
 
   return 0;
 }
