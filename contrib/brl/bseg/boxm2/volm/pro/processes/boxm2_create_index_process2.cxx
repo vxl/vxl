@@ -325,7 +325,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
     while (leaves2[li]->hyps_->get_next(0, 1, h_pt))
     {
       //vcl_cout << "Processing hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
-      if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << ".";
+      if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << "." << vcl_flush;
       double lx, ly, lz;
       lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
       //lz = 2.0*(vcl_ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model

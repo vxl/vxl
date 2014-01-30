@@ -424,8 +424,10 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   unsigned int min_i = min_uu > 0 ? (unsigned int)min_uu : 0;
   unsigned int min_j = max_vv > 0 ? (unsigned int)max_vv : 0;  // scene box min projects to lower left corner of the scene in the image
 
-  int ni = max_uu-min_uu+1 < orig_dem_ni ? (int)(max_uu-min_uu+1) : orig_dem_ni;
-  int nj = min_vv-max_vv+1 < orig_dem_nj ? (int)(min_vv-max_vv+1) : orig_dem_nj;
+  //int ni = max_uu-min_uu+1 < orig_dem_ni ? (int)(max_uu-min_uu+1) : orig_dem_ni;
+  //int nj = min_vv-max_vv+1 < orig_dem_nj ? (int)(min_vv-max_vv+1) : orig_dem_nj;
+  int ni = bb->get_max_x() - bb->get_min_x() + 1;
+  int nj = bb->get_max_y() - bb->get_min_y() + 1;
 
   vcl_cout <<  "min_uu: " << min_uu << " min_vv: " << min_vv
            <<"\nmax_uu: " << max_uu << " max_vv: " << max_vv
