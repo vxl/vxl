@@ -7,9 +7,12 @@
 
 vil_rgb<vxl_byte> color(unsigned char id)
 {
-  return vil_rgb<vxl_byte>(bvrml_color::heatmap_classic[id][0],
-                                        bvrml_color::heatmap_classic[id][1],
-                                        bvrml_color::heatmap_classic[id][2]);
+  if (id == (unsigned char)34)  // tall building as blue
+    return vil_rgb<vxl_byte>(0,0,255);
+  else
+    return vil_rgb<vxl_byte>(bvrml_color::heatmap_classic[id][0],
+                             bvrml_color::heatmap_classic[id][1],
+                             bvrml_color::heatmap_classic[id][2]);
 }
 
 bool volm_land_layer::contains(vcl_string name)
@@ -36,6 +39,8 @@ bool volm_osm_category_io::load_category_table(vcl_string const& filename,
     vil_rgb<vxl_byte> id_color;
     if (name == "invalid")
       id_color = vil_rgb<vxl_byte>(0,0,0);
+    else if (name == "building")
+      id_color = vil_rgb<vxl_byte>(255,255,255);
     else
       id_color = color(id);
     land_category_table[vcl_pair<vcl_string, vcl_string>(tag, value)] = volm_land_layer((unsigned char)id, name, (unsigned char)level, width, id_color);

@@ -129,7 +129,10 @@ bool volm_io_tools::load_naip_imgs(vcl_string const& img_folder, vcl_vector<volm
   return true;
 }
 
-int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool load_image_resource) {
+int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool load_image_resource,
+                                  bool is_cam_global,
+                                  bool load_cam_from_tfw, vcl_string const& cam_tfw_file)
+{
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs; // just the default, no concept of local coordinate system here, so won't be used
   
   if (load_image_resource) {
@@ -144,8 +147,17 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   info.img_name = img_file;
 
   vpgl_geo_camera *cam;
-  vpgl_geo_camera::init_geo_camera(img_file, info.ni, info.nj, lvcs, cam);
-  info.cam = cam; 
+  if (!is_cam_global && !load_cam_from_tfw) {
+    vpgl_geo_camera::init_geo_camera(img_file, info.ni, info.nj, lvcs, cam);
+    info.cam = cam;
+  } else if (load_cam_from_tfw) {
+    vpgl_geo_camera::init_geo_camera(cam_tfw_file, lvcs, 0, 0, cam);
+    info.cam = cam;
+  } else if (is_cam_global) {
+    vpgl_geo_camera::init_geo_camera_from_filename(img_file, info.ni, info.nj, lvcs, cam);
+    info.cam = cam;
+  }
+  
   
   // obtain the bounding box of current image
   vcl_string name = vul_file::strip_directory(img_file);
@@ -166,10 +178,12 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
 
   double lat, lon;
   cam->img_to_global(0.0, info.nj-1, lon, lat);
-  if (direction == "W")
-    lon = -lon;
-  if (hemisphere == "S")
-    lat = -lat;
+  if (!is_cam_global) {
+    if (direction == "W")
+      lon = -lon;
+    if (hemisphere == "S")
+      lat = -lat;
+  }
   vgl_point_2d<double> lower_left(lon, lat);
 
   vpgl_utm utm; int utm_zone; double x,y;
@@ -177,10 +191,12 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   vcl_cout << " zone of lidar img: " << img_file << ": " << utm_zone << " from lower left corner!\n";
 
   cam->img_to_global(info.ni-1, 0.0, lon, lat);
-  if (direction == "W")
-    lon = -lon;
-  if (hemisphere == "S")
-    lat = -lat;
+  if (!is_cam_global) {
+    if (direction == "W")
+      lon = -lon;
+    if (hemisphere == "S")
+      lat = -lat;
+  }
   vgl_point_2d<double> upper_right(lon, lat);
   vgl_box_2d<double> bbox(lower_left, upper_right);
   //vcl_cout << "bbox: " << bbox << vcl_endl;
@@ -209,13 +225,14 @@ void volm_io_tools::load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img
     infos.push_back(info);
   }
 }
-void volm_io_tools::load_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool load_image_resource)
+void volm_io_tools::load_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool load_image_resource, bool is_cam_global, bool load_cam_from_tfw)
 {
   vcl_string in_dir = folder + "*.tif*";  // sometimes .tif is written .tiff 
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string filename = fn();
+    vcl_string cam_tfw_file = vul_file::strip_extension(filename) + ".tfw";
     volm_img_info info;
-    load_lidar_img(filename, info, load_image_resource);
+    load_lidar_img(filename, info, load_image_resource, is_cam_global, load_cam_from_tfw, cam_tfw_file);
     infos.push_back(info);
   }
 }
@@ -423,6 +440,7 @@ bool volm_io_tools::load_satellite_height_map(vcl_string const& filename, volm_i
   vcl_cout << " zone of satellite height image " << info.name << ": " << utm_zone << " from lower left corner!\n";
   cam->img_to_global(info.ni-1,0.0, lon, lat);
   vgl_point_2d<double> upper_right(lon, lat);
+#if 0
   int utm_zone_ur;
   utm.transform(lat, lon, x, y, utm_zone_ur);
   if (utm_zone_ur != utm_zone)
@@ -433,7 +451,7 @@ bool volm_io_tools::load_satellite_height_map(vcl_string const& filename, volm_i
   if (upper_right.x() * lower_left.x() < 0)
     vcl_cout << " warning: satellite height image " << info.name << " crosses the Equator (set it to be northing)" << vcl_endl;
   cam->set_utm(utm_zone, northing);
-  
+#endif
   info.cam = cam;
   vgl_box_2d<double> bbox(lower_left, upper_right);
   vcl_cout << "bbox: " << bbox << vcl_endl;
@@ -442,9 +460,13 @@ bool volm_io_tools::load_satellite_height_map(vcl_string const& filename, volm_i
   return true;
 }
 
-bool volm_io_tools::load_satellite_height_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool const& load_cam_from_file)
+bool volm_io_tools::load_satellite_height_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool const& load_cam_from_file, vcl_string const& keywords)
 {
-  vcl_string file_glob = folder + "//scene_*.tif";
+  vcl_string file_glob;
+  if (keywords.compare("") == 0)
+    file_glob = folder + "//scene_*.tif";
+  else
+    file_glob = folder + "//scene_*" + keywords + ".tif";
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
     volm_img_info info;
     if (!volm_io_tools::load_satellite_height_map(fn(), info, load_cam_from_file))

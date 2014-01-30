@@ -62,6 +62,9 @@ int main(int argc, char** argv)
 
   // create a geo index and use the leaves as scenes, use template param as volm_loc_hyp_sptr but it won't actually be used
   volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(bbox, min_size, poly);
+  // write the geo index tree structure
+  vcl_string txt_filename = out_folder() + "geo_index.txt";
+  volm_geo_index2::write(root, txt_filename, min_size);
   vcl_vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root, leaves);
   unsigned tree_depth = volm_geo_index2::depth(root);

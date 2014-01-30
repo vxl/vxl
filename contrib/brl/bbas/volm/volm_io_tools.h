@@ -53,12 +53,21 @@ public:
 
   static bool load_naip_imgs(vcl_string const& img_folder, vcl_vector<volm_img_info>& imgs, bool load_resource = false);
 
-  static int load_lidar_img(vcl_string img_file, volm_img_info& info, bool load_resource = false);
+  // load vxl_byte image, the associate is either loaded from img filename or from a camera tfw file
+  static int load_lidar_img(vcl_string img_file, volm_img_info& info,
+                            bool load_resource = false,
+                            bool is_cam_global = false,
+                            bool load_cam_from_tfw = false,
+                            vcl_string const& cam_tfw_file = "");
 
   static void load_lidar_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
 
   static void load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
-  static void load_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool load_resource = false);
+
+  // load vxl_byte images using load_lidar_img, if camera are loaded from tfw file, it assumes the camera file has same filename as image file
+  static void load_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool load_resource = false,
+                        bool is_cam_global = false,
+                        bool load_cam_from_tfw = false);
 
   static bool get_location_nlcd(vcl_vector<volm_img_info>& infos, double lat, double lon, double elev, unsigned char& label);
 
@@ -78,7 +87,7 @@ public:
   static void load_aster_dem_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
 
   //: uses glob: folder//scene_*/*.tif and folder//scene_*/*.tfw
-  static bool load_satellite_height_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool const& load_cam_from_file = true);
+  static bool load_satellite_height_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool const& load_cam_from_file = true, vcl_string const& keywords = "");
 
   //: uses glob: folder//Geocover*.tif
   static void load_geocover_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);

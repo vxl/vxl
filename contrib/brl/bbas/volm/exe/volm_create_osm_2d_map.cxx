@@ -26,6 +26,7 @@
 #include <vpgl/vpgl_utm.h>
 #include <volm/volm_osm_parser.h>
 #include <vcl_where_root_dir.h>
+#include <bkml/bkml_write.h>
 
 void error(vcl_string log_file, vcl_string msg)
 {
@@ -393,8 +394,7 @@ int main(int argc, char** argv)
 }
 #endif
 
-// generate osm 2d_map based on tile for phase1B
-#if 1
+// generate classification map used to refine satellite height map
 int main(int argc, char** argv)
 {
   vul_arg<vcl_string> geo_folder("-geo", "folder where geo_cover tif images stores", "");
@@ -404,11 +404,21 @@ int main(int argc, char** argv)
   vul_arg<float> min_size ("-min", "minimum size of image size (in wgs84 degree)",0.0625);
   vul_arg<unsigned> world_id("-world", "world id for ROI (from 1 to 5",100);
   vul_arg<unsigned> tile_id("-tile", "tile id for ROI", 100);
-  vul_arg<vcl_string> class_img("-class", "classification image from satellite modelling","");
+  vul_arg<int> leaf_idx("-leaf", "leaf id of geo index for current tile (negative value will loop over all leaves", -1);
+  vul_arg<vcl_string> class_img_tree_txt("-class-str", "geo index structure file for classification map", "");
+  vul_arg<vcl_string> class_img_folder("-class-img", "classification image from satellite modeling","");
+  vul_arg<vcl_string> class_cam_folder("-class-cam", "vpgl tfw camera associated with classification image from satellite modeling","");
+  vul_arg<bool> is_satellite_building("-is-sat-building", "option to ingest satellite classification buildings into 2d land map", false);
+  vul_arg<bool> is_osm_region("-is-osm-region", "option to ingest all osm regions", false);
+  vul_arg<bool> is_osm_building("-is-osm-building", "option to ingest osm buildings into classification map",false);
+  vul_arg<bool> is_osm_road("-is-osm-road", "option to ingest all osm road and junctions into classification map", false);
+  vul_arg<bool> is_osm_pt("-is-osm-pt", "option to ingest all osm points into classification map", false);
   vul_arg_parse(argc, argv);
 
   // check the input
-  if (geo_folder().compare("") == 0 || osm_folder().compare("") == 0 || out_folder().compare("") == 0 || world_id() == 0 || urban_folder().compare("") == 0)
+  if (geo_folder().compare("") == 0 || osm_folder().compare("") == 0 || out_folder().compare("") == 0 ||
+      world_id() == 0 || urban_folder().compare("") == 0 ||
+      class_img_tree_txt().compare("") == 0 || class_img_folder().compare("") == 0 || class_cam_folder().compare("") == 0 )
   {
     vul_arg_display_usage_and_exit();
     return false;
@@ -439,6 +449,12 @@ int main(int argc, char** argv)
     unsigned tree_depth = volm_geo_index2::depth(roots[i]);
     vcl_stringstream kml;  kml << out_folder() << "/p1b_wr" << world_id() << "_tile_" << i << "_depth_" << tree_depth << ".kml";
     volm_geo_index2::write_to_kml(roots[i], tree_depth, kml.str());
+  }
+
+  // write the tree structure for sat 2d map
+  for (unsigned i = 0; i < tile_size; i++) {
+    vcl_stringstream out_txt;  out_txt << out_folder() << "/p1b_wr" << world_id() << "_tile_" << i << ".txt";
+    volm_geo_index2::write(roots[i], out_txt.str(), min_size());
   }
 
   // load geo_cover images and sort them based on tile order
@@ -492,16 +508,16 @@ int main(int argc, char** argv)
     osm_objs.push_back(volm_osm_objects(osm_file.str()));
   }
 
-#if 0
-  // load the satellite image
-  if (!vul_file::exists(class_img())) {
-    log << "ERROR: can not find classification image " << class_img() << '\n';  error(log_file.str(), log.str());
+  // maps for satellite classification map
+  vcl_map<vcl_string, vil_image_view<vxl_byte> > class_img_map;
+  vcl_map<vcl_string, vpgl_geo_camera*> class_cam_map;
+  // load geo_index for satellite classification image (note 
+  if (!vul_file::exists(class_img_tree_txt())) {
+    log << "ERROR: can not find geo_index txt file for satellite class map: " << class_img_tree_txt() << '\n';  error(log_file.str(), log.str());
     return false;
   }
-  volm_img_info sat_info;
-  volm_io_tools::load_geotiff_image(class_img(), sat_info, true);
-  vil_image_view<vxl_uint_16>* sat_img = dynamic_cast<vil_image_view<vxl_uint_16> * >(sat_info.img_r.ptr());
-#endif
+  double class_min_size;
+  volm_geo_index2_node_sptr class_root = volm_geo_index2::read_and_construct<volm_osm_object_ids_sptr>(class_img_tree_txt(), class_min_size);
 
   vcl_cout << " --------------- START -----------------" << vcl_endl;
   vcl_cout << " there are " << tiles.size() << " tiles, "
@@ -530,15 +546,20 @@ int main(int argc, char** argv)
     vcl_cout << " urban img_name: " << urban_info.img_name << " urban name: " << urban_info.name << vcl_endl;
     vcl_cout << " urban bounding box: " << urban_info.bbox << vcl_endl;
     vcl_cout << " urban image size: " << urban_info.ni << "x" << urban_info.nj << vcl_endl;
+    vcl_cout << " chosen leaf: " << leaf_idx() << vcl_endl;
 
     // create a 2d image for each leaf at desired size
     for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+      if (leaf_idx() > 0 && leaf_idx() < leaves.size())
+        if (l_idx != leaf_idx())
+          continue;
       // calculate desired resolution
       volm_geo_index2_node_sptr leaf = leaves[l_idx];
       double lon_min, lat_min, lon_max, lat_max;
       lon_min = leaf->extent_.min_x();  lat_min = leaf->extent_.min_y();
       lon_max = leaf->extent_.max_x();  lat_max = leaf->extent_.max_y();
-      double scale = lon_max-lon_min;
+      double scale_x = lon_max-lon_min;
+      double scale_y = lat_max-lat_min;
       vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lat_min, lon_min, 0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
       double box_lx, box_ly, box_lz;
       lvcs->global_to_local(lon_max, lat_max, 0, vpgl_lvcs::wgs84, box_lx, box_ly, box_lz);
@@ -548,18 +569,32 @@ int main(int argc, char** argv)
       vgl_box_2d<double> leaf_bbox_geo = leaf->extent_;
       vgl_box_2d<double> leaf_bbox(0.0, box_lx, 0.0, box_ly);
       
-      
+      // create an associate camera tfw for current image
+      vnl_matrix<double> trans_matrix(4,4,0.0);
+      trans_matrix[0][0] = scale_x/ni;
+      trans_matrix[1][1] = -scale_y/nj;
+      trans_matrix[0][3] = lon_min;
+      trans_matrix[1][3] = lat_max;
+      vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs);
+      cam->set_scale_format(true);
+      vcl_stringstream cam_name;
+      cam_name << out_folder() << "/Sat2dMap_" << tiles[t_idx].hemisphere() << vcl_setprecision(12) << lat_min
+                               << tiles[t_idx].direction() << vcl_setprecision(12) << lon_min
+                               << "_S" << scale_x << 'x' << scale_y << ".tfw";
+      cam->save_as_tfw(cam_name.str());
+
       // create 2d image for current leaf
       vil_image_view<vxl_byte> out_img(ni, nj, 1);
       vil_image_view<vxl_byte> level_img(ni, nj, 1);
       
       vcl_stringstream img_name;
-      img_name << out_folder() << "/osm_" << tiles[t_idx].hemisphere() << vcl_setprecision(6) << lat_min
-                               << tiles[t_idx].direction() << vcl_setprecision(6) << lon_min
-                               << "_S" << scale << 'x' << scale << ".tif";
+      img_name << out_folder() << "/Sat2dMap_" << tiles[t_idx].hemisphere() << vcl_setprecision(12) << lat_min
+                               << tiles[t_idx].direction() << vcl_setprecision(12) << lon_min
+                               << "_S" << scale_x << 'x' << scale_y << ".tif";
+
       out_img.fill(0);
       level_img.fill(0);
-      
+
       vcl_cout << " tile " << t_idx << " leaf " << l_idx << " has geo boundary " << leaf_bbox_geo 
                << " corresponding to image size " << out_img.ni() << 'x' << out_img.nj() << vcl_endl;
 
@@ -572,8 +607,6 @@ int main(int argc, char** argv)
           float local_y = (float)(box_ly-j+0.5);
           lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
           double u, v;
-          //if (lon < 0)  lon = -lon;
-          //if (lat < 0)  lat = -lat;
           geo_cover.cam->global_to_img(lon, lat, gz, u, v);
           unsigned uu = (unsigned)vcl_floor(u+0.5);
           unsigned vv = (unsigned)vcl_floor(v+0.5);
@@ -584,7 +617,6 @@ int main(int argc, char** argv)
 
       // ingest urban image to add extra urban region
       // Note that in urban image, three pixel values exist, 0, 1 and 255.  255 refers to urban region
-
       for (int i = 0; i < ni; i++) {
         for (int j = 0; j < nj; j++) {
           // transfer coords to get pixel in urban image
@@ -604,211 +636,278 @@ int main(int argc, char** argv)
         }
       }
 
-#if 0
-      // ingest satellite image 
-      if (!vgl_intersection(leaf_bbox_geo, sat_info.bbox).is_empty()) {
-        vcl_cout << " tile " << t_idx << " leaf " << l_idx << " has bbox " << leaf_bbox_geo 
-                 << " and intersects with satellite image " << sat_info.bbox << vcl_endl;
-        for (int i = 0; i < ni; i++) {
-          for (int j = 0; j < nj; j++) {
-            double lon, lat, gz;
-            float local_x = (float)(i+0+0.5);
-            float local_y = (float)(box_ly-j+0.5);
-            lvcs->local_to_global(local_x, local_y, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
-            double u, v;
-            if (lon < 0) lon = -lon;
-            if (lat < 0) lat = -lat;
-            sat_info.cam->global_to_img(lon, lat, gz, u, v);
-            unsigned uu = (unsigned)vcl_floor(u+0.5);
-            unsigned vv = (unsigned)vcl_floor(v+0.5);
-            if (uu > 0 && vv > 0 && uu < sat_info.ni && vv < sat_info.nj) {
-              unsigned char curr_level = volm_osm_category_io::volm_land_table[(*sat_img)(uu, vv)].level_;
-              unsigned char curr_id = (*sat_img)(uu,vv);
-              if (curr_level >= level_img(i,j)) {
-                out_img(i,j) = curr_id;  level_img(i,j) = curr_level;
-              }
-            }
-          }
+      // ingest satellite classification buildings if necessary
+      if (is_satellite_building())
+      {
+        // find the overlapped leaves
+        vcl_vector<volm_geo_index2_node_sptr> class_leaves;
+        volm_geo_index2::get_leaves(class_root, class_leaves, leaf_bbox_geo);
+        if (class_leaves.empty()) {
+          vcl_cout << "no satellite class map intersect with current 2d map" << vcl_endl;
         }
-      }
-#endif
-
-      // ingest osm regions
-      unsigned cnt = 0;
-      unsigned num_regions = osm.num_regions();
-      for (unsigned r_idx = 0; r_idx < num_regions; r_idx++) {
-        vgl_polygon<double> poly(osm.loc_polys()[r_idx]->poly()[0]);
-        // get rid off polygon with duplicated points
-        bool ignore = false;
-        for (unsigned i = 0; i < poly[0].size()-1; i++) {
-          if (poly[0][i] == poly[0][i+1])
-            ignore = true;
-        }
-        if (ignore)
-          continue;
-        // check whether the region intersect with current leaf
-        if (!vgl_intersection(leaf->extent_, poly))
-          continue;
-        unsigned char curr_level = osm.loc_polys()[r_idx]->prop().level_;
-        // geo cover is already level 0 and therefore anything in osm with level 0 is ignored
-        if (curr_level == 0)
-          continue;
-        // go from geo coords wgs84 to local
-        vgl_polygon<double> img_poly(1);
-        unsigned char curr_id = osm.loc_polys()[r_idx]->prop().id_;
-        for (unsigned pt_idx = 0; pt_idx < poly[0].size(); pt_idx++) {
-          double lx, ly, lz;
-          lvcs->global_to_local(poly[0][pt_idx].x(), poly[0][pt_idx].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
-          double i = lx;  double j = box_ly - ly;
-          img_poly[0].push_back(vgl_point_2d<double>(i,j));
-        }
-        // using polygon iterator to loop over all points inside the polygon and intersect with leaf
-        cnt++;
-        vgl_polygon_scan_iterator<double> it(img_poly, true);
-        for (it.reset(); it.next();  )
+        else
         {
-          int y = it.scany();
-          for (int x = it.startx(); x <= it.endx(); ++x) {
-            if (x >=0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
-              if (curr_level >= level_img(x,y)) {
-                out_img(x,y) = curr_id;  level_img(x,y) = curr_level;
+          // load the satellite class map, camera and store them accordingly
+          vcl_vector<vcl_string> leaf_strings;
+          vcl_vector<vgl_box_2d<double> > leaf_boxes;
+          for (vcl_vector<volm_geo_index2_node_sptr>::iterator c_vit = class_leaves.begin();
+               c_vit != class_leaves.end(); ++c_vit)
+          {
+            vcl_string leaf_string = (*c_vit)->get_string();
+            vcl_string c_img_name = class_img_folder() + "/scene_" + leaf_string + "_ortho_class.tif";
+            if (!vul_file::exists(c_img_name)) {
+              continue;
+            }
+            leaf_strings.push_back(leaf_string);
+            leaf_boxes.push_back((*c_vit)->extent_);
+            // current class image/cam has been loaded before, ignore
+            if (class_img_map.find(leaf_string) != class_img_map.end())
+              continue;
+            // load the image
+            vil_image_view<vxl_byte> c_img = vil_load(c_img_name.c_str());
+            class_img_map.insert(vcl_pair<vcl_string, vil_image_view<vxl_byte> >(leaf_string, c_img));
+            // load the camera
+            vcl_string c_cam_tfw = class_cam_folder() + "/scene_" + leaf_string + "_ortho_cam_geo.tfw";
+            if (!vul_file::exists(c_cam_tfw)) {
+              log << "ERROR: can not find satellite ortho camera: " << c_img_name << '\n';  error(log_file.str(), log.str());
+              return volm_io::EXE_ARGUMENT_ERROR;
+            }
+            vpgl_lvcs_sptr dummy_lvcs = new vpgl_lvcs;
+            vpgl_geo_camera* c_cam;
+            // pass a dummy lvcs and 0 utm_zone to create camera
+            vpgl_geo_camera::init_geo_camera(c_cam_tfw, dummy_lvcs, 0, 0, c_cam);
+            class_cam_map.insert(vcl_pair<vcl_string, vpgl_geo_camera*>(leaf_string, c_cam));
+          }
+          vcl_cout << "there are " << leaf_strings.size() << " class maps intersect with current 2d map" << vcl_endl;
+          vcl_cout << "\t they are: \n";
+          for (unsigned c_idx = 0; c_idx < leaf_strings.size(); c_idx++) {
+            vcl_cout << " \t\t " << leaf_strings[c_idx] << " ---> " << leaf_boxes[c_idx] << vcl_endl;
+          }
+          if (leaf_strings.size() != 0) {
+            for (int i = 0; i < ni; i++) {
+              //vcl_cout << "i = " << i << "," << vcl_flush;
+              for (int j = 0; j < nj; j++) {
+            
+                double lon, lat, gz;
+                float local_x = (float)(i+0+0.5);
+                float local_y = (float)(box_ly-j+0.5);
+                lvcs->local_to_global(local_x, local_y, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
+                bool is_pixel_found = false;
+                for (unsigned c_idx = 0; (c_idx < leaf_strings.size() && !is_pixel_found); c_idx++)
+                {
+                  //if (!leaf_boxes[c_idx].contains(lon, lat))
+                  //  continue;
+                  double u, v;
+                  class_cam_map[leaf_strings[c_idx]]->global_to_img(lon, lat, gz, u, v);
+                  unsigned uu = (unsigned)vcl_floor(u+0.5);
+                  unsigned vv = (unsigned)vcl_floor(v+0.5);
+                  if (uu > 0 && vv > 0 && uu < class_img_map[leaf_strings[c_idx]].ni() && vv < class_img_map[leaf_strings[c_idx]].nj()) {
+                    is_pixel_found = true;  // to avoid handling overlap region twice
+                    // only ingest buildings satellite classification map
+                    if (class_img_map[leaf_strings[c_idx]](uu,vv) == volm_osm_category_io::volm_land_table_name["building"].id_)
+                    {
+                      unsigned char curr_id = class_img_map[leaf_strings[c_idx]](uu,vv);
+                      unsigned char curr_level = volm_osm_category_io::volm_land_table[curr_id].level_;
+                      if (curr_level >= level_img(i,j)) {
+                        out_img(i,j) = curr_id; level_img(i,j) = curr_level;
+                        break;
+                      }
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
 
-      // ingest osm roads (also record the road that intersects with current leaf for junction generation)
-      cnt = 0;
-      unsigned num_roads = osm.num_roads();
-      vcl_vector<vcl_vector<vgl_point_2d<double> > > roads_in_leaf;
-      vcl_vector<volm_land_layer> roads_in_leaf_props;
-      for (unsigned r_idx = 0; r_idx < num_roads; r_idx++) {
-        vcl_vector<vgl_point_2d<double> > road = osm.loc_lines()[r_idx]->line();
-        vcl_vector<vgl_point_2d<double> > line_geo;
-        // check and obtain the road segment that lies inside the leaf
-        if (!volm_io_tools::line_inside_the_box(leaf_bbox_geo, road, line_geo))
-          continue;
-        // go from geo coords to leaf local
-        vcl_vector<vgl_point_2d<double> > line_img;
-        unsigned char curr_level = osm.loc_lines()[r_idx]->prop().level_;
-        unsigned char curr_id = osm.loc_lines()[r_idx]->prop().id_;
-        double width = osm.loc_lines()[r_idx]->prop().width_;
-        for (unsigned pt_idx = 0; pt_idx < line_geo.size(); pt_idx++) {
+      unsigned cnt = 0;
+
+      // ingest osm regions if necessary
+      if (is_osm_region())
+      {
+        unsigned num_regions = osm.num_regions();
+        for (unsigned r_idx = 0; r_idx < num_regions; r_idx++) {
+          vgl_polygon<double> poly(osm.loc_polys()[r_idx]->poly()[0]);
+          // get rid off polygon with duplicated points
+          bool ignore = false;
+          for (unsigned i = 0; i < poly[0].size()-1; i++) {
+            if (poly[0][i] == poly[0][i+1])
+              ignore = true;
+          }
+          if (ignore)
+            continue;
+          // check whether the region intersect with current leaf
+          if (!vgl_intersection(leaf->extent_, poly))
+            continue;
+          unsigned char curr_level = osm.loc_polys()[r_idx]->prop().level_;
+          // geo cover is already level 0 and therefore anything in osm with level 0 is ignored
+          if (curr_level == 0)
+            continue;
+          // go from geo coords wgs84 to local
+          vgl_polygon<double> img_poly(1);
+          unsigned char curr_id = osm.loc_polys()[r_idx]->prop().id_;
+          if (curr_id != volm_osm_category_io::volm_land_table_name["building"].id_ && is_osm_building())  // only ingest buildings if necessary
+            continue;
+          for (unsigned pt_idx = 0; pt_idx < poly[0].size(); pt_idx++) {
+            double lx, ly, lz;
+            lvcs->global_to_local(poly[0][pt_idx].x(), poly[0][pt_idx].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
+            double i = lx;  double j = box_ly - ly;
+            img_poly[0].push_back(vgl_point_2d<double>(i,j));
+          }
+          // using polygon iterator to loop over all points inside the polygon and intersect with leaf
+          cnt++;
+          vgl_polygon_scan_iterator<double> it(img_poly, true);
+          for (it.reset(); it.next();  )
+          {
+            int y = it.scany();
+            for (int x = it.startx(); x <= it.endx(); ++x) {
+              if (x >=0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
+                if (curr_level >= level_img(x,y)) {
+                  out_img(x,y) = curr_id;  level_img(x,y) = curr_level;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // ingest osm roads and junctions if necessary
+      if (is_osm_road())
+      {
+        cnt = 0;
+        unsigned num_roads = osm.num_roads();
+        vcl_vector<vcl_vector<vgl_point_2d<double> > > roads_in_leaf;
+        vcl_vector<volm_land_layer> roads_in_leaf_props;
+        for (unsigned r_idx = 0; r_idx < num_roads; r_idx++) {
+          vcl_vector<vgl_point_2d<double> > road = osm.loc_lines()[r_idx]->line();
+          vcl_vector<vgl_point_2d<double> > line_geo;
+          // check and obtain the road segment that lies inside the leaf
+          if (!volm_io_tools::line_inside_the_box(leaf_bbox_geo, road, line_geo))
+            continue;
+
+          // go from geo coords to leaf local
+          vcl_vector<vgl_point_2d<double> > line_img;
+          unsigned char curr_level = osm.loc_lines()[r_idx]->prop().level_;
+          unsigned char curr_id = osm.loc_lines()[r_idx]->prop().id_;
+          double width = osm.loc_lines()[r_idx]->prop().width_;
+          for (unsigned pt_idx = 0; pt_idx < line_geo.size(); pt_idx++) {
+            double lx, ly, lz;
+            lvcs->global_to_local(line_geo[pt_idx].x(), line_geo[pt_idx].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
+            double i = lx - leaf_bbox.min_x();
+            double j = leaf_bbox.max_y() - ly;
+            if (i>=0 && j>=0 && i<out_img.ni() && j<out_img.nj())
+              line_img.push_back(vgl_point_2d<double>(i,j));
+          }
+          if (line_img.size() < 2)
+            continue;
+
+          // record current line for later junction calculation
+          roads_in_leaf.push_back(line_img);
+          roads_in_leaf_props.push_back(osm.loc_lines()[r_idx]->prop());
+          // expend the line to polygon given certain width
+          if (width < 1.0) width = 1.1;
+          vgl_polygon<double> img_poly;
+          if (!volm_io_tools::expend_line(line_img, width, img_poly)) {
+            log << " expending osm line in tile " << t_idx << ", leaf " << leaf->extent_ << " failed given width " << width << vcl_endl;
+            error(log_file.str(), log.str());
+            return false;
+          }
+          // update the label
+          cnt++;
+          vgl_polygon_scan_iterator<double> it(img_poly, true);
+          for (it.reset(); it.next();  ) {
+            int y = it.scany();
+            for (int x = it.startx(); x <= it.endx(); ++x) {
+              if ( x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
+                if (curr_level > level_img(x, y)) {
+                  level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
+                }
+              }
+            }
+          }
+        }
+        // find and ingest osm junctions
+        unsigned n_road_in = roads_in_leaf.size();
+        for (unsigned i_rdx = 0; i_rdx < n_road_in; i_rdx++) {
+          vcl_vector<vgl_point_2d<double> > curr_rd = roads_in_leaf[i_rdx];
+          volm_land_layer curr_rd_prop = roads_in_leaf_props[i_rdx];
+          vcl_vector<vcl_vector<vgl_point_2d<double> > > net;
+          vcl_vector<volm_land_layer> net_props;
+          for (unsigned i = 0; i < n_road_in; i++)
+            if (i != i_rdx)
+            {
+              net.push_back(roads_in_leaf[i]);
+              net_props.push_back(roads_in_leaf_props[i]);
+            }
+          // find all possible junction for current road
+          vcl_vector<vgl_point_2d<double> > cross_pts;
+          vcl_vector<volm_land_layer> cross_props;
+          if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props)) {
+            log << "ERROR: find road junction for tile " << t_idx << " leaf " << leaf_bbox_geo << " road " << i_rdx << " failed\n";
+            error(log_file.str(), log.str());
+            return false;
+          }
+          // ingest junction for current roads
+          for (unsigned c_idx = 0; c_idx < cross_pts.size(); c_idx++) {
+            unsigned char curr_level = cross_props[c_idx].level_;
+            unsigned char curr_id = cross_props[c_idx].id_;
+            double radius = cross_props[c_idx].width_;
+            int cx = (int)vcl_floor(cross_pts[c_idx].x() + 0.5);
+            int cy = (int)vcl_floor(cross_pts[c_idx].y() + 0.5);
+            for (int ii = cx-radius; ii < cx+radius; ii++)
+              for (int jj = cy-radius; jj <cy+radius; jj++)
+                if (ii >=0 && jj>=0 && ii <out_img.ni() && jj < out_img.nj())
+                  if (curr_level >= level_img(ii,jj)) {
+                    out_img(ii,jj)   = curr_id;
+                    level_img(ii,jj) = curr_level;
+                  }
+          }
+        }
+      }
+
+      // ingest osm points if necessary
+      if (is_osm_pt())
+      {
+        cnt = 0;
+        unsigned n_pts = osm.num_locs();
+        vcl_vector<volm_osm_object_point_sptr> loc_pts = osm.loc_pts();
+        for (unsigned  p_idx = 0; p_idx < n_pts; p_idx++) {
+          vgl_point_2d<double> pt = loc_pts[p_idx]->loc();
+          if (!leaf_bbox_geo.contains(pt))
+            continue;
+          // transfer from geo coord to image pixel
+          unsigned char curr_level = loc_pts[p_idx]->prop().level_;
+          unsigned char curr_id = loc_pts[p_idx]->prop().id_;
           double lx, ly, lz;
-          lvcs->global_to_local(line_geo[pt_idx].x(), line_geo[pt_idx].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
+          lvcs->global_to_local(pt.x(), pt.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
           double i = lx - leaf_bbox.min_x();
           double j = leaf_bbox.max_y() - ly;
-          if (i>=0 && j>=0 && i<out_img.ni() && j<out_img.nj())
-            line_img.push_back(vgl_point_2d<double>(i,j));
-        }
-        if (line_img.size() < 2)
-          continue;
-        // record current line for later junction calculation
-        roads_in_leaf.push_back(line_img);
-        roads_in_leaf_props.push_back(osm.loc_lines()[r_idx]->prop());
-        // expend the line to polygon given certain width
-        if (width < 1.0) width = 1.1;
-        vgl_polygon<double> img_poly;
-        if (!volm_io_tools::expend_line(line_img, width, img_poly)) {
-          log << " expending osm line in tile " << t_idx << ", leaf " << leaf->extent_ << " failed given width " << width << vcl_endl;
-          error(log_file.str(), log.str());
-          return false;
-        }
-        // update the label
-        cnt++;
-        vgl_polygon_scan_iterator<double> it(img_poly, true);
-        for (it.reset(); it.next();  ) {
-          int y = it.scany();
-          for (int x = it.startx(); x <= it.endx(); ++x) {
-            if ( x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
-              if (curr_level > level_img(x, y)) {
-                level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
-              }
+          int x = (int)i;  int y = (int)j;
+          if (x>0 && y>0 && x<out_img.ni() && y<out_img.nj())
+            if (curr_level > level_img(x,y)) {
+              level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
             }
-          }
-        }
-      }
-
-      // ingest osm points
-      cnt = 0;
-      unsigned n_pts = osm.num_locs();
-      vcl_vector<volm_osm_object_point_sptr> loc_pts = osm.loc_pts();
-      for (unsigned  p_idx = 0; p_idx < n_pts; p_idx++) {
-        vgl_point_2d<double> pt = loc_pts[p_idx]->loc();
-        if (!leaf_bbox_geo.contains(pt))
-          continue;
-        // transfer from geo coord to image pixel
-        unsigned char curr_level = loc_pts[p_idx]->prop().level_;
-        unsigned char curr_id = loc_pts[p_idx]->prop().id_;
-        double lx, ly, lz;
-        lvcs->global_to_local(pt.x(), pt.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
-        double i = lx - leaf_bbox.min_x();
-        double j = leaf_bbox.max_y() - ly;
-        int x = (int)i;  int y = (int)j;
-        if (x>0 && y>0 && x<out_img.ni() && y<out_img.nj())
-          if (curr_level > level_img(x,y)) {
-            level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
-          }
-      }
-
-      // find and ingest osm junctions
-      unsigned n_road_in = roads_in_leaf.size();
-      for (unsigned i_rdx = 0; i_rdx < n_road_in; i_rdx++) {
-        vcl_vector<vgl_point_2d<double> > curr_rd = roads_in_leaf[i_rdx];
-        volm_land_layer curr_rd_prop = roads_in_leaf_props[i_rdx];
-        vcl_vector<vcl_vector<vgl_point_2d<double> > > net;
-        vcl_vector<volm_land_layer> net_props;
-        for (unsigned i = 0; i < n_road_in; i++)
-          if (i != i_rdx)
-          {
-            net.push_back(roads_in_leaf[i]);
-            net_props.push_back(roads_in_leaf_props[i]);
-          }
-        // find all possible junction for current road
-        vcl_vector<vgl_point_2d<double> > cross_pts;
-        vcl_vector<volm_land_layer> cross_props;
-        if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props)) {
-          log << "ERROR: find road junction for tile " << t_idx << " leaf " << leaf_bbox_geo << " road " << i_rdx << " failed\n";
-          error(log_file.str(), log.str());
-          return false;
-        }
-        // ingest junction for current roads
-        for (unsigned c_idx = 0; c_idx < cross_pts.size(); c_idx++) {
-          unsigned char curr_level = cross_props[c_idx].level_;
-          unsigned char curr_id = cross_props[c_idx].id_;
-          double radius = cross_props[c_idx].width_;
-          int cx = (int)vcl_floor(cross_pts[c_idx].x() + 0.5);
-          int cy = (int)vcl_floor(cross_pts[c_idx].y() + 0.5);
-          for (int ii = cx-radius; ii < cx+radius; ii++)
-            for (int jj = cy-radius; jj <cy+radius; jj++)
-              if (ii >=0 && jj>=0 && ii <out_img.ni() && jj < out_img.nj())
-                if (curr_level >= level_img(ii,jj)) {
-                  out_img(ii,jj)   = curr_id;
-                  level_img(ii,jj) = curr_level;
-                }
         }
       }
 
       // save the images
       vil_save(out_img, img_name.str().c_str());
-#if 0
+#if 1
       // save a color image for debug purpose
       vil_image_view<vil_rgb<vxl_byte> > out_class_img(ni, nj, 1);
       out_class_img.fill(volm_osm_category_io::volm_land_table[0].color_);
       vcl_stringstream color_name;
-      color_name << out_folder() << "/osm_" << tiles[t_idx].hemisphere() << vcl_setprecision(6) << lat_min
-                                 << tiles[t_idx].direction() << vcl_setprecision(6) << lon_min
-                                 << "_S" << scale << 'x' << scale << ".png";
+      color_name << out_folder() << "/Sat2dMap_" << tiles[t_idx].hemisphere() << vcl_setprecision(12) << lat_min
+                                 << tiles[t_idx].direction() << vcl_setprecision(12) << lon_min
+                                 << "_S" << scale_x << 'x' << scale_y << ".png";
       for (unsigned i = 0; i < ni; i++)
         for (unsigned j = 0; j < nj; j++)
           out_class_img(i,j) = volm_osm_category_io::volm_land_table[out_img(i,j)].color_;
       vil_save(out_class_img, color_name.str().c_str());
-#endif 
-
+#endif
     } // end of each leaf
   } // end of each tile
 
   return true;
 }
-#endif

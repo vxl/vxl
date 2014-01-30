@@ -44,7 +44,7 @@ int main(int argc,  char** argv)
   }
 
   volm_img_info lidar_img_info;
-  volm_io_tools::load_lidar_img(lidar_file(), lidar_img_info, true);
+  volm_io_tools::load_lidar_img(lidar_file(), lidar_img_info, true, false);
 
   float pier_prob_thres = pier_prob_threshold();
   unsigned char dev_id1 = volm_label_table::land_id[volm_label_table::DEVELOPED_OPEN].id_;
