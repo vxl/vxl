@@ -95,6 +95,9 @@ class vpgl_geo_camera : public vpgl_camera<double>
   virtual bool is_class(vcl_string const& cls) const
   { return cls==is_a() || cls==vcl_string("vpgl_geo_camera"); }
 
+  //: save the camera as tfw
+  void save_as_tfw(vcl_string const& tfw_filename);
+
   //: Write camera to stream
   friend vcl_ostream&  operator<<(vcl_ostream& s, vpgl_geo_camera const& p);
 

@@ -374,7 +374,7 @@ void vpgl_geo_camera::img_to_global(const double i, const double j,
                                     double& lon, double& lat) const
 {
   vnl_vector<double> v(4), res(4);
-  if (scale_tag_) {
+   if (scale_tag_) {
     v[0] = trans_matrix_[0][3] + i*trans_matrix_[0][0];
     v[1] = trans_matrix_[1][3] + j*trans_matrix_[1][1];
   }
@@ -498,6 +498,20 @@ void vpgl_geo_camera::local_to_utm(const double x, const double y, const double 
 
   vpgl_utm utm;
   utm.transform(lat, lon, e, n, utm_zone);
+}
+
+// save the camera matrix into a tfw file
+void vpgl_geo_camera::save_as_tfw(vcl_string const& tfw_filename)
+{
+  vcl_ofstream ofs(tfw_filename.c_str());
+  ofs.precision(12);
+  ofs << trans_matrix_[0][0] << '\n';
+  ofs << trans_matrix_[0][1] << '\n';
+  ofs << trans_matrix_[1][0] << '\n';
+  ofs << trans_matrix_[1][1] << '\n';
+  ofs << trans_matrix_[0][3] << '\n';
+  ofs << trans_matrix_[1][3] << '\n';
+  ofs.close();
 }
 
 bool vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2)
