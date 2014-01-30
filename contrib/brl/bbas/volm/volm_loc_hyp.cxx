@@ -174,7 +174,7 @@ void volm_loc_hyp::b_read(vsl_b_istream &is)
 
 
 //: create a kml file, size is in seconds, e.g. 0.001
-void volm_loc_hyp::write_to_kml(vcl_string out_file, double size)
+void volm_loc_hyp::write_to_kml(vcl_string out_file, double size, bool const& write_as_dot)
 {
   vcl_ofstream ofs(out_file.c_str());
   bkml_write::open_document(ofs);
@@ -186,13 +186,19 @@ void volm_loc_hyp::write_to_kml(vcl_string out_file, double size)
 
    double lon = locs_[i].x();
    double lat = locs_[i].y();
-   vcl_stringstream str; str << i << '_' << lat << '_' << lon;
-   ll[0] = lat; ll[1] = lon;
-   ul[0] = lat+size; ul[1] = lon;
-   lr[0] = lat; lr[1] = lon+size;
-   ur[0] = lat+size; ur[1] = lon+size;
-
-   bkml_write::write_box(ofs, str.str(), "location", ul, ur, ll, lr);
+   double elev = locs_[i].z();
+   vcl_stringstream str; str << i << '_' << lat << '_' << lon << '_' << elev;
+   if (write_as_dot) {
+     vgl_point_2d<double> pt(lon, lat);
+     bkml_write::write_location(ofs, pt, str.str(), "location", 0.4);
+   }
+   else {
+     ll[0] = lat; ll[1] = lon;
+     ul[0] = lat+size; ul[1] = lon;
+     lr[0] = lat; lr[1] = lon+size;
+     ur[0] = lat+size; ur[1] = lon+size;
+     bkml_write::write_box(ofs, str.str(), "location", ul, ur, ll, lr);
+   }
   }
 
   bkml_write::close_document(ofs);

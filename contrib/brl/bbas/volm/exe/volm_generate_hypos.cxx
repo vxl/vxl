@@ -222,7 +222,8 @@ int main(int argc,  char** argv)
 #include <volm/volm_geo_index.h>
 
 // find the elevation of the point and add it to the geo index if found
-void add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info> const& infos, vgl_point_2d<double> const& pt, double inc_in_sec_radius, bool search)
+bool add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info> const& infos, vcl_vector<volm_img_info> const& class_map_infos,
+              vgl_point_2d<double> const& pt, double inc_in_sec_radius, bool search)
 {
   // find the elevation of the hypotheses
   float z = 0;
@@ -234,23 +235,53 @@ void add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info> const
       int uu = (int)vcl_floor(u+0.5);
       int vv = (int)vcl_floor(v+0.5);
       if (infos[mm].valid_pixel(uu,vv)) {
-        //vil_image_view<vxl_int_16> img(infos[mm].img_r);
-        vil_image_view<float> img(infos[mm].img_r);
-        z = img(uu,vv);
-        found_it = true;
-        break;
+        // check whether this location is building
+        bool not_building = true;
+        for (unsigned mc = 0; mc < class_map_infos.size(); mc++)
+        {
+          if (class_map_infos[mc].contains(pt)) {
+            double uc,vc;
+            class_map_infos[mc].cam->global_to_img(pt.x(), pt.y(), 0, uc, vc);
+            int uuc = (int)vcl_floor(uc+0.5);
+            int vvc = (int)vcl_floor(vc+0.5);
+            if (class_map_infos[mc].valid_pixel(uuc,vvc)) {
+              vil_image_view<vxl_byte> imgc(class_map_infos[mc].img_r);
+              vcl_cout << " loc " << pt << " is " << volm_osm_category_io::volm_land_table[imgc(uuc,vvc)].name_ << " at pixel "
+                       << " (" << uuc << "x" << vvc << ") in image " << class_map_infos[mc].name << vcl_endl;
+              if (imgc(uuc,vvc)==volm_osm_category_io::volm_land_table_name["building"].id_ || imgc(uuc,vvc)==volm_osm_category_io::volm_land_table_name["tall_building"].id_)
+              {
+                not_building = false;
+                break;
+              }
+            }
+          }
+        }
+        if (not_building)
+        {
+          //vil_image_view<vxl_int_16> img(infos[mm].img_r);
+          vil_image_view<float> img(infos[mm].img_r);
+          z = img(uu,vv);
+          found_it = true;
+          break;
+        }
       }
     }
   }
   if (found_it) { // add the hypo
-    if (search) {
-      if (!volm_geo_index::exists(hyp_root, pt.y(), pt.x(), inc_in_sec_radius))
+    if (search)
+    {
+      if (!volm_geo_index::exists(hyp_root, pt.y(), pt.x(), inc_in_sec_radius)) {
         volm_geo_index::add_hypothesis(hyp_root, pt.x(), pt.y(), z);
-    } else
+        return true;
+      }
+    }
+    else
+    {
       volm_geo_index::add_hypothesis(hyp_root, pt.x(), pt.y(), z);
-
+      return true;
+    }
   }
-
+  return false;
 }
 
 int find_land_type(vcl_vector<volm_img_info>& geo_infos, vgl_point_2d<double>& pt) 
@@ -307,7 +338,8 @@ int main(int argc,  char** argv)
   vul_arg<int> world_id("-world", "the id of the world", -1);
   vul_arg<bool> p1b("-p1b", "use the p1b tiles", false);
   vul_arg<bool> use_satellite_img("-sat", "use satellite image resource", false);
-  vul_arg<vcl_string> land("-land", "the input folder of the land type .tif files", "");
+  vul_arg<vcl_string> land_class_map_folder("-map", "folder for land classification map with building in the image","");
+  vul_arg<vcl_string> land("-land", "the input folder of the land type .tif files (geo cover images)", "");
 
   vul_arg_parse(argc, argv);
 
@@ -355,20 +387,43 @@ int main(int argc,  char** argv)
     volm_geo_index::write_to_kml(hyp_root, depth, file_name3.str());
 
     if (only_gt() && add_gt().compare("") != 0) {  // only add the ground truth points in the file as they are given (i.e. with the elevs in the file)
+
+      // load height map resource to get the height for each ground truth location
+      vcl_vector<volm_img_info> infos;
+      if (use_satellite_img() )
+        // load the satellite resources
+        volm_io_tools::load_satellite_height_imgs(in_folder(), infos, false, "height_refined_sat_geo");
+      else
+        // load the DEM tiles
+        volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
       if (out_pre().compare("") == 0 || world_id() < 0) {
         vul_arg_display_usage_and_exit();
         return volm_io::EXE_ARGUMENT_ERROR;
       }
 
+      // load satellite classification map to avoid locations on top of the buildings (can be empty if now class map)
+      vcl_vector<volm_img_info> class_map_infos;
+      volm_io_tools::load_imgs(land_class_map_folder(), class_map_infos, true, false, true);
+
       vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
       int cnt = volm_io::read_gt_file(add_gt(), samples);
       vcl_cout << " adding " << cnt <<" gt locs!\n";
-    
+      vcl_cout << " height map resources: " << infos.size() << " images are loaded!\n";
+      vcl_cout << " land classification resources: " << class_map_infos.size() << " images are loaded!\n";
+
       for (int j = 0; j < cnt; ++j) {
         vcl_cout << samples[j].second.first.first << " adding.. " << samples[j].first.y() << ", " << samples[j].first.x() << ' ';
-        bool added = volm_geo_index::add_hypothesis(hyp_root, samples[j].first.x(), samples[j].first.y(), samples[j].first.z());
-        if (added) vcl_cout << " success!\n";
-        else       vcl_cout << " not found in tree of tile: " << tile_id() << "!\n";
+        // obtain the height of the height map resources
+        // check whether the gt_loc is inside roi poly
+        if (poly.contains(samples[j].first.x(), samples[j].first.y()))
+        {
+          bool added = add_hypo(hyp_root, infos, class_map_infos, vgl_point_2d<double>(samples[j].first.x(), samples[j].first.y()), inc_in_sec_rad, true);
+          //bool added = volm_geo_index::add_hypothesis(hyp_root, samples[j].first.x(), samples[j].first.y(), samples[j].first.z());
+          if (added) vcl_cout << " success!\n";
+          else       vcl_cout << " not found in tree of tile: " << tile_id() << "!\n";
+        }
+        else
+          vcl_cout << " not inside the ROI polygons!\n";
       }
 
       unsigned r_cnt = volm_geo_index::hypo_size(hyp_root) ;
@@ -378,7 +433,15 @@ int main(int argc,  char** argv)
       vcl_stringstream file_name4; file_name4 << out_pre() << "geo_index_tile_" << i;
       vcl_cout << "writing hyps to: " << file_name4.str() << vcl_endl;
       volm_geo_index::write_hyps(hyp_root, file_name4.str());
-    
+      
+      // write the hypos in kml file
+      vcl_vector<volm_geo_index_node_sptr> leaves;
+      volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
+      for (unsigned jj = 0; jj < leaves.size(); jj++) {
+        vcl_string out_file = vul_file::strip_extension(leaves[jj]->get_hyp_name(file_name4.str())) + ".kml";
+        leaves[jj]->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
+      }
+
       return volm_io::SUCCESS;
     }
 
@@ -404,10 +467,16 @@ int main(int argc,  char** argv)
       vcl_vector<volm_img_info> infos;
       if (use_satellite_img() )
         // load the satellite resources
-        volm_io_tools::load_satellite_height_imgs(in_folder(), infos, true);
+        volm_io_tools::load_satellite_height_imgs(in_folder(), infos, false, "height_refined_sat_geo");
       else
         // load the DEM tiles
         volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
+
+      // load satellite classification map to avoid locations on top of the buildings (can be empty if now class map)
+      vcl_vector<volm_img_info> class_map_infos;
+      volm_io_tools::load_imgs(land_class_map_folder(), class_map_infos, true, false, true);
+      vcl_cout << " height map resources: " << infos.size() << " images are loaded!\n";
+      vcl_cout << " land classification resources: " << class_map_infos.size() << " images are loaded!\n";
 
       if (land().compare("") == 0) {  // if not using land types
 
@@ -419,7 +488,7 @@ int main(int argc,  char** argv)
           vcl_vector<vgl_point_2d<double> > points = r->line();
           for (unsigned kk = 1; kk < points.size(); kk++) {
             if (loc_inside_region(poly, points[kk-1].x(), points[kk-1].y()))
-              add_hypo(hyp_root, infos, points[kk-1], inc_in_sec_rad, true);
+                add_hypo(hyp_root, infos, class_map_infos, points[kk-1], inc_in_sec_rad, true);
             // now interpolate along a straight line, assume locally planar
             double dif_dy = points[kk].y() - points[kk-1].y();
             double dif_dx = points[kk].x() - points[kk-1].x();
@@ -433,7 +502,7 @@ int main(int argc,  char** argv)
               double x = points[kk-1].x()+inc_dx*cnt;
               double y = points[kk-1].y()+inc_dy*cnt;
               if (loc_inside_region(poly, x, y))
-                add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
+                add_hypo(hyp_root, infos, class_map_infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, true);
             }
 
           }
@@ -473,7 +542,7 @@ int main(int argc,  char** argv)
           inc_in_sec_rad = inc_in_sec*inc_in_sec_radius_ratio;
           double remainder = 0.0;
           if ( loc_inside_region(poly, points[0].x(), points[0].y()) )
-            add_hypo(hyp_root, infos, points[0], inc_in_sec_rad, true);
+            add_hypo(hyp_root, infos, class_map_infos, points[0], inc_in_sec_rad, true);
           for (unsigned kk = 1; kk < points.size(); kk++) {  
             double prev_x = points[kk-1].x();
             double prev_y = points[kk-1].y();
@@ -509,7 +578,7 @@ int main(int argc,  char** argv)
               double x = prev_x+inc_dx_rem;
               double y = prev_y+inc_dy_rem;
               if ( loc_inside_region(poly, x, y) )
-                add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, true);
+                add_hypo(hyp_root, infos, class_map_infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, true);
               prev_x = x; 
               prev_y = y;
               ds -= rem;
@@ -520,7 +589,7 @@ int main(int argc,  char** argv)
               double x = prev_x+inc_dx;
               double y = prev_y+inc_dy;
               if (loc_inside_region(poly, x, y)) 
-                add_hypo(hyp_root, infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
+                add_hypo(hyp_root, infos, class_map_infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
               prev_x = x; 
               prev_y = y;
             }
@@ -542,7 +611,7 @@ int main(int argc,  char** argv)
       vcl_vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
       for (unsigned jj = 0; jj < leaves.size(); jj++) {
-        vcl_string out_file = leaves[jj]->get_hyp_name(file_name4.str()) + ".kml";
+        vcl_string out_file = vul_file::strip_extension(leaves[jj]->get_hyp_name(file_name4.str())) + ".kml";
         leaves[jj]->hyps_->write_to_kml(out_file, inc_in_sec_rad);
       }
 

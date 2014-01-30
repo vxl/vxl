@@ -74,7 +74,7 @@ class volm_loc_hyp : public vbl_ref_count
   void release_memory() { locs_.clear(); }
 
   //: create a kml file
-  void write_to_kml(vcl_string out_file, double size);
+  void write_to_kml(vcl_string out_file, double size, bool const& write_as_dot = false);
 
  public:
   // lon is x, lat is y 
