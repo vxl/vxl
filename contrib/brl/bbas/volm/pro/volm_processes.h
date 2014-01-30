@@ -21,5 +21,6 @@ DECLARE_FUNC_CONS(volm_find_res_pair_process);
 DECLARE_FUNC_CONS(volm_correct_rational_cameras_ransac_process2);
 DECLARE_FUNC_CONS(volm_get_full_path_process);
 DECLARE_FUNC_CONS(volm_find_satellite_pairs_process);
-
+DECLARE_FUNC_CONS(volm_transfer_geoindex_id_to_str_process);
+DECLARE_FUNC_CONS(volm_transfer_geoindex_id_to_str_process2);
 #endif
