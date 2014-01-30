@@ -23,6 +23,9 @@ int main(int argc, char** argv)
 {
   // query input
   vul_arg<vcl_string> query_xml("-xml", "tagged xml file for query image", "");
+  vul_arg<vcl_string> query_vsl("-vsl", "bwm gui vxl file for query image","");
+  vul_arg<vcl_string> weight_file("-weight", "weight parameter file", "");
+  vul_arg<vcl_string> world_str("-world", "world region","");
   // index and geolocation
   vul_arg<vcl_string> geo_hypo_folder("-geo", "folder where the geolocation for this tile is stored", "");
   vul_arg<vcl_string> desc_index_folder("-index", "directory that contains the created wr3db indices", "");
@@ -46,11 +49,15 @@ int main(int argc, char** argv)
   if (is_matcher())
   {
     // input check
-    if (query_xml().compare("") == 0 || geo_hypo_folder().compare("") == 0 || desc_index_folder().compare("") == 0 || out_folder().compare("") == 0)
+    if (geo_hypo_folder().compare("") == 0 || desc_index_folder().compare("") == 0 || out_folder().compare("") == 0)
     {
       vcl_cerr << "ERROR: arguments error, check the input" << vcl_endl;
       vul_arg_display_usage_and_exit();
       return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    if (query_xml().compare("") == 0  && query_vsl().compare("") == 0)
+    {
+      vcl_cerr << "ERROR: no query tagged file, either tagging xml or vsl file required" << vcl_endl;
     }
     // error log
     vcl_stringstream err_log;
@@ -62,21 +69,70 @@ int main(int argc, char** argv)
     unsigned ni, nj;
     vcl_vector<volm_weight> weights;
     depth_map_scene_sptr dms = new depth_map_scene;
-    if (!vul_file::exists(query_xml())) {
-      err_log << "ERROR: can not find query tag xml file: " << query_xml() << '\n';
-      error_report(err_log_file.str(), err_log.str());
-      return volm_io::EXE_ARGUMENT_ERROR;
+    
+    // load query
+    if (!vul_file::exists(query_xml())) {  // load query from vxl file and weight from weight file
+      world_region = world_str();
+      vsl_b_ifstream dis(query_vsl().c_str());
+      dms->b_read(dis);
+      dis.close();
+      // obtain the query name from image file name
+      query_name = vul_file::strip_extension(vul_file::strip_directory(dms->image_path()));
+      // load the weight parameter, if file does not exist, use average weight
+      if (vul_file::exists(weight_file()) ) {
+        // read the weight parameter from pre-loaded
+        volm_weight::read_weight(weights, weight_file());
+        // check whether the loaded weight parameters satisfy the requirement, if not, create default equal weight parameters
+        if (!volm_weight::check_weight(weights)) {
+          weights.clear();
+          volm_weight::equal_weight(weights, dms);
+        }
+      }
+      else {
+        // create equal weight parameter for all objects
+        volm_weight::equal_weight(weights, dms);
+      }
+      // check self_consistency between dms and loaded weight parameters
+      if (!dms->ground_plane().empty()) {
+        bool has_grd = false;
+        for (vcl_vector<volm_weight>::iterator wit = weights.begin();  wit != weights.end();  ++wit)
+          if ( (*wit).w_typ_ == "ground_plane" ) {
+            has_grd = true;
+            break;
+          }
+        if (!has_grd) {
+          err_log << " ERROR: inconsistency between depth_map_scene and weight parameter in ground plane\n";
+          error_report(err_log_file.str(), err_log.str());
+          return volm_io::EXE_ARGUMENT_ERROR;
+        }
+      }
+      if (weights.size() != (!dms->sky().empty() + !dms->ground_plane().empty() + dms->scene_regions().size())) {
+        vcl_cout << " weights_size = " << weights.size() << vcl_endl;
+        vcl_cout << " depth map scene size = " << !dms->sky().empty() + !dms->ground_plane().empty() + dms->scene_regions().size() << vcl_endl;
+        for (unsigned i = 0; i < weights.size(); i++) {
+          vcl_cout << " \t\t" << weights[i].w_name_ << " " << weights[i].w_obj_ << vcl_endl;
+        }
+        err_log << " ERROR: number of weight parameters is different from labelled depth_map_region objects\n";
+        error_report(err_log_file.str(), err_log.str());
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
     }
-    volm_io::read_query_tags(query_xml(), dms, weights, world_region, ni, nj, query_name);
-
+    else {
+      if (!vul_file::exists(query_xml())) {  // load query and weight from tagging xml file
+        err_log << "ERROR: can not find query tag xml file: " << query_xml() << '\n';
+        error_report(err_log_file.str(), err_log.str());
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+      volm_io::read_query_tags(query_xml(), dms, weights, world_region, ni, nj, query_name);
+      // check weight parameter (Note during parser, all labeled object are parsed into scene_regions, i.e., no sky or ground_plane
+      if (weights.size() != dms->scene_regions().size()) {
+        err_log << "ERROR: number of weight parameters (" << weights.size() << ") is inconsistent with labeled object (" << dms->scene_regions().size() << ")\n";
+        error_report(err_log_file.str(), err_log.str());
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+    }
+    
     vcl_string image_name = vul_file::strip_extension(query_name);
-
-    // check weight parameter (Note during parser, all labeled object are parsed into scene_regions, i.e., no sky or ground_plane
-    if (weights.size() != dms->scene_regions().size()) {
-      err_log << "ERROR: number of weight parameters (" << weights.size() << ") is inconsistent with labeled object (" << dms->scene_regions().size() << ")\n";
-      error_report(err_log_file.str(), err_log.str());
-      return volm_io::EXE_ARGUMENT_ERROR;
-    }
 
     // create tiles based on world_region
     vcl_vector<volm_tile> tiles;
@@ -120,8 +176,8 @@ int main(int argc, char** argv)
     // Screen output
     vcl_cout << " =========== Start to execute existence matcher for image: " << image_name << " ===============" << vcl_endl;
     vcl_cout << " \t Descriptor type : " << ex_matcher->get_index_type_str() << vcl_endl;
-    vcl_cout << " \t weight parameters: " << vcl_endl;
     vcl_cout << " \t world region: " << world_region << vcl_endl;
+    vcl_cout << " \t weight parameters: " << vcl_endl;
     for (unsigned i = 0; i < weights.size(); i++) {
       vcl_cout << " \t\t" << weights[i].w_name_ << " " << weights[i].w_obj_ << vcl_endl;
     }
