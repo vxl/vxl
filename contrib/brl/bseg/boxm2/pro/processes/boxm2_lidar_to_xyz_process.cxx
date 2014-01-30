@@ -335,6 +335,8 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
     vil_image_resource_sptr label_img = vil_load_image_resource(fname.c_str());
     vpgl_geo_camera::init_geo_camera(label_img, lvcs, geocam);
   }
+
+  // load the image
   vil_image_view_base_sptr img_sptr = vil_load(fname.c_str());
   if (img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
     vcl_cerr << "Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
@@ -344,6 +346,7 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   unsigned nii = img.ni(); unsigned nji = img.nj();
   vcl_cout << " image size: "<< nii << " x " << nji << vcl_endl;
 
+  // load the camera using filename if no geocam loaded either from image header or from input
   if (!geocam) {
     vcl_cout << "Create geo camera from filename\n";
     vpgl_geo_camera::init_geo_camera_from_filename(fname, nii, nji, lvcs, geocam);
@@ -497,3 +500,143 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
 #endif
 }
 
+// turn an ortho image of unsigned int to xyz and a label (e.g. each pixel has an id of some class) image ready to be ingested
+// Note in this case the ortho image size can be smaller than scene bounding box and the output xyz image has input image resolution
+namespace boxm2_label_to_xyz_process2_globals
+{
+  const unsigned n_inputs_  = 3;
+  const unsigned n_outputs_ = 4;
+}
+
+bool boxm2_label_to_xyz_process2_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_label_to_xyz_process2_globals;
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr";
+  input_types_[1] = "vcl_string";  // ortho label image with class ids/labels for each pixel
+  input_types_[2] = "vpgl_camera_double_sptr";  // geocam if available, otherwise pass 0, camera will be constructed using info in geotiff header or image filename
+
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  output_types_[0] = "vil_image_view_base_sptr";  // x image
+  output_types_[1] = "vil_image_view_base_sptr";  // y image
+  output_types_[2] = "vil_image_view_base_sptr";  // z image
+  output_types_[3] = "vil_image_view_base_sptr";  // label image vil_image_view<short> to be ingested
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_label_to_xyz_process2(bprb_func_process& pro)
+{
+  using namespace boxm2_label_to_xyz_process2_globals;
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+
+  // get the input
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
+  vcl_string fname = pro.get_input<vcl_string>(1);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(2);
+
+  // check camera for the label image
+  vpgl_geo_camera* geocam = 0;
+  if (cam) {
+    vcl_cout << "Using the loaded camera!\n";
+    geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  }
+  else {
+    vcl_cout << "Using the camera loaded from geotif image header\n";
+    vil_image_resource_sptr label_img = vil_load_image_resource(fname.c_str());
+    vpgl_geo_camera::init_geo_camera(label_img, lvcs, geocam);
+  }
+  vil_image_view_base_sptr img_sptr = vil_load(fname.c_str());
+  if (img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
+    vcl_cerr << "Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
+    return false;
+  }
+
+  // load the image
+  vil_image_view<vxl_byte> img(img_sptr);
+  unsigned orig_label_ni = img.ni(); unsigned orig_label_nj = img.nj();
+  vcl_cout << " original lable image size: "<< orig_label_ni << " x " << orig_label_nj << vcl_endl;
+
+  // load the camera using filename if no geocam loaded either from image header or from input
+  if (!geocam) {
+    vcl_cout << "Create geo camera from filename\n";
+    vpgl_geo_camera::init_geo_camera_from_filename(fname, orig_label_ni, orig_label_nj, lvcs, geocam);
+  }
+  if (!geocam) {
+    vcl_cerr << "In " << pro.name() << " - the geocam could not be initialized!\n";
+    return false;
+  }
+
+  // obtain the intersection region
+  vgl_box_3d<double> scene_bbox = scene->bounding_box();
+  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  if (blks.size() < 1) {
+    vcl_cerr << "In " << pro.name() << " - no block in current scene!\n";
+    return false;
+  }
+
+  brip_roi broi(orig_label_ni, orig_label_nj);
+  vsol_box_2d_sptr bb = new vsol_box_2d();
+
+  double min_uu, min_vv, max_uu, max_vv;
+  geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), min_uu, min_vv);
+  bb->add_point(min_uu,min_vv);
+  geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), max_uu, max_vv);
+  bb->add_point(max_uu,max_vv);
+  bb = broi.clip_to_image_bounds(bb);
+  if (bb->width() <= 0 || bb->height() <= 0) {
+    vcl_cout << "In " << pro.name() << " -- " << fname << " does not overlap the scene!\n";
+    return false;
+  }
+  vcl_cout <<"projected scene bbox: " << *bb << vcl_endl;
+
+  unsigned int min_i = min_uu > 0 ? (unsigned int)min_uu : 0;
+  unsigned int min_j = max_vv > 0 ? (unsigned int)max_vv : 0;  // scene box min projects to lower left corner of the scene in the image
+
+  int ni = bb->get_max_x() - bb->get_min_x() + 1;
+  int nj = bb->get_max_y() - bb->get_min_y() + 1;
+  vcl_cout <<  "min_uu: " << min_uu << " min_vv: " << min_vv
+           <<"\nmax_uu: " << max_uu << " max_vv: " << max_vv
+           <<"\nmin_i: " << min_i << " min_j: " << min_j << " ni: " << ni << " nj: " << nj << vcl_endl;
+  
+  boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
+  float sb_length = info->block_len;
+  vcl_cout <<"sb_length: " << sb_length << "!\n\n"
+           <<"ni: " << ni << " nj: " << nj << vcl_endl;
+
+  // create x y z images
+  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<vxl_byte>* out_img_label = new vil_image_view<vxl_byte>(ni, nj, 1);
+  out_img_x->fill(0.0f); out_img_y->fill(0.0f);
+  out_img_z->fill((float)(scene_bbox.max_z()+100.0));  // local coordinate system min z, initialize to constant
+  out_img_label->fill((vxl_byte)0);
+
+  // iterate over the image and for each pixel, calculate, xyz in the local coordinate system
+  for (int i = 0; i < ni; i++)
+    for (int j = 0; j < nj; j++) {
+      // find global coord of current pixel
+      double lon, lat;
+      geocam->img_to_global(i+min_i, j+min_j, lon, lat);
+      // find the local coord of this global position
+      double lx, ly, lz;
+      lvcs->global_to_local(lon, lat, 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
+      (*out_img_x)(i,j) = (float)lx;
+      (*out_img_y)(i,j) = (float)ly;
+      (*out_img_label)(i,j) = img(i+min_i, j+min_j);
+    }
+
+  // output
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
+  pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
+  pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
+  pro.set_output_val<vil_image_view_base_sptr>(3, out_img_label);
+
+  return true;
+
+}

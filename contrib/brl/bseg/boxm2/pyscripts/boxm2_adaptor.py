@@ -1565,6 +1565,29 @@ def generate_xyz_from_label_img(scene, label_tiff, geocam = 0):
     l_img = 0;
   return x_img, y_img, z_img, l_img
 
+# Create x y z images from a class image at the resolution of the given class image
+# If the camera is not given, reads image geo cam from the image filename or from geotiff header
+def generate_xyz_from_label_img2(scene, label_tiff, geocam = 0):
+  boxm2_batch.init_process("boxm2LabelImgToXYZProcess2");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1,label_tiff);
+  boxm2_batch.set_input_from_db(2,geocam)
+  result = boxm2_batch.run_process();
+  if result:
+    (xi_id, xi_type) = boxm2_batch.commit_output(0);
+    x_img = dbvalue(xi_id, xi_type);
+    (yi_id, yi_type) = boxm2_batch.commit_output(1);
+    y_img = dbvalue(yi_id, yi_type);
+    (zi_id, zi_type) = boxm2_batch.commit_output(2);
+    z_img = dbvalue(zi_id, zi_type);
+    (li_id, li_type) = boxm2_batch.commit_output(3);
+    l_img = dbvalue(li_id, li_type);
+  else:
+    x_img = 0;
+    y_img = 0;
+    z_img = 0;
+    l_img = 0;
+  return x_img, y_img, z_img, l_img
 
 # Create x y z images from an orhographic height map image,
 # assumes that the height map has the pixel GSD the same as the finest voxel resolution of the scene
