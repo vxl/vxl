@@ -429,3 +429,12 @@ def combine_planes(img_red, img_green, img_blue):
   (id, type) = boxm2_batch.commit_output(0);
   img_out = dbvalue(id, type);
   return img_out;
+
+def median_filter_image(img, neighborhood_radius):
+    boxm2_batch.init_process("vilMedianFilterProcess")
+    boxm2_batch.set_input_from_db(0,img)
+    boxm2_batch.set_input_int(1,neighborhood_radius)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    filt_img = dbvalue(id,type)
+    return filt_img
