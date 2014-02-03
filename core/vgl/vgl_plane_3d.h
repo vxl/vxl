@@ -79,6 +79,10 @@ class vgl_plane_3d
                 vgl_point_3d<T> const& p2,
                 vgl_point_3d<T> const& p3);
 
+  //: Construct from two non-skew rays. The rays intersect at their origins
+  // or are parallel. The plane will contain the two rays
+  vgl_plane_3d (vgl_ray_3d<T> const& r0, vgl_ray_3d<T> const& r1);
+
   // Data Access-------------------------------------------------------------
 
   //: Return \a x coefficient

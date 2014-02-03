@@ -8,9 +8,10 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_distance.h>
-//#include <vgl/vgl_tolerance.h>
+#include <vgl/vgl_tolerance.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -50,6 +51,40 @@ vgl_plane_3d<T>::vgl_plane_3d(vgl_vector_3d<T> const& n,
   assert(a_||b_||c_); // normal vector should not be the null vector
 }
 
+template <class T>
+vgl_plane_3d<T>::vgl_plane_3d (vgl_ray_3d<T> const& r0,
+			       vgl_ray_3d<T> const& r1){
+  // check if the rays are parallel
+  vgl_vector_3d<T>& v0 = r0.direction();
+  vgl_vector_3d<T>& v1 = r1.direction();
+  double  para = vcl_fabs(1.0-vcl_fabs(cos_angle(v0, v1)));
+  bool parallel = para < vgl_tolerance<double>::position;
+  // check if the ray origins are coincident
+  vgl_point_3d<T>& p0 = r0.origin();
+  vgl_point_3d<T>& p1 = r1.origin();
+  double d01 = length(p1-p0);
+  bool coincident = d01 < vgl_tolerance<double>::position;
+
+  // assert the rays are distinct
+  bool distinct = !parallel || parallel&&!coincident;
+  assert(distinct);
+  // assert the rays are not skew
+  bool not_skew = parallel&&distinct || !parallel&&coincident;
+  assert(not_skew);
+  
+  // Case I: coincident
+  if(coincident){
+    vgl_vector_3d<T> norm = cross_product(v0, v1);
+    vgl_plane_3d<T> pln(norm, p0);
+    a_=pln.a();   b_=pln.b();   c_=pln.c();   d_=pln.d();
+    return;
+  }
+  // Case II: parallel
+  vgl_vector_3d<T> v01 = p1-p0;
+  vgl_vector_3d<T> norm = cross_product(v0, v01);
+  vgl_plane_3d<T> pln(norm, p0);
+  a_=pln.a();   b_=pln.b();   c_=pln.c();   d_=pln.d();
+}
 //: Return true if p is on the plane
 template <class T>
 bool vgl_plane_3d<T>::contains(vgl_point_3d<T> const& p, T tol) const

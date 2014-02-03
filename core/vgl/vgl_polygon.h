@@ -125,6 +125,8 @@ class vgl_polygon
   //: Pretty print
   vcl_ostream& print(vcl_ostream&) const;
 
+  //: read this polygon from ascii stream
+  vcl_istream& read(vcl_istream&);
  protected:
 
   // Data Members--------------------------------------------------------------
@@ -165,6 +167,9 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
 // \relatesalso vgl_polygon
 template <class T>
 vcl_ostream& operator<< (vcl_ostream& os, vgl_polygon<T> const& p) { return p.print(os); }
+
+template <class T>
+vcl_istream& operator>> (vcl_istream& is, vgl_polygon<T>& p) { return p.read(is); }
 
 #define VGL_POLYGON_INSTANTIATE(T) extern "please include vgl/vgl_polygon.txx instead"
 

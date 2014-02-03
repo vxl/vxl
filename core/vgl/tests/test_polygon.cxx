@@ -3,6 +3,7 @@
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_polygon.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 
 static void test_simple_polygon()
 {
@@ -84,6 +85,15 @@ static void test_holey_polygon()
   TEST("outside (4)", p.contains( 2.0, -1.0 ), false );
   TEST("outside (5)", p.contains(-2.5, -0.5 ), false );
   TEST("outside (6)", p.contains( 3.9,  0.4 ), false );
+  vcl_ofstream os("./temp");
+  p.print(os);
+  // read the poly
+  os.close();
+  vcl_ifstream is("./temp");
+  vgl_polygon<double> pr;
+  is >>pr;
+  pr.print(vcl_cout);
+  TEST("inside after read",      pr.contains( 2.5,  0.3 ), true );
 }
 
 static void test_self_intersection()

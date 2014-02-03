@@ -7,6 +7,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_cmath.h>
 static void test_constructor()
@@ -19,6 +20,19 @@ static void test_constructor()
   vgl_vector_3d<double> nabcd = plane_abcd.normal(), nptn = plane_ptn.normal();
   double dist = vcl_fabs(1.0-dot_product(nabcd, nptn));
   TEST_NEAR("Constructors and Normal", dist ,0.0, 1e-5);
+  // case I coincident
+  vgl_vector_3d<double> dir0(-1.0, 0.0, 0.0), dir1(0.0, 0.0, 1.0);
+  vgl_ray_3d<double> r0(p0, dir0), r1(p0, dir1);
+  vgl_plane_3d<double> plane_coin_rays(r0, r1);
+  vgl_vector_3d<double> ncoin = plane_coin_rays.normal();
+  dist = vcl_fabs(1.0-dot_product(ncoin, nptn));
+  TEST_NEAR("Coincident ray constructor", dist ,0.0, 1e-5);
+  vgl_point_3d<double> p0p(-1.0,0.0,0.0);
+  vgl_ray_3d<double> r0p(p0p, dir1);
+  vgl_plane_3d<double> plane_para_rays(r0p, r1);
+  vgl_vector_3d<double> npara = plane_para_rays.normal();
+  dist = vcl_fabs(1.0-dot_product(npara, nptn));
+  TEST_NEAR("Parallel ray constructor", dist ,0.0, 1e-5);
 }
 
 static void test_operations()

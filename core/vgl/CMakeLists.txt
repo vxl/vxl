@@ -51,7 +51,8 @@ SET( vgl_sources
   vgl_triangle_test.h            vgl_triangle_test.txx
   vgl_polygon_test.h             vgl_polygon_test.txx
   vgl_triangle_3d.h              vgl_triangle_3d.cxx
-
+  vgl_frustum_3d.h               vgl_frustum_3d.txx
+  
   vgl_region_scan_iterator.h
   vgl_triangle_scan_iterator.h   vgl_triangle_scan_iterator.txx
   vgl_window_scan_iterator.h     vgl_window_scan_iterator.txx

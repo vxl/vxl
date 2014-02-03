@@ -22,6 +22,7 @@ ADD_EXECUTABLE( vgl_test_all
   test_infinite_line_3d.cxx
   test_ray_3d.cxx
   test_plane_3d.cxx
+  test_frustum_3d.cxx
 )
 TARGET_LINK_LIBRARIES( vgl_test_all vgl testlib )
 
@@ -44,7 +45,7 @@ ADD_TEST( vgl_test_triangle_3d_line_intersection  ${EXECUTABLE_OUTPUT_PATH}/vgl_
 ADD_TEST( vgl_test_infinite_line_3d               ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_infinite_line_3d)
 ADD_TEST( vgl_test_ray_3d                         ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_ray_3d)
 ADD_TEST( vgl_test_plane_3d                         ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_plane_3d)
-
+ADD_TEST( vgl_test_frustum_3d                         ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_frustum_3d)
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vgl_test_include vgl )
 ADD_EXECUTABLE( vgl_test_template_include test_template_include.cxx )

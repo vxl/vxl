@@ -19,6 +19,7 @@ DECLARE( test_triangle_3d_line_intersection );
 DECLARE( test_infinite_line_3d );
 DECLARE( test_ray_3d );
 DECLARE( test_plane_3d );
+DECLARE( test_frustum_3d );
 
 void
 register_tests()
@@ -42,6 +43,7 @@ register_tests()
   REGISTER( test_infinite_line_3d );
   REGISTER( test_ray_3d );
   REGISTER( test_plane_3d );
+  REGISTER( test_frustum_3d );
 }
 
 DEFINE_MAIN;

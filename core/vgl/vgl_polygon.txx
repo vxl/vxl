@@ -15,6 +15,7 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
+#include <vcl_string.h>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -122,13 +123,51 @@ vcl_ostream& vgl_polygon<T>::print(vcl_ostream& os) const
       os << "Sheet " << s << ' ';
       if (sheets_[s].size()==0)
         os << "(empty)";
-      else
-      for (unsigned int p = 0; p < sheets_[s].size(); ++p)
-        os << '(' << sheets_[s][p].x() << ',' << sheets_[s][p].y() << ") ";
-      os << '\n';
+      else{
+	os << " nverts = " << sheets_[s].size() << '\n';
+	for (unsigned int p = 0; p < sheets_[s].size(); ++p)
+        os << "( " << sheets_[s][p].x() << " , " << sheets_[s][p].y() << " ) ";
+	os << '\n';
+      }
     }
   }
   return os;
+}
+template <class T>
+vcl_istream& vgl_polygon<T>::read(vcl_istream& is){
+  vcl_string s;
+  is >> s;
+  if(s == "Empty polygon")
+    return is;
+  is >> s; // skip "with"
+  unsigned n_sheets;
+  is >> n_sheets;
+  if(n_sheets == 0)
+    return is;
+  is >> s; // Skip  "sheets:"
+  unsigned k;
+  sheets_.resize(n_sheets);
+  for(unsigned sh = 0; sh<n_sheets; ++sh){
+    is >> s; // Sheet
+    is >> k;
+    is >> s; // nverts or empty
+	 if(s == "(empty)")
+      return is;
+    is >> s;// =
+    unsigned nv;
+    is >> nv;
+    for(unsigned iv = 0; iv<nv; ++iv){
+      T x, y;
+      is >> s; //'('
+      is >> x ;
+      is >> s; //','
+      is >> y;
+      is >> s; //')'
+      vgl_point_2d<T> pt(x, y);
+      sheets_[sh].push_back(pt);
+    }
+  }    
+  return is;
 }
 
 template <class T>
@@ -284,6 +323,7 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
 template class vgl_polygon<T >; \
 template struct vgl_polygon_sheet_as_array<T >; \
 template vcl_ostream& operator<<(vcl_ostream&,vgl_polygon<T > const&); \
+template vcl_istream& operator>>(vcl_istream&,vgl_polygon<T >&); \
 template void vgl_selfintersections(vgl_polygon<T > const& p, \
                                     vcl_vector<vcl_pair<unsigned int,unsigned int> >& e1, \
                                     vcl_vector<vcl_pair<unsigned int,unsigned int> >& e2, \
