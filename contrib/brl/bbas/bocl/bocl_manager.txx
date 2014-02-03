@@ -58,13 +58,14 @@ bool bocl_manager<T>::initialize_cl()
     return false;
   }
   if (num_platforms > 1) {
-    vcl_cerr << "bocl_manager: warning: found " << num_platforms << "OpenCL platforms. Using the first\n";
+    vcl_cerr << "bocl_manager: warning: found " << num_platforms << " OpenCL platforms. Using the first\n";
   }
   // Get the first platform ID
-  cl_platform_id platform_id[2];
+  cl_platform_id* platform_id = new cl_platform_id[num_platforms];
   status = clGetPlatformIDs (num_platforms, platform_id, NULL);
   if (status != CL_SUCCESS) {
     vcl_cerr << "bocl_manager: clGetPlatformIDs (call 2) returned " << status << '\n';
+    delete [] platform_id;
     return false;
   }
 
@@ -122,6 +123,7 @@ bool bocl_manager<T>::initialize_cl()
   }
   if (!gpu_found && !cpu_found) {
     vcl_cout<<"bocl_manager:: No devices (GPU or CPU) found, manager is invalid"<<vcl_endl;
+    delete [] platform_id;
     return false;
   }
 
@@ -138,7 +140,7 @@ bool bocl_manager<T>::initialize_cl()
   vcl_cout<<"Default device: "<<*curr_device_<<vcl_endl;
 #endif
   //////////////////////////////////////////////////////////////////////////////
-
+  delete [] platform_id;
   return true;
 }
 
