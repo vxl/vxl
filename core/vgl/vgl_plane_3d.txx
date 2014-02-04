@@ -55,13 +55,13 @@ template <class T>
 vgl_plane_3d<T>::vgl_plane_3d (vgl_ray_3d<T> const& r0,
 			       vgl_ray_3d<T> const& r1){
   // check if the rays are parallel
-  vgl_vector_3d<T>& v0 = r0.direction();
-  vgl_vector_3d<T>& v1 = r1.direction();
+  const vgl_vector_3d<T>& v0 = r0.direction();
+  const vgl_vector_3d<T>& v1 = r1.direction();
   double  para = vcl_fabs(1.0-vcl_fabs(cos_angle(v0, v1)));
   bool parallel = para < vgl_tolerance<double>::position;
   // check if the ray origins are coincident
-  vgl_point_3d<T>& p0 = r0.origin();
-  vgl_point_3d<T>& p1 = r1.origin();
+  const vgl_point_3d<T>& p0 = r0.origin();
+  const vgl_point_3d<T>& p1 = r1.origin();
   double d01 = length(p1-p0);
   bool coincident = d01 < vgl_tolerance<double>::position;
 
