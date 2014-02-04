@@ -74,6 +74,13 @@ bool vul_file::is_directory(char const* fn)
       && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
+vcl_time_t vul_file::time_modified(char const* filename){
+  struct stat fs;
+  if(stat(filename, &fs)!=0)
+    return vcl_time_t(0);
+  return fs.st_mtime;
+}
+
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 bool vul_file::is_drive(char const* fn)
 {
