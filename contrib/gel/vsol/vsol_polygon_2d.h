@@ -132,7 +132,7 @@ class vsol_polygon_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  unsigned int size(void) const { return storage_->size(); }
+  unsigned int size(void) const { return static_cast<int>(storage_->size()); }
 
   //---------------------------------------------------------------------------
   //: Return the area of `this'
