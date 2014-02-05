@@ -427,8 +427,8 @@ void vgui_soview2D_linestrip::set_size(unsigned nn)
 
 //--------------------------------------------------------------------------------//
 
-vgui_soview2D_polygon::vgui_soview2D_polygon(unsigned n_, float const *x_, float const *y_)
-  : n(n_), x(new float[n]), y(new float[n])
+vgui_soview2D_polygon::vgui_soview2D_polygon(unsigned n_, float const *x_, float const *y_, bool fill)
+  : n(n_), x(new float[n]), y(new float[n]), filled(fill)
 {
   for (unsigned i=0; i<n; ++i)
   {
@@ -446,10 +446,17 @@ vgui_soview2D_polygon::~vgui_soview2D_polygon()
 
 void vgui_soview2D_polygon::draw() const
 {
-  glBegin(GL_LINE_LOOP);
-  for (unsigned i=0; i<n; ++i)
-    glVertex2f(x[i], y[i]);
-  glEnd();
+  if(filled){
+    glBegin(GL_POLYGON);
+    for (unsigned i=0; i<n; ++i)
+      glVertex2f(x[i], y[i]);
+    glEnd();
+  }else{
+    glBegin(GL_LINE_LOOP);
+    for (unsigned i=0; i<n; ++i)
+      glVertex2f(x[i], y[i]);
+    glEnd();
+  }
 }
 
 vcl_ostream& vgui_soview2D_polygon::print(vcl_ostream&s) const { return s << "[ a polygon. FIXME ]"; }

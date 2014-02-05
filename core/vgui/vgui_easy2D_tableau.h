@@ -96,6 +96,9 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   //: Set the child tableau to be the given tableau.
   void set_child(vgui_tableau_sptr const&);
 
+  //: get the child tableau 
+  vgui_tableau_sptr child() const;
+
   //: Set the colour of objects to the given red, green, blue, alpha values.
   void set_foreground(float r, float g, float b, float a = 1.0f);
 
@@ -145,7 +148,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
 
   //: Add  polygon with the given n vertices to the display.
   vgui_soview2D_polygon* add_polygon(unsigned n, float const *x,
-                                     float const *y);
+                                     float const *y, bool filled = false);
 
   //: Remove the given soview from the display.
   void remove(vgui_soview* vso) { vgui_displaybase_tableau::remove(vso); }

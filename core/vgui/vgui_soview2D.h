@@ -340,7 +340,7 @@ class vgui_soview2D_polygon : public vgui_soview2D
 {
  public:
   //: Constructor - create a 2D polygon with the given vertices.
-  vgui_soview2D_polygon(unsigned, float const *, float const *);
+  vgui_soview2D_polygon(unsigned, float const *, float const *, bool fill);
 
   //: Constructor - create a default 2D polygon.
   vgui_soview2D_polygon() : n(0), x(0), y(0) {}
@@ -369,7 +369,7 @@ class vgui_soview2D_polygon : public vgui_soview2D
   unsigned n;
   float *x, *y;
   void set_size(unsigned );
-
+  bool filled;
   //static void compile();
 };
 

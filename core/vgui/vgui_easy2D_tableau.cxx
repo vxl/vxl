@@ -80,6 +80,10 @@ vgui_easy2D_tableau::vgui_easy2D_tableau(vgui_tableau_sptr const& i, const char*
 
 bool vgui_easy2D_tableau::handle(vgui_event const& e)
 {
+#if 0 //event tracker
+  if(e.type != vgui_MOTION)
+    vcl_cout << "easy2D" << e << '\n' << vcl_flush;
+#endif
   if (image_slot && (e.type != vgui_DRAW || gl_mode != GL_SELECT))
     image_slot.handle(e);
 
@@ -117,7 +121,7 @@ void vgui_easy2D_tableau::set_image(vcl_string const& fn)
 //: Set the child tableau to be the given tableau.
 void vgui_easy2D_tableau::set_child(vgui_tableau_sptr const& i)
 {
-  if (i->type_name() != "vgui_image_tableau" &&
+  if (i && i->type_name() != "vgui_image_tableau" &&
       i->type_name() != "xcv_image_tableau")
     vgui_macro_warning << "assigning what seems like a non-image to my child : i = " << i << vcl_endl;
   image_slot.assign(i);
@@ -261,10 +265,9 @@ vgui_soview2D_linestrip* vgui_easy2D_tableau::add_linestrip(unsigned n, float co
 }
 
 //: Add  polygon with the given n vertices to the display.
-vgui_soview2D_polygon* vgui_easy2D_tableau::add_polygon(unsigned n, float const *x, float const *y)
+vgui_soview2D_polygon* vgui_easy2D_tableau::add_polygon(unsigned n, float const *x, float const *y, bool filled)
 {
-  vgui_soview2D_polygon *obj = new vgui_soview2D_polygon(n, x, y);
-
+  vgui_soview2D_polygon *obj = new vgui_soview2D_polygon(n, x, y, filled);
   add(obj);
   return obj;
 }
@@ -470,6 +473,10 @@ vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
   vgui_soview2D_image *obj = new vgui_soview2D_image( x, y, img, blend );
   add(obj);
   return obj;
+}
+//: access the child on the parent-child link
+vgui_tableau_sptr vgui_easy2D_tableau::child() const{
+  return image_slot.child();
 }
 
 #if 0 // deprecated method
