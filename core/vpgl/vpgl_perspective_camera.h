@@ -23,6 +23,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_ray_3d.h>
+#include <vgl/vgl_frustum_3d.h>
 #include <vcl_iosfwd.h>
 
 #include "vpgl_proj_camera.h"
@@ -214,6 +215,10 @@ postmultiply( const vpgl_perspective_camera<T>& in_cam,
 template <class T>
 vcl_vector<vpgl_perspective_camera<T> > cameras_from_directory(vcl_string dir, T);
 
-
+//: compute the frustrum of the camera view cone. The near plane
+//  the far plane distances are user defined. 
+template <class T>
+vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam,
+			  T d_near, T d_far);
 
 #endif // vpgl_perspective_camera_h_

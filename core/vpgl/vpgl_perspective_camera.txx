@@ -571,6 +571,27 @@ double vpgl_persp_cam_distance( const vpgl_perspective_camera<T>& cam1, const vp
   return vcl_acos((trace-1.0)/2.0);  // dist is theta
 }
 
+template <class T>
+vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam,
+			  T d_near, T d_far){
+
+  // normal of top face of the frustum
+  vgl_vector_3d<T> norm = -cam.principal_axis();
+  // get rays through the image corners
+  vpgl_calibration_matrix<T> K = cam.get_calibration();
+  vgl_point_2d<T> pp = K.principal_point();
+  // image corners
+  vgl_point_2d<T> ul(T(0), T(0));
+  vgl_point_2d<T> ur(T(2.0*pp.x()), T(0));
+  vgl_point_2d<T> lr(T(2.0*pp.x()), T(2.0*pp.y()));
+  vgl_point_2d<T> ll(T(0), T(2.0*pp.y()));
+  vcl_vector<vgl_ray_3d<T> > corner_rays;
+  corner_rays.push_back(cam.backproject_ray(lr));
+  corner_rays.push_back(cam.backproject_ray(ur));
+  corner_rays.push_back(cam.backproject_ray(ul));
+  corner_rays.push_back(cam.backproject_ray(ll));
+  return vgl_frustum_3d<T>(corner_rays, norm, d_near, d_far);
+}
 
 // Code for easy instantiation.
 #undef vpgl_PERSPECTIVE_CAMERA_INSTANTIATE
@@ -588,6 +609,7 @@ template double vpgl_persp_cam_distance(const vpgl_perspective_camera<T >& cam1,
                                         const vpgl_perspective_camera<T >& cam2); \
 template void vrml_write(vcl_ostream &s, const vpgl_perspective_camera<T >&, double rad); \
 template vcl_vector<vpgl_perspective_camera<T > > cameras_from_directory(vcl_string dir, T); \
+ template vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam, T d_near, T d_far); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vpgl_perspective_camera<T >&)
 

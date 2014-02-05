@@ -12,6 +12,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/vgl_frustum_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
@@ -190,6 +191,33 @@ static void test_perspective_camera()
   Pin.set_translation(tg);
   eql = cams_near_equal(Po, Pin, 0.01);
   TEST("get translation ", eql, true);
+  // test the frustum
+  vgl_frustum_3d<double> fr = frustum(P, 10.0, 20.0);
+  vcl_cout << P << fr;
+  vgl_point_3d<double> cnt = fr.centroid();
+  vcl_cout << cnt;
+  double dif = vcl_fabs(cnt.z()-5.0) +vcl_fabs( cnt.x()) + vcl_fabs(cnt.y());
+  TEST_NEAR("Perspective frustum", dif, 0.0, 1.0e-04);
+  // actual camera parameters  DSC_0070
+  vcl_stringstream str;
+  str << 664.975 << ' '<< 0 << ' ' << 752 << '\n';
+  str << 0 << ' '<< 664.975 << ' ' << 500 << '\n';
+  str << 0 << ' '<< 0 << ' ' << 1 << '\n';
+  str << 0.895636  << ' ' << -0.443045  << ' ' << -0.0393379 << '\n';
+  str << -0.0777288 << ' ' << -0.0688225 << ' ' << -0.994597 << '\n';
+  str << 0.437943  << ' ' << 0.893854   << ' ' << -0.0960772 << '\n';
+  str << -23.7517  << ' ' << 3.91779 << ' ' << -1.61185 << '\n';
+
+  vpgl_perspective_camera<double> Pact;
+  str >> Pact;
+  vgl_frustum_3d<double> fr_act = frustum(Pact, 0.5, 60.0);
+  vgl_point_3d<double> pt_in(20.7763, 0.42938, 0.8249);
+  vgl_point_3d<double> pt_out(-20.0135,-1.3294,0.7445); 
+  vcl_cout << "in " << pt_in<<" out " <<  pt_out <<'\n'
+	  << Pact <<'\n' << fr_act << '\n';
+  bool cont = fr_act.contains(pt_in);
+  bool not_cont = !fr_act.contains(pt_out);
+  TEST("point_in_actual_frustum", cont&&not_cont, true);
 }
 
 TESTMAIN(test_perspective_camera);
