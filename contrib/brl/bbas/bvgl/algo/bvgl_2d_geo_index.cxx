@@ -79,27 +79,57 @@ void bvgl_2d_geo_index::write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_n
     ul[0] = n->extent_.max_point().y(); ul[1] = n->extent_.min_point().x();
     lr[0] = n->extent_.min_point().y(); lr[1] = n->extent_.max_point().x();
     ur[0] = n->extent_.max_point().y(); ur[1] = n->extent_.max_point().x();
-    bkml_write::write_box(ofs, " ", explanation, ul, ur,ll,lr);
+    bkml_write::write_box(ofs, " ", explanation, ul, ur, ll, lr);
   }
   else {
     for (unsigned c_idx = 0; c_idx < n->children_.size(); c_idx++)
-      write_to_kml_node(ofs, n->children_[c_idx], current_depth+1, depth);
+      write_to_kml_node(ofs, n->children_[c_idx], current_depth+1, depth, explanation);
   }
 }
 
 // write the quadtree node structure at certain depth
-void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file)
+void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vcl_string explanation)
 {
   vcl_ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
-  write_to_kml_node(ofs, root, 0, depth);
+  write_to_kml_node(ofs, root, 0, depth, explanation);
+  bkml_write::close_document(ofs);
+}
+
+// write node and its children to kml for quadtree having non geo coordinates
+void bvgl_2d_geo_index::write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, vpgl_lvcs_sptr const& lvcs, vcl_string explanation)
+{
+  if (!n)
+    return;
+  if (current_depth == depth) {
+    double min_lon, min_lat, max_lon, max_lat, gz;
+    lvcs->local_to_global(n->extent_.min_point().x(), n->extent_.min_point().y(), 0.0, vpgl_lvcs::wgs84, min_lon, min_lat, gz);
+    lvcs->local_to_global(n->extent_.max_point().x(), n->extent_.max_point().y(), 0.0, vpgl_lvcs::wgs84, max_lon, max_lat, gz);
+    vnl_double_2 ul, ll, lr, ur;
+    ll[0] = min_lat;  ll[1] = min_lon;
+    ul[0] = max_lat;  ul[1] = min_lon;
+    lr[0] = min_lat;  lr[1] = max_lon;
+    ur[0] = max_lat;  ur[1] = max_lon;
+    bkml_write::write_box(ofs, " ", explanation, ul, ur, ll, lr);
+  }
+  else {
+    for (unsigned c_idx = 0; c_idx < n->children_.size(); c_idx++)
+      write_to_kml_node(ofs, n->children_[c_idx], current_depth+1, depth, lvcs, explanation);
+  }
+}
+
+void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vpgl_lvcs_sptr const& lvcs, vcl_string explanation)
+{
+  vcl_ofstream ofs(kml_file.c_str());
+  bkml_write::open_document(ofs);
+  write_to_kml_node(ofs, root, 0, depth, lvcs, explanation);
   bkml_write::close_document(ofs);
 }
 
 // return the depth of the tree
 unsigned bvgl_2d_geo_index::depth(bvgl_2d_geo_index_node_sptr node)
 {
-  if (node->children_.empty())  // alreay at leaf level
+  if (node->children_.empty())  // already at leaf level
     return 0;
   unsigned d = 0;
   for (unsigned i = 0; i < node->children_.size(); i++) {
@@ -136,6 +166,38 @@ void bvgl_2d_geo_index::write(bvgl_2d_geo_index_node_sptr root, vcl_string const
   vcl_ofstream ofs(file_name.c_str());
   ofs << min_size << '\n';
   write_to_text(ofs, root);
+}
+
+// write the tree structure using lvcs
+void write_to_text(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, vpgl_lvcs_sptr const& lvcs)
+{
+  // transfer the extents
+  double min_lon, min_lat, max_lon, max_lat, gz;
+  lvcs->local_to_global(n->extent_.min_point().x(), n->extent_.min_point().y(), 0.0, vpgl_lvcs::wgs84, min_lon, min_lat, gz);
+  lvcs->local_to_global(n->extent_.max_point().x(), n->extent_.max_point().y(), 0.0, vpgl_lvcs::wgs84, max_lon, max_lat, gz);
+  ofs << vcl_setprecision(6) << vcl_fixed << min_lon << ' '
+      << vcl_setprecision(6) << vcl_fixed << min_lat << ' '
+      << vcl_setprecision(6) << vcl_fixed << max_lon << ' '
+      << vcl_setprecision(6) << vcl_fixed << max_lat << ' '
+      << n->children_.size() << '\n';
+  for (unsigned i = 0; i < n->children_.size(); i++) {
+    if (!n->children_[i]) ofs << " 0";
+    else ofs << " 1";
+  }
+  ofs << '\n';
+  for (unsigned i = 0; i < n->children_.size(); i++) {
+    if (n->children_[i])
+      write_to_text(ofs, n->children_[i], lvcs);
+  }
+}
+
+void bvgl_2d_geo_index::write(bvgl_2d_geo_index_node_sptr root, vcl_string const& file_name, double const& min_size, vpgl_lvcs_sptr const& lvcs)
+{
+  vcl_ofstream ofs(file_name.c_str());
+  double min_size_x, min_size_y, gz;
+  lvcs->local_to_global(min_size, min_size, 0.0, vpgl_lvcs::wgs84, min_size_x, min_size_y, gz);
+  ofs << min_size_x << '\n';
+  write_to_text(ofs, root, lvcs);
 }
 
 // prune the tree leaves by given polygon

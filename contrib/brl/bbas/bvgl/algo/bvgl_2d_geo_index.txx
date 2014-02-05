@@ -129,7 +129,8 @@ bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree(vgl_box_2d<double>
     root = new bvgl_2d_geo_index_node<Type>(bbox);
     construct_sub_tree_poly<Type>(root, min_size, poly);
   }
-  vcl_cout << "bounding box " << bbox << " and polygon does not intersect, return an empty tree" << vcl_endl;
+  else
+    vcl_cout << "bounding box " << bbox << " and polygon does not intersect, return an empty tree" << vcl_endl;
   return root;
 }
 
@@ -147,7 +148,8 @@ bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree(vgl_box_2d<float> 
     root = new bvgl_2d_geo_index_node<Type>(bbox_double);
     construct_sub_tree_poly<Type>(root, min_sz_double, poly_double);
   }
-  vcl_cout << "bounding box " << bbox << " and polygon does not intersect, return an empty tree" << vcl_endl;
+  else
+    vcl_cout << "bounding box " << bbox << " and polygon does not intersect, return an empty tree" << vcl_endl;
   return root;
 }
 

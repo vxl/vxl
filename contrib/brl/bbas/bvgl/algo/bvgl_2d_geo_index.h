@@ -12,13 +12,15 @@
 //
 // \verbatim
 // Modifications
-//   <none yet>
+//   Yi Dong    Feb, 2014 -- add method to write tree structure given a lvcs if the tree is not in geo coordinates
 // \endverbatim
 //
 
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_box_2d.h>
+#include <vpgl/vpgl_lvcs.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 #include "bvgl_2d_geo_index_node_base.h"
 
 template <class Type>
@@ -74,12 +76,19 @@ public:
   static bool prune_tree(bvgl_2d_geo_index_node_sptr root, vgl_polygon<float> const& poly);
 
   //: write out kml file at given depth of the tree
-  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file);
+  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vcl_string explanation="location");
+  //: write out kml file for quadtree with non geo coordinates using given lvcs
+  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vpgl_lvcs_sptr const& lvcs, vcl_string explanation="location");
   //: write out kml file for the given node and its children
   static void write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, vcl_string explanation="location");
+  static void write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth,
+                                vpgl_lvcs_sptr const& lvcs, vcl_string explanation="location");
 
   //: write the quadtree structure into a text file, only the tree structure and not the content on the node
   static void write(bvgl_2d_geo_index_node_sptr root, vcl_string const& file_name, double const& min_size);
+
+  //: write the quadtree structure into a text file, the local coordinates inside the quadtree will be transferred to lon/lat using given lvcs
+  static void write(bvgl_2d_geo_index_node_sptr root, vcl_string const& file_name, double const& min_size, vpgl_lvcs_sptr const& lvcs);
 
   //: return all leaves of the quadtree
   static void get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves);
