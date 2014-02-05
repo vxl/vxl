@@ -30,6 +30,325 @@
 #include <vnl/vnl_math.h>
 
 
+int main(int argc, char** argv)
+{
+  vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
+  vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder prefix to read the geo hypotheses", "");
+  vul_arg<vcl_string> geo_index_folder("-index", "folder prefix to read the geo index and the hypo","");
+  vul_arg<unsigned>   point_angle("-point", "point_angle use to locate geo index", 0);
+  vul_arg<vcl_string> candidate_list("-cand", "candidate list if exist", "");
+  vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");                                // query -- camera space binary
+  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
+  vul_arg<vcl_string> img("-img", "query images, to get the image size", "");                    // query -- actual query image
+  vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");                             // query -- spherical_shell binary
+  vul_arg<vcl_string> query_bin("-query", "query binary file", "");
+  vul_arg<float>      buffer_capacity("-buff", "index buffer capacity (GB)", 1.0f);
+  vul_arg<vcl_string> out("-out", "job output folder", "");
+  vul_arg<unsigned>   id("-id", "id of the test image", 9999);
+  vul_arg<unsigned>   pass_id("-pass", "from pass 0 to pass 1", 1);
+  vul_arg_parse(argc, argv);
+
+  // check input
+  if (out().compare("") == 0 || geo_hypo_folder().compare("") == 0 || geo_index_folder().compare("") == 0 || point_angle() == 0 ||
+      gt_file().compare("") == 0 ||
+      pass_id() > 2 ||
+      img().compare("") == 0 ||
+      query_bin().compare("") == 0 ||
+      id() > 1000)
+  {
+    vul_arg_display_usage_and_exit();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  vcl_stringstream log;
+  vcl_string log_file = out() + "/render_img_log.xml";
+
+  // read the gt location for test image id, i.e., lat and lon
+  if (!vul_file::exists(gt_file())) {
+    log << "ERROR: can not find ground truth position file -->" << gt_file() << '\n';
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
+  unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
+  if (id() >= cnt) {
+    log << "ERROR: the file: " << gt_file() << " does not contain test id: " << id() << "!\n";
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+
+  // check whether we have candidate list for this query
+  bool is_candidate = false;
+  vgl_polygon<double> cand_poly;
+  if ( candidate_list().compare("") != 0) {
+    if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
+      is_candidate = true;
+      volm_io::read_polygons(candidate_list(), cand_poly);
+    }
+    else {
+      log << "ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
+      volm_io::write_post_processing_log(log_file, log.str());
+      vcl_cerr << log.str();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+  }
+
+  // create tiles
+  vcl_vector<volm_tile> tiles;
+  if (samples[id()].second.second == "desert" )
+    tiles = volm_tile::generate_p1_wr1_tiles();
+  else if (samples[id()].second.second == "coast" )
+    tiles = volm_tile::generate_p1_wr2_tiles();
+  else if (samples[id()].second.second == "Chile" )
+    tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (samples[id()].second.second == "India" )
+    tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (samples[id()].second.second == "Jordan" )
+    tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (samples[id()].second.second == "Philippines" )
+    tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (samples[id()].second.second == "Taiwan" )
+    tiles = volm_tile::generate_p1b_wr5_tiles();
+  else {
+    log << "ERROR: unknown world region, should be \" desert, coast, Chile, India, Jordan, Philippines, Taiwan\"\n";
+    volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+
+  // locate which tile contains current locations
+  unsigned tile_id = tiles.size();
+  for (unsigned i = 0; i < tiles.size(); i++)
+    if (tiles[i].bbox_double().contains(samples[id()].first.x(), samples[id()].first.y()))
+      tile_id = i;
+  vcl_cout << "GT location " << id() << " ---> " << samples[id()].first.x() << ", " << samples[id()].first.y() << ", is in tile " << tile_id << vcl_endl;
+
+  // load the geo_locations
+  vcl_stringstream file_name_pre;
+  file_name_pre << geo_hypo_folder() << "/geo_index_tile_" << tile_id;
+  if (!vul_file::exists(file_name_pre.str() + ".txt")) {
+    log << "GT location " << id() << " ---> " << samples[id()].first.x() << ", " << samples[id()].first.y() << " is in tile " << tile_id
+        << " but no geo_locations for this tile\n";
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cout << log.str();
+    return volm_io::POST_PROCESS_HALT;
+  }
+  float min_size;
+  volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
+  volm_geo_index::read_hyps(root, file_name_pre.str());
+  if (is_candidate) {
+    volm_geo_index::prune_tree(root, cand_poly);
+  }
+  vcl_vector<volm_geo_index_node_sptr> leaves;
+  volm_geo_index::get_leaves_with_hyps(root, leaves);
+
+  // load index parameters
+  boxm2_volm_wr3db_index_params params;
+  vcl_stringstream params_file;
+  params_file << geo_index_folder() << "/geo_index_tile_" << tile_id << "_index.params";
+  if (!params.read_params_file(params_file.str())) {
+    log << "ERROR: cannot read params file from " << params_file.str() << '\n';
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  unsigned layer_size = params.layer_size;
+
+  // create volm_query
+  volm_spherical_container_sptr sph = new volm_spherical_container(params.solid_angle, params.vmin, params.dmax);
+  // load sph_shell
+  if (!vul_file::exists(sph_bin())) {
+    log << "ERROR: cannot read spherical shell binary from " << sph_bin() << '\n';
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  vsl_b_ifstream sph_ifs(sph_bin());
+  volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
+  sph_shell->b_read(sph_ifs);
+  sph_ifs.close();
+  if (sph_shell->get_container_size() != params.layer_size) {
+    log << "ERROR: the spherical shell binary (" << sph_shell->get_container_size() << ") has different parameters setting from index ("
+        << params.layer_size << ")\n";
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  // load camera space
+  if (!vul_file::exists(cam_bin())) {
+    log << "ERROR: can not find camera_space binary: " << cam_bin() << '\n';
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  vsl_b_ifstream cam_ifs(cam_bin());
+  volm_camera_space_sptr cam_space = new volm_camera_space();
+  cam_space->b_read(cam_ifs);
+  cam_ifs.close();
+  // check depth_map_scene binary
+  if (!vul_file::exists(dms_bin())) {
+    log << "ERROR: can not find depth_map_scene " << dms_bin() << '\n';
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  // load query
+  volm_query_sptr query = new volm_query(query_bin(), cam_space, dms_bin(), sph_shell, sph);
+
+  // load associate score binary file
+  vcl_stringstream score_file;
+  score_file << out() << "ps_1_scores_tile_" << tile_id << ".bin";
+  if (!vul_file::exists(score_file.str())) {
+    log << "ERROR: can not find score file " << score_file.str() << '\n';
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  vcl_vector<volm_score_sptr> scores;
+  volm_score::read_scores(scores, score_file.str());
+
+  // get the ground truth score and camera from score binary
+  vgl_point_3d<double> gt_loc;
+  gt_loc = samples[id()].first;
+  double gt_lon, gt_lat;
+  gt_lon = gt_loc.x();  gt_lat = gt_loc.y();
+  unsigned hyp_gt = 0;
+  volm_geo_index_node_sptr leaf_gt = volm_geo_index::get_closest(root, gt_lat, gt_lon, hyp_gt);
+  // check the distance from ground trugh location to the closest in geo_index
+  vgl_point_3d<double> gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
+
+  double sec_to_meter = 21.0/0.000202;;  // 1 arcsec ~ 30 meter ~ 1/3600 degree
+  double x_dist = abs(gt_loc.x()-gt_closest.x())*sec_to_meter;
+  double y_dist = abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
+  vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
+  double gt_dist = sqrt(gt_dist_vec.sqr_length());
+  vcl_cerr << vcl_setprecision(10) << " GT_location = " << gt_loc
+           << ", closest location = " << gt_closest
+           << ", distance = " << gt_dist << " meter\n";
+
+  unsigned h_gt, cam_gt_best;
+  float score_gt;
+  for (unsigned i = 0; i < scores.size(); i++) {
+    unsigned li = scores[i]->leaf_id_;
+    unsigned hi = scores[i]->hypo_id_;
+    if (leaf_gt->get_string() == leaves[li]->get_string() && hyp_gt == hi) {
+      h_gt = hi; score_gt = scores[i]->max_score_; cam_gt_best = scores[i]->max_cam_id_;
+    }
+  }
+  cam_angles gt_cam_ang = cam_space->camera_angles(cam_gt_best);
+  if (!vul_file::exists(img())) {
+    log << "ERROR: can not find the test query image: " << img() << '\n';
+    volm_io::write_post_processing_log(log_file, log.str());
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  vil_image_view<vxl_byte> query_img = vil_load(img().c_str());
+  log << " For GT location, leaf is " << leaf_gt->get_string()
+      << " hypo_id = " << hyp_gt << '\n'
+      << " For GT location, closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
+      << " distance from closest to GT location is " << gt_dist
+      << " has best score = " << score_gt << ", best camera stored in BestCamera.kml ( "
+      << gt_cam_ang.get_string() << ", id = " << cam_gt_best << " ) img size " << query_img.ni() << " by " << query_img.nj() << '\n';
+  vcl_cout << log.str();
+  volm_io::write_post_processing_log(log_file, log.str());
+
+  // render the index ray-based image
+  vcl_stringstream out_fname_pre;
+  out_fname_pre << out() << "/geo_index_tile_" << tile_id;
+  // load associate indices
+  vcl_stringstream file_index_name_pre;
+  file_index_name_pre << geo_index_folder() << "/geo_index_tile_" << tile_id;
+  boxm2_volm_wr3db_index_sptr ind_dst = new boxm2_volm_wr3db_index(layer_size, buffer_capacity());
+  boxm2_volm_wr3db_index_sptr ind_ori = new boxm2_volm_wr3db_index(layer_size, buffer_capacity());
+  boxm2_volm_wr3db_index_sptr ind_lnd = new boxm2_volm_wr3db_index(layer_size, buffer_capacity());
+  ind_dst->initialize_read(leaf_gt->get_index_name(file_index_name_pre.str()));
+  ind_ori->initialize_read(leaf_gt->get_label_index_name(file_index_name_pre.str(), "orientation"));
+  ind_lnd->initialize_read(leaf_gt->get_label_index_name(file_index_name_pre.str(), "land"));
+
+  unsigned h_id;
+  vgl_point_3d<double> h_pt;
+  while (leaf_gt->hyps_->get_next(0,1,h_pt)) {
+    vcl_vector<unsigned char> values_dst(layer_size);
+    vcl_vector<unsigned char> values_ori(layer_size);
+    vcl_vector<unsigned char> values_lnd(layer_size);
+    h_id = leaf_gt->hyps_->current_-1;
+    ind_dst->get_next(values_dst);
+    ind_ori->get_next(values_ori);
+    ind_lnd->get_next(values_lnd);
+    if (h_id == h_gt) {
+      vcl_stringstream dst_img_fname;
+      vcl_stringstream ori_img_fname;
+      vcl_stringstream lnd_img_fname;
+      dst_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_dst_best_cam.png";
+      ori_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_ori_best_cam.png";
+      lnd_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_lnd_best_cam.png";
+      vil_image_view<vil_rgb<vxl_byte> > dst_img(query_img.ni(), query_img.nj());
+      vil_image_view<vil_rgb<vxl_byte> > ori_img(query_img.ni(), query_img.nj());
+      vil_image_view<vil_rgb<vxl_byte> > lnd_img(query_img.ni(), query_img.nj());
+      dst_img.fill(vil_rgb<unsigned char>(120,120,120));
+      ori_img.fill(vil_rgb<unsigned char>(120,120,120));
+      lnd_img.fill(vil_rgb<unsigned char>(120,120,120));
+      query->depth_rgb_image(values_dst, cam_gt_best, dst_img, "depth");
+      query->depth_rgb_image(values_ori, cam_gt_best, ori_img, "orientation");
+      query->depth_rgb_image(values_lnd, cam_gt_best, lnd_img, "land");
+      vil_save(dst_img, (dst_img_fname.str()).c_str());
+      vil_save(ori_img, (ori_img_fname.str()).c_str());
+      vil_save(lnd_img, (lnd_img_fname.str()).c_str());
+
+      if (id() == 46 || id() == 40) {
+        vcl_stringstream dst_gt_img_fname;
+        vcl_stringstream ori_gt_img_fname;
+        vcl_stringstream lnd_gt_img_fname;
+        dst_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_depth_gt_cam.png";
+        ori_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_orient_gt_cam.png";
+        lnd_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_lnd_gt_cam.png";
+        vil_image_view<vil_rgb<vxl_byte> > dst_gt_img(query_img.ni(), query_img.nj());
+        vil_image_view<vil_rgb<vxl_byte> > ori_gt_img(query_img.ni(), query_img.nj());
+        vil_image_view<vil_rgb<vxl_byte> > lnd_gt_img(query_img.ni(), query_img.nj());
+        // initialize the image
+        dst_gt_img.fill(vil_rgb<unsigned char>(120,120,120));
+        ori_gt_img.fill(vil_rgb<unsigned char>(120,120,120));
+        lnd_gt_img.fill(vil_rgb<unsigned char>(120,120,120));
+        cam_angles gt_cam_ang(0, 8.61, 9.075913235, 89.141542);
+        vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
+        unsigned gt_cam_id = gt_cam_pair.first;
+        query->depth_rgb_image(values_dst, gt_cam_id, dst_gt_img, "depth");
+        query->depth_rgb_image(values_ori, gt_cam_id, ori_gt_img, "orientation");
+        query->depth_rgb_image(values_lnd, gt_cam_id, lnd_gt_img, "land");
+        vil_save(dst_gt_img, (dst_gt_img_fname.str()).c_str());
+        vil_save(ori_gt_img, (ori_gt_img_fname.str()).c_str());
+        vil_save(lnd_gt_img, (lnd_gt_img_fname.str()).c_str());
+      }
+
+    }
+  }
+
+  // write out the camera kml
+  vcl_string cam_kml = out() + "/BestCamera.kml";
+  vcl_ofstream ofs_kml(cam_kml.c_str());
+  bkml_write::open_document(ofs_kml);
+
+  // write camera
+  vcl_string kml_name = "BestCamera";
+  double head = (gt_cam_ang.heading_ < 0) ? gt_cam_ang.heading_ + 360.0 : gt_cam_ang.heading_;
+  double tilt = (gt_cam_ang.tilt_ < 0) ? gt_cam_ang.tilt_ + 360 : gt_cam_ang.tilt_;
+  double roll;
+  if (gt_cam_ang.roll_ * gt_cam_ang.roll_ < 1E-10) roll = 0;
+  else                                             roll = gt_cam_ang.roll_;
+
+  double tfov = gt_cam_ang.top_fov_;
+  double tv_rad = tfov / vnl_math::deg_per_rad;
+  double ttr = vcl_tan(tv_rad);
+  double rfov = vcl_atan( query_img.ni() * ttr / query_img.nj() ) * vnl_math::deg_per_rad;
+  bkml_write::write_photo_overlay(ofs_kml, kml_name, gt_closest.x(), gt_closest.y(), cam_space->altitude(),
+                                  head, tilt, roll, tfov, rfov);
+  // write location
+  bkml_write::write_location(ofs_kml, gt_closest.y(), gt_closest.x(), cam_space->altitude(), "gt_closest");
+  bkml_write::close_document(ofs_kml);
+  return volm_io::SUCCESS;
+}
+
+
+#if 0
 // generate gt hypos
 int main(int argc,  char** argv)
 {
@@ -228,7 +547,7 @@ int main(int argc,  char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-  // locd the query
+  // load the query
   //if (!vul_file::exists(query_bin())) {
   //  log << "ERROR: can not find query_binar " << query_bin() << '\n';
   //  volm_io::write_post_processing_log(log_file, log.str());
@@ -491,3 +810,4 @@ int main(int argc,  char** argv)
 #endif
   return volm_io::SUCCESS;
 }
+#endif

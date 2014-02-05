@@ -14,7 +14,7 @@ id name level width fallback1 fallback2 fallback3 fallback4 weight1 weight2 weig
 12 Pasture_Hay 0 0 12 11 10 14 1.000 0.800 0.600 0.600
 13 Cultivated_Crops 0 0 13 35 4 11 1.000 1.000 0.600 0.300
 14 Woody_Wetlands/Marina 0 0 14 1 11 6 1.000 0.800 0.400 0.600
-15 building 4 0 15 4 13 34 1.000 0.800 0.800 0.500
+15 building 4 0 15 4 31 241 1.000 0.800 0.800 0.500
 16 airports 1 0.5 16 4 37 11 1.000 0.800 0.800 0.800
 17 beaches 0 0 17 1 6 4 1.000 0.800 0.600 0.600
 18 bridges 3 0 18 1 4 13 1.000 0.800 0.900 0.600
@@ -150,4 +150,7 @@ id name level width fallback1 fallback2 fallback3 fallback4 weight1 weight2 weig
 148 mountain_peak 1 0 148 6 6 6 1.000 0.800 0.800 0.800
 149 store_laundry 4 0 149 4 15 120 1.000 0.900 0.600 0.700
 150 road_road 4 2.5 150 31 4 13 1.000 0.800 0.800 0.600
-241 T_section 5 5.0 241 31 83 4 1.000 0.800 0.800 0.600
+152	road_motorway	5	15	152	150	154	153	1	0.8	0.7	0.7
+153	road_trunk	5	7.5	153	150	154	152	1	0.9	0.8	0.7
+154	road_tertiary	5	6	154	150	153	152	1	0.9	0.8	0.7
+241	T_section	5	5	241	31	150	154	1	0.8	0.8	0.6

@@ -567,10 +567,10 @@ bool volm_io::read_query_tags(vcl_string xml_file,
   return true;
 }
 
-bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, vcl_string log_message)
+bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, vcl_string log_message, vcl_string status_file)
 {
   vcl_ofstream file;
-  vcl_string out_file = out_folder + "/status.xml";
+  vcl_string out_file = out_folder + "/" + status_file;
   file.open (out_file.c_str());
   file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n";
   switch (status_code) {

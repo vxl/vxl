@@ -118,7 +118,7 @@ class volm_io
   //: scale value is STRONG_POSITIVE-STRONG_NEGATIVE
   enum VOLM_IMAGE_CODES {UNEVALUATED = 0, STRONG_NEGATIVE = 1, UNKNOWN = 127, STRONG_POSITIVE = 255, SCALE_VALUE = 254};
 
-  static bool write_status(vcl_string out_folder, int status_code, int percent=0, vcl_string log_message = "");
+  static bool write_status(vcl_string out_folder, int status_code, int percent=0, vcl_string log_message = "", vcl_string status_file="status.xml");
   static bool write_log(vcl_string out_folder, vcl_string log);
   static bool write_composer_log(vcl_string out_folder, vcl_string log);
   static bool write_post_processing_log(vcl_string log_file, vcl_string log);

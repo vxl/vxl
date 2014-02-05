@@ -164,6 +164,6 @@ int main(int argc, char** argv)
     query->draw_query_images(out_folder());
   }
 
-  volm_io::write_status(out_folder(), volm_io::SUCCESS);
+  volm_io::write_status(out_folder(), volm_io::PRE_PROCESS_FINISHED);
   return volm_io::SUCCESS;
 }

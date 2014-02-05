@@ -27,19 +27,17 @@
 int main(int argc, char** argv)
 {
   // input
-  vul_arg<vcl_string> cam_file("-cam", "cam kml filename", "");                                  // query camera kml
-
-  vul_arg<vcl_string> params_file("-params", "text file with the incremental params to construct camera space", "");
-  vul_arg<vcl_string> dms_file("-dms", "binary file with depth map scene", "");                // query labelme xml
-  vul_arg<vcl_string> local_out_folder("-loc_out", "local output folder where the intermediate files are stored", "");
-  vul_arg<vcl_string> weight_folder("-wgt_out", "output folder where the weight_param.txt", "");
+  vul_arg<vcl_string> cam_file("-cam", "cam kml filename", "");                                                        // query camera kml
+  vul_arg<vcl_string> params_file("-params", "text file with the incremental params to construct camera space", "");   // query camera incremental file
+  vul_arg<vcl_string> dms_file("-dms", "binary file with depth map scene", "");                                        // query label binary
+  vul_arg<vcl_string> local_out_folder("-loc_out", "local output folder where the intermediate files are stored", ""); // output folder where camera binary will be stored
   vul_arg_parse(argc, argv);
 
   vcl_stringstream log;
 
   // check the input parameters
   if (cam_file().compare("") == 0 || dms_file().compare("") == 0 ||
-      local_out_folder().compare("") == 0 || params_file().compare("") == 0 || weight_folder().compare("") == 0)
+      local_out_folder().compare("") == 0 || params_file().compare("") == 0)
   {
     vcl_cerr << " ERROR: input file/folders can not be empty!\n";
     volm_io::write_status(local_out_folder(), volm_io::EXE_ARGUMENT_ERROR);
@@ -140,61 +138,6 @@ int main(int argc, char** argv)
   cam_space.b_write(ofs);
   ofs.close();
 
-  // from loaded depth_map_scene, create an empty weight_parameter text file and store it in the local output folder
-  vcl_string weight_file = weight_folder() + "/weight_param.txt";
-
-  if (!vul_file::exists(weight_file)) {
-    vcl_ofstream ofs_weight(weight_file.c_str());
-    ofs_weight << "Note: 1. for all objects, the summation of weight in the last col should be equal to 1"
-               << " (average = " << 1/float(!dm->sky().empty() + !dm->ground_plane().empty() + dm->scene_regions().size()) << ")\n"
-               << "      2. for any objects, the summation of all weights from different attributes should be equal to 1\n\n"
-               << "name                      type      orientation      land_class      min_distance      relative_order       obj_weight\n";
-    ofs_weight.setf(vcl_ios_left);
-
-    // sky weight
-    if (dm->sky().size()) {
-      ofs_weight.width(20);
-      ofs_weight.fill(' ');
-      ofs_weight << "sky     sky            0.0             0.0              1.0              0.0\n";
-    }
-
-    // ground weight
-    if (dm->ground_plane().size()) {
-      ofs_weight.width(20);
-      ofs_weight.fill(' ');
-      ofs_weight << "ground     ground\n";
-    }
-
-    // object weight, the sequence should follow the pre-defined order
-
-    vcl_vector<depth_map_region_sptr> obj_reg = dm->scene_regions();
-    // sort the regions on depth order
-    vcl_sort(obj_reg.begin(), obj_reg.end(), compare_order());
-    for (vcl_vector<depth_map_region_sptr>::iterator rit = obj_reg.begin(); rit != obj_reg.end(); ++rit) {
-      ofs_weight.width(20);
-      ofs_weight.fill(' ');
-      if ( rit == obj_reg.end() - 1)
-        ofs_weight << (*rit)->name() << "     object";
-      else
-        ofs_weight << (*rit)->name() << "     object\n";
-    }
-    ofs_weight.close();
-  }
-
-
-#if 0
-  // test binary I/O
-  vcl_string cam_bin = local_out_folder() + "camera_space.bin";
-  vsl_b_ifstream ifs(cam_bin.c_str());
-  volm_camera_space_sptr csp_in = new volm_camera_space;
-  csp_in->b_read(ifs);
-  vcl_cout << " number of valid indics: " << (csp_in->valid_indices().size()) << vcl_endl;
-  for (unsigned i = 0 ; i < csp_in->valid_indices().size(); i++) {
-    cam_angles cam_ang = csp_in->camera_angles(i);
-    vcl_cout << " first camera angle: heading = " << cam_ang.heading_
-             << " tilt = " << cam_ang.tilt_ << " roll = " << cam_ang.roll_ << " tfov = " << cam_ang.top_fov_ << vcl_endl;
-  }
-#endif
   volm_io::write_status(local_out_folder(), volm_io::SUCCESS, 0, log.str());
   return volm_io::SUCCESS;
 }

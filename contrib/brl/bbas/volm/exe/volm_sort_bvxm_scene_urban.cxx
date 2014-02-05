@@ -37,7 +37,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> scene_root("-scene-root", "root directory where all scene xml and lvcs files are stored", "");
   vul_arg<vcl_string> out_filename("-out-file", "name of the txt file which the sorted results will be written", "urban_sort_scene.txt");
   vul_arg<float> voxel_size("-vox", "size of voxel in meters", 1.0f);
-  vul_arg<float> world_size("-size", "the size of the world in meters", 500.0f);
+  vul_arg<float> world_size_input("-size", "the size of the world in meters", 500.0f);
   vul_arg<vcl_string> in_poly("-poly", "region polygon as kml, the scenes that cover this polygon will be created", "");
   vul_arg_parse(argc, argv);
 
@@ -52,20 +52,47 @@ int main(int argc, char** argv)
   
   log_file << scene_root() << "/log_sort_scene_urban.xml";
   
-  
-  // create geo_index to fetch the size of leaf used in scene
-  vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
-  vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
-
-  // find the bbox of ROI from its polygon
-  vgl_box_2d<double> bbox_roi;
-  for (unsigned i = 0; i < poly[0].size(); i++) {
-    bbox_roi.add(poly[0][i]);
+  // load the geo_index from the folder, if tree structure not exist, create tree from given parameter
+  vcl_string tree_txt = scene_root() + "/geo_index.txt";
+  volm_geo_index2_node_sptr root;
+  if (vul_file::exists(tree_txt)) {
+    double min_size;
+    root = volm_geo_index2::read_and_construct<volm_loc_hyp_sptr>(tree_txt, min_size);
   }
-  double meter_to_deg = 1.0/(30.0*3600.0);  // 1 arcsecond is roughly 30 meter
-  double min_size = world_size()*meter_to_deg;
-  // create a geo index and use the leaves as scenes, use template param as volm_loc_hyp_sptr but it won't actually be used
-  volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(bbox_roi, min_size, poly);
+  else {
+    vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
+    vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
+
+    // find the bbox of ROI from its polygon
+    vgl_box_2d<double> bbox_rect;
+    for (unsigned i = 0; i < poly[0].size(); i++) {
+      bbox_rect.add(poly[0][i]);
+    }
+    double square_size = (bbox_rect.width() >= bbox_rect.height()) ? bbox_rect.width() : bbox_rect.height();
+    vgl_box_2d<double> bbox(bbox_rect.min_point(), square_size, square_size, vgl_box_2d<double>::min_pos);
+
+    // truncate the world size from voxel size
+    double world_size = (unsigned)vcl_ceil(world_size_input()/voxel_size())*(double)voxel_size();
+
+    // from defined world size, calculate the min_size of the geoindex
+    vgl_point_2d<double> ll(bbox_rect.min_x(), bbox_rect.min_y());
+    vgl_point_2d<double> ur(bbox_rect.max_x(), bbox_rect.max_y());
+    vpgl_lvcs_sptr lvcs_ll = new vpgl_lvcs(ll.y(), ll.x(), 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+    vpgl_lvcs_sptr lvcs_ur = new vpgl_lvcs(ur.y(), ur.x(), 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+
+    double scale_ll_x, scale_ll_y, gz;
+    lvcs_ll->local_to_global(world_size, world_size, 0.0, vpgl_lvcs::wgs84, scale_ll_x, scale_ll_y, gz);
+    scale_ll_x -= ll.x();  scale_ll_y -= ll.y();
+    double scale_ur_x, scale_ur_y;
+    lvcs_ur->local_to_global(world_size, world_size, 0.0, vpgl_lvcs::wgs84, scale_ur_x, scale_ur_y, gz);
+    scale_ur_x -= ur.x();  scale_ur_y -= ur.y();
+    vcl_set<double> scale_set;
+    scale_set.insert(scale_ur_x);  scale_set.insert(scale_ur_y);  scale_set.insert(scale_ll_x);  scale_set.insert(scale_ll_y);
+    double min_size = *scale_set.begin();
+    // create a geo index and use the leaves as scenes, use template param as volm_loc_hyp_sptr but it won't actually be used
+    root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(bbox, min_size, poly);
+  }
+
   vcl_vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root, leaves);
   vcl_cout << "the scene has " << leaves.size() << " leaves and depth is " << volm_geo_index2::depth(root) << vcl_endl;

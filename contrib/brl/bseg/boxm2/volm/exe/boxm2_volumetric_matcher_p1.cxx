@@ -88,6 +88,7 @@ int main(int argc, char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
+  vcl_stringstream status_xml;  status_xml << "status_tile_" << tile_id()<< "_gpu_" << dev_id() << ".xml";
 
   // check the consistency of tile_id and zone_id
   // for coast --- zone 18 contains only tile 8 to tile 14 and zone 17 contains only tile 0 to tile 8
@@ -112,7 +113,7 @@ int main(int argc, char** argv)
     log << " ERROR: gen_index_folder is wrong (missing last slash/ ?), no geo_index_files found in " << geo_hypo_folder() << '\n';
     if (do_log) { volm_io::write_log(out_folder(), log.str()); }
     vcl_cerr << log.str();
-    volm_io::write_status(out_folder(), volm_io::GEO_INDEX_FILE_MISSING);
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   float min_size;
@@ -127,7 +128,7 @@ int main(int argc, char** argv)
       log << " ERROR: can not fine candidate list file: " << candidate_list() << '\n';
       if (do_log)  volm_io::write_composer_log(out_folder(), log.str());
       vcl_cerr << log.str();
-      volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+      volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
     else {
@@ -156,7 +157,7 @@ int main(int argc, char** argv)
   if (!params.read_params_file(params_file.str())) {
     log << " ERROR: cannot read params file from " << params_file.str() << '\n';
     if (do_log)  volm_io::write_log(out_folder(), log.str());
-    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
     vcl_cout << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -172,7 +173,7 @@ int main(int argc, char** argv)
   if ( !vul_file::exists(sph_bin()) ) {
     log << " ERROR: can not find spherical shell binary: " << sph_bin() << '\n';
     if (do_log) volm_io::write_log(out_folder(), log.str());
-    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -187,7 +188,7 @@ int main(int argc, char** argv)
   if (sph_shell->get_container_size() != params.layer_size) {
     log << " ERROR: The loaded spherical shell has different layer size from the index\n";
     if (do_log) volm_io::write_log(out_folder(), log.str());
-    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -196,7 +197,7 @@ int main(int argc, char** argv)
   // load camera space
   if (!vul_file::exists(cam_bin())) {
     vcl_cerr << " ERROR: camera_space binary --> " << cam_bin() << " can not be found!\n";
-    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vsl_b_ifstream ifs_cam(cam_bin());
@@ -207,7 +208,7 @@ int main(int argc, char** argv)
   // check depth_map_scene binary
   if (!vul_file::exists(dms_bin())) {
     vcl_cerr << " ERROR: depth map scene binary can not be found ---> " << dms_bin() << '\n';
-    volm_io::write_status(out_folder(), volm_io::DEPTH_SCENE_FILE_IO_ERROR);
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -305,9 +306,9 @@ int main(int argc, char** argv)
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
   if (dev_id() >= (unsigned)mgr->numGPUs()) {
     log << " GPU is " << dev_id() << " is invalid, only " << mgr->numGPUs() << " are available\n";
-    if (do_log) volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
-    volm_io::write_log(out_folder(), log.str());
+    if (do_log)  volm_io::write_log(out_folder(), log.str());
     vcl_cerr << log.str();
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vcl_cout << "\n==================================================================================================\n"
@@ -327,7 +328,7 @@ int main(int argc, char** argv)
   if (!obj_ps1_matcher.volm_matcher_p1()) {
     log << " ERROR: pass 1 volm_matcher failed for geo_index " << params_file.str() << '\n';
     if (do_log) volm_io::write_log(out_folder(), log.str());
-    volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
     vcl_cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
@@ -346,7 +347,7 @@ int main(int argc, char** argv)
   if (!obj_ps1_matcher.write_matcher_result(out_fname_bin.str())) {
     log << " ERROR: writing output failed for pass 1 ray_based matcher\n";
     if (do_log) volm_io::write_log(out_folder(), log.str());
-    volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
+    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
     vcl_cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
@@ -405,11 +406,9 @@ int main(int argc, char** argv)
       gt_score_txt << out_folder() << "ps_1_gt_l_" << gt_l_id << "_h_" << gt_h_id << "_cam_scores.txt";
       if (!obj_ps1_matcher.write_gt_cam_score(gt_l_id, gt_h_id, gt_score_txt.str())) {
         log << " ERROR: writing output failed --> can not find ground truth leaf_id " << gt_l_id << ", hypo_id " << gt_h_id << '\n';
-        if (do_log) {
-          volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
-          volm_io::write_log(out_folder(), log.str());
-        }
+        if (do_log)  volm_io::write_log(out_folder(), log.str());
         vcl_cerr << log.str();
+        volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
         return volm_io::MATCHER_EXE_FAILED;
       }
     }
@@ -506,6 +505,6 @@ int main(int argc, char** argv)
 #endif
 
   // finish everything successfully
-  volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FINISHED);
+  volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FINISHED, 90, "", status_xml.str());
   return volm_io::SUCCESS;
 }
