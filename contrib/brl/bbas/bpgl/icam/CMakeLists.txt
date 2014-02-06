@@ -15,6 +15,8 @@ SET(icam_sources
     icam_view_sphere.h         icam_view_sphere.cxx         icam_view_sphere_sptr.h
     icam_transform_2d.h        icam_transform_2d.cxx
     icam_image.h
+    icam_cylinder_map.h        icam_cylinder_map.cxx   icam_cylinder_map_sptr.h
+    icam_spherical_map.h       icam_spherical_map.cxx  icam_spherical_map_sptr.h
    )
 AUX_SOURCE_DIRECTORY(Templates icam_sources)
 
@@ -25,4 +27,3 @@ IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
 
-#SUBDIRS(icam_ocl)
