@@ -107,14 +107,14 @@ void vgui_text_put(char const *str, unsigned int size)
 {
   vgui_font_bitmap font(vgui_font_bitmap::BITMAP_FONT_8_13);
   font.draw(str);
-  return w;
 }
 int vgui_text_length(const unsigned char *s, unsigned size){
   int w = 0;
   int i = 0;
-  while(str[i]!=0){
+  while(s[i]!=0){
     i++; w+=8;
   }
+  return w;
 }
 int vgui_char_width(unsigned char c, unsigned size){
   return 8;
