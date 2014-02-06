@@ -123,7 +123,7 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
   }
 
   //: Return the number of components in the mixture
-  unsigned int num_components() const { return components_.size(); }
+  unsigned int num_components() const { return static_cast<unsigned>(components_.size()); }
 
   //: Access (const) a component distribution of the mixture
   const dist_& distribution(unsigned int index) const

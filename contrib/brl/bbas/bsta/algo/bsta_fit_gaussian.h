@@ -164,9 +164,9 @@ template <class T, unsigned n>
 void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_vector<T> const& sample_weights,
                        bsta_gaussian_full<T,n>& gaussian)
 {
-  const unsigned int nobs = samples.size();
+  const unsigned int nobs = static_cast<const unsigned>(samples.size());
   // sanity check
-  if (nobs != sample_weights.size()) {
+  if (nobs != static_cast<unsigned>(sample_weights.size())) {
     vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
              << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
     return;
