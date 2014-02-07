@@ -76,21 +76,25 @@ bool brad_estimate_atmospheric_parameters_process(bprb_func_process& pro)
   }
   brad_atmospheric_parameters_sptr atm_params = new brad_atmospheric_parameters();
 
+  bool succeed;
   if (mean_reflectance > 0) {
     if (radiance_img->nplanes() == 1)
-      brad_estimate_atmospheric_parameters(*radiance_img, *mdata, mean_reflectance, *atm_params, constrain_atmospheric_params);
+      succeed = brad_estimate_atmospheric_parameters(*radiance_img, *mdata, mean_reflectance, *atm_params, constrain_atmospheric_params);
     else
-      brad_estimate_atmospheric_parameters_multi(*radiance_img, *mdata, mean_reflectance, *atm_params, constrain_atmospheric_params);
+      succeed = brad_estimate_atmospheric_parameters_multi(*radiance_img, *mdata, mean_reflectance, *atm_params, constrain_atmospheric_params);
   }
   else {
     if (radiance_img->nplanes() == 1)
-     brad_estimate_atmospheric_parameters(*radiance_img, *mdata, *atm_params);
+     succeed = brad_estimate_atmospheric_parameters(*radiance_img, *mdata, *atm_params);
     else
-     brad_estimate_atmospheric_parameters_multi(*radiance_img, *mdata, *atm_params);
+     succeed = brad_estimate_atmospheric_parameters_multi(*radiance_img, *mdata, *atm_params);
   }
-
-  pro.set_output_val<brad_atmospheric_parameters_sptr>(0, atm_params);
-
-  return true;
+  if (succeed) {
+    pro.set_output_val<brad_atmospheric_parameters_sptr>(0, atm_params);
+    return true;
+  }
+  else
+    return false;
+  
 }
 

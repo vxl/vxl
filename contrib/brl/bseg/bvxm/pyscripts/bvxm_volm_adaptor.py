@@ -9,9 +9,10 @@ def map_sdet_to_volm_ids(sdet_color_class_img):
   out_img = dbvalue(id, type);
   return out_img
 
-def volm_id_color_img(id_img):
+def volm_id_color_img(id_img, id_to_color_txt=""):
   bvxm_batch.init_process("volmGenerateColorClassMapProcess")
   bvxm_batch.set_input_from_db(0,id_img);
+  bvxm_batch.set_input_string(1,id_to_color_txt)
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   out_img = dbvalue(id, type);

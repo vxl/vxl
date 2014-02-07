@@ -35,9 +35,12 @@ def estimate_atmospheric_parameters(image, metadata, mean_reflectance = None, co
      bvxm_batch.set_input_float(2,mean_reflectance)
   if constrain_parameters != None:
       bvxm_batch.set_input_bool(3, constrain_parameters)
-  bvxm_batch.run_process()
-  (id,type) = bvxm_batch.commit_output(0)
-  atm_params = dbvalue(id,type)
+  result = bvxm_batch.run_process()
+  if result :
+    (id,type) = bvxm_batch.commit_output(0)
+    atm_params = dbvalue(id,type)
+  else :
+    atm_params = 0
   return atm_params
 
 # convert radiance values to estimated reflectances

@@ -8,6 +8,7 @@
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
 #include <volm/volm_category_io.h>
+#include <vul/vul_file.h>
 
 //:
 //  Take a colored segmentation output and map it to volm labels
@@ -68,6 +69,7 @@ bool volm_generate_color_class_map_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  // classification image
+  input_types.push_back("vcl_string");                // id to color txt
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // output unsigned short image with volm_land_type ids
   return pro.set_input_types(input_types)
@@ -83,18 +85,32 @@ bool volm_generate_color_class_map_process(bprb_func_process& pro)
 
   // get the inputs
   vil_image_view_base_sptr img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
+  vcl_string id_to_color_txt = pro.get_input<vcl_string>(1);
   vil_image_view<unsigned char> img(img_sptr);
   vil_image_view<vil_rgb<vxl_byte> > out_img(img_sptr->ni(), img_sptr->nj(), 1);
   out_img.fill(vil_rgb<vxl_byte>(0,0,0));
 
   vcl_map<unsigned char, vil_rgb<vxl_byte> > sdet_color_map;
-  sdet_color_map[0]   = vil_rgb<vxl_byte>(225,36 ,147);
-  sdet_color_map[15]  = vil_rgb<vxl_byte>(52 ,226,127);
-  sdet_color_map[28]  = vil_rgb<vxl_byte>(185,242,86 );
-  sdet_color_map[31]  = vil_rgb<vxl_byte>(191,184,98 );
-  sdet_color_map[32]  = vil_rgb<vxl_byte>(20, 166,41 );
-  sdet_color_map[242] = vil_rgb<vxl_byte>(254,17 ,199);
-  sdet_color_map[243] = vil_rgb<vxl_byte>(41, 234,166);
+  if (!vul_file::exists(id_to_color_txt)) {
+    sdet_color_map[0]   = vil_rgb<vxl_byte>(225,36 ,147);
+    sdet_color_map[15]  = vil_rgb<vxl_byte>(52 ,226,127);
+    sdet_color_map[28]  = vil_rgb<vxl_byte>(185,242,86 );
+    sdet_color_map[31]  = vil_rgb<vxl_byte>(191,184,98 );
+    sdet_color_map[32]  = vil_rgb<vxl_byte>(20, 166,41 );
+    sdet_color_map[242] = vil_rgb<vxl_byte>(254,17 ,199);
+    sdet_color_map[243] = vil_rgb<vxl_byte>(41, 234,166);
+  }
+  else {
+    vcl_ifstream ifs(id_to_color_txt.c_str());
+    vcl_string cat_name; int id; int r, g, b;
+    ifs >> cat_name;
+    while (!ifs.eof()) {
+      ifs >> id;  ifs >> r;  ifs >> g;  ifs >> b;
+      sdet_color_map.insert(vcl_pair<unsigned char, vil_rgb<vxl_byte> >((unsigned char)id, vil_rgb<vxl_byte>(r,g,b)));
+      vcl_cout << "\t\t" << cat_name << " color: " << sdet_color_map[id] << '\n';
+      ifs >> cat_name;
+    }
+  }
   
   for (unsigned i = 0; i < img.ni(); i++)
     for (unsigned j = 0; j < img.nj(); j++) {

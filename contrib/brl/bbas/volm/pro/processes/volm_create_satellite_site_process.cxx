@@ -353,7 +353,7 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
   ofs << "view_angle(deg) \t pan_img \t multi_img \t" << vcl_endl;
 
   // find the PAN/MULTI pair
-  vcl_map<double, vcl_pair<vcl_string, vcl_string> > pairs;
+  vcl_map<double, vcl_pair<vcl_string, vcl_string>, vcl_greater<double> > pairs;
   for (vcl_map<double, unsigned, std::greater<double> >::iterator mit = band_res.begin(); mit != band_res.end(); ++mit) {
     vcl_string img_name = res->resources_[mit->second].name_;
     vcl_string pair_name = res->find_pair(img_name);

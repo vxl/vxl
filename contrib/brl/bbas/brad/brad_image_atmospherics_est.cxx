@@ -58,8 +58,16 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
   float radiance_mean;
   vil_math_mean(radiance_mean, radiance, 0);
 
+  // check the value of image mean and airlight
+  if (radiance_mean < airlight)
+    return false;
+
   // fix skylight
   double skylight = 0.0;
+  // check the value is valid
+  if (radiance_mean <= airlight) {
+    return false;
+  }
 
   double deg2rad = vnl_math::pi_over_180;
   double optical_depth = -vcl_log(vnl_math::pi / (mean_reflectance * mdata.sun_irradiance_ * vcl_sin(deg2rad*mdata.sun_elevation_)) * (radiance_mean - airlight));
@@ -163,8 +171,13 @@ bool brad_estimate_atmospheric_parameters_multi(vil_image_view<float> const& rad
     float radiance_mean;
     vil_math_mean(radiance_mean, imgs[ii], 0);
 
+    // check the image mean value and the computed airlight
+    if (radiance_mean < airlight)
+      return false;
+
     // fix skylight
     double skylight = 0.0;
+
 
     double deg2rad = vnl_math::pi_over_180;
     double optical_depth = -vcl_log(vnl_math::pi / (mean_reflectance * mdata.sun_irradiance_values_[ii] * vcl_sin(deg2rad*mdata.sun_elevation_)) * (radiance_mean - airlight));
