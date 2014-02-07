@@ -74,7 +74,8 @@ bool icam_cylinder_map::map_cylinder(){
       double x = radius_*vcl_cos(th), y = radius_*vcl_sin(th);
       x+=ox; y+=oy;
       vgl_point_3d<double> pc(x, y, z);
-      vgl_vector_3d<double> dir = normalize(pc-orig);
+      vgl_vector_3d<double> dir = pc-orig;
+      dir = normalize(dir);
       vgl_ray_3d<double> ray(orig, dir);
       unsigned cam_index = 0;
       double u=0.0, v=0.0;
@@ -104,7 +105,8 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
   vpgl_perspective_camera<double>* pcam = dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr());
   if(!pcam) return false;
   //get the principal ray of the camera
-  vgl_vector_3d<double> pvec = normalize(pcam->principal_axis());
+  vgl_vector_3d<double> pvec = pcam->principal_axis();
+  pvec = normalize(pvec);
   // get image size from camera principal point
   vpgl_calibration_matrix<double> K = pcam->get_calibration();
   vgl_point_2d<double> pp = K.principal_point();
@@ -144,7 +146,8 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
       double x = radius_*vcl_cos(th), y = radius_*vcl_sin(th);
       x+=ox; y+=oy;
       vgl_point_3d<double> pc(x, y, z);
-      vgl_vector_3d<double> dir = normalize(pc-orig);
+      vgl_vector_3d<double> dir = pc-orig;
+      dir = normalize(dir);
       double dp = dot_product(dir, pvec);
       if(dp>0.0)
 	continue;
