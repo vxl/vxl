@@ -61,14 +61,14 @@ void test_von_mises_update_type(T epsilon, const vcl_string& type_name)
   //A set of random samples for theta and phi about the mean
   //without loss of generality it can be assumed that the mean
   //direction is (0, 0, 1)^t.
-  unsigned n = 50;
+  unsigned n = 100;
   vcl_cout << "Test parameter estimation for 3-d von mises distribution\n"
            << "kappa" << ' ' << "est_kappa" << ' ' << "mean z, "<< n << " samples, type =" << type_name << '\n';
   T ksum = T(0), msum = T(0);
   T norm = T(0);
   for (T kappa = T(1); kappa<=T(20); kappa+=2){
     bsta_vsum_num_obs<bsta_von_mises<T, 3> > obvm3;
-    for (unsigned i = 0; i<50; ++i){
+    for (unsigned i = 0; i<n; ++i){
       vgl_point_2d<T> p = sample_3d(kappa);
       T theta = p.x(), phi = p.y();
       typename bsta_von_mises<T, 3>::vector_type s(T(0));//sample
@@ -84,7 +84,7 @@ void test_von_mises_update_type(T epsilon, const vcl_string& type_name)
   }
   ksum /=norm; msum /=norm;
   vcl_cout << "normalized kappa "<< ksum << "  normalized mean z "<< msum << '\n';
-  TEST_NEAR("Estimate Von Mises 3-d Kappa", ksum, T(1), 1000*epsilon);
+  TEST_NEAR("Estimate Von Mises 3-d Kappa", ksum, T(1), 10000*epsilon);
   TEST_NEAR("Estimate Von Mises 3-d Mean z", msum, T(1), 1000*epsilon);
 }
 
@@ -93,7 +93,7 @@ static void test_von_mises_update()
 {
 #if VCL_CAN_DO_PARTIAL_SPECIALIZATION
   test_von_mises_update_type(1e-5f,"float");
-  test_von_mises_update_type(1e-8 ,"double");
+  test_von_mises_update_type(1e-5 ,"double");
 #endif
 }
 
