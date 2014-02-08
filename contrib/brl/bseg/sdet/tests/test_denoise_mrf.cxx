@@ -33,32 +33,6 @@ void test_denoise_mrf()
   for (unsigned i = 0; i<ni; ++i)
     vcl_cout << "Fi[" << i << "] = " << out_v(i,2) << '\n';
   TEST_NEAR("center output pixel", out_v(2,2), 5.72894, 0.01);
-  dmp.radius_ = 1.0;
-  dmp.kappa_ = 150.0;
-  dmp.beta_ = 75.0;
-  sdet_denoise_mrf dmi(dmp);
-  vil_image_resource_sptr in_imr =
-   // vil_load_image_resource("C:/images/MeshStudies/depth_cropped_joint_street.tif");
-   vil_load_image_resource("C:/images/MeshStudies/depth-joint-crop-float_max.tif");
-  vil_image_resource_sptr var_imr =
-    //vil_load_image_resource("C:/images/MeshStudies/var_cropped_joint_street.tif");
-    vil_load_image_resource("C:/images/MeshStudies/var-joint-crop-float_max.tif");
-  dmi.set_image(in_imr);    dmi.set_variance(var_imr);
-#if 0
-  dmi.compute_incidence_matrix();
-  vil_image_resource_sptr Dimgr = dmi.Dimgr();
-  vil_save_image_resource(Dimgr,
-                          "C:/images/MeshStudies/Dimg_small.tif",
-                          "tiff");
-#else
-  success = dmi.denoise();
-  if (success) {
-  vil_image_resource_sptr outri = dmi.output();
-  vil_save_image_resource(outri,
-                          "C:/images/MeshStudies/mrf_max.tif",
-                          "tiff");
-  }
-#endif
 }
 
 TESTMAIN(test_denoise_mrf);

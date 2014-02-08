@@ -2,20 +2,21 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_load.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_load.h>
 #include <vtol/vtol_intensity_face.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <testlib/testlib_test.h>
-
+#include <testlib/testlib_root_dir.h>
 static void test_region_proc(int argc, char * argv[])
 {
-  vcl_string image_path = (argc < 2) ? "jar-closeup.tif" : argv[1];
+  vcl_string root = testlib_root_dir();
+  vcl_string image_path = root + "/contrib/brl/bseg/sdet/tests/jar-closeup.tif";
   vcl_cout << "Loading Image " << image_path << '\n';
-  vil1_image image = vil1_load(image_path.c_str());
+  vil_image_resource_sptr image = vil_load_image_resource(image_path.c_str());
   if (image)
   {
     static sdet_detector_params dp;
@@ -23,7 +24,7 @@ static void test_region_proc(int argc, char * argv[])
     dp.aggressive_junction_closure=1;
     sdet_region_proc_params rpp(dp);
     sdet_region_proc rp(rpp);
-    rp.set_image(image);
+    rp.set_image_resource(image);
     rp.extract_regions();
     vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
     int n = regions.size();
@@ -33,6 +34,8 @@ static void test_region_proc(int argc, char * argv[])
       vtol_intensity_face_sptr f = regions[0];
       TEST_NEAR("size of first region", f->Npix(), 41100, 50);
     }
+  }else{
+    TEST("image could not be loaded - no fault", true, true);
   }
 }
 

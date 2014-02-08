@@ -2,19 +2,21 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_load.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_load.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
 
 static void test_detector(int argc, char * argv[])
 {
-  vcl_string image_path = (argc < 2) ? "jar-closeup.tif" : argv[1];
-  vcl_cout << "Loading Image " << image_path << '\n';
-  vil1_image image = vil1_load(image_path.c_str());
+  vcl_string root = testlib_root_dir();
+  vcl_string image_path = root + "/contrib/brl/bseg/sdet/tests/jar-closeup.tif";
+   vcl_cout << "Loading Image " << image_path << '\n';
+  vil_image_resource_sptr image = vil_load_image_resource(image_path.c_str());
   if (image)
   {
     sdet_detector_params dp;
@@ -37,6 +39,8 @@ static void test_detector(int argc, char * argv[])
       vcl_cout << "v(" << x << ' ' << y << ")\n";
       TEST("(x,y) is (229,235)", x==229&&y==235, true);
     }
+  }else{
+    TEST("image could not be loaded so no fault", true, true);
   }
 }
 
