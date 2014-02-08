@@ -513,10 +513,13 @@ static void test_line_2d()
   TEST_NEAR("normalize: b()", l2.b(), 0.8, 1e-12);
 
   {
+    // check reason for error on other platforms - JLM
     vcl_stringstream is; is << "4.5 -5 7e1  9x+7y-8=0";
+    vcl_cout << is.str();
     vgl_line_2d<float> l; is >> l;
     TEST("istream vgl_line_2d", l, vgl_line_2d<float>(4.5f,-5,70));
     is >> l;
+    vcl_cout << "formatted line " << l << '\n';
     TEST("istream vgl_line_2d formatted", l, vgl_line_2d<float>(9,7,-8));
   }
 
@@ -648,9 +651,12 @@ static void test_plane_3d()
   TEST("vgl_distance(point,plane)", vgl_distance(p3,plane2), 1);
 
   vcl_stringstream is; is << "4.5 -5 7e1 5e-1   -6x+7y-8z+9=0";
+  // check error on other platforms - JLM
+  vcl_cout << is.str();
   vgl_plane_3d<double> l; is >> l;
   TEST("istream vgl_plane_3d", l, vgl_plane_3d<double>(4.5,-5,70,0.5));
   is >> l;
+  vcl_cout << "second form for l " << l << '\n';
   TEST("istream vgl_plane_3d formatted", l, vgl_plane_3d<double>(-6,7,-8,9));
 }
 
