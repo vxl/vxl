@@ -35,6 +35,7 @@ static void test_gain_offset_solver()
   //
   //===========================    actual experiment =================
   //
+#if 0
   vcl_string exp_path = "e:/mundy/Dropbox/deliveries/exp_imgs/view_00_exp.png";
   vil_image_view<unsigned char> exp = vil_load(exp_path.c_str());
    ni = exp.ni(); nj = exp.nj();
@@ -75,5 +76,6 @@ static void test_gain_offset_solver()
 
   vcl_string mask_path = "e:/images/TextureTraining/mapped_images/test_mask_00.tiff";
   vil_save(test_mask, mask_path.c_str());
+#endif
 }
 TESTMAIN(test_gain_offset_solver);

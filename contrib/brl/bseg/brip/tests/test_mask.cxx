@@ -24,7 +24,17 @@ static void test_mask()
            << "c4_45_0\n" << c4_45_0 << '\n'
            << "c4_45_45\n" << c4_45_45 << '\n'
            << "e5\n" << e5 << '\n';
-  TEST("brip_rect_mask", true, false);
+  int m10_c = m10(0,0), m30_c = m30(0,0);
+  int m31_c = m31(0,0), m32_c = m32(0,0);
+  int m51_c = m51(0,0), m52_c = m52(0,0);
+  int c4_90_0_c = c4_90_0(0,0), c4_45_0_c = c4_45_0(0,0);
+  int c4_45_45_c = c4_45_45(0,0), e5_c = e5(0,0);
+  vcl_cout << m10_c << ' '<<  m30_c << ' ' << m31_c << ' ' << m32_c << ' '
+	   << m51_c << ' ' << m52_c << ' ' <<  c4_90_0_c << ' '
+	   << c4_45_0_c << ' ' << c4_45_45_c << ' ' << e5_c << '\n';
+  int prod = m10_c * m30_c * m31_c * m32_c * m51_c * m52_c * c4_90_0_c *
+    c4_45_0_c * c4_45_45_c * e5_c;
+  TEST("brip_rect_mask", prod, 1);
 }
 
 TESTMAIN(test_mask);
