@@ -6,6 +6,7 @@
 #include <vxl_config.h> // for vxl_uint_16 etc.
 
 #include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_rgb.h>
@@ -473,11 +474,20 @@ image_equals( const vcl_string &test_file, const vcl_string &ref_file)
 static void
 test_file_format_read( int argc, char* argv[] )
 {
+  // test data path is not passed into argv
+#if 0
   if ( argc >= 2 ) {
     image_base = argv[1];
     image_base += "/";
   }
-
+#endif
+  // replace with compiler -D defined path
+#ifndef VIL_IMG_PATH
+  TEST("Data path missing", true, true);
+  return;
+#endif
+  image_base = TEST_PATH_DEFINE(VIL_IMG_PATH);
+  image_base += "/";
   // Test generic file loads
 
   vcl_cout << "GENERIC FILE LOAD\n\n"

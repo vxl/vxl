@@ -8,16 +8,15 @@
 #include <vil/vil_math.h>
 #include <vil/vil_exception.h>
 #include <testlib/testlib_test.h>
-
+#include <testlib/testlib_root_dir.h>
 static void test_convert1(const char * golden_data_dir)
 {
   vcl_cout << "*******************************************\n"
            << " Testing vil_convert*(vil_image_view<T>..)\n"
            << "*******************************************\n";
 
-  vcl_string datadir = golden_data_dir;
-  if (*golden_data_dir) datadir += "/";
-
+ vcl_string datadir = golden_data_dir;
+ if (*golden_data_dir) datadir += "/";
   vil_image_view<vxl_byte> image1 = vil_convert_to_grey_using_rgb_weighting(
     vil_load((datadir + "ff_grey8bit_raw.pgm").c_str()));
   TEST("vil_convert_to_grey_using_rgb_weighting(vil_load(grey_image))", image1?true:false, true);
@@ -267,11 +266,18 @@ static void test_simple_pixel_conversions()
 
 static void test_convert(int argc, char* argv[])
 {
+  #ifdef VIL_IMG_PATH
+  vcl_string path = TEST_PATH_DEFINE(VIL_IMG_PATH);
+  test_convert1(path.c_str());
+  test_convert_diff_types(path.c_str());
+  #endif
   test_convert_to_n_planes();
-  test_convert1(argc>1 ? argv[1] : "file_read_data");
+ // test data path is not passed into argv - JLM
+ // test_convert1(argc>1 ? argv[1] : "file_read_data");
   test_convert_stretch_range();
   test_convert_stretch_range_limited();
-  test_convert_diff_types(argc>1 ? argv[1] : "file_read_data");
+ // test data path is not passed into argv - JLM
+ // test_convert_diff_types(argc>1 ? argv[1] : "file_read_data");
   test_simple_pixel_conversions();
 }
 
