@@ -46,7 +46,7 @@ void test_von_mises_update_type(T epsilon, const vcl_string& type_name)
   //Test 2-d von mises update
   bsta_von_mises_updater<bsta_von_mises<T, 2> > vm_2d_updater;
   bsta_vsum_num_obs<bsta_von_mises<T, 2> > obvm2;
-  for (unsigned i = 0; i<50; ++i){
+  for (unsigned i = 0; i<500; ++i){
     T theta  = sample_2d<T>();
     typename bsta_von_mises<T, 2>::vector_type s(T(0));//sample
     s[0]=vcl_cos(theta);
