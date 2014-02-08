@@ -4,6 +4,7 @@
 // DISTAR Case 14074
 //
 #include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vil/vil_config.h>
@@ -33,10 +34,20 @@
 static void test_pyramid_image_resource( int argc, char* argv[] )
 {
   vcl_string image_base; // = "core/vil/tests/file_read_data/";
+  // CMake doesn't pass data path to argv[1]
+#if 0
   if ( argc >= 2 ) {
     image_base = argv[1];
     image_base += "/";
   }
+#endif
+#ifndef VIL_IMG_PATH
+ TEST("No data path defined", true, true);
+ return;
+#endif
+  // instead use compiler -D flag to pass path
+  image_base = TEST_PATH_DEFINE(VIL_IMG_PATH);  
+  image_base += "/";
   vcl_cout << "************************************\n"
            << " Testing vil_pyramid_image_resource\n"
            << "************************************\n";

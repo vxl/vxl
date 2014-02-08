@@ -1,5 +1,6 @@
 // This is core/vil/tests/test_blocked_image_resource.cxx
 #include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vil/vil_new.h>
@@ -338,12 +339,19 @@ int
 test_blocked_image_resource_main( int argc, char* argv[] )
 {
   vcl_cout << "test_blocked_image_resource main\n";
+  // CMake does not pass in the data path as argv[1]
+#if 0
   if ( argc >= 2 ) {
     image_file = argv[1];
     image_file += "/";
   }
-  else
-    image_file = "core/vil/tests/file_read_data/";
+#endif
+#ifndef VIL_IMG_PATH
+  TEST("Path not defined", true, true);
+  return;
+#endif
+  vcl_string image_file = TEST_PATH_DEFINE(VIL_IMG_PATH);  
+  image_file += "/";
   vcl_cout << "Start test process\n";
   test_blocked_image_resource();
   return 0;

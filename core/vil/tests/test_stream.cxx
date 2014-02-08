@@ -1,5 +1,6 @@
 // This is core/vil/tests/test_stream.cxx
 #include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
 
 #include <vcl_string.h>
 
@@ -13,14 +14,20 @@
 static void
 test_stream( int argc, char* argv[] )
 {
+  // path not passed in to argv by CMake
+#if 0
   if ( argc < 2 ) {
     vcl_cerr << "Supply file_read_data directory as the first argument\n";
     TEST("vil_stream", true, false);
     return;
   }
-
-  vcl_string dir = argv[1];
-
+#endif
+  //vcl_string dir = argv[1];
+#ifndef VIL_IMG_PATH
+  TEST("Path not defined", true, true);
+ return;
+#endif
+  vcl_string dir = TEST_PATH_DEFINE(VIL_IMG_PATH);
   {
     vil_stream* fs = new vil_stream_fstream( (dir+"/ff_grey8bit_compressed.jpg").c_str(), "r" );
     fs->ref();
