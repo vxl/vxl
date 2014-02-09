@@ -514,11 +514,13 @@ static void test_line_2d()
 
   {
     // check reason for error on other platforms - JLM
-    vcl_stringstream is; is << "4.5 -5 7e1  9x+7y-8=0";
+    vcl_stringstream is; is << "4.5 -5 7e1" << vcl_ends;
     vcl_cout << is.str();
     vgl_line_2d<float> l; is >> l;
     TEST("istream vgl_line_2d", l, vgl_line_2d<float>(4.5f,-5,70));
-    is >> l;
+    vcl_stringstream is1;
+	is1 << "9x+7y-8=0" << vcl_ends;
+    is1 >> l;
     vcl_cout << "formatted line " << l << '\n';
     TEST("istream vgl_line_2d formatted", l, vgl_line_2d<float>(9,7,-8));
   }
