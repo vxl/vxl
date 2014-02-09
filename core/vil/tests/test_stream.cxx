@@ -3,6 +3,7 @@
 #include <testlib/testlib_root_dir.h>
 
 #include <vcl_string.h>
+#include <vul/vul_file.h>
 
 #include <vil/vil_stream_fstream.h>
 #include <vxl_config.h>
@@ -22,12 +23,14 @@ test_stream( int argc, char* argv[] )
     return;
   }
 #endif
-  //vcl_string dir = argv[1];
-#ifndef VIL_IMG_PATH
-  TEST("Path not defined", true, true);
- return;
-#endif
-  vcl_string dir = TEST_PATH_DEFINE(VIL_IMG_PATH);
+  vcl_string root = testlib_root_dir();
+  vcl_string dir = root + "/core/vil/tests/file_read_data";
+  bool exists = vul_file::is_directory(dir);
+  if(!exists){
+    TEST("Path not defined", false, true);
+    return;
+  }
+
   {
     vil_stream* fs = new vil_stream_fstream( (dir+"/ff_grey8bit_compressed.jpg").c_str(), "r" );
     fs->ref();

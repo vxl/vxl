@@ -41,13 +41,10 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
     image_base += "/";
   }
 #endif
-#ifndef VIL_IMG_PATH
- TEST("No data path defined", true, true);
- return;
-#endif
-  // instead use compiler -D flag to pass path
-  image_base = TEST_PATH_DEFINE(VIL_IMG_PATH);  
+  vcl_string root = testlib_root_dir();
+  image_base = root + "/core/vil/tests/file_read_data";
   image_base += "/";
+  
   vcl_cout << "************************************\n"
            << " Testing vil_pyramid_image_resource\n"
            << "************************************\n";

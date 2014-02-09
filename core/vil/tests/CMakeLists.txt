@@ -49,7 +49,7 @@ ADD_EXECUTABLE( vil_test_all
   test_math_median.cxx
   test_na.cxx
 )
-ADD_DEFINITIONS(-DVIL_IMG_PATH=${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+
 TARGET_LINK_LIBRARIES( vil_test_all vil vpl vul testlib vcl )
 
 # basic things

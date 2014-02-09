@@ -3,6 +3,7 @@
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
+#include <vul/vul_file.h>
 #include <vxl_config.h> // for vxl_uint_16 etc.
 
 #include <testlib/testlib_test.h>
@@ -481,12 +482,13 @@ test_file_format_read( int argc, char* argv[] )
     image_base += "/";
   }
 #endif
-  // replace with compiler -D defined path
-#ifndef VIL_IMG_PATH
-  TEST("Data path missing", true, true);
-  return;
-#endif
-  image_base = TEST_PATH_DEFINE(VIL_IMG_PATH);
+  vcl_string root = testlib_root_dir();
+  image_base = root + "/core/vil/tests/file_read_data";
+  bool exists = vul_file::is_directory(image_base);
+  if(!exists){
+    TEST("No test data", false, true);
+    return;
+  }
   image_base += "/";
   // Test generic file loads
 

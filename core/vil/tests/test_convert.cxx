@@ -1,6 +1,7 @@
 // This is core/vil/tests/test_convert.cxx
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
+#include <vul/vul_file.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
@@ -266,11 +267,16 @@ static void test_simple_pixel_conversions()
 
 static void test_convert(int argc, char* argv[])
 {
-  #ifdef VIL_IMG_PATH
-  vcl_string path = TEST_PATH_DEFINE(VIL_IMG_PATH);
-  test_convert1(path.c_str());
-  test_convert_diff_types(path.c_str());
-  #endif
+  vcl_string root = testlib_root_dir();
+  vcl_string path = root + "/core/vil/tests/file_read_data";
+  bool exists = vul_file::is_directory(path);
+  if(exists){
+	path += "/";
+    test_convert1(path.c_str());
+    test_convert_diff_types(path.c_str());
+  }else{
+    TEST("test data exists", false, true);
+  }
   test_convert_to_n_planes();
  // test data path is not passed into argv - JLM
  // test_convert1(argc>1 ? argv[1] : "file_read_data");

@@ -10,9 +10,10 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_block_cache.h>
-
+#include <vul/vul_file.h>
 
 static vcl_string image_file;
+static bool exists;
 static void test_blocked_image_resource()
 {
   vcl_cout << "************************************\n"
@@ -307,31 +308,35 @@ static void test_blocked_image_resource()
   vpl_unlink(path2.c_str());
   //
   ///////--------------------- Test NITF Blocked Resource ---------------////
-  vcl_string nitf_path = image_file + "ff_nitf_16bit.nitf";
-  vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
-  if (imgr)
-  {
-    TEST("NITF blocked resource",
-         imgr->get_property(vil_property_size_block_i, &sbi) &&
-         imgr->get_property(vil_property_size_block_j, &sbj),
-         true);
-  }
-  else
-  {
-    TEST("NITF resource ", false, true);
-  }
-  vil_blocked_image_resource_sptr bimgr = blocked_image_resource(imgr);
-  if (bimgr)
-  {
-    vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
-    for (unsigned bi = 0; bi<sbi; ++bi)
-      for (unsigned bj = 0; bj<sbj; ++bj)
-        vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
-    TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
-  }
-  else
-  {
-    TEST("NITF blocked image resource", false, true);
+  if(exists){
+    vcl_string nitf_path = image_file + "ff_nitf_16bit.nitf";
+    vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
+    if (imgr)
+      {
+	TEST("NITF blocked resource",
+	     imgr->get_property(vil_property_size_block_i, &sbi) &&
+	     imgr->get_property(vil_property_size_block_j, &sbj),
+	     true);
+      }
+    else
+      {
+	TEST("NITF resource ", false, true);
+      }
+    vil_blocked_image_resource_sptr bimgr = blocked_image_resource(imgr);
+    if (bimgr)
+      {
+	vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
+	for (unsigned bi = 0; bi<sbi; ++bi)
+	  for (unsigned bj = 0; bj<sbj; ++bj)
+	    vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
+	TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
+      }
+    else
+      {
+	TEST("NITF blocked image resource", false, true);
+      }
+  }else{
+    TEST("NITF path not found", false, true);
   }
 }
 
@@ -346,11 +351,9 @@ test_blocked_image_resource_main( int argc, char* argv[] )
     image_file += "/";
   }
 #endif
-#ifndef VIL_IMG_PATH
-  TEST("Path not defined", true, true);
-  return;
-#endif
-  vcl_string image_file = TEST_PATH_DEFINE(VIL_IMG_PATH);  
+  vcl_string root = testlib_root_dir();
+  vcl_string image_file = root + "/core/vil/tests/file_read_data";
+  exists = vul_file::is_directory(image_file);
   image_file += "/";
   vcl_cout << "Start test process\n";
   test_blocked_image_resource();
