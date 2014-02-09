@@ -34,7 +34,7 @@ static void test_mask()
 	   << c4_45_0_c << ' ' << c4_45_45_c << ' ' << e5_c << '\n';
   int prod = m10_c * m30_c * m31_c * m32_c * m51_c * m52_c * c4_90_0_c *
     c4_45_0_c * c4_45_45_c * e5_c;
-  TEST("brip_rect_mask", prod, 1);
+  TEST("brip_rect_mask (center product) ", prod, 1);
 }
 
 TESTMAIN(test_mask);
