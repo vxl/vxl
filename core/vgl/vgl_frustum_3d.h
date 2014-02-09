@@ -83,7 +83,7 @@ class vgl_frustum_3d
 
   //: Return true if \a (x,y,z) is inside this frustum
   // assumes that the frustum is a convex solid
-  inline bool contains(Type const& x, Type const& y, Type const& z) const;
+  bool contains(Type const& x, Type const& y, Type const& z) const;
 
   // I/O-----------------------------------------------------------------------
 

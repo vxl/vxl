@@ -190,8 +190,6 @@ contains(Type const& x, Type const& y, Type const& z) const{
     inside = sign < vgl_tolerance<Type>::position;
   }    
   return inside;
-
-  return true;
 }
 
 template <class Type>
