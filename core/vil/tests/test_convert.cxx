@@ -267,15 +267,21 @@ static void test_simple_pixel_conversions()
 
 static void test_convert(int argc, char* argv[])
 {
-  vcl_string root = testlib_root_dir();
-  vcl_string path = root + "/core/vil/tests/file_read_data";
+  vcl_string path;
+  if(argc>1){
+    path = argv[1];
+  }else{
+    vcl_string root = testlib_root_dir();
+    path = root + "/core/vil/tests/file_read_data";
+  }
   bool exists = vul_file::is_directory(path);
   if(exists){
-	path += "/";
+    path += "/";
     test_convert1(path.c_str());
     test_convert_diff_types(path.c_str());
   }else{
     TEST("test data exists", false, true);
+    vcl_cout << "Failed path: " << path << '\n';
   }
   test_convert_to_n_planes();
  // test data path is not passed into argv - JLM

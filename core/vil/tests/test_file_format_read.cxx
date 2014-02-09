@@ -476,20 +476,20 @@ static void
 test_file_format_read( int argc, char* argv[] )
 {
   // test data path is not passed into argv
-#if 0
+  bool exists = false;
   if ( argc >= 2 ) {
     image_base = argv[1];
-    image_base += "/";
+  }else{
+    vcl_string root = testlib_root_dir();
+    image_base = root + "/core/vil/tests/file_read_data";
   }
-#endif
-  vcl_string root = testlib_root_dir();
-  image_base = root + "/core/vil/tests/file_read_data";
-  bool exists = vul_file::is_directory(image_base);
+  exists = vul_file::is_directory(image_base);
+  image_base += "/";
   if(!exists){
     TEST("No test data", false, true);
+    vcl_cout << "Failed file path: " << image_base << '\n';
     return;
   }
-  image_base += "/";
   // Test generic file loads
 
   vcl_cout << "GENERIC FILE LOAD\n\n"

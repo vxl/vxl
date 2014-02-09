@@ -15,16 +15,14 @@
 static void
 test_stream( int argc, char* argv[] )
 {
-  // path not passed in to argv by CMake
-#if 0
-  if ( argc < 2 ) {
-    vcl_cerr << "Supply file_read_data directory as the first argument\n";
-    TEST("vil_stream", true, false);
-    return;
+  vcl_string dir;
+  // Test if path not passed in to argv by CMake
+  if ( argc >= 2 ) {
+    dir = argv[1];
+  }else{
+    vcl_string root = testlib_root_dir();
+    dir = root + "/core/vil/tests/file_read_data";
   }
-#endif
-  vcl_string root = testlib_root_dir();
-  vcl_string dir = root + "/core/vil/tests/file_read_data";
   bool exists = vul_file::is_directory(dir);
   if(!exists){
     TEST("Path not defined", false, true);

@@ -343,16 +343,16 @@ static void test_blocked_image_resource()
 int
 test_blocked_image_resource_main( int argc, char* argv[] )
 {
+
   vcl_cout << "test_blocked_image_resource main\n";
-  // CMake does not pass in the data path as argv[1]
-#if 0
+  // Alternative if CMake does not pass in the data path as argv[1]
+  exists = false;
   if ( argc >= 2 ) {
     image_file = argv[1];
-    image_file += "/";
+  }else{
+    vcl_string root = testlib_root_dir();
+    image_file = root + "/core/vil/tests/file_read_data";
   }
-#endif
-  vcl_string root = testlib_root_dir();
-  vcl_string image_file = root + "/core/vil/tests/file_read_data";
   exists = vul_file::is_directory(image_file);
   image_file += "/";
   vcl_cout << "Start test process\n";

@@ -34,17 +34,14 @@
 static void test_pyramid_image_resource( int argc, char* argv[] )
 {
   vcl_string image_base; // = "core/vil/tests/file_read_data/";
-  // CMake doesn't pass data path to argv[1]
-#if 0
+  // If CMake doesn't pass data path to argv[1]
   if ( argc >= 2 ) {
     image_base = argv[1];
-    image_base += "/";
+  }else{
+    vcl_string root = testlib_root_dir();
+    image_base = root + "/core/vil/tests/file_read_data";
   }
-#endif
-  vcl_string root = testlib_root_dir();
-  image_base = root + "/core/vil/tests/file_read_data";
   image_base += "/";
-  
   vcl_cout << "************************************\n"
            << " Testing vil_pyramid_image_resource\n"
            << "************************************\n";
