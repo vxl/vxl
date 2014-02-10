@@ -8,6 +8,7 @@ DECLARE( test_lens_warp_mapper );
 DECLARE( test_interpolate );
 DECLARE( test_camera_homographies);
 DECLARE( test_camera_from_box );
+DECLARE( test_project );
 
 void register_tests()
 {
@@ -18,6 +19,7 @@ void register_tests()
   REGISTER( test_interpolate );
   REGISTER( test_camera_homographies );
   REGISTER( test_camera_from_box );
+  REGISTER( test_project );
 }
 
 DEFINE_MAIN;
