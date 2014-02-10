@@ -17,6 +17,7 @@ register_tests()
   REGISTER( test_mean_shift );
   REGISTER( test_fit_gaussian );
   REGISTER( test_von_mises_update );
+  REGISTER( test_beta_updater );
   REGISTER( test_rand_sampling );
   REGISTER( test_display_vrml );
 
