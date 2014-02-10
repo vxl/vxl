@@ -98,7 +98,7 @@ static void test_camera_bounds()
   vcl_cout << " image "<< cone_axis << '\n'
            << " half angle (deg)" << half_ang*rad_to_deg
            << " solid_ang = " << sang << '\n';
-  TEST_NEAR("image bounds", sang, vnl_math::log10e, 1e-6);
+  TEST_NEAR("image bounds", sang, vnl_math::log10e, 1e-4);
   vgl_point_3d<double> minp(-0.3, -0.3, 0), maxp(-0.9, 0.3, 0.3);
   vgl_box_3d<double> box;
   box.add(minp); box.add(maxp);
@@ -135,7 +135,7 @@ static void test_camera_bounds()
   vcl_cout << " image -Ks "<< cone_axis << '\n'
            << " half angle " << half_ang*rad_to_deg
            << " solid_ang = " << sang << '\n';
-  TEST_NEAR("image bounds -Ks", sang, vnl_math::log10e, 1e-6);
+  TEST_NEAR("image bounds -Ks", sang, vnl_math::log10e, 1e-4);
   // test sphere samples
   unsigned npts = 400;
   principal_ray_scan prs(0.785, npts);

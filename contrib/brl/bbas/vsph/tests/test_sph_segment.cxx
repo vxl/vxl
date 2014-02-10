@@ -9,7 +9,9 @@
 #include <vsph/vsph_segment_sphere.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vnl/vnl_math.h>
-
+//
+// USED ONLY FOR EXPERIMENTS - NOT A ROUTINE TEST
+//
 static vcl_string MyDIR = "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/";
 
 #if 0 // only used in commented-out code below
@@ -50,6 +52,7 @@ static vcl_vector<vcl_vector<float> > convert_orient_code(vcl_vector<unsigned ch
 
 static void test_sph_segment()
 {
+#if 0
   vsl_b_ifstream is(MyDIR + "unit_sphere_1_75_105.vsl");
   vsph_unit_sphere_sptr usph;
   vsl_b_read(is, usph);
@@ -68,7 +71,7 @@ static void test_sph_segment()
       data[cnt] = 50.0;
   }
 
-#if 0
+
   vcl_cout << "Start segment" << vcl_endl;
   double point_angle = usph->point_angle();//for coast (2 really)
   double sigma = (0.1*point_angle)/dpr,  c =300.0;
@@ -125,6 +128,7 @@ static void test_sph_segment()
   double tol = 0.001;
   vsph_sph_box_2d::display_boxes(seg_path_boxes, dboxes, colors, tol);
 #endif // 0
+  TEST("Not a routine test - so ok by definition", true , true);
 }
 
 TESTMAIN(test_sph_segment);
