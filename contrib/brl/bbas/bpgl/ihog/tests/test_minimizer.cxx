@@ -26,7 +26,7 @@ static void test_minimizer()
   START("ihog minimizer test");
   vcl_string root_dir = testlib_root_dir();
   vcl_string image_file =
-    root_dir + "/contrib/gel/mrc/vpgl/ihog/tests/dalmation.tif";
+    root_dir + "/contrib/brl/bbas/bpgl/ihog/tests/dalmation.tif";
   vil_image_view_base_sptr img0_base = vil_load(image_file.c_str());
   if (!img0_base) {
     vcl_cerr << "error loading image.\n";
