@@ -83,7 +83,8 @@ static void test_match_keypoints(int argc, char* argv[])
   for (unsigned i=0; i<keypoints1.size(); ++i) {  // for each feature in I (first image)
     bapl_keypoint_sptr query = keypoints1[i];
     vcl_vector<bapl_keypoint_sptr> match;
-    bbf.n_nearest(query, match, 2, 200);       // find its two nearest neighbors, 200 is parameter value used in bundler package
+    //bbf.n_nearest(query, match, 2, 200);       // find its two nearest neighbors, 200 is parameter value used in bundler package
+    bbf.n_nearest(query, match, 2, 10);       // limit the depth of the search
     if ( vnl_vector_ssd(query->descriptor(),match[0]->descriptor()) <
         vnl_vector_ssd(query->descriptor(),match[1]->descriptor())*.6*.6) {   // 0.6 is parameter value used in bundler package
       bapl_key_match k_p(query, match[0]);
