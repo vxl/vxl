@@ -69,7 +69,8 @@ void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
 static void test_parzen_sphere()
 {
   test_parzen_sphere_type(1e-5f,"float");
-  test_parzen_sphere_type(1e-14,"double");
+  //some values not specified to higher double accuracy
+  test_parzen_sphere_type(1e-8,"double");
 }
 
 TESTMAIN(test_parzen_sphere);
