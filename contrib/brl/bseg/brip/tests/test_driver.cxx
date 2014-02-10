@@ -27,6 +27,7 @@ register_tests()
   REGISTER( test_quadtree );
   REGISTER( test_max_scale_response );
   REGISTER( test_mask );
+  REGISTER(test_label_equivalence);
   REGISTER( test_extrema );
   REGISTER( test_filter_bank );
   REGISTER( test_gain_offset_solver );
