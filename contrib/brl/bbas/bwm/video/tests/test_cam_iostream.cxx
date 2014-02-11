@@ -53,9 +53,13 @@ static void test_cam_iostream()
     bwm_video_cam_istream cam_istr(glob);
     open = cam_istr.is_open();
     TEST("open input camera stream", open, true);
-    bool read = true;
-    while (vpgl_perspective_camera<double>* c = cam_istr.read_camera())
-      read = read && *c == P;
+    bool read = false;
+    vpgl_perspective_camera<double>* c = 0;
+    c = cam_istr.read_camera();
+    if(c){
+      vcl_cout << "Camera from stream \n" << *c << '\n';
+      read = (*c == P);
+    }
     TEST("read input camera stream", read, true);
     vpl_unlink(dir.c_str());
 }
