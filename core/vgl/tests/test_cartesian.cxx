@@ -522,6 +522,7 @@ static void test_line_2d()
     TEST("istream vgl_line_2d", line, vgl_line_2d<float>(4.5f,-5,70));
     vcl_stringstream is1;
     is1 << "9x+7y-8=0" << vcl_ends;
+    vcl_cout << "stringstr 1 "<< is1.str() << '\n';
     vgl_line_2d<float> line1;
     is1 >> line1;
     vcl_cout << "formatted line " << line1 << '\n';
