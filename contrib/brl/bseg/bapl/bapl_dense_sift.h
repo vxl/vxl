@@ -32,7 +32,9 @@ class bapl_dense_sift:public vbl_ref_count
  public:
   bapl_dense_sift():pyramid_valid_(false) {}
 
-  bapl_dense_sift( const vil_image_resource_sptr& image, unsigned octave_size = 6, unsigned num_octaves = 1 );
+  bapl_dense_sift(const vil_image_resource_sptr& image, 
+                  unsigned octave_size = 6, 
+                  unsigned num_octaves = 1 );
 
   ~bapl_dense_sift() {}
 
@@ -60,16 +62,14 @@ class bapl_dense_sift:public vbl_ref_count
 
   unsigned nj() const {return this->nj_;}
 
-  unsigned octave_size() const {return this->octave_size_;}
+  unsigned octave_size() const {return this->pyramid_sptr_->num_octaves();}
 
-  unsigned num_octave() const {return this->num_octaves_;}
+  unsigned num_octaves() const {return this->pyramid_sptr_->octave_size();}
 
  private:
   bapl_lowe_pyramid_set_sptr pyramid_sptr_;
   unsigned ni_;
   unsigned nj_;
-  unsigned octave_size_;
-  unsigned num_octaves_;
   bool pyramid_valid_;
   static unsigned keypoint_id_;
 };
