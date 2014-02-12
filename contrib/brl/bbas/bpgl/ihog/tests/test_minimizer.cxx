@@ -3,7 +3,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-
+#include <vul/vul_file.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -27,7 +27,12 @@ static void test_minimizer()
   vcl_string root_dir = testlib_root_dir();
   vcl_string image_file =
     root_dir + "/contrib/brl/bbas/bpgl/ihog/tests/dalmation.tif";
-  vil_image_view_base_sptr img0_base = vil_load(image_file.c_str());
+  bool exists = vul_file::exists(image_file);
+  vil_image_view_base_sptr img0_base = 0;
+  if(exists){
+    vcl_cout << "File " << image_file << " exists\n";
+    img0_base = vil_load(image_file.c_str());
+  }
   if (!img0_base) {
     vcl_cerr << "error loading image.\n";
     TEST("FAILED TO LOAD TEST IMAGE",false,true);
