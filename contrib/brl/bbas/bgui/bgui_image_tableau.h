@@ -101,8 +101,18 @@ class bgui_image_tableau : public vgui_image_tableau
   //: set handle_motion true
   void set_handle_motion() { handle_motion_ = true; }
   void unset_handle_motion() { handle_motion_ = false; }
-
   bool handle_motion() const { return handle_motion_; }
+
+  //: display a message at the mouse pointer
+  void set_capture_mouse(){capture_mouse_ = true;}
+  void unset_capture_mouse(){capture_mouse_ = false;}
+  void set_mouse_message() {mouse_message_ = true; capture_mouse_ = true;}
+  void unset_mouse_message();
+  bool mouse_message() const {return mouse_message_;}
+  void set_mouse_message_text(vcl_string const& msg){mouse_message_text_ = msg;}
+  vcl_string mouse_message_text() const{ return mouse_message_text_;}
+  bool mouse_pos(float& mouse_u, float& mouse_v){mouse_u = mouse_pos_[0],
+      mouse_v = mouse_pos_[1]; return mouse_message_;}
 
   // true means locked, false unlocked
   void lock_linenum(bool b) { locked_ = b; handle_motion_=!b; }
@@ -131,6 +141,10 @@ class bgui_image_tableau : public vgui_image_tableau
 
   bool locked_;
   bool show_path_;
+  bool mouse_message_;
+  bool capture_mouse_;
+  vcl_string mouse_message_text_;
+  float mouse_pos_[2];
   vgui_text_tableau_sptr tt_;
 };
 

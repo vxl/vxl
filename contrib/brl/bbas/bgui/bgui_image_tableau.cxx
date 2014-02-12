@@ -24,27 +24,36 @@
 bgui_image_tableau::bgui_image_tableau()
 {
   handle_motion_ = true; locked_ = false; show_path_=false;
+  mouse_message_ = false;
   tt_ = new vgui_text_tableau();
 }
 
 bgui_image_tableau::bgui_image_tableau(vil_image_resource_sptr const & img,
                                        vgui_range_map_params_sptr const& rmp)
  : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;
- tt_ = new vgui_text_tableau();}
+  mouse_message_ = false;
+  capture_mouse_ = false;
+  tt_ = new vgui_text_tableau();}
 
 bgui_image_tableau::bgui_image_tableau(vil_image_view_base const & img,
                                        vgui_range_map_params_sptr const& rmp)
  : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;
+  mouse_message_ = false;
+  capture_mouse_ = false;
  tt_ = new vgui_text_tableau();}
 
 bgui_image_tableau::bgui_image_tableau(vil1_image const & img,
                                        vgui_range_map_params_sptr const& rmp)
  : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;
+  mouse_message_ = false;
+  capture_mouse_ = false;
  tt_ = new vgui_text_tableau();}
 
 bgui_image_tableau::bgui_image_tableau(char const *f,
                                        vgui_range_map_params_sptr const& rmp)
  : base(f, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;
+  mouse_message_ = false;
+  capture_mouse_ = false;
  tt_ = new vgui_text_tableau();}
 
 //--------------------------------------------------------------------------------
@@ -564,19 +573,30 @@ void bgui_image_tableau::image_line(const float col_start,
       vals[i].push_back(cv[i]);
   }
 }
-
+void bgui_image_tableau::unset_mouse_message(){
+  mouse_message_ = false;
+  capture_mouse_ = false;
+  tt_->clear();
+  post_redraw();
+}
 
 //--------------------------------------------------------------------------------
 //:
 // Handle all events for this tableau.
 bool bgui_image_tableau::handle(vgui_event const &e)
 {
+#if 0
+  if(e.type != vgui_MOTION)
+    vcl_cout << "bgui_image " << e << '\n' << vcl_flush;
+#endif
   static bool button_down = false;
   if (e.type == vgui_DRAW)
   {
-    base::handle(e);
-    if (tt_) tt_->handle(e);
-    return true;
+    bool handled = base::handle(e);
+
+    if(tt_) tt_->handle(e);
+
+    return handled;
   }
 
   if (e.type == vgui_BUTTON_DOWN)
@@ -584,10 +604,29 @@ bool bgui_image_tableau::handle(vgui_event const &e)
     button_down = true;
     if (handle_motion_)
       vgui::out << ' ' << vcl_endl;
+    // if the mouse message is active
+    // then store the pixel location of the mouse
+    if(e.button == vgui_LEFT && capture_mouse_){
+      vgui_projection_inspector p_insp;
+      p_insp.window_to_image_coordinates(e.wx, e.wy, mouse_pos_[0],
+					 mouse_pos_[1]);
+    }
   }
   else if (e.type == vgui_BUTTON_UP)
   {
     button_down = false;
+    // if the mouse message is active
+    // display a single line of text (mouse_message_text_)
+    if(e.button == vgui_LEFT && mouse_message_){
+      tt_->clear();
+      tt_->set_colour(0.0f, 0.0f, 0.0f);
+      tt_->set_size(12);
+      //                                                        display banner
+      //                                                            |
+      //                                                            V
+      tt_->add(mouse_pos_[0], mouse_pos_[1], mouse_message_text_);//need to modify text-tableau
+      post_redraw();
+    }
   }
   else if (e.type == vgui_MOTION && handle_motion_ && !button_down)
   {
