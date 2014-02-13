@@ -200,7 +200,7 @@ int main(int argc, char** argv)
   unsigned num_regions = top_cam_num();
   if (top_cam_num() > cand_regions.num_sheets()) num_regions = cand_regions.num_sheets();
   vcl_cout << " \t candidate file contains " <<  num_regions << " regions" << vcl_endl;
-  for (unsigned r_idx = 0; r_idx < num_regions; r_idx += 2) {
+  for (unsigned r_idx = 0; r_idx < num_regions; r_idx ++) {
     vgl_polygon<double> poly(cand_regions[r_idx]);
     // check the intersected tile
     vcl_vector<unsigned> tile_ids;
@@ -257,7 +257,7 @@ int main(int argc, char** argv)
     }
     // write out the camera kml
     cam_angles best_cam = cam_space->camera_angles(best_cam_id);
-    vcl_cout << " \t after searching region " << r_idx << " has best match at location " << best_location << " and camera ";
+    vcl_cout << " \t after searching region " << r_idx << " has best maximum " << max_score << " at location " << best_location << " and camera ";
     best_cam.print();
     double head = (best_cam.heading_ < 0) ? best_cam.heading_+360.0 : best_cam.heading_;
     double tilt = (best_cam.tilt_ < 0) ? best_cam.tilt_+360.0 : best_cam.tilt_;

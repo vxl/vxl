@@ -23,7 +23,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> params_file("-params", "camera incremetal param file for depth interval", "");    // depth interval
   vul_arg<vcl_string> dms_bin("-dms", "xml file with labeled polygons", "");                            // query labelme xml
   vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary file", "");                               // query spherical container
-  vul_arg<vcl_string> out_folder("-out", "output folder where the generated query binary are stored", ""); // options to save the query depth image
+  vul_arg<vcl_string> out_bin("-out", "output folder where the generated query binary are stored", ""); // options to save the query depth image
   vul_arg<unsigned> id("-id", "test image id", 100);
   vul_arg<bool> save_images("-save", "save out query images or not", false);
   vul_arg_parse(argc, argv);
@@ -33,18 +33,19 @@ int main(int argc, char** argv)
       dms_bin().compare("") == 0 ||
       sph_bin().compare("") == 0 ||
       params_file().compare("") == 0 ||
-      out_folder().compare("") == 0 ||
+      out_bin().compare("") == 0 ||
       id() == 100) {
     vcl_cerr << " ERROR: input file/folders can not be empty!\n";
-    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
+  vcl_string out_folder = vul_file::dirname(out_bin());
+
   // read in the camera file
   if (!vul_file::exists(cam_bin())) {
     vcl_cerr << " ERROR: camera_space binary --> " << cam_bin() << " can not be found!\n";
-    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+    volm_io::write_status(out_folder, volm_io::EXE_ARGUMENT_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vsl_b_ifstream is_cam(cam_bin());
@@ -55,7 +56,7 @@ int main(int argc, char** argv)
   // read in the spherical shell container
   if (!vul_file::exists(sph_bin())) {
     vcl_cerr << " ERROR: spherical shell binary --> " << sph_bin() << " cam not be found!\n";
-    volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
+    volm_io::write_status(out_folder, volm_io::EXE_ARGUMENT_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container();
@@ -66,7 +67,7 @@ int main(int argc, char** argv)
   // create the depth interval from parameter file
   if (!vul_file::exists(params_file())) {
     vcl_cerr << " ERROR: camera incremental parameter file can not be found ---> " << params_file() << vcl_endl;
-    volm_io::write_status(out_folder(),volm_io::EXE_ARGUMENT_ERROR);
+    volm_io::write_status(out_folder,volm_io::EXE_ARGUMENT_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   volm_io_expt_params params; 
@@ -76,7 +77,7 @@ int main(int argc, char** argv)
   // load the depth map scene
   if (!vul_file::exists(dms_bin())) {
     vcl_cerr << " ERROR: depth map scene binary can not be found ---> " << dms_bin() << vcl_endl;
-    volm_io::write_status(out_folder(), volm_io::DEPTH_SCENE_FILE_IO_ERROR);
+    volm_io::write_status(out_folder, volm_io::DEPTH_SCENE_FILE_IO_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -144,26 +145,18 @@ int main(int argc, char** argv)
     }
   }
 
-  // save the volm_query
-  vcl_stringstream out_name;
-  if (id() < 10)
-    out_name << out_folder() << "/" << "p1b_test1_00" << id() << "_query_pa_" << (int)sph_shell->point_angle() << ".bin";
-  else if(id() >= 10 && id() < 100)
-    out_name << out_folder() << "/" << "p1b_test1_0"  << id() << "_query_pa_" << (int)sph_shell->point_angle() << ".bin";
-  else
-    out_name << out_folder() << "/" << "p1b_tset1_" << id() << "_query_pa_" << (int)sph_shell->point_angle() << ".bin";
 
-  vsl_b_ofstream ofs(out_name.str());
+  vsl_b_ofstream ofs(out_bin().c_str());
   query->write_data(ofs);
   ofs.close();
 
   // visualize query
   if (save_images()) {
-    vcl_string prefix = out_folder() + "/";
+    vcl_string prefix = out_folder + "/";
     vcl_cout << " save the images in " << prefix << vcl_endl;
-    query->draw_query_images(out_folder());
+    query->draw_query_images(out_folder);
   }
 
-  volm_io::write_status(out_folder(), volm_io::PRE_PROCESS_FINISHED);
+  volm_io::write_status(out_folder, volm_io::PRE_PROCESS_FINISHED);
   return volm_io::SUCCESS;
 }

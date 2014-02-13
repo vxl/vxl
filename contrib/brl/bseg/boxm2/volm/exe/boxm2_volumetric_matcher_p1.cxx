@@ -143,6 +143,18 @@ int main(int argc, char** argv)
     vcl_cout << " NO candidate list for this query image, full index space is considered" << vcl_endl;
     is_candidate = false;
   }
+  // check the parsed candidate polygon to ensure its usage
+  if (is_candidate) {
+    unsigned ns = cand_poly.num_sheets();
+    for (unsigned s = 0; s < ns; s++) {
+      vgl_point_2d<double> start = cand_poly[s][0];
+      vgl_point_2d<double>  last = cand_poly[s][cand_poly[s].size()-1];
+      if ( (start-last).length() < 1E-5 )
+        cand_poly[s].pop_back();
+    }
+  }
+
+
   // prune the tree, only leaves with non-zero hypos are left
   if (is_candidate)
     volm_geo_index::prune_tree(root, cand_poly);

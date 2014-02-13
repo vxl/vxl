@@ -153,7 +153,7 @@ int main(int argc, char** argv)
       }
       unsigned u, v;
       if (tile.global_to_img(h_pt.x(), h_pt.y(), u, v)) {
-#if 1
+#if 0
       vcl_cout << " total_ind = " << total_ind << " ii = " << ii << " leaf_id = " << scores[ii]->leaf_id_ << ", hypo_id = " << scores[ii]->hypo_id_
                << vcl_setprecision(10) << " lon = " << h_pt.x() << " , lat = " << h_pt.y() << ", pixel = (" << u << "," << v << ")"
                << ", score = " << scores[ii]->max_score_ << vcl_endl;

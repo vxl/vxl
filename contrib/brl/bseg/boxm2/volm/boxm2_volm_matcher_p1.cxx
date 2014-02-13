@@ -109,7 +109,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
   query_local_mem_ = 0;
   vul_timer trans_query_time;
   if (!this->transfer_query()) {
-    vcl_cerr << "\n ERROR: transfering query to 1D structure failed.\n";
+    vcl_cerr << "\n ERROR: transferring query to 1D structure failed.\n";
     return false;
   }
 
@@ -309,18 +309,18 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     global_threads_[0] = cl_ni;
     global_threads_[1] = cl_nj;
 
-    if (round_cnt % 200 == 0)
-      vcl_cout << " --------  in round " << round_cnt++ << " ------\n"
+    if (round_cnt % 1000 == 0)
+      vcl_cout << " --------  in round " << round_cnt << " ------\n"
                << " Number of indices have been matched = " << total_index_num << '\n'
                << " Giving " << nc << " camera hypos per location and " << ni << " locations pre lunching\n"
-               << " NDRange stucture:\n"
+               << " NDRange structure:\n"
                << " \t dimension = " << work_dim_ << '\n'
                << " \t work group size = (" << local_threads_[0] << ", " << local_threads_[1] << ")\n"
                << " \t number of work item =  (" << global_threads_[0] << ", " << global_threads_[1] << ")\n"
                << " \t number of work group = (" << global_threads_[0]/local_threads_[0]
-               << ", " << global_threads_[1]/local_threads_[1] << ')'
+               << ", " << global_threads_[1]/local_threads_[1] << ')' << vcl_flush
                << vcl_endl;
-
+    round_cnt++;
 #if 0
     // check loaded indices and associated ids
     vcl_cout << " -------> leaf_id_updated = " << leaf_id << vcl_endl;
@@ -549,7 +549,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
     // do the test
 #if 0
     if (ni < 16)
-      this->volm_matcher_p1_test_ori(ni, index_buff_, index_combine_buff_, score_buff_, mu_buff_);
+      this->volm_matcher_p1_test_ori(ni, index_buff_, index_orient_buff_, index_land_buff_, score_buff_, mu_buff_);
 #endif
 
     // finish current round, clean host memory
@@ -605,7 +605,7 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
       vgl_point_3d<double> h_pt;
       while (cnt < n_ind && leaves_[li]->hyps_->get_next(0,1,h_pt) ) {
         if (is_candidate_) {
-          if (cand_poly_.contains(h_pt.x(), h_pt.y())) {  // having candiate list and current hypo is inside it --> accept
+          if (cand_poly_.contains(h_pt.x(), h_pt.y())) {  // having candidate list and current hypo is inside it --> accept
             unsigned char* values = index_buff + cnt * layer_size;
             unsigned char* values_ori = index_orient_buff + cnt * layer_size;
             unsigned char* values_lnd = index_land_buff + cnt * layer_size;
@@ -615,7 +615,7 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
             ind_label_->get_next(values_lnd, layer_size);
             //ind_combine_->get_next(values_combine, layer_size);
             cnt++;
-#if 1
+#if 0
             vcl_cout << "=> leaf_id = " << li
                      << ", hypo_id = " << leaves_[li]->hyps_->current_-1
                      << ", h_pt = " << h_pt << vcl_endl;
@@ -658,8 +658,10 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
           //ind_combine_->finalize();
           if (li < leaves_.size()-1) {
             ind_->initialize_read(leaves_[li+1]->get_index_name(file_name_pre_.str()));
-            ind_orient_->finalize();
-            ind_label_->finalize();
+            ind_orient_->initialize_read(leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "orientation"));
+            ind_label_->initialize_read(leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "land"));
+            //ind_orient_->finalize();
+            //ind_label_->finalize();
             //ind_combine_->initialize_read(leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "combined"));
 #if 0
             vcl_cerr << " leaf = " << li+1 << ", combine_file = " << leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "combined") << '\n';
@@ -708,7 +710,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   bocl_kernel* kern;
   // choose whether kernel to use
   if (is_grd_reg_ && is_sky_reg_) {              // both sky and ground
-#ifdef DEBUG
+#if 0
     vcl_cout << "\t using both sky and grd kernel with orientatl attribute" << vcl_endl;
 #endif
     kern = kern_vec[0];
@@ -722,7 +724,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
     kern->set_arg(sky_id_cl_mem_);        kern->set_arg(sky_id_offset_cl_mem_);    kern->set_arg(sky_weight_cl_mem_);
   }
   else if ( !is_grd_reg_ && is_sky_reg_) {     // no ground but sky
-#ifdef DEBUG
+#if 0
     vcl_cout << "\t using NO grd kernel with orientation attribute" << vcl_endl;
 #endif
     kern = kern_vec[1];
@@ -742,7 +744,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
 #endif
   }
   else if (  is_grd_reg_ && !is_sky_reg_) {    // no sky but ground
-#ifdef DEBUG
+#if 0
     vcl_cout << "\t using NO sky kernel with orientation attribute" << vcl_endl;
 #endif
     kern = kern_vec[2];
@@ -755,7 +757,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
     kern->set_arg(grd_weight_cl_mem_);    kern->set_arg(grd_wgt_attri_cl_mem_);
   }
   else {                                       // neither sky nor ground
-#ifdef DEBUG
+#if 0
     vcl_cout << "\t using NO grd NOR sky kernel" << vcl_endl;
 #endif
     kern = kern_vec[3];
@@ -815,7 +817,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
 
   // execute kernel
   if (!kern->execute(queue, work_dim_, local_threads_, global_threads_)) {
-    vcl_cerr << "\n ERROR: kernel execuation failed\n";
+    vcl_cerr << "\n ERROR: kernel execution failed\n";
     delete debug_cl_mem_;
     delete debug_buff_;
     return false;
@@ -942,7 +944,7 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& tile_fname_bi
   // write the output store binary as tile
   // write the scores out as binary
   volm_score::write_scores(score_all_, tile_fname_bin);
-  // for testing purpose, generate a temparay txt file for output
+  // for testing purpose, generate a temporary txt file for output
   if (vul_file::exists(tile_fname_txt))
     vul_file::delete_file_glob(tile_fname_txt);
 
@@ -1334,7 +1336,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
 
   // implement orientation transfer function
   if (!this->transfer_orient()) {
-    vcl_cerr << " ERROR: transfering query orientation failed\n";
+    vcl_cerr << " ERROR: transferring query orientation failed\n";
     return false;
   }
 
@@ -1359,7 +1361,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     return false;
   }
   if (query_local_mem_ > device_local_mem_) {
-    vcl_cerr << " ERROR: the required local memoery for query " << query_local_mem_/1024.0
+    vcl_cerr << " ERROR: the required local memory for query " << query_local_mem_/1024.0
              << " KByte is larger than available local memory " << device_local_mem_/1024.0
              << " KB\n";
     this->clean_query_cl_mem();
@@ -1416,7 +1418,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
   if (is_sky_reg_ && is_grd_reg_)
   {
     if (this->weights_.size() != (2+(*n_obj_)) ) {
-      vcl_cerr << "\n ERROR: inconsistancy between volm_query and volm_weight\n";
+      vcl_cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
       return false;
     }
     // sky is line 1, grd is line 2
@@ -1461,7 +1463,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
       return false;
     }
 
-    // count the memoery usage
+    // count the memory usage
     query_global_mem_ += sizeof(float);                     // sky weight
     query_global_mem_ += sizeof(float)*4;                   // grd weight and grd weight for attributes
     query_global_mem_ += sizeof(float)*5*(*n_obj_);         // obj weight and obj weight for attributes
@@ -1480,7 +1482,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
                << ' ' << vit->w_obj_ << '\n';
 
     if (this->weights_.size() != (1+(*n_obj_)) ) {
-      vcl_cerr << "\n ERROR: inconsistancy between volm_query and volm_weight\n";
+      vcl_cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
       return false;
     }
     // sky is line 1, all other objects starts from line 2
@@ -1505,7 +1507,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
       return false;
     }
 
-    // count the memoery usage
+    // count the memory usage
     query_global_mem_ += sizeof(float);                     // sky weight
     query_global_mem_ += sizeof(float)*5*(*n_obj_);         // obj weight and obj weight for attributes
     query_local_mem_  += sizeof(float);                     // sky weight
@@ -1514,7 +1516,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
   else if (is_grd_reg_)
   {
     if (this->weights_.size() != (1+(*n_obj_)) ) {
-      vcl_cerr << "\n ERROR: inconsistancy between volm_query and volm_weight\n";
+      vcl_cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
       return false;
     }
     // grd is line 1, objects starts from line 2
@@ -1548,7 +1550,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
       return false;
     }
 
-    // count the memoery usage
+    // count the memory usage
     query_global_mem_ += sizeof(float)*4;                   // grd weight and grd weight for attributes
     query_global_mem_ += sizeof(float)*5*(*n_obj_);         // obj weight and obj weight for attributes
     query_local_mem_  += sizeof(float)*4;                   // grd weight and grd weight for attributes
@@ -1557,7 +1559,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
   else
   {
     if (this->weights_.size() != (*n_obj_) ) {
-      vcl_cerr << "\n ERROR: inconsistancy between volm_query and volm_weight\n";
+      vcl_cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
       return false;
     }
     // objects starts from line1
@@ -1570,7 +1572,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
       obj_wgt_attri_buff_[i*4+3] = this->weights_[i].w_ord_;
       obj_weight_buff_[i] = this->weights_[i].w_obj_;
     }
-    // count the memoery usage
+    // count the memory usage
     query_global_mem_ += sizeof(float)*5*(*n_obj_);         // obj weight and obj weight for attributes
     query_local_mem_  += sizeof(float)*4*(*n_obj_);         // obj weight and obj weight for attributes
   }
@@ -1587,7 +1589,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
 
   obj_wgt_attri_cl_mem_ = new bocl_mem(gpu_->context(), obj_wgt_attri_buff_, 4*(*n_obj_)*sizeof(float), " obj_wgt_attri " );
   if (!obj_wgt_attri_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: create bocl_mem fialed for OBJ_WGT_ATTRI\n";
+    vcl_cerr << "\n ERROR: create bocl_mem failed for OBJ_WGT_ATTRI\n";
     delete sky_weight_cl_mem_;
     delete grd_weight_cl_mem_;  delete grd_wgt_attri_cl_mem_;
     delete obj_weight_cl_mem_;  delete obj_wgt_attri_cl_mem_;
@@ -1640,7 +1642,8 @@ bool boxm2_volm_matcher_p1::transfer_weight()
 
 bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
                                                      unsigned char* index,
-                                                     unsigned char* index_combine,
+                                                     unsigned char* index_ori,
+                                                     unsigned char* index_lnd,
                                                      float* score_buff,
                                                      float* mu_buff)
 {
@@ -1649,7 +1652,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
   unsigned no = *n_obj_;
 
   if (is_obj_reg_) {
-    // calcualte mean depth value
+    // calculate mean depth value
     for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
       unsigned start_ind = ind_id * (layer_size_);
       for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
@@ -1693,10 +1696,10 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
     }
   }
   // calculate the ground score
-  // define the altitude ratio, suppose the altitude in index could ba up to 3 meter
-  // assuming the read-in alt values in query is normally ~1m, the altiutide ratio would be (2-1)/1 ~2
+  // define the altitude ratio, suppose the altitude in index could be up to 3 meter
+  // assuming the read-in alt values in query is normally ~1m, the altitude ratio would be (2-1)/1 ~2
   // the altitude ratio defined the tolerance for ground distance d as delta_d = alt_ratio * d
-  // this delte_d coule be in depth_interval unit ?
+  // this delte_d could be in depth_interval unit ?
   unsigned char alt_ratio = 2;
   vcl_vector<float> score_grd_all;
   vcl_vector<float> score_grd_dist_all;
@@ -1716,10 +1719,11 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
           unsigned id = start_ind + grd_id_buff_[k];
           unsigned char ind_d = index[id];
           unsigned char ind_lnd, ind_ori;
-          volm_io_extract_values(index_combine[id], ind_ori, ind_lnd);
+          ind_lnd = index_lnd[id];  ind_ori = index_ori[id];
+          //volm_io_extract_values(index_combine[id], ind_ori, ind_lnd);
           //unsigned char ind_lnd = index_land[id];
           unsigned char grd_d = grd_dist_buff_[k];
-          // use phyical distance to compute the grd_dst score
+          // use physical distance to compute the grd_dst score
           if (ind_id < depth_interval_.size() && grd_d < depth_interval_.size()) {
             float ind_dst = depth_interval_[ind_d];
             float grd_dst = depth_interval_[grd_d];
@@ -1772,7 +1776,6 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
         unsigned mu_start_id = cam_id*no + ind_id*no*nc;
         for (unsigned k = 0; k < no; k++)
         {
-          // i am here
           unsigned offset_id = k + no*cam_id;
           unsigned start_obj = obj_id_offset_buff_[offset_id];
           unsigned end_obj = obj_id_offset_buff_[offset_id+1];
@@ -1812,13 +1815,12 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
             }
             // check the orientation score
             unsigned char ind_ori, ind_lnd;
-            volm_io_extract_values(index_combine[id], ind_ori, ind_lnd);
-            if ( ind_ori > 0 && ind_ori < 10) {
-              if ( ind_ori == obj_orient_buff_[k] )
-                s_ori = 1;
-              if ( ind_ori != 1 && obj_orient_buff_[k]==2 )
-                s_ori = 1;
-            }
+            ind_ori = index_ori[id];  ind_lnd = index_lnd[id];
+            //volm_io_extract_values(index_combine[id], ind_ori, ind_lnd);
+            if ( ind_ori == obj_orient_buff_[k] && obj_orient_buff_[k] == 1)
+              s_ori = 1;
+            if ( ind_ori > 2 && ind_ori < 10 && obj_orient_buff_[k] != 0)
+              s_ori = 1;
             // check the land_type score
 #ifdef DEBUG
             vcl_cout << (int)ind_lnd << vcl_endl;
@@ -1840,8 +1842,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
           // normalized the order score for object k
           score_ord_k = (end_obj != start_obj) ? score_ord_k/(end_obj-start_obj) : 0;
           score_ord_k = score_ord_k * obj_weight_buff_[k] * this->obj_wgt_attri_buff_[4*k+3];
-#if 0
-          if (ind_id == 0 && cam_id == 245) {
+#if 1
+          if (ind_id == 2 && cam_id == 90) {
             vcl_cout << " ind_id = " << ind_id
                      << " cam_id = " << cam_id
                      << " k = " << k
@@ -1862,7 +1864,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
           score_lnd_k = (end_obj != start_obj) ? score_lnd_k/(end_obj-start_obj) : 0;
           score_lnd_k = score_lnd_k * obj_weight_buff_[k] * this->obj_wgt_attri_buff_[4*k+1];
 
-          // summerize order score for index ind_id and camera cam_id
+          // summarize order score for index ind_id and camera cam_id
           score_order += score_ord_k;
           score_min += score_min_k;
           score_ori += score_ori_k;
@@ -1897,26 +1899,26 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
   }
 
   // output all sky and ground score for checking
-#if 0
+#if 1
   for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
     for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
       unsigned id = cam_id + ind_id * nc;
-      if (cam_id == 245 && ind_id == 0)
+      if (cam_id == 0 && ind_id == 2)
         vcl_cout << " ind_id = " << ind_id << " cam_id = " << cam_id
-                 << " score_sky[" << id << "] = " << score_sky_all[id]
-                 //<< "\t score_grd[" << id << "] = " << score_grd_all[id]
-                 //<< "\t score_grd_lnd[" << id << "] = " << score_grd_lnd_all[id]
+                 //<< " score_sky[" << id << "] = " << score_sky_all[id]
+                 << "\t score_grd[" << id << "] = " << score_grd_all[id]
+                 << "\t score_grd_lnd[" << id << "] = " << score_grd_lnd_all[id]
                  << "\t score_ord[" << id << "] = " << score_ord_all[id]
                  << "\t score_min[" << id << "] = " << score_min_all[id]
                  << "\t score_ori[" << id << "] = " << score_ori_all[id]
                  << "\t score_lnd[" << id << "] = " << score_lnd_all[id]
-                 << "\t score_obj[" << id << "] = " << score_ord_all[id] + score_min_all[id] + score_ori_all[id]
+                 << "\t score_obj[" << id << "] = " << score_ord_all[id] + score_min_all[id] + score_ori_all[id] + score_lnd_all[id]
                  << vcl_endl;
     }
   }
 #endif
   // output for objects
-#if 0
+#if 1
   // mean values
   for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
     for (unsigned cam_id = 0; cam_id < nc; cam_id++)
@@ -1924,7 +1926,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
         unsigned start_ind = ind_id * layer_size_;
         unsigned id = obj_id + cam_id * no + ind_id * nc * no;
       //if ( mu[id] - mu_buff[id] != 0)
-        if (ind_id == 0 && cam_id == 245) {
+        if (ind_id == 2 && cam_id == 90) {
           vcl_cout << " ind_id = " << ind_id
                    << " cam_id = " << cam_id
                    << " obj_id = " << obj_id
@@ -1938,7 +1940,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
       }
 #endif
 
-#if 0
+#if 1
     // score for object
     for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
     for (unsigned cam_id = 0; cam_id < nc; cam_id++)
@@ -1949,7 +1951,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
                  << " cam_id = " << cam_id
                  << " obj_id = " << obj_id
                  << " id = " << id
-                 << "\t score_order = " << score_order_all[id]
+                 << "\t score_order = " << score_ord_all[id]
                  << "\t score_min = " << score_min_all[id]
                  << "\t score_ori = " << score_ori_all[id]
                  << vcl_endl;
@@ -1960,12 +1962,12 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
   for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
     for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
       unsigned id = cam_id + ind_id * nc;
-    //if (ind_id == 0 && cam_id == 245)
-      vcl_cout << " ind = " << ind_id << " cam = " << cam_id << " id = " << id
-               << "\t score_cpu = " << score_all[id]
-               << "\t score_gpu = " << score_buff[id]
-               << "\t diff = " << score_all[id] - score_buff[id]
-               << vcl_endl;
+      if (ind_id == 2 && cam_id == 90)
+        vcl_cout << " ind = " << ind_id << " cam = " << cam_id << " id = " << id
+                 << "\t score_cpu = " << score_all[id]
+                 << "\t score_gpu = " << score_buff[id]
+                 << "\t diff = " << score_all[id] - score_buff[id]
+                 << vcl_endl;
     }
   }
   return true;

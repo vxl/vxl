@@ -3,7 +3,7 @@ id name level width fallback1 fallback2 fallback3 fallback4 weight1 weight2 weig
 1 Open_Water 0 0 1 6 1 4 1.000 0.100 0.100 0.100
 2 Perennial_Ice/Snow 0 0 2 1 6 10 1.000 0.500 0.400 0.100
 3 Developed/Open_Space 0 0 3 4 5 6 1.000 0.200 0.200 0.100
-4 Developed/Low_Intensity 0 0 4 15 35 31 1.000 1.000 0.700 0.300
+4 Developed/Low_Intensity 0 0 4 15 35 31 1.000 0.600 0.700 0.300
 5 Developed/High_Intensity 0 0 5 4 15 31 1.000 0.700 1.000 1.000
 6 Barren_Land/Beach 0 0 6 1 11 13 1.000 0.100 0.700 0.700
 7 Deciduous_Forest 0 0 7 8 9 11 1.000 0.900 0.900 0.700
@@ -14,7 +14,7 @@ id name level width fallback1 fallback2 fallback3 fallback4 weight1 weight2 weig
 12 Pasture_Hay 0 0 12 11 10 14 1.000 0.800 0.600 0.600
 13 Cultivated_Crops 0 0 13 35 4 11 1.000 1.000 0.600 0.300
 14 Woody_Wetlands/Marina 0 0 14 1 11 6 1.000 0.800 0.400 0.600
-15 building 4 0 15 4 31 241 1.000 0.800 0.800 0.500
+15 building 4 0 15 4 31 241 1.000 0.700 0.800 0.500
 16 airports 1 0.5 16 4 37 11 1.000 0.800 0.800 0.800
 17 beaches 0 0 17 1 6 4 1.000 0.800 0.600 0.600
 18 bridges 3 0 18 1 4 13 1.000 0.800 0.900 0.600

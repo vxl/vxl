@@ -182,7 +182,7 @@ class boxm2_volm_matcher_p1
   bool transfer_orient();
   //: transfer volm_weight parameters to 1D array for kernel
   bool transfer_weight();
-  //: read given number of indeice from volm_geo_index, with two index files, index depth and index orientation
+  //: read given number of indices from volm_geo_index, with two index files, index depth and index orientation
   bool fill_index(unsigned const& n_ind,
                   unsigned const& layer_size,
                   unsigned& leaf_id,
@@ -228,7 +228,8 @@ class boxm2_volm_matcher_p1
   //: a test function to check the kernel implementation
   bool volm_matcher_p1_test_ori(unsigned n_ind,
                                 unsigned char* index,
-                                unsigned char* index_combine,
+                                unsigned char* index_ori,
+                                unsigned char* index_lnd,
                                 float* score_buff,
                                 float* mu_buff);
 };

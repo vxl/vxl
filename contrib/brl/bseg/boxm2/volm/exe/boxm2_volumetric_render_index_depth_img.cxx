@@ -81,17 +81,25 @@ int main(int argc, char** argv)
   // check whether we have candidate list for this query
   bool is_candidate = false;
   vgl_polygon<double> cand_poly;
+  vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
   if ( candidate_list().compare("") != 0) {
-    if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
-      is_candidate = true;
-      volm_io::read_polygons(candidate_list(), cand_poly);
-    }
-    else {
-      log << "ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
+    if (!vul_file::exists(candidate_list())) {
+      log << " ERROR: can not fine candidate list file: " << candidate_list() << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
       vcl_cerr << log.str();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
+    else {
+      // parse polygon from kml
+      is_candidate = true;
+      cand_poly = bkml_parser::parse_polygon(candidate_list());
+      vcl_cout << " candidate list is parsed from file: " << candidate_list() << vcl_endl;
+      vcl_cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << vcl_endl;
+    }
+  }
+  else {
+    vcl_cout << " NO candidate list for this query image, full index space is considered" << vcl_endl;
+    is_candidate = false;
   }
 
   // create tiles
@@ -294,7 +302,7 @@ int main(int argc, char** argv)
       vil_save(ori_img, (ori_img_fname.str()).c_str());
       vil_save(lnd_img, (lnd_img_fname.str()).c_str());
 
-      if (id() == 46 || id() == 40) {
+      if (id() == 46 || id() == 61) {
         vcl_stringstream dst_gt_img_fname;
         vcl_stringstream ori_gt_img_fname;
         vcl_stringstream lnd_gt_img_fname;
@@ -308,9 +316,13 @@ int main(int argc, char** argv)
         dst_gt_img.fill(vil_rgb<unsigned char>(120,120,120));
         ori_gt_img.fill(vil_rgb<unsigned char>(120,120,120));
         lnd_gt_img.fill(vil_rgb<unsigned char>(120,120,120));
-        cam_angles gt_cam_ang(0, 8.61, 9.075913235, 89.141542);
+        //cam_angles gt_cam_ang(0, 8.61, 9.075913235, 89.141542);  // p1b_test1_46
+        cam_angles gt_cam_ang(0, 11.1, 11.11, 84.095883);        // p1b_test1_61
+        
         vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
-        unsigned gt_cam_id = gt_cam_pair.first;
+        //unsigned gt_cam_id = gt_cam_pair.first;
+        unsigned gt_cam_id = (cam_space->valid_indices()[gt_cam_pair.first]);
+        vcl_cout << " ground truth camera id = " << gt_cam_id << vcl_endl;
         query->depth_rgb_image(values_dst, gt_cam_id, dst_gt_img, "depth");
         query->depth_rgb_image(values_ori, gt_cam_id, ori_gt_img, "orientation");
         query->depth_rgb_image(values_lnd, gt_cam_id, lnd_gt_img, "land");
@@ -318,7 +330,6 @@ int main(int argc, char** argv)
         vil_save(ori_gt_img, (ori_gt_img_fname.str()).c_str());
         vil_save(lnd_gt_img, (lnd_gt_img_fname.str()).c_str());
       }
-
     }
   }
 
