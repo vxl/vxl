@@ -95,8 +95,9 @@ IF(TIFF_FOUND)
     )
   ENDIF(GEOTIFF_FOUND)
 ENDIF(TIFF_FOUND)
-
+SET( HAS_DCMTK 0 )
 INCLUDE(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
+MESSAGE("DCMTK Dir",${DCMTK_INCLUDE_DIR})
 IF(DCMTK_FOUND)
   INCLUDE_DIRECTORIES(${DCMTK_INCLUDE_DIR})
   SET( HAS_DCMTK 1 )
@@ -105,8 +106,6 @@ IF(DCMTK_FOUND)
     file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
     file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
   )
-ELSE(DCMTK_FOUND)
-  SET( HAS_DCMTK 0 )
 ENDIF(DCMTK_FOUND)
 
 OPTION(VIL_CONFIG_ENABLE_SSE2_ROUNDING
