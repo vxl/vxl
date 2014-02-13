@@ -96,7 +96,7 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
     score_sky = score_sky * l_sky_weight;
 
     // calculate object score
-    // calcualte average mean depth value first
+    // calculate average mean depth value first
     // locate the mu index to store the mean value
     unsigned mu_start_id = cam_id*ln_obj + ind_id*ln_cam*ln_obj;
     for (unsigned k = 0; k < ln_obj; ++k) {              // loop over each object for cam_id and ind_id
@@ -120,8 +120,8 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
     }
     // calculate object score
     // note that the two neighboring objects may have same order
-    // therefore voxel depth could be less or eqaul the meaning depth of the objects with lower order
-    // and could be greater or eqaul the meaning depth of the object with higher order
+    // therefore voxel depth could be less or equal the meaning depth of the objects with lower order
+    // and could be greater or equal the meaning depth of the object with higher order
     float score_obj = 0.0f;
     for (unsigned k = 0; k < ln_obj; ++k) {
       unsigned offset_id = k + ln_obj * cam_id;
@@ -150,15 +150,19 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
           for (unsigned mu_id = k+1; (s_vox_ord && mu_id < ln_obj); ++mu_id)
             if (mu[mu_id+mu_start_id]*mu[mu_id+mu_start_id] > 1E-7)
               s_vox_ord = s_vox_ord * (local_depth_interval[d] - mu[mu_id + mu_start_id] < 1E-5);
-          // calculate min_distance socre for voxel i
+          // calculate min_distance score for voxel i
           s_vox_min = (d > local_min_dist[k]) ? 1 : 0;
         }
 
-        // calcualte score for orientation and land type
+        // calculate score for orientation and land type
         unsigned char ind_ori = index_orient[id];
         unsigned char ind_lnd = index_land[id];
-        if (ind_ori < 253)
-          s_vox_ori = (ind_ori != 0 && ind_ori == local_obj_orient[k]) ? 1 : 0;
+        if (local_obj_orient[k] == 1)  // query obj is horizontal
+          s_vox_ori = (ind_ori == 1) ? 1 : 0;
+        else                           // query obj is vertical
+          s_vox_ori = (ind_ori > 1 && ind_ori < 10 && local_obj_orient[k] != 0) ? 1: 0;
+        //if (ind_ori < 253)
+        //  s_vox_ori = (ind_ori != 0 && ind_ori == local_obj_orient[k]) ? 1 : 0;
         if (ind_lnd != 0) {
           for (unsigned ii = lnd_start; ii < lnd_end; ii++) {
             if (ind_lnd == local_obj_land[ii]) {
@@ -181,7 +185,7 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
 
       score_k = (end_obj != start_obj) ? score_k/(end_obj-start_obj) : 0;
       score_k *= local_obj_weight[k];
-      // summerize the object score
+      // summarize the object score
       score_obj += score_k;
     }
 
@@ -193,7 +197,7 @@ __kernel void generalized_volm_obj_based_matching_no_grd_with_orient(__global un
        debug[3] = score_obj;
     }
 #endif
-    // summerize the scores
+    // summarize the scores
     unsigned score_id = cam_id + ind_id*ln_cam;
     score[score_id] = score_sky + score_obj;
   }  // end of the calculation of index ind_id and camera cam_id

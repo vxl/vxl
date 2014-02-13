@@ -19,7 +19,7 @@ static void test_spherical_container()
   vcl_cout << " solid angle = " << angle << "\t, finnest resolution = " << vmin << ", dmax = " << dmax  << ", number of voxel = " << (sph.get_voxels()).size() << '\n'
            << "number of depth intervals.. " << sph.get_depth_offset_map().size() << vcl_endl;
 
-  TEST("number of depth intervals.. ", sph.get_depth_offset_map().size(), 144); // change if using an angle different than 4
+  TEST("number of depth intervals.. ", sph.get_depth_offset_map().size(), 240); // change if using an angle different than 4
 #if 0
   unsigned int offset, end_offset;
   double depth;
@@ -37,11 +37,11 @@ static void test_spherical_container()
 #endif // 0
   vcl_map<double, unsigned char>& depth_interval_map = sph.get_depth_interval_map();
   vcl_cout << " interval map size: " << depth_interval_map.size();
-  TEST("number of depth intervals.. ", depth_interval_map.size(), 144);
+  TEST("number of depth intervals.. ", depth_interval_map.size(), 240);
   vcl_map<double, unsigned char>::iterator iter = depth_interval_map.end();
   iter--;
   vcl_cout << " last interval: " << (unsigned)iter->second;
-  TEST("last interval.. ", iter->second, (unsigned char)143);
+  TEST("last interval.. ", iter->second, (unsigned char)239);
   int cnt = 0;
   for (vcl_map<double, unsigned char>::iterator iter = depth_interval_map.begin(); iter != depth_interval_map.end(); iter++, cnt++) {
     vcl_cout << "depth: " << iter->first << " interval: " << iter->second << vcl_endl;

@@ -11,6 +11,7 @@
 
 static void test_geo_index2()
 {
+#if 0
   double min_size = 0.05;
   //vcl_string dir = "./";
   vcl_string dir = "D:/work/find/phase_1b/ROI/tiles/";
@@ -102,9 +103,10 @@ static void test_geo_index2()
     u.transform(tiles[i].bbox_double().max_point().y(), tiles[i].bbox_double().max_point().x(), x, y, zone_id2);
     vcl_cout << " p1b_wr5_tile_" << i << " has utm zone " << zone_id << " and utm zone " << zone_id2 << vcl_endl;
   }
+#endif
 
-#if 0
-  // test the constuct tree
+#if 1
+  // test the construct tree
   vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr2_tiles();
   float min_size = 0.25f;
 
@@ -141,7 +143,7 @@ static void test_geo_index2()
     vcl_stringstream kml_file;  kml_file << "geo_index2_prune_depth_" << l_idx << ".kml";
     volm_geo_index2::write_to_kml(root, l_idx, kml_file.str());
   }
-  TEST("prune by polygon mothod", depth_prune_poly, depth);
+  TEST("prune by polygon method", depth_prune_poly, depth);
   // test the prune method by utm zone
   volm_geo_index2::prune_by_zone(root_less, 17);
   unsigned depth_utm_17 = volm_geo_index2::depth(root_less);
@@ -150,7 +152,7 @@ static void test_geo_index2()
   // test the tree text IO
   vcl_string txt_file = "./geo_index2_tree_str.txt";
   volm_geo_index2::write(root, txt_file, min_size);
-  float min_size_read;
+  double min_size_read;
   volm_geo_index2_node_sptr root_read = volm_geo_index2::read_and_construct<volm_loc_hyp_sptr>(txt_file, min_size_read);
   unsigned depth_read = volm_geo_index2::depth(root_read);
   bool test_txt_io = (depth_read == depth) && (min_size==min_size_read);
@@ -163,7 +165,7 @@ static void test_geo_index2()
   // test the get leave method
   vcl_vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root, leaves);
-  vcl_cout << " \tleaves for current tree: \n\t";
+  vcl_cout << " \t leaves for current tree: \n\t";
   for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
     leaves[l_idx]->extent_.print(vcl_cout);
     vcl_cout << "\n\t";
@@ -180,10 +182,10 @@ static void test_geo_index2()
   
   leaves.clear();
   volm_geo_index2::get_leaves(root, leaves, bbox);
-  vcl_cout << " \tgiven bounding box: \n\t";
+  vcl_cout << " \t given bounding box: \n\t";
   bbox.print(vcl_cout);
   vcl_cout << vcl_endl;
-  vcl_cout << " \tintersect leaves are: \n\t";
+  vcl_cout << " \t intersect leaves are: \n\t";
   for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
     leaves[l_idx]->extent_.print(vcl_cout);
     vcl_cout << "\n\t";

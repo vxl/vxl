@@ -4,6 +4,7 @@
 #include <volm/volm_osm_object_polygon.h>
 #include <volm/volm_osm_objects.h>
 #include <vcl_where_root_dir.h>
+#include <vul/vul_file.h>
 
 static void test_osm_object_point()
 {
@@ -72,24 +73,27 @@ static void test_osm_object_polygon()
   TEST("osm_object_polygon io", osm_region->poly().num_sheets(), osm_region_in->poly().num_sheets());
 }
 
-static void test_load_osm()
+static void test_load_osm(vcl_string const& osm_file)
 {
-  vcl_string osm_file = "d:/work/find/phase_1b/OSM/wr5//p1b_wr5_tile_3_osm.osm";
   vcl_string osm_to_volm_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
   // create a volm_osm_objects
   volm_osm_objects objs(osm_file, osm_to_volm_file);
+  vcl_cout << " parsing osm file: " << osm_file << vcl_endl;
   vcl_cout << " number of location points parsed from osm: " << objs.num_locs() << vcl_endl;
   vcl_cout << " number of line roads parsed from osm: " << objs.num_roads() << vcl_endl;
   vcl_cout << " number of regions parsed from osm: " << objs.num_regions() << vcl_endl;
-
+  TEST("parsing locations points from osm", objs.num_locs(), 1);
+  TEST("parsing line from osm", objs.num_roads(), 23);
+  TEST("parsing regions from osm", objs.num_regions(), 12);
   // test binary io
   objs.write_osm_objects("./test.bin");
 
   volm_osm_objects objs_in("./test.bin");
 
-  vcl_cout << " number of location points parsed from osm: " << objs_in.num_locs() << vcl_endl;
-  vcl_cout << " number of line roads parsed from osm: " << objs_in.num_roads() << vcl_endl;
-  vcl_cout << " number of regions parsed from osm: " << objs_in.num_regions() << vcl_endl;
+  TEST("binary io of points",  objs_in.num_locs(),  objs.num_locs());
+  TEST("binary io of roads",   objs_in.num_roads(), objs.num_roads());
+  TEST("binary io of regions", objs_in.num_regions(), objs.num_regions());
+
   // write the objects into kml file
   objs_in.write_pts_to_kml("./test_pts.kml");
   objs_in.write_lines_to_kml("./test_roads.kml");
@@ -198,10 +202,11 @@ static void test_osm_object()
 
   // test volm_osm_object_ids
   test_osm_object_ids();
-#if 1
-  // test load objects from open street map file
-  test_load_osm();
-#endif
+  
+  vcl_string osm_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/tests/test.osm";
+  if (vul_file::exists(osm_file))
+    test_load_osm(osm_file);
+
 }
 
 TESTMAIN(test_osm_object);

@@ -139,7 +139,7 @@ __kernel void generalized_volm_obj_based_matching_no_sky_with_orient(
     score_grd = score_grd * l_grd_weight;
 
     // calculate object score
-    // calcualte average mean depth value first
+    // calculate average mean depth value first
     // locate the mu index to store the mean value
     unsigned mu_start_id = cam_id*ln_obj + ind_id*ln_cam*ln_obj;
     for (unsigned k = 0; k < ln_obj; ++k) {              // loop over each object for cam_id and ind_id
@@ -194,15 +194,19 @@ __kernel void generalized_volm_obj_based_matching_no_sky_with_orient(
           for (unsigned mu_id = k+1; (s_vox_ord && mu_id < ln_obj); ++mu_id)
             if (mu[mu_id+mu_start_id]*mu[mu_id+mu_start_id] > 1E-7)
               s_vox_ord = s_vox_ord * (local_depth_interval[d] - mu[mu_id + mu_start_id] < 1E-5);
-          // calculate min_distance socre for voxel i
+          // calculate min_distance score for voxel i
           s_vox_min = (d > local_min_dist[k]) ? 1 : 0;
         }
 
-        // calcualte score for orientation and land type
+        // calculate score for orientation and land type
         unsigned char ind_ori = index_orient[id];
         unsigned char ind_lnd = index_land[id];
-        if (ind_ori < 253)
-          s_vox_ori = (ind_ori != 0 && ind_ori == local_obj_orient[k]) ? 1 : 0;
+        if (local_obj_orient[k] == 1)  // query obj is horizontal
+          s_vox_ori = (ind_ori == 1) ? 1 : 0;
+        else                           // query obj is vertical
+          s_vox_ori = (ind_ori > 1 && ind_ori < 10 && local_obj_orient[k] != 0) ? 1: 0;
+        //if (ind_ori < 253)
+        //  s_vox_ori = (ind_ori != 0 && ind_ori == local_obj_orient[k]) ? 1 : 0;
         if (ind_lnd != 0) {
           for (unsigned ii = lnd_start; ii < lnd_end; ii++) {
             if (ind_lnd == local_obj_land[ii]) {
@@ -225,23 +229,19 @@ __kernel void generalized_volm_obj_based_matching_no_sky_with_orient(
 
       score_k = (end_obj != start_obj) ? score_k/(end_obj-start_obj) : 0;
       score_k *= local_obj_weight[k];
-      // summerize the object score
+      // summarize the object score
       score_obj += score_k;
     }
 
 #if 0
-    if ( cam_id == 0 && ind_id == 6 ) {
+    if ( cam_id == 0 && ind_id == 90 ) {
       debug[0] = cam_id;
       debug[1] = ind_id;
-      debug[2] = local_grd_wgt_attri[0];
-      debug[3] = local_grd_wgt_attri[1];
-      debug[4] = local_grd_wgt_attri[2];
-      debug[5] = l_grd_weight;
-      debug[6] = score_grd;
-      debug[7] = score_obj;
+      debug[2] = score_grd;
+      debug[3] = score_obj;
     }
 #endif
-    // summerize the scores
+    // summarize the scores
     unsigned score_id = cam_id + ind_id*ln_cam;
     score[score_id] = score_grd + score_obj;
   }  // end of the calculation of index ind_id and camera cam_id

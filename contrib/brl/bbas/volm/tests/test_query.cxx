@@ -54,11 +54,11 @@ static void test_query()
   ofs_dms.close();
 
   // create a camera space
-  double head_mid=180.0, head_radius=180.0, head_inc=5.0;
-  double tilt_mid=90.0, tilt_radius=10.0, tilt_inc=2.0;
+  double head_mid=180.0, head_radius=10.0, head_inc=5.0;
+  double tilt_mid=90.0, tilt_radius=0.0, tilt_inc=2.0;
   double roll_mid=0.0,  roll_radius=0.0,  roll_inc=0.0;
   //double top_fov_vals[] = {3.0,  4.0, 5.0, 12.0, 17.0, 18.0,19.0, 20.0, 24.0};
-  double top_fov_vals[] = {17.0, 18.0,19.0, 20.0, 24.0};
+  double top_fov_vals[] = {20.0, 24.0};
   vcl_vector<double> fovs(top_fov_vals, top_fov_vals + 5);
   double altitude = 1.6;
   volm_camera_space_sptr csp = new volm_camera_space(fovs, altitude, ni, nj,

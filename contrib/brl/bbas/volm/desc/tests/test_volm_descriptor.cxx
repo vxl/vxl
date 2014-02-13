@@ -11,18 +11,18 @@
 
 static void test_volm_desc_land()
 {
-  volm_desc_sptr land = new volm_desc_land(21);
+  volm_desc_sptr land = new volm_desc_land(3);
   land->print();
   land->visualize("test_volm_desc_land.svg", 2);
   // load from a file
   vcl_string filename = "./location_category.txt";
   vcl_ofstream ofs(filename.c_str());
-  ofs << "Shrub/Scrub";
+  ofs << "Developed/Low_Intensity";
   ofs.close();
   volm_desc_sptr land_cat = new volm_desc_land(filename);
   land_cat->print();
-  TEST("NLCD land type Shrub/Scrub is located in bin 09", (*land_cat)[9], 1);
-  TEST("NLCD land type 21 is located in correct bin", (*land)[2], 1);
+  TEST("NLCD land type 3 is located in correct bin", (*land)[10], 1);
+  TEST("NLCD land type Developed/Low_Intensity is located in bin 09", (*land_cat)[4], 1);
 }
 
 static void test_volm_desc_ex()
@@ -32,16 +32,6 @@ static void test_volm_desc_ex()
   unsigned ni = 1280;
   unsigned nj = 720;
   depth_scene->set_image_size(ni, nj);
-  // add a sky object
-  vsol_point_2d_sptr ps0 = new vsol_point_2d(0.0, 200.0);
-  vsol_point_2d_sptr ps1 = new vsol_point_2d(1280.0, 200.0);
-  vsol_point_2d_sptr ps2 = new vsol_point_2d(1280.0, 0.0);
-  vsol_point_2d_sptr ps3 = new vsol_point_2d(0.0, 0.0);
-  vcl_vector<vsol_point_2d_sptr> verts_sky;
-  verts_sky.push_back(ps0);  verts_sky.push_back(ps1);
-  verts_sky.push_back(ps2);  verts_sky.push_back(ps3);
-  vsol_polygon_2d_sptr sp = new vsol_polygon_2d(verts_sky);
-  depth_scene->add_sky(sp, 255, "sky");
   // add a ground plane object
   vsol_point_2d_sptr p0= new vsol_point_2d(0.0, 720.0);
   vsol_point_2d_sptr p1= new vsol_point_2d(1280.0, 720.0);
@@ -72,7 +62,7 @@ static void test_volm_desc_ex()
   volm_desc_sptr desc = new volm_desc_ex(depth_scene, radius);
   desc->print();
 
-  // create a existance histogram from index
+  // create a existence histogram from index
   vcl_vector<unsigned char> values_dst(1176);
   vcl_vector<unsigned char> values_combine(1176);
   float solid_angle = 2.0f, vmin = 1.0f, dmax = 3000.0f;
@@ -107,11 +97,9 @@ static void test_volm_desc_ex()
   vcl_cout << " for two same histogram, similarity score is " << score << vcl_endl;
   
 
-  TEST ("sky bin should exist", desc->count(385), 1);
   TEST ("beach bin should exist", desc->count(6), 1);
-  TEST ("building 2 should exist", desc->count(260), 1);
   TEST ("binary io is correct", is_same, true);
-  TEST ("total are of the histogram", desc->get_area(), 3);
+  TEST ("total area of the histogram", desc->get_area(), 2);
   TEST ("similarity of the histogram", score, 1.0f);
 
   vul_timer time;
@@ -162,7 +150,7 @@ static void test_volm_descriptor()
   test_volm_desc_land();
   vcl_cout << "============================================================================ " << vcl_endl;
 
-  vcl_cout << "======================== test the existance histogram ====================== " << vcl_endl;
+  vcl_cout << "======================== test the existence histogram ====================== " << vcl_endl;
   test_volm_desc_ex();
   vcl_cout << "============================================================================ " << vcl_endl;
 
