@@ -35,9 +35,17 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint,
     for ( unsigned int scale_index = 0; 
           scale_index < this->octave_size()*this->num_octaves(); ++scale_index )
     {
+      
+      vcl_cout << "scale " << scale_index + 1 << " of " 
+               << this->octave_size()*this->num_octaves() 
+               << vcl_endl;
+
       const vil_image_view<float>& current_dog = this->pyramid_sptr_->
-        dog_pyramid(scale_index/this->octave_size(), 
-                    scale_index%this->octave_size());
+        dog_pyramid(scale_index / this->num_octaves(), 
+                    scale_index % this->num_octaves());
+
+      vcl_cout << "current_dog.size() = " << current_dog.ni()
+               << ", " << current_dog.nj() << vcl_endl;
 
       //this value is used in the orientation and grad_mag images 
       //in the pyramid to recover the scale_index value which is a linear index
@@ -54,6 +62,10 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint,
       float resolution = 1.0f / current_scale;
       unsigned int ri = (unsigned int)(i*resolution);
       unsigned int rj = (unsigned int)(j*resolution);
+
+      vcl_cout << "current_dog size = " 
+               << current_dog.ni() << ", " 
+               << current_dog.nj() << vcl_endl;
 
       scale_index_map[vcl_fabs(current_dog(ri,rj))] = current_scale;
     }//end scale iteration
