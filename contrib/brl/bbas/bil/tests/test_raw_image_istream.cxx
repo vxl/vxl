@@ -12,7 +12,7 @@ static void create_raw_image_stream()
     vcl_string root = testlib_root_dir();
     vcl_string base = root + "/contrib/brl/bbas/bil/tests/file_read_data/";
     vcl_string rawFile = base+"test_raw_image_stream.raw";
-    vcl_ofstream ofile(rawFile,vcl_ios::binary);
+    vcl_ofstream ofile(rawFile.c_str(),vcl_ios::binary);
     int ni = 1;
     int nj = 1;
     int pixelsize = 8;
