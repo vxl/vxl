@@ -217,7 +217,7 @@ static void test_tangent_update()
   upos_t mup = up_pos_dist.mean();
   float var = up_pos_dist.var();
   float nobsp = up_pos_dist.num_observations;
-  TEST_NEAR("test updated position distribution", mup[0] + mup[1] + var+ nobsp - 2.0f, 1.0205177+1.7676896,1e-6);
+  TEST_NEAR("test updated position distribution", mup[0] + mup[1] + var+ nobsp - 2.0f, 1.0205177+1.7676896,1e-3);
   udir_t mud = up_dir_dist.mean();
   float kappa = up_dir_dist.kappa();
   float nobsd = up_dir_dist.num_observations;
