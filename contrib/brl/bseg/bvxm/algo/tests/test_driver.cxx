@@ -2,7 +2,7 @@
 
 DECLARE( test_merge_mog );
 DECLARE( test_mog_norm );
-DECLARE( test_boxm_scene_to_bvxm_grid);
+//DECLARE( test_boxm_scene_to_bvxm_grid);
 
 
 void register_tests()
