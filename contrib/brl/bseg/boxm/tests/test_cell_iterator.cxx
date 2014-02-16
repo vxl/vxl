@@ -28,8 +28,10 @@ void test_cell_iterator()
       vcl_cerr << " Wrong data: " << cell->data() << vcl_endl;
     }
     ++iterator;
-    cell = *iterator;
     num_cells ++;
+	if(!iterator.end()){
+    cell = *iterator;
+	}
   }
   
   if(num_cells!=120){

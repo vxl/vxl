@@ -67,6 +67,6 @@ void clean_up()
   for (; file_it; ++file_it)
   {
     vpl_unlink(file_it());
-    vul_file::delete_file_glob(file_it());
+    //vul_file::delete_file_glob(file_it());// already deleted ?? FIX_ME
   }
 }
