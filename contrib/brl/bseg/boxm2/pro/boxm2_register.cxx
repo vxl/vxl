@@ -39,6 +39,7 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_roi_init_process, "boxm2RoiInitProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_illumination_info_process, "boxm2SceneIlluminationInfoProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_persp_cam_from_scene_process, "boxm2PerspCamFromSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ortho_geo_cam_from_scene_process, "boxm2OrthoGeoCamFromSceneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_write_cache_process, "boxm2WriteCacheProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_stream_cache_close_files_process, "boxm2StreamCacheCloseFilesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_compute_sun_affine_camera_process, "boxm2ComputeSunAffineCameraProcess");

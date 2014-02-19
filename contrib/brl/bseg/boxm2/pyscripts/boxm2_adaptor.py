@@ -1416,6 +1416,24 @@ def perspective_camera_from_scene(scene, cent_x, cent_y, cent_z, ni, nj):
     cam = dbvalue(id,type)
     return cam
 
+# create orthogonal camera from a boxm2 scene
+def ortho_geo_cam_from_scene(scene):
+  boxm2_batch.init_process("boxm2OrthoGeoCamFromSceneProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  result = boxm2_batch.run_process();
+  if result:
+    (id, type) = boxm2_batch.commit_output(0);
+    cam = dbvalue(id, type);
+    (ni_id,type) = boxm2_batch.commit_output(1);
+    ni = boxm2_batch.get_output_unsigned(ni_id);
+    (nj_id,type) = boxm2_batch.commit_output(2);
+    nj = boxm2_batch.get_output_unsigned(nj_id);
+  else:
+    cam = 0;
+    ni  = 0;
+    nj  = 0;
+  return cam, ni, nj;
+
 # Create x y z images from a DEM at the resolution of the scene
 def generate_xyz_from_dem(scene, geotiff_dem, geoid_height, geocam=0,fill_in_value=-1.0):
   boxm2_batch.init_process("boxm2DemToXYZProcess");
