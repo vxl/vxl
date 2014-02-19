@@ -250,7 +250,7 @@ int main(int argc, char** argv)
             << tile_imgs[i](u, v)
             << " max score for this test_img = " << max_score
             << " given by camera " << max_cam_ang.get_string()
-            << " at location " << max_score_loc.x() << ", " << max_score_loc.y()
+            << " at location " << vcl_setprecision(12) << max_score_loc.x() << ", " << vcl_setprecision(12) << max_score_loc.y()
             << '\n';
             volm_io::write_post_processing_log(log_file, log.str());
             vcl_cout << log.str();
@@ -262,7 +262,7 @@ int main(int argc, char** argv)
   else {
     log << " max score for this test_img = " << max_score
         << " given by camera " << max_cam_ang.get_string()
-        << " at location " << max_score_loc.x() << ", " << max_score_loc.y()
+        << " at location " << vcl_setprecision(12) << max_score_loc.x() << ", " << vcl_setprecision(12) << max_score_loc.y()
         << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
     vcl_cout << log.str();

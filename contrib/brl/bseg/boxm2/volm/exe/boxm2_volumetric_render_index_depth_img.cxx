@@ -302,12 +302,12 @@ int main(int argc, char** argv)
       vil_save(ori_img, (ori_img_fname.str()).c_str());
       vil_save(lnd_img, (lnd_img_fname.str()).c_str());
 
-      if (id() == 46 || id() == 61) {
+      if (id() == 46 || id() == 61 || id() == 56) {
         vcl_stringstream dst_gt_img_fname;
         vcl_stringstream ori_gt_img_fname;
         vcl_stringstream lnd_gt_img_fname;
-        dst_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_depth_gt_cam.png";
-        ori_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_orient_gt_cam.png";
+        dst_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_dst_gt_cam.png";
+        ori_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_ori_gt_cam.png";
         lnd_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_lnd_gt_cam.png";
         vil_image_view<vil_rgb<vxl_byte> > dst_gt_img(query_img.ni(), query_img.nj());
         vil_image_view<vil_rgb<vxl_byte> > ori_gt_img(query_img.ni(), query_img.nj());
@@ -316,13 +316,19 @@ int main(int argc, char** argv)
         dst_gt_img.fill(vil_rgb<unsigned char>(120,120,120));
         ori_gt_img.fill(vil_rgb<unsigned char>(120,120,120));
         lnd_gt_img.fill(vil_rgb<unsigned char>(120,120,120));
-        //cam_angles gt_cam_ang(0, 8.61, 9.075913235, 89.141542);  // p1b_test1_46
-        cam_angles gt_cam_ang(0, 11.1, 11.11, 84.095883);        // p1b_test1_61
-        
-        vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
+        cam_angles* gt_cam_ang_ptr;
+        if (id() == 46)
+          gt_cam_ang_ptr = new cam_angles(0, 8.61, 9.075913235, 89.141542);
+        else if (id() == 61)
+          gt_cam_ang_ptr = new cam_angles(0, 11.1, 11.11, 84.095883);
+        else if (id() == 56)
+          gt_cam_ang_ptr = new cam_angles(0, 12.6, 10.6377, 97.660);
+        vcl_cout << " ground truth camera is: ";
+        gt_cam_ang_ptr->print();
+        vcl_cout << vcl_endl;
+        vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(*gt_cam_ang_ptr);
         //unsigned gt_cam_id = gt_cam_pair.first;
         unsigned gt_cam_id = (cam_space->valid_indices()[gt_cam_pair.first]);
-        vcl_cout << " ground truth camera id = " << gt_cam_id << vcl_endl;
         query->depth_rgb_image(values_dst, gt_cam_id, dst_gt_img, "depth");
         query->depth_rgb_image(values_ori, gt_cam_id, ori_gt_img, "orientation");
         query->depth_rgb_image(values_lnd, gt_cam_id, lnd_gt_img, "land");

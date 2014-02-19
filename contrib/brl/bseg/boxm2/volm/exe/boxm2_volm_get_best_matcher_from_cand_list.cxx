@@ -10,6 +10,7 @@
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_camera_space.h>
@@ -257,7 +258,8 @@ int main(int argc, char** argv)
     }
     // write out the camera kml
     cam_angles best_cam = cam_space->camera_angles(best_cam_id);
-    vcl_cout << " \t after searching region " << r_idx << " has best maximum " << max_score << " at location " << best_location << " and camera ";
+    vcl_cout << " \t after searching region " << r_idx << " has best maximum " << max_score << " at location "
+             << vcl_setprecision(12) << best_location.x() << vcl_setprecision(12) << best_location.y() << " and camera ";
     best_cam.print();
     double head = (best_cam.heading_ < 0) ? best_cam.heading_+360.0 : best_cam.heading_;
     double tilt = (best_cam.tilt_ < 0) ? best_cam.tilt_+360.0 : best_cam.tilt_;

@@ -928,7 +928,6 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
     }
   }
   else if (value_type == "land") {
-    vcl_cout << " land_type index: ";
     for (unsigned pidx = 0; pidx < query_size_; ++pidx) {
       vil_rgb<vxl_byte> color_id;
       if (values[pidx] == 0)                   // invalid --> black
