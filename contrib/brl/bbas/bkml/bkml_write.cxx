@@ -2,6 +2,7 @@
 //:
 // \file
 #include <vcl_cstdio.h>
+#include <vcl_iomanip.h>
 
 vcl_string rgb_color_to_hex_color(int alpha, int rNum, int gNum, int bNum)
 {
@@ -217,7 +218,7 @@ void bkml_write::write_location(vcl_ofstream &ofs, vcl_string name, vcl_string d
       << "  <description>" << description << "</description>\n"
       << "  <styleUrl>#m_ylw-pushpin</styleUrl>\n"
       << "  <Point>\n"
-      << "    <coordinates>" << lon << ", " << lat << ", " << elev << "</coordinates>\n"
+      << "    <coordinates>" << vcl_setprecision(12) << lon << ", " << vcl_setprecision(12) << lat << ", " << elev << "</coordinates>\n"
       << "  </Point>\n"
       << "</Placemark>\n" << vcl_endl;
 }
@@ -282,8 +283,8 @@ void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
   ofs << "<PhotoOverlay>\n"
       << "  <name>" << name << "</name>\n"
       << "  <Camera>\n"
-      << "    <longitude>" << lon << "</longitude>\n"
-      << "    <latitude>"  << lat << "</latitude>\n"
+      << "    <longitude>" << vcl_setprecision(12) << lon << "</longitude>\n"
+      << "    <latitude>"  << vcl_setprecision(12) << lat << "</latitude>\n"
       << "    <altitude>"  << alt << "</altitude>\n"
       << "    <heading>"   << head << "</heading>\n"
       << "    <tilt>"      << tilt << "</tilt>\n"
