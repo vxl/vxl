@@ -6,7 +6,7 @@
 #include <bbas/volm/volm_spherical_shell_container_sptr.h>
 #include <vnl/vnl_random.h>
 
-static void test_volm_wr3db_index()
+static void test_volm_wr3db_ind()
 {
   // create a much smaller index for testing purposes
   float vmin = 2.0f;  // min voxel resolution
@@ -76,7 +76,7 @@ static void test_volm_wr3db_index()
   TEST("finalize read", ind2->finalize(), true);
 }
 
-TESTMAIN(test_volm_wr3db_index);
+TESTMAIN(test_volm_wr3db_ind);
 
 #if 0
   float vmin = 10.0f;  // min voxel resolution
