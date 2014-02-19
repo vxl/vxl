@@ -170,6 +170,30 @@ def render_height_map_with_cam(world, input_cam, ni, nj):
   out_d_img = dbvalue(id, type);
   return out_d_img
 
+def render_height_map_expected_with_cam(world, input_cam, ni, nj):
+  bvxm_batch.init_process("bvxmHeightmapExpectedProcess");
+  bvxm_batch.set_input_from_db(0,world);
+  bvxm_batch.set_input_from_db(1,input_cam);
+  bvxm_batch.set_input_unsigned(2,ni);
+  bvxm_batch.set_input_unsigned(3,nj);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  out_h_img = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(1);
+  out_var_img = dbvalue(id, type);
+  return out_h_img, out_var_img
+
+def render_uncertainty_img(input_cam, ni, nj, world):
+  bvxm_batch.init_process("bvxmUncertaintyProcess");
+  bvxm_batch.set_input_from_db(0,world);
+  bvxm_batch.set_input_from_db(1,input_cam);
+  bvxm_batch.set_input_unsigned(2,ni);
+  bvxm_batch.set_input_unsigned(3,nj);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  out_img = dbvalue(id, type);
+  return out_img
+
 def render_ortho_edgemap(world, scale=0):
   print("Rendering ortho edge map");
   bvxm_batch.init_process("bvxmEdgemapOrthoProcess");

@@ -729,7 +729,234 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   return true;
 }
 
-vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k, unsigned scale_idx)
+//: generate a heightmap from the viewpoint of a virtual camera
+// The pixel values are the expected z values and variance along the corresponding camera ray
+bool bvxm_voxel_world::heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil_image_view<float> &heightmap, vil_image_view<float> &var, float& max_depth, unsigned scale_idx)
+{
+  typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+
+  // extract global parameters
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
+
+  // compute homographies from voxel planes to image coordinates and vise-versa.
+  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
+  vcl_vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
+
+  for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    compute_plane_image_H(virtual_camera,z,Hp2i,Hi2p,scale_idx);
+    H_plane_to_virtual_img.push_back(Hp2i);
+    H_virtual_img_to_plane.push_back(Hi2p);
+  }
+
+  // compute the height for initial pre_x, pre_y, pre_z
+  bvxm_voxel_slab<float> x_slab(grid_size.x(),grid_size.y(),1);
+  bvxm_voxel_slab<float> y_slab(grid_size.x(),grid_size.y(),1);
+  bvxm_voxel_slab<float> z_slab(grid_size.x(),grid_size.y(),1);
+  
+  for (unsigned i = 0; i < grid_size.x(); i++)
+    for (unsigned j = 0; j < grid_size.y(); j++) {
+      vgl_point_3d<float> pt = this->voxel_index_to_xyz(i, j, -1, 0);
+      x_slab(i, j) = pt.x();
+      y_slab(i, j) = pt.y();
+      z_slab(i, j) = pt.z();
+    }
+
+  vgl_h_matrix_2d<double> Hp2i, Hi2p;
+  compute_plane_image_H(virtual_camera,-1,Hp2i,Hi2p,scale_idx);  // compute for z = -1 (slab above the world volume)
+
+  // allocate some images
+  bvxm_voxel_slab<float> visX_accum_virtual(heightmap.ni(), heightmap.nj(),1);
+  bvxm_voxel_slab<float> depth(heightmap.ni(),heightmap.nj(),1);
+  bvxm_voxel_slab<float> exp_depth(heightmap.ni(),heightmap.nj(),1);
+  bvxm_voxel_slab<float> exp_depth_square(heightmap.ni(),heightmap.nj(),1);
+  bvxm_voxel_slab<ocp_datatype> slice_prob_img(heightmap.ni(),heightmap.nj(),1);
+ 
+  bvxm_voxel_slab<float> slab_x_virtual(heightmap.ni(), heightmap.nj(), 1);
+  bvxm_voxel_slab<float> slab_y_virtual(heightmap.ni(), heightmap.nj(), 1);
+  bvxm_voxel_slab<float> slab_z_virtual(heightmap.ni(), heightmap.nj(), 1);
+  bvxm_voxel_slab<float> slab_x_pre_virtual(heightmap.ni(), heightmap.nj(), 1);
+  bvxm_voxel_slab<float> slab_y_pre_virtual(heightmap.ni(), heightmap.nj(), 1);
+  bvxm_voxel_slab<float> slab_z_pre_virtual(heightmap.ni(), heightmap.nj(), 1);
+
+  // initialize the pres using z = -1 height
+  bvxm_util::warp_slab_bilinear(x_slab,Hi2p,slab_x_pre_virtual);
+  bvxm_util::warp_slab_bilinear(y_slab,Hi2p,slab_y_pre_virtual);
+  bvxm_util::warp_slab_bilinear(z_slab,Hi2p,slab_z_pre_virtual);
+
+  //heightmap_rough.fill((float)grid_size.z());
+  visX_accum_virtual.fill(1.0f);
+  depth.fill(0.0f);  // depth from the ceiling of the scene! so start with 0
+  exp_depth.fill(0.0f);  
+  exp_depth_square.fill(0.0f);  
+
+  // get occupancy probability grid
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
+  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+
+  bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+
+  vcl_cout << "generating depth map from virtual camera:" << vcl_endl;
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
+    vcl_cout << '.';
+
+    // compute PXvisX for virtual camera and update visX
+    bvxm_util::warp_slab_bilinear(*ocp_slab_it,H_virtual_img_to_plane[z],slice_prob_img);
+
+    // compute the current x,y,z
+    for (unsigned i = 0; i < grid_size.x(); i++)
+    for (unsigned j = 0; j < grid_size.y(); j++) {
+      vgl_point_3d<float> pt = this->voxel_index_to_xyz(i, j, z, 0);
+      x_slab(i, j) = pt.x();
+      y_slab(i, j) = pt.y();
+      z_slab(i, j) = pt.z();
+    }
+    bvxm_util::warp_slab_bilinear(x_slab,Hi2p,slab_x_virtual);
+    bvxm_util::warp_slab_bilinear(y_slab,Hi2p,slab_y_virtual);
+    bvxm_util::warp_slab_bilinear(z_slab,Hi2p,slab_z_virtual);
+
+
+    // compute the current depths
+    bvxm_voxel_slab<float>::iterator depth_it = depth.begin(), x_it = slab_x_virtual.begin(), y_it = slab_y_virtual.begin(), z_it = slab_z_virtual.begin();
+    bvxm_voxel_slab<float>::iterator x_pre_it = slab_x_pre_virtual.begin(), y_pre_it = slab_y_pre_virtual.begin(), z_pre_it = slab_z_pre_virtual.begin();
+    for (; depth_it != depth.end(); ++depth_it, ++x_it, ++y_it, ++z_it, ++x_pre_it, ++y_pre_it, ++z_pre_it) {
+      float inc_x = *x_pre_it - *x_it;
+      float inc_y = *y_pre_it - *y_it;
+      float inc_z = *z_pre_it - *z_it;
+      float d = vcl_sqrt(inc_x*inc_x + inc_y*inc_y + inc_z*inc_z);
+      *depth_it += d;
+      *x_pre_it = *x_it;
+      *y_pre_it = *y_it;
+      *z_pre_it = *z_it;
+    }
+
+    bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_prob_img.begin();
+    bvxm_voxel_slab<float>::iterator exp_depth_it = exp_depth.begin(), exp_depth_square_it = exp_depth_square.begin(), visX_it = visX_accum_virtual.begin();
+    depth_it = depth.begin();
+
+    for (; exp_depth_it != exp_depth.end(); ++exp_depth_it, ++PX_it, ++exp_depth_square_it, ++visX_it, ++depth_it) {
+      float PXvisX = (*visX_it) * (*PX_it);
+      *exp_depth_it += *depth_it * PXvisX;
+      *exp_depth_square_it += *depth_it * *depth_it * PXvisX;
+      
+      // update virtual visX
+      *visX_it *= (1.0f - *PX_it);
+    }
+  }
+  vcl_cout << vcl_endl;
+
+  // find the depth at the slab below the world volume
+  for (unsigned i = 0; i < grid_size.x(); i++)
+    for (unsigned j = 0; j < grid_size.y(); j++) {
+      vgl_point_3d<float> pt = this->voxel_index_to_xyz(i, j, grid_size.z(), 0);
+      x_slab(i, j) = pt.x();
+      y_slab(i, j) = pt.y();
+      z_slab(i, j) = pt.z();
+    }
+  
+  bvxm_util::warp_slab_bilinear(x_slab,Hi2p,slab_x_virtual);
+  bvxm_util::warp_slab_bilinear(y_slab,Hi2p,slab_y_virtual);
+  bvxm_util::warp_slab_bilinear(z_slab,Hi2p,slab_z_virtual);
+
+  // compute the current depths
+  bvxm_voxel_slab<float>::iterator depth_it = depth.begin(), x_it = slab_x_virtual.begin(), y_it = slab_y_virtual.begin(), z_it = slab_z_virtual.begin();
+  bvxm_voxel_slab<float>::iterator x_pre_it = slab_x_pre_virtual.begin(), y_pre_it = slab_y_pre_virtual.begin(), z_pre_it = slab_z_pre_virtual.begin();
+  for (; depth_it != depth.end(); ++depth_it, ++x_it, ++y_it, ++z_it, ++x_pre_it, ++y_pre_it, ++z_pre_it) {
+    float inc_x = *x_pre_it - *x_it;
+    float inc_y = *y_pre_it - *y_it;
+    float inc_z = *z_pre_it - *z_it;
+    float d = vcl_sqrt(inc_x*inc_x + inc_y*inc_y + inc_z*inc_z);
+    *depth_it += d;
+  }
+
+  // normalize the depths, the visibility at the end of the ray may not have diminished completely
+  bvxm_voxel_slab<float>::iterator exp_depth_it = exp_depth.begin(), exp_depth_square_it = exp_depth_square.begin(), visX_it = visX_accum_virtual.begin();
+  depth_it = depth.begin();
+  vil_image_view<float>::iterator hmap_it = heightmap.begin(), var_it = var.begin();
+  for (; exp_depth_it != exp_depth.end(); ++exp_depth_it, ++exp_depth_square_it, ++depth_it, ++visX_it, ++hmap_it, ++var_it) {
+    *hmap_it = *exp_depth_it + *depth_it * *visX_it;
+    *var_it = *exp_depth_square_it + *depth_it * *depth_it * *visX_it - (*exp_depth_it * *exp_depth_it);
+  }
+  // return the max depth for the ray (0,0) 
+  max_depth = *(depth.begin());
+
+  return true;
+}
+
+//: measure the average uncertainty along the rays
+bool bvxm_voxel_world::uncertainty(vpgl_camera_double_sptr virtual_camera, vil_image_view<float> &uncertainty, unsigned scale_idx)
+{
+  typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+
+  // extract global parameters
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
+
+  // compute homographies from voxel planes to image coordinates and vise-versa.
+  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
+  vcl_vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
+
+  for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    compute_plane_image_H(virtual_camera,z,Hp2i,Hi2p,scale_idx);
+    H_plane_to_virtual_img.push_back(Hp2i);
+    H_virtual_img_to_plane.push_back(Hi2p);
+  }
+
+  // allocate some images
+  bvxm_voxel_slab<float> visX_accum_virtual(uncertainty.ni(), uncertainty.nj(),1);
+  bvxm_voxel_slab<float> uncer(uncertainty.ni(),uncertainty.nj(),1);
+  bvxm_voxel_slab<float> uncer_cnt(uncertainty.ni(),uncertainty.nj(),1);
+  bvxm_voxel_slab<ocp_datatype> slice_prob_img(uncertainty.ni(),uncertainty.nj(),1);
+ 
+  visX_accum_virtual.fill(1.0f);
+  uncer.fill(0.0f);  // depth from the ceiling of the scene! so start with 0
+  uncer_cnt.fill(0.0f);
+  
+  // get occupancy probability grid
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
+  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+
+  bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+
+  vcl_cout << "generating depth map from virtual camera:" << vcl_endl;
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
+    vcl_cout << '.';
+
+    // compute PXvisX for virtual camera and update visX
+    bvxm_util::warp_slab_bilinear(*ocp_slab_it,H_virtual_img_to_plane[z],slice_prob_img);
+
+    bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_prob_img.begin();
+    bvxm_voxel_slab<float>::iterator uncer_it = uncer.begin(), uncer_cnt_it = uncer_cnt.begin(), visX_it = visX_accum_virtual.begin();
+    for (; uncer_it != uncer.end(); ++uncer_it, ++uncer_cnt_it, ++PX_it, ++visX_it) {
+      float PX = (*PX_it);
+      float PXminus = 1.0f-(*PX_it);
+      float ratio = PX/PXminus;
+      if (ratio > 1)
+        ratio = 1.0f/ratio;
+      //*uncer_it += ratio;
+      //*uncer_cnt_it += 1.0f;
+      *uncer_it += *visX_it * ratio;
+      *uncer_cnt_it += *visX_it;
+     
+      // update virtual visX
+      *visX_it *= (1.0f - *PX_it);
+    }
+  }
+  vcl_cout << vcl_endl;
+
+  // compute the average
+  bvxm_voxel_slab<float>::iterator uncer_it = uncer.begin(), uncer_cnt_it = uncer_cnt.begin();
+  vil_image_view<float>::iterator uncer_img_it = uncertainty.begin();
+  for (; uncer_it != uncer.end(); ++uncer_it, ++uncer_cnt_it, ++uncer_img_it) {
+    *uncer_img_it = *uncer_it / *uncer_cnt_it;
+  }
+
+  return true;
+}
+
+vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, int vox_k, unsigned scale_idx)
 {
   float vox_len = params_->voxel_length(scale_idx);
   vgl_vector_3d<unsigned> num_vox = params_->num_voxels(scale_idx);
@@ -743,7 +970,7 @@ vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigne
   return grid_origin + step_i*vox_i + step_j*vox_j + step_k*vox_k;
 }
 
-void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam, unsigned k_idx, vgl_h_matrix_2d<double> &H_plane_to_image, vgl_h_matrix_2d<double> &H_image_to_plane, unsigned scale_idx)
+void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam, int k_idx, vgl_h_matrix_2d<double> &H_plane_to_image, vgl_h_matrix_2d<double> &H_image_to_plane, unsigned scale_idx)
 {
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 

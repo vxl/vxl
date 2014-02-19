@@ -64,5 +64,6 @@ DECLARE_FUNC_CONS(vil_threshold_max_image_process);
 DECLARE_FUNC_CONS(vil_mask_image_using_ids_process);
 DECLARE_FUNC_CONS(vil_get_plane_process);
 DECLARE_FUNC_CONS(vil_combine_planes_process);
+DECLARE_FUNC_CONS(vil_block_entropy_process);
 
 #endif

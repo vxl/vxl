@@ -35,4 +35,29 @@ bool bvxm_heightmap_ortho_process_cons(bprb_func_process& pro);
 // generates a height map from a given camera viewpoint
 bool bvxm_heightmap_ortho_process(bprb_func_process& pro);
 
+
+
+// generate an expected heightmap using the input camera 
+namespace bvxm_heightmap_exp_process_globals
+{
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 2;
+}
+//: set input and output types
+bool bvxm_heightmap_exp_process_cons(bprb_func_process& pro);
+bool bvxm_heightmap_exp_process(bprb_func_process& pro);
+
+
+// measure the average uncertainty along each ray with a given camera
+//: global variables
+namespace bvxm_uncertainty_process_globals
+{
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 1;
+}
+
+//: set input and output types
+bool bvxm_uncertainty_process_cons(bprb_func_process& pro);
+bool bvxm_uncertainty_process(bprb_func_process& pro);
+
 #endif // bvxm_heightmap_ortho_process_h_

@@ -83,6 +83,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_affine_from_rat_process, "vpglComputeAffineFromRationalProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_affine_rectify_images_process, "vpglAffineRectifyImagesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_save_projective_camera_process, "vpglSaveProjectiveCameraProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_affine_rectify_images_process2, "vpglAffineRectifyImagesProcess2");
 
 }
 

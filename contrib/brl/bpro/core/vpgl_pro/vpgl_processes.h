@@ -69,5 +69,6 @@ DECLARE_FUNC_CONS(vpgl_write_generic_camera_process);
 DECLARE_FUNC_CONS(vpgl_compute_affine_from_rat_process);
 DECLARE_FUNC_CONS(vpgl_affine_rectify_images_process);
 DECLARE_FUNC_CONS(vpgl_save_projective_camera_process);
+DECLARE_FUNC_CONS(vpgl_affine_rectify_images_process2);
 
 #endif

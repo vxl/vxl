@@ -222,6 +222,13 @@ class bvxm_voxel_world: public vbl_ref_count
   bool heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap, unsigned scale_idx=0);
 
   //: generate a heightmap from the viewpoint of a virtual camera
+  // The pixel values are the expected z values and variance along the corresponding camera ray
+  bool heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil_image_view<float> &heightmap, vil_image_view<float> &var, float&max_depth, unsigned scale_idx=0);
+
+  //: measure the average uncertainty along the rays
+  bool uncertainty(vpgl_camera_double_sptr virtual_camera, vil_image_view<float> &uncertainty, unsigned scale_idx=0);
+
+  //: generate a heightmap from the viewpoint of a virtual camera
   // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
   // This version of the function assumes that there is also image data associated with the virtual camera
   template<bvxm_voxel_type APM_T>
@@ -274,10 +281,10 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type VOX_T>
   void zero_observations( unsigned int bin_idx = 0, unsigned scale = 0, bool use_memory = false);
 
-  vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k, unsigned scale=0);
+  vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, int vox_k, unsigned scale=0);
 
   void compute_plane_image_H(vpgl_camera_double_sptr const& cam,
-                             unsigned grid_k,
+                             int grid_k,
                              vgl_h_matrix_2d<double> &H_plane_to_image,
                              vgl_h_matrix_2d<double> &H_image_to_plane, unsigned scale_idx=0);
 

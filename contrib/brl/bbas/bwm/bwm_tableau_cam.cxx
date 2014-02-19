@@ -53,6 +53,11 @@ void bwm_tableau_cam::create_polygon_mesh()
     return ;
   }
   vsol_polygon_3d_sptr poly3d;
+  
+  //vgl_homg_plane_3d<double> plane(0,0,1,-740);
+  //my_observer_->set_proj_plane(plane);
+  //vcl_cout << "setting proj plane: " << plane << vcl_endl;
+
   my_observer_->backproj_poly(poly2d, poly3d);
   if (!poly3d) {
     vcl_cout << "in bwm_tableau_cam::create_polygon_mesh - backprojection failed\n";

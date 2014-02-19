@@ -50,9 +50,13 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   vgl_point_3d<float> upper_left(corner.x(), (float)(corner.y() + box.height()), corner.z());
   vgl_point_3d<float> lower_right((float)(corner.x()+box.width()), corner.y(), corner.z());
   vpgl_lvcs_sptr lvcs = params->lvcs();
+
   double lat, lon, elev;
-  lvcs->get_origin(lat, lon, elev);
-  vcl_cout << " lvcs origin: " << lat << " " << lon << " " << elev << vcl_endl;
+  /*lvcs->get_origin(lat, lon, elev);
+  vcl_cout << " lvcs origin: " << lat << " " << lon << " " << elev << vcl_endl;*/
+  // find the elevation of the point where the ray tracing stops which is one slab below the lowest world slab
+  vgl_point_3d<float> ray_trace_end = world->voxel_index_to_xyz(0, 0, params->num_voxels().z()+1, 0);
+  lvcs->local_to_global(ray_trace_end.x(), ray_trace_end.y(), ray_trace_end.z(), vpgl_lvcs::wgs84, lon, lat, elev);
   float base_elev = (float)elev;
 
   // determine the upper left corner to use a vpgl_geo_cam, WARNING: assumes that the world is compass-alinged
@@ -92,5 +96,134 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, dmap);
   pro.set_output_val<vil_image_view_base_sptr>(1, hmap);
   
+  return true;
+}
+
+
+// compute the expected height map and its variance along each ray
+bool bvxm_heightmap_exp_process_cons(bprb_func_process& pro)
+{
+  using namespace bvxm_heightmap_exp_process_globals;
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  int i=0;
+  input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world
+  input_types_[i++] = "vpgl_camera_double_sptr";
+  input_types_[i++] = "unsigned"; // ni
+  input_types_[i++] = "unsigned"; // nj
+  if (!pro.set_input_types(input_types_))
+    return false;
+
+  //output
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "vil_image_view_base_sptr";  // expected height map
+  output_types_[1] = "vil_image_view_base_sptr";  // variance of height map
+  return pro.set_output_types(output_types_);
+}
+
+// generates a height map from a given camera viewpoint
+bool bvxm_heightmap_exp_process(bprb_func_process& pro)
+{
+  using namespace bvxm_heightmap_exp_process_globals;
+
+  if (pro.n_inputs()<n_inputs_)
+  {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+
+  unsigned i = 0;
+  //voxel_world
+  bvxm_voxel_world_sptr world =  pro.get_input<bvxm_voxel_world_sptr>(i++);
+  if (!world) {
+    vcl_cout << pro.name() <<" :--  Input 3  is not valid!\n";
+    return false;
+  }
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  unsigned ni = pro.get_input<unsigned>(i++);
+  unsigned nj = pro.get_input<unsigned>(i++);
+
+   // generate vpgl_geo_camera for the scene
+  bvxm_world_params_sptr params = world->get_params();
+  vpgl_lvcs_sptr lvcs = params->lvcs();
+
+  double lat, lon, elev;
+  vgl_point_3d<float> ray_trace_end = world->voxel_index_to_xyz(0, 0, params->num_voxels().z()+1, 0);
+  lvcs->local_to_global(ray_trace_end.x(), ray_trace_end.y(), ray_trace_end.z(), vpgl_lvcs::wgs84, lon, lat, elev);
+  float base_elev = (float)elev;
+  vcl_cout << "!!!!!!!!!!!!!! base_elev: " << base_elev << vcl_endl;
+  
+  vil_image_view<float> *hmap = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float> *var_map = new vil_image_view<float>(ni, nj, 1);
+  float max_depth;
+  world->heightmap_exp(cam,*hmap, *var_map, max_depth);  
+
+  float max_val, min_val;
+  vil_math_value_range(*hmap, min_val, max_val);
+  vcl_cout << "!!!!!!!!!!! in height map min_val: " << min_val << " max_val: " << max_val << "!\n";
+
+  vcl_cout << "!!!!!!!!!!! Using max_depth: " << max_depth << " to negate the depth map!\n";
+  for (unsigned i = 0; i < ni; i++) 
+    for (unsigned j = 0; j < nj; j++) {
+      (*hmap)(i,j) = max_depth-(*hmap)(i,j)+base_elev;
+      (*var_map)(i,j) = vcl_sqrt((*var_map)(i,j));
+    }
+    
+  vil_math_value_range(*hmap, min_val, max_val);
+  vcl_cout << "!!!!!!!!!!! in height map min_val: " << min_val << " max_val: " << max_val << "!\n";
+
+  //store output
+  pro.set_output_val<vil_image_view_base_sptr>(0, hmap);
+  pro.set_output_val<vil_image_view_base_sptr>(1, var_map);
+  return true;
+}
+
+
+
+// compute the average uncertainty along each ray
+bool bvxm_uncertainty_process_cons(bprb_func_process& pro)
+{
+  using namespace bvxm_uncertainty_process_globals;
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  int i=0;
+  input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world
+  input_types_[i++] = "vpgl_camera_double_sptr";
+  input_types_[i++] = "unsigned"; // ni
+  input_types_[i++] = "unsigned"; // nj
+  if (!pro.set_input_types(input_types_))
+    return false;
+
+  //output
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "vil_image_view_base_sptr";  // uncertainty map
+  return pro.set_output_types(output_types_);
+}
+
+// generates a height map from a given camera viewpoint
+bool bvxm_uncertainty_process(bprb_func_process& pro)
+{
+  using namespace bvxm_uncertainty_process_globals;
+
+  if (pro.n_inputs()<n_inputs_)
+  {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+
+  unsigned i = 0;
+  //voxel_world
+  bvxm_voxel_world_sptr world =  pro.get_input<bvxm_voxel_world_sptr>(i++);
+  if (!world) {
+    vcl_cout << pro.name() <<" :--  Input 3  is not valid!\n";
+    return false;
+  }
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  unsigned ni = pro.get_input<unsigned>(i++);
+  unsigned nj = pro.get_input<unsigned>(i++);
+  
+  vil_image_view<float> *dmap = new vil_image_view<float>(ni, nj, 1);
+  world->uncertainty(cam,*dmap);  
+
+  //store output
+  pro.set_output_val<vil_image_view_base_sptr>(0, dmap);
   return true;
 }
