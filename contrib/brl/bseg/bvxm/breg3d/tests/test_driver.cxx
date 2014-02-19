@@ -10,10 +10,9 @@ DECLARE( test_ekf_existing_world );
 void register_tests()
 {
   REGISTER( test_homography_generator );
-  //REGISTER( test_ekf_camera_optimizer );
-  //REGISTER( test_ekf_camera_optimizer_seq );
-  // REGISTER( test_ekf_existing_world )
-
+  REGISTER( test_ekf_camera_optimizer );
+  REGISTER( test_ekf_camera_optimizer_seq );
+  REGISTER( test_ekf_existing_world )
 }
 
 DEFINE_MAIN;
