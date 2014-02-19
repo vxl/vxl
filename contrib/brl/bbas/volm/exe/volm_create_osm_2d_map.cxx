@@ -885,7 +885,7 @@ int main(int argc, char** argv)
           double j = leaf_bbox.max_y() - ly;
           int x = (int)i;  int y = (int)j;
           if (x>0 && y>0 && x<out_img.ni() && y<out_img.nj())
-            if (curr_level > level_img(x,y)) {
+            if (curr_level >= level_img(x,y)) {
               level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
             }
         }
