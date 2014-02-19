@@ -1451,18 +1451,15 @@ void bwm_site_mgr::load_depth_map_scene()
   vcl_string name = "depth_map";
   vcl_string ifile = scene.image_path();
   vcl_string ipath;
-  if (ifile.compare("") == 0) {
+  if (!vul_file::exists(ifile)) {
     // loaded depth_map_scene doesn't have image path, use the jpg having same name instead
     vcl_cerr << "\n WARNING: loaded depth_map_scene does not have image path" << vcl_endl;
     vcl_string temp = vul_file::strip_extension(vul_file::strip_directory(path.c_str())) + ".jpg";
     scene.set_image_path(temp);
     ipath = dir + '/' + temp;
-  } else {
-    //just in case the user has an obsolete directory path
-    vcl_string temp = vul_file::strip_extension(vul_file::strip_directory(path.c_str())) + ".jpg";
-    scene.set_image_path(temp);
-    ipath = dir + '/' + temp;
   }
+  else
+    ipath = ifile;
   bwm_io_tab_config* tab = new bwm_io_tab_config_cam(name, true, ipath , "not_needed" , "perspective");
   active_tableaus_.push_back(tab);
   bwm_tableau_img*  t = tableau_factory_.create_tableau(tab);
