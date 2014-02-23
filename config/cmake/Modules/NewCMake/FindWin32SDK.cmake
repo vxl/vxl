@@ -14,11 +14,13 @@ IF( WIN32 )
     PATHS
       "c:/Program Files/Microsoft SDKs/Windows"
   "c:/Program Files (x86)/Microsoft SDKs/Windows"
+  "C:/Program Files (x86)/Windows Kits/"
     PATH_SUFFIXES
       "v6.0a/include"
       "v6.1/include"
   "v7.0A/include"
        "v7.1A/include"
+       "8.0/Include/um"
 )
 
   FIND_LIBRARY(WIN32SDK_LIBRARIES 
@@ -26,11 +28,14 @@ IF( WIN32 )
     PATHS
       "c:/Program Files/Microsoft SDKs/Windows"
   "c:/Program Files (x86)/Microsoft SDKs/Windows"
+    "C:/Program Files (x86)/Windows Kits/"
     PATH_SUFFIXES
       "v6.0a/lib"
       "v6.1/lib"
   "v7.0A/lib"
         "v7.1A/Lib"
+        "8.0/Lib/win8/um/x86"
+        
 )
   
   IF( WIN32SDK_INCLUDE_DIR )
