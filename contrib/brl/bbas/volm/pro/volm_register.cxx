@@ -19,6 +19,7 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_load_satellite_resources_process, "volmLoadSatResourcesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_add_satellite_resources_process, "volmAddSatelliteResourcesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_query_satellite_resources_process, "volmQuerySatelliteResourcesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_query_satellite_resources_kml_process, "volmQuerySatelliteResourceKmlProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_correct_rational_cameras_ransac_process, "volmCorrectRationalCamerasRANSACProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_pick_nadir_resource_process, "volmPickNadirResProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_pick_nadir_resource_pair_process, "volmPickNadirResPairProcess");
@@ -34,4 +35,5 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_transfer_geoindex_id_to_str_process, "volmTransferGeoIndexIDToStr");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_transfer_geoindex_id_to_str_process2,"volmTransferGeoIndexIDToStr2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_height_map_from_ply_process, "volmGenerateHeightMapFromPlyProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_refine_bvxm_height_map_process, "volmRefineBvxmHeightMapProcess");
 }

@@ -194,6 +194,70 @@ bool volm_query_satellite_resources_process(bprb_func_process& pro)
 }
 
 
+// obtain the satellite resources that intersects with given polygon
+bool volm_query_satellite_resources_kml_process_cons(bprb_func_process& pro)
+{
+  // inputs
+  vcl_vector<vcl_string> input_types_(7);
+  input_types_[0] = "volm_satellite_resources_sptr";  // satellite resource
+  input_types_[1] = "vcl_string";                     // kml polygon
+  input_types_[2] = "vcl_string";                     // output file to print the list
+  input_types_[3] = "vcl_string";                     // the band: PAN or MULTI
+  input_types_[4] = "bool";                           // if TRUE, pick seed images randomly with a certain order of satellites
+  input_types_[5] = "int";                            // number of seed images to pick, if not enough then creates from all available
+  input_types_[6] = "double";                         // GSD threshold in meters, any image with GSD more than this GSD will not be returned, e.g. pass 1 to eliminate images with pixel resolution more than 1 meter
+
+  // output 
+  vcl_vector<vcl_string> output_types_(1);
+  output_types_[0] = "unsigned";  // return number of resources that intersect this region
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
+}
+
+bool volm_query_satellite_resources_kml_process(bprb_func_process& pro)
+{
+  // check inputs
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << " invalid inputs" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
+  vcl_string kml_file = pro.get_input<vcl_string>(1);
+  vcl_string out_file = pro.get_input<vcl_string>(2);
+  vcl_string band = pro.get_input<vcl_string>(3);
+  bool pick_seed = pro.get_input<bool>(4);
+  int n_seeds = pro.get_input<int>(5);
+  double gsd_thres = pro.get_input<double>(6);
+
+  // parse the polygon and construct its bounding box
+  if (!vul_file::exists(kml_file)) {
+    vcl_cout << pro.name() << ": can not find input kml file: " << kml_file << vcl_endl;
+    return false;
+  }
+  vgl_polygon<double> poly = bkml_parser::parse_polygon(kml_file);
+  vgl_box_2d<double> bbox;
+  for (unsigned i = 0; i < poly[0].size(); i++)
+    bbox.add(poly[0][i]);
+  double lower_left_lon  = bbox.min_x();
+  double lower_left_lat  = bbox.min_y();
+  double upper_right_lon = bbox.max_x();
+  double upper_right_lat = bbox.max_y();
+
+  unsigned cnt;  bool out = false;
+  if (!pick_seed) {
+    out = res->query_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, cnt, out_file, band, gsd_thres);
+    pro.set_output_val<unsigned>(0, cnt);
+  } else {
+    out = res->query_seeds_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, n_seeds, cnt, out_file, band, gsd_thres);
+    pro.set_output_val<unsigned>(0, cnt);
+  }
+  return out;
+
+}
+
 //: sets input and output types
 bool volm_add_satellite_resources_process_cons(bprb_func_process& pro)
 {

@@ -9,6 +9,7 @@ DECLARE_FUNC_CONS(volm_save_satellite_resources_process);
 DECLARE_FUNC_CONS(volm_load_satellite_resources_process);
 DECLARE_FUNC_CONS(volm_add_satellite_resources_process);
 DECLARE_FUNC_CONS(volm_query_satellite_resources_process);
+DECLARE_FUNC_CONS(volm_query_satellite_resources_kml_process);
 DECLARE_FUNC_CONS(volm_correct_rational_cameras_ransac_process);
 DECLARE_FUNC_CONS(volm_pick_nadir_resource_process);
 DECLARE_FUNC_CONS(volm_pick_nadir_resource_pair_process);
@@ -24,5 +25,5 @@ DECLARE_FUNC_CONS(volm_find_satellite_pairs_process);
 DECLARE_FUNC_CONS(volm_transfer_geoindex_id_to_str_process);
 DECLARE_FUNC_CONS(volm_transfer_geoindex_id_to_str_process2);
 DECLARE_FUNC_CONS(volm_generate_height_map_from_ply_process);
-
+DECLARE_FUNC_CONS(volm_refine_bvxm_height_map_process);
 #endif
