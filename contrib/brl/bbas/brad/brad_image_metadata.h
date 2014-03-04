@@ -68,8 +68,11 @@ class brad_image_metadata : public vbl_ref_count
   bool parse(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
 
   bool same_time(brad_image_metadata& other);
-  // return the time difference in collection times in units of minutes
-  unsigned same_day_time_dif(brad_image_metadata& other);
+  bool same_day(brad_image_metadata& other);
+  // return the time difference in collection times in hour and minutes
+  unsigned time_minute_dif(brad_image_metadata& other);
+
+  void print_time() { vcl_cout << "Year: " << t_.year << " Month: " << t_.month << " Day: " << t_.day << " hour: " << t_.hour << " min: " << t_.min << "; "; }
   
   //: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes
   bool same_extent(brad_image_metadata& other);

@@ -33,4 +33,5 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_satellite_pairs_process, "volmFindSatellitePairsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_transfer_geoindex_id_to_str_process, "volmTransferGeoIndexIDToStr");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_transfer_geoindex_id_to_str_process2,"volmTransferGeoIndexIDToStr2");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_height_map_from_ply_process, "volmGenerateHeightMapFromPlyProcess");
 }

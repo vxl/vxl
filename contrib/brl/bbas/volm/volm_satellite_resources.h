@@ -61,7 +61,7 @@ class volm_satellite_resources : public vbl_ref_count
     bool query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, vcl_string& out_file, vcl_string& band_str, double gsd_thres);
     
     //: get a list of pairs of ids in the resources_ list that are taken a few minutes apart from each other
-    void query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, vcl_vector<vcl_pair<unsigned, unsigned> >& ids);
+    unsigned query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, vcl_vector<vcl_pair<unsigned, unsigned> >& ids);
     //: query the resources in the given box and output the full paths of pairs to the given file
     bool query_pairs_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& sat_name);
 

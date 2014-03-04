@@ -515,18 +515,42 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
 bool brad_image_metadata::same_time(brad_image_metadata& other)
 {
-  if (this->t_.min == other.t_.min && this->t_.hour == other.t_.hour && 
-    this->t_.day == other.t_.day && this->t_.month == other.t_.month)
-    return true;
+  if (this->t_.min == other.t_.min && 
+    this->t_.hour == other.t_.hour &&
+    this->t_.day == other.t_.day &&
+    this->t_.month == other.t_.month &&
+    this->t_.year == other.t_.year)
+      return true;
+  else
+    return false;
+}
+
+bool brad_image_metadata::same_day(brad_image_metadata& other)
+{
+  if (this->t_.day == other.t_.day &&
+    this->t_.month == other.t_.month &&
+    this->t_.year == other.t_.year)
+      return true;
   else
     return false;
 }
 
 // return the time difference in collection times in units of minutes
-unsigned brad_image_metadata::same_day_time_dif(brad_image_metadata& other)
+unsigned brad_image_metadata::time_minute_dif(brad_image_metadata& other)
 {
-  if (this->t_.day == other.t_.day && this->t_.month == other.t_.month && this->t_.hour == other.t_.hour)
+  if (this->t_.hour > other.t_.hour) {
+    unsigned temp = other.t_.hour+1;
+    unsigned hour_dif = this->t_.hour - temp;
+    unsigned minute_dif = hour_dif * 60 + this->t_.min + (60-other.t_.min);
+    return minute_dif;
+  } else if (this->t_.hour < other.t_.hour) {
+    unsigned temp = this->t_.hour+1;
+    unsigned hour_dif = other.t_.hour - temp;
+    unsigned minute_dif = hour_dif * 60 + other.t_.min + (60-this->t_.min);
+    return minute_dif;
+  } else { // hours are equal
     return (unsigned)vcl_abs(this->t_.min - other.t_.min);
+  }
 }
 
 //: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes

@@ -32,6 +32,19 @@ void volm_satellite_resources::add_resource(vcl_string name)
   res.name_ = vul_file::strip_directory(name);
   res.name_ = vul_file::strip_extension(res.name_);
   res.meta_ = new brad_image_metadata(name, "");
+#if 0
+  // first check if we already have the exact same image, (unfortunately there are resources with different name but taken at exactly same time, so same image)
+  for (unsigned i = 0; i < resources_.size(); i++) {
+    if (resources_[i].meta_->satellite_name_.compare(res.meta_->satellite_name_) == 0 &&
+        resources_[i].meta_->band_.compare(res.meta_->band_) == 0 && 
+        resources_[i].meta_->same_time(*(res.meta_))) {
+        vcl_cout << "!!!!!!!!!!!!! cannot add: " << res.name_ << " with time: "; res.meta_->print_time();
+        vcl_cout << "already exists: \n" << resources_[i].name_ << " with time: "; resources_[i].meta_->print_time(); 
+        vcl_cout << " band of resources: " <<  resources_[i].meta_->band_ << " band trying to add: " << res.meta_->band_ << vcl_endl;
+        return;
+      }
+  }
+#endif
   if (res.meta_->gsd_ > 0)  // if there are parsing problems, gsd is negative
     resources_.push_back(res);
 }
@@ -366,7 +379,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
 }
 
 //: get a list of ids in the resources_ list that overlap the given rectangular region
-void volm_satellite_resources::query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, vcl_vector<vcl_pair<unsigned, unsigned> >& ids)
+unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, vcl_vector<vcl_pair<unsigned, unsigned> >& ids)
 {
   // first get all the images that intersect the area
   vcl_vector<unsigned> temp_ids;
@@ -385,19 +398,40 @@ void volm_satellite_resources::query_pairs(double lower_left_lon, double lower_l
   // check the time of collection to find pairs
   for (unsigned i = 0; i < ids2.size(); i++) {
     for (unsigned j = i+1; j < ids2.size(); j++) {
-      if (resources_[ids2[i]].meta_->same_day_time_dif(*(resources_[ids2[j]].meta_)) < 5) { // if taken less than 5 minute apart
-        ids.push_back(vcl_pair<unsigned, unsigned>(ids2[i], ids2[j]));
+      vcl_cout << resources_[ids2[i]].name_ << ": ";
+      resources_[ids2[i]].meta_->print_time(); vcl_cout << "\n";
+      vcl_cout << resources_[ids2[j]].name_ << ": ";
+      resources_[ids2[j]].meta_->print_time(); vcl_cout << "\n";
+      if (!resources_[ids2[i]].meta_->same_day(*(resources_[ids2[j]].meta_)))
+        continue;
+      unsigned time_dif = resources_[ids2[i]].meta_->time_minute_dif(*(resources_[ids2[j]].meta_));
+      if (time_dif > 0 && time_dif < 5) { // if taken less than 5 minute apart
+        //ids.push_back(vcl_pair<unsigned, unsigned>(ids2[i], ids2[j]));
+        // check if one of the images have already been pushed
+        bool already_added = false;
+        for (unsigned iii = 0; iii < ids.size(); iii++) {
+          if (resources_[ids2[i]].meta_->same_time(*(resources_[ids[iii].first].meta_)) ||
+              resources_[ids2[i]].meta_->same_time(*(resources_[ids[iii].second].meta_))) {
+                already_added = true;
+                break;
+          }
+        }
+        if (!already_added) {
+          ids.push_back(vcl_pair<unsigned, unsigned>(ids2[i], ids2[j]));
+          vcl_cout << "\t\t !!!!!! PUSHED! time dif 5 mins!\n";
+        }
+      }
+      vcl_cout << "\n";
       }
     }
-  }
-  
+  return ids.size();
 }
 
 //: query the resources in the given box and output the full paths of pairs to the given file
 bool volm_satellite_resources::query_pairs_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& sat_name)
 {
   vcl_vector<vcl_pair<unsigned, unsigned> > ids;
-  query_pairs(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, sat_name, ids);
+  cnt = query_pairs(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, sat_name, ids);
 
   vcl_ofstream ofs(out_file.c_str());
   if (!ofs) {

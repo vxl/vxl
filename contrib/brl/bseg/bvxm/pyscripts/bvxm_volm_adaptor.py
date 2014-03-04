@@ -128,6 +128,9 @@ def find_stereo_pairs(res, lower_left_lon, lower_left_lat, upper_right_lon, uppe
   bvxm_batch.set_input_string(5, scene_res_file);
   bvxm_batch.set_input_string(6, satellite_name);
   bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  cnt = bvxm_batch.get_output_unsigned(id);
+  return cnt;
 
 def correct_ransac_process(res, cor_file, output_folder, pixel_radius):
   bvxm_batch.init_process("volmCorrectRationalCamerasRANSACProcess");
@@ -163,3 +166,13 @@ def obtain_leaf_string2(min_size, in_poly, out_txt):
   bvxm_batch.set_input_string(1, in_poly)
   bvxm_batch.set_input_string(2, out_txt)
   bvxm_batch.run_process()
+
+def generate_height_map_from_ply(ply_folder, ni, nj):
+  bvxm_batch.init_process("volmGenerateHeightMapFromPlyProcess")
+  bvxm_batch.set_input_string(0, ply_folder);
+  bvxm_batch.set_input_unsigned(1, ni);
+  bvxm_batch.set_input_unsigned(2, nj);
+  bvxm_batch.run_process()
+  (id, type) = bvxm_batch.commit_output(0);
+  out = dbvalue(id, type);
+  return out

@@ -23,4 +23,6 @@ DECLARE_FUNC_CONS(volm_get_full_path_process);
 DECLARE_FUNC_CONS(volm_find_satellite_pairs_process);
 DECLARE_FUNC_CONS(volm_transfer_geoindex_id_to_str_process);
 DECLARE_FUNC_CONS(volm_transfer_geoindex_id_to_str_process2);
+DECLARE_FUNC_CONS(volm_generate_height_map_from_ply_process);
+
 #endif
