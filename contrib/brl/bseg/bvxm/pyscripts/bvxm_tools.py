@@ -21,7 +21,9 @@ def get_satellite_uncertainty(sat_name):
   return 40;
 
 ## build edge world using a set of images and camera files, the first n_seed images are used as seed
-def build_edge_world(scene, scene_id, world_dir, n_seed, image_fnames, cropped_imgs, cropped_cams, uncertainties, param_file_dir, corrected_global_cams, out_dir, save=0):
+def build_edge_world(scene, scene_id, world_dir, n_seed, image_fnames, cropped_imgs, cropped_cams,
+                     uncertainties, param_file_dir, corrected_global_cams, out_dir, n_seed_update = 1,
+                     save=0):
 
   ## remove the .vox files if any
   edge_files = glob.glob(world_dir + "/edges_*.vox");
@@ -43,6 +45,23 @@ def build_edge_world(scene, scene_id, world_dir, n_seed, image_fnames, cropped_i
     if save:
       bvxm_save_image(cropped_edge_image, out_edge_imgs % i);
     cropped_edge_imgs.append(cropped_edge_image)
+
+  # start update edge world for n_seed_update times to improve the edge world quality
+  for n_cnt in range(0, n_seed_update, 1):
+    print '-----------------------------';
+    print "scene: %d, number of update = %d from total %d updates" % (scene_id, n_cnt, n_seed_update);
+    print '-----------------------------';
+    sys.stdout.flush()
+    for i in range(0, len(cropped_edge_imgs), 1):
+      cropped_cam = cropped_cams[i]
+      cropped_edge_image = cropped_edge_imgs[i]
+      uncertainty = uncertainties[i]
+      image_name = image_fnames[i]
+      if i >= n_seed:
+        continue
+      else:
+        # update edge world using seed
+        update_edges(scene, cropped_cam, cropped_edge_image, param_file_dir + "bvxmUpdateEdgesProcess.xml");
 
   for i in range(0, len(cropped_edge_imgs), 1):
     cropped_cam = cropped_cams[i]
@@ -69,8 +88,8 @@ def build_edge_world(scene, scene_id, world_dir, n_seed, image_fnames, cropped_i
 #       bvxm_batch.remove_data(cam_global_cor.id);
       bvxm_batch.remove_data(cam_cor.id)
     else:
-      # update edge world using seed
-      update_edges(scene, cropped_cam, cropped_edge_image, param_file_dir + "bvxmUpdateEdgesProcess.xml");
+      continue;
+#       update_edges(scene, cropped_cam, cropped_edge_image, param_file_dir + "bvxmUpdateEdgesProcess.xml");
 
     cnt_updates = cnt_updates+1;
     if save:
@@ -203,7 +222,6 @@ def create_scene_crop_image(scene, res, cam_global, min_cnt, max_cnt, param_file
     # crop the image using refined camera or original camera
     statuscode, cropped_cam, cropped_img, uncertainty = roi_init(img_file, cam, scene, uncertainty_file);
     if statuscode:
-      sys.stdout.flush()
       # check the cropped image size
       crop_ni, crop_nj = image_size(cropped_img);
       if crop_ni > crop_nj:  crop_img_ratio = float(crop_nj)/float(crop_ni);

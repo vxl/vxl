@@ -118,6 +118,20 @@ def scene_resources(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_
   cnt = bvxm_batch.get_output_unsigned(id);
   return cnt;
 
+def scene_resources2(res, poly_kml, scene_res_file, band="PAN", GSD_threshold=10.0, pick_seeds=0, n_seeds=0):
+  bvxm_batch.init_process("volmQuerySatelliteResourceKmlProcess");
+  bvxm_batch.set_input_from_db(0, res);
+  bvxm_batch.set_input_string(1, poly_kml);
+  bvxm_batch.set_input_string(2, scene_res_file);
+  bvxm_batch.set_input_string(3, band);
+  bvxm_batch.set_input_bool(4, pick_seeds);
+  bvxm_batch.set_input_int(5, n_seeds);
+  bvxm_batch.set_input_double(6, GSD_threshold);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0)
+  cnt = bvxm_batch.get_output_unsigned(id);
+  return cnt;
+
 def find_stereo_pairs(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, scene_res_file, satellite_name):
   bvxm_batch.init_process("volmFindSatellitePairsProcess");
   bvxm_batch.set_input_from_db(0,res);
@@ -176,3 +190,19 @@ def generate_height_map_from_ply(ply_folder, ni, nj):
   (id, type) = bvxm_batch.commit_output(0);
   out = dbvalue(id, type);
   return out
+
+## process to refine the height map obtained from bvxm world
+## max_h and min_h are the predominant height for sky and ground mask
+def refine_bvxm_height_map(img, max_h, min_h):
+  bvxm_batch.init_process("volmRefineBvxmHeightMapProcess")
+  bvxm_batch.set_input_from_db(0, img)
+  bvxm_batch.set_input_float(1, max_h)
+  bvxm_batch.set_input_float(2, min_h)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0);
+    out_img = dbvalue(id, type);
+    return out_img;
+  else:
+    out_img = 0;
+  return out_img;
