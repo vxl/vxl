@@ -31,7 +31,8 @@ int main(int argc, char** argv)
   // input
   vul_arg<vcl_string> in_folder("-in", "input folder to read DEM files as .tif", "");
   vul_arg<vcl_string> in_poly("-poly", "region polygon as kml, the scenes that cover this polygon will be created", "");
-  vul_arg<vcl_string> out_folder("-out", "folder to write xml files","");   
+  vul_arg<vcl_string> out_folder("-out", "folder to write xml files","");
+  vul_arg<vcl_string> lvcs_root("-lvcs", "folder to write lvcs files","");
   vul_arg<vcl_string> world_root("-world_dir", "the world folder where bvxm vox binary will be stored","");
   vul_arg<float> voxel_size("-vox", "size of voxel in meters", 1.0f);
   vul_arg<float> world_size_input("-size", "the size of the world in meters", 500.0f);
@@ -45,6 +46,12 @@ int main(int argc, char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
+
+  vcl_string lvcs_folder;
+  if (lvcs_root() == "")
+    lvcs_folder = out_folder();
+  else
+    lvcs_folder = lvcs_root();
   
   vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
   vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
@@ -80,7 +87,7 @@ int main(int argc, char** argv)
   vcl_set<double> scale_set;
   scale_set.insert(scale_ur_x);  scale_set.insert(scale_ur_y);  scale_set.insert(scale_ll_x);  scale_set.insert(scale_ll_y);
   double min_size = *scale_set.begin();
-  vcl_cout << " given maximum allowd world size " << world_size_input() << " the min_size for geo index is: " << min_size << vcl_endl;
+  vcl_cout << " given maximum allowed world size " << world_size_input() << " the min_size for geo index is: " << min_size << vcl_endl;
 
   // create a geo index and use the leaves as scenes, use template param as volm_loc_hyp_sptr but it won't actually be used
   volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_loc_hyp_sptr>(bbox, min_size, poly);
@@ -114,7 +121,8 @@ int main(int argc, char** argv)
     if (dif > largest_dif) largest_dif = dif;
     //construct lvcs
     vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lower_left.y(), lower_left.x(), min, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-    vcl_string lvcs_name = name.str() + ".lvcs";
+    vcl_stringstream name_lvcs;  name_lvcs << lvcs_folder << "/scene_" << i;
+    vcl_string lvcs_name = name_lvcs.str() + ".lvcs";
     vcl_ofstream ofs(lvcs_name.c_str());
     if (!ofs) {
       vcl_cerr << "Cannot open file: " << lvcs_name << "!\n";

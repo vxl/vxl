@@ -389,6 +389,7 @@ railway turntable 110 railway 3 0
 railway tram_stop 109 land_transfer_station 4 0
 railway narrow_gauge 110 railway 3 1
 railway disused 110 railway 3 1.5
+railway construction 110 railway 3 1.5
 route pipeline 100 pipeline 4 3
 route tram 110 railway 3 1.5
 route bicycle 87 path 3 0
