@@ -162,7 +162,8 @@ def correct_ransac_process2(res, cor_file, output_folder, pixel_radius):
   bvxm_batch.set_input_string(1, cor_file);
   bvxm_batch.set_input_string(2, output_folder);
   bvxm_batch.set_input_float(3, pixel_radius);  ## pixel radius to count for inliers
-  bvxm_batch.run_process();
+  statuscode = bvxm_batch.run_process();
+  return statuscode;
 
 ## process to transfer geo_index leaf id to leaf string
 ## the geo index is loaded from tree_txt

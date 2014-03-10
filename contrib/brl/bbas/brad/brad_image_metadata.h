@@ -19,7 +19,7 @@
 #include <vgl/vgl_point_3d.h>
 
 struct image_time {
-  int year, month, day, hour, min;
+  int year, month, day, hour, min, sec;
 };
 
 class brad_image_metadata : public vbl_ref_count
@@ -72,13 +72,13 @@ class brad_image_metadata : public vbl_ref_count
   // return the time difference in collection times in hour and minutes
   unsigned time_minute_dif(brad_image_metadata& other);
 
-  void print_time() { vcl_cout << "Year: " << t_.year << " Month: " << t_.month << " Day: " << t_.day << " hour: " << t_.hour << " min: " << t_.min << "; "; }
+  void print_time() { vcl_cout << "Year: " << t_.year << " Month: " << t_.month << " Day: " << t_.day << " hour: " << t_.hour << " min: " << t_.min << " sec: " << t_.sec << "; "; }
   
   //: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes
   bool same_extent(brad_image_metadata& other);
 
   // ===========  binary I/O ================
-  short version() const { return 2; }
+  short version() const { return 3; }
   void b_write(vsl_b_ostream& os) const;
   void b_read(vsl_b_istream& is);
 

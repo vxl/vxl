@@ -11,6 +11,7 @@
 #include <volm/volm_osm_objects.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
+#include <vpgl/vpgl_local_rational_camera.h>
 
 //:
 //  Take an ortho image and its camera, a bin file with an osm object list, map the objects onto the image
@@ -308,6 +309,137 @@ bool volm_map_segments_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr out_img_sptr = new vil_image_view<vxl_byte>(out_img);
   
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
+  return hit;
+}
+
+
+
+//:
+//  Take a cropped satellite image with cropped RPC camera (local_rational_camera), an ortho height map and its camera to read the heights of OSM objects, and map the objects onto the satellite image
+//
+bool volm_map_osm_onto_image_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vil_image_view_base_sptr");  // satellite image 
+  input_types.push_back("vpgl_camera_double_sptr");  // local rational camera
+  input_types.push_back("vil_image_view_base_sptr");  // ortho image - float values: absolute heights
+  input_types.push_back("vpgl_camera_double_sptr");  // ortho camera
+  input_types.push_back("vcl_string");   // bin file with osm object list
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr"); // a color image with red channel the objects that are overlaid
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+//: Execute the process
+bool volm_map_osm_onto_image_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() < 5) {
+    vcl_cout << "volm_map_osm_process: The number of inputs should be 3" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vil_image_view_base_sptr sat_img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
+  vpgl_camera_double_sptr sat_cam = pro.get_input<vpgl_camera_double_sptr>(1);
+  
+  vil_image_view_base_sptr height_img_sptr = pro.get_input<vil_image_view_base_sptr>(2);
+  vpgl_camera_double_sptr ortho_cam = pro.get_input<vpgl_camera_double_sptr>(3);
+  vcl_string osm_file  = pro.get_input<vcl_string>(4);
+
+  vpgl_geo_camera *geo_cam = dynamic_cast<vpgl_geo_camera*>(ortho_cam.ptr());
+  if (!geo_cam) {
+    vcl_cerr << "Cannot cast the input cam to a vpgl_geo_camera!\n";
+    return false;
+  }
+
+  vpgl_local_rational_camera<double>* cam_local_rat = dynamic_cast<vpgl_local_rational_camera<double>*>(sat_cam.ptr());
+  if (!cam_local_rat) {
+    vcl_cerr << "Cannot cast the input satellite cam to a local rational camera\n";
+    return false;
+  }
+  
+  vil_image_view<float> bimg(sat_img_sptr);
+  vil_image_view<float> height_img(height_img_sptr);
+  
+  vil_image_view<vil_rgb<vxl_byte> > out_img(sat_img_sptr->ni(), sat_img_sptr->nj(), 1);
+  for (unsigned i = 0; i < out_img.ni(); i++) 
+    for (unsigned j = 0; j < out_img.nj(); j++) {
+      out_img(i, j).r = bimg(i,j);
+      out_img(i, j).g = bimg(i,j);
+      out_img(i, j).b = bimg(i,j);
+    }
+    
+  // read the osm objects
+  // load the volm_osm object
+  volm_osm_objects osm_objs(osm_file);
+  vcl_cout << " =========== Load volumetric open stree map objects... " << " ===============" << vcl_endl;
+  vcl_cout << " \t number of roads in osm: " << osm_objs.num_roads() << vcl_endl;
+  
+  bool hit = false;
+  vcl_vector<vcl_vector<vcl_pair<int, int> > > img_lines;
+  vcl_vector<volm_osm_object_line_sptr> loc_lines = osm_objs.loc_lines();
+  for (unsigned i = 0; i < loc_lines.size(); i++) {
+    vcl_vector<vgl_point_2d<double> > pts = loc_lines[i]->line();
+    vcl_vector<vcl_pair<int, int> > img_line;
+    for (unsigned j = 0; j < pts.size(); j++) {
+      double u, v;
+      geo_cam->global_to_img(pts[j].x(), pts[j].y(), 0, u, v);
+      int uu = vcl_floor(u + 0.5f);
+      int vv = vcl_floor(v + 0.5f);
+      if (uu >= 0 && vv >= 0 && uu < height_img_sptr->ni() && vv < height_img_sptr->nj()) {
+        //out_img(uu, vv).r = 255;
+        double elev = height_img(uu, vv);
+
+        // now find where it projects in the satellite image
+        double iu, iv;
+        cam_local_rat->project(pts[j].x(), pts[j].y(), elev, iu, iv);
+        int iuu = vcl_floor(iu + 0.5f);
+        int ivv = vcl_floor(iv + 0.5f);
+      
+        if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
+          img_line.push_back(vcl_pair<int, int>(iuu,ivv));
+          hit = true;
+        }
+      }
+    }
+    if (img_line.size() > 0)
+      img_lines.push_back(img_line);
+  }
+  vcl_cout << "number of img lines: " << img_lines.size() << vcl_endl;
+  if (hit) {
+    for (unsigned i = 0; i < img_lines.size(); i++) {
+      vcl_cout << "img line: " << i << " number of pts: " << img_lines[i].size() << " ";
+      out_img(img_lines[i][0].first, img_lines[i][0].second).r = 255;
+      for (unsigned j = 1; j < img_lines[i].size(); j++) {
+        double prev_u = img_lines[i][j-1].first;
+        double prev_v = img_lines[i][j-1].second;
+        double dx = img_lines[i][j].first - img_lines[i][j-1].first;
+        double dy = img_lines[i][j].second - img_lines[i][j-1].second;
+        double ds = vcl_sqrt(dx*dx + dy*dy);
+        vcl_cout << " ds: " << ds << " ";
+        double cos = dx/ds; double sin = dy/ds;
+        unsigned cnt = 1;
+        while (ds > 0.1) {
+          //out_img(prev_u + cnt*1*cos, prev_v + cnt*1*sin).r = 255;  // delta is 1 pixel
+          
+          int uu = vcl_floor(prev_u + cnt*1*cos + 0.5f);
+          int vv = vcl_floor(prev_v + cnt*1*sin + 0.5f);
+          if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj()) 
+            out_img(uu, vv).r = 255;  // delta is 1 pixel
+
+          cnt++;
+          ds -= 1;
+        }
+        vcl_cout << cnt << " pts in the image!\n";
+      }
+    }
+  }
+
+
+  vil_image_view_base_sptr out_img_sptr = new vil_image_view<vxl_byte>(out_img);
+
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
   return hit;
 }

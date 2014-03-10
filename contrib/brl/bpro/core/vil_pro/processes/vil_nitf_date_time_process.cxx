@@ -25,6 +25,7 @@ bool  vil_nitf_date_time_process_cons(bprb_func_process& pro)
   output_types.push_back("int"); // 2 day
   output_types.push_back("int"); // 3 hour
   output_types.push_back("int"); // 4 min
+  output_types.push_back("int"); // 5 sec
   return pro.set_output_types(output_types);
 }
 
@@ -68,8 +69,8 @@ bool vil_nitf_date_time_process(bprb_func_process& pro)
     vcl_cerr << "In vil_nitf_date_time_process: null image subheader\n";
     return false;
   }
-  int year, month, day, hour, min;
-  bool success = hdr->get_date_time(year, month, day, hour,  min);
+  int year, month, day, hour, min, sec;
+  bool success = hdr->get_date_time(year, month, day, hour,  min, sec);
   if (!success) {
     vcl_cerr << "In vil_nitf_date_time_process: failed to obtain date time info\n";
     return false;
@@ -80,6 +81,7 @@ bool vil_nitf_date_time_process(bprb_func_process& pro)
   pro.set_output_val<int>(2, day);
   pro.set_output_val<int>(3, hour);
   pro.set_output_val<int>(4, min);
+  pro.set_output_val<int>(5, sec);
   return true;
 }
 

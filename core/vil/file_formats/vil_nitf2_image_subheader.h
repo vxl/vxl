@@ -119,7 +119,7 @@ class vil_nitf2_image_subheader
   bool get_sun_params( double& sun_el, double& sun_az);
 
   //: Extract the date and time
-  bool get_date_time(int& year, int& month, int& day, int& hour, int& min);
+  bool get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec);
 
   bool get_correction_offset(double & u_off, double & v_off);
 

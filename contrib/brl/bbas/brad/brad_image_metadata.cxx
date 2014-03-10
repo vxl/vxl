@@ -348,12 +348,12 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   sun_elevation_ = sun_el;
   sun_azimuth_ = sun_az;
 
-  int year, month, day, hour, min;
-  if (!hdr->get_date_time(year, month, day, hour,  min)) {
+  int year, month, day, hour, min, sec;
+  if (!hdr->get_date_time(year, month, day, hour,  min, sec)) {
     vcl_cerr << "failed to obtain date time info\n";
     return false;
   }
-  t_.year = year; t_.month = month; t_.day = day; t_.hour = hour; t_.min = min;
+  t_.year = year; t_.month = month; t_.day = day; t_.hour = hour; t_.min = min; t_.sec = sec;
 
   number_of_bits_ = hdr->get_number_of_bits_per_pixel();
 
@@ -515,7 +515,8 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
 bool brad_image_metadata::same_time(brad_image_metadata& other)
 {
-  if (this->t_.min == other.t_.min && 
+  if (this->t_.sec == other.t_.sec &&
+    this->t_.min == other.t_.min && 
     this->t_.hour == other.t_.hour &&
     this->t_.day == other.t_.day &&
     this->t_.month == other.t_.month &&
@@ -601,6 +602,7 @@ void brad_image_metadata::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, cam_offset_.y());
   vsl_b_write(os, cam_offset_.z());
   vsl_b_write(os, gsd_);
+  vsl_b_write(os, t_.sec);
 }
 
 //: binary load self from stream
@@ -609,7 +611,7 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
   if (!is) return;
   short ver;
   vsl_b_read(is, ver);
-  if (ver == 0 || ver == 1 || ver == 2) {
+  if (ver == 0 || ver == 1 || ver == 2 || ver == 3) {
     vsl_b_read(is, sun_elevation_);
     vsl_b_read(is, sun_azimuth_);
     vsl_b_read(is, view_elevation_);
@@ -637,14 +639,16 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
     vsl_b_read(is, band_);
     vsl_b_read(is, n_bands_);
   } 
-  if (ver == 1 || ver == 2) {
+  if (ver == 1 || ver == 2 || ver == 3) {
     double x,y,z;
     vsl_b_read(is, x); 
     vsl_b_read(is, y);
     vsl_b_read(is, z);
     cam_offset_.set(x,y,z);
-  } if (ver == 2) {
+  } if (ver == 2 || ver == 3) {
     vsl_b_read(is, gsd_);
+  } if (ver == 3) {
+    vsl_b_read(is, t_.sec);
   }
   else {
     vcl_cout << "brad_image_metadata -- unknown binary io version " << ver << '\n';

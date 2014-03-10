@@ -391,7 +391,7 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
 #endif // 0
 
 bool vil_nitf2_image_subheader::
-get_date_time(int& year, int& month, int& day, int& hour, int& min)
+get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec)
 {
   vcl_string date_time = "";
   bool success = this->get_property("IDATIM", date_time);
@@ -401,13 +401,14 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
   }
   //d==day,h==hour,n==min,ss==sec,Z==zulu,m==month, y==year
   // format is ddhhnnssZmmmyy OR yyyymmddhhnnss (the NITF 2.1 Commercial format)
-  vcl_string s_day, s_hour, s_min, s_month, s_year;
+  vcl_string s_day, s_hour, s_min, s_month, s_year, s_sec;
   // try ddhhnnssZmmmyy first
   vcl_string s_zulu = date_time.substr(8,1);
   if (s_zulu=="Z") {
     s_day   = date_time.substr(0,2);
     s_hour  = date_time.substr(2,2);
     s_min   = date_time.substr(4,2);
+    s_sec   = date_time.substr(6,2);
     s_month = date_time.substr(9,3);
     s_year  = date_time.substr(12,2);
     vcl_string months[]={"JAN", "FEB", "MAR", "APR",
@@ -430,11 +431,13 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
     s_day   = date_time.substr(6,2);
     s_hour  = date_time.substr(8,2);
     s_min   = date_time.substr(10,2);
+    s_sec   = date_time.substr(12,2);
     month   = vcl_atoi(s_month.c_str());
   }
   day  = vcl_atoi(s_day.c_str());
   hour = vcl_atoi(s_hour.c_str());
   min =  vcl_atoi(s_min.c_str());
+  sec =  vcl_atoi(s_sec.c_str());
   year = vcl_atoi(s_year.c_str());
   if (year < 100)
     year += 2000;//good until the next millenium

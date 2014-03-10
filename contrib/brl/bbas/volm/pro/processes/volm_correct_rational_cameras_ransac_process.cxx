@@ -195,7 +195,7 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
   vcl_vector<unsigned> inlier_cnts(cam_trans.size(), 0);
   vcl_vector<vcl_vector<unsigned> > inliers;
   for (unsigned i = 0; i < cam_trans.size(); i++) {  // for each correction find how many inliers are there for it
-    vcl_cout << "offset_u: " << cam_trans[i][0].x() << " v: " << cam_trans[i][0].y() << vcl_endl;
+    //vcl_cout << "offset_u: " << cam_trans[i][0].x() << " v: " << cam_trans[i][0].y() << vcl_endl;
     vcl_vector<unsigned> inliers_i;
     inliers_i.push_back(i); // first push itself
     for (unsigned j = 0; j < cam_trans.size(); j++) {
@@ -223,10 +223,10 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
       max_i = i;
     }
   }
-  vcl_cout << vcl_endl << " using translations of 1 pt with the most inliers: \n";
-  for (unsigned k = 0; k < cams.size(); k++) {
-    vcl_cout << "offset_u: " << cam_trans[max_i][k].x() << " offset_v: " << cam_trans[max_i][k].y() << '\n';
-  }
+  //vcl_cout << vcl_endl << " using translations of 1 pt with the most inliers: \n";
+  //for (unsigned k = 0; k < cams.size(); k++) {
+    //vcl_cout << "offset_u: " << cam_trans[max_i][k].x() << " offset_v: " << cam_trans[max_i][k].y() << '\n';
+  //}
   
 
   // use the correspondence with the most number of inliers to correct the cameras
@@ -257,12 +257,12 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
     return false;
   }
 
-  vcl_cout << " after refinement: \n";
-  for (unsigned i = 0; i < intersections.size(); i++)
-    vcl_cout << "after adjustment 3D intersection point: " << intersections[i] << vcl_endl;
+  //vcl_cout << " after refinement: \n";
+  //for (unsigned i = 0; i < intersections.size(); i++)
+    //vcl_cout << "after adjustment 3D intersection point: " << intersections[i] << vcl_endl;
 
-  for (unsigned i = 0; i < cam_trans_inliers.size(); i++)   // for each correction find how many inliers are there for it
-    vcl_cout << "offset_u: " << cam_trans_inliers[i].x() << " v: " << cam_trans_inliers[i].y() << vcl_endl;
+  //for (unsigned i = 0; i < cam_trans_inliers.size(); i++)   // for each correction find how many inliers are there for it
+    //vcl_cout << "offset_u: " << cam_trans_inliers[i].x() << " v: " << cam_trans_inliers[i].y() << vcl_endl;
 
   for (unsigned i = 0; i < cams.size(); i++) {
     double u_off,v_off;
@@ -368,37 +368,33 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     return false;
   }
 
-  bool first = true;
-  bool already_exists = false;
   vcl_vector<float> cam_weights;
   vcl_vector<vpgl_rational_camera<double> > cams;
   vcl_vector<vcl_string> new_out_names;
   vcl_vector<vcl_string> new_sat_names;
   vcl_vector<vcl_vector<vgl_point_2d<double> > > new_corrs;
+  
+  unsigned cnt_exists = 0;
+  
   // now determine which cameras already exist
   for (unsigned i = 0; i < out_cam_names.size(); i++) {
 
     if (vul_file::exists(out_cam_names[i])) {
-      already_exists = true;
-      if (first) {
-        first = false;
-        // use the corrected camera
-        vpgl_rational_camera<double> *ratcam = read_rational_camera<double>(out_cam_names[i]);
-        if ( !ratcam ) {
-          vcl_cerr << "Failed to load rational camera from file" << out_cam_names[i] << '\n';
-          return false;
-        }
-        cams.push_back(*ratcam);
-        // since this is the first make its weight 1
-        cam_weights.push_back(1.0f);
-        new_out_names.push_back(out_cam_names[i]);
-        new_sat_names.push_back(cam_sat_names[i]);
-        new_corrs.push_back(corrs[i]);
-      } else {  // exists but not first! just skip it
-        vcl_cout << "\t\t skipping cam: " << cam_names[i] << " already exists!\n";
-        continue;
+      cnt_exists++;
+
+      // use the corrected camera
+      vpgl_rational_camera<double> *ratcam = read_rational_camera<double>(out_cam_names[i]);
+      if ( !ratcam ) {
+        vcl_cerr << "Failed to load rational camera from file" << out_cam_names[i] << '\n';
+        return false;
       }
+      cams.push_back(*ratcam);
+      cam_weights.push_back(1.0f);  // first pass 1 for everything
+      new_out_names.push_back(out_cam_names[i]);
+      new_sat_names.push_back(cam_sat_names[i]);
+      new_corrs.push_back(corrs[i]);
     } else {  // does not exist, then load the original camera and correct it
+      
       vpgl_rational_camera<double> *ratcam = load_cam_from_nitf(cam_names[i]);
       if ( !ratcam ) {
         vcl_cerr << "Failed to load rational camera from file" << cam_names[i] << '\n';
@@ -411,6 +407,15 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
       new_corrs.push_back(corrs[i]);
     }
   }
+  // distribute the weights
+  if (cnt_exists == 0) 
+    cam_weights.assign(cam_weights.size(), 1.0f/cams.size());
+  else { 
+    if (cnt_exists < 2) { // enforce to have at least two existing
+      vcl_cerr << " If there a pre-existing cams, then there should be at least two!\n";
+      return false;
+    }
+  }
 
   if (cams.size() == 1) {
     if (new_sat_names[0] == "GeoEye-1") {
@@ -419,31 +424,16 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     } else 
       return false;
   }
-  
-  // check if we have any that already existed, if not, then all of them need to be assigned equal weight
-  if (!already_exists) {
-    int geoeye1_cnt = 0;
-    unsigned g_id = 0;
-    for (unsigned i = 0; i < cams.size(); i++) {
-      if (new_sat_names[i] == "GeoEye-1") {
-        geoeye1_cnt++;
-        g_id = i;
-      }
-    }
-    
-    if (geoeye1_cnt != cams.size()) {
-      cam_weights.assign(cam_weights.size(), 0.0f);
-      cam_weights[g_id] = 1.0f;
-    } else
-      cam_weights.assign(cam_weights.size(), 1.0f/cams.size());
-  }
-  
+
   vcl_cout << " cam assigned weights: \n";
   for (unsigned i = 0; i < cams.size(); i++) {
     vcl_cout << new_out_names[i] << " weight: " << cam_weights[i] << '\n';
   }
 
   vcl_cout << "cams size: " << cams.size() << " corrs size: " << new_corrs.size() << vcl_endl;
+  vcl_cout.flush();
+
+  
   
   // adjust using each correspondence and save the offsets
   vcl_vector<vcl_vector<vgl_vector_2d<double> > > cam_trans;
@@ -466,14 +456,14 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   vcl_cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections!\n";
   if (!cam_trans.size()) {
     vcl_cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections! exit without any corrections!\n";
-    return true;
+    return false;
   }
   
   // find the inliers
   vcl_vector<unsigned> inlier_cnts(cam_trans.size(), 0);
   vcl_vector<vcl_vector<unsigned> > inliers;
   for (unsigned i = 0; i < cam_trans.size(); i++) {  // for each correction find how many inliers are there for it
-    vcl_cout << "offset_u: " << cam_trans[i][0].x() << " v: " << cam_trans[i][0].y() << vcl_endl;
+    //vcl_cout << "offset_u: " << cam_trans[i][0].x() << " v: " << cam_trans[i][0].y() << vcl_endl;
     vcl_vector<unsigned> inliers_i;
     inliers_i.push_back(i); // first push itself
     for (unsigned j = 0; j < cam_trans.size(); j++) {
@@ -501,10 +491,10 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
       max_i = i;
     }
   }
-  vcl_cout << vcl_endl << " using translations of 1 pt with the most inliers: \n";
-  for (unsigned k = 0; k < cams.size(); k++) {
-    vcl_cout << "offset_u: " << cam_trans[max_i][k].x() << " offset_v: " << cam_trans[max_i][k].y() << '\n';
-  }
+  //vcl_cout << vcl_endl << " using translations of 1 pt with the most inliers: \n";
+  //for (unsigned k = 0; k < cams.size(); k++) {
+    //vcl_cout << "offset_u: " << cam_trans[max_i][k].x() << " offset_v: " << cam_trans[max_i][k].y() << '\n';
+  //}
   
   // use the correspondence with the most number of inliers to correct the cameras
   for (unsigned k = 0; k < cams.size(); k++) {
@@ -534,12 +524,12 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     return false;
   }
 
-  vcl_cout << " after refinement: \n";
-  for (unsigned i = 0; i < intersections.size(); i++)
-    vcl_cout << "after adjustment 3D intersection point: " << intersections[i] << vcl_endl;
+  //vcl_cout << " after refinement: \n";
+  //for (unsigned i = 0; i < intersections.size(); i++)
+  //  vcl_cout << "after adjustment 3D intersection point: " << intersections[i] << vcl_endl;
 
-  for (unsigned i = 0; i < cam_trans_inliers.size(); i++)   // for each correction find how many inliers are there for it
-    vcl_cout << "offset_u: " << cam_trans_inliers[i].x() << " v: " << cam_trans_inliers[i].y() << vcl_endl;
+  //for (unsigned i = 0; i < cam_trans_inliers.size(); i++)   // for each correction find how many inliers are there for it
+    //vcl_cout << "offset_u: " << cam_trans_inliers[i].x() << " v: " << cam_trans_inliers[i].y() << vcl_endl;
 
   for (unsigned i = 0; i < cams.size(); i++) {
     double u_off,v_off;

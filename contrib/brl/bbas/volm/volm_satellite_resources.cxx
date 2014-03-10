@@ -32,7 +32,7 @@ void volm_satellite_resources::add_resource(vcl_string name)
   res.name_ = vul_file::strip_directory(name);
   res.name_ = vul_file::strip_extension(res.name_);
   res.meta_ = new brad_image_metadata(name, "");
-#if 0
+#if 1
   // first check if we already have the exact same image, (unfortunately there are resources with different name but taken at exactly same time, so same image)
   for (unsigned i = 0; i < resources_.size(); i++) {
     if (resources_[i].meta_->satellite_name_.compare(res.meta_->satellite_name_) == 0 &&
