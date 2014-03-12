@@ -652,7 +652,7 @@ bool volm_find_satellite_pairs_process(bprb_func_process& pro)
   vcl_string out_file = pro.get_input<vcl_string>(5);
   vcl_string sat_name = pro.get_input<vcl_string>(6);
   
-  unsigned cnt; bool out = false;
+  unsigned cnt = 0; bool out = false;
   out = res->query_pairs_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, cnt, out_file, sat_name);
   pro.set_output_val<unsigned>(0, cnt);
   return out;

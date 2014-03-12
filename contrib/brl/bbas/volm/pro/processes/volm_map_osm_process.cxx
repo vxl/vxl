@@ -355,12 +355,13 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
   }
 
   vpgl_local_rational_camera<double>* cam_local_rat = dynamic_cast<vpgl_local_rational_camera<double>*>(sat_cam.ptr());
+  //vpgl_rational_camera<double>* cam_local_rat = dynamic_cast<vpgl_rational_camera<double>*>(sat_cam.ptr());
   if (!cam_local_rat) {
     vcl_cerr << "Cannot cast the input satellite cam to a local rational camera\n";
     return false;
   }
   
-  vil_image_view<float> bimg(sat_img_sptr);
+  vil_image_view<vxl_byte> bimg(sat_img_sptr);
   vil_image_view<float> height_img(height_img_sptr);
   
   vil_image_view<vil_rgb<vxl_byte> > out_img(sat_img_sptr->ni(), sat_img_sptr->nj(), 1);
@@ -374,7 +375,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
   // read the osm objects
   // load the volm_osm object
   volm_osm_objects osm_objs(osm_file);
-  vcl_cout << " =========== Load volumetric open stree map objects... " << " ===============" << vcl_endl;
+  vcl_cout << " =========== Load volumetric open street map objects... " << " ===============" << vcl_endl;
   vcl_cout << " \t number of roads in osm: " << osm_objs.num_roads() << vcl_endl;
   
   bool hit = false;
@@ -393,19 +394,24 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
         double elev = height_img(uu, vv);
 
         // now find where it projects in the satellite image
+        // project to local coords of local_rational_camera first
+        double loc_x, loc_y, loc_z;
+        cam_local_rat->lvcs().global_to_local(pts[j].x(), pts[j].y(), elev, vpgl_lvcs::wgs84, loc_x, loc_y, loc_z);
         double iu, iv;
-        cam_local_rat->project(pts[j].x(), pts[j].y(), elev, iu, iv);
+        cam_local_rat->project(loc_x, loc_y, loc_z, iu, iv);
         int iuu = vcl_floor(iu + 0.5f);
         int ivv = vcl_floor(iv + 0.5f);
       
         if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
+          vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
           img_line.push_back(vcl_pair<int, int>(iuu,ivv));
           hit = true;
         }
       }
     }
-    if (img_line.size() > 0)
+    if (img_line.size() > 0) {
       img_lines.push_back(img_line);
+    }
   }
   vcl_cout << "number of img lines: " << img_lines.size() << vcl_endl;
   if (hit) {
