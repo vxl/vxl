@@ -98,17 +98,13 @@ static bool obtain_buildings(vil_image_view<vxl_byte> const& c_img,
 
 static bool refine_building_by_median(vil_image_view<float> const& h_img,
                                       vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > const& buildings,
-                                      vcl_map<unsigned, vcl_vector<float> >& building_height,
                                       vil_image_view<float>& refined_img);
 
-//static bool refine_building_by_height(vil_image_view<float> const& h_img,
-//                                      vil_image_view<vxl_byte> const& c_img,
-//                                      int const& radius,
-//                                      vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > const& buildings,
-//                                      vcl_map<unsigned, vcl_vector<float> > const& building_height,
-//                                      vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >& flat_regions,
-//                                      vcl_vector<vcl_pair<unsigned, unsigned> >& non_buildings,
-//                                      vil_image_view<float>& refined_img);
+static bool refine_building_by_median_divided(vil_image_view<float> const& h_img,
+                                              vil_image_view<vxl_byte> const& c_img,
+                                              vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > const& buildings,
+                                              unsigned const& size,
+                                              vil_image_view<float>& refined_img);
 
 static bool refine_building(float const& ratio,
                             float const& height_threshold,
@@ -320,7 +316,6 @@ int main(int argc, char** argv)
       vcl_pair<unsigned,unsigned> window_key(w_idx_i, w_idx_j);
       // obtain window pixels
       unsigned start_nj, end_nj;
-      start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
       start_nj = w_idx_j*dy(); end_nj = (w_idx_j+1)*dy();
       // obtain building pixels, road pixels and non-building pixels (key is a unique value from upper left of the pixel)
       vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > buildings;
@@ -333,17 +328,26 @@ int main(int argc, char** argv)
       }
 
       // flatten the building height by their median
-      // map for storing building_height info for each building (first is median, second is mean, third is standard deviation)
-      vcl_map<unsigned, vcl_vector<float> > building_height;
-      if (!refine_building_by_median(h_img, buildings, building_height, refined_h_img))
+      // flat building super pixels values (use one of the refinement scheme below)
+#if 0
+      // refine the whole building superpixel by a constant median value
+      if (!refine_building_by_median(h_img, buildings, refined_h_img))
       {
         log << "error: refine height image using median height failed\n";
         error(log_file.str(), log.str());
         return volm_io::EXE_ARGUMENT_ERROR;
       }
-      // store the building height for current window
-      for (vcl_map<unsigned, vcl_vector<float> >::iterator bh_mit = building_height.begin(); bh_mit != building_height.end(); ++bh_mit)
-        all_buidling_heights.push_back(bh_mit->second[0]);
+#endif
+#if 1
+      // refine the building roof by dividing building super pixels into small region
+      unsigned sub_pixel_size = 5;  // a 5x5 pixel window to split the building super pixels
+      if (!refine_building_by_median_divided(h_img, c_img, buildings, sub_pixel_size, refined_h_img)) {
+        log << "error: refine height image using median height failed\n";
+        error(log_file.str(), log.str());
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+
+#endif
 
       vcl_pair<vcl_pair<unsigned, unsigned>, vcl_vector<vcl_pair<unsigned, unsigned> > > tmp_pair(vcl_pair<unsigned, unsigned>(w_idx_i, w_idx_j), non_buildings);
       non_building_regions.insert(tmp_pair);
@@ -528,281 +532,12 @@ int main(int argc, char** argv)
 }
 #endif
 
-
-#if 0
-// refine satellite height map using original satellite classification map
-int main(int argc, char** argv)
-{
-  vul_arg<vcl_string> height_img_name("-height", "height map about to be refined", "");
-  vul_arg<vcl_string> class_img_name("-class", "classification map used to refine", "");
-  vul_arg<vcl_string> out_height("-out-height", "output filename of the refined height map", "");
-  vul_arg<vcl_string> out_class("-out-class", "output filename of the refined class map", "");
-  vul_arg<unsigned> dx("-x", "refined window size in pixel unit", 60);
-  vul_arg<unsigned> dy("-y", "refined window size in pixel unit", 60);
-  vul_arg<unsigned> iteration("-iter","number of refinement iteration", 100);
-  vul_arg<float> ratio("-ratio", "shape factor to control morphological operation", 0.5);
-  vul_arg<float> height_threshold("-thres", "threshold in height difference", 5);
-  vul_arg_parse(argc, argv);
-
-  // check input
-  if (height_img_name().compare("") == 0 || class_img_name().compare("") == 0 || out_height().compare("") == 0 || out_class().compare("") == 0) {
-    vul_arg_display_usage_and_exit();
-    return false;
-  }
-  vcl_stringstream log_file;
-  vcl_stringstream log;
-  log_file << out_height() << "/log_refine_height_map_scene.xml";
-
-  // load height map image (float format)
-  if (!vul_file::exists(height_img_name())) {
-    log << "error: can not find height map image: " << height_img_name() << '\n';
-    error(log_file.str(), log.str());
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
-  vil_image_view<float> h_img = vil_load(height_img_name().c_str());
-  // load classification map (unsigned char)
-  if (!vul_file::exists(class_img_name())) {
-    log << "error: can not find classification image: " << class_img_name() << '\n';
-    error(log_file.str(), log.str());
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
-  vil_image_view<vxl_byte> c_img = vil_load(class_img_name().c_str());
-  // image size needs to be same
-  if (h_img.ni() != c_img.ni() || h_img.nj() != c_img.nj()) {
-    log << "error: height map and classification map have different size" << '\n';
-    error(log_file.str(), log.str());
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
-  unsigned ni = h_img.ni();
-  unsigned nj = h_img.nj();
-  unsigned num_w_i = ni/dx() + 1;
-  unsigned num_w_j = nj/dx() + 1;
-
-  vcl_cout << "Start refined the height map..." << vcl_endl;
-  vcl_cout << "  img size: " << ni << 'x' << nj << vcl_endl;
-  vcl_cout << "  window size: " << dx() << 'x' << dy() << vcl_endl;
-  vcl_cout << "  window num: " << num_w_i << 'x' << num_w_j << vcl_endl;
-
-  // start to refine the height map on each window
-  // refined height map
-  vil_image_view<float> refined_h_img(ni, nj);
-  refined_h_img.deep_copy(h_img);
-  vcl_string refined_h_img_name = out_height();
-
-  vil_image_view<vxl_byte> refined_c_img;
-  refined_c_img.deep_copy(c_img);
-  vcl_string refined_c_img_name = out_class();
-
-#if 0
-  // save a window image for debugging purpose
-  vil_image_view<vil_rgb<vxl_byte> > w_img(ni, nj, 1);
-  vcl_string w_img_name = out_height() + "/w_img.tif";
-  w_img.fill(0);
-#endif
-
-  // maps to record the ground height of each window (key is its window id)
-  vcl_map<vcl_pair<unsigned, unsigned>, float> window_min_height;
-  window_min_height.clear();
-
-  // map to record the non-building pixels of each window
-  vcl_map<vcl_pair<unsigned, unsigned>, vcl_vector<vcl_pair<unsigned, unsigned> > > non_building_regions;
-
-  // record all the building median heights in the height image
-  vcl_vector<float> all_buidling_heights;
-
-  vcl_cout << "Start to refine buildings";
-  for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
-  {
-    unsigned start_ni, end_ni;
-    start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
-    for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
-    {
-      vcl_cout << '.';
-      vcl_cout.flush();
-      vcl_pair<unsigned,unsigned> window_key(w_idx_i, w_idx_j);
-      // obtain window pixels
-      unsigned start_nj, end_nj;
-      start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
-      start_nj = w_idx_j*dy(); end_nj = (w_idx_j+1)*dy();
-      // obtain building pixels, road pixels and non-building pixels (key is a unique value from upper left of the pixel)
-      vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > buildings;
-      vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > flat_regions;
-      vcl_vector<vcl_pair<unsigned, unsigned> > non_buildings;
-      if (!obtain_buildings(c_img, start_ni, start_nj, end_ni, end_nj, buildings, flat_regions, non_buildings)) {
-        log << "error: building extraction failed for window (" << start_ni << 'x' << start_nj << ") (to " << end_ni << 'x' << end_nj << ")\n";
-        error(log_file.str(), log.str());
-        return volm_io::EXE_ARGUMENT_ERROR;
-      }
-
-      // flatten the building height by their median
-      // map for storing building_height info for each building (first is median, second is mean, third is standard deviation)
-      vcl_map<unsigned, vcl_vector<float> > building_height;
-      if (!refine_building_by_median(h_img, buildings, building_height, refined_h_img))
-      {
-        log << "error: refine height image using median height failed\n";
-        error(log_file.str(), log.str());
-        return volm_io::EXE_ARGUMENT_ERROR;
-      }
-      // store the building height for current window
-      for (vcl_map<unsigned, vcl_vector<float> >::iterator bh_mit = building_height.begin(); bh_mit != building_height.end(); ++bh_mit)
-        all_buidling_heights.push_back(bh_mit->second[0]);
-
-      vcl_pair<vcl_pair<unsigned, unsigned>, vcl_vector<vcl_pair<unsigned, unsigned> > > tmp_pair(vcl_pair<unsigned, unsigned>(w_idx_i, w_idx_j), non_buildings);
-      non_building_regions.insert(tmp_pair);
-
-      // obtain the ground height from flat region -- using the minimum height for current window
-      vcl_vector<float> flat_heights;
-      for (vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >::iterator mit = flat_regions.begin();
-           mit != flat_regions.end(); ++mit)
-      {
-        unsigned num_pts = (unsigned)mit->second.first.size();
-        for (unsigned ri = 0; ri < num_pts; ri++)
-          flat_heights.push_back(h_img(mit->second.first[ri], mit->second.second[ri]));
-      }
-      if (flat_heights.size() != 0) {
-        vcl_sort(flat_heights.begin(), flat_heights.end());
-        //float height_median = flat_heights[flat_heights.size()/2];
-        float height_median = flat_heights[0];
-        window_min_height.insert(vcl_pair<vcl_pair<unsigned, unsigned>, float>(vcl_pair<unsigned, unsigned>(w_idx_i, w_idx_j), height_median));
-      }
-
-#if 0
-      // create a window image for debugging purpose
-      for (vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >::iterator mit = buildings.begin();
-           mit != buildings.end(); ++mit)
-      {
-        if (mit->second.first.size() < 10)
-          continue;
-        for (unsigned b_idx = 0; b_idx < mit->second.first.size(); b_idx++) {
-          unsigned w_tmp_i = mit->second.first[b_idx];
-          unsigned w_tmp_j = mit->second.second[b_idx];
-          w_img(mit->second.first[b_idx], mit->second.second[b_idx]) = vil_rgb<vxl_byte>(255,0,0);
-        }
-      }
-      for (vcl_vector<vcl_pair<unsigned, unsigned> >::iterator vit = non_buildings.begin();  vit != non_buildings.end(); ++vit)
-      {
-        w_img(vit->first, vit->second) = vil_rgb<vxl_byte>(0,255,0);
-      }
-      for (vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >::iterator mit = flat_regions.begin();
-           mit != flat_regions.end(); ++mit)
-      {
-        if (mit->second.first.size() < 10)
-          continue;
-        for (unsigned b_idx = 0; b_idx < mit->second.first.size(); b_idx++) {
-          unsigned w_tmp_i = mit->second.first[b_idx];
-          unsigned w_tmp_j = mit->second.second[b_idx];
-          w_img(mit->second.first[b_idx], mit->second.second[b_idx]) = vil_rgb<vxl_byte>(0,0,255);
-        }
-      }
-      
-#endif
-    } // end of loop over each window
-  } // end of loop over each window
-
-  // if there is no region can be used to define ground plane height, do not refine ground region
-  // at this stage, only building roof being flattened, class map remain same, building boundary remain as before
-  if (window_min_height.empty()) {
-    log << "warning: no road/park is available to refine ground plane height, ground refinement ignored\n";
-    error(log_file.str(), log.str());
-    vil_save(refined_h_img, refined_h_img_name.c_str());
-    vil_save(refined_c_img, refined_c_img_name.c_str());
-    return volm_io::SUCCESS;
-  }
-
-  // ingest ground level height using height median retrieved from road and park region (class map doesn't change
-  unsigned window_size = num_w_i;
-  if (window_size > num_w_j) window_size = num_w_j;
-  vcl_cout << "\nStart to refine ground elevation";
-  for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
-  {
-    unsigned start_ni, end_ni;
-    start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
-    for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
-    {
-      vcl_cout << '.';
-      vcl_cout.flush();
-      // obtain window pixels
-      unsigned start_nj, end_nj;
-      start_nj = w_idx_j*dy(); end_nj = (w_idx_j+1)*dy();
-
-      // obtain the window height
-      float grd_height = 0.0f;
-      vcl_map<vcl_pair<unsigned, unsigned>, float>::iterator mit = window_min_height.find(vcl_pair<unsigned,unsigned>(w_idx_i, w_idx_j));
-      if (mit == window_min_height.end())
-        // search neighbors to obtain height
-        grd_height = neighbor_height(window_min_height, w_idx_i, w_idx_j, window_size);
-      else
-        grd_height = mit->second;
-      // refine the ground height
-#if 0
-      for (unsigned g_idx_i = start_ni; g_idx_i < end_ni; g_idx_i++) {
-        for (unsigned g_idx_j = start_nj; g_idx_j < end_nj; g_idx_j++) {
-          if (g_idx_i >= 0 && g_idx_i < ni && g_idx_j >= 0 && g_idx_j < nj) {
-
-            if (g_idx_i == 147 && g_idx_j == 73) {
-              vcl_cout << " pixel (" << g_idx_i << "x" << g_idx_j << ") = "
-                << volm_osm_category_io::volm_land_table[c_img(g_idx_i, g_idx_j)].name_ << " "
-                << c_img(g_idx_i, g_idx_j) << " ground height = " << grd_height << vcl_endl;
-            }
-
-            if (c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["roads"].id_ ||
-                c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["parks"].id_ ||
-                c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["parking"].id_ ||
-                c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["palm_tree"].id_ ||
-                c_img(g_idx_i, g_idx_j) == volm_osm_category_io::volm_land_table_name["tree"].id_ ||
-                c_img(g_idx_i, g_idx_j) == 0)
-              refined_h_img(g_idx_i, g_idx_j) = grd_height;
-          }
-        }
-      }
-#endif
-#if 1
-      vcl_map<vcl_pair<unsigned,unsigned>, vcl_vector<vcl_pair<unsigned, unsigned> > >::iterator r_mit = non_building_regions.find(vcl_pair<unsigned,unsigned>(w_idx_i, w_idx_j));
-      if (r_mit != non_building_regions.end()) {
-        vcl_vector<vcl_pair<unsigned, unsigned> > region_pixels = r_mit ->second;
-        for (unsigned pidx = 0; pidx < region_pixels.size(); pidx++) {
-          refined_h_img(region_pixels[pidx].first,region_pixels[pidx].second) = grd_height;
-        }
-      }
-#endif
-    }
-  }
-
-  // refine the building boundary using morphological operation (class map will be updated here to accept new building pixels)
-  // height threshold used to divide neighbor buildings having different height
-  vcl_cout << "\nStart to refine building boundary";
-  for (unsigned i = 0; i < iteration(); i++) {
-    vcl_cout << '.';
-    vcl_cout.flush();
-    if(!refine_building(ratio(), height_threshold(), h_img, refined_c_img, refined_h_img)) {
-      log << "error: refining building failed at ratio " << ratio() << '\n';
-      error(log_file.str(), log.str());
-      return volm_io::EXE_ARGUMENT_ERROR;
-    }
-  }
-
-  // refine once again with high ratio and no height threshold to get rid of white noise (spikes)
-  if(!refine_building(0.6f, 1000, h_img, refined_c_img, refined_h_img)) {
-    log << "error: refining building failed at ratio " << ratio() << '\n';
-    error(log_file.str(), log.str());
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
-  vcl_cout << vcl_endl;
-  vil_save(refined_c_img, refined_c_img_name.c_str());
-
-  // output the image
-  vil_save(refined_h_img, refined_h_img_name.c_str());
-
-  return volm_io::SUCCESS;
-}
-#endif
-
-bool obtain_buildings(vil_image_view<vxl_byte> const& c_img,
-                      unsigned const& start_ni, unsigned const& start_nj,
-                      unsigned const& end_ni,   unsigned const& end_nj,
-                      vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >& buildings,
-                      vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >& flat_regions,
-                      vcl_vector<vcl_pair<unsigned, unsigned> >& non_buildings)
+static bool obtain_buildings(vil_image_view<vxl_byte> const& c_img,
+                             unsigned const& start_ni, unsigned const& start_nj,
+                             unsigned const& end_ni,   unsigned const& end_nj,
+                             vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >& buildings,
+                             vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >& flat_regions,
+                             vcl_vector<vcl_pair<unsigned, unsigned> >& non_buildings)
 {
   buildings.clear();
   flat_regions.clear();
@@ -869,10 +604,9 @@ bool obtain_buildings(vil_image_view<vxl_byte> const& c_img,
   return true;
 }
 
-bool refine_building_by_median(vil_image_view<float> const& h_img,
-                               vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > const& buildings,
-                               vcl_map<unsigned, vcl_vector<float> >& building_height,
-                               vil_image_view<float>& refined_img)
+static bool refine_building_by_median(vil_image_view<float> const& h_img,
+                                      vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > const& buildings,
+                                      vil_image_view<float>& refined_img)
 {
   // refine each building with its median height
   for (vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >::const_iterator mit = buildings.begin();
@@ -903,7 +637,6 @@ bool refine_building_by_median(vil_image_view<float> const& h_img,
     height_data.push_back(median);
     height_data.push_back(mean);
     height_data.push_back(variance);
-    building_height.insert(vcl_pair<unsigned, vcl_vector<float> >(building_key, height_data)); 
   }
 
 #if 0
@@ -933,8 +666,67 @@ bool refine_building_by_median(vil_image_view<float> const& h_img,
   return true;
 }
 
+static bool refine_building_by_median_divided(vil_image_view<float> const& h_img,
+                                              vil_image_view<vxl_byte> const& c_img,
+                                              vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > const& buildings,
+                                              unsigned const& w_size,
+                                              vil_image_view<float>& refined_img)
+{
+  // loop over each super pixels and divide them with a given window size
+  for (vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >::const_iterator mit = buildings.begin();
+       mit != buildings.end(); ++mit)
+  {
+    if (mit->second.first.size() < 10)  // ignore super pixel with less than 10 pixels
+      continue;
+    vcl_vector<vcl_pair<unsigned, unsigned> > super_pixel;
+    unsigned num_pts = (unsigned)mit->second.first.size();
+    for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)
+      super_pixel.push_back(vcl_pair<unsigned, unsigned>(mit->second.first[p_idx], mit->second.second[p_idx]));
+    // form the bbox of super pixels
+    vgl_box_2d<unsigned> bbox;
+    for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)
+      bbox.add(vgl_point_2d<unsigned>(super_pixel[p_idx].first, super_pixel[p_idx].second));
+    // refine the each window inside the bbox
+    unsigned ni = bbox.max_x() - bbox.min_x();
+    unsigned nj = bbox.max_y() - bbox.min_y();
+    unsigned num_w_i = ni/w_size + 1;
+    unsigned num_w_j = nj/w_size + 1;
+    // obtain the building height for each window
+    for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++) {
+      for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++) {
+        unsigned key = (w_idx_i + w_idx_j)*(w_idx_i+w_idx_j+1)/2 + w_idx_j;
+        unsigned s_ni, e_ni, s_nj, e_nj;
+        s_ni = bbox.min_x() + w_idx_i*w_size;  e_ni = bbox.min_x() + (w_idx_i+1)*w_size;
+        s_nj = bbox.min_y() + w_idx_j*w_size;  e_nj = bbox.min_y() + (w_idx_j+1)*w_size;
+        vcl_vector<float> h_values;
+        for (unsigned i = s_ni; i < e_ni; i++) {
+          for (unsigned j = s_nj; j < e_nj; j++) {
+            if ( i > bbox.max_x() && j > bbox.max_y() )  // outside the bounding box
+              continue;
+            if ( c_img(i,j) == volm_osm_category_io::volm_land_table_name["building"].id_)
+              h_values.push_back(h_img(i,j));
+          }
+        }
+        // ignore the window without any building pixel inside
+        if (h_values.empty())
+          continue;
+        vcl_sort(h_values.begin(), h_values.end());
+        float median = h_values[h_values.size()/2];
+        // refine the window using median height
+        for (unsigned i = s_ni; i < e_ni; i++) {
+          for (unsigned j = s_nj; j < e_nj; j++) {
+            if ( i > bbox.max_x() && j > bbox.max_y() )  continue;
+            if ( c_img(i,j) == volm_osm_category_io::volm_land_table_name["building"].id_)
+              refined_img(i,j) = median;
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
 
-float neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const& window_height, unsigned const& w_idx_i, unsigned const& w_idx_j, unsigned const& w_size)
+static float neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const& window_height, unsigned const& w_idx_i, unsigned const& w_idx_j, unsigned const& w_size)
 {
   bool found_neigh_height = false;
   
@@ -969,11 +761,11 @@ float neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const& window
 
 }
 
-bool refine_building(float const& ratio,
-                     float const& height_threshold,
-                     vil_image_view<float> const& h_img,
-                     vil_image_view<vxl_byte> & refined_c_img,
-                     vil_image_view<float>& refined_h_img)
+static bool refine_building(float const& ratio,
+                            float const& height_threshold,
+                            vil_image_view<float> const& h_img,
+                            vil_image_view<vxl_byte> & refined_c_img,
+                            vil_image_view<float>& refined_h_img)
 {
   // refine the building by checking its first nearest neighbor
   int ni = refined_h_img.ni();
@@ -989,6 +781,7 @@ bool refine_building(float const& ratio,
       // ignore the tree and palm tree pixels
       if (refined_c_img(i,j) == volm_osm_category_io::volm_land_table_name["palm_tree"].id_ || refined_c_img(i,j) == volm_osm_category_io::volm_land_table_name["tree"].id_)
         continue;
+      // no need to correct building pixel
       if (refined_c_img(i,j) == volm_osm_category_io::volm_land_table_name["building"].id_)
         continue;
       vcl_vector<float> neigh_heights;
