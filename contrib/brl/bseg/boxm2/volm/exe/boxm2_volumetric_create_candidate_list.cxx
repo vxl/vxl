@@ -179,7 +179,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> query_img("-img", "query image", "");
   vul_arg<unsigned> test_id("-testid", "phase 1 test id", 0);
   vul_arg<unsigned> id("-imgid", "query image id", 101);
-  vul_arg<vcl_string> gt_file("-gt", "ground truth file", "");
+  vul_arg<unsigned> world_id("-world", "roi world id", 100);
   vul_arg<unsigned> threshold("-thres", "threshold that used to create candidate list", 0);
   vul_arg<float> thres_scale("-scale", "threshold that used to create Probability map", 0.0f);
   vul_arg<unsigned> top_size("-top", "desired top list for each candidate list", 1);
@@ -384,9 +384,9 @@ int main(int argc,  char** argv)
   vcl_string log_file = out_kml() + "/candidate_list_log.xml";
   vcl_cout << " log_file = " << log_file << vcl_endl;
   // check input parameter
-  if (out().compare("") == 0 || threshold() == 0 || gt_file().compare("") == 0 || cam_bin().compare("") == 0 || query_img().compare("") == 0 ||
+  if (out().compare("") == 0 || threshold() == 0 || world_id() == 100 || cam_bin().compare("") == 0 || query_img().compare("") == 0 ||
       score_folder().compare("") == 0 || geo_hypo_a().compare("") == 0 || geo_hypo_b().compare("") == 0 || out_kml().compare("") == 0 ||
-      id() > 100 || test_id() == 0 || thres_scale() == 0.0f) {
+      id() > 900 || test_id() == 0 || thres_scale() == 0.0f) {
     log << " ERROR: input files/folders/arguments can not be empty\n";
     vul_arg_display_usage_and_exit();
     volm_io::write_post_processing_log(log_file, log.str());
@@ -406,32 +406,46 @@ int main(int argc,  char** argv)
   ni = query_image.ni();
   nj = query_image.nj();
 
-  // obtain the ground truth location
-  if (!vul_file::exists(gt_file())) {
-    log << "ERROR : can not find ground truth position file -->" << gt_file() << '\n';
-    volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
-  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
-  unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
-  if (id() >= cnt) {
-    log << "ERROR: gt_file " << gt_file() << " does not contain test id: " << id() << "!\n";
-    volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
-  vcl_cout << " the gt locations are " << samples[id()].first.x() << " , " << samples[id()].first.y() << vcl_endl;
+
   // create volm_tile
   vcl_vector<volm_tile> tiles;
-  if (samples[id()].second.second == "desert")
-    tiles = volm_tile::generate_p1_wr1_tiles();
-  else
-    tiles = volm_tile::generate_p1_wr2_tiles();
+  if (world_id() == 1)
+    tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (world_id() == 2)
+    tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (world_id() == 3)
+    tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (world_id() == 4)
+    tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (world_id() == 5)
+    tiles = volm_tile::generate_p1b_wr5_tiles();
+  else {
+    log << "ERROR: unknown roi world region id: " << world_id() << '\n';
+    volm_io::write_post_processing_log(log_file, log.str());
+    vcl_cerr << log.str();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
   unsigned n_tile = tiles.size();
 
 
-  // check the input files for each tile
+  // check the input files for each tile (for phase 1b)
+  for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
+    if ( (world_id() == 2 && t_idx == 0) || (world_id() == 2 && t_idx == 2) )
+      continue;
+    vcl_stringstream score_file;
+    score_file << score_folder() + "/ps_1_scores_tile_" << t_idx << ".bin";
+    vcl_stringstream file_name_pre;
+    file_name_pre << geo_hypo_a() << "/geo_index_tile_" << t_idx;
+    if (!vul_file::exists(file_name_pre.str() + ".txt") || !vul_file::exists(score_file.str())) {
+      log << " ERROR: can not found the score file or geo_hypo for tile " << t_idx << "\n"
+          << "\t score_file = " << score_file.str() << "\n\t geo_hypo file = " << file_name_pre.str() << ".txt" << "\n";
+      volm_io::write_post_processing_log(log_file, log.str());
+      vcl_cerr << log.str();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+  }
+
+#if 0
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
     if (t_idx == 10)
       continue;
@@ -465,7 +479,7 @@ int main(int argc,  char** argv)
       }
     }
   }
-
+#endif
 
   // create candidate list for each tile
   vcl_vector<volm_candidate_list> cand_lists;
@@ -518,9 +532,12 @@ int main(int argc,  char** argv)
   // write the candidate list
   vcl_stringstream kml_name;
   if (id() < 10)
-    kml_name << "p1a_test" << test_id() << "_0" << id();
+    kml_name << "p1b_test" << test_id() << "_00" << id();
+  else if (id() >= 10 && id() < 100)
+    kml_name << "p1b_test" << test_id() << "_0" << id();
   else
-    kml_name << "p1a_test" << test_id() << "_" << id();
+    kml_name << "p1b_test" << test_id() << "_" << id();
+
   vcl_string cam_kml = out_kml() + "/" + kml_name.str() + "-CANDIDATE.kml";
   vcl_ofstream ofs_kml(cam_kml.c_str());
   float thres_value = volm_io::scale_score_to_0_1_sig(kl(), ku(), thres_scale(), threshold());
