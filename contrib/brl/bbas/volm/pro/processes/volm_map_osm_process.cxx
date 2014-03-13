@@ -12,6 +12,8 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
+#include <volm/volm_io_tools.h>
+#include <vgl/vgl_polygon_scan_iterator.h>
 
 //:
 //  Take an ortho image and its camera, a bin file with an osm object list, map the objects onto the image
@@ -326,6 +328,9 @@ bool volm_map_osm_onto_image_process_cons(bprb_func_process& pro)
   input_types.push_back("vil_image_view_base_sptr");  // ortho image - float values: absolute heights
   input_types.push_back("vpgl_camera_double_sptr");  // ortho camera
   input_types.push_back("vcl_string");   // bin file with osm object list
+  input_types.push_back("vcl_string");   // name of band where the osm data will be put
+  input_types.push_back("bool");         // option to project OSM road
+  input_types.push_back("bool");         // option to project OSM buildings
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // a color image with red channel the objects that are overlaid
   return pro.set_input_types(input_types)
@@ -347,17 +352,26 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr height_img_sptr = pro.get_input<vil_image_view_base_sptr>(2);
   vpgl_camera_double_sptr ortho_cam = pro.get_input<vpgl_camera_double_sptr>(3);
   vcl_string osm_file  = pro.get_input<vcl_string>(4);
+  vcl_string band_name = pro.get_input<vcl_string>(5);
+  bool is_region = pro.get_input<bool>(6);
+  bool is_line   = pro.get_input<bool>(7);
 
   vpgl_geo_camera *geo_cam = dynamic_cast<vpgl_geo_camera*>(ortho_cam.ptr());
   if (!geo_cam) {
-    vcl_cerr << "Cannot cast the input cam to a vpgl_geo_camera!\n";
+    vcl_cerr << pro.name() << ": cannot cast the input cam to a vpgl_geo_camera!\n";
     return false;
   }
+
+  if (band_name.compare("r") != 0 && band_name.compare("g") != 0 && band_name.compare("b") != 0) {
+    vcl_cerr << pro.name() << ": unknown image band " << band_name << " only r, g, b allowed!\n";
+    return false;
+  }
+
 
   vpgl_local_rational_camera<double>* cam_local_rat = dynamic_cast<vpgl_local_rational_camera<double>*>(sat_cam.ptr());
   //vpgl_rational_camera<double>* cam_local_rat = dynamic_cast<vpgl_rational_camera<double>*>(sat_cam.ptr());
   if (!cam_local_rat) {
-    vcl_cerr << "Cannot cast the input satellite cam to a local rational camera\n";
+    vcl_cerr << pro.name() << ": cannot cast the input satellite cam to a local rational camera\n";
     return false;
   }
   
@@ -376,73 +390,176 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
   // load the volm_osm object
   volm_osm_objects osm_objs(osm_file);
   vcl_cout << " =========== Load volumetric open street map objects... " << " ===============" << vcl_endl;
-  vcl_cout << " \t number of roads in osm: " << osm_objs.num_roads() << vcl_endl;
-  
+
+
+  // project OSM regions (building specifically) onto image
   bool hit = false;
-  vcl_vector<vcl_vector<vcl_pair<int, int> > > img_lines;
-  vcl_vector<volm_osm_object_line_sptr> loc_lines = osm_objs.loc_lines();
-  for (unsigned i = 0; i < loc_lines.size(); i++) {
-    vcl_vector<vgl_point_2d<double> > pts = loc_lines[i]->line();
-    vcl_vector<vcl_pair<int, int> > img_line;
-    for (unsigned j = 0; j < pts.size(); j++) {
-      double u, v;
-      geo_cam->global_to_img(pts[j].x(), pts[j].y(), 0, u, v);
-      int uu = vcl_floor(u + 0.5f);
-      int vv = vcl_floor(v + 0.5f);
-      if (uu >= 0 && vv >= 0 && uu < height_img_sptr->ni() && vv < height_img_sptr->nj()) {
-        //out_img(uu, vv).r = 255;
-        double elev = height_img(uu, vv);
+  if (is_region)
+  {
+    vcl_cout << " \t number of regions in osm: " << osm_objs.num_regions() << vcl_endl;
+  
+    unsigned num_regions = osm_objs.num_regions();
+    vcl_vector<vgl_polygon<double> > loc_regions;
+    for (unsigned r_idx = 0; r_idx < num_regions; r_idx++) {
+      unsigned char curr_id = osm_objs.loc_polys()[r_idx]->prop().id_;
+      if (curr_id == volm_osm_category_io::volm_land_table_name["building"].id_)
+        loc_regions.push_back(vgl_polygon<double>(osm_objs.loc_polys()[r_idx]->poly()[0]));
+    }
+    
+    vcl_vector<vcl_vector<vgl_point_2d<double> > > img_polys;
+    for (unsigned i = 0; i < loc_regions.size(); i++) {
+      vcl_vector<vgl_point_2d<double> > pts = loc_regions[i][0];
+      //pts.push_back(loc_regions[i][0][0]);
+      vcl_vector<vgl_point_2d<double> > img_poly;
+      for (unsigned j = 0; j < pts.size(); j++) {
+        double u, v;
+        geo_cam->global_to_img(pts[j].x(), pts[j].y(), 0, u, v);
+        int uu = vcl_floor(u + 0.5f);
+        int vv = vcl_floor(v + 0.5f);
+        if (uu >= 0 && vv >= 0 && uu < height_img_sptr->ni() && vv < height_img_sptr->nj()) {
+          double elev = height_img(uu, vv);
+          // now find where it projects in the satellite image
+          // project to local coords of local_rational_camera first
+          double loc_x, loc_y, loc_z;
+          cam_local_rat->lvcs().global_to_local(pts[j].x(), pts[j].y(), elev, vpgl_lvcs::wgs84, loc_x, loc_y, loc_z);
+          double iu, iv;
+          cam_local_rat->project(loc_x, loc_y, loc_z, iu, iv);
+          double iuu = iu + 0.5;
+          double ivv = iv + 0.5;
+          if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
+            vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
+            img_poly.push_back(vgl_point_2d<double>(iuu,ivv));
+            hit = true;
+          }
+        }
+      }
+      if (img_poly.size() > 0) {
+        img_polys.push_back(img_poly);
+      }
+    }
 
-        // now find where it projects in the satellite image
-        // project to local coords of local_rational_camera first
-        double loc_x, loc_y, loc_z;
-        cam_local_rat->lvcs().global_to_local(pts[j].x(), pts[j].y(), elev, vpgl_lvcs::wgs84, loc_x, loc_y, loc_z);
-        double iu, iv;
-        cam_local_rat->project(loc_x, loc_y, loc_z, iu, iv);
-        int iuu = vcl_floor(iu + 0.5f);
-        int ivv = vcl_floor(iv + 0.5f);
-      
-        if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
-          vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
+    if (hit) {
+      for (unsigned i = 0; i < img_polys.size(); i++) {
+        vcl_vector<vcl_pair<int, int> > img_line;
+        for (unsigned k = 0; k < img_polys[i].size(); k++) {
+          int iuu = vcl_floor(img_polys[i][k].x());
+          int ivv = vcl_floor(img_polys[i][k].y());
           img_line.push_back(vcl_pair<int, int>(iuu,ivv));
-          hit = true;
+        }
+        img_line.push_back(vcl_pair<int, int>(vcl_floor(img_polys[i][0].x()),vcl_floor(img_polys[i][0].y())));
+        out_img(img_line[0].first, img_line[0].second).r = 255;
+        for (unsigned j = 1; j < img_line.size(); j++) {
+          double prev_u = img_line[j-1].first;
+          double prev_v = img_line[j-1].second;
+          double dx = img_line[j].first - img_line[j-1].first;
+          double dy = img_line[j].second - img_line[j-1].second;
+          double ds = vcl_sqrt(dx*dx + dy*dy);
+          vcl_cout << " ds: " << ds << " ";
+          double cos = dx/ds; double sin = dy/ds;
+          unsigned cnt = 1;
+          vcl_vector<vgl_point_2d<double> > line_img;
+          while (ds > 0.1) {
+            //out_img(prev_u + cnt*1*cos, prev_v + cnt*1*sin).r = 255;  // delta is 1 pixel
+            double uu = prev_u + cnt*1*cos + 0.5f;
+            double vv = prev_v + cnt*1*sin + 0.5f;
+            if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj()) {
+              if (band_name.compare("r") == 0)      out_img(uu, vv).r = 255;
+              else if(band_name.compare("g") == 0)  out_img(uu, vv).g = 255;
+              else if(band_name.compare("b") == 0)  out_img(uu, vv).b = 255;
+            }
+            cnt++; 
+            ds -= 1;
+          }
         }
       }
     }
-    if (img_line.size() > 0) {
-      img_lines.push_back(img_line);
-    }
   }
-  vcl_cout << "number of img lines: " << img_lines.size() << vcl_endl;
-  if (hit) {
-    for (unsigned i = 0; i < img_lines.size(); i++) {
-      vcl_cout << "img line: " << i << " number of pts: " << img_lines[i].size() << " ";
-      out_img(img_lines[i][0].first, img_lines[i][0].second).r = 255;
-      for (unsigned j = 1; j < img_lines[i].size(); j++) {
-        double prev_u = img_lines[i][j-1].first;
-        double prev_v = img_lines[i][j-1].second;
-        double dx = img_lines[i][j].first - img_lines[i][j-1].first;
-        double dy = img_lines[i][j].second - img_lines[i][j-1].second;
-        double ds = vcl_sqrt(dx*dx + dy*dy);
-        vcl_cout << " ds: " << ds << " ";
-        double cos = dx/ds; double sin = dy/ds;
-        unsigned cnt = 1;
-        while (ds > 0.1) {
-          //out_img(prev_u + cnt*1*cos, prev_v + cnt*1*sin).r = 255;  // delta is 1 pixel
+
+  // project OSM lines onto the image if necessary
+  if (is_line)
+  {
+    vcl_cout << " \t number of roads in osm: " << osm_objs.num_roads() << vcl_endl;
+    hit = false;
+    vcl_vector<vcl_vector<vcl_pair<int, int> > > img_lines;
+    vcl_vector<volm_osm_object_line_sptr> loc_lines = osm_objs.loc_lines();
+    for (unsigned i = 0; i < loc_lines.size(); i++) {
+      vcl_vector<vgl_point_2d<double> > pts = loc_lines[i]->line();
+      vcl_vector<vcl_pair<int, int> > img_line;
+      for (unsigned j = 0; j < pts.size(); j++) {
+        double u, v;
+        geo_cam->global_to_img(pts[j].x(), pts[j].y(), 0, u, v);
+        int uu = vcl_floor(u + 0.5f);
+        int vv = vcl_floor(v + 0.5f);
+        if (uu >= 0 && vv >= 0 && uu < height_img_sptr->ni() && vv < height_img_sptr->nj()) {
+          //out_img(uu, vv).r = 255;
+          double elev = height_img(uu, vv);
+
+          // now find where it projects in the satellite image
+          // project to local coords of local_rational_camera first
+          double loc_x, loc_y, loc_z;
+          cam_local_rat->lvcs().global_to_local(pts[j].x(), pts[j].y(), elev, vpgl_lvcs::wgs84, loc_x, loc_y, loc_z);
+          double iu, iv;
+          cam_local_rat->project(loc_x, loc_y, loc_z, iu, iv);
+          int iuu = vcl_floor(iu + 0.5f);
+          int ivv = vcl_floor(iv + 0.5f);
+      
+          if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
+            vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
+            img_line.push_back(vcl_pair<int, int>(iuu,ivv));
+            hit = true;
+          }
+        }
+      }
+      if (img_line.size() > 0) {
+        img_lines.push_back(img_line);
+      }
+    }
+    vcl_cout << "number of img lines: " << img_lines.size() << vcl_endl;
+    if (hit) {
+      for (unsigned i = 0; i < img_lines.size(); i++) {
+        vcl_cout << "img line: " << i << " number of pts: " << img_lines[i].size() << " ";
+        out_img(img_lines[i][0].first, img_lines[i][0].second).r = 255;
+        for (unsigned j = 1; j < img_lines[i].size(); j++) {
+          double prev_u = img_lines[i][j-1].first;
+          double prev_v = img_lines[i][j-1].second;
+          double dx = img_lines[i][j].first - img_lines[i][j-1].first;
+          double dy = img_lines[i][j].second - img_lines[i][j-1].second;
+          double ds = vcl_sqrt(dx*dx + dy*dy);
+          vcl_cout << " ds: " << ds << " ";
+          double cos = dx/ds; double sin = dy/ds;
+          unsigned cnt = 1;
+          vcl_vector<vgl_point_2d<double> > line_img;
+          while (ds > 0.1) {
+            //out_img(prev_u + cnt*1*cos, prev_v + cnt*1*sin).r = 255;  // delta is 1 pixel
           
-          int uu = vcl_floor(prev_u + cnt*1*cos + 0.5f);
-          int vv = vcl_floor(prev_v + cnt*1*sin + 0.5f);
-          if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj()) 
-            out_img(uu, vv).r = 255;  // delta is 1 pixel
+            double uu = prev_u + cnt*1*cos + 0.5f;
+            double vv = prev_v + cnt*1*sin + 0.5f;
+            if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj())
+              line_img.push_back(vgl_point_2d<double>(uu,vv));
+            cnt++;
+            ds -= 1;
+          }
 
-          cnt++;
-          ds -= 1;
+          // expand the line to a region with certain width
+          double width = 2.0;
+          vgl_polygon<double> img_poly;
+          volm_io_tools::expend_line(line_img, width, img_poly);
+          vgl_polygon_scan_iterator<double> it(img_poly, true);
+          for (it.reset(); it.next();  ) {
+            int y = it.scany();
+            for (int x = it.startx(); x <= it.endx(); ++x) {
+              if ( x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
+                if (band_name.compare("r") == 0)      out_img(x, y).r = 255;
+                else if(band_name.compare("g") == 0)  out_img(x, y).g = 255;
+                else if(band_name.compare("b") == 0)  out_img(x, y).b = 255;
+              }
+            }
+          }
+          vcl_cout << cnt << " pts in the image!\n";
         }
-        vcl_cout << cnt << " pts in the image!\n";
       }
     }
   }
-
 
   vil_image_view_base_sptr out_img_sptr = new vil_image_view<vxl_byte>(out_img);
 

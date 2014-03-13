@@ -209,13 +209,14 @@ def refine_bvxm_height_map(img, max_h, min_h):
 
 ## process to project open street map roads onto a cropped satellite images using
 ## its local cropped RPC camera, an ortho height map and an ortho camera
-def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file):
+def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file, band = "r"):
   bvxm_batch.init_process("VolmMapOSMtoImage");
   bvxm_batch.set_input_from_db(0, crop_img);
   bvxm_batch.set_input_from_db(1, crop_cam);
   bvxm_batch.set_input_from_db(2, ortho_img);
   bvxm_batch.set_input_from_db(3, ortho_cam);
   bvxm_batch.set_input_string(4, osm_bin_file);
+  bvxm_batch.set_input_string(5, band);
   status = bvxm_batch.run_process();
   if status:
     (id, type) = bvxm_batch.commit_output(0);
