@@ -68,17 +68,22 @@ scatter_var(vcl_vector<vpgl_rational_camera<double> > const& cams,
       return false;
     pb_pts.push_back(pb_pt);
   }
+  double weight_sum = 0.0;
   for (unsigned i = 0; i < n; i++) 
   {
     double x = pb_pts[i].x(), y = pb_pts[i].y();
     xm+=cam_weights[i]*x; ym +=cam_weights[i]*y;
+    weight_sum += cam_weights[i];
   }
+  xm /= weight_sum;
+  ym /= weight_sum;
   for (unsigned i = 0; i < n; i++)
   {
     double x = pb_pts[i].x(), y = pb_pts[i].y();
-    xsq+=(x-xm)*(x-xm); ysq+=(y-ym)*(y-ym);
+    xsq+=cam_weights[i]*(x-xm)*(x-xm); ysq+=cam_weights[i]*(y-ym)*(y-ym);
   }
-  xsq/=n; ysq/=n;
+  //xsq/=n; ysq/=n;
+  xsq /= weight_sum; ysq /= weight_sum;
   double var = vcl_sqrt(xsq*xsq + ysq*ysq);
   return var;
 }

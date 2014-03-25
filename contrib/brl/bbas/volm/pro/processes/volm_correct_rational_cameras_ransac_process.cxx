@@ -501,7 +501,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     double u_off,v_off;
     cams[k].image_offset(u_off,v_off);
     cams[k].set_image_offset(u_off + cam_trans[max_i][k].x(), v_off + cam_trans[max_i][k].y());
-    cams[k].save(out_cam_names[k]);
+    //cams[k].save(out_cam_names[k]);
   }
 
   // refine the cameras using all the inliers of this correspondence
