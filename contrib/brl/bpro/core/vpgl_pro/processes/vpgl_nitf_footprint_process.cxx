@@ -11,6 +11,7 @@
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 #include <vul/vul_file.h>
 #include <bkml/bkml_write.h>
+#include <brad/brad_image_metadata.h>
 
 //: initialization
 bool vpgl_nitf_footprint_process_cons(bprb_func_process& pro)
@@ -60,6 +61,14 @@ bool vpgl_nitf_footprint_process(bprb_func_process& pro)
       return false;
     }
 
+    // use brad_image_metadata to obtain the image foot print (it will use IMD or PVL when IGEOLO is not available)
+    brad_image_metadata meta(nitf_path,"");
+
+#if 0
+    vcl_cout << " image footprint: " << vcl_endl;
+    vcl_cout << meta.lower_left_ << vcl_endl;
+    vcl_cout << meta.upper_right_ << vcl_endl;
+
     vcl_string format = image->file_format();
     vcl_string prefix = format.substr(0,4);
 
@@ -81,7 +90,21 @@ bool vpgl_nitf_footprint_process(bprb_func_process& pro)
     vcl_string nitf_id = vul_file::strip_directory(nitf_path);
     vcl_string desc = nitf_path + " footprint";
 
+    vcl_cout << " image " << desc << ":" << vcl_endl; 
     bkml_write::write_box(ofs, nitf_id, desc, ul, ur, ll, lr);
+#endif
+
+    vgl_box_2d<double> bbox(meta.lower_left_.x(), meta.upper_right_.x(),
+                            meta.lower_left_.y(), meta.upper_right_.y());
+
+    vcl_string nitf_id = vul_file::strip_directory(nitf_path);
+    vcl_string desc = nitf_path + " footprint";
+
+    vcl_cout << "image " << desc << ":" << vcl_endl; 
+    vcl_cout << "!!!! lower left lon: "  << meta.lower_left_.x()  << " lat: " << meta.lower_left_.y() << '\n';
+    vcl_cout << "!!!! upper right lon: " << meta.upper_right_.x() << " lat: " << meta.upper_right_.y() << '\n';
+    bkml_write::write_box(ofs, nitf_id, desc, bbox);
+    //bkml_write::write_box(ofs, nitf_id, desc, ul, ur, ll, lr);
   }
   bkml_write::close_document(ofs);
 
