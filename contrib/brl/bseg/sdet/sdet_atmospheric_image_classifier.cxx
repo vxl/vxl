@@ -141,26 +141,6 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<flo
       //finished a block - compute category probabilites from the histogram
       vcl_map<vcl_string, float> texture_probs =
         this->texture_probabilities(h);
-
-#if 0 //=====debug====
-      int ii = 7518, jj = 2909;
-      if (required_block(bidxu, bidxv, ii, jj, block_size_, margin)) {
-        vcl_cout << "probs(" << i << ' ' << j << ")\n";
-        float psum = 0.0;
-        for (vcl_map<vcl_string, float>::iterator cit = texture_probs.begin();
-             cit != texture_probs.end(); ++cit)
-          psum += (*cit).second;
-
-        for (vcl_map<vcl_string, float>::iterator cit =texture_probs.begin();
-             cit != texture_probs.end(); ++cit)
-          vcl_cout << (*cit).first << ' ' << ((*cit).second)/psum << '\n';
-#ifdef DEBUG
-        vcl_cout << " hist\n";
-        for (unsigned i = 0; i<nh; ++i)
-          vcl_cout << h[i]<< '\n';
-#endif
-      }
-#endif
       vnl_vector_fixed<float, 3> color;
       //colorize output according to probabilities of each category
       this->category_quality_color_mix(texture_probs,unct, color);
@@ -168,6 +148,71 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<flo
         for (unsigned c = 0; c<block_size_; ++c)
           for (unsigned b = 0; b<3; ++b)
             prob(i+c,j+r,b) = color[b];
+    }
+    vcl_cout << '.' << vcl_flush;
+  }
+  vcl_cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << vcl_flush;
+  return prob;
+}
+
+vil_image_view<vxl_byte>
+sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<float> const& image, vcl_map<vcl_string, unsigned char>& cat_id_map)
+{
+  vcl_cout << "image size(" << image.ni()<< ' ' << image.nj() << ")pixels:["
+           << texton_dictionary_.size() << "]categories \n" << vcl_flush;
+  vul_timer t;
+  if (!color_map_valid_)
+    this->init_color_map();
+  if (!texton_index_valid_)
+    this->compute_texton_index();
+  this->compute_filter_bank(image);
+  unsigned dim = filter_responses_.n_levels();
+  vcl_cout << "texton dimension " << dim +2<< '\n';
+
+  int margin = static_cast<int>(this->max_filter_radius());
+  vcl_cout << "filter kernel margin " << margin << '\n';
+  int ni = static_cast<int>(image.ni());
+  int nj = static_cast<int>(image.nj());
+  if ((ni-margin)<=0 || (nj-margin)<=0) {
+    vcl_cout << "Image smaller than filter margin\n";
+    return vil_image_view<float>(0, 0);
+  }
+  //number of pixels in a block
+  unsigned block_area = block_size_*block_size_;
+  float weight = 1.0f/static_cast<float>(block_area);
+
+  vil_image_view<vxl_byte> prob(ni, nj);
+  prob.fill(0);
+  
+  unsigned nh = texton_index_.size();
+  int bidxv = 0;
+  for (int j = margin; j<(nj-margin); j+=block_size_, ++bidxv) {
+    int bidxu = 0;
+    for (int i = margin; i<(ni-margin); i+=block_size_, ++bidxu) {
+      vcl_vector<float> h(nh, 0.0f);
+      for (unsigned r = 0; r<block_size_; ++r)
+        for (unsigned c = 0; c<block_size_; ++c) {
+          vnl_vector<double> temp(dim+2);
+          for (unsigned f = 0; f<dim; ++f)
+            temp[f]=filter_responses_.response(f)(i+c,j+r);
+          temp[dim]=laplace_(i+c,j+r); temp[dim+1]=gauss_(i+c,j+r);
+          //hist bins are probabilities
+          //i.e., sum h[i] = 1.0 so weight should typically be 1/Nupdates
+          this->update_hist(temp, weight, h);
+        }
+      
+      // new method: just assign the highest prob class
+      vcl_pair<vcl_string, float> class_prob = this->highest_prob_class(h);
+      for (unsigned r = 0; r < block_size_; ++r)
+        for (unsigned c = 0; c < block_size_; ++c) {
+          prob(i+c, j+r) = cat_id_map[class_prob.first];
+          /*
+          if (class_prob.first.compare("cld") == 0) {
+            prob(i+c, j+r) = 255;
+          } else {
+            prob(i+c, j+r) = 0;
+          }*/
+        }
     }
     vcl_cout << '.' << vcl_flush;
   }

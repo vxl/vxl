@@ -31,6 +31,7 @@ class sdet_atmospheric_image_classifier : public sdet_texture_classifier
   //: image of atmospheric quality expressed as colors
   vil_image_view<float> classify_image_blocks_qual(vcl_string const& img_path);
   vil_image_view<float> classify_image_blocks_qual(vil_image_view<float> const& image);
+  vil_image_view<vxl_byte> classify_image_blocks_qual2(vil_image_view<float> const& image, vcl_map<vcl_string, unsigned char>& cat_id_map);
 
   //: classify image quality based on expected model image and incoming image
   // Assumes that textons have been computed for the model generating the 

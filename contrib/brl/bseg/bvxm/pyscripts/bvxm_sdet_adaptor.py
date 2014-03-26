@@ -95,6 +95,40 @@ def test_classifier(tclsf, block_size, category_id_file=""):
   out_id = dbvalue(out_id, out_type);
   return out, out_color, out_id
 
+def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, height, block_size, category_id_file=""):
+  bvxm_batch.init_process("sdetTextureClassifySatelliteCloudsProcess");
+  bvxm_batch.set_input_from_db(0, tclsf);
+  bvxm_batch.set_input_string(1, dictionary_name);
+  bvxm_batch.set_input_from_db(2, image_resource);
+  bvxm_batch.set_input_unsigned(3, i);
+  bvxm_batch.set_input_unsigned(4, j);
+  bvxm_batch.set_input_unsigned(5, width);
+  bvxm_batch.set_input_unsigned(6, height);
+  bvxm_batch.set_input_unsigned(7, block_size);
+  bvxm_batch.set_input_string(8, category_id_file);
+  bvxm_batch.run_process();
+  (out_id, out_type)=bvxm_batch.commit_output(0);
+  out_crop = dbvalue(out_id, out_type);
+  (out_id, out_type)=bvxm_batch.commit_output(1);
+  out_id_map = dbvalue(out_id, out_type);
+  return out_crop, out_id_map
+
+def create_texture_classifier(lambda0, lambda1,n_scales,scale_interval,angle_interval,laplace_radius,gauss_radius,k,n_samples):
+  bvxm_batch.init_process("sdetCreateTextureClassifierProcess");
+  bvxm_batch.set_input_float(0,lambda0);
+  bvxm_batch.set_input_float(1,lambda1);
+  bvxm_batch.set_input_unsigned(2,n_scales);
+  bvxm_batch.set_input_float(3, scale_interval);
+  bvxm_batch.set_input_float(4, angle_interval);
+  bvxm_batch.set_input_float(5, laplace_radius);
+  bvxm_batch.set_input_float(6, gauss_radius);
+  bvxm_batch.set_input_unsigned(7, k);
+  bvxm_batch.set_input_unsigned(8,n_samples);
+  bvxm_batch.run_process();
+  (tclsf_id, tclsf_type)=bvxm_batch.commit_output(0);
+  tclsf = dbvalue(tclsf_id, tclsf_type);
+  return tclsf;
+
 ## pass the color output image of the classifier and the bin file name prefix for vsol_spatial_object_2d polygon files for ground-truth
 def generate_roc(tclsf, class_out_prob_img, class_out_color_img, orig_img, prefix_for_bin_files, positive_category_name,category_id_file):
   bvxm_batch.init_process("sdetTextureClassifierROCProcess");

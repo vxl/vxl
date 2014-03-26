@@ -175,6 +175,18 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 //vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view_base_sptr\n";
 }
 
+//: Binary write voxel world to stream
+void vsl_b_write(vsl_b_ostream & , vil_image_resource_sptr const&)
+{
+  vcl_cerr << "warning: vsl_b_write not implemented for vil_image_resource_sptr\n";
+}
+
+//: Binary load voxel world from stream.
+void vsl_b_read(vsl_b_istream &, vil_image_resource_sptr &)
+{
+  vcl_cerr << "warning: vsl_b_read not implemented for vil_image_resource_sptr\n";
+}
+
 #if 0
 //: Binary write voxel world to stream
 void vsl_b_write(vsl_b_ostream & , vil_image_view_base const&)

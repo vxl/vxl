@@ -25,6 +25,20 @@ def bvxm_load_image(file_path) :
   bvxm_batch.remove_data(nj_id)
   return img, ni, nj;
 
+def bvxm_load_image_resource(file_path) :
+  bvxm_batch.init_process("vilLoadImageResourceProcess");
+  bvxm_batch.set_input_string(0, file_path);
+  bvxm_batch.run_process();
+  (id,type) = bvxm_batch.commit_output(0);
+  (ni_id, ni_type) = bvxm_batch.commit_output(1);
+  (nj_id, nj_type) = bvxm_batch.commit_output(2);
+  ni = bvxm_batch.get_output_unsigned(ni_id);
+  nj = bvxm_batch.get_output_unsigned(nj_id);
+  img = dbvalue(id,type);
+  bvxm_batch.remove_data(ni_id)
+  bvxm_batch.remove_data(nj_id)
+  return img, ni, nj;
+
 def bvxm_save_image(img, file_path) :
   assert not isinstance(list, tuple)
   bvxm_batch.init_process("vilSaveImageViewProcess");

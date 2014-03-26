@@ -8,11 +8,14 @@
 #include <vil/vil_image_view_base.h>
 #include <bil/bil_raw_image_istream.h>
 #include <bil/bil_arf_image_istream.h>
+#include <vil/vil_image_resource.h>
+
 void vil_register::register_datatype()
 {
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(bil_raw_image_istream_sptr); 
   REGISTER_DATATYPE(bil_arf_image_istream_sptr); 
+  REGISTER_DATATYPE(vil_image_resource_sptr);
 }
 
 void vil_register::register_process()
@@ -78,5 +81,6 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_get_plane_process, "vilGetPlaneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_combine_planes_process, "vilCombinePlanesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_block_entropy_process, "vilBlockEntropyProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_load_image_resource_process, "vilLoadImageResourceProcess");
 }
 
