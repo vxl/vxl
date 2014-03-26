@@ -89,11 +89,12 @@ def model_dir(scene):
   model_dir = bvxm_batch.get_output_string(id);
   return model_dir;
 
-def roi_init(image_filename, cam, world, roi_init_params_xml):
+def roi_init(image_filename, cam, world, roi_init_params_xml, is_all_bits=False):
   bvxm_batch.init_process("bvxmRoiInitProcess");
   bvxm_batch.set_input_string(0,image_filename);
   bvxm_batch.set_input_from_db(1,cam);
   bvxm_batch.set_input_from_db(2,world);
+  bvxm_batch.set_input_bool(3,is_all_bits)
   bvxm_batch.set_params_process(roi_init_params_xml);  ##"bvxmRoiInitProcess.xml");
   statuscode=bvxm_batch.run_process();
   if statuscode:
