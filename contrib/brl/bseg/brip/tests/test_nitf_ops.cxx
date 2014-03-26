@@ -27,16 +27,14 @@ static void test_nitf_ops( int argc, char* argv[] )
   vil_image_resource_sptr ir = vil_load_image_resource(image_file.c_str());
   vil_nitf2_image* nitf = static_cast<vil_nitf2_image*>(ir.ptr());
 
-  vil_image_view_base_sptr nitf_view = nitf->get_copy_view();
-
   unsigned ni = nitf->ni();
   unsigned nj = nitf->nj();
 
-  vil_image_view<vxl_uint_16> nitf_image = nitf->get_view();
+  vil_image_view<vxl_uint_16> nitf_view = nitf->get_view();
   vcl_cout << "Input nitf image pixel values: \n";
   for (unsigned i = 0; i < ni; i++) {
     for (unsigned j = 0; j < nj; j++) {
-      vcl_cout << nitf_image(i,j) << ' ';
+      vcl_cout << nitf_view(i,j) << ' ';
     }
     vcl_cout << '\n';
   }

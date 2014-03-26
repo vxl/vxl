@@ -25,11 +25,11 @@ public:
 
   //: Truncate the 16 bits NITF image to a byte image.
   //  For each pixel, the most significant 5 bits and less significant 3 bits are ignored
-  static bool truncate_nitf_bits(vil_image_view_base_sptr const& nitf_img_res_sptr, vil_image_view<unsigned char>& output);
+  static bool truncate_nitf_bits(vil_image_view<vxl_uint_16> const& in_img, vil_image_view<vxl_byte>& output);
 
   //: Truncate the 16 bits NITF image and output a vxl_unit_16 formatted image.
   //  For each pixel, the most significant 5 bits are ignored and all other 11 bits are kept
-  static bool truncate_nitf_bits(vil_image_view_base_sptr const& nitf_img_res_sptr, vil_image_view<vxl_uint_16>& output);
+  static bool truncate_nitf_bits(vil_image_view<vxl_uint_16> const& in_img, vil_image_view<vxl_uint_16>& output);
 
 };
 
