@@ -26,12 +26,13 @@ static void test_nitf_ops( int argc, char* argv[] )
 
   vil_image_resource_sptr ir = vil_load_image_resource(image_file.c_str());
   vil_nitf2_image* nitf = static_cast<vil_nitf2_image*>(ir.ptr());
+
   vil_image_view_base_sptr nitf_view = nitf->get_copy_view();
-  vil_image_view<vxl_uint_16> nitf_image(nitf_view);
 
-  unsigned ni = nitf_image.ni();
-  unsigned nj = nitf_image.nj();
+  unsigned ni = nitf->ni();
+  unsigned nj = nitf->nj();
 
+  vil_image_view<vxl_uint_16> nitf_image = nitf->get_view();
   vcl_cout << "Input nitf image pixel values: \n";
   for (unsigned i = 0; i < ni; i++) {
     for (unsigned j = 0; j < nj; j++) {
@@ -45,7 +46,7 @@ static void test_nitf_ops( int argc, char* argv[] )
   vil_image_view<vxl_byte> out_byte(ni, nj);
   out_byte.fill(0);
   
-  TEST("Truncate nitf image to byte image", brip_vil_nitf_ops::truncate_nitf_bits(*nitf, out_byte), true);
+  TEST("Truncate nitf image to byte image", brip_vil_nitf_ops::truncate_nitf_bits(nitf_view, out_byte), true);
   
   vcl_string out_byte_fname = "./out_byte.tif";
   vil_save(out_byte, out_byte_fname.c_str());
@@ -53,7 +54,7 @@ static void test_nitf_ops( int argc, char* argv[] )
   vil_image_view<vxl_uint_16> out_short(ni, nj);
   out_short.fill(0);
 
-  TEST("Truncate nitf image to unsigned short image", brip_vil_nitf_ops::truncate_nitf_bits(*nitf, out_short), true);
+  TEST("Truncate nitf image to unsigned short image", brip_vil_nitf_ops::truncate_nitf_bits(nitf_view, out_short), true);
 
   TEST("output image format (byte)", out_byte.pixel_format(), VIL_PIXEL_FORMAT_BYTE);
   TEST("output image format (short)", out_short.pixel_format(), VIL_PIXEL_FORMAT_UINT_16);

@@ -5,16 +5,11 @@
 
 // Truncate the input 16 bits NITF image to a byte image by ignoring the most significant 5
 // bits and less significant 3 bits
-bool brip_vil_nitf_ops::truncate_nitf_bits(vil_nitf2_image const& nitf,
+bool brip_vil_nitf_ops::truncate_nitf_bits(vil_image_view_base_sptr const& in_img,
                                            vil_image_view<vxl_byte>& output)
 {
-  vil_image_view_base_sptr in_img = nitf.get_copy_view();
-  if (!in_img) {
-    vcl_cout << "In brip_vil_nitf_ops::truncated_nitf_bits: can not get copy view from input NITF image\n";
-    return false;
-  }
   if (in_img->ni() != output.ni() || in_img->nj() != output.nj() || in_img->nplanes() != in_img->nplanes() ) {
-    vcl_cout << "In brip_vil_nitf_ops::truncated_nitf_bits: input NITF image size differs from output image\n";
+    vcl_cout << "In brip_vil_nitf_ops::truncated_nitf_bits: input image size differs from output image\n";
     return false;
   }
 
@@ -67,16 +62,11 @@ bool brip_vil_nitf_ops::truncate_nitf_bits(vil_nitf2_image const& nitf,
 
 // Truncate the input 16 bits NITF image by ignoring the most significant 5 bits and keeping all
 // other 11 bits
-bool brip_vil_nitf_ops::truncate_nitf_bits(vil_nitf2_image const& nitf,
+bool brip_vil_nitf_ops::truncate_nitf_bits(vil_image_view_base_sptr const& in_img,
                                            vil_image_view<vxl_uint_16>& output)
 {
-  vil_image_view_base_sptr in_img = nitf.get_copy_view();
-  if (!in_img) {
-    vcl_cout << "In brip_vil_nitf_ops::truncated_nitf_bits: can not get copy view from input NITF image\n";
-    return false;
-  }
   if (in_img->ni() != output.ni() || in_img->nj() != output.nj() || in_img->nplanes() != in_img->nplanes() ) {
-    vcl_cout << "In brip_vil_nitf_ops::truncated_nitf_bits: input NITF image size differs from output image\n";
+    vcl_cout << "In brip_vil_nitf_ops::truncated_nitf_bits: input image size differs from output image\n";
     return false;
   }
   // bit operation on the input NITF image
