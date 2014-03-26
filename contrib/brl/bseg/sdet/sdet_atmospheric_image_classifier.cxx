@@ -158,8 +158,6 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<flo
 vil_image_view<vxl_byte>
 sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<float> const& image, vcl_map<vcl_string, unsigned char>& cat_id_map, vcl_map<vcl_string, float>& cat_percentage_map)
 {
-  //if (!color_map_valid_)
-  //  this->init_color_map();
   if (!texton_index_valid_)
     this->compute_texton_index();
   this->compute_filter_bank(image);

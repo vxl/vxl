@@ -3,4 +3,6 @@
 #include <vil/vil_image_resource.h>
 #include <vil/io/vil_io_smart_ptr.h>
 
-BRDB_VALUE_INSTANTIATE(vil_image_resource_sptr, "vil_image_resource_sptr");
+typedef vil_image_resource_sptr img_res_sptr;
+
+BRDB_VALUE_INSTANTIATE(img_res_sptr, "vil_image_resource_sptr");
