@@ -16,6 +16,7 @@ ADD_EXECUTABLE( brip_test_all
   test_extrema.cxx
   test_filter_bank.cxx
   test_gain_offset_solver.cxx
+  test_nitf_ops.cxx
 )
 TARGET_LINK_LIBRARIES( brip_test_all brip vgl_algo vgl vnl_algo vnl vil vil1 vbl testlib)
 
@@ -30,6 +31,7 @@ ADD_TEST( brip_test_quadtree           ${EXECUTABLE_OUTPUT_PATH}/brip_test_all t
 ADD_TEST( brip_test_max_scale_response ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_max_scale_response )
 ADD_TEST( brip_test_mask               ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_mask )
 ADD_TEST( brip_test_label_equivalence  ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_label_equivalence )
+ADD_TEST( brip_nitf_ops                ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_nitf_ops )
 IF(SEGFAULT_FIXED)
 ADD_TEST( brip_test_extrema            ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_extrema )
 ADD_TEST( brip_test_filter_bank            ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_filter_bank )

@@ -14,6 +14,7 @@ DECLARE( test_label_equivalence );
 DECLARE( test_extrema );
 DECLARE( test_filter_bank );
 DECLARE( test_gain_offset_solver );
+DECLARE( test_nitf_ops );
 void
 register_tests()
 {
@@ -31,6 +32,7 @@ register_tests()
   REGISTER( test_extrema );
   REGISTER( test_filter_bank );
   REGISTER( test_gain_offset_solver );
+  REGISTER( test_nitf_ops );
 }
 
 DEFINE_MAIN;

@@ -17,6 +17,7 @@ SET(brip_sources
    brip_mutual_info.h        brip_mutual_info.txx
    brip_vil1_float_ops.h     brip_vil1_float_ops.cxx
    brip_vil_float_ops.h      brip_vil_float_ops.cxx
+   brip_vil_nitf_ops.h       brip_vil_nitf_ops.cxx
    brip_vil_ops.h
    brip_para_cvrg_params.h   brip_para_cvrg_params.cxx
    brip_para_cvrg.h          brip_para_cvrg.cxx

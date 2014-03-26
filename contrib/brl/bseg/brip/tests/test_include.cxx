@@ -25,5 +25,6 @@
 #include <brip/brip_vil_ops.h>
 #include <brip/brip_watershed.h>
 #include <brip/brip_watershed_params.h>
+#include <brip/brip_vil_nitf_ops.h>
 
 int main() { return 0; }
