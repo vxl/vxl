@@ -156,39 +156,39 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<flo
 }
 
 vil_image_view<vxl_byte>
-sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<float> const& image, vcl_map<vcl_string, unsigned char>& cat_id_map)
+sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<float> const& image, vcl_map<vcl_string, unsigned char>& cat_id_map, vcl_map<vcl_string, float>& cat_percentage_map)
 {
-  vcl_cout << "image size(" << image.ni()<< ' ' << image.nj() << ")pixels:["
-           << texton_dictionary_.size() << "]categories \n" << vcl_flush;
-  vul_timer t;
-  if (!color_map_valid_)
-    this->init_color_map();
+  //if (!color_map_valid_)
+  //  this->init_color_map();
   if (!texton_index_valid_)
     this->compute_texton_index();
   this->compute_filter_bank(image);
   unsigned dim = filter_responses_.n_levels();
-  vcl_cout << "texton dimension " << dim +2<< '\n';
-
+  
   int margin = static_cast<int>(this->max_filter_radius());
-  vcl_cout << "filter kernel margin " << margin << '\n';
   int ni = static_cast<int>(image.ni());
   int nj = static_cast<int>(image.nj());
+
+  vil_image_view<vxl_byte> prob(ni, nj);
+  prob.fill(0);
+
   if ((ni-margin)<=0 || (nj-margin)<=0) {
     vcl_cout << "Image smaller than filter margin\n";
-    return vil_image_view<float>(0, 0);
+    return vil_image_view<vxl_byte>(0, 0);
   }
   //number of pixels in a block
   unsigned block_area = block_size_*block_size_;
   float weight = 1.0f/static_cast<float>(block_area);
-
-  vil_image_view<vxl_byte> prob(ni, nj);
-  prob.fill(0);
   
+  for (vcl_map<vcl_string, unsigned char>::iterator iter = cat_id_map.begin(); iter != cat_id_map.end(); iter++) 
+    cat_percentage_map[iter->first] = 0.0f;
+  
+  int max_j = margin > block_size_ ? nj-margin : nj-block_size_; 
+  int max_i = margin > block_size_ ? ni-margin : ni-block_size_; 
   unsigned nh = texton_index_.size();
-  int bidxv = 0;
-  for (int j = margin; j<(nj-margin); j+=block_size_, ++bidxv) {
-    int bidxu = 0;
-    for (int i = margin; i<(ni-margin); i+=block_size_, ++bidxu) {
+  unsigned pix_count = 0;
+  for (int j = margin; j<max_j; j+=block_size_) {
+    for (int i = margin; i<max_i; i+=block_size_) {
       vcl_vector<float> h(nh, 0.0f);
       for (unsigned r = 0; r<block_size_; ++r)
         for (unsigned c = 0; c<block_size_; ++c) {
@@ -203,20 +203,20 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
       
       // new method: just assign the highest prob class
       vcl_pair<vcl_string, float> class_prob = this->highest_prob_class(h);
+      cat_percentage_map[class_prob.first] += block_area;
       for (unsigned r = 0; r < block_size_; ++r)
         for (unsigned c = 0; c < block_size_; ++c) {
           prob(i+c, j+r) = cat_id_map[class_prob.first];
-          /*
-          if (class_prob.first.compare("cld") == 0) {
-            prob(i+c, j+r) = 255;
-          } else {
-            prob(i+c, j+r) = 0;
-          }*/
+          pix_count++;
         }
     }
     vcl_cout << '.' << vcl_flush;
   }
-  vcl_cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << vcl_flush;
+  for (vcl_map<vcl_string, float>::iterator iter = cat_percentage_map.begin(); iter != cat_percentage_map.end(); iter++) {
+    iter->second /= pix_count;
+    iter->second *= 100.0;
+  }
+  
   return prob;
 }
 

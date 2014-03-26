@@ -44,6 +44,7 @@ bool sdet_texture_classify_satellite_clouds_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // output cropped image - scaled to [0,1]
   output_types.push_back("vil_image_view_base_sptr");  // output id image  - a byte image
+  output_types.push_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file 
   return pro.set_output_types(output_types);
 }
 
@@ -66,6 +67,10 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   unsigned ntextons = tc.get_number_of_textons();
   vcl_cout << " testing using the dictionary with the number of textons: " << ntextons << "\n categories:\n";
   vcl_vector<vcl_string> cats = tc.get_dictionary_categories();
+  if (!cats.size()) {
+    vcl_cerr << "The number of categories is zero!! in the classifier dictionary!\n";
+    return false;
+  }
   
   //vcl_string img_name = pro.get_input<vcl_string>(2);
   vil_image_resource_sptr image = pro.get_input<vil_image_resource_sptr>(2);
@@ -82,14 +87,17 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   vcl_map<vcl_string, vil_rgb<vxl_byte> > cat_color_map;
 
   vcl_map<vcl_string, unsigned char> cat_id_map;
+  vcl_string first_category;
   
   if (cat_ids_file.compare("") == 0) {
+    first_category = cats[0];
     for (unsigned kk = 0; kk < cats.size(); kk++) 
       cat_id_map[cats[kk]] = kk;
   } else {
     vcl_ifstream ifs(cat_ids_file.c_str());
     vcl_string cat_name; int id; int r, g, b;
     ifs >> cat_name;
+    first_category = cat_name;
     while (!ifs.eof()) {
       ifs >> id; ifs >> r; ifs >> g; ifs >> b;
       cat_id_map[cat_name] = (unsigned char)id;
@@ -144,12 +152,14 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   vil_math_scale_values(imgf, 1.0f/2048.0f);
       
   vil_image_view<float> outf = vil_crop(imgf, invalid, width, invalid, height);
-  vil_image_view<vxl_byte> class_img = tc.classify_image_blocks_qual2(imgf, cat_id_map);
+  vcl_map<vcl_string, float> cat_percentage_map;
+  vil_image_view<vxl_byte> class_img = tc.classify_image_blocks_qual2(imgf, cat_id_map,cat_percentage_map);
   vil_image_view<vxl_byte> out_class_img = vil_crop(class_img, invalid, width, invalid, height);
   
   vil_image_view_base_sptr img_ptr = new vil_image_view<float>(outf);
   pro.set_output_val<vil_image_view_base_sptr>(0, img_ptr);
   vil_image_view_base_sptr img_ptr2 = new vil_image_view<vxl_byte>(out_class_img);
   pro.set_output_val<vil_image_view_base_sptr>(1, img_ptr2);
+  pro.set_output_val<float>(2, cat_percentage_map[first_category]);  // returns the percentage of the "first" category
   return true;
 }

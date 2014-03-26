@@ -111,7 +111,10 @@ def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, 
   out_crop = dbvalue(out_id, out_type);
   (out_id, out_type)=bvxm_batch.commit_output(1);
   out_id_map = dbvalue(out_id, out_type);
-  return out_crop, out_id_map
+  (percent_id, percent_type) = bvxm_batch.commit_output(2);
+  percent = bvxm_batch.get_output_float(percent_id);
+  bvxm_batch.remove_data(percent_id)
+  return out_crop, out_id_map, percent
 
 def create_texture_classifier(lambda0, lambda1,n_scales,scale_interval,angle_interval,laplace_radius,gauss_radius,k,n_samples):
   bvxm_batch.init_process("sdetCreateTextureClassifierProcess");
