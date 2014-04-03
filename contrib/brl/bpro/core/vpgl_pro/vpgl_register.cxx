@@ -84,6 +84,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_affine_rectify_images_process, "vpglAffineRectifyImagesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_save_projective_camera_process, "vpglSaveProjectiveCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_affine_rectify_images_process2, "vpglAffineRectifyImagesProcess2");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_crop_img_using_3d_box_process, "vpglCropImgUsing3DboxProcess");
 
 }
 

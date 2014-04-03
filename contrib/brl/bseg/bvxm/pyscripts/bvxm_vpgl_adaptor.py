@@ -503,10 +503,13 @@ def create_perspective_camera_with_rot(pcam, phi, theta, cent_x, cent_y, cent_z)
     cam = dbvalue(c_id,c_type);
     return cam;
 
-def get_nitf_footprint(nitf_list_filename, out_kml_filename):
+def get_nitf_footprint(nitf_list_filename, out_kml_filename, r = 255, g = 255, b = 255):
     bvxm_batch.init_process('vpglNITFFootprintProcess');
     bvxm_batch.set_input_string(0,nitf_list_filename);
     bvxm_batch.set_input_string(1,out_kml_filename);
+    bvxm_batch.set_input_unsigned(2,r)
+    bvxm_batch.set_input_unsigned(3,g)
+    bvxm_batch.set_input_unsigned(4,b)
     bvxm_batch.run_process();
 
 def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename,init_finish=True):
@@ -690,3 +693,32 @@ def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_
   (id, type) = bvxm_batch.commit_output(3);
   out_cam2 = dbvalue(id, type);
   return out_img1, out_cam1, out_img2, out_cam2
+
+## use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
+## note that the input 3-d box is in unit of wgs84 geo coordinates
+def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty):
+  bvxm_batch.init_process("vpglCropImgUsing3DboxProcess")
+  bvxm_batch.set_input_from_db(0, img_res);
+  bvxm_batch.set_input_from_db(1, camera);
+  bvxm_batch.set_input_double(2, lower_left_lon);
+  bvxm_batch.set_input_double(3, lower_left_lat);
+  bvxm_batch.set_input_double(4, lower_left_elev);
+  bvxm_batch.set_input_double(5, upper_right_lon);
+  bvxm_batch.set_input_double(6, upper_right_lat);
+  bvxm_batch.set_input_double(7, upper_right_elev);
+  bvxm_batch.set_input_double(8, uncertainty);
+  status = bvxm_batch.run_process();
+  if status:
+    (id, type) = bvxm_batch.commit_output(0);
+    local_cam  = dbvalue(id, type);
+    (id, type) = bvxm_batch.commit_output(1);
+    i0 = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(2);
+    j0 = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(3);
+    ni = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(4);
+    nj = bvxm_batch.get_output_unsigned(id)
+    return status, local_cam, i0, j0, ni, nj;
+  else:
+    return status, dbvalue(0, ""), 0, 0, 0, 0;
