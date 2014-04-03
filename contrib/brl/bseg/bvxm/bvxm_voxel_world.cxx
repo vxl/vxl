@@ -639,7 +639,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   vcl_cout << vcl_endl;
 
 #define HMAP_DEBUG
-#ifdef  HMAP_DEBUG
+#ifdef  DEBUG
   bvxm_util::write_slab_as_image(heightmap_rough,"./heightmap_rough.tiff");
 #endif
   // now clean up height map

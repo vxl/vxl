@@ -38,12 +38,14 @@ bool sdet_texture_classify_satellite_clouds_process_cons(bprb_func_process& pro)
   input_types.push_back("unsigned");   // height (widht, height) is the size of the ROI in terms of pixels
   input_types.push_back("unsigned");   //texture block size
   input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
+  input_types.push_back("vcl_string");  // the category whose percentage of pixels among all classified pixel will be returned
   if (!pro.set_input_types(input_types))
     return false;
 
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // output cropped image - scaled to [0,1]
   output_types.push_back("vil_image_view_base_sptr");  // output id image  - a byte image
+  output_types.push_back("vil_image_view_base_sptr");  // output rgb image - a rgb image associated with class id image
   output_types.push_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file 
   return pro.set_output_types(output_types);
 }
@@ -81,32 +83,38 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
 
   tc.block_size_ = pro.get_input<unsigned>(7); 
   vcl_string cat_ids_file = pro.get_input<vcl_string>(8);
+  vcl_string first_category = pro.get_input<vcl_string>(9);
 
   int invalid = tc.max_filter_radius();
 
-  vcl_map<vcl_string, vil_rgb<vxl_byte> > cat_color_map;
-
+  //vcl_map<vcl_string, vil_rgb<vxl_byte> > cat_color_map;
+  vcl_map<unsigned char, vil_rgb<vxl_byte> > cat_color_map;
   vcl_map<vcl_string, unsigned char> cat_id_map;
-  vcl_string first_category;
   
   if (cat_ids_file.compare("") == 0) {
-    first_category = cats[0];
+    /*first_category = cats[0];*/
     for (unsigned kk = 0; kk < cats.size(); kk++) 
       cat_id_map[cats[kk]] = kk;
   } else {
     vcl_ifstream ifs(cat_ids_file.c_str());
     vcl_string cat_name; int id; int r, g, b;
     ifs >> cat_name;
-    first_category = cat_name;
+    /*first_category = cat_name;*/
     while (!ifs.eof()) {
       ifs >> id; ifs >> r; ifs >> g; ifs >> b;
       cat_id_map[cat_name] = (unsigned char)id;
-      cat_color_map[cat_name] = vil_rgb<vxl_byte>(r,g,b);
-      vcl_cout << "\t\t" << cat_name << " color: " << cat_color_map[cat_name] << '\n';
+      cat_color_map[(unsigned char)id] = vil_rgb<vxl_byte>(r,g,b);
+      vcl_cout << "\t\t" << cat_name << " color: " << cat_color_map[(unsigned char)id] << '\n';
       ifs >> cat_name;
     }
   }
-    
+  
+  // check input of first_category
+  if (cat_id_map.find(first_category) == cat_id_map.end()) {
+    vcl_cout << pro.name() << ": can not find the input first category " << first_category << " among all categories!" << vcl_endl;
+    return false;
+  }
+
   vcl_vector<vcl_string> cats2;
   vcl_cout << " output id image will use the following ids for the categories:\n";
   for (vcl_map<vcl_string, unsigned char>::iterator iter = cat_id_map.begin(); iter != cat_id_map.end(); iter++) {
@@ -156,10 +164,19 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> class_img = tc.classify_image_blocks_qual2(imgf, cat_id_map,cat_percentage_map);
   vil_image_view<vxl_byte> out_class_img = vil_crop(class_img, invalid, width, invalid, height);
   
+  // transfer id map to color map
+  vil_image_view<vil_rgb<vxl_byte> > out_rgb_img(out_class_img.ni(), out_class_img.nj());
+  for (unsigned i = 0; i < out_class_img.ni(); i++)
+    for (unsigned j = 0; j < out_class_img.nj(); j++)
+      out_rgb_img(i,j) = cat_color_map[out_class_img(i, j)];
+
+
   vil_image_view_base_sptr img_ptr = new vil_image_view<float>(outf);
   pro.set_output_val<vil_image_view_base_sptr>(0, img_ptr);
   vil_image_view_base_sptr img_ptr2 = new vil_image_view<vxl_byte>(out_class_img);
   pro.set_output_val<vil_image_view_base_sptr>(1, img_ptr2);
-  pro.set_output_val<float>(2, cat_percentage_map[first_category]);  // returns the percentage of the "first" category
+  vil_image_view_base_sptr img_ptr3 = new vil_image_view<vil_rgb<vxl_byte> >(out_rgb_img);
+  pro.set_output_val<vil_image_view_base_sptr>(2, img_ptr3);
+  pro.set_output_val<float>(3, cat_percentage_map[first_category]);  // returns the percentage of the "first" category
   return true;
 }
