@@ -293,6 +293,19 @@ def crop_image(img,i0,j0,ni,nj):
   img_out = dbvalue(id,type)
   return img_out
 
+# crop image, take a image resource as input
+def crop_image_res(img_res,i0,j0,ni,nj):
+  bvxm_batch.init_process("vilCropImageResProcess")
+  bvxm_batch.set_input_from_db(0, img_res)
+  bvxm_batch.set_input_unsigned(1, i0);
+  bvxm_batch.set_input_unsigned(2, j0);
+  bvxm_batch.set_input_unsigned(3, ni);
+  bvxm_batch.set_input_unsigned(4, nj);
+  bvxm_batch.run_process()
+  (id,type) = bvxm_batch.commit_output(0)
+  img_out = dbvalue(id,type)
+  return img_out
+
 def scale_and_offset_values(img,scale,offset):
   bvxm_batch.init_process("vilScaleAndOffsetValuesProcess")
   bvxm_batch.set_input_from_db(0,img)

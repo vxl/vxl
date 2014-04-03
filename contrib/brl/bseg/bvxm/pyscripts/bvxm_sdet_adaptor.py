@@ -95,7 +95,7 @@ def test_classifier(tclsf, block_size, category_id_file=""):
   out_id = dbvalue(out_id, out_type);
   return out, out_color, out_id
 
-def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, height, block_size, category_id_file=""):
+def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, height, block_size, percent_cat_name, category_id_file=""):
   bvxm_batch.init_process("sdetTextureClassifySatelliteCloudsProcess");
   bvxm_batch.set_input_from_db(0, tclsf);
   bvxm_batch.set_input_string(1, dictionary_name);
@@ -106,15 +106,25 @@ def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, 
   bvxm_batch.set_input_unsigned(6, height);
   bvxm_batch.set_input_unsigned(7, block_size);
   bvxm_batch.set_input_string(8, category_id_file);
-  bvxm_batch.run_process();
-  (out_id, out_type)=bvxm_batch.commit_output(0);
-  out_crop = dbvalue(out_id, out_type);
-  (out_id, out_type)=bvxm_batch.commit_output(1);
-  out_id_map = dbvalue(out_id, out_type);
-  (percent_id, percent_type) = bvxm_batch.commit_output(2);
-  percent = bvxm_batch.get_output_float(percent_id);
-  bvxm_batch.remove_data(percent_id)
-  return out_crop, out_id_map, percent
+  bvxm_batch.set_input_string(9, percent_cat_name);
+  status = bvxm_batch.run_process();
+  if status:
+    (out_id, out_type)=bvxm_batch.commit_output(0);
+    out_crop = dbvalue(out_id, out_type);
+    (out_id, out_type)=bvxm_batch.commit_output(1);
+    out_id_map = dbvalue(out_id, out_type);
+    (out_id, out_type)=bvxm_batch.commit_output(2);
+    out_rgb_map = dbvalue(out_id, out_type);
+    (percent_id, percent_type) = bvxm_batch.commit_output(3);
+    percent = bvxm_batch.get_output_float(percent_id);
+    bvxm_batch.remove_data(percent_id)
+    return out_crop, out_id_map, out_rgb_map, percent
+  else:
+    out_crop = 0;
+    out_id_map = 0;
+    out_rgb_map = 0;
+    percent = 100;
+    return out_crop, out_id_map, out_rgb_map, percent
 
 def create_texture_classifier(lambda0, lambda1,n_scales,scale_interval,angle_interval,laplace_radius,gauss_radius,k,n_samples):
   bvxm_batch.init_process("sdetCreateTextureClassifierProcess");
