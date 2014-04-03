@@ -11,6 +11,7 @@
 #include <brad_pro/brad_register.h>
 #include <bvrml/pro/bvrml_register.h>
 #include <volm/pro/volm_register.h>
+#include <brip_pro/brip_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -23,6 +24,7 @@ register_processes(PyObject *self, PyObject *args)
   brad_register::register_process();
   bvrml_register::register_process();
   volm_register::register_process();
+  brip_register::register_process();
   
   Py_INCREF(Py_None);
   return Py_None;
@@ -40,6 +42,7 @@ register_datatypes(PyObject *self, PyObject *args)
   brad_register::register_datatype();
   bvrml_register::register_datatype();
   volm_register::register_datatype();
+  brip_register::register_datatype();
 
   Py_INCREF(Py_None);
   return Py_None;
