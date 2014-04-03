@@ -23,10 +23,14 @@ def scene_box(scene):
   (id, type) = bvxm_batch.commit_output(1);
   lower_left_lat = bvxm_batch.get_output_double(id);
   (id, type) = bvxm_batch.commit_output(2);
-  upper_right_lon = bvxm_batch.get_output_double(id);
+  lower_left_elev = bvxm_batch.get_output_double(id);
   (id, type) = bvxm_batch.commit_output(3);
+  upper_right_lon = bvxm_batch.get_output_double(id);
+  (id, type) = bvxm_batch.commit_output(4);
   upper_right_lat = bvxm_batch.get_output_double(id);
-  return lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat;
+  (id, type) = bvxm_batch.commit_output(5);
+  upper_right_elev = bvxm_batch.get_output_double(id)
+  return lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev;
 
 def write_scene_kml(scene, kml_filename, is_overwrite = True, r = 255, g = 255, b = 255, name=""):
   bvxm_batch.init_process("bvxmSceneKmlProcess");

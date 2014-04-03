@@ -20,8 +20,11 @@ bool bvxm_scene_box_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "double"; // lower left lon
   output_types_[1] = "double"; // lower left lat
-  output_types_[2] = "double"; // upper right lon
-  output_types_[3] = "double"; // upper right lat
+  output_types_[2] = "double"; // lower left elev
+  output_types_[3] = "double"; // upper right lon
+  output_types_[4] = "double"; // upper right lat
+  output_types_[5] = "double"; // upper right elev
+
   return pro.set_output_types(output_types_);
 }
 
@@ -43,19 +46,23 @@ bool bvxm_scene_box_process(bprb_func_process& pro)
 
   vpgl_lvcs_sptr lvcs = params->lvcs();
   
-  double lower_left_lon, lower_left_lat, gz, upper_right_lon, upper_right_lat;
-  lvcs->local_to_global(params->corner().x(), params->corner().y(), params->corner().z(), vpgl_lvcs::wgs84, lower_left_lon, lower_left_lat, gz);
+  double lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev;
+  lvcs->local_to_global(params->corner().x(), params->corner().y(), params->corner().z(), vpgl_lvcs::wgs84,
+                        lower_left_lon, lower_left_lat, lower_left_elev);
   double dimx = params->num_voxels().x() * params->voxel_length();
   double dimy = params->num_voxels().y() * params->voxel_length();
   double dimz = params->num_voxels().z() * params->voxel_length();
-  lvcs->local_to_global(params->corner().x() + dimx, params->corner().y() + dimy, params->corner().z() + dimz, vpgl_lvcs::wgs84, upper_right_lon, upper_right_lat, gz);
+  lvcs->local_to_global(params->corner().x() + dimx, params->corner().y() + dimy, params->corner().z() + dimz, vpgl_lvcs::wgs84,
+                        upper_right_lon, upper_right_lat, upper_right_elev);
   
   //Store outputs
   unsigned j = 0;
   pro.set_output_val<double>(j++, lower_left_lon);
   pro.set_output_val<double>(j++, lower_left_lat);
+  pro.set_output_val<double>(j++, lower_left_elev);
   pro.set_output_val<double>(j++, upper_right_lon);
   pro.set_output_val<double>(j++, upper_right_lat);
+  pro.set_output_val<double>(j++, upper_right_elev);
 
   return true;
 }

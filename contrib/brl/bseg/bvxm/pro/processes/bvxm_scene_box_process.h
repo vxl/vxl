@@ -13,7 +13,7 @@
 // \author  Ozge C. Ozcanli
 // \date    Aug 25, 2013
 // \verbatim
-//  Modifications
+//  Yi Dong  Mar 31 2014  modify to return lower left elev and upper left elev of a scene as well
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -25,7 +25,7 @@
 namespace bvxm_scene_box_process_globals
 {
   const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 4;
+  const unsigned n_outputs_ = 6;
 }
 
 //: set input and output types
