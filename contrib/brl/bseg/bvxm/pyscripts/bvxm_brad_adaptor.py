@@ -49,9 +49,12 @@ def estimate_reflectance(image, metadata, atmospheric_params):
   bvxm_batch.set_input_from_db(0,image)
   bvxm_batch.set_input_from_db(1,metadata)
   bvxm_batch.set_input_from_db(2,atmospheric_params)
-  bvxm_batch.run_process()
-  (id,type) = bvxm_batch.commit_output(0)
-  reflectance_img = dbvalue(id,type)
+  status = bvxm_batch.run_process()
+  if status:
+    (id,type) = bvxm_batch.commit_output(0)
+    reflectance_img = dbvalue(id,type)
+  else:
+    reflectance_img = 0
   return reflectance_img
 
 # convert reflectance image back to digital count
