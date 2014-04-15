@@ -35,7 +35,8 @@ int main(int argc, char** argv)
   // input
   vul_arg<vcl_string> geo_folder("-geo", "folder where geo_cover tif images stores", "");
   vul_arg<vcl_string> scene_root("-scene-root", "root directory where all scene xml and lvcs files are stored", "");
-  vul_arg<vcl_string> out_filename("-out-file", "name of the txt file which the sorted results will be written", "urban_sort_scene.txt");
+  vul_arg<vcl_string> lvcs_root("-lvcs-root", "root directory where all scene lvcs files are stored","");
+  vul_arg<vcl_string> out_filename("-out-file", "name of the txt file which the sorted results will be written", "./urban_sort_scene.txt");
   vul_arg<float> voxel_size("-vox", "size of voxel in meters", 1.0f);
   vul_arg<float> world_size_input("-size", "the size of the world in meters", 500.0f);
   vul_arg<vcl_string> in_poly("-poly", "region polygon as kml, the scenes that cover this polygon will be created", "");
@@ -52,6 +53,12 @@ int main(int argc, char** argv)
   
   log_file << scene_root() << "/log_sort_scene_urban.xml";
   
+  vcl_string lvcs_dir;
+  if (lvcs_root().compare("") == 0)
+    lvcs_dir = scene_root();
+  else
+    lvcs_dir = lvcs_root();
+  vcl_cout << " lvcs directory is: " << lvcs_dir << vcl_endl;
   // load the geo_index from the folder, if tree structure not exist, create tree from given parameter
   vcl_string tree_txt = scene_root() + "/geo_index.txt";
   volm_geo_index2_node_sptr root;
@@ -105,17 +112,19 @@ int main(int argc, char** argv)
   // loop over all scene lvcs file
   vcl_multimap<double, vcl_string> scene_order;  // sorted list of scene xmls
 
-  vcl_string file_glob = scene_root() + "/*.lvcs";
+  vcl_string file_glob = lvcs_dir + "/*.lvcs";
   unsigned cnt=0;
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
+    vcl_cout << "working on lvcs: " << fn() << vcl_endl;
     vcl_string lvcs_file = fn();
-    vcl_string scene_file = vul_file::strip_extension(lvcs_file) + ".xml";
-    vcl_string scene_name = vul_file::strip_directory(scene_file);
-    vcl_string name = vul_file::strip_extension(vul_file::strip_directory(lvcs_file));
-    name = name.substr(name.find_first_of('_')+1, name.size());
+    //vcl_string scene_file = vul_file::strip_extension(lvcs_file) + ".xml";
+    //vcl_string scene_name = vul_file::strip_directory(scene_file);
+    vcl_string scene_name = vul_file::strip_extension(vul_file::strip_directory(lvcs_file));
+    vcl_string name = scene_name.substr(scene_name.find_first_of('_')+1, scene_name.size());
     vcl_stringstream str(name);
     unsigned scene_id;
     str >> scene_id;
+    vcl_string scene_file = scene_root() + "/" + scene_name + ".xml";
 
     if (!vul_file::exists(lvcs_file) || !vul_file::exists(scene_file)) {
       log << "ERROR: can not find scene " << lvcs_file << '\n';  error(log_file.str(), log.str());
@@ -171,8 +180,8 @@ int main(int argc, char** argv)
 
     // count the urban pixels
     unsigned urban_pixels = 0;
-    for (int i = 0; i < ni; i++) {
-      for (int j = 0; j < nj; j++) {
+    for (unsigned i = 0; i < ni; i++) {
+      for (unsigned j = 0; j < nj; j++) {
         // transfer coords to get geo cover pixel
         double lon, lat, gz;
         float local_x = (float)(i+0+0.5);
@@ -190,7 +199,7 @@ int main(int argc, char** argv)
       }
     }
 
-    // calcualte ration of the urban region
+    // calculate ration of the urban region
     double urban_ratio = (double)urban_pixels/(double)(ni*nj);
     scene_order.insert(vcl_pair<double, vcl_string>(urban_ratio, scene_name));
     vcl_cout << " for scene " << scene_id << " img size is " << ni << " x " << nj
@@ -210,7 +219,7 @@ int main(int argc, char** argv)
   } // end of loop over all lvcs files
 
   // output to a text file
-  vcl_string out_txt = scene_root() + '/' + out_filename();
+  vcl_string out_txt = out_filename();
 
   vcl_ofstream ofs(out_txt.c_str());
   ofs << "urban_ratio \t\t scene_xml\n";
