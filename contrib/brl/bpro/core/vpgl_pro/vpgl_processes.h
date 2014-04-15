@@ -71,4 +71,5 @@ DECLARE_FUNC_CONS(vpgl_affine_rectify_images_process);
 DECLARE_FUNC_CONS(vpgl_save_projective_camera_process);
 DECLARE_FUNC_CONS(vpgl_affine_rectify_images_process2);
 DECLARE_FUNC_CONS(vpgl_crop_img_using_3d_box_process);
+DECLARE_FUNC_CONS(vpgl_compute_utm_zone_process);
 #endif

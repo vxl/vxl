@@ -722,3 +722,22 @@ def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, low
     return status, local_cam, i0, j0, ni, nj;
   else:
     return status, dbvalue(0, ""), 0, 0, 0, 0;
+
+# give a location (lat, lon) coordinates, return its associate utm coords
+def utm_coords(lon, lat):
+  bvxm_batch.init_process("vpglCompuateUTMZoneProcess")
+  bvxm_batch.set_input_double(0, lon)
+  bvxm_batch.set_input_double(1, lat)
+  result = bvxm_batch.run_process()
+  if result:
+    (id, type) = bvxm_batch.commit_output(0);
+    x = bvxm_batch.get_output_double(id);
+    (id, type) = bvxm_batch.commit_output(1);
+    y = bvxm_batch.get_output_double(id);
+    (id, type) = bvxm_batch.commit_output(2);
+    utm_zone = bvxm_batch.get_output_int(id);
+    (id, type) = bvxm_batch.commit_output(3);
+    northing = bvxm_batch.get_output_int(id);
+    return x, y, utm_zone, northing
+  else:
+    return 0.0, 0.0, 0, 0;
