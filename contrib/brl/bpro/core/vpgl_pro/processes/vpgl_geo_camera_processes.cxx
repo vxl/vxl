@@ -279,7 +279,8 @@ bool vpgl_load_geo_camera_process2(bprb_func_process& pro)
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
 
   vpgl_geo_camera *cam;
-  vpgl_geo_camera::init_geo_camera(filename, ni, nj, lvcs, cam);
+  vpgl_geo_camera::init_geo_camera_from_filename(filename, ni, nj, lvcs, cam);
+  //vpgl_geo_camera::init_geo_camera(filename, ni, nj, lvcs, cam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
   return true;
 }
