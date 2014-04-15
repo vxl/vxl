@@ -37,8 +37,8 @@ static void test_query()
   vcl_vector<vsol_point_2d_sptr> verts;
   verts.push_back(p0);   verts.push_back(p1);
   verts.push_back(p2);   verts.push_back(p3);
-  vsol_polygon_2d_sptr gp = new vsol_polygon_2d(verts);
-  depth_scene->add_ground(gp, 0.0, 0.0, 0, "beach", 6);
+  //vsol_polygon_2d_sptr gp = new vsol_polygon_2d(verts);
+  //depth_scene->add_ground(gp, 0.0, 0.0, 0, "beach", 6);
   // add an object
   vsol_point_2d_sptr pb0 = new vsol_point_2d(640.0, 400.0);
   vsol_point_2d_sptr pb1 = new vsol_point_2d(940.0, 600.0);
@@ -130,8 +130,8 @@ static void test_query()
     vcl_vector<vcl_vector<vcl_vector<unsigned char> > >& grd_land = query->ground_land_id();
     TEST("size of grd_id vector equals n_cam",   grd_id.size(),   query->get_cam_num());
     TEST("size of grd_dist vector equals n_cam", grd_dist.size(), query->get_cam_num());
-    TEST("size of grd_land vector euqals n_cam", grd_land.size(), query->get_cam_num());
-    TEST("size of grd_offset euqals n_cam+1", grd_offset.size(), 1+query->get_cam_num());
+    TEST("size of grd_land vector equals n_cam", grd_land.size(), query->get_cam_num());
+    TEST("size of grd_offset equals n_cam+1", grd_offset.size(), 1+query->get_cam_num());
 
     if (dm->ground_plane().size()) {
       vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
@@ -166,7 +166,7 @@ static void test_query()
   vcl_vector<vcl_vector<float> >& obj_land_wgt = query->obj_land_wgt();
   vcl_vector<depth_map_region_sptr> drs = query->depth_regions();
 
-  TEST("size of object id vector equalss n_cam", obj_id.size(), query->get_cam_num());
+  TEST("size of object id vector equals n_cam", obj_id.size(), query->get_cam_num());
   TEST("size of object id per camera equals n_cam", (obj_id[0]).size(), drs.size());
   TEST("size of object offset equals 1+n_cam*n_obj", obj_offset.size(), 1+drs.size()*query->get_cam_num());
   TEST("size of land_id vector equals n_obj", obj_land.size(), drs.size());
