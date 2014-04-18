@@ -65,9 +65,7 @@ void bundler_inters_match_set::add_match(
     bundler_inters_feature_sptr f2)
 {
     bundler_inters_feature_pair p =
-        vcl_make_pair<
-            bundler_inters_feature_sptr,
-            bundler_inters_feature_sptr>(f1, f2);
+        vcl_make_pair(f1, f2);
 
     matches.push_back(p);
 

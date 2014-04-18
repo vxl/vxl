@@ -238,7 +238,7 @@ static inline void remove_if_true(
         // If this is an outlier, remove it.
         if (checks[i]) {
             to_prune.remove_feature(i + num_removed);
-            ++num_removed;
+            --num_removed;
         }
     }
 }
@@ -305,10 +305,8 @@ void bundler_tracks_impl_refine_epipolar::operator ()(
         rhs.push_back(matches.matches[i].first->point);
         lhs.push_back(matches.matches[i].second->point);
     }
-
     vpgl_fundamental_matrix<double> fm;
     ransac.compute(rhs, lhs, fm);
-
     // We'll ignore the fundamental matrix, and just look at the outliers.
     remove_if_true(ransac.outliers, matches);
 

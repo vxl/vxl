@@ -79,8 +79,11 @@ struct bundler_inters_image : public vbl_ref_count
 {
     // Information about the actual image.
     vil_image_resource_sptr source;
+    unsigned int ni;
+    unsigned int nj;
     double focal_length;
-
+    int img_id ;
+    vcl_string img_name ;
     // All the features in this image. They will be in different tracks.
     vcl_vector<bundler_inters_feature_sptr> features;
 
@@ -92,7 +95,7 @@ struct bundler_inters_image : public vbl_ref_count
     vpgl_perspective_camera<double> camera;
 
     bundler_inters_image() :
-        in_recon(false) { }
+        in_recon(false),ni(0),nj(0) { }
 
     void remove_if_present(bundler_inters_feature_sptr const& f);
 };
