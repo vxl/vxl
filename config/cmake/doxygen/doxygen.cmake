@@ -207,11 +207,21 @@ if(BUILD_DOCUMENTATION)
 
   #-------------------------------------------------------------------
   # Add doxygen target
-  #  Pivot on version 2.6.3 - newer CMake's support "SOURCES" option on
+  # Pivot on version 2.6.3 - newer CMake's support "SOURCES" option on
   # the "add_custom_target" command.
   #
   # Using CMAKE_VERSION in the following test is more to the point,
-  # but I don't know if it is supported in earlier versions of CMAKE.
+  # but it is not supported in V2.6.3 and earlier versions of CMAKE.
+  #
+  # The CMAKE_MINIMUM_REQUIRED_VERSION can differ from what is set in the top
+  # level CMake file when VXL is imported into other projects that use CMake.
+  # When building VXL as a stand-alone library, the CMAKE_MINIMUM_REQUIRED_VERSION
+  # value is set from the top level CMakeList.txt file. When the VXL
+  # export config is used by other projects,
+  # the CMAKE_MINIMUM_REQUIRED_VERSION is set from the top level cmake file
+  # for that project, where the CMAKE_MINIMUM_REQUIRED_VERSION may be greater than
+  # V2.6.3.  If it is greater, then we can use the enhanced version of add_custom_target()
+  # that supports the SOURCES ketword.
   #-------------------------------------------------------------------
   set( doxygen_sources )
   if(CMAKE_MINIMUM_REQUIRED_VERSION GREATER 2.6.3)
