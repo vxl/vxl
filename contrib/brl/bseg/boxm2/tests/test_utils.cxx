@@ -28,22 +28,6 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
     for (int i=0; i<size; i++) bsize[i] = (char) 0;
     int curr_byte = 0;
 
-    //2.a write size, init_level, max_level, max_mb
-    //vcl_memcpy(bsize,   &size, sizeof(long));
-    //curr_byte += sizeof(long);
-    //vcl_memcpy(bsize+curr_byte, &init_level, sizeof(int));
-    //curr_byte += sizeof(int);
-    //vcl_memcpy(bsize+curr_byte, &max_level, sizeof(int));
-    //curr_byte += sizeof(int);
-    //vcl_memcpy(bsize+curr_byte, &max_mb, sizeof(int));
-    //curr_byte += sizeof(int);
-
-    //2.b write dimension and buffer shape
- /*   vcl_memcpy(bsize+curr_byte, dims, 4 * sizeof(double));
-    curr_byte += 4 * sizeof(double);
-    vcl_memcpy(bsize+curr_byte, nums, 4 * sizeof(int));
-    curr_byte += 4 * sizeof(int);*/
-
     //4. put some tree values in there
     //write in the buffer some values for the trees (each tree gets a 1 as the root)
     short buff_index=0;
@@ -86,6 +70,19 @@ void boxm2_test_utils::save_test_scene_to_disk()
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
+        vgl_point_3d<double> local_origin = vgl_point_3d<double>(0,0,0) + vgl_vector_3d<double>((double)nums[0]*dims[0]*(double)i,
+                                                                                                (double)nums[0]*dims[0]*(double)j,
+                                                                                                (double)nums[0]*dims[0]*(double)k);
+        boxm2_block_id id(i,j,k);  
+        boxm2_block_metadata mdata(id,
+                                    local_origin,
+                                    vgl_vector_3d<double> (dims[0], dims[1],dims[2]),
+                                    vgl_vector_3d<unsigned>(nums[0],nums[1],nums[2]),
+                                    init_level,
+                                    max_level,
+                                    max_mb,
+                                    0.001,
+                                    2);
         char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers,
                                                                       treeLen,
                                                                       nums,
@@ -93,9 +90,9 @@ void boxm2_test_utils::save_test_scene_to_disk()
                                                                       init_level,
                                                                       max_level,
                                                                       max_mb );
-        boxm2_block_id id(i,j,k);
-        boxm2_block b(id, stream);
-
+        
+        boxm2_block b(id,mdata, stream);
+        
         vcl_cout<<"saving test block for "<<id<<vcl_endl;
         boxm2_sio_mgr::save_block("", &b);
       }
