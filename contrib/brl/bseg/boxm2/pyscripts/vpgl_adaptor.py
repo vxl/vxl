@@ -12,10 +12,9 @@ def load_perspective_camera(file_path) :
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam;
-def load_affine_camera(file_path, viewing_dist=1000) :
+def load_affine_camera(file_path) :
   boxm2_batch.init_process("vpglLoadAffineCameraProcess");
   boxm2_batch.set_input_string(0, file_path);
-  boxm2_batch.set_input_double(1, viewing_dist);
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
@@ -103,7 +102,32 @@ def get_perspective_camera_center( cam):
   (id, type) = boxm2_batch.commit_output(2);
   z=boxm2_batch.get_output_float(id);
   return x,y,z;
-
+def backprojectray(camera,u,v):
+    boxm2_batch.init_process('vpglGetBackprojectRayProcess');
+    boxm2_batch.set_input_from_db(0,camera);
+    boxm2_batch.set_input_float(1,u);
+    boxm2_batch.set_input_float(2,v);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    dx = boxm2_batch.get_output_float(id);
+    (id,type) = boxm2_batch.commit_output(1);
+    dy = boxm2_batch.get_output_float(id);
+    (id,type) = boxm2_batch.commit_output(2);
+    dz = boxm2_batch.get_output_float(id);
+    return [dx,dy,dz];
+def get_backprojected_ray( cam,u,v):
+  boxm2_batch.init_process("vpglGetBackprojectRayProcess");
+  boxm2_batch.set_input_from_db(0, cam);
+  boxm2_batch.set_input_float(1, u);
+  boxm2_batch.set_input_float(2, v);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  x=boxm2_batch.get_output_float(id);
+  (id, type) = boxm2_batch.commit_output(1);
+  y=boxm2_batch.get_output_float(id);
+  (id, type) = boxm2_batch.commit_output(2);
+  z=boxm2_batch.get_output_float(id);
+  return x,y,z;
 # returns cartesian cam center from azimuth (degrees), elevation (degrees), radius, look point;
 def get_camera_center( azimuth, elevation, radius, lookPt) :
   deg_to_rad = math.pi/180.0;
@@ -188,12 +212,6 @@ def save_perspective_cameras_vrml(camerafolder,path) :
   boxm2_batch.set_input_string(1,path);
   boxm2_batch.set_input_float(2,5.0);
   boxm2_batch.run_process();
-def save_proj_camera(camera, path):
-  boxm2_batch.init_process("vpglSaveProjectiveCameraProcess");
-  boxm2_batch.set_input_from_db(0, camera);
-  boxm2_batch.set_input_string(1, path);
-  boxm2_batch.run_process();
-
 #################################################;
 # perspective go generic conversion;
 #################################################;
@@ -225,13 +243,6 @@ def persp2genWmargin(pcam, ni, nj, margin, level=0) :
   (id,type) = boxm2_batch.commit_output(3);
   new_pers_cam = dbvalue(id,type);
   return (gcam, ni, nj, new_pers_cam);
-
-def write_generic_to_vrml(cam, out_file_name, level=0):
-  boxm2_batch.init_process("vpglWriteGenericCameraProcess");
-  boxm2_batch.set_input_from_db(0, cam);
-  boxm2_batch.set_input_string(1, out_file_name);
-  boxm2_batch.set_input_unsigned(2, level);
-  boxm2_batch.run_process();
 
 #gets bounding box from a directory of cameras... (incomplete)_;
 def camera_dir_planar_bbox(dir_name) :
@@ -342,26 +353,6 @@ def correct_rational_camera(cam_in, offset_x, offset_y):
     (id,type) = boxm2_batch.commit_output(0);
     corrected_cam = dbvalue(id,type);
     return corrected_cam;
-
-def get_rational_camera_offsets(cam_in):
-    boxm2_batch.init_process('vpglGetRationalCameraOffsetsProcess');
-    boxm2_batch.set_input_from_db(0,cam_in);
-    boxm2_batch.run_process();
-    (id,type) = boxm2_batch.commit_output(0);
-    offset_u = boxm2_batch.get_output_double(id);
-    boxm2_batch.remove_data(id);
-    (id,type) = boxm2_batch.commit_output(1);
-    offset_v = boxm2_batch.get_output_double(id);
-    boxm2_batch.remove_data(id);
-    return (offset_u,offset_v);
-
-def find_offset_and_correct_rational_camera(cam_orig, cam_corrected, cam_to_be_corrected):
-  offset_u, offset_v = get_rational_camera_offsets(cam_orig);
-  offset_u_c, offset_v_c = get_rational_camera_offsets(cam_corrected);
-  diff_u = offset_u_c - offset_u;
-  diff_v = offset_v_c - offset_v;
-  cam_out = correct_rational_camera(cam_to_be_corrected, diff_u, diff_v);
-  return cam_out
 
 # convert lat,lon,el to local coordinates;
 def convert_to_local_coordinates(lvcs_filename,lat,lon,el):
@@ -586,14 +577,6 @@ def save_lvcs(lat,lon,hae,lvcs_filename):
     boxm2_batch.run_process();
     return;
 
-def load_lvcs(lvcs_filename):
-    boxm2_batch.init_process("vpglLoadLVCSProcess");
-    boxm2_batch.set_input_string(0, lvcs_filename);
-    boxm2_batch.run_process();
-    (lvcs_id, lvcs_type) = boxm2_batch.commit_output(0);
-    lvcs = dbvalue(lvcs_id, lvcs_type);
-    return lvcs;
-
 def geo_cam_global_to_img(geocam, lon, lat):
     boxm2_batch.init_process("vpglGeoGlobalToImgProcess");
     boxm2_batch.set_input_from_db(0, geocam);
@@ -619,44 +602,3 @@ def interpolate_perspective_cameras(cam0,cam1,ncams,outdir):
     boxm2_batch.set_input_unsigned(2, ncams);
     boxm2_batch.set_input_string(3, outdir);
     return boxm2_batch.run_process();
-
-def compute_affine_from_local_rational(cropped_cam, min_x, min_y, min_z, max_x, max_y, max_z, n_points=100):
-    boxm2_batch.init_process("vpglComputeAffineFromRationalProcess");
-    boxm2_batch.set_input_from_db(0, cropped_cam);
-    boxm2_batch.set_input_double(1, min_x);
-    boxm2_batch.set_input_double(2, min_y);
-    boxm2_batch.set_input_double(3, min_z);
-    boxm2_batch.set_input_double(4, max_x);
-    boxm2_batch.set_input_double(5, max_y);
-    boxm2_batch.set_input_double(6, max_z);
-    boxm2_batch.set_input_unsigned(7, n_points);
-    boxm2_batch.run_process();
-    (id, type) = boxm2_batch.commit_output(0);
-    out_cam = dbvalue(id, type);
-    return out_cam
-
-## use the affine cameras of the images to compute an affine fundamental matrix and rectify them (flatten epipolar lines to scan lines and align them)
-## use the 3-d box that the cameras see to compute correspondences for minimally distortive alignment
-def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, min_z, max_x, max_y, max_z, n_points=100):
-  boxm2_batch.init_process("vpglAffineRectifyImagesProcess");
-  boxm2_batch.set_input_from_db(0, img1);
-  boxm2_batch.set_input_from_db(1, affine_cam1);
-  boxm2_batch.set_input_from_db(2, img2);
-  boxm2_batch.set_input_from_db(3, affine_cam2);
-  boxm2_batch.set_input_double(4, min_x);
-  boxm2_batch.set_input_double(5, min_y);
-  boxm2_batch.set_input_double(6, min_z);
-  boxm2_batch.set_input_double(7, max_x);
-  boxm2_batch.set_input_double(8, max_y);
-  boxm2_batch.set_input_double(9, max_z);
-  boxm2_batch.set_input_unsigned(10, n_points);
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  out_img1 = dbvalue(id, type);
-  (id, type) = boxm2_batch.commit_output(1);
-  out_cam1 = dbvalue(id, type);
-  (id, type) = boxm2_batch.commit_output(2);
-  out_img2 = dbvalue(id, type);
-  (id, type) = boxm2_batch.commit_output(3);
-  out_cam2 = dbvalue(id, type);
-  return out_img1, out_cam1, out_img2, out_cam2
