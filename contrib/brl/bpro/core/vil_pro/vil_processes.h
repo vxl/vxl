@@ -67,5 +67,6 @@ DECLARE_FUNC_CONS(vil_get_plane_process);
 DECLARE_FUNC_CONS(vil_combine_planes_process);
 DECLARE_FUNC_CONS(vil_block_entropy_process);
 DECLARE_FUNC_CONS(vil_load_image_resource_process);
+DECLARE_FUNC_CONS(vil_get_number_of_planes_process);
 
 #endif

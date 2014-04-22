@@ -335,6 +335,11 @@ bool vpgl_rational_adjust_multiple_pts::
       trans.set(translations[2*i], translations[2*i+1]);
       cam_translations.push_back(trans);
     }
+    // sanity check
+    if (vcl_abs(trans.x()) > 200 || vcl_abs(trans.y()) > 200) {
+      vcl_cerr << " trans: " << trans << " failed sanity check! returning false!\n";
+      return false;
+    }
     vcl_cout << trans << '\n';
   }
   return true;

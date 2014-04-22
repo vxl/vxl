@@ -234,7 +234,7 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
     double u_off,v_off;
     cams[k].image_offset(u_off,v_off);
     cams[k].set_image_offset(u_off + cam_trans[max_i][k].x(), v_off + cam_trans[max_i][k].y());
-    cams[k].save(out_cam_names[k]);
+    //cams[k].save(out_cam_names[k]);  // do not save before the refinement
   }
 
   // refine the cameras using all the inliers of this correspondence
@@ -249,8 +249,6 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
 
   vcl_vector<vgl_vector_2d<double> > cam_trans_inliers;
   vcl_vector<vgl_point_3d<double> > intersections;
-  //vcl_vector<float> cam_weights_equal(cams.size(), 1.0f/cams.size());
-  //if (!vpgl_rational_adjust_multiple_pts::adjust_lev_marq(cams, cam_weights_equal, corrs_inliers, cam_trans_inliers, intersections))
   if (!vpgl_rational_adjust_multiple_pts::adjust_lev_marq(cams, cam_weights, corrs_inliers, cam_trans_inliers, intersections))
   {
     vcl_cerr << "In vpgl_correct_rational_cameras_process - adjustment failed\n";

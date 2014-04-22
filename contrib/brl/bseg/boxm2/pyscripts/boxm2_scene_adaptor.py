@@ -367,8 +367,8 @@ class boxm2_scene_adaptor(object):
     return flip_normals(self.scene, self.opencl_cache, self.device, use_sum)
 
   # Export points and normals to a .PLY file or XYZ. Points and normals need to be extracted first
-  def export_points_and_normals(self, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, bbox_file=""):
-    return export_points_and_normals(self.scene, self.cpu_cache, file_out, save_aux, prob_thresh, vis_thresh, nmag_thresh, bbox_file)
+  def export_points_and_normals(self, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, exp_thresh=0.0, bbox_file=""):
+    return export_points_and_normals(self.scene, self.cpu_cache, file_out, save_aux, prob_thresh, vis_thresh, nmag_thresh, exp_thresh, bbox_file)
 
   # Adds auxiliary data to vertices in a .PLY
   def add_aux_info_to_ply(self, file_in, file_out):

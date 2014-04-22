@@ -56,8 +56,7 @@ void out_image_size(unsigned ni, unsigned nj, vnl_matrix_fixed<double, 3, 3>& H1
   vnl_vector_fixed<double, 3> oc = H1*cs[0];
   double ii = oc[0]/oc[2];
   double jj = oc[1]/oc[2];
-  
-  min_i = ii; min_j = jj; max_i = ii; max_j = ii;  
+  min_i = ii; min_j = jj; max_i = ii; max_j = jj;  
   for (unsigned i = 1; i < 4; i++) {
     vnl_vector_fixed<double, 3> oc = H1*cs[i];
     double ii = oc[0]/oc[2];
@@ -168,7 +167,7 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
   vcl_vector< vnl_vector_fixed<double, 3> > img_pts1, img_pts2;
 
   vnl_random rng;
-  vcl_cout << " !!!!!!!!!!!!!!!!!!!! using z = " << z << " as local ground plane height and will sample points on this plane randomly! the mid point z height would be: " << 0.5*height + min_z << '\n';
+  vcl_cout << " using z = " << z << " as local ground plane height and will sample points on this plane randomly! the mid point z height would be: " << 0.5*height + min_z << '\n';
   for (unsigned i = 0; i < n_points; i++) {
     vgl_point_3d<float> corner_world;
     double x = rng.drand64()*width + min_x;  // sample in local coords
@@ -192,12 +191,6 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
     vcl_cout << pro.name() <<" :--  problems in computing an affine fundamental matrix!\n";
     return false;
   }
-  vpgl_camera_double_sptr out_aff_camera1 = new vpgl_affine_camera<double>(H1*aff_camera1->get_matrix());
-  vpgl_affine_camera<double>* cam1_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera1.ptr());
-  //vcl_cout << "out affine cam1: \n" << cam1_ptr->get_matrix();
-  vpgl_camera_double_sptr out_aff_camera2 = new vpgl_affine_camera<double>(H2*aff_camera2->get_matrix());
-  vpgl_affine_camera<double>* cam2_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera2.ptr());
-  //vcl_cout << "out affine cam2: \n" << cam2_ptr->get_matrix();
   
   // find output image sizes
   unsigned oni, onj; //, oni2, onj2;
@@ -223,14 +216,28 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
   
   oni = (unsigned)vcl_ceil(vcl_abs(maxi-mini));
   onj = (unsigned)vcl_ceil(vcl_abs(maxj-minj));
-  //vcl_cout << "mini: " << mini1 << " minj: " << minj1 << " maxi: " << maxi1 << " maxj: " << maxj1 << " oni1: " << oni1 << " onj1: " << onj1 << vcl_endl;
   
   // warp the images bilinearly
   vil_image_view<float> out_img1(oni, onj);
   vil_image_view<float> out_img2(oni, onj);
   warp_bilinear(img1, H1, out_img1, mini, minj);
   warp_bilinear(img2, H2, out_img2, mini, minj);
+
+  // fix H1 and H2 to map pixels of output images
+  vnl_matrix_fixed<double, 3, 3> H; 
+  H.set_identity();
+  H[0][2] = -mini;
+  H[1][2] = -minj;
+  H1 = H*H1;
+  H2 = H*H2;
   
+  vpgl_camera_double_sptr out_aff_camera1 = new vpgl_affine_camera<double>(H1*aff_camera1->get_matrix());
+  vpgl_affine_camera<double>* cam1_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera1.ptr());
+  //vcl_cout << "out affine cam1: \n" << cam1_ptr->get_matrix();
+  vpgl_camera_double_sptr out_aff_camera2 = new vpgl_affine_camera<double>(H2*aff_camera2->get_matrix());
+  vpgl_affine_camera<double>* cam2_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera2.ptr());
+  //vcl_cout << "out affine cam2: \n" << cam2_ptr->get_matrix();
+
   vil_image_view_base_sptr out_img1sptr = new vil_image_view<float>(out_img1);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img1sptr);
   pro.set_output_val<vpgl_camera_double_sptr>(1, out_aff_camera1);
@@ -263,6 +270,8 @@ bool vpgl_affine_rectify_images_process2_cons(bprb_func_process& pro)
   input_types.push_back("double");    // local z plane height, supposedly the height of the ground plane, e.g. 5 
                                       //  when the points are only sampled from this plane, then the output warped images are ground plane stabilized 
                                       //     --> i.e. points on the ground plane are at the same location in each image
+  input_types.push_back("vcl_string"); // output path to write H1
+  input_types.push_back("vcl_string"); // output path to write H2
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // warped image1
   output_types.push_back("vpgl_camera_double_sptr"); // warped camera1
@@ -276,7 +285,7 @@ bool vpgl_affine_rectify_images_process2_cons(bprb_func_process& pro)
 //: Execute the process
 bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
 {
-  if (pro.n_inputs() < 13) {
+  if (pro.n_inputs() < 16) {
     vcl_cout << "vpgl_affine_rectify_images_process: The number of inputs should be 11" << vcl_endl;
     return false;
   }
@@ -297,6 +306,8 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
   double max_z = pro.get_input<double>(i++);
   unsigned n_points = pro.get_input<unsigned>(i++);
   double z = pro.get_input<double>(i++);
+  vcl_string output_path_H1 = pro.get_input<vcl_string>(i++);
+  vcl_string output_path_H2 = pro.get_input<vcl_string>(i++);
   if (n_points <= 3) {
     n_points = 10;   // make it minimum 10 points
   }
@@ -325,7 +336,7 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
 
   vnl_random rng;
   
-  vcl_cout << " !!!!!!!!!!!!!!!!!!!! using z = " << z << " as local ground plane height and will sample points on this plane randomly! the mid point z height would be: " << 0.5*height + min_z << '\n';
+  vcl_cout << " using z = " << z << " as local ground plane height and will sample points on this plane randomly! the mid point z height would be: " << 0.5*height + min_z << '\n';
   for (unsigned i = 0; i < n_points; i++) {
     vgl_point_3d<float> corner_world;
     double x = rng.drand64()*width + min_x;  // sample in local coords
@@ -348,12 +359,7 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
     vcl_cout << pro.name() <<" :--  problems in computing an affine fundamental matrix!\n";
     return false;
   }
-  vpgl_camera_double_sptr out_aff_camera1 = new vpgl_affine_camera<double>(H1*aff_camera1->get_matrix());
-  vpgl_affine_camera<double>* cam1_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera1.ptr());
-  //vcl_cout << "out affine cam1: \n" << cam1_ptr->get_matrix();
-  vpgl_camera_double_sptr out_aff_camera2 = new vpgl_affine_camera<double>(H2*aff_camera2->get_matrix());
-  vpgl_affine_camera<double>* cam2_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera2.ptr());
-  //vcl_cout << "out affine cam2: \n" << cam2_ptr->get_matrix();
+  
   
   // find output image sizes
   unsigned oni, onj; //, oni2, onj2;
@@ -379,13 +385,29 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
   
   oni = (unsigned)vcl_ceil(vcl_abs(maxi-mini));
   onj = (unsigned)vcl_ceil(vcl_abs(maxj-minj));
-  //vcl_cout << "mini: " << mini1 << " minj: " << minj1 << " maxi: " << maxi1 << " maxj: " << maxj1 << " oni1: " << oni1 << " onj1: " << onj1 << vcl_endl;
   
   // warp the images bilinearly
   vil_image_view<float> out_img1(oni, onj);
   vil_image_view<float> out_img2(oni, onj);
   warp_bilinear(img1, H1, out_img1, mini, minj);
   warp_bilinear(img2, H2, out_img2, mini, minj);
+
+  // fix H1 and H2 to map pixels of output images
+  vnl_matrix_fixed<double, 3, 3> H; 
+  H.set_identity();
+  H[0][2] = -mini;
+  H[1][2] = -minj;
+  H1 = H*H1;
+  H2 = H*H2;
+
+  out_image_size(img1_sptr->ni(), img1_sptr->nj(), H1, mini1, minj1, maxi1, maxj1);
+
+  vpgl_camera_double_sptr out_aff_camera1 = new vpgl_affine_camera<double>(H1*aff_camera1->get_matrix());
+  vpgl_affine_camera<double>* cam1_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera1.ptr());
+  //vcl_cout << "out affine cam1: \n" << cam1_ptr->get_matrix();
+  vpgl_camera_double_sptr out_aff_camera2 = new vpgl_affine_camera<double>(H2*aff_camera2->get_matrix());
+  vpgl_affine_camera<double>* cam2_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera2.ptr());
+  //vcl_cout << "out affine cam2: \n" << cam2_ptr->get_matrix();
   
   vil_image_view_base_sptr out_img1sptr = new vil_image_view<float>(out_img1);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img1sptr);
@@ -394,7 +416,173 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
   vil_image_view_base_sptr out_img2sptr = new vil_image_view<float>(out_img2);
   pro.set_output_val<vil_image_view_base_sptr>(2, out_img2sptr);
   pro.set_output_val<vpgl_camera_double_sptr>(3, out_aff_camera2);
+
+  vcl_ofstream ofs(output_path_H1);
+  ofs << H1;
+  ofs.close();
+  vcl_ofstream ofs2(output_path_H2);
+  ofs2 << H2;
+  ofs2.close();
   
   return true;
 }
 
+
+// input the disparity map given by stereo matching of rectified image pairs, disparity map is for H1 warped image1
+// output an ortograhic height map using the input bounding box
+bool vpgl_construct_height_map_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vil_image_view_base_sptr");  // image1
+  input_types.push_back("vpgl_camera_double_sptr");  // camera1 local rational
+  input_types.push_back("vcl_string");
+  input_types.push_back("float");
+  input_types.push_back("vil_image_view_base_sptr");  // image2
+  input_types.push_back("vpgl_camera_double_sptr");  // camera2 local rational
+  input_types.push_back("double");    // min point x (e.g. lower left corner of a scene bbox)
+  input_types.push_back("double");    // min point y
+  input_types.push_back("double");    // min point z
+  input_types.push_back("double");    // max point x (e.g. upper right corner of a scene bbox)
+  input_types.push_back("double");    // max point y
+  input_types.push_back("double");    // max point z
+  input_types.push_back("vcl_string"); // input path to read H1
+  input_types.push_back("vcl_string"); // input path to read H2
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr"); // orthographic height map
+  output_types.push_back("vil_image_view_base_sptr");  // disparity map for image1, print the txt input as an image
+  output_types.push_back("vil_image_view_base_sptr");  // orthorectified disparity map for image1
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+#include <vil/vil_math.h>
+#include <vil/vil_save.h>
+
+//: Execute the process
+bool vpgl_construct_height_map_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() < 14) {
+    vcl_cout << "vpgl_affine_rectify_images_process: The number of inputs should be 11" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  unsigned i = 0;
+  vil_image_view_base_sptr img1_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  vpgl_camera_double_sptr cam1_rational = pro.get_input<vpgl_camera_double_sptr>(i++);
+  //vil_image_view_base_sptr img1_disp_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  vcl_string disp_name = pro.get_input<vcl_string>(i++);
+  float min_disparity = pro.get_input<float>(i++);
+  vil_image_view_base_sptr img2_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  vpgl_camera_double_sptr cam2_rational = pro.get_input<vpgl_camera_double_sptr>(i++);
+  double min_x = pro.get_input<double>(i++);
+  double min_y = pro.get_input<double>(i++);
+  double min_z = pro.get_input<double>(i++);
+  double max_x = pro.get_input<double>(i++);
+  double max_y = pro.get_input<double>(i++);
+  double max_z = pro.get_input<double>(i++);
+  vcl_string path_H1 = pro.get_input<vcl_string>(i++);
+  vcl_string path_H2 = pro.get_input<vcl_string>(i++);
+
+  vnl_matrix_fixed<double, 3, 3> H1, H2;
+  double minih1, minjh1, minih2, minjh2;
+  vcl_ifstream ifs(path_H1);
+  ifs >> H1;
+  ifs.close();
+  vcl_ifstream ifs2(path_H2);
+  ifs2 >> H2;
+  ifs2.close();
+  vcl_cout << "read H1:\n " << H1 << "\n H2:\n " << H2 << "\n";
+  
+  vil_image_view<float> img1 = *vil_convert_cast(float(), img1_sptr);
+  
+  vcl_ifstream ifsd(disp_name);
+  if (!ifsd) {
+    vcl_cerr << "In vpgl_construct_height_map_process() -- cannot open disparity file: " << disp_name << vcl_endl;
+    return false;
+  }
+  unsigned ni, nj;
+  ifsd >> nj; ifsd >> ni;
+  vil_image_view<float> img1_disp(ni, nj);
+  for (unsigned j = 0; j < nj; j++) {
+    for (unsigned i = 0; i < ni; i++) {
+      float val;
+      ifsd >> val;
+      img1_disp(i,j) = val;
+    }
+  }
+  ifsd.close();
+
+  vil_image_view<float> img2 = *vil_convert_cast(float(), img2_sptr);
+  //unsigned width = (unsigned)vcl_ceil(max_x-min_x)*2;
+  //unsigned depth = (unsigned)vcl_ceil(max_y-min_y)*2;
+  unsigned width = (unsigned)vcl_ceil(max_x-min_x);
+  unsigned depth = (unsigned)vcl_ceil(max_y-min_y);
+  double height = max_z - min_z; 
+  vil_image_view<float> out_map(width, depth), out_map_img1(width, depth), out_map_disp1(width, depth), out_map_img2(width, depth);
+  out_map.fill(min_z);
+  out_map_img1.fill(0.0); out_map_img2.fill(0.0);
+  out_map_disp1.fill(0.0);
+  
+  for (unsigned x = 0; x < width; x++)
+    for (unsigned y = 0; y < depth; y++) {
+      // try each height 
+      double min_dif = 2.0;  // 2 pixels error in projection
+      double best_z = 0;
+      for (double z = min_z + 0.5; z < height; z += 0.5) {
+        // project this x,y,z using the camera onto the images
+        double u1,v1,u2,v2;
+        cam1_rational->project(x+min_x, max_y-y, z, u1, v1);
+        //cam1_rational->project(x/2.0+min_x, max_y-y/2.0, z, u1, v1);
+        cam2_rational->project(x+min_x, max_y-y, z, u2, v2);
+        //cam2_rational->project(x/2.0+min_x, max_y-y/2.0, z, u2, v2);
+        
+
+        if (z == 5.5 && u1 >= 0 && v1 >= 0 && u1 < img1.ni() && v1 < img1.nj()) {
+          out_map_img1(x,y) = img1(u1, v1); 
+        }
+
+        if (z == 5.5 && u2 >= 0 && v2 >= 0 && u2 < img2.ni() && v2 < img2.nj()) {
+          out_map_img2(x,y) = img2(u2, v2); 
+        }
+
+        // warp this point with H1, H2
+        vnl_vector_fixed<double,3> p1(u1, v1, 1);
+        vnl_vector_fixed<double,3> p1w = H1*p1;
+        int u1w = vcl_floor((p1w[0]/p1w[2])+0.5);
+        int v1w = vcl_floor((p1w[1]/p1w[2])+0.5);
+        
+        if (u1w < 0 || v1w < 0 || u1w >= img1_disp.ni() || v1w >= img1_disp.nj()) 
+          continue;
+        
+        if (z == 5.5)
+          out_map_disp1(x,y) = img1_disp(u1w, v1w);
+        
+        float disp = img1_disp(u1w, v1w);
+        if (disp < min_disparity)
+          continue;
+
+        vnl_vector_fixed<double,3> p2(u2, v2, 1);
+        vnl_vector_fixed<double,3> p2w = H2*p2;
+        int u2w = vcl_floor((p2w[0]/p2w[2])+0.5);
+        int v2w = vcl_floor((p2w[1]/p2w[2])+0.5);
+
+        // check if with disparity the warped pixels are exactly the same, i.e. (u1w-d,v1w) = (u2w,v2w)
+        double dif = vcl_sqrt((u1w-disp-u2w)*(u1w-disp-u2w) + (v1w-v2w)*(v1w-v2w));
+        if (dif < min_dif) {
+          min_dif = dif;
+          best_z = z;
+        }
+      }
+      out_map(x,y) = best_z;
+    }
+  
+  /*vil_save(out_map_img1, "./img1_ortho.tif");
+  vil_save(out_map_img2, "./img2_ortho.tif");*/
+  
+  vil_image_view_base_sptr out_sptr = new vil_image_view<float>(out_map);
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_sptr);
+  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<float>(img1_disp));
+  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<float>(out_map_disp1));
+  return true;
+}

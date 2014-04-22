@@ -468,7 +468,7 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
     return false;
   }
   
-  for (vcl_map<double, vcl_pair<vcl_string, vcl_string> >::iterator mit = pairs.begin(); mit != pairs.end(); ++mit)
+  for (vcl_map<double, vcl_pair<vcl_string, vcl_string>, vcl_greater<double> >::iterator mit = pairs.begin(); mit != pairs.end(); ++mit)
     ofs << mit->first << " \t " << mit->second.first << " \t " << mit->second.second << vcl_endl;
   ofs.close();
 
@@ -531,7 +531,7 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
   return false;
 #endif
 
-  
+  return true;
 }
 
 // find the PAN counterpart if given a multi band image, and vice versa
@@ -617,7 +617,7 @@ bool volm_find_res_pair_process(bprb_func_process& pro)
 bool volm_find_satellite_pairs_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(7);
+  vcl_vector<vcl_string> input_types_(8);
   input_types_[0] = "volm_satellite_resources_sptr"; 
   input_types_[1] = "double";      // lower left lon
   input_types_[2] = "double";      // lower left lat
@@ -625,6 +625,7 @@ bool volm_find_satellite_pairs_process_cons(bprb_func_process& pro)
   input_types_[4] = "double";      // upper right lat
   input_types_[5] = "vcl_string";      // output file to print the list
   input_types_[6] = "vcl_string";      // satellite name
+  input_types_[7] = "float";       // GSD_threshold
   
   if (!pro.set_input_types(input_types_))
     return false;
@@ -651,9 +652,10 @@ bool volm_find_satellite_pairs_process(bprb_func_process& pro)
   double upper_right_lat = pro.get_input<double>(4);
   vcl_string out_file = pro.get_input<vcl_string>(5);
   vcl_string sat_name = pro.get_input<vcl_string>(6);
+  float GSD_thres = pro.get_input<float>(7);
   
   unsigned cnt = 0; bool out = false;
-  out = res->query_pairs_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, cnt, out_file, sat_name);
+  out = res->query_pairs_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, GSD_thres, cnt, out_file, sat_name);
   pro.set_output_val<unsigned>(0, cnt);
   return out;
 }

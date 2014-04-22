@@ -95,10 +95,19 @@ int main(int argc, char** argv)
   volm_geo_index2::write(root, txt_filename, min_size);
   vcl_string kml_filename = out_folder() + "/scene_geo_index.kml";
   unsigned tree_depth = volm_geo_index2::depth(root);
-  volm_geo_index2::write_to_kml(root, tree_depth, kml_filename);
+  //volm_geo_index2::write_to_kml(root, tree_depth, kml_filename);
   vcl_vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root, leaves);
   vcl_cout << "the geoindex quadtree for scene has " << leaves.size() << " leaves and depth is " << tree_depth << vcl_endl;
+
+  // write to kml files with leaf ids (which will be used as scene ids)
+  vcl_ofstream ofs(kml_filename.c_str());
+  bkml_write::open_document(ofs);
+  for (unsigned i = 0; i < leaves.size(); i++) {
+    vcl_stringstream explanation; explanation << "scene_" << i;
+    volm_geo_index2::write_to_kml_node(ofs, leaves[i], 0, 0, explanation.str());
+  }
+  bkml_write::close_document(ofs);
 
   // load DEM images
   vcl_vector<volm_img_info> infos;

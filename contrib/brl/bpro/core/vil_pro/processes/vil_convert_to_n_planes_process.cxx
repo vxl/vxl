@@ -103,15 +103,48 @@ bool vil_get_plane_process(bprb_func_process& pro)
     vil_image_view<vxl_byte> band = vil_plane(img_f, plane_id);
     vil_image_view_base_sptr out_img_ptr = new vil_image_view<vxl_byte>(band);
     pro.set_output_val<vil_image_view_base_sptr>(0, out_img_ptr);
-  } else {
+  } else if (img->pixel_format() == VIL_PIXEL_FORMAT_UINT_16) {
+    vil_image_view<vxl_uint_16> img_f(img);
+    vil_image_view<vxl_uint_16> band = vil_plane(img_f, plane_id);
+    vil_image_view_base_sptr out_img_ptr = new vil_image_view<vxl_uint_16>(band);
+    pro.set_output_val<vil_image_view_base_sptr>(0, out_img_ptr);
+  }
+  else {
     vcl_cerr << "In vil_get_plane_process() - for now only supports FLOAT format!\n";
     return false;
   }
 
-  
   return true;
 }
 
+
+bool vil_get_number_of_planes_process_cons(bprb_func_process& pro)
+{
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vil_image_view_base_sptr"); 
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("unsigned");  // return number of planes
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
+  return true;
+}
+
+//: Execute the process
+bool vil_get_number_of_planes_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs()< 1) {
+    vcl_cout << "vil_get_number_of_planes_process: The input number should be 1" << vcl_endl;
+    return false;
+  }
+  unsigned i=0;
+  vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
+  pro.set_output_val<unsigned>(0, img->nplanes());
+  return true;
+}
 
 bool vil_combine_planes_process_cons(bprb_func_process& pro)
 {

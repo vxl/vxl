@@ -153,6 +153,42 @@ def get_sun_angles(mdata):
   bvxm_batch.remove_data(id)
   return sun_az, sun_el
 
+def get_metadata_info(mdata):
+  bvxm_batch.init_process("bradGetMetaDataInfoProcess")
+  bvxm_batch.set_input_from_db(0, mdata)
+  bvxm_batch.run_process()
+  (id,type) = bvxm_batch.commit_output(0)
+  sun_az = bvxm_batch.get_output_float(id)
+  bvxm_batch.remove_data(id)
+  (id,type) = bvxm_batch.commit_output(1)
+  sun_el = bvxm_batch.get_output_float(id)
+  bvxm_batch.remove_data(id)
+  (id, type) = bvxm_batch.commit_output(2)
+  year = bvxm_batch.get_output_int(id)
+  bvxm_batch.remove_data(id)
+  (id, type) = bvxm_batch.commit_output(3)
+  month = bvxm_batch.get_output_int(id)
+  bvxm_batch.remove_data(id)
+  (id, type) = bvxm_batch.commit_output(4)
+  day = bvxm_batch.get_output_int(id)
+  bvxm_batch.remove_data(id)
+  (id, type) = bvxm_batch.commit_output(5)
+  hour = bvxm_batch.get_output_int(id)
+  bvxm_batch.remove_data(id)
+  (id, type) = bvxm_batch.commit_output(6)
+  minutes = bvxm_batch.get_output_int(id)
+  bvxm_batch.remove_data(id)
+  (id, type) = bvxm_batch.commit_output(7)
+  seconds = bvxm_batch.get_output_int(id)
+  bvxm_batch.remove_data(id)
+  (id, type) = bvxm_batch.commit_output(8)
+  gsd = bvxm_batch.get_output_float(id)
+  bvxm_batch.remove_data(id)
+  (id, type) = bvxm_batch.commit_output(9)
+  sat_name = bvxm_batch.get_output_string(id)
+  bvxm_batch.remove_data(id)
+  return sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name
+
 #create a new image_metadata object
 def create_image_metadata(gain=1.0, offset=0.0, view_az = 0.0, view_el = 90.0, sun_az = 0.0, sun_el = 90.0, sun_irrad = None):
   bvxm_batch.init_process("bradCreateImageMetadataProcess")

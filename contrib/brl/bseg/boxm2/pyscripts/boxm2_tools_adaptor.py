@@ -71,7 +71,7 @@ def extract_cell_centers(scene, cache, prob_thresh=0.0):
     print "ERROR: Cache type not recognized: ", cache.type; 
     return False;
   
-def export_points_and_normals(scene, cache, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, bbox_file=""):
+def export_points_and_normals(scene, cache, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, exp_thresh = 0.0, bbox_file=""):
   if cache.type == "boxm2_cache_sptr" :
     print("Exporting to oriented point cloud");
     boxm2_batch.init_process("boxm2ExportOrientedPointCloudProcess");
@@ -82,7 +82,8 @@ def export_points_and_normals(scene, cache, file_out, save_aux=True, prob_thresh
     boxm2_batch.set_input_float(4,vis_thresh); #vis threshold
     boxm2_batch.set_input_float(5,nmag_thresh); #nmag threshold
     boxm2_batch.set_input_float(6,prob_thresh); #prob threshold
-    boxm2_batch.set_input_string(7, bbox_file); #bb filename
+    boxm2_batch.set_input_float(7,exp_thresh); #exp threshold
+    boxm2_batch.set_input_string(8, bbox_file); #bb filename
     return boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 

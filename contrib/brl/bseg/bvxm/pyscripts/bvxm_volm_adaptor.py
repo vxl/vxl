@@ -132,7 +132,7 @@ def scene_resources2(res, poly_kml, scene_res_file, band="PAN", GSD_threshold=10
   cnt = bvxm_batch.get_output_unsigned(id);
   return cnt;
 
-def find_stereo_pairs(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, scene_res_file, satellite_name):
+def find_stereo_pairs(res, lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, GSD_threshold, scene_res_file, satellite_name):
   bvxm_batch.init_process("volmFindSatellitePairsProcess");
   bvxm_batch.set_input_from_db(0,res);
   bvxm_batch.set_input_double(1, lower_left_lon);
@@ -141,6 +141,7 @@ def find_stereo_pairs(res, lower_left_lon, lower_left_lat, upper_right_lon, uppe
   bvxm_batch.set_input_double(4, upper_right_lat);
   bvxm_batch.set_input_string(5, scene_res_file);
   bvxm_batch.set_input_string(6, satellite_name);
+  bvxm_batch.set_input_float(7, GSD_threshold);
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   cnt = bvxm_batch.get_output_unsigned(id);
@@ -226,3 +227,19 @@ def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_fi
   else:
     out_img = 0;
   return out_img;
+
+def generate_height_map_plot(gt_height, height, dif_init, dif_final, dif_increment):
+  bvxm_batch.init_process("volmGenerateHeightMapPlotProcess");
+  bvxm_batch.set_input_from_db(0, gt_height);
+  bvxm_batch.set_input_from_db(1, height);
+  bvxm_batch.set_input_float(2, dif_init);
+  bvxm_batch.set_input_float(3, dif_final);
+  bvxm_batch.set_input_float(4, dif_increment);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  correct_rate_array = bvxm_batch.get_bbas_1d_array_float(id);
+  (id, type) = bvxm_batch.commit_output(1);
+  height_dif_array = bvxm_batch.get_bbas_1d_array_float(id);
+  (id, type) = bvxm_batch.commit_output(2);
+  out_map = dbvalue(id, type);
+  return correct_rate_array, height_dif_array, out_map

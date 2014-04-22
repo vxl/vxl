@@ -83,5 +83,6 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_combine_planes_process, "vilCombinePlanesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_block_entropy_process, "vilBlockEntropyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_load_image_resource_process, "vilLoadImageResourceProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_get_number_of_planes_process, "vilGetNumberOfPlanesProcess");
 }
 

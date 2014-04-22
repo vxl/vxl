@@ -45,5 +45,6 @@ DECLARE_FUNC_CONS(brad_get_sun_angles_date_time_process);
 DECLARE_FUNC_CONS(brad_create_image_metadata_process);
 DECLARE_FUNC_CONS(brad_create_atmospheric_parameters_process);
 DECLARE_FUNC_CONS(brad_estimate_shadows_process);
+DECLARE_FUNC_CONS(brad_get_meta_data_info_process);
 
 #endif

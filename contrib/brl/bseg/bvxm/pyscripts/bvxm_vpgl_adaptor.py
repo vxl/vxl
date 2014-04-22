@@ -667,7 +667,7 @@ def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, mi
 
 ## use the affine cameras of the images to compute an affine fundamental matrix and rectify them (flatten epipolar lines to scan lines and align them)
 ## use the 3-d box that the cameras see to compute correspondences for minimally distortive alignment, use the local rational cameras to find the correspondence points
-def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_cam2, local_rational_cam2, min_x, min_y, min_z, max_x, max_y, max_z, local_ground_plane_height = 5, n_points=100):
+def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_cam2, local_rational_cam2, min_x, min_y, min_z, max_x, max_y, max_z, output_path_H1, output_path_H2, local_ground_plane_height = 5, n_points=100):
   bvxm_batch.init_process("vpglAffineRectifyImagesProcess2");
   bvxm_batch.set_input_from_db(0, img1);
   bvxm_batch.set_input_from_db(1, affine_cam1);
@@ -683,6 +683,8 @@ def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_
   bvxm_batch.set_input_double(11, max_z);
   bvxm_batch.set_input_unsigned(12, n_points);
   bvxm_batch.set_input_double(13, local_ground_plane_height);
+  bvxm_batch.set_input_string(14, output_path_H1);
+  bvxm_batch.set_input_string(15, output_path_H2);
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   out_img1 = dbvalue(id, type);
@@ -693,6 +695,31 @@ def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_
   (id, type) = bvxm_batch.commit_output(3);
   out_cam2 = dbvalue(id, type);
   return out_img1, out_cam1, out_img2, out_cam2
+
+def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_rational_cam1, img2, local_rational_cam2, min_x, min_y, min_z, max_x, max_y, max_z, path_H1, path_H2):
+  bvxm_batch.init_process("vpglConstructHeightMapProcess");
+  bvxm_batch.set_input_from_db(0, img1);
+  bvxm_batch.set_input_from_db(1, local_rational_cam1);
+  bvxm_batch.set_input_string(2, img1_disp);
+  bvxm_batch.set_input_float(3, min_disparity);
+  bvxm_batch.set_input_from_db(4, img2);
+  bvxm_batch.set_input_from_db(5, local_rational_cam2);
+  bvxm_batch.set_input_double(6, min_x);
+  bvxm_batch.set_input_double(7, min_y);
+  bvxm_batch.set_input_double(8, min_z);
+  bvxm_batch.set_input_double(9, max_x);
+  bvxm_batch.set_input_double(10, max_y);
+  bvxm_batch.set_input_double(11, max_z);
+  bvxm_batch.set_input_string(12, path_H1);
+  bvxm_batch.set_input_string(13, path_H2);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  out_map = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(1);
+  disparity_map = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(2);
+  ortho_disp_map = dbvalue(id, type);
+  return out_map, disparity_map, ortho_disp_map
 
 ## use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
 ## note that the input 3-d box is in unit of wgs84 geo coordinates

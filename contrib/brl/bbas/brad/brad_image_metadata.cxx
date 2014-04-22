@@ -121,6 +121,8 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
     if (tag.compare("effectiveBandwidth") == 0) {
       linestr >> tag;  // read =
       linestr >> effectiveBand;
+      gains_.push_back(vcl_pair<double, double>(absCalfact/effectiveBand, 0.0));
+      vcl_cout << "gain: " << absCalfact/effectiveBand << vcl_endl;
       continue;
     }
     if (tag.compare("cloudCover") == 0) {
@@ -357,52 +359,7 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
   number_of_bits_ = hdr->get_number_of_bits_per_pixel();
 
-  // set solar irradiance to a reasonable default in case we don't have the information
-  // "reasonable" is defined here as roughly in the range of the examples we know.
-  double solar_irrad = 1500.0; 
-  vcl_vector<double> solar_irrads(4, 1500.0);  // for multi-spectral imagery there are multiple values
-  // solar irradiance is dependent on sensor because each has a different range of wavelengths they are sensitive to.
-  vcl_string img_info = hdr->get_image_source();
-  if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos) {
-    solar_irrad = 1375.8;
-    satellite_name_ = "IKONOS";
-  } else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos) { // OZGE TODO: check this one
-    solar_irrad = 1617;
-    satellite_name_ = "GeoEye-1";
-    solar_irrads.push_back(1960); // Blue
-    solar_irrads.push_back(1853); // Green
-    solar_irrads.push_back(1505); // Red
-    solar_irrads.push_back(1039); // near-IR  // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
-                                              // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for geoeye1 plane 0 is blue, plane 1 is green, plane 2 is red and plane 3 is near-IR)
-                                              //          this order may be different for different satellites
-
-  } else if (img_info.find("QuickBird") != vcl_string::npos || 
-             nitf_filename.find("QB") != vcl_string::npos || 
-             nitf_filename.find("QuickBird") != vcl_string::npos || 
-             img_info.find("QB02") != vcl_string::npos) {
-    solar_irrad = 1381.7;
-    satellite_name_ = "QuickBird";
-  } else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos) {
-    solar_irrad = 1580.814;
-    satellite_name_ = "WorldView";
-  } else if (img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos) {
-    solar_irrad = 1580.814;
-    satellite_name_ = "WorldView2";
-  } else if (img_info.find("DigitalGlobe") != vcl_string::npos) {
-    solar_irrad = 1580.814;
-    satellite_name_ = "DigitalGlobe";  // which satellite when the name is DigitalGlobe??
-  } else
-    vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: Guessing band-averaged solar irradiance value = " << solar_irrad << "." << nitf_filename;
-  vcl_cout << "img_info: " << img_info << vcl_endl;
-  vcl_cout << "solar_irrad: " << solar_irrad << vcl_endl;
-
-  // scale sun irradiance using Earth-Sun distance
-  double d = brad_sun_distance(year, month, day, hour, min);
-  sun_irradiance_ = solar_irrad/(d*d);
-  sun_irradiance_values_.push_back(solar_irrads[0]/(d*d));  // blue
-  sun_irradiance_values_.push_back(solar_irrads[1]/(d*d));  // green
-  sun_irradiance_values_.push_back(solar_irrads[2]/(d*d));  // red
-  sun_irradiance_values_.push_back(solar_irrads[3]/(d*d));  // near-IR
+  
 
   // compute satellite az,el values for center of image
   
@@ -428,6 +385,8 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     view_azimuth_ += 360;
 
   vcl_string dirname = vul_file::dirname(nitf_filename);
+
+   vcl_string img_info = hdr->get_image_source();
 
   // set gain offset defaults, some satellites' images do not require any adjustment
   gain_ = 1.0f;
@@ -502,6 +461,71 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   for (unsigned i = 0; i < gains_.size(); i++) {
     vcl_cout << " gain: " << gains_[i].first << " off: " << gains_[i].second << vcl_endl;
   }
+
+  // set solar irradiance to a reasonable default in case we don't have the information
+  // "reasonable" is defined here as roughly in the range of the examples we know.
+  double solar_irrad = 1500.0; 
+  vcl_vector<double> solar_irrads(n_bands_, 1500.0);  // for multi-spectral imagery there are multiple values
+  // solar irradiance is dependent on sensor because each has a different range of wavelengths they are sensitive to.
+ 
+  if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos) {
+    solar_irrad = 1375.8;
+    satellite_name_ = "IKONOS";
+  } else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos) { // OZGE TODO: check this one
+    solar_irrad = 1617;
+    satellite_name_ = "GeoEye-1";
+    solar_irrads.push_back(1960); // Blue
+    solar_irrads.push_back(1853); // Green
+    solar_irrads.push_back(1505); // Red
+    solar_irrads.push_back(1039); // near-IR  // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
+                                              // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for geoeye1 plane 0 is blue, plane 1 is green, plane 2 is red and plane 3 is near-IR)
+                                              //          this order may be different for different satellites
+
+  } else if (img_info.find("QuickBird") != vcl_string::npos || 
+             nitf_filename.find("QB") != vcl_string::npos || 
+             nitf_filename.find("QuickBird") != vcl_string::npos || 
+             img_info.find("QB02") != vcl_string::npos) {
+    solar_irrad = 1381.7;
+    satellite_name_ = "QuickBird";
+  } else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos) {
+    solar_irrad = 1580.814;
+    satellite_name_ = "WorldView";
+  } else if (img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos) {
+    solar_irrad = 1580.814;
+    satellite_name_ = "WorldView2";
+    if (n_bands_ == 8) {
+      solar_irrads.push_back(1758.2229); // Coastal
+      solar_irrads.push_back(1974.2416); // Blue
+      solar_irrads.push_back(1856.4104); // Green
+      solar_irrads.push_back(1738.4791); // Yellow  
+      solar_irrads.push_back(1559.4555); // Red 
+      solar_irrads.push_back(1342.0695); // Red Edge
+      solar_irrads.push_back(1069.7302); // NIR1
+      solar_irrads.push_back(861.2866); // NIR2
+                                                  // these values are from http://www.digitalglobe.com/sites/default/files/Radiometric_Use_of_WorldView-2_Imagery%20(1).pdf
+                                                  // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for wv2 plane 0 is coastal (?), plane 1 is blue, etc.)
+                                                  //          this order may be different for different satellites
+    } else if (n_bands_ == 4) {
+      solar_irrads.push_back(1974.2416); // Blue
+      solar_irrads.push_back(1856.4104); // Green
+      solar_irrads.push_back(1559.4555); // Red 
+      solar_irrads.push_back(1069.7302); // NIR1
+    }
+
+  } else if (img_info.find("DigitalGlobe") != vcl_string::npos) {
+    solar_irrad = 1580.814;
+    satellite_name_ = "DigitalGlobe";  // which satellite when the name is DigitalGlobe??
+  } else
+    vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: Guessing band-averaged solar irradiance value = " << solar_irrad << "." << nitf_filename;
+  vcl_cout << "img_info: " << img_info << vcl_endl;
+  vcl_cout << "solar_irrad: " << solar_irrad << vcl_endl;
+
+  // scale sun irradiance using Earth-Sun distance
+  double d = brad_sun_distance(year, month, day, hour, min);
+  sun_irradiance_ = solar_irrad/(d*d);
+  for (unsigned bandi = 0; bandi < n_bands_; bandi++)
+    sun_irradiance_values_.push_back(solar_irrads[bandi]/(d*d));  
+
   if (!parsed_fine) {
     vcl_cerr << " Problems parsing meta-data files!\n";
     vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << vcl_endl;

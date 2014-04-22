@@ -379,12 +379,12 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
 }
 
 //: get a list of ids in the resources_ list that overlap the given rectangular region
-unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, vcl_vector<vcl_pair<unsigned, unsigned> >& ids)
+unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, float GSD_thres, vcl_vector<vcl_pair<unsigned, unsigned> >& ids)
 {
   // first get all the images that intersect the area
   vcl_vector<unsigned> temp_ids;
   vcl_string band_str = "PAN";
-  this->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, temp_ids,10.0); // we're only interested in which images intersect the box, so pass gsd_thres very high
+  this->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, temp_ids,GSD_thres); // we're only interested in which images intersect the box, so pass gsd_thres very high
   vcl_cout << "there are " << temp_ids.size() << " images that intersect the scene!\n";
 
   // prune out the ones from the wrong satellite
@@ -398,12 +398,16 @@ unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double low
   // check the time of collection to find pairs
   for (unsigned i = 0; i < ids2.size(); i++) {
     for (unsigned j = i+1; j < ids2.size(); j++) {
-      vcl_cout << resources_[ids2[i]].name_ << ": ";
-      resources_[ids2[i]].meta_->print_time(); vcl_cout << "\n";
-      vcl_cout << resources_[ids2[j]].name_ << ": ";
-      resources_[ids2[j]].meta_->print_time(); vcl_cout << "\n";
       if (!resources_[ids2[i]].meta_->same_day(*(resources_[ids2[j]].meta_)))
         continue;
+
+      vcl_cout << resources_[ids2[i]].name_ << ": ";
+      resources_[ids2[i]].meta_->print_time(); 
+      vcl_cout << " azi: " << resources_[ids2[i]].meta_->sun_azimuth_ << " elev: " << resources_[ids2[i]].meta_->sun_elevation_ << " res: " << resources_[ids2[i]].meta_->gsd_ << vcl_endl;
+      vcl_cout << resources_[ids2[j]].name_ << ": ";
+      resources_[ids2[j]].meta_->print_time(); 
+      vcl_cout << " azi: " << resources_[ids2[j]].meta_->sun_azimuth_ << " elev: " << resources_[ids2[j]].meta_->sun_elevation_ << " res: " << resources_[ids2[j]].meta_->gsd_ << vcl_endl;
+      
       unsigned time_dif = resources_[ids2[i]].meta_->time_minute_dif(*(resources_[ids2[j]].meta_));
       if (time_dif > 0 && time_dif < 5) { // if taken less than 5 minute apart
         //ids.push_back(vcl_pair<unsigned, unsigned>(ids2[i], ids2[j]));
@@ -428,10 +432,10 @@ unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double low
 }
 
 //: query the resources in the given box and output the full paths of pairs to the given file
-bool volm_satellite_resources::query_pairs_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& sat_name)
+bool volm_satellite_resources::query_pairs_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, float GSD_thres, unsigned& cnt, vcl_string& out_file, vcl_string& sat_name)
 {
   vcl_vector<vcl_pair<unsigned, unsigned> > ids;
-  cnt = query_pairs(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, sat_name, ids);
+  cnt = query_pairs(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, sat_name, GSD_thres, ids);
 
   vcl_ofstream ofs(out_file.c_str());
   if (!ofs) {
