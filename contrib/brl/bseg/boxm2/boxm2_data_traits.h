@@ -425,7 +425,7 @@ class boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>
  public:
   typedef vnl_vector_fixed<float, 8> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix() { return "boxm2_batch_histogram"; }
+  static vcl_string prefix(const vcl_string& identifier = "") { return "boxm2_batch_histogram"; }
 };
 
 template<>
@@ -666,6 +666,8 @@ class boxm2_data_info
       return  BOXM2_NORMAL_ALBEDO_ARRAY ;
     else if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos)
       return  BOXM2_POINT ;
+    else if (prefix.find(boxm2_data_traits<BOXM2_NORMAL>::prefix()) != vcl_string::npos)
+      return  BOXM2_NORMAL ;
     else if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos)
       return  BOXM2_COVARIANCE ;
     else if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos)
@@ -680,6 +682,8 @@ class boxm2_data_info
       return  BOXM2_DATA_INDEX ;
     else if (prefix.find(boxm2_data_traits<BOXM2_RAY_DIR>::prefix()) != vcl_string::npos)
           return  BOXM2_RAY_DIR ;
+    else if (prefix.find(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix()) != vcl_string::npos)
+          return  BOXM2_VIS_SCORE ;
     else
       return BOXM2_UNKNOWN;
   }
