@@ -6,10 +6,11 @@
 
 #include "boxm2_ocl_processes.h"
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-
+#include <boxm2/ocl/boxm2_opencl_cache2.h>
 void boxm2_ocl_register::register_datatype()
 {
   REGISTER_DATATYPE( boxm2_opencl_cache_sptr );
+  REGISTER_DATATYPE( boxm2_opencl_cache2_sptr );
 }
 
 void boxm2_ocl_register::register_process()
@@ -83,6 +84,7 @@ void boxm2_ocl_register::register_process()
 
   // admin
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_opencl_cache_process, "boxm2CreateOpenclCacheProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_opencl_cache2_process, "boxm2CreateOpenclCache2Process");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_clear_opencl_cache_process, "boxm2ClearOpenclCacheProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_aux_per_view_naa_process, "boxm2OclUpdateAuxPerViewNAAProcess");
@@ -108,8 +110,16 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_usingQ_process, "boxm2OclUpdateUsingQProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_init_alpha_process, "boxm2OclInitAlphaProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_sky_process, "boxm2OclUpdateSkyProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_sky2_process, "boxm2OclUpdateSky2Process");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_ingest_label_with_cam_process, "boxm2OclIngestLabelwithCAMProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_max_vis_score_process, "boxm2OclUpdateMaxVisScoreProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_fuse_based_visibility_process, "boxm2OclFuseBasedVisibilityProcess");
   
-  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_view_normal_dot_process, "boxm2OclUpdateViewNormalDotProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_fuse_based_orientation_process, "boxm2OclFuseBasedOrientationProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_surface_density_process, "boxm2OclUpdateSurfaceDensityProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_fuse_surface_density_process, "boxm2OclFuseSurfaceDensityProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_compute_expectation_view_direction_process, "boxm2OclComputeExpectationViewDirectionProcess");
+
 }

@@ -6,6 +6,7 @@
 
 //the init functions
 DECLARE_FUNC_CONS(boxm2_create_opencl_cache_process);
+DECLARE_FUNC_CONS(boxm2_create_opencl_cache2_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_depth_process);
@@ -92,6 +93,14 @@ DECLARE_FUNC_CONS(boxm2_ocl_update_auxQ_per_view_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_usingQ_process);
 DECLARE_FUNC_CONS(boxm2_ocl_init_alpha_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_sky_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_sky2_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_max_vis_score_process);
+DECLARE_FUNC_CONS(boxm2_ocl_fuse_based_visibility_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_view_normal_dot_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_surface_density_process);
+DECLARE_FUNC_CONS(boxm2_ocl_fuse_based_orientation_process);
+DECLARE_FUNC_CONS(boxm2_ocl_fuse_surface_density_process);
+DECLARE_FUNC_CONS(boxm2_ocl_compute_expectation_view_direction_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_ingest_label_with_cam_process);
 
