@@ -17,6 +17,7 @@
 //  Modifications
 //   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 //   Peter Vanroose  - Jul 10, 2009 - split into .h and .cxx
+//   Yi Dong         - Apr 21, 2014 - add an option to output an negated depth map --> eventual output is an absolute height map
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -24,7 +25,7 @@
 //: global variables
 namespace bvxm_heightmap_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 1;
 }
 

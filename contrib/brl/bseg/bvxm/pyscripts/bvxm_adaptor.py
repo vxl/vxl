@@ -164,12 +164,13 @@ def render_height_map(world):
   out_h_img = dbvalue(id, type);
   return out_h_img, out_d_img
 
-def render_height_map_with_cam(world, input_cam, ni, nj):
+def render_height_map_with_cam(world, input_cam, ni, nj, is_negate = False):
   bvxm_batch.init_process("bvxmHeightmapProcess");
   bvxm_batch.set_input_from_db(0,input_cam);
   bvxm_batch.set_input_unsigned(1,ni);
   bvxm_batch.set_input_unsigned(2,nj);
   bvxm_batch.set_input_from_db(3,world);
+  bvxm_batch.set_input_bool(4, is_negate)
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   out_d_img = dbvalue(id, type);
