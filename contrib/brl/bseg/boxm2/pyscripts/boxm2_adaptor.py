@@ -100,6 +100,45 @@ def load_cpp2(scene_str) :
   (id,type) = boxm2_batch.commit_output(0);
   cache = dbvalue(id, type);
   return scene, cache;
+ #does the opencl prep work on an input scene
+def load_opencl_2(scene_str, device_string="gpu"):
+  scene = load_scene(scene_str);
+
+  ###############################################################
+  # Create cache, opencl manager, device, and gpu cache
+  ###############################################################
+  #print("Create Main Cache");
+  boxm2_batch.init_process("boxm2CreateCache2Process");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1,"lru");
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cache = dbvalue(id, type);
+
+  #print("Init Manager");
+  boxm2_batch.init_process("boclInitManagerProcess");
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  mgr = dbvalue(id, type);
+
+  #print("Get Gpu Device");
+  boxm2_batch.init_process("boclGetDeviceProcess");
+  boxm2_batch.set_input_string(0,device_string)
+  boxm2_batch.set_input_from_db(1,mgr)
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  device = dbvalue(id, type);
+
+  #print("Create Gpu Cache");
+  boxm2_batch.init_process("boxm2CreateOpenclCache2Process");
+  boxm2_batch.set_input_from_db(0,device)
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  openclcache = dbvalue(id, type);
+
+  return scene, cache, mgr, device, openclcache;
+
+
 # describe scene process, returns the path containing scene data
 def describe_scene(scene):
   boxm2_batch.init_process("boxm2DescribeSceneProcess");
@@ -149,7 +188,7 @@ def write_scene_to_vrml(scene, vrml_filename):
   boxm2_batch.run_process();
 def init_alpha(scene, cache, device,pinit = 0.01, thresh = 1.0) :
   if cache.type == "boxm2_opencl_cache_sptr":
-    print("Update Parents Alpha");
+    print("Initialize Alpha");
     boxm2_batch.init_process("boxm2OclInitAlphaProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -291,7 +330,18 @@ def update_sky(scene, cache, cam, img, device) :
   boxm2_batch.set_input_from_db(3,cam);
   boxm2_batch.set_input_from_db(4,img);
   boxm2_batch.run_process();
-# Generic render, returns a dbvalue expected image
+def update_sky2(scene, cache, cam, img,step, device) :
+  boxm2_batch.init_process("boxm2OclUpdateSky2Process");
+  boxm2_batch.set_input_from_db(0,device);
+  boxm2_batch.set_input_from_db(1,scene);
+  boxm2_batch.set_input_from_db(2,cache);
+  if( cam is not None):
+	boxm2_batch.set_input_from_db(3,cam);
+  if(img is not None):
+	boxm2_batch.set_input_from_db(4,img);
+  boxm2_batch.set_input_int(5,step);
+  boxm2_batch.run_process();
+  # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 def render_height_map(scene, cache, device=None) :
   if cache.type == "boxm2_cache_sptr" :
@@ -545,7 +595,7 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string=""
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
     return exp_image;
-  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+  elif cache.type == "boxm2_opencl_cache2_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderExpectedImageProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -992,9 +1042,7 @@ def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", nblks = 8, i
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   uscene = dbvalue(scene_id, scene_type);
-  (scene_id, scene_type) = boxm2_batch.commit_output(1);
-  rscene = dbvalue(scene_id, scene_type);
-  return uscene, rscene;
+  return uscene;
 
 
 def save_scene(scene, fname) :

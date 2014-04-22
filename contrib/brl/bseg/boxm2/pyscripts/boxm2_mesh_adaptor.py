@@ -27,7 +27,7 @@ def gen_tex_mesh(mesh,in_img_dir, in_cam_dir,out_dir):
   boxm2_batch.set_input_string(3,out_dir);
   boxm2_batch.run_process();
 
-def gen_point_cloud(scene,cache,filename,thresh = 0.3,depth=3):
+def gen_point_cloud(scene,cache,filename,thresh = 0.3,vis_thresh = 0.5,depth=3):
   boxm2_batch.init_process("boxm2ExtractPointCloudProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_from_db(1,cache);
@@ -39,7 +39,8 @@ def gen_point_cloud(scene,cache,filename,thresh = 0.3,depth=3):
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_from_db(1,cache);
   boxm2_batch.set_input_string(2,filename);
-  boxm2_batch.set_input_float(4,0.5);
+  boxm2_batch.set_input_float(4,vis_thresh);
+  boxm2_batch.set_input_float(6,thresh);
   boxm2_batch.run_process();
 def gen_oriented_point_cloud(scene,cache,prob_t, norm_mag_t, filename):
   boxm2_batch.init_process("boxm2CppComputeDerivativeProcesses");
@@ -64,4 +65,10 @@ def paint_mesh(scene,cache,in_file,out_file):
   boxm2_batch.set_input_from_db(1,cache);
   boxm2_batch.set_input_string(2,in_file);
   boxm2_batch.set_input_string(3,out_file);
+  boxm2_batch.run_process();
+def import_point_cloud(scene,cache,in_file):
+  boxm2_batch.init_process("boxm2ImportPointCloudProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cache);
+  boxm2_batch.set_input_string(2,in_file);
   boxm2_batch.run_process();

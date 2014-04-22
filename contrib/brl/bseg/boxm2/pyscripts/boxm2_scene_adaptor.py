@@ -1,4 +1,4 @@
-from boxm2_adaptor import *
+from boxm2_adaptor import *
 from boxm2_tools_adaptor import *
 from boxm2_filtering_adaptor import *
 from vil_adaptor import *;
@@ -14,7 +14,7 @@ import sys
 class boxm2_scene_adaptor(object):
 
   #scene adaptor init
-  def __init__(self, scene_str, device_string="gpu") :
+  def __init__(self, scene_str, device_string="gpu", opencl_multi_scene_cache =False) :
 
     #init (list) self vars
     self.scene = None;
@@ -31,13 +31,17 @@ class boxm2_scene_adaptor(object):
 
     #if device_string is gpu, load up opencl
     if device_string[0:3]=="gpu" :
+		if(not opencl_multi_scene_cache):
+			self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
+			self.active_cache = self.opencl_cache;
+		else:
+			self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl_2(scene_str, device_string);
+			self.active_cache = self.opencl_cache;
+    elif device_string[0:3]=="cpu" :
       self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
       self.active_cache = self.opencl_cache;
-    elif device_string[0:3]=="cpu" :
-      #self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
-      #self.active_cache = self.opencl_cache;
-      self.scene, self.cpu_cache = load_cpp(scene_str);
-      self.active_cache = self.cpu_cache;
+      #self.scene, self.cpu_cache = load_cpp(scene_str);
+      #self.active_cache = self.cpu_cache;
     elif device_string[0:3]=="cpp" :
       self.scene, self.cpu_cache = load_cpp(scene_str);
       self.active_cache = self.cpu_cache;
@@ -99,7 +103,7 @@ class boxm2_scene_adaptor(object):
 
     #run update grey or RGB
     if self.rgb :
-      return update_rgb(self.scene, cache, cam, img, dev);
+      return update_rgb(self.scene, cache, cam, img, dev,"", update_alpha);
     else :
       return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var, update_app, tnear, tfar);
 
@@ -129,7 +133,17 @@ class boxm2_scene_adaptor(object):
       print " Not  implemented in C++ yet ";
       return;
     update_sky(self.scene, cache, cam, img, dev);
-
+  #update skky wrapper, can pass in a Null device to use
+  def update_sky2(self, cam, img,step, device_string="") :
+    cache = self.active_cache;
+    dev = self.device;
+    #check if force gpu or cpu
+    if device_string=="gpu" or device_string=="cpu" :
+      cache = self.opencl_cache;
+    elif device_string=="cpp" :
+      print " Not  implemented in C++ yet ";
+      return;
+    update_sky2(self.scene, cache, cam, img,step, dev);
   #render wrapper, same as above
   def render(self, cam, ni=1280, nj=720, device_string="", ident_string="", tnear = 1000000.0,tfar = 1000000.0, ) :
     cache = self.active_cache;
