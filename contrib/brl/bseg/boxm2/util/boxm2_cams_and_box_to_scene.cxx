@@ -16,7 +16,7 @@
 void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
                                        vgl_box_3d<double>   bbox,
                                        boxm2_scene&         uscene,
-                                       boxm2_scene&         rscene, int nblks)
+                                        int nblks)
 {
     //----------------------------------------------------------------------------
     //Build the scenes,
@@ -39,7 +39,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     vsph_camera_bounds::pixel_solid_angle(cam, int(pp.x()), int(pp.y()), cone_axis, cone_half_angle, solid_angle);
     vgl_point_3d<double> cc = cam.camera_center();
     vgl_point_3d<double> zc( b2box.centroid().x(), b2box.centroid().y(), zplane);
-    double res = 2.0*(cc-zc).length()*cone_half_angle;
+    double res =2* (cc-zc).length()*cone_half_angle;
     vcl_cout<<"Resres :"<<res<<vcl_endl;
 
     //extend bbox a bit
@@ -76,59 +76,6 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     unsigned nj = numSubBlocks.y()*numBlocks.y()*nblks;;
     vcl_cout<<"Created Box size: "<<ni<<','<<nj<<vcl_endl;
     vil_image_view<vxl_byte> cntimg(ni, nj); cntimg.fill(0);
-    for (unsigned int i=0; i<cams.size(); ++i)
-    {
-        //project the four corners to the ground plane
-        cam = cams[i];
-        vgl_ray_3d<double> ul = cam.backproject(0.0, 0.0);
-        vgl_ray_3d<double> ur = cam.backproject(2*pp.x(), 0.0);
-        vgl_ray_3d<double> bl = cam.backproject(0.0, 2*pp.y());
-        vgl_ray_3d<double> br = cam.backproject(2*pp.x(), 2*pp.y());
-
-        //define z plane
-        vgl_plane_3d<double> zp( vgl_point_3d<double>( 1.0,  1.0, zplane),
-                                 vgl_point_3d<double>( 1.0, -1.0, zplane),
-                                 vgl_point_3d<double>(-1.0,  1.0, zplane) );
-
-        //intersect each ray with z plane
-        vgl_point_3d<double> ulp, urp, blp, brp;
-        bool good =    vgl_intersection(ul, zp, ulp);
-        good = good && vgl_intersection(ur, zp, urp);
-        good = good && vgl_intersection(bl, zp, blp);
-        good = good && vgl_intersection(br, zp, brp);
-
-        //convert the four corners into image coordinates
-        typedef vgl_polygon<double>::point_t        Point_type;
-        typedef vgl_polygon<double>                 Polygon_type;
-        typedef vgl_polygon_scan_iterator<double>   Polygon_scan;
-        Polygon_type poly;
-        poly.new_sheet();
-        poly.push_back( Point_type( (ulp.x()-b2box.min_x())/res, (ulp.y()-b2box.min_y())/res ) );
-        poly.push_back( Point_type( (urp.x()-b2box.min_x())/res, (urp.y()-b2box.min_y())/res ) );
-        poly.push_back( Point_type( (blp.x()-b2box.min_x())/res, (blp.y()-b2box.min_y())/res ) );
-        poly.push_back( Point_type( (brp.x()-b2box.min_x())/res, (brp.y()-b2box.min_y())/res ) );
-
-        // There will be scan lines at y=0, 1 and 2.
-        Polygon_scan it(poly, false);
-        int y=0;
-        for (it.reset(); it.next(); ++y) {
-            int y = it.scany();
-            for (int x = it.startx(); x <= it.endx(); ++x) {
-                int yy = nj-y;
-                if (x>=0 && (unsigned)x<ni && yy>=0 && (unsigned)yy<nj) {
-                    cntimg(x, yy) += (vxl_byte) 1;
-                }
-#ifdef DEBUG
-                else {
-                    vcl_cout<<"X and Y in scan iterator are out of bounds: "<<x<<','<<y<<vcl_endl;
-                }
-#endif
-            }
-        }
-    }
-
-    //find max/min/mean/var for count image
-    //vil_save(cntimg, "countImage.png");
 
     //---------------------------------------------------------------------------
     // Set up scene dimensions
@@ -169,34 +116,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
                     uscene.set_blocks(blks);
                 }
 
-                //setup render scene with strict criteria
-                if ( boxm2_util_has_percent_views(i,j,thresh,numSubBlocks*nblks,cntimg,cams.size()))
-                {
-                    vcl_cout.flush();
-                    boxm2_block_id id(i,j,k);
-                    vcl_map<boxm2_block_id, boxm2_block_metadata> blks = rscene.blocks();
-                    if (blks.find(id)!=blks.end()) {
-                        vcl_cout<<"block already exists: "<<id<<vcl_endl;
-                        continue;
-                    }
 
-                    //block origin
-                    double bx = scene_origin.x() + i*blockDim.x();
-                    double by = scene_origin.y() + j*blockDim.y();
-                    double bz = scene_origin.z() + k*blockDim.z();
-
-                    ////get the inputs
-                    unsigned max_num_lvls     = 4;
-                    float    max_data_size    = 1500.0f;
-                    float    p_init           = 0.01f;
-                    boxm2_block_metadata mdata(id,
-                                               vgl_point_3d<double>(bx,by,bz),
-                                               subBlockDim,
-                                               numSubBlocks,
-                                               1,max_num_lvls,max_data_size,p_init);
-                    blks[id]=mdata;
-                    rscene.set_blocks(blks);
-                }
             }
         }
     }

@@ -16,8 +16,7 @@ typedef vpgl_perspective_camera<double> CamType;
 void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
                                        vgl_box_3d<double>   bbox,
                                        boxm2_scene&         uscene,
-                                       boxm2_scene&         rscene,
-                                        int nblks = 8);
+                                       int nblks = 8);
 
 //does this block ijk have an observation?
 bool boxm2_util_has_observation(int i, int j, vgl_vector_3d<unsigned> pixPerBlock, vil_image_view<vxl_byte>& cntimg);
