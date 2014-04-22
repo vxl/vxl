@@ -17,6 +17,7 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
 
 //directory utility
 #include <vul/vul_timer.h>
@@ -209,9 +210,11 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
       bocl_kernel * proc_kern=kernels[i];
 
       proc_kern->set_arg( norm_image.ptr() );
+      proc_kern->set_arg( in_image.ptr() );
       proc_kern->set_arg( vis_image.ptr() );
       proc_kern->set_arg( pre_image.ptr());
       proc_kern->set_arg( img_dim.ptr() );
+      proc_kern->set_arg( app_density.ptr() );
 
       //execute kernel
       proc_kern->execute( queue, 2, local_threads, global_threads);
@@ -221,7 +224,18 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
       proc_kern->clear_args();
       norm_image->read_to_buffer(queue);
 
-      continue;
+      int count = 0;
+      vil_image_view<float> normimage(img_view->ni(),img_view->nj());
+      for (unsigned int j=0;j<cl_nj;++j) {
+          for (unsigned int i=0;i<cl_ni;++i) {
+              if ( i<img_view->ni() && j<img_view->nj() ) {
+                      normimage(i,j)  = norm_buff[count];
+                  }
+              
+              ++count;
+          }
+          }
+      vil_save(normimage,"e:/procnorm.tif");
     }
 
     //set masked values
