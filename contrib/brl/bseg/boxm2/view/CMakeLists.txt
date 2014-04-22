@@ -18,7 +18,10 @@ IF(VGUI_FOUND)
 
   SET(boxm2_view_sources
       boxm2_cam_tableau.h               boxm2_cam_tableau.cxx
+      boxm2_cam_ground_trajectory_tableau.h    boxm2_cam_ground_trajectory_tableau.cxx
+
       boxm2_ocl_render_tableau.h        boxm2_ocl_render_tableau.cxx
+      boxm2_ocl_render_trajectory_tableau.h boxm2_ocl_render_trajectory_tableau.cxx
       boxm2_ocl_update_tableau.h        boxm2_ocl_update_tableau.cxx
       boxm2_ocl_change_tableau.h        boxm2_ocl_change_tableau.cxx
       boxm2_trajectory.h
