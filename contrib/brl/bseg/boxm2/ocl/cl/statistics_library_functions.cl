@@ -72,8 +72,10 @@ float gauss_3_mixture_prob_density(float x,
               sum_weights+=w2;
           }
       }
-      if (sum_weights>0.0f)
+      if (sum_weights> 0.0f)
           sum/=sum_weights;
+      else
+          sum = 1.0f;
   }
   else
       sum=1.0f;
