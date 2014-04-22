@@ -83,6 +83,10 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_prune_scene_blocks_process, "boxm2PruneSceneBlocksProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_prune_scene_blocks_by_dem_process, "boxm2PruneSceneBlocksByDemProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_camera_from_kml_path_process, "boxm2CreateCameraFromKmlPath");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_import_point_cloud_process, "boxm2ImportPointCloudProcess");
+
+  
+
   //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_fetch_alpha_process, "boxm2SceneReadingAlphaProcess");
   //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_crop_img_process, "boxm2CreateCropImgProcess");
 }
