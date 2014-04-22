@@ -33,8 +33,14 @@ class boxm2_ray_probe_functor
       case BOXM2_MOG3_GREY:
         nelems= 8;
         break;
+      case BOXM2_LABEL_SHORT:
+          nelems= 1;
+          break;
       case BOXM2_FLOAT8:
         nelems = 8;
+        break;
+      case BOXM2_FLOAT:
+        nelems = 1;
         break;
       case BOXM2_AUX0:
         nelems = 1;
@@ -48,11 +54,21 @@ class boxm2_ray_probe_functor
       case BOXM2_AUX3:
         nelems = 1;
         break;
+
+      case BOXM2_EXPECTATION:
+        nelems = 1;
+        break;
       case BOXM2_NUM_OBS:
         nelems = 4;
         break;
       case BOXM2_POINT:
         nelems = 4;
+        break;
+      case BOXM2_NORMAL:
+        nelems = 4;
+        break;
+      case BOXM2_VIS_SCORE:
+        nelems = 1;
         break;
       case BOXM2_COVARIANCE:
         nelems = 9;
@@ -97,6 +113,13 @@ class boxm2_ray_probe_functor
         data_to_return_->push_back(mog3_grey_app[7]);
         break;
       }
+      case BOXM2_FLOAT:
+      {
+        boxm2_data<BOXM2_FLOAT>*  app_data= new boxm2_data<BOXM2_FLOAT>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+        boxm2_data<BOXM2_FLOAT>::datatype app=app_data->data()[index];
+        data_to_return_->push_back(app);
+        break;
+      }
       case BOXM2_AUX0:
       {
         boxm2_data<BOXM2_AUX0>*  app_data  = new boxm2_data<BOXM2_AUX0>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
@@ -125,6 +148,14 @@ class boxm2_ray_probe_functor
         data_to_return_->push_back(app);
         break;
       }
+
+      case BOXM2_EXPECTATION:
+      {
+        boxm2_data<BOXM2_EXPECTATION>*  app_data  = new boxm2_data<BOXM2_EXPECTATION>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+        boxm2_data<BOXM2_EXPECTATION>::datatype app=app_data->data()[index];
+        data_to_return_->push_back(app);
+        break;
+      }
       case BOXM2_NUM_OBS:
       {
         boxm2_data<BOXM2_NUM_OBS>* num_obs_data  = new boxm2_data<BOXM2_NUM_OBS>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
@@ -145,6 +176,23 @@ class boxm2_ray_probe_functor
         data_to_return_->push_back(app[3]);
         break;
       }
+      case BOXM2_NORMAL:
+      {
+        boxm2_data<BOXM2_NORMAL>* point_data  = new boxm2_data<BOXM2_NORMAL>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+        boxm2_data<BOXM2_NORMAL>::datatype app=point_data->data()[index];
+        data_to_return_->push_back(app[0]);
+        data_to_return_->push_back(app[1]);
+        data_to_return_->push_back(app[2]);
+        data_to_return_->push_back(app[3]);
+        break;
+      }
+      case BOXM2_VIS_SCORE:
+      {
+        boxm2_data<BOXM2_VIS_SCORE>* point_data  = new boxm2_data<BOXM2_VIS_SCORE>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+        boxm2_data<BOXM2_VIS_SCORE>::datatype app=point_data->data()[index];
+        data_to_return_->push_back(app);
+        break;
+      }
       case BOXM2_COVARIANCE:
       {
         boxm2_data<BOXM2_COVARIANCE>* point_data  = new boxm2_data<BOXM2_COVARIANCE>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
@@ -153,8 +201,21 @@ class boxm2_ray_probe_functor
           data_to_return_->push_back(app[k]);
         break;
       }
-      default: // do nothing
+      case BOXM2_LABEL_SHORT:
+      {
+        boxm2_data<BOXM2_LABEL_SHORT>* point_data  = new boxm2_data<BOXM2_LABEL_SHORT>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+
+        boxm2_data<BOXM2_LABEL_SHORT>::datatype app=point_data->data()[index];
+
+        data_to_return_->push_back((float)app);
         break;
+      }
+      default: // do nothing
+          {
+              vcl_cout<<"Unknown data "<<vcl_endl;
+          
+        break;
+          }
     }
     seg_len_->push_back(seg_len);
     alpha_->push_back(alpha);

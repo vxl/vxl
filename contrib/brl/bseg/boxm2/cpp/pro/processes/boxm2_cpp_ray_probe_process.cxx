@@ -108,14 +108,21 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     {
         boxm2_block *     blk  =  cache->get_block(scene,*id);
         boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+
+        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        int data_buffer_length = (int) (alph->buffer_length()/alphaTypeSize);
+
+ 
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(alph);
         if (prefix!="")
         {
             vcl_string name = prefix;
+            int dataTypeSize = (int)boxm2_data_info::datasize(name);
             if (identifier!="")
                 name+= ("_"+identifier);
-            boxm2_data_base *  data_of_interest  = cache->get_data_base(scene,*id,name);
+            boxm2_data_base *  data_of_interest  = cache->get_data_base(scene,*id,name,data_buffer_length*dataTypeSize);
+
             datas.push_back(data_of_interest);
         }
         boxm2_ray_probe_functor ray_probe_functor;
