@@ -166,6 +166,8 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
 
   // update data map
   data_map[id] = loaded;
+  if(!read_only)
+    loaded->enable_write();
   return loaded;
 }
 
