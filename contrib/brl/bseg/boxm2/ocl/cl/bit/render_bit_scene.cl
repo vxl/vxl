@@ -226,10 +226,9 @@ render_depth( __constant  RenderSceneInfo    * linfo,
               __global    float              * alpha_array,
               __global    float4             * ray_origins,
               __global    float4             * ray_directions,
-            //__global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
-              __global    float              * exp_image,     // input image and store vis_inf and pre_inf
-              __global    float              * exp_sqr_image, // sum of squares.
-              __global    uint4              * exp_image_dims,
+              __global    float              * exp_image,        // camera orign and SVD of inverse of camera matrix
+              __global    float              * exp_sqr_image,    // input image and store vis_inf and pre_inf
+              __global    uint4              * exp_image_dims,   // sum of squares.
               __global    float              * output,
               __constant  uchar              * bit_lookup,
               __global    float              * vis_image,
@@ -263,7 +262,6 @@ render_depth( __constant  RenderSceneInfo    * linfo,
   float4 ray_o = ray_origins[ imIndex[llid] ];
   float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------

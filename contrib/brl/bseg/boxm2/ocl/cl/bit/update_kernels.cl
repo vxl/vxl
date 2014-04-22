@@ -381,16 +381,21 @@ __kernel
 __kernel
     void
     proc_norm_image (  __global float* norm_image,
+    __global float * in_image,
     __global float* vis_image,
     __global float* pre_image,
-    __global uint4 * imgdims)
+    __global uint4 * imgdims,
+    __global float * appbuffer)
 {
-    // linear global id of the normalization image
+    // linear global id of the normalization imagee,
     int i=0;
     int j=0;
     i=get_global_id(0);
     j=get_global_id(1);
     float vis = vis_image[j*get_global_size(0) + i];
+    float intensity = in_image[j*get_global_size(0) + i];
+
+    //float density = (exp(-(intensity - appbuffer[0])*(intensity - appbuffer[0])/(2*appbuffer[1]*appbuffer[1]) ))/(sqrt(2*3.141)*appbuffer[1]);
 
     if (i>=(*imgdims).z && j>=(*imgdims).w && vis<0.0f)
         return;
@@ -410,19 +415,19 @@ __kernel
 // Update each cell using its aux data
 //
 __kernel
-    void
-    update_bit_scene_main(__global RenderSceneInfo  * info,
-    __global float            * alpha_array,
-    __global MOG_TYPE         * mixture_array,
-    __global ushort4          * nobs_array,
-    __global int              * aux_array0,
-    __global int              * aux_array1,
-    __global int              * aux_array2,
-    __global int              * aux_array3,
-    __global int              * update_alpha,     //update if not zero
-    __global float            * mog_var,          //if 0 or less, variable var, otherwise use as fixed var
-    __global int              * update_app,     //update if not zero
-    __global float            * output)
+void
+update_bit_scene_main(__global RenderSceneInfo  * info,
+                      __global float            * alpha_array,
+                      __global MOG_TYPE         * mixture_array,
+                      __global ushort4          * nobs_array,
+                      __global int              * aux_array0,
+                      __global int              * aux_array1,
+                      __global int              * aux_array2,
+                      __global int              * aux_array3,
+                      __global int              * update_alpha,     //update if not zero
+                      __global float            * mog_var,          //if 0 or less, variable var, otherwise use as fixed var
+                      __global int              * update_app,     //update if not zero
+                      __global float            * output)
 {
     int gid=get_global_id(0);
     int datasize = info->data_len ;//* info->num_buffer;
@@ -448,10 +453,8 @@ __kernel
         {
 #ifdef ATOMIC_FLOAT
             float mean_obs = as_float(aux_array1[gid]) / cum_len;
-
             float cell_vis  = as_float(aux_array2[gid]) / cum_len;
             float cell_beta = as_float(aux_array3[gid])/ (cum_len* info->block_len);
-
 #else
             int obs_int = aux_array1[gid];
             int vis_int = aux_array2[gid];
@@ -459,29 +462,24 @@ __kernel
             float mean_obs = convert_float(obs_int) / convert_float(len_int);
             float cell_vis  = convert_float(vis_int) / convert_float(len_int);
             float cell_beta = convert_float(beta_int) / (convert_float(len_int));
-
 #endif
-
-
             float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis);
             float4 nobs     = convert_float4(nobs_array[gid]);
             CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
             float16 data = (float16) (alpha,
-                (mixture.s0), (mixture.s1), (mixture.s2), (nobs.s0),
-                (mixture.s3), (mixture.s4), (mixture.s5), (nobs.s1),
-                (mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
-                0.0, 0.0, 0.0);
-
+                                     (mixture.s0), (mixture.s1), (mixture.s2), (nobs.s0),
+                                     (mixture.s3), (mixture.s4), (mixture.s5), (nobs.s1),
+                                     (mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
+                                     0.0, 0.0, 0.0);
             //use aux data to update cells
-            update_cell(&data, aux_data, 2.5f, 0.1f, 0.02f);
+            update_cell(&data, aux_data, 2.5f, 0.10f, 0.05f);
             if ( *update_app != 0 )
             {
                 //set appearance model (figure out if var is fixed or not)
                 float8 post_mix       = (float8) (data.s1, data.s2, data.s3,
-                    data.s5, data.s6, data.s7,
-                    data.s9, data.sa)*(float) NORM;
+                                                  data.s5, data.s6, data.s7,
+                                                  data.s9, data.sa)*(float) NORM;
                 float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
-
                 //check if mog_var is fixed, if so, overwrite variance in post_mix
                 if (*mog_var > 0.0f) {
                     post_mix.s1 = (*mog_var) * (float) NORM;
@@ -492,12 +490,9 @@ __kernel
                 CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
                 nobs_array[gid] = convert_ushort4_sat_rte(post_nobs);
             }
-
             //write alpha if update alpha is 0
             if ( *update_alpha != 0 )
                 alpha_array[gid] = max(alphamin,data.s0);
-            //alpha_array[gid] = 0.0000001;
-
         }
 
         //clear out aux data
@@ -509,7 +504,164 @@ __kernel
 }
 
 #endif // UPDATE_BIT_SCENE_MAIN
+#ifdef UPDATE_BIT_BASED_DISPERSION
+// Update each cell using its aux data
+//
+__kernel
+void
+update_bit_scene_based_dispersion(__constant  float           * centerX,
+                            __constant  float           * centerY,
+                            __constant  float           * centerZ,
+                            __constant  uchar              * bit_lookup,        // used to get data_index
+                            __global RenderSceneInfo    * info,
+                            __global int4               * tree,
+                            __global float              * alpha_array,
+                            __global MOG_TYPE           * mixture_array,
+                            __global ushort4            * nobs_array,
+                            __global int                * aux_array0,
+                            __global int                * aux_array1,
+                            __global int                * aux_array2,
+                            __global int                * aux_array3,
+                            __global float              * aux0_dir_x,
+                            __global float              * aux0_dir_y,
+                            __global float              * aux0_dir_z,
+                            __global float              * aux0_vis_exp,
+                            __global float4              * ray_origin,
+                            __global int                * update_alpha,     //update if not zero
+                            __global float              * mog_var,          //if 0 or less, variable var, otherwise use as fixed var
+                            __global int                * update_app,     //update if not zero
+                            __global float              * output,
+                            __local  uchar              * cumsum_wkgp,
+                            __local  uchar16            * local_trees)
+{
+    int gid = get_global_id(0);
+    int lid = get_local_id(0);
+    int  MAX_CELLS = 585;
+    int numTrees = info->dims.x * info->dims.y * info->dims.z;
+    //: each thread will work on a sblock of A to match it to block in B
+    if (gid < numTrees)
+    {
+        int index_x =(int)( (float)gid/(info->dims.y * info->dims.z) );
+        int rem_x   =(gid - (float)index_x*(info->dims.y * info->dims.z) );
+        int index_y =rem_x/info->dims.z;
+        int rem_y   =rem_x - index_y*info->dims.z;
+        int index_z =rem_y;
 
+
+       local_trees[lid] = as_uchar16(tree[gid]);
+        __local uchar* tree_ptr = &local_trees[lid];
+        __local uchar * cumsum = &cumsum_wkgp[lid*10];
+        // iterate through leaves
+        cumsum[0] = (*tree_ptr);
+        int cumIndex = 1;
+        for (int i=0; i<MAX_CELLS; i++)
+        {
+            //if current bit is 0 and parent bit is 1, you're at a leaf
+            int pi = (i-1)>>3;           //Bit_index of parent bit
+            bool validParent = tree_bit_at(tree_ptr, pi) || (i==0); // special case for root
+            int currDepth = get_depth(i);
+            if (validParent && ( tree_bit_at(tree_ptr, i)==0 )) {
+                //find side length for cell of this level = block_len/2^currDepth
+                float cell_len = info->block_len/(float) (1<<currDepth);
+                //: for each leaf node xform the cell and find the correspondence in another block.
+                //get alpha value for this cell;
+                int dataIndex = data_index_relative(tree_ptr, i, bit_lookup) + data_index_root(tree_ptr); //gets absolute position
+                //######## UPDATE CELL ################
+                //#####################################
+                //#####################################
+                //if alpha is less than zero don't update
+                float  alpha    = alpha_array[dataIndex];
+                float  cell_min = info->block_len/(float)(1<<info->root_level);
+                #ifdef ATOMIC_FLOAT
+                    float cum_len = as_float(aux_array0[dataIndex]);
+                #else
+                    //get cell cumulative length and make sure it isn't 0
+                    int len_int = aux_array0[dataIndex];
+                    float cum_len  = convert_float(len_int);//SEGLEN_FACTOR;
+                #endif
+                //minimum alpha value, don't let blocks get below this
+                float  alphamin = -log(1.0f-0.0001f)/cell_min;
+
+                //update cell if alpha and cum_len are greater than 0
+                if (alpha > 0.0f && cum_len > 1e-10f)
+                {
+#ifdef ATOMIC_FLOAT
+                    float mean_obs = as_float(aux_array1[dataIndex])  / cum_len;
+                    float cell_vis  = as_float(aux_array2[dataIndex]) / cum_len;
+                    float cell_beta = as_float(aux_array3[dataIndex]) / (cum_len* info->block_len);
+#else
+                    int obs_int = aux_array1[dataIndex];
+                    int vis_int = aux_array2[dataIndex];
+                    int beta_int= aux_array3[dataIndex];
+                    float mean_obs  = convert_float(obs_int)  / convert_float(len_int);
+                    float cell_vis  = convert_float(vis_int)  / convert_float(len_int);
+                    float cell_beta = convert_float(beta_int) / convert_float(len_int);
+#endif
+                    float4 center = (float4)( info->origin.x + ((float)index_x+centerX[i])*info->block_len,
+                                              info->origin.y + ((float)index_y+centerY[i])*info->block_len,
+                                              info->origin.z + ((float)index_z+centerZ[i])*info->block_len, 0.0f)  ;
+                    float4  viewing_dir = normalize(center - ray_origin[0]);
+                    float  accum_vis   = aux0_vis_exp[dataIndex];
+                    float4 accum_dir   = (float4)(aux0_dir_x[dataIndex],aux0_dir_y[dataIndex],aux0_dir_z[dataIndex],0.0f)/accum_vis;
+                    float p_dispersion = length(accum_dir); // previous dispersion
+                    accum_dir = normalize ( accum_dir );
+                    float c_dispersion = dot(viewing_dir,accum_dir);
+
+                    if( p_dispersion*c_dispersion > 0.93 )
+                        cell_beta = 1.0;
+                    aux0_dir_x[dataIndex] += viewing_dir.x*cell_vis;
+                    aux0_dir_y[dataIndex] += viewing_dir.y*cell_vis;
+                    aux0_dir_z[dataIndex] += viewing_dir.z*cell_vis;
+                    aux0_vis_exp[dataIndex] +=cell_vis;
+
+                    float4 aux_data = (float4) (cum_len, mean_obs,cell_beta, cell_vis);
+                    float4 nobs     = convert_float4(nobs_array[dataIndex]);
+                    CONVERT_FUNC_FLOAT8(mixture,mixture_array[dataIndex])/NORM;
+                    float16 data = (float16) (alpha,
+                                              (mixture.s0), (mixture.s1), (mixture.s2), (nobs.s0),
+                                              (mixture.s3), (mixture.s4), (mixture.s5), (nobs.s1),
+                                              (mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
+                                              0.0, 0.0, 0.0);
+                    //use aux data to update cells
+                    update_cell(&data, aux_data, 2.5f, 0.10f, 0.05f);
+
+
+                    if ( *update_app != 0 )
+                    {
+                        //set appearance model (figure out if var is fixed or not)
+                        float8 post_mix       = (float8) (data.s1, data.s2, data.s3,
+                                                          data.s5, data.s6, data.s7,
+                                                          data.s9, data.sa)*(float) NORM;
+                        float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
+                        //check if mog_var is fixed, if so, overwrite variance in post_mix
+                        if (*mog_var > 0.0f) {
+                            post_mix.s1 = (*mog_var) * (float) NORM;
+                            post_mix.s4 = (*mog_var) * (float) NORM;
+                            post_mix.s7 = (*mog_var) * (float) NORM;
+                        }
+                        //reset the cells in memory
+                        CONVERT_FUNC_SAT_RTE(mixture_array[dataIndex],post_mix);
+                        nobs_array[dataIndex] = convert_ushort4_sat_rte(post_nobs);
+                    }
+                    //write alpha if update alpha is 0
+                    if ( *update_alpha != 0 )
+                        alpha_array[dataIndex] = max(alphamin,data.s0);
+                }
+
+                //clear out aux data
+                aux_array0[dataIndex] = 0;
+                aux_array1[dataIndex] = 0;
+                aux_array2[dataIndex] = 0;
+                aux_array3[dataIndex] = 0;
+
+                //########################################
+            }
+        }
+    }
+
+}
+
+#endif // UPDATE_BIT_SCENE_MAIN
 #ifdef UPDATE_APP_GREY
 __kernel
     void
@@ -833,88 +985,3 @@ __kernel void update_P_using_Q(__constant RenderSceneInfo * linfo,__global uchar
 }
 
 #endif
-
-
-#ifdef UPDATE_SKY
-typedef struct
-{
-    __constant RenderSceneInfo * linfo;
-    __global float*   alpha;
-    float   obs;
-} AuxArgs;
-
-//forward declare cast ray (so you can use it)
-void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnear, float tfar);
-__kernel
-    void
-    update_sky_main(__constant  RenderSceneInfo    * linfo,
-    __global    int4               * tree_array,       // tree structure for each block
-    __global    float              * alpha_array,      // alpha for each block
-    __constant  uchar              * bit_lookup,       // used to get data_index
-    __global    float4             * ray_origins,
-    __global    float4             * ray_directions,
-    __global    float              * nearfarplanes,
-    __global    uint4              * imgdims,          // dimensions of the input image
-    __global    float              * in_image,         // the input image
-    __global    float              * output,
-    __local     uchar16            * local_tree,       // cache current tree into local memory
-    __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
-    __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-    __local     float4             * cached_aux_data,  // seg len cached aux data is only a float2
-    __local     uchar              * cumsum )          // cumulative sum for calculating data pointer
-{
-    //get local id (0-63 for an 8x8) of this patch
-    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-
-    //initialize pre-broken ray information (non broken rays will be re initialized)
-    ray_bundle_array[llid] = (short2) (-1, 0);
-    cell_ptrs[llid] = -1;
-
-    //----------------------------------------------------------------------------
-    // get image coordinates and camera,
-    // check for validity before proceeding
-    //----------------------------------------------------------------------------
-    int i=0,j=0;
-    i=get_global_id(0);
-    j=get_global_id(1);
-    int imIndex = j*get_global_size(0) + i;
-
-    //grab input image value (also holds vis)
-    float obs = in_image[imIndex];
-    float vis = 1.0f;  //no visibility in this pass
-    barrier(CLK_LOCAL_MEM_FENCE);
-
-    // cases #of threads will be more than the pixels.
-    if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y || obs < 0.0f)
-        return;
-
-    //----------------------------------------------------------------------------
-    // we know i,j map to a point on the image,
-    // BEGIN RAY TRACE
-    //----------------------------------------------------------------------------
-    float4 ray_o = ray_origins[ imIndex ];
-    float4 ray_d = ray_directions[ imIndex ];
-    float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-    calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-
-    //----------------------------------------------------------------------------
-    // we know i,j map to a point on the image, have calculated ray
-    // BEGIN RAY TRACE
-    //----------------------------------------------------------------------------
-    AuxArgs aux_args;
-    aux_args.linfo    = linfo;
-    aux_args.obs    = obs;
-    aux_args.alpha = alpha_array;
-
-    float nearplane = nearfarplanes[0]/linfo->block_len;
-    float farplane = nearfarplanes[1]/linfo->block_len;
-    cast_ray( i, j,
-        ray_ox, ray_oy, ray_oz,
-        ray_dx, ray_dy, ray_dz,
-        linfo, tree_array,                                  //scene info
-        local_tree, bit_lookup, cumsum, &vis, aux_args,nearplane,farplane);    //utility info
-
-
-}
-#endif // UPDATE_SKY
