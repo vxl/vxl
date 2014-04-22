@@ -269,20 +269,7 @@ void step_cell_post(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
 }
 #endif // POST
-#ifdef UPDATE_SKY
-//bayes step cell functor
-void step_cell_update_sky(AuxArgs aux_args, int data_ptr, uchar llid, float d)
-{
-    //slow beta calculation ----------------------------------------------------
-    float  alpha    = aux_args.alpha[data_ptr];
 
-    if(aux_args.obs < 0.1 )
-    {
-        aux_args.alpha[data_ptr] = 1e-20f;
-    }
-
-}
-#endif // POST
 #ifdef INGEST_BUCKEYE_DEM
 #define Z_SIGMA 0.2
 #define NEAR_ZERO 1e-5
@@ -324,28 +311,7 @@ void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, floa
     }
     aux_args.belief[data_ptr] = b;
     aux_args.uncertainty[data_ptr] = u;
-  /*  if( d0 < aux_args.first_depth -2  )
-    {
-        aux_args.belief[data_ptr] = -2.0;
-        aux_args.uncertainty[data_ptr] = 0.01;
-    }
-    else
-    {
 
-    }
-    if( d1 >  aux_args.first_depth  && d0 < aux_args.first_depth)
-    {
-        aux_args.belief[data_ptr] = 0.999;
-        aux_args.uncertainty[data_ptr] = 0.001;
-    }
-    else if ( d0 < aux_args.first_depth )
-    {
-        aux_args.belief[data_ptr] = 0.0;
-        aux_args.uncertainty[data_ptr] = 0.001;
-    }
-*/
-    //aux_args.belief[data_ptr] = aux_args.first_depth;
-    //aux_args.uncertainty[data_ptr] = aux_args.last_depth;
 }
 #endif // INGEST_BUCKEYE_DEM
 
