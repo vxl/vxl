@@ -92,13 +92,8 @@ bool volm_generate_color_class_map_process(bprb_func_process& pro)
 
   vcl_map<unsigned char, vil_rgb<vxl_byte> > sdet_color_map;
   if (!vul_file::exists(id_to_color_txt)) {
-    sdet_color_map[0]   = vil_rgb<vxl_byte>(225,36 ,147);
-    sdet_color_map[15]  = vil_rgb<vxl_byte>(52 ,226,127);
-    sdet_color_map[28]  = vil_rgb<vxl_byte>(185,242,86 );
-    sdet_color_map[31]  = vil_rgb<vxl_byte>(191,184,98 );
-    sdet_color_map[32]  = vil_rgb<vxl_byte>(20, 166,41 );
-    sdet_color_map[242] = vil_rgb<vxl_byte>(254,17 ,199);
-    sdet_color_map[243] = vil_rgb<vxl_byte>(41, 234,166);
+    for (vcl_map<unsigned int, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table.begin(); mit != volm_osm_category_io::volm_land_table.end();  ++mit)
+      sdet_color_map.insert(vcl_pair<unsigned char, vil_rgb<vxl_byte> >(mit->second.id_, mit->second.color_));
   }
   else {
     vcl_ifstream ifs(id_to_color_txt.c_str());
