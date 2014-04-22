@@ -73,6 +73,7 @@ DECLARE_FUNC_CONS(vpgl_save_projective_camera_process);
 DECLARE_FUNC_CONS(vpgl_affine_rectify_images_process2);
 DECLARE_FUNC_CONS(vpgl_crop_img_using_3d_box_process);
 DECLARE_FUNC_CONS(vpgl_compute_utm_zone_process);
+DECLARE_FUNC_CONS(vpgl_rational_cam_img_to_global_process);
 DECLARE_FUNC_CONS(vpgl_get_backproject_ray_processs);
 DECLARE_FUNC_CONS(vpgl_construct_height_map_process);
 

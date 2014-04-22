@@ -360,6 +360,7 @@ def find_offset_and_correct_rational_camera(cam_orig, cam_corrected, cam_to_be_c
   offset_u_c, offset_v_c = get_rational_camera_offsets(cam_corrected);
   diff_u = offset_u_c - offset_u;
   diff_v = offset_v_c - offset_v;
+  print " diff_u = %.1f, diff_v = %.1f " % (diff_u, diff_v)
   cam_out = correct_rational_camera(cam_to_be_corrected, diff_u, diff_v);
   return cam_out
 
@@ -752,10 +753,10 @@ def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, low
 
 # give a location (lat, lon) coordinates, return its associate utm coords
 def utm_coords(lon, lat):
-  bvxm_batch.init_process("vpglCompuateUTMZoneProcess")
-  bvxm_batch.set_input_double(0, lon)
-  bvxm_batch.set_input_double(1, lat)
-  result = bvxm_batch.run_process()
+  bvxm_batch.init_process("vpglComputeUTMZoneProcess");
+  bvxm_batch.set_input_double(0, lon);
+  bvxm_batch.set_input_double(1, lat);
+  result = bvxm_batch.run_process();
   if result:
     (id, type) = bvxm_batch.commit_output(0);
     x = bvxm_batch.get_output_double(id);
@@ -768,3 +769,28 @@ def utm_coords(lon, lat):
     return x, y, utm_zone, northing
   else:
     return 0.0, 0.0, 0, 0;
+    return 0.0, 0.0, 0, 0;
+
+# get the world point (wgs84) given the image point and rational camera
+# Pass default initial guess point (-1.0, -1.0, -1.0) and plane height (-1.0) if initial is unknown at all
+def rational_cam_img_to_global(camera, i, j, init_lon=-1.0, init_lat=-1.0, init_elev=-1.0, pl_elev = -1.0, error_tol = 0.05):
+  bvxm_batch.init_process("vpglRationalImgToGlobalProcess");
+  bvxm_batch.set_input_from_db(0, camera);
+  bvxm_batch.set_input_unsigned(1, i);
+  bvxm_batch.set_input_unsigned(2, j);
+  bvxm_batch.set_input_double(3, init_lon);
+  bvxm_batch.set_input_double(4, init_lat);
+  bvxm_batch.set_input_double(5, init_elev);
+  bvxm_batch.set_input_double(6, pl_elev);
+  bvxm_batch.set_input_double(7, error_tol);
+  status = bvxm_batch.run_process();
+  if status:
+    (id, type) = bvxm_batch.commit_output(0);
+    lon = bvxm_batch.get_output_double(id);
+    (id, type) = bvxm_batch.commit_output(1);
+    lat = bvxm_batch.get_output_double(id);
+    (id, type) = bvxm_batch.commit_output(2);
+    elev = bvxm_batch.get_output_double(id)
+    return lon, lat, elev
+  else:
+    return -1.0, -1.0, -1.0
