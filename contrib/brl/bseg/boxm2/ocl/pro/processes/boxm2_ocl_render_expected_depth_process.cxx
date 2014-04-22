@@ -16,13 +16,14 @@
 #include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
-
+#include <vcl_algorithm.h>
 //directory utility
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <vul/vul_timer.h>
-
+#include <vpgl/vpgl_lvcs_sptr.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 namespace boxm2_ocl_render_expected_depth_process_globals
@@ -187,7 +188,62 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
-  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+  if(cam->type_name() == "vpgl_geo_camera" )
+  {
+      vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
+      vpgl_geo_camera* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
+      // crop relevant image data into a view
+      vgl_box_3d<double> scene_bbox = scene->bounding_box();
+      vgl_box_2d<double> proj_bbox;
+      double u,v;
+      geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
+      proj_bbox.add(vgl_point_2d<double>(u,v));
+      geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
+      proj_bbox.add(vgl_point_2d<double>(u,v));
+      vcl_cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<vcl_endl;
+      int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
+      int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
+      int max_i = int(vcl_min(ni-1.0, vcl_ceil(proj_bbox.max_x())));
+      int max_j = int(vcl_min(nj-1.0, vcl_ceil(proj_bbox.max_y())));
+      if ((min_i > max_i) || (min_j > max_j)) {
+          vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
+          return false;
+      }
+      // initialize ray origin buffer, first and last return buffers
+      int count=0;
+      for (unsigned int j=0;j<cl_nj;++j) {
+          for (unsigned int i=0;i<cl_ni;++i) {
+              if ( i < ni && j < nj ) {
+                  int count4 = count*4;
+                  double full_i = min_i + i + 0.25;
+                  double full_j = min_j + j + 0.25;
+                  double lat,lon, x, y, z_first, z_last;
+                  double el_first = 0;
+                  geocam->img_to_global(full_i, full_j,  lon, lat);
+                  lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);
+                  // start rays slightly above maximum height of model
+                  float z_origin = float(scene_bbox.max_z()) + 1.0f;
+                  ray_origins[count4+0] = float(x);
+                  ray_origins[count4+1] = float(y);
+                  // ray will begin just above "top" of scene, with direction pointing in negative z direction
+                  ray_origins[count4+2] = z_origin;
+                  ray_origins[count4+3] = 0.0;
+                  ray_directions[count4+0] = 0.0 ;
+                  ray_directions[count4+1] = 0.0 ;
+                  ray_directions[count4+2] = -1.0 ;
+                  ray_directions[count4+3] = 0.0 ;
+              }
+              ++count;
+          }
+      }
+      ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+      ray_d_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  }
+  else
+  {
+      boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+  }
+  //boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   // Image Dimensions
   int img_dim_buff[4];
@@ -215,8 +271,13 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
   float subblk_dim = 0.0;
   // set arguments
-  //vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam,25000);
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  vcl_vector<boxm2_block_id> vis_order;
+  if(cam->type_name() == "vpgl_geo_camera" ) 
+      vis_order= scene->get_block_ids(); // order does not matter for a top down orthographic camera  and axis aligned blocks
+  else if(cam->type_name() == "vpgl_perspective_camera")
+      vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),ni,nj);
+  else
+      vis_order= scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
