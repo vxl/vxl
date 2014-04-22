@@ -23,6 +23,8 @@ class boxm2_ocl_update_sky
                         vpgl_camera_double_sptr  cam,
                         vil_image_view_base_sptr sky_img);
 
+    
+
   private:
     //compile kernels and place in static map
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="", bool isRGB = false);
@@ -31,5 +33,25 @@ class boxm2_ocl_update_sky
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
 
 };
+class boxm2_ocl_update_sky2
+{
+  public:
+    static bool update_sky2( boxm2_scene_sptr         scene,
+                             bocl_device_sptr         device,
+                             boxm2_opencl_cache_sptr  opencl_cache);
 
+    static bool accumulate_sky_evidence( boxm2_scene_sptr         scene,
+                                          bocl_device_sptr         device,
+                                          boxm2_opencl_cache_sptr  opencl_cache, 
+                                          vpgl_camera_double_sptr  cam,
+                                          vil_image_view_base_sptr sky_img);   
+
+  private:
+    //compile kernels and place in static map
+    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="", bool isRGB = false);
+
+    //map of paint kernel by device
+    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+
+};
 #endif // boxm2_ocl_update_sky_h_
