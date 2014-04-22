@@ -9,6 +9,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
+#include <vcl_algorithm.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -17,6 +18,8 @@
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -125,12 +128,10 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     vcl_string suffix                     = pro.get_input<vcl_string>(i++);
     vcl_string coordinate_type            = pro.get_input<vcl_string>(i++);
 
-
     //  opencl_cache->get_cpu_cache()->clear_cache();
 
     long binCache = opencl_cache.ptr()->bytes_in_cache();
     vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
-
 
     // create a command queue.
     int status=0;
@@ -150,21 +151,71 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     }
 
     //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-    //vil_image_view_base_sptr float_img=boxm2_util::prepare_input_image(img);
-    //vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
     unsigned cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
     unsigned cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
-
     global_threads[0]=cl_ni;
     global_threads[1]=cl_nj;
-
     //set generic cam
     cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
     cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
-    boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+    if(cam->type_name() == "vpgl_geo_camera" )
+    {
+        vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
+        vpgl_geo_camera* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
+        // crop relevant image data into a view
+        vgl_box_3d<double> scene_bbox = scene->bounding_box();
+        vgl_box_2d<double> proj_bbox;
+        double u,v;
+        geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
+        proj_bbox.add(vgl_point_2d<double>(u,v));
+        geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
+        proj_bbox.add(vgl_point_2d<double>(u,v));
 
+        vcl_cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<vcl_endl;
+        int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
+        int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
+        int max_i = int(vcl_min(ni-1.0, vcl_ceil(proj_bbox.max_x())));
+        int max_j = int(vcl_min(nj-1.0, vcl_ceil(proj_bbox.max_y())));
+        if ((min_i > max_i) || (min_j > max_j)) {
+            vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
+            return false;
+        }
+        // initialize ray origin buffer, first and last return buffers
+        int count=0;
+        for (unsigned int j=0;j<cl_nj;++j) {
+            for (unsigned int i=0;i<cl_ni;++i) {
+                if ( i < ni && j < nj ) {
+                    int count4 = count*4;
+                    double full_i = min_i + i + 0.25;
+                    double full_j = min_j + j + 0.25;
+                    double lat,lon, x, y, z_first, z_last;
+                    double el_first = 0;
+                    geocam->img_to_global(full_i, full_j,  lon, lat);
+                    lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);
+                    // start rays slightly above maximum height of model
+                    float z_origin = float(scene_bbox.max_z()) + 1.0f;
+                    ray_origins[count4+0] = float(x);
+                    ray_origins[count4+1] = float(y);
+                    // ray will begin just above "top" of scene, with direction pointing in negative z direction
+                    ray_origins[count4+2] = z_origin;
+                    ray_origins[count4+3] = 0.0;
+                    ray_directions[count4+0] = 0.0 ;
+                    ray_directions[count4+1] = 0.0 ;
+                    ray_directions[count4+2] = -1.0 ;
+                    ray_directions[count4+3] = 0.0 ;
+                }
+                ++count;
+            }
+        }
+        ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+        ray_d_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    }
+    else
+    {
+        boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+    }
     // Image Dimensions
     int img_dim_buff[4];
     img_dim_buff[0] = 0;
@@ -185,14 +236,19 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
     bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
+    vcl_vector<boxm2_block_id> vis_order ;
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    if(cam->type_name() == "vpgl_geo_camera" )
+        vis_order= scene->get_block_ids();
+    else if(cam->type_name() == "vpgl_perspective_camera")
+        vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),ni,nj);
+    else
+        vis_order= scene->get_vis_blocks(cam);
+
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-
         //write the image values to the buffer
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);
@@ -213,7 +269,6 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
         bocl_mem *aux3  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
         for (unsigned int i=0; i<2; ++i)
         {
-
             if( i ==0 )
             {
                 bocl_kernel* kern =  kernels[identifier][i];
@@ -222,7 +277,6 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
                 local_threads[1] = 8 ;
                 global_threads[0]=cl_ni;
                 global_threads[1]=cl_nj;
-
                 kern->set_arg( blk_info );
                 kern->set_arg( blk );
                 kern->set_arg( aux0 );
@@ -230,10 +284,8 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
                 kern->set_arg( aux2 );
                 kern->set_arg( aux3 );
                 kern->set_arg( lookup.ptr() );
-
                 kern->set_arg( ray_o_buff.ptr() );
                 kern->set_arg( ray_d_buff.ptr() );
-
                 kern->set_arg( img_dim.ptr() );
                 kern->set_arg( cl_output.ptr() );
                 kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );//local tree,
@@ -241,13 +293,11 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
                 kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );    //cell pointers,
                 kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_float4) ); //cached aux,
                 kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
-
                 //execute kernel
                 kern->execute(queue, 2, local_threads, global_threads);
                 int status = clFinish(queue);
                 check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
                 gpu_time += kern->exec_time();
-
                 //clear render kernel args so it can reset em on next execution
                 kern->clear_args();
                 //read image out to buffer (from gpu)
@@ -265,7 +315,6 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
                 local_threads[1] = 1 ;
                 global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
                 global_threads[1]=1;
-
                 kern->set_arg( blk_info );
                 kern->set_arg( aux0 );
                 kern->set_arg( aux1 );
@@ -276,10 +325,8 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
                 int status = clFinish(queue);
                 check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
                 gpu_time += kern->exec_time();
-
                 //clear render kernel args so it can reset em on next execution
                 kern->clear_args();
-
                 //write info to disk
                 aux0->read_to_buffer(queue);
                 aux1->read_to_buffer(queue);
@@ -290,7 +337,6 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
                 }
             }
         }
-
         opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(suffix),true);
         opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(suffix),true);
         if(coordinate_type != "spherical")
