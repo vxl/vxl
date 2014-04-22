@@ -73,10 +73,24 @@ void test_block()
     int nums[4] = { 64, 64, 64, 0 };
     double dims[4] = { 0.5, 0.5, 0.5, 0.0 };
     int numBuffers = 64;
-    int treeLen    = 64*64;
+    int treeLen    = 64*64*64;
     int init_level = 1;
     int max_level  = 4;
     int max_mb     = 400;
+    vgl_point_3d<double> local_origin = vgl_point_3d<double>(0,0,0) + vgl_vector_3d<double>((double)nums[0]*dims[0]*(double)0,
+                                                                                            (double)nums[0]*dims[0]*(double)0,
+                                                                                            (double)nums[0]*dims[0]*(double)0);
+    boxm2_block_id id(0,0,0);  
+    boxm2_block_metadata mdata(id,
+                                local_origin,
+                                vgl_vector_3d<double> (dims[0], dims[1],dims[2]),
+                                vgl_vector_3d<unsigned>(nums[0],nums[1],nums[2]),
+                                init_level,
+                                max_level,
+                                max_mb,
+                                0.001,
+                                2);
+
     char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers, 
                                                                   treeLen, 
                                                                   nums, 
@@ -84,21 +98,15 @@ void test_block()
                                                                   init_level,
                                                                   max_level,
                                                                   max_mb );
-    vcl_cout<<"returned stream"<<vcl_endl;
-    boxm2_block test_block(boxm2_block_id(0,0,0), stream);
-    vcl_cout<<"constructed test block "<<vcl_endl;
-    boxm2_sio_mgr::save_block(test_file, &test_block);
-    vcl_cout<<"saved block "<<vcl_endl;
+    boxm2_block test_block(id, mdata,stream);
+
 
     //make sure all the meta data matches...
-    if (test_block.block_id() != boxm2_block_id(0,0,0)) {
+    if (test_block.block_id() != id) {
       TEST("boxm2_block: id failed", true, false);
       return;
     }
-    if (test_block.num_buffers() != numBuffers) {
-        TEST("boxm2_block: num buffers failed", true, false);
-        return;
-    }
+
     if (test_block.tree_buff_length() != treeLen) {
         TEST("boxm2_block: tree_buff_length failed", true, false);
         return;
@@ -126,11 +134,11 @@ void test_block()
     TEST("boxm2_block: meta data passed", true, true);
 
     boxm2_array_3d<uchar16>&  trees = test_block.trees();
-    uchar16 comp((unsigned char) 0); comp[0] = 1;
-    for (int i=0; i<dims[0]; i++) {
-      for (int j=0; j<dims[1]; j++) {
-        for (int k=0; k<dims[2]; k++) {
-          if (trees[i][j][k] != comp) {
+    uchar16 comp((unsigned char) 0);
+    for (int i=0; i<nums[0]; i++) {
+      for (int j=0; j<nums[1]; j++) {
+        for (int k=0; k<nums[2]; k++) {
+          if (trees[i][j][k][0] != (unsigned char) 0) {
             TEST("boxm2_block: trees not initialized properly", true, false);
             return;
           }
@@ -138,13 +146,6 @@ void test_block()
       }
     }
     TEST("boxm2_block: trees initialized properly", true, true);
-
-    ////2. read in sub block dimension, sub block num
-    boxm2_block* loaded = boxm2_sio_mgr::load_block(test_file, boxm2_block_id(0,0,0));
-    boxm2_test_utils::test_block_equivalence(test_block, *loaded);
-
-    //clean up boxm2_block
-    delete loaded;
 
     //clean up file left behind "tests/block_id.0.0.0.bin"
     test_block_id();

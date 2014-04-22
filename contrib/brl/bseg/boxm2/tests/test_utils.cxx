@@ -138,16 +138,7 @@ void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
     typedef vnl_vector_fixed<unsigned short, 2> ushort2;
     typedef unsigned short                      ushort;
 
-#if 0 // omitting ID for sake of ASIO testing
-    if (a.block_id() != b.block_id()) {
-        TEST("boxm2_block: id failed", true, false);
-        return;
-    }
-#endif
-    if (a.num_buffers() != b.num_buffers()) {
-        TEST("boxm2_block: num buffers failed", true, false);
-        return;
-    }
+
     if (a.tree_buff_length() != b.tree_buff_length()) {
         TEST("boxm2_block: tree_buff_length failed", true, false);
         return;
