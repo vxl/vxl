@@ -287,11 +287,12 @@ bocl_mem* boxm2_opencl_cache2::get_copy_of_block_info(boxm2_scene_sptr scene, bo
 }
 //: Get data generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem* boxm2_opencl_cache2::get_data(boxm2_scene_sptr scene, boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
+bocl_mem* boxm2_opencl_cache2::get_data(boxm2_scene_sptr scene, boxm2_block_id id, vcl_string type, 
+                                        vcl_size_t num_bytes, bool read_only)
 {
-  //push id to front of LRU list
-  this->lru_push_front(vcl_pair<boxm2_scene_sptr, boxm2_block_id>(scene,id) );
 
+    //push id to front of LRU list
+  this->lru_push_front(vcl_pair<boxm2_scene_sptr, boxm2_block_id>(scene,id) );
   // grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, bocl_mem*>& data_map =
     this->cached_data_map(scene,type);
@@ -310,13 +311,14 @@ bocl_mem* boxm2_opencl_cache2::get_data(boxm2_scene_sptr scene, boxm2_block_id i
   else
     toLoadSize = data_base->buffer_length();
 
+     // vcl_cout<<"Loading data "<<scene->data_path()<<" "<<id<<" type "<<type<<" "<<toLoadSize<<vcl_endl;
   // make enough space by kicking out blocks
   vcl_size_t totalBytes = this->bytes_in_cache() + toLoadSize;
   if (totalBytes > maxBytesInCache_) {
-#ifdef DEBUG
-    vcl_cout<<"Loading data "<<id<<" type "<<type<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
-            <<"    removing... ";
-#endif
+
+      //vcl_cout<<"Loading data "<<scene->data_path()<<" "<<id<<" type "<<type<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
+     //       <<"    removing... ";
+
     while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() )
     {
       vcl_pair<boxm2_scene_sptr, boxm2_block_id> lru_id;
@@ -551,7 +553,10 @@ void boxm2_opencl_cache2::shallow_remove_data(boxm2_scene_sptr scene, boxm2_bloc
 vcl_map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache2::cached_data_map(boxm2_scene_sptr scene, vcl_string prefix)
 {
   if(cached_data_.find(scene) == cached_data_.end() ) 
+  {
       cached_data_[scene] = vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >();
+  }
+  
   // if map for this particular data type doesn't exist, initialize it
   if ( cached_data_[scene].find(prefix) == cached_data_[scene].end() )
   {
@@ -570,7 +575,7 @@ void boxm2_opencl_cache2::lru_push_front( vcl_pair<boxm2_scene_sptr, boxm2_block
     //search for it in the list, if it's there, delete it
     vcl_list<vcl_pair<boxm2_scene_sptr, boxm2_block_id> >::iterator iter=lru_order_.begin(); 
     for (; iter!=lru_order_.end(); ++iter) {
-        if ( (scene_id_pair.second  ==  (*iter).second )&& ( (*iter).first = scene_id_pair.first ) ) {
+        if ( (scene_id_pair.second  ==  (*iter).second )&& ( (*iter).first == scene_id_pair.first ) ) {
             lru_order_.erase(iter);
             break;
         }

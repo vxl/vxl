@@ -53,7 +53,7 @@ class boxm2_opencl_cache2: public vbl_ref_count
 
     //: returns data pointer to data block specified by ID
     template<boxm2_data_type T>
-    bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, vcl_size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, vcl_size_t num_bytes=0, bool read_only = true,vcl_string ident = "");
     bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
 
     template<boxm2_data_type T>
@@ -145,9 +145,9 @@ typedef vbl_smart_ptr<boxm2_opencl_cache2> boxm2_opencl_cache2_sptr;
 
 //: get data by type and id
 template<boxm2_data_type T>
-bocl_mem* boxm2_opencl_cache2::get_data(boxm2_scene_sptr scene, boxm2_block_id id, vcl_size_t num_bytes, bool read_only)
+bocl_mem* boxm2_opencl_cache2::get_data(boxm2_scene_sptr scene, boxm2_block_id id, vcl_size_t num_bytes, bool read_only,vcl_string ident )
 {
-  return get_data(scene, id, boxm2_data_traits<T>::prefix(), num_bytes, read_only);
+  return get_data(scene, id, boxm2_data_traits<T>::prefix(ident), num_bytes, read_only);
 }
 
 //: get new data by type and id
