@@ -37,6 +37,9 @@ class boxm2_ocl_util
 
     //: mog optoins
     static vcl_string mog_options(vcl_string data_type);
+
+    //: generate a look up table for chi square cdf
+    static void set_cdf_chisqr_lookup(cl_float* chisqr_lookup);
  };
 
 #endif // boxm2_ocl_util_h
