@@ -1,10 +1,10 @@
 //:
 // \file
-// \brief  Register two boxm2 worlds using muual information.
-// \author Vishal JAin
-// \date Apr-21-2014
+// \brief  
+// \author Vishal Jain
+// \date 13-Nov-2013
 #include <boxm2/reg/ocl/boxm2_ocl_reg_mutual_info.h>
-#include <boxm2/reg/ocl/boxm2_ocl_hierarchical_reg.h>
+#include <boxm2/reg/ocl/boxm2_ocl_hierarchical_points_to_volume_reg.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_lru_cache2.h>
 
@@ -37,28 +37,37 @@ struct ltstr
 };
 
 //: function to convert params to Xform Matrix.
-void convert_params_to_xform(vnl_vector<double>  x,  vnl_matrix<double> & xform)
+void convert_params_to_xform(vnl_vector<double>  x,  vnl_matrix<double> & xform, bool reverse = false)
 {
     xform.set_size(4,4);
     xform.fill(0.0);
     vgl_rotation_3d<double> r(vnl_vector_fixed<double,3>(x[3],x[4],x[5]));
-
+    vnl_vector<double>  t(3);
+    t[0]= x[0];t[1]=x[1];t[2]=x[2];
+    double scale = x[6];
+    if(reverse)
+    {
+        r = r.inverse();
+        t = -scale*r.as_matrix()*t;
+        scale = 1/scale ;
+    }
     xform[0][0] = r.as_matrix()[0][0];  xform[0][1] = r.as_matrix()[0][1]; xform[0][2] = r.as_matrix()[0][2];
     xform[1][0] = r.as_matrix()[1][0];  xform[1][1] = r.as_matrix()[1][1]; xform[1][2] = r.as_matrix()[1][2];
     xform[2][0] = r.as_matrix()[2][0];  xform[2][1] = r.as_matrix()[2][1]; xform[2][2] = r.as_matrix()[2][2];
 
-    xform[0][3] = x[0] ;
-    xform[1][3] = x[1] ;
-    xform[2][3] = x[2] ;
+    xform[0][3] = t[0] ;
+    xform[1][3] = t[1] ;
+    xform[2][3] = t[2] ;
 
-    xform = xform * x[6] ;
+    xform = xform * scale ;
 
     xform[3][3]  = 1;
+
 }
 int main(int argc,  char** argv)
 {
   //init vgui (should choose/determine toolkit)
-  vul_arg<vcl_string> sceneA_file("-sceneA", "sceneA filename", "");
+  vul_arg<vcl_string> sceneA_file("-plyA", "points A (xyz) filename", "");
   vul_arg<vcl_string> sceneB_file("-sceneB", "sceneB filename", "");
   vul_arg<vcl_string> xformAtoB_file("-xform", "xfrom filename", "");
   vul_arg<double> rotationangle("-rot", "rotation angle ( in radians )", 0.1);
@@ -66,19 +75,42 @@ int main(int argc,  char** argv)
   vul_arg<float> radius("-radius", "radius * sub_block_dim of scene B",3);
   vul_arg<float> iscale("-iscale", "init scale",1);
   vul_arg<float> rscale("-rscale", "radius of scale",0.00);
+  vul_arg<bool> reverse("-reverse", "On B--> A , Off A--> B",false);
   vul_arg_parse(argc, argv);
   vul_timer t;
 
-  if(!vul_file::exists(sceneA_file()) || !vul_file::exists(sceneB_file()) )
+  if (!vul_file::exists(sceneB_file()) )
   {
-      vcl_cout<<"One or both of the secene files do not exist"<<vcl_endl;
+      vcl_cout<<"scene files do not exist"<<vcl_endl;
       return -1;
   }
   //create scene
-  boxm2_scene_sptr sceneA = new boxm2_scene(sceneA_file());
-  boxm2_scene_sptr sceneB = new boxm2_scene(sceneB_file());
-
-  boxm2_lru_cache2::create(sceneA);
+  vcl_vector<vgl_point_3d<double> > pts;
+  if(vul_file::extension(sceneA_file()) == ".xyz")
+  {
+      vcl_ifstream ifile(sceneA_file().c_str());
+      vcl_string line;
+      while(vcl_getline(ifile,line))
+      {
+          vcl_istringstream iss(line);
+          vnl_vector<double> x;
+          iss>>x;
+          pts.push_back(vgl_point_3d<double>(x[0],x[1],x[2]) );
+      }
+      ifile.close();
+  }
+  else{
+      vcl_cout<<"Point Cloud is empty"<<vcl_endl;
+      return 0;
+  }
+  vcl_cout<<"Points Loaded "<<pts.size()<<vcl_endl;
+  float * vpts = new float[pts.size()*3];
+  for(unsigned i= 0;i < pts.size(); i++)
+  {
+      vpts[i*3+0] = pts[i].x(); vpts[i*3+1] = pts[i].y(); vpts[i*3+2] = pts[i].z();
+  }
+  boxm2_scene_sptr sceneB = new boxm2_scene(sceneB_file()); 
+  boxm2_lru_cache2::create(sceneB);
   boxm2_cache2_sptr cache =boxm2_cache2::instance();
   bocl_manager_child_sptr mgr =bocl_manager_child::instance();
   if (mgr->gpus_.size()==0)
@@ -104,35 +136,41 @@ int main(int argc,  char** argv)
       ifile >> mat;
       ifile.close();
       mat = mat/scale;
-      vnl_matrix<double> matr(3,3);     mat.extract(matr);
+      vnl_matrix<double> matr(3,3);     
+      mat.extract(matr);
+      vnl_vector<double> t(3,0.0);
+      t[0] = mat[0][3]; t[1] = mat[1][3]; t[2] = mat[2][3]; 
+
+      if(reverse())
+      {
+          matr = matr.transpose();
+          t = -scale*matr*t;
+          scale = 1/scale;
+      }
       vgl_rotation_3d<double> r1(matr);
-      x[0] = mat[0][3];                
-      x[1] = mat[1][3];                
-      x[2] = mat[2][3];                
-      x[3] = r1.as_rodrigues()[0];   
-      x[4] = r1.as_rodrigues()[1];   
-      x[5] = r1.as_rodrigues()[2]; 
+      x[0] = t[0];         x[3] = r1.as_rodrigues()[0];        
+      x[1] = t[1];         x[4] = r1.as_rodrigues()[1];        
+      x[2] = t[2];         x[5] = r1.as_rodrigues()[2];             
       x[6] = scale;  
   }
-  var[0] = radius()*sceneA->blocks().begin()->second.sub_block_dim_.x();  
-  var[1] = radius()*sceneA->blocks().begin()->second.sub_block_dim_.y();  
-  var[2] = radius()*sceneA->blocks().begin()->second.sub_block_dim_.z();  
-  var[3] = rotationangle()*0.0;  
+  var[0] = radius()*sceneB->blocks().begin()->second.sub_block_dim_.x()/x[6];  
+  var[1] = radius()*sceneB->blocks().begin()->second.sub_block_dim_.y()/x[6];  
+  var[2] = radius()*sceneB->blocks().begin()->second.sub_block_dim_.z()/x[6];  
+  var[3] = rotationangle();  
   var[4] = rotationangle();  
   var[5] = rotationangle();  
   var[6] = rscale();
 
   bool do_vary_scale = false;
-
   if(rscale() > 1e-10)
       do_vary_scale = true ;
 
-  boxm2_ocl_hierarchical_reg func(opencl_cache,sceneA,sceneB,device,5,do_vary_scale );
+  boxm2_ocl_hierarchical_points_to_volume_reg func(opencl_cache,vpts,sceneB,pts.size(),device,do_vary_scale );
   func.init(x, var);
   func.exhaustive();
   vnl_vector<double> xfinal = func.max_sample();
   vnl_matrix<double> xform;
-  convert_params_to_xform(xfinal,xform);
+  convert_params_to_xform(xfinal,xform,reverse());
   vcl_cout<<"Final Xform is "<<vcl_endl;
   vcl_cout<<xform<<vcl_endl;
   vcl_ofstream ofile(oxform().c_str());

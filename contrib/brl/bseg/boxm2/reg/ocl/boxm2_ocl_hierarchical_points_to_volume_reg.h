@@ -1,43 +1,40 @@
-#ifndef boxm2_ocl_monte_carlo_reg_h_
-#define boxm2_ocl_monte_carlo_reg_h_
+#ifndef boxm2_ocl_hierarchical_points_to_volume_reg_h_
+#define boxm2_ocl_hierarchical_points_to_volume_reg_h_
 //:
 // \file
-// \brief A cost function for registering volumes using mutual information
+// \brief A hierarchical cost function for registering volumes using mutual information
 // \author Vishal Jain
-// \date March 9, 2012
+// \date Nov 15, 2013
 //
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_cost_function.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <bocl/bocl_device.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
 #include <boxm2/boxm2_scene.h>
+#include <boxm2/ocl/boxm2_opencl_cache2.h>
 #include <boxm2/io/boxm2_lru_cache2.h>
-#include <boxm2/io/boxm2_stream_scene_cache.h>
-#include <boxm2/reg/ocl/boxm2_ocl_reg_mutual_info.h>
+#include <boxm2/reg/ocl2/boxm2_ocl_reg_points_to_volume_mutual_info.h>
 
 
 //: A cost function for registering video frames by minimizing square difference in intensities.
-class boxm2_ocl_monte_carlo_reg : public boxm2_ocl_reg_mutual_info
+class boxm2_ocl_hierarchical_points_to_volume_reg : public boxm2_ocl_reg_points_to_volume_mutual_info
 {
  public:
   //: Constructor. The source image is mapped to the destination frame by dt. nbins is the number of histogram bins used to compute entropies.
-  boxm2_ocl_monte_carlo_reg( boxm2_opencl_cache2_sptr  & cacheA,
-                             boxm2_stream_scene_cache & cacheB,
-                             bocl_device_sptr device, int nbins,
-                             double scale = 1.0, 
-                             int numsamples = 100);
+  boxm2_ocl_hierarchical_points_to_volume_reg( boxm2_opencl_cache2_sptr  & cache,
+                                               float *pts, 
+                                               boxm2_scene_sptr sceneB,
+                                               int npts,
+                                               bocl_device_sptr device, bool do_vary_scale);
 
   //: initialize the monte carlo reg function
   bool init(vnl_vector<double> const& mu, vnl_vector<double> const & cov);
   bool likelihood(int num_iter,int depth = 3);
-  bool sample_from_cdf(int depth );
   bool update();
-  bool exhaustive(int depth =3 );
-  ////: run simulated annealing
-  bool run_annealing(); 
-  vnl_vector<double> expected_sample();
+  bool exhaustive();
   vnl_vector<double> max_sample();
+
+ // void convert_to_xform(vnl_vector<double> & x);
  
 protected:
   bool generate_samples(int samplenum = 100);
@@ -50,9 +47,10 @@ protected:
   vcl_vector<vcl_pair<int, double> > pdf_;
   vcl_vector<vcl_pair<int, double> > cdf_;
 
+  bool do_vary_scale_;
 
   double mu_cost_;
 };
 
 
-#endif // boxm2_ocl_monte_carlo_reg_h_
+#endif // boxm2_ocl_hierarchical_reg_h_

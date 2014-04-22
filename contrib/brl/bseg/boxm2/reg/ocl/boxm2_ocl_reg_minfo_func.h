@@ -17,11 +17,11 @@
 #include <boxm2/reg/ocl/boxm2_ocl_reg_mutual_info.h>
 
 //: A cost function for registering video frames by minimizing square difference in intensities.
-class boxm2_ocl_reg_minfo_func : public boxm2_ocl_reg_mutual_info ,public vnl_cost_function
+class boxm2_ocl_reg_minfo_func2 : public boxm2_ocl_reg_mutual_info2 ,public vnl_cost_function
 {
  public:
   //: Constructor. The source image is mapped to the destination frame by dt. nbins is the number of histogram bins used to compute entropies.
-  boxm2_ocl_reg_minfo_func( boxm2_opencl_cache2_sptr& cacheA,
+  boxm2_ocl_reg_minfo_func2( boxm2_opencl_cache2_sptr& cacheA,
                             boxm2_stream_scene_cache& cacheB,
                             bocl_device_sptr device,
                             int nbins,
