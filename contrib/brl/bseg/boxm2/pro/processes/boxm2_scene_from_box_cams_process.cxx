@@ -76,16 +76,10 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
   uscene->set_appearances(appearance);
   uscene->save_scene();
 
-  //create render scene
-  boxm2_scene_sptr rscene = new boxm2_scene(scene_dir, box.min_point());
-  rscene->set_appearances(appearance);
-  rscene->save_scene();
 
   //build the two scenes
-  boxm2_util_cams_and_box_to_scene(cams, box, *uscene, *rscene);
+  boxm2_util_cams_and_box_to_scene(cams, box, *uscene);
   uscene->set_xml_path(scene_dir+"/uscene.xml");
   uscene->save_scene();
-  rscene->set_xml_path(scene_dir+"/rscene.xml");
-  rscene->save_scene();
   return true;
 }

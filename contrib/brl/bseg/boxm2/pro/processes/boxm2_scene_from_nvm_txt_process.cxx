@@ -89,22 +89,14 @@ bool boxm2_scene_from_nvm_txt_process(bprb_func_process& pro)
   uscene->set_appearances(appearance);
   uscene->save_scene();
 
-  //create render scene
-  boxm2_scene_sptr rscene = new boxm2_scene(scene_dir, box.min_point());
-  rscene->set_appearances(appearance);
-  rscene->save_scene();
-
   //build the two scenes
   vcl_vector<vpgl_perspective_camera<double> > cs;
   for (vcl_map<vcl_string, vpgl_perspective_camera<double>* >::iterator iter=cams.begin(); iter!=cams.end(); ++iter)
     cs.push_back(* iter->second);
 
-  boxm2_util_cams_and_box_to_scene(cs, box, *uscene, *rscene);
+  boxm2_util_cams_and_box_to_scene(cs, box, *uscene);
   uscene->set_xml_path(scene_dir+"/uscene.xml");
   uscene->save_scene();
-  rscene->set_xml_path(scene_dir+"/rscene.xml");
-  rscene->save_scene();
-
   if (modeldir != "")
   {
 

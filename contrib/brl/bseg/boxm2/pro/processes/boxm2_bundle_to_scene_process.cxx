@@ -21,7 +21,7 @@
 namespace boxm2_bundle_to_scene_process_globals
 {
   const unsigned n_inputs_ = 11;
-  const unsigned n_outputs_ = 2;
+  const unsigned n_outputs_ = 1;
 }
 
 bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
@@ -44,7 +44,7 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   // process has 2 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_scene_sptr";  //update scene
-  output_types_[1] = "boxm2_scene_sptr";  //render scene
+
 
   //set input and output types
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -119,26 +119,16 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   vcl_string scene_dir = "model";
   if (!vul_file::make_directory_path( scene_dir.c_str()))
     return false;
+  vcl_cout<<"Writting Uscene.xml ";
   boxm2_scene_sptr uscene = new boxm2_scene(scene_dir, bbox.min_point());
   uscene->set_lvcs(lvcs);
   uscene->set_local_origin(vgl_point_3d<double>(0.0,0.0,0.0));
   uscene->set_appearances(appearance);
-  uscene->save_scene();
-
-  //create render scene
-  boxm2_scene_sptr rscene = new boxm2_scene(scene_dir, bbox.min_point());
-  rscene->set_lvcs(lvcs);
-  rscene->set_local_origin(vgl_point_3d<double>(0.0,0.0,0.0));
-  rscene->set_appearances(appearance);
-  rscene->save_scene();
-
   //build the two scenes
-  boxm2_util_cams_and_box_to_scene(cs, bbox, *uscene, *rscene,nblks);
+  boxm2_util_cams_and_box_to_scene(cs, bbox, *uscene,nblks);
   uscene->set_xml_path(scene_dir+"/uscene.xml");
   uscene->save_scene();
-  rscene->set_xml_path(scene_dir+"/rscene.xml");
-
-  rscene->save_scene();
+    vcl_cout<<"Writting Image & camera "<<vcl_endl;
   //----------------------------------------------------------------------------
   //if output directory is non empty, create directory and save imgs, cams dirs
   //----------------------------------------------------------------------------
@@ -224,6 +214,5 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   //set output
   i=0;  // store scene smart pointer
   pro.set_output_val<boxm2_scene_sptr>(i++, uscene);
-  pro.set_output_val<boxm2_scene_sptr>(i++, rscene);
   return true;
 }
