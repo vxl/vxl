@@ -134,7 +134,7 @@ void test_cone_update()
 #endif // 0
   boxm2_cache_sptr cache=boxm2_cache::instance();
 
-  vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks_opt(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
+  vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks_opt(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()),ni,nj);
   vcl_vector<boxm2_block_id>::iterator iter;
   vil_image_view<float> * exp_img = new vil_image_view<float>(ni,nj);
   vil_image_view<float> * vis_img = new vil_image_view<float>(ni,nj);
