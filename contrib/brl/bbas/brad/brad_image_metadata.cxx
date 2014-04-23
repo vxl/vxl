@@ -574,7 +574,7 @@ unsigned brad_image_metadata::time_minute_dif(brad_image_metadata& other)
     unsigned minute_dif = hour_dif * 60 + other.t_.min + (60-this->t_.min);
     return minute_dif;
   } else { // hours are equal
-    return (unsigned)vcl_abs(this->t_.min - other.t_.min);
+    return (unsigned)vcl_abs(float(this->t_.min - other.t_.min));
   }
 }
 
