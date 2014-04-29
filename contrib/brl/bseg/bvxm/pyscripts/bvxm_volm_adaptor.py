@@ -249,7 +249,7 @@ def upsample_projected_img(input_img, num_neighbors=4):
     output_img = dbvalue(id, type);
   else:
     output_img = 0;
-  return output_img  return out_img;
+  return output_img;
 
 def generate_height_map_plot(gt_height, height, dif_init, dif_final, dif_increment):
   bvxm_batch.init_process("volmGenerateHeightMapPlotProcess");
