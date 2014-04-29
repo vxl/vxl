@@ -84,7 +84,7 @@ boxm2_volm_matcher_p1::~boxm2_volm_matcher_p1()
   if (depth_interval_buff_) delete [] depth_interval_buff_;
 }
 
-bool boxm2_volm_matcher_p1::volm_matcher_p1()
+bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
 {
   n_cam_ = new unsigned;
   *n_cam_ = (unsigned)query_->get_cam_num();
@@ -205,22 +205,29 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1()
              << extra_global_mem / GBYTE  << ")\n";
     return false;
   }
-  unsigned ni = index_global_mem / per_index_mem;
 
-  // hack here to specify the number of indice per lunching, instead of use calculated value
-  // because of CL_INVALID_COMMAND error for large number of indices given large number of cameras...
-  if (layer_size_ < 20000) {
-    if (*n_cam_ < 10000)      ni = 64;
-    else if (*n_cam_ < 15000) ni = 32;
-    else if (*n_cam_ < 20000) ni = 16;
-    else                      ni = 16;
-  }
+  // define the number of location that will be passed into kernel, if argument num_locs_to_kernel is given
+  // the ni is defined by user input. otherwise, it will be calculated based on the index size and number of trial
+  // camera at each location
+  //  Note the num_locs_to_kernel should never exceed the memory limitation of GPU card
+
+  
+  unsigned ni;
+  if (num_locs_to_kernel > 0)
+    ni = num_locs_to_kernel;
   else {
-    if (*n_cam_ < 10000)      ni = 8;
-    else if (*n_cam_ < 15000) ni = 4;
-    else                      ni = 2;
+    if (layer_size_ < 20000) {
+      if (*n_cam_ < 10000)      ni = 64;
+      else if (*n_cam_ < 15000) ni = 32;
+      else if (*n_cam_ < 20000) ni = 16;
+      else                      ni = 16;
+    }
+    else {
+      if (*n_cam_ < 10000)      ni = 8;
+      else if (*n_cam_ < 15000) ni = 4;
+      else                      ni = 2;
+    }
   }
-
   vcl_cout << "\t 4.1.3: device have total " << device_global_mem_ << " Byte (" << (float)device_global_mem_/(float)GBYTE << " GB) memory space\n"
            << "\t        query requires " << query_global_mem_ << " Byte (" << (float)query_global_mem_/(float)GBYTE << " GB)\n"
            << "\t        leave " << extra_global_mem  << " Byte (" << (float)extra_global_mem/(float)GBYTE << " GB) extra empty space on device\n"

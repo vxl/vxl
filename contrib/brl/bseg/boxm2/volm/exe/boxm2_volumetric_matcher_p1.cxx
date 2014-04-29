@@ -47,6 +47,7 @@ int main(int argc, char** argv)
   vul_arg<unsigned>   max_cam_per_loc("-max_cam", "maximum number of cameras to be saved", 200); // matcher -- output related
   vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "");      // matcher -- output folder
   vul_arg<bool>       logger("-logger", "designate one of the exes as logger", false);           // matcher -- log file generation
+  vul_arg<int>        num_locs("-num-locs", "number of location passed into GPU at each kernel launch", -1);  // matcher -- number of locations passed to GPU cache per kernel launching
   vul_arg<unsigned>   gt_id("-gt", "test image id (40 or 83)", 0);                                      // for experiments
   vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");               // for experiments
 
@@ -337,7 +338,7 @@ int main(int argc, char** argv)
                                         depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
                                         threshold(), max_cam_per_loc(), weights);
 
-  if (!obj_ps1_matcher.volm_matcher_p1()) {
+  if (!obj_ps1_matcher.volm_matcher_p1(num_locs())) {
     log << " ERROR: pass 1 volm_matcher failed for geo_index " << params_file.str() << '\n';
     if (do_log) volm_io::write_log(out_folder(), log.str());
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());

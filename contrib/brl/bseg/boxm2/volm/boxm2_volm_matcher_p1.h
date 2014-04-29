@@ -59,7 +59,7 @@ class boxm2_volm_matcher_p1
   //: destructor
   ~boxm2_volm_matcher_p1();
   //: matcher function
-  bool volm_matcher_p1();
+  bool volm_matcher_p1(int const& num_locs_to_kernel = -1);
   //: generate output -- probability map, binary score file, etc
   bool write_matcher_result(vcl_string const& tile_fname_bin, vcl_string const& tile_fname_txt);
   bool write_matcher_result(vcl_string const& tile_fname_bin);
