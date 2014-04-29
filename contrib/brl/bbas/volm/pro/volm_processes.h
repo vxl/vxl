@@ -27,5 +27,7 @@ DECLARE_FUNC_CONS(volm_transfer_geoindex_id_to_str_process);
 DECLARE_FUNC_CONS(volm_transfer_geoindex_id_to_str_process2);
 DECLARE_FUNC_CONS(volm_generate_height_map_from_ply_process);
 DECLARE_FUNC_CONS(volm_refine_bvxm_height_map_process);
+DECLARE_FUNC_CONS(volm_project_dem_to_sat_img_process);
+DECLARE_FUNC_CONS(volm_upsample_dem_projected_img_process);
 DECLARE_FUNC_CONS(volm_generate_height_map_plot_process);
 #endif

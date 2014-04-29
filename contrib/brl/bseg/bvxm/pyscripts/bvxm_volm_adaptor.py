@@ -211,7 +211,7 @@ def refine_bvxm_height_map(img, max_h, min_h):
 ## process to project open street map roads onto a cropped satellite images using
 ## its local cropped RPC camera, an ortho height map and an ortho camera
 def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file, band = "r", is_road=True, is_region=False):
-  bvxm_batch.init_process("VolmMapOSMtoImage");
+  bvxm_batch.init_process("volmMapOSMtoImage");
   bvxm_batch.set_input_from_db(0, crop_img);
   bvxm_batch.set_input_from_db(1, crop_cam);
   bvxm_batch.set_input_from_db(2, ortho_img);
@@ -227,6 +227,29 @@ def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_fi
   else:
     out_img = 0;
   return out_img;
+
+## process to project DEM images to a satellite image given the satellite viewpoint
+def project_dem_to_sat_img(sat_cam, sat_img, dem_file, dem_cam=0):
+  bvxm_batch.init_process("volmProjectDEMtoSatImgPorcess");
+  bvxm_batch.set_input_from_db(0, sat_cam);
+  bvxm_batch.set_input_from_db(1, sat_img);
+  bvxm_batch.set_input_string(2, dem_file);
+  bvxm_batch.set_input_from_db(3, dem_cam);
+  status = bvxm_batch.run_process();
+  return status;
+
+## process to up-sample the projected cropped ASTER DEM image
+def upsample_projected_img(input_img, num_neighbors=4):
+  bvxm_batch.init_process("volmUpsampleDemImgProcess");
+  bvxm_batch.set_input_from_db(0,  input_img);
+  bvxm_batch.set_input_unsigned(1, num_neighbors);
+  status = bvxm_batch.run_process();
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    output_img = dbvalue(id, type);
+  else:
+    output_img = 0;
+  return output_img  return out_img;
 
 def generate_height_map_plot(gt_height, height, dif_init, dif_final, dif_increment):
   bvxm_batch.init_process("volmGenerateHeightMapPlotProcess");
