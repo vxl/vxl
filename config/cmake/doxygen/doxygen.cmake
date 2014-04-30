@@ -140,7 +140,7 @@ if(BUILD_DOCUMENTATION)
   endif()
 
   #-------------------------------------------------------------------
-  # 
+  #
   #-------------------------------------------------------------------
   # FIXME: Should others be cached?: DOXYGEN_STYLESHEET.
   set(DOXYGEN_OUTPUT_DIR "${CMAKE_BINARY_DIR}/doxy"
@@ -206,27 +206,50 @@ if(BUILD_DOCUMENTATION)
     )
 
   #-------------------------------------------------------------------
+  # Add doxygen target
+  # Pivot on version 2.6.3 - newer CMake's support "SOURCES" option on
+  # the "add_custom_target" command.
   #
+  # Using CMAKE_VERSION in the following test is more to the point,
+  # but it is not supported in V2.6.3 and earlier versions of CMAKE.
+  #
+  # The CMAKE_MINIMUM_REQUIRED_VERSION can differ from what is set in the top
+  # level CMake file when VXL is imported into other projects that use CMake.
+  # When building VXL as a stand-alone library, the CMAKE_MINIMUM_REQUIRED_VERSION
+  # value is set from the top level CMakeList.txt file. When the VXL
+  # export config is used by other projects,
+  # the CMAKE_MINIMUM_REQUIRED_VERSION is set from the top level cmake file
+  # for that project, where the CMAKE_MINIMUM_REQUIRED_VERSION may be greater than
+  # V2.6.3.  If it is greater, then we can use the enhanced version of add_custom_target()
+  # that supports the SOURCES ketword.
   #-------------------------------------------------------------------
+  set( doxygen_sources )
   if(CMAKE_MINIMUM_REQUIRED_VERSION GREATER 2.6.3)
-    message(FATAL_ERROR
-      "config/cmake/doxygen/doxygen.cmake can now use SOURCES option"
-      "in add_custome_target command; un-comment the hidden code and"
-      "remove this conditional statement."
-      )
+    # this file does not exist in clean build
+    if( NOT EXISTS ${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake )
+       file(WRITE "${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake"
+         "# *** This is a auto-generated file. DO NOT edit! ***\n\n" )
+    endif()
+
+    set( doxygen_sources
+      SOURCES
+        "${DOXYGEN_SCRIPT_DIR}/doxygen.cmake"
+        "${DOXYGEN_SCRIPT_DIR}/doxygen_makeall.cmake"
+        "${DOXYGEN_SCRIPT_DIR}/doxyfile.in"
+        "${DOXYGEN_SCRIPT_DIR}/doxy_header.html"
+        "${DOXYGEN_SCRIPT_DIR}/vxl_doxy.pl"
+        "${CMAKE_BINARY_DIR}/doxygen_configuration.cmake"
+        "${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake"
+        "${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake"
+     )
   endif(CMAKE_MINIMUM_REQUIRED_VERSION GREATER 2.6.3)
+
   add_custom_target(build_doxygen_doc
     ${CMAKE_COMMAND} -P "${DOXYGEN_SCRIPT_DIR}/doxygen_makeall.cmake"
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     COMMENT "Build Doxygen Documentation"
     VERBATIM
-    #SOURCES
-    #  "${DOXYGEN_SCRIPT_DIR}/doxygen.cmake"
-    #  "${DOXYGEN_SCRIPT_DIR}/doxygen_makeall.cmake"
-    #  "${DOXYGEN_SCRIPT_DIR}/doxyfile.in"
-    #  "${DOXYGEN_SCRIPT_DIR}/doxy_header.html"
-    #  "${DOXYGEN_SCRIPT_DIR}/vxl_doxy.pl"
-    #  "${CMAKE_BINARY_DIR}/doxygen_configuration.cmake"
-    #  "${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake"
+    ${doxygen_sources}
     )
+
 endif(BUILD_DOCUMENTATION)
