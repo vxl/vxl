@@ -21,7 +21,6 @@
 #include <vsol/vsol_box_2d.h>
 
 #include <brip/brip_roi.h>
-#include <volm/volm_tile.h>
 #include <vgl/vgl_intersection.h>
 
 namespace boxm2_lidar_to_xyz_process_globals
@@ -178,8 +177,44 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vcl_string fname = pro.get_input<vcl_string>(1);
-  volm_tile t(fname, 0, 0); // pass ni, nj as 0 cause just need to parse the name string 
-  vgl_box_2d<float> bbox = t.bbox();
+
+  //parse the filename to obtain bounding box
+  vcl_string name = vul_file::strip_directory(fname);
+  name = name.substr(name.find_first_of('_')+1, name.size());
+  
+  vcl_string n_coords = name.substr(0, name.find_first_of('_'));
+  vcl_string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
+
+  // determine the lat, lon, hemisphere (North or South) and direction (East or West)
+  char hemisphere, direction;
+  vcl_size_t n = n_coords.find("N");
+  if (n < n_coords.size())  hemisphere = 'N';
+  else                      hemisphere = 'S';
+  n = n_coords.find("E");
+  if (n < n_coords.size())  direction = 'E';
+  else                      direction = 'W';
+  float lon, lat, scale_i, scale_j;
+  vcl_string n_str = n_coords.substr(n_coords.find_first_of(hemisphere)+1,
+                                     n_coords.find_first_of(direction)-n_coords.find_first_of(hemisphere)-1);
+  vcl_stringstream str(n_str);  str >> lat;
+
+  n_str = n_coords.substr(n_coords.find_first_of(direction)+1, n_coords.size());
+  vcl_stringstream str2(n_str);  str2 >> lon;
+
+  n_str = n_scale.substr(n_scale.find_first_of('S')+1, n_scale.find_first_of('x')-n_scale.find_first_of('S')-1);
+  vcl_stringstream str3(n_str);  str3 >> scale_i;  scale_j = scale_i;
+
+  float lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat;
+  lower_left_lon = lon;
+  if (direction == 'W')   lower_left_lon = -lon;
+  lower_left_lat = lat;
+  if (hemisphere == 'S')  lower_left_lat = -lat;
+  upper_right_lon = lower_left_lon + scale_i;
+  upper_right_lat = lower_left_lat + scale_j;
+  vgl_point_2d<float> lower_left(lower_left_lon, lower_left_lat);
+  vgl_point_2d<float> upper_right(upper_right_lon, upper_right_lat);
+
+  vgl_box_2d<float> bbox(lower_left, upper_right);
   
   // find scene bbox to see if it intersects with the image box -- WARNING: assumes that these boxes are small enough (both image and scene are small in area) so that Euclidean distances approximate the geodesic distances in geographic coordinates
   double min_lon, min_lat, gz, max_lon, max_lat;
@@ -264,11 +299,11 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
       {
         // dynamically cast the image and obtain the pixel value
         if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float> * > (img_sptr.ptr()))
-          (*out_img_z)(i,j) = (*img)(uu,vv)-orig_elev;
+          (*out_img_z)(i,j) = (*img)(uu,vv)-(float)orig_elev;
         else if (vil_image_view<short>* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr()))
-          (*out_img_z)(i,j) = (*img)(uu,vv)-orig_elev;
+          (*out_img_z)(i,j) = (*img)(uu,vv)-(float)orig_elev;
         else if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * > (img_sptr.ptr()))
-          (*out_img_z)(i,j) = (*img)(uu,vv)-orig_elev;
+          (*out_img_z)(i,j) = (*img)(uu,vv)-(float)orig_elev;
       }
     }
   

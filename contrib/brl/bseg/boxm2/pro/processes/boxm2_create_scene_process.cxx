@@ -832,12 +832,35 @@ bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
   return true;
 }
 
-
+#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource_sptr.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
+#include <vcl_algorithm.h>
+#include <vgl/vgl_intersection.h>
+#include <vul/vul_file_iterator.h>
+#include <vil/vil_load.h>
+#include <vil/vil_convert.h>
+#include <vil/vil_crop.h>
+#include <vpgl/vpgl_lvcs.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 //: A process to prune the blocks which are below the ground surface defined by ASTER DEM
 namespace boxm2_prune_scene_blocks_by_dem_process_globals
 {
   const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 1;
+
+  //: find the maximum and minimum height from dem images given a region
+  bool find_min_max_height(vgl_point_2d<double> const& lower_left, vgl_point_2d<double> const& upper_right,
+                           vcl_vector<vil_image_view_base_sptr>& dem_views,
+                           vcl_vector<vpgl_geo_camera*>& dem_cams,
+                           vcl_vector<vgl_box_2d<double> >& dem_bbox,
+                           double& min_elev, double& max_elev);
+  //: crop and find the min/max value
+  void crop_and_find_min_max(vcl_vector<vil_image_view_base_sptr>& dem_views, unsigned const& img_id,
+                             int const& i0, int const& j0, int const& c_ni, int const& c_nj,
+                             double& min, double& max);
+
 }
 
 bool boxm2_prune_scene_blocks_by_dem_process_cons(bprb_func_process& pro)
@@ -847,7 +870,7 @@ bool boxm2_prune_scene_blocks_by_dem_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";            // boxm2_scene
   input_types_[1] = "vcl_string";                  // directory where the dem images are stored
-  input_types_[2] = "float";                       // height tolrance above the surface
+  input_types_[2] = "float";                       // height tolerance above the surface
   
   // process takes 1 output
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -855,10 +878,7 @@ bool boxm2_prune_scene_blocks_by_dem_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-#include <volm/volm_tile.h>
-#include <volm/volm_io_tools.h>
-#include <vcl_algorithm.h>
-#include <vgl/vgl_intersection.h>
+
 bool boxm2_prune_scene_blocks_by_dem_process(bprb_func_process& pro)
 {
   using namespace boxm2_prune_scene_blocks_by_dem_process_globals;
@@ -874,13 +894,43 @@ bool boxm2_prune_scene_blocks_by_dem_process(bprb_func_process& pro)
   float elev_cut_off = pro.get_input<float>(i++);
 
   vpgl_lvcs lv = scene->lvcs();
+  vpgl_lvcs_sptr lvcs_sptr = new vpgl_lvcs(scene->lvcs());
 
-  // load the volm_img_info from the dem_root
-  vcl_vector<volm_img_info> dem_infos;
-  volm_io_tools::load_aster_dem_imgs(dem_root, dem_infos);
-  vcl_cout << " loaded: " << dem_infos.size() << " DEM tiles!\n";
+  // load dem images from the dem_root
+  vcl_vector<vil_image_view_base_sptr> dem_views;
+  vcl_vector<vpgl_geo_camera*> dem_cams;
+  vcl_vector<vgl_box_2d<double> > dem_bbox;
+  
+  vcl_string file_glob = dem_root + "//ASTGTM2_*.tif";
+  for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
+    vcl_string filename = fn();
+    // load the actual image
+    vil_image_view_base_sptr img_base_sptr = vil_load(filename.c_str());
+    dem_views.push_back(img_base_sptr);
+    // load the camera from geotiff header of filename
+    vpgl_geo_camera* cam;
+    vil_image_resource_sptr img_res = vil_load_image_resource(filename.c_str());
+    if (!vpgl_geo_camera::init_geo_camera(img_res, lvcs_sptr, cam)) {
+      // load camera from filename
+      vpgl_geo_camera::init_geo_camera_from_filename(filename, img_res->ni(), img_res->nj(), lvcs_sptr, cam);
+    }
+    dem_cams.push_back(cam);
+    // calculate the bbox of the image
+    double lat, lon;
+    cam->img_to_global(0.0, img_base_sptr->nj()-1, lon, lat);
+    vgl_point_2d<double> lower_left(lon, lat);
+    cam->img_to_global(img_base_sptr->ni()-1, 0.0, lon, lat);
+    vgl_point_2d<double> upper_right(lon, lat);
+    vgl_box_2d<double> bbox(lower_left, upper_right);
+    dem_bbox.push_back(bbox);
+  }
+  if (dem_views.empty()) {
+    vcl_cout << pro.name() << ": No DEM image stored in " << dem_root << vcl_endl;
+    return false;
+  }
+  vcl_cout << " loaded: " << dem_views.size() << " DEM tiles!\n";
 
-  // copy necessary infomation from previous scene
+  // copy necessary information from previous scene
   boxm2_scene_sptr pruned_scene = new boxm2_scene(scene->data_path(), scene->local_origin());
   pruned_scene->set_appearances(scene->appearances());
   pruned_scene->set_lvcs(lv);
@@ -904,7 +954,7 @@ bool boxm2_prune_scene_blocks_by_dem_process(bprb_func_process& pro)
     boxm2_block_id blk_id = mit->first;
     boxm2_block_metadata md = mit->second;
 
-    // obtain the min and max elev from dem image using bouding box of current block
+    // obtain the min and max elev from dem image using bounding box of current block
     vgl_box_3d<double> blk_box = md.bbox();
     double min_lon, min_lat, min_alt;
     double max_lon, max_lat, max_alt;
@@ -921,7 +971,7 @@ bool boxm2_prune_scene_blocks_by_dem_process(bprb_func_process& pro)
     else {
       vgl_point_2d<double>  lower_left(min_lon, min_lat);
       vgl_point_2d<double> upper_right(max_lon, max_lat);
-      if (!volm_io_tools::find_min_max_height(lower_left, upper_right, dem_infos, min_elev, max_elev)) {
+      if (!find_min_max_height(lower_left, upper_right, dem_views, dem_cams, dem_bbox, min_elev, max_elev)) {
         vcl_cout << pro.name() << ": find max/min elev for block " << blk_id << " failed\n";
         return false;
       }
@@ -1014,11 +1064,152 @@ bool boxm2_prune_scene_blocks_by_dem_process(bprb_func_process& pro)
   return true;
 }
 
+void boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(vcl_vector<vil_image_view_base_sptr>& dem_views, unsigned const& img_id,
+                                                                            int const& i0, int const& j0, int const& c_ni, int const& c_nj,
+                                                                            double& min, double& max)
+{
+  /*vcl_cout << " img id: " << img_id << vcl_endl;
+  vcl_cout << " crop: i0 = " << i0 << ", j0 = " << j0 << ", ni = " << c_ni << ", nj = " << c_nj << vcl_endl;
+  vcl_cout << " dem img size: ni = " << (dem_views[img_id])->ni() << " nj = " << (dem_views[img_id])->nj() << vcl_endl;*/
 
+  // load the actual dem image view
+  vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_views[img_id].ptr());
+  if (!dem_view) {
+    vil_image_view<float> temp(dem_views[img_id]->ni(), dem_views[img_id]->nj(), 1);
+    vil_image_view<vxl_int_16>* dem_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(dem_views[img_id].ptr());
+    if (!dem_view_int) {
+      vil_image_view<vxl_byte>* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_views[img_id].ptr());
+      vil_convert_cast(*dem_view_byte, temp);
+    }
+    else
+      vil_convert_cast(*dem_view_int, temp);
+    dem_view = new vil_image_view<float>(temp);
+  }
+
+  vil_image_view<float> crop_img = vil_crop(*(dem_view), i0, c_ni, j0, c_nj);
+  vcl_cout << " crop img size = " << crop_img.ni() << 'x' << crop_img.nj() << vcl_endl;
+  for (unsigned ii = 0; ii < crop_img.ni(); ii++) {
+    for (unsigned jj = 0; jj < crop_img.nj(); jj++) {
+      if (min > crop_img(ii,jj)) min = crop_img(ii,jj);
+      if (max < crop_img(ii,jj)) max = crop_img(ii,jj);
+    }
+  }
+}
+
+bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_point_2d<double> const& lower_left, vgl_point_2d<double> const& upper_right,
+                                                                          vcl_vector<vil_image_view_base_sptr>& dem_views,
+                                                                          vcl_vector<vpgl_geo_camera*>& dem_cams,
+                                                                          vcl_vector<vgl_box_2d<double> >& dem_bbox,
+                                                                          double& min_elev, double& max_elev)
+{
+  // find the image of all four corners
+  vcl_vector<vcl_pair<unsigned, vcl_pair<int, int> > > corners;
+  vcl_vector<vgl_point_2d<double> > pts;
+  pts.push_back(vgl_point_2d<double>(lower_left.x(), upper_right.y()));
+  pts.push_back(vgl_point_2d<double>(upper_right.x(), lower_left.y()));
+  pts.push_back(lower_left); 
+  pts.push_back(upper_right); 
+  unsigned num_dem_imgs = dem_views.size();
+  for (unsigned k = 0; k < pts.size(); k++) {
+    // find the image
+    for (unsigned j = 0; j < num_dem_imgs; j++) {
+      double u, v;
+      dem_cams[j]->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
+      int uu = (int)vcl_floor(u+0.5);  int vv = (int)vcl_floor(v+0.5);
+      if (uu < 0 || vv < 0 || uu >= dem_views[j]->ni() || vv >= dem_views[j]->nj())
+        continue;
+      corners.push_back(vcl_pair<unsigned, vcl_pair<int, int> >(j, vcl_pair<int,int>(uu,vv)));
+      break;
+    }
+  }
+  vcl_cout << " lower_left: " << lower_left << ", upper_right: " << upper_right << vcl_endl;
+  vcl_cout << " corner: " << vcl_endl;
+  for (unsigned i = 0; i < corners.size(); i++) {
+    vcl_cout <<  " dem img id : " << corners[i].first << " pixel: " << corners[i].second.first << "x" << corners[i].second.second << vcl_endl;
+  }
+  if (corners.size() != 4) {
+    vcl_cerr << "Cannot locate all 4 corners among these DEM tiles!\n";
+    return false;
+  }
+  // case 1: all corners are in the same image
+  if (corners[0].first == corners[1].first) {
+    // crop the image
+    int i0 = corners[0].second.first;
+    int j0 = corners[0].second.second;
+    int crop_ni = corners[1].second.first-corners[0].second.first+1;
+    int crop_nj = corners[1].second.second-corners[0].second.second+1;
+    boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(dem_views, corners[0].first, i0, j0, crop_ni, crop_nj, min_elev, max_elev);
+    return true;
+  }
+  // case 2: two corners are in the same image
+  if (corners[0].first == corners[2].first && corners[1].first == corners[3].first) {
+    // crop the first image
+    int i0 = corners[0].second.first;
+    int j0 = corners[0].second.second;
+    int crop_ni = dem_views[corners[0].first]->ni() - corners[0].second.first;
+    int crop_nj = corners[2].second.second-corners[0].second.second+1;
+    boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(dem_views, corners[0].first, i0, j0, crop_ni, crop_nj, min_elev, max_elev);
+    
+    // crop the second image
+    i0 = 0;
+    j0 = corners[3].second.second;
+    crop_ni = corners[3].second.first + 1;
+    crop_nj = corners[1].second.second-corners[3].second.second+1;
+    boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(dem_views, corners[1].first, i0, j0, crop_ni, crop_nj, min_elev, max_elev);
+    return true;
+  }
+  // case 3: two corners are in the same image
+  if (corners[0].first == corners[3].first && corners[1].first == corners[2].first) {
+    // crop the first image
+    int i0 = corners[0].second.first;
+    int j0 = corners[0].second.second;
+    int crop_ni = corners[3].second.first - corners[0].second.first + 1;
+    int crop_nj = dem_views[corners[0].first]->nj() - corners[0].second.second; 
+    boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(dem_views, corners[0].first, i0, j0, crop_ni, crop_nj, min_elev, max_elev);
+    
+    // crop the second image
+    i0 = corners[2].second.first;
+    j0 = 0; 
+    crop_ni = corners[1].second.first - corners[2].second.first + 1;
+    crop_nj = corners[2].second.second + 1;
+    boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(dem_views, corners[1].first, i0, j0, crop_ni, crop_nj, min_elev, max_elev);
+    return true;
+  }
+  // case 4: all corners are in different images
+  // crop the first image, image of corner 0
+  int i0 = corners[0].second.first;
+  int j0 = corners[0].second.second;
+  int crop_ni = dem_views[corners[0].first]->ni() - corners[0].second.first;
+  int crop_nj = dem_views[corners[0].first]->nj() - corners[0].second.second;
+  boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(dem_views, corners[0].first, i0, j0, crop_ni, crop_nj, min_elev, max_elev);
+  
+  // crop the second image, image of corner 1
+  i0 = 0;
+  j0 = 0;
+  crop_ni = corners[1].second.first + 1;
+  crop_nj = corners[1].second.second + 1;
+  boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(dem_views, corners[1].first, i0, j0, crop_ni, crop_nj, min_elev, max_elev);
+  
+  // crop the third image, image of corner 2
+  i0 = corners[2].second.first;
+  j0 = 0;
+  crop_ni = dem_views[corners[2].first]->ni() - corners[2].second.first;
+  crop_nj = corners[2].second.second + 1;
+  boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(dem_views, corners[2].first, i0, j0, crop_ni, crop_nj, min_elev, max_elev);
+  
+  // crop the fourth image, image of corner 3
+  i0 = 0;
+  j0 = corners[3].second.second;
+  crop_ni = corners[3].second.first + 1;
+  crop_nj = dem_views[corners[3].first]->nj() - corners[3].second.second;
+  boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(dem_views, corners[3].first, i0, j0, crop_ni, crop_nj, min_elev, max_elev);
+  
+  return true;
+}
+
+#if 0
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
-#include <volm/volm_tile.h>
-#include <volm/volm_category_io.h>
 #include <vgl/vgl_intersection.h>
 //: A process to change the resolution/refinement of blocks based on the land type
 //: e.g: rural regon like mountain can be low resolution but urban region requires high resolution
@@ -1155,8 +1346,8 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
       unsigned ii = img->ni();
       unsigned jj = img->nj();
       // if any pixel is urban, the land cover for this blk is urban
-      // else if any pixel is agriculature, the land cover for this blk is agriculature
-      // if no urban and no agriculature, the land cover for this blk is barren land, i.e., the lowest max_level, largest dims
+      // else if any pixel is agriculture, the land cover for this blk is agriculture
+      // if no urban and no agriculture, the land cover for this blk is barren land, i.e., the lowest max_level, largest dims
       for (unsigned i = bd_min_ni; i <= bd_max_ni && loop; i++) {
         for (unsigned j = bd_min_nj; j <= bd_max_nj && loop; j++) {
           if ( (*img)(i,j) == volm_osm_category_io::GEO_URBAN) {
@@ -1189,3 +1380,4 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
   pro.set_output_val<boxm2_scene_sptr>(i++, changed_scene);
   return true;
 }
+#endif

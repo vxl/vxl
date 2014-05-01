@@ -362,7 +362,6 @@ void volm_io_tools::load_geotiff_image(vcl_string filename, volm_img_info& info,
   vpgl_geo_camera *cam;
   vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
   if (load_cam_from_name) {
-    vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
     vpgl_geo_camera::init_geo_camera_from_filename(filename, info.ni, info.nj, lvcs_dummy, cam); // constructs in global WGS84 (no distinction of N/S or W/E)
     vcl_cout << cam->trans_matrix() << vcl_endl;
   } else {

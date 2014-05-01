@@ -20,4 +20,5 @@ void boxm2_volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_visualize_index_process2, "boxm2VisualizeHypIndexProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_all_index_process, "boxm2IndexLabelCombinedDataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_geo_cover_with_osm_to_xyz_process, "boxm2OSMToXYZProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_change_scene_res_by_geo_cover_process, "boxm2ChangeSceneResByGeoCover");
 }
