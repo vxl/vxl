@@ -595,7 +595,7 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string=""
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
     return exp_image;
-  elif cache.type == "boxm2_opencl_cache2_sptr" and device :
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderExpectedImageProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
