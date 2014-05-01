@@ -417,10 +417,10 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(2, out_img2sptr);
   pro.set_output_val<vpgl_camera_double_sptr>(3, out_aff_camera2);
 
-  vcl_ofstream ofs(output_path_H1);
+  vcl_ofstream ofs(output_path_H1.c_str());
   ofs << H1;
   ofs.close();
-  vcl_ofstream ofs2(output_path_H2);
+  vcl_ofstream ofs2(output_path_H2.c_str());
   ofs2 << H2;
   ofs2.close();
   
@@ -486,17 +486,17 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
 
   vnl_matrix_fixed<double, 3, 3> H1, H2;
   double minih1, minjh1, minih2, minjh2;
-  vcl_ifstream ifs(path_H1);
+  vcl_ifstream ifs(path_H1.c_str());
   ifs >> H1;
   ifs.close();
-  vcl_ifstream ifs2(path_H2);
+  vcl_ifstream ifs2(path_H2.c_str());
   ifs2 >> H2;
   ifs2.close();
   vcl_cout << "read H1:\n " << H1 << "\n H2:\n " << H2 << "\n";
   
   vil_image_view<float> img1 = *vil_convert_cast(float(), img1_sptr);
   
-  vcl_ifstream ifsd(disp_name);
+  vcl_ifstream ifsd(disp_name.c_str());
   if (!ifsd) {
     vcl_cerr << "In vpgl_construct_height_map_process() -- cannot open disparity file: " << disp_name << vcl_endl;
     return false;
