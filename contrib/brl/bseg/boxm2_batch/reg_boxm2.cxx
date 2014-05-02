@@ -14,7 +14,7 @@
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
 #include <boxm2/ocl/pro/boxm2_ocl_register.h>
-#include <boxm2/volm/pro/boxm2_volm_register.h>
+
 #if defined(HAS_GLEW) && HAS_GLEW
 #include <boxm2/view/pro/boxm2_view_register.h>
 #endif
@@ -31,103 +31,113 @@
 #include <bvrml/pro/bvrml_register.h>
 #include <bbgm/pro/bbgm_register.h>
 #include <icam_pro/icam_register.h>
+#if defined(USE_VOLM) && USE_VOLM
 #include <volm/pro/volm_register.h>
-
+#include <boxm2/volm/pro/boxm2_volm_register.h>
+#endif
 PyObject *
-register_processes(PyObject *self, PyObject *args)
+    register_processes(PyObject *self, PyObject *args)
 {
-  boxm2_register::register_process();
-  boxm2_cpp_register::register_process();
-  vpgl_register::register_process();
-  vil_register::register_process();
-  brip_register::register_process();
-  bvpl_kernels_register::register_process();
+    boxm2_register::register_process();
+    boxm2_cpp_register::register_process();
+    vpgl_register::register_process();
+    vil_register::register_process();
+    brip_register::register_process();
+    bvpl_kernels_register::register_process();
 #if defined(HAS_OPENCL) && HAS_OPENCL
-  bocl_register::register_process();
-  boxm2_ocl_register::register_process();
-  boxm2_volm_register::register_process();
+    bocl_register::register_process();
+    boxm2_ocl_register::register_process();
 #if defined(HAS_GLEW) && HAS_GLEW
-  boxm2_view_register::register_process();
+    boxm2_view_register::register_process();
 #endif
 #endif
-  bbas_register::register_process();
-  brad_register::register_process();
-  bsta_register::register_process();
-  ihog_register::register_process();
-  sdet_register::register_process();
+    bbas_register::register_process();
+    brad_register::register_process();
+    bsta_register::register_process();
+    ihog_register::register_process();
+    sdet_register::register_process();
 #if defined(HAS_HDFS) && HAS_HDFS
-  bhdfs_register::register_process();
+    bhdfs_register::register_process();
 #endif
-  bsvg_register::register_process();
-  bvrml_register::register_process();
-  bbgm_register::register_process();
-  icam_register::register_process();
-  volm_register::register_process();
-  Py_INCREF(Py_None);
-  return Py_None;
+    bsvg_register::register_process();
+    bvrml_register::register_process();
+    bbgm_register::register_process();
+    icam_register::register_process();
+#if defined(USE_VOLM) && USE_VOLM
+#if defined(HAS_OPENCL) && HAS_OPENCL
+    boxm2_volm_register::register_process();
+#endif
+    volm_register::register_process();
+#endif
+    Py_INCREF(Py_None);
+    return Py_None;
 }
 
 
 PyObject *
-register_datatypes(PyObject *self, PyObject *args)
+    register_datatypes(PyObject *self, PyObject *args)
 {
-  register_basic_datatypes();
+    register_basic_datatypes();
 
-  boxm2_register::register_datatype();
-  boxm2_cpp_register::register_datatype();
-  vpgl_register::register_datatype();
-  vil_register::register_datatype();
-  brip_register::register_datatype(); 
-  bvpl_kernels_register::register_datatype();
+    boxm2_register::register_datatype();
+    boxm2_cpp_register::register_datatype();
+    vpgl_register::register_datatype();
+    vil_register::register_datatype();
+    brip_register::register_datatype(); 
+    bvpl_kernels_register::register_datatype();
 #if defined(HAS_OPENCL) && HAS_OPENCL
-  bocl_register::register_datatype();
-  boxm2_ocl_register::register_datatype();
-  boxm2_volm_register::register_datatype();
+    bocl_register::register_datatype();
+    boxm2_ocl_register::register_datatype();
 #if defined(HAS_GLEW) && HAS_GLEW
-  boxm2_view_register::register_datatype();
+    boxm2_view_register::register_datatype();
 #endif
 #endif
-  bbas_register::register_datatype();
-  sdet_register::register_datatype();
-  brad_register::register_datatype();
-  bsta_register::register_datatype();
-  ihog_register::register_datatype();
+    bbas_register::register_datatype();
+    sdet_register::register_datatype();
+    brad_register::register_datatype();
+    bsta_register::register_datatype();
+    ihog_register::register_datatype();
 #if defined(HAS_HDFS) && HAS_HDFS
-  bhdfs_register::register_datatype();
+    bhdfs_register::register_datatype();
 #endif
-  bsvg_register::register_datatype();
-  bvrml_register::register_datatype();
-  bbgm_register::register_datatype();
-  icam_register::register_datatype();
-  boxm2_register::register_datatype();
-  volm_register::register_datatype();
-  Py_INCREF(Py_None);
-  return Py_None;
+    bsvg_register::register_datatype();
+    bvrml_register::register_datatype();
+    bbgm_register::register_datatype();
+    icam_register::register_datatype();
+    boxm2_register::register_datatype();
+#if defined(USE_VOLM) && USE_VOLM
+#if defined(HAS_OPENCL) && HAS_OPENCL
+    boxm2_volm_register::register_datatype();
+#endif
+    volm_register::register_datatype();
+#endif
+    Py_INCREF(Py_None);
+    return Py_None;
 }
 
 
 PyMODINIT_FUNC
-initboxm2_batch(void)
+    initboxm2_batch(void)
 {
-  PyMethodDef reg_pro;
-  reg_pro.ml_name = "register_processes";
-  reg_pro.ml_meth = register_processes;
-  reg_pro.ml_doc = "register_processes() create instances of each defined process";
-  reg_pro.ml_flags = METH_VARARGS;
+    PyMethodDef reg_pro;
+    reg_pro.ml_name = "register_processes";
+    reg_pro.ml_meth = register_processes;
+    reg_pro.ml_doc = "register_processes() create instances of each defined process";
+    reg_pro.ml_flags = METH_VARARGS;
 
-  PyMethodDef reg_data;
-  reg_data.ml_name = "register_datatypes";
-  reg_data.ml_meth = register_datatypes;
-  reg_data.ml_doc = "register_datatypes() insert tables in the database for each type";
-  reg_data.ml_flags = METH_VARARGS;
+    PyMethodDef reg_data;
+    reg_data.ml_name = "register_datatypes";
+    reg_data.ml_meth = register_datatypes;
+    reg_data.ml_doc = "register_datatypes() insert tables in the database for each type";
+    reg_data.ml_flags = METH_VARARGS;
 
-  boxm2_batch_methods[0]=reg_pro;
-  boxm2_batch_methods[1]=reg_data;
+    boxm2_batch_methods[0]=reg_pro;
+    boxm2_batch_methods[1]=reg_data;
 
-  for (int i=0; i<METHOD_NUM; ++i) {
-    boxm2_batch_methods[i+2]=batch_methods[i];
-  }
+    for (int i=0; i<METHOD_NUM; ++i) {
+        boxm2_batch_methods[i+2]=batch_methods[i];
+    }
 
-  Py_InitModule("boxm2_batch", boxm2_batch_methods);
+    Py_InitModule("boxm2_batch", boxm2_batch_methods);
 }
 

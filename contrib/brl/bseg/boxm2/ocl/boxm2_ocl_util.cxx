@@ -77,10 +77,13 @@ void boxm2_ocl_util::set_dodecahedron_orientations_lookup(cl_float4* dodecahedro
 //returns path to opencl src (cl files)
 vcl_string boxm2_ocl_util::ocl_src_root()
 {
-  vcl_string boxm2_ocl_src_dir(BOXM2_OPENCL_SOURCE_DIR);
-  if ( boxm2_ocl_src_dir == "" )
-    boxm2_ocl_src_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  return boxm2_ocl_src_dir;
+    vcl_string boxm2_ocl_src_dir = vcl_string(getenv ("BOXM2_OPENCL_DIR")) + "/";
+    vcl_cout<<"CL dir "<<boxm2_ocl_src_dir<<vcl_endl;
+    if ( boxm2_ocl_src_dir == "" )
+        boxm2_ocl_src_dir = BOXM2_OPENCL_SOURCE_DIR ;  
+    if ( boxm2_ocl_src_dir == "" )
+        boxm2_ocl_src_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    return boxm2_ocl_src_dir;
 }
 
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent

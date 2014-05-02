@@ -8,6 +8,9 @@ INCLUDE( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
 INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 
+OPTION(BOXM2_USE_VOLM "Inlcude Volm in boxm2_batch" YES)
+
+
 IF( PYTHON_FOUND )
   INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   IF( EXPAT_FOUND )
@@ -37,8 +40,11 @@ IF( PYTHON_FOUND )
       ENDIF(APPLE)
       SET_TARGET_PROPERTIES(boxm2_batch PROPERTIES PREFIX "")
 
-      TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro volm_pro)
-
+      TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
+      IF(BOXM2_USE_VOLM)
+        ADD_DEFINITIONS(-DUSE_VOLM=1)
+        TARGET_LINK_LIBRARIES(boxm2_batch volm_pro)
+      ENDIF(BOXM2_USE_VOLM)
       IF(GLEW_FOUND AND HAS_VGUI)
         ADD_DEFINITIONS(-DHAS_GLEW=1)
         TARGET_LINK_LIBRARIES(boxm2_batch boxm2_view_pro )
@@ -46,7 +52,11 @@ IF( PYTHON_FOUND )
 
       IF(OPENCL_FOUND)
         ADD_DEFINITIONS(-DHAS_OPENCL=1)
-        TARGET_LINK_LIBRARIES(boxm2_batch bocl_pro  boxm2_ocl_pro boxm2_volm_pro boxm2_volm_io )
+        TARGET_LINK_LIBRARIES(boxm2_batch bocl_pro  boxm2_ocl_pro )
+        IF(BOXM2_USE_VOLM)
+             TARGET_LINK_LIBRARIES(boxm2_batch boxm2_volm_pro boxm2_volm_io )
+        ENDIF(BOXM2_USE_VOLM)
+        
       ENDIF(OPENCL_FOUND)
       
       IF(HDFS_FOUND)
