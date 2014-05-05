@@ -126,8 +126,8 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     bocl_mem_sptr ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
     ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-    vcl_vector<boxm2_block_id>& blocks_A = sceneA_->get_block_ids();
-    vcl_vector<boxm2_block_id>& blocks_B = sceneB_->get_block_ids();
+    vcl_vector<boxm2_block_id> blocks_A = sceneA_->get_block_ids();
+    vcl_vector<boxm2_block_id> blocks_B = sceneB_->get_block_ids();
     vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
     vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
     vcl_size_t local_threads[1]={64};

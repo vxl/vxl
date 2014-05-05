@@ -63,8 +63,8 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
   vcl_string options = "";
   // compile the kernel if not already compiled
   vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
-  vcl_vector<boxm2_block_id>& blocks_A = sceneA->get_block_ids();
-  vcl_vector<boxm2_block_id>& blocks_B = sceneB->get_block_ids();
+  vcl_vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
+  vcl_vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
   vcl_cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<vcl_endl;
   vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
   vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
@@ -222,8 +222,8 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
   vcl_string options = "";
   // compile the kernel if not already compiled
   vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
-  vcl_vector<boxm2_block_id>& blocks_A = sceneA->get_block_ids();
-  vcl_vector<boxm2_block_id>& blocks_B = sceneB->get_block_ids();
+  vcl_vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
+  vcl_vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
   vcl_cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<vcl_endl;
   vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
   vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
@@ -387,8 +387,8 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
   vcl_string options = "";
   // compile the kernel if not already compiled
   vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
-  vcl_vector<boxm2_block_id>& blocks_A = sceneA->get_block_ids();
-  vcl_vector<boxm2_block_id>& blocks_B = sceneB->get_block_ids();
+  vcl_vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
+  vcl_vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
   vcl_cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<vcl_endl;
   vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
   vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
