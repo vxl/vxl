@@ -35,12 +35,16 @@ bool bvxm_update_edges_process_cons(bprb_func_process& pro)
   //input[1]: The current camera
   //input[2]: The current image
   //input[3]: Scale of the image
+  //input[4]: edge_prob_mask_size
+  //input[5]: edge_prob_mask_sigma
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "bvxm_voxel_world_sptr";
   input_types_[i++] = "vpgl_camera_double_sptr";
   input_types_[i++] = "vil_image_view_base_sptr";
   input_types_[i++] = "unsigned";
+  input_types_[i++] = "int";
+  input_types_[i++] = "float";
   return pro.set_input_types(input_types_);
 }
 
@@ -69,18 +73,23 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   // scale of image
   unsigned scale = pro.get_input<unsigned>(i++);
 
+  // edge update parameters
+  int edge_prob_mask_size = pro.get_input<int>(i++);
+  float edge_prob_mask_sigma = pro.get_input<float>(i++);
+
+#if 0
   // get parameters
   int edge_prob_mask_size = 21;
   pro.parameters()->get_value(param_edge_prob_mask_size_, edge_prob_mask_size);
   float edge_prob_mask_sigma = 1.0f;
   pro.parameters()->get_value(param_edge_prob_mask_sigma_, edge_prob_mask_sigma);
+#endif
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
 
   vcl_cout << "number of observations before the update: " << num_observations << '\n'
            << "edge_prob_mask_size: " << edge_prob_mask_size << '\n'
            << "edge_prob_mask_sigma: " << edge_prob_mask_sigma << '\n';
-
 
   vil_image_view<float> edge_prob_image;
   sdet_img_edge::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);

@@ -121,13 +121,15 @@ def bvxm_detect_edges(cropped_image, edge_params_xml):
   cropped_edge_image = dbvalue(cropped_edge_image_id,cropped_edge_image);
   return cropped_edge_image
 
-def update_edges(world, cropped_cam, cropped_edge_image, update_params_xml, scale=0):
+def update_edges(world, cropped_cam, cropped_edge_image, edge_prob_mask_size=21, edge_prob_mask_sigma=1.0, scale=0):
   bvxm_batch.init_process("bvxmUpdateEdgesProcess");
   bvxm_batch.set_input_from_db(0,world);
   bvxm_batch.set_input_from_db(1,cropped_cam);
   bvxm_batch.set_input_from_db(2,cropped_edge_image);
   bvxm_batch.set_input_unsigned(3,0);
-  bvxm_batch.set_params_process(update_params_xml); # "./bvxmUpdateEdgesProcess.xml");
+  bvxm_batch.set_input_int(4, edge_prob_mask_size)
+  bvxm_batch.set_input_float(5, edge_prob_mask_sigma)
+#   bvxm_batch.set_params_process(update_params_xml); # "./bvxmUpdateEdgesProcess.xml");
   bvxm_batch.run_process();
 
 def rpc_registration(world, cropped_cam, cropped_edge_image, uncertainty, shift_3d_flag=0, scale=0, is_uncertainty_float = 0):

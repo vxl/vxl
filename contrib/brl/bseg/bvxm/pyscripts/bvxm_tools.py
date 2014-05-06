@@ -61,7 +61,7 @@ def build_edge_world(scene, scene_id, world_dir, n_seed, image_fnames, cropped_i
         continue
       else:
         # update edge world using seed
-        update_edges(scene, cropped_cam, cropped_edge_image, param_file_dir + "bvxmUpdateEdgesProcess.xml");
+        update_edges(scene, cropped_cam, cropped_edge_image);
 
   for i in range(0, len(cropped_edge_imgs), 1):
     cropped_cam = cropped_cams[i]
@@ -82,7 +82,7 @@ def build_edge_world(scene, scene_id, world_dir, n_seed, image_fnames, cropped_i
 #       cam_global_cor = correct_rational_camera(cropped_cam, offset_u, offset_v);
       save_rational_camera(cam_cor,corrected_global_cams % image_name);
       # update edge world using corrected camera
-      update_edges(scene, cam_cor, cropped_edge_image, param_file_dir + "bvxmUpdateEdgesProcess.xml");
+      update_edges(scene, cam_cor, cropped_edge_image);
       # clean data
       bvxm_batch.remove_data(expected_edge_image.id)
 #       bvxm_batch.remove_data(cam_global_cor.id);

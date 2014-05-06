@@ -10,6 +10,7 @@
 // \verbatim
 //  Modifications
 //   Peter Vanroose - Jul 10, 2009 - split into .h and .cxx
+//   Yi Dong        - May 06, 2014 - avoid using xml file as input to avoid IO confliction when the process is running in parallel
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -18,12 +19,13 @@
 //: globals
 namespace bvxm_update_edges_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 0;
-
+#if 0
   // parameter strings
   const vcl_string param_edge_prob_mask_size_ =  "edge_prob_mask_size";
   const vcl_string param_edge_prob_mask_sigma_ =  "edge_prob_mask_sigma";
+#endif
 }
 
 //: set input and output types
