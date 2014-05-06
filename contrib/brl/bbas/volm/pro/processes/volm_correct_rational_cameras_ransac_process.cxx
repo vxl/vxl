@@ -295,6 +295,7 @@ bool volm_correct_rational_cameras_ransac_process2_cons(bprb_func_process& pro)
                                     // .
   input_types.push_back("vcl_string");  // output folder to write the corrected cams
   input_types.push_back("float"); // radius in pixels for the disagreement among inliers, e.g. 2 pixels
+  input_types.push_back("int");  // option to enforce having 2 existing cameras
   vcl_vector<vcl_string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -303,7 +304,7 @@ bool volm_correct_rational_cameras_ransac_process2_cons(bprb_func_process& pro)
 //: Execute the process
 bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
 {
-  if (pro.n_inputs() < 4) {
+  if (pro.n_inputs() < 5) {
     vcl_cout << "volm_correct_rational_cameras_ransac_process: The number of inputs should be 4" << vcl_endl;
     return false;
   }
@@ -313,6 +314,11 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   vcl_string input_cams = pro.get_input<vcl_string>(1);
   vcl_string output_path  = pro.get_input<vcl_string>(2);
   float pix_rad = pro.get_input<float>(3);
+  bool enforce_existing = pro.get_input<int>(4) == 1 ? true : false;
+  if (enforce_existing) 
+    vcl_cout << "!!!!!!! enforce to have at least 2 existing images!!\n";
+  else 
+    vcl_cout << "!!!!!!! DO NOT enforce to have at least 2 existing images!!\n";
 
   vcl_ifstream ifs(input_cams.c_str());
   if (!ifs) {
@@ -405,6 +411,11 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
       new_corrs.push_back(corrs[i]);
     }
   }
+  if (enforce_existing && cnt_exists < 2) {
+    vcl_cerr << " Enforcing condition to have 2 pre-existing corrected cameras! EXITING since there is: " << cnt_exists << " cameras.\n";
+    return false;
+  }
+
   // distribute the weights
   if (cnt_exists == 0) 
     cam_weights.assign(cam_weights.size(), 1.0f/cams.size());

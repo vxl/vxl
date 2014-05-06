@@ -157,12 +157,13 @@ def correct_ransac_process(res, cor_file, output_folder, pixel_radius):
 
 ## this one checks if the camera is already corrected and exists in the output folder
 ## weights the cameras accordingly
-def correct_ransac_process2(res, cor_file, output_folder, pixel_radius):
+def correct_ransac_process2(res, cor_file, output_folder, pixel_radius, enforce_existing = 0):
   bvxm_batch.init_process("volmCorrectRationalCamerasRANSACProcess2");
   bvxm_batch.set_input_from_db(0, res);
   bvxm_batch.set_input_string(1, cor_file);
   bvxm_batch.set_input_string(2, output_folder);
   bvxm_batch.set_input_float(3, pixel_radius);  ## pixel radius to count for inliers
+  bvxm_batch.set_input_int(4, enforce_existing);  ## pixel radius to count for inliers
   statuscode = bvxm_batch.run_process();
   return statuscode;
 
