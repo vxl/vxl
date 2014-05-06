@@ -23,7 +23,7 @@
 //: global variable and functions
 namespace volm_upsample_dem_projected_img_process_globals
 {
-  const unsigned n_inputs_  = 2;
+  const unsigned n_inputs_  = 4;
   const unsigned n_outputs_ = 1;
 
   typedef vnl_vector_fixed<double,2> pt_type;
@@ -36,6 +36,8 @@ bool volm_upsample_dem_projected_img_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";  // input image
   input_types_[1] = "unsigned";                  // number of nearest neighbors considered (default is 4)
+  input_types_[2] = "unsigned";                  // bin size along image column
+  input_types_[3] = "unsigned";                  // bin size along image row
   // process takes 1 output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // output image
@@ -58,6 +60,8 @@ bool volm_upsample_dem_projected_img_process(bprb_func_process& pro)
     return false;
   }
   unsigned num_neighbors = pro.get_input<unsigned>(1);
+  unsigned bin_size_0 = pro.get_input<unsigned>(2);
+  unsigned bin_size_1 = pro.get_input<unsigned>(3);
 
   unsigned ni = in_img->ni();
   unsigned nj = in_img->nj();
@@ -79,7 +83,7 @@ bool volm_upsample_dem_projected_img_process(bprb_func_process& pro)
   min_pt[0] = 0.0;  max_pt[0] = (double)ni;
   min_pt[1] = 0.0;  max_pt[1] = (double)nj;
   // set the bin size to be 60 (roughly 60 meters)
-  bin_sizes[0] = 30; bin_sizes[1] = 30;
+  bin_sizes[0] = bin_size_0; bin_sizes[1] = bin_size_1;
   rsdl_bins_2d<double, float> bins(min_pt, max_pt, bin_sizes);
   double dist_tol = 0.0001;
   bins.set_distance_tolerance(dist_tol);
@@ -94,11 +98,13 @@ bool volm_upsample_dem_projected_img_process(bprb_func_process& pro)
     bins.get_value(pixels[i], stored_value);
     //vcl_cout << "pixel [" << pixels[i][0] << ',' << pixels[i][1] << "], value = " << values[i] << " (diff = " << stored_value - values[i] << vcl_endl;
   }
-  vcl_cout << "Start to interpolate the [" << ni << 'x' << nj << "] image using " << num_neighbors << " nearest neighbors";
+  vcl_cout << "Construct rsdl bin with bin size " << bin_sizes[0] << 'x' << bin_sizes[1] << vcl_endl;
+  vcl_cout << "Start to interpolate the [" << ni << 'x' << nj << "] image given " << pixels.size() << " valid pixels and " << num_neighbors << " nearest neighbors";
+  
   vul_timer up_time;
   // for each pixel obtain its 4 nearest neighbors
   for (unsigned i = 0; i < ni; i++) {
-    if (i%200 == 0)
+    if (i%20 == 0)
       vcl_cout << '.' << i << vcl_flush;
     /*if (i > 500 || i < 200)
       continue;*/

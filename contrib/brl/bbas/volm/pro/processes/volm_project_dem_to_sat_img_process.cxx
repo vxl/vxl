@@ -7,7 +7,7 @@
 // \author Yi Dong
 // \date April 23, 2014
 //  Modifications
-//   <none yet>
+//   Yi Dong May 1, 2014  -- add a bounding box of satellite viewpoint to speed up the process execution
 // \endverbatim
 //
 
@@ -24,12 +24,15 @@
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
 #include <vnl/vnl_int_2.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_intersection.h>
 
 // process to project/crop single ASTER DEM image to the given satellite viewpoint
 //: global variables and functions
 namespace volm_project_dem_to_sat_img_process_globals
 {
-  const unsigned n_inputs_  = 4;
+  const unsigned n_inputs_  = 8;
   const unsigned n_outputs_ = 0;
 
   // function to project dem image pixel to satellite image pixel
@@ -48,6 +51,10 @@ bool volm_project_dem_to_sat_img_process_cons(bprb_func_process& pro)
   input_types_[1] = "vil_image_view_base_sptr"; // satellite image (will be overwritten)
   input_types_[2] = "vcl_string";               // ASTER DEM image name
   input_types_[3] = "vpgl_camera_double_sptr";  // geocam if DEM image does not contain a camera.  Pass 0 means the camera will be loaded from geotiff header
+  input_types_[4] = "double";                   // lower left lon of satellite region
+  input_types_[5] = "double";                   // lower left lat of satellite region
+  input_types_[6] = "double";                   // upper right lon of satellite region
+  input_types_[7] = "double";                   // upper right lat of satellite region
   // process takes 0 input
   vcl_vector<vcl_string> output_types_(n_outputs_); 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -67,6 +74,10 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
   vil_image_view_base_sptr sat_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vcl_string dem_file = pro.get_input<vcl_string>(in_i++);
   vpgl_camera_double_sptr  dem_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
+  double lower_left_lon  = pro.get_input<double>(in_i++);
+  double lower_left_lat  = pro.get_input<double>(in_i++);
+  double upper_right_lon = pro.get_input<double>(in_i++);
+  double upper_right_lat = pro.get_input<double>(in_i++);
   
   vil_image_view<float>* sat_img = dynamic_cast<vil_image_view<float>*>(sat_img_sptr.ptr());
   if (!sat_img) {
@@ -80,7 +91,7 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
     return false;
   }
 
-  // load the dem image
+  // load the dem image and dem camera
   if (!vul_file::exists(dem_file)) {
     vcl_cout << pro.name() << ": can not find dem image file: " << dem_file << vcl_endl;
     return false;
@@ -99,10 +110,32 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": the geocam of dem image can not be initialized" << vcl_endl;
     return false;
   }
-
   int dem_ni, dem_nj, sat_ni, sat_nj;
   dem_ni = dem_res->ni();  dem_nj = dem_res->nj();
   sat_ni = sat_img->ni();  sat_nj = sat_img->nj();
+  // if satellite region is given then check whether ortho image intersects with the satellite region to speed up
+  if (lower_left_lon > 0) {
+    vgl_box_2d<double> sat_bbox(lower_left_lon, upper_right_lon, lower_left_lat, upper_right_lat);
+    // obtain the bounding box of ortho image
+    double lat, lon;
+    dem_cam->img_to_global(0.0, dem_nj-1, lon, lat);
+    vgl_point_2d<double> dem_lower_left(lon, lat);
+    dem_cam->img_to_global(dem_ni-1, 0.0, lon, lat);
+    vgl_point_2d<double> dem_upper_right(lon, lat);
+    vgl_box_2d<double> dem_bbox(dem_lower_left, dem_upper_right);
+    vgl_box_2d<double> intersection_box = vgl_intersection(sat_bbox, dem_bbox);
+    if (intersection_box.is_empty()) {
+      vcl_cout << pro.name() << ": The input dem image: " << dem_bbox
+               << " doesn't overlap with satellite region: " << sat_bbox
+               << ", IGNORE" << vcl_endl;
+      return false;
+    }
+    else {
+      vcl_cout << " The dem image: " << dem_bbox << " intersects with satellite region: " << sat_bbox << vcl_endl;
+    }
+  }
+  
+
   // load the dem image view
   vil_image_view_base_sptr dem_view_base = dem_res->get_view(0, dem_ni, 0, dem_nj);
   vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());

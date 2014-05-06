@@ -229,20 +229,26 @@ def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_fi
   return out_img;
 
 ## process to project DEM images to a satellite image given the satellite viewpoint
-def project_dem_to_sat_img(sat_cam, sat_img, dem_file, dem_cam=0):
+def project_dem_to_sat_img(sat_cam, sat_img, dem_file, lower_left_lon=-1.0, lower_left_lat=-1.0, upper_right_lon=-1.0, upper_right_lat=-1.0, dem_cam=0):
   bvxm_batch.init_process("volmProjectDEMtoSatImgPorcess");
   bvxm_batch.set_input_from_db(0, sat_cam);
   bvxm_batch.set_input_from_db(1, sat_img);
   bvxm_batch.set_input_string(2, dem_file);
   bvxm_batch.set_input_from_db(3, dem_cam);
+  bvxm_batch.set_input_double(4, lower_left_lon)
+  bvxm_batch.set_input_double(5, lower_left_lat)
+  bvxm_batch.set_input_double(6, upper_right_lon)
+  bvxm_batch.set_input_double(7, upper_right_lat)
   status = bvxm_batch.run_process();
   return status;
 
 ## process to up-sample the projected cropped ASTER DEM image
-def upsample_projected_img(input_img, num_neighbors=4):
+def upsample_projected_img(input_img, num_neighbors=4, bin_size_col = 30, bin_size_row = 30):
   bvxm_batch.init_process("volmUpsampleDemImgProcess");
   bvxm_batch.set_input_from_db(0,  input_img);
   bvxm_batch.set_input_unsigned(1, num_neighbors);
+  bvxm_batch.set_input_unsigned(2, bin_size_col);
+  bvxm_batch.set_input_unsigned(3, bin_size_row);
   status = bvxm_batch.run_process();
   if status:
     (id, type) = bvxm_batch.commit_output(0)
