@@ -494,3 +494,20 @@ def image_entropy(img, block_size = 5):
   (id, type) = bvxm_batch.commit_output(0);
   entropy_img = dbvalue(id, type);
   return entropy_img;
+
+# edge detection using vil_edge_detection_process (arguments are parameters required by edge detection)
+def edge_detection(img, noise_multiplier = 1.5, smooth = 1.5, auto_threshold = False, junctionp = False, aggressive_junc_closure = False ):
+  bvxm_batch.init_process("vilEdgeDetectionProcess");
+  bvxm_batch.set_input_from_db(0, img);
+  bvxm_batch.set_input_float(1, noise_multiplier);
+  bvxm_batch.set_input_float(2, smooth);
+  bvxm_batch.set_input_bool(3, auto_threshold);
+  bvxm_batch.set_input_bool(4, junctionp);
+  bvxm_batch.set_input_bool(5, aggressive_junc_closure);
+  status = bvxm_batch.run_process();
+  if status:
+    (id, type) = bvxm_batch.commit_output(0);
+    edge_img = dbvalue(id, type);
+    return edge_img;
+  else:
+    return 0;
