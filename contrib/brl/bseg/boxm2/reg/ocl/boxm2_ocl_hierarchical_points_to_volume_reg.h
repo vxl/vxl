@@ -13,7 +13,7 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache2.h>
 #include <boxm2/io/boxm2_lru_cache2.h>
-#include <boxm2/reg/ocl2/boxm2_ocl_reg_points_to_volume_mutual_info.h>
+#include <boxm2/reg/ocl/boxm2_ocl_reg_points_to_volume_mutual_info.h>
 
 
 //: A cost function for registering video frames by minimizing square difference in intensities.
