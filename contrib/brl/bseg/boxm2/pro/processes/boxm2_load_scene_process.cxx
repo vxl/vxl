@@ -55,3 +55,49 @@ bool boxm2_load_scene_process(bprb_func_process& pro)
   pro.set_output_val<boxm2_scene_sptr>(i++, scene);
   return true;
 }
+
+namespace boxm2_modify_scene_appearance_process_globals
+{
+  const unsigned n_inputs_ = 3;
+  const unsigned n_outputs_ = 0;
+}
+bool boxm2_modify_scene_appearance_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_modify_scene_appearance_process_globals;
+
+  //process takes 1 input
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr";
+  input_types_[1] = "vcl_string";
+  input_types_[2] = "vcl_string";
+
+  // process has 1 output:
+  // output[0]: scene sptr
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_modify_scene_appearance_process(bprb_func_process& pro)
+{
+  using namespace boxm2_load_scene_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  boxm2_scene_sptr s = pro.get_input<boxm2_scene_sptr>(i++);
+  vcl_string apptype1 = pro.get_input<vcl_string>(i++);
+  vcl_string apptype2 = pro.get_input<vcl_string>(i++);
+
+  vcl_vector<vcl_string> apps;
+  
+  apps.push_back(apptype1);
+  apps.push_back(apptype2);
+  s->set_appearances(apps);
+
+  return true;
+}

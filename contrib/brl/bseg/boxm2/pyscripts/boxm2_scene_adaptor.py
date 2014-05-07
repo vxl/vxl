@@ -1,4 +1,5 @@
-from boxm2_adaptor import *
+
+from boxm2_adaptor import *
 from boxm2_tools_adaptor import *
 from boxm2_filtering_adaptor import *
 from vil_adaptor import *;
@@ -68,7 +69,10 @@ class boxm2_scene_adaptor(object):
   #describe scene (returns data path)
   def describe(self) :
     return self.description;
-
+  def modify_appearance(self, app1,app2):
+	status = modify_scene_appearance(self.scene,app1,app2);
+	self.rgb = self.description['appType']
+	return status;
   #returns scene bounding box
   def bounding_box(self) :
     return self.bbox

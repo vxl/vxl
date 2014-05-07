@@ -153,7 +153,14 @@ def describe_scene(scene):
                   'appType': appType,
                 }
   return description;
-
+# modifies scene appearance, use case build the model in grey scale and then paint it with color images.
+def modify_scene_appearance(scene,app1,app2):
+  boxm2_batch.init_process("boxm2ModifySceneAppearanceProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_string(1, app1);
+  boxm2_batch.set_input_string(2, app2);
+  status = boxm2_batch.run_process();
+  return status;
 # returns bounding box as two tuple points (minpt, maxpt)
 def scene_bbox(scene):
   boxm2_batch.init_process("boxm2SceneBboxProcess");
