@@ -426,19 +426,19 @@ bool vil_tiff_header::compute_pixel_format()
         else
           switch (bbs)
           {
-           case 1:
-            pix_fmt = VIL_PIXEL_FORMAT_BYTE;
-            return true;
-           case 2:
-            pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
-            return true;
-           case 3:
-           case 4:
-            pix_fmt = VIL_PIXEL_FORMAT_UINT_32;
-            return true;
-           default:
-            pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-            return true;
+            case 1:
+              pix_fmt = VIL_PIXEL_FORMAT_BYTE;
+              return true;
+            case 2:
+              pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
+              return true;
+            case 3:
+            case 4:
+              pix_fmt = VIL_PIXEL_FORMAT_UINT_32;
+              return true;
+            default:
+              pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+              return true;
           }
     }
   }
