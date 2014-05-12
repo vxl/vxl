@@ -235,7 +235,6 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
               ++count;
           }
           }
-      vil_save(normimage,"e:/procnorm.tif");
     }
 
     //set masked values

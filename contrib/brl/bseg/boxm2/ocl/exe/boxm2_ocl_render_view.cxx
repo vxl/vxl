@@ -35,6 +35,7 @@
 
 int main(int argc, char ** argv)
 {
+     
   // initialize vgui
   // Ming: force option "--mfc-use-gl" to use gl
   //       so that it is MUCH faster if running on a
@@ -66,6 +67,7 @@ int main(int argc, char ** argv)
     // need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
 
+
     //make bocl manager
     bocl_manager_child_sptr mgr =bocl_manager_child::instance();
     if (gpu_idx() >= mgr->gpus_.size()){
@@ -88,44 +90,6 @@ int main(int argc, char ** argv)
     boxm2_lru_cache::create(scene);
     boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene, device, 4); //allow 4 blocks inthe cache
 
-    //if image and camdir are valid and one to one, choose update or change
-    if ( vul_file::is_directory(imgdir()) && vul_file::is_directory(camdir()) )
-    {
-      //populate the list of cams/ims
-      vcl_vector<vcl_string> imgs = boxm2_util::images_from_directory(imgdir());
-      vcl_vector<vcl_string> cams = boxm2_util::camfiles_from_directory(camdir());
-      if (imgs.size() != cams.size()) {
-        vcl_cout<<"num(cams) != num(imgs), returning!"<<vcl_endl;
-        return -1;
-      }
-      
-      //either in change detection or update mode
-      if(change()) {
-        //create a new ocl_draw_glbuffer_tableau, window, and initialize it
-        boxm2_ocl_change_tableau_new bit_tableau;
-        bit_tableau->init_change(device, opencl_cache, scene, ni(), nj(), pcam, imgs, cams);
-
-        //create window, attach the new tableau and status bar
-        vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer (Change Detection)");
-        win->get_adaptor()->set_tableau(bit_tableau);
-        bit_tableau->set_statusbar(win->get_statusbar());
-        win->show();
-      }
-      else { //update mode
-        //create a new ocl_draw_glbuffer_tableau, window, and initialize it
-        boxm2_ocl_update_tableau_new bit_tableau;
-        bit_tableau->init_update(device, opencl_cache, scene, ni(), nj(), pcam, imgs, cams);
-
-        //create window, attach the new tableau and status bar
-        vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer (Update)");
-        win->get_adaptor()->set_tableau(bit_tableau);
-        bit_tableau->set_statusbar(win->get_statusbar());
-        win->show();
-      }
-    }
-    //just render tableau
-    else
-    {
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
       boxm2_ocl_render_tableau_new bit_tableau;
       bit_tableau->init(device, opencl_cache, scene, ni(), nj(), pcam, identifier());
@@ -135,10 +99,14 @@ int main(int argc, char ** argv)
       win->get_adaptor()->set_tableau(bit_tableau);
       bit_tableau->set_statusbar(win->get_statusbar());
       win->show();
-    }
+
 
     //set vgui off
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
     vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
+         
     return vgui::run();
+     
+
+    return 0;
 }
