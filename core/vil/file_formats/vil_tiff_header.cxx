@@ -379,7 +379,7 @@ bool vil_tiff_header::compute_pixel_format()
             return true;
           case 32:
             pix_fmt = VIL_PIXEL_FORMAT_INT_32;
-            return false;
+            return true;
           default: //other bit sizes don't make sense
             pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
             return false;
@@ -438,7 +438,7 @@ bool vil_tiff_header::compute_pixel_format()
               return true;
             default:
               pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-              return true;
+              return false;
           }
     }
   }
