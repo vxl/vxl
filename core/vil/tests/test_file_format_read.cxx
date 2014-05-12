@@ -136,6 +136,12 @@ struct CompareGrey
 {
 };
 
+// Greyscale+Alpha has two (2) planes
+template<class PixelType>
+struct CompareGreyAlpha
+  : public ComparePlanes<PixelType, 2>
+{
+};
 
 template<class PixelType>
 struct CompareGreyFloat
@@ -515,6 +521,7 @@ test_file_format_read( int argc, char* argv[] )
 
   vcl_cout << "Windows bitmap [bmp]\n";
   TEST("8-bit greyscale (xv created)", CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.bmp" ), true);
+  //TEST("8-bit GA uncompressed", CheckFile(CompareGreyAlpha<vxl_byte>(), "ff_ga8bit_true.txt", "ff_ga8bit.bmp" ), true);
   TEST("8-bit RGB (xv created)", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_xv.bmp" ), true);
   TEST("8-bit RGB (Top-down scans, Photoshop created)", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_topdown_ps.bmp" ), true);
   TEST("8-bit RGBA uncompressed (Photoshop created)", CheckFile(CompareRGBA<vxl_byte>(), "ff_rgba8bit_true.txt", "ff_rgba8bit_uncompressed_ps.bmp" ), true);
@@ -524,6 +531,7 @@ test_file_format_read( int argc, char* argv[] )
   TEST("8-bit RGB uncompressed", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.png" ), true);
   TEST("8-bit RGB compressed", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_compressed.png" ), true);
   TEST("8-bit RGB Indexed",    CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_indexed_4bpp.png" ), true);
+  TEST("8-bit GA compressed", CheckFile(CompareGreyAlpha<vxl_byte>(), "ff_ga8bit_true.txt", "ff_ga8bit_compressed.png" ), true);
   TEST("10-bit grey with bitdepth=true (from labview)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey10bit_true.txt", "ff_grey10bit_labview_bitdepth_true.png" ), true);
   TEST("10-bit grey with bitdepth=false (from labview)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey10bit_true.txt", "ff_grey10bit_labview_bitdepth_false.png" ), true);
   TEST("16-bit grey with bitdepth=true (from labview)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_labview_bitdepth_true.png" ), true);
@@ -537,6 +545,8 @@ test_file_format_read( int argc, char* argv[] )
   TEST("32-bit float grey", CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true.txt", "ff_grey_float.tif" ), true);
   TEST("8-bit RGBA uncompressed", CheckFile(CompareRGBA<vxl_byte>(), "ff_rgba8bit_true.txt", "ff_rgba8bit_uncompressed.tif" ), true);
   TEST("8-bit RGBA without RowsPerStrip", CheckFile(CompareRGBA<vxl_byte>(), "no_rowsperstrip_true.txt", "no_rowsperstrip.tif" ), true);
+  TEST("8-bit GA uncompressed", CheckFile(CompareGreyAlpha<vxl_byte>(), "ff_ga8bit_true.txt", "ff_ga8bit_uncompressed.tif" ), true);
+  //TEST("16-bit GA uncompressed", CheckFile(CompareGreyAlpha<vxl_uint_16>(), "ff_ga16bit_true.txt", "ff_ga16bit_uncompressed.tif" ), true);
 
   // The following tests are targeted to the vil_nitf2_image class which can read NITF 2.1, NITF 2.0 and
   // NSIF 1.0 files.  All three of these formats are covered here as well as all four different
