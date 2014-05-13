@@ -58,10 +58,7 @@ int main(int argc, char ** argv)
     vul_arg<vcl_string> scene_file("-scene", "scene filename", vul_arg<vcl_string>::is_required);
     vul_arg<unsigned>   ni("-ni", "Width of output image", 1280);
     vul_arg<unsigned>   nj("-nj", "Height of output image", 720);
-    vul_arg<vcl_string> imgdir("-imgdir", "image directory", "");
-    vul_arg<vcl_string> camdir("-camdir", "camera directory", "");
     vul_arg<vcl_string> identifier("-ident", "identifier of the appearance data to be displayed, e.g. illum_bin_0", "");
-    vul_arg<bool>       change("-change", "makes gui go into change detection mode - press n for next and p for previous", false);
     vul_arg<unsigned>   gpu_idx("-gpu_idx", "GPU index for multi GPU set up", 0);
 
     // need this on some toolkit implementations to get the window up.

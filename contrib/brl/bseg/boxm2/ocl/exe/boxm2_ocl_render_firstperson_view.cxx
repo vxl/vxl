@@ -13,7 +13,7 @@
 #include <vul/vul_file.h>
 
 //boxm2 scene stuff
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 
 //vgui stuff
@@ -96,8 +96,8 @@ int main(int argc, char ** argv)
     vcl_list<vgl_point_3d<double> >::iterator waypoint_iter = waypoints.begin();
     pcam->look_at(vgl_homg_point_3d<double>(*(++waypoint_iter)), up);
     //create cache, grab singleton instance
-    boxm2_lru_cache2::create(scene);
-    boxm2_opencl_cache2_sptr opencl_cache=new boxm2_opencl_cache2(device); //allow 4 blocks inthe cache
+    boxm2_lru_cache::create(scene);
+    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene,device); //allow 4 blocks inthe cache
 
 
 
