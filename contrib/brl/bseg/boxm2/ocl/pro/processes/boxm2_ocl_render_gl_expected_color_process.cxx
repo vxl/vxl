@@ -167,7 +167,7 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
   //create float4 image here
   float* buff = new float[4*cl_ni*cl_nj];
   vcl_fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
-  bocl_mem_sptr exp_color = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float),buff,  "exp color image (float4) buffer");
+  bocl_mem_sptr exp_color = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float)*4,buff,  "exp color image (float4) buffer");
   exp_color->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
