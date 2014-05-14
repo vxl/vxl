@@ -172,12 +172,12 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-  bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,  "vis image (single float) buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   float* max_omega_buff = new float[cl_ni*cl_nj];
   vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
-  bocl_mem_sptr max_omega_image = new bocl_mem(device->context(), max_omega_buff, cl_ni*cl_nj*sizeof(float), "vis image (single float) buffer");
+  bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,  "max_omega_image image (single float) buffer");
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     float tnearfar[2] = { 0.0f, 1000000} ;
@@ -207,7 +207,13 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   // read out expected image
   clReleaseCommandQueue(queue);
 
-  delete[] vis_buff;
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(max_omega_image.ptr());
+  opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
+
+  delete [] vis_buff;
+  delete [] max_omega_buff;
+
 
   //store render time
   int argIdx = 0;

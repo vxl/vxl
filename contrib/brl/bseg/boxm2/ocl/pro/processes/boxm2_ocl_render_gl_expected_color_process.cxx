@@ -116,9 +116,12 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
     return false;
   }
   //get the inputs
+
   unsigned i = 0;
   bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(i++);
+
   boxm2_scene_sptr        scene        = pro.get_input<boxm2_scene_sptr>(i++);
+
   boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
   unsigned                ni           = pro.get_input<unsigned>(i++);
@@ -127,6 +130,7 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
   bocl_mem_sptr           exp_img_dim  = pro.get_input<bocl_mem_sptr>(i++);
   vcl_string              ident        = pro.get_input<vcl_string>(i++);
   bool                    is_bw        = pro.get_input<bool>(i++);
+
 
   bool foundDataType = false;
   vcl_string data_type,options;
@@ -160,32 +164,30 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
 
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
-
   //create float4 image here
   float* buff = new float[4*cl_ni*cl_nj];
   vcl_fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
-  bocl_mem_sptr exp_color = new bocl_mem(device->context(), buff, 4*cl_ni*cl_nj*sizeof(float), "color im buffer (float4) buffer");
+  bocl_mem_sptr exp_color = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float),buff,  "exp color image (float4) buffer");
   exp_color->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-  bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "vis image (single float) buffer");
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,  "vis image (single float) buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     float* max_omega_buff = new float[cl_ni*cl_nj];
   vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
-  bocl_mem_sptr max_omega_image = new bocl_mem(device->context(), max_omega_buff, cl_ni*cl_nj*sizeof(float), "max_omega_image image (single float) buffer");
+  bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,  "max_omega_image image (single float) buffer");
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
   float tnearfar[2] = { 0.0f, 1000000} ;
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   // run expected image function
+
   float time = render_expected_image(scene, device, opencl_cache, queue,
                                      cam, exp_color, vis_image, max_omega_image, exp_img_dim,
                                      data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize,tnearfar_mem_ptr);
-
   // normalize and write image to GL buffer
   {
     cl_bool isbw[1] = { is_bw };
@@ -204,10 +206,14 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
     norm_rgb_gl->clear_args();
     time += norm_rgb_gl->exec_time();
   }
+  opencl_cache->unref_mem(exp_color.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(max_omega_image.ptr());
+  opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
+  delete [] buff;
+  delete [] vis_buff;
+  delete [] max_omega_buff;
 
-  //delete visibilty image
-  delete[] vis_buff;
-  delete[] buff;
 
   // read out expected image
   clReleaseCommandQueue(queue);
