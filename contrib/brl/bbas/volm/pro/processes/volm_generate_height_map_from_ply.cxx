@@ -17,6 +17,7 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <core/bbas_pro/bbas_1d_array_float.h>
 #include <vil/vil_math.h>
+#include <vcl_limits.h>
 
 //:
 //  Take a colored segmentation output and map it to volm labels
@@ -110,6 +111,7 @@ bool volm_generate_height_map_plot_process_cons(bprb_func_process& pro)
   output_types.push_back("bbas_1d_array_float_sptr");  // #correct rate
   output_types.push_back("bbas_1d_array_float_sptr");  // #height difs
   output_types.push_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
+  output_types.push_back("vil_image_view_base_sptr");  // output image with pixels as difference in value between gt and input height maps
 
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -142,11 +144,13 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
   vil_math_value_range(height, min_val, max_val);
   float dif_min_max = max_val-min_val;
   vil_image_view<vil_rgb<vxl_byte> > height_out(height.ni(), height.nj());
+  vil_image_view<float> height_out_dif(height.ni(), height.nj());
   for (unsigned i = 0; i < height.ni(); i++)
     for (unsigned j = 0; j < height.nj(); j++) {
       unsigned char val = vxl_byte(((height(i,j)-min_val)/dif_min_max)*255);
       vil_rgb<vxl_byte> col(val, val, val);
       height_out(i,j) = col;
+      height_out_dif(i,j) = vcl_numeric_limits<float>::quiet_NaN();
     }
 
   float dif_mark = dif_final;
@@ -166,6 +170,8 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
   // if input height value is valid (> 0), and gt height value is defined (> 0)
   // retrieve height from input height map and from gt map, if the absolute difference is less than current "dif" amount then accept as true positive, otherwise it is a false positive
   unsigned int pnt = 0;
+  float min_val_act = 1000000;
+  float max_val_act = -1000000;
   for (float dif = dif_init;  dif <= dif_final; dif += dif_increments, pnt++) {
     unsigned gt_cnt = 0;
     height_difs->data_array[pnt] = dif;
@@ -176,12 +182,20 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
         if (gt_val > 0) {
           gt_cnt++;
           if (val > 0) {
-            float dif_val = vcl_abs(gt_val - val);
+            float dif_actual_val = gt_val - val;
+            height_out_dif(i,j) = dif_actual_val;
+            if (dif_actual_val < min_val_act)
+              min_val_act = dif_actual_val;
+            if (dif_actual_val > max_val_act)
+              max_val_act = dif_actual_val;
+            float dif_val = vcl_abs(dif_actual_val);
             if (dif_val <= dif) {
               correct_rate->data_array[pnt]++; 
               if (dif_mark == dif)
                 height_out(i,j) = vil_rgb<vxl_byte>(255,0,0);
             } 
+          } else {
+            height_out_dif(i,j) = vcl_numeric_limits<float>::infinity();
           }
         }
       }
@@ -189,9 +203,12 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
     correct_rate->data_array[pnt] /= gt_cnt;
   }
 
+  vcl_cout << " !!!!!!!!!! minimum difference value: " << min_val_act << " max difference val: " << max_val_act << vcl_endl;
+
   pro.set_output_val<bbas_1d_array_float_sptr>(0, correct_rate);
   pro.set_output_val<bbas_1d_array_float_sptr>(1, height_difs);
   pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<vil_rgb<vxl_byte> >(height_out));
+  pro.set_output_val<vil_image_view_base_sptr>(3, new vil_image_view<float>(height_out_dif));
   return true;
 }
 

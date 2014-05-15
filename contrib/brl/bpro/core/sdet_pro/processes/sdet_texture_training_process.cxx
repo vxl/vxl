@@ -212,4 +212,53 @@ bool sdet_texture_training_process2_finish(bprb_func_process& pro)
   return true;
 }
 
+//: this process converts vsol objects saved as .bin files to .txt files
+bool sdet_dump_vsol_binary_data_process_cons(bprb_func_process& pro)
+{
+  vsl_add_to_binary_loader(vsol_polygon_2d());
+  // process takes 5 inputs:
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vcl_string"); //polygon file
+  input_types.push_back("vcl_string"); //output file name
+  if (!pro.set_input_types(input_types))
+    return false;
+
+  vcl_vector<vcl_string> output_types;
+  return pro.set_output_types(output_types);
+}
+
+bool sdet_dump_vsol_binary_data_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << "texture classifier process2 inputs are not valid"<< vcl_endl;
+    return false;
+  }
+
+  //== polygon region delineating samples of the texture
+  vcl_string poly_path = pro.get_input<vcl_string>(0);
+
+  //== the string name of the texture category
+  vcl_string output_file = pro.get_input<vcl_string>(1);
+  vcl_ofstream ofs(output_file);
+  if (!ofs) {
+    vcl_cout << " In sdet_dump_vsol_binary_data_process() -- cannot open file: " << output_file << vcl_endl;
+    return false;
+  }
+
+  // dummy classifier
+  sdet_texture_classifier_params param;
+  sdet_texture_classifier_sptr tc_ptr = new sdet_texture_classifier(param);
+  vcl_vector<vgl_polygon<double> > polys;
+  polys = tc_ptr->load_polys(poly_path);
+ 
+  for (unsigned i = 0; i < polys.size(); i++) {
+    for (unsigned j = 0; j < polys[i].num_sheets(); j++)
+      for (unsigned k = 0; k < polys[i][j].size(); k++)
+        ofs << polys[i][j][k].x() << " " << polys[i][j][k].y() << " ";
+    ofs << '\n';
+  }
+  ofs.close();
+  return true;
+}
 

@@ -67,6 +67,7 @@ bool sdet_add_to_filter_bank_process_cons(bprb_func_process& pro)
   input_types.push_back("vcl_string");   // input image name
   input_types.push_back("unsigned");     // the plane to extract the filters from
   input_types.push_back("vcl_string");   // filter bank folder
+  input_types.push_back("vcl_string");   // filter name : unique name to be used to write the response to filter folder
   input_types.push_back("bool");         // option to turn on gauss smoothing on image
   if (!pro.set_input_types(input_types))
     return false;
@@ -86,9 +87,9 @@ bool sdet_add_to_filter_bank_process(bprb_func_process& pro)
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
   vcl_string name = pro.get_input<vcl_string>(1);
   unsigned n = pro.get_input<unsigned>(2);
-  vcl_stringstream res_name; res_name << n;
   vcl_string folder = pro.get_input<vcl_string>(3);
-  bool is_smooth = pro.get_input<bool>(4);
+  vcl_string res_name = pro.get_input<vcl_string>(4);
+  bool is_smooth = pro.get_input<bool>(5);
 
   vil_image_view_base_sptr img_sptr = vil_load(name.c_str());
 
@@ -118,9 +119,9 @@ bool sdet_add_to_filter_bank_process(bprb_func_process& pro)
     
     vil_image_view<float> out_img(tni, tnj);
     vil_resample_bilin(img_f, out_img, tni, tnj);
-    tc_ptr->add_gauss_response(out_img, folder, name, res_name.str(), is_smooth);
+    tc_ptr->add_gauss_response(out_img, folder, name, res_name, is_smooth);
   } else
-    tc_ptr->add_gauss_response(img_f, folder, name, res_name.str(), is_smooth);
+    tc_ptr->add_gauss_response(img_f, folder, name, res_name, is_smooth);
   
   return true;
 }
@@ -230,6 +231,68 @@ bool sdet_add_to_filter_bank_process2(bprb_func_process& pro)
     tc_ptr->add_gauss_response(ratio, folder, name, "g_b", false);  // last argument = false --> do not gaussian smooth this image
 
   }
+  
+  return true;
+}
+
+//: this process extracts a series of filter responses from the input image (assumed to be properly scaled to [0,1]) 
+//  and adds each response as another layer to the other_responses_ of the passed classifier 
+//  practically increases the dimension of the textons
+//  the params of the classifier instance are used
+bool sdet_add_responses_to_filter_bank_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
+  input_types.push_back("vcl_string");   // input image name
+  input_types.push_back("vil_image_view_base_sptr");     // input image
+  input_types.push_back("vcl_string");   // filter bank folder
+  input_types.push_back("vcl_string");   // filter name : unique name to be used to write the response to filter folder  (the id of the filter bank will be appended to this name)
+  if (!pro.set_input_types(input_types))
+    return false;
+
+  vcl_vector<vcl_string> output_types;
+  return pro.set_output_types(output_types);
+}
+
+#include <vil/vil_math.h>
+bool sdet_add_responses_to_filter_bank_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< vcl_endl;
+    return false;
+  }
+  // get inputs
+  sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
+  vcl_string name = pro.get_input<vcl_string>(1);
+  vil_image_view_base_sptr img_sptr = pro.get_input<vil_image_view_base_sptr>(2);
+  vcl_string folder = pro.get_input<vcl_string>(3);
+  vcl_string res_name = pro.get_input<vcl_string>(4);
+
+  if (img_sptr->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
+    vcl_cerr << " In sdet_add_responses_to_filter_bank_process(): the input image format is not FLOAT!.. it is assumed the input image is properly scaled to [0,1]!\n";
+    return false;
+  }
+
+  vil_image_view<float> img_f(img_sptr);
+  float min_value, max_value;
+  vil_math_value_range(img_f, min_value, max_value);
+  if (max_value > 1.0 || min_value < 0) {
+    vcl_cerr << " In sdet_add_responses_to_filter_bank_process(): the input image is NOT scaled to [0,1]!\n";
+    return false;
+  }
+  
+  unsigned tni = tc_ptr->filter_responses().ni();
+  unsigned tnj = tc_ptr->filter_responses().nj();
+  if (tni != img_f.ni() || tnj != img_f.nj()) {
+    vcl_cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
+    vcl_cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
+    
+    vil_image_view<float> out_img(tni, tnj);
+    vil_resample_bilin(img_f, out_img, tni, tnj);
+    tc_ptr->add_filter_responses(out_img, folder, name, res_name);
+  } else
+    tc_ptr->add_filter_responses(img_f, folder, name, res_name);
   
   return true;
 }

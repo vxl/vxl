@@ -119,4 +119,52 @@ bool vpgl_rational_cam_img_to_global_process(bprb_func_process& pro)
   return true;
 }
 
+// take a lat, lon, elev position and compute the nadirness of the satellite image at that position. - measures in image space
+// project (lat, lon, elev) to image plane
+// project (lat, lon, elev+10) to image plane
+// measure the difference in the image space
+//  multiply the output of this process with the GSD of the image to get a nadirness value in meter units. that meter value would be comparable to other images' values if needed
+
+bool vpgl_rational_cam_nadirness_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types_(4);
+  input_types_[0] = "vpgl_camera_double_sptr";  // rational camera
+  input_types_[1] = "double";                   // latitude
+  input_types_[2] = "double";                   // longitude
+  input_types_[3] = "double";                   // elevation (also use as input plane elevation)
+  vcl_vector<vcl_string> output_types_(1);
+  output_types_[0] = "double";                  // nadirness measure (in terms of pixels)
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+bool vpgl_rational_cam_nadirness_process(bprb_func_process& pro)
+{
+  // sanity check
+  if (!pro.verify_inputs()){
+    vcl_cerr << pro.name() << ": there should be " << 4 << " inputs" << vcl_endl;
+    return false;
+  }
+  // get the inputs
+  unsigned i = 0;
+  vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(i++);  // rational camera
+  double lat  = pro.get_input<double>(i++);                                
+  double lon  = pro.get_input<double>(i++);                                
+  double elev = pro.get_input<double>(i++);
+  
+  // get rational camera
+  vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
+  if (!rat_cam) {
+    vcl_cerr << pro.name() << ": the input camera is not a rational camera" << vcl_endl;
+    return false;
+  }
+
+  vcl_cout << " rational camera type: " << rat_cam->type_name() << vcl_endl;
+  double u1, v1, u2, v2;
+  rat_cam->project(lon, lat, elev, u1, v1);
+  rat_cam->project(lon, lat, elev+10, u2, v2);
+  double dist = vcl_sqrt((u1-u2)*(u1-u2) + (v1-v2)*(v1-v2));  
+  pro.set_output_val<double>(0, dist);
+  return true;
+}
+
+
 

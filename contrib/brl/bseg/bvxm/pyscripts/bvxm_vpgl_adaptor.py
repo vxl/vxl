@@ -794,3 +794,14 @@ def rational_cam_img_to_global(camera, i, j, init_lon=-1.0, init_lat=-1.0, init_
     return lon, lat, elev
   else:
     return -1.0, -1.0, -1.0
+
+def rational_cam_nadirness(camera, lat, lon, elev):
+  bvxm_batch.init_process("vpglRationalCamNadirnessProcess");
+  bvxm_batch.set_input_from_db(0, camera);
+  bvxm_batch.set_input_double(1, lat);
+  bvxm_batch.set_input_double(2, lon);
+  bvxm_batch.set_input_double(3, elev);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  val = bvxm_batch.get_output_double(id)
+  return val

@@ -46,13 +46,23 @@ def extract_filter_bank(tclsf, img_name, filter_folder):
   bvxm_batch.set_input_string(2,filter_folder);
   bvxm_batch.run_process();
 
-def add_to_filter_bank(tclsf, img_name, plane, filter_folder, is_gauss_smooth = True):
+def add_to_filter_bank(tclsf, img_name, plane, filter_folder, filter_name, is_gauss_smooth = True):
   bvxm_batch.init_process("sdetAddtoFilterBankProcess");
   bvxm_batch.set_input_from_db(0,tclsf);      # classifier instance
   bvxm_batch.set_input_string(1,img_name);
   bvxm_batch.set_input_unsigned(2,plane);  ## pass which plane to extract the gauss response from
   bvxm_batch.set_input_string(3,filter_folder);
-  bvxm_batch.set_input_bool(4,is_gauss_smooth)
+  bvxm_batch.set_input_string(4,filter_name);  ## pass a unique name to be used to write to filter_folder
+  bvxm_batch.set_input_bool(5,is_gauss_smooth)
+  bvxm_batch.run_process();
+
+def add_responses_to_filter_bank(tclsf, img_name, img, filter_folder, filter_name):
+  bvxm_batch.init_process("sdetAddResponsestoFilterBankProcess");
+  bvxm_batch.set_input_from_db(0,tclsf);      # classifier instance
+  bvxm_batch.set_input_string(1,img_name);
+  bvxm_batch.set_input_from_db(2,img);
+  bvxm_batch.set_input_string(3,filter_folder);
+  bvxm_batch.set_input_string(4,filter_name);  ## pass a unique name to be used to write to filter_folder
   bvxm_batch.run_process();
 
 def add_to_filter_bank2(tclsf, img_name, filter_folder):
@@ -79,6 +89,12 @@ def train_classifier(tclsf, poly_file, category_name, dictionary_name, compute_c
   if finish_and_write_dictionary:
     bvxm_batch.finish_process();
   return tclsf
+
+def dump_binary_data_as_txt(poly_file, output_file):
+  bvxm_batch.init_process("sdetDumpVsolBinaryDataProcess");
+  bvxm_batch.set_input_string(0, poly_file);
+  bvxm_batch.set_input_string(1, output_file);
+  bvxm_batch.run_process();
 
 #def test_classifier(tclsf, img, block_size):
 def test_classifier(tclsf, block_size, category_id_file=""):

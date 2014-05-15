@@ -293,7 +293,37 @@ void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, v
   this->save_other_filter_responses(img_out_dir);
 }
 
+//: append to the vector of other_responses_
+void sdet_texture_classifier::add_filter_responses(vil_image_view<float>& img_f, vcl_string const& filter_folder, 
+                                                   vcl_string const& img_name, vcl_string const& response_name)
+{
+  brip_filter_bank filter_responses(this->n_scales_, this->scale_interval_, this->lambda0_, this->lambda1_,
+                                    this->angle_interval_, this->cutoff_per_);
+  vcl_cout << "computing filter bank on: " << img_name << " max filter radius: " << filter_responses.invalid_border() << vcl_endl;
 
+  // warning: assumes the input image is properly scaled to [0,1] !!
+  filter_responses.set_image(img_f);
+  for (unsigned i = 0; i < filter_responses.n_levels(); i++) {
+    vcl_stringstream res_name; res_name << response_name << "_" << i;
+    vcl_cout <<" adding filter response level: " << i << " to other responses with name: " << res_name.str() << vcl_endl;
+    other_responses_.push_back(filter_responses.response(i));
+    other_responses_names_.push_back(res_name.str());
+  }
+
+  vcl_string filterbank_dir = filter_folder + this->filter_dir_name();
+  if (!vul_file::exists(filterbank_dir))
+    vul_file::make_directory(filterbank_dir);
+
+  vcl_string name = vul_file::strip_directory(img_name);
+  name = vul_file::strip_extension(name);
+  
+  // first check filter folder if already computed
+  vcl_string img_out_dir = filterbank_dir + "/" + name + "/";
+  if (!vul_file::exists(img_out_dir))
+    vul_file::make_directory(img_out_dir);
+  
+  this->save_other_filter_responses(img_out_dir);
+}
 
 // Used to define the initial k means cluster centers
 // by random selection from the training data

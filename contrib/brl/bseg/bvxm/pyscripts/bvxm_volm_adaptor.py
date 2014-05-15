@@ -272,4 +272,6 @@ def generate_height_map_plot(gt_height, height, dif_init, dif_final, dif_increme
   height_dif_array = bvxm_batch.get_bbas_1d_array_float(id);
   (id, type) = bvxm_batch.commit_output(2);
   out_map = dbvalue(id, type);
-  return correct_rate_array, height_dif_array, out_map
+  (id, type) = bvxm_batch.commit_output(3);
+  out_map_dif = dbvalue(id, type);
+  return correct_rate_array, height_dif_array, out_map, out_map_dif

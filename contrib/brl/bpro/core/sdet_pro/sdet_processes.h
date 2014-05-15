@@ -32,5 +32,7 @@ DECLARE_FUNC_CONS(sdet_add_to_filter_bank_process);
 DECLARE_FUNC_CONS(sdet_texture_classifier_roc_process);
 DECLARE_FUNC_CONS(sdet_add_to_filter_bank_process2);
 DECLARE_FUNC_CONS(sdet_texture_classify_satellite_clouds_process);
+DECLARE_FUNC_CONS(sdet_dump_vsol_binary_data_process);
+DECLARE_FUNC_CONS(sdet_add_responses_to_filter_bank_process);
 
 #endif
