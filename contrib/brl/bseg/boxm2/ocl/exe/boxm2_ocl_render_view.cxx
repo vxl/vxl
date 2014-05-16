@@ -103,7 +103,5 @@ int main(int argc, char ** argv)
     vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
          
     return vgui::run();
-     
 
-    return 0;
 }
