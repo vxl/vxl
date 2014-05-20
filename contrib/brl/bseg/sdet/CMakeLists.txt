@@ -8,6 +8,7 @@ doxygen_add_library(contrib/brl/bseg/sdet
 
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
+INCLUDE_DIRECTORIES(${VXL_MUL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(sdet_sources
@@ -51,6 +52,17 @@ SET(sdet_sources
     sdet_atmospheric_image_classifier.cxx 
     sdet_atmospheric_image_classifier.h
     sdet_graph_img_seg.cxx               sdet_graph_img_seg.h sdet_graph_img_seg_sptr.h
+# SEL Class
+    sdet_sel.cxx                         sdet_sel.h
+    sdet_sel_base.cxx                    sdet_sel_base.h
+# SEL Others
+    sdet_appearance.cxx                  sdet_appearance.h
+    sdet_curvelet.cxx                    sdet_curvelet.h
+    sdet_curvelet_map.cxx                sdet_curvelet_map.h
+    sdet_curve_model.cxx                 sdet_curve_model.h
+    sdet_edgel.cxx                       sdet_edgel.h
+    sdet_EMD.cxx                         sdet_EMD.h
+
 )
 AUX_SOURCE_DIRECTORY(Templates sdet_sources)
 
@@ -58,7 +70,7 @@ ADD_LIBRARY(sdet ${sdet_sources})
 INSTALL_TARGETS(/lib sdet)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/sdet ${sdet_sources})
 
-TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl gevd vdgl vtol vsol imesh_algo imesh vil vil_algo vil1 vgl_algo vgl bvgl vnl_algo vnl vul vbl vbl_io bil_algo vsl vnl_io)
+TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol imesh_algo imesh vil vil_algo vil1 vgl_algo vgl vnl_algo vnl vul vbl vbl_io bil_algo vsl vnl_io pdf1d)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

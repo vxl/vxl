@@ -12,6 +12,7 @@ ADD_EXECUTABLE(sdet_test_all
   test_denoise_mrf.cxx
   test_denoise_mrf_bp.cxx
   test_segmentation.cxx
+  test_sel.cxx
 )
 TARGET_LINK_LIBRARIES(sdet_test_all sdet imesh_algo vtol vil1 vnl_algo vnl vgl vil testlib)
 
@@ -21,5 +22,6 @@ ADD_TEST(sdet_test_gauss_fit   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_gaus
 ADD_TEST(sdet_test_denoise_mrf   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_denoise_mrf )
 ADD_TEST(sdet_test_denoise_mrf_bp   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_denoise_mrf_bp )
 ADD_TEST(sdet_test_segmentation   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_segmentation )
+ADD_TEST(sdet_test_sel   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_sel)
 ADD_EXECUTABLE(sdet_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(sdet_test_include sdet)

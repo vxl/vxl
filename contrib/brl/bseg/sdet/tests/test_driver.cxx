@@ -6,6 +6,7 @@ DECLARE(test_gauss_fit);
 DECLARE(test_denoise_mrf);
 DECLARE(test_denoise_mrf_bp);
 DECLARE(test_segmentation);
+DECLARE(test_sel);
 
 
 void
@@ -17,6 +18,7 @@ register_tests()
   REGISTER(test_denoise_mrf);
   REGISTER(test_denoise_mrf_bp);
   REGISTER(test_segmentation);
+  REGISTER(test_sel);
 }
 
 DEFINE_MAIN;
