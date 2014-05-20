@@ -21,11 +21,11 @@ void ocl_levenberg_marquardt(vnl_vector<float> x,
   //compile pyramid test
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  src_paths.push_back(source_dir + "onl/test_levenberg_marquardt.cl");
   src_paths.push_back(source_dir + "onl/cholesky_decomposition.cl");
   src_paths.push_back(source_dir + "onl/quadratic_example.cl");
-  src_paths.push_back(source_dir + "onl/test_levenberg_marquardt.cl");
-  src_paths.push_back(source_dir + "onl/quadratic_example.cl");
   src_paths.push_back(source_dir + "onl/levenberg_marquardt.cl");
+
 
   bocl_kernel lm_test;
   lm_test.create_kernel(&device->context(),device->device_id(), src_paths, "test_levenberg_marquardt", "-D QUADRATIC", "test levenberg marquardt");

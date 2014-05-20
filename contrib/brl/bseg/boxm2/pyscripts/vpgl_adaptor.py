@@ -673,3 +673,14 @@ def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, mi
   (id, type) = boxm2_batch.commit_output(3);
   out_cam2 = dbvalue(id, type);
   return out_img1, out_cam1, out_img2, out_cam2
+
+
+def compute_camera_to_world_homography(cam,plane,inverse = False):
+  boxm2_batch.init_process("vpglComputeImageToWorldHomographyProcess");
+  boxm2_batch.set_input_from_db(0, cam);
+  boxm2_batch.set_input_float_array(1, plane);
+  boxm2_batch.set_input_bool(2, inverse);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  homg2d = boxm2_batch.get_bbas_1d_array_float(id);
+  return homg2d

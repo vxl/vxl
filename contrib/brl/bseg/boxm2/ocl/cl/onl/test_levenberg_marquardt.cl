@@ -4,13 +4,13 @@ typedef struct
     float A;
 } AuxArgs;
 
-void levenberg_marquadt_solve( __constant int * max_iter, // x : nx1
-                               int m,                     // y : mx1
-                               int n,
+float levenberg_marquadt_solve(__constant int * max_iter,    // x : nx1
+                               int  m,                       // y : mx1
+                               int  n,
                                __global float * output,
                                __local float * x,
-                               __local float * h,         // J : mxn
-                               __local float * y,         // A: nxn
+                               __local float * h,            // J : mxn
+                               __local float * y,            // A : nxn
                                __local float * g,
                                __local float * J,
                                __local float * A,
@@ -18,7 +18,7 @@ void levenberg_marquadt_solve( __constant int * max_iter, // x : nx1
                                __local float * tempn,
                                AuxArgs  args);
 __kernel
-float test_levenberg_marquardt(__constant int * max_iter, // x : nx1
+void test_levenberg_marquardt(__constant int * max_iter, // x : nx1
                                __constant int * n,        // y : mx1
                                __constant int * m,        // J : mxn
                                __global float * x,        // A: nxn
