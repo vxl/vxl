@@ -73,6 +73,9 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
 
   vbl_array_2d<T> counts() const {return counts_;}
 
+  //:Return read-only reference to count data
+  const vbl_array_2d<T>& counts() {return counts_;}
+
   void upcount(T a, T mag_a,
                T b, T mag_b);
   void parzen(const T sigma);
