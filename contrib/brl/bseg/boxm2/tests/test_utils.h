@@ -8,6 +8,7 @@
 #include <boxm2/boxm2_data.h>
 #include <testlib/testlib_test.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
+#include <boxm2/boxm2_scene.h>
 
 class boxm2_test_utils
 {
@@ -26,7 +27,7 @@ class boxm2_test_utils
 
     static vcl_string   save_test_simple_scene(vcl_string filename= "test.xml");
     static vcl_string   save_test_empty_scene();
-
+    static bool create_test_simple_scene(boxm2_scene_sptr & scene);
     static void  test_block_equivalence(boxm2_block& a, boxm2_block& b);
 
     template <boxm2_data_type data_type>

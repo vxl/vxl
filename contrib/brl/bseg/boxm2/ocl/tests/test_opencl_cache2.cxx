@@ -21,9 +21,9 @@ typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
 bool test_opencl_cache2()
 {
-  //create a simple scene
-  vcl_string scene_file1 = boxm2_ocl_test_utils::save_test_simple_scene("test1.xml");
-  vcl_string scene_file2 = boxm2_ocl_test_utils::save_test_simple_scene("test2.xml");
+  boxm2_scene_sptr scene1,scene2;
+  boxm2_ocl_test_utils::create_test_simple_scene(scene1);
+  boxm2_ocl_test_utils::create_test_simple_scene(scene2);
   //set up openCL
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
 
@@ -37,11 +37,8 @@ bool test_opencl_cache2()
   if (mgr->numGPUs()==2) gpu_idx = 1;
 
   bocl_device_sptr device = mgr->gpus_[gpu_idx];
-  boxm2_scene_sptr scene1 = new boxm2_scene(scene_file1);
-  boxm2_scene_sptr scene2 = new boxm2_scene(scene_file2);
 
   boxm2_lru_cache2::create(scene1);
-  boxm2_lru_cache2::create(scene2);
   boxm2_opencl_cache2_sptr opencl_cache = new boxm2_opencl_cache2(device);
   //iterate through response blocks
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks1 = scene1->blocks();
@@ -56,8 +53,9 @@ bool test_opencl_cache2()
 
       vcl_cout<<"Status "<<opencl_cache->to_string()<<vcl_endl;
       if(!blk_mem)
-          result = false; 
+          result = result && false;  
   }
+  TEST("Scene 1 getting blocks ", result, true );
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks2 = scene2->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter2;
   for (blk_iter2 = blocks2.begin(); blk_iter2 != blocks2.end(); ++blk_iter2)
@@ -68,8 +66,9 @@ bool test_opencl_cache2()
 
       vcl_cout<<"Status "<<opencl_cache->to_string()<<vcl_endl;
       if(!blk_mem)
-          result = false; 
+          result = result && false; 
   }
+  TEST("Scene 2 getting blocks ", result, true );
   return result;
 }
 
