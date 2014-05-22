@@ -29,10 +29,9 @@ void test_cache()
   vul_timer t; 
   t.mark();
   boxm2_block* blk =  cache->get_block(boxm2_block_id(0,0,0));
-  boxm2_data<BOXM2_ALPHA>* dat = cache->get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,0)); 
+  
 
   TEST("checking block id",blk->block_id(), boxm2_block_id(0,0,0) );
-  cache->clear_cache();
 }
 
 

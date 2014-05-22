@@ -48,12 +48,11 @@ bool test_opencl_cache2()
   {
       boxm2_block_id id = blk_iter1->first;
       vcl_cout << "Printing results for block " << id << ':' << vcl_endl;
-      bocl_mem * blk_mem = opencl_cache->get_block(scene1, id);
-      
-
+      bocl_mem*  blk_mem = opencl_cache->get_block(scene1, id);
       vcl_cout<<"Status "<<opencl_cache->to_string()<<vcl_endl;
-      if(!blk_mem)
-          result = result && false;  
+      if(!blk_mem)     result = result && false;  
+      
+      opencl_cache->unref_mem(blk_mem);
   }
   TEST("Scene 1 getting blocks ", result, true );
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks2 = scene2->blocks();
@@ -62,14 +61,18 @@ bool test_opencl_cache2()
   {
       boxm2_block_id id = blk_iter2->first;
       vcl_cout << "Printing results for block " << id << ':' << vcl_endl;
-      bocl_mem * blk_mem = opencl_cache->get_block(scene2, id);
+      bocl_mem*  blk_mem = opencl_cache->get_block(scene2, id);
 
+       
       vcl_cout<<"Status "<<opencl_cache->to_string()<<vcl_endl;
-      if(!blk_mem)
-          result = result && false; 
+      if(!blk_mem)      result = result && false; 
+
+      opencl_cache->unref_mem(blk_mem);
   }
+  opencl_cache->get_cpu_cache()->clear_cache();
   TEST("Scene 2 getting blocks ", result, true );
   return result;
 }
 
 TESTMAIN( test_opencl_cache2 );
+ 
