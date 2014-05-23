@@ -1,6 +1,6 @@
 // This is contrib/brl/bseg/bvxm/grid/bvxm_voxel_storage_slab_mem.txx
 #ifndef bvxm_voxel_storage_slab_mem_txx_
-#define bvxm_voxel_stroage_slab_mem_txx_
+#define bvxm_voxel_storage_slab_mem_txx_
 
 #include "bvxm_voxel_storage_slab_mem.h"
 // \file

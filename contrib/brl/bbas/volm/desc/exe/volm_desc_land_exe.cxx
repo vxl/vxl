@@ -65,8 +65,8 @@ int main(int argc,  char** argv)
         volm_desc_matcher_sptr m = new volm_desc_land_matcher(); // need a deriving class just to call a base method
         vnl_random rng;
         m->create_random_prob_map(rng, geo_hypo_folder(), out_folder(), tile_id(), tiles[tile_id()]);
-        double thres = 0.5;
-        m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 127, thres); 
+        float thres = 0.5f;
+        m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10.0f, 127.0f, thres); 
 
         volm_io::write_status(out_folder(), volm_io::SUCCESS);
         vcl_cout << "returning SUCCESS!\n";

@@ -30,7 +30,7 @@ public:
   virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values);
 
   //: each driving indexer should overwrite with the size of the descriptor
-  virtual unsigned layer_size() {  return volm_osm_category_io::volm_land_table.size();  }
+  virtual unsigned layer_size() {  return (unsigned)volm_osm_category_io::volm_land_table.size();  }
 
   virtual vcl_string get_index_type_str() { return volm_desc_land_indexer::name_; }
 

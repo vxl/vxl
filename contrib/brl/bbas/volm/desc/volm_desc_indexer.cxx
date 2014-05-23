@@ -68,10 +68,10 @@ bool volm_desc_indexer::index(float buffer_capacity, int min_leaf_id, int max_le
   
   for (current_leaf_id_ = 0; current_leaf_id_ < leaves_.size(); current_leaf_id_++) {
     vcl_cout << " current_leaf_id = " << current_leaf_id_ << " min_leaf_id = " << min_leaf_id << ", max_leaf_id = " << max_leaf_id << vcl_endl;
-    if (current_leaf_id_ < min_leaf_id || current_leaf_id_ >= max_leaf_id)
+    if ((int)current_leaf_id_ < min_leaf_id || (int)current_leaf_id_ >= max_leaf_id)
       continue;
 
-    vcl_cout << " current_leaf_id = " << current_leaf_id_ << " satifies " << leaves_[current_leaf_id_]->extent_ << vcl_endl;
+    vcl_cout << " current_leaf_id = " << current_leaf_id_ << " satisfies " << leaves_[current_leaf_id_]->extent_ << vcl_endl;
     if (!this->get_next())
       return false;
 
