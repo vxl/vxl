@@ -549,10 +549,10 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
         // warp this point with H1, H2
         vnl_vector_fixed<double,3> p1(u1, v1, 1);
         vnl_vector_fixed<double,3> p1w = H1*p1;
-        int u1w = vcl_floor((p1w[0]/p1w[2])+0.5);
-        int v1w = vcl_floor((p1w[1]/p1w[2])+0.5);
+        unsigned u1w = (unsigned)vcl_floor((p1w[0]/p1w[2])+0.5);
+        unsigned v1w = (unsigned)vcl_floor((p1w[1]/p1w[2])+0.5);
         
-        if (u1w < 0 || v1w < 0 || u1w >= img1_disp.ni() || v1w >= img1_disp.nj()) 
+        if (u1w >= img1_disp.ni() || v1w >= img1_disp.nj()) 
           continue;
         
         if (z == 5.5)
@@ -564,8 +564,8 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
 
         vnl_vector_fixed<double,3> p2(u2, v2, 1);
         vnl_vector_fixed<double,3> p2w = H2*p2;
-        int u2w = vcl_floor((p2w[0]/p2w[2])+0.5);
-        int v2w = vcl_floor((p2w[1]/p2w[2])+0.5);
+        int u2w = (int)vcl_floor((p2w[0]/p2w[2])+0.5);
+        int v2w = (int)vcl_floor((p2w[1]/p2w[2])+0.5);
 
         // check if with disparity the warped pixels are exactly the same, i.e. (u1w-d,v1w) = (u2w,v2w)
         double dif = vcl_sqrt((u1w-disp-u2w)*(u1w-disp-u2w) + (v1w-v2w)*(v1w-v2w));

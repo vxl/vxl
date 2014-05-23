@@ -50,7 +50,7 @@ void volm_satellite_resources::add_resource(vcl_string name)
 }
 
 //: x is lon and y is lat in the bbox, construct bbox with min point to be lower left and max to be upper right and as axis aligned with North-East
-volm_satellite_resources::volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size) : bbox_(bbox), min_size_(min_size)
+volm_satellite_resources::volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size) : min_size_(min_size), bbox_(bbox)
 { 
   this->construct_tree();
 }

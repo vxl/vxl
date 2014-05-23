@@ -548,14 +548,14 @@ bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_po
   pts.push_back(lower_left); 
   pts.push_back(upper_right); 
 
-  for (unsigned k = 0; k < pts.size(); k++) {
+  for (unsigned k = 0; k < (unsigned)pts.size(); k++) {
     // find the image
-    for (unsigned j = 0; j < infos.size(); j++) {
+    for (unsigned j = 0; j < (unsigned)infos.size(); j++) {
       double u, v;
       infos[j].cam->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
       int uu = (int)vcl_floor(u+0.5);
       int vv = (int)vcl_floor(v+0.5);
-      if (uu < 0 || vv < 0 || uu >= infos[j].ni || vv >= infos[j].nj)
+      if (uu < 0 || vv < 0 || uu >= (int)infos[j].ni || vv >= (int)infos[j].nj)
         continue;
       vcl_pair<unsigned, vcl_pair<int, int> > pp(j, vcl_pair<int, int>(uu, vv));
       corners.push_back(pp);

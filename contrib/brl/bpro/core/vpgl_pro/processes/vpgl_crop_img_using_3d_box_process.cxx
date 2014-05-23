@@ -148,7 +148,7 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
     return false;
   }
-  if (i0 < 0 || i0 > img_res_sptr->ni() || j0 < 0 || j0 > img_res_sptr->nj())
+  if (i0 > img_res_sptr->ni() || j0 > img_res_sptr->nj())
   {
     vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
     return false;

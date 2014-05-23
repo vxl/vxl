@@ -328,22 +328,22 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
   }
 
   // consistency check
-  int ni_x = x_imgs[0]->ni();
-  int nj_x = x_imgs[0]->nj();
+  unsigned ni_x = x_imgs[0]->ni();
+  unsigned nj_x = x_imgs[0]->nj();
   for (unsigned i = 1; i < x_imgs.size(); i++)
     if (x_imgs[i]->ni() != ni_x || x_imgs[i]->nj() != nj_x) {
       vcl_cout << "ERROR: " << pro.name() << " -- generated x imgs from various dem images are different in size\n";
       return false;
     }
-  int ni_y = y_imgs[0]->ni();
-  int nj_y = y_imgs[0]->nj();
+  unsigned ni_y = y_imgs[0]->ni();
+  unsigned nj_y = y_imgs[0]->nj();
   for (unsigned i = 1; i < y_imgs.size(); i++)
     if (y_imgs[i]->ni() != ni_y || y_imgs[i]->nj() != nj_y) {
       vcl_cout << "ERROR: " << pro.name() << " generated y imgs from various dem images are different in size\n";
       return false;
     }
-  int ni_z = z_imgs[0]->ni();
-  int nj_z = z_imgs[0]->nj();
+  unsigned ni_z = z_imgs[0]->ni();
+  unsigned nj_z = z_imgs[0]->nj();
   for (unsigned i = 1; i < z_imgs.size(); i++)
     if (z_imgs[i]->ni() != ni_z || z_imgs[i]->nj() != nj_z) {
       vcl_cout << "ERROR: " << pro.name() << " generated z imgs from various dem images are different in size\n";

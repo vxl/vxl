@@ -168,7 +168,7 @@ int main(int argc,  char** argv)
         int j = (int)vcl_floor(lv+0.5);
         for (int ii = i - fort_rad; ii < i + fort_rad; ii++)
           for (int jj = j - fort_rad; jj < j + fort_rad; jj++) {
-            if (ii >= 0 && jj >= 0 && ii < out_img_label.ni() && jj < out_img_label.nj() && out_img_label(ii,jj) != water_id) {
+            if (ii >= 0 && jj >= 0 && ii < (int)out_img_label.ni() && jj < (int)out_img_label.nj() && out_img_label(ii,jj) != water_id) {
               out_img_label(ii,jj) = fort_id;
               out_class_img(ii,jj) = fort_pixel_color;
             }
@@ -298,7 +298,7 @@ int main(int argc,  char** argv)
     for (psi.reset(); psi.next(); ) {
       int y = psi.scany();
       for (int x = psi.startx(); x <= psi.endx(); ++x) {
-        if (x >= 0 && y >= 0 &&  x < out_class_img.ni() && y < out_class_img.nj())  {
+        if (x >= 0 && y >= 0 &&  x < (int)out_class_img.ni() && y < (int)out_class_img.nj())  {
           if (out_img_label(x,y) == pier_id) {
             pixel_id = pier_id;
             pixel_color = pier_pixel_color;
@@ -315,7 +315,7 @@ int main(int argc,  char** argv)
       for (int x = psi.startx(); x <= psi.endx(); ++x) {
         for (int yy = y-3; yy < y+3; yy++) // enlarge 5 meters
           for (int xx = x-3; xx < x+3; xx++) {
-            if (xx >= 0 && yy >= 0 && xx < out_class_img.ni() && yy < out_class_img.nj()) {
+            if (xx >= 0 && yy >= 0 && xx < (int)out_class_img.ni() && yy < (int)out_class_img.nj()) {
                 out_img_label(xx,yy) = pixel_id;
                 out_class_img(xx,yy) = pixel_color;
               }

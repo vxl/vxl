@@ -240,7 +240,7 @@ bool sdet_dump_vsol_binary_data_process(bprb_func_process& pro)
 
   //== the string name of the texture category
   vcl_string output_file = pro.get_input<vcl_string>(1);
-  vcl_ofstream ofs(output_file);
+  vcl_ofstream ofs(output_file.c_str());
   if (!ofs) {
     vcl_cout << " In sdet_dump_vsol_binary_data_process() -- cannot open file: " << output_file << vcl_endl;
     return false;

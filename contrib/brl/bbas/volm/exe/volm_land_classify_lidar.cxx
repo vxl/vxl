@@ -136,8 +136,8 @@ int main(int argc,  char** argv)
   vcl_cout << "lidar ni: " << lidar_info.ni << " nj: " << lidar_info.nj << "\n";
 
   // find the local coords of each pixel to retrieve corresponding img pixels
-  for (int i = bb+1; i < lidar_info.ni-bb; i++) {
-    for (int j = bb+1; j < lidar_info.nj-bb; j++) {
+  for (int i = bb+1; i < (int)lidar_info.ni-bb; i++) {
+    for (int j = bb+1; j < (int)lidar_info.nj-bb; j++) {
 
       if (lidar_orig(i,j) <= 0)
         continue;

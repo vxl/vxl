@@ -437,7 +437,7 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
       geocam->global_to_img(lon, lat, gz, u, v);
       unsigned uu = (unsigned)vcl_floor(u+0.5);
       unsigned vv = (unsigned)vcl_floor(v+0.5);
-      if (uu >= 0 && vv >= 0 && uu < img.ni() && vv < img.nj())
+      if (uu < img.ni() && vv < img.nj())
         (*out_img_label)(i,j) = img(uu, vv);
     }
 

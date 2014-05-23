@@ -47,7 +47,7 @@ bool boxm2_scene_vrml_process(bprb_func_process& pro)
   vcl_map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
   
   // obtain the largest id along z direction
-  unsigned max_z_id = 0;
+  int max_z_id = 0;
   for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit)
     if (max_z_id < mit->first.k())
       max_z_id = mit->first.k();

@@ -138,8 +138,8 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
     vil_image_view<double> lon_img(lon_imgs[it->first]);
     vil_image_view<double> lat_img(lat_imgs[it->first]);
     
-    for (unsigned i = min_i; i <= max_i; i++)
-      for (unsigned j = min_j; j <= max_j; j++) {
+    for (int i = min_i; i <= max_i; i++)
+      for (int j = min_j; j <= max_j; j++) {
         //double llon, llat;
         //cam->img_to_global(i, j, llon, llat);  // WARNING: W is hard coded in vpgl_geo_camera so use -lon in the following lvcs method!!!!! 
         double lx, ly, lz;

@@ -73,9 +73,9 @@ bool volm_map_osm_process(bprb_func_process& pro)
     for (unsigned j = 0; j < pts.size(); j++) {
       double u, v;
       geo_cam->global_to_img(pts[j].x(), pts[j].y(), 0, u, v);
-      int uu = vcl_floor(u + 0.5f);
-      int vv = vcl_floor(v + 0.5f);
-      if (uu >= 0 && vv >= 0 && uu < img_sptr->ni() && vv < img_sptr->nj()) {
+      unsigned uu = (unsigned)vcl_floor(u + 0.5f);
+      unsigned vv = (unsigned)vcl_floor(v + 0.5f);
+      if (uu < img_sptr->ni() && vv < img_sptr->nj()) {
         //out_img(uu, vv).r = 255;
         img_line.push_back(vcl_pair<int, int>(uu,vv));
         hit = true;
@@ -101,9 +101,9 @@ bool volm_map_osm_process(bprb_func_process& pro)
         while (ds > 0.1) {
           //out_img(prev_u + cnt*1*cos, prev_v + cnt*1*sin).r = 255;  // delta is 1 pixel
           
-          int uu = vcl_floor(prev_u + cnt*1*cos + 0.5f);
-          int vv = vcl_floor(prev_v + cnt*1*sin + 0.5f);
-          if (uu >= 0 && vv >= 0 && uu < img_sptr->ni() && vv < img_sptr->nj()) 
+          unsigned uu = (unsigned)vcl_floor(prev_u + cnt*1*cos + 0.5f);
+          unsigned vv = (unsigned)vcl_floor(prev_v + cnt*1*sin + 0.5f);
+          if (uu < img_sptr->ni() && vv < img_sptr->nj()) 
             out_img(uu, vv).r = 255;  // delta is 1 pixel
 
           cnt++;
@@ -203,9 +203,9 @@ bool volm_map_segments_process(bprb_func_process& pro)
     for (unsigned j = 0; j < pts.size(); j++) {
       double u, v;
       geo_cam->global_to_img(pts[j].x(), pts[j].y(), 0, u, v);
-      int uu = vcl_floor(u + 0.5f);
-      int vv = vcl_floor(v + 0.5f);
-      if (uu >= 0 && vv >= 0 && uu < img_sptr->ni() && vv < img_sptr->nj()) {
+      unsigned uu = vcl_floor(u + 0.5f);
+      unsigned vv = vcl_floor(v + 0.5f);
+      if (uu < img_sptr->ni() && vv < img_sptr->nj()) {
         img_line.push_back(vcl_pair<int, int>(uu,vv));
         hit = true;
       }
@@ -236,9 +236,9 @@ bool volm_map_segments_process(bprb_func_process& pro)
         double cos = dx/ds; double sin = dy/ds;
         unsigned cnt = 1;
         while (ds > 0.1) {
-          int uu = vcl_floor(prev_u + cnt*1*cos + 0.5f);
-          int vv = vcl_floor(prev_v + cnt*1*sin + 0.5f);
-          if (uu >= 0 && vv >= 0 && uu < img_sptr->ni() && vv < img_sptr->nj()) {
+          unsigned uu = (unsigned)vcl_floor(prev_u + cnt*1*cos + 0.5f);
+          unsigned vv = (unsigned)vcl_floor(prev_v + cnt*1*sin + 0.5f);
+          if (uu < img_sptr->ni() && vv < img_sptr->nj()) {
             vil_rgb<vxl_byte> segment_color = img(uu, vv);
             vcl_pair<unsigned char, vcl_pair<unsigned char, unsigned char> > seg_color(segment_color.r, vcl_pair<unsigned char, unsigned char>(segment_color.g, segment_color.b));
             segment_map[seg_color].second = road_color;
@@ -414,9 +414,9 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
       for (unsigned j = 0; j < pts.size(); j++) {
         double u, v;
         geo_cam->global_to_img(pts[j].x(), pts[j].y(), 0, u, v);
-        int uu = vcl_floor(u + 0.5f);
-        int vv = vcl_floor(v + 0.5f);
-        if (uu >= 0 && vv >= 0 && uu < height_img_sptr->ni() && vv < height_img_sptr->nj()) {
+        unsigned uu = (unsigned)vcl_floor(u + 0.5f);
+        unsigned vv = (unsigned)vcl_floor(v + 0.5f);
+        if (uu < height_img_sptr->ni() && vv < height_img_sptr->nj()) {
           double elev = height_img(uu, vv);
           // now find where it projects in the satellite image
           // project to local coords of local_rational_camera first
@@ -442,8 +442,8 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
       for (unsigned i = 0; i < img_polys.size(); i++) {
         vcl_vector<vcl_pair<int, int> > img_line;
         for (unsigned k = 0; k < img_polys[i].size(); k++) {
-          int iuu = vcl_floor(img_polys[i][k].x());
-          int ivv = vcl_floor(img_polys[i][k].y());
+          int iuu = (int)vcl_floor(img_polys[i][k].x());
+          int ivv = (int)vcl_floor(img_polys[i][k].y());
           img_line.push_back(vcl_pair<int, int>(iuu,ivv));
         }
         img_line.push_back(vcl_pair<int, int>(vcl_floor(img_polys[i][0].x()),vcl_floor(img_polys[i][0].y())));
@@ -488,9 +488,9 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
       for (unsigned j = 0; j < pts.size(); j++) {
         double u, v;
         geo_cam->global_to_img(pts[j].x(), pts[j].y(), 0, u, v);
-        int uu = vcl_floor(u + 0.5f);
-        int vv = vcl_floor(v + 0.5f);
-        if (uu >= 0 && vv >= 0 && uu < height_img_sptr->ni() && vv < height_img_sptr->nj()) {
+        unsigned uu = (unsigned)vcl_floor(u + 0.5f);
+        unsigned vv = (unsigned)vcl_floor(v + 0.5f);
+        if (uu < height_img_sptr->ni() && vv < height_img_sptr->nj()) {
           //out_img(uu, vv).r = 255;
           double elev = height_img(uu, vv);
 
@@ -500,10 +500,9 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
           cam_local_rat->lvcs().global_to_local(pts[j].x(), pts[j].y(), elev, vpgl_lvcs::wgs84, loc_x, loc_y, loc_z);
           double iu, iv;
           cam_local_rat->project(loc_x, loc_y, loc_z, iu, iv);
-          int iuu = vcl_floor(iu + 0.5f);
-          int ivv = vcl_floor(iv + 0.5f);
-      
-          if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
+          unsigned iuu = (unsigned)vcl_floor(iu + 0.5f);
+          unsigned ivv = (unsigned)vcl_floor(iv + 0.5f);
+          if (iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
             vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
             img_line.push_back(vcl_pair<int, int>(iuu,ivv));
             hit = true;
@@ -548,7 +547,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
           for (it.reset(); it.next();  ) {
             int y = it.scany();
             for (int x = it.startx(); x <= it.endx(); ++x) {
-              if ( x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
+              if ( x >= 0 && y >= 0 && x < (int)out_img.ni() && y < (int)out_img.nj()) {
                 if (band_name.compare("r") == 0)      out_img(x, y).r = 255;
                 else if(band_name.compare("g") == 0)  out_img(x, y).g = 255;
                 else if(band_name.compare("b") == 0)  out_img(x, y).b = 255;

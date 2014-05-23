@@ -81,6 +81,6 @@ bool brip_truncate_nitf_bit_process(bprb_func_process& pro)
     }
     // output
     pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_img));
+    return true;
   }
-
 }

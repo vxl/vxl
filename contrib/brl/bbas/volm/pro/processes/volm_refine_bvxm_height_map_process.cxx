@@ -31,7 +31,7 @@ namespace volm_refine_bvxm_height_map_process_globals
       for (unsigned c = 0; c < num_nbrs; c++) {
         unsigned nbr_i = (unsigned)( (signed)i + nbrs8_delta[c][0] );
         unsigned nbr_j = (unsigned)( (signed)j + nbrs8_delta[c][1] );
-        if (nbr_i < in_img.ni() && nbr_j < in_img.nj() && nbr_i >= 0 && nbr_j >= 0)
+        if (nbr_i < in_img.ni() && nbr_j < in_img.nj())
           if ( in_img(nbr_i, nbr_j) < min_h )
             min_h = in_img(nbr_i, nbr_j);
       }

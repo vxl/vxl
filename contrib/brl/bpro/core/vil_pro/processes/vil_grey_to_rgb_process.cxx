@@ -105,8 +105,8 @@ bool vil_grey_to_rgb_process(bprb_func_process& pro)
   // generate a color rgb image
   vil_image_view<vil_rgb<vxl_byte> >* out_img = new vil_image_view<vil_rgb<vxl_byte> >(ni,nj);
   out_img->fill(vil_rgb<vxl_byte>(0,0,0));
-  for (int i = 0; i < ni; i++)
-    for (int j = 0; j < nj; j++) {
+  for (unsigned i = 0; i < ni; i++)
+    for (unsigned j = 0; j < nj; j++) {
       vil_rgb<vxl_byte> color;
       if (color_map.find((*in_img)(i,j)) != color_map.end())
         color = color_map.find((*in_img)(i,j))->second;

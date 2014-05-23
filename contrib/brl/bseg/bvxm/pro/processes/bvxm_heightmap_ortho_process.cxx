@@ -88,8 +88,8 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   vcl_cout << "Using scene height: " << h << " to negate the depth map!\n";
   vil_image_view<float> *hmap = new vil_image_view<float>(ni, nj, 1);
   hmap->fill(0.0f);
-  for (unsigned i = 0; i < ni; i++) 
-    for (unsigned j = 0; j < nj; j++) 
+  for (int i = 0; i < ni; i++) 
+    for (int j = 0; j < nj; j++) 
       (*hmap)(i,j) = h-(*dmap)(i,j)+base_elev;
     
   //store output

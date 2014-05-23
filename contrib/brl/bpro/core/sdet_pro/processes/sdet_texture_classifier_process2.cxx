@@ -107,8 +107,8 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
   // find the local coords of each pixel to retrieve corresponding img pixels
   float weight = 1.0f / (4*bb*bb);
   vcl_vector<float> hist(ntextons);
-  for (int i = invalid; i < ni-invalid; i++) {
-    for (int j = invalid; j < nj-invalid; j++) {
+  for (int i = invalid; i < (int)ni-invalid; i++) {
+    for (int j = invalid; j < (int)nj-invalid; j++) {
       
       vcl_fill(hist.begin(), hist.end(), 0.0f);
       for (int ii = i-bb; ii < i+bb; ii++)

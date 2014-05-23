@@ -554,8 +554,8 @@ int main(int argc, char** argv)
     vcl_cout << " chosen leaf: " << leaf_idx() << vcl_endl;
 
     // create a 2d image for each leaf at desired size
-    for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-      if (leaf_idx() > 0 && leaf_idx() < leaves.size())
+    for (unsigned l_idx = 0; l_idx < (unsigned)leaves.size(); l_idx++) {
+      if (leaf_idx() > 0 && leaf_idx() < (unsigned)leaves.size())
         if (l_idx != leaf_idx())
           continue;
       // calculate desired resolution
@@ -604,8 +604,8 @@ int main(int argc, char** argv)
                << " corresponding to image size " << out_img.ni() << 'x' << out_img.nj() << vcl_endl;
 
       // ingest geo_cover for the image
-      for (int i = 0; i < ni; i++) {
-        for (int j = 0; j < nj; j++) {
+      for (unsigned i = 0; i < ni; i++) {
+        for (unsigned j = 0; j < nj; j++) {
           // transfer coords to get pixel in geo cover image
           double lon, lat, gz;
           float local_x = (float)(i+0+0.5);
@@ -615,15 +615,15 @@ int main(int argc, char** argv)
           geo_cover.cam->global_to_img(lon, lat, gz, u, v);
           unsigned uu = (unsigned)vcl_floor(u+0.5);
           unsigned vv = (unsigned)vcl_floor(v+0.5);
-          if (uu > 0 && vv > 0 && uu < geo_cover.ni && vv < geo_cover.nj)
+          if (uu < geo_cover.ni && vv < geo_cover.nj)
             out_img(i,j) = volm_osm_category_io::geo_land_table[(*geo_img)(uu,vv)].id_;
         }
       }
 
       // ingest urban image to add extra urban region
       // Note that in urban image, three pixel values exist, 0, 1 and 255.  255 refers to urban region
-      for (int i = 0; i < ni; i++) {
-        for (int j = 0; j < nj; j++) {
+      for (unsigned i = 0; i < ni; i++) {
+        for (unsigned j = 0; j < nj; j++) {
           // transfer coords to get pixel in urban image
           double lon, lat, gz;
           float local_x = (float)(i+0+0.5);
@@ -689,9 +689,9 @@ int main(int argc, char** argv)
             vcl_cout << " \t\t " << leaf_strings[c_idx] << " ---> " << leaf_boxes[c_idx] << vcl_endl;
           }
           if (leaf_strings.size() != 0) {
-            for (int i = 0; i < ni; i++) {
+            for (unsigned i = 0; i < ni; i++) {
               //vcl_cout << "i = " << i << "," << vcl_flush;
-              for (int j = 0; j < nj; j++) {
+              for (unsigned j = 0; j < nj; j++) {
             
                 double lon, lat, gz;
                 float local_x = (float)(i+0+0.5);
@@ -862,7 +862,7 @@ int main(int argc, char** argv)
             int cy = (int)vcl_floor(cross_pts[c_idx].y() + 0.5);
             for (int ii = cx-radius; ii < cx+radius; ii++)
               for (int jj = cy-radius; jj <cy+radius; jj++)
-                if (ii >=0 && jj>=0 && ii <out_img.ni() && jj < out_img.nj())
+                if (ii >=0 && jj>=0 && ii < (int)out_img.ni() && jj < (int)out_img.nj())
                   if (curr_level >= level_img(ii,jj)) {
                     out_img(ii,jj)   = curr_id;
                     level_img(ii,jj) = curr_level;
@@ -889,7 +889,7 @@ int main(int argc, char** argv)
           double i = lx - leaf_bbox.min_x();
           double j = leaf_bbox.max_y() - ly;
           int x = (int)i;  int y = (int)j;
-          if (x>0 && y>0 && x<out_img.ni() && y<out_img.nj())
+          if (x>0 && y>0 && x<(int)out_img.ni() && y<(int)out_img.nj())
             if (curr_level >= level_img(x,y)) {
               level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
             }

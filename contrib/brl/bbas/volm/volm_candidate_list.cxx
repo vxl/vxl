@@ -170,7 +170,7 @@ bool volm_candidate_list::top_locations(vcl_vector<vgl_point_2d<double> >& top_l
     double lon, lat;
     unsigned u = (unsigned)top_locs_pixel[i].x();
     unsigned v = (unsigned)top_locs_pixel[i].y();
-    if (u < 0 || u > image_.ni() || v < 0 || v > image_.nj() || image_(u,v) < thres_)
+    if (u > image_.ni() || v > image_.nj() || image_(u,v) < thres_)
       continue;
     tile.img_to_global((unsigned)top_locs_pixel[i].x(), (unsigned)top_locs_pixel[i].y(), lon, lat);
     top_locs.push_back(vgl_point_2d<double>(lon, lat));

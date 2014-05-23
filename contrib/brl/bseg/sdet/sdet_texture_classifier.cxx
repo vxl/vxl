@@ -541,7 +541,7 @@ compute_training_data(vcl_string const& category,
     for (psi.reset(); psi.next(); ) {
       int j = psi.scany();
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
-        if (i >= ni || j >= nj || i < maxr || j < maxr)
+        if (i >= ni || j >= nj || i < (int)maxr || j < (int)maxr)
           continue;
         //vnl_vector<double> tx(dim+2);
         vnl_vector<double> tx(dim_total);
