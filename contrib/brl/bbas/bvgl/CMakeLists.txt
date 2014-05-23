@@ -22,6 +22,7 @@ SET(bvgl_sources
  bvgl_triangle_3d.h                      bvgl_triangle_3d.txx
  bvgl_volume_of_intersection.h           bvgl_volume_of_intersection.txx
  bvgl_ray_pyramid.h                      bvgl_ray_pyramid.cxx
+ bvgl_param_curve.h                      bvgl_param_curve.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates bvgl_sources)
 
