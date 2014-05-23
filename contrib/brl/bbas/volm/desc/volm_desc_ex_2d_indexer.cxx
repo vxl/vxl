@@ -10,7 +10,7 @@ volm_desc_ex_2d_indexer(vcl_string const& input_folder,
                         vcl_vector<double> const& radius,
                         unsigned const& nlands) : volm_desc_indexer(out_index_folder), nlands_(nlands)
 {
-  volm_io_tools::load_imgs(input_folder, classification_maps_, false, false, true);  // load them just like NLCD but do not load img resources
+  volm_io_tools::load_imgs(input_folder, classification_maps_, false, true, true);  // load them just like NLCD but do not load img resources
 
   if (radius.empty())
     radius_.push_back(1.0);
@@ -60,10 +60,12 @@ bool volm_desc_ex_2d_indexer::get_next()
           for (unsigned jj = 0; jj < lon_img.nj(); jj++) {
             double llon, llat;
             classification_maps_[i].cam->img_to_global(ii, jj, llon, llat);  // WARNING: W is hard coded in vpgl_geo_camera so use -lon in the following lvcs method!!!!! 
-            if (direction == "W") lon_img(ii,jj) = -llon;
-            else                  lon_img(ii,jj) = llon;
-            if (hemisphere == "S") lat_img(ii,jj) = -llat;
-            else                   lat_img(ii,jj) = llat;
+            lon_img(ii, jj) = llon;
+            lat_img(ii, jj) = llat;
+            //if (direction == "W") lon_img(ii,jj) = -llon;
+            //else                  lon_img(ii,jj) = llon;
+            //if (hemisphere == "S") lat_img(ii,jj) = -llat;
+            //else                   lat_img(ii,jj) = llat;
           }
         vil_image_view_base_sptr lon_img_sptr = new vil_image_view<double>(lon_img);
         vil_image_view_base_sptr lat_img_sptr = new vil_image_view<double>(lat_img);
@@ -104,8 +106,8 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
     for (unsigned m = 0; m < corners.size(); m++) {
       double lon_abs, lat_abs;
       lon_abs = corners[m].first;  lat_abs = corners[m].second;
-      if (lon_abs < 0) lon_abs = -lon_abs;
-      if (lat_abs < 0) lat_abs = -lat_abs;
+      //if (lon_abs < 0) lon_abs = -lon_abs;
+      //if (lat_abs < 0) lat_abs = -lat_abs;
       cam->global_to_img(lon_abs, lat_abs, 0.0, u, v);
       int i = (int)vcl_floor(u + 0.5);
       int j = (int)vcl_floor(v + 0.5);
@@ -133,7 +135,6 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
     int min_j = it->second[0].second;
     int max_i = it->second[1].first;
     int max_j = it->second[1].second;
-
     vil_image_view<double> lon_img(lon_imgs[it->first]);
     vil_image_view<double> lat_img(lat_imgs[it->first]);
     

@@ -48,10 +48,10 @@ bool volm_candidate_list::create_expand_polygon(vcl_vector<vgl_point_2d<int> > c
   unsigned n_points = (unsigned)sheet.size();
   vcl_vector<vgl_point_2d<double> > points;
   for (unsigned i = 0; i < n_points; i++) {
-    points.push_back(vgl_point_2d<double>(sheet[i].x()+0.5, sheet[i].y()+0.5));
-    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()+0.5));
-    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()-0.5));
-    points.push_back(vgl_point_2d<double>(sheet[i].x()-0.5, sheet[i].y()-0.5));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()+1.0, sheet[i].y()+1.0));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()-1.0, sheet[i].y()+1.0));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()-1.0, sheet[i].y()-1.0));
+    points.push_back(vgl_point_2d<double>(sheet[i].x()-1.0, sheet[i].y()-1.0));
   }
   vgl_convex_hull_2d<double> ch(points);
   vgl_polygon<double> poly = ch.hull();
@@ -183,8 +183,8 @@ bool volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile& tile,
   if (sh_idx > n_sheet_)
     return false;
   unsigned n_point = (unsigned)poly_[sh_idx].size();
-  double deg_per_half_pixel_i = 0.5 * tile.scale_i()/(tile.ni() - 1);
-  double deg_per_half_pixel_j = 0.5 * tile.scale_j()/(tile.nj() - 1);
+  double deg_per_half_pixel_i = 1.0 * tile.scale_i()/(tile.ni() - 1);
+  double deg_per_half_pixel_j = 1.0 * tile.scale_j()/(tile.nj() - 1);
   vcl_vector<vgl_point_2d<double> > points;
   for (unsigned i = 0; i < n_point; i++) {
     double lon, lat;

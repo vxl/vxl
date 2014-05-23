@@ -147,6 +147,9 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   info.img_name = img_file;
 
   vpgl_geo_camera *cam;
+  // try to load camera from image header first 
+
+
   if (!is_cam_global && !load_cam_from_tfw) {
     vpgl_geo_camera::init_geo_camera(img_file, info.ni, info.nj, lvcs, cam);
     info.cam = cam;
@@ -188,7 +191,7 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
 
   vpgl_utm utm; int utm_zone; double x,y;
   utm.transform(lat, lon, x, y, utm_zone);
-  vcl_cout << " zone of lidar img: " << img_file << ": " << utm_zone << " from lower left corner!\n";
+  vcl_cout << " zone of lidar img: " << img_file << ": " << utm_zone << " from lower left corner: " << lon << ',' << lat << "!\n";
 
   cam->img_to_global(info.ni-1, 0.0, lon, lat);
   if (!is_cam_global) {
@@ -199,18 +202,18 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   }
   vgl_point_2d<double> upper_right(lon, lat);
   vgl_box_2d<double> bbox(lower_left, upper_right);
-  //vcl_cout << "bbox: " << bbox << vcl_endl;
+  vcl_cout << "bbox: " << bbox << vcl_endl;
   info.bbox = bbox;
 
   return utm_zone;
 }
 
 void volm_io_tools::load_lidar_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos) {
-  vcl_string in_dir = folder + "*.tif";
+  vcl_string in_dir = folder + "/lidar_*.tif";
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string filename = fn();
     volm_img_info info;
-    load_lidar_img(filename, info);
+    volm_io_tools::load_lidar_img(filename, info, true, true, false);
     infos.push_back(info);
   }
 }
@@ -221,13 +224,22 @@ void volm_io_tools::load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string filename = fn();
     volm_img_info info;
-    load_lidar_img(filename, info, true);
+    load_geotiff_image(filename, info, true);
     infos.push_back(info);
   }
 }
 void volm_io_tools::load_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool load_image_resource, bool is_cam_global, bool load_cam_from_tfw)
 {
-  vcl_string in_dir = folder + "*.tif*";  // sometimes .tif is written .tiff 
+  vcl_string in_dir = folder + "/*.tif";  // sometimes .tif is written .tiff 
+  for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
+    vcl_string filename = fn();
+    vcl_string cam_tfw_file = vul_file::strip_extension(filename) + ".tfw";
+    volm_img_info info;
+    load_lidar_img(filename, info, load_image_resource, is_cam_global, load_cam_from_tfw, cam_tfw_file);
+    infos.push_back(info);
+  }
+  // also load .tiff
+  in_dir = folder + "/*.tiff";
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string filename = fn();
     vcl_string cam_tfw_file = vul_file::strip_extension(filename) + ".tfw";

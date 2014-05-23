@@ -31,6 +31,19 @@ volm_osm_objects::volm_osm_objects(vcl_string const& osm_file, vcl_string const&
   for (unsigned i = 0; i < num_pts; i++)
   {
     vcl_vector<vcl_pair<vcl_string, vcl_string> > curr_keys = osm_pt_keys[i];
+    // find pier first as first priority
+    bool pier_found = false;
+    for (vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !pier_found); ++vit) {
+      if (vit->first == "man_made" && vit->second == "pier") {
+        mit = osm_land_table.find(*vit);
+        if (mit != osm_land_table.end()) {
+          pier_found = true;  volm_land_layer prop = mit->second;  volm_osm_object_point_sptr loc_pt = new volm_osm_object_point(prop, osm_pts[i]);
+          loc_pts_.push_back(loc_pt);
+        }
+      }
+    }
+    if (pier_found)
+      continue;
     bool found = false;
     for (vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !found); ++vit) {
       mit = osm_land_table.find(*vit);
@@ -47,6 +60,19 @@ volm_osm_objects::volm_osm_objects(vcl_string const& osm_file, vcl_string const&
   for (unsigned i = 0; i < num_lines; i++)
   {
     vcl_vector<vcl_pair<vcl_string, vcl_string> > curr_keys = osm_line_keys[i];
+    // find pier first as first priority
+    bool pier_found = false;
+    for (vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !pier_found); ++vit) {
+      if (vit->first == "man_made" && vit->second == "pier") {
+        mit = osm_land_table.find(*vit);
+        if (mit != osm_land_table.end()) {
+          pier_found = true;  volm_land_layer prop = mit->second;  volm_osm_object_line_sptr loc_line = new volm_osm_object_line(mit->second, osm_lines[i]);
+          loc_lines_.push_back(loc_line);
+        }
+      }
+    }
+    if (pier_found)
+      continue;
     bool found = false;
     for (vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !found); ++vit) {
       mit = osm_land_table.find(*vit);
@@ -62,6 +88,18 @@ volm_osm_objects::volm_osm_objects(vcl_string const& osm_file, vcl_string const&
   for (unsigned i = 0; i < num_polys; i++)
   {
     vcl_vector<vcl_pair<vcl_string, vcl_string> > curr_keys = osm_poly_keys[i];
+    // find pier first
+    bool pier_found = false;
+    for (vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !pier_found); ++vit) {
+      if (vit->first == "man_made" && vit->second == "pier") {
+        mit = osm_land_table.find(*vit);
+        if (mit != osm_land_table.end()) {
+          pier_found = true;  volm_osm_object_polygon_sptr loc_poly = new volm_osm_object_polygon(mit->second, osm_polys[i]);
+          loc_polys_.push_back(loc_poly);
+        }
+      }
+    }
+
     bool found = false;
     for (vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !found); ++vit) {
       mit = osm_land_table.find(*vit);

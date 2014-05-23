@@ -26,6 +26,8 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> query_vsl("-vsl", "bwm gui vxl file for query image","");
   vul_arg<vcl_string> weight_file("-weight", "weight parameter file", "");
   vul_arg<vcl_string> world_str("-world", "world region","");
+  vul_arg<vcl_string> query_name("-query-name", "query name", "");
+  vul_arg<unsigned> tile_id("-tile", "tile id", 1000);
   // index and geolocation
   vul_arg<vcl_string> geo_hypo_folder("-geo", "folder where the geolocation for this tile is stored", "");
   vul_arg<vcl_string> desc_index_folder("-index", "directory that contains the created wr3db indices", "");
@@ -96,7 +98,7 @@ int main(int argc, char** argv)
       if (!dms->ground_plane().empty()) {
         bool has_grd = false;
         for (vcl_vector<volm_weight>::iterator wit = weights.begin();  wit != weights.end();  ++wit)
-          if ( (*wit).w_typ_ == "ground_plane" ) {
+          if ( (*wit).w_typ_ == "ground_plane" || (*wit).w_typ_ == "ground" ) {
             has_grd = true;
             break;
           }
@@ -112,7 +114,7 @@ int main(int argc, char** argv)
         for (unsigned i = 0; i < weights.size(); i++) {
           vcl_cout << " \t\t" << weights[i].w_name_ << " " << weights[i].w_obj_ << vcl_endl;
         }
-        err_log << " ERROR: number of weight parameters is different from labelled depth_map_region objects\n";
+        err_log << " ERROR: number of weight parameters is different from labeled depth_map_region objects\n";
         error_report(err_log_file.str(), err_log.str());
         return volm_io::EXE_ARGUMENT_ERROR;
       }
@@ -145,6 +147,11 @@ int main(int argc, char** argv)
     else if (world_region.compare("Desert")== 0)      tiles = volm_tile::generate_p1_wr1_tiles();
     else {
       err_log << "ERROR: unknown ROI region: " << world_region << ", check tag xml.  Available regions are: Chile, India, Jordan, Philippines, Taiwan\n";
+      error_report(err_log_file.str(), err_log.str());
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    if (tile_id() < 0 || tile_id() >= tiles.size()) {
+      err_log << "ERROR: unknown tile id " << tile_id() << " for ROI region: " << world_region << "!\n";
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
@@ -192,35 +199,37 @@ int main(int argc, char** argv)
     vcl_cout << vcl_endl;
 
     // start the matcher
-    for (unsigned tile_id = 0; tile_id < tiles.size(); tile_id++)
+    for (unsigned t_id = 0; t_id < tiles.size(); t_id++)
     {
-      vcl_cout << " matcher on tile " << tile_id << " in " << tiles.size() << " tiles...\n";
+      if (t_id != tile_id())
+        continue;
+      vcl_cout << " matcher on tile " << t_id << " in " << tiles.size() << " tiles...\n";
       vcl_cout << vcl_flush;
       // run matcher
-      if (!ex_matcher->matcher(query, geo_hypo_folder(), desc_index_folder(), buffer_capacity(), tile_id)) {
-        err_log << "ERROR: matcher on tile " << tile_id << " failed\n";
+      if (!ex_matcher->matcher(query, geo_hypo_folder(), desc_index_folder(), buffer_capacity(), t_id)) {
+        err_log << "ERROR: matcher on tile " << t_id << " failed\n";
         error_report(err_log_file.str(), err_log.str());
         return volm_io::EXE_MATCHER_FAILED;
       }
       // save score binary
-      if (!ex_matcher->write_out(out_folder(), tile_id)) {
-        err_log << "ERROR: matcher on tile " << tile_id << " failed (can not save score binary)\n";
+      if (!ex_matcher->write_out(out_folder(), t_id)) {
+        err_log << "ERROR: matcher on tile " << t_id << " failed (can not save score binary)\n";
         error_report(err_log_file.str(), err_log.str());
         return volm_io::EXE_MATCHER_FAILED;
       }
       // create probability map
       float gt_score = -1.0f;
       vgl_point_3d<double> gt_loc(0.0,0.0,0.0);
-      if (!ex_matcher->create_prob_map(geo_hypo_folder(), out_folder(), tile_id, tiles[tile_id], gt_loc, gt_score)) {
-        err_log << " ERROR: creating probability map for tile " << tile_id << " failed\n";
+      if (!ex_matcher->create_prob_map(geo_hypo_folder(), out_folder(), t_id, tiles[t_id], gt_loc, gt_score)) {
+        err_log << " ERROR: creating probability map for tile " << t_id << " failed\n";
         error_report(err_log_file.str(), err_log.str());
         return volm_io::POST_PROCESS_FAILED;
       }
       // create scaled probability map
       float thres_value = threshold();
       vcl_cout << " \t threshold used for scaling probability maps: " << thres_value << vcl_endl;
-      if (!volm_desc_matcher::create_scaled_prob_map(out_folder(), tiles[tile_id], tile_id, ku(), kl(), thres_value)) {
-        err_log << "ERROR: create scaled probability map for tile " << tile_id << " failed\n";
+      if (!volm_desc_matcher::create_scaled_prob_map(out_folder(), tiles[t_id], t_id, ku(), kl(), thres_value)) {
+        err_log << "ERROR: create scaled probability map for tile " << t_id << " failed\n";
         error_report(err_log_file.str(), err_log.str());
         return volm_io::POST_PROCESS_FAILED;
       }
@@ -230,7 +239,29 @@ int main(int argc, char** argv)
   // generate candidate list once we have the scaled_probability map
   if (is_cand())
   {
-    // TO BE IMPLEMENTED
+    if (out_folder().compare("") == 0) {
+      vcl_cerr << "ERROR: output folder and probability map folder can not be empty when creating candidate list.  Check input" << vcl_endl;
+      vul_arg_display_usage_and_exit();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    vcl_stringstream log;
+    vcl_stringstream log_file;
+    log_file << out_folder() << "/error_log_candidate_list.xml";
+    vcl_cout << " ============== Start to create candidate list ==================" << vcl_endl;
+    vcl_stringstream cand_folder;
+    cand_folder << out_folder() << "/T_" << thresc();
+    if (!vul_file::is_directory(cand_folder.str()))
+      vul_file::make_directory(cand_folder.str());
+    vcl_cout << "\t threshold: " << thresc() << vcl_endl;
+    vcl_cout << "\t probability maps are stored in: " << out_folder() << vcl_endl;
+    vcl_cout << "\t result stored in: " << cand_folder.str() << vcl_endl;
+    if (!volm_desc_matcher::create_candidate_list(out_folder(), cand_folder.str(), thresc(), top_size(), ku(), kl(), threshold(), query_name(), world_str())) {
+      //log << " creating candidate list failed at threshold " << thresc() << '\n';
+      //error_report(log_file.str(), log.str());
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    vcl_cout << " =========================== Finish =============================" << vcl_endl;
+    return volm_io::SUCCESS;
   }
 
   return volm_io::SUCCESS;

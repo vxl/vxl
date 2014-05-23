@@ -45,7 +45,7 @@ public:
   void print() const
   {
     vcl_cout << " (id: " << (int)id_ << ", name: " << name_ 
-             << ", level: " << (int)level_ <<  ", width: " << width_ << ')';
+             << ", level: " << (int)level_ <<  ", width: " << width_ << ", color: " << color_ << ')';
   }
   //: land id
   unsigned char id_;
@@ -63,7 +63,7 @@ public:
 class volm_osm_category_io
 {
 public:
-  enum nlcd_values {NLCD_WATER = 11, NLCD_ICE_SNOW = 12, NLCD_SAND = 31,
+  enum nlcd_values {NLCD_WATER = 11, NLCD_ICE_SNOW = 12, NLCD_SAND = 31, NLCD_INVALID = 0,
                     NLCD_DEVELOPED_LOW = 22, NLCD_DEVELOPED_MED = 23, NLCD_DEVELOPED_HIGH = 24, NLCD_DEVELOPED_OPEN = 21,
                     NLCD_DECIDUOUS_FOREST = 41, NLCD_EVERGREEN_FOREST = 42, NLCD_MIXED_FOREST = 43,
                     NLCD_DWARF_SCRUB = 51, NLCD_SHRUB = 52,

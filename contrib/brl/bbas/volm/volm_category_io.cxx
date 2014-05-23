@@ -9,6 +9,8 @@ vil_rgb<vxl_byte> color(unsigned char id)
 {
   if (id == (unsigned char)34)  // tall building as blue
     return vil_rgb<vxl_byte>(0,0,255);
+  else if (id == (unsigned char)29)
+    return vil_rgb<vxl_byte>(0, 255, 0);
   else
     return vil_rgb<vxl_byte>(bvrml_color::heatmap_classic[id][0],
                              bvrml_color::heatmap_classic[id][1],
@@ -241,9 +243,35 @@ vcl_map<int, double> create_geo_cover_hyp_increments_for_roads()
   m[volm_osm_category_io::GEO_AGRICULTURE_RICE]    = 4;
   m[volm_osm_category_io::GEO_WETLAND]             = 30;
   m[volm_osm_category_io::GEO_MANGROVE]            = 500;  // almost no hyps
-  m[volm_osm_category_io::GEO_WATER]               = 1000;  // almost no hyps on water (for now)
+  //m[volm_osm_category_io::GEO_WATER]               = 1000;  // almost no hyps on water (for now)
   m[volm_osm_category_io::GEO_ICE]                 = 1000; // almost no hyps on ice (for now)
   m[volm_osm_category_io::GEO_CLOUD]               = 4;  // use the most common -- CAUTION: some cloud coverage may prevent good density on urban areas
+  m[volm_osm_category_io::NLCD_DECIDUOUS_FOREST]   = 30;  // almost no hyps on the forest areas
+  m[volm_osm_category_io::NLCD_EVERGREEN_FOREST]   = 30;
+  m[volm_osm_category_io::NLCD_MIXED_FOREST]       = 30;
+  m[volm_osm_category_io::NLCD_DWARF_SCRUB]        = 30;
+  m[volm_osm_category_io::NLCD_SHRUB]              = 30;
+
+  m[volm_osm_category_io::NLCD_GRASSLAND]          = 4;
+  m[volm_osm_category_io::NLCD_LICHENS]            = 4;
+  m[volm_osm_category_io::NLCD_MOSS]               = 4;
+  m[volm_osm_category_io::NLCD_SEDGE]              = 4;
+  m[volm_osm_category_io::NLCD_CROPS]              = 10;
+  m[volm_osm_category_io::NLCD_PASTURE]            = 10;
+  
+  m[volm_osm_category_io::NLCD_EMERGENT_WETLAND]   = 4;
+  m[volm_osm_category_io::NLCD_WOODY_WETLAND]      = 4;
+  
+  m[volm_osm_category_io::NLCD_DEVELOPED_HIGH]     = 4;
+  m[volm_osm_category_io::NLCD_DEVELOPED_MED]      = 4;
+  m[volm_osm_category_io::NLCD_DEVELOPED_LOW]      = 4;
+  m[volm_osm_category_io::NLCD_DEVELOPED_OPEN]     = 10;
+
+  m[volm_osm_category_io::NLCD_WATER]              = 4;
+  m[volm_osm_category_io::NLCD_SAND]               = 4;
+  m[volm_osm_category_io::NLCD_ICE_SNOW]           = 1000;
+
+  m[volm_osm_category_io::NLCD_INVALID]            = 4;
   return m;
 }
 

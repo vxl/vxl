@@ -60,6 +60,7 @@ public:
                             bool load_cam_from_tfw = false,
                             vcl_string const& cam_tfw_file = "");
 
+  //: load lidar image and camera from geo tiff image header: use glob: folder//lidar_*.tif
   static void load_lidar_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);
 
   static void load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos);

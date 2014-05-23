@@ -246,8 +246,8 @@ bool add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info> const
             int vvc = (int)vcl_floor(vc+0.5);
             if (class_map_infos[mc].valid_pixel(uuc,vvc)) {
               vil_image_view<vxl_byte> imgc(class_map_infos[mc].img_r);
-              vcl_cout << " loc " << pt << " is " << volm_osm_category_io::volm_land_table[imgc(uuc,vvc)].name_ << " at pixel "
-                       << " (" << uuc << "x" << vvc << ") in image " << class_map_infos[mc].name << vcl_endl;
+              //vcl_cout << " loc " << vcl_setprecision(12) << pt << " is " << volm_osm_category_io::volm_land_table[imgc(uuc,vvc)].name_ << " at pixel "
+              //         << " (" << uuc << "x" << vvc << ") in image " << class_map_infos[mc].name << vcl_endl;
               if (imgc(uuc,vvc)==volm_osm_category_io::volm_land_table_name["building"].id_ || imgc(uuc,vvc)==volm_osm_category_io::volm_land_table_name["tall_building"].id_)
               {
                 not_building = false;
@@ -271,13 +271,15 @@ bool add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info> const
     if (search)
     {
       if (!volm_geo_index::exists(hyp_root, pt.y(), pt.x(), inc_in_sec_radius)) {
-        volm_geo_index::add_hypothesis(hyp_root, pt.x(), pt.y(), z);
+        if (z > 0)
+          volm_geo_index::add_hypothesis(hyp_root, pt.x(), pt.y(), z);
         return true;
       }
     }
     else
     {
-      volm_geo_index::add_hypothesis(hyp_root, pt.x(), pt.y(), z);
+      if (z > 0)
+        volm_geo_index::add_hypothesis(hyp_root, pt.x(), pt.y(), z);
       return true;
     }
   }
@@ -335,8 +337,10 @@ int main(int argc,  char** argv)
   vul_arg<bool> use_osm_roads("-osm_roads", "if passed, use the osm binary file to read the roads and generate location hypotheses along them", false);
   vul_arg<vcl_string> osm_bin_file("-osm_bin", "the binary file that has all the objects", "");
   vul_arg<vcl_string> osm_tree_folder("-osm_tree", "the geoindex tree folder that has the tree structure with the ids of osm objects at its leaves", "");
+  vul_arg<vcl_string> region_name("-region_name", "if passed, will generate constant post on the given region, e.g, sane region, pier region","");
   vul_arg<int> world_id("-world", "the id of the world", -1);
   vul_arg<bool> p1b("-p1b", "use the p1b tiles", false);
+  vul_arg<bool> p1a("-p1a", "use the p1a tiles", false);
   vul_arg<bool> use_satellite_img("-sat", "use satellite image resource", false);
   vul_arg<vcl_string> land_class_map_folder("-map", "folder for land classification map with building in the image","");
   vul_arg<vcl_string> land("-land", "the input folder of the land type .tif files (geo cover images)", "");
@@ -349,6 +353,8 @@ int main(int argc,  char** argv)
   double inc_in_sec_radius_ratio = 3.0/4.0;
   double inc_in_sec_rad = inc_in_sec*inc_in_sec_radius_ratio; // radius to search for existence of before adding a new one
 
+
+  // generate locations along the OSM road for p1b world regions
   if (p1b()) {
 
     if (out_pre().compare("") == 0 || in_poly().compare("") == 0) {
@@ -375,16 +381,18 @@ int main(int argc,  char** argv)
 
     double meter_to_sec = volm_io_tools::meter_to_seconds(tiles[i].lat_, tiles[i].lon_);
 
-    float size = 0.1;  // in seconds, set a fixed size for the leaves
+    float size = 0.1f;  // in seconds, set a fixed size for the leaves
     volm_geo_index_node_sptr hyp_root = volm_geo_index::construct_tree(tiles[i], (float)size, poly);
     // write the geo index and the hyps
-    vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << i << ".txt";
-    volm_geo_index::write(hyp_root, file_name.str(), (float)size);
-    unsigned depth = volm_geo_index::depth(hyp_root);
-    vcl_stringstream file_name2; file_name2 << out_pre() << "geo_index_tile_" << i << ".kml";
-    volm_geo_index::write_to_kml(hyp_root, 0, file_name2.str());
-    vcl_stringstream file_name3; file_name3 << out_pre() << "geo_index_tile_" << i << "_depth_" << depth << ".kml";
-    volm_geo_index::write_to_kml(hyp_root, depth, file_name3.str());
+    if (region_name().compare("") == 0) {
+      vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << i << ".txt";
+      volm_geo_index::write(hyp_root, file_name.str(), (float)size);
+      unsigned depth = volm_geo_index::depth(hyp_root);
+      vcl_stringstream file_name2; file_name2 << out_pre() << "geo_index_tile_" << i << ".kml";
+      volm_geo_index::write_to_kml(hyp_root, 0, file_name2.str());
+      vcl_stringstream file_name3; file_name3 << out_pre() << "geo_index_tile_" << i << "_depth_" << depth << ".kml";
+      volm_geo_index::write_to_kml(hyp_root, depth, file_name3.str());
+    }
 
     if (only_gt() && add_gt().compare("") != 0) {  // only add the ground truth points in the file as they are given (i.e. with the elevs in the file)
 
@@ -401,9 +409,9 @@ int main(int argc,  char** argv)
         return volm_io::EXE_ARGUMENT_ERROR;
       }
 
-      // load satellite classification map to avoid locations on top of the buildings (can be empty if now class map)
+      // load satellite classification map to avoid locations on top of the buildings (can be empty if no class map)
       vcl_vector<volm_img_info> class_map_infos;
-      volm_io_tools::load_imgs(land_class_map_folder(), class_map_infos, true, false, true);
+      volm_io_tools::load_imgs(land_class_map_folder(), class_map_infos, true, true, true);
 
       vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
       int cnt = volm_io::read_gt_file(add_gt(), samples);
@@ -474,7 +482,7 @@ int main(int argc,  char** argv)
 
       // load satellite classification map to avoid locations on top of the buildings (can be empty if now class map)
       vcl_vector<volm_img_info> class_map_infos;
-      volm_io_tools::load_imgs(land_class_map_folder(), class_map_infos, true, false, true);
+      volm_io_tools::load_imgs(land_class_map_folder(), class_map_infos, true, true, true);
       vcl_cout << " height map resources: " << infos.size() << " images are loaded!\n";
       vcl_cout << " land classification resources: " << class_map_infos.size() << " images are loaded!\n";
 
@@ -617,9 +625,339 @@ int main(int argc,  char** argv)
 
       return volm_io::SUCCESS;
     }
-  }
-  // for P1A and P1B regions reading (world_id 6 and 7 becomes desert and coast)
+  } // end of p1b location generation
 
+  // generate locations along the OSM road network and along the coastline sand region
+  if (p1a())
+  {
+    // input check
+    if (out_pre().compare("") == 0 || in_poly().compare("") == 0) {
+      vul_arg_display_usage_and_exit();  return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    vcl_cout << "will use increments: " << inc() << " arcseconds along north and east directions!\n";
+    // parse roi polygon
+    vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
+    vcl_cout << "ROI poly has: " << poly[0].size() << " points" << vcl_endl;
+    // create volm tile
+    vcl_vector<volm_tile> tiles;
+    if (world_id() == 1)       tiles = volm_tile::generate_p1_wr1_tiles();
+    else if (world_id() == 2)  tiles = volm_tile::generate_p1_wr2_tiles();
+    else {  vcl_cout << "ERROR: unknown world id in phase 1a" << vcl_endl;  return false;  }
+    vcl_cout << " number of tiles: " << tiles.size() << vcl_endl;
+    unsigned t_id = tile_id();
+    if (t_id >= tiles.size() || t_id < 0) {
+      vcl_cout << "ERROR: unknown tile id: " << t_id << vcl_endl;  return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    double meter_to_sec = volm_io_tools::meter_to_seconds(tiles[t_id].lat_, tiles[t_id].lon_);
+    // create and write geo index for locations
+    float size = 0.1f;  // in seconds, set a fixed size for the leaves
+    volm_geo_index_node_sptr hyp_root = volm_geo_index::construct_tree(tiles[t_id], (float)size, poly);
+    if (region_name().compare("") == 0) {
+      vcl_stringstream file_name;  file_name << out_pre() << "geo_index_tile_" << t_id << ".txt";
+      volm_geo_index::write(hyp_root, file_name.str(), (float)size);
+      unsigned depth = volm_geo_index::depth(hyp_root);
+      //vcl_stringstream file_name2;  file_name2 << out_pre() << "geo_index_tile" << t_id << ".kml";
+      //volm_geo_index::write_to_kml(hyp_root, 0, file_name2.str());
+      vcl_stringstream file_name3;  file_name3 << out_pre() << "geo_index_tile_" << t_id << "_depth_" << depth << ".kml";
+      volm_geo_index::write_to_kml(hyp_root, depth, file_name3.str());
+    }
+
+    // generate ground truth only locations database
+    if (only_gt() && add_gt().compare("") != 0) {
+      // only add the ground truth points in the files as they are given (using the elev in the ground truth file)
+      // load ground truth file
+      vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
+      int cnt = volm_io::read_gt_file(add_gt(), samples);
+      vcl_cout << "adding " << cnt << " ground truth locations!\n";
+      // add locations into hypo database
+      for (int i = 0; i < cnt; i++) {
+        if (poly.contains(samples[i].first.x(), samples[i].first.y())) {
+          vcl_cout << samples[i].second.first.first << " adding.. " << samples[i].first.y() << ", " << samples[i].first.x() << ' ';
+          // obtain the gt elev from ground truth file
+          bool added = volm_geo_index::add_hypothesis(hyp_root, samples[i].first.x() , samples[i].first.y(), samples[i].first.z());
+          if (added) vcl_cout << " succeed!\n";
+          else       vcl_cout << " not found in tree of tile: " << tile_id() << "!\n";
+        }
+        else {
+          vcl_cout << samples[i].second.first.first << " is not inside ROI polygons!\n";
+        }
+      }
+      vcl_cout << "after addition of ground locations, hyp_root " << t_id << " has total " << volm_geo_index::hypo_size(hyp_root) << " hypotheses in its leaves!\n";
+
+      // write the hypos
+      vcl_stringstream file_name4; file_name4 << out_pre() << "geo_index_tile_" << t_id;
+      vcl_cout << "\nwriting hypos to: " << file_name4.str() << vcl_endl;
+      volm_geo_index::write_hyps(hyp_root, file_name4.str());
+      // write the hypos into kml file for visualization
+      vcl_vector<volm_geo_index_node_sptr> leaves;
+      volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
+      for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+        vcl_string out_file = vul_file::strip_extension(leaves[l_idx]->get_hyp_name(file_name4.str()))+".kml";
+        leaves[l_idx]->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
+      }
+      return volm_io::SUCCESS;
+    }
+
+    // generate osm road network only locations database
+    if (use_osm_roads())
+    {
+      if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || osm_bin_file().compare("") == 0 || osm_tree_folder().compare("") == 0 || world_id() < 0 ||
+          land_class_map_folder().compare("") == 0) {
+        vul_arg_display_usage_and_exit();
+        vcl_cout << "ERROR: missing input for generating phase 1a OSM road network " << vcl_endl;
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+      unsigned t_id = tile_id();
+      // load OSM database
+      volm_osm_objects osm_objs;
+      double min_size;
+      vcl_stringstream file_name_pre;
+      file_name_pre << osm_tree_folder() << "geo_index2_wr" << world_id() << "_tile_" << t_id;
+      volm_geo_index2_node_sptr root = volm_io_tools::read_osm_data_and_tree(file_name_pre.str(), osm_bin_file(), osm_objs, min_size);
+      if (!root) {
+        vcl_cout << "ERROR: loading osm database failed, check file " << file_name_pre.str() << " or " << osm_bin_file() << vcl_endl;
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+      vcl_stringstream kml_roads;
+      kml_roads << out_pre() << "/p1b_wr" << world_id() << "_tile_" << tile_id() << "_osm_roads.kml";
+      osm_objs.write_lines_to_kml(kml_roads.str());
+      // load LIDAR height data
+      vcl_vector<volm_img_info> lidar_infos;
+      volm_io_tools::load_lidar_imgs(in_folder(), lidar_infos);
+      // load land classification data
+      vcl_vector<volm_img_info> class_infos;
+      volm_io_tools::load_imgs(land_class_map_folder(), class_infos, true, true, true);
+      vcl_cout << lidar_infos.size() << " LIDAR images are successfully loaded!" << vcl_endl;
+      vcl_cout << class_infos.size() << " 2d class map are successfully loaded!" << vcl_endl;
+
+      // add locations along the road network
+      if (land().compare("") == 0) {
+        vcl_cout << "generate locations along the roads with constant density" << vcl_endl;
+        vcl_vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
+        for (unsigned k = 0; k < roads.size(); k++) {
+          volm_osm_object_line_sptr r = roads[k];
+          if (r->prop().name_ == "water_river" || r->prop().name_ == "water_stream" || r->prop().name_ == "water_large_river"  || r->prop().name_ == "water_canal")
+            continue;
+          vcl_vector<vgl_point_2d<double> > points = r->line();
+          for (unsigned kk = 1; kk < points.size(); kk++) {
+            if (loc_inside_region(poly, points[kk-1].x(), points[kk-1].y()))
+              add_hypo(hyp_root, lidar_infos, class_infos, points[kk-1], inc_in_sec_rad, true);
+            // now interpolate along a straight line, assume locally planar
+            double dif_dy = points[kk].y() - points[kk-1].y();
+            double dif_dx = points[kk].x() - points[kk-1].x();
+            double ds = vcl_sqrt(dif_dy*dif_dy + dif_dx*dif_dx);
+            double inc_dy = inc_in_sec*(dif_dy/ds);
+            double inc_dx = inc_in_sec*(dif_dx/ds);
+            unsigned cnt = 0;
+            while (ds > inc_in_sec) {
+              ds = ds-inc_in_sec;  cnt++;
+              double x = points[kk-1].x() + inc_dx*cnt;  double y = points[kk-1].y() + inc_dy*cnt;
+              if (loc_inside_region(poly, x, y))
+                add_hypo(hyp_root, lidar_infos, class_infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, true);
+            }
+          }
+        }
+      } else {
+        vcl_cout << "generate locations along the roads and location density is defined by NLCD land category" << vcl_endl;
+        vcl_vector<volm_img_info> info_tmp;
+        volm_io_tools::load_nlcd_imgs(land(), info_tmp);
+        if (info_tmp.size() != tiles.size()) {
+          vcl_cout << "ERROR: mismatch in create tiles " << tiles.size() << " and loaded " << info_tmp.size() << " nlcd images, check input nlcd folder\n";
+          return false;
+        }
+        vcl_vector<volm_img_info> nlcd_infos;
+        for (unsigned i = 0; i < tiles.size(); i++) {
+          for (unsigned j = 0; j < tiles.size(); j++) {
+            double diff_lon = tiles[i].bbox_double().min_x() - info_tmp[j].bbox.min_x();
+            double diff_lat = tiles[i].bbox_double().min_y() - info_tmp[j].bbox.min_y();
+            double diff = vcl_sqrt(diff_lon*diff_lon + diff_lat*diff_lat);
+            if (diff < 0.25) {
+              nlcd_infos.push_back(info_tmp[j]);
+              break;
+            }
+          }
+        }
+        vcl_cout << nlcd_infos.size() << " NLCD images are successfully loaded!\n";
+        // start to add locations along all roads
+        vcl_vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
+        vcl_cout << "will process " << roads.size() << " roads...\n" << vcl_flush;
+        for (unsigned r_idx = 0; r_idx < roads.size(); r_idx++) {
+          if (r_idx%1000 == 0)  vcl_cout << r_idx << '.' << vcl_flush;
+          volm_osm_object_line_sptr r = roads[r_idx];
+          if (r->prop().name_ == "water_river" || r->prop().name_ == "water_stream" || r->prop().name_ == "water_large_river"  || r->prop().name_ == "water_canal")
+            continue;
+          // obtain the road network that is inside the tile
+          vcl_vector<vgl_point_2d<double> > pts = r->line() ;
+          vcl_string name = r->prop().name_;
+          if (pts.empty())
+            continue;
+          int type_prev = find_land_type(nlcd_infos, pts[0]);
+          if (type_prev < 0)
+            inc_in_sec = 4*meter_to_sec;  // if the type is unknown, use the smallest possible interval to be safe
+          else
+            inc_in_sec = volm_osm_category_io::geo_land_hyp_increments[type_prev]*meter_to_sec;
+          inc_in_sec_rad = inc_in_sec*inc_in_sec_radius_ratio;
+          double remainder = 0.0;
+          if (loc_inside_region(poly, pts[0].x(), pts[0].y()))
+            add_hypo(hyp_root, lidar_infos, class_infos, pts[0], inc_in_sec_rad, true);
+          for (unsigned kk = 1; kk < pts.size(); kk++) {
+            double prev_x = pts[kk-1].x();  double prev_y = pts[kk-1].y();
+            int type = find_land_type(nlcd_infos, pts[kk]);
+            if (type>0 && type != type_prev) {
+              double inc_now = volm_osm_category_io::geo_land_hyp_increments[type]*meter_to_sec;
+              inc_in_sec = inc_in_sec < inc_now ? inc_in_sec : inc_now;  // pick the smaller of the increments if different types
+              inc_in_sec_rad = inc_in_sec*inc_in_sec_radius_ratio;
+            }
+            // interpolate along a straight line, assume locally planar
+            double dif_dy = pts[kk].y() - pts[kk-1].y();
+            double dif_dx = pts[kk].x() - pts[kk-1].x();
+            double ds = vcl_sqrt(dif_dy*dif_dy + dif_dx*dif_dx);
+            if (inc_in_sec > ds) {
+              remainder += ds;
+              type_prev = type;
+              continue;
+            }
+            double cos = dif_dx/ds;          double sin = dif_dy/ds;
+            double inc_dy = inc_in_sec*sin;  double inc_dx = inc_in_sec*cos;
+            // get rid of remainder first
+            if (remainder < inc_in_sec) {
+              double rem = inc_in_sec-remainder;
+              double inc_dy_rem = rem*sin;
+              double inc_dx_rem = rem*cos;
+              double x = prev_x+inc_dx_rem;
+              double y = prev_y+inc_dy_rem;
+              if ( loc_inside_region(poly, x, y) )
+                add_hypo(hyp_root, lidar_infos, class_infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, true);
+              prev_x = x; 
+              prev_y = y;
+              ds -= rem;
+            }
+            while (ds > inc_in_sec) {
+              ds -= inc_in_sec;
+              double x= prev_x+inc_dx;  double y = prev_y+inc_dy;
+              if (loc_inside_region(poly, x, y))
+                add_hypo(hyp_root, lidar_infos, class_infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
+              prev_x = x;
+              prev_y = y;
+            }
+            type_prev = type;
+            remainder = ds;
+          }
+        } // end of road loop
+      } // end of if-else statement where NLCD is used or not
+
+      // write the hypos
+      vcl_stringstream file_name4;  file_name4 << out_pre() << "geo_index_tile_" << t_id;
+      vcl_cout << "\nwriting hypos to: " << file_name4.str() << vcl_endl;
+      volm_geo_index::write_hyps(hyp_root, file_name4.str());
+      vcl_cout << volm_geo_index::hypo_size(hyp_root) << " locations are generated in tile " << t_id << vcl_endl;
+      
+      vcl_vector<volm_geo_index_node_sptr> leaves;
+      volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
+      for (unsigned jj = 0; jj < leaves.size(); jj++) {
+        vcl_string out_file = vul_file::strip_extension(leaves[jj]->get_hyp_name(file_name4.str())) + ".kml";
+        leaves[jj]->hyps_->write_to_kml(out_file, inc_in_sec_rad);
+      }
+      return volm_io::SUCCESS;
+    } // end of road locations generation
+
+    // generate locations only on certain types of locations with a given density
+    if (region_name().compare("") != 0)
+    {
+      //check whether the region is defined
+      if (volm_osm_category_io::volm_land_table_name.find(region_name()) == volm_osm_category_io::volm_land_table_name.end()) {
+        vcl_cout << "ERROR: unknown region name: " << region_name() << vcl_endl;
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+      // check input
+      if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || world_id() < 0 || land_class_map_folder().compare("") == 0) {
+        vul_arg_display_usage_and_exit();
+        vcl_cout << "ERROR: missing input for generating phase 1a region based location network" << vcl_endl;
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+
+      double inc_in_meter = inc_in_sec*21/0.000202;
+      vcl_cout << "generate locations on land category: " << region_name() 
+               << " with location distance " << inc_in_meter << " meter. (" << inc_in_sec << " seconds)" << vcl_endl;
+      // determine depth of the geo index depending on inc
+      double size = nh()*inc_in_sec;
+      vcl_cout << "generate geo_index based on location density, each leaf has size: " << size << " seconds in geographic coords..\n";
+
+      volm_geo_index_node_sptr root = volm_geo_index::construct_tree(tiles[t_id], (float)size, poly);
+      // write the geo index structure
+      vcl_stringstream file_name;  file_name << out_pre() << "geo_index_tile_" << t_id << ".txt";
+      volm_geo_index::write(root, file_name.str(), (float)size);
+      unsigned depth = volm_geo_index::depth(root);
+      vcl_stringstream file_name3;  file_name3 << out_pre() << "geo_index_tile_" << t_id << "_depth_" << depth << ".kml";
+      volm_geo_index::write_to_kml(root, depth, file_name3.str());
+      // load LIDAR
+      vcl_vector<volm_img_info> lidar_infos;
+      volm_io_tools::load_lidar_imgs(in_folder(), lidar_infos);
+      // load land class map
+      vcl_vector<volm_img_info> class_infos;
+      volm_io_tools::load_imgs(land_class_map_folder(), class_infos, true, true, true);
+      vcl_cout << lidar_infos.size() << " LIDAR images are successfully loaded!" << vcl_endl;
+      vcl_cout << class_infos.size() << " 2d class map are successfully loaded!" << vcl_endl;
+
+      // loop over each leaf to add locations
+      for (unsigned i = 0; i < lidar_infos.size(); i++) {
+        volm_img_info lidar_info = lidar_infos[i];
+        vcl_vector<volm_geo_index_node_sptr> leaves;
+        volm_geo_index::get_leaves(root, leaves, lidar_info.bbox);
+        if (leaves.empty())
+          continue;
+        float leaf_size = (float)leaves[0]->extent_.width();
+        vcl_cout << leaves.size() << " leaves (" << leaf_size << "deg) intersects with lidar image: " << lidar_info.name << vcl_endl;
+        for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+          if (!leaves[l_idx]->hyps_)
+            leaves[l_idx]->hyps_ = new volm_loc_hyp();
+          float lower_left_lon = (float)leaves[l_idx]->extent_.min_point().x();
+          float lower_left_lat = (float)leaves[l_idx]->extent_.min_point().y();
+          unsigned nhi = (unsigned)vcl_ceil(leaf_size/inc_in_sec);
+          for (unsigned hi=0; hi < nhi; hi++) {
+            double lon = lower_left_lon + hi*inc_in_sec;
+            for (unsigned hj = 0; hj < nhi; hj++) {
+              double lat = lower_left_lat + hj*inc_in_sec;
+              vgl_point_2d<double> pt(lon, lat);
+              int type = find_land_type(class_infos, pt);
+              if (type > 0) {
+                if (volm_osm_category_io::volm_land_table[(unsigned char)type].name_ == region_name()) {
+                  double u,v;
+                  lidar_info.cam->global_to_img(lon, lat, 0.0, u, v);
+                  int ii = (int)vcl_floor(u+0.5);
+                  int jj = (int)vcl_floor(v+0.5);
+                  if (lidar_info.valid_pixel(ii,jj)) {
+                    vil_image_view<float> img(lidar_info.img_r);
+                    float z = img(ii,jj);
+                    unsigned id;
+                    if (z > 0 && !(leaves[l_idx]->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
+                      leaves[l_idx]->hyps_->add(lat, lon, z);
+                  }
+                }
+              }
+            }
+          }
+        } // end of loop over current lidar image
+      }  // end of loop over all lidar images
+
+      // write the hypo database
+      vcl_vector<volm_geo_index_node_sptr> leaves;
+      volm_geo_index::get_leaves_with_hyps(root, leaves);
+      vcl_stringstream file_name4; file_name4 << out_pre() << "geo_index_tile_" << t_id;
+      vcl_cout << "\nwriting hypos to: " << file_name4.str() << vcl_endl;
+      volm_geo_index::write_hyps(root, file_name4.str());
+      for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+        vcl_string out_file = vul_file::strip_extension(leaves[l_idx]->get_hyp_name(file_name4.str())) + ".kml";
+        leaves[l_idx]->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
+      }
+      vcl_cout << volm_geo_index::hypo_size(root) << " locations are generated in tile " << t_id << vcl_endl;
+      return volm_io::SUCCESS;
+    }  // end of region generation
+
+  }  // end of p1A options
+
+#if 0
+  // for P1A and P1B regions reading (world_id 6 and 7 becomes desert and coast)
   // change to wr1 tiles for desert
   vcl_vector<volm_tile> tiles;
   if (world_id() == 1)      tiles = volm_tile::generate_p1b_wr1_tiles();
@@ -636,14 +974,16 @@ int main(int argc,  char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
+#endif
 
   if (read()) {
     if (out_pre().compare("") == 0) {
       vul_arg_display_usage_and_exit();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
+    unsigned t_id = tile_id();
     float min_s;
-    vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << i;
+    vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << t_id;
     volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name.str() + ".txt", min_s);
     vcl_vector<volm_geo_index_node_sptr> leaves2;
     volm_geo_index::get_leaves(root, leaves2);
@@ -652,7 +992,7 @@ int main(int argc,  char** argv)
     vcl_cout << " read hyps!\n";
     vcl_vector<volm_geo_index_node_sptr> leaves;
     volm_geo_index::get_leaves_with_hyps(root, leaves);
-    vcl_cout << "Geo index for tile: " << i << " stored in: " << file_name.str() << '\n'
+    vcl_cout << "Geo index for tile: " << t_id << " stored in: " << file_name.str() << '\n'
              << "\t number of leaves with hyps: " << leaves.size() << vcl_endl;
     unsigned size = volm_geo_index::hypo_size(root);
     vcl_cout << "\t total number of hypos: " << size << vcl_endl;
@@ -660,12 +1000,12 @@ int main(int argc,  char** argv)
       vcl_cout << " leaf_id = " << l << " leaf bbox = " << leaves[l]->extent_ << vcl_endl;
       unsigned num_hyps = leaves[l]->hyps_->size();
       for (unsigned h = 0; h < num_hyps; h++)
-        vcl_cout << " \t hypo " << h << " = " << leaves[l]->hyps_->locs_[h] << vcl_endl;
+        vgl_point_3d<double> h_pt = leaves[l]->hyps_->locs_[h];
     }
     return volm_io::SUCCESS;
   }
 
-
+#if 0
   if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || in_poly().compare("") == 0) {
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
@@ -717,7 +1057,7 @@ int main(int argc,  char** argv)
     volm_geo_index::get_leaves(root, leaves, leaf_box);
     if (!leaves.size())
       continue;
-    float size_leaf = leaves[0]->extent_.width();
+    float size_leaf = (float)leaves[0]->extent_.width();
 #if 0
     volm_index_node_sptr dummy_root = new volm_index_node(t.bbox());
     dummy_root->children_ = leaves;
@@ -728,8 +1068,8 @@ int main(int argc,  char** argv)
     for (unsigned j = 0; j < leaves.size(); ++j) {
       if (!leaves[j]->hyps_)
         leaves[j]->hyps_ = new volm_loc_hyp();
-      float lower_left_lon = leaves[j]->extent_.min_point().x();
-      float lower_left_lat = leaves[j]->extent_.min_point().y();
+      float lower_left_lon = (float)leaves[j]->extent_.min_point().x();
+      float lower_left_lat = (float)leaves[j]->extent_.min_point().y();
       unsigned nhi = (unsigned)vcl_ceil(size_leaf/inc_in_sec);
       for (unsigned hi = 0; hi < nhi; ++hi) {
         double lon = lower_left_lon + hi*inc_in_sec;
@@ -812,9 +1152,9 @@ int main(int argc,  char** argv)
           vil_image_view<float> img(tiles[kk].first);
           float z = img(ii, jj);
           // check the neighborhood
-          for (int ii2 = ii - 1; ii2 <= ii+1; ii2++)
-            for (int jj2 = jj - 1; jj2 <= jj+1; jj2++) {
-              if (ii2 >= 0 && jj2 >= 0 && ii2 < img.ni() && jj2 < img.nj()) {
+          for (int ii2 = ii - 1; ii2 <= (int)(ii+1); ii2++)
+            for (int jj2 = jj - 1; jj2 <= (int)(jj+1); jj2++) {
+              if (ii2 >= 0 && jj2 >= 0 && ii2 < (int)img.ni() && jj2 < (int)img.nj()) {
                 if (z < img(ii2, jj2)) z = img(ii2, jj2);
               }
             }
@@ -850,5 +1190,7 @@ int main(int argc,  char** argv)
 
   vcl_cout << "total time: " << t.all()/1000 << " seconds = " << t.all()/(1000*60) << " mins.\n";
   return volm_io::SUCCESS;
+#endif
+
 }
 

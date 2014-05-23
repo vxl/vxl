@@ -455,13 +455,16 @@ void bwm_tableau_cam::add_ground_plane()
 
   static vcl_string name = "ground_plane";
   static unsigned order = 0;
-  static unsigned land_id = 0;
+  static unsigned land_vec_id = 0;
   vgui_dialog vdval("Ground Plane Region");
   vdval.field("Name ", name);
-  vdval.choice("Land Class ", land_types, land_id);
+  vdval.choice("Land Class ", land_types, land_vec_id);
+  // obtain actual land id
+  vcl_string land_name = land_types[land_vec_id];
+  unsigned char land_id = volm_osm_category_io::volm_land_table_name[land_name].id_;
   if (!vdval.ask())
     return;
-  my_observer_->add_ground_plane(order, land_id, name);
+  my_observer_->add_ground_plane(order, (unsigned)land_id, name);
 }
 
 void bwm_tableau_cam::add_sky()
@@ -505,7 +508,7 @@ void bwm_tableau_cam::add_region()
   static double     max_depth = 100.0;
   static unsigned   order = 0;
   static unsigned   orientation = 0;
-  static unsigned   land_id = 0;
+  static unsigned   land_vec_id = 0;
   // create menu
   vgui_dialog vdval("Add Region");
   vdval.field("Name ", name);
@@ -513,11 +516,14 @@ void bwm_tableau_cam::add_region()
   vdval.field("Max Depth (m)", max_depth);
   vdval.field("Order ", order);
   vdval.choice("Orientation ", orient_types, orientation);
-  vdval.choice("Land Class ", land_types, land_id);
+  vdval.choice("Land Class ", land_types, land_vec_id);
+  // obtain the actual land id
+  vcl_string land_name = land_types[land_vec_id];
+  unsigned char land_id = volm_osm_category_io::volm_land_table_name[land_name].id_;
   if (!vdval.ask())
     return;
   // create associated depth_map_region
-  my_observer_->add_region(name, min_depth, max_depth, order, orientation, land_id);
+  my_observer_->add_region(name, min_depth, max_depth, order, orientation, (unsigned)land_id);
 }
 
 void bwm_tableau_cam::edit_region_props()
@@ -587,7 +593,7 @@ void bwm_tableau_cam::edit_region_props()
     (*rit)->set_order(depth_order[name]);
     (*rit)->set_min_depth(min_depth[name]);
     (*rit)->set_max_depth(max_depth[name]);
-    (*rit)->set_land_type(land_id[name]);
+    (*rit)->set_land_type(volm_osm_category_io::volm_land_table_name[land_types[land_id[name]]].id_);
     (*rit)->set_active(active[name]);
     (*rit)->set_orient_type(orient[name]);
   }

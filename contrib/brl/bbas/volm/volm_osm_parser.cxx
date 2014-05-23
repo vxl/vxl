@@ -293,6 +293,13 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const& osm_bbox,
 {
   vcl_vector<unsigned long long>::iterator vit = way_ids.begin();
   
+  // check whether the ways are enclosed when there is only one way
+  if (way_ids.size() == 1) {
+    vcl_vector<unsigned long long> curr_line = get_line_from_way_id(way_ids[0], ways);
+    if (curr_line[0] != curr_line[curr_line.size()-1])
+      return false;
+  }
+
   // loop over all ways to compose polygon sheets
   while ( vit != way_ids.end() ) {
     unsigned long long curr_way_id = *vit;

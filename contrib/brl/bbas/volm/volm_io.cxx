@@ -1118,10 +1118,15 @@ bool volm_io::read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<do
 
     // find its label code
     int label = 0;
+    vcl_map<vcl_string, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table_name.find(type);
+    if (mit != volm_osm_category_io::volm_land_table_name.end())
+      label = mit->second.id_;
+#if 0
     for (vcl_map<int, volm_attributes >::iterator iter = volm_label_table::land_id.begin();
          iter != volm_label_table::land_id.end(); ++iter)
       if (iter->second.name_.compare(type) == 0)
         label = iter->first;
+#endif
 
     objects.push_back(vcl_pair<vgl_point_2d<double>, int>(pt, label));
   }

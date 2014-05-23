@@ -14,7 +14,7 @@ static void write_osm_samples()
   ofs_land << "landuse reservoir 1 Open_Water 0 0\n";
   ofs_land << "landuse greenhouse_horticulture 13 Cultivated_Crops 0 0\n";
   ofs_land << "man_made monitoring_station 15 building 4 1.5\n";
-  ofs_land << "emergency ambulance_station 48 hostptial 2 2\n";
+  ofs_land << "emergency ambulance_station 48 hospital 2 2\n";
   ofs_land << "tourism viewpoint 141 tourism_viewpoint 4 3.5\n";
   ofs_land << "natural shadow 0 invalid 0 1.2\n";
   ofs_land.close();
@@ -98,8 +98,10 @@ static void test_category_io()
 
   unsigned cnt = 0;
   for (vcl_vector<vcl_string>::iterator vit = volm_osm_category_io::volm_category_name_table.begin();
-       vit != volm_osm_category_io::volm_category_name_table.end(); ++vit)
-    vcl_cout << " id = " << cnt++ << " ---> name = " << *vit << vcl_endl;
+       vit != volm_osm_category_io::volm_category_name_table.end(); ++vit) {
+    unsigned id = volm_osm_category_io::volm_land_table_name[*vit].id_;
+    vcl_cout << " id = " << id << " ---> name = " << *vit << vcl_endl;
+  }
 }
 
 TESTMAIN(test_category_io);

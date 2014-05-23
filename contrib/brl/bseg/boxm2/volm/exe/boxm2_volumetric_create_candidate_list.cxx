@@ -29,7 +29,7 @@
 #include <vpgl/vpgl_utm.h>
 
 
-bool get_top_cameras(unsigned const& zone_idx, unsigned const& tile_idx, vcl_string const& cam_bin,
+bool get_top_cameras(unsigned const& tile_idx, vcl_string const& cam_bin,
                      unsigned const& ni, unsigned const& nj, vcl_string const& score_folder,
                      vcl_string const& geo_hypo_folder, vcl_vector<vgl_point_2d<double> > const& top_locs,
                      vcl_vector<cam_angles>& top_cameras, vcl_vector<double>& right_fov)
@@ -173,13 +173,12 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> out("-out", "folder where probability map stores", "");
   vul_arg<vcl_string> out_kml("-out_kml", "folder where created candidate list stores","");
   vul_arg<vcl_string> score_folder("-score", "folder where the score binaries are","");
-  vul_arg<vcl_string> geo_hypo_a("-geoa", "folder where geo hypotheses for utm zone 17 are","");
-  vul_arg<vcl_string> geo_hypo_b("-geob", "folder where geo hypotheses for utm zone 18 are","");
+  vul_arg<vcl_string> geo_hypo("-geo", "folder where geo hypotheses for utm zone 17 are","");
   vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");
   vul_arg<vcl_string> query_img("-img", "query image", "");
   vul_arg<unsigned> test_id("-testid", "phase 1 test id", 0);
   vul_arg<unsigned> id("-imgid", "query image id", 101);
-  vul_arg<unsigned> world_id("-world", "roi world id", 100);
+  vul_arg<vcl_string> world_str("-world", "roi world name -- coast, desert, Chile, India, Jordan, Philippines, Taiwan", "");
   vul_arg<unsigned> threshold("-thres", "threshold that used to create candidate list", 0);
   vul_arg<float> thres_scale("-scale", "threshold that used to create Probability map", 0.0f);
   vul_arg<unsigned> top_size("-top", "desired top list for each candidate list", 1);
@@ -210,8 +209,7 @@ int main(int argc,  char** argv)
     vcl_string rational_folder = out_dir + "/rationale/";
     vul_file::make_directory(rational_folder);
     // check the input parameter
-    if (cam_bin().compare("") == 0 || query_img().compare("") == 0 || score_folder().compare("") == 0 || dms_bin().compare("") == 0 ||
-        geo_hypo_a().compare("") == 0 || geo_hypo_b().compare("") == 0)
+    if (cam_bin().compare("") == 0 || query_img().compare("") == 0 || score_folder().compare("") == 0 || dms_bin().compare("") == 0 || geo_hypo().compare("") == 0)
     {
       log << " ERROR: input files/folder can not be empty\n";
       vul_arg_display_usage_and_exit();
@@ -287,20 +285,11 @@ int main(int argc,  char** argv)
       vcl_cerr << " Top " << i << " locations " << lon << ',' << lat << " is in utm zone " << zone_id << " and tile " << tile_id << vcl_endl;
       
       // construct the volm_geo_index
-      vcl_string geo_hypo_folder;
-      if (zone_id == 17)
-        geo_hypo_folder = geo_hypo_a();
-      else if (zone_id == 18)
-        geo_hypo_folder = geo_hypo_b();
-      else {
-        log << " ERROR: location " << lon << ',' << lat << " is outside ROI with utm zone " << zone_id << '\n';
-        volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
-        volm_io::EXE_ARGUMENT_ERROR;
-      }
+      vcl_string geo_hypo_folder = geo_hypo();
       vcl_stringstream file_name_pre;
       file_name_pre << geo_hypo_folder << "geo_index_tile_" << tile_id;
       if (!vul_file::exists(file_name_pre.str() + ".txt")) {
-        log << " ERROR: location " << lon << ',' << lat << " is in tile " << tile_id << " but no geolocations for this tile, stop\n";
+        log << " ERROR: location " << lon << ',' << lat << " is in tile " << tile_id << " but no geo locations for this tile, stop\n";
         volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
         return volm_io::POST_PROCESS_FAILED;
       }
@@ -351,7 +340,7 @@ int main(int argc,  char** argv)
         double gt_dist = sqrt(gt_dist_vect.sqr_length());
         vcl_cout << " loc_closest = " << loc_closest << " with leaf id = " << leaf->get_string() << " and hypo_id = " << hypo_id << vcl_endl;
         if (gt_dist > 0)
-          log << " NOTE: distance from the closest location " << loc_closest << " in geolocation to location " << top_locs[i]
+          log << " NOTE: distance from the closest location " << loc_closest << " in geo location to location " << top_locs[i]
               << " is " << gt_dist << " meters\n";
       }
       else {
@@ -384,8 +373,8 @@ int main(int argc,  char** argv)
   vcl_string log_file = out_kml() + "/candidate_list_log.xml";
   vcl_cout << " log_file = " << log_file << vcl_endl;
   // check input parameter
-  if (out().compare("") == 0 || threshold() == 0 || world_id() == 100 || cam_bin().compare("") == 0 || query_img().compare("") == 0 ||
-      score_folder().compare("") == 0 || geo_hypo_a().compare("") == 0 || geo_hypo_b().compare("") == 0 || out_kml().compare("") == 0 ||
+  if (out().compare("") == 0 || threshold() == 0 || world_str().compare("") == 0 || cam_bin().compare("") == 0 || query_img().compare("") == 0 ||
+      score_folder().compare("") == 0 || geo_hypo().compare("") == 0 || out_kml().compare("") == 0 ||
       id() > 900 || test_id() == 0 || thres_scale() == 0.0f) {
     log << " ERROR: input files/folders/arguments can not be empty\n";
     vul_arg_display_usage_and_exit();
@@ -409,25 +398,22 @@ int main(int argc,  char** argv)
 
   // create volm_tile
   vcl_vector<volm_tile> tiles;
-  if (world_id() == 1)
-    tiles = volm_tile::generate_p1b_wr1_tiles();
-  else if (world_id() == 2)
-    tiles = volm_tile::generate_p1b_wr2_tiles();
-  else if (world_id() == 3)
-    tiles = volm_tile::generate_p1b_wr3_tiles();
-  else if (world_id() == 4)
-    tiles = volm_tile::generate_p1b_wr4_tiles();
-  else if (world_id() == 5)
-    tiles = volm_tile::generate_p1b_wr5_tiles();
+  if (world_str() == "coast")             tiles = volm_tile::generate_p1_wr2_tiles();
+  else if (world_str() == "desert")       tiles = volm_tile::generate_p1_wr1_tiles();
+  else if (world_str() == "Chile")        tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (world_str() == "India")        tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (world_str() == "Jordan")       tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (world_str() == "Philippines")  tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (world_str() == "Taiwan")       tiles = volm_tile::generate_p1b_wr5_tiles();
   else {
-    log << "ERROR: unknown roi world region id: " << world_id() << '\n';
+    log << "ERROR: unknown world region, should be \" desert, coast, Chile, India, Jordan, Philippines, Taiwan\"\n";
     volm_io::write_post_processing_log(log_file, log.str());
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   unsigned n_tile = tiles.size();
 
-
+#if 0
   // check the input files for each tile (for phase 1b)
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
     if ( (world_id() == 2 && t_idx == 0) || (world_id() == 2 && t_idx == 2) )
@@ -444,6 +430,7 @@ int main(int argc,  char** argv)
       return volm_io::EXE_ARGUMENT_ERROR;
     }
   }
+#endif
 
 #if 0
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
@@ -531,12 +518,18 @@ int main(int argc,  char** argv)
   vcl_cout << " create candidate list kml" << vcl_endl;
   // write the candidate list
   vcl_stringstream kml_name;
+  if (id() < 10)        kml_name << "p1b_test" << test_id() << "_0" << id();
+  else if (id() < 100)  kml_name << "p1b_test" << test_id() << "_" << id();
+
+#if 0
+  vcl_stringstream kml_name;
   if (id() < 10)
     kml_name << "p1b_test" << test_id() << "_00" << id();
   else if (id() >= 10 && id() < 100)
     kml_name << "p1b_test" << test_id() << "_0" << id();
   else
     kml_name << "p1b_test" << test_id() << "_" << id();
+#endif
 
   vcl_string cam_kml = out_kml() + "/" + kml_name.str() + "-CANDIDATE.kml";
   vcl_ofstream ofs_kml(cam_kml.c_str());
@@ -561,13 +554,7 @@ int main(int argc,  char** argv)
   for (; mit != cand_map.end(); ++mit) {
     unsigned tile_idx = mit->second.first;
     unsigned sh_idx = mit->second.second;
-    unsigned zone_idx;
-    vcl_string geo_hypo_folder;
-    if (tile_idx < 8 && tile_idx != 5) {
-      zone_idx = 17;  geo_hypo_folder = geo_hypo_a();
-    } else {
-      zone_idx = 18;  geo_hypo_folder = geo_hypo_b();
-    }
+    vcl_string geo_hypo_folder = geo_hypo();
     // transfer loc_image to loc_global
     vcl_vector<vgl_point_2d<double> > region_loc_global;
     cand_lists[tile_idx].img_to_golbal(sh_idx, tiles[tile_idx], region_loc_global);
@@ -579,7 +566,7 @@ int main(int argc,  char** argv)
     vcl_vector<cam_angles> top_cameras;
     vcl_vector<double> right_fov;
     if (is_camera()) {
-      if (!get_top_cameras(zone_idx, tile_idx, cam_bin(), ni, nj, score_folder(), geo_hypo_folder, top_locs, top_cameras, right_fov)) {
+      if (!get_top_cameras(tile_idx, cam_bin(), ni, nj, score_folder(), geo_hypo_folder, top_locs, top_cameras, right_fov)) {
         log << " ERROR: failed to fetch top cameras for tile " << tile_idx << " sheet " << sh_idx << '\n';
         volm_io::write_post_processing_log(log_file, log.str());
         vcl_cerr << log.str();

@@ -61,9 +61,15 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
       // load the histogram for current location h_pt
       vcl_vector<unsigned char> values(params.layer_size);
       ind->get_next(values);
+      
       volm_desc_sptr index_desc = new volm_desc(values);
       
-      // calcualte score which measures the similarity of the query and index at current location
+      //vcl_cout << " location: " << h_pt << vcl_endl;
+      //vcl_cout << "\t: ";
+      //index_desc->print();
+      //vcl_cout << vcl_endl;
+
+      // calculate score which measures the similarity of the query and index at current location
       float max_score = 0;
       max_score = this->score(query, index_desc);
       // save the score 
@@ -149,6 +155,7 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
     vgl_point_3d<double> h_pt = leaves[scores[ii]->leaf_id_]->hyps_->locs_[scores[ii]->hypo_id_];
     if (gt_closest == h_pt)
       gt_score = scores[ii]->max_score_;
+    //vcl_cout << "locs: " << h_pt.x() << ", " << h_pt.y() << ", score = " << scores[ii]->max_score_ << vcl_endl;
     unsigned u, v;
     if (tile.global_to_img(h_pt.x(), h_pt.y(), u, v))
       if (u < tile_img.ni() && v < tile_img.nj())
@@ -245,17 +252,18 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
                                               float const& ku,
                                               float const& kl,
                                               float const& thres_ratio,
-                                              unsigned const& test_id,
-                                              unsigned const& img_id,
-                                              unsigned const& world_id)
+                                              vcl_string const& query_name,
+                                              vcl_string const& world_str)
 {
   // create volm_tiles (coast only)
   vcl_vector<volm_tile> tiles;
-  if (world_id == 1)     tiles = volm_tile::generate_p1b_wr1_tiles();
-  else if (world_id == 2) tiles = volm_tile::generate_p1b_wr2_tiles();
-  else if (world_id == 3) tiles = volm_tile::generate_p1b_wr3_tiles();
-  else if (world_id == 4) tiles = volm_tile::generate_p1b_wr4_tiles();
-  else if (world_id == 5) tiles = volm_tile::generate_p1b_wr5_tiles();
+  if (world_str == "coast")             tiles = volm_tile::generate_p1_wr2_tiles();
+  else if (world_str == "desert")       tiles = volm_tile::generate_p1_wr1_tiles();
+  else if (world_str == "Chile")        tiles = volm_tile::generate_p1b_wr1_tiles();
+  else if (world_str == "India")        tiles = volm_tile::generate_p1b_wr2_tiles();
+  else if (world_str == "Jordan")       tiles = volm_tile::generate_p1b_wr3_tiles();
+  else if (world_str == "Philippines")  tiles = volm_tile::generate_p1b_wr4_tiles();
+  else if (world_str == "Taiwan")       tiles = volm_tile::generate_p1b_wr5_tiles();
   else {
     return false;
   }
@@ -273,12 +281,16 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
     vcl_string img_name = prob_map_folder + "/ProbMap_" + tiles[t_idx].get_string() + ".tif";
     if (!vul_file::exists(img_name)) {
-      vcl_cerr << " ERROR: can not find prob_map: " << img_name << '\n';
-      return false;
+      vil_image_view<vxl_byte> tile_img(tiles[t_idx].ni(), tiles[t_idx].nj());
+      tile_img.fill(volm_io::UNKNOWN);
+      volm_candidate_list cand_list(tile_img, threshold);
+      cand_lists.push_back(cand_list);
     }
-    vil_image_view<vxl_byte> tile_img = vil_load(img_name.c_str());
-    volm_candidate_list cand_list(tile_img, threshold);
-    cand_lists.push_back(cand_list);
+    else {
+      vil_image_view<vxl_byte> tile_img = vil_load(img_name.c_str());
+      volm_candidate_list cand_list(tile_img, threshold);
+      cand_lists.push_back(cand_list);
+    }
   }
 
 #if 0
@@ -308,13 +320,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
   vcl_cout << " create candidate list kml" << vcl_endl;
   // write the candidate list
   vcl_stringstream kml_name;
-
-  if (img_id < 10)
-    kml_name << "p1b_test" << test_id << "_00" << img_id;
-  else if (img_id >= 10 && img_id < 100)
-    kml_name << "p1b_test" << test_id << "_0" << img_id;
-  else
-    kml_name << "p1b_test" << test_id << "_" << img_id;
+  kml_name << query_name << ".kml";
   vcl_string cam_kml = cand_root + "/" + kml_name.str() + "-CANDIDATE.kml";
   vcl_ofstream ofs_kml(cam_kml.c_str());
 
