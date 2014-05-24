@@ -414,7 +414,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
 
         // update_app boolean buffer
         cl_int up_app[1];
-        up_app[0] = up_app ? 1 : 0;
+        up_app[0] = update_app ? 1 : 0;
         bocl_mem_sptr up_app_mem = new bocl_mem(device->context(), up_app, sizeof(up_app), "update app bool buffer");
         up_app_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
         //mog variance, if 0.0f or less, then var will be learned

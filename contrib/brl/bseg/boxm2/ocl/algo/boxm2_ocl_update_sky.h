@@ -1,4 +1,4 @@
-#ifndef boxm2_ocl_update_h_
+#ifndef boxm2_ocl_update_sky_h_
 #define boxm2_ocl_update_sky_h_
 //:
 // \file

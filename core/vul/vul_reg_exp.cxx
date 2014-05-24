@@ -365,8 +365,8 @@ static       char* regbranch (int*);
 static       char* regpiece (int*);
 static       char* regatom (int*);
 static       char* regnode (char);
-static const char* regnext (register const char*);
-static       char* regnext (register char*);
+static const char* regnext ( const char*);
+static       char* regnext ( char*);
 static void        regc (unsigned char);
 static void        reginsert (char, char*);
 static void        regtail (char*, const char*);
@@ -392,10 +392,10 @@ static void        regoptail (char*, const char*);
 
 void vul_reg_exp::compile (char const* exp)
 {
-  register const char*   scan;
-  register const char*   longest;
-  register unsigned long len;
-           int           flags;
+  const char*   scan;
+  const char*   longest;
+  unsigned long len;
+  int           flags;
 
   if (exp == NULL) {
     //RAISE Error, SYM(vul_reg_exp), SYM(No_Expr),
@@ -493,10 +493,10 @@ void vul_reg_exp::compile (char const* exp)
 //
 static char* reg (int paren, int *flagp)
 {
-  register char* ret;
-  register char* br;
-  register char* ender;
-  register int   parno =0;
+  char* ret;
+  char* br;
+  char* ender;
+  int   parno =0;
            int   flags;
 
   *flagp = HASWIDTH; // Tentatively.
@@ -575,9 +575,9 @@ static char* reg (int paren, int *flagp)
 //
 static char* regbranch (int *flagp)
 {
-  register char* ret;
-  register char* chain;
-  register char* latest;
+  char* ret;
+  char* chain;
+  char* latest;
   int            flags;
 
   *flagp = WORST; // Tentatively.
@@ -614,9 +614,9 @@ static char* regbranch (int *flagp)
 //
 static char* regpiece (int *flagp)
 {
-  register char* ret;
-  register char  op;
-  register char* next;
+  char* ret;
+  char  op;
+  char* next;
   int            flags;
 
   ret = regatom(&flags);
@@ -683,8 +683,8 @@ static char* regpiece (int *flagp)
 //
 static char* regatom (int *flagp)
 {
-  register char* ret;
-       int   flags;
+  char* ret;
+  int   flags;
 
   *flagp = WORST; // Tentatively.
 
@@ -702,8 +702,8 @@ static char* regatom (int *flagp)
     break;
    case '[':
    {
-    register int  rxpclass;
-    register int  rxpclassend;
+    int  rxpclass;
+    int  rxpclassend;
 
     if (*regparse == '^') { // Complement of range.
       ret = regnode(ANYBUT);
@@ -777,8 +777,8 @@ static char* regatom (int *flagp)
     break;
    default:
    {
-    register int  len;
-    register char   ender;
+    int  len;
+    char   ender;
 
     regparse--;
     len = (int)vcl_strcspn(regparse, META);
@@ -811,8 +811,8 @@ static char* regatom (int *flagp)
 //
 static char* regnode (char op)
 {
-  register char* ret;
-  register char* ptr;
+  char* ret;
+  char* ptr;
 
   ret = regcode;
   if (ret == &regdummy) {
@@ -847,9 +847,9 @@ static void regc (unsigned char b)
 //
 static void reginsert (char op, char* opnd)
 {
-  register char* src;
-  register char* dst;
-  register char* place;
+  char* src;
+  char* dst;
+  char* place;
 
   if (regcode == &regdummy) {
     regsize += 3;
@@ -873,9 +873,9 @@ static void reginsert (char op, char* opnd)
 //
 static void regtail (char* p, const char* val)
 {
-  register char* scan;
-  register char* temp;
-  register vcl_ptrdiff_t  offset;
+  char* scan;
+  char* temp;
+  vcl_ptrdiff_t  offset;
 
   if (p == &regdummy)
     return;
@@ -948,7 +948,7 @@ bool vul_reg_exp::find (vcl_string const& s)
 
 bool vul_reg_exp::find (char const* string)
 {
-  register const char* s;
+  const char* s;
 
   this->searchstring = string;
 
@@ -1006,9 +1006,9 @@ bool vul_reg_exp::find (char const* string)
 static int regtry(const char* string, const char* *start,
                   const char* *end, const char* prog)
 {
-  register       int   i;
-  register const char* *sp1;
-  register const char* *ep;
+  int   i;
+  const char* *sp1;
+  const char* *ep;
 
   reginput = string;
   regstartp = start;
@@ -1042,7 +1042,7 @@ static int regtry(const char* string, const char* *start,
 //
 static int regmatch(const char* prog)
 {
-  register const char* scan; // Current node.
+   const char* scan; // Current node.
   const char* next; // Next node.
 
   scan = prog;
@@ -1068,8 +1068,8 @@ static int regmatch(const char* prog)
       break;
      case EXACTLY:
      {
-      register int     len;
-      register const char* opnd;
+      int     len;
+      const char* opnd;
 
       opnd = OPERAND(scan);
       // Inline the first character, for speed.
@@ -1097,8 +1097,8 @@ static int regmatch(const char* prog)
       break;
      case OPEN+1: case OPEN+2: case OPEN+3: case OPEN+4: case OPEN+5: case OPEN+6: case OPEN+7: case OPEN+8: case OPEN+9:
      {
-      register int no;
-      register const char* save;
+      int no;
+      const char* save;
 
       no = OP(scan) - OPEN;
       save = reginput;
@@ -1118,8 +1118,8 @@ static int regmatch(const char* prog)
      }
      case CLOSE+1: case CLOSE+2: case CLOSE+3: case CLOSE+4: case CLOSE+5: case CLOSE+6: case CLOSE+7: case CLOSE+8: case CLOSE+9:
      {
-      register     int  no;
-      register const char* save;
+      int  no;
+      const char* save;
 
       no = OP(scan) - CLOSE;
       save = reginput;
@@ -1139,7 +1139,7 @@ static int regmatch(const char* prog)
      }
      case BRANCH:
      {
-      register const char* save;
+      const char* save;
 
       if (OP(next) != BRANCH) // No choice.
         next = OPERAND(scan); // Avoid recursion.
@@ -1159,10 +1159,10 @@ static int regmatch(const char* prog)
      case STAR:
      case PLUS:
      {
-      register char   nextch;
-      register int    no;
-      register const char* save;
-      register int    min_no;
+      char   nextch;
+      int    no;
+      const char* save;
+      int    min_no;
 
       //
       // Lookahead to avoid useless match attempts when we know
@@ -1210,9 +1210,9 @@ static int regmatch(const char* prog)
 //
 static int regrepeat(const char* p)
 {
-  register     int     count = 0;
-  register const char* scan;
-  register const char* opnd;
+  int     count = 0;
+  const char* scan;
+  const char* opnd;
 
   scan = reginput;
   opnd = OPERAND(p);
@@ -1252,9 +1252,9 @@ static int regrepeat(const char* p)
 
 // dig the "next" pointer out of a node
 //
-static const char* regnext(register const char* p)
+static const char* regnext(const char* p)
 {
-  register int offset;
+  int offset;
 
   if (p == &regdummy)
     return NULL;
@@ -1270,9 +1270,9 @@ static const char* regnext(register const char* p)
 }
 
 
-static char* regnext(register char* p)
+static char* regnext(char* p)
 {
-  register int offset;
+  int offset;
 
   if (p == &regdummy)
     return NULL;

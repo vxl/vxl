@@ -299,7 +299,7 @@ void test_trans_rigid()
     vnl_matrix<double> R = rigid3.R();
 
     double det = vnl_determinant(R);
-    if (! det == 1.0 )
+    if (! (det == 1.0 ) )
     {
       vcl_cout<<"Failing with determinant test\n"
               <<"Determinant is "<<det<<vcl_endl;

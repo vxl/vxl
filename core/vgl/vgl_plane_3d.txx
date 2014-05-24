@@ -66,10 +66,10 @@ vgl_plane_3d<T>::vgl_plane_3d (vgl_ray_3d<T> const& r0,
   bool coincident = d01 < vgl_tolerance<double>::position;
 
   // assert the rays are distinct
-  bool distinct = !parallel || parallel&&!coincident;
+  bool distinct = !parallel || (parallel&&!coincident);
   assert(distinct);
   // assert the rays are not skew
-  bool not_skew = parallel&&distinct || !parallel&&coincident;
+  bool not_skew = (parallel&&distinct) || (!parallel&&coincident);
   assert(not_skew);
   
   // Case I: coincident

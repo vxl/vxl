@@ -76,7 +76,7 @@ void vbl_bit_array_2d::enlarge( unsigned int num_rows, unsigned int num_cols)
 //: Fill with value
 void vbl_bit_array_2d::fill(bool value)
 {
-  register unsigned char v = value ? ~(unsigned char)0 : 0;
+  unsigned char v = value ? ~(unsigned char)0 : 0;
   vcl_memset(data_, v, this->size());
 }
 

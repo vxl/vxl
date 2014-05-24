@@ -61,10 +61,10 @@ char* vul_string_c_trim(char* str, const char* rem) // Trim characters from stri
 {
   char* s = str;
   char* result = str;
-  register char c;
+   char c;
   while ((c=*s++) != END_OF_STRING) {
-    register const char* r = rem;
-    register char t;
+     const char* r = rem;
+     char t;
     while ((t=*r++) != END_OF_STRING && t != c) ; // Scan for match
     if (t == END_OF_STRING)                       // If no match found
       *result++ = c;
@@ -79,10 +79,10 @@ char* vul_string_c_left_trim(char* str, const char* rem) // Trim prefix from str
 {
   char* result = str;
   char* s;
-  register char c;
+   char c;
   for (s=str; (c=*s) != END_OF_STRING; s++) {
-    register const char* r = rem;
-    register char t;
+     const char* r = rem;
+     char t;
     while ((t=*r++) != END_OF_STRING && t != c) ; // Scan for match
     if (t == END_OF_STRING)                       // If no match found
       break;
@@ -98,9 +98,9 @@ char* vul_string_c_right_trim(char* str, const char* rem) // Trim suffix from st
 {
   char* s = str + vcl_strlen(str) - 1;            // last character of str
   for (; s >= str; s--) {
-    register const char* r = rem;
-    register char t;
-    register char c = *s;
+     const char* r = rem;
+     char t;
+     char c = *s;
     while ((t=*r++) != END_OF_STRING && t != c) ; // Scan for match
     if (t == END_OF_STRING)                       // If no match found
       break;
