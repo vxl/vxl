@@ -3,7 +3,7 @@
 #
 #   vxl-maintainers@lists.sf.net
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.5)
 
 # Support for CMake 2.6
 IF( COMMAND CMAKE_POLICY )

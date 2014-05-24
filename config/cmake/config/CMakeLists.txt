@@ -2,7 +2,7 @@
 #
 
 PROJECT(vxl_config)
-CMAKE_MINIMUM_REQUIRED(VERSION 1.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.5)
 
 # When adding new configuration tests that cache results, please make
 # sure they honour VXL_UPDATE_CONFIGURATION: if this variable is ON,
