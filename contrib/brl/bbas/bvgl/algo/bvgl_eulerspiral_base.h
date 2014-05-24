@@ -34,7 +34,6 @@ class bvgl_eulerspiral_base : public bvgl_param_curve
   }
 
   bvgl_param_curve *clone() const = 0;
-
 };
 
 //: Write "<bvgl_param_curve of type euler spiral> to stream"

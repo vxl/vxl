@@ -1,16 +1,19 @@
 // This is basic/bvgl/algo/tests/test_eulerspiral.cxx
 
-#include <testlib/testlib_test.h>
-#include <bvgl/algo/bvgl_eulerspiral.h>
-#include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
+
+#include <testlib/testlib_test.h>
+
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
+#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
+
+#include <bvgl/algo/bvgl_eulerspiral.h>
 
 
 //: Test functions of eulerspiral class

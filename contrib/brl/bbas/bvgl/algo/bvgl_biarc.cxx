@@ -3,14 +3,13 @@
 // \file
 
 #include "bvgl_biarc.h"
+#include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vcl_cassert.h>
 
 #define bvgl_biarc_e_angle 0.0001   //Epsilon for angles
 #define bvgl_biarc_e_k 0.00001   //Epsilon for curvature  0.0001
 #define bvgl_biarc_k_large 100000 //large curvature value
-
 
 // -------------- CONSTRUCTORS and DESTRUCTORS --------------
 //: Constructor - from intrinsic parameters
@@ -21,11 +20,6 @@ bvgl_biarc(vgl_point_2d<double > start, double start_angle, double k1, double le
   this->set_start_angle(start_angle);
 }
   
-
-
-
-
-
 //: Constructor - from 2 point-tangents
 bvgl_biarc::
 bvgl_biarc( vgl_point_2d< double > start, double start_angle, 
@@ -35,8 +29,6 @@ bvgl_biarc( vgl_point_2d< double > start, double start_angle,
   this->set_end_params(end, end_angle);
   this->compute_biarc_params();
 }
-
-
 
 //: Constructor - from 2 point-tangents
 bvgl_biarc::
@@ -50,9 +42,6 @@ bvgl_biarc(vgl_point_2d< double > start, vgl_vector_2d<double > start_tangent,
   this->set_end_params(end, end_angle);
   this->compute_biarc_params();
 }
-
-
-
 
 ////: Copy Constructor 
 //bvgl_biarc::
@@ -85,10 +74,6 @@ set_end_angle( double end_angle ){
 }
 
 
-
-
-
-
 // -----------------------------------------------------------------------------
 //: Verify if indeed the biarc parameters and its start and end parameters match
 bool bvgl_biarc::
@@ -107,13 +92,6 @@ is_consistent() const
   
   return ( diff < 1e-3);
 }
-
-
-
-
-
-
-
 
 
 // ---------------- GEOMETRY PROPERTIES -----------------------
@@ -253,8 +231,6 @@ set_end_params( vgl_point_2d< double > end, double end_angle ){
   this->set_end(end);
   this->set_end_angle(end_angle);
 }
-
-
 
 //: compute biar parameters using the currently saved start and end parameters
 bool bvgl_biarc::
@@ -422,10 +398,6 @@ compute_biarc_params( vgl_point_2d< double > start, double start_angle,
   return this->compute_biarc_params();
 }
 
-
-
-
-
 //: compute biar parameters, given start and end parameters
 bool bvgl_biarc::
 compute_biarc_params(const vgl_point_2d< double >& start, 
@@ -441,12 +413,6 @@ compute_biarc_params(const vgl_point_2d< double >& start,
 
   return this->compute_biarc_params();
 }
-
-
-
-
-
-
 
 //: Compute the angle at which the two arcs meet
 double bvgl_biarc::
@@ -470,7 +436,6 @@ compute_join_theta (double k1, double k2){
   return join_theta;
 }
 
-
 //: compute arc length of a circle with curvature k, turning from
 // angle t0 to t1
 double bvgl_biarc::
@@ -484,7 +449,6 @@ compute_arclength(double t0, double t1, double k){
     num = num + 2*vnl_math::pi;
   return num / k;
 }
-
 
 // ---------------- MISCELLANEOUS ----------------------
 //: Print parameters of the biarc
@@ -502,4 +466,3 @@ print(vcl_ostream &os ) const
   os << "k2 = " << this->k2() << vcl_endl;
   os << "len2 = " << this->len2() << vcl_endl;
 }
-

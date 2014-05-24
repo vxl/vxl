@@ -15,19 +15,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl_typeinfo.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vcl_typeinfo.h>
-
-#ifndef PI
-#define PI  (3.14159265358979323846)
-#endif
-#ifndef TWOPI
-#define TWOPI  (6.28318530717958647692)
-#endif
-#ifndef PIOVERTWO
-#define PIOVERTWO  (1.57079632679489661923)
-#endif
 
 
 //: A 2D parametric curve
@@ -60,8 +50,6 @@
 //  For example, to recover the starting point, use point_at(0). To recover the
 //  endpoint, use point_at(1) or point_at_length(length()).
 //
-//
-
 class bvgl_param_curve
 {
  public:
@@ -126,18 +114,10 @@ class bvgl_param_curve
 
   // This will be an abstract function...
   virtual bvgl_param_curve *clone() const = 0;// { return 0; }
-
- private:
-  
 };
-
-
 
 //: Read parameters from stream
 // \relates dbvgl_param_curve
 //vcl_istream&  operator>>(vcl_istream& s, bvgl_param_curve const& c) const = 0;
-
-
-
 
 #endif // bvgl_param_curve_h_

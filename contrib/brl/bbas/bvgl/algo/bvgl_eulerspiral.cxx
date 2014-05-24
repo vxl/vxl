@@ -3,20 +3,20 @@
 // \file
 
 #include "bvgl_eulerspiral.h"
-#include <vnl/vnl_math.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include <vcl_string.h>
+#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_vector_io.h>
 
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
-#include "bvgl_biarc.h"
 #include <bnl/algo/bnl_fresnel.h>
-#include <vcl_string.h>
+#include <bvgl/algo/bvgl_biarc.h>
 
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
 
 //some defines for Euler-spiral optimization
 const int bvgl_eulerspiral_max_gradient_descent_iter = 50000;  // maxinum number of iterations for gradient descent
@@ -25,13 +25,7 @@ const double bvgl_eulerspiral_e_gamma = 1e-8;   // epsilon for gamma
 const double bvgl_eulerspiral_e_k = 1e-4;   //Epsilon for curvature
 
 
-
-
-
-
-
-// ============ bvgl_eulerspiral_optimization_function class ========
-
+//: ============ bvgl_eulerspiral_optimization_function class ========
 class bvgl_eulerspiral_optimization_function : public vnl_least_squares_function
 {
 public:
@@ -53,12 +47,6 @@ private:
     unsigned int number_of_residuals,UseGradient g = use_gradient);
   bvgl_eulerspiral* es_;
 };
-
-
-
-
-
-
 
 
 // =============== bvgl_eulerspiral class =========================================
@@ -104,7 +92,6 @@ set_start_angle( double start_angle ){
   this->start_angle_ = theta;
 }
 
-
 //: Set end angle of the biarc, converted to the range [0, 2*pi)
 void bvgl_eulerspiral::
 set_end_angle( double end_angle ){
@@ -127,7 +114,6 @@ vgl_point_2d< double > bvgl_eulerspiral::
 point_at( double s) const {
   return point_at_length(s*length());
 }
-
   
 //: Return tangent of a point on the eulerspiral with s arclength away from starting point
 vgl_vector_2d< double > bvgl_eulerspiral::
@@ -211,7 +197,6 @@ init(const vgl_point_2d<double >& start, double start_angle, double k0, double g
   this->set_len(len);
 }
 
-
 //: Set intrinsic core parameters of the eulerspiral
 void bvgl_eulerspiral::
 set_intrinsic_params(double k0, double gamma, double len){
@@ -227,7 +212,6 @@ set_extrinsic_params(const vgl_point_2d< double >& start, double start_angle){
   this->set_start_angle(start_angle);
 }
   
-
 //: set parameters at starting point
 void bvgl_eulerspiral::
 set_start_params( vgl_point_2d< double > start, double start_angle ){
@@ -242,7 +226,6 @@ set_end_params( vgl_point_2d< double > end, double end_angle ){
   this->set_end_angle(end_angle);
 }
 
-
 //: set parameters at both starting point and end point
 void bvgl_eulerspiral::
 set_params( vgl_point_2d< double > start, double start_angle, 
@@ -251,7 +234,6 @@ set_params( vgl_point_2d< double > start, double start_angle,
   this->set_start_params(start, start_angle);
   this->set_end_params(end, end_angle);
 }
-
 
 //: Compute intrinsic parameters of eulerspiral using starting and ending point-tangents
 bool bvgl_eulerspiral::
@@ -284,7 +266,6 @@ operator==(const bvgl_eulerspiral& that) const{
     this->length() == that.length()
     );
 }; 
-
 
 //: assignment operator 
 bvgl_eulerspiral& bvgl_eulerspiral::
@@ -639,8 +620,6 @@ compute_es_params_use_levenberg_marquardt(bool use_lookup_table ){
     return false;
   }
   
-  
-
   double k0 = root_vector.get(0);
   double len = root_vector.get(1);
 
@@ -836,8 +815,6 @@ look_up(double start_angle, double end_angle, double* k0, double* gamma, double*
 };
 
 
-
-
 // ===================== bvgl_eulerspiral_optimization_function class ===========
 //: constructor - the same as base class
 bvgl_eulerspiral_optimization_function::
@@ -848,7 +825,6 @@ vnl_least_squares_function(number_of_unknowns, number_of_residuals, g)
 {
   this->es_ = 0;
 }
-
 
 //: Main function for optimization
 // Assume es_.psi and es_.turning_angle has been computed
@@ -867,8 +843,3 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx){
   fx.put(1, cur_end_pt.y());
   return;
 }
-
-
-
-
-
