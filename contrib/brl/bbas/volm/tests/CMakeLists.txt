@@ -20,7 +20,7 @@ ADD_EXECUTABLE( volm_test_all
   test_osm_object.cxx
 )
 
-TARGET_LINK_LIBRARIES( volm_test_all volm testlib vpl )
+TARGET_LINK_LIBRARIES( volm_test_all volm brad testlib vpl )
 
 ADD_TEST(volm_test_spherical_container ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_spherical_container)
 ADD_TEST(volm_test_tile ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_tile)
