@@ -42,6 +42,9 @@ TARGET_LINK_LIBRARIES( boxm2_volm_prepare_xyz_images_with_classes2_forts boxm2_v
 ADD_EXECUTABLE( boxm2_volm_get_best_matcher_from_cand_list boxm2_volm_get_best_matcher_from_cand_list.cxx )
 TARGET_LINK_LIBRARIES( boxm2_volm_get_best_matcher_from_cand_list boxm2_volm vbl vgl volm vul bkml)
 
+ADD_EXECUTABLE( boxm2_volumetric_pinpoint boxm2_volumetric_pinpoint.cxx )
+TARGET_LINK_LIBRARIES( boxm2_volumetric_pinpoint boxm2_volm vbl vgl volm vul vpgl bkml )
+
 IF(OPENCL_FOUND)
 
 ADD_EXECUTABLE( boxm2_volumetric_matcher_p0 boxm2_volumetric_matcher_p0.cxx)

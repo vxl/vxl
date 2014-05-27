@@ -38,7 +38,7 @@ int main(int argc, char** argv)
   // post processing related
   vul_arg<float> kl("-kl", "parameter for nonlinear score scaling", 200.0f);
   vul_arg<float> ku("-ku", "parameter for nonlinear score scaling", 10.0f);
-  vul_arg<float> threshold("-thres", "threshold ratio for generating prob map", 0.3);
+  vul_arg<float> threshold("-thres", "threshold ratio for generating prob map", 0.3f);
   vul_arg<unsigned> thresc("-thresc", "threshold that used to create candidate list", 0);
   vul_arg<unsigned> top_size("-top", "desired top list for each candidate list", 1);
   // options
@@ -150,17 +150,19 @@ int main(int argc, char** argv)
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    if (tile_id() < 0 || tile_id() >= tiles.size()) {
+    if (tile_id() >= tiles.size()) {
       err_log << "ERROR: unknown tile id " << tile_id() << " for ROI region: " << world_region << "!\n";
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
 
     // create ex_matcher
-    vcl_string params_file_pre = desc_index_folder() + "/desc_index_tile_0";
+    vcl_stringstream params_file_pre;
+    params_file_pre << desc_index_folder() << "/desc_index_tile_" << tile_id();
+    //vcl_string params_file_pre = desc_index_folder() + "/desc_index_tile_0";
     volm_buffered_index_params params;
-    if (!params.read_ex_param_file(params_file_pre)) {
-      err_log << " ERROR: fetching parameter failed from file: " << params_file_pre << ".params\n";
+    if (!params.read_ex_param_file(params_file_pre.str())) {
+      err_log << " ERROR: fetching parameter failed from file: " << params_file_pre.str() << ".params\n";
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }

@@ -24,12 +24,12 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
   vcl_vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
   vcl_stringstream index_file_name_pre;
-  index_file_name_pre << desc_index_folder << "desc_index_tile_" << tile_id;
+  index_file_name_pre << desc_index_folder << "/desc_index_tile_" << tile_id;
 
   // obtain the parameters for index
   volm_buffered_index_params params;
   if (!params.read_params_file(index_file_name_pre.str())) {
-    vcl_cerr << " ERROR: can not open index parameter file: " << vul_file::strip_extension(index_file_name_pre.str()) << ".params";
+    vcl_cerr << " ERROR: can not open index parameter file: " << vul_file::strip_extension(index_file_name_pre.str()) << ".params\n";
     return false;
   }
   
@@ -86,7 +86,7 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
 bool volm_desc_matcher::write_out(vcl_string const& out_folder, unsigned const& tile_id)
 {
   vcl_stringstream filename;
-  filename << out_folder << "/" << this->get_index_type_str() << "_score_tile_" << tile_id << ".bin";
+  filename << out_folder << "/" << this->get_index_type_str() << "_scores_tile_" << tile_id << ".bin";
   volm_score::write_scores(score_all_, filename.str());
   return true;
 }
@@ -141,7 +141,7 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
 
   // load the score binary from output folder if exists
   vcl_stringstream score_file;
-  score_file << out_folder << "/" << this->get_index_type_str() << "_score_tile_" << tile_id << ".bin";
+  score_file << out_folder << "/" << this->get_index_type_str() << "_scores_tile_" << tile_id << ".bin";
   // continue if no score binary exists for this tile
   if (!vul_file::exists(score_file.str())) {
     vcl_cerr << " WARNING: score binary result is missing for tile " << tile_id << '\n';

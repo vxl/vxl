@@ -105,21 +105,6 @@ static void test_tile()
   TEST_NEAR("tile 2 img to global lat", lat3, lat2, 0.01);
   TEST_NEAR("tile 2 img to global lon", lon3, lon2, 0.01);
 
-#if 0
-  vil_image_view<float> img = vil_load("lidar_N32.7500W079.8750_S0.0625x0.0625.tif");
-  TEST("Load lidar?", !img, false);
-  if (img) {
-    volm_tile ttest("lidar_N32.7500W079.8750_S0.0625x0.0625.tif", img.ni(), img.nj());
-
-    lat = 32.776000;
-    lon = -79.813000;
-    unsigned ii, jj;
-    bool inside = ttest.global_to_img(lon, lat, ii, jj);
-    TEST("Inside?", inside, true);
-    double val = img(ii, jj);
-    vcl_cout << val;
-  }
-#endif
 }
 
 TESTMAIN(test_tile);

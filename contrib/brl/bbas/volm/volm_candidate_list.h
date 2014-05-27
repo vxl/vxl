@@ -89,6 +89,13 @@ class volm_candidate_list
                                   vcl_vector<double>& right_fov,
                                   float const& likelihood,
                                   unsigned const& rank);
+    static void write_kml_regions(vcl_ofstream& str,
+                                  vcl_vector<vgl_point_2d<double> >& region,
+                                  vgl_point_2d<double>& top_loc,
+                                  cam_angles const& camera,
+                                  double const& right_fov,
+                                  float const& likelihood,
+                                  unsigned const& rank);
 
   private:
     unsigned thres_;

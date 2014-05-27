@@ -396,7 +396,7 @@ int main(int argc, char** argv)
 }
 #endif
 
-#if 0
+#if 1
 // FOR phase 1B --> generate classification map using 1. GeoCover; 2. OSM map;  3. Satellite classification map
 //  Note the 2D map size is defined by geo_index and the output image have 1 meter resolution
 // generate classification map used to refine satellite height map
@@ -410,9 +410,7 @@ int main(int argc, char** argv)
   vul_arg<unsigned> world_id("-world", "world id for ROI (from 1 to 5",100);
   vul_arg<unsigned> tile_id("-tile", "tile id for ROI", 100);
   vul_arg<int> leaf_idx("-leaf", "leaf id of geo index for current tile (negative value will loop over all leaves", -1);
-  vul_arg<vcl_string> class_img_tree_txt("-class-str", "geo index structure file for classification map", "");
   vul_arg<vcl_string> class_img_folder("-class-img", "classification image from satellite modeling","");
-  vul_arg<vcl_string> class_cam_folder("-class-cam", "vpgl tfw camera associated with classification image from satellite modeling","");
   vul_arg<bool> is_satellite_building("-is-sat-building", "option to ingest satellite classification buildings into 2d land map", false);
   vul_arg<bool> is_osm_region("-is-osm-region", "option to ingest all osm regions", false);
   vul_arg<bool> is_osm_building("-is-osm-building", "option to ingest osm buildings into classification map",false);
@@ -422,8 +420,7 @@ int main(int argc, char** argv)
 
   // check the input
   if (geo_folder().compare("") == 0 || osm_folder().compare("") == 0 || out_folder().compare("") == 0 ||
-      world_id() == 0 || urban_folder().compare("") == 0 ||
-      class_img_tree_txt().compare("") == 0 || class_img_folder().compare("") == 0 || class_cam_folder().compare("") == 0 )
+      world_id() == 0 || urban_folder().compare("") == 0 || class_img_folder().compare("") == 0)
   {
     vul_arg_display_usage_and_exit();
     return false;
@@ -502,6 +499,10 @@ int main(int argc, char** argv)
     }
   }
 
+  // load the satellite classification images
+  vcl_vector<volm_img_info> class_img_infos;
+  volm_io_tools::load_imgs(class_img_folder(), class_img_infos, true, true, true);
+
   // load open street map binary
   vcl_vector<volm_osm_objects> osm_objs;
   for (unsigned i = 0; i < tile_size; i++) {
@@ -513,20 +514,10 @@ int main(int argc, char** argv)
     osm_objs.push_back(volm_osm_objects(osm_file.str()));
   }
 
-  // maps for satellite classification map
-  vcl_map<vcl_string, vil_image_view<vxl_byte> > class_img_map;
-  vcl_map<vcl_string, vpgl_geo_camera*> class_cam_map;
-  // load geo_index for satellite classification image (note 
-  if (!vul_file::exists(class_img_tree_txt())) {
-    log << "ERROR: can not find geo_index txt file for satellite class map: " << class_img_tree_txt() << '\n';  error(log_file.str(), log.str());
-    return false;
-  }
-  double class_min_size;
-  volm_geo_index2_node_sptr class_root = volm_geo_index2::read_and_construct<volm_osm_object_ids_sptr>(class_img_tree_txt(), class_min_size);
-
   vcl_cout << " --------------- START -----------------" << vcl_endl;
   vcl_cout << " there are " << tiles.size() << " tiles, "
-           << geo_infos.size() << " geo_cover images and "
+           << geo_infos.size() << " geo_cover images, "
+           << class_img_infos.size() << " satellite class images and "
            << osm_objs.size() << " open street map dataset " << vcl_endl;
   if (tile_id() > tiles.size()) {
     log << "ERROR: given tile id " << tile_id() << " does not exist\n";  error(log_file.str(), log.str());
@@ -644,6 +635,49 @@ int main(int argc, char** argv)
       // ingest satellite classification buildings if necessary
       if (is_satellite_building())
       {
+        // find overlapped satellite class images
+        vcl_vector<volm_img_info> sat_img_infos;
+        for (unsigned s_idx = 0; s_idx < class_img_infos.size(); s_idx++) {
+          if (vgl_intersection(leaf_bbox_geo, class_img_infos[s_idx].bbox).is_empty())
+            sat_img_infos.push_back(class_img_infos[s_idx]);
+        }
+        if (sat_img_infos.size() != 0)
+        {
+          vcl_cout << "there are " << sat_img_infos.size() << " satellite class images intersect with current 2d map leaf: " << leaf_bbox_geo << vcl_endl;
+          vcl_cout << "\t they are: \n";
+          for (unsigned c_idx = 0; c_idx < sat_img_infos.size(); c_idx++) {
+            vcl_cout << "\t\t" << sat_img_infos[c_idx].name << " ---> " << sat_img_infos[c_idx].bbox << vcl_endl;
+          }
+          for (unsigned i = 0; i < ni; i++) {
+            for (unsigned j = 0; j < nj; j++) {
+              double lon, lat, gz;
+              float local_x = (float)(i+0+0.5);
+              float local_y = (float)(box_ly-j+0.5);
+              lvcs->local_to_global(local_x, local_y, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
+              bool is_pixel_found = false;
+              for (unsigned c_idx = 0; (c_idx < sat_img_infos.size() && !is_pixel_found); c_idx++)
+              {
+                double u, v;
+                sat_img_infos[c_idx].cam->global_to_img(lon, lat, gz, u, v);
+                unsigned uu = (unsigned)vcl_floor(u+0.5);
+                unsigned vv = (unsigned)vcl_floor(v+0.5);
+                if (uu < sat_img_infos[c_idx].ni && vv < sat_img_infos[c_idx].nj) {
+                  is_pixel_found = true;  // to avoid overlap region twice
+                  vil_image_view<vxl_byte> imgc(sat_img_infos[c_idx].img_r);
+                  if (imgc(uu,vv) == volm_osm_category_io::volm_land_table_name["building"].id_) {
+                    unsigned char curr_id = imgc(uu,vv);
+                    unsigned char curr_level = volm_osm_category_io::volm_land_table[curr_id].level_;
+                    if (curr_level >= level_img(i,j)) {
+                      out_img(i,j) = curr_id;  level_img(i,j) = curr_level;
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+#if 0
         // find the overlapped leaves
         vcl_vector<volm_geo_index2_node_sptr> class_leaves;
         volm_geo_index2::get_leaves(class_root, class_leaves, leaf_bbox_geo);
@@ -724,6 +758,7 @@ int main(int argc, char** argv)
             }
           }
         }
+#endif
       }
 
       unsigned cnt = 0;
@@ -824,10 +859,11 @@ int main(int argc, char** argv)
           for (it.reset(); it.next();  ) {
             int y = it.scany();
             for (int x = it.startx(); x <= it.endx(); ++x) {
-              if ( x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
-                if (curr_level > level_img(x, y)) {
-                  level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
-                }
+              if ( x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {  // osm road will overwrite everything
+                level_img(x,y) = curr_level;  out_img(x,y) = curr_id;
+                //if (curr_level > level_img(x, y)) {
+                //  level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
+                //}
               }
             }
           }
@@ -918,7 +954,7 @@ int main(int argc, char** argv)
 }
 #endif
 
-
+#if 0
   // For Phase 1A, generate 2D land map using NLCD, LIDAR(elev), SME(fort), URGENT(building), OSM data
   // Output GeoTiff image size is controlled by geo index and has 1 meter resolution
   // Pipeline: 1.  --> generate label using NLCD + LIDAR data (LIDAR elevation is used to refined beach/water boundary)
@@ -935,7 +971,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string>    world_str("-world", "world name of ROI", "coast");
   vul_arg<unsigned>        tile_id("-tile", "tile id of ROI", 100);
   vul_arg<float>          min_size("-min", "minimum size of the geo index (in wgs84)", 0.0625);
-  vul_arg<unsigned>       leaf_idx("-leaf", "leaf id inside tile (for parallel execution)", -1);
+  vul_arg<int>            leaf_idx("-leaf", "leaf id inside tile (for parallel execution)", -1);
   vul_arg<vcl_string>      roi_kml("-roi", "kml file storing the ROI region polygon", "");
   vul_arg_parse(argc, argv);
 
@@ -1406,3 +1442,4 @@ int main(int argc, char** argv)
   return true;
 
 }
+#endif

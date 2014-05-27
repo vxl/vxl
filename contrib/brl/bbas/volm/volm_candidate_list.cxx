@@ -301,12 +301,12 @@ void volm_candidate_list::close_kml_document(vcl_ofstream& str)
 }
 
 void volm_candidate_list::write_kml_regions(vcl_ofstream& str,
-                                                  vcl_vector<vgl_point_2d<double> >& region,
-                                                  vcl_vector<vgl_point_2d<double> >& top_locs,
-                                                  vcl_vector<cam_angles>& top_cameras,
-                                                  vcl_vector<double>& right_fov,
-                                                  float const& likelihood,
-                                                  unsigned const& rank)
+                                            vcl_vector<vgl_point_2d<double> >& region,
+                                            vcl_vector<vgl_point_2d<double> >& top_locs,
+                                            vcl_vector<cam_angles>& top_cameras,
+                                            vcl_vector<double>& right_fov,
+                                            float const& likelihood,
+                                            unsigned const& rank)
 {
   if (region.size() != 0) {
     str << "      <!-- The following folders are candidate regions -->\n";
@@ -378,4 +378,19 @@ void volm_candidate_list::write_kml_regions(vcl_ofstream& str,
     str << "      </Folder>\n\n";
   }
 
+}
+
+void volm_candidate_list::write_kml_regions(vcl_ofstream& str,
+                                            vcl_vector<vgl_point_2d<double> >& region,
+                                            vgl_point_2d<double>& top_loc,
+                                            cam_angles const& camera,
+                                            double const& right_fov,
+                                            float const& likelihood,
+                                            unsigned const& rank)
+{
+  vcl_vector<vgl_point_2d<double> > loc_vec;  loc_vec.push_back(top_loc);
+  vcl_vector<cam_angles> cam_vec;             cam_vec.push_back(camera);
+  vcl_vector<double> right_fov_vec;           right_fov_vec.push_back(right_fov);
+
+  volm_candidate_list::write_kml_regions(str, region, loc_vec, cam_vec, right_fov_vec, likelihood, rank);
 }
