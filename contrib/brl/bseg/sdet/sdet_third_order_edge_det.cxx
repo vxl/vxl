@@ -8,6 +8,9 @@
 #include <vil/vil_convert.h>
 
 #include <bil/algo/bil_color_conversions.h>
+#include <sdet/sdet_edgemap_sptr.h>
+#include <sdet/sdet_edgemap.h>
+#include <sdet/sdet_edgel.h>
 
 // function to compute generic edges
 void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
@@ -198,6 +201,9 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
   }
   double edgel_encode_time = t.real();
   vcl_cout << "time taken for edgel encode: " << edgel_encode_time << " msec" << vcl_endl;
+
+  view_i = greyscale_view.ni();
+  view_j = greyscale_view.nj();
 #if 0
   //------------------------------------------------------------------------------------------
   //create a new edgemap from the tokens identified by NMS
@@ -608,6 +614,8 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   double edgel_encode_time = t.real();
   vcl_cout << "time taken for edgel encode: " << edgel_encode_time << " msec" << vcl_endl;
 
+  view_i = comp1.ni();
+  view_j = comp1.nj();
 #if 0
   //create a new edgemap from the tokens collected from NMS
   brip_edgemap_sptr edge_map = new brip_edgemap(comp1.ni(), comp1.nj());
@@ -690,4 +698,17 @@ bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsig
   outfp.close();
 
   return true;
+}
+
+sdet_edgemap_sptr sdet_third_order_edge_det::edgemap() {
+   
+  sdet_edgemap_sptr edge_map;
+  edge_map = new sdet_edgemap(view_i, view_j);
+
+  for (unsigned i=0; i<edgels_.size(); i++)
+  {
+    sdet_edgel* new_edgel = new sdet_edgel(edgels_[i].get_pt(), vcl_tan(edgels_[i].get_theta()), edgels_[i].get_grad()); 
+    edge_map->insert(new_edgel);
+  }
+  return edge_map;
 }
