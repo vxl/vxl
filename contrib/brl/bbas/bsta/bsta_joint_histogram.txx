@@ -227,22 +227,22 @@ T bsta_joint_histogram<T>::mutual_information() const
   T mutual_information = T(0);
 
   //calculate marginal distributions
-  vcl_vector<T> pa(nbins_a_,T(0)),pb(nbins_b_,T(0));
+  vcl_vector<T> pa(nbins_a_,T(0)), pb(nbins_b_,T(0));
   for (unsigned a = 0; a < nbins_a_; ++a)
-    for (unsigned b = 0; b < nbins_b_; ++b)
-    {
+    for (unsigned b = 0; b < nbins_b_; ++b){
       pa[a] += this->p(a,b);
       pb[b] += this->p(a,b);
     }
 
-  //calculate mutual information in base 10
+  //calculate mutual information in base e
   for (unsigned a = 0; a < nbins_a_; ++a)
     for (unsigned b = 0; b < nbins_b_; ++b)
-      if (p(a,b) != 0 && pa[a] != 0 && pb[b] != 0)
-        mutual_information+=this->p(a,b)*(vcl_log(this->p(a,b)) - (vcl_log(pa[a]) + vcl_log(pb[b])) );
+      if (p(a,b) > min_prob_ && pa[a] > min_prob_ && pb[b] > min_prob_)
+        mutual_information += (this->p(a,b)*
+          (vcl_log(this->p(a,b)) - vcl_log(pa[a]) - vcl_log(pb[b])));
 
-  //convert mutual information to base 2
-  mutual_information *= (T)vnl_math::log2e;
+  //convert from natural log to base 2
+  mutual_information /= (T)vnl_math::ln2;
 
   return mutual_information;
 }
