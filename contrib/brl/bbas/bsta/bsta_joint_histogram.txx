@@ -224,7 +224,7 @@ T bsta_joint_histogram<T>::entropy() const
 template <class T>
 T bsta_joint_histogram<T>::mutual_information() const
 {
-  T mutual_information = T(0);
+  T mi = T(0);
 
   //calculate marginal distributions
   vcl_vector<T> pa(nbins_a_,T(0)), pb(nbins_b_,T(0));
@@ -238,13 +238,13 @@ T bsta_joint_histogram<T>::mutual_information() const
   for (unsigned a = 0; a < nbins_a_; ++a)
     for (unsigned b = 0; b < nbins_b_; ++b)
       if (p(a,b) > min_prob_ && pa[a] > min_prob_ && pb[b] > min_prob_)
-        mutual_information += (this->p(a,b)*
+        mi += (this->p(a,b)*
           (vcl_log(this->p(a,b)) - vcl_log(pa[a]) - vcl_log(pb[b])));
 
   //convert from natural log to base 2
-  mutual_information /= (T)vnl_math::ln2;
+  mi *= (T)vnl_math::log2e;
 
-  return mutual_information;
+  return mi;
 }
 
 template <class T>
