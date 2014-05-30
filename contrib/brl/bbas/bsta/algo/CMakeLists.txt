@@ -17,6 +17,7 @@ SET( bsta_algo_sources
    bsta_fit_gaussian.h
    bsta_sigma_normalizer.h    bsta_sigma_normalizer.cxx
    bsta_display_vrml.h
+   bsta_mvnrand.h
    )
 
 AUX_SOURCE_DIRECTORY(Templates bsta_algo_sources)
