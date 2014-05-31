@@ -185,3 +185,42 @@ vcl_string bpgl_camera_utils::get_string(double ni, double nj, double right_f, d
   str << "_h_" << head << "_t_" << tilt << "_r_" << roll << "_top_fov_" << top_f;
   return str.str();
 }
+void bpgl_camera_utils::
+camera_parameters(vpgl_perspective_camera<double> const& cam,
+		  double& rodrigues_x, double& rodrigues_y,
+		  double& rodriques_z, double& tx, double& ty,
+		  double& tz, double& focal_length_u, double& focal_length_v,
+		  double& principal_pt_u, double& principal_pt_v){
+
+    const vgl_rotation_3d<double>& R = cam.get_rotation();
+    vnl_vector_fixed<double ,3> rod = R.as_rodrigues();
+    rodrigues_x = rod[0];  rodrigues_y = rod[1];   rodrigues_z = rod[2];
+    vgl_vector_3d<double> t = cam.get_translation();
+    tx = t.x(); ty = t.y(); tz = t.z();
+    vnl_matrix_fixed<double, 3, 3> K = cam.get_calibration().get_matrix();
+    focal_length_u = K[0][0];  focal_length_v = K[1][1];
+    principal_pt_u = K[0][2];  principal_pt_v = K[1][2];
+}
+
+bool bpgl_camera_utils::
+camera_from_parameters(double rodrigues_x, double rodrigues_y,
+		       double rodriques_z, double tx, double ty,
+		       double tz, double focal_length_u, double focal_length_v,
+		       double principal_pt_u, double principal_pt_v,
+		       vpgl_perspective_camera<double>& cam){
+  vnl_vector_fixed<double, 3> rod(rodrigues_x, rodrigues_y, rodrigues_z);
+  double ang = rod.magnitude();
+  if(ang<0.0 || ang>vnl_math::twopi)
+    return false;
+  vgl_rotation_3d<double> R(rod);
+  vgl_vector_3d<double> t(tx, ty, tz);
+  vnl_matrix_fixed<double, 3, 3> K(0.0);
+  if(focal_length_u<=0.0||focal_length_v<=0.0)
+    return false;
+  K[0][0]=focal_length_u;  K[1][1]=focal_length_v;
+  K[0][2]=principal_pt_u;  K[1][2]=principal_pt_v;
+  K[2][2] = 1.0;
+  vpgl_calibration_matrix<double> Km(K);
+  cam = vpgl_perspective_camera<double>(Km, R, t);
+  return true;
+}
