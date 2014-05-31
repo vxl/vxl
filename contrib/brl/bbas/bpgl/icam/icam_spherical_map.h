@@ -28,13 +28,14 @@ class icam_spherical_map : public vbl_ref_count
 {
  public:
   //: Constructors
-  icam_spherical_map(): n_theta_(0), n_phi_(0),origin_(vgl_point_3d<double>()),
-    radius_(1.0), theta_cap_(0), t_theta_(0.0), t_phi_(0.0){}
+  icam_spherical_map(): n_theta_(0), n_phi_(0), t_theta_(0.0), t_phi_(0.0),
+    origin_(vgl_point_3d<double>()), radius_(1.0), theta_cap_(0){}
   icam_spherical_map(unsigned n_theta, unsigned nphi,
 		     vgl_point_3d<double> const& origin, double radius,
 		     double theta_cap):
-  n_theta_(n_theta), n_phi_(nphi), origin_(origin), radius_(radius),
-    theta_cap_(theta_cap), t_theta_(0.0), t_phi_(0.0){}
+  n_theta_(n_theta), n_phi_(nphi), t_theta_(0.0), t_phi_(0.0),
+    origin_(origin), radius_(radius), theta_cap_(theta_cap){}
+
   //: Destructor
   ~icam_spherical_map(){}
   //: images must be RGB byte. Cameras projective or perspective

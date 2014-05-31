@@ -28,7 +28,7 @@ boxm2_ocl_reg_mutual_info::boxm2_ocl_reg_mutual_info(boxm2_opencl_cache2_sptr& o
                                                      bocl_device_sptr device,
                                                      int nbins,
                                                      bool do_vary_scale)
-                                                     : opencl_cache_(opencl_cache),device_(device),nbins_(nbins), do_vary_scale_(do_vary_scale)
+                                                     : nbins_(nbins), opencl_cache_(opencl_cache),device_(device), do_vary_scale_(do_vary_scale)
 {
     this->compile_kernel();
     this->init_ocl_minfo();
