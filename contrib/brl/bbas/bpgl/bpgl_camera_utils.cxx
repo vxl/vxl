@@ -188,7 +188,7 @@ vcl_string bpgl_camera_utils::get_string(double ni, double nj, double right_f, d
 void bpgl_camera_utils::
 camera_parameters(vpgl_perspective_camera<double> const& cam,
 		  double& rodrigues_x, double& rodrigues_y,
-		  double& rodriques_z, double& tx, double& ty,
+		  double& rodrigues_z, double& tx, double& ty,
 		  double& tz, double& focal_length_u, double& focal_length_v,
 		  double& principal_pt_u, double& principal_pt_v){
 
@@ -204,7 +204,7 @@ camera_parameters(vpgl_perspective_camera<double> const& cam,
 
 bool bpgl_camera_utils::
 camera_from_parameters(double rodrigues_x, double rodrigues_y,
-		       double rodriques_z, double tx, double ty,
+		       double rodrigues_z, double tx, double ty,
 		       double tz, double focal_length_u, double focal_length_v,
 		       double principal_pt_u, double principal_pt_v,
 		       vpgl_perspective_camera<double>& cam){
