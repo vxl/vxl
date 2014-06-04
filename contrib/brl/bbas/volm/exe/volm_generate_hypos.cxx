@@ -366,7 +366,7 @@ int main(int argc,  char** argv)
 
     vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
     vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
-
+    poly.print(vcl_cout);
     vcl_vector<volm_tile> tiles = volm_tile::generate_p1b_wr_tiles(world_id());
     if (!tiles.size()) {  
       vcl_cerr << "Unknown world id: " << world_id() << vcl_endl;
@@ -401,7 +401,7 @@ int main(int argc,  char** argv)
       vcl_vector<volm_img_info> infos;
       if (use_satellite_img() )
         // load the satellite resources
-        volm_io_tools::load_satellite_height_imgs(in_folder(), infos, false, "height_refined_sat_geo");
+        volm_io_tools::load_satellite_height_imgs(in_folder(), infos, false, "");
       else
         // load the DEM tiles
         volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
@@ -638,7 +638,7 @@ int main(int argc,  char** argv)
       // load satellite/dem height images
       vcl_vector<volm_img_info> infos;
       if (use_satellite_img() )
-        volm_io_tools::load_satellite_height_imgs(in_folder(), infos, false, "height_geo");
+        volm_io_tools::load_satellite_height_imgs(in_folder(), infos, false, "");
       else
         volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
       
@@ -716,6 +716,90 @@ int main(int argc,  char** argv)
       return volm_io::SUCCESS;
     }
 
+    // generate locations with constant interval
+    if (p1b() && region_name().compare("all") == 0) {
+      // check whether the region is defined
+      if (region_name() != "all" && volm_osm_category_io::volm_land_table_name.find(region_name()) == volm_osm_category_io::volm_land_table_name.end()) {
+        vcl_cout << "ERROR: unknown region name: " << region_name() << vcl_endl;
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+      // check input
+      if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || world_id() < 0) {
+        vul_arg_display_usage_and_exit();
+        vcl_cout << "ERROR: missing input for generating phase 1b location database on all non-building region" << vcl_endl;
+      }
+      // load satellite/dem height images
+      vcl_vector<volm_img_info> infos;
+      if (use_satellite_img() )
+        volm_io_tools::load_satellite_height_imgs(in_folder(), infos, false, "");
+      else
+        volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
+
+      // load satellite classification 2d map to avoid locations on top of the buildings
+      vcl_cout << "height map resources: " << infos.size() << " geotiff images are loaded!\n";
+      double inc_in_meter = inc_in_sec*21/0.000202;
+      double size = nh() * inc_in_sec;
+      unsigned t_id = tile_id();
+      vcl_cout << "generate location on land category: " << region_name() << vcl_endl;
+      vcl_cout << "generation locations with interval " << inc_in_meter << " meter. (" << inc_in_sec << " seconds)" << vcl_endl;
+      vcl_cout << "generate geo_index based on location density, each leaf has size: " << size << " seconds in geographic cooridnates..\n";
+      volm_geo_index_node_sptr root = volm_geo_index::construct_tree(tiles[t_id], (float)size, poly);
+      // write the geo index structure
+      vcl_stringstream file_name;  file_name << out_pre() << "geo_index_tile_" << t_id << ".txt";
+      volm_geo_index::write(root, file_name.str(), (float)size);
+      unsigned depth = volm_geo_index::depth(root);
+      vcl_stringstream file_name3;  file_name3 << out_pre() << "geo_index_tile_" << t_id << "_depth_" << depth << ".kml";
+      volm_geo_index::write_to_kml(root, depth, file_name3.str());
+      // loop over each leaf to add locations
+      for (unsigned i = 0; i < infos.size(); i++) {
+        volm_img_info sat_info = infos[i];
+        vcl_vector<volm_geo_index_node_sptr> leaves;
+        volm_geo_index::get_leaves(root, leaves, sat_info.bbox);
+        if (leaves.empty())
+          continue;
+        float leaf_size = (float)leaves[0]->extent_.width();
+        vcl_cout << leaves.size() << " leaves (" << leaf_size << " deg) intersects with the height map: " << sat_info.name << vcl_endl;
+        for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+          if (!leaves[l_idx]->hyps_)
+            leaves[l_idx]->hyps_ = new volm_loc_hyp();
+          float lower_left_lon = (float)leaves[l_idx]->extent_.min_point().x();
+          float lower_left_lat = (float)leaves[l_idx]->extent_.min_point().y();
+          unsigned nhi = (unsigned)vcl_ceil(leaf_size/inc_in_sec);
+          for (unsigned hi=0; hi<nhi; hi++) {
+            double lon = lower_left_lon + hi*inc_in_sec;
+            for (unsigned hj=0; hj<nhi; hj++) {
+              double lat = lower_left_lat + hj*inc_in_sec;
+              vgl_point_2d<double> pt(lon, lat);
+              double u, v;
+              sat_info.cam->global_to_img(lon, lat, 0.0, u, v);
+              int ii = (int)vcl_floor(u+0.5);
+              int jj = (int)vcl_floor(v+0.5);
+              if (sat_info.valid_pixel(ii,jj)) {
+                vil_image_view<float> img(sat_info.img_r);
+                float z = img(ii,jj);
+                unsigned id;
+                if (z>0 && !(leaves[l_idx]->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
+                  leaves[l_idx]->hyps_->add(lat, lon, z);
+              }
+            }
+          }
+        }
+      }
+      // write the hypo database
+      vcl_vector<volm_geo_index_node_sptr> leaves;
+      volm_geo_index::get_leaves_with_hyps(root, leaves);
+      vcl_stringstream file_name4;  file_name4 << out_pre() << "geo_index_tile_" << t_id;
+      vcl_cout << "\nwriting hypos to: " << file_name4.str() << vcl_endl;
+      volm_geo_index::write_hyps(root, file_name4.str());
+      for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+        vcl_string out_file = vul_file::strip_extension(leaves[l_idx]->get_hyp_name(file_name4.str())) + ".kml";
+        leaves[l_idx]->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
+      }
+      vcl_cout << volm_geo_index::hypo_size(root) << " locations are generated in tile " << t_id << vcl_endl;
+
+      return volm_io::SUCCESS;
+
+    }
 
   } // end of p1b location generation
 

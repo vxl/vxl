@@ -436,7 +436,7 @@ bool volm_io_tools::load_satellite_height_map(vcl_string const& filename, volm_i
     }
     vpgl_geo_camera::init_geo_camera(cam_file, lvcs_dummy, 0, 0, cam);
   }
-  else {
+  else { // load from image header
     vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
     vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
   }

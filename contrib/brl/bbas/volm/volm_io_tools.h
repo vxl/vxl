@@ -32,6 +32,7 @@ public:
   bool intersects(vgl_polygon<double> poly) { return vgl_intersection(bbox, poly); }
   bool intersects(vgl_box_2d<double> other) { return vgl_intersection(bbox, other).area() > 0; }
   bool contains(vgl_point_2d<double> point) const { return bbox.contains(point); }
+  bool contains(double const& lon, double const& lat) const { return this->contains(vgl_point_2d<double>(lon, lat)); }
   bool valid_pixel(int uu, int vv) const { return (uu >= 0 && vv >= 0 && uu < (int)ni && vv < (int)nj) ? true : false; }
   void save_box_kml(vcl_string out_name);
 
