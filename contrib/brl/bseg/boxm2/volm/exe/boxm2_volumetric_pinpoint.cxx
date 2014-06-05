@@ -173,7 +173,7 @@ int main(int argc, char** argv)
   vcl_vector<vgl_point_2d<double> > top_locs;
   vcl_vector<float> likelihood;
   vcl_vector<unsigned> cam_ids;
-  vcl_map<float, pin_pt_loc>::iterator mit = score_map.begin();
+  vcl_multimap<float, pin_pt_loc, vcl_greater<float> >::iterator mit = score_map.begin();
   while (pin_pt_poly.num_sheets() < num_top_locs() && mit != score_map.end())
   {
     // check whether the location has been in the pin-pointed region
