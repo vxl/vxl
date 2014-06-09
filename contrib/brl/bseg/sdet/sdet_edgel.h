@@ -37,9 +37,9 @@ typedef vcl_deque<sdet_edgel* > sdet_edgel_list;
 typedef vcl_deque<sdet_edgel* >::iterator sdet_edgel_list_iter;
 typedef vcl_deque<sdet_edgel* >::const_iterator sdet_edgel_list_const_iter;
 
-typedef vcl_list<sdet_curvelet* > curvelet_list;
-typedef vcl_list<sdet_curvelet* >::iterator curvelet_list_iter;
-typedef vcl_list<sdet_curvelet* >::const_iterator curvelet_list_const_iter;
+typedef vcl_list<sdet_curvelet* > sdet_curvelet_list;
+typedef vcl_list<sdet_curvelet* >::iterator sdet_curvelet_list_iter;
+typedef vcl_list<sdet_curvelet* >::const_iterator sdet_curvelet_list_const_iter;
 
 //: edgel class: contains pt, tangent and collection of all the groupings around it
 class sdet_edgel

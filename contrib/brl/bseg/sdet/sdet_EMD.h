@@ -21,7 +21,7 @@
 #define GAMMA 14.0
 #define MAXCLUSTERS 30
 
-typedef struct bin_struct{
+typedef struct /*bin_struct*/{
   double wsum;
   double weight;
   double value;

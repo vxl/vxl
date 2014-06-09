@@ -83,7 +83,7 @@ struct sdet_int_params{
 };
 
 //: get intrinsic parameters for an edge pair
-inline sdet_int_params get_intrinsic_params(vgl_point_2d<double> pt1, vgl_point_2d<double> pt2,
+inline sdet_int_params sdet_get_intrinsic_params(vgl_point_2d<double> pt1, vgl_point_2d<double> pt2,
                                       double tan1, double tan2)
 {
   sdet_int_params pair_params;

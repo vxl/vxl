@@ -67,7 +67,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
                      double dpos, double dtheta, double /*token_len*/)
 {
   //determine the intrinsic parameters for this edgel pair
-  sdet_int_params params = get_intrinsic_params(e1->pt, e2->pt, e1->tangent, e2->tangent);
+  sdet_int_params params = sdet_get_intrinsic_params(e1->pt, e2->pt, e1->tangent, e2->tangent);
 
   //do the orientation test
   if (edgel_pair_legal(params, e1->tangent, e2->tangent))
@@ -214,7 +214,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
                      double dpos, double dtheta, double /*token_len*/)
 {
   //determine the intrinsic parameters for this edgel pair
-  sdet_int_params params = get_intrinsic_params(e1->pt, e2->pt, e1->tangent, e2->tangent);
+  sdet_int_params params = sdet_get_intrinsic_params(e1->pt, e2->pt, e1->tangent, e2->tangent);
 
   //use -pi - pi range for the intrinsic params
   if (params.t1>vnl_math::pi)
@@ -385,7 +385,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
                      double dpos, double dtheta, double token_len, double max_k)
 {
   //determine the intrinsic parameters for this edgel pair
-  sdet_int_params params = get_intrinsic_params(e1->pt, e2->pt, e1->tangent, e2->tangent);
+  sdet_int_params params = sdet_get_intrinsic_params(e1->pt, e2->pt, e1->tangent, e2->tangent);
 
   //and compute the curve bundle using the intrinsic params
   compute_curve_bundle(cv_bundle, params, ref_e==e1, dpos, dtheta, token_len, max_k);
@@ -1400,7 +1400,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
     //determine the intrinsic parameters for this edgel pair
     sdet_int_params params;
     if (ref_e == e1){
-      params = get_intrinsic_params(pts[i], e2->pt, e1->tangent, e2->tangent);
+      params = sdet_get_intrinsic_params(pts[i], e2->pt, e1->tangent, e2->tangent);
 
       //do the energy test
       bool test_passed = edgel_pair_legal(params, e1->tangent, e2->tangent);
@@ -1410,7 +1410,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
         sdet_CC_curve_model::compute_curve_bundle(cv_bundles[i], params, true, dpos, dtheta, token_len, max_k);
     }
     else {
-      params = get_intrinsic_params(e1->pt, pts[i], e1->tangent, e2->tangent);
+      params = sdet_get_intrinsic_params(e1->pt, pts[i], e1->tangent, e2->tangent);
 
       //do the energy test
       bool test_passed = edgel_pair_legal(params, e1->tangent, e2->tangent);
@@ -2278,7 +2278,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
                      double token_len, double max_k, double max_gamma)
 {
   //determine the intrinsic parameters for this edgel pair
-  sdet_int_params params = get_intrinsic_params(e1->pt, e2->pt, e1->tangent, e2->tangent);
+  sdet_int_params params = sdet_get_intrinsic_params(e1->pt, e2->pt, e1->tangent, e2->tangent);
 
   //do the energy test
   bool test_passed = edgel_pair_legal(params, e1->tangent, e2->tangent);
@@ -2578,7 +2578,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
     //determine the intrinsic parameters for this edgel pair
     sdet_int_params params;
     if (ref_e == e1){
-      params = get_intrinsic_params(pts[i], e2->pt, tangents[i], e2->tangent);
+      params = sdet_get_intrinsic_params(pts[i], e2->pt, tangents[i], e2->tangent);
 
       //do the energy test
       bool test_passed = edgel_pair_legal(params, tangents[i], e2->tangent);
@@ -2588,7 +2588,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
         sdet_ES_curve_model::compute_curve_bundle(cv_bundles[i], params, true, dpos, dtheta, token_len, max_k, max_gamma);
     }
     else {
-      params = get_intrinsic_params(e1->pt, pts[i], e1->tangent, tangents[i]);
+      params = sdet_get_intrinsic_params(e1->pt, pts[i], e1->tangent, tangents[i]);
 
       //do the energy test
       bool test_passed = edgel_pair_legal(params, e1->tangent, tangents[i]);

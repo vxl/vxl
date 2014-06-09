@@ -36,12 +36,12 @@ struct sdet_link {
   void prune_redundant_curvelets()
   {
     //go over all the curvelets
-    curvelet_list_iter cv_it = curvelets.begin();
+    sdet_curvelet_list_iter cv_it = curvelets.begin();
     for (; cv_it != curvelets.end(); cv_it++)
     {
       sdet_curvelet* cvlet = (*cv_it);
 
-      curvelet_list_iter cv_it2 = cv_it; 
+      sdet_curvelet_list_iter cv_it2 = cv_it; 
       cv_it2++;
       for (; cv_it2 != curvelets.end(); cv_it2++)
       {

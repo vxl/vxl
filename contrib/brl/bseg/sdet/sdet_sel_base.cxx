@@ -187,7 +187,7 @@ void sdet_sel_base::form_full_cvlet_map()
     sdet_edgel* eA = edgemap_->edgels[i];
 
     //add all the curvelets anchored at this edgel to all the other edgels in it
-    curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
     for ( ; cv_it!=curvelet_map_.curvelets(i).end(); cv_it++){
       sdet_curvelet* cvlet = (*cv_it);
 
@@ -203,7 +203,7 @@ void sdet_sel_base::form_full_cvlet_map()
         bool cvlet_exists = false; //reset flag
 
         //go over all the curvelets (not just anchored) formed by the current edgel
-        curvelet_list_iter cv_it2 = curvelet_map_.curvelets(eB->id).begin();
+        sdet_curvelet_list_iter cv_it2 = curvelet_map_.curvelets(eB->id).begin();
         for ( ; cv_it2!=curvelet_map_.curvelets(eB->id).end(); cv_it2++){
           sdet_curvelet* cvlet2 = (*cv_it2);
 
@@ -266,7 +266,7 @@ void sdet_sel_base::recompute_curvelet_quality()
 {
   for (unsigned i=0; i<edgemap_->edgels.size(); i++)
   {
-    curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
     for ( ; cv_it!=curvelet_map_.curvelets(i).end(); cv_it++)
       (*cv_it)->compute_properties(rad_, token_len_);
   }
@@ -285,7 +285,7 @@ void sdet_sel_base::prune_curvelets_by_gaps(double gap_threshold)
   vcl_vector<sdet_curvelet*> cvlets_to_del;
   for (unsigned i=0; i<edgemap_->edgels.size(); i++)
   {
-    curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
     for ( ; cv_it!=curvelet_map_.curvelets(i).end(); cv_it++){
       sdet_curvelet* cvlet = (*cv_it);
 
@@ -318,7 +318,7 @@ void sdet_sel_base::prune_curvelets_by_length(double length_threshold)
   vcl_vector<sdet_curvelet*> cvlets_to_del;
   for (unsigned i=0; i<edgemap_->edgels.size(); i++)
   {
-    curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
     for ( ; cv_it!=curvelet_map_.curvelets(i).end(); cv_it++){
       sdet_curvelet* cvlet = (*cv_it);
 
@@ -346,7 +346,7 @@ void sdet_sel_base::prune_the_curvelets(double quality_threshold)
   vcl_vector<sdet_curvelet*> cvlets_to_del;
   for (unsigned i=0; i<edgemap_->edgels.size(); i++)
   {
-    curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
     for ( ; cv_it!=curvelet_map_.curvelets(i).end(); cv_it++){
       if ((*cv_it)->quality<quality_threshold)
         cvlets_to_del.push_back(*cv_it);
@@ -377,7 +377,7 @@ void sdet_sel_base::prune_curvelets_by_c1_condition()
     sdet_edgel* eA = edgemap_->edgels[i];
 
     //for each cvlet before the edgel, see if a c1 cvlet can be found after it
-    curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
     for ( ; cv_it!=curvelet_map_.curvelets(i).end(); cv_it++)
     {
       sdet_curvelet* cvlet1 = (*cv_it);
@@ -386,7 +386,7 @@ void sdet_sel_base::prune_curvelets_by_c1_condition()
       bool cvlet2_found = false;
 
       //go over all the cvlet after
-      curvelet_list_iter cv_it2 = curvelet_map_.curvelets(i).begin();
+      sdet_curvelet_list_iter cv_it2 = curvelet_map_.curvelets(i).begin();
       for ( ; cv_it2!=curvelet_map_.curvelets(i).end(); cv_it2++)
       {
         sdet_curvelet* cvlet2 = (*cv_it2);
@@ -447,7 +447,7 @@ void sdet_sel_base::construct_naive_link_graph(double proximity_threshold, doubl
           //compute pairwise affinity
 
           //determine the intrinsic parameters for this edgel pair
-          sdet_int_params params = get_intrinsic_params(eA->pt, eB->pt, eA->tangent, eB->tangent);
+          sdet_int_params params = sdet_get_intrinsic_params(eA->pt, eB->pt, eA->tangent, eB->tangent);
 
           double kk, gamma, len;
           double k0_max_error, gamma_max_error, len_max_error; //other params (unimportant)
@@ -492,7 +492,7 @@ void sdet_sel_base::construct_the_link_graph(unsigned min_group_size, int method
   for (unsigned i=0; i<edgemap_->edgels.size(); i++)
   {
     //for all curvelets that are larger than the group size threshold 
-    curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
     for ( ; cv_it!=curvelet_map_.curvelets(i).end(); cv_it++)
       (*cv_it)->used = false; //reset this flag
   }
@@ -503,7 +503,7 @@ void sdet_sel_base::construct_the_link_graph(unsigned min_group_size, int method
     sdet_edgel* eA = edgemap_->edgels[i];
 
     //for all curvelets that are larger than the group size threshold 
-    curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(i).begin();
     for ( ; cv_it!=curvelet_map_.curvelets(i).end(); cv_it++){
       sdet_curvelet* cvlet = (*cv_it);
       if (cvlet->order() < min_group_size) continue;
@@ -540,9 +540,9 @@ int sdet_sel_base::count_degree_overlap(sdet_link* link)
   int max_deg = 0;
 
   //go over all pairs of curvelets causing the link
-  curvelet_list_iter c_it = link->curvelets.begin();
+  sdet_curvelet_list_iter c_it = link->curvelets.begin();
   for (; c_it != link->curvelets.end(); c_it++){
-    curvelet_list_iter c_it2 = c_it; 
+    sdet_curvelet_list_iter c_it2 = c_it; 
     c_it2++;
     for (; c_it2 != link->curvelets.end(); c_it2++)
     {
@@ -732,7 +732,7 @@ bool sdet_sel_base::link_is_reciprocal(sdet_edgel* eA, sdet_edgel* eB, unsigned 
   bool link_found = false;
 
   //for all curvelets of eA that are larger than the group size threshold 
-  curvelet_list_iter cv_it = curvelet_map_.curvelets(eA->id).begin();
+  sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(eA->id).begin();
   for ( ; cv_it!=curvelet_map_.curvelets(eA->id).end() && !link_found; cv_it++)
   {
     sdet_curvelet* cvlet = (*cv_it);
@@ -785,7 +785,7 @@ bool sdet_sel_base::link_is_reciprocal(sdet_edgel* eA, sdet_edgel* eB, sdet_edge
   //we know eC-->eN, now look for eN-->eC link
 
   //for all curvelets that are larger than the group size threshold 
-  curvelet_list_iter cv_it = curvelet_map_.curvelets(eN->id).begin();
+  sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(eN->id).begin();
   for ( ; cv_it!=curvelet_map_.curvelets(eN->id).end(); cv_it++)
   {
     sdet_curvelet* cvlet = (*cv_it);
@@ -814,7 +814,7 @@ bool sdet_sel_base::link_is_supported(sdet_edgel* eA, sdet_edgel* eB, unsigned m
   bool link_found = false;
 
   //go over all curvelets of eA and find the ones that contain eB
-  curvelet_list_iter cv_it = curvelet_map_.curvelets(eA->id).begin();
+  sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(eA->id).begin();
   for ( ; cv_it!=curvelet_map_.curvelets(eA->id).end() && !link_found; cv_it++)
   {
     sdet_curvelet* cvlet = (*cv_it);
@@ -854,7 +854,7 @@ bool sdet_sel_base::link_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel
   // they are supported by the same edgels (i.e., that eX-eC->eN-eY and eX-eC<-eN-eY both exist)
 
   //for all curvelets of eN that are larger than the group size threshold 
-  curvelet_list_iter cv_it = curvelet_map_.curvelets(eN->id).begin();
+  sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(eN->id).begin();
   for ( ; cv_it!=curvelet_map_.curvelets(eN->id).end(); cv_it++)
   {
     sdet_curvelet* cvlet = (*cv_it);
@@ -908,7 +908,7 @@ bool sdet_sel_base::triplet_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_ed
   bool cvlet_found = false;
 
   //for all curvelets of eX that are larger than the group size threshold 
-  curvelet_list_iter cv_it = curvelet_map_.curvelets(eX->id).begin();
+  sdet_curvelet_list_iter cv_it = curvelet_map_.curvelets(eX->id).begin();
   for ( ; cv_it!=curvelet_map_.curvelets(eX->id).end() && !cvlet_found; cv_it++)
   {
     cvlet1 = (*cv_it);
@@ -1006,7 +1006,7 @@ void sdet_sel_base::make_link_graph_consistent()
       //Note: comment this part to visualize the links that are removed by this process
 
       //first remove the cvlets
-      curvelet_list_iter cv_it = links_to_del[j]->curvelets.begin();
+      sdet_curvelet_list_iter cv_it = links_to_del[j]->curvelets.begin();
       for (; cv_it != links_to_del[j]->curvelets.end(); cv_it++)
         curvelet_map_.remove_curvelet(*cv_it);
     }
@@ -1229,7 +1229,7 @@ bool sdet_sel_base::link_valid(sdet_link* link)
 
     //make sure that this link is locally supported by a curvelet, otherwise it's spurious
     //go over all the cvlets on this link and make sure that at least one of them is anchored on its parent
-    curvelet_list_iter cv_it = link->curvelets.begin();
+    sdet_curvelet_list_iter cv_it = link->curvelets.begin();
     for (; cv_it != link->curvelets.end(); cv_it++)
     {
       sdet_curvelet* cvlet = (*cv_it);
@@ -1608,7 +1608,7 @@ void sdet_sel_base::evaluate_curvelet_quality(int method)
   {
     sdet_edgel* eA = edgemap_->edgels[i];
 
-    curvelet_list_iter it = curvelet_map_.curvelets(eA->id).begin();
+    sdet_curvelet_list_iter it = curvelet_map_.curvelets(eA->id).begin();
     for (; it != curvelet_map_.curvelets(eA->id).end(); it++){
       sdet_curvelet* cvlet = (*it);
 
@@ -1674,7 +1674,7 @@ void sdet_sel_base::determine_accuracy_of_measurements()
   //for each edgel, for each curvelet, get accuracy measurements from the curve_model
   for (unsigned i=0; i<edgemap_->edgels.size(); i++)
   {
-    curvelet_list_iter it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter it = curvelet_map_.curvelets(i).begin();
     for (; it != curvelet_map_.curvelets(i).end(); it++){
       sdet_curvelet* cvlet = (*it);
 
@@ -1734,7 +1734,7 @@ void sdet_sel_base::report_stats()
   unsigned max_size = 0;
   //find maximum size of curvelet
   for (unsigned i=0; i<edgemap_->edgels.size(); i++){
-    curvelet_list_iter it = curvelet_map_.curvelets(i).begin();
+    sdet_curvelet_list_iter it = curvelet_map_.curvelets(i).begin();
     for (; it != curvelet_map_.curvelets(i).end(); it++){
       sdet_curvelet* cvlet = (*it);
 
@@ -1770,7 +1770,7 @@ void sdet_sel_base::report_stats()
     vcl_vector<bool> consistent_size_exists(max_size+1, false);
 
     //for each edgel go over all the curvelets it forms
-    curvelet_list_iter it = curvelet_map_.curvelets(eA->id).begin();
+    sdet_curvelet_list_iter it = curvelet_map_.curvelets(eA->id).begin();
     for (; it != curvelet_map_.curvelets(eA->id).end(); it++)
     {
       sdet_curvelet* cvlet = (*it);
