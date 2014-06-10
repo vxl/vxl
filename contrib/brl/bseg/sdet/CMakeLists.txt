@@ -62,7 +62,9 @@ SET(sdet_sources
     sdet_curve_model.cxx                 sdet_curve_model.h
     sdet_edgel.cxx                       sdet_edgel.h
     sdet_EMD.cxx                         sdet_EMD.h
-
+# Symbolic Edge Linker
+    sdet_symbolic_edge_linker_params.cxx sdet_symbolic_edge_linker_params.h
+    sdet_symbolic_edge_linker.cxx        sdet_symbolic_edge_linker.h
 )
 AUX_SOURCE_DIRECTORY(Templates sdet_sources)
 
