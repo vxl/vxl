@@ -265,7 +265,7 @@ int main(int argc,  char** argv)
         vcl_cout << " contained!: in local: " << i << ", " << ly << ", " << lz << vcl_endl;
         for (int ii = i - fort_rad; ii < i + fort_rad; ii++)
           for (int jj = j - fort_rad; jj < j + fort_rad; jj++) {
-            if (ii >= 0 && jj >= 0 && ii < (unsigned)out_img_label.ni() && jj < (unsigned)out_img_label.nj() && out_img_label(ii,jj) != water_id) {
+            if (ii >= 0 && jj >= 0 && ii < (int)out_img_label.ni() && jj < (int)out_img_label.nj() && out_img_label(ii,jj) != water_id) {
               out_img_label(ii,jj) = fort_id;
               out_class_img(ii,jj) = fort_pixel_color;
             }
@@ -418,7 +418,7 @@ int main(int argc,  char** argv)
     for (psi.reset(); psi.next(); ) {
       int y = psi.scany();
       for (int x = psi.startx(); x <= psi.endx(); ++x) {
-        if (x >= 0 && y >= 0 &&  x < (unsigned)out_class_img.ni() && y < (unsigned)out_class_img.nj())  {
+        if (x >= 0 && y >= 0 &&  x < (int)out_class_img.ni() && y < (int)out_class_img.nj())  {
           if (out_img_label(x,y) == pier_id) {
             pixel_id = pier_id;
             pixel_color = pier_pixel_color;
@@ -435,7 +435,7 @@ int main(int argc,  char** argv)
       for (int x = psi.startx(); x <= psi.endx(); ++x) {
         for (int yy = y-5; yy < y+5; yy++) // enlarge 5 meters
           for (int xx = x-5; xx < x+5; xx++) {
-            if (xx >= 0 && yy >= 0 && xx < (unsigned)out_class_img.ni() && yy < (unsigned)out_class_img.nj()) {
+            if (xx >= 0 && yy >= 0 && xx < (int)out_class_img.ni() && yy < (int)out_class_img.nj()) {
                 out_img_label(xx,yy) = pixel_id;
                 out_class_img(xx,yy) = pixel_color;
               }

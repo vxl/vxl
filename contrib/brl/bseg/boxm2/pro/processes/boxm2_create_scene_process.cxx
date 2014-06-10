@@ -1116,7 +1116,7 @@ bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_po
       double u, v;
       dem_cams[j]->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
       int uu = (int)vcl_floor(u+0.5);  int vv = (int)vcl_floor(v+0.5);
-      if (uu < 0 || vv < 0 || uu >= dem_views[j]->ni() || vv >= dem_views[j]->nj())
+      if (uu < 0 || vv < 0 || uu >= (int)dem_views[j]->ni() || vv >= (int)dem_views[j]->nj())
         continue;
       corners.push_back(vcl_pair<unsigned, vcl_pair<int, int> >(j, vcl_pair<int,int>(uu,vv)));
       break;

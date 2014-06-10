@@ -179,7 +179,7 @@ int main(int argc, char** argv)
 
     // create query
     volm_desc_sptr query = ex_matcher->create_query_desc();
-    vcl_string query_file = out_folder() + "/" + image_name + "_query.svg";
+    vcl_string query_file = out_folder() + "/query_annotation.svg";
     query->visualize(query_file, 2);
 
     // Screen output

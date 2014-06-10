@@ -80,7 +80,7 @@ bool volm_generate_height_map_from_ply_process(bprb_func_process& pro)
         {
           int u = (int)vcl_floor(x+0.5);
           int v = (int)vcl_floor(y+0.5);
-          if (u >= ni || v >= nj || u < 0 || v < 0)
+          if (u >= (int)ni || v >= (int)nj || u < 0 || v < 0)
             continue;
           out_map(u,v) = height;
         }

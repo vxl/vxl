@@ -363,16 +363,16 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
     vil_image_view<float>* y_img = dynamic_cast<vil_image_view<float>*>(y_imgs[img_idx].ptr());
     vil_image_view<float>* z_img = dynamic_cast<vil_image_view<float>*>(z_imgs[img_idx].ptr());
 
-    for (int ix = 0; ix < ni_x; ix++)
-      for (int jx = 0; jx < nj_y; jx++)
+    for (unsigned ix = 0; ix < ni_x; ix++)
+      for (unsigned jx = 0; jx < nj_y; jx++)
         if ( (*out_img_x)(ix,jx) == -10.0f )  (*out_img_x)(ix,jx) = (*x_img)(ix,jx);
 
-    for (int iy = 0; iy < ni_y; iy++)
-      for (int jy = 0; jy < nj_y; jy++)
+    for (unsigned iy = 0; iy < ni_y; iy++)
+      for (unsigned jy = 0; jy < nj_y; jy++)
         if ( (*out_img_y)(iy,jy) == -10.0f )  (*out_img_y)(iy,jy) = (*y_img)(iy,jy);
 
-    for (int iz = 0; iz < ni_z; iz++)
-      for (int jz = 0; jz < nj_z; jz++)
+    for (unsigned iz = 0; iz < ni_z; iz++)
+      for (unsigned jz = 0; jz < nj_z; jz++)
         if ( (*out_img_z)(iz,jz) == -1.0f  )  (*out_img_z)(iz,jz) = (*z_img)(iz,jz);
   }
 
