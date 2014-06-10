@@ -215,8 +215,7 @@ int main(int argc, char** argv)
   }
   fout << '\n';
   vcl_stringstream out_str;
-  if (id() < 10) out_str << "p1b_test1_0" << id();
-  else                 out_str << "p1b_test1_"  << id();
+  out_str << "query_image";
   fout << out_str.str();
   fout.precision(4); fout.width(13); fout.fill(' ');
   fout << test_img_roi[0] << ' ';

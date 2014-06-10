@@ -25,7 +25,7 @@ int main(int argc, char** argv)
   vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg_parse(argc, argv);
 
-  if (out().compare("") == 0 || id() >= 9999 || world_region().compare("") == 0) {
+  if (out().compare("") == 0 || world_region().compare("") == 0) {
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
   test_img_thres.push_back(0.95*max_score_all);
   test_img_thres.push_back(max_score_all);
 
-  vcl_cerr << " test_id = " << id() << ", gt_score = " << gt_score << ", max_score = " << max_score_all << '\n';
+  vcl_cerr << " Among all locations" << gt_score << ", max_score = " << max_score_all << '\n';
   // calculate roi for current valid out_folder
   // cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
   vcl_map<float, vcl_vector<unsigned> > cnt_map;
@@ -183,8 +183,7 @@ int main(int argc, char** argv)
   }
   fout << '\n';
   vcl_stringstream out_str;
-  if (id() < 10) out_str << "p1a_test1_0" << id();
-  else                 out_str << "p1a_test1_"  << id();
+  out_str << "query_image";
   fout << out_str.str();
   fout.precision(4); fout.width(13); fout.fill(' ');
   fout << test_img_roi[0] << ' ';
