@@ -90,6 +90,7 @@ bool boxm2_ocl_update_max_vis_score_process(bprb_func_process& pro)
   t.mark();
   boxm2_ocl_update_max_vis::update_max_vis(scene, device, opencl_cache, cam, ni,nj,mask_img,nearfactor,farfactor);
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  return true;
 }
 
 
@@ -152,6 +153,7 @@ bool boxm2_ocl_update_view_normal_dot_process(bprb_func_process& pro)
   t.mark();
   boxm2_ocl_update_cosine_angle::update_cosine_angle(scene, device, opencl_cache, cam, ni,nj,mask_img,nearfactor,farfactor);
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  return true;
 }
 
 namespace boxm2_ocl_update_surface_density_process_globals
@@ -217,4 +219,5 @@ bool boxm2_ocl_update_surface_density_process(bprb_func_process& pro)
       if(vil_image_view<float> * std_depth_float_img = dynamic_cast<vil_image_view<float> *>(std_depth_img.ptr()) )
             boxm2_ocl_update_surface_density::update_surface_density(scene, device, opencl_cache, cam, ni,nj,*exp_depth_float_img,*std_depth_float_img,nearfactor,farfactor);
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  return true;
 }

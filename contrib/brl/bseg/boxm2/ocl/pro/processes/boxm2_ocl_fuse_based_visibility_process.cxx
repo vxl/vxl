@@ -71,6 +71,7 @@ bool boxm2_ocl_fuse_based_visibility_process(bprb_func_process& pro)
   t.mark();
   boxm2_ocl_fuse_based_visibility::fuse_based_visibility(sceneA,sceneB, device, opencl_cache);
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  return true;
 }
 namespace boxm2_ocl_fuse_based_orientation_process_globals
 {
@@ -114,6 +115,7 @@ bool boxm2_ocl_fuse_based_orientation_process(bprb_func_process& pro)
   t.mark();
   boxm2_ocl_fuse_based_orientation::fuse_based_orientation(sceneA,sceneB, device, opencl_cache);
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  return true;
 }
 namespace boxm2_ocl_fuse_surface_density_process_globals
 {
@@ -157,4 +159,6 @@ bool boxm2_ocl_fuse_surface_density_process(bprb_func_process& pro)
   t.mark();
   boxm2_ocl_fuse_surface_density::fuse_surface_density(sceneA,sceneB, device, opencl_cache);
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  
+  return true;
 }

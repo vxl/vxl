@@ -185,10 +185,16 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
       bool truth = (pairs[i].gt == 255);
       bool ignore= (pairs[i].gt > 0 && pairs[i].gt < 255);
       if(!ignore)
+      {
       if (truth)
-        fn->data_array[pnt]++; // gt=true, class=false => false neg
+      { 
+       fn->data_array[pnt]++; 
+      }// gt=true, class=false => false neg
       else
-        tn->data_array[pnt]++; // gt=false, class=false => true neg
+      {
+        tn->data_array[pnt]++;
+       }
+     }      // gt=false, class=false => true neg
     }
 
     // all classified examples in this loop are positive
