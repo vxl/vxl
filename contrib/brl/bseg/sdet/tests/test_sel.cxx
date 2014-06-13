@@ -1,15 +1,14 @@
 // This is brl/bseg/sdet/tests/test_sel.cxx
 
 #include <testlib/testlib_test.h>
-
-#include <sdet/sdet_curve_model.h>
-#include <sdet/sdet_sel.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
 #include <vcl_vector.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
+#include <vnl/vnl_math.h>
+#include <sdet/sdet_curve_model.h>
+#include <sdet/sdet_sel.h>
 
 //: Test the symbolic edge linker methods
 MAIN( test_sel )
@@ -18,7 +17,7 @@ MAIN( test_sel )
   bool test_passed = true;
 
   //*******************************************************
-  START (" Test dbset_edgel class");
+  START (" Test sdet_edgel class");
   //sdet_edgel constructors
   sdet_edgel* eA = new sdet_edgel(vgl_point_2d<double>(0.0,0.0), 0.0);
   sdet_edgel* eB = new sdet_edgel(vgl_point_2d<double>(1.0,0.0), 0.0);
