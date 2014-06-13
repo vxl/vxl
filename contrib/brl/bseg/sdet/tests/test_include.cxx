@@ -3,7 +3,6 @@
 #include <sdet/sdet_region_edge_sptr.h>
 #include <sdet/sdet_region_sptr.h>
 #include <sdet/sdet_texture_classifier_sptr.h>
-
 #include <sdet/sdet_atmospheric_image_classifier.h>
 #include <sdet/sdet_contour.h>
 #include <sdet/sdet_denoise_mrf.h>
@@ -42,5 +41,11 @@
 #include <sdet/sdet_vrml_display.h>
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
+#include <sdet_edgel.h>
+#include <sdet_edgel_link_graph.h>
+#include <sdet_edgemap.h>
+#include <sdet_sel.h>
+#include <sdet_symbolic_edge_linker.h>
+#include <sdet_symbolic_edge_linker_params.h>
 
 int main() { return 0; }
