@@ -444,6 +444,57 @@ unsigned int vgl_intersection(const vgl_box_2d<Type>& box,
   }
   return nint;
 }
+// return the line segment that lies inside the box. If none, return false.
+template <class T>
+bool vgl_intersection(vgl_box_2d<T> const& box,
+                      vgl_line_segment_2d<T> const& line_seg,
+		      vgl_line_segment_2d<T>& int_line_seg){
+  // check if both segment endpoints are inside the box
+  const vgl_point_2d<T>& p1 = line_seg.point1();
+  const vgl_point_2d<T>& p2 = line_seg.point2();
+  bool p1_in_box = box.contains(p1);
+  bool p2_in_box = box.contains(p2);
+  if(p1_in_box&&p2_in_box){
+    int_line_seg = line_seg;
+    return true;
+  }
+  // form an infinite line
+  vgl_line_2d<T> line(line_seg.a(), line_seg.b(), line_seg.c());
+  vgl_point_2d<T> pia, pib;
+  // if no intersection just return
+  if (!vgl_intersection<T>(box, line, pia, pib))
+    return false;
+
+  // check if intersection points are interior to the line segment
+  bool pia_valid = vgl_lineseg_test_point<T>(pia, line_seg);
+  bool pib_valid = vgl_lineseg_test_point<T>(pib, line_seg);
+  // shouldn't happen but to be complete ...
+  if((!pia_valid)&&(!pib_valid))
+    return false;
+  //if both intersection points are interior to the line segment then
+  //return a segment that spans the box interior
+  if(pia_valid&&pib_valid){
+    int_line_seg.set(pia, pib);
+    return true;
+  }
+  //only one intersection point is valid so form the line segment interior
+  //to the box
+  // find the original segment endpoint inside the box
+  if(p1_in_box){// p1 is inside the box
+    if(pia_valid)
+      int_line_seg.set(p1, pia);
+    else
+      int_line_seg.set(p1, pib);
+    return true;
+  }else{// p2 is inside the box
+    if(pia_valid)
+      int_line_seg.set(p2, pia);
+    else
+      int_line_seg.set(p2, pib);
+    return true;
+  }
+  return false;
+}
 
 //: Return the intersection point of two concurrent lines
 template <class T>
@@ -1061,6 +1112,7 @@ template vcl_vector<vgl_point_2d<T > > vgl_intersection(vcl_vector<vgl_point_2d<
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const&,vcl_vector<vgl_point_3d<T > > const&); \
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const&,vgl_box_3d<T > const&); \
 template bool vgl_intersection(vgl_box_2d<T > const&,vgl_line_2d<T > const&,vgl_point_2d<T >&,vgl_point_2d<T >&); \
+template bool vgl_intersection(vgl_box_2d<T> const&,vgl_line_segment_2d<T> const&, vgl_line_segment_2d<T>& ); \
 template bool vgl_intersection(vgl_box_3d<T > const&,vgl_plane_3d<T > const&); \
 template bool vgl_intersection(vgl_box_3d<T > const&,vgl_infinite_line_3d<T > const&,vgl_point_3d<T >&,vgl_point_3d<T >&);\
 template bool vgl_intersection(vgl_box_3d<T > const&,vgl_ray_3d<T > const&,vgl_point_3d<T >&,vgl_point_3d<T >&)

@@ -48,7 +48,14 @@ bool vgl_intersection(vgl_box_2d<T> const& box,
                       vgl_point_2d<T>& p0,
                       vgl_point_2d<T>& p1);
 
-//: Returns the number of intersections of a line segment with a box, up to two are returned in p0 and p1.
+//: Return true if line intersects box.If so,return the line segment inside box.
+// \relatesalso vgl_line_2d
+template <class T>
+bool vgl_intersection(vgl_box_2d<T> const& box,
+                      vgl_line_segment_2d<T> const& line,
+		      vgl_line_segment_2d<T>& int_line);
+
+//: Returns the number of intersections of a line segment with a box, up to two are returned in p0 and p1.(warning! one intersection could be either p0 or p1)
 // \relatesalso vgl_line_segment_2d
 template <class T>
 unsigned vgl_intersection(vgl_box_2d<T> const& box,
