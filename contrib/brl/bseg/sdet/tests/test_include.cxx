@@ -41,11 +41,11 @@
 #include <sdet/sdet_vrml_display.h>
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
-#include <sdet_edgel.h>
-#include <sdet_edgel_link_graph.h>
-#include <sdet_edgemap.h>
-#include <sdet_sel.h>
-#include <sdet_symbolic_edge_linker.h>
-#include <sdet_symbolic_edge_linker_params.h>
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_edgel_link_graph.h>
+#include <sdet/sdet_edgemap.h>
+#include <sdet/sdet_sel.h>
+#include <sdet/sdet_symbolic_edge_linker.h>
+#include <sdet/sdet_symbolic_edge_linker_params.h>
 
 int main() { return 0; }
