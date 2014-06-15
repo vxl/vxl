@@ -1067,7 +1067,7 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
   unsigned ns = poly.num_sheets();
   for (unsigned s = 0; s<ns; ++s) {
     vcl_vector<vgl_point_2d<T> > sh = poly[s];
-    unsigned nv = sh.size();
+    unsigned nv = static_cast<unsigned>(sh.size());
     for (unsigned i = 0; i<nv; ++i) {
       unsigned next = (i+1)%nv;
       vgl_point_2d<T> pa = sh[i];

@@ -93,9 +93,9 @@ bool vgl_lineseg_test_point(vgl_point_2d<T> const& p,
     x2 = p2.x(), y2 = p2.y(),
     xp = p.x(),  yp = p.y();
   // compute squared distances
-  T d1p = (xp-x1)*(xp-x1) + (yp-y1)*(yp-y1);
-  T d2p = (xp-x2)*(xp-x2) + (yp-y2)*(yp-y2);
-  T d12 = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+  double d1p = static_cast<double>((xp-x1)*(xp-x1) + (yp-y1)*(yp-y1));
+  double d2p = static_cast<double>((xp-x2)*(xp-x2) + (yp-y2)*(yp-y2));
+  double d12 = static_cast<double>((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
   double diff = vcl_sqrt(d1p) + vcl_sqrt(d2p) - vcl_sqrt(d12);
   // diff is always >= 0 (triangle inequality)
   return diff <= vgl_tolerance<double>::position;
