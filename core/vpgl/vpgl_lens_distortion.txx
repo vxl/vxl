@@ -1,10 +1,10 @@
-// This is bbas/bpgl/bpgl_lens_distortion.txx
-#ifndef bpgl_lens_distortion_txx_
-#define bpgl_lens_distortion_txx_
+// This is core/vpgl/vpgl_lens_distortion.txx
+#ifndef vpgl_lens_distortion_txx_
+#define vpgl_lens_distortion_txx_
 //:
 // \file
 
-#include "bpgl_lens_distortion.h"
+#include "vpgl_lens_distortion.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #if 0
@@ -17,7 +17,7 @@
 // if \p init is NULL then \p point is used as the initial guess
 template <class T>
 vgl_homg_point_2d<T>
-bpgl_lens_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
+vpgl_lens_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
                                     const vgl_homg_point_2d<T>* init ) const
 {
 #if 0 // Not yet implemented ...
@@ -38,8 +38,8 @@ bpgl_lens_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
 }
 
 // Code for easy instantiation.
-#undef BPGL_LENS_DISTORTION_INSTANTIATE
-#define BPGL_LENS_DISTORTION_INSTANTIATE(T) \
-template class bpgl_lens_distortion<T >
+#undef vpgl_LENS_DISTORTION_INSTANTIATE
+#define vpgl_LENS_DISTORTION_INSTANTIATE(T) \
+template class vpgl_lens_distortion<T >
 
-#endif // bpgl_lens_distortion_txx_
+#endif // vpgl_lens_distortion_txx_

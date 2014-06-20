@@ -13,6 +13,7 @@
 #include <vpgl/algo/vpgl_fm_compute_7_point.h>
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
 #include <vpgl/algo/vpgl_invmap_cost_function.h>
+#include <vpgl/algo/vpgl_lens_warp_mapper.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vpgl/algo/vpgl_rational_adjust.h>

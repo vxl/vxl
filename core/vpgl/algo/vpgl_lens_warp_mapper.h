@@ -1,13 +1,13 @@
-// This is bbas/bpgl/algo/bpgl_lens_warp_mapper.h
-#ifndef bpgl_lens_warp_mapper_h_
-#define bpgl_lens_warp_mapper_h_
+// This is core/vpgl/algo/vpgl_lens_warp_mapper.h
+#ifndef vpgl_lens_warp_mapper_h_
+#define vpgl_lens_warp_mapper_h_
 //:
 // \file
 // \brief A lens distortion adaptor for vil_warp
 // \author Matt Leotta
 // \date August 22, 2005
 
-#include <bpgl/bpgl_lens_distortion.h>
+#include <vpgl/vpgl_lens_distortion.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -16,11 +16,11 @@
 #include <vcl_cassert.h>
 
 //: Compute a bounding box in the distorted space for an existing box
-// This is computed by sampling alone the box boundary edges
-// \note in general this is not the inverse of bpgl_lens_unwarp_bounds
+// This is computed by sampling along the box boundary edges
+// \note in general this is not the inverse of vpgl_lens_unwarp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
-bpgl_lens_warp_bounds(const bpgl_lens_distortion<DataT>& lens,
+vpgl_lens_warp_bounds(const vpgl_lens_distortion<DataT>& lens,
                       const vgl_box_2d<BoxT>& box,
                       BoxT step_size = BoxT(1))
 {
@@ -41,11 +41,11 @@ bpgl_lens_warp_bounds(const bpgl_lens_distortion<DataT>& lens,
 }
 
 //: Compute a bounding box for an existing box in the distorted space
-// This is computed by sampling alone the box boundary edges
-// \note in general this is not the inverse of bpgl_lens_warp_bounds
+// This is computed by sampling along the box boundary edges
+// \note in general this is not the inverse of vpgl_lens_warp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
-bpgl_lens_unwarp_bounds(const bpgl_lens_distortion<DataT>& lens,
+vpgl_lens_unwarp_bounds(const vpgl_lens_distortion<DataT>& lens,
                         const vgl_box_2d<BoxT>& box,
                         BoxT step_size = BoxT(1))
 {
@@ -72,16 +72,16 @@ bpgl_lens_unwarp_bounds(const bpgl_lens_distortion<DataT>& lens,
 // lie in the resulting image
 template <class sType, class dType, class T, class InterpFunctor>
 vil_image_view<dType>
-bpgl_lens_warp_resize(const vil_image_view<sType>& in,
+vpgl_lens_warp_resize(const vil_image_view<sType>& in,
                       dType /*out_dummy*/,
-                      bpgl_lens_distortion<T>& ld,
+                      vpgl_lens_distortion<T>& ld,
                       InterpFunctor interp)
 {
-  vgl_box_2d<int> bounds = bpgl_lens_warp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
+  vgl_box_2d<int> bounds = vpgl_lens_warp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
   ld.set_translation( offset, true );
   vil_image_view<dType> out(bounds.width(), bounds.height(), in.nplanes());
-  bpgl_lens_warp(in, out, ld, interp);
+  vpgl_lens_warp(in, out, ld, interp);
   return out;
 }
 
@@ -90,9 +90,9 @@ bpgl_lens_warp_resize(const vil_image_view<sType>& in,
 // The algorithm uses the result at the previous pixel as an initial guess
 // which should reduce iterations until convergence
 template <class sType, class dType, class T, class InterpFunctor>
-void bpgl_lens_warp(const vil_image_view<sType>& in,
+void vpgl_lens_warp(const vil_image_view<sType>& in,
                     vil_image_view<dType>& out,
-                    const bpgl_lens_distortion<T>& ld,
+                    const vpgl_lens_distortion<T>& ld,
                     InterpFunctor interp)
 {
   unsigned const out_w = out.ni();
@@ -127,25 +127,25 @@ void bpgl_lens_warp(const vil_image_view<sType>& in,
 // lie in the resulting image
 template <class sType, class dType, class T, class InterpFunctor>
 vil_image_view<dType>
-bpgl_lens_unwarp_resize(const vil_image_view<sType>& in,
+vpgl_lens_unwarp_resize(const vil_image_view<sType>& in,
                         dType /*out_dummy*/,
-                        bpgl_lens_distortion<T>& ld,
+                        vpgl_lens_distortion<T>& ld,
                         InterpFunctor interp)
 {
-  vgl_box_2d<int> bounds = bpgl_lens_unwarp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
+  vgl_box_2d<int> bounds = vpgl_lens_unwarp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
   ld.set_translation( offset, false );
   vil_image_view<dType> out(bounds.width(), bounds.height(), in.nplanes());
-  bpgl_lens_unwarp(in, out, ld, interp);
+  vpgl_lens_unwarp(in, out, ld, interp);
   return out;
 }
 
 
 //: A version of vil_warp specialized for lens unwarping
 template <class sType, class dType, class T, class InterpFunctor>
-void bpgl_lens_unwarp(const vil_image_view<sType>& in,
+void vpgl_lens_unwarp(const vil_image_view<sType>& in,
                       vil_image_view<dType>& out,
-                      const bpgl_lens_distortion<T>& ld,
+                      const vpgl_lens_distortion<T>& ld,
                       InterpFunctor interp)
 {
   unsigned const out_w = out.ni();
@@ -166,4 +166,4 @@ void bpgl_lens_unwarp(const vil_image_view<sType>& in,
   }
 }
 
-#endif // bpgl_lens_warp_mapper_h_
+#endif // vpgl_lens_warp_mapper_h_

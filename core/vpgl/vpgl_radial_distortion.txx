@@ -1,22 +1,21 @@
-// This is bbas/bpgl/bpgl_radial_distortion.txx
-#ifndef bpgl_radial_distortion_txx_
-#define bpgl_radial_distortion_txx_
+// This is core/vpgl/vpgl_radial_distortion.txx
+#ifndef vpgl_radial_distortion_txx_
+#define vpgl_radial_distortion_txx_
 //:
 // \file
 
-#include "bpgl_radial_distortion.h"
+#include "vpgl_radial_distortion.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 
 #include <vcl_cmath.h>
-// not used? #include <vcl_iostream.h>
 #include <vcl_limits.h>
 
 //: Distort a projected point on the image plane
 //  Calls the pure virtual radial distortion function
 template <class T>
 vgl_homg_point_2d<T>
-bpgl_radial_distortion<T>::distort( const vgl_homg_point_2d<T>& point ) const
+vpgl_radial_distortion<T>::distort( const vgl_homg_point_2d<T>& point ) const
 {
   vgl_vector_2d<T> r = vgl_point_2d<T>(point) - center_;
   T scale = distort_radius(r.length());
@@ -30,7 +29,7 @@ bpgl_radial_distortion<T>::distort( const vgl_homg_point_2d<T>& point ) const
 // calls the radial undistortion function
 template <class T>
 vgl_homg_point_2d<T>
-bpgl_radial_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
+vpgl_radial_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
                                        const vgl_homg_point_2d<T>* init ) const
 {
   vgl_vector_2d<T> r = vgl_point_2d<T>(point) - distorted_center_;
@@ -48,7 +47,7 @@ bpgl_radial_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
 // if \p init is NULL then \p radius is used as the initial guess
 template <class T>
 T
-bpgl_radial_distortion<T>::undistort_radius( T radius, const T* init) const
+vpgl_radial_distortion<T>::undistort_radius( T radius, const T* init) const
 {
   if (radius == T(0))
     return T(1);
@@ -84,8 +83,8 @@ bpgl_radial_distortion<T>::undistort_radius( T radius, const T* init) const
 }
 
 // Code for easy instantiation.
-#undef BPGL_RADIAL_DISTORTION_INSTANTIATE
-#define BPGL_RADIAL_DISTORTION_INSTANTIATE(T) \
-template class bpgl_radial_distortion<T >
+#undef vpgl_RADIAL_DISTORTION_INSTANTIATE
+#define vpgl_RADIAL_DISTORTION_INSTANTIATE(T) \
+template class vpgl_radial_distortion<T >
 
-#endif // bpgl_radial_distortion_txx_
+#endif // vpgl_radial_distortion_txx_

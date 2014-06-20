@@ -7,6 +7,7 @@ ADD_EXECUTABLE( vpgl_algo_test_all
   test_fm_compute.cxx
   test_camera_compute.cxx
   test_camera_convert.cxx
+  test_lens_warp_mapper.cxx
   test_backproject.cxx
   test_ray.cxx
   test_ray_intersect.cxx
@@ -29,6 +30,7 @@ ADD_TEST( vpgl_algo_test_optimize_camera             ${EXECUTABLE_OUTPUT_PATH}/v
 ADD_TEST( vpgl_algo_test_fm_compute                  ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_fm_compute )
 ADD_TEST( vpgl_algo_test_rational_adjust_onept ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_rational_adjust_onept )
 ADD_TEST( vpgl_algo_test_rational_adjust         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_rational_adjust )
+ADD_TEST( vpgl_algo_test_lens_warp_mapper            ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_lens_warp_mapper )
 ADD_TEST( vpgl_algo_test_backproject                 ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_backproject )
 ADD_TEST( vpgl_algo_test_ray                         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ray )
 ADD_TEST( vpgl_algo_test_ray_intersect                         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ray_intersect )

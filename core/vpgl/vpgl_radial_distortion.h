@@ -1,6 +1,6 @@
-// This is bbas/bpgl/bpgl_radial_distortion.h
-#ifndef bpgl_radial_distortion_h_
-#define bpgl_radial_distortion_h_
+// This is core/vpgl/vpgl_radial_distortion.h
+#ifndef vpgl_radial_distortion_h_
+#define vpgl_radial_distortion_h_
 //:
 // \file
 // \brief An abstract base class for radial lens distortions.
@@ -12,22 +12,22 @@
 //   though a closed form solution for the inverse may not exist in general.
 //   A default iterative solver is implemented to solve this numerically.
 
-#include "bpgl_lens_distortion.h"
+#include "vpgl_lens_distortion.h"
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 
 //: A base class for radial lens distortions
 template <class T>
-class bpgl_radial_distortion : public bpgl_lens_distortion<T>
+class vpgl_radial_distortion : public vpgl_lens_distortion<T>
 {
  public:
   //: Constructor
-  bpgl_radial_distortion(const vgl_point_2d<T>& center, bool has_deriv=false)
+  vpgl_radial_distortion(const vgl_point_2d<T>& center, bool has_deriv=false)
    : center_(center), distorted_center_(center), has_derivative_(has_deriv) {}
 
   //: Constructor
-  bpgl_radial_distortion(const vgl_point_2d<T>& center,
+  vpgl_radial_distortion(const vgl_point_2d<T>& center,
                          const vgl_point_2d<T>& new_center, bool has_deriv=false)
    : center_(center), distorted_center_(new_center), has_derivative_(has_deriv) {}
 
@@ -95,4 +95,4 @@ class bpgl_radial_distortion : public bpgl_lens_distortion<T>
   bool has_derivative_;
 };
 
-#endif // bpgl_radial_distortion_h_
+#endif // vpgl_radial_distortion_h_

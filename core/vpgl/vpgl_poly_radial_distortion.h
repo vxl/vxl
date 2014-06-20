@@ -1,6 +1,6 @@
-// This is bbas/bpgl/bpgl_poly_radial_distortion.h
-#ifndef bpgl_poly_radial_distortion_h_
-#define bpgl_poly_radial_distortion_h_
+// This is core/vpgl/vpgl_poly_radial_distortion.h
+#ifndef vpgl_poly_radial_distortion_h_
+#define vpgl_poly_radial_distortion_h_
 //:
 // \file
 // \brief A class for polynomial radial lens distortions.
@@ -12,45 +12,45 @@
 //   bijective, though a closed form solution for the inverse may not exist in general.
 //   A default iterative solver is implemented to solve
 
-#include "bpgl_radial_distortion.h"
+#include "vpgl_radial_distortion.h"
 #include <vgl/vgl_point_2d.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 
 //: A class for nth order polynomial radial lens distortion
 template <class T, int n>
-class bpgl_poly_radial_distortion : public bpgl_radial_distortion<T>
+class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
 {
  public:
   //: Constructor
-  bpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center, const T* k)
-   : bpgl_radial_distortion<T>(center,true)
+  vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center, const T* k)
+   : vpgl_radial_distortion<T>(center,true)
   {
     set_coefficients(k);
   }
 
   //: Constructor
-  bpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
+  vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
                                    const vgl_point_2d<T>& distorted_center,
                                    const T* k)
-   : bpgl_radial_distortion<T>(center,distorted_center,true)
+   : vpgl_radial_distortion<T>(center,distorted_center,true)
   {
     set_coefficients(k);
   }
 
   //: Constructor
-  bpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
+  vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
                                    const vcl_vector<T>& k)
-   : bpgl_radial_distortion<T>(center)
+   : vpgl_radial_distortion<T>(center)
   {
     set_coefficients(k);
   }
 
   //: Constructor
-  bpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
+  vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
                                    const vgl_point_2d<T>& distorted_center,
                                    const vcl_vector<T>& k)
-   : bpgl_radial_distortion<T>(center, distorted_center)
+   : vpgl_radial_distortion<T>(center, distorted_center)
   {
     set_coefficients(k);
   }
@@ -83,4 +83,4 @@ class bpgl_poly_radial_distortion : public bpgl_radial_distortion<T>
 };
 
 
-#endif // bpgl_poly_radial_distortion_h_
+#endif // vpgl_poly_radial_distortion_h_
