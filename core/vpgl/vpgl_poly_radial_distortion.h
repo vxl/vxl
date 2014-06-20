@@ -41,7 +41,7 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
   //: Constructor
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
                                    const vcl_vector<T>& k)
-   : vpgl_radial_distortion<T>(center)
+   : vpgl_radial_distortion<T>(center,true)
   {
     set_coefficients(k);
   }
@@ -50,7 +50,7 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
                                    const vgl_point_2d<T>& distorted_center,
                                    const vcl_vector<T>& k)
-   : vpgl_radial_distortion<T>(center, distorted_center)
+   : vpgl_radial_distortion<T>(center, distorted_center,true)
   {
     set_coefficients(k);
   }
@@ -65,11 +65,26 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
 
   void set_coefficients(const T* k)
   {
+    if ( k == NULL ) return;
     const T* kptr = k;
     T* coptr = coefficients_;
     for (unsigned int i=0; i<n; ++i, ++kptr, ++coptr)
       *coptr = *kptr;
   };
+    
+  //: Read-only coefficient accessor
+  T coefficient( unsigned int i ) const
+  {
+    assert( i < n );
+    return this->coefficients_[i];
+  }
+	
+  //: Read-write coefficient accessor
+  T& coefficient( unsigned int i )
+  {
+    assert( i < n );
+    return this->coefficients_[i];
+  }
 
   //: Distort a radial length
   virtual T distort_radius( T radius ) const;
