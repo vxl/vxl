@@ -32,25 +32,25 @@ void volm_satellite_resources::add_resource(vcl_string name)
   res.name_ = vul_file::strip_directory(name);
   res.name_ = vul_file::strip_extension(res.name_);
   res.meta_ = new brad_image_metadata(name, "");
-#if 1
-  // first check if we already have the exact same image, (unfortunately there are resources with different name but taken at exactly same time, so same image)
-  for (unsigned i = 0; i < resources_.size(); i++) {
-    if (resources_[i].meta_->satellite_name_.compare(res.meta_->satellite_name_) == 0 &&
-        resources_[i].meta_->band_.compare(res.meta_->band_) == 0 && 
-        resources_[i].meta_->same_time(*(res.meta_))) {
-        vcl_cout << "!!!!!!!!!!!!! cannot add: " << res.name_ << " with time: "; res.meta_->print_time();
-        vcl_cout << "already exists: \n" << resources_[i].name_ << " with time: "; resources_[i].meta_->print_time(); 
-        vcl_cout << " band of resources: " <<  resources_[i].meta_->band_ << " band trying to add: " << res.meta_->band_ << vcl_endl;
-        return;
-      }
+  if (eliminate_same_) {
+    // first check if we already have the exact same image, (unfortunately there are resources with different name but taken at exactly same time, so same image)
+    for (unsigned i = 0; i < resources_.size(); i++) {
+      if (resources_[i].meta_->satellite_name_.compare(res.meta_->satellite_name_) == 0 &&
+          resources_[i].meta_->band_.compare(res.meta_->band_) == 0 && 
+          resources_[i].meta_->same_time(*(res.meta_))) {
+          vcl_cout << "!!!!!!!!!!!!! cannot add: " << res.name_ << " with time: "; res.meta_->print_time();
+          vcl_cout << "already exists: \n" << resources_[i].name_ << " with time: "; resources_[i].meta_->print_time(); 
+          vcl_cout << " band of resources: " <<  resources_[i].meta_->band_ << " band trying to add: " << res.meta_->band_ << vcl_endl;
+          return;
+        }
+    }
   }
-#endif
   if (res.meta_->gsd_ > 0)  // if there are parsing problems, gsd is negative
     resources_.push_back(res);
 }
 
 //: x is lon and y is lat in the bbox, construct bbox with min point to be lower left and max to be upper right and as axis aligned with North-East
-volm_satellite_resources::volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size) : min_size_(min_size), bbox_(bbox)
+volm_satellite_resources::volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size, bool eliminate_same) : min_size_(min_size), bbox_(bbox), eliminate_same_(eliminate_same)
 { 
   this->construct_tree();
 }

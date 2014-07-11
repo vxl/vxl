@@ -44,7 +44,7 @@ class volm_satellite_resources : public vbl_ref_count
     volm_satellite_resources() {}
 
     //: x is lon and y is lat in the bbox, construct bbox with min point to be lower left and max to be upper right and as axis aligned with North-East
-    volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size = 1.0);
+    volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size = 1.0, bool eliminate_same = false);
     
     //: traverse the given path recursively and add each satellite resource
     void add_path(vcl_string path);
@@ -89,6 +89,7 @@ protected:
     volm_geo_index2_node_sptr root_;
     double min_size_;
     vgl_box_2d<double> bbox_;
+    bool eliminate_same_;
 
 };
 

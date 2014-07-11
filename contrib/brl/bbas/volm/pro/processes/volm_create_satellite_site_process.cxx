@@ -21,9 +21,10 @@
 bool volm_create_satellite_resources_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(2);
+  vcl_vector<vcl_string> input_types_(3);
   input_types_[0] = "vcl_string";      // polygon file (kml) of ROI
   input_types_[1] = "float";      // polygon file (kml) of ROI
+  input_types_[2] = "bool";    // if true: eliminate the images which have different names but 'same' extent and 'same' collection time up to seconds
   
   if (!pro.set_input_types(input_types_))
     return false;
@@ -45,6 +46,7 @@ bool volm_create_satellite_resources_process(bprb_func_process& pro)
   //get the inputs
   vcl_string poly_file = pro.get_input<vcl_string>(0);
   float leaf_size = pro.get_input<float>(1);
+  bool eliminate_same = pro.get_input<bool>(2);
 
   // find the bbox of the polygon
   vgl_polygon<double> poly = bkml_parser::parse_polygon(poly_file);
@@ -57,7 +59,7 @@ bool volm_create_satellite_resources_process(bprb_func_process& pro)
   }
   vcl_cout << "bbox of ROI: " << bbox << vcl_endl;
 
-  volm_satellite_resources_sptr res = new volm_satellite_resources(bbox, leaf_size);
+  volm_satellite_resources_sptr res = new volm_satellite_resources(bbox, leaf_size,eliminate_same);
   pro.set_output_val<volm_satellite_resources_sptr>(0, res);
 
   return true;
