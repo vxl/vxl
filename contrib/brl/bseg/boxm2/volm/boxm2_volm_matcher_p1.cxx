@@ -7,7 +7,6 @@
 
 #define GBYTE 1073741824
 
-
 boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_camera_space_sptr const& cam_space,
                                              volm_query_sptr const& query,
                                              vcl_vector<volm_geo_index_node_sptr> const& leaves,
@@ -612,7 +611,8 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
       vgl_point_3d<double> h_pt;
       while (cnt < n_ind && leaves_[li]->hyps_->get_next(0,1,h_pt) ) {
         if (is_candidate_) {
-          if (cand_poly_.contains(h_pt.x(), h_pt.y())) {  // having candidate list and current hypo is inside it --> accept
+          //if (cand_poly_.contains(h_pt.x(), h_pt.y())) {  // having candidate list and current hypo is inside it --> accept
+          if (this->inside_candidate(cand_poly_, h_pt.x(), h_pt.y())) {
             unsigned char* values = index_buff + cnt * layer_size;
             unsigned char* values_ori = index_orient_buff + cnt * layer_size;
             unsigned char* values_lnd = index_land_buff + cnt * layer_size;
@@ -1978,4 +1978,17 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
     }
   }
   return true;
+}
+
+bool boxm2_volm_matcher_p1::inside_candidate(vgl_polygon<double> const& cand_poly, double const& ptx, double const& pty)
+{
+  // when sheets overlap, the poly.contain method may return false for pts located inside the overlapped region
+  // this function will returns true if the given point is inside any single sheet of the polygon
+  unsigned num_sheet = cand_poly.num_sheets();
+  for (unsigned i = 0; i < num_sheet; i++) {
+    vgl_polygon<double> single_sheet(cand_poly[i]);
+    if (single_sheet.contains(ptx, pty))
+      return true;
+  }
+  return false;
 }

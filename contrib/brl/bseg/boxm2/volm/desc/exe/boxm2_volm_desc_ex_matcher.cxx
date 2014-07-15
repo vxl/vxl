@@ -146,7 +146,7 @@ int main(int argc, char** argv)
     else if (world_region.compare("Coast")== 0)       tiles = volm_tile::generate_p1_wr2_tiles();
     else if (world_region.compare("Desert")== 0)      tiles = volm_tile::generate_p1_wr1_tiles();
     else {
-      err_log << "ERROR: unknown ROI region: " << world_region << ", check tag xml.  Available regions are: Chile, India, Jordan, Philippines, Taiwan\n";
+      err_log << "ERROR: unknown ROI region: " << world_region << ", check tag xml.  Available regions are: Coast, Desert, Chile, India, Jordan, Philippines, Taiwan\n";
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
@@ -371,7 +371,7 @@ int main(int argc, char** argv)
       for (unsigned i = 0; i < weights.size(); i++) {
         vcl_cout << " \t\t" << weights[i].w_name_ << " " << weights[i].w_obj_ << vcl_endl;
       }
-      err_log << " ERROR: number of weight parameters is different from labelled depth_map_region objects\n";
+      err_log << " ERROR: number of weight parameters is different from labeled depth_map_region objects\n";
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
@@ -439,7 +439,7 @@ int main(int argc, char** argv)
 
     // create query
     volm_desc_sptr query = ex_matcher->create_query_desc();
-    vcl_string query_file = out_folder() + "/" + image_name.str() + "_query.svg";
+    vcl_string query_file = out_folder() + "/" + "query_annotation.svg";
     query->visualize(query_file, 2);
 
     vcl_cout << " query = ";

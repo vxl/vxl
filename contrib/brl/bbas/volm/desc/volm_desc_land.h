@@ -19,7 +19,7 @@ class volm_desc_land : public volm_desc
 {
 public:
   // Constructor
-  volm_desc_land(int land_type_id);
+  volm_desc_land(int land_type_id, vcl_string const& id_type = "NLCD");
 
   // Constructor for the query
   volm_desc_land(vcl_string& filename);

@@ -92,6 +92,12 @@ bool volm_desc_indexer::index(float buffer_capacity, int min_leaf_id, int max_le
       vcl_vector<unsigned char> values;
       this->extract(h_pt.y(), h_pt.x(), h_pt.z(), values);
       ind->add_to_index(values);
+#if 0
+      vcl_cout << "for location: " << h_pt << ", index is:\n";
+      for (vcl_vector<unsigned char>::iterator vit = values.begin();  vit != values.end(); ++vit)
+        vcl_cout << (int)(*vit) << ' ';
+      vcl_cout << '\n';
+#endif
       ++indexed_cnt;
       if (indexed_cnt%1000 == 0) vcl_cerr << indexed_cnt << '.';
     }

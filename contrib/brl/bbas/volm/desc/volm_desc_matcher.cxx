@@ -63,12 +63,12 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
       ind->get_next(values);
       
       volm_desc_sptr index_desc = new volm_desc(values);
-      
-      //vcl_cout << " location: " << h_pt << vcl_endl;
-      //vcl_cout << "\t: ";
-      //index_desc->print();
-      //vcl_cout << vcl_endl;
-
+#if 0
+      vcl_cout << " location: " << h_pt << vcl_endl;
+      vcl_cout << "\t: ";
+      index_desc->print();
+      vcl_cout << vcl_endl;
+#endif
       // calculate score which measures the similarity of the query and index at current location
       float max_score = 0;
       max_score = this->score(query, index_desc);
@@ -320,7 +320,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
   vcl_cout << " create candidate list kml" << vcl_endl;
   // write the candidate list
   vcl_stringstream kml_name;
-  kml_name << query_name << ".kml";
+  kml_name << query_name;
   vcl_string cam_kml = cand_root + "/" + kml_name.str() + "-CANDIDATE.kml";
   vcl_ofstream ofs_kml(cam_kml.c_str());
 

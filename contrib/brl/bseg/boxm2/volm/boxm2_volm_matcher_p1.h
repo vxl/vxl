@@ -202,6 +202,8 @@ class boxm2_volm_matcher_p1
   bool compile_kernel(vcl_vector<bocl_kernel*>& vec_kernels);
   //: create queue
   bool create_queue();
+  //: check whether a given point is inside the candidate polygon
+  bool inside_candidate(vgl_polygon<double> const& poly, double const& x, double const& y);
 
 #if 0
   //: kernel execution function

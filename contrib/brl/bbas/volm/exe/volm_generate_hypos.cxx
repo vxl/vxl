@@ -1110,6 +1110,19 @@ int main(int argc,  char** argv)
                       leaves[l_idx]->hyps_->add(lat, lon, z);
                   }
                 }
+                else if (region_name() == "all") {  // generate constant post locations everywhere
+                  double u, v;
+                  lidar_info.cam->global_to_img(lon,lat,0.0,u,v);
+                  int ii = (int)vcl_floor(u+0.5);
+                  int jj = (int)vcl_floor(v+0.5);
+                  if (lidar_info.valid_pixel(ii,jj)) {
+                    vil_image_view<float> img(lidar_info.img_r);
+                    float z = img(ii,jj);
+                    unsigned id;
+                    if (z > 0 && !(leaves[l_idx]->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
+                      leaves[l_idx]->hyps_->add(lat, lon, z);
+                  }
+                }
               }
             }
           }

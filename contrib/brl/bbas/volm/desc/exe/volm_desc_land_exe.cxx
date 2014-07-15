@@ -23,9 +23,10 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> category_file("-cat", "category file that contains one line for the land type of the camera for the query ", "");
   vul_arg<vcl_string> category_gt_file("-cat_gt", "category gt file of multiple images, use image id to get gt loc of this one ", "");
   vul_arg<int> img_id("-id", "query image id in the category gt file, starts from 0", 1000);
-  vul_arg<unsigned> world_id("-world", "world id of different ROI",100);
+  vul_arg<vcl_string> world_str("-world", "world name, can be desert, coast, Chile, India, Jordan, Philippine, Taiwan", "");
   vul_arg<vcl_string> out_folder("-out", "output folder to save index or if matching results", "");
   vul_arg<vcl_string> desc_index_folder("-desc", "folder to read the descriptor index of the tile", "");
+  vul_arg<vcl_string> land_name("-land", "land id for test query image", "");
   vul_arg<bool> save_images("-save", "save out images or not", false);
   
   // PARAMS for indexing
@@ -45,12 +46,20 @@ int main(int argc,  char** argv)
   if (match()) {  // run the matcher
     
     vcl_vector<volm_tile> tiles;
-    if (world_id() == 1)      tiles = volm_tile::generate_p1b_wr1_tiles();
-    else if (world_id() == 2) tiles = volm_tile::generate_p1b_wr2_tiles();
-    else if (world_id() == 3) tiles = volm_tile::generate_p1b_wr3_tiles();
-    else if (world_id() == 4) tiles = volm_tile::generate_p1b_wr4_tiles();
-    else if (world_id() == 5) tiles = volm_tile::generate_p1b_wr5_tiles();
+
+    if (world_str().compare("Chile")==0)             tiles = volm_tile::generate_p1b_wr1_tiles();
+    else if (world_str().compare("India")==0)        tiles = volm_tile::generate_p1b_wr2_tiles();
+    else if (world_str().compare("Jordan")==0)       tiles = volm_tile::generate_p1b_wr3_tiles();
+    else if (world_str().compare("Philippines")==0)  tiles = volm_tile::generate_p1b_wr4_tiles();
+    else if (world_str().compare("Taiwan")== 0)      tiles = volm_tile::generate_p1b_wr5_tiles();
+    else if (world_str().compare("Coast")== 0)       tiles = volm_tile::generate_p1_wr2_tiles();
+    else if (world_str().compare("Desert")== 0)      tiles = volm_tile::generate_p1_wr1_tiles();
     else {
+      vcl_cout << "ERROR: unknown ROI region: " << world_str() << ".  Available regions are: Coast, Desert, Chile, India, Jordan, Philippines, Taiwan\n";
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    if (tile_id() >= tiles.size()) {
+      vcl_cout << "ERROR: unknown tile id " << tile_id() << " for ROI region: " << world_str() << "!\n";
       return volm_io::EXE_ARGUMENT_ERROR;
     }
 
@@ -95,24 +104,24 @@ int main(int argc,  char** argv)
       vcl_cerr << "query image id: " << img_id() << " cannot be found in the gt loc file: " << category_gt_file() << "!\n";
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    vcl_cout << "will use the gt loc of the image " << img_id() << " which is: " << query_img_info[img_info_id].first.x() << " " << query_img_info[img_info_id].first.y() << " " << query_img_info[img_info_id].first.z() << "\n";
-  
-    
-    // create the query descriptor    
     volm_desc_matcher_sptr m = new volm_desc_land_matcher(NLCD_folder(), query_img_info[img_info_id].first);
-    volm_desc_sptr query = m->create_query_desc();  // land matcher overwrites this method and uses the gt location to fetch the land type from NLCD images
-    query->print();
-
-    double thres = 0.5;
-    
-
-    if (tile_id() == 10) { // we know this one is empty : TODO: remove hard code
-      m->create_empty_prob_map(out_folder(), tile_id(), tiles[tile_id()]);
-      m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, thres); 
-      volm_io::write_status(out_folder(), volm_io::SUCCESS);
-      vcl_cout << "returning SUCCESS!\n";
-      return volm_io::SUCCESS;
+    // create the query descriptor    
+    volm_desc_sptr query;
+    if (land_name().compare("") != 0 && volm_osm_category_io::volm_land_table_name.find(land_name()) == volm_osm_category_io::volm_land_table_name.end()) {
+      // create query descriptor based on NLCD
+      query = m->create_query_desc();
+      vcl_cout << "will use the gt loc of the image " << img_id() 
+               << " which is: " << query_img_info[img_info_id].first.x()
+               << " " << query_img_info[img_info_id].first.y() << " " << query_img_info[img_info_id].first.z() << "\n";
     }
+    else {
+      // create the query descriptor based on given land category
+      unsigned char land_id = volm_osm_category_io::volm_land_table_name[land_name()].id_;
+      query = new volm_desc_land((int)land_id, "volm");
+    }
+    vcl_cout <<"create query:\n";
+    query->print();
+    double thres = 0.5;
 
     m->matcher(query, geo_hypo_folder(), desc_index_folder(), 1.0, tile_id());
     m->write_out(out_folder(), tile_id());

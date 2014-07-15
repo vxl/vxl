@@ -12,23 +12,31 @@ unsigned volm_desc_land::n_bins = obtain_bin_size();
 #endif
 
 // Constructor - returns a descriptor with a histogram of all bins 0 if it cannot find the land type, e.g. pass -1 to get such a histogram
-volm_desc_land::volm_desc_land(int land_type_id) 
+volm_desc_land::volm_desc_land(int land_type_id, vcl_string const& id_type) 
 {
   name_ = "volm_desc_land";
   nbins_ = volm_osm_category_io::volm_land_table.size();
   h_.resize(nbins_, (unsigned char)0);
-
-  if (land_type_id > 0) {
-    // current land_type_id is from geo cover, using volm_osm_category_io 
-    vcl_map<int, volm_land_layer>::iterator mit = volm_osm_category_io::geo_land_table.find(land_type_id);
-    if (mit != volm_osm_category_io::geo_land_table.end())
-      h_[mit->second.id_] = 1;
+  if (land_type_id > 0) {  // we don't want to consider invalid = 0 as one of the land types and leave the histogram as all zeros
+    if (id_type.compare("geo_cover") == 0) {
+      // current land_type_id is from geo cover, using volm_osm_category_io  (for phase1b)
+      vcl_map<int, volm_land_layer>::iterator mit = volm_osm_category_io::geo_land_table.find(land_type_id);
+      if (mit != volm_osm_category_io::geo_land_table.end())
+        h_[mit->second.id_] = 1;
+    }
+    else if (id_type.compare("NLCD") == 0) {
+      // use NLCD as input data
+      vcl_map<int, volm_land_layer>::iterator mit = volm_osm_category_io::nlcd_land_table.find(land_type_id);
+      if (mit != volm_osm_category_io::nlcd_land_table.end())
+        h_[mit->second.id_] = 1;
+    }
+    else if (id_type.compare("volm") == 0) {
+      // input land_type_id is the id defined in volm_osm_category_io
+      vcl_map<unsigned, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table.find(land_type_id);
+      if (mit != volm_osm_category_io::volm_land_table.end())
+        h_[mit->second.id_] = 1;
+    }
   }
-  //if (land_type_id > 0) { // we don't want to consider invalid = 0 as one of the land types and leave the histogram as all zeros 
-  //  vcl_map<int, volm_attributes >::iterator it = volm_label_table::land_id.find(land_type_id);
-  //  if (it != volm_label_table::land_id.end())
-  //    h_[it->second.id_ - 1] = 1;
-  //}
 }
 
 vcl_string trim(const vcl_string & s)

@@ -132,7 +132,7 @@ int main(int argc, char** argv)
   vul_arg<unsigned> iteration("-iter","number of refinement iteration", 100);
   vul_arg<float> ratio("-ratio", "shape factor to control morphological operation", 0.5);
   vul_arg<float> height_threshold("-thres", "threshold in height difference", 5);
-  vul_arg<float> tall_building_thres("-tall","height threshold for tall building category",1000);
+  vul_arg<float> tall_building_thres("-tall","height threshold for tall building category",60);
   vul_arg<vcl_string> class_map_folder("-2d-class-root", "folder where all generated 2d map stored","");
   vul_arg<vcl_string> out_class_color("-out-class-color","output color class map","");
   vul_arg_parse(argc, argv);
@@ -340,7 +340,7 @@ int main(int argc, char** argv)
 #endif
 #if 1
       // refine the building roof by dividing building super pixels into small region
-      unsigned sub_pixel_size = 5;  // a 5x5 pixel window to split the building super pixels
+      unsigned sub_pixel_size = 10;  // a 5x5 pixel window to split the building super pixels
       if (!refine_building_by_median_divided(h_img, c_img, buildings, sub_pixel_size, refined_h_img)) {
         log << "error: refine height image using median height failed\n";
         error(log_file.str(), log.str());
@@ -770,7 +770,7 @@ static bool refine_building(float const& ratio,
   // refine the building by checking its first nearest neighbor
   int ni = refined_h_img.ni();
   int nj = refined_h_img.nj();
-  if (ni != refined_c_img.ni() || nj != refined_c_img.nj())
+  if (ni != (int)refined_c_img.ni() || nj != (int)refined_c_img.nj())
     return false;
   // define the first nearest neighbor list
   int nbrs8_delta[8][2] = { { 1, 0}, { 1,-1}, { 0,-1}, {-1,-1},

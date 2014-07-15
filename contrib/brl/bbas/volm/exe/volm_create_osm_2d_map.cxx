@@ -396,7 +396,7 @@ int main(int argc, char** argv)
 }
 #endif
 
-#if 1
+#if 0
 // FOR phase 1B --> generate classification map using 1. GeoCover; 2. OSM map;  3. Satellite classification map
 //  Note the 2D map size is defined by geo_index and the output image have 1 meter resolution
 // generate classification map used to refine satellite height map
@@ -544,10 +544,15 @@ int main(int argc, char** argv)
     vcl_cout << " urban image size: " << urban_info.ni << "x" << urban_info.nj << vcl_endl;
     vcl_cout << " chosen leaf: " << leaf_idx() << vcl_endl;
 
+    for (unsigned l_idx = 0; l_idx < (unsigned)leaves.size(); l_idx++) {
+      vcl_cout << " leaf_id = " << l_idx << " --> bounding box = " << leaves[l_idx]->extent_ << vcl_endl;
+    }
+
+
     // create a 2d image for each leaf at desired size
     for (unsigned l_idx = 0; l_idx < (unsigned)leaves.size(); l_idx++) {
-      if (leaf_idx() > 0 && leaf_idx() < (unsigned)leaves.size())
-        if (l_idx != leaf_idx())
+      if (leaf_idx() > 0 && leaf_idx() < (int)leaves.size())
+        if ((int)l_idx != leaf_idx())
           continue;
       // calculate desired resolution
       volm_geo_index2_node_sptr leaf = leaves[l_idx];
@@ -638,7 +643,7 @@ int main(int argc, char** argv)
         // find overlapped satellite class images
         vcl_vector<volm_img_info> sat_img_infos;
         for (unsigned s_idx = 0; s_idx < class_img_infos.size(); s_idx++) {
-          if (vgl_intersection(leaf_bbox_geo, class_img_infos[s_idx].bbox).is_empty())
+          if (!vgl_intersection(leaf_bbox_geo, class_img_infos[s_idx].bbox).is_empty())
             sat_img_infos.push_back(class_img_infos[s_idx]);
         }
         if (sat_img_infos.size() != 0)
@@ -664,7 +669,8 @@ int main(int argc, char** argv)
                 if (uu < sat_img_infos[c_idx].ni && vv < sat_img_infos[c_idx].nj) {
                   is_pixel_found = true;  // to avoid overlap region twice
                   vil_image_view<vxl_byte> imgc(sat_img_infos[c_idx].img_r);
-                  if (imgc(uu,vv) == volm_osm_category_io::volm_land_table_name["building"].id_) {
+                  if (imgc(uu,vv) == volm_osm_category_io::volm_land_table_name["building"].id_ ||
+                      imgc(uu,vv) == volm_osm_category_io::volm_land_table_name["tall_building"].id_ ) {
                     unsigned char curr_id = imgc(uu,vv);
                     unsigned char curr_level = volm_osm_category_io::volm_land_table[curr_id].level_;
                     if (curr_level >= level_img(i,j)) {
@@ -802,7 +808,7 @@ int main(int argc, char** argv)
           {
             int y = it.scany();
             for (int x = it.startx(); x <= it.endx(); ++x) {
-              if (x >=0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
+              if (x >=0 && y >= 0 && x < (int)out_img.ni() && y < (int)out_img.nj()) {
                 if (curr_level >= level_img(x,y)) {
                   out_img(x,y) = curr_id;  level_img(x,y) = curr_level;
                 }
@@ -859,7 +865,7 @@ int main(int argc, char** argv)
           for (it.reset(); it.next();  ) {
             int y = it.scany();
             for (int x = it.startx(); x <= it.endx(); ++x) {
-              if ( x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {  // osm road will overwrite everything
+              if ( x >= 0 && y >= 0 && x < (int)out_img.ni() && y < (int)out_img.nj()) {  // osm road will overwrite everything
                 level_img(x,y) = curr_level;  out_img(x,y) = curr_id;
                 //if (curr_level > level_img(x, y)) {
                 //  level_img(x,y) = curr_level;   out_img(x,y) = curr_id;
@@ -954,7 +960,7 @@ int main(int argc, char** argv)
 }
 #endif
 
-#if 0
+#if 1
   // For Phase 1A, generate 2D land map using NLCD, LIDAR(elev), SME(fort), URGENT(building), OSM data
   // Output GeoTiff image size is controlled by geo index and has 1 meter resolution
   // Pipeline: 1.  --> generate label using NLCD + LIDAR data (LIDAR elevation is used to refined beach/water boundary)
@@ -991,22 +997,23 @@ int main(int argc, char** argv)
   unsigned t_id = tile_id();
 
   vcl_string phase_str;
-  if (world_str() == "desert" || world_str() == "coast")
+  if (world_str() == "desert" || world_str() == "coast" || world_str() == "Desert" || world_str() == "Coast")
     phase_str = "a";
-  else if (world_str() == "chile" || world_str() == "india" || world_str() == "jordan" || world_str() == "philippines" || world_str() == "taiwan")
+  else if (world_str() == "chile" || world_str() == "india" || world_str() == "jordan" || world_str() == "philippines" || world_str() == "taiwan" ||
+           world_str() == "Chile" || world_str() == "India" || world_str() == "Jordan" || world_str() == "Philippines" || world_str() == "Taiwan")
     phase_str = "b";
   else {
     log << "ERROR: unknown ROI world: " << world_str() << '\n';  error(log_file, log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   unsigned world_id;
-  if (world_str() == "desert")            world_id = 1;
-  else if (world_str() == "coast")        world_id = 2;
-  else if (world_str() == "chile")        world_id = 1;
-  else if (world_str() == "india")        world_id = 2;
-  else if (world_str() == "jordan")       world_id = 3;
-  else if (world_str() == "philippines")  world_id = 4;
-  else if (world_str() == "taiwan")       world_id = 5;
+  if (world_str() == "Desert" || world_str() == "desert")                 world_id = 1;
+  else if (world_str() == "Coast" || world_str() == "coast")              world_id = 2;
+  else if (world_str() == "Chile" || world_str() == "chile")              world_id = 1;
+  else if (world_str() == "India" || world_str() == "india")              world_id = 2;
+  else if (world_str() == "Jordan" || world_str() == "jordan")            world_id = 3;
+  else if (world_str() == "Philippines" || world_str() == "philippines")  world_id = 4;
+  else if (world_str() == "Taiwan" || world_str() == "taiwan")            world_id = 5;
 
   // create volm_geo_index2 for given ROI world
   vgl_polygon<double> roi_poly = bkml_parser::parse_polygon(roi_kml());
@@ -1145,7 +1152,6 @@ int main(int argc, char** argv)
       lidar_imgs.push_back(vcl_pair<vil_image_view<float>, vpgl_geo_camera*>(img, vit->cam));
     }
     vcl_cout << lidar_imgs.size() << " LIDAR image intersect with the leaf " << l_idx << vcl_endl;
-
     // ingest NLCD image and refine the beach/water boundary by LIDAR elevation
     for (unsigned i = 0; i < ni; i++) {
       for (unsigned j = 0; j < nj; j++) {
@@ -1158,37 +1164,15 @@ int main(int argc, char** argv)
         double u, v;
         nlcd_info.cam->global_to_img(lon, lat, gz, u, v);
         unsigned uu = (unsigned)vcl_floor(u+0.5);  unsigned vv = (unsigned)vcl_floor(v+0.5);
-        if (uu > 0 && vv > 0 && uu < nlcd_img->ni() && vv < nlcd_img->nj())
+        if (uu > 0 && vv > 0 && uu < nlcd_img->ni() && vv < nlcd_img->nj()) {
           label = (*nlcd_img)(uu, vv);
-        // refined the beach/water boundary by LIDAR elevation
-        float elev = 0.0f;
-        bool found = false;
-        for (unsigned k = 0; k < lidar_imgs.size(); k++) {
-          double u, v;
-          lidar_imgs[k].second->global_to_img(lon, lat, gz, u, v);
-          unsigned uu = (unsigned)vcl_floor(u+0.5);  unsigned vv = (unsigned)vcl_floor(v+0.5);
-          if (uu > 0 && vv > 0 && uu < lidar_imgs[k].first.ni() && vv < lidar_imgs[k].first.nj()) {
-            if ( (lidar_imgs[k].first(uu, vv) - 0.0)*(lidar_imgs[k].first(uu, vv) - 0.0) > 1E-6)
-            {  elev = lidar_imgs[k].first(uu, vv);  found = true;  break;  }
-          }
+          unsigned char land_label = volm_osm_category_io::nlcd_land_table[label].id_;
+          out_img(i,j) = land_label;
         }
-        // refine the SAND/WATER boundary by LIDAR height
-        if (label == volm_osm_category_io::NLCD_SAND && found) {
-          if (elev < 1.0f && found)
-            label = volm_osm_category_io::NLCD_WATER;
-        }
-        else if (label == volm_osm_category_io::NLCD_WOODY_WETLAND || label == volm_osm_category_io::NLCD_EMERGENT_WETLAND) {
-          if (elev < 0.5f && found)
-            label = volm_osm_category_io::NLCD_WATER;
-        }
-        else {
-          if (elev < 1.0f && found)
-            label = volm_osm_category_io::NLCD_WATER;
-        }
-        out_img(i, j) = volm_osm_category_io::nlcd_land_table[label].id_;
       }
     }
 
+#if 1
     unsigned cnt = 0;
     // ingest OSM regions
     unsigned num_regions = osm.num_regions();
@@ -1208,6 +1192,9 @@ int main(int argc, char** argv)
       // transfer to image pixel
       vgl_polygon<double> img_poly(1);
       unsigned char curr_id = osm.loc_polys()[r_idx]->prop().id_;
+      //// remove buildings from osm
+      //if (curr_id == volm_osm_category_io::volm_land_table_name["building"].id_)
+      //  continue;
       for (unsigned pt_idx = 0; pt_idx < poly[0].size(); pt_idx++) {
         double lx, ly, lz;
         lvcs->global_to_local(poly[0][pt_idx].x(), poly[0][pt_idx].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
@@ -1221,13 +1208,46 @@ int main(int argc, char** argv)
         int y = it.scany();
         for (int x = it.startx(); x <= it.endx(); ++x) {
           if (x >= 0 && y >= 0 && x < out_img.ni() && y < out_img.nj()) {
-            if (curr_level >= level_img(x, y))
+            if (curr_level > level_img(x, y))
             {  out_img(x,y) = curr_id;  level_img(x, y) = curr_level;  }
           }
         }
       }
     }
     vcl_cout << cnt << " OSM regions are ingested into Land map" << vcl_endl;
+
+    // refine the water-sand boundary using lidar elev value
+    for (unsigned i = 0; i < ni; i++) {
+      for (unsigned j = 0; j < nj; j++) {
+        // obtain global lon/lat
+        double lon, lat, gz;
+        float local_x = (float)(i+0.5);  float local_y = (float)(box_ly-j+0.5);
+        lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
+        float elev = 100.0f;
+        bool found = false;
+        for (unsigned k = 0; k < lidar_imgs.size(); k++) {
+          double u, v;
+          lidar_imgs[k].second->global_to_img(lon, lat, gz, u, v);
+          unsigned uu = (unsigned)vcl_floor(u+0.5);  unsigned vv = (unsigned)vcl_floor(v+0.5);
+          if (uu > 0 && vv > 0 && uu < lidar_imgs[k].first.ni() && vv < lidar_imgs[k].first.nj()) {
+            elev = lidar_imgs[k].first(uu, vv);  found = true;
+            break;
+          }
+        }
+        if (out_img(i,j) == volm_osm_category_io::volm_land_table_name["Barren_Land/Beach"].id_ && found) {
+          if (elev < 0.5f && found)
+            out_img(i,j) = volm_osm_category_io::volm_land_table_name["Open_Water"].id_;
+        }
+        else if (out_img(i,j) == volm_osm_category_io::volm_land_table_name["Woody_Wetlands/Marina"].id_ && found) {
+          if (elev < 0.5f && found)
+            out_img(i,j) = volm_osm_category_io::volm_land_table_name["Open_Water"].id_;
+        }
+        else {
+          if (elev < 1.0f && found)
+            out_img(i,j) = volm_osm_category_io::volm_land_table_name["Open_Water"].id_;
+        }
+      }
+    }
 
     // ingest OSM roads and junctions
     cnt = 0;
@@ -1328,6 +1348,9 @@ int main(int argc, char** argv)
       // transfer from geo coord to image pixel
       unsigned char curr_level = loc_pts[p_idx]->prop().level_;
       unsigned char curr_id = loc_pts[p_idx]->prop().id_;
+      // remove buildings from osm
+      if (curr_id == volm_osm_category_io::volm_land_table_name["building"].id_)
+        continue;
       double lx, ly, lz;
       lvcs->global_to_local(pt.x(), pt.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
       double i = lx - leaf_bbox.min_x();  double j = leaf_bbox.max_y() - ly;
@@ -1359,6 +1382,7 @@ int main(int argc, char** argv)
     }
     vcl_cout << cnt << " SME forts are ingested into land map" << vcl_endl;
 
+#if 1
     // ingest URGENT data
     cnt = 0;
     for (unsigned ii = 0; ii < build_polys.size(); ii++)
@@ -1402,6 +1426,8 @@ int main(int argc, char** argv)
       }
     }
     vcl_cout << cnt << " URGENT buildings are ingested" << vcl_endl;
+#endif
+
     // enlarge pier pixels by 5 pixel
     vcl_vector<vcl_pair<unsigned, unsigned> > pier_pixels;
     for (unsigned i = 0; i < ni; i++)
@@ -1420,6 +1446,8 @@ int main(int argc, char** argv)
     }
     vcl_cout << "enlarge pier pixels succeed" << vcl_endl;
 
+#endif
+
     // save the image
     vil_save(out_img, img_name.str().c_str());
     vil_image_view<vil_rgb<vxl_byte> > out_rgb_img(ni, nj, 1);
@@ -1436,10 +1464,6 @@ int main(int argc, char** argv)
     vcl_cout << l_idx << " finished successfully!" << vcl_endl;
   } // end of leaf loop
 
-  
-
-  
   return true;
-
 }
 #endif

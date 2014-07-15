@@ -141,7 +141,7 @@ bool boxm2_ocl_ingest_osm_label_process(bprb_func_process& pro)
     }
   }
 
-  // form the lable buffer
+  // form the label buffer
   count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
     for (unsigned int i=0;i<cl_ni;++i) {

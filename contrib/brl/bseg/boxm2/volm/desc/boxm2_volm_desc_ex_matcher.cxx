@@ -4,7 +4,7 @@
 
 float boxm2_volm_desc_ex_matcher::score(volm_desc_sptr const& a, volm_desc_sptr const& b)
 {
-  // currently, the comparision is accomplished by checking the intersection of two histgrom
+  // currently, the comparison is accomplished by checking the intersection of two histogram
   // this comparison method can be extend in future
   return a->similarity(b);
 }

@@ -181,8 +181,8 @@ void volm_spherical_shell_container::panaroma_img_class_labels(vil_image_view<vi
       img(ii,jj).b = 255;
     }
     else if (values[i] == 29) { // pier
-      img(ii,jj).r = 0;
-      img(ii,jj).g = 255;
+      img(ii,jj).r = 255;
+      img(ii,jj).g = 0;
       img(ii,jj).b = 0;
     }
 #if 0

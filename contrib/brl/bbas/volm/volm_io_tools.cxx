@@ -258,14 +258,7 @@ bool volm_io_tools::get_location_nlcd(vcl_vector<volm_img_info>& NLCD_imgs, doub
 
       // get the land type of the location
       double u, v;
-      // NLCD imgs are loaded via load_lidar_img, using the init_cam from filename
-      // therefore tranfer everything using abs(lon) and abs(lat)
-      double abs_lat, abs_lon;
-      abs_lat = lat;
-      if (lat < 0) abs_lat = -lat;
-      abs_lon = lon;
-      if (lon < 0) abs_lon = -lon;
-      NLCD_imgs[i].cam->global_to_img(abs_lon, abs_lat, elev, u, v);
+      NLCD_imgs[i].cam->global_to_img(lon, lat, elev, u, v);
       //NLCD_imgs[i].cam->global_to_img(-lon, lat, elev, u, v);
       unsigned uu = (unsigned)vcl_floor(u + 0.5);
       unsigned vv = (unsigned)vcl_floor(v + 0.5);
