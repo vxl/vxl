@@ -396,7 +396,7 @@ int main(int argc, char** argv)
 }
 #endif
 
-#if 1
+#if 0
 // FOR phase 1B --> generate classification map using 1. GeoCover; 2. OSM map;  3. Satellite classification map
 //  Note the 2D map size is defined by geo_index and the output image have 1 meter resolution
 // generate classification map used to refine satellite height map
@@ -960,7 +960,7 @@ int main(int argc, char** argv)
 }
 #endif
 
-#if 0
+#if 1
   // For Phase 1A, generate 2D land map using NLCD, LIDAR(elev), SME(fort), URGENT(building), OSM data
   // Output GeoTiff image size is controlled by geo index and has 1 meter resolution
   // Pipeline: 1.  --> generate label using NLCD + LIDAR data (LIDAR elevation is used to refined beach/water boundary)
