@@ -3,12 +3,12 @@
 
 # some classes depend on OPENCL being found...
 # shouldn't be needed in a basic library (JLM)
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-IF(OPENCL_FOUND)
+# INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+# IF(OPENCL_FOUND)
 
-ADD_DEFINITIONS(-DHAS_OPENCL=1)
-INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-ENDIF(OPENCL_FOUND)
+# ADD_DEFINITIONS(-DHAS_OPENCL=1)
+# INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
+# ENDIF(OPENCL_FOUND)
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
@@ -45,7 +45,7 @@ SET(volm_sources
  volm_spherical_index_query_matcher.h   volm_spherical_index_query_matcher.cxx
  volm_spherical_region.h                volm_spherical_region.cxx
  volm_vrml_io.h                         volm_vrml_io.cxx
- volm_buffered_index.h					volm_buffered_index.cxx
+ volm_buffered_index.h                  volm_buffered_index.cxx
  volm_candidate_list.h                  volm_candidate_list.cxx
  volm_geo_index2_node_base.h            volm_geo_index2_node_base.cxx
  volm_geo_index2_sptr.h
