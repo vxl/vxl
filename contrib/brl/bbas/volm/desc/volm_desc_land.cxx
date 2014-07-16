@@ -82,10 +82,10 @@ float volm_desc_land::similarity(volm_desc_sptr other)
 {
   if (nbins_ != other->nbins())
     return 0.0f;
-  // calcualte the inersection
+  // calculate the intersection
   float intersec = 0.0f;
   for (unsigned idx = 0; idx < nbins_; idx++) {
     intersec += (float)vcl_min(this->count(idx), other->count(idx));
   }
-  return intersec;  // intersec is 0 or 1
+  return intersec;  // intersect is 0 or 1
 }

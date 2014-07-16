@@ -28,7 +28,7 @@ volm_desc_ex::volm_desc_ex(depth_map_scene_sptr const& dms,
                            unsigned const& nlands,
                            unsigned char const& initial_mag)
 {
-  name_ = "existance descriptor";
+  name_ = "existence descriptor";
   // create a histogram based on given parameters
   norients_ = norients;
   nlands_ = nlands;
@@ -80,7 +80,7 @@ volm_desc_ex::volm_desc_ex(vcl_vector<unsigned char> const& index_dst,
                            unsigned const& nlands,
                            unsigned char const& initial_mag)
 {
-  name_ = "existance descriptor";
+  name_ = "existence descriptor";
   // create a histogram based on given parameters
   norients_ = norients;
   nlands_ = nlands;

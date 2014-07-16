@@ -61,7 +61,7 @@ public:
                unsigned const& nlands = volm_osm_category_io::volm_land_table.size(),
                unsigned char const& initial_mag = 0);
   
-  //: constrcutor from created index
+  //: constructor from created index
   volm_desc_ex(vcl_vector<unsigned char> const& index_dst,
                vcl_vector<unsigned char> const& index_combined,
                vcl_vector<double> depth_interval,
@@ -89,7 +89,7 @@ public:
   //: the radius that defines the distance interval
   vcl_vector<double>& radius() { return radius_; }
 
-  //: initialize the histrogram with given value
+  //: initialize the histogram with given value
   void initialize_bin(unsigned char const& mag);
 
   //: get the bin index from object distance, height, orientation type and land type (return idx larger than nbins if invalid)

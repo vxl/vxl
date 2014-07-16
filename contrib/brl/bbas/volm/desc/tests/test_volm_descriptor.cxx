@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <volm/desc/volm_desc_ex.h>
+#include <volm/desc/volm_desc_ex_2d.h>
 #include <volm/desc/volm_desc_land.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_container_sptr.h>
@@ -11,7 +12,7 @@
 
 static void test_volm_desc_land()
 {
-  volm_desc_sptr land = new volm_desc_land(3);
+  volm_desc_sptr land = new volm_desc_land(31);
   land->print();
   land->visualize("test_volm_desc_land.svg", 2);
   // load from a file
@@ -21,8 +22,27 @@ static void test_volm_desc_land()
   ofs.close();
   volm_desc_sptr land_cat = new volm_desc_land(filename);
   land_cat->print();
-  TEST("NLCD land type 3 is located in correct bin", (*land)[10], 1);
+  TEST("NLCD land type 3 is located in correct bin", (*land)[6], 1);
   TEST("NLCD land type Developed/Low_Intensity is located in bin 09", (*land_cat)[4], 1);
+}
+
+static void test_volm_desc_ex_2d()
+{
+  // define the radius
+  vcl_vector<double> radius;
+  radius.push_back(100);  radius.push_back(50);  radius.push_back(200);
+  // define heading intervals
+  double h_width = 45.0;  double h_inc = 30.0;
+  unsigned nland = 2;
+  volm_desc_ex_2d* desc = new volm_desc_ex_2d(radius, h_width, h_inc, nland, 2);
+  desc->print();
+  // set two object into histogram
+  unsigned land_id;  double distance, heading;
+  land_id = 1;  distance = 222;  heading = 40;
+  desc->set_count(distance, land_id, heading, (unsigned char)1);
+  land_id = 1;  distance = 230;  heading = 70;
+  desc->set_count(distance, land_id, heading, (unsigned char)1);
+  desc->print();
 }
 
 static void test_volm_desc_ex()
@@ -152,6 +172,10 @@ static void test_volm_descriptor()
 
   vcl_cout << "======================== test the existence histogram ====================== " << vcl_endl;
   test_volm_desc_ex();
+  vcl_cout << "============================================================================ " << vcl_endl;
+
+  vcl_cout << "======================== test the ex_2d histogram with heading intervals === " << vcl_endl;
+  test_volm_desc_ex_2d();
   vcl_cout << "============================================================================ " << vcl_endl;
 
 #if 0

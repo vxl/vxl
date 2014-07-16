@@ -68,7 +68,7 @@ volm_desc_ex_land_only::volm_desc_ex_land_only(vcl_vector<unsigned char> const& 
                                                unsigned const& nlands,
                                                unsigned char const& initial_mag)
 {
-  name_ = "existance land only descriptor";
+  name_ = "existence land only descriptor";
   // create a histogram based on given parameters
   nlands_ = nlands;
   if (radius.empty())
@@ -166,7 +166,7 @@ float volm_desc_ex_land_only::similarity(volm_desc_sptr other)
 {
   if (nbins_ != other->nbins())
     return 0.0f;
-  // calcualte the intersection
+  // calculate the intersection
   float intersec = 0.0f;
   for (unsigned idx = 0; idx < nbins_; idx++) {
     intersec += (float)vcl_min(this->count(idx), other->count(idx));

@@ -42,7 +42,7 @@ public:
   //: Compare two descriptor a and b using the similarity method implemented in descriptor a
   virtual float score(volm_desc_sptr const& query, volm_desc_sptr const& index);
 
-  //: Create a volumetric existance descriptor for the query image
+  //: Create a volumetric existence descriptor for the query image
   virtual volm_desc_sptr create_query_desc();
 
   virtual vcl_string get_index_type_str() { return volm_desc_ex_land_only_indexer::name_; }
@@ -50,7 +50,7 @@ public:
 private:
     //: query depth_map_scene
   depth_map_scene_sptr  dms_;
-  //: parameters related to volumetric existance descriptor
+  //: parameters related to volumetric existence descriptor
   vcl_vector<double> radius_;
   unsigned           nlands_;
   unsigned char initial_mag_;

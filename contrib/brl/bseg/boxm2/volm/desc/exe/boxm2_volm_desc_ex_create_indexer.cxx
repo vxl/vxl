@@ -1,6 +1,6 @@
 //
 // \file
-// \brief executable to create index existance descriptor of locations
+// \brief executable to create index existence descriptor of locations
 // \author Yi Dong
 // \date June 05, 2013
 
@@ -16,13 +16,13 @@ int main(int argc, char** argv)
 {
   vul_arg<vcl_string> geo_hypo_folder("-geo", "directory where the hypothesized geolocations are stored", "");
   vul_arg<vcl_string> index_folder("-index", "directory that contains the created wr3db indices", "");
-  vul_arg<vcl_string> out_index_folder("-out", "directory where create existance indices will be stored", "");
-  vul_arg<unsigned> tile_id("-tile", "tile id for which the existance indices will be created", 100);
+  vul_arg<vcl_string> out_index_folder("-out", "directory where create existence indices will be stored", "");
+  vul_arg<unsigned> tile_id("-tile", "tile id for which the existence indices will be created", 100);
   vul_arg<vcl_vector<double> > radius("-radius", "vector of distance interval");
-  vul_arg<unsigned> norients("-nori", "number of orientation type considered, default are horizontal, vertial and infinite", 0);
+  vul_arg<unsigned> norients("-nori", "number of orientation type considered, default are horizontal, vertical and infinite", 0);
   vul_arg<unsigned> nlands("-nlands", "number of land types considered, default are 35 land types", 0);
   vul_arg<float> buffer_capacity("-buffer", "buffer size used for indices, ensure the system has 2*buffer_capacity memory, unit as GB (default 2.0G)", 2.0f);
-  vul_arg<bool> is_land_only("-land", "option to choose land only existance descriptor", false);
+  vul_arg<bool> is_land_only("-land", "option to choose land only existence descriptor", false);
   vul_arg<bool> is_log("-log", "option to save log files", false);
   vul_arg<int> max_leaf_id ("-max", "maximum leaf id considered", 1000);
   vul_arg<int> min_leaf_id ("-min", "minimum leaf id considered", -1);
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   if (radius().size() == 0) {
-    vcl_cout << " NOTE: No distance type considered, the discriptor only consider land type and orientation" << vcl_endl;
+    vcl_cout << " NOTE: No distance type considered, the descriptor only consider land type and orientation" << vcl_endl;
   }
   if (norients() != 0 || nlands() != 0) {
     vcl_cout << " WARNING: specified number of orientation types and specified number of land type considered" << vcl_endl;
@@ -75,8 +75,8 @@ int main(int argc, char** argv)
     depth_interval.push_back((double)iter->first);
 
 
-  // create the existance indices for given tile
-  vcl_cout << " ============================= Start to create existance indices for tile " << tile_id() << " ===================== " << vcl_endl;
+  // create the existence indices for given tile
+  vcl_cout << " ============================= Start to create existence indices for tile " << tile_id() << " ===================== " << vcl_endl;
   volm_desc_indexer_sptr ex_indexer;
   if (is_land_only()) {
     if (norients() == 0 && nlands() == 0)
@@ -121,14 +121,14 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-  vcl_cout << " \t Create existance indices for tile " << tile_id() << "..." << vcl_endl;
+  vcl_cout << " \t Create existence indices for tile " << tile_id() << "..." << vcl_endl;
   if (!ex_indexer->index(buffer_capacity(), min_leaf_id(), max_leaf_id())) {
-    log << " ERROR: creating existance indices for tile " << tile_id() << " failed.\n";
+    log << " ERROR: creating existence indices for tile " << tile_id() << " failed.\n";
     vcl_cerr << log.str();
     if (is_log()) volm_io::write_post_processing_log(log_file.str(), log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_cout << " \t\n Finsihed!  All indices are stored in " << out_index_folder() << vcl_endl;
-  vcl_cout << " ============================= Finished to create existance indices for tile " << tile_id() << " ===================== " << vcl_endl;
+  vcl_cout << " \t\n Finished!  All indices are stored in " << out_index_folder() << vcl_endl;
+  vcl_cout << " ============================= Finished to create existence indices for tile " << tile_id() << " ===================== " << vcl_endl;
   return volm_io::SUCCESS;
 }

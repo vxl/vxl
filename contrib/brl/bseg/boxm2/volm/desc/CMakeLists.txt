@@ -1,5 +1,5 @@
 # boxm2/volm/desc/CMakeLists.txt
-# Index existance descriptor library
+# Index existence descriptor library
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/volm )

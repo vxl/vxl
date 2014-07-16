@@ -58,7 +58,7 @@ public:
   //: return the value of bin
   unsigned char count(unsigned const& i) const { return h_[i]; }
 
-  //: Accerror to the value at bin i in the histogram
+  //: Accessor to the value at bin i in the histogram
   unsigned char operator[] (unsigned int i) const { return h_[i];}
 
   void get_char_array(vcl_vector<unsigned char>& values) const;
