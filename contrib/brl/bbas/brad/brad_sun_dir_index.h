@@ -43,9 +43,9 @@ class brad_sun_dir_index
   ~brad_sun_dir_index(){}
 
   //: uses standard definion of sun azimuth and elevation, i.e. elevation zero tangent plane, increasing to nadir and azimuth zero at North and increasing to East, angles in degrees.
-  int index(double geo_sun_azimuth, double geo_sun_elevation) const;
+  int index(double geo_sun_azimuth, double geo_sun_elevation, double & min_angle) ;
   //: index from sun direction vector (pointing towards the sun).
-  int index(double x, double y, double z) const;
+  int index(double x, double y, double z, double & min_angle ) const;
 
   //: number of illumination bins
   unsigned n_sun_dir_bins() const {return static_cast<unsigned>(2*bin_radius_+1);}

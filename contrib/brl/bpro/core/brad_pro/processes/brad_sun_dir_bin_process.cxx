@@ -21,6 +21,7 @@ bool brad_sun_dir_bin_process_cons(bprb_func_process& pro)
   //output
   vcl_vector<vcl_string> output_types;
   output_types.push_back("int");  // the bin index
+  output_types.push_back("float"); // float 
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -77,8 +78,10 @@ bool brad_sun_dir_bin_process(bprb_func_process& pro)
     bins.push_back(bc);
   }
   brad_sun_dir_index bindx(longitude, latitude, bins);
-  int bin = bindx.index(sun_az, sun_el);
+  double angle;
+  int bin = bindx.index(sun_az, sun_el, angle);
   pro.set_output_val<int>(0, bin);
+  pro.set_output_val<float>(1, angle);
   is.close();
   return true;
 }

@@ -1,7 +1,7 @@
 from boxm2_register import boxm2_batch, dbvalue
 
 #############################################################################
-# PROVIDES higher level brad python functions to make boxm2_batch 
+# PROVIDES higher level brad python functions to make boxm2_batch
 # code more readable/refactored
 #############################################################################
 
@@ -71,8 +71,10 @@ def find_sun_dir_bin(metadata, output_file):
   boxm2_batch.run_process();
   (bin_id,bin_type)=boxm2_batch.commit_output(0);
   bin = boxm2_batch.get_output_int(bin_id);
-  return bin
- 
+  (angle_id,angle_type)=boxm2_batch.commit_output(1);
+  angle = boxm2_batch.get_output_float(angle_id);
+  return bin, angle
+
 # save atmospheric parameters
 def save_atmospheric_parameters(atm_params, filename):
   boxm2_batch.init_process("bradSaveAtmosphericParametersProcess")
@@ -87,7 +89,7 @@ def save_image_metadata(mdata, filename):
   boxm2_batch.set_input_from_db(0, mdata)
   boxm2_batch.set_input_string(1,filename)
   boxm2_batch.run_process()
-  return 
+  return
 
 # load image_metadata
 def load_image_metadata(filename):
@@ -106,7 +108,7 @@ def load_atmospheric_parameters(filename):
   (id,type) = boxm2_batch.commit_output(0)
   atm_params = dbvalue(id,type)
   return atm_params
- 
+
 # compute sun angles given location and time
 def get_sun_angles_date_time(lat, lon, year, month, day, hour, minute):
   boxm2_batch.init_process("bradGetSunAnglesDateTimeProcess")
@@ -195,7 +197,7 @@ def estimate_shadows(image, metadata, atmospheric_params):
   (id,type) = boxm2_batch.commit_output(0)
   shadow_probs = dbvalue(id,type)
   return shadow_probs
-  
+
 def load_eigenspace(filename):
   boxm2_batch.init_process("bradLoadEigenspaceProcess");
   boxm2_batch.set_input_string(0, filename);
@@ -203,7 +205,7 @@ def load_eigenspace(filename):
   (eig_id,eig_type)=boxm2_batch.commit_output(0);
   eig = dbvalue(eig_id, eig_type);
   return eig;
-  
+
 def classify_image(eig, h_no, h_atmos, input_image_filename, tile_ni, tile_nj):
   boxm2_batch.init_process("bradClassifyImageProcess");
   boxm2_batch.set_input_from_db(0, eig);
@@ -219,4 +221,44 @@ def classify_image(eig, h_no, h_atmos, input_image_filename, tile_ni, tile_nj):
   q_img_orig_size = dbvalue(vid, vtype);
   return q_img, q_img_orig_size
 
-
+def get_metadata_info(mdata):
+  boxm2_batch.init_process("bradGetMetaDataInfoProcess")
+  boxm2_batch.set_input_from_db(0, mdata)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  sun_az = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
+  (id,type) = boxm2_batch.commit_output(1)
+  sun_el = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
+  (id, type) = boxm2_batch.commit_output(2)
+  year = boxm2_batch.get_output_int(id)
+  boxm2_batch.remove_data(id)
+  (id, type) = boxm2_batch.commit_output(3)
+  month = boxm2_batch.get_output_int(id)
+  boxm2_batch.remove_data(id)
+  (id, type) = boxm2_batch.commit_output(4)
+  day = boxm2_batch.get_output_int(id)
+  boxm2_batch.remove_data(id)
+  (id, type) = boxm2_batch.commit_output(5)
+  hour = boxm2_batch.get_output_int(id)
+  boxm2_batch.remove_data(id)
+  (id, type) = boxm2_batch.commit_output(6)
+  minutes = boxm2_batch.get_output_int(id)
+  boxm2_batch.remove_data(id)
+  (id, type) = boxm2_batch.commit_output(7)
+  seconds = boxm2_batch.get_output_int(id)
+  boxm2_batch.remove_data(id)
+  (id, type) = boxm2_batch.commit_output(8)
+  gsd = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
+  (id, type) = boxm2_batch.commit_output(9)
+  sat_name = boxm2_batch.get_output_string(id)
+  boxm2_batch.remove_data(id)
+  (id,type) = boxm2_batch.commit_output(10)
+  view_az = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
+  (id,type) = boxm2_batch.commit_output(11)
+  view_el = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
+  return sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el

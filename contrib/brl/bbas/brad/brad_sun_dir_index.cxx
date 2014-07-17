@@ -43,7 +43,7 @@ brad_sun_dir_index::brad_sun_dir_index(double longitude_deg, double latitude_deg
 }
 
 int brad_sun_dir_index::index(double geo_sun_azimuth,
-                              double geo_sun_elevation) const
+                              double geo_sun_elevation,double & min_angle) 
 {
   //convert to standard spherical coordinates
   double sphere_az = 90.0 - geo_sun_azimuth + 360.0;
@@ -60,12 +60,12 @@ int brad_sun_dir_index::index(double geo_sun_azimuth,
   double y = s*vcl_sin(az_rad);
   double z = vcl_cos(el_rad);
   vnl_double_3 dir(x, y, z);
-  double min_ang = vcl_fabs(angle(cone_axes_[0], dir));
+  min_angle = vcl_fabs(angle(cone_axes_[0], dir));
   int min_i = 0;
   for (unsigned i=1; i< n_sun_dir_bins(); ++i) {
     double ang  = vcl_fabs(angle(cone_axes_[i], dir));
-    if (ang<min_ang) {
-      min_ang = ang;
+    if (ang<min_angle) {
+      min_angle = ang;
       min_i = i;
     }
   }
@@ -76,7 +76,7 @@ int brad_sun_dir_index::index(double geo_sun_azimuth,
   return min_i;
 }
 
-int brad_sun_dir_index::index(double x, double y, double z) const
+int brad_sun_dir_index::index(double x, double y, double z,double & min_angle) const
 {
   vnl_double_3 dir(x, y, z);
   double min_ang = vcl_fabs(angle(cone_axes_[0], dir));
