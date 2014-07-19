@@ -19,7 +19,7 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
  #endif
 
 
-#if 1
+#if 0
 //used for aerial scenes.
 __constant  float4  app_model_view_directions[8] = {  (float4)(0.81654 ,  0.00000 ,  0.57729 ,0),
                                                        (float4)(0.00000 ,  0.81654 ,  0.57729,0),
@@ -31,6 +31,20 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0.81654 ,  0.0000
                                                       (float4)(-0.57735 , -0.57735 ,  0.57735,0) };
 #endif
 
+
+#if 0
+//used for ground level scenes.
+__constant  float4  app_model_view_directions[8] = {   (float4)(0.0f,  -1.00000 ,   0,0),
+                                                       (float4)(0.8660f, -0.5f  ,  0,0),
+                                                       (float4)(0.5f ,   -0.8660f ,  0,0),
+                                                       (float4)(1.0f , 0.0f ,  0,0),
+                                                       (float4)(0.8660f, 0.5f  ,  0,0),
+                                                       (float4)(0.5f ,   0.8660f ,  0,0),
+                                                       (float4)(0 , 1.0f ,  0, 0),
+                                                       (float4)(0 , 0.0f ,  0,0)  };
+#endif
+
+
 #if 0
 //for motion capture scenes
 __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
@@ -41,6 +55,18 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
                                                       (float4)(-0.5,   -0.866, 0,0),
                                                       (float4)(0.5,   -0.866, 0,0),
                                                       (float4)(0,         0,     0,0)};
+#endif
+
+#if 1
+//used for ground level scenes (x-z plane)
+__constant  float4  app_model_view_directions[8] = {   (float4)(1.0f,  0 ,   0.0f,0),
+                                                       (float4)(0.707f, 0  ,  0.707f,0),
+                                                       (float4)(0.0f,  0 ,   1.0f,0),
+                                                       (float4)(-0.707f, 0  ,  0.707f,0),
+                                                        (float4)(-1.0f,  0 ,   0.0f,0),
+                                                       (float4)(-0.707f, 0  ,  -0.707f,0),
+                                                        (float4)(0.0f,  0 ,   -1.0f,0),
+                                                       (float4)(0.707f, 0  ,  -0.707f,0) };
 #endif
 
 void compute_app_model_weights(float* app_model_weights, float4 viewdir,__constant float4* app_model_view_directions)

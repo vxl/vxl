@@ -44,7 +44,7 @@ class bstm_ocl_change_detection
                               float                     time);
 
   private:
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
+    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts, bool isColor);
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
 };
 

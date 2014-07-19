@@ -1,4 +1,5 @@
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
 INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 SET(bstm_cpp_pro_sources
     bstm_cpp_register.h                              bstm_cpp_register.cxx

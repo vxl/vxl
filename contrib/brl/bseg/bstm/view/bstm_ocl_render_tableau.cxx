@@ -65,7 +65,7 @@ bool bstm_ocl_render_tableau::init(bocl_device_sptr device,
     render_label_ = false;
     vgl_box_3d<double> bb= scene_->bounding_box();
     bb.set_centroid_z(bb.centroid_z() - bb.depth()/4 );
-    trajectory_ = new boxm2_trajectory(80.0, 20, -1.0, bb, ni, nj);
+    trajectory_ = new boxm2_trajectory(20.0, 20, -1.0, bb, ni, nj);
     cam_iter_ = trajectory_->begin();
 
     //set bb for time

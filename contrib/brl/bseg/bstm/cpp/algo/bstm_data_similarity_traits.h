@@ -25,9 +25,6 @@ class bstm_similarity_traits<BSTM_MOG3_GREY, BOXM2_MOG3_GREY>
     double isabel_measure = (bstm_data_traits<BSTM_MOG3_GREY>::processor::expected_color(app) + 1) * p;
     double isabel_measure_boxm2 = (boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(boxm2_app) + 1) * boxm2_p;
 
-//    vcl_cout << "Curr measure: " << isabel_measure << " and next measure: " << isabel_measure_boxm2
-//             << " verdict: " <<  ( vcl_fabs( isabel_measure - isabel_measure_boxm2) < SIMILARITY_T && (boxm2_p > 0 || p == 0) ) << vcl_endl;
-
     //boxm2_p > 0 to make sure empty voxels always lead to time division
     //otherwise it leads to motion artefacts.
     return vcl_fabs( isabel_measure - isabel_measure_boxm2) < SIMILARITY_T && (boxm2_p > 0 || p == 0);
@@ -156,6 +153,49 @@ class bstm_similarity_traits<BSTM_GAUSS_RGB_VIEW_COMPACT, BOXM2_GAUSS_RGB_VIEW_C
     return rms / 8;
   }
 };
+
+
+template<>
+class bstm_similarity_traits<BSTM_GAUSS_RGB, BOXM2_GAUSS_RGB>
+{
+ public:
+
+  static bool is_similar(bstm_data_traits<BSTM_GAUSS_RGB>::datatype app, boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype boxm2_app, float p, float boxm2_p, double p_threshold, double app_threshold )
+  {
+    return (  p_threshold < 0.0f || kl_div_surf(p,boxm2_p) < p_threshold)
+       &&  (app_threshold < 0.0f || p < APP_COMP_P_THRESHOLD ||  (app_rms(app,boxm2_app)  < app_threshold) );
+  }
+
+  //D(boxm2_P || P), measure of information lost when P is used to approximate boxm2_P
+  static float kl_div_surf(float p, float boxm2_p )
+  {
+    //add epsilons if they are 0
+    if ( p < EPSILON)
+      p = EPSILON;
+    if ( boxm2_p < EPSILON)
+      boxm2_p = EPSILON;
+
+    //subtract epsilons if they are 1
+    if ( p >  1-EPSILON)
+      p = 1-EPSILON;
+    if ( boxm2_p > 1-EPSILON)
+      boxm2_p = 1-EPSILON;
+
+    return (boxm2_p*vcl_log(boxm2_p/p) + (1-boxm2_p)*vcl_log( (1-boxm2_p)/(1-p) ) ) / vnl_math::ln2;
+  }
+
+  static float app_rms(bstm_data_traits<BSTM_GAUSS_RGB>::datatype app, boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype boxm2_app )
+  {
+    vnl_vector_fixed<unsigned char,8> rgb = app;
+    vnl_vector_fixed<unsigned char,8> boxm2_rgb = boxm2_app;
+
+    float rms = vcl_sqrt( (square_of(rgb[0] - boxm2_rgb[0]) + square_of(rgb[1] - boxm2_rgb[1]) + square_of(rgb[2] - boxm2_rgb[2])) / 3.0);
+
+    return rms;
+  }
+};
+
+
 
 #undef square_of
 

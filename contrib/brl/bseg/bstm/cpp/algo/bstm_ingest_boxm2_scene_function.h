@@ -54,7 +54,7 @@ class bstm_ingest_boxm2_scene_function
    int move_time_trees(boct_bit_tree& unrefined_tree, boct_bit_tree& refined_tree, bstm_time_block* newTimeBlk,char* depth_diff );
 
    //: refines all the time trees of a given cell, based on the boxm2 data input.
-   void refine_all_time_trees(int bstm_data_offset,int boxm2_data_offset, int* dataIndex, int& currIndex, int& dataSize,
+   bool refine_all_time_trees(int bstm_data_offset,int boxm2_data_offset, int* dataIndex, int& currIndex, int& dataSize,
                               int currDepth, int currDepth_boxm2, bool is_leaf);
 
    //: moves the data of all time trees of a given cell. Copies data from parents and places the boxm2 data to current time cell.
@@ -70,7 +70,7 @@ class bstm_ingest_boxm2_scene_function
    void place_curr_data( bstm_time_tree& refined_tree, int boxm2_data_offset, bstm_data_traits<BSTM_ALPHA>::datatype*  alpha_cpy, typename bstm_data_traits<APM_TYPE>::datatype * apm_cpy, int depth_diff );
 
    //: refine input tree and return refined tree
-   bstm_time_tree refine_time_tree(const bstm_time_tree& input_tree, int boxm2_data_offset, int currDepth, int currDepth_boxm2);
+   bstm_time_tree refine_time_tree(const bstm_time_tree& input_tree, int bstm_data_offset, int boxm2_data_offset, int currDepth, int currDepth_boxm2);
 
    //: function to define similarity measure between bstm data and current boxm2 data.
    bool is_similar(float p, typename bstm_data_traits<APM_TYPE>::datatype mog, float boxm2_p, typename boxm2_data_traits<BOXM2_APM_TYPE>::datatype boxm2_mog);
@@ -82,6 +82,7 @@ class bstm_ingest_boxm2_scene_function
    //bstm datas
    bstm_data_traits<BSTM_ALPHA>::datatype *       alpha_;
    typename bstm_data_traits<APM_TYPE>::datatype* apm_model_;
+   bstm_data_traits<BSTM_CHANGE>::datatype *   change_array_;
 
    //boxm2 datas
    boxm2_data_traits<BOXM2_ALPHA>::datatype *     boxm2_alpha_;

@@ -25,6 +25,7 @@ class bstm_ocl_update_color
                           float                   time,
                           float                    mog_var,
                           bool                     update_alpha,
+                          bool                     update_changes_only,
                           vil_image_view_base_sptr mask_sptr);
 
   private:

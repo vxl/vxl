@@ -90,7 +90,7 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
   //create vgl box
   const vgl_point_3d<double> center(center_x,center_y,center_z);
   vgl_box_3d<double> box(center,len_x,len_y,len_z, vgl_box_3d<double>::centre);
-  if(len_x <= 0.0f ||len_y <= 0.0f ||len_z <= 0.0f ) //if box is empty, set it to scene's 
+  if(len_x <= 0.0f ||len_y <= 0.0f ||len_z <= 0.0f ) //if box is empty, set it to scene's
     box = scene->bounding_box();
 
   unsigned total_num_time_tree_leaf_cells = 0;
@@ -106,9 +106,6 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
     bstm_block_id bstm_id = bstm_iter->first;
     bstm_block_metadata bstm_metadata = bstm_iter->second;
 
-    double local_time;
-    if(!bstm_metadata.contains_t(0,local_time))
-      continue;
 
     if(!vgl_intersection<double>( bstm_metadata.bbox(), box).is_empty() ) //if the two boxes intersect
     {

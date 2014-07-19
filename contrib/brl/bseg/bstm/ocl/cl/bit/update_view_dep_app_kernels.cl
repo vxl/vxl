@@ -446,7 +446,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
         float app_model_weights[8] = {0};
         float4 viewdir = ray_dir[gid];
         compute_app_model_weights(app_model_weights, viewdir, &app_model_view_directions);
-        update_view_dep_app(mean_obs,cell_vis, app_model_weights, (float*)(&mixture), (float*)(&nobs),* mog_fixed_std );
+        update_view_dep_app(mean_obs,cell_vis, app_model_weights, (float*)(&mixture), (float*)(&nobs),*mog_fixed_std );
 
   #ifdef NUM_OBS_VIEW_COMPACT
         CONVERT_FUNC_USHORT8(nobs_array[data_ptr_tt], nobs);

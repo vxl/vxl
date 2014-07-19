@@ -118,13 +118,14 @@ void step_cell_change(AuxArgs aux_args, int data_ptr_tt, float d)
   CONVERT_FUNC_FLOAT8(data, aux_args.mog[data_ptr_tt])/NORM;
 
   #ifdef COLOR
-    float prob_den=gauss_prob_density_rgb(img_in, data.s0123, data.s4567);
+      float prob_den=gauss_prob_density_rgb(img_in, data.s0123, data.s4567);
   #else
     // float prob_den=gauss_3_mixture_prob_density(img_in,
     //                                             data.s0,data.s1,data.s2,
     //                                             data.s3,data.s4,data.s5,
     //                                             data.s6,data.s7,1.0f-data.s2-data.s5);
 
+    //use only most significant component
     float prob_den= gauss_prob_density(img_in, data.s0,data.s1);
   #endif
 
@@ -141,7 +142,6 @@ void step_cell_change(AuxArgs aux_args, int data_ptr_tt, float d)
   //set change
   (*aux_args.change) += prob_den*omega;
 }
-
 #endif
 
 
@@ -310,7 +310,7 @@ update_change( __constant  RenderSceneInfo    * linfo,
   //if the pixel is sure to be non-change, no need to accumulate seglen, vis, change
   //Such voxels will receive no seglen, and therefore their change prob will be set to 0
   //by the update_change_kernel kernel.
-  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w || change_p <= 0.0f)
+  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w  || change_p <= 0.0f)
     return;
 
   float4 ray_o = ray_origins[ imIndex[llid] ];
@@ -352,10 +352,7 @@ void step_cell_update(AuxArgs aux_args, int data_ptr, int data_ptr_tt, float d)
 
   //update vis
   float alpha = aux_args.alpha[data_ptr_tt];
-  float prob  = 1.0f - exp(-alpha*d*(aux_args.linfo->block_len));
-  (*aux_args.vis) = (*aux_args.vis)*(1.0f-prob);
-
-
+  (*aux_args.vis) = (*aux_args.vis) * exp(-alpha*d*(aux_args.linfo->block_len));
 }
 
 #endif //CHANGE_ACCUM
@@ -430,13 +427,15 @@ update_change_kernel(__global RenderSceneInfo  * info,
       float change_p = cum_change[gid] / cum_len;
       float vis = cum_vis[gid] / cum_len;
       //appearance models for change/non-change
+      if(change_p < EPSILON)
+        change_p = EPSILON;
       float PI_B = 1.0f / change_p - 1;
       if(PI_B < EPSILON)
         PI_B = EPSILON;
       float PI_F = 1.0f;
 
       //priors
-      float prior = 0.75f;
+      float prior = 0.5f;
       float P_C_GIVEN_B = prior * (1-vis);
       float P_C_GIVEN_F = (1.0f+prior)/2.0f;
       float P_B = 0.5f;
@@ -456,11 +455,15 @@ update_change_kernel(__global RenderSceneInfo  * info,
       change_ll_array[gid] += ll ;
       no_change_ll_array[gid] += ll_not;
 
-      if( (change_ll_array[gid] + log2(prior)  ) > (no_change_ll_array[gid] + log2(1-prior)) )
-        change_array[gid] = 1.0f;
-      else
-        change_array[gid] = 0.01f;
+      float decision_prior = 0.5f;
+      // if( (change_ll_array[gid] + log2(decision_prior)  ) > (no_change_ll_array[gid] + log2(1-decision_prior)) )
+      //   change_array[gid] = 1.0f;
+      // else
+      //   change_array[gid] = 0.01f;
 
+      float change_prob = exp2(change_ll_array[gid]);
+      float no_change_prob = exp2(no_change_ll_array[gid]);
+      change_array[gid] = change_prob / (change_prob + no_change_prob);
     }
     else {
       change_ll_array[gid] = 0.0f;

@@ -70,8 +70,9 @@ bool bstm_cpp_refine_space_process(bprb_func_process& pro)
   vcl_vector<vcl_string> valid_types;
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
+  valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
   if ( !bstm_util::verify_appearance( *scene, valid_types, app_data_type, apptypesize ) ) {
-    vcl_cout<<"bstm_cpp_refine_space_process ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT or BSTM_MOG3_GREY data type"<<vcl_endl;
+    vcl_cout<<"bstm_cpp_refine_space_process ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT or BSTM_MOG3_GREY or BSTM_GAUSS_RGB data type"<<vcl_endl;
     return false;
   }
 
@@ -80,11 +81,14 @@ bool bstm_cpp_refine_space_process(bprb_func_process& pro)
   valid_types.empty();
   valid_types.push_back(bstm_data_traits<BSTM_NUM_OBS>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix());
+  valid_types.push_back(bstm_data_traits<BSTM_NUM_OBS_SINGLE>::prefix());
   if ( !bstm_util::verify_appearance( *scene, valid_types, nobs_data_type, nobstypesize ) ) {
-    vcl_cout<<"bstm_cpp_refine_space_process ERROR: scene doesn't have BSTM_NUM_OBS or BSTM_NUM_OBS_VIEW_COMPACT data type"<<vcl_endl;
+    vcl_cout<<"bstm_cpp_refine_space_process ERROR: scene doesn't have BSTM_NUM_OBS or BSTM_NUM_OBS_VIEW_COMPACT or BSTM_NUM_OBS_SINGLE data type"<<vcl_endl;
     return false;
   }
 
+
+  vcl_cout<<"Refining in space..."<<vcl_endl;
 
   vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
   vcl_map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
@@ -119,8 +123,12 @@ bool bstm_cpp_refine_space_process(bprb_func_process& pro)
       bstm_refine_blk_in_space_function<BSTM_MOG3_GREY, BSTM_NUM_OBS> ( blk_t, blk, datas, change_prob_t);
     else if (app_data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix() &&  nobs_data_type == bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix()  )
       bstm_refine_blk_in_space_function<BSTM_MOG6_VIEW_COMPACT, BSTM_NUM_OBS_VIEW_COMPACT> ( blk_t, blk, datas, change_prob_t);
-    else
-      vcl_cout << "bstm_refine_block_space ERROR! Types don't match...." << vcl_endl;
+    else if (app_data_type == bstm_data_traits<BSTM_GAUSS_RGB>::prefix() &&  nobs_data_type == bstm_data_traits<BSTM_NUM_OBS_SINGLE>::prefix()  )
+      bstm_refine_blk_in_space_function<BSTM_GAUSS_RGB, BSTM_NUM_OBS_SINGLE> ( blk_t, blk, datas, change_prob_t);
+    else {
+      vcl_cerr << "bstm_refine_block_space ERROR! Types don't match...." << vcl_endl;
+      vcl_cerr << "App type: " << app_data_type << " and nobs: " << nobs_data_type << vcl_endl;
+    }
   }
 
   vcl_cout << "Finished refining scene..." << vcl_endl;

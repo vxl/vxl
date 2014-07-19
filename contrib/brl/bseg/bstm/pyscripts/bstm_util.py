@@ -43,3 +43,18 @@ def read_img_cam_silh(img_folder, cam_folder, silh_folder, cam_id, frame_id):
     remove_data(proj_cam)
 
     return [curr_img, curr_cam, t_silh]
+
+def read_img_cam_silh_persp(img_folder, cam_folder, silh_folder, cam_id, frame_id):
+    curr_img_name = img_folder + "cam_%05d_frame_%05d.bmp" % (cam_id,frame_id)
+    curr_silh_name = silh_folder + "cam_%05d_frame_%05d.png" % (cam_id,frame_id)
+    curr_cam_name = cam_folder + "cam_%05d.txt" % cam_id
+
+    [curr_img, ni, nj] = bstm_vil_adaptor.load_image(curr_img_name);
+    [silhouette, ni, nj] = bstm_vil_adaptor.load_image(curr_silh_name);
+    t_silh = bstm_vil_adaptor.threshold_image(silhouette,1);
+
+    curr_cam = bstm_vpgl_adaptor.load_perspective_camera(curr_cam_name);
+
+    remove_data(silhouette)
+
+    return [curr_img, curr_cam, t_silh]

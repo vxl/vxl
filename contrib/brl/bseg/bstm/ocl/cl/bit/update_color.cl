@@ -416,6 +416,34 @@ void update_3d_gauss(float8* mixture, float* nobs, float4 mean_obs, float cell_v
   (*mixture).s4567 = sigma;
 }
 
+//Updates 3 independent gaussian distributions
+void update_yuv_appearance(float8* mixture, float* nobs, float4 mean_obs, float cell_vis, float min_sigma)
+{
+  //update NOBS and calculate rho
+  (*nobs) += cell_vis;
+  if ( *nobs > 0.001f ) {
+    float rho = cell_vis / (*nobs);
+
+    //update y channel
+    float mu = (*mixture).s0;
+    float sigma = (*mixture).s4;
+    update_gauss(mean_obs.x, rho, &mu, &sigma, min_sigma);
+    (*mixture).s0 = mu;
+    (*mixture).s4 = 0.07;
+    //u channel
+    mu = (*mixture).s1;
+    sigma = (*mixture).s5;
+    update_gauss(mean_obs.y, rho, &mu, &sigma, min_sigma);
+    (*mixture).s1 = mu;
+    (*mixture).s5 = 0.1;
+    //v channel
+    mu = (*mixture).s2;
+    sigma = (*mixture).s6;
+    update_gauss(mean_obs.z, rho, &mu, &sigma, min_sigma);
+    (*mixture).s2 = mu;
+    (*mixture).s6 = 0.1;
+  }
+}
 
 __kernel
 void
@@ -428,9 +456,11 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global int              * aux_array1,
                       __global int              * aux_array2,
                       __global int              * aux_array3,
+                      __global float            * change,
                       __global float            * mog_fixed_std,
                       __global float            * time,             // time
                       __global int              * update_alpha,     //update if not zero
+                      __global int              * update_changes_only,     //update if not zero
                       __global float            * output,
                       __local  uchar8           * local_time_tree)
 {
@@ -460,7 +490,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     float  alphamin = -log(1.0f-0.001f)/cell_min;
 
     //update cell if alpha and cum_len are greater than 0
-    if (alpha > 0.0f && cum_len > 1e-10f)
+    if (alpha > 0.0f && cum_len > 1e-10f  && (*update_changes_only == 0 || change[gid] > 0.3f))
     {
       int obs_int = aux_array1[gid];
       int vis_int = aux_array2[gid];

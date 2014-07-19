@@ -176,8 +176,8 @@ __kernel void estimate_mi_vol(__constant  RenderSceneInfo * linfo,
           //////////////////////////////////////////////////
           //find transformed point in box coordinates
           float orig_x = linfo->origin.x + ((float)index_x+centerX[i])*linfo->block_len - bb_center.x;
-          float orig_y = linfo->origin.y + ((float)index_y+centerY[i])*linfo->block_len - bb_center.y ;
-          float orig_z = linfo->origin.z + ((float)index_z+centerZ[i])*linfo->block_len - bb_center.z ;
+          float orig_y = linfo->origin.y + ((float)index_y+centerY[i])*linfo->block_len - bb_center.y;
+          float orig_z = linfo->origin.z + ((float)index_z+centerZ[i])*linfo->block_len - bb_center.z;
           float xformed_x = rotation[0]*orig_x +rotation[1]*orig_y + rotation[2]*orig_z + translation[0] + bb_center.x;
           float xformed_y = rotation[3]*orig_x +rotation[4]*orig_y + rotation[5]*orig_z + translation[1] + bb_center.y;
           float xformed_z = rotation[6]*orig_x +rotation[7]*orig_y + rotation[8]*orig_z + translation[2] + bb_center.z;

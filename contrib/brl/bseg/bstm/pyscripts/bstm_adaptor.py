@@ -227,7 +227,7 @@ def update(scene, device, cache, cam, img, time, mog_var = -1, mask_img = None, 
     bstm_batch.run_process();
 
 # detect change wrapper,
-def update_color(scene, device, cache, cam, img, time, mog_var = -1, mask_img = None, update_alpha = True):
+def update_color(scene, device, cache, cam, img, time, mog_var = -1, mask_img = None, update_alpha = True, update_changes_only = False):
     bstm_batch.init_process("bstmOclUpdateColorProcess");
     bstm_batch.set_input_from_db(0,device);
     bstm_batch.set_input_from_db(1,scene);
@@ -238,6 +238,7 @@ def update_color(scene, device, cache, cam, img, time, mog_var = -1, mask_img = 
     bstm_batch.set_input_float(6,mog_var);
     bstm_batch.set_input_from_db(7,mask_img);
     bstm_batch.set_input_bool(8,update_alpha);
+    bstm_batch.set_input_bool(9,update_changes_only);
     bstm_batch.run_process();
 
 # update change wrapper,
@@ -298,6 +299,21 @@ def filter_changes(scene, cpu_cache, time):
     bstm_batch.set_input_float(2,time);
     bstm_batch.run_process();
 
+def copy_data_to_future(scene, cpu_cache, time):
+    bstm_batch.init_process("bstmCppCopyDataToFutureProcess");
+    bstm_batch.set_input_from_db(0,scene);
+    bstm_batch.set_input_from_db(1,cpu_cache);
+    bstm_batch.set_input_float(2,time);
+    bstm_batch.run_process();
+
+def change_btw_frames(scene, cpu_cache, time0, time1):
+    bstm_batch.init_process("bstmCppChangeBtwFramesProcess");
+    bstm_batch.set_input_from_db(0,scene);
+    bstm_batch.set_input_from_db(1,cpu_cache);
+    bstm_batch.set_input_float(2,time0);
+    bstm_batch.set_input_float(3,time1);
+    bstm_batch.run_process();
+
 def scene_statistics(scene, cache):
     bstm_batch.init_process("bstmSceneStatisticsProcess");
     bstm_batch.set_input_from_db(0, scene );
@@ -334,3 +350,32 @@ def export_pt_cloud(scene, cache, output_filename, prob_t, time, output_aux=True
 
     bstm_batch.run_process();
     return;
+
+def bundle2scene(bundle_file, img_dir, app_model="bstm_mog3_grey", isalign= True, out_dir="", timeSteps = 32) :
+  if app_model == "bstm_mog3_grey" :
+    nobs_model = "bstm_num_obs";
+  else:
+    print "ERROR appearance model not recognized!!!", app_model;
+    return
+
+  #run process
+  bstm_batch.init_process("bstmBundleToSceneProcess");
+  bstm_batch.set_input_string(0, bundle_file);
+  bstm_batch.set_input_string(1, img_dir);
+  bstm_batch.set_input_string(2, app_model);
+  bstm_batch.set_input_string(3, nobs_model);
+  bstm_batch.set_input_bool(4, isalign);
+  bstm_batch.set_input_unsigned(5, timeSteps);
+  bstm_batch.set_input_string(6, out_dir);
+  bstm_batch.run_process();
+  (scene_id, scene_type) = bstm_batch.commit_output(0);
+  uscene = dbvalue(scene_id, scene_type);
+  return uscene;
+
+def boxm22scene(boxm2_filename, bstm_datapath, timeSteps = 32) :
+  bstm_batch.init_process("bstmBoxm2SceneToBstmProcess");
+  bstm_batch.set_input_string(0, boxm2_filename);
+  bstm_batch.set_input_string(1, bstm_datapath);
+  bstm_batch.set_input_unsigned(2, timeSteps);
+  bstm_batch.run_process();
+

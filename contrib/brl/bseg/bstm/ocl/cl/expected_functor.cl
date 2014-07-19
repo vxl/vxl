@@ -93,16 +93,21 @@ void step_cell_render(AuxArgs aux_args, int data_ptr_tt, float d)
 
 
 #ifdef RENDER_CHANGE
-void step_cell_render_change(AuxArgs aux_args, int data_ptr_tt, float d)
+void step_cell_render_change(AuxArgs aux_args, int data_ptr, int data_ptr_tt, float d)
 {
   float alpha = aux_args.alpha[data_ptr_tt];
   float diff_omega=exp(-alpha*d);
 
+/*
   if ( (*aux_args.expint).s0 < 1.0f && (*aux_args.vis) > 0.8f )
   {
-    if(aux_args.mog[data_ptr_tt] > 0.5f)
+    if(aux_args.mog[data_ptr] > 0.5f)
       (*aux_args.expint) = 1.0f;
   }
-  (*aux_args.vis)  *= diff_omega;
+  */
+
+  (*aux_args.expint) += aux_args.mog[data_ptr] * (*aux_args.vis);
+
+  (*aux_args.vis)  *= diff_omega * (1-aux_args.mog[data_ptr]) ;
 }
 #endif

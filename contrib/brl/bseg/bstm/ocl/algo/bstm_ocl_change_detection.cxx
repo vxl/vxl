@@ -19,6 +19,7 @@
 #include <bstm/bstm_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_image_view.h>
+#include <vil/algo/vil_median.h>
 
 //directory utility
 #include <vul/vul_timer.h>
@@ -61,15 +62,16 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
     vcl_vector<vcl_string> valid_types;
     valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
     valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
-
+    valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
     if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
       vcl_cout<<"bstm_ocl_change_detection ERROR: scene doesn't have correct appearance model data type"<<vcl_endl;
       return false;
     }
     vcl_string options = bstm_ocl_util::mog_options(data_type);
+    bool isColor = (data_type == bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
 
     //grab kernel
-    vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
+    vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options, isColor);
 
     //create a command queue.
     int status=0;
@@ -93,16 +95,83 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
       }
     }
 
-    //----- PREP INPUT BUFFERS -------------
-    //prepare input images
-    vil_image_view_base_sptr float_img     = bstm_util::prepare_input_image(img, true); //true for force gray scale
-    vil_image_view<float>*   img_view      = static_cast<vil_image_view<float>* >(float_img.ptr());
 
-    //prepare workspace size
-    unsigned cl_ni    = RoundUp(img_view->ni(),local_threads[0]);
-    unsigned cl_nj    = RoundUp(img_view->nj(),local_threads[1]);
-    global_threads[0] = cl_ni;
-    global_threads[1] = cl_nj;
+    unsigned cl_ni;
+    unsigned cl_nj;
+    float* input_buff;
+    unsigned char* mask_image_buff;
+    if(!isColor){
+      vil_image_view_base_sptr float_img     = bstm_util::prepare_input_image(img, true); //true for force gray scale
+      vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+
+      //prepare workspace size
+      cl_ni    = RoundUp(img_view->ni(),local_threads[0]);
+      cl_nj    = RoundUp(img_view->nj(),local_threads[1]);
+      global_threads[0] = cl_ni;
+      global_threads[1] = cl_nj;
+
+      input_buff  = new float[cl_ni*cl_nj];
+      mask_image_buff = new unsigned char[cl_ni*cl_nj];
+
+      int count=0;
+      for (unsigned int j=0;j<cl_nj;++j) {
+          for (unsigned int i=0;i<cl_ni;++i) {
+            mask_image_buff[count]=0;
+            input_buff[count]     = 0;
+              if (i<img_view->ni() && j< img_view->nj()) {
+                input_buff[count]     = (*img_view)(i,j);
+                if (use_mask)
+                  mask_image_buff[count]=(*mask_map)(i,j);
+                else
+                  mask_image_buff[count]= 255;
+              }
+              ++count;
+          }
+      }
+
+    }
+    else
+    {
+      vil_image_view_base_sptr float_img = bstm_util::prepare_input_image(img, false);
+      if ( float_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
+        vcl_cout<<"bstm_ocl_update_color_process::using a non RGBA image!!"<<vcl_endl;
+        return false;
+      }
+      vil_image_view<vil_rgba<vxl_byte> >* img_view = static_cast<vil_image_view<vil_rgba<vxl_byte> >* >(float_img.ptr());
+
+      cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
+      cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
+      global_threads[0]=cl_ni;
+      global_threads[1]=cl_nj;
+
+      //initialize input image buffer
+      int numFloats = 4;
+      input_buff = new float[numFloats*cl_ni*cl_nj];  //need to store RGB (or YUV values)
+      mask_image_buff = new unsigned char[cl_ni*cl_nj];
+
+      int count=0;
+      for (unsigned int j=0;j<cl_nj;++j) {
+        for (unsigned int i=0;i<cl_ni;++i) {
+          //rgba values
+          input_buff[numFloats*count] = 0.0f;
+          input_buff[numFloats*count + 1] = 0.0f;
+          input_buff[numFloats*count + 2] = 0.0f;
+          input_buff[numFloats*count + 3] = 1.0f;
+          if (i<img_view->ni() && j< img_view->nj()) {
+            vil_rgba<vxl_byte> rgba = (*img_view)(i,j);
+            input_buff[numFloats*count + 0] = (float) rgba.R() / 255.0f;
+            input_buff[numFloats*count + 1] = (float) rgba.G() / 255.0f;
+            input_buff[numFloats*count + 2] = (float) rgba.B() / 255.0f;
+            input_buff[numFloats*count + 3] = (float) 1.0f;
+            if (use_mask)
+              mask_image_buff[count]=(*mask_map)(i,j);
+            else
+              mask_image_buff[count]= 255;
+          }
+          ++count;
+        }
+      }
+    }
 
     // create all buffers
     cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
@@ -111,43 +180,23 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
-
-
     //prepare image buffers (cpu)
     float* vis_buff               = new float[cl_ni*cl_nj];
     float* change_image_buff      = new float[cl_ni*cl_nj];
-    unsigned char* mask_image_buff   = new unsigned char[cl_ni*cl_nj];
-    float* input_buff             = new float[cl_ni*cl_nj];
 
     for (unsigned i=0;i<cl_ni*cl_nj;i++) {
         vis_buff[i]=1.0f;
         change_image_buff[i]=0.0f;
     }
 
-    int count=0;
-    for (unsigned int j=0;j<cl_nj;++j) {
-        for (unsigned int i=0;i<cl_ni;++i) {
-          mask_image_buff[count]=0;
-          input_buff[count]=0;
-          if (i<img_view->ni() && j< img_view->nj())
-          {
-            input_buff[count]     = (*img_view)(i,j);
-            if(use_mask)
-              mask_image_buff[count]=(*mask_map)(i,j);
-            else
-              mask_image_buff[count]= 255;
-
-
-          }
-          ++count;
-        }
-    }
-
-
 
     //prepare image buffers (GPU)
     //bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff, 4*cl_ni*cl_nj*sizeof(float),"input image buffer");
-    bocl_mem_sptr in_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), input_buff, "input image buffer");
+    bocl_mem_sptr in_image;
+    if(!isColor)
+      in_image= opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), input_buff, "input image buffer");
+    else
+      in_image= opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float)*4, input_buff, "input image buffer");
     in_image->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     bocl_mem_sptr mask_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(char), mask_image_buff, "mask image buffer");
@@ -162,11 +211,11 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     // Image Dimensions
-    unsigned int img_dim_buff[] = { 0, 0, img_view->ni(), img_view->nj() };
+    unsigned int img_dim_buff[] = { 0, 0, ni, nj };
     bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(unsigned int)*4, "image dims");
     img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-    // Output Array
+     //Output Array
     float output_arr[100];
     for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
@@ -299,7 +348,7 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
 //---------------------------------------------------
 // compiles, caches and returns list of kernels
 //---------------------------------------------------
-vcl_vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_sptr device, vcl_string opts)
+vcl_vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_sptr device, vcl_string opts, bool isColor)
 {
     // check to see if this device has compiled kernels already
     vcl_string identifier = device->device_identifier() + opts;
@@ -326,6 +375,8 @@ vcl_vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_spt
 
     //set kernel options
     opts += " -D CHANGE_DETECT ";
+    if(isColor)
+      opts += " -D COLOR ";
     vcl_string options=opts;
     opts += " -D STEP_CELL=step_cell_change(aux_args,data_ptr_tt,d*linfo->block_len) ";
 
@@ -766,7 +817,7 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
                                                 vpgl_camera_double_sptr   cam,
                                                 vil_image_view_base_sptr  img,
                                                 vil_image_view_base_sptr  mask_sptr,
-                                                float                     time )
+                                                float                    time)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -1039,6 +1090,33 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
     }
     change_image->read_to_buffer(queue);
 
+
+    //median filtering
+    //store change image
+    for (unsigned c=0;c<nj;c++)
+        for (unsigned r=0;r<ni;r++)
+            change_img(r,c) = change_image_buff[c*cl_ni+r];
+
+    int medfilt_halfsize = 5;
+    //vil_image_view<float> orig_img(image);
+    vil_image_view<float>* out_img =  new vil_image_view<float>(ni, nj);
+    out_img->fill(0.0f);
+    vcl_vector<int> strel_vec_i, strel_vec_j;
+    for (int i=-medfilt_halfsize; i <= medfilt_halfsize; ++i)
+      for (int j=-medfilt_halfsize; j <= medfilt_halfsize; ++j) {
+        strel_vec_i.push_back(i);
+        strel_vec_j.push_back(j); }
+
+    vil_structuring_element strel(strel_vec_i,strel_vec_j);
+    vil_median(change_img,*out_img,strel);
+
+    for (unsigned c=0;c<nj;c++)
+        for (unsigned r=0;r<ni;r++)
+          change_image_buff[c*cl_ni+r] = (*out_img)(r,c);
+    change_image->write_to_buffer(queue);
+    /////////////////////////////////////////
+
+
     //----------------------------------------------------------------------------
     // STEP THREE: Do update pass
     //----------------------------------------------------------------------------
@@ -1163,7 +1241,7 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
 
         //write info to disk
         change_prob->read_to_buffer(queue);
-    }
+    }   
 #endif
 
 
@@ -1274,6 +1352,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr d
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "bit/time_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
+    src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "atomics_util.cl");

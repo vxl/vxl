@@ -6,7 +6,7 @@
 //: scene/device constructor
 bstm_opencl_cache::bstm_opencl_cache(bstm_scene_sptr scene,
                                        bocl_device_sptr device)
-:  scene_(scene),  bytesInCache_(0), block_info_(0), block_info_t_(0), device_(device)
+: scene_(scene),  bytesInCache_(0), block_info_(0), device_(device),block_info_t_(0)
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
   unsigned long total_global_mem =  device->info().total_global_memory_;

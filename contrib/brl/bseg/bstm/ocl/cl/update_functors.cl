@@ -3,12 +3,19 @@
 //Update step cell functor::seg_len
 void step_cell_seglen(AuxArgs aux_args, int data_ptr,  int data_ptr_tt, float d)
 {
+#ifdef ATOMIC_FLOAT
+    //SLOW and accurate method
+    AtomicAdd((__global float*) (&aux_args.seg_len[data_ptr]), d);
+    AtomicAdd((__global float*) (&aux_args.mean_obs[data_ptr]), d * aux_args.obs );
+#else
     //SLOW and accurate method
     int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
     atom_add(&aux_args.seg_len[data_ptr], seg_int);
     int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
     atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
+#endif
 }
+
 #endif // SEGLEN
 
 #ifdef PREINF
@@ -58,10 +65,15 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, int data_ptr_tt, float d)
     CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr_tt])/NORM;
     float  weight3  = (1.0f-mixture.s2-mixture.s5);
 
+#ifdef ATOMIC_FLOAT
+    float cum_len = as_float(aux_args.seg_len[data_ptr]);
+    float mean_obs= as_float(aux_args.mean_obs[data_ptr]) / cum_len;
+#else
     int cum_int = aux_args.seg_len[data_ptr];
     int mean_int = aux_args.mean_obs[data_ptr];
     float mean_obs = convert_float(mean_int) / convert_float(cum_int);
     float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
+#endif
 
     //calculate pre_infinity denomanator (shape of image)
     pre_infinity_opt_view_based( d*aux_args.linfo->block_len,
@@ -136,12 +148,17 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, int data_ptr_tt, float d)
     CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr_tt])/NORM;
     float  weight3  = (1.0f-mixture.s2-mixture.s5);
 
-    //load aux data
+#ifdef ATOMIC_FLOAT
+    float cum_len = as_float(aux_args.seg_len[data_ptr]);
+    float mean_obs= as_float(aux_args.mean_obs[data_ptr]) / cum_len;
+#else
     int cum_int = aux_args.seg_len[data_ptr];
     int mean_int = aux_args.mean_obs[data_ptr];
     float mean_obs = convert_float(mean_int) / convert_float(cum_int);
     float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
+#endif
 
+    //load aux data
     float ray_beta, vis_cont;
     bayes_ratio_ind_view_based( d*aux_args.linfo->block_len,
                                 alpha,
@@ -155,10 +172,16 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, int data_ptr_tt, float d)
                                 &ray_beta,
                                 &vis_cont);
 
+#ifdef ATOMIC_FLOAT
+    AtomicAdd((__global float*) (&aux_args.beta_array[data_ptr]), ray_beta);
+    AtomicAdd((__global float*) (&aux_args.vis_array[data_ptr]),  (vis_cont/aux_args.linfo->block_len) );
+#else
     //discretize and store beta and vis contribution
     int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
     atom_add(&aux_args.beta_array[data_ptr], beta_int);
-    int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
+    int vis_int  = convert_int_rte((vis_cont/aux_args.linfo->block_len) * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
+#endif
+
 }
 #endif // BAYES

@@ -276,6 +276,8 @@ class bstm_data_info
       return bstm_data_traits<BSTM_LABEL>::datasize();
     if (prefix.find(bstm_data_traits<BSTM_POINT>::prefix()) != vcl_string::npos)
       return bstm_data_traits<BSTM_POINT>::datasize();
+    if (prefix.find(bstm_data_traits<BSTM_CHANGE>::prefix()) != vcl_string::npos)
+      return bstm_data_traits<BSTM_CHANGE>::datasize();
     return 0;
   }
 

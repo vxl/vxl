@@ -474,11 +474,12 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update::get_kernels(bocl_device_sptr device, 
   vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
 
   //push ray trace files
+  src_paths.push_back(source_dir + "atomics_util.cl");
   src_paths.push_back(source_dir + "update_functors.cl");
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = opts;
+  vcl_string options = opts + " -D ATOMIC_FLOAT ";
 
   //populate vector of kernels
   vcl_vector<bocl_kernel*> vec_kernels;

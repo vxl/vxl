@@ -75,11 +75,13 @@ bool bstm_cpp_export_point_cloud_process (bprb_func_process& pro)
 
     //bstm_data_base * labels=        cache->get_data_base(id,bstm_data_traits<BSTM_LABEL>::prefix());
     bstm_data_base * change_prob =  cache->get_data_base(id,bstm_data_traits<BSTM_CHANGE>::prefix(), num_el *  bstm_data_traits<BSTM_CHANGE>::datasize());
+
 //    bstm_data_base * change_prob_pos =  cache->get_data_base(id,bstm_data_traits<BSTM_CHANGE>::prefix("pos"));
 //    bstm_data_base * change_prob_neg =  cache->get_data_base(id,bstm_data_traits<BSTM_CHANGE>::prefix("neg"));
 
     bstm_data_traits<BSTM_POINT>::datatype *     points_data = (bstm_data_traits<BSTM_POINT>::datatype*) points->data_buffer();
     bstm_data_traits<BSTM_CHANGE>::datatype *    change_data = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_prob->data_buffer();
+
 //    bstm_data_traits<BSTM_CHANGE>::datatype *    change_data_prob = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_prob_pos->data_buffer();
 //    bstm_data_traits<BSTM_CHANGE>::datatype *    change_data_neg = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_prob_neg->data_buffer();
 
@@ -88,7 +90,7 @@ bool bstm_cpp_export_point_cloud_process (bprb_func_process& pro)
       if (points_data[currIdx][3] != -1) {
         file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
         if(output_aux)
-          file << change_data[currIdx]  <<  vcl_endl;//<< " " << change_data_prob[currIdx] << " " << change_data_neg[currIdx] << " "
+          file << change_data[currIdx]  << vcl_endl;
         else
           file << vcl_endl;
       }

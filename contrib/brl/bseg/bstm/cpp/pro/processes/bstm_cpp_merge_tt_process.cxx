@@ -98,8 +98,9 @@ bool bstm_cpp_merge_tt_process(bprb_func_process& pro)
     bstm_block     * blk     = cache->get_block(id);
     bstm_time_block* blk_t   = cache->get_time_block(id);
     bstm_data_base * alph    = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
-    bstm_data_base * mog     = cache->get_data_base(id,bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
-    bstm_data_base * num_obs = cache->get_data_base(id,bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix() );
+    int num_el = alph->buffer_length() / bstm_data_traits<BSTM_ALPHA>::datasize();
+    bstm_data_base * mog     = cache->get_data_base(id, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix(), bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() * num_el);
+    bstm_data_base * num_obs = cache->get_data_base(id, bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix(),bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize() * num_el );
 
     vcl_vector<bstm_data_base*> datas;
     datas.push_back(alph);

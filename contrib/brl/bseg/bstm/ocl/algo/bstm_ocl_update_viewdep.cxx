@@ -57,6 +57,7 @@ bool bstm_ocl_update_viewdep::update(bstm_scene_sptr         scene,
    bool use_mask = false;
 #if 1
    if ( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
+     vcl_cout << "Update using mask..." << vcl_endl;
      use_mask = true;
    }
 #endif

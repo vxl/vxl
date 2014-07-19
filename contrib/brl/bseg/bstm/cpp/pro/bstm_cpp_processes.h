@@ -16,6 +16,9 @@ DECLARE_FUNC_CONS(bstm_cpp_extract_point_cloud_process);
 DECLARE_FUNC_CONS(bstm_cpp_export_point_cloud_process);
 DECLARE_FUNC_CONS(bstm_cpp_refine_tt_process);
 DECLARE_FUNC_CONS(bstm_cpp_majority_filter_process);
+DECLARE_FUNC_CONS(bstm_cpp_copy_data_to_future_process);
+DECLARE_FUNC_CONS(bstm_cpp_change_btw_frames_process);
+DECLARE_FUNC_CONS(bstm_cpp_box_roc_process);
 
 
 

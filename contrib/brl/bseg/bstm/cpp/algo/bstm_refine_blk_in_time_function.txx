@@ -1,8 +1,22 @@
+#ifndef bstm_refine_blk_in_time_function_txx
+#define bstm_refine_blk_in_time_function_txx
+
 #include "bstm_refine_blk_in_time_function.h"
 //:
 // \file
 
-bool bstm_refine_blk_in_time_function::init_data(bstm_time_block* blk_t, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t, float local_time)
+#define INIT_PROB 0.3f
+
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::bstm_refine_blk_in_time_function(
+                                  bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t, float time)
+{
+  init_data(t_blk, blk, datas, change_prob_t,time);
+  refine(datas);
+}
+
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(bstm_time_block* blk_t, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t, float local_time)
 {
   //store block and pointer to uchar16 3d block
    blk_   = blk;
@@ -11,8 +25,8 @@ bool bstm_refine_blk_in_time_function::init_data(bstm_time_block* blk_t, bstm_bl
   //store data buffers
   int i=0;
   alpha_   = (float*)   datas[i++]->data_buffer();
-  mog_     = (bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype*)   datas[i++]->data_buffer();
-  num_obs_     = (bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype*)   datas[i++]->data_buffer();
+  mog_     = (typename bstm_data_traits<APM_DATA_TYPE>::datatype*)   datas[i++]->data_buffer();
+  num_obs_     = (typename bstm_data_traits<NOBS_DATA_TYPE>::datatype*)   datas[i++]->data_buffer();
   change_     = (bstm_data_traits<BSTM_CHANGE>::datatype*)   datas[i++]->data_buffer();
 
    //block max level
@@ -68,9 +82,9 @@ bool bstm_refine_blk_in_time_function::init_data(bstm_time_block* blk_t, bstm_bl
    return true;
 }
 
-bool bstm_refine_blk_in_time_function::refine(vcl_vector<bstm_data_base*>& datas)
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vcl_vector<bstm_data_base*>& datas)
 {
-  vcl_cout<<"CPU refinement in time..."<<vcl_endl;
 
   //0. allocate new time trees and copy old time trees to here.
   bstm_block_id id = blk_->block_id();
@@ -133,13 +147,13 @@ bool bstm_refine_blk_in_time_function::refine(vcl_vector<bstm_data_base*>& datas
   //3. alloc new data
   bstm_data_base* newA = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_ALPHA>::datasize() ],
                                                       dataSize * bstm_data_traits<BSTM_ALPHA>::datasize(), id);
-  bstm_data_base* newM = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() ],
-                                                      dataSize * bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() , id);
-  bstm_data_base* newN = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize() ],
-                                                      dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize(), id);
+  bstm_data_base* newM = new bstm_data_base(new char[dataSize * bstm_data_traits<APM_DATA_TYPE>::datasize()],
+                                                      dataSize * bstm_data_traits<APM_DATA_TYPE>::datasize() , id);
+  bstm_data_base* newN = new bstm_data_base(new char[dataSize * bstm_data_traits<NOBS_DATA_TYPE>::datasize()],
+                                                      dataSize * bstm_data_traits<NOBS_DATA_TYPE>::datasize(), id);
   bstm_data_traits<BSTM_ALPHA>::datatype *   alpha_cpy = (bstm_data_traits<BSTM_ALPHA>::datatype *) newA->data_buffer();
-  bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *  mog_cpy = (bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *) newM->data_buffer();
-  bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *  numobs_cpy = ( bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *) newN->data_buffer();
+  typename bstm_data_traits<APM_DATA_TYPE>::datatype *  mog_cpy = (typename bstm_data_traits<APM_DATA_TYPE>::datatype *) newM->data_buffer();
+  typename bstm_data_traits<NOBS_DATA_TYPE>::datatype *  numobs_cpy = (typename bstm_data_traits<NOBS_DATA_TYPE>::datatype *) newN->data_buffer();
 
 
   //4. move data from old data buffers to new data buffers
@@ -163,15 +177,16 @@ bool bstm_refine_blk_in_time_function::refine(vcl_vector<bstm_data_base*>& datas
   bstm_cache_sptr cache = bstm_cache::instance();
   cache->replace_time_block(id, newTimeBlk);
   cache->replace_data_base(id, bstm_data_traits<BSTM_ALPHA>::prefix(), newA);
-  cache->replace_data_base(id, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix(), newM);
-  cache->replace_data_base(id, bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix(), newN);
+  cache->replace_data_base(id, bstm_data_traits<APM_DATA_TYPE>::prefix(), newM);
+  cache->replace_data_base(id, bstm_data_traits<NOBS_DATA_TYPE>::prefix(), newN);
 
   delete[] dataIndex;
 
   return true;
 }
 
-void bstm_refine_blk_in_time_function::refine_tt(bstm_time_tree& tt)
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+void bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine_tt(bstm_time_tree& tt)
 {
   float trees_local_time = local_time_ - blk_t_->tree_index(local_time_);
   bool split_complete = false;
@@ -194,10 +209,11 @@ void bstm_refine_blk_in_time_function::refine_tt(bstm_time_tree& tt)
 
 }
 
-void bstm_refine_blk_in_time_function::move_data(bstm_time_tree& unrefined_time_tree, bstm_time_tree& refined_time_tree,
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+void bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data(bstm_time_tree& unrefined_time_tree, bstm_time_tree& refined_time_tree,
                                                                                  bstm_data_traits<BSTM_ALPHA>::datatype* alpha_cpy,
-                                                                                 bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype * mog_cpy,
-                                                                                 bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype * numobs_cpy,
+                                                                                 typename bstm_data_traits<APM_DATA_TYPE>::datatype * mog_cpy,
+                                                                                 typename bstm_data_traits<NOBS_DATA_TYPE>::datatype * numobs_cpy,
                                                                                  int depth)
 {
   vcl_vector<int> new_leaves = refined_time_tree.get_leaf_bits();
@@ -227,12 +243,12 @@ void bstm_refine_blk_in_time_function::move_data(bstm_time_tree& unrefined_time_
     {
       //if the cell contains the current time, initialize with 0. Otherwise, copy from parents
       if (  curr_time_tree_leaf == *iter )  { //if the current time is the start of a cell in which new data will be placed
-        float max_alpha_int = -vcl_log(1.0f - 0.001f);
+        float max_alpha_int = -vcl_log(1.0f - INIT_PROB);
 
         float side_len = block_len_ / (float) (1 << depth );
         float newAlpha = (max_alpha_int / side_len);
-        vnl_vector_fixed<unsigned short, 8> zeros( (unsigned short)0 );
-        bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype empty_mog( (unsigned char) 0);
+        typename bstm_data_traits<NOBS_DATA_TYPE>::datatype zeros( (unsigned short)0 );
+        typename bstm_data_traits<APM_DATA_TYPE>::datatype empty_mog( (unsigned char) 0);
 
         alpha_cpy[newDataPtr]  = newAlpha;
         mog_cpy[newDataPtr]    = empty_mog;
@@ -246,16 +262,20 @@ void bstm_refine_blk_in_time_function::move_data(bstm_time_tree& unrefined_time_
           valid_parent_bit = unrefined_time_tree.parent_index(valid_parent_bit);
         oldDataPtr = unrefined_time_tree.get_data_index(valid_parent_bit);
 
+        typename bstm_data_traits<NOBS_DATA_TYPE>::datatype zeros( (unsigned short)0 );
+
+
         //copy data
         alpha_cpy[newDataPtr]= alpha_[oldDataPtr];
         mog_cpy[newDataPtr]  = mog_[oldDataPtr];
-        numobs_cpy[newDataPtr] = num_obs_[oldDataPtr];
+        numobs_cpy[newDataPtr] = zeros;
       }
     }
   }
 }
 
-bool bstm_refine_blk_in_time_function::should_refine_tt(int data_ptr)
+template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
+bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::should_refine_tt(int data_ptr)
 {
   if(change_[data_ptr] > change_prob_t_)
     return true;
@@ -263,15 +283,4 @@ bool bstm_refine_blk_in_time_function::should_refine_tt(int data_ptr)
     return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//MAIN REFINE FUNCTION
-////////////////////////////////////////////////////////////////////////////////
-void bstm_refine_block_in_time(bstm_time_block* t_blk, bstm_block* blk,
-                        vcl_vector<bstm_data_base*> & datas,
-                        float change_prob_thresh, float time)
-{
-  bstm_refine_blk_in_time_function refine_block;
-  refine_block.init_data(t_blk, blk, datas, change_prob_thresh, time);
-
-  refine_block.refine(datas);
-}
+#endif

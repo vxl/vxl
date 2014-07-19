@@ -84,6 +84,7 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
+  valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
 
   if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
     vcl_cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: scene doesn't have BSTM_MOG6_VIEW or BSTM_MOG3_GREY data type"<<vcl_endl;
@@ -97,6 +98,8 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix());
+  boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
+
   if ( !boxm2_util::verify_appearance( *boxm2_scene, boxm2_valid_types, boxm2_data_type, boxm2_apptypesize ) ) {
     vcl_cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: boxm2 scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
@@ -144,6 +147,7 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          bstm_data_base * alph    = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_ALPHA>::prefix());
          bstm_data_base * mog     = cache->get_data_base(bstm_metadata.id_, data_type);
 
+
          vcl_map<vcl_string, bstm_data_base*> datas;
          datas[bstm_data_traits<BSTM_ALPHA>::prefix()] = alph;
          datas[data_type] = mog;
@@ -153,9 +157,12 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          boxm2_data_base * boxm2_alph    = boxm2_cache->get_data_base(bstm_metadata.id_,boxm2_data_traits<BOXM2_ALPHA>::prefix());
          boxm2_data_base * boxm2_mog     = boxm2_cache->get_data_base(bstm_metadata.id_,boxm2_data_type);
 
+
+
          vcl_map<vcl_string, boxm2_data_base*> boxm2_datas;
          boxm2_datas[boxm2_data_traits<BOXM2_ALPHA>::prefix()] = boxm2_alph;
          boxm2_datas[boxm2_data_type] = boxm2_mog;
+
 
          if(boxm2_data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() &&  data_type == bstm_data_traits<BSTM_MOG3_GREY>::prefix()  )
          {
@@ -164,13 +171,17 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          else if( boxm2_data_type == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() && data_type == bstm_data_traits<BSTM_MOG6_VIEW>::prefix()  )
          {
            bstm_ingest_boxm2_scene_function<BSTM_MOG6_VIEW, BOXM2_MOG6_VIEW>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time, p_threshold, app_threshold);
-         } if( boxm2_data_type == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() &&
-               data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()  )
+         }
+         else if( boxm2_data_type == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() && data_type == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()  ) {
            bstm_ingest_boxm2_scene_function<BSTM_MOG6_VIEW_COMPACT, BOXM2_MOG6_VIEW_COMPACT>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time, p_threshold, app_threshold);
+         }
+         else if( boxm2_data_type == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() && data_type == bstm_data_traits<BSTM_GAUSS_RGB>::prefix()  ) {
+           bstm_ingest_boxm2_scene_function<BSTM_GAUSS_RGB, BOXM2_GAUSS_RGB>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time, p_threshold, app_threshold);
+         }
          else if( boxm2_data_type == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix() && data_type == bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix()  )
            bstm_ingest_boxm2_scene_function<BSTM_GAUSS_RGB_VIEW_COMPACT, BOXM2_GAUSS_RGB_VIEW_COMPACT>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time, p_threshold, app_threshold);
          else
-           vcl_cout << "bstm_cpp_ingest_boxm2_scene_process ERROR!" << vcl_endl;
+           vcl_cout << "bstm_cpp_ingest_boxm2_scene_process ERROR! appearance models do not match, boxm2_data_type: " << boxm2_data_type << " bstm_data_type: " <<  data_type << vcl_endl;
       }
     }
   }

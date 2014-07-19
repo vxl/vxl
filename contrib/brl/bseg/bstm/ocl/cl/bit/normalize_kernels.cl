@@ -90,25 +90,34 @@ __kernel void normalize_change_kernel(__global float* change_img /* background p
 
     if(*use_mask)
     {
+        //THIS IS FOR MOTION CAPTURE SCENES
+        // float mask = mask_img[imindex];
+        // if (vis > .8f && mask == 0) {
+        //   change_img[imindex] = 0.0f;
+        //   return;
+        // }
+        // if (vis < .8f && mask == 0) {
+        //   change_img[imindex] = 1.0f;
+        //   return;
+        // }
+
+
         float mask = mask_img[imindex];
-        if (vis > .5f && mask == 0) {
-          change_img[imindex] = 0.0f;
-          return;
-        }
-        if (vis < .5f && mask == 0) {
-          change_img[imindex] = 1.0f;
-          return;
+        // if(vis > 0.75 && mask > 0.5f)
+        //     change_img[imindex] = 1.0f;
+        if(mask < 1.0f) {
+            change_img[imindex] = 0.0f;
+            return;
         }
     }
     else
         if (vis > .5f) {
-            change_img[imindex] = 0.5f;
+            change_img[imindex] = 0.01f;
             return;
         }
 
-
-
     //compute foreground belief
+    //float fgbelief   = 1.0f/(1.0f+change_img[imindex]);
     float fgbelief   = 1.0f/(1.0f+change_img[imindex]);
     change_img[imindex] = fgbelief;
 }

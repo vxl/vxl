@@ -37,6 +37,7 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
                                 float                   time,
                                 float                   mog_var,
                                 bool                     update_alpha,
+                                bool                     update_changes_only,
                                 vil_image_view_base_sptr mask_sptr)
 {
 
@@ -196,6 +197,13 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
    bstm_ocl_util::set_bit_lookup(lookup_arr);
    bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
    lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+
+   // update_alpha boolean buffer
+   cl_int up_changes_only[1];
+   up_changes_only[0] = update_changes_only ? 1 : 0;
+   bocl_mem_sptr up_changes_mem = new bocl_mem(device->context(), up_changes_only, sizeof(up_changes_only), "update changes bool buffer");
+   up_changes_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
    // update_alpha boolean buffer
    cl_int up_alpha[1];
@@ -423,6 +431,7 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
        {
          bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type,data_buffer_length*nobsTypeSize,false);
 
+         bocl_mem *change   = opencl_cache->get_data<BSTM_CHANGE>(*id, num_time_trees*auxTypeSize,false);
 
          local_threads[0] = 64;
          local_threads[1] = 1 ;
@@ -438,9 +447,12 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
          kern->set_arg( aux1 );
          kern->set_arg( aux2 );
          kern->set_arg( aux3 );
+         kern->set_arg( change );
+
          kern->set_arg( mog_var_mem.ptr() );
          kern->set_arg( time_mem.ptr() );
          kern->set_arg( up_alpha_mem.ptr() );
+         kern->set_arg( up_changes_mem .ptr() );
          kern->set_arg( cl_output.ptr() );
 
          kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar8) ); //local time tree
@@ -518,7 +530,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr de
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = opts;
+  vcl_string options = opts ;
 
   //populate vector of kernels
   vcl_vector<bocl_kernel*> vec_kernels;

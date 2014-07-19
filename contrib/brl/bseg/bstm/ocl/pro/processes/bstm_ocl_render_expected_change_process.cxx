@@ -20,7 +20,7 @@
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <bstm/ocl/algo/bstm_ocl_render_expected_image_function.h>
+#include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/algo/vil_median.h>
 
 
@@ -52,7 +52,7 @@ namespace bstm_ocl_render_expected_change_process_globals
     vcl_string options = opts;
 
 
-    options += "-D RENDER_LAMBERT -D RENDER_CHANGE -D STEP_CELL=step_cell_render_change(aux_args,data_ptr_tt,d*linfo->block_len)";
+    options += "-D RENDER_LAMBERT -D RENDER_CHANGE -D STEP_CELL=step_cell_render_change(aux_args,data_ptr,data_ptr_tt,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -156,70 +156,142 @@ bool bstm_ocl_render_expected_change_process(bprb_func_process& pro)
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
 
-  // run expected image function
-  float render_time;
+   //camera check
+   if (cam->type_name()!= "vpgl_perspective_camera" &&  cam->type_name()!= "vpgl_generic_camera" ) {
+     vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+     return 0.0f;
+   }
 
-  render_time = render_expected_image( scene, device, opencl_cache, queue,
-                                    cam, exp_image, vis_image, exp_img_dim,
-                                    data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj, apptypesize,time);
+   // create all buffers
+   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
+   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
+   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
+   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+
+   // Output Array
+   float output_arr[100];
+   for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
+   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+   // bit lookup buffer
+   cl_uchar lookup_arr[256];
+   bstm_ocl_util::set_bit_lookup(lookup_arr);
+   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+   //render label or not?
+   cl_int render_label_buf[1];
+   render_label_buf[0] = 0;
+   bocl_mem_sptr render_label_mem = new bocl_mem(device->context(), render_label_buf, sizeof(cl_int), "render label?");
+   render_label_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+   cl_float cl_time = 0;
+   bocl_mem_sptr time_mem =new bocl_mem(device->context(), &cl_time, sizeof(cl_float), "time instance buffer");
+   time_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+   //2. set global thread size
+   vcl_size_t gThreads[] = {cl_ni,cl_nj};
+
+   // set arguments
+   vcl_vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
+   vcl_vector<bstm_block_id>::iterator id;
+   for (id = vis_order.begin(); id != vis_order.end(); ++id)
+   {
+       //choose correct render kernel
+       bstm_block_metadata mdata = scene->get_block_metadata(*id);
+
+       //if the current blk does not contain the queried time, no need to ray cast
+       double local_time;
+       if(!mdata.contains_t(time,local_time))
+         continue;
+
+       //write cl_time
+       cl_time = (cl_float)local_time;
+       time_mem->write_to_buffer(queue);
 
 
+       bocl_kernel* kern =  kernels[identifier][0];
 
-//  {
-//    vcl_size_t gThreads[] = {cl_ni,cl_nj};
-//    bocl_kernel* normalize_kern= kernels[identifier][1];
-//    normalize_kern->set_arg( exp_image.ptr() );
-//    normalize_kern->set_arg( vis_image.ptr() );
-//    normalize_kern->set_arg( exp_img_dim.ptr());
-//    normalize_kern->execute( queue, 2, lthreads, gThreads);
-//    clFinish(queue);
-//
-//    //clear render kernel args so it can reset em on next execution
-//    normalize_kern->clear_args();
-//    render_time += normalize_kern->exec_time();
-//  }
+       //write the image values to the buffer
+       vul_timer transfer;
+       bocl_mem* blk       = opencl_cache->get_block(*id);
+       bocl_mem* blk_t     = opencl_cache->get_time_block(*id);
+       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+       bocl_mem* blk_t_info= opencl_cache->loaded_time_block_info();
+
+       bstm_scene_info* info_buffer_t = (bstm_scene_info*) blk_t_info->cpu_buffer();
 
 
-  float all_time = rtime.all();
-  vcl_cout<<"Total Render time: "<<render_time <<" ms"<<vcl_endl;
+       bocl_mem* alpha     = opencl_cache->get_data<BSTM_ALPHA>(*id);
+       int alphaTypeSize   = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_ALPHA>::prefix());
 
-  vis_image->read_to_buffer(queue);
+       bocl_mem *change_array   = opencl_cache->get_data(*id, bstm_data_traits<BSTM_CHANGE>::prefix(), info_buffer_t->tree_buffer_length * bstm_data_traits<BSTM_CHANGE>::datasize() ,false);
+
+       //if rendering label, actually get the data for it, otherwise don't bother.
+       bocl_mem* label = change_array;
+
+
+       ////3. SET args
+       kern->set_arg( blk_info );
+       kern->set_arg( blk );
+       kern->set_arg( blk_t );
+       kern->set_arg( alpha );
+       kern->set_arg( change_array );
+       kern->set_arg( label );
+       kern->set_arg( render_label_mem.ptr() );
+       kern->set_arg( ray_o_buff.ptr() );
+       kern->set_arg( ray_d_buff.ptr() );
+       kern->set_arg( exp_image.ptr() );
+       kern->set_arg( exp_img_dim.ptr());
+       kern->set_arg( cl_output.ptr() );
+       kern->set_arg( lookup.ptr() );
+       kern->set_arg( vis_image.ptr() );
+       kern->set_arg( time_mem.ptr() );
+
+       //local tree , cumsum buffer, imindex buffer
+       kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar16) );
+       kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar8) );
+       kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) );
+       kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_int) );
+
+       //execute kernel
+       kern->execute(queue, 2, lthreads, gThreads);
+       clFinish(queue);
+
+       //clear render kernel args so it can reset em on next execution
+       kern->clear_args();
+       kern->release_current_event();
+   }
+
+   //clean up cam
+   delete[] ray_origins;
+   delete[] ray_directions;
+   opencl_cache->unref_mem(ray_o_buff.ptr());
+   opencl_cache->unref_mem(ray_d_buff.ptr());
+
+
   exp_image->read_to_buffer(queue);
-
-
   vil_image_view< float >* exp_img_out = new vil_image_view< float >(ni,nj);
   int numFloats = 4;
   int count = 0;
   for (unsigned c=0;c<nj;++c) {
     for (unsigned r=0;r<ni;++r,count+=numFloats) {
-      (*exp_img_out)(r,c) =  (1-buff[count]) ;
+      (*exp_img_out)(r,c) =  (buff[count]) ;
     }
   }
 
 
-  int medfilt_halfsize = 2;
-  vil_image_view<float>* out_img = new vil_image_view< float >(ni,nj);
-  out_img->fill(0);
-
-  vcl_vector<int> strel_vec_i, strel_vec_j;
-  for (int i=-medfilt_halfsize; i <= medfilt_halfsize; ++i)
-    for (int j=-medfilt_halfsize; j <= medfilt_halfsize; ++j) {
-      strel_vec_i.push_back(i);
-      strel_vec_j.push_back(j); }
-
-  vil_structuring_element strel(strel_vec_i,strel_vec_j);
-  vil_median(*exp_img_out,*out_img,strel);
-
-
   delete [] vis_buff;
   delete [] buff;
-  delete exp_img_out;
+  //delete exp_img_out;
 
   // read out expected image
   clReleaseCommandQueue(queue);
 
   //store render time
   int argIdx = 0;
-  pro.set_output_val<vil_image_view_base_sptr>(argIdx++, out_img);
+  pro.set_output_val<vil_image_view_base_sptr>(argIdx++, exp_img_out);
   return true;
 }

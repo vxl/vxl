@@ -17,7 +17,9 @@
 bstm_ocl_particle_filter::bstm_ocl_particle_filter(bocl_device_sptr device, bstm_scene_sptr scene, bstm_cache_sptr cache, bstm_opencl_cache_sptr opencl_cache,
                         unsigned start_t, unsigned end_t, vgl_box_3d<double> initial_bb, int num_particles, double t_sigma, double w_sigma,
                         vcl_string kernel_opt,int nbins, int track_label, double radius ):
-device_(device), scene_(scene), opencl_cache_(opencl_cache), cache_(cache), end_t_(end_t), start_t_(start_t), initial_bb_(initial_bb), num_particles_(num_particles), t_sigma_(t_sigma), w_sigma_(w_sigma), track_label_(track_label), radius_(radius), surf_nbins_(2), app_nbins_(nbins), app_view_dir_num_(4), kernel_opt_(kernel_opt), rand_(9667566)
+                        device_(device), scene_(scene), cache_(cache), opencl_cache_(opencl_cache),num_particles_(num_particles), initial_bb_(initial_bb),
+                        t_sigma_(t_sigma), w_sigma_(w_sigma), start_t_(start_t), end_t_(end_t), track_label_(track_label), radius_(radius),
+                        kernel_opt_(kernel_opt), app_nbins_(nbins), app_view_dir_num_(4), surf_nbins_(2), rand_(9667566)
 {
   //get blocks that intersect the provided bounding box.
   //vcl_vector<bstm_block_id> relevant_blocks = scene_->get_block_ids(initial_bb, start_t);

@@ -368,6 +368,13 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
   int dataSize = 0;                                       //running sum of data size
   int currIndex = 0;
 
+  //alloc new data buffers with appropriate size
+  bstm_block_id id = blk_->block_id();
+  bstm_cache_sptr cache = bstm_cache::instance();
+  bstm_data_base *change_buffer   =   cache->get_data_base_new(id,bstm_data_traits<BSTM_CHANGE>::prefix(), blk_t_->tree_buff_length() * bstm_data_traits<BSTM_CHANGE>::datasize()  );
+
+  change_array_ = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_buffer->data_buffer();
+
   int tree_index = 0;
   boxm2_array_3d<uchar16>::iterator blk_iter, boxm2_blk_iter;
   for (blk_iter = trees.begin(), boxm2_blk_iter = boxm2_trees.begin(); blk_iter != trees.end(); ++blk_iter, ++boxm2_blk_iter)
@@ -398,7 +405,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
          int boxm2_data_offset =  boxm2_curr_tree.get_data_index( i_boxm2, false);
 
          //refine all the time trees associated with curr cell.
-         this->refine_all_time_trees(bstm_data_offset, boxm2_data_offset, dataIndex, currIndex, dataSize,
+         bool refined_time_tree = this->refine_all_time_trees(bstm_data_offset, boxm2_data_offset, dataIndex, currIndex, dataSize,
                                      curr_tree.depth_at(i), boxm2_curr_tree.depth_at(i_boxm2), is_leaf );
          num_processed_cells++;
        }
@@ -408,8 +415,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
 
   //vcl_cout << "New data size is " << dataSize << vcl_endl;
 
-  //alloc new data buffers with appropriate size
-  bstm_block_id id = blk_->block_id();
+
 
   bstm_data_base* newA = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_ALPHA>::datasize() ], dataSize * bstm_data_traits<BSTM_ALPHA>::datasize(), id);
   bstm_data_base* newM = new bstm_data_base(new char[dataSize * bstm_data_traits<APM_TYPE>::datasize()], dataSize * bstm_data_traits<APM_TYPE>::datasize(), id);
@@ -459,7 +465,6 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
   //vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
 
   //replace databases
-  bstm_cache_sptr cache = bstm_cache::instance();
   cache->replace_data_base(id, bstm_data_traits<BSTM_ALPHA>::prefix(), newA);
   cache->replace_data_base(id, bstm_data_traits<APM_TYPE>::prefix(), newM);
 
@@ -514,9 +519,10 @@ int bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::move_all_time_tr
 
 
 template <bstm_data_type APM_TYPE, boxm2_data_type BOXM2_APM_TYPE>
-void bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refine_all_time_trees(int bstm_data_offset,int boxm2_data_offset, int* dataIndex,
+bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refine_all_time_trees(int bstm_data_offset,int boxm2_data_offset, int* dataIndex,
                                                                                        int& currIndex, int& dataSize, int currDepth, int currDepth_boxm2, bool is_leaf)
 {
+  bool refined_any_time_tree = false;
   //zip thru time trees
   int newSize = 0;
   boxm2_array_1d<uchar8>  all_time_trees =  blk_t_->get_cell_all_tt(bstm_data_offset);
@@ -529,7 +535,7 @@ void bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refine_all_time
     //if not a leaf, don't bother refining its time tree to save space.
     if (t == blk_t_->tree_index(local_time_) && is_leaf)
     {
-      bstm_time_tree refined_t_tree = this->refine_time_tree(tmp_tree, boxm2_data_offset,currDepth, currDepth_boxm2);
+      bstm_time_tree refined_t_tree = this->refine_time_tree(tmp_tree, bstm_data_offset, boxm2_data_offset,currDepth, currDepth_boxm2);
       uchar8 refined_bits(refined_t_tree.get_bits());
       blk_t_->set_cell_tt(bstm_data_offset, refined_bits, t );                             //save it in time block
       newSize = refined_t_tree.num_leaves();                                               //count up the number of cells needed
@@ -537,9 +543,13 @@ void bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refine_all_time
     else
       newSize = tmp_tree.num_leaves();                                                     //count up the number of cells needed
 
+    if(tmp_tree.num_cells() != newSize)
+      refined_any_time_tree = true;
+
     dataSize += newSize;
     currIndex++;
   }
+  return refined_any_time_tree;
 }
 
 
@@ -570,7 +580,7 @@ void bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::place_curr_data
 }
 
 template <bstm_data_type APM_TYPE, boxm2_data_type BOXM2_APM_TYPE>
-bstm_time_tree bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refine_time_tree(const bstm_time_tree& input_tree, int boxm2_data_offset, int currDepth, int currDepth_boxm2)
+bstm_time_tree bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refine_time_tree(const bstm_time_tree& input_tree, int bstm_data_offset, int boxm2_data_offset, int currDepth, int currDepth_boxm2)
 {
   //initialize tree to return
   bstm_time_tree refined_tree(input_tree.get_bits(), max_level_t_);
@@ -598,6 +608,9 @@ bstm_time_tree bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refin
   bstm_data_traits<BSTM_ALPHA>::datatype alpha = alpha_[data_offset];
   float p = 1 - vcl_exp(- alpha * side_len);
   typename bstm_data_traits<APM_TYPE>::datatype mog = apm_model_[data_offset];
+
+  //save change of probabilities
+  change_array_[bstm_data_offset] = vcl_fabs(boxm2_p - p);
 
   if ( is_similar(p, mog, boxm2_p, boxm2_mog) )
     return refined_tree;

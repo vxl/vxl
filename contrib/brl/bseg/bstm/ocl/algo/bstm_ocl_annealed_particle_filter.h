@@ -12,7 +12,8 @@ class bstm_ocl_annealed_particle_filter : public bstm_ocl_particle_filter
   bstm_ocl_annealed_particle_filter(bocl_device_sptr device, bstm_scene_sptr scene, bstm_cache_sptr cache, bstm_opencl_cache_sptr opencl_cache,
                            unsigned start_t, unsigned end_t, vgl_box_3d<double> initial_bb, int num_particles, double t_sigma, double w_sigma, double w_kappa,
                            vcl_string kernel_opt, int nbins, int label, vcl_string pf_output_path, double radius = 0 ) :
-  bstm_ocl_particle_filter( device, scene, cache, opencl_cache, start_t, end_t, initial_bb, num_particles, t_sigma, w_sigma, kernel_opt, nbins, label, radius ), original_t_sigma_(t_sigma), original_w_sigma_(w_sigma), original_w_kappa_(w_kappa), pf_output_path_(pf_output_path) { }
+                               bstm_ocl_particle_filter( device,  scene, cache, opencl_cache, start_t, end_t, initial_bb, num_particles, t_sigma, w_sigma,
+                                                         kernel_opt, nbins, label,  radius ), pf_output_path_(pf_output_path), original_t_sigma_(t_sigma), original_w_sigma_(w_sigma),original_w_kappa_(w_kappa) { }
 
   virtual void track();
 

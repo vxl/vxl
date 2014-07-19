@@ -15,6 +15,7 @@
 #include <bstm/ocl/bstm_ocl_util.h>
 #include <bstm/bstm_util.h>
 #include <vil/vil_image_view.h>
+#include <vil/algo/vil_median.h>
 
 // brdb stuff
 #include <brdb/brdb_value.h>

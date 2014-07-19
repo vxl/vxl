@@ -33,7 +33,7 @@
 
 namespace bstm_ocl_update_color_process_globals
 {
-  const unsigned int n_inputs_  = 9;
+  const unsigned int n_inputs_  = 10;
   const unsigned int n_outputs_ = 0;
 }
 
@@ -51,7 +51,8 @@ bool bstm_ocl_update_color_process_cons(bprb_func_process& pro)
   input_types_[5] = "float";                        //time
   input_types_[6] = "float";                        //mog var
   input_types_[7] = "vil_image_view_base_sptr";     //mask image view
-  input_types_[8] = "bool";                          //update alpha
+  input_types_[8] = "bool";                         //update alpha
+  input_types_[9] = "bool";                         //update changed voxels only
 
   //initialize empty mask if no input is given
   brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
@@ -89,6 +90,7 @@ bool bstm_ocl_update_color_process(bprb_func_process& pro)
   float mog_var                        = pro.get_input<float>(i++);
   vil_image_view_base_sptr mask_img     = pro.get_input<vil_image_view_base_sptr>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++);
+  bool                     update_changes_only = pro.get_input<bool>(i++);
 
-  return bstm_ocl_update_color::update(scene, device, opencl_cache, cam, img, time, mog_var,  update_alpha, mask_img);
+  return bstm_ocl_update_color::update(scene, device, opencl_cache, cam, img, time, mog_var,  update_alpha, update_changes_only, mask_img);
 }

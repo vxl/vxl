@@ -62,8 +62,7 @@ class bstm_scene : public vbl_ref_count
     }
     //: visibility order from point, blocks must intersect with cam box
     vcl_vector<bstm_block_id>
-    get_vis_order_from_pt(vgl_point_3d<double> const& pt,
-                          vgl_box_2d<double> camBox = vgl_box_2d<double>());
+    get_vis_order_from_pt(vgl_point_3d<double> const& pt, vgl_box_2d<double> camBox = vgl_box_2d<double>());
 
     //: return a heap pointer to a scene info
     bool block_exists(bstm_block_id id) const { return blocks_.find(id) != blocks_.end(); }
