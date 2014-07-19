@@ -10,6 +10,7 @@
 *.hxx            whitespace=tab-in-indent,-trailing-space
 *.txt            whitespace=tab-in-indent,-trailing-space
 *.txx            whitespace=tab-in-indent,-trailing-space
+*.py            whitespace=tab-in-indent,-trailing-space
 
 *.bat           -crlf
 *.bin           -crlf
