@@ -7,7 +7,7 @@ SET(bstm_pro_sources
 AUX_SOURCE_DIRECTORY(processes bstm_pro_sources)
 ADD_LIBRARY(bstm_pro  ${bstm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bstm_pro bstm bstm_io boxm2_basic boct brdb vpgl vil vgl vul vbl vcl)
+TARGET_LINK_LIBRARIES(bstm_pro bstm bstm_io bstm_util boxm2_basic boct brdb vpgl vil vgl vul vbl vcl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
