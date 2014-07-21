@@ -164,7 +164,7 @@ void volm_desc_ex_2d::b_read(vsl_b_istream& is)
 {
   unsigned ver;
   vsl_b_read(is, ver);
-  if (ver == 1)
+  if (ver == this->version())
   {
     vsl_b_read(is, name_);
     vsl_b_read(is, nbins_);

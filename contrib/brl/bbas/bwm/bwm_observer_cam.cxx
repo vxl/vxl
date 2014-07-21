@@ -2009,7 +2009,7 @@ void bwm_observer_cam::set_ground_plane()
 
 void bwm_observer_cam::add_ground_plane(unsigned order, unsigned nlcd_id, vcl_string name)
 {
-  // get the slected polygon
+  // get the selected polygon
   vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
   if (polys.size()!=1) {
     vcl_cout << "Not a single polygon selected - select a single polygon\n";

@@ -60,6 +60,7 @@ class depth_map_region : public vbl_ref_count
   void set_depth_inc(double depth_inc){depth_inc_ = depth_inc;}
   void set_order(unsigned order){order_ = order;}
   void set_active(bool active){active_ = active;}
+  void set_ref(bool is_ref){is_ref_ = is_ref;}
   void set_orient_type(orientation type){orient_type_ = type;}
   void set_orient_type(unsigned ori_code);
   void set_orient_type(unsigned char ori_code)  { this->set_orient_type(static_cast<unsigned int>(ori_code)); }
@@ -82,6 +83,7 @@ class depth_map_region : public vbl_ref_count
   double depth() const {return depth_;}
   double depth_inc() const {return  depth_inc_;}
   bool active() const { return active_;}
+  bool is_ref() const { return is_ref_;}
   unsigned order() const {return order_;}
   vsol_point_2d_sptr centroid_2d() const;
   //:
@@ -131,7 +133,7 @@ class depth_map_region : public vbl_ref_count
                           vpgl_perspective_camera<double> const& cam,
                           double downsample_ratio = 1.0) const;
   //: version
-  unsigned version() const {return 2;}
+  unsigned version() const {return 3;}
 
   //: binary IO write
   void b_write(vsl_b_ostream& os);
@@ -141,6 +143,7 @@ class depth_map_region : public vbl_ref_count
 
  protected:
   bool active_;      // if active is true then inserted into the depth map
+  bool is_ref_;      // if is_ref is true then this object is set to be a reference object for further usage (default value is false)
   unsigned order_;   // depth order
   unsigned land_id_; // land classification id defined in volm_label_table (in volm_io)
   orientation orient_type_;

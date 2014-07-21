@@ -542,21 +542,23 @@ void bwm_tableau_cam::edit_region_props()
   static vcl_map<vcl_string, double> max_depth;
   static vcl_map<vcl_string, unsigned> orient;
   static vcl_map<vcl_string, unsigned> land_id;
-  static vcl_map<vcl_string, bool> active;;
+  static vcl_map<vcl_string, bool> active;
+  static vcl_map<vcl_string, bool> is_reference;
   // for padding to align fields
   unsigned max_string_size = 0;
   for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
        rit != regions.end(); ++rit) {
     vcl_string name  = (*rit)->name();
     if (name.size()>max_string_size)
-      max_string_size = name.size();
-    depth_order[name] = (*rit)->order();
-    min_depth[name]   = (*rit)->min_depth();
-    max_depth[name]   = (*rit)->max_depth();
+      max_string_size  = name.size();
+    depth_order[name]  = (*rit)->order();
+    min_depth[name]    = (*rit)->min_depth();
+    max_depth[name]    = (*rit)->max_depth();
     //depth_inc[name]   = (*rit)->depth_inc();
-    active[name]      = (*rit)->active();
-    orient[name]      = (*rit)->orient_type();
-    land_id[name]     = (*rit)->land_id();
+    active[name]       = (*rit)->active();
+    orient[name]       = (*rit)->orient_type();
+    land_id[name]      = (*rit)->land_id();
+    is_reference[name] = (*rit)->is_ref();
   }
   vgui_dialog_extensions reg_dialog("Scene Region Editor");
   vcl_vector<depth_map_region_sptr>::iterator gpit;
@@ -582,6 +584,7 @@ void bwm_tableau_cam::edit_region_props()
     reg_dialog.choice("Orientation", orient_types, orient[(*rit)->name()]);
     reg_dialog.choice("Land Class", land_types, land_id[(*rit)->name()]);
     reg_dialog.checkbox("Active", active[(*rit)->name()]);
+    reg_dialog.checkbox("Reference", is_reference[(*rit)->name()]);
     reg_dialog.line_break();
   }
 
@@ -595,6 +598,7 @@ void bwm_tableau_cam::edit_region_props()
     (*rit)->set_max_depth(max_depth[name]);
     (*rit)->set_land_type(volm_osm_category_io::volm_land_table_name[land_types[land_id[name]]].id_);
     (*rit)->set_active(active[name]);
+    (*rit)->set_ref(is_reference[name]);
     (*rit)->set_orient_type(orient[name]);
   }
   //my_observer_->set_ground_plane_max_depth();
@@ -612,7 +616,7 @@ void bwm_tableau_cam::edit_region_weights()
   vcl_sort(objs.begin(), objs.end(), compare_order());
 
   if (my_observer_->weights().empty()) {
-    // calcualte average weight as default
+    // calculate average weight as default
     float w_avg, w_obj;
     if (!dms.sky().empty() && !dms.ground_plane().empty()) {
       w_avg = 1.0f / (2.0f + dms.scene_regions().size());

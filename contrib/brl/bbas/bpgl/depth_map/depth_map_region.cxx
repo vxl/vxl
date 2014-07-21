@@ -90,7 +90,7 @@ depth_map_region::depth_map_region()
     orient_type_(NON_PLANAR), name_(""), depth_(-1.0),
     min_depth_(0.0), max_depth_(vcl_numeric_limits<double>::max()),
     depth_inc_(1.0),
-    region_2d_(0), region_3d_(0)
+    region_2d_(0), region_3d_(0), is_ref_(false)
 {}
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -103,7 +103,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
     orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(min_depth), max_depth_(max_depth),
     depth_inc_(1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0)
+    region_plane_(region_plane), region_2d_(region), region_3d_(0), is_ref_(false)
 {
 }
 
@@ -116,7 +116,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
     orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(-1.0), max_depth_(-1.0),
     depth_inc_(1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0)
+    region_plane_(region_plane), region_2d_(region), region_3d_(0), is_ref_(false)
 {
 }
 
@@ -437,6 +437,7 @@ void depth_map_region::b_write(vsl_b_ostream& os)
   unsigned ver = this->version();
   vsl_b_write(os, ver);
   vsl_b_write(os, active_);
+  vsl_b_write(os, is_ref_);
   vsl_b_write(os, order_);
   unsigned temp = static_cast<unsigned>(orient_type_);
   vsl_b_write(os, temp);
@@ -474,9 +475,32 @@ void depth_map_region::b_read(vsl_b_istream& is)
     vsol_polygon_3d* r3d=0;
     vsl_b_read(is, r3d);
     region_3d_ = r3d;
+    is_ref_ = false;
   }
   else if (ver == 2) {
     vsl_b_read(is, active_);
+    vsl_b_read(is, order_);
+    unsigned temp;
+    vsl_b_read(is, temp);
+    orient_type_ = static_cast<orientation>(temp);
+    vsl_b_read(is, name_);
+    vsl_b_read(is, depth_);
+    vsl_b_read(is, min_depth_);
+    vsl_b_read(is, max_depth_);
+    vsl_b_read(is, land_id_);
+    vsl_b_read(is, depth_inc_);
+    vsl_b_read(is, region_plane_);
+    vsol_polygon_2d* r2d=0;
+    vsl_b_read(is, r2d);
+    region_2d_ = r2d;
+    vsol_polygon_3d* r3d=0;
+    vsl_b_read(is, r3d);
+    region_3d_ = r3d;
+    is_ref_ = false;
+  }
+  else if (ver == 3) {
+    vsl_b_read(is, active_);
+    vsl_b_read(is, is_ref_);
     vsl_b_read(is, order_);
     unsigned temp;
     vsl_b_read(is, temp);

@@ -1,0 +1,86 @@
+//This is brl/bbas/volm/conf/volm_conf_object.h
+#ifndef volm_conf_object_h_
+#define volm_conf_object_h_
+//:
+// \file A class to represent an object that is defined by its position (relative to some coordinates), land type and other attributes
+//  Note the default location is defined by cylindrical coordinate system
+
+// \author Yi Dong
+// \date July 16, 2014
+// \verbatim
+//   Modifications
+//    none yet
+// \endverbatim
+
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
+#include <vgl/vgl_point_2d.h>
+
+class volm_conf_object;
+typedef vbl_smart_ptr<volm_conf_object> volm_conf_object_sptr;
+
+
+class volm_conf_object : public vbl_ref_count
+{
+public:
+  //: default constructor
+  volm_conf_object() : theta_(0.0f), dist_(0.0f), land_(0) {}
+  //: constructor from location theta, dist, land_id
+  volm_conf_object(float  const& theta, float  const& dist, unsigned char const& land);
+  volm_conf_object(double const& theta, double const& dist, unsigned char const& land);
+  //: constructor from a 2-d points, land id
+  volm_conf_object(vgl_point_2d<float>  const& pt, unsigned char const& land);
+  volm_conf_object(vgl_point_2d<double> const& pt, unsigned char const& land);
+
+  //: destructor
+  ~volm_conf_object() {}
+
+  //: Accessors
+  float theta() const        { return theta_; }
+  float dist()  const        { return dist_;   }
+  unsigned char land() const { return land_;   }
+  float theta_in_deg() const;
+
+  //: return the location as Cartesian
+  float x() const;
+  float y() const;
+  vgl_point_2d<float> loc() const;
+
+  //: check whether the two configuration object is same or not
+  bool is_same(volm_conf_object const& other);
+  bool is_same(volm_conf_object_sptr other_sptr);
+  bool is_same(volm_conf_object const* other_ptr);
+
+  //: print method
+  void print(vcl_ostream& os) const
+  {  
+    os << "volm_conf_object -- theta: " << theta_ << " (" << this->theta_in_deg() << " degree), dist: " << dist_ << ", land: " << (int)land_ << ")";
+    os << vcl_endl;
+  }
+
+  // ================  binary I/O ===================
+  //: version
+  unsigned version() const { return 1; }
+  //: binary IO write
+  void b_write(vsl_b_ostream& os) const;
+  //: binary IO read
+  void b_read(vsl_b_istream& is);
+
+private:
+  float theta_;             // location coordinate theta
+  float dist_;            // location coordinate radius
+  unsigned char land_;      // object land type id
+};
+
+void vsl_b_write(vsl_b_ostream& os, volm_conf_object const&     obj);
+void vsl_b_write(vsl_b_ostream& os, volm_conf_object const* obj_ptr);
+void vsl_b_write(vsl_b_ostream& os, volm_conf_object_sptr const& obj_sptr);
+
+void vsl_b_read(vsl_b_istream& is, volm_conf_object&           obj);
+void vsl_b_read(vsl_b_istream& is, volm_conf_object*&      obj_ptr);
+void vsl_b_read(vsl_b_istream& is, volm_conf_object_sptr& obj_sptr);
+
+
+#endif // volm_conf_object

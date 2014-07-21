@@ -1,15 +1,6 @@
 # bbas/volm/CMakeLists.txt
 # Volumetric Matching and 3-d indexing library
 
-# some classes depend on OPENCL being found...
-# shouldn't be needed in a basic library (JLM)
-# INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-# IF(OPENCL_FOUND)
-
-# ADD_DEFINITIONS(-DHAS_OPENCL=1)
-# INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-# ENDIF(OPENCL_FOUND)
-
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
@@ -69,6 +60,9 @@ TARGET_LINK_LIBRARIES(volm vsph bpgl vgl_algo vil vil_io vil_algo vbl_io vsol bk
 
 # Base matcher, Proximity matcher, Visibility matcher related
 SUBDIRS(desc)
+
+# 2-d, 3-d Configurational matcher related
+SUBDIRS(conf)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
