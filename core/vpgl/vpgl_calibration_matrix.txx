@@ -101,6 +101,7 @@ void vpgl_calibration_matrix<T>::set_principal_point(
 template <class T>
 void vpgl_calibration_matrix<T>::set_x_scale( T new_x_scale )
 {
+  VXL_DEPRECATED( "vpgl_calibration_matrix<T>::set_x_scale()" );
   assert( new_x_scale > 0 );
   x_scale_ = new_x_scale;
 }
@@ -110,6 +111,7 @@ void vpgl_calibration_matrix<T>::set_x_scale( T new_x_scale )
 template <class T>
 void vpgl_calibration_matrix<T>::set_y_scale( T new_y_scale )
 {
+  VXL_DEPRECATED( "vpgl_calibration_matrix<T>::set_y_scale()" );
   assert( new_y_scale > 0 );
   y_scale_ = new_y_scale;
 }

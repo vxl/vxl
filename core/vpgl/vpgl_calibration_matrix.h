@@ -55,8 +55,8 @@ class vpgl_calibration_matrix
 
   T focal_length() const { return focal_length_; }
   vgl_point_2d<T> principal_point() const { return principal_point_; }
-  T x_scale() const { return x_scale_; }
-  T y_scale() const { return y_scale_; }
+  T x_scale() const { VXL_DEPRECATED( "vpgl_calibration_matrix<T>::x_scale()" ); return x_scale_; }
+  T y_scale() const { VXL_DEPRECATED( "vpgl_calibration_matrix<T>::y_scale()" ); return y_scale_; }
   T skew() const { return skew_; }
 
   //: Equality tests
