@@ -18,8 +18,7 @@ template <class T>
 vpgl_calibration_matrix<T>::vpgl_calibration_matrix() :
   focal_length_( (T)1 ),
   principal_point_( vgl_point_2d<T>( (T)0, (T)0 ) ),
-  x_scale_( (T)1 ),
-  y_scale_( (T)1 ),
+  aspect_ratio_( (T)1 ),
   skew_( (T)0 )
 {
 }
@@ -28,17 +27,15 @@ vpgl_calibration_matrix<T>::vpgl_calibration_matrix() :
 //--------------------------------------
 template <class T>
 vpgl_calibration_matrix<T>::vpgl_calibration_matrix(
-    T focal_length, const vgl_point_2d<T>& principal_point, T x_scale, T y_scale, T skew ) :
+    T focal_length, const vgl_point_2d<T>& principal_point, T aspect_ratio, T skew ) :
   focal_length_( focal_length ),
   principal_point_( principal_point ),
-  x_scale_( x_scale ),
-  y_scale_( y_scale ),
+  aspect_ratio_( aspect_ratio ),
   skew_( skew )
 {
   // Make sure the inputs are valid.
   assert( focal_length != 0 );
-  assert( x_scale > 0 );
-  assert( y_scale > 0 );
+  assert( aspect_ratio > 0 );
 }
 
 
@@ -52,13 +49,10 @@ vpgl_calibration_matrix<T>::vpgl_calibration_matrix( const vnl_matrix_fixed<T,3,
   double scale_factor = 1.0;
   if ( K(2,2) != (T)1 ) scale_factor /= (double)K(2,2);
 
-  focal_length_ = (T)1;
-  x_scale_ = T(scale_factor*K(0,0));
-  y_scale_ = T(scale_factor*K(1,1));
+  focal_length_ = T(scale_factor*K(0,0));
+  aspect_ratio_ = T(scale_factor*K(1,1)/focal_length_);
   skew_    = T(scale_factor*K(0,1));
   principal_point_.set( T(scale_factor*K(0,2)), T(scale_factor*K(1,2)) );
-
-  assert( ( x_scale_ > 0 && y_scale_ > 0 ) || ( x_scale_ < 0 && y_scale_ < 0 ) );
 }
 
 
@@ -68,8 +62,8 @@ vnl_matrix_fixed<T,3,3> vpgl_calibration_matrix<T>::get_matrix() const
 {
   // Construct the matrix as in H&Z.
   vnl_matrix_fixed<T,3,3> K( (T)0 );
-  K(0,0) = focal_length_*x_scale_;
-  K(1,1) = focal_length_*y_scale_;
+  K(0,0) = focal_length_;
+  K(1,1) = focal_length_*aspect_ratio_;
   K(2,2) = (T)1;
   K(0,2) = principal_point_.x();
   K(1,2) = principal_point_.y();
@@ -102,8 +96,6 @@ template <class T>
 void vpgl_calibration_matrix<T>::set_x_scale( T new_x_scale )
 {
   VXL_DEPRECATED( "vpgl_calibration_matrix<T>::set_x_scale()" );
-  assert( new_x_scale > 0 );
-  x_scale_ = new_x_scale;
 }
 
 
@@ -112,10 +104,14 @@ template <class T>
 void vpgl_calibration_matrix<T>::set_y_scale( T new_y_scale )
 {
   VXL_DEPRECATED( "vpgl_calibration_matrix<T>::set_y_scale()" );
-  assert( new_y_scale > 0 );
-  y_scale_ = new_y_scale;
 }
 
+//--------------------------------------
+template <class T>
+void vpgl_calibration_matrix<T>::set_aspect_ratio( T new_aspect_ratio )
+{
+  aspect_ratio_ = new_aspect_ratio;
+}
 
 //--------------------------------------
 template <class T>
@@ -134,7 +130,7 @@ operator==(vpgl_calibration_matrix<T> const &that) const
   return
     this->focal_length_ == that.focal_length_ &&
     this->principal_point_ == that.principal_point_ &&
-    this->x_scale_ == that.x_scale_ && this->y_scale_ == that.y_scale_ &&
+    this->aspect_ratio_ == that.aspect_ratio_ &&
     this->skew_ == that.skew_;
 }
 
