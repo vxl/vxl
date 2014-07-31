@@ -250,7 +250,6 @@ void vpgl_camera_transform::normalize_img_pts(const vcl_vector<vpgl_perspective_
 
     vpgl_calibration_matrix<double> Knew(K_vals[0]/ns,
                                       vgl_point_2d<double>((K_vals[2]-nx)/ns,(K_vals[3]-ny)/ns),
-                                      1.0,
                                       K_vals[1],
                                       K_vals[4]);
 

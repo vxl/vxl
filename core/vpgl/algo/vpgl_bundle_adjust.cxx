@@ -176,7 +176,6 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
     K_vals /= cameras.size();
     vpgl_calibration_matrix<double> K(K_vals[0]/ns,
                                       vgl_point_2d<double>((K_vals[2]-nx)/ns,(K_vals[3]-ny)/ns),
-                                      1.0,
                                       K_vals[1],
                                       K_vals[4]);
     ba_func_ = new vpgl_ba_shared_k_lsqr(K,norm_image_points,mask);
