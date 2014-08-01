@@ -18,7 +18,7 @@ template <class T>
 vpgl_calibration_matrix<T>::vpgl_calibration_matrix() :
   focal_length_( (T)1 ),
   principal_point_( vgl_point_2d<T>( (T)0, (T)0 ) ),
-  aspect_ratio_( (T)1 ),
+  pixel_aspect_ratio_( (T)1 ),
   skew_( (T)0 )
 {
 }
@@ -27,15 +27,15 @@ vpgl_calibration_matrix<T>::vpgl_calibration_matrix() :
 //--------------------------------------
 template <class T>
 vpgl_calibration_matrix<T>::vpgl_calibration_matrix(
-    T focal_length, const vgl_point_2d<T>& principal_point, T aspect_ratio, T skew ) :
+    T focal_length, const vgl_point_2d<T>& principal_point, T pixel_aspect_ratio, T skew ) :
   focal_length_( focal_length ),
   principal_point_( principal_point ),
-  aspect_ratio_( aspect_ratio ),
+  pixel_aspect_ratio_( pixel_aspect_ratio ),
   skew_( skew )
 {
   // Make sure the inputs are valid.
   assert( focal_length != 0 );
-  assert( aspect_ratio > 0 );
+  assert( pixel_aspect_ratio > 0 );
 }
 
 
@@ -50,7 +50,7 @@ vpgl_calibration_matrix<T>::vpgl_calibration_matrix( const vnl_matrix_fixed<T,3,
   if ( K(2,2) != (T)1 ) scale_factor /= (double)K(2,2);
 
   focal_length_ = T(scale_factor*K(0,0));
-  aspect_ratio_ = T(scale_factor*K(1,1)/focal_length_);
+  pixel_aspect_ratio_ = T(scale_factor*K(1,1)/focal_length_);
   skew_    = T(scale_factor*K(0,1));
   principal_point_.set( T(scale_factor*K(0,2)), T(scale_factor*K(1,2)) );
 }
@@ -63,7 +63,7 @@ vnl_matrix_fixed<T,3,3> vpgl_calibration_matrix<T>::get_matrix() const
   // Construct the matrix as in H&Z.
   vnl_matrix_fixed<T,3,3> K( (T)0 );
   K(0,0) = focal_length_;
-  K(1,1) = focal_length_*aspect_ratio_;
+  K(1,1) = focal_length_*pixel_aspect_ratio_;
   K(2,2) = (T)1;
   K(0,2) = principal_point_.x();
   K(1,2) = principal_point_.y();
@@ -108,9 +108,10 @@ void vpgl_calibration_matrix<T>::set_y_scale( T new_y_scale )
 
 //--------------------------------------
 template <class T>
-void vpgl_calibration_matrix<T>::set_aspect_ratio( T new_aspect_ratio )
+void vpgl_calibration_matrix<T>::set_pixel_aspect_ratio( T new_aspect_ratio )
 {
-  aspect_ratio_ = new_aspect_ratio;
+  assert( new_aspect_ratio > 0 );
+  pixel_aspect_ratio_ = new_aspect_ratio;
 }
 
 //--------------------------------------
@@ -130,7 +131,7 @@ operator==(vpgl_calibration_matrix<T> const &that) const
   return
     this->focal_length_ == that.focal_length_ &&
     this->principal_point_ == that.principal_point_ &&
-    this->aspect_ratio_ == that.aspect_ratio_ &&
+    this->pixel_aspect_ratio_ == that.pixel_aspect_ratio_ &&
     this->skew_ == that.skew_;
 }
 
