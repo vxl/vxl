@@ -554,7 +554,8 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
             cnt++;
             ds -= 1;
           }
-
+          if (line_img.empty())
+            continue;
           // expand the line to a region with certain width
           double width = 3.0;
           vgl_polygon<double> img_poly;
