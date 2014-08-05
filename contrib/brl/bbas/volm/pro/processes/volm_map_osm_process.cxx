@@ -463,12 +463,28 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
             double uu = prev_u + cnt*1*cos + 0.5f;
             double vv = prev_v + cnt*1*sin + 0.5f;
             if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj()) {
-              if (band_name.compare("r") == 0)      out_img(uu, vv).r = 255;
-              else if(band_name.compare("g") == 0)  out_img(uu, vv).g = 255;
-              else if(band_name.compare("b") == 0)  out_img(uu, vv).b = 255;
+              line_img.push_back(vgl_point_2d<double>(uu,vv));
+              //if (band_name.compare("r") == 0)      out_img(uu, vv).r = 255;
+              //else if(band_name.compare("g") == 0)  out_img(uu, vv).g = 255;
+              //else if(band_name.compare("b") == 0)  out_img(uu, vv).b = 255;
             }
             cnt++; 
             ds -= 1;
+          }
+          // expand the line to a region with certain width
+          double width = 3.0;
+          vgl_polygon<double> img_poly;
+          volm_io_tools::expend_line(line_img, width, img_poly);
+          vgl_polygon_scan_iterator<double> it(img_poly, true);
+          for (it.reset(); it.next();  ) {
+            int y = it.scany();
+            for (int x = it.startx(); x <= it.endx(); ++x) {
+              if ( x >= 0 && y >= 0 && x < (int)out_img.ni() && y < (int)out_img.nj()) {
+                if (band_name.compare("r") == 0)      out_img(x, y).r = 255;
+                else if(band_name.compare("g") == 0)  out_img(x, y).g = 255;
+                else if(band_name.compare("b") == 0)  out_img(x, y).b = 255;
+              }
+            }
           }
         }
       }
@@ -540,7 +556,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
           }
 
           // expand the line to a region with certain width
-          double width = 2.0;
+          double width = 3.0;
           vgl_polygon<double> img_poly;
           volm_io_tools::expend_line(line_img, width, img_poly);
           vgl_polygon_scan_iterator<double> it(img_poly, true);
@@ -565,5 +581,3 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
   return hit;
 }
-
-

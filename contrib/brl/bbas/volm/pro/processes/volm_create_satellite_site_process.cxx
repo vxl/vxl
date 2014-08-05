@@ -23,7 +23,7 @@ bool volm_create_satellite_resources_process_cons(bprb_func_process& pro)
   //inputs
   vcl_vector<vcl_string> input_types_(3);
   input_types_[0] = "vcl_string";      // polygon file (kml) of ROI
-  input_types_[1] = "float";      // polygon file (kml) of ROI
+  input_types_[1] = "float";           // leaf size
   input_types_[2] = "bool";    // if true: eliminate the images which have different names but 'same' extent and 'same' collection time up to seconds
   
   if (!pro.set_input_types(input_types_))
@@ -662,6 +662,124 @@ bool volm_find_satellite_pairs_process(bprb_func_process& pro)
   return out;
 }
 
+// a process to return a text file with names of 'pairs' of satellite images that are taken a few miutues apart from each other
+// (the time difference is within 5 minutes and more than 1 minutes)
+bool volm_find_satellite_pairs_poly_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  vcl_vector<vcl_string> input_types_(5);
+  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[1] = "vcl_string";      // kml file that gives the region of interest polygon
+  input_types_[2] = "vcl_string";      // output file to print the list
+  input_types_[3] = "vcl_string";      // satellite name
+  input_types_[4] = "float";       // GSD_threshold
+  if (!pro.set_input_types(input_types_))
+    return false;
+  //output
+  vcl_vector<vcl_string> output_types_(1);
+  output_types_[0] = "unsigned";  // return number of pairs that intersect this region
+  return pro.set_output_types(output_types_);
+}
 
+bool volm_find_satellite_pairs_poly_process(bprb_func_process& pro)
+{
+  // check number of inputs
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << " invalid inputs" << vcl_endl;
+    return false;
+  }
+  //get the inputs
+  volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
+  vcl_string poly_file = pro.get_input<vcl_string>(1);
+  vcl_string out_file = pro.get_input<vcl_string>(2);
+  vcl_string sat_name = pro.get_input<vcl_string>(3);
+  float GSD_thres = pro.get_input<float>(4);
+
+  // find the bbox of the polygon
+  vgl_polygon<double> poly = bkml_parser::parse_polygon(poly_file);
+  vcl_cout << "outer poly  has: " << poly[0].size() << " points " << vcl_endl;
+
+  // find the bbox of ROI from its polygon
+  vgl_box_2d<double> bbox;
+  for (unsigned i = 0; i < poly[0].size(); i++) {
+    bbox.add(poly[0][i]);
+  }
+  double lower_left_lon  = bbox.min_x();
+  double lower_left_lat  = bbox.min_y();
+  double upper_right_lon = bbox.max_x();
+  double upper_right_lat = bbox.max_y();
+
+  unsigned cnt = 0; bool out = false;
+  out = res->query_pairs_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, GSD_thres, cnt, out_file, sat_name);
+  pro.set_output_val<unsigned>(0, cnt);
+  return out;
+}
+
+#include <vgl/vgl_intersection.h>
+// a simple process to return the area of the region where to satellite images intersect
+bool volm_satellite_pair_intersection_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  vcl_vector<vcl_string> input_types_(2);
+  input_types_[0] = "vcl_string";      // satellite image 1
+  input_types_[1] = "vcl_string";      // satellite image 2
+  if (!pro.set_input_types(input_types_))
+    return false;
+  //output
+  vcl_vector<vcl_string> output_types_(5);
+  output_types_[0] = "double";  // lower left  lon of intersection region
+  output_types_[1] = "double";  // lower left  lat of intersection region
+  output_types_[2] = "double";  // upper right lon of intersection region
+  output_types_[3] = "double";  // upper right lat of intersection region
+  output_types_[4] = "double";  // intersection area
+  return pro.set_output_types(output_types_);
+}
+
+bool volm_satellite_pair_intersection_process(bprb_func_process& pro)
+{
+  // check number of inputs
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << " invalid inputs" << vcl_endl;
+    return false;
+  }
+  //get the inputs
+  volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
+  vcl_string img_file1 = pro.get_input<vcl_string>(1);
+  vcl_string img_file2 = pro.get_input<vcl_string>(2);
+
+  if (!vul_file::exists(img_file1)) {
+    vcl_cout << pro.name() << ": " << img_file1 << " is missing" << vcl_endl;
+    return false;
+  }
+  if (!vul_file::exists(img_file2)) {
+    vcl_cout << pro.name() << ": " << img_file2 << " is missing" << vcl_endl;
+    return false;
+  }
+
+  // load two nitf images
+  brad_image_metadata meta1(img_file1,"");
+  brad_image_metadata meta2(img_file2,"");
+  vgl_box_2d<double> bbox1(meta1.lower_left_.x(), meta1.upper_right_.x(),
+                           meta1.lower_left_.y(), meta1.upper_right_.y());
+  vgl_box_2d<double> bbox2(meta2.lower_left_.x(), meta2.upper_right_.x(),
+                           meta2.lower_left_.y(), meta2.upper_right_.y());
+  
+  vgl_box_2d<double> intersection_bbox = vgl_intersection(bbox1, bbox2);
+  double area = intersection_bbox.area();
+
+  // generate output
+  unsigned i = 0;
+  pro.set_output_val<double>(i++, intersection_bbox.min_x());
+  pro.set_output_val<double>(i++, intersection_bbox.min_y());
+  pro.set_output_val<double>(i++, intersection_bbox.max_x());
+  pro.set_output_val<double>(i++, intersection_bbox.max_y());
+  pro.set_output_val<double>(i++, area);
+  return true;
+
+
+
+}
 
 

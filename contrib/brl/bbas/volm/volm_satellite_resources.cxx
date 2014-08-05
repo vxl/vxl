@@ -422,7 +422,7 @@ unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double low
         }
         if (!already_added) {
           ids.push_back(vcl_pair<unsigned, unsigned>(ids2[i], ids2[j]));
-          vcl_cout << "\t\t !!!!!! PUSHED! time dif 5 mins!\n";
+          vcl_cout << "\t\t !!!!!! PUSHED! time dif: " << time_dif << " mins within threshold [1, 5] mins!\n";
         }
       }
       vcl_cout << "\n";

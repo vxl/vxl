@@ -147,6 +147,18 @@ def find_stereo_pairs(res, lower_left_lon, lower_left_lat, upper_right_lon, uppe
   cnt = bvxm_batch.get_output_unsigned(id);
   return cnt;
 
+def find_stereo_pairs2(res, poly_roi, GSD_threshold, scene_res_file, satellite_name):
+  bvxm_batch.init_process("volmFindSatellitePairsPolyProcess")
+  bvxm_batch.set_input_from_db(0,res);
+  bvxm_batch.set_input_string(1, poly_roi);
+  bvxm_batch.set_input_string(2, scene_res_file);
+  bvxm_batch.set_input_string(3, satellite_name);
+  bvxm_batch.set_input_float(4, GSD_threshold);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  cnt = bvxm_batch.get_output_unsigned(id);
+  return cnt;
+
 def correct_ransac_process(res, cor_file, output_folder, pixel_radius):
   bvxm_batch.init_process("volmCorrectRationalCamerasRANSACProcess");
   bvxm_batch.set_input_from_db(0, res);
