@@ -103,7 +103,8 @@ static void test_sun_dir_index()
   double er = vcl_fabs(x0-0.302867)+ vcl_fabs(y0 + 0.236176);
   TEST_NEAR("test constructor", er, 0.0, 0.001);
   vcl_vector<vnl_double_2> ill_angs = illum_angles();
-  int index = diridx.index(ill_angs[2][1], ill_angs[2][0]);
+  double min_angle;
+  int index = diridx.index(ill_angs[2][1], ill_angs[2][0], min_angle);
   TEST("bin index", index, 2);
 #if 0
   vcl_ofstream os("c:/images/BaghdadBoxm2/sun_index.wrl");
