@@ -14,6 +14,12 @@ void convert(const char* t, T& d)
   str >> d;
 }
 
+void convert_string(const char* t, vcl_string& d)
+{
+  vcl_stringstream strstream(t);
+  d = strstream.str();
+}
+
 bool is_line(vcl_vector<unsigned long long> ids)
 {
   return *(ids.begin()) != *(ids.end()-1);
@@ -152,9 +158,9 @@ void volm_osm_parser::startElement(const XML_Char* name, const XML_Char** atts)
       vcl_string key, value;
       for (unsigned i = 0; atts[i]; i+=2) {
         if (vcl_strcmp(atts[i], "k") == 0)
-          convert(atts[i+1], key);
+          convert_string(atts[i+1], key);
         else if (vcl_strcmp(atts[i], "v") == 0)
-          convert(atts[i+1], value);
+          convert_string(atts[i+1], value);
       }
       vcl_pair<vcl_string, vcl_string> pair(key, value);
       if (parent_.first == OSM_NODE)
@@ -307,10 +313,13 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const& osm_bbox,
     vcl_vector<unsigned long long> curr_line = get_line_from_way_id(curr_way_id, ways);
     //vcl_vector<unsigned long long> curr_line = ways[curr_way_id];
     vcl_vector<unsigned long long> sheet;
-
     if (!is_line(curr_line)) {
       for (unsigned n_idx = 0; n_idx < curr_line.size()-1; n_idx++)
         sheet.push_back(curr_line[n_idx]);
+    }
+    else if (vit == way_ids.end()-1) {
+      ++vit;
+      continue;
     }
     else {  // search other ways to compose a enclose sheet
       for (unsigned n_idx = 0; n_idx < curr_line.size(); n_idx++)
@@ -320,7 +329,6 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const& osm_bbox,
       unsigned long long p2 = *(curr_line.end()-1);
       unsigned long long start = p1;
       unsigned long long end = p2;
-      
       bool finish = (start == end);
       do {
         ++vit;

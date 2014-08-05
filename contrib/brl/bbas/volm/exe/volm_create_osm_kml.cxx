@@ -17,6 +17,7 @@
 #include <bkml/bkml_write.h>
 #include <volm/volm_osm_parser.h>
 #include <volm/volm_io.h>
+#include <vcl_algorithm.h>
 
 static void error(vcl_string error_file, vcl_string error_msg)
 {
@@ -134,10 +135,13 @@ int main(int argc, char** argv)
   else {
     vcl_cout << " parsing location points having key \"" << key() << "\" and value \"" << value() << "\" in osm to kml..." << vcl_endl;
     volm_osm_parser::parse_points(osm_pts, osm_pt_keys, osm_file());
+    vcl_cout << osm_pts.size() << " points are parsed from osm file" << vcl_flush << vcl_endl;
     vcl_cout << " parsing lines having key \"" << key() << "\" and value \"" << value() << "\" in osm to kml..." << vcl_endl;
     volm_osm_parser::parse_lines(osm_lines, osm_line_keys, osm_file());
+    vcl_cout << osm_lines.size() << " lines are parsed from osm file" << vcl_flush << vcl_endl;
     vcl_cout << " parsing regions having key \"" << key() << "\" and value \"" << value() << "\" in osm to kml..." << vcl_endl;
     volm_osm_parser::parse_polygons(osm_polys, osm_poly_keys, osm_file());
+    vcl_cout << osm_polys.size() << " regions are parsed from osm file" << vcl_flush << vcl_endl;
     write_pts_to_kml(ofs, key(), value(), osm_land_table, osm_pts, osm_pt_keys);
     write_lines_to_kml(ofs, key(), value(), osm_land_table, osm_lines, osm_line_keys, (unsigned char)rgb_r(), (unsigned char)rgb_g(), (unsigned char)rgb_b());
     write_polys_to_kml(ofs, key(), value(), osm_land_table, osm_polys, osm_poly_keys, (unsigned char)rgb_r(), (unsigned char)rgb_g(), (unsigned char)rgb_b());
@@ -164,6 +168,10 @@ void write_pts_to_kml(vcl_ofstream& ofs, vcl_string const& key, vcl_string const
     if (found) {
       // generate description which contains all tags for that locations
       generate_description(curr_keys, description);
+      // replace unsupported character in name
+      vcl_replace(name.begin(), name.end(), '&', '_');
+      vcl_replace(name.begin(), name.end(), '<', '_');
+      vcl_replace(name.begin(), name.end(), '>', '_');
       // put location into kml
       bkml_write::write_location(ofs, osm_pts[i], name, description, 0.6);
     }
@@ -207,7 +215,11 @@ void write_lines_to_kml(vcl_ofstream& ofs, vcl_string const& key, vcl_string con
     bool found = find_key_value_from_tags(key, value, curr_keys, name);
     if (found) {
       generate_description(curr_keys, description);
-      bkml_write::write_path(ofs, osm_lines[i], name, description, 1.0, 2.0, 0.35, r, g, b);
+      // replace unsupported character in name
+      vcl_replace(name.begin(), name.end(), '&', '_');
+      vcl_replace(name.begin(), name.end(), '<', '_');
+      vcl_replace(name.begin(), name.end(), '>', '_');
+      bkml_write::write_path(ofs, osm_lines[i], name, description, 1.0, 2.0, 1.0, r, g, b);
     }
   }
 #if 0
@@ -250,7 +262,11 @@ void write_polys_to_kml(vcl_ofstream& ofs, vcl_string const& key, vcl_string con
     bool found = find_key_value_from_tags(key, value, curr_keys, name);
     if (found) {
       generate_description(curr_keys, description);
-      bkml_write::write_polygon(ofs, osm_polys[i], name, description, 1.0, 3.0, 0.4, r, g, b);
+      // replace unsupported character in name
+      vcl_replace(name.begin(), name.end(), '&', '_');
+      vcl_replace(name.begin(), name.end(), '<', '_');
+      vcl_replace(name.begin(), name.end(), '>', '_');
+      bkml_write::write_polygon(ofs, osm_polys[i], name, description, 1.0, 3.0, 0.45, r, g, b);
     }
   }
 
@@ -315,4 +331,8 @@ void generate_description(vcl_vector<vcl_pair<vcl_string, vcl_string> >& tags, v
   {
     description += vit->first + "=" + vit->second + " ";
   }
+  // replace all unsupported characters in kml to "_"
+  vcl_replace(description.begin(), description.end(), '&', '_');
+  vcl_replace(description.begin(), description.end(), '<', '_');
+  vcl_replace(description.begin(), description.end(), '>', '_');
 }
