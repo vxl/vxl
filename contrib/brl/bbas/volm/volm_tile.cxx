@@ -261,19 +261,10 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr2_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  //p1b_tiles.push_back(volm_tile(11, 71, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(12, 76, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(12, 77, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(12, 78, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(13, 76, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(13, 77, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(13, 78, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(18, 72, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(18, 73, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(18, 74, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(19, 72, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(19, 73, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(19, 74, 'N', 'E', scale_i, scale_j, ni, nj));
   return p1b_tiles;
 }
 
@@ -284,21 +275,11 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr3_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  //p1b_tiles.push_back(volm_tile(30, 34, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(30, 35, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(30, 36, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(30, 37, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(31, 34, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(31, 35, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(31, 36, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(31, 37, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(32, 34, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(32, 35, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(32, 36, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(32, 37, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(33, 35, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(33, 36, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(33, 37, 'N', 'E', scale_i, scale_j, ni, nj));
   return p1b_tiles;
 }
 
@@ -311,12 +292,9 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr4_tiles()
   float scale_j = 1;
   p1b_tiles.push_back(volm_tile(5, 124, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(5, 125, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(6, 123, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(6, 124, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(6, 125, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(6, 126, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(7, 123, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(7, 124, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(7, 125, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(7, 126, 'N', 'E', scale_i, scale_j, ni, nj));
   return p1b_tiles;
@@ -329,17 +307,11 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr5_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  //p1b_tiles.push_back(volm_tile(21, 120, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(22, 120, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(22, 121, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(23, 120, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(23, 121, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(24, 120, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(24, 121, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(24, 122, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(25, 120, 'N', 'E', scale_i, scale_j, ni, nj));
   p1b_tiles.push_back(volm_tile(25, 121, 'N', 'E', scale_i, scale_j, ni, nj));
-  //p1b_tiles.push_back(volm_tile(25, 122, 'N', 'E', scale_i, scale_j, ni, nj));
   return p1b_tiles;
 }
 
@@ -355,6 +327,131 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr_tiles(int world_id)
   default: {
     vcl_cerr << "Unknown world id: " << world_id << vcl_endl;
            } }
+  return tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p2a_wr8_tiles()
+{
+  vcl_vector<volm_tile> tiles;
+  vcl_vector<volm_tile> wr13_tile = volm_tile::generate_p2a_wr13_tiles();
+  for (unsigned i = 0; i < wr13_tile.size(); i++)  tiles.push_back(wr13_tile[i]);
+  vcl_vector<volm_tile> wr12_tile = volm_tile::generate_p2a_wr12_tiles();
+  for (unsigned i = 0; i < wr12_tile.size(); i++)  tiles.push_back(wr12_tile[i]);
+  vcl_vector<volm_tile> wr11_tile = volm_tile::generate_p2a_wr11_tiles();
+  for (unsigned i = 0; i < wr11_tile.size(); i++)  tiles.push_back(wr11_tile[i]);
+  vcl_vector<volm_tile> wr9_tile = volm_tile::generate_p2a_wr9_tiles();
+  for (unsigned i = 0; i < wr9_tile.size();  i++)  tiles.push_back(wr9_tile[i]);
+  vcl_vector<volm_tile> wr10_tile = volm_tile::generate_p2a_wr10_tiles();
+  for (unsigned i = 0; i < wr10_tile.size(); i++)  tiles.push_back(wr10_tile[i]);
+  return tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p2a_wr9_tiles()
+{
+  vcl_vector<volm_tile> tiles;
+  unsigned ni = 3601,       nj = 3601;
+  float    scale_i = 1.0f,  scale_j = 1.0f;
+  tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 148, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 150, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(34, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(34, 148, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(34, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 148, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  return tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p2a_wr10_tiles()
+{
+  vcl_vector<volm_tile> tiles;
+  unsigned ni = 3601,       nj = 3601;
+  float    scale_i = 1.0f,  scale_j = 1.0f;
+  tiles.push_back(volm_tile(35, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 150, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 151, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(34, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(34, 150, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(34, 151, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 150, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 151, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 152, 'S', 'E', scale_i, scale_j, ni, nj));
+  return tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p2a_wr11_tiles()
+{
+  vcl_vector<volm_tile> tiles;
+  unsigned ni = 3601,       nj = 3601;
+  float    scale_i = 1.0f,  scale_j = 1.0f;
+  tiles.push_back(volm_tile(35, 145, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 146, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(34, 145, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(34, 146, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(34, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 145, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 146, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(33, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  return tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p2a_wr12_tiles()
+{
+  vcl_vector<volm_tile> tiles;
+  unsigned ni = 3601,       nj = 3601;
+  float    scale_i = 1.0f,  scale_j = 1.0f;
+  tiles.push_back(volm_tile(38, 148, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(38, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(37, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(37, 148, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(37, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(36, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(36, 148, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(36, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(36, 150, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 148, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 150, 'S', 'E', scale_i, scale_j, ni, nj));
+  return tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p2a_wr13_tiles()
+{
+  vcl_vector<volm_tile> tiles;
+  unsigned ni = 3601,       nj = 3601;
+  float    scale_i = 1.0f,  scale_j = 1.0f;
+  tiles.push_back(volm_tile(38, 145, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(38, 146, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(37, 145, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(37, 146, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(37, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(36, 145, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(36, 146, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(36, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 145, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 146, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  return tiles;
+}
+
+vcl_vector<volm_tile> volm_tile::generate_p2a_wr_tiles(int world_id)
+{
+  vcl_vector<volm_tile> tiles;
+  tiles.clear();
+  switch (world_id) {
+    case 8:  { tiles = volm_tile::generate_p2a_wr8_tiles();   break; }
+    case 9:  { tiles = volm_tile::generate_p2a_wr9_tiles();   break; }
+    case 10: { tiles = volm_tile::generate_p2a_wr10_tiles();  break; }
+    case 11: { tiles = volm_tile::generate_p2a_wr11_tiles();  break; }
+    case 12: { tiles = volm_tile::generate_p2a_wr12_tiles();  break; }
+    case 13: { tiles = volm_tile::generate_p2a_wr13_tiles();  break; }
+    default: {  vcl_cerr << "in volm_tile::generate_p2a_wr_tiles: unknown world id: " << world_id << vcl_endl; }
+  }
   return tiles;
 }
 

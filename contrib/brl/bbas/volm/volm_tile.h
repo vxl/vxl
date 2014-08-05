@@ -13,6 +13,7 @@
 //  Yi Dong - May 08 2012 - add accessors
 //  Yi Dong - July 31 2013 - modify the transfer matrix to handle southern hemisphere case
 //  Yi Dong - Aug 04 2013 - add accessors
+//  Yi Dong - July 29 2014 - add more tile generators
 // \endverbatim
 
 #include <vcl_string.h>
@@ -78,6 +79,13 @@ class volm_tile
    static vcl_vector<volm_tile> generate_p1b_wr4_tiles();
    static vcl_vector<volm_tile> generate_p1b_wr5_tiles();
    static vcl_vector<volm_tile> generate_p1b_wr_tiles(int world_id);
+   static vcl_vector<volm_tile> generate_p2a_wr8_tiles();
+   static vcl_vector<volm_tile> generate_p2a_wr9_tiles();
+   static vcl_vector<volm_tile> generate_p2a_wr10_tiles();
+   static vcl_vector<volm_tile> generate_p2a_wr11_tiles();
+   static vcl_vector<volm_tile> generate_p2a_wr12_tiles();
+   static vcl_vector<volm_tile> generate_p2a_wr13_tiles();
+   static vcl_vector<volm_tile> generate_p2a_wr_tiles(int world_id);
    //: calculate width of the tile
    double calculate_width();
    double calculate_height();
