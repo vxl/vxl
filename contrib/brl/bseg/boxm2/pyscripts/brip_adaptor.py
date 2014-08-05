@@ -46,3 +46,15 @@ def blob_intersection(mp_img, gt_img):
   (id,type) = boxm2_batch.commit_output(2);
   numBlobs = boxm2_batch.get_output_int(id);
   return (tp, fp, numBlobs)
+
+###########################################################
+# Truncate 16 bits NITF image by ignoring certain bits
+###########################################################
+def truncate_nitf_image(img, is_short = True):
+  bvxm_batch.init_process("bripTruncateNITFBitProcess");
+  bvxm_batch.set_input_from_db(0, img);
+  bvxm_batch.set_input_bool(1, is_short);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  out_img = dbvalue(id, type);
+  return out_img;

@@ -486,10 +486,11 @@ def combine_planes(img_red, img_green, img_blue):
   img_out = dbvalue(id, type);
   return img_out;
 
-def image_entropy(img, block_size = 5):
+def image_entropy(img, block_size = 5, bins = 16):
   bvxm_batch.init_process("vilBlockEntropyProcess");
   bvxm_batch.set_input_from_db(0, img);
   bvxm_batch.set_input_unsigned(1, block_size);
+  bvxm_batch.set_input_unsigned(2, bins)
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   entropy_img = dbvalue(id, type);

@@ -616,6 +616,7 @@ class brip_vil_float_ops
                                        const unsigned step,
                                        vil_image_resource_sptr const& img,
                                        const float sigma = 1.0f,
+                                       const unsigned bins = 16,
                                        const bool intensity = true,
                                        const bool gradient = true,
                                        const bool ihs = false);

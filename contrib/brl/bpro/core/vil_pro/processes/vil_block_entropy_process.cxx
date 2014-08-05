@@ -16,6 +16,7 @@ bool vil_block_entropy_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  //: original image
   input_types.push_back("unsigned"); // block size
+  input_types.push_back("unsigned"); // number of bins
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -39,12 +40,13 @@ bool vil_block_entropy_process(bprb_func_process& pro)
   unsigned i=0;
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
   unsigned size = pro.get_input<unsigned>(i++);
+  unsigned bins = pro.get_input<unsigned>(i++);
 
   //int medfilt_halfsize = 1;
   vil_image_resource_sptr image_res = vil_new_image_resource_of_view(*image);
   //float sigma = 1.0f;
   float sigma = 0.01f;
-  vil_image_view<float> out_img = brip_vil_float_ops::entropy(size, size, 1, image_res, sigma, true, false, false);
+  vil_image_view<float> out_img = brip_vil_float_ops::entropy(size, size, 1, image_res, sigma, bins, true, false, false);
   
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(out_img));
   return true;

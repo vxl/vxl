@@ -3268,6 +3268,7 @@ brip_vil_float_ops::entropy(const unsigned i_radius,
                             const unsigned step,
                             vil_image_resource_sptr const& img,
                             const float sigma,
+                            const unsigned bins,
                             const bool intensity,
                             const bool gradient,
                             const bool ihs)
@@ -3290,7 +3291,7 @@ brip_vil_float_ops::entropy(const unsigned i_radius,
     for (unsigned j = j_radius; j<(nj-j_radius); j+=step)
       for (unsigned i = i_radius; i<(ni-i_radius); i+=step)
         ent(i/step,j/step) =
-          brip_vil_float_ops::entropy_i(i, j, i_radius, j_radius, gimage);
+          brip_vil_float_ops::entropy_i(i, j, i_radius, j_radius, gimage, 255.0f, bins);
 
   if (gradient)
   {
