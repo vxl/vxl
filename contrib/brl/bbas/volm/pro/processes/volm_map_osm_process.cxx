@@ -14,6 +14,7 @@
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <volm/volm_io_tools.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
+#include <vul/vul_file.h>
 
 //:
 //  Take an ortho image and its camera, a bin file with an osm object list, map the objects onto the image
@@ -341,7 +342,7 @@ bool volm_map_osm_onto_image_process_cons(bprb_func_process& pro)
 bool volm_map_osm_onto_image_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() < 5) {
-    vcl_cout << "volm_map_osm_process: The number of inputs should be 3" << vcl_endl;
+    vcl_cout << "volm_map_osm_process: The number of inputs should be 5" << vcl_endl;
     return false;
   }
 
