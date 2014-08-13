@@ -482,10 +482,10 @@ bool volm_io_tools::load_satellite_height_imgs(vcl_string const& folder, vcl_vec
 
 void volm_io_tools::load_geocover_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)
 {
-  vcl_string file_glob = folder + "//Geocover_*.tif";
+  vcl_string file_glob = folder + "//NLCD_*.tif";
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
     volm_img_info info;
-    volm_io_tools::load_geotiff_image(fn(), info, true);  // last argument true so load camera from the file name
+    volm_io_tools::load_geotiff_image(fn(), info, false);  // last argument true so load camera from the file name
     infos.push_back(info);
   }
 }
