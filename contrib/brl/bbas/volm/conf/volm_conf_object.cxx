@@ -13,16 +13,20 @@ volm_conf_object::volm_conf_object(float const& theta, float const& dist, unsign
 {
   dist_ = dist;  land_ = land;
   theta_ = theta;
-  while (theta_ < vnl_math::twopi)
+  while (theta_ > vnl_math::twopi)
     theta_ -= (float)vnl_math::twopi;
+  while (theta_ < 0)
+    theta_ += (float)vnl_math::twopi;
 }
 
 volm_conf_object::volm_conf_object(double const& theta, double const& dist, unsigned char const& land)
 {
   dist_ = (float)dist; land_ = land;
   theta_ = (float)theta;
-  while (theta_ < vnl_math::twopi)
+  while (theta_ > vnl_math::twopi)
     theta_ -= (float)vnl_math::twopi;
+  while (theta_ < 0)
+    theta_ += (float)vnl_math::twopi;
 }
 
 // construct by the location point represented as (x,y)

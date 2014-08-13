@@ -27,8 +27,10 @@
 #include <vpgl/io/vpgl_io_perspective_camera.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_camera_space.h>
+#include <volm/volm_io_tools.h>
 #include <volm/volm_category_io.h>
 #include <volm/conf/volm_conf_object.h>
+
 
 class volm_conf_query;
 typedef vbl_smart_ptr<volm_conf_query> volm_conf_query_sptr;
@@ -44,7 +46,7 @@ public:
   //: destructor
   ~volm_conf_query() {}
 
-  //: Accessors
+  //: accessors
   vcl_vector<vpgl_perspective_camera<double> >& cameras()  { return cameras_; }
   vcl_vector<vcl_string>& camera_strings() { return camera_strings_; }
   vcl_vector<cam_angles>& camera_angles()  { return camera_angles_; }
@@ -54,13 +56,13 @@ public:
   unsigned ncam() const { return ncam_; }
   unsigned nobj() const { return nobj_; }
   unsigned nref() const { return nref_; }
+  double altitude() const { return altitude_; }
   vcl_vector<vcl_string>& ref_obj_name() { return ref_obj_name_; }
-  vcl_vector<vcl_map<vcl_string, vcl_vector<vgl_point_3d<float> > > >& obj_3d_polygons() { return obj_3d_polygons_; }
-  vcl_map<vcl_string, unsigned char>& obj_land_ids() { return obj_land_ids_; }
   vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> >& conf_objects() { return conf_objects_; }
 
-  //: some visualization method...
-
+  //: plot the configuration 
+  bool visualize_ref_objs(vcl_string const& in_img_file, vcl_string const& out_folder);
+  bool generate_top_views(vcl_string const& out_folder,  vcl_string const& filename_pre = "top_view");
   //: IO ??
 
 private:
@@ -75,28 +77,41 @@ private:
   unsigned nobj_;
   //: number of reference objects
   unsigned nref_;
+  //: camear altitude
+  double altitude_;
   //: vector of cameras that satisfies ground plane constraint among all possible camera calibrations
   vcl_vector<vpgl_perspective_camera<double> > cameras_;
   vcl_vector<vcl_string> camera_strings_;
   vcl_vector<cam_angles> camera_angles_;
   //: list of reference objects specified in depth scene
   vcl_vector<vcl_string> ref_obj_name_;
-  //: list of 3-d polygons generated from 2-d labeled polygon.  Map key is the object name
-  vcl_vector<vcl_map<vcl_string, vcl_vector<vgl_point_3d<float> > > > obj_3d_polygons_;
-  //: list of land type generated from 2-d labeled polygon.    Map key is the object name
-  vcl_map<vcl_string, unsigned char> obj_land_ids_;
   //: list of configurational objects for each camera
   vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objects_;
+  vcl_vector<vcl_map<vcl_string, vcl_pair<unsigned, unsigned> > > conf_objects_pixels_  ;
 
   //: construct reference objects list
   bool parse_ref_object(depth_map_scene_sptr depth_scene);
-  //: construct cameras
+  //: construct cameras -- also prune the camera
   bool create_perspective_cameras(volm_camera_space_sptr cam_space);
-  //: construct 3-d polygons from depth map scene for each camera
-  bool create_3d_polygons(depth_map_scene_sptr depth_scene);
   //: construct the configurational objects for each camera
   bool create_conf_object();
-
+  //: project all ground vertices of a polygon from image plane to world coordinates, return the nearest point distance and its angle relative to camera
+  //  x axis (East if camera heading is zero)
+  void project(vpgl_perspective_camera<double> const& cam,
+               vgl_homg_point_3d<double> const& cam_center, 
+               vgl_line_2d<double> const& horizon,
+               vgl_polygon<double> const& poly,
+               float& min_dist, float& phi,
+               unsigned& i, unsigned& j);
+  //: return the y coordinates given x and a line function
+  double line_coord(vgl_line_2d<double> const& line, double const& x);
+  //: plot a line into image
+  void plot_line_into_image(vil_image_view<vil_rgb<vxl_byte> >& image, vcl_vector<vgl_point_2d<double> > const& line,
+                            unsigned char const& r = 255, unsigned char const& g = 255, unsigned char const& b = 255,
+                            double const& width = 3.0);
+  void plot_dot_into_image(vil_image_view<vil_rgb<vxl_byte> >& image, vgl_point_2d<double> const& pt,
+                           unsigned char const& r = 255, unsigned char const& g = 255, unsigned char const& b = 255,
+                           double const& radius = 3.0);
 };
 
 #endif // volm_conf_query

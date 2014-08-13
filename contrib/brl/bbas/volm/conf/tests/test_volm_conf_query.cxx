@@ -1,9 +1,23 @@
 #include <testlib/testlib_test.h>
 #include <volm/conf/volm_conf_query.h>
 #include <vul/vul_file.h>
+#include <vsph/vsph_spherical_coord.h>
+#include <vsph/vsph_sph_point_3d.h>
+#include <bpgl/bpgl_camera_utils.h>
+#include <vil/vil_load.h>
+#include <vil/vil_save.h>
+
+double line_coord(vgl_line_2d<double> const& line, double const& x)
+{
+  if (line.b() == 0)
+    return 0.0;
+  else
+    return -line.a()/line.b()*x - line.c()/line.b();
+}
 
 static void test_volm_conf_query()
 {
+
   // load the depth_map_scene
   vcl_string depth_scene_file = "d:/work/find/conf_matcher_expt/p1a_test1_40/p1a_test1_40.vsl";
   if (!vul_file::exists(depth_scene_file)) {
@@ -47,16 +61,14 @@ static void test_volm_conf_query()
     }
   }
   // create a camera space
-  double head_mid=67.0,   head_radius=3.0,  head_inc=2.0;
-  double tilt_mid=87.7,   tilt_radius=3.0,  tilt_inc=2.0;
+  double head_mid=67.0,   head_radius=0.0,  head_inc=2.0;
+  double tilt_mid=87.70,   tilt_radius=0.0,  tilt_inc=2.0;
   double roll_mid=-0.74,  roll_radius=0.0,  roll_inc=0.0;
   //double top_fov_vals[] = {3.0,  4.0, 5.0, 12.0, 17.0, 18.0,19.0, 20.0, 24.0};
-  double top_fov_vals[] = {5.3, 7.3, 3.3};
-  vcl_vector<double> fovs(top_fov_vals, top_fov_vals + 3);
+  double top_fov_vals[] = {5.3};
+  vcl_vector<double> fovs;
+  fovs.push_back(top_fov_vals[0]);
 
-  for (vcl_vector<double>::iterator vit = fovs.begin();  vit != fovs.end();  ++vit)
-    vcl_cout << *vit << ", ";
-  vcl_cout << vcl_endl;
 
   double altitude = 3.0;
   volm_camera_space_sptr csp = new volm_camera_space(fovs, altitude, ni, nj,
@@ -89,7 +101,7 @@ static void test_volm_conf_query()
     vcl_cout << (*vit) << ", ";
   vcl_cout << vcl_endl;
 
-  vcl_cout << "configuration query camera list: " << vcl_endl;
+  vcl_cout << "configurational query camera list: " << vcl_endl;
   vcl_vector<vcl_string> cam_string = query->camera_strings();
   for (vcl_vector<vcl_string>::iterator vit = cam_string.begin();  vit != cam_string.end();  ++vit)
     vcl_cout << "\t" << (*vit) << vcl_endl;
@@ -97,11 +109,127 @@ static void test_volm_conf_query()
   TEST("configurational query cameras", query->cameras().size(), query->camera_angles().size());
   TEST("configurational query reference objects", query->ref_obj_name().size(), num_of_ref_objects);
 
+  vcl_cout << "configurational query has following reference object: " << vcl_endl;
+  vcl_vector<vcl_string> query_ref_obj = query->ref_obj_name();
+  for (vcl_vector<vcl_string>::iterator vit = query_ref_obj.begin();  vit != query_ref_obj.end();  ++vit)
+    vcl_cout << " " << (*vit);
+  vcl_cout << vcl_endl;
 
-  vcl_vector<vpgl_perspective_camera<double> > cam = query->cameras();
-  for (unsigned i = 0; i < cam.size(); i++) {
-    vcl_cout << "camera " << i << " has center " << cam[i].camera_center() << vcl_endl;
+  vcl_cout << "configurational query has following configuration object: " << vcl_endl;
+  vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objs = query->conf_objects();
+  for (unsigned i = 0; i < conf_objs.size(); i++) {
+    vcl_cout << "\t camera: " << cam_string[i] << vcl_endl;
+    for (vcl_map<vcl_string, volm_conf_object_sptr>::iterator mit = conf_objs[i].begin();  mit != conf_objs[i].end(); ++mit) {
+      vcl_cout << "\t\t obj name: " << mit->first << "\t\t" ;  mit->second->print(vcl_cout);
+    }
   }
+
+
+
+  // visualize the configurational query
+  vcl_string out_folder = "d:/work/find/conf_matcher_expt/p1a_test1_40/";
+  vcl_string img_file = "d:/work/find/conf_matcher_expt/p1a_test1_40/p1a_test1_40.jpg";
+  query->visualize_ref_objs(img_file, out_folder);
+  query->generate_top_views(out_folder);
+
+  
+#if 0
+  vcl_vector<vpgl_perspective_camera<double> > cam = query->cameras();
+  // get the horizon line
+  // obtain camera center
+  vgl_homg_point_3d<double> cam_center = cam[0].camera_center();
+  // obtain the horizon line
+  vgl_line_2d<double> h_line = bpgl_camera_utils::horizon(cam[0]);
+  vcl_cout << "\t camera center: " << cam_center << ", horizontal line: " << h_line << vcl_endl;
+
+  double i, j;
+  i = 1500;  j = 2000;
+  vgl_ray_3d<double> l_ray = cam[0].backproject_ray(i, j);
+  vsph_spherical_coord sph_coord(vgl_point_3d<double>(0.0,0.0,0.0), 1.0);
+  vsph_sph_point_3d sp;
+  vgl_point_3d<double> cp(l_ray.direction().x(), l_ray.direction().y(), l_ray.direction().z());
+  sph_coord.spherical_coord(cp, sp);
+  double dist = vcl_tan(vnl_math::pi - sp.theta_)*altitude;
+  double jj = line_coord(h_line, i);
+  if (j < jj)
+    vcl_cout << "pixel: " << i << 'x' << j << " is above horizon " << jj << vcl_endl;
+  vcl_cout << "pixel: " << i << 'x' << j << ", world_point: " << cp << ", world_point sph: " << sp
+           << ", dist: " << dist << ", phi: " << sp.phi_/vnl_math::pi_over_180 << vcl_endl;
+  volm_conf_object_sptr obj = new volm_conf_object(sp.phi_, dist, 1);
+  obj->print(vcl_cout);
+
+  i = 0;  j = 2500;
+  l_ray = cam[0].backproject_ray(i, j);
+  cp.set(l_ray.direction().x(), l_ray.direction().y(), l_ray.direction().z());
+  sph_coord.spherical_coord(cp, sp);
+  dist = vcl_tan(vnl_math::pi - sp.theta_)*altitude;
+  jj = line_coord(h_line, i);
+  if (j < jj)
+    vcl_cout << "pixel: " << i << 'x' << j << " is above horizon " << jj << vcl_endl;
+  vcl_cout << "pixel: " << i << 'x' << j << ", world_point: " << cp << ", world_point sph: " << sp
+           << ", dist: " << dist << ", phi: " << sp.phi_/vnl_math::pi_over_180 << vcl_endl;
+
+
+  i = 1000; j = 2500;
+  l_ray = cam[0].backproject_ray(i, j);
+  cp.set(l_ray.direction().x(), l_ray.direction().y(), l_ray.direction().z());
+  sph_coord.spherical_coord(cp, sp);
+  dist = vcl_tan(vnl_math::pi - sp.theta_)*altitude;
+  jj = line_coord(h_line, i);
+  if (j < jj)
+    vcl_cout << "pixel: " << i << 'x' << j << " is above horizon " << jj << vcl_endl;
+  vcl_cout << "pixel: " << i << 'x' << j << ", world_point: " << cp << ", world_point sph: " << sp
+           << ", dist: " << dist << ", phi: " << sp.phi_/vnl_math::pi_over_180 << vcl_endl;
+
+  i = 2000; j = 2500;
+  l_ray = cam[0].backproject_ray(i, j);
+  cp.set(l_ray.direction().x(), l_ray.direction().y(), l_ray.direction().z());
+  sph_coord.spherical_coord(cp, sp);
+  dist = vcl_tan(vnl_math::pi - sp.theta_)*altitude;
+  jj = line_coord(h_line, i);
+  if (j < jj)
+    vcl_cout << "pixel: " << i << 'x' << j << " is above horizon " << jj << vcl_endl;
+  vcl_cout << "pixel: " << i << 'x' << j << ", world_point: " << cp << ", world_point sph: " << sp
+           << ", dist: " << dist << ", phi: " << sp.phi_/vnl_math::pi_over_180 << vcl_endl;
+
+
+  i = 3999; j = 2500;
+  l_ray = cam[0].backproject_ray(i, j);
+  cp.set(l_ray.direction().x(), l_ray.direction().y(), l_ray.direction().z());
+  sph_coord.spherical_coord(cp, sp);
+  dist = vcl_tan(vnl_math::pi - sp.theta_)*altitude;
+  jj = line_coord(h_line, i);
+  if (j < jj)
+    vcl_cout << "pixel: " << i << 'x' << j << " is above horizon " << jj << vcl_endl;
+  vcl_cout << "pixel: " << i << 'x' << j << ", world_point: " << cp << ", world_point sph: " << sp
+           << ", dist: " << dist << ", phi: " << sp.phi_/vnl_math::pi_over_180 << vcl_endl;
+
+  //// test the horizonal line in image coordinates
+  //hp_3d.set(0.0,0.0,1.0,0.0);
+  //hp_2d = cam[0].project(hp_3d);
+  //vcl_cout << "p3da " << hp_3d << " p2da " << hp_2d << '\n';
+  //vcl_cout << "p3da " << hp_3d << ", img pixels: " << hp_2d.x()/hp_2d.w() << "x" << hp_2d.y()/hp_2d.w() << vcl_endl;
+
+  //vgl_line_2d<double> h_line = bpgl_camera_utils::horizon(cam[0]);
+  //vcl_cout << "h_line: " << h_line << vcl_endl;
+
+
+  //// plot the horizon on the image
+  //vcl_string img_file = "V:/p1a_related/test1/p1a_test1_40/p1a_test1_40.jpg";
+  //vil_image_view<vil_rgb<vxl_byte> > img = vil_load(img_file.c_str());
+  //unsigned nii = img.ni();
+  //unsigned njj = img.nj();
+
+  //for (unsigned i = 0; i < nii; i++) {
+  //  unsigned j = vcl_floor(-h_line.a()/h_line.b()*i - h_line.c()/h_line.b());
+  //  if (j < njj)
+  //    img(i,j) = vil_rgb<vxl_byte>(0,0,0);
+  //}
+  //vcl_string save_file = "v:/p1a_related/test1/p1a_test1_40/p1a_test1_40_h_line.jpg";
+  //vil_save(img, save_file.c_str());
+#endif
+
+  return;
 }
 
 TESTMAIN( test_volm_conf_query );
