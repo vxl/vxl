@@ -62,6 +62,7 @@ DECLARE_FUNC_CONS(vil_EO_IR_combine_process);
 DECLARE_FUNC_CONS(vil_truncate_image_process);
 DECLARE_FUNC_CONS(vil_grey_to_rgb_process);
 DECLARE_FUNC_CONS(vil_threshold_max_image_process);
+DECLARE_FUNC_CONS(vil_threshold_image_region_process);
 DECLARE_FUNC_CONS(vil_mask_image_using_ids_process);
 DECLARE_FUNC_CONS(vil_get_plane_process);
 DECLARE_FUNC_CONS(vil_combine_planes_process);
@@ -69,5 +70,6 @@ DECLARE_FUNC_CONS(vil_block_entropy_process);
 DECLARE_FUNC_CONS(vil_load_image_resource_process);
 DECLARE_FUNC_CONS(vil_get_number_of_planes_process);
 DECLARE_FUNC_CONS(vil_edge_detection_process);
+DECLARE_FUNC_CONS(vil_binary_edge_detection_process);
 
 #endif

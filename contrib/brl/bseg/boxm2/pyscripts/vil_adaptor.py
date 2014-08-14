@@ -25,20 +25,6 @@ def load_image(file_path) :
   boxm2_batch.remove_data(nj_id)
   return img, ni, nj;
 
-def load_image_resource(file_path) :
-  boxm2_batch.init_process("vilLoadImageResourceProcess");
-  boxm2_batch.set_input_string(0, file_path);
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0)
-  (ni_id, ni_type) = boxm2_batch.commit_output(1);
-  (nj_id, nj_type) = boxm2_batch.commit_output(2);
-  ni = boxm2_batch.get_output_unsigned(ni_id);
-  nj = boxm2_batch.get_output_unsigned(nj_id);
-  img_res = dbvalue(id,type);
-  boxm2_batch.remove_data(ni_id);
-  boxm2_batch.remove_data(nj_id);
-  return img_res, ni, nj;
-
 def save_image(img, file_path) :
   assert not isinstance(list, tuple)
   boxm2_batch.init_process("vilSaveImageViewProcess");
@@ -244,6 +230,16 @@ def max_threshold_image(img, threshold):
     (id,type) = boxm2_batch.commit_output(0)
     mask = dbvalue(id,type)
     return mask
+def threshold_image_inside(img, min_thres, max_thres, threshold_inside=True):
+    boxm2_batch.init_process("vilThresholdImageInsideProcess")
+    boxm2_batch.set_input_from_db(0, img)
+    boxm2_batch.set_input_float(1, min_thres)
+    boxm2_batch.set_input_float(2, max_thres)
+    boxm2_batch.set_input_bool(3, threshold_inside)
+    boxm2_batch.run_process()
+    (id, type) = boxm2_batch.commit_output(0)
+    mask = dbvalue(id, type)
+    return mask
 def stretch_image(img, min_value, max_value, output_type_str='float'):
     boxm2_batch.init_process("vilStretchImageProcess")
     boxm2_batch.set_input_from_db(0,img)
@@ -281,19 +277,6 @@ def crop_image(img,i0,j0,ni,nj):
   boxm2_batch.set_input_unsigned(2,j0)
   boxm2_batch.set_input_unsigned(3,ni)
   boxm2_batch.set_input_unsigned(4,nj)
-  boxm2_batch.run_process()
-  (id,type) = boxm2_batch.commit_output(0)
-  img_out = dbvalue(id,type)
-  return img_out
-
-# crop image, take a image resource as input
-def crop_image_res(img_res,i0,j0,ni,nj):
-  boxm2_batch.init_process("vilCropImageResProcess")
-  boxm2_batch.set_input_from_db(0, img_res)
-  boxm2_batch.set_input_unsigned(1, i0);
-  boxm2_batch.set_input_unsigned(2, j0);
-  boxm2_batch.set_input_unsigned(3, ni);
-  boxm2_batch.set_input_unsigned(4, nj);
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   img_out = dbvalue(id,type)
@@ -466,12 +449,13 @@ def median_filter_image(img, neighborhood_radius):
     filt_img = dbvalue(id,type)
     return filt_img
 
-def image_entropy(img, block_size = 5, bins = 16):
-  boxm2_batch.init_process("vilBlockEntropyProcess");
-  boxm2_batch.set_input_from_db(0, img);
-  boxm2_batch.set_input_unsigned(1, block_size);
-  boxm2_batch.set_input_unsigned(2, bins);
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  entropy_img = dbvalue(id, type);
-  return entropy_img;
+def binary_edge_detection(img, max_size, min_size, threshold_id = 255):
+  boxm2_batch.init_process("vilBinaryEdgeDetectionProcess")
+  boxm2_batch.set_input_from_db(0, img)
+  boxm2_batch.set_input_unsigned(1, max_size)
+  boxm2_batch.set_input_unsigned(2, min_size)
+  boxm2_batch.set_input_unsigned(3, threshold_id)
+  boxm2_batch.run_process()
+  (id, type) = boxm2_batch.commit_output(0)
+  edge_img = dbvalue(id,type)
+  return edge_img

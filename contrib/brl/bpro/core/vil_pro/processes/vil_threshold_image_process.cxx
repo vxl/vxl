@@ -135,3 +135,69 @@ bool vil_threshold_max_image_process(bprb_func_process& pro)
 }
 
 
+
+//: threshold an image such that dest(i,j,p)=true if min_thres<=src(i,j,p)<=max_thres if inside is true or dest(i,j,p)=true if src(i,j,p)<=min_thres or src(i,j,p)>=t1
+bool vil_threshold_image_region_process_cons(bprb_func_process& pro)
+{
+    // input
+    bool ok=false;
+    vcl_vector<vcl_string> input_types(4);
+    input_types[0] = "vil_image_view_base_sptr";  // input image
+    input_types[1] = "float";                     // min threshold
+    input_types[2] = "float";                     // max threshold
+    input_types[3] = "bool";                      // whether to threshold inside or outside, if true threshold inside, i.e. dest(i,j,p)=true if t0<=src(i,j,p)<=t1
+    ok = pro.set_input_types(input_types);
+    if (!ok) return ok;
+
+    // output
+    vcl_vector<vcl_string> output_types(1);
+    output_types[0] = "vil_image_view_base_sptr";
+    ok = pro.set_output_types(output_types);
+    if (!ok) return ok;
+    return true;
+}
+
+//: execute the process
+bool vil_threshold_image_region_process(bprb_func_process& pro)
+{
+    // sanity check
+    if (!pro.verify_inputs())
+      return false;
+
+    // get input
+    unsigned i = 0;
+    vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
+    float min_thres = pro.get_input<float>(i++);
+    float max_thres = pro.get_input<float>(i++);
+    bool thres_inside = pro.get_input<bool>(i++);
+
+    // retrieve float image
+    vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
+    vil_image_view<float> fimg = *fimage;
+
+    vil_image_view<bool>* temp = new vil_image_view<bool>;
+    if (thres_inside) {
+      // apply thresholds such that dest(i,j,p)=true if t0<=src(i,j,p)<=t1
+      vil_threshold_inside(fimg, *temp, min_thres, max_thres);
+    }
+    else {
+      // apply thresholds such that dest(i,j,p)=true if src(i,j,p)<=t0 or src(i,j,p)>=t1
+      vil_threshold_outside(fimg, *temp, min_thres, max_thres);
+    }
+
+    vil_image_view<unsigned char>* out = new vil_image_view<unsigned char>(temp->ni(), temp->nj());
+    for (unsigned k = 0 ; k < out->ni(); k++)
+    {
+        for (unsigned l = 0 ; l < out->nj(); l++)
+        {
+            if ((*temp)(k,l) )
+                (*out)(k,l) =255;
+            else
+                (*out)(k,l) =0;
+        }
+    }
+
+    // output
+    pro.set_output_val<vil_image_view_base_sptr>(0, out);
+    return true;
+}
