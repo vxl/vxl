@@ -42,4 +42,5 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_upsample_dem_projected_img_process, "volmUpsampleDemImgProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_height_map_plot_process, "volmGenerateHeightMapPlotProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_satellite_pair_intersection_process, "volmSatellitePairIntersectionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_combine_height_map_process, "volmCombineHeightMapProcess");
 }

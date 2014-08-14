@@ -287,3 +287,13 @@ def generate_height_map_plot(gt_height, height, dif_init, dif_final, dif_increme
   (id, type) = bvxm_batch.commit_output(3);
   out_map_dif = dbvalue(id, type);
   return correct_rate_array, height_dif_array, out_map, out_map_dif
+
+# combine height map
+def combine_height_map(height_map_folder, poly_roi, out_folder, size_in_degree = 0.0625, leaf_id = -1):
+  bvxm_batch.init_process("volmCombineHeightMapProcess");
+  bvxm_batch.set_input_string(0, height_map_folder);
+  bvxm_batch.set_input_string(1, poly_roi);
+  bvxm_batch.set_input_string(2, out_folder);
+  bvxm_batch.set_input_float(3, size_in_degree);
+  bvxm_batch.set_input_int(4, leaf_id);
+  bvxm_batch.run_process();

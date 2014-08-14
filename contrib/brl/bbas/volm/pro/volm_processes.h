@@ -32,4 +32,5 @@ DECLARE_FUNC_CONS(volm_project_dem_to_sat_img_process);
 DECLARE_FUNC_CONS(volm_upsample_dem_projected_img_process);
 DECLARE_FUNC_CONS(volm_generate_height_map_plot_process);
 DECLARE_FUNC_CONS(volm_satellite_pair_intersection_process);
+DECLARE_FUNC_CONS(volm_combine_height_map_process);
 #endif

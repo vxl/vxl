@@ -147,20 +147,25 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   info.img_name = img_file;
 
   vpgl_geo_camera *cam;
-  // try to load camera from image header first 
+  // try to load camera from image header first
+  vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
+  vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
+  vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
 
-
-  if (!is_cam_global && !load_cam_from_tfw) {
-    vpgl_geo_camera::init_geo_camera(img_file, info.ni, info.nj, lvcs, cam);
-    info.cam = cam;
-  } else if (load_cam_from_tfw) {
-    vpgl_geo_camera::init_geo_camera(cam_tfw_file, lvcs, 0, 0, cam);
-    info.cam = cam;
-  } else if (is_cam_global) {
-    vpgl_geo_camera::init_geo_camera_from_filename(img_file, info.ni, info.nj, lvcs, cam);
-    info.cam = cam;
+  if (cam == 0) {
+    if (!is_cam_global && !load_cam_from_tfw) {
+      vpgl_geo_camera::init_geo_camera(img_file, info.ni, info.nj, lvcs, cam);
+      info.cam = cam;
+    } else if (load_cam_from_tfw) {
+      vpgl_geo_camera::init_geo_camera(cam_tfw_file, lvcs, 0, 0, cam);
+      info.cam = cam;
+    } else if (is_cam_global) {
+      vpgl_geo_camera::init_geo_camera_from_filename(img_file, info.ni, info.nj, lvcs, cam);
+      info.cam = cam;
+    }
   }
-  
+  else
+    info.cam = cam;
   
   // obtain the bounding box of current image
   vcl_string name = vul_file::strip_directory(img_file);
