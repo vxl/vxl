@@ -31,6 +31,9 @@ class boxm2_export_oriented_point_cloud_function
                                       boxm2_data_base* points, boxm2_data_base* normals,
                                       vcl_ofstream& file,
                                       bool output_aux, float vis_t, float nmag_t, float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices);
+  static void exportColorPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
+                                       boxm2_data_base* mog, boxm2_data_base* alpha,vcl_string datatype,
+                                       boxm2_data_base* points,vcl_ofstream& file,float prob_t,vgl_box_3d<double> bb, unsigned& num_vertices);
 
   static bool calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk, const vnl_vector_fixed<float, 4>& point, const float& alpha, float& prob);
 

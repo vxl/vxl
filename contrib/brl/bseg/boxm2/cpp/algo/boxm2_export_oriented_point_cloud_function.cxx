@@ -137,7 +137,54 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
     //}
   }
 }
+void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
+                                                                        boxm2_data_base* mog, boxm2_data_base* alpha,vcl_string datatype ,
+                                                                        boxm2_data_base* points,vcl_ofstream& file,float prob_t,vgl_box_3d<double> bb, unsigned& num_vertices)
+{
+    boxm2_data_traits<BOXM2_POINT>::datatype     *   points_data  = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
+    boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *   mog_data     = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
+    boxm2_data_traits<BOXM2_ALPHA>::datatype     *   alpha_data   = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
+    file << vcl_fixed;
+    int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+    for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
+        float prob = 0.0f;
+        if (!calculateProbOfPoint(scene, blk, points_data[currIdx], alpha_data[currIdx], prob))
+            continue;
+        if (prob >= prob_t)
+        {
+            //check bounding box
+            if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
+            {
+                file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
+                
+                if(datatype == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+                {
+                    float exp_color  = boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog_data[currIdx]);
+                    int col = (int)(exp_color*255);
+                    col = col > 255 ? 255 : col;
+                    file << col << ' ' << col << ' ' << col <<"\n";
+                }
+                else if ( datatype == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
+                {
+                    vnl_vector_fixed<float,3> exp_color = boxm2_data_traits<BOXM2_GAUSS_RGB>::processor::expected_color(mog_data[currIdx]);
+                    int col0 = (int)(exp_color[0]*255);
+                    col0 = col0 > 255 ? 255 : col0;
+                    int col1 = (int)(exp_color[1]*255);
+                    col1 = col1 > 255 ? 255 : col1;
+                    int col2 = (int)(exp_color[2]*255);
+                    col2 = col2 > 255 ? 255 : col2;
+                    file << col0 << ' ' << col1 << ' ' << col2 <<"\n";
 
+                }
+                else{
+                    file << 0 << ' ' << 0 << ' ' << 0 <<"\n";
+                }
+               
+                num_vertices++;
+            }
+        }
+    }
+}
 bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
                                                                       const vnl_vector_fixed<float, 4>& point,
                                                                       const vnl_vector_fixed<float, 9>& cov,
