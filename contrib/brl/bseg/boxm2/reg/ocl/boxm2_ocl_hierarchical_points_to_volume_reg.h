@@ -1,3 +1,6 @@
+//PUBLIC RELEASE APPROVAL FROM AFRL 
+//Case Number: RY-14-0126
+//PA Approval Number: 88ABW-2014-1143
 #ifndef boxm2_ocl_hierarchical_points_to_volume_reg_h_
 #define boxm2_ocl_hierarchical_points_to_volume_reg_h_
 //:

@@ -1,3 +1,6 @@
+#PUBLIC RELEASE APPROVAL FROM AFRL 
+#Case Number: RY-14-0126
+#PA Approval Number: 88ABW-2014-1143
 # contrib/brl/bseg/boxm2_multi/exe/CMakeLists.txt
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )

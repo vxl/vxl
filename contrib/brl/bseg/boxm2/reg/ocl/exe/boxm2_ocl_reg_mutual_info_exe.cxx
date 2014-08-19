@@ -1,3 +1,6 @@
+//PUBLIC RELEASE APPROVAL FROM AFRL 
+//Case Number: RY-14-0126
+//PA Approval Number: 88ABW-2014-1143
 //:
 // \file
 // \brief  Register two boxm2 worlds using muual information.

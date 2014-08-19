@@ -1,3 +1,6 @@
+//PUBLIC RELEASE APPROVAL FROM AFRL
+//Case Number: RY-14-0126
+//PA Approval Number: 88ABW-2014-1143
 #pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics: enable
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable
 

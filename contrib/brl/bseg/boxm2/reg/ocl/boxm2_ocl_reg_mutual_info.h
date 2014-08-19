@@ -1,3 +1,6 @@
+//PUBLIC RELEASE APPROVAL FROM AFRL 
+//Case Number: RY-14-0126
+//PA Approval Number: 88ABW-2014-1143
 #ifndef boxm2_ocl_reg_mutual_info_h
 #define boxm2_ocl_reg_mutual_info_h
 //:
