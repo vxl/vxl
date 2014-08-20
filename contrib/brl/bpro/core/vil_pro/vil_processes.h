@@ -71,5 +71,6 @@ DECLARE_FUNC_CONS(vil_load_image_resource_process);
 DECLARE_FUNC_CONS(vil_get_number_of_planes_process);
 DECLARE_FUNC_CONS(vil_edge_detection_process);
 DECLARE_FUNC_CONS(vil_binary_edge_detection_process);
+DECLARE_FUNC_CONS(vil_BGR_to_RGB_process);
 
 #endif

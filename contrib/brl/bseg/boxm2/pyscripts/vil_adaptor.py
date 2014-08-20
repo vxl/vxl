@@ -459,3 +459,10 @@ def binary_edge_detection(img, max_size, min_size, threshold_id = 255):
   (id, type) = boxm2_batch.commit_output(0)
   edge_img = dbvalue(id,type)
   return edge_img
+def BGR_to_RGB(inimg):
+  boxm2_batch.init_process("vilBGRToRGBProcess")
+  boxm2_batch.set_input_from_db(0, inimg)
+  boxm2_batch.run_process()
+  (id, type) = boxm2_batch.commit_output(0)
+  out_img = dbvalue(id,type)
+  return out_img

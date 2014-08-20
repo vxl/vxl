@@ -87,5 +87,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_get_number_of_planes_process, "vilGetNumberOfPlanesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_edge_detection_process, "vilEdgeDetectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_binary_edge_detection_process, "vilBinaryEdgeDetectionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_BGR_to_RGB_process, "vilBGRToRGBProcess");
+  
 }
 

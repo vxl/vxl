@@ -99,7 +99,11 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
       int data_buff_length    = (int) (alpha->buffer_length()/alphaTypeSize);
       //specify size to make sure data is right size.
       boxm2_data_base * points = cache->get_data_base(id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
-      boxm2_data_base * mog = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier), data_buff_length * mogSize);
+      boxm2_data_base * mog;
+      if( data_type == "boxm2_gauss_rgb")
+         mog = cache->get_data_base(id,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(identifier), data_buff_length * mogSize);
+      else 
+          mog= cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier), data_buff_length * mogSize);
       boxm2_block_metadata data = blk_iter->second;
       if (output_filename.substr(output_filename.find_last_of(".") + 1) == "xyz")
           boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(scene, data, blk, mog, alpha,data_type,  points, myfile,  prob_t,  bb_expanded, num_vertices);
