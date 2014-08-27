@@ -55,7 +55,7 @@ line_colour: black
 point_colour: red
 
 // Approximate width of region to display shape
-width: 100
+width: 200
 
 // Optional paths to text files containing a matrix and vector
 // defining a linear subspace of the parameter space.
