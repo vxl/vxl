@@ -396,7 +396,7 @@ int main(int argc, char** argv)
 }
 #endif
 
-#if 0
+#if 1
 // FOR phase 1B --> generate classification map using 1. GeoCover; 2. OSM map;  3. Satellite classification map
 //  Note the 2D map size is defined by geo_index and the output image have 1 meter resolution
 // generate classification map used to refine satellite height map
@@ -518,7 +518,7 @@ int main(int argc, char** argv)
   vcl_cout << " there are " << tiles.size() << " tiles, "
            << geo_infos.size() << " geo_cover images, "
            << class_img_infos.size() << " satellite class images and "
-           << osm_objs.size() << " open street map dataset " << vcl_endl;
+           << osm_objs.size() << " open street map dataset " << vcl_flush << vcl_endl;
   if (tile_id() > tiles.size()) {
     log << "ERROR: given tile id " << tile_id() << " does not exist\n";  error(log_file.str(), log.str());
     return false;
@@ -960,7 +960,7 @@ int main(int argc, char** argv)
 }
 #endif
 
-#if 1
+#if 0
   // For Phase 1A, generate 2D land map using NLCD, LIDAR(elev), SME(fort), URGENT(building), OSM data
   // Output GeoTiff image size is controlled by geo index and has 1 meter resolution
   // Pipeline: 1.  --> generate label using NLCD + LIDAR data (LIDAR elevation is used to refined beach/water boundary)

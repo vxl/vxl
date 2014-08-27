@@ -146,7 +146,7 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   info.name = vul_file::strip_directory(vul_file::strip_extension(img_file)); 
   info.img_name = img_file;
 
-  vpgl_geo_camera *cam;
+  vpgl_geo_camera *cam = 0;
   // try to load camera from image header first
   vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
   vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
@@ -487,10 +487,10 @@ bool volm_io_tools::load_satellite_height_imgs(vcl_string const& folder, vcl_vec
 
 void volm_io_tools::load_geocover_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)
 {
-  vcl_string file_glob = folder + "//NLCD_*.tif";
+  vcl_string file_glob = folder + "//*.tif";
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
     volm_img_info info;
-    volm_io_tools::load_geotiff_image(fn(), info, false);  // last argument true so load camera from the file name
+    volm_io_tools::load_geotiff_image(fn(), info, true);  // last argument true so load camera from the file name
     infos.push_back(info);
   }
 }

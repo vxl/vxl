@@ -220,160 +220,163 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
     vcl_cout << "ERROR: " << pro.name() << " -- NO dem images in given folder: " << geotiff_folder << vcl_endl;
     return false;
   }
-  vcl_cout << pro.name() << " -- there are " << geotiff_img_names.size() << " dem images available for current bvxm_scene\n";
-
+  
   // use previous process to generate output image
-  vcl_vector<vil_image_view_base_sptr> x_imgs;
-  vcl_vector<vil_image_view_base_sptr> y_imgs;
-  vcl_vector<vil_image_view_base_sptr> z_imgs;
+  vcl_vector<vil_image_view<float> > x_imgs;
+  vcl_vector<vil_image_view<float> > y_imgs;
+  vcl_vector<vil_image_view<float> > z_imgs;
 
-  DECLARE_FUNC_CONS(bvxm_dem_to_xyz_process);
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_dem_to_xyz_process, "bvxmDemToXYZProcess");
-  REGISTER_DATATYPE(bvxm_voxel_world_sptr);
-  REGISTER_DATATYPE(vpgl_camera_double_sptr);
+  // get the lvcs coords for current scene
+  bvxm_world_params_sptr params = scene->get_params();
+  vpgl_lvcs_sptr lvcs = params->lvcs();
 
-  brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_world_sptr>(scene);
-  brdb_value_sptr v2 = new brdb_value_t<double>(geoid_height);
-  brdb_value_sptr v3 = new brdb_value_t<vpgl_camera_double_sptr>(cam);
-  brdb_value_sptr v4 = new brdb_value_t<float>(fill_in_value);
+  // obtain the world bounding box
+  vgl_point_3d<float> lower_left = params->corner();
+  vgl_vector_3d<unsigned> num_voxels = params->num_voxels();
+  float voxel_length = params->voxel_length();
+  double dim_x, dim_y, dim_z;
+  dim_x = num_voxels.x()*voxel_length;
+  dim_y = num_voxels.y()*voxel_length;
+  dim_z = num_voxels.z()*voxel_length;
+  vgl_point_3d<float> upper_rght(lower_left.x()+dim_x, lower_left.y()+dim_y, lower_left.z()+dim_z);
 
-  for (unsigned i = 0; i < geotiff_img_names.size(); i++)
+  vgl_box_3d<double> scene_bbox((double)lower_left.x(), (double)lower_left.y(), (double)lower_left.z(),
+                                (double)upper_rght.x(), (double)upper_rght.y(), (double)upper_rght.z());
+
+  // prepare an image for the finest resolution
+  int ni = (int)num_voxels.x();
+  int nj = (int)num_voxels.y();
+  double lon, lat, gz;
+  lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84, lon, lat, gz);
+  gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
+  if (fill_in_value < 0)
+    fill_in_value = vcl_numeric_limits<float>::max();
+  vcl_cout << pro.name() << " -- there are " << geotiff_img_names.size() << " dem images available for current bvxm_scene" << vcl_endl;
+  vcl_cout << pro.name() << " -- the geo camera will be loaded from image headers\n";
+  vcl_cout << pro.name() << " -- scene_info:" << vcl_endl;
+  vcl_cout << "\t\t scene bounding box: " << scene_bbox << vcl_endl;
+  vcl_cout << "\t\t scene voxel resoultion: " << voxel_length << vcl_endl;
+  vcl_cout << pro.name() << " -- output image resolution: " << ni << "x" << nj << vcl_endl;
+  vcl_cout << pro.name() << " -- invalid pixel values (-10.0, -10.0, -1.0)" << vcl_flush << vcl_endl;
+  // loop over each dem image in the image folder to create x, y, z image
+  vcl_cout << pro.name() << " -- Start to generate xyz images from " << geotiff_img_names.size() << " dem images" << vcl_endl;
+
+  for (unsigned img_idx = 0; img_idx < geotiff_img_names.size(); img_idx++)
   {
-    vcl_string dem_img_name = geotiff_img_names[i];
-    brdb_value_sptr v1 = new brdb_value_t<vcl_string>(dem_img_name);
-    // run the process
-    bool good = bprb_batch_process_manager::instance()->init_process("bvxmDemToXYZProcess");
-    good = good && bprb_batch_process_manager::instance()->set_input(0, v0)
-                && bprb_batch_process_manager::instance()->set_input(1, v1)
-                && bprb_batch_process_manager::instance()->set_input(2, v2)
-                && bprb_batch_process_manager::instance()->set_input(3, v3)
-                && bprb_batch_process_manager::instance()->set_input(4, v4);
-
-    bool run_good = bprb_batch_process_manager::instance()->run_process();
-
-    if (!run_good)
+    vcl_string dem_img_name = geotiff_img_names[img_idx];
+    // load the camera from image header
+    vil_image_resource_sptr dem_res = vil_load_image_resource(dem_img_name.c_str());
+    vpgl_geo_camera* geocam = 0;
+    vcl_cout << '\t' << pro.name() << " -- Generate xyz images from " << dem_img_name << "..." << vcl_flush << vcl_endl;
+    vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
+    if (!geocam) {
+      vcl_cout << "ERROR: " << pro.name() << ": The geocam could not be initialized for DEM image header: " << dem_img_name << "!\n";
+      return false;
+    }
+    // check the intersection
+    unsigned orig_dem_ni = dem_res->ni();  unsigned orig_dem_nj = dem_res->nj();
+    vcl_cout << pro.name() << " -- Original dem resolution: " << orig_dem_ni << ' ' << orig_dem_nj << vcl_endl;
+    brip_roi broi(orig_dem_ni, orig_dem_nj);
+    vsol_box_2d_sptr bb = new vsol_box_2d();
+    double u, v;
+    geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
+    bb->add_point(u, v);
+    geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
+    bb->add_point(u, v);
+    bb = broi.clip_to_image_bounds(bb);
+    if (bb->width() <= 0 || bb->height() <= 0) {
+      vcl_cout << pro.name() << " -- " << dem_img_name << " does not overlap the scene, ignored\n";
       continue;
-
-    // get the output
-    unsigned id_x_img, id_y_img, id_z_img;
-    good = good && bprb_batch_process_manager::instance()->commit_output(0, id_x_img)
-                && bprb_batch_process_manager::instance()->commit_output(1, id_y_img)
-                && bprb_batch_process_manager::instance()->commit_output(2, id_z_img);
-    if (!good)  {
-      vcl_cout << "ERROR: " << pro.name() << " run process for image " << dem_img_name << " failed!\n";
-      return false;
-    }
-    brdb_query_aptr Q_x_img = brdb_query_comp_new("id", brdb_query::EQ, id_x_img);
-    brdb_selection_sptr S_x_img = DATABASE->select("vil_image_view_base_sptr_data", Q_x_img);
-    if (S_x_img->size() != 1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-               << " no selections\n";
-    }
-    brdb_value_sptr value_x_img;
-    if (!S_x_img->get_value(vcl_string("value"), value_x_img)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-               << " didn't get value\n";
-    }
-    if (value_x_img == 0) {
-      vcl_cout << "ERROR: " << pro.name() << " obtain output x image for image " << dem_img_name << " failed!\n";
-      return false;
-    }
-    brdb_query_aptr Q_y_img = brdb_query_comp_new("id", brdb_query::EQ, id_y_img);
-    brdb_selection_sptr S_y_img = DATABASE->select("vil_image_view_base_sptr_data", Q_y_img);
-    if (S_y_img->size() != 1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-               << " no selections\n";
-    }
-    brdb_value_sptr value_y_img;
-    if (!S_y_img->get_value(vcl_string("value"), value_y_img)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-               << " didn't get value\n";
-    }
-    if (value_y_img == 0) {
-      vcl_cout << "ERROR: " << pro.name() << " obtain output y image for image " << dem_img_name << " failed!\n";
-      return false;
     }
 
-    brdb_query_aptr Q_z_img = brdb_query_comp_new("id", brdb_query::EQ, id_z_img);
-    brdb_selection_sptr S_z_img = DATABASE->select("vil_image_view_base_sptr_data", Q_z_img);
-    if (S_z_img->size() != 1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-               << " no selections\n";
-    }
-    brdb_value_sptr value_z_img;
-    if (!S_z_img->get_value(vcl_string("value"), value_z_img)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-               << " didn't get value\n";
-    }
-    if (value_z_img == 0) {
-      vcl_cout << "ERROR: " << pro.name() << " obtain output y image for image " << dem_img_name << " failed!\n";
-      return false;
+    // load the dem image
+    vil_image_view_base_sptr dem_view_base = dem_res->get_view(0, orig_dem_ni, 0, orig_dem_nj);
+    vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
+    if (!dem_view) {
+      vil_image_view<float> temp(dem_view_base->ni(), dem_view_base->nj(), 1);
+
+      vil_image_view<vxl_int_16>* dem_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(dem_view_base.ptr());
+      if (!dem_view_int) {
+        vil_image_view<vxl_byte>* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_view_base.ptr());
+        if (!dem_view_byte) {
+          vcl_cerr << "ERROR: " << pro.name() << ": The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
+          return false;
+        }
+        else {
+          vil_convert_cast(*dem_view_byte, temp);
+        }
+      }
+      else
+        vil_convert_cast(*dem_view_int, temp);
+      dem_view = new vil_image_view<float>(temp);
     }
 
-    brdb_value_t<vil_image_view_base_sptr>* result_x = static_cast<brdb_value_t<vil_image_view_base_sptr>*>(value_x_img.ptr());
-    brdb_value_t<vil_image_view_base_sptr>* result_y = static_cast<brdb_value_t<vil_image_view_base_sptr>*>(value_y_img.ptr());
-    brdb_value_t<vil_image_view_base_sptr>* result_z = static_cast<brdb_value_t<vil_image_view_base_sptr>*>(value_z_img.ptr());
-    vil_image_view_base_sptr x_img = result_x->value();
-    vil_image_view_base_sptr y_img = result_y->value();
-    vil_image_view_base_sptr z_img = result_z->value();
+    // create x y z images
+    vil_image_view<float> img_x(ni, nj, 1);
+    vil_image_view<float> img_y(ni, nj, 1);
+    vil_image_view<float> img_z(ni, nj, 1);
 
-    x_imgs.push_back(x_img);
-    y_imgs.push_back(y_img);
-    z_imgs.push_back(z_img);
+    // initialize the image by scene origin
+    img_x.fill(-10.0f);
+    img_y.fill(-10.0f);
+    img_z.fill(-1.0f);
+
+    if (fill_in_value < 0)
+      fill_in_value = vcl_numeric_limits<float>::max();
+
+    for (int i = 0; i < ni; i++) {
+      for (int j = 0; j < nj; j++) {
+        float local_x = (float)(i*voxel_length+scene_bbox.min_x()+voxel_length/2.0f);
+        float local_y = (float)(scene_bbox.max_y()-j*voxel_length+voxel_length/2.0f);
+        (img_x)(i,j) = local_x;
+        (img_y)(i,j) = local_y;
+        double u, v;
+        geocam->project(local_x, local_y, scene_bbox.min_z(), u, v);
+        // for now just cast to the nearest pixel in DEM, might want to sample bi-linearly
+        int uu = (int)vcl_floor(u+0.5);
+        int vv = (int)vcl_floor(v+0.5);
+        if (uu >= 0 && vv >= 0 && uu < (int)orig_dem_ni && vv <(int)orig_dem_nj) {
+          if ((*dem_view)(uu,vv) < fill_in_value)
+            (img_z)(i,j) = (*dem_view)(uu,vv);
+        }
+      }
+    }
+    x_imgs.push_back(img_x);
+    y_imgs.push_back(img_y);
+    z_imgs.push_back(img_z);
   }
+  // combine all the images
   unsigned num_imgs = x_imgs.size();
   if (num_imgs != y_imgs.size() || num_imgs != z_imgs.size()) {
     vcl_cout << "ERROR: " << pro.name() << " -- inconsistency of number of generate x y z images\n";
     return false;
   }
+  vcl_cout << num_imgs << " are created from " << geotiff_img_names.size() << " ASTER DEM images, combine them now ... " << vcl_endl;
 
-  // consistency check
-  unsigned ni_x = x_imgs[0]->ni();
-  unsigned nj_x = x_imgs[0]->nj();
-  for (unsigned i = 1; i < x_imgs.size(); i++)
-    if (x_imgs[i]->ni() != ni_x || x_imgs[i]->nj() != nj_x) {
-      vcl_cout << "ERROR: " << pro.name() << " -- generated x imgs from various dem images are different in size\n";
-      return false;
-    }
-  unsigned ni_y = y_imgs[0]->ni();
-  unsigned nj_y = y_imgs[0]->nj();
-  for (unsigned i = 1; i < y_imgs.size(); i++)
-    if (y_imgs[i]->ni() != ni_y || y_imgs[i]->nj() != nj_y) {
-      vcl_cout << "ERROR: " << pro.name() << " generated y imgs from various dem images are different in size\n";
-      return false;
-    }
-  unsigned ni_z = z_imgs[0]->ni();
-  unsigned nj_z = z_imgs[0]->nj();
-  for (unsigned i = 1; i < z_imgs.size(); i++)
-    if (z_imgs[i]->ni() != ni_z || z_imgs[i]->nj() != nj_z) {
-      vcl_cout << "ERROR: " << pro.name() << " generated z imgs from various dem images are different in size\n";
-      return false;
-    }
-
-  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni_x, nj_x, 1);
-  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni_y, nj_y, 1);
-  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni_z, nj_z, 1);
+  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
   out_img_x->fill(-10.0f);
   out_img_y->fill(-10.0f);
   out_img_z->fill(-1.0f);
 
   for (unsigned img_idx = 0; img_idx < num_imgs; img_idx++)
   {
-    vil_image_view<float>* x_img = dynamic_cast<vil_image_view<float>*>(x_imgs[img_idx].ptr());
-    vil_image_view<float>* y_img = dynamic_cast<vil_image_view<float>*>(y_imgs[img_idx].ptr());
-    vil_image_view<float>* z_img = dynamic_cast<vil_image_view<float>*>(z_imgs[img_idx].ptr());
+    vil_image_view<float> x_img = x_imgs[img_idx];
+    vil_image_view<float> y_img = y_imgs[img_idx];
+    vil_image_view<float> z_img = z_imgs[img_idx];
 
-    for (unsigned ix = 0; ix < ni_x; ix++)
-      for (unsigned jx = 0; jx < nj_y; jx++)
-        if ( (*out_img_x)(ix,jx) == -10.0f )  (*out_img_x)(ix,jx) = (*x_img)(ix,jx);
+    for (unsigned ix = 0; ix < ni; ix++)
+      for (unsigned jx = 0; jx < nj; jx++)
+        if ( (*out_img_x)(ix,jx) == -10.0f )  (*out_img_x)(ix,jx) = (x_img)(ix,jx);
 
-    for (unsigned iy = 0; iy < ni_y; iy++)
-      for (unsigned jy = 0; jy < nj_y; jy++)
-        if ( (*out_img_y)(iy,jy) == -10.0f )  (*out_img_y)(iy,jy) = (*y_img)(iy,jy);
+    for (unsigned iy = 0; iy < ni; iy++)
+      for (unsigned jy = 0; jy < nj; jy++)
+        if ( (*out_img_y)(iy,jy) == -10.0f )  (*out_img_y)(iy,jy) = (y_img)(iy,jy);
 
-    for (unsigned iz = 0; iz < ni_z; iz++)
-      for (unsigned jz = 0; jz < nj_z; jz++)
-        if ( (*out_img_z)(iz,jz) == -1.0f  )  (*out_img_z)(iz,jz) = (*z_img)(iz,jz);
+    for (unsigned iz = 0; iz < ni; iz++)
+      for (unsigned jz = 0; jz < nj; jz++)
+        if ( (*out_img_z)(iz,jz) == -1.0f  )  (*out_img_z)(iz,jz) = (z_img)(iz,jz);
   }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
