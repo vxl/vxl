@@ -218,7 +218,6 @@ vcl_vector<int> boct_bit_tree::get_leaf_bits(int rootBit, int depth)
     }
   }
 
-  vcl_cout<<vcl_endl;
   return subTree;
 }
 //: Return cell with a particular locational code

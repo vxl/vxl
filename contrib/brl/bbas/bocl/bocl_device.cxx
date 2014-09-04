@@ -29,7 +29,7 @@ vcl_string bocl_device::device_identifier()
 {
     vcl_stringstream outstr;
     outstr<<(long)(device_[0]);
-    return info_.device_name_+outstr.str();
+    return info_.device_vendor_+info_.device_name_+outstr.str();
 }
 //destructor
 bocl_device::~bocl_device()

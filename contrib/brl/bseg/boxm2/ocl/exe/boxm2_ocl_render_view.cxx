@@ -59,19 +59,44 @@ int main(int argc, char ** argv)
     vul_arg<unsigned>   ni("-ni", "Width of output image", 1280);
     vul_arg<unsigned>   nj("-nj", "Height of output image", 720);
     vul_arg<vcl_string> identifier("-ident", "identifier of the appearance data to be displayed, e.g. illum_bin_0", "");
-    vul_arg<unsigned>   gpu_idx("-gpu_idx", "GPU index for multi GPU set up", 0);
+    vul_arg<vcl_string> device_name("-device", "GPU or cpu", "");
+    vul_arg<unsigned>   device_id("-device_idx", "GPU index for multi GPU set up", 0);
 
     // need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
 
-
+    bocl_device_sptr  device( NULL );
     //make bocl manager
     bocl_manager_child_sptr mgr =bocl_manager_child::instance();
-    if (gpu_idx() >= mgr->gpus_.size()){
-      vcl_cout << "GPU index out of bounds" << vcl_endl;
+    if(device_name()=="gpu" || device_name()=="")
+    {
+        vcl_vector<bocl_device_sptr> devices;
+        for(unsigned i = 0; i < mgr->gpus_.size(); i++)
+        {
+            vcl_string device_ident = mgr->gpus_[i]->device_identifier();
+            if(device_ident.find("NVIDIA") != vcl_string::npos)
+                devices.push_back( mgr->gpus_[i] );
+        }
+        if (device_id() >= devices.size()){
+            vcl_cout << "GPU index out of bounds" << vcl_endl;
+            return -1;
+        }
+        device = devices[device_id()];
+
+    }
+    else if(device_name()=="cpu")
+    {
+    if (device_id() >= mgr->cpus_.size()){
+      vcl_cout << "CPU index out of bounds" << vcl_endl;
       return -1;
     }
-    bocl_device_sptr device = mgr->gpus_[gpu_idx()];
+    device = mgr->cpus_[device_id()];
+
+    }else
+    {
+        vcl_cout<<"unknow device "<<vcl_endl;
+        return -1;
+    }
     vcl_cout << "Using: " << *device;
     boxm2_scene_sptr scene = new boxm2_scene(scene_file());
 

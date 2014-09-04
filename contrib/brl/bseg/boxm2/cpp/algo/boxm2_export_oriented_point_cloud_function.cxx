@@ -268,7 +268,6 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
   //if the scene doesn't contain point,
   if (!scene->contains(vgl_point, id, local)) {
-    vcl_cout << "Point " << vgl_point << " not present in scene! Skipping..." << vcl_endl;
     return false;
   }
   //if the block passed isn't the block that contains the point, there is something wrong...

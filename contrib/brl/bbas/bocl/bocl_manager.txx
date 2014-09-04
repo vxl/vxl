@@ -98,7 +98,7 @@ bool bocl_manager<T>::initialize_cl()
         gpus_.push_back(gpu);
       }
 
-      break;
+      //break;
     }
   }
   // now check for CPUs
