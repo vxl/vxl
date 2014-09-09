@@ -10,7 +10,7 @@ vil_file_format::~vil_file_format()
 {
 }
 
-
+#include <vcl_cstdlib.h>
 #include <vil/vil_config.h> // for list of configured file formats
 #include <vil/vil_exception.h>
 
@@ -162,10 +162,8 @@ void vil_file_format::add_file_format(vil_file_format* ff)
   while (c<MAX_FILE_FORMATS-1u && l[c]!=0) ++c;
   if (l[c]!=0)
   {
-    vil_exception_warning(vcl_logic_error(
-      "vil_file_format::add_file_format Unable to add any more file formats" ));
     vcl_cerr << "ERROR vil_file_format::add_file_format Unable to add any more file formats\n";
-    return;
+    vcl_abort();
   }
   l[c] = ff;
   l[c+1] = 0;

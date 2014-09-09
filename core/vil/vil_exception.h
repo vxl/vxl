@@ -186,9 +186,9 @@ class vil_exception_corrupt_image_file
   vil_exception_corrupt_image_file(const vcl_string& function,
                                    const vcl_string& type,
                                    const vcl_string& file_name,
-                                   const vcl_string& description = "") :
+                                   const vcl_string& description = "")
 #if VCL_HAS_EXCEPTIONS
-  vil_exception_image_io(function, type, file_name, description)
+  : vil_exception_image_io(function, type, file_name, description)
 #endif
   {}
 #if VCL_HAS_EXCEPTIONS
