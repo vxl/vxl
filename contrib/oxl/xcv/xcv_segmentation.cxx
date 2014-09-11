@@ -224,13 +224,13 @@ void xcv_segmentation::canny_ox()
 
   draw_edges(detected_edges, col, row);
   
-  // Save the edges 
-  vcl_ofstream ofs("c:/temp/1.txt");
-  for(vcl_list<osl_edge*>::const_iterator i=detected_edges.begin(); i!=detected_edges.end(); ++i)
-  	{
-  		(*i)->write_ascii(ofs); 
-  		ofs << "\n";
-  	}
+  // Example code to save the edges 
+  //vcl_ofstream ofs("/temp/1.txt");
+  //for(vcl_list<osl_edge*>::const_iterator i=detected_edges.begin(); i!=detected_edges.end(); ++i)
+  //	{
+  //		(*i)->write_ascii(ofs); 
+  //		ofs << "\n";
+  //	}
 }
 
 //-----------------------------------------------------------------------------
