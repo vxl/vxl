@@ -708,6 +708,13 @@ VDS void print_value(vcl_ostream &s, vul_arg<char *> const &argmt)
 
 VDS int parse(vul_arg<char*>* argmt, char ** argv)
 {
+  // Reached the end?
+  if (!argv || !argv[0]) {
+    // no input
+    vcl_cerr << "vul_arg_parse: Expected string, none is provided.\n";
+    return -1;
+  }
+
   argmt->value_ = argv[0]; // argv is valid till the end of the program so
   return 1;                // it's ok to just grab the pointer.
 }
