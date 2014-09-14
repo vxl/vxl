@@ -44,6 +44,7 @@ register_tests()
   REGISTER( test_infinite_line_3d );
   REGISTER( test_ray_3d );
   REGISTER( test_plane_3d );
+  REGISTER( test_frustum_3d );
   REGISTER( test_intersection );
 }
 
