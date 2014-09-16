@@ -31,6 +31,10 @@ public:
   //  For each pixel, the most significant 5 bits are ignored and all other 11 bits are kept
   static bool truncate_nitf_bits(vil_image_view<vxl_uint_16> const& in_img, vil_image_view<vxl_uint_16>& output);
 
+    //: Truncate the 16 bits NITF image and output a byte image.
+  //  For each pixel, the most significant 5 bits are ignored and all other 11 bits are kept
+  static bool scale_nitf_bits(vil_image_view<vxl_uint_16> const& in_img, vil_image_view<vxl_byte>& output);
+
 };
 
 #endif  // brip_vil_nitf_ops_h_

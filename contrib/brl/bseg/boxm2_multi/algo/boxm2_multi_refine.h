@@ -4,7 +4,7 @@
 // \file
 // \brief This class does the cumulative seg len and cumulative observation on the GPU.
 
-#include <boxm2_multi_cache.h>
+#include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <bocl/bocl_device.h>

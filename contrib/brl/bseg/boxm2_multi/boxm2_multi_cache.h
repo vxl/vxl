@@ -24,6 +24,8 @@
 #include <vcl_iosfwd.h>
 #include <vcl_algorithm.h>
 
+class boxm2_multi_cache;
+typedef vbl_smart_ptr<boxm2_multi_cache> boxm2_multi_cache_sptr;
 //: example realization of abstract cache class; holds an opencl cache for each device
 class boxm2_multi_cache: public vbl_ref_count
 {

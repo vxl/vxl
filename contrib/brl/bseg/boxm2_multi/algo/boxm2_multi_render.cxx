@@ -34,8 +34,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     return 0.0f;
 
   //setup image size
-  int ni=img.ni(),
-      nj=img.nj();
+  int ni=img.ni(), nj=img.nj();
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
 
@@ -48,8 +47,9 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
 
   //set up image, command queue lists
   vcl_vector<cl_command_queue> queues;
-  vcl_vector<bocl_mem_sptr> exp_mems, vis_mems, img_dims, outputs,
-                            ray_os, ray_ds, lookups;
+  vcl_vector<bocl_mem*> exp_mems, vis_mems;
+  vcl_vector<bocl_mem_sptr> img_dims, outputs,
+                            ray_os, ray_ds, lookups,tnearfarptrs,max_omegas;
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders;
   vcl_size_t maxBlocks = 0;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = cache.ocl_caches();
@@ -81,14 +81,14 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     //create exp image (TODO, make these patches to save mem)
     float* exp_buff = new float[cl_ni*cl_nj];
     vcl_fill(exp_buff, exp_buff+cl_ni*cl_nj, 0.0f);
-    bocl_mem_sptr exp_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), exp_buff, "exp image buffer");
+    bocl_mem * exp_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), exp_buff, "exp image buffer");
     exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     exp_mems.push_back(exp_image);
 
     // visibility image
     float* vis_buff = new float[cl_ni*cl_nj];
     vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-    bocl_mem_sptr vis_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "exp image buffer");
+    bocl_mem * vis_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "exp image buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     vis_mems.push_back(vis_image);
 
@@ -107,6 +107,15 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     ray_os.push_back(ray_o_buff);
     ray_ds.push_back(ray_d_buff);
 
+    float* max_omega_buff = new float[cl_ni*cl_nj];
+    vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
+    bocl_mem_sptr max_omega_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"max omega buffer");
+    max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    max_omegas.push_back(max_omega_image);
+    float tnearfar[2] = { 0.0f, 1000000} ;
+    bocl_mem_sptr tnearfar_mem_ptr = ocl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
+    tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    tnearfarptrs.push_back(tnearfar_mem_ptr);
     // bit lookup buffer
     cl_uchar lookup_arr[256];
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
@@ -145,8 +154,8 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
       exp_mems[i]->zero_gpu_buffer(queues[i]);
       vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
       this->render_block(sub_scene, id, ocl_cache, queues[i],
-                         ray_os[i], ray_ds[i], exp_mems[i], vis_mems[i], img_dims[i],
-                         outputs[i], lookups[i], data_type, kerns[0],
+                         ray_os[i], ray_ds[i], exp_mems[i], vis_mems[i],max_omegas[i], img_dims[i],
+                         outputs[i],tnearfarptrs[i], lookups[i], data_type, kerns[0],
                          lthreads, cl_ni, cl_nj, apptypesize);
     }
 
@@ -228,8 +237,8 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     float* e = (float*) exp_mems[i]->cpu_buffer();
     delete[] v;
     delete[] e;
-    ocl_cache->unref_mem(exp_mems[i].ptr());
-    ocl_cache->unref_mem(vis_mems[i].ptr());
+    ocl_cache->unref_mem(exp_mems[i]);
+    ocl_cache->unref_mem(vis_mems[i]);
 
     //clear ray mems
     float* ro = (float*) ray_os[i]->cpu_buffer();
@@ -239,10 +248,15 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     ocl_cache->unref_mem(ray_os[i].ptr());
     ocl_cache->unref_mem(ray_ds[i].ptr());
 
+    delete[] max_omegas[i]->cpu_buffer();
+    ocl_cache->unref_mem( max_omegas[i].ptr());
+
     //clear output
     float* out = (float*) outputs[i]->cpu_buffer();
     delete[] out;
     ocl_cache->unref_mem(outputs[i].ptr());
+
+    ocl_cache->unref_mem(tnearfarptrs[i].ptr());
   }
 
   //--------------------------------
@@ -420,9 +434,9 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         vcl_cout<<(*id);
-        render_block(scene, *id, opencl_cache, queue,  ray_o_buff, ray_d_buff,
-                     exp_image, vis_image, exp_img_dim, cl_output, lookup, data_type, kernel,
-                     lthreads, cl_ni, cl_nj, apptypesize);
+        //render_block(scene, *id, opencl_cache, queue,  ray_o_buff, ray_d_buff,
+        //             exp_image, vis_image, exp_img_dim, cl_output, lookup, data_type, kernel,
+        //             lthreads, cl_ni, cl_nj, apptypesize);
     }
 
     //clean up cam
@@ -437,10 +451,12 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
                                         cl_command_queue& queue,
                                         bocl_mem_sptr & ray_o_buff,
                                         bocl_mem_sptr & ray_d_buff,
-                                        bocl_mem_sptr & exp_image,
-                                        bocl_mem_sptr & vis_image,
+                                        bocl_mem*  exp_image,
+                                        bocl_mem*  vis_image,
+                                        bocl_mem_sptr & max_omega_image,
                                         bocl_mem_sptr & exp_img_dim,
                                         bocl_mem_sptr & cl_output,
+                                        bocl_mem_sptr & tnearfar_mem_ptr,
                                         bocl_mem_sptr & lookup,
                                         vcl_string data_type,
                                         bocl_kernel* kern,
@@ -470,11 +486,13 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
     kern->set_arg( mog );
     kern->set_arg( ray_o_buff.ptr() );
     kern->set_arg( ray_d_buff.ptr() );
-    kern->set_arg( exp_image.ptr() );
+    kern->set_arg(tnearfar_mem_ptr.ptr());
+    kern->set_arg( exp_image );
     kern->set_arg( exp_img_dim.ptr());
     kern->set_arg( cl_output.ptr() );
     kern->set_arg( lookup.ptr() );
-    kern->set_arg( vis_image.ptr() );
+    kern->set_arg( vis_image );
+    kern->set_arg(max_omega_image.ptr() );
 
     //local tree , cumsum buffer, imindex buffer
     kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar16) );
@@ -494,7 +512,9 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
 vcl_vector<bocl_kernel*>&
 boxm2_multi_render::get_kernels(bocl_device_sptr device, vcl_string opts)
 {
-  // check to see if this device has compiled kernels already
+    //store list
+  vcl_vector<bocl_kernel*> kerns;
+    // check to see if this device has compiled kernels already
   vcl_string identifier = device->device_identifier()+opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
@@ -519,7 +539,6 @@ boxm2_multi_render::get_kernels(bocl_device_sptr device, vcl_string opts)
   //set kernel options
   //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
   vcl_string options = opts + " -D RENDER ";
-  options += " -D DETERMINISTIC ";
   options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
   //have kernel construct itself using the context and device
@@ -543,10 +562,9 @@ boxm2_multi_render::get_kernels(bocl_device_sptr device, vcl_string opts)
                                           options,              //options
                                           "normalize render kernel"); //kernel identifier (for error checking)
 
-  //store list
-  vcl_vector<bocl_kernel*> kerns(2);
-  kerns[0] = ray_trace_kernel;
-  kerns[1] = normalize_render_kernel;
+
+  kerns.push_back( ray_trace_kernel );
+  kerns.push_back( normalize_render_kernel);
 
   //cache in map and return
   this->kernels_[identifier] = kerns;

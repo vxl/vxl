@@ -42,7 +42,7 @@ int main(int argc,  char** argv)
   vul_arg<unsigned>   num_updates("-num", "Number of updates", 10);
   vul_arg<int>        inFrame("-frame", "Single frame to use", -1);
   vul_arg<int>        renderInt("-renderInt", "Interval to render progress", -1);
-  vul_arg<unsigned>   numGPU("-numGPU", "Number of GPUs to use", 2);
+  vul_arg<unsigned>   numGPU("-numGPU", "Number of GPUs to use", 1);
   vul_arg_parse(argc, argv);
 
   //create scene
@@ -51,9 +51,7 @@ int main(int argc,  char** argv)
   //make bocl manager (handles a lot of OpenCL stuff)
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
 
-  //create cpu cache (lru), and create opencl_cache on the device
-  boxm2_lru_cache::create(scene);
-
+  
   //make a multicache
   if ( numGPU() > mgr->gpus_.size() ) {
     vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr->gpus_.size()<<" available"<<vcl_endl;
@@ -97,7 +95,6 @@ int main(int argc,  char** argv)
   {
     //update with random frame (or user chosen frame)
     int frame = (inFrame() >= 0) ? inFrame() : frames[i];
-
 
     vcl_cout<<"===========================================\n"
             <<"Update with frame: "<<frame<<", num "<<i<<" of "<<numUpdates<<vcl_endl;

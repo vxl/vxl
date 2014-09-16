@@ -55,9 +55,12 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   else {
     inImg = new float[cl_ni*cl_nj];
     int c = 0;
-    for (int j=0; j<nj; ++j)
-      for (int i=0; i<ni; ++i)
-        inImg[c++] = img(i,j);
+    for (int j=0; j<cl_nj; ++j)
+      for (int i=0; i<cl_ni; ++i)
+    if( i <ni && j <nj )
+      inImg[c++] = img(i,j);
+    else
+      c++;
   }
   //-------------------------------------------------------
   //prepare buffers for each device
@@ -68,7 +71,9 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
                              img_dims = helper.img_dims_,
                              ray_ds = helper.ray_ds_,
                              ray_os = helper.ray_os_,
-                             lookups = helper.lookups_;
+                             lookups = helper.lookups_,
+                             tnearfarptrs = helper.tnearfarptrs_;
+
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and its cache
@@ -107,7 +112,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
       //Run block store aux
       boxm2_block_id id = ids[i];
       store_aux_per_block(id, sub_scene, ocl_cache, queues[i], kern,
-                          in_imgs[i], img_dims[i], ray_os[i], ray_ds[i],
+                          in_imgs[i], img_dims[i], ray_os[i], ray_ds[i],tnearfarptrs[i],
                           out_imgs[i], lookups[i], lthreads, gThreads);
     }
 
@@ -115,13 +120,6 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
     for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       clFinish(queues[i]);
-      //boxm2_block_id id = ids[i];
-      //boxm2_opencl_cache* ocl_cache = ocl_caches[i];
-
-      //read aux data back into CPU
-      //vul_timer ttime; ttime.mark();
-      //read_aux(id, ocl_cache, queues[i]);
-      //transfer_time += ttime.all();
     }
   }
   float gpu_time = t.all() - transfer_time;
@@ -130,25 +128,6 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   for (unsigned int i=0; i<queues.size(); ++i) {
     ocl_caches[i]->unref_mem(in_imgs[i].ptr());
   }
-
-//==== DEBUG ====
-#if 0
-  //unsigned cl_ni=RoundUp(ni,lthreads[0]);
-  //unsigned cl_nj=RoundUp(nj,lthreads[1]);
-  vil_image_view<float> segLens(cl_ni,cl_nj);
-  segLens.fill(0.0f);
-  for (unsigned int i=0; i<queues.size(); ++i) {
-    //clFinish(queues[i]);
-    out_imgs[i]->read_to_buffer(queues[i]);
-    float* output_arr = (float*) out_imgs[i]->cpu_buffer();
-    int count=0;
-    for (int j=0; j<cl_nj; ++j)
-      for (int i=0; i<cl_ni; ++i)
-        segLens(i,j) += output_arr[count++];
-  }
-  vil_save(segLens, "seg_len.tiff");
-#endif
-//==============
 
   //cleanup input image buffer
   if (inImg != img.top_left_ptr())
@@ -184,6 +163,7 @@ void boxm2_multi_store_aux::store_aux_per_block(boxm2_block_id const& id,
                                                 bocl_mem_sptr&        img_dim,
                                                 bocl_mem_sptr&        ray_o_buff,
                                                 bocl_mem_sptr&        ray_d_buff,
+                                                bocl_mem_sptr&        tnearfarptr,
                                                 bocl_mem_sptr&        cl_output,
                                                 bocl_mem_sptr&        lookup,
                                                 vcl_size_t*           lthreads,
@@ -232,6 +212,7 @@ void boxm2_multi_store_aux::store_aux_per_block(boxm2_block_id const& id,
   kern->set_arg( lookup.ptr() );
   kern->set_arg( ray_o_buff.ptr() );
   kern->set_arg( ray_d_buff.ptr() );
+  kern->set_arg( tnearfarptr.ptr() );
   kern->set_arg( img_dim.ptr() );
   kern->set_arg( in_image.ptr() );
   kern->set_arg( cl_output.ptr() );
@@ -246,11 +227,7 @@ void boxm2_multi_store_aux::store_aux_per_block(boxm2_block_id const& id,
 
   //clear render kernel args so it can reset em on next execution
   kern->clear_args();
-#if 0
-  //enqueue two nonblocking reads
-  aux0->read_to_buffer(queue, false);
-  aux1->read_to_buffer(queue, false);
-#endif
+
 }
 
 //-----------------------------------------------------------------
@@ -272,6 +249,7 @@ bocl_kernel* boxm2_multi_store_aux::get_kernels(bocl_device_sptr device, vcl_str
   vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "cell_utils.cl");
+  src_paths.push_back(source_dir + "atomics_util.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "backproject.cl");
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
@@ -281,12 +259,11 @@ bocl_kernel* boxm2_multi_store_aux::get_kernels(bocl_device_sptr device, vcl_str
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = opts+" -D INTENSITY  ";
-  options += " -D DETERMINISTIC ";
+  vcl_string options = opts + "";
 
   //create all passes
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+  vcl_string seg_opts = options + "-D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
   seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len");
 
   //cache in map

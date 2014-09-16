@@ -140,10 +140,13 @@ def cart2sphere(cartPt, sCenter):
 def load_rational_camera(file_path) :
   boxm2_batch.init_process("vpglLoadRationalCameraProcess");
   boxm2_batch.set_input_string(0, file_path);
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  cam = dbvalue(id,type);
-  return cam;
+  status = boxm2_batch.run_process();
+  cam = None
+  if status:
+      (id,type) = boxm2_batch.commit_output(0);
+      cam = dbvalue(id,type);
+  return status, cam;
+
 
 def load_rational_camera_nitf(file_path) :
   boxm2_batch.init_process("vpglLoadRationalCameraNITFProcess");

@@ -27,6 +27,8 @@ SUBDIRS(algo)
 #executables
 SUBDIRS(exe)
 
+##executables
+SUBDIRS(pro)
 #tests
 IF( BUILD_TESTING )
   SUBDIRS(tests)

@@ -2,7 +2,7 @@
 #define boxm2_multi_update_h
 //:
 // \file
-#include <boxm2_multi_cache.h>
+#include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
@@ -31,6 +31,7 @@ class boxm2_multi_update_helper
                               vcl_vector<bocl_mem_sptr>& ray_os,
                               vcl_vector<bocl_mem_sptr>& ray_ds,
                               vcl_vector<bocl_mem_sptr>& img_dims,
+                              vcl_vector<bocl_mem_sptr>& tnearfarptrs,
                               vcl_vector<bocl_mem_sptr>& lookups,
                               vcl_vector<bocl_mem_sptr>& outputs,
                               vcl_vector<boxm2_multi_cache_group*>& group_orders,
@@ -39,21 +40,23 @@ class boxm2_multi_update_helper
                               vcl_size_t maxBlocks) :
         queues_(queues),
         img_dims_(img_dims),
-        outputs_(outputs),
+      tnearfarptrs_(tnearfarptrs),
+      outputs_(outputs),
         ray_ds_(ray_ds),
         ray_os_(ray_os),
         lookups_(lookups),
         vis_orders_(vis_orders),
         vis_caches_(vis_caches),
         maxBlocks_(maxBlocks),
-        group_orders_(group_orders)
+      group_orders_(group_orders)
+
     {}
 
     //update command queues
     vcl_vector<cl_command_queue>& queues_;
 
     //ray trace vars
-    vcl_vector<bocl_mem_sptr>&  img_dims_, outputs_, ray_ds_, ray_os_, lookups_;
+    vcl_vector<bocl_mem_sptr>&  img_dims_, outputs_, ray_ds_, ray_os_, lookups_, tnearfarptrs_;
 
     //visibility order for each dev
     vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders_;

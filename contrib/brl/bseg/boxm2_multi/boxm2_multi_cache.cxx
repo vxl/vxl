@@ -268,11 +268,11 @@ boxm2_multi_cache::group_order_from_pt(vgl_point_3d<double> const& pt,
     vgl_box_2d<double> grp2d(grpBox.min_x(), grpBox.max_x(),
                              grpBox.min_y(), grpBox.max_y());
     vgl_box_2d<double> intersect = vgl_intersection(grp2d, camBox);
-    if (!intersect.is_empty() || camBox.is_empty()) {
+    //if (!intersect.is_empty() || camBox.is_empty()) {
       vgl_point_3d<double> center  = grpBox.centroid();
       double dist = vgl_distance( center, pt );
       distances.push_back( Pair(dist, grp) );
-    }
+    //}
   }
 
   //sort distances

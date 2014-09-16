@@ -33,7 +33,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   //store vars for each ocl_cache
   //---------------------------------
   vcl_vector<cl_command_queue> queues; //store queue for each device
-  vcl_vector<bocl_mem_sptr> img_dims, outputs, ray_ds, ray_os, lookups; //ray trace vars
+  vcl_vector<bocl_mem_sptr> img_dims, outputs, ray_ds, ray_os, lookups,tnearfarptrs; //ray trace vars
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders; //visibility order for each dev
   vcl_size_t maxBlocks = 0;
   vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.ocl_caches();
@@ -54,16 +54,22 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
       vcl_cout<<"boxm2_multi_store_aux::store_aux unable to create command queue"<<vcl_endl;
       return 0.0f;
     }
-
+    float * tnearfar= new float[2];
+    tnearfar[0] = 0.0;
+    tnearfar[1] = 100000.0 ;
+    bocl_mem_sptr tnearfar_mem_ptr = new bocl_mem(device->context(),tnearfar,sizeof(float)*2,  "tnearfar  buffer");
+    tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    tnearfarptrs.push_back(tnearfar_mem_ptr);
     //create image dim buff
     int img_dim_buff[4] = {0,0,ni,nj};
     bocl_mem_sptr img_dim = new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
     img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     img_dims.push_back(img_dim);
 
+
     // Output Array
     float* output_arr = new float[cl_ni*cl_nj];
-    vcl_fill(output_arr, output_arr+cl_ni*cl_nj, 0.0f);
+    vcl_fill(output_arr, output_arr+cl_ni*cl_nj, 1.0f);
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*cl_ni*cl_nj, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     outputs.push_back(cl_output);
@@ -95,16 +101,15 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
     vcl_vector<boxm2_block_id> ids = grp[grpId]->ids();
     for (unsigned int i=0; i<ids.size(); ++i) {
-      float* visImg = new float[ni*nj]; vcl_fill(visImg, visImg+ni*nj, 1.0f);
-      float* preImg = new float[ni*nj]; vcl_fill(preImg, preImg+ni*nj, 0.0f);
+      float* visImg = new float[cl_ni*cl_nj]; vcl_fill(visImg, visImg+cl_ni*cl_nj, 1.0f);
+      float* preImg = new float[cl_ni*cl_nj]; vcl_fill(preImg, preImg+cl_ni*cl_nj, 0.0f);
       grp[grpId]->set_vis(i, visImg);
       grp[grpId]->set_pre(i, preImg);
     }
   }
 
   //create boxm2_multi update helper object for factored out vars
-  boxm2_multi_update_helper helper(queues, ray_os, ray_ds, img_dims, lookups,
-                                   outputs, grp, vis_orders, ocl_caches, maxBlocks);
+  boxm2_multi_update_helper helper(queues, ray_os, ray_ds, img_dims,tnearfarptrs, lookups, outputs, grp, vis_orders, ocl_caches, maxBlocks);
 
   //store aux data (cell vis, cell length)
   vul_timer stepTimer; stepTimer.mark();
@@ -113,13 +118,14 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   gpu_time += aux_time;
 
   //calcl pre/vis inf, and store pre/vis images along the way
-  float* norm_img = new float[img.ni() * img.nj()];
+  float* norm_img = new float[cl_ni * cl_nj];
   vcl_map<bocl_device*, float*> pre_map, vis_map;
   stepTimer.mark();
   float pre_vis_time = boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, norm_img, helper);
   vcl_cout<<"  pre_vis time: "<<pre_vis_time<<"  "<<stepTimer.all()<<vcl_endl;
   gpu_time += pre_vis_time;
 
+  
   //calculate cell beta, cell vis, and finally reduce each cell to new alphas
   stepTimer.mark();
   float update_cell_time = boxm2_multi_update_cell::update_cells(cache, img, cam, norm_img, helper);
@@ -148,6 +154,9 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
     ocl_cache->unref_mem(ray_os[i].ptr());
     ocl_cache->unref_mem(ray_ds[i].ptr());
 
+    float* tnf = (float*) tnearfarptrs[i]->cpu_buffer();
+    delete[] tnf;
+    ocl_cache->unref_mem(tnearfarptrs[i].ptr() );
     //release output
     float* output = (float*) outputs[i]->cpu_buffer();
     delete[] output;

@@ -153,7 +153,7 @@ int main(int argc,  char** argv)
     float gpu_time = renderer.render(mcache, out, cams[i]);
     float rtime = (float) rtimer.all();
     vcl_cout<<"Render "<<i<<" time: "<<rtime<<vcl_endl;
-    vcl_stringstream s; s<<"out_"<<i<<".tiff";
+    vcl_stringstream s; s<<"e:/data/3dModeling/apt/out_"<<i<<".tiff";
     vil_save(out, s.str().c_str());
     mean_time += rtime;
     gpu_total += gpu_time;

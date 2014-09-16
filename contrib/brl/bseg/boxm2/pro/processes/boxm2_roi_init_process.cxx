@@ -51,7 +51,7 @@
 //: globals variables and functions
 namespace boxm2_roi_init_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 3;
 
   // === functions ===
@@ -64,7 +64,7 @@ namespace boxm2_roi_init_process_globals
                 //vil_image_view<unsigned char>* nitf_image_unsigned_char,
                 vil_image_view_base_sptr& img_ptr,
                 vpgl_local_rational_camera<double>& local_camera,
-                bool convert_to_8_bit, int margin);
+                bool convert_to_8_bit, int margin, int clip_box_width = -1.0,int clip_box_height = -1 );
 
   //: projects the box on the image by taking the union of all the projected corners
   vgl_box_2d<double>* project_box(vpgl_rational_camera<double>* cam,
@@ -84,7 +84,7 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
                                                vil_image_view_base_sptr& img_ptr,
                                                vpgl_local_rational_camera<double>& local_camera,
                                                bool convert_to_8_bit,
-                                               int margin)
+                                               int margin,int clip_box_width, int clip_box_height)
 {
   //: read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
@@ -111,9 +111,9 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   if (bb2->width() <= 0 || bb2->height() <= 0) 
     return false;
 
-  //: use the margin
-  roi_box->set_width(roi_box->width() + 2*margin);
-  roi_box->set_height(roi_box->height() + 2*margin);
+  
+  roi_box->set_width(roi_box->width()+2*margin);
+  roi_box->set_height(roi_box->height()+2*margin);
   
   vsol_box_2d_sptr bb = new vsol_box_2d();
   bb->add_point(roi_box->min_x(), roi_box->min_y());
@@ -121,12 +121,20 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   bb = broi.clip_to_image_bounds(bb);
   if (bb->width() <= 0 || bb->height() <= 0) 
     return false;
+  //: use the margin
+  double maxwidth = bb->width();
+  double maxheight = bb->height();
+  
+  if(clip_box_width > 0)
+    maxwidth = clip_box_width;
+  if(clip_box_height > 0)
+    maxheight = clip_box_height;
 
   vil_image_view_base_sptr roi =
     nitf->get_copy_view((unsigned int)bb->get_min_x(),
-                        (unsigned int)bb->width(),
+                        (unsigned int)maxwidth,
                         (unsigned int)bb->get_min_y(),
-                        (unsigned int)bb->height());
+                        (unsigned int)maxheight);
   if (!roi) {
     vcl_cerr << "boxm2_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
     return false;
@@ -298,6 +306,9 @@ bool boxm2_roi_init_process_cons(bprb_func_process& pro)
   input_types_[i++] = "boxm2_scene_sptr";     // scene
   input_types_[i++] = "bool";  // whether to convert to 8 bits or not, default is true=do the conversion
   input_types_[i++] = "int";   // margin - clip an image with an extra margin around, default is zero if not set
+  input_types_[i++] = "int";   // set image dimensions
+  input_types_[i++] = "int";   // set image dimensions
+
   bool good = pro.set_input_types(input_types_);
 
   //this process takes 3 outputs:
@@ -314,6 +325,12 @@ bool boxm2_roi_init_process_cons(bprb_func_process& pro)
 
   brdb_value_sptr idx2 = new brdb_value_t<int>(0);
   pro.set_input(4, idx2);
+
+    brdb_value_sptr idx3 = new brdb_value_t<int>(-1);
+  pro.set_input(5, idx3);
+
+    brdb_value_sptr idx4 = new brdb_value_t<int>(-1);
+  pro.set_input(6, idx4);
 
   // set up  process parameters
   bprb_parameters_sptr params = new bprb_parameters();
@@ -350,6 +367,9 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
   bool convert_to_8_bit = pro.get_input<bool>(i++);
   int margin = pro.get_input<int>(i++);
 
+  int clip_image_width = pro.get_input<int>(i++);
+    int clip_image_height = pro.get_input<int>(i++);
+  
   // uncertainty (meters) -- SHOULD BE A PARAM
   float uncertainty=0;
   if ( !pro.parameters()->get_value(error, uncertainty) ) {
@@ -367,7 +387,7 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
   }
 
   vpgl_local_rational_camera<double> local_camera;
-  if (!roi_init(image_path, rat_camera, scene, uncertainty, img_ptr, local_camera, convert_to_8_bit, margin)) {
+  if (!roi_init(image_path, rat_camera, scene, uncertainty, img_ptr, local_camera, convert_to_8_bit, margin,clip_image_width, clip_image_height)) {
     //vcl_cerr << "The process has failed!\n";
     return false;
   }

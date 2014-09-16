@@ -46,6 +46,7 @@ class boxm2_multi_pre_vis_inf
                                         bocl_mem_sptr&      img_dim,
                                         bocl_mem_sptr&      ray_o_buff,
                                         bocl_mem_sptr&      ray_d_buff,
+                                        bocl_mem_sptr&      tnearfarptr,
                                         bocl_mem_sptr&      cl_output,
                                         bocl_mem_sptr&      lookup,
                                         vcl_size_t*         lthreads,

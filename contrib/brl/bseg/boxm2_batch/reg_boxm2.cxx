@@ -14,7 +14,7 @@
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
 #include <boxm2/ocl/pro/boxm2_ocl_register.h>
-
+#include <boxm2_multi/pro/boxm2_multi_register.h>
 #if defined(HAS_GLEW) && HAS_GLEW
 #include <boxm2/view/pro/boxm2_view_register.h>
 #endif
@@ -47,6 +47,7 @@ PyObject *
 #if defined(HAS_OPENCL) && HAS_OPENCL
     bocl_register::register_process();
     boxm2_ocl_register::register_process();
+    boxm2_multi_register::register_process();
 #if defined(HAS_GLEW) && HAS_GLEW
     boxm2_view_register::register_process();
 #endif
@@ -88,6 +89,7 @@ PyObject *
 #if defined(HAS_OPENCL) && HAS_OPENCL
     bocl_register::register_datatype();
     boxm2_ocl_register::register_datatype();
+    boxm2_multi_register::register_datatype();
 #if defined(HAS_GLEW) && HAS_GLEW
     boxm2_view_register::register_datatype();
 #endif

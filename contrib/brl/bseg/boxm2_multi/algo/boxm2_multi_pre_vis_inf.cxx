@@ -53,10 +53,10 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
   //vis inf and pre inf buffers
-  float* visImg = new float[ni*nj];
-  float* preImg = new float[ni*nj];
-  vcl_fill(visImg, visImg+ni*nj, 1.0f);
-  vcl_fill(preImg, preImg+ni*nj, 0.0f);
+  float* visImg = new float[cl_ni*cl_nj];
+  float* preImg = new float[cl_ni*cl_nj];
+  vcl_fill(visImg, visImg+cl_ni*cl_nj, 1.0f);
+  vcl_fill(preImg, preImg+cl_ni*cl_nj, 0.0f);
 
   //-------------------------------------------------------
   //prepare buffers for each device
@@ -66,7 +66,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
                              img_dims = helper.img_dims_,
                              ray_ds = helper.ray_ds_,
                              ray_os = helper.ray_os_,
-                             lookups = helper.lookups_;
+                             lookups = helper.lookups_,
+                             tnearfarptrs=  helper.tnearfarptrs_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   vcl_vector<bocl_mem_sptr> vis_mems, pre_mems, visInfMems, preInfMems;
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
@@ -118,7 +119,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       pre_mems[i]->zero_gpu_buffer(queues[i]);
       cpu_time += pre_vis_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0],
                                     vis_mems[i], pre_mems[i], img_dims[i],
-                                    ray_os[i], ray_ds[i],
+                                    ray_os[i], ray_ds[i],tnearfarptrs[i],
                                     out_imgs[i], lookups[i], lthreads, gThreads);
     }
 
@@ -127,57 +128,37 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       int i = indices[idx];
 
 #if 1
-      //find the minU,minV, maxU,maxV points
+
       vul_timer cpuTimer; cpuTimer.mark();
-      double minU=ni, minV=nj,
-             maxU=0, maxV=0;
-      vgl_box_3d<double>& blkBox = group.bbox(i);
-      vcl_vector<vgl_point_3d<double> > verts = blkBox.vertices();
-      for (unsigned int vi=0; vi<verts.size(); ++vi) {
-        double u, v;
-        cam->project(verts[vi].x(), verts[vi].y(), verts[vi].z(), u, v);
-        if (u < minU) minU = u;
-        if (u > maxU) maxU = u;
-        if (v < minV) minV = v;
-        if (v > maxV) maxV = v;
-      }
-      //make sure you clamp the value between
-      minU = clamp(minU, 0.0, (double) ni);
-      maxU = clamp(maxU, 0.0, (double) ni);
-      maxV = clamp(maxV, 0.0, (double) nj);
-      minV = clamp(minV, 0.0, (double) nj);
-
       //first store vis/pre images for first member of group
-      vcl_memcpy(group.get_vis(i), visImg, ni*nj*sizeof(float));
-      vcl_memcpy(group.get_pre(i), preImg, ni*nj*sizeof(float));
-
+      vcl_memcpy(group.get_vis(i), visImg, cl_ni*cl_nj*sizeof(float));
+      vcl_memcpy(group.get_pre(i), preImg, cl_ni*cl_nj*sizeof(float));
       //next update the vis and pre images
       clFinish(queues[i]);
-#if 0 // gpu_time will be overwritten after this for loop
-      if (idx+1 == indices.size())
-        gpu_time += t.all();
-#endif
+
       vis_mems[i]->read_to_buffer(queues[i]);
       pre_mems[i]->read_to_buffer(queues[i]);
       float* v = (float*) vis_mems[i]->cpu_buffer();
       float* p = (float*) pre_mems[i]->cpu_buffer();
-      for (int jj=(int)minV; jj<(int)maxV; ++jj)
-        for (int ii=(int)minU; ii<(int)maxU; ++ii) {
-          int idx = jj*ni + ii;
-          preImg[idx]  = preImg[idx] + p[idx]*visImg[idx];
-          visImg[idx] *= v[idx];
+      for (int jj=(int)0; jj<(int)cl_nj; ++jj)
+        for (int ii=(int)0; ii<(int)cl_ni; ++ii) {
+          int index = jj*cl_ni + ii;
+      preImg[index]  = preImg[index] + p[index]*visImg[index];
+          visImg[index] *= v[index];
         }
       cpu_time += cpuTimer.all();
 #else
+
       //first store vis/pre images for first member of group
       float* p = (float*) preInfMems[i]->enqueue_map(queues[i]);
       float* v = (float*) visInfMems[i]->enqueue_map(queues[i]);
       clFinish(queues[i]);
-      vcl_memcpy(group.get_vis(i), v/*visImg*/, ni*nj*sizeof(float));
-      vcl_memcpy(group.get_pre(i), p/*preImg*/, ni*nj*sizeof(float));
+      vcl_memcpy(group.get_vis(i), v, cl_ni*cl_nj*sizeof(float));
+      vcl_memcpy(group.get_pre(i), p/*preImg*/, cl_ni*cl_nj*sizeof(float));
 
       bocl_device_sptr device = ocl_caches[i]->get_device();
       bocl_kernel*     kern   = get_kernels(device, options)[2];
+
       preInfMems[i]->enqueue_unmap(queues[i], p);
       visInfMems[i]->enqueue_unmap(queues[i], v);
       kern->set_arg( preInfMems[i].ptr() );
@@ -190,54 +171,39 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       kern->clear_args();
 #endif
     }
+
+
+
   }
   gpu_time = t.all();
 
   t.mark();
   //---- This instead of the reduce step ----
   //Norm image create on CPU
-  for (int c=0; c<ni*nj; ++c)
+  for (int c=0; c<cl_ni*cl_nj; ++c)
     norm_img[c] = visImg[c] + preImg[c];
 
   //grab accurate GPU time (includes transfers)
   cpu_time += t.all();
   gpu_time -= cpu_time;
 
-#if 0
+#if 1
   vil_image_view<float> nimg(ni,nj), vimg(ni,nj), pimg(ni,nj);
   int c=0;
-  for (int j=0; j<nj; ++j)
-    for (int i=0; i<ni; ++i) {
+
+  for (int j=0; j<cl_nj; ++j)
+    for (int i=0; i<cl_ni; ++i) {
+      if( i < ni && j < nj )
+    {
       nimg(i,j) = norm_img[c];
       vimg(i,j) = visImg[c];
       pimg(i,j) = preImg[c];
+    }
       c++;
     }
-  vil_save(nimg, "norm_image.tiff");
-  vil_save(vimg, "vis_image.tiff");
-  vil_save(pimg, "pre_image.tiff");
-#endif
-
-#if 0
-  //------------------
-  //read all images in
-  //vcl_vector<float*> pre_imgs, vis_imgs;
-  //for (unsigned int i=0; i<vis_mems.size(); ++i) {
-  //  // read out expected image
-  //  pre_mems[i]->read_to_buffer(queues[i]);
-  //  vis_mems[i]->read_to_buffer(queues[i]);
-
-  //  //populate vil_image_views for combination
-  //  pre_imgs.push_back( (float*) pre_mems[i]->cpu_buffer());
-  //  vis_imgs.push_back( (float*) vis_mems[i]->cpu_buffer());
-  //}
-
-  //-------------------------------------------------------------------
-  // Reduce images into pre/vis image and make sure the interim
-  // pre/vis images are correct
-  //-------------------------------------------------------------------
-  //pre_vis_reduce(cache, pre_imgs, vis_imgs, ocl_caches,
-  //               pre_map, vis_map, ni, nj, norm_img);
+  vil_save(nimg, "e:/norm_image.tiff");
+  vil_save(vimg, "e:/vis_image.tiff");
+  vil_save(pimg, "e:/pre_image.tiff");
 #endif
 
   //-------------------------------------
@@ -245,6 +211,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   //-------------------------------------
   delete[] visImg;
   delete[] preImg;
+
   for (unsigned int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
     float* v = (float*) vis_mems[i]->cpu_buffer();
@@ -271,6 +238,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
                                                  bocl_mem_sptr&        img_dim,
                                                  bocl_mem_sptr&        ray_o_buff,
                                                  bocl_mem_sptr&        ray_d_buff,
+                                                 bocl_mem_sptr&        tnearfarptr,
                                                  bocl_mem_sptr&        cl_output,
                                                  bocl_mem_sptr&        lookup,
                                                  vcl_size_t*           lthreads,
@@ -316,6 +284,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
   kern->set_arg( lookup.ptr() );
   kern->set_arg( ray_o_buff.ptr() );
   kern->set_arg( ray_d_buff.ptr() );
+  kern->set_arg( tnearfarptr.ptr() );
   kern->set_arg( img_dim.ptr() );
   kern->set_arg( vis_image.ptr() );
   kern->set_arg( pre_image.ptr() );
@@ -324,132 +293,14 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
   kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
   float transfer_time = ttime.all();
 
+ 
   //execute kernel
   kern->execute(queue, 2, lthreads, gThreads);
-
   //clear render kernel args so it can reset em on next execution
   kern->clear_args();
   return transfer_time;
 }
 
-#if 0
-float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,
-                                              vcl_vector<float*>& pre_imgs,
-                                              vcl_vector<float*>& vis_imgs,
-                                              vcl_vector<boxm2_opencl_cache*>& ocl_caches ,
-                                              vcl_map<bocl_device*, float*>& pre_map,
-                                              vcl_map<bocl_device*, float*>& vis_map,
-                                              int ni,
-                                              int nj,
-                                              float* norm_img )
-{
-  //------------------------------------------------------------------------
-  // combine images - need to ensure that images along the way are correct
-  //------------------------------------------------------------------------
-  for (unsigned int idx=0; idx<pre_imgs.size(); ++idx) {
-    if (idx > 0) {
-      float* prev_vis = vis_imgs[idx-1];
-      float* prev_pre = pre_imgs[idx-1];
-
-      float* v = vis_imgs[idx];
-      float* p = pre_imgs[idx];
-
-      //make sure v and p are updated
-      for (int c=0; c<ni*nj; ++c) {
-        v[c] *= prev_vis[c];
-        p[c]  = p[c]*prev_vis[c] + prev_pre[c];
-      }
-    }
-  }
-
-  //create a map from device to
-  float* vis0 = new float[ni*nj]; vcl_fill(vis0, vis0+ni*nj, 1.0f);
-  float* pre0 = new float[ni*nj]; vcl_fill(pre0, pre0+ni*nj, 0.0f);
-
-  //store dev0
-  bocl_device_sptr dev0 = ocl_caches[0]->get_device();
-  vis_map[dev0.ptr()] = vis0;
-  pre_map[dev0.ptr()] = pre0;
-  for (unsigned int idx=1; idx<ocl_caches.size(); ++idx) {
-    boxm2_opencl_cache*     ocl_cache = ocl_caches[idx];
-    boxm2_scene_sptr        sub_scene = ocl_cache->get_scene();
-    bocl_device_sptr        device    = ocl_cache->get_device();
-
-    vis_map[ device.ptr() ] = vis_imgs[idx-1];
-    pre_map[ device.ptr() ] = pre_imgs[idx-1];
-  }
-
-  //--------------------------------------------
-  //run proc_norm image to create norm image
-  //--------------------------------------------
-  if (ocl_caches.size() <= 0)
-    return -1.0f;
-
-  //grab sub scene and it's cache
-  boxm2_opencl_cache*     ocl_cache = ocl_caches[0];
-  boxm2_scene_sptr        sub_scene = ocl_cache->get_scene();
-  bocl_device_sptr        device    = ocl_cache->get_device();
-
-  //get scene options
-  vcl_string data_type, options;
-  int apptypesize;
-  if ( !boxm2_multi_util::get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) )
-    return 0.0f;
-  vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
-  bocl_kernel* proc_kern = kerns[1];
-
-  //-- create cmd queue
-  int status=0;
-  cl_command_queue queue = clCreateCommandQueue( device->context(),
-                                                 *(device->device_id()),
-                                                 CL_QUEUE_PROFILING_ENABLE,
-                                                 &status );
-  if (status!=0) {
-    vcl_cout<<"boxm2_multi_pre_vis_inf::store_aux unable to create command queue"<<vcl_endl;
-    return 0.0f;
-  }
-
-  //create buffers
-  bocl_mem_sptr norm_mem = ocl_cache->alloc_mem(sizeof(float)*ni*nj, norm_img, "norm mem buffer");
-  norm_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  float* pre_end = pre_imgs[ pre_imgs.size()-1 ];
-  bocl_mem_sptr pre_mem = ocl_cache->alloc_mem(sizeof(float)*ni*nj, pre_end, "pre mem buffer");
-  pre_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  float* vis_end = vis_imgs[ pre_imgs.size()-1 ];
-  bocl_mem_sptr vis_mem = ocl_cache->alloc_mem(sizeof(float)*ni*nj, vis_end, "vis mem buffer");
-  vis_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  // Image Dimensions
-  int img_dim_buff[4] = {0, 0, ni, nj};
-  bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
-  img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  //set args and execute
-  proc_kern->set_arg( norm_mem.ptr() );
-  proc_kern->set_arg( vis_mem.ptr() );
-  proc_kern->set_arg( pre_mem.ptr() );
-  proc_kern->set_arg( img_dim.ptr() );
-
-  //execute kernel
-  vcl_size_t lthreads[2] = {8,8};
-  vcl_size_t gThreads[] = { RoundUp(ni,lthreads[0]), RoundUp(nj,lthreads[1]) };
-  proc_kern->execute( queue, 2, lthreads, gThreads);
-  status = clFinish(queue);
-  check_val(status, MEM_FAILURE, "PROC NORM KERNEL EXECUTE FAILED: " + error_to_string(status));
-  proc_kern->clear_args();
-  norm_mem->read_to_buffer(queue);
-
-  //clean up buffers
-  //last image is not used, clean up
-  delete[] vis_imgs[ocl_caches.size()-1];
-  delete[] pre_imgs[ocl_caches.size()-1];
-  ocl_cache->unref_mem(norm_mem.ptr());
-  ocl_cache->unref_mem(pre_mem.ptr());
-  ocl_cache->unref_mem(vis_mem.ptr());
-}
-#endif
 
 
 //-----------------------------------------------------------------
@@ -482,9 +333,7 @@ vcl_vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr 
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = opts+" -D INTENSITY  ";
-  options += " -D DETERMINISTIC ";
-
+  vcl_string options = opts+"";
   //create all passes
   bocl_kernel* pre_inf = new bocl_kernel();
   vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";

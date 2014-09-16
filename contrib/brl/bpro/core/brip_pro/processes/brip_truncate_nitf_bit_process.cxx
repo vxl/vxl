@@ -61,10 +61,12 @@ bool brip_truncate_nitf_bit_process(bprb_func_process& pro)
   unsigned nj = in_img->nj();
   unsigned np = in_img->nplanes();
   // being truncation
+  vcl_cout<<"is_short "<<is_short<<vcl_endl;
   if (is_short) {
+    
     // truncate the input 16 bits image to a byte image by ignoring the most significant 5 bits and less significant 3 bits
     vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(ni,nj,np);
-    if (!brip_vil_nitf_ops::truncate_nitf_bits(*in_img, *out_img)) {
+    if (!brip_vil_nitf_ops::scale_nitf_bits(*in_img, *out_img)) {
       vcl_cout << pro.name() << ": truncate image from " << in_img_ptr->pixel_format() << " to " << out_img->pixel_format() << " failed!" << vcl_endl;
       return false;
     }

@@ -2,7 +2,7 @@
 #define boxm2_multi_render_h
 //:
 // \file
-#include <boxm2_multi_cache.h>
+#include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vil/vil_image_view.h>
@@ -61,10 +61,12 @@ class boxm2_multi_render
                         cl_command_queue& queue,
                         bocl_mem_sptr & ray_o_buff,
                         bocl_mem_sptr & ray_d_buff,
-                        bocl_mem_sptr & exp_image,
-                        bocl_mem_sptr & vis_image,
+                        bocl_mem * exp_image,
+                        bocl_mem * vis_image,
+                        bocl_mem_sptr & max_omega_image,
                         bocl_mem_sptr & exp_img_dim,
                         bocl_mem_sptr & cl_output,
+                        bocl_mem_sptr & tnearfar_mem_ptr,
                         bocl_mem_sptr & lookup,
                         vcl_string data_type,
                         bocl_kernel* kern,
