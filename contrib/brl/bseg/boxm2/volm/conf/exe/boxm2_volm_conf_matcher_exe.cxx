@@ -86,10 +86,16 @@ int main(int argc, char** argv)
   // obtain the desired leaf
   vcl_vector<volm_geo_index_node_sptr> loc_leaves;
   if (leaf_id() >= 0 && leaf_id() < (int)loc_leaves_all.size()) {
-    if (is_cand && vgl_intersection(loc_leaves_all[leaf_id()]->extent_, cand_poly))
+    if (is_cand && vgl_intersection(loc_leaves_all[leaf_id()]->extent_, cand_poly)) {
+        vcl_cout << "input leaf " << leaf_id() << " is inside candidate polygon, matcher will be performed" << vcl_endl;
         loc_leaves.push_back(loc_leaves_all[leaf_id()]);
+    }
     else
       loc_leaves.push_back(loc_leaves_all[leaf_id()]);
+    if (loc_leaves.empty()) {
+      vcl_cout << "input leaf " << leaf_id() << ": " << loc_leaves_all[leaf_id()] << " is outside candidate polygon.  Exit!!!\n";
+      return volm_io::SUCCESS;
+    }
   }
   else
   {
