@@ -7,10 +7,10 @@ vcl_string bvgl_2d_geo_index_node_base::get_string() const
 {
   vcl_stringstream str;
   str << "node_"
-      << vcl_setprecision(6) << vcl_fixed << this->extent_.min_point().x() << '_'
-      << vcl_setprecision(6) << vcl_fixed << this->extent_.min_point().y() << '_'
-      << vcl_setprecision(6) << vcl_fixed << this->extent_.max_point().x() << '_'
-      << vcl_setprecision(6) << vcl_fixed << this->extent_.max_point().y();
+      << vcl_setprecision(8) << vcl_fixed << this->extent_.min_point().x() << '_'
+      << vcl_setprecision(8) << vcl_fixed << this->extent_.min_point().y() << '_'
+      << vcl_setprecision(8) << vcl_fixed << this->extent_.max_point().x() << '_'
+      << vcl_setprecision(8) << vcl_fixed << this->extent_.max_point().y();
   return str.str();
 }
 

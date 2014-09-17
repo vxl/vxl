@@ -172,7 +172,7 @@ void volm_osm_parser::startElement(const XML_Char* name, const XML_Char** atts)
       else if (parent_.first == OSM_RELATION)
         relation_keys_[parent_.second].push_back(pair);
       else
-        vcl_cerr << " WARNNING: unknow tag detected when parsing osm file " << vcl_endl;
+        vcl_cerr << " WARNNING: unknown tag detected when parsing osm file " << vcl_endl;
     }
   }
 }

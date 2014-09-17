@@ -96,6 +96,21 @@ class volm_candidate_list
                                   double const& right_fov,
                                   float const& likelihood,
                                   unsigned const& rank);
+    //: write a candidate region associated with its favored heading direction (represented as a line)
+    static void write_kml_regions(vcl_ofstream& str,
+                                  vcl_vector<vgl_point_2d<double> >& region,
+                                  vgl_point_2d<double>& top_loc,
+                                  vcl_vector<vgl_point_2d<double> >& heading,
+                                  float const& likelihood,
+                                  unsigned const& rank);
+
+    //: generate a circular region given a circular center and radius
+    static bool generate_pin_point_circle(vgl_point_2d<double> const& center, double const& radius, vcl_vector<vgl_point_2d<double> >& circle);
+    //: generate a heading directional line given the camera center and heading direction
+    static bool generate_heading_direction(vgl_point_2d<double> const& center, float const& heading_angle, double const& length, vcl_vector<vgl_point_2d<double> >& heading_line);
+    //: method to check whether a given point is inside the candidate region
+    static bool inside_candidate_region(vgl_polygon<double> const& cand_poly, double const& lon, double const& lat);
+    static bool inside_candidate_region(vgl_polygon<double> const& cand_poly, vgl_point_2d<double> const& pt);
 
   private:
     unsigned thres_;

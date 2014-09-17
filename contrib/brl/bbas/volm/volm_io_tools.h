@@ -103,7 +103,7 @@ public:
   static double meter_to_seconds(double lat, double lon);
 
   //: returns the points from the list that lie inside the box and also containes the intersection points
-  static bool line_inside_the_box(vgl_box_2d<double> const& bbox, vcl_vector<vgl_point_2d<double> >& line, vcl_vector<vgl_point_2d<double> >& line_in);
+  static bool line_inside_the_box(vgl_box_2d<double> const& bbox, vcl_vector<vgl_point_2d<double> > const& line, vcl_vector<vgl_point_2d<double> >& line_in);
 
   //: find junctions on a road from a road network
   static bool search_junctions(vcl_vector<vgl_point_2d<double> > const& road, volm_land_layer const& road_prop,

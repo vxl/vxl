@@ -47,7 +47,7 @@ public:
   //: destructor
   ~bvgl_2d_geo_index_node() {}
 
-  //: date inside current node
+  //: data inside current node
   Type contents_;
 };
 

@@ -485,6 +485,29 @@ vcl_vector<volm_tile> volm_tile::generate_p2a_wr_tiles(int world_id)
   return tiles;
 }
 
+bool volm_tile::generate_tiles(unsigned const& world_id, vcl_vector<volm_tile>& tiles)
+{
+  tiles.clear();
+  switch (world_id)
+  {
+    case 1:  { tiles = volm_tile::generate_p1b_wr1_tiles();  break; }
+    case 2:  { tiles = volm_tile::generate_p1b_wr2_tiles();  break; }
+    case 3:  { tiles = volm_tile::generate_p1b_wr3_tiles();  break; }
+    case 4:  { tiles = volm_tile::generate_p1b_wr4_tiles();  break; }
+    case 5:  { tiles = volm_tile::generate_p1b_wr5_tiles();  break; }
+    case 6:  { tiles = volm_tile::generate_p1_wr2_tiles();   break; }
+    case 7:  { tiles = volm_tile::generate_p1_wr1_tiles();   break; }
+    case 8:  { tiles = volm_tile::generate_p2a_wr8_tiles();   break; }
+    case 9:  { tiles = volm_tile::generate_p2a_wr9_tiles();   break; }
+    case 10: { tiles = volm_tile::generate_p2a_wr10_tiles();  break; }
+    case 11: { tiles = volm_tile::generate_p2a_wr11_tiles();  break; }
+    case 12: { tiles = volm_tile::generate_p2a_wr12_tiles();  break; }
+    case 13: { tiles = volm_tile::generate_p2a_wr13_tiles();  break; }
+    default: { return false; }
+  }
+  return true;
+}
+
 vcl_string volm_tile::get_string()
 {
   vcl_stringstream str;

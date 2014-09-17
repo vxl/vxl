@@ -17,56 +17,35 @@
 #include <vcl_ios.h>
 #include <bvrml/bvrml_write.h>
 
+bool is_same(double const& x, double const& y)
+{
+  return (vcl_fabs(x-y) < 1E-6);
+}
+
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> world_region("-world", "ROI world region (can be desert, coast, Chile, India, Jordan, Philippines, Taiwan)", "");
-  vul_arg<vcl_string> out("-out", "experiment output root", "");
-  vul_arg<unsigned> id("-id", "test image id",9999);
-  vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
-  vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
-  vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
-  vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");        // ground truth file -- used for testing purpose
+  vul_arg<unsigned>    world_id("-world",     "ROI world id", 9999);
+  vul_arg<vcl_string>       out("-out", "experiment output root", "");
+  vul_arg<float>             kl("-kl", "parameter for nonlinear score scaling", 200.0f);
+  vul_arg<float>             ku("-ku", "parameter for nonlinear score scaling", 10.0f);
+  vul_arg<double>        gt_lon("-lon",      "location longitude", 0.0);
+  vul_arg<double>        gt_lat("-lat",      "location latitude", 0.0);
   vul_arg_parse(argc, argv);
   
   // input check
-  if (out().compare("") == 0 || id() >= 9999 || gt_file().compare("") == 0) {
+  if (out().compare("") == 0 || world_id() == 9999 || is_same(gt_lon(),0.0) || is_same(gt_lat(),0.0) ) {
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
   vcl_stringstream log;
   vcl_string log_file = out() + "/evaluate_roi_log.xml";
-  // read gt location
-  if (!vul_file::exists(gt_file())) {
-    log << "ERROR : can not find ground truth position file -->" << gt_file() << '\n';
-    volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
-  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
-  volm_io::read_gt_file(gt_file(), samples);
-  double gt_lon, gt_lat;
-  gt_lon = samples[id()].first.x();
-  gt_lat = samples[id()].first.y();
 
   // create tile
   vcl_vector<volm_tile> tiles;
-  if (world_region().compare("desert") == 0)
-    tiles = volm_tile::generate_p1_wr1_tiles();
-  else if (world_region().compare("coast") == 0)
-    tiles = volm_tile::generate_p1_wr2_tiles();
-  else if (world_region().compare("Chile")  == 0)
-    tiles = volm_tile::generate_p1b_wr1_tiles();
-  else if (world_region().compare("India") == 0)
-    tiles = volm_tile::generate_p1b_wr2_tiles();
-  else if (world_region().compare("Jordan") == 0)
-    tiles = volm_tile::generate_p1b_wr3_tiles();
-  else if (world_region().compare("Philippines") == 0)
-    tiles = volm_tile::generate_p1b_wr4_tiles();
-  else if (world_region().compare("Taiwan") == 0)
-    tiles = volm_tile::generate_p1b_wr5_tiles();
-  else {
-    log << "ERROR: unknown world region, should be \" desert, coast, Chile, India, Jordan, Philippines, Taiwan\"\n";
-    volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+  if (!volm_tile::generate_tiles(world_id(), tiles)) {
+    log << "ERROR: unknown world id " << world_id() << "!\n";
+    volm_io::write_error_log(log_file, log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -92,11 +71,10 @@ int main(int argc, char** argv)
         if (tile_img(ii, jj) > max_score_all && tile_img(ii,jj) > 0) max_score_all = tile_img(ii,jj);
     // search for the maximum score for ground truth location
     unsigned u, v;
-    if (tiles[i].global_to_img(samples[id()].first.x(), samples[id()].first.y(), u, v)) {
+    if (tiles[i].global_to_img(gt_lon(), gt_lat(), u, v)) {
       if (u < tile_img.ni() && v < tile_img.nj())
         gt_score = tile_img(u,v);
-        log << "\t id = " << id() << ", GT location: " << samples[id()].first.x() << ", "
-                      << samples[id()].first.y() << " is at pixel: "
+        log << "\t query location: " << gt_lon() << "x" << gt_lat() << " is at pixel: "
                       << u << ", " << v << " in tile " << i << " and has value: "
                       << gt_score << '\n';
         volm_io::write_post_processing_log(log_file, log.str());
@@ -112,7 +90,7 @@ int main(int argc, char** argv)
   test_img_thres.push_back(gt_score);
   test_img_thres.push_back(max_score_all);
 
-  vcl_cout << " test_id = " << id() << ", gt_score = " << gt_score << ", max_score = " << max_score_all << '\n';
+  vcl_cout << " for query location: " << gt_lon() << "x" << gt_lat() << ", gt_score = " << gt_score << ", max_score = " << max_score_all << '\n';
   // calculate roi for current valid out_folder
   // cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
   vcl_map<float, vcl_vector<unsigned> > cnt_map;

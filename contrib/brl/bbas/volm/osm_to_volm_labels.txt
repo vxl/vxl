@@ -248,6 +248,8 @@ highway rest_area 90 road_rest_area 3 0
 highway secondary_link 31 roads 3 3
 highway unclassified 31 roads 3 2.5
 highway trunk_link 83 trunk 3 7.5
+highway construction 246 road_construction 3 7.5
+highway bus_stop 247 bus_stop 5 0
 historic ruins 55 landmark 4 0
 historic city_gate 55 landmark 4 0
 historic rune_stone 55 landmark 4 0
@@ -267,7 +269,7 @@ landuse reservoir 1 Open_Water 0 0
 landuse retail 52 plaza 1 0
 landuse landfill 3 Developed/Open_Space 0 0
 landuse quarry 93 mineral 2 0
-landuse industrial 5 Developed/High_Intensity 0 0
+landuse industrial 248 land_industrial 1 0
 landuse salt_pond 1 Open_Water 0 0
 landuse residential 94 land_residential 1 0
 landuse railway 110 railway 3 1.5
@@ -291,7 +293,7 @@ landuse construction 3 Developed/Open_Space 0 0
 landuse recreation_ground 28 parks 1 0
 landuse forest 9 Mixed_Forest 0 0
 leisure dog_park 28 parks 1 0
-leisure playground 28 parks 1 0
+leisure playground 249 playground 1 0
 leisure swimming_pool 96 swimming_pool 4 0
 leisure park 28 parks 1 0
 leisure marina 26 marinas 3 0

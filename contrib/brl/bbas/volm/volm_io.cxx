@@ -421,8 +421,9 @@ bool volm_io::read_camera(vcl_string kml_file,
     // use top_fov
     top_fov_dev = parser->top_fov_dev_;
   }
-
+  
   delete parser;
+  vcl_fclose(xmlFile);
   return true;
 }
 
@@ -661,6 +662,12 @@ bool volm_io::write_post_processing_log(vcl_string log_file, vcl_string log)
   file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n"
        << "<log>\n"<<log<<"</log>\n</status>";
   file.close();
+  return true;
+}
+
+bool volm_io::write_error_log(vcl_string const& log_file, vcl_string const& log)
+{
+  vcl_cerr << log;  volm_io::write_post_processing_log(log_file, log);
   return true;
 }
 
@@ -997,7 +1004,7 @@ void volm_weight::equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene
 #endif
 }
 
-void volm_io_expt_params::read_params(vcl_string params_file)
+void volm_io_expt_params::read_params(vcl_string const& params_file)
 {
   vcl_ifstream ifs(params_file.c_str());
   vcl_string dummy;
@@ -1012,6 +1019,18 @@ void volm_io_expt_params::read_params(vcl_string params_file)
   ifs >> dummy; ifs >> point_angle; vcl_cout << dummy << ' ' << point_angle << ' ';
   ifs >> dummy; ifs >> top_angle;   vcl_cout << dummy << ' ' << top_angle << ' ';
   ifs >> dummy; ifs >> bottom_angle;vcl_cout << dummy << ' ' << bottom_angle << '\n';
+  ifs.close();
+}
+
+void volm_io_expt_params::read_cam_inc_params(vcl_string const& params_file)
+{
+  vcl_ifstream ifs(params_file.c_str());
+  vcl_string dummy;
+  ifs >> dummy; ifs >> fov_inc;     vcl_cout << dummy << ' ' << fov_inc << ' ';
+  ifs >> dummy; ifs >> tilt_inc;    vcl_cout << dummy << ' ' << tilt_inc << ' ';
+  ifs >> dummy; ifs >> roll_inc;    vcl_cout << dummy << ' ' << roll_inc << ' ';
+  ifs >> dummy; ifs >> head_inc;    vcl_cout << dummy << ' ' << head_inc << '\n';
+  ifs.close();
 }
 
 bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data)
@@ -1029,7 +1048,7 @@ bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& da
   return true;
 }
 
-//: read the building footpring file
+//: read the building footprint file
 bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds, vcl_vector<double>& heights)
 {
   vcl_cout << "\t\t !!!!!!!!!!!!!! reading file: " << file << vcl_endl;

@@ -18,14 +18,13 @@
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> world_region("-world", "ROI world region (can be desert, coast, Chile, India, Jordan, Philippines, Taiwan)", "");
-  vul_arg<vcl_string> out("-out", "experiment output root", "");
-  vul_arg<unsigned>   id("-id", "test image id", 9999);
-  vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
-  vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
+  vul_arg<unsigned>    world_id("-world",     "ROI world id", 9999);
+  vul_arg<vcl_string>       out("-out", "experiment output root", "");
+  vul_arg<float>             kl("-kl", "parameter for nonlinear score scaling", 200.0f);
+  vul_arg<float>             ku("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg_parse(argc, argv);
 
-  if (out().compare("") == 0 || world_region().compare("") == 0) {
+  if (out().compare("") == 0 || world_id() == 9999) {
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -33,24 +32,11 @@ int main(int argc, char** argv)
   vcl_string log_file = out() + "/evaluate_roi_max_log.xml";
 
   // create tile
+  // start to create the probability map
   vcl_vector<volm_tile> tiles;
-  if (world_region().compare("desert") == 0)
-    tiles = volm_tile::generate_p1_wr1_tiles();
-  else if (world_region().compare("coast") == 0)
-    tiles = volm_tile::generate_p1_wr2_tiles();
-  else if (world_region().compare("Chile")  == 0)
-    tiles = volm_tile::generate_p1b_wr1_tiles();
-  else if (world_region().compare("India") == 0)
-    tiles = volm_tile::generate_p1b_wr2_tiles();
-  else if (world_region().compare("Jordan") == 0)
-    tiles = volm_tile::generate_p1b_wr3_tiles();
-  else if (world_region().compare("Philippines") == 0)
-    tiles = volm_tile::generate_p1b_wr4_tiles();
-  else if (world_region().compare("Taiwan") == 0)
-    tiles = volm_tile::generate_p1b_wr5_tiles();
-  else {
-    log << "ERROR: unknown world region, should be \" desert, coast, Chile, India, Jordan, Philippines, Taiwan\"\n";
-    volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+  if (!volm_tile::generate_tiles(world_id(), tiles)) {
+    log << "ERROR: unknown world id " << world_id() << "!\n";
+    volm_io::write_error_log(log_file, log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -82,7 +68,7 @@ int main(int argc, char** argv)
   test_img_thres.push_back(0.95*max_score_all);
   test_img_thres.push_back(max_score_all);
 
-  vcl_cerr << " Among all locations" << gt_score << ", max_score = " << max_score_all << '\n';
+  vcl_cerr << " Among all locations " << gt_score << ", max_score = " << max_score_all << '\n';
   // calculate roi for current valid out_folder
   // cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
   vcl_map<float, vcl_vector<unsigned> > cnt_map;

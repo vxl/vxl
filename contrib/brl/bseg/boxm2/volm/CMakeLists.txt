@@ -49,6 +49,9 @@ SUBDIRS(exe)
 #pro
 SUBDIRS(pro)
 
-#desc
+#desc matcher
 SUBDIRS(desc)
+
+#conf matcher
+SUBDIRS(conf)
 

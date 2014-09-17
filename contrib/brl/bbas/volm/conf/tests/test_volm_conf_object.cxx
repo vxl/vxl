@@ -4,6 +4,7 @@
 #include <vnl/vnl_math.h>
 #include <vcl_limits.h>
 #include <vgl/vgl_point_2d.h>
+#include <vul/vul_file.h>
 
 static void test_volm_conf_object()
 {
@@ -20,6 +21,8 @@ static void test_volm_conf_object()
   obj_sptr->print(vcl_cout);
   float epsilon = 1E-5;
   vcl_cout << "epsilon = " << epsilon << vcl_endl;
+  vcl_cout << "size of an volm_conf_object: " << sizeof(*obj_sptr) << " bytes" << vcl_endl;
+  vcl_cout << "size of its member: " << sizeof(obj_sptr->theta()) + sizeof(obj_sptr->dist()) + sizeof(obj_sptr->land()) << " bytes" << vcl_endl;
   TEST_NEAR("Test angle value", obj_sptr->theta(), theta, 1e-5f);
   TEST_NEAR("Test angle value(in degree)", obj_sptr->theta_in_deg(), theta_in_deg, epsilon);
   TEST_NEAR("Test distance value", obj_sptr->dist(), dist, epsilon);
@@ -36,8 +39,7 @@ static void test_volm_conf_object()
   volm_conf_object_sptr obj_in = new volm_conf_object();
   vsl_b_read(is, obj_in);
   TEST("Test binary IO", obj_sptr->is_same(obj_in), true);
-
-
+  return;
 }
 
 TESTMAIN( test_volm_conf_object );

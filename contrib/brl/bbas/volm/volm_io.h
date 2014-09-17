@@ -102,7 +102,8 @@ class volm_io_expt_params
 {
  public:
   float fov_inc, tilt_inc, roll_inc, head_inc, vmin, solid_angle, dmax, cap_angle, point_angle, top_angle, bottom_angle;
-  void read_params(vcl_string params_file);
+  void read_params(vcl_string const& params_file);
+  void read_cam_inc_params(vcl_string const& param_file);
 };
 
 class volm_io
@@ -122,6 +123,7 @@ class volm_io
   static bool write_log(vcl_string out_folder, vcl_string log);
   static bool write_composer_log(vcl_string out_folder, vcl_string log);
   static bool write_post_processing_log(vcl_string log_file, vcl_string log);
+  static bool write_error_log(vcl_string const& log_file, vcl_string const& log);
 
   //: return true if MATCHER_EXE_FINISHED, otherwise return false
   static bool check_matcher_status(vcl_string out_folder);

@@ -82,7 +82,7 @@ vcl_map<int, volm_land_layer> create_nlcd_to_volm_table()
   m[volm_osm_category_io::NLCD_EVERGREEN_FOREST] = volm_land_layer(8, "Evergreen_Forest", 0, 0.0, color(8));
   m[volm_osm_category_io::NLCD_MIXED_FOREST]     = volm_land_layer(9, "Mixed_Forest", 0, 0.0, color(9));
   m[volm_osm_category_io::NLCD_DWARF_SCRUB]      = volm_land_layer(10, "Dwarf_Scrub", 0, 0.0, color(10));
-  m[volm_osm_category_io::NLCD_SHRUB]            = volm_land_layer(10, "Shrub/Scrub", 0, 0.0, color(10));
+  m[volm_osm_category_io::NLCD_SHRUB]            = volm_land_layer(10, "Dwarf_Scrub", 0, 0.0, color(10));
   m[volm_osm_category_io::NLCD_GRASSLAND]        = volm_land_layer(11, "Grassland/Herbaceous", 0, 0.0, color(11));
   m[volm_osm_category_io::NLCD_SEDGE]            = volm_land_layer(11, "Sedge/Herbaceous", 0, 0.0, color(11));
   m[volm_osm_category_io::NLCD_LICHENS]          = volm_land_layer(11, "lichens", 0, 0.0, color(11));

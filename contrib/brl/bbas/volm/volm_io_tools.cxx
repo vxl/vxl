@@ -682,7 +682,7 @@ bool find_intersect(vgl_box_2d<double> const& bbox, vgl_point_2d<double> const& 
   return false;
 }
 
-bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, vcl_vector<vgl_point_2d<double> >& line, vcl_vector<vgl_point_2d<double> >& road)
+bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, vcl_vector<vgl_point_2d<double> > const& line, vcl_vector<vgl_point_2d<double> >& road)
 {
   // obtain points that lie inside the bounding box
   vcl_vector<vgl_point_2d<double> > line_in = vgl_intersection(line, bbox);
@@ -694,7 +694,7 @@ bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, vcl_vect
   // find the intersection points
   for (unsigned i = 0; i < line_in.size(); i++) {
     vgl_point_2d<double> curr_pt = line_in[i];
-    vcl_vector<vgl_point_2d<double> >::iterator vit = vcl_find(line.begin(), line.end(), curr_pt);
+    vcl_vector<vgl_point_2d<double> >::const_iterator vit = vcl_find(line.begin(), line.end(), curr_pt);
     if (vit == line.begin() ) {
       vgl_point_2d<double> next = *(vit+1);
       if (bbox.contains(next))

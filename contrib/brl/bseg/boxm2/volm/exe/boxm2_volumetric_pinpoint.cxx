@@ -66,7 +66,7 @@ int main(int argc, char** argv)
   vul_arg<bool>       is_cam("-is_cam", "option to choose whether we write the camera into kml as photo overlay", false);
   vul_arg<vcl_string> cam_bin("-cam", "camera space binary","");
   vul_arg<vcl_string> query_img("-img", "query image size", "");
-  vul_arg<vcl_string> geo_folder("-geo", "geo location databse", "");
+  vul_arg<vcl_string> geo_folder("-geo", "geo location database", "");
   vul_arg<vcl_string> candidate_list("-cand", "candidate list used during matching for search space reduction, if existed","");
   vul_arg<double>     radius("-radius", "pin-point circle radius (in meter)", 100.0);
   vul_arg<unsigned>   num_top_locs("-num-locs", "number of desired pinning points", 100);

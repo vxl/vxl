@@ -145,10 +145,10 @@ unsigned bvgl_2d_geo_index::depth(bvgl_2d_geo_index_node_sptr node)
 // write the tree structure
 void write_to_text(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n)
 {
-  ofs << vcl_setprecision(6) << vcl_fixed << n->extent_.min_point().x() << ' '
-      << vcl_setprecision(6) << vcl_fixed << n->extent_.min_point().y() << ' '
-      << vcl_setprecision(6) << vcl_fixed << n->extent_.max_point().x() << ' '
-      << vcl_setprecision(6) << vcl_fixed << n->extent_.max_point().y() << '\n'
+  ofs << vcl_setprecision(8) << vcl_fixed << n->extent_.min_point().x() << ' '
+      << vcl_setprecision(8) << vcl_fixed << n->extent_.min_point().y() << ' '
+      << vcl_setprecision(8) << vcl_fixed << n->extent_.max_point().x() << ' '
+      << vcl_setprecision(8) << vcl_fixed << n->extent_.max_point().y() << '\n'
       << n->children_.size() << '\n';
   for (unsigned i = 0; i < n->children_.size(); i++) {
     if (!n->children_[i]) ofs << " 0";

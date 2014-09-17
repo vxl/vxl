@@ -210,13 +210,13 @@ int main(int argc, char** argv)
 
   //// find and ingest osm junctions
   //unsigned n_road_in = roads_in_leaf.size();
-  //for (unsigned i_rdx = 0; i_rdx < n_road_in; i_rdx++) {
-  //  vcl_vector<vgl_point_2d<double> > curr_rd = roads_in_leaf[i_rdx];
-  //  volm_land_layer curr_rd_prop = roads_in_leaf_props[i_rdx];
+  //for (unsigned r_idx = 0; r_idx < n_road_in; r_idx++) {
+  //  vcl_vector<vgl_point_2d<double> > curr_rd = roads_in_leaf[r_idx];
+  //  volm_land_layer curr_rd_prop = roads_in_leaf_props[r_idx];
   //  vcl_vector<vcl_vector<vgl_point_2d<double> > > net;
   //  vcl_vector<volm_land_layer> net_props;
   //  for (unsigned i = 0; i < n_road_in; i++)
-  //    if (i != i_rdx)
+  //    if (i != r_idx)
   //    {
   //      net.push_back(roads_in_leaf[i]);
   //      net_props.push_back(roads_in_leaf_props[i]);
@@ -225,7 +225,7 @@ int main(int argc, char** argv)
   //  vcl_vector<vgl_point_2d<double> > cross_pts;
   //  vcl_vector<volm_land_layer> cross_props;
   //  if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props)) {
-  //    vcl_cout << "ERROR: find road junction for tile " << tile_id() << " leaf " << leaf_bbox_geo << " road " << i_rdx << " failed\n";
+  //    vcl_cout << "ERROR: find road junction for tile " << tile_id() << " leaf " << leaf_bbox_geo << " road " << r_idx << " failed\n";
   //    return false;
   //  }
   //  // ingest junction for current roads
@@ -876,13 +876,13 @@ int main(int argc, char** argv)
         }
         // find and ingest osm junctions
         unsigned n_road_in = roads_in_leaf.size();
-        for (unsigned i_rdx = 0; i_rdx < n_road_in; i_rdx++) {
-          vcl_vector<vgl_point_2d<double> > curr_rd = roads_in_leaf[i_rdx];
-          volm_land_layer curr_rd_prop = roads_in_leaf_props[i_rdx];
+        for (unsigned r_idx = 0; r_idx < n_road_in; r_idx++) {
+          vcl_vector<vgl_point_2d<double> > curr_rd = roads_in_leaf[r_idx];
+          volm_land_layer curr_rd_prop = roads_in_leaf_props[r_idx];
           vcl_vector<vcl_vector<vgl_point_2d<double> > > net;
           vcl_vector<volm_land_layer> net_props;
           for (unsigned i = 0; i < n_road_in; i++)
-            if (i != i_rdx)
+            if (i != r_idx)
             {
               net.push_back(roads_in_leaf[i]);
               net_props.push_back(roads_in_leaf_props[i]);
@@ -891,7 +891,7 @@ int main(int argc, char** argv)
           vcl_vector<vgl_point_2d<double> > cross_pts;
           vcl_vector<volm_land_layer> cross_props;
           if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props)) {
-            log << "ERROR: find road junction for tile " << t_idx << " leaf " << leaf_bbox_geo << " road " << i_rdx << " failed\n";
+            log << "ERROR: find road junction for tile " << t_idx << " leaf " << leaf_bbox_geo << " road " << r_idx << " failed\n";
             error(log_file.str(), log.str());
             return false;
           }
@@ -1301,21 +1301,21 @@ int main(int argc, char** argv)
     // find and ingest osm junctions
     cnt = 0;
     unsigned n_road_in = roads_in_leaf.size();
-    for (unsigned i_rdx = 0; i_rdx < n_road_in; i_rdx++)
+    for (unsigned r_idx = 0; r_idx < n_road_in; r_idx++)
     {
-      vcl_vector<vgl_point_2d<double> > curr_rd = roads_in_leaf[i_rdx];
-      volm_land_layer curr_rd_prop = roads_in_leaf_props[i_rdx];
+      vcl_vector<vgl_point_2d<double> > curr_rd = roads_in_leaf[r_idx];
+      volm_land_layer curr_rd_prop = roads_in_leaf_props[r_idx];
       vcl_vector<vcl_vector<vgl_point_2d<double> > > net;
       vcl_vector<volm_land_layer> net_props;
       for (unsigned i = 0; i < n_road_in; i++)
-        if (i != i_rdx) {
+        if (i != r_idx) {
           net.push_back(roads_in_leaf[i]);  net_props.push_back(roads_in_leaf_props[i]);
         }
       // find all possible junction for current road
       vcl_vector<vgl_point_2d<double> > cross_pts;
       vcl_vector<volm_land_layer> cross_props;
       if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props)) {
-        log << "ERROR: find road junction for tile " << t_id << " leaf " << leaf_bbox_geo << " road " << i_rdx << " failed\n";
+        log << "ERROR: find road junction for tile " << t_id << " leaf " << leaf_bbox_geo << " road " << r_idx << " failed\n";
         error(log_file, log.str());
         return false;
       }

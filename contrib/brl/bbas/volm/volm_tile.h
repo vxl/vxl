@@ -86,6 +86,7 @@ class volm_tile
    static vcl_vector<volm_tile> generate_p2a_wr12_tiles();
    static vcl_vector<volm_tile> generate_p2a_wr13_tiles();
    static vcl_vector<volm_tile> generate_p2a_wr_tiles(int world_id);
+   static bool generate_tiles(unsigned const& world_id, vcl_vector<volm_tile>& tiles);
    //: calculate width of the tile
    double calculate_width();
    double calculate_height();

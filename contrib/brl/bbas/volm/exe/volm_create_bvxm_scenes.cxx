@@ -98,7 +98,7 @@ int main(int argc, char** argv)
   //volm_geo_index2::write_to_kml(root, tree_depth, kml_filename);
   vcl_vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root, leaves);
-  vcl_cout << "the geoindex quadtree for scene has " << leaves.size() << " leaves and depth is " << tree_depth << vcl_endl;
+  vcl_cout << "the geo-index quad tree for scene has " << leaves.size() << " leaves and depth is " << tree_depth << vcl_endl;
 
   // write to kml files with leaf ids (which will be used as scene ids)
   vcl_ofstream ofs(kml_filename.c_str());

@@ -7,7 +7,7 @@
 // and can be visualized by a 2-d overhead image
 // Note that the coordinates are relative to camera center and represented under cylindrical coordinate system.  Also sky object is not considered in this matcher
 //
-// \author Yi DOng
+// \author Yi Dong
 // \date July 16, 2014
 // \verbatim
 //   Modifications
@@ -41,12 +41,12 @@ public:
   //: default constructor
   volm_conf_query();
   //: constructor from depth map scene
-  volm_conf_query(volm_camera_space_sptr cam_space, depth_map_scene_sptr depth_scene);
+  volm_conf_query(volm_camera_space_sptr cam_space, depth_map_scene_sptr depth_scene, unsigned const& tol_in_pixel = 4);
 
   //: destructor
   ~volm_conf_query() {}
 
-  //: accessors
+  //: access
   vcl_vector<vpgl_perspective_camera<double> >& cameras()  { return cameras_; }
   vcl_vector<vcl_string>& camera_strings() { return camera_strings_; }
   vcl_vector<cam_angles>& camera_angles()  { return camera_angles_; }
@@ -59,11 +59,12 @@ public:
   double altitude() const { return altitude_; }
   vcl_vector<vcl_string>& ref_obj_name() { return ref_obj_name_; }
   vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> >& conf_objects() { return conf_objects_; }
+  vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > >& conf_objects_d_tol() { return conf_objects_d_tol_; }
 
   //: plot the configuration 
   bool visualize_ref_objs(vcl_string const& in_img_file, vcl_string const& out_folder);
   bool generate_top_views(vcl_string const& out_folder,  vcl_string const& filename_pre = "top_view");
-  //: IO ??
+  //: IO
 
 private:
   //: image size
@@ -77,8 +78,11 @@ private:
   unsigned nobj_;
   //: number of reference objects
   unsigned nref_;
-  //: camear altitude
+  //: camera altitude
   double altitude_;
+  //: distance tolerance in image domain
+  unsigned tol_in_pixel_;
+
   //: vector of cameras that satisfies ground plane constraint among all possible camera calibrations
   vcl_vector<vpgl_perspective_camera<double> > cameras_;
   vcl_vector<vcl_string> camera_strings_;
@@ -87,6 +91,7 @@ private:
   vcl_vector<vcl_string> ref_obj_name_;
   //: list of configurational objects for each camera
   vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objects_;
+  vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > > conf_objects_d_tol_;
   vcl_vector<vcl_map<vcl_string, vcl_pair<unsigned, unsigned> > > conf_objects_pixels_  ;
 
   //: construct reference objects list
@@ -98,11 +103,14 @@ private:
   //: project all ground vertices of a polygon from image plane to world coordinates, return the nearest point distance and its angle relative to camera
   //  x axis (East if camera heading is zero)
   void project(vpgl_perspective_camera<double> const& cam,
-               vgl_homg_point_3d<double> const& cam_center, 
-               vgl_line_2d<double> const& horizon,
                vgl_polygon<double> const& poly,
                float& min_dist, float& phi,
                unsigned& i, unsigned& j);
+  //: project an image pixel to world coordinates, distance and its angle are relative to camera center
+  //  return -1 for image pixel that is above horizon or out of image plane
+  void project(vpgl_perspective_camera<double> const& cam,
+               double const& pixel_i, double const& pixel_j,
+               float& dist, float& phi);
   //: return the y coordinates given x and a line function
   double line_coord(vgl_line_2d<double> const& line, double const& x);
   //: plot a line into image

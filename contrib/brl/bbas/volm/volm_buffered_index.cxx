@@ -73,6 +73,28 @@ bool volm_buffered_index_params::read_ex_param_file(vcl_string index_file_name_p
   return true;
 }
 
+bool volm_buffered_index_params::write_conf_param_file(vcl_string const& index_file_name_pre)
+{
+  vcl_string index_params_file = index_file_name_pre + ".params";
+  vcl_ofstream ofs(index_params_file.c_str());
+  if (ofs.fail())
+    return false;
+  ofs << "radius " << this->conf_radius << vcl_endl;
+  ofs.close();
+  return true;
+}
+
+bool volm_buffered_index_params::read_conf_param_file(vcl_string const& index_file_name_pre)
+{
+  vcl_string index_params_file = index_file_name_pre + ".params";
+  vcl_ifstream ifs(index_params_file.c_str());
+  if (!ifs.is_open())
+    return false;
+  vcl_string tmp;
+  ifs >> tmp >> conf_radius;
+  return true;
+}
+
 bool volm_buffered_index_params::write_size_file(vcl_string index_file_name, unsigned long indexed_cnt)
 {
   vcl_string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";

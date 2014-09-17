@@ -36,16 +36,22 @@ class volm_buffered_index_params
     static bool write_size_file(vcl_string index_file_name, unsigned long size);
     static bool read_size_file(vcl_string index_file_name, unsigned long& size);
 
-    //: text i/o for existance histogram parameters
+    //: text i/o for existence histogram parameters
     bool write_ex_param_file(vcl_string index_file_name);
     bool read_ex_param_file(vcl_string index_file_name);
+
+    //: text i/o for 2d configurational index parameters
+    bool write_conf_param_file(vcl_string const& index_file_name_pre);
+    bool read_conf_param_file(vcl_string const& index_file_name_pre);
     
   public:
     unsigned layer_size;
-    //: existance histogram parameters
+    //: existence histogram parameters
     vcl_vector<double> radius;
     unsigned norients;
     unsigned nlands;
+    //: 2d configurational index parameters
+    double conf_radius;
 };
 
 

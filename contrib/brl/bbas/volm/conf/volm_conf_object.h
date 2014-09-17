@@ -37,7 +37,7 @@ public:
   //: destructor
   ~volm_conf_object() {}
 
-  //: Accessors
+  //: access
   float theta() const        { return theta_; }
   float dist()  const        { return dist_;   }
   unsigned char land() const { return land_;   }
@@ -60,9 +60,12 @@ public:
     os << vcl_endl;
   }
 
+  //: visualization method for configuration index and values are the indices relative to geo-location defined by lon and lat
+  static bool write_to_kml(double const& lon, double const& lat, vcl_vector<volm_conf_object>& values, vcl_string const& kml_file);
+
   // ================  binary I/O ===================
   //: version
-  unsigned version() const { return 1; }
+  unsigned char version() const { return (unsigned char)1; }
   //: binary IO write
   void b_write(vsl_b_ostream& os) const;
   //: binary IO read
