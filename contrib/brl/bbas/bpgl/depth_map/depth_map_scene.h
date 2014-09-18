@@ -60,7 +60,7 @@ class depth_map_scene : public vbl_ref_count
                   depth_map_region_sptr const& ground_plane,
                   depth_map_region_sptr const& sky,
                   vcl_vector<depth_map_region_sptr> const& scene_regions);
-  
+
   //: accessors
   unsigned ni() const {return ni_;}
   unsigned nj() const {return nj_;}
@@ -100,7 +100,8 @@ class depth_map_scene : public vbl_ref_count
                   vcl_string name,
                   depth_map_region::orientation orient,
                   unsigned order = 0,
-                  unsigned land_id = 40);
+                  unsigned land_id = 40,
+                  double height = -1.0);
 
   //: add a ground region into ground_plane_
   void add_ground(vsol_polygon_2d_sptr const& ground_plane,
@@ -108,7 +109,8 @@ class depth_map_scene : public vbl_ref_count
                   double max_depth = 0,
                   unsigned order = 0,
                   vcl_string name = "ground_plane",
-                  unsigned land_id = 40);
+                  unsigned land_id = 40,
+                  double height=-1.0);
 
   //: add a sky region into sky_
   void add_sky(vsol_polygon_2d_sptr const& sky,

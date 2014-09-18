@@ -509,11 +509,13 @@ void bwm_tableau_cam::add_region()
   static unsigned   order = 0;
   static unsigned   orientation = 0;
   static unsigned   land_vec_id = 0;
+  static double     height = -1.0;
   // create menu
   vgui_dialog vdval("Add Region");
   vdval.field("Name ", name);
   vdval.field("Min Depth (m)", min_depth);
   vdval.field("Max Depth (m)", max_depth);
+  vdval.field("Height (m)", height);
   vdval.field("Order ", order);
   vdval.choice("Orientation ", orient_types, orientation);
   vdval.choice("Land Class ", land_types, land_vec_id);
@@ -523,7 +525,7 @@ void bwm_tableau_cam::add_region()
   if (!vdval.ask())
     return;
   // create associated depth_map_region
-  my_observer_->add_region(name, min_depth, max_depth, order, orientation, (unsigned)land_id);
+  my_observer_->add_region(name, min_depth, max_depth, order, orientation, (unsigned)land_id, height);
 }
 
 void bwm_tableau_cam::edit_region_props()
@@ -540,6 +542,7 @@ void bwm_tableau_cam::edit_region_props()
   static vcl_map<vcl_string, unsigned> depth_order;
   static vcl_map<vcl_string, double> min_depth;
   static vcl_map<vcl_string, double> max_depth;
+  static vcl_map<vcl_string, double> height;
   static vcl_map<vcl_string, unsigned> orient;
   static vcl_map<vcl_string, unsigned> land_id;
   static vcl_map<vcl_string, bool> active;
@@ -554,6 +557,7 @@ void bwm_tableau_cam::edit_region_props()
     depth_order[name]  = (*rit)->order();
     min_depth[name]    = (*rit)->min_depth();
     max_depth[name]    = (*rit)->max_depth();
+    height[name]       = (*rit)->height();
     //depth_inc[name]   = (*rit)->depth_inc();
     active[name]       = (*rit)->active();
     orient[name]       = (*rit)->orient_type();
@@ -581,6 +585,7 @@ void bwm_tableau_cam::edit_region_props()
     reg_dialog.field("Order", depth_order[(*rit)->name()]);
     reg_dialog.field("MinDepth", min_depth[(*rit)->name()]);
     reg_dialog.field("MaxDepth", max_depth[(*rit)->name()]);
+    reg_dialog.field("Height",   height[(*rit)->name()]);
     reg_dialog.choice("Orientation", orient_types, orient[(*rit)->name()]);
     reg_dialog.choice("Land Class", land_types, land_id[(*rit)->name()]);
     reg_dialog.checkbox("Active", active[(*rit)->name()]);
@@ -596,6 +601,7 @@ void bwm_tableau_cam::edit_region_props()
     (*rit)->set_order(depth_order[name]);
     (*rit)->set_min_depth(min_depth[name]);
     (*rit)->set_max_depth(max_depth[name]);
+    (*rit)->set_height(height[name]);
     (*rit)->set_land_type(volm_osm_category_io::volm_land_table_name[land_types[land_id[name]]].id_);
     (*rit)->set_active(active[name]);
     (*rit)->set_ref(is_reference[name]);

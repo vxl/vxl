@@ -11,6 +11,7 @@
 //  Modifications
 //     Yi Dong     NOV--2012    added an method to check whether the given camera hypothesis is consistent with defined 2-d ground plane in the image
 //     Yi Dong     JAN--2013    added attributed land_id for land classification
+//     Yi Dong     SEP--2014    added height of the region
 // \endverbatim
 // units are in meters
 #include <vbl/vbl_ref_count.h>
@@ -36,17 +37,18 @@ class depth_map_region : public vbl_ref_count
   //: standard constructor for a plane that can be moved along the camera ray
   depth_map_region(vsol_polygon_2d_sptr const& region, 
                    vgl_plane_3d<double> const& region_plane,
-                   double min_depth, double max_depth,
-                   vcl_string name,
+                   double const& min_depth, double const& max_depth,
+                   vcl_string const& name,
                    depth_map_region::orientation orient,
-                   unsigned land_id = 0);
+                   unsigned const& land_id = 0,
+                   double const& height = -10.0);
 
   //: constructor for a fixed plane, e.g. the ground plane
   depth_map_region(vsol_polygon_2d_sptr const& region, 
                    vgl_plane_3d<double> const& region_plane,
-                   vcl_string name,
+                   vcl_string const& name,
                    depth_map_region::orientation orient,
-                   unsigned land_id = 0);
+                   unsigned const& land_id = 0);
 
   //: constructor for a region of infinite distance
   depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -57,6 +59,7 @@ class depth_map_region : public vbl_ref_count
 
   void set_min_depth(double min_depth){min_depth_ = min_depth;}
   void set_max_depth(double max_depth){max_depth_ = max_depth;}
+  void set_height(double height){height_ = height;}
   void set_depth_inc(double depth_inc){depth_inc_ = depth_inc;}
   void set_order(unsigned order){order_ = order;}
   void set_active(bool active){active_ = active;}
@@ -68,6 +71,7 @@ class depth_map_region : public vbl_ref_count
   //:accessors
   double min_depth() const {return min_depth_;}
   double max_depth() const {return max_depth_;}
+  double height()    const {return height_;}
   //: unique name
   vcl_string name() const {return name_;}
   //: region orientation
@@ -133,7 +137,7 @@ class depth_map_region : public vbl_ref_count
                           vpgl_perspective_camera<double> const& cam,
                           double downsample_ratio = 1.0) const;
   //: version
-  unsigned version() const {return 3;}
+  unsigned version() const {return 4;}
 
   //: binary IO write
   void b_write(vsl_b_ostream& os);
@@ -153,6 +157,8 @@ class depth_map_region : public vbl_ref_count
   double min_depth_; // closest possible centroid depth
   double max_depth_; // furthest possible centroid depth
   double depth_inc_; // step size from min to max depth
+  // height value for region
+  double height_;
   vgl_plane_3d<double> region_plane_;
   vsol_polygon_2d_sptr region_2d_;
   vsol_polygon_3d_sptr region_3d_;//:cached

@@ -2059,7 +2059,8 @@ void bwm_observer_cam::add_region(vcl_string name,
                                   double max_depth,
                                   unsigned order,
                                   unsigned orient,
-                                  unsigned land_id)
+                                  unsigned land_id,
+                                  double height)
 {
   vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
   if (polys.size() != 1) {
@@ -2076,25 +2077,25 @@ void bwm_observer_cam::add_region(vcl_string name,
   switch (orient)
   {
    case 0:
-    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::HORIZONTAL, order,land_id);
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::HORIZONTAL, order,land_id, height);
     break;
    case 1:
-    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::FRONT_PARALLEL, order,land_id);
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::FRONT_PARALLEL, order,land_id, height);
     break;
    case 2:
-    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::SLANTED_RIGHT, order,land_id);
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::SLANTED_RIGHT, order,land_id, height);
     break;
    case 3:
-    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::SLANTED_LEFT, order,land_id);
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::SLANTED_LEFT, order,land_id, height);
     break;
    case 4:
-    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::POROUS, order,land_id);
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::POROUS, order,land_id, height);
     break;
    case 5:
-    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::NON_PLANAR, order,land_id);
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::NON_PLANAR, order,land_id, height);
     break;
    default:
-    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::INFINT, order,land_id);
+    scene_.add_region(p->sptr(), np, min_depth, max_depth, name, depth_map_region::INFINT, order,land_id, height);
   }
 }
 

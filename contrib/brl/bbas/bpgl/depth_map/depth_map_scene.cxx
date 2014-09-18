@@ -47,13 +47,15 @@ void depth_map_scene::add_ground(vsol_polygon_2d_sptr const& ground_plane,
                                  double max_depth,
                                  unsigned order,
                                  vcl_string name,
-                                 unsigned land_id)
+                                 unsigned land_id,
+                                 double height)
 {
   vgl_plane_3d<double> gp(0.0, 0.0, 1.0, 0.0); // z axis is the plane normal
   depth_map_region_sptr ground = new depth_map_region(ground_plane, gp, name, depth_map_region::HORIZONTAL, land_id);
   ground->set_order(order);
   ground->set_min_depth(min_depth);
   ground->set_max_depth(max_depth);
+  ground->set_height(height);
   ground_plane_.push_back(ground);
 }
 
@@ -79,14 +81,16 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
                                  vcl_string name,
                                  depth_map_region::orientation orient,
                                  unsigned order,
-                                 unsigned land_id)
+                                 unsigned land_id,
+                                 double height)
 {
   vgl_plane_3d<double> plane(region_normal.x(), region_normal.y(), region_normal.z(), 0.0);
   depth_map_region_sptr reg = new depth_map_region(region, plane,
                                                    min_depth, max_depth,
                                                    name,
                                                    orient,
-                                                   land_id);
+                                                   land_id,
+                                                   height);
   reg->set_order(order);
   scene_regions_[name]=reg;
 }
@@ -370,7 +374,7 @@ void depth_map_scene::b_read(vsl_b_istream& is)
     vsl_b_read(is, cam_);
   }
   else {
-    vcl_cout << " in depth_map_scene::b_read - unknown version\n";
+    vcl_cout << " in depth_map_scene::b_read - unknown version " << ver << "\n";
     return;
   }
 }
