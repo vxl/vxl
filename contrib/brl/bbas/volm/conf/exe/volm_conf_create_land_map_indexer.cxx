@@ -35,7 +35,8 @@ int main(int argc, char** argv)
   vul_arg<unsigned>   world_id("-world", "ROI world id", 9999);
   vul_arg<unsigned>   tile_id("-tile", "ROI tile id", 9999);
   vul_arg<double>     min_size("-min", "minimum size of geo index (in wgs84 degree)", 0.0078125);
-  vul_arg<double>     density("-density", "location point density (in meter)", 5);
+  vul_arg<double>     density("-density", "location point density (in meter)", 5.0);
+  vul_arg<double> road_density("-line-density", "location point density along the line (in meter)", 5.0);
   vul_arg<vcl_string> poly_roi("-poly", "ROI region polygon kml file", "");
   vul_arg<vcl_string> map_folder("-map", "land map folder", "");
   vul_arg<vcl_string> osm_file("-osm", "osm binary file", "");
@@ -217,7 +218,7 @@ int main(int argc, char** argv)
         // ignore the general road category
         //if (osm.loc_lines()[r_idx]->prop().name_ == "roads")
         //  continue;
-        leaf_ptr->contents_->add_locations(osm.loc_lines()[r_idx]->line(), osm.loc_lines()[r_idx]->prop().id_);
+        leaf_ptr->contents_->add_locations(osm.loc_lines()[r_idx]->line(), osm.loc_lines()[r_idx]->prop().id_, road_density());
       }
       vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading OSM roads"
                << vcl_flush << vcl_endl;

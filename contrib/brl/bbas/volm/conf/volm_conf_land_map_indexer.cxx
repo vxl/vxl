@@ -265,7 +265,7 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
 }
 
 // add locations from a list of location points
-bool volm_conf_land_map_indexer::add_locations(vcl_vector<vgl_point_2d<double> > const& locs, unsigned char const& land)
+bool volm_conf_land_map_indexer::add_locations(vcl_vector<vgl_point_2d<double> > const& locs, unsigned char const& land, double density)
 {
   // obtain the line segment that lies inside the leaf
   vcl_vector<vgl_point_2d<double> > locs_in;
@@ -278,7 +278,7 @@ bool volm_conf_land_map_indexer::add_locations(vcl_vector<vgl_point_2d<double> >
     in_list.push_back(new vsol_point_2d(*vit));
 
   vcl_vector<vsol_point_2d_sptr> out_list;
-  this->upsample_location_list(in_list, out_list);
+  this->upsample_location_list(in_list, out_list, density);
   // put the upsampled locations into database
   for (unsigned i = 0; i < out_list.size(); i++)
     this->add_locations(vgl_point_2d<double>(out_list[i]->x(), out_list[i]->y()), land);

@@ -83,7 +83,7 @@ public:
   bool add_locations(vil_image_view<vxl_byte> const& image, vpgl_geo_camera* camera, vcl_string const& img_type = "nlcd");
 
   //: add location points from a list of points with their land properties
-  bool add_locations(vcl_vector<vgl_point_2d<double> > const& locs, unsigned char const& land);
+  bool add_locations(vcl_vector<vgl_point_2d<double> > const& locs, unsigned char const& land, double density = -1.0);
 
   //: add location points from boundary of a region with their land properties
   bool add_locations(vgl_polygon<double> const& poly, unsigned char const& land);
