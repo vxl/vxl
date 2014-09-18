@@ -345,6 +345,7 @@ int main(int argc,  char** argv)
   vul_arg<bool> use_satellite_img("-sat", "use satellite image resource", false);
   vul_arg<vcl_string> land_class_map_folder("-map", "folder for land classification map with building in the image","");
   vul_arg<vcl_string> land("-land", "the input folder of the land type .tif files (geo cover images)", "");
+  vul_arg<vcl_string> urgent_folder("-urgent", "RUGENT data folder","");
 
   vul_arg_parse(argc, argv);
 
@@ -385,7 +386,7 @@ int main(int argc,  char** argv)
     float size = 0.1f;  // in seconds, set a fixed size for the leaves
     volm_geo_index_node_sptr hyp_root = volm_geo_index::construct_tree(tiles[i], (float)size, poly);
     // write the geo index and the hyps
-    if (region_name().compare("") == 0) {
+    if (region_name().compare("") == 0 && !non_building()) {
       vcl_stringstream file_name; file_name << out_pre() << "geo_index_tile_" << i << ".txt";
       volm_geo_index::write(hyp_root, file_name.str(), (float)size);
       unsigned depth = volm_geo_index::depth(hyp_root);
@@ -454,7 +455,7 @@ int main(int argc,  char** argv)
       return volm_io::SUCCESS;
     }
 
-    if (p1b() && use_osm_roads()) {  // if an osm binary file is specified
+    if (use_osm_roads()) {  // if an osm binary file is specified
       if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || osm_bin_file().compare("") == 0 || osm_tree_folder().compare("") == 0 || world_id() < 0) {
         vul_arg_display_usage_and_exit();
         return volm_io::EXE_ARGUMENT_ERROR;
@@ -628,10 +629,10 @@ int main(int argc,  char** argv)
     } // end of p1b generating locations along the road
 
     // generate locations on all non-building region with constant post
-    if (p1b() && non_building())
+    if (non_building())
     {
       // check input
-      if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || world_id() < 0 || land_class_map_folder().compare("") == 0) {
+      if (in_folder().compare("") == 0 || out_pre().compare("") == 0 || world_id() < 0 ) {
         vul_arg_display_usage_and_exit();
         vcl_cout << "ERROR: missing input for generating phase 1b location database on all non-building region" << vcl_endl;
       }
@@ -648,6 +649,22 @@ int main(int argc,  char** argv)
       vcl_cout << "height map resources: " << infos.size() << " geotiff images are loaded!\n";
       vcl_cout << "land classification resources: " << class_map_infos.size() << " images are loaded\n";
 
+      // load URGENT building footprint
+      vcl_string glob = urgent_folder() + "/*.csv";
+      vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > > build_polys;
+      vcl_vector<double> build_heights;
+      for (vul_file_iterator fit = glob; fit; ++fit) {
+        volm_io::read_building_file(fit(), build_polys, build_heights);
+      }
+      vcl_cout << "URGENT building resources: " << build_polys.size() << " buildings are loaded from " << urgent_folder() << vcl_endl;
+      // obtain the building polygons that intersect with current tile
+      vcl_vector<vgl_polygon<double> > build_in_tile;
+      for (unsigned i = 0; i < build_polys.size(); i++) {
+        if (vgl_intersection(tiles[tile_id()].bbox_double(), build_polys[i].first))
+          build_in_tile.push_back(build_polys[i].first);
+      }
+      vcl_cout << build_in_tile.size() << " URGENT buildings are inside given tile" << tiles[tile_id()].bbox() << vcl_endl;
+
       double inc_in_meter = inc_in_sec*21/0.000202;
       double size = nh() * inc_in_sec;
       unsigned t_id = tile_id();
@@ -660,7 +677,7 @@ int main(int argc,  char** argv)
       unsigned depth = volm_geo_index::depth(root);
       vcl_stringstream file_name3;  file_name3 << out_pre() << "geo_index_tile_" << t_id << "_depth_" << depth << ".kml";
       volm_geo_index::write_to_kml(root, depth, file_name3.str());
-      
+
       // loop over each leaf to add locations
       for (unsigned i = 0; i < infos.size(); i++) {
         volm_img_info sat_info = infos[i];
@@ -668,9 +685,17 @@ int main(int argc,  char** argv)
         volm_geo_index::get_leaves(root, leaves, sat_info.bbox);
         if (leaves.empty())
           continue;
+        // obtain the building polygons that currently intersect with given leaf
         float leaf_size = (float)leaves[0]->extent_.width();
-        vcl_cout << leaves.size() << " leaves (" << leaf_size << " deg) intersects with the height map: " << sat_info.name << vcl_endl;
+        vcl_cout << leaves.size() << " leaves (" << leaf_size << " deg) intersects with the height map: " << sat_info.name << vcl_flush << vcl_endl;
         for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+          // obtain buildings that are inside leaf
+          vcl_vector<vgl_polygon<double> > build_in_leaf;
+          build_in_leaf.clear();
+          for (unsigned b_idx = 0; b_idx < build_in_tile.size(); b_idx++)
+            if (vgl_intersection(leaves[l_idx]->extent_, build_in_tile[b_idx]))
+              build_in_leaf.push_back(build_in_tile[b_idx]);
+          vcl_cout << build_in_leaf.size() << " are in leaf " << leaves[l_idx]->extent_ << vcl_flush << vcl_endl;
           if (!leaves[l_idx]->hyps_)
             leaves[l_idx]->hyps_ = new volm_loc_hyp();
           float lower_left_lon = (float)leaves[l_idx]->extent_.min_point().x();
@@ -681,8 +706,15 @@ int main(int argc,  char** argv)
             for (unsigned hj=0; hj<nhi; hj++) {
               double lat = lower_left_lat + hj*inc_in_sec;
               vgl_point_2d<double> pt(lon, lat);
+              // check building from URGENT data
+              bool is_building = false;
+              for (unsigned i = 0; (i < build_in_leaf.size() && !is_building);  i++)
+                is_building = loc_inside_region(build_in_leaf[i], lon, lat);
+              if (is_building)
+                continue;
+              // check building from classification map
               int type = find_land_type(class_map_infos, pt);
-              if (type < 0 ||
+              if ((class_map_infos.size() && type < 0) ||
                   type == (int)volm_osm_category_io::volm_land_table_name["building"].id_ ||
                   type == (int)volm_osm_category_io::volm_land_table_name["tall_building"].id_)
                 continue;
@@ -700,16 +732,21 @@ int main(int argc,  char** argv)
             }
           }
         }
+        vcl_cout << "FINISH!!\n";
       }
       // write the hypo database
       vcl_vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(root, leaves);
+      vcl_cout << leaves.size() << " leaves have location hypotheses" << vcl_endl;
+      for (unsigned i = 0; i < leaves.size(); i++) {
+        vcl_cout << "\t leaf: " << i << " has " << leaves[i]->hyps_->locs_.size() << " locations" << vcl_endl;
+      }
       vcl_stringstream file_name4;  file_name4 << out_pre() << "geo_index_tile_" << t_id;
       vcl_cout << "\nwriting hypos to: " << file_name4.str() << vcl_endl;
       volm_geo_index::write_hyps(root, file_name4.str());
       for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
         vcl_string out_file = vul_file::strip_extension(leaves[l_idx]->get_hyp_name(file_name4.str())) + ".kml";
-        leaves[l_idx]->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
+        leaves[l_idx]->hyps_->write_to_kml(out_file, inc_in_sec_rad, false);
       }
       vcl_cout << volm_geo_index::hypo_size(root) << " locations are generated in tile " << t_id << vcl_endl;
 
@@ -717,7 +754,7 @@ int main(int argc,  char** argv)
     }
 
     // generate locations with constant interval
-    if (p1b() && region_name().compare("all") == 0) {
+    if (region_name().compare("all") == 0) {
       // check whether the region is defined
       if (region_name() != "all" && volm_osm_category_io::volm_land_table_name.find(region_name()) == volm_osm_category_io::volm_land_table_name.end()) {
         vcl_cout << "ERROR: unknown region name: " << region_name() << vcl_endl;
