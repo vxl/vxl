@@ -10,7 +10,7 @@
 // \author Yi Dong
 // \data August 14, 2014
 // \verbatim
-//   Modifications
+//   Yi Dong     SEP--2014    added height value for each location point
 // \endverbatim
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -27,9 +27,10 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vgl/io/vgl_io_box_2d.h>
+#include <vgl/io/vgl_io_point_3d.h>
 #include <vsl/vsl_map_io.h>
 
-typedef vcl_map<unsigned char, vcl_vector<vgl_point_2d<double> > > volm_conf_loc_map;
+typedef vcl_map<unsigned char, vcl_vector<vgl_point_3d<double> > > volm_conf_loc_map;
 
 class volm_conf_land_map_indexer;
 typedef vbl_smart_ptr<volm_conf_land_map_indexer> volm_conf_land_map_indexer_sptr;
@@ -77,18 +78,18 @@ public:
   unsigned nlocs(unsigned char const& land_id) const;
 
   //: add a location point (won't added into land_locs_ if input location is out of the bbox)
-  bool add_locations(vgl_point_2d<double> const& loc, unsigned char const& land_id);
+  bool add_locations(vgl_point_3d<double> const& loc, unsigned char const& land_id);
 
-  //: add location points from a input image and its camera
+  //: add location points from a input image and its camera (assuming height value is -1.0 for all edge points from image)
   bool add_locations(vil_image_view<vxl_byte> const& image, vpgl_geo_camera* camera, vcl_string const& img_type = "nlcd");
 
-  //: add location points from a list of points with their land properties
-  bool add_locations(vcl_vector<vgl_point_2d<double> > const& locs, unsigned char const& land, double density = -1.0);
+  //: add location points from a list of points with their land properties (assuming height value is constant for all points in the list)
+  bool add_locations(vcl_vector<vgl_point_2d<double> > const& locs, unsigned char const& land, double const& height = -1.0, double const& density = -1.0);
 
-  //: add location points from boundary of a region with their land properties
-  bool add_locations(vgl_polygon<double> const& poly, unsigned char const& land);
+  //: add location points from boundary of a region with their land properties (assuming height value is constant for the polygon)
+  bool add_locations(vgl_polygon<double> const& poly, unsigned char const& land, double const& height = -1.0);
 
-  //: add location points from a line network by searching all the intersections inside the network
+  //: add location points from a line network by searching all the intersections inside the network (assuming height value is -1.0)
   bool add_locations(vcl_vector<vcl_vector<vgl_point_2d<double> > > const& lines, vcl_vector<unsigned char> const& lines_prop);
 
   //: upsample the location list to desired density (assuming input point locations are defined by wgs84)
@@ -131,7 +132,7 @@ private:
   volm_conf_loc_map land_locs_;
 
   //: write a vector of locations with their land id into kml
-  void write_out_kml_locs(vcl_ofstream& ofs, vcl_vector<vgl_point_2d<double> > const& locations, unsigned char land_id, double const& size,  bool const& is_write_as_dot) const;
+  void write_out_kml_locs(vcl_ofstream& ofs, vcl_vector<vgl_point_3d<double> > const& locations, unsigned char land_id, double const& size,  bool const& is_write_as_dot) const;
 
 };
 

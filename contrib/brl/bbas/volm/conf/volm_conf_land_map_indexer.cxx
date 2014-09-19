@@ -137,16 +137,19 @@ unsigned volm_conf_land_map_indexer::nlocs(unsigned char const& land_id) const
 }
 
 // add a location into database
-bool volm_conf_land_map_indexer::add_locations(vgl_point_2d<double> const& loc, unsigned char const& land_id)
+bool volm_conf_land_map_indexer::add_locations(vgl_point_3d<double> const& loc, unsigned char const& land_id)
 {
-  if (bbox_.contains(loc))
+  if ( bbox_.contains(vgl_point_2d<double>(loc.x(),loc.y())) )
     land_locs_[land_id].push_back(loc);
   return true;
 }
 
 // add locations from a land map
+// note that the edge points from image has no height available ( put -1.0 height for all points
 bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& image, vpgl_geo_camera* geocam, vcl_string const& img_type)
 {
+  // height value for all points from image
+  double height_value = -1.0;
   // obtain the cropped image first
   brip_roi broi(image.ni(), image.nj());
   vsol_box_2d_sptr bb = new vsol_box_2d();
@@ -259,13 +262,14 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
     // put the valid locations into database
     for (unsigned e_idx = 0; e_idx < sampled_edge_locs.size(); e_idx++)
       for (vcl_vector<vsol_point_2d_sptr>::iterator vit = sampled_edge_locs[e_idx].begin();  vit != sampled_edge_locs[e_idx].end(); ++vit)
-        this->add_locations(vgl_point_2d<double>((*vit)->x(), (*vit)->y()), land_id);
+        this->add_locations(vgl_point_3d<double>((*vit)->x(), (*vit)->y(), height_value), land_id);
   } // end of loop over all possible land id of input image
   return true;
 }
 
 // add locations from a list of location points
-bool volm_conf_land_map_indexer::add_locations(vcl_vector<vgl_point_2d<double> > const& locs, unsigned char const& land, double density)
+// assume the list of points has constant height
+bool volm_conf_land_map_indexer::add_locations(vcl_vector<vgl_point_2d<double> > const& locs, unsigned char const& land, double const& height, double const& density)
 {
   // obtain the line segment that lies inside the leaf
   vcl_vector<vgl_point_2d<double> > locs_in;
@@ -281,19 +285,19 @@ bool volm_conf_land_map_indexer::add_locations(vcl_vector<vgl_point_2d<double> >
   this->upsample_location_list(in_list, out_list, density);
   // put the upsampled locations into database
   for (unsigned i = 0; i < out_list.size(); i++)
-    this->add_locations(vgl_point_2d<double>(out_list[i]->x(), out_list[i]->y()), land);
+    this->add_locations(vgl_point_3d<double>(out_list[i]->x(), out_list[i]->y(), height), land);
   return true;
 }
 
 // add locations from a region boundary
-bool volm_conf_land_map_indexer::add_locations(vgl_polygon<double> const& poly, unsigned char const& land)
+bool volm_conf_land_map_indexer::add_locations(vgl_polygon<double> const& poly, unsigned char const& land, double const& height)
 {
   // upsample the input polygon and generate the location list
   vcl_vector<vsol_point_2d_sptr> out_locs;
   this->upsample_region_boundary(poly, out_locs);
   // put the upsampled locations into database
   for (unsigned i = 0; i < out_locs.size(); i++)
-    this->add_locations(vgl_point_2d<double>(out_locs[i]->x(), out_locs[i]->y()), land);
+    this->add_locations(vgl_point_3d<double>(out_locs[i]->x(), out_locs[i]->y(), height), land);
   return true;
 }
 
@@ -359,8 +363,8 @@ bool volm_conf_land_map_indexer::add_locations(vcl_vector<vcl_vector<vgl_point_2
       lvcs_->local_to_global(cross_pts[i].x(), cross_pts[i].y(), 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
       if ( volm_osm_category_io::volm_land_table[cross_props[i].id_].name_ == "invalid")
         continue;
-      if ( vcl_find(land_locs_[cross_props[i].id_].begin(), land_locs_[cross_props[i].id_].end(), vgl_point_2d<double>(lon, lat)) == land_locs_[cross_props[i].id_].end() )
-        this->add_locations(vgl_point_2d<double>(lon, lat), cross_props[i].id_);
+      if ( vcl_find(land_locs_[cross_props[i].id_].begin(), land_locs_[cross_props[i].id_].end(), vgl_point_3d<double>(lon, lat, -1.0)) == land_locs_[cross_props[i].id_].end() )
+        this->add_locations(vgl_point_3d<double>(lon, lat, -1.0), cross_props[i].id_);
     }
   }
   return true;
@@ -460,7 +464,7 @@ void volm_conf_land_map_indexer::upsample_region_boundary(vgl_polygon<double> co
 
 // visualize locations database in kml
 void volm_conf_land_map_indexer::write_out_kml_locs(vcl_ofstream& ofs,
-                                                    vcl_vector<vgl_point_2d<double> > const& locations, unsigned char land_id,
+                                                    vcl_vector<vgl_point_3d<double> > const& locations, unsigned char land_id,
                                                     double const& size,  bool const& is_write_as_dot) const
 {
   unsigned num_locs = locations.size();
@@ -468,9 +472,12 @@ void volm_conf_land_map_indexer::write_out_kml_locs(vcl_ofstream& ofs,
   {
     double lon = locations[i].x();
     double lat = locations[i].y();
+    double height = locations[i].z();
     unsigned char land = land_id;
     vcl_stringstream name;
-    name << i << "_" << vcl_setprecision(6) << lon << '_' << vcl_setprecision(6) << lat << '_' <<  volm_osm_category_io::volm_land_table[land_id].name_;
+    name << i << "_" << vcl_setprecision(6) << lon << '_' << vcl_setprecision(6) << lat
+         << '_' << vcl_setprecision(6) << height
+         << '_' <<  volm_osm_category_io::volm_land_table[land_id].name_;
     if (is_write_as_dot) {
       vgl_point_2d<double> pt(lon, lat);
       bkml_write::write_location(ofs, pt, name.str(), "", 0.6);
@@ -500,7 +507,7 @@ bool volm_conf_land_map_indexer::write_out_kml(vcl_string const& kml_file, unsig
   //bkml_write::write_box(ofs, this->box_string(), "", bbox_);
 
   // write out locations
-  vcl_vector<vgl_point_2d<double> > locations = land_locs_.find(land_id)->second;
+  vcl_vector<vgl_point_3d<double> > locations = land_locs_.find(land_id)->second;
   this->write_out_kml_locs(ofs, locations, land_id, size, is_write_as_dot);
   bkml_write::close_document(ofs);
   ofs.close();
@@ -521,7 +528,7 @@ bool volm_conf_land_map_indexer::write_out_kml(vcl_string const& kml_file, doubl
   for (volm_conf_loc_map::const_iterator mit = land_locs_.begin(); mit != land_locs_.end(); ++mit)
   {
     unsigned land_id = mit->first;
-    vcl_vector<vgl_point_2d<double> > locations = mit->second;
+    vcl_vector<vgl_point_3d<double> > locations = mit->second;
     this->write_out_kml_locs(ofs, locations, land_id, size, is_write_as_dot);
   }
   bkml_write::close_document(ofs);

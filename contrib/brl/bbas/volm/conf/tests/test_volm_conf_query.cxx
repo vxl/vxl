@@ -19,7 +19,7 @@ static void test_volm_conf_query()
 {
 
   // load the depth_map_scene
-  vcl_string depth_scene_file = "d:/work/find/conf_matcher_expt/p1a_test1_40/p1a_test1_40.vsl";
+  vcl_string depth_scene_file = "d:/work/find/conf_matcher_expt/p2a_test2_150/p2a_test2_150_conf_h.vsl";
   if (!vul_file::exists(depth_scene_file)) {
     vcl_cout << "can not find file: " << depth_scene_file << vcl_endl;
     return;
@@ -45,7 +45,9 @@ static void test_volm_conf_query()
     for (unsigned i = 0; i < dms->ground_plane().size(); i++) {
       vcl_cout << "name = " << dms->ground_plane()[i]->name() << ", is_ref = " << dms->ground_plane()[i]->is_ref()
                << ", land = " << volm_osm_category_io::volm_land_table[dms->ground_plane()[i]->land_id()].name_ << ", orient = " << dms->ground_plane()[i]->orient_type()
-               << ", min_dist = " << dms->ground_plane()[i]->min_depth() << vcl_endl;
+               << ", min_dist = " << dms->ground_plane()[i]->min_depth()
+               << ", height = " << dms->ground_plane()[i]->height()
+               << vcl_endl;
       if (dms->ground_plane()[i]->is_ref())
         num_of_ref_objects++;
     }
@@ -55,22 +57,24 @@ static void test_volm_conf_query()
     for (unsigned i = 0; i < dms->scene_regions().size(); i++) {
       vcl_cout << "name = " << dms->scene_regions()[i]->name() << ", is_ref = " << dms->scene_regions()[i]->is_ref()
                << ", land = " << volm_osm_category_io::volm_land_table[dms->scene_regions()[i]->land_id()].name_ << ", orient = " << dms->scene_regions()[i]->orient_type()
-               << ", min_dist = " << dms->scene_regions()[i]->min_depth() << vcl_endl;
+               << ", min_dist = " << dms->scene_regions()[i]->min_depth()
+               << ", height = " << dms->scene_regions()[i]->height()
+               << vcl_endl;
       if (dms->scene_regions()[i]->is_ref())
         num_of_ref_objects++;
     }
   }
   // create a camera space
   double head_mid=67.0,   head_radius=0.0,  head_inc=2.0;
-  double tilt_mid=87.70,   tilt_radius=0.0,  tilt_inc=2.0;
-  double roll_mid=-0.74,  roll_radius=0.0,  roll_inc=0.0;
+  double tilt_mid=96.967085,   tilt_radius=5.0,  tilt_inc=2.0;
+  double roll_mid=0.5632510,   roll_radius=0.0,  roll_inc=0.0;
   //double top_fov_vals[] = {3.0,  4.0, 5.0, 12.0, 17.0, 18.0,19.0, 20.0, 24.0};
-  double top_fov_vals[] = {5.3};
+  double top_fov_vals[] = {14.538983, 12.538983, 16.538983};
   vcl_vector<double> fovs;
   fovs.push_back(top_fov_vals[0]);
 
 
-  double altitude = 3.0;
+  double altitude = 1.4;
   volm_camera_space_sptr csp = new volm_camera_space(fovs, altitude, ni, nj,
                                                      head_mid, head_radius, head_inc,
                                                      tilt_mid, tilt_radius, tilt_inc,
@@ -93,7 +97,7 @@ static void test_volm_conf_query()
     csp->generate_full_camera_index_space();
 
   // construct a volm_conf_queue
-  volm_conf_query_sptr query = new volm_conf_query(csp, dms);
+  volm_conf_query_sptr query = new volm_conf_query(csp, dms, 25);
 
   vcl_cout << "configurational query reference object list: ";
   vcl_vector<vcl_string> ref_object_names = query->ref_obj_name();
@@ -117,22 +121,22 @@ static void test_volm_conf_query()
 
   vcl_cout << "configurational query has following configuration object: " << vcl_endl;
   vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objs = query->conf_objects();
+  vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > > d_tol = query->conf_objects_d_tol();
   for (unsigned i = 0; i < conf_objs.size(); i++) {
     vcl_cout << "\t camera: " << cam_string[i] << vcl_endl;
     for (vcl_map<vcl_string, volm_conf_object_sptr>::iterator mit = conf_objs[i].begin();  mit != conf_objs[i].end(); ++mit) {
       vcl_cout << "\t\t obj name: " << mit->first << "\t\t" ;  mit->second->print(vcl_cout);
+      vcl_cout << "\t\t  distance tolerance: " << d_tol[i][mit->first].first << " to " << d_tol[i][mit->first].second << vcl_endl;
     }
   }
 
 
-
   // visualize the configurational query
-  vcl_string out_folder = "d:/work/find/conf_matcher_expt/p1a_test1_40/";
-  vcl_string img_file = "d:/work/find/conf_matcher_expt/p1a_test1_40/p1a_test1_40.jpg";
+  vcl_string out_folder = "d:/work/find/conf_matcher_expt/p2a_test2_150/";
+  vcl_string img_file = "d:/work/find/conf_matcher_expt/p2a_test2_150/p2a_test2_150.jpg";
   query->visualize_ref_objs(img_file, out_folder);
-  query->generate_top_views(out_folder);
 
-  
+
 #if 0
   vcl_vector<vpgl_perspective_camera<double> > cam = query->cameras();
   // get the horizon line

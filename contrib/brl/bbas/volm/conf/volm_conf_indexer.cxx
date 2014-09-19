@@ -80,7 +80,7 @@ bool volm_conf_indexer::index(float const& buffer_capacity, int const& min_leaf_
       }
       // create a invalid index for location has no values to ensure index size consistent with location size
       if (values.empty())
-        values.push_back(volm_conf_object(0.0f, 0.0f, 0));
+        values.push_back(volm_conf_object(0.0f, 0.0f, -1.0f, 0));
       if (!ind.add_to_index(values)) {
         vcl_cerr << "In volm_conf_indexer::index -- add index to buffer failed for location " << h_pt << " failed!\n";
         return false;

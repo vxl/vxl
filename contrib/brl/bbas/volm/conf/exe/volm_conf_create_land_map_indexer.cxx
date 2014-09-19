@@ -161,7 +161,8 @@ int main(int argc, char** argv)
       if (build_heights[i] > 20.0)
         land_id = volm_osm_category_io::volm_land_table_name["tall_building"].id_;
       // add URGENT building by its center points
-      if (!leaf_ptr->contents_->add_locations(build_polys[i].second, land_id)) {
+      vgl_point_3d<double> loc_pt(build_polys[i].second.x(), build_polys[i].second.y(), build_heights[i]);
+      if (!leaf_ptr->contents_->add_locations(loc_pt, land_id)) {
         log << "ERROR: adding location from URGENT building[" << i << "]: " << build_polys[i].second << " failed\n";
         error(log_file, log.str());
         return volm_io::EXE_ARGUMENT_ERROR;
@@ -175,7 +176,7 @@ int main(int argc, char** argv)
           poly.push_back(build_polys[i].first[0][pi]);
       if (!vgl_intersection(leaf_ptr->extent_, poly))
         continue;
-      if (!leaf_ptr->contents_->add_locations(poly, land_id)) {
+      if (!leaf_ptr->contents_->add_locations(poly, land_id, build_heights[i])) {
         log << "ERROR: adding location from URGENT building: " << build_polys[i].second << " failed." << vcl_endl;  error(log_file, log.str());
         return volm_io::EXE_ARGUMENT_ERROR;
       }
@@ -186,8 +187,10 @@ int main(int argc, char** argv)
 
     // add sme data
     vcl_cout << "\t adding locations from " << sme_objects.size() << " SME objects...\n";
-    for (unsigned i = 0; i < sme_objects.size(); i++)
-      leaf_ptr->contents_->add_locations(sme_objects[i].first, (unsigned char)sme_objects[i].second);
+    for (unsigned i = 0; i < sme_objects.size(); i++) {
+      vgl_point_3d<double> sme_pt(sme_objects[i].first.x(), sme_objects[i].first.y(), -1.0);
+      leaf_ptr->contents_->add_locations(sme_pt, (unsigned char)sme_objects[i].second);
+    }
     vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading SME data"
              << vcl_flush << vcl_endl;
 
@@ -201,7 +204,8 @@ int main(int argc, char** argv)
       {
         if (loc_pts[p_idx]->prop().level_ < osm_level())
           continue;
-        leaf_ptr->contents_->add_locations(loc_pts[p_idx]->loc(), loc_pts[p_idx]->prop().id_);
+        vgl_point_3d<double> pt_3d(loc_pts[p_idx]->loc().x(), loc_pts[p_idx]->loc().y(), -1.0);
+        leaf_ptr->contents_->add_locations(pt_3d, loc_pts[p_idx]->prop().id_);
       }
       vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading OSM points"
                << vcl_flush << vcl_endl;
@@ -218,7 +222,7 @@ int main(int argc, char** argv)
         // ignore the general road category
         //if (osm.loc_lines()[r_idx]->prop().name_ == "roads")
         //  continue;
-        leaf_ptr->contents_->add_locations(osm.loc_lines()[r_idx]->line(), osm.loc_lines()[r_idx]->prop().id_, road_density());
+        leaf_ptr->contents_->add_locations(osm.loc_lines()[r_idx]->line(), osm.loc_lines()[r_idx]->prop().id_, road_density(), -1.0);
       }
       vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading OSM roads"
                << vcl_flush << vcl_endl;
@@ -249,7 +253,7 @@ int main(int argc, char** argv)
         if (osm.loc_polys()[r_idx]->prop().level_ < osm_level() )
           continue;
         vgl_polygon<double> poly(osm.loc_polys()[r_idx]->poly()[0]);
-        leaf_ptr->contents_->add_locations(poly, osm.loc_polys()[r_idx]->prop().id_);
+        leaf_ptr->contents_->add_locations(poly, osm.loc_polys()[r_idx]->prop().id_, -1.0);
       }
       vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading OSM regions"
                << vcl_flush << vcl_endl;

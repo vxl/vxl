@@ -7,15 +7,15 @@ static void test_volm_conf_2d_indexer()
 {
   vul_timer t;
   // location index folder
-  vcl_string loc_index_folder = "v:/p1a_related/p1a_index/pier_only/geoindex_p1a_wr2/";
+  vcl_string loc_index_folder = "v:/p1a_related/p1a_index/gt_only/geoindex_p1a_wr2/";
 
   // land map index folder
-  vcl_string land_map_folder = "v:/p1a_related/p1a_index/conf_index/land_map_index/wr6/";
+  vcl_string land_map_folder = "v:/p1a_related/p1a_index/conf_index/land_map_index/wr6_h/";
 
-  double radius = 3000.0;  // in meter
+  double radius = 200.0;  // in meter
   unsigned tile_id = 3;
   float buffer_capacity = 2.0; // GB
-  vcl_string out_folder = "v:/p1a_related/p1a_index/conf_index/2d_conf_index/wr6/pier_only/";
+  vcl_string out_folder = "v:/p1a_related/p1a_index/gt_only/geoindex_conf_2d_h_radius_200/";
   // create index
   volm_conf_indexer_sptr indexer = new volm_conf_2d_indexer(radius, out_folder, land_map_folder, tile_id);
 
@@ -57,7 +57,6 @@ static void test_volm_conf_2d_indexer()
       vcl_vector<volm_conf_object> values;
       ind.get_next(values);
       volm_conf_object::write_to_kml(h_pt.x(), h_pt.y(), values, kml_file.str());
-      break;
     }
   }
   return;

@@ -11,7 +11,7 @@
 // \date July 16, 2014
 // \verbatim
 //   Modifications
-//    none yet
+//    Yi Dong     SEP--2014    added height attribute
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -63,7 +63,7 @@ public:
 
   //: plot the configuration 
   bool visualize_ref_objs(vcl_string const& in_img_file, vcl_string const& out_folder);
-  bool generate_top_views(vcl_string const& out_folder,  vcl_string const& filename_pre = "top_view");
+  //bool generate_top_views(vcl_string const& out_folder,  vcl_string const& filename_pre = "top_view");
   //: IO
 
 private:

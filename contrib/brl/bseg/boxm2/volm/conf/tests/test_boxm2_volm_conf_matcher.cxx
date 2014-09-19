@@ -130,7 +130,6 @@ static void test_volm_conf_matcher()
   vcl_string out_folder = "d:/work/find/conf_matcher_expt/p1a_test1_40_Conf2dRUN/";
   vcl_string img_file = "d:/work/find/conf_matcher_expt/p1a_test1_40/p1a_test1_40.jpg";
   query->visualize_ref_objs(img_file, out_folder);
-  query->generate_top_views(out_folder);
 
   // --------------------------------   index   ---------------------------------------
   // load geo location

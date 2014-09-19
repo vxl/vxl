@@ -200,7 +200,6 @@ int main(int argc, char** argv)
 #if 0
     // visualize the configuration query
     if (cam_string.size() < 30) {
-      //query->generate_top_views(out_folder());
       if (vul_file::exists(query_img()))
         query->visualize_ref_objs(query_img(), out_folder());
     }

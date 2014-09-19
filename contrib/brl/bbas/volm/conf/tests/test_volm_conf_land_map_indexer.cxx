@@ -16,15 +16,15 @@
 static void test_volm_conf_land_map_indexer()
 {
   // location index folder
-  vcl_string loc_index_folder = "v:/p1a_related/p1a_index/pier_only/geoindex_p1a_wr2/";
+  vcl_string loc_index_folder = "v:/p1a_related/p1a_index/gt_only/geoindex_p1a_wr2/";
 
-  // land mpa index folder
-  vcl_string land_map_folder = "v:/p1a_related/p1a_index/conf_index/land_map_index/wr6/";
+  // land map index folder
+  vcl_string land_map_folder = "v:/p1a_related/p1a_index/conf_index/land_map_index/wr6_h/";
 
   double radius = 3000.0;  // in meter
   unsigned tile_id = 3;
   double min_size = 0.0078125;
-  
+
   vcl_string poly_roi = "v:/p1a_related/Coast-WR.kml";
   vgl_polygon<double> roi_poly = bkml_parser::parse_polygon(poly_roi);
   vcl_vector<volm_tile> tiles;
@@ -34,7 +34,7 @@ static void test_volm_conf_land_map_indexer()
   bvgl_2d_geo_index::get_leaves(root, leaves);
 
   // write the tree
-  vcl_string out_folder = "./";
+  vcl_string out_folder = land_map_folder;
   unsigned tree_depth = bvgl_2d_geo_index::depth(root);
   vcl_stringstream tree_txt;
   tree_txt << out_folder << "/2d_geo_index_tile_" << tile_id << ".txt";
@@ -45,14 +45,16 @@ static void test_volm_conf_land_map_indexer()
 
 
   // check loaded tree filename
-  vcl_string tree_txt_in = "V:/p1a_related/p1a_index/conf_index/land_map_index/wr6/2d_geo_index_tile_3.txt";
+  vcl_stringstream tree_txt_in;
+  tree_txt_in << out_folder << "/2d_geo_index_tile_" << tile_id << ".txt";
   double min_size_in;
-  bvgl_2d_geo_index_node_sptr root_in = bvgl_2d_geo_index::read_and_construct<volm_conf_land_map_indexer_sptr>(tree_txt_in, min_size_in);
+  bvgl_2d_geo_index_node_sptr root_in = bvgl_2d_geo_index::read_and_construct<volm_conf_land_map_indexer_sptr>(tree_txt_in.str(), min_size_in);
   vcl_vector<bvgl_2d_geo_index_node_sptr> leaves_in;
   bvgl_2d_geo_index::get_leaves(root, leaves_in);
 
   vcl_cout << "input tree min_size:  " << min_size << vcl_endl;
   vcl_cout << "loaded tree min_size: " << min_size_in << vcl_endl;
+  bool file_io = true;
   for (unsigned i = 0; i < leaves.size(); i++)
   {
     bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leaves[i].ptr());
@@ -62,11 +64,125 @@ static void test_volm_conf_land_map_indexer()
     vcl_stringstream filename_in;
     filename_in << out_folder << leaf_ptr_in->get_label_name("land_map_index", "all");
 
+    file_io = (filename.str().compare(filename_in.str()) == 0);
+#if 0
     vcl_cout << " ---------------------------------leaf " << i << "----------------------------------- " << vcl_endl;
     vcl_cout << "leaf: " << leaf_ptr->extent_ << " --> filename: " << filename.str() << vcl_endl; 
     vcl_cout << "leaf: " << leaf_ptr_in->extent_ << " --> filename: " << filename_in.str() << vcl_endl;
-
+#endif
   }
+  TEST("file name consistency", file_io, true);
+
+  // check add location methods
+  // load OSM data
+  vcl_string osm_bin_file = "v:/p1a_related/OSM/p1a_wr6_tile_3_osm.bin";
+  volm_osm_objects osm(osm_bin_file);
+  
+  // load URGENT building folder
+  vcl_string urgent_file = "v:/p1a_related/URGENT/Urgent_N32W080.csv";
+  vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > > build_polys;
+  vcl_vector<double> build_heights;
+  volm_io::read_building_file(urgent_file, build_polys, build_heights);
+  // load SME data (points)
+  vcl_string sme_file = "v:/p1a_related/SME/SME_N32W080.csv";
+  vcl_vector<vcl_pair<vgl_point_2d<double>, int> > sme_objects;
+  volm_io::read_sme_file(sme_file, sme_objects);
+  
+  vcl_cout << "read " << osm.num_locs() << " OSM loc points, " << osm.num_roads() << " OSM roads and " << osm.num_regions() << " OSM regions" << vcl_endl;
+  vcl_cout << "read " << build_polys.size() << " URGENT buildings from file: " << urgent_file << vcl_endl;
+  vcl_cout << "read " << sme_objects.size() << " SME objects from file: " << sme_file << vcl_endl;
+  vcl_cout << "add data into " << leaves.size() << " leaves" << vcl_endl;
+  for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++)
+  {
+    bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leaves[l_idx].ptr());
+    leaf_ptr->contents_ = new volm_conf_land_map_indexer(leaf_ptr->extent_, 5.0);
+    vcl_cout << "  working on leaf " << l_idx << ", " << leaf_ptr->extent_ << "..." << vcl_endl;
+    // add OSM points
+    unsigned n_pts = osm.num_locs();
+    vcl_vector<volm_osm_object_point_sptr> loc_pts = osm.loc_pts();
+    for (unsigned p_idx = 0; p_idx < n_pts; p_idx++) {
+      if (loc_pts[p_idx]->prop().level_ < 2)
+        continue;
+      leaf_ptr->contents_->add_locations(vgl_point_3d<double>(loc_pts[p_idx]->loc().x(), loc_pts[p_idx]->loc().y(), -1.0), loc_pts[p_idx]->prop().id_);
+    }
+    vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading OSM POINTS"
+             << vcl_flush << vcl_endl;
+
+    // add OSM lines
+    unsigned n_lines = osm.num_roads();
+    for (unsigned r_idx = 0; r_idx < n_lines; r_idx++)
+    {
+      if (osm.loc_lines()[r_idx]->prop().level_ < 2)
+        continue;
+      vcl_vector<vgl_point_2d<double> > road = osm.loc_lines()[r_idx]->line();
+      leaf_ptr->contents_->add_locations(road, osm.loc_lines()[r_idx]->prop().id_, -1.0, 10.0);
+    }
+    vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading OSM ROADS"
+             << vcl_flush << vcl_endl;
+
+    // add OSM road intersections
+    vcl_vector<vcl_vector<vgl_point_2d<double> > > lines;
+    vcl_vector<unsigned char> lines_prop;
+    for (unsigned i = 0; i < n_lines; i++) {
+      lines.push_back(osm.loc_lines()[i]->line());
+      lines_prop.push_back(osm.loc_lines()[i]->prop().id_);
+    }
+    leaf_ptr->contents_->add_locations(lines, lines_prop);
+    vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type()
+             << " land types) are added after loading OSM ROAD INTERSECTIONS"
+             << vcl_flush << vcl_endl;
+
+    // add OSM regions
+    unsigned n_regions = osm.num_regions();
+    for (unsigned r_idx = 0; r_idx < n_regions; r_idx++)
+    {
+      if (osm.loc_polys()[r_idx]->prop().level_ < 2)
+        continue;
+      vgl_polygon<double> poly(osm.loc_polys()[r_idx]->poly()[0]);
+      leaf_ptr->contents_->add_locations(poly, osm.loc_polys()[r_idx]->prop().id_, -1.0);
+    }
+    vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading OSM REGIONS"
+             << vcl_flush << vcl_endl;
+
+    // add URGENT buildings
+    for (unsigned i = 0; i < build_polys.size(); i++)
+    {
+      unsigned char land_id = volm_osm_category_io::volm_land_table_name["building"].id_;
+      if (build_heights[i] > 20.0)
+        land_id = volm_osm_category_io::volm_land_table_name["tall_building"].id_;
+      // add URGENT buildings by its boundary points
+      vgl_polygon<double> poly;
+      poly.new_sheet();
+      for (unsigned pi = 0; pi < build_polys[i].first[0].size(); pi++)
+        if (vcl_find(poly[0].begin(), poly[0].end(), build_polys[i].first[0][pi]) == poly[0].end())
+          poly.push_back(build_polys[i].first[0][pi]);
+      if (!vgl_intersection(leaf_ptr->extent_, poly))
+        continue;
+      leaf_ptr->contents_->add_locations(poly, land_id, build_heights[i]);
+    }
+    vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading URGENT buildings"
+             << vcl_flush << vcl_endl;
+
+    // add SME data
+    for (unsigned i = 0; i < sme_objects.size(); i++) {
+      vgl_point_3d<double> sme_pt(sme_objects[i].first.x(), sme_objects[i].first.y(), -1.0);
+      leaf_ptr->contents_->add_locations(sme_pt, (unsigned char)sme_objects[i].second);
+    }
+    vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading SME objects"
+             << vcl_flush << vcl_endl;
+
+    // write out the data
+    vcl_stringstream filename;
+    filename << out_folder << leaf_ptr->get_label_name("land_map_index", "all");
+    // write out kml file for visualization if necessary
+    vcl_string out_kml_file = vul_file::strip_extension(filename.str()) + ".kml";
+    leaf_ptr->contents_->write_out_kml(out_kml_file, 0.25E-4);
+    leaf_ptr->contents_->write_out_bin(filename.str());
+    vcl_cout << " leaf " << l_idx << " was written into file: " << out_kml_file << vcl_endl;
+  }  // end of loop over leaves
+
+  return;
+
 #if 0
   // NLCD folder
   vcl_string nlcd_folder = "v:/p1a_related/NLCD/";

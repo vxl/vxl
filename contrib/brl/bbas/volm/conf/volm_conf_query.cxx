@@ -100,19 +100,20 @@ bool volm_conf_query::create_conf_object()
     {
       //vcl_cout << "\t\t projecting " << regions[r_idx]->name() << "..." << vcl_flush << vcl_endl;
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly(regions[r_idx]->region_2d());
-      float theta = -1.0f, dist = -1.0f;
+      float theta = -1.0f, dist = -1.0f, height = -1.0f;
       unsigned i, j;
       // project all ground vertices on the polygon to 3-d world points if the vertex is under the horizon
       this->project(pcam, poly, dist, theta, i, j);
       
       // hack here to use the distance from depth map scene
       dist = regions[r_idx]->min_depth();
+      height = regions[r_idx]->height();
       //vcl_cout << "\t\t min_dist: " << dist << ", phi: " << theta << ", pixel: " << i << "x" << j << vcl_flush << vcl_endl;
-      if (theta < 0 && dist < 0)
+      if (theta < 0)
         continue;
       // create a configurational object for it
       unsigned char land_id = regions[r_idx]->land_id();
-      volm_conf_object_sptr conf_obj = new volm_conf_object(theta, dist, land_id);
+      volm_conf_object_sptr conf_obj = new volm_conf_object(theta, dist, height, land_id);
       //vcl_cout << "conf_obj: ";  conf_obj->print(vcl_cout);
       conf_object.insert(vcl_pair<vcl_string, volm_conf_object_sptr>(regions[r_idx]->name(), conf_obj));
       vcl_pair<unsigned, unsigned> tmp_pair(i,j);
@@ -247,6 +248,9 @@ bool volm_conf_query::visualize_ref_objs(vcl_string const& in_file, vcl_string c
     this->plot_line_into_image(img, h_line_pixels, 0, 0, 0, 6);
     // plot the non-ground depth map scenes first
     for (unsigned i = 0; i < regions.size(); i++) {
+      // not plot the object that is not projected based on current camera
+      if (conf_objects_[cam_id].find(regions[i]->name()) == conf_objects_[cam_id].end())
+        continue;
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly(regions[i]->region_2d());
       poly[0].push_back(poly[0][0]);
       unsigned char r,g,b;
@@ -285,6 +289,7 @@ bool volm_conf_query::visualize_ref_objs(vcl_string const& in_file, vcl_string c
 
 }
 
+#if 0
 bool volm_conf_query::generate_top_views(vcl_string const& out_folder, vcl_string const& filename_pre)
 {
   // ensure a maximum image size
@@ -338,6 +343,7 @@ bool volm_conf_query::generate_top_views(vcl_string const& out_folder, vcl_strin
   }
   return true;
 }
+#endif
 
 void volm_conf_query::plot_line_into_image(vil_image_view<vil_rgb<vxl_byte> >& image,
                                            vcl_vector<vgl_point_2d<double> > const& line,

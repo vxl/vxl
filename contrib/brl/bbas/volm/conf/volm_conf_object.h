@@ -9,7 +9,7 @@
 // \date July 16, 2014
 // \verbatim
 //   Modifications
-//    none yet
+//    Yi Dong     SEP--2014    added height attribute
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -17,6 +17,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 
 class volm_conf_object;
 typedef vbl_smart_ptr<volm_conf_object> volm_conf_object_sptr;
@@ -26,21 +27,25 @@ class volm_conf_object : public vbl_ref_count
 {
 public:
   //: default constructor
-  volm_conf_object() : theta_(0.0f), dist_(0.0f), land_(0) {}
+  volm_conf_object() : theta_(0.0f), dist_(0.0f), height_(0.0f), land_(0) {}
   //: constructor from location theta, dist, land_id
-  volm_conf_object(float  const& theta, float  const& dist, unsigned char const& land);
-  volm_conf_object(double const& theta, double const& dist, unsigned char const& land);
-  //: constructor from a 2-d points, land id
-  volm_conf_object(vgl_point_2d<float>  const& pt, unsigned char const& land);
-  volm_conf_object(vgl_point_2d<double> const& pt, unsigned char const& land);
+  volm_conf_object(float  const& theta, float  const& dist, float  const& height, unsigned char const& land);
+  volm_conf_object(double const& theta, double const& dist, double const& height, unsigned char const& land);
+  //: constructor from a 2-d points, a height value and land id
+  volm_conf_object(vgl_point_2d<float>  const& pt, float  const& height, unsigned char const& land);
+  volm_conf_object(vgl_point_2d<double> const& pt, double const& height, unsigned char const& land);
+  //: constructor from a 3-d points (note the dist are the ground distance, i.e. calculated by pt.x() and pt.y())
+  volm_conf_object(vgl_point_3d<float>  const& pt, unsigned char const& land);
+  volm_conf_object(vgl_point_3d<double> const& pt, unsigned char const& land);
 
   //: destructor
   ~volm_conf_object() {}
 
   //: access
-  float theta() const        { return theta_; }
-  float dist()  const        { return dist_;   }
-  unsigned char land() const { return land_;   }
+  float theta()  const        { return theta_; }
+  float dist()   const        { return dist_;   }
+  float height() const        { return height_; }
+  unsigned char land()  const { return land_;   }
   float theta_in_deg() const;
 
   //: return the location as Cartesian
@@ -56,7 +61,9 @@ public:
   //: print method
   void print(vcl_ostream& os) const
   {  
-    os << "volm_conf_object -- theta: " << theta_ << " (" << this->theta_in_deg() << " degree), dist: " << dist_ << ", land: " << (int)land_ << ")";
+    os << "volm_conf_object -- theta: " << theta_ << " (" << this->theta_in_deg() << " degree), dist: " << dist_ 
+       << ", height: " << height_
+       << ", land: " << (int)land_ << ")";
     os << vcl_endl;
   }
 
@@ -65,7 +72,7 @@ public:
 
   // ================  binary I/O ===================
   //: version
-  unsigned char version() const { return (unsigned char)1; }
+  unsigned char version() const { return (unsigned char)2; }
   //: binary IO write
   void b_write(vsl_b_ostream& os) const;
   //: binary IO read
@@ -73,7 +80,8 @@ public:
 
 private:
   float theta_;             // location coordinate theta
-  float dist_;            // location coordinate radius
+  float dist_;              // location coordinate radius
+  float height_;
   unsigned char land_;      // object land type id
 };
 

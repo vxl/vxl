@@ -9,7 +9,7 @@
 // \date August 25, 2014
 // \verbatim
 //  Modifications
-//   <none yet>
+//   Yi Dong     SEP--2014    added height attribute
 // \endverbatim
 //
 

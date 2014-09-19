@@ -1,6 +1,7 @@
 #include <volm/conf/volm_conf_2d_indexer.h>
 //:
 // \file
+#include <vgl/vgl_closest_point.h>
 #include <vul/vul_file.h>
 #include <vcl_cassert.h>
 #include <volm/volm_buffered_index.h>             // for parameter class
@@ -12,7 +13,7 @@ volm_conf_2d_indexer::volm_conf_2d_indexer(double const& radius, vcl_string cons
   : radius_(radius), land_map_folder_(land_map_folder)
 {
   // calculate radius in degree
-  radius_in_degree_ = ( ( (1.2*radius_) / 30.0) + 1.0) * (1.0 / 3600.0);  // 1 arcseconds is ~ 30 meter, 1 arcseconds is 1/3600 seconds
+  radius_in_degree_ = ( ( (2*radius_) / 30.0) + 1.0) * (1.0 / 3600.0);  // 1 arcseconds is ~ 30 meter, 1 arcseconds is 1/3600 seconds
   square_radius_ = radius_*radius_;
   current_leaf_id_ = 0;
   tile_id_ = tile_id;
@@ -144,8 +145,8 @@ bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double 
     for (volm_conf_loc_map::iterator mit = loc_map.begin(); mit != loc_map.end(); ++mit)
     {
       unsigned char land_id = mit->first;
-      vcl_vector<vgl_point_2d<double> > loc = mit->second;
-      for (vcl_vector<vgl_point_2d<double> >::iterator vit = loc.begin(); vit != loc.end(); ++vit)
+      vcl_vector<vgl_point_3d<double> > loc = mit->second;
+      for (vcl_vector<vgl_point_3d<double> >::iterator vit = loc.begin(); vit != loc.end(); ++vit)
       {
         // calculate distance and angle
         double lx, ly, lz;
@@ -154,7 +155,8 @@ bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double 
         if (square_dist < square_radius_) {
           double dist = vcl_sqrt(lx*lx+ly*ly);
           double phi  = vcl_atan2(ly, lx);
-          values.push_back(volm_conf_object(phi, dist, land_id));
+          double height = vit->z();
+          values.push_back(volm_conf_object(phi, dist, height, land_id));
 #if 0
           bkml_write::write_location(ofs, vgl_point_2d<double>(vgl_point_2d<double>(vit->x(), vit->y())), "loc", "", 0.3);
 #endif
@@ -171,13 +173,14 @@ bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double 
 
 double volm_conf_2d_indexer::min_dist_from_box_to_pt(vpgl_lvcs lvcs, vgl_box_2d<double> const& box, double const& lon, double const& lat)
 {
-  double square_min_dist = 1.0E10;
-  double plx, ply, plz;
-  lvcs.global_to_local(lon, lat, 0.0, vpgl_lvcs::wgs84, plx, ply, plz);
-  double vlon, vlat;
-  double blx, bly, blz;
-  double square_dist;
+  // check whether the location is inside leaf or not
+  if (box.contains(lon, lat))
+    return -1.0;
+  // obtain the closest points from the given (lon,lat) to the bounding box
+  vgl_polygon<double> poly;
+  poly.new_sheet();
   for (unsigned k = 0; k < 4; k++) {
+    double vlon, vlat;
     switch (k) {
       case 0:  { vlon = box.min_x();  vlat = box.min_y();  break; }
       case 1:  { vlon = box.max_x();  vlat = box.min_y();  break; }
@@ -185,10 +188,14 @@ double volm_conf_2d_indexer::min_dist_from_box_to_pt(vpgl_lvcs lvcs, vgl_box_2d<
       case 3:  { vlon = box.min_x();  vlat = box.max_y();  break; }
       default: { vlon = box.min_x();  vlat = box.min_y(); }
     }
-    lvcs.global_to_local(vlon, vlat, 0.0, vpgl_lvcs::wgs84, blx, bly, blz);
-    square_dist = (blx-plx)*(blx-plx) + (bly-ply)*(bly-ply);
-    if (square_min_dist > square_dist)
-      square_min_dist = square_dist;
+    poly.push_back(vlon, vlat);
   }
-  return vcl_sqrt(square_min_dist);
+  vgl_point_2d<double> closest_pt = vgl_closest_point(poly, vgl_point_2d<double>(lon, lat));
+  // calculate the minimum distance
+  double plx, ply, plz;
+  lvcs.global_to_local(lon, lat, 0.0, vpgl_lvcs::wgs84, plx, ply, plz);
+  double clx, cly, clz;
+  lvcs.global_to_local(closest_pt.x(), closest_pt.y(), 0.0, vpgl_lvcs::wgs84, clx, cly, clz);
+  double min_dist = vcl_sqrt((plx-clx)*(plx-clx)+(ply-cly)*(ply-cly));
+  return min_dist;
 }
