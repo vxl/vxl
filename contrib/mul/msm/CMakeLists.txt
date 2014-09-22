@@ -35,6 +35,8 @@ SET(msm_sources
 
   msm_reflect_shape.h         msm_reflect_shape.cxx
   msm_pose_maker.h            msm_pose_maker.cxx
+
+  msm_cubic_bezier.h          msm_cubic_bezier.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates msm_sources)
