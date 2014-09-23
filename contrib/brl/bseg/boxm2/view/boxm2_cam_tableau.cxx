@@ -7,6 +7,8 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>
 #include <vgl/vgl_distance.h>
+#include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
 
 
 boxm2_cam_tableau::boxm2_cam_tableau() :
@@ -19,6 +21,7 @@ boxm2_cam_tableau::boxm2_cam_tableau() :
   vgl_point_3d<double> def(2,2,2);
   cam_.set_camera_center(def);
   default_cam_.set_camera_center(def);
+  default_cam_.look_at(default_stare_point_);
 }
 
 //: sets up viewport and GL Modes
@@ -145,24 +148,27 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
 
     //cam location in spherical coordinates (this should be relative to the stare point
     vgl_point_3d<double> cam_center = cam_.get_camera_center();
-    vgl_point_3d<double> origin(default_stare_point_.x(),
-                                default_stare_point_.y(),
-                                default_stare_point_.z());
-    double rad = vgl_distance<double>(cam_center, origin);
-    double theta = vcl_acos((cam_center.z()-origin.z())/rad);
-    double phi = vcl_atan2((cam_center.y()-origin.y()), (cam_center.x()-origin.x()));
 
-    //update theta by a function of dy
-    double angleScale = .1;
-    double newTheta = theta - dy * angleScale;
-    double newPhi = phi + dx * angleScale;
-    vgl_point_3d<double> newCenter(origin.x()+rad * vcl_sin(newTheta) * vcl_cos(newPhi),
-                                   origin.y()+rad * vcl_sin(newTheta) * vcl_sin(newPhi),
-                                   origin.z()+rad * vcl_cos(newTheta));
-    cam_.set_camera_center(newCenter);
-    vcl_cout<<"New center"<<newCenter<<" old center "<<cam_center<<vcl_endl;
-    cam_.look_at(stare_point_);
+    vgl_point_3d<double> origin(stare_point_);
 
+    vgl_h_matrix_3d<double> T0;
+    T0.set_identity();
+    T0.set_translation(-origin.x(), -origin.y(), -origin.z());
+    vnl_vector_fixed<double,3> cam_x(cam_.get_rotation().as_matrix().get_row(0));
+    vnl_vector_fixed<double,3> cam_y(cam_.get_rotation().as_matrix().get_row(1));
+    //vnl_vector_fixed<double,3> cam_z(cam_.get_rotation().as_matrix().get_row(2));
+    // we want to rotate around the camera x and y axes
+    static const double angle_scale = 0.1;
+    vgl_rotation_3d<double> Rx(cam_x * -dy * angle_scale);
+    vgl_rotation_3d<double> Ry(cam_y * -dx * angle_scale);
+    
+    // now compose all the transformations to get total movement of camera center
+    vgl_h_matrix_3d<double> composed = T0.get_inverse() * Rx.as_h_matrix_3d() * Ry.as_h_matrix_3d() * T0;
+
+    vgl_point_3d<double> new_center = composed * vgl_homg_point_3d<double>(cam_center);
+    cam_.set_camera_center(new_center);
+    cam_.look_at(stare_point_, vgl_vector_3d<double>(-cam_y[0], -cam_y[1], -cam_y[2]));
+   
     this->post_redraw();
     return true;
   }
