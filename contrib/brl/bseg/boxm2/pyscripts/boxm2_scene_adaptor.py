@@ -59,12 +59,18 @@ class boxm2_scene_adaptor(object):
     self.lvcs = scene_lvcs(self.scene);
 
   def __del__(self):
-    boxm2_batch.remove_data(self.scene.id)
-    boxm2_batch.remove_data(self.cpu_cache.id)
-    boxm2_batch.remove_data(self.ocl_mgr.id)
-    boxm2_batch.remove_data(self.device.id)
-    boxm2_batch.remove_data(self.opencl_cache.id)
-    boxm2_batch.remove_data(self.lvcs.id)
+    if self.scene is not None:
+        boxm2_batch.remove_data(self.scene.id)
+    if self.cpu_cache is not None:
+        boxm2_batch.remove_data(self.cpu_cache.id)
+    if self.ocl_mgr is not None:
+        boxm2_batch.remove_data(self.ocl_mgr.id)
+    if self.device is not None:
+        boxm2_batch.remove_data(self.device.id)
+    if self.opencl_cache is not None:
+        boxm2_batch.remove_data(self.opencl_cache.id)
+    if self.lvcs is not None:
+        boxm2_batch.remove_data(self.lvcs.id)
 
   #describe scene (returns data path)
   def describe(self) :
