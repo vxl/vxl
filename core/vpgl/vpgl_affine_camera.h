@@ -87,4 +87,12 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   vgl_vector_3d<T> ray_dir_;//needed to assign a consistent sense to the ray
 };
 
+//: Read vpgl_affine_camera  from stream
+template <class Type>
+vcl_istream&  operator>>(vcl_istream& s, vpgl_affine_camera<Type>& c);
+
+//: Write vpgl_affine_camera to stream
+template <class Type>
+vcl_ostream&  operator<<(vcl_ostream& s, vpgl_affine_camera<Type> const& c);
+
 #endif // vpgl_affine_camera_h_

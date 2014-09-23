@@ -177,10 +177,33 @@ void vpgl_affine_camera<T>::orient_ray_direction(vgl_vector_3d<T> const& look_di
   }
 }
 
+//: Write vpgl_affine_camera to stream
+template <class Type>
+vcl_ostream&  operator<<(vcl_ostream& s,
+                         vpgl_affine_camera<Type> const& c)
+{
+  s << c.get_matrix() << '\n';
+  return s;
+}
+
+//: Read camera from stream
+template <class Type>
+vcl_istream&  operator >>(vcl_istream& s,
+                          vpgl_affine_camera<Type>& c)
+{
+  vnl_matrix_fixed<Type, 3, 4> P;
+  s >> P;
+  c = vpgl_affine_camera<Type>(P);
+  return s ;
+}
+
+
 // Code for easy instantiation.
 #undef vpgl_AFFINE_CAMERA_INSTANTIATE
 #define vpgl_AFFINE_CAMERA_INSTANTIATE(T) \
-template class vpgl_affine_camera<T >
+template class vpgl_affine_camera<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, const vpgl_affine_camera<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vpgl_affine_camera<T >&)
 
 
 #endif // vpgl_affine_camera_txx_
