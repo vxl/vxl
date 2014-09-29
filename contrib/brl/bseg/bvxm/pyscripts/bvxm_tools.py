@@ -450,3 +450,4 @@ def get_scene_files(scene, res, cam_global, cam_global2, min_cnt, max_cnt, param
       valid_uncertainties.append(uncertainties[i])
 
   return cropped_valid_imgs, cropped_valid_cams, valid_uncertainties, valid_img_names, valid_cameras, n_seed, len(cam_cat);
+

@@ -70,5 +70,5 @@ DECLARE_FUNC_CONS(bvxm_scene_origin_process);
 DECLARE_FUNC_CONS(bvxm_orthorectify_process);
 DECLARE_FUNC_CONS(bvxm_uncertainty_process);
 DECLARE_FUNC_CONS(bvxm_heightmap_exp_process);
-
+DECLARE_FUNC_CONS(bvxm_create_land_map_process);
 #endif
