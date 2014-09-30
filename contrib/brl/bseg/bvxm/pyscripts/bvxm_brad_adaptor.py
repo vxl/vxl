@@ -21,9 +21,12 @@ def radiometrically_calibrate(cropped_image, meta):
   bvxm_batch.init_process("bradNITFAbsRadiometricCalibrationProcess")
   bvxm_batch.set_input_from_db(0, cropped_image)
   bvxm_batch.set_input_from_db(1, meta)
-  bvxm_batch.run_process()
-  (id, type) = bvxm_batch.commit_output(0)
-  cropped_img_cal = dbvalue(id, type)
+  status = bvxm_batch.run_process()
+  if status :
+    (id, type) = bvxm_batch.commit_output(0)
+    cropped_img_cal = dbvalue(id, type)
+  else :
+    cropped_img_cal = 0
   return cropped_img_cal
 
 # estimate atmospheric parameters
