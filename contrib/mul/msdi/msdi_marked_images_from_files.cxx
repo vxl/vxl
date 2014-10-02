@@ -1,4 +1,3 @@
-
 //:
 // \file
 // \author Tim Cootes
@@ -11,10 +10,13 @@
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
 #include <vimt/vimt_image_2d_of.h>
+#include <vimt/vimt_load.h>
+#include <vimt/vimt_convert.h>
+
 
 msdi_marked_images_from_files::msdi_marked_images_from_files()
   : grey_only_(true),image_ok_(false),image_pyr_ok_(false),
-    points_ok_(false),index_(0)
+    points_ok_(false),load_as_float_(false),unit_scaling_(1000.0f),index_(0)
 {
   pyr_builder_.set_min_size(24,24);
 }
@@ -25,7 +27,7 @@ msdi_marked_images_from_files::msdi_marked_images_from_files(
                      const vcl_vector<vcl_string>& image_names,
                      const vcl_string& points_dir,
                      const vcl_vector<vcl_string>& points_names)
-  : grey_only_(true),index_(0)
+  : grey_only_(true),unit_scaling_(1000.0f),index_(0)
 {
   set(image_dir,image_names, points_dir, points_names);
 }
@@ -34,7 +36,8 @@ msdi_marked_images_from_files::msdi_marked_images_from_files(
 void msdi_marked_images_from_files::set(const vcl_string& image_dir,
                                         const vcl_vector<vcl_string>& image_names,
                                         const vcl_string& points_dir,
-                                        const vcl_vector<vcl_string>& points_names)
+                                        const vcl_vector<vcl_string>& points_names,
+                                        bool load_as_float)
 {
   assert(image_names.size()==points_names.size());
   image_dir_   = image_dir;
@@ -47,6 +50,7 @@ void msdi_marked_images_from_files::set(const vcl_string& image_dir,
   image_pyr_ok_=false;
   points_ok_=false;
   grey_only_=true;
+  load_as_float_ = load_as_float;
 }
 //: Initialise with directories and filenames
 void msdi_marked_images_from_files::set(const vcl_string& image_dir,
@@ -72,6 +76,15 @@ msdi_marked_images_from_files::~msdi_marked_images_from_files()
 {
 }
 
+//: Scaling required to convert from units in image to desired world units 
+// (e.g. 1000 for mm if image units are metres)
+// Only used if load_as_float_ is true.
+void msdi_marked_images_from_files::set_unit_scaling(float s)
+{
+  unit_scaling_=s;
+}
+
+
 unsigned msdi_marked_images_from_files::size() const
 {
   return image_name_.size();
@@ -82,7 +95,11 @@ const vimt_image_2d& msdi_marked_images_from_files::image()
 {
   assert(index_ < (int)size());
   if (!image_ok_) get_image();
-  return image_;
+
+  if (!load_as_float_)     
+    return image_;
+  else 
+    return float_image_;
 }
 
   //: Return current image pyramid
@@ -92,11 +109,18 @@ const vimt_image_pyramid& msdi_marked_images_from_files::image_pyr()
   if (!image_ok_) get_image();
   if (!image_pyr_ok_)
   {
-    pyr_builder_.build(image_pyr_,image_);
+    if (!load_as_float_)     
+    { pyr_builder_.build(image_pyr_,image_); }
+    else 
+    { float_pyr_builder_.build(float_image_pyr_,float_image_); }
+
     image_pyr_ok_=true;
   }
 
-  return image_pyr_;
+  if (!load_as_float_)     
+    return image_pyr_;
+  else 
+    return float_image_pyr_;
 }
 
 const msm_points& msdi_marked_images_from_files::points()
@@ -143,17 +167,39 @@ void msdi_marked_images_from_files::get_image()
   // Read in the image
   vcl_string image_path = image_dir_ + "/" + image_name_[index_];
 
-  image_.image() = vil_load(image_path.c_str());
-  if (image_.image().size()==0)
-  {
-    vcl_cerr<<"Empty image!\n";
+  if (!load_as_float_) 
+  { 
+    image_.image() = vil_load(image_path.c_str()); 
+
+    if (image_.image().size()==0)
+    {
+      vcl_cerr<<"Empty image!\n";
+    }
+
+    if (grey_only_ && image_.image().nplanes()>1)
+    {
+      vil_image_view<vxl_byte> grey_image;
+      vil_convert_planes_to_grey(image_.image(),grey_image);
+      image_.image() = grey_image;
+    }
   }
-  if (grey_only_ && image_.image().nplanes()>1)
+  else 
   {
-    vil_image_view<vxl_byte> grey_image;
-    vil_convert_planes_to_grey(image_.image(),grey_image);
-    image_.image() = grey_image;
+    vimt_load(image_path.c_str(),float_image_,unit_scaling_);
+   
+    if (float_image_.image().size()==0)
+    {
+      vcl_cerr<<"Empty image!\n";
+    }
+
+    if (grey_only_ && float_image_.image().nplanes()>1)
+    {
+      vil_image_view<float> grey_image;
+      vil_convert_planes_to_grey(float_image_.image(),grey_image);
+      float_image_.image() = grey_image;
+    }
   }
+
   image_ok_=true;
 }
 
