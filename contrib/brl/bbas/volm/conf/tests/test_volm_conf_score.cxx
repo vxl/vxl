@@ -1,6 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <volm/conf/volm_conf_score.h>
 #include <volm/conf/volm_conf_buffer.h>
+#include <volm/conf/volm_conf_object.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
@@ -10,8 +11,15 @@
 
 static void test_volm_conf_score()
 {
-  volm_conf_score_sptr score_sptr = new volm_conf_score(0.12, -vnl_math::pi);
+  vcl_vector<volm_conf_object> landmarks;
+  for (unsigned i = 0; i < 5; i++) {
+    landmarks.push_back(volm_conf_object(i*0.1f, i*0.2f, i*0.3f, i));
+  }
+  volm_conf_score_sptr score_sptr = new volm_conf_score(0.12, -vnl_math::pi, landmarks);
   score_sptr->print(vcl_cout);
+  vcl_cout << score_sptr->landmarks().size() << " landmarks in score:" << vcl_endl;
+  for (unsigned i = 0; i < score_sptr->landmarks().size(); i++)
+    score_sptr->landmarks()[i].print(vcl_cout);
   vcl_cout << "direction relative to north: " << score_sptr->theta_to_north() << vcl_endl;
   TEST_NEAR("Testing score value", score_sptr->score(), 0.12, EPISLON);
   TEST_NEAR("Testing angular value", score_sptr->theta_in_deg(), vnl_math::pi / vnl_math::pi_over_180, EPISLON);
@@ -26,6 +34,10 @@ static void test_volm_conf_score()
   vsl_b_read(is, score_in);
   TEST_NEAR("Testing binary IO", score_sptr->score(), score_in->score(), EPISLON);
   TEST_NEAR("Testing binary IO", score_sptr->theta(), score_in->theta(), EPISLON);
+  bool landmark_same = true;
+  for (unsigned i = 0; i < score_in->landmarks().size(); i++)
+    landmark_same = landmark_same && score_sptr->landmarks()[i].is_same(score_in->landmarks()[i]);
+  TEST("Testing binary IO", landmark_same, true);
 
   // Test score buffer
   vcl_cout << " ---------------- Testing score buffer ----------------- " << vcl_endl;
@@ -40,7 +52,11 @@ static void test_volm_conf_score()
   unsigned data_size = rnd.lrand32(0,50);
   for (unsigned k = 0; k < data_size; k++)
   {
-    volm_conf_score value(rnd.drand32(0.0f, 1.0f), rnd.drand32(0, 2*vnl_math::twopi));
+    vcl_vector<volm_conf_object> landmarks;
+    unsigned size = rnd.lrand32(0,10);
+    for (unsigned i = 0; i < size; i++)
+      landmarks.push_back(volm_conf_object(rnd.drand32(0.0f, vnl_math::twopi), rnd.drand32(0.0f, 200.0f), rnd.drand32(0.0f, 32.f), rnd.lrand32(0,255)));
+    volm_conf_score value(rnd.drand32(0.0f, 1.0f), rnd.drand32(0, 2*vnl_math::twopi), landmarks);
     scores.push_back(value);
   }
 
@@ -74,12 +90,16 @@ static void test_volm_conf_score()
     if (k < 10) {
       vcl_cout << "    input value " << k << ": ";  scores[k].print(vcl_cout);
       vcl_cout << "   loaded value " << k << ": ";  scores_in[k].print(vcl_cout);
+      vcl_cout << "   input landmarks " << k << ": " << scores[k].landmarks().size() << ", loaded landmarks " << k  << ": " << scores_in[k].landmarks().size() << vcl_endl;
     }
     is_same = is_same && ( vcl_fabs(scores[k].score()-scores_in[k].score())<EPISLON )
                       && ( vcl_fabs(scores[k].theta()-scores_in[k].theta())<EPISLON );
+    unsigned num_landmarks = scores[k].landmarks().size();
+    for (unsigned i = 0; i < num_landmarks; i++)
+      is_same = is_same && scores[k].landmarks()[i].is_same(scores_in[k].landmarks()[i]);
   }
 
-  TEST("Testing binary IO", is_same, true);
+  TEST("Testing buffer binary IO", is_same, true);
   return;
 }
 

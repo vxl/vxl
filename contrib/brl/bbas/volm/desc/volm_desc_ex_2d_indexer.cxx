@@ -10,8 +10,8 @@ volm_desc_ex_2d_indexer(vcl_string const& input_folder,
                         vcl_vector<double> const& radius,
                         unsigned const& nlands) : volm_desc_indexer(out_index_folder), nlands_(nlands)
 {
-  volm_io_tools::load_imgs(input_folder, classification_maps_, false, true, true);  // load them just like NLCD but do not load img resources
-
+  volm_io_tools::load_imgs(input_folder, classification_maps_, false, true, false);  // load them just like NLCD but do not load img resources
+  
   if (radius.empty())
     radius_.push_back(1.0);
   else

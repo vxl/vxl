@@ -69,13 +69,16 @@ int main(int argc, char** argv)
   log_file << out_folder() << "/log_prob_map_tile_" << tile_id() << ".xml";
   // load the geo index
   // create the candidate polygon if exists
-  vgl_polygon<double> cand_poly;
+  vgl_polygon<double> cand_out, cand_in;
   bool is_cand = false;
-  cand_poly.clear();
+  cand_out.clear();  cand_in.clear();
   if (vul_file::exists(cand_file())) {
-    cand_poly = bkml_parser::parse_polygon(cand_file());
-    vcl_cout << "candidate regions (" << cand_poly.num_sheets() << " sheet)are loaded from file: " << cand_file() << "!!!!!!!!!!" << vcl_endl;
-    is_cand = (cand_poly.num_sheets() != 0);
+    //cand_poly = bkml_parser::parse_polygon(cand_file());
+    unsigned n_out, n_in;
+    vgl_polygon<double> poly = bkml_parser::parse_polygon_with_inner(cand_file(), cand_out, cand_in, n_out, n_in);
+    vcl_cout << "candidate regions (" << cand_out.num_sheets() << " outer sheet and " << cand_in.num_sheets() << " inner sheet)are loaded from file: "
+             << cand_file() << "!!!!!!!!!!" << vcl_endl;
+    is_cand = (cand_out.num_sheets() != 0);
   }
 
   // load geo index locations
@@ -95,7 +98,7 @@ int main(int argc, char** argv)
   // obtain the desired leaf
   vcl_vector<volm_geo_index_node_sptr> loc_leaves;
   for (unsigned i = 0; i < loc_leaves_all.size(); i++)
-    if (is_cand && vgl_intersection(loc_leaves_all[i]->extent_, cand_poly))
+    if (is_cand && vgl_intersection(loc_leaves_all[i]->extent_, cand_out))
       loc_leaves.push_back(loc_leaves_all[i]);
     else
       loc_leaves.push_back(loc_leaves_all[i]);
@@ -128,7 +131,11 @@ int main(int argc, char** argv)
     // loop over the location and retrieve the score
     vgl_point_3d<double> h_pt;
     while (leaf->hyps_->get_next(0,1,h_pt)) {
-      if (is_cand && !volm_candidate_list::inside_candidate_region(cand_poly, h_pt.x(), h_pt.y()))
+#if 0
+      if (is_cand && !volm_candidate_list::inside_candidate_region(cand_in, cand_out, h_pt.x(), h_pt.y()))
+        continue;
+#endif
+      if (is_cand && !volm_candidate_list::inside_candidate_region(cand_out, h_pt.x(), h_pt.y()))
         continue;
       volm_conf_score score_in;
       score_idx.get_next(score_in);
@@ -174,7 +181,7 @@ int main(int argc, char** argv)
     vgl_point_3d<double> h_pt;
     while (leaf->hyps_->get_next(0,1,h_pt))
     {
-      if (is_cand && !cand_poly.contains(h_pt.x(), h_pt.y()))
+      if (is_cand && !volm_candidate_list::inside_candidate_region(cand_in, cand_out, h_pt.x(), h_pt.y()))
         continue;
       volm_conf_score score_in;
       score_idx.get_next(score_in);

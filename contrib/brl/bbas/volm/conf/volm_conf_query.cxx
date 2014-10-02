@@ -104,9 +104,8 @@ bool volm_conf_query::create_conf_object()
       unsigned i, j;
       // project all ground vertices on the polygon to 3-d world points if the vertex is under the horizon
       this->project(pcam, poly, dist, theta, i, j);
-      
-      // hack here to use the distance from depth map scene
-      dist = regions[r_idx]->min_depth();
+      // here to use the distance from depth map scene
+      dist   = regions[r_idx]->min_depth();
       height = regions[r_idx]->height();
       //vcl_cout << "\t\t min_dist: " << dist << ", phi: " << theta << ", pixel: " << i << "x" << j << vcl_flush << vcl_endl;
       if (theta < 0)
@@ -123,51 +122,111 @@ bool volm_conf_query::create_conf_object()
     conf_objects_.push_back(conf_object);
     conf_objects_pixels_.push_back(conf_pixels);
   }
-
-  // calculate the distance tolerance for each configuration object
-  int nbrs4_delta[4][2] = {  {-tol_in_pixel_,  tol_in_pixel_}, { tol_in_pixel_,  tol_in_pixel_},
-                             { tol_in_pixel_, -tol_in_pixel_}, {-tol_in_pixel_, -tol_in_pixel_}  };
-  unsigned num_nbrs = 4;
-  for (unsigned cam_id =0;  cam_id < ncam_;  cam_id++)
+  
+  if (tol_in_pixel_ == 0)
   {
-    vpgl_perspective_camera<double> pcam = cameras_[cam_id];
-    vcl_map<vcl_string, volm_conf_object_sptr> conf_objs = conf_objects_[cam_id];
-    vcl_map<vcl_string, vcl_pair<unsigned, unsigned> > conf_pixels = conf_objects_pixels_[cam_id];
-    vcl_map<vcl_string, vcl_pair<float, float> > conf_dist_tol;
-    for (vcl_map<vcl_string, vcl_pair<unsigned, unsigned> >::iterator mit = conf_pixels.begin(); mit != conf_pixels.end();  ++mit)
+    for (unsigned cam_id =0;  cam_id < ncam_;  cam_id++)
     {
-      unsigned i = mit->second.first;  unsigned j = mit->second.second;
-      float min_dist = conf_objs[mit->first]->dist();
-      float max_dist = min_dist;
-      for (unsigned k = 0; k < num_nbrs; k++) {
-        int nbr_i = i + nbrs4_delta[k][0];
-        int nbr_j = j + nbrs4_delta[k][1];
-        float dist, phi;
-        this->project(pcam, nbr_i, nbr_j, dist, phi);
-        if (dist < 0)
-          continue;
-        if (dist < min_dist)  min_dist = dist;
-        if (dist > max_dist)  max_dist = dist;
-        //vcl_cout << "\t pixel " << nbr_i << ", " << nbr_j << ", dist: " << dist << ", min_dist: " << min_dist << ", max_dist: " << max_dist << vcl_endl;
+      vcl_map<vcl_string, volm_conf_object_sptr> conf_objs = conf_objects_[cam_id];
+      vcl_map<vcl_string, vcl_pair<unsigned, unsigned> > conf_pixels = conf_objects_pixels_[cam_id];
+      vcl_map<vcl_string, vcl_pair<float, float> > conf_dist_tol;
+      for (vcl_map<vcl_string, vcl_pair<unsigned, unsigned> >::iterator mit = conf_pixels.begin(); mit != conf_pixels.end();  ++mit)
+      {
+        float min_dist = conf_objs[mit->first]->dist()*0.8;
+        float max_dist = conf_objs[mit->first]->dist()*1.2;
+        conf_dist_tol.insert(vcl_pair<vcl_string, vcl_pair<float, float> >(mit->first, vcl_pair<float, float>(min_dist, max_dist)));
       }
-      conf_dist_tol.insert(vcl_pair<vcl_string, vcl_pair<float, float> >(mit->first, vcl_pair<float, float>(min_dist, max_dist)));
+      conf_objects_d_tol_.push_back(conf_dist_tol);
     }
-    conf_objects_d_tol_.push_back(conf_dist_tol);
+  }
+  else
+  {
+    // calculate the distance tolerance for each configuration object
+    int nbrs4_delta[4][2] = {  {-tol_in_pixel_,  tol_in_pixel_},
+                               { tol_in_pixel_,  tol_in_pixel_},
+                               { tol_in_pixel_, -tol_in_pixel_},
+                               {-tol_in_pixel_, -tol_in_pixel_}
+                            };
+    unsigned num_nbrs = 4;
+    for (unsigned cam_id =0;  cam_id < ncam_;  cam_id++)
+    {
+      vpgl_perspective_camera<double> pcam = cameras_[cam_id];
+      vcl_map<vcl_string, volm_conf_object_sptr> conf_objs = conf_objects_[cam_id];
+      vcl_map<vcl_string, vcl_pair<unsigned, unsigned> > conf_pixels = conf_objects_pixels_[cam_id];
+      vcl_map<vcl_string, vcl_pair<float, float> > conf_dist_tol;
+      for (vcl_map<vcl_string, vcl_pair<unsigned, unsigned> >::iterator mit = conf_pixels.begin(); mit != conf_pixels.end();  ++mit)
+      {
+        unsigned i = mit->second.first;  unsigned j = mit->second.second;
+        float min_dist = conf_objs[mit->first]->dist();
+        float max_dist = min_dist;
+        for (unsigned k = 0; k < num_nbrs; k++) {
+          int nbr_i = i + nbrs4_delta[k][0];
+          int nbr_j = j + nbrs4_delta[k][1];
+          float dist, phi;
+          this->project(pcam, nbr_i, nbr_j, dist, phi);
+          if (dist < 0 || phi < 0)
+            continue;
+          if (dist <= min_dist)  min_dist = dist;
+          if (dist >= max_dist)  max_dist = dist;
+          //vcl_cout << "\t pixel " << nbr_i << ", " << nbr_j << ", dist: " << dist << ", min_dist: " << min_dist << ", max_dist: " << max_dist << vcl_endl;
+        }
+        conf_dist_tol.insert(vcl_pair<vcl_string, vcl_pair<float, float> >(mit->first, vcl_pair<float, float>(min_dist, max_dist)));
+      }
+      conf_objects_d_tol_.push_back(conf_dist_tol);
+    }
   }
 
   return true;
 }
 
+// calculate the minimum distance, the average angle values from the label boundary and the pixel associated with it
 void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,
                               vgl_polygon<double> const& poly,
                               float& min_dist, float& phi, unsigned& i, unsigned& j)
 {
-  
   min_dist = -1.0f;  phi = -1.0f;  i = 0;  j=0;
   // only consider the first sheet
   unsigned n_vertices = poly[0].size();
   vcl_map<float, float> pt_pairs;
   vcl_map<float, vcl_pair<unsigned, unsigned> > pt_pixels;
+  // calculate the angle value from all polygons
+  vcl_set<float> dist_values;
+  vcl_vector<float> phi_values;
+  vcl_vector<vcl_pair<double, double> > pixel_values;
+  for (unsigned v_idx = 0; v_idx < n_vertices; v_idx++)
+  {
+    double x = poly[0][v_idx].x();
+    double y = poly[0][v_idx].y();
+    float dist, phi;
+    this->project(cam, x, y, dist, phi);
+    if (phi < 0)
+      continue;
+    dist_values.insert(dist);
+    phi_values.push_back(phi);
+    pixel_values.push_back(vcl_pair<double, double>(x,y));
+  }
+  if (phi_values.empty())  // no vertices projects to ground
+    return;
+  min_dist = *(dist_values.begin());
+  // calculate the average angle
+  float phi_value = 0.0f;
+  double xi = 0.0, yi = 0.0;
+  for (unsigned pi = 0; pi < phi_values.size(); pi++)
+    phi_value += phi_values[pi];
+  for (unsigned pi = 0; pi < pixel_values.size(); pi++) {
+    xi += pixel_values[pi].first;
+    yi += pixel_values[pi].second;
+  }
+  phi_value /= phi_values.size();
+  xi /= pixel_values.size();
+  yi /= pixel_values.size();
+
+  phi = phi_value;
+  i = (unsigned)(vcl_floor(xi+0.5));
+  j = (unsigned)(vcl_floor(yi+0.5));
+  return;
+
+# if 0
   for (unsigned v_idx = 0; v_idx < n_vertices; v_idx++) {
     double x = poly[0][v_idx].x();
     double y = poly[0][v_idx].y();
@@ -180,6 +239,8 @@ void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,
     vcl_cout << "\t\tpixel: " << x << "x" << y << " is under horizon, has ray " << cp 
              << " and spherical coords: " << sp << " dist: " << dist << ", theta: " << sp.phi_ << vcl_flush << vcl_endl;
 #endif
+
+
     pt_pixels.insert(vcl_pair<float, vcl_pair<unsigned, unsigned> >(dist, vcl_pair<unsigned, unsigned>((unsigned)x,(unsigned)y)));
   }
   if (pt_pairs.empty())  // no vertices projects to ground
@@ -191,6 +252,8 @@ void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,
   j = pt_pixels[min_dist].second;
   //vcl_cout << "\t\tmin_dist: " << min_dist << ", phi: " << phi << ", pixel: " << i << "x" << j << vcl_flush << vcl_endl;
   return;
+#endif
+
 }
 
 void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,

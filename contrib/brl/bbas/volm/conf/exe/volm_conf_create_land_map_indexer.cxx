@@ -222,7 +222,7 @@ int main(int argc, char** argv)
         // ignore the general road category
         //if (osm.loc_lines()[r_idx]->prop().name_ == "roads")
         //  continue;
-        leaf_ptr->contents_->add_locations(osm.loc_lines()[r_idx]->line(), osm.loc_lines()[r_idx]->prop().id_, road_density(), -1.0);
+        leaf_ptr->contents_->add_locations(osm.loc_lines()[r_idx]->line(), osm.loc_lines()[r_idx]->prop().id_, -1.0, road_density());
       }
       vcl_cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading OSM roads"
                << vcl_flush << vcl_endl;

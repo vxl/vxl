@@ -11,6 +11,7 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <bsol/bsol_algs.h>
+#include <vul/vul_file.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
@@ -348,6 +349,7 @@ bool volm_io::read_camera(vcl_string kml_file,
   tilt_dev = 0;
   roll_dev = 0;
   top_fov_dev = 0;
+  heading = 0;
   bkml_parser* parser = new bkml_parser();
   vcl_FILE* xmlFile = vcl_fopen(kml_file.c_str(), "r");
   if (!xmlFile) {
@@ -1177,5 +1179,36 @@ bool volm_io::write_sme_kml_type(vcl_string file, vcl_string type_name, vcl_vect
     bkml_write::write_location(ofs, name, ids.str(), objects[i].first.y(), objects[i].first.x(), 0.0);
   }
   bkml_write::close_document(ofs);
+  return true;
+}
+
+bool volm_io::read_dem_peak_file(vcl_string const& file, vcl_vector<vcl_pair<vgl_point_2d<double>, double> >& objects)
+{
+  if (!vul_file::exists(file)) {
+    vcl_cerr << "In volm_io::read_dem_peak_file: can not find input file: " << file << "!\n";
+    return false;
+  }
+  vcl_ifstream ifs(file.c_str());
+  if (!ifs.is_open())
+    return false;
+
+  while (!ifs.eof()) {
+    double lon, lat, height;
+    char buffer[10000];
+    ifs.getline(buffer, 10000);
+    vcl_string temp_buf(buffer);
+    if (ifs.eof()) break;
+    char *tok = vcl_strtok(buffer, " ");
+    vcl_stringstream tlat(tok);  tlat >> lat;
+
+    tok = vcl_strtok(NULL, " ");
+    vcl_stringstream tlon(tok);  tlon >> lon;
+
+    tok = vcl_strtok(NULL, " ");
+    vcl_stringstream theight(tok);  theight >> height;
+
+    vgl_point_2d<double> peak_loc(lon, lat);
+    objects.push_back(vcl_pair<vgl_point_2d<double>, double>(peak_loc, height));
+  }
   return true;
 }

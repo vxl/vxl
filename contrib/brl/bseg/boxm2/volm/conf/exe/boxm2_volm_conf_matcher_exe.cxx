@@ -43,6 +43,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string>  cand_file("-cand", "candidate region kml provided by previous matcher", "");
   vul_arg<float> buffer_capacity("-buffer", "buffer capacity for index creation (in GByte)", 2.0f);
   vul_arg<unsigned> tol_in_pixel("-tol", "distance tolerance value in pixel unit (default is 25)", 25);
+  vul_arg<bool>       use_height("-height", "option to use building height in matching", false);
   vul_arg<bool>             read("-read", "option to read the matching score from output folder", false);
   vul_arg_parse(argc, argv);
   vcl_cout << "argc: " << argc << vcl_endl;
@@ -57,17 +58,25 @@ int main(int argc, char** argv)
   vcl_stringstream log_file;
   vcl_stringstream log;
   log_file << out_folder() << "/log_tile_" << tile_id() << "_leaf_" << leaf_id() << ".xml";
-  
+
   // load the geo index locations
   // create the candidate region if exists
-  vgl_polygon<double> cand_poly;
+  vgl_polygon<double> cand_out, cand_in;
   bool is_cand = false;
-  cand_poly.clear();
+  cand_out.clear();  cand_in.clear();
   if (vul_file::exists(cand_file())) {
-    cand_poly = bkml_parser::parse_polygon(cand_file());
-    vcl_cout << "candidate regions (" << cand_poly.num_sheets() << " sheet)are loaded from file: " << cand_file() << "!!!!!!!!!!" << vcl_endl;
-    is_cand = (cand_poly.num_sheets() != 0);
+    //cand_poly = bkml_parser::parse_polygon(cand_file());
+    unsigned n_out, n_in;
+    vgl_polygon<double> poly = bkml_parser::parse_polygon_with_inner(cand_file(), cand_out, cand_in, n_out, n_in);
+    vcl_cout << "candidate regions (" << cand_out.num_sheets() << " outer sheet and " << cand_in.num_sheets() << " inner sheet)are loaded from file: "
+             << cand_file() << "!!!!!!!!!!" << vcl_endl;
+    is_cand = (cand_out.num_sheets() != 0);
   }
+
+  if (use_height()){
+    vcl_cout << "Configuration Matcher will match the height of URGENT building footprints!!!!!!!!!!!!!!!!!!!!!!!!" << vcl_endl;
+  }
+  vcl_cout << "Distance tolerance is " << tol_in_pixel() << " pixels!!!!!!!!!!!!!!!!!!!!!!" << vcl_flush << vcl_endl;
 
   // load geo index locations
   vcl_stringstream file_name_pre;
@@ -86,7 +95,7 @@ int main(int argc, char** argv)
   // obtain the desired leaf
   vcl_vector<volm_geo_index_node_sptr> loc_leaves;
   if (leaf_id() >= 0 && leaf_id() < (int)loc_leaves_all.size()) {
-    if (is_cand && vgl_intersection(loc_leaves_all[leaf_id()]->extent_, cand_poly)) {
+    if (is_cand && vgl_intersection(loc_leaves_all[leaf_id()]->extent_, cand_out)) {
         vcl_cout << "input leaf " << leaf_id() << " is inside candidate polygon, matcher will be performed" << vcl_endl;
         loc_leaves.push_back(loc_leaves_all[leaf_id()]);
     }
@@ -100,7 +109,7 @@ int main(int argc, char** argv)
   else
   {
     for (unsigned i = 0; i < loc_leaves_all.size(); i++)
-      if (is_cand && vgl_intersection(loc_leaves_all[i]->extent_, cand_poly))
+      if (is_cand && vgl_intersection(loc_leaves_all[i]->extent_, cand_out))
         loc_leaves.push_back(loc_leaves_all[i]);
       else
         loc_leaves.push_back(loc_leaves_all[i]);
@@ -179,14 +188,14 @@ int main(int argc, char** argv)
     vcl_vector<vcl_string> cam_string = query->camera_strings();
     vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > > conf_objs_d_tol = query->conf_objects_d_tol();
     vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objs = query->conf_objects(); 
-    if (cam_string.size() < 4) {
+    if (cam_string.size() < 10000) {
       for (unsigned i = 0; i < conf_objs.size(); i++) {
-        vcl_cout << "   camera: " << cam_string[i] << " has following configurational objects" << vcl_endl;
-        for (vcl_map<vcl_string, volm_conf_object_sptr>::iterator mit = conf_objs[i].begin();  mit != conf_objs[i].end(); ++mit)  {
-          vcl_cout << "    " << mit->first << "\t\t";
-          mit->second->print(vcl_cout);
-          vcl_cout << "      distance tolerance: " << conf_objs_d_tol[i][mit->first].first << " meter to " << conf_objs_d_tol[i][mit->first].second << " meter " << vcl_endl;
-        }
+        vcl_cout << "   camera " << i << " : " << cam_string[i] << " has " << conf_objs[i].size() << " configurational objects" << vcl_endl;
+        //for (vcl_map<vcl_string, volm_conf_object_sptr>::iterator mit = conf_objs[i].begin();  mit != conf_objs[i].end(); ++mit)  {
+        //  vcl_cout << " cam " << i << "  " << mit->first << "\t\t";
+        //  mit->second->print(vcl_cout);
+        //  vcl_cout << "      distance tolerance: " << conf_objs_d_tol[i][mit->first].first << " meter to " << conf_objs_d_tol[i][mit->first].second << " meter " << vcl_endl;
+        //}
       }
     }
     unsigned num_locs = 0;
@@ -199,27 +208,27 @@ int main(int argc, char** argv)
     vcl_cout << "  matching will operate on " << num_locs << " locations in " << loc_leaves.size() << vcl_endl;
 #if 0
     // visualize the configuration query
-    if (cam_string.size() < 30) {
+    if (cam_string.size() < 100) {
       if (vul_file::exists(query_img()))
         query->visualize_ref_objs(query_img(), out_folder());
     }
 #endif
-
     // create a configurational matcher
     if (idx_folder().compare("") == 0) {
       log << "ERROR: can not find index folder: " << idx_folder() << "!\n";
       volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
     }
     vul_timer t;
-    boxm2_volm_conf_matcher matcher(query, tile_id(), loc_leaves, idx_folder(), out_folder(), cand_poly, buffer_capacity());
+    t.mark();
+    boxm2_volm_conf_matcher matcher(query, tile_id(), loc_leaves, idx_folder(), out_folder(), cand_out, cand_in, buffer_capacity());
 
     vcl_cout << " Start the configuration matcher ..." << vcl_endl;
-    int matched_locs = matcher.conf_match_cpp(index_name(), leaf_id());
+    int matched_locs = matcher.conf_match_cpp(index_name(), leaf_id(), use_height());
     if (matched_locs == 0) {
       log << "ERROR: configurational matcher failed on tile " << tile_id() << ", leaf " << leaf_id() << "!\n";
       return volm_io::EXE_MATCHER_FAILED;
     }
-    vcl_cout << " Matching " << matched_locs << " and " << query->ncam() << " cameras per location consumes " << t.all()/(1000.0*60.0) << " seconds" << vcl_endl;
+    vcl_cout << " Matching " << matched_locs << " and " << query->ncam() << " cameras per location consumes " << t.all()/(1000.0*60.0) << " minutes" << vcl_endl;
     return volm_io::SUCCESS;
   }
   else  // read the score for given leaf
@@ -239,7 +248,11 @@ int main(int argc, char** argv)
       vgl_point_3d<double> h_pt;
       while (leaf->hyps_->get_next(0,1,h_pt))
       {
-        if (is_cand && !volm_candidate_list::inside_candidate_region(cand_poly, h_pt.x(), h_pt.y()))
+#if 0
+        if (is_cand && !volm_candidate_list::inside_candidate_region(cand_in, cand_out, h_pt.x(), h_pt.y()))
+          continue;
+#endif
+        if (is_cand && !volm_candidate_list::inside_candidate_region(cand_out, h_pt.x(), h_pt.y()))
           continue;
         volm_conf_score score_in;
         score_idx.get_next(score_in);

@@ -7,7 +7,8 @@
 
 // note the angular value is from 0 to 2*pi and 0 refers to the east direction
 
-volm_conf_score::volm_conf_score(float const& score, float const& theta) : score_(score), theta_(theta)
+volm_conf_score::volm_conf_score(float const& score, float const& theta, vcl_vector<volm_conf_object> const& landmarks)
+ : score_(score), theta_(theta), landmarks_(landmarks)
 {
   while (theta_ > vnl_math::twopi)
     theta_ -= (float)vnl_math::twopi;
@@ -33,15 +34,31 @@ void volm_conf_score::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, ver);
   vsl_b_write(os, score_);
   vsl_b_write(os, theta_);
+  vsl_b_write(os, landmarks_.size());
+  for (unsigned i = 0; i < landmarks_.size(); i++)
+    vsl_b_write(os, landmarks_[i]);
 }
 
 void volm_conf_score::b_read(vsl_b_istream& is)
 {
   unsigned char ver;
   vsl_b_read(is, ver);
-  if (ver == this->version()) {
+  if (ver == 1) {
     vsl_b_read(is, score_);
     vsl_b_read(is, theta_);
+  }
+  else if (ver == this->version())
+  {
+    vsl_b_read(is, score_);
+    vsl_b_read(is, theta_);
+    unsigned num_landmarks;
+    vsl_b_read(is, num_landmarks);
+    landmarks_.clear();
+    for (unsigned i = 0; i < num_landmarks; i++) {
+      volm_conf_object obj;
+      vsl_b_read(is, obj);
+      landmarks_.push_back(obj);
+    }
   }
   else {
     vcl_cout << "volm_conf_score: binary read -- unknown binary io version: " << (int)ver << ", most updated version is " << this->version() << '\n';

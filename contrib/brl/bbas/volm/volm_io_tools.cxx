@@ -152,7 +152,7 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
   vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
 
-  if (cam == 0) {
+  if (!cam) {
     if (!is_cam_global && !load_cam_from_tfw) {
       vpgl_geo_camera::init_geo_camera(img_file, info.ni, info.nj, lvcs, cam);
       info.cam = cam;

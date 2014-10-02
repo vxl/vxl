@@ -166,13 +166,16 @@ class volm_io
   static int read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > >& samples);
   static bool read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data);
 
-  //: read the building footpring file
+  //: read the building footprints file
   static bool read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds, vcl_vector<double>& heights);
 
   //: read the sme labels
   static bool read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects);
   static bool write_sme_kml(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects);
   static bool write_sme_kml_type(vcl_string file, vcl_string type_name, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects);
+
+  //: read peak files (first element in pair is the location represented by it wgs84 coords, 
+  static bool read_dem_peak_file(vcl_string const& file, vcl_vector<vcl_pair<vgl_point_2d<double>, double> >& objects);
 };
 
 class volm_rationale

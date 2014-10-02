@@ -519,11 +519,11 @@ void bwm_tableau_cam::add_region()
   vdval.field("Order ", order);
   vdval.choice("Orientation ", orient_types, orientation);
   vdval.choice("Land Class ", land_types, land_vec_id);
+  if (!vdval.ask())
+    return;
   // obtain the actual land id
   vcl_string land_name = land_types[land_vec_id];
   unsigned char land_id = volm_osm_category_io::volm_land_table_name[land_name].id_;
-  if (!vdval.ask())
-    return;
   // create associated depth_map_region
   my_observer_->add_region(name, min_depth, max_depth, order, orientation, (unsigned)land_id, height);
 }

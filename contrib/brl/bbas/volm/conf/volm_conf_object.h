@@ -63,8 +63,7 @@ public:
   {  
     os << "volm_conf_object -- theta: " << theta_ << " (" << this->theta_in_deg() << " degree), dist: " << dist_ 
        << ", height: " << height_
-       << ", land: " << (int)land_ << ")";
-    os << vcl_endl;
+       << ", land: " << (int)land_ << ")\n";
   }
 
   //: visualization method for configuration index and values are the indices relative to geo-location defined by lon and lat
@@ -92,6 +91,8 @@ void vsl_b_write(vsl_b_ostream& os, volm_conf_object_sptr const& obj_sptr);
 void vsl_b_read(vsl_b_istream& is, volm_conf_object&           obj);
 void vsl_b_read(vsl_b_istream& is, volm_conf_object*&      obj_ptr);
 void vsl_b_read(vsl_b_istream& is, volm_conf_object_sptr& obj_sptr);
+
+void vsl_print_summary(vcl_ostream& os, volm_conf_object const& obj);
 
 
 #endif // volm_conf_object

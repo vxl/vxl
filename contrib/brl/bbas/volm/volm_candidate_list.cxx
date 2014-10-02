@@ -269,8 +269,10 @@ void volm_candidate_list::open_kml_document(vcl_ofstream& str, vcl_string const&
       << "      <LineStyle> <color>ff0000ff</color><width>1</width> </LineStyle>\n"
       << "      <PolyStyle> <color>1a0000ff</color> </PolyStyle>\n"
       << "    </Style>\n";
-  str << "    <Style id=\"CameraHeading_style\">\n"
+  str << "    <Style id=\"CamView_style\">\n"
+      << "      <LabelStyle><scale>0.5</scale></LabelStyle>\n"
       << "      <LineStyle> <color>ffff5500</color> <width>3</width> </LineStyle>\n"
+      << "      <PolyStyle><color>4a009900</color></PolyStyle>\n"
       << "    </Style>\n";
   str << "    <Style id=\"CameraPoint_style\">\n"
       << "      <LabelStyle> <scale>0.0</scale> </LabelStyle>\n"
@@ -284,6 +286,7 @@ void volm_candidate_list::open_kml_document(vcl_ofstream& str, vcl_string const&
       << "        <Icon><href>http://google.com/mapfiles/ms/micons/flag.png</href></Icon>\n"
       << "      </IconStyle>\n"
       << "    </Style>\n";
+#if 0
   str << "    <!-- The following <Folder> is the Candidate List -->\n";
   str << "    <Folder>\n"
       << "      <name>Candidate List</name>\n"
@@ -294,12 +297,13 @@ void volm_candidate_list::open_kml_document(vcl_ofstream& str, vcl_string const&
       << "          <value>" << threshold << "</value>\n"
       << "        </Data>\n"
       << "      </ExtendedData>\n";
+#endif
 }
 
 void volm_candidate_list::close_kml_document(vcl_ofstream& str)
 {
-  str << "    <!-- Here ends the first Candidate list -->\n";
-  str << "    </Folder>\n";
+  str << "    <!-- Here ends all Candidate lists -->\n";
+  //str << "    </Folder>\n";
   str << "  </Document>\n</kml>\n";
 }
 
@@ -342,7 +346,6 @@ void volm_candidate_list::write_kml_regions(vcl_ofstream& str,
 
     // write the top locations for this region and associate camera associates
     for (unsigned idx = 0; idx < top_locs.size(); idx++) {
-    
       // write the caemra location
       str << "        <Placemark>\n"
           << "          <name>CR" << rank << '_' << idx << " Camera Estimate</name>\n"
@@ -402,6 +405,9 @@ void volm_candidate_list::write_kml_regions(vcl_ofstream& str,
                                             vcl_vector<vgl_point_2d<double> >& region,
                                             vgl_point_2d<double>& top_loc,
                                             vcl_vector<vgl_point_2d<double> >& heading,
+                                            vcl_vector<vgl_point_2d<double> >& viewing,
+                                            vcl_vector<vgl_point_2d<double> >& landmarks,
+                                            vcl_vector<unsigned char>& landmark_types,
                                             float const& likelihood,
                                             unsigned const& rank)
 {
@@ -409,9 +415,9 @@ void volm_candidate_list::write_kml_regions(vcl_ofstream& str,
     str << "      <!-- The following folders are candidate regions -->\n";
     str << "      <!-- Each candidate region contains no more than 1 camera estimate -->\n";
     str << "      <Folder>\n";
-    str << "        <name>" << rank << "</name>\n";
+    str << "        <name>Candidate " << rank << "</name>\n";
     str << "        <Placemark>\n";
-    str << "          <name>CR" << rank << "</name>\n";
+    str << "          <name>Region" << rank << "</name>\n";
     str << "          <styleUrl>#CR_style</styleUrl>\n";
     str << "          <ExtendedData>\n";
     str << "            <Data name = \"likelihood\">\n"
@@ -433,10 +439,9 @@ void volm_candidate_list::write_kml_regions(vcl_ofstream& str,
         << "            </outerBoundaryIs>\n"
         << "          </Polygon>\n"
         << "        </Placemark>\n";
-
     // write the top location for this region
     str << "        <Placemark>\n"
-        << "          <name>CR" << rank << "_1_Camera Estimate</name>\n"
+        << "          <name>Region" << rank << "_Camera Estimate</name>\n"
         << "          <styleUrl>#CameraPoint_style</styleUrl>\n"
         << "          <Point>\n"
         << "            <altitudeMode>relativeToGround</altitudeMode>\n"
@@ -449,17 +454,52 @@ void volm_candidate_list::write_kml_regions(vcl_ofstream& str,
         << "        </Placemark>\n";
 
     // write the heading direction (represented as a line)
+    //str << "        <Placemark>\n"
+    //    << "          <name>CR" << rank << "_1_Camera_Heading</name>\n"
+    //    << "          <styleUrl>#CamView_style</styleUrl>\n"
+    //    << "          <LineString>\n"
+    //    << "            <tessellate>1</tessellate>\n"
+    //    << "            <coordinates>\n";
+    //for (vcl_vector<vgl_point_2d<double> >::iterator vit = heading.begin(); vit != heading.end(); ++vit)
+    //  str << "              " << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0 ";
+    //str << "            </coordinates>\n"
+    //    << "          </LineString>\n"
+    //    << "        </Placemark>\n";
+    // write the camera viewing
     str << "        <Placemark>\n"
-        << "          <name>CR" << rand << "_1_Camera Heading</name>\n"
-        << "          <styleUrl>#CameraHeading_style</styleUrl>\n"
-        << "          <LineString>\n"
+        << "          <name>Region" << rank << "_Camera_Heading</name>\n"
+        << "          <styleUrl>#CamView_style</styleUrl>\n"
+        << "          <Polygon>\n"
         << "            <tessellate>1</tessellate>\n"
-        << "            <coordinates>\n";
-    for (vcl_vector<vgl_point_2d<double> >::iterator vit = heading.begin(); vit != heading.end(); ++vit)
+        << "            <outerBoundaryIs>\n"
+        << "              <LinearRing>\n"
+        << "                <coordinates>\n";
+    for (vcl_vector<vgl_point_2d<double> >::iterator vit = viewing.begin();  vit != viewing.end(); ++vit)
       str << "              " << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0\n";
-    str << "            </coordinates>\n"
-        << "          </LineString>\n"
+    str << "                </coordinates>\n"
+        << "              </LinearRing>\n"
+        << "            </outerBoundaryIs>\n"
+        << "          </Polygon>\n"
         << "        </Placemark>\n";
+
+    // write the landmarks
+    str << "        <Folder>\n"
+        << "          <name>Landmarks</name>\n";
+    for (unsigned l_idx = 0; l_idx < landmarks.size(); l_idx++)
+    {
+      str << "          <Placemark>\n"
+          << "            <name>" << volm_osm_category_io::volm_land_table[landmark_types[l_idx]].name_ << "_" << rank << "</name>\n"
+          << "            <Point>\n"
+          << "              <altitudeMode>relativeToGround</altitudeMode>\n"
+          << "              <coordinates>\n"
+          << "                " << vcl_setprecision(12) << landmarks[l_idx].x() << ','
+                                << vcl_setprecision(12) << landmarks[l_idx].y() << ','
+                                << "0.0\n"
+          << "              </coordinates>\n"
+          << "            </Point>\n"
+          << "          </Placemark>\n";
+    }
+    str << "        </Folder>\n";
     str << "      </Folder>\n\n";
   }
 }
@@ -485,8 +525,9 @@ bool volm_candidate_list::generate_pin_point_circle(vgl_point_2d<double> const& 
 
 // generate a heading directional line given the camera center and heading direction
 // Note that the input heading angular value is relative to East
-bool volm_candidate_list::generate_heading_direction(vgl_point_2d<double> const& center, float const& heading_angle, double const& length,
-                                                     vcl_vector<vgl_point_2d<double> >& heading_line)
+bool volm_candidate_list::generate_heading_direction(vgl_point_2d<double> const& center, float const& heading_angle, float const& length, float const& right_fov,
+                                                     vcl_vector<vgl_point_2d<double> >& heading_line,
+                                                     vcl_vector<vgl_point_2d<double> >& viewing)
 {
   // create a local lvcs
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(center.y(), center.x(), 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
@@ -496,6 +537,25 @@ bool volm_candidate_list::generate_heading_direction(vgl_point_2d<double> const&
   lvcs->local_to_global(lx, ly, 0.0, vpgl_lvcs::wgs84, e_lon, e_lat, e_gz);
   heading_line.push_back(center);
   heading_line.push_back(vgl_point_2d<double>(e_lon, e_lat));
+
+  // generate camera viewing volume
+  float left_angle  = heading_angle - right_fov;
+  float right_angle = heading_angle + right_fov;
+  while(left_angle < 0)
+    left_angle += vnl_math::twopi;
+  while(right_angle > vnl_math::twopi)
+    right_angle -= vnl_math::twopi;
+  viewing.push_back(center);
+  double lon, lat, gz;
+  lx = length * vcl_cos(left_angle);
+  ly = length * vcl_sin(left_angle);
+  lvcs->local_to_global(lx, ly, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
+  viewing.push_back(vgl_point_2d<double>(lon, lat));
+  lx = length * vcl_cos(right_angle);
+  ly = length * vcl_sin(right_angle);
+  lvcs->local_to_global(lx, ly, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
+  viewing.push_back(vgl_point_2d<double>(lon, lat));
+  viewing.push_back(center);
   return true;
 }
 
@@ -510,6 +570,30 @@ bool volm_candidate_list::inside_candidate_region(vgl_polygon<double> const& can
   for (unsigned i = 0; i < cand_poly.num_sheets(); i++)
   {
     vgl_polygon<double> single_sheet(cand_poly[i]);
+    if (single_sheet.contains(pt))
+      return true;
+  }
+  return false;
+}
+
+bool volm_candidate_list::inside_candidate_region(vgl_polygon<double> const& cand_poly_in, vgl_polygon<double> const& cand_poly_out, double const& lon, double const& lat)
+{
+  return volm_candidate_list::inside_candidate_region(cand_poly_in, cand_poly_out, vgl_point_2d<double>(lon, lat));
+}
+
+bool volm_candidate_list::inside_candidate_region(vgl_polygon<double> const& cand_poly_in, vgl_polygon<double> const& cand_poly_out, vgl_point_2d<double> const& pt)
+{
+  // check whether the point is inside any of the inner boundary of candidate region
+  unsigned num_in = cand_poly_in.num_sheets();
+  for (unsigned i = 0; i < num_in; i++) {
+    vgl_polygon<double> single_sheet(cand_poly_in[i]);
+    if (single_sheet.contains(pt))
+      return false;
+  }
+  // point is not in any of the inner region, check whether it is inside the outer boundary
+  unsigned num_out = cand_poly_out.num_sheets();
+  for (unsigned i = 0; i < num_out; i++) {
+    vgl_polygon<double> single_sheet(cand_poly_out[i]);
     if (single_sheet.contains(pt))
       return true;
   }

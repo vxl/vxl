@@ -101,16 +101,23 @@ class volm_candidate_list
                                   vcl_vector<vgl_point_2d<double> >& region,
                                   vgl_point_2d<double>& top_loc,
                                   vcl_vector<vgl_point_2d<double> >& heading,
+                                  vcl_vector<vgl_point_2d<double> >& viewing,
+                                  vcl_vector<vgl_point_2d<double> >& landmarks,
+                                  vcl_vector<unsigned char>& landmark_types,
                                   float const& likelihood,
                                   unsigned const& rank);
 
     //: generate a circular region given a circular center and radius
     static bool generate_pin_point_circle(vgl_point_2d<double> const& center, double const& radius, vcl_vector<vgl_point_2d<double> >& circle);
-    //: generate a heading directional line given the camera center and heading direction
-    static bool generate_heading_direction(vgl_point_2d<double> const& center, float const& heading_angle, double const& length, vcl_vector<vgl_point_2d<double> >& heading_line);
+    //: generate a heading directional line and camera viewing volume given the camera center and heading direction
+    static bool generate_heading_direction(vgl_point_2d<double> const& center, float const& heading_angle, float const& length, float const& right_fov,
+                                           vcl_vector<vgl_point_2d<double> >& heading_line,
+                                           vcl_vector<vgl_point_2d<double> >& viewing);
     //: method to check whether a given point is inside the candidate region
     static bool inside_candidate_region(vgl_polygon<double> const& cand_poly, double const& lon, double const& lat);
     static bool inside_candidate_region(vgl_polygon<double> const& cand_poly, vgl_point_2d<double> const& pt);
+    static bool inside_candidate_region(vgl_polygon<double> const& cand_poly_in, vgl_polygon<double> const& cand_poly_out, double const& lon, double const& lat);
+    static bool inside_candidate_region(vgl_polygon<double> const& cand_poly_in, vgl_polygon<double> const& cand_poly_out, vgl_point_2d<double> const& pt);
 
   private:
     unsigned thres_;

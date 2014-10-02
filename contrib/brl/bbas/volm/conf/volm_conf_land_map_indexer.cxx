@@ -95,8 +95,8 @@ volm_conf_land_map_indexer::volm_conf_land_map_indexer(float  const& min_lon, fl
 
 volm_conf_land_map_indexer::volm_conf_land_map_indexer(vcl_string const& bin_file)
 {
+  assert(vul_file::exists(bin_file));
   vsl_b_ifstream is(bin_file.c_str());
-  assert(is);
   this->b_read(is);
   is.close();
 }

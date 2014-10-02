@@ -110,7 +110,7 @@ bool volm_conf_object::write_to_kml(double const& lon, double const& lat, vcl_ve
     lvcs.local_to_global(lx, ly, 0.0, vpgl_lvcs::wgs84, loc_lon, loc_lat, loc_gz);
     // write the location into kml
     vcl_stringstream loc_name;
-    loc_name << i << "_" << vcl_setprecision(4) << loc_lon << '_' << vcl_setprecision(4) << loc_lat << '_' << vcl_setprecision(2) << values[i].height()
+    loc_name << i << "_" << vcl_setprecision(4) << loc_lon << '_' << vcl_setprecision(4) << loc_lat << '_' << vcl_setprecision(6) << values[i].height()
              << "_" << volm_osm_category_io::volm_land_table[values[i].land()].name_;
     vnl_double_2 ul, ll, lr, ur;
     double size = 1E-5;
@@ -205,3 +205,7 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_object_sptr& obj_sptr)
   obj_sptr = obj_ptr;
 }
 
+void vsl_print_summary(vcl_ostream& os, volm_conf_object const& obj)
+{
+  obj.print(os);
+}

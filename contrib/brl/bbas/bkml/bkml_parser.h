@@ -6,6 +6,7 @@
 //  Modifications
 //   Yi Dong   SEP-2012   added parser for polygon (inner/outer) defined in kml
 //   Yi Dong   NOV-2012   added parser for deviations of heading, tilt, roll, right_fov, top_fov of camera
+//   Yi Dong   OCT-2014   added extra checking for polygon parsing to avoid duplicated points
 // \endverbatim
 
 // Tags for KML
@@ -62,7 +63,8 @@ class bkml_parser : public expatpp
 
   //: parser to load the outer and inner boundary, the first n_out sheets are the outer boundary 
   //  and the following n_in sheets are the inner boundary
-  static vgl_polygon<double> parse_polygon_with_inner(vcl_string poly_kml_file, unsigned& n_out, unsigned& n_in);
+  static vgl_polygon<double> parse_polygon_with_inner(vcl_string poly_kml_file, vgl_polygon<double>& outer, vgl_polygon<double>& inter,
+                                                      unsigned& n_out, unsigned& n_in);
 
   static bool parse_location_from_kml(vcl_string kml_file, double& lat, double& lon);
 

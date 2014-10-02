@@ -12,6 +12,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
+#include <vcl_algorithm.h>
 #include <vcl_cstddef.h> // for std::size_t
 
 // --------------
@@ -280,7 +281,13 @@ void bkml_parser::charData(const XML_Char* s, int len)
       str >> z;
       str.ignore(128, ' ');
       vgl_point_3d<double> vpt(x,y,z);
-      poly_verts.push_back(vpt);
+      // check whether same point exists inside the poly_verts already
+      bool found = false;
+      if (vcl_find(poly_verts.begin(), poly_verts.end(), vpt) == poly_verts.end())
+        poly_verts.push_back(vpt);
+      //else
+      //  vcl_cout << "WARNING: duplicated point: "
+      //           << x << ", " << y << ", " << z << " exists in polygon coordinates and is ignored" << vcl_endl;
       //if (cord_tag_ == KML_POLYOB_TAG)
       //  poly_verts.push_back(vpt);
       //else if (cord_tag_ == KML_POLYIB_TAG)
@@ -293,14 +300,14 @@ void bkml_parser::charData(const XML_Char* s, int len)
     }
     if (cord_tag_ == KML_POLYOB_TAG)
       polyouter_.push_back(poly_verts);
-    else if (cord_tag_ == KML_POLYOB_TAG)
+    else if (cord_tag_ == KML_POLYIB_TAG)
       polyinner_.push_back(poly_verts);
     else if (cord_tag_ == KML_LINE_TAG)
       linecord_.push_back(poly_verts);
     else if (cord_tag_ == KML_POINT_TAG)
       points_.push_back(poly_verts[0]);
     else
-      vcl_cout << "WARNING: shape tag can not be recognized (not LineString, Point or Polygon, nothing will be parserd)" << vcl_endl;
+      vcl_cout << "WARNING: shape tag: " << cord_tag_ << " can not be recognized (not LineString, Point or Polygon, nothing will be parserd)" << vcl_endl;
     last_tag = "";
     cord_tag_ = "";
   }
@@ -360,7 +367,7 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
   }
   for (unsigned sh_idx = 0; sh_idx < parser->polyouter_.size(); sh_idx++) {
     out.new_sheet();
-    unsigned n_points = (unsigned)parser->polyouter_[sh_idx].size()-1;
+    unsigned n_points = (unsigned)parser->polyouter_[sh_idx].size();
     for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++) {
       out.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
     }
@@ -368,10 +375,14 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
   return out;
 }
 
-vgl_polygon<double> bkml_parser::parse_polygon_with_inner(vcl_string poly_kml_file, unsigned& n_out, unsigned& n_in)
+vgl_polygon<double> bkml_parser::parse_polygon_with_inner(vcl_string poly_kml_file, vgl_polygon<double>& outer, vgl_polygon<double>& inner,
+                                                          unsigned& n_out, unsigned& n_in)
 {
   bkml_parser* parser = new bkml_parser();
   vgl_polygon<double> out;
+  out.clear();
+  outer.clear();
+  inner.clear();
   vcl_FILE* xmlFile = vcl_fopen(poly_kml_file.c_str(), "r");
   if (!xmlFile) {
     vcl_cerr << poly_kml_file.c_str() << " error on opening the input kml file\n";
@@ -390,16 +401,22 @@ vgl_polygon<double> bkml_parser::parse_polygon_with_inner(vcl_string poly_kml_fi
   // load the outer boundary
   for (unsigned sh_idx = 0; sh_idx < n_out; sh_idx++) {
     out.new_sheet();
-    unsigned n_points = (unsigned)parser->polyouter_[sh_idx].size() - 1;
-    for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++)
+    outer.new_sheet();
+    unsigned n_points = (unsigned)parser->polyouter_[sh_idx].size();
+    for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++) {
       out.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
+      outer.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
+    }
   }
   // load the inner boundary
   for (unsigned sh_idx = 0; sh_idx < n_in; sh_idx++) {
     out.new_sheet();
-    unsigned n_points = (unsigned)parser->polyinner_[sh_idx].size() - 1;
-    for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++)
+    inner.new_sheet();
+    unsigned n_points = (unsigned)parser->polyinner_[sh_idx].size();
+    for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++) {
       out.push_back(parser->polyinner_[sh_idx][pt_idx].x(), parser->polyinner_[sh_idx][pt_idx].y());
+      inner.push_back(parser->polyinner_[sh_idx][pt_idx].x(), parser->polyinner_[sh_idx][pt_idx].y());
+    }
   }
   return out;
 }
