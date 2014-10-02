@@ -86,6 +86,8 @@ const vxl_uint_16 VIL_DICOM_HEADER_PIXELGROUP               =0x7fe0;
 const vxl_uint_16 VIL_DICOM_HEADER_PADGROUP                 =0xfffc;
 const vxl_uint_16 VIL_DICOM_HEADER_DELIMITERGROUP           =0xfffe;
 
+const vxl_uint_16 VIL_DICOM_HEADER_NSPHILIPSGROUP           =0x2005;
+
 // Useful elements of the Meta File group
 const vxl_uint_16 VIL_DICOM_HEADER_MFGROUPLENGTH            =0x0000;
 const vxl_uint_16 VIL_DICOM_HEADER_MFTRANSFERSYNTAX         =0x0010;
@@ -147,6 +149,7 @@ const vxl_uint_16 VIL_DICOM_HEADER_AQECHOTRAINLENGTH        =0x0091; // IS
 const vxl_uint_16 VIL_DICOM_HEADER_AQPIXELBANDWIDTH         =0x0095; // DS
 const vxl_uint_16 VIL_DICOM_HEADER_AQSOFTWAREVERSION        =0x1020; // LO
 const vxl_uint_16 VIL_DICOM_HEADER_AQPROTOCOLNAME           =0x1030; // LO
+const vxl_uint_16 VIL_DICOM_HEADER_AQTRIGGERTIME            =0x1060; // DS
 const vxl_uint_16 VIL_DICOM_HEADER_AQHEARTRATE              =0x1088; // IS
 const vxl_uint_16 VIL_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES  =0x1090; // IS
 const vxl_uint_16 VIL_DICOM_HEADER_AQTRIGGERWINDOW          =0x1094; // IS
@@ -202,6 +205,13 @@ const vxl_uint_16 VIL_DICOM_HEADER_DLITEM                   =0xe000;
 const vxl_uint_16 VIL_DICOM_HEADER_DLITEMDELIMITATIONITEM   =0xe00d;
 const vxl_uint_16 VIL_DICOM_HEADER_DLSEQDELIMITATIONITEM    =0xe0dd;
 
+// Tags needed in the Procedure group
+const vxl_uint_16 VIL_DICOM_HEADER_PRREALWORLDVALUEINTERCEPT=0x9224; // FD
+const vxl_uint_16 VIL_DICOM_HEADER_PRREALWORLDVALUESLOPE    =0x9225; // FD
+
+// Tags from non-standard Philips group
+const vxl_uint_16 VIL_DICOM_HEADER_NSPHILIPSPRIVATEINTERCEPT=0x100d; // DS
+const vxl_uint_16 VIL_DICOM_HEADER_NSPHILIPSPRIVATESLOPE    =0x100e; // DS
 
 // Defines for the Value Representations for Part10 meta header
 const char * const VIL_DICOM_HEADER_APPLICATIONENTRY          ="AE";
@@ -393,6 +403,7 @@ struct vil_dicom_header_info
   vil_dicom_header_type_of<vil_dicom_header_DS>::type pixel_bandwidth_;    /*< The bandwidth of the pixels */
   vil_dicom_header_type_of<vil_dicom_header_LO>::type software_vers_; /*< Versions of the scanner software used */
   vil_dicom_header_type_of<vil_dicom_header_LO>::type protocol_name_; /*< The name of the protocol used */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type trigger_time_; /*< The trigger time */
   vil_dicom_header_type_of<vil_dicom_header_IS>::type heart_rate_;           /*< The patient's heart rate */
   vil_dicom_header_type_of<vil_dicom_header_IS>::type card_num_images_;      /*< The cardiac number of images */
   vil_dicom_header_type_of<vil_dicom_header_IS>::type trigger_window_;       /*< The trigger window for this image */
@@ -443,6 +454,15 @@ struct vil_dicom_header_info
   vil_dicom_header_type_of<vil_dicom_header_US>::type pix_rep_;        /*< The pixel representation (+/-) */
   vil_dicom_header_type_of<vil_dicom_header_US>::type stored_bits_;    /*< The bits stored */
   vil_dicom_header_type_of<vil_dicom_header_US>::type allocated_bits_; /*< The bits allocated */
+
+  // Info from procedure group
+  vil_dicom_header_type_of<vil_dicom_header_FD>::type real_world_value_intercept_; /*< The real world intercept value */
+  vil_dicom_header_type_of<vil_dicom_header_FD>::type real_world_value_slope_; /*< The real world slope value */
+
+  // Non-standard info from Philips scanner
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type philips_private_intercept_; /*< The philips private intercept value */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type philips_private_slope_; /*< The philips private scale value */
+ 
 };
 
 
@@ -620,6 +640,34 @@ class vil_dicom_header_format
   //    and last_read_()
   void readDelimiterElements(short element, int dblock_size,
                              vil_stream &fs);
+
+  //: Method to read the procedure group's details
+  //
+  //  \param element The element being read in the image group
+  //  \param dblock_size The size of the data block for this
+  //                     element
+  //  \param fs The file stream to read from
+  //  \sa readHeaderElements(), readIdentifyingElements(),
+  //      readPatientElements(), readAcquisitionElements(),
+  //    readRelationshipElements(), readDelimiterElements()
+  //    readProcedureElements()
+  //    and last_read_()
+  void readProcedureElements(short element, int dblock_size,
+                             vil_stream &fs);
+
+  //: Method to read the (non-standard, private) Philips group details
+  //
+  //  \param element The element being read in the image group
+  //  \param dblock_size The size of the data block for this
+  //                     element
+  //  \param fs The file stream to read from
+  //  \sa readHeaderElements(), readIdentifyingElements(),
+  //      readPatientElements(), readAcquisitionElements(),
+  //    readRelationshipElements(), readDelimiterElements()
+  //    readProcedureElements(), readNSPhilipsElements()
+  //    and last_read_()
+  void readNSPhilipsElements(short element, int dblock_size,
+                               vil_stream &fs);
 
   //: Method to convert the Value Representation (VR) (if it exists)
   //

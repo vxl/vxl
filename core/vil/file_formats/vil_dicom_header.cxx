@@ -79,6 +79,7 @@ vil_dicom_header_info_clear( vil_dicom_header_info& info )
   info.pixel_bandwidth_ = VIL_DICOM_HEADER_UNSPECIFIED;
   info.software_vers_ = "";
   info.protocol_name_ = "";
+  info.trigger_time_ = VIL_DICOM_HEADER_UNSPECIFIED;
   info.heart_rate_ = VIL_DICOM_HEADER_UNSPECIFIED;
   info.card_num_images_ = VIL_DICOM_HEADER_UNSPECIFIED;
   info.trigger_window_ = VIL_DICOM_HEADER_UNSPECIFIED;
@@ -128,6 +129,14 @@ vil_dicom_header_info_clear( vil_dicom_header_info& info )
   info.allocated_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   info.imager_spacing_x_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
   info.imager_spacing_y_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
+
+  // Info for image procedure
+  info.real_world_value_intercept_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.real_world_value_slope_ = VIL_DICOM_HEADER_UNSPECIFIED;
+
+  // Info for non-standard Philips data
+  info.philips_private_slope_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.philips_private_intercept_ = VIL_DICOM_HEADER_UNSPECIFIED;
 }
 
 
@@ -435,6 +444,14 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
       readDelimiterElements(element, data_block_size, fs);
       break;
 
+     case VIL_DICOM_HEADER_PROCEDUREGROUP:
+      readProcedureElements(element, data_block_size, fs);
+      break;
+
+     case VIL_DICOM_HEADER_NSPHILIPSGROUP:
+      readNSPhilipsElements(element, data_block_size, fs);
+      break;
+
      // Nothing found, so skip this data block
      default:
       fs.seek(data_block_size + fs.tell());
@@ -586,6 +603,7 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
    CASE(VIL_DICOM_HEADER_AQPIXELBANDWIDTH,        pixel_bandwidth_,(float)vcl_atof); // It's the pixel bandwidth
    CASE(VIL_DICOM_HEADER_AQSOFTWAREVERSION,       software_vers_, (char *)); // It's the scanner software version
    CASE(VIL_DICOM_HEADER_AQPROTOCOLNAME,          protocol_name_, (char *)); // It's the protocol name
+   CASE(VIL_DICOM_HEADER_AQTRIGGERTIME,           trigger_time_,(float)vcl_atof); // It's the trigger time
    CASE(VIL_DICOM_HEADER_AQHEARTRATE,             heart_rate_,vcl_atoi); // It's the heart rate
    CASE(VIL_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES, card_num_images_,vcl_atoi); // It's the cardiac number of images
    CASE(VIL_DICOM_HEADER_AQTRIGGERWINDOW,         trigger_window_,vcl_atoi); // It's the trigger window
@@ -738,6 +756,54 @@ void vil_dicom_header_format::readDelimiterElements(short element,
     fs.seek(dblock_size + fs.tell());
     break;
   } // End of switch
+}
+
+//================================================================
+
+void vil_dicom_header_format::readProcedureElements(short element,
+                                                    int dblock_size,
+                                                    vil_stream &fs)
+{
+  // Pointer to any data read
+  char *data_p = 0;
+
+  // Check the elements
+  switch ((vxl_uint_16)element)
+  {
+   vcl_cout << "Proecedure group; element: " << element << vcl_endl;
+   CASE(VIL_DICOM_HEADER_PRREALWORLDVALUEINTERCEPT,real_world_value_intercept_,(double)vcl_atof); // It's the real world intercept value
+   CASE(VIL_DICOM_HEADER_PRREALWORLDVALUESLOPE    ,real_world_value_slope_,(double)vcl_atof); // It's the real world intercept value
+   default: // It's nothing we want, so skip it!
+   vcl_cout << "Procedure group; unread element: " << element << vcl_endl;
+    fs.seek(dblock_size + fs.tell());
+    break;
+  } // End of switch
+
+  delete[] data_p;
+}
+
+//================================================================
+
+void vil_dicom_header_format::readNSPhilipsElements(short element,
+                                                    int dblock_size,
+                                                    vil_stream &fs)
+{
+  // Pointer to any data read
+  char *data_p = 0;
+
+  // Check the elements
+  switch ((vxl_uint_16)element)
+  {
+   vcl_cout << "Non-standard Philips group; element: " << element << vcl_endl;
+   CASE(VIL_DICOM_HEADER_NSPHILIPSPRIVATEINTERCEPT,philips_private_intercept_,(float)vcl_atof); // It's the Philips private intercept value
+   CASE(VIL_DICOM_HEADER_NSPHILIPSPRIVATESLOPE    ,philips_private_slope_,(float)vcl_atof); // It's the Philips private slope value
+   default: // It's nothing we want, so skip it!
+   vcl_cout << "Non-standard Philips group; unread element: " << element << vcl_endl;
+    fs.seek(dblock_size + fs.tell());
+    break;
+  } // End of switch
+
+  delete[] data_p;
 }
 
 //================================================================
@@ -1220,6 +1286,7 @@ void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
      << " pixel_bandwidth  The bandwidth of the pixels: " << s.pixel_bandwidth_ << vcl_endl
      << " software_vers_   Versions of the scanner software used: " << s.software_vers_ << vcl_endl
      << " protocol_name    The name of the protocol used: " << s.protocol_name_ << vcl_endl
+     << " trigger_time     The trigger time: " << s.trigger_time_ << vcl_endl
      << " heart_rate       The patient's heart rate: " << s.heart_rate_ << vcl_endl
      << " card_num_images  The cardiac number of images: " << s.card_num_images_ << vcl_endl
      << " trigger_window   The trigger window for this image: " << s.trigger_window_ << vcl_endl
@@ -1268,7 +1335,15 @@ void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
      << " stored_bits      The bits stored: " << s.stored_bits_ << vcl_endl
      << " allocated_bits   The bits allocated: " << s.allocated_bits_ << vcl_endl
      << " imager_spacing_x The sensor pixel spacing in x: " << s.imager_spacing_x_ << vcl_endl
-     << " imager_spacing_y The sensor pixel spacing in y: " << s.imager_spacing_y_ << vcl_endl;
+     << " imager_spacing_y The sensor pixel spacing in y: " << s.imager_spacing_y_ << vcl_endl
+
+     << "\n\nInfo from the tags specifically for the procedure group\n"
+     << " real_world_value_intercept        The real world intercept value: " << s.real_world_value_intercept_ << vcl_endl
+     << " real_world_value_slope            The real world slope value: " << s.real_world_value_slope_ << vcl_endl
+
+     << "\n\nInfo from the tags specifically for the Philips private group (2005)\n"
+     << " philips_private_intercept        The philips private intercept value: " << s.philips_private_intercept_ << vcl_endl
+     << " philips_private_slope            The philips private slope value: " << s.philips_private_slope_ << vcl_endl;
 }
 
 #endif // HAS_DCMTK

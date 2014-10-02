@@ -799,6 +799,7 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQPIXELBANDWIDTH),        i.pixel_bandwidth_ ); // It's the pixel bandwidth
   try_set< ap_type(LO) >::proc( f, group, ap_el(AQSOFTWAREVERSION),       i.software_vers_ ); // It's the scanner software version
   try_set< ap_type(LO) >::proc( f, group, ap_el(AQPROTOCOLNAME),          i.protocol_name_ ); // It's the protocol name
+  try_set< ap_type(DS) >::proc( f, group, ap_el(AQTRIGGERTIME),           i.trigger_time_ ); // It's the trigger time
   try_set< ap_type(IS) >::proc( f, group, ap_el(AQHEARTRATE),             i.heart_rate_ ); // It's the heart rate
   try_set< ap_type(IS) >::proc( f, group, ap_el(AQCARDIACNUMBEROFIMAGES), i.card_num_images_ ); // It's the cardiac number of images
   try_set< ap_type(IS) >::proc( f, group, ap_el(AQTRIGGERWINDOW),         i.trigger_window_ ); // It's the trigger window
@@ -898,6 +899,14 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
       vcl_cout<<"DICOM tags y.PixelSpacing and y.ImagerPixelSpacing missing: use y.PixelSpacing = x.ImagerPixelSpacing."<<vcl_endl;
     }
   }
+
+  group = VIL_DICOM_HEADER_PROCEDUREGROUP;
+  try_set< ap_type(FD) >::proc( f, group, ap_el(PRREALWORLDVALUEINTERCEPT),i.real_world_value_intercept_ ); // It's the real world intercept value
+  try_set< ap_type(FD) >::proc( f, group, ap_el(PRREALWORLDVALUESLOPE),    i.real_world_value_slope_ ); // It's the real world slope value
+
+  group = VIL_DICOM_HEADER_NSPHILIPSGROUP;
+  try_set< ap_type(DS) >::proc( f, group, ap_el(NSPHILIPSPRIVATEINTERCEPT),i.philips_private_intercept_); // It's the Philips private intercept value
+  try_set< ap_type(DS) >::proc( f, group, ap_el(NSPHILIPSPRIVATESLOPE),    i.philips_private_slope_); // It's the Philips private slope value
 
   i.header_valid_ = true;
 
