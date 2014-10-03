@@ -159,7 +159,7 @@ __kernel void normalize_depth_render_kernel_gl(__global uint * exp_img,
 
     float depth  = as_float(exp_img[imindex]);
     float vis = vis_img[imindex];
-    //intensity += vis*1.0f;
+
     float depth_norm = depth * depth_scale_offset[0] + depth_scale_offset[1];
     exp_img[imindex] =(rgbaFloatToInt((float4) depth_norm));
 }

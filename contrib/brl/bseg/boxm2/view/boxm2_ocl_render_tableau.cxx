@@ -163,8 +163,16 @@ void boxm2_ocl_render_tableau::calibrate_depth_range()
       min_dist = dist;
     }
   }
+#if 1
+  // invert map - bright is close, dark is far
+  depth_scale_ = 1.0/(min_dist - max_dist);
+  depth_offset_ =  -max_dist*depth_scale_;
+#else
+  // bright is far, dark is close
   depth_scale_ = 1.0/(max_dist - min_dist);
-  depth_offset_ =  -min_dist*depth_scale_;
+  depth_offset_ = -min_dist*depth_scale_;
+
+#endif
 }
 
 //: calls on ray manager to render frame into the pbuffer_
@@ -193,8 +201,10 @@ float boxm2_ocl_render_tableau::render_frame()
 
     bool good = true; 
     if (render_depth_) {
+      // set the depth_offset_ and depth_scale_ values
+      calibrate_depth_range();
 
-        good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedDepthProcess");
+      good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedDepthProcess");
       //set process args
       good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
       good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
