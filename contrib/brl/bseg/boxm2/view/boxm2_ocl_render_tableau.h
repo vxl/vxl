@@ -78,6 +78,12 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
   
   //hack to toggle RGB to B&W
   bool is_bw_;
+  // toggle depth / expected image
+  bool render_depth_;
+
+  void calibrate_depth_range();
+  float depth_scale_;
+  float depth_offset_;
 };
 
 //: declare smart pointer

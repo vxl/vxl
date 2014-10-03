@@ -141,6 +141,29 @@ __kernel void normalize_render_kernel_rgb_gl( __global float4* exp_img,
     else
       gl_im[imindex]   = rgbaFloatToInt( (float4) intensity.x );//(intensity-*min_i)/range) ;
 }
+
+__kernel void normalize_depth_render_kernel_gl(__global uint * exp_img,
+                                         __global float* vis_img,
+                                         __global float* depth_scale_offset,
+                                         __global uint4* imgdims)
+{
+    int i=0,j=0;
+    i=get_global_id(0);
+    j=get_global_id(1);
+    int imindex=j*get_global_size(0)+i;
+
+    // check to see if the thread corresponds to an actual pixel as in some
+    // cases #of threads will be more than the pixels.
+    if (i<(*imgdims).x || j<(*imgdims).y|| i>=(*imgdims).z || j>=(*imgdims).w)
+        return;
+
+    float depth  = as_float(exp_img[imindex]);
+    float vis = vis_img[imindex];
+    //intensity += vis*1.0f;
+    float depth_norm = depth * depth_scale_offset[0] + depth_scale_offset[1];
+    exp_img[imindex] =(rgbaFloatToInt((float4) depth_norm));
+}
+
 #endif
 
 #ifdef RENDER_GL

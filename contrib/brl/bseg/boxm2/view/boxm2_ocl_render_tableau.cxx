@@ -30,10 +30,12 @@ boxm2_ocl_render_tableau::boxm2_ocl_render_tableau()
   DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_color_process);
   DECLARE_FUNC_CONS(boxm2_ocl_render_gl_view_dep_app_expected_image_process);
   DECLARE_FUNC_CONS(boxm2_ocl_render_gl_view_dep_app_expected_color_process);
+  DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_depth_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_expected_image_process, "boxm2OclRenderGlExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_expected_color_process, "boxm2OclRenderGlExpectedColorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_view_dep_app_expected_image_process, "boxm2OclRenderGlViewDepExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_view_dep_app_expected_color_process, "boxm2OclRenderGlViewDepExpectedColorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_expected_depth_process, "boxm2OclRenderGlExpectedDepthProcess");
 
   REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
   REGISTER_DATATYPE(boxm2_scene_sptr);
@@ -60,8 +62,14 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
 
     default_stare_point_.set(scene->bounding_box().centroid().x(),
                              scene->bounding_box().centroid().y(),
+#if 0
                              scene->bounding_box().min_z());
+#else
+                             scene->bounding_box().centroid().z());
+#endif
+    default_cam_.look_at(default_stare_point_);
     stare_point_=default_stare_point_;
+    cam_.look_at(stare_point_);
     scale_ =scene->bounding_box().height();
     //create the scene
     scene_ = scene;
@@ -71,6 +79,9 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
     render_trajectory_ = true;
     trajectory_ = new boxm2_trajectory(30.0, 45.0, -1.0, scene_->bounding_box(), ni, nj); 
     cam_iter_ = trajectory_->begin(); 
+    render_depth_ = false;
+    // set depth_scale_ and depth_offset_
+    calibrate_depth_range();
     return true;
 }
 
@@ -111,6 +122,13 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
       vcl_cout<<"Toggling b and w"<<vcl_endl;
       is_bw_ = !is_bw_;  
     } 
+    else if (e.key == vgui_key('d')) {
+      vcl_cout << "Toggling depth and expected image" << vcl_endl;
+      render_depth_ = !render_depth_;
+      if (render_depth_) {
+        calibrate_depth_range();
+      }
+    }
   }
   
   if (boxm2_cam_tableau::handle(e)) {
@@ -118,6 +136,35 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
   }
 
   return false;
+}
+
+void boxm2_ocl_render_tableau::calibrate_depth_range()
+{
+  vgl_box_3d<double> bbox = scene_->bounding_box();
+  vcl_vector<vgl_point_3d<double> > bbox_verts;
+  bbox_verts.push_back(vgl_point_3d<double>(bbox.min_x(), bbox.min_y(), bbox.min_z()));
+  bbox_verts.push_back(vgl_point_3d<double>(bbox.min_x(), bbox.min_y(), bbox.max_z()));
+  bbox_verts.push_back(vgl_point_3d<double>(bbox.min_x(), bbox.max_y(), bbox.min_z()));
+  bbox_verts.push_back(vgl_point_3d<double>(bbox.min_x(), bbox.max_y(), bbox.max_z()));
+  bbox_verts.push_back(vgl_point_3d<double>(bbox.max_x(), bbox.min_y(), bbox.min_z()));
+  bbox_verts.push_back(vgl_point_3d<double>(bbox.max_x(), bbox.min_y(), bbox.max_z()));
+  bbox_verts.push_back(vgl_point_3d<double>(bbox.max_x(), bbox.max_y(), bbox.min_z()));
+  bbox_verts.push_back(vgl_point_3d<double>(bbox.max_x(), bbox.max_y(), bbox.max_z()));
+
+  vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam_.camera_center());
+  double min_dist = vnl_numeric_traits<double>::maxval;
+  double max_dist = 0.0;
+  for (vcl_vector<vgl_point_3d<double> >::const_iterator vit=bbox_verts.begin(); vit!=bbox_verts.end(); ++vit) {
+    double dist = (*vit - cam_center).length();
+    if (dist > max_dist) {
+      max_dist = dist;
+    }
+    if (dist < min_dist) {
+      min_dist = dist;
+    }
+  }
+  depth_scale_ = 1.0/(max_dist - min_dist);
+  depth_offset_ =  -min_dist*depth_scale_;
 }
 
 //: calls on ray manager to render frame into the pbuffer_
@@ -138,38 +185,59 @@ float boxm2_ocl_render_tableau::render_frame()
     brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
     brdb_value_sptr brdb_ni = new brdb_value_t<unsigned>(ni_);
     brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj_);
+    brdb_value_sptr brdb_depth_scale = new brdb_value_t<float>(depth_scale_);
+    brdb_value_sptr brdb_depth_offset = new brdb_value_t<float>(depth_offset_);
     brdb_value_sptr exp_img = new brdb_value_t<bocl_mem_sptr>(exp_img_);
     brdb_value_sptr exp_img_dim = new brdb_value_t<bocl_mem_sptr>(exp_img_dim_);
     brdb_value_sptr ident = new brdb_value_t<vcl_string>(identifier_);
-    
-    //if scene has RGB data type, use color render process
+
     bool good = true; 
-  if(scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix()))
-      good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlViewDepExpectedImageProcess");
-  else if(scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix()) )
-    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlViewDepExpectedColorProcess");
-  else if(scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
-      good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedColorProcess");
-  else
-      good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedImageProcess");
-      
-    //set process args
-    good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
-    good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
-    good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
-    good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
-    good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
-    good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
-    good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
-    good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
-    good = good && bprb_batch_process_manager::instance()->set_input(8, ident);   // string identifier to specify appearance data 
-    
-    //hack for toggling
-    if(is_bw_) {
-      brdb_value_sptr brdb_is_bw = new brdb_value_t<bool>(true); 
-      good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_is_bw); 
+    if (render_depth_) {
+
+        good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedDepthProcess");
+      //set process args
+      good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
+      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
+      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
+      good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
+      good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
+      good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
+      good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
+      good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
+      good = good && bprb_batch_process_manager::instance()->set_input(8, brdb_depth_scale);   // depth scale 
+      good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_depth_offset);   // depth offset
     }
+    else {
     
+      //if scene has RGB data type, use color render process
+    if(scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix()))
+        good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlViewDepExpectedImageProcess");
+    else if(scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix()) )
+      good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlViewDepExpectedColorProcess");
+    else if(scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+        good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedColorProcess");
+    else
+        good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedImageProcess");
+        
+      //set process args
+      good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
+      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
+      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
+      good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
+      good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
+      good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
+      good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
+      good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
+      good = good && bprb_batch_process_manager::instance()->set_input(8, ident);   // string identifier to specify appearance data 
+      
+      //hack for toggling
+      if(is_bw_) {
+        brdb_value_sptr brdb_is_bw = new brdb_value_t<bool>(true); 
+        good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_is_bw); 
+      }
+    }
+
+
     good = good && bprb_batch_process_manager::instance()->run_process();
     
     //grab float output from render gl process

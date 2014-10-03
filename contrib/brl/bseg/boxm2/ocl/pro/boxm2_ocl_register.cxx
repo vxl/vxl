@@ -121,5 +121,6 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_surface_density_process, "boxm2OclUpdateSurfaceDensityProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_fuse_surface_density_process, "boxm2OclFuseSurfaceDensityProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_compute_expectation_view_direction_process, "boxm2OclComputeExpectationViewDirectionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_expected_depth_process, "boxm2OclRenderGlExpectedDepthProcess");
 
 }

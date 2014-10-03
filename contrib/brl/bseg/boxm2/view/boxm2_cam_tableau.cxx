@@ -158,7 +158,7 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
     vnl_vector_fixed<double,3> cam_y(cam_.get_rotation().as_matrix().get_row(1));
     //vnl_vector_fixed<double,3> cam_z(cam_.get_rotation().as_matrix().get_row(2));
     // we want to rotate around the camera x and y axes
-    static const double angle_scale = 0.1;
+    static const double angle_scale = 0.2;
     vgl_rotation_3d<double> Rx(cam_x * -dy * angle_scale);
     vgl_rotation_3d<double> Ry(cam_y * -dx * angle_scale);
     
