@@ -41,7 +41,7 @@ public:
   //: default constructor
   volm_conf_query();
   //: constructor from depth map scene
-  volm_conf_query(volm_camera_space_sptr cam_space, depth_map_scene_sptr depth_scene, unsigned const& tol_in_pixel = 4);
+  volm_conf_query(volm_camera_space_sptr cam_space, depth_map_scene_sptr depth_scene, int const& tol_in_pixel = 4);
 
   //: destructor
   ~volm_conf_query() {}
@@ -81,7 +81,7 @@ private:
   //: camera altitude
   double altitude_;
   //: distance tolerance in image domain
-  unsigned tol_in_pixel_;
+  int tol_in_pixel_;
 
   //: vector of cameras that satisfies ground plane constraint among all possible camera calibrations
   vcl_vector<vpgl_perspective_camera<double> > cameras_;

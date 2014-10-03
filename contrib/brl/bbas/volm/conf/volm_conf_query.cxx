@@ -24,7 +24,7 @@ volm_conf_query::volm_conf_query()
 }
 
 // create query from labeled depth map scene
-volm_conf_query::volm_conf_query(volm_camera_space_sptr cam_space, depth_map_scene_sptr depth_scene, unsigned const& tol_in_pixel)
+volm_conf_query::volm_conf_query(volm_camera_space_sptr cam_space, depth_map_scene_sptr depth_scene, int const& tol_in_pixel)
 {
   tol_in_pixel_ = tol_in_pixel;
   dm_ = depth_scene;
@@ -142,10 +142,10 @@ bool volm_conf_query::create_conf_object()
   else
   {
     // calculate the distance tolerance for each configuration object
-    int nbrs4_delta[4][2] = {  {-tol_in_pixel_,  tol_in_pixel_},
-                               { tol_in_pixel_,  tol_in_pixel_},
-                               { tol_in_pixel_, -tol_in_pixel_},
-                               {-tol_in_pixel_, -tol_in_pixel_}
+    int nbrs4_delta[4][2] = {  {-1*tol_in_pixel_,    tol_in_pixel_},
+                               {   tol_in_pixel_,    tol_in_pixel_},
+                               {   tol_in_pixel_, -1*tol_in_pixel_},
+                               {-1*tol_in_pixel_, -1*tol_in_pixel_}
                             };
     unsigned num_nbrs = 4;
     for (unsigned cam_id =0;  cam_id < ncam_;  cam_id++)
