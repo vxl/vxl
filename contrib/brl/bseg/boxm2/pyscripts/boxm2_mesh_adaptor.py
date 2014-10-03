@@ -81,9 +81,10 @@ def paint_mesh(scene,cache,in_file,out_file):
   boxm2_batch.set_input_string(2,in_file);
   boxm2_batch.set_input_string(3,out_file);
   boxm2_batch.run_process();
-def import_point_cloud(scene,cache,in_file):
+def import_point_cloud(scene,cache,in_file,min_octree_depth=2):
   boxm2_batch.init_process("boxm2ImportPointCloudProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_from_db(1,cache);
   boxm2_batch.set_input_string(2,in_file);
+  boxm2_batch.set_input_unsigned(3, min_octree_depth)
   boxm2_batch.run_process();

@@ -48,7 +48,7 @@ void readPointsFromXYZ(const vcl_string& filename, vcl_vector<vgl_point_3d<doubl
 
 namespace boxm2_import_point_cloud_process_globals
 {
-  const unsigned n_inputs_ = 3;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 0;
 }
 
@@ -61,9 +61,15 @@ bool boxm2_import_point_cloud_process_cons(bprb_func_process& pro)
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string"; //input ply filename
+  input_types_[3] = "unsigned"; // min octree depth
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
+
+  // set default min depth for backwards compatibility
+  brdb_value_sptr default_min_depth = new brdb_value_t<unsigned>(2);
+  pro.set_input(3, default_min_depth);
+  
 }
 
 bool boxm2_import_point_cloud_process(bprb_func_process& pro)
@@ -80,37 +86,38 @@ bool boxm2_import_point_cloud_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   vcl_string input_mesh_filename = pro.get_input<vcl_string>(i++);
+  int min_depth = pro.get_input<unsigned>(i++);
   vcl_vector<vgl_point_3d<double> > all_points;
   readPointsFromXYZ(input_mesh_filename, all_points);
   vgl_point_3d<double> local;
   boxm2_block_id id;
   for (unsigned  i = 0; i < all_points.size(); i++) {
     if (!scene->contains(all_points[i], id, local)) {
-      //vcl_cout << "ERROR: point: " << all_points[i] << " isn't in scene. Exiting...." << vcl_endl;
-      //return false;
+      vcl_cout << "ERROR: point: " << all_points[i] << " isn't in scene. Exiting...." << vcl_endl;
+      return false;
     }
     else
     {
-    int index_x=(int)vcl_floor(local.x());
-    int index_y=(int)vcl_floor(local.y());
-    int index_z=(int)vcl_floor(local.z());
-    boxm2_block * blk=cache->get_block(id);
-    boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
-    vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
-    boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
-    int bit_index=tree.traverse(local);
-    int depth=tree.depth_at(bit_index);
-    if(depth >= 2 )
-    {
-    int data_offset=tree.get_data_index(bit_index,false);
-    boxm2_data_base *  alpha_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    alpha_base->enable_write();
-    boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
-    double side_len = 1.0 / (double) (1 << depth);
-    //store cell probability
-    double alpha = - vcl_log(1.0f-0.99f) / (side_len * mdata.sub_block_dim_.x()) ;
-    alpha_data->data()[data_offset] = alpha ;
-    }
+      int index_x=(int)vcl_floor(local.x());
+      int index_y=(int)vcl_floor(local.y());
+      int index_z=(int)vcl_floor(local.z());
+      boxm2_block * blk=cache->get_block(id);
+      boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
+      vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
+      boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
+      int bit_index=tree.traverse(local);
+      int depth=tree.depth_at(bit_index);
+      if(depth >= (int)min_depth )
+      {
+        int data_offset=tree.get_data_index(bit_index,false);
+        boxm2_data_base *  alpha_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        alpha_base->enable_write();
+        boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
+        double side_len = 1.0 / (double) (1 << depth);
+        //store cell probability
+        double alpha = - vcl_log(1.0f-0.99f) / (side_len * mdata.sub_block_dim_.x()) ;
+        alpha_data->data()[data_offset] = alpha ;
+      }
     }
   }
   return true;
