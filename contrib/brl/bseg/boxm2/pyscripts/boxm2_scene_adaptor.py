@@ -182,7 +182,7 @@ class boxm2_scene_adaptor(object):
       cache = self.cpu_cache;
       dev = None;
     if self.rgb :
-      expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev,ident);
+      expimg, vis_image, status = render_rgb(self.scene, cache, cam, ni, nj, dev);
     else :
       expimg, vis_image = render_grey_and_vis(self.scene, cache, cam, ni, nj, dev,ident);
     return expimg, vis_image;
