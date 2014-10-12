@@ -38,6 +38,8 @@ IF (BUILD_CORE_IMAGING)
   
   OPTION( VXL_FORCE_V3P_J2K "Use V3P instead of any native JPEG2000 library? (WIN32 only)" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_J2K )
+  # Use old CMake policy to avoid warning about directory without CMakeLists.txt
+  CMAKE_POLICY(SET CMP0014 OLD)
   SUBDIRS(j2k)
 
   OPTION( VXL_FORCE_V3P_TIFF "Use V3P instead of any native TIFF library?" NO)
