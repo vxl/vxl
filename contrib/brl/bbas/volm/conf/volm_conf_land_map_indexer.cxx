@@ -351,7 +351,8 @@ bool volm_conf_land_map_indexer::add_locations(vcl_vector<vcl_vector<vgl_point_2
     // find all intersections for current road
     vcl_vector<vgl_point_2d<double> > cross_pts;
     vcl_vector<volm_land_layer> cross_props;
-    if (!volm_io_tools::search_junctions(curr_line, curr_prop, net, net_props, cross_pts, cross_props)) {
+    vcl_vector<volm_land_layer> cross_geo_props;
+    if (!volm_io_tools::search_junctions(curr_line, curr_prop, net, net_props, cross_pts, cross_props, cross_geo_props)) {
       vcl_cerr << "In volm_conf_land_map_indexer::add_location: find line intersection failed for line " << r_idx << vcl_endl;
       return false;
     }

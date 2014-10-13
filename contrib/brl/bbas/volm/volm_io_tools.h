@@ -108,7 +108,7 @@ public:
   //: find junctions on a road from a road network
   static bool search_junctions(vcl_vector<vgl_point_2d<double> > const& road, volm_land_layer const& road_prop,
                                vcl_vector<vcl_vector<vgl_point_2d<double> > > net, vcl_vector<volm_land_layer> net_props,
-                               vcl_vector<vgl_point_2d<double> >& cross_pts, vcl_vector<volm_land_layer>& cross_props);
+                               vcl_vector<vgl_point_2d<double> >& cross_pts, vcl_vector<volm_land_layer>& cross_props, vcl_vector<volm_land_layer>& cross_geo_props);
 
 };
 

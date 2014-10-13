@@ -18,6 +18,7 @@
 #include <volm/volm_tile.h>
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>
+#include <volm/volm_osm_object_line.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_box_2d.h>
@@ -27,6 +28,7 @@
 #include <bkml/bkml_write.h>
 #include <vcl_algorithm.h>
 #include <vul/vul_timer.h>
+#include <vcl_where_root_dir.h>
 
 void error(vcl_string log_file, vcl_string msg)
 {
@@ -46,6 +48,133 @@ bool is_included(vcl_vector<vgl_point_2d<double> > const& pts, vgl_point_2d<doub
   return false;
 }
 
+int main(int argc, char** argv)
+{
+  // input
+  vul_arg<vcl_string> osm_xml("-xml", "open street map xml file", "");
+  vul_arg<vcl_string> osm_bin("-osm", "open street map bin file", "");                                                               // open street map xml file
+  vul_arg<vcl_string> out_file("-out", "output file name where kml file will reside", "");                                                                     // output kml file
+  vul_arg<vcl_string> key("-key", "desired output intersection type. e.g T_section, 2_way, 4_way","T_section");
+  vul_arg<double> min_size("-min", "quad tree size for speeding up", 0.03125);
+  vul_arg<unsigned> rgb_r("-r", "rgb color", 255);
+  vul_arg<unsigned> rgb_g("-g", "rgb color", 255);
+  vul_arg<unsigned> rgb_b("-b", "rgb color", 255);
+  vul_arg_parse(argc, argv);
+
+  // check input
+  if (osm_bin().compare("") == 0 || out_file().compare("") == 0 || osm_xml().compare("") == 0) {
+    vcl_cerr << " ERROR: input is missing!\n";
+    vul_arg_display_usage_and_exit();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  // error log
+  vcl_stringstream log;
+  vcl_string log_file;
+  log_file = vul_file::strip_extension(out_file());
+
+  // parse the osm files
+  if (!vul_file::exists(osm_bin())) {
+    log << "error: can not find open street map xml file: " << osm_bin() << "!\n";
+    error(log_file, log.str());
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+
+
+  // obtain the bounding box
+  vcl_ofstream ofs(out_file().c_str());
+  bkml_write::open_document(ofs);
+  // write the bounding box
+  vcl_stringstream str_box;
+  double lon_min, lat_min, lon_max, lat_max;
+  vgl_box_2d<double> bbox = volm_osm_parser::parse_bbox(osm_xml());
+  lon_min = bbox.min_x();  lat_min = bbox.min_y();
+  lon_max = bbox.max_x();  lat_max = bbox.max_y();
+  str_box << vcl_setprecision(6) << lat_min << 'x' << vcl_setprecision(6) << lon_min << "to"
+          << vcl_setprecision(6) << lat_max << 'x' << vcl_setprecision(6) << lon_max;
+  bkml_write::write_box(ofs, "region", "", bbox);
+
+  vcl_cout << "Input osm file:  " << osm_bin() << vcl_endl;
+  vcl_cout << "Output kml file: " << out_file() << vcl_endl;
+  vcl_cout << "START..." << vcl_endl;
+  vcl_vector<vcl_vector<vcl_pair<vcl_string, vcl_string> > > osm_line_keys;
+  vcl_cout << " parsing all roads from osm file ..." << vcl_endl;
+  volm_osm_objects osm_obj(osm_bin());
+  vcl_vector<volm_osm_object_line_sptr> loc_lines = osm_obj.loc_lines();
+  vcl_cout << loc_lines.size() << " location lines are loaded from osm file" << vcl_endl;
+  // create a 2d quad tree to speed up
+  volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_osm_object_ids_sptr>(bbox, min_size());
+  vcl_vector<volm_geo_index2_node_sptr> leaves;
+  volm_geo_index2::get_leaves(root, leaves);
+
+  // find the road intersections
+  unsigned n_lines = loc_lines.size();
+  vcl_vector<vgl_point_2d<double> > all_cross_pts;
+  
+  for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++)
+  {
+    // find the road that is inside current leaf
+    volm_geo_index2_node_sptr leaf = leaves[l_idx];
+    vgl_box_2d<double> leaf_bbox_geo = leaf->extent_;
+    vcl_vector<vcl_vector<vgl_point_2d<double> > > roads_in_leaf;
+    vcl_vector<volm_land_layer> roads_in_leaf_props;
+    for (unsigned r_idx = 0; r_idx < n_lines; r_idx++) {
+      vcl_vector<vgl_point_2d<double> > road = loc_lines[r_idx]->line();
+      vcl_vector<vgl_point_2d<double> > line_geo;
+      if (!volm_io_tools::line_inside_the_box(leaf_bbox_geo, road, line_geo))
+        continue;
+      roads_in_leaf.push_back(line_geo);
+      roads_in_leaf_props.push_back(loc_lines[r_idx]->prop());
+    }
+    vcl_cout << " leaf " << l_idx << ", " << leaf_bbox_geo << " has " << roads_in_leaf.size() << " roads inside" << vcl_endl;
+    unsigned n_road_in = roads_in_leaf.size();
+    for (unsigned i_rdx = 0; i_rdx < n_road_in; i_rdx++) {
+      vcl_vector<vgl_point_2d<double> > curr_rd = roads_in_leaf[i_rdx];
+      volm_land_layer curr_rd_prop = roads_in_leaf_props[i_rdx];
+      vcl_vector<vcl_vector<vgl_point_2d<double> > > net;
+      vcl_vector<volm_land_layer> net_props;
+      for (unsigned i = 0; i < n_road_in; i++)
+        if (i != i_rdx)
+        {
+          net.push_back(roads_in_leaf[i]);
+          net_props.push_back(roads_in_leaf_props[i]);
+        }
+      // find all possible junction for current road
+      vcl_vector<vgl_point_2d<double> > cross_pts;
+      vcl_vector<volm_land_layer> cross_props;
+      vcl_vector<volm_land_layer> cross_geo_props;
+      if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props, cross_geo_props)) {
+        log << "ERROR: find road junction for leaf " << leaf_bbox_geo << " road " << i_rdx << " failed\n";
+        error(log_file, log.str());
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+      if (cross_geo_props.size() != cross_pts.size()) {
+        log << "ERROR: number of intersection, " << cross_pts.size() << ", differs from the number of intersection types" << cross_geo_props.size() << "!\n";
+        error(log_file, log.str());
+        return volm_io::EXE_ARGUMENT_ERROR;
+      }
+      // store all desired intersections
+      for (unsigned k = 0; k < cross_pts.size(); k++) {
+        if (is_included(all_cross_pts, cross_pts[k]))
+          continue;
+        if (cross_geo_props[k].name_.compare(key()) != 0)
+          continue;
+        all_cross_pts.push_back(cross_pts[k]);
+      }
+    }
+    vcl_cout << "After leaf " << l_idx << ", there are " << all_cross_pts.size() << " \"" << key() << "\" intersections formed" << vcl_flush << vcl_endl;
+  } // loop over leaves
+
+  // put into kml file
+  for (unsigned c_idx = 0; c_idx < all_cross_pts.size(); c_idx++)
+  {
+    vcl_stringstream str_p;  str_p << "id_" << c_idx;
+    bkml_write::write_location(ofs, all_cross_pts[c_idx], key(), str_p.str(), 0.6);
+  }
+  bkml_write::close_document(ofs);
+  return 0;
+}
+
+#if 0
 int main(int argc, char** argv)
 {
   vul_arg<vcl_string> osm_folder("-osm", "folder where osm binary stores", "");
@@ -164,7 +293,8 @@ int main(int argc, char** argv)
         // find all possible junction for current road
         vcl_vector<vgl_point_2d<double> > cross_pts;
         vcl_vector<volm_land_layer> cross_props;
-        if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props)) {
+        vcl_vector<volm_land_layer> cross_geo_props;
+        if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props, cross_geo_props)) {
           log << "ERROR: find road junction for tile " << t_idx << " leaf " << leaf_bbox_geo << " road " << i_rdx << " failed\n";
           error(log_file.str(), log.str());
           return volm_io::EXE_ARGUMENT_ERROR;
@@ -208,3 +338,4 @@ int main(int argc, char** argv)
   return volm_io::SUCCESS;
 
 }
+#endif

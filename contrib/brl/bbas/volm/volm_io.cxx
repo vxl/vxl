@@ -1100,7 +1100,13 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygo
       poly[0].push_back(pt);
       tok = vcl_strtok(NULL, ",");
     }
-    builds.push_back(vcl_pair<vgl_polygon<double>, vgl_point_2d<double> >(poly, cent_pt));
+    // remove the duplicated points inside polygon
+    vgl_polygon<double> prune_poly(1);
+    prune_poly[0].push_back(poly[0][0]);
+    for (unsigned i = 1; i < poly[0].size(); i++)
+      if (poly[0][i] != poly[0][i-1])
+        prune_poly[0].push_back(poly[0][i]);
+    builds.push_back(vcl_pair<vgl_polygon<double>, vgl_point_2d<double> >(prune_poly, cent_pt));
     heights.push_back(height);
   }
   return true;

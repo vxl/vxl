@@ -113,7 +113,7 @@ bool volm_conf_object::write_to_kml(double const& lon, double const& lat, vcl_ve
     loc_name << i << "_" << vcl_setprecision(4) << loc_lon << '_' << vcl_setprecision(4) << loc_lat << '_' << vcl_setprecision(6) << values[i].height()
              << "_" << volm_osm_category_io::volm_land_table[values[i].land()].name_;
     vnl_double_2 ul, ll, lr, ur;
-    double size = 1E-5;
+    double size = 5E-5;
     ll[0] = loc_lat;      ll[1] = loc_lon;
     ul[0] = loc_lat+size; ul[1] = loc_lon;
     lr[0] = loc_lat;      lr[1] = loc_lon+size;

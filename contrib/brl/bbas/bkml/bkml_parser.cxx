@@ -104,6 +104,9 @@ bkml_parser::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, KML_CORD_TAG) == 0 && (cord_tag_ != "") ) {
     last_tag = KML_CORD_TAG;
   }
+  else if (vcl_strcmp(name, KML_PLACEMARK_NAME_TAG) == 0) {
+    last_tag = KML_PLACEMARK_NAME_TAG;
+  }
   else if (vcl_strcmp(name, KML_POLYOB_TAG) == 0) {
     cord_tag_ = KML_POLYOB_TAG;
   }
@@ -147,6 +150,13 @@ void bkml_parser::charData(const XML_Char* s, int len)
     for (int i =0; i<len; ++i)
       str << s[i];
     str >> latitude_;
+    last_tag = "";
+  }
+  else if (last_tag == KML_PLACEMARK_NAME_TAG) {
+    vcl_stringstream str;
+    for (int i =0; i<len; ++i)
+      str << s[i];
+    current_name_ = str.str();
     last_tag = "";
   }
   /*else if (last_tag == KML_COORDS_TAG) {
@@ -298,16 +308,16 @@ void bkml_parser::charData(const XML_Char* s, int len)
       //  vcl_cout << "WARNING: shape tag can not be recognized (not LineString or Polygon)" << vcl_endl;
       //}
     }
-    if (cord_tag_ == KML_POLYOB_TAG)
+    if (cord_tag_ == KML_POLYOB_TAG && current_name_ == "Region")
       polyouter_.push_back(poly_verts);
-    else if (cord_tag_ == KML_POLYIB_TAG)
+    else if (cord_tag_ == KML_POLYIB_TAG && current_name_ == "Region")
       polyinner_.push_back(poly_verts);
-    else if (cord_tag_ == KML_LINE_TAG)
+    else if (cord_tag_ == KML_LINE_TAG && current_name_ == "Region")
       linecord_.push_back(poly_verts);
-    else if (cord_tag_ == KML_POINT_TAG)
+    else if (cord_tag_ == KML_POINT_TAG )
       points_.push_back(poly_verts[0]);
     else
-      vcl_cout << "WARNING: shape tag: " << cord_tag_ << " can not be recognized (not LineString, Point or Polygon, nothing will be parserd)" << vcl_endl;
+      vcl_cout << "WARNING: shape tag: " << cord_tag_ << " (name: " << current_name_ << ") will not be parsed" << vcl_endl;
     last_tag = "";
     cord_tag_ = "";
   }

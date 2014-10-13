@@ -28,7 +28,7 @@
 #define KML_CORD_TAG "coordinates"
 #define KML_POLYCORE_END_TAG "/coordinates"
 #define KML_LINE_TAG "LineString"
-//#define KML_PLACEMARK_NAME_TAG "name"
+#define KML_PLACEMARK_NAME_TAG "name"
 
 
 #define KML_HEAD_DEV_TAG "heading_deviation"

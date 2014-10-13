@@ -816,8 +816,20 @@ void find_junctions(vgl_line_segment_2d<double> const& seg,
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(lines[i].point1().x(), lines[i].point1().y(), 0.0),
                                    vgl_point_3d<double>(lines[i].point2().x(), lines[i].point2().y(), 0.0));
     vgl_point_3d<double> pt;
-    if (!vgl_intersection(l1, l2, pt))
-      continue;
+    // check intersection
+    if (!vgl_intersection(l1, l2, pt)) {
+      // check whether connect at end point
+      if (near_eq_pt(seg.point1(), lines[i].point1()))
+        pt.set(seg.point1().x(), seg.point1().y(), 0.0);
+      else if (near_eq_pt(seg.point1(), lines[i].point2()))
+        pt.set(seg.point1().x(), seg.point1().y(), 0.0);
+      else if (near_eq_pt(seg.point2(), lines[i].point1()))
+        pt.set(seg.point2().x(), seg.point2().y(), 0.0);
+      else if (near_eq_pt(seg.point2(), lines[i].point2()))
+        pt.set(seg.point2().x(), seg.point2().y(), 0.0);
+      else
+        continue;
+    }
     cross_pts.push_back(vgl_point_2d<double>(pt.x(), pt.y()));
     vcl_pair<int,int> key(seg_prop.id_, line_prop.id_);
     cross_prop.push_back(volm_osm_category_io::road_junction_table[key]);
@@ -843,7 +855,8 @@ unsigned count_line_start_from_cross(vgl_point_2d<double> const& cross_pt,
 
 bool volm_io_tools::search_junctions(vcl_vector<vgl_point_2d<double> > const& road, volm_land_layer const& road_prop,
                                      vcl_vector<vcl_vector<vgl_point_2d<double> > > net, vcl_vector<volm_land_layer> net_props,
-                                     vcl_vector<vgl_point_2d<double> >& cross_pts, vcl_vector<volm_land_layer>& cross_props)
+                                     vcl_vector<vgl_point_2d<double> >& cross_pts, vcl_vector<volm_land_layer>& cross_props,
+                                     vcl_vector<volm_land_layer>& cross_geo_props)
 {
   unsigned n_rds = net.size();
 
@@ -873,7 +886,7 @@ bool volm_io_tools::search_junctions(vcl_vector<vgl_point_2d<double> > const& ro
         return false;
       for (unsigned p_idx = 0; p_idx < pt.size(); p_idx++)
         if (vcl_find(cross_pts.begin(), cross_pts.end(), pt[p_idx]) == cross_pts.end()) {
-          cross_pts.push_back(pt[p_idx]);  cross_props.push_back(prop[p_idx]);
+          cross_pts.push_back(pt[p_idx]);  cross_props.push_back(prop[p_idx]);  cross_geo_props.push_back(volm_osm_category_io::volm_land_table_name["4_way"]);
         }
     }
   }
@@ -884,7 +897,17 @@ bool volm_io_tools::search_junctions(vcl_vector<vgl_point_2d<double> > const& ro
   for (unsigned c_idx = 0; c_idx < cross_pts.size(); c_idx++) {
     unsigned num_lines = count_line_start_from_cross(cross_pts[c_idx], road, net);
     if (num_lines == 1 || num_lines == 3) {
-      cross_props[c_idx] = volm_osm_category_io::volm_land_table[241];
+      cross_props[c_idx] = volm_osm_category_io::volm_land_table_name["T_section"];
+    }
+  }
+  // define the geometric properties of intersections
+  for (unsigned c_idx = 0; c_idx < cross_pts.size(); c_idx++) {
+    unsigned num_lines = count_line_start_from_cross(cross_pts[c_idx], road, net);
+    if (num_lines == 1 || num_lines == 3) {
+      cross_geo_props[c_idx] = volm_osm_category_io::volm_land_table_name["T_section"];
+    }
+    if (num_lines == 2) {
+      cross_geo_props[c_idx] = volm_osm_category_io::volm_land_table_name["2_way"];
     }
   }
 

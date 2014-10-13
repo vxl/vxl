@@ -56,11 +56,11 @@ bool volm_conf_query::parse_ref_object(depth_map_scene_sptr dm)
   // note that sky object should never be reference object
   if (dm->ground_plane().size())
     for (unsigned i = 0; i < dm->ground_plane().size(); i++)
-      if ( dm->ground_plane()[i]->is_ref() )
+      if ( dm->ground_plane()[i]->is_ref() && dm->ground_plane()[i]->active())
         ref_obj_name_.push_back(dm->ground_plane()[i]->name());
   if (dm->scene_regions().size())
     for (unsigned i = 0; i < dm->scene_regions().size(); i++)
-      if ( dm->scene_regions()[i]->is_ref() )
+      if ( dm->scene_regions()[i]->is_ref() && dm->scene_regions()[i]->active())
         ref_obj_name_.push_back(dm->scene_regions()[i]->name());
   if (ref_obj_name_.empty())
     return false;
@@ -98,6 +98,10 @@ bool volm_conf_query::create_conf_object()
     vcl_vector<depth_map_region_sptr> regions = dm_->scene_regions();
     for (unsigned r_idx = 0; r_idx < regions.size(); r_idx++)
     {
+      if (!regions[r_idx]->active()) {
+        vcl_cout << "\t\t region " << r_idx << " " << regions[r_idx]->name() << " is not active, IGNORED" << vcl_endl;
+        continue;
+      }
       //vcl_cout << "\t\t projecting " << regions[r_idx]->name() << "..." << vcl_flush << vcl_endl;
       vgl_polygon<double> poly = bsol_algs::vgl_from_poly(regions[r_idx]->region_2d());
       float theta = -1.0f, dist = -1.0f, height = -1.0f;

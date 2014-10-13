@@ -224,7 +224,8 @@ int main(int argc, char** argv)
   //  // find all possible junction for current road
   //  vcl_vector<vgl_point_2d<double> > cross_pts;
   //  vcl_vector<volm_land_layer> cross_props;
-  //  if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props)) {
+  //  vcl_vector<volm_land_layer> cross_geo_props;
+  //  if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props, cross_geo_props)) {
   //    vcl_cout << "ERROR: find road junction for tile " << tile_id() << " leaf " << leaf_bbox_geo << " road " << r_idx << " failed\n";
   //    return false;
   //  }
@@ -890,7 +891,8 @@ int main(int argc, char** argv)
           // find all possible junction for current road
           vcl_vector<vgl_point_2d<double> > cross_pts;
           vcl_vector<volm_land_layer> cross_props;
-          if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props)) {
+          vcl_vector<volm_land_layer> cross_geo_props;
+          if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props, cross_geo_props)) {
             log << "ERROR: find road junction for tile " << t_idx << " leaf " << leaf_bbox_geo << " road " << r_idx << " failed\n";
             error(log_file.str(), log.str());
             return false;
@@ -1314,7 +1316,8 @@ int main(int argc, char** argv)
       // find all possible junction for current road
       vcl_vector<vgl_point_2d<double> > cross_pts;
       vcl_vector<volm_land_layer> cross_props;
-      if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props)) {
+      vcl_vector<volm_land_layer> cross_geo_props;
+      if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props, cross_geo_props)) {
         log << "ERROR: find road junction for tile " << t_id << " leaf " << leaf_bbox_geo << " road " << r_idx << " failed\n";
         error(log_file, log.str());
         return false;
