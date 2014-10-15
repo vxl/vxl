@@ -23,6 +23,10 @@ vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr &im,
 vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr &im,
                                                  float unit_scaling=1.0f);
 
+//: Load image from path into byte image
+// If input image is float or int16 then stretch values to byte 
+void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& image, 
+                       float unit_scaling);
 
 //: Load image from path into given image (forcing to given pixel type)
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
