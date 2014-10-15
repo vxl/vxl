@@ -169,7 +169,7 @@ void msdi_marked_images_from_files::get_image()
 
   if (!load_as_float_) 
   { 
-    image_.image() = vil_load(image_path.c_str()); 
+    vimt_load_to_byte(image_path, image_, unit_scaling_);
 
     if (image_.image().size()==0)
     {
