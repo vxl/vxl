@@ -17,6 +17,7 @@ DECLARE( test_geo_index2 );
 DECLARE( test_osm_parser );
 DECLARE( test_category_io );
 DECLARE( test_osm_object );
+DECLARE( test_candidate_region_parser );
 
 void
 register_tests()
@@ -37,6 +38,7 @@ register_tests()
   REGISTER( test_osm_parser );
   REGISTER( test_category_io );
   REGISTER( test_osm_object );
+  REGISTER( test_candidate_region_parser );
 }
 
 DEFINE_MAIN;

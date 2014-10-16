@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+    <Document>
+        <name>test_region</name>
+        <Style id="CamView-style">
+            <IconStyle><scale>0.0</scale><heading>0.0</heading></IconStyle>
+            <LabelStyle><color>ff4168eb</color><scale>0.7</scale></LabelStyle>
+            <LineStyle><color>ff4168eb</color><width>1.5</width></LineStyle>
+            <PolyStyle><color>404168eb</color></PolyStyle>
+        </Style>
+        <Style id="CR-style">
+            <LabelStyle><scale>0.0</scale></LabelStyle>
+            <LineStyle><color>ff00ffff</color><width>3.0</width></LineStyle>
+            <PolyStyle><color>3a00ffff</color></PolyStyle>
+        </Style>
+        <Style id="Trace-style">
+            <BalloonStyle><text></text></BalloonStyle>
+        </Style>
+        <Style id="CandidateInfo-style">
+            <BalloonStyle><text></text></BalloonStyle>
+        </Style>
+        <Style id="Landmark-style">
+            <LabelStyle>
+                <scale>0.0</scale>
+            </LabelStyle>
+            <LineStyle>
+                <color>500014ff</color>
+                <width>3.0</width>
+            </LineStyle>
+            <PolyStyle>
+                <color>2a0014ff</color>
+            </PolyStyle>
+        </Style>
+        <Style id="LandmarkPoint-style">
+            <LabelStyle>
+                <scale>1.0</scale>
+            </LabelStyle>
+        </Style>
+        <Folder id="C0">
+            <name>Candidate 0</name>
+            <Folder>
+                <name>Trace</name>
+                <styleUrl>#Trace-style</styleUrl>
+                <ExtendedData>
+                    <Data name="parent">
+                        <value>N/A</value>
+                    </Data>
+                    <Data name="children">
+                        <value>N/A</value>
+                    </Data>
+                </ExtendedData>
+            </Folder>
+            <Placemark>
+                <name>Region</name>
+                <styleUrl>#CR-style</styleUrl>
+                <Polygon>
+                    <tessellate>1</tessellate>
+                    <outerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>-71.39160036349502,41.83279052679126,0 -71.39179720647013,41.83221974273389,0 -71.39221619820722,41.83159917370605,0 -71.39202271525898,41.8310901973049,0 -71.39187349517742,41.83093629169831,0 -71.39129193669308,41.83069496991286,0 -71.39071610205546,41.8306201380784,0 -71.39018475104241,41.83065186640282,0 -71.38980972338071,41.83077591946745,0 -71.38941926007618,41.83104483505979,0 -71.3891907086562,41.83165672103576,0 -71.38910827428632,41.83221564836723,0 -71.38911506676618,41.8326739060148,0 -71.38936437309549,41.83295877313898,0 -71.38979037026023,41.83314919568634,0 -71.39048178188186,41.83320935655344,0 -71.39099719116329,41.83329895682512,0 -71.39160036349502,41.83279052679126,0
+                            </coordinates>
+                        </LinearRing>
+                    </outerBoundaryIs>
+                    <innerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>
+                            -71.39119081612914,41.83175713991874,0 -71.39092779103959,41.83155767104924,0 -71.39038396898302,41.83169850005213,0 -71.39045582637282,41.83198955504792,0 -71.3909655570063,41.83197894457667,0 -71.39119081612914,41.83175713991874,0
+                            </coordinates>
+                        </LinearRing>
+                    </innerBoundaryIs>
+                    <innerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>
+                            -71.39038120380802,41.83085536706531,0 -71.39004765340165,41.8308808016062,0 -71.38982476172619,41.83091727832848,0 -71.38976214428679,41.8309898753926,0 -71.38974840575331,41.83111101024807,0 -71.38981477099418,41.83126807664129,0 -71.3901336295267,41.83125494596124,0 -71.39044754782802,41.83099995027256,0 -71.39038120380802,41.83085536706531,0
+                            </coordinates>
+                        </LinearRing>
+                    </innerBoundaryIs>
+                </Polygon>
+            </Placemark>
+            <Placemark>
+                <name>Overhead Overlay</name>
+                <styleUrl>#CamView-style</styleUrl>
+                <Polygon>
+                    <outerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>-71.39156684273168,41.8345384665903,0 -71.39062372240014,41.83207130024885,0 -71.38808553647364,41.83396895142225,0 -71.39156684273168,41.8345384665903,0</coordinates>
+                        </LinearRing>
+                    </outerBoundaryIs>
+                    <innerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>
+                            -71.39065023686659,41.83340752526337,0 -71.3898126311697,41.83338445393536,0 -71.38983207262095,41.83358135397188,0 -71.39071903533554,41.83367683260955,0 -71.39065023686659,41.83340752526337,0
+                            </coordinates>
+                        </LinearRing>
+                    </innerBoundaryIs>
+                </Polygon>
+            </Placemark>
+            <Folder id="Landmarks">
+                <name>Landmarks</name>
+                <visibility>0</visibility>
+                <Placemark>
+                    <name>Landmarks0</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.391079,41.834201,0</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Landmarks0</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.390095,41.833644,0</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Landmarks0</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.388286,41.834639,0</coordinates>
+                    </Point>
+                </Placemark>
+            </Folder>
+        </Folder>
+        <Folder id="C1">
+            <name>Candidate 1</name>
+            <styleUrl>#CandidateInfo-style</styleUrl>
+            <Folder>
+                <name>Trace</name>
+                <styleUrl>#Trace-style</styleUrl>
+                <ExtendedData>
+                    <Data name="parent">
+                        <value>N/A</value>
+                    </Data>
+                    <Data name="children">
+                        <value>N/A</value>
+                    </Data>
+                </ExtendedData>
+            </Folder>
+            <Placemark>
+                <name>Region</name>
+                <styleUrl>#CR-style</styleUrl>
+                <Polygon>
+                    <tessellate>1</tessellate>
+                    <outerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>-71.38682218136701,41.82899928173649,0 -71.38754409051967,41.82841666593044,0 -71.38790524524552,41.82790588846552,0 -71.38781335484924,41.82749548440195,0 -71.38754761858884,41.82724812304817,0 -71.38753415143573,41.82724733790124,0 -71.38730868294,41.82711410223197,0 -71.38728182685283,41.82710258291308,0 -71.38672084494014,41.82691808762638,0 -71.38638959868936,41.82683805587232,0 -71.38633646626245,41.82682486753533,0 -71.38591871432791,41.82678028549039,0 -71.38586472095193,41.82677706570345,0 -71.38530865727928,41.82674464271193,0 -71.38525354091473,41.82675144015308,0 -71.38477536143958,41.82675375735585,0 -71.38474725096673,41.82676216019083,0 -71.38441521921297,41.826803053673,0 -71.38437245240409,41.82682066686192,0 -71.38417678245865,41.82685965560048,0 -71.38412024756305,41.82687652838063,0 -71.38405106644349,41.82688257762945,0 -71.38379607069675,41.82695854433439,0 -71.38376662812775,41.82697705866668,0 -71.38359500601071,41.82703798955716,0 -71.38353698907275,41.82706505852651,0 -71.38337298229462,41.82717755061551,0 -71.38337075315155,41.8271977915467,0 -71.38321888635247,41.827321707344,0 -71.38318802102688,41.82735060435314,0 -71.38318690408222,41.82736076887473,0 -71.38300841409141,41.82759658724384,0 -71.38300613749939,41.82761701777292,0 -71.38292088106485,41.82775641055147,0 -71.38290237948176,41.82779666994423,0 -71.38289649897277,41.82784804946496,0 -71.38289414438246,41.82786861911477,0 -71.38283846921343,41.82798984903182,0 -71.38281868541665,41.82804066835391,0 -71.38279904860202,41.82809142104008,0 -71.38268870101865,41.82836182280536,0 -71.38265692454384,41.8284010041256,0 -71.38263539781741,41.82847205246659,0 -71.38258093226567,41.82871743518712,0 -71.3825635868517,41.82874769770356,0 -71.38255744867873,41.82879987245073,0 -71.38255496026221,41.8288207980913,0 -71.38251235553379,41.82906145155143,0 -71.38250537876183,41.82912394373004,0 -71.3825007328556,41.82916562218762,0 -71.38251002751572,41.82920810894675,0 -71.38251932746846,41.82925061824207,0 -71.38256139402105,41.82937877161236,0 -71.38256929697441,41.82943226270677,0 -71.38257826956269,41.82947551403821,0 -71.38266421972772,41.82970522198827,0 -71.38267327512052,41.82974877203594,0 -71.38269776128327,41.82978208994734,0 -71.38277058326936,41.82989162499419,0 -71.38279383866409,41.82993586905968,0 -71.38282064491847,41.82994826880803,0 -71.38293838699556,41.83003096031075,0 -71.3833121626012,41.8302355330754,0 -71.38359745552374,41.83035081272751,0 -71.38380333129871,41.83041637855306,0 -71.38428574089419,41.83041288300989,0 -71.38460659943337,41.83031202505993,0 -71.38493182223184,41.83014601854575,0 -71.38542280482625,41.82981806873342,0 -71.38615445132811,41.82936915465945,0 -71.38682218136701,41.82899928173649,0</coordinates>
+                        </LinearRing>
+                    </outerBoundaryIs>
+                </Polygon>
+            </Placemark>
+            <Placemark>
+                <name>Overhead Overlay</name>
+                <styleUrl>#CamView-style</styleUrl>
+                <Polygon>
+                    <outerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>-71.38547802297575,41.82803350356431,0 -71.38959049239993,41.82650726947679,0 -71.38636162437597,41.8246574421721,0 -71.38547802297575,41.82803350356431,0</coordinates>
+                        </LinearRing>
+                    </outerBoundaryIs>
+                </Polygon>
+            </Placemark>
+            <Folder id="Landmarks">
+                <name>Landmarks</name>
+                <visibility>0</visibility>
+                <Placemark>
+                    <name>Landmarks1</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.388688,41.826264,0</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Landmarks1</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.386427,41.825479,0</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Landmarks1</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.386019,41.826791,0</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Landmarks1</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.387797,41.824041,0</coordinates>
+                    </Point>
+                </Placemark>
+            </Folder>
+        </Folder>
+        -->
+        <Folder id="C2">
+            <name>Candidate 2</name>
+            <styleUrl>#CandidateInfo-style</styleUrl>
+            <Folder>
+                <name>Trace</name>
+                <styleUrl>#Trace-style</styleUrl>
+                <ExtendedData>
+                    <Data name="parent">
+                        <value>N/A</value>
+                    </Data>
+                    <Data name="children">
+                        <value>N/A</value>
+                    </Data>
+                </ExtendedData>
+            </Folder>
+            <Placemark>
+                <name>Region</name>
+                <styleUrl>#CR-style</styleUrl>
+                <LineString>
+                  <tessellate>1</tessellate>
+                  <coordinates>
+                    -71.3915367384088,41.82837652415408,0
+                    -71.38992220553594,41.82896579871829,0
+                    -71.38869537008294,41.83000212470276,0
+                    -71.38823346918491,41.83065777666953,0
+                    -71.38808687991406,41.83144508546426,0
+                    -71.38804889768187,41.83204474269959,0
+                  </coordinates>
+                </LineString>
+            </Placemark>
+            <Placemark>
+                <name>Overhead Overlay</name>
+                <styleUrl>#CamView-style</styleUrl>
+                <Polygon>
+                    <outerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>-71.38827013119578,41.8306568538638,0 -71.38522414462337,41.83037290363151,0 -71.38578240575492,41.83246474714431,0 -71.38827013119578,41.8306568538638,0</coordinates>
+                        </LinearRing>
+                    </outerBoundaryIs>
+                </Polygon>
+            </Placemark>
+            <Folder id="Landmarks">
+                <name>Landmarks</name>
+                <visibility>0</visibility>
+                <Placemark>
+                    <name>Landmarks2</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.390249,41.829386,0</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Landmarks2</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.386277,41.831524,0</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Landmarks2</name>
+                    <styleUrl>#LandmarkPoint-style</styleUrl>
+                    <Point>
+                        <coordinates>-71.391376,41.827867,0</coordinates>
+                    </Point>
+                </Placemark>
+            </Folder>
+        </Folder>
+    </Document>
+</kml>

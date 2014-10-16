@@ -70,8 +70,8 @@ IF(EXPAT_FOUND)
        bwm_tableau_img.cxx              bwm_tableau_img.h
        bwm_tableau_factory.cxx          bwm_tableau_factory.h
        bwm_tableau_proj_cam.cxx         bwm_tableau_proj_cam.h
-       bwm_tableau_geo_cam.cxx			bwm_tableau_geo_cam.h
-	   bwm_tableau_rat_cam.cxx          bwm_tableau_rat_cam.h
+       bwm_tableau_geo_cam.cxx          bwm_tableau_geo_cam.h
+       bwm_tableau_rat_cam.cxx          bwm_tableau_rat_cam.h
        bwm_tableau_generic_cam.cxx      bwm_tableau_generic_cam.h
        bwm_tableau_video.cxx            bwm_tableau_video.h
        bwm_observable_mesh.cxx          bwm_observable_mesh.h             bwm_observable_mesh_sptr.h
@@ -115,7 +115,13 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io vsph depth_map bsta_io bmsh3d bmsh3d_algo bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl_algo vnl vpgl vpgl_algo vpgl_io vpgl_file_formats bvgl vul volm)
+TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io vsph depth_map bsta_io bmsh3d bmsh3d_algo bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl_algo vnl vpgl vpgl_algo vpgl_io vpgl_file_formats bvgl vul)
+
+IF(EXPAT_FOUND)
+  IF(EXPATPP_FOUND)
+    TARGET_LINK_LIBRARIES(bwm volm)
+  ENDIF(EXPATPP_FOUND)
+ENDIF(EXPAT_FOUND)
 
 SUBDIRS(algo)
 SUBDIRS(pro)

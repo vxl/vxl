@@ -3,14 +3,6 @@
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
-  INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
-  INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
-
 SET (volm_conf_sources
   volm_conf_object.h              volm_conf_object.cxx
   volm_conf_query.h               volm_conf_query.cxx

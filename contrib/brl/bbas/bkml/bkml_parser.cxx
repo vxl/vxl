@@ -351,7 +351,7 @@ vcl_vector<vgl_point_3d<double> > bkml_parser::parse_points(vcl_string kml_file)
   return parser->points_;
 }
 
-//: the first sheet contains the outer polygon, and the second sheet contains the inner polygon if any, saves 2d points, only lat, lon
+//: the returned polygon only contains outer boundary
 vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
 {
   bkml_parser* parser = new bkml_parser();
@@ -372,8 +372,7 @@ vgl_polygon<double> bkml_parser::parse_polygon(vcl_string poly_kml_file)
   if (parser->polyouter_.empty()) {
     vcl_cerr << "input kml has no polygon outerboundary, return an empty polygon" << '\n';
     delete parser;
-    vgl_polygon<double> out2;
-    return out2;
+    return out;
   }
   for (unsigned sh_idx = 0; sh_idx < parser->polyouter_.size(); sh_idx++) {
     out.new_sheet();
