@@ -133,6 +133,8 @@ vil_dicom_header_info_clear( vil_dicom_header_info& info )
   // Info for image procedure
   info.real_world_value_intercept_ = VIL_DICOM_HEADER_UNSPECIFIED;
   info.real_world_value_slope_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  info.exposedarea_x_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  info.exposedarea_y_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
 
   // Info for non-standard Philips data
   info.philips_private_slope_ = VIL_DICOM_HEADER_UNSPECIFIED;
@@ -1340,6 +1342,9 @@ void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
      << "\n\nInfo from the tags specifically for the procedure group\n"
      << " real_world_value_intercept        The real world intercept value: " << s.real_world_value_intercept_ << vcl_endl
      << " real_world_value_slope            The real world slope value: " << s.real_world_value_slope_ << vcl_endl
+     << " exposedarea_x    The exposed area in x: " << s.exposedarea_x_ << vcl_endl
+     << " exposedarea_y    The exposed ares in y: " << s.exposedarea_y_ << vcl_endl
+
 
      << "\n\nInfo from the tags specifically for the Philips private group (2005)\n"
      << " philips_private_intercept        The philips private intercept value: " << s.philips_private_intercept_ << vcl_endl

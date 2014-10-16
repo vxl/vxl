@@ -208,6 +208,7 @@ const vxl_uint_16 VIL_DICOM_HEADER_DLSEQDELIMITATIONITEM    =0xe0dd;
 // Tags needed in the Procedure group
 const vxl_uint_16 VIL_DICOM_HEADER_PRREALWORLDVALUEINTERCEPT=0x9224; // FD
 const vxl_uint_16 VIL_DICOM_HEADER_PRREALWORLDVALUESLOPE    =0x9225; // FD
+const vxl_uint_16 VIL_DICOM_HEADER_EXPOSEDAREA              =0x0303; // US
 
 // Tags from non-standard Philips group
 const vxl_uint_16 VIL_DICOM_HEADER_NSPHILIPSPRIVATEINTERCEPT=0x100d; // DS
@@ -352,116 +353,118 @@ struct vil_dicom_header_info
   vil_dicom_header_image_type image_type_; /*< The encapsulated (or not) image type */
 
   // Identifying fields
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type image_id_type_;    /*< The image type from the dicom header */
-  vil_dicom_header_type_of<vil_dicom_header_UI>::type sop_cl_uid_;       /*< The class unique id for the Service/Object Pair */
-  vil_dicom_header_type_of<vil_dicom_header_UI>::type sop_in_uid_;       /*< The instance uid for the SOP */
-  vil_dicom_header_type_of<vil_dicom_header_DA>::type study_date_;             /*< The date of the study */
-  vil_dicom_header_type_of<vil_dicom_header_DA>::type series_date_;            /*< The date this series was collected */
-  vil_dicom_header_type_of<vil_dicom_header_DA>::type acquisition_date_;       /*< The date of acquisition */
-  vil_dicom_header_type_of<vil_dicom_header_DA>::type image_date_;             /*< The date of this image */
-  vil_dicom_header_type_of<vil_dicom_header_TM>::type study_time_;            /*< The time of the study */
-  vil_dicom_header_type_of<vil_dicom_header_TM>::type series_time_;           /*< The time of the series */
-  vil_dicom_header_type_of<vil_dicom_header_TM>::type acquisition_time_;      /*< The time of acquisition */
-  vil_dicom_header_type_of<vil_dicom_header_TM>::type image_time_;            /*< The time of the image */
-  vil_dicom_header_type_of<vil_dicom_header_SH>::type accession_number_; /*< The accession number for this image */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type modality_;         /*< The imaging modality */
-  vil_dicom_header_type_of<vil_dicom_header_LO>::type manufacturer_;     /*< The name of the scanner manufacturer */
-  vil_dicom_header_type_of<vil_dicom_header_LO>::type institution_name_; /*< The name of the institution */
-  vil_dicom_header_type_of<vil_dicom_header_ST>::type institution_addr_; /*< The address of the institution */
-  vil_dicom_header_type_of<vil_dicom_header_PN>::type ref_phys_name_;    /*< The name of the referring physician */
-  vil_dicom_header_type_of<vil_dicom_header_SH>::type station_name_;     /*< The name of the station used */
-  vil_dicom_header_type_of<vil_dicom_header_LO>::type study_desc_;       /*< A description of the study */
-  vil_dicom_header_type_of<vil_dicom_header_LO>::type series_desc_;      /*< A description of the series */
-  vil_dicom_header_type_of<vil_dicom_header_PN>::type att_phys_name_;    /*< The name of the attending physician */
-  vil_dicom_header_type_of<vil_dicom_header_PN>::type operator_name_;    /*< The name of the MR operator */
-  vil_dicom_header_type_of<vil_dicom_header_LO>::type model_name_;       /*< The name of the MR scanner model */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type image_id_type_;                /*< The image type from the dicom header */
+  vil_dicom_header_type_of<vil_dicom_header_UI>::type sop_cl_uid_;                   /*< The class unique id for the Service/Object Pair */
+  vil_dicom_header_type_of<vil_dicom_header_UI>::type sop_in_uid_;                   /*< The instance uid for the SOP */
+  vil_dicom_header_type_of<vil_dicom_header_DA>::type study_date_;                   /*< The date of the study */
+  vil_dicom_header_type_of<vil_dicom_header_DA>::type series_date_;                  /*< The date this series was collected */
+  vil_dicom_header_type_of<vil_dicom_header_DA>::type acquisition_date_;             /*< The date of acquisition */
+  vil_dicom_header_type_of<vil_dicom_header_DA>::type image_date_;                   /*< The date of this image */
+  vil_dicom_header_type_of<vil_dicom_header_TM>::type study_time_;                   /*< The time of the study */
+  vil_dicom_header_type_of<vil_dicom_header_TM>::type series_time_;                  /*< The time of the series */
+  vil_dicom_header_type_of<vil_dicom_header_TM>::type acquisition_time_;             /*< The time of acquisition */
+  vil_dicom_header_type_of<vil_dicom_header_TM>::type image_time_;                   /*< The time of the image */
+  vil_dicom_header_type_of<vil_dicom_header_SH>::type accession_number_;             /*< The accession number for this image */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type modality_;                     /*< The imaging modality */
+  vil_dicom_header_type_of<vil_dicom_header_LO>::type manufacturer_;                 /*< The name of the scanner manufacturer */
+  vil_dicom_header_type_of<vil_dicom_header_LO>::type institution_name_;             /*< The name of the institution */
+  vil_dicom_header_type_of<vil_dicom_header_ST>::type institution_addr_;             /*< The address of the institution */
+  vil_dicom_header_type_of<vil_dicom_header_PN>::type ref_phys_name_;                /*< The name of the referring physician */
+  vil_dicom_header_type_of<vil_dicom_header_SH>::type station_name_;                 /*< The name of the station used */
+  vil_dicom_header_type_of<vil_dicom_header_LO>::type study_desc_;                   /*< A description of the study */
+  vil_dicom_header_type_of<vil_dicom_header_LO>::type series_desc_;                  /*< A description of the series */
+  vil_dicom_header_type_of<vil_dicom_header_PN>::type att_phys_name_;                /*< The name of the attending physician */
+  vil_dicom_header_type_of<vil_dicom_header_PN>::type operator_name_;                /*< The name of the MR operator */
+  vil_dicom_header_type_of<vil_dicom_header_LO>::type model_name_;                   /*< The name of the MR scanner model */
 
   // Patient info
-  vil_dicom_header_type_of<vil_dicom_header_PN>::type patient_name_;  /*< Patient's name */
-  vil_dicom_header_type_of<vil_dicom_header_LO>::type patient_id_;    /*< Patient's ID */
-  vil_dicom_header_type_of<vil_dicom_header_DA>::type patient_dob_;         /*< The patient's date of birth */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type patient_sex_;   /*< The sex of the patient */
-  vil_dicom_header_type_of<vil_dicom_header_AS>::type patient_age_;   /*< The age of the patient */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type patient_weight_;     /*< The weight of the patient */
-  vil_dicom_header_type_of<vil_dicom_header_LT>::type patient_hist_;  /*< Any additional patient history */
+  vil_dicom_header_type_of<vil_dicom_header_PN>::type patient_name_;                 /*< Patient's name */
+  vil_dicom_header_type_of<vil_dicom_header_LO>::type patient_id_;                   /*< Patient's ID */
+  vil_dicom_header_type_of<vil_dicom_header_DA>::type patient_dob_;                  /*< The patient's date of birth */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type patient_sex_;                  /*< The sex of the patient */
+  vil_dicom_header_type_of<vil_dicom_header_AS>::type patient_age_;                  /*< The age of the patient */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type patient_weight_;               /*< The weight of the patient */
+  vil_dicom_header_type_of<vil_dicom_header_LT>::type patient_hist_;                 /*< Any additional patient history */
 
   // Acquisition Info
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type scanning_seq_;  /*< A description of the scanning sequence */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type sequence_var_;  /*< A description of the sequence variant */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type scan_options_;  /*< A description of various scan options */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type mr_acq_type_;   /*< The acquisition type for this scan */
-  vil_dicom_header_type_of<vil_dicom_header_SH>::type sequence_name_; /*< The name of the sequence */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type angio_flag_;    /*< The angio flag for this sequence */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type slice_thickness_;    /*< Slice thickness (for voxel size) */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type repetition_time_;    /*< Scan repetition time */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type echo_time_;          /*< Scan echo time */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type inversion_time_;     /*< Scan inversion time */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type number_of_averages_; /*< The number of averages for this scan */
-  vil_dicom_header_type_of<vil_dicom_header_IS>::type echo_numbers_;         /*< The echo numbers for this scan */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type mag_field_strength_; /*< The strength of the magnetic field */
-  vil_dicom_header_type_of<vil_dicom_header_IS>::type echo_train_length_;    /*< The length of the echo train */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type pixel_bandwidth_;    /*< The bandwidth of the pixels */
-  vil_dicom_header_type_of<vil_dicom_header_LO>::type software_vers_; /*< Versions of the scanner software used */
-  vil_dicom_header_type_of<vil_dicom_header_LO>::type protocol_name_; /*< The name of the protocol used */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type trigger_time_; /*< The trigger time */
-  vil_dicom_header_type_of<vil_dicom_header_IS>::type heart_rate_;           /*< The patient's heart rate */
-  vil_dicom_header_type_of<vil_dicom_header_IS>::type card_num_images_;      /*< The cardiac number of images */
-  vil_dicom_header_type_of<vil_dicom_header_IS>::type trigger_window_;       /*< The trigger window for this image */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type reconst_diameter_;   /*< The reconstruction diameter */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type imager_spacing_x_;         /*< The sensor pixel spacing in x */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type imager_spacing_y_;         /*< The sensor pixel spacing in y */
-  vil_dicom_header_type_of<vil_dicom_header_SH>::type receiving_coil_;/*< Details of the receiving coil */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type phase_enc_dir_; /*< The phase encoding direction */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type flip_angle_;         /*< The flip angle */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type sar_;                /*< The specific absorption rate */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type patient_pos_;   /*< The position of the patient in the scanner */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type scanning_seq_;                 /*< A description of the scanning sequence */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type sequence_var_;                 /*< A description of the sequence variant */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type scan_options_;                 /*< A description of various scan options */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type mr_acq_type_;                  /*< The acquisition type for this scan */
+  vil_dicom_header_type_of<vil_dicom_header_SH>::type sequence_name_;                /*< The name of the sequence */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type angio_flag_;                   /*< The angio flag for this sequence */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type slice_thickness_;              /*< Slice thickness (for voxel size) */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type repetition_time_;              /*< Scan repetition time */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type echo_time_;                    /*< Scan echo time */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type inversion_time_;               /*< Scan inversion time */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type number_of_averages_;           /*< The number of averages for this scan */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type echo_numbers_;                 /*< The echo numbers for this scan */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type mag_field_strength_;           /*< The strength of the magnetic field */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type echo_train_length_;            /*< The length of the echo train */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type pixel_bandwidth_;              /*< The bandwidth of the pixels */
+  vil_dicom_header_type_of<vil_dicom_header_LO>::type software_vers_;                /*< Versions of the scanner software used */
+  vil_dicom_header_type_of<vil_dicom_header_LO>::type protocol_name_;                /*< The name of the protocol used */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type trigger_time_;                 /*< The trigger time */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type heart_rate_;                   /*< The patient's heart rate */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type card_num_images_;              /*< The cardiac number of images */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type trigger_window_;               /*< The trigger window for this image */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type reconst_diameter_;             /*< The reconstruction diameter */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type imager_spacing_x_;             /*< The sensor pixel spacing in x */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type imager_spacing_y_;             /*< The sensor pixel spacing in y */
+  vil_dicom_header_type_of<vil_dicom_header_SH>::type receiving_coil_;               /*< Details of the receiving coil */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type phase_enc_dir_;                /*< The phase encoding direction */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type flip_angle_;                   /*< The flip angle */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type sar_;                          /*< The specific absorption rate */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type patient_pos_;                  /*< The position of the patient in the scanner */
 
   // Relationship info
-  vil_dicom_header_type_of<vil_dicom_header_UI>::type stud_ins_uid_;  /*< The study instance unique id */
-  vil_dicom_header_type_of<vil_dicom_header_UI>::type ser_ins_uid_;   /*< The series instance unique id */
-  vil_dicom_header_type_of<vil_dicom_header_SH>::type study_id_;      /*< The id of this study */
-  vil_dicom_header_type_of<vil_dicom_header_IS>::type series_number_;        /*< The number of this series */
-  vil_dicom_header_type_of<vil_dicom_header_IS>::type acquisition_number_;   /*< The number of the acquisition */
-  vil_dicom_header_type_of<vil_dicom_header_IS>::type image_number_;         /*< The number of this image instance */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type pat_orient_;    /*< The orientation of the patient */
-  vcl_vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_pos_;     /*< The image position relative to the patient */
-  vcl_vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_orient_;  /*< The image orientation relative to the patient */
-  vil_dicom_header_type_of<vil_dicom_header_UI>::type frame_of_ref_;  /*< The frame of reference */
-  vil_dicom_header_type_of<vil_dicom_header_IS>::type images_in_acq_;        /*< Then number ot images in the acquisition */
-  vil_dicom_header_type_of<vil_dicom_header_LO>::type pos_ref_ind_;   /*< The position reference indicator */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type slice_location_;     /*< The location of the slice */
-  vil_dicom_header_type_of<vil_dicom_header_LT>::type image_comments_;  /*< The image comments */
+  vil_dicom_header_type_of<vil_dicom_header_UI>::type stud_ins_uid_;                 /*< The study instance unique id */
+  vil_dicom_header_type_of<vil_dicom_header_UI>::type ser_ins_uid_;                  /*< The series instance unique id */
+  vil_dicom_header_type_of<vil_dicom_header_SH>::type study_id_;                     /*< The id of this study */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type series_number_;                /*< The number of this series */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type acquisition_number_;           /*< The number of the acquisition */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type image_number_;                 /*< The number of this image instance */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type pat_orient_;                   /*< The orientation of the patient */
+  vcl_vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_pos_;        /*< The image position relative to the patient */
+  vcl_vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_orient_;     /*< The image orientation relative to the patient */
+  vil_dicom_header_type_of<vil_dicom_header_UI>::type frame_of_ref_;                 /*< The frame of reference */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type images_in_acq_;                /*< Then number ot images in the acquisition */
+  vil_dicom_header_type_of<vil_dicom_header_LO>::type pos_ref_ind_;                  /*< The position reference indicator */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type slice_location_;               /*< The location of the slice */
+  vil_dicom_header_type_of<vil_dicom_header_LT>::type image_comments_;               /*< The image comments */
 
   // Image info
-  vil_dicom_header_type_of<vil_dicom_header_US>::type pix_samps_; /*< The number of samples per pixel */
-  vil_dicom_header_type_of<vil_dicom_header_CS>::type photo_interp_;  /*< The photometric interpretation */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type size_x_;      /*< The number of columns */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type size_y_;      /*< The number of rows */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type size_z_;      /*< The number of planes */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type high_bit_;  /*< The bit used as the high bit */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type small_im_pix_val_;   /*< The smallest image pixel value */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type large_im_pix_val_;   /*< The largest image pixel value */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type pixel_padding_val_;  /*< The value used for padding pixels */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type window_centre_;      /*< The value of the image window's centre */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type window_width_;       /*< The actual width of the image window */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type pix_samps_;                    /*< The number of samples per pixel */
+  vil_dicom_header_type_of<vil_dicom_header_CS>::type photo_interp_;                 /*< The photometric interpretation */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type size_x_;                       /*< The number of columns */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type size_y_;                       /*< The number of rows */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type size_z_;                       /*< The number of planes */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type high_bit_;                     /*< The bit used as the high bit */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type small_im_pix_val_;             /*< The smallest image pixel value */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type large_im_pix_val_;             /*< The largest image pixel value */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type pixel_padding_val_;            /*< The value used for padding pixels */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type window_centre_;                /*< The value of the image window's centre */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type window_width_;                 /*< The actual width of the image window */
 
   // Info from the tags specifically for reading the image data
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type spacing_x_;                   /*< The pixel spacing in x */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type spacing_y_;                   /*< The pixel spacing in y */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type spacing_slice_;           /*< The pixel spacing in z */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type res_intercept_;           /*< The image rescale intercept */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type res_slope_;               /*< The image rescale slope */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type pix_rep_;        /*< The pixel representation (+/-) */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type stored_bits_;    /*< The bits stored */
-  vil_dicom_header_type_of<vil_dicom_header_US>::type allocated_bits_; /*< The bits allocated */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type spacing_x_;                    /*< The pixel spacing in x */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type spacing_y_;                    /*< The pixel spacing in y */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type spacing_slice_;                /*< The pixel spacing in z */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type res_intercept_;                /*< The image rescale intercept */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type res_slope_;                    /*< The image rescale slope */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type pix_rep_;                      /*< The pixel representation (+/-) */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type stored_bits_;                  /*< The bits stored */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type allocated_bits_;               /*< The bits allocated */
 
   // Info from procedure group
-  vil_dicom_header_type_of<vil_dicom_header_FD>::type real_world_value_intercept_; /*< The real world intercept value */
-  vil_dicom_header_type_of<vil_dicom_header_FD>::type real_world_value_slope_; /*< The real world slope value */
+  vil_dicom_header_type_of<vil_dicom_header_FD>::type real_world_value_intercept_;   /*< The real world intercept value */
+  vil_dicom_header_type_of<vil_dicom_header_FD>::type real_world_value_slope_;       /*< The real world slope value */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type exposedarea_x_;                /*< The exposed area in x */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type exposedarea_y_;                /*< The exposed area in y */
 
   // Non-standard info from Philips scanner
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type philips_private_intercept_; /*< The philips private intercept value */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type philips_private_slope_; /*< The philips private scale value */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type philips_private_intercept_;    /*< The philips private intercept value */
+  vil_dicom_header_type_of<vil_dicom_header_DS>::type philips_private_slope_;        /*< The philips private scale value */
  
 };
 

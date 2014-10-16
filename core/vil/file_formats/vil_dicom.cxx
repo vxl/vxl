@@ -349,6 +349,24 @@ void vil_dicom_image::correct_manufacturer_discrepancies()
       header_.spacing_y_ = yPixelSize;
     }
   }
+
+  //
+  // GE Lunar iDXA scanner produces files with no indication of the pixel size or scaling, other than the
+  // exposed area.
+  //
+  if ( ( (header_.manufacturer_ == "GE Healthcare") ) &&
+       ( (header_.model_name_.find("Lunar iDXA") != header_.model_name_.npos )         ) )
+  {
+    //GE Lunar iDXA scanner: set pixel size from exposed area and number of rows/columns
+
+    if (header_.exposedarea_x_!=0 && header_.exposedarea_y_!=0 && header_.size_x_!=0 && header_.size_y_!=0)
+    {
+      header_.spacing_x_ = header_.exposedarea_x_;
+      header_.spacing_y_ = header_.exposedarea_y_;
+      header_.spacing_x_ /= header_.size_x_;
+      header_.spacing_y_ /= header_.size_y_;
+    }
+  }
 }
 
 //:try and interpret the Hologic comments section to extract pixel size
@@ -727,6 +745,22 @@ namespace
         }
       }
     }
+
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_vector<vxl_uint_16>& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e ) {
+        vxl_uint_16 value_at_pos;
+        for ( unsigned long pos = 0; pos < e->getVM(); ++pos )
+        {
+          if ( e->getUint16( value_at_pos, pos ) != EC_Normal ) {
+            vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") at " << pos << " is not Uint16\n";
+          }
+          else {
+              value.push_back(value_at_pos);
+          }
+        }
+      }
+    }
   };
 
   VCL_DEFINE_SPECIALIZATION
@@ -867,16 +901,6 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
     i.spacing_y_ = i.spacing_x_;
   // check whether pixelspacing is available if not set to imagerpixelspacing
 
-  if ( ps_ips.size() > 0 )
-    i.imager_spacing_x_ = ps_ips[0];
-  else
-    i.imager_spacing_x_ = 0;
-  if ( ps_ips.size() > 1 )
-    i.imager_spacing_y_ = ps_ips[1];
-  else
-    i.imager_spacing_y_ = i.imager_spacing_x_;
-
-
   if (ps.size() <= 0)
   {
     if (ps_ips.size() <= 0)
@@ -903,6 +927,18 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   group = VIL_DICOM_HEADER_PROCEDUREGROUP;
   try_set< ap_type(FD) >::proc( f, group, ap_el(PRREALWORLDVALUEINTERCEPT),i.real_world_value_intercept_ ); // It's the real world intercept value
   try_set< ap_type(FD) >::proc( f, group, ap_el(PRREALWORLDVALUESLOPE),    i.real_world_value_slope_ ); // It's the real world slope value
+
+  typedef vil_dicom_header_type_of<vil_dicom_header_US>::type US_type;
+  vcl_vector<US_type> psb;
+  try_set< ap_type(US) >::proc( f, group, ap_el(EXPOSEDAREA), psb );
+  if ( psb.size() > 0 )
+    i.exposedarea_x_ = psb[0];
+  else
+    i.exposedarea_x_ = 0;
+  if ( psb.size() > 1 )
+    i.exposedarea_y_ = psb[1];
+  else
+    i.exposedarea_y_ = i.exposedarea_x_;
 
   group = VIL_DICOM_HEADER_NSPHILIPSGROUP;
   try_set< ap_type(DS) >::proc( f, group, ap_el(NSPHILIPSPRIVATEINTERCEPT),i.philips_private_intercept_); // It's the Philips private intercept value
