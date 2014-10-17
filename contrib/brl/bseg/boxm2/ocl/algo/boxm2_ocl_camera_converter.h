@@ -22,8 +22,11 @@ class boxm2_ocl_camera_converter
                                    unsigned cl_nj,
                                    bocl_mem_sptr & ray_origins,
                                    bocl_mem_sptr & ray_directions,
-                                   vcl_size_t i_min = 0,
-                                   vcl_size_t j_min = 0);
+				   vcl_size_t i_min = 0,
+                                   vcl_size_t j_min = 0,
+                                   bool create_ray_o_d_buffers = true
+				   );
+
 
   private:
     //: private helper method converts perspective camera to ray image
@@ -35,7 +38,8 @@ class boxm2_ocl_camera_converter
                                            unsigned cl_ni,
                                            unsigned cl_nj,
                                            vcl_size_t i_min,
-                                           vcl_size_t j_min);
+                                           vcl_size_t j_min,
+					   bool create_ray_o_d_buffers);
 
     //: compile helper kernel, should only occur once
     static bocl_kernel* compile_persp_to_generic_kernel(bocl_device_sptr device);

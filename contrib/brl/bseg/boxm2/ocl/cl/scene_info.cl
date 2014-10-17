@@ -14,6 +14,7 @@
     #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( as_ushort8(data) )
     #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int4( convert_ushort8_sat_rte(data) )
     #define EXPECTED_INT(lhs, data) lhs =((data.s0) * (data.s2)+(data.s3) * (data.s5)+(data.s6) * (1 - data.s2 - data.s5));
+    #define MOG_INIT(lhs) int4 lhs = {0,0,0,0}
     #define NORM 65535
 #endif
 #ifdef MOG_TYPE_8
@@ -22,17 +23,20 @@
     #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( as_uchar8(data) )
     #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int2( convert_uchar8_sat_rte(data) )
     #define EXPECTED_INT(lhs, data) lhs =((data.s0) * (data.s2)+(data.s3) * (data.s5)+(data.s6) * (1 - data.s2 - data.s5));
+    #define MOG_INIT(lhs) int2 lhs = {0,0}
     #define NORM 255
 #endif
 #ifdef MOG_TYPE_4
     #define MOG_TYPE uchar4
     #define CONVERT_FUNC(lhs,data) uchar4 lhs = as_uchar4(data)
     #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = convert_uchar4_sat_rte(data)
+    #define MOG_INIT(lhs) uchar4 lhs = {0, 0, 0, 0}
     #define NORM 65535
 #endif
 #ifdef MOG_TYPE_2
     #define MOG_TYPE uchar2
     #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data)
+    #define MOG_INIT(lhs) uchar2 lhs = {0,0}
     #define NORM 65535
 #endif
 #ifdef MOG_VIEW_DEP

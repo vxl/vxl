@@ -70,6 +70,9 @@ subdirs(util)
 # volumetric matching Library
 subdirs(volm)
 
+# vector flow library
+subdirs(vecf)
+
 #tests
 IF( BUILD_TESTING )
   SUBDIRS(tests)

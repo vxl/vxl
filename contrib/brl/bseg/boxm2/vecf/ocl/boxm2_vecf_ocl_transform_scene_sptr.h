@@ -1,0 +1,7 @@
+#ifndef boxm2_vecf_ocl_transform_scene_sptr_h
+#define boxm2_vecf_ocl_transform_scene_sptr_h
+
+#include <vbl/vbl_smart_ptr.h>
+class boxm2_vecf_ocl_transform_scene;
+typedef vbl_smart_ptr<boxm2_vecf_ocl_transform_scene> boxm2_vecf_ocl_transform_scene_sptr;
+#endif
