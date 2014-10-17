@@ -152,6 +152,10 @@ bool bgui_image_utils::init_histogram_from_data()
     }
     return true;
    }
+   case  VIL_PIXEL_FORMAT_FLOAT:
+   {
+     return true;
+   }
    default:
     vcl_cout << "Format not supported by bgui_image_utils\n";
     return false;
@@ -192,6 +196,21 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
    case  VIL_PIXEL_FORMAT_UINT_16:
    {
     vil_image_view<unsigned short> v = view;
+    for (unsigned p = 0; p<np; ++p) {
+      float cnt = 0.0f;
+      while (cnt++<area_frac)
+      {
+        unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
+        unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
+        double val = static_cast<double>(v(i,j,p));
+        data_[p].push_back(val);
+      }
+    }
+    return true;
+   }
+   case VIL_PIXEL_FORMAT_FLOAT:
+   {
+    vil_image_view<float> v = view;
     for (unsigned p = 0; p<np; ++p) {
       float cnt = 0.0f;
       while (cnt++<area_frac)

@@ -446,6 +446,14 @@ def grey_to_rgb(img, color_txt):
     outimg = 0
   return outimg
 
+def rgb_to_grey(img):
+  bvxm_batch.init_process("vilRGBToGreyProcess");
+  bvxm_batch.set_input_from_db(0,img)
+  bvxm_batch.run_process()
+  (id, type) = bvxm_batch.commit_output(0)
+  outimg = dbvalue(id, type);
+  return outimg
+
 def mask_image_using_id(img, id_img, input_id):
   bvxm_batch.init_process("vilMaskImageUsingIDsProcess");
   bvxm_batch.set_input_from_db(0, img);
@@ -466,21 +474,30 @@ def get_plane(img, plane_id):
   return img_plane;
 
 def get_number_of_planes(img):
-  bvxm_batch.init_process("vilGetPlaneProcess");
+  bvxm_batch.init_process("vilGetNumberOfPlanesProcess");
   bvxm_batch.set_input_from_db(0, img);
-  bvxm_batch.set_input_unsigned(1, plane_id);
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
-  img_plane = dbvalue(id, type);
-  (id, type) = bvxm_batch.commit_output(1);
   n_planes = bvxm_batch.get_output_unsigned(id)
-  return img_plane, n_planes;
+  return n_planes;
 
 def combine_planes(img_red, img_green, img_blue):
   bvxm_batch.init_process("vilCombinePlanesProcess");
   bvxm_batch.set_input_from_db(0, img_red);
   bvxm_batch.set_input_from_db(1, img_green);
   bvxm_batch.set_input_from_db(2, img_blue);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  img_out = dbvalue(id, type);
+  return img_out;
+
+## combine them in the given order in the output image
+def combine_planes2(img_blue, img_green, img_red, img_nir):
+  bvxm_batch.init_process("vilCombinePlanesProcess2");
+  bvxm_batch.set_input_from_db(0, img_blue);
+  bvxm_batch.set_input_from_db(1, img_green);
+  bvxm_batch.set_input_from_db(2, img_red);
+  bvxm_batch.set_input_from_db(3, img_nir);
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   img_out = dbvalue(id, type);

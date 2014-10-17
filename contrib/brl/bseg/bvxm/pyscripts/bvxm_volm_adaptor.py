@@ -175,7 +175,7 @@ def correct_ransac_process2(res, cor_file, output_folder, pixel_radius, enforce_
   bvxm_batch.set_input_string(1, cor_file);
   bvxm_batch.set_input_string(2, output_folder);
   bvxm_batch.set_input_float(3, pixel_radius);  ## pixel radius to count for inliers
-  bvxm_batch.set_input_int(4, enforce_existing);  ## pixel radius to count for inliers
+  bvxm_batch.set_input_int(4, enforce_existing);  ## if 1: enforce to have at least 2 existing images
   statuscode = bvxm_batch.run_process();
   return statuscode;
 
@@ -223,7 +223,7 @@ def refine_bvxm_height_map(img, max_h, min_h):
 
 ## process to project open street map roads onto a cropped satellite images using
 ## its local cropped RPC camera, an ortho height map and an ortho camera
-def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file, band = "r", is_road=True, is_region=False):
+def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file, band = "r", is_road=True, is_region=False, vsol_bin_filename=""):
   bvxm_batch.init_process("volmMapOSMtoImage");
   bvxm_batch.set_input_from_db(0, crop_img);
   bvxm_batch.set_input_from_db(1, crop_cam);
@@ -233,6 +233,7 @@ def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_fi
   bvxm_batch.set_input_string(5, band);
   bvxm_batch.set_input_bool(6,is_region)
   bvxm_batch.set_input_bool(7,is_road)
+  bvxm_batch.set_input_string(8,vsol_bin_filename)
   status = bvxm_batch.run_process();
   if status:
     (id, type) = bvxm_batch.commit_output(0);
@@ -241,7 +242,43 @@ def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_fi
     out_img = 0;
   return out_img;
 
+## process to project open street map roads onto an ortho image using its vpgl_geo_camera. no height map is necessary
+def project_osm_to_ortho_img(img_byte, ortho_cam, osm_file):
+  bvxm_batch.init_process("volmMapOSMProcess");
+  bvxm_batch.set_input_from_db(0,img_byte);
+  bvxm_batch.set_input_from_db(1,ortho_cam);
+  bvxm_batch.set_input_string(2, osm_file);
+  hit = bvxm_batch.run_process();                ## process returns true if any osm objects hit the image area in this tile
+  (id, type) = bvxm_batch.commit_output(0);
+  out_img = dbvalue(id, type);
+  return hit, out_img
+def project_osm_category_to_ortho_img(img_byte, ortho_cam, osm_file, osm_category_name, output_vsol_binary_name):
+  bvxm_batch.init_process("volmMapOSMontoImageProcess3");
+  bvxm_batch.set_input_from_db(0,img_byte);
+  bvxm_batch.set_input_from_db(1,ortho_cam);
+  bvxm_batch.set_input_string(2, osm_file);
+  bvxm_batch.set_input_string(3, osm_category_name);
+  bvxm_batch.set_input_string(4, output_vsol_binary_name);
+  hit = bvxm_batch.run_process();                ## process returns true if any osm objects hit the image area in this tile
+  return hit
+
+## process to project open street map roads onto a cropped satellite images using
+## its local cropped RPC camera, an ortho height map and an ortho camera
+## pass osm_category_name as in the volm category names in table: Dropbox\projects\FINDER\data\OSM\land_category_08_12_2014.txt
+def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file, osm_category_name, vsol_bin_filename):
+  bvxm_batch.init_process("volmMapOSMontoImageProcess2");
+  bvxm_batch.set_input_from_db(0, crop_img);
+  bvxm_batch.set_input_from_db(1, crop_cam);
+  bvxm_batch.set_input_from_db(2, ortho_img);
+  bvxm_batch.set_input_from_db(3, ortho_cam);
+  bvxm_batch.set_input_string(4, osm_bin_file);
+  bvxm_batch.set_input_string(5, osm_category_name);
+  bvxm_batch.set_input_string(6,vsol_bin_filename)
+  status = bvxm_batch.run_process();
+  return status;
+
 ## process to project DEM images to a satellite image given the satellite viewpoint
+## modified to also input ortho camera (instead of a rational camera) so that DEMs or height maps can be projected onto any ortho image - just pass the ortho cam for sat_cam
 def project_dem_to_sat_img(sat_cam, sat_img, dem_file, lower_left_lon=-1.0, lower_left_lat=-1.0, upper_right_lon=-1.0, upper_right_lat=-1.0, dem_cam=0):
   bvxm_batch.init_process("volmProjectDEMtoSatImgPorcess");
   bvxm_batch.set_input_from_db(0, sat_cam);
@@ -297,3 +334,23 @@ def combine_height_map(height_map_folder, poly_roi, out_folder, size_in_degree =
   bvxm_batch.set_input_float(3, size_in_degree);
   bvxm_batch.set_input_int(4, leaf_id);
   bvxm_batch.run_process();
+
+## process that takes an ortho height map, an ortho classification map (id image) and their ortho camera
+##   extracts the outlines of the buildings in the classification map
+##   converts them to geo positions and outputs a .csv file and a kml file
+def extract_building_outlines(height_img, class_img, geocam, csv_file_name, kml_file_name):
+  bvxm_batch.init_process("volmExtractBuildinOutlinesProcess")
+  bvxm_batch.set_input_from_db(0, height_img)
+  bvxm_batch.set_input_from_db(1, class_img)
+  bvxm_batch.set_input_from_db(2, geocam)
+  bvxm_batch.set_input_string(3, csv_file_name)
+  bvxm_batch.set_input_string(4, kml_file_name)
+  bvxm_batch.run_process()
+  (id, type) = bvxm_batch.commit_output(0);
+  binary_img = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(1);
+  binary_img_e = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(2);
+  binary_img_d = dbvalue(id, type);
+  return binary_img, binary_img_e, binary_img_d
+

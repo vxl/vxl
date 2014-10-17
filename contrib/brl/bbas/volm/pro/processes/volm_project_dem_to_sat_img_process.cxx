@@ -8,6 +8,9 @@
 // \date April 23, 2014
 //  Modifications
 //   Yi Dong May 1, 2014  -- add a bounding box of satellite viewpoint to speed up the process execution
+//   Ozge C. Ozcanli June 05, 2014 -- adding an option to use an ortho camera instead of a rational camera for the satellite view 
+//                                    DEMs or height maps can now be projected onto orthorectified satellite images or other types of ortho images
+//                                    input cam should be vpgl_geo_camera
 // \endverbatim
 //
 
@@ -40,6 +43,12 @@ namespace volm_project_dem_to_sat_img_process_globals
                           int const& dem_i,  int const& dem_j,  float const& dem_height,
                           int const& sat_ni, int const& sat_nj,
                           int& sat_img_i,    int& sat_img_j);
+
+  // function to project dem image pixel to ortho image pixel
+  bool project_dem_to_ortho(vpgl_geo_camera const& dem_cam, vpgl_geo_camera* img_cam, 
+                            int const& dem_i,  int const& dem_j,  float const& dem_height,
+                            int const& img_ni, int const& img_nj,
+                            int& img_i,    int& img_j);
 }
 //: constructor
 bool volm_project_dem_to_sat_img_process_cons(bprb_func_process& pro)
@@ -84,12 +93,6 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The image pixel format, " << sat_img_sptr->pixel_format() << " is not supported!" << vcl_endl;
     return false;
   }
-  // note the sat_cam can either be rational_camera or local_rational_camera
-  vpgl_rational_camera<double>* sat_cam = dynamic_cast<vpgl_rational_camera<double>*>(sat_cam_sptr.as_pointer());
-  if (!sat_cam) {
-    vcl_cerr << pro.name() << ": the input camera is not a rational camera" << vcl_endl;
-    return false;
-  }
 
   // load the dem image and dem camera
   if (!vul_file::exists(dem_file)) {
@@ -110,6 +113,7 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": the geocam of dem image can not be initialized" << vcl_endl;
     return false;
   }
+
   int dem_ni, dem_nj, sat_ni, sat_nj;
   dem_ni = dem_res->ni();  dem_nj = dem_res->nj();
   sat_ni = sat_img->ni();  sat_nj = sat_img->nj();
@@ -134,7 +138,6 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
       vcl_cout << " The dem image: " << dem_bbox << " intersects with satellite region: " << sat_bbox << vcl_endl;
     }
   }
-  
 
   // load the dem image view
   vil_image_view_base_sptr dem_view_base = dem_res->get_view(0, dem_ni, 0, dem_nj);
@@ -156,20 +159,49 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
     dem_view = new vil_image_view<float>(temp);
   }
 
+  // note the sat_cam can either be rational_camera or local_rational_camera
+  bool rational_cam = true;
+  vpgl_rational_camera<double>* sat_cam = dynamic_cast<vpgl_rational_camera<double>*>(sat_cam_sptr.as_pointer());
+  vpgl_geo_camera* geo_cam;
+  if (!sat_cam) {
+    vcl_cout << pro.name() << ": the input camera is not a rational camera" << vcl_endl;
+    rational_cam = false;
+
+    geo_cam = dynamic_cast<vpgl_geo_camera*>(sat_cam_sptr.as_pointer());
+    if (!geo_cam) {
+      vcl_cerr << pro.name() << ": the input camera is neither a rational camera nor a geo camera!" << vcl_endl;
+      return false;
+    }
+  }
+
   // start projection
   vcl_cout << "Projecting [" << dem_ni << 'x' << dem_nj << "] dem image to satellite image having size [" << sat_ni << 'x' << sat_nj << "]\n";
   //vcl_vector<vnl_int_2> valid_pixels;
   unsigned cnt = 0;
-  for (int i = 0; i < dem_ni; i++) {
-    if (i%200==0) vcl_cout << "." << i << vcl_flush;
-    for (int j = 0; j < dem_nj; j++) {
-      int sat_img_i, sat_img_j;
-      if (project_dem_to_sat(*dem_cam, sat_cam, i, j, (*dem_view)(i,j), sat_ni, sat_nj, sat_img_i, sat_img_j)) {
-        (*sat_img)(sat_img_i, sat_img_j) = (*dem_view)(i,j);
-        cnt++;
+  if (rational_cam) {
+    for (int i = 0; i < dem_ni; i++) {
+      if (i%200==0) vcl_cout << "." << i << vcl_flush;
+      for (int j = 0; j < dem_nj; j++) {
+        int sat_img_i, sat_img_j;
+        if (project_dem_to_sat(*dem_cam, sat_cam, i, j, (*dem_view)(i,j), sat_ni, sat_nj, sat_img_i, sat_img_j)) {
+          (*sat_img)(sat_img_i, sat_img_j) = (*dem_view)(i,j);
+          cnt++;
+        }
+      }
+    }
+  } else {  // using ortho cam
+    for (int i = 0; i < dem_ni; i++) {
+      if (i%200==0) vcl_cout << "." << i << vcl_flush;
+      for (int j = 0; j < dem_nj; j++) {
+        int sat_img_i, sat_img_j;
+        if (project_dem_to_ortho(*dem_cam, geo_cam, i, j, (*dem_view)(i,j), sat_ni, sat_nj, sat_img_i, sat_img_j)) {
+          (*sat_img)(sat_img_i, sat_img_j) = (*dem_view)(i,j);
+          cnt++;
+        }
       }
     }
   }
+
   vcl_cout << '\n' << cnt << " pixels in dem image are projected onto satellite image\n";
   return true;
 }
@@ -209,3 +241,35 @@ bool volm_project_dem_to_sat_img_process_globals::project_dem_to_sat(vpgl_geo_ca
   else
     return false;
 }
+
+
+// function to project dem image pixel to ortho image pixel
+bool volm_project_dem_to_sat_img_process_globals::project_dem_to_ortho(vpgl_geo_camera const& dem_cam, vpgl_geo_camera* img_cam, 
+                            int const& dem_i,  int const& dem_j,  float const& dem_height,
+                            int const& img_ni, int const& img_nj,
+                            int& img_i,    int& img_j)
+{
+  // obtain global coords from dem pixel
+  double lon, lat;
+  double iu, iv;
+  int uu, vv;
+  dem_cam.img_to_global(dem_i, dem_j, lon, lat);
+  // project global coords to satellite image
+  img_cam->global_to_img(lon, lat, dem_height, iu, iv);   // actually the dem_height does not matter in the ortho case
+  
+  uu = (int)vcl_floor(iu+0.5);
+  vv = (int)vcl_floor(iv+0.5);
+
+  if (uu >= 0 && vv >= 0 && uu < img_ni && vv < img_nj) {
+    img_i = uu;  img_j = vv;
+#if 0
+    vcl_cout << " dem_img_pixel: [" << dem_i << ',' << dem_j
+             << "] --> [" << lon << ", " << lat << ", " << dem_height
+             << "] --> [" << img_i << "," << img_j << "]" << vcl_endl;
+#endif
+    return true;
+  }
+  else
+    return false;
+}
+

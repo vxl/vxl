@@ -277,7 +277,7 @@ void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, v
     out_gauss.deep_copy(img_f);
   other_responses_.push_back(out_gauss);
   other_responses_names_.push_back(response_name);
-
+  
   vcl_string filterbank_dir = filter_folder + this->filter_dir_name();
   if (!vul_file::exists(filterbank_dir))
     vul_file::make_directory(filterbank_dir);
@@ -309,7 +309,7 @@ void sdet_texture_classifier::add_filter_responses(vil_image_view<float>& img_f,
     other_responses_.push_back(filter_responses.response(i));
     other_responses_names_.push_back(res_name.str());
   }
-
+  
   vcl_string filterbank_dir = filter_folder + this->filter_dir_name();
   if (!vul_file::exists(filterbank_dir))
     vul_file::make_directory(filterbank_dir);
@@ -534,7 +534,7 @@ compute_training_data(vcl_string const& category,
     return false;
   }
   unsigned dim_total = dim + 2 + other_responses_.size();
-  vcl_cout << " texton dimension: " << dim_total << '\n' << vcl_flush;
+  vcl_cout << " texton dimension: " << dim_total << " dim: " << dim << " other_responses_ size: " << other_responses_.size() << '\n' << vcl_flush;
   vcl_vector<vgl_polygon<double> >::const_iterator pit = texture_regions.begin();
   for (; pit != texture_regions.end(); ++pit) {
     vgl_polygon_scan_iterator<double> psi(*pit, false);
@@ -1166,6 +1166,10 @@ unsigned sdet_texture_classifier::nearest_texton_index(vnl_vector<double> const&
   return min_index;
 }
 
+vnl_vector<double> sdet_texture_classifier::get_texton(unsigned texton_id) {
+  return texton_index_[texton_id].k_mean_;
+}
+
 void sdet_texture_classifier::compute_category_histograms()
 {
   // assumes that training_data and the texton index are valid
@@ -1196,6 +1200,50 @@ void sdet_texture_classifier::compute_category_histograms()
     category_histograms_[cat]=hist;
   }
   vcl_cout << '\n';
+}
+
+//: an option to create samples and labels to be used with classifiers
+void sdet_texture_classifier::create_samples_and_labels_from_textons(vcl_vector<vnl_vector<double> >& samples, vcl_vector<double>& labels)
+{
+ 
+  samples.clear();
+  labels.clear();
+
+  double label_id = 0;
+  vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::iterator iter = texton_dictionary_.begin();
+  for (; iter != texton_dictionary_.end(); iter++) {
+    for (unsigned i = 0; i < iter->second.size(); i++) {
+      samples.push_back(iter->second[i]);
+      labels.push_back(label_id);
+    }
+    vcl_cout << "category: " << iter->first <<" with id: " << label_id << " has final sample size: " << samples.size() << vcl_endl;
+    label_id += 1.0;
+  }
+  
+  return;
+}
+void sdet_texture_classifier::create_samples_and_labels_from_training_data(vcl_vector<vnl_vector<double> >& samples, vcl_vector<double>& labels)
+{
+  samples.clear();
+  labels.clear();
+
+  double label_id = 0;
+  vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::iterator dit = training_data_.begin();
+  for (; dit != training_data_.end(); ++dit) {
+    //histogram for the given category
+    const vcl_string& cat = (*dit).first;
+    const vcl_vector<vnl_vector<double> >& tdata = (*dit).second;
+    unsigned ndata  = tdata.size();
+    //insert texton counts into the histogram
+    for (vcl_vector<vnl_vector<double> >::const_iterator vit = tdata.begin(); vit != tdata.end(); ++vit) {
+      samples.push_back(*vit);
+      labels.push_back(label_id);
+    }
+    vcl_cout << "category: " << cat <<" with id: " << label_id << " has final sample size: " << samples.size() << vcl_endl;
+    label_id += 1.0;
+  }
+
+  return;
 }
 
 void sdet_texture_classifier::
@@ -1419,6 +1467,19 @@ void sdet_texture_classifier::compute_textons_of_pixels(vil_image_view<int>& tex
       unsigned indx = this->nearest_texton_index(tx);
       texton_img(i,j) = indx;
     }
+}
+
+vnl_vector<double> sdet_texture_classifier::get_response_vector(unsigned i, unsigned j)
+{
+  unsigned dim = filter_responses_.n_levels();
+  unsigned dim_total = dim + 2 + other_responses_.size();
+  vnl_vector<double> tx(dim_total);
+  for (unsigned f = 0; f<dim; ++f)
+    tx[f]=filter_responses_.response(f)(i,j);
+  tx[dim]=laplace_(i,j); tx[dim+1]=gauss_(i,j);
+  for (unsigned f = 0; f<other_responses_.size(); ++f)
+    tx[dim+2+f]=(other_responses_[f])(i,j);  
+  return tx;
 }
 
 // === Binary I/O ===

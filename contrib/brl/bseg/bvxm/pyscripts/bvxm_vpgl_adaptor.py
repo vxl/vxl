@@ -751,6 +751,34 @@ def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, low
   else:
     return status, dbvalue(0, ""), 0, 0, 0, 0;
 
+## use the 3-d box to crop an ortho image using its geo camera
+## note that the input 3-d box is in unit of wgs84 geo coordinates
+def crop_ortho_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev):
+  bvxm_batch.init_process("vpglCropOrthoUsing3DboxPRocess")
+  bvxm_batch.set_input_from_db(0, img_res);
+  bvxm_batch.set_input_from_db(1, camera);
+  bvxm_batch.set_input_double(2, lower_left_lon);
+  bvxm_batch.set_input_double(3, lower_left_lat);
+  bvxm_batch.set_input_double(4, lower_left_elev);
+  bvxm_batch.set_input_double(5, upper_right_lon);
+  bvxm_batch.set_input_double(6, upper_right_lat);
+  bvxm_batch.set_input_double(7, upper_right_elev);
+  status = bvxm_batch.run_process();
+  if status:
+    (id, type) = bvxm_batch.commit_output(0);
+    local_geo_cam  = dbvalue(id, type);
+    (id, type) = bvxm_batch.commit_output(1);
+    i0 = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(2);
+    j0 = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(3);
+    ni = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(4);
+    nj = bvxm_batch.get_output_unsigned(id)
+    return status, local_geo_cam, i0, j0, ni, nj;
+  else:
+    return status, dbvalue(0, ""), 0, 0, 0, 0;
+
 # give a location (lat, lon) coordinates, return its associate utm coords
 def utm_coords(lon, lat):
   bvxm_batch.init_process("vpglComputeUTMZoneProcess");

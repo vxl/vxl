@@ -154,6 +154,10 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   //: The texton histograms derived from the training data
   void compute_category_histograms();
 
+  //: an option to create samples and labels to be used with classifiers
+  void create_samples_and_labels_from_textons(vcl_vector<vnl_vector<double> >& samples, vcl_vector<double>& labels);
+  void create_samples_and_labels_from_training_data(vcl_vector<vnl_vector<double> >& samples, vcl_vector<double>& labels);
+
   //: save texton dictionary, binary (includes classifier params at top of file)
   bool save_dictionary(vcl_string const& path) const;
   //: load dictionary, binary
@@ -221,6 +225,9 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   //: compute the texton of each pixel using the filter bank and/or other responses
   void compute_textons_of_pixels(vil_image_view<int>& texton_img);
+
+  vnl_vector<double> get_texton(unsigned texton_id);
+  vnl_vector<double> get_response_vector(unsigned i, unsigned j);
 
   // ===  debug utilities ===
 

@@ -447,7 +447,7 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     vcl_cout << *this;
     return true;
   }
-
+  n_bands_ = 1;  // initialize just in case
   vcl_string ext = vul_file::extension(meta_filename);
   bool parsed_fine = false;
   if (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0)
@@ -487,6 +487,11 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
              img_info.find("QB02") != vcl_string::npos) {
     solar_irrad = 1381.7;
     satellite_name_ = "QuickBird";
+    solar_irrads.push_back(1924.59); // Blue
+    solar_irrads.push_back(1843.08); // Green
+    solar_irrads.push_back(1574.77); // Red
+    solar_irrads.push_back(1113.71); // near-IR  // these values are from http://grasswiki.osgeo.org/wiki/QuickBird
+                                              
   } else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos) {
     solar_irrad = 1580.814;
     satellite_name_ = "WorldView";

@@ -8,6 +8,12 @@
 #include <vil/vil_image_view.h>
 #include <vul/vul_file.h>
 #include <vil/algo/vil_region_finder.h>
+#include <bil/algo/bil_blob_finder.h>
+#include <vil/algo/vil_binary_dilate.h>
+#include <vil/algo/vil_binary_erode.h>
+#include <bkml/bkml_write.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
+#include <vgl/vgl_point_3d.h>
 
 // for debug
 #if 0
@@ -162,5 +168,155 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img);
 
+  return true;
+}
+
+// extract the building outlines (with n vertices in global wgs84 coords) from the ortho classification map (byte image with each pixel the id of the class)
+// output is a .csv file where each line is:
+//    height, volume, area, confidence, cent_lon, cent_lat, lon_0, lat_0, ..., lon_i, lat_i, ..., lon_n, lat_n;
+bool volm_extract_building_outlines_process_cons(bprb_func_process& pro)
+{
+ 
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vil_image_view_base_sptr"); // height map
+  input_types.push_back("vil_image_view_base_sptr"); // classification map
+  input_types.push_back("vpgl_camera_double_sptr"); // geo camera
+  input_types.push_back("vcl_string"); // output building .csv filename
+  input_types.push_back("vcl_string"); // output building kml filename
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr"); // binary map
+  output_types.push_back("vil_image_view_base_sptr"); // binary map
+  output_types.push_back("vil_image_view_base_sptr"); // binary map
+  return pro.set_input_types(input_types)
+     &&  pro.set_output_types(output_types);
+}
+
+//: Execute the process
+bool volm_extract_building_outlines_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs()< 3) {
+    vcl_cout << "volm_extract_building_outlines_process: The number of inputs should be 3" << vcl_endl;
+    return false;
+  }
+
+  unsigned i=0;
+  vil_image_view_base_sptr height_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr class_img_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  vcl_string csv_filename = pro.get_input<vcl_string>(i++);
+  vcl_string kml_filename = pro.get_input<vcl_string>(i++);
+
+  // convert image to float
+  vil_image_view<float> height(height_sptr);
+  unsigned ni = height.ni(); unsigned nj = height.nj();
+  vcl_cout << "ni: " << ni << " nj: " << nj << vcl_endl;
+
+  vil_image_view<vxl_byte> class_img(class_img_sptr);
+  if (class_img_sptr->ni() != ni || class_img_sptr->nj() != nj) {
+    vcl_cout << "volm_extract_building_outlines_process: The input image sizes are not compatible!" << vcl_endl;
+    return false;
+  }
+  
+  // first make the class image binary
+  vil_image_view<bool> class_img_binary(class_img.ni(), class_img.nj());
+  vil_image_view<bool> class_img_binary_E(class_img.ni(), class_img.nj());
+  vil_image_view<bool> class_img_binary_D(class_img.ni(), class_img.nj());
+  class_img_binary.fill(false);
+  for (unsigned i = 0; i < class_img.ni(); i++)
+    for (unsigned j = 0; j < class_img.nj(); j++) {
+      //if (class_img(i,j) == 34 || class_img(i,j) == 15)
+      //  class_img_binary(i,j) = true;
+      // use height map
+      //if (height(i,j) > 15)
+      //if (height(i,j) > 10 && height(i,j) <= 15)
+      //if ((class_img(i,j) == 34 || class_img(i,j) == 15) && height(i,j) > 10 && height(i,j) <= 15)
+      if ((class_img(i,j) == 34 || class_img(i,j) == 15) && height(i,j) > 5 && height(i,j) <= 10)
+        class_img_binary(i,j) = true;
+    }
+  
+  vil_structuring_element se;
+  se.set_to_disk(3);
+  vil_binary_erode(class_img_binary,class_img_binary_E,se);
+  vil_binary_dilate(class_img_binary_E,class_img_binary_D,se);
+
+  vcl_vector<int> bi,bj;
+  bil_blob_finder finder(class_img_binary_D);
+  vcl_vector<vcl_vector<vgl_point_3d<double> > > bldgs;
+  while (finder.next_8con_region(bi,bj))
+  {
+    vcl_cout<<"Blob boundary length: "<<bi.size()<<vcl_endl;
+    vcl_vector<vgl_point_3d<double> > poly;
+    for (unsigned i = 0; i < bi.size(); i++) {
+      double lon, lat;
+      geocam->img_to_global(bi[i], bj[i], lon, lat);
+      poly.push_back(vgl_point_3d<double>(lon, lat, height(bi[i], bj[i])));
+    }
+    bldgs.push_back(poly);
+  }
+
+  // find blobs again to compute avg heights (need the region representation this time)
+  bil_blob_finder finder2(class_img_binary_D);
+  vcl_vector<double> bldg_heights;
+  vcl_vector<vil_chord> region;
+  while (finder2.next_8con_region(region))
+  {
+    vcl_cout<<"Blob region number of rows: "<<region.size()<<vcl_endl;
+    double avg_height = 0.0;
+    unsigned cnt = 0;
+    double area = 0.0;
+    for (unsigned k = 0; k < region.size(); k++) {
+      for (unsigned i = region[k].ilo; i < region[k].ihi; i++) {
+        double lon, lat;
+        avg_height += height(i, region[k].j);
+        cnt++;
+      }
+    }
+    avg_height /= cnt;
+    bldg_heights.push_back(avg_height);
+  }
+  vcl_cout << " there are: " << bldgs.size() << " buildings and " << bldg_heights.size() << " building heights.\n";
+  vcl_cout.flush();
+
+  vcl_ofstream ofs(kml_filename.c_str());
+  bkml_write::open_document(ofs);  
+
+  vcl_ofstream ofs_csv(csv_filename.c_str());
+  
+  for (unsigned i = 0; i < bldgs.size(); i++) {
+    vgl_polygon<double> poly(1);
+    double cent_lon = 0.0, cent_lat = 0.0;
+    for (unsigned j = 0; j < bldgs[i].size(); j++) {
+      poly[0].push_back(vgl_point_2d<double>(bldgs[i][j].x(), bldgs[i][j].y()));
+      cent_lon += bldgs[i][j].x();
+      cent_lat += bldgs[i][j].y();
+    }
+    cent_lon /= bldgs[i].size();
+    cent_lat /= bldgs[i].size();
+    vcl_stringstream avg_height_str; avg_height_str << "h: " << bldg_heights[i] << " " << cent_lon << " " << cent_lat;
+    bkml_write::write_polygon(ofs, poly, avg_height_str.str(),avg_height_str.str());
+                            /*double const& scale = 1.0,
+                            double const& line_width = 3.0,
+                            double const& alpha = 0.45,
+                            unsigned char const& r = 0,
+                            unsigned char const& g = 255,
+                            unsigned char const& b = 0);*/
+    
+    // for csv each building is one line:   height, volume (=0.0 for now), area (=0.0 for now), confidence (=0.5 for now), cent_lon, cent_lat, lon_0, lat_0, ..., lon_i, lat_i, ..., lon_n, lat_n;
+    ofs_csv << bldg_heights[i] << ",0.0,0.0,0.5," << cent_lon << ',' << cent_lat;
+    for (unsigned j = 0; j < bldgs[i].size(); j++) 
+      ofs_csv << ',' << bldgs[i][j].x() << ',' << bldgs[i][j].y();
+    ofs_csv << '\n';
+  }
+  bkml_write::close_document(ofs);
+  ofs_csv.close();
+
+  //set output
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<bool>(class_img_binary));
+  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<bool>(class_img_binary_E));
+  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<bool>(class_img_binary_D));
+  //pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vil_rgb<vxl_byte> >(out_img));
+  //pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<float >(height));
   return true;
 }

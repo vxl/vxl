@@ -10,6 +10,7 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${VXL_MUL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${VTHREEP_INCLUDE_DIR})
 
 SET(sdet_sources
     sdet_edge_champher.cxx               sdet_edge_champher.h
@@ -72,7 +73,7 @@ ADD_LIBRARY(sdet ${sdet_sources})
 INSTALL_TARGETS(/lib sdet)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/sdet ${sdet_sources})
 
-TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol imesh_algo imesh vil vil_algo vil1 vgl_algo vgl vnl_algo vnl vul vbl vbl_io bil_algo vsl vnl_io pdf1d)
+TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol imesh_algo imesh vil vil_algo vil1 vgl_algo vgl bvgl vnl_algo vnl vul vbl vbl_io bil_algo vsl vnl_io pdf1d)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

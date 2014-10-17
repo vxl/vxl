@@ -18,6 +18,7 @@
 #include <vil/vil_image_resource.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_box_2d.h>
@@ -28,10 +29,6 @@ namespace vpgl_crop_img_using_3d_box_process_globals
 {
   const unsigned n_inputs_ = 9;
   const unsigned n_outputs_ = 5;
-  
-  // return all 4 corners of the 3d box
-  vcl_vector<vgl_point_3d<double> > corner_of_box_3d(vgl_box_3d<double> box);
-
 }
 
 // initialization
@@ -105,11 +102,11 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
 
   // create a camera box with uncertainty
   vgl_box_3d<double> cam_box(center, 2*uncertainty, 2*uncertainty, 2*uncertainty, vgl_box_3d<double>::centre);
-  vcl_vector<vgl_point_3d<double> > cam_corners = corner_of_box_3d(cam_box);
+  vcl_vector<vgl_point_3d<double> > cam_corners = cam_box.vertices();
 
   // create the 3D box given input coordinates (in geo-coordinates)
   vgl_box_3d<double> bbox(lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev);
-  vcl_vector<vgl_point_3d<double> > box_corners = corner_of_box_3d(bbox);
+  vcl_vector<vgl_point_3d<double> > box_corners = bbox.vertices();
 
   // projection
   vgl_box_2d<double> roi_box_2d;
@@ -180,17 +177,132 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   return true;
 }
 
-vcl_vector<vgl_point_3d<double> > vpgl_crop_img_using_3d_box_process_globals::corner_of_box_3d(vgl_box_3d<double> box)
+// global variables and functions
+namespace vpgl_crop_ortho_using_3d_box_process_globals
 {
-  
-  vcl_vector<vgl_point_3d<double> > corners;
-  corners.push_back(box.min_point());
-  corners.push_back(vgl_point_3d<double>(box.min_x()+box.width(), box.min_y(),              box.min_z()));
-  corners.push_back(vgl_point_3d<double>(box.min_x()+box.width(), box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<double>(box.min_x(),             box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<double>(box.min_x(),             box.min_y(),              box.max_z()));
-  corners.push_back(vgl_point_3d<double>(box.min_x()+box.width(), box.min_y(),              box.max_z()));
-  corners.push_back(vgl_point_3d<double>(box.max_point()));
-  corners.push_back(vgl_point_3d<double>(box.min_x(),             box.min_y()+box.height(), box.max_z()));
-  return corners;
+  const unsigned n_inputs_ = 8;
+  const unsigned n_outputs_ = 5;
 }
+
+// initialization
+bool vpgl_crop_ortho_using_3d_box_process_cons(bprb_func_process& pro)
+{
+  using namespace vpgl_crop_ortho_using_3d_box_process_globals;
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_resource_sptr";  // ortho image resource
+  input_types_[1] = "vpgl_camera_double_sptr";  // ortho camera as a vpgl_geo_camera
+  input_types_[2] = "double";                   // lower_left_lon
+  input_types_[3] = "double";                   // lower_left_lat
+  input_types_[4] = "double";                   // lower_left_elev
+  input_types_[5] = "double";                   // upper_right_lon
+  input_types_[6] = "double";                   // upper_right_lat
+  input_types_[7] = "double";                   // upper_right_elev
+
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "vpgl_camera_double_sptr"; // geocam of cropped image
+  output_types_[1] = "unsigned";                 // image pixel i0
+  output_types_[2] = "unsigned";                 // image pixel j0
+  output_types_[3] = "unsigned";                 // image size ni
+  output_types_[4] = "unsigned";                 // image size nj
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+// execute the process
+bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
+{
+  using namespace vpgl_crop_ortho_using_3d_box_process_globals;
+  // sanity check
+  if (pro.n_inputs() != n_inputs_) {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
+    return false;
+  }
+
+  // get the input
+  unsigned i = 0;
+  vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(i++);  // image resource
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+
+  double lower_left_lon   = pro.get_input<double>(i++);
+  double lower_left_lat   = pro.get_input<double>(i++);
+  double lower_left_elev  = pro.get_input<double>(i++);
+  double upper_right_lon  = pro.get_input<double>(i++);
+  double upper_right_lat  = pro.get_input<double>(i++);
+  double upper_right_elev = pro.get_input<double>(i++);
+
+  // create the 3D box given input coordinates (in geo-coordinates)
+  vgl_box_3d<double> bbox(lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev);
+  vcl_vector<vgl_point_3d<double> > box_corners = bbox.vertices();
+
+  // projection
+  vgl_box_2d<double> roi_box_2d;
+
+  // project the box to image coords
+  for (unsigned j = 0; j < box_corners.size(); j++) {
+    double u, v;
+    geocam->global_to_img(box_corners[j].x(), box_corners[j].y(), box_corners[j].z(), u, v);
+    vgl_point_2d<double> p2d(u, v);
+    roi_box_2d.add(p2d);
+  }
+  
+  vcl_cout << pro.name() << ": projected 2d roi box: " << roi_box_2d << vcl_endl;
+
+  // crop the image
+  brip_roi broi(img_res_sptr->ni(), img_res_sptr->nj());
+  vsol_box_2d_sptr bb = new vsol_box_2d();
+  bb->add_point(roi_box_2d.min_x(), roi_box_2d.min_y());
+  bb->add_point(roi_box_2d.max_x(), roi_box_2d.max_y());
+  bb = broi.clip_to_image_bounds(bb);
+
+  unsigned i0 = (unsigned)bb->get_min_x();
+  unsigned j0 = (unsigned)bb->get_min_y();
+  unsigned ni = (unsigned)bb->width();
+  unsigned nj = (unsigned)bb->height();
+
+  if (ni <= 0 || nj <= 0)
+  {
+    vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
+    return false;
+  }
+  if (i0 < 0 || i0 > img_res_sptr->ni() || j0 < 0 || j0 > img_res_sptr->nj())
+  {
+    vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
+    return false;
+  }
+
+  if ( (i0+ni) > img_res_sptr->ni() && (j0+nj) > img_res_sptr->nj())
+  {
+    vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
+    return false;
+  }
+
+  // create an ortho geocam for the cropped image  -- CAUTION: assumes that the image is aligned East-North (no rotation)
+  double lon0, lat0, lonn, latn;
+  geocam->img_to_global(i0, j0, lon0, lat0);
+  geocam->img_to_global(i0+ni-1, j0+nj-1, lonn, latn);
+  double scalingx = (lonn - lon0)/(ni-1);
+  double scalingy = (latn - lat0)/(nj-1);
+  
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  trans_matrix[0][0] = scalingx;
+  trans_matrix[0][1] = 0.0;
+  trans_matrix[1][0] = 0.0;
+  trans_matrix[1][1] = scalingy;
+  trans_matrix[0][3] = lon0;
+  trans_matrix[1][3] = lat0;
+  trans_matrix[3][3] = 1.0;
+
+  vpgl_geo_camera* camera = new vpgl_geo_camera(trans_matrix, geocam->lvcs());
+  camera->set_scale_format(true);
+
+  // store output
+  unsigned out_j = 0;
+  pro.set_output_val<vpgl_camera_double_sptr>(out_j++, camera);
+  pro.set_output_val<unsigned>(out_j++, i0);
+  pro.set_output_val<unsigned>(out_j++, j0);
+  pro.set_output_val<unsigned>(out_j++, ni);
+  pro.set_output_val<unsigned>(out_j++, nj);
+
+  return true;
+}
+
