@@ -24,11 +24,7 @@ IF( PYTHON_FOUND )
     INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
-
-    IF(OPENCL_FOUND)
-      INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-    ENDIF(OPENCL_FOUND)
-
+    INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
      SET(boxm2_batch_sources
          reg_boxm2.h   reg_boxm2.cxx
         )
@@ -56,11 +52,11 @@ IF( PYTHON_FOUND )
 
       IF(OPENCL_FOUND)
         ADD_DEFINITIONS(-DHAS_OPENCL=1)
-        TARGET_LINK_LIBRARIES(boxm2_batch bocl_pro  boxm2_ocl_pro boxm2_multi_pro)
+        TARGET_LINK_LIBRARIES(boxm2_batch bocl_pro  boxm2_ocl_pro boxm2_multi_pro boxm2_vecf_ocl_pro)
         IF(BOXM2_USE_VOLM)
              TARGET_LINK_LIBRARIES(boxm2_batch boxm2_volm_pro boxm2_volm_io )
         ENDIF(BOXM2_USE_VOLM)
-        
+	        
       ENDIF(OPENCL_FOUND)
       
       IF(HDFS_FOUND)

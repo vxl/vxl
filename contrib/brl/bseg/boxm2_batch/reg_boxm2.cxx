@@ -15,6 +15,7 @@
 #include <bocl/pro/bocl_register.h>
 #include <boxm2/ocl/pro/boxm2_ocl_register.h>
 #include <boxm2_multi/pro/boxm2_multi_register.h>
+#include <boxm2/vecf/ocl/pro/boxm2_vecf_ocl_register.h>
 #if defined(HAS_GLEW) && HAS_GLEW
 #include <boxm2/view/pro/boxm2_view_register.h>
 #endif
@@ -48,6 +49,7 @@ PyObject *
     bocl_register::register_process();
     boxm2_ocl_register::register_process();
     boxm2_multi_register::register_process();
+    boxm2_vecf_ocl_register::register_process();
 #if defined(HAS_GLEW) && HAS_GLEW
     boxm2_view_register::register_process();
 #endif
