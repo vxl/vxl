@@ -9,8 +9,8 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
 SET(boxm2_vecf_ocl_sources
     boxm2_vecf_ocl_transform_scene.h                  boxm2_vecf_ocl_transform_scene.cxx
-    boxm2_vecf_ocl_ssd_func.h                         boxm2_vecf_ocl_ssd_func.cxx
-    boxm2_vecf_ocl_transform_minimizer.h              boxm2_vecf_ocl_transform_minimizer.cxx
+#    boxm2_vecf_ocl_ssd_func.h                         boxm2_vecf_ocl_ssd_func.cxx
+#    boxm2_vecf_ocl_transform_minimizer.h              boxm2_vecf_ocl_transform_minimizer.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_ocl_sources)
