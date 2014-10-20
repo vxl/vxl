@@ -86,9 +86,13 @@ class mbl_eps_writer
 
   //: Define colour of subsequent graphics r,g,b in [0,1]
   void set_rgb(double r, double g, double b);
+  
+  //: Draws filled box covering whole region
+  //  Should be called before anything else.
+  void draw_background_box();
 
   //: Set colour of subsequent graphics using a named colour
-  //  Valid options include black,white,grey,red,green,blue,
+  //  Valid options include black,grey25,grey,grey75,white red,green,blue,
   //  cyan,yellow.  Note: Probably need a tidy map thing to
   //  do this properly.  Sets to grey if colour not known.
   void set_colour(const vcl_string& colour_name);
@@ -117,6 +121,10 @@ class mbl_eps_writer
 
   //: Draws circle of radius r around p, with current colour
   void draw_circle(const vgl_point_2d<double>& p, double r);
+
+  //: Draws rectangle of given width/height, corner at (x,y)
+  void draw_box(double x, double y, 
+                double width, double height, bool filled=false);
 
   //: Draws line segment from p1 to p2
   void draw_line(const vgl_point_2d<double>& p1,

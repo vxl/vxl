@@ -57,6 +57,8 @@ void mbl_eps_writer::set_colour(const vcl_string& colour_name)
   if (colour_name=="black") { set_grey_shade(0.0); return; }
   if (colour_name=="white") { set_grey_shade(1.0); return; }
   if (colour_name=="grey") { set_grey_shade(0.5); return; }
+  if (colour_name=="grey25") { set_grey_shade(0.25); return; }
+  if (colour_name=="grey75") { set_grey_shade(0.75); return; }
   if (colour_name=="red") { set_rgb(1,0,0); return; }
   if (colour_name=="green") { set_rgb(0,1,0); return; }
   if (colour_name=="blue") { set_rgb(0,0,1); return; }
@@ -156,6 +158,31 @@ void mbl_eps_writer::draw_line(const vgl_point_2d<double>& p1, const vgl_point_2
       <<sx_*p2.x()<<' '<<ny_-sy_*p2.y()<<" L\n"
       <<"stroke\n";
 }
+
+//: Draws filled box covering whole region
+//  Should be called before anything else.
+void mbl_eps_writer::draw_background_box()
+{
+  ofs_<<"newpath\n"
+      <<"0 0 M "
+      <<nx_<<" 0 L "
+      <<nx_<<' '<<ny_<<" L "
+      <<"0 "<<ny_<<" L fill stroke\n";
+}
+
+
+//: Draws rectangle of given width/height, corner at (x,y)
+void mbl_eps_writer::draw_box(double x, double y, double w, double h, bool filled)
+{
+  ofs_<<"newpath\n"
+      <<sx_*x<<' '<<ny_-sy_*y<<" M "
+      <<sx_*(x+w)<<' '<<ny_-sy_*y<<" L "
+      <<sx_*(x+w)<<' '<<ny_-sy_*(y+h)<<" L "
+      <<sx_*x<<' '<<ny_-sy_*(y+h)<<" L ";
+  if (filled) ofs_<<"fill ";
+  ofs_<<"stroke\n";
+}
+
 
 //: Draws polygon connecting points.
 //  If closed, then adds line joining last to first point.
