@@ -54,6 +54,10 @@ line-width: 1
 line_colour: black
 point_colour: red
 
+
+//: Colour of background (or "none" for transparent)
+background_colour: white
+
 // Approximate width of region to display shape
 width: 200
 
@@ -124,6 +128,10 @@ struct tool_params
 
   //: Point colour
   vcl_string point_colour;
+  
+  //: Colour of background (or "none" for transparent)
+  vcl_string background_colour;
+
 
   //: Radius of points to display (if <0, then don't draw points)
   double point_radius;
@@ -160,6 +168,7 @@ void tool_params::read_from_file(const vcl_string& path)
   width=vul_string_atof(props.get_optional_property("width","100"));
   line_colour=props.get_optional_property("line_colour","black");
   point_colour=props.get_optional_property("point_colour","red");
+  background_colour=props.get_optional_property("background_colour","white");
   base_name=props.get_optional_property("base_name","./");
   output_dir=props.get_optional_property("output_dir","./");
   shape_model_path=props.get_optional_property("shape_model_path",
@@ -189,6 +198,12 @@ void draw_mode(msm_shape_mode_view& mode_view,
   ss<<params.output_dir<<'/'<<params.base_name<<"_s"<<m<<".eps";
   mbl_eps_writer writer(ss.str().c_str(),
                         win_box.width(),win_box.height());
+  
+  if (params.background_colour!="none")
+  {
+    writer.set_colour(params.background_colour);
+    writer.draw_background_box();
+  } 
 
   unsigned n_shapes = mode_view.points().size();
   for (unsigned i=0;i<n_shapes;++i)
@@ -236,6 +251,12 @@ void draw_mode_frames(msm_shape_mode_view& mode_view,
     ss<<i<<".eps";
     mbl_eps_writer writer(ss.str().c_str(),
                           win_box.width(),win_box.height());
+
+    if (params.background_colour!="none")
+    {
+      writer.set_colour(params.background_colour);
+      writer.draw_background_box();
+    } 
 
     writer.set_colour(params.point_colour);
     if (params.point_radius>0)
