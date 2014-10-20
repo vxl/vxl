@@ -5,11 +5,12 @@
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
   IF(EXPATPP_FOUND)
-    MESSAGE("FIND EXPAT")
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
     INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-
+    INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
+    INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
+    
     SET(volm_sources
      volm_io.h                              volm_io.cxx
      volm_io_tools.h                        volm_io_tools.cxx
@@ -42,23 +43,13 @@ IF(EXPAT_FOUND)
      volm_category_io.h                     volm_category_io.cxx
      volm_satellite_resources.h             volm_satellite_resources.cxx
      volm_satellite_resources_sptr.h
+     volm_osm_parser.h                      volm_osm_parser.cxx
+     volm_osm_objects.h                     volm_osm_objects.cxx
+     volm_osm_object_point.h                volm_osm_object_point.cxx
+     volm_osm_object_line.h                 volm_osm_object_line.cxx
+     volm_osm_object_polygon.h              volm_osm_object_polygon.cxx
+     volm_candidate_region_parser.h         volm_candidate_region_parser.cxx
     )
-
-    INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-    IF(EXPAT_FOUND)
-     IF(EXPATPP_FOUND)
-      INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
-      INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
-        SET(volm_sources ${volm_sources}
-            volm_osm_parser.h                      volm_osm_parser.cxx
-            volm_osm_objects.h                     volm_osm_objects.cxx
-            volm_osm_object_point.h                volm_osm_object_point.cxx
-            volm_osm_object_line.h                 volm_osm_object_line.cxx
-            volm_osm_object_polygon.h              volm_osm_object_polygon.cxx
-            volm_candidate_region_parser.h         volm_candidate_region_parser.cxx
-           )
-     ENDIF(EXPATPP_FOUND)
-    ENDIF(EXPAT_FOUND)
 
     AUX_SOURCE_DIRECTORY(Templates volm_sources)
 
@@ -66,15 +57,13 @@ IF(EXPAT_FOUND)
 
     TARGET_LINK_LIBRARIES(volm vsph bpgl vgl_algo vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul bvrml depth_map )
 
-    IF(EXPAT_FOUND)
-      TARGET_LINK_LIBRARIES(volm ${EXPAT_LIBRARIES})
-      IF(APPLE)
-        TARGET_LINK_LIBRARIES(volm expat)
-      ENDIF(APPLE)
-      IF(EXPATPP_FOUND)
-        TARGET_LINK_LIBRARIES(volm ${EXPATPP_LIBRARIES})
-      ENDIF(EXPATPP_FOUND)
-    ENDIF(EXPAT_FOUND)
+
+    TARGET_LINK_LIBRARIES(volm ${EXPAT_LIBRARIES})
+    IF(APPLE)
+      TARGET_LINK_LIBRARIES(volm expat)
+    ENDIF(APPLE)
+    TARGET_LINK_LIBRARIES(volm ${EXPATPP_LIBRARIES})
+
 
     # Base matcher, Proximity matcher, Visibility matcher related
     SUBDIRS(desc)
