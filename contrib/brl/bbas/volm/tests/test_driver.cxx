@@ -18,6 +18,7 @@ DECLARE( test_osm_parser );
 DECLARE( test_category_io );
 DECLARE( test_osm_object );
 DECLARE( test_candidate_region_parser );
+DECLARE( test_utils );
 
 void
 register_tests()
@@ -39,6 +40,7 @@ register_tests()
   REGISTER( test_category_io );
   REGISTER( test_osm_object );
   REGISTER( test_candidate_region_parser );
+  REGISTER( test_utils );
 }
 
 DEFINE_MAIN;

@@ -261,5 +261,6 @@ int main(int argc, char** argv)
       }
       score_idx.finalize();
     }
+    return volm_io::SUCCESS;
   }
 }

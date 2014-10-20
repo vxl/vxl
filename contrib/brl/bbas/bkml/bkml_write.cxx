@@ -272,6 +272,20 @@ void bkml_write::write_location(vcl_ofstream& ofs, double lat, double lon, doubl
       << "</Placemark>\n";
 }
 
+void bkml_write::write_location_as_box(vcl_ofstream& ofs, double lon, double lat, double elev,
+                                       vcl_string const& name,
+                                       vcl_string const& description,
+                                       double const& size,
+                                       unsigned char const& r, unsigned char const& g, unsigned char const& b)
+{
+  vnl_double_2 ul, ll, lr, ur;
+  ll[0] = lat; ll[1] = lon;
+  ul[0] = lat+size; ul[1] = lon;
+  lr[0] = lat; lr[1] = lon+size;
+  ur[0] = lat+size; ur[1] = lon+size;
+  bkml_write::write_box(ofs, name, description, ul, ur, ll, lr, r, g, b);
+}
+
 void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
                                      double lon, double lat, double alt,
                                      double head, double tilt, double roll,
@@ -326,4 +340,64 @@ void bkml_write::write_kml_style(vcl_ofstream& ofs,
       << "    <outline>0</outline>\n"
       << "  </PolyStyle>\n"
       << "</Style>\n";
+}
+
+void bkml_write::write_polygon(vcl_ofstream& ofs,
+                               vcl_vector<vcl_pair<vgl_polygon<double>, vgl_polygon<double> > > const& polygon,
+                               vcl_string const& name, vcl_string const& description,
+                               double const& scale, double const& line_width,
+                               double const& alpha, unsigned char const& r, unsigned char const& g, unsigned char const& b)
+{
+  // obtain line color
+  vcl_string line_color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
+  // obtain polygon color
+  int alpha_int = (int)(alpha*255);
+  vcl_string poly_color = rgb_color_to_hex_color(alpha_int, (int)r, (int)g, (int)b);
+
+  unsigned num_region = polygon.size();
+  for (unsigned i = 0; i < polygon.size(); i++) {
+    vgl_polygon<double> outer = polygon[i].first;
+    vgl_polygon<double> inner = polygon[i].second;
+    if (outer[0].empty())
+      continue;
+    ofs << "<Placemark>\n"
+        << "  <name>" << name << "</name>\n";
+    if (description.compare("") != 0)
+      ofs << "  <description>" << description << "</description>\n";
+    ofs << "  <Style>\n"
+        << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
+        << "    <LineStyle> <color>" << line_color << "</color> <width>" << line_width << "</width> </LineStyle>\n"
+        << "    <PolyStyle>\n"
+        << "      <color>" << poly_color << "</color>\n"
+        << "      <fill>0</fill>\n"
+        << "      <outline>1</outline>\n"
+        << "    </PolyStyle>\n"
+        << "  </Style>\n";
+    ofs << "  <Polygon>\n"
+        << "    <tessellate>1</tessellate>\n"
+        << "    <outerBoundaryIs>\n"
+        << "      <LinearRing>\n"
+        << "        <coordinates>";
+    for (vcl_vector<vgl_point_2d<double> >::iterator vit = outer[0].begin(); vit != outer[0].end(); ++vit)
+      ofs << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0 ";
+    ofs << vcl_setprecision(12) << outer[0][0].x() << ',' << vcl_setprecision(12) << outer[0][0].y() << ",0";
+    ofs << "</coordinates>\n"
+        << "      </LinearRing>\n"
+        << "    </outerBoundaryIs>\n";
+    // write out the inner boundary
+    for (unsigned in_idx = 0; in_idx < inner.num_sheets(); in_idx++) {
+      ofs << "    <innerBoundaryIs>\n"
+          << "      <LinearRing>\n"
+          << "        <coordinates>";
+      for (vcl_vector<vgl_point_2d<double> >::iterator vit = inner[in_idx].begin(); vit != inner[in_idx].end(); ++vit)
+        ofs << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0 ";
+      ofs << vcl_setprecision(12) << inner[in_idx][0].x() << ',' << vcl_setprecision(12) << inner[in_idx][0].y() << ",0";
+      ofs << "</coordinates>\n"
+          << "      </LinearRing>\n"
+          << "    </innerBoundaryIs>\n";
+    }
+    ofs << "  </Polygon>\n"
+        << "</Placemark>\n";
+  }
+  return;
 }

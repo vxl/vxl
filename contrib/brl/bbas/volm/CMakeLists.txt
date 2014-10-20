@@ -10,7 +10,7 @@ IF(EXPAT_FOUND)
     INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
     INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
     INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
-    
+
     SET(volm_sources
      volm_io.h                              volm_io.cxx
      volm_io_tools.h                        volm_io_tools.cxx
@@ -43,28 +43,26 @@ IF(EXPAT_FOUND)
      volm_category_io.h                     volm_category_io.cxx
      volm_satellite_resources.h             volm_satellite_resources.cxx
      volm_satellite_resources_sptr.h
+     volm_utils.h                           volm_utils.txx
      volm_osm_parser.h                      volm_osm_parser.cxx
      volm_osm_objects.h                     volm_osm_objects.cxx
      volm_osm_object_point.h                volm_osm_object_point.cxx
      volm_osm_object_line.h                 volm_osm_object_line.cxx
      volm_osm_object_polygon.h              volm_osm_object_polygon.cxx
      volm_candidate_region_parser.h         volm_candidate_region_parser.cxx
+     volm_utils.h                           volm_utils.txx
     )
 
     AUX_SOURCE_DIRECTORY(Templates volm_sources)
 
     ADD_LIBRARY(volm  ${volm_sources})
 
-    TARGET_LINK_LIBRARIES(volm vsph bpgl vgl_algo vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul bvrml depth_map )
-
-
+    TARGET_LINK_LIBRARIES(volm vsph bpgl vgl vgl_algo vgl_io vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul bvrml depth_map )
     TARGET_LINK_LIBRARIES(volm ${EXPAT_LIBRARIES})
     IF(APPLE)
       TARGET_LINK_LIBRARIES(volm expat)
     ENDIF(APPLE)
     TARGET_LINK_LIBRARIES(volm ${EXPATPP_LIBRARIES})
-
-
     # Base matcher, Proximity matcher, Visibility matcher related
     SUBDIRS(desc)
 

@@ -69,7 +69,11 @@ ADD_EXECUTABLE( volm_create_osm_intersection_kml
 ADD_EXECUTABLE( volm_create_osm_kml
                 volm_create_osm_kml.cxx
               )
-              
+
+ADD_EXECUTABLE( volm_parse_candidate_region
+                volm_parse_candidate_region.cxx
+              )
+
 TARGET_LINK_LIBRARIES( volm_dummy_matcher volm depth_map )
 TARGET_LINK_LIBRARIES( volm_query_creation volm depth_map bvrml )
 TARGET_LINK_LIBRARIES( volm_generate_hypos volm depth_map bvrml )
@@ -85,5 +89,6 @@ TARGET_LINK_LIBRARIES( volm_create_osm_2d_map vul vgl volm )
 TARGET_LINK_LIBRARIES( volm_create_bvxm_scenes volm vbl vgl bkml vpgl bvxm )
 TARGET_LINK_LIBRARIES( volm_sort_bvxm_scene_urban volm vul vpgl )
 TARGET_LINK_LIBRARIES( volm_refine_height_map volm vil vcl vul vgl )
-TARGET_LINK_LIBRARIES( volm_create_osm_intersection_kml volm vil vcl vul vgl bkml)
-TARGET_LINK_LIBRARIES( volm_create_osm_kml volm vil vcl vul vgl bkml)
+TARGET_LINK_LIBRARIES( volm_create_osm_intersection_kml volm vil vcl vul vgl bkml )
+TARGET_LINK_LIBRARIES( volm_create_osm_kml volm vil vcl vul vgl bkml )
+TARGET_LINK_LIBRARIES( volm_parse_candidate_region volm vgl bkml )

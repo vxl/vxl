@@ -10,7 +10,9 @@
 //
 // \verbatim
 //  Modifications
-//   Yi Dong --- Feb, 2013  adding functions to write the Photooverlay
+//   Yi Dong --- Feb, 2013  added method to write Photo overlay
+//   Yi Dong --- Oct, 2014  added method to write Polygon with inner boundary
+//   Yi Dong --- Oct, 2014  added method to write a point as a 2-d box
 // \endverbatim
 
 #include <vcl_fstream.h>
@@ -50,6 +52,14 @@ class bkml_write
                              unsigned char const& r = 255,
                              unsigned char const& g = 131,
                              unsigned char const& b = 250);
+  // write location as a small box
+  static void write_location_as_box(vcl_ofstream& ofs, double lat, double lon, double elev,
+                                    vcl_string const& name = "location",
+                                    vcl_string const& description = "",
+                                    double const& size = 1E-5,
+                                    unsigned char const& r = 255,
+                                    unsigned char const& g = 131,
+                                    unsigned char const& b = 250);
 
   //: put a pin at the given location (x = lon and y = lat)
   static void write_location(vcl_ofstream& ofs, vgl_point_2d<double> const& loc,
@@ -70,6 +80,19 @@ class bkml_write
 
   //: Write a polygon with color, line style
   static void write_polygon(vcl_ofstream& ofs, vgl_polygon<double> const& poly,
+                            vcl_string const& name = "polygon",
+                            vcl_string const& description = "",
+                            double const& scale = 1.0,
+                            double const& line_width = 3.0,
+                            double const& alpha = 0.45,
+                            unsigned char const& r = 0,
+                            unsigned char const& g = 255,
+                            unsigned char const& b = 0);
+
+  //: Write a polygon with inner boundary
+  // (first element in pair is the outer boundary (single sheet), second element in pair is the inner boundary)
+  static void write_polygon(vcl_ofstream& ofs,
+                            vcl_vector<vcl_pair<vgl_polygon<double>, vgl_polygon<double> > > const& polygon,
                             vcl_string const& name = "polygon",
                             vcl_string const& description = "",
                             double const& scale = 1.0,

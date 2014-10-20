@@ -190,7 +190,7 @@ template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(vgl_box_2d
 template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(vgl_box_2d<double> bbox, double const& min_size, vgl_polygon<float> const& poly);\
 template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const double& min_size, vgl_polygon<double> const& poly);\
 template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const double& min_size, vgl_polygon<float> const& poly);\
-template volm_geo_index2_node_sptr volm_geo_index2::read_and_construct<T>(vcl_string const& flie_name, double& min_size);
+template volm_geo_index2_node_sptr volm_geo_index2::read_and_construct<T>(vcl_string const& flie_name, double& min_size)
 
 
 #endif // volm_geo_index2_txx_

@@ -308,16 +308,16 @@ void bkml_parser::charData(const XML_Char* s, int len)
       //  vcl_cout << "WARNING: shape tag can not be recognized (not LineString or Polygon)" << vcl_endl;
       //}
     }
-    if (cord_tag_ == KML_POLYOB_TAG && current_name_ == "Region")
+    if (cord_tag_ == KML_POLYOB_TAG)
       polyouter_.push_back(poly_verts);
-    else if (cord_tag_ == KML_POLYIB_TAG && current_name_ == "Region")
+    else if (cord_tag_ == KML_POLYIB_TAG)
       polyinner_.push_back(poly_verts);
-    else if (cord_tag_ == KML_LINE_TAG && current_name_ == "Region")
+    else if (cord_tag_ == KML_LINE_TAG)
       linecord_.push_back(poly_verts);
     else if (cord_tag_ == KML_POINT_TAG )
       points_.push_back(poly_verts[0]);
     else
-      vcl_cout << "WARNING: shape tag: " << cord_tag_ << " (name: " << current_name_ << ") will not be parsed" << vcl_endl;
+      vcl_cout << "WARNING: shape tag: " << cord_tag_ << " will not be parsed" << vcl_endl;
     last_tag = "";
     cord_tag_ = "";
   }

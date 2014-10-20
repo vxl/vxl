@@ -22,5 +22,6 @@
 #include <volm/volm_spherical_shell_container.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_vrml_io.h>
+#include <volm/volm_utils.h>
 
 int main() { return 0; }
