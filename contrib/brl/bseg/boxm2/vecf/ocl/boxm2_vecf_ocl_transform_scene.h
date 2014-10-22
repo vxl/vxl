@@ -26,8 +26,8 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
  public:
   //: Constructor. 
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
-				 boxm2_scene_sptr& target_scene,
-				 boxm2_opencl_cache2_sptr ocl_cache);
+                     boxm2_scene_sptr& target_scene,
+                     boxm2_opencl_cache2_sptr ocl_cache);
 
   ~boxm2_vecf_ocl_transform_scene();
 
@@ -36,8 +36,8 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
 
   //: transform a scene of arbitray size, block by block
   bool transform(vgl_rotation_3d<double>  rot,
-		 vgl_vector_3d<double> trans,
-		 vgl_vector_3d<double> scale);
+                 vgl_vector_3d<double> trans,
+                 vgl_vector_3d<double> scale);
 
   //: transform a scene with one block so that
   //  both source and target blocks fit in GPU memory
@@ -45,20 +45,26 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   //  and kernel args are released after target
   //  is transformed. The target data is written to disk.
   bool transform_1_blk(vgl_rotation_3d<double>  rot,
-		       vgl_vector_3d<double> trans,
-		       vgl_vector_3d<double> scale,
-		       bool finish = true);
+                       vgl_vector_3d<double> trans,
+                       vgl_vector_3d<double> scale,
+                       bool finish = true);
+  //: transform a scene with one block and interpolate appearance
+  bool transform_1_blk_interp(vgl_rotation_3d<double>  rot,
+                              vgl_vector_3d<double> trans,
+                              vgl_vector_3d<double> scale,
+                              bool finish = true);
 
   //render the current state of the target scene
   bool render_scene_appearance(vpgl_camera_double_sptr const & cam, vil_image_view<float>& expected_img,
-			       vil_image_view<float>& vis_img, int ni, int nj, bool finish = false);
+                               vil_image_view<float>& vis_img, int ni, int nj, bool finish = false);
  protected:
   bool compile_trans_kernel();
+  bool compile_trans_interp_kernel();
   bool compile_rend_kernel();
   bool compile_norm_kernel();
   bool init_ocl_trans();
   bool get_scene_appearance(boxm2_scene_sptr scene,
-			    vcl_string&      options);
+                            vcl_string&      options);
 
   boxm2_opencl_cache2_sptr  opencl_cache_;
   boxm2_scene_sptr target_scene_;
@@ -67,6 +73,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   int apptypesize_;//both scenes should have the same apptype
   vcl_string app_type_;
   bocl_kernel * trans_kern;
+  bocl_kernel * trans_interp_kern;
   //transform kernel args 
   float* translation_buff;
   float* rotation_buff;
@@ -91,6 +98,10 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_mem* blk_source;
   bocl_mem* alpha_source;
   bocl_mem* mog_source;
+  bocl_mem* nobs_source;
+  bocl_mem* nbr_exint; // neighborhood info
+  bocl_mem* nbr_exists;
+  bocl_mem* nbr_prob;
   // expected image kernel args
   float* buff;
   float* vis_buff;

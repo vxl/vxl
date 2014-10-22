@@ -75,6 +75,7 @@ class boxm2_scene_adaptor(object):
   #describe scene (returns data path)
   def describe(self) :
     return self.description;
+
   def modify_appearance(self, app1,app2):
 	status = modify_scene_appearance(self.scene,app1,app2);
 	self.rgb = self.description['appType']
@@ -89,6 +90,36 @@ class boxm2_scene_adaptor(object):
   def cache() :
     return self.cache;
 
+
+  def transform_to_scene(self, to_scene, trans, rot, scale):
+      if self.opencl_cache.type == "boxm2_opencl_cache2_sptr":
+        print("transforming scene");
+        boxm2_batch.init_process("boxm2VecfOclTransformSceneProcess");
+        boxm2_batch.set_input_from_db(0,self.scene);
+        boxm2_batch.set_input_from_db(1,to_scene);
+        boxm2_batch.set_input_from_db(2,self.opencl_cache);
+        boxm2_batch.set_input_double (3, trans[0]);
+        boxm2_batch.set_input_double (4, trans[1]);
+        boxm2_batch.set_input_double (5, trans[2]);
+        boxm2_batch.set_input_double (6,  rot[0][0]);
+        boxm2_batch.set_input_double (7,  rot[0][1]);
+        boxm2_batch.set_input_double (8,  rot[0][2]);
+        boxm2_batch.set_input_double (9,  rot[1][0]);
+        boxm2_batch.set_input_double (10, rot[1][1]);
+        boxm2_batch.set_input_double (11, rot[1][2]);
+        boxm2_batch.set_input_double (12, rot[2][0]);
+        boxm2_batch.set_input_double (13, rot[2][1]);
+        boxm2_batch.set_input_double (14, rot[2][2]);
+        boxm2_batch.set_input_double (15, scale[0]);
+        boxm2_batch.set_input_double (16, scale[1]);
+        boxm2_batch.set_input_double (17, scale[2]);
+
+        return boxm2_batch.run_process();
+      else :
+        print "ERROR: Cache type not recognized: ", self.opencl_cache.type;
+        return False;
+
+ 
   def init_alpha(self, pinit=0.01, thresh = 1.0):
     cache = self.opencl_cache
     dev = self.device
@@ -691,3 +722,4 @@ class boxm2_scene_adaptor(object):
     boxm2_batch.set_input_from_db(0,self.scene);
     boxm2_batch.set_input_from_db(1,self.cpu_cache);
     return boxm2_batch.run_process();
+

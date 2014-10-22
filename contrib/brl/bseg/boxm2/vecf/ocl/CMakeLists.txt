@@ -9,8 +9,9 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
 SET(boxm2_vecf_ocl_sources
     boxm2_vecf_ocl_transform_scene.h                  boxm2_vecf_ocl_transform_scene.cxx
-#    boxm2_vecf_ocl_ssd_func.h                         boxm2_vecf_ocl_ssd_func.cxx
-#    boxm2_vecf_ocl_transform_minimizer.h              boxm2_vecf_ocl_transform_minimizer.cxx
+    boxm2_vecf_ocl_ssd_func.h                         boxm2_vecf_ocl_ssd_func.cxx
+    boxm2_vecf_ocl_transform_minimizer.h              boxm2_vecf_ocl_transform_minimizer.cxx
+    boxm2_vecf_ocl_store_nbrs.h                       boxm2_vecf_ocl_store_nbrs.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_ocl_sources)
@@ -28,7 +29,7 @@ subdirs(pro)
 
 #tests
 IF( BUILD_TESTING )
-#  SUBDIRS(tests) #not yet
+  SUBDIRS(tests) 
 ENDIF( BUILD_TESTING )
 
 ENDIF(OPENCL_FOUND)

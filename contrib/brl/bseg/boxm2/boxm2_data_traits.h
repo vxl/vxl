@@ -63,6 +63,7 @@ enum boxm2_data_type
   BOXM2_EXPECTATION,
   BOXM2_DATA_INDEX,
   BOXM2_RAY_DIR,
+  BOXM2_CHAR8,
   BOXM2_UNKNOWN
 };
 
@@ -323,6 +324,16 @@ class boxm2_data_traits<BOXM2_FLOAT8>
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "float8"; else return "float8_"+identifier; }
+};
+
+template<>
+class boxm2_data_traits<BOXM2_CHAR8>
+{
+ public:
+  typedef vnl_vector_fixed<unsigned char, 8> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "char8"; else return "char8_"+identifier; }
 };
 
 template<>
@@ -613,6 +624,10 @@ class boxm2_data_info
 
     if (prefix.find(boxm2_data_traits<BOXM2_RAY_DIR>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_RAY_DIR>::datasize();
+
+    if (prefix.find(boxm2_data_traits<BOXM2_CHAR8>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_CHAR8>::datasize();
+
     return 0;
   }
 
@@ -684,6 +699,8 @@ class boxm2_data_info
           return  BOXM2_RAY_DIR ;
     else if (prefix.find(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix()) != vcl_string::npos)
           return  BOXM2_VIS_SCORE ;
+    else if (prefix.find(boxm2_data_traits<BOXM2_CHAR8>::prefix()) != vcl_string::npos)
+          return  BOXM2_CHAR8 ;
     else
       return BOXM2_UNKNOWN;
   }
