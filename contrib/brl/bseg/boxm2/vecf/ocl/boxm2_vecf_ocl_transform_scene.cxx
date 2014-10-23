@@ -777,11 +777,13 @@ render_scene_appearance(vpgl_camera_double_sptr const& cam, vil_image_view<float
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);  
 
     //camera check
-  if (cam->type_name()!= "vpgl_perspective_camera" &&
-        cam->type_name()!= "vpgl_generic_camera" ) {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
-      return false;
-    }
+  const vcl_string cam_type( cam->type_name() );
+  if (cam_type != "vpgl_perspective_camera" &&
+      cam_type != "vpgl_generic_camera" &&
+      cam_type != "vpgl_affine_camera" ) {
+    vcl_cout<<"Cannot render with camera of type " << cam_type << vcl_endl;
+    return false;
+  }
   // create all buffers
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
