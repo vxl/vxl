@@ -62,6 +62,9 @@ class boxm2_cache2: public vbl_ref_count
 
   //: dumps writeable data onto disk
   // -- pure virtual method; see specialisations
+  //: write all data
+  virtual void write_to_disk() = 0;
+  //: write only data for scene
   virtual void write_to_disk(boxm2_scene_sptr & scene) = 0;
 
   //: disable the write process

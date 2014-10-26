@@ -65,10 +65,11 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr&
 
 boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
 {
-    delete trans_kern;
- delete rend_kern;
- delete norm_kern;
-    opencl_cache_->clear_cache();
+  delete trans_kern;
+  delete rend_kern;
+  delete norm_kern;
+  opencl_cache_->clear_cache();
+
 }
 
 bool boxm2_vecf_ocl_transform_scene::compile_trans_kernel()
@@ -165,7 +166,7 @@ bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     int status = 0;
     queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
-   ocl_depth = 0;
+    ocl_depth = 0;
     blk_info_target = 0;
     blk_info_source = 0;
     info_buffer = 0;
@@ -179,6 +180,7 @@ bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
     return true;
 }
 // the transform is the inverse, i.e. a map from the target to the source
+// an arbitrary number of blocks are handled, no interpolation
 bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
             vgl_vector_3d<double> trans,
             vgl_vector_3d<double> scale)
@@ -224,7 +226,7 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
      {
        //Gather information about the target and setup target data buffers
        bocl_mem* blk_target       = opencl_cache_->get_block(target_scene_, *iter_blks_target);
-       bocl_mem* alpha_target     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene_, *iter_blks_target,0,true);
+       bocl_mem* alpha_target     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene_, *iter_blks_target,0,false);
        boxm2_scene_info* info_buffer = target_scene_->get_blk_metadata(*iter_blks_target);
        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
        info_buffer->data_buffer_length = (int) (alpha_target->num_bytes()/alphaTypeSize);
@@ -233,12 +235,12 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
        blk_info_target->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
        bocl_mem * mog_target = 0;
        if(app_type_ == "boxm2_mog3_grey")
-  mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blks_target,0,true);
+      mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blks_target,0,false);
        else if(app_type_ == "boxm2_mog3_grey_16")
-  mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(target_scene_, *iter_blks_target,0,true);
+      mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(target_scene_, *iter_blks_target,0,false);
        else {
-  vcl_cout << "Unknown appearance type for target_scene " << app_type_ << '\n';
-  return false;
+      vcl_cout << "Unknown appearance type for target_scene " << app_type_ << '\n';
+      return false;
        }
        vgl_box_3d<float> box_target(info_buffer->scene_origin[0],info_buffer->scene_origin[1],info_buffer->scene_origin[2],
         info_buffer->scene_origin[0]+info_buffer->scene_dims[0]*info_buffer->block_len,
@@ -272,7 +274,7 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
       {
         // get more information about the source block since it will actually be used.
                bocl_mem* blk_source       = opencl_cache_->get_block(source_scene_, *iter_blks_source);
-               bocl_mem* alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blks_source,0,false);
+               bocl_mem* alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blks_source,0,true);
                int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
                info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
 
@@ -280,9 +282,9 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
                blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
         bocl_mem* mog_source = 0;
         if(app_type_ == "boxm2_mog3_grey")
-   mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blks_source,0,false);
+          mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blks_source,0,true);
         else if(app_type_ == "boxm2_mog3_grey_16")
-   mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blks_source,0,false);
+          mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blks_source,0,true);
         else {
    vcl_cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
    return false;
@@ -298,13 +300,13 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
                trans_kern->set_arg(mog_target);
                trans_kern->set_arg(blk_source);
                trans_kern->set_arg(alpha_source);
-        trans_kern->set_arg(mog_source);
+            trans_kern->set_arg(mog_source);
                trans_kern->set_arg(translation.ptr());
                trans_kern->set_arg(rotation.ptr());
                trans_kern->set_arg(scalem.ptr());
                trans_kern->set_arg(ocl_depth.ptr());
                trans_kern->set_arg(output.ptr());
-        trans_kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
+            trans_kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
                trans_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees target
                trans_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees source
                if(!trans_kern->execute(queue, 1, local_threads, global_threads))
@@ -588,7 +590,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      // trans_interp_kernel arguments set the first time the function is called
    
      blk_target       = opencl_cache_->get_block(target_scene_, *iter_blk_target);
-     alpha_target     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene_, *iter_blk_target,0,true);
+     alpha_target     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene_, *iter_blk_target,0, false);
      info_buffer = target_scene_->get_blk_metadata(*iter_blk_target);
      int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
      info_buffer->data_buffer_length = (int) (alpha_target->num_bytes()/alphaTypeSize);
@@ -597,9 +599,9 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      blk_info_target->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
    
      if(app_type_ == "boxm2_mog3_grey")
-       mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blk_target,0,true);
+       mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blk_target,0,false);
      else if(app_type_ == "boxm2_mog3_grey_16")
-       mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(target_scene_, *iter_blk_target,0,true);
+       mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(target_scene_, *iter_blk_target,0,false);
      else {
        vcl_cout << "Unknown appearance type for target_scene " << app_type_ << '\n';
        return false;
@@ -636,23 +638,23 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      return false;
    // get more information about the source block since it will actually be used.
    blk_source       = opencl_cache_->get_block(source_scene_, *iter_blk_source);
-   alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,false);
+   alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,true);
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
    
    blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );   
    blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
    if(app_type_ == "boxm2_mog3_grey")
-     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk_source,0,false);
+     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk_source,0,true);
    else if(app_type_ == "boxm2_mog3_grey_16")
-     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blk_source,0,false);
+     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blk_source,0,true);
    else {
      vcl_cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
      return false;
    }
    //   nobs_source = opencl_cache_->get_data<BOXM2_NUM_OBS>(source_scene_, *iter_blk_source,0,false);
-   nbr_exint = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,false, "nbr_exint");
-   nbr_exists = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,false, "nbr_exist");
-   nbr_prob   = opencl_cache_->get_data<BOXM2_FLOAT8>(source_scene_, *iter_blk_source,0,false, "nbr_prob");
+   nbr_exint = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exint");
+   nbr_exists = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exist");
+   nbr_prob   = opencl_cache_->get_data<BOXM2_FLOAT8>(source_scene_, *iter_blk_source,0,true, "nbr_prob");
    trans_interp_kern->set_arg(blk_info_target);
    trans_interp_kern->set_arg(blk_info_source);
    trans_interp_kern->set_arg(blk_target);
@@ -679,7 +681,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      {
        vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
        return false;
-     }
+    }
    int status = clFinish(queue);
    bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL FAILED: " + error_to_string(status));
    if(!good_kern)

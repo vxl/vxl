@@ -23,6 +23,7 @@
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
+
 //: block info that can be easily made into a buffer and sent to gpu
 struct boxm2_scene_info
 {
@@ -44,6 +45,10 @@ class boxm2_scene_info_wrapper : public vbl_ref_count
   public:
     boxm2_scene_info * info;
 };
+//Smart_Pointer typedef for boxm2_scene
+class boxm2_scene;
+typedef vbl_smart_ptr<boxm2_scene> boxm2_scene_sptr;
+typedef vbl_smart_ptr<boxm2_scene_info_wrapper> boxm2_scene_info_wrapper_sptr;
 
 //: boxm2_scene: simple scene model that maintains (in world coordinates)
 //      - scene origin
@@ -55,7 +60,7 @@ class boxm2_scene : public vbl_ref_count
 {
   public:
     //: empty scene, needs to be initialized manually
-    boxm2_scene() {}
+    boxm2_scene() {count_++;}
 
     boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version = 2);
 
@@ -68,6 +73,9 @@ class boxm2_scene : public vbl_ref_count
 
     //: destructor
     ~boxm2_scene() { }
+
+    //:create an in-memory copy of the scene with unique id
+    boxm2_scene_sptr clone_no_disk();
 
     //: save scene xml file
     void save_scene();
@@ -164,7 +172,8 @@ class boxm2_scene : public vbl_ref_count
     //: scene version number
     int version() { return version_; }
     void set_version(int v) { version_ = v; }
-
+    //: unique scene id
+    unsigned id() {return id_;}
     //: scene mutators
     void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
     void set_rpc_origin(vgl_point_3d<double> rpc)   { rpc_origin_ = rpc; }
@@ -179,7 +188,10 @@ class boxm2_scene : public vbl_ref_count
     void set_data_path(vcl_string path)             { data_path_ = path+"/"; }
 
   private:
-
+    //: unique scene id
+    unsigned id_;
+    // count of constructed scenes to generate a unique id
+    static unsigned count_;
     //: world scene information
     vpgl_lvcs               lvcs_;
     vgl_point_3d<double>    local_origin_;
@@ -213,9 +225,6 @@ class boxm2_dist_id_pair
     }
 };
 
-//Smart_Pointer typedef for boxm2_scene
-typedef vbl_smart_ptr<boxm2_scene> boxm2_scene_sptr;
-typedef vbl_smart_ptr<boxm2_scene_info_wrapper> boxm2_scene_info_wrapper_sptr;
 //: scene output stream operator
 vcl_ostream& operator<<(vcl_ostream &s, boxm2_scene& scene);
 

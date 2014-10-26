@@ -2,7 +2,7 @@
 #define boxm2_vecf_ocl_store_nbrs_h
 //:
 // \file
-// \brief A function to cached neigbor information in the scene
+// \brief A function to cache neigbor information in the scene
 // \author J.L. Mundy
 // \date October 18, 2014
 //
@@ -16,7 +16,16 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
+//
 // input a scene block and output an augmented block with neigborhood information
+// current information is:
+// 1) the existence of each of the six neighbors       
+//     (x0 +- side_len, y0 +- side_len, z0 +-side_len)                   (uchar8)
+// 2) the expected intensity of each of the neighbors                    (uchar8)
+// 3) the probability derived from alpha stored in each of the neighbors (float8)
+// This information is written back into the scene model directory
+// after the function completes
+//
 class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
 {
  public:
@@ -42,7 +51,7 @@ class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
   boxm2_scene_sptr source_scene_;
   bocl_device_sptr device_;
   int status;
-  int apptypesize_;//both scenes should have the same apptype
+  int apptypesize_;//size of the appearance model
   vcl_string app_type_;
   bocl_kernel * kern;
   bocl_mem_sptr centerX;

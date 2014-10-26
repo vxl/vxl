@@ -301,7 +301,7 @@ vcl_string boxm2_lru_cache2::to_string()
 }
 
 //: dumps all data onto disk
-void boxm2_lru_cache2::write_to_disk(boxm2_scene_sptr & scene)
+void boxm2_lru_cache2::write_to_disk()
 {
    // save the data and delete
   vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >,ltstr1 >::iterator scene_iter =cached_data_.begin();
@@ -330,6 +330,39 @@ void boxm2_lru_cache2::write_to_disk(boxm2_scene_sptr & scene)
   }
   
 }
+//: dumps all data onto disk
+void boxm2_lru_cache2::write_to_disk(boxm2_scene_sptr & scene)
+{
+   // save the data and delete
+  vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >,ltstr1 >::iterator scene_iter =cached_data_.begin();
+  for(;scene_iter!=cached_data_.end(); scene_iter++)
+  {
+    if(scene_iter->first->id() != scene->id())
+      continue;
+      vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > &dmap = scene_iter->second;
+      for (vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator iter = dmap.begin();
+          iter != dmap.end(); iter++)
+      {
+          for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
+              boxm2_block_id id = it->first;
+              boxm2_sio_mgr::save_block_data_base(scene_iter->first->data_path(), it->first, it->second, iter->first);
+          }
+      }
+  }
+  vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 >::iterator scene_block_iter =cached_blocks_.begin();
+  for(;scene_block_iter!=cached_blocks_.end(); scene_block_iter++)
+  {
+    if(scene_block_iter->first->id() != scene->id())
+      continue;
+      for (vcl_map<boxm2_block_id, boxm2_block*>::iterator iter = scene_block_iter->second.begin();
+          iter != scene_block_iter->second.end(); iter++)
+      {
+          boxm2_block_id id = iter->first;
+          boxm2_sio_mgr::save_block(scene_block_iter->first->data_path(), iter->second);
+      }
+  }
+}  
+
 //: add a new scene to the cache
 bool boxm2_lru_cache2::add_scene(boxm2_scene_sptr & scene)
 {

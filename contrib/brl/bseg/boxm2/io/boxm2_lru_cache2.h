@@ -43,13 +43,17 @@ class boxm2_lru_cache2 : public boxm2_cache2
     virtual void replace_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, vcl_string type, boxm2_data_base* replacement);
 
     //: dumps writeable data to disk
+    virtual void write_to_disk();
+
+    //: dumps writeable data for specified scene to disk
     virtual void write_to_disk(boxm2_scene_sptr & scene);
 
     //: add a new scene to the cache
     virtual bool add_scene(boxm2_scene_sptr & scene);
 
-    //: add an existing scene to the cache
+    //: remove an existing scene from the cache
     virtual bool remove_scene(boxm2_scene_sptr & scene);
+
     //: to string method returns a string describing the cache's current state
     vcl_string to_string();
 

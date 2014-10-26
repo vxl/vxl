@@ -28,7 +28,8 @@
 
 //vul include
 #include <vul/vul_file.h>
-
+//initialize static count to assign unique scene id
+unsigned boxm2_scene::count_ = 0;
 
 boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version)
 {
@@ -37,6 +38,8 @@ boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origi
   xml_path_  = data_path_ + "/scene.xml";
   num_illumination_bins_ = -1;
   version_ = version;
+  id_ = count_;
+  count_++;
 }
 
 boxm2_scene::boxm2_scene(const char* buffer)
@@ -47,7 +50,7 @@ boxm2_scene::boxm2_scene(const char* buffer)
              << parser.XML_GetCurrentLineNumber() << '\n';
     return;
   }
-
+  
   //store data path
   data_path_ = parser.path();
   xml_path_  = data_path_ + "scene.xml";
@@ -64,6 +67,8 @@ boxm2_scene::boxm2_scene(const char* buffer)
   appearances_ = parser.appearances();
   num_illumination_bins_ = parser.num_illumination_bins();
   version_ = parser.version();
+  id_ = count_;
+  count_++;
 }
 
 //: initializes Scene from XML file
@@ -110,8 +115,23 @@ boxm2_scene::boxm2_scene(vcl_string filename)
   appearances_ = parser.appearances();
   num_illumination_bins_ = parser.num_illumination_bins();
   version_ = parser.version();
+  id_ = count_;
+  count_++;
 }
 
+boxm2_scene_sptr boxm2_scene::clone_no_disk(){
+  boxm2_scene* clone = new boxm2_scene();
+  clone->set_lvcs(this->lvcs_);
+  clone->set_local_origin(this->local_origin_);
+  clone->set_rpc_origin(this->rpc_origin_);
+  clone->set_data_path("");
+  clone->set_xml_path("");
+  clone->set_blocks(this->blocks_);
+  clone->set_appearances(this->appearances_);
+  clone->set_num_illumination_bins(this->num_illumination_bins_);
+  clone->set_version(this->version_);
+  return clone;
+}
 
 //: add a block meta data...
 void boxm2_scene::add_block_metadata(boxm2_block_metadata data)

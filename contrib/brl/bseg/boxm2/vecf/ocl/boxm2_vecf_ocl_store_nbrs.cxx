@@ -147,7 +147,6 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   kern->set_arg(nbr_exists);
   kern->set_arg(ocl_depth);
   kern->set_arg(output.ptr());
-  kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
   kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees
   kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local neighbor trees 
   kern->execute( queue, 1, local_threads, global_threads);

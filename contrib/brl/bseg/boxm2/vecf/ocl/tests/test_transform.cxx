@@ -26,7 +26,8 @@ typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 void test_transform()
 {
   // Set up the scenes
-  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/putin_face/";
+  //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/putin_face/";
+  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
   vcl_string source_scene_path = base_dir_path + "source_scene.xml";
   vcl_string target_scene_path = base_dir_path + "target_scene.xml";
   if(!vul_file::exists(source_scene_path) || !vul_file::exists(target_scene_path) )
@@ -37,7 +38,7 @@ void test_transform()
   boxm2_scene_sptr source_scene = new boxm2_scene(source_scene_path);
   boxm2_scene_sptr target_scene = new boxm2_scene(target_scene_path);
   boxm2_lru_cache2::create(source_scene);
-  boxm2_lru_cache2::create(target_scene);
+
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
   unsigned gpu_idx = 1; //on JLM's alienware
   bocl_device_sptr device = mgr->gpus_[gpu_idx];
@@ -48,14 +49,15 @@ void test_transform()
   vgl_rotation_3d<double> R(M);
   vgl_vector_3d<double> t(0.0, 0.0, 0.0);
   vgl_vector_3d<double> si(1.0, 1.0, 1.0);
-  vgl_vector_3d<double> s0(1.3, 1.0, 1.0);
+  vgl_vector_3d<double> s0(0.9, 1.0, 1.0);
   vgl_vector_3d<double> s1(1.0, 0.9, 1.0);
   //===========================================
    boxm2_vecf_ocl_transform_scene trs(source_scene, target_scene, opencl_cache);
    int ni = 360, nj = 360;
-  #if 0
-    trs.transform_1_blk_interp(R, t, si, false);
-    vil_image_view<float> exp, vis;
+   trs.transform_1_blk_interp(R, t, si, true);
+   return;
+#if 0
+   vil_image_view<float> exp, vis;
   //  vcl_string cam_path = base_dir_path + "putin_cam.txt";
     vcl_string cam_path = base_dir_path + "putin_small_cam.txt";
     //    vcl_string cam_path = base_dir_path + "putin_side_cam.txt";
@@ -86,7 +88,7 @@ void test_transform()
   vcl_cout << "transform/render time " << tim.real()/(n*1000.0) << " sec\n" << vcl_flush;
 #endif
 
-#if 1// The minimizer example
+#if 0// The minimizer example
 
   vcl_string img_path = base_dir_path + "putin_trans_rend.tiff";
   vil_image_view<float> ref_img = vil_load(img_path.c_str());
@@ -97,8 +99,8 @@ void test_transform()
   vpgl_camera_double_sptr camptr = new vpgl_perspective_camera<double>(cam);
   boxm2_vecf_ocl_transform_minimizer tm(source_scene, target_scene, opencl_cache, ref_img, camptr);
   tm.minimize();
-  double smin =0.990, smax = 1.001, sinc = 0.0001;
- // tm.error_surface_1d(0, smin, smax, sinc);
+  double smin =0.9, smax = 1.1, sinc = 0.001;
+  tm.error_surface_1d(0, smin, smax, sinc);
   vil_image_view<float> dif = tm.opt_diff();
   vcl_string diff_img_path = base_dir_path + "putin_trans_diff.tiff";
   vil_save(dif, diff_img_path.c_str());

@@ -2,7 +2,7 @@
 #define boxm2_vecf_ocl_transform_scene_h
 //:
 // \file
-// \brief A function to transform a scene
+// \brief A function to filter a block using the six neigborhood
 // \author J.L. Mundy
 // \date October 5, 2014
 //
@@ -26,8 +26,8 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
  public:
   //: Constructor. 
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
-                     boxm2_scene_sptr& target_scene,
-                     boxm2_opencl_cache2_sptr ocl_cache);
+                                 boxm2_scene_sptr& target_scene,
+                                 boxm2_opencl_cache2_sptr ocl_cache);
 
   ~boxm2_vecf_ocl_transform_scene();
 
@@ -35,6 +35,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   unsigned nj() const{return  cl_nj;}
 
   //: transform a scene of arbitray size, block by block
+  // no interpolation
   bool transform(vgl_rotation_3d<double>  rot,
                  vgl_vector_3d<double> trans,
                  vgl_vector_3d<double> scale);
@@ -44,17 +45,20 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   //  if "finish==true" then GPU state is cleared
   //  and kernel args are released after target
   //  is transformed. The target data is written to disk.
+  //  no interpolation
   bool transform_1_blk(vgl_rotation_3d<double>  rot,
                        vgl_vector_3d<double> trans,
                        vgl_vector_3d<double> scale,
                        bool finish = true);
-  //: transform a scene with one block and interpolate appearance
+  //: transform a scene with one block and interpolate appearance and alpha
+  // leave GPU buffers in place unless finish == true
   bool transform_1_blk_interp(vgl_rotation_3d<double>  rot,
                               vgl_vector_3d<double> trans,
                               vgl_vector_3d<double> scale,
                               bool finish = true);
 
-  //render the current state of the target scene
+  //:render the current state of the target scene leaving scene GPU buffers in place
+  // thus rendering can be faster since block buffer transfers are not needed
   bool render_scene_appearance(vpgl_camera_double_sptr const & cam, vil_image_view<float>& expected_img,
                                vil_image_view<float>& vis_img, int ni, int nj, bool finish = false);
  protected:
@@ -70,11 +74,12 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   boxm2_scene_sptr target_scene_;
   boxm2_scene_sptr source_scene_;
   bocl_device_sptr device_;
-  int apptypesize_;//both scenes should have the same apptype
-  vcl_string app_type_;
+  int apptypesize_;//size of the appearance model in bytes
+  vcl_string app_type_; //type of appearance
+
+  //transform kernels and args 
   bocl_kernel * trans_kern;
   bocl_kernel * trans_interp_kern;
-  //transform kernel args 
   float* translation_buff;
   float* rotation_buff;
   float* scale_buff;
@@ -99,10 +104,11 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_mem* alpha_source;
   bocl_mem* mog_source;
   bocl_mem* nobs_source;
-  bocl_mem* nbr_exint; // neighborhood info
-  bocl_mem* nbr_exists;
-  bocl_mem* nbr_prob;
-  // expected image kernel args
+  bocl_mem* nbr_exint;   // neighborhood info
+  bocl_mem* nbr_exists;  // to support
+  bocl_mem* nbr_prob;    //interpolation
+
+  // expected image kernels and args
   float* buff;
   float* vis_buff;
   float* max_omega_buff;

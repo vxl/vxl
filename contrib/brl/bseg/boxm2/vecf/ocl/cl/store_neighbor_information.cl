@@ -33,7 +33,6 @@ __kernel void extract_neighbors_block( __constant float           * centerX,    
 				       __global   uchar8          * nbr_exists,            //does neighbor exist
 				       __global    int            * max_depth,
 				       __global    float          * output,               // debug output
-				       __local    uchar           * cumsum_wkgp,
 				       __local    uchar16         * local_tree_arg,
 				       __local    uchar16         * neighbor_tree_arg
 				       )
@@ -58,9 +57,6 @@ __kernel void extract_neighbors_block( __constant float           * centerX,    
   {
     local_tree_arg[llid]=as_uchar16(tree_array[gid]);
     __local uchar16* local_tree = &local_tree_arg[llid];
-    __local uchar * cumsum = &cumsum_wkgp[llid*10];
-    cumsum[0] = (*local_tree).s0;
-    int cumIndex = 1;
     int index_x =(int)( (float)gid/(linfo->dims.y * linfo->dims.z));
     int rem_x   =( gid- (float)index_x*(linfo->dims.y * linfo->dims.z));
     int index_y = rem_x/linfo->dims.z;
