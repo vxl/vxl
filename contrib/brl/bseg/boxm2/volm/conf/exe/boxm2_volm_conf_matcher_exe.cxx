@@ -7,7 +7,7 @@
 // \date September 08, 2014
 // \verbatim
 //  Modifications
-//   <none yet>
+//   Yi Dong -- Oct, 2014  Modify the candidate region
 // \endverbatim
 //
 
@@ -15,6 +15,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/io/vgl_io_polygon.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
 #include <bpgl/depth_map/depth_map_scene.h>
 #include <bkml/bkml_parser.h>
@@ -27,7 +28,223 @@
 #include <volm/conf/volm_conf_buffer.h>
 #include <volm/volm_candidate_list.h>
 #include <boxm2/volm/conf/boxm2_volm_conf_matcher.h>
+#include <volm/volm_utils.h>
 
+int main(int argc, char** argv)
+{
+  vul_arg<unsigned>       tile_id("-tile", "ROI tile id", 9999);
+  vul_arg<int>            leaf_id("-leaf", "geo location leaf id pass(-1) for matcher running on all leaves", -1);
+  vul_arg<vcl_string>   query_img("-img",  "query image", "");
+  vul_arg<vcl_string>     dms_bin("-dms",  "depth map scene file", "");
+  vul_arg<vcl_string>     cam_kml("-cam",  "camera calibration kml file", "");
+  vul_arg<vcl_string>     cam_inc("-inc",  "file defining camera angle incremental values", "");
+  vul_arg<vcl_string>  geo_folder("-geo",  "folder to read the geo hypotheses ", "");
+  vul_arg<vcl_string>  idx_folder("-idx",  "folder to read configuration indices", "");
+  vul_arg<vcl_string>  index_name("-idx-name", "name of the loaded index", "");
+  vul_arg<vcl_string>  out_folder("-out",  "output folder", "");
+  vul_arg<bool>           is_cand("-is-cand", "option to specify whether there is candidate region available", false);
+  vul_arg<vcl_string> cand_folder("-cand-folder", "folder where the candidate regions for each geo location leaf stores", "");
+  vul_arg<float>  buffer_capacity("-buffer", "buffer capacity for index creation (in GByte)", 2.0f);
+  vul_arg<unsigned>  tol_in_pixel("-tol", "distance tolerance value in pixel unit (default is 25)", 25);
+  vul_arg<bool>        use_height("-height", "option to use building height in matching", false);
+  vul_arg<bool>              read("-read", "option to read the matching score from output folder", false);
+  vul_arg_parse(argc, argv);
+
+  // input check
+  if (tile_id() == 9999 || geo_folder().compare("") == 0 || out_folder().compare("") == 0)
+  {
+    vul_arg_display_usage_and_exit();
+    return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  vcl_stringstream log_file;
+  vcl_stringstream log;
+  log_file << out_folder() << "/log_tile_" << tile_id() << "_leaf_" << leaf_id() << ".xml";
+
+  if (use_height()) {
+    vcl_cout << "Configuration Matcher will match the height of URGENT building footprints!!!!!!!!!!!!!!!!!!!!!!!!" << vcl_endl;
+  }
+  vcl_cout << "Distance tolerance is " << tol_in_pixel() << " pixels!!!!!!!!!!!!!!!!!!!!!!" << vcl_flush << vcl_endl;
+  
+  // load the geo index locations
+  vcl_stringstream file_name_pre;
+  file_name_pre << geo_folder() << "/geo_index_tile_" << tile_id();
+  if (!vul_file::exists(file_name_pre.str()+".txt")) {
+    log << "ERROR: loading geo index locations fails form file: " << file_name_pre.str() << ".txt!\n";
+    volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
+  }
+  float min_size;
+  volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str()+".txt", min_size);
+  volm_geo_index::read_hyps(root, file_name_pre.str());
+  vcl_vector<volm_geo_index_node_sptr> loc_leaves_all;
+  loc_leaves_all.clear();
+  volm_geo_index::get_leaves_with_hyps(root, loc_leaves_all);
+
+  vcl_vector<volm_geo_index_node_sptr> loc_leaves;
+  loc_leaves.clear();
+  if (leaf_id() >= 0 && leaf_id() < (int)loc_leaves_all.size())
+    loc_leaves.push_back(loc_leaves_all[leaf_id()]);
+  else
+    for (unsigned i = 0; i < loc_leaves_all.size(); i++)
+      loc_leaves.push_back(loc_leaves_all[i]);
+
+  if (!read())        // perform configurational matcher
+  {
+    // input check
+    if (dms_bin().compare("") == 0 || cam_kml().compare("") == 0 || cam_inc().compare("") == 0 )
+    {
+      vcl_cerr << "ERROR: missing input for configuration matcher!!!" << vcl_endl;
+      vul_arg_display_usage_and_exit();
+      return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    // load the depth map scene
+    if (!vul_file::exists(dms_bin())) {
+      log << "ERROR: can not find depth map scene binary: " << dms_bin() << "!\n";
+      volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    depth_map_scene_sptr dms = new depth_map_scene;
+    vsl_b_ifstream dms_is(dms_bin().c_str());
+    dms->b_read(dms_is);
+    dms_is.close();
+    // create the camera space
+    // read the camera incremental values
+    if (!vul_file::exists(cam_inc())) {
+      log << "ERROR: can not find camera incremental file: " << cam_inc() << "!\n";
+      volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    volm_io_expt_params params;
+    params.read_cam_inc_params(cam_inc());
+    double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
+    double tfov, tfov_dev, altitude, lat, lon;
+    if (!volm_io::read_camera(cam_kml(), dms->ni(), dms->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, tfov, tfov_dev, altitude, lat, lon)) {
+      log << "ERROR: parsing camera kml file failed: " << cam_kml() << "!\n";
+      volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    // create camera space
+    volm_camera_space_sptr csp = new volm_camera_space(tfov, tfov_dev, params.fov_inc, altitude, dms->ni(), dms->nj(),
+                                                       heading, heading_dev, params.head_inc,
+                                                       tilt, tilt_dev, params.tilt_inc,
+                                                       roll, roll_dev, params.roll_inc);
+    // enforce ground plane constraint if user specified a ground plane in the depth map scene
+    if (dms->ground_plane().size() > 0)
+    {
+      camera_space_iterator cit = csp->begin();
+      for ( ; cit != csp->end(); ++cit) {
+        unsigned current = csp->cam_index();
+        vpgl_perspective_camera<double> cam = csp->camera();  // camera t current stat of iterator
+        bool success = true;
+        for (unsigned i = 0; success && i < dms->ground_plane().size(); i++)
+          success = dms->ground_plane()[i]->region_ground_2d_to_3d(cam);
+        if (success) // add this camera
+          csp->add_camera_index(current);
+      }
+    }
+    else
+    {
+      csp->generate_full_camera_index_space();
+    }
+    // create the volm_conf_query
+    volm_conf_query_sptr query = new volm_conf_query(csp, dms, tol_in_pixel());
+    // some screen outputs for input
+    vcl_cout << "--------- Operate configuration matcher on tile " << tile_id() << " and leaf " << leaf_id() << " ------------ " << vcl_endl;
+    vcl_cout << " Input query info: " << vcl_endl;
+    vcl_cout << "  query has " << query->ncam() << " cameras" << vcl_endl;
+    vcl_vector<vcl_string> cam_string = query->camera_strings();
+    vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > > conf_objs_d_tol = query->conf_objects_d_tol();
+    vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objs = query->conf_objects(); 
+    if (cam_string.size() < 20) {
+      for (unsigned i = 0; i < conf_objs.size(); i++) {
+        vcl_cout << "   camera " << i << " : " << cam_string[i] << " has " << conf_objs[i].size() << " configurational objects" << vcl_endl;
+      }
+    }
+    unsigned num_locs = 0;
+    vcl_cout << " Index type: " << index_name() << vcl_endl;
+    vcl_cout << " Tile " << tile_id() << " has " << loc_leaves.size() << " leaves for matcher" << vcl_endl;
+    vcl_cout << " Configuration matcher will operate on " << loc_leaves.size() << " leaves (leaf id: " << leaf_id() << ')' << vcl_endl;
+    // create a configuration matcher
+    if (idx_folder().compare("") == 0) {
+      log << "ERROR: can not find index folder: " << idx_folder() << "!\n";
+      volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    if (cand_folder().compare("") == 0) {
+      log << "ERROR: can not find candidate region folder: " << cand_folder() << "!\n";
+      volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
+    }
+    vcl_cout << " Start the configuration matcher!!!!!!!!" << vcl_endl;
+    vul_timer t;
+    t.mark();
+    boxm2_volm_conf_matcher matcher(query, tile_id(), loc_leaves, idx_folder(), out_folder(), cand_folder(), buffer_capacity());
+    int matched_locs = 0;
+    if (is_cand())
+      matched_locs = matcher.conf_match_cpp(index_name(), use_height());
+    else
+      matched_locs = matcher.conf_match_cpp_no_candidate(index_name(), use_height());
+    if (matched_locs < 0) {
+      log << "ERROR: configuration matcher failed on tile " << tile_id() << ", leaf " << leaf_id() << "!\n";
+      volm_io::write_error_log(log_file.str(), log.str());
+      return volm_io::EXE_MATCHER_FAILED;
+    }
+    vcl_cout << " Matching " << matched_locs << " and " << query->ncam() << " cameras per location costs " << t.all()/(1000.0*60.0) << " minutes" << vcl_endl;
+    return volm_io::SUCCESS;
+  }
+  else  // read the score for given leaf
+  {
+    vcl_cout << "--------- Reading configuration matcher score on tile " << tile_id() << " ------------ " << vcl_endl;
+    vcl_stringstream score_file_pre;
+    score_file_pre << out_folder() << "/conf_score_tile_" << tile_id();
+    for (unsigned i = 0; i < loc_leaves.size(); i++)
+    {
+      volm_geo_index_node_sptr leaf = loc_leaves[i];
+      vcl_string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
+      if (!vul_file::exists(score_bin_file))
+        continue;  // case where leaf is entirely outside the candidate region
+
+      volm_conf_buffer<volm_conf_score> score_idx(buffer_capacity());
+      score_idx.initialize_read(score_bin_file);
+      
+      // load the candidate region
+      bool is_cand = false;
+      // load and check candidate region
+      vcl_string outer_region_file = cand_folder() + "/cand_region_outer_" + leaf->get_string() + ".bin";
+      vgl_polygon<double> cand_outer, cand_inner;
+      cand_outer.clear();
+      cand_inner.clear();
+      if (vul_file::exists(outer_region_file)) {  // read the exterior boundaries of candidate region
+        is_cand = true;
+        vsl_b_ifstream ifs_out(outer_region_file);
+        vsl_b_read(ifs_out, cand_outer);
+        ifs_out.close();
+      }
+      vcl_string inner_region_file = cand_folder() + "/cand_region_inner_" + leaf->get_string() + ".bin";
+      if (vul_file::exists(inner_region_file)) {
+        vsl_b_ifstream ifs_in(inner_region_file);
+        vsl_b_read(ifs_in, cand_inner);
+        ifs_in.close();
+      }
+      // check whether the leaf is entirely covered by the candidate region
+      if (cand_inner.num_sheets() == 0) {
+        for (unsigned i = 0; (i < cand_outer.num_sheets() && is_cand); i++)
+          if (volm_utils::poly_contains(cand_outer[i], leaf->extent_))
+            is_cand = false;
+      }
+      // load the score
+      vgl_point_3d<double> h_pt;
+      while (leaf->hyps_->get_next(0,1,h_pt))
+      {
+        if (is_cand && !volm_candidate_list::inside_candidate_region(cand_inner, cand_outer, h_pt.x(), h_pt.y()))
+          continue;
+        volm_conf_score score_in;
+        score_idx.get_next(score_in);
+        vcl_cout << "location: " << vcl_setprecision(8) << h_pt.x() << ", " << vcl_setprecision(8) << h_pt.y() << " (tile " << tile_id() << "): ---> ";
+        score_in.print(vcl_cout);
+      }
+      score_idx.finalize();
+    }
+    return volm_io::SUCCESS;
+  }
+  return volm_io::SUCCESS;
+}
+
+#if 0
 int main(int argc, char** argv)
 {
   vul_arg<unsigned>      tile_id("-tile", "ROI tile id", 9999);
@@ -264,3 +481,4 @@ int main(int argc, char** argv)
     return volm_io::SUCCESS;
   }
 }
+#endif

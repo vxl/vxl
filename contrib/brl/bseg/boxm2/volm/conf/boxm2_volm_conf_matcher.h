@@ -37,8 +37,7 @@ public:
                           vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
                           vcl_string const& index_folder,
                           vcl_string const& out_folder,
-                          vgl_polygon<double> const& cand_out,
-                          vgl_polygon<double> const& cand_in,
+                          vcl_string const& cand_folder,
                           float const& buffer_capacity = 2.0);
   //: constructor to create query online
   boxm2_volm_conf_matcher(volm_camera_space_sptr const& cam_space, depth_map_scene_sptr const& depth_scene,
@@ -46,8 +45,7 @@ public:
                           vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
                           vcl_string const& index_folder,
                           vcl_string const& out_folder,
-                          vgl_polygon<double> const& cand_out,
-                          vgl_polygon<double> const& cand_in,
+                          vcl_string const& cand_folder,
                           float const& buffer_capacity = 2.0,
                           unsigned tol_in_pixel = 25);
 
@@ -57,15 +55,14 @@ public:
   volm_conf_query_sptr query()    const { return query_; }
   vcl_string index_folder()       const { return index_folder_; }
   float buffer_capacity()         const { return buffer_capacity_; }
-  vgl_polygon<double> cand_out()  const { return cand_poly_out_; }
-  vgl_polygon<double> cand_in()   const { return cand_poly_in_; }
 
   vcl_vector<volm_geo_index_node_sptr>& loc_leaves() { return loc_leaves_; }
 
   // =================== method =======================
 
   //: configurational matcher on location leaf with leaf_id (if leaf_id is -1, matcher will operate on all leaves)
-  int conf_match_cpp(vcl_string const& index_name, int const& leaf_id = -1, bool const& use_height = false);
+  int conf_match_cpp(vcl_string const& index_name, bool const& use_height = true);
+  int conf_match_cpp_no_candidate(vcl_string& index_name, bool const& use_height = true);
 
 private:
   //: configurational query
@@ -84,9 +81,7 @@ private:
   float buffer_capacity_;  // in GB
 
   //: candidate polygon
-  vgl_polygon<double> cand_poly_out_;
-  vgl_polygon<double> cand_poly_in_;
-  bool is_cand_; // signature of candidate region being valid
+  vcl_string cand_folder_;
 
   //: output folder
   vcl_string out_folder_;
@@ -94,19 +89,21 @@ private:
   //: matching query with a single location index
   bool matching(vcl_vector<volm_conf_object> const& values, volm_conf_score& score, bool const& use_height = false);
 
+#if 0
   //: matching given a reference object point in index
   void match_to_reference(volm_conf_object const& ref_i, volm_conf_object_sptr const& ref_q,
                            vcl_vector<volm_conf_object_sptr> const& obj_q,
                            vcl_map<unsigned char, vcl_vector<volm_conf_object> >& obj_i,
                            float& score,
                            vcl_vector<volm_conf_object>& matched_objs);
+#endif
 
   void match_to_reference_h(volm_conf_object const& ref_i, volm_conf_object_sptr const& ref_q,
                             vcl_vector<volm_conf_object_sptr> const& obj_q,
                             vcl_map<unsigned char, vcl_vector<volm_conf_object> >& obj_i,
                             float& score,
-                            vcl_vector<volm_conf_object>& matched_objs);
-      
+                            vcl_vector<volm_conf_object>& matched_objs,
+                            bool const& use_height = true);
 
 };
 

@@ -4,42 +4,126 @@
 
 #include <vul/vul_file.h>
 #include <vcl_algorithm.h>
+#include <vgl/io/vgl_io_polygon.h>
+#include <volm/volm_utils.h>
 #include <volm/volm_candidate_list.h>
+
 
 boxm2_volm_conf_matcher::boxm2_volm_conf_matcher(volm_conf_query_sptr const& query,
                                                  unsigned const& tile_id,
                                                  vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
                                                  vcl_string const& index_folder,
                                                  vcl_string const& out_folder,
-                                                 vgl_polygon<double> const& cand_poly_out,
-                                                 vgl_polygon<double> const& cand_poly_in,
+                                                 vcl_string const& cand_folder,
                                                  float const& buffer_capacity)
- : query_(query), tile_id_(tile_id), loc_leaves_(loc_leaves), index_folder_(index_folder), cand_poly_out_(cand_poly_out), cand_poly_in_(cand_poly_in),
-   buffer_capacity_(buffer_capacity),
+ : query_(query), tile_id_(tile_id), loc_leaves_(loc_leaves), index_folder_(index_folder),
+   buffer_capacity_(buffer_capacity), cand_folder_(cand_folder),
    out_folder_(out_folder)
-{
-  is_cand_ = (cand_poly_out_.num_sheets() != 0);
-}
+{}
 
 boxm2_volm_conf_matcher::boxm2_volm_conf_matcher(volm_camera_space_sptr const& cam_space, depth_map_scene_sptr const& depth_scene,
                                                  unsigned const& tile_id,
                                                  vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
                                                  vcl_string const& index_folder,
                                                  vcl_string const& out_folder,
-                                                 vgl_polygon<double> const& cand_poly_out,
-                                                 vgl_polygon<double> const& cand_poly_in,
+                                                 vcl_string const& cand_folder,
                                                  float const& buffer_capacity,
                                                  unsigned tol_in_pixel)
- : tile_id_(tile_id), loc_leaves_(loc_leaves), index_folder_(index_folder), cand_poly_out_(cand_poly_out), cand_poly_in_(cand_poly_in),
-   buffer_capacity_(buffer_capacity),
-   out_folder_(out_folder)
+ : tile_id_(tile_id), loc_leaves_(loc_leaves), index_folder_(index_folder),
+   buffer_capacity_(buffer_capacity), cand_folder_(cand_folder), out_folder_(out_folder)
 {
   query_ = new volm_conf_query(cam_space, depth_scene, tol_in_pixel);
-  is_cand_ = (cand_poly_out_.num_sheets() != 0);
 }
 
-int boxm2_volm_conf_matcher::conf_match_cpp(vcl_string const& index_name, int const& leaf_idx, bool const& use_height)
+int boxm2_volm_conf_matcher::conf_match_cpp(vcl_string const& index_name, bool const& use_height)
 {
+  // loop over each leaf to match
+  unsigned matched_locs = 0;
+  unsigned n_leaves = loc_leaves_.size();
+  for (unsigned l_idx = 0; l_idx < n_leaves; l_idx++)
+  {
+    volm_geo_index_node_sptr leaf = loc_leaves_[l_idx];
+    bool is_cand = false;
+    // load and check candidate region
+    vcl_string outer_region_file = cand_folder_ + "/cand_region_outer_" + leaf->get_string() + ".bin";
+    vgl_polygon<double> cand_outer, cand_inner;
+    cand_outer.clear();
+    cand_inner.clear();
+    if (vul_file::exists(outer_region_file)) {  // read the exterior boundaries of candidate region
+      is_cand = true;
+      vsl_b_ifstream ifs_out(outer_region_file);
+      vsl_b_read(ifs_out, cand_outer);
+      ifs_out.close();
+    }
+    if (cand_outer.num_sheets() == 0)
+      continue;  // leaf is entirely outside the candidate region
+    vcl_string inner_region_file = cand_folder_ + "/cand_region_inner_" + leaf->get_string() + ".bin";
+    if (vul_file::exists(inner_region_file)) {
+      vsl_b_ifstream ifs_in(inner_region_file);
+      vsl_b_read(ifs_in, cand_inner);
+      ifs_in.close();
+    }
+    // check whether the leaf is entirely covered by the candidate region
+    if (cand_inner.num_sheets() == 0) {
+      for (unsigned i = 0; (i < cand_outer.num_sheets() && is_cand); i++)
+        if (volm_utils::poly_contains(cand_outer[i], leaf->extent_))
+          is_cand = false;
+    }
+    // create an index buffer for current leaf
+    vcl_stringstream index_file_pre;
+    index_file_pre << index_folder_ << "/conf_index_tile_" << tile_id_;
+    vcl_string bin_file_name = index_file_pre.str() + "_" + leaf->get_string() + "_" + index_name + ".bin";
+    if (!vul_file::exists(bin_file_name)) {
+      vcl_cerr << "In boxm2_volm_conf_matcher::conf_matcher: can not find index binary file " << bin_file_name << " for leaf " << l_idx << " and index name " << index_name << "!\n";
+      return -1;
+    }
+    vcl_cout << "loading index from: " << bin_file_name << " using " << buffer_capacity_ << " GB buffer" << vcl_flush << vcl_endl;
+    volm_conf_buffer<volm_conf_object> ind(buffer_capacity_);
+    if (!ind.initialize_read(bin_file_name)) {
+      vcl_cerr << "In boxm2_volm_conf_matcher::conf_matcher: can not initialize reading index binary file: " << bin_file_name << "!\n";
+      return -1;
+    }
+    // create an index buffer for writing score
+    vcl_stringstream score_file_pre;
+    score_file_pre << out_folder_ << "/conf_score_tile_" << tile_id_;
+    vcl_string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name + ".bin";
+    volm_conf_buffer<volm_conf_score> score_idx(buffer_capacity_);
+    if (!score_idx.initialize_write(score_bin_file)) {
+      vcl_cout << "In boxm2_volm_conf_matcher::conf_matcher: can not initialize writing score binary file: " << score_bin_file << "!\n";
+      return -1;
+    }
+    // loop over each location inside leaf
+    vgl_point_3d<double> h_pt;
+    unsigned cnt = 0;
+    while ( leaf->hyps_->get_next(0,1,h_pt))
+    {
+      if (cnt++/1000 == 0)  vcl_cout << '.' << vcl_flush;
+      // get index from index database
+      vcl_vector<volm_conf_object> values;
+      if (!ind.get_next(values)) {
+        vcl_cerr << "In boxm2_volm_conf_matcher::conf_matcher: get index for location " << h_pt.x() << ", " << h_pt.y() << " failed!\n";
+        return -1;
+      }
+      // check candidate region
+      if (is_cand)
+        if (!volm_candidate_list::inside_candidate_region(cand_inner, cand_outer, h_pt.x(), h_pt.y()))
+          continue;
+      volm_conf_score score;
+      this->matching(values, score, use_height);
+      score_idx.add_to_index(score);
+#if 0
+      vcl_cout << "location: " << vcl_setprecision(8) << h_pt.x() << ", " << vcl_setprecision(8) << h_pt.y() << "): ---> ";
+      score.print(vcl_cout);
+#endif
+      matched_locs++;
+    }
+    // write out the score
+    score_idx.finalize();
+    vcl_cout << '\n';
+  }
+  return matched_locs;
+
+#if 0
   // loop over each leaf to match
   unsigned matched_locs = 0;
   unsigned n_leaves = loc_leaves_.size();
@@ -102,6 +186,61 @@ int boxm2_volm_conf_matcher::conf_match_cpp(vcl_string const& index_name, int co
     score_idx.finalize();
   } // end of loop over location leaves
 
+  return matched_locs;
+#endif
+}
+
+int boxm2_volm_conf_matcher::conf_match_cpp_no_candidate(vcl_string& index_name, bool const& use_height)
+{
+  // loop over each leaf to match
+  unsigned matched_locs = 0;
+  unsigned n_leaves = (unsigned)loc_leaves_.size();
+  for (unsigned l_idx = 0; l_idx < n_leaves; l_idx++)
+  {
+    volm_geo_index_node_sptr leaf = loc_leaves_[l_idx];
+    // create an index buffer for current leaf
+    vcl_stringstream index_file_pre;
+    index_file_pre << index_folder_ << "/conf_index_tile_" << tile_id_;
+    vcl_string bin_file_name = index_file_pre.str() + "_" + leaf->get_string() + "_" + index_name + ".bin";
+    if (!vul_file::exists(bin_file_name)) {
+      vcl_cerr << "In boxm2_volm_conf_matcher::conf_matcher: can not find index binary file " << bin_file_name << " for leaf " << l_idx << " and index name " << index_name << "!\n";
+      return -1;
+    }
+    vcl_cout << "loading index from: " << bin_file_name << " using " << buffer_capacity_ << " GB buffer" << vcl_flush << vcl_endl;
+    volm_conf_buffer<volm_conf_object> ind(buffer_capacity_);
+    if (!ind.initialize_read(bin_file_name)) {
+      vcl_cerr << "In boxm2_volm_conf_matcher::conf_matcher: can not initialize reading index binary file: " << bin_file_name << "!\n";
+      return -1;
+    }
+    // create an index buffer for writing score
+    vcl_stringstream score_file_pre;
+    score_file_pre << out_folder_ << "/conf_score_tile_" << tile_id_;
+    vcl_string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name + ".bin";
+    volm_conf_buffer<volm_conf_score> score_idx(buffer_capacity_);
+    if (!score_idx.initialize_write(score_bin_file)) {
+      vcl_cout << "In boxm2_volm_conf_matcher::conf_matcher: can not initialize writing score binary file: " << score_bin_file << "!\n";
+      return -1;
+    }
+    // loop over each location inside leaf
+    vgl_point_3d<double> h_pt;
+    unsigned cnt = 0;
+    while ( leaf->hyps_->get_next(0,1,h_pt))
+    {
+      if (cnt++/1000 == 0)  vcl_cout << '.' << vcl_flush << vcl_endl;
+      // get index from index database
+      vcl_vector<volm_conf_object> values;
+      if (!ind.get_next(values)) {
+        vcl_cerr << "In boxm2_volm_conf_matcher::conf_matcher: get index for location " << h_pt.x() << ", " << h_pt.y() << " failed!\n";
+        return -1;
+      }
+      volm_conf_score score;
+      this->matching(values, score, use_height);
+      score_idx.add_to_index(score);
+      matched_locs++;
+    }
+    // write out the score
+    score_idx.finalize();
+  }
   return matched_locs;
 }
 
@@ -177,10 +316,7 @@ bool boxm2_volm_conf_matcher::matching(vcl_vector<volm_conf_object> const& value
       for (vcl_vector<volm_conf_object>::iterator vit = i_ref_objs.begin();  vit != i_ref_objs.end(); ++vit) {
         float score;
         vcl_vector<volm_conf_object> matched_objs;
-        if (use_height)
-          this->match_to_reference_h(*vit, q_ref, q_objs, index_map, score, matched_objs);
-        else
-          this->match_to_reference(*vit, q_ref, q_objs, index_map, score, matched_objs);
+        this->match_to_reference_h(*vit, q_ref, q_objs, index_map, score, matched_objs, use_height);
         // add the reference object into matched objects
         matched_objs.push_back(*vit);
         score_ref.insert(vcl_pair<float, float>(score, vit->theta()));
@@ -216,7 +352,6 @@ bool boxm2_volm_conf_matcher::matching(vcl_vector<volm_conf_object> const& value
   float max_score = 0.0f;
   float max_theta = 0.0f;
   vcl_vector<volm_conf_object> best_matched_objs;
-  unsigned max_cam_id;
   for (vcl_map<unsigned, vcl_pair<float, float> >::iterator mit = score_cam_map.begin(); mit != score_cam_map.end(); ++mit)
   {
     if (mit->second.first > max_score) {
@@ -230,6 +365,7 @@ bool boxm2_volm_conf_matcher::matching(vcl_vector<volm_conf_object> const& value
   return true;
 }
 
+#if 0
 // match query to a index with one reference point in index
 void boxm2_volm_conf_matcher::match_to_reference(volm_conf_object const& ref_i, volm_conf_object_sptr const& ref_q,
                                                  vcl_vector<volm_conf_object_sptr> const& obj_q,
@@ -291,13 +427,14 @@ void boxm2_volm_conf_matcher::match_to_reference(volm_conf_object const& ref_i, 
   score /= obj_score.size();
   return;
 }
-
+#endif
 
 void boxm2_volm_conf_matcher::match_to_reference_h(volm_conf_object const& ref_i, volm_conf_object_sptr const& ref_q,
                                                    vcl_vector<volm_conf_object_sptr> const& obj_q,
                                                    vcl_map<unsigned char, vcl_vector<volm_conf_object> >& obj_map_i,
                                                    float& score,
-                                                   vcl_vector<volm_conf_object>& matched_objs)
+                                                   vcl_vector<volm_conf_object>& matched_objs,
+                                                   bool const& use_height)
 {
   matched_objs.clear();
   score = 0.0f;
@@ -345,10 +482,10 @@ void boxm2_volm_conf_matcher::match_to_reference_h(volm_conf_object const& ref_i
         }
       }
       float total_score = 0.0f;
-      if (score_h < 0)  // consider only distance score and angular score
-        total_score = 0.4*score_d + 0.6*score_t;
+      if (score_h < 0 || !use_height)  // consider only distance score and angular score
+        total_score = 0.4f*score_d + 0.6f*score_t;
       else
-        total_score = 0.3*score_d + 0.3*score_t + 0.4*score_h;
+        total_score = 0.3f*score_d + 0.3f*score_t + 0.4f*score_h;
       if (total_score > max_score) {
         max_score = total_score;
         best_objs = *vit;

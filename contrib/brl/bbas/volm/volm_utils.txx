@@ -32,14 +32,13 @@ bool volm_utils::poly_contains(vcl_vector<vgl_point_2d<T> > const& sheet, vgl_bo
   corners.push_back(vgl_point_2d<T>(b.max_x(), b.min_y()));
   corners.push_back(b.max_point());
   corners.push_back(vgl_point_2d<T>(b.min_x(), b.max_y()));
-  for (vcl_vector<vgl_point_2d<T> >::iterator vit = corners.begin();  vit != corners.end(); ++vit)
-    if (!poly.contains(*vit))
+  for (unsigned i = 0; i < corners.size(); i++)
+    if (!poly.contains(corners[i]))
       return false;
   // all 4 corners are inside polygon, check if there is any of the boundary points is inside the box (not on the edges)
-  for (vcl_vector<vgl_point_2d<T> >::const_iterator vit = sheet.begin(); vit != sheet.end(); ++vit) {
-    if ( inside_box(b, *vit))
+  for (unsigned i = 0; i < sheet.size(); i++)
+    if (inside_box(b, sheet[i]))
       return false;
-  }
   return true;
 }
 
