@@ -900,6 +900,8 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   else
     i.spacing_y_ = i.spacing_x_;
   // check whether pixelspacing is available if not set to imagerpixelspacing
+  // Note: I removed the messages here since they may not be accurate; correct_manufacturer_discrepancies
+  // obtains accurate pixel spacings for some images.
 
   if (ps.size() <= 0)
   {
@@ -907,20 +909,20 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
     {
       i.spacing_x_ = 1;
       i.spacing_y_ = 1;
-      vcl_cout<<"DICOM tags PixelSpacing and ImagerPixelSpacing missing: use PixelSpacing = 1.0."<<vcl_endl;
+      //vcl_cout<<"DICOM tags PixelSpacing and ImagerPixelSpacing missing: use PixelSpacing = 1.0."<<vcl_endl;
     } 
     else if (ps_ips.size() > 1)
     {
       i.spacing_x_ = i.imager_spacing_x_;
       i.spacing_y_ = i.imager_spacing_y_;
-      vcl_cout<<"DICOM tag PixelSpacing missing: use PixelSpacing = ImagerPixelSpacing."<<vcl_endl;
+      //vcl_cout<<"DICOM tag PixelSpacing missing: use PixelSpacing = ImagerPixelSpacing."<<vcl_endl;
     }
     else if (ps_ips.size() > 0)
     {
       i.spacing_x_ = i.imager_spacing_x_;
       i.spacing_y_ = i.imager_spacing_x_;
-      vcl_cout<<"DICOM tag x.PixelSpacing missing: use x.PixelSpacing = x.ImagerPixelSpacing."<<vcl_endl;
-      vcl_cout<<"DICOM tags y.PixelSpacing and y.ImagerPixelSpacing missing: use y.PixelSpacing = x.ImagerPixelSpacing."<<vcl_endl;
+      //vcl_cout<<"DICOM tag x.PixelSpacing missing: use x.PixelSpacing = x.ImagerPixelSpacing."<<vcl_endl;
+      //vcl_cout<<"DICOM tags y.PixelSpacing and y.ImagerPixelSpacing missing: use y.PixelSpacing = x.ImagerPixelSpacing."<<vcl_endl;
     }
   }
 
