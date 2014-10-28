@@ -90,7 +90,9 @@ void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& im
 {
   vil_image_resource_sptr ir = vil_load_image_resource(im_path.c_str());
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
-  { image.image()=vil_load(im_path.c_str()); }
+  { 
+    vimt_load(im_path.c_str(), image, unit_scaling);
+  }
   else 
   if ((ir->pixel_format()==VIL_PIXEL_FORMAT_FLOAT) || 
      (ir->pixel_format()==VIL_PIXEL_FORMAT_UINT_16) || 
