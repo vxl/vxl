@@ -30,17 +30,17 @@
 int main(int argc, char** argv)
 {
     // input
-    vul_arg<vcl_string> cam_kml("-camkml",  "camera KML", "e:/data/Finder/Camera20.kml");                                // query -- camera space binary
-    vul_arg<vcl_string> cam_params("-camparams", "camera params", "Z://projects//FINDER//test1//p1a_test1_20///cam_inc_params.txt");                                // query -- camera space binary
-    vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "Z://projects//FINDER//test1//p1a_test1_20//p1a_test1_20.vsl");                             // query -- depth map scene
-    vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "e:/data/Finder/unit_sphere_2_75_105.vsl");                             // query -- spherical shell container binary
-    vul_arg<vcl_string> geo_index_folder(" -geo", " tree structure", "Z:/projects/FINDER/index/geoindex_zone_17_inc_2_nh_100/"); // index -- folder to read the geo_index and hypos for each leaf
-    vul_arg<vcl_string> geo_data_folder("-data", "folder to read the index data", "Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_0.5/"); // index -- folder to read the geo_index and hypos for each leaf
-    vul_arg<unsigned>   tile_id("-tile", "ID of the tile that current matcher consdier", 3);       // matcher -- tile id
+    vul_arg<vcl_string> cam_kml("-camkml",  "camera KML", "");                                // query -- camera space binary
+    vul_arg<vcl_string> cam_params("-camparams", "camera params", "");                                // query -- camera space binary
+    vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
+    vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");                             // query -- spherical shell container binary
+    vul_arg<vcl_string> geo_index_folder(" -geo", " tree structure", ""); // index -- folder to read the geo_index and hypos for each leaf
+    vul_arg<vcl_string> geo_data_folder("-data", "folder to read the index data", ""); // index -- folder to read the geo_index and hypos for each leaf
+    vul_arg<unsigned>   tile_id("-tile", "ID of the tile that current matcher consider", 3);       // matcher -- tile id
     vul_arg<unsigned>   zone_id("-zone", "ID of the utm zone of current tile",17);                 // matcher -- zone id
     vul_arg<float>      threshold("-thres", "threshold for choosing valid cameras (0~1)", 0.4f);   // matcher -- threshold for choosing cameras
     vul_arg<unsigned>   max_cam_per_loc("-max_cam", "maximum number of cameras to be saved", 200); // matcher -- output related
-    vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "e:/data/Finder/20/");      // matcher -- output folder
+    vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "");      // matcher -- output folder
     vul_arg<bool>       logger("-logger", "designate one of the exes as logger", false);           // matcher -- log file generation
     vul_arg_parse(argc, argv);
 
@@ -81,8 +81,7 @@ int main(int argc, char** argv)
     // read in the parameter, create depth_interval
     boxm2_volm_wr3db_index_params params;
     vcl_stringstream params_file;
-    params_file << "Z:/projects/FINDER/index/geoindex_zone_17_inc_2_nh_100_combined_pa_2/" << "geo_index_tile_" << tile_id() << "_index.params";
-    
+    params_file << geo_index_folder() << "/geo_index_tile_" << tile_id() << "_index.params";
 
     if (!params.read_params_file(params_file.str())) {
         log << " ERROR: cannot read params file from " << params_file.str() << '\n';

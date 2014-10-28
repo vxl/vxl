@@ -11,8 +11,6 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_intersection.h>
 
-static vcl_string MyDIR = "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/";
-
 static void test_sph_geom()
 {
   double er = 0;
@@ -187,8 +185,6 @@ static void test_sph_geom()
       && box_s1.contains(boxes[0])&& box_s1.contains(boxes[1]);
   TEST("each box contains the other's bounds", good, true);
 
-  vcl_string box_path = MyDIR + "box_display.wrl";
-
   // transform a box
   vsph_sph_box_2d tb1 = box_s1.transform(0.5, 0.25, 1.2, true);
   double tth_min = 1.96624, tth_max = 2.17535;
@@ -296,27 +292,6 @@ static void test_sph_geom()
   double td_vgl = static_cast<double>(t.real())/(2.0*nb*1000.0);
   vcl_cout << "vgl box intersection time = " << td_vgl << " secs\n"
            << "ratio = " << td_vsph/td_vgl << '\n';
-#if 0
-  double tol = 0.001;
-  vcl_string grok_path = MyDIR + "grok_box_display.wrl";
-  vcl_ofstream os(grok_path.c_str());
-  grok.display_box(os, 1.0f, 1.0f, 0.0f, tol);
-  os.close();
-  vcl_vector<vgl_vector_3d<double> > verts;
-  vcl_vector<vcl_vector<int> > quads;
-  box_s1.planar_quads(verts, quads, tol);
-  vcl_ofstream os(box_path.c_str());
-  box_s1.display_box(os, 1.0f, 0.0f, 0.0f, tol);
-  os.close();
-
-  vcl_vector<vsph_sph_box_2d> dis_boxes(2);
-  dis_boxes[0]=box_s1;   dis_boxes[1]=box_s2;
-  vcl_vector<float> c0(3, 0.0f), c1(3, 0.0f);
-  c0[0]=1.0f; c1[0]=1.0f; c1[1] = 1.0f;
-  vcl_vector<vcl_vector<float> > colors(2);
-  colors[0]=c0; colors[1]=c1;
-  vsph_sph_box_2d::display_boxes(box_path, dis_boxes, colors, tol);
-#endif
 }
 
 TESTMAIN(test_sph_geom);

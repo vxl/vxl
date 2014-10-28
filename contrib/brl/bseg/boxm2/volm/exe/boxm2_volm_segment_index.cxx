@@ -26,13 +26,13 @@
 int main(int argc, char** argv)
 {
     // input
-    vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "e:/data/Finder/unit_sphere_0.5_75_105.vsl");                             // query -- spherical shell container binary
-    vul_arg<vcl_string> geo_index_folder("-geo", " tree structure", "Z:/projects/FINDER/index/geoindex_zone_17_inc_2_nh_100/"); // index -- folder to read the geo_index and hypos for each leaf
-    vul_arg<vcl_string> geo_data_folder("-data", "folder to read the index data", "e:/data/Finder/temp/");//Z:/projects/FINDER/index/old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_0.5/"); // index -- folder to read the geo_index and hypos for each leaf
-    vul_arg<unsigned>   tile_id("-tile", "ID of the tile that current matcher consdier", 3);       // matcher -- tile id
+    vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");
+    vul_arg<vcl_string> geo_index_folder("-geo", " tree structure", "");
+    vul_arg<vcl_string> geo_data_folder("-data", "folder to read the index data", "");
+    vul_arg<unsigned>   tile_id("-tile", "ID of the tile that current matcher consider", 3);       // matcher -- tile id
     vul_arg<unsigned>   zone_id("-zone", "ID of the utm zone of current tile",17);                 // matcher -- zone id
     vul_arg<float>      threshold("-thres", "threshold for choosing valid cameras (0~1)", 0.4f);   // matcher -- threshold for choosing cameras
-    vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "Z://projects//FINDER//index//old_indices_remove/geoindex_zone_17_inc_2_nh_100_pa_0.5/segment/");      // matcher -- output folder
+    vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "");
     vul_arg<bool>       logger("-logger", "designate one of the exes as logger", false);           // matcher -- log file generation
     vul_arg_parse(argc, argv);
 
@@ -160,7 +160,8 @@ int main(int argc, char** argv)
                 vgl_vector_3d<double> axis_x(1.0, 0.0, 0.0);
                 vgl_vector_3d<double> axis_y(0.0, 1.0, 0.0);
                 vgl_vector_3d<double> axis_z(0.0, 0.0, 1.0);
-                vcl_ofstream os("e:/data/Finder/matcher.wrl");
+                vcl_string out_wrl_file = out_folder() + "/matcher.wrl";
+                vcl_ofstream os(out_wrl_file.c_str());
                 if (!os.is_open())
                     return -1;
                 bvrml_write::write_vrml_header(os);

@@ -447,7 +447,6 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
   for (unsigned r = 0; r < this->scene_regions().size(); r++) {
     vil_image_view<float> reg_img = this->depth_map(this->scene_regions()[r]->name(), level);
     region_imgs.push_back(reg_img);
-    //vil_save(reg_img, "C:\\projects\\FINDER\\query_matching\\scene_depth_exp\\reg.tif");
   }
   vcl_vector<float> region_means(this->scene_regions().size(), 0.0f);
   vcl_vector<float> region_std_dev(this->scene_regions().size(), 0.0f);
@@ -572,10 +571,6 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
 {
   unsigned ni = depth_img.ni(); unsigned nj = depth_img.nj();
   assert(ni == vis_img.ni() && nj == vis_img.nj());
-
-  //vil_image_view<float> mag(ni, nj);
-  //brip_vil_float_ops::gradient_mag_3x3(depth_img, mag);
-  //vil_save(mag, "C:\\projects\\FINDER\\gradient.tif");
 
   this->begin();
   // first count number of overlapping sky pixels
@@ -852,50 +847,6 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
   if (score_cnt > 0) score /= score_cnt;
   vcl_cout << "score: " << score << vcl_endl;
 
-#if 0
-  if (pixel_cnt > 0)
-    score /= pixel_cnt;
-  else
-    score = 0.0f;
-
-  for (unsigned v = 0; v < nj; v++)
-    for (unsigned u = 0; u < ni; u++) {
-      if (ground_img(u,v) > 0)  // if labeled region and on a visible surface == use this as mask
-        debug_imgs["ground"](u,v) = depth_img(u,v);
-     }
-
-  for (vcl_map<vcl_string, vil_image_view<float> >::iterator iter = debug_imgs.begin(); iter != debug_imgs.end(); iter++) {
-    vcl_string name = "C:\\projects\\FINDER\\query_matching\\scene_depth_exp\\reg_debug_"+iter->first+".tif";
-    vil_save(iter->second, name.c_str());
-    name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_debug_"+iter->first+".png";
-    vil_image_view<vxl_byte> dest(ni, nj);
-    vil_convert_stretch_range(iter->second, dest);
-    vil_save(dest, name.c_str());
-  }
-
-  vcl_string name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_sky.tif";
-  vil_save(sky_img, name.c_str());
-  name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_sky.png";
-  vil_image_view<vxl_byte> dest(ni, nj);
-  vil_convert_stretch_range(sky_img, dest);
-  vil_save(dest, name.c_str());
-
-  name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_ground.tif";
-  vil_save(ground_img, name.c_str());
-  name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_ground.png";
-  vil_convert_stretch_range(ground_img, dest);
-  vil_save(dest, name.c_str());
-
-  for (unsigned r = 0, rr = 0; r < this->scene_regions().size(); r++) {
-    if (this->scene_regions()[r]->active()) {
-      vcl_stringstream ss; ss << this->scene_regions()[r]->name();
-      vcl_string name = "C:\\projects\\query_matching\\scene_depth_exp\\reg_"+ss.str()+".png";
-      vil_convert_stretch_range(region_imgs[rr], dest);
-      vil_save(dest, name.c_str());
-      rr++;
-    }
-  }
-#endif
   region_imgs.clear();
   return true;
 }

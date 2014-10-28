@@ -273,7 +273,6 @@ bool sdet_segment_image_using_height_map_process2(bprb_func_process& pro)
   vcl_cout << "edge image value range, min: " << min_h << " max: " << max_h << " normalizing to [0,1]!\n";
   vil_math_scale_and_offset_values(edge_img, 1.0,-min_h); 
   vil_math_scale_and_offset_values(edge_img, 1.0/(max_h-min_h),0); 
-  vil_save(edge_img, "C:\\projects\\FINDER\\satellite_modeling\\rpc_correction\\world\\crops_grey\\temp2.tiff");
 
   vil_image_view<vil_rgb<vxl_byte> > out_img;
 

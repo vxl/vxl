@@ -11,7 +11,6 @@ DECLARE( test_camera_space );
 DECLARE( test_region_query );
 DECLARE( test_io );
 DECLARE( test_region_index );
-DECLARE( test_index_query_matcher );
 DECLARE( test_spherical_region );
 DECLARE( test_geo_index2 );
 DECLARE( test_osm_parser );
@@ -33,7 +32,6 @@ register_tests()
   REGISTER( test_region_query );
   REGISTER( test_io );
   REGISTER( test_region_index );
-  REGISTER( test_index_query_matcher );
   REGISTER( test_spherical_region );
   REGISTER( test_geo_index2 );
   REGISTER( test_osm_parser );

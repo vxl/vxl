@@ -129,42 +129,6 @@ static void test_depth_map()
   vsol_polygon_2d_sptr sky = new vsol_polygon_2d(vertss);
   dms.set_sky(sky);
 
-#if 0
-  //  vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res03_coloredmounds_depthscene_v2.vsl";
-  //    vcl_string spath = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res06_dirtroad_depthscene_v2.vsl";
-  // vcl_string spath = "e:/mundy/VisionSystems/Finder/VolumetricQuery/Queries/p1a_res17_beachgrass_depthmap_scene.vsl";
-vcl_string spath = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/feb_test_queries/tile6_drainage/p1a_test20/p1a_res20_groundtruth_labelme.vsl";
-  vsl_b_ifstream tis(spath.c_str()); 
-  depth_map_scene scin;
-  scin.b_read(tis);
-  tis.close();
-#endif
-#if 0 
-// needed to convert old depthmap scenes to new region types
-  vcl_vector<depth_map_region_sptr> regs = scin.scene_regions();
-  for(vcl_vector<depth_map_region_sptr>::iterator rit = regs.begin(); rit !=regs.end();++rit)
-    if((*rit)->orient_type() == depth_map_region::HORIZONTAL)
-      (*rit)->set_orient_type( depth_map_region::VERTICAL);
-  vcl_vector<depth_map_region_sptr> gps = scin.ground_plane();
-  for(vcl_vector<depth_map_region_sptr>::iterator rit = gps.begin(); rit !=gps.end();++rit)
-    (*rit)->set_orient_type( depth_map_region::GROUND_PLANE);
-
-  vcl_vector<depth_map_region_sptr> sks = scin.sky();
-  for(vcl_vector<depth_map_region_sptr>::iterator rit = sks.begin(); rit !=sks.end();++rit)
-    (*rit)->set_orient_type( depth_map_region::INFINT);
-
-  vsl_b_ofstream tos(spath.c_str());
-  scin.b_write(tos);
-
-  scene_depth_iterator dend = scin.end();
-  scene_depth_iterator sit = scin.begin();
-  for (; sit != dend; ++sit)
-    scin.print_depth_states();
-
-  vil_image_view<float> dv = sit->depth_map(0);
-  vil_save(dv, "e:/mundy/VisionSystems/Finder/VolumetricQuery/depth_map_with_iterator_v2.tiff");
-
-#endif
 }
 
 

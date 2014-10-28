@@ -32,10 +32,10 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> out("-out", "job output folder", "");
   vul_arg<unsigned> id("-id", "id of the test image", 6);
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
-  vul_arg<vcl_string> cam_kml("-camkml",  "camera KML", "e:/data/Finder/Camera20.kml");                                // query -- camera space binary
-  vul_arg<vcl_string> cam_params("-camparams", "camera params", "Z://projects//FINDER//test1//p1a_test1_20///cam_inc_params.txt");                                // query -- camera space binary
-  vul_arg<vcl_string> best_cam_kml("-bestcamkml",  "camera KML", "e:/data/Finder/Camera20.kml");                                // query -- camera space binary
-  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "Z://projects//FINDER//test1//p1a_test1_20//p1a_test1_20.vsl");                             // query -- depth map scene
+  vul_arg<vcl_string> cam_kml("-camkml",  "camera KML", "");
+  vul_arg<vcl_string> cam_params("-camparams", "camera params", "");                                // query -- camera space binary
+  vul_arg<vcl_string> best_cam_kml("-bestcamkml",  "camera KML", "");                                // query -- camera space binary
+  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
 
   vul_arg_parse(argc, argv);
 
@@ -121,10 +121,9 @@ int main(int argc,  char** argv)
   unsigned max_score_cam_id;
   float max_score = 0.0f;
 
-  vcl_string geo_folders[2]={geo_hypo_folder(),
-                             "Z:/projects/FINDER/index/geoindex_zone_18_inc_2_nh_100/"};
+  vcl_string geo_folders[1]={geo_hypo_folder()};
 
-  for (unsigned k = 0 ; k < 2; k++)
+  for (unsigned k = 0 ; k < 1; k++)
   {
     for (unsigned i = 0; i < tiles.size(); i++) {
       volm_tile tile = tiles[i];
@@ -245,7 +244,7 @@ int main(int argc,  char** argv)
   vcl_cout<<"Ground truth Score is "<<gt_score<<vcl_endl;
   int gt_count = 0;
   int tot_count = 0;
-  for (unsigned k = 0 ; k < 2; k++)
+  for (unsigned k = 0 ; k < 1; k++)
   {
     for (unsigned i = 0; i < tiles.size(); i++) {
       volm_tile tile = tiles[i];

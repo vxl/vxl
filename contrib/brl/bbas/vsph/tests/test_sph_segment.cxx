@@ -12,7 +12,7 @@
 //
 // USED ONLY FOR EXPERIMENTS - NOT A ROUTINE TEST
 //
-static vcl_string MyDIR = "C:/Users/mundy/VisionSystems/Finder/VolumetricQuery/";
+static vcl_string MyDIR = "./";
 
 #if 0 // only used in commented-out code below
 static void random_rgb(float& r, float&g, float& b)

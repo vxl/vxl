@@ -37,23 +37,6 @@ static void test_unit_sphere()
   }
   TEST("binary read write - vsph_unit_sphere", good, true);
   vpl_unlink("./temp.bin");
-#if 0
-  point_angle = 0.25;
-  min_theta = 75.0;
-  max_theta = 105.0;
-  vsph_unit_sphere_sptr usph2 = 
-    new vsph_unit_sphere(point_angle, min_theta, max_theta);
-  vsl_b_ofstream os2("c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/unit_sphere_0.25_75_105.vsl");
-  if(!os2)
-   return;
-  vsl_b_write(os2, usph2);
-#if 0
-  vcl_string vert_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/verts.wrl";
-  usph2->display_vertices(vert_path);
-   vcl_string edge_path = "c:/Users/mundy/VisionSystems/Finder/VolumetricQuery/edges.wrl";
-  usph2->display_edges(edge_path);
-#endif
-#endif
 }
 TESTMAIN(test_unit_sphere);
 

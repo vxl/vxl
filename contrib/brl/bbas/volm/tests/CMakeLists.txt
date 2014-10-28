@@ -12,7 +12,6 @@ ADD_EXECUTABLE( volm_test_all
   test_io.cxx
   test_region_query.cxx
   test_region_index.cxx
-  test_index_query_matcher.cxx
   test_spherical_region.cxx
   test_geo_index2.cxx
   test_osm_parser.cxx
@@ -34,7 +33,6 @@ ADD_TEST(volm_test_camera_space ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_cam
 ADD_TEST(volm_test_io ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_io)
 ADD_TEST(volm_test_region_query ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_region_query)
 ADD_TEST(volm_test_region_index ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_region_index)
-ADD_TEST(volm_test_index_query_matcher ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_index_query_matcher)
 ADD_TEST(volm_test_spherical_region ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_spherical_region)
 ADD_TEST(volm_test_volm_geo_index2 ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_geo_index2)
 ADD_TEST(volm_test_category_io ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_category_io)
