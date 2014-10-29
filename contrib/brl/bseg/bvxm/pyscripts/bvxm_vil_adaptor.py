@@ -200,19 +200,7 @@ def image_range(img):
     minVal = bvxm_batch.get_output_float(id)
     (id,type) = bvxm_batch.commit_output(1)
     maxVal = bvxm_batch.get_output_float(id)
-    (id,type) = bvxm_batch.commit_output(2)
-    min_i  = bvxm_batch.get_output_unsigned(id)
-    (id,type) = bvxm_batch.commit_output(3)
-    min_j  = bvxm_batch.get_output_unsigned(id)
-    (id,type) = bvxm_batch.commit_output(4)
-    min_p  = bvxm_batch.get_output_unsigned(id)
-    (id,type) = bvxm_batch.commit_output(5)
-    max_i  = bvxm_batch.get_output_unsigned(id)
-    (id,type) = bvxm_batch.commit_output(6)
-    max_j  = bvxm_batch.get_output_unsigned(id)
-    (id,type) = bvxm_batch.commit_output(7)
-    max_p  = bvxm_batch.get_output_unsigned(id)
-    return minVal, maxVal, min_i, min_j, min_p, max_i, max_j, max_p
+    return minVal, maxVal
 
 def gradient(img) :
     bvxm_batch.init_process('vilGradientProcess')
