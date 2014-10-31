@@ -14,6 +14,7 @@
 // \endverbatim
 
 #include <vcl_fstream.h>
+#include <vcl_string.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_line_segment_3d.h>
@@ -77,8 +78,37 @@ class bvrml_write
                                   float radius, float height,
                                   const float r, const float g, const float b,
                                   const unsigned side = 0);
+
+  // From http://www.lighthouse3d.com/vrml/tutorial/index.shtml?view:
+  // Orientation determines the direction at which the user is looking, 
+  // it specifies a rotation relative to the default orientation 
+  // which points along the Z axis in the negative direction.
+  // default orientation is 0 0 1 0
+  //
+  // The default view will be set to the first viewpoint element encountered
+  template <class T>
+  static void write_viewpoint(vcl_ofstream& ofs,
+                              const T cx, const T cy, const T cz,//position
+                              const T ox, const T oy, const T oz, const T rad, //orientation
+                              const vcl_string& description);
+                              
+                              
 };
 
+
+template <class T>
+void bvrml_write::
+write_viewpoint(vcl_ofstream& ofs,
+                const T cx, const T cy, const T cz,
+                const T ox, const T oy, const T oz, const T rad,
+                const vcl_string& description)
+{
+  ofs << "Viewpoint {\n"
+      << "  position     " << cx << ' ' << cy << ' ' << cz << '\n'
+      << "  orientation  " << ox << ' ' << oy << ' ' << oz << ' ' << rad << '\n'
+      << "  description  \"" << description << "\"\n"
+      << "}\n";
+}
 
 
 template <class T>
