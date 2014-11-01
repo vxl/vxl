@@ -1,6 +1,7 @@
 #include "boxm2_vecf_ocl_transform_scene.h"
 //:
 // \file
+#include <vnl/vnl_vector_fixed.h>
 #include <bocl/bocl_cl.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -50,27 +51,136 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
 
 boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
               boxm2_scene_sptr& target_scene,
-              boxm2_opencl_cache2_sptr ocl_cache)
+              boxm2_opencl_cache2_sptr ocl_cache, 
+              unsigned ni, unsigned nj)
   : source_scene_(source_scene),
      target_scene_(target_scene),
-     opencl_cache_(ocl_cache)
+     opencl_cache_(ocl_cache),
+     ni_(ni), nj_(nj)
 {
   device_=opencl_cache_->get_device();
   this->compile_trans_kernel();
   this->compile_trans_interp_kernel();
   this->compile_rend_kernel();
   this->compile_norm_kernel();
+  this->compile_depth_kernel();
+  this->compile_depth_norm_kernel();
   this->init_ocl_trans();
+
+  init_render_args();
 }
 
 boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
 {
   delete trans_kern;
-  delete rend_kern;
-  delete norm_kern;
+  delete rend_kern_;
+  delete rend_norm_kern_;
+  delete depth_kern_;
+  delete depth_norm_kern_;
   opencl_cache_->clear_cache();
 
+
+  // destroy render args
+  if ((ni_ > 0) && (nj_ > 0)) {
+    delete [] img_buff_;
+    delete [] vis_buff_;
+    delete [] max_omega_buff_;
+    delete [] ray_origins_;
+    delete [] ray_directions_;
+    opencl_cache_->unref_mem(ray_o_buff_.ptr());
+    opencl_cache_->unref_mem(ray_d_buff_.ptr());
+    opencl_cache_->unref_mem(tnearfar_mem_ptr_.ptr());
+    opencl_cache_->unref_mem(exp_image_.ptr());
+    opencl_cache_->unref_mem(vis_image_.ptr());
+    opencl_cache_->unref_mem(max_omega_image_.ptr());
+    // depth stuff
+    delete[] depth_buff_;
+    delete[] var_buff_;
+    delete[] prob_image_buff_;
+    delete[] t_infinity_buff_;
+    opencl_cache_->unref_mem(depth_image_.ptr());
+    opencl_cache_->unref_mem(var_image_.ptr());
+    opencl_cache_->unref_mem(prob_image_.ptr());
+    opencl_cache_->unref_mem(t_infinity_.ptr());
+    opencl_cache_->unref_mem(subblk_dim_.ptr());
+  }
 }
+
+
+bool boxm2_vecf_ocl_transform_scene::init_render_args()
+{
+  lthreads_[0]=8;
+  lthreads_[1]=8;
+
+  if ((ni_ == 0) || (nj_ == 0)) {
+    return true;
+  }
+  cl_ni_=RoundUp(ni_,lthreads_[0]);
+  cl_nj_=RoundUp(nj_,lthreads_[1]);
+
+  img_buff_ = new float[cl_ni_*cl_nj_];
+  vcl_fill(img_buff_, img_buff_ + cl_ni_*cl_nj_, 0.0f);
+  exp_image_=opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float), img_buff_,"exp image buffer");
+  exp_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  vis_buff_ = new float[cl_ni_*cl_nj_];
+  vcl_fill(vis_buff_, vis_buff_ + cl_ni_*cl_nj_, 1.0f);
+  vis_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float), vis_buff_,"vis image buffer");
+  vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  max_omega_buff_ = new float[cl_ni_*cl_nj_];
+  vcl_fill(max_omega_buff_, max_omega_buff_ + cl_ni_*cl_nj_, 0.0f);
+  max_omega_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float), max_omega_buff_,"vis image buffer");
+  max_omega_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  tnearfar_buff_[0] = 0.0f;
+  tnearfar_buff_[1] = 1000000.0f;
+
+  tnearfar_mem_ptr_ = opencl_cache_->alloc_mem(2*sizeof(float), tnearfar_buff_, "tnearfar  buffer");
+  tnearfar_mem_ptr_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);  
+  
+  img_dim_buff_[0] = 0;   img_dim_buff_[2] = (int)ni_;
+  img_dim_buff_[1] = 0;   img_dim_buff_[3] = (int)nj_;
+
+  exp_img_dim_ = new bocl_mem(device_->context(), img_dim_buff_, sizeof(int)*4, "image dims");
+  exp_img_dim_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+  // create all buffers
+  ray_origins_ = new cl_float[4*cl_ni_*cl_nj_];
+  ray_directions_ = new cl_float[4*cl_ni_*cl_nj_];
+  ray_o_buff_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(cl_float4), ray_origins_, "ray_origins buffer");
+  ray_d_buff_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(cl_float4), ray_directions_, "ray_directions buffer");
+  ray_o_buff_->create_buffer(CL_MEM_READ_WRITE);
+  ray_d_buff_->create_buffer(CL_MEM_READ_WRITE);
+
+  // depth args
+  depth_buff_ = new float[cl_ni_*cl_nj_];
+  vcl_fill(depth_buff_, depth_buff_ + cl_ni_*cl_nj_, 0.0f);
+  depth_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),depth_buff_,"exp depth buffer");
+  depth_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  var_buff_ = new float[cl_ni_*cl_nj_];
+  vcl_fill(var_buff_, var_buff_ + cl_ni_*cl_nj_, 0.0f);
+  var_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),var_buff_,"var image buffer");
+  var_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  prob_image_buff_ = new float[cl_ni_*cl_nj_];
+  vcl_fill(prob_image_buff_, prob_image_buff_ + cl_ni_*cl_nj_, 0.0f);
+  prob_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),prob_image_buff_,"vis x omega image buffer");
+  prob_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  t_infinity_buff_ = new float[cl_ni_*cl_nj_];
+  vcl_fill(t_infinity_buff_, t_infinity_buff_ + cl_ni_*cl_nj_, 0.0f);
+  t_infinity_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),t_infinity_buff_,"t infinity buffer");
+  t_infinity_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  subblk_dim_buff_ = 1.0f;
+  subblk_dim_ = opencl_cache_->alloc_mem(sizeof(cl_float), &(subblk_dim_buff_), "sub block dim buffer");
+  subblk_dim_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+  
+  return true;
+}
+
 
 bool boxm2_vecf_ocl_transform_scene::compile_trans_kernel()
 {
@@ -120,8 +230,8 @@ bool boxm2_vecf_ocl_transform_scene::compile_rend_kernel()
   options += "-D RENDER ";
   options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
   
-  this->rend_kern = new bocl_kernel();
-  bool good = rend_kern->create_kernel( &device_->context(),
+  this->rend_kern_ = new bocl_kernel();
+  bool good = rend_kern_->create_kernel( &device_->context(),
        device_->device_id(),
        src_paths,
        "render_bit_scene",   //kernel name
@@ -139,8 +249,8 @@ bool boxm2_vecf_ocl_transform_scene::compile_norm_kernel()
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-  norm_kern = new bocl_kernel();
-  bool good = norm_kern->create_kernel( &device_->context(),
+  rend_norm_kern_ = new bocl_kernel();
+  bool good = rend_norm_kern_->create_kernel( &device_->context(),
      device_->device_id(),
      src_paths,
      "normalize_render_kernel",   //kernel name
@@ -148,6 +258,59 @@ bool boxm2_vecf_ocl_transform_scene::compile_norm_kernel()
      "boxm2 opencl norm image"); //kernel identifier (for error checking)
   return good;
 }
+
+bool boxm2_vecf_ocl_transform_scene::compile_depth_kernel()
+{
+    vcl_vector<vcl_string> src_paths;
+    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    src_paths.push_back(source_dir + "scene_info.cl");
+    src_paths.push_back(source_dir + "pixel_conversion.cl");
+    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+    src_paths.push_back(source_dir + "backproject.cl");
+    src_paths.push_back(source_dir + "statistics_library_functions.cl");
+    src_paths.push_back(source_dir + "expected_functor.cl");
+    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
+    src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+
+    //set kernel options
+    vcl_string options = " -D RENDER_DEPTH ";
+    options +=  "-D DETERMINISTIC";
+    options += " -D STEP_CELL=step_cell_render_depth2(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
+
+    //have kernel construct itself using the context and device
+    this->depth_kern_ = new bocl_kernel();
+
+    bool good = depth_kern_->create_kernel( &device_->context(),
+                                            device_->device_id(),
+                                            src_paths,
+                                            "render_depth",   //kernel name
+                                            options,              //options
+                                            "boxm2 opencl render depth image"); //kernel identifier (for error checking)
+    return good;
+}
+
+bool boxm2_vecf_ocl_transform_scene::compile_depth_norm_kernel()
+{
+    vcl_vector<vcl_string> norm_src_paths;
+    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    norm_src_paths.push_back(source_dir + "scene_info.cl");
+
+    norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
+    norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
+    depth_norm_kern_ = new bocl_kernel();
+
+    vcl_string options = " -D RENDER_DEPTH ";
+
+    bool good = depth_norm_kern_->create_kernel( &device_->context(),
+                                                 device_->device_id(),
+                                                 norm_src_paths,
+                                                 "normalize_render_depth_kernel",   //kernel name
+                                                 options,              //options
+                                                 "normalize render depth kernel"); //kernel identifier (for error checking)
+    return good;
+}
+
 bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
 {
     centerX = new bocl_mem(device_->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
@@ -165,7 +328,7 @@ bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
     lookup=new bocl_mem(device_->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     int status = 0;
-    queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
+    queue_ = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
     ocl_depth = 0;
     blk_info_target = 0;
     blk_info_source = 0;
@@ -309,27 +472,27 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
             trans_kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
                trans_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees target
                trans_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees source
-               if(!trans_kern->execute(queue, 1, local_threads, global_threads))
+               if(!trans_kern->execute(queue_, 1, local_threads, global_threads))
                {
                    vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
                    return false;
                }
-               int status = clFinish(queue);
+               int status = clFinish(queue_);
                check_val(status, MEM_FAILURE, "MIFO EXECUTE FAILED: " + error_to_string(status));
                gpu_time += trans_kern->exec_time();
                //clear kernel args so it can reset them on next execution
                trans_kern->clear_args();
-               clFinish(queue);
+               clFinish(queue_);
                blk_info_source->release_memory();
                delete info_buffer_source;
             }
-    mog_target->read_to_buffer(queue);
-    alpha_target->read_to_buffer(queue);
+    mog_target->read_to_buffer(queue_);
+    alpha_target->read_to_buffer(queue_);
   }
        blk_info_target->release_memory();
        delete info_buffer;
      }
-   clFinish(queue);
+   clFinish(queue_);
    opencl_cache_->unref_mem(translation.ptr());
    opencl_cache_->unref_mem(rotation.ptr());
    opencl_cache_->unref_mem(scalem.ptr());
@@ -367,10 +530,10 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
    int statusw =0;
    // just copy the transformation parameters to gpu memory 
    if(!first){
-     translation->write_to_buffer(queue);
-     rotation->write_to_buffer(queue);
-     scalem->write_to_buffer(queue);
-     statusw = clFinish(queue);
+     translation->write_to_buffer(queue_);
+     rotation->write_to_buffer(queue_);
+     scalem->write_to_buffer(queue_);
+     statusw = clFinish(queue_);
      bool good_write = check_val(statusw, CL_SUCCESS, "WRITE TO GPU FAILED " + error_to_string(statusw));
      if(!good_write)
        return false;
@@ -486,18 +649,18 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
    trans_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees source
    first = false;
    }
-   if(!trans_kern->execute(queue, 1, local_threads, global_threads))
+   if(!trans_kern->execute(queue_, 1, local_threads, global_threads))
      {
        vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
        return false;
      }
-   int status = clFinish(queue);
+   int status = clFinish(queue_);
    bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL FAILED: " + error_to_string(status));
    if(!good_kern)
      return false;
-   mog_target->read_to_buffer(queue);
-   alpha_target->read_to_buffer(queue);
-   status = clFinish(queue);
+   mog_target->read_to_buffer(queue_);
+   alpha_target->read_to_buffer(queue_);
+   status = clFinish(queue_);
    bool good_read = check_val(status, CL_SUCCESS, "READ FROM GPU FAILED: " + error_to_string(status));
    if(!good_read)
      return false;
@@ -521,9 +684,9 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
    return true;
 }
 bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<double>  rot,
-           vgl_vector_3d<double> trans,
-           vgl_vector_3d<double> scale,
-           bool finish){
+                                                            vgl_vector_3d<double> trans,
+                                                            vgl_vector_3d<double> scale,
+                                                            bool finish){
  static bool first = true;
   int depth = 0;
   // set up the buffers the first time the function is called
@@ -550,10 +713,10 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
    int statusw =0;
    // just copy the transformation parameters to gpu memory 
    if(!first){
-     translation->write_to_buffer(queue);
-     rotation->write_to_buffer(queue);
-     scalem->write_to_buffer(queue);
-     statusw = clFinish(queue);
+     translation->write_to_buffer(queue_);
+     rotation->write_to_buffer(queue_);
+     scalem->write_to_buffer(queue_);
+     statusw = clFinish(queue_);
      bool good_write = check_val(statusw, CL_SUCCESS, "WRITE TO GPU FAILED " + error_to_string(statusw));
      if(!good_write)
        return false;
@@ -677,19 +840,19 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
    trans_interp_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees source
    first = false;
    }
-   if(!trans_interp_kern->execute(queue, 1, local_threads, global_threads))
+   if(!trans_interp_kern->execute(queue_, 1, local_threads, global_threads))
      {
        vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
        return false;
     }
-   int status = clFinish(queue);
+   int status = clFinish(queue_);
    bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL FAILED: " + error_to_string(status));
    if(!good_kern)
      return false;
-   mog_target->read_to_buffer(queue);
-   alpha_target->read_to_buffer(queue);
-   output->read_to_buffer(queue);
-   status = clFinish(queue);
+   mog_target->read_to_buffer(queue_);
+   alpha_target->read_to_buffer(queue_);
+   output->read_to_buffer(queue_);
+   status = clFinish(queue_);
    bool good_read = check_val(status, CL_SUCCESS, "READ FROM GPU FAILED: " + error_to_string(status));
    if(!good_read)
      return false;
@@ -720,63 +883,24 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
 }
 bool boxm2_vecf_ocl_transform_scene::
 render_scene_appearance(vpgl_camera_double_sptr const& cam, vil_image_view<float>& expected_img,
-   vil_image_view<float>& vis_img, int ni, int nj, bool finish){
+                        vil_image_view<float>& vis_img)
+{
   // It is assumed that this function will be called multiple times
   // where the scene changes between calls and possibly the camera
   // It is also assumed that the scene is one block
   // and the data is already avaiable in the cache and required buffers
   // have been allocated by a previous function call.
   vpgl_camera_double_sptr & nccam = const_cast<vpgl_camera_double_sptr &>(cam);
-  static bool first = true;
-  vcl_size_t lthreads[2]={8,8};
-  cl_ni=RoundUp(ni,lthreads[0]);
-  cl_nj=RoundUp(nj,lthreads[1]);
-  if(!first){
-    // intialize the render image planes
-    vcl_fill(buff, buff + cl_ni*cl_nj, 0.0f);
-    vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-    vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
-    exp_image->write_to_buffer(queue);
-    vis_image->write_to_buffer(queue);
-    max_omega_image->write_to_buffer(queue);
-    // assumes that the camera may be changing between calls
-    boxm2_ocl_camera_converter::compute_ray_image( device_, queue, nccam, cl_ni, cl_nj, ray_o_buff, ray_d_buff, 0, 0, false);
-    ray_o_buff->write_to_buffer(queue);
-    ray_d_buff->write_to_buffer(queue);
-    int statusw = clFinish(queue);
-    bool good_write = check_val(statusw, CL_SUCCESS, "WRITE TO GPU FAILED " + error_to_string(statusw));
-    if(!good_write)
-      return false;
-  }
-  if(first){
-  buff = new float[cl_ni*cl_nj];
-  vcl_fill(buff, buff + cl_ni*cl_nj, 0.0f);
-  exp_image=opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(float), buff,"exp image buffer");
-  exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-  vis_image = opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
-  vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  // intialize the render image planes
+  vcl_fill(img_buff_, img_buff_ + cl_ni_*cl_nj_, 0.0f);
+  vcl_fill(vis_buff_, vis_buff_ + cl_ni_*cl_nj_, 1.0f);
+  vcl_fill(max_omega_buff_, max_omega_buff_ + cl_ni_*cl_nj_, 0.0f);
+  exp_image_->write_to_buffer(queue_);
+  vis_image_->write_to_buffer(queue_);
+  max_omega_image_->write_to_buffer(queue_);
 
-  max_omega_buff = new float[cl_ni*cl_nj];
-  vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
-  max_omega_image = opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"vis image buffer");
-  max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  float tnearfar[2] = { 0.0f, 1000000.0f} ;
-  
-  int img_dim_buff[4];
-  img_dim_buff[0] = 0;   img_dim_buff[2] = ni;
-  img_dim_buff[1] = 0;   img_dim_buff[3] = nj;
-  exp_img_dim=new bocl_mem(device_->context(), img_dim_buff, sizeof(int)*4, "image dims");
-  exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-
-  tnearfar_mem_ptr = opencl_cache_->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
-  tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);  
-
-    //camera check
+  //camera check
   const vcl_string cam_type( cam->type_name() );
   if (cam_type != "vpgl_perspective_camera" &&
       cam_type != "vpgl_generic_camera" &&
@@ -784,71 +908,188 @@ render_scene_appearance(vpgl_camera_double_sptr const& cam, vil_image_view<float
     vcl_cout<<"Cannot render with camera of type " << cam_type << vcl_endl;
     return false;
   }
-  // create all buffers
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
 
-  ray_o_buff = opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
-  ray_d_buff = opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
-  
-  boxm2_ocl_camera_converter::compute_ray_image( device_, queue, nccam, cl_ni, cl_nj, ray_o_buff, ray_d_buff, 0 , 0);
+  // assumes that the camera may be changing between calls
+  boxm2_ocl_camera_converter::compute_ray_image( device_, queue_, nccam, cl_ni_, cl_nj_, ray_o_buff_, ray_d_buff_, 0, 0, false);
+  ray_o_buff_->write_to_buffer(queue_);
+  ray_d_buff_->write_to_buffer(queue_);
 
-  rend_kern->set_arg( blk_info_target );
-  rend_kern->set_arg( blk_target );
-  rend_kern->set_arg( alpha_target );
-  rend_kern->set_arg( mog_target );
-  rend_kern->set_arg( ray_o_buff.ptr() );
-  rend_kern->set_arg( ray_d_buff.ptr() );
-  rend_kern->set_arg( tnearfar_mem_ptr );
-  rend_kern->set_arg( exp_image );
-  rend_kern->set_arg( exp_img_dim);
-  rend_kern->set_arg( output.ptr() );
-  rend_kern->set_arg( lookup.ptr() );
-  rend_kern->set_arg( vis_image );
-  rend_kern->set_arg( max_omega_image );
+  int statusw = clFinish(queue_);
+  bool good_write = check_val(statusw, CL_SUCCESS, "WRITE TO GPU FAILED " + error_to_string(statusw));
+  if(!good_write) {
+    return false;
+  }
 
-        //local tree , cumsum buffer, imindex buffer
-  rend_kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar16) );
-  rend_kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) );
-  rend_kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_int) );
-  first = false;
-  }  
+  rend_kern_->set_arg( blk_info_target );
+  rend_kern_->set_arg( blk_target );
+  rend_kern_->set_arg( alpha_target );
+  rend_kern_->set_arg( mog_target );
+  rend_kern_->set_arg( ray_o_buff_.ptr() );
+  rend_kern_->set_arg( ray_d_buff_.ptr() );
+  rend_kern_->set_arg( tnearfar_mem_ptr_.ptr() );
+  rend_kern_->set_arg( exp_image_.ptr() );
+  rend_kern_->set_arg( exp_img_dim_.ptr());
+  rend_kern_->set_arg( output.ptr() );
+  rend_kern_->set_arg( lookup.ptr() );
+  rend_kern_->set_arg( vis_image_.ptr() );
+  rend_kern_->set_arg( max_omega_image_.ptr() );
+
+  //local tree , cumsum buffer, imindex buffer
+  rend_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*sizeof(cl_uchar16) );
+  rend_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*10*sizeof(cl_uchar) );
+  rend_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*sizeof(cl_int) );
+
   //execute kernel
-  static vcl_size_t gThreads[] = {cl_ni,cl_nj};
-  rend_kern->execute(queue, 2, lthreads, gThreads);
-  clFinish(queue);
+  vcl_size_t gThreads[] = {cl_ni_,cl_nj_};
+  rend_kern_->execute(queue_, 2, lthreads_, gThreads);
+  statusw = clFinish(queue_);
+  bool good_run = check_val(statusw, CL_SUCCESS, "RENDER KERNEL FAILED " + error_to_string(statusw));
+  if (!good_run) {
+    return false;
+  }
 
-  norm_kern->set_arg( exp_image );
-  norm_kern->set_arg( vis_image );
-  norm_kern->set_arg( exp_img_dim);
-  norm_kern->execute( queue, 2, lthreads, gThreads);
-  clFinish(queue);
-  exp_image->read_to_buffer(queue);
-  vis_image->read_to_buffer(queue);
-  rend_kern->clear_args();
-  norm_kern->clear_args();
+  rend_norm_kern_->set_arg( exp_image_.ptr() );
+  rend_norm_kern_->set_arg( vis_image_.ptr() );
+  rend_norm_kern_->set_arg( exp_img_dim_.ptr() );
+  rend_norm_kern_->execute( queue_, 2, lthreads_, gThreads);
+  statusw = clFinish(queue_);
+  good_run = check_val(statusw, CL_SUCCESS, "RENDER NORM KERNEL FAILED " + error_to_string(statusw));
+  if (!good_run) {
+    return false;
+  }
 
-  expected_img.set_size(ni, nj);
+  exp_image_->read_to_buffer(queue_);
+  vis_image_->read_to_buffer(queue_);
+  statusw = clFinish(queue_);
+  bool good_read = check_val(statusw, CL_SUCCESS, "READ OF IMAGE BUFFERS FAILED " + error_to_string(statusw));
+  if (!good_read) {
+    return false;
+  }
+
+  rend_kern_->clear_args();
+  rend_norm_kern_->clear_args();
+
+  expected_img.set_size(ni_, nj_);
   expected_img.fill(0.0f);
-  for (unsigned r=0;r<nj;r++)
-    for (unsigned c=0;c<ni;c++)
-      expected_img(c,r)=buff[r*cl_ni+c];
-  vis_img.set_size(ni, nj);
+  for (unsigned r=0;r<nj_;r++)
+    for (unsigned c=0;c<ni_;c++)
+      expected_img(c,r)=img_buff_[r*cl_ni_+c];
+  vis_img.set_size(ni_, nj_);
   vis_img.fill(0.0f);
-  for (unsigned r=0;r<nj;r++)
-    for (unsigned c=0;c<ni;c++)
-      vis_img(c,r)=vis_buff[r*cl_ni+c];
-  if(finish){
-    delete [] buff;
-    delete [] vis_buff;
-    delete [] max_omega_buff;
-    opencl_cache_->unref_mem(ray_o_buff.ptr());
-    opencl_cache_->unref_mem(ray_d_buff.ptr());
-    opencl_cache_->unref_mem(tnearfar_mem_ptr);
-    opencl_cache_->unref_mem(exp_image);
-    opencl_cache_->unref_mem(vis_image);
-    opencl_cache_->unref_mem(max_omega_image);
-  }    
+  for (unsigned r=0;r<nj_;r++)
+    for (unsigned c=0;c<ni_;c++)
+      vis_img(c,r)=vis_buff_[r*cl_ni_+c];
+
   return true;
 }
 
+bool boxm2_vecf_ocl_transform_scene::render_scene_depth(vpgl_camera_double_sptr const & cam,
+                                                        vil_image_view<float>& expected_depth,
+                                                        vil_image_view<float>& vis_img)
+{
+  // It is assumed that this function will be called multiple times
+  // where the scene changes between calls and possibly the camera
+  // It is also assumed that the scene is one block
+  // and the data is already avaiable in the cache and required buffers
+  // have been allocated by a previous function call.
+  vpgl_camera_double_sptr & nccam = const_cast<vpgl_camera_double_sptr &>(cam);
+
+  //camera check
+  const vcl_string cam_type( cam->type_name() );
+  if (cam_type != "vpgl_perspective_camera" &&
+      cam_type != "vpgl_generic_camera" &&
+      cam_type != "vpgl_affine_camera" ) {
+    vcl_cout<<"Cannot render with camera of type " << cam_type << vcl_endl;
+    return false;
+  }
+
+  // intialize the render image planes
+  vcl_fill(depth_buff_, depth_buff_ + cl_ni_*cl_nj_, 0.0f);
+  vcl_fill(vis_buff_, vis_buff_ + cl_ni_*cl_nj_, 1.0f);
+  vcl_fill(var_buff_, var_buff_ + cl_ni_*cl_nj_, 0.0f);
+  vcl_fill(prob_image_buff_, prob_image_buff_ + cl_ni_*cl_nj_, 0.0f);
+  vcl_fill(t_infinity_buff_, t_infinity_buff_ + cl_ni_*cl_nj_, 0.0f);
+
+  depth_image_->write_to_buffer(queue_);
+  vis_image_->write_to_buffer(queue_);
+  var_image_->write_to_buffer(queue_);
+  prob_image_->write_to_buffer(queue_);
+  t_infinity_->write_to_buffer(queue_);
+
+  // assumes that the camera may be changing between calls
+  boxm2_ocl_camera_converter::compute_ray_image( device_, queue_, nccam, cl_ni_, cl_nj_, ray_o_buff_, ray_d_buff_, 0, 0, false);
+  ray_o_buff_->write_to_buffer(queue_);
+  ray_d_buff_->write_to_buffer(queue_);
+
+  int statusw = clFinish(queue_);
+  bool good_write = check_val(statusw, CL_SUCCESS, "WRITE TO GPU FAILED " + error_to_string(statusw));
+  if(!good_write) {
+    return false;
+  }
+
+  depth_kern_->set_arg( blk_info_target );
+  depth_kern_->set_arg( blk_target );
+  depth_kern_->set_arg( alpha_target );
+  depth_kern_->set_arg( ray_o_buff_.ptr() );
+  depth_kern_->set_arg( ray_d_buff_.ptr() );
+  depth_kern_->set_arg( depth_image_.ptr() );
+  depth_kern_->set_arg( var_image_.ptr() );
+  depth_kern_->set_arg( exp_img_dim_.ptr() );
+  depth_kern_->set_arg( output.ptr() );
+  depth_kern_->set_arg( lookup.ptr() );
+  depth_kern_->set_arg( vis_image_.ptr() );
+  depth_kern_->set_arg( prob_image_.ptr() );
+  depth_kern_->set_arg( t_infinity_.ptr() );
+
+  //local tree , cumsum buffer, imindex buffer
+  depth_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*sizeof(cl_uchar16) );
+  depth_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*10*sizeof(cl_uchar) );
+  depth_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*sizeof(cl_int) );
+
+  //execute kernel
+  vcl_size_t gThreads[] = {cl_ni_,cl_nj_};
+  depth_kern_->execute(queue_, 2, lthreads_, gThreads);
+  statusw = clFinish(queue_);
+  bool good_run = check_val(statusw, CL_SUCCESS, "EXECUTION OF DEPTH KERNEL FAILED " + error_to_string(statusw));
+  if (!good_run) {
+    return false;
+  }
+
+  depth_norm_kern_->set_arg( depth_image_.ptr() );
+  depth_norm_kern_->set_arg( var_image_.ptr() );
+  depth_norm_kern_->set_arg( vis_image_.ptr() );
+  depth_norm_kern_->set_arg( exp_img_dim_.ptr());
+  depth_norm_kern_->set_arg( t_infinity_.ptr());
+  depth_norm_kern_->set_arg( subblk_dim_.ptr() );
+  depth_norm_kern_->execute( queue_, 2, lthreads_, gThreads);
+  statusw = clFinish(queue_);
+  good_run = check_val(statusw, CL_SUCCESS, "EXECUTION OF DEPTH NORM KERNEL FAILED " + error_to_string(statusw));
+  if (!good_run) {
+    return false;
+  }
+
+  depth_image_->read_to_buffer(queue_);
+  var_image_->read_to_buffer(queue_);
+  vis_image_->read_to_buffer(queue_);
+  statusw = clFinish(queue_);
+  bool good_read = check_val(statusw, CL_SUCCESS, "READ OF DEPTH BUFFERS FAILED " + error_to_string(statusw));
+  if (!good_read) {
+    return false;
+  }
+
+  depth_kern_->clear_args();
+  depth_norm_kern_->clear_args();
+
+  expected_depth.set_size(ni_, nj_);
+  expected_depth.fill(0.0f);
+  for (unsigned r=0;r<nj_;r++)
+    for (unsigned c=0;c<ni_;c++)
+      expected_depth(c,r)=depth_buff_[r*cl_ni_+c];
+  vis_img.set_size(ni_, nj_);
+  vis_img.fill(0.0f);
+  for (unsigned r=0;r<nj_;r++)
+    for (unsigned c=0;c<ni_;c++)
+      vis_img(c,r)=vis_buff_[r*cl_ni_+c];
+
+  return true;
+}

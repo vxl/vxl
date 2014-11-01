@@ -87,7 +87,7 @@ bool boxm2_vecf_ocl_transform_scene_process(bprb_func_process& pro)
 	  pro.get_input<double>(16),
 	  pro.get_input<double>(17));
 
-  boxm2_vecf_ocl_transform_scene tscn(source_scene, target_scene, cache);
+  boxm2_vecf_ocl_transform_scene tscn(source_scene, target_scene, cache, 0, 0);
   //  if(!tscn.transform(rot, trans, scale))
   if(!tscn.transform_1_blk(rot, trans, scale))
     return false;

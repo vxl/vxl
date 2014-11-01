@@ -52,8 +52,8 @@ void test_transform()
   vgl_vector_3d<double> s0(0.9, 1.0, 1.0);
   vgl_vector_3d<double> s1(1.0, 0.9, 1.0);
   //===========================================
-   boxm2_vecf_ocl_transform_scene trs(source_scene, target_scene, opencl_cache);
    int ni = 360, nj = 360;
+   boxm2_vecf_ocl_transform_scene trs(source_scene, target_scene, opencl_cache, ni, nj);
    trs.transform_1_blk_interp(R, t, si, true);
    return;
 #if 0
