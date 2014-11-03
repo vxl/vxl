@@ -41,3 +41,5 @@ TARGET_LINK_LIBRARIES(vimt3d vil3d_algo vil3d_io vil3d vimt mbl vnl_algo vgl vnl
 IF (BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF (BUILD_TESTING)
+
+SUBDIRS(tools)
