@@ -13,7 +13,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
                                      vcl_vector<bocl_device*> &    devices)
 {
   scene_ = scene;
-  boxm2_lru_cache::create(scene);
+  boxm2_lru_cache1::create(scene);
 
 #if  1
   unsigned int blocksAdded = 0;
@@ -27,7 +27,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
     sub_scenes_.push_back(sub_scene);
 
     //create ocl_cache for this scene...
-    boxm2_opencl_cache* ocl_cache = new boxm2_opencl_cache(sub_scene, devices[dev_id]);
+    boxm2_opencl_cache1* ocl_cache = new boxm2_opencl_cache1(sub_scene, devices[dev_id]);
     ocl_caches_.push_back(ocl_cache);
   }
 
@@ -133,7 +133,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
     sub_scenes_.push_back(sub_scene);
 
     //create ocl_cache for this scene...
-    boxm2_opencl_cache* ocl_cache = new boxm2_opencl_cache(sub_scene, devices[dev_id]);
+    boxm2_opencl_cache1* ocl_cache = new boxm2_opencl_cache1(sub_scene, devices[dev_id]);
     ocl_caches_.push_back(ocl_cache);
   }
 #endif
@@ -156,9 +156,9 @@ boxm2_multi_cache::~boxm2_multi_cache()
     if (groups_[i]) delete groups_[i];
 }
 
-vcl_vector<boxm2_opencl_cache*> boxm2_multi_cache::get_vis_sub_scenes(vpgl_perspective_camera<double>* cam)
+vcl_vector<boxm2_opencl_cache1*> boxm2_multi_cache::get_vis_sub_scenes(vpgl_perspective_camera<double>* cam)
 {
-  vcl_vector<boxm2_opencl_cache*> vis_order;
+  vcl_vector<boxm2_opencl_cache1*> vis_order;
   if (!cam) {
     vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
     return vis_order;
@@ -172,14 +172,14 @@ vcl_vector<boxm2_opencl_cache*> boxm2_multi_cache::get_vis_sub_scenes(vpgl_persp
   return this->get_vis_order_from_pt(cam_center);
 }
 
-vcl_vector<boxm2_opencl_cache*>
+vcl_vector<boxm2_opencl_cache1*>
 boxm2_multi_cache::get_vis_sub_scenes(vpgl_generic_camera<double>* cam)
 {
   vgl_point_3d<double> cam_center = cam->max_ray_origin();
   return this->get_vis_order_from_pt(cam_center);
 }
 
-vcl_vector<boxm2_opencl_cache*>
+vcl_vector<boxm2_opencl_cache1*>
 boxm2_multi_cache::get_vis_sub_scenes(vpgl_camera_double_sptr cam)
 {
   if ( cam->type_name() == "vpgl_generic_camera" )
@@ -190,20 +190,20 @@ boxm2_multi_cache::get_vis_sub_scenes(vpgl_camera_double_sptr cam)
     vcl_cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<vcl_endl;
 
   //else return empty
-  vcl_vector<boxm2_opencl_cache*> empty;
+  vcl_vector<boxm2_opencl_cache1*> empty;
   return empty;
 }
 
-vcl_vector<boxm2_opencl_cache*>
+vcl_vector<boxm2_opencl_cache1*>
 boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
 {
   //Map of distance, id
-  typedef boxm2_dist_pair<boxm2_opencl_cache*> Pair;
+  typedef boxm2_dist_pair<boxm2_opencl_cache1*> Pair;
   vcl_vector<Pair> distances;
 
   //iterate through each block
   for (unsigned int idx=0; idx<ocl_caches_.size(); ++idx) {
-    boxm2_opencl_cache*     cache   = ocl_caches_[idx];
+    boxm2_opencl_cache1*     cache   = ocl_caches_[idx];
     boxm2_scene_sptr        sscene  = cache->get_scene();
     vgl_box_3d<double>      bbox    = sscene->bounding_box();
     vgl_point_3d<double>    center  = bbox.centroid();
@@ -215,7 +215,7 @@ boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
   vcl_sort(distances.begin(), distances.end());
 
   //put blocks in "vis_order"
-  vcl_vector<boxm2_opencl_cache*>   vis_order;
+  vcl_vector<boxm2_opencl_cache1*>   vis_order;
   vcl_vector<Pair>::iterator di;
   for (di = distances.begin(); di != distances.end(); ++di)
     vis_order.push_back(di->dat_);

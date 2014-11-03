@@ -6,11 +6,11 @@
 
 #include "boxm2_ocl_processes.h"
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 void boxm2_ocl_register::register_datatype()
 {
   REGISTER_DATATYPE( boxm2_opencl_cache_sptr );
-  REGISTER_DATATYPE( boxm2_opencl_cache2_sptr );
+  REGISTER_DATATYPE( boxm2_opencl_cache1_sptr );
 }
 
 void boxm2_ocl_register::register_process()
@@ -83,8 +83,8 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_adaptive_cone_render_expected_process, "boxm2OclAdaptiveConeRenderExpectedProcess");
 
   // admin
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_opencl_cache1_process, "boxm2CreateOpenclCache1Process");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_opencl_cache_process, "boxm2CreateOpenclCacheProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_opencl_cache2_process, "boxm2CreateOpenclCache2Process");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_clear_opencl_cache_process, "boxm2ClearOpenclCacheProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_aux_per_view_naa_process, "boxm2OclUpdateAuxPerViewNAAProcess");

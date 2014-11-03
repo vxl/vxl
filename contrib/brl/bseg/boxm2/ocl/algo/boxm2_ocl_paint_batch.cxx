@@ -49,13 +49,13 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
 
   // reads from disc if not already in memory
   boxm2_cache_sptr cache  = opencl_cache->get_cpu_cache();
-  boxm2_data_base* alph   = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+  boxm2_data_base* alph   = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
   int alphaTypeSize       = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
   int data_buff_length    = (int) (alph->buffer_length()/alphaTypeSize);
 
   //debuggers--------
   int mogSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-  boxm2_data_base* mog_base = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), mogSize*data_buff_length, false);
+  boxm2_data_base* mog_base = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), mogSize*data_buff_length, false);
   boxm2_data<BOXM2_MOG3_GREY>* mog_data_ = new boxm2_data<BOXM2_MOG3_GREY>(mog_base->data_buffer(), mog_base->buffer_length(), mog_base->block_id());
   //----------------
 
@@ -136,8 +136,8 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   //write the image values to the buffer
   int mogTypeSize     = (int) boxm2_data_info::datasize(data_type);
   vul_timer transfer;
-  /* bocl_mem* blk = */ opencl_cache->get_block(id);
-  bocl_mem* mog       = opencl_cache->get_data(id, data_type, data_buff_length*mogTypeSize, false);
+  /* bocl_mem* blk = */ opencl_cache->get_block(scene, id);
+  bocl_mem* mog       = opencl_cache->get_data(scene, id, data_type, data_buff_length*mogTypeSize, false);
   bocl_mem* blk_info  = opencl_cache->loaded_block_info();
 
   boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();

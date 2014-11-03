@@ -260,10 +260,10 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(*id);
+      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-      bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+      bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type);
       transfer_time += (float) transfer.all();
 
       ////3. SET args

@@ -83,12 +83,12 @@ bool boxm2_cpp_cast_intensities_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       vcl_cout<<"Block id "<<(*id)<<' ';
-      boxm2_block *   blk   = cache->get_block(*id);
+      boxm2_block *   blk   = cache->get_block(scene,*id);
 
       //: first make sure that the database is removed from memory if it already exists
-      cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
+      cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
       //: now retrieve it with get_data_base_new method so that even if it exists on disc, a fresh one will be created
-      boxm2_data_base *  alph = cache->get_data_base_new(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier), false);
+      boxm2_data_base *  alph = cache->get_data_base_new(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier), false);
 
       boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
       scene_info_wrapper->info=scene->get_blk_metadata(*id);

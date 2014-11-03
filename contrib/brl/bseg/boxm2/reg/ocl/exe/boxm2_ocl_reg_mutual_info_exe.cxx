@@ -9,7 +9,7 @@
 #include <boxm2/reg/ocl/boxm2_ocl_reg_mutual_info.h>
 #include <boxm2/reg/ocl/boxm2_ocl_hierarchical_reg.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/io/boxm2_lru_cache2.h>
+#include <boxm2/io/boxm2_lru_cache.h>
 
 
 #include <vgl/vgl_vector_3d.h>
@@ -19,7 +19,7 @@
 #include <vcl_algorithm.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_device.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_powell.h>
@@ -81,14 +81,14 @@ int main(int argc,  char** argv)
   boxm2_scene_sptr sceneA = new boxm2_scene(sceneA_file());
   boxm2_scene_sptr sceneB = new boxm2_scene(sceneB_file());
 
-  boxm2_lru_cache2::create(sceneA);
-  boxm2_cache2_sptr cache =boxm2_cache2::instance();
+  boxm2_lru_cache::create(sceneA);
+  boxm2_cache_sptr cache =boxm2_cache::instance();
   bocl_manager_child_sptr mgr =bocl_manager_child::instance();
   if (mgr->gpus_.size()==0)
     return false;
 
   bocl_device_sptr  device = mgr->gpus_[1];
-  boxm2_opencl_cache2_sptr opencl_cache = new boxm2_opencl_cache2(device);
+  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
 
   vnl_vector<double> x(7,0.0);    
   vnl_vector<double> var(7,0.0);

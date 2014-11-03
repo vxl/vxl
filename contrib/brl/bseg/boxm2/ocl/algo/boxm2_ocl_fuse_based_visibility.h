@@ -8,8 +8,8 @@
 //boxm2 includes
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
-#include <boxm2/io/boxm2_cache2.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/io/boxm2_cache.h>
 
 #include <vil/vil_image_view_base.h>
 
@@ -20,7 +20,7 @@ class boxm2_ocl_fuse_based_visibility
     static bool fuse_based_visibility( boxm2_scene_sptr         sceneA,
                                        boxm2_scene_sptr         sceneB,
                                        bocl_device_sptr         device,
-                                       boxm2_opencl_cache2_sptr  opencl_cache);
+                                       boxm2_opencl_cache_sptr  opencl_cache);
 
   private:
     //compile kernels and place in static map
@@ -39,7 +39,7 @@ class boxm2_ocl_fuse_based_orientation
     static bool fuse_based_orientation( boxm2_scene_sptr         sceneA,
                                                boxm2_scene_sptr         sceneB,
                                                bocl_device_sptr         device,
-                                               boxm2_opencl_cache2_sptr  opencl_cache);
+                                               boxm2_opencl_cache_sptr  opencl_cache);
 
   private:
     //compile kernels and place in static map
@@ -59,7 +59,7 @@ class boxm2_ocl_fuse_surface_density
     static bool fuse_surface_density( boxm2_scene_sptr         sceneA,
                                                boxm2_scene_sptr         sceneB,
                                                bocl_device_sptr         device,
-                                               boxm2_opencl_cache2_sptr  opencl_cache);
+                                               boxm2_opencl_cache_sptr  opencl_cache);
 
   private:
     //compile kernels and place in static map

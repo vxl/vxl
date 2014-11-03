@@ -17,7 +17,7 @@
 
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
-void boxm2_ocl_test_utils::create_edge_scene(boxm2_scene* scene, float val1, float val2)
+void boxm2_ocl_test_utils::create_edge_scene(boxm2_scene_sptr scene, float val1, float val2)
 {
   //vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
   vcl_string test_file =  "edge_test_scene.xml";
@@ -82,8 +82,8 @@ void boxm2_ocl_test_utils::create_edge_scene(boxm2_scene* scene, float val1, flo
     for (int j=0; j<2; j++) {
       boxm2_block_id id(i,j,0);
       //loads block structure and data into cahe, data is initialized
-      /* boxm2_block *  blk      = */ boxm2_cache::instance()->get_block(id);
-      /* boxm2_data_base * alpha = */ boxm2_cache::instance()->get_data_base_new(id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      /* boxm2_block *  blk      = */ boxm2_cache::instance()->get_block(scene,id);
+      /* boxm2_data_base * alpha = */ boxm2_cache::instance()->get_data_base_new(scene,id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
     }
   }
 
@@ -122,7 +122,7 @@ bool boxm2_ocl_test_utils::create_test_simple_scene(boxm2_scene_sptr & scene)
   return true;
 }
 
-void boxm2_ocl_test_utils::print_alpha_scene(boxm2_scene* scene)
+void boxm2_ocl_test_utils::print_alpha_scene(boxm2_scene_sptr scene)
 {
   //iterate through blocks
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
@@ -132,8 +132,8 @@ void boxm2_ocl_test_utils::print_alpha_scene(boxm2_scene* scene)
     boxm2_block_id id = blk_iter->first;
     vcl_cout << "Printing results for block: " << id << vcl_endl;
 
-    boxm2_block *     blk     = boxm2_cache::instance()->get_block(id);
-    boxm2_data_base * alphas    = boxm2_cache::instance()->get_data_base(id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_block *     blk     = boxm2_cache::instance()->get_block(scene,id);
+    boxm2_data_base * alphas    = boxm2_cache::instance()->get_data_base(scene,id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_block_metadata data = blk_iter->second;
 
     //3d array of trees

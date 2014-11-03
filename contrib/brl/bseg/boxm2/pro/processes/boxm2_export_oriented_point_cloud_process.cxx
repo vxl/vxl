@@ -125,7 +125,7 @@ bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
       continue;
     
     vcl_cout << "Processing Block: "<<id<< " with prob t: " << prob_t << ", vis t: " << vis_t << " and nmag_t: " << nmag_t << " finest cell length: " << finest_cell_length << vcl_endl;
-    boxm2_block *     blk     = cache->get_block(id);
+    boxm2_block *     blk     = cache->get_block(scene,id);
 
     //get data sizes
     vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -137,19 +137,19 @@ bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
     vcl_size_t nobsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix());
     vcl_size_t raydirTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_RAY_DIR>::prefix());
 
-    boxm2_data_base * alpha =        cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base * alpha =        cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     int data_buff_length    = (int) (alpha->buffer_length()/alphaTypeSize);
     
     //specify size to make sure data is right size.
-    boxm2_data_base * points = cache->get_data_base(id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
-    boxm2_data_base * normals = cache->get_data_base(id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
-    boxm2_data_base * vis = cache->get_data_base(id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
-    boxm2_data_base * vis_sum = cache->get_data_base(id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix("sum"), data_buff_length * visTypeSize);
-    boxm2_data_base * mog = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), data_buff_length * mogSize);
-    boxm2_data_base * exp = cache->get_data_base(id,boxm2_data_traits<BOXM2_EXPECTATION>::prefix(), data_buff_length * expTypeSize);
-    boxm2_data_base * nobs = cache->get_data_base(id,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(), data_buff_length * nobsTypeSize);
-    boxm2_data_base * ray_dir_sum = cache->get_data_base(id,boxm2_data_traits<BOXM2_RAY_DIR>::prefix(), data_buff_length * raydirTypeSize);
-    boxm2_data_base * ray_dir_weighted_sum = cache->get_data_base(id,boxm2_data_traits<BOXM2_RAY_DIR>::prefix(), data_buff_length * raydirTypeSize);
+    boxm2_data_base * points = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
+    boxm2_data_base * normals = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
+    boxm2_data_base * vis = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
+    boxm2_data_base * vis_sum = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix("sum"), data_buff_length * visTypeSize);
+    boxm2_data_base * mog = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), data_buff_length * mogSize);
+    boxm2_data_base * exp = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_EXPECTATION>::prefix(), data_buff_length * expTypeSize);
+    boxm2_data_base * nobs = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(), data_buff_length * nobsTypeSize);
+    boxm2_data_base * ray_dir_sum = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_RAY_DIR>::prefix(), data_buff_length * raydirTypeSize);
+    boxm2_data_base * ray_dir_weighted_sum = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_RAY_DIR>::prefix(), data_buff_length * raydirTypeSize);
 
     
     boxm2_block_metadata data = blk_iter->second;

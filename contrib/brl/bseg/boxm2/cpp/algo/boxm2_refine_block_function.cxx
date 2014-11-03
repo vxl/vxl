@@ -6,9 +6,10 @@
 
 
 //: initialize generic data base pointers as their data type
-bool boxm2_refine_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh)
+bool boxm2_refine_block_function::init_data(boxm2_scene_sptr scene, boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh)
 {
     //store block and pointer to uchar16 3d block
+    scene_ = scene;
     blk_   = blk;
 
     //store data buffers
@@ -139,9 +140,9 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
 
   //3. Replace data in the cache
   boxm2_cache_sptr cache = boxm2_cache::instance();
-  cache->replace_data_base(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
-  cache->replace_data_base(id, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), newM);
-  cache->replace_data_base(id, boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), newN);
+  cache->replace_data_base(scene_, id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
+  cache->replace_data_base(scene_, id, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), newM);
+  cache->replace_data_base(scene_, id, boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), newN);
 
   return true;
 }
@@ -280,13 +281,14 @@ int boxm2_refine_block_function::free_space(int startPtr, int endPtr)
 ////////////////////////////////////////////////////////////////////////////////
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
-void boxm2_refine_block( boxm2_block* blk,
+void boxm2_refine_block( boxm2_scene_sptr scene,
+                         boxm2_block* blk,
                          vcl_vector<boxm2_data_base*> & datas,
                          float prob_thresh,
                          bool is_random)
 {
   boxm2_refine_block_function refine_block;
-  refine_block.init_data(blk, datas, prob_thresh);
+  refine_block.init_data(scene, blk, datas, prob_thresh);
 
   refine_block.refine_deterministic(datas);
 }

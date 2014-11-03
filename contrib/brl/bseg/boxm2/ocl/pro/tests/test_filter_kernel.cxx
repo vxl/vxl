@@ -134,6 +134,8 @@ void test_inner_cluster(boxm2_block* blk,
 {
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
+  boxm2_scene_sptr scene = new boxm2_scene();
+
   int dataSize = 8+9;
   float* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
 
@@ -189,7 +191,7 @@ void test_inner_cluster(boxm2_block* blk,
   new_alphas->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
 
   //grab the block out of the cache as well
-  bocl_mem* blk_mem = opencl_cache->get_block(id);
+  bocl_mem* blk_mem = opencl_cache->get_block(scene,id);
   bocl_mem* blk_info = opencl_cache->loaded_block_info();
   blk_mem->write_to_buffer(queue);
 
@@ -272,6 +274,8 @@ void test_outer_cluster(boxm2_block* blk,
   int dataSize = 8*(1+8+64) + 1;
   float* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
 
+  boxm2_scene_sptr scene = new boxm2_scene();
+
   //set up fake trees
   int count = 0;
   for (int i=0; i<3; ++i) {
@@ -321,7 +325,7 @@ void test_outer_cluster(boxm2_block* blk,
   new_alphas->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
 
   //grab the block out of the cache as well
-  bocl_mem* blk_mem = opencl_cache->get_block(id);
+  bocl_mem* blk_mem = opencl_cache->get_block(scene,id);
   bocl_mem* blk_info = opencl_cache->loaded_block_info();
   blk_mem->write_to_buffer(queue);
 
@@ -432,9 +436,9 @@ void test_filter_kernel()
 
   //instantiate a cache to grab the first block
   boxm2_lru_cache::create(scene);
-  boxm2_block* blk = boxm2_cache::instance()->get_block(id);
+  boxm2_block* blk = boxm2_cache::instance()->get_block(scene,id);
 
-  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(scene, device);
+  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
 
   //RUN Tests
   vcl_cout<<"Testing inner cluster"<<vcl_endl;

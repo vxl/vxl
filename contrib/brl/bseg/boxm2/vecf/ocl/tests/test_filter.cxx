@@ -12,7 +12,7 @@
 #include <vul/vul_timer.h>
 #include <bocl/bocl_manager.h>
 #include <boct/boct_bit_tree.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_util.h>
 #include <vul/vul_file.h>
 #include <vcl_vector.h>
@@ -34,12 +34,12 @@ void test_filter()
   boxm2_scene_sptr source_scene = new boxm2_scene(source_scene_path);
   //  boxm2_scene_sptr temp_scene = new boxm2_scene(temp_scene_path);
   boxm2_scene_sptr temp_scene = source_scene->clone_no_disk();
-  boxm2_lru_cache2::create(source_scene);
+  boxm2_lru_cache::create(source_scene);
 
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
   unsigned gpu_idx = 1; //on JLM's alienware
   bocl_device_sptr device = mgr->gpus_[gpu_idx];
-  boxm2_opencl_cache2_sptr opencl_cache = new boxm2_opencl_cache2(device);
+  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
   boxm2_vecf_ocl_filter f(source_scene, temp_scene, opencl_cache);
   vcl_vector<float> coefs(8,0.125f);
   coefs[0]=0.25f;   coefs[7]=0.0f;

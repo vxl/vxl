@@ -11,11 +11,52 @@
 #include <vcl_fstream.h>
 #include <boxm2/boxm2_scene.h>
 #include <bocl/bocl_device.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
-namespace boxm2_create_opencl_cache_process_globals
+namespace boxm2_create_opencl_cache1_process_globals
 {
   const unsigned n_inputs_ = 2;
+  const unsigned n_outputs_ = 1;
+}
+
+bool boxm2_create_opencl_cache1_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_create_opencl_cache1_process_globals;
+
+  //process takes 2 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "bocl_device_sptr";
+  input_types_[1] = "boxm2_scene_sptr";
+
+  // process has 1 output
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  output_types_[0] = "boxm2_opencl_cache1_sptr";
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_create_opencl_cache1_process(bprb_func_process& pro)
+{
+  using namespace boxm2_create_opencl_cache1_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_opencl_cache1_sptr opencl_cache= new boxm2_opencl_cache1(scene, device);
+  i=0;
+
+  // store scene smart pointer
+  pro.set_output_val<boxm2_opencl_cache1_sptr>(i++, opencl_cache);
+  return true;
+}
+namespace boxm2_create_opencl_cache_process_globals
+{
+  const unsigned n_inputs_ = 1;
   const unsigned n_outputs_ = 1;
 }
 
@@ -23,10 +64,10 @@ bool boxm2_create_opencl_cache_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_opencl_cache_process_globals;
 
-  //process takes 2 inputs
+  //process takes 1 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
-  input_types_[1] = "boxm2_scene_sptr";
+
 
   // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -46,51 +87,10 @@ bool boxm2_create_opencl_cache_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache_sptr opencl_cache= new boxm2_opencl_cache(scene, device);
+  boxm2_opencl_cache_sptr opencl_cache= new boxm2_opencl_cache(device);
   i=0;
 
   // store scene smart pointer
   pro.set_output_val<boxm2_opencl_cache_sptr>(i++, opencl_cache);
-  return true;
-}
-namespace boxm2_create_opencl_cache2_process_globals
-{
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
-}
-
-bool boxm2_create_opencl_cache2_process_cons(bprb_func_process& pro)
-{
-  using namespace boxm2_create_opencl_cache2_process_globals;
-
-  //process takes 1 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "bocl_device_sptr";
-
-
-  // process has 1 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  output_types_[0] = "boxm2_opencl_cache2_sptr";
-
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-}
-
-bool boxm2_create_opencl_cache2_process(bprb_func_process& pro)
-{
-  using namespace boxm2_create_opencl_cache2_process_globals;
-
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-    return false;
-  }
-  //get the inputs
-  unsigned i = 0;
-  bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
-  boxm2_opencl_cache2_sptr opencl_cache= new boxm2_opencl_cache2(device);
-  i=0;
-
-  // store scene smart pointer
-  pro.set_output_val<boxm2_opencl_cache2_sptr>(i++, opencl_cache);
   return true;
 }

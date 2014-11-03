@@ -12,7 +12,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vil/vil_image_view.h>
 #include <bocl/bocl_device.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
@@ -27,7 +27,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   //: Constructor. 
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
                                  boxm2_scene_sptr& target_scene,
-                                 boxm2_opencl_cache2_sptr ocl_cache,
+                                 boxm2_opencl_cache_sptr ocl_cache,
                                  unsigned ni, unsigned nj);
 
   ~boxm2_vecf_ocl_transform_scene();
@@ -80,7 +80,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bool get_scene_appearance(boxm2_scene_sptr scene,
                             vcl_string&      options);
 
-  boxm2_opencl_cache2_sptr  opencl_cache_;
+  boxm2_opencl_cache_sptr  opencl_cache_;
   boxm2_scene_sptr target_scene_;
   boxm2_scene_sptr source_scene_;
   bocl_device_sptr device_;

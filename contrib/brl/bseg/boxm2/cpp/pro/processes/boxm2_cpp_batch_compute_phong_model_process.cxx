@@ -72,9 +72,9 @@ bool boxm2_cpp_batch_compute_phong_model_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); id++) {
-    boxm2_block *     blk     = cache->get_block(*id);
-    boxm2_data_base *  alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
-    boxm2_data_base *  phongs_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model"),alpha->buffer_length()* 8 ,false);
+    boxm2_block *     blk     = cache->get_block(scene,*id);
+    boxm2_data_base *  alpha  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
+    boxm2_data_base *  phongs_model_data  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model"),alpha->buffer_length()* 8 ,false);
     boxm2_compute_phongs_model_functor data_functor;
     data_functor.init_data(sun_elev,
                            sun_azim,
@@ -84,7 +84,7 @@ bool boxm2_cpp_batch_compute_phong_model_process(bprb_func_process& pro)
     int phongs_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
     int data_buff_length = (int) (phongs_model_data->buffer_length()/phongs_model_TypeSize);
     boxm2_data_leaves_serial_iterator<boxm2_compute_phongs_model_functor>(blk, data_buff_length,data_functor);
-    cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model") );
+    cache->remove_data_base(scene,*id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model") );
   }
   return true;
 }

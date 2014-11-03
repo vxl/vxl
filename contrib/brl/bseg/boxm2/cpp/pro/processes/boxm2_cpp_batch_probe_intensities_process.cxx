@@ -79,7 +79,7 @@ bool boxm2_cpp_batch_probe_intensities_process(bprb_func_process& pro)
   int index_y=(int)vcl_floor(local.y());
   int index_z=(int)vcl_floor(local.z());
 
-  boxm2_block * blk=cache->get_block(id);
+  boxm2_block * blk=cache->get_block(scene,id);
   boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
   vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
   boct_bit_tree tree(treebits.data_block(),mdata.max_level_);

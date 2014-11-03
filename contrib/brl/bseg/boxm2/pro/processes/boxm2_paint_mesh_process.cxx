@@ -130,7 +130,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     int index_x=(int)vcl_floor(local.x());
     int index_y=(int)vcl_floor(local.y());
     int index_z=(int)vcl_floor(local.z());
-    boxm2_block * blk=cache->get_block(id);
+    boxm2_block * blk=cache->get_block(scene,id);
     boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
     vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
     boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
@@ -139,7 +139,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     int depth=tree.depth_at(bit_index);
 
     int data_offset=tree.get_data_index(bit_index,false);
-    boxm2_data_base *  alpha_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base *  alpha_base  = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
     float alpha=(alpha_data->data())[data_offset];
@@ -147,7 +147,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     //store cell probability
     prob = 1.0f - (float)vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
 
-    boxm2_data_base *  int_base  = cache->get_data_base(id, data_type);
+    boxm2_data_base *  int_base  = cache->get_data_base(scene,id, data_type);
     if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos) {
       boxm2_data<BOXM2_GAUSS_RGB> *int_data = new boxm2_data<BOXM2_GAUSS_RGB>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
       intensity = boxm2_gauss_rgb_processor::expected_color( (int_data->data())[data_offset]);

@@ -138,7 +138,7 @@ int main(int argc,  char** argv)
 
     //create cache, grab singleton instance
     boxm2_lru_cache::create(scene);
-    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene, device, 1); //allow 4 blocks inthe cache
+    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device); //allow 4 blocks inthe cache
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device);
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
     brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache);

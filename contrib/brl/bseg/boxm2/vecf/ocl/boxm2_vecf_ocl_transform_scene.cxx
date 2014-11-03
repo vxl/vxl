@@ -51,7 +51,7 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
 
 boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
               boxm2_scene_sptr& target_scene,
-              boxm2_opencl_cache2_sptr ocl_cache, 
+              boxm2_opencl_cache_sptr ocl_cache, 
               unsigned ni, unsigned nj)
   : source_scene_(source_scene),
      target_scene_(target_scene),
@@ -497,7 +497,7 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
    opencl_cache_->unref_mem(rotation.ptr());
    opencl_cache_->unref_mem(scalem.ptr());
    opencl_cache_->unref_mem(ocl_depth.ptr());
-   boxm2_lru_cache2::instance()->write_to_disk(target_scene_);
+   boxm2_lru_cache::instance()->write_to_disk(target_scene_);
    return true;
 }
 bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  rot,
@@ -666,7 +666,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
      return false;
    if(finish){
      trans_kern->clear_args();
-     boxm2_lru_cache2::instance()->write_to_disk(target_scene_);
+     boxm2_lru_cache::instance()->write_to_disk(target_scene_);
      ocl_depth->release_memory();
      blk_info_source->release_memory();
      delete info_buffer_source;
@@ -858,7 +858,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      return false;
    if(finish){
      trans_interp_kern->clear_args();
-     boxm2_lru_cache2::instance()->write_to_disk(target_scene_);
+     boxm2_lru_cache::instance()->write_to_disk(target_scene_);
      ocl_depth->release_memory();
      blk_info_source->release_memory();
      delete info_buffer_source;

@@ -101,7 +101,7 @@ bool boxm2_import_point_cloud_process(bprb_func_process& pro)
       int index_x=(int)vcl_floor(local.x());
       int index_y=(int)vcl_floor(local.y());
       int index_z=(int)vcl_floor(local.z());
-      boxm2_block * blk=cache->get_block(id);
+      boxm2_block * blk=cache->get_block(scene,id);
       boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
       vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
       boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
@@ -110,7 +110,7 @@ bool boxm2_import_point_cloud_process(bprb_func_process& pro)
       if(depth >= (int)min_depth )
       {
         int data_offset=tree.get_data_index(bit_index,false);
-        boxm2_data_base *  alpha_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        boxm2_data_base *  alpha_base  = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         alpha_base->enable_write();
         boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
         double side_len = 1.0 / (double) (1 << depth);

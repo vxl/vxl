@@ -110,7 +110,7 @@ int main(int argc, char ** argv)
 
     //create cache, grab singleton instance
     boxm2_lru_cache::create(scene);
-    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene, device, 4); //allow 4 blocks inthe cache
+    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device); 
 
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
       boxm2_ocl_render_tableau_new bit_tableau;

@@ -24,7 +24,7 @@ class boxm2_refine_block_function
   boxm2_refine_block_function() {}
 
   //: initialize generic data base pointers as their data type
-  bool init_data(boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh);
+  bool init_data(boxm2_scene_sptr scene, boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh);
 
   //: refine function;
   bool refine();
@@ -46,6 +46,7 @@ class boxm2_refine_block_function
   int free_space(int startPtr, int endPtr);
 
  private:
+  boxm2_scene_sptr scene_;
   boxm2_block* blk_;
 
   float*       alpha_;
@@ -72,7 +73,8 @@ class boxm2_refine_block_function
 ////////////////////////////////////////////////////////////////////////////////
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
-void boxm2_refine_block( boxm2_block* blk,
+void boxm2_refine_block( boxm2_scene_sptr scene,
+                         boxm2_block* blk,
                          vcl_vector<boxm2_data_base*> & datas,
                          float prob_thresh,
                          bool is_random = true);

@@ -22,7 +22,7 @@ class boxm2_filter_block_function
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
-  boxm2_filter_block_function(boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas);
+  boxm2_filter_block_function(boxm2_scene_sptr scene, boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas);
 
  private:
  
@@ -34,6 +34,7 @@ class boxm2_filter_block_function
   boxm2_block* blk_;
   uchar16*     trees_;
   float*       alpha_;
+  boxm2_scene_sptr scene_;
 };
 
 

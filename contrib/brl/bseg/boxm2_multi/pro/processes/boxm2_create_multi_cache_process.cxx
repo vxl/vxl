@@ -106,6 +106,6 @@ bool boxm2_write_multi_cache_process(bprb_func_process& pro)
     bool doclear = pro.get_input<bool>(i++);
     if(doclear)
         mcache->clear();
-    boxm2_lru_cache::instance()->write_to_disk();
+    boxm2_lru_cache1::instance()->write_to_disk();
     return true;
 }

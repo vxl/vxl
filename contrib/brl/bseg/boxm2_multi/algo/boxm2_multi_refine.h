@@ -6,7 +6,7 @@
 
 #include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
@@ -22,7 +22,7 @@ class boxm2_multi_refine
 
   private:
     static float refine_trees_per_block(const boxm2_block_id& id,
-                                        boxm2_opencl_cache* ocl_cache,
+                                        boxm2_opencl_cache1* ocl_cache,
                                         cl_command_queue& queue,
                                         int numTrees,
                                         BlockMemMap&  sizebuffs,
@@ -35,7 +35,7 @@ class boxm2_multi_refine
     static void swap_data_per_block(boxm2_scene_sptr scene,
                                     const boxm2_block_id& id,
                                     int numTrees,
-                                    boxm2_opencl_cache* ocl_cache,
+                                    boxm2_opencl_cache1* ocl_cache,
                                     cl_command_queue& queue,
                                     BlockMemMap& sizebuffs,
                                     BlockMemMap& blockCopies,

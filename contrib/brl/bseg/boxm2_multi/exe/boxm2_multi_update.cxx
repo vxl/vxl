@@ -20,7 +20,7 @@
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_device.h>
@@ -145,7 +145,7 @@ int main(int argc,  char** argv)
   mcache.clear();
 
   //write cache
-  boxm2_lru_cache::instance()->write_to_disk();
+  boxm2_lru_cache1::instance()->write_to_disk();
 
   return 0;
 }

@@ -40,7 +40,7 @@ bool boxm2_vecf_ocl_store_nbrs::get_scene_appearance( boxm2_scene_sptr scene,
     return true;
 }
 boxm2_vecf_ocl_store_nbrs::boxm2_vecf_ocl_store_nbrs(boxm2_scene_sptr& source_scene,
-                                   boxm2_opencl_cache2_sptr ocl_cache)
+                                   boxm2_opencl_cache_sptr ocl_cache)
   : source_scene_(source_scene),
     opencl_cache_(ocl_cache)
 {
@@ -157,7 +157,7 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   nbr_prob->read_to_buffer(queue);
   output->read_to_buffer(queue);
   clFinish( queue);
-  boxm2_lru_cache2::instance()->write_to_disk(source_scene_);
+  boxm2_lru_cache::instance()->write_to_disk(source_scene_);
   kern->clear_args();
   opencl_cache_->unref_mem(ocl_depth);
   blk_info_source->release_memory();

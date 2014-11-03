@@ -31,18 +31,9 @@ class boxm2_scene_adaptor(object):
     self.lvcs = None;
 
     #if device_string is gpu, load up opencl
-    if device_string[0:3]=="gpu" :
-		if(not opencl_multi_scene_cache):
+    if device_string[0:3]=="gpu" or device_string[0:3]=="cpu":
 			self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
 			self.active_cache = self.opencl_cache;
-		else:
-			self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl_2(scene_str, device_string);
-			self.active_cache = self.opencl_cache;
-    elif device_string[0:3]=="cpu" :
-      self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
-      self.active_cache = self.opencl_cache;
-      #self.scene, self.cpu_cache = load_cpp(scene_str);
-      #self.active_cache = self.cpu_cache;
     elif device_string[0:3]=="cpp" :
       self.scene, self.cpu_cache = load_cpp(scene_str);
       self.active_cache = self.cpu_cache;
@@ -92,7 +83,7 @@ class boxm2_scene_adaptor(object):
 
 
   def transform_to_scene(self, to_scene, trans, rot, scale):
-      if self.opencl_cache.type == "boxm2_opencl_cache2_sptr":
+      if self.opencl_cache.type == "boxm2_opencl_cache_sptr":
         print("transforming scene");
         boxm2_batch.init_process("boxm2VecfOclTransformSceneProcess");
         boxm2_batch.set_input_from_db(0,self.scene);

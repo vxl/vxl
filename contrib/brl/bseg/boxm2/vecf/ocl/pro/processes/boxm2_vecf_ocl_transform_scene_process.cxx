@@ -31,7 +31,7 @@ bool boxm2_vecf_ocl_transform_scene_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";     // source scene
   input_types_[1] = "boxm2_scene_sptr";     // target scene
-  input_types_[2] = "boxm2_opencl_cache2_sptr";
+  input_types_[2] = "boxm2_opencl_cache_sptr";
   // inverse transformation -- target to source
   input_types_[3] = "double"; // translation
   input_types_[4] = "double";
@@ -66,7 +66,7 @@ bool boxm2_vecf_ocl_transform_scene_process(bprb_func_process& pro)
   // two scenes are stored in the same cache
   boxm2_scene_sptr source_scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_scene_sptr target_scene = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache2_sptr cache = pro.get_input<boxm2_opencl_cache2_sptr>(i++);
+  boxm2_opencl_cache_sptr cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   bocl_device_sptr device = cache->get_device();
   //translation vector
   vgl_vector_3d<double> trans;

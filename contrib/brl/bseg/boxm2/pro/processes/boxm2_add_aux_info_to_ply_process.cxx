@@ -184,7 +184,7 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
     int index_y=(int)vcl_floor(local.y());
     int index_z=(int)vcl_floor(local.z());
 
-    boxm2_block * blk=cache->get_block(id);
+    boxm2_block * blk=cache->get_block(scene,id);
     boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
     vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
     boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
@@ -198,13 +198,13 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
 
     //get the base data
     int data_offset=tree.get_data_index(bit_index,false);
-    boxm2_data_base * alpha_base = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base * alpha_base = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     int data_buff_length = (int) (alpha_base->buffer_length()/alphaTypeSize);
 
 //  boxm2_data_base * points = cache->get_data_base(id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize); // UNUSED!! -- fixme
-    boxm2_data_base * normals = cache->get_data_base(id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
-    boxm2_data_base * vis = cache->get_data_base(id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
-    boxm2_data_base * mog = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), data_buff_length * mogSize);
+    boxm2_data_base * normals = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
+    boxm2_data_base * vis = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
+    boxm2_data_base * mog = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), data_buff_length * mogSize);
 
     //get the actual data
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha_base->data_buffer();

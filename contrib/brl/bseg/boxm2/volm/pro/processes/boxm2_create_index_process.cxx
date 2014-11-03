@@ -346,9 +346,9 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
       vul_timer transfer;
 
-      bocl_mem* blk       = opencl_cache->get_block(id_inner);
+      bocl_mem* blk       = opencl_cache->get_block(scene, id_inner);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(id_inner);
+      bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, id_inner);
 
       transfer_time += (float) transfer.all();
 

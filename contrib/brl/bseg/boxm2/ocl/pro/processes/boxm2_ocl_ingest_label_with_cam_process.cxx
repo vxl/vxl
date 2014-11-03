@@ -215,13 +215,13 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem * blk           = opencl_cache->get_block(*id);
+    bocl_mem * blk           = opencl_cache->get_block(scene,*id);
     
     // to go back to ingesting labels as is with the input data_type, uncomment below and comment the next get_data, also see below
     //// get alpha to get size, TODO: Fix This!
-    //bocl_mem * alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-    //bocl_mem * label_data    = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
-    bocl_mem* label_data       = opencl_cache->get_data(*id,data_type,0,true);
+    //bocl_mem * alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    //bocl_mem * label_data    = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+    bocl_mem* label_data       = opencl_cache->get_data(scene,*id,data_type,0,true);
     
     bocl_mem * blk_info      = opencl_cache->loaded_block_info();
     transfer_time           += (float) transfer.all();
@@ -249,7 +249,7 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
     
     // to go back to ingesting labels as is with the input data_type, uncomment below and comment deep_replace, also change ingest_label_map.cl accordingly
     //label_data->read_to_buffer(queue);
-    opencl_cache->deep_replace_data(*id, out_data_type, label_data, false); // deep replace to output type where read_to_buffer is called
+    opencl_cache->deep_replace_data(scene,*id, out_data_type, label_data, false); // deep replace to output type where read_to_buffer is called
     
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();

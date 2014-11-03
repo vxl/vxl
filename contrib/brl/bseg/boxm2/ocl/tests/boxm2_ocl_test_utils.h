@@ -27,8 +27,8 @@ public:
                                               int max_mb );
   static vcl_string save_test_simple_scene(vcl_string filename= "test.xml");
   static bool create_test_simple_scene(boxm2_scene_sptr & scene);
-  static void create_edge_scene(boxm2_scene* scene, float val1, float val2);
-  static void print_alpha_scene(boxm2_scene* scene);
+  static void create_edge_scene(boxm2_scene_sptr scene, float val1, float val2);
+  static void print_alpha_scene(boxm2_scene_sptr scene);
   template<class T> static void  fill_random(T *b, T *e, vnl_random &rng) ; 
   static void clean_up();
   

@@ -73,15 +73,15 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
     boxm2_block_metadata data = blk_iter->second;
 
     //get data from cache
-    boxm2_data_base * alpha = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base * alpha = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
 
-    boxm2_data_base * points= cache->get_data_base(id,boxm2_data_traits<BOXM2_POINT>::prefix(), (alpha->buffer_length() /alphaTypeSize) * pointTypeSize, false);
+    boxm2_data_base * points= cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_POINT>::prefix(), (alpha->buffer_length() /alphaTypeSize) * pointTypeSize, false);
 
     //3d array of trees
-    boxm2_array_3d<uchar16>& trees = cache->get_block(id)->trees();
+    boxm2_array_3d<uchar16>& trees = cache->get_block(scene,id)->trees();
 
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
     boxm2_data_traits<BOXM2_POINT>::datatype * points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();

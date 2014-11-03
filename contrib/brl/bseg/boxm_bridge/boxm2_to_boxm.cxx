@@ -16,6 +16,7 @@
 
 //boxm2 files
 #include <boxm2/boxm2_scene.h>
+#include <boxm2/io/boxm2_lru_cache.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
@@ -181,23 +182,23 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> boxm_dir("-out", "output directory", "");
   vul_arg_parse(argc, argv);
 
-  boxm2_scene scene2(boxm2_file());
+  boxm2_scene_sptr scene2 = new boxm2_scene(boxm2_file());
 
   //initialize a block and data cache
-  boxm2_lru_cache::create(&scene2);
+  boxm2_lru_cache::create(scene2);
   boxm2_cache_sptr cache = boxm2_cache::instance();
 
-  vpgl_lvcs lvcs = scene2.lvcs();
-  //vgl_point_3d<double> origin = scene2.local_origin();
-  vgl_box_3d<double> world = scene2.bounding_box();
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene2.blocks();
+  vpgl_lvcs lvcs = scene2->lvcs();
+  //vgl_point_3d<double> origin = scene2->local_origin();
+  vgl_box_3d<double> world = scene2->bounding_box();
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene2->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin();
 
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-  vgl_vector_3d<unsigned int> block_nums = scene2.scene_dimensions();
+  vgl_vector_3d<unsigned int> block_nums = scene2->scene_dimensions();
   vgl_point_3d<int> min_block_index;
   vgl_point_3d<double> origin;
-  scene2.min_block_index(min_block_index, origin);
+  scene2->min_block_index(min_block_index, origin);
   vgl_vector_3d<double> ww(world.width()/block_nums.x(),world.height()/block_nums.y(),world.depth()/block_nums.z());
 
 
@@ -210,14 +211,14 @@ int main(int argc, char** argv)
   while (iter != blocks.end()) {
     boxm2_block_metadata metadata = iter ->second;
     boxm2_block_id id = iter->first;
-    boxm2_block *     block     = cache->get_block(iter->first);
+    boxm2_block *     block     = cache->get_block(scene2, iter->first);
     vcl_cout<<" DATA buffers "<< block->num_buffers()<<vcl_endl;
-    boxm2_data_base * data_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+    boxm2_data_base * data_base = cache->get_data_base(scene2, iter->first,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
     boxm2_data<BOXM2_NUM_OBS> *num_obs=new boxm2_data<BOXM2_NUM_OBS>(data_base->data_buffer(),data_base->buffer_length(),data_base->block_id());
 
-    boxm2_data_base * mog3_data_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+    boxm2_data_base * mog3_data_base = cache->get_data_base(scene2, iter->first,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     boxm2_data<BOXM2_MOG3_GREY> *mog3_data=new boxm2_data<BOXM2_MOG3_GREY>(mog3_data_base->data_buffer(),mog3_data_base->buffer_length(),mog3_data_base->block_id());
-    boxm2_data_base * alpha_data_base  = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base * alpha_data_base  = cache->get_data_base(scene2, iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data =new boxm2_data<BOXM2_ALPHA>(alpha_data_base->data_buffer(),alpha_data_base->buffer_length(),alpha_data_base->block_id());
 
     // compute the block bounding box etc

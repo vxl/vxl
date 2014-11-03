@@ -427,11 +427,11 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
 
         vul_timer transfer;
 
-        bocl_mem* blk       = opencl_cache->get_block(id_inner);
+        bocl_mem* blk       = opencl_cache->get_block(scene, id_inner);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id_inner);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, id_inner);
 
-        bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,0,true);
+        bocl_mem* mog       = opencl_cache->get_data(scene, id_inner,data_type,0,true);
 #if 0 // was:
         bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
 #endif

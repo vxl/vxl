@@ -6,7 +6,7 @@
 
 #include <boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2_multi/algo/boxm2_multi_update.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
@@ -34,7 +34,7 @@ class boxm2_multi_store_aux
 
     static void store_aux_per_block(const boxm2_block_id& id,
                                           boxm2_scene_sptr    scene,
-                                          boxm2_opencl_cache* opencl_cache,
+                                          boxm2_opencl_cache1* opencl_cache,
                                           cl_command_queue&   queue,
                                           bocl_kernel*        kernel,
                                           bocl_mem_sptr&      in_image,
@@ -50,7 +50,7 @@ class boxm2_multi_store_aux
 
     // Reads aux memory from GPU to CPU ram
     static void read_aux(const boxm2_block_id& id,
-                         boxm2_opencl_cache* opencl_cache,
+                         boxm2_opencl_cache1* opencl_cache,
                          cl_command_queue&   queue);
 
     //map keeps track of all kernels compiled and cached

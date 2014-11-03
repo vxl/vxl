@@ -130,8 +130,8 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); id++) {
-    boxm2_block *     blk     = cache->get_block(*id);
-    boxm2_data_base *  alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0, false);
+    boxm2_block *     blk     = cache->get_block(scene,*id);
+    boxm2_data_base *  alpha  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0, false);
     unsigned int n_cells = alpha->buffer_length() / boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     vcl_string naa_prefix = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
     vcl_cout << "naa_prefix = " << naa_prefix << vcl_endl;
@@ -141,7 +141,7 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
     vcl_cout << "na_model_size2 = " << sizeof(boxm2_normal_albedo_array) << vcl_endl;
     vcl_cout << "n_cells = " << n_cells << vcl_endl;
     vcl_cout << "na_data_size = " << na_data_size << vcl_endl;
-    boxm2_data_base *  na_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix(), na_data_size, false);
+    boxm2_data_base *  na_model_data  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix(), na_data_size, false);
 
     bool update_alpha = false;
     boxm2_compute_normal_albedo_functor_opt data_functor(update_alpha);
@@ -151,8 +151,8 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
     int data_buff_length = (int) (na_model_data->buffer_length()/na_model_TypeSize);
 
     boxm2_data_leaves_serial_iterator<boxm2_compute_normal_albedo_functor_opt>(blk, data_buff_length,data_functor);
-    cache->remove_data_base( *id, boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() );
-    cache->remove_data_base( *id, boxm2_data_traits<BOXM2_ALPHA>::prefix() );
+    cache->remove_data_base(scene, *id, boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() );
+    cache->remove_data_base(scene, *id, boxm2_data_traits<BOXM2_ALPHA>::prefix() );
 
   }
   return true;

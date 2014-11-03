@@ -190,8 +190,8 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(*id);
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
       bocl_mem * blk_info  = opencl_cache->loaded_block_info();
 
       //make sure the scene info data size reflects the real data size
@@ -202,9 +202,9 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
 
       //grab an appropriately sized AUX data buffer
       int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize,false);
+      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize,false);
       auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize,false);
+      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize,false);
       transfer_time += (float) transfer.all();
       local_threads[0] = 8; local_threads[1] = 8;
       global_threads[0]=cl_ni; global_threads[1]=cl_nj;
@@ -268,10 +268,10 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(*id);
+      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
       bocl_mem * blk_info  = opencl_cache->loaded_block_info();
 
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -280,12 +280,12 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       //vcl_cout << "getting aux0 and aux1 data " << vcl_endl;
       //grab an appropriately sized AUX data buffer
       int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize,true);
+      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize,true);
       auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize,true);
+      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize,true);
 
       //vcl_cout << "getting output data: prefix_name = " << prefix_name << vcl_endl;
-      bocl_mem *aux_out  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name),
+      bocl_mem *aux_out  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name),
                                                   info_buffer->data_buffer_length*auxTypeSize,false);
 
       //vcl_cout << "got data. " << vcl_endl;
@@ -319,7 +319,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       //vcl_cout << "3" << vcl_endl;
       clFinish(queue);
       //vcl_cout << "4" << vcl_endl;
-      cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name));
+      cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name));
       //vcl_cout << "5" << vcl_endl;
   }
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;

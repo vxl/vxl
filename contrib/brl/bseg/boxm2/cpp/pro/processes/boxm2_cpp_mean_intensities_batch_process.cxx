@@ -68,12 +68,12 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
     // we're assuming that we have enough RAM to store the whole output block for alpha
-    boxm2_data_base *  output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(),0,false);
+    boxm2_data_base *  output_alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(),0,false);
     boxm2_mean_intensities_batch_functor data_functor;
     data_functor.init_data(output_alph, str_cache);
     int data_buff_length = (int) (output_alph->buffer_length()/alphaTypeSize);
     boxm2_data_serial_iterator<boxm2_mean_intensities_batch_functor>(data_buff_length,data_functor);
-    cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());  // cache needs to be read-write cache for output alpha blocks to be written before being discarded
+    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix());  // cache needs to be read-write cache for output alpha blocks to be written before being discarded
   }
 
   return true;
@@ -123,12 +123,12 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
   for (vcl_vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
   {
     // we're assuming that we have enough RAM to store the whole output block for alpha
-    boxm2_data_base * output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
+    boxm2_data_base * output_alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
     boxm2_mean_intensities_print_functor data_functor;
     data_functor.init_data(output_alph,str_cache);
     int data_buff_length = (int) (output_alph->buffer_length()/alphaTypeSize);
     boxm2_data_serial_iterator<boxm2_mean_intensities_print_functor>(data_buff_length,data_functor);
-    cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
+    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
   }
 
   return true;

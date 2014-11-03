@@ -64,9 +64,9 @@ void test_cone_ray_trace()
 
   //instantiate a cache to grab the first block
   boxm2_lru_cache::create(scene);
-  boxm2_block* blk = boxm2_cache::instance()->get_block(id);
-  boxm2_data_base * alph = boxm2_cache::instance()->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-  boxm2_data_base * mog  = boxm2_cache::instance()->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  boxm2_block* blk = boxm2_cache::instance()->get_block(scene,id);
+  boxm2_data_base * alph = boxm2_cache::instance()->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  boxm2_data_base * mog  = boxm2_cache::instance()->get_data_base(scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
 
   //set block data to be black and white
   boxm2_data<BOXM2_ALPHA>* alpha_data_ = new boxm2_data<BOXM2_ALPHA>(alph->data_buffer(),alph->buffer_length(),alph->block_id());

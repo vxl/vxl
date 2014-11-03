@@ -50,7 +50,7 @@ bool boxm2_vecf_ocl_filter::get_scene_appearance( boxm2_scene_sptr scene,
 
 boxm2_vecf_ocl_filter::boxm2_vecf_ocl_filter(boxm2_scene_sptr& source_scene,
                                              boxm2_scene_sptr& temp_scene,
-                                             boxm2_opencl_cache2_sptr ocl_cache)
+                                             boxm2_opencl_cache_sptr ocl_cache)
   : source_scene_(source_scene),
      temp_scene_(temp_scene),
      opencl_cache_(ocl_cache)
@@ -211,7 +211,7 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    vcl_cout << "Output: " << output_buff[0] <<' ' << output_buff[1] <<' ' << output_buff[2]
             << ' ' << output_buff[3] <<' ' << output_buff[4] <<' ' << output_buff[5] << '\n';
   
-   boxm2_lru_cache2::instance()->write_to_disk(source_scene_); 
+   boxm2_lru_cache::instance()->write_to_disk(source_scene_); 
    // look into properly releasing all data
    ocl_depth->release_memory();
    blk_info_source->release_memory();

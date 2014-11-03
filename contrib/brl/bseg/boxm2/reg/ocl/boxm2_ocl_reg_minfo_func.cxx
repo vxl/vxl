@@ -3,7 +3,7 @@
 #include <boct/boct_bit_tree.h>
 
 
-boxm2_ocl_reg_minfo_func2::boxm2_ocl_reg_minfo_func2( boxm2_opencl_cache2_sptr& cacheA,
+boxm2_ocl_reg_minfo_func2::boxm2_ocl_reg_minfo_func2( boxm2_opencl_cache_sptr& cacheA,
                                                     boxm2_stream_scene_cache& cacheB,
                                                     bocl_device_sptr device,
                                                     int nbins,

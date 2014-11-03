@@ -110,9 +110,9 @@ bool boxm2_cpp_change_detection_process2(bprb_func_process& pro)
           vcl_vector<boxm2_block_id>::iterator id;
           for (id = vis_order.begin(); id != vis_order.end(); ++id)
           {
-              boxm2_block *     blk  = cache->get_block(*id);
-              boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-              boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
+              boxm2_block *     blk  = cache->get_block(scene,*id);
+              boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+              boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type);
               vcl_vector<boxm2_data_base*> datas;
               datas.push_back(alph);
               datas.push_back(mog);

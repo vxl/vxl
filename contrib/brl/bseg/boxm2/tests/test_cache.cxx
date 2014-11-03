@@ -28,7 +28,7 @@ void test_cache()
   vcl_cout<<"loading initial BLOCK and ALPHA"<<vcl_endl;
   vul_timer t; 
   t.mark();
-  boxm2_block* blk =  cache->get_block(boxm2_block_id(0,0,0));
+  boxm2_block* blk =  cache->get_block(scene, boxm2_block_id(0,0,0));
   
 
   TEST("checking block id",blk->block_id(), boxm2_block_id(0,0,0) );

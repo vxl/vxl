@@ -303,9 +303,9 @@ bool boxm2_ocl_update_alpha_wphongs_process(bprb_func_process& pro)
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(*id);
+      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -313,14 +313,14 @@ bool boxm2_ocl_update_alpha_wphongs_process(bprb_func_process& pro)
 
       int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
       // data type string may contain an identifier so determine the buffer size
-      bocl_mem* cubic_model       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
-      bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);
+      bocl_mem* cubic_model       = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
+      bocl_mem* num_obs   = opencl_cache->get_data(scene,*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);
 
       //grab an appropriately sized AUX data buffer
       int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
       auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
+      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
 
       transfer_time += (float) transfer.all();
       if (i==UPDATE_SEGLEN)
@@ -391,10 +391,10 @@ bool boxm2_ocl_update_alpha_wphongs_process(bprb_func_process& pro)
       else if (i==UPDATE_BAYES)
       {
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-        bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
         aux2->zero_gpu_buffer(queue);
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
-        bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
         aux3->zero_gpu_buffer(queue);
 
         kern->set_arg( blk_info );
@@ -434,10 +434,10 @@ bool boxm2_ocl_update_alpha_wphongs_process(bprb_func_process& pro)
       else if (i==UPDATE_CELL)
       {
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-        bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
 
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
-        bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
 
         local_threads[0] = 64;
         local_threads[1] = 1 ;

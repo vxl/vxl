@@ -114,18 +114,18 @@ bool boxm2_cpp_compute_derivative_process(bprb_func_process& pro)
     boxm2_block_id id = blk_iter->first;
     vcl_cout<<"Filtering Block: "<<id<<vcl_endl;
 
-    boxm2_block *     blk     = cache->get_block(id);
-    boxm2_data_base * alph    = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_block *     blk     = cache->get_block(scene,id);
+    boxm2_data_base * alph    = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     //store normal directions
     int normalsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
-    boxm2_data_base * normals    = cache->get_data_base(id,boxm2_data_traits<BOXM2_NORMAL>::prefix(),alph->buffer_length()/alphaTypeSize*normalsTypeSize,false);
+    boxm2_data_base * normals    = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(),alph->buffer_length()/alphaTypeSize*normalsTypeSize,false);
 
     //store point locations
     int pointsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
-    boxm2_data_base * points    = cache->get_data_base(id,boxm2_data_traits<BOXM2_POINT>::prefix(),alph->buffer_length()/alphaTypeSize*pointsTypeSize,false);
+    boxm2_data_base * points    = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_POINT>::prefix(),alph->buffer_length()/alphaTypeSize*pointsTypeSize,false);
 
     boxm2_block_metadata data = blk_iter->second;
     boxm2_compute_derivative_function(data, blk, alph, normals,points, prob_threshold, normal_threshold, kernel_x_file_name,kernel_y_file_name,kernel_z_file_name);

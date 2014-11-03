@@ -8,7 +8,7 @@
 // \date June 3, 2011
 
 #include <vcl_fstream.h>
-#include <boxm2/io/boxm2_cache2.h>
+#include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
@@ -36,7 +36,7 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     //process takes 7 inputs:
     vcl_vector<vcl_string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
-    input_types_[1] = "boxm2_cache2_sptr";
+    input_types_[1] = "boxm2_cache_sptr";
     input_types_[2] = "vpgl_camera_double_sptr";
     input_types_[3] = "unsigned";
     input_types_[4] = "unsigned";
@@ -73,7 +73,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     //get the inputs
     unsigned k = 0;
     boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(k++);
-    boxm2_cache2_sptr cache = pro.get_input<boxm2_cache2_sptr>(k++);
+    boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(k++);
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(k++);
     unsigned pi=pro.get_input<unsigned>(k++);
     unsigned pj=pro.get_input<unsigned>(k++);

@@ -54,7 +54,7 @@ void boxm2_points_to_volume::fillVolume()
   {
     boxm2_block_id id = blk_iter->first;
     vcl_cout<<"Converting Block: "<<id<<vcl_endl;
-    boxm2_block *        blk   = cache_->get_block(id);
+    boxm2_block *        blk   = cache_->get_block(scene_, id);
     boxm2_block_metadata data  = blk_iter->second;
     vcl_size_t           nTrees= blk->trees().size();
 
@@ -85,7 +85,7 @@ void boxm2_points_to_volume::fillVolume()
 
     //Replace data in the cache
     boxm2_cache_sptr cache = boxm2_cache::instance();
-    cache->replace_data_base(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
+    cache->replace_data_base(scene_, id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
   }
 }
 

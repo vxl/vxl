@@ -516,7 +516,7 @@ bool boxm2_util::get_point_index(boxm2_scene_sptr& scene,
     int index_x=(int)vcl_floor(local.x());
     int index_y=(int)vcl_floor(local.y());
     int index_z=(int)vcl_floor(local.z());
-    boxm2_block * blk=cache->get_block(bid);
+    boxm2_block * blk=cache->get_block(scene, bid);
     boxm2_block_metadata mdata = scene->get_block_metadata_const(bid);
     vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
     boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
@@ -541,7 +541,7 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
 #if 0
     data_offset += 0x10000*((int)treebits[12]*0x100+(int)treebits[13]);
 #endif
-    boxm2_data_base *  alpha_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base *  alpha_base  = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
     float alpha=alpha_data->data()[data_offset];
@@ -552,7 +552,7 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
 
     //store cell probability
     prob=1.0f-vcl_exp(-alpha*side_len);
-    boxm2_data_base *  int_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+    boxm2_data_base *  int_base  = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     boxm2_data<BOXM2_MOG3_GREY> *int_data=new boxm2_data<BOXM2_MOG3_GREY>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
     // intensity
     intensity=(float)int_data->data()[data_offset][0]/255.0f;

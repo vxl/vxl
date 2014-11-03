@@ -247,8 +247,8 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(*id);
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id, 0, false);
+      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id, 0, false);
       bocl_mem * blk_info  = opencl_cache->loaded_block_info();
 
       //make sure the scene info data size reflects the real data size
@@ -260,18 +260,18 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
       // data type string may contain an identifier so determine the buffer size
       int nobsTypeSize = (int)boxm2_data_info::datasize(num_obs_type);
       int appTypeSize = (int) boxm2_data_info::datasize(data_type);
-      bocl_mem* mog       = opencl_cache->get_data(*id, data_type, info_buffer->data_buffer_length*appTypeSize, false);
-      bocl_mem* num_obs   = opencl_cache->get_data(*id, num_obs_type, info_buffer->data_buffer_length*nobsTypeSize, false);
+      bocl_mem* mog       = opencl_cache->get_data(scene,*id, data_type, info_buffer->data_buffer_length*appTypeSize, false);
+      bocl_mem* num_obs   = opencl_cache->get_data(scene,*id, num_obs_type, info_buffer->data_buffer_length*nobsTypeSize, false);
 
       //grab an appropriately sized AUX data buffer
       int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
       auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
+      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
       auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-      bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
+      bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
       auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
-      bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
+      bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
 
       transfer_time += (float) transfer.all();
       if (i==UPDATE_SEGLEN)

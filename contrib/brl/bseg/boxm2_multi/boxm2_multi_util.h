@@ -5,7 +5,7 @@
 // \brief boxm2_opencl_scene_streamer assists the processor in streaming blocks
 #include <boxm2/boxm2_scene.h>
 #include <vcl_vector.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 
 //open cl includes
 #include <bocl/bocl_cl.h>

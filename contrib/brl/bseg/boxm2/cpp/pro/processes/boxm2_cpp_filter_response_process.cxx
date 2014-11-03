@@ -94,8 +94,8 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
     boxm2_block_id id = blk_iter->first;
     vcl_cout<<"Filtering Block: "<<id<<vcl_endl;
 
-    boxm2_block *     blk     = cache->get_block(id);
-    boxm2_data_base * alph    = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_block *     blk     = cache->get_block(scene,id);
+    boxm2_data_base * alph    = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_block_metadata data = blk_iter->second;
 
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -104,7 +104,7 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
     int responseTypeSize = (int)boxm2_data_info::datasize(RESPONSE_DATATRAIT::prefix());
     vcl_stringstream ss; ss << id_kernel;
     vcl_cout << "Data type: " << RESPONSE_DATATRAIT::prefix(ss.str()) << vcl_endl;
-    boxm2_data_base * response    = cache->get_data_base(id,RESPONSE_DATATRAIT::prefix(ss.str()),alph->buffer_length()/alphaTypeSize*responseTypeSize,false);
+    boxm2_data_base * response    = cache->get_data_base(scene,id,RESPONSE_DATATRAIT::prefix(ss.str()),alph->buffer_length()/alphaTypeSize*responseTypeSize,false);
 
     filter_function.apply_filter(data, blk, alph, response, prob_threshold,  octree_lvl);
   }

@@ -6,7 +6,7 @@
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
-#include <boxm2/io/boxm2_cache2.h>
+#include <boxm2/io/boxm2_cache1.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 
 #include <imesh/imesh_mesh.h>
@@ -17,7 +17,7 @@ void boxm2_register::register_datatype()
 {
   REGISTER_DATATYPE( boxm2_scene_sptr );
   REGISTER_DATATYPE( boxm2_cache_sptr );
-  REGISTER_DATATYPE( boxm2_cache2_sptr );
+  REGISTER_DATATYPE( boxm2_cache1_sptr );
   REGISTER_DATATYPE( imesh_mesh_sptr );
   REGISTER_DATATYPE( boxm2_stream_cache_sptr );
 }
@@ -26,8 +26,8 @@ void boxm2_register::register_process()
 {
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_load_scene_process,      "boxm2LoadSceneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_modify_scene_appearance_process,      "boxm2ModifySceneAppearanceProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_cache1_process,    "boxm2CreateCache1Process");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_cache_process,    "boxm2CreateCacheProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_cache2_process,    "boxm2CreateCache2Process");
   
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_scene_process,    "boxm2CreateSceneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_write_scene_xml_process, "boxm2WriteSceneXMLProcess");

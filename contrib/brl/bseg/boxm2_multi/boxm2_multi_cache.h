@@ -6,7 +6,7 @@
 
 #include "boxm2_multi_cache_group.h"
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <vpgl/vpgl_generic_camera.h>
 
 //open cl includes
@@ -37,7 +37,7 @@ class boxm2_multi_cache: public vbl_ref_count
                        vcl_vector<bocl_device*> &    devices );
     ~boxm2_multi_cache();
 
-    vcl_vector<boxm2_opencl_cache*>& ocl_caches() { return ocl_caches_; }
+    vcl_vector<boxm2_opencl_cache1*>& ocl_caches() { return ocl_caches_; }
     vcl_vector<boxm2_scene_sptr>&    sub_scenes() { return sub_scenes_; }
     boxm2_scene_sptr                 get_scene()  { return scene_; }
     vcl_string to_string();
@@ -51,10 +51,10 @@ class boxm2_multi_cache: public vbl_ref_count
                                                              vgl_box_2d<double> const& camBox);
 
     //: return a vector of sub scene pointers in visibility order from this camera
-    vcl_vector<boxm2_opencl_cache*> get_vis_order_from_pt(vgl_point_3d<double> const& pt);
-    vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_perspective_camera<double>* cam);
-    vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_generic_camera<double>* cam);
-    vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_camera_double_sptr cam);
+    vcl_vector<boxm2_opencl_cache1*> get_vis_order_from_pt(vgl_point_3d<double> const& pt);
+    vcl_vector<boxm2_opencl_cache1*> get_vis_sub_scenes(vpgl_perspective_camera<double>* cam);
+    vcl_vector<boxm2_opencl_cache1*> get_vis_sub_scenes(vpgl_generic_camera<double>* cam);
+    vcl_vector<boxm2_opencl_cache1*> get_vis_sub_scenes(vpgl_camera_double_sptr cam);
 
   private:
     boxm2_scene_sptr                     scene_;
@@ -63,7 +63,7 @@ class boxm2_multi_cache: public vbl_ref_count
     vcl_vector<boxm2_scene_sptr>         sub_scenes_;
 
     //: list of regular opencl caches
-    vcl_vector<boxm2_opencl_cache*>      ocl_caches_;
+    vcl_vector<boxm2_opencl_cache1*>      ocl_caches_;
 
     //: list of block groups
     vcl_vector<boxm2_multi_cache_group*> groups_;

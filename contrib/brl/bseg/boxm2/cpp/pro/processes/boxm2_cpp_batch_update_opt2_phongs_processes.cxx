@@ -99,17 +99,17 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         vcl_cout<<"Block id "<<(*id)<<' ';
-        boxm2_block *     blk   = cache->get_block(*id);
-        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
-        boxm2_data_base *  float8_phongs   = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(),0,true);
+        boxm2_block *     blk   = cache->get_block(scene,*id);
+        boxm2_data_base *  alph  = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
+        boxm2_data_base *  float8_phongs   = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(),0,true);
         // call get_data_base method with num_bytes = 0 to read from disc
-        boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(img_identifier));
-        boxm2_data_base *aux1 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(img_identifier));
+        boxm2_data_base *aux0 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(img_identifier));
+        boxm2_data_base *aux1 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(img_identifier));
 
-        boxm2_data_base *aux0_view = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(dir_identifier));
-        boxm2_data_base *aux1_view = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(dir_identifier));
-        boxm2_data_base *aux2_view = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
-        boxm2_data_base *aux3_view = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
+        boxm2_data_base *aux0_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(dir_identifier));
+        boxm2_data_base *aux1_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(dir_identifier));
+        boxm2_data_base *aux2_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
+        boxm2_data_base *aux3_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
 
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(aux0);
@@ -129,15 +129,15 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
                                                                     scene_info_wrapper->info,
                                                                     blk,cam,ni,nj);
 
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix());
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(img_identifier));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(img_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(img_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(img_identifier));
 
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(dir_identifier));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(dir_identifier));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(dir_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(dir_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
     }
     // compute beta denominator
     vil_image_view<float> *  norm_img= new vil_image_view<float>(ni,nj);
@@ -155,18 +155,18 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         vcl_cout<<"Block id "<<(*id)<<' ';
-        boxm2_block *     blk   = cache->get_block(*id);
-        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
-        boxm2_data_base *  phongs_model_base   = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(),0,false);
+        boxm2_block *     blk   = cache->get_block(scene,*id);
+        boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
+        boxm2_data_base *  phongs_model_base   = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(),0,false);
         // call get_data_base method with num_bytes = 0 to read from disc
-        boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(img_identifier));
-        boxm2_data_base *aux1 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(img_identifier));
-        boxm2_data_base *aux0_view = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(dir_identifier));
-        boxm2_data_base *aux1_view = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(dir_identifier));
-        boxm2_data_base *aux2_view = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
-        boxm2_data_base *aux3_view = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
+        boxm2_data_base *aux0 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(img_identifier));
+        boxm2_data_base *aux1 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(img_identifier));
+        boxm2_data_base *aux0_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(dir_identifier));
+        boxm2_data_base *aux1_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(dir_identifier));
+        boxm2_data_base *aux2_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
+        boxm2_data_base *aux3_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
         // generate aux in a writable mode
-        boxm2_data_base *aux = cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX>::prefix(img_identifier),aux0->buffer_length()/aux0TypeSize*auxTypeSize,false);
+        boxm2_data_base *aux = cache->get_data_base(scene,*id, boxm2_data_traits<BOXM2_AUX>::prefix(img_identifier),aux0->buffer_length()/aux0TypeSize*auxTypeSize,false);
 
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(aux0);
@@ -189,16 +189,16 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
                                                                          cam,
                                                                          ni,nj);
 
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix());
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(img_identifier));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(img_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(img_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(img_identifier));
 
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(dir_identifier));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(dir_identifier));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(img_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(dir_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(dir_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(img_identifier));
     }
 
     return true;
@@ -261,8 +261,8 @@ bool boxm2_cpp_batch_update_opt2_phongs_process(bprb_func_process& pro)
     id = blk_ids.begin();
     for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
         // pass num_bytes = 0 to make sure disc is read if not already in memory
-        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-        boxm2_data_base *  phongs  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(),0,false);
+        boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+        boxm2_data_base *  phongs  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(),0,false);
         vcl_cout << "buffer length of alpha: " << alph->buffer_length() << '\n'
                  << "buffer length of phongs: " << phongs->buffer_length() << vcl_endl;
         boxm2_batch_update_opt2_phongs_functor data_functor;
@@ -270,8 +270,8 @@ bool boxm2_cpp_batch_update_opt2_phongs_process(bprb_func_process& pro)
         int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
         boxm2_data_serial_iterator<boxm2_batch_update_opt2_phongs_functor>(data_buff_length,data_functor);
 
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix());
     }
     return true;
 }
@@ -326,10 +326,10 @@ bool boxm2_cpp_batch_update_nonray_process(bprb_func_process& pro)
     id = blk_ids.begin();
     for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
         // pass num_bytes = 0 to make sure disc is read if not already in memory
-        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-        boxm2_data_base *  phongs  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model"),0,false);
-        boxm2_data_base *  air  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix("entropy_histo_air"),0,false);
-        boxm2_data_base *  uncertainty  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix("uncertainty"),0,false);
+        boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+        boxm2_data_base *  phongs  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model"),0,false);
+        boxm2_data_base *  air  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("entropy_histo_air"),0,false);
+        boxm2_data_base *  uncertainty  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix("uncertainty"),0,false);
         vcl_cout << "buffer length of alpha: " << alph->buffer_length() << '\n'
                  << "buffer length of phongs: " << phongs->buffer_length() << vcl_endl;
         boxm2_batch_update_nonray_phongs_functor data_functor;
@@ -337,10 +337,10 @@ bool boxm2_cpp_batch_update_nonray_process(bprb_func_process& pro)
         int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
         boxm2_data_serial_iterator<boxm2_batch_update_nonray_phongs_functor>(data_buff_length,data_functor);
 
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model"));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix("entropy_histo_air"));
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix("uncertainty"));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model"));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("entropy_histo_air"));
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix("uncertainty"));
     }
     return true;
 }

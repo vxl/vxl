@@ -30,7 +30,7 @@ vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_fuse_based_visibility::k
 bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr         sceneA,
                                                             boxm2_scene_sptr         sceneB,
                                                             bocl_device_sptr         device,
-                                                            boxm2_opencl_cache2_sptr  opencl_cache)
+                                                            boxm2_opencl_cache_sptr  opencl_cache)
 {
 
 
@@ -189,7 +189,7 @@ vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_fuse_based_orientation::
 bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr         sceneA,
                                                                             boxm2_scene_sptr         sceneB,
                                                                             bocl_device_sptr         device,
-                                                                            boxm2_opencl_cache2_sptr  opencl_cache)
+                                                                            boxm2_opencl_cache_sptr  opencl_cache)
 {
 
 
@@ -354,7 +354,7 @@ vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_fuse_surface_density::ke
 bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr         sceneA,
                                                           boxm2_scene_sptr         sceneB,
                                                           bocl_device_sptr         device,
-                                                          boxm2_opencl_cache2_sptr  opencl_cache)
+                                                          boxm2_opencl_cache_sptr  opencl_cache)
 {
 
 
