@@ -31,6 +31,7 @@ SET(vil3d_algo_sources
   vil3d_make_edt_filter.h       vil3d_make_edt_filter.cxx  
   vil3d_overlap.h               vil3d_overlap.cxx
   vil3d_find_blobs.h            vil3d_find_blobs.cxx
+  vil3d_rank_filter.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)
