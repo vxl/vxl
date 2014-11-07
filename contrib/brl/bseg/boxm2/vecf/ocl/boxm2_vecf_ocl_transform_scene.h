@@ -96,19 +96,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_mem* translation;
   bocl_mem* rotation;
   bocl_mem* scalem;
-  bocl_mem_sptr centerX;
-  bocl_mem_sptr centerY;
-  bocl_mem_sptr centerZ;
-  bocl_mem_sptr lookup;
-  bocl_mem_sptr output;
-  float output_buff[1000];
-  bocl_mem* ocl_depth;
-  bocl_mem* blk_info_target;
   bocl_mem* blk_info_source;
-  boxm2_scene_info* info_buffer;
-  bocl_mem* blk_target;
-  bocl_mem* alpha_target;
-  bocl_mem * mog_target;
   boxm2_scene_info* info_buffer_source;
   bocl_mem* blk_source;
   bocl_mem* alpha_source;
@@ -117,6 +105,24 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_mem* nbr_exint;   // neighborhood info
   bocl_mem* nbr_exists;  // to support
   bocl_mem* nbr_prob;    //interpolation
+
+  bocl_mem_sptr centerX_;
+  bocl_mem_sptr centerY_;
+  bocl_mem_sptr centerZ_;
+
+  // common stuff
+  boxm2_scene_info* info_buffer_;
+  int octree_depth_buff_;
+  float output_buff_[1000];
+  cl_uchar lookup_arr_[256];
+  bocl_mem_sptr output_;
+  bocl_mem_sptr blk_info_target_;
+  bocl_mem_sptr octree_depth_;
+  bocl_mem_sptr lookup_;
+
+  bocl_mem* alpha_target_;
+  bocl_mem* mog_target_;
+  bocl_mem* blk_target_;
 
   // expected image kernels and args
   vcl_size_t lthreads_[2];

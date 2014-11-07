@@ -77,7 +77,7 @@ boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
   delete rend_norm_kern_;
   delete depth_kern_;
   delete depth_norm_kern_;
-  opencl_cache_->clear_cache();
+  //opencl_cache_->clear_cache();
 
 
   // destroy render args
@@ -104,6 +104,16 @@ boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
     opencl_cache_->unref_mem(t_infinity_.ptr());
     opencl_cache_->unref_mem(subblk_dim_.ptr());
   }
+  // common stuff
+  opencl_cache_->unref_mem( output_.ptr() );
+  opencl_cache_->unref_mem( blk_info_target_.ptr() );
+  opencl_cache_->unref_mem( octree_depth_.ptr() );
+  opencl_cache_->unref_mem( lookup_.ptr() );
+
+  // transform stuff
+  opencl_cache_->unref_mem( centerX_.ptr() );
+  opencl_cache_->unref_mem( centerY_.ptr() );
+  opencl_cache_->unref_mem( centerZ_.ptr() );
 }
 
 
@@ -177,7 +187,46 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
   subblk_dim_buff_ = 1.0f;
   subblk_dim_ = opencl_cache_->alloc_mem(sizeof(cl_float), &(subblk_dim_buff_), "sub block dim buffer");
   subblk_dim_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-  
+
+  // common stuff
+  vcl_vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
+  vcl_vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
+  if(blocks_target.size()!=1||blocks_source.size()!=1) {
+    std::cerr << "Error: boxm2_vecf_ocl_transform_scene: number of blocks > 1" << std::endl;
+    return false;
+  }
+  vcl_vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
+  vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+  trans_interp_kern->set_arg(centerX_.ptr());
+  trans_interp_kern->set_arg(centerY_.ptr());
+  trans_interp_kern->set_arg(centerZ_.ptr());
+  trans_interp_kern->set_arg(lookup_.ptr());
+
+  octree_depth_buff_ = 0;
+  octree_depth_ = new bocl_mem(device_->context(), &(octree_depth_buff_), sizeof(int), "  depth of octree " );
+  octree_depth_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+
+  //Gather information about the target and setup target data buffers
+  // trans_interp_kernel arguments set the first time the function is called
+
+  blk_target_       = opencl_cache_->get_block(target_scene_, *iter_blk_target);
+  alpha_target_     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene_, *iter_blk_target,0, false);
+  info_buffer_ = target_scene_->get_blk_metadata(*iter_blk_target);
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  info_buffer_->data_buffer_length = (int) (alpha_target_->num_bytes()/alphaTypeSize);
+  int data_size = info_buffer_->data_buffer_length;
+  blk_info_target_  = new bocl_mem(device_->context(), info_buffer_, sizeof(boxm2_scene_info), " Scene Info" );   
+  blk_info_target_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+
+  if(app_type_ == "boxm2_mog3_grey")
+    mog_target_       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blk_target,0,false);
+  else if(app_type_ == "boxm2_mog3_grey_16")
+    mog_target_       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(target_scene_, *iter_blk_target,0,false);
+  else {
+    vcl_cout << "Unknown appearance type for target_scene " << app_type_ << '\n';
+    return false;
+  }
+
   return true;
 }
 
@@ -313,29 +362,33 @@ bool boxm2_vecf_ocl_transform_scene::compile_depth_norm_kernel()
 
 bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
 {
-    centerX = new bocl_mem(device_->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
-    centerY = new bocl_mem(device_->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
-    centerZ = new bocl_mem(device_->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
-    centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-    centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-    centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    centerX_ = new bocl_mem(device_->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
+    centerY_ = new bocl_mem(device_->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
+    centerZ_ = new bocl_mem(device_->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+  bocl_mem_sptr output;
+    centerX_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    centerY_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    centerZ_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
     // output buffer for debugging
-    output = new bocl_mem(device_->context(), output_buff, sizeof(float)*1000, "output" );
-    output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
+    output_ = new bocl_mem(device_->context(), output_buff_, sizeof(float)*1000, "output" );
+    output_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
+
     // bit lookup buffer
-    cl_uchar lookup_arr[256];
-    boxm2_ocl_util::set_bit_lookup(lookup_arr);
-    lookup=new bocl_mem(device_->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
-    lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    boxm2_ocl_util::set_bit_lookup(lookup_arr_);
+    lookup_=new bocl_mem(device_->context(), lookup_arr_, sizeof(cl_uchar)*256, "bit lookup buffer");
+    lookup_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
     int status = 0;
     queue_ = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
-    ocl_depth = 0;
-    blk_info_target = 0;
+
+    octree_depth_ = 0;
+    blk_info_target_ = 0;
     blk_info_source = 0;
-    info_buffer = 0;
-    blk_target = 0;
-    alpha_target = 0;
-    mog_target = 0;
+    info_buffer_ = 0;
+    blk_target_ = 0;
+    alpha_target_ = 0;
+    mog_target_ = 0;
     info_buffer_source = 0;
     blk_source = 0;
     alpha_source = 0;
@@ -349,7 +402,7 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
             vgl_vector_3d<double> scale)
 
 {
-   int depth = 0;
+#if 0
    float translation_buff[4];
    translation_buff[0] = trans.x();        
    translation_buff[1] = trans.y();        
@@ -455,7 +508,7 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
                trans_kern->set_arg(centerX.ptr());
                trans_kern->set_arg(centerY.ptr());
                trans_kern->set_arg(centerZ.ptr());
-               trans_kern->set_arg(lookup.ptr());
+               trans_kern->set_arg(lookup_.ptr());
                trans_kern->set_arg(blk_info_target);
                trans_kern->set_arg(blk_info_source);
                trans_kern->set_arg(blk_target);
@@ -467,8 +520,8 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
                trans_kern->set_arg(translation.ptr());
                trans_kern->set_arg(rotation.ptr());
                trans_kern->set_arg(scalem.ptr());
-               trans_kern->set_arg(ocl_depth.ptr());
-               trans_kern->set_arg(output.ptr());
+               trans_kern->set_arg(octree_depth_.ptr());
+               trans_kern->set_arg(output_.ptr());
             trans_kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
                trans_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees target
                trans_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees source
@@ -496,14 +549,16 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
    opencl_cache_->unref_mem(translation.ptr());
    opencl_cache_->unref_mem(rotation.ptr());
    opencl_cache_->unref_mem(scalem.ptr());
-   opencl_cache_->unref_mem(ocl_depth.ptr());
+   opencl_cache_->unref_mem(octree_depth_.ptr());
    boxm2_lru_cache::instance()->write_to_disk(target_scene_);
+#endif
    return true;
 }
 bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  rot,
            vgl_vector_3d<double> trans,
            vgl_vector_3d<double> scale,
            bool finish){
+#if 0
   static bool first = true;
   int depth = 0;
   // set up the buffers the first time the function is called
@@ -561,27 +616,27 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
      trans_kern->set_arg(centerX.ptr());
      trans_kern->set_arg(centerY.ptr());
      trans_kern->set_arg(centerZ.ptr());
-     trans_kern->set_arg(lookup.ptr());
+     trans_kern->set_arg(lookup_.ptr());
 
-     ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
-     ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+     octree_depth_ = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
+     octree_depth_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
      //Gather information about the target and setup target data buffers
      // trans_kernel arguments set the first time the function is called
    
-     blk_target       = opencl_cache_->get_block(target_scene_, *iter_blk_target);
-     alpha_target     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene_, *iter_blk_target,0,true);
+     blk_target_       = opencl_cache_->get_block(target_scene_, *iter_blk_target);
+     alpha_target_     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene_, *iter_blk_target,0,true);
      info_buffer = target_scene_->get_blk_metadata(*iter_blk_target);
      int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-     info_buffer->data_buffer_length = (int) (alpha_target->num_bytes()/alphaTypeSize);
+     info_buffer->data_buffer_length = (int) (alpha_target_->num_bytes()/alphaTypeSize);
      int data_size = info_buffer->data_buffer_length;
-     blk_info_target  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
-     blk_info_target->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+     blk_info_target_  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
+     blk_info_target_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
    
      if(app_type_ == "boxm2_mog3_grey")
-       mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blk_target,0,true);
+       mog_target_       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blk_target,0,true);
      else if(app_type_ == "boxm2_mog3_grey_16")
-       mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(target_scene_, *iter_blk_target,0,true);
+       mog_target_       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(target_scene_, *iter_blk_target,0,true);
      else {
        vcl_cout << "Unknown appearance type for target_scene " << app_type_ << '\n';
        return false;
@@ -681,12 +736,14 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
      delete [] scale_buff;
      scale_buff = 0;   rotation_buff = 0;   translation_buff = 0;
    }
+#endif
    return true;
 }
 bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<double>  rot,
                                                             vgl_vector_3d<double> trans,
                                                             vgl_vector_3d<double> scale,
                                                             bool finish){
+#if 0
  static bool first = true;
   int depth = 0;
   // set up the buffers the first time the function is called
@@ -735,16 +792,17 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      scalem = new bocl_mem(device_->context(), scale_buff, sizeof(float)*4, " scale " );
      scalem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
+     trans_interp_kern->set_arg(centerX.ptr());
+     trans_interp_kern->set_arg(centerY.ptr());
+     trans_interp_kern->set_arg(centerZ.ptr());
+     trans_interp_kern->set_arg(lookup.ptr());
+#if 0
      vcl_vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
      vcl_vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
      if(blocks_target.size()!=1||blocks_source.size()!=1)
        return false;
      vcl_vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
      vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
-     trans_interp_kern->set_arg(centerX.ptr());
-     trans_interp_kern->set_arg(centerY.ptr());
-     trans_interp_kern->set_arg(centerZ.ptr());
-     trans_interp_kern->set_arg(lookup.ptr());
 
      ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
      ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
@@ -769,6 +827,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
        vcl_cout << "Unknown appearance type for target_scene " << app_type_ << '\n';
        return false;
      }
+#endif
      vgl_box_3d<float> box_target(info_buffer->scene_origin[0],info_buffer->scene_origin[1],info_buffer->scene_origin[2],
       info_buffer->scene_origin[0]+info_buffer->scene_dims[0]*info_buffer->block_len,
       info_buffer->scene_origin[1]+info_buffer->scene_dims[1]*info_buffer->block_len,
@@ -879,6 +938,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
       << output_buff[i+2] << ' ' << output_buff[i+3] << ' '
       << output_buff[i+4] << ' ' << output_buff[i+5] << '\n';
 #endif
+#endif
    return true;
 }
 bool boxm2_vecf_ocl_transform_scene::
@@ -920,17 +980,17 @@ render_scene_appearance(vpgl_camera_double_sptr const& cam, vil_image_view<float
     return false;
   }
 
-  rend_kern_->set_arg( blk_info_target );
-  rend_kern_->set_arg( blk_target );
-  rend_kern_->set_arg( alpha_target );
-  rend_kern_->set_arg( mog_target );
+  rend_kern_->set_arg( blk_info_target_.ptr() );
+  rend_kern_->set_arg( blk_target_ );
+  rend_kern_->set_arg( alpha_target_ );
+  rend_kern_->set_arg( mog_target_ );
   rend_kern_->set_arg( ray_o_buff_.ptr() );
   rend_kern_->set_arg( ray_d_buff_.ptr() );
   rend_kern_->set_arg( tnearfar_mem_ptr_.ptr() );
   rend_kern_->set_arg( exp_image_.ptr() );
   rend_kern_->set_arg( exp_img_dim_.ptr());
-  rend_kern_->set_arg( output.ptr() );
-  rend_kern_->set_arg( lookup.ptr() );
+  rend_kern_->set_arg( output_.ptr() );
+  rend_kern_->set_arg( lookup_.ptr() );
   rend_kern_->set_arg( vis_image_.ptr() );
   rend_kern_->set_arg( max_omega_image_.ptr() );
 
@@ -1027,16 +1087,16 @@ bool boxm2_vecf_ocl_transform_scene::render_scene_depth(vpgl_camera_double_sptr 
     return false;
   }
 
-  depth_kern_->set_arg( blk_info_target );
-  depth_kern_->set_arg( blk_target );
-  depth_kern_->set_arg( alpha_target );
+  depth_kern_->set_arg( blk_info_target_.ptr() );
+  depth_kern_->set_arg( blk_target_);
+  depth_kern_->set_arg( alpha_target_  );
   depth_kern_->set_arg( ray_o_buff_.ptr() );
   depth_kern_->set_arg( ray_d_buff_.ptr() );
   depth_kern_->set_arg( depth_image_.ptr() );
   depth_kern_->set_arg( var_image_.ptr() );
   depth_kern_->set_arg( exp_img_dim_.ptr() );
-  depth_kern_->set_arg( output.ptr() );
-  depth_kern_->set_arg( lookup.ptr() );
+  depth_kern_->set_arg( output_.ptr() );
+  depth_kern_->set_arg( lookup_.ptr() );
   depth_kern_->set_arg( vis_image_.ptr() );
   depth_kern_->set_arg( prob_image_.ptr() );
   depth_kern_->set_arg( t_infinity_.ptr() );
