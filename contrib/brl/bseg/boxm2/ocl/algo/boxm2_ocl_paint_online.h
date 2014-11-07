@@ -21,7 +21,8 @@ class boxm2_ocl_paint_online
                              bocl_device_sptr         device,
                              boxm2_opencl_cache_sptr  opencl_cache,
                              vil_image_view_base_sptr img,
-                             vpgl_camera_double_sptr  cam);
+                             vpgl_camera_double_sptr  cam,
+                             vcl_string const& apm_id="");
 
   private:
     //compile kernels and place in static map

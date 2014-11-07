@@ -31,7 +31,8 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
                                          bocl_device_sptr          device,
                                          boxm2_opencl_cache_sptr    opencl_cache,
                                          vil_image_view_base_sptr   img,
-                                         vpgl_camera_double_sptr    cam)
+                                         vpgl_camera_double_sptr    cam,
+                                         vcl_string const& apm_id)
 {
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
   typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
@@ -49,20 +50,20 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
   vcl_string data_type, num_obs_type;
   vcl_vector<vcl_string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(apm_id) )
     {
       data_type = apps[i];
       foundDataType = true;
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix(apm_id) )
     {
       data_type = apps[i];
       foundDataType = true;
 
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
+    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix(apm_id) )
     {
       num_obs_type = apps[i];
       foundNumObsType = true;
