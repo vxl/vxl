@@ -62,7 +62,6 @@ def load_opencl(scene_str, device_string="gpu"):
   #print("Create Gpu Cache");
   boxm2_batch.init_process("boxm2CreateOpenclCacheProcess");
   boxm2_batch.set_input_from_db(0,device)
-  boxm2_batch.set_input_from_db(1,scene)
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   openclcache = dbvalue(id, type);
