@@ -89,7 +89,7 @@ bool boxm2_create_cache_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_cache_process_globals;
 
-  //process takes 1 input
+  //process takes 3 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vcl_string";
