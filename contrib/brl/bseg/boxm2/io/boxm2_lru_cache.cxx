@@ -39,7 +39,7 @@ void boxm2_lru_cache::clear_cache()
           iter != dmap.end(); iter++)
       {
           for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) 
-              delete [] it->second;
+              delete it->second;
 
           iter->second.clear();
       }
@@ -53,7 +53,7 @@ void boxm2_lru_cache::clear_cache()
       for (vcl_map<boxm2_block_id, boxm2_block*>::iterator iter = scene_block_iter->second.begin();
           iter != scene_block_iter->second.end(); iter++)
       {
-          delete [] iter->second;
+          delete iter->second;
       }
       scene_block_iter->second.clear();
   }
@@ -68,9 +68,13 @@ boxm2_block* boxm2_lru_cache::get_block(boxm2_scene_sptr & scene, boxm2_block_id
   boxm2_block_metadata mdata = scene->get_block_metadata(id);
   
   //: add a scene
-  if(cached_blocks_.find(scene) == cached_blocks_.end() )
+  if(cached_blocks_.find(scene) == cached_blocks_.end() ) {
+    this->add_scene(scene);
+  }
+#if 0
     if(!this->add_scene(scene))
         return NULL;
+#endif
   
   //: add a block
   if ( cached_blocks_[scene].find(id) == cached_blocks_[scene].end() )
