@@ -73,7 +73,8 @@ class boxm2_merge_block_function
 ////////////////////////////////////////////////////////////////////////////////
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
-void boxm2_merge_block( boxm2_block* blk,
+void boxm2_merge_block( boxm2_scene_sptr scene,
+                        boxm2_block* blk,
                         vcl_vector<boxm2_data_base*> & datas,
                         float prob_thresh,
                         bool is_random = true);

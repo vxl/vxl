@@ -97,7 +97,7 @@ bool boxm2_cpp_merge_process(bprb_func_process& pro)
 
     //refine block and datas
     boxm2_block_metadata data = blk_iter->second;
-    boxm2_merge_block(blk,datas, thresh, false);
+    boxm2_merge_block(scene, blk,datas, thresh, false);
     blk->enable_write(); // now cache will make sure that it is written to disc
   }
   
