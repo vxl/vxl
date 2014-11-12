@@ -1104,5 +1104,26 @@ bool vpgl_generic_camera_convert::convert( vpgl_geo_camera& geocam, int ni, int 
   return true;
 }
 
+//: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera using the specified ray direction (not necessarily nadir rays)
+//  basically creates a camera with parallel rays but the rays can be in any direction
+bool vpgl_generic_camera_convert::convert( vpgl_geo_camera& geocam, int ni, int nj, double height, vgl_vector_3d<double>& dir,
+                                           vpgl_generic_camera<double> & gen_cam, unsigned level)
+{
+  double scale = (level < 32) ? double(1L<<level) : vcl_pow(2.0,static_cast<double>(level));
+
+  vbl_array_2d<vgl_ray_3d<double> > rays(nj, ni);
+  vgl_point_3d<double> org;
+
+  for (int j = 0; j<nj; ++j)
+    for (int i = 0; i<ni; ++i) {
+      double x,y,z;
+      geocam.backproject(i*scale, j*scale,x,y,z);
+      org.set(x, y, height);
+      rays[j][i].set(org, dir);
+    }
+  gen_cam = vpgl_generic_camera<double>(rays);
+  return true;
+}
+
 
 #endif // vpgl_camera_convert_cxx_

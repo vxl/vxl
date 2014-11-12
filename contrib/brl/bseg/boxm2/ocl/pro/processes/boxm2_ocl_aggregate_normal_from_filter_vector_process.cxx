@@ -128,9 +128,11 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // set up directions buffer
-  cl_float4* directions = new cl_float4[num_filters];
+  //cl_float4* directions = new cl_float4[num_filters];
+  cl_float* directions = new float[4*num_filters];
 
-  for (unsigned k = 0; k < num_filters; k++) {
+  //for (unsigned k = 0; k < num_filters; k++) {
+  for (unsigned k = 0, count = 0; k < num_filters; k++, count += 4) {
     bvpl_kernel_sptr filter = filter_vector->kernels_[k];
     vnl_float_3 dir = filter->axis();
     dir.normalize();
@@ -142,6 +144,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
     directions[k].s2 = dir[2];
     directions[k].s3 = 0.0f;
 #endif
+    directions[count+0] = dir[0];
+    directions[count+1] = dir[1];
+    directions[count+2] = dir[2];
+    directions[count+3] = 0.0f;
   }
   bocl_mem_sptr directions_buffer=new bocl_mem(device->context(), directions, sizeof(cl_float4)*num_filters, "directions buffer");
   directions_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);

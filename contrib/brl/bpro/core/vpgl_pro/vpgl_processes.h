@@ -78,5 +78,7 @@ DECLARE_FUNC_CONS(vpgl_construct_height_map_process);
 DECLARE_FUNC_CONS(vpgl_rational_cam_nadirness_process);
 DECLARE_FUNC_CONS(vpgl_compute_image_to_world_homography_process);
 DECLARE_FUNC_CONS(vpgl_crop_ortho_using_3d_box_process);
+DECLARE_FUNC_CONS(vpgl_convert_non_nadir_geo_camera_to_generic_process);
+DECLARE_FUNC_CONS(vpgl_get_generic_camera_ray_process);
 
 #endif

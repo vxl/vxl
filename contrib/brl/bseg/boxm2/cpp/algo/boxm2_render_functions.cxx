@@ -1,5 +1,6 @@
 #include "boxm2_render_functions.h"
 #include "boxm2_render_cone_functor.h"
+#include "boxm2_render_depth_of_max_prob_functor.h"
 #include "boxm2_cast_cone_ray_function.h"
 #include <vul/vul_timer.h>
 
@@ -64,5 +65,23 @@ void boxm2_render_expected_depth( boxm2_scene_info * linfo,
   boxm2_render_exp_depth_functor render_functor;
   render_functor.init_data(data,expected,vis,len_img);
   cast_ray_per_block<boxm2_render_exp_depth_functor>
+      (render_functor,linfo,blk_sptr,cam,roi_ni,roi_nj,roi_ni0,roi_nj0);
+}
+
+void boxm2_render_depth_of_max_prob( boxm2_scene_info * linfo,
+                                     boxm2_block * blk_sptr,
+                                     boxm2_data_base * data,
+                                     vpgl_camera_double_sptr cam ,
+                                     vil_image_view<float> *expected,
+                                     vil_image_view<float> * vis,
+                                     vil_image_view<float> * prob_img,
+                                     unsigned int roi_ni,
+                                     unsigned int roi_nj,
+                                     unsigned int roi_ni0,
+                                     unsigned int roi_nj0)
+{
+  boxm2_render_depth_of_max_prob_functor render_functor;
+  render_functor.init_data(data,expected,vis,prob_img);
+  cast_ray_per_block<boxm2_render_depth_of_max_prob_functor>
       (render_functor,linfo,blk_sptr,cam,roi_ni,roi_nj,roi_ni0,roi_nj0);
 }

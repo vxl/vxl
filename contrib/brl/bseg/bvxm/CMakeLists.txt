@@ -38,9 +38,23 @@ SET(bvxm_sources
    )
 AUX_SOURCE_DIRECTORY(Templates bvxm_sources)
 
+#find expatpp library for bvxm_world_params parser
+INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+IF(EXPAT_FOUND)
+  INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+  SET(bvxm_sources ${bvxm_sources}
+      bvxm_world_params_parser.h             bvxm_world_params_parser.cxx
+     )
+ENDIF(EXPAT_FOUND)
+
 ADD_LIBRARY( bvxm ${bvxm_sources})
 
 TARGET_LINK_LIBRARIES( bvxm bvxm_grid bsta bsta_algo vpgl vpgl_io vpgl_file_formats brip sdet bil_algo vgl_io vgl_algo vil_algo vnl_algo vnl vgl vil vul vbl vsl vcl)
+
+IF(EXPAT_FOUND)
+TARGET_LINK_LIBRARIES(bvxm expatpp)
+ENDIF(EXPAT_FOUND)
 
 SUBDIRS( grid )
 SUBDIRS( io )

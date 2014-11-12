@@ -149,6 +149,56 @@ bool vpgl_convert_geo_camera_to_generic_process(bprb_func_process& pro)
 }
 
 //: initialization
+//  also input a ray direction, and thus create a generic camera with parallel rays with the given direction
+//  so this process creates an orthographic camera which is not necessarily nadir
+bool vpgl_convert_non_nadir_geo_camera_to_generic_process_cons(bprb_func_process& pro)
+{
+  //this process takes 5 inputs and one output
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");  // input geo camera
+  input_types.push_back("int");
+  input_types.push_back("int");
+  input_types.push_back("double");
+  input_types.push_back("int");
+  input_types.push_back("double");  // ray direction x   (nadir direction would be (0,0,-1)
+  input_types.push_back("double");  // ray direction y
+  input_types.push_back("double");  // ray direction z
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vpgl_camera_double_sptr");  // generic camera output
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+//: Execute the process
+bool vpgl_convert_non_nadir_geo_camera_to_generic_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs()!= 8) {
+    vcl_cout << "vpgl_convert_geo_camera_to_generic_process: The number of inputs should be 5" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
+  int ni = pro.get_input<int>(1);
+  int nj = pro.get_input<int>(2);
+  double scene_height = pro.get_input<double>(3);
+  int level = pro.get_input<int>(4);
+  double dir_x = pro.get_input<double>(5);
+  double dir_y = pro.get_input<double>(6);
+  double dir_z = pro.get_input<double>(7);
+  vgl_vector_3d<double> dir(dir_x, dir_y, dir_z);
+
+  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  vpgl_generic_camera<double> gcam;
+  vpgl_generic_camera_convert::convert(*geocam, ni, nj, scene_height, dir, gcam, level);
+
+  vpgl_camera_double_sptr out = new vpgl_generic_camera<double>(gcam);
+  pro.set_output_val<vpgl_camera_double_sptr>(0, out);
+  return true;
+}
+
+
+//: initialization
 bool vpgl_geo_footprint_process_cons(bprb_func_process& pro)
 {
   //this process takes 4 inputs:

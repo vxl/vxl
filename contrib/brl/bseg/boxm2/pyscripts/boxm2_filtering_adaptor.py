@@ -30,7 +30,13 @@ def create_kernel_vector(factory_name, dir_type, dim_x, dim_y, dim_z, supp_x, su
 
     return filters;
     
-    
+def write_kernel_vector(filters, output_prefix):
+    print("Creating Filtering Kernels");
+    boxm2_batch.init_process("bvpl_write_generic_kernel_vector_process");
+    boxm2_batch.set_input_from_db(0,filters);
+    boxm2_batch.set_input_string(1,output_prefix);
+    boxm2_batch.run_process();
+
 #********************************************************************
 #  Apply a vector of filters to a boxm2_scene
 #********************************************************************
@@ -44,8 +50,22 @@ def apply_filters(scene, cache, device, filters) :
     boxm2_batch.set_input_from_db(3,filters);
     return boxm2_batch.run_process();
   else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+    print "ERROR: Cache type not recognized: ", cache.type;
     return False;
+
+#********************************************************************
+#  Apply a vector of filters to a boxm2_scene -- CPP version -- inputs kernels as txt files and creates *.bin files
+#       read the kernel from filter_basename + str(filter_id) + ".txt"
+#********************************************************************
+def apply_filters_cpp(scene, cpp_cache, prob_thres, filter_basename, filter_id, octree_lvl):
+  boxm2_batch.init_process("boxm2CppFilterResponseProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cpp_cache);
+  boxm2_batch.set_input_float(2, prob_thres);
+  boxm2_batch.set_input_string(3, filter_basename);
+  boxm2_batch.set_input_unsigned(4, filter_id); #id kernel --> read the kernel from filter_basename + str(filter_id) + ".txt"
+  boxm2_batch.set_input_unsigned(5, octree_lvl); #octree level to run kernel
+  boxm2_batch.run_process();
 
 #********************************************************************
 #  Apply a vector of filters to a boxm2_scene
@@ -115,3 +135,4 @@ def create_coarse_model(scene, cache, device, model_dir) :
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
     return False;
+

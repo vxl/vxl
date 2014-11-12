@@ -86,7 +86,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
           num_vertices++;
 
           if (output_aux){
-            file << ' ' << normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ' << prob  << ' ' << vis_data[currIdx];
+            file << ' ' << normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ' << prob  << ' ' << vis_data[currIdx] << ' ' << normals_data[currIdx][3];
           }
           file << vcl_endl;
         }
@@ -295,9 +295,10 @@ void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& fi
    file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices;
    file << "\nproperty float32 x\nproperty float32 y\nproperty float32 z";
    if (output_aux) {
-     file << "\nproperty float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\n" << "property float prob\nproperty float vis_score\n";
+     //file << "\nproperty float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\n" << "property float prob\nproperty float vis_score\n";
+     file << "\nproperty float nx\nproperty float ny\nproperty float nz\n" << "property float prob\nproperty float vis_score\nproperty float nmag\n";
    }
-   file << "\nend_header\n"
+   file << "end_header\n"
         << ss.str();
 }
 

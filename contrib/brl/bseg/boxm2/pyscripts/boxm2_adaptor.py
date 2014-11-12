@@ -690,7 +690,17 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None,tnear=100000.0,tf
 #####################################################################
 def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
   if cache.type == "boxm2_cache_sptr" :
-    print "boxm2_batch CPU render depth not yet implemented";
+    #print "boxm2_batch CPU render depth not yet implemented";
+    boxm2_batch.init_process("boxm2CppRenderExpectedDepthProcess");
+    boxm2_batch.set_input_from_db(0,scene);
+    boxm2_batch.set_input_from_db(1,cache);
+    boxm2_batch.set_input_from_db(2,cam);
+    boxm2_batch.set_input_unsigned(3,ni);
+    boxm2_batch.set_input_unsigned(4,nj);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    exp_image = dbvalue(id,type);
+    return exp_image, 0, 0
   elif cache.type == "boxm2_opencl_cache_sptr" and device :
     boxm2_batch.init_process("boxm2OclRenderExpectedDepthProcess");
     boxm2_batch.set_input_from_db(0,device);
@@ -709,6 +719,31 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
     return exp_image, var_image, vis_image
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
+
+## render the depth of the surface that has the max prob of being the first visible and occupied surface along the ray
+def render_depth_of_max_prob_surface(scene, cache, cam, ni=1280, nj=720, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    #print "boxm2_batch CPU render depth not yet implemented";
+    boxm2_batch.init_process("boxm2CppRenderDepthofMaxProbProcess");
+    boxm2_batch.set_input_from_db(0,scene);
+    boxm2_batch.set_input_from_db(1,cache);
+    boxm2_batch.set_input_from_db(2,cam);
+    boxm2_batch.set_input_unsigned(3,ni);
+    boxm2_batch.set_input_unsigned(4,nj);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    exp_image = dbvalue(id,type);
+    (id,type) = boxm2_batch.commit_output(1);
+    prob_image = dbvalue(id,type);
+    (id,type) = boxm2_batch.commit_output(2);
+    vis_image = dbvalue(id,type);
+    return exp_image, prob_image, vis_image
+  elif cache.type == "boxm2_opencl_cache_sptr" and device :
+    print "boxm2_batch CPU render depth of max prob surface not yet implemented for GPU";
+    return 0, 0, 0
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+
 
 #####################################################################
 # render depth map by loading block inside certain region
@@ -1940,3 +1975,4 @@ def load_score_binary(geo_hypo_folder, score_file, out_text, tile_id, candidate_
   boxm2_batch.set_input_string(3, out_text);
   boxm2_batch.set_input_unsigned(4, tile_id);
   boxm2_batch.run_process();
+

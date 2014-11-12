@@ -251,10 +251,12 @@ vgl_ray_3d<T> vpgl_generic_camera<T>::ray(const T u, const T v) const
 {
   double du = static_cast<double>(u);
   double dv = static_cast<double>(v);
-  assert(du>=0.0&&dv>=0.0);
+  // also allow for very small negative values, they are truncated to the nearest ray anyways
+  assert( (du>=0.0&&dv>=0.0) || (vcl_abs(du)<0.01 && vcl_abs(dv) < 0.01) );
   int iu = static_cast<int>(du);
   int iv = static_cast<int>(dv);
-  assert(iu<static_cast<int>(cols()) && iv<static_cast<int>(rows()));
+  // also allow for values which are very close to ncols and nrows, they are truncated anyways
+  assert( iu <= static_cast<int>(cols()) + 0.01 && iv <= static_cast<int>(rows()) + 0.01 );
   //check for integer pixel coordinates
   if ((du-iu) == 0.0 && (dv-iv) == 0.0)
     return rays_[0][iv][iu];

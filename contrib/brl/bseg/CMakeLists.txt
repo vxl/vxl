@@ -79,3 +79,6 @@ SUBDIRS(boxm2_multi)
 #space-time modeling 
 SUBDIRS(bstm)
 SUBDIRS(bstm_batch)
+
+#the bridge lib to convert between bvxm and boxm2 scenes
+SUBDIRS(bvxm_bridge)

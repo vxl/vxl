@@ -191,13 +191,15 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
                 vgl_point_3d<double> pt = blk_o + length;
                 double u,v;
                 cam->project(pt.x(),pt.y(),pt.z(),u,v);
-                if ( u >= 0 && v >=0 && u < cam->cols() && v <cam->rows() )
+                int iu = (int)u;
+                int iv = (int)v;
+                if ( iu >= 0 && iv >= 0 && iu < cam->cols() && iv < cam->rows() )
                 {
                     vgl_point_3d<double> ro =  cam->ray(u,v).origin();
                     double depth = (ro-pt).length();
                     if(depth <  min_depth)
                         min_depth = depth ;
-                }
+                } 
             }
             if (min_depth <1e10)
                 distances.push_back( boxm2_dist_id_pair(min_depth, iter->first) );

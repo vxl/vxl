@@ -8,6 +8,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_render_functions.h          boxm2_render_functions.cxx
     boxm2_render_exp_image_functor.h
     boxm2_render_exp_depth_functor.h
+    boxm2_render_depth_of_max_prob_functor.h
     boxm2_render_cone_functor.h
     boxm2_update_image_functor.h
     boxm2_update_functions.h          boxm2_update_functions.cxx

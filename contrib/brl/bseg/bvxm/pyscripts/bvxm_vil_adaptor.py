@@ -529,3 +529,12 @@ def edge_detection(img, noise_multiplier = 1.5, smooth = 1.5, auto_threshold = F
     return edge_img;
   else:
     return 0;
+
+def histogram_equalize(img):
+  bvxm_batch.init_process("vilHistogramEqualizeProcess");
+  bvxm_batch.set_input_from_db(0, img);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  img_equalized = dbvalue(id, type);
+  return img_equalized;
+

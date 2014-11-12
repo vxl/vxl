@@ -17,6 +17,7 @@ DECLARE_FUNC_CONS(bvpl_create_gauss3d_xx_kernel_vector_process);
 DECLARE_FUNC_CONS(bvpl_load_taylor_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_gauss3d_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_generic_kernel_vector_process);
+DECLARE_FUNC_CONS(bvpl_write_generic_kernel_vector_process);
 
 //util
 DECLARE_FUNC_CONS(bvpl_create_wc_kernel_vector_process);

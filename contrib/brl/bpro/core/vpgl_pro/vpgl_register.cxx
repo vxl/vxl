@@ -93,5 +93,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_rational_cam_nadirness_process, "vpglRationalCamNadirnessProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_image_to_world_homography_process, "vpglComputeImageToWorldHomographyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_crop_ortho_using_3d_box_process, "vpglCropOrthoUsing3DboxPRocess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_non_nadir_geo_camera_to_generic_process, "vpglConvertNonNadirGeoCameraToGenericProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_generic_camera_ray_process, "vpglGetGenericCamRayProcess");
 
 }

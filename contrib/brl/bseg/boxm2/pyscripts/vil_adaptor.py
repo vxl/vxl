@@ -466,3 +466,12 @@ def BGR_to_RGB(inimg):
   (id, type) = boxm2_batch.commit_output(0)
   out_img = dbvalue(id,type)
   return out_img
+
+def histogram_equalize(img):
+  boxm2_batch.init_process("vilHistogramEqualizeProcess");
+  boxm2_batch.set_input_from_db(0, img);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  img_equalized = dbvalue(id, type);
+  return img_equalized;
+

@@ -81,7 +81,7 @@ aggregate(__constant  RenderSceneInfo      * linfo,
     normal_x = responses[0];
     normal_y = responses[1];
     normal_z = responses[2];
-#if 0
+
     for (unsigned response_id = 0; response_id < 3; response_id++)
     {
       normal_x += responses[response_id] * directions[response_id].x;
@@ -91,8 +91,8 @@ aggregate(__constant  RenderSceneInfo      * linfo,
       sum_weights_y += fabs( directions[response_id].y);
       sum_weights_z += fabs( directions[response_id].z);
     }
-#endif
-    //normal_x /= sum_weights_x;  normal_y /= sum_weights_y; normal_z /= sum_weights_z;
+
+    normal_x /= sum_weights_x;  normal_y /= sum_weights_y; normal_z /= sum_weights_z;
     float norm = length( (float4)(normal_x,normal_y,normal_z,0.0));
 
     if (norm > 0.0) {

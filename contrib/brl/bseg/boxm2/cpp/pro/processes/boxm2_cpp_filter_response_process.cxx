@@ -102,7 +102,8 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
 
     //store responses
     int responseTypeSize = (int)boxm2_data_info::datasize(RESPONSE_DATATRAIT::prefix());
-    vcl_stringstream ss; ss << id_kernel;
+    vcl_string kernel_name = vul_file::strip_directory(kernel_base_file_name);
+    vcl_stringstream ss; ss << kernel_name << "_" << id_kernel;
     vcl_cout << "Data type: " << RESPONSE_DATATRAIT::prefix(ss.str()) << vcl_endl;
     boxm2_data_base * response    = cache->get_data_base(id,RESPONSE_DATATRAIT::prefix(ss.str()),alph->buffer_length()/alphaTypeSize*responseTypeSize,false);
 

@@ -255,6 +255,26 @@ def write_generic_to_vrml(cam, out_file_name, level=0):
   boxm2_batch.set_input_unsigned(2, level);
   boxm2_batch.run_process();
 
+def get_generic_cam_ray(cam, u, v):
+  boxm2_batch.init_process("vpglGetGenericCamRayProcess");
+  boxm2_batch.set_input_from_db(0, cam);
+  boxm2_batch.set_input_unsigned(1, u);
+  boxm2_batch.set_input_unsigned(2, v);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  orig_x = boxm2_batch.get_output_double(id);
+  (id,type) = boxm2_batch.commit_output(1);
+  orig_y = boxm2_batch.get_output_double(id);
+  (id,type) = boxm2_batch.commit_output(2);
+  orig_z = boxm2_batch.get_output_double(id);
+  (id,type) = boxm2_batch.commit_output(3);
+  dir_x = boxm2_batch.get_output_double(id);
+  (id,type) = boxm2_batch.commit_output(4);
+  dir_y = boxm2_batch.get_output_double(id);
+  (id,type) = boxm2_batch.commit_output(5);
+  dir_z = boxm2_batch.get_output_double(id);
+  return orig_x, orig_y, orig_z, dir_x, dir_y, dir_z;
+
 #gets bounding box from a directory of cameras... (incomplete)_;
 def camera_dir_planar_bbox(dir_name) :
   boxm2_batch.init_process("vpglGetBoundingBoxProcess");
@@ -594,6 +614,21 @@ def geo2generic(geocam, ni, nj, scene_height, level):
     boxm2_batch.set_input_int(2, nj);
     boxm2_batch.set_input_double(3, scene_height);
     boxm2_batch.set_input_int(4, level);
+    boxm2_batch.run_process();
+    (c_id, c_type) = boxm2_batch.commit_output(0);
+    cam = dbvalue(c_id, c_type);
+    return cam;
+
+def geo2generic_nonnadir(geocam, ni, nj, scene_height, dir_x, dir_y, dir_z, level):
+    boxm2_batch.init_process("vpglConvertNonNadirGeoCameraToGenericProcess");
+    boxm2_batch.set_input_from_db(0, geocam);
+    boxm2_batch.set_input_int(1, ni);
+    boxm2_batch.set_input_int(2, nj);
+    boxm2_batch.set_input_double(3, scene_height);
+    boxm2_batch.set_input_int(4, level);
+    boxm2_batch.set_input_double(5, dir_x);
+    boxm2_batch.set_input_double(6, dir_y);
+    boxm2_batch.set_input_double(7, dir_z);
     boxm2_batch.run_process();
     (c_id, c_type) = boxm2_batch.commit_output(0);
     cam = dbvalue(c_id, c_type);

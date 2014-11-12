@@ -181,3 +181,53 @@ bool vpgl_write_generic_camera_process(bprb_func_process& pro)
 
   return true;
 }
+
+//: fetch the ray origin and direction for a given image pixel
+bool vpgl_get_generic_camera_ray_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");
+  input_types.push_back("unsigned"); // u
+  input_types.push_back("unsigned"); // v
+  bool ok = pro.set_input_types(input_types);
+
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("double");  // ray origin x
+  output_types.push_back("double");  // ray origin y
+  output_types.push_back("double");  // ray origin z
+  output_types.push_back("double");  // ray direction x
+  output_types.push_back("double");  // ray direction y
+  output_types.push_back("double");  // ray direction z
+  return pro.set_output_types(output_types);
+}
+
+//: Execute the process
+bool vpgl_get_generic_camera_ray_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs()!= 3) {
+    vcl_cout << "vpgl_get_generic_camera_ray_process: The number of inputs should be 3" << vcl_endl;
+    return false;
+  }
+  // get the inputs
+  vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
+  if (!camera) {
+    vcl_cout<<"Null camera input\n"<<vcl_endl;
+    return false;
+  }
+  
+  unsigned u = pro.get_input<unsigned>(1);
+  unsigned v = pro.get_input<unsigned>(2);
+
+  vpgl_generic_camera<double>* gcam = dynamic_cast<vpgl_generic_camera<double>* >(camera.ptr());
+  vgl_ray_3d<double> ray = gcam->ray(u, v);
+
+  pro.set_output_val<double>(0, ray.origin().x());
+  pro.set_output_val<double>(1, ray.origin().y());
+  pro.set_output_val<double>(2, ray.origin().z());
+  pro.set_output_val<double>(3, ray.direction().x());
+  pro.set_output_val<double>(4, ray.direction().y());
+  pro.set_output_val<double>(5, ray.direction().z());
+  return true;
+}

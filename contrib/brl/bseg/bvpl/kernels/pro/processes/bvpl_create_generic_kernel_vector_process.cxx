@@ -93,3 +93,54 @@ bool bvpl_create_generic_kernel_vector_process(bprb_func_process& pro)
   return false;
 }
 
+
+// write the vectors to txt files
+namespace bvpl_write_generic_kernel_vector_process_globals
+{
+  const unsigned n_inputs_ = 2;
+  const unsigned n_outputs_ = 0;
+}
+
+
+bool bvpl_write_generic_kernel_vector_process_cons(bprb_func_process& pro)
+{
+  using namespace bvpl_write_generic_kernel_vector_process_globals;
+
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "bvpl_kernel_vector_sptr";
+  input_types_[1] = "vcl_string";  // prefix of the output text files
+
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool bvpl_write_generic_kernel_vector_process(bprb_func_process& pro)
+{
+  using namespace bvpl_write_generic_kernel_vector_process_globals;
+
+  if (pro.n_inputs() < n_inputs_)
+  {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+
+  //get inputs:
+  bvpl_kernel_vector_sptr kernels = pro.get_input<bvpl_kernel_vector_sptr>(0);
+  vcl_string output_prefix =pro.get_input<vcl_string>(1);
+
+  vcl_vector< bvpl_kernel_sptr >::iterator iter = kernels->begin();
+  unsigned id = 1;
+  for ( ; iter != kernels->end(); iter++, id++) {
+    bvpl_kernel_sptr k = *iter;
+    vcl_cout << " printing out kernel: " << k->name() << vcl_endl;
+    vcl_stringstream ss; ss << output_prefix << k->name() << "_" << id << ".txt";
+    k->print_to_file(ss.str());
+
+    // sanity check
+    vcl_cout << " kernel angle: " << k->angle() << " axis: " << k->axis() << " sum: " << k->cum_sum() << vcl_endl;
+  }
+  
+  return true;
+}
+
