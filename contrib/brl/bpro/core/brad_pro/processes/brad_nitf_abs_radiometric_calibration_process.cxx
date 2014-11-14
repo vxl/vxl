@@ -51,15 +51,12 @@ bool brad_nitf_abs_radiometric_calibration_process(bprb_func_process& pro)
   if (img.nplanes() == 1) {
     //: calibrate
     vil_math_scale_and_offset_values(img, md->gain_, md->offset_);
-  } else if (img.nplanes() >= 4) {  // a multi-spectral image
-    vil_image_view<float> band1 = vil_plane(img, 0);
-    vil_math_scale_and_offset_values(band1, md->gains_[1].first, md->gains_[1].second);  // assuming gains_[0] is PAN band's gain
-    vil_image_view<float> band2 = vil_plane(img, 1);
-    vil_math_scale_and_offset_values(band2, md->gains_[2].first, md->gains_[2].second);
-    vil_image_view<float> band3 = vil_plane(img, 2);
-    vil_math_scale_and_offset_values(band3, md->gains_[3].first, md->gains_[3].second);
-    vil_image_view<float> band4 = vil_plane(img, 3);
-    vil_math_scale_and_offset_values(band4, md->gains_[4].first, md->gains_[4].second);
+  } else if (img.nplanes() >= 4) {  // a multi-spectral image 4 or 8 bands
+    for (unsigned ii = 0; ii < img.nplanes(); ii++) {
+      vil_image_view<float> band = vil_plane(img, ii);
+      vil_math_scale_and_offset_values(band, md->gains_[ii+1].first, md->gains_[ii+1].second);  // assuming gains_[0] is PAN band's gain (brad_image_metadata parses from metadata files and creates gains_ vector accordingly)
+    }
+
   } else 
     return false;
 

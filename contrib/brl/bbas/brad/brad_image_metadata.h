@@ -85,8 +85,13 @@ class brad_image_metadata : public vbl_ref_count
  protected:
   //: Parse Quickbird IMD file
   bool parse_from_imd(vcl_string const& filename);
+  
   //: Parse GeoEye PVL file
   bool parse_from_pvl(vcl_string const& filename);
+  
+  //: Parse the required params for normalization from a text file with a known format, 
+  //  it can be used to calibrate images from any satellite if such files are created for each image of the satellite
+  bool parse_from_txt(vcl_string const& filename);
 };
 
 typedef vbl_smart_ptr<brad_image_metadata> brad_image_metadata_sptr;

@@ -258,21 +258,17 @@ bool brad_estimate_reflectance_image(vil_image_view<float> const& radiance, brad
 bool brad_estimate_reflectance_image_multi(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, brad_atmospheric_parameters const& atm_params, vil_image_view<float> &reflectance_multi)
 {
 
-  vil_image_view<float> band1 = vil_plane(radiance, 0);
-  vil_image_view<float> band2 = vil_plane(radiance, 1);
-  vil_image_view<float> band3 = vil_plane(radiance, 2);
-  vil_image_view<float> band4 = vil_plane(radiance, 3);
   vcl_vector<vil_image_view<float> > imgs;
-  imgs.push_back(band1); 
-  imgs.push_back(band2);
-  imgs.push_back(band3);
-  imgs.push_back(band4);
+  for (unsigned ii = 0; ii < radiance.nplanes(); ii++) {
+    vil_image_view<float> band = vil_plane(radiance, ii);
+    imgs.push_back(band);
+  }
 
   // calculate atmosphere transmittance value
   double sun_el_rads = mdata.sun_elevation_ * vnl_math::pi_over_180;
   double sat_el_rads = mdata.view_elevation_ * vnl_math::pi_over_180;
 
-  for (unsigned ii = 0; ii < 4; ii++) {
+  for (unsigned ii = 0; ii < radiance.nplanes(); ii++) {
     vil_image_view<float> reflectance = vil_plane(reflectance_multi, ii);
     
     double T_sun = vcl_exp(-atm_params.optical_depth_multi_[ii] / vcl_sin(sun_el_rads));

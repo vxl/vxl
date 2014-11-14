@@ -430,6 +430,14 @@ def get_plane(img, plane_id):
   img_plane = dbvalue(id, type);
   return img_plane;
 
+def get_number_of_planes(img):
+  boxm2_batch.init_process("vilGetNumberOfPlanesProcess");
+  boxm2_batch.set_input_from_db(0, img);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  n_planes = boxm2_batch.get_output_unsigned(id)
+  return n_planes;
+
 def combine_planes(img_red, img_green, img_blue):
   boxm2_batch.init_process("vilCombinePlanesProcess");
   boxm2_batch.set_input_from_db(0, img_red);
