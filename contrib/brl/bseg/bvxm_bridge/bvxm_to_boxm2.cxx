@@ -73,11 +73,11 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
     float empty_prob_alpha = data.p_init_;
 
     //get data from cache
-    boxm2_data_base * alpha = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base * alpha = cache->get_data_base(new_scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     //3d array of trees
-    boxm2_array_3d<uchar16>& trees = cache->get_block(id)->trees();
+    boxm2_array_3d<uchar16>& trees = cache->get_block(new_scene, id)->trees();
 
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
 
