@@ -6,7 +6,7 @@
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vpgl/vpgl_camera.h>
 
@@ -59,12 +59,12 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
                              ray_os = helper.ray_os_,
                              lookups = helper.lookups_,
                              tnearfarptrs = helper.tnearfarptrs_;
-  vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
+  vcl_vector<boxm2_opencl_cache1*>& ocl_caches = helper.vis_caches_;
   vcl_vector<bocl_mem_sptr> vis_mems, pre_mems, norm_mems;
 
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
     bocl_device_sptr    device    = ocl_cache->get_device();
 
@@ -97,7 +97,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
     for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       //grab sub scene and it's cache
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
 
@@ -119,7 +119,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
       clFinish(queues[i]);
 
      // vul_timer ttime; ttime.mark();
-     //boxm2_opencl_cache* opencl_cache = ocl_caches[i];
+     //boxm2_opencl_cache1* opencl_cache = ocl_caches[i];
      //boxm2_block_id id = ids[i];
 
      // //calc data buffer length
@@ -150,7 +150,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
   //--------------------------------------
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     ocl_cache->unref_mem(vis_mems[i].ptr());
     ocl_cache->unref_mem(pre_mems[i].ptr());
     ocl_cache->unref_mem(norm_mems[i].ptr());
@@ -162,7 +162,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
 //runs pre/vis on single block
 float boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
                                                    boxm2_scene_sptr    scene,
-                                                   boxm2_opencl_cache* opencl_cache,
+                                                   boxm2_opencl_cache1* opencl_cache,
                                                    cl_command_queue&   queue,
                                                    vcl_string          data_type,
                                                    bocl_kernel*        kern,
@@ -270,7 +270,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
 
   vcl_vector<bocl_mem_sptr>& out_imgs = helper.outputs_,
                              lookups = helper.lookups_;
-  vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
+  vcl_vector<boxm2_opencl_cache1*>& ocl_caches = helper.vis_caches_;
 
   //Only bother updating the visible groups
   vcl_vector<boxm2_multi_cache_group*> grp = mcache.get_vis_groups(cam);
@@ -280,7 +280,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
     for (unsigned int i=0; i<ids.size(); ++i) {
       ttime.mark();
       //grab sub scene and it's cache
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
       boxm2_block_id       id    = ids[i];
@@ -368,7 +368,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       clFinish(queues[i]);
 
       ttime.mark();
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_block_id id = ids[i];
       
       //write alpha, mog and num obs to disk

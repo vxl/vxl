@@ -810,7 +810,7 @@ bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
     long buf_len = vul_file::size(file_name.str());
     boxm2_block_metadata md = iter->second;
 #if 0
-    boxm2_data_base *  alph = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  alph = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     long buf_len = (long)alph->buffer_length();
 #endif
     vcl_cout << " size: " << buf_len << ' ';

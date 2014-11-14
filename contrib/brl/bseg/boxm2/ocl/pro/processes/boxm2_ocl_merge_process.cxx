@@ -218,8 +218,8 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
 
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(id);
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id);
+        bocl_mem* blk       = opencl_cache->get_block(scene,id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         transfer_time += (float) transfer.all();
         vcl_size_t lThreads[] = {64, 1};
@@ -302,7 +302,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
             bocl_kernel* kern=kernels[data_identifier];
 
             //get bocl_mem data independent of CPU pointer
-            bocl_mem* dat = opencl_cache->get_data(id, data_types[i]);
+            bocl_mem* dat = opencl_cache->get_data(scene,id, data_types[i]);
 
             //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
             vcl_cout<<"  new data size of "<<data_types[i]<<" is "<<newDataSize<<vcl_endl;
@@ -311,7 +311,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
             new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
             //grab the block out of the cache as well
-            bocl_mem* blk = opencl_cache->get_block(id);
+            bocl_mem* blk = opencl_cache->get_block(scene,id);
             bocl_mem* blk_info = opencl_cache->loaded_block_info();
 
             //determine swapping behavior
@@ -350,7 +350,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
             gpu_time += kern->exec_time();
 
             ////write the data to buffer
-            opencl_cache->deep_replace_data(id, data_types[i], new_dat);
+            opencl_cache->deep_replace_data(scene,id, data_types[i], new_dat);
             if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
                 vcl_cout<<"   Writing refined trees."<<vcl_endl;
                 blk->read_to_buffer(queue);

@@ -19,7 +19,8 @@ class boxm2_merge_block_function
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
-  boxm2_merge_block_function() : merge_count_(0),
+  boxm2_merge_block_function(boxm2_scene_sptr scene) : scene_(scene),
+                                 merge_count_(0),
                                  prob_thresh_(.05f),
                                  init_prob_(.001f),
                                  block_len_(1.0) {}
@@ -44,6 +45,7 @@ class boxm2_merge_block_function
                  ushort4* num_obs_cpy);
 
  private:
+  boxm2_scene_sptr scene_;
   int          merge_count_;
   boxm2_block* blk_;
   uchar16*     trees_;
@@ -71,7 +73,8 @@ class boxm2_merge_block_function
 ////////////////////////////////////////////////////////////////////////////////
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
-void boxm2_merge_block( boxm2_block* blk,
+void boxm2_merge_block( boxm2_scene_sptr scene,
+                        boxm2_block* blk,
                         vcl_vector<boxm2_data_base*> & datas,
                         float prob_thresh,
                         bool is_random = true);

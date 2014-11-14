@@ -9,7 +9,7 @@
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 #include <bocl/bocl_mem.h>
@@ -45,10 +45,10 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders;
   vcl_vector<bocl_mem_sptr> out_mems, lookups, prob_mems;
   vcl_size_t maxBlocks = 0;
-  vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.ocl_caches();
+  vcl_vector<boxm2_opencl_cache1*> ocl_caches = cache.ocl_caches();
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
     bocl_device_sptr    device    = ocl_cache->get_device();
 
@@ -103,7 +103,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   for (unsigned int blk=0; blk<maxBlocks; ++blk) {
     for (unsigned int i=0; i<ocl_caches.size(); ++i) {
       //grab sub scene and it's cache
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
 
@@ -128,7 +128,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   //------------------------------------------------------------------
   unsigned num_refined   = 0;     //number of cells that split
   for (unsigned int i=0; i<queues.size(); ++i) {
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
 
     BlockMemMap& sizeMap = sizeMaps[i];
@@ -173,7 +173,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   for (unsigned int blk=0; blk<maxBlocks; ++blk) {
     for (unsigned int i=0; i<ocl_caches.size(); ++i) {
       //grab sub scene and it's cache
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
 
@@ -197,7 +197,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   //STEP FOUR: Clean up
   vcl_cout<<" Total Num Refined: "<<num_refined<<vcl_endl;
   for (unsigned int i=0; i<queues.size(); ++i) {
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     BlockMemMap& sizeMap = sizeMaps[i];
     BlockMemMap& copyMap = copyMaps[i];
     BlockMemMap::iterator iter;
@@ -221,7 +221,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
 
 //: Refines trees, keeps track of new sizes
 float boxm2_multi_refine::refine_trees_per_block(const boxm2_block_id& id,
-                                                 boxm2_opencl_cache* ocl_cache,
+                                                 boxm2_opencl_cache1* ocl_cache,
                                                  cl_command_queue& queue,
                                                  int numTrees,
                                                  BlockMemMap&  sizebuffs,
@@ -288,7 +288,7 @@ float boxm2_multi_refine::refine_trees_per_block(const boxm2_block_id& id,
 void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
                                               const boxm2_block_id& id,
                                               int numTrees,
-                                              boxm2_opencl_cache* ocl_cache,
+                                              boxm2_opencl_cache1* ocl_cache,
                                               cl_command_queue& queue,
                                               BlockMemMap&  sizebuffs,
                                               BlockMemMap&  blockCopies,

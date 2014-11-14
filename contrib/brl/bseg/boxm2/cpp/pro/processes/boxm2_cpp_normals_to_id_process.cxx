@@ -72,14 +72,14 @@ bool boxm2_cpp_normals_to_id_process(bprb_func_process& pro)
         vcl_size_t labelshortSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix());
 
 
-        boxm2_data_base * alpha =        cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        boxm2_data_base * alpha =        cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int data_buff_length    = (int) (alpha->buffer_length()/alphaTypeSize);
 
 
-        boxm2_data_base * points = cache->get_data_base(*id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
-        boxm2_data_base * normals = cache->get_data_base(*id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
-        boxm2_data_base * vis = cache->get_data_base(*id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
-        boxm2_data_base * normalids = cache->get_data_base(*id,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("orientation"), data_buff_length * labelshortSize,false);
+        boxm2_data_base * points = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
+        boxm2_data_base * normals = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
+        boxm2_data_base * vis = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
+        boxm2_data_base * normalids = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("orientation"), data_buff_length * labelshortSize,false);
 
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(alpha);

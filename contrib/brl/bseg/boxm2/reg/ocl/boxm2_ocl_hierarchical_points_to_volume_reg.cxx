@@ -4,7 +4,7 @@
 #include <vcl_where_root_dir.h>
 #include <vnl/vnl_random.h>
 #include <vcl_algorithm.h>
-boxm2_ocl_hierarchical_points_to_volume_reg::boxm2_ocl_hierarchical_points_to_volume_reg( boxm2_opencl_cache2_sptr  & cache,
+boxm2_ocl_hierarchical_points_to_volume_reg::boxm2_ocl_hierarchical_points_to_volume_reg( boxm2_opencl_cache_sptr  & cache,
                                                    float *pts, 
                                                    boxm2_scene_sptr sceneB,
                                                    int npts,

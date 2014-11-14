@@ -253,9 +253,9 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    vcl_vector<boxm2_block_id>::iterator id;
    for (id = block_ids.begin(); id != block_ids.end(); ++id)
    {
-      /* bocl_mem* blk = */ opencl_cache->get_block(*id);
+      /* bocl_mem* blk = */ opencl_cache->get_block(scene,*id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,true);
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,true);
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -272,7 +272,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
 
       vcl_string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
       int appTypeSize = (int)boxm2_data_info::datasize(data_type);
-      bocl_mem* naa_apm   = opencl_cache->get_data(*id,data_type,num_cells*appTypeSize, true);
+      bocl_mem* naa_apm   = opencl_cache->get_data(scene,*id,data_type,num_cells*appTypeSize, true);
 
       boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
       bocl_mem_sptr bocl_data_type0 = opencl_cache->alloc_mem(data_type0->buffer_length(), data_type0->data_buffer(),"bocl data type0");

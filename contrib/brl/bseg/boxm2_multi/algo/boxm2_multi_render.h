@@ -4,7 +4,7 @@
 // \file
 #include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
@@ -41,7 +41,7 @@ class boxm2_multi_render
     //: renders single image
     float render_scene( boxm2_scene_sptr scene,
                         bocl_device_sptr device,
-                        boxm2_opencl_cache* opencl_cache,
+                        boxm2_opencl_cache1* opencl_cache,
                         cl_command_queue & queue,
                         vpgl_camera_double_sptr & cam,
                         bocl_mem_sptr & exp_image,
@@ -57,7 +57,7 @@ class boxm2_multi_render
     //:calls render block code
     float render_block( boxm2_scene_sptr& scene,
                         boxm2_block_id id,
-                        boxm2_opencl_cache* opencl_cache,
+                        boxm2_opencl_cache1* opencl_cache,
                         cl_command_queue& queue,
                         bocl_mem_sptr & ray_o_buff,
                         bocl_mem_sptr & ray_d_buff,

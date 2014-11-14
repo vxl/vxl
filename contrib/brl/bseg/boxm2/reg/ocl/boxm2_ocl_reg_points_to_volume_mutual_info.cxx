@@ -22,7 +22,7 @@ typedef vnl_vector_fixed<unsigned char,16> uchar16;
 
 
 
-boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_reg_points_to_volume_mutual_info(boxm2_opencl_cache2_sptr& opencl_cache,
+boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_reg_points_to_volume_mutual_info(boxm2_opencl_cache_sptr& opencl_cache,
                                                                                        float * pts,
                                                                                        boxm2_scene_sptr& sceneB,
                                                                                        bocl_device_sptr device,

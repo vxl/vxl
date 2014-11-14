@@ -25,7 +25,7 @@
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>

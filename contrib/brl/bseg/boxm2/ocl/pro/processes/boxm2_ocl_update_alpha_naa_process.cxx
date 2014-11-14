@@ -465,9 +465,9 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(*id);
+      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
 
       //vcl_cout << "  loaded block and alpha: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
@@ -483,9 +483,9 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
 
       //grab an appropriately sized AUX data buffer
       int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
       auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
+      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
       //vcl_cout << " loaded aux0, aux1: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
 
       transfer_time += (float) transfer.all();
@@ -527,7 +527,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       }
       else if (i==UPDATE_PREINF)
       {
-        bocl_mem* naa_apm   = opencl_cache->get_data(*id,data_type,num_cells*appTypeSize, true);
+        bocl_mem* naa_apm   = opencl_cache->get_data(scene,*id,data_type,num_cells*appTypeSize, true);
 
         kern->set_arg( blk_info );
         kern->set_arg( blk );
@@ -562,15 +562,15 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       }
       else if (i==UPDATE_BAYES)
       {
-        bocl_mem* naa_apm   = opencl_cache->get_data(*id,data_type,num_cells*appTypeSize, true);
+        bocl_mem* naa_apm   = opencl_cache->get_data(scene,*id,data_type,num_cells*appTypeSize, true);
 
         //vcl_cout << "loaded naa bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
 
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-        bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
         aux2->zero_gpu_buffer(queue);
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
-        bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
 
         //vcl_cout << "loaded aux2 and aux3 : bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
         aux3->zero_gpu_buffer(queue);
@@ -618,10 +618,10 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       else if (i==UPDATE_CELL)
       {
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-        bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
 
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
-        bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
 
         local_threads[0] = 64;
         local_threads[1] = 1 ;

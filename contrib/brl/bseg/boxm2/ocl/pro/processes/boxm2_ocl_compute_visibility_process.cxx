@@ -224,8 +224,8 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         vul_timer transfer;
-        bocl_mem* blk           = opencl_cache->get_block(*id);
-        bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        bocl_mem* blk           = opencl_cache->get_block(scene,*id);
+        bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
         bocl_mem * blk_info     = opencl_cache->loaded_block_info();
         transfer_time          += (float) transfer.all();
 
@@ -262,7 +262,7 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
             kern->clear_args();
         }
 
-        opencl_cache->shallow_remove_data(*id,"alpha");
+        opencl_cache->shallow_remove_data(scene,*id,"alpha");
     }
     opencl_cache->free_mem(ray_image);
     opencl_cache->free_mem(vis_image);

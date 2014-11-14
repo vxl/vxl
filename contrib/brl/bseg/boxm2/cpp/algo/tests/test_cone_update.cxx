@@ -65,11 +65,11 @@ void test_cone_update()
 
   // instantiate a cache to grab the first block
   boxm2_lru_cache::create(scene);
-  boxm2_block* blk = boxm2_cache::instance()->get_block(id);
+  boxm2_block* blk = boxm2_cache::instance()->get_block(scene,id);
   // set block data to be black and white
-  boxm2_data_base * alph = boxm2_cache::instance()->get_data_base(id,boxm2_data_traits<BOXM2_GAMMA>::prefix());
+  boxm2_data_base * alph = boxm2_cache::instance()->get_data_base(scene,id,boxm2_data_traits<BOXM2_GAMMA>::prefix());
   boxm2_data<BOXM2_GAMMA>    * alpha_data_ = new boxm2_data<BOXM2_GAMMA>(alph->data_buffer(),alph->buffer_length(),alph->block_id());
-  boxm2_data_base * mog  = boxm2_cache::instance()->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  boxm2_data_base * mog  = boxm2_cache::instance()->get_data_base(scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   boxm2_data<BOXM2_MOG3_GREY>* mog3_data_  = new boxm2_data<BOXM2_MOG3_GREY>(mog->data_buffer(),mog->buffer_length(),mog->block_id());
 
   typedef vnl_vector_fixed<vxl_byte, 16> uchar16;

@@ -19,7 +19,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
 SET(boxm2_ocl_sources
     boxm2_opencl_cache.h     boxm2_opencl_cache.cxx
-    boxm2_opencl_cache2.h     boxm2_opencl_cache2.cxx
+    boxm2_opencl_cache1.h     boxm2_opencl_cache1.cxx
     boxm2_ocl_util.h         boxm2_ocl_util.cxx
    )
 

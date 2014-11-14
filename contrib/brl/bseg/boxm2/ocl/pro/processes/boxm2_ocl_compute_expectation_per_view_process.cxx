@@ -362,9 +362,9 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(*id);
+      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -372,20 +372,20 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
 
       //grab an appropriately sized AUX data buffer
       int auxTypeSize  = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-      bocl_mem *aux0   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+      bocl_mem *aux0   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
       auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
 
       //also grab mog
-      bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
+      bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
 
       transfer_time += (float) transfer.all();
       if (i==COMPUTE_SEGLEN)
       {
         int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix());
-        bocl_mem* num_obs_single   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(suffix),info_buffer->data_buffer_length*nobsTypeSize,false);
+        bocl_mem* num_obs_single   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(suffix),info_buffer->data_buffer_length*nobsTypeSize,false);
 
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_DATA_INDEX>::prefix());
-        bocl_mem* currIdx   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_DATA_INDEX>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem* currIdx   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_DATA_INDEX>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
 
         int int_zero = 0;
         aux0->fill(queue,int_zero,"int",true);
@@ -434,16 +434,16 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         vcl_cout << "Allocating " << total_num_rays << " num rays..." << vcl_endl;
         //alloc pixel obs
         int pixelTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_PIXEL>::prefix());
-        bocl_mem* all_obs = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_PIXEL>::prefix(suffix),total_num_rays*pixelTypeSize,false);
+        bocl_mem* all_obs = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_PIXEL>::prefix(suffix),total_num_rays*pixelTypeSize,false);
         //alloc expectations
         int expTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_EXPECTATION>::prefix());
-        bocl_mem* all_exp = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_EXPECTATION>::prefix(suffix),total_num_rays*expTypeSize,false);
+        bocl_mem* all_exp = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_EXPECTATION>::prefix(suffix),total_num_rays*expTypeSize,false);
         //alloc pre expectations
         int preexpTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-        bocl_mem* all_pre_exp = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX2>::prefix(suffix),total_num_rays*preexpTypeSize,false);
+        bocl_mem* all_pre_exp = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX2>::prefix(suffix),total_num_rays*preexpTypeSize,false);
         //alloc seglens
         int seglenTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
-        bocl_mem* all_seglen = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix),total_num_rays*seglenTypeSize,false);
+        bocl_mem* all_seglen = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix),total_num_rays*seglenTypeSize,false);
       }
       else if (i == COMPUTE_EXPSUM)
       {
@@ -478,12 +478,12 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
       }
       else if (i == COMPUTE_EXPECTATION)
       {
-        bocl_mem* all_obs     = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_PIXEL>::prefix(suffix));
-        bocl_mem* all_exp     = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_EXPECTATION>::prefix(suffix));
-        bocl_mem* all_pre_exp = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX2>::prefix(suffix));
-        bocl_mem* all_seglen = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix));
-        bocl_mem* num_obs_single = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(suffix));
-        bocl_mem* currIdx   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_DATA_INDEX>::prefix(suffix));
+        bocl_mem* all_obs     = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_PIXEL>::prefix(suffix));
+        bocl_mem* all_exp     = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_EXPECTATION>::prefix(suffix));
+        bocl_mem* all_pre_exp = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX2>::prefix(suffix));
+        bocl_mem* all_seglen = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix));
+        bocl_mem* num_obs_single = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(suffix));
+        bocl_mem* currIdx   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_DATA_INDEX>::prefix(suffix));
 
         //init buffers
         unsigned char zero_char = 0;
@@ -540,7 +540,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
       }
       else if (i == CONVERT_EXP)
       {
-        bocl_mem* all_exp     = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_EXPECTATION>::prefix(suffix));
+        bocl_mem* all_exp     = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_EXPECTATION>::prefix(suffix));
         unsigned int total_num_rays = all_exp->num_bytes() /  sizeof(boxm2_data_traits<BOXM2_EXPECTATION>::datatype);
         vcl_cout << "Total num of rays: " << total_num_rays << vcl_endl;
 
@@ -566,13 +566,13 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
         all_exp->read_to_buffer(queue);
 
 
-        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(suffix), true);
-        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix), true);
-        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix), true);
-        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_PIXEL>::prefix(suffix ), true);
-        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(suffix ), true);
-        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_DATA_INDEX>::prefix( suffix ), true);
-        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_EXPECTATION>::prefix( suffix ), true);
+        opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(suffix), true);
+        opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix), true);
+        opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix), true);
+        opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_PIXEL>::prefix(suffix ), true);
+        opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(suffix ), true);
+        opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_DATA_INDEX>::prefix( suffix ), true);
+        opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_EXPECTATION>::prefix( suffix ), true);
       }
 
       clFinish(queue);

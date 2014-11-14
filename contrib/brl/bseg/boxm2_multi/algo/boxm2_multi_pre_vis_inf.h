@@ -6,7 +6,7 @@
 
 #include <boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
@@ -37,7 +37,7 @@ class boxm2_multi_pre_vis_inf
     //runs pre/vis on single block
     static float pre_vis_per_block(const boxm2_block_id&     id,
                                         boxm2_scene_sptr    scene,
-                                        boxm2_opencl_cache* opencl_cache,
+                                        boxm2_opencl_cache1* opencl_cache,
                                         cl_command_queue&   queue,
                                         vcl_string          data_type,
                                         bocl_kernel*        kernel,
@@ -57,7 +57,7 @@ class boxm2_multi_pre_vis_inf
     static float pre_vis_reduce( boxm2_multi_cache&    cache,
                                  vcl_vector<float*>&   pre_imgs,
                                  vcl_vector<float*>&   vis_imgs,
-                                 vcl_vector<boxm2_opencl_cache*>& ocl_caches,
+                                 vcl_vector<boxm2_opencl_cache1*>& ocl_caches,
                                  vcl_map<bocl_device*, float*>& pre_map,
                                  vcl_map<bocl_device*, float*>& vis_map,
                                  int ni,

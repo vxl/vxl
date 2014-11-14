@@ -119,13 +119,13 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
     bocl_kernel* kern =  kernels[(device->device_id())][0];
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem * blk       = opencl_cache->get_block(*id);
+    bocl_mem * blk       = opencl_cache->get_block(scene,*id);
     vcl_cout<<" Block Num: "<<(*id)<<vcl_endl;
     vcl_cout.flush();
     bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-    bocl_mem * alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-    bocl_mem * hist      = opencl_cache->get_data<BOXM2_BATCH_HISTOGRAM>(*id);
-    bocl_mem * intensity = opencl_cache->get_data<BOXM2_MOG3_GREY>(*id);
+    bocl_mem * alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    bocl_mem * hist      = opencl_cache->get_data<BOXM2_BATCH_HISTOGRAM>(scene,*id);
+    bocl_mem * intensity = opencl_cache->get_data<BOXM2_MOG3_GREY>(scene,*id);
 
     transfer_time += (float) transfer.all();
 

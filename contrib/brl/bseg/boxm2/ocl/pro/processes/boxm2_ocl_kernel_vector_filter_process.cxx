@@ -135,14 +135,14 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
 
       //set up input data (currently hard-coded to be alpha)
       vul_timer transfer;
-      bocl_mem* data_in = opencl_cache->get_data<BOXM2_ALPHA>(id, 0, false);
+      bocl_mem* data_in = opencl_cache->get_data<BOXM2_ALPHA>(scene,id, 0, false);
       vcl_size_t dataSize = data_in->num_bytes();
 
       //set up output_data
-      bocl_mem* filter_response = opencl_cache->get_data_new(id, boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()), dataSize, false);
+      bocl_mem* filter_response = opencl_cache->get_data_new(scene,id, boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()), dataSize, false);
 
       //grab the block out of the cache as well
-      bocl_mem* blk = opencl_cache->get_block(id);
+      bocl_mem* blk = opencl_cache->get_block(scene,id);
       bocl_mem* blk_info = opencl_cache->loaded_block_info();
 
       //set workspace
@@ -187,7 +187,7 @@ bool boxm2_ocl_kernel_vector_filter_process_globals::process(bocl_device_sptr de
 
       //shallow remove from ocl cache unnecessary items from ocl cache.
       vcl_cout<<"Filtering: After execute MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
-      opencl_cache->shallow_remove_data(id,boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
+      opencl_cache->shallow_remove_data(scene,id,boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
     }  //end block iter for
 
     delete [] filter_coeff;

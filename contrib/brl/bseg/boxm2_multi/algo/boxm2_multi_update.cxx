@@ -36,10 +36,10 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   vcl_vector<bocl_mem_sptr> img_dims, outputs, ray_ds, ray_os, lookups,tnearfarptrs; //ray trace vars
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders; //visibility order for each dev
   vcl_size_t maxBlocks = 0;
-  vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.ocl_caches();
+  vcl_vector<boxm2_opencl_cache1*> ocl_caches = cache.ocl_caches();
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
     bocl_device_sptr    device    = ocl_cache->get_device();
 
@@ -144,7 +144,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   }
 
   for (unsigned int i=0; i<queues.size(); ++i) {
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
 
     //release generic cam
     float* rayO = (float*) ray_os[i]->cpu_buffer();

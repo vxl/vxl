@@ -142,9 +142,9 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
                             *mdata.sub_block_num_.y()
                             *mdata.sub_block_num_.z());
     //choose correct render kernel
-    bocl_mem* blk       = opencl_cache->get_block(*id);
+    bocl_mem* blk       = opencl_cache->get_block(scene,*id);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);

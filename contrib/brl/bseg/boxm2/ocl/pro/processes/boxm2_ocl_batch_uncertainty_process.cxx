@@ -130,16 +130,16 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
   for (id = block_ids.begin(); id != block_ids.end(); ++id)
   {
     //choose correct render kernel
-    /* bocl_mem* blk = */ opencl_cache->get_block(*id);
+    /* bocl_mem* blk = */ opencl_cache->get_block(scene,*id);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,true);
+    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,true);
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
 
     //grab an appropriately sized AUX data buffer
     int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
-    bocl_mem *coeffs_buff  = opencl_cache->get_data(*id,
+    bocl_mem *coeffs_buff  = opencl_cache->get_data(scene,*id,
                                                     boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),
                                                     info_buffer->data_buffer_length*auxTypeSize,false);
 
@@ -202,7 +202,7 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
     boxm2_data_leaves_serial_iterator<boxm2_update_synoptic_probability>(cpu_blk,data_buff_length,data_functor);
     opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), true );
 #endif // 0
-   opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"), true );
+   opencl_cache->deep_remove_data( scene, *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"), true );
   }
   clReleaseCommandQueue(queue);
 

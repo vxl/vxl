@@ -6,7 +6,7 @@
 
 #include <boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2_multi/algo/boxm2_multi_update.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
@@ -35,7 +35,7 @@ class boxm2_multi_update_cell
     //runs pre/vis on single block
     static float calc_beta_per_block(const boxm2_block_id&     id,
                                     boxm2_scene_sptr    scene,
-                                    boxm2_opencl_cache* opencl_cache,
+                                    boxm2_opencl_cache1* opencl_cache,
                                     cl_command_queue&   queue,
                                     vcl_string          data_type,
                                     bocl_kernel*        kern,

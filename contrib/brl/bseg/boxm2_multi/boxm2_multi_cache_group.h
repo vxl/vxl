@@ -6,7 +6,7 @@
 #include "boxm2_multi_util.h"
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vcl_iosfwd.h>
@@ -31,7 +31,7 @@ class boxm2_multi_cache_group
     boxm2_multi_cache_group(vcl_vector<boxm2_block_id> ids):ids_(ids) {}
 
     //: add a block to the group
-    void add_block(boxm2_block_metadata data, boxm2_opencl_cache* cache) {
+    void add_block(boxm2_block_metadata data, boxm2_opencl_cache1* cache) {
       ids_.push_back(data.id_);
       bboxes_.push_back(data.bbox());
       bbox_.add(data.bbox());
@@ -67,7 +67,7 @@ class boxm2_multi_cache_group
     vcl_vector<boxm2_block_id> ids_;
 
     //cache taht each block belongs to
-    vcl_vector<boxm2_opencl_cache*> caches_;
+    vcl_vector<boxm2_opencl_cache1*> caches_;
 
     //bboxes for each block
     vcl_vector<vgl_box_3d<double> > bboxes_;

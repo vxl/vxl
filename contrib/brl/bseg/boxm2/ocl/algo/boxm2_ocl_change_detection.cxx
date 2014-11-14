@@ -220,10 +220,10 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
 
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene,*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+        bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type);
         transfer_time += (float) transfer.all();
 
         ////3. SET args
@@ -333,10 +333,10 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
 
                     //write the image values to the buffer
                     vul_timer transfer;
-                    bocl_mem* blk       = opencl_cache->get_block(*id);
+                    bocl_mem* blk       = opencl_cache->get_block(scene,*id);
                     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-                    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-                    bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
+                    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+                    bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type);
                     transfer_time      += (float) transfer.all();
 
                     ////3. SET args
@@ -826,9 +826,9 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
 
                 //-----write the image values to the buffer
                 vul_timer transfer;
-                bocl_mem* blk       = opencl_cache->get_block(*id);
+                bocl_mem* blk       = opencl_cache->get_block(scene,*id);
                 bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-                bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+                bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
 
                 // aux buffers (determine length first)
                 boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
@@ -836,9 +836,9 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
                 info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
                 blk_info->write_to_buffer(queue);
                 int auxTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-                bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+                bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
                 auxTypeSize     = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-                bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
+                bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
                 transfer_time += (float) transfer.all();
 
                 //3. SET args
@@ -879,10 +879,10 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
 
                 //-----write the image values to the buffer
                 vul_timer transfer;
-                bocl_mem* blk       = opencl_cache->get_block(*id);
+                bocl_mem* blk       = opencl_cache->get_block(scene,*id);
                 bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-                bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-                bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
+                bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+                bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type);
 
                 // aux buffers (determine length first)
                 boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
@@ -890,9 +890,9 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
                 info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
                 blk_info->write_to_buffer((queue));
                 int auxTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-                bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+                bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
                 auxTypeSize     = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-                bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
+                bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
                 transfer_time += (float) transfer.all();
 
                 //3. SET args
@@ -963,8 +963,8 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
             //----------------------------------------------------------------------------
             for (id = vis_order.begin(); id != vis_order.end(); ++id){
                 //choose correct render kernel
-                bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(*id);
-                bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(*id);
+                bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(scene,*id);
+                bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(scene,*id);
                 aux0->zero_gpu_buffer(queue);
                 aux1->zero_gpu_buffer(queue);
             }
@@ -1262,9 +1262,9 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
 
         //-----write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene,*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
 
         // aux buffers (determine length first)
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
@@ -1273,9 +1273,9 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         blk_info->write_to_buffer(queue);
 
         int auxTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
         auxTypeSize     = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-        bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
         transfer_time += (float) transfer.all();
 
 
@@ -1321,10 +1321,10 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         //-----write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene,*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+        bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type);
 
         // aux buffers (determine length first)
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
@@ -1332,9 +1332,9 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
         int auxTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux0  = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
         auxTypeSize     = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-        bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        bocl_mem *aux1  = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize);
         transfer_time += (float) transfer.all();
 
         //3. SET args

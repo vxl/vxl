@@ -133,11 +133,11 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       vcl_cout<<"Block id "<<(*id)<<' ';
-      boxm2_block *     blk   = cache->get_block(*id);
-      boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-      boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
-      boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
-      boxm2_data_base *aux1 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
+      boxm2_block *     blk   = cache->get_block(scene,*id);
+      boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+      boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
+      boxm2_data_base *aux0 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
+      boxm2_data_base *aux1 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
 
       vcl_vector<boxm2_data_base*> datas;
       datas.push_back(aux0);
@@ -207,14 +207,14 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       vcl_cout<<"Block id "<<(*id)<<' ';
-      boxm2_block *     blk   = cache->get_block(*id);
-      boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-      boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
-      boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
-      boxm2_data_base *aux1 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
+      boxm2_block *     blk   = cache->get_block(scene,*id);
+      boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+      boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
+      boxm2_data_base *aux0 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
+      boxm2_data_base *aux1 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
 
       // generate aux in a writable mode
-      boxm2_data_base *aux = cache->get_data_base_new(*id, boxm2_data_traits<BOXM2_AUX>::prefix(identifier),false);
+      boxm2_data_base *aux = cache->get_data_base_new(scene,*id, boxm2_data_traits<BOXM2_AUX>::prefix(identifier),false);
 
       vcl_vector<boxm2_data_base*> datas;
       datas.push_back(aux0);
@@ -330,8 +330,8 @@ bool boxm2_cpp_batch_update_opt2_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
-    boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
+    boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type,0,false);
 
     if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
     {

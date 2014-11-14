@@ -62,12 +62,12 @@ bool boxm2_cpp_filter_process(bprb_func_process& pro)
     boxm2_block_id id = blk_iter->first;
     vcl_cout<<"Filtering Block: "<<id<<vcl_endl;
 
-    boxm2_block *     blk     = cache->get_block(id);
-    boxm2_data_base * alph    = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_block *     blk     = cache->get_block(scene,id);
+    boxm2_data_base * alph    = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     //refine block and datas
     boxm2_block_metadata data = blk_iter->second;
-    boxm2_filter_block_function(data, blk,alph);
+    boxm2_filter_block_function(scene, data, blk,alph);
   }
 
   return true;

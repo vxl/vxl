@@ -102,7 +102,7 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
         int index_y=(int)vcl_floor(local.y());
         int index_z=(int)vcl_floor(local.z());
 
-        boxm2_block * blk=cache->get_block(id);
+        boxm2_block * blk=cache->get_block(scene,id);
         boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
 
         vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
@@ -110,7 +110,7 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
         int bit_index=tree.traverse(local);
         int index=tree.get_data_index(bit_index,false);
 
-        boxm2_data_base     *  float_base  = cache->get_data_base(id,data_identifier);
+        boxm2_data_base     *  float_base  = cache->get_data_base(scene,id,data_identifier);
         float * buffer = reinterpret_cast<float*>(float_base->data_buffer());
         img(i,j) = buffer[index];
       }

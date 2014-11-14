@@ -62,7 +62,6 @@ def load_opencl(scene_str, device_string="gpu"):
   #print("Create Gpu Cache");
   boxm2_batch.init_process("boxm2CreateOpenclCacheProcess");
   boxm2_batch.set_input_from_db(0,device)
-  boxm2_batch.set_input_from_db(1,scene)
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   openclcache = dbvalue(id, type);
@@ -85,59 +84,16 @@ def load_cpp(scene_str) :
   (id,type) = boxm2_batch.commit_output(0);
   cache = dbvalue(id, type);
   return scene, cache;
+
 #Just loads up CPP cache2
 def load_cpp2(scene_str) :
-  scene = load_scene(scene_str);
+    # boxm2_cache has been replaced by boxm2_cache, so this function is just a passthrough now.
+    return load_cpp(scene_str)
 
-  ###############################################################
-  # Create cache, opencl manager, device, and gpu cache
-  ###############################################################
-  #print("Create Main Cache");
-  boxm2_batch.init_process("boxm2CreateCache2Process");
-  boxm2_batch.set_input_from_db(0,scene);
-  boxm2_batch.set_input_string(1,"lru");
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  cache = dbvalue(id, type);
-  return scene, cache;
  #does the opencl prep work on an input scene
 def load_opencl_2(scene_str, device_string="gpu"):
-  scene = load_scene(scene_str);
-
-  ###############################################################
-  # Create cache, opencl manager, device, and gpu cache
-  ###############################################################
-  #print("Create Main Cache");
-  boxm2_batch.init_process("boxm2CreateCache2Process");
-  boxm2_batch.set_input_from_db(0,scene);
-  boxm2_batch.set_input_string(1,"lru");
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  cache = dbvalue(id, type);
-
-  #print("Init Manager");
-  boxm2_batch.init_process("boclInitManagerProcess");
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  mgr = dbvalue(id, type);
-
-  #print("Get Gpu Device");
-  boxm2_batch.init_process("boclGetDeviceProcess");
-  boxm2_batch.set_input_string(0,device_string)
-  boxm2_batch.set_input_from_db(1,mgr)
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  device = dbvalue(id, type);
-
-  #print("Create Gpu Cache");
-  boxm2_batch.init_process("boxm2CreateOpenclCache2Process");
-  boxm2_batch.set_input_from_db(0,device)
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  openclcache = dbvalue(id, type);
-
-  return scene, cache, mgr, device, openclcache;
-
+    # boxm2_opencl_cache has been replaced by boxm2_opencl_cache2, so this function is just a passthrough now.
+    return load_opencl(scene_str, device_string)
 
 # describe scene process, returns the path containing scene data
 def describe_scene(scene):

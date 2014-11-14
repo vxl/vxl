@@ -4,7 +4,7 @@
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 #include <bocl/bocl_mem.h>
@@ -52,11 +52,11 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
                             ray_os, ray_ds, lookups,tnearfarptrs,max_omegas;
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders;
   vcl_size_t maxBlocks = 0;
-  vcl_vector<boxm2_opencl_cache*>& ocl_caches = cache.ocl_caches();
+  vcl_vector<boxm2_opencl_cache1*>& ocl_caches = cache.ocl_caches();
   for (unsigned int i=0; i<ocl_caches.size(); ++i)
   {
     //grab sub scene and it's cache
-    boxm2_opencl_cache*     ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1*     ocl_cache = ocl_caches[i];
     boxm2_scene_sptr        sub_scene = ocl_cache->get_scene();
     bocl_device_sptr        device    = ocl_cache->get_device();
 
@@ -144,7 +144,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     vcl_vector<int> indices = group.order_from_cam(cam);
     for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
       boxm2_block_id id = ids[i];
@@ -225,7 +225,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   for (unsigned int i=0; i<ocl_caches.size(); ++i)
   {
     //grab sub scene and it's cache
-    boxm2_opencl_cache*     ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1*     ocl_cache = ocl_caches[i];
     boxm2_scene_sptr        sub_scene = ocl_cache->get_scene();
     bocl_device_sptr        device    = ocl_cache->get_device();
 
@@ -276,11 +276,11 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   vcl_vector<bocl_mem_sptr> exp_mems, vis_mems;
 
   //for each device/cache, run a render
-  vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.get_vis_sub_scenes(cam.ptr());
+  vcl_vector<boxm2_opencl_cache1*> ocl_caches = cache.get_vis_sub_scenes(cam.ptr());
   for (unsigned int i=0; i<ocl_caches.size(); ++i)
   {
     //grab sub scene and it's cache
-    boxm2_opencl_cache*     ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1*     ocl_cache = ocl_caches[i];
     boxm2_scene_sptr        sub_scene = ocl_cache->get_scene();
     bocl_device_sptr        device    = ocl_cache->get_device();
 
@@ -386,7 +386,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
 
 float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
                                         bocl_device_sptr device,
-                                        boxm2_opencl_cache* opencl_cache,
+                                        boxm2_opencl_cache1* opencl_cache,
                                         cl_command_queue & queue,
                                         vpgl_camera_double_sptr & cam,
                                         bocl_mem_sptr & exp_image,
@@ -447,7 +447,7 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
 
 float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
                                         boxm2_block_id id,
-                                        boxm2_opencl_cache* opencl_cache,
+                                        boxm2_opencl_cache1* opencl_cache,
                                         cl_command_queue& queue,
                                         bocl_mem_sptr & ray_o_buff,
                                         bocl_mem_sptr & ray_d_buff,

@@ -20,10 +20,13 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_update_sky.h                      boxm2_ocl_update_sky.cxx
     boxm2_ocl_update_max_vis.h                  boxm2_ocl_update_max_vis.cxx
     boxm2_ocl_fuse_based_visibility.h           boxm2_ocl_fuse_based_visibility.cxx
+    boxm2_ocl_expected_image_renderer.h         boxm2_ocl_expected_image_renderer.cxx
+    boxm2_ocl_update_sun_visibilities.h         boxm2_ocl_update_sun_visibilities.cxx
+    boxm2_ocl_render_expected_shadow_map.h      boxm2_ocl_render_expected_shadow_map.cxx
        )
 
 ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul vnl_algo)
+TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul vnl_algo brad)
 
 #tests
 IF( BUILD_TESTING )

@@ -15,6 +15,7 @@
 
 void boxm2_export_stack_images_function  ::export_opacity_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, vcl_string outdir)
 {
+  boxm2_scene_sptr& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
   vgl_point_3d<int> min_index;
   vgl_point_3d<int> max_index;
 
@@ -55,8 +56,8 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
   for (blk_iter= blocks.begin(); blk_iter!=blocks.end(); ++blk_iter)
   {
     vcl_cout<<"Block id "<<blk_iter->first<<vcl_endl;
-    boxm2_block  * blk = cache->get_block(blk_iter->first);
-    boxm2_data_base *  alpha_base  = cache->get_data_base(blk_iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_block  * blk = cache->get_block(nc_scene,blk_iter->first);
+    boxm2_data_base *  alpha_base  = cache->get_data_base(nc_scene,blk_iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
@@ -129,6 +130,9 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
 
 void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, vil3d_image_view<unsigned char> & img3d)
 {
+  // we need to const_cast to call the new cache functions which take a (non const) scene as 1st arg.
+  // perhaps const versions of get_block and friends could be added
+  boxm2_scene_sptr& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
   vgl_point_3d<int> min_index;
   vgl_point_3d<int> max_index;
 
@@ -164,11 +168,11 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
 
   for (blk_iter= blocks.begin(); blk_iter!=blocks.end(); ++blk_iter)
   {
-    boxm2_block  * blk = cache->get_block(blk_iter->first);
-    boxm2_data_base *  alpha_base  = cache->get_data_base(blk_iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_block  * blk = cache->get_block(nc_scene,blk_iter->first);
+    boxm2_data_base *  alpha_base  = cache->get_data_base(nc_scene, blk_iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
-    boxm2_data_base *  int_base  = cache->get_data_base(blk_iter->first,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+    boxm2_data_base *  int_base  = cache->get_data_base(nc_scene, blk_iter->first,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     boxm2_data<BOXM2_MOG3_GREY> *int_data=new boxm2_data<BOXM2_MOG3_GREY>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
@@ -236,6 +240,10 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
 
 void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, vil3d_image_view<unsigned char> & img3d)
 {
+  // we need to const_cast to call the new cache functions which take a (non const) scene as 1st arg.
+  // perhaps const versions of get_block and friends could be added
+  boxm2_scene_sptr& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
+
   vgl_point_3d<int> min_index;
   vgl_point_3d<int> max_index;
 
@@ -271,10 +279,10 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
 
   for (blk_iter= blocks.begin(); blk_iter!=blocks.end(); ++blk_iter)
   {
-    boxm2_block  * blk = cache->get_block(blk_iter->first);
-    boxm2_data_base *  alpha_base  = cache->get_data_base(blk_iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_block  * blk = cache->get_block(nc_scene, blk_iter->first);
+    boxm2_data_base *  alpha_base  = cache->get_data_base(nc_scene, blk_iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
-    boxm2_data_base *  int_base  = cache->get_data_base(blk_iter->first,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
+    boxm2_data_base *  int_base  = cache->get_data_base(nc_scene, blk_iter->first,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
     boxm2_data<BOXM2_GAUSS_RGB> *int_data=new boxm2_data<BOXM2_GAUSS_RGB>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;

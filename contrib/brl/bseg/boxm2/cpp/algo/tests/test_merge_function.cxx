@@ -25,8 +25,10 @@ void test_merge_bit_tree()
                        alph/2.0f, alph/2.0f, alph/2.0f, alph/2.0f,   //second gen
                        alph/2.0f, alph/2.0f, alph/2.0f, alph/2.0f };
 
+      boxm2_scene_sptr scene = new boxm2_scene();
+
       //test single merge
-      boxm2_merge_block_function merge_function;
+      boxm2_merge_block_function merge_function(scene);
       boct_bit_tree merged = merge_function.merge_bit_tree(btree, alpha, 0.3f);
 
       for (int i=0; i<73; ++i) {
@@ -52,8 +54,10 @@ void test_merge_bit_tree()
       for (int i=0; i<17; ++i)
         alpha[i] = alph/4.0f;
 
+      boxm2_scene_sptr scene = new boxm2_scene();
+
       //test single merge
-      boxm2_merge_block_function merge_function;
+      boxm2_merge_block_function merge_function(scene);
       boct_bit_tree merged = merge_function.merge_bit_tree(btree, alpha, 0.3f);
 
       if (merged.bit_at(0) != 1) {
@@ -85,8 +89,10 @@ void test_merge_bit_tree()
         if (i==14) alpha[i] = 8.0f*alph; //set one to be too big for .3
       }
 
+      boxm2_scene_sptr scene = new boxm2_scene();
+
       //test single merge
-      boxm2_merge_block_function merge_function;
+      boxm2_merge_block_function merge_function(scene);
       boct_bit_tree merged = merge_function.merge_bit_tree(btree, alpha, 0.3f);
 
       if (merged.bit_at(0) == 1 && merged.bit_at(1) == 1)

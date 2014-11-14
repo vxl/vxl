@@ -31,7 +31,8 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
                                          bocl_device_sptr          device,
                                          boxm2_opencl_cache_sptr    opencl_cache,
                                          vil_image_view_base_sptr   img,
-                                         vpgl_camera_double_sptr    cam)
+                                         vpgl_camera_double_sptr    cam,
+                                         vcl_string const& apm_id)
 {
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
   typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
@@ -49,20 +50,20 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
   vcl_string data_type, num_obs_type;
   vcl_vector<vcl_string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(apm_id) )
     {
       data_type = apps[i];
       foundDataType = true;
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix(apm_id) )
     {
       data_type = apps[i];
       foundDataType = true;
 
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
+    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix(apm_id) )
     {
       num_obs_type = apps[i];
       foundNumObsType = true;
@@ -164,9 +165,9 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem* blk       = opencl_cache->get_block(*id);
+    bocl_mem* blk       = opencl_cache->get_block(scene, *id);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-    bocl_mem* alpha     = opencl_cache->get_data(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    bocl_mem* alpha     = opencl_cache->get_data(scene, *id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -174,13 +175,13 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
 
     //grab an appropriately sized AUX data buffer
     int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-    bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+    bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(scene, *id, info_buffer->data_buffer_length*auxTypeSize);
     auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-    bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
+    bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(scene, *id, info_buffer->data_buffer_length*auxTypeSize);
     auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-    bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
+    bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene, *id, info_buffer->data_buffer_length*auxTypeSize);
     auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
-    bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
+    bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(scene, *id, info_buffer->data_buffer_length*auxTypeSize);
 
     transfer_time += (float) transfer.all();
     aux0->zero_gpu_buffer(queue);
@@ -227,9 +228,9 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
     aux2->read_to_buffer(queue);
     bocl_kernel* kern1 =  kerns[1];
     int mogTypeSize    = (int) boxm2_data_info::datasize(data_type);
-    bocl_mem* mog      = opencl_cache->get_data(*id, data_type, info_buffer->data_buffer_length*mogTypeSize, false);
+    bocl_mem* mog      = opencl_cache->get_data(scene, *id, data_type, info_buffer->data_buffer_length*mogTypeSize, false);
     int nobs_size      = (int) boxm2_data_info::datasize(num_obs_type);
-    bocl_mem* num_obs  = opencl_cache->get_data(*id, num_obs_type, info_buffer->data_buffer_length*nobs_size, false);
+    bocl_mem* num_obs  = opencl_cache->get_data(scene, *id, num_obs_type, info_buffer->data_buffer_length*nobs_size, false);
 
     kern1->set_arg( blk_info );
     kern1->set_arg( mog );

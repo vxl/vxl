@@ -5,7 +5,8 @@
 // \file
 
 //: "default" constructor
-boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas)
+boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene, boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas)
+  : scene_(scene)
 {
   //1. allocate new alpha data array (stays the same size)
   vcl_cout<<"Allocating new data blocks"<<vcl_endl;
@@ -128,7 +129,7 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata da
 
   //3. Replace data in the cache
   boxm2_cache_sptr cache = boxm2_cache::instance();
-  cache->replace_data_base(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
+  cache->replace_data_base(scene_, id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
 }
 
 

@@ -156,9 +156,9 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
 
   //3. Replace data in the cache
   boxm2_cache_sptr cache = boxm2_cache::instance();
-  cache->replace_data_base(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
-  cache->replace_data_base(id, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), newM);
-  cache->replace_data_base(id, boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), newN);
+  cache->replace_data_base(scene_, id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
+  cache->replace_data_base(scene_, id, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), newM);
+  cache->replace_data_base(scene_, id, boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), newN);
 
   delete [] dataIndex;
   return true;
@@ -314,12 +314,13 @@ int boxm2_merge_block_function::move_data( boct_bit_tree& old_tree,
 ////////////////////////////////////////////////////////////////////////////////
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
-void boxm2_merge_block( boxm2_block* blk,
+void boxm2_merge_block( boxm2_scene_sptr scene,
+                        boxm2_block* blk,
                         vcl_vector<boxm2_data_base*> & datas,
                         float prob_thresh,
                         bool is_random)
 {
-  boxm2_merge_block_function merge_block;
+  boxm2_merge_block_function merge_block(scene);
   merge_block.init_data(blk, datas, prob_thresh);
   merge_block.merge(datas);
 }

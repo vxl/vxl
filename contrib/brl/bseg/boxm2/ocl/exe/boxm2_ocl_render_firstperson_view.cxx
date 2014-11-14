@@ -97,7 +97,7 @@ int main(int argc, char ** argv)
     pcam->look_at(vgl_homg_point_3d<double>(*(++waypoint_iter)), up);
     //create cache, grab singleton instance
     boxm2_lru_cache::create(scene);
-    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene,device); //allow 4 blocks inthe cache
+    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device); //allow 4 blocks inthe cache
 
 
 

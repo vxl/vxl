@@ -48,7 +48,7 @@ bool test_gauss_gradients_filter()
 
   bocl_device_sptr device = mgr->gpus_[gpu_idx];
   boxm2_lru_cache::create(scene);
-  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(scene, device, 4);
+  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
   boxm2_ocl_kernel_vector_filter_process_globals::process(device, scene, opencl_cache, filter_vector);
 
   //verify values of the response
@@ -65,9 +65,9 @@ bool test_gauss_gradients_filter()
       boxm2_block_id id = blk_iter->first;
       vcl_cout << "Printing results for block: " << id << vcl_endl;
 
-      boxm2_block *     blk     = boxm2_cache::instance()->get_block(id);
+      boxm2_block *     blk     = boxm2_cache::instance()->get_block(scene, id);
       vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
-      boxm2_data_base * response    = boxm2_cache::instance()->get_data_base(id, boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
+      boxm2_data_base * response    = boxm2_cache::instance()->get_data_base(scene, id, boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
       boxm2_block_metadata data = blk_iter->second;
 
       //3d array of trees

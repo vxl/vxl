@@ -8,7 +8,7 @@
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 #include <bocl/bocl_mem.h>
@@ -68,11 +68,11 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
                              ray_os = helper.ray_os_,
                              lookups = helper.lookups_,
                              tnearfarptrs=  helper.tnearfarptrs_;
-  vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
+  vcl_vector<boxm2_opencl_cache1*>& ocl_caches = helper.vis_caches_;
   vcl_vector<bocl_mem_sptr> vis_mems, pre_mems, visInfMems, preInfMems;
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
 
     //pre/vis images
     float* vis_buff = new float[cl_ni*cl_nj];
@@ -104,7 +104,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
     for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       //grab sub scene and it's cache
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
 
@@ -213,7 +213,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   delete[] preImg;
 
   for (unsigned int i=0; i<queues.size(); ++i) {
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     float* v = (float*) vis_mems[i]->cpu_buffer();
     float* p = (float*) pre_mems[i]->cpu_buffer();
     delete[] v;
@@ -229,7 +229,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
 float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
                                                  boxm2_scene_sptr      scene,
-                                                 boxm2_opencl_cache*   opencl_cache,
+                                                 boxm2_opencl_cache1*   opencl_cache,
                                                  cl_command_queue&     queue,
                                                  vcl_string            data_type,
                                                  bocl_kernel*          kern,

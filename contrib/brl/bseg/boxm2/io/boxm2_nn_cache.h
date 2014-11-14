@@ -2,12 +2,12 @@
 #define boxm2_nn_cache_h_
 //:
 // \file
-#include <boxm2/io/boxm2_cache.h>
+#include <boxm2/io/boxm2_cache1.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <vcl_iostream.h>
 
 //: an example cache that loads in the nearest neighbors of the requested block (asynchronously)
-class boxm2_nn_cache : public boxm2_cache
+class boxm2_nn_cache : public boxm2_cache1
 {
   public:
 

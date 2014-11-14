@@ -75,12 +75,12 @@ float render_expected_image(  boxm2_scene_sptr & scene,
         bocl_kernel* kern =  kernel;
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
         int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         // data type string may contain an identifier so determine the buffer size
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+        bocl_mem* mog       = opencl_cache->get_data(scene, *id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
         transfer_time += (float) transfer.all();
 
         ////3. SET args
@@ -123,9 +123,9 @@ float render_expected_image(  boxm2_scene_sptr & scene,
     return gpu_time + transfer_time;
 }
 
-float render_expected_image(  boxm2_scene_sptr & scene,
+float render_expected_image2(  boxm2_scene_sptr & scene,
                               bocl_device_sptr & device,
-                              boxm2_opencl_cache2_sptr & opencl_cache,
+                              boxm2_opencl_cache_sptr & opencl_cache,
                               cl_command_queue & queue,
                               vpgl_camera_double_sptr & cam,
                               bocl_mem_sptr & exp_image,
@@ -173,7 +173,11 @@ float render_expected_image(  boxm2_scene_sptr & scene,
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),cl_ni,cl_nj);
+    vcl_vector<boxm2_block_id> vis_order;
+    if(cam->type_name() == "vpgl_perspective_camera")
+      vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),cl_ni,cl_nj);
+    else
+      vis_order= scene->get_vis_blocks(cam);
     vcl_cout<<"Scene : "<<scene->data_path()<<' '<<vis_order.size()<<" cache size "<<opencl_cache->bytes_in_cache()<< vcl_endl;
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id !=  vis_order.end(); ++id)
@@ -325,10 +329,10 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
 
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_GAMMA>(*id); //, numCells*gammaTypeSize); //opencl_cache->get_data<BOXM2_GAMMA>(*id);
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_GAMMA>(scene, *id); //, numCells*gammaTypeSize); //opencl_cache->get_data<BOXM2_GAMMA>(*id);
+        bocl_mem* mog       = opencl_cache->get_data(scene, *id,data_type);
         transfer_time += (float) transfer.all();
 
         ////3. SET args
@@ -427,10 +431,10 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
         bocl_kernel* kern =  kernel;
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-        bocl_mem *aux_sun   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(data_type));
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
+        bocl_mem *aux_sun   = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX0>::prefix(data_type));
         //vcl_cout << "id = " << id << vcl_endl;
         vcl_cout << "blk = " << blk->cpu_buffer() << '\n'
                  << "alpha = " << alpha->cpu_buffer() << '\n'
@@ -534,10 +538,10 @@ float render_expected_phongs_image( boxm2_scene_sptr & scene,
 
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-        bocl_mem* mog       = opencl_cache->get_data(*id,"float8_phongs_model");
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
+        bocl_mem* mog       = opencl_cache->get_data(scene, *id,"float8_phongs_model");
         transfer_time += (float) transfer.all();
 
         ////3. SET args
@@ -679,16 +683,16 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
 
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
         int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         // data type string may contain an identifier so determine the buffer size
         unsigned int num_cells = alpha->num_bytes()/alphaTypeSize;
         vcl_string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
         int appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
 
-        bocl_mem* naa_apm  = opencl_cache->get_data(*id,data_type,num_cells*appTypeSize, true);
+        bocl_mem* naa_apm  = opencl_cache->get_data(scene, *id,data_type,num_cells*appTypeSize, true);
         transfer_time += (float) transfer.all();
 
         ////3. SET args
@@ -824,16 +828,16 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
 
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
         int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         // data type string may contain an identifier so determine the buffer size
         unsigned int num_cells = alpha->num_bytes()/alphaTypeSize;
         vcl_string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
         int appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
 
-        bocl_mem* naa_apm  = opencl_cache->get_data(*id,data_type,num_cells*appTypeSize, true);
+        bocl_mem* naa_apm  = opencl_cache->get_data(scene, *id,data_type,num_cells*appTypeSize, true);
         transfer_time += (float) transfer.all();
 
         ////3. SET args

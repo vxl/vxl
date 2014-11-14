@@ -470,9 +470,9 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
 
         vul_timer transfer;
 
-        bocl_mem* blk       = opencl_cache->get_block(id_inner);
+        bocl_mem* blk       = opencl_cache->get_block(scene, id_inner);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(id_inner);
+        bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, id_inner);
 
         transfer_time += (float) transfer.all();
 
@@ -507,8 +507,8 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
         kern->clear_args();
 
         //remove from device memory unnecessary items
-        opencl_cache->shallow_remove_block(id_inner);
-        opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        opencl_cache->shallow_remove_block(scene, id_inner);
+        opencl_cache->shallow_remove_data(scene, id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         //opencl_cache->clear_cache();
       }
       if (vis_blocks.size() != 0)  // normalize

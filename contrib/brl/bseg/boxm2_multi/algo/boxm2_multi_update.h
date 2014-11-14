@@ -4,7 +4,7 @@
 // \file
 #include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
@@ -36,7 +36,7 @@ class boxm2_multi_update_helper
                               vcl_vector<bocl_mem_sptr>& outputs,
                               vcl_vector<boxm2_multi_cache_group*>& group_orders,
                               vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders,
-                              vcl_vector<boxm2_opencl_cache*>& vis_caches,
+                              vcl_vector<boxm2_opencl_cache1*>& vis_caches,
                               vcl_size_t maxBlocks) :
         queues_(queues),
         img_dims_(img_dims),
@@ -60,7 +60,7 @@ class boxm2_multi_update_helper
 
     //visibility order for each dev
     vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders_;
-    vcl_vector<boxm2_opencl_cache*>& vis_caches_;
+    vcl_vector<boxm2_opencl_cache1*>& vis_caches_;
     vcl_size_t maxBlocks_;
     vcl_vector<boxm2_multi_cache_group*>& group_orders_;
 };

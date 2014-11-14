@@ -55,13 +55,13 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
         for (id = vis_order.begin(); id != vis_order.end(); ++id)
         {
             vcl_cout<<"Block id "<<(*id)<<' ';
-            boxm2_block     *  blk   = cache->get_block(*id);
-            boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_GAMMA>::prefix(),0,false);
-            boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
-            boxm2_data_base *  nobs = cache->get_data_base(*id,num_obs_type,0,false);
+            boxm2_block     *  blk   = cache->get_block(scene,*id);
+            boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_GAMMA>::prefix(),0,false);
+            boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type,0,false);
+            boxm2_data_base *  nobs = cache->get_data_base(scene,*id,num_obs_type,0,false);
             int alphaTypeSize       = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
             int auxTypeSize         = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-            boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
+            boxm2_data_base *  aux  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
 
             vcl_vector<boxm2_data_base*> datas;
             datas.push_back(aux);
@@ -119,13 +119,13 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        boxm2_block     *  blk   = cache->get_block(*id);
-        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_GAMMA>::prefix(),0,false);
-        boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
-        boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,0,false);
+        boxm2_block     *  blk   = cache->get_block(scene,*id);
+        boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_GAMMA>::prefix(),0,false);
+        boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
+        boxm2_data_base *  nobs  = cache->get_data_base(scene,*id,num_obs_type,0,false);
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
         int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-        boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
+        boxm2_data_base *  aux  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(aux);
         datas.push_back(alph);
@@ -135,7 +135,7 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
         data_functor.init_data(datas, float(blk->sub_block_dim().x()), blk->max_level());
         int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
         boxm2_data_serial_iterator<boxm2_cone_update_data_functor>(data_buff_length,data_functor);
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix());
     }
     return true;
 }
@@ -187,12 +187,12 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
         for (id = vis_order.begin(); id != vis_order.end(); ++id)
         {
             vcl_cout<<"Block id "<<(*id)<<' ';
-            boxm2_block *     blk   = cache->get_block(*id);
-            boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-            boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
-            boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
+            boxm2_block *     blk   = cache->get_block(scene,*id);
+            boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+            boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
+            boxm2_data_base *  nobs  = cache->get_data_base(scene,*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
             int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-            boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
+            boxm2_data_base *  aux  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
 
             vcl_vector<boxm2_data_base*> datas;
             datas.push_back(aux);
@@ -266,13 +266,13 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        boxm2_block     *  blk   = cache->get_block(*id);
-        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-        boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
-        boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,0,false);
+        boxm2_block     *  blk   = cache->get_block(scene,*id);
+        boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+        boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
+        boxm2_data_base *  nobs  = cache->get_data_base(scene,*id,num_obs_type,0,false);
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-        boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
+        boxm2_data_base *  aux  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(aux);
         datas.push_back(alph);
@@ -292,7 +292,7 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
           boxm2_data_serial_iterator<boxm2_update_data_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
         }
 
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix());
     }
     return true;
 }
@@ -353,12 +353,12 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
         for (id = vis_order.begin(); id != vis_order.end(); ++id)
         {
             vcl_cout<<"Block id "<<(*id)<<' ';
-            boxm2_block *     blk   = cache->get_block(*id);
-            boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-            boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
-            boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
+            boxm2_block *     blk   = cache->get_block(scene,*id);
+            boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+            boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
+            boxm2_data_base *  nobs  = cache->get_data_base(scene,*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
             int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-            boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
+            boxm2_data_base *  aux  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
 
             vcl_vector<boxm2_data_base*> datas;
             datas.push_back(aux);
@@ -432,13 +432,13 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        boxm2_block     *  blk   = cache->get_block(*id);
-        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-        boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
-        boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,0,false);
+        boxm2_block     *  blk   = cache->get_block(scene,*id);
+        boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+        boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
+        boxm2_data_base *  nobs  = cache->get_data_base(scene,*id,num_obs_type,0,false);
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-        boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
+        boxm2_data_base *  aux  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(aux);
         datas.push_back(alph);
@@ -458,7 +458,7 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
           boxm2_data_serial_iterator<boxm2_update_with_shadow_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
         }
 
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix());
     }
     return true;
 }
@@ -502,12 +502,12 @@ bool boxm2_update_using_quality(boxm2_scene_sptr & scene,
         for (id = vis_order.begin(); id != vis_order.end(); ++id)
         {
             vcl_cout<<"Block id "<<(*id)<<' ';
-            boxm2_block *     blk   = cache->get_block(*id);
-            boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-            boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
-            boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
+            boxm2_block *     blk   = cache->get_block(scene,*id);
+            boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+            boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
+            boxm2_data_base *  nobs  = cache->get_data_base(scene,*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
             int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-            boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
+            boxm2_data_base *  aux  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
             vcl_vector<boxm2_data_base*> datas;
             datas.push_back(aux);
             datas.push_back(alph);
@@ -579,13 +579,13 @@ bool boxm2_update_using_quality(boxm2_scene_sptr & scene,
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        boxm2_block     *  blk   = cache->get_block(*id);
-        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-        boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
-        boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,0,false);
+        boxm2_block     *  blk   = cache->get_block(scene,*id);
+        boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+        boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
+        boxm2_data_base *  nobs  = cache->get_data_base(scene,*id,num_obs_type,0,false);
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-        boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
+        boxm2_data_base *  aux  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(aux);
         datas.push_back(alph);
@@ -604,7 +604,7 @@ bool boxm2_update_using_quality(boxm2_scene_sptr & scene,
             data_functor.init_data(datas, float(blk->sub_block_dim().x()), blk->max_level());
             boxm2_data_serial_iterator<boxm2_update_using_quality_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
         }
-        cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
+        cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix());
     }
     return true;
 }

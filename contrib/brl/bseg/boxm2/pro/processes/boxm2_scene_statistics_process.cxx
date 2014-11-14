@@ -103,7 +103,7 @@ bool boxm2_scene_statistics_process(bprb_func_process& pro)
 
     if(!vgl_intersection<double>( boxm2_metadata.bbox(), box).is_empty() ) //if the two boxes intersect
     {
-      boxm2_block* blk = cache->get_block(boxm2_id);
+      boxm2_block* blk = cache->get_block(scene,boxm2_id);
 
       boxm2_array_3d<uchar16>&  trees = blk->trees();
       for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {

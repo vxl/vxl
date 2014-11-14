@@ -141,10 +141,10 @@ bool boxm2_cpp_create_mog_image_process(bprb_func_process& pro)
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
-    boxm2_block *     blk  =  cache->get_block(*id);
-    boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
-    boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
+    boxm2_block *     blk  =  cache->get_block(scene,*id);
+    boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base *  nobs  = cache->get_data_base(scene,*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
+    boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type);
     vcl_vector<boxm2_data_base*> datas;
     datas.push_back(alph);
     datas.push_back(mog);

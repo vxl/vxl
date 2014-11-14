@@ -66,9 +66,9 @@ bool boxm2_cpp_batch_compute_synoptic_function_1d_process(bprb_func_process& pro
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); id++) {
-    boxm2_block *     blk     = cache->get_block(*id);
-    boxm2_data_base *  alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    boxm2_data_base *  cubic_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),alpha->buffer_length()* 8 ,false);
+    boxm2_block *     blk     = cache->get_block(scene,*id);
+    boxm2_data_base *  alpha  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  cubic_model_data  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),alpha->buffer_length()* 8 ,false);
     boxm2_synoptic_fucntion_1d_functor data_functor;
     data_functor.init_data(str_cache,alpha,cubic_model_data);
     int phongs_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
@@ -76,7 +76,7 @@ bool boxm2_cpp_batch_compute_synoptic_function_1d_process(bprb_func_process& pro
 
     boxm2_data_leaves_serial_iterator<boxm2_synoptic_fucntion_1d_functor>(blk,data_buff_length,data_functor);
 
-    cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
+    cache->remove_data_base(scene, *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
   }
 
   vcl_cout<<"Finished Cubic "<<vcl_endl;

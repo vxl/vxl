@@ -52,9 +52,17 @@ bool copy_fine_to_coarse(boxm2_block & blk,
                          boxm2_data_base * alpha_base ,
                          boxm2_cache_sptr cache)
 {
-    boxm2_scene_sptr scene = cache->get_scene();
+    // assuming exactly one scene in cache!
+    vcl_vector<boxm2_scene_sptr> scenes = cache->get_scenes();
+    if (scenes.size() == 0) {
+      vcl_cerr << "Error: boxm2_ocl_create_coarser: no scenes in cache! " << vcl_endl;
+      return false;
+    }
+    if (scenes.size() > 1) {
+      vcl_cerr << "Warning: boxm2_ocl_create_coarser: multiple scenes in cache - using the first." << vcl_endl;
+    }
+    boxm2_scene_sptr scene = scenes[0];
     vgl_box_3d<int> bbox = scene->bounding_box_blk_ids();
-
 
 
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),
@@ -63,8 +71,8 @@ bool copy_fine_to_coarse(boxm2_block & blk,
 
 
 
-    boxm2_block * blksB = cache->get_block(mdata.id_);
-    boxm2_data_base * alpha_buffer_B = cache->get_data_base(mdata.id_,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_block * blksB = cache->get_block(scene,mdata.id_);
+    boxm2_data_base * alpha_buffer_B = cache->get_data_base(scene,mdata.id_,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data_B=new boxm2_data<BOXM2_ALPHA>(alpha_buffer_B->data_buffer(),
                                                                       alpha_buffer_B->buffer_length(),
                                                                       alpha_buffer_B->block_id());

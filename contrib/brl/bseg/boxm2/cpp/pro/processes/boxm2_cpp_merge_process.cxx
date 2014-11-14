@@ -85,10 +85,10 @@ bool boxm2_cpp_merge_process(bprb_func_process& pro)
   {
     boxm2_block_id id = blk_iter->first;
     vcl_cout<<"Merging Block: "<<id<<vcl_endl;
-    boxm2_block *     blk     = cache->get_block(id);
-    boxm2_data_base * alph    = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(), 0, false);
-    boxm2_data_base * mog     = cache->get_data_base(id,data_type, 0, false);
-    boxm2_data_base * num_obs = cache->get_data_base(id,boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), 0, false);
+    boxm2_block *     blk     = cache->get_block(scene, id);
+    boxm2_data_base * alph    = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix(), 0, false);
+    boxm2_data_base * mog     = cache->get_data_base(scene,id,data_type, 0, false);
+    boxm2_data_base * num_obs = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), 0, false);
 
     vcl_vector<boxm2_data_base*> datas;
     datas.push_back(alph);
@@ -97,7 +97,7 @@ bool boxm2_cpp_merge_process(bprb_func_process& pro)
 
     //refine block and datas
     boxm2_block_metadata data = blk_iter->second;
-    boxm2_merge_block(blk,datas, thresh, false);
+    boxm2_merge_block(scene, blk,datas, thresh, false);
     blk->enable_write(); // now cache will make sure that it is written to disc
   }
   

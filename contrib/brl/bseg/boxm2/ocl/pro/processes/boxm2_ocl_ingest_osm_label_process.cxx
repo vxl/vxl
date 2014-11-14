@@ -224,11 +224,11 @@ bool boxm2_ocl_ingest_osm_label_process(bprb_func_process& pro)
 
     // write the image values to the buffer
     vul_timer transfer;
-    bocl_mem* blk = opencl_cache->get_block(*id);
+    bocl_mem* blk = opencl_cache->get_block(scene,*id);
 
     // create buffer for ingested label
-    bocl_mem* alpha      = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-    bocl_mem* label_data = opencl_cache->get_data(*id, out_data_type, alpha->num_bytes()/alphaTypeSize*apptypesize, true);
+    bocl_mem* alpha      = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    bocl_mem* label_data = opencl_cache->get_data(scene,*id, out_data_type, alpha->num_bytes()/alphaTypeSize*apptypesize, true);
 
     bocl_mem* blk_info   = opencl_cache->loaded_block_info();
     transfer_time += (float) transfer.all();

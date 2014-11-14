@@ -80,8 +80,8 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem* blk       = opencl_cache->get_block(id);
-    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id);
+    bocl_mem* blk       = opencl_cache->get_block(scene,id);
+    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
     transfer_time += (float) transfer.all();
     vcl_size_t lThreads[] = {64, 1};
@@ -161,7 +161,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       bocl_kernel* kern = get_refine_data_kernel(device, data_types[i]);
 
       //get bocl_mem data independent of CPU pointer
-      bocl_mem* dat = opencl_cache->get_data(id, data_types[i]);
+      bocl_mem* dat = opencl_cache->get_data(scene,id, data_types[i]);
 
       //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
       int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
@@ -170,7 +170,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
       //grab the block out of the cache as well
-      bocl_mem* blk = opencl_cache->get_block(id);
+      bocl_mem* blk = opencl_cache->get_block(scene,id);
       bocl_mem* blk_info = opencl_cache->loaded_block_info();
 
       //is alpha buffer
@@ -218,7 +218,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       gpu_time += kern->exec_time();
 
       //write the data to buffer
-      opencl_cache->deep_replace_data(id, data_types[i], new_dat);
+      opencl_cache->deep_replace_data(scene,id, data_types[i], new_dat);
       if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix())
         blk->read_to_buffer(queue);
 

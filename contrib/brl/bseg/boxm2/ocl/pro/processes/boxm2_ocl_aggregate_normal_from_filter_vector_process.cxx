@@ -172,9 +172,9 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
     //load tree and alpha
     boxm2_block_metadata data = blk_iter->second;
     vul_timer transfer;
-    /* bocl_mem* blk = */ opencl_cache->get_block(blk_iter->first);
+    /* bocl_mem* blk = */ opencl_cache->get_block(scene,blk_iter->first);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(blk_iter->first,0,true);
+    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,blk_iter->first,0,true);
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -182,7 +182,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
 
     //store normals locations
     vcl_size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
-    bocl_mem * normals    = opencl_cache->get_data(id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), info_buffer->data_buffer_length*normalsTypeSize,false);
+    bocl_mem * normals    = opencl_cache->get_data(scene,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), info_buffer->data_buffer_length*normalsTypeSize,false);
 
     //set global and local threads
     local_threads[0] = 128;
@@ -196,7 +196,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
     for (unsigned i = 0; i < num_filters; i++) {
       bvpl_kernel_sptr filter = filter_vector->kernels_[i];
       vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
-      bocl_mem * response = opencl_cache->get_data(id,RESPONSE_DATATYPE::prefix(filter_ident.str()), 0, true);
+      bocl_mem * response = opencl_cache->get_data(scene,id,RESPONSE_DATATYPE::prefix(filter_ident.str()), 0, true);
       kern->set_arg( response );
     }
 

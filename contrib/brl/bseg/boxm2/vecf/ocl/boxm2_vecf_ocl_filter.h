@@ -11,7 +11,7 @@
 #include <boxm2/io/boxm2_cache.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
 
 //: Map a scene with Euclidean and anisotropic scale transforms.
 // the input transform is the inverse so that the target scene voxels
@@ -24,7 +24,7 @@ class boxm2_vecf_ocl_filter
   //: Constructor. 
   boxm2_vecf_ocl_filter(boxm2_scene_sptr& source_scene,
                                  boxm2_scene_sptr& temp_scene,
-                                 boxm2_opencl_cache2_sptr ocl_cache);
+                                 boxm2_opencl_cache_sptr ocl_cache);
 
   ~boxm2_vecf_ocl_filter();
 
@@ -39,7 +39,7 @@ class boxm2_vecf_ocl_filter
   bool get_scene_appearance(boxm2_scene_sptr scene,
                             vcl_string&      options);
 
-  boxm2_opencl_cache2_sptr  opencl_cache_;
+  boxm2_opencl_cache_sptr  opencl_cache_;
   boxm2_scene_sptr temp_scene_;
   boxm2_scene_sptr source_scene_;
   bocl_device_sptr device_;

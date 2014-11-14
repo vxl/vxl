@@ -17,7 +17,7 @@
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/boxm2_opencl_cache1.h>
 
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_device.h>
@@ -32,7 +32,7 @@
 
 void test_render_expected_images(boxm2_scene_sptr scene,
                                  bocl_device_sptr device,
-                                 boxm2_opencl_cache* cache,
+                                 boxm2_opencl_cache1* cache,
                                  vcl_vector<vpgl_camera_double_sptr>& cams,
                                  unsigned ni, unsigned nj)
 {
@@ -41,7 +41,7 @@ void test_render_expected_images(boxm2_scene_sptr scene,
   DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_color_process, "boxm2OclRenderExpectedColorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_image_process, "boxm2OclRenderExpectedImageProcess");
-  REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
+  REGISTER_DATATYPE(boxm2_opencl_cache1_sptr);
   REGISTER_DATATYPE(boxm2_scene_sptr);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(float);
@@ -57,7 +57,7 @@ void test_render_expected_images(boxm2_scene_sptr scene,
     //set up brdb_value_sptr arguments... (for generic passing)
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device);
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
-    brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(cache);
+    brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache1_sptr>(cache);
     brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cams[i]);
     brdb_value_sptr brdb_ni = new brdb_value_t<unsigned>(ni);
     brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj);
@@ -118,7 +118,7 @@ int main(int argc,  char** argv)
   bocl_manager_child_sptr mgr = bocl_manager_child::instance();
 
   //create cpu cache (lru), and create opencl_cache on the device
-  boxm2_lru_cache::create(scene);
+  boxm2_lru_cache1::create(scene);
 
   if (numGPU() > mgr->gpus_.size()) {
     vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr->gpus_.size()<<" available"<<vcl_endl;
@@ -166,7 +166,7 @@ int main(int argc,  char** argv)
           <<"-----------------------------------------"<<vcl_endl;
 
   //test scene render on one gpu
-  //boxm2_opencl_cache* opencl_cache = new boxm2_opencl_cache(scene, mgr->gpus_[0]);
+  //boxm2_opencl_cache1* opencl_cache = new boxm2_opencl_cache1(scene, mgr->gpus_[0]);
   //test_render_expected_images(scene, mgr->gpus_[0], opencl_cache, cams, ni(), nj());
 
   return 0;

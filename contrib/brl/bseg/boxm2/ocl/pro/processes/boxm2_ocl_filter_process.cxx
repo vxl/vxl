@@ -124,14 +124,14 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
 
         //get current and copy of alpha
         vul_timer transfer;
-        bocl_mem* alphas = opencl_cache->get_data<BOXM2_ALPHA>(id, 0, false);
+        bocl_mem* alphas = opencl_cache->get_data<BOXM2_ALPHA>(scene,id, 0, false);
         vcl_size_t dataSize = alphas->num_bytes();
 
         bocl_mem* new_alphas = new bocl_mem(device->context(), NULL, dataSize, "new alpha buffer ");
         new_alphas->create_buffer(CL_MEM_READ_WRITE, queue);
 
         //grab the block out of the cache as well
-        bocl_mem* blk = opencl_cache->get_block(id);
+        bocl_mem* blk = opencl_cache->get_block(scene,id);
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
 
 
@@ -162,7 +162,7 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
         gpu_time += kern->exec_time();
 
         //write the data to buffer
-        opencl_cache->deep_replace_data(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), new_alphas);
+        opencl_cache->deep_replace_data(scene,id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), new_alphas);
 
     }  //end block iter for
 

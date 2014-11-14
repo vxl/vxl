@@ -9,7 +9,7 @@
 
 #include <bocl/bocl_manager.h>
 #include <boct/boct_bit_tree.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_util.h>
 
 
@@ -38,8 +38,8 @@ bool test_opencl_cache2()
 
   bocl_device_sptr device = mgr->gpus_[gpu_idx];
 
-  boxm2_lru_cache2::create(scene1);
-  boxm2_opencl_cache2_sptr opencl_cache = new boxm2_opencl_cache2(device);
+  boxm2_lru_cache::create(scene1);
+  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
   //iterate through response blocks
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks1 = scene1->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter1;

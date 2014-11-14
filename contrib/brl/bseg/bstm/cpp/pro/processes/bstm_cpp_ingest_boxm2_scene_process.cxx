@@ -153,9 +153,9 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          datas[data_type] = mog;
 
          //get data from boxm2 scene
-         boxm2_block *     boxm2_blk     = boxm2_cache->get_block(bstm_metadata.id_);
-         boxm2_data_base * boxm2_alph    = boxm2_cache->get_data_base(bstm_metadata.id_,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-         boxm2_data_base * boxm2_mog     = boxm2_cache->get_data_base(bstm_metadata.id_,boxm2_data_type);
+         boxm2_block *     boxm2_blk     = boxm2_cache->get_block(boxm2_scene, bstm_metadata.id_);
+         boxm2_data_base * boxm2_alph    = boxm2_cache->get_data_base(boxm2_scene, bstm_metadata.id_,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+         boxm2_data_base * boxm2_mog     = boxm2_cache->get_data_base(boxm2_scene, bstm_metadata.id_,boxm2_data_type);
 
 
 

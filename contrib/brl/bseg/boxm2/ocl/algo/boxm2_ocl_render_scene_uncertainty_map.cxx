@@ -206,9 +206,9 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene,*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
         // data type string may contain an identifier so determine the buffer size
         transfer_time += (float) transfer.all();
         //3. SET args
@@ -240,12 +240,12 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
+        bocl_mem* blk       = opencl_cache->get_block(scene,*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
         int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         // data type string may contain an identifier so determine the buffer size
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+        bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
         transfer_time += (float) transfer.all();
         //3. SET args
         kern->set_arg( blk_info );

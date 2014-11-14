@@ -135,8 +135,8 @@ bool boxm2_ocl_init_alpha_process(bprb_func_process& pro)
 
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(id);
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id);
+        bocl_mem* blk       = opencl_cache->get_block(scene,id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         transfer_time += (float) transfer.all();
         vcl_size_t lThreads[] = {16, 1};
@@ -160,7 +160,7 @@ bool boxm2_ocl_init_alpha_process(bprb_func_process& pro)
         kern->clear_args();
         alpha->read_to_buffer(queue);
         clFinish(queue);
-        opencl_cache->shallow_remove_data(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        opencl_cache->shallow_remove_data(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     }
     

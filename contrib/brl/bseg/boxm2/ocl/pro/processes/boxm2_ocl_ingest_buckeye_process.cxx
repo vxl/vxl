@@ -331,9 +331,9 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem * blk           = opencl_cache->get_block(*id);
+    bocl_mem * blk           = opencl_cache->get_block(scene, *id);
     bocl_mem * blk_info      = opencl_cache->loaded_block_info();
-    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id,0,false);
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -342,12 +342,12 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     blk_info->write_to_buffer((queue));
     // aux0 for occupancy "belief"
     int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-    //bocl_mem *aux0 = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize, false);
-    bocl_mem *aux0 = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(), info_buffer->data_buffer_length*auxTypeSize, false);
+    //bocl_mem *aux0 = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize, false);
+    bocl_mem *aux0 = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX0>::prefix(), info_buffer->data_buffer_length*auxTypeSize, false);
     // aux1 for occupancy "uncertainty"
     auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-    //bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize, false);
-    bocl_mem *aux1 = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(),info_buffer->data_buffer_length*auxTypeSize, false);
+    //bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize, false);
+    bocl_mem *aux1 = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX1>::prefix(),info_buffer->data_buffer_length*auxTypeSize, false);
 
     // initialize belief values to 0.0
     //aux0->zero_gpu_buffer(queue);
@@ -401,11 +401,11 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     // update alpha values based on belief and uncertainty stored in aux0 and aux1
 
     boxm2_cache_sptr cpu_cache = opencl_cache->get_cpu_cache();
-    boxm2_data_base *alpha_data = cpu_cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    boxm2_data_base *aux0_data = cpu_cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(),0,false);
-    boxm2_data_base *aux1_data = cpu_cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(),0,false);
+    boxm2_data_base *alpha_data = cpu_cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *aux0_data = cpu_cache->get_data_base(scene, *id, boxm2_data_traits<BOXM2_AUX0>::prefix(),0,false);
+    boxm2_data_base *aux1_data = cpu_cache->get_data_base(scene, *id, boxm2_data_traits<BOXM2_AUX1>::prefix(),0,false);
 
-    boxm2_block* block = cpu_cache->get_block(*id);
+    boxm2_block* block = cpu_cache->get_block(scene,*id);
 
     double subblock_side_len = block->sub_block_dim().x();
     alpha_update_from_opinion_functor update_func(alpha_data, aux0_data, aux1_data, subblock_side_len);

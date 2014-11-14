@@ -9,7 +9,7 @@
 
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
-#include <boxm2/ocl/boxm2_opencl_cache2.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
@@ -44,7 +44,7 @@ bool boxm2_ocl_fuse_based_visibility_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr"; // scene A
   input_types_[2] = "boxm2_scene_sptr"; // scene B
-  input_types_[3] = "boxm2_opencl_cache2_sptr";
+  input_types_[3] = "boxm2_opencl_cache_sptr";
   // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -66,7 +66,7 @@ bool boxm2_ocl_fuse_based_visibility_process(bprb_func_process& pro)
   bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr         sceneA        = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_scene_sptr         sceneB        = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache2_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache2_sptr>(i++);
+  boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vul_timer t;
   t.mark();
   boxm2_ocl_fuse_based_visibility::fuse_based_visibility(sceneA,sceneB, device, opencl_cache);
@@ -88,7 +88,7 @@ bool boxm2_ocl_fuse_based_orientation_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr"; // scene A
   input_types_[2] = "boxm2_scene_sptr"; // scene B
-  input_types_[3] = "boxm2_opencl_cache2_sptr";
+  input_types_[3] = "boxm2_opencl_cache_sptr";
   // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -110,7 +110,7 @@ bool boxm2_ocl_fuse_based_orientation_process(bprb_func_process& pro)
   bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr         sceneA        = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_scene_sptr         sceneB        = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache2_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache2_sptr>(i++);
+  boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vul_timer t;
   t.mark();
   boxm2_ocl_fuse_based_orientation::fuse_based_orientation(sceneA,sceneB, device, opencl_cache);
@@ -132,7 +132,7 @@ bool boxm2_ocl_fuse_surface_density_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr"; // scene A
   input_types_[2] = "boxm2_scene_sptr"; // scene B
-  input_types_[3] = "boxm2_opencl_cache2_sptr";
+  input_types_[3] = "boxm2_opencl_cache_sptr";
   // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -154,7 +154,7 @@ bool boxm2_ocl_fuse_surface_density_process(bprb_func_process& pro)
   bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr         sceneA        = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_scene_sptr         sceneB        = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache2_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache2_sptr>(i++);
+  boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vul_timer t;
   t.mark();
   boxm2_ocl_fuse_surface_density::fuse_surface_density(sceneA,sceneB, device, opencl_cache);

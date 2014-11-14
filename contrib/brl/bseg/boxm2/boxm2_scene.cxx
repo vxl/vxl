@@ -179,8 +179,9 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
     vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x(),
                                     blk_dim.y()*blk_num.y(),
                                     blk_dim.z()*blk_num.z());
-    
-    double min_depth = 1e10;
+
+    vcl_vector<vgl_point_3d<double> > test_pts;
+    // block corners
     for(unsigned i = 0;  i<=1 ; i++)
         for(unsigned j = 0;  j<=1 ; j++)
             for(unsigned k = 0;  k<=1 ; k++)
@@ -188,22 +189,29 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
                 vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x()*(double)i,
                                                 blk_dim.y()*blk_num.y()*(double)j,
                                                 blk_dim.z()*blk_num.z()*(double)k);
-                vgl_point_3d<double> pt = blk_o + length;
-                double u,v;
-                cam->project(pt.x(),pt.y(),pt.z(),u,v);
-                int iu = (int)u;
-                int iv = (int)v;
-                if ( iu >= 0 && iv >= 0 && iu < cam->cols() && iv < cam->rows() )
-                {
-                    vgl_point_3d<double> ro =  cam->ray(u,v).origin();
-                    double depth = (ro-pt).length();
-                    if(depth <  min_depth)
-                        min_depth = depth ;
-                } 
+                test_pts.push_back( blk_o + length );
             }
-            if (min_depth <1e10)
-                distances.push_back( boxm2_dist_id_pair(min_depth, iter->first) );
-
+    // block centroid
+    // handle (most) cases where visible block has all 8 corners outside of image bounds
+    test_pts.push_back( blk_o + vgl_vector_3d<double>(blk_dim.x()*blk_num.x()*0.5,
+                                                      blk_dim.y()*blk_num.y()*0.5,
+                                                      blk_dim.z()*blk_num.z()*0.5) );
+    
+    double min_depth = 1e10;
+    for (vcl_vector<vgl_point_3d<double> >::const_iterator pit=test_pts.begin(); pit!=test_pts.end(); ++pit) {
+      double u,v;
+      cam->project(pit->x(),pit->y(),pit->z(),u,v);
+      if ( u >= 0 && v >=0 && u < cam->cols() && v <cam->rows() )
+      {
+        vgl_point_3d<double> ro =  cam->ray(u,v).origin();
+        double depth = (ro-*pit).length();
+        if(depth <  min_depth)
+          min_depth = depth ;
+      }
+    }
+    if (min_depth <1e10) {
+      distances.push_back( boxm2_dist_id_pair(min_depth, iter->first) );
+    }
   }
 
   //sort distances
