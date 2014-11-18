@@ -45,7 +45,7 @@ void vbl_bit_array_3d::flip(unsigned int i1, unsigned int i2, unsigned int i3)
 
 void vbl_bit_array_3d::fill(bool v)
 {
-  register unsigned char temp = v ? ~(unsigned char)0 : 0;
+  unsigned char temp = v ? ~(unsigned char)0 : 0;
   vcl_memset(data_, temp, this->size());
 }
 

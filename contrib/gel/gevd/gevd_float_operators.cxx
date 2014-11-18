@@ -106,7 +106,7 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
   const int sum1 = wx*wy;
   for (int y = 0; y < yhi; y++)
     for (int x = 0; x < xhi; x++) {
-      register double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
+      double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
       for (int j = 0; j < wy; j++)
         for (int i = 0; i < wx; i++) {
           xval = floatPixel(from, x+i, y+j);
@@ -156,7 +156,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
   const int yhi = from.GetSizeY() - wy + 1;
   const int sum1 = wx*wy;
   for (int x = 0, y = yhi/2; x < xhi; ++x) {
-    register double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
+    double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
     for (int j = 0; j < wy; j++)
       for (int i = 0; i < wx; i++) {
         xval = floatPixel(from, x+i, y+j);
@@ -174,7 +174,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
     floatPixel(*to, x+rx, y+ry) = (float)cvar;
   }
   for (int x = xhi/2, y = 0; y < yhi; ++y) {
-    register double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
+    double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
     for (int j = 0; j < wy; j++)
       for (int i = 0; i < wx; i++) {
         xval = floatPixel(from, x+i, y+j);
@@ -1457,8 +1457,8 @@ float
 gevd_float_operators::BilinearInterpolate(const gevd_bufferxy& buffer,
                                           float x, float y)
 {
-  register int ix = int(x);             // integral parts
-  register int iy = int(y);
+  int ix = int(x);             // integral parts
+  int iy = int(y);
   float fx = x - ix;                    // fractional parts
   float fy = y - iy;
   float c00 = floatPixel(buffer, ix, iy); // 4 corners of rectangle
@@ -3309,8 +3309,8 @@ gevd_float_operators::Correlation(const float* data, const int length,
   if (sum1 < radius)
     return 0;
   else {
-    register double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
-    for (register int x = xmin, y = ymin; x < xmax; x++, y++) {
+    double sumx=0, sumy=0, sumxx=0, sumyy=0, sumxy=0, xval, yval;
+    for (int x = xmin, y = ymin; x < xmax; x++, y++) {
       xval = data[x]; yval = pattern[y];
       sumxy += xval * yval;             // accumulate correlation value
       sumx += xval;

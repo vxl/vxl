@@ -685,7 +685,7 @@ vsrl_manager::show_gradient_dir(vil1_memory_image_of<double> im_in)
 
   const double shift=128;
   const double scale=40; // actually: 127/pi
-  register double dx, dy;
+  double dx, dy;
   for (int x=0; x<im_out.width(); x++) {
     for (int y=0; y<im_out.height(); y++) {
       if (x==0) {

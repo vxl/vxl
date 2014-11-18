@@ -839,7 +839,7 @@ float vifa_histogram::GetCount(float pixelval) const
 
 float vifa_histogram::GetMinVal() const
 {
-  register int i=0;
+  int i=0;
   while (i<num-1 && !counts[i])
     i++;
   return vals[i];
@@ -847,7 +847,7 @@ float vifa_histogram::GetMinVal() const
 
 float vifa_histogram::GetMaxVal() const
 {
-  register int i=num-1;
+  int i=num-1;
   while (i>0 && !counts[i])
     i--;
   if (i < 0)
@@ -857,7 +857,7 @@ float vifa_histogram::GetMaxVal() const
 
 float vifa_histogram::GetMaxCount() const
 {
-  register int i;
+  int i;
   float max = 0.0f;
 
   for (i=0; i < num; i++)
@@ -951,7 +951,7 @@ float vifa_histogram::ComputeArea(float low, float high) const
         indexhigh = num-1;
     }
 
-    register int i=indexlow;
+    int i=indexlow;
     float sum = 0.0f;
     while (i <= indexhigh)
     {
@@ -1115,7 +1115,7 @@ int vifa_histogram::WritePlot(const char *fname)
   float * temp_y = this->GetCounts();
   float     delt = this->GetBucketSize();
 
-  for (register int i=0; i < stat_res ;i++)
+  for (int i=0; i < stat_res ;i++)
   {
     x[2*i] = temp_x[i] - 0.5f * delt;
     x[2*i+1] = temp_x[i] + 0.5f * delt;
@@ -1123,7 +1123,7 @@ int vifa_histogram::WritePlot(const char *fname)
     y[2*i+1] = temp_y[i];
   }
 
-  for (register int j = 0; j < 2*stat_res; j++)
+  for (int j = 0; j < 2*stat_res; j++)
     fp << x[j] << delimiter << y[j] << vcl_endl;
 
   delete [] x;

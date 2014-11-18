@@ -37,8 +37,8 @@ init(void)
 
   if (vals != NULL && counts != NULL)
   {
-    register float*  pval = vals;
-    register float*  pcount = counts;
+    float*  pval = vals;
+    float*  pcount = counts;
 
     switch (num)
     {
@@ -64,7 +64,7 @@ init(void)
         break;
     }
 
-    for (register int i = 1; i < num; ++i)
+    for (int i = 1; i < num; ++i)
     {
       float  val = *(pval++);
       *pval = val + 1;

@@ -64,7 +64,7 @@ void bsta_int_histogram_1d::set_count(unsigned int bin, long int val) // const??
 // get highest bin value in histogram; returns max value; index of max is available in imax
 unsigned long int bsta_int_histogram_1d::get_max_val(unsigned int &imax)
 {
-  register long int max = 0;
+  long int max = 0;
   for (unsigned int i=0; i<nbins_; i++)
     if ( counts_[i] > max ) {
       max = counts_[i];

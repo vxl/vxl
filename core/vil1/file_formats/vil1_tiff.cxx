@@ -583,7 +583,7 @@ bool vil1_tiff_generic_image::write_header()
      int** cm = GetColorMap();
      for (int i=0; i<3; i++)
      {
-       register int j = 0;
+       int j = 0;
        for (; j<ncolors; j++) *cmap++ = (unsigned short)SCALE(cm[i][j]);
        for (; j<mapsize; j++) *cmap++ = 0;
      }

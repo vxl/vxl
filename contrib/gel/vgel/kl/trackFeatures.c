@@ -74,9 +74,9 @@ static void _computeIntensityDifference(
   int width, int height,  /* size of window */
   _FloatWindow imgdiff)   /* output */
 {
-  register int hw = width/2, hh = height/2;
+  int hw = width/2, hh = height/2;
   float g1, g2;
-  register int i, j;
+  int i, j;
 
   /* Compute values */
   for (j = -hh ; j <= hh ; j++)
@@ -107,9 +107,9 @@ static void _computeGradientSum(
   _FloatWindow gradx,      /* output */
   _FloatWindow grady)      /*   " */
 {
-  register int hw = width/2, hh = height/2;
+  int hw = width/2, hh = height/2;
   float g1, g2;
-  register int i, j;
+  int i, j;
 
   /* Compute values */
   for (j = -hh ; j <= hh ; j++)
@@ -139,8 +139,8 @@ static void _compute2by2GradientMatrix(
   float *gyy)
 
 {
-  register float gx, gy;
-  register int i;
+  float gx, gy;
+  int i;
 
   /* Compute values */
   *gxx = 0.0;  *gxy = 0.0;  *gyy = 0.0;
@@ -168,8 +168,8 @@ static void _compute2by1ErrorVector(
   float *ex,   /* return values */
   float *ey)
 {
-  register float diff;
-  register int i;
+  float diff;
+  int i;
 
   /* Compute values */
   *ex = 0;  *ey = 0;

@@ -32,13 +32,13 @@ bsta_int_histogram_2d::~bsta_int_histogram_2d() {}
 // get total counts in entire histogram
 unsigned long int bsta_int_histogram_2d::get_area()
 {
-  register unsigned long int area = 0;
+  unsigned long int area = 0;
   for (unsigned int j=0; j<nbins_y_; j++) {
     for (unsigned int i=0; i<nbins_x_; i++) {
       area = area + counts_[j][i];
     }
   }
-    return area;
+  return area;
 }
 
 // (get_counts() and set_counts() defined as inline in .h file
@@ -46,7 +46,7 @@ unsigned long int bsta_int_histogram_2d::get_area()
 // get highest value in histogram; returns max value; index of max is available in imax
 unsigned long int bsta_int_histogram_2d::get_max_val(unsigned int &imax, unsigned int &jmax)
 {
-  register long int max = 0;
+  long int max = 0;
   for (unsigned int j=0; j<nbins_y_; j++)
   {
     for (unsigned int i=0; i<nbins_x_; i++)
@@ -59,7 +59,7 @@ unsigned long int bsta_int_histogram_2d::get_max_val(unsigned int &imax, unsigne
       }
     }
   }
-return max;
+  return max;
 }
 
 
