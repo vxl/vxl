@@ -41,20 +41,21 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
   }
   else if (cam->type_name() == "vpgl_generic_camera") {
     //set the ray images, and write to buffer
-    boxm2_ocl_util::set_generic_camera(cam, (cl_float*) ray_origins->cpu_buffer(), (cl_float*) ray_directions->cpu_buffer(), cl_ni, cl_nj);
+    boxm2_ocl_util::set_generic_camera(cam, (cl_float*) ray_origins->cpu_buffer(), (cl_float*) ray_directions->cpu_buffer(), cl_ni, cl_nj,i_min,j_min);
     ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
-    else if (cam->type_name() == "vpgl_affine_camera") {
-        vpgl_generic_camera<double> * gen_cam = new vpgl_generic_camera<double> ();
-        vpgl_camera_double_sptr gcam = gen_cam;
-        vpgl_affine_camera<double> & aff_cam = (*  (vpgl_affine_camera<double>*) cam.ptr());
-        vpgl_generic_camera_convert::convert(aff_cam,cl_ni, cl_nj, *gen_cam);
-        //set the ray images, and write to buffer
-        boxm2_ocl_util::set_generic_camera(gcam, (cl_float*) ray_origins->cpu_buffer(), (cl_float*) ray_directions->cpu_buffer(), cl_ni, cl_nj);
-	if(create_ray_o_d_buffers){
-	  ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-	  ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  else if (cam->type_name() == "vpgl_affine_camera") {
+    vpgl_generic_camera<double> * gen_cam = new vpgl_generic_camera<double> ();
+    vpgl_camera_double_sptr gcam = gen_cam;
+    vpgl_affine_camera<double> & aff_cam = (*  (vpgl_affine_camera<double>*) cam.ptr());
+    vpgl_generic_camera_convert::convert(aff_cam,cl_ni, cl_nj, *gen_cam);
+    //set the ray images, and write to buffer
+
+    boxm2_ocl_util::set_generic_camera(gcam, (cl_float*) ray_origins->cpu_buffer(), (cl_float*) ray_directions->cpu_buffer(), cl_ni, cl_nj,i_min,j_min);
+    if(create_ray_o_d_buffers) {
+      ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+      ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 	}
   }
   else {
