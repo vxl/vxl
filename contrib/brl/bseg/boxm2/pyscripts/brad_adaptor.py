@@ -11,9 +11,11 @@ def read_nitf_metadata(nitf_filename, imd_folder=""):
   boxm2_batch.init_process("bradNITFReadMetadataProcess")
   boxm2_batch.set_input_string(0, nitf_filename)  # requires full path and name
   boxm2_batch.set_input_string(1, imd_folder)  # pass empty if meta is in img folder
-  boxm2_batch.run_process()
-  (id, type) = boxm2_batch.commit_output(0)
-  meta = dbvalue(id, type)
+  status = boxm2_batch.run_process()
+  meta = None
+  if status:
+      (id, type) = boxm2_batch.commit_output(0)
+      meta = dbvalue(id, type)
   return meta
 
 # radiometrically normalize a sat image (cropped) based on its metadata
@@ -21,9 +23,11 @@ def radiometrically_calibrate(cropped_image, meta):
   boxm2_batch.init_process("bradNITFAbsRadiometricCalibrationProcess")
   boxm2_batch.set_input_from_db(0, cropped_image)
   boxm2_batch.set_input_from_db(1, meta)
-  boxm2_batch.run_process()
-  (id, type) = boxm2_batch.commit_output(0)
-  cropped_img_cal = dbvalue(id, type)
+  status = boxm2_batch.run_process()
+  cropped_img_cal = None
+  if status:
+      (id, type) = boxm2_batch.commit_output(0)
+      cropped_img_cal = dbvalue(id, type)
   return cropped_img_cal
 
 # estimate atmospheric parameters
@@ -35,9 +39,11 @@ def estimate_atmospheric_parameters(image, metadata, mean_reflectance = None, co
      boxm2_batch.set_input_float(2,mean_reflectance)
   if constrain_parameters != None:
       boxm2_batch.set_input_bool(3, constrain_parameters)
-  boxm2_batch.run_process()
-  (id,type) = boxm2_batch.commit_output(0)
-  atm_params = dbvalue(id,type)
+  status = boxm2_batch.run_process()
+  atm_params = None
+  if status:
+      (id,type) = boxm2_batch.commit_output(0)
+      atm_params = dbvalue(id,type)
   return atm_params
 
 # convert radiance values to estimated reflectances
@@ -46,9 +52,11 @@ def estimate_reflectance(image, metadata, atmospheric_params):
   boxm2_batch.set_input_from_db(0,image)
   boxm2_batch.set_input_from_db(1,metadata)
   boxm2_batch.set_input_from_db(2,atmospheric_params)
-  boxm2_batch.run_process()
-  (id,type) = boxm2_batch.commit_output(0)
-  reflectance_img = dbvalue(id,type)
+  status = boxm2_batch.run_process()
+  reflectance_img = None
+  if status:
+      (id,type) = boxm2_batch.commit_output(0)
+      reflectance_img = dbvalue(id,type)
   return reflectance_img
 
 # convert reflectance image back to digital count
@@ -68,11 +76,13 @@ def find_sun_dir_bin(metadata, output_file):
   boxm2_batch.init_process("bradSunDirBinProcess");
   boxm2_batch.set_input_from_db(0,metadata)
   boxm2_batch.set_input_string(1,output_file);
-  boxm2_batch.run_process();
-  (bin_id,bin_type)=boxm2_batch.commit_output(0);
-  bin = boxm2_batch.get_output_int(bin_id);
-  (angle_id,angle_type)=boxm2_batch.commit_output(1);
-  angle = boxm2_batch.get_output_float(angle_id);
+  status = boxm2_batch.run_process();
+  bin, angle = None, None
+  if status:
+      (bin_id,bin_type)=boxm2_batch.commit_output(0);
+      bin = boxm2_batch.get_output_int(bin_id);
+      (angle_id,angle_type)=boxm2_batch.commit_output(1);
+      angle = boxm2_batch.get_output_float(angle_id);
   return bin, angle
 
 # save atmospheric parameters

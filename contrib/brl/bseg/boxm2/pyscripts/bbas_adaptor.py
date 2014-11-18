@@ -112,7 +112,8 @@ def save_sun_index(output_file_name, longitude, latitude, year, hour, minute, ra
   boxm2_batch.set_input_int(4,hour);
   boxm2_batch.set_input_int(5,minute);
   boxm2_batch.set_input_int(6,radius);
-  boxm2_batch.run_process();
+  status = boxm2_batch.run_process();
+  return status
   
 def sun_dir_bin(meta,illum_bin_filename):
   boxm2_batch.init_process("bradSunDirBinProcess");

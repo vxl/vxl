@@ -108,8 +108,10 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   bb2->add_point(roi_box->min_x(), roi_box->min_y());
   bb2->add_point(roi_box->max_x(), roi_box->max_y());
   bb2 = broi.clip_to_image_bounds(bb2);
-  if (bb2->width() <= 0 || bb2->height() <= 0) 
+  if (bb2->width() <= 0 || bb2->height() <= 0) {
+    vcl_cerr << "boxm2_roi_init_process::execute - cannot clip roi to image boundaries\n";
     return false;
+  }
 
   
   roi_box->set_width(roi_box->width()+2*margin);
@@ -119,8 +121,10 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   bb->add_point(roi_box->min_x(), roi_box->min_y());
   bb->add_point(roi_box->max_x(), roi_box->max_y());
   bb = broi.clip_to_image_bounds(bb);
-  if (bb->width() <= 0 || bb->height() <= 0) 
+  if (bb->width() <= 0 || bb->height() <= 0) {
+    vcl_cerr << "boxm2_roi_init_process::execute - cannot clip padded roi to image boundaries\n";
     return false;
+  }
   //: use the margin
   double maxwidth = bb->width();
   double maxheight = bb->height();
@@ -136,7 +140,7 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
                         (unsigned int)bb->get_min_y(),
                         (unsigned int)maxheight);
   if (!roi) {
-    vcl_cerr << "boxm2_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
+    vcl_cerr << "boxm2_roi_init_process::roi_init() - cannot load pixel data\n";
     return false;
   }
 

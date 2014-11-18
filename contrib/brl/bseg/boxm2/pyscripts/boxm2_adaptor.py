@@ -1430,13 +1430,15 @@ def render_shadow_map(scene,device, ocl_cache, camera, ni, nj, prefix_name=''):
 def scene_illumination_info(scene):
     boxm2_batch.init_process("boxm2SceneIlluminationInfoProcess");
     boxm2_batch.set_input_from_db(0, scene);
-    boxm2_batch.run_process();
-    (lon_id,lon_type)=boxm2_batch.commit_output(0);
-    longitude = boxm2_batch.get_output_float(lon_id)
-    (lat_id,lat_type)=boxm2_batch.commit_output(1);
-    latitude = boxm2_batch.get_output_float(lat_id)
-    (nb_id,nb_type)=boxm2_batch.commit_output(2);
-    nbins = boxm2_batch.get_output_int(nb_id);
+    status = boxm2_batch.run_process();
+    longitude, latitude, nbins = None, None, None
+    if status:
+        (lon_id,lon_type)=boxm2_batch.commit_output(0);
+        longitude = boxm2_batch.get_output_float(lon_id)
+        (lat_id,lat_type)=boxm2_batch.commit_output(1);
+        latitude = boxm2_batch.get_output_float(lat_id)
+        (nb_id,nb_type)=boxm2_batch.commit_output(2);
+        nbins = boxm2_batch.get_output_int(nb_id);
     return longitude, latitude, nbins
 
 # create stream cache

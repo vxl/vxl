@@ -225,9 +225,11 @@ def persp2gen(pcam, ni, nj, level=0) :
   boxm2_batch.set_input_unsigned(1, ni);
   boxm2_batch.set_input_unsigned(2, nj);
   boxm2_batch.set_input_unsigned(3, level);
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  gcam = dbvalue(id,type);
+  status = boxm2_batch.run_process();
+  gcam = None
+  if status:
+      (id,type) = boxm2_batch.commit_output(0);
+      gcam = dbvalue(id,type);
   return gcam;
 
 def persp2genWmargin(pcam, ni, nj, margin, level=0) :
@@ -354,9 +356,11 @@ def convert_to_generic_camera(cam_in, ni, nj, level=0):
     boxm2_batch.set_input_unsigned(1,ni);
     boxm2_batch.set_input_unsigned(2,nj);
     boxm2_batch.set_input_unsigned(3,level);
-    boxm2_batch.run_process();
-    (id,type) = boxm2_batch.commit_output(0);
-    generic_cam = dbvalue(id,type);
+    status = boxm2_batch.run_process();
+    generic_cam = None
+    if status:
+        (id,type) = boxm2_batch.commit_output(0);
+        generic_cam = dbvalue(id,type);
     return generic_cam;
 
 # create a generic camera from a local rational with user-specified z range;
