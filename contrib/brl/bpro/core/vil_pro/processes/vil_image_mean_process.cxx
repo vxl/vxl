@@ -38,7 +38,7 @@ bool vil_image_mean_process(bprb_func_process& pro)
   // for now assume input is a float image
   vil_image_view<float> view_a = *(vil_convert_cast(float(), img_ptr_a));
 
-  float mean= 0.0f;
+  double mean= 0.0;
   vil_math_mean(mean, view_a, 0);
   pro.set_output_val<float>(0, mean);
 
