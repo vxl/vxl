@@ -57,7 +57,7 @@ IF(EXPAT_FOUND)
 
     ADD_LIBRARY(volm  ${volm_sources})
 
-    TARGET_LINK_LIBRARIES(volm vsph bpgl vgl vgl_algo vgl_io vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul bvrml depth_map )
+    TARGET_LINK_LIBRARIES(volm vsph bpgl vgl vgl_algo vgl_io vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul bvrml depth_map brad)
     TARGET_LINK_LIBRARIES(volm ${EXPAT_LIBRARIES})
     IF(APPLE)
       TARGET_LINK_LIBRARIES(volm expat)
