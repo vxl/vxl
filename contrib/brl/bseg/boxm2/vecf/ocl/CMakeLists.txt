@@ -13,6 +13,7 @@ SET(boxm2_vecf_ocl_sources
     boxm2_vecf_ocl_transform_minimizer.h              boxm2_vecf_ocl_transform_minimizer.cxx
     boxm2_vecf_ocl_store_nbrs.h                       boxm2_vecf_ocl_store_nbrs.cxx
     boxm2_vecf_ocl_filter.h                           boxm2_vecf_ocl_filter.cxx
+    boxm2_vecf_ocl_transform_scene_sptr.h
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_ocl_sources)
