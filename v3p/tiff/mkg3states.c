@@ -1,3 +1,5 @@
+/* "$Id: mkg3states.c,v 1.11 2010-03-10 18:56:48 bfriesen Exp $ */
+
 /*
  * Copyright (c) 1991-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -39,7 +41,11 @@
 
 #include "tif_fax3.h"
 
-#define	streq(a,b)	(strcmp(a,b) == 0)
+#ifndef HAVE_GETOPT
+extern int getopt(int, char**, char*);
+#endif
+
+#define streq(a,b)  (strcmp(a,b) == 0)
 
 /* NB: can't use names in tif_fax3.h 'cuz they are declared const */
 TIFFFaxTabEnt MainTable[128];
@@ -47,8 +53,8 @@ TIFFFaxTabEnt WhiteTable[4096];
 TIFFFaxTabEnt BlackTable[8192];
 
 struct proto {
-    uint16 code;		/* right justified, lsb-first, zero filled */
-    uint16 val;		/* (pixel count)<<4 + code width  */
+    uint16 code;    /* right justified, lsb-first, zero filled */
+    uint16 val;   /* (pixel count)<<4 + code width  */
 };
 
 static struct proto Pass[] = {
@@ -316,25 +322,25 @@ FillTable(TIFFFaxTabEnt *T, int Size, struct proto *P, int State)
     int limit = 1 << Size;
 
     while (P->val) {
-	int width = P->val & 15;
-	int param = P->val >> 4;
-	int incr = 1 << width;
-	int code;
-	for (code = P->code; code < limit; code += incr) {
-	    TIFFFaxTabEnt *E = T+code;
-	    E->State = State;
-	    E->Width = width;
-	    E->Param = param;
-	}
-	P++;
+  int width = P->val & 15;
+  int param = P->val >> 4;
+  int incr = 1 << width;
+  int code;
+  for (code = P->code; code < limit; code += incr) {
+      TIFFFaxTabEnt *E = T+code;
+      E->State = State;
+      E->Width = width;
+      E->Param = param;
+  }
+  P++;
     }
 }
 
-static	char* storage_class = "";
-static	char* const_class = "";
-static	int packoutput = 1;
-static	char* prebrace = "";
-static	char* postbrace = "";
+static  char* storage_class = "";
+static  char* const_class = "";
+static  int packoutput = 1;
+static  char* prebrace = "";
+static  char* postbrace = "";
 
 void
 WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
@@ -343,29 +349,29 @@ WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
     char* sep;
 
     fprintf(fd, "%s %s TIFFFaxTabEnt %s[%d] = {",
-	storage_class, const_class, name, Size);
+  storage_class, const_class, name, Size);
     if (packoutput) {
-	sep = "\n";
-	for (i = 0; i < Size; i++) {
-	    fprintf(fd, "%s%s%d,%d,%d%s",
-		sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
-	    if (((i+1) % 10) == 0)
-		    sep = ",\n";
-	    else
-		    sep = ",";
-	    T++;
-	}
+  sep = "\n";
+  for (i = 0; i < Size; i++) {
+      fprintf(fd, "%s%s%d,%d,%d%s",
+    sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
+      if (((i+1) % 10) == 0)
+        sep = ",\n";
+      else
+        sep = ",";
+      T++;
+  }
     } else {
-	sep = "\n ";
-	for (i = 0; i < Size; i++) {
-	    fprintf(fd, "%s%s%3d,%3d,%4d%s",
-		sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
-	    if (((i+1) % 6) == 0)
-		    sep = ",\n ";
-	    else
-		    sep = ",";
-	    T++;
-	}
+  sep = "\n ";
+  for (i = 0; i < Size; i++) {
+      fprintf(fd, "%s%s%3d,%3d,%4d%s",
+    sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
+      if (((i+1) % 6) == 0)
+        sep = ",\n ";
+      else
+        sep = ",";
+      T++;
+  }
     }
     fprintf(fd, "\n};\n");
 }
@@ -381,32 +387,32 @@ main(int argc, char* argv[])
     extern char* optarg;
 
     while ((c = getopt(argc, argv, "c:s:bp")) != -1)
-	switch (c) {
-	case 'c':
-	    const_class = optarg;
-	    break;
-	case 's':
-	    storage_class = optarg;
-	    break;
-	case 'p':
-	    packoutput = 0;
-	    break;
-	case 'b':
-	    prebrace = "{";
-	    postbrace = "}";
-	    break;
-	case '?':
-	    fprintf(stderr,
-		"usage: %s [-c const] [-s storage] [-p] [-b] file\n",
-		argv[0]);
-	    return (-1);
-	}
+  switch (c) {
+  case 'c':
+      const_class = optarg;
+      break;
+  case 's':
+      storage_class = optarg;
+      break;
+  case 'p':
+      packoutput = 0;
+      break;
+  case 'b':
+      prebrace = "{";
+      postbrace = "}";
+      break;
+  case '?':
+      fprintf(stderr,
+    "usage: %s [-c const] [-s storage] [-p] [-b] file\n",
+    argv[0]);
+      return (-1);
+  }
     outputfile = optind < argc ? argv[optind] : "g3states.h";
     fd = fopen(outputfile, "w");
     if (fd == NULL) {
-	fprintf(stderr, "%s: %s: Cannot create output file.\n",
-	    argv[0], outputfile);
-	return (-2);
+  fprintf(stderr, "%s: %s: Cannot create output file.\n",
+      argv[0], outputfile);
+  return (-2);
     }
     FillTable(MainTable, 7, Pass, S_Pass);
     FillTable(MainTable, 7, Horiz, S_Horiz);
@@ -436,3 +442,10 @@ main(int argc, char* argv[])
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

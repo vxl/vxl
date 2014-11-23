@@ -34,9 +34,9 @@
 #endif
 
 #ifdef VAXC
-#define	NOSHARE	noshare
+#define NOSHARE noshare
 #else
-#define	NOSHARE
+#define NOSHARE
 #endif
 
 #ifdef __alpha
@@ -336,13 +336,13 @@ asm("_$$PsectAttributes_NOSHR$$_TIFFerrorHandler")
 #if !HAVE_IEEEFP
 /* IEEE floting point handling */
 
-typedef	struct ieeedouble {
+typedef struct ieeedouble {
         u_long        mant2;                        /* fix NDR: full 8-byte swap */
         u_long        mant        : 20,
                 exp        : 11,
                 sign        : 1;
 } ieeedouble;
-typedef	struct ieeefloat {
+typedef struct ieeefloat {
         u_long        mant        : 23,
                 exp        : 8,
                 sign        : 1;
@@ -353,7 +353,7 @@ typedef	struct ieeefloat {
  *  simply a reverse-IEEE float/double.
  */
 
-typedef	struct {
+typedef struct {
         u_long        mant1        : 7,
                 exp        : 8,
                 sign        : 1,
@@ -361,14 +361,14 @@ typedef	struct {
                 mant3   : 16,
                 mant4   : 16;
 } nativedouble;
-typedef	struct {
+typedef struct {
         u_long        mant1        : 7,
                 exp        : 8,
                 sign        : 1,
                 mant2        : 16;
 } nativefloat;
 
-typedef	union {
+typedef union {
         ieeedouble        ieee;
         nativedouble        native;
         char                b[8];
@@ -376,7 +376,7 @@ typedef	union {
         double                d;
 } double_t;
 
-typedef	union {
+typedef union {
         ieeefloat        ieee;
         nativefloat        native;
         char                b[4];
@@ -397,11 +397,11 @@ typedef	union {
  * LSB first.)
  *
  * First longword:
- *	32 least significant bits of mantissa
+ *  32 least significant bits of mantissa
  * Second longword:
- *	0-19:	20 most significant bits of mantissa
- *	20-30:	exponent
- *	31:	sign
+ *  0-19: 20 most significant bits of mantissa
+ *  20-30:  exponent
+ *  31: sign
  * The exponent is stored as excess 1023.
  * The most significant bit of the mantissa is implied 1, and not stored.
  * If the exponent and mantissa are zero, the number is zero.
@@ -512,7 +512,7 @@ dtoieee(double *dp)
  * Beware, these do not handle over/under-flow
  * during conversion from ieee to native format.
  */
-#define	NATIVE2IEEEFLOAT(fp) { \
+#define NATIVE2IEEEFLOAT(fp) { \
     float_t t; \
     if (t.ieee.exp = (fp)->native.exp) \
         t.ieee.exp += -129 + 127; \
@@ -520,10 +520,10 @@ dtoieee(double *dp)
     t.ieee.mant = ((fp)->native.mant1<<16)|(fp)->native.mant2; \
     *(fp) = t; \
 }
-#define	IEEEFLOAT2NATIVE(fp) { \
+#define IEEEFLOAT2NATIVE(fp) { \
     float_t t; int v = (fp)->ieee.exp; \
-    if (v) v += -127 + 129;		/* alter bias of exponent */\
-    t.native.exp = v;			/* implicit truncation of exponent */\
+    if (v) v += -127 + 129;   /* alter bias of exponent */\
+    t.native.exp = v;     /* implicit truncation of exponent */\
     t.native.sign = (fp)->ieee.sign; \
     v = (fp)->ieee.mant; \
     t.native.mant1 = v >> 16; \
