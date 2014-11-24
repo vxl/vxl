@@ -43,19 +43,14 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
     *errstream << "there is a problem with norm transform\n";
   }
 
-  // normalize the points
-  for (unsigned i=0; i<points_.size(); i++) {
-    vgl_homg_point_3d<T> p = points_[i];
-    points_[i] = norm(p);
-  }
-
   // compute the matrix A of Ax=b
   T A=0, B=0, C=0, D=0, E=0, F=0, G=0, H=0, I=0;
-  unsigned n = points_.size();
+  const unsigned n = points_.size();
   for (unsigned i=0; i<n; i++) {
-    T x = points_[i].x()/points_[i].w();
-    T y = points_[i].y()/points_[i].w();
-    T z = points_[i].z()/points_[i].w();
+    points_[i] = norm(points_[i]);//normalize
+    const T x = points_[i].x()/points_[i].w();
+    const T y = points_[i].y()/points_[i].w();
+    const T z = points_[i].z()/points_[i].w();
     A += x;
     B += y;
     C += z;
@@ -67,7 +62,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
     I += x*z;
   }
 
-  vnl_matrix<T> coeff_matrix(4, 4);
+  vnl_matrix<T> coeff_matrix(4,4);
   coeff_matrix(0, 0) = D;
   coeff_matrix(0, 1) = G;
   coeff_matrix(0, 2) = I;
@@ -100,8 +95,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
   vnl_vector<T> s = svd.nullvector();
 
   // re-transform the points back to the real world
-  vnl_matrix_fixed<T,4,4> N=norm.get_matrix();
-  vnl_matrix_fixed<T,4,4> N_transp = N.transpose();
+  vnl_matrix_fixed<T,4,4> N_transp=norm.get_matrix().transpose();
   s = N_transp * s;
 
   T a, b, c, d;
