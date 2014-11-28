@@ -176,31 +176,37 @@ refine_projection(int nearest_c, int nearest_r, vgl_point_3d<T> const& p,
   //find intersections of neighboring rays with the plane
   //need at least two neighbors
   img_pts.push_back(vgl_point_2d<T>(0.0, 0.0));
-  if (nearest_r>0) {
+  bool horiz = false;
+  bool vert = false;
+  if (nearest_r>0 && !horiz) {
     vgl_ray_3d<T> r = rays_[0][nearest_r-1][nearest_c];
     valid_inter = vgl_intersection(r, pl, ipt);
     inter_pts.push_back(ipt);
     img_pts.push_back(vgl_point_2d<T>(0.0, -1.0));
+    horiz = true;
   }
-  if (nearest_c>0) {
+  if (nearest_c>0 && !vert) {
     vgl_ray_3d<T> r = rays_[0][nearest_r][nearest_c-1];
     valid_inter = vgl_intersection(r, pl, ipt);
     inter_pts.push_back(ipt);
     img_pts.push_back(vgl_point_2d<T>(-1.0, 0.0));
+    vert = true;
   }
   int nrght = static_cast<int>(cols())-1;
-  if (nearest_c<nrght) {
+  if (nearest_c<nrght && !vert) {
     vgl_ray_3d<T> r = rays_[0][nearest_r][nearest_c+1];
     valid_inter = vgl_intersection(r, pl, ipt);
     inter_pts.push_back(ipt);
     img_pts.push_back(vgl_point_2d<T>(1.0, 0.0));
+        vert = true;
   }
   int nbl = static_cast<int>(rows())-1;
-  if (nearest_r<nbl) {
+  if (nearest_r<nbl && !horiz) {
     vgl_ray_3d<T> r = rays_[0][nearest_r+1][nearest_c];
     valid_inter = vgl_intersection(r, pl, ipt);
     inter_pts.push_back(ipt);
     img_pts.push_back(vgl_point_2d<T>(0.0, 1.0));
+    horiz = true;
   }
   //less than two neighbors, shouldn't happen!
   if (!valid_inter||inter_pts.size()<3) {
