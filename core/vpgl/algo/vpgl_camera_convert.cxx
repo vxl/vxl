@@ -849,11 +849,8 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
     nr[i]=dj;
     nc[i]=di;
     scl[i]=2.0*scl[i-1];
-    // removed +1 because (rarely) the footprint of a level in the image pyramid would
-    // cover a region beyond the valid region of the RPC, causing the ray to fail to
-    // backproject with sufficient accuracy
-    di = (di+1)/2;
-    dj = (dj+1)/2;
+    di = (di+1)/2+1;
+    dj = (dj+1)/2+1;
   }
   // convert the ray interpolation tolerances
   double org_tol = 0.0;
