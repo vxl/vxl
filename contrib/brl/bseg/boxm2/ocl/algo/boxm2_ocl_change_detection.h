@@ -92,6 +92,7 @@ class boxm2_ocl_aux_pass_change
                                 boxm2_opencl_cache_sptr   opencl_cache,
                                 vpgl_camera_double_sptr   cam,
                                 vil_image_view_base_sptr  img,
+                                vcl_string identifier= "",
                                 bool max_density=false,float nearfactor = 100000.0f, float farfactor= 0.000001f);
 
   private:

@@ -1145,6 +1145,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
                                               boxm2_opencl_cache_sptr   opencl_cache,
                                               vpgl_camera_double_sptr   cam,
                                               vil_image_view_base_sptr  img,
+                                              vcl_string identifier,
                                               bool max_density,
                                               float nearfactor, 
                                               float farfactor )
@@ -1162,6 +1163,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     vcl_string data_type,num_obs_type,options;
     int apptypesize;
     get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize);
+    data_type = data_type + "_"+identifier ;
     //grab kernel
     vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options,max_density);
 
@@ -1250,8 +1252,12 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
      bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
      tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     //----- STEP ONE: per cell mean obs pass ---------
-    //For each ID in the visibility order, grab that block
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_perspective_camera<double>*) cam.ptr() );
+
+     vcl_vector<boxm2_block_id> vis_order;
+     if(cam->type_name() == "vpgl_perspective_camera")
+         vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),img_view->ni(),img_view->nj());
+     else
+         vis_order= scene->get_vis_blocks(cam);
     vcl_vector<boxm2_block_id>::iterator id;
     vcl_cout<<"  STEP ONE"<<vcl_endl;
     bocl_kernel* kern =  kerns[0];
@@ -1409,7 +1415,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         for (unsigned r=0;r<ni;r++)
          {
              
-             change_img(r,c) = change_image_buff[c*cl_ni+r] ; //1/(1+change_image_buff[c*cl_ni+r]+vis_buff[c*cl_ni+r]);
+             change_img(r,c) = 1/(1+change_image_buff[c*cl_ni+r]);
              vis_img(r,c) = vis_buff[c*cl_ni+r];
 
         }

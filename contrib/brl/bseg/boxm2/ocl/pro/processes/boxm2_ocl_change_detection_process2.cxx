@@ -30,7 +30,7 @@
 
 namespace boxm2_ocl_change_detection_process2_globals
 {
-  const unsigned n_inputs_     = 8;
+  const unsigned n_inputs_     = 9;
   const unsigned n_outputs_    = 2;
 }
 
@@ -45,21 +45,24 @@ bool boxm2_ocl_change_detection_process2_cons(bprb_func_process& pro)
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
-  input_types_[5] = "bool";   // is max mode on ?
-  input_types_[6] = "float";                        // near factor ( # of pixels should map to the finest voxel )
-  input_types_[7] = "float";                        // far factor (  # of pixels should map to the finest voxel )
+   input_types_[5] = "vcl_string";
+  input_types_[6] = "bool";   // is max mode on ?
+  input_types_[7] = "float";                        // near factor ( # of pixels should map to the finest voxel )
+  input_types_[8] = "float";                        // far factor (  # of pixels should map to the finest voxel )
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
   output_types_[1] = "vil_image_view_base_sptr";  // vis image
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  brdb_value_sptr identifier        = new brdb_value_t<vcl_string>("");
+  pro.set_input(5, identifier);
   brdb_value_sptr idx        = new brdb_value_t<bool>(false);
-  pro.set_input(5, idx);
+  pro.set_input(6, idx);
   brdb_value_sptr tnearfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
   brdb_value_sptr tfarfactor   = new brdb_value_t<float>(0.0001f);  //by default update alpha
 
-  pro.set_input(6, tnearfactor);
-  pro.set_input(7, tfarfactor);  
+  pro.set_input(7, tnearfactor);
+  pro.set_input(8, tfarfactor);  
   return good;
 }
 
@@ -78,6 +81,7 @@ bool boxm2_ocl_change_detection_process2(bprb_func_process& pro)
   boxm2_opencl_cache_sptr   opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr   cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr  img           = pro.get_input<vil_image_view_base_sptr>(i++);
+  vcl_string identifier = pro.get_input<vcl_string>(i++);
    bool  max_density           = pro.get_input<bool>(i++);
   float                    nearfactor   = pro.get_input<float>(i++);
   float                    farfactor    = pro.get_input<float>(i++);
@@ -99,7 +103,7 @@ bool boxm2_ocl_change_detection_process2(bprb_func_process& pro)
                                               scene,
                                               opencl_cache,
                                               cam,
-                                              img,
+                                              img, identifier,
                                               max_density, nearfactor,  farfactor );
   vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
   // set outputs
