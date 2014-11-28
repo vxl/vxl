@@ -792,7 +792,7 @@ def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, 
   else :
     print "ERROR: Cache type not recognized: ", cache.type;
 
-def change_detect2(scene, cache, cam, img, maxmode = False,tnear = 100000, tfar = 0.00001,  device=None) :
+def change_detect2(scene, cache, cam, img,identifier="", maxmode = False,tnear = 100000, tfar = 0.00001,  device=None) :
     print "boxm2_batch GPU change detection";
     boxm2_batch.init_process("boxm2OclChangeDetectionProcess2");
     boxm2_batch.set_input_from_db(0,device);
@@ -800,9 +800,10 @@ def change_detect2(scene, cache, cam, img, maxmode = False,tnear = 100000, tfar 
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_from_db(3,cam);
     boxm2_batch.set_input_from_db(4,img);
-    boxm2_batch.set_input_bool(5,maxmode);
-    boxm2_batch.set_input_float(6,tnear);
-    boxm2_batch.set_input_float(7,tfar);
+    boxm2_batch.set_input_string(5,identifier);
+    boxm2_batch.set_input_bool(6,maxmode);
+    boxm2_batch.set_input_float(7,tnear);
+    boxm2_batch.set_input_float(8,tfar);
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     cd_img = dbvalue(id,type);

@@ -373,7 +373,7 @@ class boxm2_scene_adaptor(object):
     return cd_img;
 
   # detect change wrapper,
-  def change_detect2(self, cam, img, max_mode=False,tnear = 100000, tfar = 0.00001, device_string="") :
+  def change_detect2(self, cam, img,identifier="", max_mode=False,tnear = 10000000, tfar = 0.00001, device_string="") :
     cache = self.active_cache;
     dev = self.device;
     if device_string=="gpu" :
@@ -381,7 +381,7 @@ class boxm2_scene_adaptor(object):
     elif device_string=="cpp" :
       cache = self.cpu_cache;
       dev = None;
-    cd_img,vis_img = change_detect2(self.scene,cache,cam,img,max_mode,tnear,tfar,dev);
+    cd_img,vis_img = change_detect2(self.scene,cache,cam,img,identifier,max_mode,tnear,tfar,dev);
     return cd_img,vis_img;
 
   def refine(self, thresh=0.3, device_string="") :
