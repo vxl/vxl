@@ -97,7 +97,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
     }
 }
 vcl_list<boxm2_block_vis_graph_node_sptr>::iterator 
-    boxm2_block_vis_graph::find(boxm2_block_id & id, vcl_list<boxm2_block_vis_graph_node_sptr> & list_nodes )
+    boxm2_block_vis_graph::find(const boxm2_block_id & id, vcl_list<boxm2_block_vis_graph_node_sptr> & list_nodes )
 {
     vcl_list<boxm2_block_vis_graph_node_sptr>::iterator iter = list_nodes.begin();
     for (; iter!= list_nodes.end(); iter++)
