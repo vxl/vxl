@@ -248,7 +248,8 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     ocl_cache->unref_mem(ray_os[i].ptr());
     ocl_cache->unref_mem(ray_ds[i].ptr());
 
-    delete[] max_omegas[i]->cpu_buffer();
+    float* max_omega_buff_float = (float*) max_omegas[i]->cpu_buffer();
+    delete[] max_omega_buff_float;
     ocl_cache->unref_mem( max_omegas[i].ptr());
 
     //clear output
