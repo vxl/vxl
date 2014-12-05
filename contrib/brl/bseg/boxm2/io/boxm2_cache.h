@@ -71,7 +71,6 @@ class boxm2_cache: public vbl_ref_count
   // -- generic method: does not do anything; see specialisations
   virtual void disable_write() {}
 
-
   virtual bool add_scene(boxm2_scene_sptr & scene) = 0;
 
   virtual bool remove_scene(boxm2_scene_sptr & scene) = 0;
@@ -79,12 +78,13 @@ class boxm2_cache: public vbl_ref_count
   // Caution: make sure to call write to disk methods not to loose writable data
   virtual void clear_cache() = 0;
   
-  vcl_vector<boxm2_scene_sptr> get_scenes(){return scenes_;}
+  virtual vcl_vector<boxm2_scene_sptr> get_scenes() = 0;
 
  protected:
 
   //: hidden constructor
-  boxm2_cache(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs=LOCAL) : scenes_(1,scene), filesystem_(fs) {}
+  //boxm2_cache(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs=LOCAL) : scenes_(1,scene), filesystem_(fs) {}
+  boxm2_cache(BOXM2_IO_FS_TYPE fs=LOCAL) : filesystem_(fs) {}
 
   //: hidden destructor (protected so it cannot be called -- forces the class to be singleton)
   virtual ~boxm2_cache() {}
@@ -93,7 +93,7 @@ class boxm2_cache: public vbl_ref_count
   static boxm2_cache_sptr instance_;
 
   //: boxm2_scene needs to be around to initialized uninitialized blocks
-  vcl_vector<boxm2_scene_sptr> scenes_;
+  //vcl_vector<boxm2_scene_sptr> scenes_;
 
   //: boxm2_asio_manager handles asio requests
   boxm2_asio_mgr io_mgr_;

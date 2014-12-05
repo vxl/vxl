@@ -60,19 +60,23 @@ class boxm2_lru_cache : public boxm2_cache
     //: delete all the memory, caution: make sure to call write to disc methods not to loose writable data
     virtual void clear_cache();
 
+    //: return the list of scenes with any data in the cache
+    virtual vcl_vector<boxm2_scene_sptr> get_scenes(); 
+
   private:
 
     //: hidden constructor (private so it cannot be called -- forces the class to be singleton)
     boxm2_lru_cache(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE=LOCAL);
 
     //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
-    ~boxm2_lru_cache();
+    virtual ~boxm2_lru_cache();
 
     //: keep a map of boxm2_block pointers (size will be limited to 9 blocks
     vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 > cached_blocks_;
 
     //: keeps one copy of each type of cached data
     vcl_map< boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >,ltstr1 > cached_data_;
+
 
     // ---------Helper Methods --------------------------------------------------
 

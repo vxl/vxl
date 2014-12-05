@@ -3,6 +3,7 @@
 // \file
 #include <boxm2/boxm2_block_metadata.h>
 #include <vcl_sstream.h>
+#include <vcl_set.h>
 
 //: PUBLIC create method, for creating singleton instance of boxm2_cache
 void boxm2_lru_cache::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)
@@ -17,9 +18,30 @@ void boxm2_lru_cache::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)
 }
 
 //: constructor, set the directory path
-boxm2_lru_cache::boxm2_lru_cache(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type) : boxm2_cache(scene,fs_type)
+boxm2_lru_cache::boxm2_lru_cache(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type) : boxm2_cache(fs_type)
 {
+  cached_blocks_[scene] = vcl_map<boxm2_block_id, boxm2_block*>();
+  cached_data_[scene] = vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >();
 }
+
+
+//: return list of scenes with data in the cache
+vcl_vector<boxm2_scene_sptr> boxm2_lru_cache::get_scenes()
+{
+  vcl_set<boxm2_scene_sptr > scenes;
+  for (vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 >::const_iterator it=cached_blocks_.begin();
+       it != cached_blocks_.end(); ++it) {
+    scenes.insert(it->first);
+  }
+  // in case the cache has data, but not the block
+  for (vcl_map< boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >,ltstr1 >::const_iterator it=cached_data_.begin();
+       it != cached_data_.end(); ++it) {
+    scenes.insert(it->first);
+  }
+  return vcl_vector<boxm2_scene_sptr>(scenes.begin(), scenes.end());
+}
+
+
 
 //: destructor flushes the memory for currently ongoing asynchronous requests
 boxm2_lru_cache::~boxm2_lru_cache()
@@ -374,7 +396,6 @@ bool boxm2_lru_cache::add_scene(boxm2_scene_sptr & scene)
     {
         cached_blocks_[scene] = vcl_map<boxm2_block_id, boxm2_block*>();
         cached_data_[scene]   =   vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >();
-        scenes_.push_back(scene);
         return true;
     }
     else
