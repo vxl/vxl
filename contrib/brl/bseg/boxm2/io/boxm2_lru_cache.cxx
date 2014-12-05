@@ -405,13 +405,13 @@ bool boxm2_lru_cache::add_scene(boxm2_scene_sptr & scene)
     }
 }
 
-//: add an existing scene to the cache
+//: remove a scene from the cache
 bool boxm2_lru_cache::remove_scene(boxm2_scene_sptr & scene)
 {
-    
-    //scenes_.erase(vcl_find(scene));
-    return false;
+  // not allowed / implemented; return false
+  return false;
 }
+
 //: shows elements in cache
 vcl_ostream& operator<<(vcl_ostream &s, boxm2_lru_cache& scene)
 {
