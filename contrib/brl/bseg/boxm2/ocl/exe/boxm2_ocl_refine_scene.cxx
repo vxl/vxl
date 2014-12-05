@@ -8,7 +8,6 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <bocl/bocl_manager.h>
 #include <bocl/bocl_cl.h>
 
 int main(int argc,  char** argv)
@@ -26,13 +25,13 @@ int main(int argc,  char** argv)
 
   //create cache, grab singleton instance
   boxm2_lru_cache::create(scene);
-  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device); 
+  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
 
   //refine scene...
   boxm2_ocl_refine::refine_scene( device, scene, opencl_cache, thresh() );
 
   //write scene
-  boxm2_lru_cache::instance()->write_to_disk(); 
+  boxm2_lru_cache::instance()->write_to_disk();
 
   return 0;
 }

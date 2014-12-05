@@ -28,7 +28,6 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <bocl/bocl_manager.h>
 
 #include <bpro/core/vil_pro/vil_register.h>
 //brdb stuff

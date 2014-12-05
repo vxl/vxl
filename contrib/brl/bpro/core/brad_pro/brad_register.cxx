@@ -33,7 +33,6 @@ void brad_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_classify_image_pixel_process, "bradClassifyImagePixelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_phongs_model_process, "bradEstimatePhongsModelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_shadow_model_process, "bradEstimateShadowModelProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_classify_image_pixel_process, "bradClassifyImagePixelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_eigenimage_pixel_process, "bradEigenimagePixelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_synoptic_function_1d_process, "bradEstimateSynopticFunction1dProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_empty_process, "bradEstimateEmptyProcess");
