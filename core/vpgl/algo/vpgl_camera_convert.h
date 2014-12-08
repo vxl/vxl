@@ -83,7 +83,9 @@ class vpgl_generic_camera_convert
                        int ni, int nj,
                        vpgl_generic_camera<double> & gen_cam,
                        double local_z_min, double local_z_max, unsigned level = 0);
-
+  static bool convert_bruteforce( vpgl_local_rational_camera<double> const& rat_cam,
+                                 int gni, int gnj, vpgl_generic_camera<double> & gen_cam,
+                                 double local_z_min, double local_z_max, unsigned level);
   //: Convert a proj_camera to a generic camera
   static bool convert( vpgl_proj_camera<double> const& prj_cam,
                        int ni, int nj,
@@ -136,6 +138,12 @@ class vpgl_generic_camera_convert
   static vgl_ray_3d<double> interp_pair(vgl_ray_3d<double> const& r0,
                                         vgl_ray_3d<double> const& r1,
                                         double n_grid);
+  static bool pyramid_est(vpgl_local_rational_camera<double> const& rat_cam,
+                                              int ni, int nj,int offseti, int offsetj,
+                                               double local_z_min, double local_z_max,
+                                              int n_levels,vcl_vector<int> nr, vcl_vector<int> nc,
+                                              vcl_vector<unsigned int> scl,vcl_vector<vbl_array_2d<vgl_ray_3d<double> > > & ray_pyr );
+
   vpgl_generic_camera_convert();
 };
 

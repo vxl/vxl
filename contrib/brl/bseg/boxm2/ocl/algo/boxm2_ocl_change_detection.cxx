@@ -1163,6 +1163,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     vcl_string data_type,num_obs_type,options;
     int apptypesize;
     get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize);
+    if(identifier!= "")
     data_type = data_type + "_"+identifier ;
     //grab kernel
     vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options,max_density);

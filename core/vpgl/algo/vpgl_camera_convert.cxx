@@ -768,6 +768,7 @@ vpgl_generic_camera_convert::interp_pair(vgl_ray_3d<double> const& r0,
   return vgl_ray_3d<double>(intp_org, intp_dir);
 }
 
+
 //
 // convert a generic camera from a local rational camera
 // the approach is to form a pyramid and convert rays by
@@ -797,7 +798,6 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   // convert high and low elevations to local z values
   rat_cam.lvcs().global_to_local(lon,lat,el_low,vpgl_lvcs::wgs84,x,y,z_low,vpgl_lvcs::DEG);
   rat_cam.lvcs().global_to_local(lon,lat,el_high,vpgl_lvcs::wgs84,x,y,z_high,vpgl_lvcs::DEG);
-
   return convert(rat_cam, ni, nj, gen_cam, z_low, z_high, level);
 }
 
@@ -810,6 +810,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
 // a ray by the four adjacent neighbors is sufficiently accurate
 // The remaining layers of the pyramid are filled in by interpolation
 //
+#if 0
 bool vpgl_generic_camera_convert::
 convert( vpgl_local_rational_camera<double> const& rat_cam,
          int ni, int nj, vpgl_generic_camera<double> & gen_cam,
@@ -820,7 +821,6 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
 
   // initial guess for backprojection to planes
   vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
-
   // initialize the ray pyramid
   // convert the required number of levels
   double dim = ni;
@@ -838,19 +838,22 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   ray_pyr[0].resize(nj, ni);
   ray_pyr[0].fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),vgl_vector_3d<double>(0,0,1)));
   nr[0]=nj;   nc[0]=ni; scl[0]=1.0;
-  int di = (ni+1)/2+1,
-      dj = (nj+1)/2+1;
-
+  vcl_cout<<"(ni,nj)"<<ni<<","<<nj<<vcl_endl;
+  int di = (ni+1)/2 +1,
+      dj = (nj+1)/2 +1;
+  
   for (int i=1; i<n_levels; ++i)
   {
+    vcl_cout<<"(di,dj)"<<di<<","<<dj<<vcl_endl;
     ray_pyr[i].resize(dj,di);
     ray_pyr[i].fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),
                                        vgl_vector_3d<double>(0,0,1)));
     nr[i]=dj;
     nc[i]=di;
     scl[i]=2.0*scl[i-1];
-    di = (di+1)/2+1;
-    dj = (dj+1)/2+1;
+    di = (di+1)/2 +1 ;
+    dj = (dj+1)/2 +1;
+
   }
   // convert the ray interpolation tolerances
   double org_tol = 0.0;
@@ -865,13 +868,14 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
     // set rays at current pyramid level
     for (int j =0; j<nr[lev]; ++j) {
       int sj = static_cast<int>(scl[lev]*j);
-      //if (sj>=nj) sj = nj;
+      if (sj>=nj) 
+          sj = nj-1;
       for (int i =0;i<nc[lev]; ++i)
       {
         int si = static_cast<int>(scl[lev]*i);
-        //if (si>=ni) si = ni;
+        if (si>=ni) 
+            si = ni-1;
         vgl_point_2d<double> ip(si,sj);
-#if 1  // use result from previous pyramid level to initialize guess
         vgl_point_3d<double> prev_org(0.0,0.0,local_z_max);
         vgl_point_3d<double> prev_endpt(0.0, 0.0, local_z_min);
         // initialize guess with
@@ -891,12 +895,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
           return false;
         if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt, error_tol))
           return false;
-#else // 0
-        if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, vgl_point_3d<double>(0.0,0.0,0.0), org))
-          return false;
-        if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, vgl_point_3d<double>(0.0,0.0,0.0), endpt))
-          return false;
-#endif
+
         vgl_vector_3d<double> dir = endpt-org;
         ray_pyr[lev][j][i].set(org, dir);
       }
@@ -908,7 +907,8 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
     need_interp = false;
     max_org_err = 0.0; max_ang_err = 0.0;
     vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
-    for (int j =1; j<(nr[lev]-1)&&!need_interp; ++j) {
+
+    for (int j =1; (j<nr[lev]-1)&&!need_interp; ++j) {
       for (int i =1;(i<nc[lev]-1)&&!need_interp; ++i) {
         vgl_ray_3d<double> ray = ray_pyr[lev][j][i];
         //
@@ -931,6 +931,8 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
         if (dorg>max_org_err) max_org_err = dorg;
         if (dang>max_ang_err) max_ang_err = dang;
         need_interp = max_org_err>org_tol || max_ang_err>ang_tol;
+        if(need_interp)
+            vcl_cout<<lev<<", "<<i<<","<<j<<vcl_endl;
       }
     }
   }
@@ -964,13 +966,254 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
       }
   }
   if ((int)level < n_levels) {
-    gen_cam = vpgl_generic_camera<double>(ray_pyr[level]);
+    gen_cam = vpgl_generic_camera<double>(ray_pyr,nr,nc);
     return true;
   }
   else
     return false;
 }
+#endif
 
+
+bool vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double> const& rat_cam,
+                                              int ni, int nj,int offseti, int offsetj,
+                                               double local_z_min, double local_z_max,
+                                              int n_levels,vcl_vector<int> nr, vcl_vector<int> nc,
+                                              vcl_vector<unsigned int> scl,vcl_vector<vbl_array_2d<vgl_ray_3d<double> > > & ray_pyr )
+
+{
+  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
+  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
+
+  // initial guess for backprojection to planes
+  vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
+          // convert the ray interpolation tolerances
+          double org_tol = 0.0;
+          double ang_tol = 0.0;
+          double max_org_err = 0.0, max_ang_err = 0.0;
+          if (!ray_tol(rat_cam,offseti+ ni/2.0, offsetj +nj/2.0, high,
+              org, low, endpt, org_tol, ang_tol))
+              return false;
+
+          bool need_interp = true;
+          int lev = n_levels-1;
+          //vcl_cout<<" lev "<<lev<<" ";
+          for (; lev>=0&&need_interp; --lev) {
+              // set rays at current pyramid level
+              for (int j =0; j<nr[lev]; ++j) {
+                  int sj = offsetj+static_cast<int>(scl[lev]*j);
+                  //sj = (j == 0)? sj : sj -1;
+                  //if (sj>=gnj) 
+                  //    sj =gnj;
+                  for (int i =0;i<nc[lev]; ++i)
+                  {
+                      int si =  offseti+ static_cast<int>(scl[lev]*i);
+                      //si = (i == 0)? si : si -1;
+                      //if (si>=gni) 
+                      //    si = gni;
+                      vgl_point_2d<double> ip(si,sj);
+                      vgl_point_3d<double> prev_org(0.0,0.0,local_z_max);
+                      vgl_point_3d<double> prev_endpt(0.0, 0.0, local_z_min);
+                      // initialize guess with
+                      if (lev < n_levels-1) {
+                          double rel_scale =  scl[lev]/scl[lev+1];
+                          int i_above = static_cast<int>(rel_scale * i);
+                          int j_above = static_cast<int>(rel_scale * j);
+                          prev_org = ray_pyr[lev+1][j_above][i_above].origin();
+                          vgl_vector_3d<double> prev_dir = ray_pyr[lev+1][j_above][i_above].direction();
+                          // find endpoint
+                          double ray_len = (local_z_min - prev_org.z()) / prev_dir.z();
+                          prev_endpt = prev_org + (prev_dir * ray_len);
+                      }
+                      const double error_tol = 0.5; // allow projection error of 0.25 pixel
+                      if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org, error_tol))
+                          return false;
+                      if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt, error_tol))
+                          return false;
+                      vgl_vector_3d<double> dir = endpt-org;
+                      ray_pyr[lev][j][i].set(org, dir);
+                  }
+              }
+              // check for interpolation accuracy at the current level
+              // scan through the array and find largest discrepancy in
+              // ray origin and ray direction
+              need_interp = false;
+              max_org_err = 0.0; max_ang_err = 0.0;
+              vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
+
+              for (int j =1; (j<nr[lev]-1)&&!need_interp; ++j) {
+                  for (int i =1;(i<nc[lev]-1)&&!need_interp; ++i) {
+                      vgl_ray_3d<double> ray = ray_pyr[lev][j][i];
+                      //
+                      //collect 4-neighbors of ray
+                      //
+                      //        0
+                      //      1 x 2
+                      //        3
+                      //
+                      ray_nbrs[0]=ray_pyr[lev][j-1][i];
+                      ray_nbrs[1]=ray_pyr[lev][j][i-1];
+                      ray_nbrs[2]=ray_pyr[lev][j][i+1];
+                      ray_nbrs[3]=ray_pyr[lev][j+1][i];
+                      //interpolate using neighbors
+                      vgl_ray_3d<double> intp_ray;
+                      if (!interp_ray(ray_nbrs, intp_ray))
+                          return false;
+                      double dorg = (ray.origin()-intp_ray.origin()).length();
+                      double dang = angle(ray.direction(), intp_ray.direction());
+                      if (dorg>max_org_err) max_org_err = dorg;
+                      if (dang>max_ang_err) max_ang_err = dang;
+                      need_interp = max_org_err>org_tol || max_ang_err>ang_tol;
+#if 0
+                      if(need_interp)
+                          vcl_cout<<lev<<", "<<i<<","<<j<<vcl_endl;
+#endif
+                  }
+              }
+          }
+          // found level where interpolation is within tolerance
+          // fill in values at lower levels
+          for (++lev; lev>0; --lev) {
+              unsigned int ncr = nc[lev];
+              unsigned int nrb = nr[lev];
+              vbl_array_2d<vgl_ray_3d<double> >& clev = ray_pyr[lev];
+              vbl_array_2d<vgl_ray_3d<double> >& nlev = ray_pyr[lev-1];
+              vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
+              vcl_vector<vgl_ray_3d<double> > interp_rays(4);
+              for (unsigned int j = 0; j<nrb; ++j)
+                  for (unsigned int i = 0; i<ncr; ++i) {
+                      ray_nbrs[0] = clev[j][i];
+                      ray_nbrs[1] = clev[j][i];
+                      ray_nbrs[2] = clev[j][i];
+                      ray_nbrs[3] = clev[j][i];
+                      if (i+1<ncr) ray_nbrs[1] = clev[j][i+1];
+                      if (j+1<nrb) ray_nbrs[2] = clev[j+1][i];
+                      if (i+1<ncr && j+1<nrb) ray_nbrs[3] = clev[j+1][i+1];
+                      if (!upsample_rays(ray_nbrs, clev[j][i], interp_rays))
+                          return false;
+                      if (2*i<nlev.cols() && 2*j<nlev.rows())
+                      {
+                          nlev[2*j][2*i]    =interp_rays[0];
+                          if (2*i+1<nlev.cols())                      nlev[2*j][2*i+1]  =interp_rays[1];
+                          if (2*j+1<nlev.rows())                      nlev[2*j+1][2*i]  =interp_rays[2];
+                          if (2*i+1<nlev.cols() && 2*j+1<nlev.rows()) nlev[2*j+1][2*i+1]=interp_rays[3];
+                      }
+                  }
+          }
+
+}
+#if 1
+//: Implementation of breaking up images in 256x256 blocks
+bool vpgl_generic_camera_convert::
+convert( vpgl_local_rational_camera<double> const& rat_cam,
+         int gni, int gnj, vpgl_generic_camera<double> & gen_cam,
+         double local_z_min, double local_z_max, unsigned level)
+{
+  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
+  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
+
+  // initial guess for backprojection to planes
+  vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
+  // initialize the ray pyramid
+  // convert the required number of levels
+  
+  int mindim = gni < gnj ? gni : gnj;
+  int factor = 256;
+  int n_levels  = 6;
+
+  while( mindim < factor )
+  {
+      factor /= 2;
+      n_levels--;
+
+      vcl_cout<<"."<<vcl_endl;
+  }
+  int numi = gni/factor;
+  int numj = gnj/factor;
+
+  // construct pyramid of ray indices
+  // the row and column dimensions at each level
+  vcl_vector<int> nr(n_levels,0), nc(n_levels,0);
+  vbl_array_2d<vgl_ray_3d<double> > finalrays(gnj,gni);
+
+  vcl_vector<unsigned int> scl(n_levels);
+  unsigned int running_scale = 1;
+  vcl_vector<vbl_array_2d<vgl_ray_3d<double> > > ray_pyr(n_levels);
+  for(unsigned int i = 0; i < n_levels; i++)
+  {
+    nr[i] = factor/running_scale + 1;
+    nc[i] = factor/running_scale + 1;
+    ray_pyr[i].resize(nr[i], nc[i]);
+    ray_pyr[i].fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),vgl_vector_3d<double>(0,0,1)));
+    scl[i]=running_scale;
+    running_scale*=2;
+    finalrays.fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),vgl_vector_3d<double>(0,0,1)));
+  }
+  for (unsigned int bigi=0 ; bigi<=numi;bigi++)
+  {
+      unsigned int ni = factor;
+      unsigned int offseti = bigi*factor;
+      if(bigi == numi )
+          offseti = gni-factor-1;
+      for (unsigned int bigj=0 ; bigj<=numj;bigj++)
+      {
+          unsigned int nj = factor;
+          unsigned int offsetj = bigj*factor;
+          if(bigj == numj )
+              offsetj = gnj-factor-1;     
+          if(!vpgl_generic_camera_convert::pyramid_est(rat_cam,ni,nj,offseti,offsetj,local_z_min, local_z_max,n_levels,nr, nc,scl,ray_pyr ))
+              return false;
+          for(unsigned int i = 0; i < factor; i++)
+          {
+              for(unsigned int j = 0; j < factor; j++)
+              {
+                  if(j+offsetj < gnj && i+offseti <gni )
+                      finalrays[j+offsetj][i+offseti] = ray_pyr[0][j][i];
+              }
+          }
+      }
+  }
+  if ((int)level < n_levels) {
+      gen_cam = vpgl_generic_camera<double>(finalrays);
+      return true;
+  }
+  else
+      return false;
+}
+#endif
+#if 1
+bool vpgl_generic_camera_convert::
+convert_bruteforce( vpgl_local_rational_camera<double> const& rat_cam,
+         int gni, int gnj, vpgl_generic_camera<double> & gen_cam,
+         double local_z_min, double local_z_max, unsigned level)
+{
+  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
+  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
+
+  // initial guess for backprojection to planes
+  vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
+  // initialize the ray pyramid
+  // convert the required number of levels
+    vbl_array_2d<vgl_ray_3d<double> > finalrays(gnj,gni);
+  for(unsigned i = 0 ; i < gni; i++)
+  {
+      for(unsigned j = 0 ; j < gnj; j++)
+      {
+          vgl_point_2d<double> ip(i,j);
+          const double error_tol = 0.5; // allow projection error of 0.25 pixel
+          if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, org, org, error_tol))
+              return false;
+          if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, endpt, endpt, error_tol))
+              return false;
+          vgl_vector_3d<double> dir = endpt-org;
+          finalrays[j][i].set(org, dir);
+      }
+  }
+
+      gen_cam = vpgl_generic_camera<double>(finalrays);
+      return true;
+}
+#endif
 bool vpgl_generic_camera_convert::
 convert( vpgl_proj_camera<double> const& prj_cam, int ni, int nj,
          vpgl_generic_camera<double> & gen_cam, unsigned level)

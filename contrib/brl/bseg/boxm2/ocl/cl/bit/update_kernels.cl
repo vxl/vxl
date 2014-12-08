@@ -472,7 +472,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                      (mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
                                      0.0, 0.0, 0.0);
             //use aux data to update cells
-            update_cell(&data, aux_data, 2.5f, 0.10f, 0.05f);
+            update_cell(&data, aux_data, 2.5f, 0.07f, 0.05f);
             if ( *update_app != 0 )
             {
                 //set appearance model (figure out if var is fixed or not)
