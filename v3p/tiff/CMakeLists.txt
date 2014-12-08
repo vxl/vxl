@@ -77,12 +77,25 @@ IF(UNIX)
     tif_unix.c
   )
 ELSE(UNIX)
-  ADD_DEFINITIONS( -DTIF_PLATFORM_CONSOLE)
+  IF(WIN32)
+    # Copy the header files
+    FILE(COPY tif_config.vc.h  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+    FILE(RENAME ${CMAKE_CURRENT_BINARY_DIR}/tif_config.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h)
+    FILE(COPY tiffconf.vc.h    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+    FILE(RENAME ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.vc.h  ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h)
+    INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 
-  SET( tiff_sources ${tiff_sources}
-    tif_win32.c
-   #fax3sm_winnt.c
-  )
+    # TODO  
+    # Copy WinCE files for Wince build
+
+    # Use console/terminal output for error output.
+    # Without this def it will use MessageBoxA() instead.
+    ADD_DEFINITIONS( -DTIF_PLATFORM_CONSOLE)
+    SET( tiff_sources ${tiff_sources}
+      tif_win32.c
+     #fax3sm_winnt.c
+    )
+  ENDIF(WIN32)
 ENDIF(UNIX)
 
 
