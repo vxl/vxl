@@ -9,6 +9,8 @@
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_cl.h>
+#include <bocl/bocl_manager.h>
+
 
 int main(int argc,  char** argv)
 {
