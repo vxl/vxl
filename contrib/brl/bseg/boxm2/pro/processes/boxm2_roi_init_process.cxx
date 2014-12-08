@@ -101,7 +101,7 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
 
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vgl_box_2d<double>* roi_box = project_box(camera, lvcs, box, error);
-  
+
   brip_roi broi(nitf->ni(), nitf->nj());
 
   vsol_box_2d_sptr bb2 = new vsol_box_2d();
@@ -113,10 +113,10 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
     return false;
   }
 
-  
+
   roi_box->set_width(roi_box->width()+2*margin);
   roi_box->set_height(roi_box->height()+2*margin);
-  
+
   vsol_box_2d_sptr bb = new vsol_box_2d();
   bb->add_point(roi_box->min_x(), roi_box->min_y());
   bb->add_point(roi_box->max_x(), roi_box->max_y());
@@ -128,7 +128,7 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   //: use the margin
   double maxwidth = bb->width();
   double maxheight = bb->height();
-  
+
   if(clip_box_width > 0)
     maxwidth = clip_box_width;
   if(clip_box_height > 0)
@@ -140,7 +140,10 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
                         (unsigned int)bb->get_min_y(),
                         (unsigned int)maxheight);
   if (!roi) {
-    vcl_cerr << "boxm2_roi_init_process::roi_init() - cannot load pixel data\n";
+    vcl_cerr << "boxm2_roi_init_process::roi_init() - cannot load pixel data "
+             << "(min_x:" << (unsigned int)bb->get_min_x() << " width:" << (unsigned int)maxwidth
+             << " min_y:" << (unsigned int)bb->get_min_y() << " height:" << (unsigned int)maxheight
+             << ")" << vcl_endl;
     return false;
   }
 
@@ -373,7 +376,7 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
 
   int clip_image_width = pro.get_input<int>(i++);
     int clip_image_height = pro.get_input<int>(i++);
-  
+
   // uncertainty (meters) -- SHOULD BE A PARAM
   float uncertainty=0;
   if ( !pro.parameters()->get_value(error, uncertainty) ) {

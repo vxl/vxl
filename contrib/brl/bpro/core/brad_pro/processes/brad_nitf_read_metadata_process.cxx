@@ -3,7 +3,7 @@
 // \file
 //     Read the metadata for the given satellite image,
 //       the metadata files are assumed to be in the same folder as the imagefile
-//       
+//
 //
 //
 
@@ -17,7 +17,7 @@ bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string"); // image name
   input_types.push_back("vcl_string"); // meta folder if exists
-  
+
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -26,7 +26,7 @@ bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
   pro.set_input(1, idx);
 
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("brad_image_metadata_sptr"); 
+  output_types.push_back("brad_image_metadata_sptr");
   return pro.set_output_types(output_types);
 }
 
@@ -41,9 +41,12 @@ bool brad_nitf_read_metadata_process(bprb_func_process& pro)
   //get the inputs
   vcl_string nitf_img_name = pro.get_input<vcl_string>(0);
   vcl_string meta_folder = pro.get_input<vcl_string>(1);
-  
+
   brad_image_metadata_sptr md = new brad_image_metadata;
-  md->parse(nitf_img_name, meta_folder);
+  if(!md->parse(nitf_img_name, meta_folder)) {
+    vcl_cout<<"nitf metadata parsing failed\n"<<vcl_endl;
+    return false;
+  }
   pro.set_output_val<brad_image_metadata_sptr>(0, md);
   return true;
 }

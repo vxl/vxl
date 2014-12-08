@@ -172,6 +172,7 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
   if (!vul_file::make_directory_path(datapath.c_str()))
     return false;
 
+  // use vpgl_lvcs::str_to_enum(lvcs_name.c_str()) instead
   vpgl_lvcs::cs_names cs_id;
   if (cs_name == "wgs84")
     cs_id = vpgl_lvcs::wgs84;
@@ -228,7 +229,7 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
   int n_bytes_subb = 36*n_cells_subb;  // alpha:4, mog3/gauss:8, num_obs:8,aux:16
   float bytes = (float)(n_subb*n_bytes_subb);
   vcl_cout << "memory requirements for a block at finest resolution:\n"
-           << " n_subblocks: " << n_subb << " bytes per sub-block: " << n_bytes_subb << " MB per block: " << bytes/1000000.0 << "\n"
+           << n_subb << "=n_subblocks, " << n_bytes_subb << " bytes per sub-block, " << bytes/1000000.0 << " MB per block\n"
            << " including bit tree: " << (bytes + n_subb*16)/1000000 << " MB\n"
            << "total world: " << (bytes + n_subb*16)*n_x*n_y*n_z/1000000 << vcl_endl;
 

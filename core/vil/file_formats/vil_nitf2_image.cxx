@@ -497,6 +497,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
 #if HAS_J2K
     s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000;
 #else //HAS_J2K
+    vcl_cerr << "Cannot decode JPEG 2000 image. The J2K library was not built." << vcl_endl;
     return 0;
 #endif //HAS_J2K
   }
@@ -517,7 +518,9 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
   }
 
   vcl_string compression_type;
-  if (!current_image_header()->get_property("IC", compression_type)) return 0;
+  if (!current_image_header()->get_property("IC", compression_type)) {
+    return 0;
+  }
 
   //right now we only plan to support uncompressed and JPEG2000
   if (compression_type == "NC" || compression_type == "NM") {
