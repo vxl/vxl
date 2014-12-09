@@ -51,13 +51,15 @@ ELSE (WIN32)
       ${OPENGL_INCLUDE_DIR}
     )
 
-    FIND_LIBRARY( GLEW_LIBRARY glew
-      /usr/lib64
-      /usr/lib
-      /usr/local/lib
-      /usr/openwin/lib
-      /usr/X11R6/lib
-      ${OPENGL_LIBRARY_DIR}
+    FIND_LIBRARY( GLEW_LIBRARY
+      NAMES glew GLEW
+      PATHS
+            /usr/lib64
+            /usr/lib
+            /usr/local/lib
+            /usr/openwin/lib
+            /usr/X11R6/lib
+            ${OPENGL_LIBRARY_DIR}
     )
 
 ENDIF (WIN32)
