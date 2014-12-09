@@ -2,6 +2,7 @@
 
 PROJECT( tiff C )
 
+MESSAGE("VCL_CXX_HAS_HEADER_CASSERT=${VCL_CXX_HAS_HEADER_CASSERT}, ${VCL_HAS_HEADER_ASSERT_H}")
 INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 
 IF(NOT VXL_USING_NATIVE_TIFF)
@@ -75,7 +76,16 @@ IF(NOT VXL_USING_NATIVE_TIFF)
         tif_write.c
         tif_zip.c
       )
-      
+
+      # put config header files in build tree      
+      SET( HAVE_ASSERT_H    ${VCL_HAS_HEADER_ASSERT_H} )
+      SET( HAVE_DLFCN_H     ${VCL_HAS_DLFCN_H} )
+      SET( HAVE_FCNTL_H     ${VCL_HAS_FCNTL_H} )
+      SET( HAVE_INTTYPES_H  ${VCL_HAS_INTTYPES_H} )
+      CONFIGURE_FILE(tif_config.h.in  ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h )
+      CONFIGURE_FILE(tiffconf.h.in    ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h )
+      INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
+
       IF(UNIX)
         SET( tiff_sources ${tiff_sources}
           tif_unix.c
@@ -89,12 +99,11 @@ IF(NOT VXL_USING_NATIVE_TIFF)
           ENDIF(MSVC)
       
       
-          # Copy the header files
-          FILE(COPY tif_config.vc.h  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-          FILE(RENAME ${CMAKE_CURRENT_BINARY_DIR}/tif_config.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h)
-          FILE(COPY tiffconf.vc.h    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-          FILE(RENAME ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.vc.h  ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h)
-          INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
+          ## Copy the header files
+          #FILE(COPY tif_config.vc.h  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+          #FILE(RENAME ${CMAKE_CURRENT_BINARY_DIR}/tif_config.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h)
+          #FILE(COPY tiffconf.vc.h    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+          #FILE(RENAME ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.vc.h  ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h)
       
           # TODO  
           # Copy WinCE files for Wince build
