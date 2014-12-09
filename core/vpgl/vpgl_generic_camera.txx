@@ -81,12 +81,12 @@ vpgl_generic_camera<T>::
     vpgl_generic_camera( vcl_vector<vbl_array_2d<vgl_ray_3d<T> > > const& rays,
     vcl_vector<int> nrs,   vcl_vector<int> ncs  )
 {
-    assert(nc>0&&nr>0);
+    assert(rays.size()>0 && nrs.size()>0 && ncs.size()>0);
     //compute bounds on ray origins
     double min_dist = vnl_numeric_traits<double>::maxval;
     double max_dist = 0.0;
     vgl_point_3d<T> datum(T(0), T(0), T(0));
-    for (int v = 0; v<nrs[0]; ++v)
+    for (int v = 0; v<nrs[0]; ++v) {
         for (int u = 0; u<ncs[0]; ++u) {
             vgl_point_3d<T> org = rays[0][v][u].origin();
             double d = vgl_distance(datum, org);
@@ -101,10 +101,11 @@ vpgl_generic_camera<T>::
                 min_ray_direction_ = rays[0][v][u].direction();
             }
         }
-        rays_ = rays;
-        nr_ = nrs;
-        nc_ = ncs;
-        n_levels_ = rays.size();
+    }
+    rays_ = rays;
+    nr_ = nrs;
+    nc_ = ncs;
+    n_levels_ = rays.size();
 }
 // the ray closest to the given 3-d point is selected
 // note that the ray is taken to be an infinite 3-d line
