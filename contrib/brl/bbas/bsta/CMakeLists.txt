@@ -6,10 +6,6 @@ doxygen_add_library(contrib/brl/bbas/bsta
   PACKAGE contrib/brl
   )
 
-IF (EXISTS ${lems_SOURCE_DIR}/basic )
-INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/basic )
-ENDIF (EXISTS ${lems_SOURCE_DIR}/basic )
-
 SET(bsta_sources
  bsta_gauss.cxx            bsta_gauss.h
  bsta_histogram_base.h

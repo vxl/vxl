@@ -23,14 +23,6 @@ IF(EXPAT_FOUND)
       ADD_DEFINITIONS( -DHAS_GEOTIFF=0 )
     ENDIF(GEOTIFF_FOUND)
   ENDIF(TIFF_FOUND)
-  
- IF(lems_SOURCE_DIR)
-  INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/contrib/dec )
- ENDIF(lems_SOURCE_DIR)
-
-  IF(lems_SOURCE_DIR)
-    INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/contrib/dec )
-  ENDIF(lems_SOURCE_DIR)
 
   SET(boxm2_pro_sources
       boxm2_processes.h

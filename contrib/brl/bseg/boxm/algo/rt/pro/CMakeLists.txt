@@ -8,9 +8,6 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
  # INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
  # INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
- IF(lems_SOURCE_DIR)
-  INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/contrib/dec )
- ENDIF(lems_SOURCE_DIR)
 
   SET(boxm_algo_rt_pro_sources
       boxm_algo_rt_processes.h
