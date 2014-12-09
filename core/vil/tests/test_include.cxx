@@ -125,7 +125,7 @@
 #if HAS_TIFF
 #include <vil/file_formats/vil_tiff.h>
 #include <vil/file_formats/vil_tiff_header.h>
-#ifdef HAS_GEOTIFF
+#if HAS_GEOTIFF
 #include <vil/file_formats/vil_geotiff_header.h>
 #endif
 #endif

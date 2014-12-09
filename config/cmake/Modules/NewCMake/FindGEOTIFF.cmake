@@ -8,8 +8,10 @@
 #  GEOTIFF_LIBRARY, where to find the GEOTIFF library.
 
 FIND_PATH(GEOTIFF_INCLUDE_DIR geotiff.h
-  /usr/local/include
-  /usr/include
+  PATH_SUFFIXES geotiff
+  PATHS
+    /usr/local/include
+    /usr/include
 )
 
 SET(GEOTIFF_NAMES ${GEOTIFF_NAMES} geotiff)
