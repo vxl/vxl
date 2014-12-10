@@ -107,6 +107,11 @@ IF(NOT VXL_USING_NATIVE_TIFF)
     #SET(HOST_FILLORDER "FILLORDER_LSB2MSB")
     IF( NOT CYGWIN )
       SET( USE_WIN32_FILEIO 1 )
+      
+      # Suppress warnings of using unsecure CRT functions
+      IF(MSVC)
+        ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+      ENDIF(MSVC)
     ENDIF( NOT CYGWIN )
   ELSE(WIN32)
     #TODO
