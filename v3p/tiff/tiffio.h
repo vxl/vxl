@@ -95,6 +95,7 @@ typedef void* tdata_t;          /* image data ref */
 #endif
 
 #if defined(USE_WIN32_FILEIO)
+# define WIN32_LEAN_AND_MEAN
 # define VC_EXTRALEAN
 # include <windows.h>
 # ifdef __WIN32__
