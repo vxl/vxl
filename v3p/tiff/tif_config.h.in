@@ -336,11 +336,12 @@
 #define TIFF_PTRDIFF_T ptrdiff_t
 
 /* Signed size type formatter */
-#undef TIFF_SSIZE_FORMAT
+/* Hard-coded */
+#define TIFF_SSIZE_FORMAT "%ld"
 
 /* Signed size type */
 /* Hard-coded */
-#define TIFF_SSIZE_T ssize_t
+#define TIFF_SSIZE_T size_t
 
 /* Unsigned 16-bit type */
 #define TIFF_UINT16_T  unsigned @VXL_INT_16@
