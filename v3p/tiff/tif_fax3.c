@@ -43,6 +43,14 @@
 #include "t4.h"
 #include <stdio.h>
 
+/* Define to `__inline__' or `__inline' if that's what the C compiler
+calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
+# ifndef inline
+#  define inline __inline
+# endif
+#endif
+
 /*
  * Compression+decompression state blocks are
  * derived from this ``base state'' block.
