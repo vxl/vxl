@@ -28,7 +28,7 @@ class brad_image_metadata : public vbl_ref_count
   //: Constructor extracts information from NITF header and vendor-specific metadata file
   brad_image_metadata(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
   //: Default constructor
-  brad_image_metadata() : gain_(1.0), offset_(0.0) {}
+  brad_image_metadata() : n_bands_(0), gsd_(-1.0), gain_(1.0), offset_(0.0) {}
 
   // position of sun relative to imaged location
   double sun_elevation_; // degrees above horizon
@@ -91,7 +91,7 @@ class brad_image_metadata : public vbl_ref_count
   
   //: Parse the required params for normalization from a text file with a known format, 
   //  it can be used to calibrate images from any satellite if such files are created for each image of the satellite
-  bool parse_from_txt(vcl_string const& filename);
+  bool parse_from_txt(vcl_string const& filename, vcl_vector<double>& solar_irrads);
 };
 
 typedef vbl_smart_ptr<brad_image_metadata> brad_image_metadata_sptr;

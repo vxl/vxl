@@ -8,6 +8,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vcl_sstream.h>
+#include <vcl_cassert.h>
 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
@@ -106,7 +107,7 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
   double absCalfact = 1.0;
   double effectiveBand = 1.0;
   lower_left_.set(181, 91, 10000);
-  upper_right_.set(-181,-91, -10000); 
+  upper_right_.set(-181,-91, -10000);
   for (; awk; ++awk)
   {
     vcl_stringstream linestr(awk.line());
@@ -185,7 +186,7 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
       continue;
     }
   }
-  n_bands_--; // there is an extra BEGIN_GROUP for some other image info not related to individual bands 
+  n_bands_--; // there is an extra BEGIN_GROUP for some other image info not related to individual bands
   vcl_cout << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << vcl_endl;
   gain_ = absCalfact/effectiveBand;
   offset_ = 0.0;
@@ -216,8 +217,8 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
       linestr >> tag;
       linestr >> cloud_coverage_percentage_;
       continue;
-    } 
-    if ((linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("upperRightCorner") != vcl_string::npos) || 
+    }
+    if ((linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("upperRightCorner") != vcl_string::npos) ||
         (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("upperLeftCorner") != vcl_string::npos) ||
         (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("lowerRightCorner") != vcl_string::npos) ||
         (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("lowerLeftCorner") != vcl_string::npos) )
@@ -230,7 +231,7 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
          linestr.str(awk.line());
       }
       vcl_string dummy; linestr >> dummy; linestr >> dummy;
-      double y; linestr >> y; 
+      double y; linestr >> y;
       while (linestr.str().find("longitude") == vcl_string::npos) {
          ++awk;
          //linestr = vcl_stringstream(awk.line());
@@ -238,7 +239,7 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
          linestr.str(awk.line());
       }
       linestr >> dummy; linestr >> dummy;
-      double x; linestr >> x; 
+      double x; linestr >> x;
       while (linestr.str().find("height") == vcl_string::npos) {
          ++awk;
          //linestr = vcl_stringstream(awk.line());
@@ -246,11 +247,11 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
          linestr.str(awk.line());
       }
       linestr >> dummy; linestr >> dummy;
-      double z; linestr >> z; 
+      double z; linestr >> z;
       if (lower_left_.x() > x) lower_left_.set(x, lower_left_.y(), lower_left_.z());
       if (lower_left_.y() > y) lower_left_.set(lower_left_.x(), y, lower_left_.z());
       if (lower_left_.z() > z) lower_left_.set(lower_left_.x(), lower_left_.y(), z);
-      
+
       if (upper_right_.x() < x) upper_right_.set(x, upper_right_.y(), upper_right_.z());
       if (upper_right_.y() < y) upper_right_.set(upper_right_.x(), y, upper_right_.z());
       if (upper_right_.z() < z) upper_right_.set(upper_right_.x(), upper_right_.y(), z);
@@ -260,7 +261,7 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
       linestr >> tag;
       vcl_string band_str;
       linestr >> band_str;
-      if (band_str.find("PAN") != vcl_string::npos) 
+      if (band_str.find("PAN") != vcl_string::npos)
         band_ = "PAN";
       else
         band_ = "MULTI";
@@ -282,13 +283,13 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
       linestr.str(awk.line());
 
       vcl_string dummy; linestr >> dummy; linestr >> dummy;
-      double g; linestr >> g; 
+      double g; linestr >> g;
 
        ++awk;
       linestr.clear();
       linestr.str(awk.line());
       linestr >> dummy; linestr >> dummy;
-      double off; linestr >> off; 
+      double off; linestr >> off;
 
       gains_.push_back(vcl_pair<double, double>(g, off));
     }
@@ -297,7 +298,7 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
   return true;
 }
 
-//: Parse the required params for normalization and other tasks from a text file with a known format, 
+//: Parse the required params for normalization and other tasks from a text file with a known format,
 //  it can be used to calibrate images from any satellite if such files are created for each image of the satellite
 //  example file:
 // productSpectralType MULTI
@@ -311,7 +312,7 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
 // numberOfSpectralBands 4
 // solar_irradiance 1924.59 1843.08 1574.77 1113.71
 // gain_offset 0.2359 0 0.1453 0 0.1785 0 0.1353 0
-bool brad_image_metadata::parse_from_txt(vcl_string const& filename)
+bool brad_image_metadata::parse_from_txt(vcl_string const& filename, vcl_vector<double>& solar_irrads)
 {
   vcl_cout << "parsing radiometric calibration and atmospheric normalization parameters from: " << filename << "...\n";
   vcl_ifstream ifs( filename.c_str() );
@@ -324,6 +325,8 @@ bool brad_image_metadata::parse_from_txt(vcl_string const& filename)
   upper_right_.set(-181,-91, -10000);
   double val;
 
+  bool parsed_gain_offset = false, parsed_gains = false, parsed_sun_irradiance = false;
+  bool parsed_coverage_percentage_ = false;
   vul_awk awk(ifs);
   for (; awk; ++awk)
   {
@@ -333,12 +336,17 @@ bool brad_image_metadata::parse_from_txt(vcl_string const& filename)
 
     if (tag.compare("CloudCoverPercentage") == 0) {
       linestr >> cloud_coverage_percentage_;
+      parsed_coverage_percentage_ = true;
       continue;
-    } 
+    }
+    if (tag.compare("SunAngle") == 0) {
+      linestr >> sun_azimuth_; linestr >> sun_elevation_;
+      continue;
+    }
     if (tag.compare("productSpectralType") == 0) {
       vcl_string band_str;
       linestr >> band_str;
-      if (band_str.find("PAN") != vcl_string::npos) 
+      if (band_str.find("PAN") != vcl_string::npos)
         band_ = "PAN";
       else
         band_ = "MULTI";
@@ -379,7 +387,6 @@ bool brad_image_metadata::parse_from_txt(vcl_string const& filename)
       upper_right_.set(upper_right_.x(), upper_right_.y(), val);
       continue;
     }
-
     if (tag.compare("numberOfSpectralBands") == 0) {
       linestr >> n_bands_;
       continue;
@@ -389,14 +396,12 @@ bool brad_image_metadata::parse_from_txt(vcl_string const& filename)
         vcl_cerr << "n_bands tag should precede solar_irradiance tag! Problems parsing: " << filename << "\n";
         return false;
       }
-      if (n_bands_ == 1) 
-        linestr >> sun_irradiance_;
-      else {
-        for (unsigned i = 0; i < n_bands_; i++) { 
-          linestr >> val;
-          sun_irradiance_values_.push_back(val);
-        }
-      }  
+      solar_irrads.clear();
+      for (unsigned i = 0; i < n_bands_; i++) {
+        linestr >> val;
+        solar_irrads.push_back(val);
+      }
+      parsed_sun_irradiance = true;
       continue;
     }
     if (tag.compare("gain_offset") == 0) {
@@ -406,16 +411,32 @@ bool brad_image_metadata::parse_from_txt(vcl_string const& filename)
       }
       if (n_bands_ == 1) {
         linestr >> gain_; linestr >> offset_;
+        parsed_gain_offset = true;
       } else {
-        for (unsigned i = 0; i < n_bands_; i++) { 
+        gains_.clear();
+        for (unsigned i = 0; i < n_bands_; i++) {
           linestr >> gain_; linestr >> offset_;
           gains_.push_back(vcl_pair<double, double>(gain_, offset_));
         }
+        parsed_gains = true;
       }
       continue;
     }
   }
-  vcl_cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << vcl_endl;
+
+  if (n_bands_ == 1 && (!parsed_gain_offset || !parsed_sun_irradiance)) {
+    vcl_cerr << "the metadata file must include values for gain, offset, and solar irradiance" << vcl_endl;
+    return false;
+  }
+  else if(n_bands_ > 1 && (!parsed_gains || !parsed_sun_irradiance)) {
+    vcl_cerr << "the metadata file must include values for gain, offset, and solar irradiance" << vcl_endl;
+    return false;
+  }
+
+  if(parsed_coverage_percentage_) {
+    vcl_cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << vcl_endl;
+  }
+
   return true;
 }
 
@@ -480,10 +501,10 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
   number_of_bits_ = hdr->get_number_of_bits_per_pixel();
 
-  
+
 
   // compute satellite az,el values for center of image
-  
+
   double off_u, off_v;
   nitf_cam.image_offset(off_u, off_v);
   // get lat,lon offsets for local euclidean coord. system origin
@@ -507,11 +528,8 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
   vcl_string dirname = vul_file::dirname(nitf_filename);
 
-   vcl_string img_info = hdr->get_image_source();
-
-  // set gain offset defaults, some satellites' images do not require any adjustment
-  gain_ = 1.0f;
-  offset_ = 0.0f;
+  vcl_string img_info = hdr->get_image_source();
+  vcl_cout << "img_info: " << img_info << vcl_endl;
 
   // look for metadata files with known formats recursively in the directory of the image
   // If we find one, check file name to see if it is for the same image, if so parse it
@@ -553,135 +571,183 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     }
   }
 
+  // n_bands_, gain_, offset_ (or gains_) and sun_irradiance (or sun_irradiance_values_) will be set
+  //
+  // TODO it would be nice to refactor this so that there are proper parsed gaurds on variables like
+  // has_<VARIABLE>. also, define an order in which information is parsed (e.g., hard coded values, the
+  // image subheader (TREs), then a metadata file (which themselves don't have to be mutually exclusive))
+
+  // set gain offset defaults, some satellites' images do not require any adjustment
+  gain_ = 1.0f;
+  offset_ = 0.0f;
+  double solar_irrad = 1500.0;
+  vcl_vector<double> solar_irrads;  // for multi-spectral imagery there are multiple values
+  bool parsed_sun_irradiance = false;
+  // no metadata file provided; try providing some known values
   if (meta_filename.size() == 0) {
     // check if this is IKONOS
     vcl_string type = hdr->get_image_type(); // type mono is band PAN
     unsigned bpp = number_of_bits_;
-    vcl_cout << "Ikonos: bpp " << bpp << " type: " << type << vcl_endl;
     if (img_info.compare("IKONOS") == 0 && type.compare("MONO") == 0 && bpp == (unsigned)11) {
+      vcl_cout << "Ikonos: bpp " << bpp << " type: " << type << vcl_endl;
       vcl_cout << "An 11-bit Panchromatic IKONOS image, setting gain & offset values according to tech document\n";
+      n_bands_ = 1;
       gain_ = (10.0/161.0)/0.403;
       offset_ = 0.0;
     }
     else {
-      vcl_cout << "could not set gain and offset for " << imagename << vcl_endl;
+      vcl_cerr << "ERROR: could not set gain and offset for " << imagename << vcl_endl;
+      return false;
     }
-    vcl_cout << *this;
-    return true;
   }
-  n_bands_ = 1;  // initialize just in case
-  vcl_string ext = vul_file::extension(meta_filename);
-  bool parsed_fine = false;
-  bool parsed_sun_irradiance = false;
-  if (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0) {  // IMD files do not specify PAN gain if it is a multi image
-    parsed_fine = parse_from_imd(meta_filename);
-    if (n_bands_ >= 4)
-      gains_.insert(gains_.begin(), vcl_pair<double, double> (gain_, offset_)); // insert a dummy GAIN to account for PAN gain, this value will never be used
-  } else if (ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0) {  // pvl files also specify PAN gain even if it is a multi image (band 1 is PAN, 2-4 are multi)
-    parsed_fine = parse_from_pvl(meta_filename);
-    gain_ = gains_[0].first;
-    offset_ = gains_[0].second;
-  } else if (ext.compare(".TXT") == 0 || ext.compare(".txt") == 0) {
-    parsed_fine = parse_from_txt(meta_filename);
-    if (n_bands_ >= 4) 
-      gains_.insert(gains_.begin(), vcl_pair<double, double> (gain_, offset_)); // insert a dummy GAIN to account for PAN gain, this 0th value will never be used
-    parsed_sun_irradiance = true;
-  }
-  else
-    vcl_cout << "unknown meta file format: " << ext << " in name: " << meta_filename << "!\n";
-  for (unsigned i = 0; i < gains_.size(); i++) {
-    vcl_cout << " gain: " << gains_[i].first << " off: " << gains_[i].second << vcl_endl;
+  else {
+    // n_bands_, gain and offset (or gains_) should be set if parsed_fine is true
+    vcl_string ext = vul_file::extension(meta_filename);
+    bool parsed_fine = false;
+    if (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0) {  // IMD files do not specify PAN gain if it is a multi image
+      parsed_fine = parse_from_imd(meta_filename);
+      if(parsed_fine) {
+        if (n_bands_ >= 4) {
+          gains_.insert(gains_.begin(), vcl_pair<double, double> (gain_, offset_)); // insert a dummy GAIN to account for PAN gain, this value will never be used
+        }
+      }
+    } else if (ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0) {  // pvl files also specify PAN gain even if it is a multi image (band 1 is PAN, 2-4 are multi)
+      parsed_fine = parse_from_pvl(meta_filename);
+      if(parsed_fine) { 
+        gain_ = gains_[0].first;
+        offset_ = gains_[0].second;
+      }
+    } else if (ext.compare(".TXT") == 0 || ext.compare(".txt") == 0) {
+      parsed_fine = parse_from_txt(meta_filename, solar_irrads);
+      if(parsed_fine) {
+        if (n_bands_ == 1) {
+          // solar_irrads will be populated
+          assert(solar_irrads.size() > 0);
+          solar_irrad = solar_irrads[0];
+        } else if (n_bands_ >= 4) {
+          gains_.insert(gains_.begin(), vcl_pair<double, double> (gain_, offset_)); // insert a dummy GAIN to account for PAN gain, this 0th value will never be used
+        }
+        parsed_sun_irradiance = true;
+      }
+    }
+    else {
+      vcl_cout << "ERROR unrecognized metadata file format: " << ext << " in name: " << meta_filename << "!\n";
+      vcl_cerr << "      Could not set gain and offset for " << imagename << vcl_endl;
+      return false;
+    }
+    if (!parsed_fine) {
+      vcl_cerr << " Problems parsing meta-data files!\n";
+      vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << vcl_endl;
+      return false;
+    }
+
+    for (unsigned i = 0; i < gains_.size(); i++) {
+      vcl_cout << " gain: " << gains_[i].first << " off: " << gains_[i].second << vcl_endl;
+    }
   }
 
   // solar irradiance is dependent on sensor because each has a different range of wavelengths they are sensitive to.
   // set solar irradiance to a reasonable default in case we don't have the information
   // "reasonable" is defined here as roughly in the range of the examples we know.
   if (!parsed_sun_irradiance) {
-    sun_irradiance_ = 1500.0; 
-    sun_irradiance_values_.resize(n_bands_, 1500.0);
-  
+    solar_irrads.resize(n_bands_, 1500.0);
+
     if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos) {
-      sun_irradiance_ = 1375.8;
+      solar_irrad = 1375.8;
       satellite_name_ = "IKONOS";
     } else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos) { // OZGE TODO: check this one
-      sun_irradiance_ = 1617;
+      // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
+      solar_irrad = 1617;
       satellite_name_ = "GeoEye-1";
-      if (n_bands_ == 4) {
-        sun_irradiance_values_[0] = 1960; // Blue
-        sun_irradiance_values_[1] = 1853; // Green
-        sun_irradiance_values_[2] = 1505; // Red
-        sun_irradiance_values_[3] = 1039; // near-IR  // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
-                                                // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for geoeye1 plane 0 is blue, plane 1 is green, plane 2 is red and plane 3 is near-IR)
-                                                //          this order may be different for different satellites
+      // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for geoeye1 plane 0
+      //          is blue, plane 1 is green, plane 2 is red and plane 3 is near-IR). this order may be different for
+      //          different satellites
+      if (n_bands_ == 1) {
+        // pass
+      } else if (n_bands_ == 4) {
+        solar_irrads[0] = 1960; // Blue
+        solar_irrads[1] = 1853; // Green
+        solar_irrads[2] = 1505; // Red
+        solar_irrads[3] = 1039; // near-IR
+      } else {
+        vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
+        return false;
       }
-    } else if (img_info.find("QuickBird") != vcl_string::npos || 
-               nitf_filename.find("QB") != vcl_string::npos || 
-               nitf_filename.find("QuickBird") != vcl_string::npos || 
+    } else if (img_info.find("QuickBird") != vcl_string::npos ||
+               nitf_filename.find("QB") != vcl_string::npos ||
+               nitf_filename.find("QuickBird") != vcl_string::npos ||
                img_info.find("QB02") != vcl_string::npos) {
-      sun_irradiance_ = 1381.7;
+      solar_irrad = 1381.7;
       satellite_name_ = "QuickBird";
-      if (n_bands_ == 4) {
-        sun_irradiance_values_[0] = 1924.59; // Blue
-        sun_irradiance_values_[1] = 1843.08; // Green
-        sun_irradiance_values_[2] = 1574.77; // Red
-        sun_irradiance_values_[3] = 1113.71; // near-IR  // these values are from http://grasswiki.osgeo.org/wiki/QuickBird
+      if (n_bands_ == 1) {
+        // pass
+      } else if (n_bands_ == 4) {
+        solar_irrads[0] = 1924.59; // Blue
+        solar_irrads[1] = 1843.08; // Green
+        solar_irrads[2] = 1574.77; // Red
+        solar_irrads[3] = 1113.71; // near-IR  // these values are from http://grasswiki.osgeo.org/wiki/QuickBird
+      } else {
+        vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
+        return false;
       }
-                                              
     } else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos) {
-      sun_irradiance_ = 1580.814;
+      solar_irrad = 1580.814;
       satellite_name_ = "WorldView";
     } else if (img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos) {
-      sun_irradiance_ = 1580.814;
+      // these values are from http://www.digitalglobe.com/sites/default/files/Radiometric_Use_of_WorldView-2_Imagery%20(1).pdf
+      solar_irrad = 1580.814;
       satellite_name_ = "WorldView2";
-      if (n_bands_ == 8) {
-        sun_irradiance_values_[0] = 1758.2229; // Coastal
-        sun_irradiance_values_[1] = 1974.2416; // Blue
-        sun_irradiance_values_[2] = 1856.4104; // Green
-        sun_irradiance_values_[3] = 1738.4791; // Yellow  
-        sun_irradiance_values_[4] = 1559.4555; // Red 
-        sun_irradiance_values_[5] = 1342.0695; // Red Edge
-        sun_irradiance_values_[6] = 1069.7302; // NIR1
-        sun_irradiance_values_[7] = 861.2866; // NIR2
-                                                    // these values are from http://www.digitalglobe.com/sites/default/files/Radiometric_Use_of_WorldView-2_Imagery%20(1).pdf
-                                                    // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for wv2 plane 0 is coastal (?), plane 1 is blue, etc.)
-                                                    //          this order may be different for different satellites
+      // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for wv2 plane 0 is coastal (?), plane 1 is blue, etc.)
+      //          this order may be different for different satellites
+      if (n_bands_ == 1) {
+        // pass
+      } else if (n_bands_ == 8) {
+        solar_irrads[0] = 1758.2229; // Coastal
+        solar_irrads[1] = 1974.2416; // Blue
+        solar_irrads[2] = 1856.4104; // Green
+        solar_irrads[3] = 1738.4791; // Yellow
+        solar_irrads[4] = 1559.4555; // Red
+        solar_irrads[5] = 1342.0695; // Red Edge
+        solar_irrads[6] = 1069.7302; // NIR1
+        solar_irrads[7] = 861.2866;  // NIR2
       } else if (n_bands_ == 4) {
-        sun_irradiance_values_[0] = 1974.2416; // Blue
-        sun_irradiance_values_[1] = 1856.4104; // Green
-        sun_irradiance_values_[2] = 1559.4555; // Red 
-        sun_irradiance_values_[3] = 1069.7302; // NIR1
+        solar_irrads[0] = 1974.2416; // Blue
+        solar_irrads[1] = 1856.4104; // Green
+        solar_irrads[2] = 1559.4555; // Red
+        solar_irrads[3] = 1069.7302; // NIR1
+      } else {
+        vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
+        return false;
       }
-
     } else if (img_info.find("DigitalGlobe") != vcl_string::npos) {
-      sun_irradiance_ = 1580.814;
+      solar_irrad = 1580.814;
       satellite_name_ = "DigitalGlobe";  // which satellite when the name is DigitalGlobe??
-      vcl_cerr << "satellite name is DigitalGlobe but cannot determine which satellite!! so sun irradiance values are not set properly (esp. for multi-spectral images)" << vcl_endl;
-    } else 
-      vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: Guessing band-averaged solar irradiance value = " << sun_irradiance_ << "." << nitf_filename;
+      vcl_cerr << "WARNING satellite name is DigitalGlobe but cannot determine which satellite!! so sun irradiance values are not set properly (esp. for multi-spectral images)" << vcl_endl;
+    } else {
+      vcl_cerr << "ERROR Could not find known satellite name in: " << img_info << " from NITF " << nitf_filename << vcl_endl;;
+      vcl_cerr << "      Could not set solar irradiance for " << imagename << vcl_endl;
+      return false;
+    }
   }
-  vcl_cout << "img_info: " << img_info << vcl_endl;
-  
-  // scale sun irradiance using Earth-Sun distance
+
+  // a solar irradiance has been found; scale it using Earth-Sun distance
   double d = brad_sun_distance(year, month, day, hour, min);
   if (n_bands_ == 1) {
-    vcl_cout << "sun_irradiance_: " << sun_irradiance_ << " ";
-    sun_irradiance_ = sun_irradiance_/(d*d);
+    vcl_cout << "solar_irradiance_: " << solar_irrad << " ";
+    sun_irradiance_ = solar_irrad/(d*d);
     vcl_cout << " after scaling with Earth-Sun distance: " << sun_irradiance_ << vcl_endl;
   } else {
-    for (unsigned ii = 0; ii < sun_irradiance_values_.size(); ii++) 
-      vcl_cout << "sun_irradiance_values_[" << ii << "]: " << sun_irradiance_values_[ii] << vcl_endl;
+    assert(n_bands_ == solar_irrads.size());
+    for (unsigned ii = 0; ii < solar_irrads.size(); ii++)
+      vcl_cout << "solar_irradiance_values_[" << ii << "]: " << solar_irrads[ii] << vcl_endl;
+    sun_irradiance_values_.resize(n_bands_, 1500.0);
     for (unsigned bandi = 0; bandi < n_bands_; bandi++)
-      sun_irradiance_values_[bandi] = sun_irradiance_values_[bandi]/(d*d);  
+      sun_irradiance_values_[bandi] = solar_irrads[bandi]/(d*d);
     vcl_cout << " .. after scaling with Earth-Sun distance..: " << d << "\n";
-    for (unsigned ii = 0; ii < sun_irradiance_values_.size(); ii++) 
+    for (unsigned ii = 0; ii < sun_irradiance_values_.size(); ii++)
       vcl_cout << "sun_irradiance_values_[" << ii << "]: " << sun_irradiance_values_[ii] << vcl_endl;
   }
-  
-  if (!parsed_fine) {
-    vcl_cerr << " Problems parsing meta-data files!\n";
-    vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << vcl_endl;
-    return false;
-  }
+
   vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << vcl_endl;
   vcl_cout << *this;
 
@@ -691,7 +757,7 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 bool brad_image_metadata::same_time(brad_image_metadata& other)
 {
   if (this->t_.sec == other.t_.sec &&
-    this->t_.min == other.t_.min && 
+    this->t_.min == other.t_.min &&
     this->t_.hour == other.t_.hour &&
     this->t_.day == other.t_.day &&
     this->t_.month == other.t_.month &&
@@ -733,16 +799,16 @@ unsigned brad_image_metadata::time_minute_dif(brad_image_metadata& other)
 bool brad_image_metadata::same_extent(brad_image_metadata& other)
 {
   // some images are rotated 'in-plane', so even though their bounding boxes overlap very well, the offset in the camera (upper left corner in the image) may be different
-  if (cam_offset_.x() != other.cam_offset_.x() || 
-      cam_offset_.y() != other.cam_offset_.y() || 
+  if (cam_offset_.x() != other.cam_offset_.x() ||
+      cam_offset_.y() != other.cam_offset_.y() ||
       cam_offset_.z() != other.cam_offset_.z())
       return false;
-  
+
   vgl_box_2d<double> b1(lower_left_.x(), lower_left_.y(), upper_right_.x(), upper_right_.y());
   vgl_box_2d<double> b2(other.lower_left_.x(), other.lower_left_.y(), other.upper_right_.x(), other.upper_right_.y());
-  if (vcl_abs(vgl_intersection(b1, b2).area() - b1.area()) < 0.000000001) 
+  if (vcl_abs(vgl_intersection(b1, b2).area() - b1.area()) < 0.000000001)
     return true;
-   
+
   return false;
 }
 
@@ -813,10 +879,10 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
     lower_left_.set(x,y,z);
     vsl_b_read(is, band_);
     vsl_b_read(is, n_bands_);
-  } 
+  }
   if (ver == 1 || ver == 2 || ver == 3) {
     double x,y,z;
-    vsl_b_read(is, x); 
+    vsl_b_read(is, x);
     vsl_b_read(is, y);
     vsl_b_read(is, z);
     cam_offset_.set(x,y,z);
