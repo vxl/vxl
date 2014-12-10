@@ -108,10 +108,6 @@ IF(NOT VXL_USING_NATIVE_TIFF)
     IF( NOT CYGWIN )
       SET( USE_WIN32_FILEIO 1 )
       
-      # Suppress warnings of using unsecure CRT functions
-      IF(MSVC)
-        ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
-      ENDIF(MSVC)
     ENDIF( NOT CYGWIN )
   ELSE(WIN32)
     #TODO
@@ -129,17 +125,11 @@ IF(NOT VXL_USING_NATIVE_TIFF)
   ELSE(UNIX)
     IF(WIN32)
   
-      # Disable warnings on using unsecured lib functions
+      # Disable warnings on using unsecured CRT lib functions
       IF(MSVC)
         ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
+        ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
       ENDIF(MSVC)
-  
-  
-      ## Copy the header files
-      #FILE(COPY tif_config.vc.h  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-      #FILE(RENAME ${CMAKE_CURRENT_BINARY_DIR}/tif_config.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h)
-      #FILE(COPY tiffconf.vc.h    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-      #FILE(RENAME ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.vc.h  ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h)
   
       # TODO  
       # Copy WinCE files for Wince build
