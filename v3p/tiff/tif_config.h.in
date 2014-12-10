@@ -62,13 +62,13 @@
 #define HAVE_IEEEFP 1
 
 /* Define to 1 if the system has the type `int16'. */
-#define HAVE_INT16 1
+#undef HAVE_INT16
 
 /* Define to 1 if the system has the type `int32'. */
-#define HAVE_INT32 1
+#undef HAVE_INT32
 
 /* Define to 1 if the system has the type `int8'. */
-#define HAVE_INT8 1
+#undef HAVE_INT8
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H
@@ -309,52 +309,56 @@
 #define THUNDER_SUPPORT 1
 
 /* Signed 16-bit type */
-#undef TIFF_INT16_T
+#define TIFF_INT16_T @VXL_INT_16@
 
 /* Signed 32-bit type formatter */
 #undef TIFF_INT32_FORMAT
 
 /* Signed 32-bit type */
-#undef TIFF_INT32_T
+#define TIFF_INT32_T  @VXL_INT_32@
 
 /* Signed 64-bit type formatter */
-#undef TIFF_INT64_FORMAT
+/* Hard-coded from tif_config.vc.h*/
+#define TIFF_INT64_FORMAT "%I64d"
 
 /* Signed 64-bit type */
-#undef TIFF_INT64_T
+#define TIFF_INT64_T  @VXL_INT_64@
 
 /* Signed 8-bit type */
-#undef TIFF_INT8_T
+#define TIFF_INT8_T  @VXL_INT_8@
 
 /* Pointer difference type formatter */
 #undef TIFF_PTRDIFF_FORMAT
 
 /* Pointer difference type */
-#undef TIFF_PTRDIFF_T
+/* Hard-coded */
+#define TIFF_PTRDIFF_T ptrdiff_t
 
 /* Signed size type formatter */
 #undef TIFF_SSIZE_FORMAT
 
 /* Signed size type */
-#undef TIFF_SSIZE_T
+/* Hard-coded */
+#define TIFF_SSIZE_T ssize_t
 
 /* Unsigned 16-bit type */
-#undef TIFF_UINT16_T
+#define TIFF_UINT16_T  unsigned @VXL_INT_16@
 
 /* Unsigned 32-bit type formatter */
 #undef TIFF_UINT32_FORMAT
 
 /* Unsigned 32-bit type */
-#undef TIFF_UINT32_T
+#define TIFF_UINT32_T  unsigned @VXL_INT_32@
 
 /* Unsigned 64-bit type formatter */
-#undef TIFF_UINT64_FORMAT
+/* Hard-coded from tif_config.vc.h*/
+#define TIFF_UINT64_FORMAT "%I64u"
 
 /* Unsigned 64-bit type */
-#undef TIFF_UINT64_T
+#define TIFF_UINT64_T  unsigned @VXL_INT_64@
 
 /* Unsigned 8-bit type */
-#undef TIFF_UINT8_T
+#define TIFF_UINT8_T  unsigned @VXL_INT_8@
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME
