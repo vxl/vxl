@@ -217,7 +217,7 @@
 #cmakedefine LZW_SUPPORT
 
 /* Support Microsoft Document Imaging format */
-/* Hard-coded to 1 based on the same header from previous version in v3p/tiff*/
+/* Hard-coded to 1 based on the same header from previous version */
 #define MDI_SUPPORT 1
 
 /* Support NeXT 2-bit RLE algorithm */
@@ -252,10 +252,11 @@
 #undef PACKAGE_VERSION
 
 /* Support Macintosh PackBits algorithm */
-#undef PACKBITS_SUPPORT
+/* Hard-coded to 1 */
+#define PACKBITS_SUPPORT 1
 
 /* Support Pixar log-format algorithm (requires Zlib) */
-#undef PIXARLOG_SUPPORT
+#define PIXARLOG_SUPPORT  @LZW_SUPPORT@
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
