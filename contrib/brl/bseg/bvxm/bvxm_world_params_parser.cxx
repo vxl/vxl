@@ -109,7 +109,7 @@ bvxm_world_params_sptr bvxm_world_param_parser::create_bvxm_world_params()
     if (!is)
     {
       vcl_cerr << " Error opening lvcs file  " << lvcs_path_ << vcl_endl;
-      return false;
+      return bvxm_world_params_sptr();
     }
     lvcs->read(is);
     is.close();
