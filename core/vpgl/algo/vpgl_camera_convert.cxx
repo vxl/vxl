@@ -987,120 +987,121 @@ bool vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double>
 
   // initial guess for backprojection to planes
   vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
-          // convert the ray interpolation tolerances
-          double org_tol = 0.0;
-          double ang_tol = 0.0;
-          double max_org_err = 0.0, max_ang_err = 0.0;
-          if (!ray_tol(rat_cam,offseti+ ni/2.0, offsetj +nj/2.0, high,
-              org, low, endpt, org_tol, ang_tol))
-              return false;
+  // convert the ray interpolation tolerances
+  double org_tol = 0.0;
+  double ang_tol = 0.0;
+  double max_org_err = 0.0, max_ang_err = 0.0;
+  if (!ray_tol(rat_cam,offseti+ ni/2.0, offsetj +nj/2.0, high,
+      org, low, endpt, org_tol, ang_tol))
+      return false;
 
-          bool need_interp = true;
-          int lev = n_levels-1;
-          //vcl_cout<<" lev "<<lev<<" ";
-          for (; lev>=0&&need_interp; --lev) {
-              // set rays at current pyramid level
-              for (int j =0; j<nr[lev]; ++j) {
-                  int sj = offsetj+static_cast<int>(scl[lev]*j);
-                  //sj = (j == 0)? sj : sj -1;
-                  //if (sj>=gnj) 
-                  //    sj =gnj;
-                  for (int i =0;i<nc[lev]; ++i)
-                  {
-                      int si =  offseti+ static_cast<int>(scl[lev]*i);
-                      //si = (i == 0)? si : si -1;
-                      //if (si>=gni) 
-                      //    si = gni;
-                      vgl_point_2d<double> ip(si,sj);
-                      vgl_point_3d<double> prev_org(0.0,0.0,local_z_max);
-                      vgl_point_3d<double> prev_endpt(0.0, 0.0, local_z_min);
-                      // initialize guess with
-                      if (lev < n_levels-1) {
-                          double rel_scale =  scl[lev]/scl[lev+1];
-                          int i_above = static_cast<int>(rel_scale * i);
-                          int j_above = static_cast<int>(rel_scale * j);
-                          prev_org = ray_pyr[lev+1][j_above][i_above].origin();
-                          vgl_vector_3d<double> prev_dir = ray_pyr[lev+1][j_above][i_above].direction();
-                          // find endpoint
-                          double ray_len = (local_z_min - prev_org.z()) / prev_dir.z();
-                          prev_endpt = prev_org + (prev_dir * ray_len);
-                      }
-                      const double error_tol = 0.5; // allow projection error of 0.25 pixel
-                      if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org, error_tol))
-                          return false;
-                      if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt, error_tol))
-                          return false;
-                      vgl_vector_3d<double> dir = endpt-org;
-                      ray_pyr[lev][j][i].set(org, dir);
-                  }
+  bool need_interp = true;
+  int lev = n_levels-1;
+  //vcl_cout<<" lev "<<lev<<" ";
+  for (; lev>=0&&need_interp; --lev) {
+      // set rays at current pyramid level
+      for (int j =0; j<nr[lev]; ++j) {
+          int sj = offsetj+static_cast<int>(scl[lev]*j);
+          //sj = (j == 0)? sj : sj -1;
+          //if (sj>=gnj) 
+          //    sj =gnj;
+          for (int i =0;i<nc[lev]; ++i)
+          {
+              int si =  offseti+ static_cast<int>(scl[lev]*i);
+              //si = (i == 0)? si : si -1;
+              //if (si>=gni) 
+              //    si = gni;
+              vgl_point_2d<double> ip(si,sj);
+              vgl_point_3d<double> prev_org(0.0,0.0,local_z_max);
+              vgl_point_3d<double> prev_endpt(0.0, 0.0, local_z_min);
+              // initialize guess with
+              if (lev < n_levels-1) {
+                  double rel_scale =  scl[lev]/scl[lev+1];
+                  int i_above = static_cast<int>(rel_scale * i);
+                  int j_above = static_cast<int>(rel_scale * j);
+                  prev_org = ray_pyr[lev+1][j_above][i_above].origin();
+                  vgl_vector_3d<double> prev_dir = ray_pyr[lev+1][j_above][i_above].direction();
+                  // find endpoint
+                  double ray_len = (local_z_min - prev_org.z()) / prev_dir.z();
+                  prev_endpt = prev_org + (prev_dir * ray_len);
               }
-              // check for interpolation accuracy at the current level
-              // scan through the array and find largest discrepancy in
-              // ray origin and ray direction
-              need_interp = false;
-              max_org_err = 0.0; max_ang_err = 0.0;
-              vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
+              const double error_tol = 0.5; // allow projection error of 0.25 pixel
+              if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org, error_tol))
+                  return false;
+              if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt, error_tol))
+                  return false;
+              vgl_vector_3d<double> dir = endpt-org;
+              ray_pyr[lev][j][i].set(org, dir);
+          }
+      }
+      // check for interpolation accuracy at the current level
+      // scan through the array and find largest discrepancy in
+      // ray origin and ray direction
+      need_interp = false;
+      max_org_err = 0.0; max_ang_err = 0.0;
+      vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
 
-              for (int j =1; (j<nr[lev]-1)&&!need_interp; ++j) {
-                  for (int i =1;(i<nc[lev]-1)&&!need_interp; ++i) {
-                      vgl_ray_3d<double> ray = ray_pyr[lev][j][i];
-                      //
-                      //collect 4-neighbors of ray
-                      //
-                      //        0
-                      //      1 x 2
-                      //        3
-                      //
-                      ray_nbrs[0]=ray_pyr[lev][j-1][i];
-                      ray_nbrs[1]=ray_pyr[lev][j][i-1];
-                      ray_nbrs[2]=ray_pyr[lev][j][i+1];
-                      ray_nbrs[3]=ray_pyr[lev][j+1][i];
-                      //interpolate using neighbors
-                      vgl_ray_3d<double> intp_ray;
-                      if (!interp_ray(ray_nbrs, intp_ray))
-                          return false;
-                      double dorg = (ray.origin()-intp_ray.origin()).length();
-                      double dang = angle(ray.direction(), intp_ray.direction());
-                      if (dorg>max_org_err) max_org_err = dorg;
-                      if (dang>max_ang_err) max_ang_err = dang;
-                      need_interp = max_org_err>org_tol || max_ang_err>ang_tol;
+      for (int j =1; (j<nr[lev]-1)&&!need_interp; ++j) {
+          for (int i =1;(i<nc[lev]-1)&&!need_interp; ++i) {
+              vgl_ray_3d<double> ray = ray_pyr[lev][j][i];
+              //
+              //collect 4-neighbors of ray
+              //
+              //        0
+              //      1 x 2
+              //        3
+              //
+              ray_nbrs[0]=ray_pyr[lev][j-1][i];
+              ray_nbrs[1]=ray_pyr[lev][j][i-1];
+              ray_nbrs[2]=ray_pyr[lev][j][i+1];
+              ray_nbrs[3]=ray_pyr[lev][j+1][i];
+              //interpolate using neighbors
+              vgl_ray_3d<double> intp_ray;
+              if (!interp_ray(ray_nbrs, intp_ray))
+                  return false;
+              double dorg = (ray.origin()-intp_ray.origin()).length();
+              double dang = angle(ray.direction(), intp_ray.direction());
+              if (dorg>max_org_err) max_org_err = dorg;
+              if (dang>max_ang_err) max_ang_err = dang;
+              need_interp = max_org_err>org_tol || max_ang_err>ang_tol;
 #if 0
-                      if(need_interp)
-                          vcl_cout<<lev<<", "<<i<<","<<j<<vcl_endl;
+              if(need_interp)
+                  vcl_cout<<lev<<", "<<i<<","<<j<<vcl_endl;
 #endif
-                  }
+          }
+      }
+  }
+  // found level where interpolation is within tolerance
+  // fill in values at lower levels
+  for (++lev; lev>0; --lev) {
+      unsigned int ncr = nc[lev];
+      unsigned int nrb = nr[lev];
+      vbl_array_2d<vgl_ray_3d<double> >& clev = ray_pyr[lev];
+      vbl_array_2d<vgl_ray_3d<double> >& nlev = ray_pyr[lev-1];
+      vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
+      vcl_vector<vgl_ray_3d<double> > interp_rays(4);
+      for (unsigned int j = 0; j<nrb; ++j) {
+          for (unsigned int i = 0; i<ncr; ++i) {
+              ray_nbrs[0] = clev[j][i];
+              ray_nbrs[1] = clev[j][i];
+              ray_nbrs[2] = clev[j][i];
+              ray_nbrs[3] = clev[j][i];
+              if (i+1<ncr) ray_nbrs[1] = clev[j][i+1];
+              if (j+1<nrb) ray_nbrs[2] = clev[j+1][i];
+              if (i+1<ncr && j+1<nrb) ray_nbrs[3] = clev[j+1][i+1];
+              if (!upsample_rays(ray_nbrs, clev[j][i], interp_rays))
+                  return false;
+              if (2*i<nlev.cols() && 2*j<nlev.rows())
+              {
+                  nlev[2*j][2*i]    =interp_rays[0];
+                  if (2*i+1<nlev.cols())                      nlev[2*j][2*i+1]  =interp_rays[1];
+                  if (2*j+1<nlev.rows())                      nlev[2*j+1][2*i]  =interp_rays[2];
+                  if (2*i+1<nlev.cols() && 2*j+1<nlev.rows()) nlev[2*j+1][2*i+1]=interp_rays[3];
               }
           }
-          // found level where interpolation is within tolerance
-          // fill in values at lower levels
-          for (++lev; lev>0; --lev) {
-              unsigned int ncr = nc[lev];
-              unsigned int nrb = nr[lev];
-              vbl_array_2d<vgl_ray_3d<double> >& clev = ray_pyr[lev];
-              vbl_array_2d<vgl_ray_3d<double> >& nlev = ray_pyr[lev-1];
-              vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
-              vcl_vector<vgl_ray_3d<double> > interp_rays(4);
-              for (unsigned int j = 0; j<nrb; ++j)
-                  for (unsigned int i = 0; i<ncr; ++i) {
-                      ray_nbrs[0] = clev[j][i];
-                      ray_nbrs[1] = clev[j][i];
-                      ray_nbrs[2] = clev[j][i];
-                      ray_nbrs[3] = clev[j][i];
-                      if (i+1<ncr) ray_nbrs[1] = clev[j][i+1];
-                      if (j+1<nrb) ray_nbrs[2] = clev[j+1][i];
-                      if (i+1<ncr && j+1<nrb) ray_nbrs[3] = clev[j+1][i+1];
-                      if (!upsample_rays(ray_nbrs, clev[j][i], interp_rays))
-                          return false;
-                      if (2*i<nlev.cols() && 2*j<nlev.rows())
-                      {
-                          nlev[2*j][2*i]    =interp_rays[0];
-                          if (2*i+1<nlev.cols())                      nlev[2*j][2*i+1]  =interp_rays[1];
-                          if (2*j+1<nlev.rows())                      nlev[2*j+1][2*i]  =interp_rays[2];
-                          if (2*i+1<nlev.cols() && 2*j+1<nlev.rows()) nlev[2*j+1][2*i+1]=interp_rays[3];
-                      }
-                  }
-          }
-
+      }
+  }
+  return true;
 }
 #if 1
 //: Implementation of breaking up images in 256x256 blocks
