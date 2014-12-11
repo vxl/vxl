@@ -6,6 +6,7 @@
 
 #ifndef _TIFFCONF_
 #define _TIFFCONF_
+#include <stddef.h>
 
 /* Signed 16-bit type */
 #define TIFF_INT16_T @VXL_INT_16@
