@@ -319,8 +319,7 @@
 #define TIFF_INT32_T  @VXL_INT_32@
 
 /* Signed 64-bit type formatter */
-/* Hard-coded from tif_config.vc.h*/
-#define TIFF_INT64_FORMAT "%I64d"
+#define TIFF_INT64_FORMAT "@TIFF_INT64_FORMAT@"
 
 /* Signed 64-bit type */
 #define TIFF_INT64_T  @VXL_INT_64@
@@ -329,7 +328,7 @@
 #define TIFF_INT8_T  @VXL_INT_8@
 
 /* Pointer difference type formatter */
-#undef TIFF_PTRDIFF_FORMAT
+#define TIFF_PTRDIFF_FORMAT "@TIFF_PTRDIFF_FORMAT@"
 
 /* Pointer difference type */
 /* Hard-coded */
@@ -337,7 +336,7 @@
 
 /* Signed size type formatter */
 /* Hard-coded */
-#define TIFF_SSIZE_FORMAT "%ld"
+#define TIFF_SSIZE_FORMAT "@TIFF_SSIZE_FORMAT@"
 
 /* Signed size type */
 /* Hard-coded */
@@ -353,8 +352,7 @@
 #define TIFF_UINT32_T  unsigned @VXL_INT_32@
 
 /* Unsigned 64-bit type formatter */
-/* Hard-coded from tif_config.vc.h*/
-#define TIFF_UINT64_FORMAT "%I64u"
+#define TIFF_UINT64_FORMAT "@TIFF_UINT64_FORMAT@"
 
 /* Unsigned 64-bit type */
 #define TIFF_UINT64_T  unsigned @VXL_INT_64@
