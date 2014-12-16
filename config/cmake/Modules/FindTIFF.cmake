@@ -12,19 +12,16 @@
 # Additionally
 # VXL_USING_NATIVE_TIFF  - True if we are using a TIFF library provided outside vxl (or v3p)
 
+IF( NOT TIFF_FOUND )
 
-# If this FORCE variable is unset or is FALSE, try to find a native library.
-IF( VXL_FORCE_V3P_TIFF )
-ELSE( VXL_FORCE_V3P_TIFF )
-  FIND_PACKAGE( TIFF QUIET )
-ENDIF( VXL_FORCE_V3P_TIFF )
+  # If this FORCE variable is unset or is FALSE, try to find a native library.
+  IF( NOT VXL_FORCE_V3P_TIFF )
+    FIND_PACKAGE( TIFF QUIET )
+    IF( TIFF_FOUND )
+      SET(VXL_USING_NATIVE_TIFF "YES")
+    ENDIF( TIFF_FOUND )
+  ENDIF( NOT VXL_FORCE_V3P_TIFF )
 
-  
-IF(TIFF_FOUND)
-
-  SET(VXL_USING_NATIVE_TIFF "YES")
-
-ELSE(TIFF_FOUND)
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -32,13 +29,15 @@ ELSE(TIFF_FOUND)
   # exist.
   #
   
-  IF(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
+  IF( NOT TIFF_FOUND )
+    IF(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
 
-    SET( TIFF_FOUND "YES" )
-    SET( TIFF_INCLUDE_DIR ${tiff_BINARY_DIR} ${tiff_SOURCE_DIR})  
-    SET( TIFF_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/tiff)
-    SET( TIFF_LIBRARIES tiff )
+      SET( TIFF_FOUND "YES" )
+      SET( TIFF_INCLUDE_DIR ${tiff_BINARY_DIR} ${tiff_SOURCE_DIR})
+      SET( TIFF_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/tiff)
+      SET( TIFF_LIBRARIES tiff )
   
-  ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
+    ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
+  ENDIF( NOT TIFF_FOUND )
   
-ENDIF(TIFF_FOUND)
+ENDIF(NOT TIFF_FOUND)
