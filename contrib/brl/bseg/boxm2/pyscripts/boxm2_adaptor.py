@@ -1268,8 +1268,16 @@ def save_multi_block_scene(params) :
   boxm2_batch.run_process();
 
 def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0,clip_width = -1, clip_height = -1) :
+  def fail():
+    local_cam = 0
+    cropped_image = 0
+    uncertainty = 0
+    return result, local_cam, cropped_image, uncertainty
+    
   boxm2_batch.init_process("boxm2RoiInitProcess")
-  boxm2_batch.set_params_process(params_fname)
+  result = boxm2_batch.set_params_process(params_fname)
+  if not result:
+    return fail()
   boxm2_batch.set_input_string(0, NITF_path)
   boxm2_batch.set_input_from_db(1,camera)
   boxm2_batch.set_input_from_db(2,scene)
@@ -1285,11 +1293,9 @@ def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0,c
     cropped_image = dbvalue(id,type)
     (id,type) = boxm2_batch.commit_output(2)
     uncertainty = boxm2_batch.get_output_float(id)
+    return result, local_cam, cropped_image, uncertainty
   else:
-    local_cam = 0
-    cropped_image = 0
-    uncertainty = 0
-  return result, local_cam, cropped_image, uncertainty
+    return fail()
 
 def create_mask_image(scene, camera, ni, nj, ground_plane_only=False) :
   boxm2_batch.init_process("boxm2CreateSceneMaskProcess")
