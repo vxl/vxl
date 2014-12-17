@@ -125,12 +125,19 @@ bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) //
     int size;
     int length;
     tagtype_t ttype;
-    get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
+    bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
+    if (!status) {
+      vcl_cerr << "Missing ProjectedCSTypeGeoKey (" << ProjectedCSTypeGeoKey << ") key!\n";
+      return false;
+    }
 
     // WGS84 / UTM northern hemisphere:  326zz where zz is UTM zone number
     // WGS84 / UTM southern hemisphere:  327zz where zz is UTM zone number
     // we are looking for a short value, only one
-    assert ((length == 1) && (ttype == TYPE_SHORT));
+    if(length != 1 || ttype != TYPE_SHORT) {
+      vcl_cerr << "Expected a single value with type int16 (short)!\n";
+      return false;
+    }
 
     short *val = static_cast<short*> (value);
     if ((*val < PCS_WGS84_UTM_zone_1N ) || ((*val > PCS_WGS84_UTM_zone_60S ))) {
@@ -164,8 +171,15 @@ bool vil_geotiff_header::GCS_WGS84_MET_DEG()
   if (gtif_modeltype(type) && type == ModelTypeGeographic) {
     void *value; int size; int length; tagtype_t ttype;
     
-    get_key_value(GeogLinearUnitsGeoKey, &value, size, length, ttype);
-    assert ((length == 1) && (ttype == TYPE_SHORT));
+    bool status = get_key_value(GeogLinearUnitsGeoKey, &value, size, length, ttype);
+    if (!status) {
+      vcl_cerr << "Missing GeogLinearUnitsGeoKey (" << GeogLinearUnitsGeoKey << ") key!\n";
+      return false;
+    }
+    if(length != 1 || ttype != TYPE_SHORT) {
+      vcl_cerr << "Expected a single value with type int16 (short)!\n";
+      return false;
+    }
     short *val = static_cast<short*> (value);
 
     if (*val != Linear_Meter) {
@@ -173,8 +187,15 @@ bool vil_geotiff_header::GCS_WGS84_MET_DEG()
       return false;
     }
 
-    get_key_value(GeogAngularUnitsGeoKey, &value, size, length, ttype);
-    assert ((length == 1) && (ttype == TYPE_SHORT));
+    status = get_key_value(GeogAngularUnitsGeoKey, &value, size, length, ttype);
+    if (!status) {
+      vcl_cerr << "Missing GeogAngularUnitsGeoKey (" << GeogAngularUnitsGeoKey << ") key!\n";
+      return false;
+    }
+    if(length != 1 || ttype != TYPE_SHORT) {
+      vcl_cerr << "Expected a single value with type int16 (short)!\n";
+      return false;
+    }
     val = static_cast<short*> (value);
 
     if (*val != Angular_Degree) {
@@ -197,9 +218,15 @@ bool vil_geotiff_header::PCS_NAD83_UTM_zone(int &zone, GTIF_HEMISPH &hemisph)
     int size;
     int length;
     tagtype_t ttype;
-    get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
-
-    assert ((length == 1) && (ttype == TYPE_SHORT));
+    bool status = get_key_value(ProjectedCSTypeGeoKey, &value, size, length, ttype);
+    if (!status) {
+      vcl_cerr << "Missing ProjectedCSTypeGeoKey (" << ProjectedCSTypeGeoKey << ") key!\n";
+      return false;
+    }
+    if(length != 1 || ttype != TYPE_SHORT) {
+      vcl_cerr << "Expected a single value with type int16 (short)!\n";
+      return false;
+    }
 
     short *val = static_cast<short*> (value);
     if ((*val < PCS_NAD83_UTM_zone_3N ) || ((*val > PCS_NAD83_Missouri_West ))) {
