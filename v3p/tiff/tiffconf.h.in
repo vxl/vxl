@@ -51,7 +51,8 @@
 
 /* Define as 0 or 1 according to the floating point format suported by the
    machine */
-/* Hard-coded to 1 */
+/* Hard-coded to 1 (vxl actually doesn't think we have this header, but tiff 
+   won't compile if this is not defined) */
 #define HAVE_IEEEFP 1
 
 /* Set the native cpu bit order (FILLORDER_LSB2MSB or FILLORDER_MSB2LSB) */
@@ -60,8 +61,7 @@
 
 /* Native cpu byte order: 1 if big-endian (Motorola) or 0 if little-endian
    (Intel) */
-/* Hard-coded to little-endian (Intel)  for now */
-#define HOST_BIGENDIAN 0
+#cmakedefine HOST_BIGENDIAN
 
 /* Support CCITT Group 3 & 4 algorithms */
 /* Hard-coded to 1 */
@@ -94,7 +94,7 @@
 
 
 /* Support Pixar log-format algorithm (requires Zlib) */
-#define PIXARLOG_SUPPORT  @LZW_SUPPORT@
+#cmakedefine PIXARLOG_SUPPORT
 
 /* Support ThunderScan 4-bit RLE algorithm */
 /* Hard-coded to 1 */
