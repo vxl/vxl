@@ -162,6 +162,15 @@ static void vil_tiff_unmapfileproc(thandle_t, tdata_t, toff_t)
 static TIFF* open_tiff(tif_stream_structures* tss, const char* mode)
 {
   tss->vs->seek(0L);
+#if HAS_GEOTIFF
+  TIFF* tiff = XTIFFClientOpen("unknown filename",
+                               mode, // read, enable strip chopping
+                               (thandle_t)tss,
+                               vil_tiff_readproc, vil_tiff_writeproc,
+                               vil_tiff_seekproc, vil_tiff_closeproc,
+                               vil_tiff_sizeproc,
+                               vil_tiff_mapfileproc, vil_tiff_unmapfileproc);
+#else // this file is only included if HAS TIFF is defined vil_file_format.cxx
   TIFF* tiff = TIFFClientOpen("unknown filename",
                               mode, // read, enable strip chopping
                               (thandle_t)tss,
@@ -169,6 +178,7 @@ static TIFF* open_tiff(tif_stream_structures* tss, const char* mode)
                               vil_tiff_seekproc, vil_tiff_closeproc,
                               vil_tiff_sizeproc,
                               vil_tiff_mapfileproc, vil_tiff_unmapfileproc);
+#endif // HAS_GEOTIFF
 
   if (!tiff)
     return 0;
@@ -190,7 +200,11 @@ vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
 
   if (!h->format_supported)
   {
+#if HAS_GEOTIFF
+    XTIFFClose(tss->tif);
+#else
     TIFFClose(tss->tif);
+#endif // HAS_GEOTIFF
     delete h;
     return 0;
   }
@@ -307,7 +321,11 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
                                            format, size_block_i, size_block_j);
   if (!h->format_supported)
   {
+#if HAS_GEOTIFF
+    XTIFFClose(tss->tif);
+#else
     TIFFClose(tss->tif);
+#endif // HAS_GEOTIFF
     delete h;
     return 0;
   }

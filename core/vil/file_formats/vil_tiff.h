@@ -37,6 +37,7 @@
 #include <vil/file_formats/vil_tiff_header.h>
 #include <tiffio.h>
 #if HAS_GEOTIFF
+#include <xtiffio.h>
 #include <vil/file_formats/vil_geotiff_header.h>
 #endif
 
@@ -99,7 +100,11 @@ struct tif_ref_cnt
   void unref(){
     if (--cnt_<=0)
     {
-      TIFFClose(tif_);
+#if HAS_GEOTIFF
+    XTIFFClose(tif_);
+#else
+    TIFFClose(tif_);
+#endif // HAS_GEOTIFF
       delete this;
     }
   }
