@@ -1,4 +1,6 @@
 #include "boxm2_block.h"
+#include <boct/boct_bit_tree.h>
+#include <vgl/vgl_intersection.h>
 //:
 // \file
 #include <boxm2/boxm2_util.h>
@@ -19,7 +21,7 @@ boxm2_block::boxm2_block(boxm2_block_id id, boxm2_block_metadata data, char* buf
   max_mb_     = int(data.max_mb_);
   sub_block_dim_ = data.sub_block_dim_;
   sub_block_num_ = data.sub_block_num_;
-
+  local_origin_ = data.local_origin_;
   block_id_ = id;
   buffer_ = buffer;
   this->b_read(buffer_);
@@ -152,6 +154,7 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   init_level_ = data.init_level_;
   max_level_  = data.max_level_;
   max_mb_     = int(data.max_mb_);
+  local_origin_ = data.local_origin_;
   buffer_ = new char[byte_count_];
 
   //get member variable metadata straight, then write to the buffer
@@ -242,8 +245,117 @@ long boxm2_block::calc_byte_count(int num_buffers, int trees_per_buffer, int num
   }
   return toReturn;
 }
+vgl_box_3d<double> boxm2_block::bounding_box_global() const{
+  vgl_vector_3d<double> diag(sub_block_dim_.x()*sub_block_num_.x(),
+                             sub_block_dim_.y()*sub_block_num_.y(),
+                             sub_block_dim_.z()*sub_block_num_.z());
+  return vgl_box_3d<double>(local_origin_,local_origin_+diag);
+}
 
+bool boxm2_block::contains(vgl_point_3d<double> const& global_pt, vgl_point_3d<double>& local_pt) const{
+  vgl_box_3d<double> bbox = this->bounding_box_global();
+  if(bbox.contains(global_pt.x(), global_pt.y(), global_pt.z())) {
+    double local_x=(global_pt.x()-local_origin_.x())/sub_block_dim_.x();
+    double local_y=(global_pt.y()-local_origin_.y())/sub_block_dim_.y();
+    double local_z=(global_pt.z()-local_origin_.z())/sub_block_dim_.z();
+    local_pt.set(local_x, local_y, local_z);
+    return true;
+  }
+  return false;
+}
+bool boxm2_block::contains(vgl_point_3d<double> const& global_pt, vgl_point_3d<int>& local_pt) const{
+  vgl_point_3d<double> p;
+  if(!this->contains(global_pt, p))
+    return false;
+  int index_x=(int)vcl_floor(p.x());
+  int index_y=(int)vcl_floor(p.y());
+  int index_z=(int)vcl_floor(p.z());
+  local_pt.set(index_x, index_y, index_z);
+  return true;
+}
 
+bool boxm2_block::contains(vgl_point_3d<double> const& global_pt, vgl_point_3d<double>& local_tree_coords,
+                           vgl_point_3d<double>& cell_center, double& side_length) const{
+  if(!this->contains(global_pt, local_tree_coords))
+    return false;
+  int index_x=(int)vcl_floor(local_tree_coords.x());
+  int index_y=(int)vcl_floor(local_tree_coords.y());
+  int index_z=(int)vcl_floor(local_tree_coords.z());
+  vnl_vector_fixed<unsigned char,16> treebits=trees_(index_x,index_y,index_z);
+  boct_bit_tree tree(treebits.data_block(),max_level_);
+  int bit_index=tree.traverse(local_tree_coords);
+  unsigned depth=tree.depth_at(bit_index);
+  side_length=static_cast<float>(sub_block_dim_.x()/((float)(1<<depth)));
+  cell_center = tree.cell_center(bit_index);
+  cell_center.set(cell_center.x()+index_x, cell_center.y()+index_y,cell_center.z()+index_z);
+  return true;
+}
+
+bool boxm2_block::data_index(vgl_point_3d<double> const& global_pt, unsigned& index, unsigned& depth, double& side_length) const{
+  vgl_point_3d<double> loc;
+  if(!this->contains(global_pt, loc))
+    return false;
+  int index_x=(int)vcl_floor(loc.x());
+  int index_y=(int)vcl_floor(loc.y());
+  int index_z=(int)vcl_floor(loc.z());
+  vnl_vector_fixed<unsigned char,16> treebits=trees_(index_x,index_y,index_z);
+  boct_bit_tree tree(treebits.data_block(),max_level_);
+  int bit_index=tree.traverse(loc);
+  depth=tree.depth_at(bit_index);
+  index=tree.get_data_index(bit_index,false);
+  side_length=static_cast<float>(sub_block_dim_.x()/((float)(1<<depth)));
+  return true;
+}
+bool boxm2_block::data_index(vgl_point_3d<double> const& global_pt, unsigned& index) const{
+  unsigned depth;
+  double cell_side_length;
+  return this->data_index(global_pt, index, depth, cell_side_length);
+}
+
+vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global_box){
+  vcl_vector<cell_info> temp;
+  vgl_box_3d<double> bbox = this->bounding_box_global();
+  vgl_box_3d<double> inter = vgl_intersection<double>(global_box, bbox);
+  if(inter.is_empty())
+    return temp;
+  vgl_point_3d<double> min_pt = inter.min_point();
+  double local_x_min =(min_pt.x()-local_origin_.x())/sub_block_dim_.x();
+  double local_y_min =(min_pt.y()-local_origin_.y())/sub_block_dim_.y();
+  double local_z_min =(min_pt.z()-local_origin_.z())/sub_block_dim_.z();
+  int index_x_min=(int)vcl_floor(local_x_min);
+  int index_y_min=(int)vcl_floor(local_y_min);
+  int index_z_min=(int)vcl_floor(local_z_min);
+  vgl_point_3d<double> max_pt = inter.max_point();
+  double local_x_max =(max_pt.x()-local_origin_.x())/sub_block_dim_.x();
+  double local_y_max =(max_pt.y()-local_origin_.y())/sub_block_dim_.y();
+  double local_z_max =(max_pt.z()-local_origin_.z())/sub_block_dim_.z();
+  int index_x_max=(int)vcl_floor(local_x_max);
+  int index_y_max=(int)vcl_floor(local_y_max);
+  int index_z_max=(int)vcl_floor(local_z_max);
+  vgl_point_3d<double> loc;
+  for(int iz = index_z_min; iz<=index_z_max; ++iz){
+    loc.z() = iz*sub_block_dim_.z();
+    for(int iy = index_y_min; iy<=index_y_max; ++iy){
+      loc.y() = iy*sub_block_dim_.y();
+      for(int ix = index_x_min; ix<=index_x_max; ++ix){
+        loc.x() = ix*sub_block_dim_.x();
+        cell_info ci;
+        vnl_vector_fixed<unsigned char,16> treebits=trees_(ix,iy,iz);
+        boct_bit_tree tree(treebits.data_block(),max_level_);
+        int bit_index=tree.traverse(loc);
+        ci.depth_=tree.depth_at(bit_index);
+        ci.data_index_=tree.get_data_index(bit_index,false);
+        ci.side_length_=static_cast<float>(sub_block_dim_.x()/((float)(1<<ci.depth_)));
+        vgl_point_3d<double> cell_center = tree.cell_center(bit_index);
+        ci.cell_center_.set(cell_center.x()+loc.x()+local_origin_.x(),
+                        cell_center.y()+loc.y()+local_origin_.y(),
+                        cell_center.z()+loc.z()+local_origin_.z());
+          temp.push_back(ci);
+      }
+    }
+  }
+  return temp;
+}
 //------------ I/O -------------------------------------------------------------
 vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& block)
 {
@@ -254,7 +366,8 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& block)
     << "Max level=" << block.max_level() << '\n'
     << "Max MB=" << block.max_mb() << '\n'
     << "Sub Block Dim=" << block.sub_block_dim() << '\n'
-    << "Sub Block Num=" << block.sub_block_num() << vcl_endl;
+    << "Sub Block Num=" << block.sub_block_num() << '\n'
+    << "Local Origin " << block.local_origin() << vcl_endl;
 }
 
 //: Binary write boxm2_block to stream.

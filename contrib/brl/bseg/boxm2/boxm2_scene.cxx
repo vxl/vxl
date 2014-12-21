@@ -118,6 +118,20 @@ boxm2_scene::boxm2_scene(vcl_string filename)
   id_ = count_;
   count_++;
 }
+// pretty much a straignt copy but provide a unique id
+boxm2_scene::boxm2_scene(boxm2_scene const& other_scene){
+  lvcs_ = other_scene.lvcs();
+  local_origin_ = other_scene.local_origin();
+  rpc_origin_ = other_scene.rpc_origin();
+  data_path_ = other_scene.data_path();
+  xml_path_ = other_scene.xml_path();
+  boxm2_scene& non_const_scene = const_cast<boxm2_scene&>(other_scene);
+  blocks_ = non_const_scene.blocks();
+  appearances_ = other_scene.appearances();
+  num_illumination_bins_ = other_scene.num_illumination_bins();
+  version_ = other_scene.version();
+  id_ = count_++;
+}
 
 boxm2_scene_sptr boxm2_scene::clone_no_disk(){
   boxm2_scene* clone = new boxm2_scene();

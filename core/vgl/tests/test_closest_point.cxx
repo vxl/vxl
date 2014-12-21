@@ -16,6 +16,7 @@
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_sphere_3d.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for sqrt()
 
@@ -540,6 +541,17 @@ static void test_infinite_line_3d_closest_points()
                     u);
     TEST("Non-parallel, non-intersecting infinite lines", success, true);
 }
+static void test_sphere_3d_closest_point(){
+  vcl_cout << "-------------------------------------------------\n"
+           << " Testing vgl_closest_point(3-d sphere):\n"
+           << "-------------------------------------------------\n";
+  vgl_sphere_3d<double> s(1.0, 2.0, 3.0, 4.0);
+  vgl_point_3d<double> p(5.0, 5.0, 5.0);
+  vgl_point_3d<double> cp = vgl_closest_point(s, p);
+  double x = 3.97113-cp.x(), y = 4.22834-cp.y(), z = 4.48556-cp.z();
+  double er = vcl_sqrt(x*x + y*y + z*z);
+  TEST_NEAR("Closest point on sphere", er, 0.0, 1.e-5);
+}
 
 static void test_closest_point()
 {
@@ -557,6 +569,7 @@ static void test_closest_point()
   testLine3DClosestPoints();
   testLineSegment3DClosestPoints();
   test_infinite_line_3d_closest_points();
+  test_sphere_3d_closest_point();
 }
 
 TESTMAIN(test_closest_point);

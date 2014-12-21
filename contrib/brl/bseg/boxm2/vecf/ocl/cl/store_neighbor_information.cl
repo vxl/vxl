@@ -38,7 +38,6 @@ __kernel void extract_neighbors_block( __constant float           * centerX,    
 				       )
 {
 
-  //convert 3-d workgroup index to a linear index
   int gid = get_global_id(0);
   int llid = get_local_id(0);
   int numTrees = linfo->dims.x * linfo->dims.y * linfo->dims.z;

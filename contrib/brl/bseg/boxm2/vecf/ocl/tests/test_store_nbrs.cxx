@@ -22,8 +22,10 @@ typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 void test_store_nbrs()
 {
   // Set up the scenes
-  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
-  vcl_string source_scene_path = base_dir_path + "source_scene.xml";
+  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
+  //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
+  //vcl_string source_scene_path = base_dir_path + "source_scene.xml";
+    vcl_string source_scene_path = base_dir_path + "eye.xml";
   if(!vul_file::exists(source_scene_path))
   {
       vcl_cout<<"source scene file does not exist"<<vcl_endl;

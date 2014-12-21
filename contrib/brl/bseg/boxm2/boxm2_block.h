@@ -25,7 +25,13 @@
 //smart pointer stuff
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-
+struct cell_info{
+cell_info(): depth_(0),data_index_(0), side_length_(0.0){}
+  vgl_point_3d<double> cell_center_;
+  unsigned depth_;
+  unsigned data_index_;
+  double side_length_;
+};
 
 class boxm2_block : public vbl_ref_count
 {
@@ -69,7 +75,7 @@ class boxm2_block : public vbl_ref_count
   int                       max_level()         const { return max_level_; }
   int                       max_mb()            const { return max_mb_; }
   long                      byte_count()        const { return byte_count_; }
-
+  vgl_point_3d<double>      local_origin()      const { return local_origin_;}
   //: mutators
   void set_block_id(boxm2_block_id id)  { block_id_ = id; }
   void set_init_level(int level)        { init_level_ = level; }
@@ -84,6 +90,33 @@ class boxm2_block : public vbl_ref_count
   void enable_write() { read_only_ = false; }
   bool read_only() const { return read_only_; }
 
+  //: construct the bounding box for the block in scene coordinates
+  vgl_box_3d<double> bounding_box_global() const;
+
+  /////
+  //: Global point methods. All test if the specified global point
+  // is inside *this block and produce coordinates and indices, returning true.
+  // If the point is not inside the block, the methods return false.
+  //
+  //: if the block contains the global_pt, compute the local real coordinates of the sub_block (tree)
+  bool contains(vgl_point_3d<double> const& global_pt, vgl_point_3d<double>& local_pt) const;
+  //: if the block contains the global_pt, compute the integer local coordinates of the sub_block (tree)
+  bool contains(vgl_point_3d<double> const& global_pt, vgl_point_3d<int>& local_pt) const;
+
+  //: retrieve local tree coordinates for global_pt and the coords for the cell containing the global point
+  bool contains(vgl_point_3d<double> const& global_pt, vgl_point_3d<double>& local_tree_coords,
+                vgl_point_3d<double>& cell_center, double& side_length) const;
+
+  //: compute the data index for the cell containing the pt, also return cell octree depth and cell side length
+  bool data_index(vgl_point_3d<double> const& global_pt, unsigned& index, unsigned& depth, double& side_length) const;
+
+  //: just get the data index
+  bool data_index(vgl_point_3d<double> const& global_pt, unsigned& index) const;
+
+  //: retrieve a vector of cell centers and other info inside the specified bounding box, both in global world coordinates
+  vcl_vector<cell_info> cells_in_box(vgl_box_3d<double> const& global_box);
+  
+  /////
  private:
 
   //: unique block id (currently 3D address)
@@ -101,6 +134,7 @@ class boxm2_block : public vbl_ref_count
   //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
   vgl_vector_3d<double>   sub_block_dim_;
   vgl_vector_3d<unsigned> sub_block_num_;
+  vgl_point_3d<double> local_origin_;
 
   //: info about block's trees
   int init_level_;   //each sub_blocks's init level (default 1)

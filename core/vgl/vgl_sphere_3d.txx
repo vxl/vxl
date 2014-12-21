@@ -92,6 +92,31 @@ vcl_istream& vgl_sphere_3d<T>::read(vcl_istream& is)
   return is;
 }
 
+template <class Type>
+void vgl_sphere_3d<Type>::spherical_to_cartesian(Type elevation_rad, Type azimuth_rad,
+                                                 Type& x, Type& y, Type& z) const{
+ 
+  double el = static_cast<double>(elevation_rad), az = static_cast<double>(azimuth_rad);
+  double cx = static_cast<double>(c_.x()),cy =static_cast<double>(c_.y()), cz = static_cast<double>(c_.z());
+  double r = static_cast<double>(r_);
+  double se = vcl_sin(elevation_rad), ce = vcl_cos(elevation_rad);
+  double sa = vcl_sin(azimuth_rad), ca = vcl_cos(azimuth_rad);
+  
+  x = static_cast<Type>((r*se*ca)+cx);
+  y = static_cast<Type>((r*se*sa)+cy);
+  z = static_cast<Type>((r*ce)+cz); 
+
+}
+
+template <class Type>
+void vgl_sphere_3d<Type>::spherical_to_cartesian(Type elevation_rad, Type azimuth_rad, vgl_point_3d<Type>&  pt) const
+{
+
+  Type x, y, z;
+  spherical_to_cartesian(elevation_rad, azimuth_rad, x, y, z);
+  pt.set(x, y, z);
+
+}
 
 //: Writes "<vgl_sphere_3d centre=vgl_point_3d<x,y,z> radius=r)>" to stream
 template <class T>

@@ -14,6 +14,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -621,7 +622,20 @@ vgl_point_3d<T> vgl_closest_point(vgl_line_segment_3d<T> const& l,
                                   p.x(), p.y(), p.z());
  return q;
 }
-
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
+                                  vgl_point_3d<T> const& p){
+  const vgl_point_3d<T>& c = s.centre();
+  // offset p by sphere center
+  double vx = static_cast<double>(p.x()-c.x()), vy = static_cast<double>(p.y()-c.y()),
+    vz = static_cast<double>(p.z()-c.z());
+  double radius = vcl_sqrt(vx*vx + vy*vy + vz*vz);
+  T azimuth = static_cast<T>(vcl_atan2(vy, vx));
+  T elevation = static_cast<T>(vcl_acos(vz/radius));
+  vgl_point_3d<T> ret;
+  s.spherical_to_cartesian(elevation, azimuth, ret);
+  return ret;
+}
 #undef DIST_SQR_TO_LINE_SEG_2D
 #undef DIST_SQR_TO_LINE_SEG_3D
 
@@ -660,6 +674,6 @@ template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
 template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
          vgl_closest_points(vgl_line_segment_3d<T >const&, vgl_line_segment_3d<T >const&, bool*); \
 template vgl_point_2d<T > vgl_closest_point(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
-template vgl_point_3d<T > vgl_closest_point(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&)
-
+template vgl_point_3d<T > vgl_closest_point(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&); \
+template  vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s, vgl_point_3d<T> const& p)
 #endif // vgl_closest_point_txx_

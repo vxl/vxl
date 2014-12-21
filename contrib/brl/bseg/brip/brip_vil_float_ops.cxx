@@ -1461,7 +1461,7 @@ brip_vil_float_ops::convert_to_byte(vil_image_view<float> const& image)
   if (range == 0.f)
     range = 1.f;
   else
-    range = 256.f/range;
+    range = 255.f/range;
   for (unsigned y = 0; y<h; y++)
     for (unsigned x = 0; x<w; x++)
     {

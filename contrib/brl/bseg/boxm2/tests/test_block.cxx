@@ -147,6 +147,20 @@ void test_block()
     }
     TEST("boxm2_block: trees initialized properly", true, true);
 
+    // test various location and data index functions
+    vgl_box_3d<double> bbox = test_block.bounding_box_global();
+    bool good = true;
+    unsigned indx, dpth;
+    double side_length;
+    vgl_point_3d<double> g_pt(0.51, 0.51, 0.51);
+        good = good && bbox.contains(g_pt);
+    vgl_point_3d<int> l_pt;
+    good = good && test_block.contains(g_pt, l_pt);
+    good = good && test_block.data_index(g_pt, indx, dpth, side_length);
+    good = good && indx == 16656;
+    good = good && dpth == 0;
+    good = good && side_length == dims[0];
+         TEST("boxm2_block: bounding box, contains and index", good, true);
     //clean up file left behind "tests/block_id.0.0.0.bin"
     test_block_id();
 }

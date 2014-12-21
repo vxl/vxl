@@ -65,6 +65,14 @@ class vgl_sphere_3d
   bool clip(const vgl_line_3d_2_points<Type> & line,
             vgl_point_3d<Type> &p1, vgl_point_3d<Type> &p2) const;
   
+
+  //: convert point on sphere to Cartesian coordinates, angles in radians
+  void spherical_to_cartesian(Type elevation_rad, Type azimuth_rad,
+                              Type& x, Type& y, Type& z) const;
+
+  void spherical_to_cartesian(Type elevation_rad, Type azimuth_rad,
+                              vgl_point_3d<Type>&  pt) const;
+
   //: Writes "<vgl_sphere_3d centre=vgl_point_3d<x,y,z> radius=r)>" to stream
   vcl_ostream& print(vcl_ostream& os) const;
 

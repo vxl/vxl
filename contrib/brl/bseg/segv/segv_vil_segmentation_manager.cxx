@@ -1348,10 +1348,11 @@ void segv_vil_segmentation_manager::display_images_as_color()
 
 void segv_vil_segmentation_manager::intensity_profile()
 {
+  bgui_image_tableau_sptr itab = selected_image_tab();
+ itab->lock_linenum(true);
   bgui_picker_tableau_sptr ptab = selected_picker_tab();
   float start_col=0, end_col=0, start_row=0, end_row=0;
   ptab->pick_line(&start_col, &start_row, &end_col, &end_row);
-  bgui_image_tableau_sptr itab = selected_image_tab();
   vcl_vector<double> pos, vals;
   itab->image_line(start_col, start_row, end_col, end_row, pos, vals);
   bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
@@ -1367,9 +1368,11 @@ void segv_vil_segmentation_manager::intensity_profile()
   if (!ip_dialog->ask())
   {
     delete ip_dialog;
+    itab->lock_linenum(false);
     return;
   }
 delete ip_dialog;
+ itab->lock_linenum(false);
 }
 
 void segv_vil_segmentation_manager::display_roi()

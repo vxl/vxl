@@ -89,7 +89,6 @@ __kernel void filter_block_six_neighbors(__constant  float           * centerX,
   float weights[8];
   for(int k = 0; k<8; ++k)
     weights[k] = filter_weights[k];
-  //convert 3-d workgroup index to a linear index
   int gid = get_global_id(0);
   int lid = get_local_id(0);
   __local uchar16* neighbor_tree = &neighbor_trees[lid];
@@ -138,7 +137,7 @@ __kernel void filter_block_six_neighbors(__constant  float           * centerX,
 					     0.0f );
 	      uchar8 nbr_exist = (uchar8)(0); //local register to temporarily store neighbor existence
 	      uchar8 nbr_exp_int = (uchar8)(0); //local register to temporarily store expected intensity
-	      float8 nbr_alpha = (float8)(-log(0.001f)/side_len); //local register to temporarily store neighbor probs
+	      float8 nbr_alpha = (float8)(-log(0.001f)/side_len); //local register to temporarily store neighbor alphas
 	      float4 lcent; //local center
 	      int neighborBitIndex, idx, blkI;
 	      float del = 0.0f, exint = 0.0f, nrm = (float)NORM;
@@ -256,8 +255,9 @@ __kernel void filter_block_six_neighbors(__constant  float           * centerX,
 
 	      //data index for the current cell in source
 	      int sidx = data_index_relative( local_tree_source, i, lookup) + data_index_root(local_tree_source);
+	      //data index for the current cell in temp
 	      int tidx = data_index_relative( local_tree_temp, i, lookup) + data_index_root(local_tree_temp);
-	      // filter using neighborhood
+	      // filter using neighborhood just computed
 	      if(filter_from_source){
 		MOG_TYPE mog = source_mog_array[sidx];
 		filter_mog(&mog, &nbr_exp_int, &nbr_exist, &weights);

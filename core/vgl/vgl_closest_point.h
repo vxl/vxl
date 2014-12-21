@@ -320,5 +320,9 @@ template <class T> inline
 vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
                                   vgl_line_segment_3d<T> const& l) { return vgl_closest_point(l,p); }
 
-
+//: Return the closest point on a sphere \a s to a point \a p in 3D
+// \relatesalso vgl_point_3d
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
+                                  vgl_point_3d<T> const& p);
 #endif // vgl_closest_point_h_

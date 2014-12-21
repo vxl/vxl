@@ -3,7 +3,7 @@
 // \author J.L. Mundy
 // \date 10/12/14
 
-
+#include <memory>
 #include <testlib/testlib_test.h>
 #include <vcl_fstream.h>
 #include <vil/vil_image_view.h>
@@ -18,14 +18,16 @@
 #include <vcl_vector.h>
 #include "../boxm2_vecf_ocl_filter.h"
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-
 void test_filter()
 {
+
   // Set up the scenes
   //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/putin_face/";
-  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
-  vcl_string source_scene_path = base_dir_path + "filter_source_scene.xml";
+        //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
+        //  vcl_string source_scene_path = base_dir_path + "filter_source_scene.xml";
   //  vcl_string temp_scene_path = base_dir_path + "filter_temp_scene.xml";
+        vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
+        vcl_string source_scene_path = base_dir_path + "eye.xml";
   if(!vul_file::exists(source_scene_path))
   {
       vcl_cout<<"One or both of the secene files do not exist"<<vcl_endl;
@@ -43,7 +45,8 @@ void test_filter()
   boxm2_vecf_ocl_filter f(source_scene, temp_scene, opencl_cache);
   vcl_vector<float> coefs(8,0.125f);
   coefs[0]=0.25f;   coefs[7]=0.0f;
-  f.filter(coefs);//one iteration
+  f.filter(coefs, 3);
+
 }
 
 TESTMAIN( test_filter );

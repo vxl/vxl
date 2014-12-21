@@ -71,6 +71,9 @@ class boxm2_scene : public vbl_ref_count
     //: initializes scene from xmlFile
     boxm2_scene(vcl_string filename);
 
+    //: copy constructor
+    boxm2_scene(boxm2_scene const& other_scene);
+
     //: destructor
     ~boxm2_scene() { }
 
@@ -150,7 +153,8 @@ class boxm2_scene : public vbl_ref_count
 
     //: If a block contains a 3-d point, set the local coordinates of the point
     bool block_contains(vgl_point_3d<double> const& p, boxm2_block_id bid,
-                  vgl_point_3d<double>& local_coords) const;
+                        vgl_point_3d<double>& local_coords) const;
+
     //: If a scene contains a 3-d point, set the block id, else return false. The local coordinates of the point are also returned
     bool contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
                   vgl_point_3d<double>& local_coords) const;
@@ -170,10 +174,10 @@ class boxm2_scene : public vbl_ref_count
     int num_illumination_bins() const {return num_illumination_bins_;}
 
     //: scene version number
-    int version() { return version_; }
+    int version() const { return version_; }
     void set_version(int v) { version_ = v; }
     //: unique scene id
-    unsigned id() {return id_;}
+    unsigned id() const {return id_;}
     //: scene mutators
     void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
     void set_rpc_origin(vgl_point_3d<double> rpc)   { rpc_origin_ = rpc; }
