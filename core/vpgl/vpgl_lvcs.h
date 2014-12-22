@@ -26,11 +26,11 @@
 // \verbatim
 //  Modifications
 //   Ozge C. Ozcanli  July 28 2012: added option to use UTM projection planes as local coordinate system
-//                                  origin point is still given in wgs84, 
+//                                  origin point is still given in wgs84,
 //                                  but it is converted to utm origin during local to global transformations and vice versa
 //                                  all the global coords are still either in wgs84, nad27n or wgs72
-//                                  if a utm zone is crossed 
-//   Yi Dong  July 31, 2013: fix the local_to_global method to correctly transfer the local cooridinates to global wgs84 coords 
+//                                  if a utm zone is crossed
+//   Yi Dong  July 31, 2013: fix the local_to_global method to correctly transfer the local cooridinates to global wgs84 coords
 //                           for points located in southern hemisphere.  Note that the input point needs to be at the same hemisphere
 //                           as the lvcs origin
 //
@@ -116,7 +116,7 @@ class vpgl_lvcs : public vbl_ref_count
   bool operator==(vpgl_lvcs const& r) const;
 
   void get_utm_origin(double& x, double& y, double& elev, int& zone) const;
-  
+
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
 
@@ -124,8 +124,8 @@ class vpgl_lvcs : public vbl_ref_count
   void b_read(vsl_b_istream &is);
 
   //: Return IO version number;
-  short version() const { return 1; }  
-  
+  short version() const { return 1; }
+
 
   // INTERNALS-----------------------------------------------------------------
 
@@ -143,9 +143,9 @@ class vpgl_lvcs : public vbl_ref_count
 
  protected:
   cs_names local_cs_name_;    //!< Name of local frame's coord system ("nad27n", "wgs84" etc.)
-  double localCSOriginLat_;   //!< Lat (in radians) of the origin
-  double localCSOriginLon_;   //!< Lon (in radians) of the origin
-  double localCSOriginElev_;  //!< Elev (in radians) of the origin
+  double localCSOriginLat_;   //!< Lat (in geo_angle_unit_) of the origin
+  double localCSOriginLon_;   //!< Lon (in geo_angle_unit_) of the origin
+  double localCSOriginElev_;  //!< Elev (in localXYZUnit_) of the origin
   double lat_scale_;          //!< radians/meter along lat at the origin)
   double lon_scale_;          //!< radians/meter along lon at the origin)
   AngUnits geo_angle_unit_;   //!< lat lon angle unit (degrees or radians)
@@ -153,10 +153,10 @@ class vpgl_lvcs : public vbl_ref_count
   double lox_;                //!< Origin in local co-ordinates.
   double loy_;                //!< Origin in local co-ordinates.
   double theta_;              //!< Direction of north in radians.
-  
-  double localUTMOrigin_X_East_;  // in meters 
-  double localUTMOrigin_Y_North_; // in meters 
-  int localUTMOrigin_Zone_;      
+
+  double localUTMOrigin_X_East_;  // in meters
+  double localUTMOrigin_Y_North_; // in meters
+  int localUTMOrigin_Zone_;
 };
 
 //: return the scale for lat lon and elevation
