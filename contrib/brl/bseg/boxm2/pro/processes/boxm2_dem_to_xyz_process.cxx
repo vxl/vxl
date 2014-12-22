@@ -113,7 +113,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
     vcl_cout << "Using the loaded camera!\n";
   }
   else {
-    vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
+    vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam); // FIXME leaking geocam. This pattern is everywhere...
   }
   
   if (!geocam) {
@@ -142,6 +142,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
     return false;
   }
 
+  vil_image_view_base_sptr dem_view_float;
   vil_image_view_base_sptr dem_view_base = dem_res->get_view(0, orig_dem_ni, 0, orig_dem_nj);
   vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
   if (!dem_view) {
@@ -154,12 +155,17 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
         vcl_cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
         return false;
       }
-      else
+      else {
         vil_convert_cast(*dem_view_byte, temp);
+      }
     }
-    else
+    else {
       vil_convert_cast(*dem_view_int, temp);
-    dem_view = new vil_image_view<float>(temp);
+    }
+
+    dem_view_float = new vil_image_view<float>(temp); // shallow copy
+    dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_float.ptr());
+    //assert(dev_view);
   }
 
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
