@@ -72,17 +72,16 @@ int main(int argc, char ** argv)
     {
         vcl_vector<bocl_device_sptr> devices;
         for(unsigned i = 0; i < mgr->gpus_.size(); i++)
-        {
-            vcl_string device_ident = mgr->gpus_[i]->device_identifier();
-            if(device_ident.find("NVIDIA") != vcl_string::npos)
-                devices.push_back( mgr->gpus_[i] );
-        }
-        if (device_id() >= devices.size()){
+          devices.push_back( mgr->gpus_[i] );
+        if(device_id() >= devices.size()){
             vcl_cout << "GPU index out of bounds" << vcl_endl;
             return -1;
         }
-        device = devices[device_id()];
-
+        vcl_string device_ident = devices[device_id()]->device_identifier();
+        if(device_ident.find("NVIDIA") != vcl_string::npos)
+          device = devices[device_id()];
+        else
+          return -1;
     }
     else if(device_name()=="cpu")
     {
