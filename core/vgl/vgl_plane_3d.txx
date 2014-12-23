@@ -200,7 +200,6 @@ bool vgl_plane_3d<T>::plane_coords(vgl_point_3d<T> const& p3d,
    return false;
   // use the plane point to compute coordinates
   // construct the axis vectors
-  vgl_vector_3d<T> Y((T)0, (T)1, (T)0);
   vgl_point_3d<T> origin_pt = vgl_closest_point_origin(*this);
   vgl_vector_3d<T> p = pt_on_plane - origin_pt;
   vgl_vector_3d<T> uvec, vvec;
