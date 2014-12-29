@@ -32,6 +32,6 @@ SUBDIRS(pro)
 SUBDIRS(algo)
 
 #exe
-SUBDIRS(exe)
+#SUBDIRS(exe)
 
 ENDIF(OPENCL_FOUND)

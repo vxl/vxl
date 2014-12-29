@@ -46,7 +46,9 @@ subdirs(cpp)
 subdirs(ocl)
 
 #view section
-subdirs(view)
+# this is causing confusing compiler errors with Visual Studio 2013 Professional;
+# also had to comment out ocl/exe
+#subdirs(view)
 
 #util
 subdirs(util)
