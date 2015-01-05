@@ -132,65 +132,68 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
   cl_ni_=RoundUp(ni_,lthreads_[0]);
   cl_nj_=RoundUp(nj_,lthreads_[1]);
 
+
+  bool good_buffers = true;
+
   img_buff_ = new float[cl_ni_*cl_nj_];
   vcl_fill(img_buff_, img_buff_ + cl_ni_*cl_nj_, 0.0f);
   exp_image_=opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float), img_buff_,"exp image buffer");
-  exp_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  good_buffers &= exp_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   vis_buff_ = new float[cl_ni_*cl_nj_];
   vcl_fill(vis_buff_, vis_buff_ + cl_ni_*cl_nj_, 1.0f);
   vis_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float), vis_buff_,"vis image buffer");
-  vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  good_buffers &= vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   max_omega_buff_ = new float[cl_ni_*cl_nj_];
   vcl_fill(max_omega_buff_, max_omega_buff_ + cl_ni_*cl_nj_, 0.0f);
   max_omega_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float), max_omega_buff_,"vis image buffer");
-  max_omega_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  good_buffers &= max_omega_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   tnearfar_buff_[0] = 0.0f;
   tnearfar_buff_[1] = 1000000.0f;
 
   tnearfar_mem_ptr_ = opencl_cache_->alloc_mem(2*sizeof(float), tnearfar_buff_, "tnearfar  buffer");
-  tnearfar_mem_ptr_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);  
+  good_buffers &= tnearfar_mem_ptr_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);  
   
   img_dim_buff_[0] = 0;   img_dim_buff_[2] = (int)ni_;
   img_dim_buff_[1] = 0;   img_dim_buff_[3] = (int)nj_;
 
   exp_img_dim_ = new bocl_mem(device_->context(), img_dim_buff_, sizeof(int)*4, "image dims");
-  exp_img_dim_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  good_buffers &= exp_img_dim_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // create all buffers
   ray_origins_ = new cl_float[4*cl_ni_*cl_nj_];
   ray_directions_ = new cl_float[4*cl_ni_*cl_nj_];
   ray_o_buff_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(cl_float4), ray_origins_, "ray_origins buffer");
   ray_d_buff_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(cl_float4), ray_directions_, "ray_directions buffer");
-  ray_o_buff_->create_buffer(CL_MEM_READ_WRITE);
-  ray_d_buff_->create_buffer(CL_MEM_READ_WRITE);
+  good_buffers &= ray_o_buff_->create_buffer(CL_MEM_READ_WRITE);
+  good_buffers &= ray_d_buff_->create_buffer(CL_MEM_READ_WRITE);
 
   // depth args
   depth_buff_ = new float[cl_ni_*cl_nj_];
   vcl_fill(depth_buff_, depth_buff_ + cl_ni_*cl_nj_, 0.0f);
   depth_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),depth_buff_,"exp depth buffer");
-  depth_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  good_buffers &= depth_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   var_buff_ = new float[cl_ni_*cl_nj_];
   vcl_fill(var_buff_, var_buff_ + cl_ni_*cl_nj_, 0.0f);
   var_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),var_buff_,"var image buffer");
-  var_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  good_buffers &= var_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   prob_image_buff_ = new float[cl_ni_*cl_nj_];
   vcl_fill(prob_image_buff_, prob_image_buff_ + cl_ni_*cl_nj_, 0.0f);
   prob_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),prob_image_buff_,"vis x omega image buffer");
-  prob_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  good_buffers &= prob_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   t_infinity_buff_ = new float[cl_ni_*cl_nj_];
   vcl_fill(t_infinity_buff_, t_infinity_buff_ + cl_ni_*cl_nj_, 0.0f);
   t_infinity_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),t_infinity_buff_,"t infinity buffer");
-  t_infinity_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  good_buffers &= t_infinity_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   subblk_dim_buff_ = 1.0f;
   subblk_dim_ = opencl_cache_->alloc_mem(sizeof(cl_float), &(subblk_dim_buff_), "sub block dim buffer");
-  subblk_dim_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+  good_buffers &= subblk_dim_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
   // common stuff
   vcl_vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
@@ -210,7 +213,7 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
 
   octree_depth_buff_ = 0;
   octree_depth_ = new bocl_mem(device_->context(), &(octree_depth_buff_), sizeof(int), "  depth of octree " );
-  octree_depth_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+  good_buffers &= octree_depth_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
   //Gather information about the target and setup target data buffers
   // trans_interp_kernel arguments set the first time the function is called
@@ -222,7 +225,13 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
   info_buffer_->data_buffer_length = (int) (alpha_target_->num_bytes()/alphaTypeSize);
   int data_size = info_buffer_->data_buffer_length;
   blk_info_target_  = new bocl_mem(device_->context(), info_buffer_, sizeof(boxm2_scene_info), " Scene Info" );   
-  blk_info_target_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+  good_buffers &= blk_info_target_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+
+  if (!good_buffers) {
+    std::cerr << "Error allocating one or more opencl buffers" << std::endl;
+    std::cerr << "cl_ni_ = " << cl_ni_ << " cl_nj_ = " << cl_nj_ << std::endl;
+    return false;
+  }
 
   if(app_type_ == "boxm2_mog3_grey")
     mog_target_       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blk_target,0,false);
