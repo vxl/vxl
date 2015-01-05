@@ -1,6 +1,7 @@
 #include "boxm2_vecf_ocl_transform_scene.h"
 //:
 // \file
+#include <vcl_stdexcept.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <bocl/bocl_cl.h>
 #include <vgl/vgl_box_3d.h>
@@ -67,7 +68,9 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr&
   this->compile_depth_norm_kernel();
   this->init_ocl_trans();
 
-  init_render_args();
+  if (!init_render_args()) {
+    throw vcl_runtime_error("init_render_args returned false");
+  }
 }
 
 boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
@@ -123,7 +126,8 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
   lthreads_[1]=8;
 
   if ((ni_ == 0) || (nj_ == 0)) {
-    return true;
+    vcl_cerr << "Error: invalid image dimensions " << ni_ << ", " << nj_ << vcl_endl;
+    return false;
   }
   cl_ni_=RoundUp(ni_,lthreads_[0]);
   cl_nj_=RoundUp(nj_,lthreads_[1]);
