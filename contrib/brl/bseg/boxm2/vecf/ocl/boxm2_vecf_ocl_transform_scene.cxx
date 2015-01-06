@@ -167,8 +167,8 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
   ray_directions_ = new cl_float[4*cl_ni_*cl_nj_];
   ray_o_buff_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(cl_float4), ray_origins_, "ray_origins buffer");
   ray_d_buff_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(cl_float4), ray_directions_, "ray_directions buffer");
-  good_buffers &= ray_o_buff_->create_buffer(CL_MEM_READ_WRITE);
-  good_buffers &= ray_d_buff_->create_buffer(CL_MEM_READ_WRITE);
+  good_buffers &= ray_o_buff_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  good_buffers &= ray_d_buff_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // depth args
   depth_buff_ = new float[cl_ni_*cl_nj_];
