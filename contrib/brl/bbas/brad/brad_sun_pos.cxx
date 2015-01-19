@@ -252,7 +252,10 @@ void brad_sun_direction_hist(int obs_time_year, int obs_time_hours,
       }
       brad_sun_pos(y, month, d%30, obs_time_hours, obs_mints, 0,
                    longitude, latitude, sun_azimuth, sun_elevation);
-      double sphere_az = 90.0-sun_azimuth+360.0;
+      double sphere_az = 90.0-sun_azimuth;
+      if(sphere_az < 0) {
+        sphere_az += 360.0;
+      }
       double sphere_el = 90.0-sun_elevation;
       h.upcount(sphere_az, sphere_el);
       if (d>0&&d%30==0) month++;
@@ -273,7 +276,10 @@ void brad_sun_direction_hist(int obs_time_year, int obs_time_hours,
       }
       brad_sun_pos(y, month, d%30, obs_time_hours, obs_mints, 0,
                    longitude, latitude, sun_azimuth, sun_elevation);
-      double sphere_az = 90.0-sun_azimuth+360.0;
+      double sphere_az = 90.0-sun_azimuth;
+      if(sphere_az < 0) {
+        sphere_az += 360.0;
+      }
       double sphere_el = 90.0-sun_elevation;
       h.upcount(sphere_az, sphere_el);
       if (d>0&&d%30==0) month++;
