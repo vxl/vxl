@@ -109,7 +109,7 @@ void boxm2_ocl_render_expected_shadow_map::compile_kernel(bocl_device_sptr devic
 
   //set kernel options
   //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-  vcl_string options = opts + " -D RENDER_SUN_VIS ";
+  vcl_string options = opts + " -D RENDER_SUN_VIS";
   options += " -D STEP_CELL=step_cell_render_sun_vis(aux_args.auxsun,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
   //have kernel construct itself using the context and device
