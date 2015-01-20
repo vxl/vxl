@@ -5,6 +5,7 @@
 #include "bsta_joint_histogram_3d.h"
 
 #include <vcl_cmath.h> // for log()
+#include<vcl_cstdlib.h>//for div
 #include <vcl_iostream.h>
 #include "bsta_gauss.h"
 #include <vnl/vnl_math.h> // for log2e == 1/vcl_log(2.0)
@@ -349,6 +350,18 @@ T bsta_joint_histogram_3d<T>::get_count(T a, T b, T c) const
   if (volume_valid_)
     return pv*volume_;
   return pv*this->volume();
+}
+
+template <class T>
+void bsta_joint_histogram_3d<T>::
+bin_max_count(unsigned& ia, unsigned& ib, unsigned & ic) const
+{
+  ia = 0; ib = 0; ic = 0;
+  for(unsigned i = 0; i < this->counts_.get_row1_count(); ++i)
+    for(unsigned j = 0; j < this->counts_.get_row2_count(); ++j)
+      for(unsigned k = 0; k < this->counts_.get_row3_count(); ++k)
+        if( this->counts_[i][j][k] > this->counts_[ia][ib][ic] )
+          ia = i, ib = j, ic = k;
 }
 
 template <class T>

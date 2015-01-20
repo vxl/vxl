@@ -142,6 +142,10 @@ public bsta_joint_histogram_3d_base
   //:access by value
   T get_count(T a, T b, T c) const;
 
+  //: Find bin indices with largest count.
+  //: Will return the first (lowest bin indices) in case of ties
+  void bin_max_count(unsigned& ia, unsigned& ib, unsigned& ic) const;
+
   // prints only cells with non-zero probability
   void print(vcl_ostream& os = vcl_cout) const;
 
