@@ -150,35 +150,49 @@ void bsta_joint_histogram_3d<T>::upcount(T a, T mag_a,
                                          T b, T mag_b,
                                          T c, T mag_c)
 {
+  int bin_a = -1, bin_b = -1, bin_c = -1;
+  
+  if(!this->bin_at_val(a, b, c, bin_a, bin_b, bin_c))
+    return;
+  
+  counts_[bin_a][bin_b][bin_c] += mag_a + mag_b + mag_c;
+  volume_valid_ = false;
+}
+
+template <class T>
+bool bsta_joint_histogram_3d<T>::bin_at_val(
+  const T a, const T b, const T c,
+  int& ia, int& ib, int& ic) const
+{
   if (a<min_a_||a>max_a_)
-    return;
+    return false;
   if (b<min_b_||b>max_b_)
-    return;
+    return false;
   if (c<min_c_||c>max_c_)
-    return;
-  int bin_a =-1, bin_b = -1, bin_c = -1;
+    return false;
+
+  ia = -1, ib = -1, ic = -1;
   for (unsigned i = 0; i<nbins_a_; i++)
     if ((i+1)*delta_a_>=(a-min_a_))
     {
-      bin_a = i;
+      ia = i;
       break;
     }
   for (unsigned i = 0; i<nbins_b_; i++)
     if ((i+1)*delta_b_>=(b-min_b_))
     {
-      bin_b = i;
+      ib = i;
       break;
     }
   for (unsigned i = 0; i<nbins_c_; i++)
     if ((i+1)*delta_c_>=(c-min_c_))
     {
-      bin_c = i;
+      ic = i;
       break;
     }
-  if (bin_a<0||bin_b<0||bin_c<0) return;
-  T v = counts_[bin_a][bin_b][bin_c] + mag_a + mag_b + mag_c;
-  counts_[bin_a][bin_b][bin_c]=v;
-  volume_valid_ = false;
+  if (ia<0||ib<0||ic<0) return false;
+
+  return true;
 }
 
 template <class T>
@@ -212,43 +226,12 @@ T bsta_joint_histogram_3d<T>::p(unsigned a, unsigned b, unsigned c) const
 template <class T>
 T bsta_joint_histogram_3d<T>::p(T a, T b, T c) const
 {
-  if (a<min_a_||a>max_a_)
-    return 0;
-  if (b<min_b_||b>max_b_)
-    return 0;
-  if (c<min_c_||c>max_c_)
-    return 0;
-  if (!volume_valid_)
-    compute_volume();
-  if (volume_ == T(0))
-    return 0;
-  unsigned bina = 0, binb = 0, binc = 0;
-  bool found = false;
-  for (unsigned ia = 0; (ia<nbins_a_)&&!found; ++ia)
-    if ((ia+1)*delta_a_>=(a-min_a_)) {
-      bina = ia;
-      found = true;
-    }
-  if (!found)
-    return 0;
-  found = false;
-  for (unsigned ib = 0; (ib<nbins_b_)&&!found; ++ib)
-    if ((ib+1)*delta_b_>=(b-min_b_)) {
-      binb = ib;
-      found = true;
-    }
-  if (!found)
-    return 0;
-  found = false;
-  for (unsigned ic = 0; (ic<nbins_c_)&&!found; ++ic)
-    if ((ic+1)*delta_c_>=(c-min_c_)) {
-      binc = ic;
-      found = true;
-    }
-  if (!found)
+  int bina, binb, binc;
+  if(!bin_at_val(a,b,c,bina,binb,binc))
     return 0;
   return counts_[bina][binb][binc]/volume_;
 }
+                                            
 
 template <class T>
 void bsta_joint_histogram_3d<T>::parzen(const T sigma)

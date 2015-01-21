@@ -142,6 +142,12 @@ public bsta_joint_histogram_3d_base
   //:access by value
   T get_count(T a, T b, T c) const;
 
+  //:return false if bin not found
+  bool bin_at_val(
+    const T a, const T b, const T c,
+    int& ia, int &ib, int& ic) const;
+    
+
   //: Find bin indices with largest count.
   //: Will return the first (lowest bin indices) in case of ties
   void bin_max_count(unsigned& ia, unsigned& ib, unsigned& ic) const;
