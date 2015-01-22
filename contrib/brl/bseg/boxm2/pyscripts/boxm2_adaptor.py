@@ -1529,13 +1529,13 @@ def generate_xyz_from_dem(scene, geotiff_dem, geoid_height, geocam=None,fill_in_
   return x_img, y_img, z_img
 
 # Create x y z images from a DEM at the resolution of the scene
-def generate_xyz_from_dem2(scene, geotiff_dem, geoid_height, geocam=0,fill_in_value=-1.0):
+def generate_xyz_from_dem2(scene, geotiff_dem, geoid_height, geocam=None,fill_in_value=-1.0):
   boxm2_batch.init_process("boxm2DemToXYZProcess2");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1,geotiff_dem);
   boxm2_batch.set_input_double(2,geoid_height);
-  # FIXME like generate_xyz_from_dem
-  boxm2_batch.set_input_from_db(3,geocam);
+  if geocam:
+    boxm2_batch.set_input_from_db(3,geocam);
   boxm2_batch.set_input_float(4,fill_in_value);
   result = boxm2_batch.run_process();
   if result:

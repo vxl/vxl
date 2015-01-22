@@ -376,7 +376,13 @@ bool boxm2_dem_to_xyz_process2_cons(bprb_func_process& pro)
   output_types_[1] = "vil_image_view_base_sptr";  // y image
   output_types_[2] = "vil_image_view_base_sptr";  // z image
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
+  // set input defaults
+  brdb_value_sptr geocam = new brdb_value_t<vpgl_camera_double_sptr>;
+  pro.set_input(3, geocam);
+
+  return good;
 }
 
 bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
@@ -398,12 +404,12 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
 
   vpgl_geo_camera* geocam = 0;
-  if (cam) {
+  if ( cam && (geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr())) ) {
     vcl_cout << "Using the loaded camera!\n";
-    geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
   }
-  else
+  else {
     vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
+  }
 
   if (!geocam) {
     vcl_cerr << "In boxm2_dem_to_xyz_process() - the geocam could not be initialized!\n";
