@@ -28,6 +28,7 @@ DECLARE_FUNC_CONS(vpgl_convert_to_generic_camera_process);
 DECLARE_FUNC_CONS(vpgl_convert_local_rational_to_generic_process);
 DECLARE_FUNC_CONS(vpgl_resample_perspective_camera_process);
 DECLARE_FUNC_CONS(vpgl_generate_3d_point_from_depth_process);
+DECLARE_FUNC_CONS(vpgl_generate_xyz_from_depth_image_process);
 DECLARE_FUNC_CONS(vpgl_get_view_direction_at_point_process);
 DECLARE_FUNC_CONS(vpgl_get_rpc_offsets_process);
 DECLARE_FUNC_CONS(vpgl_get_bounding_box_process);

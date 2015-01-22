@@ -331,9 +331,23 @@ def get_view_at_point(persp_cam,x,y,z):
   boxm2_batch.remove_data(id);
   return theta, phi;
 
-def get_3d_from_depth(persp_cam,u,v,t) :
+def get_xyz_from_depth_image(cam,depth_img):
+  boxm2_batch.init_process("vpglGenerateXYZFromDepthImageProcess");
+  boxm2_batch.set_input_from_db(0,cam); # perspective or generic camera
+  boxm2_batch.set_input_from_db(1,depth_img);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  x_img = dbvalue(id,type);
+  (id,type) = boxm2_batch.commit_output(1);
+  y_img = dbvalue(id,type);
+  (id,type) = boxm2_batch.commit_output(2);
+  z_img = dbvalue(id,type);
+
+  return x_img,y_img,z_img;
+
+def get_3d_from_depth(cam,u,v,t) :
   boxm2_batch.init_process("vpglGenerate3dPointFromDepthProcess");
-  boxm2_batch.set_input_from_db(0,persp_cam);
+  boxm2_batch.set_input_from_db(0,cam); # perspective or generic camera
   boxm2_batch.set_input_float(1,u);
   boxm2_batch.set_input_float(2,v);
   boxm2_batch.set_input_float(3,t);

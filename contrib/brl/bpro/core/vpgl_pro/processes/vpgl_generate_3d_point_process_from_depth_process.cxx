@@ -7,6 +7,7 @@
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_generic_camera.h>
 #include <vsl/vsl_binary_io.h>
 
 namespace vpgl_generate_3d_point_from_depth_process_globals
@@ -51,15 +52,20 @@ bool vpgl_generate_3d_point_from_depth_process(bprb_func_process& pro)
   float v = pro.get_input<float>(i++);
   float t = pro.get_input<float>(i++);
 
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
-  if (!cam) {
+  vgl_ray_3d<double> ray;
+  if(vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr())) {
+    ray=cam->backproject_ray(vgl_point_2d<double>(u,v));
+  }
+  else if(vpgl_generic_camera<double>* cam = dynamic_cast<vpgl_generic_camera<double>*>(cam_ptr.ptr())) {
+    ray = cam->ray(u,v);
+  }
+  else {
     vcl_cerr << "vpgl_generate_3d_point_from_depth_process: couldn't cast camera\n";
     return false;
   }
-
-  vgl_ray_3d<double> ray=cam->backproject_ray(vgl_point_2d<double>(u,v));
-  vcl_cout<<ray.origin()<<vcl_endl;
+  //vcl_cout<<ray.origin()<<vcl_endl;
   vgl_point_3d<double> pt3d=ray.origin()+ray.direction()*t;
+
   pro.set_output_val<float>(0, (float)pt3d.x());
   pro.set_output_val<float>(1, (float)pt3d.y());
   pro.set_output_val<float>(2, (float)pt3d.z());
