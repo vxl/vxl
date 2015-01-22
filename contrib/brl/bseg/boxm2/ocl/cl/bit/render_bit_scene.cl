@@ -290,8 +290,8 @@ render_depth( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
 
   //store the expected intensity
-  exp_image[imIndex[llid]] += (* aux_args.expdepth)*linfo->block_len;
-  exp_sqr_image[imIndex[llid]] += (* aux_args.expdepthsqr)*linfo->block_len*linfo->block_len;
+  exp_image[imIndex[llid]] += (* aux_args.expdepth);
+  exp_sqr_image[imIndex[llid]] += (* aux_args.expdepthsqr);
   prob_image[imIndex[llid]] = (* aux_args.probsum);
   //store visibility at the end of this block
   vis_image[imIndex[llid]]  = vis_rec;
