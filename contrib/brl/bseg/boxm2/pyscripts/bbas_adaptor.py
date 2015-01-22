@@ -62,8 +62,10 @@ def camera_angles(camera, x,y,z):
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   cam_az = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
   (id,type) = boxm2_batch.commit_output(1)
   cam_el = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
   return (cam_az, cam_el)
 def bbox_from_ply(filename):
   minpoint = list();
@@ -74,9 +76,11 @@ def bbox_from_ply(filename):
   for i in (0,1,2):
     (id,type) = boxm2_batch.commit_output(i)
     minpoint.append(boxm2_batch.get_output_double(id));
+    boxm2_batch.remove_data(id);
   for i in (3,4,5):
     (id,type) = boxm2_batch.commit_output(i)
     maxpoint.append(boxm2_batch.get_output_double(id));
+    boxm2_batch.remove_data(id);
   return (minpoint, maxpoint)
 
 def estimate_radiance_values(image, sun_el, sun_dist, sensor_el, solar_irrad=None, downwelled_irrad=None, optical_depth=None):
@@ -122,6 +126,7 @@ def sun_dir_bin(meta,illum_bin_filename):
   boxm2_batch.run_process();
   (id,type)=boxm2_batch.commit_output(0);
   bin = boxm2_batch.get_output_int(id);
+  boxm2_batch.remove_data(id);
   return bin;
 
 def prob_as_expected(image,atomicity):
@@ -243,6 +248,7 @@ def texture_classifier_kernel_margin(dictionary):
   boxm2_batch.run_process();
   (m_id, m_type) = boxm2_batch.commit_output(0);
   margin = boxm2_batch.get_output_int(m_id);
+  boxm2_batch.remove_data(m_id);
   return margin;
   
 def texture_classifier(tcl, dictionary, img, block_size=64):

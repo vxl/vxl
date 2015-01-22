@@ -79,10 +79,13 @@ def load_perspective_camera_from_kml_file(NI, NJ, kml_file) :
   cam = dbvalue(id,type);
   (id,type) = boxm2_batch.commit_output(1);
   longitude = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(2);
   latitude = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(3);
   altitude = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id);
   return cam, longitude, latitude, altitude;
 
 #resize a camera from size0 =(ni,nj) to size1 (ni_1, nj_1);
@@ -104,10 +107,13 @@ def get_perspective_camera_center( cam):
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   x=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(1);
   y=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(2);
   z=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   return x,y,z;
 
 def get_backprojected_ray( cam,u,v):
@@ -118,10 +124,13 @@ def get_backprojected_ray( cam,u,v):
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   x=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(1);
   y=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(2);
   z=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   return x,y,z;
 # returns cartesian cam center from azimuth (degrees), elevation (degrees), radius, look point;
 def get_camera_center( azimuth, elevation, radius, lookPt) :
@@ -244,8 +253,10 @@ def persp2genWmargin(pcam, ni, nj, margin, level=0) :
   gcam = dbvalue(id,type);
   (id,type) = boxm2_batch.commit_output(1);
   ni = boxm2_batch.get_output_unsigned(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(2);
   nj = boxm2_batch.get_output_unsigned(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(3);
   new_pers_cam = dbvalue(id,type);
   return (gcam, ni, nj, new_pers_cam);
@@ -265,16 +276,22 @@ def get_generic_cam_ray(cam, u, v):
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   orig_x = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(1);
   orig_y = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(2);
   orig_z = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(3);
   dir_x = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(4);
   dir_y = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(5);
   dir_z = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id);
   return orig_x, orig_y, orig_z, dir_x, dir_y, dir_z;
 
 #gets bounding box from a directory of cameras... (incomplete)_;
@@ -284,17 +301,19 @@ def camera_dir_planar_bbox(dir_name) :
   boxm2_batch.run_process();
 
 def project_point(camera,x,y,z):
-    boxm2_batch.init_process('vpglProjectProcess');
-    boxm2_batch.set_input_from_db(0,camera);
-    boxm2_batch.set_input_float(1,x);
-    boxm2_batch.set_input_float(2,y);
-    boxm2_batch.set_input_float(3,z);
-    boxm2_batch.run_process();
-    (id,type) = boxm2_batch.commit_output(0);
-    u = boxm2_batch.get_output_float(id);
-    (id,type) = boxm2_batch.commit_output(1);
-    v = boxm2_batch.get_output_float(id);
-    return (u,v);
+  boxm2_batch.init_process('vpglProjectProcess');
+  boxm2_batch.set_input_from_db(0,camera);
+  boxm2_batch.set_input_float(1,x);
+  boxm2_batch.set_input_float(2,y);
+  boxm2_batch.set_input_float(3,z);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  u = boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
+  (id,type) = boxm2_batch.commit_output(1);
+  v = boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
+  return (u,v);
 
 # gets view direction at a point for a perspective camera;
 def get_view_at_point(persp_cam,x,y,z):
@@ -306,8 +325,10 @@ def get_view_at_point(persp_cam,x,y,z):
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   theta=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(1);
   phi=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   return theta, phi;
 
 def get_3d_from_depth(persp_cam,u,v,t) :
@@ -319,10 +340,13 @@ def get_3d_from_depth(persp_cam,u,v,t) :
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   x=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(1);
   y=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(2);
   z=boxm2_batch.get_output_float(id);
+  boxm2_batch.remove_data(id);
   return x,y,z;
 
 # triangulates a list of cams and a list of points;
@@ -343,10 +367,13 @@ def get_3d_from_cams( cams, points ):
     boxm2_batch.run_process();
     (id, type) = boxm2_batch.commit_output(0);
     x=boxm2_batch.get_output_float(id);
+    boxm2_batch.remove_data(id);
     (id, type) = boxm2_batch.commit_output(1);
     y=boxm2_batch.get_output_float(id);
+    boxm2_batch.remove_data(id);
     (id, type) = boxm2_batch.commit_output(2);
     z=boxm2_batch.get_output_float(id);
+    boxm2_batch.remove_data(id);
     return x,y,z;
 
 # create a generic camera;
@@ -489,6 +516,8 @@ def perturb_camera(cam_in, angle, rng):
     (phi_id,type) = boxm2_batch.commit_output(2);
     theta = boxm2_batch.get_output_float(theta_id);
     phi = boxm2_batch.get_output_float(phi_id);
+    boxm2_batch.remove_data(theta_id);
+    boxm2_batch.remove_data(phi_id);
     return pert_cam, theta, phi;
 
 def write_perspective_cam_vrml(vrml_filename, pcam, camera_rad, axis_length, r, g, b):
@@ -519,10 +548,13 @@ def get_perspective_cam_center(pcam):
     boxm2_batch.run_process();
     (x_id,x_type) = boxm2_batch.commit_output(0);
     x = boxm2_batch.get_output_float(x_id);
+    boxm2_batch.remove_data(x_id);
     (y_id,type) = boxm2_batch.commit_output(1);
     y = boxm2_batch.get_output_float(y_id);
+    boxm2_batch.remove_data(y_id);
     (z_id,type) = boxm2_batch.commit_output(2);
     z = boxm2_batch.get_output_float(z_id);
+    boxm2_batch.remove_data(z_id);
     return x, y, z;
 
 def create_perspective_camera2(pcam, cent_x, cent_y, cent_z):
@@ -663,8 +695,10 @@ def geo_cam_global_to_img(geocam, lon, lat):
     boxm2_batch.run_process();
     (id, type) = boxm2_batch.commit_output(0);
     u = boxm2_batch.get_output_int(id);
+    boxm2_batch.remove_data(id);
     (id, type) = boxm2_batch.commit_output(1);
     v = boxm2_batch.get_output_int(id);
+    boxm2_batch.remove_data(id);
     return u, v;
 
 def convert_perspective_to_nvm(cams_dir,imgs_dir, output_nvm):
@@ -731,6 +765,7 @@ def compute_camera_to_world_homography(cam,plane,inverse = False):
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   homg2d = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id)
   return homg2d
 
 ## use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
@@ -752,12 +787,16 @@ def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, low
     local_cam  = dbvalue(id, type);
     (id, type) = boxm2_batch.commit_output(1);
     i0 = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id);
     (id, type) = boxm2_batch.commit_output(2);
     j0 = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id);
     (id, type) = boxm2_batch.commit_output(3);
     ni = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id);
     (id, type) = boxm2_batch.commit_output(4);
     nj = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id);
     return status, local_cam, i0, j0, ni, nj;
   else:
     return status, dbvalue(0, ""), 0, 0, 0, 0;

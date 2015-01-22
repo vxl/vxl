@@ -16,6 +16,12 @@ class dbvalue:
     self.id = index    # unsigned integer
     self.type = type   # string
 
+  # TODO add a __del__ destructor which removes the data from the db
+  # RE: requires taking ownership of the database id; we would either
+  # have to specialize the copy method (__copy__()), for example, to 
+  # increment the reference count in the database, or make the database
+  # fail silently if it can't remove an object.
+
 def remove_data(id):
   boxm2_batch.remove_data(id)
 

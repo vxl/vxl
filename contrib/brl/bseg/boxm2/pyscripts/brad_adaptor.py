@@ -81,8 +81,10 @@ def find_sun_dir_bin(metadata, output_file):
   if status:
       (bin_id,bin_type)=boxm2_batch.commit_output(0);
       bin = boxm2_batch.get_output_int(bin_id);
+      boxm2_batch.remove_data(bin_id);
       (angle_id,angle_type)=boxm2_batch.commit_output(1);
       angle = boxm2_batch.get_output_float(angle_id);
+      boxm2_batch.remove_data(angle_id);
   return bin, angle
 
 # save atmospheric parameters

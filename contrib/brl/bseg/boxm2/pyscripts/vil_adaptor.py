@@ -1,12 +1,4 @@
-import boxm2_batch
-boxm2_batch.not_verbose();
-boxm2_batch.register_processes();
-boxm2_batch.register_datatypes();
-class dbvalue:
-  def __init__(self, index, type):
-    self.id = index    # unsigned integer
-    self.type = type   # string
-
+from boxm2_register import boxm2_batch, dbvalue
 
 ###################################################
 # Vil loading and saving
@@ -55,6 +47,7 @@ def bae_raw_stream(file_path,ni=0,nj=0,pixelsize=0) :
   stream = dbvalue(id, type);
   (id, type) = boxm2_batch.commit_output(1);
   numImgs = boxm2_batch.get_output_int(id);
+  boxm2_batch.remove_data(id);
   return stream, numImgs
 
 def next_frame(rawStream) :
@@ -85,6 +78,7 @@ def arf_stream(file_path) :
   stream = dbvalue(id, type);
   (id, type) = boxm2_batch.commit_output(1);
   numImgs = boxm2_batch.get_output_int(id);
+  boxm2_batch.remove_data(id);
   return stream, numImgs
 def arf_next_frame(rawStream) :
   boxm2_batch.init_process("bilArfReadFrameProcess")
@@ -94,6 +88,7 @@ def arf_next_frame(rawStream) :
   img = dbvalue(id,type);
   (id, type) = boxm2_batch.commit_output(1);
   time = boxm2_batch.get_output_unsigned(id);
+  boxm2_batch.remove_data(id);
   return img, time
 
 def arf_seek_frame(rawStream, frame) :
@@ -105,6 +100,7 @@ def arf_seek_frame(rawStream, frame) :
   img = dbvalue(id,type);
   (id, type) = boxm2_batch.commit_output(1);
   time = boxm2_batch.get_output_unsigned(id);
+  boxm2_batch.remove_data(id);
   return img, time
 
 def read_CLIF07(indir,outdir,camnum,datatype="CLIF06") :
@@ -132,12 +128,16 @@ def pixel_wise_roc(cd_img, gt_img, mask_img=None) :
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   tp = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(1);
   tn = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(2);
   fp = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(3);
   fn = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(6);
   outimg = dbvalue(id,type);
   #return tuple of true positives, true negatives, false positives, etc..
@@ -152,8 +152,8 @@ def pixel(img, point):
     boxm2_batch.run_process()
     (id,type) = boxm2_batch.commit_output(0)
     val = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id);
     return val
-
 
 #resize image (default returns float image
 def resize(img, ni, nj, pixel="float"):
@@ -174,8 +174,10 @@ def image_size(img):
     boxm2_batch.run_process()
     (id,type) = boxm2_batch.commit_output(0)
     ni = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id)
     (id,type) = boxm2_batch.commit_output(1)
     nj = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id)
     return ni,nj
 
 def image_range(img):
@@ -184,8 +186,10 @@ def image_range(img):
     boxm2_batch.run_process()
     (id,type) = boxm2_batch.commit_output(0)
     minVal = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
     (id,type) = boxm2_batch.commit_output(1)
     maxVal = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
     return minVal, maxVal
 
 def gradient(img) :
@@ -309,14 +313,19 @@ def nitf_date_time(image_filename):
   if status:
       (id,type)=boxm2_batch.commit_output(0);
       year =  boxm2_batch.get_output_int(id);
+      boxm2_batch.remove_data(id);
       (id,type)=boxm2_batch.commit_output(1);
       month =  boxm2_batch.get_output_int(id);
+      boxm2_batch.remove_data(id);
       (id,type)=boxm2_batch.commit_output(2);
       day =  boxm2_batch.get_output_int(id);
+      boxm2_batch.remove_data(id);
       (id,type)=boxm2_batch.commit_output(3);
       hour = boxm2_batch.get_output_int(id);
+      boxm2_batch.remove_data(id);
       (id,type)=boxm2_batch.commit_output(4);
       minute = boxm2_batch.get_output_int(id);
+      boxm2_batch.remove_data(id);
   return year, month, day, hour, minute
 
 def undistort_image(img, param_file, iters) :
@@ -378,6 +387,7 @@ def img_sum(img, plane_index=0):
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   value = boxm2_batch.get_output_double(id)
+  boxm2_batch.remove_data(id)
   return value
 
 ## input a visibility image with float values in 0,1 range, negate this image and threshold to generate a byte image as a mask
@@ -437,7 +447,8 @@ def get_number_of_planes(img):
   boxm2_batch.set_input_from_db(0, img);
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
-  n_planes = boxm2_batch.get_output_unsigned(id)
+  n_planes = boxm2_batch.get_output_unsigned(id);
+  boxm2_batch.remove_data(id);
   return n_planes;
 
 def combine_planes(img_red, img_green, img_blue):

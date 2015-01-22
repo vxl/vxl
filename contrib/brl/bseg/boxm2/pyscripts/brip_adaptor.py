@@ -41,10 +41,13 @@ def blob_intersection(mp_img, gt_img):
   
   (id,type) = boxm2_batch.commit_output(0);
   tp = boxm2_batch.get_output_int(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(1);
   fp = boxm2_batch.get_output_int(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(2);
   numBlobs = boxm2_batch.get_output_int(id);
+  boxm2_batch.remove_data(id);
   return (tp, fp, numBlobs)
 
 ###########################################################

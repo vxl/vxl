@@ -42,7 +42,6 @@ class boxm2_scene_adaptor(object):
       print "UNKNOWN device type: ", device_string
       print "exiting."
       sys.exit(-1)
-
     #store model directory for later use
     self.bbox = scene_bbox(self.scene);
     self.description = describe_scene(self.scene);
@@ -410,6 +409,10 @@ class boxm2_scene_adaptor(object):
     elif device_string=="cpp" :
       median_filter(self.scene, self.cpu_cache, None);
 
+  # given the scene, chip the NITF and setup the camera 
+  def roi_init(self, NITF_path, camera, convert_to_8bit, params_fname, margin=0, clip_width=-1, clip_height=-1):
+    return roi_init(NITF_path, camera, self.scene, convert_to_8bit, params_fname, margin, clip_width, clip_height)
+
   # Apply multiple filters to  scene
   def kernel_vector_filter(self, filters ) :
     return apply_filters(self.scene, self.opencl_cache, self.device, filters);
@@ -541,7 +544,7 @@ class boxm2_scene_adaptor(object):
     (id,type)=boxm2_batch.commit_output(0);
     n_table=dbvalue(id,type);
 
-    # call batch pain process
+    # call batch paint process
     if device_string=="":
       boxm2_batch.init_process("boxm2OclPaintBatchProcess");
       boxm2_batch.set_input_from_db(0, self.device);

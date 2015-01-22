@@ -18,19 +18,26 @@ def get_info_along_ray(scene,cache,cam,u,v,prefix,identifier="") :
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   len_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(1);
   alpha_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(2);
   vis_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(3);
   tabs_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id, type) = boxm2_batch.commit_output(4);
   res_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   if (prefix != "") :
     (id, type) = boxm2_batch.commit_output(5);
     data_array_1d = boxm2_batch.get_bbas_1d_array_float(id);
+    boxm2_batch.remove_data(id);
     (id, type) = boxm2_batch.commit_output(6);
     nelems = boxm2_batch.get_output_int(id);
+    boxm2_batch.remove_data(id);
     return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d,res_array_1d, data_array_1d, nelems;
   else :
     return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d,res_array_1d;
@@ -56,8 +63,10 @@ def probe_intensities(scene, cpu_cache, str_cache, point):
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   intensities=boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(1);
   visibilities=boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   return intensities, visibilities
   
 def extract_cell_centers(scene, cache, prob_thresh=0.0):

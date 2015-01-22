@@ -102,13 +102,16 @@ def describe_scene(scene):
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
   dataPath = boxm2_batch.get_output_string(id);
+  boxm2_batch.remove_data(id)
   (id, type) = boxm2_batch.commit_output(1);
   appType = boxm2_batch.get_output_string(id);
+  boxm2_batch.remove_data(id)
   description = {
                   'dataPath': dataPath,
                   'appType': appType,
                 }
   return description;
+
 # modifies scene appearance, use case build the model in grey scale and then paint it with color images.
 def modify_scene_appearance(scene,app1,app2):
   boxm2_batch.init_process("boxm2ModifySceneAppearanceProcess");
@@ -117,15 +120,17 @@ def modify_scene_appearance(scene,app1,app2):
   boxm2_batch.set_input_string(2, app2);
   status = boxm2_batch.run_process();
   return status;
+
 # returns bounding box as two tuple points (minpt, maxpt)
 def scene_bbox(scene):
   boxm2_batch.init_process("boxm2SceneBboxProcess");
   boxm2_batch.set_input_from_db(0, scene);
   boxm2_batch.run_process();
-  out = []
+  out = [];
   for outIdx in range(6):
     (id, type) = boxm2_batch.commit_output(outIdx);
     pt = boxm2_batch.get_output_double(id);
+    boxm2_batch.remove_data(id);
     out.append(pt);
   minPt = (out[0], out[1], out[2]);
   maxPt = (out[3], out[4], out[5]);
@@ -849,6 +854,7 @@ def refine(scene, cache, thresh=0.3, device=None) :
     #get and report cells output
     (id, type) = boxm2_batch.commit_output(0);
     nCells = boxm2_batch.get_output_int(id);
+    boxm2_batch.remove_data(id);
     return nCells;
   else :
     print "ERROR: Cache type unrecognized: ", cache.type;
@@ -1267,7 +1273,7 @@ def save_multi_block_scene(params) :
   boxm2_batch.set_input_string(1, fname);
   boxm2_batch.run_process();
 
-def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0,clip_width = -1, clip_height = -1) :
+def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0, clip_width=-1, clip_height=-1) :
   def fail():
     local_cam = 0
     cropped_image = 0
@@ -1293,6 +1299,7 @@ def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0,c
     cropped_image = dbvalue(id,type)
     (id,type) = boxm2_batch.commit_output(2)
     uncertainty = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
     return result, local_cam, cropped_image, uncertainty
   else:
     return fail()
@@ -1336,8 +1343,10 @@ def blob_precision_recall(cd_img, gt_img, mask_img=None) :
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
   precision = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
   (id,type) = boxm2_batch.commit_output(1);
   recall    = boxm2_batch.get_bbas_1d_array_float(id);
+  boxm2_batch.remove_data(id);
 
   #return tuple of true positives, true negatives, false positives, etc..
   return (precision, recall);
@@ -1446,6 +1455,9 @@ def scene_illumination_info(scene):
         latitude = boxm2_batch.get_output_float(lat_id)
         (nb_id,nb_type)=boxm2_batch.commit_output(2);
         nbins = boxm2_batch.get_output_int(nb_id);
+        boxm2_batch.remove_data(lon_id);
+        boxm2_batch.remove_data(lat_id);
+        boxm2_batch.remove_data(nb_id);
     return longitude, latitude, nbins
 
 # create stream cache
@@ -1485,6 +1497,8 @@ def ortho_geo_cam_from_scene(scene):
     ni = boxm2_batch.get_output_unsigned(ni_id);
     (nj_id,type) = boxm2_batch.commit_output(2);
     nj = boxm2_batch.get_output_unsigned(nj_id);
+    boxm2_batch.remove_data(ni_id);
+    boxm2_batch.remove_data(nj_id);
   else:
     cam = 0;
     ni  = 0;
@@ -1520,6 +1534,7 @@ def generate_xyz_from_dem2(scene, geotiff_dem, geoid_height, geocam=0,fill_in_va
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1,geotiff_dem);
   boxm2_batch.set_input_double(2,geoid_height);
+  # FIXME like generate_xyz_from_dem
   boxm2_batch.set_input_from_db(3,geocam);
   boxm2_batch.set_input_float(4,fill_in_value);
   result = boxm2_batch.run_process();
@@ -1808,6 +1823,7 @@ def compute_los_visibility(scene,cache,x0,y0,z0,x1,y1,z1, t = 5):
   result = boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0)
   vis = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id);
   return vis;
 
 def get_scene_from_box_cams(camsdir,x0,y0,z0,x1,y1,z1,modeldir):
