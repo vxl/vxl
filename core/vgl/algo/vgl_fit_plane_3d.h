@@ -54,6 +54,11 @@ class vgl_fit_plane_3d
   // report issues over an ostream if declared
   bool fit(const T error_marg, vcl_ostream* outstream=0);
 
+  //:fits a plane returning the smallest singular value
+  //:of the data scatter matrix decomposition, a measure
+  //:of variance in the direction of the plane normal
+  T fit(vcl_ostream* outstream=0);
+
   // Data Access---------------------------------------------------------------
 
   vcl_vector<vgl_homg_point_3d<T> >& get_points(){return points_;}
