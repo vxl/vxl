@@ -30,7 +30,7 @@
 
 namespace boxm2_ocl_change_detection_process_globals
 {
-  const unsigned n_inputs_     = 9;
+  const unsigned n_inputs_     = 10;
   const unsigned n_outputs_    = 2;
 }
 
@@ -49,6 +49,7 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   input_types_[6] = "int";   // n for nxn ray casting
   input_types_[7] = "vcl_string"; // "raybelief" string for using raybelief
   input_types_[8] = "bool";       // true to use max mode probability
+  input_types_[9] = "vcl_string";       // idenitifer
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
   output_types_[1] = "vil_image_view_base_sptr";  // Red Green change image
@@ -58,9 +59,11 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   brdb_value_sptr nxn  = new brdb_value_t<int>(1);
   brdb_value_sptr rayb = new brdb_value_t<vcl_string>(""); // use ray belief?
   brdb_value_sptr pmax = new brdb_value_t<bool>(false);    // use max-mode probability instead of mixture?
+  brdb_value_sptr ident = new brdb_value_t<vcl_string>(""); // identifier
   pro.set_input(6, nxn);
   pro.set_input(7, rayb);
   pro.set_input(8, pmax);
+  pro.set_input(9, ident);
   return good;
 }
 
@@ -83,6 +86,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   int                       n             = pro.get_input<unsigned>(i++);                 // nxn
   vcl_string                norm_type     = pro.get_input<vcl_string>(i++);
   bool                      pmax          = pro.get_input<bool>(i++);
+  vcl_string                identifier = pro.get_input<vcl_string>(i++);
 
   // img dims
   unsigned ni=img->ni();
@@ -118,7 +122,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
                                                exp_img,
                                                n,
                                                norm_type,
-                                               pmax );
+                                               pmax, identifier);
   }
   vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
 

@@ -40,26 +40,27 @@ bool boxm2_ocl_change_detection_globals::get_scene_appearances( boxm2_scene_sptr
                                                                 vcl_string&      data_type,
                                                                 vcl_string&      num_obs_type,
                                                                 vcl_string&      options,
-                                                                int&             apptypesize)
+                                                                int&             apptypesize,
+                                                                vcl_string identifier = "")
 {
     vcl_vector<vcl_string> apps = scene->appearances();
     bool foundDataType = false, foundNumObsType = false;
     for (unsigned int i=0; i<apps.size(); ++i) {
-        if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+        if (apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix())
         {
-            data_type = apps[i];
+            data_type = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier);
             foundDataType = true;
             options=" -D MOG_TYPE_8 ";
         }
-        else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+        else if (apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix())
         {
-            data_type = apps[i];
+            data_type = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier);
             foundDataType = true;
             options=" -D MOG_TYPE_16 ";
         }
-        else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
+        else if (apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix())
         {
-            num_obs_type = apps[i];
+            num_obs_type = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier);
             foundNumObsType = true;
         }
     }
@@ -92,7 +93,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
                                                 vil_image_view_base_sptr  exp_img,
                                                 int                       n,
                                                 vcl_string                norm_type,
-                                                bool                      pmax )
+                                                bool                      pmax, vcl_string identifier="")
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -106,7 +107,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     //---- get scene info -----
     vcl_string data_type,num_obs_type,options;
     int apptypesize;
-    get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize);
+    get_scene_appearances(scene, data_type, num_obs_type, options, apptypesize, identifier);
 
     //specify max mode options
     if ( pmax )
@@ -1124,7 +1125,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
                                             norm_src_paths,
                                             "normalize_change_kernel",   //kernel name
                                             norm_opts,                   //options
-                                            "normalize change detection kernel"); //kernel identifier (for error checking)
+                                            "normalize change detection kernel");//kernel identifier (for error checking)
 
     //store in a vector in the map and return
     vcl_vector<bocl_kernel*> vec_kernels;
@@ -1147,8 +1148,8 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
                                               vil_image_view_base_sptr  img,
                                               vcl_string identifier,
                                               bool max_density,
-                                              float nearfactor, 
-                                              float farfactor )
+                                              float nearfactor,
+                                              float farfactor)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -1513,4 +1514,3 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_spt
     kernels_[identifier] = vec_kernels;
     return kernels_[identifier];
 }
-

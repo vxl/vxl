@@ -31,7 +31,8 @@ namespace boxm2_ocl_change_detection_globals
                              vcl_string&         data_type,
                              vcl_string&         num_obs_type,
                              vcl_string&         options,
-                             int&                apptypesize);
+                             int&                apptypesize,
+                             vcl_string identifier);
 };
 
 //Older, single pass, multi-res change detection
@@ -48,7 +49,7 @@ class boxm2_ocl_change_detection
                               vil_image_view_base_sptr  exp_img,
                               int                       n,
                               vcl_string                norm_type,
-                              bool                      pmax );
+                              bool                      pmax, vcl_string identifier);
 
   private:
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
