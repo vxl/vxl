@@ -90,5 +90,6 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_BGR_to_RGB_process, "vilBGRToRGBProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_combine_planes_process2, "vilCombinePlanesProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_histogram_equalize_process, "vilHistogramEqualizeProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_invert_float_image_process, "vilInvertFloatImageProcess");
 }
 

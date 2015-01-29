@@ -495,4 +495,10 @@ def histogram_equalize(img):
   (id, type) = boxm2_batch.commit_output(0);
   img_equalized = dbvalue(id, type);
   return img_equalized;
-
+def invert_float_image(img):
+  boxm2_batch.init_process("vilInvertFloatImageProcess");
+  boxm2_batch.set_input_from_db(0, img);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  inverted_img = dbvalue(id, type);
+  return inverted_img;

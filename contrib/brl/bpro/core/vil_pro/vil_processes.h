@@ -74,5 +74,6 @@ DECLARE_FUNC_CONS(vil_binary_edge_detection_process);
 DECLARE_FUNC_CONS(vil_BGR_to_RGB_process);
 DECLARE_FUNC_CONS(vil_combine_planes_process2);
 DECLARE_FUNC_CONS(vil_histogram_equalize_process);
+DECLARE_FUNC_CONS(vil_invert_float_image_process);
 
 #endif
