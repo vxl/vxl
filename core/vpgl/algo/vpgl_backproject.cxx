@@ -8,6 +8,7 @@
 #include <vnl/algo/vnl_amoeba.h>
 #include <vgl/vgl_intersection.h>
 #include <vpgl/vpgl_generic_camera.h>
+#include <vnl/vnl_random.h>
 
 //: Backproject an image point onto a plane, start with initial_guess
 bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
@@ -32,14 +33,17 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
   }
   // general case
   vpgl_invmap_cost_function cf(image_point, plane, cam);
-  vnl_double_2 x1(0.0, 0.0);
-
+  vnl_double_2 x1(0.000, 0.0000);
   cf.set_params(initial_guess, x1);
+  if (image_point[0] == 3712 && image_point[1] == 3456)
+      bool flag = true;
   vnl_amoeba amoeba(cf);
   amoeba.set_max_iterations(100000);
   amoeba.set_relative_diameter(1.0);
+  amoeba.set_zero_term_delta(0.025);
   vnl_vector<double> x(&x1[0], 2);
-  amoeba.minimize(x); x1 = x;
+  amoeba.minimize(x); 
+  x1 = x;
   cf.point_3d(x1, world_point);
   double u=0, v=0, X=world_point[0], Y=world_point[1], Z=world_point[2];
   cam->project(X, Y, Z, u, v);
@@ -49,8 +53,8 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
   // was: double err = vcl_sqrt(cf.f(x));
   if (err > error_tol) // greater than a 20th of a pixel
   {
-    vcl_cerr << "ERROR: backprojection error = " << err << vcl_endl;
-    return false;
+      vcl_cerr << "ERROR: backprojection error = " << err << vcl_endl;
+      return false;
   }
   return true;
 }

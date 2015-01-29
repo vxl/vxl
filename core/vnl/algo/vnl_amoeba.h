@@ -63,10 +63,11 @@ class vnl_amoeba
   //  I.e. the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   void set_relative_diameter(double r) { relative_diameter = r; }
 
+  void set_zero_term_delta(double d) { zero_term_delta = d; }
   //: Scaling used to select starting vertices relative to initial x0.
   //  I.e. the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   double relative_diameter;
-
+  double zero_term_delta;
   //: Construct and supply function to be minimized
   vnl_amoeba(vnl_cost_function& f);
 

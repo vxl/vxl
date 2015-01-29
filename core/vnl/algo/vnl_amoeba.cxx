@@ -29,6 +29,7 @@ vnl_amoeba::vnl_amoeba(vnl_cost_function& f)
   X_tolerance = 1e-8;
   F_tolerance = 1e-4;
   relative_diameter = 0.05;
+  zero_term_delta = 0.00025;
 }
 
 
@@ -179,7 +180,7 @@ void vnl_amoebaFit::set_up_simplex_relative(vcl_vector<vnl_amoeba_SimplexCorner>
 
   // Following improvement suggested by L.Pfeffer at Stanford
   const double usual_delta = relative_diameter;             // 5 percent deltas for non-zero terms
-  const double zero_term_delta = 0.00025;      // Even smaller delta for zero elements of x
+  //const double zero_term_delta = 0.00025;      // Even smaller delta for zero elements of x
 //  vnl_vector<double> y(n);
   for (int j = 0; j < n; ++j) {
     vnl_amoeba_SimplexCorner *s = &simplex[j+1];
