@@ -193,6 +193,16 @@ def create_local_rational_camera(rational_cam_fname, lvcs_fname):
     (id,type) = boxm2_batch.commit_output(0);
     cam = dbvalue(id,type);
     return cam;
+def convert_to_local_rational_camera(rational_cam, lvcs):
+    boxm2_batch.init_process('vpglConvertToLocalRationalCameraProcess');
+    boxm2_batch.set_input_from_db(0,rational_cam);
+    boxm2_batch.set_input_from_db(1,lvcs);
+    status = boxm2_batch.run_process();
+    cam = None;
+    if status:
+      (id,type) = boxm2_batch.commit_output(0);
+      cam = dbvalue(id,type);
+    return cam;
 
 ###################;
 #camera saving;

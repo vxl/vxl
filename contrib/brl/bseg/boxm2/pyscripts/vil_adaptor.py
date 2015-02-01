@@ -6,15 +6,17 @@ from boxm2_register import boxm2_batch, dbvalue
 def load_image(file_path) :
   boxm2_batch.init_process("vilLoadImageViewProcess");
   boxm2_batch.set_input_string(0, file_path);
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  (ni_id, ni_type) = boxm2_batch.commit_output(1);
-  (nj_id, nj_type) = boxm2_batch.commit_output(2);
-  ni = boxm2_batch.get_output_unsigned(ni_id);
-  nj = boxm2_batch.get_output_unsigned(nj_id);
-  img = dbvalue(id,type);
-  boxm2_batch.remove_data(ni_id)
-  boxm2_batch.remove_data(nj_id)
+  status = boxm2_batch.run_process();
+  img = ni = nj = None
+  if status:
+    (id,type) = boxm2_batch.commit_output(0);
+    (ni_id, ni_type) = boxm2_batch.commit_output(1);
+    (nj_id, nj_type) = boxm2_batch.commit_output(2);
+    ni = boxm2_batch.get_output_unsigned(ni_id);
+    nj = boxm2_batch.get_output_unsigned(nj_id);
+    img = dbvalue(id,type);
+    boxm2_batch.remove_data(ni_id)
+    boxm2_batch.remove_data(nj_id)
   return img, ni, nj;
 
 def save_image(img, file_path) :
@@ -309,7 +311,7 @@ def nitf_date_time(image_filename):
   boxm2_batch.init_process("vilNITFDateTimeProcess");
   boxm2_batch.set_input_string(0,image_filename);
   status = boxm2_batch.run_process();
-  year, month, day, hour, minute = None, None, None, None, None
+  year = month = day = hour = minute = None
   if status:
       (id,type)=boxm2_batch.commit_output(0);
       year =  boxm2_batch.get_output_int(id);

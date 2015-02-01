@@ -1280,7 +1280,7 @@ def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0, 
     cropped_image = 0
     uncertainty = 0
     return result, local_cam, cropped_image, uncertainty
-    
+
   boxm2_batch.init_process("boxm2RoiInitProcess")
   result = boxm2_batch.set_params_process(params_fname)
   if not result:
@@ -1448,7 +1448,7 @@ def scene_illumination_info(scene):
     boxm2_batch.init_process("boxm2SceneIlluminationInfoProcess");
     boxm2_batch.set_input_from_db(0, scene);
     status = boxm2_batch.run_process();
-    longitude, latitude, nbins = None, None, None
+    longitude = latitude = nbins = None
     if status:
         (lon_id,lon_type)=boxm2_batch.commit_output(0);
         longitude = boxm2_batch.get_output_float(lon_id)
