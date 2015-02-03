@@ -50,6 +50,9 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
     (*this) = vpgl_affine_camera<T>(ry, u, pt, u0, v0, su, sv);
   }
 
+  virtual bool set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix );
+  virtual bool set_matrix( const T* new_camera_matrix ); // i.e., T new_camera_matrix[12]
+
   virtual vcl_string type_name() const { return "vpgl_affine_camera"; }
 
   //: Set the top two rows.

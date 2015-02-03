@@ -125,6 +125,31 @@ void vpgl_affine_camera<T>::set_rows(
   ray_dir_ = normalize(ray_dir_);
 }
 
+template <class T>
+bool vpgl_affine_camera<T>::set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix )
+{
+  assert( new_camera_matrix(2,3) != 0 );
+  vnl_matrix_fixed<T,3,4> C( new_camera_matrix );
+  C = C/C(2,3);
+  C(2,0) = (T)0; C(2,1) = (T)0; C(2,2) = (T)0;
+  vpgl_proj_camera<T>::set_matrix( C );
+
+  vgl_homg_point_3d<T> cc = vpgl_proj_camera<T>::camera_center();
+  vgl_vector_3d<T> old_ray_dir = ray_dir_;
+  ray_dir_.set(cc.x(), cc.y(), cc.z());
+  ray_dir_ = normalize(ray_dir_);
+  // assume that new and old ray directions should not differ by more than 90 deg.
+  // if this assumption is false, caller should call orient_ray_direction() afterwards.
+  orient_ray_direction(old_ray_dir);
+}
+
+template <class T>
+bool vpgl_affine_camera<T>::set_matrix( const T* new_camera_matrix_p )
+{
+  vnl_matrix_fixed<T,3,4> new_camera_matrix( new_camera_matrix_p );
+  set_matrix( new_camera_matrix );
+}
+
 //: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
 template <class T>
 vgl_homg_point_3d<T> vpgl_affine_camera<T>::camera_center() const
