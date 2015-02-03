@@ -34,6 +34,19 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
                                          vpgl_camera_double_sptr    cam,
                                          vcl_string const& apm_id)
 {
+  vil_image_view<float> weights(img->ni(), img->nj());
+  weights.fill(1.0f);
+  return paint_scene_with_weights(scene, device, opencl_cache, img, weights, cam, apm_id);
+}
+
+bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          scene,
+                                                      bocl_device_sptr          device,
+                                                      boxm2_opencl_cache_sptr    opencl_cache,
+                                                      vil_image_view_base_sptr   img,
+                                                      vil_image_view<float> const& weights,
+                                                      vpgl_camera_double_sptr    cam,
+                                                      vcl_string const& apm_id)
+{
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
   typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
   typedef boxm2_data_traits<BOXM2_AUX2>::datatype aux2_datatype;
@@ -114,9 +127,14 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
     for (unsigned int i=0;i<cl_ni;++i) {
-      input_buff[count] = 0.0f;
-      if ( i<img_view->ni() && j< img_view->nj() )
+      if ( i<img_view->ni() && j< img_view->nj() ) {
         input_buff[count] = (*img_view)(i,j);
+        vis_buff[count] = weights(i,j);
+      }
+      else {
+        input_buff[count] = 0.0f;
+        vis_buff[count] = 1.0f;
+      }
       ++count;
     }
   }

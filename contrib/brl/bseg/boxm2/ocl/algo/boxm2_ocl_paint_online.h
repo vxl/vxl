@@ -12,6 +12,7 @@
 #include <boxm2/io/boxm2_cache.h>
 
 #include <vil/vil_image_view_base.h>
+#include <vil/vil_image_view.h>
 
 //: boxm2_ocl_paint_batch class
 class boxm2_ocl_paint_online
@@ -23,6 +24,14 @@ class boxm2_ocl_paint_online
                              vil_image_view_base_sptr img,
                              vpgl_camera_double_sptr  cam,
                              vcl_string const& apm_id="");
+
+    static bool paint_scene_with_weights( boxm2_scene_sptr         scene,
+                                          bocl_device_sptr         device,
+                                          boxm2_opencl_cache_sptr  opencl_cache,
+                                          vil_image_view_base_sptr img,
+                                          vil_image_view<float> const& weights,
+                                          vpgl_camera_double_sptr  cam,
+                                          vcl_string const& apm_id="");
 
   private:
     //compile kernels and place in static map
