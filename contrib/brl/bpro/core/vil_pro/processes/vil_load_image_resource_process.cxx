@@ -46,7 +46,7 @@ bool vil_load_image_resource_process(bprb_func_process& pro)
 
   vil_image_resource_sptr loaded_image = vil_load_image_resource(image_filename.c_str());
   if ( !loaded_image ) {
-    vcl_cerr << "Failed to load image file" << image_filename << vcl_endl;
+    vcl_cerr << "Failed to load image file: " << image_filename << vcl_endl;
     return false;
   }
 

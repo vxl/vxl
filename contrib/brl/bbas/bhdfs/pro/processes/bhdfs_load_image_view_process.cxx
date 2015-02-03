@@ -43,7 +43,7 @@ bool bhdfs_load_image_view_process(bprb_func_process& pro)
   vcl_string image_filename = pro.get_input<vcl_string>(i++);
   vil_image_view_base_sptr loaded_image = bhdfs_vil_load(image_filename.c_str());
   if ( !loaded_image ) {
-    vcl_cerr << "Failed to load image file" << image_filename << vcl_endl;
+    vcl_cerr << "Failed to load image file: " << image_filename << vcl_endl;
     return false;
   }
   

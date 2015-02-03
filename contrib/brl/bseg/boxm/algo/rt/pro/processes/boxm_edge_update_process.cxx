@@ -210,7 +210,7 @@ bool boxm_edge_refine_updates_process(bprb_func_process& pro)
 
     vil_image_view_base_sptr loaded_image = vil_load(img_id.c_str() );
     if ( !loaded_image || loaded_image->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-      vcl_cerr << "Failed to load image file" << img_id << " or format is not FLOAT img!\n";
+      vcl_cerr << "Failed to load image file: " << img_id << " or format is not FLOAT img!\n";
       return false;
     }
     vil_image_view<float> img(loaded_image);

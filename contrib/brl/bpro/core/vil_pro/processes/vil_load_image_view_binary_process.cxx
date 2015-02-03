@@ -47,7 +47,7 @@ bool vil_load_image_view_binary_process(bprb_func_process& pro)
   is.close();
 
   if ( !loaded_image ) {
-    vcl_cerr << "Failed to load image file" << image_filename << vcl_endl;
+    vcl_cerr << "Failed to load image file: " << image_filename << vcl_endl;
     return false;
   }
 

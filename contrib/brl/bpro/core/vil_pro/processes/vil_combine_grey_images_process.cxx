@@ -45,7 +45,7 @@ bool get_images(vcl_string file,
        continue;
      vil_image_view_base_sptr loaded_image = vil_load(image_filename.c_str() );
      if ( !loaded_image ) {
-       vcl_cerr << "Failed to load image file" << image_filename << '\n';
+       vcl_cerr << "Failed to load image file: " << image_filename << '\n';
        return false;
      }
      if ( loaded_image->nplanes() != 1)
