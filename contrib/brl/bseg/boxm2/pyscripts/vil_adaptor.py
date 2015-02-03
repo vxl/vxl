@@ -296,6 +296,17 @@ def scale_and_offset_values(img,scale,offset):
   boxm2_batch.run_process()
   return
 
+def init_byte_img(ni,nj,np,val):
+  boxm2_batch.init_process("vilInitByteImageProcess")
+  boxm2_batch.set_input_unsigned(0,ni)
+  boxm2_batch.set_input_unsigned(1,nj)
+  boxm2_batch.set_input_unsigned(2,np)
+  boxm2_batch.set_input_unsigned(3,val)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  img_out = dbvalue(id,type)
+  return img_out
+
 def init_float_img(ni,nj,np,val):
   boxm2_batch.init_process("vilInitFloatImageProcess")
   boxm2_batch.set_input_unsigned(0,ni)
