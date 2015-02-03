@@ -24,18 +24,24 @@
 #include <vsol/vsol_box_2d.h>
 #include <vcl_iostream.h>
 
+
 // global variables and functions
 namespace vpgl_crop_img_using_3d_box_process_globals
 {
-  const unsigned n_inputs_ = 9;
+  const unsigned n_inputs_ = 10;
   const unsigned n_outputs_ = 5;
 }
+
+// === functions ===
+bool project_box(vpgl_rational_camera<double> const* const rat_cam, const vgl_box_3d<double> &scene_bbox,
+    double uncertainty, const vpgl_lvcs_sptr &lvcs_sptr,
+    vgl_box_2d<double> &roi_box_2d);
 
 // initialization
 bool vpgl_crop_img_using_3d_box_process_cons(bprb_func_process& pro)
 {
   using namespace vpgl_crop_img_using_3d_box_process_globals;
-  // process takes 7 inputs
+  // process takes 10 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_resource_sptr";  // image resource
   input_types_[1] = "vpgl_camera_double_sptr";  // rational camera
@@ -46,6 +52,7 @@ bool vpgl_crop_img_using_3d_box_process_cons(bprb_func_process& pro)
   input_types_[6] = "double";                   // upper_right_lat
   input_types_[7] = "double";                   // upper_right_elev
   input_types_[8] = "double";                   // uncertainty value (in meter units)
+  input_types_[9] = "vpgl_lvcs_sptr";           // lvcs
 
   // process takes 5 outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -54,7 +61,14 @@ bool vpgl_crop_img_using_3d_box_process_cons(bprb_func_process& pro)
   output_types_[2] = "unsigned";                 // image pixel j0
   output_types_[3] = "unsigned";                 // image size ni
   output_types_[4] = "unsigned";                 // image size nj
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
+  // set input defaults
+  brdb_value_sptr lvcs = new brdb_value_t<vpgl_camera_double_sptr>;
+  pro.set_input(9, lvcs);
+
+  return good; 
 }
 
 // execute the process
@@ -78,6 +92,7 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   double upper_right_lat  = pro.get_input<double>(i++);
   double upper_right_elev = pro.get_input<double>(i++);
   double uncertainty      = pro.get_input<double>(i++);
+  vpgl_lvcs_sptr lvcs_sptr= pro.get_input<vpgl_lvcs_sptr>(i++);
 
   vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
   if (!rat_cam) {
@@ -86,48 +101,20 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   }
 
   // generate a lvcs coordinates to transfer camera offset coordinates
-  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lower_left_lat, lower_left_lon, lower_left_elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-  
-  // project box
-  double xoff, yoff, zoff;
-  xoff = rat_cam->offset(vpgl_rational_camera<double>::X_INDX);
-  yoff = rat_cam->offset(vpgl_rational_camera<double>::Y_INDX);
-  zoff = rat_cam->offset(vpgl_rational_camera<double>::Z_INDX);
+  if(!lvcs_sptr) {
+    lvcs_sptr = new vpgl_lvcs(lower_left_lat, lower_left_lon, lower_left_elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  }
 
-  // global to lcoal (wgs84 to meter in order to apply uncertainty)
-  double lx, ly, lz;
-  lvcs->global_to_local(xoff, yoff, zoff, vpgl_lvcs::wgs84, lx, ly, lz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-  double center[3];
-  center[0] = lx;  center[1] = ly;  center[2] = lz;
+  vgl_box_3d<double> scene_bbox(lower_left_lon, lower_left_lat, lower_left_elev,
+                        upper_right_lon, upper_right_lat, upper_right_elev);
 
-  // create a camera box with uncertainty
-  vgl_box_3d<double> cam_box(center, 2*uncertainty, 2*uncertainty, 2*uncertainty, vgl_box_3d<double>::centre);
-  vcl_vector<vgl_point_3d<double> > cam_corners = cam_box.vertices();
-
-  // create the 3D box given input coordinates (in geo-coordinates)
-  vgl_box_3d<double> bbox(lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev);
-  vcl_vector<vgl_point_3d<double> > box_corners = bbox.vertices();
-
-  // projection
   vgl_box_2d<double> roi_box_2d;
-  double lon, lat, gz;
-  for (unsigned i = 0; i < cam_corners.size(); i++)
-  {
-    lvcs->local_to_global(cam_corners[i].x(), cam_corners[i].y(), cam_corners[i].z(), vpgl_lvcs::wgs84,
-                          lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-    vpgl_rational_camera<double>* new_cam = rat_cam->clone();
-    new_cam->set_offset(vpgl_rational_camera<double>::X_INDX, lon);
-    new_cam->set_offset(vpgl_rational_camera<double>::Y_INDX, lat);
-    new_cam->set_offset(vpgl_rational_camera<double>::Z_INDX, gz);
-
-    // project the box to image coords
-    for (unsigned j = 0; j < box_corners.size(); j++) {
-      vgl_point_2d<double> p2d = new_cam->project(vgl_point_3d<double>(box_corners[j].x(), box_corners[j].y(), box_corners[j].z()));
-      roi_box_2d.add(p2d);
-    }
+  bool good = project_box(rat_cam, scene_bbox, uncertainty, lvcs_sptr, roi_box_2d);
+  if(!good) {
+    return false;
   }
   vcl_cout << pro.name() << ": projected 2d roi box: " << roi_box_2d << " given uncertainty " << uncertainty << " meters." << vcl_endl;
-
+  
   // crop the image
   brip_roi broi(img_res_sptr->ni(), img_res_sptr->nj());
   vsol_box_2d_sptr bb = new vsol_box_2d();
@@ -135,6 +122,7 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   bb->add_point(roi_box_2d.max_x(), roi_box_2d.max_y());
   bb = broi.clip_to_image_bounds(bb);
 
+  // store output
   unsigned i0 = (unsigned)bb->get_min_x();
   unsigned j0 = (unsigned)bb->get_min_y();
   unsigned ni = (unsigned)bb->width();
@@ -158,13 +146,14 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   }
 
   // create the local camera
-  vpgl_local_rational_camera<double> local_camera(*lvcs, *rat_cam);
+  vpgl_local_rational_camera<double> local_camera(*lvcs_sptr, *rat_cam);
   // calculate local camera offset from image bounding box
   double global_u, global_v, local_u, local_v;
   rat_cam->image_offset(global_u, global_v);
   local_u = global_u - bb->get_min_x();
   local_v = global_v - bb->get_min_y();
   local_camera.set_image_offset(local_u, local_v);
+
 
   // store output
   unsigned out_j = 0;
@@ -173,6 +162,163 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   pro.set_output_val<unsigned>(out_j++, j0);
   pro.set_output_val<unsigned>(out_j++, ni);
   pro.set_output_val<unsigned>(out_j++, nj);
+  return true;
+}
+
+// global variables and functions
+namespace vpgl_offset_cam_using_3d_box_process_globals
+{
+  const unsigned n_inputs_ = 9;
+  const unsigned n_outputs_ = 5;
+}
+
+// initialization
+bool vpgl_offset_cam_using_3d_box_process_cons(bprb_func_process& pro)
+{
+  using namespace vpgl_offset_cam_using_3d_box_process_globals;
+  // process takes 9 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vpgl_camera_double_sptr";  // rational camera
+  input_types_[1] = "double";                   // lower_left_lon
+  input_types_[2] = "double";                   // lower_left_lat
+  input_types_[3] = "double";                   // lower_left_elev
+  input_types_[4] = "double";                   // upper_right_lon
+  input_types_[5] = "double";                   // upper_right_lat
+  input_types_[6] = "double";                   // upper_right_elev
+  input_types_[7] = "double";                   // uncertainty value (in meter units)
+  input_types_[8] = "vpgl_lvcs_sptr";           // lvcs
+
+  // process takes 5 outputs
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "vpgl_camera_double_sptr";  // crop rational camera
+  output_types_[1] = "unsigned";                 // image pixel i0
+  output_types_[2] = "unsigned";                 // image pixel j0
+  output_types_[3] = "unsigned";                 // image size ni
+  output_types_[4] = "unsigned";                 // image size nj
+
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
+  // set input defaults
+  brdb_value_sptr lvcs = new brdb_value_t<vpgl_lvcs_sptr>;
+  pro.set_input(8, lvcs);
+
+  return good; 
+}
+
+// execute the process
+bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
+{
+  using namespace vpgl_offset_cam_using_3d_box_process_globals;
+  // sanity check
+  if (pro.n_inputs() != n_inputs_) {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
+    return false;
+  }
+
+  // get the input
+  unsigned i = 0;
+  vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(i++); // rational camera
+  double lower_left_lon   = pro.get_input<double>(i++);
+  double lower_left_lat   = pro.get_input<double>(i++);
+  double lower_left_elev  = pro.get_input<double>(i++);
+  double upper_right_lon  = pro.get_input<double>(i++);
+  double upper_right_lat  = pro.get_input<double>(i++);
+  double upper_right_elev = pro.get_input<double>(i++);
+  double uncertainty      = pro.get_input<double>(i++);
+  vpgl_lvcs_sptr lvcs_sptr= pro.get_input<vpgl_lvcs_sptr>(i++);
+
+  vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
+  if (!rat_cam) {
+    vcl_cout << pro.name() << ": the input camera is not a rational camera" << vcl_endl;
+    return false;
+  }
+
+  // generate a lvcs coordinates to transfer camera offset coordinates
+  if(!lvcs_sptr) {
+    lvcs_sptr = new vpgl_lvcs(lower_left_lat, lower_left_lon, lower_left_elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  }
+
+  vgl_box_3d<double> scene_bbox(lower_left_lon, lower_left_lat, lower_left_elev,
+                        upper_right_lon, upper_right_lat, upper_right_elev);
+
+  vgl_box_2d<double> roi_box_2d;
+  bool good = project_box(rat_cam, scene_bbox, uncertainty, lvcs_sptr, roi_box_2d);
+  if(!good) {
+    return false;
+  }
+  vcl_cout << pro.name() << ": projected 2d roi box: " << roi_box_2d << " given uncertainty " << uncertainty << " meters." << vcl_endl;
+
+  // crop the image
+  vsol_box_2d_sptr bb = new vsol_box_2d();
+  bb->add_point(roi_box_2d.min_x(), roi_box_2d.min_y());
+  bb->add_point(roi_box_2d.max_x(), roi_box_2d.max_y());
+
+  // store output
+  unsigned i0 = (unsigned)bb->get_min_x();
+  unsigned j0 = (unsigned)bb->get_min_y();
+  unsigned ni = (unsigned)bb->width();
+  unsigned nj = (unsigned)bb->height();
+
+  // create the local camera
+  vpgl_local_rational_camera<double> local_camera(*lvcs_sptr, *rat_cam);
+  // calculate local camera offset from image bounding box
+  double global_u, global_v, local_u, local_v;
+  rat_cam->image_offset(global_u, global_v);
+  local_u = global_u - bb->get_min_x();
+  local_v = global_v - bb->get_min_y();
+  local_camera.set_image_offset(local_u, local_v);
+
+
+  // store output
+  unsigned out_j = 0;
+  pro.set_output_val<vpgl_camera_double_sptr>(out_j++, new vpgl_local_rational_camera<double>(local_camera));
+  pro.set_output_val<unsigned>(out_j++, i0);
+  pro.set_output_val<unsigned>(out_j++, j0);
+  pro.set_output_val<unsigned>(out_j++, ni);
+  pro.set_output_val<unsigned>(out_j++, nj);
+  return true;
+}
+
+bool project_box(vpgl_rational_camera<double> const* const rat_cam, const vgl_box_3d<double> &scene_bbox,
+    double uncertainty, const vpgl_lvcs_sptr &lvcs_sptr,
+    vgl_box_2d<double> &roi_box_2d)
+{
+  // project box
+  double xoff, yoff, zoff;
+  xoff = rat_cam->offset(vpgl_rational_camera<double>::X_INDX);
+  yoff = rat_cam->offset(vpgl_rational_camera<double>::Y_INDX);
+  zoff = rat_cam->offset(vpgl_rational_camera<double>::Z_INDX);
+
+  // global to lcoal (wgs84 to meter in order to apply uncertainty)
+  double lx, ly, lz;
+  lvcs_sptr->global_to_local(xoff, yoff, zoff, vpgl_lvcs::wgs84, lx, ly, lz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  double center[3];
+  center[0] = lx;  center[1] = ly;  center[2] = lz;
+
+  // create a camera box with uncertainty
+  vgl_box_3d<double> cam_box(center, 2*uncertainty, 2*uncertainty, 2*uncertainty, vgl_box_3d<double>::centre);
+  vcl_vector<vgl_point_3d<double> > cam_corners = cam_box.vertices();
+
+  // create the 3D box given input coordinates (in geo-coordinates)
+  vcl_vector<vgl_point_3d<double> > box_corners = scene_bbox.vertices();
+
+  // projection
+  double lon, lat, gz;
+  for (unsigned i = 0; i < cam_corners.size(); i++)
+  {
+    lvcs_sptr->local_to_global(cam_corners[i].x(), cam_corners[i].y(), cam_corners[i].z(), vpgl_lvcs::wgs84,
+                          lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+    vpgl_rational_camera<double>* new_cam = rat_cam->clone();
+    new_cam->set_offset(vpgl_rational_camera<double>::X_INDX, lon);
+    new_cam->set_offset(vpgl_rational_camera<double>::Y_INDX, lat);
+    new_cam->set_offset(vpgl_rational_camera<double>::Z_INDX, gz);
+
+    // project the box to image coords
+    for (unsigned j = 0; j < box_corners.size(); j++) {
+      vgl_point_2d<double> p2d = new_cam->project(vgl_point_3d<double>(box_corners[j].x(), box_corners[j].y(), box_corners[j].z()));
+      roi_box_2d.add(p2d);
+    }
+  }
 
   return true;
 }

@@ -794,7 +794,7 @@ def compute_camera_to_world_homography(cam,plane,inverse = False):
 
 ## use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
 ## note that the input 3-d box is in unit of wgs84 geo coordinates
-def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty):
+def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=None):
   boxm2_batch.init_process("vpglCropImgUsing3DboxProcess");
   boxm2_batch.set_input_from_db(0, img_res);
   boxm2_batch.set_input_from_db(1, camera);
@@ -805,6 +805,41 @@ def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, low
   boxm2_batch.set_input_double(6, upper_right_lat);
   boxm2_batch.set_input_double(7, upper_right_elev);
   boxm2_batch.set_input_double(8, uncertainty);
+  if lvcs:
+    boxm2_batch.set_input_from_db(9, lvcs);
+  status = boxm2_batch.run_process();
+  if status:
+    (id, type) = boxm2_batch.commit_output(0);
+    local_cam  = dbvalue(id, type);
+    (id, type) = boxm2_batch.commit_output(1);
+    i0 = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id);
+    (id, type) = boxm2_batch.commit_output(2);
+    j0 = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id);
+    (id, type) = boxm2_batch.commit_output(3);
+    ni = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id);
+    (id, type) = boxm2_batch.commit_output(4);
+    nj = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id);
+    return status, local_cam, i0, j0, ni, nj;
+  else:
+    return status, dbvalue(0, ""), 0, 0, 0, 0;
+## use the 3-d box to offset the local camera using image camera, given certain uncertainty value in meter unit
+## note that the input 3-d box is in unit of wgs84 geo coordinates
+def offset_cam_using_3d_box(camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=None):
+  boxm2_batch.init_process("vpglOffsetCamUsing3DboxProcess");
+  boxm2_batch.set_input_from_db(0, camera);
+  boxm2_batch.set_input_double(1, lower_left_lon);
+  boxm2_batch.set_input_double(2, lower_left_lat);
+  boxm2_batch.set_input_double(3, lower_left_elev);
+  boxm2_batch.set_input_double(4, upper_right_lon);
+  boxm2_batch.set_input_double(5, upper_right_lat);
+  boxm2_batch.set_input_double(6, upper_right_elev);
+  boxm2_batch.set_input_double(7, uncertainty);
+  if lvcs:
+    boxm2_batch.set_input_from_db(8, lvcs);
   status = boxm2_batch.run_process();
   if status:
     (id, type) = boxm2_batch.commit_output(0);
