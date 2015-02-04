@@ -21,6 +21,7 @@ bool bvxm_heightmap_ortho_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // this one is the depth map from top
   output_types_[1] = "vil_image_view_base_sptr";  // this one is negated depth map, so height map from scene floor + scene floor height --> eventual output is an absolute height map
+  output_types_[2] = "vil_image_view_base_sptr";  // confidence map: max prob value along the ortho ray that generated the height value at that pixel, can be used to filter noise from the height map
   return pro.set_output_types(output_types_);
 }
 
@@ -80,7 +81,8 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);  
   
   vil_image_view<unsigned> *dmap = new vil_image_view<unsigned>(ni, nj, 1);
-  world->heightmap(camera,*dmap);  // this method actually generates a depth not a height map
+  vil_image_view<float> *conf_map = new vil_image_view<float>(ni, nj, 1);
+  world->heightmap(camera,*dmap, *conf_map);  // this method actually generates a depth not a height map
 
   // subtract from the scene height to get the height from scene floor
   float h = box.depth();
@@ -95,6 +97,7 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   //store output
   pro.set_output_val<vil_image_view_base_sptr>(0, dmap);
   pro.set_output_val<vil_image_view_base_sptr>(1, hmap);
+  pro.set_output_val<vil_image_view_base_sptr>(2, conf_map);
   
   return true;
 }

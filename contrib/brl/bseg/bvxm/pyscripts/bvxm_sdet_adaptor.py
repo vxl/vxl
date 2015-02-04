@@ -142,6 +142,33 @@ def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, 
     percent = 100;
     return out_crop, out_id_map, out_rgb_map, percent
 
+def test_classifier_clouds2(tclsf, dictionary_name, image_resource, i, j, width, height, block_size, percent_cat_name, category_id_file=""):
+  bvxm_batch.init_process("sdetTextureClassifySatelliteCloudsProcess2");
+  bvxm_batch.set_input_from_db(0, tclsf);
+  bvxm_batch.set_input_string(1, dictionary_name);
+  bvxm_batch.set_input_from_db(2, image_resource);
+  bvxm_batch.set_input_unsigned(3, i);
+  bvxm_batch.set_input_unsigned(4, j);
+  bvxm_batch.set_input_unsigned(5, width);
+  bvxm_batch.set_input_unsigned(6, height);
+  bvxm_batch.set_input_unsigned(7, block_size);
+  bvxm_batch.set_input_string(8, category_id_file);
+  bvxm_batch.set_input_string(9, percent_cat_name);
+  status = bvxm_batch.run_process();
+  if status:
+    (out_id, out_type) = bvxm_batch.commit_output(0);
+    out_crop = dbvalue(out_id, out_type);
+    (out_id, out_type) = bvxm_batch.commit_output(1);
+    out_id_map = dbvalue(out_id, out_type);
+    (out_id, out_type) = bvxm_batch.commit_output(2);
+    out_rgb_map = dbvalue(out_id, out_type);
+    (out_id, out_type) = bvxm_batch.commit_output(3);
+    percent = bvxm_batch.get_output_float(out_id)
+    bvxm_batch.remove_data(out_id)
+    return out_crop, out_id_map, out_rgb_map, percent;
+  else:
+    return 0, 0, 0, 100;
+
 def create_texture_classifier(lambda0, lambda1,n_scales,scale_interval,angle_interval,laplace_radius,gauss_radius,k,n_samples):
   bvxm_batch.init_process("sdetCreateTextureClassifierProcess");
   bvxm_batch.set_input_float(0,lambda0);
@@ -184,6 +211,32 @@ def generate_roc(tclsf, class_out_prob_img, class_out_color_img, orig_img, prefi
   (id,type) = bvxm_batch.commit_output(6);
   outimg = dbvalue(id,type);
   return tp, tn, fp, fn, tpr, fpr, outimg;
+
+## ROC analysis for a binary classifier
+def generate_roc2(image, gt_pos_file, pos_sign = "low"):
+  bvxm_batch.init_process("sdetTextureClassifierROCProcess2")
+  bvxm_batch.set_input_from_db(0, image)
+  bvxm_batch.set_input_string(1, gt_pos_file)
+  bvxm_batch.set_input_string(2, pos_sign)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    threshold  = bvxm_batch.get_bbas_1d_array_float(id) 
+    (id, type) = bvxm_batch.commit_output(1)
+    tp  = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(2)
+    tn  = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(3)
+    fp  = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(4)
+    fn  = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(5)
+    tpr = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(6)
+    fpr = bvxm_batch.get_bbas_1d_array_float(id)
+    return threshold, tp, tn, fp, fn, tpr, fpr
+  else:
+    return 0, 0, 0, 0, 0, 0, 0
 
 def segment_image(img, weight_thres, margin=0, min_size=50, sigma=1,neigh=8):
   bvxm_batch.init_process("sdetSegmentImageProcess");

@@ -10,6 +10,9 @@
 // \author D. E. Crispell
 // \date January 28, 2012
 //
+//  Modifications
+//   Yi Dong   OCT-2014   added support for eight band images
+// \endverbatim
 //----------------------------------------------------------------------------
 #include "brad_image_metadata.h"
 #include "brad_atmospheric_parameters.h"

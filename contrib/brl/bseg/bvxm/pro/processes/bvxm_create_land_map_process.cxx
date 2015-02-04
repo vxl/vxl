@@ -142,13 +142,16 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
         if (!vgl_intersection(scene_bbox, poly))
           continue;
         unsigned char curr_level = vit->loc_polys()[r_idx]->prop().level_;
+        unsigned char curr_id = vit->loc_polys()[r_idx]->prop().id_;
         // geo cover is already level 0 and therefore anything in osm with level 0 is ignored
-        if (curr_level == 0)
+        if (curr_level == 0 && curr_id != volm_osm_category_io::volm_land_table_name["Open_Water"].id_)
           continue;
         // go from geo coords wgs84 to local
         vgl_polygon<double> img_poly(1);
-        unsigned char curr_id = vit->loc_polys()[r_idx]->prop().id_;
-        if (curr_id != volm_osm_category_io::volm_land_table_name["building"].id_)  // only ingest buildings if necessary
+        
+        if (curr_id != volm_osm_category_io::volm_land_table_name["building"].id_ &&
+            curr_id != volm_osm_category_io::volm_land_table_name["Open_Water"].id_
+            )  // only ingest buildings and water if necessary
             continue;
         for (unsigned pt_idx = 0; pt_idx < poly[0].size(); pt_idx++) {
           double lx, ly, lz;

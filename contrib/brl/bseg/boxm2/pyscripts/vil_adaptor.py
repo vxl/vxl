@@ -219,11 +219,12 @@ def gradient_angle(Ix, Iy) :
     angleImg = dbvalue(id,type)
     return angleImg
 
-def threshold_image(img, value, threshold_above=True):
+def threshold_image(img, value, threshold_above=True, id=255):
     boxm2_batch.init_process("vilThresholdImageProcess")
     boxm2_batch.set_input_from_db(0,img)
     boxm2_batch.set_input_float(1,value)
     boxm2_batch.set_input_bool(2,threshold_above)
+    boxm2_batch.set_input_unsigned(3, id)
     boxm2_batch.run_process()
     (id,type) = boxm2_batch.commit_output(0)
     mask = dbvalue(id,type)
@@ -473,6 +474,38 @@ def combine_planes(img_red, img_green, img_blue):
   (id, type) = boxm2_batch.commit_output(0);
   img_out = dbvalue(id, type);
   return img_out;
+
+## combine them in the given order in the output image
+def combine_planes2(img_blue, img_green, img_red, img_nir):
+  bvxm_batch.init_process("vilCombinePlanesProcess2");
+  bvxm_batch.set_input_from_db(0, img_blue);
+  bvxm_batch.set_input_from_db(1, img_green);
+  bvxm_batch.set_input_from_db(2, img_red);
+  bvxm_batch.set_input_from_db(3, img_nir);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  img_out = dbvalue(id, type);
+  return img_out;
+
+### combine 8 bands into one output image
+### note that the band order in output image is same as input and user is responsible for the passing sequence of image bands
+def combine_planes_8_bands(img_coastal, img_blue, img_green, img_yellow, img_red, img_red_edge, img_nir1, img_nir2):
+  bvxm_batch.init_process("vilCombinePlanes8BandsProcess")
+  bvxm_batch.set_input_from_db(0, img_coastal)
+  bvxm_batch.set_input_from_db(1, img_blue)
+  bvxm_batch.set_input_from_db(2, img_green)
+  bvxm_batch.set_input_from_db(3, img_yellow)
+  bvxm_batch.set_input_from_db(4, img_red)
+  bvxm_batch.set_input_from_db(5, img_red_edge)
+  bvxm_batch.set_input_from_db(6, img_nir1)
+  bvxm_batch.set_input_from_db(7, img_nir2)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_img = dbvalue(id, type)
+    return out_img
+  else:
+    return 0;
 
 def median_filter_image(img, neighborhood_radius):
     boxm2_batch.init_process("vilMedianFilterProcess")

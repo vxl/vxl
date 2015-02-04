@@ -185,6 +185,9 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
   int max_i = margin > block_size_ ? ni-margin : ni-block_size_; 
   unsigned nh = texton_index_.size();
   unsigned pix_count = 0;
+  vcl_cout << "ni: " << ni << ", nj: " << nj << vcl_endl;
+  vcl_cout << "margin: " << margin << ", max_j: " << max_j << ", max_i: " << max_i << ", block_size: " << block_size_ << vcl_endl;
+
   for (int j = margin; j<max_j; j+=block_size_) {
     for (int i = margin; i<max_i; i+=block_size_) {
       vcl_vector<float> h(nh, 0.0f);
@@ -208,7 +211,7 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
           pix_count++;
         }
     }
-    vcl_cout << '.' << vcl_flush;
+    vcl_cout << j << "," << vcl_flush;
   }
   for (vcl_map<vcl_string, float>::iterator iter = cat_percentage_map.begin(); iter != cat_percentage_map.end(); iter++) {
     iter->second /= pix_count;

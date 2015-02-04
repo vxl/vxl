@@ -34,8 +34,8 @@ bool vpgl_rational_cam_img_to_global_process_cons(bprb_func_process& pro)
   // process takes 6 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vpgl_camera_double_sptr";  // rational camera
-  input_types_[1] = "unsigned";                      // image point i
-  input_types_[2] = "unsigned";                      // image point j
+  input_types_[1] = "unsigned";                 // image point i
+  input_types_[2] = "unsigned";                 // image point j
   input_types_[3] = "double";                   // initial gauss longitude (if given)
   input_types_[4] = "double";                   // initial gauss latitude  (if given)
   input_types_[5] = "double";                   // initial gauss elevation (also use as input plane elevation)
@@ -103,13 +103,6 @@ bool vpgl_rational_cam_img_to_global_process(bprb_func_process& pro)
   }
   double lon, lat, elev;
   lon = world_pt.x();  lat = world_pt.y();  elev = world_pt.z();
-  // transfer to global wgs84 coordinates if input camera is a local rational camera
-  if (rat_cam->type_name() == "vpgl_local_rational_camera") {
-    vpgl_local_rational_camera<double>* local_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(cam_sptr.as_pointer());
-    vpgl_lvcs lvcs = local_cam->lvcs();
-    lvcs.local_to_global(world_pt.x(), world_pt.y(), world_pt.z(), vpgl_lvcs::wgs84, lon, lat, elev);
-  }
-
   // output
   i = 0;
   pro.set_output_val<double>(i++, lon);

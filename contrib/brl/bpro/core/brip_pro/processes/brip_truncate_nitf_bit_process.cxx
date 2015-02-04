@@ -49,7 +49,7 @@ bool brip_truncate_nitf_bit_process(bprb_func_process& pro)
   // get the input
   unsigned i = 0;
   vil_image_view_base_sptr in_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  bool is_short = pro.get_input<bool>(i++);
+  bool is_byte = pro.get_input<bool>(i++);
 
   if (in_img_ptr->pixel_format() != VIL_PIXEL_FORMAT_UINT_16) {
     vcl_cout << pro.name() << ": Unsupported Pixel Format = " << in_img_ptr->pixel_format() << vcl_endl;
@@ -61,9 +61,8 @@ bool brip_truncate_nitf_bit_process(bprb_func_process& pro)
   unsigned nj = in_img->nj();
   unsigned np = in_img->nplanes();
   // being truncation
-  vcl_cout<<"is_short "<<is_short<<vcl_endl;
-  if (is_short) {
-    
+  if (is_byte) {
+    vcl_cout << "truncate to byte image" << vcl_endl;
     // truncate the input 16 bits image to a byte image by ignoring the most significant 5 bits and less significant 3 bits
     vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(ni,nj,np);
     if (!brip_vil_nitf_ops::scale_nitf_bits(*in_img, *out_img)) {
@@ -75,6 +74,7 @@ bool brip_truncate_nitf_bit_process(bprb_func_process& pro)
     return true;
   }
   else {
+    vcl_cout << "truncate to short image" << vcl_endl;
     // truncate the input image by ignoring the most significant 5 bits
     vil_image_view<vxl_uint_16>* out_img = new vil_image_view<vxl_uint_16>(ni, nj, np);
     if (!brip_vil_nitf_ops::truncate_nitf_bits(*in_img, *out_img)) {

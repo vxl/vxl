@@ -579,7 +579,7 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
 }
 //: generate a heightmap from the viewpoint of a virtual camera
 // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
-bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap,unsigned scale_idx)
+bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap, vil_image_view<float> &conf_map, unsigned scale_idx)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
@@ -649,9 +649,11 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   float med_diff_thresh = 8.0;
 
   // convert confidence and heightmap to vil images
-  vil_image_view<float>* conf_img = new vil_image_view<float>(heightmap.ni(),heightmap.nj());
-  vil_image_view_base_sptr conf_img_sptr = conf_img;
+  //vil_image_view<float>* conf_img = new vil_image_view<float>(heightmap.ni(),heightmap.nj());
+  //vil_image_view_base_sptr conf_img_sptr = conf_img;
+  vil_image_view_base_sptr conf_img_sptr = new vil_image_view<float>(conf_map);
   bvxm_util::slab_to_img(max_prob_image,conf_img_sptr);
+
   vil_image_view<float>* heightmap_rough_img = new vil_image_view<float>(heightmap.ni(),heightmap.nj());
   vil_image_view_base_sptr heightmap_rough_img_sptr = heightmap_rough_img;
   bvxm_util::slab_to_img(heightmap_rough,heightmap_rough_img_sptr);

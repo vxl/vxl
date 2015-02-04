@@ -19,4 +19,3 @@ def get_satellite_uncertainty(sat_name):
   if "GeoEye" in sat_name:
     return 5;
   return 40;
-

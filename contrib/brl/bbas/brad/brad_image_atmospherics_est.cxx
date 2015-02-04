@@ -86,115 +86,97 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
   return true;
 }
 
-// compute the params from a multi band image - only 4 bands for now
+// compute the params from a multi band image
 bool brad_estimate_atmospheric_parameters_multi(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, brad_atmospheric_parameters &params)
 {
   unsigned int ni = radiance.ni();
   unsigned int nj = radiance.nj();
-  
-  vil_image_view<float> band1 = vil_plane(radiance, 0);
-  vil_image_view<float> band2 = vil_plane(radiance, 1);
-  vil_image_view<float> band3 = vil_plane(radiance, 2);
-  vil_image_view<float> band4 = vil_plane(radiance, 3);
-  
-  vcl_vector<vil_image_view<float> > imgs;
-  imgs.push_back(band1); 
-  imgs.push_back(band2);
-  imgs.push_back(band3);
-  imgs.push_back(band4);
+  unsigned int np = radiance.nplanes();
 
-  for (unsigned ii = 0; ii < 4; ii++) {
+  vcl_vector<vil_image_view<float> > bands;
+  bands.clear();
+
+  for (unsigned p = 0; p < np; p++)
+    bands.push_back(vil_image_view<float>(vil_plane(radiance,p)));
+
+  // calculate atmospheric parameters for each band
+  for (unsigned p = 0; p < np; p++)
+  {
     // find min and max values in image
     float minval, maxval;
-    vil_math_value_range(imgs[ii],minval,maxval);
+    vil_math_value_range(bands[p], minval, maxval);
     // compute histogram for image
     bsta_histogram<float> h(minval, maxval, 512);
-    for (unsigned j = 0; j<nj; ++j)
-      for (unsigned i = 0; i<ni; ++i)
-        h.upcount(imgs[ii](i, j), 1.0f);
+    for (unsigned j = 0; j < nj; j++)
+      for (unsigned i = 0; i < ni; i++)
+        h.upcount(bands[p](i,j), 1.0f);
 
     // compute airlight
     float frac = 0.0001f;
     double airlight = h.value_with_area_below(frac);
-
-    vcl_cout << "min = " << minval << ", airlight = " << airlight << vcl_endl;
-
     // fix optical depth and skylight
-    double optical_depth = 0.10;
+    double optical_depth = 0.0;
     double skylight = 0.0;
-
+    vcl_cout << "band " << p << ": min = " << minval << ", airlight = " << airlight
+             << ", optical_depth (fixed) = " << optical_depth << ", skylight (fixed) = " << skylight << vcl_endl;
+    // set atmospheric parameters
     params.airlight_multi_.push_back(airlight);
     params.optical_depth_multi_.push_back(optical_depth);
     params.skylight_multi_.push_back(skylight);
   }
-
   return true;
 }
 
 // compute the params from a multi band image - only for 4 bands for now
 bool brad_estimate_atmospheric_parameters_multi(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, float mean_reflectance, brad_atmospheric_parameters &params, bool constrain_atmospheric_params)
 {
-  if (radiance.nplanes() < 4)
-    return false;
+  unsigned ni = radiance.ni();
+  unsigned nj = radiance.nj();
+  unsigned np = radiance.nplanes();
 
-  unsigned int ni = radiance.ni();
-  unsigned int nj = radiance.nj();
-  
-  vil_image_view<float> band1 = vil_plane(radiance, 0);
-  vil_image_view<float> band2 = vil_plane(radiance, 1);
-  vil_image_view<float> band3 = vil_plane(radiance, 2);
-  vil_image_view<float> band4 = vil_plane(radiance, 3);
-  vcl_vector<vil_image_view<float> > imgs;
-  imgs.push_back(band1); 
-  imgs.push_back(band2);
-  imgs.push_back(band3);
-  imgs.push_back(band4);
-  
-  for (unsigned ii = 0; ii < 4; ii++) {
+  // calculate atmospheric parameters for each band
+  for (unsigned p = 0; p < np; p++)
+  {
+    vil_image_view<float> img = vil_plane(radiance, p);
     float minval, maxval;
-    vil_math_value_range(imgs[ii],minval,maxval);
-    // compute histogram for image
+    vil_math_value_range(img, minval, maxval);
+    // compute histogram for image band p
     bsta_histogram<float> h(minval, maxval, 512);
-    for (unsigned j = 0; j<nj; ++j)
-      for (unsigned i = 0; i<ni; ++i)
-        h.upcount(imgs[ii](i, j), 1.0f);
-
+    for (unsigned j = 0; j < nj; j++)
+      for (unsigned i = 0; i < ni; i++)
+        h.upcount(img(i,j), 1.0f);
     // compute airlight
     float frac = 0.0001f;
     double airlight = h.value_with_area_below(frac);
-    vcl_cout << "min = " << minval << ", airlight = " << airlight << vcl_endl;
-
     // find image mean
     float radiance_mean;
-    vil_math_mean(radiance_mean, imgs[ii], 0);
-
+    vil_math_mean(radiance_mean, img, 0);
     // check the image mean value and the computed airlight
-    if (radiance_mean < airlight)
+    if (radiance_mean < airlight) {
+      vcl_cerr << "brad_image_atmospherics_est::brad_estimate_atmospheric_parameters_multi : radiance_mean " << radiance_mean << " is smaller than airlight " << airlight << "\n!";
       return false;
-
+    }
     // fix skylight
     double skylight = 0.0;
-
-
+    // calculate optical depth
     double deg2rad = vnl_math::pi_over_180;
-    double optical_depth = -vcl_log(vnl_math::pi / (mean_reflectance * mdata.sun_irradiance_values_[ii] * vcl_sin(deg2rad*mdata.sun_elevation_)) * (radiance_mean - airlight));
-    optical_depth /= (1.0/vcl_sin(deg2rad*mdata.view_elevation_) + 1.0/vcl_sin(deg2rad*mdata.sun_elevation_));
-
+    double optical_depth = -vcl_log(vnl_math::pi / (mean_reflectance*mdata.sun_irradiance_values_[p]*vcl_sin(deg2rad*mdata.sun_elevation_)) * (radiance_mean-airlight));
+    
     if (constrain_atmospheric_params) {
-      // Optical depth cannot be less than 0.
+      // Optical depth cannot be less than 0
       // in practice, we may not have reliable metadata, in which case the best we can hope for is
       // a reasonable normalization of image intensities - optical depth may need to be < 0 in this case.
       optical_depth = vcl_max(0.0, optical_depth);
     }
-
+    // set parameters
     params.airlight_multi_.push_back(airlight);
     params.optical_depth_multi_.push_back(optical_depth);
     params.skylight_multi_.push_back(skylight);
-
-    vcl_cout << "airlight = " << airlight << " optical_depth = " << optical_depth << " skylight = " << skylight << vcl_endl;
+    vcl_cout << "band " << p << ": min = " << minval << ", airlight = " << airlight
+             << ", optical_depth = " << optical_depth << ", skylight (fixed) = " << skylight << vcl_endl;
   }
-
   return true;
+
 }
 
 
@@ -254,33 +236,29 @@ bool brad_estimate_reflectance_image(vil_image_view<float> const& radiance, brad
 
 bool brad_estimate_reflectance_image_multi(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, brad_atmospheric_parameters const& atm_params, vil_image_view<float> &reflectance_multi)
 {
-
-  vcl_vector<vil_image_view<float> > imgs;
-  for (unsigned ii = 0; ii < radiance.nplanes(); ii++) {
-    vil_image_view<float> band = vil_plane(radiance, ii);
-    imgs.push_back(band);
-  }
-
   // calculate atmosphere transmittance value
-  double sun_el_rads = mdata.sun_elevation_ * vnl_math::pi_over_180;
+  double sun_el_rads = mdata.sun_elevation_  * vnl_math::pi_over_180;
   double sat_el_rads = mdata.view_elevation_ * vnl_math::pi_over_180;
+  unsigned ni = radiance.ni();
+  unsigned nj = radiance.nj();
+  unsigned np = radiance.nplanes();
 
-  for (unsigned ii = 0; ii < radiance.nplanes(); ii++) {
-    vil_image_view<float> reflectance = vil_plane(reflectance_multi, ii);
+  for (unsigned p = 0; p < np; p++)
+  {
+    vil_image_view<float> img = vil_plane(radiance, p);
+    vil_image_view<float> reflectance = vil_plane(reflectance_multi, p);
     
-    double T_sun = vcl_exp(-atm_params.optical_depth_multi_[ii] / vcl_sin(sun_el_rads));
-    double T_view = vcl_exp(-atm_params.optical_depth_multi_[ii] / vcl_sin(sat_el_rads));
+    double T_sun  = vcl_exp(-atm_params.optical_depth_multi_[p] / vcl_sin(sun_el_rads));
+    double T_view = vcl_exp(-atm_params.optical_depth_multi_[p] / vcl_sin(sat_el_rads));
 
-    // ideal Lambertian reflector, surface normal = [0 0 1]
+    // ideal Lambertian reflector, surface normal = [0,0,1]
     double sun_dot_norm = vcl_sin(sun_el_rads);
-    double Lsat_horizontal = T_view*(mdata.sun_irradiance_values_[ii] * sun_dot_norm * T_sun + atm_params.skylight_multi_[ii])/vnl_math::pi + atm_params.airlight_multi_[ii];
+    double Lsat_horizontal = T_view*(mdata.sun_irradiance_values_[p]*sun_dot_norm*T_sun + atm_params.skylight_multi_[p])/vnl_math::pi + atm_params.airlight_multi_[p];
 
     // stretch radiance values such that airlight value maps to 0, and ideal reflector maps to 1
-    unsigned int ni = imgs[ii].ni();
-    unsigned int nj = imgs[ii].nj();
-    for (unsigned int j=0; j<nj; ++j) {
-      for (unsigned int i=0; i<ni; ++i) {
-        double normalized = (imgs[ii](i,j) - atm_params.airlight_multi_[ii]) / Lsat_horizontal;
+    for (unsigned j = 0; j < nj; j++) {
+      for (unsigned i = 0; i < ni; i++) {
+        double normalized = (img(i,j) - atm_params.airlight_multi_[p]) / Lsat_horizontal;
         // don't let reflectance value fall below 0
         // value above 1 is unlikely but possible (e.g. specular reflection)
         reflectance(i,j) = vcl_min(vcl_max(0.0f, float(normalized)), 1.0f);

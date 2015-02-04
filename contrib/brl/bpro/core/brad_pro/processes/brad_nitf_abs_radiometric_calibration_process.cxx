@@ -5,6 +5,9 @@
 //      http://www.digitalglobe.com/downloads/QuickBird_technote_raduse_v1.pdf
 //   In the output image, the pixel values are top-of-atmosphere  band-averaged radiance values
 //     with unit W m^-2 sr^-1 um^-1
+// \verbatim
+//   Yi Dong --- Oct, 2014  added radiometric normalization for different types of multi-spectral images
+// \endverbatim
 
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
@@ -46,22 +49,24 @@ bool brad_nitf_abs_radiometric_calibration_process(bprb_func_process& pro)
 
   float min_val, max_val;
   vil_math_value_range(img, min_val, max_val);
-  vcl_cout << "before calibration img min: " << min_val << " max: " << max_val << vcl_endl;
+  vcl_cout << pro.name() << ": before calibration img min: " << min_val << " max: " << max_val << vcl_endl;
 
+  //: calibrate
   if (img.nplanes() == 1) {
-    //: calibrate
     vil_math_scale_and_offset_values(img, md->gain_, md->offset_);
-  } else if (img.nplanes() >= 4) {  // a multi-spectral image 4 or 8 bands
+  }
+  else if (img.nplanes() >= 4)
+  {  // a multi-spectral image 4 or 8 bands
     for (unsigned ii = 0; ii < img.nplanes(); ii++) {
       vil_image_view<float> band = vil_plane(img, ii);
       vil_math_scale_and_offset_values(band, md->gains_[ii+1].first, md->gains_[ii+1].second);  // assuming gains_[0] is PAN band's gain (brad_image_metadata parses from metadata files and creates gains_ vector accordingly)
     }
-
-  } else 
+  }
+  else
     return false;
 
   vil_math_value_range(img, min_val, max_val);
-  vcl_cout << "after calibration img min: " << min_val << " max: " << max_val << vcl_endl;
+  vcl_cout << pro.name() << "after calibration img min: " << min_val << " max: " << max_val << vcl_endl;
 
   //output date time info
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(img));

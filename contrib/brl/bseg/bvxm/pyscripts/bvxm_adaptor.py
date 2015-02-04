@@ -164,7 +164,9 @@ def render_height_map(world):
   out_d_img = dbvalue(id, type);
   (id, type) = bvxm_batch.commit_output(1);
   out_h_img = dbvalue(id, type);
-  return out_h_img, out_d_img
+  (id, type) = bvxm_batch.commit_output(2);
+  out_conf_img = dbvalue(id, type);
+  return out_h_img, out_d_img, out_conf_img
 
 def render_height_map_with_cam(world, input_cam, ni, nj, is_negate = False):
   bvxm_batch.init_process("bvxmHeightmapProcess");

@@ -219,7 +219,7 @@ class bvxm_voxel_world: public vbl_ref_count
 
   //: generate a heightmap from the viewpoint of a virtual camera
   // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
-  bool heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap, unsigned scale_idx=0);
+  bool heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap, vil_image_view<float> &conf_map, unsigned scale_idx=0);
 
   //: generate a heightmap from the viewpoint of a virtual camera
   // The pixel values are the expected z values and variance along the corresponding camera ray
@@ -2049,7 +2049,8 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
 
   // generate heightmap from virtual cameras point of view
   vil_image_view<unsigned> heightmap_img(virtual_view->ni(),virtual_view->nj(),1);
-  this->heightmap(virtual_camera,heightmap_img);
+  vil_image_view<float> heightmap_img_conf(virtual_view->ni(),virtual_view->nj(),1);
+  this->heightmap(virtual_camera,heightmap_img,heightmap_img_conf);
   typename vil_image_view<unsigned>::iterator hmap_img_it = heightmap_img.begin();
   typename bvxm_voxel_slab<unsigned>::iterator hmap_it = heightmap.begin();
   for (; hmap_it != heightmap.end(); ++hmap_it, ++hmap_img_it) {

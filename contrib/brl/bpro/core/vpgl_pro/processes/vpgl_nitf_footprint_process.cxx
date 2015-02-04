@@ -93,3 +93,87 @@ bool vpgl_nitf_footprint_process(bprb_func_process& pro)
   return true;
 }
 
+//: initialization
+bool vpgl_nitf_footprint_process2_cons(bprb_func_process& pro)
+{
+  //this process takes 5 inputs:
+  // 1: (vcl_string) the image filename
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vcl_string");
+  input_types.push_back("vcl_string");
+  input_types.push_back("bool");
+  //this process takes 4 outputs
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("double");  // lower left  lon
+  output_types.push_back("double");  // lower left  lat
+  output_types.push_back("double");  // lower left  elev
+  output_types.push_back("double");  // upper right lon
+  output_types.push_back("double");  // upper right lat
+  output_types.push_back("double");  // upper right elev
+  return pro.set_input_types(input_types) && pro.set_output_types(output_types);
+}
+
+//: execute the process
+bool vpgl_nitf_footprint_process2(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Invalid inputs\n";
+    return false;
+  }
+
+  // get the inputs
+  vcl_string img_file = pro.get_input<vcl_string>(0);
+  vcl_string kml_file = pro.get_input<vcl_string>(1);
+  bool         is_kml = pro.get_input<bool>(2);
+  if (!vul_file::exists(img_file)) {
+    vcl_cerr << pro.name() << ": can not find input image file: " << img_file << "!\n";
+    return false;
+  }
+  
+  
+  // load image metadata
+  brad_image_metadata meta(img_file,"");
+  double lower_left_lon  = meta.lower_left_.x();
+  double lower_left_lat  = meta.lower_left_.y();
+  double lower_left_elev = meta.lower_left_.z();
+  double upper_right_lon = meta.upper_right_.x();
+  double upper_right_lat = meta.upper_right_.y();
+  double upper_right_elev = meta.upper_right_.z();
+  
+  // create kml file
+  if (is_kml)
+  {
+    vcl_ofstream ofs(kml_file.c_str());
+    if (!ofs.good()) {
+      vcl_cerr << pro.name() << ": Error opening " << kml_file << " for write!\n";
+      return false;
+    }
+
+    bkml_write::open_document(ofs);
+    vgl_box_2d<double> bbox(meta.lower_left_.x(), meta.upper_right_.x(),
+                              meta.lower_left_.y(), meta.upper_right_.y());
+
+    vnl_double_2 ul(bbox.max_y(), bbox.min_x());
+    vnl_double_2 ur(bbox.max_y(), bbox.max_x());
+    vnl_double_2 ll(bbox.min_y(), bbox.min_x());
+    vnl_double_2 lr(bbox.min_y(), bbox.max_x());
+    vcl_string nitf_id = vul_file::strip_directory(img_file);
+    vcl_string desc = img_file + " footprint";
+    bkml_write::write_box(ofs, nitf_id, desc, ul, ur, ll, lr, 0, 255, 0);
+    bkml_write::close_document(ofs);
+    ofs.close();
+  }
+
+  vcl_cout << " lower left: " << meta.lower_left_ << vcl_endl;
+  vcl_cout << "upper right: " << meta.upper_right_ << vcl_endl;
+  // generate output
+  unsigned i = 0;
+  pro.set_output_val<double>(i++,  lower_left_lon);
+  pro.set_output_val<double>(i++,  lower_left_lat);
+  pro.set_output_val<double>(i++,  lower_left_elev);
+  pro.set_output_val<double>(i++, upper_right_lon);
+  pro.set_output_val<double>(i++, upper_right_lat);
+  pro.set_output_val<double>(i++, upper_right_elev);
+
+  return true;
+}

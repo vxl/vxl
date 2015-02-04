@@ -2,7 +2,9 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-
+// \verbatim
+//   Yi Dong --- Oct, 2014  add image difference, image ratio binary operation
+// \endverbatim
 #include <vil/vil_math.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
@@ -51,6 +53,10 @@ bool vil_binary_image_op_process(bprb_func_process& pro)
     vil_math_image_max(view_a, view_b, result);
   else if (operation=="sum")
     vil_math_image_sum(view_a, view_b, result);
+  else if (operation=="diff")
+    vil_math_image_difference(view_a, view_b, result);
+  else if (operation=="ratio")
+    vil_math_image_ratio(view_a, view_b, result);
   else
     {
     vcl_cerr << "In vil_binary_image_op_process::execute() -"

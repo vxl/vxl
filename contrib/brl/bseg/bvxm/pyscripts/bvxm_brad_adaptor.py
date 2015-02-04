@@ -263,3 +263,4 @@ def classify_image(eig, h_no, h_atmos, input_image_filename, tile_ni, tile_nj):
   (vid, vtype) = bvxm_batch.commit_output(1);
   q_img_orig_size = dbvalue(vid, vtype);
   return q_img, q_img_orig_size
+

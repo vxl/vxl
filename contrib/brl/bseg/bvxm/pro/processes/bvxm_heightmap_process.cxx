@@ -73,8 +73,9 @@ bool bvxm_heightmap_process(bprb_func_process& pro)
   }
 
   vil_image_view<unsigned> *hmap = new vil_image_view<unsigned>(npixels_x, npixels_y, 1);
+  vil_image_view<float> *conf_map = new vil_image_view<float>(npixels_x, npixels_y, 1);
 
-  voxel_world->heightmap(camera,*hmap);
+  voxel_world->heightmap(camera, *hmap, *conf_map);
 
   if (is_negate) {
     // generate absolute height map by negating depth map with scene floor + scene floor height

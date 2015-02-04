@@ -121,9 +121,7 @@ bool volm_generate_color_class_map_process(bprb_func_process& pro)
 
 //:
 // a process that uses a source class map to update current class map.
-// The source class map supposes to have more accurate tree/road land categories yet unclear parks/parking lot/building boundaries.
-// Therefore the new source class map will overwrite current class map in terms of non-building region while keep building pixels which
-// reside on open space
+// Note that the new source map will overwrite current class map
 bool volm_update_class_map_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types_;
@@ -152,25 +150,14 @@ bool volm_update_class_map_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The class map and source class map have difference in size (" << ni << 'x' << nj << "), and (" << srce_img->ni() << 'x' << srce_img->nj() << ')' << vcl_endl;
     return false;
   }
-  unsigned cnt = 0;
   for (unsigned i = 0; i < ni; i++) {
     for (unsigned j = 0; j < nj; j++) {
-      bool is_parks_or_lot = (*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["parks"].id_ ||
-                             (*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["parking"].id_ ||
-                             (*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["invalid"].id_;
       if ((*srce_img)(i,j) == volm_osm_category_io::volm_land_table_name["invalid"].id_ )
         continue;
-      if ( (*curr_img)(i,j) == volm_osm_category_io::volm_land_table_name["building"].id_ && is_parks_or_lot) {  // keep previous building if source is open space, parking lot or invalid
-        //vcl_cout << " pixel (" << i << "," << j << ") has current value " << (unsigned)(*curr_img)(i,j) << " and source value " << (unsigned)(*srce_img)(i,j) << vcl_endl;
-        cnt++;
-        continue;
-      }
       // overwrite the class map with new source
       (*curr_img)(i,j) = (*srce_img)(i,j);
     }
   }
-  vcl_cout << " there are " << cnt << " building pixels kept during update" << vcl_endl;
-
   return true;
 }
 

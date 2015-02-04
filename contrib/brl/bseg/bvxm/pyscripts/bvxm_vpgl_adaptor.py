@@ -355,6 +355,13 @@ def get_rational_camera_offsets(cam_in):
     bvxm_batch.remove_data(id);
     return (offset_u,offset_v);
 
+def get_correction_offset(cam_orig, cam_corrected):
+  offset_u,   offset_v   = get_rational_camera_offsets(cam_orig);
+  offset_u_c, offset_v_c = get_rational_camera_offsets(cam_corrected);
+  diff_u = offset_u_c - offset_u;
+  diff_v = offset_v_c - offset_v;
+  return diff_u, diff_v;
+
 def find_offset_and_correct_rational_camera(cam_orig, cam_corrected, cam_to_be_corrected):
   offset_u, offset_v = get_rational_camera_offsets(cam_orig);
   offset_u_c, offset_v_c = get_rational_camera_offsets(cam_corrected);
@@ -512,6 +519,29 @@ def get_nitf_footprint(nitf_list_filename, out_kml_filename, r = 255, g = 255, b
     bvxm_batch.set_input_unsigned(3,g)
     bvxm_batch.set_input_unsigned(4,b)
     bvxm_batch.run_process();
+
+def get_nitf_footprint2(nitf_img_filename, out_kml_file = "", is_kml = False):
+    bvxm_batch.init_process("vpglNITFFootprintProcess2");
+    bvxm_batch.set_input_string(0, nitf_img_filename);
+    bvxm_batch.set_input_string(1, out_kml_file);
+    bvxm_batch.set_input_bool(2, is_kml)
+    status = bvxm_batch.run_process()
+    if status:
+      (id, type) = bvxm_batch.commit_output(0)
+      ll_lon = bvxm_batch.get_output_double(id)
+      (id, type) = bvxm_batch.commit_output(1)
+      ll_lat = bvxm_batch.get_output_double(id)
+      (id, type) = bvxm_batch.commit_output(2)
+      ll_elev = bvxm_batch.get_output_double(id)
+      (id, type) = bvxm_batch.commit_output(3)
+      ur_lon = bvxm_batch.get_output_double(id)
+      (id, type) = bvxm_batch.commit_output(4)
+      ur_lat = bvxm_batch.get_output_double(id)
+      (id, type) = bvxm_batch.commit_output(5)
+      ur_elev = bvxm_batch.get_output_double(id)
+      return ll_lon, ll_lat, ll_elev, ur_lon, ur_lat, ur_elev
+    else:
+      return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
 
 def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename,init_finish=True):
     bvxm_batch.init_process('vpglGeoFootprintProcess');
@@ -833,3 +863,18 @@ def rational_cam_nadirness(camera, lat, lon, elev):
   (id, type) = bvxm_batch.commit_output(0);
   val = bvxm_batch.get_output_double(id)
   return val
+
+# use lvcs to calculate GSD of nitf satellite image
+def calculate_nitf_gsd(rational_cam, lon1, lat1, elev1, distance = 1000):
+  # create a lvcs
+  lvcs = create_lvcs(lat1, lon1, elev1, "wgs84")
+  lat2, lon2, elev2 = convert_local_to_global_coordinates(lvcs, distance, distance, 0.0)
+  # calculate image pixel
+  i1, j1 = project_point(rational_cam, lon1, lat1, elev1)
+  i2, j2 = project_point(rational_cam, lon2, lat2, elev2)
+  gsd_i = distance / (i2-i1)
+  gsd_j = distance / (j2-j1)
+  if (gsd_i < 0.0): gsd_i = -1*gsd_i
+  if (gsd_j < 0.0): gsd_j = -1*gsd_j
+  bvxm_batch.remove_data(lvcs.id)
+  return gsd_i, gsd_j

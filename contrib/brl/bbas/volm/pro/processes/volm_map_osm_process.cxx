@@ -24,7 +24,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
-
+#include <bsol/bsol_algs.h>
 //:
 //  Take an ortho image and its camera, a bin file with an osm object list, map the objects onto the image
 bool volm_map_osm_process_cons(bprb_func_process& pro)
@@ -334,7 +334,7 @@ bool volm_map_osm_onto_image_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  // satellite image 
-  input_types.push_back("vpgl_camera_double_sptr");  // local rational camera
+  input_types.push_back("vpgl_camera_double_sptr");   // local rational camera
   input_types.push_back("vil_image_view_base_sptr");  // ortho image - float values: absolute heights
   input_types.push_back("vpgl_camera_double_sptr");  // ortho camera
   input_types.push_back("vcl_string");   // bin file with osm object list
@@ -649,6 +649,7 @@ bool volm_map_osm_onto_image_process2_cons(bprb_func_process& pro)
   input_types.push_back("vcl_string");         // OSM category name
   input_types.push_back("vcl_string");   // output a binary file with the mapped objects in image coordinates saved as a vector of vsol_spatial_object_2d_sptr
   vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr"); // a binary image patch that labels the OSM category
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -715,6 +716,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
     
   vcl_vector<vcl_vector<vgl_point_2d<double> > > img_polys;
 
+  vcl_cout << "project OSM regions with name " << osm_category_name << " onto image..." << vcl_endl;
   for (unsigned i = 0; i < loc_regions.size(); i++) {
     vcl_vector<vgl_point_2d<double> > pts = loc_regions[i][0];
     //pts.push_back(loc_regions[i][0][0]);
@@ -737,7 +739,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
         double iuu = iu + 0.5;
         double ivv = iv + 0.5;
         if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
-          vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
+          //vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
           img_poly.push_back(vgl_point_2d<double>(iuu,ivv));
           vsol_pts.push_back(new vsol_point_2d(iuu, ivv));
           hit = true;
@@ -753,7 +755,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
     }
   }
 
-   
+  vcl_cout << "project OSM lines with name " << osm_category_name << " onto image..." << vcl_endl;
   // project all OSM lines with the specified name
   vcl_vector<vcl_vector<vcl_pair<int, int> > > img_lines;
   vcl_vector<volm_osm_object_line_sptr> loc_lines = osm_objs.loc_lines();
@@ -782,25 +784,53 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
         unsigned iuu = (unsigned)vcl_floor(iu + 0.5f);
         unsigned ivv = (unsigned)vcl_floor(iv + 0.5f);
         if (iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
-          vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
+          //vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
           img_line.push_back(vcl_pair<int, int>(iuu,ivv));
-          vsol_pts.push_back(new vsol_point_2d(iuu, ivv));
           hit = true;
         }
       }
     }
-    if (img_line.size() > 0) {
-      // trace back the points to make it a polygon (its not a good idea to connect end point to the first point since roads curve and then the poly includes buildings, etc.)
-      for (int i = vsol_pts.size()-1; i >=0; i--) 
-        vsol_pts.push_back(vsol_pts[i]);
+    if (img_line.size() > 1) {
+      vcl_cout << "road " << i << " has " << img_line.size() << " points" << vcl_endl;
+      // expend the line to a polygon
+      double width = loc_lines[i]->prop().width_;
+      if (width == 0)  width = 3.0;
+      width += 2.0;
+      vgl_polygon<double> img_poly;
+      vcl_vector<vgl_point_2d<double> > line_img;
+      for (unsigned j = 1; j < img_line.size(); j++) {
+        double prev_u = img_line[j-1].first;
+        double prev_v = img_line[j-1].second;
+        double dx = img_line[j].first - img_line[j-1].first;
+        double dy = img_line[j].second - img_line[j-1].second;
+        double ds = vcl_sqrt(dx*dx + dy*dy);
+        double cos = dx/ds; double sin = dy/ds;
+        unsigned cnt = 1;
+        while (ds > 0.1) {
+          double uu = prev_u + cnt*1*cos + 0.5f;
+          double vv = prev_v + cnt*1*sin + 0.5f;
+          if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj())
+            line_img.push_back(vgl_point_2d<double>(uu,vv));
+          cnt++;
+          ds -= 1;
+        }
+      }
+      if (line_img.empty())
+        continue;
+      // expand the line to a region with certain width
+      volm_io_tools::expend_line(line_img, width, img_poly);
+      unsigned num_verts = img_poly[0].size();
+      for (unsigned v_idx = 0; v_idx < num_verts; v_idx++)
+        vsol_pts.push_back(new vsol_point_2d(img_poly[0][v_idx].x(), img_poly[0][v_idx].y()));
       if (vsol_pts.size() > 2) {
         vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
         sos.push_back(vsolp->cast_to_spatial_object());
-      } 
+      }
     }
   }
 
   // project all OSM points with the specified name
+  vcl_cout << "project OSM points with name " << osm_category_name << " onto image..." << vcl_endl;
   vcl_cout << " \t number of points in osm: " << osm_objs.num_locs() << vcl_endl;
   unsigned num_points = osm_objs.num_locs();
   vcl_vector<vcl_pair<unsigned, unsigned> > img_pts;
@@ -842,27 +872,79 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
   // prepare the binary file, append to its content if it already exists
   if (sos.size() == 0) 
     vcl_cerr << " There are no vsol spatial objects in the vector!\n";
+  vsl_b_ifstream istr(bin_filename);
+  vcl_vector<vsol_spatial_object_2d_sptr> sos_in;
+  if (! !istr) { 
+    vsl_b_read(istr, sos_in);  
+    istr.close();
+  } 
+  vsl_b_ofstream ostr(bin_filename);
+  if (!ostr) 
+    vcl_cerr << "Failed to open output stream " << bin_filename << vcl_endl;
   else {
-    vsl_b_ifstream istr(bin_filename);
-    vcl_vector<vsol_spatial_object_2d_sptr> sos_in;
-    if (! !istr) { 
-      vsl_b_read(istr, sos_in);  
-      istr.close();
-    } 
-  
-    vsl_b_ofstream ostr(bin_filename);
-    if (!ostr) 
-      vcl_cerr << "Failed to open output stream " << bin_filename << vcl_endl;
-    else {
-      vcl_cout << "there are " << sos.size() << " vsol objects, appending to binary file: " << bin_filename << " which currently has: " << sos_in.size() << " objects" << vcl_endl;
-      for (unsigned ii = 0; ii < sos_in.size(); ii++) 
-        sos.push_back(sos_in[ii]); 
-      vsl_b_write(ostr, sos);
-      ostr.close();
+    vcl_cout << "there are " << sos.size() << " vsol objects, appending to binary file: " << bin_filename << " which currently has: " << sos_in.size() << " objects" << vcl_endl;
+    for (unsigned ii = 0; ii < sos_in.size(); ii++) 
+      sos.push_back(sos_in[ii]); 
+    vsl_b_write(ostr, sos);
+    ostr.close();
+  }
+
+  // prepare the image patch
+  vil_image_view<vil_rgb<vxl_byte> > out_img(sat_img_sptr->ni(), sat_img_sptr->nj(), 1);
+  for (unsigned i = 0; i < out_img.ni(); i++) 
+    for (unsigned j = 0; j < out_img.nj(); j++) {
+      out_img(i, j).r = bimg(i,j);
+      out_img(i, j).g = bimg(i,j);
+      out_img(i, j).b = bimg(i,j);
+    }
+  vcl_vector<vgl_polygon<double> > sos_poly;
+  for (unsigned i = 0; i < sos.size(); i++) {
+    vsol_polygon_2d* poly = static_cast<vsol_polygon_2d*>(sos[i].ptr());
+    vgl_polygon<double> vpoly; vpoly.new_sheet();
+    unsigned nverts = poly->size();
+    for (unsigned i = 0; i < nverts; i++) {
+      vsol_point_2d_sptr v = poly->vertex(i);
+      vpoly.push_back(v->x(), v->y());
+    }
+    sos_poly.push_back(vpoly);
+  }
+
+  if (sos_poly.size() == 0)
+    vcl_cerr << " There are no vsol spatial objects in the vector!\n";
+  else {
+    vcl_cout << "there are " << sos_poly.size() << " vsol objects put into the image patch " << vcl_endl;
+    for (unsigned i = 0; i < sos_poly.size(); i++) {
+      vgl_polygon_scan_iterator<double> it(sos_poly[i], true);
+      for (it.reset(); it.next(); ) {
+        int y = it.scany();
+        for (int x = it.startx(); x <= it.endx(); ++x)
+          if ( x >= 0 && y >= 0 && x < (int)out_img.ni() && y < (int)out_img.nj()) {
+            out_img(x,y).r = 255;
+          }
+      }
     }
   }
 
-  return hit;
+  // write out a text file (csv format) to store the outlines of landmarks
+  // format: number_of_points,x,y,x,y,x,y,...
+  vcl_string txt_file = vul_file::strip_extension(bin_filename) + ".csv";
+  vcl_ofstream ofs(txt_file.c_str());
+  for (unsigned i = 0; i < sos_poly.size(); i++) {
+    unsigned n_verts = sos_poly[i][0].size();
+    ofs << n_verts;
+    for (unsigned v_idx = 0; v_idx < n_verts; v_idx++) {
+      unsigned uu = (unsigned)vcl_floor(sos_poly[i][0][v_idx].x() + 0.5);
+      unsigned vv = (unsigned)vcl_floor(sos_poly[i][0][v_idx].y() + 0.5);
+      if (uu < out_img.ni() && vv < out_img.nj())
+        ofs << ',' << uu << ',' << vv;
+    }
+    ofs << '\n';
+  }
+  ofs.close();
+  vil_image_view_base_sptr out_img_sptr = new vil_image_view<vxl_byte>(out_img);
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
+  
+  return true;
 }
 
 
@@ -1046,4 +1128,3 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
 
   return hit;
 }
-

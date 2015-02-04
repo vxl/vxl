@@ -2,6 +2,9 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
+// \verbatim
+//   Yi Dong --- Oct, 2014  add support for more pixel format of input image
+// \endverbatim
 
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
@@ -42,13 +45,28 @@ bool vil_scale_and_offset_values_process(bprb_func_process& pro)
 
   // cast to float
   vil_image_view<float> *image_float = dynamic_cast<vil_image_view<float>*>(image.ptr());
-  if (!image_float) {
-     vcl_cerr << "ERROR: vil_scale_and_offset_values_process: expecting vil_image_view<float> " << vcl_endl;
-     return false;
+  if (vil_image_view<float> *image_float = dynamic_cast<vil_image_view<float>*>(image.ptr()))
+    vil_math_scale_and_offset_values(*image_float, scale, offset);
+  else if (vil_image_view<vxl_int_16>* image_int = dynamic_cast<vil_image_view<vxl_int_16>*>(image.ptr()))
+    vil_math_scale_and_offset_values(*image_int,   scale, offset);
+  else if (vil_image_view<vxl_byte>* image_byte = dynamic_cast<vil_image_view<vxl_byte>*>(image.ptr())) {
+    if (scale < 0) {
+      vcl_cerr << pro.name() << ": negative scale factor " << scale << " can not operate on byte image!\n";
+      return false;
+    }
+    vil_math_scale_and_offset_values(*image_byte,  scale, offset);
   }
-
-  vil_math_scale_and_offset_values(*image_float, scale, offset);
-
+  else if (vil_image_view<vxl_uint_16>* image_uint = dynamic_cast<vil_image_view<vxl_uint_16>*>(image.ptr())) {
+    if (scale < 0) {
+      vcl_cerr << pro.name() << ": negative scale factor: " << scale << " can not operate on unsigned short image!\n";
+      return false;
+    }
+    vil_math_scale_and_offset_values(*image_uint,  scale, offset);
+  }
+  else {
+    vcl_cerr << pro.name() << ": Input image pixel format: " << image->pixel_format() << " is not supported!\n";
+    return false;
+  }
   return true;
 }
 

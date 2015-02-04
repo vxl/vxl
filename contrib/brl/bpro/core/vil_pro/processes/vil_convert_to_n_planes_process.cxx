@@ -291,3 +291,109 @@ bool vil_combine_planes_process2(bprb_func_process& pro)
   
   return true;
 }
+
+//: process to combine 8 planes into a single image
+/// Note that user is responsible for the sequence of the image planes
+bool vil_combine_palnes_8_bands_process_cons(bprb_func_process& pro)
+{
+  // this process takes 8 inputs:
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vil_image_view_base_sptr");  // coastal plane
+  input_types.push_back("vil_image_view_base_sptr");  // blue plane
+  input_types.push_back("vil_image_view_base_sptr");  // green plane
+  input_types.push_back("vil_image_view_base_sptr");  // yellow plane
+  input_types.push_back("vil_image_view_base_sptr");  // red plane
+  input_types.push_back("vil_image_view_base_sptr");  // red edge plane
+  input_types.push_back("vil_image_view_base_sptr");  // nir1
+  input_types.push_back("vil_image_view_base_sptr");  // nir2
+
+  // this process takes 1 outputs
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr");  // output image with 8 planes
+  return pro.set_input_types(input_types) && pro.set_output_types(output_types);
+}
+
+bool vil_combine_palnes_8_bands_process(bprb_func_process& pro)
+{
+  // sanity check
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": invalid input!\n";
+    return false;
+  }
+
+  // get the inputs
+  unsigned in_i = 0;
+  vil_image_view_base_sptr img_c    = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr img_b    = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr img_g    = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr img_y    = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr img_r    = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr img_re   = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr img_nir1 = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr img_nir2 = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  unsigned ni = img_c->ni();
+  unsigned nj = img_c->nj();
+
+  if (img_c->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
+  {
+    vil_image_view<float> img_out(img_c->ni(), img_r->nj(), 8);
+    vcl_vector<vil_image_view<float> > imgs_vec;
+    imgs_vec.push_back(vil_image_view<float>(img_c));     imgs_vec.push_back(vil_image_view<float>(img_b));
+    imgs_vec.push_back(vil_image_view<float>(img_g));     imgs_vec.push_back(vil_image_view<float>(img_y));
+    imgs_vec.push_back(vil_image_view<float>(img_r));     imgs_vec.push_back(vil_image_view<float>(img_re));
+    imgs_vec.push_back(vil_image_view<float>(img_nir1));  imgs_vec.push_back(vil_image_view<float>(img_nir2));
+    for (unsigned i = 0; i < ni; i++)
+      for (unsigned j = 0; j < nj; j++)
+        for (unsigned p = 0; p < 8; p++)
+          img_out(i,j,p) = imgs_vec[p](i,j);
+    pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(img_out));
+  }
+  else if (img_c->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+  {
+    vil_image_view<vxl_byte> img_out(img_c->ni(), img_r->nj(), 8);
+    vcl_vector<vil_image_view<vxl_byte> > imgs_vec;
+    imgs_vec.push_back(vil_image_view<vxl_byte>(img_c));     imgs_vec.push_back(vil_image_view<vxl_byte>(img_b));
+    imgs_vec.push_back(vil_image_view<vxl_byte>(img_g));     imgs_vec.push_back(vil_image_view<vxl_byte>(img_y));
+    imgs_vec.push_back(vil_image_view<vxl_byte>(img_r));     imgs_vec.push_back(vil_image_view<vxl_byte>(img_re));
+    imgs_vec.push_back(vil_image_view<vxl_byte>(img_nir1));  imgs_vec.push_back(vil_image_view<vxl_byte>(img_nir2));
+    for (unsigned i = 0; i < ni; i++)
+      for (unsigned j = 0; j < nj; j++)
+        for (unsigned p = 0; p < 8; p++)
+          img_out(i,j,p) = imgs_vec[p](i,j);
+    pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(img_out));
+  }
+  else if (img_c->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+  {
+    vil_image_view<vxl_uint_16> img_out(img_c->ni(), img_r->nj(), 8);
+    vcl_vector<vil_image_view<vxl_uint_16> > imgs_vec;
+    imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_c));     imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_b));
+    imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_g));     imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_y));
+    imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_r));     imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_re));
+    imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_nir1));  imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_nir2));
+    for (unsigned i = 0; i < ni; i++)
+      for (unsigned j = 0; j < nj; j++)
+        for (unsigned p = 0; p < 8; p++)
+          img_out(i,j,p) = imgs_vec[p](i,j);
+    pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_uint_16>(img_out));
+  }
+  else if (img_c->pixel_format() == VIL_PIXEL_FORMAT_INT_16)
+  {
+    vil_image_view<vxl_int_16> img_out(img_c->ni(), img_r->nj(), 8);
+    vcl_vector<vil_image_view<vxl_int_16> > imgs_vec;
+    imgs_vec.push_back(vil_image_view<vxl_int_16>(img_c));     imgs_vec.push_back(vil_image_view<vxl_int_16>(img_b));
+    imgs_vec.push_back(vil_image_view<vxl_int_16>(img_g));     imgs_vec.push_back(vil_image_view<vxl_int_16>(img_y));
+    imgs_vec.push_back(vil_image_view<vxl_int_16>(img_r));     imgs_vec.push_back(vil_image_view<vxl_int_16>(img_re));
+    imgs_vec.push_back(vil_image_view<vxl_int_16>(img_nir1));  imgs_vec.push_back(vil_image_view<vxl_int_16>(img_nir2));
+    for (unsigned i = 0; i < ni; i++)
+      for (unsigned j = 0; j < nj; j++)
+        for (unsigned p = 0; p < 8; p++)
+          img_out(i,j,p) = imgs_vec[p](i,j);
+    pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_int_16>(img_out));
+  }
+  else {
+    vcl_cerr << pro.name() << ": unsupported input image pixel format: " << img_c->pixel_format() << "!\n";
+    return false;
+  }
+  return true;
+}
+

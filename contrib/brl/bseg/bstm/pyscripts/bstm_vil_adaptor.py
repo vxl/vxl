@@ -142,11 +142,12 @@ def gradient_angle(Ix, Iy) :
     angleImg = dbvalue(id,type)
     return angleImg
 
-def threshold_image(img, value, threshold_above=True):
+def threshold_image(img, value, threshold_above=True, id=255):
     bstm_batch.init_process("vilThresholdImageProcess")
     bstm_batch.set_input_from_db(0,img)
     bstm_batch.set_input_float(1,value)
     bstm_batch.set_input_bool(2,threshold_above)
+    bstm_batch.set_input_unsigned(3, id)
     bstm_batch.run_process()
     (id,type) = bstm_batch.commit_output(0)
     mask = dbvalue(id,type)

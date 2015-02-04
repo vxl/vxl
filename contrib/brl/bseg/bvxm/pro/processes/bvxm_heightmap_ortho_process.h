@@ -26,7 +26,7 @@
 namespace bvxm_heightmap_ortho_process_globals
 {
   const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 2;
+  const unsigned n_outputs_ = 3;
 }
 
 //: set input and output types
