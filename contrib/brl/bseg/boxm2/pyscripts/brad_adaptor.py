@@ -107,9 +107,11 @@ def save_image_metadata(mdata, filename):
 def load_image_metadata(filename):
   boxm2_batch.init_process("bradLoadImageMetadataProcess")
   boxm2_batch.set_input_string(0,filename)
-  boxm2_batch.run_process()
-  (id,type) = boxm2_batch.commit_output(0)
-  mdata = dbvalue(id,type)
+  status = boxm2_batch.run_process()
+  mdata = None
+  if status:
+    (id,type) = boxm2_batch.commit_output(0)
+    mdata = dbvalue(id,type)
   return mdata
 
 # load atmospheric parameters
