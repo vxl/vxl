@@ -141,6 +141,7 @@ bool vpgl_affine_camera<T>::set_matrix( const vnl_matrix_fixed<T,3,4>& new_camer
   // assume that new and old ray directions should not differ by more than 90 deg.
   // if this assumption is false, caller should call orient_ray_direction() afterwards.
   orient_ray_direction(old_ray_dir);
+  return true;
 }
 
 template <class T>
@@ -148,6 +149,7 @@ bool vpgl_affine_camera<T>::set_matrix( const T* new_camera_matrix_p )
 {
   vnl_matrix_fixed<T,3,4> new_camera_matrix( new_camera_matrix_p );
   set_matrix( new_camera_matrix );
+  return true;
 }
 
 //: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
