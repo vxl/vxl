@@ -15,6 +15,8 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_new.h>
+#include <vil/vil_crop.h>
 
 // brdb stuff
 #include <brdb/brdb_value.h>
@@ -50,6 +52,7 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   input_types_[7] = "vcl_string"; // "raybelief" string for using raybelief
   input_types_[8] = "bool";       // true to use max mode probability
   input_types_[9] = "vcl_string";       // idenitifer
+
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
   output_types_[1] = "vil_image_view_base_sptr";  // Red Green change image
@@ -111,35 +114,62 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
                                               pmax );
   }
   else {
-    // store scene smaprt pointer
-    boxm2_ocl_change_detection::change_detect( *change_img,
-                                               *rgb_change_img,
-                                               device,
-                                               scene,
-                                               opencl_cache,
-                                               cam,
-                                               img,
-                                               exp_img,
-                                               n,
-                                               norm_type,
-                                               pmax, identifier);
-  }
-  vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
+    bool ret = true;
+    //TODO Factor this out to a utility function
+    //make sure this image small enough (or else carve it into image pieces)
+    const vcl_size_t MAX_PIXELS = 16777216;
+    if (ni*nj > MAX_PIXELS) {
+      vcl_size_t sni = RoundUp(ni, 16);
+      vcl_size_t snj = RoundUp(nj, 16);
+      unsigned int numSegI = 1;
+      unsigned int numSegJ = 1;
+      while ( sni*snj*2 > MAX_PIXELS ) {
+        sni /= 2;
+        snj /= 2;
+        ++numSegI;
+        ++numSegJ;
+      }
+      sni = RoundUp(sni, 16);
+      snj = RoundUp(snj, 16);
+      vil_image_resource_sptr ir = vil_new_image_resource_of_view(*img);
+      vil_image_resource_sptr er = vil_new_image_resource_of_view(*exp_img);
 
-  // store rgb change image
-  vcl_cout<<" preparing rgb output image"<<vcl_endl;
-  vil_image_view_base_sptr  float_img = boxm2_util::prepare_input_image(img, true); // true for force gray scale
-  vil_image_view<float>&    inImg     = *static_cast<vil_image_view<float>* >(float_img.ptr());
-  vil_image_view<float>&    change    = *change_img;
-  vil_image_view<vxl_byte>& rgb       = *rgb_change_img;
-  for (unsigned c=0; c<nj; c++) {
-    for (unsigned r=0; r<ni; r++) {
-      rgb(r,c,0) = (vxl_byte) ( change(r,c) * 255.0f);
-      rgb(r,c,1) = (vxl_byte) ( inImg(r,c) * 255.0f/8.0f );
-      rgb(r,c,2) = (vxl_byte) 0;
-      rgb(r,c,3) = (vxl_byte) 255;
+      //run update for each image make sure to input i/j
+      for (unsigned int i=0; i<=numSegI; ++i) {
+        for (unsigned int j=0; j<=numSegJ; ++j) {
+          if(!ret) return false;
+
+          //make sure the view doesn't extend past the original image
+          vcl_size_t startI = (vcl_size_t) i * sni;
+          vcl_size_t startJ = (vcl_size_t) j * snj;
+          vcl_size_t endI = vcl_min(startI + sni, (vcl_size_t) ni);
+          vcl_size_t endJ = vcl_min(startJ + snj, (vcl_size_t) nj);
+          if (endI <= startI || endJ <= startJ)
+            break;
+          vcl_cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<vcl_endl;
+
+          unsigned int chunkNI = endI-startI;
+          unsigned int chunkNJ = endJ-startJ;
+          vil_image_view_base_sptr img_view = ir->get_copy_view(startI, chunkNI, startJ, chunkNJ);
+          vil_image_view_base_sptr exp_view = er->get_copy_view(startI, chunkNI, startJ, chunkNJ);
+          vil_image_view<float> change_view = vil_crop(*change_img, startI, chunkNI, startJ, chunkNJ);
+          vil_image_view<vxl_byte> rgb_change_view = vil_crop(*rgb_change_img, startI, chunkNI, startJ, chunkNJ);
+
+          ret = boxm2_ocl_change_detection::change_detect( change_view, rgb_change_view,
+              device, scene, opencl_cache, cam, img_view, exp_view,
+              n, norm_type, pmax, identifier, startI, startJ );
+        }
+      }
     }
+    else { //otherwise just run a normal update with one image
+      ret = boxm2_ocl_change_detection::change_detect( *change_img, *rgb_change_img,
+          device, scene, opencl_cache, cam, img, exp_img,
+          n, norm_type, pmax, identifier );
+    }
+
+    if(!ret) return false;
   }
+  vcl_cout<<"Total change time: "<<t.all()<<" ms"<<vcl_endl;
 
   // set outputs
   i=0;

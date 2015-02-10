@@ -93,7 +93,10 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
                                                 vil_image_view_base_sptr  exp_img,
                                                 int                       n,
                                                 vcl_string                norm_type,
-                                                bool                      pmax, vcl_string identifier="")
+                                                bool                      pmax, 
+                                                vcl_string                identifier,
+                                                vcl_size_t                startI,
+                                                vcl_size_t                startJ)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -141,7 +144,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
-    boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+    boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff, startI, startJ );
 
     //prepare image buffers (cpu)
     float* vis_buff               = new float[cl_ni*cl_nj];
