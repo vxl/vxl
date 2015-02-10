@@ -25,7 +25,9 @@ float render_expected_image( boxm2_scene_sptr & scene,
                             unsigned cl_ni,
                             unsigned cl_nj,
                             int apptypesize,
-                            bocl_mem_sptr & tnearfar_mem_ptr);
+                            bocl_mem_sptr & tnearfar_mem_ptr,
+                            vcl_size_t startI=0,
+                            vcl_size_t startJ=0);
 float render_expected_image2( boxm2_scene_sptr & scene,
                             bocl_device_sptr & device,
                             boxm2_opencl_cache_sptr & opencl_cache,
