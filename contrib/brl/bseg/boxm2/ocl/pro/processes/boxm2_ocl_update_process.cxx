@@ -66,9 +66,9 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
   brdb_value_sptr up_alpha   = new brdb_value_t<bool>(true);  //by default update alpha
   brdb_value_sptr def_var    = new brdb_value_t<float>(-1.0f);
-  brdb_value_sptr up_app   = new brdb_value_t<bool>(true);  //by default update alpha
-  brdb_value_sptr tnearfactor   = new brdb_value_t<float>(1e6f);  //by default update alpha
-  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(1e-6f);  //by default update alpha
+  brdb_value_sptr up_app     = new brdb_value_t<bool>(true);  //by default update alpha
+  brdb_value_sptr tnearfactor  = new brdb_value_t<float>(1e6f);  //by default update alpha
+  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(1e-6f); //by default update alpha
   pro.set_input(5, idx);
   pro.set_input(6, empty_mask);
   pro.set_input(7, up_alpha);
@@ -102,8 +102,8 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   bool                     update_app   = pro.get_input<bool>(i++);
   float                    nearfactor   = pro.get_input<float>(i++);
   float                    farfactor    = pro.get_input<float>(i++);
-  vul_timer t;
 
+  vul_timer t;
   t.mark();
   //TODO Factor this out to a utility function
   //make sure this image small enough (or else carve it into image pieces)
@@ -123,9 +123,15 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     snj = RoundUp(snj, 16);
     vil_image_resource_sptr ir = vil_new_image_resource_of_view(*img);
 
+    bool ret = true;
     //run update for each image make sure to input i/j
     for (unsigned int i=0; i<=numSegI; ++i) {
       for (unsigned int j=0; j<=numSegJ; ++j) {
+        if(!ret) {
+          vcl_cout << pro.name() << " failed" << vcl_endl;
+          return false;
+        }
+
         //make sure the view doesn't extend past the original image
         vcl_size_t startI = (vcl_size_t) i * sni;
         vcl_size_t startJ = (vcl_size_t) j * snj;
@@ -136,7 +142,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         vcl_cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<vcl_endl;
         vil_image_view_base_sptr view = ir->get_copy_view(startI, endI-startI, startJ, endJ-startJ);
         //run update
-        boxm2_ocl_update::update(scene, device, opencl_cache, cam, view,
+        ret = boxm2_ocl_update::update(scene, device, opencl_cache, cam, view,
                                  ident, mask_sptr, update_alpha, mog_var,update_app,nearfactor,farfactor,
                                  startI, startJ);
       }

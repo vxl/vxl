@@ -10,24 +10,25 @@
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
 #include <brad/brad_illum_util.h>
-float render_expected_image(  boxm2_scene_sptr & scene,
-                              bocl_device_sptr & device,
-                              boxm2_opencl_cache_sptr & opencl_cache,
-                              cl_command_queue & queue,
-                              vpgl_camera_double_sptr & cam,
-                              bocl_mem_sptr & exp_image,
-                              bocl_mem_sptr & vis_image,
-                              bocl_mem_sptr & max_omega_image,
-                              bocl_mem_sptr & exp_img_dim,
-                              vcl_string data_type,
-                              bocl_kernel* kernel,
-                              vcl_size_t * lthreads,
-                              unsigned cl_ni,
-                              unsigned cl_nj,
-                              int apptypesize,
-                              bocl_mem_sptr & tnearfar_mem_ptr,
-                              vcl_size_t startI,
-                              vcl_size_t startJ)
+
+float render_expected_image( boxm2_scene_sptr & scene,
+                             bocl_device_sptr & device,
+                             boxm2_opencl_cache_sptr & opencl_cache,
+                             cl_command_queue & queue,
+                             vpgl_camera_double_sptr & cam,
+                             bocl_mem_sptr & exp_image,
+                             bocl_mem_sptr & vis_image,
+                             bocl_mem_sptr & max_omega_image,
+                             bocl_mem_sptr & exp_img_dim,
+                             vcl_string data_type,
+                             bocl_kernel* kernel,
+                             vcl_size_t * lthreads,
+                             unsigned cl_ni,
+                             unsigned cl_nj,
+                             int apptypesize,
+                             bocl_mem_sptr & tnearfar_mem_ptr,
+                             vcl_size_t startI,
+                             vcl_size_t startJ)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -125,7 +126,7 @@ float render_expected_image(  boxm2_scene_sptr & scene,
     return gpu_time + transfer_time;
 }
 
-float render_expected_image2(  boxm2_scene_sptr & scene,
+float render_expected_image2( boxm2_scene_sptr & scene,
                               bocl_device_sptr & device,
                               boxm2_opencl_cache_sptr & opencl_cache,
                               cl_command_queue & queue,
@@ -140,7 +141,7 @@ float render_expected_image2(  boxm2_scene_sptr & scene,
                               unsigned cl_ni,
                               unsigned cl_nj,
                               int apptypesize,
-                            bocl_mem_sptr & tnearfar_mem_ptr )
+                              bocl_mem_sptr & tnearfar_mem_ptr )
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;

@@ -137,7 +137,10 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
       //run update for each image make sure to input i/j
       for (unsigned int i=0; i<=numSegI; ++i) {
         for (unsigned int j=0; j<=numSegJ; ++j) {
-          if(!ret) return false;
+          if(!ret) {
+            vcl_cout << pro.name() << " failed" << vcl_endl;
+            return false;
+          }
 
           //make sure the view doesn't extend past the original image
           vcl_size_t startI = (vcl_size_t) i * sni;
