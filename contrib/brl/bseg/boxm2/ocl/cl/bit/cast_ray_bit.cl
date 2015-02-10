@@ -14,6 +14,7 @@
 //#define STEP_CELL step_cell_render(aux_args.mixture_array,aux_args.alpha_array,data_ptr,d,vis,aux_args.expected_int);
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
+#define GRAZING_RAY_D 0.001f
 
 ////////////////////////////////////////////////////////////////////////////////
 //Helper methods (that will hopefully, one day, become vector ops)
@@ -27,14 +28,24 @@ inline float calc_tfar( float ray_ox, float ray_oy, float ray_oz,
                         float ray_dx, float ray_dy, float ray_dz,
                         float max_facex, float max_facey, float max_facez)
 {
-  return min(min( (max_facex-ray_ox)*(1.0f/ray_dx), (max_facey-ray_oy)*(1.0f/ray_dy)), (max_facez-ray_oz)*(1.0f/ray_dz));
+    // prevent ray from leaving cell along direction with very small delta value.
+    // will cause exit t values slightly too large in grazing cases
+    float tfar_x = fabs(ray_dx) > GRAZING_RAY_D? (max_facex - ray_ox) / ray_dx : MAXFLOAT;
+    float tfar_y = fabs(ray_dy) > GRAZING_RAY_D? (max_facey - ray_oy) / ray_dy : MAXFLOAT;
+    float tfar_z = fabs(ray_dz) > GRAZING_RAY_D? (max_facez - ray_oz) / ray_dz : MAXFLOAT;
+    return min(min(tfar_x, tfar_y), tfar_z);
 }
 
 inline float calc_tnear(float ray_ox, float ray_oy, float ray_oz,
                         float ray_dx, float ray_dy, float ray_dz,
                         float min_facex, float min_facey, float min_facez)
 {
-  return max(max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
+    // prevent ray from entering cell along direction with very small delta value.
+    // will cause entrance t values slightly too small in grazing cases
+    float tnear_x = fabs(ray_dx) > GRAZING_RAY_D? (min_facex - ray_ox) / ray_dx : -MAXFLOAT;
+    float tnear_y = fabs(ray_dy) > GRAZING_RAY_D? (min_facey - ray_oy) / ray_dy : -MAXFLOAT;
+    float tnear_z = fabs(ray_dz) > GRAZING_RAY_D? (min_facez - ray_oz) / ray_dz : -MAXFLOAT;
+    return max(max(tnear_x, tnear_y), tnear_z);
 }
 
 //requires float position
@@ -116,6 +127,17 @@ void cast_ray(
   min_facex = calc_pos(tblock, ray_ox, ray_dx); //(ray_ox + (tblock + TREE_EPSILON)*ray_dx);
   min_facey = calc_pos(tblock, ray_oy, ray_dy); //(ray_oy + (tblock + TREE_EPSILON)*ray_dy);
   min_facez = calc_pos(tblock, ray_oz, ray_dz); //(ray_oz + (tblock + TREE_EPSILON)*ray_dz);
+
+  // verify that position is within bounds of block
+  if ( (min_facex < 0) || (min_facex >= linfo->dims.x) ) {
+      return;
+  }
+  if ( (min_facey < 0) || (min_facey >= linfo->dims.y) ) {
+      return;
+  }
+  if ( (min_facez < 0) || (min_facez >= linfo->dims.z) ) {
+      return;
+  }
 
   //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
   float cell_minx, cell_miny, cell_minz;
@@ -235,6 +257,17 @@ void cast_ray_render_vis(
   min_facex = calc_pos(tblock, ray_ox, ray_dx); //(ray_ox + (tblock + TREE_EPSILON)*ray_dx);
   min_facey = calc_pos(tblock, ray_oy, ray_dy); //(ray_oy + (tblock + TREE_EPSILON)*ray_dy);
   min_facez = calc_pos(tblock, ray_oz, ray_dz); //(ray_oz + (tblock + TREE_EPSILON)*ray_dz);
+
+  // verify that position is within bounds of block
+  if ( (min_facex < 0) || (min_facex >= linfo->dims.x) ) {
+      return;
+  }
+  if ( (min_facey < 0) || (min_facey >= linfo->dims.y) ) {
+      return;
+  }
+  if ( (min_facez < 0) || (min_facez >= linfo->dims.z) ) {
+      return;
+  }
 
   //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
   float cell_minx, cell_miny, cell_minz;
@@ -361,6 +394,17 @@ void cast_ray_render_vis2(
   min_facex = calc_pos(tblock, ray_ox, ray_dx); //(ray_ox + (tblock + TREE_EPSILON)*ray_dx);
   min_facey = calc_pos(tblock, ray_oy, ray_dy); //(ray_oy + (tblock + TREE_EPSILON)*ray_dy);
   min_facez = calc_pos(tblock, ray_oz, ray_dz); //(ray_oz + (tblock + TREE_EPSILON)*ray_dz);
+
+  // verify that position is within bounds of block
+  if ( (min_facex < 0) || (min_facex >= linfo->dims.x) ) {
+      return;
+  }
+  if ( (min_facey < 0) || (min_facey >= linfo->dims.y) ) {
+      return;
+  }
+  if ( (min_facez < 0) || (min_facez >= linfo->dims.z) ) {
+      return;
+  }
 
   //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
   float cell_minx, cell_miny, cell_minz;

@@ -99,12 +99,14 @@ bool calc_scene_ray_generic_cam(__constant RenderSceneInfo * linfo,
   ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
   ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
 
+#if 0
   //thresh ray direction components - too small a treshhold causes axis aligned
   //viewpoints to hang in infinite loop (block loop)
   float thresh = exp2(-12.0f);
   if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
   if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
   if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
+#endif
   ray_d.w = 0.0f; ray_d = normalize(ray_d);
 
   //store float 3's
