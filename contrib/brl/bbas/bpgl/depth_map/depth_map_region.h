@@ -41,7 +41,9 @@ class depth_map_region : public vbl_ref_count
                    vcl_string const& name,
                    depth_map_region::orientation orient,
                    unsigned const& land_id = 0,
-                   double const& height = -10.0);
+                   double const& height = -1.0,
+                   bool const& is_ref = false);
+
 
   //: constructor for a fixed plane, e.g. the ground plane
   depth_map_region(vsol_polygon_2d_sptr const& region, 

@@ -17,6 +17,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vil/vil_save.h>
+#include <bsol/bsol_algs.h>
 #include <vil/vil_image_view.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
 #include <bpgl/depth_map/depth_map_scene.h>

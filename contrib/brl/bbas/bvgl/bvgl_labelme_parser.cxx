@@ -76,7 +76,7 @@ void bvgl_labelme_parser::endElement(const XML_Char* name)
     polygons_.push_back(poly);
   }
 
-  if (vcl_strcmp(name, PIXEL_TAG)==0) {
+  if (vcl_strcmp(name, PIXEL_TAG)==0 || vcl_strcmp(name, SINGLE_PIONT_TAG)==0 ) {
     vgl_point_2d<double> pt(x_, y_);
     pixels_.push_back(pt);
   }
@@ -92,9 +92,14 @@ void bvgl_labelme_parser::endElement(const XML_Char* name)
     obj_min_dists_.push_back(min_dist_);
     obj_max_dists_.push_back(max_dist_);
     obj_depth_orders_.push_back(order_);
+    obj_heights_.push_back(height_);
     obj_nlcd_ids_.push_back(nlcd_id_);
     obj_weights_.push_back(weight_);
     obj_frame_ids_.push_back(frame_id_);
+    if (reference_ == 0)
+      obj_references_.push_back(false);
+    else
+      obj_references_.push_back(true);
   }
 }
 
@@ -154,6 +159,12 @@ void bvgl_labelme_parser::charData(const XML_Char* s, int len)
     if (land.length() != 0)
       obj_land_categories_.push_back(land);
   }
+  if (active_tag_ == HEIGHT_TAG) {
+    convert(vcl_string(s, len), height_);
+  }
+
+  if (active_tag_ == REFERENCE_TAG)
+    convert(vcl_string(s, len), reference_);
 
   if (active_tag_ == OBJECT_MINDIST_TAG)
     convert(vcl_string(s,len), min_dist_);

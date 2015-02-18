@@ -147,6 +147,15 @@ class volm_io
                               unsigned& img_nj,
                               vcl_string& query_name);
 
+  //: parser for reading xml tags for landmark configuration matcher
+  static bool read_conf_query_tags(vcl_string xml_file,
+                                   float const& floor_height,
+                                   depth_map_scene_sptr& depth_scene,
+                                   vcl_string& world_region,
+                                   unsigned& img_ni,
+                                   unsigned& img_nj,
+                                   vcl_string& query_name);
+  
   //: piecewise linear s.t. [1,127) -> [0,t), [127,255] -> [t,1]
   static float scale_score_to_0_1(unsigned char pix_value, float threshold);
   //: piecewise non-linear s.t. [1,255] -> [0,1]

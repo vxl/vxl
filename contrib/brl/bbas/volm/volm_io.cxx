@@ -570,6 +570,105 @@ bool volm_io::read_query_tags(vcl_string xml_file,
   return true;
 }
 
+bool volm_io::read_conf_query_tags(vcl_string xml_file,
+                                  float const& floor_height,
+                                  depth_map_scene_sptr& depth_scene,
+                                  vcl_string& world_region,
+                                  unsigned& img_ni, unsigned& img_nj,
+                                  vcl_string& query_name)
+{
+  if (!vul_file::exists(xml_file))
+    return false;
+  bvgl_labelme_parser parser(xml_file);
+  vcl_vector<vgl_point_2d<double> > points = parser.pixels(); // <point> tag
+  vcl_vector<vcl_string>& object_names = parser.obj_names();  // <name> tag
+  vcl_vector<vcl_string>& object_land_types = parser.obj_land_categories();  // <land> tag
+  vcl_vector<float>& object_mindist = parser.obj_mindists();
+  vcl_vector<float>& object_maxdist = parser.obj_maxdists();
+  vcl_vector<int>& object_heights = parser.obj_heights();
+  vcl_vector<bool>& object_references = parser.obj_references();
+  // check the consistency
+  unsigned num_objs = object_names.size();
+  if (num_objs != points.size() || num_objs != object_land_types.size() || num_objs != object_references.size() ||
+      num_objs != object_mindist.size() || num_objs != object_maxdist.size() || num_objs != object_heights.size() )
+  {
+    vcl_cerr << "ERROR parsing tag file " << xml_file << ": incomplete object properties definition, check tags in xml file\n";
+    return false;
+  }
+  if (!parser.image_ni() || !parser.image_nj())
+  {
+    vcl_cerr << "ERROR parsing tag file " << xml_file << ": missing image size or image name, check <nrows>, <ncols> or <filename>\n";
+    return false;
+  }
+
+  if (parser.image_name().compare("") == 0)
+  {
+    vcl_cerr << "ERROR parsing tag file " << xml_file << ": missing image name tag <filename>\n";
+    return false;
+  }
+  if (parser.region().compare("") == 0)
+  {
+    vcl_cerr << "ERROR parsing tag file " << xml_file << ": missing <region> tag to specify the world region\n";
+    return false;
+  }
+
+  // create polygon from points -- expands to 4 points
+  vcl_vector<vgl_polygon<double> > polys;
+  for (unsigned i = 0; i < num_objs; i++)
+  {
+    vgl_polygon<double> poly;
+    poly.new_sheet();
+    poly.push_back(points[i].x(), points[i].y());
+    poly.push_back(points[i].x(), points[i].y()+1);
+    poly.push_back(points[i].x()+1, points[i].y()+1);
+    poly.push_back(points[i].x()+1, points[i].y());
+    polys.push_back(poly);
+  }
+
+  // parse the world region
+  vcl_cout << "parser.region(): " << parser.region();
+  vcl_cout << "filename: " << parser.image_name();
+  world_region = parser.region();
+  // parse the query name
+  vcl_string filename = parser.image_name();
+  query_name = vul_file::strip_extension(filename);
+  // parser the image dimension
+  img_ni = parser.image_ni();
+  img_nj = parser.image_nj();
+
+  // construct the depth map scene
+  depth_scene->set_image_size(img_ni, img_nj);
+  for (unsigned i = 0; i < num_objs; i++)
+  {
+    vcl_string land_type = object_land_types[i];
+    if (volm_osm_category_io::tag_to_volm_land_table.find(land_type) == volm_osm_category_io::tag_to_volm_land_table.end())
+      continue;
+    if (volm_osm_category_io::tag_to_volm_land_table.find(land_type)->second.name_ == "invalid")
+      continue;
+    // calculate the height value
+    double height = -1.0;
+    if (object_heights[i] != -1 && object_heights[i] != 0)
+      height = object_heights[i] * floor_height;
+    
+    vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
+    vgl_vector_3d<double> np;  // surface normal
+    np.set(1.0, 1.0, 1.0);
+    // define orientation from height value
+    if (height == -1.0)
+      depth_scene->add_region(poly, np, object_mindist[i], object_maxdist[i], object_names[i],
+                              depth_map_region::HORIZONTAL, 1,
+                              volm_osm_category_io::tag_to_volm_land_table.find(land_type)->second.id_,
+                              height, object_references[i]);
+    else
+      depth_scene->add_region(poly, np, object_mindist[i], object_maxdist[i], object_names[i],
+                              depth_map_region::FRONT_PARALLEL, 1,
+                              volm_osm_category_io::tag_to_volm_land_table.find(land_type)->second.id_,
+                              height, object_references[i]);
+  }
+  return true;
+
+}
+
 bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, vcl_string log_message, vcl_string status_file)
 {
   vcl_ofstream file;

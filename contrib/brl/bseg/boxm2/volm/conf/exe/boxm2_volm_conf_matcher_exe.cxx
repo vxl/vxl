@@ -8,6 +8,7 @@
 // \verbatim
 //  Modifications
 //   Yi Dong -- Oct, 2014  Modify the candidate region
+//   Yi Dong -- Feb, 2014  Update the matcher that can accept tag xml file as configuration query input
 // \endverbatim
 //
 
@@ -36,6 +37,8 @@ int main(int argc, char** argv)
   vul_arg<int>            leaf_id("-leaf", "geo location leaf id pass(-1) for matcher running on all leaves", -1);
   vul_arg<vcl_string>   query_img("-img",  "query image", "");
   vul_arg<vcl_string>     dms_bin("-dms",  "depth map scene file", "");
+  vul_arg<vcl_string>     tag_xml("-tag",  "tag xml file", "");
+  vul_arg<float>     floor_height("-floor-height",  "building floor height (default is 4.5m/per floor)", 4.5f);
   vul_arg<vcl_string>     cam_kml("-cam",  "camera calibration kml file", "");
   vul_arg<vcl_string>     cam_inc("-inc",  "file defining camera angle incremental values", "");
   vul_arg<vcl_string>  geo_folder("-geo",  "folder to read the geo hypotheses ", "");
@@ -90,21 +93,43 @@ int main(int argc, char** argv)
   if (!read())        // perform configurational matcher
   {
     // input check
-    if (dms_bin().compare("") == 0 || cam_kml().compare("") == 0 || cam_inc().compare("") == 0 )
+    if ( cam_kml().compare("") == 0 || cam_inc().compare("") == 0 )
     {
       vcl_cerr << "ERROR: missing input for configuration matcher!!!" << vcl_endl;
       vul_arg_display_usage_and_exit();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    // load the depth map scene
-    if (!vul_file::exists(dms_bin())) {
-      log << "ERROR: can not find depth map scene binary: " << dms_bin() << "!\n";
-      volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
+    if (dms_bin().compare("") == 0 && tag_xml().compare("") == 0)
+    {
+      vcl_cerr << "ERROR: missing query tag file, either tag .xml file or .vsl binary file required" << vcl_endl;
+      vul_arg_display_usage_and_exit();
+      return volm_io::EXE_ARGUMENT_ERROR;
     }
+    // load the query label
+    vcl_string world_region, query_name;
+    unsigned img_ni, img_nj;
     depth_map_scene_sptr dms = new depth_map_scene;
-    vsl_b_ifstream dms_is(dms_bin().c_str());
-    dms->b_read(dms_is);
-    dms_is.close();
+    if (vul_file::exists(dms_bin()))  // load from .vsl file
+    {
+      vsl_b_ifstream dms_is(dms_bin().c_str());
+      dms->b_read(dms_is);
+      dms_is.close();
+    }
+    else // load from query tag xml file
+    {
+      if (!vul_file::exists(tag_xml()))
+      {
+        log << "ERROR: can not find tag xml file: " << tag_xml() << "!\n";
+        volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
+      }
+      vcl_cout << "Configuration Matcher will load query from tag xml file: " << tag_xml() << "!!!!!!!!!!!!!!!!!!!!!!!!" << vcl_endl;
+      if (!volm_io::read_conf_query_tags(tag_xml(), floor_height(), dms, world_region, img_ni, img_nj, query_name)) {
+        log << "ERROR: load query tag xml failed, check tag file for more details!!!\n";
+        volm_io::write_error_log(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
+      }
+      vcl_cout << "  query is loaded successfully from tag xml!!!" << vcl_endl;
+    }
+
     // create the camera space
     // read the camera incremental values
     if (!vul_file::exists(cam_inc())) {
@@ -150,10 +175,11 @@ int main(int argc, char** argv)
     vcl_cout << "  query has " << query->ncam() << " cameras" << vcl_endl;
     vcl_vector<vcl_string> cam_string = query->camera_strings();
     vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > > conf_objs_d_tol = query->conf_objects_d_tol();
-    vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objs = query->conf_objects(); 
+    vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objs = query->conf_objects();
+    vcl_vector<vcl_string> query_ref_obj = query->ref_obj_name();
     if (cam_string.size() < 20) {
       for (unsigned i = 0; i < conf_objs.size(); i++) {
-        vcl_cout << "   camera " << i << " : " << cam_string[i] << " has " << conf_objs[i].size() << " configurational objects" << vcl_endl;
+        vcl_cout << "   camera " << i << " : " << cam_string[i] << " has " << conf_objs[i].size() << " configurational objects " << vcl_endl;
       }
     }
     unsigned num_locs = 0;

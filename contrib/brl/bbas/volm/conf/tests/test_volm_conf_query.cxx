@@ -1,4 +1,5 @@
 #include <testlib/testlib_test.h>
+#include <volm/volm_io.h>
 #include <volm/conf/volm_conf_query.h>
 #include <vul/vul_file.h>
 #include <vsph/vsph_spherical_coord.h>
@@ -12,7 +13,91 @@
 #include <bpgl/depth_map/depth_map_region_sptr.h>
 #include <bpgl/depth_map/depth_map_scene.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
+#include <vcl_where_root_dir.h>
 
+
+// test to create a configuration query from tag xml file
+static void test_volm_conf_query_from_tag_file()
+{
+  vcl_string xml_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/tests/test.xml";
+  depth_map_scene_sptr dms = new depth_map_scene;
+  float floor_height = 4.5f;
+  vcl_string world_region, query_name;
+  unsigned img_ni, img_nj;
+  bool success = volm_io::read_conf_query_tags(xml_file, floor_height, dms, world_region, img_ni, img_nj, query_name);
+  vcl_cout << "Tag content output: " << vcl_endl;
+  vcl_cout << "  region: " << world_region;
+  vcl_cout << "  query name: " << query_name << vcl_endl;
+  vcl_cout << "  image size: " << img_ni << "x" << img_nj << vcl_endl;
+  unsigned n_region = dms->scene_regions().size();
+  for (unsigned i = 0; i < n_region; i++)
+  {
+    depth_map_region_sptr region_sptr = dms->scene_regions()[i];
+    // obtain the image pixel tag from polygon
+    vgl_polygon<double> poly = bsol_algs::vgl_from_poly(region_sptr->region_2d());
+    vgl_point_2d<double> pixel = poly[0][0];
+    vcl_cout << "  name: " << region_sptr->name()
+             << ", mindist: " << region_sptr->min_depth()
+             << ", maxdist: " << region_sptr->max_depth()
+             << ", height: " << region_sptr->height()
+             << ", reference: " << region_sptr->is_ref()
+             << ", point: (" << vcl_fixed << pixel.x() << ", " << vcl_fixed << pixel.y() << ")"
+             << ", land: " << volm_osm_category_io::volm_land_table[region_sptr->land_id()].name_
+             << vcl_endl;
+  }
+
+  // create a camera space
+  double head_mid=0.0,       head_radius=0.0,  head_inc=2.0;
+  double tilt_mid=95.561826,   tilt_radius=4.0,  tilt_inc=2.0;
+  double roll_mid=-1.516657,   roll_radius=0.0,  roll_inc=0.0;
+  //double top_fov_vals[] = {3.0,  4.0, 5.0, 12.0, 17.0, 18.0,19.0, 20.0, 24.0};
+  double top_fov_vals[] = {16.115608, 14.115608, 18.115608};
+  vcl_vector<double> fovs;
+  fovs.push_back(top_fov_vals[0]);
+  fovs.push_back(top_fov_vals[1]);
+  fovs.push_back(top_fov_vals[2]);
+
+
+  double altitude = 2.73;
+  volm_camera_space_sptr csp = new volm_camera_space(fovs, altitude, img_ni, img_nj,
+                                                     head_mid, head_radius, head_inc,
+                                                     tilt_mid, tilt_radius, tilt_inc,
+                                                     roll_mid, roll_radius, roll_inc);
+  csp->generate_full_camera_index_space();
+  // create the configuration query
+  volm_conf_query_sptr query = new volm_conf_query(csp, dms, 25);
+  vcl_cout << "configurational query reference object list: ";
+  vcl_vector<vcl_string> ref_object_names = query->ref_obj_name();
+  for (vcl_vector<vcl_string>::iterator vit = ref_object_names.begin(); vit != ref_object_names.end(); ++vit)
+    vcl_cout << (*vit) << ", ";
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "configurational query camera list: " << vcl_endl;
+  vcl_vector<vcl_string> cam_string = query->camera_strings();
+  for (vcl_vector<vcl_string>::iterator vit = cam_string.begin();  vit != cam_string.end();  ++vit)
+    vcl_cout << "\t" << (*vit) << vcl_endl;
+  vcl_cout << query->cameras().size() << " perspective cameras are created." << vcl_endl;
+  TEST("configurational query cameras", query->cameras().size(), query->camera_angles().size());
+  TEST("configurational query reference objects", query->ref_obj_name().size(), 1);
+
+  vcl_cout << "configurational query has following reference object: " << vcl_endl;
+  vcl_vector<vcl_string> query_ref_obj = query->ref_obj_name();
+  for (vcl_vector<vcl_string>::iterator vit = query_ref_obj.begin();  vit != query_ref_obj.end();  ++vit)
+    vcl_cout << " " << (*vit);
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "configurational query has following configuration object: " << vcl_endl;
+  vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objs = query->conf_objects();
+  vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > > d_tol = query->conf_objects_d_tol();
+  for (unsigned i = 0; i < conf_objs.size(); i++) {
+    vcl_cout << "\t camera: " << cam_string[i] << vcl_endl;
+    for (vcl_map<vcl_string, volm_conf_object_sptr>::iterator mit = conf_objs[i].begin();  mit != conf_objs[i].end(); ++mit) {
+      vcl_cout << "\t\t obj name: " << mit->first << "\t\t" ;  mit->second->print(vcl_cout);
+      vcl_cout << "\t\t  distance tolerance: " << d_tol[i][mit->first].first << " to " << d_tol[i][mit->first].second << vcl_endl;
+    }
+  }
+
+}
 
 static void test_volm_conf_query()
 {
@@ -124,6 +209,9 @@ static void test_volm_conf_query()
     }
   }
 
+
+  vcl_cout << " ---------- Test creating configuration query from tag xml file --------------------" << vcl_endl;
+  test_volm_conf_query_from_tag_file();
   return;
 }
 

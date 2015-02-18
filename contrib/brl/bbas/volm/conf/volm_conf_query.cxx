@@ -4,7 +4,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
-#include <bsol/bsol_algs.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vul/vul_file.h>
 #include <vil/vil_load.h>
@@ -90,6 +89,7 @@ bool volm_conf_query::create_conf_object()
   // loop over each calibrated camera to construct the list of configurational objects
   for (unsigned cam_id =0;  cam_id < ncam_;  cam_id++)
   {
+    vcl_cout << "camera: " << this->camera_strings_[cam_id] << vcl_endl;
     vpgl_perspective_camera<double> pcam = cameras_[cam_id];
     // create a map of volm_conf_object
     vcl_map<vcl_string, volm_conf_object_sptr> conf_object;
@@ -201,9 +201,11 @@ void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,
   {
     double x = poly[0][v_idx].x();
     double y = poly[0][v_idx].y();
+    if (x < 0 || x >= ni_ || y < 0 || y >= nj_)
+      continue;
     float dist, phi;
     this->project(cam, x, y, dist, phi);
-    if (phi < 0)
+    if (dist < 0)
       continue;
     dist_values.insert(dist);
     phi_values.push_back(phi);

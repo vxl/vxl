@@ -82,7 +82,8 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
                                  depth_map_region::orientation orient,
                                  unsigned order,
                                  unsigned land_id,
-                                 double height)
+                                 double height,
+                                 bool is_ref)
 {
   vgl_plane_3d<double> plane(region_normal.x(), region_normal.y(), region_normal.z(), 0.0);
   depth_map_region_sptr reg = new depth_map_region(region, plane,
@@ -90,7 +91,8 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
                                                    name,
                                                    orient,
                                                    land_id,
-                                                   height);
+                                                   height,
+                                                   is_ref);
   reg->set_order(order);
   scene_regions_[name]=reg;
 }

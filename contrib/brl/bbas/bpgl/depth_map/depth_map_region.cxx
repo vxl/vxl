@@ -99,12 +99,13 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string const& name,
                                    depth_map_region::orientation orient,
                                    unsigned const& land_id,
-                                   double const& height)
+                                   double const& height,
+                                   bool const& is_ref)
   : active_(true), order_(0), land_id_(land_id),
     orient_type_(orient), name_(name), depth_(-1.0),
     min_depth_(min_depth), max_depth_(max_depth), height_(height),
     depth_inc_(1.0),
-    region_plane_(region_plane), region_2d_(region), region_3d_(0), is_ref_(false)
+    region_plane_(region_plane), region_2d_(region), region_3d_(0), is_ref_(is_ref)
 {
 }
 

@@ -101,7 +101,8 @@ class depth_map_scene : public vbl_ref_count
                   depth_map_region::orientation orient,
                   unsigned order = 0,
                   unsigned land_id = 40,
-                  double height = -1.0);
+                  double height = -1.0,
+                  bool is_ref = false);
 
   //: add a ground region into ground_plane_
   void add_ground(vsol_polygon_2d_sptr const& ground_plane,

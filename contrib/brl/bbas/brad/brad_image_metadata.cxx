@@ -659,14 +659,8 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos) {
       solar_irrad = 1375.8;
       satellite_name_ = "IKONOS";
-<<<<<<< HEAD
-    } else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos) { // OZGE TODO: check this one
-      // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
-      solar_irrad = 1617;
-=======
     } else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos || satellite_name_.compare("OV-5") == 0 ) { // OZGE TODO: check this one
       sun_irradiance_ = 1617;
->>>>>>> update for WV02 image index classification
       satellite_name_ = "GeoEye-1";
       // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for geoeye1 plane 0
       //          is blue, plane 1 is green, plane 2 is red and plane 3 is near-IR). this order may be different for
@@ -682,13 +676,6 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
         vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
         return false;
       }
-<<<<<<< HEAD
-    } else if (img_info.find("QuickBird") != vcl_string::npos ||
-               nitf_filename.find("QB") != vcl_string::npos ||
-               nitf_filename.find("QuickBird") != vcl_string::npos ||
-               img_info.find("QB02") != vcl_string::npos) {
-      solar_irrad = 1381.7;
-=======
     } else if (img_info.find("QuickBird") != vcl_string::npos || 
                nitf_filename.find("QB") != vcl_string::npos || 
                nitf_filename.find("QuickBird") != vcl_string::npos || 
@@ -696,7 +683,6 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
                satellite_name_.compare("QB02") == 0
                ) {
       sun_irradiance_ = 1381.7;
->>>>>>> update for WV02 image index classification
       satellite_name_ = "QuickBird";
       if (n_bands_ == 1) {
         // pass
@@ -709,21 +695,11 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
         vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
         return false;
       }
-<<<<<<< HEAD
-    } else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos) {
-      solar_irrad = 1580.814;
-      satellite_name_ = "WorldView";
-    } else if (img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos) {
-      // these values are from http://www.digitalglobe.com/sites/default/files/Radiometric_Use_of_WorldView-2_Imagery%20(1).pdf
-      solar_irrad = 1580.814;
-=======
-                                              
     } else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos || satellite_name_.compare("WV01") == 0 ) {
       sun_irradiance_ = 1580.814;
       satellite_name_ = "WorldView";
     } else if (img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos || satellite_name_.compare("WV02") == 0) {
       sun_irradiance_ = 1580.814;
->>>>>>> update for WV02 image index classification
       satellite_name_ = "WorldView2";
       // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for wv2 plane 0 is coastal (?), plane 1 is blue, etc.)
       //          this order may be different for different satellites
