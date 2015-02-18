@@ -69,7 +69,7 @@
     <maxdist>500.0</maxdist>
     <land>BUILDING</land>
     <height>0</height>
-    <reference>0</reference>
+    <reference>1</reference>
     <point>
       <x>882</x><y>396</y>
     </point>
