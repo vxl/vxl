@@ -1155,13 +1155,13 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
       unsigned int ni = factor;
       unsigned int offseti = bigi*factor;
       if(bigi == numi )
-          offseti = gni-factor-1;
+          offseti = gni-factor;
       for (unsigned int bigj=0 ; bigj<=numj;bigj++)
       {
           unsigned int nj = factor;
           unsigned int offsetj = bigj*factor;
           if(bigj == numj )
-              offsetj = gnj-factor-1;     
+              offsetj = gnj-factor;     
           if(!vpgl_generic_camera_convert::pyramid_est(rat_cam,ni,nj,offseti,offsetj,local_z_min, local_z_max,n_levels,nr, nc,scl,ray_pyr ))
               return false;
           for(unsigned int i = 0; i < factor; i++)
