@@ -67,10 +67,11 @@ namespace boxm2_roi_init_process_globals
                 bool convert_to_8_bit, int margin, int clip_box_width = -1.0,int clip_box_height = -1 );
 
   //: projects the box on the image by taking the union of all the projected corners
-  vgl_box_2d<double>* project_box(vpgl_rational_camera<double>* cam,
-                                  vpgl_lvcs_sptr lvcs,
-                                  vgl_box_3d<double> box,
-                                  float r);
+  bool project_box(const vpgl_rational_camera<double>& cam,
+                   const vpgl_lvcs_sptr& lvcs,
+                   const vgl_box_3d<double>& box,
+                   float r,
+                   vgl_box_2d<double>& roi);
 
   vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> box);
 }
@@ -100,31 +101,32 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   vgl_box_3d<double> box = scene->bounding_box();
 
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-  vgl_box_2d<double>* roi_box = project_box(camera, lvcs, box, error);
+  vgl_box_2d<double> roi_box;
+  project_box(*camera, lvcs, box, error, roi_box);
 
   brip_roi broi(nitf->ni(), nitf->nj());
 
   vsol_box_2d_sptr bb2 = new vsol_box_2d();
-  bb2->add_point(roi_box->min_x(), roi_box->min_y());
-  bb2->add_point(roi_box->max_x(), roi_box->max_y());
+  bb2->add_point(roi_box.min_x(), roi_box.min_y());
+  bb2->add_point(roi_box.max_x(), roi_box.max_y());
   bb2 = broi.clip_to_image_bounds(bb2);
   if (bb2->width() <= 0 || bb2->height() <= 0) {
     vcl_cerr << "boxm2_roi_init_process::execute - cannot clip roi to image boundaries\n";
     return false;
   }
 
-
-  roi_box->set_width(roi_box->width()+2*margin);
-  roi_box->set_height(roi_box->height()+2*margin);
+  roi_box.set_width(roi_box.width()+2*margin);
+  roi_box.set_height(roi_box.height()+2*margin);
 
   vsol_box_2d_sptr bb = new vsol_box_2d();
-  bb->add_point(roi_box->min_x(), roi_box->min_y());
-  bb->add_point(roi_box->max_x(), roi_box->max_y());
+  bb->add_point(roi_box.min_x(), roi_box.min_y());
+  bb->add_point(roi_box.max_x(), roi_box.max_y());
   bb = broi.clip_to_image_bounds(bb);
   if (bb->width() <= 0 || bb->height() <= 0) {
     vcl_cerr << "boxm2_roi_init_process::execute - cannot clip padded roi to image boundaries\n";
     return false;
   }
+
   //: use the margin
   double maxwidth = bb->width();
   double maxheight = bb->height();
@@ -226,12 +228,11 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
 
   double u, v;
   camera->image_offset(u, v);
-  double tu =  u - roi_box->min_x();
-  double tv =  v - roi_box->min_y();
+  double tu =  vcl_floor(u - bb->get_min_x()); // the image is cropped by pixel
+  double tv =  vcl_floor(v - bb->get_min_y());
   vpgl_rational_camera<double> new_cam(*camera);
   new_cam.set_image_offset(tu, tv);
   local_camera = vpgl_local_rational_camera<double> (*lvcs, new_cam);
-  delete roi_box;
   return true;
 }
 
@@ -252,15 +253,16 @@ vcl_vector<vgl_point_3d<double> > boxm2_roi_init_process_globals::corners_of_box
 }
 
 //: project_box function
-vgl_box_2d<double>* boxm2_roi_init_process_globals::project_box( vpgl_rational_camera<double>* cam,
-                                                                 vpgl_lvcs_sptr lvcs,
-                                                                 vgl_box_3d<double> box,
-                                                                 float r)
+bool boxm2_roi_init_process_globals::project_box( const vpgl_rational_camera<double>& cam,
+                                                  const vpgl_lvcs_sptr& lvcs,
+                                                  const vgl_box_3d<double>& box,
+                                                  float r,
+                                                  vgl_box_2d<double>& roi)
 {
   double xoff, yoff, zoff;
-  xoff = cam->offset(vpgl_rational_camera<double>::X_INDX);
-  yoff = cam->offset(vpgl_rational_camera<double>::Y_INDX);
-  zoff = cam->offset(vpgl_rational_camera<double>::Z_INDX);
+  xoff = cam.offset(vpgl_rational_camera<double>::X_INDX);
+  yoff = cam.offset(vpgl_rational_camera<double>::Y_INDX);
+  zoff = cam.offset(vpgl_rational_camera<double>::Z_INDX);
 
   // global to local
   double lx, ly, lz;
@@ -275,14 +277,12 @@ vgl_box_2d<double>* boxm2_roi_init_process_globals::project_box( vpgl_rational_c
   vcl_vector<vgl_point_3d<double> > cam_corners = corners_of_box_3d(cam_box);
   vcl_vector<vgl_point_3d<double> > box_corners = corners_of_box_3d(box);
 
-  vgl_box_2d<double>* roi = new vgl_box_2d<double>();
-
   double lon, lat, gz;
   for (unsigned i=0; i<cam_corners.size(); i++) {
     vgl_point_3d<double> cam_corner = cam_corners[i];
     lvcs->local_to_global(cam_corner.x(), cam_corner.y(), cam_corner.z(),
                           vpgl_lvcs::wgs84, lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-    vpgl_rational_camera<double>* new_cam = cam->clone();
+    vpgl_rational_camera<double>* new_cam = cam.clone();
     new_cam->set_offset(vpgl_rational_camera<double>::X_INDX, lon);
     new_cam->set_offset(vpgl_rational_camera<double>::Y_INDX, lat);
     new_cam->set_offset(vpgl_rational_camera<double>::Z_INDX, gz);
@@ -293,11 +293,11 @@ vgl_box_2d<double>* boxm2_roi_init_process_globals::project_box( vpgl_rational_c
       lvcs->local_to_global(box_corners[j].x(), box_corners[j].y(), box_corners[j].z(),
                             vpgl_lvcs::wgs84, lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
       vgl_point_2d<double> p2d = new_cam->project(vgl_point_3d<double>(lon, lat, gz));
-      roi->add(p2d);
+      roi.add(p2d);
     }
+    delete new_cam;
   }
-
-  return roi;
+  return true;
 }
 
 
@@ -377,11 +377,11 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
   int clip_image_width = pro.get_input<int>(i++);
     int clip_image_height = pro.get_input<int>(i++);
 
-  // uncertainty (meters) -- SHOULD BE A PARAM
+  // uncertainty (meters)
   float uncertainty=0;
   if ( !pro.parameters()->get_value(error, uncertainty) ) {
-      vcl_cout << pro.name() << ": error in retrieving parameters\n";
-    return false;
+      vcl_cout << pro.name() << ": error in retrieving parameters.\n";
+      vcl_cout << "    using default value for uncertainty: " << uncertainty << vcl_endl;
   }
 
   //vil_image_view<unsigned char>* img_ptr = new vil_image_view<unsigned char>();

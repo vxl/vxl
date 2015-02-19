@@ -33,9 +33,13 @@ namespace vpgl_crop_img_using_3d_box_process_globals
 }
 
 // === functions ===
-bool project_box(vpgl_rational_camera<double> const* const rat_cam, const vgl_box_3d<double> &scene_bbox,
-    double uncertainty, const vpgl_lvcs_sptr &lvcs_sptr,
+bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr &lvcs_sptr, 
+    const vgl_box_3d<double> &scene_bbox, double uncertainty, 
     vgl_box_2d<double> &roi_box_2d);
+
+void create_local_rational_camera(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr& lvcs_sptr, 
+  const vsol_box_2d_sptr& bb, vpgl_local_rational_camera<double>& local_camera);
+
 
 // initialization
 bool vpgl_crop_img_using_3d_box_process_cons(bprb_func_process& pro)
@@ -109,7 +113,7 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
                         upper_right_lon, upper_right_lat, upper_right_elev);
 
   vgl_box_2d<double> roi_box_2d;
-  bool good = project_box(rat_cam, scene_bbox, uncertainty, lvcs_sptr, roi_box_2d);
+  bool good = project_box(*rat_cam, lvcs_sptr, scene_bbox, uncertainty, roi_box_2d);
   if(!good) {
     return false;
   }
@@ -133,27 +137,10 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
     return false;
   }
-  if (i0 > img_res_sptr->ni() || j0 > img_res_sptr->nj())
-  {
-    vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
-    return false;
-  }
-
-  if ( (i0+ni) > img_res_sptr->ni() && (j0+nj) > img_res_sptr->nj())
-  {
-    vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
-    return false;
-  }
 
   // create the local camera
-  vpgl_local_rational_camera<double> local_camera(*lvcs_sptr, *rat_cam);
-  // calculate local camera offset from image bounding box
-  double global_u, global_v, local_u, local_v;
-  rat_cam->image_offset(global_u, global_v);
-  local_u = global_u - bb->get_min_x();
-  local_v = global_v - bb->get_min_y();
-  local_camera.set_image_offset(local_u, local_v);
-
+  vpgl_local_rational_camera<double> local_camera;
+  create_local_rational_camera(*rat_cam, lvcs_sptr, bb, local_camera);
 
   // store output
   unsigned out_j = 0;
@@ -242,7 +229,7 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
                         upper_right_lon, upper_right_lat, upper_right_elev);
 
   vgl_box_2d<double> roi_box_2d;
-  bool good = project_box(rat_cam, scene_bbox, uncertainty, lvcs_sptr, roi_box_2d);
+  bool good = project_box(*rat_cam, lvcs_sptr, scene_bbox, uncertainty, roi_box_2d);
   if(!good) {
     return false;
   }
@@ -259,15 +246,23 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
   unsigned ni = (unsigned)bb->width();
   unsigned nj = (unsigned)bb->height();
 
-  // create the local camera
-  vpgl_local_rational_camera<double> local_camera(*lvcs_sptr, *rat_cam);
-  // calculate local camera offset from image bounding box
-  double global_u, global_v, local_u, local_v;
-  rat_cam->image_offset(global_u, global_v);
-  local_u = global_u - bb->get_min_x();
-  local_v = global_v - bb->get_min_y();
-  local_camera.set_image_offset(local_u, local_v);
+  if(i0 < 0) {
+    ni += i0;
+    i0 = 0;
+  }
+  if(j0 < 0) {
+    nj += j0;
+    j0 = 0;
+  }
 
+  if (ni <= 0 || nj <= 0) {
+    vcl_cout << pro.name() << ": projected box too small" << vcl_endl;
+    return false;
+  }
+
+  // create the local camera
+  vpgl_local_rational_camera<double> local_camera;
+  create_local_rational_camera(*rat_cam, lvcs_sptr, bb, local_camera);
 
   // store output
   unsigned out_j = 0;
@@ -279,15 +274,28 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
   return true;
 }
 
-bool project_box(vpgl_rational_camera<double> const* const rat_cam, const vgl_box_3d<double> &scene_bbox,
-    double uncertainty, const vpgl_lvcs_sptr &lvcs_sptr,
+void create_local_rational_camera(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr& lvcs_sptr, 
+  const vsol_box_2d_sptr& bb, vpgl_local_rational_camera<double>& local_camera)
+{
+  // calculate local camera offset from image bounding box
+  double global_u, global_v, local_u, local_v;
+  rat_cam.image_offset(global_u, global_v);
+  local_u = vcl_floor(global_u - bb->get_min_x());  // the image was cropped by pixel
+  local_v = vcl_floor(global_v - bb->get_min_y());
+  // create the local camera
+  local_camera = vpgl_local_rational_camera<double>(*lvcs_sptr, rat_cam);
+  local_camera.set_image_offset(local_u, local_v);
+}
+
+bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr &lvcs_sptr,
+    const vgl_box_3d<double> &scene_bbox, double uncertainty,
     vgl_box_2d<double> &roi_box_2d)
 {
   // project box
   double xoff, yoff, zoff;
-  xoff = rat_cam->offset(vpgl_rational_camera<double>::X_INDX);
-  yoff = rat_cam->offset(vpgl_rational_camera<double>::Y_INDX);
-  zoff = rat_cam->offset(vpgl_rational_camera<double>::Z_INDX);
+  xoff = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
+  yoff = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
+  zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
 
   // global to lcoal (wgs84 to meter in order to apply uncertainty)
   double lx, ly, lz;
@@ -308,7 +316,7 @@ bool project_box(vpgl_rational_camera<double> const* const rat_cam, const vgl_bo
   {
     lvcs_sptr->local_to_global(cam_corners[i].x(), cam_corners[i].y(), cam_corners[i].z(), vpgl_lvcs::wgs84,
                           lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-    vpgl_rational_camera<double>* new_cam = rat_cam->clone();
+    vpgl_rational_camera<double>* new_cam = rat_cam.clone();
     new_cam->set_offset(vpgl_rational_camera<double>::X_INDX, lon);
     new_cam->set_offset(vpgl_rational_camera<double>::Y_INDX, lat);
     new_cam->set_offset(vpgl_rational_camera<double>::Z_INDX, gz);
@@ -318,6 +326,7 @@ bool project_box(vpgl_rational_camera<double> const* const rat_cam, const vgl_bo
       vgl_point_2d<double> p2d = new_cam->project(vgl_point_3d<double>(box_corners[j].x(), box_corners[j].y(), box_corners[j].z()));
       roi_box_2d.add(p2d);
     }
+    delete new_cam;
   }
 
   return true;

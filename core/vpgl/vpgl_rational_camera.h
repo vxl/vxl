@@ -198,7 +198,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
     scale_offsets_[V_INDX].set_offset(v_off); }
 
   //:get u-v translation offset
-  void image_offset(T& u_off, T& v_off)
+  void image_offset(T& u_off, T& v_off) const
     {u_off = offset(U_INDX); v_off = offset(V_INDX);}
 
    //:set u-v scale
