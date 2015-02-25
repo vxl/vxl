@@ -153,7 +153,7 @@ bool boxm2_ocl_render_expected_image::render(
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       vcl_cout<<"Focal Length " << f<<vcl_endl;
       tnearfar[0] = f* scene->finest_resolution()/nearfactor ;
-      tnearfar[1] = f* scene->finest_resolution()/farfactor ;
+      tnearfar[1] = f* scene->finest_resolution()*farfactor ;
 
       vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
   }

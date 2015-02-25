@@ -57,8 +57,8 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the 7th input is not set
   brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
-  brdb_value_sptr tnearfactor  = new brdb_value_t<float>(1e6f);  //by default update alpha
-  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(1e-6f); //by default update alpha
+  brdb_value_sptr tnearfactor  = new brdb_value_t<float>(1e6f);
+  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(1e6f);
 
   pro.set_input(6, idx);
   pro.set_input(7, tnearfactor);

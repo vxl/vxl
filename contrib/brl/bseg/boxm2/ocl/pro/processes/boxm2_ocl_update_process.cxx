@@ -67,8 +67,8 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   brdb_value_sptr up_alpha   = new brdb_value_t<bool>(true);  //by default update alpha
   brdb_value_sptr def_var    = new brdb_value_t<float>(-1.0f);
   brdb_value_sptr up_app     = new brdb_value_t<bool>(true);  //by default update alpha
-  brdb_value_sptr tnearfactor  = new brdb_value_t<float>(1e6f);  //by default update alpha
-  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(1e-6f); //by default update alpha
+  brdb_value_sptr tnearfactor  = new brdb_value_t<float>(1e6f);
+  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(1e6f);
   pro.set_input(5, idx);
   pro.set_input(6, empty_mask);
   pro.set_input(7, up_alpha);
